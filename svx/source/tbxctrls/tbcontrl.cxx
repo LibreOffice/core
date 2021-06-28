@@ -1084,21 +1084,25 @@ void SvxStyleBox_Impl::DataChanged( const DataChangedEvent& rDCEvt )
     InterimItemWindow::DataChanged( rDCEvt );
 }
 
-bool SvxStyleBox_Base::AdjustFontForItemHeight(OutputDevice& rDevice, tools::Rectangle const & rTextRect, tools::Long nHeight)
+bool SvxStyleBox_Base::AdjustFontForItemHeight(OutputDevice &rDevice, tools::Rectangle const &rTextRect, tools::Long nHeight)
 {
-    if (rTextRect.Bottom() > nHeight)
-    {
-        // the text does not fit, adjust the font size
-        double ratio = static_cast< double >( nHeight ) / rTextRect.Bottom();
-        vcl::Font aFont(rDevice.GetFont());
-        Size aPixelSize(aFont.GetFontSize());
-        aPixelSize.setWidth( aPixelSize.Width() * ratio );
-        aPixelSize.setHeight( aPixelSize.Height() * ratio );
-        aFont.SetFontSize(aPixelSize);
-        rDevice.SetFont(aFont);
-        return true;
-    }
-    return false;
+    const float fMinHeight = nHeight * 0.5f;
+    const float fMaxHeight = nHeight * 0.8f;
+    float ratio;
+    if (rTextRect.GetHeight() > fMaxHeight)
+        ratio = fMaxHeight / rTextRect.GetHeight();
+    else
+        if (rTextRect.GetHeight() < fMinHeight)
+            ratio = fMinHeight / rTextRect.GetHeight();
+        else
+            return false;
+    vcl::Font aFont(rDevice.GetFont());
+    Size aFontSizePixel(aFont.GetFontSize());
+    aFontSizePixel.setWidth(0);
+    aFontSizePixel.setHeight(aFontSizePixel.Height() * ratio);
+    aFont.SetFontSize(aFontSizePixel);
+    rDevice.SetFont(aFont);
+    return true;
 }
 
 void SvxStyleBox_Impl::SetOptimalSize()
@@ -1112,22 +1116,18 @@ void SvxStyleBox_Impl::SetOptimalSize()
     SetSizePixel(get_preferred_size());
 }
 
-void SvxStyleBox_Base::UserDrawEntry(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect, const OUString &rStyleName)
+void SvxStyleBox_Base::UserDrawEntry(vcl::RenderContext &rRenderContext, const tools::Rectangle &rRect, const OUString &rStyleName)
 {
-    // IMG_TXT_DISTANCE in ilstbox.hxx is 6, then 1 is added as
-    // nBorder, and we are adding 1 in order to look better when
-    // italics is present
+    // IMG_TXT_DISTANCE in ilstbox.hxx is 6, 1 is added as border, and 1 is added in order to look better when italics are present
+
     const int nLeftDistance = 8;
-
     tools::Rectangle aTextRect;
-    rRenderContext.GetTextBoundRect(aTextRect, rStyleName);
-
+    rRenderContext.GetTextBoundRect(aTextRect, "Text Body");
     Point aPos(rRect.TopLeft());
     aPos.AdjustX(nLeftDistance );
-
-    if (!AdjustFontForItemHeight(rRenderContext, aTextRect, rRect.GetHeight()))
-        aPos.AdjustY((rRect.GetHeight() - aTextRect.Bottom() ) / 2);
-
+    if (AdjustFontForItemHeight(rRenderContext, aTextRect, rRect.GetHeight()))
+        rRenderContext.GetTextBoundRect(aTextRect, "Text Body");
+    aPos.AdjustY((rRect.GetHeight() - aTextRect.GetHeight()) / 2);
     rRenderContext.DrawText(aPos, rStyleName);
 }
 
@@ -2595,9 +2595,12 @@ struct SvxStyleToolBoxControl::Impl
                 static const char* aCalcStyles[] =
                 {
                     "Default",
-                    "Heading1",
-                    "Result",
-                    "Result2"
+                    "Accent 1",
+                    "Accent 2",
+                    "Accent 3",
+                    "Heading 1",
+                    "Heading 2",
+                    "Result"
                 };
                 Reference<container::XNameAccess> xCellStyles;
                 xStylesSupplier->getStyleFamilies()->getByName("CellStyles") >>= xCellStyles;
