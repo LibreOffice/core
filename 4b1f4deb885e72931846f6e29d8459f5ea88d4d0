@@ -439,6 +439,24 @@
       "revId": "4b1f4deb885e72931846f6e29d8459f5ea88d4d0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "93d7acaf_474fddf0",
+        "filename": "sw/source/uibase/utlui/content.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 4715,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2021-06-28T04:09:52Z",
+      "side": 1,
+      "message": "Something like:\n\nif (xNameAccess.is() \u0026\u0026 !xNameAccess-\u003ehasByName(rIterString.second))\n{\n  uno::Any aObj \u003d xNameAccess-\u003egetByName(pCnt-\u003eGetName());\n  uno::Reference\u003cuno::XInterface\u003e xTmp;\n  aObj \u003e\u003e\u003d xTmp;\n  uno::Reference\u003ccontainer::XNamed\u003e xNamed(xTmp, uno::UNO_QUERY);\n  try\n  {\n    xNamed-\u003esetName(rIterString.second);\n  }\n  catch (const uno::RuntimeException\u0026)\n  {\n    OSL_FAIL(\"name wasn\u0027t changed\");\n  }\n}",
+      "parentUuid": "1acb8d2e_62ff2e64",
+      "revId": "4b1f4deb885e72931846f6e29d8459f5ea88d4d0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
