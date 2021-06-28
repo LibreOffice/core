@@ -576,19 +576,19 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
     for( SwWriteTableRows::size_type nRow=1; nRow < m_aRows.size(); ++nRow )
     {
         SwWriteTableRow *pNextRow = m_aRows[nRow].get();
-        bool bBorder = ( pRow->bBottomBorder || pNextRow->bTopBorder );
+        bool bBorder = ( pRow->m_bBottomBorder || pNextRow->m_bTopBorder );
         bRowsHaveBorder |= bBorder;
         bRowsHaveBorderOnly &= bBorder;
 
-        sal_uInt16 nBorder2 = pRow->bBottomBorder ? pRow->nBottomBorder : USHRT_MAX;
-        if( pNextRow->bTopBorder && pNextRow->nTopBorder < nBorder2 )
-            nBorder2 = pNextRow->nTopBorder;
+        sal_uInt16 nBorder2 = pRow->m_bBottomBorder ? pRow->m_nBottomBorder : USHRT_MAX;
+        if( pNextRow->m_bTopBorder && pNextRow->m_nTopBorder < nBorder2 )
+            nBorder2 = pNextRow->m_nTopBorder;
 
-        pRow->bBottomBorder = bBorder;
-        pRow->nBottomBorder = nBorder2;
+        pRow->m_bBottomBorder = bBorder;
+        pRow->m_nBottomBorder = nBorder2;
 
-        pNextRow->bTopBorder = bBorder;
-        pNextRow->nTopBorder = nBorder2;
+        pNextRow->m_bTopBorder = bBorder;
+        pNextRow->m_nTopBorder = nBorder2;
 
         pRow = pNextRow;
     }
@@ -599,11 +599,11 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
     for( SwWriteTableCols::size_type nCol=1; nCol<m_aCols.size(); ++nCol )
     {
         SwWriteTableCol *pNextCol = m_aCols[nCol].get();
-        bool bBorder = ( pCol->bRightBorder || pNextCol->bLeftBorder );
+        bool bBorder = ( pCol->m_bRightBorder || pNextCol->m_bLeftBorder );
         bColsHaveBorder |= bBorder;
         bColsHaveBorderOnly &= bBorder;
-        pCol->bRightBorder = bBorder;
-        pNextCol->bLeftBorder = bBorder;
+        pCol->m_bRightBorder = bBorder;
+        pNextCol->m_bLeftBorder = bBorder;
         pCol = pNextCol;
     }
 
@@ -767,7 +767,7 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
                 html.attribute(OOO_STRING_SVTOOLS_HTML_O_width, OString::number(SwHTMLWriter::ToPixel(nWidth,false)));
             html.end();
 
-            if( bColGroups && pColumn->bRightBorder && nCol<nCols-1 )
+            if( bColGroups && pColumn->m_bRightBorder && nCol<nCols-1 )
             {
                 rWrt.DecIndentLevel(); // indent content of <COLGRP>
                 rWrt.OutNewLine(); // </COLGRP> in new line
@@ -798,7 +798,7 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
     // can be outputted if there is a line below the cell.
     if( bTHead &&
         (bTSections || bColGroups) &&
-        m_nHeadEndRow<m_aRows.size()-1 && !m_aRows[m_nHeadEndRow]->bBottomBorder )
+        m_nHeadEndRow<m_aRows.size()-1 && !m_aRows[m_nHeadEndRow]->m_bBottomBorder )
         bTHead = false;
 
     // Output <TBODY> only if <THEAD> is outputted.
@@ -818,10 +818,10 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
         const SwWriteTableRow *pRow2 = m_aRows[nRow].get();
 
         OutTableCells( rWrt, pRow2->GetCells(), pRow2->GetBackground() );
-        if( !m_nCellSpacing && nRow < m_aRows.size()-1 && pRow2->bBottomBorder &&
-            pRow2->nBottomBorder > DEF_LINE_WIDTH_1 )
+        if( !m_nCellSpacing && nRow < m_aRows.size()-1 && pRow2->m_bBottomBorder &&
+            pRow2->m_nBottomBorder > DEF_LINE_WIDTH_1 )
         {
-            for( auto nCnt = (pRow2->nBottomBorder / DEF_LINE_WIDTH_1) - 1; nCnt; --nCnt )
+            for( auto nCnt = (pRow2->m_nBottomBorder / DEF_LINE_WIDTH_1) - 1; nCnt; --nCnt )
             {
                 rWrt.OutNewLine();
                 HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OString(rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_tablerow ));
@@ -830,7 +830,7 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
             }
         }
         if( ( (bTHead && nRow==m_nHeadEndRow) ||
-              (bTBody && pRow2->bBottomBorder) ) &&
+              (bTBody && pRow2->m_bBottomBorder) ) &&
             nRow < m_aRows.size()-1 )
         {
             rWrt.DecIndentLevel(); // indent content of <THEAD>/<TDATA>

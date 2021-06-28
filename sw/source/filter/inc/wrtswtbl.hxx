@@ -97,9 +97,9 @@ typedef std::vector<std::unique_ptr<SwWriteTableCell>> SwWriteTableCells;
 class SwWriteTableRow final
 {
     SwWriteTableCells m_Cells;       ///< all cells of the rows
-    const SvxBrushItem *pBackground; // background
+    const SvxBrushItem *m_pBackground; // background
 
-    tools::Long nPos;                       // end position (twips) of the row
+    tools::Long m_nPos;                       // end position (twips) of the row
     bool mbUseLayoutHeights;
 
     SwWriteTableRow & operator= (const SwWriteTableRow &) = delete;
@@ -109,11 +109,11 @@ class SwWriteTableRow final
 
 public:
 
-    sal_uInt16 nTopBorder;          // thickness of upper/lower border
-    sal_uInt16 nBottomBorder;
+    sal_uInt16 m_nTopBorder;          // thickness of upper/lower border
+    sal_uInt16 m_nBottomBorder;
 
-    bool bTopBorder : 1;            // which borders are there?
-    bool bBottomBorder : 1;
+    bool m_bTopBorder : 1;            // which borders are there?
+    bool m_bBottomBorder : 1;
 
     SwWriteTableRow( tools::Long nPos, bool bUseLayoutHeights );
 
@@ -125,12 +125,12 @@ public:
 
     void SetBackground( const SvxBrushItem *pBGround )
     {
-        pBackground = pBGround;
+        m_pBackground = pBGround;
     }
-    const SvxBrushItem *GetBackground() const { return pBackground; }
+    const SvxBrushItem *GetBackground() const { return m_pBackground; }
 
-    bool HasTopBorder() const                   { return bTopBorder; }
-    bool HasBottomBorder() const                { return bBottomBorder; }
+    bool HasTopBorder() const                   { return m_bTopBorder; }
+    bool HasBottomBorder() const                { return m_bBottomBorder; }
 
     const SwWriteTableCells& GetCells() const   { return m_Cells; }
 
@@ -141,7 +141,7 @@ public:
 inline bool SwWriteTableRow::operator==( const SwWriteTableRow& rRow ) const
 {
     // allow for some fuzzyness
-    return (nPos >= rRow.nPos ?  nPos - rRow.nPos : rRow.nPos - nPos ) <=
+    return (m_nPos >= rRow.m_nPos ?  m_nPos - rRow.m_nPos : rRow.m_nPos - m_nPos ) <=
         (mbUseLayoutHeights ? 0 : ROWFUZZY);
 }
 
@@ -149,7 +149,7 @@ inline bool SwWriteTableRow::operator<( const SwWriteTableRow& rRow ) const
 {
     // Since we only know the degrees of truth of 0 and 1 here, we also prefer to
     // not let x==y and x<y at the same time ;-)
-    return nPos < rRow.nPos - (mbUseLayoutHeights ? 0 : ROWFUZZY);
+    return m_nPos < rRow.m_nPos - (mbUseLayoutHeights ? 0 : ROWFUZZY);
 }
 
 using SwWriteTableRows
@@ -157,47 +157,47 @@ using SwWriteTableRows
 
 class SwWriteTableCol
 {
-    sal_uInt32 nPos;                    // end position of the column
+    sal_uInt32 m_nPos;                    // end position of the column
 
-    sal_uInt32 nWidthOpt;
+    sal_uInt32 m_nWidthOpt;
 
-    bool bRelWidthOpt : 1;
+    bool m_bRelWidthOpt : 1;
 
 public:
-    bool bLeftBorder : 1;               // which borders are there?
-    bool bRightBorder : 1;
+    bool m_bLeftBorder : 1;               // which borders are there?
+    bool m_bRightBorder : 1;
 
     SwWriteTableCol( sal_uInt32 nPosition );
 
-    sal_uInt32 GetPos() const                       { return nPos; }
+    sal_uInt32 GetPos() const                       { return m_nPos; }
 
-    bool HasLeftBorder() const                  { return bLeftBorder; }
+    bool HasLeftBorder() const                  { return m_bLeftBorder; }
 
-    bool HasRightBorder() const                 { return bRightBorder; }
+    bool HasRightBorder() const                 { return m_bRightBorder; }
 
     inline bool operator==( const SwWriteTableCol& rCol ) const;
     inline bool operator<( const SwWriteTableCol& rCol ) const;
 
     void SetWidthOpt( sal_uInt32 nWidth, bool bRel )
     {
-        nWidthOpt = nWidth; bRelWidthOpt = bRel;
+        m_nWidthOpt = nWidth; m_bRelWidthOpt = bRel;
     }
-    sal_uInt32 GetWidthOpt() const                 { return nWidthOpt; }
-    bool HasRelWidthOpt() const                 { return bRelWidthOpt; }
+    sal_uInt32 GetWidthOpt() const                 { return m_nWidthOpt; }
+    bool HasRelWidthOpt() const                 { return m_bRelWidthOpt; }
 };
 
 inline bool SwWriteTableCol::operator==( const SwWriteTableCol& rCol ) const
 {
     // allow for some fuzzyness
-    return (nPos >= rCol.nPos ? nPos - rCol.nPos
-                                     : rCol.nPos - nPos ) <= COLFUZZY;
+    return (m_nPos >= rCol.m_nPos ? m_nPos - rCol.m_nPos
+                                     : rCol.m_nPos - m_nPos ) <= COLFUZZY;
 }
 
 inline bool SwWriteTableCol::operator<( const SwWriteTableCol& rCol ) const
 {
     // Since we only know the degrees of truth of 0 and 1 here, we also prefer to
     // not let x==y and x<y at the same time ;-)
-    return nPos + COLFUZZY < rCol.nPos;
+    return m_nPos + COLFUZZY < rCol.m_nPos;
 }
 
 struct SwWriteTableColLess {
