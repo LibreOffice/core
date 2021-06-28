@@ -1322,6 +1322,12 @@ void ObjectInspectorTreeHandler::inspectObject(uno::Reference<uno::XInterface> c
     // Set implementation name
     OUString aImplementationName = getInterfaceImplementationClass(xInterface);
     mpObjectInspectorWidgets->mpClassNameLabel->set_label(aImplementationName);
+    sal_Int32 nStrLen = aImplementationName.getLength();
+    sal_Int32 nDigitWidth
+        = mpObjectInspectorWidgets->mpClassNameLabel->get_approximate_digit_width();
+
+    //get_about_digit_width() returns an approximate value. To always see the full class name (nStrLen+2)
+    mpObjectInspectorWidgets->mpClassNameLabel->set_size_request((nStrLen + 2) * nDigitWidth, -1);
 
     // Fire entering the current opened page manually
     auto rPageId = mpObjectInspectorWidgets->mpNotebook->get_current_page_ident();
