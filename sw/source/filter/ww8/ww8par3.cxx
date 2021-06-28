@@ -488,6 +488,26 @@ WW8LSTInfo* WW8ListManager::GetLSTByListId( sal_uInt32 nIdLst ) const
     return aResult->get();
 }
 
+// The same numbering sequence (abstract list) might be referred to by multiple numbering styles.
+// If so, then the listId that they share can tie them together as a single RES_PARATR_LIST_ID.
+sal_uInt32 WW8ListManager::GetSharedListId(sal_uInt16 nLFO)
+{
+    if (nLFO >= m_LFOInfos.size())
+        return 0;
+
+    sal_uInt32 nRet = m_LFOInfos[nLFO]->nIdLst;
+    for (size_t n = 0; n < m_LFOInfos.size(); ++n)
+    {
+        if (n == nLFO)
+            continue;
+        // if another LFO shares the same abstract list, then return the listId
+        if (m_LFOInfos[n]->nIdLst == nRet)
+            return nRet;
+    }
+    // the listId is unique, so return nothing since it isn't shared
+    return 0;
+}
+
 static OUString sanitizeString(const OUString& rString)
 {
     sal_Int32 i=0;
@@ -1845,6 +1865,10 @@ void SwWW8ImplReader::RegisterNumFormatOnTextNode(sal_uInt16 nCurrentLFO,
     {
         pTextNd->SetCountedInList( true );
     }
+
+    sal_Int32 nIdLst = m_xLstManager->GetSharedListId(nCurrentLFO);
+    if (pRule && nIdLst)
+        pTextNd->SetAttr(SfxStringItem(RES_PARATR_LIST_ID, OUString::number(nIdLst)));
 
     // #i99822#
     // Direct application of the list level formatting no longer
