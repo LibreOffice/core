@@ -162,6 +162,7 @@ public:
     SwNumRule* GetNumRule(size_t i);
     size_t GetWW8LSTInfoNum() const{return maLSTInfos.size();}
     static SvxNumType GetSvxNumTypeFromMSONFC(sal_uInt16 nMSONFC);
+    sal_uInt32 GetSharedListId(sal_uInt16 nLFO);
 
 private:
     wwSprmParser maSprmParser;
