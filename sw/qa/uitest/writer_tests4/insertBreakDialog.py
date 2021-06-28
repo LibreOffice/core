@@ -9,16 +9,6 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 
 class WriterInsertBreakDialog(UITestCase):
 
-    def launch_dialog_and_select_option(self, child):
-
-        self.ui_test.execute_dialog_through_command(".uno:InsertBreak")
-        xDialog = self.xUITest.getTopFocusWindow()
-
-        xOption = xDialog.getChild(child)
-        xOption.executeAction("CLICK", tuple())
-
-        return xDialog
-
     def getPages(self, total):
         document = self.ui_test.get_component()
 
@@ -28,9 +18,9 @@ class WriterInsertBreakDialog(UITestCase):
 
         self.ui_test.create_doc_in_start_center("writer")
 
-        xDialog = self.launch_dialog_and_select_option("linerb")
-        xOkBtn = xDialog.getChild("ok")
-        xOkBtn.executeAction("CLICK", tuple())
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:InsertBreak") as xDialog:
+            xOption = xDialog.getChild("linerb")
+            xOption.executeAction("CLICK", tuple())
 
         self.getPages(1)
 
@@ -40,9 +30,9 @@ class WriterInsertBreakDialog(UITestCase):
 
         self.ui_test.create_doc_in_start_center("writer")
 
-        xDialog = self.launch_dialog_and_select_option("columnrb")
-        xOkBtn = xDialog.getChild("ok")
-        xOkBtn.executeAction("CLICK", tuple())
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:InsertBreak") as xDialog:
+            xOption = xDialog.getChild("columnrb")
+            xOption.executeAction("CLICK", tuple())
 
         self.getPages(1)
 
@@ -54,13 +44,13 @@ class WriterInsertBreakDialog(UITestCase):
 
         for i in range(9):
             with self.subTest(i=i):
-                xDialog = self.launch_dialog_and_select_option("pagerb")
+                with self.ui_test.execute_dialog_through_command_guarded(".uno:InsertBreak") as xDialog:
 
-                xStyleList = xDialog.getChild("stylelb")
-                xStyleList.executeAction("SELECT", mkPropertyValues({"POS": str(i)}))
+                    xOption = xDialog.getChild("pagerb")
+                    xOption.executeAction("CLICK", tuple())
 
-                xOkBtn = xDialog.getChild("ok")
-                xOkBtn.executeAction("CLICK", tuple())
+                    xStyleList = xDialog.getChild("stylelb")
+                    xStyleList.executeAction("SELECT", mkPropertyValues({"POS": str(i)}))
 
                 self.getPages(i + 2)
 
@@ -70,10 +60,8 @@ class WriterInsertBreakDialog(UITestCase):
 
         self.ui_test.create_doc_in_start_center("writer")
 
-        self.ui_test.execute_dialog_through_command(".uno:InsertBreak")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xCancelBtn = xDialog.getChild("cancel")
-        self.ui_test.close_dialog_through_button(xCancelBtn)
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:InsertBreak", close_button="cancel"):
+            pass
 
         self.getPages(1)
 

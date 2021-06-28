@@ -18,20 +18,17 @@ class tdf113252(UITestCase):
         xWriterEdit = xWriterDoc.getChild("writer_edit")
 
         #Start LibreOffice. Go to Tools > Macros > Organize Macros > Basic
-        self.ui_test.execute_dialog_through_command(".uno:MacroDialog")
-        xDialog = self.xUITest.getTopFocusWindow()
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:MacroDialog", close_button="close") as xDialog:
 
-        #Click Button Organizer
-        xorganize = xDialog.getChild("organize")
-        with self.ui_test.execute_blocking_action(xorganize.executeAction, args=('CLICK', ()), close_button="close") as dialog:
-            xTabs = dialog.getChild("tabcontrol")
-            select_pos(xTabs, "0")
-            select_pos(xTabs, "1")
-            select_pos(xTabs, "2")
-            #Click button Close in the next dialog -> crash.
+            #Click Button Organizer
+            xorganize = xDialog.getChild("organize")
+            with self.ui_test.execute_blocking_action(xorganize.executeAction, args=('CLICK', ()), close_button="close") as dialog:
+                xTabs = dialog.getChild("tabcontrol")
+                select_pos(xTabs, "0")
+                select_pos(xTabs, "1")
+                select_pos(xTabs, "2")
+                #Click button Close in the next dialog -> crash.
 
-        xClose = xDialog.getChild("close")
-        self.ui_test.close_dialog_through_button(xClose)
 
         self.assertEqual(get_state_as_dict(xWriterEdit)["CurrentPage"], "1")
 

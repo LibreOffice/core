@@ -19,12 +19,9 @@ class tdf78068(UITestCase):
         #- add some text
         type_text(xWriterEdit, "Test")
         #- go to Format > Paragraph
-        self.ui_test.execute_dialog_through_command(".uno:ParagraphDialog")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xTabs = xDialog.getChild("tabcontrol")
-        select_pos(xTabs, "0")
-        xOK = xDialog.getChild("ok")
-        xOK.executeAction("CLICK", tuple()) #close dialog
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:ParagraphDialog") as xDialog:
+            xTabs = xDialog.getChild("tabcontrol")
+            select_pos(xTabs, "0")
 
         self.assertEqual(document.Text.String[0:4], "Test")
         self.ui_test.close_doc()

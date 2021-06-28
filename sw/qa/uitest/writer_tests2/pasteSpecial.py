@@ -21,16 +21,13 @@ class PasteSpecial(UITestCase):
             self.xUITest.executeCommand(".uno:SelectAll")
             self.xUITest.executeCommand(".uno:Copy")
 
-            self.ui_test.execute_dialog_through_command(".uno:PasteSpecial")
-            xDialog = self.xUITest.getTopFocusWindow()
+            with self.ui_test.execute_dialog_through_command_guarded(".uno:PasteSpecial") as xDialog:
 
-            xList = xDialog.getChild('list')
-            xChild = xList.getChild(str(i))
+                xList = xDialog.getChild('list')
+                xChild = xList.getChild(str(i))
 
-            xChild.executeAction("SELECT", tuple())
+                xChild.executeAction("SELECT", tuple())
 
-            xOkBtn = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOkBtn)
 
             self.xUITest.executeCommand(".uno:Undo")
 

@@ -14,15 +14,6 @@ from com.sun.star.drawing.RectanglePoint import MIDDLE_MIDDLE
 
 class WriterPageDialog(UITestCase):
 
-    def launch_dialog_and_select_tab(self, tab):
-        self.ui_test.execute_dialog_through_command(".uno:PageDialog")
-
-        xDialog = self.xUITest.getTopFocusWindow()
-        tabcontrol = xDialog.getChild("tabcontrol")
-        select_pos(tabcontrol, str(tab))
-
-        return xDialog
-
     def click_button(self, dialog, button):
         xButton = dialog.getChild(button)
         xButton.executeAction("CLICK", tuple())
@@ -127,19 +118,18 @@ class WriterPageDialog(UITestCase):
         buttons = ['btnbitmap', 'btncolor', 'btngradient', 'btnhatch', 'btnpattern']
         for index, button in enumerate(buttons):
 
-            xDialog = self.launch_dialog_and_select_tab(2)
-
-            self.click_button(xDialog, button)
-
-            self.click_button(xDialog, 'ok')
+            with self.ui_test.execute_dialog_through_command_guarded(".uno:PageDialog") as xDialog:
+                tabcontrol = xDialog.getChild("tabcontrol")
+                select_pos(tabcontrol, "2")
+                self.click_button(xDialog, button)
 
             self.check_default_area(button)
 
-            xDialog = self.launch_dialog_and_select_tab(2)
+            with self.ui_test.execute_dialog_through_command_guarded(".uno:PageDialog") as xDialog:
+                tabcontrol = xDialog.getChild("tabcontrol")
+                select_pos(tabcontrol, "2")
 
-            self.click_button(xDialog, 'btnnone')
-
-            self.click_button(xDialog, 'ok')
+                self.click_button(xDialog, 'btnnone')
 
             self.check_default_area('btnnone')
 
@@ -157,15 +147,14 @@ class WriterPageDialog(UITestCase):
 
         for i in range(30):
             with self.subTest(i=i):
-                xDialog = self.launch_dialog_and_select_tab(1)
+                with self.ui_test.execute_dialog_through_command_guarded(".uno:PageDialog") as xDialog:
+                    tabcontrol = xDialog.getChild("tabcontrol")
+                    select_pos(tabcontrol, "1")
+                    xFormatList = xDialog.getChild("comboPageFormat")
+                    select_pos(xFormatList, str(i))
 
-                xFormatList = xDialog.getChild("comboPageFormat")
-                select_pos(xFormatList, str(i))
-
-                self.assertEqual(
-                    get_state_as_dict(xFormatList)["SelectEntryText"], lPaperFormat[i])
-
-                self.click_button(xDialog, 'ok')
+                    self.assertEqual(
+                        get_state_as_dict(xFormatList)["SelectEntryText"], lPaperFormat[i])
 
         self.ui_test.close_doc()
 
@@ -178,20 +167,18 @@ class WriterPageDialog(UITestCase):
         self.assertEqual(
             document.StyleFamilies.PageStyles.Standard.IsLandscape, False)
 
-        xDialog = self.launch_dialog_and_select_tab(1)
-
-        self.click_button(xDialog, 'radiobuttonLandscape')
-
-        self.click_button(xDialog, 'ok')
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:PageDialog") as xDialog:
+            tabcontrol = xDialog.getChild("tabcontrol")
+            select_pos(tabcontrol, "1")
+            self.click_button(xDialog, 'radiobuttonLandscape')
 
         self.assertEqual(
             document.StyleFamilies.PageStyles.Standard.IsLandscape, True)
 
-        xDialog = self.launch_dialog_and_select_tab(1)
-
-        self.click_button(xDialog, 'radiobuttonPortrait')
-
-        self.click_button(xDialog, 'ok')
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:PageDialog") as xDialog:
+            tabcontrol = xDialog.getChild("tabcontrol")
+            select_pos(tabcontrol, "1")
+            self.click_button(xDialog, 'radiobuttonPortrait')
 
         self.assertEqual(
             document.StyleFamilies.PageStyles.Standard.IsLandscape, False)
@@ -209,15 +196,15 @@ class WriterPageDialog(UITestCase):
 
         for i in range(4):
             with self.subTest(i=i):
-                xDialog = self.launch_dialog_and_select_tab(1)
+                with self.ui_test.execute_dialog_through_command_guarded(".uno:PageDialog") as xDialog:
+                    tabcontrol = xDialog.getChild("tabcontrol")
+                    select_pos(tabcontrol, "1")
 
-                xTextDirectionList = xDialog.getChild("comboTextFlowBox")
-                select_pos(xTextDirectionList, str(i))
+                    xTextDirectionList = xDialog.getChild("comboTextFlowBox")
+                    select_pos(xTextDirectionList, str(i))
 
-                self.assertEqual(
-                    get_state_as_dict(xTextDirectionList)["SelectEntryText"], lTextDirection[i])
-
-                self.click_button(xDialog, 'ok')
+                    self.assertEqual(
+                        get_state_as_dict(xTextDirectionList)["SelectEntryText"], lTextDirection[i])
 
                 self.assertEqual(
                     document.StyleFamilies.PageStyles.Standard.WritingMode, i)
@@ -227,10 +214,8 @@ class WriterPageDialog(UITestCase):
     def test_cancel_button_page_dialog(self):
         self.ui_test.create_doc_in_start_center("writer")
 
-        self.ui_test.execute_dialog_through_command(".uno:PageDialog")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xCancelBtn = xDialog.getChild("cancel")
-        self.ui_test.close_dialog_through_button(xCancelBtn)
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:PageDialog", close_button="cancel") as xDialog:
+            pass
 
         self.ui_test.close_doc()
 

@@ -23,14 +23,11 @@ class tdf141557(UITestCase):
 
             self.ui_test.wait_until_child_is_available('metricfield')
 
-            self.ui_test.execute_dialog_through_command(".uno:TransformDialog")
+            with self.ui_test.execute_dialog_through_command_guarded(".uno:TransformDialog") as xDialog:
 
-            xDialog = self.xUITest.getTopFocusWindow()
 
-            xDialog.getChild('topara').executeAction("CLICK", tuple())
+                xDialog.getChild('topara').executeAction("CLICK", tuple())
 
-            xOkBtn = xDialog.getChild("ok")
-            xOkBtn.executeAction("CLICK", tuple())
 
             # Without the fix in place, at this point crash occurs.
             self.assertEqual(AT_PARAGRAPH, document.DrawPage.getByIndex(0).AnchorType)
