@@ -40,7 +40,7 @@ class ImplSchedulerDataPrinter(object):
                 task_type = "Timer"
             else:
                 task_type = "Task"
-            res = "{:7s}{:10s} active: {:6s}".format( task_type, str(task['mePriority']), str(task['mbActive']) )
+            res = "{:7s}{:10s} active: {:6s}".format( task_type, str(task['mePriority']).replace('TaskPriority::',''), str(task['mbActive']) )
             name = task['mpDebugName']
             if not name:
                 res = res + "   (task debug name not set)"
@@ -48,9 +48,9 @@ class ImplSchedulerDataPrinter(object):
                 res = "{} '{}' ({})".format(res, str(name.string()), str(task.dynamic_type))
             val_type = gdb.lookup_type(str( task.dynamic_type )).pointer()
             timer = gdbobj['mpTask'].cast( val_type )
-            if (task_type == "Timer"):
+            if task_type == "Timer":
                 res = "{}: {}ms".format(res, timer['mnTimeout'])
-            else:
+            elif task_type == "Idle":
                 assert 0 == timer['mnTimeout'], "Idle with timeout == {}".format( timer['mnTimeout'] )
             return res
         else:
@@ -76,7 +76,7 @@ class ImplSchedulerDataPrinter(object):
             return self
 
         def __next__(self):
-            if not self.value['mpNext']:
+            if not self.value:
                 raise StopIteration()
 
             pos = str(self.pos)
@@ -86,6 +86,28 @@ class ImplSchedulerDataPrinter(object):
 
             return (pos, name)
 
+class ImplSchedulerContextPrinter(object):
+
+    def __init__(self, typename, value):
+        self.typename = typename
+        self.value = value
+        self.prio = gdb.lookup_type('TaskPriority')
+
+    def to_string(self):
+        print('{')
+        if self.value['mnTimerPeriod']:
+            print('mnTimerPeriod =', self.value['mnTimerPeriod'])
+        if self.value['mpSchedulerStack']:
+            print('STACK', end =", ")
+            print(self.value['mpSchedulerStack'].dereference())
+        if self.value['mpFirstSchedulerData']:
+            for key, value in self.prio.items():
+                first = self.value['mpFirstSchedulerData'][value.enumval]
+                if first:
+                    print(key.replace('TaskPriority::', ''), end =", ")
+                    print(first.dereference())
+        print('}')
+
 printer = None
 
 def build_pretty_printers():
@@ -93,6 +115,7 @@ def build_pretty_printers():
 
     printer = printing.Printer("libreoffice/vcl")
     printer.add('ImplSchedulerData', ImplSchedulerDataPrinter)
+    printer.add('ImplSchedulerContext', ImplSchedulerContextPrinter)
 
 def register_pretty_printers(obj):
     printing.register_pretty_printer(printer, obj)
