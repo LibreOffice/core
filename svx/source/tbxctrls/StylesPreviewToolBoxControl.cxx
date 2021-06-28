@@ -91,7 +91,8 @@ void StylesPreviewToolBoxControl::InitializeStyles(
         }
         else if (xServices->supportsService("com.sun.star.sheet.SpreadsheetDocument"))
         {
-            static const char* aCalcStyles[] = { "Default", "Heading1", "Result", "Result2" };
+            static const char* aCalcStyles[]
+                = { "Default", "Accent 1", "Accent 2", "Accent 3", "Heading 1", "Heading 2", "Result" };
             css::uno::Reference<css::container::XNameAccess> xCellStyles;
             xStylesSupplier->getStyleFamilies()->getByName("CellStyles") >>= xCellStyles;
             for (const char* pCalcStyle : aCalcStyles)
