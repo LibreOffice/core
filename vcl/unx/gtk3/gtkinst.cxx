@@ -16608,6 +16608,9 @@ class IMHandler
 {
 private:
     GtkInstanceDrawingArea* m_pArea;
+#if GTK_CHECK_VERSION(4, 0, 0)
+    GtkEventController* m_pFocusController;
+#endif
     GtkIMContext* m_pIMContext;
     OUString m_sPreeditText;
     gulong m_nFocusInSignalId;
@@ -16618,10 +16621,21 @@ public:
     IMHandler(GtkInstanceDrawingArea* pArea)
         : m_pArea(pArea)
         , m_pIMContext(gtk_im_multicontext_new())
-        , m_nFocusInSignalId(g_signal_connect(m_pArea->getWidget(), "focus-in-event", G_CALLBACK(signalFocusIn), this))
-        , m_nFocusOutSignalId(g_signal_connect(m_pArea->getWidget(), "focus-out-event", G_CALLBACK(signalFocusOut), this))
         , m_bExtTextInput(false)
     {
+        GtkWidget* pWidget = m_pArea->getWidget();
+
+#if GTK_CHECK_VERSION(4, 0, 0)
+        m_pFocusController = gtk_event_controller_focus_new();
+        gtk_widget_add_controller(pWidget, m_pFocusController);
+
+        m_nFocusInSignalId = g_signal_connect(m_pFocusController, "enter", G_CALLBACK(signalFocusIn), this);
+        m_nFocusOutSignalId = g_signal_connect(m_pFocusController, "leave", G_CALLBACK(signalFocusOut), this);
+#else
+        m_nFocusInSignalId = g_signal_connect(pWidget, "focus-in-event", G_CALLBACK(signalFocusIn), this);
+        m_nFocusOutSignalId = g_signal_connect(pWidget, "focus-out-event", G_CALLBACK(signalFocusOut), this);
+#endif
+
         g_signal_connect(m_pIMContext, "preedit-start", G_CALLBACK(signalIMPreeditStart), this);
         g_signal_connect(m_pIMContext, "preedit-end", G_CALLBACK(signalIMPreeditEnd), this);
         g_signal_connect(m_pIMContext, "commit", G_CALLBACK(signalIMCommit), this);
@@ -16629,7 +16643,6 @@ public:
         g_signal_connect(m_pIMContext, "retrieve-surrounding", G_CALLBACK(signalIMRetrieveSurrounding), this);
         g_signal_connect(m_pIMContext, "delete-surrounding", G_CALLBACK(signalIMDeleteSurrounding), this);
 
-        GtkWidget* pWidget = m_pArea->getWidget();
         if (!gtk_widget_get_realized(pWidget))
             gtk_widget_realize(pWidget);
         im_context_set_client_widget(m_pIMContext, pWidget);
@@ -16645,26 +16658,43 @@ public:
             gtk_im_context_focus_out(m_pIMContext);
     }
 
+#if GTK_CHECK_VERSION(4, 0, 0)
+    static void signalFocusIn(GtkEventControllerFocus*, gpointer im_handler)
+#else
     static gboolean signalFocusIn(GtkWidget*, GdkEvent*, gpointer im_handler)
+#endif
     {
         IMHandler* pThis = static_cast<IMHandler*>(im_handler);
         pThis->signalFocus(true);
+#if !GTK_CHECK_VERSION(4, 0, 0)
         return false;
+#endif
     }
 
+#if GTK_CHECK_VERSION(4, 0, 0)
+    static void signalFocusOut(GtkEventControllerFocus*, gpointer im_handler)
+#else
     static gboolean signalFocusOut(GtkWidget*, GdkEvent*, gpointer im_handler)
+#endif
     {
         IMHandler* pThis = static_cast<IMHandler*>(im_handler);
         pThis->signalFocus(false);
+#if !GTK_CHECK_VERSION(4, 0, 0)
         return false;
+#endif
     }
 
     ~IMHandler()
     {
         EndExtTextInput();
 
+#if GTK_CHECK_VERSION(4, 0, 0)
+        g_signal_handler_disconnect(m_pFocusController, m_nFocusOutSignalId);
+        g_signal_handler_disconnect(m_pFocusController, m_nFocusInSignalId);
+#else
         g_signal_handler_disconnect(m_pArea->getWidget(), m_nFocusOutSignalId);
         g_signal_handler_disconnect(m_pArea->getWidget(), m_nFocusInSignalId);
+#endif
 
         if (gtk_widget_has_focus(m_pArea->getWidget()))
             gtk_im_context_focus_out(m_pIMContext);
@@ -22144,6 +22174,8 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "modules/scalc/ui/formatcellsdialog.ui" &&
         rUIFile != "modules/scalc/ui/goalseekdlg.ui" &&
         rUIFile != "modules/scalc/ui/groupdialog.ui" &&
+        rUIFile != "modules/scalc/ui/headerfootercontent.ui" &&
+        rUIFile != "modules/scalc/ui/headerfooterdialog.ui" &&
         rUIFile != "modules/scalc/ui/inputstringdialog.ui" &&
         rUIFile != "modules/scalc/ui/insertname.ui" &&
         rUIFile != "modules/scalc/ui/insertcells.ui" &&
