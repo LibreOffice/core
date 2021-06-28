@@ -1625,6 +1625,10 @@ ShapeExport& PowerPointShapeExport::WritePlaceholderReferenceTextBody(
             bool bIsDateTimeFixed = false;
             xPagePropSet->getPropertyValue("IsDateTimeFixed") >>= bIsDateTimeFixed;
 
+            // Ideally "Date" should be replaced with the formatted date text
+            // but since variable datetime overrides the text, this seems fine for now.
+            OUString aDateTimeText = "Date";
+
             if(ePageType != LAYOUT && !bIsDateTimeFixed)
             {
                 sal_Int32 nDateTimeFormat = 0;
@@ -1644,18 +1648,18 @@ ShapeExport& PowerPointShapeExport::WritePlaceholderReferenceTextBody(
             {
                 OString aUUID(comphelper::xml::generateGUIDString());
                 mpFS->startElementNS(XML_a, XML_fld, XML_id, aUUID.getStr(), XML_type, aDateTimeType);
-                mpFS->endElementNS(XML_a, XML_fld);
             }
             else
             {
-                OUString aDateTimeText;
                 xPagePropSet->getPropertyValue("DateTimeText") >>= aDateTimeText;
                 mpFS->startElementNS(XML_a, XML_r);
-                mpFS->startElementNS(XML_a, XML_t);
-                mpFS->writeEscaped(aDateTimeText);
-                mpFS->endElementNS(XML_a, XML_t);
-                mpFS->endElementNS(XML_a, XML_r);
             }
+
+            mpFS->startElementNS(XML_a, XML_t);
+            mpFS->writeEscaped(aDateTimeText);
+            mpFS->endElementNS(XML_a, XML_t);
+
+            mpFS->endElementNS(XML_a, bIsDateTimeFixed ? XML_r : XML_fld);
             break;
         }
         default:
