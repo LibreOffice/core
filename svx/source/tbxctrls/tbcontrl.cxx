@@ -2595,9 +2595,12 @@ struct SvxStyleToolBoxControl::Impl
                 static const char* aCalcStyles[] =
                 {
                     "Default",
-                    "Heading1",
-                    "Result",
-                    "Result2"
+                    "Accent 1",
+                    "Accent 2",
+                    "Accent 3",
+                    "Heading 1",
+                    "Heading 2",
+                    "Result"
                 };
                 Reference<container::XNameAccess> xCellStyles;
                 xStylesSupplier->getStyleFamilies()->getByName("CellStyles") >>= xCellStyles;
