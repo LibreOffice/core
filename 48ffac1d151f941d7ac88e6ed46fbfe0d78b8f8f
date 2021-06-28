@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "121281a7_758b0ce3",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3096,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-06-28T16:03:21Z",
+      "side": 1,
+      "message": "As the return value is checked below against std::numeric_limits\u003csal_Int64\u003e::max() and min(), is it guaranteed that an implicit automatic type conversion from double to sal_Int64 clamps the value to min() or max()?\n\nSee also include/o3tl/float_int_conversion.hxx\n\nHowever, maybe this should use std::llround() instead.",
+      "revId": "48ffac1d151f941d7ac88e6ed46fbfe0d78b8f8f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
