@@ -114,57 +114,57 @@ struct HTMLTableOptions
 
 class HTMLTableContext
 {
-    SwHTMLNumRuleInfo aNumRuleInfo; // Numbering valid before the table
+    SwHTMLNumRuleInfo m_aNumRuleInfo; // Numbering valid before the table
 
-    SwTableNode *pTableNd;              // table node
-    SwFrameFormat *pFrameFormat;        // the Fly frame::Frame, containing the table
-    std::unique_ptr<SwPosition> pPos;   // position behind the table
+    SwTableNode *m_pTableNd;              // table node
+    SwFrameFormat *m_pFrameFormat;        // the Fly frame::Frame, containing the table
+    std::unique_ptr<SwPosition> m_pPos;   // position behind the table
 
-    size_t nContextStAttrMin;
-    size_t nContextStMin;
+    size_t m_nContextStAttrMin;
+    size_t m_nContextStMin;
 
-    bool    bRestartPRE : 1;
-    bool    bRestartXMP : 1;
-    bool    bRestartListing : 1;
+    bool    m_bRestartPRE : 1;
+    bool    m_bRestartXMP : 1;
+    bool    m_bRestartListing : 1;
 
     HTMLTableContext(const HTMLTableContext&) = delete;
     HTMLTableContext& operator=(const HTMLTableContext&) = delete;
 
 public:
 
-    std::shared_ptr<HTMLAttrTable> xAttrTab;        // attributes
+    std::shared_ptr<HTMLAttrTable> m_xAttrTab;        // attributes
 
     HTMLTableContext( SwPosition *pPs, size_t nCntxtStMin,
                        size_t nCntxtStAttrMin ) :
-        pTableNd( nullptr ),
-        pFrameFormat( nullptr ),
-        pPos( pPs ),
-        nContextStAttrMin( nCntxtStAttrMin ),
-        nContextStMin( nCntxtStMin ),
-        bRestartPRE( false ),
-        bRestartXMP( false ),
-        bRestartListing( false ),
-        xAttrTab(std::make_shared<HTMLAttrTable>())
+        m_pTableNd( nullptr ),
+        m_pFrameFormat( nullptr ),
+        m_pPos( pPs ),
+        m_nContextStAttrMin( nCntxtStAttrMin ),
+        m_nContextStMin( nCntxtStMin ),
+        m_bRestartPRE( false ),
+        m_bRestartXMP( false ),
+        m_bRestartListing( false ),
+        m_xAttrTab(std::make_shared<HTMLAttrTable>())
     {
-        memset(xAttrTab.get(), 0, sizeof(HTMLAttrTable));
+        memset(m_xAttrTab.get(), 0, sizeof(HTMLAttrTable));
     }
 
-    void SetNumInfo( const SwHTMLNumRuleInfo& rInf ) { aNumRuleInfo.Set(rInf); }
-    const SwHTMLNumRuleInfo& GetNumInfo() const { return aNumRuleInfo; };
+    void SetNumInfo( const SwHTMLNumRuleInfo& rInf ) { m_aNumRuleInfo.Set(rInf); }
+    const SwHTMLNumRuleInfo& GetNumInfo() const { return m_aNumRuleInfo; };
 
     void SavePREListingXMP( SwHTMLParser& rParser );
     void RestorePREListingXMP( SwHTMLParser& rParser );
 
-    SwPosition *GetPos() const { return pPos.get(); }
+    SwPosition *GetPos() const { return m_pPos.get(); }
 
-    void SetTableNode( SwTableNode *pNd ) { pTableNd = pNd; }
-    SwTableNode *GetTableNode() const { return pTableNd; }
+    void SetTableNode( SwTableNode *pNd ) { m_pTableNd = pNd; }
+    SwTableNode *GetTableNode() const { return m_pTableNd; }
 
-    void SetFrameFormat( SwFrameFormat *pFormat ) { pFrameFormat = pFormat; }
-    SwFrameFormat *GetFrameFormat() const { return pFrameFormat; }
+    void SetFrameFormat( SwFrameFormat *pFormat ) { m_pFrameFormat = pFormat; }
+    SwFrameFormat *GetFrameFormat() const { return m_pFrameFormat; }
 
-    size_t GetContextStMin() const { return nContextStMin; }
-    size_t GetContextStAttrMin() const { return nContextStAttrMin; }
+    size_t GetContextStMin() const { return m_nContextStMin; }
+    size_t GetContextStAttrMin() const { return m_nContextStAttrMin; }
 };
 
 }
@@ -336,35 +336,35 @@ public:
 // Column of a HTML table
 class HTMLTableColumn
 {
-    bool bIsEndOfGroup;
+    bool m_bIsEndOfGroup;
 
-    sal_uInt16 nWidth;                      // options of <COL>
-    bool bRelWidth;
+    sal_uInt16 m_nWidth;                      // options of <COL>
+    bool m_bRelWidth;
 
-    SvxAdjust eAdjust;
-    sal_Int16 eVertOri;
+    SvxAdjust m_eAdjust;
+    sal_Int16 m_eVertOri;
 
-    SwFrameFormat *aFrameFormats[6];
+    SwFrameFormat *m_aFrameFormats[6];
 
     static inline sal_uInt16 GetFrameFormatIdx( bool bBorderLine,
                                 sal_Int16 eVertOri );
 
 public:
 
-    bool bLeftBorder;                   // is there a line before the column
+    bool m_bLeftBorder;                   // is there a line before the column
 
     HTMLTableColumn();
 
     inline void SetWidth( sal_uInt16 nWidth, bool bRelWidth);
 
-    void SetAdjust( SvxAdjust eAdj ) { eAdjust = eAdj; }
-    SvxAdjust GetAdjust() const { return eAdjust; }
+    void SetAdjust( SvxAdjust eAdj ) { m_eAdjust = eAdj; }
+    SvxAdjust GetAdjust() const { return m_eAdjust; }
 
-    void SetVertOri( sal_Int16 eV) { eVertOri = eV; }
-    sal_Int16 GetVertOri() const { return eVertOri; }
+    void SetVertOri( sal_Int16 eV) { m_eVertOri = eV; }
+    sal_Int16 GetVertOri() const { return m_eVertOri; }
 
-    void SetEndOfGroup() { bIsEndOfGroup = true; }
-    bool IsEndOfGroup() const { return bIsEndOfGroup; }
+    void SetEndOfGroup() { m_bIsEndOfGroup = true; }
+    bool IsEndOfGroup() const { return m_bIsEndOfGroup; }
 
     inline void SetFrameFormat( SwFrameFormat *pFormat, bool bBorderLine,
                            sal_Int16 eVertOri );
@@ -858,30 +858,30 @@ void HTMLTableRow::Shrink( sal_uInt16 nCells )
 }
 
 HTMLTableColumn::HTMLTableColumn():
-    bIsEndOfGroup(false),
-    nWidth(0), bRelWidth(false),
-    eAdjust(SvxAdjust::End), eVertOri(text::VertOrientation::TOP),
-    bLeftBorder(false)
+    m_bIsEndOfGroup(false),
+    m_nWidth(0), m_bRelWidth(false),
+    m_eAdjust(SvxAdjust::End), m_eVertOri(text::VertOrientation::TOP),
+    m_bLeftBorder(false)
 {
-    for(SwFrameFormat* & rp : aFrameFormats)
+    for(SwFrameFormat* & rp : m_aFrameFormats)
         rp = nullptr;
 }
 
 inline void HTMLTableColumn::SetWidth( sal_uInt16 nWdth, bool bRelWdth )
 {
-    if( bRelWidth==bRelWdth )
+    if( m_bRelWidth==bRelWdth )
     {
-        if( nWdth > nWidth )
-            nWidth = nWdth;
+        if( nWdth > m_nWidth )
+            m_nWidth = nWdth;
     }
     else
-        nWidth = nWdth;
-    bRelWidth = bRelWdth;
+        m_nWidth = nWdth;
+    m_bRelWidth = bRelWdth;
 }
 
 inline std::unique_ptr<SwHTMLTableLayoutColumn> HTMLTableColumn::CreateLayoutInfo()
 {
-    return std::unique_ptr<SwHTMLTableLayoutColumn>(new SwHTMLTableLayoutColumn( nWidth, bRelWidth, bLeftBorder ));
+    return std::unique_ptr<SwHTMLTableLayoutColumn>(new SwHTMLTableLayoutColumn( m_nWidth, m_bRelWidth, m_bLeftBorder ));
 }
 
 inline sal_uInt16 HTMLTableColumn::GetFrameFormatIdx( bool bBorderLine,
@@ -902,13 +902,13 @@ inline sal_uInt16 HTMLTableColumn::GetFrameFormatIdx( bool bBorderLine,
 inline void HTMLTableColumn::SetFrameFormat( SwFrameFormat *pFormat, bool bBorderLine,
                                         sal_Int16 eVertOrient )
 {
-    aFrameFormats[GetFrameFormatIdx(bBorderLine,eVertOrient)] = pFormat;
+    m_aFrameFormats[GetFrameFormatIdx(bBorderLine,eVertOrient)] = pFormat;
 }
 
 inline SwFrameFormat *HTMLTableColumn::GetFrameFormat( bool bBorderLine,
                                              sal_Int16 eVertOrient ) const
 {
-    return aFrameFormats[GetFrameFormatIdx(bBorderLine,eVertOrient)];
+    return m_aFrameFormats[GetFrameFormatIdx(bBorderLine,eVertOrient)];
 }
 
 void HTMLTable::InitCtor(const HTMLTableOptions& rOptions)
@@ -1088,7 +1088,7 @@ const std::shared_ptr<SwHTMLTableLayout>& HTMLTable::CreateLayoutInfo()
 
     sal_uInt16 nBorderWidth = GetBorderWidth( m_aBorderLine, true );
     sal_uInt16 nLeftBorderWidth =
-        m_aColumns[0].bLeftBorder ? GetBorderWidth(m_aLeftBorderLine, true) : 0;
+        m_aColumns[0].m_bLeftBorder ? GetBorderWidth(m_aLeftBorderLine, true) : 0;
     sal_uInt16 nRightBorderWidth =
         m_bRightBorder ? GetBorderWidth( m_aRightBorderLine, true ) : 0;
 
@@ -1357,7 +1357,7 @@ void HTMLTable::FixFrameFormat( SwTableBox *pBox,
                 }
                 bSet = true;
             }
-            if (m_aColumns[nCol].bLeftBorder)
+            if (m_aColumns[nCol].m_bLeftBorder)
             {
                 const SvxBorderLine& rBorderLine =
                     0==nCol ? m_aLeftBorderLine : m_aBorderLine;
@@ -1800,7 +1800,7 @@ void HTMLTable::InheritVertBorders( const HTMLTable *pParent,
             GetBorderWidth( m_aInheritedRightBorderLine, true ) + MIN_BORDER_DIST;
     }
 
-    if (pParent->m_aColumns[nCol].bLeftBorder)
+    if (pParent->m_aColumns[nCol].m_bLeftBorder)
     {
         m_bInheritedLeftBorder = true;  // just remember for now
         m_aInheritedLeftBorderLine = 0==nCol ? pParent->m_aLeftBorderLine
@@ -1818,7 +1818,7 @@ void HTMLTable::InheritVertBorders( const HTMLTable *pParent,
 
     m_bRightAllowed = ( pParent->m_bRightAllowed &&
                   (nCol+nColSpan==pParent->m_nCols ||
-                   !pParent->m_aColumns[nCol+nColSpan].bLeftBorder) );
+                   !pParent->m_aColumns[nCol+nColSpan].m_bLeftBorder) );
 }
 
 void HTMLTable::SetBorders()
@@ -1829,7 +1829,7 @@ void HTMLTable::SetBorders()
             ((HTMLTableRules::Rows==m_eRules || HTMLTableRules::Groups==m_eRules) &&
              m_aColumns[i-1].IsEndOfGroup()))
         {
-            m_aColumns[i].bLeftBorder = true;
+            m_aColumns[i].m_bLeftBorder = true;
         }
 
     for( i=0; i<m_nRows-1; i++ )
@@ -1853,7 +1853,7 @@ void HTMLTable::SetBorders()
         m_bRightBorder = true;
     if( HTMLTableFrame::LHS==m_eFrame || HTMLTableFrame::VSides==m_eFrame || HTMLTableFrame::Box==m_eFrame )
     {
-        m_aColumns[0].bLeftBorder = true;
+        m_aColumns[0].m_bLeftBorder = true;
     }
 
     for( i=0; i<m_nRows; i++ )
@@ -2497,9 +2497,9 @@ void HTMLTable::MakeParentContents()
 
 void HTMLTableContext::SavePREListingXMP( SwHTMLParser& rParser )
 {
-    bRestartPRE = rParser.IsReadPRE();
-    bRestartXMP = rParser.IsReadXMP();
-    bRestartListing = rParser.IsReadListing();
+    m_bRestartPRE = rParser.IsReadPRE();
+    m_bRestartXMP = rParser.IsReadXMP();
+    m_bRestartListing = rParser.IsReadListing();
     rParser.FinishPREListingXMP();
 }
 
@@ -2507,13 +2507,13 @@ void HTMLTableContext::RestorePREListingXMP( SwHTMLParser& rParser )
 {
     rParser.FinishPREListingXMP();
 
-    if( bRestartPRE )
+    if( m_bRestartPRE )
         rParser.StartPRE();
 
-    if( bRestartXMP )
+    if( m_bRestartXMP )
         rParser.StartXMP();
 
-    if( bRestartListing )
+    if( m_bRestartListing )
         rParser.StartListing();
 }
 
@@ -3361,7 +3361,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
             std::optional<std::deque<std::unique_ptr<HTMLAttr>>> pPostIts;
             if( !bForceFrame && (bTopTable || pCurTable->HasParentSection()) )
             {
-                SplitAttrTab(pTCntxt->xAttrTab, bTopTable);
+                SplitAttrTab(pTCntxt->m_xAttrTab, bTopTable);
                 // If we reuse an already existing paragraph, we can't add
                 // PostIts since the paragraph gets behind that table.
                 // They're gonna be moved into the first paragraph of the table
@@ -3375,7 +3375,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
             }
             else
             {
-                SaveAttrTab(pTCntxt->xAttrTab);
+                SaveAttrTab(pTCntxt->m_xAttrTab);
                 if( bTopTable && !bAppended )
                 {
                     pPostIts.emplace();
@@ -5176,7 +5176,7 @@ std::shared_ptr<HTMLTable> SwHTMLParser::BuildTable(SvxAdjust eParentAdjust,
 
         GetNumInfo().Set( pTCntxt->GetNumInfo() );
         pTCntxt->RestorePREListingXMP( *this );
-        RestoreAttrTab(pTCntxt->xAttrTab);
+        RestoreAttrTab(pTCntxt->m_xAttrTab);
 
         if (m_xTable == xCurTable)
         {

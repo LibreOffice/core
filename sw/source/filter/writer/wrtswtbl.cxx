@@ -55,9 +55,9 @@ sal_Int16 SwWriteTableCell::GetVertOri() const
 }
 
 SwWriteTableRow::SwWriteTableRow( tools::Long nPosition, bool bUseLayoutHeights )
-    : pBackground(nullptr), nPos(nPosition), mbUseLayoutHeights(bUseLayoutHeights),
-    nTopBorder(USHRT_MAX), nBottomBorder(USHRT_MAX), bTopBorder(true),
-    bBottomBorder(true)
+    : m_pBackground(nullptr), m_nPos(nPosition), mbUseLayoutHeights(bUseLayoutHeights),
+    m_nTopBorder(USHRT_MAX), m_nBottomBorder(USHRT_MAX), m_bTopBorder(true),
+    m_bBottomBorder(true)
 {
 }
 
@@ -76,8 +76,8 @@ SwWriteTableCell *SwWriteTableRow::AddCell( const SwTableBox *pBox,
 }
 
 SwWriteTableCol::SwWriteTableCol(sal_uInt32 nPosition)
-    : nPos(nPosition), nWidthOpt(0), bRelWidthOpt(false),
-    bLeftBorder(true), bRightBorder(true)
+    : m_nPos(nPosition), m_nWidthOpt(0), m_bRelWidthOpt(false),
+    m_bLeftBorder(true), m_bRightBorder(true)
 {
 }
 
@@ -684,7 +684,7 @@ void SwWriteTable::FillTableRowsCols( tools::Long nStartRPos, sal_uInt16 nStartR
                         SwWriteTableCol *pCol = m_aCols[nOldCol].get();
                         OSL_ENSURE(pCol, "No TableCol found, panic!");
                         if (pCol)
-                            pCol->bLeftBorder = false;
+                            pCol->m_bLeftBorder = false;
                     }
 
                     if (!(nBorderMask & 8))
@@ -692,22 +692,22 @@ void SwWriteTable::FillTableRowsCols( tools::Long nStartRPos, sal_uInt16 nStartR
                         SwWriteTableCol *pCol = m_aCols[nCol].get();
                         OSL_ENSURE(pCol, "No TableCol found, panic!");
                         if (pCol)
-                            pCol->bRightBorder = false;
+                            pCol->m_bRightBorder = false;
                     }
 
                     if (!(nBorderMask & 1))
-                        pRow->bTopBorder = false;
-                    else if (!pRow->nTopBorder || nTopBorder < pRow->nTopBorder)
-                        pRow->nTopBorder = nTopBorder;
+                        pRow->m_bTopBorder = false;
+                    else if (!pRow->m_nTopBorder || nTopBorder < pRow->m_nTopBorder)
+                        pRow->m_nTopBorder = nTopBorder;
 
                     if (!(nBorderMask & 2))
-                        pEndRow->bBottomBorder = false;
+                        pEndRow->m_bBottomBorder = false;
                     else if (
-                                !pEndRow->nBottomBorder ||
-                                nBottomBorder < pEndRow->nBottomBorder
+                                !pEndRow->m_nBottomBorder ||
+                                nBottomBorder < pEndRow->m_nBottomBorder
                             )
                     {
-                        pEndRow->nBottomBorder = nBottomBorder;
+                        pEndRow->m_nBottomBorder = nBottomBorder;
                     }
                 }
             }
@@ -804,8 +804,8 @@ SwWriteTable::SwWriteTable(const SwTable* pTable, const SwHTMLTableLayout *pLayo
     {
         std::unique_ptr<SwWriteTableRow> pRow(
             new SwWriteTableRow( (nRow+1)*ROW_DFLT_HEIGHT, m_bUseLayoutHeights ));
-        pRow->nTopBorder = 0;
-        pRow->nBottomBorder = 0;
+        pRow->m_nTopBorder = 0;
+        pRow->m_nBottomBorder = 0;
         m_aRows.insert( std::move(pRow) );
     }
 
@@ -854,18 +854,18 @@ SwWriteTable::SwWriteTable(const SwTable* pTable, const SwHTMLTableLayout *pLayo
 
             SwWriteTableCol *pCol = m_aCols[nCol].get();
             if( !(nBorderMask & 4) )
-                pCol->bLeftBorder = false;
+                pCol->m_bLeftBorder = false;
 
             pCol = m_aCols[nCol+nColSpan-1].get();
             if( !(nBorderMask & 8) )
-                pCol->bRightBorder = false;
+                pCol->m_bRightBorder = false;
 
             if( !(nBorderMask & 1) )
-                pRow->bTopBorder = false;
+                pRow->m_bTopBorder = false;
 
             SwWriteTableRow *pEndRow = m_aRows[nRow+nRowSpan-1].get();
             if( !(nBorderMask & 2) )
-                pEndRow->bBottomBorder = false;
+                pEndRow->m_bBottomBorder = false;
 
             // The height requires only to be written once
             if( nHeight )
