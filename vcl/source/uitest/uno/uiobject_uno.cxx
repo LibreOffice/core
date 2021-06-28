@@ -29,9 +29,6 @@ UIObjectUnoObj::UIObjectUnoObj(std::unique_ptr<UIObject> pObj):
 
 UIObjectUnoObj::~UIObjectUnoObj()
 {
-    {
-        std::scoped_lock<std::mutex> lk3(mMutex);
-    }
     SolarMutexGuard aGuard;
     mpObj.reset();
 }
