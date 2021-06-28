@@ -994,7 +994,7 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                                 m_pImpl->nBottomMargin += aMSOBaseLeftTop.Y + aMSOBaseSize.Height
                                                           - (aLOSnapRect.Y + aLOSnapRect.Height);
                                 // tdf#141880 LibreOffice cannot handle negative vertical margins.
-                                // Those cases are catched below at common place.
+                                // Those cases are caught below at common place.
                             }
                         } // end IMPORT_AS_DETECTED_INLINE
                         else if ((m_pImpl->nWrap == text::WrapTextMode_PARALLEL

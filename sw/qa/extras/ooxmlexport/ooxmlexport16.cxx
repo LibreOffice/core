@@ -93,7 +93,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf142486_FrameShadow, "tdf142486_FrameShadow.odt")
     OUString sText = xViewCursor->getString();
     // Without fix in place, the frame size including shadow width was exported as object size. On
     // import the shadow width was added as wrap "distance from text". That results in totally
-    // different wrapping of the surrouding text.
+    // different wrapping of the surrounding text.
     // Here line started with "x" instead of expected "e".
     CPPUNIT_ASSERT(sText.startsWith("e"));
 }

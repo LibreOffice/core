@@ -89,7 +89,7 @@ void lclMovePositionWithRotation(awt::Point& aPos, const Size& rSize, Degree100 
 {
     // code from ImplEESdrWriter::ImplFlipBoundingBox (filter/source/msfilter/eschesdo.cxx)
     // TODO: refactor
-    // MSO uses left|top of the unrotated object rectangle as position. When you rotate that retangle
+    // MSO uses left|top of the unrotated object rectangle as position. When you rotate that rectangle
     // around its center and build a snap rectangle S from it, then left|top of S has to be the
     // position used in LO. This method converts LOs aPos to the position used by MSO.
 
@@ -920,7 +920,7 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
     // FixMe: tdf141880. Because LibreOffice currently cannot handle negative vertical margins, they
     // were forced to zero on import. Especially bottom margin of inline anchored rotated objects are
     // affected. If the object was not changed, it would be better to export the original values
-    // from grab-Bag. Unfortulately there exists no marker for "not changed", so a heuristic is used
+    // from grab-Bag. Unfortunately there exists no marker for "not changed", so a heuristic is used
     // here: If current left, top and right margins do not differ more than 1Hmm = 635EMU from the
     // values in grab-Bag, it is likely, that the object was not changed and we restore the values
     // from grab-Bag.
