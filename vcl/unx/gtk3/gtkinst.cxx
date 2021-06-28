@@ -433,8 +433,10 @@ bool GtkInstance::AnyInput( VclInputFlags nType )
     EnsureInit();
     if( (nType & VclInputFlags::TIMER) && IsTimerExpired() )
         return true;
+
 #if !GTK_CHECK_VERSION(4, 0, 0)
-    if (!gdk_events_pending())
+    GdkDisplay* pDisplay = gdk_display_get_default();
+    if (!gdk_display_has_pending(pDisplay))
         return false;
 #endif
 
@@ -445,7 +447,7 @@ bool GtkInstance::AnyInput( VclInputFlags nType )
 #if !GTK_CHECK_VERSION(4, 0, 0)
     std::deque<GdkEvent*> aEvents;
     GdkEvent *pEvent = nullptr;
-    while ((pEvent = gdk_event_get()))
+    while ((pEvent = gdk_display_get_event(pDisplay)))
     {
         aEvents.push_back(pEvent);
         VclInputFlags nEventType = categorizeEvent(pEvent);
@@ -458,7 +460,7 @@ bool GtkInstance::AnyInput( VclInputFlags nType )
     while (!aEvents.empty())
     {
         pEvent = aEvents.front();
-        gdk_event_put(pEvent);
+        gdk_display_put_event(pDisplay, pEvent);
         gdk_event_free(pEvent);
         aEvents.pop_front();
     }
