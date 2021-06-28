@@ -24,14 +24,11 @@ class tdf81696(UITestCase):
 
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:B3"}))
             #Open sort dialog by DATA - SORT,Just sort it by Column A, ascending. (it's default)
-            self.ui_test.execute_dialog_through_command(".uno:DataSort")
-            xDialog = self.xUITest.getTopFocusWindow()
-            xTabs = xDialog.getChild("tabcontrol")
-            xleftright = xDialog.getChild("leftright")
-            select_pos(xTabs, "0")
+            with self.ui_test.execute_dialog_through_command_guarded(".uno:DataSort") as xDialog:
+                xTabs = xDialog.getChild("tabcontrol")
+                xleftright = xDialog.getChild("leftright")
+                select_pos(xTabs, "0")
 
-            xOK = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOK)
             #verify
             self.assertEqual(get_cell_by_position(calc_doc, 0, 0, 0).getString(), "A")
             self.assertEqual(get_cell_by_position(calc_doc, 0, 1, 0).getString(), "B")

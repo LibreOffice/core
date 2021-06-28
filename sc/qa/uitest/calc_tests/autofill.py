@@ -19,10 +19,8 @@ class CalcAutofill(UITestCase):
             gridwin = xCalcDoc.getChild("grid_window")
             #Select cell A12 and drag the fill handle in the bottom right corner of the cell down to A18
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A12:A18"}))
-            self.ui_test.execute_dialog_through_command(".uno:FillSeries")
-            xDialog = self.xUITest.getTopFocusWindow()
-            xOK = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOK)
+            with self.ui_test.execute_dialog_through_command_guarded(".uno:FillSeries"):
+                pass
             #Compare with the content in the right next column
             self.assertEqual(get_cell_by_position(calc_doc, 0, 0, 11).getValue(), 18.34)
             self.assertEqual(get_cell_by_position(calc_doc, 0, 0, 12).getValue(), 19.34)
@@ -33,16 +31,13 @@ class CalcAutofill(UITestCase):
             self.assertEqual(get_cell_by_position(calc_doc, 0, 0, 17).getValue(), 24.34)
             #Select cell A12 and drag the fill handle in the bottom right corner of the cell up to A6
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A6:A12"}))
-            self.ui_test.execute_dialog_through_command(".uno:FillSeries")
-            xDialog = self.xUITest.getTopFocusWindow()
-            xup = xDialog.getChild("up")
-            xincrement = xDialog.getChild("increment")
-            xup.executeAction("CLICK", tuple())
-            xincrement.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
-            xincrement.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
-            xincrement.executeAction("TYPE", mkPropertyValues({"TEXT":"-1"}))
-            xOK = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOK)
+            with self.ui_test.execute_dialog_through_command_guarded(".uno:FillSeries") as xDialog:
+                xup = xDialog.getChild("up")
+                xincrement = xDialog.getChild("increment")
+                xup.executeAction("CLICK", tuple())
+                xincrement.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+                xincrement.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+                xincrement.executeAction("TYPE", mkPropertyValues({"TEXT":"-1"}))
             #Compare with the content in the right next column
             self.assertEqual(get_cell_by_position(calc_doc, 0, 0, 5).getValue(), 12.34)
             self.assertEqual(get_cell_by_position(calc_doc, 0, 0, 6).getValue(), 13.34)
@@ -54,10 +49,8 @@ class CalcAutofill(UITestCase):
 
             #Continue with the next cells with grey background
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "M12:M18"}))
-            self.ui_test.execute_dialog_through_command(".uno:FillSeries")
-            xDialog = self.xUITest.getTopFocusWindow()
-            xOK = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOK)
+            with self.ui_test.execute_dialog_through_command_guarded(".uno:FillSeries"):
+                pass
             #Compare with the content in the right next column
             self.assertEqual(get_cell_by_position(calc_doc, 0, 12, 11).getString(), "12abc40")
             self.assertEqual(get_cell_by_position(calc_doc, 0, 12, 12).getString(), "12abc41")
@@ -68,16 +61,13 @@ class CalcAutofill(UITestCase):
             self.assertEqual(get_cell_by_position(calc_doc, 0, 12, 17).getString(), "12abc46")
 
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "M6:M12"}))
-            self.ui_test.execute_dialog_through_command(".uno:FillSeries")
-            xDialog = self.xUITest.getTopFocusWindow()
-            xup = xDialog.getChild("up")
-            xincrement = xDialog.getChild("increment")
-            xup.executeAction("CLICK", tuple())
-            xincrement.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
-            xincrement.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
-            xincrement.executeAction("TYPE", mkPropertyValues({"TEXT":"-1"}))
-            xOK = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOK)
+            with self.ui_test.execute_dialog_through_command_guarded(".uno:FillSeries") as xDialog:
+                xup = xDialog.getChild("up")
+                xincrement = xDialog.getChild("increment")
+                xup.executeAction("CLICK", tuple())
+                xincrement.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+                xincrement.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+                xincrement.executeAction("TYPE", mkPropertyValues({"TEXT":"-1"}))
             #Compare with the content in the right next column
             self.assertEqual(get_cell_by_position(calc_doc, 0, 12, 5).getString(), "12abc34")
             self.assertEqual(get_cell_by_position(calc_doc, 0, 12, 6).getString(), "12abc35")
@@ -88,10 +78,8 @@ class CalcAutofill(UITestCase):
             self.assertEqual(get_cell_by_position(calc_doc, 0, 12, 11).getString(), "12abc40")
 
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "P12:P18"}))
-            self.ui_test.execute_dialog_through_command(".uno:FillSeries")
-            xDialog = self.xUITest.getTopFocusWindow()
-            xOK = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOK)
+            with self.ui_test.execute_dialog_through_command_guarded(".uno:FillSeries"):
+                pass
             #Compare with the content in the right next column
             self.assertEqual(get_cell_by_position(calc_doc, 0, 15, 11).getString(), "10.64.127.7")
             self.assertEqual(get_cell_by_position(calc_doc, 0, 15, 12).getString(), "10.64.127.8")
@@ -102,16 +90,13 @@ class CalcAutofill(UITestCase):
             self.assertEqual(get_cell_by_position(calc_doc, 0, 15, 17).getString(), "10.64.127.13")
 
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "P6:P12"}))
-            self.ui_test.execute_dialog_through_command(".uno:FillSeries")
-            xDialog = self.xUITest.getTopFocusWindow()
-            xup = xDialog.getChild("up")
-            xincrement = xDialog.getChild("increment")
-            xup.executeAction("CLICK", tuple())
-            xincrement.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
-            xincrement.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
-            xincrement.executeAction("TYPE", mkPropertyValues({"TEXT":"-1"}))
-            xOK = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOK)
+            with self.ui_test.execute_dialog_through_command_guarded(".uno:FillSeries") as xDialog:
+                xup = xDialog.getChild("up")
+                xincrement = xDialog.getChild("increment")
+                xup.executeAction("CLICK", tuple())
+                xincrement.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+                xincrement.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+                xincrement.executeAction("TYPE", mkPropertyValues({"TEXT":"-1"}))
             #Compare with the content in the right next column
             self.assertEqual(get_cell_by_position(calc_doc, 0, 15, 5).getString(), "10.64.127.1")
             self.assertEqual(get_cell_by_position(calc_doc, 0, 15, 6).getString(), "10.64.127.2")
@@ -129,12 +114,9 @@ class CalcAutofill(UITestCase):
         enter_text_to_cell(gridwin, "A1", "1st")
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "B2"}))
         gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:A3"}))
-        self.ui_test.execute_dialog_through_command(".uno:FillSeries")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xautofill = xDialog.getChild("autofill")
-        xautofill.executeAction("CLICK", tuple())
-        xOK = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOK)
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:FillSeries") as xDialog:
+            xautofill = xDialog.getChild("autofill")
+            xautofill.executeAction("CLICK", tuple())
         self.assertEqual(get_cell_by_position(document, 0, 0, 0).getString(), "1st")
         self.assertEqual(get_cell_by_position(document, 0, 0, 1).getString(), "2nd")
         self.assertEqual(get_cell_by_position(document, 0, 0, 2).getString(), "3rd")

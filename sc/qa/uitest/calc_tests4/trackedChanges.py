@@ -47,21 +47,15 @@ class CalcTrackedChanges(UITestCase):
         document = self.ui_test.get_component()
         self.xUITest.executeCommand(".uno:TraceChangeMode")
         #protect dialog
-        self.ui_test.execute_dialog_through_command(".uno:ProtectTraceChangeMode")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xpass = xDialog.getChild("pass1ed")
-        xpass.executeAction("TYPE", mkPropertyValues({"TEXT":"a"}))
-        xconfirm = xDialog.getChild("confirm1ed")
-        xconfirm.executeAction("TYPE", mkPropertyValues({"TEXT":"a"}))
-        xOkBtn = xDialog.getChild("ok")
-        xOkBtn.executeAction("CLICK", tuple())
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:ProtectTraceChangeMode") as xDialog:
+            xpass = xDialog.getChild("pass1ed")
+            xpass.executeAction("TYPE", mkPropertyValues({"TEXT":"a"}))
+            xconfirm = xDialog.getChild("confirm1ed")
+            xconfirm.executeAction("TYPE", mkPropertyValues({"TEXT":"a"}))
         #verify password
-        self.ui_test.execute_dialog_through_command(".uno:ProtectTraceChangeMode")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xpass = xDialog.getChild("pass1ed")
-        xpass.executeAction("TYPE", mkPropertyValues({"TEXT":"a"}))
-        xOkBtn = xDialog.getChild("ok")
-        xOkBtn.executeAction("CLICK", tuple())
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:ProtectTraceChangeMode") as xDialog:
+            xpass = xDialog.getChild("pass1ed")
+            xpass.executeAction("TYPE", mkPropertyValues({"TEXT":"a"}))
 
         self.ui_test.close_doc()
 

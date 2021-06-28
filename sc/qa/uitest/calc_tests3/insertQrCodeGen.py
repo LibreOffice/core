@@ -17,32 +17,26 @@ class insertQrCode(UITestCase):
         document = self.ui_test.get_component()
 
         # cancel the dialog without doing anything
-        self.ui_test.execute_dialog_through_command(".uno:InsertQrCode")
-        xDialog = self.xUITest.getTopFocusWindow()
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:InsertQrCode", close_button="cancel") as xDialog:
 
-        xURL = xDialog.getChild("edit_text")
-        type_text(xURL, "www.libreoffice.org")
+            xURL = xDialog.getChild("edit_text")
+            type_text(xURL, "www.libreoffice.org")
 
-        xCloseBtn = xDialog.getChild("cancel")
-        self.ui_test.close_dialog_through_button(xCloseBtn)
         with self.assertRaises(IndexOutOfBoundsException):
             document.Sheets.getByIndex(0).DrawPage.getByIndex(0)
 
         # Reopen the dialog box
-        self.ui_test.execute_dialog_through_command(".uno:InsertQrCode")
-        xDialog = self.xUITest.getTopFocusWindow()
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:InsertQrCode") as xDialog:
 
-        # Get elements in the Dialog Box
-        xURL = xDialog.getChild("edit_text")
-        xECC_Low = xDialog.getChild("button_low") #How radio button input is written in text.
-        xBorder = xDialog.getChild("edit_margin")
+            # Get elements in the Dialog Box
+            xURL = xDialog.getChild("edit_text")
+            xECC_Low = xDialog.getChild("button_low") #How radio button input is written in text.
+            xBorder = xDialog.getChild("edit_margin")
 
-        type_text(xURL, "www.libreoffice.org") #set the QR code
-        xECC_Low.executeAction("CLICK", tuple())
-        xBorder.executeAction("UP", tuple())
-        xBorder.executeAction("DOWN", tuple())
-        xOKBtn = xDialog.getChild("ok")
-        xOKBtn.executeAction("CLICK", tuple())
+            type_text(xURL, "www.libreoffice.org") #set the QR code
+            xECC_Low.executeAction("CLICK", tuple())
+            xBorder.executeAction("UP", tuple())
+            xBorder.executeAction("DOWN", tuple())
 
         # check the QR code in the document
         self.assertEqual(document.Sheets.getByIndex(0).DrawPage.getByIndex(0).QRCodeProperties.Payload, "www.libreoffice.org")
@@ -57,19 +51,16 @@ class insertQrCode(UITestCase):
         gridwin = xCalcDoc.getChild("grid_window")
         document = self.ui_test.get_component()
 
-        self.ui_test.execute_dialog_through_command(".uno:InsertQrCode")
-        xDialog = self.xUITest.getTopFocusWindow()
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:InsertQrCode") as xDialog:
 
-        xURL = xDialog.getChild("edit_text")
-        xECC_Low = xDialog.getChild("button_low")
-        xBorder = xDialog.getChild("edit_margin")
+            xURL = xDialog.getChild("edit_text")
+            xECC_Low = xDialog.getChild("button_low")
+            xBorder = xDialog.getChild("edit_margin")
 
-        type_text(xURL, "www.libreoffice.org") #set the QR code
-        xECC_Low.executeAction("CLICK", tuple())
-        xBorder.executeAction("UP", tuple())
-        xBorder.executeAction("DOWN", tuple())
-        xOKBtn = xDialog.getChild("ok")
-        xOKBtn.executeAction("CLICK", tuple())
+            type_text(xURL, "www.libreoffice.org") #set the QR code
+            xECC_Low.executeAction("CLICK", tuple())
+            xBorder.executeAction("UP", tuple())
+            xBorder.executeAction("DOWN", tuple())
 
         #check the QR Code in the document
         self.assertEqual(document.Sheets.getByIndex(0).DrawPage.getByIndex(0).QRCodeProperties.Payload, "www.libreoffice.org")

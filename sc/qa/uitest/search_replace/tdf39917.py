@@ -23,46 +23,37 @@ class tdf39917(UITestCase):
         gridwin = xCalcDoc.getChild("grid_window")
         document = self.ui_test.get_component()
         #* Tools --> Options --> Calc --> Formula -->  Syntax = Excel R1C1
-        self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog")  #optionsdialog
-        xDialogOpt = self.xUITest.getTopFocusWindow()
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:OptionsTreeDialog") as xDialogOpt:
 
-        xPages = xDialogOpt.getChild("pages")
-        xCalcEntry = xPages.getChild('3')                 # Calc
-        xCalcEntry.executeAction("EXPAND", tuple())
-        xCalcFormulaEntry = xCalcEntry.getChild('4')
-        xCalcFormulaEntry.executeAction("SELECT", tuple())          #Formula
+            xPages = xDialogOpt.getChild("pages")
+            xCalcEntry = xPages.getChild('3')                 # Calc
+            xCalcEntry.executeAction("EXPAND", tuple())
+            xCalcFormulaEntry = xCalcEntry.getChild('4')
+            xCalcFormulaEntry.executeAction("SELECT", tuple())          #Formula
 
-        formulasyntax = xDialogOpt.getChild("formulasyntax")
-        #Excel R1C1
-        select_by_text(formulasyntax, "Excel R1C1")
+            formulasyntax = xDialogOpt.getChild("formulasyntax")
+            #Excel R1C1
+            select_by_text(formulasyntax, "Excel R1C1")
 
-        xOKBtn = xDialogOpt.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKBtn)
 
         #1. Create a workbook with 3 sheets: Page1, Page2, Page3.
         # 2. Tools -> Options -> LibreOffice Calc -> Formula: Set syntax to Excel A1
         # 5. Fill fields:
 
-        self.ui_test.execute_dialog_through_command(".uno:Insert")  #insert sheet
-        xDialog = self.xUITest.getTopFocusWindow()
-        after = xDialog.getChild("after")
-        after.executeAction("CLICK", tuple())
-        nameed = xDialog.getChild("nameed")
-        nameed.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
-        nameed.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
-        nameed.executeAction("TYPE", mkPropertyValues({"TEXT":"Page2"}))
-        xOKButton = xDialog.getChild("ok")
-        xOKButton.executeAction("CLICK", tuple())
-        self.ui_test.execute_dialog_through_command(".uno:Insert")  #insert sheet
-        xDialog = self.xUITest.getTopFocusWindow()
-        after = xDialog.getChild("after")
-        after.executeAction("CLICK", tuple())
-        nameed = xDialog.getChild("nameed")
-        nameed.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
-        nameed.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
-        nameed.executeAction("TYPE", mkPropertyValues({"TEXT":"Page3"}))
-        xOKButton = xDialog.getChild("ok")
-        xOKButton.executeAction("CLICK", tuple())
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:Insert") as xDialog:
+            after = xDialog.getChild("after")
+            after.executeAction("CLICK", tuple())
+            nameed = xDialog.getChild("nameed")
+            nameed.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+            nameed.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+            nameed.executeAction("TYPE", mkPropertyValues({"TEXT":"Page2"}))
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:Insert") as xDialog:
+            after = xDialog.getChild("after")
+            after.executeAction("CLICK", tuple())
+            nameed = xDialog.getChild("nameed")
+            nameed.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+            nameed.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+            nameed.executeAction("TYPE", mkPropertyValues({"TEXT":"Page3"}))
         gridwin.executeAction("TYPE", mkPropertyValues({"KEYCODE":"RIGHT"}))
         # 3. Type in (for example) B4:  =Page2!B4
         enter_text_to_cell(gridwin, "B4", "=Page2!RC")
@@ -88,21 +79,18 @@ class tdf39917(UITestCase):
         enter_text_to_cell(gridwin, "A1", "=FORMULA(R[3]C[1])")
         self.assertEqual(get_cell_by_position(document, 0, 0, 0).getString(), "=Page3!RC")
         #Give it back Tools --> Options --> Calc --> Formula -->  Syntax = Calc A1
-        self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog")  #optionsdialog
-        xDialogOpt = self.xUITest.getTopFocusWindow()
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:OptionsTreeDialog") as xDialogOpt:
 
-        xPages = xDialogOpt.getChild("pages")
-        xCalcEntry = xPages.getChild('3')                 # Calc
-        xCalcEntry.executeAction("EXPAND", tuple())
-        xCalcFormulaEntry = xCalcEntry.getChild('4')
-        xCalcFormulaEntry.executeAction("SELECT", tuple())          #Formula
+            xPages = xDialogOpt.getChild("pages")
+            xCalcEntry = xPages.getChild('3')                 # Calc
+            xCalcEntry.executeAction("EXPAND", tuple())
+            xCalcFormulaEntry = xCalcEntry.getChild('4')
+            xCalcFormulaEntry.executeAction("SELECT", tuple())          #Formula
 
-        formulasyntax = xDialogOpt.getChild("formulasyntax")
-        #Excel R1C1
-        select_by_text(formulasyntax, "Calc A1")
+            formulasyntax = xDialogOpt.getChild("formulasyntax")
+            #Excel R1C1
+            select_by_text(formulasyntax, "Calc A1")
 
-        xOKBtn = xDialogOpt.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKBtn)
 
         self.ui_test.close_doc()
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

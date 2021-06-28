@@ -16,33 +16,29 @@ import unittest
 class CalcChartUIDemo(UITestCase):
 
     def create_insert_chart_dialog(self):
-        self.ui_test.execute_dialog_through_command(".uno:InsertObjectChart")
-        # time.sleep(1) # ideally wait for a creation event
-        return self.xUITest.getTopFocusWindow()
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:InsertObjectChart", close_button="cancel") as xCalcDoc:
+            # time.sleep(1) # ideally wait for a creation event
 
-    def fill_spreadsheet(self):
-        xCalcDoc = self.xUITest.getTopFocusWindow()
-        xGridWindow = xCalcDoc.getChild("grid_window")
+        def fill_spreadsheet(self):
+            xGridWindow = xCalcDoc.getChild("grid_window")
 
-        enter_text_to_cell(xGridWindow, "A1", "col1")
-        enter_text_to_cell(xGridWindow, "B1", "col2")
-        enter_text_to_cell(xGridWindow, "C1", "col3")
-        enter_text_to_cell(xGridWindow, "A2", "1")
-        enter_text_to_cell(xGridWindow, "B2", "3")
-        enter_text_to_cell(xGridWindow, "C2", "5")
+            enter_text_to_cell(xGridWindow, "A1", "col1")
+            enter_text_to_cell(xGridWindow, "B1", "col2")
+            enter_text_to_cell(xGridWindow, "C1", "col3")
+            enter_text_to_cell(xGridWindow, "A2", "1")
+            enter_text_to_cell(xGridWindow, "B2", "3")
+            enter_text_to_cell(xGridWindow, "C2", "5")
 
-        xGridWindow.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:C2"}))
+            xGridWindow.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:C2"}))
 
-    def test_cancel_immediately(self):
+        def test_cancel_immediately(self):
 
-        self.ui_test.create_doc_in_start_center("calc")
+            self.ui_test.create_doc_in_start_center("calc")
 
-        self.fill_spreadsheet()
+            self.fill_spreadsheet()
 
-        xChartDlg = self.create_insert_chart_dialog();
+            xChartDlg = self.create_insert_chart_dialog();
 
-        xCancelBtn = xChartDlg.getChild("cancel")
-        self.ui_test.close_dialog_through_button(xCancelBtn)
 
         self.ui_test.close_doc()
 

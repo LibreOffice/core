@@ -20,14 +20,11 @@ class tdf85979(UITestCase):
             #(I selected C1 to C5, then Text to Columns, unselected "Tab" and selected "Space")
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "C1:C5"}))
             # Data - Text to Columns
-            self.ui_test.execute_dialog_through_command(".uno:TextToColumns")
-            xDialog = self.xUITest.getTopFocusWindow()
-            xspace = xDialog.getChild("space")
-            if (get_state_as_dict(xspace)["Selected"]) == "false":
-                xspace.executeAction("CLICK", tuple())
-            # Click Ok
-            xOK = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOK)
+            with self.ui_test.execute_dialog_through_command_guarded(".uno:TextToColumns") as xDialog:
+                xspace = xDialog.getChild("space")
+                if (get_state_as_dict(xspace)["Selected"]) == "false":
+                    xspace.executeAction("CLICK", tuple())
+                # Click Ok
 
             #Verify
             self.assertEqual(get_cell_by_position(calc_doc, 0, 2, 0).getValue(), 99)
