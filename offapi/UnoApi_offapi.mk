@@ -476,7 +476,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/xml/dom,\
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/xml/sax,\
 	FastParser \
-	FastShapeContextHandler \
 	FastTokenHandler \
 	Parser \
     Writer \
@@ -4373,7 +4372,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/xml/sax,\
 	XFastDocumentHandler \
 	XFastParser \
 	XFastSAXSerializable \
-	XFastShapeContextHandler \
 	XFastTokenHandler \
 	XLocator \
 	XParser \
