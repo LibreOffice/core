@@ -98,10 +98,9 @@ SwColumnDlg::SwColumnDlg(weld::Window* pParent, SwWrtShell& rSh)
     m_nSelectionWidth = aRect.Width();
 
     SfxItemSet* pColPgSet = nullptr;
-    static sal_uInt16 const aSectIds[] = { RES_COL, RES_COL,
-                                                RES_FRM_SIZE, RES_FRM_SIZE,
-                                                RES_COLUMNBALANCE, RES_FRAMEDIR,
-                                                0 };
+    static svl::Items<RES_FRM_SIZE, RES_FRM_SIZE,
+                      RES_COL, RES_COL,
+                      RES_COLUMNBALANCE, RES_FRAMEDIR> const aSectIds;
 
     const SwSection* pCurrSection = m_rWrtShell.GetCurrSection();
     const sal_uInt16 nFullSectCnt = m_rWrtShell.GetFullSelectedSectionCount();
