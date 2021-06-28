@@ -10,7 +10,7 @@
 from uitest.framework import UITestCase
 from uitest.uihelper.common import get_state_as_dict
 from libreoffice.uno.propertyvalue import mkPropertyValues
-from uitest.uihelper import guarded
+
 #test FontWorks dialog
 class fontWorksDialog(UITestCase):
 
@@ -19,7 +19,7 @@ class fontWorksDialog(UITestCase):
         xWriterDoc = self.xUITest.getTopFocusWindow()
         xWriterEdit = xWriterDoc.getChild("writer_edit")
 
-        with guarded.execute_dialog_through_command(self, ".uno:FontworkGalleryFloater", close_button="cancel") as xDialog:
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:FontworkGalleryFloater", close_button="cancel") as xDialog:
             FontWorkSelector = xDialog.getChild("ctlFavoriteswin")
             # Select element with id (3)
             element3 = FontWorkSelector.getChild("2")

@@ -31,14 +31,11 @@ class masterSlides(UITestCase):
         xCloseMasterButton = xImpress.getChild("closemasterslide")
         xCloseMasterButton.executeAction("CLICK", tuple())
 
-        self.ui_test.execute_dialog_through_command(".uno:PresentationLayout")
-        xDialog = self.xUITest.getTopFocusWindow()
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:PresentationLayout") as xDialog:
 
-        xSelect = xDialog.getChild('select')
-        xSelect.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RIGHT"}))
+            xSelect = xDialog.getChild('select')
+            xSelect.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RIGHT"}))
 
-        xOk = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOk)
 
         xMasterSlide = xImpress.getChild("masterslide")
         self.assertEqual("Default 1", get_state_as_dict(xMasterSlide)['SelectEntryText'])
