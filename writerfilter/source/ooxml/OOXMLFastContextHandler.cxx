@@ -20,7 +20,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
-#include <com/sun/star/xml/sax/FastShapeContextHandler.hpp>
 #include <com/sun/star/xml/sax/SAXException.hpp>
 #include <ooxml/resourceids.hxx>
 #include <oox/mathml/import.hxx>
@@ -1692,11 +1691,11 @@ void OOXMLFastContextHandlerShape::setToken(Token_t nToken)
         getDocument()->pushShapeContext();
     }
 
-    mrShapeContext.set(getDocument()->getShapeContext());
+    mrShapeContext = getDocument()->getShapeContext();
     if (!mrShapeContext.is())
     {
         // Define the shape context for the whole document
-        mrShapeContext = css::xml::sax::FastShapeContextHandler::create(getComponentContext());
+        mrShapeContext = new oox::shape::ShapeContextHandler(getComponentContext());
         getDocument()->setShapeContext(mrShapeContext);
     }
 

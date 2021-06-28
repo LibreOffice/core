@@ -16,18 +16,19 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_OOX_SOURCE_SHAPE_SHAPECONTEXTHANDLER_HXX
-#define INCLUDED_OOX_SOURCE_SHAPE_SHAPECONTEXTHANDLER_HXX
+#pragma once
 
 #include <memory>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/implbase.hxx>
-#include <com/sun/star/xml/sax/XFastShapeContextHandler.hpp>
 #include <oox/drawingml/graphicshapecontext.hxx>
 #include <oox/core/fragmenthandler2.hxx>
 #include <oox/core/xmlfilterbase.hxx>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
+#include <com/sun/star/graphic/XGraphicMapper.hpp>
+#include <com/sun/star/drawing/XDrawPage.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 
 namespace oox::shape {
 
@@ -45,24 +46,14 @@ public:
     }
 };
 
-class ShapeContextHandler:
-    public ::cppu::WeakImplHelper< css::xml::sax::XFastShapeContextHandler,
-                                    css::lang::XServiceInfo >
+class OOX_DLLPUBLIC ShapeContextHandler:
+    public ::cppu::WeakImplHelper< css::xml::sax::XFastContextHandler >
 {
 public:
     explicit ShapeContextHandler
     (css::uno::Reference< css::uno::XComponentContext > const & context);
 
     virtual ~ShapeContextHandler() override;
-
-    // css::lang::XServiceInfo:
-    virtual OUString SAL_CALL getImplementationName() override;
-
-    virtual sal_Bool SAL_CALL supportsService
-    (const OUString & ServiceName) override;
-
-    virtual css::uno::Sequence< OUString > SAL_CALL
-    getSupportedServiceNames() override;
 
     // css::xml::sax::XFastContextHandler:
     virtual void SAL_CALL startFastElement
@@ -93,35 +84,29 @@ public:
 
     virtual void SAL_CALL characters(const OUString & aChars) override;
 
-    // css::xml::sax::XFastShapeContextHandler:
-    virtual css::uno::Reference< css::drawing::XShape > SAL_CALL getShape() override;
+    css::uno::Reference< css::drawing::XShape > getShape();
 
-    virtual css::uno::Reference< css::drawing::XDrawPage > SAL_CALL getDrawPage() override;
+    css::uno::Reference< css::drawing::XDrawPage > getDrawPage();
+    void setDrawPage(const css::uno::Reference< css::drawing::XDrawPage > & the_value);
 
-    virtual void SAL_CALL setDrawPage
-    (const css::uno::Reference< css::drawing::XDrawPage > & the_value) override;
+    css::uno::Reference< css::frame::XModel > getModel();
+    void setModel(const css::uno::Reference< css::frame::XModel > & the_value);
 
-    virtual css::uno::Reference< css::frame::XModel > SAL_CALL getModel() override;
+    OUString getRelationFragmentPath();
+    void setRelationFragmentPath(const OUString & the_value);
 
-    virtual void SAL_CALL setModel
-    (const css::uno::Reference< css::frame::XModel > & the_value) override;
+    sal_Int32 getStartToken();
+    void setStartToken( sal_Int32 _starttoken );
 
-    virtual OUString SAL_CALL getRelationFragmentPath() override;
-    virtual void SAL_CALL setRelationFragmentPath
-    (const OUString & the_value) override;
+    css::awt::Point getPosition();
+    void setPosition(const css::awt::Point& rPosition);
 
-    virtual ::sal_Int32 SAL_CALL getStartToken() override;
-    virtual void SAL_CALL setStartToken( ::sal_Int32 _starttoken ) override;
+    void setDocumentProperties(const css::uno::Reference<css::document::XDocumentProperties>& xDocProps);
+    css::uno::Reference<css::document::XDocumentProperties> getDocumentProperties();
+    css::uno::Sequence<css::beans::PropertyValue> getMediaDescriptor();
+    void setMediaDescriptor(const css::uno::Sequence<css::beans::PropertyValue>& rMediaDescriptor);
 
-    virtual css::awt::Point SAL_CALL getPosition() override;
-    virtual void SAL_CALL setPosition(const css::awt::Point& rPosition) override;
-
-    virtual void SAL_CALL setDocumentProperties(const css::uno::Reference<css::document::XDocumentProperties>& xDocProps) override;
-    virtual css::uno::Reference<css::document::XDocumentProperties> SAL_CALL getDocumentProperties() override;
-    virtual css::uno::Sequence<css::beans::PropertyValue> SAL_CALL getMediaDescriptor() override;
-    virtual void SAL_CALL setMediaDescriptor(const css::uno::Sequence<css::beans::PropertyValue>& rMediaDescriptor) override;
-
-    void SAL_CALL setGraphicMapper(css::uno::Reference<css::graphic::XGraphicMapper> const & rGraphicMapper) override;
+    void setGraphicMapper(css::uno::Reference<css::graphic::XGraphicMapper> const & rGraphicMapper);
 
 private:
     ShapeContextHandler(ShapeContextHandler const &) = delete;
@@ -162,7 +147,5 @@ private:
 };
 
 }
-
-#endif // INCLUDED_OOX_SOURCE_SHAPE_SHAPECONTEXTHANDLER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

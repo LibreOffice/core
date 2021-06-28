@@ -834,23 +834,23 @@ const uno::Sequence<beans::PropertyValue>& OOXMLDocumentImpl::getMediaDescriptor
     return maMediaDescriptor;
 }
 
-void OOXMLDocumentImpl::setShapeContext( uno::Reference<xml::sax::XFastShapeContextHandler> xContext )
+void OOXMLDocumentImpl::setShapeContext( rtl::Reference<oox::shape::ShapeContextHandler> xContext )
 {
     if (!maShapeContexts.empty())
         maShapeContexts.top() = xContext;
 }
 
-uno::Reference<xml::sax::XFastShapeContextHandler> OOXMLDocumentImpl::getShapeContext( )
+rtl::Reference<oox::shape::ShapeContextHandler> OOXMLDocumentImpl::getShapeContext( )
 {
     if (!maShapeContexts.empty())
         return maShapeContexts.top();
     else
-        return uno::Reference<xml::sax::XFastShapeContextHandler>();
+        return {};
 }
 
 void OOXMLDocumentImpl::pushShapeContext()
 {
-    maShapeContexts.push(uno::Reference<xml::sax::XFastShapeContextHandler>());
+    maShapeContexts.push({});
 }
 
 void OOXMLDocumentImpl::popShapeContext()

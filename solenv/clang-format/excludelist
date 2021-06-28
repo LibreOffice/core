@@ -5499,6 +5499,7 @@ include/oox/ppt/slidetransitioncontext.hxx
 include/oox/ppt/soundactioncontext.hxx
 include/oox/ppt/timenode.hxx
 include/oox/ppt/timenodelistcontext.hxx
+include/oox/shape/ShapeContextHandler.hxx
 include/oox/shape/ShapeFilterBase.hxx
 include/oox/token/tokenmap.hxx
 include/oox/vml/vmldrawing.hxx
@@ -7323,7 +7324,6 @@ oox/source/ppt/timenodelistcontext.cxx
 oox/source/ppt/timetargetelementcontext.cxx
 oox/source/ppt/timetargetelementcontext.hxx
 oox/source/shape/ShapeContextHandler.cxx
-oox/source/shape/ShapeContextHandler.hxx
 oox/source/shape/ShapeDrawingFragmentHandler.cxx
 oox/source/shape/ShapeDrawingFragmentHandler.hxx
 oox/source/shape/ShapeFilterBase.cxx
