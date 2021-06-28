@@ -146,7 +146,7 @@ void SalData::ensureThreadAutoreleasePool() {}
 
 extern "C" SalInstance *create_SalInstance()
 {
-    IosSalInstance* pInstance = new IosSalInstance( std::make_unique<SvpSalYieldMutex>() );
+    IosSalInstance* pInstance = new IosSalInstance( std::make_unique<SalYieldMutex>() );
     new SvpSalData(pInstance);
     return pInstance;
 }
