@@ -41,22 +41,19 @@ class classification(UITestCase):
         writer_doc = self.ui_test.create_doc_in_start_center("writer")
         document = self.ui_test.get_component()
         xWriterDoc = self.xUITest.getTopFocusWindow()
-        self.ui_test.execute_dialog_through_command(".uno:ClassificationDialog")
-        xDialog = self.xUITest.getTopFocusWindow()
-        classificationEditWindow = xDialog.getChild("classificationEditWindow")
-        recentlyUsedCB = xDialog.getChild("recentlyUsedCB")
-        classificationCB = xDialog.getChild("classificationCB")
-        internationalClassificationCB = xDialog.getChild("internationalClassificationCB")
-        intellectualPropertyPartEntry = xDialog.getChild("intellectualPropertyPartEntry")
-        intellectualPropertyPartAddButton = xDialog.getChild("intellectualPropertyPartAddButton")
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:ClassificationDialog") as xDialog:
+            classificationEditWindow = xDialog.getChild("classificationEditWindow")
+            recentlyUsedCB = xDialog.getChild("recentlyUsedCB")
+            classificationCB = xDialog.getChild("classificationCB")
+            internationalClassificationCB = xDialog.getChild("internationalClassificationCB")
+            intellectualPropertyPartEntry = xDialog.getChild("intellectualPropertyPartEntry")
+            intellectualPropertyPartAddButton = xDialog.getChild("intellectualPropertyPartAddButton")
 
-        select_by_text(classificationCB, "Confidential")
-        #verify International is set too
-        self.assertEqual(get_state_as_dict(internationalClassificationCB)["SelectEntryText"], "Confidential")
-        #verify textBox Content
-        # self.assertEqual(get_state_as_dict(classificationEditWindow)["Text"], "Conf")
-        xOKBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKBtn)
+            select_by_text(classificationCB, "Confidential")
+            #verify International is set too
+            self.assertEqual(get_state_as_dict(internationalClassificationCB)["SelectEntryText"], "Confidential")
+            #verify textBox Content
+            # self.assertEqual(get_state_as_dict(classificationEditWindow)["Text"], "Conf")
 
         header = document.StyleFamilies.PageStyles.Standard.HeaderText.createEnumeration().nextElement()
         self.assertEqual(header.String, "Confidential")
@@ -66,16 +63,13 @@ class classification(UITestCase):
 
         #verify watermark
         #Bug 122586 - Classification: by using the dialog, Watermark text from policy is not placed in the document
-        self.ui_test.execute_dialog_through_command(".uno:Watermark")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xTextInput = xDialog.getChild("TextInput")
-        xAngle = xDialog.getChild("Angle")
-        xTransparency = xDialog.getChild("Transparency")
-        self.assertEqual(get_state_as_dict(xTextInput)["Text"], "Confidential")
-        self.assertEqual(get_state_as_dict(xAngle)["Text"], "45°")
-        self.assertEqual((get_state_as_dict(xTransparency)["Text"])[0:2], "50")
-        xCancelBtn = xDialog.getChild("cancel")
-        self.ui_test.close_dialog_through_button(xCancelBtn)
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:Watermark", close_button="cancel") as xDialog:
+            xTextInput = xDialog.getChild("TextInput")
+            xAngle = xDialog.getChild("Angle")
+            xTransparency = xDialog.getChild("Transparency")
+            self.assertEqual(get_state_as_dict(xTextInput)["Text"], "Confidential")
+            self.assertEqual(get_state_as_dict(xAngle)["Text"], "45°")
+            self.assertEqual((get_state_as_dict(xTransparency)["Text"])[0:2], "50")
 
         #TODO
         #open dialog and add intellectualProperty text, save
@@ -83,24 +77,21 @@ class classification(UITestCase):
         #reopen and verify classification and Content
 
         #do the same for Paragraph classification
-        self.ui_test.execute_dialog_through_command(".uno:ParagraphClassificationDialog")
-        xDialog = self.xUITest.getTopFocusWindow()
-        classificationEditWindow = xDialog.getChild("classificationEditWindow")
-        recentlyUsedCB = xDialog.getChild("recentlyUsedCB")
-        classificationCB = xDialog.getChild("classificationCB")
-        internationalClassificationCB = xDialog.getChild("internationalClassificationCB")
-        intellectualPropertyPartEntry = xDialog.getChild("intellectualPropertyPartEntry")
-        intellectualPropertyPartAddButton = xDialog.getChild("intellectualPropertyPartAddButton")
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:ParagraphClassificationDialog") as xDialog:
+            classificationEditWindow = xDialog.getChild("classificationEditWindow")
+            recentlyUsedCB = xDialog.getChild("recentlyUsedCB")
+            classificationCB = xDialog.getChild("classificationCB")
+            internationalClassificationCB = xDialog.getChild("internationalClassificationCB")
+            intellectualPropertyPartEntry = xDialog.getChild("intellectualPropertyPartEntry")
+            intellectualPropertyPartAddButton = xDialog.getChild("intellectualPropertyPartAddButton")
 
-        select_by_text(classificationCB, "Confidential")
-        #verify International is set too
-        self.assertEqual(get_state_as_dict(internationalClassificationCB)["SelectEntryText"], "Confidential")
-        #verify textBox Content  TODO textbox not supported
-        #self.assertEqual(get_state_as_dict(classificationEditWindow)["Text"], "Conf")
-        # print(get_state_as_dict(classificationEditWindow))
+            select_by_text(classificationCB, "Confidential")
+            #verify International is set too
+            self.assertEqual(get_state_as_dict(internationalClassificationCB)["SelectEntryText"], "Confidential")
+            #verify textBox Content  TODO textbox not supported
+            #self.assertEqual(get_state_as_dict(classificationEditWindow)["Text"], "Conf")
+            # print(get_state_as_dict(classificationEditWindow))
 
-        xOKBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKBtn)
 
         self.assertEqual(document.Text.String[0:6], "(Conf)")
         self.assertEqual(header.String, "Confidential")
@@ -113,24 +104,21 @@ class classification(UITestCase):
         document = self.ui_test.get_component()
         xWriterDoc = self.xUITest.getTopFocusWindow()
         #+ new file and do it only for Paragraph classification (no watermark!)
-        self.ui_test.execute_dialog_through_command(".uno:ParagraphClassificationDialog")
-        xDialog = self.xUITest.getTopFocusWindow()
-        classificationEditWindow = xDialog.getChild("classificationEditWindow")
-        recentlyUsedCB = xDialog.getChild("recentlyUsedCB")
-        classificationCB = xDialog.getChild("classificationCB")
-        internationalClassificationCB = xDialog.getChild("internationalClassificationCB")
-        intellectualPropertyPartEntry = xDialog.getChild("intellectualPropertyPartEntry")
-        intellectualPropertyPartAddButton = xDialog.getChild("intellectualPropertyPartAddButton")
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:ParagraphClassificationDialog") as xDialog:
+            classificationEditWindow = xDialog.getChild("classificationEditWindow")
+            recentlyUsedCB = xDialog.getChild("recentlyUsedCB")
+            classificationCB = xDialog.getChild("classificationCB")
+            internationalClassificationCB = xDialog.getChild("internationalClassificationCB")
+            intellectualPropertyPartEntry = xDialog.getChild("intellectualPropertyPartEntry")
+            intellectualPropertyPartAddButton = xDialog.getChild("intellectualPropertyPartAddButton")
 
-        select_by_text(classificationCB, "Confidential")
-        #verify International is set too
-        self.assertEqual(get_state_as_dict(internationalClassificationCB)["SelectEntryText"], "Confidential")
-        #verify textBox Content  TODO  - texbox not supported yet
-        # self.assertEqual(get_state_as_dict(classificationEditWindow)["Text"], "Conf")
-        # print(get_state_as_dict(classificationEditWindow))
+            select_by_text(classificationCB, "Confidential")
+            #verify International is set too
+            self.assertEqual(get_state_as_dict(internationalClassificationCB)["SelectEntryText"], "Confidential")
+            #verify textBox Content  TODO  - texbox not supported yet
+            # self.assertEqual(get_state_as_dict(classificationEditWindow)["Text"], "Conf")
+            # print(get_state_as_dict(classificationEditWindow))
 
-        xOKBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKBtn)
 
         controller = self.ui_test.get_component().getCurrentController()
         self.assertEqual(document.Text.String[0:6], "(Conf)")
@@ -144,25 +132,22 @@ class classification(UITestCase):
         document = self.ui_test.get_component()
         xWriterDoc = self.xUITest.getTopFocusWindow()
         #+ new file and do it only for Paragraph classification (no watermark!)
-        self.ui_test.execute_dialog_through_command(".uno:ParagraphClassificationDialog")
-        xDialog = self.xUITest.getTopFocusWindow()
-        classificationEditWindow = xDialog.getChild("classificationEditWindow")
-        recentlyUsedCB = xDialog.getChild("recentlyUsedCB")
-        classificationCB = xDialog.getChild("classificationCB")
-        internationalClassificationCB = xDialog.getChild("internationalClassificationCB")
-        intellectualPropertyPartEntry = xDialog.getChild("intellectualPropertyPartEntry")
-        intellectualPropertyPartAddButton = xDialog.getChild("intellectualPropertyPartAddButton")
-        #type text AA
-        intellectualPropertyPartEntry.executeAction("TYPE", mkPropertyValues({"TEXT":"AA"}))
-        intellectualPropertyPartAddButton.executeAction("CLICK", tuple())
-        select_by_text(classificationCB, "Internal Only")
-        #verify International is set too
-        self.assertEqual(get_state_as_dict(internationalClassificationCB)["SelectEntryText"], "Internal Only")
-        #verify textBox Content  TODO  - texbox not supported yet
-        # self.assertEqual(get_state_as_dict(classificationEditWindow)["Text"], "Conf")
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:ParagraphClassificationDialog") as xDialog:
+            classificationEditWindow = xDialog.getChild("classificationEditWindow")
+            recentlyUsedCB = xDialog.getChild("recentlyUsedCB")
+            classificationCB = xDialog.getChild("classificationCB")
+            internationalClassificationCB = xDialog.getChild("internationalClassificationCB")
+            intellectualPropertyPartEntry = xDialog.getChild("intellectualPropertyPartEntry")
+            intellectualPropertyPartAddButton = xDialog.getChild("intellectualPropertyPartAddButton")
+            #type text AA
+            intellectualPropertyPartEntry.executeAction("TYPE", mkPropertyValues({"TEXT":"AA"}))
+            intellectualPropertyPartAddButton.executeAction("CLICK", tuple())
+            select_by_text(classificationCB, "Internal Only")
+            #verify International is set too
+            self.assertEqual(get_state_as_dict(internationalClassificationCB)["SelectEntryText"], "Internal Only")
+            #verify textBox Content  TODO  - texbox not supported yet
+            # self.assertEqual(get_state_as_dict(classificationEditWindow)["Text"], "Conf")
 
-        xOKBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKBtn)
 
         controller = self.ui_test.get_component().getCurrentController()
         self.assertEqual(document.Text.String[0:6], "(AAIO)")

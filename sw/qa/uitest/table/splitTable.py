@@ -17,13 +17,10 @@ class splitTable(UITestCase):
             self.xUITest.executeCommand(".uno:GoDown")
             self.xUITest.executeCommand(".uno:GoDown")
             #dialog Split table, check Copy heading, OK -> verify 2 tables, 1st has 2 rows, second has 5 rows
-            self.ui_test.execute_dialog_through_command(".uno:SplitTable")
-            xDialog = self.xUITest.getTopFocusWindow()
+            with self.ui_test.execute_dialog_through_command_guarded(".uno:SplitTable") as xDialog:
 
-            copyheading = xDialog.getChild("copyheading")
-            copyheading.executeAction("CLICK", tuple())
-            xOKBtn = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOKBtn)
+                copyheading = xDialog.getChild("copyheading")
+                copyheading.executeAction("CLICK", tuple())
             self.assertEqual(writer_doc.TextTables.getCount(), 2)
             tables = writer_doc.getTextTables()
             self.assertEqual(len(tables[0].getRows()), 2)
@@ -38,13 +35,10 @@ class splitTable(UITestCase):
             #go to row 2
             self.xUITest.executeCommand(".uno:GoDown")
             self.xUITest.executeCommand(".uno:GoDown")
-            self.ui_test.execute_dialog_through_command(".uno:SplitTable")
-            xDialog = self.xUITest.getTopFocusWindow()
+            with self.ui_test.execute_dialog_through_command_guarded(".uno:SplitTable") as xDialog:
 
-            customheading = xDialog.getChild("customheading")
-            customheading.executeAction("CLICK", tuple())
-            xOKBtn = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOKBtn)
+                customheading = xDialog.getChild("customheading")
+                customheading.executeAction("CLICK", tuple())
             self.assertEqual(writer_doc.TextTables.getCount(), 2)
             tables = writer_doc.getTextTables()
             self.assertEqual(len(tables[0].getRows()), 2)
@@ -59,13 +53,10 @@ class splitTable(UITestCase):
             #go to row 2
             self.xUITest.executeCommand(".uno:GoDown")
             self.xUITest.executeCommand(".uno:GoDown")
-            self.ui_test.execute_dialog_through_command(".uno:SplitTable")
-            xDialog = self.xUITest.getTopFocusWindow()
+            with self.ui_test.execute_dialog_through_command_guarded(".uno:SplitTable") as xDialog:
 
-            noheading = xDialog.getChild("noheading")
-            noheading.executeAction("CLICK", tuple())
-            xOKBtn = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOKBtn)
+                noheading = xDialog.getChild("noheading")
+                noheading.executeAction("CLICK", tuple())
             self.assertEqual(writer_doc.TextTables.getCount(), 2)
             tables = writer_doc.getTextTables()
             self.assertEqual(len(tables[0].getRows()), 2)

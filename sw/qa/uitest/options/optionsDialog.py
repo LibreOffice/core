@@ -11,47 +11,41 @@ class optionsDialog(UITestCase):
     def test_moreIconsDialog(self):
         self.ui_test.create_doc_in_start_center("writer")
 
-        self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog")
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:OptionsTreeDialog") as xDialog:
 
-        xDialog = self.xUITest.getTopFocusWindow()
-        xPages = xDialog.getChild("pages")
-        xLOEntry = xPages.getChild('0')
-        xLOEntry.executeAction("EXPAND", tuple())
-        xViewEntry = xLOEntry.getChild('2')
-        xViewEntry.executeAction("SELECT", tuple())
+            xPages = xDialog.getChild("pages")
+            xLOEntry = xPages.getChild('0')
+            xLOEntry.executeAction("EXPAND", tuple())
+            xViewEntry = xLOEntry.getChild('2')
+            xViewEntry.executeAction("SELECT", tuple())
 
-        xMoreIconsBtn = xDialog.getChild("btnMoreIcons")
+            xMoreIconsBtn = xDialog.getChild("btnMoreIcons")
 
-        with self.ui_test.execute_blocking_action(xMoreIconsBtn.executeAction, args=('CLICK', ()), close_button="buttonClose") as dialog:
-            # Check it doesn't crash while opening it
-            xCloseBtn = dialog.getChild("buttonClose")
-            self.ui_test.wait_until_property_is_updated(xCloseBtn, "Enabled", "true")
+            with self.ui_test.execute_blocking_action(xMoreIconsBtn.executeAction, args=('CLICK', ()), close_button="buttonClose") as dialog:
+                # Check it doesn't crash while opening it
+                xCloseBtn = dialog.getChild("buttonClose")
+                self.ui_test.wait_until_property_is_updated(xCloseBtn, "Enabled", "true")
 
-        xOKBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKBtn)
 
         self.ui_test.close_doc()
 
     def test_tdf138596(self):
         self.ui_test.create_doc_in_start_center("writer")
 
-        self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xPages = xDialog.getChild("pages")
-        xWriterEntry = xPages.getChild('3')
-        xWriterEntry.executeAction("EXPAND", tuple())
-        xFormattingAidsEntry = xWriterEntry.getChild('2')
-        xFormattingAidsEntry.executeAction("SELECT", tuple())
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:OptionsTreeDialog") as xDialog:
+            xPages = xDialog.getChild("pages")
+            xWriterEntry = xPages.getChild('3')
+            xWriterEntry.executeAction("EXPAND", tuple())
+            xFormattingAidsEntry = xWriterEntry.getChild('2')
+            xFormattingAidsEntry.executeAction("SELECT", tuple())
 
-        xApplyBtn = xDialog.getChild("apply")
+            xApplyBtn = xDialog.getChild("apply")
 
-        # Click apply button twice
-        # Without the fix in place, this test would have crashed here
-        xApplyBtn.executeAction("CLICK", tuple())
-        xApplyBtn.executeAction("CLICK", tuple())
+            # Click apply button twice
+            # Without the fix in place, this test would have crashed here
+            xApplyBtn.executeAction("CLICK", tuple())
+            xApplyBtn.executeAction("CLICK", tuple())
 
-        xOKBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKBtn)
 
         self.ui_test.close_doc()
 
