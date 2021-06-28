@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "78dfccd6_83e24510",
+        "filename": "writerfilter/source/dmapper/GraphicImport.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-06-28T12:24:31Z",
+      "side": 1,
+      "message": "Just drop the comment. Nobody will update it, if some other algo functions are used or remove the header, if the std:swap usage is dropped. Eventually some tooling would.",
+      "revId": "588489dd790bcd050ba684e6be35debc82d637e1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
