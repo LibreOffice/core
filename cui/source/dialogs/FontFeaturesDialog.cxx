@@ -11,7 +11,7 @@
 #include <FontFeaturesDialog.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <vcl/font/FeatureParser.hxx>
-#include <vcl/virdev.hxx>
+#include <FontFeatures.hxx>
 #include <svtools/colorcfg.hxx>
 #include <unordered_set>
 
@@ -51,16 +51,7 @@ void FontFeaturesDialog::initialize()
 {
     ScopedVclPtrInstance<VirtualDevice> aVDev(*Application::GetDefaultDevice(),
                                               DeviceFormat::DEFAULT, DeviceFormat::DEFAULT);
-    aVDev->SetOutputSizePixel(Size(10, 10));
-
-    vcl::Font aFont = aVDev->GetFont();
-    aFont.SetFamilyName(m_sFontName);
-    aVDev->SetFont(aFont);
-
-    std::vector<vcl::font::Feature> rFontFeatures;
-
-    if (!aVDev->GetFontFeatures(rFontFeatures))
-        return;
+    std::vector<vcl::font::Feature> rFontFeatures = getFontFeatureList(m_sFontName, *aVDev);
 
     std::unordered_set<sal_uInt32> aDoneFeatures;
     std::vector<vcl::font::Feature> rFilteredFontFeatures;

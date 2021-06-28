@@ -101,11 +101,15 @@ private:
     std::unique_ptr<weld::Label> m_xCTLFontTypeFT;
     std::unique_ptr<weld::Button> m_xCTLFontFeaturesButton;
 
+    //for getting FontFeatures
+    ScopedVclPtrInstance<VirtualDevice> m_xVDev;
+
     void                Initialize();
     const FontList*     GetFontList() const;
     void                UpdatePreview_Impl();
     void                FillStyleBox_Impl(const weld::Widget& rBox);
     void                FillSizeBox_Impl(const weld::Widget& rBox);
+    void                EnableFeatureButton(const weld::Widget& rNameBox);
 
     enum LanguageGroup
     {
