@@ -2669,6 +2669,7 @@ private:
     gulong m_nDragGetSignalId;
 
 #if GTK_CHECK_VERSION(4, 0, 0)
+    int m_nGrabCount;
     GtkEventController* m_pFocusController;
     GtkEventController* m_pClickController;
     GtkEventController* m_pMotionController;
@@ -3220,6 +3221,7 @@ public:
         , m_nDragDataDeleteignalId(0)
         , m_nDragGetSignalId(0)
 #if GTK_CHECK_VERSION(4, 0, 0)
+        , m_nGrabCount(0)
         , m_pFocusController(nullptr)
         , m_pClickController(nullptr)
         , m_pMotionController(nullptr)
@@ -3879,23 +3881,27 @@ public:
 
     virtual void grab_add() override
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
+#if GTK_CHECK_VERSION(4, 0, 0)
+        ++m_nGrabCount;
+#else
         gtk_grab_add(m_pWidget);
 #endif
     }
 
     virtual bool has_grab() const override
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
-        return gtk_widget_has_grab(m_pWidget);
+#if GTK_CHECK_VERSION(4, 0, 0)
+        return m_nGrabCount != 0;
 #else
-        return false;
+        return gtk_widget_has_grab(m_pWidget);
 #endif
     }
 
     virtual void grab_remove() override
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
+#if GTK_CHECK_VERSION(4, 0, 0)
+        --m_nGrabCount;
+#else
         gtk_grab_remove(m_pWidget);
 #endif
     }
