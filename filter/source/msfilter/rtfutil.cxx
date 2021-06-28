@@ -65,9 +65,9 @@ void WrapOle1InOle2(SvStream& rOle1, sal_uInt32 nOle1Size, SvStream& rOle2,
     // AnsiClipboardFormat
     pCompObj->WriteUInt32(0x00000000);
     // Reserved1
-    OString aReserved1(rClassName);
-    pCompObj->WriteUInt32(aReserved1.getLength() + 1);
-    pCompObj->WriteOString(aReserved1);
+    const OString& rReserved1(rClassName);
+    pCompObj->WriteUInt32(rReserved1.getLength() + 1);
+    pCompObj->WriteOString(rReserved1);
     pCompObj->WriteChar(0);
     // UnicodeMarker
     pCompObj->WriteUInt32(0x71B239F4);
