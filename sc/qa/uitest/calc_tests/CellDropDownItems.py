@@ -22,28 +22,25 @@ class CellDropDownItems(UITestCase):
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "C10"}))
 
         #Open Validation Dialog
-        self.ui_test.execute_dialog_through_command(".uno:Validation")
-        xDialog = self.xUITest.getTopFocusWindow()
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:Validation") as xDialog:
 
-        #Select List option
-        xallow = xDialog.getChild("allow")
-        xallow.executeAction("SELECT", mkPropertyValues({"POS": "6"}))
+            #Select List option
+            xallow = xDialog.getChild("allow")
+            xallow.executeAction("SELECT", mkPropertyValues({"POS": "6"}))
 
-        #Add items to the List
-        xminlist = xDialog.getChild("minlist")
-        xminlist.executeAction("TYPE", mkPropertyValues({"TEXT": "Item1"}))
-        xminlist.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RETURN"}))
-        xminlist.executeAction("TYPE", mkPropertyValues({"TEXT": "Item2"}))
-        xminlist.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RETURN"}))
-        xminlist.executeAction("TYPE", mkPropertyValues({"TEXT": "Item3"}))
-        xminlist.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RETURN"}))
-        xminlist.executeAction("TYPE", mkPropertyValues({"TEXT": "Item4"}))
-        xminlist.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RETURN"}))
-        xminlist.executeAction("TYPE", mkPropertyValues({"TEXT": "Item5"}))
+            #Add items to the List
+            xminlist = xDialog.getChild("minlist")
+            xminlist.executeAction("TYPE", mkPropertyValues({"TEXT": "Item1"}))
+            xminlist.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RETURN"}))
+            xminlist.executeAction("TYPE", mkPropertyValues({"TEXT": "Item2"}))
+            xminlist.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RETURN"}))
+            xminlist.executeAction("TYPE", mkPropertyValues({"TEXT": "Item3"}))
+            xminlist.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RETURN"}))
+            xminlist.executeAction("TYPE", mkPropertyValues({"TEXT": "Item4"}))
+            xminlist.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RETURN"}))
+            xminlist.executeAction("TYPE", mkPropertyValues({"TEXT": "Item5"}))
 
-        #Close the dialog
-        xOk = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOk)
+            #Close the dialog
 
         #Launch the Select Menu to view the list ans select first item in the list
         gridwin = xCalcDoc.getChild("grid_window")

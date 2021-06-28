@@ -23,45 +23,42 @@ class Subtotals(UITestCase):
             # 1. Open the test file
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:F123"}))
             # 2. Data->Subtotals
-            self.ui_test.execute_dialog_through_command(".uno:DataSubTotals")
-            xDialog = self.xUITest.getTopFocusWindow()
-            xTabs = xDialog.getChild("tabcontrol")
-            select_pos(xTabs, "0")
-            # = 1st group = 3. Group by "Person Number", select "shipping time" and use the Max function.
-            xGroupBy = xDialog.getChild("group_by")
-            select_by_text(xGroupBy, "Person Number")
-            # 4. Tick 'Calculate subtotals for' -> "shipping time" - already selected
-    #        xCheckListMenu = xDialog.getChild("grid1")
-    #        xTreeList = xCheckListMenu.getChild("columns")
-    #        x6Entry = xTreeList.getChild("5")
-    #        xFirstEntry.executeAction("CLICK", tuple())
-            #use the Max function
+            with self.ui_test.execute_dialog_through_command_guarded(".uno:DataSubTotals") as xDialog:
+                xTabs = xDialog.getChild("tabcontrol")
+                select_pos(xTabs, "0")
+                # = 1st group = 3. Group by "Person Number", select "shipping time" and use the Max function.
+                xGroupBy = xDialog.getChild("group_by")
+                select_by_text(xGroupBy, "Person Number")
+                # 4. Tick 'Calculate subtotals for' -> "shipping time" - already selected
+        #        xCheckListMenu = xDialog.getChild("grid1")
+        #        xTreeList = xCheckListMenu.getChild("columns")
+        #        x6Entry = xTreeList.getChild("5")
+        #        xFirstEntry.executeAction("CLICK", tuple())
+                #use the Max function
 
-            #= 2nd group =5. Group by "Person Number", select "shipping time" and use the Min function.
-            select_pos(xTabs, "1")
-            xGroupBy = xDialog.getChild("group_by")
-            select_by_text(xGroupBy, "Person Number")
-            # 4. Tick 'Calculate subtotals for' -> "shipping time" - already selected
-    #        xCheckListMenu = xDialog.getChild("grid1")
-    #        xTreeList = xCheckListMenu.getChild("columns")
-    #        x6Entry = xTreeList.getChild("5")
-    #        xFirstEntry.executeAction("CLICK", tuple())
-            #use the Min function
+                #= 2nd group =5. Group by "Person Number", select "shipping time" and use the Min function.
+                select_pos(xTabs, "1")
+                xGroupBy = xDialog.getChild("group_by")
+                select_by_text(xGroupBy, "Person Number")
+                # 4. Tick 'Calculate subtotals for' -> "shipping time" - already selected
+        #        xCheckListMenu = xDialog.getChild("grid1")
+        #        xTreeList = xCheckListMenu.getChild("columns")
+        #        x6Entry = xTreeList.getChild("5")
+        #        xFirstEntry.executeAction("CLICK", tuple())
+                #use the Min function
 
-            #= 3rd group = Group by "Person Number", select "shipping time" and use the Average function.
-            select_pos(xTabs, "2")
-            xGroupBy = xDialog.getChild("group_by")
-            select_by_text(xGroupBy, "Person Number")
-            # 4. Tick 'Calculate subtotals for' -> "shipping time" - already selected
-    #        xCheckListMenu = xDialog.getChild("grid1")
-    #        xTreeList = xCheckListMenu.getChild("columns")
-    #        x6Entry = xTreeList.getChild("5")
-    #        xFirstEntry.executeAction("CLICK", tuple())
-            #use the Average function
+                #= 3rd group = Group by "Person Number", select "shipping time" and use the Average function.
+                select_pos(xTabs, "2")
+                xGroupBy = xDialog.getChild("group_by")
+                select_by_text(xGroupBy, "Person Number")
+                # 4. Tick 'Calculate subtotals for' -> "shipping time" - already selected
+        #        xCheckListMenu = xDialog.getChild("grid1")
+        #        xTreeList = xCheckListMenu.getChild("columns")
+        #        x6Entry = xTreeList.getChild("5")
+        #        xFirstEntry.executeAction("CLICK", tuple())
+                #use the Average function
 
-            # 5. Click OK
-            xOKBtn = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOKBtn)
+                # 5. Click OK
 
             #verify
             self.assertEqual(get_cell_by_position(calc_doc, 0, 0, 141).getString(), "Grand Average")

@@ -22,16 +22,14 @@ class tdf57274(UITestCase):
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "B6:E6"}))
             self.xUITest.executeCommand(".uno:Copy")
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "B11"}))
-            self.ui_test.execute_dialog_through_command(".uno:PasteSpecial")
-            xDialog = self.xUITest.getTopFocusWindow()
-            #We paste here using Paste Special with 'Link' Checkbox activated
-            xLink = xDialog.getChild("link")
-            xLink.executeAction("CLICK", tuple())
-            xOkBtn = xDialog.getChild("ok")
-            # self.ui_test.close_dialog_through_button(xOkBtn)
+            with self.ui_test.execute_dialog_through_command_guarded(".uno:PasteSpecial", close_button="") as xDialog:
+                #We paste here using Paste Special with 'Link' Checkbox activated
+                xLink = xDialog.getChild("link")
+                xLink.executeAction("CLICK", tuple())
 
-            with self.ui_test.execute_blocking_action(xOkBtn.executeAction, args=('CLICK', ()), close_button="yes"):
-                pass
+                xOkBtn = xDialog.getChild("ok")
+                with self.ui_test.execute_blocking_action(xOkBtn.executeAction, args=('CLICK', ()), close_button="yes"):
+                    pass
 
             #we would expect a reference to cell E6 here and a zero being displayed, but the cell is also simply blank.
             self.assertEqual(get_cell_by_position(calc_doc, 0, 4, 10).getValue(), 0)

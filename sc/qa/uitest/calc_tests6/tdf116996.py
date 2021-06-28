@@ -16,38 +16,35 @@ class tdf116996(UITestCase):
         gridwin = xCalcDoc.getChild("grid_window")
         document = self.ui_test.get_component()
 
-        self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog")  #optionsdialog
-        xDialogOpt = self.xUITest.getTopFocusWindow()
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:OptionsTreeDialog", close_button="") as xDialogOpt:
+            xPages = xDialogOpt.getChild("pages")
+            xLOEntry = xPages.getChild('0')                 # Libreoffice
+            xLOEntry.executeAction("EXPAND", tuple())
+            xAdvancedEntry = xLOEntry.getChild('10')
+            xAdvancedEntry.executeAction("SELECT", tuple())          #Libreoffice / Advanced
+            xexperimental = xDialogOpt.getChild("experimental")
+            xexperimental.executeAction("CLICK", tuple())          #enable experimental features
 
-        xPages = xDialogOpt.getChild("pages")
-        xLOEntry = xPages.getChild('0')                 # Libreoffice
-        xLOEntry.executeAction("EXPAND", tuple())
-        xAdvancedEntry = xLOEntry.getChild('10')
-        xAdvancedEntry.executeAction("SELECT", tuple())          #Libreoffice / Advanced
-        xexperimental = xDialogOpt.getChild("experimental")
-        xexperimental.executeAction("CLICK", tuple())          #enable experimental features
+            xOKBtn = xDialogOpt.getChild("ok")
 
-        xOKBtn = xDialogOpt.getChild("ok")
-
-        with self.ui_test.execute_blocking_action(xOKBtn.executeAction, args=('CLICK', ()), close_button="no"):
-            pass
+            with self.ui_test.execute_blocking_action(xOKBtn.executeAction, args=('CLICK', ()), close_button="no"):
+                pass
 
         #reopen options dialog and verify
-        self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog")  #optionsdialog
-        xDialogOpt = self.xUITest.getTopFocusWindow()
-        xPages = xDialogOpt.getChild("pages")
-        xLOEntry = xPages.getChild('0')                 # Libreoffice
-        xLOEntry.executeAction("EXPAND", tuple())
-        xAdvancedEntry = xLOEntry.getChild('10')
-        xAdvancedEntry.executeAction("SELECT", tuple())          #Libreoffice / Advanced
-        xexperimental = xDialogOpt.getChild("experimental")
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:OptionsTreeDialog", close_button="") as xDialogOpt:
+            xPages = xDialogOpt.getChild("pages")
+            xLOEntry = xPages.getChild('0')                 # Libreoffice
+            xLOEntry.executeAction("EXPAND", tuple())
+            xAdvancedEntry = xLOEntry.getChild('10')
+            xAdvancedEntry.executeAction("SELECT", tuple())          #Libreoffice / Advanced
+            xexperimental = xDialogOpt.getChild("experimental")
 
-        self.assertEqual(get_state_as_dict(xexperimental)["Selected"], "true")
-        xexperimental.executeAction("CLICK", tuple())       #disable experimental features
-        xOKBtn = xDialogOpt.getChild("ok")
+            self.assertEqual(get_state_as_dict(xexperimental)["Selected"], "true")
+            xexperimental.executeAction("CLICK", tuple())       #disable experimental features
+            xOKBtn = xDialogOpt.getChild("ok")
 
-        with self.ui_test.execute_blocking_action(xOKBtn.executeAction, args=('CLICK', ()), close_button="no"):
-            pass
+            with self.ui_test.execute_blocking_action(xOKBtn.executeAction, args=('CLICK', ()), close_button="no"):
+                pass
 
         self.ui_test.close_doc()
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

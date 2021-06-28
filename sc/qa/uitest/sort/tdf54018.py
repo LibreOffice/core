@@ -23,16 +23,13 @@ class tdf54018(UITestCase):
             #click top left columns / rows heading field to select all cells
             self.xUITest.executeCommand(".uno:SelectAll")
             #Menu 'Data -> Sort -> Column D -> Descending' <ok>
-            self.ui_test.execute_dialog_through_command(".uno:DataSort")
-            xDialog = self.xUITest.getTopFocusWindow()
-            xTabs = xDialog.getChild("tabcontrol")
-            select_pos(xTabs, "0")
-            xSortKey1 = xDialog.getChild("sortlb")
-            xdown = xDialog.getChild("down")
-            select_by_text(xSortKey1, "Column B")
-            xdown.executeAction("CLICK", tuple())
-            xOKBtn = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOKBtn)
+            with self.ui_test.execute_dialog_through_command_guarded(".uno:DataSort") as xDialog:
+                xTabs = xDialog.getChild("tabcontrol")
+                select_pos(xTabs, "0")
+                xSortKey1 = xDialog.getChild("sortlb")
+                xdown = xDialog.getChild("down")
+                select_by_text(xSortKey1, "Column B")
+                xdown.executeAction("CLICK", tuple())
             #Bug: When progress bar reaches 40% LibO Stops responding
             #Verify
             self.assertEqual(get_cell_by_position(calc_doc, 0, 1, 0).getString(), "7")

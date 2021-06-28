@@ -42,24 +42,18 @@ class tdf36383(UITestCase):
         self.assertFalse(row.getPropertyValue("IsVisible"))
 
         #row height
-        self.ui_test.execute_dialog_through_command(".uno:RowHeight")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xvalue = xDialog.getChild("value")
-        xvalue.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
-        xvalue.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
-        xvalue.executeAction("TYPE", mkPropertyValues({"TEXT":"1 cm"}))
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:RowHeight") as xDialog:
+            xvalue = xDialog.getChild("value")
+            xvalue.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+            xvalue.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+            xvalue.executeAction("TYPE", mkPropertyValues({"TEXT":"1 cm"}))
 
-        xOk = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOk)
 
         self.assertFalse(row.getPropertyValue("IsVisible"))
 
         #optimal row height
-        self.ui_test.execute_dialog_through_command(".uno:SetOptimalRowHeight")
-        xDialog = self.xUITest.getTopFocusWindow()
-
-        xOk = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOk)
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:SetOptimalRowHeight"):
+            pass
 
         self.assertFalse(row.getPropertyValue("IsVisible"))
 

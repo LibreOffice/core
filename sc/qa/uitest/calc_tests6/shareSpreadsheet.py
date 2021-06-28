@@ -18,15 +18,12 @@ class shareSpreadsheet(UITestCase):
         document = self.ui_test.get_component()
 
         #dialog shareSpreadsheet
-        self.ui_test.execute_dialog_through_command(".uno:ShareDocument")
-        xDialog = self.xUITest.getTopFocusWindow()
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:ShareDocument", close_button="cancel") as xDialog:
 
-        share = xDialog.getChild("share")
-        share.executeAction("CLICK", tuple())
-        users = xDialog.getChild("users")
-        self.assertEqual(get_state_as_dict(users)["Children"], "1")
-        xCancelBtn = xDialog.getChild("cancel")
-        self.ui_test.close_dialog_through_button(xCancelBtn)
+            share = xDialog.getChild("share")
+            share.executeAction("CLICK", tuple())
+            users = xDialog.getChild("users")
+            self.assertEqual(get_state_as_dict(users)["Children"], "1")
 
         self.ui_test.close_doc()
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

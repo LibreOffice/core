@@ -25,25 +25,22 @@ class tdf49531(UITestCase):
 
             #Menu 'Data -> Sort -> Top to bottom - all otheroptions unchecked
             #Column B - Ascending' <ok>
-            self.ui_test.execute_dialog_through_command(".uno:DataSort")
-            xDialog = self.xUITest.getTopFocusWindow()
-            xTabs = xDialog.getChild("tabcontrol")
-            select_pos(xTabs, "1")
-            xNatural = xDialog.getChild("naturalsort")
-            xtopdown = xDialog.getChild("topdown")
-            xHeader = xDialog.getChild("header")
-            if (get_state_as_dict(xNatural)["Selected"]) == "true":
-                xNatural.executeAction("CLICK", tuple())
-            if (get_state_as_dict(xHeader)["Selected"]) == "true":
-                xHeader.executeAction("CLICK", tuple())
-            xtopdown.executeAction("CLICK", tuple())
-            select_pos(xTabs, "0")
-            xSortKey1 = xDialog.getChild("sortlb")
-            xAsc = xDialog.getChild("up")
-            select_by_text(xSortKey1, "Column B")
-            xAsc.executeAction("CLICK", tuple())
-            xOk = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOk)
+            with self.ui_test.execute_dialog_through_command_guarded(".uno:DataSort") as xDialog:
+                xTabs = xDialog.getChild("tabcontrol")
+                select_pos(xTabs, "1")
+                xNatural = xDialog.getChild("naturalsort")
+                xtopdown = xDialog.getChild("topdown")
+                xHeader = xDialog.getChild("header")
+                if (get_state_as_dict(xNatural)["Selected"]) == "true":
+                    xNatural.executeAction("CLICK", tuple())
+                if (get_state_as_dict(xHeader)["Selected"]) == "true":
+                    xHeader.executeAction("CLICK", tuple())
+                xtopdown.executeAction("CLICK", tuple())
+                select_pos(xTabs, "0")
+                xSortKey1 = xDialog.getChild("sortlb")
+                xAsc = xDialog.getChild("up")
+                select_by_text(xSortKey1, "Column B")
+                xAsc.executeAction("CLICK", tuple())
             #Verify
             self.assertEqual(get_cell_by_position(calc_doc, 0, 0, 0).getString(), "x")
             self.assertEqual(get_cell_by_position(calc_doc, 0, 0, 1).getString(), "0")
