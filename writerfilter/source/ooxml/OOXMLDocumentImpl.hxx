@@ -43,7 +43,7 @@ class OOXMLDocumentImpl : public OOXMLDocument
     css::uno::Reference<css::xml::dom::XDocument> mxGlossaryDocDom;
     css::uno::Sequence < css::uno::Sequence< css::uno::Any > > mxGlossaryDomList;
     /// Stack of shape contexts, 1 element for VML, 1 element / nesting level for drawingML.
-    std::stack< css::uno::Reference<css::xml::sax::XFastShapeContextHandler> > maShapeContexts;
+    std::stack< rtl::Reference<oox::shape::ShapeContextHandler> > maShapeContexts;
     css::uno::Reference<css::xml::dom::XDocument> mxThemeDom;
     css::uno::Sequence<css::uno::Reference<css::xml::dom::XDocument> > mxCustomXmlDomList;
     css::uno::Sequence<css::uno::Reference<css::xml::dom::XDocument> > mxCustomXmlDomPropsList;
@@ -126,8 +126,8 @@ public:
     virtual void setXNoteId(const sal_Int32 nId) override;
     virtual sal_Int32 getXNoteId() const override;
     virtual const OUString & getTarget() const override;
-    virtual css::uno::Reference<css::xml::sax::XFastShapeContextHandler> getShapeContext( ) override;
-    virtual void setShapeContext( css::uno::Reference<css::xml::sax::XFastShapeContextHandler> xContext ) override;
+    virtual rtl::Reference<oox::shape::ShapeContextHandler> getShapeContext( ) override;
+    virtual void setShapeContext( rtl::Reference<oox::shape::ShapeContextHandler> xContext ) override;
     void pushShapeContext() override;
     void popShapeContext() override;
     virtual css::uno::Reference<css::xml::dom::XDocument> getThemeDom() override;
