@@ -257,6 +257,30 @@
     },
     {
       "key": {
+        "uuid": "2f88032b_2781d177",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 536,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-06-28T08:44:26Z",
+      "side": 1,
+      "message": "Hiii\n\nIt gives the following error on using weld_tree_view\n\ncannot convert from \u0027std::unique_ptr\u003cweld::TreeView,std::default_delete\u003cweld::TreeView\u003e\u003e\u0027 to \u0027const std::unique_ptr\u003cweld::StyleList,std::\ndefault_delete\u003cweld::StyleList\u003e\u003e\n\nCould you please suggest some code snippet where \"weld_tree_view\" type function is called internally inside a constructor?",
+      "parentUuid": "a6182f52_f7bc2c1b",
+      "range": {
+        "startLine": 536,
+        "startChar": 28,
+        "endLine": 536,
+        "endChar": 43
+      },
+      "revId": "ee097c59afa796e167931a4fff215d1a3337df76",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "052467c7_fe93c029",
         "filename": "sfx2/source/dialog/templdlg.cxx",
         "patchSetId": 9
