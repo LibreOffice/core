@@ -16,6 +16,24 @@
       "revId": "48ffac1d151f941d7ac88e6ed46fbfe0d78b8f8f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a9e6a00f_8f67c2c5",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3096,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-28T16:25:50Z",
+      "side": 1,
+      "message": "Yes you are right - this is UB (and llround also doesn\u0027t specify the value returned when it overflows) - I will look for the saturating variants.",
+      "parentUuid": "121281a7_758b0ce3",
+      "revId": "48ffac1d151f941d7ac88e6ed46fbfe0d78b8f8f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
