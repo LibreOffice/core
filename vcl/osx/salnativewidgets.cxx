@@ -982,7 +982,7 @@ bool AquaSalGraphics::getNativeControlRegion(ControlType nType,
             }
             break;
         case ControlType::Combobox:
-          if (nPart == ControlPart::Entire)
+            if (nPart == ControlPart::Entire)
             {
                 w = aCtrlBoundRect.GetWidth();
                 h = COMBOBOX_HEIGHT + 2 * FOCUS_RING_WIDTH;

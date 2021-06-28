@@ -186,9 +186,9 @@ DataProviderBaseImpl::DataProviderBaseImpl(id data) :
 DataProviderBaseImpl::~DataProviderBaseImpl()
 {
   if (mSystemData)
-    {
+  {
       [mSystemData release];
-    }
+  }
 }
 
 namespace {
@@ -233,15 +233,15 @@ Any UniDataProvider::getOOoData()
   Any oOOData;
 
   if (mSystemData)
-    {
+  {
       oOOData <<= OUString(static_cast<const char*>([mSystemData bytes]),
                                  [mSystemData length],
                                  RTL_TEXTENCODING_UTF8);
-    }
+  }
   else
-    {
+  {
       oOOData = mData;
-    }
+  }
 
   return oOOData;
 }
@@ -285,17 +285,17 @@ Any ByteSequenceDataProvider::getOOoData()
   Any oOOData;
 
   if (mSystemData)
-    {
+  {
       unsigned int flavorDataLength = [mSystemData length];
       Sequence<sal_Int8> byteSequence;
       byteSequence.realloc(flavorDataLength);
       memcpy(byteSequence.getArray(), [mSystemData bytes], flavorDataLength);
       oOOData <<= byteSequence;
-    }
+  }
   else
-    {
+  {
       oOOData =  mData;
-    }
+  }
 
   return oOOData;
 }
@@ -334,7 +334,7 @@ Any HTMLFormatDataProvider::getOOoData()
   Any oOOData;
 
   if (mSystemData)
-    {
+  {
       unsigned int flavorDataLength = [mSystemData length];
       Sequence<sal_Int8> unkHtmlData;
 
@@ -345,17 +345,17 @@ Any HTMLFormatDataProvider::getOOoData()
       Sequence<sal_Int8> plainHtml;
 
       if (isHTMLFormat(unkHtmlData))
-        {
+      {
           plainHtml = HTMLFormatToTextHtml(unkHtmlData);
           pPlainHtml = &plainHtml;
-        }
+      }
 
       oOOData <<= *pPlainHtml;
-    }
+  }
   else
-    {
+  {
       oOOData = mData;
-    }
+  }
 
   return oOOData;
 }
@@ -463,34 +463,34 @@ Any FileListDataProvider::getOOoData()
   Any oOOData;
 
   if (mSystemData)
-    {
+  {
       size_t length = [mSystemData count];
       size_t lenSeqRequired = 0;
 
       for (size_t i = 0; i < length; i++)
-        {
+      {
           NSString* fname = [mSystemData objectAtIndex: i];
           lenSeqRequired += [fname maximumLengthOfBytesUsingEncoding: NSUnicodeStringEncoding] + sizeof(unichar);
-        }
+      }
 
       Sequence<sal_Int8> oOOFileList(lenSeqRequired);
       unichar* pBuffer = reinterpret_cast<unichar*>(oOOFileList.getArray());
       memset(pBuffer, 0, lenSeqRequired);
 
       for (size_t i = 0; i < length; i++)
-        {
+      {
           NSString* fname = [mSystemData objectAtIndex: i];
           [fname getCharacters: pBuffer];
           size_t l = [fname length];
           pBuffer += l + 1;
-        }
+      }
 
       oOOData <<= oOOFileList;
-    }
+  }
   else
-    {
+  {
       oOOData = mData;
-    }
+  }
 
   return oOOData;
 }
@@ -553,7 +553,7 @@ const NSString* DataFlavorMapper::openOfficeToSystemFlavor( const DataFlavor& oO
 
     for( size_t i = 0; i < SIZE_FLAVOR_MAP; ++i )
     {
-       if (oOOFlavor.MimeType.startsWith(OUString::createFromAscii(flavorMap[i].OOoFlavor)))
+        if (oOOFlavor.MimeType.startsWith(OUString::createFromAscii(flavorMap[i].OOoFlavor)))
         {
             if (flavorMap[i].SystemFlavor != nil)
                 sysFlavor = flavorMap[i].SystemFlavor;
@@ -594,7 +594,7 @@ DataProviderPtr_t DataFlavorMapper::getDataProvider( const NSString* systemFlavo
       Any data = rTransferable->getTransferData(oOOFlavor);
 
       if (isByteSequenceType(data.getValueType()))
-        {
+      {
           /*
              the HTMLFormatDataProvider prepends segment information to HTML
              this is useful for exchange with MS Word (which brings this stuff from Windows)
@@ -608,29 +608,29 @@ DataProviderPtr_t DataFlavorMapper::getDataProvider( const NSString* systemFlavo
           else
           */
           if ([systemFlavor caseInsensitiveCompare: NSPasteboardTypeTIFF] == NSOrderedSame)
-            {
+          {
               dp = DataProviderPtr_t( new PNGDataProvider( data, NSBitmapImageFileTypeTIFF));
-            }
+          }
 SAL_WNODEPRECATED_DECLARATIONS_PUSH
               // "'NSFilenamesPboardType' is deprecated: first deprecated in macOS 10.14 - Create
               // multiple pasteboard items with NSPasteboardTypeFileURL or kUTTypeFileURL instead"
           else if ([systemFlavor caseInsensitiveCompare: NSFilenamesPboardType] == NSOrderedSame)
 SAL_WNODEPRECATED_DECLARATIONS_POP
-            {
+          {
               dp = DataProviderPtr_t(new FileListDataProvider(data));
-            }
+          }
           else
-            {
+          {
               dp = DataProviderPtr_t(new ByteSequenceDataProvider(data));
-            }
-        }
+          }
+      }
       else // Must be OUString type
-        {
+      {
           SAL_WARN_IF(
               !isOUStringType(data.getValueType()), "vcl",
               "must be OUString type");
           dp = DataProviderPtr_t(new UniDataProvider(data));
-        }
+      }
     }
   catch( const UnsupportedFlavorException& e )
     {
@@ -652,29 +652,29 @@ DataProviderPtr_t DataFlavorMapper::getDataProvider( const NSString* systemFlavo
   DataProviderPtr_t dp;
 
   if ([systemFlavor caseInsensitiveCompare: NSPasteboardTypeString] == NSOrderedSame)
-    {
+  {
       dp = DataProviderPtr_t(new UniDataProvider(systemData));
-    }
+  }
   else if ([systemFlavor caseInsensitiveCompare: NSPasteboardTypeHTML] == NSOrderedSame)
-    {
+  {
       dp = DataProviderPtr_t(new HTMLFormatDataProvider(systemData));
-    }
+  }
   else if ([systemFlavor caseInsensitiveCompare: NSPasteboardTypeTIFF] == NSOrderedSame)
-    {
+  {
       dp = DataProviderPtr_t( new PNGDataProvider(systemData, NSBitmapImageFileTypeTIFF));
-    }
+  }
 SAL_WNODEPRECATED_DECLARATIONS_PUSH
       // "'NSFilenamesPboardType' is deprecated: first deprecated in macOS 10.14 - Create multiple
       // pasteboard items with NSPasteboardTypeFileURL or kUTTypeFileURL instead"
   else if ([systemFlavor caseInsensitiveCompare: NSFilenamesPboardType] == NSOrderedSame)
 SAL_WNODEPRECATED_DECLARATIONS_POP
-    {
+  {
       //dp = DataProviderPtr_t(new FileListDataProvider(systemData));
-    }
+  }
   else
-    {
+  {
       dp = DataProviderPtr_t(new ByteSequenceDataProvider(systemData));
-    }
+  }
 
   return dp;
 }
@@ -738,16 +738,16 @@ css::uno::Sequence<css::datatransfer::DataFlavor> DataFlavorMapper::typesArrayTo
   Sequence<DataFlavor> flavors;
 
   for (int i = 0; i < nFormats; i++)
-    {
+  {
       NSString* sysFormat = [types objectAtIndex: i];
       DataFlavor oOOFlavor = systemToOpenOfficeFlavor(sysFormat);
 
       if (isValidFlavor(oOOFlavor))
-        {
+      {
           flavors.realloc(flavors.getLength() + 1);
           flavors[flavors.getLength() - 1] = oOOFlavor;
-        }
-    }
+      }
+  }
 
   return flavors;
 }
@@ -757,12 +757,12 @@ NSArray* DataFlavorMapper::getAllSupportedPboardTypes()
   NSMutableArray* array = [[NSMutableArray alloc] initWithCapacity: SIZE_FLAVOR_MAP];
 
   for (sal_uInt32 i = 0; i < SIZE_FLAVOR_MAP; i++)
-    {
+  {
       if (flavorMap[i].SystemFlavor != nil)
           [array addObject: flavorMap[i].SystemFlavor];
       else
           [array addObject: [NSString stringWithUTF8String: flavorMap[i].OOoFlavor]];
-    }
+  }
 
   return [array autorelease];
 }
