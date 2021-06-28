@@ -22,25 +22,22 @@ class Subtotals(UITestCase):
             # Open the test file
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:B15"}))
             #Data->Subtotals
-            self.ui_test.execute_dialog_through_command(".uno:DataSubTotals")
-            xDialog = self.xUITest.getTopFocusWindow()
-            xTabs = xDialog.getChild("tabcontrol")
-            select_pos(xTabs, "0")
-            xGroupBy = xDialog.getChild("group_by")
-            select_by_text(xGroupBy, "Store Name")
-            xCheckListMenu = xDialog.getChild("grid1")
-            xTreeList = xCheckListMenu.getChild("columns")
-            xEntry = xTreeList.getChild("1")
-            xEntry.executeAction("CLICK", tuple())
+            with self.ui_test.execute_dialog_through_command_guarded(".uno:DataSubTotals") as xDialog:
+                xTabs = xDialog.getChild("tabcontrol")
+                select_pos(xTabs, "0")
+                xGroupBy = xDialog.getChild("group_by")
+                select_by_text(xGroupBy, "Store Name")
+                xCheckListMenu = xDialog.getChild("grid1")
+                xTreeList = xCheckListMenu.getChild("columns")
+                xEntry = xTreeList.getChild("1")
+                xEntry.executeAction("CLICK", tuple())
 
-            #use the SUM function
-    #        xfunctions = xDialog.getChild("functions")
-    #        propsF = {"TEXT": "Sum"}
-    #        actionPropsF = mkPropertyValues(propsF)
-    #        xfunctions.executeAction("SELECT", actionPropsF)
+                #use the SUM function
+        #        xfunctions = xDialog.getChild("functions")
+        #        propsF = {"TEXT": "Sum"}
+        #        actionPropsF = mkPropertyValues(propsF)
+        #        xfunctions.executeAction("SELECT", actionPropsF)
 
-            xOKBtn = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOKBtn)
 
             #verify
             self.assertEqual(get_cell_by_position(calc_doc, 0, 0, 15).getString(), "5408 Sum")

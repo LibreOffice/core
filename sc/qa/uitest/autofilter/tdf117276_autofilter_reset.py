@@ -97,10 +97,8 @@ class tdf117276_autofilter_reset(UITestCase):
         xGridWindow.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:B6"}))
 
         # 2. switch on auto-filter
-        self.ui_test.execute_dialog_through_command(".uno:DataFilterAutoFilter")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xYesBtn = xDialog.getChild("yes")
-        self.ui_test.close_dialog_through_button(xYesBtn)
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:DataFilterAutoFilter", close_button="yes"):
+            pass
 
         # autofilter still exist
         self.assertEqual(document.getPropertyValue("UnnamedDatabaseRanges").getByTable(0).AutoFilter, True)

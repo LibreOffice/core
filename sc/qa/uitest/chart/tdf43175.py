@@ -15,16 +15,13 @@ class Tdf43175(UITestCase):
 
             self.xUITest.executeCommand(".uno:TableSelectAll")
 
-            self.ui_test.execute_dialog_through_command(".uno:Move")
-            xDialog = self.xUITest.getTopFocusWindow()
-            insertBefore = xDialog.getChild("insertBefore")
+            with self.ui_test.execute_dialog_through_command_guarded(".uno:Move") as xDialog:
+                insertBefore = xDialog.getChild("insertBefore")
 
-            # Select - move to end position -
-            xTreeEntry = insertBefore.getChild('2')
-            xTreeEntry.executeAction("SELECT", tuple())
+                # Select - move to end position -
+                xTreeEntry = insertBefore.getChild('2')
+                xTreeEntry.executeAction("SELECT", tuple())
 
-            xOKBtn = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOKBtn)
 
             aSheetNames = ['Blad1', 'Blad2', 'Blad1_2', 'Blad2_2']
 

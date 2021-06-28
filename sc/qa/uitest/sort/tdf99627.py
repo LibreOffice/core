@@ -22,17 +22,14 @@ class tdf99627(UITestCase):
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
 
             #Open sort dialog by DATA - SORT
-            self.ui_test.execute_dialog_through_command(".uno:DataSort")
-            xDialog = self.xUITest.getTopFocusWindow()
-            xTabs = xDialog.getChild("tabcontrol")
-            select_pos(xTabs, "1")
-            xNatural = xDialog.getChild("naturalsort")
-            xdown = xDialog.getChild("down")
-            xNatural.executeAction("CLICK", tuple())
-            select_pos(xTabs, "0")
-            xdown.executeAction("CLICK", tuple())
-            xOk = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOk)
+            with self.ui_test.execute_dialog_through_command_guarded(".uno:DataSort") as xDialog:
+                xTabs = xDialog.getChild("tabcontrol")
+                select_pos(xTabs, "1")
+                xNatural = xDialog.getChild("naturalsort")
+                xdown = xDialog.getChild("down")
+                xNatural.executeAction("CLICK", tuple())
+                select_pos(xTabs, "0")
+                xdown.executeAction("CLICK", tuple())
             #Verify
             self.assertEqual(get_cell_by_position(calc_doc, 0, 0, 1).getString(), "2998")
             self.assertEqual(get_cell_by_position(calc_doc, 0, 0, 2998).getString(), "1")

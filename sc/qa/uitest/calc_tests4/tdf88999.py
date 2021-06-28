@@ -23,26 +23,23 @@ class tdf88999(UITestCase):
         #select cell A1
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
         #format - cell
-        self.ui_test.execute_dialog_through_command(".uno:FormatCellDialog")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xTabs = xDialog.getChild("tabcontrol")
-        select_pos(xTabs, "0")  #tab Numbers
-        xliststore1 = xDialog.getChild("categorylb")  #1st list / Category
-        xliststore2 = xDialog.getChild("formatlb")  #2nd list / Format
-        xdecimalsed = xDialog.getChild("decimalsed")
-        xleadzerosed = xDialog.getChild("leadzerosed")
-        xnegnumred = xDialog.getChild("negnumred")
-        xthousands = xDialog.getChild("thousands")
-        xlanguagelb = xDialog.getChild("languagelb")
-        xformatted = xDialog.getChild("formatted")
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:FormatCellDialog") as xDialog:
+            xTabs = xDialog.getChild("tabcontrol")
+            select_pos(xTabs, "0")  #tab Numbers
+            xliststore1 = xDialog.getChild("categorylb")  #1st list / Category
+            xliststore2 = xDialog.getChild("formatlb")  #2nd list / Format
+            xdecimalsed = xDialog.getChild("decimalsed")
+            xleadzerosed = xDialog.getChild("leadzerosed")
+            xnegnumred = xDialog.getChild("negnumred")
+            xthousands = xDialog.getChild("thousands")
+            xlanguagelb = xDialog.getChild("languagelb")
+            xformatted = xDialog.getChild("formatted")
 
-        self.assertEqual(get_state_as_dict(xliststore1)["SelectEntryText"], "Scientific")
-        self.assertEqual(get_state_as_dict(xdecimalsed)["Text"], "2")
-        self.assertEqual(get_state_as_dict(xdecimalsed)["Enabled"], "true")
-        self.assertEqual(get_state_as_dict(xleadzerosed)["Text"], "1")
-        self.assertEqual(get_state_as_dict(xformatted)["Text"], "0.00E+00")
-        xOk = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOk)
+            self.assertEqual(get_state_as_dict(xliststore1)["SelectEntryText"], "Scientific")
+            self.assertEqual(get_state_as_dict(xdecimalsed)["Text"], "2")
+            self.assertEqual(get_state_as_dict(xdecimalsed)["Enabled"], "true")
+            self.assertEqual(get_state_as_dict(xleadzerosed)["Text"], "1")
+            self.assertEqual(get_state_as_dict(xformatted)["Text"], "0.00E+00")
 
         self.ui_test.close_doc()
 
