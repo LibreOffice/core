@@ -25,21 +25,15 @@ class tdf126017(UITestCase):
             xcloseBtn = xDialog.getChild("close")
             self.ui_test.close_dialog_through_button(xcloseBtn)
             #edit index
-            self.ui_test.execute_dialog_through_command(".uno:EditCurIndex")  #open index dialog
-            xDiagIndex = self.xUITest.getTopFocusWindow()
-            xOKBtn = xDiagIndex.getChild("ok")
-            title = xDiagIndex.getChild("title")
-            title.executeAction("TYPE", mkPropertyValues({"TEXT":"aaaa"}))
-            self.ui_test.close_dialog_through_button(xOKBtn)
+            with self.ui_test.execute_dialog_through_command_guarded(".uno:EditCurIndex") as xDiagIndex:
+                title = xDiagIndex.getChild("title")
+                title.executeAction("TYPE", mkPropertyValues({"TEXT":"aaaa"}))
 
             self.xUITest.executeCommand(".uno:Undo")
 
-            self.ui_test.execute_dialog_through_command(".uno:EditCurIndex")  #open index dialog
-            xDiagIndex = self.xUITest.getTopFocusWindow()
-            xOKBtn = xDiagIndex.getChild("ok")
-            title = xDiagIndex.getChild("title")
-            title.executeAction("TYPE", mkPropertyValues({"TEXT":"aaaa"}))
-            self.ui_test.close_dialog_through_button(xOKBtn)
+            with self.ui_test.execute_dialog_through_command_guarded(".uno:EditCurIndex") as xDiagIndex:
+                title = xDiagIndex.getChild("title")
+                title.executeAction("TYPE", mkPropertyValues({"TEXT":"aaaa"}))
 
             self.xUITest.executeCommand(".uno:Undo")
             self.xUITest.executeCommand(".uno:Undo")

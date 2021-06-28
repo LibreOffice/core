@@ -26,10 +26,8 @@ class tdf123446(UITestCase):
         self.xUITest.executeCommand(".uno:GoLeft")
         self.xUITest.executeCommand(".uno:GoLeft")
 
-        self.ui_test.execute_dialog_through_command(".uno:InsertMultiIndex")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xokbtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xokbtn)
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:InsertMultiIndex"):
+            pass
         #- Undo the ToC insertion.
         self.xUITest.executeCommand(".uno:Undo")
         #- Redo the ToC insertion.
