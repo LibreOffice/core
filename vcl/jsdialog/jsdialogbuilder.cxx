@@ -223,6 +223,9 @@ JSDialogNotifyIdle::generatePopupMessage(VclPtr<vcl::Window> pWindow, OUString s
     if (!pWindow || !m_aNotifierWindow)
         return aJsonWriter;
 
+    if (!pWindow->GetParentWithLOKNotifier())
+        return aJsonWriter;
+
     pWindow->DumpAsPropertyTree(*aJsonWriter);
 
     aJsonWriter->put("jsontype", "dialog");
@@ -230,7 +233,7 @@ JSDialogNotifyIdle::generatePopupMessage(VclPtr<vcl::Window> pWindow, OUString s
     aJsonWriter->put("cancellable", true);
     aJsonWriter->put("popupParent", sParentId);
     aJsonWriter->put("clickToClose", sCloseId);
-    aJsonWriter->put("id", pWindow->GetLOKWindowId());
+    aJsonWriter->put("id", pWindow->GetParentWithLOKNotifier()->GetLOKWindowId());
 
     return aJsonWriter;
 }
