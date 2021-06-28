@@ -67,8 +67,8 @@ bool isBuilderEnabledForPopup(std::u16string_view rUIFile)
         || rUIFile == u"modules/scalc/ui/floatingborderstyle.ui"
         || rUIFile == u"svx/ui/textunderlinecontrol.ui" || rUIFile == u"svx/ui/numberingwindow.ui"
         || rUIFile == u"svx/ui/paralinespacingcontrol.ui"
-        || rUIFile == u"svx/ui/floatinglineproperty.ui"
-        || rUIFile == u"svx/ui/floatinglinestyle.ui")
+        || rUIFile == u"svx/ui/floatinglineproperty.ui" || rUIFile == u"svx/ui/floatinglinestyle.ui"
+        || rUIFile == u"svx/ui/floatinglineend.ui")
         return true;
 
     return false;
