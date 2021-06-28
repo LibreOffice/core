@@ -2591,12 +2591,16 @@ protected:
 
     void localizeDecimalSeparator()
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
         // tdf#128867 if localize decimal separator is active we will always
         // need to be able to change the output of the decimal key press
         if (!m_nKeyPressSignalId && Application::GetSettings().GetMiscSettings().GetEnableLocalizedDecimalSep())
+        {
+#if GTK_CHECK_VERSION(4, 0, 0)
+            m_nKeyPressSignalId = g_signal_connect(get_key_controller(), "key-pressed", G_CALLBACK(signalKeyPressed), this);
+#else
             m_nKeyPressSignalId = g_signal_connect(m_pWidget, "key-press-event", G_CALLBACK(signalKey), this);
 #endif
+        }
     }
 
     void ensure_drag_begin_end()
@@ -2669,6 +2673,7 @@ private:
     GtkEventController* m_pClickController;
     GtkEventController* m_pMotionController;
     GtkEventController* m_pDragController;
+    GtkEventController* m_pKeyController;
 #endif
 
     rtl::Reference<GtkInstDropTarget> m_xDropTarget;
@@ -2681,12 +2686,28 @@ private:
         pThis->signal_size_allocate(allocation->width, allocation->height);
     }
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
+#if GTK_CHECK_VERSION(4, 0, 0)
+    static gboolean signalKeyPressed(GtkEventControllerKey*, guint keyval, guint keycode, GdkModifierType state, gpointer widget)
+    {
+        LocalizeDecimalSeparator(keyval);
+        GtkInstanceWidget* pThis = static_cast<GtkInstanceWidget*>(widget);
+        return pThis->signal_key_press(keyval, keycode, state);
+    }
+
+    static gboolean signalKeyReleased(GtkEventControllerKey*, guint keyval, guint keycode, GdkModifierType state, gpointer widget)
+    {
+        LocalizeDecimalSeparator(keyval);
+        GtkInstanceWidget* pThis = static_cast<GtkInstanceWidget*>(widget);
+        return pThis->signal_key_release(keyval, keycode, state);
+    }
+#else
     static gboolean signalKey(GtkWidget*, GdkEventKey* pEvent, gpointer widget)
     {
         LocalizeDecimalSeparator(pEvent->keyval);
         GtkInstanceWidget* pThis = static_cast<GtkInstanceWidget*>(widget);
-        return pThis->signal_key(pEvent);
+        if (pEvent->type == GDK_KEY_PRESS)
+            return pThis->signal_key_press(pEvent);
+        return pThis->signal_key_release(pEvent);
     }
 #endif
 
@@ -3203,6 +3224,7 @@ public:
         , m_pClickController(nullptr)
         , m_pMotionController(nullptr)
         , m_pDragController(nullptr)
+        , m_pKeyController(nullptr)
 #endif
     {
         if (!bTakeOwnership)
@@ -3213,19 +3235,27 @@ public:
 
     virtual void connect_key_press(const Link<const KeyEvent&, bool>& rLink) override
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
         if (!m_nKeyPressSignalId)
+        {
+#if GTK_CHECK_VERSION(4, 0, 0)
+            m_nKeyPressSignalId = g_signal_connect(get_key_controller(), "key-pressed", G_CALLBACK(signalKeyPressed), this);
+#else
             m_nKeyPressSignalId = g_signal_connect(m_pWidget, "key-press-event", G_CALLBACK(signalKey), this);
 #endif
+        }
         weld::Widget::connect_key_press(rLink);
     }
 
     virtual void connect_key_release(const Link<const KeyEvent&, bool>& rLink) override
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
         if (!m_nKeyReleaseSignalId)
+        {
+#if GTK_CHECK_VERSION(4, 0, 0)
+            m_nKeyReleaseSignalId = g_signal_connect(get_key_controller(), "key-released", G_CALLBACK(signalKeyReleased), this);
+#else
             m_nKeyReleaseSignalId = g_signal_connect(m_pWidget, "key-release-event", G_CALLBACK(signalKey), this);
 #endif
+        }
         weld::Widget::connect_key_release(rLink);
     }
 
@@ -3745,6 +3775,16 @@ public:
         return m_pDragController;
     }
 
+    GtkEventController* get_key_controller()
+    {
+        if (!m_pKeyController)
+        {
+            m_pKeyController = gtk_event_controller_key_new();
+            gtk_widget_add_controller(m_pWidget, m_pKeyController);
+        }
+        return m_pKeyController;
+    }
+
 #endif
 
 
@@ -3795,15 +3835,40 @@ public:
         m_aSizeAllocateHdl.Call(Size(nWidth, nHeight));
     }
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
-    bool signal_key(const GdkEventKey* pEvent)
+#if GTK_CHECK_VERSION(4, 0, 0)
+    bool signal_key_press(guint keyval, guint keycode, GdkModifierType state)
     {
-        if (pEvent->type == GDK_KEY_PRESS && m_aKeyPressHdl.IsSet())
+        if (m_aKeyPressHdl.IsSet())
+        {
+            SolarMutexGuard aGuard;
+            return m_aKeyPressHdl.Call(CreateKeyEvent(keyval, keycode, state, 0));
+        }
+        return false;
+    }
+
+    bool signal_key_release(guint keyval, guint keycode, GdkModifierType state)
+    {
+        if (m_aKeyReleaseHdl.IsSet())
+        {
+            SolarMutexGuard aGuard;
+            return m_aKeyReleaseHdl.Call(CreateKeyEvent(keyval, keycode, state, 0));
+        }
+        return false;
+    }
+#else
+    bool signal_key_press(const GdkEventKey* pEvent)
+    {
+        if (m_aKeyPressHdl.IsSet())
         {
             SolarMutexGuard aGuard;
             return m_aKeyPressHdl.Call(GtkToVcl(*pEvent));
         }
-        if (pEvent->type == GDK_KEY_RELEASE && m_aKeyReleaseHdl.IsSet())
+        return false;
+    }
+
+    bool signal_key_release(const GdkEventKey* pEvent)
+    {
+        if (m_aKeyReleaseHdl.IsSet())
         {
             SolarMutexGuard aGuard;
             return m_aKeyReleaseHdl.Call(GtkToVcl(*pEvent));
@@ -3978,9 +4043,21 @@ public:
         if (m_nDragGetSignalId)
             g_signal_handler_disconnect(m_pWidget, m_nDragGetSignalId);
         if (m_nKeyPressSignalId)
+        {
+#if GTK_CHECK_VERSION(4, 0, 0)
+            g_signal_handler_disconnect(get_key_controller(), m_nKeyPressSignalId);
+#else
             g_signal_handler_disconnect(m_pWidget, m_nKeyPressSignalId);
+#endif
+        }
         if (m_nKeyReleaseSignalId)
+        {
+#if GTK_CHECK_VERSION(4, 0, 0)
+            g_signal_handler_disconnect(get_key_controller(), m_nKeyReleaseSignalId);
+#else
             g_signal_handler_disconnect(m_pWidget, m_nKeyReleaseSignalId);
+#endif
+        }
         if (m_nButtonPressSignalId)
         {
 #if GTK_CHECK_VERSION(4, 0, 0)
