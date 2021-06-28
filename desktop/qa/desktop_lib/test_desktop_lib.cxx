@@ -226,6 +226,8 @@ public:
     void testMetricField();
     void testMultiDocuments();
     void testJumpCursor();
+    void testNoDuplicateTableSelection();
+    void testMultiViewTableSelection();
     void testABI();
 
     CPPUNIT_TEST_SUITE(DesktopLOKTest);
@@ -289,6 +291,8 @@ public:
     CPPUNIT_TEST(testMetricField);
     CPPUNIT_TEST(testMultiDocuments);
     CPPUNIT_TEST(testJumpCursor);
+    CPPUNIT_TEST(testNoDuplicateTableSelection);
+    CPPUNIT_TEST(testMultiViewTableSelection);
     CPPUNIT_TEST(testABI);
     CPPUNIT_TEST_SUITE_END();
 
@@ -1946,6 +1950,8 @@ class ViewCallback
     int mnView;
 public:
     OString m_aCellFormula;
+    int m_nTableSelectionCount;
+    bool m_bEmptyTableSelection;
     bool m_bTilesInvalidated;
     bool m_bZeroCursor;
     tools::Rectangle m_aOwnCursor;
@@ -1954,6 +1960,8 @@ public:
 
     ViewCallback(LibLODocument_Impl* pDocument)
         : mpDocument(pDocument),
+          m_nTableSelectionCount(0),
+          m_bEmptyTableSelection(false),
           m_bTilesInvalidated(false),
           m_bZeroCursor(false)
     {
@@ -2015,6 +2023,12 @@ public:
         case LOK_CALLBACK_CELL_FORMULA:
         {
             m_aCellFormula = aPayload;
+        }
+        break;
+        case LOK_CALLBACK_TABLE_SELECTED:
+        {
+            m_bEmptyTableSelection = (std::string(pPayload).compare("{\n}\n") == 0);
+            ++m_nTableSelectionCount;
         }
         break;
         }
@@ -3087,6 +3101,113 @@ void DesktopLOKTest::testJumpCursor()
     CPPUNIT_ASSERT(!aView1.m_bZeroCursor);
 
     comphelper::LibreOfficeKit::setTiledAnnotations(true);
+}
+
+static void lcl_repeatKeyStroke(LibLODocument_Impl *pDocument, int nCharCode, int nKeyCode, size_t nCount)
+{
+    for (size_t nCtr = 0; nCtr < nCount; ++nCtr)
+    {
+        pDocument->m_pDocumentClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYINPUT, nCharCode, nKeyCode);
+        pDocument->m_pDocumentClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYUP, nCharCode, nKeyCode);
+    }
+}
+
+void DesktopLOKTest::testNoDuplicateTableSelection()
+{
+    comphelper::LibreOfficeKit::setActive();
+    LibLODocument_Impl* pDocument = loadDoc("table-selection.odt");
+
+    // Create view 1.
+    pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
+    ViewCallback aView1(pDocument);
+
+    lcl_repeatKeyStroke(pDocument, 0, KEY_DOWN, 1);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(1, aView1.m_nTableSelectionCount);
+    CPPUNIT_ASSERT(aView1.m_bEmptyTableSelection);
+
+    aView1.m_nTableSelectionCount = 0;
+    // Go to Table1.
+    lcl_repeatKeyStroke(pDocument, 0, KEY_DOWN, 1);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(1, aView1.m_nTableSelectionCount);
+    CPPUNIT_ASSERT(!aView1.m_bEmptyTableSelection);
+
+    aView1.m_nTableSelectionCount = 0;
+    // Move to the last row in Table1.
+    lcl_repeatKeyStroke(pDocument, 0, KEY_DOWN, 2);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(0, aView1.m_nTableSelectionCount);
+
+    // Go outside Table1.
+    lcl_repeatKeyStroke(pDocument, 0, KEY_DOWN, 1);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(1, aView1.m_nTableSelectionCount);
+    CPPUNIT_ASSERT(aView1.m_bEmptyTableSelection);
+}
+
+void DesktopLOKTest::testMultiViewTableSelection()
+{
+    comphelper::LibreOfficeKit::setActive();
+    LibLODocument_Impl* pDocument = loadDoc("table-selection.odt");
+
+    // Create view 1.
+    pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
+    ViewCallback aView1(pDocument);
+    int nView1 = pDocument->m_pDocumentClass->getView(pDocument);
+
+    // Create view 2.
+    pDocument->m_pDocumentClass->createView(pDocument);
+    pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
+    ViewCallback aView2(pDocument);
+    int nView2 = pDocument->m_pDocumentClass->getView(pDocument);
+
+    // switch to view 1.
+    pDocument->m_pDocumentClass->setView(pDocument, nView1);
+    lcl_repeatKeyStroke(pDocument, 0, KEY_DOWN, 1);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(1, aView1.m_nTableSelectionCount);
+    CPPUNIT_ASSERT_EQUAL(1, aView2.m_nTableSelectionCount);
+    CPPUNIT_ASSERT(aView1.m_bEmptyTableSelection);
+    CPPUNIT_ASSERT(aView2.m_bEmptyTableSelection);
+
+    aView1.m_nTableSelectionCount = 0;
+    aView2.m_nTableSelectionCount = 0;
+
+    pDocument->m_pDocumentClass->setView(pDocument, nView1);
+    // Go to Table1.
+    lcl_repeatKeyStroke(pDocument, 0, KEY_DOWN, 1);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(1, aView1.m_nTableSelectionCount);
+    CPPUNIT_ASSERT_EQUAL(0, aView2.m_nTableSelectionCount);
+
+    aView1.m_nTableSelectionCount = 0;
+    // Switch to view 2
+    pDocument->m_pDocumentClass->setView(pDocument, nView2);
+    // Go to Table2 in view 2.
+    lcl_repeatKeyStroke(pDocument, 0, KEY_DOWN, 7);
+    Scheduler::ProcessEventsToIdle();
+    // View1 should not get any table selection messages.
+    CPPUNIT_ASSERT_EQUAL(0, aView1.m_nTableSelectionCount);
+    // View2 will first get table selection of Table1, then emty selection, and finally on 7th down arrow keypress,
+    // it will get table-selection of Table2. So in total it should get 3 table selections.
+    CPPUNIT_ASSERT_EQUAL(3, aView2.m_nTableSelectionCount);
+    CPPUNIT_ASSERT(!aView2.m_bEmptyTableSelection);
+
+    aView1.m_nTableSelectionCount = 0;
+    aView2.m_nTableSelectionCount = 0;
+
+    // Switch to view 1
+    pDocument->m_pDocumentClass->setView(pDocument, nView1);
+    // Go out of Table1 and re-enter..
+    lcl_repeatKeyStroke(pDocument, 0, KEY_UP, 1);
+    lcl_repeatKeyStroke(pDocument, 0, KEY_DOWN, 1);
+    Scheduler::ProcessEventsToIdle();
+    // View1 should get one empty table selection, then get Table1 selection.
+    CPPUNIT_ASSERT_EQUAL(2, aView1.m_nTableSelectionCount);
+    // View2 should not get any table selection.
+    CPPUNIT_ASSERT_EQUAL(0, aView2.m_nTableSelectionCount);
+    CPPUNIT_ASSERT(!aView1.m_bEmptyTableSelection);
 }
 
 namespace {
