@@ -37,16 +37,12 @@ class ManualCalcTests(UITestCase):
         xGridWin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
 
         # Execute "Select DB Range dialog"
-        self.ui_test.execute_dialog_through_command(".uno:SelectDB")
-        xSelectNameDlg = self.xUITest.getTopFocusWindow()
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:SelectDB") as xSelectNameDlg:
 
-        xListBox = xSelectNameDlg.getChild("treeview")
-        xListBoxState = get_state_as_dict(xListBox)
-        self.assertEqual(xListBoxState["SelectionCount"], "1")
-        self.assertEqual(xListBoxState["SelectEntryText"], "my_database")
-
-        xOkBtn = xSelectNameDlg.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOkBtn)
+            xListBox = xSelectNameDlg.getChild("treeview")
+            xListBoxState = get_state_as_dict(xListBox)
+            self.assertEqual(xListBoxState["SelectionCount"], "1")
+            self.assertEqual(xListBoxState["SelectEntryText"], "my_database")
 
         # Assert that the correct range has been selected
         gridWinState = get_state_as_dict(xGridWin)
@@ -74,11 +70,8 @@ class ManualCalcTests(UITestCase):
         xGridWin.executeAction("SELECT", mkPropertyValues({"RANGE": "B1:B10"}))
 
         # Execute "Sort" dialog
-        self.ui_test.execute_dialog_through_command(".uno:DataSort")
-        xSortDlg = self.xUITest.getTopFocusWindow()
-
-        xOkBtn = xSortDlg.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOkBtn)
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:DataSort"):
+            pass
 
         document = self.ui_test.get_component()
 
@@ -102,20 +95,17 @@ class ManualCalcTests(UITestCase):
         xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
         xGridWin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:C10"}))
 
-        self.ui_test.execute_dialog_through_command(".uno:Validation")
-        xValidationDlg = self.xUITest.getTopFocusWindow()
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:Validation") as xValidationDlg:
 
-        xAllowList = xValidationDlg.getChild("allow")
-        xAllowList.executeAction("SELECT", mkPropertyValues({"POS": "1"}))
+            xAllowList = xValidationDlg.getChild("allow")
+            xAllowList.executeAction("SELECT", mkPropertyValues({"POS": "1"}))
 
-        xData = xValidationDlg.getChild("data")
-        xData.executeAction("SELECT", mkPropertyValues({"POS": "5"}))
+            xData = xValidationDlg.getChild("data")
+            xData.executeAction("SELECT", mkPropertyValues({"POS": "5"}))
 
-        xVal = xValidationDlg.getChild("max")
-        xVal.executeAction("TYPE", mkPropertyValues({"TEXT":"0"}))
+            xVal = xValidationDlg.getChild("max")
+            xVal.executeAction("TYPE", mkPropertyValues({"TEXT":"0"}))
 
-        xOkBtn = xValidationDlg.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOkBtn)
 
         def enter_text(cell, text):
             enter_text_to_cell(xGridWin, cell, text)
@@ -145,18 +135,14 @@ class ManualCalcTests(UITestCase):
 
         xGridWin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
 
-        self.ui_test.execute_dialog_through_command(".uno:PasteSpecial")
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:PasteSpecial") as xPasteSpecialDlg:
 
-        xPasteSpecialDlg = self.xUITest.getTopFocusWindow()
+            xAllChkBox = xPasteSpecialDlg.getChild("paste_all")
+            xAllChkBox.executeAction("CLICK", tuple())
 
-        xAllChkBox = xPasteSpecialDlg.getChild("paste_all")
-        xAllChkBox.executeAction("CLICK", tuple())
+            xTransposeChkBox = xPasteSpecialDlg.getChild("transpose")
+            xTransposeChkBox.executeAction("CLICK", tuple())
 
-        xTransposeChkBox = xPasteSpecialDlg.getChild("transpose")
-        xTransposeChkBox.executeAction("CLICK", tuple())
-
-        xOkBtn = xPasteSpecialDlg.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOkBtn)
 
         document = self.ui_test.get_component()
         self.assertEqual(get_cell_by_position(document, 0, 2, 1).getString(), "abcd")

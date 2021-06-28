@@ -16,18 +16,15 @@ class tdf100517(UITestCase):
     def execute_sort_dialog(self, gridwin, bIncludeNotes):
         gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:B3"}))
 
-        self.ui_test.execute_dialog_through_command(".uno:DataSort")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xTabs = xDialog.getChild("tabcontrol")
-        select_pos(xTabs, "1")
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:DataSort") as xDialog:
+            xTabs = xDialog.getChild("tabcontrol")
+            select_pos(xTabs, "1")
 
-        xIncludeNotes = xDialog.getChild("includenotes")
+            xIncludeNotes = xDialog.getChild("includenotes")
 
-        if (get_state_as_dict(xIncludeNotes)["Selected"]) != bIncludeNotes:
-            xIncludeNotes.executeAction("CLICK", tuple())
+            if (get_state_as_dict(xIncludeNotes)["Selected"]) != bIncludeNotes:
+                xIncludeNotes.executeAction("CLICK", tuple())
 
-        xOk = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOk)
 
     def test_tdf100517(self):
         calc_doc = self.ui_test.create_doc_in_start_center("calc")

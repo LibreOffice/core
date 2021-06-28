@@ -15,11 +15,9 @@ class dataform(UITestCase):
         gridwin = xCalcDoc.getChild("grid_window")
         gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:A10"}))
 
-        self.ui_test.execute_dialog_through_command(".uno:DataForm")
-        xDialog = self.xUITest.getTopFocusWindow()
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:DataForm", close_button="close"):
+            pass
 
-        xCloseBtn = xDialog.getChild("close")
-        self.ui_test.close_dialog_through_button(xCloseBtn)
         self.ui_test.close_doc()
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
