@@ -68,7 +68,8 @@ bool isBuilderEnabledForPopup(const OUString& rUIFile)
         || rUIFile == "modules/scalc/ui/floatingborderstyle.ui"
         || rUIFile == "svx/ui/textunderlinecontrol.ui" || rUIFile == "svx/ui/numberingwindow.ui"
         || rUIFile == "svx/ui/paralinespacingcontrol.ui"
-        || rUIFile == "svx/ui/floatinglineproperty.ui" || rUIFile == "svx/ui/floatinglinestyle.ui")
+        || rUIFile == "svx/ui/floatinglineproperty.ui" || rUIFile == "svx/ui/floatinglinestyle.ui"
+        || rUIFile == "svx/ui/floatinglineend.ui")
         return true;
 
     return false;
