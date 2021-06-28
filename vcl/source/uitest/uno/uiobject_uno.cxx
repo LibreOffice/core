@@ -106,18 +106,16 @@ void SAL_CALL UIObjectUnoObj::executeAction(const OUString& rAction, const css::
         throw css::uno::RuntimeException();
 
     std::unique_lock<std::mutex> lk(mMutex);
-    mAction = rAction;
-    mPropValues = rPropValues;
     mReady = false;
     auto aIdle = std::make_unique<Idle>();
     aIdle->SetDebugName("UI Test Idle Handler");
     aIdle->SetPriority(TaskPriority::HIGHEST);
 
-    std::function<void()> func = [this](){
+    std::function<void()> func = [&rAction, &rPropValues, this](){
 
         SolarMutexGuard aGuard;
         StringMap aMap;
-        for (const auto& rPropVal : std::as_const(mPropValues))
+        for (const auto& rPropVal : rPropValues)
         {
             OUString aVal;
             if (!(rPropVal.Value >>= aVal))
@@ -125,7 +123,7 @@ void SAL_CALL UIObjectUnoObj::executeAction(const OUString& rAction, const css::
 
             aMap[rPropVal.Name] = aVal;
         }
-        mpObj->execute(mAction, aMap);
+        mpObj->execute(rAction, aMap);
     };
 
     ExecuteWrapper* pWrapper = new ExecuteWrapper(func, LINK(this, UIObjectUnoObj, NotifyHdl));
