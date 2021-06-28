@@ -19,14 +19,4 @@ def create_doc_in_start_center(testCase, app):
     finally:
         testCase.ui_test.close_doc()
 
-# Calls UITest.close_dialog_through_button at exit
-@contextmanager
-def execute_dialog_through_command(testCase, command, printNames=False, close_button = "ok"):
-    testCase.ui_test.execute_dialog_through_command(command, printNames)
-    xDialog = testCase.xUITest.getTopFocusWindow()
-    try:
-        yield xDialog
-    finally:
-        testCase.ui_test.close_dialog_through_button(xDialog.getChild(close_button))
-
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

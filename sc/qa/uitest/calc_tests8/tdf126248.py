@@ -31,7 +31,7 @@ class tdf126248(UITestCase):
         self.xUITest.executeCommand(".uno:Sidebar")
 
     def changeLocalSetting(self, language):
-        with guarded.execute_dialog_through_command(self, ".uno:OptionsTreeDialog") as xDialog:
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:OptionsTreeDialog") as xDialog:
             xPages = xDialog.getChild("pages")
             xLanguageEntry = xPages.getChild('2')
             xLanguageEntry.executeAction("EXPAND", tuple())
@@ -53,7 +53,7 @@ class tdf126248(UITestCase):
 
             self.changeLocalSetting("Chinese (traditional)")
 
-            with guarded.execute_dialog_through_command(self, ".uno:FormatCellDialog") as xDialog:
+            with self.ui_test.execute_dialog_through_command_guarded(".uno:FormatCellDialog") as xDialog:
                 xTabs = xDialog.getChild("tabcontrol")
                 select_pos(xTabs, "1")
 

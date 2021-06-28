@@ -20,32 +20,26 @@ class masterElements(UITestCase):
         self.ui_test.close_dialog_through_button(xCancelBtn)
         document = self.ui_test.get_component()
 
-        self.ui_test.execute_dialog_through_command(".uno:MasterLayouts")
-        xDialog = self.xUITest.getTopFocusWindow()
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:MasterLayouts") as xDialog:
 
-        xpagenumber = xDialog.getChild("pagenumber")
-        xfooter = xDialog.getChild("footer")
-        datetime = xDialog.getChild("datetime")
-        xpagenumber.executeAction("CLICK", tuple())
-        xfooter.executeAction("CLICK", tuple())
-        datetime.executeAction("CLICK", tuple())
+            xpagenumber = xDialog.getChild("pagenumber")
+            xfooter = xDialog.getChild("footer")
+            datetime = xDialog.getChild("datetime")
+            xpagenumber.executeAction("CLICK", tuple())
+            xfooter.executeAction("CLICK", tuple())
+            datetime.executeAction("CLICK", tuple())
 
-        xOKButton = xDialog.getChild("ok")
-        xOKButton.executeAction("CLICK", tuple())
 
         #verify
-        self.ui_test.execute_dialog_through_command(".uno:MasterLayouts")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xfooter = xDialog.getChild("footer")
-        datetime = xDialog.getChild("datetime")
-        xpagenumber = xDialog.getChild("pagenumber")
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:MasterLayouts") as xDialog:
+            xfooter = xDialog.getChild("footer")
+            datetime = xDialog.getChild("datetime")
+            xpagenumber = xDialog.getChild("pagenumber")
 
-        self.assertEqual(get_state_as_dict(xfooter)["Selected"], "false")
-        self.assertEqual(get_state_as_dict(datetime)["Selected"], "false")
-        self.assertEqual(get_state_as_dict(xpagenumber)["Selected"], "false")
+            self.assertEqual(get_state_as_dict(xfooter)["Selected"], "false")
+            self.assertEqual(get_state_as_dict(datetime)["Selected"], "false")
+            self.assertEqual(get_state_as_dict(xpagenumber)["Selected"], "false")
 
-        xOKButton = xDialog.getChild("ok")
-        xOKButton.executeAction("CLICK", tuple())
 
         self.ui_test.close_doc()
 
