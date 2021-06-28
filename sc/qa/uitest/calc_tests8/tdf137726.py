@@ -13,10 +13,11 @@ class tdf137726(UITestCase):
         xCalcDoc = self.xUITest.getTopFocusWindow()
         gridwin = xCalcDoc.getChild("grid_window")
 
-        self.ui_test.execute_dialog_through_command(".uno:DataDataPilotRun")
-
         # three dialogs are displayed one after the other, click OK in all of them
-        for i in range(3):
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:DataDataPilotRun") as xDialog:
+            pass
+
+        for i in range(2):
             xDialog = self.xUITest.getTopFocusWindow()
             xOKBtn = xDialog.getChild('ok')
             self.ui_test.close_dialog_through_button(xOKBtn)

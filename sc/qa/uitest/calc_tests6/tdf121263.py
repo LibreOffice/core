@@ -18,14 +18,10 @@ class tdf121263(UITestCase):
         document = self.ui_test.get_component()
         gridwin = xTopWindow.getChild("grid_window")
 
-        self.ui_test.execute_dialog_through_command(".uno:Insert")  #insert sheet
-        xDialog = self.xUITest.getTopFocusWindow()
-        xOKButton = xDialog.getChild("ok")
-        xOKButton.executeAction("CLICK", tuple())
-        self.ui_test.execute_dialog_through_command(".uno:Insert")  #insert sheet
-        xDialog = self.xUITest.getTopFocusWindow()
-        xOKButton = xDialog.getChild("ok")
-        xOKButton.executeAction("CLICK", tuple())
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:Insert"):
+            pass
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:Insert"):
+            pass
 
         gridwin.executeAction("SELECT", mkPropertyValues({"TABLE": "2"}))
         #select previous sheet
@@ -35,12 +31,9 @@ class tdf121263(UITestCase):
         self.xUITest.executeCommand(".uno:Hide")
 
         #show sheet Dialog
-        self.ui_test.execute_dialog_through_command(".uno:Show")
-        xDialog = self.xUITest.getTopFocusWindow()
-        treeview = xDialog.getChild("treeview")
-        self.assertEqual(get_state_as_dict(treeview)["Children"], "2")
-        xcancel = xDialog.getChild("cancel")
-        self.ui_test.close_dialog_through_button(xcancel)
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:Show", close_button="cancel") as xDialog:
+            treeview = xDialog.getChild("treeview")
+            self.assertEqual(get_state_as_dict(treeview)["Children"], "2")
 
         self.ui_test.close_doc()
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

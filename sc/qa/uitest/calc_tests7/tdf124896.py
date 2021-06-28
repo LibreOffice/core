@@ -16,10 +16,9 @@ class tdf124896(UITestCase):
         gridwin = xCalcDoc.getChild("grid_window")
 
         # Remove X Bar R Chart (2) sheet
-        self.ui_test.execute_dialog_through_command(".uno:Remove")  #delete sheet
-        xDialog = self.xUITest.getTopFocusWindow()
-        xOKButton = xDialog.getChild("yes")
-        xOKButton.executeAction("CLICK", tuple())
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:Remove", close_button="yes") as xDialog:
+            pass
+
         #verify; no crashes
         self.assertEqual(calc_doc.Sheets.getCount(), 2)
 

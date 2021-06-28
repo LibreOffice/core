@@ -23,24 +23,21 @@ class tdf53482(UITestCase):
             #1. Highlight cells to be sorted A8:J124
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A8:J124"}))
             #2. Click Data menu, Sort
-            self.ui_test.execute_dialog_through_command(".uno:DataSort")
-            xDialog = self.xUITest.getTopFocusWindow()
-            xTabs = xDialog.getChild("tabcontrol")
-            select_pos(xTabs, "1")
-            #3. On Options tab, tick 'Range contains column labels'
-            xHeader = xDialog.getChild("header")
-            xHeader.executeAction("CLICK", tuple())
-            if (get_state_as_dict(xHeader)["Selected"]) == "false":
+            with self.ui_test.execute_dialog_through_command_guarded(".uno:DataSort") as xDialog:
+                xTabs = xDialog.getChild("tabcontrol")
+                select_pos(xTabs, "1")
+                #3. On Options tab, tick 'Range contains column labels'
+                xHeader = xDialog.getChild("header")
                 xHeader.executeAction("CLICK", tuple())
-            #4. On Sort Criteria tab, set appropriate criteria
-            select_pos(xTabs, "0")
-            xDown = xDialog.getChild("down")
-            xDown.executeAction("CLICK", tuple())
-            xSortKey1 = xDialog.getChild("sortlb")
-            select_by_text(xSortKey1, "Occupation")
-            #5. Click Ok
-            xOK = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOK)
+                if (get_state_as_dict(xHeader)["Selected"]) == "false":
+                    xHeader.executeAction("CLICK", tuple())
+                #4. On Sort Criteria tab, set appropriate criteria
+                select_pos(xTabs, "0")
+                xDown = xDialog.getChild("down")
+                xDown.executeAction("CLICK", tuple())
+                xSortKey1 = xDialog.getChild("sortlb")
+                select_by_text(xSortKey1, "Occupation")
+                #5. Click Ok
             #6. Expected behavior:  Ignore column labels when sorting
             self.assertEqual(get_cell_by_position(calc_doc, 0, 6, 7).getString(), "Occupation")
             self.assertEqual(get_cell_by_position(calc_doc, 0, 6, 8).getString(), "Travel Industry")
@@ -60,22 +57,19 @@ class tdf53482(UITestCase):
         #1. Highlight cells to be sorted
         gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:A5"}))
         #2. Click Data menu, Sort
-        self.ui_test.execute_dialog_through_command(".uno:DataSort")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xTabs = xDialog.getChild("tabcontrol")
-        select_pos(xTabs, "1")
-        #3. On Options tab, tick 'Range contains column labels'
-        xHeader = xDialog.getChild("header")
-        xHeader.executeAction("CLICK", tuple())
-        if (get_state_as_dict(xHeader)["Selected"]) == "false":
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:DataSort") as xDialog:
+            xTabs = xDialog.getChild("tabcontrol")
+            select_pos(xTabs, "1")
+            #3. On Options tab, tick 'Range contains column labels'
+            xHeader = xDialog.getChild("header")
             xHeader.executeAction("CLICK", tuple())
-        #4. On Sort Criteria tab, set appropriate criteria
-        select_pos(xTabs, "0")
-        xDown = xDialog.getChild("down")
-        xDown.executeAction("CLICK", tuple())
-        #5. Click Ok
-        xOK = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOK)
+            if (get_state_as_dict(xHeader)["Selected"]) == "false":
+                xHeader.executeAction("CLICK", tuple())
+            #4. On Sort Criteria tab, set appropriate criteria
+            select_pos(xTabs, "0")
+            xDown = xDialog.getChild("down")
+            xDown.executeAction("CLICK", tuple())
+            #5. Click Ok
         #6. Expected behavior:  Ignore column labels when sorting
         self.assertEqual(get_cell_by_position(document, 0, 0, 0).getString(), "Misc")
         self.assertEqual(get_cell_by_position(document, 0, 0, 1).getString(), "s")
