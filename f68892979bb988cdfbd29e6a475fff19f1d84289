@@ -16,6 +16,24 @@
       "revId": "f68892979bb988cdfbd29e6a475fff19f1d84289",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dfcbced9_f2100d1b",
+        "filename": "sfx2/uiconfig/ui/templatepanel.ui",
+        "patchSetId": 10
+      },
+      "lineNbr": 315,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-06-28T14:07:29Z",
+      "side": 1,
+      "message": "I have removed liststore3 which you asked to remove.. Please let me know what you are expecting to remove more..",
+      "parentUuid": "e27f37d5_68dc07cf",
+      "revId": "f68892979bb988cdfbd29e6a475fff19f1d84289",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
