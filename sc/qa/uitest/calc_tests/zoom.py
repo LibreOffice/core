@@ -22,46 +22,34 @@ class calcZoom(UITestCase):
         self.assertEqual(get_state_as_dict(gridwin)["Zoom"], "100")
 
         #dialog View-Zoom-Zoom
-        self.ui_test.execute_dialog_through_command(".uno:Zoom")
-        xDialog = self.xUITest.getTopFocusWindow()
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:Zoom") as xDialog:
 
-        #select fit weight & height - OK - open and verify
-        fitwandh = xDialog.getChild("fitwandh")
-        fitwandh.executeAction("CLICK",tuple())
-        xOKBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKBtn)
+            #select fit weight & height - OK - open and verify
+            fitwandh = xDialog.getChild("fitwandh")
+            fitwandh.executeAction("CLICK",tuple())
 
-        self.ui_test.execute_dialog_through_command(".uno:Zoom")
-        xDialog = self.xUITest.getTopFocusWindow()
-        #select fit weight - OK - open and verify
-        fitw = xDialog.getChild("fitw")
-        fitw.executeAction("CLICK",tuple())
-        xOKBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKBtn)
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:Zoom") as xDialog:
+            #select fit weight - OK - open and verify
+            fitw = xDialog.getChild("fitw")
+            fitw.executeAction("CLICK",tuple())
 
-        self.ui_test.execute_dialog_through_command(".uno:Zoom")
-        xDialog = self.xUITest.getTopFocusWindow()
-        #select 100% & Automatic - OK - open and verify
-        x100pc = xDialog.getChild("100pc")
-        x100pc.executeAction("CLICK", tuple())
-        xOKBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKBtn)
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:Zoom") as xDialog:
+            #select 100% & Automatic - OK - open and verify
+            x100pc = xDialog.getChild("100pc")
+            x100pc.executeAction("CLICK", tuple())
         self.assertEqual(get_state_as_dict(gridwin)["Zoom"], "100")
 
         #Set the Zoom to be 103%
         gridwin.executeAction("SET", mkPropertyValues({"ZOOM": "103"}))
         self.assertEqual(get_state_as_dict(gridwin)["Zoom"], "103")
 
-        self.ui_test.execute_dialog_through_command(".uno:Zoom")
-        xDialog = self.xUITest.getTopFocusWindow()
-        #select variable option and make zoom 100% again - OK - open and verify
-        zoomsb = xDialog.getChild("zoomsb")
-        self.assertEqual(get_state_as_dict(zoomsb)["Text"], "103%")
-        zoomsb.executeAction("DOWN",tuple())
-        zoomsb.executeAction("DOWN",tuple())
-        zoomsb.executeAction("DOWN",tuple())
-        xOKBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKBtn)
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:Zoom") as xDialog:
+            #select variable option and make zoom 100% again - OK - open and verify
+            zoomsb = xDialog.getChild("zoomsb")
+            self.assertEqual(get_state_as_dict(zoomsb)["Text"], "103%")
+            zoomsb.executeAction("DOWN",tuple())
+            zoomsb.executeAction("DOWN",tuple())
+            zoomsb.executeAction("DOWN",tuple())
         self.assertEqual(get_state_as_dict(gridwin)["Zoom"], "100")
 
         self.ui_test.close_doc()

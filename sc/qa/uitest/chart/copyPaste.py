@@ -39,15 +39,12 @@ class CopyPaste(UITestCase):
         with self.ui_test.load_empty_file("calc") as calc_document:
 
             # Rename the sheet to match the same name as the first document
-            self.ui_test.execute_dialog_through_command(".uno:RenameTable")
-            xDialog = self.xUITest.getTopFocusWindow()
-            xname_entry = xDialog.getChild("name_entry")
+            with self.ui_test.execute_dialog_through_command_guarded(".uno:RenameTable") as xDialog:
+                xname_entry = xDialog.getChild("name_entry")
 
-            xname_entry.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
-            xname_entry.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
-            xname_entry.executeAction("TYPE", mkPropertyValues({"TEXT":"Sheet.1"}))
-            xOKBtn = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOKBtn)
+                xname_entry.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+                xname_entry.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+                xname_entry.executeAction("TYPE", mkPropertyValues({"TEXT":"Sheet.1"}))
 
             self.xUITest.executeCommand(".uno:Paste")
 

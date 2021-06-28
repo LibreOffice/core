@@ -29,24 +29,21 @@ class tdf118308(UITestCase):
 
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
 
-            self.ui_test.execute_dialog_through_command(".uno:PasteSpecial")
-            xDialog = self.xUITest.getTopFocusWindow()
+            with self.ui_test.execute_dialog_through_command_guarded(".uno:PasteSpecial") as xDialog:
 
-            # Without the fix in place, this test would have failed here
-            # since a different dialog would have been opened and the children
-            # wouldn't have been found
-            xText = xDialog.getChild("text")
-            xNumbers = xDialog.getChild("numbers")
-            xDatetime = xDialog.getChild("datetime")
-            xFormats = xDialog.getChild("formats")
+                # Without the fix in place, this test would have failed here
+                # since a different dialog would have been opened and the children
+                # wouldn't have been found
+                xText = xDialog.getChild("text")
+                xNumbers = xDialog.getChild("numbers")
+                xDatetime = xDialog.getChild("datetime")
+                xFormats = xDialog.getChild("formats")
 
-            self.assertEqual("true", get_state_as_dict(xText)["Selected"])
-            self.assertEqual("true", get_state_as_dict(xNumbers)["Selected"])
-            self.assertEqual("true", get_state_as_dict(xDatetime)["Selected"])
-            self.assertEqual("false", get_state_as_dict(xFormats)["Selected"])
+                self.assertEqual("true", get_state_as_dict(xText)["Selected"])
+                self.assertEqual("true", get_state_as_dict(xNumbers)["Selected"])
+                self.assertEqual("true", get_state_as_dict(xDatetime)["Selected"])
+                self.assertEqual("false", get_state_as_dict(xFormats)["Selected"])
 
-            xOkBtn = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOkBtn)
 
             self.assertEqual("A", get_cell_by_position(calc_document, 0, 0, 0).getString())
 

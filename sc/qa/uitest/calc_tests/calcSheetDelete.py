@@ -22,17 +22,13 @@ class calcSheetDelete(UITestCase):
         xGridWindow.executeAction("SELECT", mkPropertyValues({"CELL": "L12"}))
         nrSheets = document.Sheets.getCount()  #default number
 
-        self.ui_test.execute_dialog_through_command(".uno:Insert")  #insert sheet
-        xDialog = self.xUITest.getTopFocusWindow()
-        xOKButton = xDialog.getChild("ok")
-        xOKButton.executeAction("CLICK", tuple())
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:Insert"):
+            pass
 
         self.assertEqual(document.Sheets.getCount(), nrSheets + 1)
 
-        self.ui_test.execute_dialog_through_command(".uno:Remove")  #delete sheet
-        xDialog = self.xUITest.getTopFocusWindow()
-        xOKButton = xDialog.getChild("yes")
-        xOKButton.executeAction("CLICK", tuple())
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:Remove", close_button="yes"):
+            pass
         xToolkit = self.xContext.ServiceManager.createInstance('com.sun.star.awt.Toolkit')
         xToolkit.processEventsToIdle()
 
@@ -51,15 +47,11 @@ class calcSheetDelete(UITestCase):
 
         nrSheets = document.Sheets.getCount()  #default number of sheets
 
-        self.ui_test.execute_dialog_through_command(".uno:Insert")  #insert sheet
-        xDialog = self.xUITest.getTopFocusWindow()
-        xOKButton = xDialog.getChild("ok")
-        xOKButton.executeAction("CLICK", tuple())
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:Insert"):
+            pass
 
-        self.ui_test.execute_dialog_through_command(".uno:Insert")  #insert sheet
-        xDialog = self.xUITest.getTopFocusWindow()
-        xOKButton = xDialog.getChild("ok")
-        xOKButton.executeAction("CLICK", tuple())
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:Insert"):
+            pass
         xToolkit = self.xContext.ServiceManager.createInstance('com.sun.star.awt.Toolkit')
         xToolkit.processEventsToIdle()
 
@@ -68,10 +60,8 @@ class calcSheetDelete(UITestCase):
         xGridWindow = xCalcDoc.getChild("grid_window")
         enter_text_to_cell(xGridWindow, "B2", "abcd")
 
-        self.ui_test.execute_dialog_through_command(".uno:Remove")  #delete sheet
-        xDialog = self.xUITest.getTopFocusWindow()
-        xOKButton = xDialog.getChild("yes")
-        xOKButton.executeAction("CLICK", tuple())
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:Remove", close_button="yes"):
+            pass
 
         self.assertEqual(document.Sheets.getCount(), nrSheets + 1)
         self.xUITest.executeCommand(".uno:Undo")
@@ -91,10 +81,8 @@ class calcSheetDelete(UITestCase):
         nrSheets = document.Sheets.getCount()  #default number
         i = 0
         while i < 6:
-            self.ui_test.execute_dialog_through_command(".uno:Insert")  #insert sheet
-            xDialog = self.xUITest.getTopFocusWindow()
-            xOKButton = xDialog.getChild("ok")
-            xOKButton.executeAction("CLICK", tuple())
+            with self.ui_test.execute_dialog_through_command_guarded(".uno:Insert"):
+                pass
             i = i + 1
         self.assertEqual(document.Sheets.getCount(), nrSheets + 6)
 
@@ -103,10 +91,8 @@ class calcSheetDelete(UITestCase):
             self.xUITest.executeCommand(".uno:JumpToNextTableSel")  #select next sheet
             i = i + 1
 
-        self.ui_test.execute_dialog_through_command(".uno:Remove")  #delete selected sheets
-        xDialog = self.xUITest.getTopFocusWindow()
-        xOKButton = xDialog.getChild("yes")
-        xOKButton.executeAction("CLICK", tuple())
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:Remove", close_button="yes"):
+            pass
 
         xToolkit = self.xContext.ServiceManager.createInstance('com.sun.star.awt.Toolkit')
         xToolkit.processEventsToIdle()
@@ -128,10 +114,8 @@ class calcSheetDelete(UITestCase):
         nrSheets = document.Sheets.getCount()  #default number
         i = 0
         while i < 100:
-            self.ui_test.execute_dialog_through_command(".uno:Insert")  #insert sheet
-            xDialog = self.xUITest.getTopFocusWindow()
-            xOKButton = xDialog.getChild("ok")
-            xOKButton.executeAction("CLICK", tuple())
+            with self.ui_test.execute_dialog_through_command_guarded(".uno:Insert"):
+                pass
             i = i + 1
         xToolkit = self.xContext.ServiceManager.createInstance('com.sun.star.awt.Toolkit')
         xToolkit.processEventsToIdle()
@@ -142,10 +126,8 @@ class calcSheetDelete(UITestCase):
             self.xUITest.executeCommand(".uno:JumpToNextTableSel")  #select next sheet
             i = i + 1
 
-        self.ui_test.execute_dialog_through_command(".uno:Remove")  #delete selected sheets
-        xDialog = self.xUITest.getTopFocusWindow()
-        xOKButton = xDialog.getChild("yes")
-        xOKButton.executeAction("CLICK", tuple())
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:Remove", close_button="yes"):
+            pass
 
         self.assertEqual(document.Sheets.getCount(), nrSheets)
         self.xUITest.executeCommand(".uno:Undo")

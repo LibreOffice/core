@@ -16,19 +16,16 @@ class tdf140754(UITestCase):
         with self.ui_test.load_file(get_url_for_data_file("tdf140754.ods")) as calc_doc:
 
             #Make sure 'multi-threaded calculation' is enabled
-            self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog")
-            xDialogOpt = self.xUITest.getTopFocusWindow()
+            with self.ui_test.execute_dialog_through_command_guarded(".uno:OptionsTreeDialog") as xDialogOpt:
 
-            xPages = xDialogOpt.getChild("pages")
-            xCalcEntry = xPages.getChild('3')
-            xCalcEntry.executeAction("EXPAND", tuple())
-            xCalcCalculateEntry = xCalcEntry.getChild('3')
-            xCalcCalculateEntry.executeAction("SELECT", tuple())
+                xPages = xDialogOpt.getChild("pages")
+                xCalcEntry = xPages.getChild('3')
+                xCalcEntry.executeAction("EXPAND", tuple())
+                xCalcCalculateEntry = xCalcEntry.getChild('3')
+                xCalcCalculateEntry.executeAction("SELECT", tuple())
 
-            self.assertEqual('true', get_state_as_dict(xDialogOpt.getChild('threadingenabled'))["Selected"])
+                self.assertEqual('true', get_state_as_dict(xDialogOpt.getChild('threadingenabled'))["Selected"])
 
-            xOKBtn = xDialogOpt.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOKBtn)
 
 
             self.assertEqual(0, get_cell_by_position(calc_doc, 0, 0, 30).getValue())

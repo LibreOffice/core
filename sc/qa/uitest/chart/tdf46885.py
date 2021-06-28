@@ -21,12 +21,9 @@ class tdf46885(UITestCase):
         document = self.ui_test.get_component()
         enter_text_to_cell(gridwin, "A10", "col1")
         #When you start a new chart and have one empty cell selected LibO will crash when you select the Next>> button.
-        self.ui_test.execute_dialog_through_command(".uno:InsertObjectChart")
-        xChartDlg = self.xUITest.getTopFocusWindow()
-        xNextBtn = xChartDlg.getChild("next")
-        xNextBtn.executeAction("CLICK", tuple())
-        xOkBtn = xChartDlg.getChild("finish")
-        self.ui_test.close_dialog_through_button(xOkBtn)
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:InsertObjectChart", close_button="finish") as xChartDlg:
+            xNextBtn = xChartDlg.getChild("next")
+            xNextBtn.executeAction("CLICK", tuple())
 
         #verify, we didn't crash
         self.assertEqual(get_cell_by_position(document, 0, 0, 9).getString(), "col1")
@@ -41,12 +38,9 @@ class tdf46885(UITestCase):
         enter_text_to_cell(gridwin, "A10", "col1")
         #If you select multiple empty cells and then start a new chart LibO will crash immediately.
         gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:C4"}))
-        self.ui_test.execute_dialog_through_command(".uno:InsertObjectChart")
-        xChartDlg = self.xUITest.getTopFocusWindow()
-        xNextBtn = xChartDlg.getChild("next")
-        xNextBtn.executeAction("CLICK", tuple())
-        xOkBtn = xChartDlg.getChild("finish")
-        self.ui_test.close_dialog_through_button(xOkBtn)
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:InsertObjectChart", close_button="finish") as xChartDlg:
+            xNextBtn = xChartDlg.getChild("next")
+            xNextBtn.executeAction("CLICK", tuple())
 
         #verify, we didn't crash
         self.assertEqual(get_cell_by_position(document, 0, 0, 9).getString(), "col1")

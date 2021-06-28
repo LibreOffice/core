@@ -34,10 +34,8 @@ class tdf126306(UITestCase):
 
         xGridWin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:A15"}))
 
-        self.ui_test.execute_dialog_through_command(".uno:DataFilterAutoFilter")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xYesBtn = xDialog.getChild("yes")
-        self.ui_test.close_dialog_through_button(xYesBtn)
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:DataFilterAutoFilter", close_button="yes"):
+            pass
 
         self.assertEqual(document.getPropertyValue("UnnamedDatabaseRanges").getByTable(0).AutoFilter, True)
 

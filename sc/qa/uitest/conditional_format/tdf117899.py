@@ -16,16 +16,13 @@ class Tdf117899(UITestCase):
 
   def execute_conditional_format_manager_dialog(self):
 
-    self.ui_test.execute_dialog_through_command(".uno:ConditionalFormatManagerDialog")
-    xCondFormatMgr = self.xUITest.getTopFocusWindow()
+    with self.ui_test.execute_dialog_through_command_guarded(".uno:ConditionalFormatManagerDialog") as xCondFormatMgr:
 
-    aExpectedResult = 'Formula is $E3="нет"'
-    xList = xCondFormatMgr.getChild("CONTAINER")
-    self.assertEqual(1, len(xList.getChildren()))
-    self.assertTrue(get_state_as_dict(xList.getChild('0'))['Text'].endswith(aExpectedResult))
+        aExpectedResult = 'Formula is $E3="нет"'
+        xList = xCondFormatMgr.getChild("CONTAINER")
+        self.assertEqual(1, len(xList.getChildren()))
+        self.assertTrue(get_state_as_dict(xList.getChild('0'))['Text'].endswith(aExpectedResult))
 
-    xOKBtn = xCondFormatMgr.getChild("ok")
-    self.ui_test.close_dialog_through_button(xOKBtn)
 
   def test_tdf117899(self):
     with self.ui_test.load_file(get_url_for_data_file("tdf117899.ods")):
@@ -48,16 +45,13 @@ class Tdf117899(UITestCase):
                 self.xUITest.executeCommandWithParameters(".uno:ClipboardFormatItems", formatProperty)
 
                 # Save Copy as
-                self.ui_test.execute_dialog_through_command(".uno:ObjectMenue?VerbID:short=-8")
-                xDialog = self.xUITest.getTopFocusWindow()
+                with self.ui_test.execute_dialog_through_command_guarded(".uno:ObjectMenue?VerbID:short=-8", close_button="open") as xDialog:
 
-                xFileName = xDialog.getChild("file_name")
-                xFileName.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
-                xFileName.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
-                xFileName.executeAction("TYPE", mkPropertyValues({"TEXT": xFilePath}))
+                    xFileName = xDialog.getChild("file_name")
+                    xFileName.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+                    xFileName.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+                    xFileName.executeAction("TYPE", mkPropertyValues({"TEXT": xFilePath}))
 
-                xOpenBtn = xDialog.getChild("open")
-                self.ui_test.close_dialog_through_button(xOpenBtn)
 
             with self.ui_test.load_file(systemPathToFileUrl(xFilePath)):
 
