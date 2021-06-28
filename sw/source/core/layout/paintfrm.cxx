@@ -3899,6 +3899,21 @@ private:
 
 }
 
+// set strikethrough for deleted objects anchored to character
+void SwFrame::SetDrawObjsAsDeleted( bool bDeleted )
+{
+    if ( SwSortedObjs *pObjs = GetDrawObjs() )
+    {
+        for (SwAnchoredObject* pAnchoredObj : *pObjs)
+        {
+            if ( auto pFly = dynamic_cast<SwFlyFrame *>( pAnchoredObj ) )
+            {
+                pFly->SetDeleted(bDeleted);
+            }
+        }
+    }
+}
+
 void SwFlyFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const& rRect, SwPrintData const*const) const
 {
     //optimize thumbnail generation and store procedure to improve odt saving performance, #i120030#

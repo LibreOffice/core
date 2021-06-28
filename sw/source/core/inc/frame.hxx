@@ -547,6 +547,7 @@ public:
     void  RemoveFly( SwFlyFrame *pToRemove );
     const SwSortedObjs *GetDrawObjs() const { return m_pDrawObjs.get(); }
           SwSortedObjs *GetDrawObjs()       { return m_pDrawObjs.get(); }
+    void SetDrawObjsAsDeleted( bool bDeleted ); // change tracking of objects anchored to character
     // #i28701# - change purpose of method and adjust its name
     void InvalidateObjs( const bool _bNoInvaOfAsCharAnchoredObjs = true );
 
