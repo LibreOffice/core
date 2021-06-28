@@ -19,10 +19,8 @@ class tdf115573(UITestCase):
         document = self.ui_test.get_component()
         xWriterDoc = self.xUITest.getTopFocusWindow()
         #insert table 2x2
-        self.ui_test.execute_dialog_through_command(".uno:InsertTable")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xOkBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOkBtn)
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:InsertTable"):
+            pass
         #select font format - Bold and write text "abc"
         self.xUITest.executeCommand(".uno:Bold")
         tables = document.getTextTables()
@@ -35,14 +33,11 @@ class tdf115573(UITestCase):
         self.xUITest.executeCommand(".uno:GoUp")
         self.xUITest.executeCommand(".uno:GoUp")
         #check the format of the text (should be still bold) Format-Character-Font-Style-Bold
-        self.ui_test.execute_dialog_through_command(".uno:FontDialog")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xTabs = xDialog.getChild("tabcontrol")
-        select_pos(xTabs, "0")
-        xweststylelbcjk = xDialog.getChild("weststylelb-cjk")
-        self.assertEqual(get_state_as_dict(xweststylelbcjk)["Text"], "Bold")
-        xCloseBtn = xDialog.getChild("cancel")
-        self.ui_test.close_dialog_through_button(xCloseBtn)
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:FontDialog", close_button="cancel") as xDialog:
+            xTabs = xDialog.getChild("tabcontrol")
+            select_pos(xTabs, "0")
+            xweststylelbcjk = xDialog.getChild("weststylelb-cjk")
+            self.assertEqual(get_state_as_dict(xweststylelbcjk)["Text"], "Bold")
 
         self.ui_test.close_doc()
 
@@ -51,10 +46,8 @@ class tdf115573(UITestCase):
         document = self.ui_test.get_component()
         xWriterDoc = self.xUITest.getTopFocusWindow()
         #insert table 2x2
-        self.ui_test.execute_dialog_through_command(".uno:InsertTable")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xOkBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOkBtn)
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:InsertTable"):
+            pass
         #select font format - Bold and write text "abc"
         self.xUITest.executeCommand(".uno:Bold")
         tables = document.getTextTables()
@@ -67,14 +60,11 @@ class tdf115573(UITestCase):
         self.xUITest.executeCommand(".uno:GoUp")
         self.xUITest.executeCommand(".uno:GoUp")
         #check the format of the text (should be still bold) Format-Character-Font-Style-Bold
-        self.ui_test.execute_dialog_through_command(".uno:FontDialog")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xTabs = xDialog.getChild("tabcontrol")
-        select_pos(xTabs, "0")
-        xweststylelbcjk = xDialog.getChild("weststylelb-cjk")
-        self.assertEqual(get_state_as_dict(xweststylelbcjk)["Text"], "Bold")
-        xCloseBtn = xDialog.getChild("cancel")
-        self.ui_test.close_dialog_through_button(xCloseBtn)
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:FontDialog", close_button="cancel") as xDialog:
+            xTabs = xDialog.getChild("tabcontrol")
+            select_pos(xTabs, "0")
+            xweststylelbcjk = xDialog.getChild("weststylelb-cjk")
+            self.assertEqual(get_state_as_dict(xweststylelbcjk)["Text"], "Bold")
 
         self.ui_test.close_doc()
 
@@ -83,10 +73,8 @@ class tdf115573(UITestCase):
         document = self.ui_test.get_component()
         xWriterDoc = self.xUITest.getTopFocusWindow()
         #insert table 2x2
-        self.ui_test.execute_dialog_through_command(".uno:InsertTable")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xOkBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOkBtn)
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:InsertTable"):
+            pass
         #select font format - Bold and write text "abc"
         self.xUITest.executeCommand(".uno:Bold")
         tables = document.getTextTables()
@@ -94,14 +82,11 @@ class tdf115573(UITestCase):
         #insert column left
         self.xUITest.executeCommand(".uno:InsertColumnsBefore")
         #check the format of the text (should be still bold) Format-Character-Font-Style-Bold
-        self.ui_test.execute_dialog_through_command(".uno:FontDialog")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xTabs = xDialog.getChild("tabcontrol")
-        select_pos(xTabs, "0")
-        xweststylelbcjk = xDialog.getChild("weststylelb-cjk")
-        self.assertEqual(get_state_as_dict(xweststylelbcjk)["Text"], "Bold")
-        xCloseBtn = xDialog.getChild("cancel")
-        self.ui_test.close_dialog_through_button(xCloseBtn)
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:FontDialog", close_button="cancel") as xDialog:
+            xTabs = xDialog.getChild("tabcontrol")
+            select_pos(xTabs, "0")
+            xweststylelbcjk = xDialog.getChild("weststylelb-cjk")
+            self.assertEqual(get_state_as_dict(xweststylelbcjk)["Text"], "Bold")
 
         self.ui_test.close_doc()
 
@@ -110,10 +95,8 @@ class tdf115573(UITestCase):
         document = self.ui_test.get_component()
         xWriterDoc = self.xUITest.getTopFocusWindow()
         #insert table 2x2
-        self.ui_test.execute_dialog_through_command(".uno:InsertTable")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xOkBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOkBtn)
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:InsertTable"):
+            pass
         #select font format - Bold and write text "abc"
         self.xUITest.executeCommand(".uno:Bold")
         tables = document.getTextTables()
@@ -121,14 +104,11 @@ class tdf115573(UITestCase):
         #insert column left
         self.xUITest.executeCommand(".uno:InsertColumnsAfter")
         #check the format of the text (should be still bold) Format-Character-Font-Style-Bold
-        self.ui_test.execute_dialog_through_command(".uno:FontDialog")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xTabs = xDialog.getChild("tabcontrol")
-        select_pos(xTabs, "0")
-        xweststylelbcjk = xDialog.getChild("weststylelb-cjk")
-        self.assertEqual(get_state_as_dict(xweststylelbcjk)["Text"], "Bold")
-        xCloseBtn = xDialog.getChild("cancel")
-        self.ui_test.close_dialog_through_button(xCloseBtn)
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:FontDialog", close_button="cancel") as xDialog:
+            xTabs = xDialog.getChild("tabcontrol")
+            select_pos(xTabs, "0")
+            xweststylelbcjk = xDialog.getChild("weststylelb-cjk")
+            self.assertEqual(get_state_as_dict(xweststylelbcjk)["Text"], "Bold")
 
         self.ui_test.close_doc()
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

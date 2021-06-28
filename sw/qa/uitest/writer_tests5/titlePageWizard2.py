@@ -15,24 +15,21 @@ class tdf138907(UITestCase):
             # Test an undefined situation - try to modify pages beyond the end of the document.
 
             #dialog Title Page
-            self.ui_test.execute_dialog_through_command(".uno:TitlePageDialog")
-            xDialog = self.xUITest.getTopFocusWindow()
-            #set restart page number to 2. With this doc, it defaults to resetting to 1.
-            xRestartNumbering = xDialog.getChild("NF_RESTART_NUMBERING")
-            xRestartNumbering.executeAction("UP", tuple()) # restart numbering at 2
+            with self.ui_test.execute_dialog_through_command_guarded(".uno:TitlePageDialog") as xDialog:
+                #set restart page number to 2. With this doc, it defaults to resetting to 1.
+                xRestartNumbering = xDialog.getChild("NF_RESTART_NUMBERING")
+                xRestartNumbering.executeAction("UP", tuple()) # restart numbering at 2
 
-            #Convert three pages to title/index pages starting at non-existing page twenty.
-            xPageCount = xDialog.getChild("NF_PAGE_COUNT")
-            for _ in range(0,2):
-                xPageCount.executeAction("UP", tuple())
-            xUseStartingPage = xDialog.getChild("RB_PAGE_START")
-            xUseStartingPage.executeAction("CLICK", tuple())
-            xStartingPage = xDialog.getChild("NF_PAGE_START")
-            for _ in range(0,19):
-                xStartingPage.executeAction("UP", tuple()) #Start at mythical page 20.
+                #Convert three pages to title/index pages starting at non-existing page twenty.
+                xPageCount = xDialog.getChild("NF_PAGE_COUNT")
+                for _ in range(0,2):
+                    xPageCount.executeAction("UP", tuple())
+                xUseStartingPage = xDialog.getChild("RB_PAGE_START")
+                xUseStartingPage.executeAction("CLICK", tuple())
+                xStartingPage = xDialog.getChild("NF_PAGE_START")
+                for _ in range(0,19):
+                    xStartingPage.executeAction("UP", tuple()) #Start at mythical page 20.
 
-            xOKBtn = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOKBtn)
 
             # Nothing should happen when modifying pages that don't exist.
             # Just a page break, without a valid restart page number on page 2
@@ -56,23 +53,20 @@ class tdf138907(UITestCase):
 
 
             #dialog Title Page
-            self.ui_test.execute_dialog_through_command(".uno:TitlePageDialog")
-            xDialog = self.xUITest.getTopFocusWindow()
-            #set restart page number to 1 - which is the default.
-            #set restart title page to 1 - the current value for this document is 6.
-            xRestartNumbering = xDialog.getChild("NF_SET_PAGE_NUMBER")
-            print(xDialog.getChildren())
-            for _ in range(0,5):
-                xRestartNumbering.executeAction("DOWN", tuple()) # restart title numbering at 1
-            #Insert two title/index pages at beginning of the document.
-            newPages = xDialog.getChild("RB_INSERT_NEW_PAGES")
-            newPages.executeAction("CLICK", tuple())
-            xPageCount = xDialog.getChild("NF_PAGE_COUNT")
-            for _ in range(0,1):
-                xPageCount.executeAction("UP", tuple())
+            with self.ui_test.execute_dialog_through_command_guarded(".uno:TitlePageDialog") as xDialog:
+                #set restart page number to 1 - which is the default.
+                #set restart title page to 1 - the current value for this document is 6.
+                xRestartNumbering = xDialog.getChild("NF_SET_PAGE_NUMBER")
+                print(xDialog.getChildren())
+                for _ in range(0,5):
+                    xRestartNumbering.executeAction("DOWN", tuple()) # restart title numbering at 1
+                #Insert two title/index pages at beginning of the document.
+                newPages = xDialog.getChild("RB_INSERT_NEW_PAGES")
+                newPages.executeAction("CLICK", tuple())
+                xPageCount = xDialog.getChild("NF_PAGE_COUNT")
+                for _ in range(0,1):
+                    xPageCount.executeAction("UP", tuple())
 
-            xOKBtn = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOKBtn)
 
             Paragraphs = document.Text.createEnumeration()
             Para1 = Paragraphs.nextElement()
@@ -96,18 +90,15 @@ class tdf138907(UITestCase):
             #Now test replacing several pages with title and index styles
 
             #dialog Title Page
-            self.ui_test.execute_dialog_through_command(".uno:TitlePageDialog")
-            xDialog = self.xUITest.getTopFocusWindow()
-            print(xDialog.getChildren())
-            #Convert four pages to title/index pages starting at page one.
-            xPageCount = xDialog.getChild("NF_PAGE_COUNT")
-            for _ in range(0,3):
-                xPageCount.executeAction("DOWN", tuple())  #reset to 1 first
-            for _ in range(0,3):
-                xPageCount.executeAction("UP", tuple())
+            with self.ui_test.execute_dialog_through_command_guarded(".uno:TitlePageDialog") as xDialog:
+                print(xDialog.getChildren())
+                #Convert four pages to title/index pages starting at page one.
+                xPageCount = xDialog.getChild("NF_PAGE_COUNT")
+                for _ in range(0,3):
+                    xPageCount.executeAction("DOWN", tuple())  #reset to 1 first
+                for _ in range(0,3):
+                    xPageCount.executeAction("UP", tuple())
 
-            xOKBtn = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOKBtn)
 
             Paragraphs = document.Text.createEnumeration()
             Para1 = Paragraphs.nextElement()

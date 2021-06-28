@@ -18,17 +18,11 @@ class tdf115026(UITestCase):
         self.xUITest.executeCommand(".uno:InsertPagebreak")
         self.assertEqual(get_state_as_dict(xWriterEdit)["CurrentPage"], "2")
 
-        self.ui_test.execute_dialog_through_command(".uno:InsertTable")
-        xDialog = self.xUITest.getTopFocusWindow()
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:InsertTable"):
+            pass
 
-        xOkBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOkBtn)
-
-        self.ui_test.execute_dialog_through_command(".uno:AutoFormat")
-        xDialog = self.xUITest.getTopFocusWindow()
-
-        xOkBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOkBtn)
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:AutoFormat"):
+            pass
 
         self.assertEqual(get_state_as_dict(xWriterEdit)["CurrentPage"], "2")
 

@@ -19,16 +19,12 @@ class tdf51352(UITestCase):
         #1. New a text document
         #2. Insert a table and then in one cell create another table
         #-insert a table (by default 2x2)
-        self.ui_test.execute_dialog_through_command(".uno:InsertTable")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xOkBtn = xDialog.getChild("ok")
-        xOkBtn.executeAction("CLICK", tuple())
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:InsertTable"):
+            pass
         #-put the cursor inside first cell top left for example
         #-insert an inner table (by default 2x2) inside this cell
-        self.ui_test.execute_dialog_through_command(".uno:InsertTable")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xOkBtn = xDialog.getChild("ok")
-        xOkBtn.executeAction("CLICK", tuple())
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:InsertTable"):
+            pass
         #3. Select the first table
         xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RIGHT"}))
         xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RIGHT"}))
@@ -37,10 +33,8 @@ class tdf51352(UITestCase):
         xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RIGHT"}))
         self.assertEqual(document.TextTables.getCount(), 2)
         #4. From menu "Table->Convert->Table to Text
-        self.ui_test.execute_dialog_through_command(".uno:ConvertTableToText")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xOkBtn = xDialog.getChild("ok")
-        xOkBtn.executeAction("CLICK", tuple())
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:ConvertTableToText"):
+            pass
         self.assertEqual(document.TextTables.getCount(), 0)
         #5. Undo/Redo
         self.xUITest.executeCommand(".uno:Undo")

@@ -37,16 +37,13 @@ class tdf46561(UITestCase):
 
             # Switch "same left and right page headers" on and off a few times
             for _ in range(4):
-                self.ui_test.execute_dialog_through_command(".uno:PageDialog")
-                PageDialog = self.xUITest.getTopFocusWindow();
+                with self.ui_test.execute_dialog_through_command_guarded(".uno:PageDialog") as PageDialog:
 
-                xTabs = PageDialog.getChild("tabcontrol")
-                select_pos(xTabs, "4")
+                    xTabs = PageDialog.getChild("tabcontrol")
+                    select_pos(xTabs, "4")
 
-                Button = xTabs.getChild('checkSameLR')
-                Button.executeAction("CLICK",tuple())
-                ok = PageDialog.getChild("ok")
-                self.ui_test.close_dialog_through_button(ok)
+                    Button = xTabs.getChild('checkSameLR')
+                    Button.executeAction("CLICK",tuple())
 
             # We should be back to the starting state after 2*k on/off changes
             self.check_header_texts(master="right", first="1st", left="left", right="right")

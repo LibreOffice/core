@@ -19,33 +19,27 @@ class tdf78133(UITestCase):
         document = self.ui_test.get_component()
         #New text document
         #open option, go to App colors
-        self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog")  #optionsdialog
-        xDialog = self.xUITest.getTopFocusWindow()
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:OptionsTreeDialog") as xDialog:
 
-        xPages = xDialog.getChild("pages")
-        xLOEntry = xPages.getChild('0')                 # Lo Dev
-        xLOEntry.executeAction("EXPAND", tuple())
-        xLoAppColorsEntry = xLOEntry.getChild('8')
-        xLoAppColorsEntry.executeAction("SELECT", tuple())          #Applications Colors
-        #change text boundaries checkbox, save
-        docboundaries = xDialog.getChild("docboundaries")
-        docboundaries.executeAction("CLICK", tuple())
-        xOKBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKBtn)
+            xPages = xDialog.getChild("pages")
+            xLOEntry = xPages.getChild('0')                 # Lo Dev
+            xLOEntry.executeAction("EXPAND", tuple())
+            xLoAppColorsEntry = xLOEntry.getChild('8')
+            xLoAppColorsEntry.executeAction("SELECT", tuple())          #Applications Colors
+            #change text boundaries checkbox, save
+            docboundaries = xDialog.getChild("docboundaries")
+            docboundaries.executeAction("CLICK", tuple())
         #verify - reopen dialog and check if "text boundaries" is still unchecked
-        self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog")  #optionsdialog
-        xDialog = self.xUITest.getTopFocusWindow()
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:OptionsTreeDialog") as xDialog:
 
-        xPages = xDialog.getChild("pages")
-        xLOEntry = xPages.getChild('0')                 # Lo Dev
-        xLOEntry.executeAction("EXPAND", tuple())
-        xLoAppColorsEntry = xLOEntry.getChild('8')
-        xLoAppColorsEntry.executeAction("SELECT", tuple())          #Applications Colors
-        #change text boundaries checkbox, save
-        docboundaries = xDialog.getChild("docboundaries")
-        self.assertEqual(get_state_as_dict(docboundaries)["Selected"], "false")
-        xOKBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKBtn)
+            xPages = xDialog.getChild("pages")
+            xLOEntry = xPages.getChild('0')                 # Lo Dev
+            xLOEntry.executeAction("EXPAND", tuple())
+            xLoAppColorsEntry = xLOEntry.getChild('8')
+            xLoAppColorsEntry.executeAction("SELECT", tuple())          #Applications Colors
+            #change text boundaries checkbox, save
+            docboundaries = xDialog.getChild("docboundaries")
+            self.assertEqual(get_state_as_dict(docboundaries)["Selected"], "false")
 
         self.ui_test.close_doc()
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

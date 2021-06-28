@@ -15,12 +15,9 @@ class tableToText(UITestCase):
         with self.ui_test.load_file(get_url_for_data_file("tableToText.odt")) as writer_doc:
             xWriterDoc = self.xUITest.getTopFocusWindow()
             #dialog Table to text - Tabs; verify
-            self.ui_test.execute_dialog_through_command(".uno:ConvertTableToText")
-            xDialog = self.xUITest.getTopFocusWindow()
-            tabs = xDialog.getChild("tabs")
-            tabs.executeAction("CLICK", tuple())
-            xOKBtn = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOKBtn)
+            with self.ui_test.execute_dialog_through_command_guarded(".uno:ConvertTableToText") as xDialog:
+                tabs = xDialog.getChild("tabs")
+                tabs.executeAction("CLICK", tuple())
             #verify
             self.assertEqual(writer_doc.Text.String[0:3], "a\ta")
             self.assertEqual(writer_doc.TextTables.getCount(), 0)
@@ -29,12 +26,9 @@ class tableToText(UITestCase):
             self.assertEqual(writer_doc.TextTables.getCount(), 1)
 
             #dialog Table to text - Paragraph; verify
-            self.ui_test.execute_dialog_through_command(".uno:ConvertTableToText")
-            xDialog = self.xUITest.getTopFocusWindow()
-            paragraph = xDialog.getChild("paragraph")
-            paragraph.executeAction("CLICK", tuple())
-            xOKBtn = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOKBtn)
+            with self.ui_test.execute_dialog_through_command_guarded(".uno:ConvertTableToText") as xDialog:
+                paragraph = xDialog.getChild("paragraph")
+                paragraph.executeAction("CLICK", tuple())
             #verify
             self.assertEqual(writer_doc.Text.String.replace('\r\n', '\n')[0:4], "a\na\n")
             self.assertEqual(writer_doc.TextTables.getCount(), 0)
@@ -43,12 +37,9 @@ class tableToText(UITestCase):
             self.assertEqual(writer_doc.TextTables.getCount(), 1)
 
             #dialog Table to text - Semicolons; verify
-            self.ui_test.execute_dialog_through_command(".uno:ConvertTableToText")
-            xDialog = self.xUITest.getTopFocusWindow()
-            semicolons = xDialog.getChild("semicolons")
-            semicolons.executeAction("CLICK", tuple())
-            xOKBtn = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOKBtn)
+            with self.ui_test.execute_dialog_through_command_guarded(".uno:ConvertTableToText") as xDialog:
+                semicolons = xDialog.getChild("semicolons")
+                semicolons.executeAction("CLICK", tuple())
             #verify
             self.assertEqual(writer_doc.Text.String.replace('\r\n', '\n')[0:6], "a;a\n;\n")
             self.assertEqual(writer_doc.TextTables.getCount(), 0)
@@ -57,16 +48,13 @@ class tableToText(UITestCase):
             self.assertEqual(writer_doc.TextTables.getCount(), 1)
 
             #dialog Table to text - other; verify
-            self.ui_test.execute_dialog_through_command(".uno:ConvertTableToText")
-            xDialog = self.xUITest.getTopFocusWindow()
-            other = xDialog.getChild("other")
-            other.executeAction("CLICK", tuple())
-            othered = xDialog.getChild("othered")
-            othered.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
-            othered.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
-            othered.executeAction("TYPE", mkPropertyValues({"TEXT":":"}))
-            xOKBtn = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOKBtn)
+            with self.ui_test.execute_dialog_through_command_guarded(".uno:ConvertTableToText") as xDialog:
+                other = xDialog.getChild("other")
+                other.executeAction("CLICK", tuple())
+                othered = xDialog.getChild("othered")
+                othered.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+                othered.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+                othered.executeAction("TYPE", mkPropertyValues({"TEXT":":"}))
             #verify
             self.assertEqual(writer_doc.Text.String.replace('\r\n', '\n')[0:6], "a:a\n:\n")
             self.assertEqual(writer_doc.TextTables.getCount(), 0)

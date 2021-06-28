@@ -15,14 +15,11 @@ class Tdf126226(UITestCase):
             self.xUITest.executeCommand(".uno:SelectAll")
 
             # Without the fix in place, this test would have crashed here
-            self.ui_test.execute_dialog_through_command(".uno:CommentChangeTracking")
+            with self.ui_test.execute_dialog_through_command_guarded(".uno:CommentChangeTracking") as xDialog:
 
-            xDialog = self.xUITest.getTopFocusWindow()
 
-            self.assertEqual("Hello\n", get_state_as_dict(xDialog.getChild("edit"))["Text"])
-            self.assertEqual("Autor desconocido, 07/04/2019 13:43:52",
-                    get_state_as_dict(xDialog.getChild("lastedit"))["Text"])
+                self.assertEqual("Hello\n", get_state_as_dict(xDialog.getChild("edit"))["Text"])
+                self.assertEqual("Autor desconocido, 07/04/2019 13:43:52",
+                        get_state_as_dict(xDialog.getChild("lastedit"))["Text"])
 
-            xOKBtn = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOKBtn)
 

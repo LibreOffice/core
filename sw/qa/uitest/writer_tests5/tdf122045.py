@@ -16,23 +16,20 @@ class tdf122045(UITestCase):
         xWriterDoc = self.xUITest.getTopFocusWindow()
         document = self.ui_test.get_component()
 
-        self.ui_test.execute_dialog_through_command(".uno:PageDialog")
-        xDialog = self.xUITest.getTopFocusWindow()
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:PageDialog", close_button="cancel") as xDialog:
 
-        xTabs = xDialog.getChild("tabcontrol")
-        select_pos(xTabs, "2")
+            xTabs = xDialog.getChild("tabcontrol")
+            select_pos(xTabs, "2")
 
-        btncolor = xDialog.getChild("btncolor")
-        btncolor.executeAction("CLICK", tuple())
+            btncolor = xDialog.getChild("btncolor")
+            btncolor.executeAction("CLICK", tuple())
 
-        xApplyBtn = xDialog.getChild("apply")
-        xApplyBtn.executeAction("CLICK", tuple())
+            xApplyBtn = xDialog.getChild("apply")
+            xApplyBtn.executeAction("CLICK", tuple())
 
-        self.assertTrue(document.isModified())
-        self.assertEqual("0x729fcf", hex(document.StyleFamilies.PageStyles.Standard.BackColor))
+            self.assertTrue(document.isModified())
+            self.assertEqual("0x729fcf", hex(document.StyleFamilies.PageStyles.Standard.BackColor))
 
-        xCancelBtn = xDialog.getChild("cancel")
-        self.ui_test.close_dialog_through_button(xCancelBtn)
 
         self.assertTrue(document.isModified())
         self.assertEqual("0x729fcf", hex(document.StyleFamilies.PageStyles.Standard.BackColor))

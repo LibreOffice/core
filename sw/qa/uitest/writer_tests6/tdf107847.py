@@ -15,19 +15,16 @@ class tdf107847(UITestCase):
         document = self.ui_test.get_component()
         xWriterDoc = self.xUITest.getTopFocusWindow()
 
-        self.ui_test.execute_dialog_through_command(".uno:InsertFrame")   #  insert frame
-        xDialog = self.xUITest.getTopFocusWindow()
-        xTabs = xDialog.getChild("tabcontrol")
-        select_pos(xTabs, "1")
-        select_pos(xTabs, "2")
-        select_pos(xTabs, "3")
-        select_pos(xTabs, "4")
-        select_pos(xTabs, "5")
-        select_pos(xTabs, "6")
-        select_pos(xTabs, "7")
-        select_pos(xTabs, "8")   #tab Macro
-        xokbtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xokbtn)
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:InsertFrame") as xDialog:
+            xTabs = xDialog.getChild("tabcontrol")
+            select_pos(xTabs, "1")
+            select_pos(xTabs, "2")
+            select_pos(xTabs, "3")
+            select_pos(xTabs, "4")
+            select_pos(xTabs, "5")
+            select_pos(xTabs, "6")
+            select_pos(xTabs, "7")
+            select_pos(xTabs, "8")   #tab Macro
 
         self.assertEqual(document.TextFrames.getCount(), 1)
         self.xUITest.executeCommand(".uno:Undo")

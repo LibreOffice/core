@@ -11,18 +11,11 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 
 class tdf125104(UITestCase):
 
-    def open_page_style_dialog(self):
-        self.ui_test.execute_dialog_through_command(".uno:PageDialog")
-        xDialog = self.xUITest.getTopFocusWindow()
-        tabcontrol = xDialog.getChild("tabcontrol")
-        select_pos(tabcontrol, "1")
-        return xDialog.getChild("comboLayoutFormat")
-
     def set_combo_layout_format(self, dialog, format):
+        tabcontrol = dialog.getChild("tabcontrol")
+        select_pos(tabcontrol, "1")
         comboLayoutFormat = dialog.getChild("comboLayoutFormat")
         select_by_text(comboLayoutFormat, format)
-        okBtn = dialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(okBtn)
 
     def test_tdf125104_pageFormat_numbering(self):
         self.ui_test.create_doc_in_start_center("writer")
@@ -37,25 +30,29 @@ class tdf125104(UITestCase):
         self.assertEqual(text[2:3], "2")
 
         # Bug 125104 - Changing page numbering to "1st, 2nd, 3rd,..." causes crashes when trying to change Page settings later
-        self.set_combo_layout_format(self.open_page_style_dialog(), "1st, 2nd, 3rd, ...")
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:PageDialog") as xDialog:
+            self.set_combo_layout_format(xDialog, "1st, 2nd, 3rd, ...")
+
         text = document.Text.String.replace('\r\n', '\n')
         self.assertEqual(text[0:3], "1st")
         self.assertEqual(text[4:7], "2nd")
 
-        xDialog = self.open_page_style_dialog()
-        comboLayoutFormat = xDialog.getChild("comboLayoutFormat")
-        self.assertEqual(get_state_as_dict(comboLayoutFormat)["SelectEntryText"], "1st, 2nd, 3rd, ...")
-        cancelBtn = xDialog.getChild("cancel")
-        self.ui_test.close_dialog_through_button(cancelBtn)
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:PageDialog", close_button="cancel") as xDialog:
+            comboLayoutFormat = xDialog.getChild("comboLayoutFormat")
+            self.assertEqual(get_state_as_dict(comboLayoutFormat)["SelectEntryText"], "1st, 2nd, 3rd, ...")
 
         # change to devanagari alphabet format
-        self.set_combo_layout_format(self.open_page_style_dialog(), "क, ख, ग, ...")
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:PageDialog") as xDialog:
+            self.set_combo_layout_format(xDialog, "क, ख, ग, ...")
+
         text = document.Text.String.replace('\r\n', '\n')
         self.assertEqual(text[0:1], "क")
         self.assertEqual(text[2:3], "ख")
 
         # change to devanagari number format
-        self.set_combo_layout_format(self.open_page_style_dialog(), "१, २, ३, ...")
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:PageDialog") as xDialog:
+            self.set_combo_layout_format(xDialog, "१, २, ३, ...")
+
         text = document.Text.String.replace('\r\n', '\n')
         self.assertEqual(text[0:1], "१")
         self.assertEqual(text[2:3], "२")

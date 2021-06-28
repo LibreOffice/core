@@ -24,14 +24,11 @@ class tdf116474(UITestCase):
         #select image
         document.getCurrentController().select(document.getDrawPage()[0])
 
-        self.ui_test.execute_dialog_through_command(".uno:InsertCaptionDialog")   #  caption
-        xDialogCaption = self.xUITest.getTopFocusWindow()
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:InsertCaptionDialog") as xDialogCaption:
 
-        xCapt = xDialogCaption.getChild("caption_edit")
-        xCapt.executeAction("TYPE", mkPropertyValues({"TEXT":"Caption"}))
+            xCapt = xDialogCaption.getChild("caption_edit")
+            xCapt.executeAction("TYPE", mkPropertyValues({"TEXT":"Caption"}))
 
-        xOkBtn=xDialogCaption.getChild("ok")
-        xOkBtn.executeAction("CLICK", tuple())
 
         xFrame = document.TextFrames[0]
         self.assertEqual(document.TextFrames[0].Text.String, "Figure 1: Caption")
