@@ -19,12 +19,9 @@ class textToTable(UITestCase):
         #Enter A;B ; select the text ; dialog Text to table - Semicolon; verify
         type_text(xWriterEdit, "A;B;C")
         xWriterEdit.executeAction("SELECT", mkPropertyValues({"START_POS": "0", "END_POS": "5"}))
-        self.ui_test.execute_dialog_through_command(".uno:ConvertTextToTable")
-        xDialog = self.xUITest.getTopFocusWindow()
-        semicolons = xDialog.getChild("semicolons")
-        semicolons.executeAction("CLICK", tuple())
-        xOKBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKBtn)
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:ConvertTextToTable") as xDialog:
+            semicolons = xDialog.getChild("semicolons")
+            semicolons.executeAction("CLICK", tuple())
         #verify
         self.assertEqual(document.TextTables.getCount(), 1)
         tables = document.getTextTables()
@@ -43,18 +40,15 @@ class textToTable(UITestCase):
             xWriterEdit = xWriterDoc.getChild("writer_edit")
             #open file; select all text ; dialog Text to table - other ":"; verify
             self.xUITest.executeCommand(".uno:SelectAll")
-            self.ui_test.execute_dialog_through_command(".uno:ConvertTextToTable")
-            xDialog = self.xUITest.getTopFocusWindow()
-            other = xDialog.getChild("other")
-            other.executeAction("CLICK", tuple())
-            othered = xDialog.getChild("othered")
-            othered.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
-            othered.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
-            othered.executeAction("TYPE", mkPropertyValues({"TEXT":":"}))
-            headingcb = xDialog.getChild("headingcb")
-            headingcb.executeAction("CLICK", tuple())
-            xOKBtn = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOKBtn)
+            with self.ui_test.execute_dialog_through_command_guarded(".uno:ConvertTextToTable") as xDialog:
+                other = xDialog.getChild("other")
+                other.executeAction("CLICK", tuple())
+                othered = xDialog.getChild("othered")
+                othered.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+                othered.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+                othered.executeAction("TYPE", mkPropertyValues({"TEXT":":"}))
+                headingcb = xDialog.getChild("headingcb")
+                headingcb.executeAction("CLICK", tuple())
             #verify
             self.assertEqual(writer_doc.TextTables.getCount(), 1)
             tables = writer_doc.getTextTables()

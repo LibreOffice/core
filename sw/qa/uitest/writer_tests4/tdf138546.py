@@ -18,25 +18,19 @@ class tdf138546(UITestCase):
             change_measurement_unit(self, "Centimeter")
 
             #dialog Columns
-            self.ui_test.execute_dialog_through_command(".uno:FormatColumns")
-            xDialog = self.xUITest.getTopFocusWindow()
+            with self.ui_test.execute_dialog_through_command_guarded(".uno:FormatColumns", close_button="cancel") as xDialog:
 
-            colsnf = xDialog.getChild("colsnf")
-            width1mf = xDialog.getChild("width1mf")
-            self.assertEqual(get_state_as_dict(colsnf)["Text"], "2")
-            self.assertEqual((get_state_as_dict(width1mf)["Text"])[0:3], "2.0") #2.00 cm
-            xOKBtn = xDialog.getChild("cancel")
-            self.ui_test.close_dialog_through_button(xOKBtn)
+                colsnf = xDialog.getChild("colsnf")
+                width1mf = xDialog.getChild("width1mf")
+                self.assertEqual(get_state_as_dict(colsnf)["Text"], "2")
+                self.assertEqual((get_state_as_dict(width1mf)["Text"])[0:3], "2.0") #2.00 cm
 
-            self.ui_test.execute_dialog_through_command(".uno:PageDialog")
-            xDialog = self.xUITest.getTopFocusWindow()
-            tabcontrol = xDialog.getChild("tabcontrol")
-            select_pos(tabcontrol, "7") #Columns
-            colsnf = xDialog.getChild("colsnf")
-            width1mf = xDialog.getChild("width1mf")
-            self.assertEqual(get_state_as_dict(colsnf)["Text"], "2")
-            self.assertEqual((get_state_as_dict(width1mf)["Text"])[0:3], "2.0") #2.00 cm
-            xOKBtn = xDialog.getChild("cancel")
-            self.ui_test.close_dialog_through_button(xOKBtn)
+            with self.ui_test.execute_dialog_through_command_guarded(".uno:PageDialog", close_button="cancel") as xDialog:
+                tabcontrol = xDialog.getChild("tabcontrol")
+                select_pos(tabcontrol, "7") #Columns
+                colsnf = xDialog.getChild("colsnf")
+                width1mf = xDialog.getChild("width1mf")
+                self.assertEqual(get_state_as_dict(colsnf)["Text"], "2")
+                self.assertEqual((get_state_as_dict(width1mf)["Text"])[0:3], "2.0") #2.00 cm
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

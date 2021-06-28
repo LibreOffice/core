@@ -15,11 +15,8 @@ class tdf64690(UITestCase):
 
         self.ui_test.create_doc_in_start_center("writer")
 
-        self.ui_test.execute_dialog_through_command(".uno:MacroDialog")
-        xDialog = self.xUITest.getTopFocusWindow()
-
-        xEditBtn = xDialog.getChild("edit")
-        xEditBtn.executeAction("CLICK", tuple())
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:MacroDialog", close_button="edit"):
+            pass
 
         xMacroWin = self.xUITest.getTopFocusWindow()
         xEditWin = xMacroWin.getChild('EditorWindow')

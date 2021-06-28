@@ -16,19 +16,13 @@ class tdf124586(UITestCase):
             xWriterDoc = self.xUITest.getTopFocusWindow()
 
             #Goto Tools > Chapter Numbering.
-            self.ui_test.execute_dialog_through_command(".uno:ChapterNumberingDialog")
-            xDialog = self.xUITest.getTopFocusWindow()
-            xstyle = xDialog.getChild("style")
-            select_by_text(xstyle, "MyHeading")
-            xOK = xDialog.getChild("ok")
-            xOK.executeAction("CLICK", tuple())
+            with self.ui_test.execute_dialog_through_command_guarded(".uno:ChapterNumberingDialog") as xDialog:
+                xstyle = xDialog.getChild("style")
+                select_by_text(xstyle, "MyHeading")
 
             self.assertEqual(writer_doc.Text.String[0:8], "Schritte")
 
-            self.ui_test.execute_dialog_through_command(".uno:ChapterNumberingDialog")
-            xDialog = self.xUITest.getTopFocusWindow()
-            xstyle = xDialog.getChild("style")
-            self.assertEqual(get_state_as_dict(xstyle)["SelectEntryText"], "MyHeading")
-            xOK = xDialog.getChild("ok")
-            xOK.executeAction("CLICK", tuple())
+            with self.ui_test.execute_dialog_through_command_guarded(".uno:ChapterNumberingDialog") as xDialog:
+                xstyle = xDialog.getChild("style")
+                self.assertEqual(get_state_as_dict(xstyle)["SelectEntryText"], "MyHeading")
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

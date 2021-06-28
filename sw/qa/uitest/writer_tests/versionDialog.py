@@ -18,22 +18,19 @@ class versionDialog(UITestCase):
 
             xWriterDoc = self.xUITest.getTopFocusWindow()
 
-            self.ui_test.execute_dialog_through_command(".uno:VersionDialog")
+            with self.ui_test.execute_dialog_through_command_guarded(".uno:VersionDialog", close_button="close") as xVersionDialog:
 
-            xVersionDialog = self.xUITest.getTopFocusWindow()
 
-            versiondList = xVersionDialog.getChild("versions")
+                versiondList = xVersionDialog.getChild("versions")
 
-            text = "04/06/2020 15:18\t\tHELLO"
-            self.assertEqual(1, len(versiondList.getChildren()))
-            self.assertEqual(get_state_as_dict(versiondList.getChild('0'))["Text"].strip(), text)
+                text = "04/06/2020 15:18\t\tHELLO"
+                self.assertEqual(1, len(versiondList.getChildren()))
+                self.assertEqual(get_state_as_dict(versiondList.getChild('0'))["Text"].strip(), text)
 
-            xDeleteBtn = xVersionDialog.getChild("delete")
-            xDeleteBtn.executeAction("CLICK", tuple())
+                xDeleteBtn = xVersionDialog.getChild("delete")
+                xDeleteBtn.executeAction("CLICK", tuple())
 
-            self.assertEqual(0, len(versiondList.getChildren()))
+                self.assertEqual(0, len(versiondList.getChildren()))
 
-            xCloseBtn = xVersionDialog.getChild("close")
-            xCloseBtn.executeAction("CLICK", tuple())
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

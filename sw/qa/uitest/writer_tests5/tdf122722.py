@@ -27,44 +27,38 @@ class tdf122722(UITestCase):
         #6. Opened Character, Select "Font Effect" tab
         #7. Check Hidden, and click [OK]
         #8. Crash a LibreOffice
-        self.ui_test.execute_dialog_through_command(".uno:FontDialog")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xTabs = xDialog.getChild("tabcontrol")
-        select_pos(xTabs, "1")
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:FontDialog") as xDialog:
+            xTabs = xDialog.getChild("tabcontrol")
+            select_pos(xTabs, "1")
 
-        xEffects = xDialog.getChild("effectslb")
-        xRelief = xDialog.getChild("relieflb")
-        xHidden = xDialog.getChild("hiddencb")
-        xOverline = xDialog.getChild("overlinelb")
-        xStrikeout = xDialog.getChild("strikeoutlb")
-        xUnderline = xDialog.getChild("underlinelb")
-        xEmphasis = xDialog.getChild("emphasislb")
-        xPosition = xDialog.getChild("positionlb")
+            xEffects = xDialog.getChild("effectslb")
+            xRelief = xDialog.getChild("relieflb")
+            xHidden = xDialog.getChild("hiddencb")
+            xOverline = xDialog.getChild("overlinelb")
+            xStrikeout = xDialog.getChild("strikeoutlb")
+            xUnderline = xDialog.getChild("underlinelb")
+            xEmphasis = xDialog.getChild("emphasislb")
+            xPosition = xDialog.getChild("positionlb")
 
-        xHidden.executeAction("CLICK", tuple())
+            xHidden.executeAction("CLICK", tuple())
 
-        xOK = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOK)
         #un-hidden
-        self.ui_test.execute_dialog_through_command(".uno:FontDialog")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xTabs = xDialog.getChild("tabcontrol")
-        select_pos(xTabs, "1")
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:FontDialog") as xDialog:
+            xTabs = xDialog.getChild("tabcontrol")
+            select_pos(xTabs, "1")
 
-        xEffects = xDialog.getChild("effectslb")
-        xRelief = xDialog.getChild("relieflb")
-        xHidden = xDialog.getChild("hiddencb")
-        xOverline = xDialog.getChild("overlinelb")
-        xStrikeout = xDialog.getChild("strikeoutlb")
-        xUnderline = xDialog.getChild("underlinelb")
-        xEmphasis = xDialog.getChild("emphasislb")
-        xPosition = xDialog.getChild("positionlb")
+            xEffects = xDialog.getChild("effectslb")
+            xRelief = xDialog.getChild("relieflb")
+            xHidden = xDialog.getChild("hiddencb")
+            xOverline = xDialog.getChild("overlinelb")
+            xStrikeout = xDialog.getChild("strikeoutlb")
+            xUnderline = xDialog.getChild("underlinelb")
+            xEmphasis = xDialog.getChild("emphasislb")
+            xPosition = xDialog.getChild("positionlb")
 
-        self.assertEqual(get_state_as_dict(xHidden)["Selected"], "true")
-        xHidden.executeAction("CLICK", tuple())
+            self.assertEqual(get_state_as_dict(xHidden)["Selected"], "true")
+            xHidden.executeAction("CLICK", tuple())
 
-        xOK = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOK)
 
         self.assertEqual(document.Text.String[0:11], "LibreOffice")
 

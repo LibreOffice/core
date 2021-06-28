@@ -18,20 +18,15 @@ class tdf113284(UITestCase):
         xToolkit.processEventsToIdle()
 
         xPageCount = writer_doc.CurrentController.PageCount
-        self.ui_test.execute_dialog_through_command(".uno:GotoPage")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xPageText = xDialog.getChild("page")
-        xPageText.executeAction("TYPE", mkPropertyValues({"TEXT":str(xPageCount)})) # goto last page
-        xOkBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOkBtn)
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:GotoPage") as xDialog:
+            xPageText = xDialog.getChild("page")
+            xPageText.executeAction("TYPE", mkPropertyValues({"TEXT":str(xPageCount)})) # goto last page
 
         xToolkit.processEventsToIdle()
 
         self.assertEqual(get_state_as_dict(xWriterEdit)["CurrentPage"], str(xPageCount))
-        self.ui_test.execute_dialog_through_command(".uno:EditCurIndex")  #open index dialog
-        xDiagIndex = self.xUITest.getTopFocusWindow()
-        xCancBtn = xDiagIndex.getChild("cancel")
-        self.ui_test.close_dialog_through_button(xCancBtn)   # close dialog
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:EditCurIndex", close_button="cancel"):
+            pass
 
         #page count  is not constant
         #self.assertEqual(get_state_as_dict(xWriterEdit)["CurrentPage"], "66")    #page 66 start of the Index

@@ -22,22 +22,19 @@ class apply_line_cap(UITestCase):
             self.ui_test.wait_until_child_is_available('metricfield')
 
             # line setting dialog window
-            self.ui_test.execute_dialog_through_command(".uno:FormatLine")
-            xFormatLineDlg = self.xUITest.getTopFocusWindow()
+            with self.ui_test.execute_dialog_through_command_guarded(".uno:FormatLine") as xFormatLineDlg:
 
-            # get cap style combo box
-            xCapStyle = xFormatLineDlg.getChild("LB_CAP_STYLE")
-            cap_style = get_state_as_dict(xCapStyle)['SelectEntryText']
+                # get cap style combo box
+                xCapStyle = xFormatLineDlg.getChild("LB_CAP_STYLE")
+                cap_style = get_state_as_dict(xCapStyle)['SelectEntryText']
 
-            # get line style combo box
-            xLineStyle = xFormatLineDlg.getChild("LB_LINE_STYLE")
+                # get line style combo box
+                xLineStyle = xFormatLineDlg.getChild("LB_LINE_STYLE")
 
-            # select 'Dot (Rounded)', but store the previous value
-            style = get_state_as_dict(xLineStyle)['SelectEntryText']
-            select_pos(xLineStyle, "3")
+                # select 'Dot (Rounded)', but store the previous value
+                style = get_state_as_dict(xLineStyle)['SelectEntryText']
+                select_pos(xLineStyle, "3")
 
-            xOKBtn = xFormatLineDlg.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOKBtn)
 
             self.assertEqual(cap_style, 'Flat')
             self.assertEqual(style, 'Long Dash Dot')
@@ -49,22 +46,19 @@ class apply_line_cap(UITestCase):
             self.ui_test.wait_until_child_is_available('metricfield')
 
             # line setting dialog window
-            self.ui_test.execute_dialog_through_command(".uno:FormatLine")
-            xFormatLineDlg = self.xUITest.getTopFocusWindow()
+            with self.ui_test.execute_dialog_through_command_guarded(".uno:FormatLine") as xFormatLineDlg:
 
-            # get cap style combo box
-            xCapStyle = xFormatLineDlg.getChild("LB_CAP_STYLE")
-            cap_style = get_state_as_dict(xCapStyle)['SelectEntryText']
+                # get cap style combo box
+                xCapStyle = xFormatLineDlg.getChild("LB_CAP_STYLE")
+                cap_style = get_state_as_dict(xCapStyle)['SelectEntryText']
 
-            # get line style combo box
-            xLineStyle = xFormatLineDlg.getChild("LB_LINE_STYLE")
+                # get line style combo box
+                xLineStyle = xFormatLineDlg.getChild("LB_LINE_STYLE")
 
-            # select 'Dot', but store the previous value
-            style = get_state_as_dict(xLineStyle)['SelectEntryText']
-            select_pos(xLineStyle, "2")
+                # select 'Dot', but store the previous value
+                style = get_state_as_dict(xLineStyle)['SelectEntryText']
+                select_pos(xLineStyle, "2")
 
-            xOKBtn = xFormatLineDlg.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOKBtn)
 
             # This was 'Flat' (set only dash style of the line style before)
             self.assertEqual(cap_style, 'Round')
@@ -77,20 +71,17 @@ class apply_line_cap(UITestCase):
             self.ui_test.wait_until_child_is_available('metricfield')
 
             # line setting dialog window
-            self.ui_test.execute_dialog_through_command(".uno:FormatLine")
-            xFormatLineDlg = self.xUITest.getTopFocusWindow()
+            with self.ui_test.execute_dialog_through_command_guarded(".uno:FormatLine") as xFormatLineDlg:
 
-            # get cap style combo box
-            xCapStyle = xFormatLineDlg.getChild("LB_CAP_STYLE")
-            cap_style = get_state_as_dict(xCapStyle)['SelectEntryText']
+                # get cap style combo box
+                xCapStyle = xFormatLineDlg.getChild("LB_CAP_STYLE")
+                cap_style = get_state_as_dict(xCapStyle)['SelectEntryText']
 
-            # get line style combo box
-            xLineStyle = xFormatLineDlg.getChild("LB_LINE_STYLE")
+                # get line style combo box
+                xLineStyle = xFormatLineDlg.getChild("LB_LINE_STYLE")
 
-            style = get_state_as_dict(xLineStyle)['SelectEntryText']
+                style = get_state_as_dict(xLineStyle)['SelectEntryText']
 
-            xOKBtn = xFormatLineDlg.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOKBtn)
 
             # This was 'Flat' (set only dash style of the line style before)
             self.assertEqual(cap_style, 'Flat')
