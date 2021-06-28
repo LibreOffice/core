@@ -27,7 +27,6 @@
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
 #include <com/sun/star/text/XTextFrame.hpp>
-#include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 #include <com/sun/star/view/XViewCursor.hpp>
 #include <comphelper/configuration.hxx>
