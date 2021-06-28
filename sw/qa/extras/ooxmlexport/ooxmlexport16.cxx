@@ -210,6 +210,17 @@ DECLARE_OOXMLEXPORT_TEST(testTdf140668, "tdf140668.docx")
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf38054, "tdf38054.docx")
+{
+    //the main problem was loss of data on adding an image and savig it as docx file.
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+    CPPUNIT_ASSERT_EQUAL(OUString("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."), getParagraph(1)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("Eget nunc lobortis mattis aliquam faucibus purus in massa tempor. Duis ultricies lacus sed turpis tincidunt id"), getParagraph(2)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("Ac felis donec et odio pellentesque. Sit amet volutpat consequat mauris nunc congue nisi vitae. Urna duis convallis convallis tellus."), getParagraph(3)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("Amet tellus cras adipiscing enim eu turpis egestas. Et odio pellentesque diam volutpat. Id diam maecenas ultricies mi eget."), getParagraph(4)->getString());
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf138771, "tdf138771.docx")
 {
     // Don't crash when document is imported
