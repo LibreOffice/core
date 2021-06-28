@@ -10,20 +10,36 @@
 #include <sal/config.h>
 
 #include <atomic>
+#include <condition_variable>
 #include <memory>
+#include <mutex>
 #include "uiobject_uno.hxx"
 #include <utility>
 #include <cppuhelper/supportsservice.hxx>
+#include <tools/link.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/window.hxx>
 
 #include <set>
 
+class Timer;
+
+namespace {
+
+struct Notifier {
+    std::condition_variable cv;
+    std::mutex mMutex;
+    bool mReady = false;
+
+    DECL_LINK( NotifyHdl, Timer*, void );
+};
+
+}
+
 UIObjectUnoObj::UIObjectUnoObj(std::unique_ptr<UIObject> pObj):
     UIObjectBase(m_aMutex),
-    mpObj(std::move(pObj)),
-    mReady(true)
+    mpObj(std::move(pObj))
 {
 }
 
@@ -43,7 +59,7 @@ css::uno::Reference<css::ui::test::XUIObject> SAL_CALL UIObjectUnoObj::getChild(
     return new UIObjectUnoObj(std::move(pObj));
 }
 
-IMPL_LINK_NOARG(UIObjectUnoObj, NotifyHdl, Timer*, void)
+IMPL_LINK_NOARG(Notifier, NotifyHdl, Timer*, void)
 {
     std::scoped_lock<std::mutex> lk(mMutex);
     mReady = true;
@@ -102,8 +118,6 @@ void SAL_CALL UIObjectUnoObj::executeAction(const OUString& rAction, const css::
     if (!mpObj)
         throw css::uno::RuntimeException();
 
-    std::unique_lock<std::mutex> lk(mMutex);
-    mReady = false;
     auto aIdle = std::make_unique<Idle>();
     aIdle->SetDebugName("UI Test Idle Handler");
     aIdle->SetPriority(TaskPriority::HIGHEST);
@@ -123,14 +137,18 @@ void SAL_CALL UIObjectUnoObj::executeAction(const OUString& rAction, const css::
         mpObj->execute(rAction, aMap);
     };
 
-    ExecuteWrapper* pWrapper = new ExecuteWrapper(func, LINK(this, UIObjectUnoObj, NotifyHdl));
+    Notifier notifier;
+    ExecuteWrapper* pWrapper = new ExecuteWrapper(func, LINK(&notifier, Notifier, NotifyHdl));
     aIdle->SetInvokeHandler(LINK(pWrapper, ExecuteWrapper, ExecuteActionHdl));
     {
         SolarMutexGuard aGuard;
         aIdle->Start();
     }
 
-    cv.wait(lk, [this]{return mReady;});
+    {
+        std::unique_lock<std::mutex> lk(notifier.mMutex);
+        notifier.cv.wait(lk, [&notifier]{return notifier.mReady;});
+    }
     pWrapper->setSignal();
 
     SolarMutexGuard aGuard;

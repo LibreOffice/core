@@ -15,13 +15,8 @@
 #include <com/sun/star/ui/test/XUIObject.hpp>
 
 #include <memory>
-#include <condition_variable>
-#include <mutex>
 
-#include <tools/link.hxx>
 #include <vcl/uitest/uiobject.hxx>
-
-class Timer;
 
 typedef ::cppu::WeakComponentImplHelper <
     css::ui::test::XUIObject, css::lang::XServiceInfo
@@ -55,14 +50,6 @@ public:
     css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     OUString SAL_CALL getHierarchy() override;
-
-private:
-
-    DECL_LINK( NotifyHdl, Timer*, void );
-
-    std::condition_variable cv;
-    std::mutex mMutex;
-    bool mReady;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
