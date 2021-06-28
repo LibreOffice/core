@@ -3292,6 +3292,10 @@ void SdOOXMLExportTest2::testTdf59323_slideFooters()
     assertXPath(pXmlDocSlide1, "//p:ph [@type='ftr']", "idx", "2");
     assertXPath(pXmlDocSlide1, "//p:ph [@type='sldNum']", "idx", "3");
 
+    // Test if datetime fields have text in them
+    // This is needed for backwards compatibility
+    assertXPath(pXmlDocSlide1, "//a:fld [@type='datetime1']/a:t");
+
     xDocShRef->DoClose();
 }
 
