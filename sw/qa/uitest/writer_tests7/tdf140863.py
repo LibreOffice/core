@@ -15,12 +15,8 @@ class tdf140863(UITestCase):
         self.ui_test.create_doc_in_start_center("writer")
 
         # Insert one section
-        self.ui_test.execute_dialog_through_command(".uno:InsertSection")
-
-        xDialog = self.xUITest.getTopFocusWindow()
-
-        xOkBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOkBtn)
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:InsertSection"):
+            pass
 
         xWriterDoc = self.xUITest.getTopFocusWindow()
         xWriterEdit = xWriterDoc.getChild("writer_edit")
@@ -35,33 +31,22 @@ class tdf140863(UITestCase):
         self.assertTrue(document.TextSections.Section1.IsVisible)
 
 
-        self.ui_test.execute_dialog_through_command(".uno:EditRegion")
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:EditRegion") as xDialog:
+            xHide = xDialog.getChild('hide')
+            self.assertEqual('false', get_state_as_dict(xHide)['Selected'])
 
-        xDialog = self.xUITest.getTopFocusWindow()
+            xHide.executeAction('CLICK', tuple())
 
-        xHide = xDialog.getChild('hide')
-        self.assertEqual('false', get_state_as_dict(xHide)['Selected'])
-
-        xHide.executeAction('CLICK', tuple())
-
-        xOkBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOkBtn)
 
         self.assertEqual(1, len(document.TextSections))
         self.assertFalse(document.TextSections.Section1.IsVisible)
         self.assertEqual(get_state_as_dict(xWriterEdit)["CurrentPage"], "1")
 
-        self.ui_test.execute_dialog_through_command(".uno:EditRegion")
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:EditRegion") as xDialog:
+            xHide = xDialog.getChild('hide')
+            self.assertEqual('true', get_state_as_dict(xHide)['Selected'])
 
-        xDialog = self.xUITest.getTopFocusWindow()
-
-        xHide = xDialog.getChild('hide')
-        self.assertEqual('true', get_state_as_dict(xHide)['Selected'])
-
-        xHide.executeAction('CLICK', tuple())
-
-        xOkBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOkBtn)
+            xHide.executeAction('CLICK', tuple())
 
         self.assertEqual(1, len(document.TextSections))
         self.assertTrue(document.TextSections.Section1.IsVisible)

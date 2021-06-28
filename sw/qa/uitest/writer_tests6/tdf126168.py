@@ -18,19 +18,14 @@ class tdf126168(UITestCase):
 
         #2) Menu > Insert > Frame > Frame
         #3) Press OK in Frame dialog
-        self.ui_test.execute_dialog_through_command(".uno:InsertFrame")   #  insert frame
-        xDialog = self.xUITest.getTopFocusWindow()
-        xokbtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xokbtn)
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:InsertFrame"):
+            pass
         self.assertEqual(document.TextFrames.getCount(), 1)
         #New Style from Selection  [uno:StyleNewByExample]
-        self.ui_test.execute_dialog_through_command(".uno:StyleNewByExample")
-        #5) Enter a name in the Create Style dialog and press OK
-        xDialog = self.xUITest.getTopFocusWindow()
-        stylename = xDialog.getChild("stylename")
-        stylename.executeAction("TYPE", mkPropertyValues({"TEXT":"a"}))
-        xokbtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xokbtn)
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:StyleNewByExample") as xDialog:
+            #5) Enter a name in the Create Style dialog and press OK
+            stylename = xDialog.getChild("stylename")
+            stylename.executeAction("TYPE", mkPropertyValues({"TEXT":"a"}))
         #6) ctrl+z 3 times
         self.xUITest.executeCommand(".uno:Undo")
         self.xUITest.executeCommand(".uno:Undo")

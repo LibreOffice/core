@@ -17,12 +17,8 @@ class tdf99334(UITestCase):
             #select whole table
             self.xUITest.executeCommand(".uno:SelectTable")
             #Tools - Sort
-            self.ui_test.execute_dialog_through_command(".uno:SortDialog")
-            xDialog = self.xUITest.getTopFocusWindow()
-            # xDown = xDialog.getChild("down1")
-            # xDown.executeAction("CLICK", tuple())
-            xOK = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOK)
+            with self.ui_test.execute_dialog_through_command_guarded(".uno:SortDialog"):
+                pass
             #verify
             tables = writer_doc.getTextTables()
             table = tables[0]

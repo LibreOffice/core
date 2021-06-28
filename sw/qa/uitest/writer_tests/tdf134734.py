@@ -17,30 +17,27 @@ class TestClass(UITestCase):
         document = self.ui_test.get_component()
 
         # set margins and fill color
-        self.ui_test.execute_dialog_through_command(".uno:PageDialog")
-        DrawPageDialog = self.xUITest.getTopFocusWindow()
-        xTabs = DrawPageDialog.getChild("tabcontrol")
-        select_pos(xTabs, "1")
-        checkBackgroundFullSize = DrawPageDialog.getChild("checkBackgroundFullSize")
-        self.assertEqual(get_state_as_dict(checkBackgroundFullSize)["Selected"], "true")
-        spinMargLeft = DrawPageDialog.getChild("spinMargLeft")
-        for _ in range(20):
-            spinMargLeft.executeAction("UP",tuple())
-        spinMargRight = DrawPageDialog.getChild("spinMargRight")
-        for _ in range(15):
-            spinMargRight.executeAction("UP",tuple())
-        spinMargTop = DrawPageDialog.getChild("spinMargTop")
-        for _ in range(10):
-            spinMargTop.executeAction("UP",tuple())
-        spinMargBot = DrawPageDialog.getChild("spinMargBot")
-        for _ in range(5):
-            spinMargBot.executeAction("UP",tuple())
-        xTabs = DrawPageDialog.getChild("tabcontrol")
-        select_pos(xTabs, "2")
-        btncolor = DrawPageDialog.getChild("btncolor")
-        btncolor.executeAction("CLICK",tuple())
-        ok = DrawPageDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(ok)
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:PageDialog") as DrawPageDialog:
+            xTabs = DrawPageDialog.getChild("tabcontrol")
+            select_pos(xTabs, "1")
+            checkBackgroundFullSize = DrawPageDialog.getChild("checkBackgroundFullSize")
+            self.assertEqual(get_state_as_dict(checkBackgroundFullSize)["Selected"], "true")
+            spinMargLeft = DrawPageDialog.getChild("spinMargLeft")
+            for _ in range(20):
+                spinMargLeft.executeAction("UP",tuple())
+            spinMargRight = DrawPageDialog.getChild("spinMargRight")
+            for _ in range(15):
+                spinMargRight.executeAction("UP",tuple())
+            spinMargTop = DrawPageDialog.getChild("spinMargTop")
+            for _ in range(10):
+                spinMargTop.executeAction("UP",tuple())
+            spinMargBot = DrawPageDialog.getChild("spinMargBot")
+            for _ in range(5):
+                spinMargBot.executeAction("UP",tuple())
+            xTabs = DrawPageDialog.getChild("tabcontrol")
+            select_pos(xTabs, "2")
+            btncolor = DrawPageDialog.getChild("btncolor")
+            btncolor.executeAction("CLICK",tuple())
 
         xStyle = document.StyleFamilies["PageStyles"]["Standard"]
 
@@ -52,15 +49,12 @@ class TestClass(UITestCase):
         self.assertEqual(xStyle.BackgroundFullSize, True)
 
         # uncheck it
-        self.ui_test.execute_dialog_through_command(".uno:PageDialog")
-        DrawPageDialog = self.xUITest.getTopFocusWindow()
-        xTabs = DrawPageDialog.getChild("tabcontrol")
-        select_pos(xTabs, "1")
-        checkBackgroundFullSize = DrawPageDialog.getChild("checkBackgroundFullSize")
-        self.assertEqual(get_state_as_dict(checkBackgroundFullSize)["Selected"], "true")
-        checkBackgroundFullSize.executeAction("CLICK",tuple())
-        ok = DrawPageDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(ok)
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:PageDialog") as DrawPageDialog:
+            xTabs = DrawPageDialog.getChild("tabcontrol")
+            select_pos(xTabs, "1")
+            checkBackgroundFullSize = DrawPageDialog.getChild("checkBackgroundFullSize")
+            self.assertEqual(get_state_as_dict(checkBackgroundFullSize)["Selected"], "true")
+            checkBackgroundFullSize.executeAction("CLICK",tuple())
 
         self.assertEqual(xStyle.FillStyle, SOLID)
         self.assertEqual(xStyle.LeftMargin, 2997)
@@ -70,15 +64,12 @@ class TestClass(UITestCase):
         self.assertEqual(xStyle.BackgroundFullSize, False)
 
         # check it again
-        self.ui_test.execute_dialog_through_command(".uno:PageDialog")
-        DrawPageDialog = self.xUITest.getTopFocusWindow()
-        xTabs = DrawPageDialog.getChild("tabcontrol")
-        select_pos(xTabs, "1")
-        checkBackgroundFullSize = DrawPageDialog.getChild("checkBackgroundFullSize")
-        self.assertEqual(get_state_as_dict(checkBackgroundFullSize)["Selected"], "false")
-        checkBackgroundFullSize.executeAction("CLICK",tuple())
-        ok = DrawPageDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(ok)
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:PageDialog") as DrawPageDialog:
+            xTabs = DrawPageDialog.getChild("tabcontrol")
+            select_pos(xTabs, "1")
+            checkBackgroundFullSize = DrawPageDialog.getChild("checkBackgroundFullSize")
+            self.assertEqual(get_state_as_dict(checkBackgroundFullSize)["Selected"], "false")
+            checkBackgroundFullSize.executeAction("CLICK",tuple())
 
         self.assertEqual(xStyle.FillStyle, SOLID)
         self.assertEqual(xStyle.LeftMargin, 2997)

@@ -17,17 +17,14 @@ class tdf53460(UITestCase):
         xWriterEdit = xWriterDoc.getChild("writer_edit")
         document = self.ui_test.get_component()
         #-insert a table (by default 2x2)
-        self.ui_test.execute_dialog_through_command(".uno:InsertTable")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xOkBtn = xDialog.getChild("ok")
-        xOkBtn.executeAction("CLICK", tuple())
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:InsertTable"):
+            pass
 
         #-put the cursor inside first cell top left for example
         #-insert an inner table (by default 2x2) inside this cell
-        self.ui_test.execute_dialog_through_command(".uno:InsertTable")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xOkBtn = xDialog.getChild("ok")
-        xOkBtn.executeAction("CLICK", tuple())
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:InsertTable"):
+            pass
+
         #-still in top left cell, go to the line after the inner table
         xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "DOWN"}))
         xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "DOWN"}))

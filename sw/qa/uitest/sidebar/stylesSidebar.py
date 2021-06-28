@@ -14,38 +14,34 @@ class StylesSidebar(UITestCase):
    def test_load_styles_from_template(self):
         self.ui_test.create_doc_in_start_center("writer")
 
-        self.ui_test.execute_dialog_through_command(".uno:LoadStyles")
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:LoadStyles", close_button="") as xDialog:
+            xText = xDialog.getChild("text")
+            xNumbering = xDialog.getChild("numbering")
+            xFrame = xDialog.getChild("frame")
+            xPages = xDialog.getChild("pages")
 
-        xDialog = self.xUITest.getTopFocusWindow()
+            self.assertEqual('true', get_state_as_dict(xText)['Selected'])
+            self.assertEqual('false', get_state_as_dict(xNumbering)['Selected'])
+            self.assertEqual('false', get_state_as_dict(xFrame)['Selected'])
+            self.assertEqual('false', get_state_as_dict(xPages)['Selected'])
 
-        xText = xDialog.getChild("text")
-        xNumbering = xDialog.getChild("numbering")
-        xFrame = xDialog.getChild("frame")
-        xPages = xDialog.getChild("pages")
+            xNumbering.executeAction("CLICK", tuple())
+            xFrame.executeAction("CLICK", tuple())
+            xPages.executeAction("CLICK", tuple())
 
-        self.assertEqual('true', get_state_as_dict(xText)['Selected'])
-        self.assertEqual('false', get_state_as_dict(xNumbering)['Selected'])
-        self.assertEqual('false', get_state_as_dict(xFrame)['Selected'])
-        self.assertEqual('false', get_state_as_dict(xPages)['Selected'])
+            self.assertEqual('true', get_state_as_dict(xText)['Selected'])
+            self.assertEqual('true', get_state_as_dict(xNumbering)['Selected'])
+            self.assertEqual('true', get_state_as_dict(xFrame)['Selected'])
+            self.assertEqual('true', get_state_as_dict(xPages)['Selected'])
 
-        xNumbering.executeAction("CLICK", tuple())
-        xFrame.executeAction("CLICK", tuple())
-        xPages.executeAction("CLICK", tuple())
+            xFileName = xDialog.getChild("fromfile")
+            xFileName.executeAction("CLICK", tuple())
 
-        self.assertEqual('true', get_state_as_dict(xText)['Selected'])
-        self.assertEqual('true', get_state_as_dict(xNumbering)['Selected'])
-        self.assertEqual('true', get_state_as_dict(xFrame)['Selected'])
-        self.assertEqual('true', get_state_as_dict(xPages)['Selected'])
-
-        xFileName = xDialog.getChild("fromfile")
-        xFileName.executeAction("CLICK", tuple())
-
-        xOpenDialog = self.xUITest.getTopFocusWindow()
-        xFileName = xOpenDialog.getChild("file_name")
-        xFileName.executeAction("TYPE", mkPropertyValues({"TEXT": get_url_for_data_file("customStyles.odt")}))
-
-        xOpenBtn = xOpenDialog.getChild("open")
-        xOpenBtn.executeAction("CLICK", tuple())
+            xOpenDialog = self.xUITest.getTopFocusWindow()
+            xFileName = xOpenDialog.getChild("file_name")
+            xFileName.executeAction("TYPE", mkPropertyValues({"TEXT": get_url_for_data_file("customStyles.odt")}))
+            xOpenBtn = xOpenDialog.getChild("open")
+            xOpenBtn.executeAction("CLICK", tuple())
 
         xWriterDoc = self.xUITest.getTopFocusWindow()
         xWriterEdit = xWriterDoc.getChild("writer_edit")

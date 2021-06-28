@@ -45,16 +45,13 @@ class tdf140117(UITestCase):
                     elif i == 2:
                             self.assertEqual("XXXXleft", xHeaderLeftText)
 
-                    self.ui_test.execute_dialog_through_command(".uno:PageDialog")
-                    PageDialog = self.xUITest.getTopFocusWindow();
+                    with self.ui_test.execute_dialog_through_command_guarded(".uno:PageDialog") as PageDialog:
 
-                    xTabs = PageDialog.getChild("tabcontrol")
-                    select_pos(xTabs, "4")
+                        xTabs = PageDialog.getChild("tabcontrol")
+                        select_pos(xTabs, "4")
 
-                    # Change option "same content on left and right pages" for the next iteration
-                    Button = xTabs.getChild('checkSameLR')
-                    Button.executeAction("CLICK", tuple())
-                    ok = PageDialog.getChild("ok")
-                    self.ui_test.close_dialog_through_button(ok)
+                        # Change option "same content on left and right pages" for the next iteration
+                        Button = xTabs.getChild('checkSameLR')
+                        Button.executeAction("CLICK", tuple())
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

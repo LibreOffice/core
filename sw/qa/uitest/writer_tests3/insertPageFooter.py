@@ -27,13 +27,9 @@ class WriterInsertPageFooter(UITestCase):
         self.assertEqual(
             document.StyleFamilies.PageStyles.Standard.FooterIsOn, True)
 
-        self.ui_test.execute_dialog_through_command(
-            ".uno:InsertPageFooter?PageStyle:string=Default%20Page%20Style&On:bool=false")
-
-        xDialog = self.xUITest.getTopFocusWindow()
-
-        xOption = xDialog.getChild("yes")
-        xOption.executeAction("CLICK", tuple())
+        with self.ui_test.execute_dialog_through_command_guarded(
+                ".uno:InsertPageFooter?PageStyle:string=Default%20Page%20Style&On:bool=false", close_button="yes"):
+            pass
 
         self.assertEqual(
             document.StyleFamilies.PageStyles.Standard.FooterIsOn, False)
@@ -52,12 +48,8 @@ class WriterInsertPageFooter(UITestCase):
 
         self.insert_footer()
 
-        self.ui_test.execute_dialog_through_command(".uno:InsertTable")
-
-        xInsertDlg = self.xUITest.getTopFocusWindow()
-
-        xOkBtn = xInsertDlg.getChild("ok")
-        xOkBtn.executeAction("CLICK", tuple())
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:InsertTable"):
+            pass
 
         document = self.ui_test.get_component()
 

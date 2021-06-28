@@ -20,24 +20,21 @@ class tdf118208(UITestCase):
             # 2. Press ctrl-H to show the search and replace dialog.
             # 3. Press the "Format..."  button.
             #Libreoffice immediately crashed.
-            self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog")  #optionsdialog
-            xDialog = self.xUITest.getTopFocusWindow()
+            with self.ui_test.execute_dialog_through_command_guarded(".uno:OptionsTreeDialog") as xDialog:
 
-            xPages = xDialog.getChild("pages")
-            xLanguageEntry = xPages.getChild('2')                 # Language Settings
-            xLanguageEntry.executeAction("EXPAND", tuple())
-            xxLanguageEntryGeneralEntry = xLanguageEntry.getChild('0')
-            xxLanguageEntryGeneralEntry.executeAction("SELECT", tuple())          #Language
+                xPages = xDialog.getChild("pages")
+                xLanguageEntry = xPages.getChild('2')                 # Language Settings
+                xLanguageEntry.executeAction("EXPAND", tuple())
+                xxLanguageEntryGeneralEntry = xLanguageEntry.getChild('0')
+                xxLanguageEntryGeneralEntry.executeAction("SELECT", tuple())          #Language
 
-            asianlanguage = xDialog.getChild("asiansupport")
-            complexlanguage = xDialog.getChild("ctlsupport")
-            if (get_state_as_dict(asianlanguage)["Selected"]) == "true":
-                asianlanguage.executeAction("CLICK", tuple())
-            if (get_state_as_dict(complexlanguage)["Selected"]) == "true":
-                complexlanguage.executeAction("CLICK", tuple())
+                asianlanguage = xDialog.getChild("asiansupport")
+                complexlanguage = xDialog.getChild("ctlsupport")
+                if (get_state_as_dict(asianlanguage)["Selected"]) == "true":
+                    asianlanguage.executeAction("CLICK", tuple())
+                if (get_state_as_dict(complexlanguage)["Selected"]) == "true":
+                    complexlanguage.executeAction("CLICK", tuple())
 
-            xOKBtn = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOKBtn)
 
             self.ui_test.execute_modeless_dialog_through_command(".uno:SearchDialog")
             xDialog = self.xUITest.getTopFocusWindow()
@@ -53,22 +50,19 @@ class tdf118208(UITestCase):
             self.ui_test.close_dialog_through_button(xcloseBtn)
 
             #enable lang support again
-            self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog")  #optionsdialog
-            xDialog = self.xUITest.getTopFocusWindow()
+            with self.ui_test.execute_dialog_through_command_guarded(".uno:OptionsTreeDialog") as xDialog:
 
-            xPages = xDialog.getChild("pages")
-            xLanguageEntry = xPages.getChild('2')                 # Language Settings
-            xLanguageEntry.executeAction("EXPAND", tuple())
-            xxLanguageEntryGeneralEntry = xLanguageEntry.getChild('0')
-            xxLanguageEntryGeneralEntry.executeAction("SELECT", tuple())          #Language
+                xPages = xDialog.getChild("pages")
+                xLanguageEntry = xPages.getChild('2')                 # Language Settings
+                xLanguageEntry.executeAction("EXPAND", tuple())
+                xxLanguageEntryGeneralEntry = xLanguageEntry.getChild('0')
+                xxLanguageEntryGeneralEntry.executeAction("SELECT", tuple())          #Language
 
-            asianlanguage = xDialog.getChild("asiansupport")
-            complexlanguage = xDialog.getChild("ctlsupport")
-            if (get_state_as_dict(asianlanguage)["Selected"]) == "false":
-                asianlanguage.executeAction("CLICK", tuple())
-            if (get_state_as_dict(complexlanguage)["Selected"]) == "false":
-                complexlanguage.executeAction("CLICK", tuple())
-            xOKBtn = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOKBtn)
+                asianlanguage = xDialog.getChild("asiansupport")
+                complexlanguage = xDialog.getChild("ctlsupport")
+                if (get_state_as_dict(asianlanguage)["Selected"]) == "false":
+                    asianlanguage.executeAction("CLICK", tuple())
+                if (get_state_as_dict(complexlanguage)["Selected"]) == "false":
+                    complexlanguage.executeAction("CLICK", tuple())
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

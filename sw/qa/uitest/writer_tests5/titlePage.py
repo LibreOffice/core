@@ -13,24 +13,17 @@ class titlePage(UITestCase):
         document = self.ui_test.get_component()
         xWriterDoc = self.xUITest.getTopFocusWindow()
         #dialog Title Page
-        self.ui_test.execute_dialog_through_command(".uno:TitlePageDialog")
-        xDialog = self.xUITest.getTopFocusWindow()
-        #print(xDialog.getChildren())
-
-        #select new Pages; nr of pages =2 (click UP), save; verify pageCount = 3
-        newPages = xDialog.getChild("RB_INSERT_NEW_PAGES")
-        newPages.executeAction("CLICK", tuple())
-        xpageCount = xDialog.getChild("NF_PAGE_COUNT")
-        xpageCount.executeAction("UP", tuple())
-        xOKBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKBtn)
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:TitlePageDialog") as xDialog:
+            #select new Pages; nr of pages =2 (click UP), save; verify pageCount = 3
+            newPages = xDialog.getChild("RB_INSERT_NEW_PAGES")
+            newPages.executeAction("CLICK", tuple())
+            xpageCount = xDialog.getChild("NF_PAGE_COUNT")
+            xpageCount.executeAction("UP", tuple())
         self.assertEqual(document.CurrentController.PageCount, 3)
 
         # check cancel button
-        self.ui_test.execute_dialog_through_command(".uno:TitlePageDialog")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xCancelBtn = xDialog.getChild("cancel")
-        self.ui_test.close_dialog_through_button(xCancelBtn)
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:TitlePageDialog", close_button="cancel"):
+            pass
         self.assertEqual(document.CurrentController.PageCount, 3)
 
         self.ui_test.close_doc()

@@ -14,28 +14,24 @@ class WriterInsertTableDialog(UITestCase):
 
         self.ui_test.create_doc_in_start_center("writer")
 
-        self.ui_test.execute_dialog_through_command(".uno:InsertTable")
-        xDialog = self.xUITest.getTopFocusWindow()
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:InsertTable") as xDialog:
 
-        xNameEdit = xDialog.getChild("nameedit")
+            xNameEdit = xDialog.getChild("nameedit")
 
-        xNameEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
-        xNameEdit.executeAction("TYPE", mkPropertyValues({"TEXT": name}))
+            xNameEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+            xNameEdit.executeAction("TYPE", mkPropertyValues({"TEXT": name}))
 
-        xColSpin = xDialog.getChild("colspin")
-        xColSpin.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
-        xColSpin.executeAction("TYPE", mkPropertyValues({"TEXT": str(cols)}))
+            xColSpin = xDialog.getChild("colspin")
+            xColSpin.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+            xColSpin.executeAction("TYPE", mkPropertyValues({"TEXT": str(cols)}))
 
-        xRowSpin = xDialog.getChild("rowspin")
-        xRowSpin.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
-        xRowSpin.executeAction("TYPE", mkPropertyValues({"TEXT": str(rows)}))
+            xRowSpin = xDialog.getChild("rowspin")
+            xRowSpin.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+            xRowSpin.executeAction("TYPE", mkPropertyValues({"TEXT": str(rows)}))
 
-        self.assertEqual(get_state_as_dict(xNameEdit)["Text"], name)
-        self.assertEqual(get_state_as_dict(xColSpin)["Text"], str(cols))
-        self.assertEqual(get_state_as_dict(xRowSpin)["Text"], str(rows))
-
-        xOkBtn = xDialog.getChild("ok")
-        xOkBtn.executeAction("CLICK", tuple())
+            self.assertEqual(get_state_as_dict(xNameEdit)["Text"], name)
+            self.assertEqual(get_state_as_dict(xColSpin)["Text"], str(cols))
+            self.assertEqual(get_state_as_dict(xRowSpin)["Text"], str(rows))
 
         document = self.ui_test.get_component()
 
@@ -53,21 +49,15 @@ class WriterInsertTableDialog(UITestCase):
 
         self.insert_table("Test3", 2, 2)
 
-        self.ui_test.execute_dialog_through_command(".uno:TableNumberFormatDialog")
-
-        xNumberFormatDlg = self.xUITest.getTopFocusWindow()
-
-        xOkBtn = xNumberFormatDlg.getChild("ok")
-        xOkBtn.executeAction("CLICK", tuple())
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:TableNumberFormatDialog"):
+            pass
 
         self.ui_test.close_doc()
 
     def test_cancel_button_insert_table_dialog(self):
         self.ui_test.create_doc_in_start_center("writer")
-        self.ui_test.execute_dialog_through_command(".uno:InsertTable")
-        Dialog = self.xUITest.getTopFocusWindow()
-        CancelBtn = Dialog.getChild("cancel")
-        self.ui_test.close_dialog_through_button(CancelBtn)
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:InsertTable", close_button="cancel"):
+            pass
 
         document = self.ui_test.get_component()
         tables = document.getTextTables()
