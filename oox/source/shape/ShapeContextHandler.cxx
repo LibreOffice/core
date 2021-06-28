@@ -49,7 +49,7 @@ ShapeContextHandler::ShapeContextHandler(uno::Reference< uno::XComponentContext 
 {
     try
     {
-        mxFilterBase.set( new ShapeFilterBase(context) );
+        mxShapeFilterBase.set( new ShapeFilterBase(context) );
     }
     catch( uno::Exception& )
     {
@@ -64,7 +64,7 @@ uno::Reference<xml::sax::XFastContextHandler> const & ShapeContextHandler::getLo
 {
     if (!mxLockedCanvasContext.is())
     {
-        FragmentHandler2Ref rFragmentHandler(new ShapeFragmentHandler(*mxFilterBase, msRelationFragmentPath));
+        FragmentHandler2Ref rFragmentHandler(new ShapeFragmentHandler(*mxShapeFilterBase, msRelationFragmentPath));
 
         switch (nElement & 0xffff)
         {
@@ -91,7 +91,7 @@ uno::Reference<xml::sax::XFastContextHandler> const & ShapeContextHandler::getCh
             case XML_chart:
             {
                 std::unique_ptr<ContextHandler2Helper> pFragmentHandler(
-                        new ShapeFragmentHandler(*mxFilterBase, msRelationFragmentPath));
+                        new ShapeFragmentHandler(*mxShapeFilterBase, msRelationFragmentPath));
                 mpShape = std::make_shared<Shape>("com.sun.star.drawing.OLE2Shape" );
                 mxChartShapeContext.set(new ChartGraphicDataContext(*pFragmentHandler, mpShape, true));
                 break;
@@ -108,7 +108,7 @@ uno::Reference<xml::sax::XFastContextHandler> const & ShapeContextHandler::getWp
 {
     if (!mxWpsContext.is())
     {
-        FragmentHandler2Ref rFragmentHandler(new ShapeFragmentHandler(*mxFilterBase, msRelationFragmentPath));
+        FragmentHandler2Ref rFragmentHandler(new ShapeFragmentHandler(*mxShapeFilterBase, msRelationFragmentPath));
         ShapePtr pMasterShape;
 
         uno::Reference<drawing::XShape> xShape;
@@ -139,7 +139,7 @@ uno::Reference<xml::sax::XFastContextHandler> const & ShapeContextHandler::getWp
 {
     if (!mxWpgContext.is())
     {
-        FragmentHandler2Ref rFragmentHandler(new ShapeFragmentHandler(*mxFilterBase, msRelationFragmentPath));
+        FragmentHandler2Ref rFragmentHandler(new ShapeFragmentHandler(*mxShapeFilterBase, msRelationFragmentPath));
 
         switch (getBaseToken(nElement))
         {
@@ -159,7 +159,7 @@ ShapeContextHandler::getGraphicShapeContext(::sal_Int32 Element )
 {
     if (! mxGraphicShapeContext.is())
     {
-        auto pFragmentHandler = std::make_shared<ShapeFragmentHandler>(*mxFilterBase, msRelationFragmentPath);
+        auto pFragmentHandler = std::make_shared<ShapeFragmentHandler>(*mxShapeFilterBase, msRelationFragmentPath);
         ShapePtr pMasterShape;
 
         switch (Element & 0xffff)
@@ -187,11 +187,11 @@ ShapeContextHandler::getDrawingShapeContext()
 {
     if (!mxDrawingFragmentHandler.is())
     {
-        mpDrawing = std::make_shared<oox::vml::Drawing>( *mxFilterBase, mxDrawPage, oox::vml::VMLDRAWING_WORD );
+        mpDrawing = std::make_shared<oox::vml::Drawing>( *mxShapeFilterBase, mxDrawPage, oox::vml::VMLDRAWING_WORD );
         mxDrawingFragmentHandler.set
           (static_cast<ContextHandler *>
            (new oox::vml::DrawingFragment
-            ( *mxFilterBase, msRelationFragmentPath, *mpDrawing )));
+            ( *mxShapeFilterBase, msRelationFragmentPath, *mpDrawing )));
     }
     else
     {
@@ -203,7 +203,7 @@ ShapeContextHandler::getDrawingShapeContext()
             mxDrawingFragmentHandler.set
               (static_cast<ContextHandler *>
                (new oox::vml::DrawingFragment
-                ( *mxFilterBase, msRelationFragmentPath, *mpDrawing )));
+                ( *mxShapeFilterBase, msRelationFragmentPath, *mpDrawing )));
         }
     }
     return mxDrawingFragmentHandler;
@@ -214,7 +214,7 @@ ShapeContextHandler::getDiagramShapeContext()
 {
     if (!mxDiagramShapeContext.is())
     {
-        auto pFragmentHandler = std::make_shared<ShapeFragmentHandler>(*mxFilterBase, msRelationFragmentPath);
+        auto pFragmentHandler = std::make_shared<ShapeFragmentHandler>(*mxShapeFilterBase, msRelationFragmentPath);
         mpShape = std::make_shared<Shape>();
         mxDiagramShapeContext.set(new DiagramGraphicDataContext(*pFragmentHandler, mpShape));
     }
@@ -261,7 +261,7 @@ void SAL_CALL ShapeContextHandler::startFastElement
 (::sal_Int32 Element,
  const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
 {
-    mxFilterBase->filter(maMediaDescriptor);
+    mxShapeFilterBase->filter(maMediaDescriptor);
 
     mpThemePtr = std::make_shared<Theme>();
 
@@ -273,21 +273,19 @@ void SAL_CALL ShapeContextHandler::startFastElement
         {
             // Get Target for Type = "officeDocument" from _rels/.rels file
             // aOfficeDocumentFragmentPath is pointing to "word/document.xml" for docx & to "ppt/presentation.xml" for pptx
-            FragmentHandlerRef rFragmentHandlerRef(new ShapeFragmentHandler(*mxFilterBase, "/"));
+            FragmentHandlerRef rFragmentHandlerRef(new ShapeFragmentHandler(*mxShapeFilterBase, "/"));
             OUString aOfficeDocumentFragmentPath = rFragmentHandlerRef->getFragmentPathFromFirstTypeFromOfficeDoc( u"officeDocument" );
 
             // Get the theme DO NOT  use msRelationFragmentPath for getting theme as for a document there is a single theme in document.xml.rels
             // and the same is used by header and footer as well.
-            FragmentHandlerRef rFragmentHandler(new ShapeFragmentHandler(*mxFilterBase, aOfficeDocumentFragmentPath));
+            FragmentHandlerRef rFragmentHandler(new ShapeFragmentHandler(*mxShapeFilterBase, aOfficeDocumentFragmentPath));
             OUString aThemeFragmentPath = rFragmentHandler->getFragmentPathFromFirstTypeFromOfficeDoc( u"theme" );
 
             if(!aThemeFragmentPath.isEmpty())
             {
-                uno::Reference<xml::sax::XFastSAXSerializable> xDoc(mxFilterBase->importFragment(aThemeFragmentPath), uno::UNO_QUERY_THROW);
-                mxFilterBase->importFragment(new ThemeFragmentHandler(*mxFilterBase, aThemeFragmentPath, *mpThemePtr ), xDoc);
-                ShapeFilterBase* pShapeFilterBase(dynamic_cast<ShapeFilterBase*>(mxFilterBase.get()));
-                if (pShapeFilterBase)
-                    pShapeFilterBase->setCurrentTheme(mpThemePtr);
+                uno::Reference<xml::sax::XFastSAXSerializable> xDoc(mxShapeFilterBase->importFragment(aThemeFragmentPath), uno::UNO_QUERY_THROW);
+                mxShapeFilterBase->importFragment(new ThemeFragmentHandler(*mxShapeFilterBase, aThemeFragmentPath, *mpThemePtr ), xDoc);
+                mxShapeFilterBase->setCurrentTheme(mpThemePtr);
             }
         }
 
@@ -398,7 +396,7 @@ ShapeContextHandler::getShape()
     uno::Reference< drawing::XShape > xResult;
     uno::Reference< drawing::XShapes > xShapes = mxDrawPage;
 
-    if (mxFilterBase.is() && xShapes.is())
+    if (mxShapeFilterBase && xShapes.is())
     {
         if ( getContextHandler() == getDrawingShapeContext() )
         {
@@ -414,7 +412,7 @@ ShapeContextHandler::getShape()
             basegfx::B2DHomMatrix aMatrix;
             if (mpShape->getExtDrawings().empty())
             {
-                mpShape->addShape( *mxFilterBase, mpThemePtr.get(), xShapes, aMatrix, mpShape->getFillProperties() );
+                mpShape->addShape( *mxShapeFilterBase, mpThemePtr.get(), xShapes, aMatrix, mpShape->getFillProperties() );
                 xResult = mpShape->getXShape();
             }
             else
@@ -428,9 +426,9 @@ ShapeContextHandler::getShape()
                     OUString aFragmentPath(pDiagramGraphicDataContext->getFragmentPathFromRelId(extDrawing));
                     oox::drawingml::ShapePtr pShapePtr = std::make_shared<Shape>( "com.sun.star.drawing.GroupShape" );
                     pShapePtr->setDiagramType();
-                    mxFilterBase->importFragment(new ShapeDrawingFragmentHandler(*mxFilterBase, aFragmentPath, pShapePtr));
+                    mxShapeFilterBase->importFragment(new ShapeDrawingFragmentHandler(*mxShapeFilterBase, aFragmentPath, pShapePtr));
                     pShapePtr->setDiagramDoms(mpShape->getDiagramDoms());
-                    pShapePtr->keepDiagramDrawing(*mxFilterBase, aFragmentPath);
+                    pShapePtr->keepDiagramDrawing(*mxShapeFilterBase, aFragmentPath);
 
                     if (!mpShape->getChildren().empty())
                     {
@@ -440,7 +438,7 @@ ShapeContextHandler::getShape()
                         aChildren.insert(aChildren.begin(), pBackground);
                     }
 
-                    pShapePtr->addShape( *mxFilterBase, mpThemePtr.get(), xShapes, aMatrix, pShapePtr->getFillProperties() );
+                    pShapePtr->addShape( *mxShapeFilterBase, mpThemePtr.get(), xShapes, aMatrix, pShapePtr->getFillProperties() );
                     xResult = pShapePtr->getXShape();
                 }
                 mpShape.reset();
@@ -453,7 +451,7 @@ ShapeContextHandler::getShape()
             if (pShape)
             {
                 basegfx::B2DHomMatrix aMatrix;
-                pShape->addShape(*mxFilterBase, mpThemePtr.get(), xShapes, aMatrix, pShape->getFillProperties());
+                pShape->addShape(*mxShapeFilterBase, mpThemePtr.get(), xShapes, aMatrix, pShape->getFillProperties());
                 xResult = pShape->getXShape();
                 mxLockedCanvasContext.clear();
             }
@@ -470,7 +468,7 @@ ShapeContextHandler::getShape()
                 oox::drawingml::ShapePtr xShapePtr( pChartGraphicDataContext->getShape());
                 // See SwXTextDocument::createInstance(), ODF import uses the same hack.
                 xShapePtr->setServiceName("com.sun.star.drawing.temporaryForXMLImportOLE2Shape");
-                xShapePtr->addShape( *mxFilterBase, mpThemePtr.get(), xShapes, aMatrix, xShapePtr->getFillProperties() );
+                xShapePtr->addShape( *mxShapeFilterBase, mpThemePtr.get(), xShapes, aMatrix, xShapePtr->getFillProperties() );
                 xResult = xShapePtr->getXShape();
             }
             mxChartShapeContext.clear();
@@ -482,7 +480,7 @@ ShapeContextHandler::getShape()
             {
                 basegfx::B2DHomMatrix aMatrix;
                 pShape->setPosition(maPosition);
-                pShape->addShape(*mxFilterBase, mpThemePtr.get(), xShapes, aMatrix, pShape->getFillProperties());
+                pShape->addShape(*mxShapeFilterBase, mpThemePtr.get(), xShapes, aMatrix, pShape->getFillProperties());
                 xResult = pShape->getXShape();
                 mxSavedShape = xResult;
                 mxWpsContext.clear();
@@ -495,7 +493,7 @@ ShapeContextHandler::getShape()
             {
                 basegfx::B2DHomMatrix aMatrix;
                 pShape->setPosition(maPosition);
-                pShape->addShape(*mxFilterBase, mpThemePtr.get(), xShapes, aMatrix, pShape->getFillProperties());
+                pShape->addShape(*mxShapeFilterBase, mpThemePtr.get(), xShapes, aMatrix, pShape->getFillProperties());
                 xResult = pShape->getXShape();
                 mxSavedShape = xResult;
                 mxWpgContext.clear();
@@ -513,7 +511,7 @@ ShapeContextHandler::getShape()
                 mpShape->setPosition(maPosition);
             }
 
-            mpShape->addShape(*mxFilterBase, mpThemePtr.get(), xShapes, aTransformation, mpShape->getFillProperties() );
+            mpShape->addShape(*mxShapeFilterBase, mpThemePtr.get(), xShapes, aTransformation, mpShape->getFillProperties() );
             xResult.set(mpShape->getXShape());
             mxGraphicShapeContext.clear( );
         }
@@ -537,18 +535,18 @@ void SAL_CALL ShapeContextHandler::setDrawPage
 css::uno::Reference< css::frame::XModel > SAL_CALL
 ShapeContextHandler::getModel()
 {
-    if( !mxFilterBase.is() )
+    if( !mxShapeFilterBase.is() )
         throw uno::RuntimeException();
-    return mxFilterBase->getModel();
+    return mxShapeFilterBase->getModel();
 }
 
 void SAL_CALL ShapeContextHandler::setModel
 (const css::uno::Reference< css::frame::XModel > & the_value)
 {
-    if( !mxFilterBase.is() )
+    if( !mxShapeFilterBase.is() )
         throw uno::RuntimeException();
     uno::Reference<lang::XComponent> xComp(the_value, uno::UNO_QUERY_THROW);
-    mxFilterBase->setTargetDocument(xComp);
+    mxShapeFilterBase->setTargetDocument(xComp);
 }
 
 OUString SAL_CALL ShapeContextHandler::getRelationFragmentPath()
@@ -584,7 +582,7 @@ void SAL_CALL ShapeContextHandler::setPosition(const awt::Point& rPosition)
 void SAL_CALL ShapeContextHandler::setDocumentProperties(const uno::Reference<document::XDocumentProperties>& xDocProps)
 {
     mxDocumentProperties = xDocProps;
-    mxFilterBase->checkDocumentProperties(mxDocumentProperties);
+    mxShapeFilterBase->checkDocumentProperties(mxDocumentProperties);
 }
 
 uno::Reference<document::XDocumentProperties> SAL_CALL ShapeContextHandler::getDocumentProperties()
@@ -604,8 +602,7 @@ void SAL_CALL ShapeContextHandler::setMediaDescriptor(const uno::Sequence<beans:
 
 void SAL_CALL ShapeContextHandler::setGraphicMapper(css::uno::Reference<css::graphic::XGraphicMapper> const & rxGraphicMapper)
 {
-    auto pShapeFilterBase = static_cast<ShapeFilterBase*>(mxFilterBase.get());
-    pShapeFilterBase->setGraphicMapper(rxGraphicMapper);
+    mxShapeFilterBase->setGraphicMapper(rxGraphicMapper);
 }
 
 OUString ShapeContextHandler::getImplementationName()

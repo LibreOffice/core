@@ -31,6 +31,8 @@
 
 namespace oox::shape {
 
+class ShapeFilterBase;
+
 class ShapeFragmentHandler : public core::FragmentHandler2
 {
 public:
@@ -144,7 +146,7 @@ private:
     css::uno::Reference<css::document::XDocumentProperties> mxDocumentProperties;
     css::uno::Sequence<css::beans::PropertyValue> maMediaDescriptor;
 
-    ::rtl::Reference< core::XmlFilterBase > mxFilterBase;
+    ::rtl::Reference< ShapeFilterBase > mxShapeFilterBase;
     drawingml::ThemePtr mpThemePtr;
     css::uno::Reference<css::drawing::XDrawPage> mxDrawPage;
     OUString msRelationFragmentPath;
