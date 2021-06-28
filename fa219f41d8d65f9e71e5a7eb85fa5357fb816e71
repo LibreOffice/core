@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "de3c1228_ccc39d82",
+        "filename": "sw/source/core/inc/DocumentContentOperationsManager.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2021-06-28T05:27:40Z",
+      "side": 1,
+      "message": "Please leave only one newline here.",
+      "revId": "fa219f41d8d65f9e71e5a7eb85fa5357fb816e71",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
