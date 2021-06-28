@@ -25,23 +25,20 @@ class tdf139511(UITestCase):
         self.assertEqual(8004, document.DrawPages[0].getByIndex(2).BoundRect.Height)
         self.assertEqual(14104, document.DrawPages[0].getByIndex(2).BoundRect.Width)
 
-        self.ui_test.execute_dialog_through_command(".uno:TransformDialog")
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:TransformDialog") as xDialog:
 
-        xDialog = self.xUITest.getTopFocusWindow()
 
-        xWidth = xDialog.getChild('MTR_FLD_WIDTH')
-        xHeight = xDialog.getChild('MTR_FLD_HEIGHT')
+            xWidth = xDialog.getChild('MTR_FLD_WIDTH')
+            xHeight = xDialog.getChild('MTR_FLD_HEIGHT')
 
-        xWidth.executeAction("TYPE", mkPropertyValues({"KEYCODE": "CTRL+A"}))
-        xWidth.executeAction("TYPE", mkPropertyValues({"KEYCODE": "BACKSPACE"}))
-        xWidth.executeAction("TYPE", mkPropertyValues({"TEXT": "10"}))
+            xWidth.executeAction("TYPE", mkPropertyValues({"KEYCODE": "CTRL+A"}))
+            xWidth.executeAction("TYPE", mkPropertyValues({"KEYCODE": "BACKSPACE"}))
+            xWidth.executeAction("TYPE", mkPropertyValues({"TEXT": "10"}))
 
-        xHeight.executeAction("TYPE", mkPropertyValues({"KEYCODE": "CTRL+A"}))
-        xHeight.executeAction("TYPE", mkPropertyValues({"KEYCODE": "BACKSPACE"}))
-        xHeight.executeAction("TYPE", mkPropertyValues({"TEXT": "5"}))
+            xHeight.executeAction("TYPE", mkPropertyValues({"KEYCODE": "CTRL+A"}))
+            xHeight.executeAction("TYPE", mkPropertyValues({"KEYCODE": "BACKSPACE"}))
+            xHeight.executeAction("TYPE", mkPropertyValues({"TEXT": "5"}))
 
-        xOkBtn = xDialog.getChild("ok")
-        xOkBtn.executeAction("CLICK", tuple())
 
         document = self.ui_test.get_component()
 

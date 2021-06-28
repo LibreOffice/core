@@ -18,12 +18,9 @@ class tdf91762(UITestCase):
 
         self.xUITest.executeCommand(".uno:AssignLayout?WhatLayout:long=1")
 
-        self.ui_test.execute_dialog_through_command(".uno:InsertTable")
-        xDialog = self.xUITest.getTopFocusWindow()
-        self.assertEqual('5', get_state_as_dict(xDialog.getChild('columns'))['Text'])
-        self.assertEqual('2', get_state_as_dict(xDialog.getChild('rows'))['Text'])
-        xOkBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOkBtn)
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:InsertTable") as xDialog:
+            self.assertEqual('5', get_state_as_dict(xDialog.getChild('columns'))['Text'])
+            self.assertEqual('2', get_state_as_dict(xDialog.getChild('rows'))['Text'])
 
         document = self.ui_test.get_component()
         self.assertEqual(1931, document.DrawPages[0].getByIndex(1).BoundRect.Height)

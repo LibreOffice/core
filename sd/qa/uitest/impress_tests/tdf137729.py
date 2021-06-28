@@ -19,20 +19,17 @@ class tdf137729(UITestCase):
         xCancelBtn = xTemplateDlg.getChild("close")
         self.ui_test.close_dialog_through_button(xCancelBtn)
 
-        self.ui_test.execute_dialog_through_command(".uno:PageSetup")
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:PageSetup") as xPageSetupDlg:
 
-        xPageSetupDlg = self.xUITest.getTopFocusWindow()
-        tabcontrol = xPageSetupDlg.getChild("tabcontrol")
-        select_pos(tabcontrol, "1")
+            tabcontrol = xPageSetupDlg.getChild("tabcontrol")
+            select_pos(tabcontrol, "1")
 
-        xBtn = xPageSetupDlg.getChild('btnhatch')
-        xBtn.executeAction("CLICK", tuple())
+            xBtn = xPageSetupDlg.getChild('btnhatch')
+            xBtn.executeAction("CLICK", tuple())
 
-        xDistance = xPageSetupDlg.getChild('distancemtr')
-        xDistance.executeAction("UP", tuple())
+            xDistance = xPageSetupDlg.getChild('distancemtr')
+            xDistance.executeAction("UP", tuple())
 
-        xOkBtn = xPageSetupDlg.getChild("ok")
-        xOkBtn.executeAction("CLICK", tuple())
 
         document = self.ui_test.get_component()
         self.assertEqual(
