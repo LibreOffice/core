@@ -211,6 +211,19 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf100582)
     pMod->SetInputOptions(aInputOption);
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf137248)
+{
+    ScModelObj* pModelObj = createDoc("tdf137248.ods");
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    insertStringToCell(*pModelObj, "B1", "50");
+
+    CPPUNIT_ASSERT_EQUAL(10.0, pDoc->GetValue(ScAddress(1, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(10.0, pDoc->GetValue(ScAddress(1, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(70.0, pDoc->GetValue(ScAddress(1, 4, 0)));
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf97215)
 {
     ScModelObj* pModelObj = createDoc("tdf97215.ods");
