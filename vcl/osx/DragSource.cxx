@@ -71,9 +71,9 @@ static Sequence<OUString> dragSource_getSupportedServiceNames()
   self = [super init];
 
   if (self)
-    {
+  {
       mDragSource = pds;
-    }
+  }
 
   return self;
 }
@@ -161,10 +161,10 @@ DragSource::~DragSource()
 void SAL_CALL DragSource::initialize(const Sequence< Any >& aArguments)
 {
   if (aArguments.getLength() < 2)
-    {
+  {
       throw Exception("DragSource::initialize: Not enough parameter.",
                       static_cast<OWeakObject*>(this));
-    }
+  }
 
   Any pNSView = aArguments[1];
   sal_uInt64 tmp = 0;
@@ -179,10 +179,10 @@ void SAL_CALL DragSource::initialize(const Sequence< Any >& aArguments)
   */
   if (![mView respondsToSelector: @selector(registerMouseEventListener:)] ||
       ![mView respondsToSelector: @selector(unregisterMouseEventListener:)])
-    {
+  {
       throw Exception("DragSource::initialize: Provided view doesn't support mouse listener",
                       static_cast<OWeakObject*>(this));
-    }
+  }
   NSWindow* pWin = [mView window];
   if( ! pWin || ![pWin respondsToSelector: @selector(getSalFrame)] )
   {
@@ -194,10 +194,10 @@ void SAL_CALL DragSource::initialize(const Sequence< Any >& aArguments)
   mDragSourceHelper = [[DragSourceHelper alloc] initWithDragSource: this];
 
   if (mDragSourceHelper == nil)
-    {
+  {
       throw Exception("DragSource::initialize: Cannot initialize DragSource",
                       static_cast<OWeakObject*>(this));
-    }
+  }
 
   [static_cast<id <MouseEventListener>>(mView) registerMouseEventListener: mDragSourceHelper];
 }
@@ -288,9 +288,9 @@ void SAL_CALL DragSource::startDrag(const DragGestureEvent& trigger,
 void DragSource::saveMouseEvent(NSEvent* theEvent)
 {
   if (mLastMouseEventBeforeStartDrag != nil)
-    {
+  {
       [mLastMouseEventBeforeStartDrag release];
-    }
+  }
 
   mLastMouseEventBeforeStartDrag = theEvent;
 }
@@ -303,19 +303,19 @@ unsigned int DragSource::getSupportedDragOperations(bool isLocal) const
   unsigned int srcActions = OfficeToSystemDragActions(mDragSourceActions);
 
   if (isLocal)
-    {
+  {
       // Support NSDragOperation generic which means we can
       // decide which D&D operation to choose. We map
       // NSDragOperationGeneric to DNDConstants::ACTION_DEFAULT
       // in SystemToOfficeDragActions to signal this and
       // use it in DropTarget::determineDropAction
       srcActions |= NSDragOperationGeneric;
-    }
+  }
   else
-    {
+  {
       // Mask out link and move operations on external DnD
       srcActions &= ~(NSDragOperationMove | NSDragOperationLink);
-    }
+  }
 
   return srcActions;
 }

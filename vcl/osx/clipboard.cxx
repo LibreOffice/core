@@ -92,10 +92,10 @@ AquaClipboard::AquaClipboard(NSPasteboard* pasteboard, bool bUseSystemPasteboard
       SAL_WNODEPRECATED_DECLARATIONS_POP
 
       if (mPasteboard == nil)
-        {
+      {
             throw uno::RuntimeException("AquaClipboard: Cannot create Cocoa pasteboard",
                 static_cast<XClipboardEx*>(this));
-        }
+      }
     }
 
     [mPasteboard retain];

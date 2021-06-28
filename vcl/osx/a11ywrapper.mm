@@ -423,34 +423,34 @@ static std::ostream &operator<<(std::ostream &s, NSObject *obj) {
 -(id)roleDescriptionAttribute {
     if ( mActsAsRadioGroup ) {
         return [ AquaA11yRoleHelper getRoleDescriptionFrom: NSAccessibilityRadioGroupRole with: @"" ];
-	} else if( [ self accessibleContext ] -> getAccessibleRole() == AccessibleRole::RADIO_BUTTON ) {
-		// FIXME: VO should read this because of hierarchy, this is just a workaround
-		// get parent and its children
-		AquaA11yWrapper * parent = [ self parentAttribute ];
-		NSArray * children = [ parent childrenAttribute ];
-		// find index of self
-		int index = 1;
-		NSEnumerator * enumerator = [ children objectEnumerator ];
-		AquaA11yWrapper * child = nil;
-		while ( ( child = [ enumerator nextObject ] ) ) {
-			if ( self == child ) {
-				break;
-			}
-			index++;
-		}
-		// build string
-		NSNumber * nIndex = [ NSNumber numberWithInt: index ];
-		NSNumber * nGroupsize = [ NSNumber numberWithInt: [ children count ] ];
-		NSMutableString * value = [ [ NSMutableString alloc ] init ];
-		[ value appendString: @"radio button " ];
-		[ value appendString: [ nIndex stringValue ] ];
-		[ value appendString: @" of " ];
-		[ value appendString: [ nGroupsize stringValue ] ];
-		// clean up and return string
-		[ nIndex release ];
-		[ nGroupsize release ];
-		[ children release ];
-		return value;
+    } else if( [ self accessibleContext ] -> getAccessibleRole() == AccessibleRole::RADIO_BUTTON ) {
+        // FIXME: VO should read this because of hierarchy, this is just a workaround
+        // get parent and its children
+        AquaA11yWrapper * parent = [ self parentAttribute ];
+        NSArray * children = [ parent childrenAttribute ];
+        // find index of self
+        int index = 1;
+        NSEnumerator * enumerator = [ children objectEnumerator ];
+        AquaA11yWrapper * child = nil;
+        while ( ( child = [ enumerator nextObject ] ) ) {
+            if ( self == child ) {
+                break;
+            }
+            index++;
+        }
+        // build string
+        NSNumber * nIndex = [ NSNumber numberWithInt: index ];
+        NSNumber * nGroupsize = [ NSNumber numberWithInt: [ children count ] ];
+        NSMutableString * value = [ [ NSMutableString alloc ] init ];
+        [ value appendString: @"radio button " ];
+        [ value appendString: [ nIndex stringValue ] ];
+        [ value appendString: @" of " ];
+        [ value appendString: [ nGroupsize stringValue ] ];
+        // clean up and return string
+        [ nIndex release ];
+        [ nGroupsize release ];
+        [ children release ];
+        return value;
     } else {
         return [ AquaA11yRoleHelper getRoleDescriptionFrom:
                 [ AquaA11yRoleHelper getNativeRoleFrom: [ self accessibleContext ] ]
@@ -761,7 +761,7 @@ static std::ostream &operator<<(std::ostream &s, NSObject *obj) {
             nAccessibleChildren = [ self accessibleContext ] -> getAccessibleChildCount();
             if (  nAccessibleChildren > 0 ) {
                 [ attributeNames addObject: NSAccessibilityChildrenAttribute ];
-        }
+            }
         }
         catch( DisposedException& ) {}
         catch( RuntimeException& ) {}

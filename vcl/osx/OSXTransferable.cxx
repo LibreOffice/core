@@ -62,15 +62,15 @@ bool cmpAllContentTypeParameter(const Reference<XMimeContentType> & xLhs,
       OUString pRhs;
 
       for (sal_Int32 i = 0; i < xLhsFlavors.getLength(); i++)
-        {
+      {
           pLhs = xLhs->getParameterValue(xLhsFlavors[i]);
           pRhs = xRhs->getParameterValue(xLhsFlavors[i]);
 
           if (!pLhs.equalsIgnoreAsciiCase(pRhs))
-            {
+          {
               return false;
-            }
-        }
+          }
+      }
     }
   catch(IllegalArgumentException&)
     {
@@ -102,10 +102,10 @@ OSXTransferable::~OSXTransferable()
 Any SAL_CALL OSXTransferable::getTransferData( const DataFlavor& aFlavor )
 {
   if (!isValidFlavor(aFlavor) || !isDataFlavorSupported(aFlavor))
-    {
+  {
       throw UnsupportedFlavorException("AquaClipboard: Unsupported data flavor",
                                        static_cast<XTransferable*>(this));
-    }
+  }
 
   bool bInternal(false);
   NSString const * sysFormat =
@@ -119,21 +119,21 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
       // pasteboard items with NSPasteboardTypeFileURL or kUTTypeFileURL instead"
   if ([sysFormat caseInsensitiveCompare: NSFilenamesPboardType] == NSOrderedSame)
 SAL_WNODEPRECATED_DECLARATIONS_POP
-    {
+  {
       NSArray* sysData = [mPasteboard propertyListForType: const_cast<NSString *>(sysFormat)];
       dp = DataFlavorMapper::getDataProvider(sysFormat, sysData);
-    }
+  }
   else
-    {
+  {
       NSData* sysData = [mPasteboard dataForType: const_cast<NSString *>(sysFormat)];
       dp = DataFlavorMapper::getDataProvider(sysFormat, sysData);
-    }
+  }
 
   if (!dp)
-    {
+  {
       throw UnsupportedFlavorException("AquaClipboard: Unsupported data flavor",
                                        static_cast<XTransferable*>(this));
-    }
+  }
 
   return dp->getOOoData();
 }
@@ -157,10 +157,10 @@ void OSXTransferable::initClipboardItemList()
   NSArray* pboardFormats = [mPasteboard types];
 
   if (pboardFormats == nullptr)
-    {
+  {
       throw RuntimeException("AquaClipboard: Cannot get clipboard data",
                              static_cast<XTransferable*>(this));
-    }
+  }
 
   mFlavorList = mDataFlavorMapper->typesArrayToFlavorSequence(pboardFormats);
 }
@@ -178,9 +178,9 @@ bool OSXTransferable::compareDataFlavors(const DataFlavor& lhs, const DataFlavor
 
         if (!xLhs->getFullMediaType().equalsIgnoreAsciiCase(xRhs->getFullMediaType()) ||
             !cmpAllContentTypeParameter(xLhs, xRhs))
-          {
+        {
             return false;
-          }
+        }
     }
     catch( IllegalArgumentException& )
     {
