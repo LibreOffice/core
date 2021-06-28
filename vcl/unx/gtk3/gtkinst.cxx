@@ -8843,28 +8843,19 @@ namespace {
 
 void do_grab(GtkWidget* pWidget)
 {
-#if !GTK_CHECK_VERSION(4, 0, 0)
     GdkDisplay *pDisplay = gtk_widget_get_display(pWidget);
     GdkSeat* pSeat = gdk_display_get_default_seat(pDisplay);
     gdk_seat_grab(pSeat, widget_get_surface(pWidget),
                   GDK_SEAT_CAPABILITY_ALL, true, nullptr, nullptr, nullptr, nullptr);
-#else
-    (void)pWidget;
-#endif
 }
 
 void do_ungrab(GtkWidget* pWidget)
 {
-#if !GTK_CHECK_VERSION(4, 0, 0)
     GdkDisplay *pDisplay = gtk_widget_get_display(pWidget);
     GdkSeat* pSeat = gdk_display_get_default_seat(pDisplay);
     gdk_seat_ungrab(pSeat);
-#else
-    (void)pWidget;
-#endif
 }
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
 GtkPositionType show_menu_older_gtk(GtkWidget* pMenuButton, GtkWindow* pMenu)
 {
     //place the toplevel just below its launcher button
@@ -8947,11 +8938,9 @@ GtkPositionType show_menu_older_gtk(GtkWidget* pMenuButton, GtkWindow* pMenu)
 
     return ePosUsed;
 }
-#endif
 
 bool show_menu_newer_gtk(GtkWidget* pComboBox, GtkWindow* pMenu)
 {
-#if !GTK_CHECK_VERSION(4, 0, 0)
     static auto window_move_to_rect = reinterpret_cast<void (*) (GdkWindow*, const GdkRectangle*, GdkGravity,
                                                                  GdkGravity, GdkAnchorHints, gint, gint)>(
                                                                     dlsym(nullptr, "gdk_window_move_to_rect"));
@@ -8991,11 +8980,6 @@ bool show_menu_newer_gtk(GtkWidget* pComboBox, GtkWindow* pMenu)
                         0, 0);
 
     return true;
-#else
-    (void)pComboBox;
-    (void)pMenu;
-    return true;
-#endif
 }
 
 GtkPositionType show_menu(GtkWidget* pMenuButton, GtkWindow* pMenu)
@@ -9018,21 +9002,15 @@ GtkPositionType show_menu(GtkWidget* pMenuButton, GtkWindow* pMenu)
         pFrame->BlockTooltip();
     }
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
     // try with gdk_window_move_to_rect, but if that's not available, try without
     if (!show_menu_newer_gtk(pMenuButton, pMenu))
         ePosUsed = show_menu_older_gtk(pMenuButton, pMenu);
     gtk_widget_show_all(GTK_WIDGET(pMenu));
-#else
-    show_menu_newer_gtk(pMenuButton, pMenu);
-    gtk_widget_show(GTK_WIDGET(pMenu));
-#endif
     gtk_widget_grab_focus(GTK_WIDGET(pMenu));
     do_grab(GTK_WIDGET(pMenu));
 
     return ePosUsed;
 }
-
 #endif
 
 /* four types of uses of this
