@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4730898a_42f64985",
+        "filename": "include/vcl/weld.hxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-06-28T14:11:51Z",
+      "side": 1,
+      "message": "I removed this in my code.. I fail to understand why its getting reverted..I will remove it again",
+      "range": {
+        "startLine": 79,
+        "startChar": 0,
+        "endLine": 79,
+        "endChar": 16
+      },
+      "revId": "d0c3f6607da5dcb291f29eb7de69b02468067cbc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
