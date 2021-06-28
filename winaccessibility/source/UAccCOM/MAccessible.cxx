@@ -74,21 +74,20 @@ using namespace com::sun::star::accessibility::AccessibleStateType;
 
 namespace {
 
-enum XInterfaceIndex {
-    XI_COMPONENT    = 0x01,
-    XI_TEXT         = 0x02,
-    XI_TABLE        = 0x03,
-    XI_EDITABLETEXT = 0x04,
-    XI_IMAGE        = 0x05,
-    XI_SELECTION    = 0x06,
-    XI_EXTENDEDCOMP = 0x07,
-    XI_VALUE        = 0x08,
-    XI_KEYBINDING   = 0x09,
-    XI_ACTION       = 0x0A,
-    XI_HYPERTEXT    = 0x0B,
-    XI_HYPERLINK    = 0x0C,
-    XI_ATTRIBUTE    = 0x0D,
-    XI_NULL         = -1
+enum class XInterfaceType {
+    XI_COMPONENT,
+    XI_TEXT,
+    XI_TABLE,
+    XI_EDITABLETEXT,
+    XI_IMAGE,
+    XI_SELECTION,
+    XI_EXTENDEDCOMP,
+    XI_VALUE,
+    XI_KEYBINDING,
+    XI_ACTION,
+    XI_HYPERTEXT,
+    XI_HYPERLINK,
+    XI_ATTRIBUTE
 };
 
 template <class Interface>
@@ -2500,33 +2499,33 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::Put_ActionDescription( const OLE
         LEAVE_PROTECTED_BLOCK
 }
 
-bool CMAccessible::GetXInterfaceFromXAccessible(XAccessible* pXAcc, XInterface** ppXI, int index)
+bool CMAccessible::GetXInterfaceFromXAccessible(XAccessible* pXAcc, XInterface** ppXI, XInterfaceType eType)
 {
-    switch(index)
+    switch(eType)
     {
-    case XI_COMPONENT:
+    case XInterfaceType::XI_COMPONENT:
         return queryXInterface<XAccessibleComponent>(pXAcc, ppXI);
-    case XI_TEXT:
+    case XInterfaceType::XI_TEXT:
         return queryXInterface<XAccessibleText>(pXAcc, ppXI);
-    case XI_EDITABLETEXT:
+    case XInterfaceType::XI_EDITABLETEXT:
         return queryXInterface<XAccessibleEditableText>(pXAcc, ppXI);
-    case XI_TABLE:
+    case XInterfaceType::XI_TABLE:
         return queryXInterface<XAccessibleTable>(pXAcc, ppXI);
-    case XI_SELECTION:
+    case XInterfaceType::XI_SELECTION:
         return queryXInterface<XAccessibleSelection>(pXAcc, ppXI);
-    case XI_EXTENDEDCOMP:
+    case XInterfaceType::XI_EXTENDEDCOMP:
         return queryXInterface<XAccessibleExtendedComponent>(pXAcc, ppXI);
-    case XI_KEYBINDING:
+    case XInterfaceType::XI_KEYBINDING:
         return queryXInterface<XAccessibleKeyBinding>(pXAcc, ppXI);
-    case XI_ACTION:
+    case XInterfaceType::XI_ACTION:
         return queryXInterface<XAccessibleAction>(pXAcc, ppXI);
-    case XI_VALUE:
+    case XInterfaceType::XI_VALUE:
         return queryXInterface<XAccessibleValue>(pXAcc, ppXI);
-    case XI_HYPERTEXT:
+    case XInterfaceType::XI_HYPERTEXT:
         return queryXInterface<XAccessibleHypertext>(pXAcc, ppXI);
-    case XI_HYPERLINK:
+    case XInterfaceType::XI_HYPERLINK:
         return queryXInterface<XAccessibleHyperlink>(pXAcc, ppXI);
-    case XI_IMAGE:
+    case XInterfaceType::XI_IMAGE:
         return queryXInterface<XAccessibleImage>(pXAcc, ppXI);
     default:
         return false;
@@ -2553,21 +2552,21 @@ struct AggMapEntry
 {
     const IID* piid;
     AggCreatorFunc* pfnCreateInstance;
-    int XIFIndex;
+    const XInterfaceType eXInterfaceType;
 };
 
 }
 
 static AggMapEntry g_CMAccessible_AggMap[] = {
-    { &IID_IAccessibleComponent, &createAggInstance<CAccComponent>, XI_COMPONENT },
-    { &IID_IAccessibleText, &createAggInstance<CAccText>, XI_TEXT },
-    { &IID_IAccessibleEditableText, &createAggInstance<CAccEditableText>, XI_EDITABLETEXT },
-    { &IID_IAccessibleImage, &createAggInstance<CAccImage>, XI_IMAGE },
-    { &IID_IAccessibleTable, &createAggInstance<CAccTable>, XI_TABLE },
-    { &IID_IAccessibleAction, &createAggInstance<CAccAction>, XI_ACTION },
-    { &IID_IAccessibleValue, &createAggInstance<CAccValue>, XI_VALUE },
-    { &IID_IAccessibleHypertext, &createAggInstance<CAccHypertext>, XI_HYPERTEXT },
-    { &IID_IAccessibleHyperlink, &createAggInstance<CAccHyperLink>, XI_HYPERLINK }
+    { &IID_IAccessibleComponent, &createAggInstance<CAccComponent>, XInterfaceType::XI_COMPONENT },
+    { &IID_IAccessibleText, &createAggInstance<CAccText>, XInterfaceType::XI_TEXT },
+    { &IID_IAccessibleEditableText, &createAggInstance<CAccEditableText>, XInterfaceType::XI_EDITABLETEXT },
+    { &IID_IAccessibleImage, &createAggInstance<CAccImage>, XInterfaceType::XI_IMAGE },
+    { &IID_IAccessibleTable, &createAggInstance<CAccTable>, XInterfaceType::XI_TABLE },
+    { &IID_IAccessibleAction, &createAggInstance<CAccAction>, XInterfaceType::XI_ACTION },
+    { &IID_IAccessibleValue, &createAggInstance<CAccValue>, XInterfaceType::XI_VALUE },
+    { &IID_IAccessibleHypertext, &createAggInstance<CAccHypertext>, XInterfaceType::XI_HYPERTEXT },
+    { &IID_IAccessibleHyperlink, &createAggInstance<CAccHyperLink>, XInterfaceType::XI_HYPERLINK }
 };
 
 
@@ -2593,7 +2592,7 @@ HRESULT WINAPI CMAccessible::SmartQI(void* /*pv*/, REFIID iid, void** ppvObject)
 
             XInterface* pXI = nullptr;
             bool bFound = GetXInterfaceFromXAccessible(m_xAccessible.get(),
-                                &pXI, rEntry.XIFIndex);
+                                &pXI, rEntry.eXInterfaceType);
             if(!bFound)
             {
                 return E_FAIL;

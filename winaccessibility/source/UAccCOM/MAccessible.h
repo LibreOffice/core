@@ -29,6 +29,10 @@
 #include "acccommon.h"
 #include <rtl/ustring.hxx>
 
+namespace {
+enum class XInterfaceType;
+}
+
 #define     OBJID_WINDOW        ((LONG)0x00000000)
 #define     OBJID_SYSMENU       ((LONG)0xFFFFFFFF)
 #define     OBJID_TITLEBAR      ((LONG)0xFFFFFFFE)
@@ -218,7 +222,7 @@ private:
     css::uno::Reference<css::accessibility::XAccessibleSelection> GetSelection();
     // end accSelect implementation methods
     static bool GetXInterfaceFromXAccessible(css::accessibility::XAccessible*,
-            css::uno::XInterface**, int);
+            css::uno::XInterface**, XInterfaceType);
     HRESULT WINAPI SmartQI(void* pv, REFIID iid, void** ppvObject);
 
 public:
