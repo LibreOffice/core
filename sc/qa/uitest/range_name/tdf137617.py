@@ -25,18 +25,15 @@ class tdf137617(UITestCase):
 
         gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:B2"}))
 
-        self.ui_test.execute_dialog_through_command(".uno:CreateNames")
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:CreateNames") as xDialog:
 
-        xDialog = self.xUITest.getTopFocusWindow()
 
-        # Only left is selected
-        self.assertEqual('true', get_state_as_dict(xDialog.getChild('left'))['Selected'])
-        self.assertEqual('false', get_state_as_dict(xDialog.getChild('right'))['Selected'])
-        self.assertEqual('false', get_state_as_dict(xDialog.getChild('bottom'))['Selected'])
-        self.assertEqual('false', get_state_as_dict(xDialog.getChild('top'))['Selected'])
+            # Only left is selected
+            self.assertEqual('true', get_state_as_dict(xDialog.getChild('left'))['Selected'])
+            self.assertEqual('false', get_state_as_dict(xDialog.getChild('right'))['Selected'])
+            self.assertEqual('false', get_state_as_dict(xDialog.getChild('bottom'))['Selected'])
+            self.assertEqual('false', get_state_as_dict(xDialog.getChild('top'))['Selected'])
 
-        xOkBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOkBtn)
 
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "B1"}))
 
@@ -48,38 +45,32 @@ class tdf137617(UITestCase):
         self.assertEqual('Result2', get_state_as_dict(xPosWindow)['Text'])
 
         # Change formula syntax to "Excel R1C1"
-        self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog")
-        xDialogOpt = self.xUITest.getTopFocusWindow()
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:OptionsTreeDialog") as xDialogOpt:
 
-        xPages = xDialogOpt.getChild("pages")
-        xCalcEntry = xPages.getChild('3')
-        xCalcEntry.executeAction("EXPAND", tuple())
-        xCalcFormulaEntry = xCalcEntry.getChild('4')
-        xCalcFormulaEntry.executeAction("SELECT", tuple())
+            xPages = xDialogOpt.getChild("pages")
+            xCalcEntry = xPages.getChild('3')
+            xCalcEntry.executeAction("EXPAND", tuple())
+            xCalcFormulaEntry = xCalcEntry.getChild('4')
+            xCalcFormulaEntry.executeAction("SELECT", tuple())
 
-        xFormulaSyntax = xDialogOpt.getChild('formulasyntax')
-        select_by_text(xFormulaSyntax, "Excel R1C1")
+            xFormulaSyntax = xDialogOpt.getChild('formulasyntax')
+            select_by_text(xFormulaSyntax, "Excel R1C1")
 
-        xOKBtn = xDialogOpt.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKBtn)
 
         enter_text_to_cell(gridwin, "C1", "Result3")
         enter_text_to_cell(gridwin, "D1", "Result4")
 
         gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "C1:D2"}))
 
-        self.ui_test.execute_dialog_through_command(".uno:CreateNames")
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:CreateNames") as xDialog:
 
-        xDialog = self.xUITest.getTopFocusWindow()
 
-        # Only top is selected
-        self.assertEqual('false', get_state_as_dict(xDialog.getChild('left'))['Selected'])
-        self.assertEqual('false', get_state_as_dict(xDialog.getChild('right'))['Selected'])
-        self.assertEqual('false', get_state_as_dict(xDialog.getChild('bottom'))['Selected'])
-        self.assertEqual('true', get_state_as_dict(xDialog.getChild('top'))['Selected'])
+            # Only top is selected
+            self.assertEqual('false', get_state_as_dict(xDialog.getChild('left'))['Selected'])
+            self.assertEqual('false', get_state_as_dict(xDialog.getChild('right'))['Selected'])
+            self.assertEqual('false', get_state_as_dict(xDialog.getChild('bottom'))['Selected'])
+            self.assertEqual('true', get_state_as_dict(xDialog.getChild('top'))['Selected'])
 
-        xOkBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOkBtn)
 
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "C2"}))
 
@@ -92,20 +83,17 @@ class tdf137617(UITestCase):
         self.assertEqual('Result4', get_state_as_dict(xPosWindow)['Text'])
 
         # Change formula syntax back to "Calc A1"
-        self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog")
-        xDialogOpt = self.xUITest.getTopFocusWindow()
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:OptionsTreeDialog") as xDialogOpt:
 
-        xPages = xDialogOpt.getChild("pages")
-        xCalcEntry = xPages.getChild('3')
-        xCalcEntry.executeAction("EXPAND", tuple())
-        xCalcFormulaEntry = xCalcEntry.getChild('4')
-        xCalcFormulaEntry.executeAction("SELECT", tuple())
+            xPages = xDialogOpt.getChild("pages")
+            xCalcEntry = xPages.getChild('3')
+            xCalcEntry.executeAction("EXPAND", tuple())
+            xCalcFormulaEntry = xCalcEntry.getChild('4')
+            xCalcFormulaEntry.executeAction("SELECT", tuple())
 
-        xFormulaSyntax = xDialogOpt.getChild('formulasyntax')
-        select_by_text(xFormulaSyntax, "Calc A1")
+            xFormulaSyntax = xDialogOpt.getChild('formulasyntax')
+            select_by_text(xFormulaSyntax, "Calc A1")
 
-        xOKBtn = xDialogOpt.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKBtn)
 
         self.ui_test.close_doc()
 

@@ -16,12 +16,9 @@ class tdf37623(UITestCase):
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A2:A6"}))
-            self.ui_test.execute_dialog_through_command(".uno:FillSeries")
-            xDialog = self.xUITest.getTopFocusWindow()
-            xautofill = xDialog.getChild("autofill")
-            xautofill.executeAction("CLICK", tuple())
-            xOK = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOK)
+            with self.ui_test.execute_dialog_through_command_guarded(".uno:FillSeries") as xDialog:
+                xautofill = xDialog.getChild("autofill")
+                xautofill.executeAction("CLICK", tuple())
 
             self.assertEqual(get_cell_by_position(calc_doc, 0, 0, 1).getValue(), 1)
             self.assertEqual(get_cell_by_position(calc_doc, 0, 0, 2).getValue(), 0)

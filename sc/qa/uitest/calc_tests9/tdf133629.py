@@ -16,10 +16,8 @@ class tdf133629(UITestCase):
         gridwin = xCalcDoc.getChild("grid_window")
         document = self.ui_test.get_component()
 
-        self.ui_test.execute_dialog_through_command(".uno:Insert")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xOKButton = xDialog.getChild("ok")
-        xOKButton.executeAction("CLICK", tuple())
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:Insert"):
+            pass
 
         self.xUITest.executeCommand(".uno:TableSelectAll")
 
@@ -29,22 +27,19 @@ class tdf133629(UITestCase):
         self.assertIsNotNone(getattr(document.CurrentSelection, 'Sheet1.A1:AMJ1048576'))
         self.assertIsNotNone(getattr(document.CurrentSelection, 'Sheet1.A2:AMJ1048576'))
 
-        self.ui_test.execute_dialog_through_command(".uno:FormatCellDialog")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xTabs = xDialog.getChild("tabcontrol")
-        select_pos(xTabs, "5")
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:FormatCellDialog") as xDialog:
+            xTabs = xDialog.getChild("tabcontrol")
+            select_pos(xTabs, "5")
 
-        xPresets = xDialog.getChild("presets")
-        xPresets.executeAction("CHOOSE", mkPropertyValues({"POS": "4"}))
+            xPresets = xDialog.getChild("presets")
+            xPresets.executeAction("CHOOSE", mkPropertyValues({"POS": "4"}))
 
-        # Change width
-        xLineWidth = xDialog.getChild("linewidthmf")
-        xLineWidth.executeAction("UP", tuple())
-        xLineWidth.executeAction("UP", tuple())
-        self.assertEqual("1.25 pt", get_state_as_dict(xLineWidth)['Text'])
+            # Change width
+            xLineWidth = xDialog.getChild("linewidthmf")
+            xLineWidth.executeAction("UP", tuple())
+            xLineWidth.executeAction("UP", tuple())
+            self.assertEqual("1.25 pt", get_state_as_dict(xLineWidth)['Text'])
 
-        xOk = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOk)
 
         # Without the fix in place, this test would have crash here
 

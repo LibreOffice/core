@@ -20,36 +20,30 @@ class tdf123508(UITestCase):
         xCalcDoc = self.xUITest.getTopFocusWindow()
         gridwin = xCalcDoc.getChild("grid_window")
         #open "Format > Page - Sheet > Scale
-        self.ui_test.execute_dialog_through_command(".uno:PageFormatDialog")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xTabs = xDialog.getChild("tabcontrol")
-        select_pos(xTabs, "6")  #tab Scale
-        scalingMode = xDialog.getChild("comboLB_SCALEMODE")
-        spinEDSCALEPAGEWIDTH = xDialog.getChild("spinED_SCALEPAGEWIDTH")
-        spinEDSCALEPAGEHEIGHT = xDialog.getChild("spinED_SCALEPAGEHEIGHT")
-        #select "Fit print range(s) to width/height"  from the scale mode drop-down list
-        select_by_text(scalingMode, "Fit print range(s) to width/height")
-        #define a value for the page, e.g.: width   2; height  2
-        spinEDSCALEPAGEWIDTH.executeAction("UP", tuple())
-        spinEDSCALEPAGEHEIGHT.executeAction("UP", tuple())
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:PageFormatDialog") as xDialog:
+            xTabs = xDialog.getChild("tabcontrol")
+            select_pos(xTabs, "6")  #tab Scale
+            scalingMode = xDialog.getChild("comboLB_SCALEMODE")
+            spinEDSCALEPAGEWIDTH = xDialog.getChild("spinED_SCALEPAGEWIDTH")
+            spinEDSCALEPAGEHEIGHT = xDialog.getChild("spinED_SCALEPAGEHEIGHT")
+            #select "Fit print range(s) to width/height"  from the scale mode drop-down list
+            select_by_text(scalingMode, "Fit print range(s) to width/height")
+            #define a value for the page, e.g.: width   2; height  2
+            spinEDSCALEPAGEWIDTH.executeAction("UP", tuple())
+            spinEDSCALEPAGEHEIGHT.executeAction("UP", tuple())
 
-        xOKBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKBtn)
 
         #verify
-        self.ui_test.execute_dialog_through_command(".uno:PageFormatDialog")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xTabs = xDialog.getChild("tabcontrol")
-        select_pos(xTabs, "6")  #tab Scale
-        scalingMode = xDialog.getChild("comboLB_SCALEMODE")
-        spinEDSCALEPAGEWIDTH = xDialog.getChild("spinED_SCALEPAGEWIDTH")
-        spinEDSCALEPAGEHEIGHT = xDialog.getChild("spinED_SCALEPAGEHEIGHT")
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:PageFormatDialog", close_button="cancel") as xDialog:
+            xTabs = xDialog.getChild("tabcontrol")
+            select_pos(xTabs, "6")  #tab Scale
+            scalingMode = xDialog.getChild("comboLB_SCALEMODE")
+            spinEDSCALEPAGEWIDTH = xDialog.getChild("spinED_SCALEPAGEWIDTH")
+            spinEDSCALEPAGEHEIGHT = xDialog.getChild("spinED_SCALEPAGEHEIGHT")
 
-        self.assertEqual(get_state_as_dict(scalingMode)["SelectEntryText"], "Fit print range(s) to width/height")
-        self.assertEqual(get_state_as_dict(spinEDSCALEPAGEWIDTH)["Text"], "2")
-        self.assertEqual(get_state_as_dict(spinEDSCALEPAGEHEIGHT)["Text"], "2")
+            self.assertEqual(get_state_as_dict(scalingMode)["SelectEntryText"], "Fit print range(s) to width/height")
+            self.assertEqual(get_state_as_dict(spinEDSCALEPAGEWIDTH)["Text"], "2")
+            self.assertEqual(get_state_as_dict(spinEDSCALEPAGEHEIGHT)["Text"], "2")
 
-        xCancelBtn = xDialog.getChild("cancel")
-        self.ui_test.close_dialog_through_button(xCancelBtn)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

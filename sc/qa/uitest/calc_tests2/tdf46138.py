@@ -19,12 +19,9 @@ class tdf46138(UITestCase):
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
         self.xUITest.executeCommand(".uno:SelectColumn")
         #select 'edit'>'fill'>'series'>Starting Value '1' then "OK",
-        self.ui_test.execute_dialog_through_command(".uno:FillSeries")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xStart = xDialog.getChild("startValue")
-        xStart.executeAction("TYPE", mkPropertyValues({"TEXT":"1"}))
-        xOK = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOK)
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:FillSeries") as xDialog:
+            xStart = xDialog.getChild("startValue")
+            xStart.executeAction("TYPE", mkPropertyValues({"TEXT":"1"}))
         self.assertEqual(get_cell_by_position(document, 0, 0, 0).getString(), "1")
         #then "Ctrl+Z"/ undo
         self.xUITest.executeCommand(".uno:Undo")

@@ -23,35 +23,29 @@ class tdf65686(UITestCase):
         #- Select Allow List
         #- Enter Entries Aap Noot Mies
         #- OK
-        self.ui_test.execute_dialog_through_command(".uno:Validation")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xTabs = xDialog.getChild("tabcontrol")
-        select_pos(xTabs, "0")
-        xallow = xDialog.getChild("allow")
-        xallowempty = xDialog.getChild("allowempty")
-        minlist = xDialog.getChild("minlist")
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:Validation") as xDialog:
+            xTabs = xDialog.getChild("tabcontrol")
+            select_pos(xTabs, "0")
+            xallow = xDialog.getChild("allow")
+            xallowempty = xDialog.getChild("allowempty")
+            minlist = xDialog.getChild("minlist")
 
-        select_by_text(xallow, "List")
-        minlist.executeAction("TYPE", mkPropertyValues({"TEXT":"Aap"}))
-        minlist.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RETURN"}))
-        minlist.executeAction("TYPE", mkPropertyValues({"TEXT":"Noot"}))
-        minlist.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RETURN"}))
-        minlist.executeAction("TYPE", mkPropertyValues({"TEXT":"Mies"}))
-        xOKBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKBtn)
+            select_by_text(xallow, "List")
+            minlist.executeAction("TYPE", mkPropertyValues({"TEXT":"Aap"}))
+            minlist.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RETURN"}))
+            minlist.executeAction("TYPE", mkPropertyValues({"TEXT":"Noot"}))
+            minlist.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RETURN"}))
+            minlist.executeAction("TYPE", mkPropertyValues({"TEXT":"Mies"}))
         #- again open Data > Validity
         #> there are empty lines in the list Entries
-        self.ui_test.execute_dialog_through_command(".uno:Validation")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xallow = xDialog.getChild("allow")
-        xallowempty = xDialog.getChild("allowempty")
-        minlist = xDialog.getChild("minlist")
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:Validation") as xDialog:
+            xallow = xDialog.getChild("allow")
+            xallowempty = xDialog.getChild("allowempty")
+            minlist = xDialog.getChild("minlist")
 
-        self.assertEqual(get_state_as_dict(xallow)["SelectEntryText"], "List")
-        self.assertEqual(get_state_as_dict(minlist)["Text"], "Aap\nNoot\nMies")
+            self.assertEqual(get_state_as_dict(xallow)["SelectEntryText"], "List")
+            self.assertEqual(get_state_as_dict(minlist)["Text"], "Aap\nNoot\nMies")
 
-        xOKBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKBtn)
 
         self.ui_test.close_doc()
 

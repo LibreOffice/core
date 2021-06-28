@@ -25,26 +25,20 @@ class scenarios(UITestCase):
         enter_text_to_cell(xGridWindow, "B4", "1")
         xGridWindow.executeAction("SELECT", mkPropertyValues({"RANGE": "B1:B4"}))
         #scenarios - scenario A1
-        self.ui_test.execute_dialog_through_command(".uno:ScenarioManager")
-        xDialog = self.xUITest.getTopFocusWindow()
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:ScenarioManager") as xDialog:
 
-        name = xDialog.getChild("name")
-        name.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
-        name.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
-        name.executeAction("TYPE", mkPropertyValues({"TEXT":"A1"}))
-        xOKBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKBtn)
+            name = xDialog.getChild("name")
+            name.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+            name.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+            name.executeAction("TYPE", mkPropertyValues({"TEXT":"A1"}))
 
         #next scenarios - scenario B1
-        self.ui_test.execute_dialog_through_command(".uno:ScenarioManager")
-        xDialog = self.xUITest.getTopFocusWindow()
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:ScenarioManager") as xDialog:
 
-        name = xDialog.getChild("name")
-        name.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
-        name.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
-        name.executeAction("TYPE", mkPropertyValues({"TEXT":"B1"}))
-        xOKBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKBtn)
+            name = xDialog.getChild("name")
+            name.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+            name.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+            name.executeAction("TYPE", mkPropertyValues({"TEXT":"B1"}))
 
         self.ui_test.close_doc()
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
