@@ -19,10 +19,8 @@ class tdf121949 (UITestCase):
         gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "B1:B1", "EXTEND":"1"}))
         gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "B3:B3", "EXTEND":"1"}))
         gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "C1:C3", "EXTEND":"1"}))
-        self.ui_test.execute_dialog_through_command(".uno:Copy")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xOKBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKBtn)
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:Copy"):
+            pass
 
         self.ui_test.close_doc()
 

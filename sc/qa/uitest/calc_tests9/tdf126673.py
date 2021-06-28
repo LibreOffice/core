@@ -25,22 +25,16 @@ class tdf126673(UITestCase):
             #select A2
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A2"}))
             #optimal row height
-            self.ui_test.execute_dialog_through_command(".uno:SetOptimalRowHeight")
-            xDialog = self.xUITest.getTopFocusWindow()
-            # Click Ok
-            xOK = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOK)
+            with self.ui_test.execute_dialog_through_command_guarded(".uno:SetOptimalRowHeight") as xDialog:
+                pass
+
             #select A2
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A2"}))
             #row height
-            self.ui_test.execute_dialog_through_command(".uno:RowHeight")
-            xDialog = self.xUITest.getTopFocusWindow()
-            xvalue = xDialog.getChild("value")
-            heightStrOrig = get_state_as_dict(xvalue)["Text"]
-            heightVal = heightStrOrig[:4]  #default 0.45 cm,
-            self.assertEqual(heightVal > '0.45', True)  #new value is bigger then default
-            # Click Ok
-            xcancel = xDialog.getChild("cancel")
-            self.ui_test.close_dialog_through_button(xcancel)
+            with self.ui_test.execute_dialog_through_command_guarded(".uno:RowHeight", close_button="cancel") as xDialog:
+                xvalue = xDialog.getChild("value")
+                heightStrOrig = get_state_as_dict(xvalue)["Text"]
+                heightVal = heightStrOrig[:4]  #default 0.45 cm,
+                self.assertEqual(heightVal > '0.45', True)  #new value is bigger then default
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

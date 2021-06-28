@@ -14,19 +14,13 @@ class sheetRename(UITestCase):
         xCalcDoc = self.xUITest.getTopFocusWindow()
         gridwin = xCalcDoc.getChild("grid_window")
         document = self.ui_test.get_component()
-        self.ui_test.execute_dialog_through_command(".uno:RenameTable")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xname_entry = xDialog.getChild("name_entry")
-        xname_entry.executeAction("TYPE", mkPropertyValues({"TEXT":"NewName"}))
-        xOKBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKBtn)
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:RenameTable") as xDialog:
+            xname_entry = xDialog.getChild("name_entry")
+            xname_entry.executeAction("TYPE", mkPropertyValues({"TEXT":"NewName"}))
         #Verify
-        self.ui_test.execute_dialog_through_command(".uno:RenameTable")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xname_entry = xDialog.getChild("name_entry")
-        self.assertEqual(get_state_as_dict(xname_entry)["Text"], "NewName")
-        xCancelBtn = xDialog.getChild("cancel")
-        self.ui_test.close_dialog_through_button(xCancelBtn)
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:RenameTable", close_button="cancel") as xDialog:
+            xname_entry = xDialog.getChild("name_entry")
+            self.assertEqual(get_state_as_dict(xname_entry)["Text"], "NewName")
 
         self.ui_test.close_doc()
 
@@ -35,26 +29,22 @@ class sheetRename(UITestCase):
         xCalcDoc = self.xUITest.getTopFocusWindow()
         gridwin = xCalcDoc.getChild("grid_window")
         document = self.ui_test.get_component()
-        self.ui_test.execute_dialog_through_command(".uno:RenameTable")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xname_entry = xDialog.getChild("name_entry")
-        nameVal = get_state_as_dict(xname_entry)["Text"]
-        xname_entry.executeAction("TYPE", mkPropertyValues({"TEXT":"NewName**"}))
-        xOKBtn = xDialog.getChild("ok")
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:RenameTable", close_button="") as xDialog:
+            xname_entry = xDialog.getChild("name_entry")
+            nameVal = get_state_as_dict(xname_entry)["Text"]
+            xname_entry.executeAction("TYPE", mkPropertyValues({"TEXT":"NewName**"}))
+            xOKBtn = xDialog.getChild("ok")
 
-        with self.ui_test.execute_blocking_action(xOKBtn.executeAction, args=('CLICK', ())):
-            pass
+            with self.ui_test.execute_blocking_action(xOKBtn.executeAction, args=('CLICK', ())):
+                pass
 
-        xCancelBtn = xDialog.getChild("cancel")
-        self.ui_test.close_dialog_through_button(xCancelBtn)
+            xCancelBtn = xDialog.getChild("cancel")
+            self.ui_test.close_dialog_through_button(xCancelBtn)
 
         #Verify
-        self.ui_test.execute_dialog_through_command(".uno:RenameTable")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xname_entry = xDialog.getChild("name_entry")
-        self.assertEqual(get_state_as_dict(xname_entry)["Text"], nameVal)
-        xOKBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKBtn)
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:RenameTable") as xDialog:
+            xname_entry = xDialog.getChild("name_entry")
+            self.assertEqual(get_state_as_dict(xname_entry)["Text"], nameVal)
 
         self.ui_test.close_doc()
 

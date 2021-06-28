@@ -31,15 +31,12 @@ class tdf99773(UITestCase):
 
         gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:A6"}))
         #Open sort dialog by DATA - SORT
-        self.ui_test.execute_dialog_through_command(".uno:DataSort")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xTabs = xDialog.getChild("tabcontrol")
-        select_pos(xTabs, "1")
-        xNatural = xDialog.getChild("naturalsort")
-        if (get_state_as_dict(xNatural)["Selected"]) == "false":
-            xNatural.executeAction("CLICK", tuple())
-        xOk = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOk)
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:DataSort") as xDialog:
+            xTabs = xDialog.getChild("tabcontrol")
+            select_pos(xTabs, "1")
+            xNatural = xDialog.getChild("naturalsort")
+            if (get_state_as_dict(xNatural)["Selected"]) == "false":
+                xNatural.executeAction("CLICK", tuple())
         #Verify
         self.assertEqual(get_cell_by_position(document, 0, 0, 0).getString(), "A 2")
         self.assertEqual(get_cell_by_position(document, 0, 0, 1).getString(), "A 5")

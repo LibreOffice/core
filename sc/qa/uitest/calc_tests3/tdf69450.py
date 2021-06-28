@@ -23,21 +23,18 @@ class tdf69450(UITestCase):
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
         self.xUITest.executeCommand(".uno:Copy")
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "B1"}))
-        self.ui_test.execute_dialog_through_command(".uno:PasteSpecial")
-        xDialog = self.xUITest.getTopFocusWindow()
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:PasteSpecial") as xDialog:
 
-        xtext = xDialog.getChild("text")
-        xnumbers = xDialog.getChild("numbers")
-        xdatetime = xDialog.getChild("datetime")
-        xformats = xDialog.getChild("formats")
+            xtext = xDialog.getChild("text")
+            xnumbers = xDialog.getChild("numbers")
+            xdatetime = xDialog.getChild("datetime")
+            xformats = xDialog.getChild("formats")
 
-        xtext.executeAction("CLICK", tuple())
-        xnumbers.executeAction("CLICK", tuple())
-        xdatetime.executeAction("CLICK", tuple())
-        xformats.executeAction("CLICK", tuple())
+            xtext.executeAction("CLICK", tuple())
+            xnumbers.executeAction("CLICK", tuple())
+            xdatetime.executeAction("CLICK", tuple())
+            xformats.executeAction("CLICK", tuple())
 
-        xOkBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOkBtn)
 
         #check B1 text
         self.assertEqual(get_cell_by_position(document, 0, 1, 0).getString(), "B")
@@ -46,11 +43,8 @@ class tdf69450(UITestCase):
         self.xUITest.executeCommand(".uno:Bold")
         self.xUITest.executeCommand(".uno:Copy")
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "B1"}))
-        self.ui_test.execute_dialog_through_command(".uno:PasteSpecial")
-        xDialog = self.xUITest.getTopFocusWindow() #previous settings should be remembered (only format)
-
-        xOkBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOkBtn)
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:PasteSpecial"):
+            pass
 
         #check B1 text
         self.assertEqual(get_cell_by_position(document, 0, 1, 0).getString(), "B")

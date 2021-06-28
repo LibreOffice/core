@@ -12,21 +12,18 @@ class Tdf104026(UITestCase):
 
   def execute_conditional_format_manager_dialog(self, nCount):
 
-    self.ui_test.execute_dialog_through_command(".uno:ConditionalFormatManagerDialog")
-    xCondFormatMgr = self.xUITest.getTopFocusWindow()
+    with self.ui_test.execute_dialog_through_command_guarded(".uno:ConditionalFormatManagerDialog") as xCondFormatMgr:
 
-    aExpectedResults = ['A2\tCell value != $Sheet1.$B2', 'A3\tCell value != $Sheet1.$B3',
-        'A4\tCell value != $Sheet1.$B4', 'A5\tCell value != $Sheet1.$B5',
-        'A6\tCell value != $Sheet1.$B6', 'A7\tCell value != $Sheet1.$B7']
+        aExpectedResults = ['A2\tCell value != $Sheet1.$B2', 'A3\tCell value != $Sheet1.$B3',
+            'A4\tCell value != $Sheet1.$B4', 'A5\tCell value != $Sheet1.$B5',
+            'A6\tCell value != $Sheet1.$B6', 'A7\tCell value != $Sheet1.$B7']
 
-    xList = xCondFormatMgr.getChild("CONTAINER")
-    self.assertEqual(nCount, len(xList.getChildren()))
+        xList = xCondFormatMgr.getChild("CONTAINER")
+        self.assertEqual(nCount, len(xList.getChildren()))
 
-    for i in range(nCount):
-        self.assertEqual(aExpectedResults[i], get_state_as_dict(xList.getChild(str(i)))['Text'])
+        for i in range(nCount):
+            self.assertEqual(aExpectedResults[i], get_state_as_dict(xList.getChild(str(i)))['Text'])
 
-    xOKBtn = xCondFormatMgr.getChild("ok")
-    self.ui_test.close_dialog_through_button(xOKBtn)
 
   def test_tdf104026(self):
     with self.ui_test.load_file(get_url_for_data_file("tdf104026.ods")):

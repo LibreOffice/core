@@ -24,10 +24,8 @@ class tdf46062(UITestCase):
 
         gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:A4"}))
 
-        self.ui_test.execute_dialog_through_command(".uno:DataFilterAutoFilter")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xYesBtn = xDialog.getChild("yes")
-        self.ui_test.close_dialog_through_button(xYesBtn)
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:DataFilterAutoFilter", close_button="yes"):
+            pass
 
         gridwin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "0", "ROW": "0"}))
         xFloatWindow = self.xUITest.getFloatWindow()

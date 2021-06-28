@@ -37,12 +37,9 @@ class navigator(UITestCase):
             self.assertEqual(len(xComments.getChildren()), 1)
             self.assertEqual(get_state_as_dict(xComments.getChild('0'))['Text'], 'Test Comment')
 
-            self.ui_test.execute_dialog_through_command(".uno:RenameTable")
-            xDialog = self.xUITest.getTopFocusWindow()
-            xname_entry = xDialog.getChild("name_entry")
-            xname_entry.executeAction("TYPE", mkPropertyValues({"TEXT": "S1"}))
-            xOKBtn = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOKBtn)
+            with self.ui_test.execute_dialog_through_command_guarded(".uno:RenameTable") as xDialog:
+                xname_entry = xDialog.getChild("name_entry")
+                xname_entry.executeAction("TYPE", mkPropertyValues({"TEXT": "S1"}))
 
             xCalcDoc = self.xUITest.getTopFocusWindow()
             xNavigatorPanel = xCalcDoc.getChild("NavigatorPanel")

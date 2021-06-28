@@ -16,39 +16,29 @@ class hideShowSheet(UITestCase):
         gridwin = xCalcDoc.getChild("grid_window")
         document = self.ui_test.get_component()
         #insert sheet
-        self.ui_test.execute_dialog_through_command(".uno:Insert")
-        current_dialog = self.xUITest.getTopFocusWindow()
-        xOkButton = current_dialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOkButton)
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:Insert"):
+            pass
         #select sheet
         gridwin.executeAction("SELECT", mkPropertyValues({"TABLE":"1"}))
         self.assertEqual(get_state_as_dict(gridwin)["SelectedTable"], "1")
         #hide sheet
         self.xUITest.executeCommand(".uno:Hide")
         #show sheet Dialog
-        self.ui_test.execute_dialog_through_command(".uno:Show")
-        xDialog = self.xUITest.getTopFocusWindow()
-        treeview = xDialog.getChild("treeview")
-        self.assertEqual(get_state_as_dict(treeview)["Children"], "1")
-        xcancel = xDialog.getChild("cancel")
-        self.ui_test.close_dialog_through_button(xcancel)
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:Show", close_button="cancel") as xDialog:
+            treeview = xDialog.getChild("treeview")
+            self.assertEqual(get_state_as_dict(treeview)["Children"], "1")
         #insert 2nd sheet
-        self.ui_test.execute_dialog_through_command(".uno:Insert")
-        current_dialog = self.xUITest.getTopFocusWindow()
-        xOkButton = current_dialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOkButton)
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:Insert"):
+            pass
         #select sheet
         gridwin.executeAction("SELECT", mkPropertyValues({"TABLE":"2"}))
         self.assertEqual(get_state_as_dict(gridwin)["SelectedTable"], "1")
         #hide sheet
         self.xUITest.executeCommand(".uno:Hide")
         #show sheet Dialog
-        self.ui_test.execute_dialog_through_command(".uno:Show")
-        xDialog = self.xUITest.getTopFocusWindow()
-        treeview = xDialog.getChild("treeview")
-        self.assertEqual(get_state_as_dict(treeview)["Children"], "2")
-        xcancel = xDialog.getChild("cancel")
-        self.ui_test.close_dialog_through_button(xcancel)
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:Show", close_button="cancel") as xDialog:
+            treeview = xDialog.getChild("treeview")
+            self.assertEqual(get_state_as_dict(treeview)["Children"], "2")
 
         self.ui_test.close_doc()
 
