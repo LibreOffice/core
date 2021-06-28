@@ -2227,6 +2227,50 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf142196)
     assertXPath(pXmlDoc2, "//line", 0);
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf142700)
+{
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf142700.fodt");
+
+    //turn on red-lining and show changes
+    pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On | RedlineFlags::ShowDelete
+                                                      | RedlineFlags::ShowInsert);
+    CPPUNIT_ASSERT_MESSAGE("redlining should be on",
+                           pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+    CPPUNIT_ASSERT_MESSAGE(
+        "redlines should be visible",
+        IDocumentRedlineAccess::IsShowChanges(pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
+
+    // Dump the rendering of the first page as an XML file.
+    SwDocShell* pShell = pDoc->GetDocShell();
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // (2 lines = crossing out of the deleted image + 1 line for the
+    // vertical "changed line" indicator before the paragraph line)
+    assertXPath(pXmlDoc, "//line", 3);
+
+    // check line color
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[1]/push[3]/push[1]/push[1]/linecolor", 1);
+    // tdf#142128 This was NON_PRINTING_CHARACTER_COLOR (#268bd2)
+    assertXPath(
+        pXmlDoc,
+        "/metafile/push[1]/push[1]/push[1]/push[3]/push[1]/push[1]/linecolor[@color='#268bd2']", 0);
+
+    // reject deletion of the image
+    IDocumentRedlineAccess& rIDRA(pDoc->getIDocumentRedlineAccess());
+    rIDRA.AcceptAllRedline(false);
+
+    xMetaFile = pShell->GetPreviewMetaFile();
+    xmlDocUniquePtr pXmlDoc2 = dumpAndParse(dumper, *xMetaFile);
+
+    // no crossing out and vertical "changed line" indicator
+    // This was 2 (not removed strikethrough)
+    assertXPath(pXmlDoc2, "//line", 0);
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf139120)
 {
     SwDoc* pDoc = createDoc("tdf54819.fodt");
