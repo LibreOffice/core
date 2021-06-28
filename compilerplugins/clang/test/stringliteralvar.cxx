@@ -110,4 +110,12 @@ void f11(int nStreamType)
     (void)sStreamType;
 }
 
+void f12()
+{
+// expected-error@+1 {{change type of macro constant from constant character array to OUStringLiteral, and make it static [loplugin:stringliteralvar]}}
+#define LITERAL "foo"
+    // expected-note@+1 {{first passed into a 'rtl::OUString' constructor here [loplugin:stringliteralvar]}}
+    f(LITERAL);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

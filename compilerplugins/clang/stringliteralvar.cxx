@@ -112,45 +112,78 @@ public:
             break;
             case 2:
             {
-                auto const e1 = dyn_cast<DeclRefExpr>(expr->getArg(0)->IgnoreParenImpCasts());
-                if (e1 == nullptr)
+                if (auto const e1 = dyn_cast<DeclRefExpr>(expr->getArg(0)->IgnoreParenImpCasts()))
                 {
-                    return true;
+                    auto const t = e1->getType();
+                    if (!(t.isConstQualified() && t->isConstantArrayType()))
+                    {
+                        return true;
+                    }
+                    auto const e2 = expr->getArg(1);
+                    if (!((isa<CXXDefaultArgExpr>(e2)
+                           && loplugin::TypeCheck(e2->getType())
+                                  .Struct("Dummy")
+                                  .Namespace("libreoffice_internal")
+                                  .Namespace("rtl")
+                                  .GlobalNamespace())
+                          || (loplugin::TypeCheck(ctor->getParamDecl(1)->getType())
+                                  .Typedef("sal_Int32")
+                                  .GlobalNamespace()
+                              && e2->isIntegerConstantExpr(compiler.getASTContext()))))
+                    {
+                        return true;
+                    }
+                    auto const d = e1->getDecl();
+                    if (!reportedArray_.insert(d).second)
+                    {
+                        return true;
+                    }
+                    report(
+                        DiagnosticsEngine::Warning,
+                        "change type of variable %0 from constant character array (%1) to "
+                        "%select{OStringLiteral|OUStringLiteral}2%select{|, and make it static}3",
+                        d->getLocation())
+                        << d << d->getType()
+                        << (tc.Class("OString").Namespace("rtl").GlobalNamespace() ? 0 : 1)
+                        << isAutomaticVariable(cast<VarDecl>(d)) << d->getSourceRange();
+                    report(DiagnosticsEngine::Note, "first passed into a %0 constructor here",
+                           expr->getLocation())
+                        << expr->getType().getUnqualifiedType() << expr->getSourceRange();
                 }
-                auto const t = e1->getType();
-                if (!(t.isConstQualified() && t->isConstantArrayType()))
+                else if (auto const e1
+                         = dyn_cast<clang::StringLiteral>(expr->getArg(0)->IgnoreParenImpCasts()))
                 {
-                    return true;
+                    if (!compat::getBeginLoc(e1).isMacroID())
+                        return true;
+                    auto const e2 = expr->getArg(1);
+                    if (!((isa<CXXDefaultArgExpr>(e2)
+                           && loplugin::TypeCheck(e2->getType())
+                                  .Struct("Dummy")
+                                  .Namespace("libreoffice_internal")
+                                  .Namespace("rtl")
+                                  .GlobalNamespace())
+                          || (loplugin::TypeCheck(ctor->getParamDecl(1)->getType())
+                                  .Typedef("sal_Int32")
+                                  .GlobalNamespace()
+                              && e2->isIntegerConstantExpr(compiler.getASTContext()))))
+                    {
+                        return true;
+                    }
+                    auto spellingLoc
+                        = compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(e1));
+                    if (ignoreLocation(spellingLoc))
+                        return true;
+                    if (isInUnoIncludeFile(spellingLoc))
+                        return true;
+                    report(DiagnosticsEngine::Warning,
+                           "change type of macro constant from constant character array to "
+                           "%select{OStringLiteral|OUStringLiteral}0, and make it constexpr",
+                           spellingLoc)
+                        << (tc.Class("OString").Namespace("rtl").GlobalNamespace() ? 0 : 1);
+                    report(DiagnosticsEngine::Note, "first passed into a %0 constructor here",
+                           expr->getLocation())
+                        << expr->getType().getUnqualifiedType() << expr->getSourceRange();
                 }
-                auto const e2 = expr->getArg(1);
-                if (!((isa<CXXDefaultArgExpr>(e2)
-                       && loplugin::TypeCheck(e2->getType())
-                              .Struct("Dummy")
-                              .Namespace("libreoffice_internal")
-                              .Namespace("rtl")
-                              .GlobalNamespace())
-                      || (loplugin::TypeCheck(ctor->getParamDecl(1)->getType())
-                              .Typedef("sal_Int32")
-                              .GlobalNamespace()
-                          && e2->isIntegerConstantExpr(compiler.getASTContext()))))
-                {
-                    return true;
-                }
-                auto const d = e1->getDecl();
-                if (!reportedArray_.insert(d).second)
-                {
-                    return true;
-                }
-                report(DiagnosticsEngine::Warning,
-                       "change type of variable %0 from constant character array (%1) to "
-                       "%select{OStringLiteral|OUStringLiteral}2%select{|, and make it static}3",
-                       d->getLocation())
-                    << d << d->getType()
-                    << (tc.Class("OString").Namespace("rtl").GlobalNamespace() ? 0 : 1)
-                    << isAutomaticVariable(cast<VarDecl>(d)) << d->getSourceRange();
-                report(DiagnosticsEngine::Note, "first passed into a %0 constructor here",
-                       expr->getLocation())
-                    << expr->getType().getUnqualifiedType() << expr->getSourceRange();
             }
             break;
         }

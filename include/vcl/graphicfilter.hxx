@@ -66,29 +66,29 @@ namespace o3tl
     template<> struct typed_flags<GraphicFilterImportFlags> : is_typed_flags<GraphicFilterImportFlags, 0x0063> {};
 }
 
-#define IMP_BMP                 "SVBMP"
-#define IMP_MOV                 "SVMOV"
-#define IMP_SVMETAFILE          "SVMETAFILE"
-#define IMP_WMF                 "SVWMF"
-#define IMP_EMF                 "SVEMF"
-#define IMP_GIF                 "SVIGIF"
-#define IMP_PNG                 "SVIPNG"
-#define IMP_JPEG                "SVIJPEG"
-#define IMP_XBM                 "SVIXBM"
-#define IMP_XPM                 "SVIXPM"
-#define IMP_SVG                 "SVISVG"
-#define IMP_PDF                 "SVIPDF"
-#define IMP_TIFF                "SVTIFF"
-#define IMP_TGA                 "SVTGA"
-#define IMP_PICT                "SVPICT"
-#define IMP_MET                 "SVMET"
-#define IMP_RAS                 "SVRAS"
-#define IMP_PCX                 "SVPCX"
-#define IMP_EPS                 "SVIEPS"
-#define IMP_PSD                 "SVPSD"
-#define IMP_PCD                 "SVPCD"
-#define IMP_PBM                 "SVPBM"
-#define IMP_DXF                 "SVDXF"
+constexpr OUStringLiteral IMP_BMP = u"SVBMP";
+constexpr OUStringLiteral IMP_MOV = u"SVMOV";
+constexpr OUStringLiteral IMP_SVMETAFILE = u"SVMETAFILE";
+constexpr OUStringLiteral IMP_WMF = u"SVWMF";
+constexpr OUStringLiteral IMP_EMF = u"SVEMF";
+constexpr OUStringLiteral IMP_GIF = u"SVIGIF";
+constexpr OUStringLiteral IMP_PNG = u"SVIPNG";
+constexpr OUStringLiteral IMP_JPEG = u"SVIJPEG";
+constexpr OUStringLiteral IMP_XBM = u"SVIXBM";
+constexpr OUStringLiteral IMP_XPM = u"SVIXPM";
+constexpr OUStringLiteral IMP_SVG = u"SVISVG";
+constexpr OUStringLiteral IMP_PDF = u"SVIPDF";
+constexpr OUStringLiteral IMP_TIFF = u"SVTIFF";
+constexpr OUStringLiteral IMP_TGA = u"SVTGA";
+constexpr OUStringLiteral IMP_PICT = u"SVPICT";
+constexpr OUStringLiteral IMP_MET = u"SVMET";
+constexpr OUStringLiteral IMP_RAS = u"SVRAS";
+constexpr OUStringLiteral IMP_PCX = u"SVPCX";
+constexpr OUStringLiteral IMP_EPS = u"SVIEPS";
+constexpr OUStringLiteral IMP_PSD = u"SVPSD";
+constexpr OUStringLiteral IMP_PCD = u"SVPCD";
+constexpr OUStringLiteral IMP_PBM = u"SVPBM";
+constexpr OUStringLiteral IMP_DXF = u"SVDXF";
 
 #define EXP_BMP                 "SVBMP"
 #define EXP_SVMETAFILE          "SVMETAFILE"

@@ -39,23 +39,21 @@ using namespace ::com::sun::star::uno           ;   // Reference
 using namespace ::com::sun::star::beans         ;   // PropertyValue
 using namespace ::com::sun::star::configuration ;
 
-const char* FilterConfigCache::FilterConfigCacheEntry::InternalPixelFilterNameList[] =
+const OUString InternalPixelFilterNameList[] =
 {
     IMP_BMP, IMP_GIF, IMP_PNG, IMP_JPEG, IMP_TIFF,
     IMP_XBM, IMP_XPM, IMP_TGA, IMP_PICT, IMP_MET, IMP_RAS,
     IMP_PCX, IMP_MOV, IMP_PSD, IMP_PCD,  IMP_PBM, IMP_DXF,
     EXP_BMP, EXP_GIF, EXP_PNG, EXP_JPEG, EXP_TIFF,
-    nullptr
 };
 
 void FilterConfigCache::FilterConfigCacheEntry::CreateFilterName( const OUString& rUserDataEntry )
 {
     bIsPixelFormat = false;
     sFilterName = rUserDataEntry;
-    const char** pPtr;
-    for ( pPtr = InternalPixelFilterNameList; *pPtr; pPtr++ )
+    for ( const auto & s : InternalPixelFilterNameList )
     {
-        if ( sFilterName.equalsIgnoreAsciiCaseAscii( *pPtr ) )
+        if ( sFilterName.equalsIgnoreAsciiCase( s ) )
         {
             bIsPixelFormat = true;
         }

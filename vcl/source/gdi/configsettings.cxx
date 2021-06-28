@@ -34,7 +34,7 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::container;
 
-#define SETTINGS_CONFIGNODE "VCL/Settings"
+constexpr OUStringLiteral SETTINGS_CONFIGNODE = u"VCL/Settings";
 
 SettingsConfigItem* SettingsConfigItem::get()
 {
