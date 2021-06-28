@@ -16,34 +16,24 @@ class WriterInsertEnvelope(UITestCase):
     def test_insert_envelope(self):
         self.ui_test.create_doc_in_start_center("writer")
         document = self.ui_test.get_component()
-        self.ui_test.execute_dialog_through_command(".uno:InsertEnvelope")
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:InsertEnvelope", close_button="user") as xDialog:
+            xAddrTxt= xDialog.getChild("addredit")
+            xSenderTxt = xDialog.getChild("senderedit")
+            xSenderCheckBox = xDialog.getChild("sender")
 
-        xDialog = self.xUITest.getTopFocusWindow()
+            xAddrTxt.executeAction("SELECT", mkPropertyValues({"FROM": "1", "TO": "200"}))
+            xAddrTxt.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+            xAddrTxt.executeAction("TYPE", mkPropertyValues({"TEXT":"Address"}))
 
-        xAddrTxt= xDialog.getChild("addredit")
-        xSenderTxt = xDialog.getChild("senderedit")
-        xSenderCheckBox = xDialog.getChild("sender")
+            xSenderTxt.executeAction("SELECT", mkPropertyValues({"FROM": "1", "TO": "200"}))
+            xSenderTxt.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+            xSenderTxt.executeAction("TYPE", mkPropertyValues({"TEXT":"Sender"}))
 
-        xAddrTxt.executeAction("SELECT", mkPropertyValues({"FROM": "1", "TO": "200"}))
-        xAddrTxt.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
-        xAddrTxt.executeAction("TYPE", mkPropertyValues({"TEXT":"Address"}))
-
-        xSenderTxt.executeAction("SELECT", mkPropertyValues({"FROM": "1", "TO": "200"}))
-        xSenderTxt.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
-        xSenderTxt.executeAction("TYPE", mkPropertyValues({"TEXT":"Sender"}))
-
-        xInsBtn = xDialog.getChild("user")
-        xInsBtn.executeAction("CLICK", tuple())
-
-        self.ui_test.execute_dialog_through_command(".uno:InsertEnvelope")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xAddrTxt= xDialog.getChild("addredit")
-        xSenderTxt = xDialog.getChild("senderedit")
-        self.assertEqual(get_state_as_dict(xAddrTxt)["Text"], "Address")
-        self.assertEqual(get_state_as_dict(xSenderTxt)["Text"], "Sender")
-
-        xcancelBtn = xDialog.getChild("cancel")
-        self.ui_test.close_dialog_through_button(xcancelBtn)
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:InsertEnvelope", close_button="cancel") as xDialog:
+            xAddrTxt= xDialog.getChild("addredit")
+            xSenderTxt = xDialog.getChild("senderedit")
+            self.assertEqual(get_state_as_dict(xAddrTxt)["Text"], "Address")
+            self.assertEqual(get_state_as_dict(xSenderTxt)["Text"], "Sender")
 
         self.ui_test.close_doc()
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

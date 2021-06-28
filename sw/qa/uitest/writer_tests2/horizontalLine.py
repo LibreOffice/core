@@ -19,22 +19,16 @@ class WriterInsertHorizontalLine(UITestCase):
 
         self.xUITest.executeCommand(".uno:StyleApply?Style:string=Horizontal%20Line&FamilyName:string=ParagraphStyles") #insert horizontal line
 
-        self.ui_test.execute_dialog_through_command(".uno:EditStyle")  #open style dialog
-        xDialog = self.xUITest.getTopFocusWindow()
-        xStyleNametxt = xDialog.getChild("name")
-        self.assertEqual(get_state_as_dict(xStyleNametxt)["Text"], "Horizontal Line") #check style name
-        xCancBtn = xDialog.getChild("cancel")
-        self.ui_test.close_dialog_through_button(xCancBtn)
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:EditStyle", close_button="cancel") as xDialog:
+            xStyleNametxt = xDialog.getChild("name")
+            self.assertEqual(get_state_as_dict(xStyleNametxt)["Text"], "Horizontal Line") #check style name
 
         self.xUITest.executeCommand(".uno:Undo")
         self.xUITest.executeCommand(".uno:Redo")
 
-        self.ui_test.execute_dialog_through_command(".uno:EditStyle")  #open style dialog
-        xDialog = self.xUITest.getTopFocusWindow()
-        xStyleNametxt = xDialog.getChild("name")
-        self.assertEqual(get_state_as_dict(xStyleNametxt)["Text"], "Horizontal Line")  #check style name
-        xCancBtn = xDialog.getChild("cancel")
-        self.ui_test.close_dialog_through_button(xCancBtn)
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:EditStyle", close_button="cancel") as xDialog:
+            xStyleNametxt = xDialog.getChild("name")
+            self.assertEqual(get_state_as_dict(xStyleNametxt)["Text"], "Horizontal Line")  #check style name
 
         self.ui_test.close_doc()
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

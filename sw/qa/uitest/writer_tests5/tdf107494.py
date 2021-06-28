@@ -38,10 +38,9 @@ class tdf107494(UITestCase):
         textGraphic.Graphic = graphic
         text.insertTextContent(cursor, textGraphic, False)
         # Delete the header
-        self.ui_test.execute_dialog_through_command(".uno:InsertPageHeader?PageStyle:string=Default%20Page%20Style&On:bool=false")
-        xDialog = self.xUITest.getTopFocusWindow()  #question dialog
-        xOption = xDialog.getChild("yes")
-        xOption.executeAction("CLICK", tuple())
+        with self.ui_test.execute_dialog_through_command_guarded(
+                ".uno:InsertPageHeader?PageStyle:string=Default%20Page%20Style&On:bool=false", close_button="yes"):
+            pass
 
         self.assertEqual(document.StyleFamilies.PageStyles.Standard.HeaderIsOn, False)
 
@@ -74,10 +73,9 @@ class tdf107494(UITestCase):
         textGraphic.Graphic = graphic
         text.insertTextContent(cursor, textGraphic, False)
         # Delete the footer
-        self.ui_test.execute_dialog_through_command(".uno:InsertPageFooter?PageStyle:string=Default%20Page%20Style&On:bool=false")
-        xDialog = self.xUITest.getTopFocusWindow()  #question dialog
-        xOption = xDialog.getChild("yes")
-        xOption.executeAction("CLICK", tuple())
+        with self.ui_test.execute_dialog_through_command_guarded(
+                ".uno:InsertPageFooter?PageStyle:string=Default%20Page%20Style&On:bool=false", close_button="yes"):
+            pass
 
         self.assertEqual(document.StyleFamilies.PageStyles.Standard.FooterIsOn, False)
 

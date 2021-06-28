@@ -19,17 +19,14 @@ class tdf135693(UITestCase):
             self.xUITest.executeCommand(".uno:GoDown")
 
             # Without the fix in place, this would have crashed here
-            self.ui_test.execute_dialog_through_command(".uno:TableDialog")
+            with self.ui_test.execute_dialog_through_command_guarded(".uno:TableDialog") as xTableDlg:
 
-            xTableDlg = self.xUITest.getTopFocusWindow()
 
-            xTabs = xTableDlg.getChild("tabcontrol")
-            select_pos(xTabs, "0")
+                xTabs = xTableDlg.getChild("tabcontrol")
+                select_pos(xTabs, "0")
 
-            # Check we are in the right table
-            self.assertEqual("Table1", get_state_as_dict(xTabs.getChild('name'))['Text'])
+                # Check we are in the right table
+                self.assertEqual("Table1", get_state_as_dict(xTabs.getChild('name'))['Text'])
 
-            xok = xTableDlg.getChild("ok")
-            self.ui_test.close_dialog_through_button(xok)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

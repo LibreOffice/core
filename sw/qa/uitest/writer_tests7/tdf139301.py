@@ -22,16 +22,13 @@ class tdf139301(UITestCase):
                 self.ui_test.wait_until_child_is_available('metricfield')
 
                 # line setting dialog window
-                self.ui_test.execute_dialog_through_command(".uno:FormatLine")
-                xFormatLineDlg = self.xUITest.getTopFocusWindow()
-                # get line style combo box
-                xLineStyle = xFormatLineDlg.getChild("LB_LINE_STYLE")
+                with self.ui_test.execute_dialog_through_command_guarded(".uno:FormatLine") as xFormatLineDlg:
+                    # get line style combo box
+                    xLineStyle = xFormatLineDlg.getChild("LB_LINE_STYLE")
 
-                # check preset line style
-                style = get_state_as_dict(xLineStyle)['SelectEntryText']
+                    # check preset line style
+                    style = get_state_as_dict(xLineStyle)['SelectEntryText']
 
-                xOKBtn = xFormatLineDlg.getChild("ok")
-                self.ui_test.close_dialog_through_button(xOKBtn)
 
                 self.assertEqual(style, self.styles[i])
 
@@ -48,16 +45,13 @@ class tdf139301(UITestCase):
                 self.ui_test.wait_until_child_is_available('metricfield')
 
                 # line setting dialog window
-                self.ui_test.execute_dialog_through_command(".uno:FormatLine")
-                xFormatLineDlg = self.xUITest.getTopFocusWindow()
-                # get line style combo box
-                xLineStyle = xFormatLineDlg.getChild("LB_LINE_STYLE")
+                with self.ui_test.execute_dialog_through_command_guarded(".uno:FormatLine") as xFormatLineDlg:
+                    # get line style combo box
+                    xLineStyle = xFormatLineDlg.getChild("LB_LINE_STYLE")
 
-                # check preset line style
-                style = get_state_as_dict(xLineStyle)['SelectEntryText']
+                    # check preset line style
+                    style = get_state_as_dict(xLineStyle)['SelectEntryText']
 
-                xOKBtn = xFormatLineDlg.getChild("ok")
-                self.ui_test.close_dialog_through_button(xOKBtn)
 
                 self.assertEqual(style, self.styles[i] + style_name_extension)
 

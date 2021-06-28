@@ -30,26 +30,24 @@ class tdf90401(UITestCase):
 
             # enable remove personal info security option
 
-            self.ui_test.execute_dialog_through_command('.uno:OptionsTreeDialog')  #optionsdialog
-            xDialog = self.xUITest.getTopFocusWindow()
+            with self.ui_test.execute_dialog_through_command_guarded('.uno:OptionsTreeDialog', close_button="") as xDialog:
+                xPages = xDialog.getChild('pages')
+                xGenEntry = xPages.getChild('0')
+                xSecurityPage = xGenEntry.getChild('6')
+                xSecurityPage.executeAction('SELECT', tuple())
+                # Click Button Options...
+                xOptions = xDialog.getChild('options')
 
-            xPages = xDialog.getChild('pages')
-            xGenEntry = xPages.getChild('0')
-            xSecurityPage = xGenEntry.getChild('6')
-            xSecurityPage.executeAction('SELECT', tuple())
-            # Click Button Options...
-            xOptions = xDialog.getChild('options')
+                with self.ui_test.execute_blocking_action(xOptions.executeAction, args=('CLICK', ()), close_button="") as dialog:
+                    xRemovePersonal = dialog.getChild('removepersonal')
+                    xRemovePersonal.executeAction('CLICK', tuple())
+                    xOkBtn = dialog.getChild('ok')
+                    # FIXME: we can't use close_dialog_through_button here, the dialog doesn't emit the
+                    # event DialogClosed after closing
+                    xOkBtn.executeAction('CLICK', tuple())
 
-            with self.ui_test.execute_blocking_action(xOptions.executeAction, args=('CLICK', ()), close_button="") as dialog:
-                xRemovePersonal = dialog.getChild('removepersonal')
-                xRemovePersonal.executeAction('CLICK', tuple())
-                xOkBtn = dialog.getChild('ok')
-                # FIXME: we can't use close_dialog_through_button here, the dialog doesn't emit the
-                # event DialogClosed after closing
-                xOkBtn.executeAction('CLICK', tuple())
-
-            xOKBtn = xDialog.getChild('ok')
-            self.ui_test.close_dialog_through_button(xOKBtn)
+                xOKBtn = xDialog.getChild('ok')
+                self.ui_test.close_dialog_through_button(xOKBtn)
 
             # save and reload the document to remove personal info
 
@@ -57,16 +55,11 @@ class tdf90401(UITestCase):
                 xFilePath = os.path.join(tempdir, 'tdf90401-tmp.fodt')
 
                 # Save Copy as
-                self.ui_test.execute_dialog_through_command('.uno:SaveAs')
-                xDialog = self.xUITest.getTopFocusWindow()
-
-                xFileName = xDialog.getChild('file_name')
-                xFileName.executeAction('TYPE', mkPropertyValues({'KEYCODE':'CTRL+A'}))
-                xFileName.executeAction('TYPE', mkPropertyValues({'KEYCODE':'BACKSPACE'}))
-                xFileName.executeAction('TYPE', mkPropertyValues({'TEXT': xFilePath}))
-
-                xOpenBtn = xDialog.getChild('open')
-                self.ui_test.close_dialog_through_button(xOpenBtn)
+                with self.ui_test.execute_dialog_through_command_guarded('.uno:SaveAs', close_button="open") as xDialog:
+                    xFileName = xDialog.getChild('file_name')
+                    xFileName.executeAction('TYPE', mkPropertyValues({'KEYCODE':'CTRL+A'}))
+                    xFileName.executeAction('TYPE', mkPropertyValues({'KEYCODE':'BACKSPACE'}))
+                    xFileName.executeAction('TYPE', mkPropertyValues({'TEXT': xFilePath}))
 
                 # Close the Writer document
                 self.ui_test.close_doc()

@@ -15,30 +15,24 @@ class dateFormFieldDialog(UITestCase):
             xWriterDoc = self.xUITest.getTopFocusWindow()
 
             # open the dialog (cursor is at the field)
-            self.ui_test.execute_dialog_through_command(".uno:ControlProperties")
-            xDialog = self.xUITest.getTopFocusWindow()
+            with self.ui_test.execute_dialog_through_command_guarded(".uno:ControlProperties") as xDialog:
 
-            itemsList = xDialog.getChild("date_formats_treeview")
+                itemsList = xDialog.getChild("date_formats_treeview")
 
-            # check whether we have the right format selected
-            self.assertEqual(get_state_as_dict(itemsList)["Children"], "20")
-            self.assertEqual(get_state_as_dict(itemsList)["SelectEntryText"], "12/31/99")
+                # check whether we have the right format selected
+                self.assertEqual(get_state_as_dict(itemsList)["Children"], "20")
+                self.assertEqual(get_state_as_dict(itemsList)["SelectEntryText"], "12/31/99")
 
-            # select a new format
-            itemsList.getChild("11").executeAction("SELECT", tuple());
-            self.assertEqual(get_state_as_dict(itemsList)["SelectEntryText"], "12-31")
+                # select a new format
+                itemsList.getChild("11").executeAction("SELECT", tuple());
+                self.assertEqual(get_state_as_dict(itemsList)["SelectEntryText"], "12-31")
 
-            xOKBtn = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOKBtn)
 
             # open the dialog again
-            self.ui_test.execute_dialog_through_command(".uno:ControlProperties")
-            xDialog = self.xUITest.getTopFocusWindow()
-            itemsList = xDialog.getChild("date_formats_treeview")
-            self.assertEqual(get_state_as_dict(itemsList)["SelectEntryText"], "12-31")
+            with self.ui_test.execute_dialog_through_command_guarded(".uno:ControlProperties") as xDialog:
+                itemsList = xDialog.getChild("date_formats_treeview")
+                self.assertEqual(get_state_as_dict(itemsList)["SelectEntryText"], "12-31")
 
-            xOKBtn = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOKBtn)
 
     def test_date_field_with_custom_format(self):
         # open a file with a date form field
@@ -46,17 +40,14 @@ class dateFormFieldDialog(UITestCase):
             xWriterDoc = self.xUITest.getTopFocusWindow()
 
             # open the dialog (cursor is at the field)
-            self.ui_test.execute_dialog_through_command(".uno:ControlProperties")
-            xDialog = self.xUITest.getTopFocusWindow()
+            with self.ui_test.execute_dialog_through_command_guarded(".uno:ControlProperties") as xDialog:
 
-            itemsList = xDialog.getChild("date_formats_treeview")
+                itemsList = xDialog.getChild("date_formats_treeview")
 
-            # check whether we have the right format selected
-            self.assertEqual(get_state_as_dict(itemsList)["Children"], "20")
-            self.assertEqual(get_state_as_dict(itemsList)["SelectEntryText"], "1999. december 31., péntek")
+                # check whether we have the right format selected
+                self.assertEqual(get_state_as_dict(itemsList)["Children"], "20")
+                self.assertEqual(get_state_as_dict(itemsList)["SelectEntryText"], "1999. december 31., péntek")
 
-            xOKBtn = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOKBtn)
 
     def test_date_reformat(self):
         # open a file with a date form field
@@ -65,21 +56,18 @@ class dateFormFieldDialog(UITestCase):
             self.assertEqual(writer_doc.getText().getString(), "07/17/19")
 
             # open the dialog (cursor is at the field)
-            self.ui_test.execute_dialog_through_command(".uno:ControlProperties")
-            xDialog = self.xUITest.getTopFocusWindow()
+            with self.ui_test.execute_dialog_through_command_guarded(".uno:ControlProperties") as xDialog:
 
-            itemsList = xDialog.getChild("date_formats_treeview")
+                itemsList = xDialog.getChild("date_formats_treeview")
 
-            # check whether we have the right format selected
-            self.assertEqual(get_state_as_dict(itemsList)["Children"], "20")
-            self.assertEqual(get_state_as_dict(itemsList)["SelectEntryText"], "12/31/99")
+                # check whether we have the right format selected
+                self.assertEqual(get_state_as_dict(itemsList)["Children"], "20")
+                self.assertEqual(get_state_as_dict(itemsList)["SelectEntryText"], "12/31/99")
 
-            # select a new format
-            itemsList.getChild("11").executeAction("SELECT", tuple());
-            self.assertEqual(get_state_as_dict(itemsList)["SelectEntryText"], "12-31")
+                # select a new format
+                itemsList.getChild("11").executeAction("SELECT", tuple());
+                self.assertEqual(get_state_as_dict(itemsList)["SelectEntryText"], "12-31")
 
-            xOKBtn = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOKBtn)
 
             # after applying the new format, the field content should be updated
             self.assertEqual(writer_doc.getText().getString(), "07-17")
@@ -91,21 +79,18 @@ class dateFormFieldDialog(UITestCase):
             self.assertEqual(writer_doc.getText().getString(), "[select date]")
 
             # open the dialog (cursor is at the field)
-            self.ui_test.execute_dialog_through_command(".uno:ControlProperties")
-            xDialog = self.xUITest.getTopFocusWindow()
+            with self.ui_test.execute_dialog_through_command_guarded(".uno:ControlProperties") as xDialog:
 
-            itemsList = xDialog.getChild("date_formats_treeview")
+                itemsList = xDialog.getChild("date_formats_treeview")
 
-            # check whether we have the right format selected
-            self.assertEqual(get_state_as_dict(itemsList)["Children"], "20")
-            self.assertEqual(get_state_as_dict(itemsList)["SelectEntryText"], "Fri 31/Dec 99")
+                # check whether we have the right format selected
+                self.assertEqual(get_state_as_dict(itemsList)["Children"], "20")
+                self.assertEqual(get_state_as_dict(itemsList)["SelectEntryText"], "Fri 31/Dec 99")
 
-            # select a new format
-            itemsList.getChild("11").executeAction("SELECT", tuple());
-            self.assertEqual(get_state_as_dict(itemsList)["SelectEntryText"], "12-31")
+                # select a new format
+                itemsList.getChild("11").executeAction("SELECT", tuple());
+                self.assertEqual(get_state_as_dict(itemsList)["SelectEntryText"], "12-31")
 
-            xOKBtn = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOKBtn)
 
             # a placeholder text is not changed by format change
             self.assertEqual(writer_doc.getText().getString(), "[select date]")
@@ -120,21 +105,18 @@ class dateFormFieldDialog(UITestCase):
             self.assertEqual(writer_doc.getText().getString(), "07/17/19")
 
             # open the dialog (cursor is at the field)
-            self.ui_test.execute_dialog_through_command(".uno:ControlProperties")
-            xDialog = self.xUITest.getTopFocusWindow()
+            with self.ui_test.execute_dialog_through_command_guarded(".uno:ControlProperties") as xDialog:
 
-            itemsList = xDialog.getChild("date_formats_treeview")
+                itemsList = xDialog.getChild("date_formats_treeview")
 
-            # check whether we have the right format selected
-            self.assertEqual(get_state_as_dict(itemsList)["Children"], "20")
-            self.assertEqual(get_state_as_dict(itemsList)["SelectEntryText"], "12/31/99")
+                # check whether we have the right format selected
+                self.assertEqual(get_state_as_dict(itemsList)["Children"], "20")
+                self.assertEqual(get_state_as_dict(itemsList)["SelectEntryText"], "12/31/99")
 
-            # select a new format
-            itemsList.getChild("3").executeAction("SELECT", tuple());
-            self.assertEqual(get_state_as_dict(itemsList)["SelectEntryText"], "Dec 31, 1999")
+                # select a new format
+                itemsList.getChild("3").executeAction("SELECT", tuple());
+                self.assertEqual(get_state_as_dict(itemsList)["SelectEntryText"], "Dec 31, 1999")
 
-            xOKBtn = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOKBtn)
 
             # a placeholder text is not changed by format change
             self.assertEqual(writer_doc.getText().getString(), "Jul 17, 2019")

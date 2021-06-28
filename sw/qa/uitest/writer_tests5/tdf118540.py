@@ -16,10 +16,8 @@ class tdf118540(UITestCase):
    def test_tdf118540_preview_document_properties(self):
         with self.ui_test.load_file(get_url_for_data_file("tdf118540.docx")) as writer_doc:
             self.xUITest.executeCommand(".uno:PrintPreview")  #open print preview
-            self.ui_test.execute_dialog_through_command(".uno:SetDocumentProperties") #open properties dialog
-            xDialog = self.xUITest.getTopFocusWindow()
-            xOkBtn = xDialog.getChild("ok")
-            xOkBtn.executeAction("CLICK", tuple())
+            with self.ui_test.execute_dialog_through_command_guarded(".uno:SetDocumentProperties"):
+                pass
             self.xUITest.executeCommand(".uno:ClosePreview")  # close print preview
 
             self.xUITest.getTopFocusWindow() #Get focus after closing preview

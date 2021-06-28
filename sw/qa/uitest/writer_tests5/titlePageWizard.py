@@ -36,13 +36,10 @@ class tdf138907(UITestCase):
 
 
             #dialog Title Page
-            self.ui_test.execute_dialog_through_command(".uno:TitlePageDialog")
-            xDialog = self.xUITest.getTopFocusWindow()
-            #set restart page number to 2. With this doc, it defaults to resetting to 1.
-            xRestartNumbering = xDialog.getChild("NF_RESTART_NUMBERING")
-            xRestartNumbering.executeAction("UP", tuple()) # restart numbering at 2
-            xOKBtn = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOKBtn)
+            with self.ui_test.execute_dialog_through_command_guarded(".uno:TitlePageDialog") as xDialog:
+                #set restart page number to 2. With this doc, it defaults to resetting to 1.
+                xRestartNumbering = xDialog.getChild("NF_RESTART_NUMBERING")
+                xRestartNumbering.executeAction("UP", tuple()) # restart numbering at 2
 
             Paragraphs = document.Text.createEnumeration()
             Para1 = Paragraphs.nextElement()
@@ -54,11 +51,8 @@ class tdf138907(UITestCase):
             self.assertEqual(Para2.PageDescName, "Landscape")
 
             #re-run dialog Title Page
-            self.ui_test.execute_dialog_through_command(".uno:TitlePageDialog")
-            xDialog = self.xUITest.getTopFocusWindow()
-            #accept defaults and OK without making any changes.
-            xOKBtn = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOKBtn)
+            with self.ui_test.execute_dialog_through_command_guarded(".uno:TitlePageDialog"):
+                pass
 
             # Without this fix, re-running the wizard was failing with the title page restarting at page 2.
             Paragraphs = document.Text.createEnumeration()
@@ -75,20 +69,16 @@ class tdf138907(UITestCase):
             #Now test replacing several pages with title and index styles
 
             #dialog Title Page
-            self.ui_test.execute_dialog_through_command(".uno:TitlePageDialog")
-            xDialog = self.xUITest.getTopFocusWindow()
-            print(xDialog.getChildren())
-            #Convert three pages to title/index pages starting at page two.
-            xPageCount = xDialog.getChild("NF_PAGE_COUNT")
-            for _ in range(0,2):
-                xPageCount.executeAction("UP", tuple())
-            xUseStartingPage = xDialog.getChild("RB_PAGE_START")
-            xUseStartingPage.executeAction("CLICK", tuple())
-            xStartingPage = xDialog.getChild("NF_PAGE_START")
-            xStartingPage.executeAction("UP", tuple()) #Start at page 2.
+            with self.ui_test.execute_dialog_through_command_guarded(".uno:TitlePageDialog") as xDialog:
+                #Convert three pages to title/index pages starting at page two.
+                xPageCount = xDialog.getChild("NF_PAGE_COUNT")
+                for _ in range(0,2):
+                    xPageCount.executeAction("UP", tuple())
+                xUseStartingPage = xDialog.getChild("RB_PAGE_START")
+                xUseStartingPage.executeAction("CLICK", tuple())
+                xStartingPage = xDialog.getChild("NF_PAGE_START")
+                xStartingPage.executeAction("UP", tuple()) #Start at page 2.
 
-            xOKBtn = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOKBtn)
 
             Paragraphs = document.Text.createEnumeration()
             Para1 = Paragraphs.nextElement()
@@ -111,23 +101,19 @@ class tdf138907(UITestCase):
             #Now test inserting at the end of the document
 
             #dialog Title Page
-            self.ui_test.execute_dialog_through_command(".uno:TitlePageDialog")
-            xDialog = self.xUITest.getTopFocusWindow()
-            print(xDialog.getChildren())
-            #Insert three title/index pages at the end of the document (plus a content page).
-            newPages = xDialog.getChild("RB_INSERT_NEW_PAGES")
-            newPages.executeAction("CLICK", tuple())
-            xPageCount = xDialog.getChild("NF_PAGE_COUNT")
-            for _ in range(0,2):
-                xPageCount.executeAction("UP", tuple())
-            xUseStartingPage = xDialog.getChild("RB_PAGE_START")
-            xUseStartingPage.executeAction("CLICK", tuple())
-            xStartingPage = xDialog.getChild("NF_PAGE_START")
-            for _ in range(0,18):
-                xStartingPage.executeAction("UP", tuple()) #Start at mythical page 20.
+            with self.ui_test.execute_dialog_through_command_guarded(".uno:TitlePageDialog") as xDialog:
+                #Insert three title/index pages at the end of the document (plus a content page).
+                newPages = xDialog.getChild("RB_INSERT_NEW_PAGES")
+                newPages.executeAction("CLICK", tuple())
+                xPageCount = xDialog.getChild("NF_PAGE_COUNT")
+                for _ in range(0,2):
+                    xPageCount.executeAction("UP", tuple())
+                xUseStartingPage = xDialog.getChild("RB_PAGE_START")
+                xUseStartingPage.executeAction("CLICK", tuple())
+                xStartingPage = xDialog.getChild("NF_PAGE_START")
+                for _ in range(0,18):
+                    xStartingPage.executeAction("UP", tuple()) #Start at mythical page 20.
 
-            xOKBtn = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOKBtn)
 
             # Without the fix, the pages were being inserted before the last page.
             text = document.Text.String.replace('\r\n', '\n')
@@ -143,24 +129,20 @@ class tdf138907(UITestCase):
             #Now test inserting in the middle of the document
 
             #dialog Title Page
-            self.ui_test.execute_dialog_through_command(".uno:TitlePageDialog")
-            xDialog = self.xUITest.getTopFocusWindow()
-            print(xDialog.getChildren())
-            #Insert three title/index pages starting at page 2.
-            newPages = xDialog.getChild("RB_INSERT_NEW_PAGES")
-            newPages.executeAction("CLICK", tuple())
-            xPageCount = xDialog.getChild("NF_PAGE_COUNT")
-            for _ in range(0,2):
-                xPageCount.executeAction("UP", tuple())
-            xUseStartingPage = xDialog.getChild("RB_PAGE_START")
-            xUseStartingPage.executeAction("CLICK", tuple())
-            xStartingPage = xDialog.getChild("NF_PAGE_START")
-            for _ in range(0,10):
-                xStartingPage.executeAction("DOWN", tuple()) #Reset to page 1
-            xStartingPage.executeAction("UP", tuple()) #Start at page 2.
+            with self.ui_test.execute_dialog_through_command_guarded(".uno:TitlePageDialog") as xDialog:
+                #Insert three title/index pages starting at page 2.
+                newPages = xDialog.getChild("RB_INSERT_NEW_PAGES")
+                newPages.executeAction("CLICK", tuple())
+                xPageCount = xDialog.getChild("NF_PAGE_COUNT")
+                for _ in range(0,2):
+                    xPageCount.executeAction("UP", tuple())
+                xUseStartingPage = xDialog.getChild("RB_PAGE_START")
+                xUseStartingPage.executeAction("CLICK", tuple())
+                xStartingPage = xDialog.getChild("NF_PAGE_START")
+                for _ in range(0,10):
+                    xStartingPage.executeAction("DOWN", tuple()) #Reset to page 1
+                xStartingPage.executeAction("UP", tuple()) #Start at page 2.
 
-            xOKBtn = xDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOKBtn)
 
             # Without first re-calculating the layout, the styles were applied to the wrong pages.
             Paragraphs = document.Text.createEnumeration()

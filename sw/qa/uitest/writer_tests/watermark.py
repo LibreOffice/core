@@ -16,48 +16,36 @@ class watermark(UITestCase):
         document = self.ui_test.get_component()
         xWriterDoc = self.xUITest.getTopFocusWindow()
 
-        self.ui_test.execute_dialog_through_command(".uno:Watermark")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xTextInput = xDialog.getChild("TextInput")
-        xAngle = xDialog.getChild("Angle")
-        xTransparency = xDialog.getChild("Transparency")
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:Watermark") as xDialog:
+            xTextInput = xDialog.getChild("TextInput")
+            xAngle = xDialog.getChild("Angle")
+            xTransparency = xDialog.getChild("Transparency")
 
-        xTextInput.executeAction("TYPE", mkPropertyValues({"TEXT":"Watermark"}))
-        xAngle.executeAction("UP", tuple())
-        xTransparency.executeAction("UP", tuple())
+            xTextInput.executeAction("TYPE", mkPropertyValues({"TEXT":"Watermark"}))
+            xAngle.executeAction("UP", tuple())
+            xTransparency.executeAction("UP", tuple())
 
-        xOkBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOkBtn)
 
-        self.ui_test.execute_dialog_through_command(".uno:Watermark")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xTextInput = xDialog.getChild("TextInput")
-        xAngle = xDialog.getChild("Angle")
-        xTransparency = xDialog.getChild("Transparency")
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:Watermark", close_button="cancel") as xDialog:
+            xTextInput = xDialog.getChild("TextInput")
+            xAngle = xDialog.getChild("Angle")
+            xTransparency = xDialog.getChild("Transparency")
 
-        self.assertEqual(get_state_as_dict(xTextInput)["Text"], "Watermark")
-        self.assertEqual(get_state_as_dict(xAngle)["Text"], "90°")
-        self.assertEqual(get_state_as_dict(xTransparency)["Text"], "51%")
+            self.assertEqual(get_state_as_dict(xTextInput)["Text"], "Watermark")
+            self.assertEqual(get_state_as_dict(xAngle)["Text"], "90°")
+            self.assertEqual(get_state_as_dict(xTransparency)["Text"], "51%")
 
-        xCancBtn = xDialog.getChild("cancel")
-        self.ui_test.close_dialog_through_button(xCancBtn)
 
-        self.ui_test.execute_dialog_through_command(".uno:Watermark")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xTextInput = xDialog.getChild("TextInput")
-        xTextInput.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
-        xTextInput.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
-        xOkBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOkBtn)
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:Watermark") as xDialog:
+            xTextInput = xDialog.getChild("TextInput")
+            xTextInput.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+            xTextInput.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
 
-        self.ui_test.execute_dialog_through_command(".uno:Watermark")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xTextInput = xDialog.getChild("TextInput")
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:Watermark", close_button="cancel") as xDialog:
+            xTextInput = xDialog.getChild("TextInput")
 
-        self.assertEqual(get_state_as_dict(xTextInput)["Text"], "")
+            self.assertEqual(get_state_as_dict(xTextInput)["Text"], "")
 
-        xCancBtn = xDialog.getChild("cancel")
-        self.ui_test.close_dialog_through_button(xCancBtn)
 
         self.ui_test.close_doc()
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

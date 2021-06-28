@@ -31,18 +31,13 @@ class tdf122449(UITestCase):
             self.ui_test.close_dialog_through_button(xcloseBtn)
             xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "HOME"}))
             # invoke Index dialog Index entry   .uno:IndexEntryDialog
-            self.ui_test.execute_dialog_through_command(".uno:IndexEntryDialog")
-            xDialog = self.xUITest.getTopFocusWindow()
-            xcloseBtn = xDialog.getChild("close")
-            self.ui_test.close_dialog_through_button(xcloseBtn)
+            with self.ui_test.execute_dialog_through_command_guarded(".uno:IndexEntryDialog", close_button="close"):
+                pass
             # close
             # Go to page 2
-            self.ui_test.execute_dialog_through_command(".uno:GotoPage")
-            xDialog = self.xUITest.getTopFocusWindow()
-            xPageText = xDialog.getChild("page")
-            xPageText.executeAction("TYPE", mkPropertyValues({"TEXT":"2"}))
-            xOkBtn = xDialog.getChild("ok")
-            xOkBtn.executeAction("CLICK", tuple())
+            with self.ui_test.execute_dialog_through_command_guarded(".uno:GotoPage") as xDialog:
+                xPageText = xDialog.getChild("page")
+                xPageText.executeAction("TYPE", mkPropertyValues({"TEXT":"2"}))
             # verify
             self.assertEqual(get_state_as_dict(xWriterEdit)["CurrentPage"], "2")
 

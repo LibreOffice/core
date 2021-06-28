@@ -28,22 +28,19 @@ class tdf133189(UITestCase):
         #change measurement to Inches
         change_measurement_unit(self, 'Inch')
 
-        self.ui_test.execute_dialog_through_command(".uno:PageDialog")
-        xDialog = self.xUITest.getTopFocusWindow()
-        tabcontrol = xDialog.getChild("tabcontrol")
-        select_pos(tabcontrol, "1")
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:PageDialog") as xDialog:
+            tabcontrol = xDialog.getChild("tabcontrol")
+            select_pos(tabcontrol, "1")
 
-        xWidth = xDialog.getChild('spinWidth')
-        xHeight = xDialog.getChild('spinHeight')
+            xWidth = xDialog.getChild('spinWidth')
+            xHeight = xDialog.getChild('spinHeight')
 
-        props = {"VALUE": '8.0'}
-        actionProps = mkPropertyValues(props)
+            props = {"VALUE": '8.0'}
+            actionProps = mkPropertyValues(props)
 
-        xWidth.executeAction("VALUE", actionProps)
-        xHeight.executeAction("VALUE", actionProps)
+            xWidth.executeAction("VALUE", actionProps)
+            xHeight.executeAction("VALUE", actionProps)
 
-        xOKBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKBtn)
 
         self.ui_test.wait_until_property_is_updated(xPaperMargin, "SelectEntryText", "Normal (0.75″)")
         self.assertEqual(get_state_as_dict(xPaperMargin)['SelectEntryText'], "Normal (0.75″)")

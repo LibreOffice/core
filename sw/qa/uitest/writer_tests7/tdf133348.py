@@ -21,19 +21,16 @@ class tdf133348(UITestCase):
         xArgs = mkPropertyValues({"Text": "C1"})
         self.xUITest.executeCommandWithParameters(".uno:InsertAnnotation", xArgs)
 
-        self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog")
-        xDialogOpt = self.xUITest.getTopFocusWindow()
-        xPages = xDialogOpt.getChild("pages")
-        xEntry = xPages.getChild('0')
-        xEntry.executeAction("EXPAND", tuple())
-        xGeneralEntry = xEntry.getChild('0')
-        xGeneralEntry.executeAction("SELECT", tuple())
-        xFirstName = xDialogOpt.getChild("firstname")
-        props = {"TEXT": "Known Author"}
-        actionProps = mkPropertyValues(props)
-        xFirstName.executeAction("TYPE", actionProps)
-        xOKBtn = xDialogOpt.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKBtn)
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:OptionsTreeDialog") as xDialogOpt:
+            xPages = xDialogOpt.getChild("pages")
+            xEntry = xPages.getChild('0')
+            xEntry.executeAction("EXPAND", tuple())
+            xGeneralEntry = xEntry.getChild('0')
+            xGeneralEntry.executeAction("SELECT", tuple())
+            xFirstName = xDialogOpt.getChild("firstname")
+            props = {"TEXT": "Known Author"}
+            actionProps = mkPropertyValues(props)
+            xFirstName.executeAction("TYPE", actionProps)
 
         xWriterDoc = self.xUITest.getTopFocusWindow()
         xArgs = mkPropertyValues({"Text": "C2"})
