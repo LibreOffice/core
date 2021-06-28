@@ -16,6 +16,24 @@
       "revId": "677658a88e0571c563c30e4441a24404c5fa0361",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "92cca388_65f5aa0f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 13
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2021-06-28T11:55:23Z",
+      "side": 1,
+      "message": "among others\nI forgot, English often uses latin abbreviations. \"et al.\" would have been better.",
+      "parentUuid": "d082c1bb_7a4d9c2f",
+      "revId": "677658a88e0571c563c30e4441a24404c5fa0361",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
