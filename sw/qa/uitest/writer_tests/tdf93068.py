@@ -18,33 +18,23 @@ class tdf93068(UITestCase):
 
         # tdf#135950: Character dialog crashes if multiple cells in a
         # table are selected
-        self.ui_test.execute_dialog_through_command(".uno:InsertTable")
-        xDialog = self.xUITest.getTopFocusWindow()
-
-        xOkBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOkBtn)
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:InsertTable"):
+            pass
 
         self.xUITest.executeCommand(".uno:SelectAll")
 
         # Check the table is selected
         self.assertEqual("SwXTextTableCursor", document.CurrentSelection.getImplementationName())
 
-        self.ui_test.execute_dialog_through_command(".uno:FontDialog")
-        xFontDlg = self.xUITest.getTopFocusWindow()
-        xOKBtn = xFontDlg.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKBtn)
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:FontDialog"):
+            pass
 
-        self.ui_test.execute_dialog_through_command(".uno:FontDialog")
-        xFontDlg = self.xUITest.getTopFocusWindow()
-        xCancBtn = xFontDlg.getChild("cancel")
-        xCancBtn.executeAction("CLICK", tuple())
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:FontDialog", close_button="cancel"):
+            pass
 
-        self.ui_test.execute_dialog_through_command(".uno:FontDialog")
-        xFontDlg = self.xUITest.getTopFocusWindow()
-        xDiscardBtn = xFontDlg.getChild("reset")
-        xDiscardBtn.executeAction("CLICK", tuple())
-        xOKBtn = xFontDlg.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKBtn)
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:FontDialog") as xFontDlg:
+            xDiscardBtn = xFontDlg.getChild("reset")
+            xDiscardBtn.executeAction("CLICK", tuple())
 
         self.xUITest.getTopFocusWindow()
 

@@ -14,17 +14,14 @@ class Tdf140257(UITestCase):
 
   def change_outline_level(self, sText):
 
-    self.ui_test.execute_dialog_through_command(".uno:ParagraphDialog")
-    xDialog = self.xUITest.getTopFocusWindow()
-    xTabs = xDialog.getChild("tabcontrol")
-    select_pos(xTabs, "4")
+    with self.ui_test.execute_dialog_through_command_guarded(".uno:ParagraphDialog") as xDialog:
+        xTabs = xDialog.getChild("tabcontrol")
+        select_pos(xTabs, "4")
 
-    xOutline = xDialog.getChild("comboLB_OUTLINE_LEVEL")
+        xOutline = xDialog.getChild("comboLB_OUTLINE_LEVEL")
 
-    select_by_text(xOutline, sText)
+        select_by_text(xOutline, sText)
 
-    xOKBtn = xDialog.getChild("ok")
-    self.ui_test.close_dialog_through_button(xOKBtn)
 
   def test_tdf140257(self):
     self.ui_test.create_doc_in_start_center("writer")

@@ -21,18 +21,15 @@ class tdf40427(UITestCase):
         self.assertEqual(2, document.CurrentController.PageCount)
 
         # Make sure that the view is 2 pages side-by-side - look at dialog View-Zoom-Zoom
-        self.ui_test.execute_dialog_through_command(".uno:Zoom")
-        xDialog = self.xUITest.getTopFocusWindow()
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:Zoom") as xDialog:
 
-        columnssb = xDialog.getChild("columnssb")
-        columns = xDialog.getChild("columns")
-        bookmode = xDialog.getChild("bookmode")
-        self.assertEqual("true", get_state_as_dict(columns)["Checked"])
-        self.assertEqual("2", get_state_as_dict(columnssb)["Text"])
-        self.assertEqual("false", get_state_as_dict(bookmode)["Selected"])
+            columnssb = xDialog.getChild("columnssb")
+            columns = xDialog.getChild("columns")
+            bookmode = xDialog.getChild("bookmode")
+            self.assertEqual("true", get_state_as_dict(columns)["Checked"])
+            self.assertEqual("2", get_state_as_dict(columnssb)["Text"])
+            self.assertEqual("false", get_state_as_dict(bookmode)["Selected"])
 
-        xOKBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKBtn)
 
         # In this view, the sections "SectionB" and "SectionC" on second page are positioned on screen
         # higher than "SectionY" and "SectionA" respectively; there are nested and anchored sections.

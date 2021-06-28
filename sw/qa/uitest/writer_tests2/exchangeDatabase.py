@@ -14,10 +14,8 @@ class exchangeDB(UITestCase):
 
         self.ui_test.create_doc_in_start_center("writer")
 
-        self.ui_test.execute_dialog_through_command(".uno:ChangeDatabaseField")
-        xExDBDlg = self.xUITest.getTopFocusWindow()
-        xCloseBtn = xExDBDlg.getChild("close")
-        self.ui_test.close_dialog_through_button(xCloseBtn)
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:ChangeDatabaseField", close_button="close"):
+            pass
 
         self.ui_test.close_doc()
 
@@ -25,30 +23,22 @@ class exchangeDB(UITestCase):
 
         self.ui_test.create_doc_in_start_center("writer")
 
-        self.ui_test.execute_dialog_through_command(".uno:ChangeDatabaseField")
-        xExDBDlg = self.xUITest.getTopFocusWindow()
-        xTreelist = xExDBDlg.getChild("availablelb")
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:ChangeDatabaseField") as xExDBDlg:
+            xTreelist = xExDBDlg.getChild("availablelb")
 
-        xLabeldb = xExDBDlg.getChild("dbnameft")
-        self.assertEqual(get_state_as_dict(xLabeldb)["Text"], "[None]")
+            xLabeldb = xExDBDlg.getChild("dbnameft")
+            self.assertEqual(get_state_as_dict(xLabeldb)["Text"], "[None]")
 
-        xTreeEntry = xTreelist.getChild('0')                 #Available Databases
-        xTreeEntry.executeAction("EXPAND", tuple())          #Click on the Bibliography
-        xTreeEntry.executeAction("COLLAPSE", tuple())
-        xTreeEntry.executeAction("EXPAND", tuple())
-        xTreeEntry2 = xTreeEntry.getChild('0')                 #Available Databases
-        xTreeEntry2.executeAction("SELECT", tuple())          #Click on the biblio
+            xTreeEntry = xTreelist.getChild('0')                 #Available Databases
+            xTreeEntry.executeAction("EXPAND", tuple())          #Click on the Bibliography
+            xTreeEntry.executeAction("COLLAPSE", tuple())
+            xTreeEntry.executeAction("EXPAND", tuple())
+            xTreeEntry2 = xTreeEntry.getChild('0')                 #Available Databases
+            xTreeEntry2.executeAction("SELECT", tuple())          #Click on the biblio
 
-        xDefineBtn = xExDBDlg.getChild("ok")
-        xDefineBtn.executeAction("CLICK", tuple())
-
-        self.ui_test.execute_dialog_through_command(".uno:ChangeDatabaseField")
-        xExDBDlg = self.xUITest.getTopFocusWindow()
-        xLabeldb = xExDBDlg.getChild("dbnameft")
-        self.assertEqual(get_state_as_dict(xLabeldb)["Text"], "Bibliography.biblio")
-
-        xCloseBtn = xExDBDlg.getChild("close")
-        self.ui_test.close_dialog_through_button(xCloseBtn)
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:ChangeDatabaseField", close_button="close") as xExDBDlg:
+            xLabeldb = xExDBDlg.getChild("dbnameft")
+            self.assertEqual(get_state_as_dict(xLabeldb)["Text"], "Bibliography.biblio")
 
         self.ui_test.close_doc()
 

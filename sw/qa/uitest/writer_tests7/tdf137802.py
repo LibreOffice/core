@@ -25,14 +25,11 @@ class tdf137802(UITestCase):
 
             self.ui_test.wait_until_child_is_available('metricfield')
 
-            self.ui_test.execute_dialog_through_command(".uno:TransformDialog")
+            with self.ui_test.execute_dialog_through_command_guarded(".uno:TransformDialog") as xDialog:
 
-            xDialog = self.xUITest.getTopFocusWindow()
 
-            xDialog.getChild('topage').executeAction("CLICK", tuple())
+                xDialog.getChild('topage').executeAction("CLICK", tuple())
 
-            xOkBtn = xDialog.getChild("ok")
-            xOkBtn.executeAction("CLICK", tuple())
 
             self.assertEqual(AT_PAGE, document.DrawPage.getByIndex(0).AnchorType)
 

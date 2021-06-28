@@ -14,13 +14,10 @@ class tdf104795(UITestCase):
 
    def test_tdf104795(self):
         with self.ui_test.load_file(get_url_for_data_file("tdf104795.odt")) as writer_doc:
-            self.ui_test.execute_dialog_through_command(".uno:SetDocumentProperties")
-            xDialog = self.xUITest.getTopFocusWindow()
+            with self.ui_test.execute_dialog_through_command_guarded(".uno:SetDocumentProperties") as xDialog:
 
-            sShowSignedText = get_state_as_dict(xDialog.getChild('showsigned'))['Text']
+                sShowSignedText = get_state_as_dict(xDialog.getChild('showsigned'))['Text']
 
-            xOkBtn = xDialog.getChild("ok")
-            xOkBtn.executeAction("CLICK", tuple())
 
             # Without the fix in place, this test would have failed with
             # AssertionError: '12/19/2016, 23:06:31, timur.davletshin' != '12/19/2016, 00:00:00, !!br0ken!!'
