@@ -2,6 +2,57 @@
   "comments": [
     {
       "key": {
+        "uuid": "dfea2598_fedd9ace",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-28T05:18:35Z",
+      "side": 1,
+      "message": "Please look closer to the https://gerrit.libreoffice.org/c/core/+/117918/4//COMMIT_MSG#7 to see that you omitted the bug number reference. Please pay attention to details - computer science is about details.",
+      "revId": "ee097c59afa796e167931a4fff215d1a3337df76",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c9d475c3_81e19813",
+        "filename": "include/sfx2/viewfrm.hxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-28T05:18:35Z",
+      "side": 1,
+      "message": "Why do you need this forward declaration in a HXX where it is not used? If you use it in another HXX/CXX, then forward-declare it directly there.",
+      "revId": "ee097c59afa796e167931a4fff215d1a3337df76",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dac00163_ce5c1580",
+        "filename": "include/vcl/weld.hxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 2455,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-28T05:18:35Z",
+      "side": 1,
+      "message": "We don\u0027t need this. This new method would only repeat what weld_tree_view does, and we need to implement StyleList constructor to call weld_tree_view internally.",
+      "revId": "ee097c59afa796e167931a4fff215d1a3337df76",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "316eb7dd_c2436fb3",
         "filename": "sfx2/Library_sfx.mk",
         "patchSetId": 9
@@ -25,6 +76,81 @@
     },
     {
       "key": {
+        "uuid": "5944b4cf_a27e0c64",
+        "filename": "sfx2/Library_sfx.mk",
+        "patchSetId": 9
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-28T05:18:35Z",
+      "side": 1,
+      "message": "And? Just remove the tab, ant type four spaces. Or configure your editor to not do things that you don\u0027t want :)",
+      "parentUuid": "316eb7dd_c2436fb3",
+      "range": {
+        "startLine": 207,
+        "startChar": 0,
+        "endLine": 207,
+        "endChar": 31
+      },
+      "revId": "ee097c59afa796e167931a4fff215d1a3337df76",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7d528367_20896c45",
+        "filename": "sfx2/source/dialog/StyleList.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-28T05:18:35Z",
+      "side": 1,
+      "message": "Note the missing space between \u0027#include\u0027 and the \u0027\u003c\u0027",
+      "revId": "ee097c59afa796e167931a4fff215d1a3337df76",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "096c8d30_07b1dd50",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-28T05:18:35Z",
+      "side": 1,
+      "message": "This method is documented as \"handle drop of content **into the treeview**\", so it is natural to make it a member of the StyleList.",
+      "revId": "ee097c59afa796e167931a4fff215d1a3337df76",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "56433c4e_65ccfbf6",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-28T05:18:35Z",
+      "side": 1,
+      "message": "This repeated pattern suggests that the two treeviews are in fact closely related. So again: what mxFmtLb is used for exactly?",
+      "revId": "ee097c59afa796e167931a4fff215d1a3337df76",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "76176150_7b1e1ddc",
         "filename": "sfx2/source/dialog/templdlg.cxx",
         "patchSetId": 9
@@ -42,6 +168,70 @@
         "endLine": 536,
         "endChar": 43
       },
+      "revId": "ee097c59afa796e167931a4fff215d1a3337df76",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a6182f52_f7bc2c1b",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 536,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-28T05:18:35Z",
+      "side": 1,
+      "message": "See comment above at declaration of weld_style_view",
+      "parentUuid": "76176150_7b1e1ddc",
+      "range": {
+        "startLine": 536,
+        "startChar": 28,
+        "endLine": 536,
+        "endChar": 43
+      },
+      "revId": "ee097c59afa796e167931a4fff215d1a3337df76",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "052467c7_fe93c029",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 1047,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-28T05:18:35Z",
+      "side": 1,
+      "message": "Please no commented-out pieces from the not-yet-started task of adding character style list.",
+      "range": {
+        "startLine": 1042,
+        "startChar": 0,
+        "endLine": 1047,
+        "endChar": 7
+      },
+      "revId": "ee097c59afa796e167931a4fff215d1a3337df76",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2e6d840e_7b6d9c27",
+        "filename": "sfx2/uiconfig/ui/templatepanel.ui",
+        "patchSetId": 9
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-28T05:18:35Z",
+      "side": 1,
+      "message": "You still try to change the .UI. Should I repeat again that a change tike this, where much of the code is just a garbage, remnants of something, is very difficult to review and difficult to concentrate on what you actually need to fix/change?",
       "revId": "ee097c59afa796e167931a4fff215d1a3337df76",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
