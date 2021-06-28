@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:drawooo="http://openoffice.org/2010/draw" xmlns:of="urn:oasis:names:tc:opendocument:xmlns:of:1.2" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:ooo="http://openoffice.org/2004/office" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:officeooo="http://openoffice.org/2009/office" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.text">
+<office:styles>
+  <style:style style:name="Graphics" style:family="graphic">
+   <style:graphic-properties text:anchor-type="paragraph" svg:x="0cm" svg:y="0cm" style:wrap="dynamic" style:number-wrapped-paragraphs="no-limit" style:wrap-contour="false" style:vertical-pos="top" style:vertical-rel="paragraph" style:horizontal-pos="center" style:horizontal-rel="paragraph"/>
+  </style:style>
+ </office:styles>
+ <office:automatic-styles>
+  <style:style style:name="fr1" style:family="graphic" style:parent-style-name="Graphics">
+   <style:graphic-properties style:wrap="parallel" style:number-wrapped-paragraphs="no-limit" style:wrap-contour="false" style:vertical-pos="from-top" style:vertical-rel="paragraph" style:horizontal-pos="from-left" style:horizontal-rel="paragraph" style:mirror="none" fo:clip="rect(0cm, 0cm, 0cm, 0cm)" draw:luminance="0%" draw:contrast="0%" draw:red="0%" draw:green="0%" draw:blue="0%" draw:gamma="100%" draw:color-inversion="false" draw:image-opacity="100%" draw:color-mode="standard" draw:wrap-influence-on-position="once-concurrent" loext:allow-overlap="true"/>
+  </style:style>
+  <style:style style:name="dp1" style:family="drawing-page">
+   <style:drawing-page-properties draw:background-size="full"/>
+  </style:style>
+ </office:automatic-styles>
+ <office:master-styles>
+  <style:master-page style:name="Standard" draw:style-name="dp1"/>
+ </office:master-styles>
+ <office:body>
+  <office:text>
+   <text:tracked-changes text:track-changes="false">
+    <text:changed-region xml:id="ct94919822029600" text:id="ct94919822029600">
+     <text:deletion>
+      <office:change-info>
+       <dc:creator>X</dc:creator>
+       <dc:date>2021-05-07T17:32:23</dc:date>
+      </office:change-info>
+     </text:deletion>
+    </text:changed-region>
+   </text:tracked-changes>
+   <text:p text:style-name="Standard"><text:change-start text:change-id="ct94919822029600"/>Lorem <draw:frame draw:style-name="fr1" draw:name="Image1" text:anchor-type="char" svg:x="4.89cm" svg:y="0.499cm" svg:width="6.541cm" svg:height="3.32cm" draw:z-index="0"><draw:image draw:mime-type="image/png">
+      <office:binary-data>iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAAAAAA6fptVAAAAAmJLR0QA/4ePzL8AAAAJcEhZ
+       cwAACxMAAAsTAQCanBgAAAAHdElNRQflBQYKGR4LTuGQAAAACklEQVQI12M4DwAA0QDQfVbA
+       HQAAAABJRU5ErkJggg==
+      </office:binary-data>
+     </draw:image>
+    </draw:frame>ipsum <text:change-end text:change-id="ct94919822029600"/>dolor sit amet, consectetuer adipiscing elit. Maecenas porttitor congue massa. Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna.</text:p>
+  </office:text>
+ </office:body>
+</office:document>
