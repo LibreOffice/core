@@ -23,6 +23,7 @@
 #include <vcl/customweld.hxx>
 #include <vcl/image.hxx>
 #include <vcl/weld.hxx>
+#include <svtools/toolbarmenu.hxx>
 #include <array>
 
 class ValueSet;
@@ -32,7 +33,7 @@ namespace svx::sidebar
 class LinePropertyPanelBase;
 class LineWidthValueSet;
 
-class LineWidthPopup final
+class LineWidthPopup final : public WeldToolbarPopup
 {
 public:
     LineWidthPopup(weld::Widget* pParent, LinePropertyPanelBase& rParent);
@@ -41,6 +42,8 @@ public:
     void SetWidthSelect(tools::Long lValue, bool bValuable, MapUnit eMapUnit);
 
     weld::Container* getTopLevel() const { return m_xTopLevel.get(); }
+
+    virtual void GrabFocus() override;
 
 private:
     LinePropertyPanelBase& m_rParent;
@@ -53,15 +56,12 @@ private:
     Image m_aIMGCus;
     Image m_aIMGCusGray;
 
-    std::unique_ptr<weld::Builder> m_xBuilder;
-    std::unique_ptr<weld::Container> m_xTopLevel;
     std::unique_ptr<weld::MetricSpinButton> m_xMFWidth;
     std::unique_ptr<LineWidthValueSet> m_xVSWidth;
     std::unique_ptr<weld::CustomWeld> m_xVSWidthWin;
 
     DECL_LINK(VSSelectHdl, ValueSet*, void);
     DECL_LINK(MFModifyHdl, weld::MetricSpinButton&, void);
-    DECL_LINK(FocusHdl, weld::Widget&, void);
 };
 
 } // end of namespace svx::sidebar
