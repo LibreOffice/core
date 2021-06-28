@@ -151,6 +151,24 @@
     },
     {
       "key": {
+        "uuid": "428bead2_4e95fe87",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-06-28T08:16:47Z",
+      "side": 1,
+      "message": "The code suggests that when mxStyleList is not visible then we use mxFmtLb..But I am thinking that why will mxStyleList not be visible?",
+      "parentUuid": "56433c4e_65ccfbf6",
+      "revId": "ee097c59afa796e167931a4fff215d1a3337df76",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "76176150_7b1e1ddc",
         "filename": "sfx2/source/dialog/templdlg.cxx",
         "patchSetId": 9
