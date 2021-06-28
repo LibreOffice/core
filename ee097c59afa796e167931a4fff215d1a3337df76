@@ -134,6 +134,47 @@
     },
     {
       "key": {
+        "uuid": "e4d347e1_3f43d1dd",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-06-28T08:29:21Z",
+      "side": 1,
+      "message": "Can we somehow use this method in StyleList.cxx instead of creating another member?\nCreating this will automatically require to make FillTreeBox and SelectStyle marked below as a member of StyleList.cxx..",
+      "parentUuid": "096c8d30_07b1dd50",
+      "revId": "ee097c59afa796e167931a4fff215d1a3337df76",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b1cf28f8_0e930ee2",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-06-28T08:29:21Z",
+      "side": 1,
+      "message": "Please refer to the comment on line 137..",
+      "range": {
+        "startLine": 205,
+        "startChar": 0,
+        "endLine": 206,
+        "endChar": 15
+      },
+      "revId": "ee097c59afa796e167931a4fff215d1a3337df76",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "56433c4e_65ccfbf6",
         "filename": "sfx2/source/dialog/templdlg.cxx",
         "patchSetId": 9
