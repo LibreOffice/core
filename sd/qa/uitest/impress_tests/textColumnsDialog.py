@@ -31,7 +31,7 @@ class textColumnsDialog(UITestCase):
             self.assertEqual("com.sun.star.drawing.SvxShapeCollection", document.CurrentSelection.getImplementationName())
 
             # Test defaults and set some values
-            with guarded.execute_dialog_through_command(self, ".uno:TextAttributes") as xDialog:
+            with self.ui_test.execute_dialog_through_command_guarded(".uno:TextAttributes") as xDialog:
                 xTabs = xDialog.getChild("tabcontrol")
                 select_pos(xTabs, "2")
                 colNumber = xDialog.getChild('FLD_COL_NUMBER')
@@ -42,7 +42,7 @@ class textColumnsDialog(UITestCase):
                 colSpacing.executeAction("SET", mkPropertyValues({"TEXT": "1.5"}))
 
             # Test that settings persist
-            with guarded.execute_dialog_through_command(self, ".uno:TextAttributes") as xDialog:
+            with self.ui_test.execute_dialog_through_command_guarded(".uno:TextAttributes") as xDialog:
                 xTabs = xDialog.getChild("tabcontrol")
                 select_pos(xTabs, "2")
                 colNumber = xDialog.getChild('FLD_COL_NUMBER')
