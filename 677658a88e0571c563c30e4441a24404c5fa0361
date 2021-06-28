@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d082c1bb_7a4d9c2f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 13
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-06-28T07:48:43Z",
+      "side": 1,
+      "message": "What is \"a. o.\" here, \"and others\"? :-)",
+      "revId": "677658a88e0571c563c30e4441a24404c5fa0361",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
