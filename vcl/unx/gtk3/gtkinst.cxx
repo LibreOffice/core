@@ -434,13 +434,18 @@ bool GtkInstance::AnyInput( VclInputFlags nType )
     if( (nType & VclInputFlags::TIMER) && IsTimerExpired() )
         return true;
 
+    // strip timer bits now
+    nType = nType & ~VclInputFlags::TIMER;
+
+    static constexpr VclInputFlags ANY_INPUT_EXCLUDING_TIMER = VCL_INPUT_ANY & ~VclInputFlags::TIMER;
+
 #if !GTK_CHECK_VERSION(4, 0, 0)
     GdkDisplay* pDisplay = gdk_display_get_default();
     if (!gdk_display_has_pending(pDisplay))
         return false;
 #endif
 
-    if (nType == VCL_INPUT_ANY)
+    if (nType == ANY_INPUT_EXCLUDING_TIMER)
         return true;
 
     bool bRet = false;
