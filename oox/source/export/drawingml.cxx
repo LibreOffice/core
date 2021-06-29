@@ -2268,11 +2268,13 @@ OUString DrawingML::GetDatetimeTypeFromDateTime(SvxDateFormat eDate, SvxTimeForm
         case SvxDateFormat::B:
             aDateField = "datetime1"; // 13/02/1996
             break;
-        case SvxDateFormat::StdBig:
         case SvxDateFormat::C:
+            aDateField = "datetime5";
+            break;
         case SvxDateFormat::D:
             aDateField = "datetime3"; // 13 February 1996
             break;
+        case SvxDateFormat::StdBig:
         case SvxDateFormat::E:
         case SvxDateFormat::F:
             aDateField = "datetime2";
