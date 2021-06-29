@@ -141,7 +141,13 @@ public:
     ODFSaneDefaultVersion   GetODFSaneDefaultVersion() const;
 
     bool                IsReadOnly( EOption eOption ) const;
+
+    /** gets a sane default from the currently configured default */
+    static ODFSaneDefaultVersion  GetODFSaneDefaultVersion(ODFDefaultVersion eDefaultVersion);
 };
+
+/** lighter-weight version of the same method in SvtSaveOptions */
+UNOTOOLS_DLLPUBLIC SvtSaveOptions::ODFSaneDefaultVersion GetODFSaneDefaultVersion();
 
 #endif
 

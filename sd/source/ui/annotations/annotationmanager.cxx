@@ -703,7 +703,7 @@ void AnnotationManagerImpl::GetAnnotationState(SfxItemSet& rSet)
     const bool bReadOnly = mrBase.GetDocShell()->IsReadOnly();
     const bool bWrongPageKind = (pCurrentPage == nullptr) || (pCurrentPage->GetPageKind() != PageKind::Standard);
 
-    const SvtSaveOptions::ODFSaneDefaultVersion nCurrentODFVersion( SvtSaveOptions().GetODFSaneDefaultVersion() );
+    const SvtSaveOptions::ODFSaneDefaultVersion nCurrentODFVersion( GetODFSaneDefaultVersion() );
 
     if (bReadOnly || bWrongPageKind || (nCurrentODFVersion <= SvtSaveOptions::ODFSVER_012))
         rSet.DisableItem( SID_INSERT_POSTIT );

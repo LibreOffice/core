@@ -31,6 +31,7 @@
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 #include <officecfg/Office/Recovery.hxx>
+#include <officecfg/Office/Common.hxx>
 
 using namespace utl;
 using namespace com::sun::star::uno;
@@ -937,9 +938,25 @@ SvtSaveOptions::ODFDefaultVersion SvtSaveOptions::GetODFDefaultVersion() const
     return (nRet == ODFVER_UNKNOWN) ? ODFVER_LATEST : nRet;
 }
 
+SvtSaveOptions::ODFSaneDefaultVersion GetODFSaneDefaultVersion()
+{
+    sal_Int16 nTmp = officecfg::Office::Common::Save::ODF::DefaultVersion::get();
+    SvtSaveOptions::ODFDefaultVersion eODFDefaultVersion;
+    if( nTmp == 3 )
+        eODFDefaultVersion = SvtSaveOptions::ODFVER_LATEST;
+    else
+        eODFDefaultVersion = SvtSaveOptions::ODFDefaultVersion( nTmp );
+    return SvtSaveOptions::GetODFSaneDefaultVersion(eODFDefaultVersion);
+}
+
 SvtSaveOptions::ODFSaneDefaultVersion SvtSaveOptions::GetODFSaneDefaultVersion() const
 {
-    switch (pImp->pSaveOpt->GetODFDefaultVersion())
+    return GetODFSaneDefaultVersion(pImp->pSaveOpt->GetODFDefaultVersion());
+}
+
+SvtSaveOptions::ODFSaneDefaultVersion SvtSaveOptions::GetODFSaneDefaultVersion(ODFDefaultVersion eODFDefaultVersion)
+{
+    switch (eODFDefaultVersion)
     {
         default:
             assert(!"map new ODFDefaultVersion to ODFSaneDefaultVersion");

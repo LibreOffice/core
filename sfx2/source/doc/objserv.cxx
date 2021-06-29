@@ -1770,8 +1770,7 @@ bool SfxObjectShell::PrepareForSigning(weld::Window* pDialogParent)
     bool bHasSign = ( pImpl->nScriptingSignatureState != SignatureState::NOSIGNATURES || pImpl->nDocumentSignatureState != SignatureState::NOSIGNATURES );
 
     // the target ODF version on saving (only valid when signing ODF of course)
-    SvtSaveOptions aSaveOpt;
-    SvtSaveOptions::ODFSaneDefaultVersion nVersion = aSaveOpt.GetODFSaneDefaultVersion();
+    SvtSaveOptions::ODFSaneDefaultVersion nVersion = GetODFSaneDefaultVersion();
 
     // the document is not new and is not modified
     OUString aODFVersion(comphelper::OStorageHelper::GetODFVersionFromStorage(GetStorage()));
@@ -1952,8 +1951,7 @@ bool SfxObjectShell::SignDocumentContentUsingCertificate(const Reference<XCertif
     bool bHasSign = ( pImpl->nScriptingSignatureState != SignatureState::NOSIGNATURES || pImpl->nDocumentSignatureState != SignatureState::NOSIGNATURES );
 
     // the target ODF version on saving (only valid when signing ODF of course)
-    SvtSaveOptions aSaveOpt;
-    SvtSaveOptions::ODFSaneDefaultVersion nVersion = aSaveOpt.GetODFSaneDefaultVersion();
+    SvtSaveOptions::ODFSaneDefaultVersion nVersion = GetODFSaneDefaultVersion();
 
     // the document is not new and is not modified
     OUString aODFVersion(comphelper::OStorageHelper::GetODFVersionFromStorage(GetStorage()));

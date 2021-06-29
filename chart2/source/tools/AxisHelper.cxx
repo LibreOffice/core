@@ -1148,7 +1148,7 @@ Reference< XChartType > AxisHelper::getFirstChartTypeWithSeriesAttachedToAxisInd
 
 bool AxisHelper::isAxisPositioningEnabled()
 {
-    const SvtSaveOptions::ODFSaneDefaultVersion nCurrentVersion(SvtSaveOptions().GetODFSaneDefaultVersion());
+    const SvtSaveOptions::ODFSaneDefaultVersion nCurrentVersion(GetODFSaneDefaultVersion());
     return nCurrentVersion >= SvtSaveOptions::ODFSVER_012;
 }
 
