@@ -52,7 +52,7 @@ class tdf91305(UITestCase):
 
         gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:C1"}))
         #Open sort dialog by DATA - SORT
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:DataSort") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:DataSort") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             xleftright = xDialog.getChild("leftright")
             select_pos(xTabs, "1")
@@ -62,7 +62,7 @@ class tdf91305(UITestCase):
         self.assertEqual(get_cell_by_position(document, 0, 1, 0).getString(), "cc")
         self.assertEqual(get_cell_by_position(document, 0, 2, 0).getString(), "ff")
         #Open sort dialog by DATA - SORT
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:DataSort") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:DataSort") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             xleftright = xDialog.getChild("leftright")
             xdown = xDialog.getChild("down")

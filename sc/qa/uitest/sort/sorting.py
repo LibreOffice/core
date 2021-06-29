@@ -54,7 +54,7 @@ class CalcSorting(UITestCase):
         #Select cell A3
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A3"}))
         #Open sort dialog by DATA - SORT /Switch to tabpage Options
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:DataSort", close_button="cancel") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:DataSort", close_button="cancel") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             select_pos(xTabs, "1")
             #Verify that option "Range contains column labels" is set
@@ -98,7 +98,7 @@ class CalcSorting(UITestCase):
         #Select cell B3
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "B3"}))
         #Open sort dialog by DATA - SORT /Switch to tabpage Options
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:DataSort", close_button="cancel") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:DataSort", close_button="cancel") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             select_pos(xTabs, "1")
             #Verify that option "Range contains column labels" is not set
@@ -230,7 +230,7 @@ class CalcSorting(UITestCase):
         #Select cell A3
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A3"}))
         #Open sort dialog by DATA - SORT
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:DataSort", close_button="cancel") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:DataSort", close_button="cancel") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             select_pos(xTabs, "0")
             #Verify that the first sort criteria is set to "Number(ascending)"
@@ -242,7 +242,7 @@ class CalcSorting(UITestCase):
         #Select cell B3
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "B3"}))
         #Open sort dialog by DATA - SORT
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:DataSort", close_button="cancel") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:DataSort", close_button="cancel") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             select_pos(xTabs, "0")
             #Verify that the first sort criteria is set to "Misc (ascending)"
@@ -257,7 +257,7 @@ class CalcSorting(UITestCase):
         gridwin.executeAction("TYPE", mkPropertyValues({"KEYCODE": "TAB"}))
         gridwin.executeAction("TYPE", mkPropertyValues({"KEYCODE": "TAB"}))
         #Open sort dialog by DATA - SORT
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:DataSort", close_button="cancel") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:DataSort", close_button="cancel") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             select_pos(xTabs, "0")
             #Verify that the first sort criteria is set to "Number(ascending)"
@@ -271,7 +271,7 @@ class CalcSorting(UITestCase):
         #Move the active cell inside the range to column B by using the TAB key
         gridwin.executeAction("TYPE", mkPropertyValues({"KEYCODE": "TAB"}))
         #Open sort dialog by DATA - SORT
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:DataSort", close_button="cancel") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:DataSort", close_button="cancel") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             select_pos(xTabs, "0")
             #Verify that the first sort criteria is set to "Misc (ascending)"

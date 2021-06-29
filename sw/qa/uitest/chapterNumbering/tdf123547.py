@@ -15,7 +15,7 @@ class tdf123547(UITestCase):
         with self.ui_test.load_file(get_url_for_data_file("tdf123547.docx")) as writer_doc:
             xWriterDoc = self.xUITest.getTopFocusWindow()
 
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:ChapterNumberingDialog") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:ChapterNumberingDialog") as xDialog:
                 xTabs = xDialog.getChild("tabcontrol")
                 select_pos(xTabs, "1")
             #verify we didn't crash

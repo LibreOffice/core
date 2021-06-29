@@ -14,7 +14,7 @@ class tdf124413(UITestCase):
 
         self.ui_test.create_doc_in_start_center("writer")
         #Start LibreOffice. Go to Tools > Macros > Organize Macros > Basic
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:MacroDialog", close_button="") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:MacroDialog", close_button="") as xDialog:
             #Open Editor
             xEditBtn = xDialog.getChild("edit")
             xEditBtn.executeAction("CLICK", tuple())

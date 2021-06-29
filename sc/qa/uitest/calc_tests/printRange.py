@@ -93,7 +93,7 @@ class printRange(UITestCase):
         self.ui_test.close_dialog_through_button(xOK)
 
         #Copy sheet
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:Move"):
+        with self.ui_test.execute_dialog_through_command(".uno:Move"):
             pass
         #Verify Print Range dialog on new sheet
         self.ui_test.execute_modeless_dialog_through_command(".uno:EditPrintArea")

@@ -21,7 +21,7 @@ class tdf40427(UITestCase):
         self.assertEqual(2, document.CurrentController.PageCount)
 
         # Make sure that the view is 2 pages side-by-side - look at dialog View-Zoom-Zoom
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:Zoom") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:Zoom") as xDialog:
 
             columnssb = xDialog.getChild("columnssb")
             columns = xDialog.getChild("columns")

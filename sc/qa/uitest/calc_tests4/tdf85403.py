@@ -22,7 +22,7 @@ class tdf85403(UITestCase):
             #putting a new SUM(A1) in C1 will show 123
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
             # Data - Text to Columns
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:TextToColumns"):
+            with self.ui_test.execute_dialog_through_command(".uno:TextToColumns"):
                 pass
 
             #Verify

@@ -14,20 +14,20 @@ class GoToPage_dialog(UITestCase):
         xWriterDoc = self.xUITest.getTopFocusWindow()
         xWriterEdit = xWriterDoc.getChild("writer_edit")
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:GotoPage") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:GotoPage") as xDialog:
             xPageText = xDialog.getChild("page")
             xPageText.executeAction("TYPE", mkPropertyValues({"TEXT":"2"}))
 
         self.assertEqual(get_state_as_dict(xWriterEdit)["CurrentPage"], "2")
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:GotoPage") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:GotoPage") as xDialog:
             xPageText = xDialog.getChild("page")
             xPageText.executeAction("TYPE", mkPropertyValues({"TEXT":"3a"}))
 
         self.assertEqual(get_state_as_dict(xWriterEdit)["CurrentPage"], "3")
 
         # check cancel button
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:GotoPage", close_button="cancel"):
+        with self.ui_test.execute_dialog_through_command(".uno:GotoPage", close_button="cancel"):
             pass
 
         self.assertEqual(get_state_as_dict(xWriterEdit)["CurrentPage"], "3")

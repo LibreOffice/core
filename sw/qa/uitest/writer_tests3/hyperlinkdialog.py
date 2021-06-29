@@ -21,7 +21,7 @@ class HyperlinkDialog(UITestCase):
         self.ui_test.create_doc_in_start_center("writer")
         MainWindow = self.xUITest.getTopFocusWindow()
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:HyperlinkDialog", close_button="cancel") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:HyperlinkDialog", close_button="cancel") as xDialog:
 
             # Test the vertical tab
             xtab=xDialog.getChild("tabcontrol")
@@ -51,7 +51,7 @@ class HyperlinkDialog(UITestCase):
         self.ui_test.create_doc_in_start_center("writer")
         xMainWindow = self.xUITest.getTopFocusWindow()
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:HyperlinkDialog") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:HyperlinkDialog") as xDialog:
 
             # insert link
             xtab=xDialog.getChild("tabcontrol")
@@ -93,7 +93,7 @@ class HyperlinkDialog(UITestCase):
         xWriterDoc = self.xUITest.getTopFocusWindow()
         xWriterEdit = xWriterDoc.getChild("writer_edit")
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:HyperlinkDialog", close_button="") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:HyperlinkDialog", close_button="") as xDialog:
             xHelp = xDialog.getChild("help")
             xHelp.executeAction('FOCUS', tuple())
 

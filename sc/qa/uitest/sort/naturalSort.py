@@ -29,7 +29,7 @@ class CalcNaturalSorting(UITestCase):
         enter_text_to_cell(gridwin, "A4", "MW180SSMOU456.994JIL4")
         enter_text_to_cell(gridwin, "A5", "MW101SSMOU456.996JIL4")
         #Open sort dialog by DATA - SORT
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:DataSort") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:DataSort") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             select_pos(xTabs, "0")
             xNatural = xDialog.getChild("naturalsort")
@@ -57,7 +57,7 @@ class CalcNaturalSorting(UITestCase):
         gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "D1:D4"}))
 
         #Open sort dialog by DATA - SORT
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:DataSort") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:DataSort") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             select_pos(xTabs, "1")
             xNatural = xDialog.getChild("naturalsort")
@@ -85,7 +85,7 @@ class CalcNaturalSorting(UITestCase):
         gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:D1"}))
 
         #Open sort dialog by DATA - SORT
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:DataSort") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:DataSort") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             xleftright = xDialog.getChild("leftright")
             select_pos(xTabs, "1")

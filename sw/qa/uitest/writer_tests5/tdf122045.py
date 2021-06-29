@@ -16,7 +16,7 @@ class tdf122045(UITestCase):
         xWriterDoc = self.xUITest.getTopFocusWindow()
         document = self.ui_test.get_component()
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:PageDialog", close_button="cancel") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:PageDialog", close_button="cancel") as xDialog:
 
             xTabs = xDialog.getChild("tabcontrol")
             select_pos(xTabs, "2")

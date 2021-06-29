@@ -20,7 +20,7 @@ class tdf99069(UITestCase):
         gridwin = xCalcDoc.getChild("grid_window")
         #(1) Download and open example.ods attached to tdf#97266  with cell B1 active.
         #(2) In tool bar, click the chart icon.  Program presents Chart Wizard.
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:InsertObjectChart", close_button="finish"):
+        with self.ui_test.execute_dialog_through_command(".uno:InsertObjectChart", close_button="finish"):
             # the chart shows a border with handles on each side and at each corner.
             pass
 

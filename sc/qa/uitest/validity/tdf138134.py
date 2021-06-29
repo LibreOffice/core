@@ -26,7 +26,7 @@ class DetectiveCircle(UITestCase):
         #Select the cells to be validated
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A3"}))
         #Apply Data > Validity ... > Whole Numbers
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:Validation") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:Validation") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             select_pos(xTabs, "0")
             xallow = xDialog.getChild("allow")

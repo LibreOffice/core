@@ -15,7 +15,7 @@ class tdf140863(UITestCase):
         self.ui_test.create_doc_in_start_center("writer")
 
         # Insert one section
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:InsertSection"):
+        with self.ui_test.execute_dialog_through_command(".uno:InsertSection"):
             pass
 
         xWriterDoc = self.xUITest.getTopFocusWindow()
@@ -31,7 +31,7 @@ class tdf140863(UITestCase):
         self.assertTrue(document.TextSections.Section1.IsVisible)
 
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:EditRegion") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:EditRegion") as xDialog:
             xHide = xDialog.getChild('hide')
             self.assertEqual('false', get_state_as_dict(xHide)['Selected'])
 
@@ -42,7 +42,7 @@ class tdf140863(UITestCase):
         self.assertFalse(document.TextSections.Section1.IsVisible)
         self.assertEqual(get_state_as_dict(xWriterEdit)["CurrentPage"], "1")
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:EditRegion") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:EditRegion") as xDialog:
             xHide = xDialog.getChild('hide')
             self.assertEqual('true', get_state_as_dict(xHide)['Selected'])
 

@@ -14,7 +14,7 @@ class exchangeDB(UITestCase):
 
         self.ui_test.create_doc_in_start_center("writer")
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:ChangeDatabaseField", close_button="close"):
+        with self.ui_test.execute_dialog_through_command(".uno:ChangeDatabaseField", close_button="close"):
             pass
 
         self.ui_test.close_doc()
@@ -23,7 +23,7 @@ class exchangeDB(UITestCase):
 
         self.ui_test.create_doc_in_start_center("writer")
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:ChangeDatabaseField") as xExDBDlg:
+        with self.ui_test.execute_dialog_through_command(".uno:ChangeDatabaseField") as xExDBDlg:
             xTreelist = xExDBDlg.getChild("availablelb")
 
             xLabeldb = xExDBDlg.getChild("dbnameft")
@@ -36,7 +36,7 @@ class exchangeDB(UITestCase):
             xTreeEntry2 = xTreeEntry.getChild('0')                 #Available Databases
             xTreeEntry2.executeAction("SELECT", tuple())          #Click on the biblio
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:ChangeDatabaseField", close_button="close") as xExDBDlg:
+        with self.ui_test.execute_dialog_through_command(".uno:ChangeDatabaseField", close_button="close") as xExDBDlg:
             xLabeldb = xExDBDlg.getChild("dbnameft")
             self.assertEqual(get_state_as_dict(xLabeldb)["Text"], "Bibliography.biblio")
 

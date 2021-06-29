@@ -37,7 +37,7 @@ class navigator(UITestCase):
             self.assertEqual(len(xComments.getChildren()), 1)
             self.assertEqual(get_state_as_dict(xComments.getChild('0'))['Text'], 'Test Comment')
 
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:RenameTable") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:RenameTable") as xDialog:
                 xname_entry = xDialog.getChild("name_entry")
                 xname_entry.executeAction("TYPE", mkPropertyValues({"TEXT": "S1"}))
 

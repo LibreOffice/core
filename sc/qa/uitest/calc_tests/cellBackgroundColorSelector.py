@@ -22,7 +22,7 @@ class CalcCellBackgroundColorSelector(UITestCase):
         #select cell A1
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
         #format - cell
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:FormatCellDialog") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:FormatCellDialog") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             select_pos(xTabs, "6")  #tab Numbers
             # click on color btn
@@ -148,7 +148,7 @@ class CalcCellBackgroundColorSelector(UITestCase):
         #select cell A5
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A5"}))
         #format - cell
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:FormatCellDialog") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:FormatCellDialog") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             select_pos(xTabs, "6")  #tab Numbers
             # click on color btn
@@ -177,7 +177,7 @@ class CalcCellBackgroundColorSelector(UITestCase):
         #select cell D3
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "D3"}))
         #format - cell
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:FormatCellDialog") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:FormatCellDialog") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             select_pos(xTabs, "6")  #tab Numbers
             # click on color btn

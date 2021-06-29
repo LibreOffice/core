@@ -23,7 +23,7 @@ class Subtotals(UITestCase):
             # 1. Open the test file
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:F123"}))
             # 2. Data->Subtotals
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:DataSubTotals") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:DataSubTotals") as xDialog:
                 xTabs = xDialog.getChild("tabcontrol")
                 select_pos(xTabs, "0")
                 # = 1st group = 3. Group by "Person Number", select "shipping time" and use the Max function.

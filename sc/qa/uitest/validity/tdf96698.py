@@ -22,7 +22,7 @@ class tdf96698(UITestCase):
         #A general validity check for the entered new content of the active cell - especially for text
         #with a custom formula like in Excel is not possible.
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A2"}))
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:Validation") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:Validation") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             select_pos(xTabs, "0")
             xallow = xDialog.getChild("allow")
@@ -32,7 +32,7 @@ class tdf96698(UITestCase):
             select_by_text(xallow, "Custom")
             xmin.executeAction("TYPE", mkPropertyValues({"TEXT":"ISERROR(FIND(\",\",B2))"}))
         #verify
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:Validation") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:Validation") as xDialog:
             xallow = xDialog.getChild("allow")
             xallowempty = xDialog.getChild("allowempty")
             xmin = xDialog.getChild("min")
@@ -42,7 +42,7 @@ class tdf96698(UITestCase):
 
 
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A3"}))
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:Validation") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:Validation") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             select_pos(xTabs, "0")
             xallow = xDialog.getChild("allow")
@@ -52,7 +52,7 @@ class tdf96698(UITestCase):
             select_by_text(xallow, "Custom")
             xmin.executeAction("TYPE", mkPropertyValues({"TEXT":"NOT(ISERROR(B3))"}))
         #verify
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:Validation") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:Validation") as xDialog:
             xallow = xDialog.getChild("allow")
             xallowempty = xDialog.getChild("allowempty")
             xmin = xDialog.getChild("min")
@@ -62,7 +62,7 @@ class tdf96698(UITestCase):
 
 
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A7"}))
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:Validation") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:Validation") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             select_pos(xTabs, "0")
             xallow = xDialog.getChild("allow")
@@ -72,7 +72,7 @@ class tdf96698(UITestCase):
             select_by_text(xallow, "Custom")
             xmin.executeAction("TYPE", mkPropertyValues({"TEXT":"ISERROR(FIND(\",\",A7))"}))
         #verify
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:Validation") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:Validation") as xDialog:
             xallow = xDialog.getChild("allow")
             xallowempty = xDialog.getChild("allowempty")
             xmin = xDialog.getChild("min")
@@ -82,7 +82,7 @@ class tdf96698(UITestCase):
 
 
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A8"}))
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:Validation") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:Validation") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             select_pos(xTabs, "0")
             xallow = xDialog.getChild("allow")
@@ -92,7 +92,7 @@ class tdf96698(UITestCase):
             select_by_text(xallow, "Custom")
             xmin.executeAction("TYPE", mkPropertyValues({"TEXT":"NOT(ISERROR(A8))"}))
         #verify
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:Validation") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:Validation") as xDialog:
             xallow = xDialog.getChild("allow")
             xallowempty = xDialog.getChild("allowempty")
             xmin = xDialog.getChild("min")

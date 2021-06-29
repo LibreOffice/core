@@ -24,7 +24,7 @@ class tdf63805(UITestCase):
             #2 - Select A1:A20
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:A20"}))
             #3 - Edit -> fill -> Series -> Down - Date-Month-Increment=1 <ok>
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:FillSeries"):
+            with self.ui_test.execute_dialog_through_command(".uno:FillSeries"):
                 pass
             #5 -Expected: All Cells show last day of month / Actual: some months skipped
             self.assertEqual(get_cell_by_position(calc_doc, 0, 0, 0).getValue(), 41213)

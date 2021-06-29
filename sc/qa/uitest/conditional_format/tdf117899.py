@@ -16,7 +16,7 @@ class Tdf117899(UITestCase):
 
   def execute_conditional_format_manager_dialog(self):
 
-    with self.ui_test.execute_dialog_through_command_guarded(".uno:ConditionalFormatManagerDialog") as xCondFormatMgr:
+    with self.ui_test.execute_dialog_through_command(".uno:ConditionalFormatManagerDialog") as xCondFormatMgr:
 
         aExpectedResult = 'Formula is $E3="нет"'
         xList = xCondFormatMgr.getChild("CONTAINER")
@@ -45,7 +45,7 @@ class Tdf117899(UITestCase):
                 self.xUITest.executeCommandWithParameters(".uno:ClipboardFormatItems", formatProperty)
 
                 # Save Copy as
-                with self.ui_test.execute_dialog_through_command_guarded(".uno:ObjectMenue?VerbID:short=-8", close_button="open") as xDialog:
+                with self.ui_test.execute_dialog_through_command(".uno:ObjectMenue?VerbID:short=-8", close_button="open") as xDialog:
 
                     xFileName = xDialog.getChild("file_name")
                     xFileName.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))

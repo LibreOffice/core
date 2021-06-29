@@ -34,7 +34,7 @@ class CalcChartUIDemo(UITestCase):
 
         self.fill_spreadsheet()
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:InsertObjectChart", close_button="cancel"):
+        with self.ui_test.execute_dialog_through_command(".uno:InsertObjectChart", close_button="cancel"):
             pass
 
         self.ui_test.close_doc()
@@ -45,7 +45,7 @@ class CalcChartUIDemo(UITestCase):
 
         self.fill_spreadsheet()
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:InsertObjectChart", close_button="finish"):
+        with self.ui_test.execute_dialog_through_command(".uno:InsertObjectChart", close_button="finish"):
             pass
 
         self.ui_test.close_doc()
@@ -56,7 +56,7 @@ class CalcChartUIDemo(UITestCase):
 
         self.fill_spreadsheet()
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:InsertObjectChart", close_button="finish") as xChartDlg:
+        with self.ui_test.execute_dialog_through_command(".uno:InsertObjectChart", close_button="finish") as xChartDlg:
             xNextBtn = xChartDlg.getChild("next")
             xNextBtn.executeAction("CLICK", tuple())
 
@@ -76,7 +76,7 @@ class CalcChartUIDemo(UITestCase):
         xCalcDoc = self.xUITest.getTopFocusWindow()
         xGridWindow = xCalcDoc.getChild("grid_window")
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:InsertObjectChart", close_button="finish"):
+        with self.ui_test.execute_dialog_through_command(".uno:InsertObjectChart", close_button="finish"):
             pass
 
         xGridWindow.executeAction("DESELECT", mkPropertyValues({"OBJECT": ""}))
@@ -94,7 +94,7 @@ class CalcChartUIDemo(UITestCase):
         xCalcDoc = self.xUITest.getTopFocusWindow()
         xGridWindow = xCalcDoc.getChild("grid_window")
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:InsertObjectChart", close_button="finish"):
+        with self.ui_test.execute_dialog_through_command(".uno:InsertObjectChart", close_button="finish"):
             pass
 
         xGridWindow.executeAction("DESELECT", mkPropertyValues({"OBJECT": ""}))
@@ -115,7 +115,7 @@ class CalcChartUIDemo(UITestCase):
         xCalcDoc = self.xUITest.getTopFocusWindow()
         xGridWindow = xCalcDoc.getChild("grid_window")
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:InsertObjectChart", close_button="finish"):
+        with self.ui_test.execute_dialog_through_command(".uno:InsertObjectChart", close_button="finish"):
             pass
 
         xGridWindow.executeAction("DESELECT", mkPropertyValues({"OBJECT": ""}))

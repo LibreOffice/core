@@ -18,7 +18,7 @@ class tdf105301(UITestCase):
 
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:R9"}))
 
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:DataSort") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:DataSort") as xDialog:
                 xTabs = xDialog.getChild("tabcontrol")
                 select_pos(xTabs, "0")
                 self.assertEqual("Column B", get_state_as_dict(xDialog.getChild("sortlb"))['DisplayText'])

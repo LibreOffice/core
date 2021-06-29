@@ -25,7 +25,7 @@ class tdf137617(UITestCase):
 
         gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:B2"}))
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:CreateNames") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:CreateNames") as xDialog:
 
 
             # Only left is selected
@@ -45,7 +45,7 @@ class tdf137617(UITestCase):
         self.assertEqual('Result2', get_state_as_dict(xPosWindow)['Text'])
 
         # Change formula syntax to "Excel R1C1"
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:OptionsTreeDialog") as xDialogOpt:
+        with self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog") as xDialogOpt:
 
             xPages = xDialogOpt.getChild("pages")
             xCalcEntry = xPages.getChild('3')
@@ -62,7 +62,7 @@ class tdf137617(UITestCase):
 
         gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "C1:D2"}))
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:CreateNames") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:CreateNames") as xDialog:
 
 
             # Only top is selected
@@ -83,7 +83,7 @@ class tdf137617(UITestCase):
         self.assertEqual('Result4', get_state_as_dict(xPosWindow)['Text'])
 
         # Change formula syntax back to "Calc A1"
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:OptionsTreeDialog") as xDialogOpt:
+        with self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog") as xDialogOpt:
 
             xPages = xDialogOpt.getChild("pages")
             xCalcEntry = xPages.getChild('3')

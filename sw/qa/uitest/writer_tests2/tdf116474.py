@@ -24,7 +24,7 @@ class tdf116474(UITestCase):
         #select image
         document.getCurrentController().select(document.getDrawPage()[0])
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:InsertCaptionDialog") as xDialogCaption:
+        with self.ui_test.execute_dialog_through_command(".uno:InsertCaptionDialog") as xDialogCaption:
 
             xCapt = xDialogCaption.getChild("caption_edit")
             xCapt.executeAction("TYPE", mkPropertyValues({"TEXT":"Caption"}))

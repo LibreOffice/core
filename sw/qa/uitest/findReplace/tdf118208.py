@@ -20,7 +20,7 @@ class tdf118208(UITestCase):
             # 2. Press ctrl-H to show the search and replace dialog.
             # 3. Press the "Format..."  button.
             #Libreoffice immediately crashed.
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:OptionsTreeDialog") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog") as xDialog:
 
                 xPages = xDialog.getChild("pages")
                 xLanguageEntry = xPages.getChild('2')                 # Language Settings
@@ -50,7 +50,7 @@ class tdf118208(UITestCase):
             self.ui_test.close_dialog_through_button(xcloseBtn)
 
             #enable lang support again
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:OptionsTreeDialog") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog") as xDialog:
 
                 xPages = xDialog.getChild("pages")
                 xLanguageEntry = xPages.getChild('2')                 # Language Settings

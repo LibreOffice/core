@@ -15,7 +15,7 @@ class Tdf126226(UITestCase):
             self.xUITest.executeCommand(".uno:SelectAll")
 
             # Without the fix in place, this test would have crashed here
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:CommentChangeTracking") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:CommentChangeTracking") as xDialog:
 
 
                 self.assertEqual("Hello\n", get_state_as_dict(xDialog.getChild("edit"))["Text"])

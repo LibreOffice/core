@@ -31,11 +31,11 @@ class tdf122449(UITestCase):
             self.ui_test.close_dialog_through_button(xcloseBtn)
             xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "HOME"}))
             # invoke Index dialog Index entry   .uno:IndexEntryDialog
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:IndexEntryDialog", close_button="close"):
+            with self.ui_test.execute_dialog_through_command(".uno:IndexEntryDialog", close_button="close"):
                 pass
             # close
             # Go to page 2
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:GotoPage") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:GotoPage") as xDialog:
                 xPageText = xDialog.getChild("page")
                 xPageText.executeAction("TYPE", mkPropertyValues({"TEXT":"2"}))
             # verify

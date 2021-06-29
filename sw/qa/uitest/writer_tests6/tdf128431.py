@@ -17,7 +17,7 @@ class tdf128431(UITestCase):
 
         change_measurement_unit(self, "Centimeter")
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:PageDialog") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:PageDialog") as xDialog:
             tabcontrol = xDialog.getChild("tabcontrol")
             select_pos(tabcontrol, 6) #borders
 

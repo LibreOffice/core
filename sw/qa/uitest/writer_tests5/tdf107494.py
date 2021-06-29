@@ -38,7 +38,7 @@ class tdf107494(UITestCase):
         textGraphic.Graphic = graphic
         text.insertTextContent(cursor, textGraphic, False)
         # Delete the header
-        with self.ui_test.execute_dialog_through_command_guarded(
+        with self.ui_test.execute_dialog_through_command(
                 ".uno:InsertPageHeader?PageStyle:string=Default%20Page%20Style&On:bool=false", close_button="yes"):
             pass
 
@@ -73,7 +73,7 @@ class tdf107494(UITestCase):
         textGraphic.Graphic = graphic
         text.insertTextContent(cursor, textGraphic, False)
         # Delete the footer
-        with self.ui_test.execute_dialog_through_command_guarded(
+        with self.ui_test.execute_dialog_through_command(
                 ".uno:InsertPageFooter?PageStyle:string=Default%20Page%20Style&On:bool=false", close_button="yes"):
             pass
 

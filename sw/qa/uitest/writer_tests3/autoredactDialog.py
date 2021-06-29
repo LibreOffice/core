@@ -39,7 +39,7 @@ class AutoRedactDialog(UITestCase):
 
     def test_add_target(self):
         self.ui_test.create_doc_in_start_center("writer")
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:AutoRedactDoc", close_button="cancel") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:AutoRedactDoc", close_button="cancel") as xDialog:
             xAddBtn = xDialog.getChild("add")
 
             # Make sure we are starting with an empty targets list
@@ -79,7 +79,7 @@ class AutoRedactDialog(UITestCase):
                 self.assertEqual(child_text[2], targets_list[i][1]) #content
 
         # Now let's make sure the dialog remembers last state
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:AutoRedactDoc", close_button="cancel") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:AutoRedactDoc", close_button="cancel") as xDialog:
             xTargetsListbox = xDialog.getChild("targets")
             targets_box_state_dict = get_state_as_dict(xTargetsListbox)
             self.assertEqual(int(targets_box_state_dict["Children"]), len(targets_list))
@@ -96,7 +96,7 @@ class AutoRedactDialog(UITestCase):
 
     def test_edit_target(self):
         self.ui_test.create_doc_in_start_center("writer")
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:AutoRedactDoc", close_button="cancel") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:AutoRedactDoc", close_button="cancel") as xDialog:
             xAddBtn = xDialog.getChild("add")
             xEditBtn = xDialog.getChild("edit")
 

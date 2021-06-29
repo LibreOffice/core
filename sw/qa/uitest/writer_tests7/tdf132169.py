@@ -23,7 +23,7 @@ class tdf132169(UITestCase):
             self.assertEqual(get_state_as_dict(xLineMetric)["Text"], "0.0 pt")
 
             #Check changing value from dialog also works
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:FormatLine") as xFormatLineDlg:
+            with self.ui_test.execute_dialog_through_command(".uno:FormatLine") as xFormatLineDlg:
                 xWidth = xFormatLineDlg.getChild('MTR_FLD_LINE_WIDTH')
                 type_text(xWidth, "4.0")
 

@@ -30,19 +30,19 @@ class tdf125104(UITestCase):
         self.assertEqual(text[2:3], "2")
 
         # Bug 125104 - Changing page numbering to "1st, 2nd, 3rd,..." causes crashes when trying to change Page settings later
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:PageDialog") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:PageDialog") as xDialog:
             self.set_combo_layout_format(xDialog, "1st, 2nd, 3rd, ...")
 
         text = document.Text.String.replace('\r\n', '\n')
         self.assertEqual(text[0:3], "1st")
         self.assertEqual(text[4:7], "2nd")
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:PageDialog", close_button="cancel") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:PageDialog", close_button="cancel") as xDialog:
             comboLayoutFormat = xDialog.getChild("comboLayoutFormat")
             self.assertEqual(get_state_as_dict(comboLayoutFormat)["SelectEntryText"], "1st, 2nd, 3rd, ...")
 
         # change to devanagari alphabet format
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:PageDialog") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:PageDialog") as xDialog:
             self.set_combo_layout_format(xDialog, "क, ख, ग, ...")
 
         text = document.Text.String.replace('\r\n', '\n')
@@ -50,7 +50,7 @@ class tdf125104(UITestCase):
         self.assertEqual(text[2:3], "ख")
 
         # change to devanagari number format
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:PageDialog") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:PageDialog") as xDialog:
             self.set_combo_layout_format(xDialog, "१, २, ३, ...")
 
         text = document.Text.String.replace('\r\n', '\n')

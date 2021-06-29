@@ -18,7 +18,7 @@ class tdf116737(UITestCase):
         document = self.ui_test.get_component()
 
         #Insert => Insert Table / It's not possible to select a table style
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:InsertTable") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:InsertTable") as xDialog:
 
             formatlbinstable = xDialog.getChild("formatlbinstable")
             entry = formatlbinstable.getChild("11") #Simple List Shaded
@@ -26,7 +26,7 @@ class tdf116737(UITestCase):
 
 
         #verify .uno:TableDialog
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:TableDialog") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:TableDialog") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             select_pos(xTabs, "4")   #tab Background
 

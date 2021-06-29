@@ -16,7 +16,7 @@ class moveCopySheet(UITestCase):
         gridwin = xCalcDoc.getChild("grid_window")
         document = self.ui_test.get_component()
         #default - 1 sheet; select the sheet (is selected), dialog move/copy sheet
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:Move") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:Move") as xDialog:
             #new name = newName
             newName = xDialog.getChild("newName")
             newName.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
@@ -25,7 +25,7 @@ class moveCopySheet(UITestCase):
         #verify, the file has 2 sheets; first one "newName" is selected
         self.assertEqual(document.Sheets.getCount(), 2)
         # dialog move/copy sheet ; Move is selected; select -move to end position - ; New Name = moveName
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:Move") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:Move") as xDialog:
             insertBefore = xDialog.getChild("insertBefore")
 
             xTreeEntry = insertBefore.getChild('2')
@@ -43,7 +43,7 @@ class moveCopySheet(UITestCase):
         self.assertEqual(document.Sheets[1].Name, "moveName")
 
         # Verify that the cancel button does not do anything
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:Move", close_button="cancel"):
+        with self.ui_test.execute_dialog_through_command(".uno:Move", close_button="cancel"):
             pass
 
         self.assertEqual(document.Sheets.getCount(), 2)
@@ -51,7 +51,7 @@ class moveCopySheet(UITestCase):
         self.assertEqual(document.Sheets[1].Name, "moveName")
 
         #Check copy option
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:Move") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:Move") as xDialog:
             xCopy = xDialog.getChild("copy")
             xCopy.executeAction("CLICK", tuple())
             sheetName = "moveName_2"

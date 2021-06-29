@@ -17,7 +17,7 @@ class tdf119661(UITestCase):
 
         self.ui_test.create_doc_in_start_center("writer")
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:InsertGraphic", close_button="") as xOpenDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:InsertGraphic", close_button="") as xOpenDialog:
             xFileName = xOpenDialog.getChild("file_name")
             xFileName.executeAction("TYPE", mkPropertyValues({"TEXT": get_url_for_data_file("LibreOffice.jpg")}))
 
@@ -34,7 +34,7 @@ class tdf119661(UITestCase):
             xOK = xWarnDialog.getChild("ok")
             self.ui_test.close_dialog_through_button(xOK)
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:LinkDialog", close_button="close") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:LinkDialog", close_button="close") as xDialog:
 
 
             sLinks = "TB_LINKS"
@@ -57,7 +57,7 @@ class tdf119661(UITestCase):
             xFilePath = os.path.join(tempdir, "tdf119661-tmp.odt")
 
             # Save Copy as
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:SaveAs", close_button="open") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:SaveAs", close_button="open") as xDialog:
 
                 xFileName = xDialog.getChild("file_name")
                 xFileName.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))

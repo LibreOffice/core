@@ -29,7 +29,7 @@ class tdf53920(UITestCase):
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A3", "EXTEND":"1"}))
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A5", "EXTEND":"1"}))
         #Apply Data > Validity ... > Cell Range
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:Validation") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:Validation") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             select_pos(xTabs, "0")
             xallow = xDialog.getChild("allow")
@@ -40,21 +40,21 @@ class tdf53920(UITestCase):
 
         #Expected behavior: All selected cells validate data.
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:Validation") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:Validation") as xDialog:
             xallow = xDialog.getChild("allow")
             xmin = xDialog.getChild("min")
             self.assertEqual(get_state_as_dict(xallow)["SelectEntryText"], "Cell range")
             self.assertEqual(get_state_as_dict(xmin)["Text"], "$Sheet1.$C$1:$C$3")
 
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A3"}))
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:Validation") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:Validation") as xDialog:
             xallow = xDialog.getChild("allow")
             xmin = xDialog.getChild("min")
             self.assertEqual(get_state_as_dict(xallow)["SelectEntryText"], "Cell range")
             self.assertEqual(get_state_as_dict(xmin)["Text"], "$Sheet1.$C$1:$C$3")
 
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A5"}))
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:Validation") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:Validation") as xDialog:
             xallow = xDialog.getChild("allow")
             xmin = xDialog.getChild("min")
             self.assertEqual(get_state_as_dict(xallow)["SelectEntryText"], "Cell range")

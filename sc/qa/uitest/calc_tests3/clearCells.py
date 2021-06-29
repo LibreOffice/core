@@ -22,7 +22,7 @@ class clearCells(UITestCase):
         enter_text_to_cell(gridwin, "A2", "1")
 
         gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:A2"}))
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:Delete") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:Delete") as xDialog:
             xdeleteall = xDialog.getChild("deleteall")
             xtext = xDialog.getChild("text")
             xdatetime = xDialog.getChild("datetime")
@@ -64,7 +64,7 @@ class clearCells(UITestCase):
         enter_text_to_cell(gridwin, "A2", "1")
 
         gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:A2"}))
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:Delete") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:Delete") as xDialog:
             xdeleteall = xDialog.getChild("deleteall")
             xtext = xDialog.getChild("text")
             xdatetime = xDialog.getChild("datetime")
@@ -106,7 +106,7 @@ class clearCells(UITestCase):
         enter_text_to_cell(gridwin, "A2", "1")
 
         gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:A2"}))
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:Delete") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:Delete") as xDialog:
             xdeleteall = xDialog.getChild("deleteall")
             xtext = xDialog.getChild("text")
             xdatetime = xDialog.getChild("datetime")
@@ -147,7 +147,7 @@ class clearCells(UITestCase):
         enter_text_to_cell(gridwin, "A2", "=A1+1")
 
         gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:A2"}))
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:Delete") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:Delete") as xDialog:
             xdeleteall = xDialog.getChild("deleteall")
             xtext = xDialog.getChild("text")
             xdatetime = xDialog.getChild("datetime")
@@ -190,7 +190,7 @@ class clearCells(UITestCase):
 
         gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:A2"}))
         self.xUITest.executeCommand(".uno:Bold")
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:Delete") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:Delete") as xDialog:
             xdeleteall = xDialog.getChild("deleteall")
             xtext = xDialog.getChild("text")
             xdatetime = xDialog.getChild("datetime")
@@ -219,7 +219,7 @@ class clearCells(UITestCase):
 
         #Verify
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:FormatCellDialog") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:FormatCellDialog") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             select_pos(xTabs, "1")  #tab Font
 
@@ -242,7 +242,7 @@ class clearCells(UITestCase):
 
         gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:A2"}))
         self.xUITest.executeCommand(".uno:Bold")
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:Delete") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:Delete") as xDialog:
             xdeleteall = xDialog.getChild("deleteall")
             xtext = xDialog.getChild("text")
             xdatetime = xDialog.getChild("datetime")
@@ -270,7 +270,7 @@ class clearCells(UITestCase):
         enter_text_to_cell(gridwin, "A2", "1")
 
         gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:A2"}))
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:Delete", close_button="cancel") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:Delete", close_button="cancel") as xDialog:
             xdeleteall = xDialog.getChild("deleteall")
 
             if (get_state_as_dict(xdeleteall)["Selected"]) == "false":

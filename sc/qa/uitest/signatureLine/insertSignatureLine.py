@@ -21,7 +21,7 @@ class insertSignatureLineCalc(UITestCase):
         document = self.ui_test.get_component()
 
         # cancel the dialog without doing anything
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:InsertSignatureLine", close_button="cancel") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:InsertSignatureLine", close_button="cancel") as xDialog:
 
             xName = xDialog.getChild("edit_name")
             xName.executeAction("TYPE", mkPropertyValues({"TEXT":"Name"})) #set the signature line
@@ -30,7 +30,7 @@ class insertSignatureLineCalc(UITestCase):
             document.Sheets.getByIndex(0).DrawPage.getByIndex(0)
 
         # set the signature line
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:InsertSignatureLine") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:InsertSignatureLine") as xDialog:
 
             xName = xDialog.getChild("edit_name")
             xTitle = xDialog.getChild("edit_title")
@@ -61,7 +61,7 @@ class insertSignatureLineCalc(UITestCase):
         gridwin = xCalcDoc.getChild("grid_window")
         document = self.ui_test.get_component()
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:InsertSignatureLine") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:InsertSignatureLine") as xDialog:
 
             xName = xDialog.getChild("edit_name")
             xTitle = xDialog.getChild("edit_title")

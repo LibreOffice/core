@@ -32,14 +32,14 @@ class Subtotals(UITestCase):
         enter_text_to_cell(gridwin, "A8", "1")
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A9"}))
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:DataSubTotals"):
+        with self.ui_test.execute_dialog_through_command(".uno:DataSubTotals"):
             pass
 
         self.assertEqual(get_cell_by_position(document, 0, 0, 7).getValue(), 1)
         self.assertEqual(get_cell_by_position(document, 0, 0, 8).getString(), "")
 
         # check cancel button
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:DataSubTotals", close_button="cancel"):
+        with self.ui_test.execute_dialog_through_command(".uno:DataSubTotals", close_button="cancel"):
             pass
 
         self.ui_test.close_doc()
@@ -54,7 +54,7 @@ class Subtotals(UITestCase):
             # Select from the menu bar Data
             # Select option subtotal
             # Subtotal dialog displays
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:DataSubTotals") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:DataSubTotals") as xDialog:
                 # Select group by: Category
                 xGroupBy = xDialog.getChild("group_by")
                 select_by_text(xGroupBy, "Category")
@@ -76,11 +76,11 @@ class Subtotals(UITestCase):
             # 1 select all cells
             self.xUITest.executeCommand(".uno:SelectAll")#use uno command Menu Edit->Select All
             # 2 invoke sub-total menu and select none
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:DataSubTotals") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:DataSubTotals") as xDialog:
                 xGroupBy = xDialog.getChild("group_by")
                 select_by_text(xGroupBy, "- none -")
             # 2 invoke sort menu and... crash
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:DataSort", close_button="cancel"):
+            with self.ui_test.execute_dialog_through_command(".uno:DataSort", close_button="cancel"):
                 pass
 
             self.assertEqual(get_cell_by_position(calc_doc, 0, 0, 8).getString(), "z")
@@ -92,7 +92,7 @@ class Subtotals(UITestCase):
             gridwin = XcalcDoc.getChild("grid_window")
             # 1. Open the test file
             # 2. Data->Subtotals
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:DataSubTotals") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:DataSubTotals") as xDialog:
                 # 3. Group by->Trans date
                 xGroupBy = xDialog.getChild("group_by")
                 select_by_text(xGroupBy, "Trans Date")
@@ -103,7 +103,7 @@ class Subtotals(UITestCase):
                 xFirstEntry.executeAction("CLICK", tuple())
                 # 5. Click OK
             # 6. Data->Subtotals
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:DataSubTotals") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:DataSubTotals") as xDialog:
                 # 7. Group by->-none-
                 xGroupBy = xDialog.getChild("group_by")
                 select_by_text(xGroupBy, "- none -")
@@ -114,7 +114,7 @@ class Subtotals(UITestCase):
                 xFirstEntry.executeAction("CLICK", tuple())
                 # 9. Click OK
             # 10. Data->Sort
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:DataSort") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:DataSort") as xDialog:
                 # 11. Sort key 1->Post Date.
                 sortkey1 = xDialog.getChild("sortlb")
                 select_by_text(sortkey1, "Post Date")
@@ -132,7 +132,7 @@ class Subtotals(UITestCase):
             # 2. Place cursor in cell outside of subtotals range (e.g. B7)
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "B7"}))
             # 3. Data → Subtotals
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:DataSubTotals") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:DataSubTotals") as xDialog:
                 # 4. Group by: "- none -"
                 xGroupBy = xDialog.getChild("group_by")
                 select_by_text(xGroupBy, "- none -")

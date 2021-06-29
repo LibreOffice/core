@@ -17,7 +17,7 @@ class TestClass(UITestCase):
         document = self.ui_test.get_component()
 
         # set margins and fill color
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:PageDialog") as DrawPageDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:PageDialog") as DrawPageDialog:
             xTabs = DrawPageDialog.getChild("tabcontrol")
             select_pos(xTabs, "1")
             checkBackgroundFullSize = DrawPageDialog.getChild("checkBackgroundFullSize")
@@ -49,7 +49,7 @@ class TestClass(UITestCase):
         self.assertEqual(xStyle.BackgroundFullSize, True)
 
         # uncheck it
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:PageDialog") as DrawPageDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:PageDialog") as DrawPageDialog:
             xTabs = DrawPageDialog.getChild("tabcontrol")
             select_pos(xTabs, "1")
             checkBackgroundFullSize = DrawPageDialog.getChild("checkBackgroundFullSize")
@@ -64,7 +64,7 @@ class TestClass(UITestCase):
         self.assertEqual(xStyle.BackgroundFullSize, False)
 
         # check it again
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:PageDialog") as DrawPageDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:PageDialog") as DrawPageDialog:
             xTabs = DrawPageDialog.getChild("tabcontrol")
             select_pos(xTabs, "1")
             checkBackgroundFullSize = DrawPageDialog.getChild("checkBackgroundFullSize")

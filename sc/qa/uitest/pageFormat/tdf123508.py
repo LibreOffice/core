@@ -20,7 +20,7 @@ class tdf123508(UITestCase):
         xCalcDoc = self.xUITest.getTopFocusWindow()
         gridwin = xCalcDoc.getChild("grid_window")
         #open "Format > Page - Sheet > Scale
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:PageFormatDialog") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:PageFormatDialog") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             select_pos(xTabs, "6")  #tab Scale
             scalingMode = xDialog.getChild("comboLB_SCALEMODE")
@@ -34,7 +34,7 @@ class tdf123508(UITestCase):
 
 
         #verify
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:PageFormatDialog", close_button="cancel") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:PageFormatDialog", close_button="cancel") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             select_pos(xTabs, "6")  #tab Scale
             scalingMode = xDialog.getChild("comboLB_SCALEMODE")

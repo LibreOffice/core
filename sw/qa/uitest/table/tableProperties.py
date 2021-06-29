@@ -21,7 +21,7 @@ class tableProperties(UITestCase):
             change_measurement_unit(self, "Centimeter")
 
             #dialog Table Properties - Table
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:TableDialog") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:TableDialog") as xDialog:
                 tabcontrol = xDialog.getChild("tabcontrol")
                 select_pos(tabcontrol, "0")
 
@@ -55,7 +55,7 @@ class tableProperties(UITestCase):
                 belowmf.executeAction("TYPE", mkPropertyValues({"TEXT":"1"}))
                 select_by_text(textdirection, "Left-to-right (LTR)")
             #verify
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:TableDialog") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:TableDialog") as xDialog:
                 tabcontrol = xDialog.getChild("tabcontrol")
                 select_pos(tabcontrol, "0")
 
@@ -77,7 +77,7 @@ class tableProperties(UITestCase):
                 self.assertEqual(get_state_as_dict(belowmf)["Text"], "1.00 cm")
 
             #dialog Table Properties - Text flow
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:TableDialog") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:TableDialog") as xDialog:
                 tabcontrol = xDialog.getChild("tabcontrol")
                 select_pos(tabcontrol, "1")
 
@@ -96,7 +96,7 @@ class tableProperties(UITestCase):
                 vertorient = xDialog.getChild("vertorient")
                 select_by_text(vertorient, "Bottom")
             #verify
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:TableDialog") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:TableDialog") as xDialog:
                 tabcontrol = xDialog.getChild("tabcontrol")
                 select_pos(tabcontrol, "1")
 
@@ -116,7 +116,7 @@ class tableProperties(UITestCase):
                 self.assertEqual(get_state_as_dict(vertorient)["SelectEntryText"], "Bottom")
 
             #dialog Table Properties - Columns
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:TableDialog") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:TableDialog") as xDialog:
                 tabcontrol = xDialog.getChild("tabcontrol")
                 select_pos(tabcontrol, "2")
 
@@ -136,7 +136,7 @@ class tableProperties(UITestCase):
     #        self.ui_test.close_dialog_through_button(xOKBtn)
 
             #dialog Table Properties - Borders
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:TableDialog") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:TableDialog") as xDialog:
                 tabcontrol = xDialog.getChild("tabcontrol")
                 select_pos(tabcontrol, "3")
 
@@ -146,7 +146,7 @@ class tableProperties(UITestCase):
                 mergeadjacent.executeAction("CLICK", tuple())
 
             #verify
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:TableDialog") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:TableDialog") as xDialog:
                 tabcontrol = xDialog.getChild("tabcontrol")
                 select_pos(tabcontrol, "3")
                 sync = xDialog.getChild("sync")
@@ -155,7 +155,7 @@ class tableProperties(UITestCase):
                 self.assertEqual(get_state_as_dict(mergeadjacent)["Selected"], "false")
 
             #dialog Table Properties - Background
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:TableDialog") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:TableDialog") as xDialog:
                 tabcontrol = xDialog.getChild("tabcontrol")
                 select_pos(tabcontrol, "4")
 
@@ -177,7 +177,7 @@ class tableProperties(UITestCase):
                 B_custom.executeAction("DOWN", tuple())  #need to refresh HEX value...
 
             #verify
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:TableDialog") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:TableDialog") as xDialog:
                 tabcontrol = xDialog.getChild("tabcontrol")
                 select_pos(tabcontrol, "4")
                 btncolor = xDialog.getChild("btncolor")

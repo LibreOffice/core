@@ -37,7 +37,7 @@ class ManualCalcTests(UITestCase):
         xGridWin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
 
         # Execute "Select DB Range dialog"
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:SelectDB") as xSelectNameDlg:
+        with self.ui_test.execute_dialog_through_command(".uno:SelectDB") as xSelectNameDlg:
 
             xListBox = xSelectNameDlg.getChild("treeview")
             xListBoxState = get_state_as_dict(xListBox)
@@ -70,7 +70,7 @@ class ManualCalcTests(UITestCase):
         xGridWin.executeAction("SELECT", mkPropertyValues({"RANGE": "B1:B10"}))
 
         # Execute "Sort" dialog
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:DataSort"):
+        with self.ui_test.execute_dialog_through_command(".uno:DataSort"):
             pass
 
         document = self.ui_test.get_component()
@@ -95,7 +95,7 @@ class ManualCalcTests(UITestCase):
         xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
         xGridWin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:C10"}))
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:Validation") as xValidationDlg:
+        with self.ui_test.execute_dialog_through_command(".uno:Validation") as xValidationDlg:
 
             xAllowList = xValidationDlg.getChild("allow")
             xAllowList.executeAction("SELECT", mkPropertyValues({"POS": "1"}))
@@ -135,7 +135,7 @@ class ManualCalcTests(UITestCase):
 
         xGridWin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:PasteSpecial") as xPasteSpecialDlg:
+        with self.ui_test.execute_dialog_through_command(".uno:PasteSpecial") as xPasteSpecialDlg:
 
             xAllChkBox = xPasteSpecialDlg.getChild("paste_all")
             xAllChkBox.executeAction("CLICK", tuple())

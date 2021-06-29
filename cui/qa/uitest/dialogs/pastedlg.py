@@ -26,7 +26,7 @@ class Test(UITestCase):
         self.xUITest.executeCommand(".uno:Copy")
 
         # Now use paste special to see what formats are offered.
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:PasteSpecial", close_button="cancel") as pasteSpecial:
+        with self.ui_test.execute_dialog_through_command(".uno:PasteSpecial", close_button="cancel") as pasteSpecial:
             formats = pasteSpecial.getChild("list")
             entryCount = int(get_state_as_dict(formats)["Children"])
             items = []

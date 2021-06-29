@@ -25,7 +25,7 @@ class scenarios(UITestCase):
         enter_text_to_cell(xGridWindow, "B4", "1")
         xGridWindow.executeAction("SELECT", mkPropertyValues({"RANGE": "B1:B4"}))
         #scenarios - scenario A1
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:ScenarioManager") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:ScenarioManager") as xDialog:
 
             name = xDialog.getChild("name")
             name.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
@@ -33,7 +33,7 @@ class scenarios(UITestCase):
             name.executeAction("TYPE", mkPropertyValues({"TEXT":"A1"}))
 
         #next scenarios - scenario B1
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:ScenarioManager") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:ScenarioManager") as xDialog:
 
             name = xDialog.getChild("name")
             name.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))

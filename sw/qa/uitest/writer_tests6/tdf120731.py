@@ -15,7 +15,7 @@ class tdf120731(UITestCase):
             xWriterDoc = self.xUITest.getTopFocusWindow()
 
             self.xUITest.executeCommand(".uno:SelectAll")
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:FontDialog"):
+            with self.ui_test.execute_dialog_through_command(".uno:FontDialog"):
                 pass
             self.assertEqual(writer_doc.Text.String[0:5], "Lorem")
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

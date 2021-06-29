@@ -14,7 +14,7 @@ class slideShowSettings(UITestCase):
         cancel = TemplateDialog.getChild("close")
         self.ui_test.close_dialog_through_button(cancel)
         self.xUITest.executeCommand(".uno:InsertPage")
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:PresentationDialog") as PresentationDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:PresentationDialog") as PresentationDialog:
 
             xfrom = PresentationDialog.getChild("from")
             xfrom.executeAction("CLICK",tuple())
@@ -34,7 +34,7 @@ class slideShowSettings(UITestCase):
             changeslidesbyclick.executeAction("CLICK",tuple())
 
         #verify
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:PresentationDialog", close_button="cancel") as PresentationDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:PresentationDialog", close_button="cancel") as PresentationDialog:
             xfrom = PresentationDialog.getChild("from")
             self.assertEqual(get_state_as_dict(xfrom)["Checked"], "true")
             from_cb = PresentationDialog.getChild("from_cb")

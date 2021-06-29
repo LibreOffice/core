@@ -29,7 +29,7 @@ class tdf89907(UITestCase):
         #Optimal Width
         self.xUITest.executeCommand(".uno:SetOptimalColumnWidthDirect")
         # Data - Text to Columns
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:TextToColumns") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:TextToColumns") as xDialog:
             xother = xDialog.getChild("other")
             xinputother = xDialog.getChild("inputother")
             if (get_state_as_dict(xother)["Selected"]) == "false":

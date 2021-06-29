@@ -16,7 +16,7 @@ class autofilter(UITestCase):
             #autofilter exist
             self.assertEqual(calc_doc.getPropertyValue("UnnamedDatabaseRanges").getByTable(0).AutoFilter, True)
 
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:DataSort", close_button="cancel"):
+            with self.ui_test.execute_dialog_through_command(".uno:DataSort", close_button="cancel"):
                 pass
 
             #autofilter still exist
@@ -35,13 +35,13 @@ class autofilter(UITestCase):
         enter_text_to_cell(xGridWindow, "B3", "d")
         xGridWindow.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:B1"}))
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:DataFilterAutoFilter", close_button="yes"):
+        with self.ui_test.execute_dialog_through_command(".uno:DataFilterAutoFilter", close_button="yes"):
             pass
 
         xGridWindow.executeAction("SELECT", mkPropertyValues({"RANGE": "A2:A3"}))
         self.xUITest.executeCommand(".uno:SelectRow") #select two rows
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:DataSort"):
+        with self.ui_test.execute_dialog_through_command(".uno:DataSort"):
             pass
 
         #autofilter still exist
@@ -59,7 +59,7 @@ class autofilter(UITestCase):
 
             xGridWindow.executeAction("SELECT", mkPropertyValues({"RANGE": "A2:E6"}))
 
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:DataSort"):
+            with self.ui_test.execute_dialog_through_command(".uno:DataSort"):
                 pass
 
             #autofilter still exist

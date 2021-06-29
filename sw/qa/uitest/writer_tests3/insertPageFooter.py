@@ -27,7 +27,7 @@ class WriterInsertPageFooter(UITestCase):
         self.assertEqual(
             document.StyleFamilies.PageStyles.Standard.FooterIsOn, True)
 
-        with self.ui_test.execute_dialog_through_command_guarded(
+        with self.ui_test.execute_dialog_through_command(
                 ".uno:InsertPageFooter?PageStyle:string=Default%20Page%20Style&On:bool=false", close_button="yes"):
             pass
 
@@ -48,7 +48,7 @@ class WriterInsertPageFooter(UITestCase):
 
         self.insert_footer()
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:InsertTable"):
+        with self.ui_test.execute_dialog_through_command(".uno:InsertTable"):
             pass
 
         document = self.ui_test.get_component()

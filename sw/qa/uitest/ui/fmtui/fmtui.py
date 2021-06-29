@@ -18,7 +18,7 @@ class TestTmpdlg(UITestCase):
         self.ui_test.create_doc_in_start_center("writer")
         xWriterDoc = self.xUITest.getTopFocusWindow()
         document = self.ui_test.get_component()
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:EditStyle", close_button="cancel") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:EditStyle", close_button="cancel") as xDialog:
 
             xTabs = xDialog.getChild("tabcontrol")
             # Select RID_SVXPAGE_CHAR_EFFECTS.

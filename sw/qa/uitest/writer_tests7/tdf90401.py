@@ -30,7 +30,7 @@ class tdf90401(UITestCase):
 
             # enable remove personal info security option
 
-            with self.ui_test.execute_dialog_through_command_guarded('.uno:OptionsTreeDialog', close_button="") as xDialog:
+            with self.ui_test.execute_dialog_through_command('.uno:OptionsTreeDialog', close_button="") as xDialog:
                 xPages = xDialog.getChild('pages')
                 xGenEntry = xPages.getChild('0')
                 xSecurityPage = xGenEntry.getChild('6')
@@ -55,7 +55,7 @@ class tdf90401(UITestCase):
                 xFilePath = os.path.join(tempdir, 'tdf90401-tmp.fodt')
 
                 # Save Copy as
-                with self.ui_test.execute_dialog_through_command_guarded('.uno:SaveAs', close_button="open") as xDialog:
+                with self.ui_test.execute_dialog_through_command('.uno:SaveAs', close_button="open") as xDialog:
                     xFileName = xDialog.getChild('file_name')
                     xFileName.executeAction('TYPE', mkPropertyValues({'KEYCODE':'CTRL+A'}))
                     xFileName.executeAction('TYPE', mkPropertyValues({'KEYCODE':'BACKSPACE'}))

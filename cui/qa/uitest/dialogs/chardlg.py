@@ -25,7 +25,7 @@ class Test(UITestCase):
         self.xUITest.executeCommand(".uno:SelectAll")
 
         # Now use Format -> Character.
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:FontDialog") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:FontDialog") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             # Select RID_SVXPAGE_CHAR_EFFECTS.
             select_pos(xTabs, "1")
@@ -56,7 +56,7 @@ class Test(UITestCase):
         self.xUITest.executeCommand(".uno:SelectAll")
 
         # Now use Format -> Character.
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:FontDialog") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:FontDialog") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             # Select RID_SVXPAGE_CHAR_EFFECTS.
             select_pos(xTabs, "1")
@@ -82,7 +82,7 @@ class Test(UITestCase):
         editWin = doc.getChild("writer_edit")
 
         # Use Format -> Character.
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:FontDialog") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:FontDialog") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             # Select RID_SVXPAGE_CHAR_EFFECTS.
             select_pos(xTabs, "1")

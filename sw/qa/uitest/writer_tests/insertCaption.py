@@ -13,7 +13,7 @@ class insertCaption(UITestCase):
    def test_insert_caption(self):
         self.ui_test.create_doc_in_start_center("writer")
         document = self.ui_test.get_component()
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:InsertFrame") as xDialogFr:
+        with self.ui_test.execute_dialog_through_command(".uno:InsertFrame") as xDialogFr:
 
             xWidth = xDialogFr.getChild("width")
             xWidth.executeAction("UP", tuple())
@@ -26,7 +26,7 @@ class insertCaption(UITestCase):
 
         self.assertEqual(document.TextFrames.getCount(), 1)
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:InsertCaptionDialog") as xDialogCaption:
+        with self.ui_test.execute_dialog_through_command(".uno:InsertCaptionDialog") as xDialogCaption:
 
             xCapt = xDialogCaption.getChild("caption_edit")
             xCapt.executeAction("TYPE", mkPropertyValues({"TEXT":"Caption"}))
@@ -36,7 +36,7 @@ class insertCaption(UITestCase):
 
         self.assertEqual(document.TextFrames[0].Text.String.replace('\r\n', '\n'), "\nText 1: Caption")
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:InsertCaptionDialog") as xDialogCaption:
+        with self.ui_test.execute_dialog_through_command(".uno:InsertCaptionDialog") as xDialogCaption:
             xCapt = xDialogCaption.getChild("caption_edit")
             xCapt.executeAction("TYPE", mkPropertyValues({"TEXT":"Caption2"}))
             xSep = xDialogCaption.getChild("separator_edit")
@@ -45,7 +45,7 @@ class insertCaption(UITestCase):
 
         self.assertEqual(document.TextFrames[0].Text.String.replace('\r\n', '\n'), "\nText 1: Caption\nText 2-: Caption2")
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:InsertCaptionDialog") as xDialogCaption:
+        with self.ui_test.execute_dialog_through_command(".uno:InsertCaptionDialog") as xDialogCaption:
             xCapt = xDialogCaption.getChild("caption_edit")
             xCapt.executeAction("TYPE", mkPropertyValues({"TEXT":"Caption3"}))
             xSep = xDialogCaption.getChild("separator_edit")

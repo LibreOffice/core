@@ -21,7 +21,7 @@ class specialCharacter(UITestCase):
 
         document = self.ui_test.get_component()
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:InsertSymbol", close_button="cancel") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:InsertSymbol", close_button="cancel") as xDialog:
             xCharSet = xDialog.getChild("showcharset")  # default charset
 
             xCharSet.executeAction("SELECT", mkPropertyValues({"COLUMN": "1", "ROW": "4"}))  # digit 4 selected
@@ -33,7 +33,7 @@ class specialCharacter(UITestCase):
             self.assertEqual(get_state_as_dict(xDecText)["Text"], "52")
 
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:InsertSymbol", close_button="cancel") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:InsertSymbol", close_button="cancel") as xDialog:
 
             xComboFont = xDialog.getChild("fontlb")
             select_pos(xComboFont, "0")  # select font

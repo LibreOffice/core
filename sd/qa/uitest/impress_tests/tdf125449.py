@@ -18,7 +18,7 @@ class tdf125449(UITestCase):
         xCancelBtn = xTemplateDlg.getChild("close")
         self.ui_test.close_dialog_through_button(xCancelBtn)
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:PageSetup") as xPageSetupDlg:
+        with self.ui_test.execute_dialog_through_command(".uno:PageSetup") as xPageSetupDlg:
 
             tabcontrol = xPageSetupDlg.getChild("tabcontrol")
             select_pos(tabcontrol, "1")

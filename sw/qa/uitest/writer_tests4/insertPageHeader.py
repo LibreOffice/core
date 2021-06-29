@@ -26,7 +26,7 @@ class WriterInsertPageHeader(UITestCase):
         self.assertEqual(
             document.StyleFamilies.PageStyles.Standard.HeaderIsOn, True)
 
-        with self.ui_test.execute_dialog_through_command_guarded(
+        with self.ui_test.execute_dialog_through_command(
                 ".uno:InsertPageHeader?PageStyle:string=Default%20Page%20Style&On:bool=false", close_button="yes"):
             pass
 
@@ -47,7 +47,7 @@ class WriterInsertPageHeader(UITestCase):
 
         self.insert_header()
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:InsertTable"):
+        with self.ui_test.execute_dialog_through_command(".uno:InsertTable"):
             pass
 
         document = self.ui_test.get_component()

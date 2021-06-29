@@ -15,7 +15,7 @@ class tdf107847(UITestCase):
         document = self.ui_test.get_component()
         xWriterDoc = self.xUITest.getTopFocusWindow()
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:InsertFrame") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:InsertFrame") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             select_pos(xTabs, "1")
             select_pos(xTabs, "2")

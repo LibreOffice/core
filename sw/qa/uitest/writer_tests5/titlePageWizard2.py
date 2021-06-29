@@ -15,7 +15,7 @@ class tdf138907(UITestCase):
             # Test an undefined situation - try to modify pages beyond the end of the document.
 
             #dialog Title Page
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:TitlePageDialog") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:TitlePageDialog") as xDialog:
                 #set restart page number to 2. With this doc, it defaults to resetting to 1.
                 xRestartNumbering = xDialog.getChild("NF_RESTART_NUMBERING")
                 xRestartNumbering.executeAction("UP", tuple()) # restart numbering at 2
@@ -53,7 +53,7 @@ class tdf138907(UITestCase):
 
 
             #dialog Title Page
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:TitlePageDialog") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:TitlePageDialog") as xDialog:
                 #set restart page number to 1 - which is the default.
                 #set restart title page to 1 - the current value for this document is 6.
                 xRestartNumbering = xDialog.getChild("NF_SET_PAGE_NUMBER")
@@ -90,7 +90,7 @@ class tdf138907(UITestCase):
             #Now test replacing several pages with title and index styles
 
             #dialog Title Page
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:TitlePageDialog") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:TitlePageDialog") as xDialog:
                 print(xDialog.getChildren())
                 #Convert four pages to title/index pages starting at page one.
                 xPageCount = xDialog.getChild("NF_PAGE_COUNT")

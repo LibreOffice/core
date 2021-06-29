@@ -36,7 +36,7 @@ class tdf138907(UITestCase):
 
 
             #dialog Title Page
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:TitlePageDialog") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:TitlePageDialog") as xDialog:
                 #set restart page number to 2. With this doc, it defaults to resetting to 1.
                 xRestartNumbering = xDialog.getChild("NF_RESTART_NUMBERING")
                 xRestartNumbering.executeAction("UP", tuple()) # restart numbering at 2
@@ -51,7 +51,7 @@ class tdf138907(UITestCase):
             self.assertEqual(Para2.PageDescName, "Landscape")
 
             #re-run dialog Title Page
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:TitlePageDialog"):
+            with self.ui_test.execute_dialog_through_command(".uno:TitlePageDialog"):
                 pass
 
             # Without this fix, re-running the wizard was failing with the title page restarting at page 2.
@@ -69,7 +69,7 @@ class tdf138907(UITestCase):
             #Now test replacing several pages with title and index styles
 
             #dialog Title Page
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:TitlePageDialog") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:TitlePageDialog") as xDialog:
                 #Convert three pages to title/index pages starting at page two.
                 xPageCount = xDialog.getChild("NF_PAGE_COUNT")
                 for _ in range(0,2):
@@ -101,7 +101,7 @@ class tdf138907(UITestCase):
             #Now test inserting at the end of the document
 
             #dialog Title Page
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:TitlePageDialog") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:TitlePageDialog") as xDialog:
                 #Insert three title/index pages at the end of the document (plus a content page).
                 newPages = xDialog.getChild("RB_INSERT_NEW_PAGES")
                 newPages.executeAction("CLICK", tuple())
@@ -129,7 +129,7 @@ class tdf138907(UITestCase):
             #Now test inserting in the middle of the document
 
             #dialog Title Page
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:TitlePageDialog") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:TitlePageDialog") as xDialog:
                 #Insert three title/index pages starting at page 2.
                 newPages = xDialog.getChild("RB_INSERT_NEW_PAGES")
                 newPages.executeAction("CLICK", tuple())

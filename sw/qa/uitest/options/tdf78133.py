@@ -19,7 +19,7 @@ class tdf78133(UITestCase):
         document = self.ui_test.get_component()
         #New text document
         #open option, go to App colors
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:OptionsTreeDialog") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog") as xDialog:
 
             xPages = xDialog.getChild("pages")
             xLOEntry = xPages.getChild('0')                 # Lo Dev
@@ -30,7 +30,7 @@ class tdf78133(UITestCase):
             docboundaries = xDialog.getChild("docboundaries")
             docboundaries.executeAction("CLICK", tuple())
         #verify - reopen dialog and check if "text boundaries" is still unchecked
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:OptionsTreeDialog") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog") as xDialog:
 
             xPages = xDialog.getChild("pages")
             xLOEntry = xPages.getChild('0')                 # Lo Dev

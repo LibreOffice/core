@@ -21,7 +21,7 @@ class tdf65856(UITestCase):
             self.xUITest.executeCommand(".uno:Copy")
             #mark cell D1
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "D1"}))
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:PasteSpecial") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:PasteSpecial") as xDialog:
 
                 xmove_right = xDialog.getChild("move_right")
                 xmove_right.executeAction("CLICK", tuple())
@@ -53,7 +53,7 @@ class tdf65856(UITestCase):
             self.xUITest.executeCommand(".uno:Copy")
             #mark cell B2
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "B2"}))
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:PasteSpecial") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:PasteSpecial") as xDialog:
 
                 xmove_right = xDialog.getChild("move_right")
                 xmove_right.executeAction("CLICK", tuple())

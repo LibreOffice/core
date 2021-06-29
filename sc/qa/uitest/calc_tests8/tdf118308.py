@@ -29,7 +29,7 @@ class tdf118308(UITestCase):
 
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
 
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:PasteSpecial") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:PasteSpecial") as xDialog:
 
                 # Without the fix in place, this test would have failed here
                 # since a different dialog would have been opened and the children
