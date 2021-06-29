@@ -21,8 +21,6 @@
 
 #include <com/sun/star/chart/TimeUnit.hpp>
 
-#include <rtl/math.hxx>
-
 #include <limits>
 
 namespace chart
@@ -49,8 +47,7 @@ bool MergedMinimumAndMaximumSupplier::hasMinimumAndMaximumSupplier( MinimumAndMa
 
 double MergedMinimumAndMaximumSupplier::getMinimumX()
 {
-    double fGlobalExtremum;
-    ::rtl::math::setInf(&fGlobalExtremum, false);
+    double fGlobalExtremum = std::numeric_limits<double>::infinity();
     for (auto const& elem : m_aMinimumAndMaximumSupplierList)
     {
         double fLocalExtremum = elem->getMinimumX();
@@ -64,8 +61,7 @@ double MergedMinimumAndMaximumSupplier::getMinimumX()
 
 double MergedMinimumAndMaximumSupplier::getMaximumX()
 {
-    double fGlobalExtremum;
-    ::rtl::math::setInf(&fGlobalExtremum, true);
+    double fGlobalExtremum = -std::numeric_limits<double>::infinity();
     for (auto const& elem : m_aMinimumAndMaximumSupplierList)
     {
         double fLocalExtremum = elem->getMaximumX();
@@ -79,8 +75,7 @@ double MergedMinimumAndMaximumSupplier::getMaximumX()
 
 double MergedMinimumAndMaximumSupplier::getMinimumYInRange( double fMinimumX, double fMaximumX, sal_Int32 nAxisIndex )
 {
-    double fGlobalExtremum;
-    ::rtl::math::setInf(&fGlobalExtremum, false);
+    double fGlobalExtremum = std::numeric_limits<double>::infinity();
     for (auto const& elem : m_aMinimumAndMaximumSupplierList)
     {
         double fLocalExtremum = elem->getMinimumYInRange( fMinimumX, fMaximumX, nAxisIndex );
@@ -94,8 +89,7 @@ double MergedMinimumAndMaximumSupplier::getMinimumYInRange( double fMinimumX, do
 
 double MergedMinimumAndMaximumSupplier::getMaximumYInRange( double fMinimumX, double fMaximumX, sal_Int32 nAxisIndex )
 {
-    double fGlobalExtremum;
-    ::rtl::math::setInf(&fGlobalExtremum, true);
+    double fGlobalExtremum = -std::numeric_limits<double>::infinity();
     for (auto const& elem : m_aMinimumAndMaximumSupplierList)
     {
         double fLocalExtremum = elem->getMaximumYInRange( fMinimumX, fMaximumX, nAxisIndex );
@@ -109,8 +103,7 @@ double MergedMinimumAndMaximumSupplier::getMaximumYInRange( double fMinimumX, do
 
 double MergedMinimumAndMaximumSupplier::getMinimumZ()
 {
-    double fGlobalExtremum;
-    ::rtl::math::setInf(&fGlobalExtremum, false);
+    double fGlobalExtremum = std::numeric_limits<double>::infinity();
     for (auto const& elem : m_aMinimumAndMaximumSupplierList)
     {
         double fLocalExtremum = elem->getMinimumZ();
@@ -124,8 +117,7 @@ double MergedMinimumAndMaximumSupplier::getMinimumZ()
 
 double MergedMinimumAndMaximumSupplier::getMaximumZ()
 {
-    double fGlobalExtremum;
-    ::rtl::math::setInf(&fGlobalExtremum, true);
+    double fGlobalExtremum = -std::numeric_limits<double>::infinity();
     for (auto const& elem : m_aMinimumAndMaximumSupplierList)
     {
         double fLocalExtremum = elem->getMaximumZ();
