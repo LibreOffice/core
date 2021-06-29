@@ -41,10 +41,12 @@
 
 #include "unobaseclass.hxx"
 #include "TextCursorHelper.hxx"
+#include "unocrsr.hxx"
 
 class SwDoc;
 struct SwPosition;
 class SwUnoCursor;
+class SfxItemPropertySet;
 
 typedef ::cppu::WeakImplHelper
 <   css::lang::XServiceInfo
@@ -70,8 +72,16 @@ class SwXTextCursor final
 
 private:
 
-    class Impl;
-    ::sw::UnoImplPtr<Impl> m_pImpl;
+    const SfxItemPropertySet &  m_rPropSet;
+    const CursorType            m_eType;
+    const css::uno::Reference< css::text::XText > m_xParentText;
+    sw::UnoCursorPointer m_pUnoCursor;
+
+    SwUnoCursor& GetCursorOrThrow() {
+        if(!m_pUnoCursor)
+            throw css::uno::RuntimeException("SwXTextCursor: disposed or invalid", nullptr);
+        return *m_pUnoCursor;
+    }
 
     virtual ~SwXTextCursor() override;
 
