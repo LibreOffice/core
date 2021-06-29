@@ -1896,10 +1896,10 @@ double ScInterpreter::ScGetPMT(double fRate, double fNper, double fPv,
     {
         if (bPayInAdvance) // payment in advance
             fPayment = (fFv + fPv * exp( fNper * ::rtl::math::log1p(fRate) ) ) * fRate /
-                (::rtl::math::expm1( (fNper + 1) * ::rtl::math::log1p(fRate) ) - fRate);
+                (std::expm1( (fNper + 1) * ::rtl::math::log1p(fRate) ) - fRate);
         else  // payment in arrear
             fPayment = (fFv + fPv * exp(fNper * ::rtl::math::log1p(fRate) ) ) * fRate /
-                ::rtl::math::expm1( fNper * ::rtl::math::log1p(fRate) );
+                std::expm1( fNper * ::rtl::math::log1p(fRate) );
     }
     return -fPayment;
 }
