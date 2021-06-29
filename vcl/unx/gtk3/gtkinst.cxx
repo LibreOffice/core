@@ -439,17 +439,37 @@ bool GtkInstance::AnyInput( VclInputFlags nType )
 
     static constexpr VclInputFlags ANY_INPUT_EXCLUDING_TIMER = VCL_INPUT_ANY & ~VclInputFlags::TIMER;
 
+    const bool bCheckForAnyInput = nType == ANY_INPUT_EXCLUDING_TIMER;
+
+    bool bRet = false;
+
+#if defined(GDK_WINDOWING_WAYLAND)
+    if (bCheckForAnyInput)
+    {
+        GdkDisplay* pDisplay = gdk_display_get_default();
+        if (DLSYM_GDK_IS_WAYLAND_DISPLAY(pDisplay))
+        {
+            wl_display* pWLDisplay = gdk_wayland_display_get_wl_display(pDisplay);
+            static auto wayland_display_get_fd = reinterpret_cast<int (*) (wl_display*)>(dlsym(nullptr, "wl_display_get_fd"));
+            if (wayland_display_get_fd)
+            {
+                GPollFD aPollFD;
+                aPollFD.fd = wayland_display_get_fd(pWLDisplay);
+                aPollFD.events = G_IO_IN | G_IO_ERR | G_IO_HUP;
+                bRet = g_poll(&aPollFD, 1, 0) > 0;
+            }
+        }
+    }
+#endif
+
 #if !GTK_CHECK_VERSION(4, 0, 0)
     GdkDisplay* pDisplay = gdk_display_get_default();
     if (!gdk_display_has_pending(pDisplay))
-        return false;
-#endif
+        return bRet;
 
-    if (nType == ANY_INPUT_EXCLUDING_TIMER)
+    if (bCheckForAnyInput)
         return true;
 
-    bool bRet = false;
-#if !GTK_CHECK_VERSION(4, 0, 0)
     std::deque<GdkEvent*> aEvents;
     GdkEvent *pEvent = nullptr;
     while ((pEvent = gdk_display_get_event(pDisplay)))
@@ -470,6 +490,7 @@ bool GtkInstance::AnyInput( VclInputFlags nType )
         aEvents.pop_front();
     }
 #endif
+
     return bRet;
 }
 
