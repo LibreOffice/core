@@ -175,7 +175,7 @@ protected:
 private:
     DECL_LINK(EventListener, VclWindowEvent&, void);
     DECL_LINK(KeyEventListener, VclWindowEvent&, bool);
-    DECL_LINK(MouseEventListener, VclSimpleEvent&, void);
+    DECL_LINK(MouseEventListener, VclWindowEvent&, void);
     DECL_LINK(MnemonicActivateHdl, vcl::Window&, bool);
 
     static void DoRecursivePaint(vcl::Window* pWindow, const Point& rPos, OutputDevice& rOutput);
@@ -204,7 +204,7 @@ protected:
 
     virtual void HandleEventListener(VclWindowEvent& rEvent);
     virtual bool HandleKeyEventListener(VclWindowEvent& rEvent);
-    virtual void HandleMouseEventListener(VclSimpleEvent& rEvent);
+    virtual void HandleMouseEventListener(VclWindowEvent& rEvent);
 
 public:
     SalInstanceWidget(vcl::Window* pWidget, SalInstanceBuilder* pBuilder, bool bTakeOwnership);
@@ -1143,7 +1143,7 @@ private:
     // in VclDrawingArea
     virtual void HandleEventListener(VclWindowEvent& rEvent) override;
 
-    virtual void HandleMouseEventListener(VclSimpleEvent& rEvent) override;
+    virtual void HandleMouseEventListener(VclWindowEvent& rEvent) override;
 
     virtual bool HandleKeyEventListener(VclWindowEvent& /*rEvent*/) override;
 
