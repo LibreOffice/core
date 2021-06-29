@@ -1472,8 +1472,6 @@ void JavaVirtualMachine::handleJniException(JNIEnv * environment) {
 }
 
 
-void JavaVirtualMachine::dispose() {}
-
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 stoc_JavaVM_get_implementation(
     css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
