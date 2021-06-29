@@ -763,7 +763,8 @@ void ScGlobal::OpenURL(const OUString& rURL, const OUString& rTarget, bool bIgno
     // OpenURL is always called in the GridWindow by mouse clicks in some way or another.
     // That's why pScActiveViewShell and nScClickMouseModifier are correct.
 
-    if (!bIgnoreSettings && !ShouldOpenURL())
+    // Fragments pointing into the current document should be always opened.
+    if (!bIgnoreSettings && !(ShouldOpenURL() || rURL.startsWith("#")))
         return;
 
     SfxViewFrame* pViewFrm = SfxViewFrame::Current();
