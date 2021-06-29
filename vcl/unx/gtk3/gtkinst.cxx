@@ -22251,7 +22251,9 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "svx/ui/chineseconversiondialog.ui" &&
         rUIFile != "svx/ui/chinesedictionary.ui" &&
         rUIFile != "svx/ui/colorwindow.ui" &&
+        rUIFile != "svx/ui/docrecoverybrokendialog.ui" &&
         rUIFile != "svx/ui/docrecoveryprogressdialog.ui" &&
+        rUIFile != "svx/ui/docrecoveryrecoverdialog.ui" &&
         rUIFile != "svx/ui/docrecoverysavedialog.ui" &&
         rUIFile != "svx/ui/findreplacedialog.ui" &&
         rUIFile != "svx/ui/fontworkgallerydialog.ui" &&
