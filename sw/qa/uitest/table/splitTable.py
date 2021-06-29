@@ -17,7 +17,7 @@ class splitTable(UITestCase):
             self.xUITest.executeCommand(".uno:GoDown")
             self.xUITest.executeCommand(".uno:GoDown")
             #dialog Split table, check Copy heading, OK -> verify 2 tables, 1st has 2 rows, second has 5 rows
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:SplitTable") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:SplitTable") as xDialog:
 
                 copyheading = xDialog.getChild("copyheading")
                 copyheading.executeAction("CLICK", tuple())
@@ -35,7 +35,7 @@ class splitTable(UITestCase):
             #go to row 2
             self.xUITest.executeCommand(".uno:GoDown")
             self.xUITest.executeCommand(".uno:GoDown")
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:SplitTable") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:SplitTable") as xDialog:
 
                 customheading = xDialog.getChild("customheading")
                 customheading.executeAction("CLICK", tuple())
@@ -53,7 +53,7 @@ class splitTable(UITestCase):
             #go to row 2
             self.xUITest.executeCommand(".uno:GoDown")
             self.xUITest.executeCommand(".uno:GoDown")
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:SplitTable") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:SplitTable") as xDialog:
 
                 noheading = xDialog.getChild("noheading")
                 noheading.executeAction("CLICK", tuple())

@@ -24,7 +24,7 @@ class tdf73006(UITestCase):
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
         self.xUITest.executeCommand(".uno:SelectColumn")
         # Data - Text to Columns
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:TextToColumns") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:TextToColumns") as xDialog:
             xspace = xDialog.getChild("space")
             if (get_state_as_dict(xspace)["Selected"]) == "false":
                 xspace.executeAction("CLICK", tuple())

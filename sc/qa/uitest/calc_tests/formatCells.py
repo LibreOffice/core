@@ -21,7 +21,7 @@ class formatCell(UITestCase):
         #select cell A1
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
         #format - cell
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:FormatCellDialog") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:FormatCellDialog") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             select_pos(xTabs, "0")  #tab Numbers
             xliststore1 = xDialog.getChild("categorylb")  #1st list / Category
@@ -45,7 +45,7 @@ class formatCell(UITestCase):
         #verify
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
         #format - cell
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:FormatCellDialog") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:FormatCellDialog") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             select_pos(xTabs, "0")  #tab Numbers
             xliststore1 = xDialog.getChild("categorylb")  #1st list / Category
@@ -76,7 +76,7 @@ class formatCell(UITestCase):
         #select cell A1
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
         #format - cell
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:FormatCellDialog") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:FormatCellDialog") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             select_pos(xTabs, "1")  #tab Font
             xSizeFont = xDialog.getChild("westsizelb-cjk")
@@ -99,7 +99,7 @@ class formatCell(UITestCase):
         #Verify - select cell A1
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
         #format - cell
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:FormatCellDialog", close_button="cancel") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:FormatCellDialog", close_button="cancel") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             select_pos(xTabs, "1")  #tab Font
             xSizeFont = xDialog.getChild("westsizelb-cjk")
@@ -128,7 +128,7 @@ class formatCell(UITestCase):
         #select cell A1
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
         #format - cell
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:FormatCellDialog") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:FormatCellDialog") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             select_pos(xTabs, "2")  #tab Font Effects
             xRelief = xDialog.getChild("relieflb")
@@ -148,7 +148,7 @@ class formatCell(UITestCase):
         #Verify- select cell A1
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
         #format - cell
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:FormatCellDialog", close_button="cancel") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:FormatCellDialog", close_button="cancel") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             select_pos(xTabs, "2")
 
@@ -177,7 +177,7 @@ class formatCell(UITestCase):
         #select cell A1
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
         #format - cell
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:FormatCellDialog") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:FormatCellDialog") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             select_pos(xTabs, "3")  #tab Alignment
             comboboxHorzAlign = xDialog.getChild("comboboxHorzAlign")
@@ -199,7 +199,7 @@ class formatCell(UITestCase):
         #Verify- select cell A1
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
         #format - cell
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:FormatCellDialog") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:FormatCellDialog") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             select_pos(xTabs, "3")
             comboboxHorzAlign = xDialog.getChild("comboboxHorzAlign")
@@ -228,7 +228,7 @@ class formatCell(UITestCase):
         #select cell A1
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
         #format - cell
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:FormatCellDialog") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:FormatCellDialog") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             select_pos(xTabs, "4")  #tab Asian typography
             xcheckForbidList = xDialog.getChild("checkForbidList")
@@ -236,7 +236,7 @@ class formatCell(UITestCase):
         #Verify- select cell A1
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
         #format - cell
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:FormatCellDialog") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:FormatCellDialog") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             select_pos(xTabs, "4")
             xcheckForbidList = xDialog.getChild("checkForbidList")
@@ -257,7 +257,7 @@ class formatCell(UITestCase):
         #select cell A1
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
         #format - cell
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:FormatCellDialog") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:FormatCellDialog") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             select_pos(xTabs, "5")  #tab Borders
 
@@ -307,7 +307,7 @@ class formatCell(UITestCase):
         #select cell A1
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
         #format - cell
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:FormatCellDialog") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:FormatCellDialog") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             select_pos(xTabs, "5")  #tab Borders
             xsync = xDialog.getChild("sync")
@@ -337,7 +337,7 @@ class formatCell(UITestCase):
         # Verify select cell A1
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
         #format - cell
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:FormatCellDialog") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:FormatCellDialog") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             select_pos(xTabs, "5")  #tab Borders
             xsync = xDialog.getChild("sync")
@@ -364,7 +364,7 @@ class formatCell(UITestCase):
         #select cell A1
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
         #format - cell
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:FormatCellDialog") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:FormatCellDialog") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             select_pos(xTabs, "6")  #tab Cell protection
             xcheckHideFormula = xDialog.getChild("checkHideFormula")
@@ -378,7 +378,7 @@ class formatCell(UITestCase):
         # Verify select cell A1
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
         #format - cell
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:FormatCellDialog") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:FormatCellDialog") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             select_pos(xTabs, "6")  #tab Borders
             xcheckHideFormula = xDialog.getChild("checkHideFormula")
@@ -400,7 +400,7 @@ class formatCell(UITestCase):
         #select cell A1
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
         #format - cell
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:FormatCellDialog") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:FormatCellDialog") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             select_pos(xTabs, "3")  #tab Alignment
             xspinDegrees = xDialog.getChild("spinDegrees")

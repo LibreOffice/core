@@ -18,7 +18,7 @@ class tdf91762(UITestCase):
 
         self.xUITest.executeCommand(".uno:AssignLayout?WhatLayout:long=1")
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:InsertTable") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:InsertTable") as xDialog:
             self.assertEqual('5', get_state_as_dict(xDialog.getChild('columns'))['Text'])
             self.assertEqual('2', get_state_as_dict(xDialog.getChild('rows'))['Text'])
 

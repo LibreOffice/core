@@ -21,7 +21,7 @@ class protectSheet(UITestCase):
         gridwin = xCalcDoc.getChild("grid_window")
         document = self.ui_test.get_component()
         #enter password - lock
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:Protect") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:Protect") as xDialog:
             xprotect = xDialog.getChild("protect")
             xpassword1 = xDialog.getChild("password1")
             xpassword2 = xDialog.getChild("password2")
@@ -33,7 +33,7 @@ class protectSheet(UITestCase):
 
         #Unlock
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:Protect") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:Protect") as xDialog:
             xpass1ed = xDialog.getChild("pass1ed")
 
             xpass1ed.executeAction("TYPE", mkPropertyValues({"TEXT":"aa"}))
@@ -43,7 +43,7 @@ class protectSheet(UITestCase):
         self.assertEqual(get_cell_by_position(document, 0, 1, 1).getString(), "A")
 
         # test cancel button
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:Protect", close_button="cancel"):
+        with self.ui_test.execute_dialog_through_command(".uno:Protect", close_button="cancel"):
             pass
 
         enter_text_to_cell(gridwin, "B2", "B")

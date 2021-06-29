@@ -15,7 +15,7 @@ class writerZoom(UITestCase):
         document = self.ui_test.get_component()
         xWriterDoc = self.xUITest.getTopFocusWindow()
         #dialog View-Zoom-Zoom
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:Zoom") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:Zoom") as xDialog:
 
             #select Optimal & Automatic - OK - open and verify
             optimal = xDialog.getChild("optimal")
@@ -23,7 +23,7 @@ class writerZoom(UITestCase):
             automatic = xDialog.getChild("automatic")
             automatic.executeAction("CLICK", tuple())
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:Zoom") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:Zoom") as xDialog:
             optimal = xDialog.getChild("optimal")
             automatic = xDialog.getChild("automatic")
             self.assertEqual(get_state_as_dict(optimal)["Checked"], "true")
@@ -34,7 +34,7 @@ class writerZoom(UITestCase):
             fitwandh.executeAction("CLICK", tuple())
             singlepage.executeAction("CLICK", tuple())
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:Zoom") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:Zoom") as xDialog:
             singlepage = xDialog.getChild("singlepage")
             fitwandh = xDialog.getChild("fitwandh")
             self.assertEqual(get_state_as_dict(singlepage)["Checked"], "true")
@@ -49,7 +49,7 @@ class writerZoom(UITestCase):
             columnssb.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
             columnssb.executeAction("TYPE", mkPropertyValues({"TEXT":"3"}))
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:Zoom") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:Zoom") as xDialog:
             fitw = xDialog.getChild("fitw")
             columnssb = xDialog.getChild("columnssb")
             columns = xDialog.getChild("columns")
@@ -62,7 +62,7 @@ class writerZoom(UITestCase):
             x100pc.executeAction("CLICK", tuple())
             automatic.executeAction("CLICK", tuple())
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:Zoom") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:Zoom") as xDialog:
             automatic = xDialog.getChild("automatic")
             x100pc = xDialog.getChild("100pc")
             self.assertEqual(get_state_as_dict(automatic)["Checked"], "true")
@@ -75,7 +75,7 @@ class writerZoom(UITestCase):
             zoomsb.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
             zoomsb.executeAction("TYPE", mkPropertyValues({"TEXT":"101"}))
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:Zoom") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:Zoom") as xDialog:
             variable = xDialog.getChild("variable")
             zoomsb = xDialog.getChild("zoomsb")
             self.assertEqual(get_state_as_dict(variable)["Checked"], "true")

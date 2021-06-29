@@ -19,14 +19,14 @@ class WriterInsertHorizontalLine(UITestCase):
 
         self.xUITest.executeCommand(".uno:StyleApply?Style:string=Horizontal%20Line&FamilyName:string=ParagraphStyles") #insert horizontal line
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:EditStyle", close_button="cancel") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:EditStyle", close_button="cancel") as xDialog:
             xStyleNametxt = xDialog.getChild("name")
             self.assertEqual(get_state_as_dict(xStyleNametxt)["Text"], "Horizontal Line") #check style name
 
         self.xUITest.executeCommand(".uno:Undo")
         self.xUITest.executeCommand(".uno:Redo")
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:EditStyle", close_button="cancel") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:EditStyle", close_button="cancel") as xDialog:
             xStyleNametxt = xDialog.getChild("name")
             self.assertEqual(get_state_as_dict(xStyleNametxt)["Text"], "Horizontal Line")  #check style name
 

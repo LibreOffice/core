@@ -17,7 +17,7 @@ class dropDownFormFieldDialog(UITestCase):
             xWriterDoc = self.xUITest.getTopFocusWindow()
 
             # open the dialog (cursor is at the field)
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:ControlProperties") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:ControlProperties") as xDialog:
 
                 itemEntry = xDialog.getChild("item_entry")
                 addButton = xDialog.getChild("add_button")
@@ -49,7 +49,7 @@ class dropDownFormFieldDialog(UITestCase):
 
 
             # check whether items are the same after reopening
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:ControlProperties") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:ControlProperties") as xDialog:
 
                 itemsList = xDialog.getChild("items_treeview")
                 self.assertEqual(get_state_as_dict(itemsList)["Children"], "4")
@@ -66,7 +66,7 @@ class dropDownFormFieldDialog(UITestCase):
             xWriterDoc = self.xUITest.getTopFocusWindow()
 
             # open the dialog (cursor is at the field)
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:ControlProperties") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:ControlProperties") as xDialog:
 
                 itemEntry = xDialog.getChild("item_entry")
                 addButton = xDialog.getChild("add_button")
@@ -110,7 +110,7 @@ class dropDownFormFieldDialog(UITestCase):
 
 
             # check whether items are the same after reopening
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:ControlProperties") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:ControlProperties") as xDialog:
 
                 itemsList = xDialog.getChild("items_treeview")
                 removeButton = xDialog.getChild("remove_button")
@@ -136,7 +136,7 @@ class dropDownFormFieldDialog(UITestCase):
             xWriterDoc = self.xUITest.getTopFocusWindow()
 
             # open the dialog (cursor is at the field)
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:ControlProperties") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:ControlProperties") as xDialog:
 
                 itemEntry = xDialog.getChild("item_entry")
                 addButton = xDialog.getChild("add_button")
@@ -200,7 +200,7 @@ class dropDownFormFieldDialog(UITestCase):
 
 
             # check whether items are the same after reopening
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:ControlProperties") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:ControlProperties") as xDialog:
 
                 itemsList = xDialog.getChild("items_treeview")
                 self.assertEqual(get_state_as_dict(itemsList)["Children"], "4")
@@ -219,7 +219,7 @@ class dropDownFormFieldDialog(UITestCase):
                 xWriterDoc = self.xUITest.getTopFocusWindow()
 
                 # open the dialog (cursor is at the field)
-                with self.ui_test.execute_dialog_through_command_guarded(".uno:ControlProperties") as xDialog:
+                with self.ui_test.execute_dialog_through_command(".uno:ControlProperties") as xDialog:
 
                     itemsList = xDialog.getChild("items_treeview")
 

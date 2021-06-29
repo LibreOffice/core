@@ -13,7 +13,7 @@ class Tdf137945(UITestCase):
     def test_tdf137945(self):
         with self.ui_test.load_file(get_url_for_data_file("tdf137945.ods")) as calc_doc:
 
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:Validation") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:Validation") as xDialog:
                 xTabs = xDialog.getChild("tabcontrol")
                 select_pos(xTabs, "1")
                 xInput = xDialog.getChild("inputhelp")

@@ -14,7 +14,7 @@ class Tdf142395(UITestCase):
     def test_tdf142395(self):
 
         # Load file from Open dialog
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:Open", close_button="open") as xOpenDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:Open", close_button="open") as xOpenDialog:
 
             xFileName = xOpenDialog.getChild("file_name")
             xFileName.executeAction("TYPE", mkPropertyValues({"TEXT": get_url_for_data_file("tdf142395.csv")}))

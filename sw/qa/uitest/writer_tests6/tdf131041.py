@@ -13,7 +13,7 @@ class tdf131041(UITestCase):
         self.ui_test.create_doc_in_start_center("writer")
         document = self.ui_test.get_component()
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:PageDialog") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:PageDialog") as xDialog:
             tabcontrol = xDialog.getChild("tabcontrol")
             select_pos(tabcontrol, 4) #header
 

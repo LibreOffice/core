@@ -15,7 +15,7 @@ class dataform(UITestCase):
         gridwin = xCalcDoc.getChild("grid_window")
         gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:A10"}))
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:DataForm", close_button="close"):
+        with self.ui_test.execute_dialog_through_command(".uno:DataForm", close_button="close"):
             pass
 
         self.ui_test.close_doc()

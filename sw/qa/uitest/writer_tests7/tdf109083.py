@@ -18,7 +18,7 @@ class tdf109083(UITestCase):
         #generate two 2x2 tables with the same autoformat table style (Default Table Style)
         #Note that this style is different than applying nothing!
         for i in range(0, 2):
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:InsertTable") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:InsertTable") as xDialog:
                 formatlbinstable = xDialog.getChild("formatlbinstable")
                 entry = formatlbinstable.getChild("1")
                 entry.executeAction("SELECT", tuple())
@@ -45,7 +45,7 @@ class tdf109083(UITestCase):
 
         #first row's cells must be yellow, second/last row's cells must be updated to yellow by now
         for i in range (0,4):
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:TableDialog") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:TableDialog") as xDialog:
                 xTabs = xDialog.getChild("tabcontrol")
                 select_pos(xTabs, "4")   #tab Background
                 btncolor = xDialog.getChild("btncolor")

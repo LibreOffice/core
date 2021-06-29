@@ -39,7 +39,7 @@ class CopyPaste(UITestCase):
         with self.ui_test.load_empty_file("calc") as calc_document:
 
             # Rename the sheet to match the same name as the first document
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:RenameTable") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:RenameTable") as xDialog:
                 xname_entry = xDialog.getChild("name_entry")
 
                 xname_entry.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))

@@ -18,7 +18,7 @@ class versionDialog(UITestCase):
 
             xWriterDoc = self.xUITest.getTopFocusWindow()
 
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:VersionDialog", close_button="close") as xVersionDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:VersionDialog", close_button="close") as xVersionDialog:
 
 
                 versiondList = xVersionDialog.getChild("versions")

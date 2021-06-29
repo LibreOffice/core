@@ -22,7 +22,7 @@ class WriterChapterNumbering(UITestCase):
 
         change_measurement_unit(self, "Millimeter")
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:ChapterNumberingDialog") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:ChapterNumberingDialog") as xDialog:
             xstyle = xDialog.getChild("style")
             xnumbering = xDialog.getChild("numbering")
             xcharstyle = xDialog.getChild("charstyle")
@@ -52,7 +52,7 @@ class WriterChapterNumbering(UITestCase):
             xindentatmf.executeAction("UP", tuple())
 
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:ChapterNumberingDialog", close_button="cancel") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:ChapterNumberingDialog", close_button="cancel") as xDialog:
 
             xstyle = xDialog.getChild("style")
             xnumbering = xDialog.getChild("numbering")

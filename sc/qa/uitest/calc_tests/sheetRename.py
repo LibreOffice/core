@@ -14,11 +14,11 @@ class sheetRename(UITestCase):
         xCalcDoc = self.xUITest.getTopFocusWindow()
         gridwin = xCalcDoc.getChild("grid_window")
         document = self.ui_test.get_component()
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:RenameTable") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:RenameTable") as xDialog:
             xname_entry = xDialog.getChild("name_entry")
             xname_entry.executeAction("TYPE", mkPropertyValues({"TEXT":"NewName"}))
         #Verify
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:RenameTable", close_button="cancel") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:RenameTable", close_button="cancel") as xDialog:
             xname_entry = xDialog.getChild("name_entry")
             self.assertEqual(get_state_as_dict(xname_entry)["Text"], "NewName")
 
@@ -29,7 +29,7 @@ class sheetRename(UITestCase):
         xCalcDoc = self.xUITest.getTopFocusWindow()
         gridwin = xCalcDoc.getChild("grid_window")
         document = self.ui_test.get_component()
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:RenameTable", close_button="") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:RenameTable", close_button="") as xDialog:
             xname_entry = xDialog.getChild("name_entry")
             nameVal = get_state_as_dict(xname_entry)["Text"]
             xname_entry.executeAction("TYPE", mkPropertyValues({"TEXT":"NewName**"}))
@@ -42,7 +42,7 @@ class sheetRename(UITestCase):
             self.ui_test.close_dialog_through_button(xCancelBtn)
 
         #Verify
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:RenameTable") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:RenameTable") as xDialog:
             xname_entry = xDialog.getChild("name_entry")
             self.assertEqual(get_state_as_dict(xname_entry)["Text"], nameVal)
 

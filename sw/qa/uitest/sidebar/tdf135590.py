@@ -17,7 +17,7 @@ class tdf135590(UITestCase):
         #change measurement to Centimeter
         change_measurement_unit(self, 'Centimeter')
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:InsertEnvelope") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:InsertEnvelope") as xDialog:
 
 
             tabcontrol = xDialog.getChild("tabcontrol")
@@ -37,7 +37,7 @@ class tdf135590(UITestCase):
         xWriterDoc = self.xUITest.getTopFocusWindow()
         xWriterEdit = xWriterDoc.getChild("writer_edit")
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:PageDialog") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:PageDialog") as xDialog:
             tabcontrol = xDialog.getChild("tabcontrol")
             select_pos(tabcontrol, "1")
 

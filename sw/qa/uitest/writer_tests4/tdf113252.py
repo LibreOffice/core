@@ -18,7 +18,7 @@ class tdf113252(UITestCase):
         xWriterEdit = xWriterDoc.getChild("writer_edit")
 
         #Start LibreOffice. Go to Tools > Macros > Organize Macros > Basic
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:MacroDialog", close_button="close") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:MacroDialog", close_button="close") as xDialog:
 
             #Click Button Organizer
             xorganize = xDialog.getChild("organize")

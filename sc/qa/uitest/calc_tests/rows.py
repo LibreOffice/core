@@ -21,7 +21,7 @@ class CalcRows(UITestCase):
         #select A1
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
         #row height
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:RowHeight") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:RowHeight") as xDialog:
             xvalue = xDialog.getChild("value")
             xdefault = xDialog.getChild("default")
             self.assertEqual(get_state_as_dict(xdefault)["Selected"], "true")  #default selected
@@ -40,7 +40,7 @@ class CalcRows(UITestCase):
             xvalue.executeAction("TYPE", mkPropertyValues({"TEXT":"1 cm"}))
             # Click Ok
         #verify
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:RowHeight", close_button="cancel") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:RowHeight", close_button="cancel") as xDialog:
             xvalue = xDialog.getChild("value")
             self.assertEqual(get_state_as_dict(xvalue)["Text"], "1.0001 cm")
 
@@ -57,7 +57,7 @@ class CalcRows(UITestCase):
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A3", "EXTEND":"1"}))
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:RowHeight") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:RowHeight") as xDialog:
             xvalue = xDialog.getChild("value")
             xdefault = xDialog.getChild("default")
             #write your own value
@@ -67,12 +67,12 @@ class CalcRows(UITestCase):
             # Click Ok
         #verify
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:RowHeight") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:RowHeight") as xDialog:
             xvalue = xDialog.getChild("value")
             self.assertEqual(get_state_as_dict(xvalue)["Text"], "1.0001 cm")
 
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A3"}))
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:RowHeight") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:RowHeight") as xDialog:
             xvalue = xDialog.getChild("value")
             self.assertEqual(get_state_as_dict(xvalue)["Text"], "1.0001 cm")
 
@@ -90,7 +90,7 @@ class CalcRows(UITestCase):
         #select A1
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
         #row height
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:RowHeight") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:RowHeight") as xDialog:
             xvalue = xDialog.getChild("value")
             xvalue.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
             xvalue.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
@@ -106,7 +106,7 @@ class CalcRows(UITestCase):
         self.xUITest.executeCommand(".uno:Paste")
         #verify
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A3"}))
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:RowHeight") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:RowHeight") as xDialog:
             xvalue = xDialog.getChild("value")
             self.assertEqual(get_state_as_dict(xvalue)["Text"], "1.0001 cm")
 
@@ -173,7 +173,7 @@ class CalcRows(UITestCase):
         #select A3
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A3"}))
         #row height
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:RowHeight") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:RowHeight") as xDialog:
             xvalue = xDialog.getChild("value")
             xvalue.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
             xvalue.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
@@ -187,12 +187,12 @@ class CalcRows(UITestCase):
 
         #verify
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A3"}))
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:RowHeight") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:RowHeight") as xDialog:
             xvalue = xDialog.getChild("value")
             self.assertEqual(get_state_as_dict(xvalue)["Text"], "1.0001 cm")
 
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A4"}))
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:RowHeight") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:RowHeight") as xDialog:
             xvalue = xDialog.getChild("value")
             self.assertEqual(get_state_as_dict(xvalue)["Text"], "1.0001 cm")
 

@@ -45,7 +45,7 @@ class tdf140117(UITestCase):
                     elif i == 2:
                             self.assertEqual("XXXXleft", xHeaderLeftText)
 
-                    with self.ui_test.execute_dialog_through_command_guarded(".uno:PageDialog") as PageDialog:
+                    with self.ui_test.execute_dialog_through_command(".uno:PageDialog") as PageDialog:
 
                         xTabs = PageDialog.getChild("tabcontrol")
                         select_pos(xTabs, "4")

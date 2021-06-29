@@ -16,7 +16,7 @@ class tdf140754(UITestCase):
         with self.ui_test.load_file(get_url_for_data_file("tdf140754.ods")) as calc_doc:
 
             #Make sure 'multi-threaded calculation' is enabled
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:OptionsTreeDialog") as xDialogOpt:
+            with self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog") as xDialogOpt:
 
                 xPages = xDialogOpt.getChild("pages")
                 xCalcEntry = xPages.getChild('3')

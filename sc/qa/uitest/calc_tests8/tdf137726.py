@@ -14,7 +14,7 @@ class tdf137726(UITestCase):
         gridwin = xCalcDoc.getChild("grid_window")
 
         # three dialogs are displayed one after the other, click OK in all of them
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:DataDataPilotRun") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:DataDataPilotRun") as xDialog:
             pass
 
         for i in range(2):

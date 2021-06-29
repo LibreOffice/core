@@ -20,7 +20,7 @@ class tdf134881(UITestCase):
             change_measurement_unit(self, "Centimeter")
 
             #dialog Table Properties
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:TableDialog") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:TableDialog") as xDialog:
                 tabcontrol = xDialog.getChild("tabcontrol")
                 select_pos(tabcontrol, "2") #columns
 

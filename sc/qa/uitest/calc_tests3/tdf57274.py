@@ -22,7 +22,7 @@ class tdf57274(UITestCase):
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "B6:E6"}))
             self.xUITest.executeCommand(".uno:Copy")
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "B11"}))
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:PasteSpecial", close_button="") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:PasteSpecial", close_button="") as xDialog:
                 #We paste here using Paste Special with 'Link' Checkbox activated
                 xLink = xDialog.getChild("link")
                 xLink.executeAction("CLICK", tuple())

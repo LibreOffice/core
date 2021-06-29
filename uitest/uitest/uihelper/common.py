@@ -28,7 +28,7 @@ def get_url_for_data_file(file_name):
     return pathlib.Path(org.libreoffice.unotest.makeCopyFromTDOC(file_name)).as_uri()
 
 def change_measurement_unit(UITestCase, unit):
-    with UITestCase.ui_test.execute_dialog_through_command_guarded(".uno:OptionsTreeDialog") as xDialogOpt:
+    with UITestCase.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog") as xDialogOpt:
         xPages = xDialogOpt.getChild("pages")
         xAppEntry = xPages.getChild('3')
         xAppEntry.executeAction("EXPAND", tuple())

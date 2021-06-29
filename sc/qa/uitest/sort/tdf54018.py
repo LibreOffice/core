@@ -23,7 +23,7 @@ class tdf54018(UITestCase):
             #click top left columns / rows heading field to select all cells
             self.xUITest.executeCommand(".uno:SelectAll")
             #Menu 'Data -> Sort -> Column D -> Descending' <ok>
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:DataSort") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:DataSort") as xDialog:
                 xTabs = xDialog.getChild("tabcontrol")
                 select_pos(xTabs, "0")
                 xSortKey1 = xDialog.getChild("sortlb")

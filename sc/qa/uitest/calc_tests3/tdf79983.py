@@ -25,7 +25,7 @@ class tdf79983(UITestCase):
         gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:A4"}))
 
         #Tools / Options / LibreOffice Calc / Sort Lists
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:OptionsTreeDialog") as xDialogOpt:
+        with self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog") as xDialogOpt:
 
             xPages = xDialogOpt.getChild("pages")
             xCalcEntry = xPages.getChild('3')                 # Calc
@@ -45,7 +45,7 @@ class tdf79983(UITestCase):
         enter_text_to_cell(gridwin, "A1", "AAA")
         gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:A4"}))
         #fill down
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:FillSeries") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:FillSeries") as xDialog:
             xautofill = xDialog.getChild("autofill")
             xautofill.executeAction("CLICK", tuple())
         #verify

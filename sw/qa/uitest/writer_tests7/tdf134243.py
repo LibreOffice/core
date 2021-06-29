@@ -13,7 +13,7 @@ class tdf134243(UITestCase):
         with self.ui_test.load_file(get_url_for_data_file("tdf134243.odt")) as writer_doc:
 
             # Without the fix in place, it would hung launching the mailmerge wizard
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:MailMergeWizard", close_button="cancel"):
+            with self.ui_test.execute_dialog_through_command(".uno:MailMergeWizard", close_button="cancel"):
                 pass
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

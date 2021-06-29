@@ -19,7 +19,7 @@ class CalcTextToColumns(UITestCase):
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
             #Make sure that tools-options-StarOffice Calc-General-Input settings-Show overwrite warning when pasting data is tagged.
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:OptionsTreeDialog") as xDialogOpt:
+            with self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog") as xDialogOpt:
 
                 xPages = xDialogOpt.getChild("pages")
                 xWriterEntry = xPages.getChild('3')                 # Calc
@@ -35,7 +35,7 @@ class CalcTextToColumns(UITestCase):
             #Select A1:A5 on Sheet 'Dot_as_Separator'
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:A5"}))
             #Data - Text to Columns
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:TextToColumns", close_button="") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:TextToColumns", close_button="") as xDialog:
                 #Untag Tab as separator and tag other. Put a dot into the input field next to the other checkbox
                 xtab = xDialog.getChild("tab")
                 xcomma = xDialog.getChild("comma")
@@ -93,7 +93,7 @@ class CalcTextToColumns(UITestCase):
             self.assertEqual(get_cell_by_position(calc_doc, 0, 6, 4).getString(), "random content")
 
             #verify setting in options
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:OptionsTreeDialog") as xDialogOpt:
+            with self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog") as xDialogOpt:
 
                 xPages = xDialogOpt.getChild("pages")
                 xWriterEntry = xPages.getChild('3')                 # Calc
@@ -109,7 +109,7 @@ class CalcTextToColumns(UITestCase):
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
             #Make sure that tools-options-StarOffice Calc-General-Input settings-Show overwrite warning when pasting data is tagged.
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:OptionsTreeDialog") as xDialogOpt:
+            with self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog") as xDialogOpt:
 
                 xPages = xDialogOpt.getChild("pages")
                 xWriterEntry = xPages.getChild('3')                 # Calc
@@ -125,7 +125,7 @@ class CalcTextToColumns(UITestCase):
             # Select A1:A5
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:A5"}))
             # Data - Text to Columns
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:TextToColumns", close_button="") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:TextToColumns", close_button="") as xDialog:
                 # Untag Tab as separator and tag comma.
                 xComma = xDialog.getChild("comma")
                 if (get_state_as_dict(xComma)["Selected"]) == "false":
@@ -178,7 +178,7 @@ class CalcTextToColumns(UITestCase):
             with self.ui_test.load_file(get_url_for_data_file("text_to_columns_semicolon.ods")) as calc_doc:
                 gridwin = xCalcDoc.getChild("grid_window")
                 #Make sure that tools-options-StarOffice Calc-General-Input settings-Show overwrite warning when pasting data is tagged.
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:OptionsTreeDialog") as xDialogOpt:
+            with self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog") as xDialogOpt:
 
                 xPages = xDialogOpt.getChild("pages")
                 xWriterEntry = xPages.getChild('3')                 # Calc
@@ -192,7 +192,7 @@ class CalcTextToColumns(UITestCase):
             # Select A1:A5 on Sheet
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:A5"}))
             # Data - Text to Columns
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:TextToColumns", close_button="") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:TextToColumns", close_button="") as xDialog:
                 # Untag comma as separator and tag Semicolon
                 xSemicolon = xDialog.getChild("semicolon")
                 if (get_state_as_dict(xSemicolon)["Selected"]) == "false":
@@ -245,7 +245,7 @@ class CalcTextToColumns(UITestCase):
             with self.ui_test.load_file(get_url_for_data_file("text_to_columns_space.ods")) as calc_doc:
                 gridwin = xCalcDoc.getChild("grid_window")
                 #Make sure that tools-options-StarOffice Calc-General-Input settings-Show overwrite warning when pasting data is tagged.
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:OptionsTreeDialog") as xDialogOpt:
+            with self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog") as xDialogOpt:
 
                 xPages = xDialogOpt.getChild("pages")
                 xWriterEntry = xPages.getChild('3')                 # Calc
@@ -259,7 +259,7 @@ class CalcTextToColumns(UITestCase):
             # Select A1:A5 on Sheet
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:A5"}))
             # Data - Text to Columns
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:TextToColumns", close_button="") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:TextToColumns", close_button="") as xDialog:
                 # Untag comma as separator and tag Semicolon
                 xSpace = xDialog.getChild("space")
                 if (get_state_as_dict(xSpace)["Selected"]) == "false":
@@ -313,7 +313,7 @@ class CalcTextToColumns(UITestCase):
             with self.ui_test.load_file(get_url_for_data_file("text_to_columns_pipe.ods")) as calc_doc:
                 gridwin = xCalcDoc.getChild("grid_window")
                 #Make sure that tools-options-StarOffice Calc-General-Input settings-Show overwrite warning when pasting data is tagged.
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:OptionsTreeDialog") as xDialogOpt:
+            with self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog") as xDialogOpt:
 
                 xPages = xDialogOpt.getChild("pages")
                 xWriterEntry = xPages.getChild('3')                 # Calc
@@ -327,7 +327,7 @@ class CalcTextToColumns(UITestCase):
             # Select A1:A5 on Sheet
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:A5"}))
             # Data - Text to Columns
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:TextToColumns", close_button="") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:TextToColumns", close_button="") as xDialog:
                 # Untag comma as separator and tag Semicolon
                 xtab = xDialog.getChild("tab")
                 xcomma = xDialog.getChild("comma")
@@ -387,7 +387,7 @@ class CalcTextToColumns(UITestCase):
             with self.ui_test.load_file(get_url_for_data_file("text_to_columns_pipe_space.ods")) as calc_doc:
                 gridwin = xCalcDoc.getChild("grid_window")
                 #Make sure that tools-options-StarOffice Calc-General-Input settings-Show overwrite warning when pasting data is tagged.
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:OptionsTreeDialog") as xDialogOpt:
+            with self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog") as xDialogOpt:
 
                 xPages = xDialogOpt.getChild("pages")
                 xWriterEntry = xPages.getChild('3')                 # Calc
@@ -401,7 +401,7 @@ class CalcTextToColumns(UITestCase):
             # Select A1:A5 on Sheet
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:A5"}))
             # Data - Text to Columns
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:TextToColumns", close_button="") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:TextToColumns", close_button="") as xDialog:
                 xtab = xDialog.getChild("tab")
                 xcomma = xDialog.getChild("comma")
                 xsemicolon = xDialog.getChild("semicolon")

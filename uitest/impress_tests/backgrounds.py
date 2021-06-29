@@ -113,7 +113,7 @@ class ImpressBackgrounds(UITestCase):
 
         buttons = ['btnbitmap', 'btncolor', 'btngradient', 'btnhatch', 'btnpattern']
         for index, button in enumerate(buttons):
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:PageSetup") as xPageSetupDlg:
+            with self.ui_test.execute_dialog_through_command(".uno:PageSetup") as xPageSetupDlg:
 
                 tabcontrol = xPageSetupDlg.getChild("tabcontrol")
                 select_pos(tabcontrol, "1")
@@ -126,7 +126,7 @@ class ImpressBackgrounds(UITestCase):
 
             self.checkDefaultBackground(button)
 
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:PageSetup") as xPageSetupDlg:
+            with self.ui_test.execute_dialog_through_command(".uno:PageSetup") as xPageSetupDlg:
 
                 tabcontrol = xPageSetupDlg.getChild("tabcontrol")
                 select_pos(tabcontrol, "1")

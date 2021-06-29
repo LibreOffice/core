@@ -16,21 +16,21 @@ class renameSlide(UITestCase):
         xCancelBtn = xTemplateDlg.getChild("close")
         self.ui_test.close_dialog_through_button(xCancelBtn)
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:RenamePage") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:RenamePage") as xDialog:
 
             name_entry = xDialog.getChild("name_entry")
             name_entry.executeAction("TYPE", mkPropertyValues({"TEXT":"NewName"}))
 
 
         #verify
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:RenamePage") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:RenamePage") as xDialog:
 
             name_entry = xDialog.getChild("name_entry")
             self.assertEqual(get_state_as_dict(name_entry)["Text"], "NewName")
 
         self.xUITest.executeCommand(".uno:InsertPage")
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:RenamePage", close_button="cancel") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:RenamePage", close_button="cancel") as xDialog:
 
             xOKBtn = xDialog.getChild("ok")
             self.assertEqual("true", get_state_as_dict(xOKBtn)['Enabled'])

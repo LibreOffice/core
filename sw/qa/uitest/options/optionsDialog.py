@@ -11,7 +11,7 @@ class optionsDialog(UITestCase):
     def test_moreIconsDialog(self):
         self.ui_test.create_doc_in_start_center("writer")
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:OptionsTreeDialog") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog") as xDialog:
 
             xPages = xDialog.getChild("pages")
             xLOEntry = xPages.getChild('0')
@@ -32,7 +32,7 @@ class optionsDialog(UITestCase):
     def test_tdf138596(self):
         self.ui_test.create_doc_in_start_center("writer")
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:OptionsTreeDialog") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog") as xDialog:
             xPages = xDialog.getChild("pages")
             xWriterEntry = xPages.getChild('3')
             xWriterEntry.executeAction("EXPAND", tuple())

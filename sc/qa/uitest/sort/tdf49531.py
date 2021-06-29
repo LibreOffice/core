@@ -25,7 +25,7 @@ class tdf49531(UITestCase):
 
             #Menu 'Data -> Sort -> Top to bottom - all otheroptions unchecked
             #Column B - Ascending' <ok>
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:DataSort") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:DataSort") as xDialog:
                 xTabs = xDialog.getChild("tabcontrol")
                 select_pos(xTabs, "1")
                 xNatural = xDialog.getChild("naturalsort")

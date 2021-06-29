@@ -28,7 +28,7 @@ class tdf133189(UITestCase):
         #change measurement to Inches
         change_measurement_unit(self, 'Inch')
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:PageDialog") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:PageDialog") as xDialog:
             tabcontrol = xDialog.getChild("tabcontrol")
             select_pos(tabcontrol, "1")
 

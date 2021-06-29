@@ -15,7 +15,7 @@ class dateFormFieldDialog(UITestCase):
             xWriterDoc = self.xUITest.getTopFocusWindow()
 
             # open the dialog (cursor is at the field)
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:ControlProperties") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:ControlProperties") as xDialog:
 
                 itemsList = xDialog.getChild("date_formats_treeview")
 
@@ -29,7 +29,7 @@ class dateFormFieldDialog(UITestCase):
 
 
             # open the dialog again
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:ControlProperties") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:ControlProperties") as xDialog:
                 itemsList = xDialog.getChild("date_formats_treeview")
                 self.assertEqual(get_state_as_dict(itemsList)["SelectEntryText"], "12-31")
 
@@ -40,7 +40,7 @@ class dateFormFieldDialog(UITestCase):
             xWriterDoc = self.xUITest.getTopFocusWindow()
 
             # open the dialog (cursor is at the field)
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:ControlProperties") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:ControlProperties") as xDialog:
 
                 itemsList = xDialog.getChild("date_formats_treeview")
 
@@ -56,7 +56,7 @@ class dateFormFieldDialog(UITestCase):
             self.assertEqual(writer_doc.getText().getString(), "07/17/19")
 
             # open the dialog (cursor is at the field)
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:ControlProperties") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:ControlProperties") as xDialog:
 
                 itemsList = xDialog.getChild("date_formats_treeview")
 
@@ -79,7 +79,7 @@ class dateFormFieldDialog(UITestCase):
             self.assertEqual(writer_doc.getText().getString(), "[select date]")
 
             # open the dialog (cursor is at the field)
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:ControlProperties") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:ControlProperties") as xDialog:
 
                 itemsList = xDialog.getChild("date_formats_treeview")
 
@@ -105,7 +105,7 @@ class dateFormFieldDialog(UITestCase):
             self.assertEqual(writer_doc.getText().getString(), "07/17/19")
 
             # open the dialog (cursor is at the field)
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:ControlProperties") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:ControlProperties") as xDialog:
 
                 itemsList = xDialog.getChild("date_formats_treeview")
 

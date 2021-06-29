@@ -18,9 +18,9 @@ class tdf121263(UITestCase):
         document = self.ui_test.get_component()
         gridwin = xTopWindow.getChild("grid_window")
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:Insert"):
+        with self.ui_test.execute_dialog_through_command(".uno:Insert"):
             pass
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:Insert"):
+        with self.ui_test.execute_dialog_through_command(".uno:Insert"):
             pass
 
         gridwin.executeAction("SELECT", mkPropertyValues({"TABLE": "2"}))
@@ -31,7 +31,7 @@ class tdf121263(UITestCase):
         self.xUITest.executeCommand(".uno:Hide")
 
         #show sheet Dialog
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:Show", close_button="cancel") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:Show", close_button="cancel") as xDialog:
             treeview = xDialog.getChild("treeview")
             self.assertEqual(get_state_as_dict(treeview)["Children"], "2")
 

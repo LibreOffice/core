@@ -22,7 +22,7 @@ class Subtotals(UITestCase):
             # Open the test file
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:B15"}))
             #Data->Subtotals
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:DataSubTotals") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:DataSubTotals") as xDialog:
                 xTabs = xDialog.getChild("tabcontrol")
                 select_pos(xTabs, "0")
                 xGroupBy = xDialog.getChild("group_by")

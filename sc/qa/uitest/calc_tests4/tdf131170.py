@@ -13,7 +13,7 @@ class tdf131170(UITestCase):
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
 
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:DefineLabelRange") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:DefineLabelRange") as xDialog:
 
                 xRange = xDialog.getChild("range")
                 self.assertEqual(4, len(xRange.getChildren()))

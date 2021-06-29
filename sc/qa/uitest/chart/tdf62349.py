@@ -21,7 +21,7 @@ class tdf62349(UITestCase):
             #3: select all data cells C5:H9
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "C5:H9"}))
             # 4: create a chart with insert/chart menu
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:InsertObjectChart", close_button="finish"):
+            with self.ui_test.execute_dialog_through_command(".uno:InsertObjectChart", close_button="finish"):
                 pass
 
             # 5: (single) click to an empty cell to finalize the chart

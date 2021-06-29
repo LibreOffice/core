@@ -18,7 +18,7 @@ class tdf137803(UITestCase):
             self.ui_test.wait_until_child_is_available('metricfield')
 
             # open textattrs dialog
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:TextAttributes") as TextDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:TextAttributes") as TextDialog:
 
                 # check autosize on
                 TSB_AUTOGROW_SIZE = TextDialog.getChild('TSB_AUTOGROW_SIZE')

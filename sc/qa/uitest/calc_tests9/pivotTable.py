@@ -25,7 +25,7 @@ class pivotTable(UITestCase):
             self.xUITest.executeCommand(".uno:GoUp")
 
 
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:DataDataPilotRun") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:DataDataPilotRun") as xDialog:
                 xFields = xDialog.getChild("listbox-fields")
                 self.assertEqual(2, len(xFields.getChildren()))
                 self.assertEqual("qtX", get_state_as_dict(xFields.getChild('0'))['Text'])

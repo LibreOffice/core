@@ -16,7 +16,7 @@ class tdf116996(UITestCase):
         gridwin = xCalcDoc.getChild("grid_window")
         document = self.ui_test.get_component()
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:OptionsTreeDialog", close_button="") as xDialogOpt:
+        with self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog", close_button="") as xDialogOpt:
             xPages = xDialogOpt.getChild("pages")
             xLOEntry = xPages.getChild('0')                 # Libreoffice
             xLOEntry.executeAction("EXPAND", tuple())
@@ -31,7 +31,7 @@ class tdf116996(UITestCase):
                 pass
 
         #reopen options dialog and verify
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:OptionsTreeDialog", close_button="") as xDialogOpt:
+        with self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog", close_button="") as xDialogOpt:
             xPages = xDialogOpt.getChild("pages")
             xLOEntry = xPages.getChild('0')                 # Libreoffice
             xLOEntry.executeAction("EXPAND", tuple())

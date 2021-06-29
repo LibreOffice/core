@@ -17,7 +17,7 @@ class tdf99334(UITestCase):
             #select whole table
             self.xUITest.executeCommand(".uno:SelectTable")
             #Tools - Sort
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:SortDialog"):
+            with self.ui_test.execute_dialog_through_command(".uno:SortDialog"):
                 pass
             #verify
             tables = writer_doc.getTextTables()

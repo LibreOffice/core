@@ -15,7 +15,7 @@ class tableToText(UITestCase):
         with self.ui_test.load_file(get_url_for_data_file("tableToText.odt")) as writer_doc:
             xWriterDoc = self.xUITest.getTopFocusWindow()
             #dialog Table to text - Tabs; verify
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:ConvertTableToText") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:ConvertTableToText") as xDialog:
                 tabs = xDialog.getChild("tabs")
                 tabs.executeAction("CLICK", tuple())
             #verify
@@ -26,7 +26,7 @@ class tableToText(UITestCase):
             self.assertEqual(writer_doc.TextTables.getCount(), 1)
 
             #dialog Table to text - Paragraph; verify
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:ConvertTableToText") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:ConvertTableToText") as xDialog:
                 paragraph = xDialog.getChild("paragraph")
                 paragraph.executeAction("CLICK", tuple())
             #verify
@@ -37,7 +37,7 @@ class tableToText(UITestCase):
             self.assertEqual(writer_doc.TextTables.getCount(), 1)
 
             #dialog Table to text - Semicolons; verify
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:ConvertTableToText") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:ConvertTableToText") as xDialog:
                 semicolons = xDialog.getChild("semicolons")
                 semicolons.executeAction("CLICK", tuple())
             #verify
@@ -48,7 +48,7 @@ class tableToText(UITestCase):
             self.assertEqual(writer_doc.TextTables.getCount(), 1)
 
             #dialog Table to text - other; verify
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:ConvertTableToText") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:ConvertTableToText") as xDialog:
                 other = xDialog.getChild("other")
                 other.executeAction("CLICK", tuple())
                 othered = xDialog.getChild("othered")

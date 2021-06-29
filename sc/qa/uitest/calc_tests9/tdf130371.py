@@ -20,7 +20,7 @@ class namedRanges(UITestCase):
             text2 = "value\t$Sheet3.$B$2\tSheet3"
             text3 = "value\t$Sheet4.$B$2\tSheet4"
 
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:DefineName") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:DefineName") as xDialog:
                 namesList = xDialog.getChild('names')
                 self.assertEqual(2, len(namesList.getChildren()))
                 self.assertEqual(get_state_as_dict(namesList.getChild('0'))["Text"], text1)
@@ -35,7 +35,7 @@ class namedRanges(UITestCase):
 
             self.xUITest.executeCommand(".uno:Paste")
 
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:DefineName") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:DefineName") as xDialog:
                 namesList = xDialog.getChild('names')
                 self.assertEqual(3, len(namesList.getChildren()))
                 self.assertEqual(get_state_as_dict(namesList.getChild('0'))["Text"], text1)
@@ -45,7 +45,7 @@ class namedRanges(UITestCase):
 
             self.xUITest.executeCommand(".uno:Undo")
 
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:DefineName", close_button="cancel") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:DefineName", close_button="cancel") as xDialog:
                 namesList = xDialog.getChild('names')
                 self.assertEqual(2, len(namesList.getChildren()))
                 self.assertEqual(get_state_as_dict(namesList.getChild('0'))["Text"], text1)

@@ -34,7 +34,7 @@ class tdf101894(UITestCase):
             xOldSheetRanges.append(xRow)
 
         # Rename the sheet first
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:RenameTable") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:RenameTable") as xDialog:
             xname_entry = xDialog.getChild("name_entry")
 
             oldName = get_state_as_dict(xname_entry)['Text']
@@ -43,7 +43,7 @@ class tdf101894(UITestCase):
             xname_entry.executeAction("TYPE", mkPropertyValues({"TEXT":"NewName"}))
 
         # Copy sheet and use the old name
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:Move") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:Move") as xDialog:
             newName = xDialog.getChild("newName")
             newName.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
             newName.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))

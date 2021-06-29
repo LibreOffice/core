@@ -16,7 +16,7 @@ class watermark(UITestCase):
         document = self.ui_test.get_component()
         xWriterDoc = self.xUITest.getTopFocusWindow()
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:Watermark") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:Watermark") as xDialog:
             xTextInput = xDialog.getChild("TextInput")
             xAngle = xDialog.getChild("Angle")
             xTransparency = xDialog.getChild("Transparency")
@@ -26,7 +26,7 @@ class watermark(UITestCase):
             xTransparency.executeAction("UP", tuple())
 
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:Watermark", close_button="cancel") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:Watermark", close_button="cancel") as xDialog:
             xTextInput = xDialog.getChild("TextInput")
             xAngle = xDialog.getChild("Angle")
             xTransparency = xDialog.getChild("Transparency")
@@ -36,12 +36,12 @@ class watermark(UITestCase):
             self.assertEqual(get_state_as_dict(xTransparency)["Text"], "51%")
 
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:Watermark") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:Watermark") as xDialog:
             xTextInput = xDialog.getChild("TextInput")
             xTextInput.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
             xTextInput.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:Watermark", close_button="cancel") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:Watermark", close_button="cancel") as xDialog:
             xTextInput = xDialog.getChild("TextInput")
 
             self.assertEqual(get_state_as_dict(xTextInput)["Text"], "")

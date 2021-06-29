@@ -19,7 +19,7 @@ class tdf126577(UITestCase):
 
         gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:A20"}))
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:FillSeries") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:FillSeries") as xDialog:
 
             self.assertEqual("true", get_state_as_dict(xDialog.getChild("down"))['Checked'])
             self.assertEqual("true", get_state_as_dict(xDialog.getChild("linear"))['Checked'])

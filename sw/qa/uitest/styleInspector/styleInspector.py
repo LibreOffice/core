@@ -333,7 +333,7 @@ class styleNavigator(UITestCase):
 
             # FIXME: neither LO_EXT_SHADING, nor odf:prefix/odf:suffix changes update the View,
             # so add a temporary bookmark to the text range to trigger the color change immediately
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:InsertBookmark", close_button="insert"):
+            with self.ui_test.execute_dialog_through_command(".uno:InsertBookmark", close_button="insert"):
                 pass
 
             self.xUITest.executeCommand(".uno:Undo")

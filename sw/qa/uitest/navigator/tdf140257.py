@@ -14,7 +14,7 @@ class Tdf140257(UITestCase):
 
   def change_outline_level(self, sText):
 
-    with self.ui_test.execute_dialog_through_command_guarded(".uno:ParagraphDialog") as xDialog:
+    with self.ui_test.execute_dialog_through_command(".uno:ParagraphDialog") as xDialog:
         xTabs = xDialog.getChild("tabcontrol")
         select_pos(xTabs, "4")
 

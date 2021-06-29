@@ -14,7 +14,7 @@ class WriterInsertTableDialog(UITestCase):
 
         self.ui_test.create_doc_in_start_center("writer")
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:InsertTable") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:InsertTable") as xDialog:
 
             xNameEdit = xDialog.getChild("nameedit")
 
@@ -49,14 +49,14 @@ class WriterInsertTableDialog(UITestCase):
 
         self.insert_table("Test3", 2, 2)
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:TableNumberFormatDialog"):
+        with self.ui_test.execute_dialog_through_command(".uno:TableNumberFormatDialog"):
             pass
 
         self.ui_test.close_doc()
 
     def test_cancel_button_insert_table_dialog(self):
         self.ui_test.create_doc_in_start_center("writer")
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:InsertTable", close_button="cancel"):
+        with self.ui_test.execute_dialog_through_command(".uno:InsertTable", close_button="cancel"):
             pass
 
         document = self.ui_test.get_component()

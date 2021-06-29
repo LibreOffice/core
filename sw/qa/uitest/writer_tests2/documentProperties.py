@@ -30,7 +30,7 @@ class documentProperties(UITestCase):
 
    def test_open_documentProperties_writer(self):
         self.ui_test.create_doc_in_start_center("writer")
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:SetDocumentProperties") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:SetDocumentProperties") as xDialog:
             xResetBtn = xDialog.getChild("reset")
             xResetBtn.executeAction("CLICK", tuple())
 
@@ -96,7 +96,7 @@ class documentProperties(UITestCase):
             xUpdateBtn.executeAction("CLICK", tuple())
 
 #now open the dialog again and read the properties
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:SetDocumentProperties", close_button="cancel") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:SetDocumentProperties", close_button="cancel") as xDialog:
             xTitleText = xDialog.getChild("title")
             xSubjectText = xDialog.getChild("subject")
             xKeywordsText = xDialog.getChild("keywords")

@@ -16,7 +16,7 @@ class tdf133629(UITestCase):
         gridwin = xCalcDoc.getChild("grid_window")
         document = self.ui_test.get_component()
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:Insert"):
+        with self.ui_test.execute_dialog_through_command(".uno:Insert"):
             pass
 
         self.xUITest.executeCommand(".uno:TableSelectAll")
@@ -27,7 +27,7 @@ class tdf133629(UITestCase):
         self.assertIsNotNone(getattr(document.CurrentSelection, 'Sheet1.A1:AMJ1048576'))
         self.assertIsNotNone(getattr(document.CurrentSelection, 'Sheet1.A2:AMJ1048576'))
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:FormatCellDialog") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:FormatCellDialog") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             select_pos(xTabs, "5")
 

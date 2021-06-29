@@ -12,11 +12,11 @@ class tdf128593(UITestCase):
         MainDoc = self.ui_test.create_doc_in_start_center("writer")
         MainWindow = self.xUITest.getTopFocusWindow()
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:InsertTable"):
+        with self.ui_test.execute_dialog_through_command(".uno:InsertTable"):
             pass
 
         self.xUITest.executeCommandWithParameters(".uno:TableCellBackgroundColor", mkPropertyValues({"TableCellBackgroundColor" : 16776960 }) )
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:TableDialog") as TablePropertiesDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:TableDialog") as TablePropertiesDialog:
             writer_edit = MainWindow.getChild("writer_edit")
             writer_edit.executeAction("SELECT", mkPropertyValues({"END_POS": "0", "START_POS": "0"}))
             tabcontrol = TablePropertiesDialog.getChild("tabcontrol")

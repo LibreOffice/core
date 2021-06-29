@@ -12,7 +12,7 @@ class Tdf104026(UITestCase):
 
   def execute_conditional_format_manager_dialog(self, nCount):
 
-    with self.ui_test.execute_dialog_through_command_guarded(".uno:ConditionalFormatManagerDialog") as xCondFormatMgr:
+    with self.ui_test.execute_dialog_through_command(".uno:ConditionalFormatManagerDialog") as xCondFormatMgr:
 
         aExpectedResults = ['A2\tCell value != $Sheet1.$B2', 'A3\tCell value != $Sheet1.$B3',
             'A4\tCell value != $Sheet1.$B4', 'A5\tCell value != $Sheet1.$B5',

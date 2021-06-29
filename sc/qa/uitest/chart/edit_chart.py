@@ -36,7 +36,7 @@ class CalcChartEditUIDemo(UITestCase):
         xCalcDoc = self.xUITest.getTopFocusWindow()
         xGridWindow = xCalcDoc.getChild("grid_window")
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:InsertObjectChart", close_button="finish"):
+        with self.ui_test.execute_dialog_through_command(".uno:InsertObjectChart", close_button="finish"):
             pass
 
         xGridWindow.executeAction("DESELECT", mkPropertyValues({"OBJECT": ""}))

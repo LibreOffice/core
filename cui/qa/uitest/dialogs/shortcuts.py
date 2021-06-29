@@ -17,7 +17,7 @@ class Test(UITestCase):
         xWriterDoc = self.xUITest.getTopFocusWindow()
         xWriterEdit = xWriterDoc.getChild("writer_edit")
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:EditStyle") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:EditStyle") as xDialog:
 
             xTabs = xDialog.getChild("tabcontrol")
             select_pos(xTabs, "0")

@@ -23,7 +23,7 @@ class tdf53482(UITestCase):
             #1. Highlight cells to be sorted A8:J124
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A8:J124"}))
             #2. Click Data menu, Sort
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:DataSort") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:DataSort") as xDialog:
                 xTabs = xDialog.getChild("tabcontrol")
                 select_pos(xTabs, "1")
                 #3. On Options tab, tick 'Range contains column labels'
@@ -57,7 +57,7 @@ class tdf53482(UITestCase):
         #1. Highlight cells to be sorted
         gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:A5"}))
         #2. Click Data menu, Sort
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:DataSort") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:DataSort") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             select_pos(xTabs, "1")
             #3. On Options tab, tick 'Range contains column labels'

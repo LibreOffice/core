@@ -18,7 +18,7 @@ class WriterInsertBreakDialog(UITestCase):
 
         self.ui_test.create_doc_in_start_center("writer")
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:InsertBreak") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:InsertBreak") as xDialog:
             xOption = xDialog.getChild("linerb")
             xOption.executeAction("CLICK", tuple())
 
@@ -30,7 +30,7 @@ class WriterInsertBreakDialog(UITestCase):
 
         self.ui_test.create_doc_in_start_center("writer")
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:InsertBreak") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:InsertBreak") as xDialog:
             xOption = xDialog.getChild("columnrb")
             xOption.executeAction("CLICK", tuple())
 
@@ -44,7 +44,7 @@ class WriterInsertBreakDialog(UITestCase):
 
         for i in range(9):
             with self.subTest(i=i):
-                with self.ui_test.execute_dialog_through_command_guarded(".uno:InsertBreak") as xDialog:
+                with self.ui_test.execute_dialog_through_command(".uno:InsertBreak") as xDialog:
 
                     xOption = xDialog.getChild("pagerb")
                     xOption.executeAction("CLICK", tuple())
@@ -60,7 +60,7 @@ class WriterInsertBreakDialog(UITestCase):
 
         self.ui_test.create_doc_in_start_center("writer")
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:InsertBreak", close_button="cancel"):
+        with self.ui_test.execute_dialog_through_command(".uno:InsertBreak", close_button="cancel"):
             pass
 
         self.getPages(1)

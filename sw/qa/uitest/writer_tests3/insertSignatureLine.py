@@ -16,7 +16,7 @@ class insertSignatureLine(UITestCase):
         xWriterDoc = self.xUITest.getTopFocusWindow()
 
         # cancel the dialog without doing anything
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:InsertSignatureLine", close_button="cancel") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:InsertSignatureLine", close_button="cancel") as xDialog:
 
             xName = xDialog.getChild("edit_name")
             xName.executeAction("TYPE", mkPropertyValues({"TEXT":"Name"})) #set the signature line
@@ -25,7 +25,7 @@ class insertSignatureLine(UITestCase):
             document.DrawPage.getByIndex(0)
 
         # set the signature line
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:InsertSignatureLine") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:InsertSignatureLine") as xDialog:
 
             xName = xDialog.getChild("edit_name")
             xTitle = xDialog.getChild("edit_title")
@@ -56,7 +56,7 @@ class insertSignatureLine(UITestCase):
         document = self.ui_test.get_component()
         xWriterDoc = self.xUITest.getTopFocusWindow()
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:InsertSignatureLine") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:InsertSignatureLine") as xDialog:
 
             xName = xDialog.getChild("edit_name")
             xTitle = xDialog.getChild("edit_title")

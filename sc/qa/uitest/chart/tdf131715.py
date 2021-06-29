@@ -11,7 +11,7 @@ class tdf131715(UITestCase):
 
     def test_tdf131715(self):
         self.ui_test.create_doc_in_start_center("calc")
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:InsertObjectChart", close_button="finish") as xChartDlg:
+        with self.ui_test.execute_dialog_through_command(".uno:InsertObjectChart", close_button="finish") as xChartDlg:
 
             xWizard = xChartDlg.getChild('Wizard')
 

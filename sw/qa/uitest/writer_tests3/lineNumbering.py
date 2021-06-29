@@ -19,7 +19,7 @@ class WriterLineNumbering(UITestCase):
 
         change_measurement_unit(self, "Centimeter")
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:LineNumberingDialog") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:LineNumberingDialog") as xDialog:
             xshownumbering = xDialog.getChild("shownumbering")
             xstyledropdown = xDialog.getChild("styledropdown")
             xformatdropdown = xDialog.getChild("formatdropdown")
@@ -46,7 +46,7 @@ class WriterLineNumbering(UITestCase):
             xshowfooterheadernumbering.executeAction("CLICK", tuple())
             xrestarteverynewpage.executeAction("CLICK", tuple())
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:LineNumberingDialog", close_button="cancel") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:LineNumberingDialog", close_button="cancel") as xDialog:
             xshownumbering = xDialog.getChild("shownumbering")
             xstyledropdown = xDialog.getChild("styledropdown")
             xformatdropdown = xDialog.getChild("formatdropdown")
@@ -78,7 +78,7 @@ class WriterLineNumbering(UITestCase):
         self.ui_test.create_doc_in_start_center("writer")
         document = self.ui_test.get_component()
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:LineNumberingDialog", close_button="cancel") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:LineNumberingDialog", close_button="cancel") as xDialog:
             xshownumbering = xDialog.getChild("shownumbering")
             xformatdropdown = xDialog.getChild("formatdropdown")
 

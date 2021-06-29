@@ -20,7 +20,7 @@ class tdf85979(UITestCase):
             #(I selected C1 to C5, then Text to Columns, unselected "Tab" and selected "Space")
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "C1:C5"}))
             # Data - Text to Columns
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:TextToColumns") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:TextToColumns") as xDialog:
                 xspace = xDialog.getChild("space")
                 if (get_state_as_dict(xspace)["Selected"]) == "false":
                     xspace.executeAction("CLICK", tuple())
