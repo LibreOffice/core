@@ -572,7 +572,7 @@ void SvxNumberFormat::SetListFormat(const OUString& rPrefix, const OUString& rSu
     {
         int nLevelId = nLevel - nInclUpperLevels + i;
         if (nLevelId < 0)
-            // There can be cases with curent level 1, but request to show 10 upper levels. Trim it
+            // There can be cases with current level 1, but request to show 10 upper levels. Trim it
             continue;
 
         *sListFormat += "%";
