@@ -818,6 +818,19 @@ WeldTextForwarder::~WeldTextForwarder()
 
 IMPL_LINK(WeldTextForwarder, NotifyHdl, EENotify&, rNotify, void)
 {
+    if (EditEngine* pEditEngine = m_rEditAcc.GetEditEngine())
+    {
+        if (rNotify.eNotificationType == EE_NOTIFY_PROCESSNOTIFICATIONS
+            && !pEditEngine->GetUpdateMode())
+        {
+            // tdf#143088 an UpdateMode of false will just to on to cause
+            // AccessibleTextHelper_Impl::GetTextForwarder to throw an
+            // exception as a Frozen EditEngine is considered Invalid so return
+            // early instead
+            return;
+        }
+    }
+
     ::std::unique_ptr<SfxHint> aHint = SvxEditSourceHelper::EENotification2Hint(&rNotify);
     if (aHint)
         m_rEditSource.GetBroadcaster().Broadcast(*aHint);
