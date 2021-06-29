@@ -112,10 +112,6 @@ public:
     virtual void SAL_CALL
     elementReplaced(css::container::ContainerEvent const & rEvent) override;
 
-    // XComponent
-    virtual void SAL_CALL
-    dispose() override;
-
 private:
     JavaVirtualMachine(JavaVirtualMachine const &) = delete;
     void operator =(const JavaVirtualMachine&) = delete;
