@@ -959,9 +959,9 @@ void SwHTMLWriter::writeFrameFormatOptions(HtmlWriter& aHtml, const SwFrameForma
         sal_uInt8 nPercentHeight = pFSItem->GetHeightPercent();
 
         // Size of the object in Twips without margins
-        Size aTwipSz( (nPercentWidth ? 0
+        Size aTwipSz( (nPercentWidth && nPercentWidth != 255 ? 0
                                  : pFSItem->GetWidth()-aTwipSpc.Width()),
-                      (nPercentHeight ? 0
+                      (nPercentHeight && nPercentHeight != 255 ? 0
                                   : pFSItem->GetHeight()-aTwipSpc.Height()) );
 
         OSL_ENSURE( aTwipSz.Width() >= 0 && aTwipSz.Height() >= 0, "Frame size minus spacing < 0!!!???" );
@@ -987,7 +987,7 @@ void SwHTMLWriter::writeFrameFormatOptions(HtmlWriter& aHtml, const SwFrameForma
             ((nPercentWidth && nPercentWidth!=255) || aPixelSz.Width()) )
         {
             OString sWidth;
-            if (nPercentWidth)
+            if (nPercentWidth && nPercentWidth != 255)
                 sWidth = OString::number(static_cast<sal_Int32>(nPercentWidth)) + "%";
             else
                 sWidth = OString::number(static_cast<sal_Int32>(aPixelSz.Width()));
@@ -998,7 +998,7 @@ void SwHTMLWriter::writeFrameFormatOptions(HtmlWriter& aHtml, const SwFrameForma
             ((nPercentHeight && nPercentHeight!=255) || aPixelSz.Height()) )
         {
             OString sHeight;
-            if (nPercentHeight)
+            if (nPercentHeight && nPercentHeight != 255)
                 sHeight = OString::number(static_cast<sal_Int32>(nPercentHeight)) + "%";
             else
                 sHeight = OString::number(static_cast<sal_Int32>(aPixelSz.Height()));
