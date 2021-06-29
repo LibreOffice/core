@@ -13,15 +13,12 @@ class CharDialogText(UITestCase):
     def test_select_char(self):
         self.ui_test.create_doc_in_start_center("calc")
 
-        self.ui_test.execute_dialog_through_command(".uno:InsertSymbol")
-        xCharDialog = self.xUITest.getTopFocusWindow()
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:InsertSymbol", close_button="cancel") as xCharDialog:
 
-        xCharSet = xCharDialog.getChild("showcharset")
+            xCharSet = xCharDialog.getChild("showcharset")
 
-        xCharSet.executeAction("SELECT", mkPropertyValues({"COLUMN": "2", "ROW": "2"}))
+            xCharSet.executeAction("SELECT", mkPropertyValues({"COLUMN": "2", "ROW": "2"}))
 
-        xCancelBtn = xCharDialog.getChild("cancel")
-        self.ui_test.close_dialog_through_button(xCancelBtn)
 
         self.ui_test.close_doc()
 

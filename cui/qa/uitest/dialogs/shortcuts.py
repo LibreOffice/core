@@ -17,26 +17,23 @@ class Test(UITestCase):
         xWriterDoc = self.xUITest.getTopFocusWindow()
         xWriterEdit = xWriterDoc.getChild("writer_edit")
 
-        self.ui_test.execute_dialog_through_command(".uno:EditStyle")  #open style dialog
-        xDialog = self.xUITest.getTopFocusWindow()
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:EditStyle") as xDialog:
 
-        xTabs = xDialog.getChild("tabcontrol")
-        select_pos(xTabs, "0")
+            xTabs = xDialog.getChild("tabcontrol")
+            select_pos(xTabs, "0")
 
-        for i in range(16):
-            self.assertEqual(get_state_as_dict(xTabs)["CurrPagePos"], str(i))
+            for i in range(16):
+                self.assertEqual(get_state_as_dict(xTabs)["CurrPagePos"], str(i))
 
-            xTabs.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+PAGEDOWN"}))
+                xTabs.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+PAGEDOWN"}))
 
-        self.assertEqual(get_state_as_dict(xTabs)["CurrPagePos"], "0")
+            self.assertEqual(get_state_as_dict(xTabs)["CurrPagePos"], "0")
 
-        for i in reversed(range(16)):
-            xTabs.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+PAGEUP"}))
+            for i in reversed(range(16)):
+                xTabs.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+PAGEUP"}))
 
-            self.assertEqual(get_state_as_dict(xTabs)["CurrPagePos"], str(i))
+                self.assertEqual(get_state_as_dict(xTabs)["CurrPagePos"], str(i))
 
-        xOkBtn = xDialog.getChild("ok")
-        xOkBtn.executeAction("CLICK", tuple())
 
         self.ui_test.close_doc()
 

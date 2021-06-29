@@ -15,13 +15,10 @@ class CheckBoxTest(UITestCase):
 
         self.ui_test.create_doc_in_start_center("calc")
 
-        self.ui_test.execute_dialog_through_command(".uno:FormatCellDialog")
-        xCellsDlg = self.xUITest.getTopFocusWindow()
-        xNegativeNumRedCB = xCellsDlg.getChild("negnumred")
-        xNegativeNumRedCB.executeAction("CLICK",tuple())
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:FormatCellDialog") as xCellsDlg:
+            xNegativeNumRedCB = xCellsDlg.getChild("negnumred")
+            xNegativeNumRedCB.executeAction("CLICK",tuple())
 
-        okBtn = xCellsDlg.getChild("ok")
-        self.ui_test.close_dialog_through_button(okBtn)
 
         self.ui_test.close_doc()
 
