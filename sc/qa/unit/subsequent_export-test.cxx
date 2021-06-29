@@ -281,6 +281,7 @@ public:
     void testTdf84874();
     void testTdf136721_paper_size();
     void testTdf139258_rotated_image();
+    void testTdf140431();
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
@@ -460,6 +461,7 @@ public:
     CPPUNIT_TEST(testTdf84874);
     CPPUNIT_TEST(testTdf136721_paper_size);
     CPPUNIT_TEST(testTdf139258_rotated_image);
+    CPPUNIT_TEST(testTdf140431);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -5847,6 +5849,23 @@ void ScExportTest::testTdf139258_rotated_image()
     assertXPathContent(pDrawing, "/xdr:wsDr/xdr:twoCellAnchor/xdr:from/xdr:row", "12");
     assertXPathContent(pDrawing, "/xdr:wsDr/xdr:twoCellAnchor/xdr:to/xdr:col", "6");
     assertXPathContent(pDrawing, "/xdr:wsDr/xdr:twoCellAnchor/xdr:to/xdr:row", "25");
+}
+
+void ScExportTest::testTdf140431()
+{
+    ScDocShellRef xShell = loadDoc(u"129969-min.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xShell.is());
+
+    ScDocShellRef xDocSh = saveAndReload(&(*xShell), FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+    ScDocument& rDoc = xDocSh->GetDocument();
+    ScAddress aPos(0, 2, 0);
+    const EditTextObject* pEditText = rDoc.GetEditText(aPos);
+    const SvxFieldData* pData = pEditText->GetFieldData(0, 0, text::textfield::Type::URL);
+    const SvxURLField* pURLData = static_cast<const SvxURLField*>(pData);
+    CPPUNIT_ASSERT(pURLData->GetURL().startsWith("file://ndhlis"));
+
+    xDocSh->DoClose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest);
