@@ -189,6 +189,29 @@
     },
     {
       "key": {
+        "uuid": "57a9dfa1_aa01b4df",
+        "filename": "sfx2/source/dialog/StyleList.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 477,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-06-29T14:52:12Z",
+      "side": 1,
+      "message": "Also, please tell how to access this?",
+      "range": {
+        "startLine": 477,
+        "startChar": 43,
+        "endLine": 477,
+        "endChar": 56
+      },
+      "revId": "46c930b409580a860fce196cee22faf305820032",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5bbd90bb_bc4ee77c",
         "filename": "sfx2/source/dialog/StyleList.cxx",
         "patchSetId": 12
