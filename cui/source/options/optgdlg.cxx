@@ -46,6 +46,7 @@
 #include <editeng/editids.hrc>
 #include <svx/svxids.hrc>
 #include <svl/intitem.hxx>
+#include <GraphicsTestsDialog.hxx>
 #include <unotools/searchopt.hxx>
 #include <sal/log.hxx>
 #include <officecfg/Office/Common.hxx>
@@ -585,10 +586,10 @@ OfaViewTabPage::~OfaViewTabPage()
 {
 }
 
-IMPL_STATIC_LINK_NOARG(OfaViewTabPage, OnRunGPTestClick, weld::Button&, void)
+IMPL_LINK_NOARG(OfaViewTabPage, OnRunGPTestClick, weld::Button&, void)
 {
-    comphelper::dispatchCommand(".uno:GraphicTestDialog",{});
-    //Launch the Dialog box from here.
+    GraphicsTestsDialog m_xGraphicsTestDialog(m_xContainer.get());
+    m_xGraphicsTestDialog.run();
 }
 
 IMPL_STATIC_LINK_NOARG(OfaViewTabPage, OnMoreIconsClick, weld::Button&, void)

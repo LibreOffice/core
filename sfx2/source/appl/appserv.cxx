@@ -637,15 +637,6 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             break;
         }
 
-        case SID_GRAPHICTEST_DIALOG:
-        {
-            SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-            ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateGraphicTestsDialog(rReq.GetFrameWeld()));
-            pDlg->Execute();
-            bDone = true;
-            break;
-        }
-
         case SID_TEMPLATE_MANAGER:
         {
             SfxTemplateManagerDlg aDialog(rReq.GetFrameWeld());

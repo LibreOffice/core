@@ -117,7 +117,7 @@ private:
     DECL_LINK(OnAntialiasingToggled, weld::Toggleable&, void);
     DECL_LINK(OnUseSkiaToggled, weld::Toggleable&, void);
     DECL_STATIC_LINK(OfaViewTabPage, OnMoreIconsClick, weld::Button&, void);
-    DECL_STATIC_LINK(OfaViewTabPage, OnRunGPTestClick, weld::Button&, void);
+    DECL_LINK(OnRunGPTestClick, weld::Button&, void);
     void UpdateSkiaStatus();
     void HideSkiaWidgets();
     void UpdateHardwareAccelStatus();
