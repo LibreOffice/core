@@ -1790,7 +1790,7 @@ OOXMLFastContextHandlerShape::lcl_createFastChildContext
  const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
 {
     // we need to share a single theme across all the shapes, but we parse it
-    // in ShapeContextHandler. So if it has been parsed there, propogate it to
+    // in ShapeContextHandler. So if it has been parsed there, propagate it to
     // the document.
     if (mrShapeContext && mrShapeContext->getTheme() && !getDocument()->getTheme())
     {

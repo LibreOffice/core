@@ -52,7 +52,7 @@ DECLARE_ODFEXPORT_TEST(testTdf137199, "tdf137199.docx")
 
 DECLARE_ODFEXPORT_TEST(testListFormatDocx, "listformat.docx")
 {
-    // Ensure in resulting ODT we also have not just prefix/suffux, but custom delimiters
+    // Ensure in resulting ODT we also have not just prefix/suffix, but custom delimiters
     CPPUNIT_ASSERT_EQUAL(OUString(">1<"), getProperty<OUString>(getParagraph(1), "ListLabelString"));
     CPPUNIT_ASSERT_EQUAL(OUString(">>1/1<<"), getProperty<OUString>(getParagraph(2), "ListLabelString"));
     CPPUNIT_ASSERT_EQUAL(OUString(">>1/1/1<<"), getProperty<OUString>(getParagraph(3), "ListLabelString"));
@@ -84,7 +84,7 @@ DECLARE_ODFEXPORT_TEST(testListFormatDocx, "listformat.docx")
 
 DECLARE_ODFEXPORT_TEST(testListFormatOdt, "listformat.odt")
 {
-    // Ensure in resulting ODT we also have not just prefix/suffux, but custom delimiters
+    // Ensure in resulting ODT we also have not just prefix/suffix, but custom delimiters
     CPPUNIT_ASSERT_EQUAL(OUString(">1<"), getProperty<OUString>(getParagraph(1), "ListLabelString"));
     CPPUNIT_ASSERT_EQUAL(OUString(">>1.1<<"), getProperty<OUString>(getParagraph(2), "ListLabelString"));
     CPPUNIT_ASSERT_EQUAL(OUString(">>1.1.1<<"), getProperty<OUString>(getParagraph(3), "ListLabelString"));
