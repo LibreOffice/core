@@ -20,7 +20,8 @@
 #include <MeanValueRegressionCurveCalculator.hxx>
 
 #include <osl/diagnose.h>
-#include <rtl/math.hxx>
+
+#include <limits>
 
 using namespace ::com::sun::star;
 
@@ -28,9 +29,8 @@ namespace chart
 {
 
 MeanValueRegressionCurveCalculator::MeanValueRegressionCurveCalculator() :
-        m_fMeanValue( 0.0 )
+        m_fMeanValue( std::numeric_limits<double>::quiet_NaN() )
 {
-    ::rtl::math::setNan( & m_fMeanValue );
 }
 
 MeanValueRegressionCurveCalculator::~MeanValueRegressionCurveCalculator()
@@ -59,7 +59,7 @@ void SAL_CALL MeanValueRegressionCurveCalculator::recalculateRegression(
 
     if( nMax == 0 )
     {
-        ::rtl::math::setNan( & m_fMeanValue );
+        m_fMeanValue = std::numeric_limits<double>::quiet_NaN();
     }
     else
     {

@@ -44,6 +44,7 @@
 #include <basegfx/numeric/ftools.hxx>
 
 #include <algorithm>
+#include <limits>
 #include <memory>
 
 using namespace ::com::sun::star;
@@ -1109,18 +1110,15 @@ double VCartesianAxis::getLabelLineIntersectionValue() const
 
 double VCartesianAxis::getExtraLineIntersectionValue() const
 {
-    double fNan;
-    rtl::math::setNan(&fNan);
-
     if( !m_aAxisProperties.m_pfExrtaLinePositionAtOtherAxis )
-        return fNan;
+        return std::numeric_limits<double>::quiet_NaN();
 
     double fMin = (m_nDimensionIndex==1) ? m_pPosHelper->getLogicMinX() : m_pPosHelper->getLogicMinY();
     double fMax = (m_nDimensionIndex==1) ? m_pPosHelper->getLogicMaxX() : m_pPosHelper->getLogicMaxY();
 
     if( *m_aAxisProperties.m_pfExrtaLinePositionAtOtherAxis <= fMin
         || *m_aAxisProperties.m_pfExrtaLinePositionAtOtherAxis >= fMax )
-        return fNan;
+        return std::numeric_limits<double>::quiet_NaN();
 
     return *m_aAxisProperties.m_pfExrtaLinePositionAtOtherAxis;
 }

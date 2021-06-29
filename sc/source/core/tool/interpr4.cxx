@@ -3902,9 +3902,7 @@ double applyImplicitIntersection(const sc::RangeMatrix& rMat, const ScAddress& r
         return rMat.mpMat->GetDouble(nOffset, 0);
     }
 
-    double fVal;
-    rtl::math::setNan(&fVal);
-    return fVal;
+    return std::numeric_limits<double>::quiet_NaN();
 }
 
 // Test for Functions that evaluate an error code and directly set nGlobalError to 0

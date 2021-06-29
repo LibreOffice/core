@@ -58,6 +58,7 @@
 #include <com/sun/star/sheet/XMembersAccess.hpp>
 #include <com/sun/star/sheet/XMembersSupplier.hpp>
 
+#include <limits>
 #include <string_view>
 #include <vector>
 
@@ -486,9 +487,7 @@ uno::Sequence<sheet::MemberResult> getVisiblePageMembersAsResults( const uno::Re
         if (bVisible)
         {
             /* TODO: any numeric value to obtain? */
-            double fValue;
-            rtl::math::setNan(&fValue);
-            aRes.emplace_back(rName, aCaption, 0, fValue);
+            aRes.emplace_back(rName, aCaption, 0, std::numeric_limits<double>::quiet_NaN());
         }
     }
 

@@ -22,7 +22,6 @@
 #include <strings.hrc>
 
 #include <osl/diagnose.h>
-#include <rtl/math.hxx>
 
 #ifdef DEBUG_CHART2_TOOLS
 #define DEBUG_INTERNAL_DATA 1
@@ -34,6 +33,7 @@
 
 #include <algorithm>
 #include <iterator>
+#include <limits>
 
 using ::com::sun::star::uno::Sequence;
 
@@ -129,10 +129,8 @@ void InternalData::setData( const Sequence< Sequence< double > >& rDataInRows )
         m_aColumnLabels.resize( m_nColumnCount );
 
     m_aData.resize( m_nRowCount * m_nColumnCount );
-    double fNan;
-    ::rtl::math::setNan( & fNan );
     // set all values to Nan
-    m_aData = fNan;
+    m_aData = std::numeric_limits<double>::quiet_NaN();
 
     for( sal_Int32 nRow=0; nRow<m_nRowCount; ++nRow )
     {
@@ -296,9 +294,7 @@ bool InternalData::enlargeData( sal_Int32 nColumnCount, sal_Int32 nRowCount )
 
     if( bGrow )
     {
-        double fNan;
-        ::rtl::math::setNan( &fNan );
-        tDataType aNewData( fNan, nNewSize );
+        tDataType aNewData( std::numeric_limits<double>::quiet_NaN(), nNewSize );
         // copy old data
         for( int nCol=0; nCol<m_nColumnCount; ++nCol )
             static_cast< tDataType >(
@@ -322,9 +318,7 @@ void InternalData::insertColumn( sal_Int32 nAfterIndex )
     sal_Int32 nNewColumnCount = m_nColumnCount + 1;
     sal_Int32 nNewSize( nNewColumnCount * m_nRowCount );
 
-    double fNan;
-    ::rtl::math::setNan( &fNan );
-    tDataType aNewData( fNan, nNewSize );
+    tDataType aNewData( std::numeric_limits<double>::quiet_NaN(), nNewSize );
 
     // copy old data
     int nCol=0;
@@ -379,9 +373,7 @@ void InternalData::insertRow( sal_Int32 nAfterIndex )
     sal_Int32 nNewRowCount = m_nRowCount + 1;
     sal_Int32 nNewSize( m_nColumnCount * nNewRowCount );
 
-    double fNan;
-    ::rtl::math::setNan( &fNan );
-    tDataType aNewData( fNan, nNewSize );
+    tDataType aNewData( std::numeric_limits<double>::quiet_NaN(), nNewSize );
 
     // copy old data
     sal_Int32 nIndex = nAfterIndex + 1;
@@ -416,9 +408,7 @@ void InternalData::deleteColumn( sal_Int32 nAtIndex )
     sal_Int32 nNewColumnCount = m_nColumnCount - 1;
     sal_Int32 nNewSize( nNewColumnCount * m_nRowCount );
 
-    double fNan;
-    ::rtl::math::setNan( &fNan );
-    tDataType aNewData( fNan, nNewSize );
+    tDataType aNewData( std::numeric_limits<double>::quiet_NaN(), nNewSize );
 
     // copy old data
     int nCol=0;
@@ -450,9 +440,7 @@ void InternalData::deleteRow( sal_Int32 nAtIndex )
     sal_Int32 nNewRowCount = m_nRowCount - 1;
     sal_Int32 nNewSize( m_nColumnCount * nNewRowCount );
 
-    double fNan;
-    ::rtl::math::setNan( &fNan );
-    tDataType aNewData( fNan, nNewSize );
+    tDataType aNewData( std::numeric_limits<double>::quiet_NaN(), nNewSize );
 
     // copy old data
     sal_Int32 nIndex = nAtIndex;
