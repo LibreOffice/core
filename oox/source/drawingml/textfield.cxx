@@ -218,21 +218,22 @@ SvxDateFormat TextField::getLODateFormat(std::u16string_view rDateTimeType)
     switch( nDateTimeNum )
     {
     case 1: // Date dd/mm/yyyy
-    case 2: // Date Day, Month dd, yyyy
-    case 5: // Date dd-Mon-yy
-    case 6: // Date Month yy
-    case 7: // Date Mon-yy
     case 8: // DateTime dd/mm/yyyy H:MM PM
     case 9: // DateTime dd/mm/yyyy H:MM:SS PM
         return SvxDateFormat::B;
-    case 3: // Date dd Month yyyy
+    case 2: // Date Day, Month dd, yyyy
         return SvxDateFormat::StdBig;
-    case 4: // Date Month dd, yyyy
-        return SvxDateFormat::StdSmall;
-    case 10: // Time H:MM
-    case 11: // Time H:MM:SS
-    case 12: // Time H:MM PM
-    case 13: // Time H:MM:SS PM
+    case 3: // Date dd Month yyyy
+    case 4: // Date Month dd, yyyy - no exact map
+    case 6: // Date Month yy - no exact map
+        return SvxDateFormat::D;
+    case 5: // Date dd-Mon-yy - no exact map
+    case 7: // Date Mon-yy - no exact map
+        return SvxDateFormat::C;
+    case 10: // Time H:MM - not a date format
+    case 11: // Time H:MM:SS - not a date format
+    case 12: // Time H:MM PM - not a date format
+    case 13: // Time H:MM:SS PM - not a date format
     default:
         return SvxDateFormat::AppDefault;
     }
