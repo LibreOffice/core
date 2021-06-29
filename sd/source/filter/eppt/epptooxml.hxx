@@ -123,7 +123,7 @@ private:
         @param rXShape Master placeholder shape
         @returns Placeholder index
     */
-    unsigned CreateNewPlaceholderIndex(const css::uno::Reference<css::drawing::XShape>& rXShape);
+    sal_Int32 CreateNewPlaceholderIndex(const css::uno::Reference<css::drawing::XShape>& rXShape);
     css::uno::Reference<css::drawing::XShape> GetReferencedPlaceholderXShape(const PlaceholderType eType, PageType ePageType) const;
     void WritePlaceholderReferenceShapes(PowerPointShapeExport& rDML, PageType ePageType);
 
@@ -151,9 +151,9 @@ private:
 
     ::oox::drawingml::ShapeExport::ShapeHashMap maShapeMap;
 
-    unsigned mnPlaceholderIndexMax; ///< Last used placeholder index
+    sal_Int32 mnPlaceholderIndexMax; ///< Last used placeholder index
     /// Map of placeholder indexes for Master placeholders
-    std::unordered_map< css::uno::Reference<css::drawing::XShape>, unsigned > maPlaceholderShapeToIndexMap;
+    std::unordered_map< css::uno::Reference<css::drawing::XShape>, sal_Int32 > maPlaceholderShapeToIndexMap;
 
     struct AuthorComments {
         sal_Int32 nId;
