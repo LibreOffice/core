@@ -52,6 +52,24 @@
       "revId": "fa219f41d8d65f9e71e5a7eb85fa5357fb816e71",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ead6701c_e003f129",
+        "filename": "sw/source/core/inc/DocumentContentOperationsManager.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1003025
+      },
+      "writtenOn": "2021-06-29T06:28:52Z",
+      "side": 1,
+      "message": "I got that. Will do it.",
+      "parentUuid": "9ef19190_e299e403",
+      "revId": "fa219f41d8d65f9e71e5a7eb85fa5357fb816e71",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
