@@ -34,6 +34,24 @@
       "revId": "86e300df241312f6152da1cfa3cb2b8c668d1df5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5577ae28_eac66d94",
+        "filename": "sc/source/ui/view/gridwin.cxx",
+        "patchSetId": 18
+      },
+      "lineNbr": 430,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-06-29T12:36:12Z",
+      "side": 1,
+      "message": "Done.\nImplemented with https://gerrit.libreoffice.org/c/core/+/118112",
+      "parentUuid": "678bb4a7_e7884c2b",
+      "revId": "86e300df241312f6152da1cfa3cb2b8c668d1df5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
