@@ -21,6 +21,7 @@
 #include <utility>
 #include <memory>
 #include <vector>
+#include <limits>
 #include <algorithm>
 
 #include <cppuhelper/interfacecontainer.hxx>
@@ -885,12 +886,9 @@ double SwXCell::getValue()
 {
     SolarMutexGuard aGuard;
     // #i112652# a table cell may contain NaN as a value, do not filter that
-    double fRet;
     if(IsValid() && !getString().isEmpty())
-        fRet = m_pBox->GetFrameFormat()->GetTableBoxValue().GetValue();
-    else
-        ::rtl::math::setNan( &fRet );
-    return fRet;
+        return m_pBox->GetFrameFormat()->GetTableBoxValue().GetValue();
+    return std::numeric_limits<double>::quiet_NaN();
 }
 
 void SwXCell::setValue(double rValue)
@@ -1212,7 +1210,7 @@ double SwXCell::GetForcedNumericalValue() const
     }
     double fTmp;
     if (!const_cast<SwDoc*>(GetDoc())->IsNumberFormat(const_cast<SwXCell*>(this)->getString(), nFIndex, fTmp))
-        ::rtl::math::setNan(&fTmp);
+        return std::numeric_limits<double>::quiet_NaN();
     return fTmp;
 }
 

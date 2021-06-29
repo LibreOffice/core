@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <rtl/math.hxx>
-
 #include <iterator>
 
 #include <InternalDataProvider.hxx>
@@ -40,6 +38,7 @@
 #include <comphelper/property.hxx>
 #include <tools/diagnose_ex.h>
 
+#include <limits>
 #include <vector>
 #include <algorithm>
 
@@ -1489,9 +1488,7 @@ void SAL_CALL InternalDataProvider::removeChartDataChangeEventListener(
 
 double SAL_CALL InternalDataProvider::getNotANumber()
 {
-    double fNan;
-    ::rtl::math::setNan( & fNan );
-    return fNan;
+    return std::numeric_limits<double>::quiet_NaN();
 }
 
 sal_Bool SAL_CALL InternalDataProvider::isNotANumber( double nNumber )

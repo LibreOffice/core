@@ -35,7 +35,6 @@
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
-#include <rtl/math.hxx>
 #include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -45,6 +44,7 @@
 #include <com/sun/star/container/XIndexReplace.hpp>
 
 #include <algorithm>
+#include <limits>
 
 
 using namespace ::com::sun::star;
@@ -489,10 +489,8 @@ DataBrowser::DataBrowser(const css::uno::Reference<css::awt::XWindow> &rParent,
     m_rNumberEditController( new ::svt::FormattedFieldCellController( m_aNumberEditField.get() )),
     m_rTextEditController( new ::svt::EditCellController( m_aTextEditField.get() ))
 {
-    double fNan;
-    ::rtl::math::setNan( & fNan );
     Formatter& rFormatter = m_aNumberEditField->get_formatter();
-    rFormatter.SetDefaultValue( fNan );
+    rFormatter.SetDefaultValue( std::numeric_limits<double>::quiet_NaN() );
     rFormatter.TreatAsNumber( true );
     RenewTable();
 }
@@ -741,16 +739,13 @@ OUString DataBrowser::GetCellText( sal_Int32 nRow, sal_uInt16 nColumnId ) const
 
 double DataBrowser::GetCellNumber( sal_Int32 nRow, sal_uInt16 nColumnId ) const
 {
-    double fResult;
-    ::rtl::math::setNan( & fResult );
-
     if(( nColumnId >= 1 ) && ( nRow >= 0 ) && m_apDataBrowserModel)
     {
-        fResult = m_apDataBrowserModel->getCellNumber(
+        return m_apDataBrowserModel->getCellNumber(
             static_cast< sal_Int32 >( nColumnId ) - 1, nRow );
     }
 
-    return fResult;
+    return std::numeric_limits<double>::quiet_NaN();
 }
 
 void DataBrowser::Resize()

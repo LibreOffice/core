@@ -29,8 +29,10 @@
 
 #include <com/sun/star/chart2/AxisType.hpp>
 #include <o3tl/safeint.hxx>
-#include <rtl/math.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <tools/diagnose_ex.h>
+
+#include <limits>
 
 namespace chart
 {
@@ -453,8 +455,7 @@ static bool lcl_fillDateCategories( const uno::Reference< data::XDataSequence >&
             {
                 if( aAny.hasValue() && !bContainsEmptyString )//empty string does not count as non date value!
                     bOnlyDatesFound=false;
-                ::rtl::math::setNan( &aDate );
-                rDateCategories.push_back( aDate );
+                rDateCategories.push_back( std::numeric_limits<double>::quiet_NaN() );
             }
         }
         std::sort( rDateCategories.begin(), rDateCategories.end() );
