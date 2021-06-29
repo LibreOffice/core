@@ -655,52 +655,20 @@ SwUnoCursorHelper::GetCurTextFormatColl(SwPaM & rPaM, const bool bConditional)
     return bError ? nullptr : pFormat;
 }
 
-class SwXTextCursor::Impl
-{
-
-public:
-    const SfxItemPropertySet &  m_rPropSet;
-    const CursorType            m_eType;
-    const uno::Reference< text::XText > m_xParentText;
-    sw::UnoCursorPointer m_pUnoCursor;
-
-    Impl(   SwDoc & rDoc,
-            const CursorType eType,
-            uno::Reference<text::XText> const & xParent,
-            SwPosition const& rPoint, SwPosition const*const pMark)
-        : m_rPropSet(*aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_CURSOR))
-        , m_eType(eType)
-        , m_xParentText(xParent)
-        , m_pUnoCursor(rDoc.CreateUnoCursor(rPoint))
-    {
-        if (pMark)
-        {
-            m_pUnoCursor->SetMark();
-            *m_pUnoCursor->GetMark() = *pMark;
-        }
-    }
-
-    SwUnoCursor& GetCursorOrThrow() {
-        if(!m_pUnoCursor)
-            throw uno::RuntimeException("SwXTextCursor: disposed or invalid", nullptr);
-        return *m_pUnoCursor;
-    }
-};
-
 SwUnoCursor& SwXTextCursor::GetCursor()
-    { return *m_pImpl->m_pUnoCursor; }
+    { return *m_pUnoCursor; }
 
 SwPaM const* SwXTextCursor::GetPaM() const
-    { return m_pImpl->m_pUnoCursor.get(); }
+    { return m_pUnoCursor.get(); }
 
 SwPaM* SwXTextCursor::GetPaM()
-    { return m_pImpl->m_pUnoCursor.get(); }
+    { return m_pUnoCursor.get(); }
 
 SwDoc const* SwXTextCursor::GetDoc() const
-    { return m_pImpl->m_pUnoCursor ? &m_pImpl->m_pUnoCursor->GetDoc() : nullptr; }
+    { return m_pUnoCursor ? &m_pUnoCursor->GetDoc() : nullptr; }
 
 SwDoc* SwXTextCursor::GetDoc()
-    { return m_pImpl->m_pUnoCursor ? &m_pImpl->m_pUnoCursor->GetDoc() : nullptr; }
+    { return m_pUnoCursor ? &m_pUnoCursor->GetDoc() : nullptr; }
 
 SwXTextCursor::SwXTextCursor(
         SwDoc & rDoc,
@@ -708,26 +676,42 @@ SwXTextCursor::SwXTextCursor(
         const CursorType eType,
         const SwPosition& rPos,
         SwPosition const*const pMark)
-    : m_pImpl( new Impl(rDoc, eType, xParent, rPos, pMark) )
+    : m_rPropSet(*aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_CURSOR))
+    , m_eType(eType)
+    , m_xParentText(xParent)
+    , m_pUnoCursor(rDoc.CreateUnoCursor(rPos))
 {
+    if (pMark)
+    {
+        m_pUnoCursor->SetMark();
+        *m_pUnoCursor->GetMark() = *pMark;
+    }
 }
 
 SwXTextCursor::SwXTextCursor(uno::Reference< text::XText > const& xParent,
         SwPaM const& rSourceCursor, const CursorType eType)
-    : m_pImpl( new Impl(rSourceCursor.GetDoc(), eType,
-                xParent, *rSourceCursor.GetPoint(),
-                rSourceCursor.HasMark() ? rSourceCursor.GetMark() : nullptr) )
+    : m_rPropSet(*aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_CURSOR))
+    , m_eType(eType)
+    , m_xParentText(xParent)
+    , m_pUnoCursor(rSourceCursor.GetDoc().CreateUnoCursor(*rSourceCursor.GetPoint()))
 {
+    if (rSourceCursor.HasMark())
+    {
+        m_pUnoCursor->SetMark();
+        *m_pUnoCursor->GetMark() = *rSourceCursor.GetMark();
+    }
 }
 
 SwXTextCursor::~SwXTextCursor()
 {
+    SolarMutexGuard g; // #i105557#: call dtor with locked solar mutex
+    m_pUnoCursor.reset(nullptr); // need to delete this with SolarMutex held
 }
 
 void SwXTextCursor::DeleteAndInsert(const OUString& rText,
         const bool bForceExpandHints)
 {
-    auto pUnoCursor = static_cast<SwCursor*>(m_pImpl->m_pUnoCursor.get());
+    auto pUnoCursor = static_cast<SwCursor*>(m_pUnoCursor.get());
     if (!pUnoCursor)
         return;
 
@@ -810,11 +794,11 @@ lcl_ForceIntoMeta(SwPaM & rCursor,
 
 bool SwXTextCursor::IsAtEndOfMeta() const
 {
-    if (CursorType::Meta == m_pImpl->m_eType)
+    if (CursorType::Meta == m_eType)
     {
-        auto pCursor( m_pImpl->m_pUnoCursor );
+        auto pCursor( m_pUnoCursor );
         SwXMeta const*const pXMeta(
-                dynamic_cast<SwXMeta*>(m_pImpl->m_xParentText.get()) );
+                dynamic_cast<SwXMeta*>(m_xParentText.get()) );
         OSL_ENSURE(pXMeta, "no meta?");
         if (pCursor && pXMeta)
         {
@@ -880,7 +864,7 @@ void SAL_CALL SwXTextCursor::collapseToStart()
 {
     SolarMutexGuard aGuard;
 
-    SwUnoCursor & rUnoCursor( m_pImpl->GetCursorOrThrow() );
+    SwUnoCursor & rUnoCursor( GetCursorOrThrow() );
 
     if (rUnoCursor.HasMark())
     {
@@ -896,7 +880,7 @@ void SAL_CALL SwXTextCursor::collapseToEnd()
 {
     SolarMutexGuard aGuard;
 
-    SwUnoCursor & rUnoCursor( m_pImpl->GetCursorOrThrow() );
+    SwUnoCursor & rUnoCursor( GetCursorOrThrow() );
 
     if (rUnoCursor.HasMark())
     {
@@ -913,7 +897,7 @@ sal_Bool SAL_CALL SwXTextCursor::isCollapsed()
     SolarMutexGuard aGuard;
 
     bool bRet = true;
-    auto pUnoCursor(m_pImpl->m_pUnoCursor);
+    auto pUnoCursor(m_pUnoCursor);
     if(pUnoCursor && pUnoCursor->GetMark())
     {
         bRet = (*pUnoCursor->GetPoint() == *pUnoCursor->GetMark());
@@ -926,13 +910,13 @@ SwXTextCursor::goLeft(sal_Int16 nCount, sal_Bool Expand)
 {
     SolarMutexGuard aGuard;
 
-    SwUnoCursor & rUnoCursor( m_pImpl->GetCursorOrThrow() );
+    SwUnoCursor & rUnoCursor( GetCursorOrThrow() );
 
     SwUnoCursorHelper::SelectPam(rUnoCursor, Expand);
     bool bRet = rUnoCursor.Left( nCount);
-    if (CursorType::Meta == m_pImpl->m_eType)
+    if (CursorType::Meta == m_eType)
     {
-        bRet = lcl_ForceIntoMeta(rUnoCursor, m_pImpl->m_xParentText,
+        bRet = lcl_ForceIntoMeta(rUnoCursor, m_xParentText,
                     META_CHECK_BOTH)
             && bRet;
     }
@@ -944,13 +928,13 @@ SwXTextCursor::goRight(sal_Int16 nCount, sal_Bool Expand)
 {
     SolarMutexGuard aGuard;
 
-    SwUnoCursor & rUnoCursor( m_pImpl->GetCursorOrThrow() );
+    SwUnoCursor & rUnoCursor( GetCursorOrThrow() );
 
     SwUnoCursorHelper::SelectPam(rUnoCursor, Expand);
     bool bRet = rUnoCursor.Right(nCount);
-    if (CursorType::Meta == m_pImpl->m_eType)
+    if (CursorType::Meta == m_eType)
     {
-        bRet = lcl_ForceIntoMeta(rUnoCursor, m_pImpl->m_xParentText,
+        bRet = lcl_ForceIntoMeta(rUnoCursor, m_xParentText,
                     META_CHECK_BOTH)
             && bRet;
     }
@@ -963,10 +947,10 @@ SwXTextCursor::gotoStart(sal_Bool Expand)
     SolarMutexGuard aGuard;
     comphelper::ProfileZone aZone("gotoStart");
 
-    SwUnoCursor & rUnoCursor( m_pImpl->GetCursorOrThrow() );
+    SwUnoCursor & rUnoCursor( GetCursorOrThrow() );
 
     SwUnoCursorHelper::SelectPam(rUnoCursor, Expand);
-    if (CursorType::Body == m_pImpl->m_eType)
+    if (CursorType::Body == m_eType)
     {
         rUnoCursor.Move( fnMoveBackward, GoInDoc );
         //check, that the cursor is not in a table
@@ -999,18 +983,18 @@ SwXTextCursor::gotoStart(sal_Bool Expand)
             }
         }
     }
-    else if (   (CursorType::Frame   == m_pImpl->m_eType)
-            ||  (CursorType::TableText == m_pImpl->m_eType)
-            ||  (CursorType::Header  == m_pImpl->m_eType)
-            ||  (CursorType::Footer  == m_pImpl->m_eType)
-            ||  (CursorType::Footnote== m_pImpl->m_eType)
-            ||  (CursorType::Redline == m_pImpl->m_eType))
+    else if (   (CursorType::Frame   == m_eType)
+            ||  (CursorType::TableText == m_eType)
+            ||  (CursorType::Header  == m_eType)
+            ||  (CursorType::Footer  == m_eType)
+            ||  (CursorType::Footnote== m_eType)
+            ||  (CursorType::Redline == m_eType))
     {
         rUnoCursor.MoveSection(GoCurrSection, fnSectionStart);
     }
-    else if (CursorType::Meta == m_pImpl->m_eType)
+    else if (CursorType::Meta == m_eType)
     {
-        lcl_ForceIntoMeta(rUnoCursor, m_pImpl->m_xParentText, META_INIT_START);
+        lcl_ForceIntoMeta(rUnoCursor, m_xParentText, META_INIT_START);
     }
 }
 
@@ -1020,25 +1004,25 @@ SwXTextCursor::gotoEnd(sal_Bool Expand)
     SolarMutexGuard aGuard;
     comphelper::ProfileZone aZone("gotoEnd");
 
-    SwUnoCursor & rUnoCursor( m_pImpl->GetCursorOrThrow() );
+    SwUnoCursor & rUnoCursor( GetCursorOrThrow() );
 
     SwUnoCursorHelper::SelectPam(rUnoCursor, Expand);
-    if (CursorType::Body == m_pImpl->m_eType)
+    if (CursorType::Body == m_eType)
     {
         rUnoCursor.Move( fnMoveForward, GoInDoc );
     }
-    else if (   (CursorType::Frame   == m_pImpl->m_eType)
-            ||  (CursorType::TableText == m_pImpl->m_eType)
-            ||  (CursorType::Header  == m_pImpl->m_eType)
-            ||  (CursorType::Footer  == m_pImpl->m_eType)
-            ||  (CursorType::Footnote== m_pImpl->m_eType)
-            ||  (CursorType::Redline == m_pImpl->m_eType))
+    else if (   (CursorType::Frame   == m_eType)
+            ||  (CursorType::TableText == m_eType)
+            ||  (CursorType::Header  == m_eType)
+            ||  (CursorType::Footer  == m_eType)
+            ||  (CursorType::Footnote== m_eType)
+            ||  (CursorType::Redline == m_eType))
     {
         rUnoCursor.MoveSection( GoCurrSection, fnSectionEnd);
     }
-    else if (CursorType::Meta == m_pImpl->m_eType)
+    else if (CursorType::Meta == m_eType)
     {
-        lcl_ForceIntoMeta(rUnoCursor, m_pImpl->m_xParentText, META_INIT_END);
+        lcl_ForceIntoMeta(rUnoCursor, m_xParentText, META_INIT_END);
     }
 }
 
@@ -1053,7 +1037,7 @@ SwXTextCursor::gotoRange(
         throw uno::RuntimeException();
     }
 
-    SwUnoCursor & rOwnCursor( m_pImpl->GetCursorOrThrow() );
+    SwUnoCursor & rOwnCursor( GetCursorOrThrow() );
 
     uno::Reference<lang::XUnoTunnel> xRangeTunnel( xRange, uno::UNO_QUERY);
     SwXTextRange* pRange = nullptr;
@@ -1091,7 +1075,7 @@ SwXTextCursor::gotoRange(
 
     {
         SwStartNodeType eSearchNodeType = SwNormalStartNode;
-        switch (m_pImpl->m_eType)
+        switch (m_eType)
         {
         case CursorType::Frame:      eSearchNodeType = SwFlyStartNode;       break;
         case CursorType::TableText:    eSearchNodeType = SwTableBoxStartNode;  break;
@@ -1140,11 +1124,11 @@ SwXTextCursor::gotoRange(
         }
     }
 
-    if (CursorType::Meta == m_pImpl->m_eType)
+    if (CursorType::Meta == m_eType)
     {
         SwPaM CopyPam(*pPam->GetMark(), *pPam->GetPoint());
         const bool bNotForced( lcl_ForceIntoMeta(
-                    CopyPam, m_pImpl->m_xParentText, META_CHECK_BOTH) );
+                    CopyPam, m_xParentText, META_CHECK_BOTH) );
         if (!bNotForced)
         {
             throw uno::RuntimeException(
@@ -1195,7 +1179,7 @@ sal_Bool SAL_CALL SwXTextCursor::isStartOfWord()
 {
     SolarMutexGuard aGuard;
 
-    SwUnoCursor & rUnoCursor( m_pImpl->GetCursorOrThrow() );
+    SwUnoCursor & rUnoCursor( GetCursorOrThrow() );
 
     const bool bRet =
         rUnoCursor.IsStartWordWT( i18n::WordType::DICTIONARY_WORD );
@@ -1206,7 +1190,7 @@ sal_Bool SAL_CALL SwXTextCursor::isEndOfWord()
 {
     SolarMutexGuard aGuard;
 
-    SwUnoCursor & rUnoCursor( m_pImpl->GetCursorOrThrow() );
+    SwUnoCursor & rUnoCursor( GetCursorOrThrow() );
 
     const bool bRet =
         rUnoCursor.IsEndWordWT( i18n::WordType::DICTIONARY_WORD );
@@ -1218,7 +1202,7 @@ SwXTextCursor::gotoNextWord(sal_Bool Expand)
 {
     SolarMutexGuard aGuard;
 
-    SwUnoCursor & rUnoCursor( m_pImpl->GetCursorOrThrow() );
+    SwUnoCursor & rUnoCursor( GetCursorOrThrow() );
 
     // problems arise when a paragraph starts with something other than a word
     bool bRet = false;
@@ -1251,9 +1235,9 @@ SwXTextCursor::gotoNextWord(sal_Bool Expand)
     // return true if cursor has moved
     bRet =  (&pPoint->nNode.GetNode() != pOldNode)  ||
             (pPoint->nContent.GetIndex() != nOldIndex);
-    if (bRet && (CursorType::Meta == m_pImpl->m_eType))
+    if (bRet && (CursorType::Meta == m_eType))
     {
-        bRet = lcl_ForceIntoMeta(rUnoCursor, m_pImpl->m_xParentText,
+        bRet = lcl_ForceIntoMeta(rUnoCursor, m_xParentText,
                     META_CHECK_BOTH);
     }
 
@@ -1265,7 +1249,7 @@ SwXTextCursor::gotoPreviousWord(sal_Bool Expand)
 {
     SolarMutexGuard aGuard;
 
-    SwUnoCursor & rUnoCursor( m_pImpl->GetCursorOrThrow() );
+    SwUnoCursor & rUnoCursor( GetCursorOrThrow() );
 
     // white spaces create problems on the paragraph start
     bool bRet = false;
@@ -1291,9 +1275,9 @@ SwXTextCursor::gotoPreviousWord(sal_Bool Expand)
     // return true if cursor has moved
     bRet =  (&pPoint->nNode.GetNode() != pOldNode)  ||
             (pPoint->nContent.GetIndex() != nOldIndex);
-    if (bRet && (CursorType::Meta == m_pImpl->m_eType))
+    if (bRet && (CursorType::Meta == m_eType))
     {
-        bRet = lcl_ForceIntoMeta(rUnoCursor, m_pImpl->m_xParentText,
+        bRet = lcl_ForceIntoMeta(rUnoCursor, m_xParentText,
                     META_CHECK_BOTH);
     }
 
@@ -1305,7 +1289,7 @@ SwXTextCursor::gotoEndOfWord(sal_Bool Expand)
 {
     SolarMutexGuard aGuard;
 
-    SwUnoCursor & rUnoCursor( m_pImpl->GetCursorOrThrow() );
+    SwUnoCursor & rUnoCursor( GetCursorOrThrow() );
 
     bool bRet = false;
     SwPosition  *const pPoint     = rUnoCursor.GetPoint();
@@ -1327,9 +1311,9 @@ SwXTextCursor::gotoEndOfWord(sal_Bool Expand)
         pPoint->nNode       = rOldNode;
         pPoint->nContent    = nOldIndex;
     }
-    else if (CursorType::Meta == m_pImpl->m_eType)
+    else if (CursorType::Meta == m_eType)
     {
-        bRet = lcl_ForceIntoMeta(rUnoCursor, m_pImpl->m_xParentText,
+        bRet = lcl_ForceIntoMeta(rUnoCursor, m_xParentText,
                     META_CHECK_BOTH);
     }
 
@@ -1341,7 +1325,7 @@ SwXTextCursor::gotoStartOfWord(sal_Bool Expand)
 {
     SolarMutexGuard aGuard;
 
-    SwUnoCursor & rUnoCursor( m_pImpl->GetCursorOrThrow() );
+    SwUnoCursor & rUnoCursor( GetCursorOrThrow() );
 
     bool bRet = false;
     SwPosition  *const pPoint     = rUnoCursor.GetPoint();
@@ -1363,9 +1347,9 @@ SwXTextCursor::gotoStartOfWord(sal_Bool Expand)
         pPoint->nNode       = rOldNode;
         pPoint->nContent    = nOldIndex;
     }
-    else if (CursorType::Meta == m_pImpl->m_eType)
+    else if (CursorType::Meta == m_eType)
     {
-        bRet = lcl_ForceIntoMeta(rUnoCursor, m_pImpl->m_xParentText,
+        bRet = lcl_ForceIntoMeta(rUnoCursor, m_xParentText,
                     META_CHECK_BOTH);
     }
 
@@ -1377,7 +1361,7 @@ SwXTextCursor::isStartOfSentence()
 {
     SolarMutexGuard aGuard;
 
-    SwUnoCursor & rUnoCursor( m_pImpl->GetCursorOrThrow() );
+    SwUnoCursor & rUnoCursor( GetCursorOrThrow() );
 
     // start of paragraph?
     bool bRet = rUnoCursor.GetPoint()->nContent == 0;
@@ -1400,7 +1384,7 @@ SwXTextCursor::isEndOfSentence()
 {
     SolarMutexGuard aGuard;
 
-    SwUnoCursor & rUnoCursor( m_pImpl->GetCursorOrThrow() );
+    SwUnoCursor & rUnoCursor( GetCursorOrThrow() );
 
     // end of paragraph?
     bool bRet = rUnoCursor.GetContentNode() &&
@@ -1424,7 +1408,7 @@ SwXTextCursor::gotoNextSentence(sal_Bool Expand)
 {
     SolarMutexGuard aGuard;
 
-    SwUnoCursor & rUnoCursor( m_pImpl->GetCursorOrThrow() );
+    SwUnoCursor & rUnoCursor( GetCursorOrThrow() );
 
     const bool bWasEOS = isEndOfSentence();
     SwUnoCursorHelper::SelectPam(rUnoCursor, Expand);
@@ -1445,9 +1429,9 @@ SwXTextCursor::gotoNextSentence(sal_Bool Expand)
             bRet = false;
         }
     }
-    if (CursorType::Meta == m_pImpl->m_eType)
+    if (CursorType::Meta == m_eType)
     {
-        bRet = lcl_ForceIntoMeta(rUnoCursor, m_pImpl->m_xParentText,
+        bRet = lcl_ForceIntoMeta(rUnoCursor, m_xParentText,
                     META_CHECK_BOTH)
             && bRet;
     }
@@ -1459,7 +1443,7 @@ SwXTextCursor::gotoPreviousSentence(sal_Bool Expand)
 {
     SolarMutexGuard aGuard;
 
-    SwUnoCursor & rUnoCursor( m_pImpl->GetCursorOrThrow() );
+    SwUnoCursor & rUnoCursor( GetCursorOrThrow() );
 
     SwUnoCursorHelper::SelectPam(rUnoCursor, Expand);
     bool bRet = rUnoCursor.GoSentence(SwCursor::PREV_SENT);
@@ -1473,9 +1457,9 @@ SwXTextCursor::gotoPreviousSentence(sal_Bool Expand)
             rUnoCursor.GoSentence(SwCursor::PREV_SENT);
         }
     }
-    if (CursorType::Meta == m_pImpl->m_eType)
+    if (CursorType::Meta == m_eType)
     {
-        bRet = lcl_ForceIntoMeta(rUnoCursor, m_pImpl->m_xParentText,
+        bRet = lcl_ForceIntoMeta(rUnoCursor, m_xParentText,
                     META_CHECK_BOTH)
             && bRet;
     }
@@ -1487,7 +1471,7 @@ SwXTextCursor::gotoStartOfSentence(sal_Bool Expand)
 {
     SolarMutexGuard aGuard;
 
-    SwUnoCursor & rUnoCursor( m_pImpl->GetCursorOrThrow() );
+    SwUnoCursor & rUnoCursor( GetCursorOrThrow() );
 
     SwUnoCursorHelper::SelectPam(rUnoCursor, Expand);
     // if we're at the para start then we won't move
@@ -1496,9 +1480,9 @@ SwXTextCursor::gotoStartOfSentence(sal_Bool Expand)
     bool bRet = SwUnoCursorHelper::IsStartOfPara(rUnoCursor)
         || rUnoCursor.GoSentence(SwCursor::START_SENT)
         || SwUnoCursorHelper::IsStartOfPara(rUnoCursor);
-    if (CursorType::Meta == m_pImpl->m_eType)
+    if (CursorType::Meta == m_eType)
     {
-        bRet = lcl_ForceIntoMeta(rUnoCursor, m_pImpl->m_xParentText,
+        bRet = lcl_ForceIntoMeta(rUnoCursor, m_xParentText,
                     META_CHECK_BOTH)
             && bRet;
     }
@@ -1510,7 +1494,7 @@ SwXTextCursor::gotoEndOfSentence(sal_Bool Expand)
 {
     SolarMutexGuard aGuard;
 
-    SwUnoCursor & rUnoCursor( m_pImpl->GetCursorOrThrow() );
+    SwUnoCursor & rUnoCursor( GetCursorOrThrow() );
 
     SwUnoCursorHelper::SelectPam(rUnoCursor, Expand);
     // bRet is true if GoSentence() succeeded or if the
@@ -1520,9 +1504,9 @@ SwXTextCursor::gotoEndOfSentence(sal_Bool Expand)
     bool bRet = !bAlreadyParaEnd
             &&  (rUnoCursor.GoSentence(SwCursor::END_SENT)
                  || rUnoCursor.MovePara(GoCurrPara, fnParaEnd));
-    if (CursorType::Meta == m_pImpl->m_eType)
+    if (CursorType::Meta == m_eType)
     {
-        bRet = lcl_ForceIntoMeta(rUnoCursor, m_pImpl->m_xParentText,
+        bRet = lcl_ForceIntoMeta(rUnoCursor, m_xParentText,
                     META_CHECK_BOTH)
             && bRet;
     }
@@ -1534,7 +1518,7 @@ SwXTextCursor::isStartOfParagraph()
 {
     SolarMutexGuard aGuard;
 
-    SwUnoCursor & rUnoCursor( m_pImpl->GetCursorOrThrow() );
+    SwUnoCursor & rUnoCursor( GetCursorOrThrow() );
 
     const bool bRet = SwUnoCursorHelper::IsStartOfPara(rUnoCursor);
     return bRet;
@@ -1545,7 +1529,7 @@ SwXTextCursor::isEndOfParagraph()
 {
     SolarMutexGuard aGuard;
 
-    SwUnoCursor & rUnoCursor( m_pImpl->GetCursorOrThrow() );
+    SwUnoCursor & rUnoCursor( GetCursorOrThrow() );
 
     const bool bRet = SwUnoCursorHelper::IsEndOfPara(rUnoCursor);
     return bRet;
@@ -1556,9 +1540,9 @@ SwXTextCursor::gotoStartOfParagraph(sal_Bool Expand)
 {
     SolarMutexGuard aGuard;
 
-    SwUnoCursor & rUnoCursor( m_pImpl->GetCursorOrThrow() );
+    SwUnoCursor & rUnoCursor( GetCursorOrThrow() );
 
-    if (CursorType::Meta == m_pImpl->m_eType)
+    if (CursorType::Meta == m_eType)
     {
         return false;
     }
@@ -1581,9 +1565,9 @@ SwXTextCursor::gotoEndOfParagraph(sal_Bool Expand)
 {
     SolarMutexGuard aGuard;
 
-    SwUnoCursor & rUnoCursor( m_pImpl->GetCursorOrThrow() );
+    SwUnoCursor & rUnoCursor( GetCursorOrThrow() );
 
-    if (CursorType::Meta == m_pImpl->m_eType)
+    if (CursorType::Meta == m_eType)
     {
         return false;
     }
@@ -1606,9 +1590,9 @@ SwXTextCursor::gotoNextParagraph(sal_Bool Expand)
 {
     SolarMutexGuard aGuard;
 
-    SwUnoCursor & rUnoCursor( m_pImpl->GetCursorOrThrow() );
+    SwUnoCursor & rUnoCursor( GetCursorOrThrow() );
 
-    if (CursorType::Meta == m_pImpl->m_eType)
+    if (CursorType::Meta == m_eType)
     {
         return false;
     }
@@ -1622,9 +1606,9 @@ SwXTextCursor::gotoPreviousParagraph(sal_Bool Expand)
 {
     SolarMutexGuard aGuard;
 
-    SwUnoCursor & rUnoCursor( m_pImpl->GetCursorOrThrow() );
+    SwUnoCursor & rUnoCursor( GetCursorOrThrow() );
 
-    if (CursorType::Meta == m_pImpl->m_eType)
+    if (CursorType::Meta == m_eType)
     {
         return false;
     }
@@ -1638,7 +1622,7 @@ SwXTextCursor::getText()
 {
     SolarMutexGuard g;
 
-    return m_pImpl->m_xParentText;
+    return m_xParentText;
 }
 
 uno::Reference< text::XTextRange > SAL_CALL
@@ -1646,12 +1630,12 @@ SwXTextCursor::getStart()
 {
     SolarMutexGuard aGuard;
 
-    SwUnoCursor & rUnoCursor( m_pImpl->GetCursorOrThrow() );
+    SwUnoCursor & rUnoCursor( GetCursorOrThrow() );
 
     uno::Reference< text::XTextRange > xRet;
     SwPaM aPam(*rUnoCursor.Start());
     const uno::Reference< text::XText >  xParent = getText();
-    if (CursorType::Meta == m_pImpl->m_eType)
+    if (CursorType::Meta == m_eType)
     {
         // return cursor to prevent modifying SwXTextRange for META
         rtl::Reference<SwXTextCursor> pXCursor(
@@ -1672,12 +1656,12 @@ SwXTextCursor::getEnd()
 {
     SolarMutexGuard aGuard;
 
-    SwUnoCursor & rUnoCursor( m_pImpl->GetCursorOrThrow() );
+    SwUnoCursor & rUnoCursor( GetCursorOrThrow() );
 
     uno::Reference< text::XTextRange >  xRet;
     SwPaM aPam(*rUnoCursor.End());
     const uno::Reference< text::XText >  xParent = getText();
-    if (CursorType::Meta == m_pImpl->m_eType)
+    if (CursorType::Meta == m_eType)
     {
         // return cursor to prevent modifying SwXTextRange for META
         rtl::Reference<SwXTextCursor> pXCursor(
@@ -1697,7 +1681,7 @@ OUString SAL_CALL SwXTextCursor::getString()
 {
     SolarMutexGuard aGuard;
 
-    SwUnoCursor & rUnoCursor( m_pImpl->GetCursorOrThrow() );
+    SwUnoCursor & rUnoCursor( GetCursorOrThrow() );
 
     OUString aText;
     SwUnoCursorHelper::GetTextFromPam(rUnoCursor, aText);
@@ -1709,10 +1693,10 @@ SwXTextCursor::setString(const OUString& aString)
 {
     SolarMutexGuard aGuard;
 
-    m_pImpl->GetCursorOrThrow(); // just to check if valid
+    GetCursorOrThrow(); // just to check if valid
 
-    const bool bForceExpandHints( (CursorType::Meta == m_pImpl->m_eType)
-        && dynamic_cast<SwXMeta&>(*m_pImpl->m_xParentText)
+    const bool bForceExpandHints( (CursorType::Meta == m_eType)
+        && dynamic_cast<SwXMeta&>(*m_xParentText)
                 .CheckForOwnMemberMeta(*GetPaM(), true) );
     DeleteAndInsert(aString, bForceExpandHints);
 }
@@ -2075,7 +2059,7 @@ SwXTextCursor::getPropertySetInfo()
             { u"", 0, css::uno::Type(), 0, 0 }
         };
         const uno::Reference< beans::XPropertySetInfo >  xInfo =
-            m_pImpl->m_rPropSet.getPropertySetInfo();
+            m_rPropSet.getPropertySetInfo();
         // extend PropertySetInfo!
         const uno::Sequence<beans::Property> aPropSeq = xInfo->getProperties();
         return rtl::Reference<SfxExtItemPropertySetInfo>(new SfxExtItemPropertySetInfo(
@@ -2091,7 +2075,7 @@ SwXTextCursor::setPropertyValue(
 {
     SolarMutexGuard aGuard;
 
-    SwUnoCursor & rUnoCursor( m_pImpl->GetCursorOrThrow() );
+    SwUnoCursor & rUnoCursor( GetCursorOrThrow() );
 
     if (rPropertyName == UNO_NAME_IS_SKIP_HIDDEN_TEXT)
     {
@@ -2114,7 +2098,7 @@ SwXTextCursor::setPropertyValue(
     else
     {
         SwUnoCursorHelper::SetPropertyValue(rUnoCursor,
-                m_pImpl->m_rPropSet, rPropertyName, rValue);
+                m_rPropSet, rPropertyName, rValue);
     }
 }
 
@@ -2123,7 +2107,7 @@ SwXTextCursor::getPropertyValue(const OUString& rPropertyName)
 {
     SolarMutexGuard aGuard;
 
-    SwUnoCursor & rUnoCursor( m_pImpl->GetCursorOrThrow() );
+    SwUnoCursor & rUnoCursor( GetCursorOrThrow() );
 
     uno::Any aAny;
     if (rPropertyName == UNO_NAME_IS_SKIP_HIDDEN_TEXT)
@@ -2139,7 +2123,7 @@ SwXTextCursor::getPropertyValue(const OUString& rPropertyName)
     else
     {
         aAny = SwUnoCursorHelper::GetPropertyValue(rUnoCursor,
-                m_pImpl->m_rPropSet, rPropertyName);
+                m_rPropSet, rPropertyName);
     }
     return aAny;
 }
@@ -2181,10 +2165,10 @@ SwXTextCursor::getPropertyState(const OUString& rPropertyName)
 {
     SolarMutexGuard aGuard;
 
-    SwUnoCursor & rUnoCursor( m_pImpl->GetCursorOrThrow() );
+    SwUnoCursor & rUnoCursor( GetCursorOrThrow() );
 
     const beans::PropertyState eRet = SwUnoCursorHelper::GetPropertyState(
-            rUnoCursor, m_pImpl->m_rPropSet, rPropertyName);
+            rUnoCursor, m_rPropSet, rPropertyName);
     return eRet;
 }
 
@@ -2194,10 +2178,10 @@ SwXTextCursor::getPropertyStates(
 {
     SolarMutexGuard aGuard;
 
-    SwUnoCursor & rUnoCursor( m_pImpl->GetCursorOrThrow() );
+    SwUnoCursor & rUnoCursor( GetCursorOrThrow() );
 
     return SwUnoCursorHelper::GetPropertyStates(
-            rUnoCursor, m_pImpl->m_rPropSet, rPropertyNames);
+            rUnoCursor, m_rPropSet, rPropertyNames);
 }
 
 void SAL_CALL
@@ -2228,7 +2212,7 @@ void SAL_CALL SwXTextCursor::setPropertyValues(
 
     SolarMutexGuard aGuard;
 
-    SwUnoCursor & rUnoCursor( m_pImpl->GetCursorOrThrow() );
+    SwUnoCursor & rUnoCursor( GetCursorOrThrow() );
 
     // a little lame to have to copy into this.
     uno::Sequence< beans::PropertyValue > aPropertyValues( aValues.getLength() );
@@ -2246,7 +2230,7 @@ void SAL_CALL SwXTextCursor::setPropertyValues(
     }
     try
     {
-        SwUnoCursorHelper::SetPropertyValues( rUnoCursor, m_pImpl->m_rPropSet, aPropertyValues );
+        SwUnoCursorHelper::SetPropertyValues( rUnoCursor, m_rPropSet, aPropertyValues );
     }
     catch (const css::beans::UnknownPropertyException& e)
     {
@@ -2324,7 +2308,7 @@ SwXTextCursor::setAllPropertiesToDefault()
 {
     SolarMutexGuard aGuard;
 
-    SwUnoCursor & rUnoCursor( m_pImpl->GetCursorOrThrow() );
+    SwUnoCursor & rUnoCursor( GetCursorOrThrow() );
 
     o3tl::sorted_vector<sal_uInt16> aParaWhichIds;
     o3tl::sorted_vector<sal_uInt16> aWhichIds;
@@ -2347,7 +2331,7 @@ SwXTextCursor::setPropertiesToDefault(
 {
     SolarMutexGuard aGuard;
 
-    SwUnoCursor & rUnoCursor( m_pImpl->GetCursorOrThrow() );
+    SwUnoCursor & rUnoCursor( GetCursorOrThrow() );
 
     if ( !rPropertyNames.hasElements() )
         return;
@@ -2358,7 +2342,7 @@ SwXTextCursor::setPropertiesToDefault(
     for (const OUString& rName : rPropertyNames)
     {
         SfxItemPropertyMapEntry const*const  pEntry =
-            m_pImpl->m_rPropSet.getPropertyMap().getByName( rName );
+            m_rPropSet.getPropertyMap().getByName( rName );
         if (!pEntry)
         {
             if (rName == UNO_NAME_IS_SKIP_HIDDEN_TEXT ||
@@ -2410,7 +2394,7 @@ SwXTextCursor::getPropertyDefaults(
 {
     SolarMutexGuard aGuard;
 
-    SwUnoCursor & rUnoCursor( m_pImpl->GetCursorOrThrow() );
+    SwUnoCursor & rUnoCursor( GetCursorOrThrow() );
 
     const sal_Int32 nCount = rPropertyNames.getLength();
     uno::Sequence< uno::Any > aRet(nCount);
@@ -2422,7 +2406,7 @@ SwXTextCursor::getPropertyDefaults(
         for (sal_Int32 i = 0; i < nCount; i++)
         {
             SfxItemPropertyMapEntry const*const pEntry =
-                m_pImpl->m_rPropSet.getPropertyMap().getByName( pNames[i] );
+                m_rPropSet.getPropertyMap().getByName( pNames[i] );
             if (!pEntry)
             {
                 if (pNames[i] == UNO_NAME_IS_SKIP_HIDDEN_TEXT ||
@@ -2449,7 +2433,7 @@ void SAL_CALL SwXTextCursor::invalidateMarkings(::sal_Int32 nType)
 {
     SolarMutexGuard aGuard;
 
-    SwUnoCursor & rUnoCursor( m_pImpl->GetCursorOrThrow() );
+    SwUnoCursor & rUnoCursor( GetCursorOrThrow() );
 
     SwNode& node = rUnoCursor.GetNode();
 
@@ -2489,7 +2473,7 @@ SwXTextCursor::makeRedline(
 {
     SolarMutexGuard aGuard;
 
-    SwUnoCursor & rUnoCursor( m_pImpl->GetCursorOrThrow() );
+    SwUnoCursor & rUnoCursor( GetCursorOrThrow() );
 
     SwUnoCursorHelper::makeRedline(rUnoCursor, rRedlineType, rRedlineProperties);
 }
@@ -2499,7 +2483,7 @@ void SAL_CALL SwXTextCursor::insertDocumentFromURL(const OUString& rURL,
 {
     SolarMutexGuard aGuard;
 
-    SwUnoCursor & rUnoCursor( m_pImpl->GetCursorOrThrow() );
+    SwUnoCursor & rUnoCursor( GetCursorOrThrow() );
 
     SwUnoCursorHelper::InsertFile(&rUnoCursor, rURL, rOptions);
 }
@@ -2818,7 +2802,7 @@ SwXTextCursor::sort(const uno::Sequence< beans::PropertyValue >& rDescriptor)
 {
     SolarMutexGuard aGuard;
 
-    SwUnoCursor & rUnoCursor( m_pImpl->GetCursorOrThrow() );
+    SwUnoCursor & rUnoCursor( GetCursorOrThrow() );
 
     if (!rUnoCursor.HasMark())
         return;
@@ -2863,7 +2847,7 @@ SwXTextCursor::createContentEnumeration(const OUString& rServiceName)
     SolarMutexGuard g;
     if (rServiceName != "com.sun.star.text.TextContent")
         throw uno::RuntimeException();
-    SwUnoCursor& rUnoCursor( m_pImpl->GetCursorOrThrow() );
+    SwUnoCursor& rUnoCursor( GetCursorOrThrow() );
     return SwXParaFrameEnumeration::Create(rUnoCursor, PARAFRAME_PORTION_TEXTRANGE);
 }
 
@@ -2872,9 +2856,9 @@ SwXTextCursor::createEnumeration()
 {
     SolarMutexGuard g;
 
-    SwUnoCursor & rUnoCursor( m_pImpl->GetCursorOrThrow() );
+    SwUnoCursor & rUnoCursor( GetCursorOrThrow() );
 
-    SwXText* pParentText = comphelper::getUnoTunnelImplementation<SwXText>(m_pImpl->m_xParentText);
+    SwXText* pParentText = comphelper::getUnoTunnelImplementation<SwXText>(m_xParentText);
     OSL_ENSURE(pParentText, "parent is not a SwXText");
     if (!pParentText)
     {
@@ -2887,7 +2871,7 @@ SwXTextCursor::createEnumeration()
         pNewCursor->SetMark();
         *pNewCursor->GetMark() = *rUnoCursor.GetMark();
     }
-    const CursorType eSetType = (CursorType::TableText == m_pImpl->m_eType)
+    const CursorType eSetType = (CursorType::TableText == m_eType)
             ? CursorType::SelectionInTable : CursorType::Selection;
     return SwXParagraphEnumeration::Create(pParentText, pNewCursor, eSetType);
 }
