@@ -47,11 +47,9 @@ public:
     }
 };
 
-#define DECLARE_TXTIMPORT_TEST(TestName, filename)                                                 \
-    DECLARE_SW_IMPORT_TEST(TestName, filename, nullptr, TxtImportTest)
-
-DECLARE_TXTIMPORT_TEST(testTdf112191, "bullets.odt")
+CPPUNIT_TEST_FIXTURE(TxtImportTest, testTdf112191)
 {
+    load(mpTestDocumentPath, "bullets.odt");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
     SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
@@ -79,8 +77,9 @@ DECLARE_TXTIMPORT_TEST(testTdf112191, "bullets.odt")
     assertExportedRange(OUStringToOString(aString, osl_getThreadTextEncoding()), aPaM3);
 }
 
-DECLARE_TXTIMPORT_TEST(testTdf60145_utf8withoutbom, "UTF8WITHOUTBOM.txt")
+CPPUNIT_TEST_FIXTURE(TxtImportTest, testTdf60145_utf8withoutbom)
 {
+    load(mpTestDocumentPath, "UTF8WITHOUTBOM.txt");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
     SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
@@ -91,8 +90,9 @@ DECLARE_TXTIMPORT_TEST(testTdf60145_utf8withoutbom, "UTF8WITHOUTBOM.txt")
     CPPUNIT_ASSERT_EQUAL(OUString(u"漢a'"), xPara->getString());
 }
 
-DECLARE_TXTIMPORT_TEST(testTdf60145_utf8withbom, "UTF8WITHBOM.txt")
+CPPUNIT_TEST_FIXTURE(TxtImportTest, testTdf60145_utf8withbom)
 {
+    load(mpTestDocumentPath, "UTF8WITHBOM.txt");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
     SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
@@ -103,8 +103,9 @@ DECLARE_TXTIMPORT_TEST(testTdf60145_utf8withbom, "UTF8WITHBOM.txt")
     CPPUNIT_ASSERT_EQUAL(OUString(u"漢a'"), xPara->getString());
 }
 
-DECLARE_TXTIMPORT_TEST(testTdf60145_utf16lewithoutbom, "UTF16LEWITHOUTBOM.txt")
+CPPUNIT_TEST_FIXTURE(TxtImportTest, testTdf60145_utf16lewithoutbom)
 {
+    load(mpTestDocumentPath, "UTF16LEWITHOUTBOM.txt");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
     SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
@@ -115,8 +116,9 @@ DECLARE_TXTIMPORT_TEST(testTdf60145_utf16lewithoutbom, "UTF16LEWITHOUTBOM.txt")
     CPPUNIT_ASSERT_EQUAL(OUString(u"漢a'"), xPara->getString());
 }
 
-DECLARE_TXTIMPORT_TEST(testTdf60145_utf16lewithbom, "UTF16LEWITHBOM.txt")
+CPPUNIT_TEST_FIXTURE(TxtImportTest, testTdf60145_utf16lewithbom)
 {
+    load(mpTestDocumentPath, "UTF16LEWITHBOM.txt");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
     SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
@@ -127,8 +129,9 @@ DECLARE_TXTIMPORT_TEST(testTdf60145_utf16lewithbom, "UTF16LEWITHBOM.txt")
     CPPUNIT_ASSERT_EQUAL(OUString(u"漢a'"), xPara->getString());
 }
 
-DECLARE_TXTIMPORT_TEST(testTdf60145_utf16bewithoutbom, "UTF16BEWITHOUTBOM.txt")
+CPPUNIT_TEST_FIXTURE(TxtImportTest, testTdf60145_utf16bewithoutbom)
 {
+    load(mpTestDocumentPath, "UTF16BEWITHOUTBOM.txt");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
     SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
@@ -139,8 +142,9 @@ DECLARE_TXTIMPORT_TEST(testTdf60145_utf16bewithoutbom, "UTF16BEWITHOUTBOM.txt")
     CPPUNIT_ASSERT_EQUAL(OUString(u"漢a'"), xPara->getString());
 }
 
-DECLARE_TXTIMPORT_TEST(testTdf60145_utf16bewithbom, "UTF16BEWITHBOM.txt")
+CPPUNIT_TEST_FIXTURE(TxtImportTest, testTdf60145_utf16bewithbom)
 {
+    load(mpTestDocumentPath, "UTF16BEWITHBOM.txt");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
     SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
