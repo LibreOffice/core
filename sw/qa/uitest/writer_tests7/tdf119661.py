@@ -27,12 +27,10 @@ class tdf119661(UITestCase):
             xLink.executeAction("CLICK", tuple())
 
             xOpenBtn = xOpenDialog.getChild("open")
-            xOpenBtn.executeAction("CLICK", tuple())
 
             #Confirmation dialog is displayed
-            xWarnDialog = self.xUITest.getTopFocusWindow()
-            xOK = xWarnDialog.getChild("ok")
-            self.ui_test.close_dialog_through_button(xOK)
+            with self.ui_test.execute_dialog_through_action(xOpenBtn, 'CLICK'):
+                pass
 
         with self.ui_test.execute_dialog_through_command(".uno:LinkDialog", close_button="close") as xDialog:
 
