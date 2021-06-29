@@ -189,6 +189,29 @@
     },
     {
       "key": {
+        "uuid": "61f7f702_56e13b29",
+        "filename": "sfx2/source/dialog/StyleList.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 447,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-06-29T17:59:53Z",
+      "side": 1,
+      "message": "Hii..\n\nThis will call the EnableEdit in StyleList.cxx .. We have another EnableEdit in the Dialog.. How are we ensuring that these two EnableEdit s are in sync?\n\nSuppose there is a function X in Dialog, which we are moving from Dialog to StyleList..Inside that function X, there is another function Y \n\nX()\n{\n.\n.\nY()\n.\n.\n}\n\nSuppose we decide that we are moving only some part of Function X, such that Y() is not moved to StyleList. Then suppose there is another function Z in StyleList which is calling X in StyleList. Here the problem will arise because Z must call the X function of Dialog otherwise function Y will not be executed when Z calls X.\n\nAs far as I can see, there is only one solution to this, i.e. moving the whole of X including Y into StyleList..\n\nThe same problem is with SelectStyle here. We should move EnableEdit completely in StyleList",
+      "range": {
+        "startLine": 447,
+        "startChar": 16,
+        "endLine": 447,
+        "endChar": 26
+      },
+      "revId": "46c930b409580a860fce196cee22faf305820032",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "57a9dfa1_aa01b4df",
         "filename": "sfx2/source/dialog/StyleList.cxx",
         "patchSetId": 12
