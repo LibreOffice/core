@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "93f0c3cc_ae8fd073",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport16.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-06-29T11:13:34Z",
+      "side": 1,
+      "message": "this comment has no value. Instead, add how the test would fail without the fix in place. See line 153 for instance.",
+      "revId": "133d55c481dbf9421ce2139b607b62d9486bd568",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
