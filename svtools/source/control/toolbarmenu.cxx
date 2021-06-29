@@ -18,6 +18,7 @@
  */
 
 #include <memory>
+#include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <osl/diagnose.h>
 
@@ -147,7 +148,11 @@ void ToolbarPopupContainer::setPopover(std::unique_ptr<WeldToolbarPopup> xPopup)
     // move the WeldToolbarPopup contents into this toolbar so on-demand contents can appear inside a preexisting gtk popover
     // because the arrow for the popover is only enabled if there's a popover set
     m_xPopup->getTopLevel()->move(m_xPopup->getContainer(), m_xContainer.get());
-    m_xPopup->GrabFocus();
+
+    // in online LoseFocus event is fired due to this line and popup is closed
+    // when first time opened any popup from not focused sidebar
+    if (!comphelper::LibreOfficeKit::isActive())
+        m_xPopup->GrabFocus();
 }
 
 void ToolbarPopupContainer::unsetPopover()
