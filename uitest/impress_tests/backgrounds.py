@@ -113,33 +113,27 @@ class ImpressBackgrounds(UITestCase):
 
         buttons = ['btnbitmap', 'btncolor', 'btngradient', 'btnhatch', 'btnpattern']
         for index, button in enumerate(buttons):
-            self.ui_test.execute_dialog_through_command(".uno:PageSetup")
+            with self.ui_test.execute_dialog_through_command_guarded(".uno:PageSetup") as xPageSetupDlg:
 
-            xPageSetupDlg = self.xUITest.getTopFocusWindow()
-            tabcontrol = xPageSetupDlg.getChild("tabcontrol")
-            select_pos(tabcontrol, "1")
+                tabcontrol = xPageSetupDlg.getChild("tabcontrol")
+                select_pos(tabcontrol, "1")
 
-            xBtn = xPageSetupDlg.getChild(button)
-            xBtn.executeAction("CLICK", tuple())
+                xBtn = xPageSetupDlg.getChild(button)
+                xBtn.executeAction("CLICK", tuple())
 
-            # tdf#100024: Without the fix in place, this test would have crashed here
-            # changing the background to bitmap
-            xOkBtn = xPageSetupDlg.getChild("ok")
-            xOkBtn.executeAction("CLICK", tuple())
+                # tdf#100024: Without the fix in place, this test would have crashed here
+                # changing the background to bitmap
 
             self.checkDefaultBackground(button)
 
-            self.ui_test.execute_dialog_through_command(".uno:PageSetup")
+            with self.ui_test.execute_dialog_through_command_guarded(".uno:PageSetup") as xPageSetupDlg:
 
-            xPageSetupDlg = self.xUITest.getTopFocusWindow()
-            tabcontrol = xPageSetupDlg.getChild("tabcontrol")
-            select_pos(tabcontrol, "1")
+                tabcontrol = xPageSetupDlg.getChild("tabcontrol")
+                select_pos(tabcontrol, "1")
 
-            xBtn = xPageSetupDlg.getChild('btnnone')
-            xBtn.executeAction("CLICK", tuple())
+                xBtn = xPageSetupDlg.getChild('btnnone')
+                xBtn.executeAction("CLICK", tuple())
 
-            xOkBtn = xPageSetupDlg.getChild("ok")
-            xOkBtn.executeAction("CLICK", tuple())
 
             self.checkDefaultBackground('btnnone')
 

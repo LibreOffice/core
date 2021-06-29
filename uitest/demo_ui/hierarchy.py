@@ -17,18 +17,15 @@ class CheckBoxTest(UITestCase):
 
         self.ui_test.create_doc_in_start_center("calc")
 
-        self.ui_test.execute_dialog_through_command(".uno:About")
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:About", close_button="btnClose") as xAboutDlg:
 
-        xAboutDlg = self.xUITest.getTopFocusWindow()
 
-        json_string = xAboutDlg.getHierarchy()
-        print(json_string)
-        json_content = json.loads(json_string)
-        print(json_content)
-        print(json.dumps(json_content, indent=4))
+            json_string = xAboutDlg.getHierarchy()
+            print(json_string)
+            json_content = json.loads(json_string)
+            print(json_content)
+            print(json.dumps(json_content, indent=4))
 
-        closeBtn = xAboutDlg.getChild("btnClose")
-        self.ui_test.close_dialog_through_button(closeBtn)
 
         self.ui_test.close_doc()
 
