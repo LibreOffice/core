@@ -63,7 +63,6 @@ class SvxSearchItem;
 #define SID_PRINTER_NAME                    (SID_SFX_START + 322)
 #define SID_PRINTER_CHANGESTODOC            (SID_SFX_START + 324)
 #define SID_PRINTPREVIEW                    (SID_SFX_START + 325)
-#define SID_GRAPHICTEST_DIALOG              (SID_SFX_START + 326)
 
 #define SID_MAIL_SUBJECT                    (SID_SFX_START + 328)
 #define SID_MAIL_SENDDOC                    (SID_SFX_START + 331)
