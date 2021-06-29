@@ -28,37 +28,32 @@ def get_url_for_data_file(file_name):
     return pathlib.Path(org.libreoffice.unotest.makeCopyFromTDOC(file_name)).as_uri()
 
 def change_measurement_unit(UITestCase, unit):
-    UITestCase.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog")
-    xDialogOpt = UITestCase.xUITest.getTopFocusWindow()
+    with UITestCase.ui_test.execute_dialog_through_command_guarded(".uno:OptionsTreeDialog") as xDialogOpt:
+        xPages = xDialogOpt.getChild("pages")
+        xAppEntry = xPages.getChild('3')
+        xAppEntry.executeAction("EXPAND", tuple())
+        xGeneralEntry = xAppEntry.getChild('0')
+        xGeneralEntry.executeAction("SELECT", tuple())
 
-    xPages = xDialogOpt.getChild("pages")
-    xAppEntry = xPages.getChild('3')
-    xAppEntry.executeAction("EXPAND", tuple())
-    xGeneralEntry = xAppEntry.getChild('0')
-    xGeneralEntry.executeAction("SELECT", tuple())
+        # Calc
+        if 'unitlb' in xDialogOpt.getChildren():
+            xUnit = xDialogOpt.getChild("unitlb")
 
-    # Calc
-    if 'unitlb' in xDialogOpt.getChildren():
-        xUnit = xDialogOpt.getChild("unitlb")
+        # Writer
+        elif 'metric' in xDialogOpt.getChildren():
+            xUnit = xDialogOpt.getChild("metric")
 
-    # Writer
-    elif 'metric' in xDialogOpt.getChildren():
-        xUnit = xDialogOpt.getChild("metric")
+        # Impress
+        elif 'units' in xDialogOpt.getChildren():
+            xUnit = xDialogOpt.getChild("units")
 
-    # Impress
-    elif 'units' in xDialogOpt.getChildren():
-        xUnit = xDialogOpt.getChild("units")
+        props = {"TEXT": unit}
+        actionProps = mkPropertyValues(props)
+        xUnit.executeAction("SELECT", actionProps)
 
-    props = {"TEXT": unit}
-    actionProps = mkPropertyValues(props)
-    xUnit.executeAction("SELECT", actionProps)
-
-    # tdf#137930: Check apply button doesn't reset the value
-    xApplyBtn = xDialogOpt.getChild("apply")
-    xApplyBtn.executeAction("CLICK", tuple())
-    UITestCase.assertEqual(unit, get_state_as_dict(xUnit)['SelectEntryText'])
-
-    xOKBtn = xDialogOpt.getChild("ok")
-    UITestCase.ui_test.close_dialog_through_button(xOKBtn)
+        # tdf#137930: Check apply button doesn't reset the value
+        xApplyBtn = xDialogOpt.getChild("apply")
+        xApplyBtn.executeAction("CLICK", tuple())
+        UITestCase.assertEqual(unit, get_state_as_dict(xUnit)['SelectEntryText'])
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

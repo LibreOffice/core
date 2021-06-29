@@ -26,22 +26,19 @@ class Test(UITestCase):
         self.xUITest.executeCommand(".uno:Copy")
 
         # Now use paste special to see what formats are offered.
-        self.ui_test.execute_dialog_through_command(".uno:PasteSpecial")
-        pasteSpecial = self.xUITest.getTopFocusWindow()
-        formats = pasteSpecial.getChild("list")
-        entryCount = int(get_state_as_dict(formats)["Children"])
-        items = []
-        for index in range(entryCount):
-            entry = formats.getChild(str(index))
-            entry.executeAction("SELECT", tuple())
-            items.append(get_state_as_dict(formats)["SelectEntryText"])
+        with self.ui_test.execute_dialog_through_command_guarded(".uno:PasteSpecial", close_button="cancel") as pasteSpecial:
+            formats = pasteSpecial.getChild("list")
+            entryCount = int(get_state_as_dict(formats)["Children"])
+            items = []
+            for index in range(entryCount):
+                entry = formats.getChild(str(index))
+                entry.executeAction("SELECT", tuple())
+                items.append(get_state_as_dict(formats)["SelectEntryText"])
 
-        # Make sure there is no RTF vs Richtext duplication.
-        self.assertTrue("Rich text formatting (RTF)" in items)
-        self.assertFalse("Rich text formatting (Richtext)" in items)
+            # Make sure there is no RTF vs Richtext duplication.
+            self.assertTrue("Rich text formatting (RTF)" in items)
+            self.assertFalse("Rich text formatting (Richtext)" in items)
 
-        # Close the dialog and the document.
-        self.ui_test.close_dialog_through_button(pasteSpecial.getChild("cancel"))
         self.ui_test.close_doc()
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
