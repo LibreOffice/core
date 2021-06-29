@@ -258,10 +258,10 @@
 		  <p>The UNO-starter is for running a component or service process, and
 		  providing a runtime environment. Raising a component might look like
 		  this </p>
-		  <p><code>[c:\] uno.exe -c MyComponent -l mycomp.dll -r myregistry.rdb
+		  <p><code>[c:\] uno.exe -c MyComponent -l mycomp.dll -env:URE_MORE_SERVICES=myservices.rdb -env:URE_MORE_TYPES=mytypes.rdb
 		  -- foo bar</code></p>
 		  <p>or</p>
-		  <p><code>[c:\] uno.exe -s foo.bar.FooBarService -r myregistry.rdb
+		  <p><code>[c:\] uno.exe -s foo.bar.FooBarService -env:URE_MORE_SERVICES=myservices.rdb -env:URE_MORE_TYPES=mytypes.rdb
 		  -- foo bar</code></p>
 		  <p>The starter loads the component and instantiates it. The component
 		  must export the interface <a href="%DOXYGEN_PREFIX1%/docs/idl/ref/interfacecom_1_1sun_1_1star_1_1lang_1_1XMain.html" title="link into the IDL reference to the interface com.sun.star.lang.XMain">com.sun.star.lang.XMain</a>:</p>
