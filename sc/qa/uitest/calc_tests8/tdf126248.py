@@ -11,7 +11,6 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 from uitest.uihelper.calc import enter_text_to_cell
 from uitest.uihelper.common import select_pos
 from uitest.uihelper.common import select_by_text
-from uitest.uihelper import guarded
 
 class tdf126248(UITestCase):
 
@@ -49,7 +48,7 @@ class tdf126248(UITestCase):
 
     def test_tdf126248(self):
 
-        with guarded.create_doc_in_start_center(self, "calc"):
+        with self.ui_test.create_doc_in_start_center_guarded("calc"):
 
             self.changeLocalSetting("Chinese (traditional)")
 
