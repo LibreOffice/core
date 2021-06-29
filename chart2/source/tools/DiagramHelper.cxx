@@ -1660,7 +1660,7 @@ bool DiagramHelper::switchDiagramPositioningToExcludingPositioning(
     ChartModel& rModel, bool bResetModifiedState, bool bConvertAlsoFromAutoPositioning )
 {
     //return true if something was changed
-    const SvtSaveOptions::ODFSaneDefaultVersion nCurrentODFVersion(SvtSaveOptions().GetODFSaneDefaultVersion());
+    const SvtSaveOptions::ODFSaneDefaultVersion nCurrentODFVersion(GetODFSaneDefaultVersion());
     if (SvtSaveOptions::ODFSVER_012 < nCurrentODFVersion)
     {
         uno::Reference< css::chart::XDiagramPositioning > xDiagramPositioning( rModel.getFirstDiagram(), uno::UNO_QUERY );

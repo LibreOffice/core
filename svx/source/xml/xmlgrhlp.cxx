@@ -653,13 +653,15 @@ OUString SvXMLGraphicHelper::implSaveGraphic(css::uno::Reference<css::graphic::X
                 case GfxLinkType::NativeMet: aExtension = ".met"; break;
                 case GfxLinkType::NativePct: aExtension = ".pct"; break;
                 case GfxLinkType::NativeSvg:
+                {
                     // backward-compat kludge: since no released OOo
                     // version to date can handle svg properly, wrap it up
                     // into an svm. slight catch22 here, since strict ODF
                     // conformance _recommends_ svg - then again, most old
                     // ODF consumers are believed to be OOo
-                    if (SvtSaveOptions().GetODFSaneDefaultVersion() < SvtSaveOptions::ODFSVER_012
-                        || SvtSaveOptions().GetODFSaneDefaultVersion() == SvtSaveOptions::ODFSVER_012_EXT_COMPAT)
+                    auto nSaneVersion = GetODFSaneDefaultVersion();
+                    if ( nSaneVersion < SvtSaveOptions::ODFSVER_012
+                        || nSaneVersion == SvtSaveOptions::ODFSVER_012_EXT_COMPAT)
                     {
                         bUseGfxLink = false;
                         aExtension = ".svm";
@@ -669,6 +671,7 @@ OUString SvXMLGraphicHelper::implSaveGraphic(css::uno::Reference<css::graphic::X
                         aExtension = ".svg";
                     }
                     break;
+                }
                 case GfxLinkType::NativePdf: aExtension = ".pdf"; break;
 
                 default:

@@ -319,8 +319,7 @@ void SfxObjectShell::SetupStorage( const uno::Reference< embed::XStorage >& xSto
     SvtSaveOptions::ODFSaneDefaultVersion nDefVersion = SvtSaveOptions::ODFSVER_013;
     if (!utl::ConfigManager::IsFuzzing())
     {
-        SvtSaveOptions aSaveOpt;
-        nDefVersion = aSaveOpt.GetODFSaneDefaultVersion();
+        nDefVersion = GetODFSaneDefaultVersion();
     }
 
     // the default values, that should be used for ODF1.1 and older formats
@@ -977,8 +976,7 @@ bool SfxObjectShell::DoSave()
             SvtSaveOptions::ODFSaneDefaultVersion nDefVersion = SvtSaveOptions::ODFSVER_013;
             if (!utl::ConfigManager::IsFuzzing())
             {
-                SvtSaveOptions aSaveOpt;
-                nDefVersion = aSaveOpt.GetODFSaneDefaultVersion();
+                nDefVersion = GetODFSaneDefaultVersion();
             }
             uno::Reference<beans::XPropertySet> const xProps(GetMedium()->GetStorage(), uno::UNO_QUERY);
             assert(xProps.is());
@@ -1187,8 +1185,7 @@ bool SfxObjectShell::SaveTo_Impl
         if ( bTryToPreserveScriptSignature )
         {
             // check that the storage format stays the same
-            SvtSaveOptions aSaveOpt;
-            SvtSaveOptions::ODFSaneDefaultVersion nVersion = aSaveOpt.GetODFSaneDefaultVersion();
+            SvtSaveOptions::ODFSaneDefaultVersion nVersion = GetODFSaneDefaultVersion();
 
             OUString aODFVersion;
             try
