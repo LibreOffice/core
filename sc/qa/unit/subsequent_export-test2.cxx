@@ -186,6 +186,7 @@ public:
     void testTdf136721_paper_size();
     void testTdf139258_rotated_image();
     void testTdf126541_SheetVisibilityImportXlsx();
+    void testTdf140431();
 
     CPPUNIT_TEST_SUITE(ScExportTest2);
 
@@ -280,6 +281,7 @@ public:
     CPPUNIT_TEST(testTdf136721_paper_size);
     CPPUNIT_TEST(testTdf139258_rotated_image);
     CPPUNIT_TEST(testTdf126541_SheetVisibilityImportXlsx);
+    CPPUNIT_TEST(testTdf140431);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2280,6 +2282,23 @@ void ScExportTest2::testTdf126541_SheetVisibilityImportXlsx()
     // Sheet based grid line visibility setting should not overwrite the global setting.
     xShell = loadDocAndSetupModelViewController(u"tdf126541_GridOff.", FORMAT_XLSX, true);
     CPPUNIT_ASSERT(xShell->GetDocument().GetViewOptions().GetOption(VOPT_GRID));
+}
+
+void ScExportTest2::testTdf140431()
+{
+    ScDocShellRef xShell = loadDoc(u"129969-min.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xShell.is());
+
+    ScDocShellRef xDocSh = saveAndReload(&(*xShell), FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+    ScDocument& rDoc = xDocSh->GetDocument();
+    ScAddress aPos(0, 2, 0);
+    const EditTextObject* pEditText = rDoc.GetEditText(aPos);
+    const SvxFieldData* pData = pEditText->GetFieldData(0, 0, text::textfield::Type::URL);
+    const SvxURLField* pURLData = static_cast<const SvxURLField*>(pData);
+    CPPUNIT_ASSERT(pURLData->GetURL().startsWith("file://ndhlis"));
+
+    xDocSh->DoClose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest2);
