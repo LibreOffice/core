@@ -2938,20 +2938,20 @@ void DrawingML::WriteLstStyles(const css::uno::Reference<css::text::XTextContent
                                bool& rbOverridingCharHeight, sal_Int32& rnCharHeight,
                                const css::uno::Reference<css::beans::XPropertySet>& rXShapePropSet)
 {
-    Reference<XEnumerationAccess> access(rParagraph, UNO_QUERY);
-    if (!access.is())
+    Reference<XEnumerationAccess> xAccess(rParagraph, UNO_QUERY);
+    if (!xAccess.is())
         return;
 
-    Reference<XEnumeration> enumeration(access->createEnumeration());
-    if (!enumeration.is())
+    Reference<XEnumeration> xEnumeration(xAccess->createEnumeration());
+    if (!xEnumeration.is())
         return;
 
 
     Reference<XTextRange> rRun;
 
-    if (enumeration->hasMoreElements())
+    if (xEnumeration->hasMoreElements())
     {
-        Any aAny(enumeration->nextElement());
+        Any aAny(xEnumeration->nextElement());
         if (aAny >>= rRun)
         {
             float fFirstCharHeight = rnCharHeight / 1000.;

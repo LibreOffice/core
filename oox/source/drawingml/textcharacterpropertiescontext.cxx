@@ -50,11 +50,13 @@ TextCharacterPropertiesContext::TextCharacterPropertiesContext(
     int nVisualTokenAmount = sax_fastparser::castToFastAttributeList(
                 rAttribs.getFastAttributeList() ).getFastAttributeTokens().size();
 
-    if ( rAttribs.hasAttribute( XML_lang ) ){
+    if ( rAttribs.hasAttribute( XML_lang ) )
+    {
         mrTextCharacterProperties.moLang = rAttribs.getString( XML_lang );
         --nVisualTokenAmount; // Not a visual attribute
     }
-    if ( rAttribs.hasAttribute( XML_altLang )){
+    if ( rAttribs.hasAttribute( XML_altLang ))
+    {
         --nVisualTokenAmount; // Not a visual attribute
     }
     if ( rAttribs.hasAttribute( XML_sz ) )

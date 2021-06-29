@@ -121,7 +121,7 @@ public:
     ShapeExport&        WriteUnknownShape(const Reference< XShape >& xShape) override;
     ShapeExport&        WritePlaceholderShape(const Reference< XShape >& xShape, PlaceholderType ePlaceholder);
     /** Writes a placeholder shape that references the placeholder on the master slide */
-    ShapeExport&        WritePlaceholderReferenceShape(PlaceholderType ePlaceholder, unsigned nReferencedPlaceholderIdx, PageType ePageType, Reference<XPropertySet>& rXPagePropSet);
+    ShapeExport&        WritePlaceholderReferenceShape(PlaceholderType ePlaceholder, sal_Int32 nReferencedPlaceholderIdx, PageType ePageType, Reference<XPropertySet>& rXPagePropSet);
     ShapeExport&        WritePageShape(const Reference< XShape >& xShape, PageType ePageType, bool bPresObj);
     /** Writes textbody of a placeholder that references the placeholder on the master slide */
     ShapeExport&        WritePlaceholderReferenceTextBody(PlaceholderType ePlaceholder, PageType ePageType, const Reference<XPropertySet> xPagePropSet);
@@ -1607,7 +1607,7 @@ ShapeExport& PowerPointShapeExport::WritePlaceholderShape(const Reference< XShap
     }
     mpFS->endElementNS(XML_p, XML_spPr);
 
-    WriteTextBox(xShape, XML_p, bUsePlaceholderIndex);
+    WriteTextBox(xShape, XML_p, /*bWritePropertiesAsLstStyles=*/bUsePlaceholderIndex);
 
     mpFS->endElementNS(XML_p, XML_sp);
 
@@ -1615,7 +1615,7 @@ ShapeExport& PowerPointShapeExport::WritePlaceholderShape(const Reference< XShap
 }
 
 ShapeExport& PowerPointShapeExport::WritePlaceholderReferenceShape(
-    PlaceholderType ePlaceholder, unsigned nReferencedPlaceholderIdx, PageType ePageType,
+    PlaceholderType ePlaceholder, sal_Int32 nReferencedPlaceholderIdx, PageType ePageType,
     Reference<XPropertySet>& rXPagePropSet)
 {
     mpFS->startElementNS(XML_p, XML_sp);
@@ -2274,7 +2274,7 @@ void PowerPointExport::WritePlaceholderReferenceShapes(PowerPointShapeExport& rD
     }
 }
 
-unsigned PowerPointExport::CreateNewPlaceholderIndex(const css::uno::Reference<XShape> &rXShape)
+sal_Int32 PowerPointExport::CreateNewPlaceholderIndex(const css::uno::Reference<XShape> &rXShape)
 {
     maPlaceholderShapeToIndexMap.insert({rXShape, mnPlaceholderIndexMax});
     return mnPlaceholderIndexMax++;
