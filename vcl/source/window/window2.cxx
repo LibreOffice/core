@@ -22,6 +22,8 @@
 #include <o3tl/float_int_conversion.hxx>
 #include <sal/log.hxx>
 
+#include <tools/helpers.hxx>
+
 #include <vcl/toolkit/dialog.hxx>
 #include <vcl/event.hxx>
 #include <vcl/toolkit/fixed.hxx>
@@ -369,11 +371,6 @@ void Window::SetZoom( const Fraction& rZoom )
     }
 }
 
-static tools::Long WinFloatRound( double fVal )
-{
-    return( fVal > 0.0 ? static_cast<tools::Long>( fVal + 0.5 ) : -static_cast<tools::Long>( -fVal + 0.5 ) );
-}
-
 void Window::SetZoomedPointFont(vcl::RenderContext& rRenderContext, const vcl::Font& rFont)
 {
     const Fraction& rZoom = GetZoom();
@@ -381,8 +378,8 @@ void Window::SetZoomedPointFont(vcl::RenderContext& rRenderContext, const vcl::F
     {
         vcl::Font aFont(rFont);
         Size aSize = aFont.GetFontSize();
-        aSize.setWidth( WinFloatRound(double(aSize.Width() * rZoom)) );
-        aSize.setHeight( WinFloatRound(double(aSize.Height() * rZoom)) );
+        aSize.setWidth( FRound(double(aSize.Width() * rZoom)) );
+        aSize.setHeight( FRound(double(aSize.Height() * rZoom)) );
         aFont.SetFontSize(aSize);
         SetPointFont(rRenderContext, aFont);
     }
@@ -399,7 +396,7 @@ tools::Long Window::CalcZoom( tools::Long nCalc ) const
     if ( rZoom.GetNumerator() != rZoom.GetDenominator() )
     {
         double n = double(nCalc * rZoom);
-        nCalc = WinFloatRound( n );
+        nCalc = FRound( n );
     }
     return nCalc;
 }
