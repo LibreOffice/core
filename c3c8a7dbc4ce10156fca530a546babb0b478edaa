@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7b174e9c_3d571711",
+        "filename": "unotools/source/ucbhelper/xtempfile.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-29T08:16:34Z",
+      "side": 1,
+      "message": "Interesting, why not use the object directly then, without optional?",
+      "revId": "c3c8a7dbc4ce10156fca530a546babb0b478edaa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
