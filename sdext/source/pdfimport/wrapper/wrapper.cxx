@@ -641,52 +641,6 @@ void LineParser::readFont()
 
     // extract textual attributes (bold, italic in the name, etc.)
     parseFontFamilyName(aResult);
-    // need to read font file?
-    if( nFileLen )
-    {
-        uno::Sequence<sal_Int8> aFontFile(nFileLen);
-        readBinaryData( aFontFile );
-
-        awt::FontDescriptor aFD;
-        uno::Sequence< uno::Any > aArgs(1);
-        aArgs[0] <<= aFontFile;
-
-        try
-        {
-            uno::Reference< beans::XMaterialHolder > xMat(
-                m_parser.m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-                    "com.sun.star.awt.FontIdentificator", aArgs, m_parser.m_xContext ),
-                uno::UNO_QUERY );
-            if( xMat.is() )
-            {
-                uno::Any aRes( xMat->getMaterial() );
-                if( aRes >>= aFD )
-                {
-                    if (!aFD.Name.isEmpty())
-                    {
-                        aResult.familyName = aFD.Name;
-                        parseFontFamilyName(aResult);
-                    }
-                    aResult.isBold      = (aFD.Weight > 100.0);
-                    aResult.isItalic    = (aFD.Slant == awt::FontSlant_OBLIQUE ||
-                                           aFD.Slant == awt::FontSlant_ITALIC );
-                    aResult.isUnderline = false;
-                    aResult.size        = 0;
-                }
-            }
-        }
-        catch( uno::Exception& )
-        {
-        }
-
-        if( aResult.familyName.isEmpty() )
-        {
-            // last fallback
-            aResult.familyName  = "Arial";
-            aResult.isUnderline = false;
-        }
-
-    }
 
     if (!m_parser.m_xDev)
         m_parser.m_xDev.disposeAndReset(VclPtr<VirtualDevice>::Create());
