@@ -16,6 +16,40 @@
       "revId": "c85ec983b74190793420d660eed8380eb96e0bf6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eb80dc9b_9dc37c74",
+        "filename": "chart2/source/tools/InternalDataProvider.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1498,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-29T03:44:00Z",
+      "side": 1,
+      "message": "The newline is inserted here unintentionally - please remove the newline",
+      "revId": "c85ec983b74190793420d660eed8380eb96e0bf6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "947630c7_1d8bec46",
+        "filename": "chart2/source/tools/ThreeDHelper.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-29T03:44:00Z",
+      "side": 1,
+      "message": "And same for rtl::math::tan vs std::tan",
+      "revId": "c85ec983b74190793420d660eed8380eb96e0bf6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }

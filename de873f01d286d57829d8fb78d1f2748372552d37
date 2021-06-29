@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2fe5e7a3_87690791",
+        "filename": "chart2/source/tools/InternalDataProvider.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1496,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-29T03:44:00Z",
+      "side": 0,
+      "message": "The newline is dropped here unintentionally - please restore the newline",
+      "revId": "de873f01d286d57829d8fb78d1f2748372552d37",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b421a5b0_ce92fad8",
+        "filename": "chart2/source/tools/RelativePositionHelper.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-29T03:44:00Z",
+      "side": 0,
+      "message": "rtl::math::sin/cos has an isValidArcArg call, which is documented this way:\n\n  /** If a value is a valid argument for sin(), cos(), tan().\n  \n      IEEE 754 specifies that absolute values up to 2^64 (\u003d1.844e19) for the\n      radian must be supported by trigonometric functions.  Unfortunately, at\n      least on x86 architectures, the FPU doesn\u0027t generate an error pattern for\n      values \u003e2^64 but produces erroneous results instead and sets only the\n      \"invalid operation\" (IM) flag in the status word :-(  Thus the application\n      has to handle it itself.\n   */\n\nIs this not relevant anymore?",
+      "revId": "de873f01d286d57829d8fb78d1f2748372552d37",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
