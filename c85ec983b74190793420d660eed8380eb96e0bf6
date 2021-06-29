@@ -93,6 +93,23 @@
     },
     {
       "key": {
+        "uuid": "b9adcd81_fb994ce2",
+        "filename": "include/rtl/math.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 439,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-06-29T08:47:16Z",
+      "side": 1,
+      "message": "These C ABI declarations should be present also for LIBO_INTERNAL_ONLY:\n* For one, this causes loplugin:external/loplugin:unreffun for the definitions (in LIBO_INTERNAL_ONLY code), see e.g. the failing build of patch set 7 at \u003chttps://ci.libreoffice.org/job/gerrit_linux_clang_dbgutil/90312/consoleFull#8257000742a810015-1db5-427c-9ce2-83b5f06a5284\u003e.\n* For another, chances are low that some internal code accidentally calls these C functions (compared to the C++ functions in include/rtl/math.hxx) when it should call corresponding C/C++ standard library functions.",
+      "revId": "c85ec983b74190793420d660eed8380eb96e0bf6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e6128e46_28b5f79f",
         "filename": "include/rtl/math.h",
         "patchSetId": 7
@@ -121,6 +138,24 @@
       "writtenOn": "2021-06-29T04:26:02Z",
       "side": 1,
       "message": "I\u0027d suggest just define an inline function returning NaN, and make it conditional depending on the define; then use it in all the trigonometric functions here uniformly? That would not require to re-define them all.",
+      "revId": "c85ec983b74190793420d660eed8380eb96e0bf6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e0314b20_f9205965",
+        "filename": "include/rtl/math.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 473,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-06-29T08:47:16Z",
+      "side": 1,
+      "message": "Or rather, this probably indicates that my suggestion that \"it /could/ make sense to move them into #if !defined LIBO_INTERNAL_ONLY blocks\" wasn\u0027t such a bright idea after all:  It is fine if you adapt internal uses of these functions that can be replaced with uses of std functionality, but---seeing the consequences here---I would just not bother making these functions invisible to LIBO_INERNAL_ONLY after all.",
+      "parentUuid": "549848a8_cb6b95d1",
       "revId": "c85ec983b74190793420d660eed8380eb96e0bf6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
