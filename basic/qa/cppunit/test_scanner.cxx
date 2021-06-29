@@ -13,7 +13,7 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
 
-#include <rtl/math.hxx>
+#include <limits>
 
 #include <scanner.hxx>
 
@@ -654,11 +654,9 @@ void ScannerTest::testNumbers()
     // the buffer is artificially constrained by the scanner.
     CPPUNIT_ASSERT_EQUAL(1u, static_cast<unsigned int>(errors)); // HACK
 
-    double fInf = 0.0;
-    rtl::math::setInf(&fInf, false);
     symbols = getSymbols("10e308", errors);
     CPPUNIT_ASSERT_EQUAL(size_t(2), symbols.size());
-    CPPUNIT_ASSERT_EQUAL(fInf, symbols[0].number);
+    CPPUNIT_ASSERT_EQUAL(std::numeric_limits<double>::infinity(), symbols[0].number);
     CPPUNIT_ASSERT_EQUAL(SbxDOUBLE, symbols[0].type);
     CPPUNIT_ASSERT_EQUAL(cr, symbols[1].text);
     CPPUNIT_ASSERT_EQUAL(1u, static_cast<unsigned int>(errors)); // math error, overflow
