@@ -93,8 +93,7 @@ static double dnorm(double x) {
 }
 // cumulative normal distribution (see also ScInterpreter::integralPhi)
 static double pnorm(double x) {
-    //return 0.5*(erf(sqrt(0.5)*x)+1.0);       // windows may not have erf
-    return 0.5 * ::rtl::math::erfc(-x * 0.7071067811865475);
+    return 0.5 * std::erfc(-x * 0.7071067811865475);
 }
 
 // binary option cash (domestic)
