@@ -22,7 +22,7 @@
 #include <ResId.hxx>
 #include <strings.hrc>
 
-#include <rtl/math.hxx>
+#include <limits>
 
 #include <com/sun/star/chart2/MovingAverageType.hpp>
 
@@ -43,7 +43,7 @@ void SAL_CALL MovingAverageRegressionCurveCalculator::recalculateRegression(
     const uno::Sequence< double >& aXValues,
     const uno::Sequence< double >& aYValues )
 {
-    ::rtl::math::setNan( & m_fCorrelationCoefficient );
+    m_fCorrelationCoefficient = std::numeric_limits<double>::quiet_NaN();
 
     RegressionCalculationHelper::tDoubleVectorPair aValues(
         RegressionCalculationHelper::cleanup(
@@ -134,9 +134,7 @@ void MovingAverageRegressionCurveCalculator::calculateValues(
 
 double SAL_CALL MovingAverageRegressionCurveCalculator::getCurveValue( double /*x*/ )
 {
-    double fResult;
-    rtl::math::setNan(&fResult);
-    return fResult;
+    return std::numeric_limits<double>::quiet_NaN();
 }
 
 uno::Sequence< geometry::RealPoint2D > SAL_CALL MovingAverageRegressionCurveCalculator::getCurveValues(

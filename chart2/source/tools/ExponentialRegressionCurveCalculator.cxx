@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 
+#include <limits>
 #include <string_view>
 
 #include <ExponentialRegressionCurveCalculator.hxx>
@@ -34,12 +35,10 @@ namespace chart
 {
 
 ExponentialRegressionCurveCalculator::ExponentialRegressionCurveCalculator()
-    : m_fLogSlope(0.0)
-    , m_fLogIntercept(0.0)
+    : m_fLogSlope(std::numeric_limits<double>::quiet_NaN())
+    , m_fLogIntercept(std::numeric_limits<double>::quiet_NaN())
     , m_fSign(1.0)
 {
-    ::rtl::math::setNan( & m_fLogSlope );
-    ::rtl::math::setNan( & m_fLogIntercept );
 }
 
 ExponentialRegressionCurveCalculator::~ExponentialRegressionCurveCalculator()
@@ -65,9 +64,9 @@ void SAL_CALL ExponentialRegressionCurveCalculator::recalculateRegression(
         nMax = aValues.first.size();
         if( nMax <= 1 )
         {
-            ::rtl::math::setNan( & m_fLogSlope );
-            ::rtl::math::setNan( & m_fLogIntercept );
-            ::rtl::math::setNan( & m_fCorrelationCoefficient );// actual it is coefficient of determination
+            m_fLogSlope = std::numeric_limits<double>::quiet_NaN();
+            m_fLogIntercept = std::numeric_limits<double>::quiet_NaN();
+            m_fCorrelationCoefficient = std::numeric_limits<double>::quiet_NaN();// actual it is coefficient of determination
             return;
         }
         m_fSign = -1.0;
@@ -116,16 +115,13 @@ void SAL_CALL ExponentialRegressionCurveCalculator::recalculateRegression(
 
 double SAL_CALL ExponentialRegressionCurveCalculator::getCurveValue( double x )
 {
-    double fResult;
-    ::rtl::math::setNan( & fResult );
-
     if( ! ( std::isnan( m_fLogSlope ) ||
             std::isnan( m_fLogIntercept )))
     {
-        fResult = m_fSign * exp(m_fLogIntercept + x * m_fLogSlope);
+        return m_fSign * exp(m_fLogIntercept + x * m_fLogSlope);
     }
 
-    return fResult;
+    return std::numeric_limits<double>::quiet_NaN();
 }
 
 uno::Sequence< geometry::RealPoint2D > SAL_CALL ExponentialRegressionCurveCalculator::getCurveValues(

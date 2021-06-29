@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <limits>
 #include <memory>
 #include <orcusinterface.hxx>
 
@@ -259,11 +260,11 @@ void ScOrcusNamedExpression::commit()
 ScOrcusFactory::CellStoreToken::CellStoreToken(const ScAddress& rPos, Type eType)
     : maPos(rPos)
     , meType(eType)
+    , mfValue(std::numeric_limits<double>::quiet_NaN())
     , mnIndex1(0)
     , mnIndex2(0)
     , meGrammar(formula::FormulaGrammar::GRAM_UNSPECIFIED)
 {
-    rtl::math::setNan(&mfValue);
 }
 
 ScOrcusFactory::CellStoreToken::CellStoreToken(const ScAddress& rPos, double fValue)
@@ -279,11 +280,11 @@ ScOrcusFactory::CellStoreToken::CellStoreToken(const ScAddress& rPos, double fVa
 ScOrcusFactory::CellStoreToken::CellStoreToken(const ScAddress& rPos, uint32_t nIndex)
     : maPos(rPos)
     , meType(Type::String)
+    , mfValue(std::numeric_limits<double>::quiet_NaN())
     , mnIndex1(nIndex)
     , mnIndex2(0)
     , meGrammar(formula::FormulaGrammar::GRAM_UNSPECIFIED)
 {
-    rtl::math::setNan(&mfValue);
 }
 
 ScOrcusFactory::CellStoreToken::CellStoreToken(const ScAddress& rPos, const OUString& rFormula,
@@ -291,11 +292,11 @@ ScOrcusFactory::CellStoreToken::CellStoreToken(const ScAddress& rPos, const OUSt
     : maPos(rPos)
     , meType(Type::Formula)
     , maStr1(rFormula)
+    , mfValue(std::numeric_limits<double>::quiet_NaN())
     , mnIndex1(0)
     , mnIndex2(0)
     , meGrammar(eGrammar)
 {
-    rtl::math::setNan(&mfValue);
 }
 
 ScOrcusFactory::ScOrcusFactory(ScDocument& rDoc, bool bSkipDefaultStyles) :

@@ -64,8 +64,6 @@
 #include <memory>
 #include <numeric>
 
-#include <math.h>
-
 // factor from font size to optimal cell height (text width)
 #define SC_ROT_BREAK_FACTOR     6
 
@@ -2472,8 +2470,6 @@ bool appendToBlock(
 {
     svl::SharedStringPool& rPool = pDoc->GetSharedStringPool();
     size_t nLenRemain = nArrayLen - nPos;
-    double fNan;
-    rtl::math::setNan(&fNan);
 
     for (sc::CellStoreType::iterator it = _it; it != itEnd; ++it)
     {
@@ -2627,9 +2623,6 @@ copyFirstFormulaBlock(
     sc::FormulaGroupContext& rCxt, const sc::CellStoreType::iterator& itBlk, size_t nArrayLen,
     SCTAB nTab, SCCOL nCol )
 {
-    double fNan;
-    rtl::math::setNan(&fNan);
-
     size_t nLen = std::min(itBlk->size, nArrayLen);
 
     sc::formula_block::iterator it = sc::formula_block::begin(*itBlk->data);
@@ -2661,7 +2654,8 @@ copyFirstFormulaBlock(
             if (!pNumArray)
             {
                 rCxt.m_NumArrays.push_back(
-                    std::make_unique<sc::FormulaGroupContext::NumArrayType>(nArrayLen, fNan));
+                    std::make_unique<sc::FormulaGroupContext::NumArrayType>(nArrayLen,
+                        std::numeric_limits<double>::quiet_NaN()));
                 pNumArray = rCxt.m_NumArrays.back().get();
             }
 
@@ -2741,9 +2735,6 @@ formula::VectorRefArray ScColumn::FetchVectorRefArray( SCROW nRow1, SCROW nRow2 
     // So temporarily block the discarding.
     ProtectFormulaGroupContext protectContext(&GetDoc());
 
-    double fNan;
-    rtl::math::setNan(&fNan);
-
     // We need to fetch all cell values from row 0 to nRow2 for caching purposes.
     sc::CellStoreType::iterator itBlk = maCells.begin();
     switch (itBlk->type)
@@ -2763,7 +2754,8 @@ formula::VectorRefArray ScColumn::FetchVectorRefArray( SCROW nRow1, SCROW nRow2 
             rCxt.m_NumArrays.push_back(
                 std::make_unique<sc::FormulaGroupContext::NumArrayType>(it, itEnd));
             sc::FormulaGroupContext::NumArrayType& rArray = *rCxt.m_NumArrays.back();
-            rArray.resize(nRow2+1, fNan); // allocate to the requested length.
+            // allocate to the requested length.
+            rArray.resize(nRow2+1, std::numeric_limits<double>::quiet_NaN());
 
             pColArray = rCxt.setCachedColArray(nTab, nCol, &rArray, nullptr);
             if (!pColArray)
@@ -2877,7 +2869,8 @@ formula::VectorRefArray ScColumn::FetchVectorRefArray( SCROW nRow1, SCROW nRow2 
         {
             // Fill the whole length with NaN's.
             rCxt.m_NumArrays.push_back(
-                std::make_unique<sc::FormulaGroupContext::NumArrayType>(nRow2+1, fNan));
+                std::make_unique<sc::FormulaGroupContext::NumArrayType>(nRow2+1,
+                    std::numeric_limits<double>::quiet_NaN()));
             sc::FormulaGroupContext::NumArrayType& rArray = *rCxt.m_NumArrays.back();
             pColArray = rCxt.setCachedColArray(nTab, nCol, &rArray, nullptr);
             if (!pColArray)

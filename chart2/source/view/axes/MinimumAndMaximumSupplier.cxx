@@ -23,6 +23,8 @@
 
 #include <rtl/math.hxx>
 
+#include <limits>
+
 namespace chart
 {
 using namespace ::com::sun::star;
@@ -56,7 +58,7 @@ double MergedMinimumAndMaximumSupplier::getMinimumX()
             fGlobalExtremum=fLocalExtremum;
     }
     if(std::isinf(fGlobalExtremum))
-        ::rtl::math::setNan(&fGlobalExtremum);
+        return std::numeric_limits<double>::quiet_NaN();
     return fGlobalExtremum;
 }
 
@@ -71,7 +73,7 @@ double MergedMinimumAndMaximumSupplier::getMaximumX()
             fGlobalExtremum=fLocalExtremum;
     }
     if(std::isinf(fGlobalExtremum))
-        ::rtl::math::setNan(&fGlobalExtremum);
+        return std::numeric_limits<double>::quiet_NaN();
     return fGlobalExtremum;
 }
 
@@ -86,7 +88,7 @@ double MergedMinimumAndMaximumSupplier::getMinimumYInRange( double fMinimumX, do
             fGlobalExtremum=fLocalExtremum;
     }
     if(std::isinf(fGlobalExtremum))
-        ::rtl::math::setNan(&fGlobalExtremum);
+        return std::numeric_limits<double>::quiet_NaN();
     return fGlobalExtremum;
 }
 
@@ -101,7 +103,7 @@ double MergedMinimumAndMaximumSupplier::getMaximumYInRange( double fMinimumX, do
             fGlobalExtremum=fLocalExtremum;
     }
     if(std::isinf(fGlobalExtremum))
-        ::rtl::math::setNan(&fGlobalExtremum);
+        return std::numeric_limits<double>::quiet_NaN();
     return fGlobalExtremum;
 }
 
@@ -116,7 +118,7 @@ double MergedMinimumAndMaximumSupplier::getMinimumZ()
             fGlobalExtremum=fLocalExtremum;
     }
     if(std::isinf(fGlobalExtremum))
-        ::rtl::math::setNan(&fGlobalExtremum);
+        return std::numeric_limits<double>::quiet_NaN();
     return fGlobalExtremum;
 }
 
@@ -131,7 +133,7 @@ double MergedMinimumAndMaximumSupplier::getMaximumZ()
             fGlobalExtremum=fLocalExtremum;
     }
     if(std::isinf(fGlobalExtremum))
-        ::rtl::math::setNan(&fGlobalExtremum);
+        return std::numeric_limits<double>::quiet_NaN();
     return fGlobalExtremum;
 }
 
