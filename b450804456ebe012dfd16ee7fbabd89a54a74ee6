@@ -22,6 +22,30 @@
       "revId": "b450804456ebe012dfd16ee7fbabd89a54a74ee6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "590aa899_b83a7938",
+        "filename": "odk/docs/tools.html",
+        "patchSetId": 1
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-06-29T12:27:28Z",
+      "side": 1,
+      "message": "Depends on the contents of myregistry.rdb.  Maybe either drop this part completely, or else spell out both explicitly like\n\n  -env:URE_MORE_SERVICES\u003dmyservices.rdb -env:URE_MORE_TYPES\u003dmytypes.rdb",
+      "parentUuid": "33920cad_ff711a12",
+      "range": {
+        "startLine": 261,
+        "startChar": 61,
+        "endLine": 261,
+        "endChar": 75
+      },
+      "revId": "b450804456ebe012dfd16ee7fbabd89a54a74ee6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
