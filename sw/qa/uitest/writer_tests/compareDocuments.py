@@ -21,16 +21,13 @@ class compareDocuments(UITestCase):
             xWriterDoc = self.xUITest.getTopFocusWindow()
 
             with self.ui_test.execute_dialog_through_command(".uno:CompareDocuments", close_button="") as xOpenDialog:
-
                 xFileName = xOpenDialog.getChild("file_name")
                 xFileName.executeAction("TYPE", mkPropertyValues({"TEXT": get_url_for_data_file("tdf130960_2.odt")}))
                 xOpenBtn = xOpenDialog.getChild("open")
-                xOpenBtn.executeAction("CLICK", tuple())
 
                 # Close the dialog and open it again so the list of changes is updated
-                xTrackDlg = self.xUITest.getTopFocusWindow()
-                xcloseBtn = xTrackDlg.getChild("close")
-                self.ui_test.close_dialog_through_button(xcloseBtn)
+                with self.ui_test.execute_dialog_through_action(xOpenBtn, 'CLICK', close_button="close"):
+                    pass
 
             self.ui_test.execute_modeless_dialog_through_command(".uno:AcceptTrackedChanges")
             xTrackDlg = self.xUITest.getTopFocusWindow()
@@ -55,12 +52,10 @@ class compareDocuments(UITestCase):
                 xFileName = xOpenDialog.getChild("file_name")
                 xFileName.executeAction("TYPE", mkPropertyValues({"TEXT": get_url_for_data_file("tdf137855_2.odt")}))
                 xOpenBtn = xOpenDialog.getChild("open")
-                xOpenBtn.executeAction("CLICK", tuple())
 
                 # Close the dialog and open it again so the list of changes is updated
-                xTrackDlg = self.xUITest.getTopFocusWindow()
-                xcloseBtn = xTrackDlg.getChild("close")
-                self.ui_test.close_dialog_through_button(xcloseBtn)
+                with self.ui_test.execute_dialog_through_action(xOpenBtn, 'CLICK', close_button="close"):
+                    pass
 
             self.ui_test.execute_modeless_dialog_through_command(".uno:AcceptTrackedChanges")
             xTrackDlg = self.xUITest.getTopFocusWindow()

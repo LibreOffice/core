@@ -30,7 +30,7 @@ class tdf90401(UITestCase):
 
             # enable remove personal info security option
 
-            with self.ui_test.execute_dialog_through_command('.uno:OptionsTreeDialog', close_button="") as xDialog:
+            with self.ui_test.execute_dialog_through_command('.uno:OptionsTreeDialog') as xDialog:
                 xPages = xDialog.getChild('pages')
                 xGenEntry = xPages.getChild('0')
                 xSecurityPage = xGenEntry.getChild('6')
@@ -45,9 +45,6 @@ class tdf90401(UITestCase):
                     # FIXME: we can't use close_dialog_through_button here, the dialog doesn't emit the
                     # event DialogClosed after closing
                     xOkBtn.executeAction('CLICK', tuple())
-
-                xOKBtn = xDialog.getChild('ok')
-                self.ui_test.close_dialog_through_button(xOKBtn)
 
             # save and reload the document to remove personal info
 

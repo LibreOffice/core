@@ -35,13 +35,10 @@ class StylesSidebar(UITestCase):
             self.assertEqual('true', get_state_as_dict(xPages)['Selected'])
 
             xFileName = xDialog.getChild("fromfile")
-            xFileName.executeAction("CLICK", tuple())
 
-            xOpenDialog = self.xUITest.getTopFocusWindow()
-            xFileName = xOpenDialog.getChild("file_name")
-            xFileName.executeAction("TYPE", mkPropertyValues({"TEXT": get_url_for_data_file("customStyles.odt")}))
-            xOpenBtn = xOpenDialog.getChild("open")
-            xOpenBtn.executeAction("CLICK", tuple())
+            with self.ui_test.execute_dialog_through_action(xFileName, 'CLICK', close_button="open") as dialog:
+                xFileName = dialog.getChild("file_name")
+                xFileName.executeAction("TYPE", mkPropertyValues({"TEXT": get_url_for_data_file("customStyles.odt")}))
 
         xWriterDoc = self.xUITest.getTopFocusWindow()
         xWriterEdit = xWriterDoc.getChild("writer_edit")
