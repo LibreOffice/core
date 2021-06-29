@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "d22a06de_f4c7f461",
+        "filename": "basic/qa/cppunit/test_scanner.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-29T19:45:39Z",
+      "side": 1,
+      "message": "I\u0027m sorry, but \"C style code\" is not an answer to the question asking why do you include some specific standard header to a file. The header does not enable \"style\", nor does it \"indicates\" the style. It\u0027s purpose is *only* to introduce some names/definitions to the current scope, and you only include it when you need something in the header; otherwise, if you don\u0027t need things defined in the header, you do not make builds longer by including unused stuff, even if you use some style.",
+      "parentUuid": "adf5ea7f_fed5f681",
+      "revId": "c85ec983b74190793420d660eed8380eb96e0bf6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "eb80dc9b_9dc37c74",
         "filename": "chart2/source/tools/InternalDataProvider.cxx",
         "patchSetId": 7

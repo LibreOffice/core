@@ -86,6 +86,24 @@
       "revId": "de873f01d286d57829d8fb78d1f2748372552d37",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e68b53bb_279d2e87",
+        "filename": "sal/qa/rtl/math/test-rtl-math.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 455,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-29T19:45:39Z",
+      "side": 0,
+      "message": "We are not testing standard library, we are testing *our* function; and the idea of testing is just making sure that *possible future changes* to the implementation (e.g., someone decides to use non-standard highly-optimized self-written or third-party code) does not break the tested invariants.",
+      "parentUuid": "e3f2b788_33ceba26",
+      "revId": "de873f01d286d57829d8fb78d1f2748372552d37",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
