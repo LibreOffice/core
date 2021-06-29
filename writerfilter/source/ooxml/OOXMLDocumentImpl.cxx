@@ -25,6 +25,7 @@
 #include <com/sun/star/xml/dom/DocumentBuilder.hpp>
 #include <com/sun/star/graphic/GraphicMapper.hpp>
 #include <ooxml/resourceids.hxx>
+#include <oox/shape/ShapeFilterBase.hxx>
 #include "OOXMLStreamImpl.hxx"
 #include "OOXMLDocumentImpl.hxx"
 #include "OOXMLBinaryObjectReference.hxx"
@@ -877,6 +878,13 @@ uno::Sequence<uno::Reference<xml::dom::XDocument> > OOXMLDocumentImpl::getCustom
 uno::Sequence<beans::PropertyValue > OOXMLDocumentImpl::getEmbeddingsList( )
 {
     return mxEmbeddingsList;
+}
+
+const rtl::Reference<oox::shape::ShapeFilterBase>& OOXMLDocumentImpl::getShapeFilterBase()
+{
+    if (!mxShapeFilterBase)
+        mxShapeFilterBase = new oox::shape::ShapeFilterBase(mpStream->getContext());
+    return mxShapeFilterBase;
 }
 
 OOXMLDocument *

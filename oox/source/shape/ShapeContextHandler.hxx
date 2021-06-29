@@ -48,8 +48,7 @@ class ShapeContextHandler:
                                     css::lang::XServiceInfo >
 {
 public:
-    explicit ShapeContextHandler
-    (css::uno::Reference< css::uno::XComponentContext > const & context);
+    explicit ShapeContextHandler(const rtl::Reference<ShapeFilterBase>& xFilterBase);
 
     virtual ~ShapeContextHandler() override;
 
@@ -120,6 +119,9 @@ public:
     virtual void SAL_CALL setMediaDescriptor(const css::uno::Sequence<css::beans::PropertyValue>& rMediaDescriptor) override;
 
     void SAL_CALL setGraphicMapper(css::uno::Reference<css::graphic::XGraphicMapper> const & rGraphicMapper) override;
+
+    void setTheme(const oox::drawingml::ThemePtr& pTheme) { mpThemePtr = pTheme; }
+    const oox::drawingml::ThemePtr& getTheme() { return mpThemePtr; }
 
 private:
     ShapeContextHandler(ShapeContextHandler const &) = delete;
