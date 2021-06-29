@@ -1507,8 +1507,7 @@ namespace numfunc
             return SvxNumberFormat::LABEL_ALIGNMENT;
 
         SvxNumberFormat::SvxNumPositionAndSpaceMode ePosAndSpaceMode;
-        SvtSaveOptions aSaveOptions;
-        switch (aSaveOptions.GetODFSaneDefaultVersion())
+        switch (GetODFSaneDefaultVersion())
         {
             case SvtSaveOptions::ODFSVER_010:
             case SvtSaveOptions::ODFSVER_011:
