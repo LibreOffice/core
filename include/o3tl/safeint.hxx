@@ -13,6 +13,7 @@
 
 #include <algorithm>
 #include <cassert>
+#include <cmath>
 #include <limits>
 #include <type_traits>
 
@@ -244,6 +245,17 @@ template<typename T1, typename T2> constexpr T1 narrowing(T2 value) { return val
 template<typename T> [[nodiscard]] inline T sanitizing_min(T a, T b)
 {
     return std::min(a, b);
+}
+
+// https://www.securecoding.cert.org/confluence/display/c/FLP34-C.+Ensure+that+floating-point+conversions+are+within+range+of+the+new+type
+template<typename T> [[nodiscard]] inline T saturating_round(double fVal)
+{
+    fVal = std::round(fVal);
+    if (std::isgreater(fVal, std::numeric_limits<T>::max()))
+        return std::numeric_limits<T>::max();
+    else if (std::isless(fVal, std::numeric_limits<T>::min()))
+        return std::numeric_limits<T>::min();
+    return fVal;
 }
 
 }

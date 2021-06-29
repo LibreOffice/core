@@ -10,6 +10,7 @@
 
 #include <sal/config.h>
 #include <sal/types.h>
+#include <o3tl/safeint.hxx>
 #include <tools/long.hxx>
 #include <cassert>
 #include <type_traits>
@@ -72,7 +73,7 @@ inline sal_uInt32 AlignedWidth4Bytes(sal_uInt32 nWidthBits)
 
 inline tools::Long FRound( double fVal )
 {
-    return fVal > 0.0 ? static_cast<tools::Long>( fVal + 0.5 ) : -static_cast<tools::Long>( -fVal + 0.5 );
+    return o3tl::saturating_round<tools::Long>(fVal);
 }
 
 //valid range:  (-180,180]
