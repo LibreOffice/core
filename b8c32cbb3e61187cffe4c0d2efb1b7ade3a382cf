@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6a91bbc1_566e70a2",
+        "filename": "sd/qa/unit/uiimpress.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 735,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-06-29T17:16:38Z",
+      "side": 1,
+      "message": "Maybe a Python UI test would have been better to avoid of SD_DLLPUBLIC and checking only the less transparent presentation settings. But otherwise it works well.",
+      "range": {
+        "startLine": 721,
+        "startChar": 0,
+        "endLine": 735,
+        "endChar": 1
+      },
+      "revId": "b8c32cbb3e61187cffe4c0d2efb1b7ade3a382cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
