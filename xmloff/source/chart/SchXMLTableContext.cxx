@@ -27,7 +27,6 @@
 #include "transporttypes.hxx"
 #include <XMLStringBufferImportContext.hxx>
 #include <o3tl/safeint.hxx>
-#include <rtl/math.hxx>
 #include <sal/log.hxx>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltoken.hxx>
@@ -42,6 +41,7 @@
 
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 
+#include <limits>
 #include <vector>
 #include <algorithm>
 #include <iterator>
@@ -65,10 +65,8 @@ struct lcl_ApplyCellToData
     explicit lcl_ApplyCellToData( Sequence< double > & rOutData ) :
             m_rData( rOutData ),
             m_nIndex( 0 ),
-            m_nSize( rOutData.getLength()),
-            m_fNaN( 0.0 )
+            m_nSize( rOutData.getLength())
     {
-        ::rtl::math::setNan( &m_fNaN );
     }
 
     void operator() ( const SchXMLCell & rCell )
@@ -78,7 +76,7 @@ struct lcl_ApplyCellToData
             if( rCell.eType == SCH_CELL_TYPE_FLOAT )
                 m_rData[m_nIndex] = rCell.fValue;
             else
-                m_rData[m_nIndex] = m_fNaN;
+                m_rData[m_nIndex] = std::numeric_limits<double>::quiet_NaN();
         }
         ++m_nIndex;
     }
@@ -92,7 +90,6 @@ private:
     Sequence< double > & m_rData;
     sal_Int32 m_nIndex;
     sal_Int32 m_nSize;
-    double m_fNaN;
 };
 
 void lcl_fillRangeMapping(
@@ -741,10 +738,8 @@ void SchXMLTableHelper::applyTableToInternalDataProvider(
                 // values
                 Sequence< double >& rTargetRow = aDataInRows[nRow];
                 lcl_ApplyCellToData aApplyCellToData = ::std::for_each( rRow.begin() + nColOffset, rRow.end(), lcl_ApplyCellToData( rTargetRow ) );
-                double fNaN = 0.0;
-                ::rtl::math::setNan( &fNaN );
                 for( sal_Int32 nCurrentIndex = aApplyCellToData.getCurrentIndex(); nCurrentIndex<nNumColumns; nCurrentIndex++ )
-                    rTargetRow[nCurrentIndex] = fNaN;//#i110615#
+                    rTargetRow[nCurrentIndex] = std::numeric_limits<double>::quiet_NaN();//#i110615#
             }
         }
     }

@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <limits>
 #include <memory>
 #include <sal/config.h>
 
@@ -287,9 +288,6 @@ void PivotTableDataProvider::collectPivotTableData()
         return;
     const uno::Sequence<uno::Sequence<sheet::DataResult>> xDataResultsSequence = xDPResults->getResults();
 
-    double fNan;
-    rtl::math::setNan(&fNan);
-
     std::unordered_set<size_t> aValidRowIndex;
 
     size_t nRowIndex = 0;
@@ -304,7 +302,8 @@ void PivotTableDataProvider::collectPivotTableData()
                 continue;
             if (rDataResult.Flags == 0 || rDataResult.Flags & css::sheet::DataResultFlags::HASDATA)
             {
-                aRow.emplace_back(rDataResult.Flags ? rDataResult.Value : fNan, 0);
+                aRow.emplace_back(rDataResult.Flags ? rDataResult.Value
+                                                    : std::numeric_limits<double>::quiet_NaN(), 0);
                 if (rDataResult.Flags != 0) // set as valid only if we have data
                 {
                     bRowEmpty = false;

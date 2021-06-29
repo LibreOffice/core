@@ -27,6 +27,7 @@
 #include <drawingml/chart/typegroupconverter.hxx>
 
 #include <cstdio>
+#include <limits>
 
 #include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
@@ -104,7 +105,6 @@
 #include <set>
 #include <unordered_set>
 
-#include <rtl/math.hxx>
 #include <o3tl/temporary.hxx>
 #include <o3tl/sorted_vector.hxx>
 
@@ -416,8 +416,6 @@ static void lcl_fillCategoriesIntoStringVector(
 
 static ::std::vector< double > lcl_getAllValuesFromSequence( const Reference< chart2::data::XDataSequence > & xSeq )
 {
-    double fNan = 0.0;
-    ::rtl::math::setNan( &fNan );
     ::std::vector< double > aResult;
 
     Reference< chart2::data::XNumericalDataSequence > xNumSeq( xSeq, uno::UNO_QUERY );
@@ -429,7 +427,7 @@ static ::std::vector< double > lcl_getAllValuesFromSequence( const Reference< ch
     else if( xSeq.is())
     {
         Sequence< uno::Any > aAnies( xSeq->getData());
-        aResult.resize( aAnies.getLength(), fNan );
+        aResult.resize( aAnies.getLength(), std::numeric_limits<double>::quiet_NaN() );
         for( sal_Int32 i=0; i<aAnies.getLength(); ++i )
             aAnies[i] >>= aResult[i];
     }
