@@ -16,7 +16,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/test/GraphicsRenderTests.hxx>
 
-GraphicsTestsDialog::GraphicsTestsDialog(weld::Window* pParent)
+GraphicsTestsDialog::GraphicsTestsDialog(weld::Container* pParent)
     : GenericDialogController(pParent, "cui/ui/graphictestdlg.ui", "GraphicTestsDialog")
     , m_xResultLog(m_xBuilder->weld_text_view("gptest_txtVW"))
     , m_xDownloadResults(m_xBuilder->weld_button("gptest_downld"))
