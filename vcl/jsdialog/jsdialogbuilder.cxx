@@ -226,7 +226,13 @@ JSDialogNotifyIdle::generatePopupMessage(VclPtr<vcl::Window> pWindow, OUString s
     if (!pWindow->GetParentWithLOKNotifier())
         return aJsonWriter;
 
-    pWindow->DumpAsPropertyTree(*aJsonWriter);
+    {
+        auto aChildren = aJsonWriter->startArray("children");
+        {
+            auto aStruct = aJsonWriter->startStruct();
+            pWindow->DumpAsPropertyTree(*aJsonWriter);
+        }
+    }
 
     aJsonWriter->put("jsontype", "dialog");
     aJsonWriter->put("type", "modalpopup");
