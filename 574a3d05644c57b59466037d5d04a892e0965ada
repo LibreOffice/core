@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "17e170a6_177dd059",
+        "filename": "sal/rtl/math.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1003291
+      },
+      "writtenOn": "2021-06-29T19:40:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7db22249_d5ebe46a",
+      "range": {
+        "startLine": 49,
+        "startChar": 6,
+        "endLine": 49,
+        "endChar": 9
+      },
+      "revId": "574a3d05644c57b59466037d5d04a892e0965ada",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "591831f7_dadb85a8",
         "filename": "sal/rtl/math.cxx",
         "patchSetId": 3
@@ -39,6 +63,24 @@
       "revId": "574a3d05644c57b59466037d5d04a892e0965ada",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5f00c977_b79d3372",
+        "filename": "sal/rtl/math.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1003291
+      },
+      "writtenOn": "2021-06-29T19:40:35Z",
+      "side": 1,
+      "message": "You\u0027re right. Adopted the idea into the code.",
+      "parentUuid": "591831f7_dadb85a8",
+      "revId": "574a3d05644c57b59466037d5d04a892e0965ada",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
