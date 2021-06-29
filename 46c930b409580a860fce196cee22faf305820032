@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d4eb9520_f434fd0e",
+        "filename": "sfx2/source/dialog/StyleList.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-06-29T11:42:31Z",
+      "side": 1,
+      "message": "Could you please tell once again how to access this?",
+      "range": {
+        "startLine": 103,
+        "startChar": 32,
+        "endLine": 103,
+        "endChar": 48
+      },
+      "revId": "46c930b409580a860fce196cee22faf305820032",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "66c15b60_75c02379",
+        "filename": "sfx2/source/dialog/StyleList.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-06-29T11:42:31Z",
+      "side": 1,
+      "message": "Could you please tell how to pass StyleList here?",
+      "range": {
+        "startLine": 122,
+        "startChar": 47,
+        "endLine": 122,
+        "endChar": 88
+      },
+      "revId": "46c930b409580a860fce196cee22faf305820032",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2b2c7212_e1fb20fb",
+        "filename": "sfx2/source/dialog/StyleList.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-06-29T11:42:31Z",
+      "side": 1,
+      "message": "Here I need to pass eFam.. Please tell how to do this..",
+      "range": {
+        "startLine": 170,
+        "startChar": 4,
+        "endLine": 170,
+        "endChar": 17
+      },
+      "revId": "46c930b409580a860fce196cee22faf305820032",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6c62073f_f40308d1",
+        "filename": "sfx2/source/dialog/StyleList.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-06-29T11:42:31Z",
+      "side": 1,
+      "message": "Here again eFam is required.. Please tell how to pass it..",
+      "range": {
+        "startLine": 171,
+        "startChar": 4,
+        "endLine": 171,
+        "endChar": 37
+      },
+      "revId": "46c930b409580a860fce196cee22faf305820032",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5bbd90bb_bc4ee77c",
+        "filename": "sfx2/source/dialog/StyleList.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 478,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-06-29T11:42:31Z",
+      "side": 1,
+      "message": "Hii..\n\nPlease tell how to move this from Dialog because it requires Deletion watcher",
+      "range": {
+        "startLine": 478,
+        "startChar": 8,
+        "endLine": 478,
+        "endChar": 20
+      },
+      "revId": "46c930b409580a860fce196cee22faf305820032",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ca2ee31a_298ab37c",
+        "filename": "sfx2/source/dialog/StyleList.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 479,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-06-29T11:42:31Z",
+      "side": 1,
+      "message": "Please tell how to move this because it is present in the constructor of Dialog",
+      "range": {
+        "startLine": 479,
+        "startChar": 4,
+        "endLine": 479,
+        "endChar": 16
+      },
+      "revId": "46c930b409580a860fce196cee22faf305820032",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
