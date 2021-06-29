@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "29bf79c3_b606f341",
+        "filename": "basic/qa/cppunit/test_scanner.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-29T03:23:44Z",
+      "side": 1,
+      "message": "Why \u003ccmath\u003e? std::numeric_limits template class is definitely not C-style math, and is defined in \u003climits\u003e",
+      "revId": "c85ec983b74190793420d660eed8380eb96e0bf6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
