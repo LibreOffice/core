@@ -18,7 +18,7 @@
  */
 #pragma once
 
-#include <memory>
+#include <optional>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XTempFile.hpp>
@@ -29,6 +29,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <osl/mutex.hxx>
+#include <unotools/tempfile.hxx>
 
 namespace com::sun::star::uno { class XComponentContext; }
 
@@ -48,7 +49,7 @@ typedef ::cppu::WeakImplHelper< css::io::XTempFile
 class OTempFileService : public OTempFileBase
 {
 protected:
-    std::unique_ptr<utl::TempFile> mpTempFile;
+    std::optional<utl::TempFile> mpTempFile;
     ::osl::Mutex maMutex;
     SvStream* mpStream;
     bool mbRemoveFile;
