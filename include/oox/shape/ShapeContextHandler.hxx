@@ -50,8 +50,7 @@ class OOX_DLLPUBLIC ShapeContextHandler:
     public ::cppu::WeakImplHelper< css::xml::sax::XFastContextHandler >
 {
 public:
-    explicit ShapeContextHandler
-    (css::uno::Reference< css::uno::XComponentContext > const & context);
+    explicit ShapeContextHandler(const rtl::Reference<ShapeFilterBase>& xFilterBase);
 
     virtual ~ShapeContextHandler() override;
 
@@ -107,6 +106,9 @@ public:
     void setMediaDescriptor(const css::uno::Sequence<css::beans::PropertyValue>& rMediaDescriptor);
 
     void setGraphicMapper(css::uno::Reference<css::graphic::XGraphicMapper> const & rGraphicMapper);
+
+    void setTheme(const oox::drawingml::ThemePtr& pTheme) { mpThemePtr = pTheme; }
+    const oox::drawingml::ThemePtr& getTheme() { return mpThemePtr; }
 
 private:
     ShapeContextHandler(ShapeContextHandler const &) = delete;

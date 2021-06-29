@@ -23,6 +23,8 @@
 #include <com/sun/star/xml/dom/XDocument.hpp>
 #include <com/sun/star/graphic/XGraphicMapper.hpp>
 
+#include <oox/drawingml/drawingmltypes.hxx>
+
 #include "OOXMLPropertySet.hxx"
 
 #include <vector>
@@ -66,6 +68,10 @@ class OOXMLDocumentImpl : public OOXMLDocument
     css::uno::Sequence<css::beans::PropertyValue> maMediaDescriptor;
     /// Graphic mapper
     css::uno::Reference<css::graphic::XGraphicMapper> mxGraphicMapper;
+    // For a document there is a single theme in document.xml.rels
+    // and the same is used by header and footer as well.
+    oox::drawingml::ThemePtr mpTheme;
+    rtl::Reference<oox::shape::ShapeFilterBase> mxShapeFilterBase;
 
     bool mbCommentsExtendedResolved = false;
 
@@ -146,6 +152,12 @@ public:
     {
         return mxGraphicMapper;
     }
+
+    const oox::drawingml::ThemePtr & getTheme() const { return mpTheme; }
+    void setTheme(const oox::drawingml::ThemePtr& pTheme) { mpTheme = pTheme; }
+
+    const rtl::Reference<oox::shape::ShapeFilterBase> & getShapeFilterBase();
+
 };
 
 }
