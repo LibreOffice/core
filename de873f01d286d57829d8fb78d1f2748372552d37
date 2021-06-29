@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "e79bb892_b86aad36",
+        "filename": "chart2/source/tools/InternalDataProvider.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1496,
+      "author": {
+        "id": 1003291
+      },
+      "writtenOn": "2021-06-29T19:23:19Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "2fe5e7a3_87690791",
+      "revId": "de873f01d286d57829d8fb78d1f2748372552d37",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b421a5b0_ce92fad8",
         "filename": "chart2/source/tools/RelativePositionHelper.cxx",
         "patchSetId": 7
@@ -47,6 +65,24 @@
       "writtenOn": "2021-06-29T04:26:02Z",
       "side": 0,
       "message": "Shouldn\u0027t we somehow keep the tests (maybe make them build without the internal-only define)?",
+      "revId": "de873f01d286d57829d8fb78d1f2748372552d37",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e3f2b788_33ceba26",
+        "filename": "sal/qa/rtl/math/test-rtl-math.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 455,
+      "author": {
+        "id": 1003291
+      },
+      "writtenOn": "2021-06-29T19:23:19Z",
+      "side": 0,
+      "message": "Actual implementation is a wrapper arround C definition.\nThere is no point testing C standar library.",
+      "parentUuid": "a81d27eb_96d0f44a",
       "revId": "de873f01d286d57829d8fb78d1f2748372552d37",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
