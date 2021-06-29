@@ -30,11 +30,9 @@ namespace chart
 {
 
 LogarithmicRegressionCurveCalculator::LogarithmicRegressionCurveCalculator() :
-        m_fSlope( 0.0 ),
-        m_fIntercept( 0.0 )
+        m_fSlope( std::numeric_limits<double>::quiet_NaN() ),
+        m_fIntercept( std::numeric_limits<double>::quiet_NaN() )
 {
-    ::rtl::math::setNan( & m_fSlope );
-    ::rtl::math::setNan( & m_fIntercept );
 }
 
 LogarithmicRegressionCurveCalculator::~LogarithmicRegressionCurveCalculator()
@@ -53,9 +51,9 @@ void SAL_CALL LogarithmicRegressionCurveCalculator::recalculateRegression(
     const size_t nMax = aValues.first.size();
     if( nMax <= 1 )  // at least 2 points
     {
-        ::rtl::math::setNan( & m_fSlope );
-        ::rtl::math::setNan( & m_fIntercept );
-        ::rtl::math::setNan( & m_fCorrelationCoefficient );
+        m_fSlope = std::numeric_limits<double>::quiet_NaN();
+        m_fIntercept = std::numeric_limits<double>::quiet_NaN();
+        m_fCorrelationCoefficient = std::numeric_limits<double>::quiet_NaN();
         return;
     }
 
@@ -89,16 +87,13 @@ void SAL_CALL LogarithmicRegressionCurveCalculator::recalculateRegression(
 
 double SAL_CALL LogarithmicRegressionCurveCalculator::getCurveValue( double x )
 {
-    double fResult;
-    ::rtl::math::setNan( & fResult );
-
     if( ! ( std::isnan( m_fSlope ) ||
             std::isnan( m_fIntercept )))
     {
-        fResult = m_fSlope * log( x ) + m_fIntercept;
+        return m_fSlope * log( x ) + m_fIntercept;
     }
 
-    return fResult;
+    return std::numeric_limits<double>::quiet_NaN();
 }
 
 uno::Sequence< geometry::RealPoint2D > SAL_CALL LogarithmicRegressionCurveCalculator::getCurveValues(

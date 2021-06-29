@@ -17,12 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <limits>
+#include <cmath>
+
 #include <StatisticsHelper.hxx>
 #include <DataSeriesHelper.hxx>
 #include <ErrorBar.hxx>
 #include <unonames.hxx>
 
-#include <rtl/math.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/chart2/XDataSeries.hpp>
@@ -60,16 +62,11 @@ double lcl_getVariance( const Sequence< double > & rData, sal_Int32 & rOutValidC
         }
     }
 
-    double fResult;
     if( rOutValidCount == 0 )
-        ::rtl::math::setNan( & fResult );
-    else
-    {
-        const double fN = static_cast< double >( rOutValidCount );
-        fResult = (fQuadSum - fSum*fSum/fN) / fN;
-    }
+        return std::numeric_limits<double>::quiet_NaN();
 
-    return fResult;
+    const double fN = static_cast< double >( rOutValidCount );
+    return (fQuadSum - fSum*fSum/fN) / fN;
 }
 
 Reference< chart2::data::XLabeledDataSequence > lcl_getErrorBarLabeledSequence(
@@ -183,20 +180,11 @@ double StatisticsHelper::getStandardError( const Sequence< double > & rData )
 {
     sal_Int32 nValCount;
     double fVar = lcl_getVariance( rData, nValCount );
-    double fResult;
 
-    if( nValCount == 0 ||
-        std::isnan( fVar ))
-    {
-        ::rtl::math::setNan( & fResult );
-    }
-    else
-    {
-        // standard-deviation / sqrt(n)
-        fResult = sqrt( fVar ) / sqrt( double(nValCount) );
-    }
-
-    return fResult;
+    if( nValCount == 0 || std::isnan( fVar ))
+        return std::numeric_limits<double>::quiet_NaN();
+    // standard-deviation / sqrt(n)
+    return sqrt( fVar ) / sqrt( double(nValCount) );
 }
 
 Reference< chart2::data::XLabeledDataSequence > StatisticsHelper::getErrorLabeledDataSequenceFromDataSource(
@@ -238,8 +226,7 @@ double StatisticsHelper::getErrorFromDataSource(
     bool bPositiveValue,
     bool bYError /* = true */ )
 {
-    double fResult = 0.0;
-    ::rtl::math::setNan( & fResult );
+    double fResult = std::numeric_limits<double>::quiet_NaN();
 
     Reference< chart2::data::XDataSequence > xValues(
         StatisticsHelper::getErrorDataSequenceFromDataSource( xDataSource, bPositiveValue, bYError ));

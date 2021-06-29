@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <limits>
 #include <memory>
 #include <VDataSeries.hxx>
 #include <ObjectIdentifier.hxx>
@@ -67,12 +68,7 @@ double VDataSequence::getValue( sal_Int32 index ) const
 {
     if( 0<=index && index<Doubles.getLength() )
         return Doubles[index];
-    else
-    {
-        double fNan;
-        ::rtl::math::setNan( & fNan );
-        return fNan;
-    }
+    return std::numeric_limits<double>::quiet_NaN();
 }
 
 sal_Int32 VDataSequence::detectNumberFormatKey( sal_Int32 index ) const
@@ -152,8 +148,8 @@ VDataSeries::VDataSeries( const uno::Reference< XDataSeries >& xDataSeries )
 
     , m_pValueSequenceForDataLabelNumberFormatDetection(&m_aValues_Y)
 
-    , m_fXMeanValue(1.0)
-    , m_fYMeanValue(1.0)
+    , m_fXMeanValue(std::numeric_limits<double>::quiet_NaN())
+    , m_fYMeanValue(std::numeric_limits<double>::quiet_NaN())
 
     , m_aAttributedDataPointIndexList()
 
@@ -171,9 +167,6 @@ VDataSeries::VDataSeries( const uno::Reference< XDataSeries >& xDataSeries )
     , mpOldSeries(nullptr)
     , mnPercent(0.0)
 {
-    ::rtl::math::setNan( & m_fXMeanValue );
-    ::rtl::math::setNan( & m_fYMeanValue );
-
     uno::Reference<data::XDataSource> xDataSource( xDataSeries, uno::UNO_QUERY );
 
     uno::Sequence< uno::Reference<
@@ -272,14 +265,14 @@ void VDataSeries::doSortByXValues()
 
     //prepare a vector for sorting
     std::vector< std::vector< double > > aTmp;//outer vector are points, inner vector are the different values of the point
-    double fNan;
-    ::rtl::math::setNan( & fNan );
     sal_Int32 nPointIndex = 0;
     for( nPointIndex=0; nPointIndex < m_nPointCount; nPointIndex++ )
     {
         aTmp.push_back(
-                        { ((nPointIndex < m_aValues_X.Doubles.getLength()) ? m_aValues_X.Doubles[nPointIndex] : fNan),
-                          ((nPointIndex < m_aValues_Y.Doubles.getLength()) ? m_aValues_Y.Doubles[nPointIndex] : fNan)
+                        { ((nPointIndex < m_aValues_X.Doubles.getLength()) ? m_aValues_X.Doubles[nPointIndex]
+                                                                           : std::numeric_limits<double>::quiet_NaN()),
+                          ((nPointIndex < m_aValues_Y.Doubles.getLength()) ? m_aValues_Y.Doubles[nPointIndex]
+                                                                           : std::numeric_limits<double>::quiet_NaN())
                         }
                       );
     }
@@ -435,7 +428,7 @@ void VDataSeries::setAttachedAxisIndex( sal_Int32 nAttachedAxisIndex )
 
 double VDataSeries::getXValue( sal_Int32 index ) const
 {
-    double fRet = 0.0;
+    double fRet = std::numeric_limits<double>::quiet_NaN();
     if(m_aValues_X.is())
     {
         if( 0<=index && index<m_aValues_X.getLength() )
@@ -447,16 +440,12 @@ double VDataSeries::getXValue( sal_Int32 index ) const
                 fRet = nOldVal + (fRet - nOldVal) * mnPercent;
             }
         }
-        else
-            ::rtl::math::setNan( &fRet );
     }
     else
     {
         // #i70133# always return correct X position - needed for short data series
         if( 0<=index /*&& index < m_nPointCount*/ )
             fRet = index+1;//first category (index 0) matches with real number 1.0
-        else
-            ::rtl::math::setNan( &fRet );
     }
     lcl_maybeReplaceNanWithZero( fRet, getMissingValueTreatment() );
     return fRet;
@@ -464,7 +453,7 @@ double VDataSeries::getXValue( sal_Int32 index ) const
 
 double VDataSeries::getYValue( sal_Int32 index ) const
 {
-    double fRet = 0.0;
+    double fRet = std::numeric_limits<double>::quiet_NaN();
     if(m_aValues_Y.is())
     {
         if( 0<=index && index<m_aValues_Y.getLength() )
@@ -476,16 +465,12 @@ double VDataSeries::getYValue( sal_Int32 index ) const
                 fRet = nOldVal + (fRet - nOldVal) * mnPercent;
             }
         }
-        else
-            ::rtl::math::setNan( &fRet );
     }
     else
     {
         // #i70133# always return correct X position - needed for short data series
         if( 0<=index /*&& index < m_nPointCount*/ )
             fRet = index+1;//first category (index 0) matches with real number 1.0
-        else
-            ::rtl::math::setNan( &fRet );
     }
     lcl_maybeReplaceNanWithZero( fRet, getMissingValueTreatment() );
     return fRet;
@@ -493,8 +478,8 @@ double VDataSeries::getYValue( sal_Int32 index ) const
 
 void VDataSeries::getMinMaxXValue(double& fMin, double& fMax) const
 {
-    rtl::math::setNan( &fMax );
-    rtl::math::setNan( &fMin );
+    fMax = std::numeric_limits<double>::quiet_NaN();
+    fMin = std::numeric_limits<double>::quiet_NaN();
 
     uno::Sequence< double > aValuesX = getAllX();
 
@@ -701,7 +686,7 @@ double VDataSeries::getMinimumofAllDifferentYValues( sal_Int32 index ) const
     }
 
     if( std::isinf(fMin) )
-        ::rtl::math::setNan(&fMin);
+        return std::numeric_limits<double>::quiet_NaN();
 
     return fMin;
 }
@@ -737,7 +722,7 @@ double VDataSeries::getMaximumofAllDifferentYValues( sal_Int32 index ) const
     }
 
     if( std::isinf(fMax) )
-        ::rtl::math::setNan(&fMax);
+        return std::numeric_limits<double>::quiet_NaN();
 
     return fMax;
 }
@@ -1112,11 +1097,7 @@ double VDataSeries::getValueByProperty( sal_Int32 nIndex, const OUString& rPropN
 {
     auto const itr = m_PropertyMap.find(rPropName);
     if (itr == m_PropertyMap.end())
-    {
-        double fNan;
-        ::rtl::math::setNan( &fNan );
-        return fNan;
-    }
+        return std::numeric_limits<double>::quiet_NaN();
 
     const VDataSequence* pData = &itr->second;
     double fValue = pData->getValue(nIndex);

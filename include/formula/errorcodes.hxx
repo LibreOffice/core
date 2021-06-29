@@ -24,6 +24,8 @@
 #include <sal/mathconf.h>
 #include <sal/types.h>
 
+#include <limits>
+
 // Store as 16-bits, since error values are stored in tokens and formula results,
 // and that can matter
 enum class FormulaError : sal_uInt16
@@ -96,7 +98,7 @@ enum class FormulaError : sal_uInt16
 inline double CreateDoubleError( FormulaError nErr )
 {
     sal_math_Double smVal;
-    ::rtl::math::setNan( &smVal.value );
+    smVal.value = std::numeric_limits<double>::quiet_NaN();
     smVal.nan_parts.fraction_lo = static_cast<unsigned>(nErr);
     return smVal.value;
 }
