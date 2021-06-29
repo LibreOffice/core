@@ -437,6 +437,8 @@ ScGridWindow::~ScGridWindow()
 
 void ScGridWindow::dispose()
 {
+    maShowPageBreaksTimer.Stop();
+
     ImpDestroyOverlayObjects();
 
     mpFilterBox.reset();
