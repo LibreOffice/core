@@ -175,6 +175,16 @@ class UITest(object):
         self.close_dialog_through_button(xCancelBtn)
         return True
 
+    # Calls UITest.close_doc at exit
+    @contextmanager
+    def create_doc_in_start_center_guarded(self, app):
+        self.create_doc_in_start_center(app)
+        component = self.get_component()
+        try:
+            yield component
+        finally:
+            self.close_doc()
+
     def create_doc_in_start_center(self, app):
         xStartCenter = self._xUITest.getTopFocusWindow()
         try:
