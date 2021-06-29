@@ -33,7 +33,7 @@ OTempFileService::OTempFileService(css::uno::Reference< css::uno::XComponentCont
 , mbInClosed( false )
 , mbOutClosed( false )
 {
-    mpTempFile.reset(new utl::TempFile());
+    mpTempFile.emplace();
     mpTempFile->EnableKillingFile();
 }
 
