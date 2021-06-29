@@ -45,15 +45,9 @@ using namespace core;
 using namespace drawingml;
 
 ShapeContextHandler::ShapeContextHandler(uno::Reference< uno::XComponentContext > const & context) :
-  mnStartToken(0)
+  mnStartToken(0),
+  mxShapeFilterBase( new ShapeFilterBase(context) )
 {
-    try
-    {
-        mxShapeFilterBase.set( new ShapeFilterBase(context) );
-    }
-    catch( uno::Exception& )
-    {
-    }
 }
 
 ShapeContextHandler::~ShapeContextHandler()
