@@ -519,7 +519,7 @@ public:
         res = rtl::math::log1p(x);
         CPPUNIT_ASSERT_EQUAL(-0.0,res);
         CPPUNIT_ASSERT(std::signbit(res));
-        rtl::math::setInf( &x, false);
+        x = std::numeric_limits<double>::infinity();
         res = rtl::math::log1p(x);
         CPPUNIT_ASSERT_EQUAL(true, std::isinf(res) && !std::signbit(res));
         x = -1.0;
@@ -528,10 +528,10 @@ public:
         x = -1.1;
         res = rtl::math::log1p(x);
         CPPUNIT_ASSERT(std::isnan(res));
-        rtl::math::setInf( &x, true);
+        x = -std::numeric_limits<double>::infinity();
         res = rtl::math::log1p(x);
         CPPUNIT_ASSERT(std::isnan(res));
-        rtl::math::setNan( &x);
+        x = std::numeric_limits<double>::quiet_NaN();
         res = rtl::math::log1p(x);
         CPPUNIT_ASSERT(std::isnan(res));
     }

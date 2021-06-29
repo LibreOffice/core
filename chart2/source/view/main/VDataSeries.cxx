@@ -34,7 +34,6 @@
 #include <com/sun/star/chart2/XRegressionCurveCalculator.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
 
-#include <rtl/math.hxx>
 #include <osl/diagnose.h>
 #include <tools/color.hxx>
 #include <tools/diagnose_ex.h>
@@ -657,8 +656,7 @@ bool VDataSeries::isLabelCustomPos(sal_Int32 nPointIndex) const
 
 double VDataSeries::getMinimumofAllDifferentYValues( sal_Int32 index ) const
 {
-    double fMin=0.0;
-    ::rtl::math::setInf(&fMin, false);
+    double fMin = std::numeric_limits<double>::infinity();
 
     if( !m_aValues_Y.is() &&
         (m_aValues_Y_Min.is() || m_aValues_Y_Max.is()
@@ -693,8 +691,7 @@ double VDataSeries::getMinimumofAllDifferentYValues( sal_Int32 index ) const
 
 double VDataSeries::getMaximumofAllDifferentYValues( sal_Int32 index ) const
 {
-    double fMax=0.0;
-    ::rtl::math::setInf(&fMax, true);
+    double fMax = -std::numeric_limits<double>::infinity();
 
     if( !m_aValues_Y.is() &&
         (m_aValues_Y_Min.is() || m_aValues_Y_Max.is()
