@@ -34,6 +34,24 @@
       "revId": "fa219f41d8d65f9e71e5a7eb85fa5357fb816e71",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9ef19190_e299e403",
+        "filename": "sw/source/core/inc/DocumentContentOperationsManager.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2021-06-29T05:09:34Z",
+      "side": 1,
+      "message": "There are still two newlines between the last \"}\" and the bottom modeline. Please leave only one newline.",
+      "parentUuid": "3df7d55b_8a0a5841",
+      "revId": "fa219f41d8d65f9e71e5a7eb85fa5357fb816e71",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
