@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "aea9ca2c_3a579279",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2623,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-06-29T10:34:58Z",
+      "side": 1,
+      "message": "Do we really need this? (Maybe yes, I don\u0027t know. Likely this is a compatibility feature with incomplete ODT support.)",
+      "range": {
+        "startLine": 2623,
+        "startChar": 12,
+        "endLine": 2623,
+        "endChar": 125
+      },
+      "revId": "7128b9671436a65d61fedf629fe0f44cd2bb7404",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "74cc2313_c884e2e3",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2639,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-06-29T10:34:58Z",
+      "side": 1,
+      "message": "lcl_fillEmptyFrameProperties() does the same, so I suggest to use that, with some clean-up (e.g. move the local function to a helper class, optional anchor setting)",
+      "range": {
+        "startLine": 2625,
+        "startChar": 0,
+        "endLine": 2639,
+        "endChar": 131
+      },
+      "revId": "7128b9671436a65d61fedf629fe0f44cd2bb7404",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "21a2bf7d_fb0fee18",
+        "filename": "writerfilter/source/dmapper/PropertyMap.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1116,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-06-29T10:34:58Z",
+      "side": 1,
+      "message": "margin",
+      "range": {
+        "startLine": 1116,
+        "startChar": 33,
+        "endLine": 1116,
+        "endChar": 38
+      },
+      "revId": "7128b9671436a65d61fedf629fe0f44cd2bb7404",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7d6ec9e5_809f6053",
+        "filename": "writerfilter/source/dmapper/PropertyMap.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1119,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-06-29T10:34:58Z",
+      "side": 1,
+      "message": "moving",
+      "range": {
+        "startLine": 1119,
+        "startChar": 10,
+        "endLine": 1119,
+        "endChar": 17
+      },
+      "revId": "7128b9671436a65d61fedf629fe0f44cd2bb7404",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
