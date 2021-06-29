@@ -33,6 +33,23 @@
       "revId": "de873f01d286d57829d8fb78d1f2748372552d37",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a81d27eb_96d0f44a",
+        "filename": "sal/qa/rtl/math/test-rtl-math.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 455,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-29T04:26:02Z",
+      "side": 0,
+      "message": "Shouldn\u0027t we somehow keep the tests (maybe make them build without the internal-only define)?",
+      "revId": "de873f01d286d57829d8fb78d1f2748372552d37",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }

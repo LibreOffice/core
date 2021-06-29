@@ -50,6 +50,97 @@
       "revId": "c85ec983b74190793420d660eed8380eb96e0bf6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ffaed867_b43638a3",
+        "filename": "drawinglayer/source/processor2d/vclmetafileprocessor2d.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 446,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-29T04:26:02Z",
+      "side": 1,
+      "message": "Please don\u0027t use magic numbers like this. In this case, I\u0027d just use\n\n  std::sin(M_PI/12)\n\nand wait for P1383R0 and C++20\u0027s std::numbers::pi.",
+      "range": {
+        "startLine": 446,
+        "startChar": 35,
+        "endLine": 446,
+        "endChar": 58
+      },
+      "revId": "c85ec983b74190793420d660eed8380eb96e0bf6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "baf504b9_217282cb",
+        "filename": "include/formula/errorcodes.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-29T04:26:02Z",
+      "side": 1,
+      "message": "This header was moved below \u003csal/types.h\u003e, which both is unrelated change, and also breaks sorted order. It\u0027s OK to group stl headers grouped separately (and have them sorted separately),... so please move the \u003crtl/math.hxx\u003e up, and add a newline before \u003ccmath\u003e (or \u003climits\u003e rather?)",
+      "revId": "c85ec983b74190793420d660eed8380eb96e0bf6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e6128e46_28b5f79f",
+        "filename": "include/rtl/math.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 450,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-29T04:26:02Z",
+      "side": 1,
+      "message": "Please don\u0027t move this block. If needed, introduce multiple #ifndef ... #endif blocks, so that the lines of code keep their git history as much as possible.",
+      "revId": "c85ec983b74190793420d660eed8380eb96e0bf6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "549848a8_cb6b95d1",
+        "filename": "include/rtl/math.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 473,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-29T04:26:02Z",
+      "side": 1,
+      "message": "I\u0027d suggest just define an inline function returning NaN, and make it conditional depending on the define; then use it in all the trigonometric functions here uniformly? That would not require to re-define them all.",
+      "revId": "c85ec983b74190793420d660eed8380eb96e0bf6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "da13f2d8_4506074f",
+        "filename": "include/rtl/math.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 518,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-29T04:26:02Z",
+      "side": 1,
+      "message": "I\u0027m not sure that this and following should be re-defined.",
+      "revId": "c85ec983b74190793420d660eed8380eb96e0bf6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
