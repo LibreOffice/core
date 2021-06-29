@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "48c5d8c6_520ef134",
+        "filename": "basic/qa/cppunit/test_scanner.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1003291
+      },
+      "writtenOn": "2021-06-29T20:55:20Z",
+      "side": 1,
+      "message": "Sorry. In the purge rtl::math::setinf changed it by math.h and used definition INFINITY.\nAbout why it is there: an error.\nMisunderstood the question: thought you where asking me to make the code C style instead of C++.",
+      "parentUuid": "d22a06de_f4c7f461",
+      "revId": "c85ec983b74190793420d660eed8380eb96e0bf6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "eb80dc9b_9dc37c74",
         "filename": "chart2/source/tools/InternalDataProvider.cxx",
         "patchSetId": 7
@@ -206,6 +224,24 @@
     },
     {
       "key": {
+        "uuid": "c6a138a2_22a778c7",
+        "filename": "include/rtl/math.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 439,
+      "author": {
+        "id": 1003291
+      },
+      "writtenOn": "2021-06-29T20:55:20Z",
+      "side": 1,
+      "message": "Then gonna let this header untouched.",
+      "parentUuid": "b9adcd81_fb994ce2",
+      "revId": "c85ec983b74190793420d660eed8380eb96e0bf6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e6128e46_28b5f79f",
         "filename": "include/rtl/math.h",
         "patchSetId": 7
@@ -220,6 +256,24 @@
       "revId": "c85ec983b74190793420d660eed8380eb96e0bf6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7a3bfc9e_fdae9ac9",
+        "filename": "include/rtl/math.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 450,
+      "author": {
+        "id": 1003291
+      },
+      "writtenOn": "2021-06-29T20:55:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e6128e46_28b5f79f",
+      "revId": "c85ec983b74190793420d660eed8380eb96e0bf6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -258,6 +312,24 @@
     },
     {
       "key": {
+        "uuid": "fedbbb0e_e91cac68",
+        "filename": "include/rtl/math.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 473,
+      "author": {
+        "id": 1003291
+      },
+      "writtenOn": "2021-06-29T20:55:20Z",
+      "side": 1,
+      "message": "Rearanged. Is it better now?",
+      "parentUuid": "e0314b20_f9205965",
+      "revId": "c85ec983b74190793420d660eed8380eb96e0bf6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "da13f2d8_4506074f",
         "filename": "include/rtl/math.hxx",
         "patchSetId": 7
@@ -272,6 +344,24 @@
       "revId": "c85ec983b74190793420d660eed8380eb96e0bf6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2f2e1866_29a59f42",
+        "filename": "include/rtl/math.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 518,
+      "author": {
+        "id": 1003291
+      },
+      "writtenOn": "2021-06-29T20:55:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da13f2d8_4506074f",
+      "revId": "c85ec983b74190793420d660eed8380eb96e0bf6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }

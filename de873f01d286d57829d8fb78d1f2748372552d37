@@ -54,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "61528606_3e477059",
+        "filename": "chart2/source/tools/RelativePositionHelper.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1003291
+      },
+      "writtenOn": "2021-06-29T20:55:20Z",
+      "side": 0,
+      "message": "chart2/source/tools/RelativePositionHelper.cxx\nFunction name: RelativePositionHelper::getCenterOfAnchoredObject\nFrom here: suppose it\u0027s related to the orientation of the chart \u003c\u003c 2^64\n\nchart2/source/view/main/LabelPositionHelper.cxx\nLabelPositionHelper::LabelPositionHelper\nSuppose: setup label position.\nThere won\u0027t be angles grater than 360º.\n\nchart2/source/view/main/PlottingPositionHelper.cxx\nPolarPlottingPositionHelper::transformUnitCircleToScene\nSuppose: maybe disc chart orientation?\nInternal angle should be safe.\n\nchart2/source/view/main/ShapeFactory.cxx\nShapeFactory::getSizeAfterRotation\nSuppose: rotate shape\nInternal angle should be safe.\n\ndrawinglayer/source/processor2d/vclmetafileprocessor2d.cxx\nConstant 100% safe\n\nsc/source/core/data/documen4.cxx\nbool ScDocument::Solver\nSuppose: the tangent is being used as numerical derivative (Regula falsi algorithm)\nSo no impossible angles\n\nscaddins/source/analysis/bessel.cxx\nFiltered it out as bad imput\n\nchart2/source/tools/ThreeDHelper.cxx\nGonna remove it for now.",
+      "parentUuid": "b421a5b0_ce92fad8",
+      "revId": "de873f01d286d57829d8fb78d1f2748372552d37",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a81d27eb_96d0f44a",
         "filename": "sal/qa/rtl/math/test-rtl-math.cxx",
         "patchSetId": 7
