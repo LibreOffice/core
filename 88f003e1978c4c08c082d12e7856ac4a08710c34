@@ -16,6 +16,24 @@
       "revId": "88f003e1978c4c08c082d12e7856ac4a08710c34",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a9e8c87f_cbecf7d8",
+        "filename": "filter/source/msfilter/rtfutil.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-06-29T09:47:18Z",
+      "side": 1,
+      "message": "The context is that the above mentioned [MS-OLEDS] spec says that these bytes are reserved, at the same time Word writes the OLE class name there. We do the same.\n\nBut sure, I could remove rReserved1 and just add a one-liner comment saying this is the \"Reserved1\" field in the spec with the same effect. Would that be better?",
+      "parentUuid": "2d888da2_df8bd14c",
+      "revId": "88f003e1978c4c08c082d12e7856ac4a08710c34",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
