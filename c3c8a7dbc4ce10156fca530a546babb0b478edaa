@@ -16,6 +16,24 @@
       "revId": "c3c8a7dbc4ce10156fca530a546babb0b478edaa",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cff04d09_18715ff2",
+        "filename": "unotools/source/ucbhelper/xtempfile.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-06-29T08:18:25Z",
+      "side": 1,
+      "message": "because it sometimes wants to deallocate the object early, e.g. in OTempFileService::closeInput",
+      "parentUuid": "7b174e9c_3d571711",
+      "revId": "c3c8a7dbc4ce10156fca530a546babb0b478edaa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
