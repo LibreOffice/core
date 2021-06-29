@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "01a71085_d8ab8b51",
+        "filename": "reportdesign/source/core/api/ReportDefinition.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-06-29T10:47:59Z",
+      "side": 1,
+      "message": "Do we really need this? Module reportdesign is for the data base component Base.",
+      "revId": "19fa853ce12136b5c14e0c5a0aa906c296b75388",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
