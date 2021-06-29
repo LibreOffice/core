@@ -109,7 +109,12 @@ bool CGM::ImplGetEllipse( FloatPoint& rCenter, FloatPoint& rRadius, double& rAng
 
 static bool useless(double value)
 {
-    return std::isnan(value) || std::isinf(value);
+    if (!std::isfinite(value))
+        return true;
+    int exp;
+    std::frexp(value, &exp);
+    const int maxbits = sizeof(tools::Long) * 8;
+    return exp > maxbits;
 }
 
 void CGM::ImplDoClass4()
