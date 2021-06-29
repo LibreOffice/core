@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a7ba73cd_0db0002e",
+        "filename": "vcl/source/uitest/uno/uiobject_uno.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-06-29T09:40:26Z",
+      "side": 1,
+      "message": "why is this needed?",
+      "range": {
+        "startLine": 67,
+        "startChar": 32,
+        "endLine": 67,
+        "endChar": 45
+      },
+      "revId": "181b309751f3765fd63395b784cb65cb616839ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
