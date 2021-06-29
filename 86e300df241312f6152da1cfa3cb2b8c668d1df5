@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a6e57c68_b672c410",
+        "filename": "sc/source/ui/view/gridwin.cxx",
+        "patchSetId": 18
+      },
+      "lineNbr": 430,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-06-29T12:08:38Z",
+      "side": 1,
+      "message": "Who will stop this timer when the ScGridWindow is deleted, together with the underlying document? \u0027make check\u0027 now sometimes fails for me with this soffice.bin backtrace, as part of UITest_calc_tests:\n\n#0  0x00007fdd1c752558 in std::__uniq_ptr_impl\u003cSfxObjectShell_Impl, std::default_delete\u003cSfxObjectShell_Impl\u003e \u003e::_M_ptr() const (this\u003d0x9999999999999a31) at /usr/include/c++/7/bits/unique_ptr.h:147\n#1  0x00007fdd1c751660 in std::unique_ptr\u003cSfxObjectShell_Impl, std::default_delete\u003cSfxObjectShell_Impl\u003e \u003e::get() const (this\u003d0x9999999999999a31) at /usr/include/c++/7/bits/unique_ptr.h:332\n#2  0x00007fdd1cb982c6 in std::unique_ptr\u003cSfxObjectShell_Impl, std::default_delete\u003cSfxObjectShell_Impl\u003e \u003e::operator-\u003e() const (this\u003d0x9999999999999a31) at /usr/include/c++/7/bits/unique_ptr.h:326\n#3  0x00007fdd1cb9c066 in SfxObjectShell::IsModified() const (this\u003d0x9999999999999999) at /home/vmiklos/git/libreoffice/master/sfx2/source/doc/objmisc.cxx:255\n#4  0x00007fdd00bbd9a3 in ScGridWindow::InitiatePageBreaksTimer(Timer*) (this\u003d0x2027820, pTimer\u003d0x2027b00) at /home/vmiklos/git/libreoffice/master/sc/source/ui/view/gridwin4.cxx:2357\n#5  0x00007fdd00bbd8db in ScGridWindow::DataChanged(DataChangedEvent const\u0026) (this\u003d0xdf3cea6f69295b00, rDCEvt\u003d...) at /home/vmiklos/git/libreoffice/master/sc/source/ui/view/gridwin4.cxx:2344\n#6  0x00007fdd17e4988b in Link\u003cTimer*, void\u003e::Call(Timer*) const (this\u003d0x2027b20, data\u003d0x2027b00) at /home/vmiklos/git/libreoffice/master/include/tools/link.hxx:111\n#7  0x00007fdd17e49713 in Timer::Invoke() (this\u003d0x2027b00) at /home/vmiklos/git/libreoffice/master/vcl/source/app/timer.cxx:75\n#8  0x00007fdd17dfc4a6 in Scheduler::CallbackTaskScheduling() () at /home/vmiklos/git/libreoffice/master/vcl/source/app/scheduler.cxx:471\n#9  0x00007fdd180f1b71 in SalTimer::CallCallback() (this\u003d0x18ed640) at /home/vmiklos/git/libreoffice/master/vcl/inc/saltimer.hxx:54\n#10 0x00007fdd180f02cb in SvpSalInstance::CheckTimeout(bool) (this\u003d0x9d58e0, bExecuteTimers\u003dtrue) at /home/vmiklos/git/libreoffice/master/vcl/headless/svpinst.cxx:210\n#11 0x00007fdd180f10bc in SvpSalInstance::DoYield(bool, bool) (this\u003d0x9d58e0, bWait\u003dtrue, bHandleAllCurrentEvents\u003dfalse) at /home/vmiklos/git/libreoffice/master/vcl/headless/svpinst.cxx:467\n#12 0x00007fdd17e29188 in ImplYield(bool, bool) (i_bWait\u003dtrue, i_bAllEvents\u003dfalse) at /home/vmiklos/git/libreoffice/master/vcl/source/app/svapp.cxx:465\n#13 0x00007fdd17e2993f in Application::Yield() () at /home/vmiklos/git/libreoffice/master/vcl/source/app/svapp.cxx:532\n#14 0x00007fdd17e28e9b in Application::Execute() () at /home/vmiklos/git/libreoffice/master/vcl/source/app/svapp.cxx:444\n#15 0x00007fdd21601384 in desktop::Desktop::Main() (this\u003d0x7fff44737960) at /home/vmiklos/git/libreoffice/master/desktop/source/app/app.cxx:1602\n#16 0x00007fdd17e45ac9 in ImplSVMain() () at /home/vmiklos/git/libreoffice/master/vcl/source/app/svmain.cxx:199\n#17 0x00007fdd17e45bee in SVMain() () at /home/vmiklos/git/libreoffice/master/vcl/source/app/svmain.cxx:231\n#18 0x00007fdd21662c53 in soffice_main() () at /home/vmiklos/git/libreoffice/master/desktop/source/app/sofficemain.cxx:98\n#19 0x00000000004008af in sal_main () at /home/vmiklos/git/libreoffice/master/desktop/source/app/main.c:49\n#20 0x0000000000400895 in main (argc\u003d7, argv\u003d0x7fff44737cc8) at /home/vmiklos/git/libreoffice/master/desktop/source/app/main.c:47\n\nThis doesn\u0027t happen all the time, but I saw it twice. Sounds like a use-after-free, the timer is not stopped but the underlying SfxObjectShell is deleted.",
+      "revId": "86e300df241312f6152da1cfa3cb2b8c668d1df5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
