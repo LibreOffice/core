@@ -50,6 +50,7 @@
 #include <comphelper/SetFlagContextHelper.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <cppuhelper/weak.hxx>
 #include <jvmaccess/classpath.hxx>
 #include <jvmaccess/unovirtualmachine.hxx>
 #include <jvmaccess/virtualmachine.hxx>
@@ -1477,7 +1478,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 stoc_JavaVM_get_implementation(
     css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
 {
-    return static_cast<cppu::OWeakObject*>(new JavaVirtualMachine(context));
+    return cppu::acquire(new JavaVirtualMachine(context));
 }
 
 
