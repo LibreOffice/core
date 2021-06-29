@@ -687,7 +687,7 @@ void ListsManager::lcl_attribute( Id nName, Value& rVal )
 
                 // DOCX level-text contains levels definition in format "%1.%2.%3"
                 // we need to convert it to LO internal representation: "%1%.%2%.%3%"
-                std::regex aTokenRegex("(%\\d)");
+                static const std::regex aTokenRegex("(%\\d)");
                 sLevelText = std::regex_replace(sLevelText, aTokenRegex, "$1%");
                 pCurrentLvl->SetBulletChar( OUString::fromUtf8(sLevelText) );
             }
