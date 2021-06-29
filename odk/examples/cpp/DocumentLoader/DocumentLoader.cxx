@@ -34,9 +34,7 @@
  *************************************************************************/
 
 // Simple client application using the UnoUrlResolver service.
-#include <stdio.h>
-#include <wchar.h>
-
+#include <iostream>
 #include <sal/main.h>
 #include <cppuhelper/bootstrap.hxx>
 
@@ -51,8 +49,7 @@
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
 
-#include <string.h>
-
+using namespace std;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
@@ -60,9 +57,7 @@ using namespace com::sun::star::bridge;
 using namespace com::sun::star::frame;
 using namespace com::sun::star::registry;
 
-using ::rtl::OUString;
-using ::rtl::OUStringToOString;
-
+using namespace rtl;
 
 SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 {
@@ -72,8 +67,14 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 
     if (nCount < 1)
     {
-        printf("using: DocumentLoader -env:URE_MORE_TYPES=<office_types_rdb_url> <file_url> [<uno_connection_url>]\n\n"
-               "example: DocumentLoader -env:URE_MORE_TYPES=\"file:///.../program/offapi.rdb\" \"file:///e:/temp/test.odt\" \"uno:socket,host=localhost,port=2083;urp;StarOffice.ServiceManager\"\n");
+        cout << "using: DocumentLoader -env:URE_MORE_TYPES=<office_types_rdb_url> <file_url> "
+                "[<uno_connection_url>]"
+             << endl
+             << endl
+             << "example: DocumentLoader -env:URE_MORE_TYPES=\"file:///.../program/offapi.rdb\" "
+                "\"file:///e:/temp/test.odt\" "
+                "\"uno:socket,host=localhost,port=2083;urp;StarOffice.ServiceManager\""
+             << endl;
         exit(1);
     }
      if (nCount == 2)
@@ -108,9 +109,8 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     }
     catch ( Exception& e )
     {
-        printf("Error: cannot establish a connection using '%s':\n       %s\n",
-               OUStringToOString(sConnectionString, RTL_TEXTENCODING_ASCII_US).getStr(),
-               OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US).getStr());
+        cout << "Error: cannot establish a connection using "
+             << sConnectionString << endl << e.Message << endl;
         exit(1);
     }
 
