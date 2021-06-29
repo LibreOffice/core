@@ -52,7 +52,7 @@ class GraphicsTestsDialog : public weld::GenericDialogController
     DECL_LINK(HandleResultViewRequest, weld::Button&, void);
 
 public:
-    GraphicsTestsDialog(weld::Window* pParent);
+    GraphicsTestsDialog(weld::Container* pParent);
     ~GraphicsTestsDialog();
     virtual short run() override;
 };

@@ -37,7 +37,6 @@
 #include <cuitbxform.hxx>
 #include <dlgname.hxx>
 #include <DiagramDialog.hxx>
-#include <GraphicsTestsDialog.hxx>
 #include <hangulhanjadlg.hxx>
 #include <hyphen.hxx>
 #include <insdlg.hxx>
@@ -951,8 +950,6 @@ public:
     CreateAdditionsDialog(weld::Window* pParent, const OUString& sAdditionsTag) override;
 
     virtual VclPtr<VclAbstractDialog> CreateAboutDialog(weld::Window* pParent) override;
-
-    virtual VclPtr<VclAbstractDialog> CreateGraphicTestsDialog(weld::Window* pParent) override;
 
     virtual VclPtr<VclAbstractDialog> CreateTipOfTheDayDialog(weld::Window* pParent) override;
 

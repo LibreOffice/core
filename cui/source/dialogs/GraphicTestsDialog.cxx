@@ -47,7 +47,7 @@ IMPL_LINK(GraphicTestEntry, HandleResultViewRequest, weld::Button&, rButton, voi
     m_ImgVwDialog.run();
 }
 
-GraphicsTestsDialog::GraphicsTestsDialog(weld::Window* pParent)
+GraphicsTestsDialog::GraphicsTestsDialog(weld::Container* pParent)
     : GenericDialogController(pParent, "cui/ui/graphictestdlg.ui", "GraphicTestsDialog")
     , m_xResultLog(m_xBuilder->weld_text_view("gptest_txtVW"))
     , m_xDownloadResults(m_xBuilder->weld_button("gptest_downld"))
@@ -81,7 +81,7 @@ short GraphicsTestsDialog::run()
 
 IMPL_LINK_NOARG(GraphicsTestsDialog, HandleDownloadRequest, weld::Button&, void)
 {
-    osl::File::remove(m_xZipFileUrl); // Remove previous exports
+    osl::File::remove(m_xZipFileUrl); // Remove the previous export
     try
     {
         utl::ZipPackageHelper aZipHelper(comphelper::getProcessComponentContext(), m_xZipFileUrl);
