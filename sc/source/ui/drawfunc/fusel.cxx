@@ -222,7 +222,8 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                 }
 
                 // open hyperlink, if found at object or in object's text
-                if ( !sURL.isEmpty() && ScGlobal::ShouldOpenURL() )
+                // Fragments pointing into the current document should be always opened.
+                if ( !sURL.isEmpty() && (ScGlobal::ShouldOpenURL() || sURL.startsWith("#")) )
                 {
                     ScGlobal::OpenURL( sURL, sTarget );
                     rViewShell.FakeButtonUp( rViewShell.GetViewData().GetActivePart() );
