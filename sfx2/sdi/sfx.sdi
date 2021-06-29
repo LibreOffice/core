@@ -134,23 +134,6 @@ SfxVoidItem About SID_ABOUT
     GroupId = SfxGroupId::Application;
 ]
 
-SfxVoidItem GraphicTestDialog SID_GRAPHICTEST_DIALOG
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    ToolBoxConfig = TRUE,
-    GroupId = SfxGroupId::Application;
-]
-
 SfxVoidItem Activate SID_ACTIVATE
 ()
 [

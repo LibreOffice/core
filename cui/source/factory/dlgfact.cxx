@@ -64,7 +64,6 @@
 #include <SignatureLineDialog.hxx>
 #include <SignSignatureLineDialog.hxx>
 #include <QrCodeGenDialog.hxx>
-#include <GraphicsTestsDialog.hxx>
 #include <SpellDialog.hxx>
 #include <cfg.hxx>
 #include <numpages.hxx>
@@ -1693,13 +1692,6 @@ AbstractDialogFactory_Impl::CreateAboutDialog(weld::Window* pParent)
 {
     return VclPtr<CuiAbstractController_Impl>::Create(
         std::make_unique<AboutDialog>(pParent));
-}
-
-VclPtr<VclAbstractDialog>
-AbstractDialogFactory_Impl::CreateGraphicTestsDialog(weld::Window* pParent)
-{
-    return VclPtr<CuiAbstractController_Impl>::Create(
-        std::make_unique<GraphicsTestsDialog>(pParent));
 }
 
 VclPtr<VclAbstractDialog>
