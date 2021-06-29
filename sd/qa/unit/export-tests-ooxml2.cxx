@@ -12,6 +12,7 @@
 #include <comphelper/sequence.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/editobj.hxx>
+#include <editeng/flditem.hxx>
 #include <editeng/outlobj.hxx>
 #include <editeng/numitem.hxx>
 #include <editeng/unoprnms.hxx>
@@ -787,26 +788,33 @@ void matchNumberFormat( int nPage, uno::Reference< text::XTextField > const & xF
     xPropSet->getPropertyValue("NumberFormat") >>= nNumFmt;
     switch( nPage )
     {
-        case 0:     // 13/02/96
-                    CPPUNIT_ASSERT_EQUAL_MESSAGE("Number formats of Date fields don't match", sal_Int32(2), nNumFmt);
+        case 0:     // 13/02/96 (StdSmall)
+                    CPPUNIT_ASSERT_EQUAL_MESSAGE("Number formats of Date fields don't match", sal_Int32(SvxDateFormat::StdSmall), nNumFmt);
                     break;
         case 1:     // 13/02/1996
-                    CPPUNIT_ASSERT_EQUAL_MESSAGE("Number formats of Date fields don't match", sal_Int32(5), nNumFmt);
+                    CPPUNIT_ASSERT_EQUAL_MESSAGE("Number formats of Date fields don't match", sal_Int32(SvxDateFormat::B), nNumFmt);
                     break;
-        case 2:     // 13 February 1996
-                    CPPUNIT_ASSERT_EQUAL_MESSAGE("Number formats of Date fields don't match", sal_Int32(3), nNumFmt);
+        case 2:     // Tuesday, June 29, 2021 (StdBig)
+                    CPPUNIT_ASSERT_EQUAL_MESSAGE("Number formats of Date fields don't match", sal_Int32(SvxDateFormat::StdBig), nNumFmt);
                     break;
-        case 3:     // 13:49:38
-                    CPPUNIT_ASSERT_EQUAL_MESSAGE("Number formats of Time fields don't match", sal_Int32(2), nNumFmt);
+        case 3:     // 13:49:38 (Standard)
+                    CPPUNIT_ASSERT_EQUAL_MESSAGE("Number formats of Time fields don't match", sal_Int32(SvxTimeFormat::Standard), nNumFmt);
                     break;
         case 4:     // 13:49
-                    CPPUNIT_ASSERT_EQUAL_MESSAGE("Number formats of Time fields don't match", sal_Int32(3), nNumFmt);
+                    CPPUNIT_ASSERT_EQUAL_MESSAGE("Number formats of Time fields don't match", sal_Int32(SvxTimeFormat::HH24_MM), nNumFmt);
                     break;
         case 5:     // 01:49 PM
-                    CPPUNIT_ASSERT_EQUAL_MESSAGE("Number formats of Time fields don't match", sal_Int32(6), nNumFmt);
+                    CPPUNIT_ASSERT_EQUAL_MESSAGE("Number formats of Time fields don't match", sal_Int32(SvxTimeFormat::HH12_MM), nNumFmt);
                     break;
         case 6:     // 01:49:38 PM
-                    CPPUNIT_ASSERT_EQUAL_MESSAGE("Number formats of Time fields don't match", sal_Int32(7), nNumFmt);
+                    CPPUNIT_ASSERT_EQUAL_MESSAGE("Number formats of Time fields don't match", sal_Int32(SvxTimeFormat::HH12_MM_SS), nNumFmt);
+                    break;
+        case 7:     // June 29, 2021
+                    CPPUNIT_ASSERT_EQUAL_MESSAGE("Number formats of Date fields don't match", sal_Int32(SvxDateFormat::D), nNumFmt);
+                    break;
+        case 8:     // Jun 29, 2021
+                    CPPUNIT_ASSERT_EQUAL_MESSAGE("Number formats of Date fields don't match", sal_Int32(SvxDateFormat::C), nNumFmt);
+                    break;
     }
 }
 
@@ -818,7 +826,7 @@ void SdOOXMLExportTest2::testDatetimeFieldNumberFormat()
 
     xDocShRef = saveAndReload( xDocShRef.get(), PPTX );
 
-    for(sal_uInt16 i = 0; i <= 6; ++i)
+    for(sal_uInt16 i = 0; i <= 8; ++i)
     {
         matchNumberFormat( i, getTextFieldFromPage(0, 0, 0, i, xDocShRef) );
     }
@@ -832,7 +840,7 @@ void SdOOXMLExportTest2::testDatetimeFieldNumberFormatPPTX()
 
     xDocShRef = saveAndReload( xDocShRef.get(), PPTX );
 
-    for(sal_uInt16 i = 0; i <= 6; ++i)
+    for(sal_uInt16 i = 0; i <= 8; ++i)
     {
         matchNumberFormat( i, getTextFieldFromPage(0, 0, 0, i, xDocShRef) );
     }
