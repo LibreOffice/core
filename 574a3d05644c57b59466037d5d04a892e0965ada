@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7db22249_d5ebe46a",
+        "filename": "sal/rtl/math.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-29T15:37:23Z",
+      "side": 1,
+      "message": "My personal stylistic preference - for the consistency - would be both here and below to use 1e0 instead of 1.0 😊",
+      "range": {
+        "startLine": 49,
+        "startChar": 6,
+        "endLine": 49,
+        "endChar": 9
+      },
+      "revId": "574a3d05644c57b59466037d5d04a892e0965ada",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "591831f7_dadb85a8",
+        "filename": "sal/rtl/math.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-29T15:37:23Z",
+      "side": 1,
+      "message": "Do you think that it could be further simplified by making the n10s a plain 1-d array of 33 elements from 1e-16 to 1e16, and here first do a check to eliminate it all - if (nExp \u003c -n10Max || nExp \u003e n10Max) return pow(...); else return n10s[nExp + n10Max]; - n10Max being 16?",
+      "revId": "574a3d05644c57b59466037d5d04a892e0965ada",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
