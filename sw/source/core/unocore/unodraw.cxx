@@ -1016,23 +1016,26 @@ uno::Sequence< sal_Int8 > SwXShape::getImplementationId(  )
 uno::Reference< beans::XPropertySetInfo >  SwXShape::getPropertySetInfo()
 {
     SolarMutexGuard aGuard;
-    uno::Reference< beans::XPropertySetInfo >  aRet;
-    if(m_xShapeAgg.is())
+    if (!mxPropertySetInfo)
     {
-        const uno::Type& rPropSetType = cppu::UnoType<beans::XPropertySet>::get();
-        uno::Any aPSet = m_xShapeAgg->queryAggregation( rPropSetType );
-        if(auto xPrSet = o3tl::tryAccess<uno::Reference<beans::XPropertySet>>(
-               aPSet))
+        uno::Reference< beans::XPropertySetInfo >  aRet;
+        if(m_xShapeAgg.is())
         {
-            uno::Reference< beans::XPropertySetInfo >  xInfo = (*xPrSet)->getPropertySetInfo();
-            // Expand PropertySetInfo!
-            const uno::Sequence<beans::Property> aPropSeq = xInfo->getProperties();
-            aRet = new SfxExtItemPropertySetInfo( m_pPropertyMapEntries, aPropSeq );
+            const uno::Type& rPropSetType = cppu::UnoType<beans::XPropertySet>::get();
+            uno::Any aPSet = m_xShapeAgg->queryAggregation( rPropSetType );
+            if(auto xPrSet = o3tl::tryAccess<uno::Reference<beans::XPropertySet>>(
+                   aPSet))
+            {
+                uno::Reference< beans::XPropertySetInfo >  xInfo = (*xPrSet)->getPropertySetInfo();
+                // Expand PropertySetInfo!
+                const uno::Sequence<beans::Property> aPropSeq = xInfo->getProperties();
+                mxPropertySetInfo = new SfxExtItemPropertySetInfo( m_pPropertyMapEntries, aPropSeq );
+            }
         }
+        if(!mxPropertySetInfo)
+            mxPropertySetInfo = m_pPropSet->getPropertySetInfo();
     }
-    if(!aRet.is())
-        aRet = m_pPropSet->getPropertySetInfo();
-    return aRet;
+    return mxPropertySetInfo;
 }
 
 void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& aValue)
