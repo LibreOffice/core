@@ -37,6 +37,7 @@
 #include <oox/drawingml/themefragmenthandler.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <memory>
+#include <sal/log.hxx>
 
 using namespace ::com::sun::star;
 
@@ -44,9 +45,9 @@ namespace oox::shape {
 using namespace core;
 using namespace drawingml;
 
-ShapeContextHandler::ShapeContextHandler(uno::Reference< uno::XComponentContext > const & context) :
+ShapeContextHandler::ShapeContextHandler(const rtl::Reference<ShapeFilterBase>& xFilterBase) :
   mnStartToken(0),
-  mxShapeFilterBase( new ShapeFilterBase(context) )
+  mxShapeFilterBase(xFilterBase)
 {
 }
 
@@ -257,14 +258,13 @@ void SAL_CALL ShapeContextHandler::startFastElement
 {
     mxShapeFilterBase->filter(maMediaDescriptor);
 
-    mpThemePtr = std::make_shared<Theme>();
-
     if (Element == DGM_TOKEN(relIds) || Element == LC_TOKEN(lockedCanvas) || Element == C_TOKEN(chart) ||
         Element == WPS_TOKEN(wsp) || Element == WPG_TOKEN(wgp) || Element == OOX_TOKEN(dmlPicture, pic))
     {
         // Parse the theme relation, if available; the diagram won't have colors without it.
-        if (!msRelationFragmentPath.isEmpty())
+        if (!mpThemePtr && !msRelationFragmentPath.isEmpty())
         {
+            mpThemePtr = std::make_shared<Theme>();
             // Get Target for Type = "officeDocument" from _rels/.rels file
             // aOfficeDocumentFragmentPath is pointing to "word/document.xml" for docx & to "ppt/presentation.xml" for pptx
             FragmentHandlerRef rFragmentHandlerRef(new ShapeFragmentHandler(*mxShapeFilterBase, "/"));
