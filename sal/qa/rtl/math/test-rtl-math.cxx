@@ -452,6 +452,8 @@ public:
         CPPUNIT_ASSERT_EQUAL( 1.0, rtl::math::approxSub( 617673396283947.0, 617673396283946.0));
     }
 
+#ifndef LIBO_INTERNAL_ONLY
+
     void test_erf() {
         double x, res;
         x =  0.0;
@@ -509,6 +511,8 @@ public:
         res = rtl::math::expm1(x);
         CPPUNIT_ASSERT(std::isnan(res));
     }
+
+#endif
 
     void test_log1p() {
         double x, res;
@@ -609,9 +613,11 @@ public:
     CPPUNIT_TEST(test_stringToDouble_exponent_without_digit);
     CPPUNIT_TEST(test_round);
     CPPUNIT_TEST(test_doubleToString);
+#ifndef LIBO_INTERNAL_ONLY
     CPPUNIT_TEST(test_erf);
     CPPUNIT_TEST(test_erfc);
     CPPUNIT_TEST(test_expm1);
+#endif
     CPPUNIT_TEST(test_log1p);
     CPPUNIT_TEST(test_approx);
     CPPUNIT_TEST(test_acosh);
