@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "fdb0d9b4_fbc63e19",
+        "filename": "sfx2/source/dialog/StyleList.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-29T12:14:58Z",
+      "side": 1,
+      "message": "First of all, add \u0027SfxObjectShell* pCurObjShell;\u0027 to StyleList, and add GetObjectShell member function to it returning the value of pCurObjShell, and SetObjectShell setting its value.\n\nThen find the place in the dialog where the value of dialog\u0027s pCurObjShell is set, and add there a call to StyleList::SetObjectShell(), so that StyleList also has the correct shell.",
+      "parentUuid": "d4eb9520_f434fd0e",
+      "range": {
+        "startLine": 103,
+        "startChar": 32,
+        "endLine": 103,
+        "endChar": 48
+      },
+      "revId": "46c930b409580a860fce196cee22faf305820032",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "66c15b60_75c02379",
         "filename": "sfx2/source/dialog/StyleList.cxx",
         "patchSetId": 12
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "51db0cfb_a130bbe3",
+        "filename": "sfx2/source/dialog/StyleList.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-29T12:14:58Z",
+      "side": 1,
+      "message": "\u0027this\u0027 is the StyleList here, so when you pass \u0027this\u0027 to the event, it is already there.",
+      "parentUuid": "66c15b60_75c02379",
+      "range": {
+        "startLine": 122,
+        "startChar": 47,
+        "endLine": 122,
+        "endChar": 88
+      },
+      "revId": "46c930b409580a860fce196cee22faf305820032",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2b2c7212_e1fb20fb",
         "filename": "sfx2/source/dialog/StyleList.cxx",
         "patchSetId": 12
@@ -59,6 +107,30 @@
       "writtenOn": "2021-06-29T11:42:31Z",
       "side": 1,
       "message": "Here I need to pass eFam.. Please tell how to do this..",
+      "range": {
+        "startLine": 170,
+        "startChar": 4,
+        "endLine": 170,
+        "endChar": 17
+      },
+      "revId": "46c930b409580a860fce196cee22faf305820032",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "888f6cc3_39027116",
+        "filename": "sfx2/source/dialog/StyleList.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-29T12:14:58Z",
+      "side": 1,
+      "message": "In AcceptDrop I see a call to GetActualFamily() - doesn\u0027t that work?",
+      "parentUuid": "2b2c7212_e1fb20fb",
       "range": {
         "startLine": 170,
         "startChar": 4,
@@ -117,6 +189,30 @@
     },
     {
       "key": {
+        "uuid": "2fff7620_334d0bca",
+        "filename": "sfx2/source/dialog/StyleList.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 478,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-29T12:14:58Z",
+      "side": 1,
+      "message": "Please elaborate on this: what did you try, and what problem do you face. Because I don\u0027t understand reading this what you mean by \"because it requires Deletion watcher\" - what is \"it\"? Dialog? Method? where the watcher is used, and how does it appear here, where I don\u0027t see watchers?",
+      "parentUuid": "5bbd90bb_bc4ee77c",
+      "range": {
+        "startLine": 478,
+        "startChar": 8,
+        "endLine": 478,
+        "endChar": 20
+      },
+      "revId": "46c930b409580a860fce196cee22faf305820032",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ca2ee31a_298ab37c",
         "filename": "sfx2/source/dialog/StyleList.cxx",
         "patchSetId": 12
@@ -128,6 +224,30 @@
       "writtenOn": "2021-06-29T11:42:31Z",
       "side": 1,
       "message": "Please tell how to move this because it is present in the constructor of Dialog",
+      "range": {
+        "startLine": 479,
+        "startChar": 4,
+        "endLine": 479,
+        "endChar": 16
+      },
+      "revId": "46c930b409580a860fce196cee22faf305820032",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "68e3a2c8_93094690",
+        "filename": "sfx2/source/dialog/StyleList.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 479,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-29T12:14:58Z",
+      "side": 1,
+      "message": "This is a toolbar. So we have several options here:\n\n1. Pass reference to the toolbar to the StyleList\u0027s methods that need to operate on toolbar;\n2. Pass the toolbar reference to the StyleList\u0027s constructor, so that it\u0027s always available (but not own the toolbar);\n3. Do not operate the toolbar from StyleList methods, but instead let related StyleList functions return some value, and the caller (dialog) would check the return value and do something with the toolbar.\n\nBut in this case - why do you want to operate the toolbar from the StyleList? Let the dialog itself do that in the dialog\u0027s EnableItem. This operation does not depend on what StyleList does.",
+      "parentUuid": "ca2ee31a_298ab37c",
       "range": {
         "startLine": 479,
         "startChar": 4,
