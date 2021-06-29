@@ -292,7 +292,9 @@ void ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
                                         pObj = pHit;
                             }
                             ScMacroInfo* pInfo = ScDrawLayer::GetMacroInfo( pObj );
-                            if ( pInfo && (pInfo->GetHlink().getLength() > 0) )
+                            // Fragments pointing into the current document need no tooltip
+                            // describing the ctrl-click functionality.
+                            if ( pInfo && (pInfo->GetHlink().getLength() > 0) && !pInfo->GetHlink().startsWith("#") )
                             {
                                 aPixRect = LogicToPixel(aVEvt.pObj->GetLogicRect());
                                 aHelpText = SfxHelp::GetURLHelpText(pInfo->GetHlink());
