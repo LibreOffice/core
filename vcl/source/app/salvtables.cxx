@@ -219,7 +219,8 @@ void SalInstanceWidget::ensure_mouse_listener()
 {
     if (!m_bMouseEventListener)
     {
-        Application::AddEventListener(LINK(this, SalInstanceWidget, MouseEventListener));
+        m_xWidget->AddEventListener(LINK(this, SalInstanceWidget, MouseEventListener));
+        m_xWidget->AddChildEventListener(LINK(this, SalInstanceWidget, MouseEventListener));
         m_bMouseEventListener = true;
     }
 }
@@ -517,7 +518,10 @@ SalInstanceWidget::~SalInstanceWidget()
     if (m_aMnemonicActivateHdl.IsSet())
         m_xWidget->SetMnemonicActivateHdl(Link<vcl::Window&, bool>());
     if (m_bMouseEventListener)
-        Application::RemoveEventListener(LINK(this, SalInstanceWidget, MouseEventListener));
+    {
+        m_xWidget->RemoveChildEventListener(LINK(this, SalInstanceWidget, MouseEventListener));
+        m_xWidget->RemoveEventListener(LINK(this, SalInstanceWidget, MouseEventListener));
+    }
     if (m_bKeyEventListener)
         Application::RemoveKeyListener(LINK(this, SalInstanceWidget, KeyEventListener));
     if (m_bEventListener)
@@ -611,11 +615,10 @@ MouseEvent TransformEvent(const MouseEvent& rEvent, const vcl::Window* pParent,
 }
 }
 
-void SalInstanceWidget::HandleMouseEventListener(VclSimpleEvent& rEvent)
+void SalInstanceWidget::HandleMouseEventListener(VclWindowEvent& rWinEvent)
 {
-    if (rEvent.GetId() == VclEventId::WindowMouseButtonDown)
+    if (rWinEvent.GetId() == VclEventId::WindowMouseButtonDown)
     {
-        auto& rWinEvent = static_cast<VclWindowEvent&>(rEvent);
         if (m_xWidget == rWinEvent.GetWindow())
         {
             const MouseEvent* pMouseEvent = static_cast<const MouseEvent*>(rWinEvent.GetData());
@@ -629,9 +632,8 @@ void SalInstanceWidget::HandleMouseEventListener(VclSimpleEvent& rEvent)
             m_aMousePressHdl.Call(aTransformedEvent);
         }
     }
-    else if (rEvent.GetId() == VclEventId::WindowMouseButtonUp)
+    else if (rWinEvent.GetId() == VclEventId::WindowMouseButtonUp)
     {
-        auto& rWinEvent = static_cast<VclWindowEvent&>(rEvent);
         if (m_xWidget == rWinEvent.GetWindow())
         {
             const MouseEvent* pMouseEvent = static_cast<const MouseEvent*>(rWinEvent.GetData());
@@ -645,9 +647,8 @@ void SalInstanceWidget::HandleMouseEventListener(VclSimpleEvent& rEvent)
             m_aMouseReleaseHdl.Call(aTransformedEvent);
         }
     }
-    else if (rEvent.GetId() == VclEventId::WindowMouseMove)
+    else if (rWinEvent.GetId() == VclEventId::WindowMouseMove)
     {
-        auto& rWinEvent = static_cast<VclWindowEvent&>(rEvent);
         if (m_xWidget == rWinEvent.GetWindow())
         {
             const MouseEvent* pMouseEvent = static_cast<const MouseEvent*>(rWinEvent.GetData());
@@ -691,7 +692,7 @@ IMPL_LINK(SalInstanceWidget, KeyEventListener, VclWindowEvent&, rEvent, bool)
     return HandleKeyEventListener(rEvent);
 }
 
-IMPL_LINK(SalInstanceWidget, MouseEventListener, VclSimpleEvent&, rEvent, void)
+IMPL_LINK(SalInstanceWidget, MouseEventListener, VclWindowEvent&, rEvent, void)
 {
     HandleMouseEventListener(rEvent);
 }
@@ -5913,7 +5914,7 @@ void SalInstanceDrawingArea::HandleEventListener(VclWindowEvent& rEvent)
     SalInstanceWidget::HandleEventListener(rEvent);
 }
 
-void SalInstanceDrawingArea::HandleMouseEventListener(VclSimpleEvent& rEvent)
+void SalInstanceDrawingArea::HandleMouseEventListener(VclWindowEvent& rEvent)
 {
     if (rEvent.GetId() == VclEventId::WindowMouseButtonDown
         || rEvent.GetId() == VclEventId::WindowMouseButtonUp
