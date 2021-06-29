@@ -851,8 +851,7 @@ double lcl_getErrorBarLogicLength(
                                              ? OUString("PositiveError")
                                              : OUString("NegativeError") ) >>= fPercent )
                 {
-                    double fMaxValue;
-                    ::rtl::math::setInf(&fMaxValue, true);
+                    double fMaxValue = -std::numeric_limits<double>::infinity();
                     for(double d : rData)
                     {
                         if(fMaxValue < d)
@@ -1706,9 +1705,8 @@ double VSeriesPlotter::getMinimumYInRange( double fMinimumX, double fMaximumX, s
         return fMinY;
     }
 
-    double fMinimum, fMaximum;
-    ::rtl::math::setInf(&fMinimum, false);
-    ::rtl::math::setInf(&fMaximum, true);
+    double fMinimum = std::numeric_limits<double>::infinity();
+    double fMaximum = -std::numeric_limits<double>::infinity();
     for(std::vector<VDataSeriesGroup> & rXSlots : m_aZSlots)
     {
         for(VDataSeriesGroup & rXSlot : rXSlots)
@@ -1739,9 +1737,8 @@ double VSeriesPlotter::getMaximumYInRange( double fMinimumX, double fMaximumX, s
         return fMaxY;
     }
 
-    double fMinimum, fMaximum;
-    ::rtl::math::setInf(&fMinimum, false);
-    ::rtl::math::setInf(&fMaximum, true);
+    double fMinimum = std::numeric_limits<double>::infinity();
+    double fMaximum = -std::numeric_limits<double>::infinity();
     for( std::vector< VDataSeriesGroup > & rXSlots : m_aZSlots)
     {
         for(VDataSeriesGroup & rXSlot : rXSlots)
@@ -1817,8 +1814,8 @@ bool VSeriesPlotter::isSeparateStackingForDifferentSigns( sal_Int32 nDimensionIn
 
 void VSeriesPlotter::getMinimumAndMaximumX( double& rfMinimum, double& rfMaximum ) const
 {
-    ::rtl::math::setInf(&rfMinimum, false);
-    ::rtl::math::setInf(&rfMaximum, true);
+    rfMinimum = std::numeric_limits<double>::infinity();
+    rfMaximum = -std::numeric_limits<double>::infinity();
 
     for (auto const& ZSlot : m_aZSlots)
     {
@@ -1840,8 +1837,8 @@ void VSeriesPlotter::getMinimumAndMaximumX( double& rfMinimum, double& rfMaximum
 
 void VSeriesPlotter::getMinimumAndMaximumYInContinuousXRange( double& rfMinY, double& rfMaxY, double fMinX, double fMaxX, sal_Int32 nAxisIndex ) const
 {
-    ::rtl::math::setInf(&rfMinY, false);
-    ::rtl::math::setInf(&rfMaxY, true);
+    rfMinY = std::numeric_limits<double>::infinity();
+    rfMaxY = -std::numeric_limits<double>::infinity();
 
     for (auto const& ZSlot : m_aZSlots)
     {
@@ -1926,8 +1923,8 @@ sal_Int32 VDataSeriesGroup::getAttachedAxisIndexForFirstSeries() const
 void VDataSeriesGroup::getMinimumAndMaximumX( double& rfMinimum, double& rfMaximum ) const
 {
 
-    ::rtl::math::setInf(&rfMinimum, false);
-    ::rtl::math::setInf(&rfMaximum, true);
+    rfMinimum = std::numeric_limits<double>::infinity();
+    rfMaximum = -std::numeric_limits<double>::infinity();
 
     for (std::unique_ptr<VDataSeries> const & pSeries : m_aSeriesVector)
     {
@@ -2131,8 +2128,8 @@ void VDataSeriesGroup::calculateYMinAndMaxForCategory( sal_Int32 nCategoryIndex
     assert(nCategoryIndex >= 0);
     assert(nCategoryIndex < getPointCount());
 
-    ::rtl::math::setInf(&rfMinimumY, false);
-    ::rtl::math::setInf(&rfMaximumY, true);
+    rfMinimumY = std::numeric_limits<double>::infinity();
+    rfMaximumY = -std::numeric_limits<double>::infinity();
 
     if(m_aSeriesVector.empty())
         return;
@@ -2218,8 +2215,8 @@ void VDataSeriesGroup::calculateYMinAndMaxForCategoryRange(
         , double& rfMinimumY, double& rfMaximumY, sal_Int32 nAxisIndex )
 {
     //@todo maybe cache these values
-    ::rtl::math::setInf(&rfMinimumY, false);
-    ::rtl::math::setInf(&rfMaximumY, true);
+    rfMinimumY = std::numeric_limits<double>::infinity();
+    rfMaximumY = -std::numeric_limits<double>::infinity();
 
     //iterate through the given categories
     if(nStartCategoryIndex<0)

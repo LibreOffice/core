@@ -34,8 +34,9 @@
 #include <com/sun/star/chart2/XCoordinateSystem.hpp>
 #include <comphelper/sequence.hxx>
 #include <tools/diagnose_ex.h>
+
 #include <algorithm>
-#include <rtl/math.hxx>
+#include <limits>
 
 namespace chart
 {
@@ -354,10 +355,8 @@ void VCoordinateSystem::prepareAutomaticAxisScaling( ScaleAutomatism& rScaleAuto
         m_aMergedMinMaxSupplier.setTimeResolutionOnXAxis( nTimeResolution, rScaleAutomatism.getNullDate() );
     }
 
-    double fMin = 0.0;
-    double fMax = 0.0;
-    ::rtl::math::setInf(&fMin, false);
-    ::rtl::math::setInf(&fMax, true);
+    double fMin = std::numeric_limits<double>::infinity();
+    double fMax = -std::numeric_limits<double>::infinity();
     if( nDimIndex == 0 )
     {
         // x dimension
