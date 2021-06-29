@@ -118,8 +118,12 @@ SvpSalFrame::~SvpSalFrame()
 
 void SvpSalFrame::GetFocus()
 {
+    if (m_nStyle == SalFrameStyleFlags::NONE)
+        return;
     if( s_pFocusFrame == this )
         return;
+    // FIXME: return if !m_bVisible
+    // That's IMHO why CppunitTest_sd_tiledrendering crashes non-headless
 
     if( (m_nStyle & (SalFrameStyleFlags::OWNERDRAWDECORATION | SalFrameStyleFlags::FLOAT)) == SalFrameStyleFlags::NONE )
     {
@@ -210,7 +214,16 @@ void SvpSalFrame::SetExtendedFrameStyle( SalExtStyle )
 
 void SvpSalFrame::Show( bool bVisible, bool bNoActivate )
 {
-    if( bVisible && ! m_bVisible )
+    if (m_nStyle == SalFrameStyleFlags::NONE)
+        return;
+    if (bVisible == m_bVisible)
+    {
+        if (m_bVisible && !bNoActivate)
+            GetFocus();
+        return;
+    }
+
+    if (bVisible)
     {
         // SAL_DEBUG("SvpSalFrame::Show: showing: " << this);
         m_bVisible = true;
@@ -218,16 +231,11 @@ void SvpSalFrame::Show( bool bVisible, bool bNoActivate )
         if( ! bNoActivate )
             GetFocus();
     }
-    else if( ! bVisible && m_bVisible )
+    else
     {
         // SAL_DEBUG("SvpSalFrame::Show: hiding: " << this);
         m_bVisible = false;
-        m_pInstance->PostEvent( this, nullptr, SalEvent::Resize );
         LoseFocus();
-    }
-    else
-    {
-        // SAL_DEBUG("SvpSalFrame::Show: nothing: " << this);
     }
 }
 
@@ -364,9 +372,14 @@ void SvpSalFrame::SetAlwaysOnTop( bool )
 {
 }
 
-void SvpSalFrame::ToTop( SalFrameToTop )
+void SvpSalFrame::ToTop(SalFrameToTop nFlags)
 {
-    GetFocus();
+    if (m_nStyle == SalFrameStyleFlags::NONE)
+        return;
+    if (nFlags & SalFrameToTop::RestoreWhenMin)
+        Show(true, false);
+    else
+        GetFocus();
 }
 
 void SvpSalFrame::SetPointer( PointerStyle )
