@@ -1607,7 +1607,7 @@ ShapeExport& PowerPointShapeExport::WritePlaceholderShape(const Reference< XShap
     }
     mpFS->endElementNS(XML_p, XML_spPr);
 
-    WriteTextBox(xShape, XML_p, bUsePlaceholderIndex);
+    WriteTextBox(xShape, XML_p, /*bWritePropertiesAsLstStyles=*/bUsePlaceholderIndex);
 
     mpFS->endElementNS(XML_p, XML_sp);
 
@@ -2274,7 +2274,7 @@ void PowerPointExport::WritePlaceholderReferenceShapes(PowerPointShapeExport& rD
     }
 }
 
-unsigned PowerPointExport::CreateNewPlaceholderIndex(const css::uno::Reference<XShape> &rXShape)
+sal_Int32 PowerPointExport::CreateNewPlaceholderIndex(const css::uno::Reference<XShape> &rXShape)
 {
     maPlaceholderShapeToIndexMap.insert({rXShape, mnPlaceholderIndexMax});
     return mnPlaceholderIndexMax++;

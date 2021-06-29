@@ -1590,8 +1590,9 @@ ShapeExport& ShapeExport::WriteTextBox( const Reference< XInterface >& xIface, s
 
         pFS->startElementNS(nXmlNamespace,
                             (GetDocumentType() != DOCUMENT_DOCX ? XML_txBody : XML_txbx));
-        WriteText( xIface, /*bBodyPr=*/(GetDocumentType() != DOCUMENT_DOCX), true, 0, bWritePropertiesAsLstStyles );
         pFS->endElementNS( nXmlNamespace, (GetDocumentType() != DOCUMENT_DOCX ? XML_txBody : XML_txbx) );
+        WriteText(xIface, /*bBodyPr=*/(GetDocumentType() != DOCUMENT_DOCX), /*bText=*/true,
+                  /*nXmlNamespace=*/0, /*bWritePropertiesAsLstStyles=*/bWritePropertiesAsLstStyles);
         if (GetDocumentType() == DOCUMENT_DOCX)
             WriteText( xIface, /*bBodyPr=*/true, /*bText=*/false, /*nXmlNamespace=*/nXmlNamespace );
     }
