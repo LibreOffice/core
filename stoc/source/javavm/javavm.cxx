@@ -471,7 +471,7 @@ private:
 
 JavaVirtualMachine::JavaVirtualMachine(
     css::uno::Reference< css::uno::XComponentContext > const & rContext):
-    JavaVirtualMachine_Impl(m_aMutex),
+    WeakComponentImplHelper(m_aMutex),
     m_xContext(rContext),
     m_bDisposed(false),
     m_pJavaVm(nullptr),
