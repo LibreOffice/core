@@ -13,34 +13,33 @@ class masterSlides(UITestCase):
 
     def test_change_master_slide_from_dialog(self):
 
-        self.ui_test.create_doc_in_start_center("impress")
+        with self.ui_test.create_doc_in_start_center_guarded("impress"):
 
-        xTemplateDlg = self.xUITest.getTopFocusWindow()
-        xCancelBtn = xTemplateDlg.getChild("close")
-        self.ui_test.close_dialog_through_button(xCancelBtn)
+            xTemplateDlg = self.xUITest.getTopFocusWindow()
+            xCancelBtn = xTemplateDlg.getChild("close")
+            self.ui_test.close_dialog_through_button(xCancelBtn)
 
-        xImpress = self.xUITest.getTopFocusWindow()
-        xMasterSlide = xImpress.getChild("masterslide")
-        self.assertEqual("Default", get_state_as_dict(xMasterSlide)['SelectEntryText'])
+            xImpress = self.xUITest.getTopFocusWindow()
+            xMasterSlide = xImpress.getChild("masterslide")
+            self.assertEqual("Default", get_state_as_dict(xMasterSlide)['SelectEntryText'])
 
-        xMasterButton = xImpress.getChild("masterslidebutton")
-        xMasterButton.executeAction("CLICK", tuple())
+            xMasterButton = xImpress.getChild("masterslidebutton")
+            xMasterButton.executeAction("CLICK", tuple())
 
-        self.xUITest.executeCommand(".uno:InsertMasterPage")
+            self.xUITest.executeCommand(".uno:InsertMasterPage")
 
-        xCloseMasterButton = xImpress.getChild("closemasterslide")
-        xCloseMasterButton.executeAction("CLICK", tuple())
+            xCloseMasterButton = xImpress.getChild("closemasterslide")
+            xCloseMasterButton.executeAction("CLICK", tuple())
 
-        with self.ui_test.execute_dialog_through_command(".uno:PresentationLayout") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:PresentationLayout") as xDialog:
 
-            xSelect = xDialog.getChild('select')
-            xSelect.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RIGHT"}))
+                xSelect = xDialog.getChild('select')
+                xSelect.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RIGHT"}))
 
 
-        xMasterSlide = xImpress.getChild("masterslide")
-        self.assertEqual("Default 1", get_state_as_dict(xMasterSlide)['SelectEntryText'])
+            xMasterSlide = xImpress.getChild("masterslide")
+            self.assertEqual("Default 1", get_state_as_dict(xMasterSlide)['SelectEntryText'])
 
-        self.ui_test.close_doc()
 
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

@@ -14,33 +14,31 @@ from uitest.uihelper.common import select_pos
 class masterElements(UITestCase):
 
    def test_master_elements(self):
-        self.ui_test.create_doc_in_start_center("impress")
-        xTemplateDlg = self.xUITest.getTopFocusWindow()
-        xCancelBtn = xTemplateDlg.getChild("close")
-        self.ui_test.close_dialog_through_button(xCancelBtn)
-        document = self.ui_test.get_component()
+        with self.ui_test.create_doc_in_start_center_guarded("impress"):
+            xTemplateDlg = self.xUITest.getTopFocusWindow()
+            xCancelBtn = xTemplateDlg.getChild("close")
+            self.ui_test.close_dialog_through_button(xCancelBtn)
 
-        with self.ui_test.execute_dialog_through_command(".uno:MasterLayouts") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:MasterLayouts") as xDialog:
 
-            xpagenumber = xDialog.getChild("pagenumber")
-            xfooter = xDialog.getChild("footer")
-            datetime = xDialog.getChild("datetime")
-            xpagenumber.executeAction("CLICK", tuple())
-            xfooter.executeAction("CLICK", tuple())
-            datetime.executeAction("CLICK", tuple())
-
-
-        #verify
-        with self.ui_test.execute_dialog_through_command(".uno:MasterLayouts") as xDialog:
-            xfooter = xDialog.getChild("footer")
-            datetime = xDialog.getChild("datetime")
-            xpagenumber = xDialog.getChild("pagenumber")
-
-            self.assertEqual(get_state_as_dict(xfooter)["Selected"], "false")
-            self.assertEqual(get_state_as_dict(datetime)["Selected"], "false")
-            self.assertEqual(get_state_as_dict(xpagenumber)["Selected"], "false")
+                xpagenumber = xDialog.getChild("pagenumber")
+                xfooter = xDialog.getChild("footer")
+                datetime = xDialog.getChild("datetime")
+                xpagenumber.executeAction("CLICK", tuple())
+                xfooter.executeAction("CLICK", tuple())
+                datetime.executeAction("CLICK", tuple())
 
 
-        self.ui_test.close_doc()
+            #verify
+            with self.ui_test.execute_dialog_through_command(".uno:MasterLayouts") as xDialog:
+                xfooter = xDialog.getChild("footer")
+                datetime = xDialog.getChild("datetime")
+                xpagenumber = xDialog.getChild("pagenumber")
+
+                self.assertEqual(get_state_as_dict(xfooter)["Selected"], "false")
+                self.assertEqual(get_state_as_dict(datetime)["Selected"], "false")
+                self.assertEqual(get_state_as_dict(xpagenumber)["Selected"], "false")
+
+
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

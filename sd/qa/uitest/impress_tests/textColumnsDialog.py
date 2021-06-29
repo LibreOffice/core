@@ -11,12 +11,11 @@ from uitest.uihelper.common import get_state_as_dict
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from uitest.uihelper.common import change_measurement_unit, select_pos
 from uitest.framework import UITestCase
-from uitest.uihelper import guarded
 
 class textColumnsDialog(UITestCase):
 
     def test_textColumnsDialog(self):
-        with guarded.create_doc_in_start_center(self, "impress") as document:
+        with self.ui_test.create_doc_in_start_center_guarded("impress") as document:
 
             xTemplateDlg = self.xUITest.getTopFocusWindow()
             xCancelBtn = xTemplateDlg.getChild("close")
