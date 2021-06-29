@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a1c6e55f_315177ae",
+        "filename": "uitest/uitest/test.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-29T20:23:21Z",
+      "side": 1,
+      "message": "I don\u0027t quite understand the precaution. The argument has a default value, so it *only* may be None when the caller explicitly passes None. I\u0027d just assert against it in the beginning of the function, and not add dubious conditions.",
+      "revId": "ff641dc9e4d2aff1d1cbe4425cd9c03a2edc847e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
