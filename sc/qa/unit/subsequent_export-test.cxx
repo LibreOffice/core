@@ -284,6 +284,8 @@ public:
     void testCheckboxFormControlXlsxExport();
     void testButtonFormControlXlsxExport();
     void testInvalidNamedRange();
+    void testTdf140431();
+
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
@@ -466,6 +468,7 @@ public:
     CPPUNIT_TEST(testCheckboxFormControlXlsxExport);
     CPPUNIT_TEST(testButtonFormControlXlsxExport);
     CPPUNIT_TEST(testInvalidNamedRange);
+    CPPUNIT_TEST(testTdf140431);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -5911,6 +5914,23 @@ void ScExportTest::testInvalidNamedRange()
     // Without the fix in place, this test would have failed, we didn't ignore the problematic named
     // range on import.
     CPPUNIT_ASSERT(!xNamedRanges->hasByName("myname"));
+}
+
+void ScExportTest::testTdf140431()
+{
+    ScDocShellRef xShell = loadDoc(u"129969-min.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xShell.is());
+
+    ScDocShellRef xDocSh = saveAndReload(&(*xShell), FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+    ScDocument& rDoc = xDocSh->GetDocument();
+    ScAddress aPos(0, 2, 0);
+    const EditTextObject* pEditText = rDoc.GetEditText(aPos);
+    const SvxFieldData* pData = pEditText->GetFieldData(0, 0, text::textfield::Type::URL);
+    const SvxURLField* pURLData = static_cast<const SvxURLField*>(pData);
+    CPPUNIT_ASSERT(pURLData->GetURL().startsWith("file://ndhlis"));
+
+    xDocSh->DoClose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest);

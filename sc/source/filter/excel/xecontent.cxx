@@ -392,9 +392,9 @@ XclExpHyperlink::XclExpHyperlink( const XclExpRoot& rRoot, const SvxURLField& rU
             for( int i = 0; i < nLevel; ++i )
                 msTarget = "../" + msTarget;
         }
-        else
+        else if (rRoot.GetOutput() != EXC_OUTPUT_XML_2007)
         {
-            // ooxml expects the file:/// part appended ( or at least
+            // xls expects the file:/// part appended ( or at least
             // ms2007 does, ms2010 is more tolerant )
             msTarget = "file:///" + msTarget;
         }
