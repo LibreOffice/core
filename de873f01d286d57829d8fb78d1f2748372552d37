@@ -122,6 +122,24 @@
       "revId": "de873f01d286d57829d8fb78d1f2748372552d37",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a9034e00_11897014",
+        "filename": "sal/qa/rtl/math/test-rtl-math.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 455,
+      "author": {
+        "id": 1003291
+      },
+      "writtenOn": "2021-06-29T21:27:59Z",
+      "side": 0,
+      "message": "Added an #if clause to them.\nBut the purpose is to remove from internal API all functions with an std equivalent.\nSo for us those functions won\u0027t exsist nor the tests.\nhttps://gerrit.libreoffice.org/c/core/+/118134/1",
+      "parentUuid": "e68b53bb_279d2e87",
+      "revId": "de873f01d286d57829d8fb78d1f2748372552d37",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
