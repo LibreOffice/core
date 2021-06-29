@@ -96,6 +96,29 @@
     },
     {
       "key": {
+        "uuid": "314c9231_4266a548",
+        "filename": "sfx2/source/dialog/StyleList.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-06-29T14:24:11Z",
+      "side": 1,
+      "message": "Hii\n\nIts showing the error that weld::StyleList has no member \"LinkStubOnAsyncExecuteDrop\".. If I create this member, I have to define ActionSelect here.. Please tell if I should define ActionSelect in StyleList as I am not sure of it..",
+      "range": {
+        "startLine": 122,
+        "startChar": 47,
+        "endLine": 122,
+        "endChar": 51
+      },
+      "revId": "46c930b409580a860fce196cee22faf305820032",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2b2c7212_e1fb20fb",
         "filename": "sfx2/source/dialog/StyleList.cxx",
         "patchSetId": 12
@@ -213,6 +236,30 @@
     },
     {
       "key": {
+        "uuid": "dfc42c12_47d21e3e",
+        "filename": "sfx2/source/dialog/StyleList.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 478,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-06-29T14:24:11Z",
+      "side": 1,
+      "message": "Please refer to the comment in templdlg.cxx",
+      "parentUuid": "2fff7620_334d0bca",
+      "range": {
+        "startLine": 478,
+        "startChar": 8,
+        "endLine": 478,
+        "endChar": 20
+      },
+      "revId": "46c930b409580a860fce196cee22faf305820032",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ca2ee31a_298ab37c",
         "filename": "sfx2/source/dialog/StyleList.cxx",
         "patchSetId": 12
@@ -253,6 +300,53 @@
         "startChar": 4,
         "endLine": 479,
         "endChar": 16
+      },
+      "revId": "46c930b409580a860fce196cee22faf305820032",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cdbfb943_b32e13b1",
+        "filename": "sfx2/source/dialog/StyleList.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 479,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-06-29T14:24:11Z",
+      "side": 1,
+      "message": "Yes, even I was thinking to let the methods like EnableItem, EnableEdit, EnableShow etc. to remain in Dialog.. But they are being used in methods like SelectStyle in StyleList which requires them to be moved here.\n\nI will make m_xActionTbR remain in the Dialog.. But please address the above mentioned thing.",
+      "parentUuid": "68e3a2c8_93094690",
+      "range": {
+        "startLine": 479,
+        "startChar": 4,
+        "endLine": 479,
+        "endChar": 16
+      },
+      "revId": "46c930b409580a860fce196cee22faf305820032",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "71f43ba4_b5462799",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 1183,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-06-29T14:24:11Z",
+      "side": 1,
+      "message": "DeletionWatcher is declared here in Execute_Impl.. Moving Execute_Impl to StyleList.cxx would require moving DeletionWatcher too?",
+      "range": {
+        "startLine": 1183,
+        "startChar": 4,
+        "endLine": 1183,
+        "endChar": 19
       },
       "revId": "46c930b409580a860fce196cee22faf305820032",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
