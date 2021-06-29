@@ -24,6 +24,10 @@ std::atomic<bool> TraceEvent::s_bRecording = (getenv("TRACE_EVENT_RECORDING") !=
 #else
 std::atomic<bool> TraceEvent::s_bRecording = false;
 #endif
+
+std::size_t TraceEvent::s_nBufferSize = 0;
+void (*TraceEvent::s_pBufferFullCallback)() = nullptr;
+
 int AsyncEvent::s_nIdCounter = 0;
 int ProfileZone::s_nNesting = 0;
 
@@ -38,6 +42,12 @@ void TraceEvent::addRecording(const OUString& sObject)
     osl::MutexGuard aGuard(g_aMutex);
 
     g_aRecording.emplace_back(sObject);
+
+    if (s_nBufferSize > 0 && g_aRecording.size() >= s_nBufferSize)
+    {
+        if (s_pBufferFullCallback != nullptr)
+            (*s_pBufferFullCallback)();
+    }
 }
 
 void TraceEvent::addInstantEvent(const char* sName, const std::map<OUString, OUString>& args)
@@ -71,6 +81,12 @@ void TraceEvent::startRecording()
 }
 
 void TraceEvent::stopRecording() { s_bRecording = false; }
+
+void TraceEvent::setBufferSizeAndCallback(std::size_t bufferSize, void (*bufferFullCallback)())
+{
+    s_nBufferSize = bufferSize;
+    s_pBufferFullCallback = bufferFullCallback;
+}
 
 std::vector<OUString> TraceEvent::getEventVectorAndClear()
 {
