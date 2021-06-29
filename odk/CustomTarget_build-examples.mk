@@ -19,6 +19,7 @@ my_example_dirs = \
     DevelopersGuide/ProfUNO/CppBinding \
     DevelopersGuide/ProfUNO/SimpleBootstrap_cpp \
     OLE/activex \
+    cpp/Draw \
     cpp/DocumentLoader \
     cpp/complextoolbarcontrols \
     cpp/counter \
