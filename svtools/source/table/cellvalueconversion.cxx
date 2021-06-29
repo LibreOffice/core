@@ -27,7 +27,6 @@
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
 #include <com/sun/star/util/NumberFormat.hpp>
-#include <rtl/math.hxx>
 #include <sal/log.hxx>
 #include <tools/date.hxx>
 #include <tools/time.hxx>
@@ -37,6 +36,7 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <comphelper/processfactory.hxx>
 
+#include <limits>
 #include <memory>
 #include <unordered_map>
 
@@ -152,8 +152,7 @@ namespace svt
 
         virtual double convertToDouble( Any const & i_value ) const override
         {
-            double returnValue(0);
-            ::rtl::math::setNan( &returnValue );
+            double returnValue = std::numeric_limits<double>::quiet_NaN();
             OSL_VERIFY( i_value >>= returnValue );
             return returnValue;
         }
@@ -210,8 +209,7 @@ namespace svt
 
         virtual double convertToDouble( Any const & i_value ) const override
         {
-            double returnValue(0);
-            ::rtl::math::setNan( &returnValue );
+            double returnValue = std::numeric_limits<double>::quiet_NaN();
 
             // extract actual UNO value
             DateTime aDateTimeValue;
@@ -242,8 +240,7 @@ namespace svt
 
         virtual double convertToDouble( Any const & i_value ) const override
         {
-            double returnValue(0);
-            ::rtl::math::setNan( &returnValue );
+            double returnValue = std::numeric_limits<double>::quiet_NaN();
 
             // extract
             css::util::Date aDateValue;
@@ -270,8 +267,7 @@ namespace svt
 
         virtual double convertToDouble( Any const & i_value ) const override
         {
-            double returnValue(0);
-            ::rtl::math::setNan( &returnValue );
+            double returnValue = std::numeric_limits<double>::quiet_NaN();
 
             // extract
             css::util::Time aTimeValue;

@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <limits>
 #include <memory>
 #include <VSeriesPlotter.hxx>
 #include <BaseGFXHelper.hxx>
@@ -808,8 +809,7 @@ double lcl_getErrorBarLogicLength(
     bool bPositive,
     bool bYError )
 {
-    double fResult;
-    ::rtl::math::setNan( & fResult );
+    double fResult = std::numeric_limits<double>::quiet_NaN();
     try
     {
         switch( nErrorBarStyle )
@@ -1726,7 +1726,7 @@ double VSeriesPlotter::getMinimumYInRange( double fMinimumX, double fMaximumX, s
         }
     }
     if(std::isinf(fMinimum))
-        ::rtl::math::setNan(&fMinimum);
+        return std::numeric_limits<double>::quiet_NaN();
     return fMinimum;
 }
 
@@ -1759,7 +1759,7 @@ double VSeriesPlotter::getMaximumYInRange( double fMinimumX, double fMaximumX, s
         }
     }
     if(std::isinf(fMaximum))
-        ::rtl::math::setNan(&fMaximum);
+        return std::numeric_limits<double>::quiet_NaN();
     return fMaximum;
 }
 
@@ -1833,9 +1833,9 @@ void VSeriesPlotter::getMinimumAndMaximumX( double& rfMinimum, double& rfMaximum
         }
     }
     if(std::isinf(rfMinimum))
-        ::rtl::math::setNan(&rfMinimum);
+        rfMinimum = std::numeric_limits<double>::quiet_NaN();
     if(std::isinf(rfMaximum))
-        ::rtl::math::setNan(&rfMaximum);
+        rfMaximum = std::numeric_limits<double>::quiet_NaN();
 }
 
 void VSeriesPlotter::getMinimumAndMaximumYInContinuousXRange( double& rfMinY, double& rfMaxY, double fMinX, double fMaxX, sal_Int32 nAxisIndex ) const
@@ -1856,9 +1856,9 @@ void VSeriesPlotter::getMinimumAndMaximumYInContinuousXRange( double& rfMinY, do
         }
     }
     if(std::isinf(rfMinY))
-        ::rtl::math::setNan(&rfMinY);
+        rfMinY = std::numeric_limits<double>::quiet_NaN();
     if(std::isinf(rfMaxY))
-        ::rtl::math::setNan(&rfMaxY);
+        rfMaxY = std::numeric_limits<double>::quiet_NaN();
 }
 
 sal_Int32 VSeriesPlotter::getPointCount() const
@@ -1944,9 +1944,9 @@ void VDataSeriesGroup::getMinimumAndMaximumX( double& rfMinimum, double& rfMaxim
         }
     }
     if(std::isinf(rfMinimum))
-        ::rtl::math::setNan(&rfMinimum);
+        rfMinimum = std::numeric_limits<double>::quiet_NaN();
     if(std::isinf(rfMaximum))
-        ::rtl::math::setNan(&rfMaximum);
+        rfMaximum = std::numeric_limits<double>::quiet_NaN();
 }
 
 namespace {
@@ -2007,14 +2007,15 @@ public:
 
     void getTotalRange(double& rfMin, double& rfMax) const
     {
-        rtl::math::setNan(&rfMin);
-        rtl::math::setNan(&rfMax);
-
         TotalStoreType aStore;
         getTotalStore(aStore);
 
         if (aStore.empty())
+        {
+            rfMin = std::numeric_limits<double>::quiet_NaN();
+            rfMax = std::numeric_limits<double>::quiet_NaN();
             return;
+        }
 
         TotalStoreType::const_iterator it = aStore.begin(), itEnd = aStore.end();
         rfMin = it->second.first;
@@ -2085,8 +2086,8 @@ private:
 void VDataSeriesGroup::getMinimumAndMaximumYInContinuousXRange(
     double& rfMinY, double& rfMaxY, double fMinX, double fMaxX, sal_Int32 nAxisIndex ) const
 {
-    ::rtl::math::setNan(&rfMinY);
-    ::rtl::math::setNan(&rfMaxY);
+    rfMinY = std::numeric_limits<double>::quiet_NaN();
+    rfMaxY = std::numeric_limits<double>::quiet_NaN();
 
     if (m_aSeriesVector.empty())
         // No data series.  Bail out.
@@ -2145,12 +2146,11 @@ void VDataSeriesGroup::calculateYMinAndMaxForCategory( sal_Int32 nCategoryIndex
         return;
     }
 
-    double fTotalSum, fPositiveSum, fNegativeSum, fFirstPositiveY, fFirstNegativeY;
-    ::rtl::math::setNan( &fTotalSum );
-    ::rtl::math::setNan( &fPositiveSum );
-    ::rtl::math::setNan( &fNegativeSum );
-    ::rtl::math::setNan( &fFirstPositiveY );
-    ::rtl::math::setNan( &fFirstNegativeY );
+    double fTotalSum = std::numeric_limits<double>::quiet_NaN();
+    double fPositiveSum = std::numeric_limits<double>::quiet_NaN();
+    double fNegativeSum = std::numeric_limits<double>::quiet_NaN();
+    double fFirstPositiveY = std::numeric_limits<double>::quiet_NaN();
+    double fFirstNegativeY = std::numeric_limits<double>::quiet_NaN();
 
     if( bSeparateStackingForDifferentSigns )
     {
@@ -2233,8 +2233,8 @@ void VDataSeriesGroup::calculateYMinAndMaxForCategoryRange(
         nEndCategoryIndex=0;
     for( sal_Int32 nCatIndex = nStartCategoryIndex; nCatIndex <= nEndCategoryIndex; nCatIndex++ )
     {
-        double fMinimumY; ::rtl::math::setNan(&fMinimumY);
-        double fMaximumY; ::rtl::math::setNan(&fMaximumY);
+        double fMinimumY = std::numeric_limits<double>::quiet_NaN();
+        double fMaximumY = std::numeric_limits<double>::quiet_NaN();
 
         calculateYMinAndMaxForCategory( nCatIndex
             , bSeparateStackingForDifferentSigns, fMinimumY, fMaximumY, nAxisIndex );
