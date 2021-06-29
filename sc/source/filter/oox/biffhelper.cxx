@@ -23,6 +23,8 @@
 #include <osl/diagnose.h>
 #include <oox/helper/binaryinputstream.hxx>
 
+#include <limits>
+
 namespace oox::xls {
 
 namespace {
@@ -68,7 +70,7 @@ const sal_Int32 BIFF_RK_VALUEMASK           = 0xFFFFFFFC;
         default:    OSL_FAIL( "BiffHelper::calcDoubleFromError - unknown error code" );
     }
     sal_math_Double  aMathDouble;
-    ::rtl::math::setNan( &aMathDouble.value );
+    aMathDouble.value = std::numeric_limits<double>::quiet_NaN();
     aMathDouble.nan_parts.fraction_lo = nApiError;
     return  aMathDouble.value;
 }

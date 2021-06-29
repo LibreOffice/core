@@ -47,6 +47,7 @@
 #include <osl/diagnose.h>
 
 #include <algorithm>
+#include <limits>
 #include <vector>
 
 using ::rtl::math::approxEqual;
@@ -745,10 +746,10 @@ bool ScDBQueryDataIterator::DataAccessMatrix::isValidQuery(SCROW nRow, const ScM
     return std::find(aResults.begin(), aResults.end(), true) != aResults.end();
 }
 
-ScDBQueryDataIterator::Value::Value() :
-    mnError(FormulaError::NONE), mbIsNumber(true)
+ScDBQueryDataIterator::Value::Value()
+    : mfValue(std::numeric_limits<double>::quiet_NaN())
+    , mnError(FormulaError::NONE), mbIsNumber(true)
 {
-    ::rtl::math::setNan(&mfValue);
 }
 
 ScDBQueryDataIterator::ScDBQueryDataIterator(ScDocument& rDocument, const ScInterpreterContext& rContext, std::unique_ptr<ScDBQueryParamBase> pParam) :

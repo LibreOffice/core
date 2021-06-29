@@ -11,12 +11,13 @@
 #include <global.hxx>
 
 #include <unotools/charclass.hxx>
-#include <rtl/math.hxx>
 #include <sal/log.hxx>
 #include <o3tl/hash_combine.hxx>
 
 #include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
+
+#include <limits>
 
 using namespace com::sun::star;
 using namespace std;
@@ -171,7 +172,7 @@ void ScDPResultTree::add(
         else
         {
             // This name pair already exists. Set the value to NaN.
-            rtl::math::setNan(&it->second);
+            it->second = std::numeric_limits<double>::quiet_NaN();
         }
     }
 
@@ -259,9 +260,7 @@ double ScDPResultTree::getLeafResult(const css::sheet::DataPilotFieldFilter& rFi
         return it->second;
 
     // Not found.  Return an NaN.
-    double fNan;
-    rtl::math::setNan(&fNan);
-    return fNan;
+    return std::numeric_limits<double>::quiet_NaN();
 }
 
 #if DEBUG_PIVOT_TABLE

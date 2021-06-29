@@ -373,8 +373,8 @@ ScSolverValueDialog::ScSolverValueDialog(weld::Window* pParent)
     : GenericDialogController(pParent, "modules/scalc/ui/doubledialog.ui", "DoubleDialog")
     , m_xFrame(m_xBuilder->weld_frame("frame"))
     , m_xEdValue(m_xBuilder->weld_entry("value"))
+    , m_fMaxValue(std::numeric_limits<double>::quiet_NaN())
 {
-    ::rtl::math::setNan(&m_fMaxValue);
 }
 
 ScSolverValueDialog::~ScSolverValueDialog()

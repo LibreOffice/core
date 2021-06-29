@@ -34,12 +34,12 @@
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <rtl/math.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <tools/diagnose_ex.h>
 #include <tools/helpers.hxx>
 
+#include <limits>
 #include <memory>
 
 using namespace ::com::sun::star;
@@ -198,9 +198,8 @@ PieChart::PieChart( const uno::Reference<XChartType>& xChartTypeModel
         , m_pPosHelper( new PiePositionHelper( (m_nDimension==3) ? 0.0 : 90.0 ) )
         , m_bUseRings(false)
         , m_bSizeExcludesLabelsAndExplodedSegments(bExcludingPositioning)
+        , m_fMaxOffset(std::numeric_limits<double>::quiet_NaN())
 {
-    ::rtl::math::setNan(&m_fMaxOffset);
-
     PlotterBase::m_pPosHelper = m_pPosHelper.get();
     VSeriesPlotter::m_pMainPosHelper = m_pPosHelper.get();
     m_pPosHelper->m_fRadiusOffset = 0.0;
@@ -711,7 +710,7 @@ void PieChart::createShapes()
         nExplodeableSlot = m_aZSlots.front().size()-1;
 
     m_aLabelInfoList.clear();
-    ::rtl::math::setNan(&m_fMaxOffset);
+    m_fMaxOffset = std::numeric_limits<double>::quiet_NaN();
     sal_Int32 n3DRelativeHeight = 100;
     uno::Reference< beans::XPropertySet > xPropertySet( m_xChartTypeModel, uno::UNO_QUERY );
     if ( (m_nDimension==3) && xPropertySet.is())

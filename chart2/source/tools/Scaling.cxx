@@ -18,9 +18,11 @@
  */
 
 #include <Scaling.hxx>
-#include <rtl/math.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <cppuhelper/supportsservice.hxx>
+
+#include <cmath>
+#include <limits>
 
 namespace com::sun::star::uno { class XComponentContext; }
 
@@ -57,12 +59,9 @@ LogarithmicScaling::~LogarithmicScaling()
 
 double SAL_CALL LogarithmicScaling::doScaling( double value )
 {
-    double fResult;
     if( std::isnan( value ) || std::isinf( value ) )
-        ::rtl::math::setNan( & fResult );
-    else
-        fResult = log( value ) / m_fLogOfBase;
-    return fResult;
+        return std::numeric_limits<double>::quiet_NaN();
+    return std::log( value ) / m_fLogOfBase;
 }
 
 uno::Reference< XScaling > SAL_CALL LogarithmicScaling::getInverseScaling()
@@ -106,12 +105,9 @@ ExponentialScaling::~ExponentialScaling()
 
 double SAL_CALL ExponentialScaling::doScaling( double value )
 {
-    double fResult;
     if( std::isnan( value ) || std::isinf( value ) )
-        ::rtl::math::setNan( & fResult );
-    else
-        fResult = pow( m_fBase, value );
-    return fResult;
+        return std::numeric_limits<double>::quiet_NaN();
+    return std::pow( m_fBase, value );
 }
 
 uno::Reference< XScaling > SAL_CALL ExponentialScaling::getInverseScaling()
@@ -154,12 +150,9 @@ LinearScaling::~LinearScaling()
 
 double SAL_CALL LinearScaling::doScaling( double value )
 {
-    double fResult;
     if( std::isnan( value ) || std::isinf( value ) )
-        ::rtl::math::setNan( & fResult );
-    else
-        fResult = m_fOffset + m_fSlope * value;
-    return fResult;
+        return std::numeric_limits<double>::quiet_NaN();
+    return m_fOffset + m_fSlope * value;
 }
 
 uno::Reference< XScaling > SAL_CALL
@@ -205,12 +198,9 @@ PowerScaling::~PowerScaling()
 
 double SAL_CALL PowerScaling::doScaling( double value )
 {
-    double fResult;
     if( std::isnan( value ) || std::isinf( value ) )
-        ::rtl::math::setNan( & fResult );
-    else
-        fResult = pow( value, m_fExponent );
-    return fResult;
+        return std::numeric_limits<double>::quiet_NaN();
+    return std::pow( value, m_fExponent );
 }
 
 uno::Reference< XScaling > SAL_CALL
