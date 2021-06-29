@@ -18,11 +18,11 @@ class tdf126168(UITestCase):
 
         #2) Menu > Insert > Frame > Frame
         #3) Press OK in Frame dialog
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:InsertFrame"):
+        with self.ui_test.execute_dialog_through_command(".uno:InsertFrame"):
             pass
         self.assertEqual(document.TextFrames.getCount(), 1)
         #New Style from Selection  [uno:StyleNewByExample]
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:StyleNewByExample") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:StyleNewByExample") as xDialog:
             #5) Enter a name in the Create Style dialog and press OK
             stylename = xDialog.getChild("stylename")
             stylename.executeAction("TYPE", mkPropertyValues({"TEXT":"a"}))

@@ -23,7 +23,7 @@ class tdf39917(UITestCase):
         gridwin = xCalcDoc.getChild("grid_window")
         document = self.ui_test.get_component()
         #* Tools --> Options --> Calc --> Formula -->  Syntax = Excel R1C1
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:OptionsTreeDialog") as xDialogOpt:
+        with self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog") as xDialogOpt:
 
             xPages = xDialogOpt.getChild("pages")
             xCalcEntry = xPages.getChild('3')                 # Calc
@@ -40,14 +40,14 @@ class tdf39917(UITestCase):
         # 2. Tools -> Options -> LibreOffice Calc -> Formula: Set syntax to Excel A1
         # 5. Fill fields:
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:Insert") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:Insert") as xDialog:
             after = xDialog.getChild("after")
             after.executeAction("CLICK", tuple())
             nameed = xDialog.getChild("nameed")
             nameed.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
             nameed.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
             nameed.executeAction("TYPE", mkPropertyValues({"TEXT":"Page2"}))
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:Insert") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:Insert") as xDialog:
             after = xDialog.getChild("after")
             after.executeAction("CLICK", tuple())
             nameed = xDialog.getChild("nameed")
@@ -79,7 +79,7 @@ class tdf39917(UITestCase):
         enter_text_to_cell(gridwin, "A1", "=FORMULA(R[3]C[1])")
         self.assertEqual(get_cell_by_position(document, 0, 0, 0).getString(), "=Page3!RC")
         #Give it back Tools --> Options --> Calc --> Formula -->  Syntax = Calc A1
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:OptionsTreeDialog") as xDialogOpt:
+        with self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog") as xDialogOpt:
 
             xPages = xDialogOpt.getChild("pages")
             xCalcEntry = xPages.getChild('3')                 # Calc

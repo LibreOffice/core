@@ -16,7 +16,7 @@ class tdf124295(UITestCase):
     def test_tdf124295(self):
         # Open spreadsheet and insert chart
         self.ui_test.create_doc_in_start_center("calc")
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:InsertObjectChart", close_button="cancel") as xChartDlg:
+        with self.ui_test.execute_dialog_through_command(".uno:InsertObjectChart", close_button="cancel") as xChartDlg:
 
             # Click 3D look check button
             x3DCheckBtn = xChartDlg.getChild("3dlook")

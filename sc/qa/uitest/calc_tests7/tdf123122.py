@@ -21,7 +21,7 @@ class tdf123122(UITestCase):
         #select cell A1
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
         #format - cell
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:FormatCellDialog") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:FormatCellDialog") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             select_pos(xTabs, "0")  #tab Numbers
             xliststore1 = xDialog.getChild("categorylb")  #1st list / Category
@@ -41,7 +41,7 @@ class tdf123122(UITestCase):
         #verify
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
         #format - cell
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:FormatCellDialog") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:FormatCellDialog") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             select_pos(xTabs, "0")  #tab Numbers
             xliststore1 = xDialog.getChild("categorylb")  #1st list / Category

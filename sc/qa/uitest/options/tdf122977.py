@@ -21,7 +21,7 @@ class chartDefaultColors(UITestCase):
         document = self.ui_test.get_component()
 
         #Go to Tools -> Options -> Charts -> Default Colors
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:OptionsTreeDialog", close_button="cancel") as xDialogOpt:
+        with self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog", close_button="cancel") as xDialogOpt:
 
             xPages = xDialogOpt.getChild("pages")
             xChartEntry = xPages.getChild('5')                 # Charts

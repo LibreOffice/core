@@ -27,7 +27,7 @@ class tdf82398(UITestCase):
         gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:A4"}))
         self.xUITest.executeCommand(".uno:NumberFormatDate")
         # Data - Text to Columns
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:TextToColumns") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:TextToColumns") as xDialog:
             xother = xDialog.getChild("other")
             xinputother = xDialog.getChild("inputother")
 

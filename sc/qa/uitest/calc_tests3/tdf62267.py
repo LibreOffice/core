@@ -23,12 +23,12 @@ class tdf62267(UITestCase):
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
             self.xUITest.executeCommand(".uno:Copy")
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "C1"}))
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:PasteSpecial") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:PasteSpecial") as xDialog:
                 #it's the default - text, numbers and dates
                 pass
 
             #--> Cell formatting should stay as before
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:ConditionalFormatManagerDialog", close_button="cancel") as xCondFormatMgr:
+            with self.ui_test.execute_dialog_through_command(".uno:ConditionalFormatManagerDialog", close_button="cancel") as xCondFormatMgr:
 
 
                 # check that we have exactly 1 conditional format

@@ -23,7 +23,7 @@ class tdf141557(UITestCase):
 
             self.ui_test.wait_until_child_is_available('metricfield')
 
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:TransformDialog") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:TransformDialog") as xDialog:
 
 
                 xDialog.getChild('topara').executeAction("CLICK", tuple())

@@ -21,7 +21,7 @@ class tdf133348(UITestCase):
         xArgs = mkPropertyValues({"Text": "C1"})
         self.xUITest.executeCommandWithParameters(".uno:InsertAnnotation", xArgs)
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:OptionsTreeDialog") as xDialogOpt:
+        with self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog") as xDialogOpt:
             xPages = xDialogOpt.getChild("pages")
             xEntry = xPages.getChild('0')
             xEntry.executeAction("EXPAND", tuple())

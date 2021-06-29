@@ -16,7 +16,7 @@ class hideShowSheet(UITestCase):
         gridwin = xCalcDoc.getChild("grid_window")
         document = self.ui_test.get_component()
         #insert sheet
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:Insert"):
+        with self.ui_test.execute_dialog_through_command(".uno:Insert"):
             pass
         #select sheet
         gridwin.executeAction("SELECT", mkPropertyValues({"TABLE":"1"}))
@@ -24,11 +24,11 @@ class hideShowSheet(UITestCase):
         #hide sheet
         self.xUITest.executeCommand(".uno:Hide")
         #show sheet Dialog
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:Show", close_button="cancel") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:Show", close_button="cancel") as xDialog:
             treeview = xDialog.getChild("treeview")
             self.assertEqual(get_state_as_dict(treeview)["Children"], "1")
         #insert 2nd sheet
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:Insert"):
+        with self.ui_test.execute_dialog_through_command(".uno:Insert"):
             pass
         #select sheet
         gridwin.executeAction("SELECT", mkPropertyValues({"TABLE":"2"}))
@@ -36,7 +36,7 @@ class hideShowSheet(UITestCase):
         #hide sheet
         self.xUITest.executeCommand(".uno:Hide")
         #show sheet Dialog
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:Show", close_button="cancel") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:Show", close_button="cancel") as xDialog:
             treeview = xDialog.getChild("treeview")
             self.assertEqual(get_state_as_dict(treeview)["Children"], "2")
 

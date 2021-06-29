@@ -20,7 +20,7 @@ class validity(UITestCase):
         document = self.ui_test.get_component()
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:Validation") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:Validation") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             select_pos(xTabs, "0")
             xallow = xDialog.getChild("allow")
@@ -35,7 +35,7 @@ class validity(UITestCase):
             xmin.executeAction("TYPE", mkPropertyValues({"TEXT":"1"}))
             xmax.executeAction("TYPE", mkPropertyValues({"TEXT":"2"}))
         #reopen and verify
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:Validation", close_button="cancel") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:Validation", close_button="cancel") as xDialog:
             xallow = xDialog.getChild("allow")
             xallowempty = xDialog.getChild("allowempty")
             xdata = xDialog.getChild("data")
@@ -58,7 +58,7 @@ class validity(UITestCase):
         document = self.ui_test.get_component()
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:Validation") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:Validation") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             select_pos(xTabs, "1")
             xtsbhelp = xDialog.getChild("tsbhelp")
@@ -69,7 +69,7 @@ class validity(UITestCase):
             xtitle.executeAction("TYPE", mkPropertyValues({"TEXT":"A"}))
             xinputhelp.executeAction("TYPE", mkPropertyValues({"TEXT":"B"}))
         #reopen and verify
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:Validation") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:Validation") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             xtsbhelp = xDialog.getChild("tsbhelp")
             xtitle = xDialog.getChild("title")
@@ -90,7 +90,7 @@ class validity(UITestCase):
         document = self.ui_test.get_component()
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:Validation") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:Validation") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             select_pos(xTabs, "2")
 
@@ -102,7 +102,7 @@ class validity(UITestCase):
             xerroralerttitle.executeAction("TYPE", mkPropertyValues({"TEXT":"Warn"}))
             xerrorMsg.executeAction("TYPE", mkPropertyValues({"TEXT":"Warn2"}))
         #reopen and verify
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:Validation") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:Validation") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             select_pos(xTabs, "2")
 

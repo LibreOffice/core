@@ -27,7 +27,7 @@ class RadioButtonTest(UITestCase):
 
         self.ui_test.create_doc_in_start_center("calc")
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:FormatCellDialog") as xCellsDlg:
+        with self.ui_test.execute_dialog_through_command(".uno:FormatCellDialog") as xCellsDlg:
             xNegativeNumRedCB = xCellsDlg.getChild("negnumred")
             xNegativeNumRedCB.executeAction("CLICK",tuple())
 

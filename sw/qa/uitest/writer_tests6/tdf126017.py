@@ -25,13 +25,13 @@ class tdf126017(UITestCase):
             xcloseBtn = xDialog.getChild("close")
             self.ui_test.close_dialog_through_button(xcloseBtn)
             #edit index
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:EditCurIndex") as xDiagIndex:
+            with self.ui_test.execute_dialog_through_command(".uno:EditCurIndex") as xDiagIndex:
                 title = xDiagIndex.getChild("title")
                 title.executeAction("TYPE", mkPropertyValues({"TEXT":"aaaa"}))
 
             self.xUITest.executeCommand(".uno:Undo")
 
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:EditCurIndex") as xDiagIndex:
+            with self.ui_test.execute_dialog_through_command(".uno:EditCurIndex") as xDiagIndex:
                 title = xDiagIndex.getChild("title")
                 title.executeAction("TYPE", mkPropertyValues({"TEXT":"aaaa"}))
 

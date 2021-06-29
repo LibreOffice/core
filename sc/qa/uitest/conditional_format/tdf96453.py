@@ -20,7 +20,7 @@ class ConditionalFormatDlgTest(UITestCase):
             conditional_format_list = get_conditional_format_from_sheet(sheet)
             self.assertEqual(conditional_format_list.getLength(), 2)
 
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:ConditionalFormatManagerDialog", close_button="") as xCondFormatMgr:
+            with self.ui_test.execute_dialog_through_command(".uno:ConditionalFormatManagerDialog", close_button="") as xCondFormatMgr:
 
 
                 # check that we have exactly two conditional formats in the beginning

@@ -14,7 +14,7 @@ class tdf104795(UITestCase):
 
    def test_tdf104795(self):
         with self.ui_test.load_file(get_url_for_data_file("tdf104795.odt")) as writer_doc:
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:SetDocumentProperties") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:SetDocumentProperties") as xDialog:
 
                 sShowSignedText = get_state_as_dict(xDialog.getChild('showsigned'))['Text']
 

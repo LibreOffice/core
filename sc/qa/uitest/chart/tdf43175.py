@@ -15,7 +15,7 @@ class Tdf43175(UITestCase):
 
             self.xUITest.executeCommand(".uno:TableSelectAll")
 
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:Move") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:Move") as xDialog:
                 insertBefore = xDialog.getChild("insertBefore")
 
                 # Select - move to end position -

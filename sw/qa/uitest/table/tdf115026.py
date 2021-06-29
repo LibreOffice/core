@@ -18,10 +18,10 @@ class tdf115026(UITestCase):
         self.xUITest.executeCommand(".uno:InsertPagebreak")
         self.assertEqual(get_state_as_dict(xWriterEdit)["CurrentPage"], "2")
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:InsertTable"):
+        with self.ui_test.execute_dialog_through_command(".uno:InsertTable"):
             pass
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:AutoFormat"):
+        with self.ui_test.execute_dialog_through_command(".uno:AutoFormat"):
             pass
 
         self.assertEqual(get_state_as_dict(xWriterEdit)["CurrentPage"], "2")

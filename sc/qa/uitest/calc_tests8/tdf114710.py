@@ -22,7 +22,7 @@ class tdf114710(UITestCase):
 
                 self.xUITest.getTopFocusWindow()
 
-                with self.ui_test.execute_dialog_through_command_guarded(".uno:PasteSpecial") as xDialog:
+                with self.ui_test.execute_dialog_through_command(".uno:PasteSpecial") as xDialog:
 
                     xList = xDialog.getChild('list')
 

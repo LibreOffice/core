@@ -19,7 +19,7 @@ class tdf135693(UITestCase):
             self.xUITest.executeCommand(".uno:GoDown")
 
             # Without the fix in place, this would have crashed here
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:TableDialog") as xTableDlg:
+            with self.ui_test.execute_dialog_through_command(".uno:TableDialog") as xTableDlg:
 
 
                 xTabs = xTableDlg.getChild("tabcontrol")

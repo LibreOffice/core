@@ -16,7 +16,7 @@ class tdf115853(UITestCase):
 
     def test_tdf115853(self):
         self.ui_test.create_doc_in_start_center("writer")
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:SetDocumentProperties") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:SetDocumentProperties") as xDialog:
 
             xTabs = xDialog.getChild("tabcontrol")
 

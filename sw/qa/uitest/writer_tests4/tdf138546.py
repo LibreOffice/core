@@ -18,14 +18,14 @@ class tdf138546(UITestCase):
             change_measurement_unit(self, "Centimeter")
 
             #dialog Columns
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:FormatColumns", close_button="cancel") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:FormatColumns", close_button="cancel") as xDialog:
 
                 colsnf = xDialog.getChild("colsnf")
                 width1mf = xDialog.getChild("width1mf")
                 self.assertEqual(get_state_as_dict(colsnf)["Text"], "2")
                 self.assertEqual((get_state_as_dict(width1mf)["Text"])[0:3], "2.0") #2.00 cm
 
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:PageDialog", close_button="cancel") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:PageDialog", close_button="cancel") as xDialog:
                 tabcontrol = xDialog.getChild("tabcontrol")
                 select_pos(tabcontrol, "7") #Columns
                 colsnf = xDialog.getChild("colsnf")

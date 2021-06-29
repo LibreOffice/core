@@ -17,7 +17,7 @@ class tdf81292(UITestCase):
             #select whole table
             self.xUITest.executeCommand(".uno:SelectTable")
             #Tools - Sort
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:SortDialog") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:SortDialog") as xDialog:
                 xDown = xDialog.getChild("down1")
                 xDown.executeAction("CLICK", tuple())
             #verify

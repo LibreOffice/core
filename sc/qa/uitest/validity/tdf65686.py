@@ -23,7 +23,7 @@ class tdf65686(UITestCase):
         #- Select Allow List
         #- Enter Entries Aap Noot Mies
         #- OK
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:Validation") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:Validation") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             select_pos(xTabs, "0")
             xallow = xDialog.getChild("allow")
@@ -38,7 +38,7 @@ class tdf65686(UITestCase):
             minlist.executeAction("TYPE", mkPropertyValues({"TEXT":"Mies"}))
         #- again open Data > Validity
         #> there are empty lines in the list Entries
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:Validation") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:Validation") as xDialog:
             xallow = xDialog.getChild("allow")
             xallowempty = xDialog.getChild("allowempty")
             minlist = xDialog.getChild("minlist")

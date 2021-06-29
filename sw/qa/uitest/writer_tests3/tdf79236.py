@@ -30,7 +30,7 @@ class tdf79236(UITestCase):
 
         self.assertEqual(document.CurrentSelection.getByIndex(0).String, "Test for tdf79236")
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:ParagraphDialog") as xParagraphDlg:
+        with self.ui_test.execute_dialog_through_command(".uno:ParagraphDialog") as xParagraphDlg:
 
 
 
@@ -63,7 +63,7 @@ class tdf79236(UITestCase):
         self.assertEqual(document.CurrentSelection.getByIndex(0).ParaBottomMargin, 5503)
         self.assertEqual(document.CurrentSelection.getByIndex(0).ParaFirstLineIndent, 3704)
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:ParagraphDialog") as xParagraphDlg:
+        with self.ui_test.execute_dialog_through_command(".uno:ParagraphDialog") as xParagraphDlg:
 
 
             xLeftSpnBtn = xParagraphDlg.getChild("spinED_LEFTINDENT")

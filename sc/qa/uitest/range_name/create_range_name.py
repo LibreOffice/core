@@ -67,7 +67,7 @@ class CreateRangeNameTest(UITestCase):
         self.assertEqual(3.0, get_cell_by_position(document, 0, 0, 1).getValue())
 
         # Change the name
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:DefineName") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:DefineName") as xDialog:
             xNamesList = xDialog.getChild('names')
             self.assertEqual(1, len(xNamesList.getChildren()))
 
@@ -120,7 +120,7 @@ class CreateRangeNameTest(UITestCase):
         # Use the name range in the current sheet
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "B1"}))
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:InsertName", close_button="paste") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:InsertName", close_button="paste") as xDialog:
 
             xCtrl = xDialog.getChild('ctrl')
             self.assertEqual(1, len(xCtrl.getChildren()))
@@ -135,13 +135,13 @@ class CreateRangeNameTest(UITestCase):
         self.assertEqual("=localRangeName", get_cell_by_position(document, 0, 1, 0).getFormula())
 
         # Insert a new sheet
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:Insert"):
+        with self.ui_test.execute_dialog_through_command(".uno:Insert"):
             pass
 
         # Use the name range in the new sheet
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "B1"}))
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:InsertName", close_button="paste") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:InsertName", close_button="paste") as xDialog:
 
             xCtrl = xDialog.getChild('ctrl')
             self.assertEqual(1, len(xCtrl.getChildren()))
@@ -158,7 +158,7 @@ class CreateRangeNameTest(UITestCase):
         # and AssertionError: '=Sheet1.localRangeName' != '=localrangename'
         self.assertEqual("=Sheet1.localRangeName", get_cell_by_position(document, 0, 1, 0).getFormula())
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:DefineName") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:DefineName") as xDialog:
 
             # tdf#138851: Without the fix in place, this test would have failed with
             # AssertionError: 'Sheet1' != 'Document (Global)'

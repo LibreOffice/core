@@ -21,7 +21,7 @@ class protectSpreadsheet(UITestCase):
         gridwin = xCalcDoc.getChild("grid_window")
         document = self.ui_test.get_component()
         #enter password
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:ToolProtectionDocument") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:ToolProtectionDocument") as xDialog:
             xpass1ed = xDialog.getChild("pass1ed")
             xconfirm1ed = xDialog.getChild("confirm1ed")
 
@@ -29,7 +29,7 @@ class protectSpreadsheet(UITestCase):
             xconfirm1ed.executeAction("TYPE", mkPropertyValues({"TEXT":"aa"}))
 
         #Verify
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:ToolProtectionDocument", close_button="cancel") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:ToolProtectionDocument", close_button="cancel") as xDialog:
             xpass1ed = xDialog.getChild("pass1ed")
 
             xpass1ed.executeAction("TYPE", mkPropertyValues({"TEXT":"aa"}))

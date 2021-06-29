@@ -19,7 +19,7 @@ class textToTable(UITestCase):
         #Enter A;B ; select the text ; dialog Text to table - Semicolon; verify
         type_text(xWriterEdit, "A;B;C")
         xWriterEdit.executeAction("SELECT", mkPropertyValues({"START_POS": "0", "END_POS": "5"}))
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:ConvertTextToTable") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:ConvertTextToTable") as xDialog:
             semicolons = xDialog.getChild("semicolons")
             semicolons.executeAction("CLICK", tuple())
         #verify
@@ -40,7 +40,7 @@ class textToTable(UITestCase):
             xWriterEdit = xWriterDoc.getChild("writer_edit")
             #open file; select all text ; dialog Text to table - other ":"; verify
             self.xUITest.executeCommand(".uno:SelectAll")
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:ConvertTextToTable") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:ConvertTextToTable") as xDialog:
                 other = xDialog.getChild("other")
                 other.executeAction("CLICK", tuple())
                 othered = xDialog.getChild("othered")

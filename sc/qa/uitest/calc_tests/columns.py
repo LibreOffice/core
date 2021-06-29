@@ -21,7 +21,7 @@ class CalcColumns(UITestCase):
         #select A1
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
         #column width
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:ColumnWidth") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:ColumnWidth") as xDialog:
             xvalue = xDialog.getChild("value")
             xdefault = xDialog.getChild("default")
             self.assertEqual(get_state_as_dict(xdefault)["Selected"], "true")  #default selected
@@ -40,7 +40,7 @@ class CalcColumns(UITestCase):
             xvalue.executeAction("TYPE", mkPropertyValues({"TEXT":"1 cm"}))
             # Click Ok
         #verify
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:ColumnWidth", close_button="cancel") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:ColumnWidth", close_button="cancel") as xDialog:
             xvalue = xDialog.getChild("value")
             self.assertEqual(get_state_as_dict(xvalue)["Text"], "1.0001 cm")
 
@@ -57,7 +57,7 @@ class CalcColumns(UITestCase):
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "C1", "EXTEND":"1"}))
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:ColumnWidth") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:ColumnWidth") as xDialog:
             xvalue = xDialog.getChild("value")
             xdefault = xDialog.getChild("default")
             #write your own value
@@ -67,12 +67,12 @@ class CalcColumns(UITestCase):
             # Click Ok
         #verify
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:ColumnWidth") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:ColumnWidth") as xDialog:
             xvalue = xDialog.getChild("value")
             self.assertEqual(get_state_as_dict(xvalue)["Text"], "1.0001 cm")
 
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "C1"}))
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:ColumnWidth") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:ColumnWidth") as xDialog:
             xvalue = xDialog.getChild("value")
             self.assertEqual(get_state_as_dict(xvalue)["Text"], "1.0001 cm")
 
@@ -89,7 +89,7 @@ class CalcColumns(UITestCase):
         #select A1
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
         #column width
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:ColumnWidth") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:ColumnWidth") as xDialog:
             xvalue = xDialog.getChild("value")
             xvalue.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
             xvalue.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
@@ -105,7 +105,7 @@ class CalcColumns(UITestCase):
         self.xUITest.executeCommand(".uno:Paste")
         #verify
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "C1"}))
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:ColumnWidth") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:ColumnWidth") as xDialog:
             xvalue = xDialog.getChild("value")
             self.assertEqual(get_state_as_dict(xvalue)["Text"], "1.0001 cm")
 
@@ -172,7 +172,7 @@ class CalcColumns(UITestCase):
         #select C1
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "C1"}))
         #column width
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:ColumnWidth") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:ColumnWidth") as xDialog:
             xvalue = xDialog.getChild("value")
             xvalue.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
             xvalue.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
@@ -181,7 +181,7 @@ class CalcColumns(UITestCase):
         #select D1
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "D1"}))
         #column width
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:ColumnWidth") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:ColumnWidth") as xDialog:
             xvalue = xDialog.getChild("value")
             xvalue.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
             xvalue.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
@@ -190,7 +190,7 @@ class CalcColumns(UITestCase):
         #select E1
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "E1"}))
         #column width
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:ColumnWidth") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:ColumnWidth") as xDialog:
             xvalue = xDialog.getChild("value")
             xvalue.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
             xvalue.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
@@ -203,32 +203,32 @@ class CalcColumns(UITestCase):
         self.xUITest.executeCommand(".uno:InsertColumnsBefore")
         #verify
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "C1"}))
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:ColumnWidth") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:ColumnWidth") as xDialog:
             xvalue = xDialog.getChild("value")
             self.assertEqual(get_state_as_dict(xvalue)["Text"], "1.0001 cm")
 
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "D1"}))
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:ColumnWidth") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:ColumnWidth") as xDialog:
             xvalue = xDialog.getChild("value")
             self.assertEqual(get_state_as_dict(xvalue)["Text"], "2.0003 cm")
 
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "E1"}))
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:ColumnWidth") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:ColumnWidth") as xDialog:
             xvalue = xDialog.getChild("value")
             self.assertEqual(get_state_as_dict(xvalue)["Text"], "3.0004 cm")
 
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "F1"}))
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:ColumnWidth") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:ColumnWidth") as xDialog:
             xvalue = xDialog.getChild("value")
             self.assertEqual(get_state_as_dict(xvalue)["Text"], "1.0001 cm")
 
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "G1"}))
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:ColumnWidth") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:ColumnWidth") as xDialog:
             xvalue = xDialog.getChild("value")
             self.assertEqual(get_state_as_dict(xvalue)["Text"], "2.0003 cm")
 
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "H1"}))
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:ColumnWidth") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:ColumnWidth") as xDialog:
             xvalue = xDialog.getChild("value")
             self.assertEqual(get_state_as_dict(xvalue)["Text"], "3.0004 cm")
 

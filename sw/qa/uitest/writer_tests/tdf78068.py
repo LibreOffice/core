@@ -19,7 +19,7 @@ class tdf78068(UITestCase):
         #- add some text
         type_text(xWriterEdit, "Test")
         #- go to Format > Paragraph
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:ParagraphDialog") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:ParagraphDialog") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             select_pos(xTabs, "0")
 

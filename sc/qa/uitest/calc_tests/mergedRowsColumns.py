@@ -64,7 +64,7 @@ class mergedRowsColumns(UITestCase):
 
             #move the content of the hidden cells into the first cell
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A11:A12"}))
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:ToggleMergeCells") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:ToggleMergeCells") as xDialog:
                 xMoveCells = xDialog.getChild("move-cells-radio")
                 xMoveCells.executeAction("CLICK", tuple())
             self.assertEqual(get_cell_by_position(calc_doc, 0, 0, 10).getString(), "2 3")
@@ -76,7 +76,7 @@ class mergedRowsColumns(UITestCase):
 
             #keep the contents of the hidden cells
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A11:A12"}))
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:ToggleMergeCells") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:ToggleMergeCells") as xDialog:
                 xMoveCells = xDialog.getChild("keep-content-radio")
                 xMoveCells.executeAction("CLICK", tuple())
             self.assertEqual(get_cell_by_position(calc_doc, 0, 0, 10).getString(), "2")
@@ -89,7 +89,7 @@ class mergedRowsColumns(UITestCase):
 
             #Empty the contents of the hidden cells
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A11:A12"}))
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:ToggleMergeCells") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:ToggleMergeCells") as xDialog:
                 xMoveCells = xDialog.getChild("move-cells-radio")
                 xMoveCells.executeAction("CLICK", tuple())
             self.assertEqual(get_cell_by_position(calc_doc, 0, 0, 10).getString(), "2 3")
@@ -102,7 +102,7 @@ class mergedRowsColumns(UITestCase):
 
             #A21-A22
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A21:A22"}))
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:ToggleMergeCells") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:ToggleMergeCells") as xDialog:
                 xMoveCells = xDialog.getChild("keep-content-radio")
                 xMoveCells.executeAction("CLICK", tuple())
             self.assertEqual(get_cell_by_position(calc_doc, 0, 0, 20).getString(), "2")
@@ -115,7 +115,7 @@ class mergedRowsColumns(UITestCase):
 
             #A30-A32
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A30:A32"}))
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:ToggleMergeCells") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:ToggleMergeCells") as xDialog:
                 xMoveCells = xDialog.getChild("keep-content-radio")
                 xMoveCells.executeAction("CLICK", tuple())
             self.assertEqual(get_cell_by_position(calc_doc, 0, 1, 31).getString(), "thisisbad")
@@ -126,7 +126,7 @@ class mergedRowsColumns(UITestCase):
 
             #J12-K12
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "J12:K12"}))
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:ToggleMergeCells") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:ToggleMergeCells") as xDialog:
 
                 xMoveCells = xDialog.getChild("keep-content-radio")
                 xMoveCells.executeAction("CLICK", tuple())
@@ -139,7 +139,7 @@ class mergedRowsColumns(UITestCase):
 
             #J22-K22
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "J22:K22"}))
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:ToggleMergeCells") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:ToggleMergeCells") as xDialog:
                 xMoveCells = xDialog.getChild("keep-content-radio")
                 xMoveCells.executeAction("CLICK", tuple())
             self.assertEqual(get_cell_by_position(calc_doc, 0, 9, 21).getString(), "2")

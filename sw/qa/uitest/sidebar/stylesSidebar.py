@@ -14,7 +14,7 @@ class StylesSidebar(UITestCase):
    def test_load_styles_from_template(self):
         self.ui_test.create_doc_in_start_center("writer")
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:LoadStyles", close_button="") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:LoadStyles", close_button="") as xDialog:
             xText = xDialog.getChild("text")
             xNumbering = xDialog.getChild("numbering")
             xFrame = xDialog.getChild("frame")

@@ -25,7 +25,7 @@ class WriterSort(UITestCase):
 
         selection = self.xUITest.executeCommand(".uno:SelectAll")  #select whole text
         #Tools - Sort
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:SortDialog") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:SortDialog") as xDialog:
             xDown = xDialog.getChild("down1")
             xDown.executeAction("CLICK", tuple())
         #check
@@ -45,7 +45,7 @@ class WriterSort(UITestCase):
 
         selection = self.xUITest.executeCommand(".uno:SelectAll")  #select whole text
         #Tools - Sort
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:SortDialog") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:SortDialog") as xDialog:
             xDown = xDialog.getChild("down1")
             xcolsb1 = xDialog.getChild("colsb1")
             xtypelb1 = xDialog.getChild("typelb1")

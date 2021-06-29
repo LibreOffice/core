@@ -19,7 +19,7 @@ class fontWorksDialog(UITestCase):
         xWriterDoc = self.xUITest.getTopFocusWindow()
         xWriterEdit = xWriterDoc.getChild("writer_edit")
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:FontworkGalleryFloater", close_button="cancel") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:FontworkGalleryFloater", close_button="cancel") as xDialog:
             FontWorkSelector = xDialog.getChild("ctlFavoriteswin")
             # Select element with id (3)
             element3 = FontWorkSelector.getChild("2")

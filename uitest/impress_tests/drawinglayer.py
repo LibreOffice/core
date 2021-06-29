@@ -44,7 +44,7 @@ class ImpressDrawinglayerTest(UITestCase):
         xEditWin.executeAction("SELECT", mkPropertyValues({"OBJECT":"Unnamed Drawinglayer object 1"}))
         self.assertEqual("com.sun.star.drawing.SvxShapeCollection", document.CurrentSelection.getImplementationName())
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:Size") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:Size") as xDialog:
             self.assertEqual('25.2', get_state_as_dict(xDialog.getChild('MTR_FLD_WIDTH'))['Value'])
             self.assertEqual('9.13', get_state_as_dict(xDialog.getChild('MTR_FLD_HEIGHT'))['Value'])
             self.assertEqual('2.4', get_state_as_dict(xDialog.getChild('MTR_FLD_POS_X'))['Value'])
@@ -89,7 +89,7 @@ class ImpressDrawinglayerTest(UITestCase):
         xEditWin.executeAction("SELECT", mkPropertyValues({"OBJECT":"Unnamed Drawinglayer object 1"}))
         self.assertEqual("com.sun.star.drawing.SvxShapeCollection", document.CurrentSelection.getImplementationName())
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:Size") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:Size") as xDialog:
             self.assertEqual('12.6', get_state_as_dict(xDialog.getChild('MTR_FLD_WIDTH'))['Value'])
             self.assertEqual('4.57', get_state_as_dict(xDialog.getChild('MTR_FLD_HEIGHT'))['Value'])
             self.assertEqual('0.95', get_state_as_dict(xDialog.getChild('MTR_FLD_POS_X'))['Value'])
@@ -134,7 +134,7 @@ class ImpressDrawinglayerTest(UITestCase):
         xEditWin.executeAction("SELECT", mkPropertyValues({"OBJECT":"Unnamed Drawinglayer object 1"}))
         self.assertEqual("com.sun.star.drawing.SvxShapeCollection", document.CurrentSelection.getImplementationName())
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:Size") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:Size") as xDialog:
             self.assertEqual('30', get_state_as_dict(xDialog.getChild('NF_ANGLE'))['Value'])
 
         self.assertEqual("com.sun.star.drawing.SvxShapeCollection", document.CurrentSelection.getImplementationName())

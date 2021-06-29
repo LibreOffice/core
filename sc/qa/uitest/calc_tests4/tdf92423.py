@@ -19,7 +19,7 @@ class tdf92423(UITestCase):
         document = self.ui_test.get_component()
 
         #Make sure that tools-options-StarOffice Calc-General-Input settings-Show overwrite warning when pasting data is tagged.
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:OptionsTreeDialog") as xDialogOpt:
+        with self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog") as xDialogOpt:
 
             xPages = xDialogOpt.getChild("pages")
             xWriterEntry = xPages.getChild('3')                 # Calc
@@ -48,7 +48,7 @@ class tdf92423(UITestCase):
         gridWinState = get_state_as_dict(gridwin)
         self.assertEqual(gridWinState["MarkedArea"], "Sheet1.A7:Sheet1.A9")
         # Data - Text to Columns
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:TextToColumns") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:TextToColumns") as xDialog:
             xSemicolon = xDialog.getChild("semicolon")  #check semicolon checkbox
             if (get_state_as_dict(xSemicolon)["Selected"]) == "false":
                 xSemicolon.executeAction("CLICK", tuple())

@@ -84,7 +84,7 @@ class keyF4(UITestCase):
         gridwin = xCalcDoc.getChild("grid_window")
         document = self.ui_test.get_component()
         #* Tools --> Options --> Calc --> Formula -->  Syntax = Excel R1C1
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:OptionsTreeDialog") as xDialogOpt:
+        with self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog") as xDialogOpt:
 
             xPages = xDialogOpt.getChild("pages")
             xCalcEntry = xPages.getChild('3')                 # Calc
@@ -113,7 +113,7 @@ class keyF4(UITestCase):
         self.assertEqual(get_cell_by_position(document, 0, 0, 0).getString(), "=R3C3")
 
         #Give it back Tools --> Options --> Calc --> Formula -->  Syntax = Calc A1
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:OptionsTreeDialog") as xDialogOpt:
+        with self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog") as xDialogOpt:
 
             xPages = xDialogOpt.getChild("pages")
             xCalcEntry = xPages.getChild('3')                 # Calc

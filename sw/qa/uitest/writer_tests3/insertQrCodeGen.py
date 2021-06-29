@@ -16,7 +16,7 @@ class insertQrCode(UITestCase):
         xWriterDoc = self.xUITest.getTopFocusWindow()
 
         # cancel the dialog without doing anything
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:InsertQrCode", close_button="cancel") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:InsertQrCode", close_button="cancel") as xDialog:
 
             xURL = xDialog.getChild("edit_text")
             type_text(xURL, "www.libreoffice.org")
@@ -25,7 +25,7 @@ class insertQrCode(UITestCase):
             document.DrawPage.getByIndex(0)
 
         # Reopen the dialog box
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:InsertQrCode") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:InsertQrCode") as xDialog:
 
             # Get elements in the Dialog Box
             xURL = xDialog.getChild("edit_text")
@@ -49,7 +49,7 @@ class insertQrCode(UITestCase):
         document = self.ui_test.get_component()
         xWriterDoc = self.xUITest.getTopFocusWindow()
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:InsertQrCode") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:InsertQrCode") as xDialog:
 
             xURL = xDialog.getChild("edit_text")
             xECC_Low = xDialog.getChild("button_low")

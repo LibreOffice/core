@@ -35,7 +35,7 @@ class ManualCalcTests(UITestCase):
         xGridWin.executeAction("SELECT", mkPropertyValues({"CELL": "A3"}))
 
         # Choose Paste Special Options and paste data
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:PasteSpecial") as xPasteSpecialDlg:
+        with self.ui_test.execute_dialog_through_command(".uno:PasteSpecial") as xPasteSpecialDlg:
             xAllChkBox = xPasteSpecialDlg.getChild("paste_all")
             xAllChkBox.executeAction("CLICK", tuple())
             xLinkChkBox = xPasteSpecialDlg.getChild("link")

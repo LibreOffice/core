@@ -20,7 +20,7 @@ class tdf105544(UITestCase):
             gridwin = xCalcDoc.getChild("grid_window")
             #2. select B3. Format> conditional formatting> manage
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "B3"}))
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:ConditionalFormatManagerDialog", close_button="") as xCondFormatMgr:
+            with self.ui_test.execute_dialog_through_command(".uno:ConditionalFormatManagerDialog", close_button="") as xCondFormatMgr:
 
                 # check that we have exactly four conditional formats in the beginning
                 xList = xCondFormatMgr.getChild("CONTAINER")

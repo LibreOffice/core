@@ -17,12 +17,12 @@ class tdf53460(UITestCase):
         xWriterEdit = xWriterDoc.getChild("writer_edit")
         document = self.ui_test.get_component()
         #-insert a table (by default 2x2)
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:InsertTable"):
+        with self.ui_test.execute_dialog_through_command(".uno:InsertTable"):
             pass
 
         #-put the cursor inside first cell top left for example
         #-insert an inner table (by default 2x2) inside this cell
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:InsertTable"):
+        with self.ui_test.execute_dialog_through_command(".uno:InsertTable"):
             pass
 
         #-still in top left cell, go to the line after the inner table

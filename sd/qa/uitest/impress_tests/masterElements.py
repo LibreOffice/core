@@ -20,7 +20,7 @@ class masterElements(UITestCase):
         self.ui_test.close_dialog_through_button(xCancelBtn)
         document = self.ui_test.get_component()
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:MasterLayouts") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:MasterLayouts") as xDialog:
 
             xpagenumber = xDialog.getChild("pagenumber")
             xfooter = xDialog.getChild("footer")
@@ -31,7 +31,7 @@ class masterElements(UITestCase):
 
 
         #verify
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:MasterLayouts") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:MasterLayouts") as xDialog:
             xfooter = xDialog.getChild("footer")
             datetime = xDialog.getChild("datetime")
             xpagenumber = xDialog.getChild("pagenumber")

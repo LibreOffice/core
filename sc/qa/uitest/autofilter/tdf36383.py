@@ -42,7 +42,7 @@ class tdf36383(UITestCase):
         self.assertFalse(row.getPropertyValue("IsVisible"))
 
         #row height
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:RowHeight") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:RowHeight") as xDialog:
             xvalue = xDialog.getChild("value")
             xvalue.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
             xvalue.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
@@ -52,7 +52,7 @@ class tdf36383(UITestCase):
         self.assertFalse(row.getPropertyValue("IsVisible"))
 
         #optimal row height
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:SetOptimalRowHeight"):
+        with self.ui_test.execute_dialog_through_command(".uno:SetOptimalRowHeight"):
             pass
 
         self.assertFalse(row.getPropertyValue("IsVisible"))

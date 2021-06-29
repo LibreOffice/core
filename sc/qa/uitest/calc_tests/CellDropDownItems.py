@@ -22,7 +22,7 @@ class CellDropDownItems(UITestCase):
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "C10"}))
 
         #Open Validation Dialog
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:Validation") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:Validation") as xDialog:
 
             #Select List option
             xallow = xDialog.getChild("allow")

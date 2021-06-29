@@ -18,7 +18,7 @@ class autoFormat(UITestCase):
         #select A1:C5
         gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:C5"}))
         #AutoFormat Styles
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:AutoFormat") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:AutoFormat") as xDialog:
 
             formatlb = xDialog.getChild("formatlb")
             numformatcb = xDialog.getChild("numformatcb")
@@ -39,7 +39,7 @@ class autoFormat(UITestCase):
 
 
         #verify
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:AutoFormat") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:AutoFormat") as xDialog:
 
             formatlb = xDialog.getChild("formatlb")
             numformatcb = xDialog.getChild("numformatcb")

@@ -18,7 +18,7 @@ class shareSpreadsheet(UITestCase):
         document = self.ui_test.get_component()
 
         #dialog shareSpreadsheet
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:ShareDocument", close_button="cancel") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:ShareDocument", close_button="cancel") as xDialog:
 
             share = xDialog.getChild("share")
             share.executeAction("CLICK", tuple())

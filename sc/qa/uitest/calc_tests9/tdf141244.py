@@ -20,7 +20,7 @@ class tdf141244(UITestCase):
 
         enter_text_to_cell(gridwin, "A1", '=DDE("soffice";"data1.ods";"sheet1.A1")')
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:EditLinks", close_button="close") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:EditLinks", close_button="close") as xDialog:
 
             xLinks = xDialog.getChild("TB_LINKS")
             self.assertEqual(1, len(xLinks.getChildren()))

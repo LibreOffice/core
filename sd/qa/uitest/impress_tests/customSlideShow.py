@@ -14,7 +14,7 @@ class customSlideShow(UITestCase):
         TemplateDialog = self.xUITest.getTopFocusWindow()
         cancel = TemplateDialog.getChild("close")
         self.ui_test.close_dialog_through_button(cancel)
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:CustomShowDialog") as CustomSlideShows:
+        with self.ui_test.execute_dialog_through_command(".uno:CustomShowDialog") as CustomSlideShows:
             new = CustomSlideShows.getChild("new")
 
             with self.ui_test.execute_blocking_action(new.executeAction, args=('CLICK', ())) as DefineCustomSlideShow:
@@ -29,7 +29,7 @@ class customSlideShow(UITestCase):
                 add.executeAction("CLICK",tuple())
 
         #verify
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:CustomShowDialog") as CustomSlideShows:
+        with self.ui_test.execute_dialog_through_command(".uno:CustomShowDialog") as CustomSlideShows:
             edit = CustomSlideShows.getChild("edit")
             customshowlist = CustomSlideShows.getChild("customshowlist")
             self.assertEqual(get_state_as_dict(customshowlist)["SelectionCount"], "1")

@@ -27,7 +27,7 @@ class tdf122722(UITestCase):
         #6. Opened Character, Select "Font Effect" tab
         #7. Check Hidden, and click [OK]
         #8. Crash a LibreOffice
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:FontDialog") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:FontDialog") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             select_pos(xTabs, "1")
 
@@ -43,7 +43,7 @@ class tdf122722(UITestCase):
             xHidden.executeAction("CLICK", tuple())
 
         #un-hidden
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:FontDialog") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:FontDialog") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             select_pos(xTabs, "1")
 

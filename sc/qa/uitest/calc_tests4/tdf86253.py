@@ -19,7 +19,7 @@ class tdf86253(UITestCase):
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
             self.xUITest.executeCommand(".uno:Copy")
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "C1:C17"}))
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:PasteSpecial") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:PasteSpecial") as xDialog:
 
                 xtext = xDialog.getChild("text")
                 xnumbers = xDialog.getChild("numbers")
@@ -34,7 +34,7 @@ class tdf86253(UITestCase):
 
             #--> Cell formatting for C1:C17 is changed. But, if you go to "Format - Conditional Formatting - Manage",
             #you will see that a new formatting condition is created with the range "C1:C6", rather than "C1:C17". This is wrong behavior.
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:ConditionalFormatManagerDialog", close_button="cancel") as xCondFormatMgr:
+            with self.ui_test.execute_dialog_through_command(".uno:ConditionalFormatManagerDialog", close_button="cancel") as xCondFormatMgr:
 
 
                 # check that we have exactly 1 conditional format and range is C1:C17

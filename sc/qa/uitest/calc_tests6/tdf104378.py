@@ -17,7 +17,7 @@ class tdf104378(UITestCase):
 
         enter_text_to_cell(gridwin, "A1", "遠程MySQL連接遠程MySQL連接遠程MySQL連接")
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:ChineseConversion"):
+        with self.ui_test.execute_dialog_through_command(".uno:ChineseConversion"):
             pass
 
         document = self.ui_test.get_component()

@@ -18,7 +18,7 @@ class tdf93068(UITestCase):
 
         # tdf#135950: Character dialog crashes if multiple cells in a
         # table are selected
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:InsertTable"):
+        with self.ui_test.execute_dialog_through_command(".uno:InsertTable"):
             pass
 
         self.xUITest.executeCommand(".uno:SelectAll")
@@ -26,13 +26,13 @@ class tdf93068(UITestCase):
         # Check the table is selected
         self.assertEqual("SwXTextTableCursor", document.CurrentSelection.getImplementationName())
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:FontDialog"):
+        with self.ui_test.execute_dialog_through_command(".uno:FontDialog"):
             pass
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:FontDialog", close_button="cancel"):
+        with self.ui_test.execute_dialog_through_command(".uno:FontDialog", close_button="cancel"):
             pass
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:FontDialog") as xFontDlg:
+        with self.ui_test.execute_dialog_through_command(".uno:FontDialog") as xFontDlg:
             xDiscardBtn = xFontDlg.getChild("reset")
             xDiscardBtn.executeAction("CLICK", tuple())
 

@@ -21,7 +21,7 @@ class tdf137446(UITestCase):
 
             gridwin.executeAction("SELECT", mkPropertyValues({"OBJECT": "lineObject"}))
 
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:TransformDialog") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:TransformDialog") as xDialog:
 
 
                 self.assertEqual('10', get_state_as_dict(xDialog.getChild('MTR_FLD_WIDTH'))['Value'])
@@ -34,7 +34,7 @@ class tdf137446(UITestCase):
                 xDialog.getChild('MTR_FLD_WIDTH').executeAction("UP", tuple())
 
 
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:TransformDialog") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:TransformDialog") as xDialog:
 
 
                 self.assertEqual('10.1', get_state_as_dict(xDialog.getChild('MTR_FLD_WIDTH'))['Value'])

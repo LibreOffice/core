@@ -19,7 +19,7 @@ class columns(UITestCase):
         change_measurement_unit(self, "Centimeter")
 
         #dialog Columns
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:FormatColumns") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:FormatColumns") as xDialog:
 
             colsnf = xDialog.getChild("colsnf")
             colsnf.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
@@ -34,7 +34,7 @@ class columns(UITestCase):
             autowidth = xDialog.getChild("autowidth")
             autowidth.executeAction("CLICK", tuple())
         #verify
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:FormatColumns", close_button="cancel") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:FormatColumns", close_button="cancel") as xDialog:
             colsnf = xDialog.getChild("colsnf")
             spacing1mf = xDialog.getChild("spacing1mf")
             autowidth = xDialog.getChild("autowidth")

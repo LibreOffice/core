@@ -17,7 +17,7 @@ class CheckBoxTest(UITestCase):
 
         self.ui_test.create_doc_in_start_center("calc")
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:About", close_button="btnClose") as xAboutDlg:
+        with self.ui_test.execute_dialog_through_command(".uno:About", close_button="btnClose") as xAboutDlg:
 
 
             json_string = xAboutDlg.getHierarchy()

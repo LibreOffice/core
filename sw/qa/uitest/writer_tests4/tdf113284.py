@@ -18,14 +18,14 @@ class tdf113284(UITestCase):
         xToolkit.processEventsToIdle()
 
         xPageCount = writer_doc.CurrentController.PageCount
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:GotoPage") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:GotoPage") as xDialog:
             xPageText = xDialog.getChild("page")
             xPageText.executeAction("TYPE", mkPropertyValues({"TEXT":str(xPageCount)})) # goto last page
 
         xToolkit.processEventsToIdle()
 
         self.assertEqual(get_state_as_dict(xWriterEdit)["CurrentPage"], str(xPageCount))
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:EditCurIndex", close_button="cancel"):
+        with self.ui_test.execute_dialog_through_command(".uno:EditCurIndex", close_button="cancel"):
             pass
 
         #page count  is not constant

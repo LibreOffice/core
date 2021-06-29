@@ -25,7 +25,7 @@ class tdf139511(UITestCase):
         self.assertEqual(8004, document.DrawPages[0].getByIndex(2).BoundRect.Height)
         self.assertEqual(14104, document.DrawPages[0].getByIndex(2).BoundRect.Width)
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:TransformDialog") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:TransformDialog") as xDialog:
 
 
             xWidth = xDialog.getChild('MTR_FLD_WIDTH')

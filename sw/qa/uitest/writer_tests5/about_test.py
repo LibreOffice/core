@@ -13,7 +13,7 @@ class AboutDlgTest(UITestCase):
 
         self.ui_test.create_doc_in_start_center("writer")
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:About", close_button="btnClose"):
+        with self.ui_test.execute_dialog_through_command(".uno:About", close_button="btnClose"):
             pass
 
         self.ui_test.close_doc()

@@ -41,7 +41,7 @@ class classification(UITestCase):
         writer_doc = self.ui_test.create_doc_in_start_center("writer")
         document = self.ui_test.get_component()
         xWriterDoc = self.xUITest.getTopFocusWindow()
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:ClassificationDialog") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:ClassificationDialog") as xDialog:
             classificationEditWindow = xDialog.getChild("classificationEditWindow")
             recentlyUsedCB = xDialog.getChild("recentlyUsedCB")
             classificationCB = xDialog.getChild("classificationCB")
@@ -63,7 +63,7 @@ class classification(UITestCase):
 
         #verify watermark
         #Bug 122586 - Classification: by using the dialog, Watermark text from policy is not placed in the document
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:Watermark", close_button="cancel") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:Watermark", close_button="cancel") as xDialog:
             xTextInput = xDialog.getChild("TextInput")
             xAngle = xDialog.getChild("Angle")
             xTransparency = xDialog.getChild("Transparency")
@@ -77,7 +77,7 @@ class classification(UITestCase):
         #reopen and verify classification and Content
 
         #do the same for Paragraph classification
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:ParagraphClassificationDialog") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:ParagraphClassificationDialog") as xDialog:
             classificationEditWindow = xDialog.getChild("classificationEditWindow")
             recentlyUsedCB = xDialog.getChild("recentlyUsedCB")
             classificationCB = xDialog.getChild("classificationCB")
@@ -104,7 +104,7 @@ class classification(UITestCase):
         document = self.ui_test.get_component()
         xWriterDoc = self.xUITest.getTopFocusWindow()
         #+ new file and do it only for Paragraph classification (no watermark!)
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:ParagraphClassificationDialog") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:ParagraphClassificationDialog") as xDialog:
             classificationEditWindow = xDialog.getChild("classificationEditWindow")
             recentlyUsedCB = xDialog.getChild("recentlyUsedCB")
             classificationCB = xDialog.getChild("classificationCB")
@@ -132,7 +132,7 @@ class classification(UITestCase):
         document = self.ui_test.get_component()
         xWriterDoc = self.xUITest.getTopFocusWindow()
         #+ new file and do it only for Paragraph classification (no watermark!)
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:ParagraphClassificationDialog") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:ParagraphClassificationDialog") as xDialog:
             classificationEditWindow = xDialog.getChild("classificationEditWindow")
             recentlyUsedCB = xDialog.getChild("recentlyUsedCB")
             classificationCB = xDialog.getChild("classificationCB")

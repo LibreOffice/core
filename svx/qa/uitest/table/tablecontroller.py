@@ -22,7 +22,7 @@ class SvxTableControllerTest(UITestCase):
         self.xUITest.executeCommand(".uno:InsertTable?Columns:short=2&Rows:short=2")
 
         # Enable shadow.
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:TableDialog") as tableDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:TableDialog") as tableDialog:
             tabs = tableDialog.getChild("tabcontrol")
             # Select "shadow".
             select_pos(tabs, "4")
@@ -59,7 +59,7 @@ class SvxTableControllerTest(UITestCase):
             impress.executeAction("TYPE", mkPropertyValues({"KEYCODE": "CTRL+TAB"}))
         impress.executeAction("TYPE", mkPropertyValues({"TEXT": "A3"}))
         self.xUITest.executeCommand(".uno:SelectAll")
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:TableDialog") as tableDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:TableDialog") as tableDialog:
             tabs = tableDialog.getChild("tabcontrol")
             # Select "shadow".
             select_pos(tabs, "4")

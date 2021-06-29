@@ -14,7 +14,7 @@ class tdf131581(UITestCase):
 
         self.xUITest.getTopFocusWindow()
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:OptionsTreeDialog") as xDialogOpt:
+        with self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog") as xDialogOpt:
 
             xPages = xDialogOpt.getChild("pages")
             xLOEntry = xPages.getChild('0')

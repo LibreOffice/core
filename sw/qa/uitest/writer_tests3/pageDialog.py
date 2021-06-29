@@ -118,14 +118,14 @@ class WriterPageDialog(UITestCase):
         buttons = ['btnbitmap', 'btncolor', 'btngradient', 'btnhatch', 'btnpattern']
         for index, button in enumerate(buttons):
 
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:PageDialog") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:PageDialog") as xDialog:
                 tabcontrol = xDialog.getChild("tabcontrol")
                 select_pos(tabcontrol, "2")
                 self.click_button(xDialog, button)
 
             self.check_default_area(button)
 
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:PageDialog") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:PageDialog") as xDialog:
                 tabcontrol = xDialog.getChild("tabcontrol")
                 select_pos(tabcontrol, "2")
 
@@ -147,7 +147,7 @@ class WriterPageDialog(UITestCase):
 
         for i in range(30):
             with self.subTest(i=i):
-                with self.ui_test.execute_dialog_through_command_guarded(".uno:PageDialog") as xDialog:
+                with self.ui_test.execute_dialog_through_command(".uno:PageDialog") as xDialog:
                     tabcontrol = xDialog.getChild("tabcontrol")
                     select_pos(tabcontrol, "1")
                     xFormatList = xDialog.getChild("comboPageFormat")
@@ -167,7 +167,7 @@ class WriterPageDialog(UITestCase):
         self.assertEqual(
             document.StyleFamilies.PageStyles.Standard.IsLandscape, False)
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:PageDialog") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:PageDialog") as xDialog:
             tabcontrol = xDialog.getChild("tabcontrol")
             select_pos(tabcontrol, "1")
             self.click_button(xDialog, 'radiobuttonLandscape')
@@ -175,7 +175,7 @@ class WriterPageDialog(UITestCase):
         self.assertEqual(
             document.StyleFamilies.PageStyles.Standard.IsLandscape, True)
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:PageDialog") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:PageDialog") as xDialog:
             tabcontrol = xDialog.getChild("tabcontrol")
             select_pos(tabcontrol, "1")
             self.click_button(xDialog, 'radiobuttonPortrait')
@@ -196,7 +196,7 @@ class WriterPageDialog(UITestCase):
 
         for i in range(4):
             with self.subTest(i=i):
-                with self.ui_test.execute_dialog_through_command_guarded(".uno:PageDialog") as xDialog:
+                with self.ui_test.execute_dialog_through_command(".uno:PageDialog") as xDialog:
                     tabcontrol = xDialog.getChild("tabcontrol")
                     select_pos(tabcontrol, "1")
 
@@ -214,7 +214,7 @@ class WriterPageDialog(UITestCase):
     def test_cancel_button_page_dialog(self):
         self.ui_test.create_doc_in_start_center("writer")
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:PageDialog", close_button="cancel") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:PageDialog", close_button="cancel") as xDialog:
             pass
 
         self.ui_test.close_doc()

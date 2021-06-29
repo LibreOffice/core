@@ -15,14 +15,14 @@ class insertFootEndnote(UITestCase):
         xWriterDoc = self.xUITest.getTopFocusWindow()
 
 #Automatic - Footnote
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:InsertFootnoteDialog"):
+        with self.ui_test.execute_dialog_through_command(".uno:InsertFootnoteDialog"):
             pass
 
         self.assertEqual(document.Footnotes.getCount(), 1)
         self.xUITest.executeCommand(".uno:Undo")
         self.assertEqual(document.Footnotes.getCount(), 0)
 #Automatic - Endnote
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:InsertFootnoteDialog") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:InsertFootnoteDialog") as xDialog:
             xEndnote = xDialog.getChild("endnote")
             xEndnote.executeAction("CLICK", tuple())
 
@@ -30,7 +30,7 @@ class insertFootEndnote(UITestCase):
         self.xUITest.executeCommand(".uno:Undo")
         self.assertEqual(document.Endnotes.getCount(), 0)
 #Character - Footnote
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:InsertFootnoteDialog") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:InsertFootnoteDialog") as xDialog:
             xChar = xDialog.getChild("character")
             xChar.executeAction("CLICK", tuple())
             xCharentry = xDialog.getChild("characterentry")
@@ -41,7 +41,7 @@ class insertFootEndnote(UITestCase):
         self.assertEqual(document.Footnotes.getCount(), 0)
 
 #Character - Endnote
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:InsertFootnoteDialog") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:InsertFootnoteDialog") as xDialog:
             xChar = xDialog.getChild("character")
             xChar.executeAction("CLICK", tuple())
             xCharentry = xDialog.getChild("characterentry")
@@ -55,7 +55,7 @@ class insertFootEndnote(UITestCase):
         self.assertEqual(document.Endnotes.getCount(), 0)
 
 #Cancel button
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:InsertFootnoteDialog", close_button="cancel"):
+        with self.ui_test.execute_dialog_through_command(".uno:InsertFootnoteDialog", close_button="cancel"):
             pass
 
         self.ui_test.close_doc()

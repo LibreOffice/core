@@ -20,7 +20,7 @@ class TestClass(UITestCase):
         self.ui_test.close_dialog_through_button(close)
 
         # set margins and fill color
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:PageSetup") as DrawPageDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:PageSetup") as DrawPageDialog:
             xTabs = DrawPageDialog.getChild("tabcontrol")
             select_pos(xTabs, "0")
             checkBackgroundFullSize = DrawPageDialog.getChild("checkBackgroundFullSize")
@@ -56,7 +56,7 @@ class TestClass(UITestCase):
           document.MasterPages.getByIndex(0).BackgroundFullSize, False)
 
         # check it
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:PageSetup") as DrawPageDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:PageSetup") as DrawPageDialog:
             xTabs = DrawPageDialog.getChild("tabcontrol")
             select_pos(xTabs, "0")
             checkBackgroundFullSize = DrawPageDialog.getChild("checkBackgroundFullSize")
@@ -77,7 +77,7 @@ class TestClass(UITestCase):
           document.MasterPages.getByIndex(0).BackgroundFullSize, True)
 
         # uncheck it again
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:PageSetup") as DrawPageDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:PageSetup") as DrawPageDialog:
             xTabs = DrawPageDialog.getChild("tabcontrol")
             select_pos(xTabs, "0")
             checkBackgroundFullSize = DrawPageDialog.getChild("checkBackgroundFullSize")

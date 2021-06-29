@@ -25,13 +25,13 @@ class tdf126673(UITestCase):
             #select A2
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A2"}))
             #optimal row height
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:SetOptimalRowHeight") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:SetOptimalRowHeight") as xDialog:
                 pass
 
             #select A2
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A2"}))
             #row height
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:RowHeight", close_button="cancel") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:RowHeight", close_button="cancel") as xDialog:
                 xvalue = xDialog.getChild("value")
                 heightStrOrig = get_state_as_dict(xvalue)["Text"]
                 heightVal = heightStrOrig[:4]  #default 0.45 cm,

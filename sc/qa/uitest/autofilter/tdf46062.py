@@ -24,7 +24,7 @@ class tdf46062(UITestCase):
 
         gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:A4"}))
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:DataFilterAutoFilter", close_button="yes"):
+        with self.ui_test.execute_dialog_through_command(".uno:DataFilterAutoFilter", close_button="yes"):
             pass
 
         gridwin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "0", "ROW": "0"}))

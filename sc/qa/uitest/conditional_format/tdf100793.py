@@ -25,7 +25,7 @@ class tdf100793(UITestCase):
             #2) Go to sheet "plan"
             gridwin.executeAction("SELECT", mkPropertyValues({"TABLE": "2"}))
             #3) Open the conditional formatting management dialog-> The indicated range should be G18:K29,F18,F20:F29
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:ConditionalFormatManagerDialog", close_button="") as xCondFormatMgr:
+            with self.ui_test.execute_dialog_through_command(".uno:ConditionalFormatManagerDialog", close_button="") as xCondFormatMgr:
 
                 # check that we have exactly one conditional formats in the beginning
                 xList = xCondFormatMgr.getChild("CONTAINER")
@@ -72,7 +72,7 @@ class tdf100793(UITestCase):
                 self.ui_test.close_dialog_through_button(xOKBtn)
 
             #verify - reopen, check range
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:ConditionalFormatManagerDialog", close_button="") as xCondFormatMgr:
+            with self.ui_test.execute_dialog_through_command(".uno:ConditionalFormatManagerDialog", close_button="") as xCondFormatMgr:
                 xEditBtn = xCondFormatMgr.getChild("edit")
                 with self.ui_test.execute_dialog_through_action(xEditBtn, "CLICK", event_name = "ModelessDialogVisible") as xCondFormatDlg:
                     xedassign = xCondFormatDlg.getChild("edassign")

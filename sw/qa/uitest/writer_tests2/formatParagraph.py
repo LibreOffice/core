@@ -19,7 +19,7 @@ class formatParagraph(UITestCase):
         document = self.ui_test.get_component()
         xWriterDoc = self.xUITest.getTopFocusWindow()
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:ParagraphDialog") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:ParagraphDialog") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             select_pos(xTabs, "0")
 
@@ -44,7 +44,7 @@ class formatParagraph(UITestCase):
             xActivate.executeAction("CLICK", tuple())
 
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:ParagraphDialog", close_button="cancel") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:ParagraphDialog", close_button="cancel") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             select_pos(xTabs, "0")
             xBeforeText = xDialog.getChild("spinED_LEFTINDENT")
@@ -75,7 +75,7 @@ class formatParagraph(UITestCase):
         document = self.ui_test.get_component()
         xWriterDoc = self.xUITest.getTopFocusWindow()
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:ParagraphDialog") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:ParagraphDialog") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             select_pos(xTabs, "1")
 
@@ -94,7 +94,7 @@ class formatParagraph(UITestCase):
             xExpandChk.executeAction("CLICK", tuple())
 
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:ParagraphDialog", close_button="cancel") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:ParagraphDialog", close_button="cancel") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             select_pos(xTabs, "1")
 
@@ -120,7 +120,7 @@ class formatParagraph(UITestCase):
         document = self.ui_test.get_component()
         xWriterDoc = self.xUITest.getTopFocusWindow()
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:ParagraphDialog") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:ParagraphDialog") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             select_pos(xTabs, "2")
 
@@ -153,7 +153,7 @@ class formatParagraph(UITestCase):
             xcheckKeepPara.executeAction("CLICK", tuple())
 
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:ParagraphDialog", close_button="cancel") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:ParagraphDialog", close_button="cancel") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             select_pos(xTabs, "2")
 
@@ -193,7 +193,7 @@ class formatParagraph(UITestCase):
         document = self.ui_test.get_component()
         xWriterDoc = self.xUITest.getTopFocusWindow()
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:ParagraphDialog") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:ParagraphDialog") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             select_pos(xTabs, "3")
 
@@ -206,7 +206,7 @@ class formatParagraph(UITestCase):
             xcheckApplySpacing.executeAction("CLICK", tuple())
 
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:ParagraphDialog", close_button="cancel") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:ParagraphDialog", close_button="cancel") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             select_pos(xTabs, "3")
 
@@ -226,7 +226,7 @@ class formatParagraph(UITestCase):
         document = self.ui_test.get_component()
         xWriterDoc = self.xUITest.getTopFocusWindow()
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:ParagraphDialog") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:ParagraphDialog") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             select_pos(xTabs, "4")
 
@@ -241,7 +241,7 @@ class formatParagraph(UITestCase):
             xParaSpin.executeAction("UP", tuple())
 
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:ParagraphDialog", close_button="cancel") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:ParagraphDialog", close_button="cancel") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             select_pos(xTabs, "4")
 
@@ -265,7 +265,7 @@ class formatParagraph(UITestCase):
 
         change_measurement_unit(self, "Centimeter")
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:ParagraphDialog") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:ParagraphDialog") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             select_pos(xTabs, "5")
 
@@ -287,7 +287,7 @@ class formatParagraph(UITestCase):
             xNewButtn.executeAction("CLICK", tuple())
 
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:ParagraphDialog", close_button="cancel") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:ParagraphDialog", close_button="cancel") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             select_pos(xTabs, "5")
 
@@ -305,7 +305,7 @@ class formatParagraph(UITestCase):
             self.assertEqual(get_state_as_dict(xED_TABPOS)["Text"], "1.00 cm")
 
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:ParagraphDialog") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:ParagraphDialog") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             select_pos(xTabs, "5")
 
@@ -317,7 +317,7 @@ class formatParagraph(UITestCase):
             xUnderscore.executeAction("CLICK", tuple())
             xNewButtn.executeAction("CLICK", tuple())
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:ParagraphDialog", close_button="cancel") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:ParagraphDialog", close_button="cancel") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             select_pos(xTabs, "5")
 
@@ -327,7 +327,7 @@ class formatParagraph(UITestCase):
             self.assertEqual(get_state_as_dict(xUnderscore)["Checked"], "true")
 
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:ParagraphDialog") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:ParagraphDialog") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             select_pos(xTabs, "5")
 
@@ -339,7 +339,7 @@ class formatParagraph(UITestCase):
             xDashLine.executeAction("CLICK", tuple())
             xNewButtn.executeAction("CLICK", tuple())
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:ParagraphDialog", close_button="cancel") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:ParagraphDialog", close_button="cancel") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             select_pos(xTabs, "5")
 
@@ -349,7 +349,7 @@ class formatParagraph(UITestCase):
             self.assertEqual(get_state_as_dict(xDashLine)["Checked"], "true")
 
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:ParagraphDialog") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:ParagraphDialog") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             select_pos(xTabs, "5")
 
@@ -361,7 +361,7 @@ class formatParagraph(UITestCase):
             xPointsLine.executeAction("CLICK", tuple())
             xNewButtn.executeAction("CLICK", tuple())
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:ParagraphDialog", close_button="cancel") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:ParagraphDialog", close_button="cancel") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             select_pos(xTabs, "5")
 
@@ -378,7 +378,7 @@ class formatParagraph(UITestCase):
         document = self.ui_test.get_component()
         xWriterDoc = self.xUITest.getTopFocusWindow()
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:ParagraphDialog") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:ParagraphDialog") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             select_pos(xTabs, "6")
 
@@ -396,7 +396,7 @@ class formatParagraph(UITestCase):
             xText.executeAction("TYPE", mkPropertyValues({"TEXT":"A"}))
             select_by_text(xCharStyle, "Definition")
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:ParagraphDialog", close_button="cancel") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:ParagraphDialog", close_button="cancel") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             select_pos(xTabs, "6")
 
@@ -422,7 +422,7 @@ class formatParagraph(UITestCase):
 
         change_measurement_unit(self, "Centimeter")
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:ParagraphDialog") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:ParagraphDialog") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             select_pos(xTabs, "7")
 
@@ -445,7 +445,7 @@ class formatParagraph(UITestCase):
             xMerge.executeAction("CLICK", tuple())
 
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:ParagraphDialog", close_button="cancel") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:ParagraphDialog", close_button="cancel") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             select_pos(xTabs, "7")
 
@@ -472,7 +472,7 @@ class formatParagraph(UITestCase):
         document = self.ui_test.get_component()
         xWriterDoc = self.xUITest.getTopFocusWindow()
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:ParagraphDialog", close_button="cancel") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:ParagraphDialog", close_button="cancel") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             select_pos(xTabs, "8")
 
@@ -494,7 +494,7 @@ class formatParagraph(UITestCase):
         document = self.ui_test.get_component()
         xWriterDoc = self.xUITest.getTopFocusWindow()
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:ParagraphDialog") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:ParagraphDialog") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             select_pos(xTabs, "9")
 
@@ -505,7 +505,7 @@ class formatParagraph(UITestCase):
             xTranText.executeAction("UP", tuple())
 
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:ParagraphDialog", close_button="cancel") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:ParagraphDialog", close_button="cancel") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             select_pos(xTabs, "9")
 
@@ -516,7 +516,7 @@ class formatParagraph(UITestCase):
             self.assertEqual(get_state_as_dict(xTranText)["Text"], "51%")
 
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:ParagraphDialog") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:ParagraphDialog") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             select_pos(xTabs, "9")
 
@@ -535,7 +535,7 @@ class formatParagraph(UITestCase):
             xEnd.executeAction("UP", tuple())
 
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:ParagraphDialog", close_button="cancel") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:ParagraphDialog", close_button="cancel") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             select_pos(xTabs, "9")
 

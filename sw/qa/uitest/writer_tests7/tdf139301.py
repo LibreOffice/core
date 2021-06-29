@@ -22,7 +22,7 @@ class tdf139301(UITestCase):
                 self.ui_test.wait_until_child_is_available('metricfield')
 
                 # line setting dialog window
-                with self.ui_test.execute_dialog_through_command_guarded(".uno:FormatLine") as xFormatLineDlg:
+                with self.ui_test.execute_dialog_through_command(".uno:FormatLine") as xFormatLineDlg:
                     # get line style combo box
                     xLineStyle = xFormatLineDlg.getChild("LB_LINE_STYLE")
 
@@ -45,7 +45,7 @@ class tdf139301(UITestCase):
                 self.ui_test.wait_until_child_is_available('metricfield')
 
                 # line setting dialog window
-                with self.ui_test.execute_dialog_through_command_guarded(".uno:FormatLine") as xFormatLineDlg:
+                with self.ui_test.execute_dialog_through_command(".uno:FormatLine") as xFormatLineDlg:
                     # get line style combo box
                     xLineStyle = xFormatLineDlg.getChild("LB_LINE_STYLE")
 

@@ -18,7 +18,7 @@ class tdf91726(UITestCase):
         #select A1:E9
         gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:E9"}))
         #AutoFormat Styles
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:AutoFormat", close_button="") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:AutoFormat", close_button="") as xDialog:
             #add new style "Default"
             xadd = xDialog.getChild("add")
 

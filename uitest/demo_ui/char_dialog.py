@@ -13,7 +13,7 @@ class CharDialogText(UITestCase):
     def test_select_char(self):
         self.ui_test.create_doc_in_start_center("calc")
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:InsertSymbol", close_button="cancel") as xCharDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:InsertSymbol", close_button="cancel") as xCharDialog:
 
             xCharSet = xCharDialog.getChild("showcharset")
 

@@ -15,7 +15,7 @@ class tdf114992(UITestCase):
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
 
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:Remove", close_button="yes"):
+            with self.ui_test.execute_dialog_through_command(".uno:Remove", close_button="yes"):
                 pass
 
             self.assertEqual(calc_doc.Sheets.getCount(), 1)

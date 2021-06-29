@@ -22,7 +22,7 @@ class tdf117367(UITestCase):
         gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:B4"}))
 
         #Right-click - Merge cells  /Select all three options
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:MergeCells") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:MergeCells") as xDialog:
             xmoveCellsRadio = xDialog.getChild("move-cells-radio")
             xemptyCellsRadio = xDialog.getChild("empty-cells-radio")
             xkeepContentRadio = xDialog.getChild("keep-content-radio")

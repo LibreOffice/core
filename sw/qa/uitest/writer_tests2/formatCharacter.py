@@ -18,7 +18,7 @@ class formatCharacter(UITestCase):
         document = self.ui_test.get_component()
         xWriterDoc = self.xUITest.getTopFocusWindow()
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:FontDialog") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:FontDialog") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             select_pos(xTabs, "0")
 
@@ -39,7 +39,7 @@ class formatCharacter(UITestCase):
             select_pos(xLangFontEast, "0")
             select_pos(xLangFontCTL, "0")
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:FontDialog", close_button="cancel") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:FontDialog", close_button="cancel") as xDialog:
             xSizeFont = xDialog.getChild("westsizelb-cjk")
             xSizeFontEast = xDialog.getChild("eastsizelb")
             xSizeFontCTL = xDialog.getChild("ctlsizelb")
@@ -62,7 +62,7 @@ class formatCharacter(UITestCase):
         document = self.ui_test.get_component()
         xWriterDoc = self.xUITest.getTopFocusWindow()
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:FontDialog") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:FontDialog") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             select_pos(xTabs, "1")
 
@@ -85,7 +85,7 @@ class formatCharacter(UITestCase):
             select_pos(xPosition, "1")
 
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:FontDialog", close_button="cancel") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:FontDialog", close_button="cancel") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             select_pos(xTabs, "1")
 
@@ -115,7 +115,7 @@ class formatCharacter(UITestCase):
         document = self.ui_test.get_component()
         xWriterDoc = self.xUITest.getTopFocusWindow()
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:FontDialog") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:FontDialog") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             select_pos(xTabs, "4")
 
@@ -135,7 +135,7 @@ class formatCharacter(UITestCase):
         self.xUITest.executeCommand(".uno:GoLeft")
         self.assertEqual(document.Text.String[0:11], "LibreOffice")
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:FontDialog", close_button="cancel") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:FontDialog", close_button="cancel") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             select_pos(xTabs, "4")
             xURL = xDialog.getChild("urled")
@@ -157,7 +157,7 @@ class formatCharacter(UITestCase):
         document = self.ui_test.get_component()
         xWriterDoc = self.xUITest.getTopFocusWindow()
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:FontDialog") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:FontDialog") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             select_pos(xTabs, "3")
 
@@ -165,7 +165,7 @@ class formatCharacter(UITestCase):
             xTwolines.executeAction("CLICK", tuple())
 
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:FontDialog", close_button="cancel") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:FontDialog", close_button="cancel") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             select_pos(xTabs, "3")
             xTwolines = xDialog.getChild("twolines")
@@ -178,7 +178,7 @@ class formatCharacter(UITestCase):
         document = self.ui_test.get_component()
         xWriterDoc = self.xUITest.getTopFocusWindow()
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:FontDialog") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:FontDialog") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             select_pos(xTabs, "2")
 
@@ -199,7 +199,7 @@ class formatCharacter(UITestCase):
             xFitToLine.executeAction("CLICK", tuple())
 
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:FontDialog", close_button="cancel") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:FontDialog", close_button="cancel") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             select_pos(xTabs, "2")
             xSuperscript = xDialog.getChild("superscript")
@@ -225,7 +225,7 @@ class formatCharacter(UITestCase):
         document = self.ui_test.get_component()
         xWriterDoc = self.xUITest.getTopFocusWindow()
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:FontDialog") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:FontDialog") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             select_pos(xTabs, "2")
 
@@ -233,7 +233,7 @@ class formatCharacter(UITestCase):
             xScalewidth.executeAction("UP", tuple())
 
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:FontDialog", close_button="cancel") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:FontDialog", close_button="cancel") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             select_pos(xTabs, "2")
             xScalewidth = xDialog.getChild("scalewidthsb")

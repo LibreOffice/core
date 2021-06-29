@@ -16,14 +16,14 @@ class ConfigureDialog(UITestCase):
     def test_open_ConfigureDialog_writer(self):
 
         self.ui_test.create_doc_in_start_center("writer")
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:ConfigureDialog", close_button="cancel"):
+        with self.ui_test.execute_dialog_through_command(".uno:ConfigureDialog", close_button="cancel"):
             pass
 
         self.ui_test.close_doc()
 
     def test_search_filter(self):
         self.ui_test.create_doc_in_start_center("writer")
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:ConfigureDialog", close_button="cancel") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:ConfigureDialog", close_button="cancel") as xDialog:
 
             xfunc = xDialog.getChild("functions")
             xSearch = xDialog.getChild("searchEntry")
@@ -61,7 +61,7 @@ class ConfigureDialog(UITestCase):
 
     def test_category_listbox(self):
         self.ui_test.create_doc_in_start_center("writer")
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:ConfigureDialog", close_button="cancel") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:ConfigureDialog", close_button="cancel") as xDialog:
 
             xFunc = xDialog.getChild("functions")
             xCategory = xDialog.getChild("commandcategorylist")
@@ -87,7 +87,7 @@ class ConfigureDialog(UITestCase):
 
         # Without the fix in place, calling customize dialog after inserting
         # a formula object would crash
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:ConfigureDialog", close_button="cancel"):
+        with self.ui_test.execute_dialog_through_command(".uno:ConfigureDialog", close_button="cancel"):
             pass
 
         self.ui_test.close_doc()
@@ -95,7 +95,7 @@ class ConfigureDialog(UITestCase):
     def test_gear_button_menu(self):
         self.ui_test.create_doc_in_start_center("writer")
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:ConfigureDialog", close_button="cancel") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:ConfigureDialog", close_button="cancel") as xDialog:
 
             # Open the New Menu Dialog with id = 0
             xmenugearbtn=xDialog.getChild("menugearbtn")

@@ -17,7 +17,7 @@ class autocorrectOptions(UITestCase):
         gridwin = xCalcDoc.getChild("grid_window")
         document = self.ui_test.get_component()
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:AutoCorrectDlg", close_button="cancel") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:AutoCorrectDlg", close_button="cancel") as xDialog:
             xTabs = xDialog.getChild("tabcontrol")
             select_pos(xTabs, "0")       #tab replace
             origtext = xDialog.getChild("origtext")

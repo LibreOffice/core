@@ -16,7 +16,7 @@ class tdf37623(UITestCase):
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A2:A6"}))
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:FillSeries") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:FillSeries") as xDialog:
                 xautofill = xDialog.getChild("autofill")
                 xautofill.executeAction("CLICK", tuple())
 

@@ -31,7 +31,7 @@ class masterSlides(UITestCase):
         xCloseMasterButton = xImpress.getChild("closemasterslide")
         xCloseMasterButton.executeAction("CLICK", tuple())
 
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:PresentationLayout") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:PresentationLayout") as xDialog:
 
             xSelect = xDialog.getChild('select')
             xSelect.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RIGHT"}))

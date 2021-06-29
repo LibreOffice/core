@@ -23,7 +23,7 @@ class tdf69450(UITestCase):
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
         self.xUITest.executeCommand(".uno:Copy")
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "B1"}))
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:PasteSpecial") as xDialog:
+        with self.ui_test.execute_dialog_through_command(".uno:PasteSpecial") as xDialog:
 
             xtext = xDialog.getChild("text")
             xnumbers = xDialog.getChild("numbers")
@@ -43,7 +43,7 @@ class tdf69450(UITestCase):
         self.xUITest.executeCommand(".uno:Bold")
         self.xUITest.executeCommand(".uno:Copy")
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "B1"}))
-        with self.ui_test.execute_dialog_through_command_guarded(".uno:PasteSpecial"):
+        with self.ui_test.execute_dialog_through_command(".uno:PasteSpecial"):
             pass
 
         #check B1 text

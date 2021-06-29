@@ -16,7 +16,7 @@ class Test(UITestCase):
         with self.ui_test.load_file(get_url_for_data_file("pdf-sign.pdf")) as impress_doc:
 
             # Now use File -> Digital signatures -> Digital signatures.
-            with self.ui_test.execute_dialog_through_command_guarded(".uno:Signature", close_button="close"):
+            with self.ui_test.execute_dialog_through_command(".uno:Signature", close_button="close"):
                 # Without the accompanying fix in place, this test would have failed with:
                 # uno.com.sun.star.uno.RuntimeException: Could not find child with id: close vcl/source/uitest/uiobject.cxx:452
                 pass
