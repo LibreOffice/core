@@ -1695,8 +1695,11 @@ void OOXMLFastContextHandlerShape::setToken(Token_t nToken)
     if (!mrShapeContext.is())
     {
         // Define the shape context for the whole document
-        mrShapeContext = new oox::shape::ShapeContextHandler(getComponentContext());
+        mrShapeContext = new oox::shape::ShapeContextHandler(getDocument()->getShapeFilterBase());
         getDocument()->setShapeContext(mrShapeContext);
+        auto pThemePtr = getDocument()->getTheme();
+        if (pThemePtr)
+            mrShapeContext->setTheme(pThemePtr);
     }
 
     mrShapeContext->setModel(getDocument()->getModel());
@@ -1786,6 +1789,15 @@ OOXMLFastContextHandlerShape::lcl_createFastChildContext
 (Token_t Element,
  const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
 {
+    // we need to share a single theme across all the shapes, but we parse it
+    // in ShapeContextHandler. So if it has been parsed there, propogate it to
+    // the document.
+    if (mrShapeContext && mrShapeContext->getTheme() && !getDocument()->getTheme())
+    {
+        auto pThemePtr = mrShapeContext->getTheme();
+        getDocument()->setTheme(pThemePtr);
+    }
+
     uno::Reference< xml::sax::XFastContextHandler > xContextHandler;
 
     bool bGroupShape = Element == Token_t(NMSP_vml | XML_group);
