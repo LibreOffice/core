@@ -119,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "d78af437_58f4a63e",
+        "filename": "sfx2/source/dialog/StyleList.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-29T19:39:22Z",
+      "side": 1,
+      "message": "I see you already got familiar with this stuff - so just to reiterate - here you see the mechanism of dispatching/handling async events in LibreOffice. We declare handlers using\n\n  DECL_LINK(OnAsyncExecuteDrop, void *, void);\n\n(see it in the sfx2/source/inc/templdgi.hxx) - that will be the function called when the async event will be handled. Then we define them using\n\n  IMPL_LINK_NOARG(SfxCommonTemplateDialog_Impl, OnAsyncExecuteDrop, void*, void)\n\n(see it in sfx2/source/dialog/templdlg.cxx), which contains the code. And then we initiate it using Application::PostUserEvent, passing the LINK and the object there.\n\n\u003d\u003d\n\nYou are quite right about the need to handle or initiate ActionSelect(\"new\") somehow. Possibly the easiest could be having a pointer to the dialog in the StyleList (we will not access its data - we will just post messages to it), and make the OnAsyncExecuteDrop public in the dialog - so that here we will just do something like\n\n  Application::PostUserEvent(LINK(pParentDlg, SfxCommonTemplateDialog_Impl, OnAsyncExecuteDrop));\n\nand the rest will happen there in the dialog.",
+      "parentUuid": "314c9231_4266a548",
+      "range": {
+        "startLine": 122,
+        "startChar": 47,
+        "endLine": 122,
+        "endChar": 51
+      },
+      "revId": "46c930b409580a860fce196cee22faf305820032",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2b2c7212_e1fb20fb",
         "filename": "sfx2/source/dialog/StyleList.cxx",
         "patchSetId": 12
@@ -212,6 +236,30 @@
     },
     {
       "key": {
+        "uuid": "16019fa9_2aae5399",
+        "filename": "sfx2/source/dialog/StyleList.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 447,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-29T19:39:22Z",
+      "side": 1,
+      "message": "Here again having a pointer to parent could help - and when we see that nothing is selected, we may post it a message (call parent\u0027s public function - pParentDlg-\u003eEnableEdit(false))",
+      "parentUuid": "61f7f702_56e13b29",
+      "range": {
+        "startLine": 447,
+        "startChar": 16,
+        "endLine": 447,
+        "endChar": 26
+      },
+      "revId": "46c930b409580a860fce196cee22faf305820032",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "57a9dfa1_aa01b4df",
         "filename": "sfx2/source/dialog/StyleList.cxx",
         "patchSetId": 12
@@ -223,6 +271,30 @@
       "writtenOn": "2021-06-29T14:52:12Z",
       "side": 1,
       "message": "Also, please tell how to access this?",
+      "range": {
+        "startLine": 477,
+        "startChar": 43,
+        "endLine": 477,
+        "endChar": 56
+      },
+      "revId": "46c930b409580a860fce196cee22faf305820032",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6a1e16ed_c08ad5c7",
+        "filename": "sfx2/source/dialog/StyleList.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 477,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-29T19:39:22Z",
+      "side": 1,
+      "message": "Why StyleList should perform \"watercan\" item handling? It relates to the relevant button on the dialog\u0027s toolbar - so it should stay there. The dialog would then just ask StyleList for the required data, and do the action itself.",
+      "parentUuid": "57a9dfa1_aa01b4df",
       "range": {
         "startLine": 477,
         "startChar": 43,
@@ -377,6 +449,30 @@
     },
     {
       "key": {
+        "uuid": "45f1913c_98fbe842",
+        "filename": "sfx2/source/dialog/StyleList.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 479,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-29T19:39:22Z",
+      "side": 1,
+      "message": "The methods would be only moved partially, where some logic needs to remain in dialog - so dialog should still have those methods with its part of code.",
+      "parentUuid": "cdbfb943_b32e13b1",
+      "range": {
+        "startLine": 479,
+        "startChar": 4,
+        "endLine": 479,
+        "endChar": 16
+      },
+      "revId": "46c930b409580a860fce196cee22faf305820032",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "71f43ba4_b5462799",
         "filename": "sfx2/source/dialog/templdlg.cxx",
         "patchSetId": 12
@@ -388,6 +484,30 @@
       "writtenOn": "2021-06-29T14:24:11Z",
       "side": 1,
       "message": "DeletionWatcher is declared here in Execute_Impl.. Moving Execute_Impl to StyleList.cxx would require moving DeletionWatcher too?",
+      "range": {
+        "startLine": 1183,
+        "startChar": 4,
+        "endLine": 1183,
+        "endChar": 19
+      },
+      "revId": "46c930b409580a860fce196cee22faf305820032",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f671cee4_9581311c",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 1183,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-29T19:39:22Z",
+      "side": 1,
+      "message": "As mentioned there, I believe that at least some actions should not be moved here - so please first keep the watercan handling in the dialog, and let\u0027s see.",
+      "parentUuid": "71f43ba4_b5462799",
       "range": {
         "startLine": 1183,
         "startChar": 4,
