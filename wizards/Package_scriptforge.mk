@@ -51,6 +51,7 @@ $(eval $(call gb_Package_add_files,wizards_basicsrvscriptforge,$(LIBO_SHARE_FOLD
 $(eval $(call gb_Package_add_files,wizards_basicsrvscriptforge,$(LIBO_SHARE_FOLDER)/basic/ScriptForge/po,\
 	po/ScriptForge.pot \
 	po/en.po \
+	po/pt.po \
 ))
 
 $(eval $(call gb_Package_add_files,wizards_basicsrvscriptforge,$(LIBO_LIB_PYUNO_FOLDER),\
