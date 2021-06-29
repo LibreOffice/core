@@ -25,10 +25,6 @@ interface Application
     [
         ExecMethod = MiscExec_Impl ;
     ]
-    SID_GRAPHICTEST_DIALOG
-    [
-        ExecMethod = MiscExec_Impl ;
-    ]
     SID_SETOPTIONS
     [
         ExecMethod = MiscExec_Impl ;

@@ -47,7 +47,7 @@ IMPL_LINK(GraphicTestEntry, HandleResultViewRequest, weld::Button&, rButton, voi
     m_ImgVwDialog.run();
 }
 
-GraphicsTestsDialog::GraphicsTestsDialog(weld::Window* pParent)
+GraphicsTestsDialog::GraphicsTestsDialog(weld::Container* pParent)
     : GenericDialogController(pParent, "cui/ui/graphictestdlg.ui", "GraphicTestsDialog")
     , m_xResultLog(m_xBuilder->weld_text_view("gptest_txtVW"))
     , m_xDownloadResults(m_xBuilder->weld_button("gptest_downld"))
@@ -68,11 +68,11 @@ short GraphicsTestsDialog::run()
                           + "\n(Click on any test to view its resultant bitmap image)";
     m_xResultLog->set_text(aResultLog);
     sal_Int32 nTestNumber = 0;
-    for (VclTestResult& tests : aTestObject.getTestResults())
+    for (VclTestResult& test : aTestObject.getTestResults())
     {
         auto xGpTest = std::make_unique<GraphicTestEntry>(m_xContainerBox.get(), m_xDialog.get(),
-                                                          tests.getTestName(), tests.getStatus(),
-                                                          tests.getBitmap());
+                                                          test.getTestName(), test.getStatus(),
+                                                          test.getBitmap());
         m_xContainerBox->reorder_child(xGpTest->get_widget(), nTestNumber++);
         m_xGraphicTestEntries.push_back(std::move(xGpTest));
     }
@@ -81,7 +81,7 @@ short GraphicsTestsDialog::run()
 
 IMPL_LINK_NOARG(GraphicsTestsDialog, HandleDownloadRequest, weld::Button&, void)
 {
-    osl::File::remove(m_xZipFileUrl); // Remove previous exports
+    osl::File::remove(m_xZipFileUrl); // Remove the previous export
     try
     {
         utl::ZipPackageHelper aZipHelper(comphelper::getProcessComponentContext(), m_xZipFileUrl);
