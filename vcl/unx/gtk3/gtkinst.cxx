@@ -16475,7 +16475,7 @@ private:
     }
 #endif
 
-    DECL_LINK(SettingsChangedHdl, VclSimpleEvent&, void);
+    DECL_LINK(SettingsChangedHdl, VclWindowEvent&, void);
 public:
     GtkInstanceDrawingArea(GtkDrawingArea* pDrawingArea, GtkInstanceBuilder* pBuilder, const a11yref& rA11y, bool bTakeOwnership)
         : GtkInstanceWidget(GTK_WIDGET(pDrawingArea), pBuilder, bTakeOwnership)
@@ -16501,7 +16501,7 @@ public:
         g_object_set_data(G_OBJECT(m_pDrawingArea), "g-lo-GtkInstanceDrawingArea", this);
         m_xDevice->EnableRTL(get_direction());
 
-        Application::AddEventListener(LINK(this, GtkInstanceDrawingArea, SettingsChangedHdl));
+        ImplGetDefaultWindow()->AddEventListener(LINK(this, GtkInstanceDrawingArea, SettingsChangedHdl));
     }
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
@@ -16680,7 +16680,7 @@ public:
 
     virtual ~GtkInstanceDrawingArea() override
     {
-        Application::RemoveEventListener(LINK(this, GtkInstanceDrawingArea, SettingsChangedHdl));
+        ImplGetDefaultWindow()->RemoveEventListener(LINK(this, GtkInstanceDrawingArea, SettingsChangedHdl));
 
         g_object_steal_data(G_OBJECT(m_pDrawingArea), "g-lo-GtkInstanceDrawingArea");
 #if !GTK_CHECK_VERSION(4, 0, 0)
@@ -16722,12 +16722,12 @@ public:
     }
 };
 
-IMPL_LINK(GtkInstanceDrawingArea, SettingsChangedHdl, VclSimpleEvent&, rEvent, void)
+IMPL_LINK(GtkInstanceDrawingArea, SettingsChangedHdl, VclWindowEvent&, rEvent, void)
 {
-    if (rEvent.GetId() != VclEventId::ApplicationDataChanged)
+    if (rEvent.GetId() != VclEventId::WindowDataChanged)
         return;
 
-    DataChangedEvent* pData = static_cast<DataChangedEvent*>(static_cast<VclWindowEvent&>(rEvent).GetData());
+    DataChangedEvent* pData = static_cast<DataChangedEvent*>(rEvent.GetData());
     if (pData->GetType() == DataChangedEventType::SETTINGS)
         signal_style_updated();
 }
