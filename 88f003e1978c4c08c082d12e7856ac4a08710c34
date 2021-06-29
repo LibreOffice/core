@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2d888da2_df8bd14c",
+        "filename": "filter/source/msfilter/rtfutil.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-06-29T09:23:32Z",
+      "side": 1,
+      "message": "wouldn\u0027t it be even better to elide rReserved1 completely?",
+      "revId": "88f003e1978c4c08c082d12e7856ac4a08710c34",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
