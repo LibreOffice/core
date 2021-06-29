@@ -428,6 +428,40 @@ bool GtkInstance::IsTimerExpired()
     return (m_pTimer && m_pTimer->Expired());
 }
 
+namespace
+{
+    bool DisplayHasAnyInput()
+    {
+        GdkDisplay* pDisplay = gdk_display_get_default();
+#if defined(GDK_WINDOWING_WAYLAND)
+        if (DLSYM_GDK_IS_WAYLAND_DISPLAY(pDisplay))
+        {
+            bool bRet = false;
+            wl_display* pWLDisplay = gdk_wayland_display_get_wl_display(pDisplay);
+            static auto wayland_display_get_fd = reinterpret_cast<int (*) (wl_display*)>(dlsym(nullptr, "wl_display_get_fd"));
+            if (wayland_display_get_fd)
+            {
+                GPollFD aPollFD;
+                aPollFD.fd = wayland_display_get_fd(pWLDisplay);
+                aPollFD.events = G_IO_IN | G_IO_ERR | G_IO_HUP;
+                bRet = g_poll(&aPollFD, 1, 0) > 0;
+            }
+            return bRet;
+        }
+#endif
+#if defined(GDK_WINDOWING_X11)
+        if (DLSYM_GDK_IS_X11_DISPLAY(pDisplay))
+        {
+            GPollFD aPollFD;
+            aPollFD.fd = ConnectionNumber(gdk_x11_display_get_xdisplay(pDisplay));
+            aPollFD.events = G_IO_IN;
+            return g_poll(&aPollFD, 1, 0) > 0;
+        }
+#endif
+        return false;
+    }
+}
+
 bool GtkInstance::AnyInput( VclInputFlags nType )
 {
     EnsureInit();
@@ -443,24 +477,8 @@ bool GtkInstance::AnyInput( VclInputFlags nType )
 
     bool bRet = false;
 
-#if defined(GDK_WINDOWING_WAYLAND)
     if (bCheckForAnyInput)
-    {
-        GdkDisplay* pDisplay = gdk_display_get_default();
-        if (DLSYM_GDK_IS_WAYLAND_DISPLAY(pDisplay))
-        {
-            wl_display* pWLDisplay = gdk_wayland_display_get_wl_display(pDisplay);
-            static auto wayland_display_get_fd = reinterpret_cast<int (*) (wl_display*)>(dlsym(nullptr, "wl_display_get_fd"));
-            if (wayland_display_get_fd)
-            {
-                GPollFD aPollFD;
-                aPollFD.fd = wayland_display_get_fd(pWLDisplay);
-                aPollFD.events = G_IO_IN | G_IO_ERR | G_IO_HUP;
-                bRet = g_poll(&aPollFD, 1, 0) > 0;
-            }
-        }
-    }
-#endif
+        bRet = DisplayHasAnyInput();
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
     GdkDisplay* pDisplay = gdk_display_get_default();
