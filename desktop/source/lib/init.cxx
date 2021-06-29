@@ -210,7 +210,13 @@ public:
         SetTimeout(dumpTimeoutMS);
         Start();
     }
+
     virtual void Invoke() override
+    {
+        flushRecordings();
+    }
+
+    static void flushRecordings()
     {
         const css::uno::Sequence<OUString> aEvents =
             comphelper::TraceEvent::getRecordingAndClear();
@@ -3905,6 +3911,7 @@ static void lo_setOption(LibreOfficeKit* /*pThis*/, const char *pOption, const c
     {
         if (strcmp(pValue, "start") == 0)
         {
+            comphelper::TraceEvent::setBufferSizeAndCallback(100, TraceEventDumper::flushRecordings);
             comphelper::TraceEvent::startRecording();
             if (traceEventDumper == nullptr)
                 traceEventDumper = new TraceEventDumper();
