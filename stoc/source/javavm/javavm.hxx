@@ -52,18 +52,11 @@ namespace jvmaccess {
 
 namespace stoc_javavm {
 
-// The MS compiler needs a typedef here, so the JavaVirtualMachine ctor can call
-// its base class ctor:
-typedef
-cppu::WeakComponentImplHelper< css::lang::XInitialization,
-                                css::lang::XServiceInfo,
-                                css::java::XJavaVM,
-                                css::java::XJavaThreadRegister_11,
-                                css::container::XContainerListener >
-JavaVirtualMachine_Impl;
-
 class JavaVirtualMachine:
-    private cppu::BaseMutex, public JavaVirtualMachine_Impl
+    private cppu::BaseMutex,
+    public cppu::WeakComponentImplHelper<
+        css::lang::XInitialization, css::lang::XServiceInfo, css::java::XJavaVM,
+        css::java::XJavaThreadRegister_11, css::container::XContainerListener>
 {
 public:
     explicit JavaVirtualMachine(
