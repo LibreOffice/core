@@ -54,6 +54,8 @@ class SvpSalFrame : public SalFrame
     std::vector< SvpSalGraphics* >      m_aGraphics;
 
     static SvpSalFrame*       s_pFocusFrame;
+    OUString m_sTitle;
+
 public:
     SvpSalFrame( SvpSalInstance* pInstance,
                  SalFrame* pParent,
@@ -63,6 +65,11 @@ public:
     void GetFocus();
     void LoseFocus();
     void PostPaint() const;
+
+    OUString title() const { return m_sTitle; }
+    SalFrameStyleFlags style() const { return m_nStyle; }
+    bool isVisible() const { return m_bVisible; }
+    bool hasFocus() const { return s_pFocusFrame == this; }
 
     // SalFrame
     virtual SalGraphics*        AcquireGraphics() override;
@@ -119,6 +126,19 @@ public:
 private:
     basegfx::B2IVector GetSurfaceFrameSize() const;
 };
+
+template <typename charT, typename traits>
+inline std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& stream,
+                                                     const SvpSalFrame& frame)
+{
+    stream << &frame << " (vis " << frame.isVisible() <<  " focus " << frame.hasFocus();
+    stream << " style " << std::hex << std::setfill('0') << std::setw(8) << static_cast<sal_uInt32>(frame.style());
+    OUString sTitle = frame.title();
+    if (!sTitle.isEmpty())
+        stream << " '" << sTitle << "'";
+    stream << ")";
+    return stream;
+}
 
 #endif // INCLUDED_VCL_INC_HEADLESS_SVPFRAME_HXX
 

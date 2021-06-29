@@ -187,8 +187,9 @@ void SvpSalFrame::PostPaint() const
     }
 }
 
-void SvpSalFrame::SetTitle( const OUString& )
+void SvpSalFrame::SetTitle(const OUString& sTitle)
 {
+    m_sTitle = sTitle;
 }
 
 void SvpSalFrame::SetIcon( sal_uInt16 )
