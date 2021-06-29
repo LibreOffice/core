@@ -16,6 +16,24 @@
       "revId": "86e300df241312f6152da1cfa3cb2b8c668d1df5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "678bb4a7_e7884c2b",
+        "filename": "sc/source/ui/view/gridwin.cxx",
+        "patchSetId": 18
+      },
+      "lineNbr": 430,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-06-29T12:10:56Z",
+      "side": 1,
+      "message": "Perhaps all we need is a maShowPageBreaksTimer.Stop(); at the start of ScGridWindow::dispose()?",
+      "parentUuid": "a6e57c68_b672c410",
+      "revId": "86e300df241312f6152da1cfa3cb2b8c668d1df5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
