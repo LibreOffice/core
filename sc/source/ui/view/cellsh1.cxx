@@ -2775,7 +2775,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             {
                 ScViewData* rData = GetViewData();
                 ScMarkData& rMark = rData->GetMarkData();
-                ScDocument* rDoc = rData->GetDocument();
+                ScDocument& rDoc = rData->GetDocument();
 
                 rMark.MarkToMulti();
 
@@ -2792,7 +2792,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     for (SCROW nRow = nStartRow; nRow <= nEndRow; ++nRow)
                     {
                         SCROW nLastRow = nRow;
-                        if (rDoc->RowHidden(nRow, nTab, nullptr, &nLastRow))
+                        if (rDoc.RowHidden(nRow, nTab, nullptr, &nLastRow))
                         {
                             rMark.SetMultiMarkArea(
                                 ScRange(nStartCol, nRow, nTab, nEndCol, nLastRow, nTab), false);
@@ -2813,7 +2813,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             {
                 ScViewData* rData = GetViewData();
                 ScMarkData& rMark = rData->GetMarkData();
-                ScDocument* rDoc = rData->GetDocument();
+                ScDocument& rDoc = rData->GetDocument();
 
                 rMark.MarkToMulti();
 
@@ -2830,7 +2830,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     for (SCCOL nCol = nStartCol; nCol <= nEndCol; ++nCol)
                     {
                         SCCOL nLastCol = nCol;
-                        if (rDoc->ColHidden(nCol, nTab, nullptr, &nLastCol))
+                        if (rDoc.ColHidden(nCol, nTab, nullptr, &nLastCol))
                         {
                             rMark.SetMultiMarkArea(
                                 ScRange(nCol, nStartRow, nTab, nLastCol, nEndRow, nTab), false);
