@@ -56,6 +56,7 @@
 #include <strings.hrc>
 #include <fntcap.hxx>
 #include <vcl/outdev/ScopedStates.hxx>
+#include <o3tl/hash_combine.hxx>
 
 using namespace ::com::sun::star;
 
@@ -71,27 +72,6 @@ tools::Long SwFntObj::s_nPixWidth;
 MapMode* SwFntObj::s_pPixMap = nullptr;
 static vcl::DeleteOnDeinit< VclPtr<OutputDevice> > s_pFntObjPixOut( new VclPtr<OutputDevice> );
 
-/**
- * Defines a substring on a given output device, to be used as an std::map<>
- * key.
- */
-struct SwTextGlyphsKey
-{
-    VclPtr<OutputDevice> m_pOutputDevice;
-    OUString m_aText;
-    sal_Int32 m_nIndex;
-    sal_Int32 m_nLength;
-
-};
-
-/**
- * Glyphs and text width for the given SwTextGlyphsKey.
- */
-struct SwTextGlyphsData
-{
-    SalLayoutGlyphs m_aTextGlyphs;
-    tools::Long m_nTextWidth = -1; // -1 = not computed yet
-};
 
 namespace
 {
@@ -117,37 +97,35 @@ tools::Long EvalGridWidthAdd( const SwTextGridItem *const pGrid, const SwDrawTex
 
 }
 
-bool operator<(const SwTextGlyphsKey& l, const SwTextGlyphsKey& r)
+std::size_t SwTextGlyphsKeyHash::operator()(const SwTextGlyphsKey& rKey) const
 {
-    if (l.m_pOutputDevice.get() < r.m_pOutputDevice.get())
-        return true;
-    if (l.m_pOutputDevice.get() > r.m_pOutputDevice.get())
+    std::size_t seed = 0;
+    o3tl::hash_combine(seed, rKey.m_pOutputDevice.get());
+    o3tl::hash_combine(seed, rKey.m_nIndex);
+    o3tl::hash_combine(seed, rKey.m_nLength);
+    return seed;
+}
+
+bool SwTextGlyphsKeyEqual::operator()(const SwTextGlyphsKey& l, const SwTextGlyphsKey& r) const
+{
+    if (l.m_pOutputDevice.get() != r.m_pOutputDevice.get())
         return false;
-    if (l.m_nIndex < r.m_nIndex)
-        return true;
-    if (l.m_nIndex > r.m_nIndex)
+    if (l.m_nIndex != r.m_nIndex)
         return false;
-    if (l.m_nLength < r.m_nLength)
+    if (l.m_nLength != r.m_nLength)
         return true;
-    if (l.m_nLength > r.m_nLength)
-        return false;
 
     // Comparing strings is expensive, so compare them:
     // - only at the end of this function
     // - only once
     // - only the relevant substring (if the index/length is not out of bounds)
-    sal_Int32 nRet = 0;
+    bool bRet;
     if (l.m_nLength < 0 || l.m_nIndex < 0 || l.m_nIndex + l.m_nLength > l.m_aText.getLength())
-        nRet = l.m_aText.compareTo(r.m_aText);
+        bRet = l.m_aText == r.m_aText;
     else
-        nRet = memcmp(l.m_aText.getStr() + l.m_nIndex, r.m_aText.getStr() + r.m_nIndex,
-                      l.m_nLength * sizeof(sal_Unicode));
-    if (nRet < 0)
-        return true;
-    if (nRet > 0)
-        return false;
-
-    return false;
+        bRet = memcmp(l.m_aText.getStr() + l.m_nIndex, r.m_aText.getStr() + r.m_nIndex,
+                      l.m_nLength * sizeof(sal_Unicode)) == 0;
+    return bRet;
 };
 
 void SwFntCache::Flush( )
@@ -219,7 +197,7 @@ void SwFntObj::CreatePrtFont( const OutputDevice& rPrt )
  * Pre-calculates glyph items for the rendered subset of rKey's text, assuming
  * outdev state does not change between the outdev calls.
  */
-static SalLayoutGlyphs* lcl_CreateLayout(const SwTextGlyphsKey& rKey, std::map<SwTextGlyphsKey, SwTextGlyphsData>::iterator it)
+static SalLayoutGlyphs* lcl_CreateLayout(const SwTextGlyphsKey& rKey, SwTextGlyphsCache::iterator it)
 {
     assert (!it->second.m_aTextGlyphs.IsValid());
 
@@ -242,7 +220,7 @@ static SalLayoutGlyphs* lcl_CreateLayout(const SwTextGlyphsKey& rKey, std::map<S
 
 SalLayoutGlyphs* SwFntObj::GetCachedSalLayoutGlyphs(const SwTextGlyphsKey& key)
 {
-    std::map<SwTextGlyphsKey, SwTextGlyphsData>::iterator it = m_aTextGlyphs.find(key);
+    auto it = m_aTextGlyphs.find(key);
     if(it != m_aTextGlyphs.end())
     {
         if( it->second.m_aTextGlyphs.IsValid())
@@ -258,7 +236,7 @@ SalLayoutGlyphs* SwFntObj::GetCachedSalLayoutGlyphs(const SwTextGlyphsKey& key)
 
 tools::Long SwFntObj::GetCachedTextWidth(const SwTextGlyphsKey& key, const vcl::TextLayoutCache* vclCache)
 {
-    std::map<SwTextGlyphsKey, SwTextGlyphsData>::iterator it = m_aTextGlyphs.find(key);
+    auto it = m_aTextGlyphs.find(key);
     if(it != m_aTextGlyphs.end() && it->second.m_nTextWidth >= 0)
         return it->second.m_nTextWidth;
     if(it == m_aTextGlyphs.end())
