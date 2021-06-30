@@ -1268,7 +1268,7 @@ void SdDrawDocument::SetTextDefaults() const
         aNumRule.SetLevel( i, aNumberFormat );
     }
 
-    SvxNumBulletItem aNumBulletItem( aNumRule, EE_PARA_NUMBULLET );
+    SvxNumBulletItem aNumBulletItem( std::move(aNumRule), EE_PARA_NUMBULLET );
     m_pItemPool->SetPoolDefaultItem( aNumBulletItem );
 }
 

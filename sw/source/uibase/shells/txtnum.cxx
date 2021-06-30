@@ -183,7 +183,7 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
                 }
                 aSvxRule.SetFeatureFlag(SvxNumRuleFlags::ENABLE_EMBEDDED_BMP, false);
             }
-            aSet.Put( SvxNumBulletItem( aSvxRule ) );
+            aSet.Put( SvxNumBulletItem( std::move(aSvxRule) ) );
         }
 
         aSet.Put( SfxBoolItem( SID_PARAM_NUM_PRESET,false ));

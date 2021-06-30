@@ -327,7 +327,7 @@ const SfxPoolItem* FuBulletAndPosition::GetNumBulletItem(SfxItemSet& aNewAttr, s
                 SvxNumRule aNewRule( rLclRule );
                 aNewRule.SetFeatureFlag( SvxNumRuleFlags::NO_NUMBERS );
 
-                SvxNumBulletItem aNewItem( aNewRule, EE_PARA_NUMBULLET );
+                SvxNumBulletItem aNewItem( std::move(aNewRule), EE_PARA_NUMBULLET );
                 aNewAttr.Put(aNewItem);
             }
 

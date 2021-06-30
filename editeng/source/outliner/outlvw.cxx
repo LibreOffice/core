@@ -878,7 +878,7 @@ void OutlinerView::ToggleBullets()
                     {
                         SfxItemSet aAttrs( pOwner->GetParaAttribs( nPara ) );
                         SvxNumRule aNewNumRule( *pDefaultBulletNumRule );
-                        aAttrs.Put( SvxNumBulletItem( aNewNumRule, EE_PARA_NUMBULLET ) );
+                        aAttrs.Put( SvxNumBulletItem( std::move(aNewNumRule), EE_PARA_NUMBULLET ) );
                         pOwner->SetParaAttribs( nPara, aAttrs );
                     }
                 }
@@ -1050,7 +1050,7 @@ void OutlinerView::ApplyBulletsNumbering(
                         }
                     }
 
-                    aAttrs.Put(SvxNumBulletItem(aNewRule, EE_PARA_NUMBULLET));
+                    aAttrs.Put(SvxNumBulletItem(std::move(aNewRule), EE_PARA_NUMBULLET));
                 }
             }
             pOwner->SetParaAttribs(nPara, aAttrs);
