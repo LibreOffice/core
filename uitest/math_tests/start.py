@@ -18,74 +18,69 @@ class SimpleMathTest(UITestCase):
 
     def test_start_math(self):
 
-        self.ui_test.create_doc_in_start_center("math")
+        with self.ui_test.create_doc_in_start_center_guarded("math"):
 
-        xMathDoc = self.xUITest.getTopFocusWindow()
+            xMathDoc = self.xUITest.getTopFocusWindow()
 
-        self.ui_test.close_doc()
 
     def test_docking_window_listbox(self):
 
-        self.ui_test.create_doc_in_start_center("math")
+        with self.ui_test.create_doc_in_start_center_guarded("math"):
 
-        xMathDoc = self.xUITest.getTopFocusWindow()
+            xMathDoc = self.xUITest.getTopFocusWindow()
 
-        xList = xMathDoc.getChild("listbox")
-        state = get_state_as_dict(xList)
-        self.assertEqual(state["SelectEntryText"], "Unary/Binary Operators")
-        select_pos(xList, "1")
-        state = get_state_as_dict(xList)
-        self.assertEqual(state["SelectEntryText"], "Relations")
+            xList = xMathDoc.getChild("listbox")
+            state = get_state_as_dict(xList)
+            self.assertEqual(state["SelectEntryText"], "Unary/Binary Operators")
+            select_pos(xList, "1")
+            state = get_state_as_dict(xList)
+            self.assertEqual(state["SelectEntryText"], "Relations")
 
-        self.ui_test.close_doc()
 
     def test_math_edit(self):
-        self.ui_test.create_doc_in_start_center("math")
+        with self.ui_test.create_doc_in_start_center_guarded("math"):
 
-        xMathDoc = self.xUITest.getTopFocusWindow()
+            xMathDoc = self.xUITest.getTopFocusWindow()
 
-        xMathEdit = xMathDoc.getChild("math_edit")
+            xMathEdit = xMathDoc.getChild("math_edit")
 
-        type_text(xMathEdit, "E=mc^2")
+            type_text(xMathEdit, "E=mc^2")
 
-        self.ui_test.close_doc()
 
     def test_math_selector(self):
-        self.ui_test.create_doc_in_start_center("math")
+        with self.ui_test.create_doc_in_start_center_guarded("math"):
 
-        xMathDoc = self.xUITest.getTopFocusWindow()
+            xMathDoc = self.xUITest.getTopFocusWindow()
 
-        xMathSelector = xMathDoc.getChild("element_selector")
+            xMathSelector = xMathDoc.getChild("element_selector")
 
-        xElement = xMathSelector.getChild("1")
-        xElement.executeAction("SELECT", tuple())
+            xElement = xMathSelector.getChild("1")
+            xElement.executeAction("SELECT", tuple())
 
-        self.ui_test.close_doc()
 
     @unittest.skip("on windows the f4 does not always work")
     def test_complete_math(self):
-        self.ui_test.create_doc_in_start_center("math")
+        with self.ui_test.create_doc_in_start_center_guarded("math"):
 
-        xMathDoc = self.xUITest.getTopFocusWindow()
+            xMathDoc = self.xUITest.getTopFocusWindow()
 
-        xList = xMathDoc.getChild("listbox")
-        state = get_state_as_dict(xList)
-        self.assertEqual(state["SelectEntryText"], "Unary/Binary Operators")
-        select_pos(xList, "1")
+            xList = xMathDoc.getChild("listbox")
+            state = get_state_as_dict(xList)
+            self.assertEqual(state["SelectEntryText"], "Unary/Binary Operators")
+            select_pos(xList, "1")
 
-        xMathSelector = xMathDoc.getChild("element_selector")
+            xMathSelector = xMathDoc.getChild("element_selector")
 
-        xElement = xMathSelector.getChild("1")
-        xElement.executeAction("SELECT", tuple())
+            xElement = xMathSelector.getChild("1")
+            xElement.executeAction("SELECT", tuple())
 
-        xMathEdit = xMathDoc.getChild("math_edit")
-        type_text(xMathEdit, "1")
-        xMathEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"F4"}))
-        type_text(xMathEdit, "2")
+            xMathEdit = xMathDoc.getChild("math_edit")
+            type_text(xMathEdit, "1")
+            xMathEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"F4"}))
+            type_text(xMathEdit, "2")
 
-        edit_state = get_state_as_dict(xMathEdit)
-        self.assertEqual("1 <> 2 ", edit_state["Text"])
+            edit_state = get_state_as_dict(xMathEdit)
+            self.assertEqual("1 <> 2 ", edit_state["Text"])
 
-        self.ui_test.close_doc()
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

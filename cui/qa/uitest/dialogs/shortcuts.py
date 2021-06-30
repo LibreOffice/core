@@ -13,28 +13,27 @@ from uitest.uihelper.common import get_state_as_dict
 class Test(UITestCase):
 
     def test_tab_navigation(self):
-        self.ui_test.create_doc_in_start_center("writer")
-        xWriterDoc = self.xUITest.getTopFocusWindow()
-        xWriterEdit = xWriterDoc.getChild("writer_edit")
+        with self.ui_test.create_doc_in_start_center_guarded("writer"):
+            xWriterDoc = self.xUITest.getTopFocusWindow()
+            xWriterEdit = xWriterDoc.getChild("writer_edit")
 
-        with self.ui_test.execute_dialog_through_command(".uno:EditStyle") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:EditStyle") as xDialog:
 
-            xTabs = xDialog.getChild("tabcontrol")
-            select_pos(xTabs, "0")
+                xTabs = xDialog.getChild("tabcontrol")
+                select_pos(xTabs, "0")
 
-            for i in range(16):
-                self.assertEqual(get_state_as_dict(xTabs)["CurrPagePos"], str(i))
+                for i in range(16):
+                    self.assertEqual(get_state_as_dict(xTabs)["CurrPagePos"], str(i))
 
-                xTabs.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+PAGEDOWN"}))
+                    xTabs.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+PAGEDOWN"}))
 
-            self.assertEqual(get_state_as_dict(xTabs)["CurrPagePos"], "0")
+                self.assertEqual(get_state_as_dict(xTabs)["CurrPagePos"], "0")
 
-            for i in reversed(range(16)):
-                xTabs.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+PAGEUP"}))
+                for i in reversed(range(16)):
+                    xTabs.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+PAGEUP"}))
 
-                self.assertEqual(get_state_as_dict(xTabs)["CurrPagePos"], str(i))
+                    self.assertEqual(get_state_as_dict(xTabs)["CurrPagePos"], str(i))
 
 
-        self.ui_test.close_doc()
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

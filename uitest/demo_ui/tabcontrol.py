@@ -16,23 +16,22 @@ class TabControlTest(UITestCase):
 
     def test_select_pos(self):
 
-        self.ui_test.create_doc_in_start_center("calc")
+        with self.ui_test.create_doc_in_start_center_guarded("calc"):
 
-        xCalcDoc = self.xUITest.getTopFocusWindow()
-        xGridWindow = xCalcDoc.getChild("grid_window")
-        enter_text_to_cell(xGridWindow, "B2", "=2+3+4")
-        xGridWindow.executeAction("SELECT", mkPropertyValues({"CELL": "B2"}))
+            xCalcDoc = self.xUITest.getTopFocusWindow()
+            xGridWindow = xCalcDoc.getChild("grid_window")
+            enter_text_to_cell(xGridWindow, "B2", "=2+3+4")
+            xGridWindow.executeAction("SELECT", mkPropertyValues({"CELL": "B2"}))
 
-        self.ui_test.execute_modeless_dialog_through_command(".uno:FunctionDialog")
+            self.ui_test.execute_modeless_dialog_through_command(".uno:FunctionDialog")
 
-        xFunctionDlg = self.xUITest.getTopFocusWindow()
+            xFunctionDlg = self.xUITest.getTopFocusWindow()
 
-        xTabs = xFunctionDlg.getChild("tabcontrol")
-        select_pos(xTabs, "1")
+            xTabs = xFunctionDlg.getChild("tabcontrol")
+            select_pos(xTabs, "1")
 
-        xCancelBtn = xFunctionDlg.getChild("cancel")
-        xCancelBtn.executeAction("CLICK", tuple())
+            xCancelBtn = xFunctionDlg.getChild("cancel")
+            xCancelBtn.executeAction("CLICK", tuple())
 
-        self.ui_test.close_doc()
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
