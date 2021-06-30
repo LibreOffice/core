@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "394d73a3_9fa1770f",
+        "filename": "basic/qa/cppunit/test_scanner.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 659,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-06-30T08:42:53Z",
+      "side": 1,
+      "message": "why not use std::numeric_limits\u003cdouble\u003e::infinity() here?",
+      "range": {
+        "startLine": 659,
+        "startChar": 32,
+        "endLine": 659,
+        "endChar": 40
+      },
+      "revId": "4c9dfc3f45460c375e693c00867cc0ab8811e513",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2baea4df_b9e21313",
+        "filename": "sal/qa/rtl/math/test-rtl-math.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 534,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-06-30T08:42:53Z",
+      "side": 1,
+      "message": "would arguably be better if that replacement was part of a change concentrating on rtl::math::setNan, but as \u003chttps://git.libreoffice.org/core/+/7838efe4b703945ccde963f8506c8c7744e04e6e%5E%21\u003e \"Purge out rtl::math::setNan\" has already been merged, lets keep it here as a one-off",
+      "revId": "4c9dfc3f45460c375e693c00867cc0ab8811e513",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
