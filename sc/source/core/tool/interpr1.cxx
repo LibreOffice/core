@@ -1908,7 +1908,7 @@ void ScInterpreter::ScArcCosHyp()
     if (fVal < 1.0)
         PushIllegalArgument();
     else
-        PushDouble( ::rtl::math::acosh( fVal));
+        PushDouble( std::acosh( fVal));
 }
 
 void ScInterpreter::ScArcTanHyp()

@@ -1368,7 +1368,7 @@ bool SAL_CALL rtl_math_approxEqual(double a, double b) SAL_THROW_EXTERN_C()
 
 double SAL_CALL rtl_math_expm1(double fValue) SAL_THROW_EXTERN_C()
 {
-    return expm1(fValue);
+    return std::expm1(fValue);
 }
 
 double SAL_CALL rtl_math_log1p(double fValue) SAL_THROW_EXTERN_C()
@@ -1377,72 +1377,45 @@ double SAL_CALL rtl_math_log1p(double fValue) SAL_THROW_EXTERN_C()
     if (fValue == -0.0)
         return fValue; // macOS 10.8 libc returns 0.0 for -0.0
 #endif
-
-    return log1p(fValue);
+    return std::log1p(fValue);
 }
 
+/** Parent hiperbolic atan function (atanh) */
 double SAL_CALL rtl_math_atanh(double fValue) SAL_THROW_EXTERN_C()
-#if defined __clang__
-    __attribute__((no_sanitize("float-divide-by-zero"))) // atahn(1) -> inf
-#endif
 {
-   return 0.5 * rtl_math_log1p(2.0 * fValue / (1.0-fValue));
+#ifdef __APPLE__
+    if (fValue == -0.0)
+        return fValue; // maybe macOS 10.8 libc returns 0.0 for -0.0
+#endif
+    return std::atanh(fValue);
 }
 
 /** Parent error function (erf) */
 double SAL_CALL rtl_math_erf(double x) SAL_THROW_EXTERN_C()
 {
-    return erf(x);
+    return std::erf(x);
 }
 
 /** Parent complementary error function (erfc) */
 double SAL_CALL rtl_math_erfc(double x) SAL_THROW_EXTERN_C()
 {
-    return erfc(x);
+    return std::erfc(x);
 }
 
-/** improved accuracy of asinh for |x| large and for x near zero
-    @see #i97605#
- */
+/** Parent hiperbolic asin function (asinh) */
 double SAL_CALL rtl_math_asinh(double fX) SAL_THROW_EXTERN_C()
 {
-    if ( fX == 0.0 )
-        return 0.0;
-
-    double fSign = 1.0;
-    if ( fX < 0.0 )
-    {
-        fX = - fX;
-        fSign = -1.0;
-    }
-
-    if ( fX < 0.125 )
-        return fSign * rtl_math_log1p( fX + fX*fX / (1.0 + sqrt( 1.0 + fX*fX)));
-
-    if ( fX < 1.25e7 )
-        return fSign * log( fX + sqrt( 1.0 + fX*fX));
-
-    return fSign * log( 2.0*fX);
+#ifdef __APPLE__
+    if (fValue == -0.0)
+        return fValue; // maybe macOS 10.8 libc returns 0.0 for -0.0
+#endif
+    return std::asinh(fX);
 }
 
-/** improved accuracy of acosh for x large and for x near 1
-    @see #i97605#
- */
+/** Parent hiperbolic acosine function (acosh) */
 double SAL_CALL rtl_math_acosh(double fX) SAL_THROW_EXTERN_C()
 {
-    volatile double fZ = fX - 1.0;
-    if (fX < 1.0)
-        return std::numeric_limits<double>::quiet_NaN();
-    if ( fX == 1.0 )
-        return 0.0;
-
-    if ( fX < 1.1 )
-        return rtl_math_log1p( fZ + sqrt( fZ*fZ + 2.0*fZ));
-
-    if ( fX < 1.25e7 )
-        return log( fX + sqrt( fX*fX - 1.0));
-
-    return log( 2.0*fX);
+    return std::acosh(fX);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
