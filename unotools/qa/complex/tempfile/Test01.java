@@ -51,6 +51,8 @@ public class Test01 {
         //compare the file name with the name in the URL.
         sFileURL = m_aTestHelper.GetTempFileURL( xTempFile );
         sFileName = m_aTestHelper.GetTempFileName( xTempFile );
+        m_aTestHelper.Message( "Tempfile URL: " + sFileURL );
+        m_aTestHelper.Message( "Tempfile name: " + sFileName );
         m_aTestHelper.CompareFileNameAndURL( sFileName, sFileURL );
 
         //write to the stream using the service.
