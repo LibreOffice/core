@@ -1076,7 +1076,9 @@ IMPL_LINK( SwGlobalTree, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg, vo
     sal_Int32 nPos = 0;
     for (const std::unique_ptr<SfxMedium>& pMed : aMedList)
     {
-        OUString sFileName = pMed->GetURLObject().GetMainURL( INetURLObject::DecodeMechanism::NONE )
+        // tdf#127978 - don't URL encode filename for navigator's tooltip
+        OUString sFileName
+            = pMed->GetURLObject().GetMainURL(INetURLObject::DecodeMechanism::Unambiguous)
             + OUStringChar(sfx2::cTokenSeparator)
             + pMed->GetFilter()->GetFilterName()
             + OUStringChar(sfx2::cTokenSeparator);
