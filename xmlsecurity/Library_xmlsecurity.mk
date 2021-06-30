@@ -22,7 +22,6 @@ $(eval $(call gb_Library_add_defs,xmlsecurity,\
 
 $(eval $(call gb_Library_use_externals,xmlsecurity,\
 	boost_headers \
-	$(if $(filter PDFIUM,$(BUILD_TYPE)),pdfium) \
 ))
 
 $(eval $(call gb_Library_set_precompiled_header,xmlsecurity,xmlsecurity/inc/pch/precompiled_xmlsecurity))
