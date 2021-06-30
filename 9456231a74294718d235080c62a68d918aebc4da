@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cb77b4e2_bcedcc10",
+        "filename": "sw/qa/extras/layout/layout2.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 1454,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-06-30T10:48:01Z",
+      "side": 1,
+      "message": "according the LibreOffice coding standard, use readable variable names",
+      "range": {
+        "startLine": 1454,
+        "startChar": 10,
+        "endLine": 1454,
+        "endChar": 17
+      },
+      "revId": "9456231a74294718d235080c62a68d918aebc4da",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ca8058e9_b6e25e0e",
+        "filename": "sw/qa/extras/layout/layout2.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 1456,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-06-30T10:48:01Z",
+      "side": 1,
+      "message": "according the LibreOffice coding standard, use readable variable names",
+      "range": {
+        "startLine": 1456,
+        "startChar": 9,
+        "endLine": 1456,
+        "endChar": 15
+      },
+      "revId": "9456231a74294718d235080c62a68d918aebc4da",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b843071c_b1f0e5f6",
+        "filename": "sw/qa/extras/layout/layout2.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 1463,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-06-30T10:48:01Z",
+      "side": 1,
+      "message": "according the LibreOffice coding standard, use readable variable names",
+      "range": {
+        "startLine": 1463,
+        "startChar": 9,
+        "endLine": 1463,
+        "endChar": 19
+      },
+      "revId": "9456231a74294718d235080c62a68d918aebc4da",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "46cb630c_329ec4f6",
+        "filename": "sw/qa/extras/layout/layout2.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 1485,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-06-30T10:48:01Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 1485,
+        "startChar": 16,
+        "endLine": 1485,
+        "endChar": 17
+      },
+      "revId": "9456231a74294718d235080c62a68d918aebc4da",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "01144db3_5517ca62",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 6289,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-06-30T10:48:01Z",
+      "side": 1,
+      "message": "m_vPostponedFlys.erase(m_vPostponedFlys.begin() + i) within a not iterator based cycle results invalid positions, and losing some of the flys during the export (check with a textbox with multiple flys).\n\nSuggested fix:\n\n        {\n            for (auto it \u003d m_vPostponedFlys.begin(); it !\u003d m_vPostponedFlys.end(); )\n            {\n                m_nEmbedFlyLevel++;\n                WriteFlyFrame(*it);\n                it \u003d m_vPostponedFlys.erase(it);\n                m_nEmbedFlyLevel--;\n            }\n        }\n\n(This is equivalent of the following:\n\n        {\n            for (size_t i \u003d 0; i \u003c m_vPostponedFlys.size(); i++)\n            {\n                m_nEmbedFlyLevel++;\n                WriteFlyFrame(m_vPostponedFlys[i]);\n                m_nEmbedFlyLevel--;\n            }\n            m_vPostponedFlys.clear();\n        }\n)",
+      "range": {
+        "startLine": 6283,
+        "startChar": 0,
+        "endLine": 6289,
+        "endChar": 13
+      },
+      "revId": "9456231a74294718d235080c62a68d918aebc4da",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
