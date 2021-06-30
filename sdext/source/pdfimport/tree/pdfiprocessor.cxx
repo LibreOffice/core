@@ -147,7 +147,20 @@ void PDFIProcessor::setFont( const FontAttributes& i_rFont )
     FontAttributes aChangedFont( i_rFont );
     GraphicsContext& rGC=getCurrentContext();
     // for text render modes, please see PDF reference manual
-    aChangedFont.isOutline = ( (rGC.TextRenderMode == 1) || (rGC. TextRenderMode == 2) );
+    if (rGC.TextRenderMode == 1)
+    {
+        aChangedFont.isOutline = true;
+    }
+    else if (rGC.TextRenderMode == 2)
+    {
+        // tdf#81484: faux bold is represented as "stroke+fill" (while using the same color for both stroke and fill) in pdf.
+        // Convert to bold instead if the stroke color is the same as the fill color,
+        // otherwise it should be outline.
+        if (getCurrentContext().LineColor == getCurrentContext().FillColor)
+            aChangedFont.isBold = true;
+        else
+            aChangedFont.isOutline = true;
+    }
     FontToIdMap::const_iterator it = m_aFontToId.find( aChangedFont );
     if( it != m_aFontToId.end() )
         rGC.FontId = it->second;
