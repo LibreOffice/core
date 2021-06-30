@@ -16,6 +16,24 @@
       "revId": "eebb26f039c7a9777338f5d573958109be95018b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dbf816d8_ae1f9b03",
+        "filename": "sal/qa/rtl/math/test-rtl-math.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 455,
+      "author": {
+        "id": 1003291
+      },
+      "writtenOn": "2021-06-30T14:57:57Z",
+      "side": 1,
+      "message": "Since I\u0027ve removed all calls to these functions they are no longer required.\nSo was planning to also remove the tests.\nHowever can\u0027t be completely removed because are part of public API.\nFollowing the conversation on this topic here:\nhttps://gerrit.libreoffice.org/c/core/+/117952\nIt\u0027s gonna be left untouched.",
+      "parentUuid": "cf6de2ad_14b621ff",
+      "revId": "eebb26f039c7a9777338f5d573958109be95018b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
