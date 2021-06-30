@@ -34,6 +34,24 @@
       "revId": "ff641dc9e4d2aff1d1cbe4425cd9c03a2edc847e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f90ab306_bb3ee333",
+        "filename": "uitest/uitest/test.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-30T07:52:13Z",
+      "side": 1,
+      "message": "Can you give a pointer to such a setup, please?",
+      "parentUuid": "51d2a7ba_c2347498",
+      "revId": "ff641dc9e4d2aff1d1cbe4425cd9c03a2edc847e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
