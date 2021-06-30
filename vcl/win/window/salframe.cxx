@@ -3353,6 +3353,16 @@ bool WinSalFrame::MapUnicodeToKeyCode( sal_Unicode aUnicode, LanguageType aLangT
     return bRet;
 }
 
+static void UnsetAltIfAltGr(SalKeyEvent& rKeyEvt, sal_uInt16 nModCode)
+{
+    if ((nModCode & (KEY_MOD1 | KEY_MOD2)) == (KEY_MOD1 | KEY_MOD2) &&
+        rKeyEvt.mnCharCode)
+    {
+        // this is actually AltGr and should not be handled as Alt
+        rKeyEvt.mnCode &= ~(KEY_MOD1 | KEY_MOD2);
+    }
+}
+
 static bool ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
                               WPARAM wParam, LPARAM lParam, LRESULT& rResult )
 {
@@ -3441,8 +3451,12 @@ static bool ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
         aKeyEvt.mnCode     |= nModCode;
         aKeyEvt.mnCharCode  = ImplGetCharCode( pFrame, wParam );
         aKeyEvt.mnRepeat    = nRepeat;
+
+        UnsetAltIfAltGr(aKeyEvt, nModCode);
+
         nLastChar = 0;
         nLastVKChar = 0;
+
         bool nRet = pFrame->CallCallback( SalEvent::KeyInput, &aKeyEvt );
         pFrame->CallCallback( SalEvent::KeyUp, &aKeyEvt );
         return nRet;
@@ -3593,12 +3607,7 @@ static bool ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
                 aKeyEvt.mnCode     |= nModCode;
                 aKeyEvt.mnRepeat    = nRepeat;
 
-                if ((nModCode & (KEY_MOD1 | KEY_MOD2)) == (KEY_MOD1 | KEY_MOD2) &&
-                    aKeyEvt.mnCharCode)
-                {
-                    // this is actually AltGr and should not be handled as Alt
-                    aKeyEvt.mnCode &= ~(KEY_MOD1 | KEY_MOD2);
-                }
+                UnsetAltIfAltGr(aKeyEvt, nModCode);
 
                 bIgnoreCharMsg = bCharPeek;
                 bool nRet = pFrame->CallCallback( nEvent, &aKeyEvt );
