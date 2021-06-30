@@ -865,7 +865,7 @@ double stringToDouble(CharT const * pBegin, CharT const * pEnd,
             && (CharT('N') == p[2]))
         {
             p += 3;
-            rtl::math::setNan( &fVal );
+            fVal = std::numeric_limits<double>::quiet_NaN();
             bDone = true;
         }
         else if ((CharT('I') == p[0]) && (CharT('N') == p[1])
@@ -1012,19 +1012,8 @@ double stringToDouble(CharT const * pBegin, CharT const * pEnd,
             {
                 // "1.#NAN", "+1.#NAN", "-1.#NAN"
                 p += 4;
-                rtl::math::setNan( &fVal );
-                if (bSign)
-                {
-                    union {
-                        double sd;
-                        sal_math_Double md;
-                    } m;
-
-                    m.sd = fVal;
-                    m.md.w32_parts.msw |= 0x80000000; // create negative NaN
-                    fVal = m.sd;
-                    bSign = false; // don't negate again
-                }
+                fVal = bSign ? -std::numeric_limits<double>::quiet_NaN()
+                             : std::numeric_limits<double>::quiet_NaN();
 
                 // Eat any further digits:
                 while (p != pEnd && rtl::isAsciiDigit(*p))
