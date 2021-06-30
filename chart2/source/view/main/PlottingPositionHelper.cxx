@@ -617,10 +617,9 @@ drawing::Position3D PolarPlottingPositionHelper::transformUnitCircleToScene( dou
 
     double fX=fUnitRadius*std::cos(fAnglePi);
     double fY=fUnitRadius*std::sin(fAnglePi);
-    double fZ=fLogicZ;
 
     //!! applying matrix to vector does ignore translation, so it is important to use a B3DPoint here instead of B3DVector
-    ::basegfx::B3DPoint aPoint(fX,fY,fZ);
+    ::basegfx::B3DPoint aPoint(fX,fY,fLogicZ);
     ::basegfx::B3DPoint aRet = m_aUnitCartesianToScene * aPoint;
     return B3DPointToPosition3D(aRet);
 }
