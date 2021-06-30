@@ -44,7 +44,7 @@ SvpSalFrame::SvpSalFrame( SvpSalInstance* pInstance,
                           SalFrame* pParent,
                           SalFrameStyleFlags nSalFrameStyle ) :
     m_pInstance( pInstance ),
-    m_pParent( static_cast<SvpSalFrame*>(pParent) ),
+    m_pParent(nullptr),
     m_nStyle( nSalFrameStyle ),
     m_bVisible( false ),
 #ifndef IOS
@@ -64,11 +64,10 @@ SvpSalFrame::SvpSalFrame( SvpSalInstance* pInstance,
     m_aSystemChildData.pSalFrame    = this;
 #endif
 
-    if( m_pParent )
-        m_pParent->m_aChildren.push_back( this );
-
     if( m_pInstance )
         m_pInstance->registerFrame( this );
+
+    SetParent(static_cast<SvpSalFrame*>(pParent));
 
     SetPosSize( 0, 0, 800, 600, SAL_FRAME_POSSIZE_WIDTH | SAL_FRAME_POSSIZE_HEIGHT );
 }
@@ -78,11 +77,9 @@ SvpSalFrame::~SvpSalFrame()
     if( m_pInstance )
         m_pInstance->deregisterFrame( this );
 
-    std::vector<SvpSalFrame*> Children = m_aChildren;
-    for( auto& rChild : Children )
-        rChild->SetParent( m_pParent );
-    if( m_pParent )
-        m_pParent->m_aChildren.erase(std::remove(m_pParent->m_aChildren.begin(), m_pParent->m_aChildren.end(), this), m_pParent->m_aChildren.end());
+    for (auto* pChild : m_aChildren)
+        delete pChild;
+    SetParent(nullptr);
 
     if( s_pFocusFrame == this )
     {
@@ -477,9 +474,23 @@ void SvpSalFrame::SimulateKeyPress( sal_uInt16 /*nKeyCode*/ )
 
 void SvpSalFrame::SetParent( SalFrame* pNewParent )
 {
-    if( m_pParent )
-        m_pParent->m_aChildren.erase(std::remove(m_pParent->m_aChildren.begin(), m_pParent->m_aChildren.end(), this), m_pParent->m_aChildren.end());
+    if (m_pParent == pNewParent)
+        return;
+    if (m_pParent)
+    {
+        auto res = std::find(m_pParent->m_aChildren.begin(), m_pParent->m_aChildren.end(), this);
+        assert(res != m_pParent->m_aChildren.end());
+        m_pParent->m_aChildren.erase(res);
+    }
     m_pParent = static_cast<SvpSalFrame*>(pNewParent);
+    if (m_pParent)
+    {
+#ifndef NDEBUG
+        auto res = std::find(m_pParent->m_aChildren.begin(), m_pParent->m_aChildren.end(), this);
+        assert(res == m_pParent->m_aChildren.end());
+#endif
+        m_pParent->m_aChildren.push_back(this);
+    }
 }
 
 void SvpSalFrame::SetPluginParent( SystemParentData* )
