@@ -1315,12 +1315,12 @@ bool XMLTransformerBase::ConvertURIToOOo( OUString& rURI,
                     {
                     case '/':
                         // a relative path segment within the package
-                        nPos = nLen;    // leave loop
+                        nPos = nLen - 1;    // leave loop
                         break;
                     case ':':
                         // a schema
                         bPackage = false;
-                        nPos = nLen;    // leave loop
+                        nPos = nLen - 1;    // leave loop
                         break;
                     default:
                         // we don't care about any other characters
