@@ -35,6 +35,10 @@
 #include <cstddef>
 #include <math.h>
 
+#include <cmath>
+static_assert(std::signbit(std::log1p(-0.0)),"Mac OS bug aroung log1p has not been corrected.");
+static_assert(!std::signbit(std::log1p(-0.0)),"Mac OS bug aroung log1p has been corrected.");
+
 namespace rtl {
 
 namespace math {
