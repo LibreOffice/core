@@ -316,27 +316,8 @@ namespace sw::mark
 
     OUString MarkBase::GenerateNewName(std::u16string_view rPrefix)
     {
-        static bool bHack = (getenv("LIBO_ONEWAY_STABLE_ODF_EXPORT") != nullptr);
-
-        if (bHack)
-        {
-            static sal_Int64 nIdCounter = SAL_CONST_INT64(6000000000);
-            return rPrefix + OUString::number(nIdCounter++);
-        }
-        else
-        {
-            static OUString sUniquePostfix;
-            static sal_Int32 nCount = SAL_MAX_INT32;
-            if(nCount == SAL_MAX_INT32)
-            {
-                unsigned int const n(comphelper::rng::uniform_uint_distribution(0,
-                                    std::numeric_limits<unsigned int>::max()));
-                sUniquePostfix = "_" + OUString::number(n);
-                nCount = 0;
-            }
-            // putting the counter in front of the random parts will speed up string comparisons
-            return rPrefix + OUString::number(nCount++) + sUniquePostfix;
-        }
+        static sal_Int64 nIdCounter = SAL_CONST_INT64(6000000000);
+        return rPrefix + OUString::number(nIdCounter++);
     }
 
     void MarkBase::SwClientNotify(const SwModify&, const SfxHint& rHint)

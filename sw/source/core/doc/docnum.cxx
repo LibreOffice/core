@@ -2491,19 +2491,8 @@ OUString SwDoc::GetUniqueNumRuleName( const OUString* pChkStr, bool bAutoNum ) c
     OUString aName;
     if( bAutoNum )
     {
-        static bool bHack = (getenv("LIBO_ONEWAY_STABLE_ODF_EXPORT") != nullptr);
-
-        if (bHack)
-        {
-            static sal_Int64 nIdCounter = SAL_CONST_INT64(8000000000);
-            aName = OUString::number(nIdCounter++);
-        }
-        else
-        {
-            unsigned int const n(comphelper::rng::uniform_uint_distribution(0,
-                                    std::numeric_limits<unsigned int>::max()));
-            aName = OUString::number(n);
-        }
+        static sal_Int64 nIdCounter = SAL_CONST_INT64(8000000000);
+        aName = OUString::number(nIdCounter++);
         if( pChkStr && pChkStr->isEmpty() )
             pChkStr = nullptr;
     }
