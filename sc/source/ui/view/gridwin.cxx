@@ -4004,6 +4004,9 @@ sal_Int8 ScGridWindow::AcceptDrop( const AcceptDropEvent& rEvt )
             DropScroll( rEvt.maPosPixel );
     }
 
+    if (comphelper::LibreOfficeKit::isActive() && nRet != DND_ACTION_NONE)
+        SetPointer(PointerStyle::Hand);
+
     return nRet;
 }
 
@@ -4496,6 +4499,9 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
 
 sal_Int8 ScGridWindow::ExecuteDrop( const ExecuteDropEvent& rEvt )
 {
+    if (comphelper::LibreOfficeKit::isActive())
+        SetPointer(PointerStyle::FatCross);
+
     DrawMarkDropObj( nullptr );    // drawing layer
 
     ScModule* pScMod = SC_MOD();
