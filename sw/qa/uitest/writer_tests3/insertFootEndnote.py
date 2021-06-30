@@ -10,53 +10,51 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 class insertFootEndnote(UITestCase):
 
    def test_insert_foot_endnote(self):
-        self.ui_test.create_doc_in_start_center("writer")
-        document = self.ui_test.get_component()
-        xWriterDoc = self.xUITest.getTopFocusWindow()
+        with self.ui_test.create_doc_in_start_center_guarded("writer") as document:
+            xWriterDoc = self.xUITest.getTopFocusWindow()
 
 #Automatic - Footnote
-        with self.ui_test.execute_dialog_through_command(".uno:InsertFootnoteDialog"):
-            pass
+            with self.ui_test.execute_dialog_through_command(".uno:InsertFootnoteDialog"):
+                pass
 
-        self.assertEqual(document.Footnotes.getCount(), 1)
-        self.xUITest.executeCommand(".uno:Undo")
-        self.assertEqual(document.Footnotes.getCount(), 0)
+            self.assertEqual(document.Footnotes.getCount(), 1)
+            self.xUITest.executeCommand(".uno:Undo")
+            self.assertEqual(document.Footnotes.getCount(), 0)
 #Automatic - Endnote
-        with self.ui_test.execute_dialog_through_command(".uno:InsertFootnoteDialog") as xDialog:
-            xEndnote = xDialog.getChild("endnote")
-            xEndnote.executeAction("CLICK", tuple())
+            with self.ui_test.execute_dialog_through_command(".uno:InsertFootnoteDialog") as xDialog:
+                xEndnote = xDialog.getChild("endnote")
+                xEndnote.executeAction("CLICK", tuple())
 
-        self.assertEqual(document.Endnotes.getCount(), 1)
-        self.xUITest.executeCommand(".uno:Undo")
-        self.assertEqual(document.Endnotes.getCount(), 0)
+            self.assertEqual(document.Endnotes.getCount(), 1)
+            self.xUITest.executeCommand(".uno:Undo")
+            self.assertEqual(document.Endnotes.getCount(), 0)
 #Character - Footnote
-        with self.ui_test.execute_dialog_through_command(".uno:InsertFootnoteDialog") as xDialog:
-            xChar = xDialog.getChild("character")
-            xChar.executeAction("CLICK", tuple())
-            xCharentry = xDialog.getChild("characterentry")
-            xCharentry.executeAction("TYPE", mkPropertyValues({"TEXT":"A"}))
+            with self.ui_test.execute_dialog_through_command(".uno:InsertFootnoteDialog") as xDialog:
+                xChar = xDialog.getChild("character")
+                xChar.executeAction("CLICK", tuple())
+                xCharentry = xDialog.getChild("characterentry")
+                xCharentry.executeAction("TYPE", mkPropertyValues({"TEXT":"A"}))
 
-        self.assertEqual(document.Footnotes.getCount(), 1)
-        self.xUITest.executeCommand(".uno:Undo")
-        self.assertEqual(document.Footnotes.getCount(), 0)
+            self.assertEqual(document.Footnotes.getCount(), 1)
+            self.xUITest.executeCommand(".uno:Undo")
+            self.assertEqual(document.Footnotes.getCount(), 0)
 
 #Character - Endnote
-        with self.ui_test.execute_dialog_through_command(".uno:InsertFootnoteDialog") as xDialog:
-            xChar = xDialog.getChild("character")
-            xChar.executeAction("CLICK", tuple())
-            xCharentry = xDialog.getChild("characterentry")
-            xCharentry.executeAction("TYPE", mkPropertyValues({"TEXT":"A"}))
+            with self.ui_test.execute_dialog_through_command(".uno:InsertFootnoteDialog") as xDialog:
+                xChar = xDialog.getChild("character")
+                xChar.executeAction("CLICK", tuple())
+                xCharentry = xDialog.getChild("characterentry")
+                xCharentry.executeAction("TYPE", mkPropertyValues({"TEXT":"A"}))
 
-            xEndnote = xDialog.getChild("endnote")
-            xEndnote.executeAction("CLICK", tuple())
+                xEndnote = xDialog.getChild("endnote")
+                xEndnote.executeAction("CLICK", tuple())
 
-        self.assertEqual(document.Endnotes.getCount(), 1)
-        self.xUITest.executeCommand(".uno:Undo")
-        self.assertEqual(document.Endnotes.getCount(), 0)
+            self.assertEqual(document.Endnotes.getCount(), 1)
+            self.xUITest.executeCommand(".uno:Undo")
+            self.assertEqual(document.Endnotes.getCount(), 0)
 
 #Cancel button
-        with self.ui_test.execute_dialog_through_command(".uno:InsertFootnoteDialog", close_button="cancel"):
-            pass
+            with self.ui_test.execute_dialog_through_command(".uno:InsertFootnoteDialog", close_button="cancel"):
+                pass
 
-        self.ui_test.close_doc()
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

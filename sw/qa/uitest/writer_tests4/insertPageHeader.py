@@ -34,31 +34,28 @@ class WriterInsertPageHeader(UITestCase):
             document.StyleFamilies.PageStyles.Standard.HeaderIsOn, False)
 
     def test_header(self):
-        self.ui_test.create_doc_in_start_center("writer")
+        with self.ui_test.create_doc_in_start_center_guarded("writer") as document:
 
-        self.insert_header()
+            self.insert_header()
 
-        self.delete_header()
+            self.delete_header()
 
-        self.ui_test.close_doc()
 
     def test_tdf107427(self):
-        self.ui_test.create_doc_in_start_center("writer")
+        with self.ui_test.create_doc_in_start_center_guarded("writer") as document:
 
-        self.insert_header()
+            self.insert_header()
 
-        with self.ui_test.execute_dialog_through_command(".uno:InsertTable"):
-            pass
+            with self.ui_test.execute_dialog_through_command(".uno:InsertTable"):
+                pass
 
-        document = self.ui_test.get_component()
 
-        tables = document.getTextTables()
-        self.assertEqual(len(tables[0].getRows()), 2)
-        self.assertEqual(len(tables[0].getColumns()), 2)
+            tables = document.getTextTables()
+            self.assertEqual(len(tables[0].getRows()), 2)
+            self.assertEqual(len(tables[0].getColumns()), 2)
 
-        self.xUITest.executeCommand(".uno:SelectAll")
+            self.xUITest.executeCommand(".uno:SelectAll")
 
-        self.delete_header()
+            self.delete_header()
 
-        self.ui_test.close_doc()
 

@@ -10,23 +10,22 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 class Tdf118883(UITestCase):
 
    def test_tdf118883(self):
-        self.ui_test.create_doc_in_start_center("writer")
+        with self.ui_test.create_doc_in_start_center_guarded("writer") as writer_document:
 
-        # Insert shape with Ctrl key
-        xArgs = mkPropertyValues({"KeyModifier": 8192})
-        self.xUITest.executeCommandWithParameters(".uno:BasicShapes.rectangle", xArgs)
+            # Insert shape with Ctrl key
+            xArgs = mkPropertyValues({"KeyModifier": 8192})
+            self.xUITest.executeCommandWithParameters(".uno:BasicShapes.rectangle", xArgs)
 
-        writer_document = self.ui_test.get_component()
-        self.assertEqual(1, writer_document.DrawPage.getCount())
+            self.assertEqual(1, writer_document.DrawPage.getCount())
 
-        self.xUITest.executeCommand(".uno:Copy")
+            self.xUITest.executeCommand(".uno:Copy")
 
-        with self.ui_test.load_empty_file("calc") as calc_document:
+            with self.ui_test.load_empty_file("calc") as calc_document:
 
-            self.xUITest.executeCommand(".uno:Paste")
+                self.xUITest.executeCommand(".uno:Paste")
 
-            # Without the fix in place, this test would have failed with
-            # AssertionError: 1 != 0
-            self.assertEqual(1, calc_document.DrawPages[0].getCount())
+                # Without the fix in place, this test would have failed with
+                # AssertionError: 1 != 0
+                self.assertEqual(1, calc_document.DrawPages[0].getCount())
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

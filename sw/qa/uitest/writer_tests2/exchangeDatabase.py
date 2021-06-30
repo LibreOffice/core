@@ -12,34 +12,32 @@ class exchangeDB(UITestCase):
 
     def test_exchange_database(self):
 
-        self.ui_test.create_doc_in_start_center("writer")
+        with self.ui_test.create_doc_in_start_center_guarded("writer"):
 
-        with self.ui_test.execute_dialog_through_command(".uno:ChangeDatabaseField", close_button="close"):
-            pass
+            with self.ui_test.execute_dialog_through_command(".uno:ChangeDatabaseField", close_button="close"):
+                pass
 
-        self.ui_test.close_doc()
 
     def test_exchange_database2(self):
 
-        self.ui_test.create_doc_in_start_center("writer")
+        with self.ui_test.create_doc_in_start_center_guarded("writer"):
 
-        with self.ui_test.execute_dialog_through_command(".uno:ChangeDatabaseField") as xExDBDlg:
-            xTreelist = xExDBDlg.getChild("availablelb")
+            with self.ui_test.execute_dialog_through_command(".uno:ChangeDatabaseField") as xExDBDlg:
+                xTreelist = xExDBDlg.getChild("availablelb")
 
-            xLabeldb = xExDBDlg.getChild("dbnameft")
-            self.assertEqual(get_state_as_dict(xLabeldb)["Text"], "[None]")
+                xLabeldb = xExDBDlg.getChild("dbnameft")
+                self.assertEqual(get_state_as_dict(xLabeldb)["Text"], "[None]")
 
-            xTreeEntry = xTreelist.getChild('0')                 #Available Databases
-            xTreeEntry.executeAction("EXPAND", tuple())          #Click on the Bibliography
-            xTreeEntry.executeAction("COLLAPSE", tuple())
-            xTreeEntry.executeAction("EXPAND", tuple())
-            xTreeEntry2 = xTreeEntry.getChild('0')                 #Available Databases
-            xTreeEntry2.executeAction("SELECT", tuple())          #Click on the biblio
+                xTreeEntry = xTreelist.getChild('0')                 #Available Databases
+                xTreeEntry.executeAction("EXPAND", tuple())          #Click on the Bibliography
+                xTreeEntry.executeAction("COLLAPSE", tuple())
+                xTreeEntry.executeAction("EXPAND", tuple())
+                xTreeEntry2 = xTreeEntry.getChild('0')                 #Available Databases
+                xTreeEntry2.executeAction("SELECT", tuple())          #Click on the biblio
 
-        with self.ui_test.execute_dialog_through_command(".uno:ChangeDatabaseField", close_button="close") as xExDBDlg:
-            xLabeldb = xExDBDlg.getChild("dbnameft")
-            self.assertEqual(get_state_as_dict(xLabeldb)["Text"], "Bibliography.biblio")
+            with self.ui_test.execute_dialog_through_command(".uno:ChangeDatabaseField", close_button="close") as xExDBDlg:
+                xLabeldb = xExDBDlg.getChild("dbnameft")
+                self.assertEqual(get_state_as_dict(xLabeldb)["Text"], "Bibliography.biblio")
 
-        self.ui_test.close_doc()
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

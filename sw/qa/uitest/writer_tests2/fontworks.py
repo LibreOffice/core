@@ -15,26 +15,25 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 class fontWorksDialog(UITestCase):
 
     def test_fontwork_selector(self):
-        self.ui_test.create_doc_in_start_center("writer")
-        xWriterDoc = self.xUITest.getTopFocusWindow()
-        xWriterEdit = xWriterDoc.getChild("writer_edit")
+        with self.ui_test.create_doc_in_start_center_guarded("writer"):
+            xWriterDoc = self.xUITest.getTopFocusWindow()
+            xWriterEdit = xWriterDoc.getChild("writer_edit")
 
-        with self.ui_test.execute_dialog_through_command(".uno:FontworkGalleryFloater", close_button="cancel") as xDialog:
-            FontWorkSelector = xDialog.getChild("ctlFavoriteswin")
-            # Select element with id (3)
-            element3 = FontWorkSelector.getChild("2")
-            element3.executeAction("SELECT", mkPropertyValues({}))
-            print(get_state_as_dict(FontWorkSelector))
-            self.assertEqual(get_state_as_dict(FontWorkSelector)["SelectedItemPos"], "2")
-            self.assertEqual(get_state_as_dict(FontWorkSelector)["SelectedItemId"], "3")
-            self.assertEqual(get_state_as_dict(FontWorkSelector)["VisibleCount"], "36")
+            with self.ui_test.execute_dialog_through_command(".uno:FontworkGalleryFloater", close_button="cancel") as xDialog:
+                FontWorkSelector = xDialog.getChild("ctlFavoriteswin")
+                # Select element with id (3)
+                element3 = FontWorkSelector.getChild("2")
+                element3.executeAction("SELECT", mkPropertyValues({}))
+                print(get_state_as_dict(FontWorkSelector))
+                self.assertEqual(get_state_as_dict(FontWorkSelector)["SelectedItemPos"], "2")
+                self.assertEqual(get_state_as_dict(FontWorkSelector)["SelectedItemId"], "3")
+                self.assertEqual(get_state_as_dict(FontWorkSelector)["VisibleCount"], "36")
 
-            # Select element with id (7)
-            element7 = FontWorkSelector.getChild("6")
-            element7.executeAction("SELECT", mkPropertyValues({}))
-            self.assertEqual(get_state_as_dict(FontWorkSelector)["SelectedItemPos"], "6")
-            self.assertEqual(get_state_as_dict(FontWorkSelector)["SelectedItemId"], "7")
+                # Select element with id (7)
+                element7 = FontWorkSelector.getChild("6")
+                element7.executeAction("SELECT", mkPropertyValues({}))
+                self.assertEqual(get_state_as_dict(FontWorkSelector)["SelectedItemPos"], "6")
+                self.assertEqual(get_state_as_dict(FontWorkSelector)["SelectedItemId"], "7")
 
-        self.ui_test.close_doc()
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
