@@ -1357,7 +1357,7 @@ SfxItemSet&   SwDocStyleSheet::GetItemSet()
             {
                 OSL_ENSURE(m_pNumRule, "No NumRule");
                 SvxNumRule aRule = m_pNumRule->MakeSvxNumRule();
-                m_aCoreSet.Put(SvxNumBulletItem(aRule));
+                m_aCoreSet.Put(SvxNumBulletItem(std::move(aRule)));
             }
             break;
 

@@ -108,7 +108,7 @@ OutlineBulletDlg::OutlineBulletDlg(weld::Window* pParent, const SfxItemSet* pAtt
         SvxNumRule aNewRule( rRule );
         aNewRule.SetFeatureFlag( SvxNumRuleFlags::NO_NUMBERS );
 
-        SvxNumBulletItem aNewItem( aNewRule, EE_PARA_NUMBULLET );
+        SvxNumBulletItem aNewItem( std::move(aNewRule), EE_PARA_NUMBULLET );
         m_aInputSet.Put(aNewItem);
     }
 

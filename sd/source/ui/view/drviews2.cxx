@@ -446,7 +446,7 @@ private:
                         aItemSet.Put(SvxWeightItem(WEIGHT_NORMAL, EE_CHAR_WEIGHT));
 
                     SvxNumRule aDefaultNumRule(SvxNumRuleFlags::NONE, 0, false);
-                    aItemSet.Put(SvxNumBulletItem(aDefaultNumRule, EE_PARA_NUMBULLET));
+                    aItemSet.Put(SvxNumBulletItem(std::move(aDefaultNumRule), EE_PARA_NUMBULLET));
 
                     pOutliner->SetParaAttribs(nParagraph, aItemSet);
                 }

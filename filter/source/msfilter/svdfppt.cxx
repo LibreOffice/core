@@ -4411,7 +4411,7 @@ PPTStyleSheet::PPTStyleSheet( const DffRecordHeader& rSlideHd, SvStream& rIn, Sd
                     aRule.SetLevel( nDepth, aNumberFormat );
             }
         }
-        mpNumBulletItem[ i ] = std::make_unique<SvxNumBulletItem>( aRule, EE_PARA_NUMBULLET );
+        mpNumBulletItem[ i ] = std::make_unique<SvxNumBulletItem>( std::move(aRule), EE_PARA_NUMBULLET );
     }
 }
 

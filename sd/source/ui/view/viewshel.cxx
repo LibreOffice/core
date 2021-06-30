@@ -857,7 +857,7 @@ const SfxPoolItem* ViewShell::GetNumBulletItem(SfxItemSet& aNewAttr, sal_uInt16&
                 SvxNumRule aNewRule( rRule );
                 aNewRule.SetFeatureFlag( SvxNumRuleFlags::NO_NUMBERS );
 
-                SvxNumBulletItem aNewItem( aNewRule, EE_PARA_NUMBULLET );
+                SvxNumBulletItem aNewItem( std::move(aNewRule), EE_PARA_NUMBULLET );
                 aNewAttr.Put(aNewItem);
             }
 

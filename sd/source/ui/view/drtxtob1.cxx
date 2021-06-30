@@ -488,7 +488,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                                 aNewRule.SetLevel(nLevel, aFmt);
                             }
 
-                            pFirstStyleSheet->GetItemSet().Put(SvxNumBulletItem(aNewRule, EE_PARA_NUMBULLET));
+                            pFirstStyleSheet->GetItemSet().Put(SvxNumBulletItem(std::move(aNewRule), EE_PARA_NUMBULLET));
 
                             SdStyleSheet::BroadcastSdStyleSheetChange(pFirstStyleSheet, PresentationObjects::Outline_1, pSSPool);
                         }

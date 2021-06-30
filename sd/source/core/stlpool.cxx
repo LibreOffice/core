@@ -1095,7 +1095,7 @@ void SdStyleSheetPool::PutNumBulletItem( SfxStyleSheetBase* pSheet,
                 aNumRule.SetLevel( i, aNumberFormat );
             }
 
-            rSet.Put( SvxNumBulletItem( aNumRule, EE_PARA_NUMBULLET ) );
+            rSet.Put( SvxNumBulletItem( std::move(aNumRule), EE_PARA_NUMBULLET ) );
             static_cast<SfxStyleSheet*>(pSheet)->Broadcast(SfxHint( SfxHintId::DataChanged ) );
         }
         break;
@@ -1127,7 +1127,7 @@ void SdStyleSheetPool::PutNumBulletItem( SfxStyleSheetBase* pSheet,
                     aNumRule.SetLevel(i, aFrmt);
                 }
 
-                rSet.Put( SvxNumBulletItem( aNumRule, EE_PARA_NUMBULLET ) );
+                rSet.Put( SvxNumBulletItem( std::move(aNumRule), EE_PARA_NUMBULLET ) );
                 static_cast<SfxStyleSheet*>(pSheet)->Broadcast(SfxHint( SfxHintId::DataChanged ) );
             }
         }
@@ -1151,7 +1151,7 @@ void SdStyleSheetPool::PutNumBulletItem( SfxStyleSheetBase* pSheet,
                 aNumRule.SetLevel( i, aNumberFormat );
             }
 
-            rSet.Put( SvxNumBulletItem( aNumRule, EE_PARA_NUMBULLET ) );
+            rSet.Put( SvxNumBulletItem( std::move(aNumRule), EE_PARA_NUMBULLET ) );
             static_cast<SfxStyleSheet*>(pSheet)->Broadcast(SfxHint( SfxHintId::DataChanged ) );
         }
         break;
