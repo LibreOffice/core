@@ -10,40 +10,38 @@ class tdf93068(UITestCase):
 
     def test_tdf93068(self):
 
-        self.ui_test.create_doc_in_start_center("writer")
+        with self.ui_test.create_doc_in_start_center_guarded("writer") as document:
 
-        document = self.ui_test.get_component()
 
-        self.xUITest.getTopFocusWindow()
+            self.xUITest.getTopFocusWindow()
 
-        # tdf#135950: Character dialog crashes if multiple cells in a
-        # table are selected
-        with self.ui_test.execute_dialog_through_command(".uno:InsertTable"):
-            pass
+            # tdf#135950: Character dialog crashes if multiple cells in a
+            # table are selected
+            with self.ui_test.execute_dialog_through_command(".uno:InsertTable"):
+                pass
 
-        self.xUITest.executeCommand(".uno:SelectAll")
+            self.xUITest.executeCommand(".uno:SelectAll")
 
-        # Check the table is selected
-        self.assertEqual("SwXTextTableCursor", document.CurrentSelection.getImplementationName())
+            # Check the table is selected
+            self.assertEqual("SwXTextTableCursor", document.CurrentSelection.getImplementationName())
 
-        with self.ui_test.execute_dialog_through_command(".uno:FontDialog"):
-            pass
+            with self.ui_test.execute_dialog_through_command(".uno:FontDialog"):
+                pass
 
-        with self.ui_test.execute_dialog_through_command(".uno:FontDialog", close_button="cancel"):
-            pass
+            with self.ui_test.execute_dialog_through_command(".uno:FontDialog", close_button="cancel"):
+                pass
 
-        with self.ui_test.execute_dialog_through_command(".uno:FontDialog") as xFontDlg:
-            xDiscardBtn = xFontDlg.getChild("reset")
-            xDiscardBtn.executeAction("CLICK", tuple())
+            with self.ui_test.execute_dialog_through_command(".uno:FontDialog") as xFontDlg:
+                xDiscardBtn = xFontDlg.getChild("reset")
+                xDiscardBtn.executeAction("CLICK", tuple())
 
-        self.xUITest.getTopFocusWindow()
+            self.xUITest.getTopFocusWindow()
 
-        # Check the table is still selected after closing the dialog
-        self.assertEqual("SwXTextTableCursor", document.CurrentSelection.getImplementationName())
+            # Check the table is still selected after closing the dialog
+            self.assertEqual("SwXTextTableCursor", document.CurrentSelection.getImplementationName())
 
-        self.xUITest.executeCommand(".uno:GoDown")
+            self.xUITest.executeCommand(".uno:GoDown")
 
-        # Check the table is no longer selected
-        self.assertNotEqual("SwXTextTableCursor", document.CurrentSelection.getImplementationName())
+            # Check the table is no longer selected
+            self.assertNotEqual("SwXTextTableCursor", document.CurrentSelection.getImplementationName())
 
-        self.ui_test.close_doc()

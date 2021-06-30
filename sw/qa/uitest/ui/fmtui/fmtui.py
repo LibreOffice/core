@@ -15,20 +15,18 @@ class TestTmpdlg(UITestCase):
 
     def test_para_style_semi_transparent_text(self):
 
-        self.ui_test.create_doc_in_start_center("writer")
-        xWriterDoc = self.xUITest.getTopFocusWindow()
-        document = self.ui_test.get_component()
-        with self.ui_test.execute_dialog_through_command(".uno:EditStyle", close_button="cancel") as xDialog:
+        with self.ui_test.create_doc_in_start_center_guarded("writer"):
+            xWriterDoc = self.xUITest.getTopFocusWindow()
+            with self.ui_test.execute_dialog_through_command(".uno:EditStyle", close_button="cancel") as xDialog:
 
-            xTabs = xDialog.getChild("tabcontrol")
-            # Select RID_SVXPAGE_CHAR_EFFECTS.
-            select_pos(xTabs, "1")
-            xFontTransparency = xDialog.getChild("fonttransparencymtr")
-            # Without the accompanying fix in place, this test would have failed with:
-            # AssertionError: 'false' != 'true'
-            # i.e. the control was hidden in the paragraph style dialog.
-            self.assertEqual(get_state_as_dict(xFontTransparency)["Visible"], "true")
+                xTabs = xDialog.getChild("tabcontrol")
+                # Select RID_SVXPAGE_CHAR_EFFECTS.
+                select_pos(xTabs, "1")
+                xFontTransparency = xDialog.getChild("fonttransparencymtr")
+                # Without the accompanying fix in place, this test would have failed with:
+                # AssertionError: 'false' != 'true'
+                # i.e. the control was hidden in the paragraph style dialog.
+                self.assertEqual(get_state_as_dict(xFontTransparency)["Visible"], "true")
 
-        self.ui_test.close_doc()
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

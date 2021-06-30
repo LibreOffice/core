@@ -12,33 +12,32 @@ class tdf124413(UITestCase):
 
     def test_copy_paste_overwriting_undo_redo_in_macro_editor_tdf124413(self):
 
-        self.ui_test.create_doc_in_start_center("writer")
-        #Start LibreOffice. Go to Tools > Macros > Organize Macros > Basic
-        with self.ui_test.execute_dialog_through_command(".uno:MacroDialog", close_button="") as xDialog:
-            #Open Editor
-            xEditBtn = xDialog.getChild("edit")
-            xEditBtn.executeAction("CLICK", tuple())
+        with self.ui_test.create_doc_in_start_center_guarded("writer"):
+            #Start LibreOffice. Go to Tools > Macros > Organize Macros > Basic
+            with self.ui_test.execute_dialog_through_command(".uno:MacroDialog", close_button="") as xDialog:
+                #Open Editor
+                xEditBtn = xDialog.getChild("edit")
+                xEditBtn.executeAction("CLICK", tuple())
 
-            resultText = "REM  *****  BASIC  *****\n\nSub Main\n\nEnd Sub\n"
+                resultText = "REM  *****  BASIC  *****\n\nSub Main\n\nEnd Sub\n"
 
-            xMacroWin = self.xUITest.getTopFocusWindow()
-            xEditWin = xMacroWin.getChild('EditorWindow')
+                xMacroWin = self.xUITest.getTopFocusWindow()
+                xEditWin = xMacroWin.getChild('EditorWindow')
 
-            self.assertEqual(get_state_as_dict(xEditWin)['Text'], resultText)
+                self.assertEqual(get_state_as_dict(xEditWin)['Text'], resultText)
 
-            self.xUITest.executeCommand(".uno:SelectAll")
-            self.xUITest.executeCommand(".uno:Copy")
-            self.xUITest.executeCommand(".uno:SelectAll")
-            self.xUITest.executeCommand(".uno:Paste")
-            self.xUITest.executeCommand(".uno:Undo")
-            self.xUITest.executeCommand(".uno:Redo")
-            self.xUITest.executeCommand(".uno:Undo")
-            self.xUITest.executeCommand(".uno:Redo")
-            self.xUITest.executeCommand(".uno:Undo")
-            self.xUITest.executeCommand(".uno:Redo")
+                self.xUITest.executeCommand(".uno:SelectAll")
+                self.xUITest.executeCommand(".uno:Copy")
+                self.xUITest.executeCommand(".uno:SelectAll")
+                self.xUITest.executeCommand(".uno:Paste")
+                self.xUITest.executeCommand(".uno:Undo")
+                self.xUITest.executeCommand(".uno:Redo")
+                self.xUITest.executeCommand(".uno:Undo")
+                self.xUITest.executeCommand(".uno:Redo")
+                self.xUITest.executeCommand(".uno:Undo")
+                self.xUITest.executeCommand(".uno:Redo")
 
-            self.assertEqual(get_state_as_dict(xEditWin)['Text'], resultText)
+                self.assertEqual(get_state_as_dict(xEditWin)['Text'], resultText)
 
-        self.ui_test.close_doc()
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

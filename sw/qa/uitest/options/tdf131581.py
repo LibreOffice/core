@@ -10,26 +10,25 @@ from uitest.framework import UITestCase
 class tdf131581(UITestCase):
 
     def test_tdf131581(self):
-        self.ui_test.create_doc_in_start_center("writer")
+        with self.ui_test.create_doc_in_start_center_guarded("writer"):
 
-        self.xUITest.getTopFocusWindow()
+            self.xUITest.getTopFocusWindow()
 
-        with self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog") as xDialogOpt:
+            with self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog") as xDialogOpt:
 
-            xPages = xDialogOpt.getChild("pages")
-            xLOEntry = xPages.getChild('0')
-            xLOEntry.executeAction("EXPAND", tuple())
-            xAdvancedEntry = xLOEntry.getChild('10')
-            xAdvancedEntry.executeAction("SELECT", tuple())
+                xPages = xDialogOpt.getChild("pages")
+                xLOEntry = xPages.getChild('0')
+                xLOEntry.executeAction("EXPAND", tuple())
+                xAdvancedEntry = xLOEntry.getChild('10')
+                xAdvancedEntry.executeAction("SELECT", tuple())
 
-            xExpertBtn = xDialogOpt.getChild("expertconfig")
+                xExpertBtn = xDialogOpt.getChild("expertconfig")
 
-            with self.ui_test.execute_blocking_action(xExpertBtn.executeAction, args=('CLICK', ())) as dialog:
-                # Without the fix in place, this would have hung
-                xSearchBtn = dialog.getChild("searchButton")
-                xSearchBtn.executeAction("CLICK", tuple())
+                with self.ui_test.execute_blocking_action(xExpertBtn.executeAction, args=('CLICK', ())) as dialog:
+                    # Without the fix in place, this would have hung
+                    xSearchBtn = dialog.getChild("searchButton")
+                    xSearchBtn.executeAction("CLICK", tuple())
 
 
-        self.ui_test.close_doc()
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
