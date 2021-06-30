@@ -273,6 +273,7 @@ int getFlatTypeRank(const OUString& rType)
 
         // Export only
         "writer_layout_dump_xml",
+        "writer_indexing_export",
         "graphic_HTML",
 
         // Internal use only
