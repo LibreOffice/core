@@ -21,29 +21,27 @@ class ManualCalcTests(UITestCase):
         # This test is to check that paste special combined with some options and link is ok.
         # Refers to tdf#84810
 
-        self.ui_test.create_doc_in_start_center("calc")
+        with self.ui_test.create_doc_in_start_center_guarded("calc") as document:
 
-        # Write text to cell A1
-        xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
-        enter_text_to_cell(xGridWin, "A1", "abcd")
+            # Write text to cell A1
+            xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
+            enter_text_to_cell(xGridWin, "A1", "abcd")
 
-        # Copy cell A1 to clipboard
-        xGridWin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
-        self.xUITest.executeCommand(".uno:Copy")
+            # Copy cell A1 to clipboard
+            xGridWin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
+            self.xUITest.executeCommand(".uno:Copy")
 
-        # Set cursor to cell A3
-        xGridWin.executeAction("SELECT", mkPropertyValues({"CELL": "A3"}))
+            # Set cursor to cell A3
+            xGridWin.executeAction("SELECT", mkPropertyValues({"CELL": "A3"}))
 
-        # Choose Paste Special Options and paste data
-        with self.ui_test.execute_dialog_through_command(".uno:PasteSpecial") as xPasteSpecialDlg:
-            xAllChkBox = xPasteSpecialDlg.getChild("paste_all")
-            xAllChkBox.executeAction("CLICK", tuple())
-            xLinkChkBox = xPasteSpecialDlg.getChild("link")
-            xLinkChkBox.executeAction("CLICK", tuple())
+            # Choose Paste Special Options and paste data
+            with self.ui_test.execute_dialog_through_command(".uno:PasteSpecial") as xPasteSpecialDlg:
+                xAllChkBox = xPasteSpecialDlg.getChild("paste_all")
+                xAllChkBox.executeAction("CLICK", tuple())
+                xLinkChkBox = xPasteSpecialDlg.getChild("link")
+                xLinkChkBox.executeAction("CLICK", tuple())
 
-        # Assert successful paste
-        document = self.ui_test.get_component()
-        self.assertEqual(get_cell_by_position(document, 0, 0, 2).getString(), "abcd")
-        self.ui_test.close_doc()
+            # Assert successful paste
+            self.assertEqual(get_cell_by_position(document, 0, 0, 2).getString(), "abcd")
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

@@ -11,23 +11,21 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 
 class tdf132173(UITestCase):
     def test_tdf132173(self):
-        self.ui_test.create_doc_in_start_center("calc")
+        with self.ui_test.create_doc_in_start_center_guarded("calc") as document:
 
-        self.ui_test.execute_modeless_dialog_through_command(".uno:FunctionDialog")
-        xDialog = self.xUITest.getTopFocusWindow()
-        xFormula = xDialog.getChild("ed_formula")
-        xFormula.executeAction("TYPE", mkPropertyValues({"TEXT": 'FIND({"A";"B";"C"},"SAMPLE TEXT")'}))
+            self.ui_test.execute_modeless_dialog_through_command(".uno:FunctionDialog")
+            xDialog = self.xUITest.getTopFocusWindow()
+            xFormula = xDialog.getChild("ed_formula")
+            xFormula.executeAction("TYPE", mkPropertyValues({"TEXT": 'FIND({"A";"B";"C"},"SAMPLE TEXT")'}))
 
-        self.assertEqual(get_state_as_dict(xFormula)["Text"], '=FIND({"A";"B";"C"},"SAMPLE TEXT")')
+            self.assertEqual(get_state_as_dict(xFormula)["Text"], '=FIND({"A";"B";"C"},"SAMPLE TEXT")')
 
-        xOk = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOk)
+            xOk = xDialog.getChild("ok")
+            self.ui_test.close_dialog_through_button(xOk)
 
-        document = self.ui_test.get_component()
 
-        #Without the fix in place, cell's value would have been #NAME?
-        self.assertEqual(get_cell_by_position(document, 0, 0, 0).getString(), "2")
+            #Without the fix in place, cell's value would have been #NAME?
+            self.assertEqual(get_cell_by_position(document, 0, 0, 0).getString(), "2")
 
-        self.ui_test.close_doc()
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

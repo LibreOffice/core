@@ -13,27 +13,25 @@ from uitest.uihelper.common import get_state_as_dict
 class tdf121263(UITestCase):
 
     def test_tdf121263_hide_more_sheets(self):
-        calc_doc = self.ui_test.create_doc_in_start_center("calc")
-        xTopWindow = self.xUITest.getTopFocusWindow()
-        document = self.ui_test.get_component()
-        gridwin = xTopWindow.getChild("grid_window")
+        with self.ui_test.create_doc_in_start_center_guarded("calc"):
+            xTopWindow = self.xUITest.getTopFocusWindow()
+            gridwin = xTopWindow.getChild("grid_window")
 
-        with self.ui_test.execute_dialog_through_command(".uno:Insert"):
-            pass
-        with self.ui_test.execute_dialog_through_command(".uno:Insert"):
-            pass
+            with self.ui_test.execute_dialog_through_command(".uno:Insert"):
+                pass
+            with self.ui_test.execute_dialog_through_command(".uno:Insert"):
+                pass
 
-        gridwin.executeAction("SELECT", mkPropertyValues({"TABLE": "2"}))
-        #select previous sheet
-        self.xUITest.executeCommand(".uno:JumpToPrevTableSel")
+            gridwin.executeAction("SELECT", mkPropertyValues({"TABLE": "2"}))
+            #select previous sheet
+            self.xUITest.executeCommand(".uno:JumpToPrevTableSel")
 
-        #hide sheet
-        self.xUITest.executeCommand(".uno:Hide")
+            #hide sheet
+            self.xUITest.executeCommand(".uno:Hide")
 
-        #show sheet Dialog
-        with self.ui_test.execute_dialog_through_command(".uno:Show", close_button="cancel") as xDialog:
-            treeview = xDialog.getChild("treeview")
-            self.assertEqual(get_state_as_dict(treeview)["Children"], "2")
+            #show sheet Dialog
+            with self.ui_test.execute_dialog_through_command(".uno:Show", close_button="cancel") as xDialog:
+                treeview = xDialog.getChild("treeview")
+                self.assertEqual(get_state_as_dict(treeview)["Children"], "2")
 
-        self.ui_test.close_doc()
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

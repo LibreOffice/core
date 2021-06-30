@@ -12,38 +12,36 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 
 class tdf117367(UITestCase):
     def test_tdf117367_merge_cells_radio_buttons(self):
-        calc_doc = self.ui_test.create_doc_in_start_center("calc")
-        xCalcDoc = self.xUITest.getTopFocusWindow()
-        gridwin = xCalcDoc.getChild("grid_window")
-        document = self.ui_test.get_component()
+        with self.ui_test.create_doc_in_start_center_guarded("calc"):
+            xCalcDoc = self.xUITest.getTopFocusWindow()
+            gridwin = xCalcDoc.getChild("grid_window")
 
-        enter_text_to_cell(gridwin, "A1", "AAA")
-        enter_text_to_cell(gridwin, "A2", "BBB")
-        gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:B4"}))
+            enter_text_to_cell(gridwin, "A1", "AAA")
+            enter_text_to_cell(gridwin, "A2", "BBB")
+            gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:B4"}))
 
-        #Right-click - Merge cells  /Select all three options
-        with self.ui_test.execute_dialog_through_command(".uno:MergeCells") as xDialog:
-            xmoveCellsRadio = xDialog.getChild("move-cells-radio")
-            xemptyCellsRadio = xDialog.getChild("empty-cells-radio")
-            xkeepContentRadio = xDialog.getChild("keep-content-radio")
-            xmoveCellsRadio.executeAction("CLICK", tuple())
-            xmoveCellsRadio.executeAction("CLICK", tuple())
-            #Issue: I think these should be exclusive, not possible to select more than one. It is also impossible to uncheck any of the buttons.
-            self.assertEqual(get_state_as_dict(xmoveCellsRadio)["Checked"], "true")
-            self.assertEqual(get_state_as_dict(xemptyCellsRadio)["Checked"], "false")
-            self.assertEqual(get_state_as_dict(xkeepContentRadio)["Checked"], "false")
+            #Right-click - Merge cells  /Select all three options
+            with self.ui_test.execute_dialog_through_command(".uno:MergeCells") as xDialog:
+                xmoveCellsRadio = xDialog.getChild("move-cells-radio")
+                xemptyCellsRadio = xDialog.getChild("empty-cells-radio")
+                xkeepContentRadio = xDialog.getChild("keep-content-radio")
+                xmoveCellsRadio.executeAction("CLICK", tuple())
+                xmoveCellsRadio.executeAction("CLICK", tuple())
+                #Issue: I think these should be exclusive, not possible to select more than one. It is also impossible to uncheck any of the buttons.
+                self.assertEqual(get_state_as_dict(xmoveCellsRadio)["Checked"], "true")
+                self.assertEqual(get_state_as_dict(xemptyCellsRadio)["Checked"], "false")
+                self.assertEqual(get_state_as_dict(xkeepContentRadio)["Checked"], "false")
 
-            xemptyCellsRadio.executeAction("CLICK", tuple())
-            self.assertEqual(get_state_as_dict(xmoveCellsRadio)["Checked"], "false")
-            self.assertEqual(get_state_as_dict(xemptyCellsRadio)["Checked"], "true")
-            self.assertEqual(get_state_as_dict(xkeepContentRadio)["Checked"], "false")
+                xemptyCellsRadio.executeAction("CLICK", tuple())
+                self.assertEqual(get_state_as_dict(xmoveCellsRadio)["Checked"], "false")
+                self.assertEqual(get_state_as_dict(xemptyCellsRadio)["Checked"], "true")
+                self.assertEqual(get_state_as_dict(xkeepContentRadio)["Checked"], "false")
 
-            xkeepContentRadio.executeAction("CLICK", tuple())
-            self.assertEqual(get_state_as_dict(xmoveCellsRadio)["Checked"], "false")
-            self.assertEqual(get_state_as_dict(xemptyCellsRadio)["Checked"], "false")
-            self.assertEqual(get_state_as_dict(xkeepContentRadio)["Checked"], "true")
+                xkeepContentRadio.executeAction("CLICK", tuple())
+                self.assertEqual(get_state_as_dict(xmoveCellsRadio)["Checked"], "false")
+                self.assertEqual(get_state_as_dict(xemptyCellsRadio)["Checked"], "false")
+                self.assertEqual(get_state_as_dict(xkeepContentRadio)["Checked"], "true")
 
 
-        self.ui_test.close_doc()
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

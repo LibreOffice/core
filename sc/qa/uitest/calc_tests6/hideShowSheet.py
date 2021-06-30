@@ -11,35 +11,33 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 
 class hideShowSheet(UITestCase):
     def test_hide_show_sheet(self):
-        writer_doc = self.ui_test.create_doc_in_start_center("calc")
-        xCalcDoc = self.xUITest.getTopFocusWindow()
-        gridwin = xCalcDoc.getChild("grid_window")
-        document = self.ui_test.get_component()
-        #insert sheet
-        with self.ui_test.execute_dialog_through_command(".uno:Insert"):
-            pass
-        #select sheet
-        gridwin.executeAction("SELECT", mkPropertyValues({"TABLE":"1"}))
-        self.assertEqual(get_state_as_dict(gridwin)["SelectedTable"], "1")
-        #hide sheet
-        self.xUITest.executeCommand(".uno:Hide")
-        #show sheet Dialog
-        with self.ui_test.execute_dialog_through_command(".uno:Show", close_button="cancel") as xDialog:
-            treeview = xDialog.getChild("treeview")
-            self.assertEqual(get_state_as_dict(treeview)["Children"], "1")
-        #insert 2nd sheet
-        with self.ui_test.execute_dialog_through_command(".uno:Insert"):
-            pass
-        #select sheet
-        gridwin.executeAction("SELECT", mkPropertyValues({"TABLE":"2"}))
-        self.assertEqual(get_state_as_dict(gridwin)["SelectedTable"], "1")
-        #hide sheet
-        self.xUITest.executeCommand(".uno:Hide")
-        #show sheet Dialog
-        with self.ui_test.execute_dialog_through_command(".uno:Show", close_button="cancel") as xDialog:
-            treeview = xDialog.getChild("treeview")
-            self.assertEqual(get_state_as_dict(treeview)["Children"], "2")
+        with self.ui_test.create_doc_in_start_center_guarded("calc"):
+            xCalcDoc = self.xUITest.getTopFocusWindow()
+            gridwin = xCalcDoc.getChild("grid_window")
+            #insert sheet
+            with self.ui_test.execute_dialog_through_command(".uno:Insert"):
+                pass
+            #select sheet
+            gridwin.executeAction("SELECT", mkPropertyValues({"TABLE":"1"}))
+            self.assertEqual(get_state_as_dict(gridwin)["SelectedTable"], "1")
+            #hide sheet
+            self.xUITest.executeCommand(".uno:Hide")
+            #show sheet Dialog
+            with self.ui_test.execute_dialog_through_command(".uno:Show", close_button="cancel") as xDialog:
+                treeview = xDialog.getChild("treeview")
+                self.assertEqual(get_state_as_dict(treeview)["Children"], "1")
+            #insert 2nd sheet
+            with self.ui_test.execute_dialog_through_command(".uno:Insert"):
+                pass
+            #select sheet
+            gridwin.executeAction("SELECT", mkPropertyValues({"TABLE":"2"}))
+            self.assertEqual(get_state_as_dict(gridwin)["SelectedTable"], "1")
+            #hide sheet
+            self.xUITest.executeCommand(".uno:Hide")
+            #show sheet Dialog
+            with self.ui_test.execute_dialog_through_command(".uno:Show", close_button="cancel") as xDialog:
+                treeview = xDialog.getChild("treeview")
+                self.assertEqual(get_state_as_dict(treeview)["Children"], "2")
 
-        self.ui_test.close_doc()
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

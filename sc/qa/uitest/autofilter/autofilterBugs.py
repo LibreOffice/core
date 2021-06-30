@@ -23,31 +23,29 @@ class autofilter(UITestCase):
             self.assertEqual(calc_doc.getPropertyValue("UnnamedDatabaseRanges").getByTable(0).AutoFilter, True)
 
    def test_tdf94055(self):
-        self.ui_test.create_doc_in_start_center("calc")
-        document = self.ui_test.get_component()
-        calcDoc = self.xUITest.getTopFocusWindow()
-        xGridWindow = calcDoc.getChild("grid_window")
-        enter_text_to_cell(xGridWindow, "A1", "X")
-        enter_text_to_cell(xGridWindow, "B1", "Y")
-        enter_text_to_cell(xGridWindow, "A2", "a")
-        enter_text_to_cell(xGridWindow, "B2", "b")
-        enter_text_to_cell(xGridWindow, "A3", "c")
-        enter_text_to_cell(xGridWindow, "B3", "d")
-        xGridWindow.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:B1"}))
+        with self.ui_test.create_doc_in_start_center_guarded("calc") as document:
+            calcDoc = self.xUITest.getTopFocusWindow()
+            xGridWindow = calcDoc.getChild("grid_window")
+            enter_text_to_cell(xGridWindow, "A1", "X")
+            enter_text_to_cell(xGridWindow, "B1", "Y")
+            enter_text_to_cell(xGridWindow, "A2", "a")
+            enter_text_to_cell(xGridWindow, "B2", "b")
+            enter_text_to_cell(xGridWindow, "A3", "c")
+            enter_text_to_cell(xGridWindow, "B3", "d")
+            xGridWindow.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:B1"}))
 
-        with self.ui_test.execute_dialog_through_command(".uno:DataFilterAutoFilter", close_button="yes"):
-            pass
+            with self.ui_test.execute_dialog_through_command(".uno:DataFilterAutoFilter", close_button="yes"):
+                pass
 
-        xGridWindow.executeAction("SELECT", mkPropertyValues({"RANGE": "A2:A3"}))
-        self.xUITest.executeCommand(".uno:SelectRow") #select two rows
+            xGridWindow.executeAction("SELECT", mkPropertyValues({"RANGE": "A2:A3"}))
+            self.xUITest.executeCommand(".uno:SelectRow") #select two rows
 
-        with self.ui_test.execute_dialog_through_command(".uno:DataSort"):
-            pass
+            with self.ui_test.execute_dialog_through_command(".uno:DataSort"):
+                pass
 
-        #autofilter still exist
-        self.assertEqual(document.getPropertyValue("UnnamedDatabaseRanges").getByTable(0).AutoFilter, True)
+            #autofilter still exist
+            self.assertEqual(document.getPropertyValue("UnnamedDatabaseRanges").getByTable(0).AutoFilter, True)
 
-        self.ui_test.close_doc()
 
         #tdf77479.ods
    def test_tdf77479(self):

@@ -14,107 +14,101 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 
 class validity(UITestCase):
     def test_validity_tab_criteria(self):
-        calc_doc = self.ui_test.create_doc_in_start_center("calc")
-        xCalcDoc = self.xUITest.getTopFocusWindow()
-        gridwin = xCalcDoc.getChild("grid_window")
-        document = self.ui_test.get_component()
-        gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
+        with self.ui_test.create_doc_in_start_center_guarded("calc"):
+            xCalcDoc = self.xUITest.getTopFocusWindow()
+            gridwin = xCalcDoc.getChild("grid_window")
+            gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
 
-        with self.ui_test.execute_dialog_through_command(".uno:Validation") as xDialog:
-            xTabs = xDialog.getChild("tabcontrol")
-            select_pos(xTabs, "0")
-            xallow = xDialog.getChild("allow")
-            xallowempty = xDialog.getChild("allowempty")
-            xdata = xDialog.getChild("data")
-            xmin = xDialog.getChild("min")
-            xmax = xDialog.getChild("max")
+            with self.ui_test.execute_dialog_through_command(".uno:Validation") as xDialog:
+                xTabs = xDialog.getChild("tabcontrol")
+                select_pos(xTabs, "0")
+                xallow = xDialog.getChild("allow")
+                xallowempty = xDialog.getChild("allowempty")
+                xdata = xDialog.getChild("data")
+                xmin = xDialog.getChild("min")
+                xmax = xDialog.getChild("max")
 
-            select_by_text(xallow, "Whole Numbers")
-            xallowempty.executeAction("CLICK", tuple())
-            select_by_text(xdata, "valid range")
-            xmin.executeAction("TYPE", mkPropertyValues({"TEXT":"1"}))
-            xmax.executeAction("TYPE", mkPropertyValues({"TEXT":"2"}))
-        #reopen and verify
-        with self.ui_test.execute_dialog_through_command(".uno:Validation", close_button="cancel") as xDialog:
-            xallow = xDialog.getChild("allow")
-            xallowempty = xDialog.getChild("allowempty")
-            xdata = xDialog.getChild("data")
-            xmin = xDialog.getChild("min")
-            xmax = xDialog.getChild("max")
+                select_by_text(xallow, "Whole Numbers")
+                xallowempty.executeAction("CLICK", tuple())
+                select_by_text(xdata, "valid range")
+                xmin.executeAction("TYPE", mkPropertyValues({"TEXT":"1"}))
+                xmax.executeAction("TYPE", mkPropertyValues({"TEXT":"2"}))
+            #reopen and verify
+            with self.ui_test.execute_dialog_through_command(".uno:Validation", close_button="cancel") as xDialog:
+                xallow = xDialog.getChild("allow")
+                xallowempty = xDialog.getChild("allowempty")
+                xdata = xDialog.getChild("data")
+                xmin = xDialog.getChild("min")
+                xmax = xDialog.getChild("max")
 
-            self.assertEqual(get_state_as_dict(xallow)["SelectEntryText"], "Whole Numbers")
-            self.assertEqual(get_state_as_dict(xallowempty)["Selected"], "false")
-            self.assertEqual(get_state_as_dict(xdata)["SelectEntryText"], "valid range")
-            self.assertEqual(get_state_as_dict(xmin)["Text"], "1")
-            self.assertEqual(get_state_as_dict(xmax)["Text"], "2")
+                self.assertEqual(get_state_as_dict(xallow)["SelectEntryText"], "Whole Numbers")
+                self.assertEqual(get_state_as_dict(xallowempty)["Selected"], "false")
+                self.assertEqual(get_state_as_dict(xdata)["SelectEntryText"], "valid range")
+                self.assertEqual(get_state_as_dict(xmin)["Text"], "1")
+                self.assertEqual(get_state_as_dict(xmax)["Text"], "2")
 
-        self.ui_test.close_doc()
 
     def test_validity_tab_inputHelp(self):
         #validationhelptabpage.ui
-        calc_doc = self.ui_test.create_doc_in_start_center("calc")
-        xCalcDoc = self.xUITest.getTopFocusWindow()
-        gridwin = xCalcDoc.getChild("grid_window")
-        document = self.ui_test.get_component()
-        gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
+        with self.ui_test.create_doc_in_start_center_guarded("calc"):
+            xCalcDoc = self.xUITest.getTopFocusWindow()
+            gridwin = xCalcDoc.getChild("grid_window")
+            gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
 
-        with self.ui_test.execute_dialog_through_command(".uno:Validation") as xDialog:
-            xTabs = xDialog.getChild("tabcontrol")
-            select_pos(xTabs, "1")
-            xtsbhelp = xDialog.getChild("tsbhelp")
-            xtitle = xDialog.getChild("title")
-            xinputhelp = xDialog.getChild("inputhelp")
+            with self.ui_test.execute_dialog_through_command(".uno:Validation") as xDialog:
+                xTabs = xDialog.getChild("tabcontrol")
+                select_pos(xTabs, "1")
+                xtsbhelp = xDialog.getChild("tsbhelp")
+                xtitle = xDialog.getChild("title")
+                xinputhelp = xDialog.getChild("inputhelp")
 
-            xtsbhelp.executeAction("CLICK", tuple())
-            xtitle.executeAction("TYPE", mkPropertyValues({"TEXT":"A"}))
-            xinputhelp.executeAction("TYPE", mkPropertyValues({"TEXT":"B"}))
-        #reopen and verify
-        with self.ui_test.execute_dialog_through_command(".uno:Validation") as xDialog:
-            xTabs = xDialog.getChild("tabcontrol")
-            xtsbhelp = xDialog.getChild("tsbhelp")
-            xtitle = xDialog.getChild("title")
-            xinputhelp = xDialog.getChild("inputhelp")
-            # print(get_state_as_dict(xtsbhelp))
-            select_pos(xTabs, "1")
-            self.assertEqual(get_state_as_dict(xtsbhelp)["Selected"], "true")
-            self.assertEqual(get_state_as_dict(xtitle)["Text"], "A")
-            self.assertEqual(get_state_as_dict(xinputhelp)["Text"], "B")
+                xtsbhelp.executeAction("CLICK", tuple())
+                xtitle.executeAction("TYPE", mkPropertyValues({"TEXT":"A"}))
+                xinputhelp.executeAction("TYPE", mkPropertyValues({"TEXT":"B"}))
+            #reopen and verify
+            with self.ui_test.execute_dialog_through_command(".uno:Validation") as xDialog:
+                xTabs = xDialog.getChild("tabcontrol")
+                xtsbhelp = xDialog.getChild("tsbhelp")
+                xtitle = xDialog.getChild("title")
+                xinputhelp = xDialog.getChild("inputhelp")
+                # print(get_state_as_dict(xtsbhelp))
+                select_pos(xTabs, "1")
+                self.assertEqual(get_state_as_dict(xtsbhelp)["Selected"], "true")
+                self.assertEqual(get_state_as_dict(xtitle)["Text"], "A")
+                self.assertEqual(get_state_as_dict(xinputhelp)["Text"], "B")
 
-        self.ui_test.close_doc()
 
     def test_validity_tab_errorAlert(self):
         # erroralerttabpage.ui
-        calc_doc = self.ui_test.create_doc_in_start_center("calc")
-        xCalcDoc = self.xUITest.getTopFocusWindow()
-        gridwin = xCalcDoc.getChild("grid_window")
-        document = self.ui_test.get_component()
-        gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
+        with self.ui_test.create_doc_in_start_center_guarded("calc"):
+            xCalcDoc = self.xUITest.getTopFocusWindow()
+            gridwin = xCalcDoc.getChild("grid_window")
+            gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
 
-        with self.ui_test.execute_dialog_through_command(".uno:Validation") as xDialog:
-            xTabs = xDialog.getChild("tabcontrol")
-            select_pos(xTabs, "2")
+            with self.ui_test.execute_dialog_through_command(".uno:Validation") as xDialog:
+                xTabs = xDialog.getChild("tabcontrol")
+                select_pos(xTabs, "2")
 
-            xactionCB = xDialog.getChild("actionCB")
-            xerroralerttitle = xDialog.getChild("erroralert_title")
-            xerrorMsg = xDialog.getChild("errorMsg")
+                xactionCB = xDialog.getChild("actionCB")
+                xerroralerttitle = xDialog.getChild("erroralert_title")
+                xerrorMsg = xDialog.getChild("errorMsg")
 
-            select_by_text(xactionCB, "Warning")
-            xerroralerttitle.executeAction("TYPE", mkPropertyValues({"TEXT":"Warn"}))
-            xerrorMsg.executeAction("TYPE", mkPropertyValues({"TEXT":"Warn2"}))
-        #reopen and verify
-        with self.ui_test.execute_dialog_through_command(".uno:Validation") as xDialog:
-            xTabs = xDialog.getChild("tabcontrol")
-            select_pos(xTabs, "2")
+                select_by_text(xactionCB, "Warning")
+                xerroralerttitle.executeAction("TYPE", mkPropertyValues({"TEXT":"Warn"}))
+                xerrorMsg.executeAction("TYPE", mkPropertyValues({"TEXT":"Warn2"}))
+            #reopen and verify
+            with self.ui_test.execute_dialog_through_command(".uno:Validation") as xDialog:
+                xTabs = xDialog.getChild("tabcontrol")
+                select_pos(xTabs, "2")
 
-            xactionCB = xDialog.getChild("actionCB")
-            xerroralerttitle = xDialog.getChild("erroralert_title")
-            xerrorMsg = xDialog.getChild("errorMsg")
+                xactionCB = xDialog.getChild("actionCB")
+                xerroralerttitle = xDialog.getChild("erroralert_title")
+                xerrorMsg = xDialog.getChild("errorMsg")
 
-            self.assertEqual(get_state_as_dict(xactionCB)["SelectEntryText"], "Warning")
-            self.assertEqual(get_state_as_dict(xerroralerttitle)["Text"], "Warn")
-            self.assertEqual(get_state_as_dict(xerrorMsg)["Text"], "Warn2")
+                self.assertEqual(get_state_as_dict(xactionCB)["SelectEntryText"], "Warning")
+                self.assertEqual(get_state_as_dict(xerroralerttitle)["Text"], "Warn")
+                self.assertEqual(get_state_as_dict(xerrorMsg)["Text"], "Warn2")
 
 
-        self.ui_test.close_doc()
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

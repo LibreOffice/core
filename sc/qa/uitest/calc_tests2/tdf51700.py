@@ -13,39 +13,37 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 
 class tdf51700(UITestCase):
     def test_tdf51700_text_to_columns(self):
-        calc_doc = self.ui_test.create_doc_in_start_center("calc")
-        xCalcDoc = self.xUITest.getTopFocusWindow()
-        gridwin = xCalcDoc.getChild("grid_window")
-        document = self.ui_test.get_component()
+        with self.ui_test.create_doc_in_start_center_guarded("calc") as document:
+            xCalcDoc = self.xUITest.getTopFocusWindow()
+            gridwin = xCalcDoc.getChild("grid_window")
 
-        #Add data
-        enter_text_to_cell(gridwin, "A2", "3242,43242,3242,2342")
-        enter_text_to_cell(gridwin, "A3", "fdsfa,afsdfa,adfdas,fsad")
-        enter_text_to_cell(gridwin, "A4", "21312,1111,1111,111")
-        #select column A
-        gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
-        self.xUITest.executeCommand(".uno:SelectColumn")
-        # Data - Text to Columns
-        with self.ui_test.execute_dialog_through_command(".uno:TextToColumns") as xDialog:
-            xcomma = xDialog.getChild("comma")
-            if (get_state_as_dict(xcomma)["Selected"]) == "false":
-                xcomma.executeAction("CLICK", tuple())
-            # Click Ok
+            #Add data
+            enter_text_to_cell(gridwin, "A2", "3242,43242,3242,2342")
+            enter_text_to_cell(gridwin, "A3", "fdsfa,afsdfa,adfdas,fsad")
+            enter_text_to_cell(gridwin, "A4", "21312,1111,1111,111")
+            #select column A
+            gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
+            self.xUITest.executeCommand(".uno:SelectColumn")
+            # Data - Text to Columns
+            with self.ui_test.execute_dialog_through_command(".uno:TextToColumns") as xDialog:
+                xcomma = xDialog.getChild("comma")
+                if (get_state_as_dict(xcomma)["Selected"]) == "false":
+                    xcomma.executeAction("CLICK", tuple())
+                # Click Ok
 
-        #Verify
-        self.assertEqual(get_cell_by_position(document, 0, 0, 1).getValue(), 3242)
-        self.assertEqual(get_cell_by_position(document, 0, 0, 2).getString(), "fdsfa")
-        self.assertEqual(get_cell_by_position(document, 0, 0, 3).getValue(), 21312)
-        self.assertEqual(get_cell_by_position(document, 0, 1, 1).getValue(), 43242)
-        self.assertEqual(get_cell_by_position(document, 0, 1, 2).getString(), "afsdfa")
-        self.assertEqual(get_cell_by_position(document, 0, 1, 3).getValue(), 1111)
-        self.assertEqual(get_cell_by_position(document, 0, 2, 1).getValue(), 3242)
-        self.assertEqual(get_cell_by_position(document, 0, 2, 2).getString(), "adfdas")
-        self.assertEqual(get_cell_by_position(document, 0, 2, 3).getValue(), 1111)
-        self.assertEqual(get_cell_by_position(document, 0, 3, 1).getValue(), 2342)
-        self.assertEqual(get_cell_by_position(document, 0, 3, 2).getString(), "fsad")
-        self.assertEqual(get_cell_by_position(document, 0, 3, 3).getValue(), 111)
+            #Verify
+            self.assertEqual(get_cell_by_position(document, 0, 0, 1).getValue(), 3242)
+            self.assertEqual(get_cell_by_position(document, 0, 0, 2).getString(), "fdsfa")
+            self.assertEqual(get_cell_by_position(document, 0, 0, 3).getValue(), 21312)
+            self.assertEqual(get_cell_by_position(document, 0, 1, 1).getValue(), 43242)
+            self.assertEqual(get_cell_by_position(document, 0, 1, 2).getString(), "afsdfa")
+            self.assertEqual(get_cell_by_position(document, 0, 1, 3).getValue(), 1111)
+            self.assertEqual(get_cell_by_position(document, 0, 2, 1).getValue(), 3242)
+            self.assertEqual(get_cell_by_position(document, 0, 2, 2).getString(), "adfdas")
+            self.assertEqual(get_cell_by_position(document, 0, 2, 3).getValue(), 1111)
+            self.assertEqual(get_cell_by_position(document, 0, 3, 1).getValue(), 2342)
+            self.assertEqual(get_cell_by_position(document, 0, 3, 2).getString(), "fsad")
+            self.assertEqual(get_cell_by_position(document, 0, 3, 3).getValue(), 111)
 
-        self.ui_test.close_doc()
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

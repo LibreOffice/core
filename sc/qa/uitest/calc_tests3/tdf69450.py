@@ -12,43 +12,41 @@ from libreoffice.calc.document import get_cell_by_position
 class tdf69450(UITestCase):
 
     def test_tdf69450(self):
-        calc_doc = self.ui_test.create_doc_in_start_center("calc")
-        xCalcDoc = self.xUITest.getTopFocusWindow()
-        gridwin = xCalcDoc.getChild("grid_window")
-        document = self.ui_test.get_component()
+        with self.ui_test.create_doc_in_start_center_guarded("calc") as document:
+            xCalcDoc = self.xUITest.getTopFocusWindow()
+            gridwin = xCalcDoc.getChild("grid_window")
 
-        #add text to A1 and B1
-        enter_text_to_cell(gridwin, "A1", "A")
-        enter_text_to_cell(gridwin, "B1", "B")
-        gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
-        self.xUITest.executeCommand(".uno:Copy")
-        gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "B1"}))
-        with self.ui_test.execute_dialog_through_command(".uno:PasteSpecial") as xDialog:
+            #add text to A1 and B1
+            enter_text_to_cell(gridwin, "A1", "A")
+            enter_text_to_cell(gridwin, "B1", "B")
+            gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
+            self.xUITest.executeCommand(".uno:Copy")
+            gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "B1"}))
+            with self.ui_test.execute_dialog_through_command(".uno:PasteSpecial") as xDialog:
 
-            xtext = xDialog.getChild("text")
-            xnumbers = xDialog.getChild("numbers")
-            xdatetime = xDialog.getChild("datetime")
-            xformats = xDialog.getChild("formats")
+                xtext = xDialog.getChild("text")
+                xnumbers = xDialog.getChild("numbers")
+                xdatetime = xDialog.getChild("datetime")
+                xformats = xDialog.getChild("formats")
 
-            xtext.executeAction("CLICK", tuple())
-            xnumbers.executeAction("CLICK", tuple())
-            xdatetime.executeAction("CLICK", tuple())
-            xformats.executeAction("CLICK", tuple())
+                xtext.executeAction("CLICK", tuple())
+                xnumbers.executeAction("CLICK", tuple())
+                xdatetime.executeAction("CLICK", tuple())
+                xformats.executeAction("CLICK", tuple())
 
 
-        #check B1 text
-        self.assertEqual(get_cell_by_position(document, 0, 1, 0).getString(), "B")
+            #check B1 text
+            self.assertEqual(get_cell_by_position(document, 0, 1, 0).getString(), "B")
 
-        gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A2"}))
-        self.xUITest.executeCommand(".uno:Bold")
-        self.xUITest.executeCommand(".uno:Copy")
-        gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "B1"}))
-        with self.ui_test.execute_dialog_through_command(".uno:PasteSpecial"):
-            pass
+            gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A2"}))
+            self.xUITest.executeCommand(".uno:Bold")
+            self.xUITest.executeCommand(".uno:Copy")
+            gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "B1"}))
+            with self.ui_test.execute_dialog_through_command(".uno:PasteSpecial"):
+                pass
 
-        #check B1 text
-        self.assertEqual(get_cell_by_position(document, 0, 1, 0).getString(), "B")
-        self.ui_test.close_doc()
+            #check B1 text
+            self.assertEqual(get_cell_by_position(document, 0, 1, 0).getString(), "B")
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
 

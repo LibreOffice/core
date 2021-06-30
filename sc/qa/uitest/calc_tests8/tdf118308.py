@@ -13,39 +13,38 @@ from libreoffice.calc.document import get_cell_by_position
 class tdf118308(UITestCase):
 
     def test_tdf118308(self):
-        calc_doc = self.ui_test.create_doc_in_start_center("calc")
-        xCalcDoc = self.xUITest.getTopFocusWindow()
-        gridwin = xCalcDoc.getChild("grid_window")
-        document = self.ui_test.get_component()
-
-        enter_text_to_cell(gridwin, "A1", "A")
-        gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
-        self.xUITest.executeCommand(".uno:Copy")
-
-        with self.ui_test.load_empty_file("calc") as calc_document:
-
+        with self.ui_test.create_doc_in_start_center_guarded("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
 
+            enter_text_to_cell(gridwin, "A1", "A")
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
+            self.xUITest.executeCommand(".uno:Copy")
 
-            with self.ui_test.execute_dialog_through_command(".uno:PasteSpecial") as xDialog:
+            with self.ui_test.load_empty_file("calc") as calc_document:
 
-                # Without the fix in place, this test would have failed here
-                # since a different dialog would have been opened and the children
-                # wouldn't have been found
-                xText = xDialog.getChild("text")
-                xNumbers = xDialog.getChild("numbers")
-                xDatetime = xDialog.getChild("datetime")
-                xFormats = xDialog.getChild("formats")
+                xCalcDoc = self.xUITest.getTopFocusWindow()
+                gridwin = xCalcDoc.getChild("grid_window")
 
-                self.assertEqual("true", get_state_as_dict(xText)["Selected"])
-                self.assertEqual("true", get_state_as_dict(xNumbers)["Selected"])
-                self.assertEqual("true", get_state_as_dict(xDatetime)["Selected"])
-                self.assertEqual("false", get_state_as_dict(xFormats)["Selected"])
+                gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
+
+                with self.ui_test.execute_dialog_through_command(".uno:PasteSpecial") as xDialog:
+
+                    # Without the fix in place, this test would have failed here
+                    # since a different dialog would have been opened and the children
+                    # wouldn't have been found
+                    xText = xDialog.getChild("text")
+                    xNumbers = xDialog.getChild("numbers")
+                    xDatetime = xDialog.getChild("datetime")
+                    xFormats = xDialog.getChild("formats")
+
+                    self.assertEqual("true", get_state_as_dict(xText)["Selected"])
+                    self.assertEqual("true", get_state_as_dict(xNumbers)["Selected"])
+                    self.assertEqual("true", get_state_as_dict(xDatetime)["Selected"])
+                    self.assertEqual("false", get_state_as_dict(xFormats)["Selected"])
 
 
-            self.assertEqual("A", get_cell_by_position(calc_document, 0, 0, 0).getString())
+                self.assertEqual("A", get_cell_by_position(calc_document, 0, 0, 0).getString())
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
 

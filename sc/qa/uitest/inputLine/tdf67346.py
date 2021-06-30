@@ -18,28 +18,26 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 class tdf67346(UITestCase):
 
     def test_tdf67346_undo_paste_text_input_line(self):
-        calc_doc = self.ui_test.create_doc_in_start_center("calc")
-        xCalcDoc = self.xUITest.getTopFocusWindow()
-        gridwin = xCalcDoc.getChild("grid_window")
-        document = self.ui_test.get_component()
-        # type 'Apple' in A1
-        enter_text_to_cell(gridwin, "A1", "Apple")
-        # input line: copy the text from there
-        xInputWin = xCalcDoc.getChild("sc_input_window")
-        xInputWin.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
-        self.xUITest.executeCommand(".uno:Copy")
-        gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A2"}))
-        # Ctrl-V
-        self.xUITest.executeCommand(".uno:Paste")
-        self.assertEqual(get_cell_by_position(document, 0, 0, 0).getString(), "Apple")
-        self.assertEqual(get_cell_by_position(document, 0, 0, 1).getString(), "Apple")
-        self.assertEqual(get_state_as_dict(xInputWin)["Text"], "Apple")
-        #Ctrl-Z
-        self.xUITest.executeCommand(".uno:Undo")
-        self.assertEqual(get_cell_by_position(document, 0, 0, 0).getString(), "Apple")
-        self.assertEqual(get_cell_by_position(document, 0, 0, 1).getString(), "")
-        self.assertEqual(get_state_as_dict(xInputWin)["Text"], "")
+        with self.ui_test.create_doc_in_start_center_guarded("calc") as document:
+            xCalcDoc = self.xUITest.getTopFocusWindow()
+            gridwin = xCalcDoc.getChild("grid_window")
+            # type 'Apple' in A1
+            enter_text_to_cell(gridwin, "A1", "Apple")
+            # input line: copy the text from there
+            xInputWin = xCalcDoc.getChild("sc_input_window")
+            xInputWin.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+            self.xUITest.executeCommand(".uno:Copy")
+            gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A2"}))
+            # Ctrl-V
+            self.xUITest.executeCommand(".uno:Paste")
+            self.assertEqual(get_cell_by_position(document, 0, 0, 0).getString(), "Apple")
+            self.assertEqual(get_cell_by_position(document, 0, 0, 1).getString(), "Apple")
+            self.assertEqual(get_state_as_dict(xInputWin)["Text"], "Apple")
+            #Ctrl-Z
+            self.xUITest.executeCommand(".uno:Undo")
+            self.assertEqual(get_cell_by_position(document, 0, 0, 0).getString(), "Apple")
+            self.assertEqual(get_cell_by_position(document, 0, 0, 1).getString(), "")
+            self.assertEqual(get_state_as_dict(xInputWin)["Text"], "")
 
-        self.ui_test.close_doc()
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

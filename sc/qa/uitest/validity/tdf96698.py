@@ -14,93 +14,91 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 #Bug 96698 - Data => Validity => Custom (like Excel) is missing
 class tdf96698(UITestCase):
     def test_tdf96698_validity_custom_formula(self):
-        calc_doc = self.ui_test.create_doc_in_start_center("calc")
-        xCalcDoc = self.xUITest.getTopFocusWindow()
-        gridwin = xCalcDoc.getChild("grid_window")
-        document = self.ui_test.get_component()
+        with self.ui_test.create_doc_in_start_center_guarded("calc"):
+            xCalcDoc = self.xUITest.getTopFocusWindow()
+            gridwin = xCalcDoc.getChild("grid_window")
 
-        #A general validity check for the entered new content of the active cell - especially for text
-        #with a custom formula like in Excel is not possible.
-        gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A2"}))
-        with self.ui_test.execute_dialog_through_command(".uno:Validation") as xDialog:
-            xTabs = xDialog.getChild("tabcontrol")
-            select_pos(xTabs, "0")
-            xallow = xDialog.getChild("allow")
-            xallowempty = xDialog.getChild("allowempty")
-            xmin = xDialog.getChild("min")
+            #A general validity check for the entered new content of the active cell - especially for text
+            #with a custom formula like in Excel is not possible.
+            gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A2"}))
+            with self.ui_test.execute_dialog_through_command(".uno:Validation") as xDialog:
+                xTabs = xDialog.getChild("tabcontrol")
+                select_pos(xTabs, "0")
+                xallow = xDialog.getChild("allow")
+                xallowempty = xDialog.getChild("allowempty")
+                xmin = xDialog.getChild("min")
 
-            select_by_text(xallow, "Custom")
-            xmin.executeAction("TYPE", mkPropertyValues({"TEXT":"ISERROR(FIND(\",\",B2))"}))
-        #verify
-        with self.ui_test.execute_dialog_through_command(".uno:Validation") as xDialog:
-            xallow = xDialog.getChild("allow")
-            xallowempty = xDialog.getChild("allowempty")
-            xmin = xDialog.getChild("min")
+                select_by_text(xallow, "Custom")
+                xmin.executeAction("TYPE", mkPropertyValues({"TEXT":"ISERROR(FIND(\",\",B2))"}))
+            #verify
+            with self.ui_test.execute_dialog_through_command(".uno:Validation") as xDialog:
+                xallow = xDialog.getChild("allow")
+                xallowempty = xDialog.getChild("allowempty")
+                xmin = xDialog.getChild("min")
 
-            self.assertEqual(get_state_as_dict(xallow)["SelectEntryText"], "Custom")
-            self.assertEqual(get_state_as_dict(xmin)["Text"], "ISERROR(FIND(\",\",B2))")
-
-
-        gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A3"}))
-        with self.ui_test.execute_dialog_through_command(".uno:Validation") as xDialog:
-            xTabs = xDialog.getChild("tabcontrol")
-            select_pos(xTabs, "0")
-            xallow = xDialog.getChild("allow")
-            xallowempty = xDialog.getChild("allowempty")
-            xmin = xDialog.getChild("min")
-
-            select_by_text(xallow, "Custom")
-            xmin.executeAction("TYPE", mkPropertyValues({"TEXT":"NOT(ISERROR(B3))"}))
-        #verify
-        with self.ui_test.execute_dialog_through_command(".uno:Validation") as xDialog:
-            xallow = xDialog.getChild("allow")
-            xallowempty = xDialog.getChild("allowempty")
-            xmin = xDialog.getChild("min")
-
-            self.assertEqual(get_state_as_dict(xallow)["SelectEntryText"], "Custom")
-            self.assertEqual(get_state_as_dict(xmin)["Text"], "NOT(ISERROR(B3))")
+                self.assertEqual(get_state_as_dict(xallow)["SelectEntryText"], "Custom")
+                self.assertEqual(get_state_as_dict(xmin)["Text"], "ISERROR(FIND(\",\",B2))")
 
 
-        gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A7"}))
-        with self.ui_test.execute_dialog_through_command(".uno:Validation") as xDialog:
-            xTabs = xDialog.getChild("tabcontrol")
-            select_pos(xTabs, "0")
-            xallow = xDialog.getChild("allow")
-            xallowempty = xDialog.getChild("allowempty")
-            xmin = xDialog.getChild("min")
+            gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A3"}))
+            with self.ui_test.execute_dialog_through_command(".uno:Validation") as xDialog:
+                xTabs = xDialog.getChild("tabcontrol")
+                select_pos(xTabs, "0")
+                xallow = xDialog.getChild("allow")
+                xallowempty = xDialog.getChild("allowempty")
+                xmin = xDialog.getChild("min")
 
-            select_by_text(xallow, "Custom")
-            xmin.executeAction("TYPE", mkPropertyValues({"TEXT":"ISERROR(FIND(\",\",A7))"}))
-        #verify
-        with self.ui_test.execute_dialog_through_command(".uno:Validation") as xDialog:
-            xallow = xDialog.getChild("allow")
-            xallowempty = xDialog.getChild("allowempty")
-            xmin = xDialog.getChild("min")
+                select_by_text(xallow, "Custom")
+                xmin.executeAction("TYPE", mkPropertyValues({"TEXT":"NOT(ISERROR(B3))"}))
+            #verify
+            with self.ui_test.execute_dialog_through_command(".uno:Validation") as xDialog:
+                xallow = xDialog.getChild("allow")
+                xallowempty = xDialog.getChild("allowempty")
+                xmin = xDialog.getChild("min")
 
-            self.assertEqual(get_state_as_dict(xallow)["SelectEntryText"], "Custom")
-            self.assertEqual(get_state_as_dict(xmin)["Text"], "ISERROR(FIND(\",\",A7))")
-
-
-        gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A8"}))
-        with self.ui_test.execute_dialog_through_command(".uno:Validation") as xDialog:
-            xTabs = xDialog.getChild("tabcontrol")
-            select_pos(xTabs, "0")
-            xallow = xDialog.getChild("allow")
-            xallowempty = xDialog.getChild("allowempty")
-            xmin = xDialog.getChild("min")
-
-            select_by_text(xallow, "Custom")
-            xmin.executeAction("TYPE", mkPropertyValues({"TEXT":"NOT(ISERROR(A8))"}))
-        #verify
-        with self.ui_test.execute_dialog_through_command(".uno:Validation") as xDialog:
-            xallow = xDialog.getChild("allow")
-            xallowempty = xDialog.getChild("allowempty")
-            xmin = xDialog.getChild("min")
-
-            self.assertEqual(get_state_as_dict(xallow)["SelectEntryText"], "Custom")
-            self.assertEqual(get_state_as_dict(xmin)["Text"], "NOT(ISERROR(A8))")
+                self.assertEqual(get_state_as_dict(xallow)["SelectEntryText"], "Custom")
+                self.assertEqual(get_state_as_dict(xmin)["Text"], "NOT(ISERROR(B3))")
 
 
-        self.ui_test.close_doc()
+            gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A7"}))
+            with self.ui_test.execute_dialog_through_command(".uno:Validation") as xDialog:
+                xTabs = xDialog.getChild("tabcontrol")
+                select_pos(xTabs, "0")
+                xallow = xDialog.getChild("allow")
+                xallowempty = xDialog.getChild("allowempty")
+                xmin = xDialog.getChild("min")
+
+                select_by_text(xallow, "Custom")
+                xmin.executeAction("TYPE", mkPropertyValues({"TEXT":"ISERROR(FIND(\",\",A7))"}))
+            #verify
+            with self.ui_test.execute_dialog_through_command(".uno:Validation") as xDialog:
+                xallow = xDialog.getChild("allow")
+                xallowempty = xDialog.getChild("allowempty")
+                xmin = xDialog.getChild("min")
+
+                self.assertEqual(get_state_as_dict(xallow)["SelectEntryText"], "Custom")
+                self.assertEqual(get_state_as_dict(xmin)["Text"], "ISERROR(FIND(\",\",A7))")
+
+
+            gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A8"}))
+            with self.ui_test.execute_dialog_through_command(".uno:Validation") as xDialog:
+                xTabs = xDialog.getChild("tabcontrol")
+                select_pos(xTabs, "0")
+                xallow = xDialog.getChild("allow")
+                xallowempty = xDialog.getChild("allowempty")
+                xmin = xDialog.getChild("min")
+
+                select_by_text(xallow, "Custom")
+                xmin.executeAction("TYPE", mkPropertyValues({"TEXT":"NOT(ISERROR(A8))"}))
+            #verify
+            with self.ui_test.execute_dialog_through_command(".uno:Validation") as xDialog:
+                xallow = xDialog.getChild("allow")
+                xallowempty = xDialog.getChild("allowempty")
+                xmin = xDialog.getChild("min")
+
+                self.assertEqual(get_state_as_dict(xallow)["SelectEntryText"], "Custom")
+                self.assertEqual(get_state_as_dict(xmin)["Text"], "NOT(ISERROR(A8))")
+
+
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

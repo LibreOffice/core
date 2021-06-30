@@ -13,27 +13,25 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 
 class tdf73006(UITestCase):
     def test_tdf73006_text_to_columns(self):
-        calc_doc = self.ui_test.create_doc_in_start_center("calc")
-        xCalcDoc = self.xUITest.getTopFocusWindow()
-        gridwin = xCalcDoc.getChild("grid_window")
-        document = self.ui_test.get_component()
+        with self.ui_test.create_doc_in_start_center_guarded("calc") as document:
+            xCalcDoc = self.xUITest.getTopFocusWindow()
+            gridwin = xCalcDoc.getChild("grid_window")
 
-        #Add data
-        enter_text_to_cell(gridwin, "A2", "A B")
-        #select column A
-        gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
-        self.xUITest.executeCommand(".uno:SelectColumn")
-        # Data - Text to Columns
-        with self.ui_test.execute_dialog_through_command(".uno:TextToColumns") as xDialog:
-            xspace = xDialog.getChild("space")
-            if (get_state_as_dict(xspace)["Selected"]) == "false":
-                xspace.executeAction("CLICK", tuple())
-            # Click Ok
+            #Add data
+            enter_text_to_cell(gridwin, "A2", "A B")
+            #select column A
+            gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
+            self.xUITest.executeCommand(".uno:SelectColumn")
+            # Data - Text to Columns
+            with self.ui_test.execute_dialog_through_command(".uno:TextToColumns") as xDialog:
+                xspace = xDialog.getChild("space")
+                if (get_state_as_dict(xspace)["Selected"]) == "false":
+                    xspace.executeAction("CLICK", tuple())
+                # Click Ok
 
-        #Verify
-        self.assertEqual(get_cell_by_position(document, 0, 0, 1).getString(), "A")
-        self.assertEqual(get_cell_by_position(document, 0, 1, 1).getString(), "B")
+            #Verify
+            self.assertEqual(get_cell_by_position(document, 0, 0, 1).getString(), "A")
+            self.assertEqual(get_cell_by_position(document, 0, 1, 1).getString(), "B")
 
-        self.ui_test.close_doc()
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

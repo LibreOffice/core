@@ -43,6 +43,5 @@ class Tdf57841(UITestCase):
         for i in range(4):
             self.assertEqual(str(i + 1), get_cell_by_position(document, 0, i, 0).getString())
 
-        self.ui_test.close_doc()
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

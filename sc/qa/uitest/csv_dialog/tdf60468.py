@@ -50,6 +50,5 @@ class Tdf60468(UITestCase):
         self.assertEqual("value2.1\n\tvalue2.2\nvalue2.3", get_cell_by_position(document, 0, 1, 1).getString())
         self.assertEqual("value3", get_cell_by_position(document, 0, 2, 1).getString())
 
-        self.ui_test.close_doc()
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
