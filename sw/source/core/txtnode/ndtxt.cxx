@@ -4110,7 +4110,7 @@ void SwTextNode::SetListRestart( bool bRestart )
 bool SwTextNode::IsListRestart() const
 {
     const SfxBoolItem& aIsRestartItem =
-        dynamic_cast<const SfxBoolItem&>(GetAttr( RES_PARATR_LIST_ISRESTART ));
+        static_cast<const SfxBoolItem&>(GetAttr( RES_PARATR_LIST_ISRESTART ));
 
     return aIsRestartItem.GetValue();
 }
@@ -4225,7 +4225,7 @@ void SwTextNode::SetCountedInList( bool bCounted )
 bool SwTextNode::IsCountedInList() const
 {
     const SfxBoolItem& aIsCountedInListItem =
-        dynamic_cast<const SfxBoolItem&>(GetAttr( RES_PARATR_LIST_ISCOUNTED ));
+        static_cast<const SfxBoolItem&>(GetAttr( RES_PARATR_LIST_ISCOUNTED ));
 
     return aIsCountedInListItem.GetValue();
 }

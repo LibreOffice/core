@@ -139,7 +139,7 @@ void SwFrameControlsManager::SetPageBreakControl( const SwPageFrame* pPageFrame 
         pControl.swap( pNewControl );
     }
 
-    SwPageBreakWin* pWin = dynamic_cast<SwPageBreakWin *>(pControl->GetWindow());
+    SwPageBreakWin* pWin = static_cast<SwPageBreakWin *>(pControl->GetWindow());
     assert (pWin != nullptr);
     pWin->UpdatePosition();
     if (!pWin->IsVisible())
