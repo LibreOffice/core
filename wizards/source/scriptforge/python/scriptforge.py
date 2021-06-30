@@ -224,6 +224,11 @@ class ScriptForge(object, metaclass = _Singleton):
             if '.py$' in script.lower():  # Python
                 if len(scope) == 0:
                     scope = 'share'     # Default for Python
+                # Provide an alternate helper script depending on test context
+                if script.startswith(cls.pythonhelpermodule) and hasattr(cls, 'pythonhelpermodule2'):
+                    script = cls.pythonhelpermodule2 + script[len(cls.pythonhelpermodule):]
+                    if '#' in script:
+                        scope, script = script.split('#')
                 uri = 'vnd.sun.star.script:{0}?language=Python&location={1}'.format(script, scope)
             else:  # Basic
                 if len(scope) == 0:

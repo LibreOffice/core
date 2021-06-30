@@ -77,6 +77,7 @@ Private TreeDataModel		As Object	&apos; com.sun.star.awt.tree.MutableTreeDataMod
 &apos;	Specific persistent services objects or properties
 Private FileSystemNaming	As String	&apos; If &quot;SYS&quot;, file and folder naming is based on operating system notation
 Private PythonHelper		As String	&apos; File name of Python helper functions (stored in $(inst)/share/Scripts/python)
+Private PythonHelper2		As String	&apos; Alternate Python helper file name for test purposes
 Private Interface			As Object	&apos; ScriptForge own L10N service
 Private OSName				As String	&apos; WIN, LINUX, MACOS
 Private SFDialogs			As Variant	&apos; Persistent storage for the SFDialogs library
@@ -127,6 +128,7 @@ Private Sub Class_Initialize()
 	Set Introspection = Nothing
 	FileSystemNaming = &quot;ANY&quot;
 	PythonHelper = &quot;ScriptForgeHelper.py&quot;
+	PythonHelper2 = &quot;&quot;
 	Set Interface = Nothing
 	Set BrowseNodeFactory = Nothing
 	Set DatabaseContext = Nothing
