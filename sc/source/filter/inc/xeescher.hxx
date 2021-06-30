@@ -259,6 +259,8 @@ public:
 
     virtual void        SaveXml( XclExpXmlStream& rStrm ) override;
 
+    void SaveVml(XclExpXmlStream& rStrm);
+
     OUString SaveControlPropertiesXml(XclExpXmlStream& rStrm) const;
     void SaveSheetXml(XclExpXmlStream& rStrm, const OUString& aIdFormControlPr) const;
 
@@ -296,6 +298,7 @@ private:
     sal_Int32           mnShapeId;
     tools::Rectangle    maAreaFrom;
     tools::Rectangle    maAreaTo;
+    XclExpObjectManager& mrRoot;
 };
 
 //#endif

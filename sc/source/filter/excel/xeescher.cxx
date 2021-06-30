@@ -70,6 +70,8 @@
 #include <oox/export/chartexport.hxx>
 #include <oox/export/utils.hxx>
 #include <oox/token/namespaces.hxx>
+#include <oox/export/vmlexport.hxx>
+#include <sax/fastattribs.hxx>
 #include <memory>
 
 using namespace com::sun::star;
@@ -659,7 +661,8 @@ XclExpTbxControlObj::XclExpTbxControlObj( XclExpObjectManager& rRoot, Reference<
     mbScrollHor( false ),
     mbPrint( false ),
     mbVisible( false ),
-    mnShapeId( 0 )
+    mnShapeId( 0 ),
+    mrRoot(rRoot)
 {
     namespace FormCompType = css::form::FormComponentType;
     namespace AwtVisualEffect = css::awt::VisualEffect;
@@ -1090,6 +1093,100 @@ void XclExpTbxControlObj::WriteSbs( XclExpStream& rStrm )
 void XclExpTbxControlObj::setShapeId(sal_Int32 aShapeId)
 {
     mnShapeId = aShapeId;
+}
+
+namespace
+{
+/// Handles the VML export of form controls (e.g. checkboxes).
+class VmlFormControlExporter : public oox::vml::VMLExport
+{
+    sal_uInt16 m_nObjType;
+    tools::Rectangle m_aAreaFrom;
+    tools::Rectangle m_aAreaTo;
+    OUString m_aLabel;
+
+public:
+    VmlFormControlExporter(const sax_fastparser::FSHelperPtr& p, sal_uInt16 nObjType,
+                           const tools::Rectangle& rAreaFrom, const tools::Rectangle& rAreaTo,
+                           const OUString& rLabel);
+
+protected:
+    using VMLExport::StartShape;
+    sal_Int32 StartShape() override;
+    using VMLExport::EndShape;
+    void EndShape(sal_Int32 nShapeElement) override;
+};
+
+VmlFormControlExporter::VmlFormControlExporter(const sax_fastparser::FSHelperPtr& p,
+                                               sal_uInt16 nObjType,
+                                               const tools::Rectangle& rAreaFrom,
+                                               const tools::Rectangle& rAreaTo,
+                                               const OUString& rLabel)
+    : VMLExport(p)
+    , m_nObjType(nObjType)
+    , m_aAreaFrom(rAreaFrom)
+    , m_aAreaTo(rAreaTo)
+    , m_aLabel(rLabel)
+{
+}
+
+sal_Int32 VmlFormControlExporter::StartShape()
+{
+    // Host control.
+    AddShapeAttribute(XML_type, "#_x0000_t201");
+    return VMLExport::StartShape();
+}
+
+void VmlFormControlExporter::EndShape(sal_Int32 nShapeElement)
+{
+    sax_fastparser::FSHelperPtr pVmlDrawing = GetFS();
+
+    pVmlDrawing->startElement(FSNS(XML_v, XML_textbox));
+    pVmlDrawing->startElement(XML_div);
+    pVmlDrawing->write(m_aLabel);
+    pVmlDrawing->endElement(XML_div);
+    pVmlDrawing->endElement(FSNS(XML_v, XML_textbox));
+
+    OString aObjectType;
+    switch (m_nObjType)
+    {
+        case EXC_OBJTYPE_CHECKBOX:
+            aObjectType = "Checkbox";
+            break;
+    }
+    pVmlDrawing->startElement(FSNS(XML_x, XML_ClientData), XML_ObjectType, aObjectType);
+    OString aAnchor = OString::number(m_aAreaFrom.Left());
+    aAnchor += ", " + OString::number(m_aAreaFrom.Top());
+    aAnchor += ", " + OString::number(m_aAreaFrom.Right());
+    aAnchor += ", " + OString::number(m_aAreaFrom.Bottom());
+    aAnchor += ", " + OString::number(m_aAreaTo.Left());
+    aAnchor += ", " + OString::number(m_aAreaTo.Top());
+    aAnchor += ", " + OString::number(m_aAreaTo.Right());
+    aAnchor += ", " + OString::number(m_aAreaTo.Bottom());
+    XclXmlUtils::WriteElement(pVmlDrawing, FSNS(XML_x, XML_Anchor), aAnchor);
+
+    // XclExpOcxControlObj::WriteSubRecs() has the same fixed value.
+    XclXmlUtils::WriteElement(pVmlDrawing, FSNS(XML_x, XML_TextVAlign), "Center");
+
+    pVmlDrawing->endElement(FSNS(XML_x, XML_ClientData));
+    VMLExport::EndShape(nShapeElement);
+}
+
+}
+
+/// Save into xl/drawings/vmlDrawing1.vml.
+void XclExpTbxControlObj::SaveVml(XclExpXmlStream& rStrm)
+{
+    SdrObject* pObj = SdrObject::getSdrObjectFromXShape(mxShape);
+    tools::Rectangle aAreaFrom;
+    tools::Rectangle aAreaTo;
+    // Unlike XclExpTbxControlObj::SaveXml(), this is not calculated in EMUs.
+    lcl_GetFromTo(mrRoot, pObj->GetLogicRect(), GetTab(), aAreaFrom, aAreaTo);
+    VmlFormControlExporter aFormControlExporter(rStrm.GetCurrentStream(), GetObjType(), aAreaFrom,
+                                                aAreaTo, msLabel);
+    aFormControlExporter.AddSdrObject(*pObj, /*eHOri=*/-1,
+                                      /*eVOri=*/-1, /*eHRel=*/-1, /*eVRel=*/-1,
+                                      /*pWrapAttrList=*/nullptr, /*bOOxmlExport=*/true);
 }
 
 // save into xl\drawings\drawing1.xml
