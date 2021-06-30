@@ -11,51 +11,49 @@ from uitest.uihelper.common import select_pos
 class insertCaption(UITestCase):
 
    def test_insert_caption(self):
-        self.ui_test.create_doc_in_start_center("writer")
-        document = self.ui_test.get_component()
-        with self.ui_test.execute_dialog_through_command(".uno:InsertFrame") as xDialogFr:
+        with self.ui_test.create_doc_in_start_center_guarded("writer") as document:
+            with self.ui_test.execute_dialog_through_command(".uno:InsertFrame") as xDialogFr:
 
-            xWidth = xDialogFr.getChild("width")
-            xWidth.executeAction("UP", tuple())
-            xWidth.executeAction("UP", tuple())
+                xWidth = xDialogFr.getChild("width")
+                xWidth.executeAction("UP", tuple())
+                xWidth.executeAction("UP", tuple())
 
-            xHeight = xDialogFr.getChild("height")
-            xHeight.executeAction("UP", tuple())
-            xHeight.executeAction("UP", tuple())
-
-
-        self.assertEqual(document.TextFrames.getCount(), 1)
-
-        with self.ui_test.execute_dialog_through_command(".uno:InsertCaptionDialog") as xDialogCaption:
-
-            xCapt = xDialogCaption.getChild("caption_edit")
-            xCapt.executeAction("TYPE", mkPropertyValues({"TEXT":"Caption"}))
+                xHeight = xDialogFr.getChild("height")
+                xHeight.executeAction("UP", tuple())
+                xHeight.executeAction("UP", tuple())
 
 
-        xFrame = document.TextFrames[0]
+            self.assertEqual(document.TextFrames.getCount(), 1)
 
-        self.assertEqual(document.TextFrames[0].Text.String.replace('\r\n', '\n'), "\nText 1: Caption")
+            with self.ui_test.execute_dialog_through_command(".uno:InsertCaptionDialog") as xDialogCaption:
 
-        with self.ui_test.execute_dialog_through_command(".uno:InsertCaptionDialog") as xDialogCaption:
-            xCapt = xDialogCaption.getChild("caption_edit")
-            xCapt.executeAction("TYPE", mkPropertyValues({"TEXT":"Caption2"}))
-            xSep = xDialogCaption.getChild("separator_edit")
-            xSep.executeAction("TYPE", mkPropertyValues({"TEXT":"-"}))
+                xCapt = xDialogCaption.getChild("caption_edit")
+                xCapt.executeAction("TYPE", mkPropertyValues({"TEXT":"Caption"}))
 
 
-        self.assertEqual(document.TextFrames[0].Text.String.replace('\r\n', '\n'), "\nText 1: Caption\nText 2-: Caption2")
+            xFrame = document.TextFrames[0]
 
-        with self.ui_test.execute_dialog_through_command(".uno:InsertCaptionDialog") as xDialogCaption:
-            xCapt = xDialogCaption.getChild("caption_edit")
-            xCapt.executeAction("TYPE", mkPropertyValues({"TEXT":"Caption3"}))
-            xSep = xDialogCaption.getChild("separator_edit")
-            xSep.executeAction("TYPE", mkPropertyValues({"TEXT":"-"}))
-            xPos = xDialogCaption.getChild("position")
-            select_pos(xPos, "1")
+            self.assertEqual(document.TextFrames[0].Text.String.replace('\r\n', '\n'), "\nText 1: Caption")
+
+            with self.ui_test.execute_dialog_through_command(".uno:InsertCaptionDialog") as xDialogCaption:
+                xCapt = xDialogCaption.getChild("caption_edit")
+                xCapt.executeAction("TYPE", mkPropertyValues({"TEXT":"Caption2"}))
+                xSep = xDialogCaption.getChild("separator_edit")
+                xSep.executeAction("TYPE", mkPropertyValues({"TEXT":"-"}))
 
 
-        self.assertEqual(document.TextFrames[0].Text.String.replace('\r\n', '\n'), "\nText 1: Caption\nText 2-: Caption2\nText 3--: Caption3")
+            self.assertEqual(document.TextFrames[0].Text.String.replace('\r\n', '\n'), "\nText 1: Caption\nText 2-: Caption2")
 
-        self.ui_test.close_doc()
+            with self.ui_test.execute_dialog_through_command(".uno:InsertCaptionDialog") as xDialogCaption:
+                xCapt = xDialogCaption.getChild("caption_edit")
+                xCapt.executeAction("TYPE", mkPropertyValues({"TEXT":"Caption3"}))
+                xSep = xDialogCaption.getChild("separator_edit")
+                xSep.executeAction("TYPE", mkPropertyValues({"TEXT":"-"}))
+                xPos = xDialogCaption.getChild("position")
+                select_pos(xPos, "1")
+
+
+            self.assertEqual(document.TextFrames[0].Text.String.replace('\r\n', '\n'), "\nText 1: Caption\nText 2-: Caption2\nText 3--: Caption3")
+
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

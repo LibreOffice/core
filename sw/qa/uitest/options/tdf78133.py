@@ -14,32 +14,30 @@ class tdf78133(UITestCase):
 
     def test_tdf78133_options_app_colors(self):
 
-        self.ui_test.create_doc_in_start_center("writer")
-        xWriterDoc = self.xUITest.getTopFocusWindow()
-        document = self.ui_test.get_component()
-        #New text document
-        #open option, go to App colors
-        with self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog") as xDialog:
+        with self.ui_test.create_doc_in_start_center_guarded("writer") as document:
+            xWriterDoc = self.xUITest.getTopFocusWindow()
+            #New text document
+            #open option, go to App colors
+            with self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog") as xDialog:
 
-            xPages = xDialog.getChild("pages")
-            xLOEntry = xPages.getChild('0')                 # Lo Dev
-            xLOEntry.executeAction("EXPAND", tuple())
-            xLoAppColorsEntry = xLOEntry.getChild('8')
-            xLoAppColorsEntry.executeAction("SELECT", tuple())          #Applications Colors
-            #change text boundaries checkbox, save
-            docboundaries = xDialog.getChild("docboundaries")
-            docboundaries.executeAction("CLICK", tuple())
-        #verify - reopen dialog and check if "text boundaries" is still unchecked
-        with self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog") as xDialog:
+                xPages = xDialog.getChild("pages")
+                xLOEntry = xPages.getChild('0')                 # Lo Dev
+                xLOEntry.executeAction("EXPAND", tuple())
+                xLoAppColorsEntry = xLOEntry.getChild('8')
+                xLoAppColorsEntry.executeAction("SELECT", tuple())          #Applications Colors
+                #change text boundaries checkbox, save
+                docboundaries = xDialog.getChild("docboundaries")
+                docboundaries.executeAction("CLICK", tuple())
+            #verify - reopen dialog and check if "text boundaries" is still unchecked
+            with self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog") as xDialog:
 
-            xPages = xDialog.getChild("pages")
-            xLOEntry = xPages.getChild('0')                 # Lo Dev
-            xLOEntry.executeAction("EXPAND", tuple())
-            xLoAppColorsEntry = xLOEntry.getChild('8')
-            xLoAppColorsEntry.executeAction("SELECT", tuple())          #Applications Colors
-            #change text boundaries checkbox, save
-            docboundaries = xDialog.getChild("docboundaries")
-            self.assertEqual(get_state_as_dict(docboundaries)["Selected"], "false")
+                xPages = xDialog.getChild("pages")
+                xLOEntry = xPages.getChild('0')                 # Lo Dev
+                xLOEntry.executeAction("EXPAND", tuple())
+                xLoAppColorsEntry = xLOEntry.getChild('8')
+                xLoAppColorsEntry.executeAction("SELECT", tuple())          #Applications Colors
+                #change text boundaries checkbox, save
+                docboundaries = xDialog.getChild("docboundaries")
+                self.assertEqual(get_state_as_dict(docboundaries)["Selected"], "false")
 
-        self.ui_test.close_doc()
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

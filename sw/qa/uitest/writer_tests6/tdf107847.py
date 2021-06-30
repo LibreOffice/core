@@ -11,23 +11,21 @@ from uitest.uihelper.common import select_pos
 class tdf107847(UITestCase):
 
    def test_tdf_107847_macro_tab_crash(self):
-        self.ui_test.create_doc_in_start_center("writer")
-        document = self.ui_test.get_component()
-        xWriterDoc = self.xUITest.getTopFocusWindow()
+        with self.ui_test.create_doc_in_start_center_guarded("writer") as document:
+            xWriterDoc = self.xUITest.getTopFocusWindow()
 
-        with self.ui_test.execute_dialog_through_command(".uno:InsertFrame") as xDialog:
-            xTabs = xDialog.getChild("tabcontrol")
-            select_pos(xTabs, "1")
-            select_pos(xTabs, "2")
-            select_pos(xTabs, "3")
-            select_pos(xTabs, "4")
-            select_pos(xTabs, "5")
-            select_pos(xTabs, "6")
-            select_pos(xTabs, "7")
-            select_pos(xTabs, "8")   #tab Macro
+            with self.ui_test.execute_dialog_through_command(".uno:InsertFrame") as xDialog:
+                xTabs = xDialog.getChild("tabcontrol")
+                select_pos(xTabs, "1")
+                select_pos(xTabs, "2")
+                select_pos(xTabs, "3")
+                select_pos(xTabs, "4")
+                select_pos(xTabs, "5")
+                select_pos(xTabs, "6")
+                select_pos(xTabs, "7")
+                select_pos(xTabs, "8")   #tab Macro
 
-        self.assertEqual(document.TextFrames.getCount(), 1)
-        self.xUITest.executeCommand(".uno:Undo")
-        self.assertEqual(document.TextFrames.getCount(), 0)
-        self.ui_test.close_doc()
+            self.assertEqual(document.TextFrames.getCount(), 1)
+            self.xUITest.executeCommand(".uno:Undo")
+            self.assertEqual(document.TextFrames.getCount(), 0)
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

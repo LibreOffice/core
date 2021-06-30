@@ -12,49 +12,47 @@ class tdf140863(UITestCase):
 
     def test_tdf140863(self):
 
-        self.ui_test.create_doc_in_start_center("writer")
+        with self.ui_test.create_doc_in_start_center_guarded("writer") as document:
 
-        # Insert one section
-        with self.ui_test.execute_dialog_through_command(".uno:InsertSection"):
-            pass
+            # Insert one section
+            with self.ui_test.execute_dialog_through_command(".uno:InsertSection"):
+                pass
 
-        xWriterDoc = self.xUITest.getTopFocusWindow()
-        xWriterEdit = xWriterDoc.getChild("writer_edit")
+            xWriterDoc = self.xUITest.getTopFocusWindow()
+            xWriterEdit = xWriterDoc.getChild("writer_edit")
 
-        # Insert a page break in the section
-        xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "UP"}))
-        self.xUITest.executeCommand(".uno:InsertPagebreak")
-        self.assertEqual(get_state_as_dict(xWriterEdit)["CurrentPage"], "2")
+            # Insert a page break in the section
+            xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "UP"}))
+            self.xUITest.executeCommand(".uno:InsertPagebreak")
+            self.assertEqual(get_state_as_dict(xWriterEdit)["CurrentPage"], "2")
 
-        document = self.ui_test.get_component()
-        self.assertEqual(1, len(document.TextSections))
-        self.assertTrue(document.TextSections.Section1.IsVisible)
-
-
-        with self.ui_test.execute_dialog_through_command(".uno:EditRegion") as xDialog:
-            xHide = xDialog.getChild('hide')
-            self.assertEqual('false', get_state_as_dict(xHide)['Selected'])
-
-            xHide.executeAction('CLICK', tuple())
+            self.assertEqual(1, len(document.TextSections))
+            self.assertTrue(document.TextSections.Section1.IsVisible)
 
 
-        self.assertEqual(1, len(document.TextSections))
-        self.assertFalse(document.TextSections.Section1.IsVisible)
-        self.assertEqual(get_state_as_dict(xWriterEdit)["CurrentPage"], "1")
+            with self.ui_test.execute_dialog_through_command(".uno:EditRegion") as xDialog:
+                xHide = xDialog.getChild('hide')
+                self.assertEqual('false', get_state_as_dict(xHide)['Selected'])
 
-        with self.ui_test.execute_dialog_through_command(".uno:EditRegion") as xDialog:
-            xHide = xDialog.getChild('hide')
-            self.assertEqual('true', get_state_as_dict(xHide)['Selected'])
+                xHide.executeAction('CLICK', tuple())
 
-            xHide.executeAction('CLICK', tuple())
 
-        self.assertEqual(1, len(document.TextSections))
-        self.assertTrue(document.TextSections.Section1.IsVisible)
+            self.assertEqual(1, len(document.TextSections))
+            self.assertFalse(document.TextSections.Section1.IsVisible)
+            self.assertEqual(get_state_as_dict(xWriterEdit)["CurrentPage"], "1")
 
-        # Without the fix in place, this test would have failed with
-        # AssertionError: '1' != '2'
-        self.assertEqual(get_state_as_dict(xWriterEdit)["CurrentPage"], "2")
+            with self.ui_test.execute_dialog_through_command(".uno:EditRegion") as xDialog:
+                xHide = xDialog.getChild('hide')
+                self.assertEqual('true', get_state_as_dict(xHide)['Selected'])
 
-        self.ui_test.close_doc()
+                xHide.executeAction('CLICK', tuple())
+
+            self.assertEqual(1, len(document.TextSections))
+            self.assertTrue(document.TextSections.Section1.IsVisible)
+
+            # Without the fix in place, this test would have failed with
+            # AssertionError: '1' != '2'
+            self.assertEqual(get_state_as_dict(xWriterEdit)["CurrentPage"], "2")
+
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
