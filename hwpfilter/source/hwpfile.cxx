@@ -624,7 +624,6 @@ int HWPFile::compareCharShape(CharShape const *shape)
     return 0;
 }
 
-
 int HWPFile::compareParaShape(ParaShape const *shape)
 {
     int count = pslist.size();
@@ -632,7 +631,7 @@ int HWPFile::compareParaShape(ParaShape const *shape)
     {
         for(int i = 0; i< count; i++)
         {
-            ParaShape *pshape = getParaShape(i);
+            ParaShape *pshape = pslist[i].get();
             if( shape->left_margin == pshape->left_margin &&
                 shape->right_margin == pshape->right_margin &&
                 shape->pspacing_prev == pshape->pspacing_prev &&
@@ -660,7 +659,6 @@ int HWPFile::compareParaShape(ParaShape const *shape)
     }
     return 0;
 }
-
 
 HWPFile *GetCurrentDoc()
 {
