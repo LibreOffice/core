@@ -571,6 +571,7 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/filter/xml/xmltexte \
     sw/source/filter/xml/xmltexti \
     sw/source/filter/indexing/IndexingExport \
+    sw/source/filter/indexing/IndexingExportFilter \
     sw/source/uibase/app/appenv \
     sw/source/uibase/app/apphdl \
     sw/source/uibase/app/applab \
