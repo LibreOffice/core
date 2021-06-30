@@ -510,8 +510,10 @@ void Window::SetPointer( PointerStyle nPointer )
     // issue mouse pointer events only for document windows
     // Doc windows' immediate parent SfxFrameViewWindow_Impl is the one with
     // parent notifier set during initialization
-    if (GetParent()->ImplGetWindowImpl()->mbLOKParentNotifier &&
-        GetParent()->ImplGetWindowImpl()->mnLOKWindowId == 0)
+    if ((ImplGetFrameData()->mbDragging &&
+         ImplGetFrameData()->mpMouseDownWin == this) ||
+        (GetParent()->ImplGetWindowImpl()->mbLOKParentNotifier &&
+         GetParent()->ImplGetWindowImpl()->mnLOKWindowId == 0))
     {
         pWin->GetLOKNotifier()->libreOfficeKitViewCallback(LOK_CALLBACK_MOUSE_POINTER, aPointerString.getStr());
     }
