@@ -11,7 +11,7 @@ from com.sun.star.lang import IndexOutOfBoundsException
 class insertSignatureLine(UITestCase):
 
    def test_insert_signature_line(self):
-        with self.ui_test.create_doc_in_start_center_guarded("writer") as document:
+        with self.ui_test.create_doc_in_start_center("writer") as document:
             xWriterDoc = self.xUITest.getTopFocusWindow()
 
             # cancel the dialog without doing anything
@@ -50,7 +50,7 @@ class insertSignatureLine(UITestCase):
 
 
    def test_insert_signature_line2(self):
-        with self.ui_test.create_doc_in_start_center_guarded("writer") as document:
+        with self.ui_test.create_doc_in_start_center("writer") as document:
             xWriterDoc = self.xUITest.getTopFocusWindow()
 
             with self.ui_test.execute_dialog_through_command(".uno:InsertSignatureLine") as xDialog:

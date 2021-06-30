@@ -15,7 +15,7 @@ from uitest.uihelper.calc import enter_text_to_cell
 
 class keyF4(UITestCase):
     def test_f4(self):
-        with self.ui_test.create_doc_in_start_center_guarded("calc") as document:
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
             #enter data
@@ -77,7 +77,7 @@ class keyF4(UITestCase):
 
     def test_tdf39650_F4_R1C1(self):
         #Bug 39650 - Shift+F4 conversion from relative to absolute does not work for R1C1 syntax
-        with self.ui_test.create_doc_in_start_center_guarded("calc") as document:
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
             #* Tools --> Options --> Calc --> Formula -->  Syntax = Excel R1C1

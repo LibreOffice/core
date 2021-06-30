@@ -15,7 +15,7 @@ from uitest.uihelper.common import change_measurement_unit
 class formatParagraph(UITestCase):
 
    def test_format_paragraph_tab_indents_spacing(self):
-        with self.ui_test.create_doc_in_start_center_guarded("writer"):
+        with self.ui_test.create_doc_in_start_center("writer"):
             xWriterDoc = self.xUITest.getTopFocusWindow()
 
             with self.ui_test.execute_dialog_through_command(".uno:ParagraphDialog") as xDialog:
@@ -69,7 +69,7 @@ class formatParagraph(UITestCase):
 
 
    def test_format_paragraph_tab_alignment(self):
-        with self.ui_test.create_doc_in_start_center_guarded("writer"):
+        with self.ui_test.create_doc_in_start_center("writer"):
             xWriterDoc = self.xUITest.getTopFocusWindow()
 
             with self.ui_test.execute_dialog_through_command(".uno:ParagraphDialog") as xDialog:
@@ -112,7 +112,7 @@ class formatParagraph(UITestCase):
 
 
    def test_format_paragraph_tab_text_flow(self):
-        with self.ui_test.create_doc_in_start_center_guarded("writer"):
+        with self.ui_test.create_doc_in_start_center("writer"):
             xWriterDoc = self.xUITest.getTopFocusWindow()
 
             with self.ui_test.execute_dialog_through_command(".uno:ParagraphDialog") as xDialog:
@@ -183,7 +183,7 @@ class formatParagraph(UITestCase):
 
 
    def test_format_paragraph_tab_asian_typography(self):
-        with self.ui_test.create_doc_in_start_center_guarded("writer"):
+        with self.ui_test.create_doc_in_start_center("writer"):
             xWriterDoc = self.xUITest.getTopFocusWindow()
 
             with self.ui_test.execute_dialog_through_command(".uno:ParagraphDialog") as xDialog:
@@ -214,7 +214,7 @@ class formatParagraph(UITestCase):
 
 
    def test_format_paragraph_tab_outline_numbering(self):
-        with self.ui_test.create_doc_in_start_center_guarded("writer"):
+        with self.ui_test.create_doc_in_start_center("writer"):
             xWriterDoc = self.xUITest.getTopFocusWindow()
 
             with self.ui_test.execute_dialog_through_command(".uno:ParagraphDialog") as xDialog:
@@ -249,7 +249,7 @@ class formatParagraph(UITestCase):
 
 
    def test_format_paragraph_tab_tabs(self):
-        with self.ui_test.create_doc_in_start_center_guarded("writer"):
+        with self.ui_test.create_doc_in_start_center("writer"):
             xWriterDoc = self.xUITest.getTopFocusWindow()
 
             change_measurement_unit(self, "Centimeter")
@@ -362,7 +362,7 @@ class formatParagraph(UITestCase):
 
 
    def test_format_paragraph_tab_drop_caps(self):
-        with self.ui_test.create_doc_in_start_center_guarded("writer"):
+        with self.ui_test.create_doc_in_start_center("writer"):
             xWriterDoc = self.xUITest.getTopFocusWindow()
 
             with self.ui_test.execute_dialog_through_command(".uno:ParagraphDialog") as xDialog:
@@ -402,7 +402,7 @@ class formatParagraph(UITestCase):
 
 
    def test_format_paragraph_tab_borders(self):
-        with self.ui_test.create_doc_in_start_center_guarded("writer"):
+        with self.ui_test.create_doc_in_start_center("writer"):
             xWriterDoc = self.xUITest.getTopFocusWindow()
 
             change_measurement_unit(self, "Centimeter")
@@ -452,7 +452,7 @@ class formatParagraph(UITestCase):
 
 
    def test_format_paragraph_area(self):
-        with self.ui_test.create_doc_in_start_center_guarded("writer"):
+        with self.ui_test.create_doc_in_start_center("writer"):
             xWriterDoc = self.xUITest.getTopFocusWindow()
 
             with self.ui_test.execute_dialog_through_command(".uno:ParagraphDialog", close_button="cancel") as xDialog:
@@ -472,7 +472,7 @@ class formatParagraph(UITestCase):
                 xHatch.executeAction("CLICK", tuple())
 
    def test_format_paragraph_transparency(self):
-        with self.ui_test.create_doc_in_start_center_guarded("writer"):
+        with self.ui_test.create_doc_in_start_center("writer"):
             xWriterDoc = self.xUITest.getTopFocusWindow()
 
             with self.ui_test.execute_dialog_through_command(".uno:ParagraphDialog") as xDialog:

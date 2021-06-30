@@ -29,7 +29,7 @@ class documentProperties(UITestCase):
             self.assertEqual(aExpected, get_state_as_dict(xRemoveBtn)['ReallyVisible'])
 
    def test_open_documentProperties_writer(self):
-        with self.ui_test.create_doc_in_start_center_guarded("writer"):
+        with self.ui_test.create_doc_in_start_center("writer"):
             with self.ui_test.execute_dialog_through_command(".uno:SetDocumentProperties") as xDialog:
                 xResetBtn = xDialog.getChild("reset")
                 xResetBtn.executeAction("CLICK", tuple())

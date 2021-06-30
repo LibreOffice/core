@@ -16,7 +16,7 @@ class Comments(UITestCase):
 
     def test_comments_features(self):
 
-        with self.ui_test.create_doc_in_start_center_guarded("writer"):
+        with self.ui_test.create_doc_in_start_center("writer"):
 
             xMainWindow = self.xUITest.getTopFocusWindow()
 
@@ -63,7 +63,7 @@ class Comments(UITestCase):
 
     def test_multi_comments(self):
 
-        with self.ui_test.create_doc_in_start_center_guarded("writer"):
+        with self.ui_test.create_doc_in_start_center("writer"):
 
             xMainWindow = self.xUITest.getTopFocusWindow()
 

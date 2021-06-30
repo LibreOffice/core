@@ -11,7 +11,7 @@ class tdf105411(UITestCase):
 
     def test_delete_conditional_format(self):
 
-        with self.ui_test.create_doc_in_start_center_guarded("calc"):
+        with self.ui_test.create_doc_in_start_center("calc"):
 
             self.ui_test.execute_modeless_dialog_through_command(".uno:ConditionalFormatDialog")
 

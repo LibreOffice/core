@@ -12,7 +12,7 @@ class tdf136941(UITestCase):
 
     def test_tdf136941(self):
 
-        with self.ui_test.create_doc_in_start_center_guarded("writer"):
+        with self.ui_test.create_doc_in_start_center("writer"):
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")
 

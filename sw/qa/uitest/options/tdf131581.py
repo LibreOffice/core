@@ -10,7 +10,7 @@ from uitest.framework import UITestCase
 class tdf131581(UITestCase):
 
     def test_tdf131581(self):
-        with self.ui_test.create_doc_in_start_center_guarded("writer"):
+        with self.ui_test.create_doc_in_start_center("writer"):
 
             self.xUITest.getTopFocusWindow()
 

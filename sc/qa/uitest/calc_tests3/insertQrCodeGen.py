@@ -11,7 +11,7 @@ from com.sun.star.lang import IndexOutOfBoundsException
 class insertQrCode(UITestCase):
 
    def test_insert_qr_code_gen(self):
-        with self.ui_test.create_doc_in_start_center_guarded("calc") as document:
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
 
@@ -44,7 +44,7 @@ class insertQrCode(UITestCase):
 
 
    def test_insert_qr_code_gen2(self):
-        with self.ui_test.create_doc_in_start_center_guarded("calc") as document:
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
 

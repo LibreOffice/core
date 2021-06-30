@@ -16,7 +16,7 @@ class WriterInsertBreakDialog(UITestCase):
 
     def test_insert_line_break(self):
 
-        with self.ui_test.create_doc_in_start_center_guarded("writer"):
+        with self.ui_test.create_doc_in_start_center("writer"):
 
             with self.ui_test.execute_dialog_through_command(".uno:InsertBreak") as xDialog:
                 xOption = xDialog.getChild("linerb")
@@ -27,7 +27,7 @@ class WriterInsertBreakDialog(UITestCase):
 
     def test_insert_column_break(self):
 
-        with self.ui_test.create_doc_in_start_center_guarded("writer"):
+        with self.ui_test.create_doc_in_start_center("writer"):
 
             with self.ui_test.execute_dialog_through_command(".uno:InsertBreak") as xDialog:
                 xOption = xDialog.getChild("columnrb")
@@ -38,7 +38,7 @@ class WriterInsertBreakDialog(UITestCase):
 
     def test_insert_page_break(self):
 
-        with self.ui_test.create_doc_in_start_center_guarded("writer"):
+        with self.ui_test.create_doc_in_start_center("writer"):
 
             for i in range(9):
                 with self.subTest(i=i):
@@ -55,7 +55,7 @@ class WriterInsertBreakDialog(UITestCase):
 
     def test_cancel_button_insert_line_break_dialog(self):
 
-        with self.ui_test.create_doc_in_start_center_guarded("writer"):
+        with self.ui_test.create_doc_in_start_center("writer"):
 
             with self.ui_test.execute_dialog_through_command(".uno:InsertBreak", close_button="cancel"):
                 pass

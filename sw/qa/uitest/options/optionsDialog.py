@@ -9,7 +9,7 @@ from uitest.framework import UITestCase
 class optionsDialog(UITestCase):
 
     def test_moreIconsDialog(self):
-        with self.ui_test.create_doc_in_start_center_guarded("writer"):
+        with self.ui_test.create_doc_in_start_center("writer"):
 
             with self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog") as xDialog:
 
@@ -29,7 +29,7 @@ class optionsDialog(UITestCase):
 
 
     def test_tdf138596(self):
-        with self.ui_test.create_doc_in_start_center_guarded("writer"):
+        with self.ui_test.create_doc_in_start_center("writer"):
 
             with self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog") as xDialog:
                 xPages = xDialog.getChild("pages")

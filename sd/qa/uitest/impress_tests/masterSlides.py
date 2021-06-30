@@ -13,7 +13,7 @@ class masterSlides(UITestCase):
 
     def test_change_master_slide_from_dialog(self):
 
-        with self.ui_test.create_doc_in_start_center_guarded("impress"):
+        with self.ui_test.create_doc_in_start_center("impress"):
 
             xTemplateDlg = self.xUITest.getTopFocusWindow()
             xCancelBtn = xTemplateDlg.getChild("close")

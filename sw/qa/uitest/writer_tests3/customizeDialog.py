@@ -15,13 +15,13 @@ class ConfigureDialog(UITestCase):
 
     def test_open_ConfigureDialog_writer(self):
 
-        with self.ui_test.create_doc_in_start_center_guarded("writer"):
+        with self.ui_test.create_doc_in_start_center("writer"):
             with self.ui_test.execute_dialog_through_command(".uno:ConfigureDialog", close_button="cancel"):
                 pass
 
 
     def test_search_filter(self):
-        with self.ui_test.create_doc_in_start_center_guarded("writer"):
+        with self.ui_test.create_doc_in_start_center("writer"):
             with self.ui_test.execute_dialog_through_command(".uno:ConfigureDialog", close_button="cancel") as xDialog:
 
                 xfunc = xDialog.getChild("functions")
@@ -58,7 +58,7 @@ class ConfigureDialog(UITestCase):
 
 
     def test_category_listbox(self):
-        with self.ui_test.create_doc_in_start_center_guarded("writer"):
+        with self.ui_test.create_doc_in_start_center("writer"):
             with self.ui_test.execute_dialog_through_command(".uno:ConfigureDialog", close_button="cancel") as xDialog:
 
                 xFunc = xDialog.getChild("functions")
@@ -78,7 +78,7 @@ class ConfigureDialog(UITestCase):
 
 
     def test_tdf133862(self):
-        with self.ui_test.create_doc_in_start_center_guarded("writer"):
+        with self.ui_test.create_doc_in_start_center("writer"):
 
             self.xUITest.executeCommand(".uno:InsertObjectStarMath")
 
@@ -89,7 +89,7 @@ class ConfigureDialog(UITestCase):
 
 
     def test_gear_button_menu(self):
-        with self.ui_test.create_doc_in_start_center_guarded("writer"):
+        with self.ui_test.create_doc_in_start_center("writer"):
 
             with self.ui_test.execute_dialog_through_command(".uno:ConfigureDialog", close_button="cancel") as xDialog:
 

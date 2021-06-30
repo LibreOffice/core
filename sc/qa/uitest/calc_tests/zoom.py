@@ -11,7 +11,7 @@ from uitest.uihelper.common import get_state_as_dict
 
 class calcZoom(UITestCase):
     def test_zoom_calc(self):
-        with self.ui_test.create_doc_in_start_center_guarded("calc"):
+        with self.ui_test.create_doc_in_start_center("calc"):
             MainWindow = self.xUITest.getTopFocusWindow()
             gridwin = MainWindow.getChild("grid_window")
             gridwin.executeAction("SELECT", mkPropertyValues({"TABLE": "0"}))

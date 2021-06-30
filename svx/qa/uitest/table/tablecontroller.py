@@ -14,7 +14,7 @@ class SvxTableControllerTest(UITestCase):
 
     def testOnFormatTable(self):
         # Create an Impress document with a single table in it.
-        with self.ui_test.create_doc_in_start_center_guarded("impress") as component:
+        with self.ui_test.create_doc_in_start_center("impress") as component:
             template = self.xUITest.getTopFocusWindow()
             self.ui_test.close_dialog_through_button(template.getChild("close"))
             self.xUITest.executeCommand(".uno:SelectAll")
@@ -41,7 +41,7 @@ class SvxTableControllerTest(UITestCase):
 
     def testUndoCrash(self):
         # Given an Impress document with a single table in it:
-        with self.ui_test.create_doc_in_start_center_guarded("impress"):
+        with self.ui_test.create_doc_in_start_center("impress"):
             template = self.xUITest.getTopFocusWindow()
             self.ui_test.close_dialog_through_button(template.getChild("close"))
             self.xUITest.executeCommand(".uno:SelectAll")

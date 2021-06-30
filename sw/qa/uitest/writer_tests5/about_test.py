@@ -11,7 +11,7 @@ class AboutDlgTest(UITestCase):
 
     def test_about_dlg(self):
 
-        with self.ui_test.create_doc_in_start_center_guarded("writer"):
+        with self.ui_test.create_doc_in_start_center("writer"):
 
             with self.ui_test.execute_dialog_through_command(".uno:About", close_button="btnClose"):
                 pass

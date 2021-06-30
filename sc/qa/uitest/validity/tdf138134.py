@@ -15,7 +15,7 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 class DetectiveCircle(UITestCase):
 
     def test_delete_circle_at_formula(self):
-        with self.ui_test.create_doc_in_start_center_guarded("calc") as document:
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
             enter_text_to_cell(gridwin, "A1", "1")

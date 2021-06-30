@@ -13,7 +13,7 @@ class CellDropDownItems(UITestCase):
     def test_dropdownitems(self):
 
         #This is to test Dropdown items in grid window
-        with self.ui_test.create_doc_in_start_center_guarded("calc") as document:
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
 

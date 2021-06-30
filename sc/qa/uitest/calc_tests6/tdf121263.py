@@ -13,7 +13,7 @@ from uitest.uihelper.common import get_state_as_dict
 class tdf121263(UITestCase):
 
     def test_tdf121263_hide_more_sheets(self):
-        with self.ui_test.create_doc_in_start_center_guarded("calc"):
+        with self.ui_test.create_doc_in_start_center("calc"):
             xTopWindow = self.xUITest.getTopFocusWindow()
             gridwin = xTopWindow.getChild("grid_window")
 

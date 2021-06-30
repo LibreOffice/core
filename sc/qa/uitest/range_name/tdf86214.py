@@ -15,7 +15,7 @@ class InvalidNames(UITestCase):
 
     def test_invalid_names(self):
 
-        with self.ui_test.create_doc_in_start_center_guarded("calc"):
+        with self.ui_test.create_doc_in_start_center("calc"):
 
             self.ui_test.execute_modeless_dialog_through_command(".uno:AddName")
 

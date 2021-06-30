@@ -12,7 +12,7 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 class tdf44837(UITestCase):
 
     def test_tdf448373_Replace_All_clears_current_selection(self):
-        with self.ui_test.create_doc_in_start_center_guarded("writer") as document:
+        with self.ui_test.create_doc_in_start_center("writer") as document:
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")
 

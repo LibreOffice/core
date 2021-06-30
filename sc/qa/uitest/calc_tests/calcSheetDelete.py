@@ -13,7 +13,7 @@ class calcSheetDelete(UITestCase):
 
     def test_tdf114228_insert_and_delete_sheet(self):
 
-        with self.ui_test.create_doc_in_start_center_guarded("calc") as document:
+        with self.ui_test.create_doc_in_start_center("calc") as document:
 
             xCalcDoc = self.xUITest.getTopFocusWindow()
             xGridWindow = xCalcDoc.getChild("grid_window")
@@ -40,7 +40,7 @@ class calcSheetDelete(UITestCase):
 
     def test_tdf43078_insert_and_delete_sheet_insert_text(self):
 
-        with self.ui_test.create_doc_in_start_center_guarded("calc") as document:
+        with self.ui_test.create_doc_in_start_center("calc") as document:
 
             nrSheets = document.Sheets.getCount()  #default number of sheets
 
@@ -69,7 +69,7 @@ class calcSheetDelete(UITestCase):
 
     def test_delete_more_sheets_at_once(self):
 
-        with self.ui_test.create_doc_in_start_center_guarded("calc") as document:
+        with self.ui_test.create_doc_in_start_center("calc") as document:
 
             xCalcDoc = self.xUITest.getTopFocusWindow()
             xGridWindow = xCalcDoc.getChild("grid_window")
@@ -100,7 +100,7 @@ class calcSheetDelete(UITestCase):
 
     def test_tdf105105_delete_lots_of_sheets_at_once(self):
 
-        with self.ui_test.create_doc_in_start_center_guarded("calc") as document:
+        with self.ui_test.create_doc_in_start_center("calc") as document:
 
             xCalcDoc = self.xUITest.getTopFocusWindow()
             xGridWindow = xCalcDoc.getChild("grid_window")

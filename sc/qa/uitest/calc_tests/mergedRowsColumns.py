@@ -160,7 +160,7 @@ class mergedRowsColumns(UITestCase):
             self.xUITest.executeCommand(".uno:Undo")
 
     def test_move_merged_cells(self):
-        with self.ui_test.create_doc_in_start_center_guarded("calc"):
+        with self.ui_test.create_doc_in_start_center("calc"):
             xTopWindow = self.xUITest.getTopFocusWindow()
             gridwin = xTopWindow.getChild("grid_window")
 

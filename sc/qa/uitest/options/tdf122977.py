@@ -15,7 +15,7 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 
 class chartDefaultColors(UITestCase):
     def test_tdf122977_crash_chart_default_colors_options(self):
-        with self.ui_test.create_doc_in_start_center_guarded("calc"):
+        with self.ui_test.create_doc_in_start_center("calc"):
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
 

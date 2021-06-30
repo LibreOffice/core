@@ -13,7 +13,7 @@ from uitest.framework import UITestCase
 class ImpressDrawinglayerTest(UITestCase):
 
     def test_move_object(self):
-        with self.ui_test.create_doc_in_start_center_guarded("impress") as document:
+        with self.ui_test.create_doc_in_start_center("impress") as document:
 
             xTemplateDlg = self.xUITest.getTopFocusWindow()
             xCancelBtn = xTemplateDlg.getChild("close")
@@ -56,7 +56,7 @@ class ImpressDrawinglayerTest(UITestCase):
 
 
     def test_resize_object(self):
-        with self.ui_test.create_doc_in_start_center_guarded("impress") as document:
+        with self.ui_test.create_doc_in_start_center("impress") as document:
 
             xTemplateDlg = self.xUITest.getTopFocusWindow()
             xCancelBtn = xTemplateDlg.getChild("close")
@@ -99,7 +99,7 @@ class ImpressDrawinglayerTest(UITestCase):
 
 
     def test_rotate_object(self):
-        with self.ui_test.create_doc_in_start_center_guarded("impress") as document:
+        with self.ui_test.create_doc_in_start_center("impress") as document:
 
             xTemplateDlg = self.xUITest.getTopFocusWindow()
             xCancelBtn = xTemplateDlg.getChild("close")

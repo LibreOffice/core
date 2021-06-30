@@ -14,7 +14,7 @@ from uitest.uihelper.common import select_pos
 class masterElements(UITestCase):
 
    def test_master_elements(self):
-        with self.ui_test.create_doc_in_start_center_guarded("impress"):
+        with self.ui_test.create_doc_in_start_center("impress"):
             xTemplateDlg = self.xUITest.getTopFocusWindow()
             xCancelBtn = xTemplateDlg.getChild("close")
             self.ui_test.close_dialog_through_button(xCancelBtn)

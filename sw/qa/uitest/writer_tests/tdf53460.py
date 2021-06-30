@@ -12,7 +12,7 @@ class tdf53460(UITestCase):
 
     def test_resize_table_with_keyboard_tdf53460(self):
 
-        with self.ui_test.create_doc_in_start_center_guarded("writer") as document:
+        with self.ui_test.create_doc_in_start_center("writer") as document:
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")
             #-insert a table (by default 2x2)

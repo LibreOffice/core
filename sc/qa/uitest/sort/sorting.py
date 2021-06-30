@@ -18,7 +18,7 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 class CalcSorting(UITestCase):
 
     def test_Sortingbuttons_detect_columnheaders(self):
-        with self.ui_test.create_doc_in_start_center_guarded("calc") as document:
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
             #In column A enter: Number; 3; 4; 6; 2 / In column B enter: Misc; s; d; f; g
@@ -69,7 +69,7 @@ class CalcSorting(UITestCase):
             self.assertEqual(get_cell_by_position(document, 0, 1, 0).getString(), "Misc")
 
     def test_Sortingbuttons_list_has_not_columnheaders(self):
-        with self.ui_test.create_doc_in_start_center_guarded("calc") as document:
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
             #In column A enter: 5; 3; 4; 6; 2 / In column B enter: e; s; d; f; g
@@ -104,7 +104,7 @@ class CalcSorting(UITestCase):
                 #Cancel dialog
 
     def test_Sorting_default_to_selected_column(self):
-        with self.ui_test.create_doc_in_start_center_guarded("calc") as document:
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
             #In column A enter: Number; 3; 4; 6; 2 / In column B enter: Misc; s; d; f; g
@@ -143,7 +143,7 @@ class CalcSorting(UITestCase):
 
 
     def test_Sorting_default_to_selected_TAB_A_column(self):
-        with self.ui_test.create_doc_in_start_center_guarded("calc") as document:
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
             #In column A enter: Number; 3; 4; 6; 2 / In column B enter: Misc; s; d; f; g
@@ -173,7 +173,7 @@ class CalcSorting(UITestCase):
 
 
     def test_Sorting_default_to_selected_TAB_B_column(self):
-        with self.ui_test.create_doc_in_start_center_guarded("calc") as document:
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
             #In column A enter: Number; 3; 4; 6; 2 / In column B enter: Misc; s; d; f; g
@@ -202,7 +202,7 @@ class CalcSorting(UITestCase):
 
 
     def test_Sorting_sort_criteria(self):
-        with self.ui_test.create_doc_in_start_center_guarded("calc") as document:
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
             #In column A enter: Number; 3; 4; 6; 2 / In column B enter: Misc; s; d; f; g

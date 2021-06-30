@@ -18,7 +18,7 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 class CalcNaturalSorting(UITestCase):
 
     def test_natural_sorting_rows(self):
-        with self.ui_test.create_doc_in_start_center_guarded("calc") as document:
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
             #enter data
@@ -70,7 +70,7 @@ class CalcNaturalSorting(UITestCase):
 
 
     def test_natural_sorting_columns(self):
-        with self.ui_test.create_doc_in_start_center_guarded("calc") as document:
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
             #enter data

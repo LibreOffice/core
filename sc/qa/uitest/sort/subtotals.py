@@ -17,7 +17,7 @@ from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
 class Subtotals(UITestCase):
 
     def test_tdf114720(self):
-        with self.ui_test.create_doc_in_start_center_guarded("calc") as document:
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             XcalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = XcalcDoc.getChild("grid_window")
 

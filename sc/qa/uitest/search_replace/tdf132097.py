@@ -11,7 +11,7 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 class tdf132097(UITestCase):
 
    def test_tdf132097(self):
-        with self.ui_test.create_doc_in_start_center_guarded("calc"):
+        with self.ui_test.create_doc_in_start_center("calc"):
             xCalcDoc = self.xUITest.getTopFocusWindow()
 
             self.ui_test.execute_modeless_dialog_through_command(".uno:SearchDialog")

@@ -13,7 +13,7 @@ from uitest.uihelper.common import get_state_as_dict
 class Test(UITestCase):
 
     def test_tab_navigation(self):
-        with self.ui_test.create_doc_in_start_center_guarded("writer"):
+        with self.ui_test.create_doc_in_start_center("writer"):
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")
 

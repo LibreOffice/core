@@ -13,7 +13,7 @@ from uitest.uihelper.common import select_pos
 class Tdf140528(UITestCase):
 
     def test_tdf140528(self):
-        with self.ui_test.create_doc_in_start_center_guarded("writer"):
+        with self.ui_test.create_doc_in_start_center("writer"):
 
             with self.ui_test.execute_dialog_through_command(".uno:ChapterNumberingDialog") as xDialog:
 

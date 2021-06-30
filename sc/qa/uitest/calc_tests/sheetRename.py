@@ -10,7 +10,7 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 
 class sheetRename(UITestCase):
     def test_sheet_rename(self):
-        with self.ui_test.create_doc_in_start_center_guarded("calc"):
+        with self.ui_test.create_doc_in_start_center("calc"):
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
             with self.ui_test.execute_dialog_through_command(".uno:RenameTable") as xDialog:
@@ -23,7 +23,7 @@ class sheetRename(UITestCase):
 
 
     def test_sheet_rename_invalid_sheet_name(self):
-        with self.ui_test.create_doc_in_start_center_guarded("calc"):
+        with self.ui_test.create_doc_in_start_center("calc"):
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
             with self.ui_test.execute_dialog_through_command(".uno:RenameTable", close_button="") as xDialog:

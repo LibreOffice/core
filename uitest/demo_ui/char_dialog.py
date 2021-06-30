@@ -11,7 +11,7 @@ from uitest.framework import UITestCase
 class CharDialogText(UITestCase):
 
     def test_select_char(self):
-        with self.ui_test.create_doc_in_start_center_guarded("calc"):
+        with self.ui_test.create_doc_in_start_center("calc"):
 
             with self.ui_test.execute_dialog_through_command(".uno:InsertSymbol", close_button="cancel") as xCharDialog:
 

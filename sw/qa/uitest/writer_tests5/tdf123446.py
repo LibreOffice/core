@@ -11,7 +11,7 @@ from uitest.uihelper.common import type_text
 class tdf123446(UITestCase):
 
    def test_tsd123446_undo_redo_ToC_crash(self):
-        with self.ui_test.create_doc_in_start_center_guarded("writer") as document:
+        with self.ui_test.create_doc_in_start_center("writer") as document:
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")
             #- Add a word to an empty document.

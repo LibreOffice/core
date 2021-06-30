@@ -14,7 +14,7 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 #Bug 96698 - Data => Validity => Custom (like Excel) is missing
 class tdf96698(UITestCase):
     def test_tdf96698_validity_custom_formula(self):
-        with self.ui_test.create_doc_in_start_center_guarded("calc"):
+        with self.ui_test.create_doc_in_start_center("calc"):
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
 

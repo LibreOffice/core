@@ -17,7 +17,7 @@ class tdf138556( UITestCase ):
 
     def test_stock_chart13_insert_series( self ):
         #Start LibreOffice Writer
-        with self.ui_test.create_doc_in_start_center_guarded( "writer" ):
+        with self.ui_test.create_doc_in_start_center( "writer" ):
             xMainTop = self.xUITest.getTopFocusWindow()
 
             #Insert Chart

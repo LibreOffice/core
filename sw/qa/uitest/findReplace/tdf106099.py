@@ -13,7 +13,7 @@ from uitest.uihelper.common import get_state_as_dict
 
 class tdf106099(UITestCase):
     def test_tdf106099_find_format_underline(self):
-        with self.ui_test.create_doc_in_start_center_guarded("writer"):
+        with self.ui_test.create_doc_in_start_center("writer"):
             xWriterDoc = self.xUITest.getTopFocusWindow()
             #Find and replace
             self.ui_test.execute_modeless_dialog_through_command(".uno:SearchDialog")

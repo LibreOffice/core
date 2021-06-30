@@ -113,7 +113,7 @@ class WriterPageDialog(UITestCase):
 
     def test_area_tab(self):
 
-        with self.ui_test.create_doc_in_start_center_guarded("writer"):
+        with self.ui_test.create_doc_in_start_center("writer"):
 
             buttons = ['btnbitmap', 'btncolor', 'btngradient', 'btnhatch', 'btnpattern']
             for index, button in enumerate(buttons):
@@ -142,7 +142,7 @@ class WriterPageDialog(UITestCase):
             "C5 Envelope", "C4 Envelope", "#6¾ Envelope", "#7¾ (Monarch) Envelope",
             "#9 Envelope", "#10 Envelope", "#11 Envelope", "#12 Envelope", "Japanese Postcard"]
 
-        with self.ui_test.create_doc_in_start_center_guarded("writer"):
+        with self.ui_test.create_doc_in_start_center("writer"):
 
             for i in range(30):
                 with self.subTest(i=i):
@@ -158,7 +158,7 @@ class WriterPageDialog(UITestCase):
 
     def test_orientation(self):
 
-        with self.ui_test.create_doc_in_start_center_guarded("writer") as document:
+        with self.ui_test.create_doc_in_start_center("writer") as document:
 
             self.assertEqual(
                 document.StyleFamilies.PageStyles.Standard.IsLandscape, False)
@@ -185,7 +185,7 @@ class WriterPageDialog(UITestCase):
         lTextDirection = ['Left-to-right (horizontal)', 'Right-to-left (horizontal)',
             'Right-to-left (vertical)', 'Left-to-right (vertical)']
 
-        with self.ui_test.create_doc_in_start_center_guarded("writer") as document:
+        with self.ui_test.create_doc_in_start_center("writer") as document:
 
             for i in range(4):
                 with self.subTest(i=i):
@@ -204,7 +204,7 @@ class WriterPageDialog(UITestCase):
 
 
     def test_cancel_button_page_dialog(self):
-        with self.ui_test.create_doc_in_start_center_guarded("writer"):
+        with self.ui_test.create_doc_in_start_center("writer"):
 
             with self.ui_test.execute_dialog_through_command(".uno:PageDialog", close_button="cancel") as xDialog:
                 pass

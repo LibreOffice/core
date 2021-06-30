@@ -15,7 +15,7 @@ from uitest.uihelper.common import select_pos
 class specialCharacter(UITestCase):
 
     def test_special_character(self):
-        with self.ui_test.create_doc_in_start_center_guarded("writer") as document:
+        with self.ui_test.create_doc_in_start_center("writer") as document:
 
             xWriterDoc = self.xUITest.getTopFocusWindow()
 

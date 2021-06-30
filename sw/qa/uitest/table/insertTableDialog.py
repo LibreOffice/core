@@ -16,7 +16,7 @@ class WriterInsertTableDialog(UITestCase):
 
     def test_tdf104158(self):
 
-        with self.ui_test.create_doc_in_start_center_guarded("writer") as document:
+        with self.ui_test.create_doc_in_start_center("writer") as document:
 
             with self.ui_test.execute_dialog_through_command(".uno:InsertTable") as xDialog:
 
@@ -49,7 +49,7 @@ class WriterInsertTableDialog(UITestCase):
 
 
     def test_cancel_button_insert_table_dialog(self):
-        with self.ui_test.create_doc_in_start_center_guarded("writer") as document:
+        with self.ui_test.create_doc_in_start_center("writer") as document:
             with self.ui_test.execute_dialog_through_command(".uno:InsertTable", close_button="cancel"):
                 pass
 

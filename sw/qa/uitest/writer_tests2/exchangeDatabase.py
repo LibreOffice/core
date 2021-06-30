@@ -12,7 +12,7 @@ class exchangeDB(UITestCase):
 
     def test_exchange_database(self):
 
-        with self.ui_test.create_doc_in_start_center_guarded("writer"):
+        with self.ui_test.create_doc_in_start_center("writer"):
 
             with self.ui_test.execute_dialog_through_command(".uno:ChangeDatabaseField", close_button="close"):
                 pass
@@ -20,7 +20,7 @@ class exchangeDB(UITestCase):
 
     def test_exchange_database2(self):
 
-        with self.ui_test.create_doc_in_start_center_guarded("writer"):
+        with self.ui_test.create_doc_in_start_center("writer"):
 
             with self.ui_test.execute_dialog_through_command(".uno:ChangeDatabaseField") as xExDBDlg:
                 xTreelist = xExDBDlg.getChild("availablelb")

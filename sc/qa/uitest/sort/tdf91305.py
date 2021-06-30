@@ -18,7 +18,7 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 class tdf91305(UITestCase):
 
     def test_tdf91305_sort_text_cells_rows(self):
-        with self.ui_test.create_doc_in_start_center_guarded("calc") as document:
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
             #In column A enter texts
@@ -40,7 +40,7 @@ class tdf91305(UITestCase):
             self.assertEqual(get_cell_by_position(document, 0, 0, 2).getString(), "aa")
 
     def test_tdf91305_sort_text_cells_columns(self):
-        with self.ui_test.create_doc_in_start_center_guarded("calc") as document:
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
             #In column A enter texts
@@ -76,7 +76,7 @@ class tdf91305(UITestCase):
     def test_tdf91305_sort_text_cells_rows(self):
         #Selecting some empty cells and pressing SORT causes empty cells to move below.
         #No matter if you sort from A to Z or from Z to A.
-        with self.ui_test.create_doc_in_start_center_guarded("calc") as document:
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
             #In column A enter text
@@ -94,7 +94,7 @@ class tdf91305(UITestCase):
 
         #2) Placing digit to the header position and running set of sorts will make digit to be on 2nd or last position.
     def test_tdf91305_sort_text_cells_1st_row_digit(self):
-        with self.ui_test.create_doc_in_start_center_guarded("calc") as document:
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
             #In column A enter texts
