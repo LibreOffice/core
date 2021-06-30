@@ -3077,10 +3077,10 @@ private:
     }
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
-    static void signalDragLeave(GtkWidget*, GdkDragContext*, guint /*time*/, gpointer widget)
+    static void signalDragLeave(GtkWidget* pWidget, GdkDragContext*, guint /*time*/, gpointer widget)
     {
         GtkInstanceWidget* pThis = static_cast<GtkInstanceWidget*>(widget);
-        pThis->m_xDropTarget->signalDragLeave();
+        pThis->m_xDropTarget->signalDragLeave(pWidget);
         if (pThis->m_bDraggedOver)
         {
             pThis->m_bDraggedOver = false;

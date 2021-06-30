@@ -176,7 +176,7 @@ public:
     gboolean signalDragDrop(GtkDropTargetAsync *context, GdkDrop *drop, double x, double y);
 #endif
 
-    void signalDragLeave();
+    void signalDragLeave(GtkWidget* pWidget);
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
     void signalDragDropReceived(GtkWidget* pWidget, GdkDragContext* context, gint x, gint y, GtkSelectionData* data, guint ttype, guint time);

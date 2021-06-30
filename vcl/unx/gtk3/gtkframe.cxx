@@ -4643,10 +4643,12 @@ GdkDragAction GtkInstDropTarget::signalDragMotion(GtkDropTargetAsync *context, G
 {
     if (!m_bInDrag)
     {
-        GtkWidget* pHighlightWidget = GTK_WIDGET(m_pFrame->getFixedContainer());
 #if !GTK_CHECK_VERSION(4,0,0)
+        GtkWidget* pHighlightWidget = m_pFrame ? GTK_WIDGET(m_pFrame->getFixedContainer()) : pWidget;
         gtk_drag_highlight(pHighlightWidget);
 #else
+        GtkWidget* pHighlightWidget = m_pFrame ? GTK_WIDGET(m_pFrame->getFixedContainer()) :
+                gtk_event_controller_get_widget(GTK_EVENT_CONTROLLER(context));
         gtk_widget_set_state_flags(pHighlightWidget, GTK_STATE_FLAG_DROP_ACTIVE, false);
 #endif
     }
@@ -4744,20 +4746,20 @@ GdkDragAction GtkInstDropTarget::signalDragMotion(GtkDropTargetAsync *context, G
 }
 
 #if GTK_CHECK_VERSION(4,0,0)
-void GtkSalFrame::signalDragLeave(GtkDropTargetAsync* /*dest*/, GdkDrop* /*drop*/, gpointer frame)
+void GtkSalFrame::signalDragLeave(GtkDropTargetAsync* pDest, GdkDrop* /*drop*/, gpointer frame)
 {
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
     if (!pThis->m_pDropTarget)
         return;
-    pThis->m_pDropTarget->signalDragLeave();
+    pThis->m_pDropTarget->signalDragLeave(gtk_event_controller_get_widget(GTK_EVENT_CONTROLLER(pDest)));
 }
 #else
-void GtkSalFrame::signalDragLeave(GtkWidget*, GdkDragContext* /*context*/, guint /*time*/, gpointer frame)
+void GtkSalFrame::signalDragLeave(GtkWidget* pWidget, GdkDragContext* /*context*/, guint /*time*/, gpointer frame)
 {
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
     if (!pThis->m_pDropTarget)
         return;
-    pThis->m_pDropTarget->signalDragLeave();
+    pThis->m_pDropTarget->signalDragLeave(pWidget);
 }
 #endif
 
@@ -4770,11 +4772,11 @@ static gboolean lcl_deferred_dragExit(gpointer user_data)
     return false;
 }
 
-void GtkInstDropTarget::signalDragLeave()
+void GtkInstDropTarget::signalDragLeave(GtkWidget *pWidget)
 {
     m_bInDrag = false;
 
-    GtkWidget* pHighlightWidget = GTK_WIDGET(m_pFrame->getFixedContainer());
+    GtkWidget* pHighlightWidget = m_pFrame ? GTK_WIDGET(m_pFrame->getFixedContainer()) : pWidget;
 #if !GTK_CHECK_VERSION(4,0,0)
     gtk_drag_unhighlight(pHighlightWidget);
 #else
