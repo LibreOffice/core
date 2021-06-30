@@ -1222,6 +1222,8 @@ public:
                         MetaLineColorAction( const Color& rColor, bool bSet );
 
     const Color&        GetColor() const { return maColor; }
+    void                SetColor(Color & rColor) { maColor = rColor; }
+    void                SetSetting(bool rSet) { mbSet = rSet; }
     bool                IsSetting() const { return mbSet; }
 };
 
