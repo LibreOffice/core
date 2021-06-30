@@ -78,6 +78,7 @@ public class TestHelper {
     public void ReadDirectlyFromTempFile( byte [][] pBytes, int nBytes,  XSimpleFileAccess xSFA, String sTempFileURL )
          throws java.lang.Exception
     {
+        Message ( "Attempting to read directly from " + sTempFileURL );
         XInputStream xInTemp = xSFA.openFileRead( sTempFileURL );
         if ( xInTemp == null )
             throw new java.lang.Exception("Cannot create input stream from URL.");
