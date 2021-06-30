@@ -15,103 +15,98 @@ class ConfigureDialog(UITestCase):
 
     def test_open_ConfigureDialog_writer(self):
 
-        self.ui_test.create_doc_in_start_center("writer")
-        with self.ui_test.execute_dialog_through_command(".uno:ConfigureDialog", close_button="cancel"):
-            pass
+        with self.ui_test.create_doc_in_start_center_guarded("writer"):
+            with self.ui_test.execute_dialog_through_command(".uno:ConfigureDialog", close_button="cancel"):
+                pass
 
-        self.ui_test.close_doc()
 
     def test_search_filter(self):
-        self.ui_test.create_doc_in_start_center("writer")
-        with self.ui_test.execute_dialog_through_command(".uno:ConfigureDialog", close_button="cancel") as xDialog:
+        with self.ui_test.create_doc_in_start_center_guarded("writer"):
+            with self.ui_test.execute_dialog_through_command(".uno:ConfigureDialog", close_button="cancel") as xDialog:
 
-            xfunc = xDialog.getChild("functions")
-            xSearch = xDialog.getChild("searchEntry")
+                xfunc = xDialog.getChild("functions")
+                xSearch = xDialog.getChild("searchEntry")
 
-            initialEntryCount = get_state_as_dict(xfunc)["Children"]
-            self.assertTrue(initialEntryCount != 0)
+                initialEntryCount = get_state_as_dict(xfunc)["Children"]
+                self.assertTrue(initialEntryCount != 0)
 
-            xSearch.executeAction("TYPE", mkPropertyValues({"TEXT":"format"}))
+                xSearch.executeAction("TYPE", mkPropertyValues({"TEXT":"format"}))
 
-            # Wait for the search/filter op to be completed
-            timeout = time.time() + 1
-            while time.time() < timeout:
-                filteredEntryCount = get_state_as_dict(xfunc)["Children"]
-                if filteredEntryCount != initialEntryCount:
-                    break
-                time.sleep(0.1)
+                # Wait for the search/filter op to be completed
+                timeout = time.time() + 1
+                while time.time() < timeout:
+                    filteredEntryCount = get_state_as_dict(xfunc)["Children"]
+                    if filteredEntryCount != initialEntryCount:
+                        break
+                    time.sleep(0.1)
 
-            self.assertTrue(filteredEntryCount < initialEntryCount)
+                self.assertTrue(filteredEntryCount < initialEntryCount)
 
-            xSearch.executeAction("CLEAR", tuple())
+                xSearch.executeAction("CLEAR", tuple())
 
-            # Wait for the search/filter op to be completed
-            timeout = time.time() + 1
-            while time.time() < timeout:
-                finalEntryCount = get_state_as_dict(xfunc)["Children"]
-                if finalEntryCount != filteredEntryCount:
-                    break
-                time.sleep(0.1)
+                # Wait for the search/filter op to be completed
+                timeout = time.time() + 1
+                while time.time() < timeout:
+                    finalEntryCount = get_state_as_dict(xfunc)["Children"]
+                    if finalEntryCount != filteredEntryCount:
+                        break
+                    time.sleep(0.1)
 
-            self.assertEqual(initialEntryCount, finalEntryCount)
+                self.assertEqual(initialEntryCount, finalEntryCount)
 
 
 
-        self.ui_test.close_doc()
 
     def test_category_listbox(self):
-        self.ui_test.create_doc_in_start_center("writer")
-        with self.ui_test.execute_dialog_through_command(".uno:ConfigureDialog", close_button="cancel") as xDialog:
+        with self.ui_test.create_doc_in_start_center_guarded("writer"):
+            with self.ui_test.execute_dialog_through_command(".uno:ConfigureDialog", close_button="cancel") as xDialog:
 
-            xFunc = xDialog.getChild("functions")
-            xCategory = xDialog.getChild("commandcategorylist")
+                xFunc = xDialog.getChild("functions")
+                xCategory = xDialog.getChild("commandcategorylist")
 
-            initialEntryCount = get_state_as_dict(xFunc)["Children"]
-            self.assertTrue(initialEntryCount != 0)
+                initialEntryCount = get_state_as_dict(xFunc)["Children"]
+                self.assertTrue(initialEntryCount != 0)
 
-            select_pos(xCategory, "1")
-            filteredEntryCount = get_state_as_dict(xFunc)["Children"]
-            self.assertTrue(filteredEntryCount < initialEntryCount)
+                select_pos(xCategory, "1")
+                filteredEntryCount = get_state_as_dict(xFunc)["Children"]
+                self.assertTrue(filteredEntryCount < initialEntryCount)
 
-            select_pos(xCategory, "0")
-            finalEntryCount = get_state_as_dict(xFunc)["Children"]
-            self.assertEqual(initialEntryCount, finalEntryCount)
+                select_pos(xCategory, "0")
+                finalEntryCount = get_state_as_dict(xFunc)["Children"]
+                self.assertEqual(initialEntryCount, finalEntryCount)
 
 
-        self.ui_test.close_doc()
 
     def test_tdf133862(self):
-        self.ui_test.create_doc_in_start_center("writer")
+        with self.ui_test.create_doc_in_start_center_guarded("writer"):
 
-        self.xUITest.executeCommand(".uno:InsertObjectStarMath")
+            self.xUITest.executeCommand(".uno:InsertObjectStarMath")
 
-        # Without the fix in place, calling customize dialog after inserting
-        # a formula object would crash
-        with self.ui_test.execute_dialog_through_command(".uno:ConfigureDialog", close_button="cancel"):
-            pass
+            # Without the fix in place, calling customize dialog after inserting
+            # a formula object would crash
+            with self.ui_test.execute_dialog_through_command(".uno:ConfigureDialog", close_button="cancel"):
+                pass
 
-        self.ui_test.close_doc()
 
     def test_gear_button_menu(self):
-        self.ui_test.create_doc_in_start_center("writer")
+        with self.ui_test.create_doc_in_start_center_guarded("writer"):
 
-        with self.ui_test.execute_dialog_through_command(".uno:ConfigureDialog", close_button="cancel") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:ConfigureDialog", close_button="cancel") as xDialog:
 
-            # Open the New Menu Dialog with id = 0
-            xmenugearbtn=xDialog.getChild("menugearbtn")
-            def show_dialog0():
-                xmenugearbtn.executeAction("OPENFROMLIST", mkPropertyValues({"POS": "0" }))
-            with self.ui_test.execute_blocking_action( action=show_dialog0, close_button="cancel"):
-                pass
+                # Open the New Menu Dialog with id = 0
+                xmenugearbtn=xDialog.getChild("menugearbtn")
+                def show_dialog0():
+                    xmenugearbtn.executeAction("OPENFROMLIST", mkPropertyValues({"POS": "0" }))
+                with self.ui_test.execute_blocking_action( action=show_dialog0, close_button="cancel"):
+                    pass
 
-            # Open the Rename Menu Dialog with id = 2
-            xmenugearbtn=xDialog.getChild("menugearbtn")
-            def show_dialog2():
-                xmenugearbtn.executeAction("OPENFROMLIST", mkPropertyValues({"POS": "2"}))
-            with self.ui_test.execute_blocking_action( action=show_dialog2, close_button="cancel"):
-                pass
+                # Open the Rename Menu Dialog with id = 2
+                xmenugearbtn=xDialog.getChild("menugearbtn")
+                def show_dialog2():
+                    xmenugearbtn.executeAction("OPENFROMLIST", mkPropertyValues({"POS": "2"}))
+                with self.ui_test.execute_blocking_action( action=show_dialog2, close_button="cancel"):
+                    pass
 
 
-        self.ui_test.close_doc()
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
