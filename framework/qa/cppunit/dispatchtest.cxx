@@ -15,6 +15,7 @@
 #include <com/sun/star/frame/DispatchHelper.hpp>
 #include <com/sun/star/frame/XDispatchProviderInterceptor.hpp>
 #include <com/sun/star/frame/XInterceptorInfo.hpp>
+#include <com/sun/star/util/URLTransformer.hpp>
 
 #include <comphelper/processfactory.hxx>
 #include <rtl/ref.hxx>
@@ -200,6 +201,37 @@ CPPUNIT_TEST_FIXTURE(DispatchTest, testInterception)
     CPPUNIT_ASSERT_EQUAL(1, pInterceptor->getExpected());
     // This was 1: MyInterceptor::queryDispatch() was called for .uno:Italic.
     CPPUNIT_ASSERT_EQUAL(0, pInterceptor->getUnexpected());
+}
+
+constexpr OUStringLiteral DATA_DIRECTORY = u"/framework/qa/cppunit/data/";
+
+CPPUNIT_TEST_FIXTURE(DispatchTest, testSfxOfficeDispatchDispose)
+{
+    // this test doesn't work with a new document because of aURL.Main check in SfxBaseController::dispatch()
+    mxComponent = loadFromDesktop(m_directories.getURLFromSrc(DATA_DIRECTORY) + "empty.fodp",
+                                  "com.sun.star.presentation.PresentationDocument");
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xModel.is());
+    uno::Reference<frame::XController> xController(xModel->getCurrentController());
+    CPPUNIT_ASSERT(xController.is());
+    uno::Reference<frame::XDispatchProvider> xFrame(xController->getFrame(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xFrame.is());
+
+    uno::Reference<util::XURLTransformer> xParser(util::URLTransformer::create(mxComponentContext));
+    util::URL url;
+    url.Complete = xModel->getURL() + "#dummy";
+    xParser->parseStrict(url);
+
+    uno::Reference<frame::XDispatch> xDisp(xFrame->queryDispatch(url, "", 0));
+    CPPUNIT_ASSERT(xDisp.is());
+
+    mxComponent->dispose();
+
+    util::URL urlSlot;
+    urlSlot.Complete = "slot:5598";
+    xParser->parseStrict(urlSlot);
+    // crashed with UAF
+    xDisp->dispatch(urlSlot, {});
 }
 }
 

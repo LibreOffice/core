@@ -322,6 +322,27 @@ SfxDispatchController_Impl::SfxDispatchController_Impl(
         BindInternal_Impl( nSlot, pBindings );
         pBindings->LEAVEREGISTRATIONS();
     }
+    assert(pDispatcher);
+    assert(SfxApplication::Get()->GetAppDispatcher_Impl() == pDispatcher
+        || pDispatcher->GetFrame() != nullptr);
+    if (pDispatcher->GetFrame())
+    {
+        StartListening(*pDispatcher->GetFrame());
+    }
+    else
+    {
+        StartListening(*SfxApplication::Get());
+    }
+}
+
+void SfxDispatchController_Impl::Notify(SfxBroadcaster& rBC, SfxHint const& rHint)
+{
+    if (rHint.GetId() == SfxHintId::Dying)
+    {   // both pBindings and pDispatcher are dead if SfxViewFrame is dead
+        pBindings = nullptr;
+        pDispatcher = nullptr;
+        EndListening(rBC);
+    }
 }
 
 SfxDispatchController_Impl::~SfxDispatchController_Impl()
