@@ -70,6 +70,24 @@
       "revId": "ff641dc9e4d2aff1d1cbe4425cd9c03a2edc847e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "721a9fbe_54e5df66",
+        "filename": "uitest/uitest/test.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-30T07:58:29Z",
+      "side": 1,
+      "message": "Ah, so not None, but \"\"! I see. Thanks!",
+      "parentUuid": "cd03693e_36070580",
+      "revId": "ff641dc9e4d2aff1d1cbe4425cd9c03a2edc847e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
