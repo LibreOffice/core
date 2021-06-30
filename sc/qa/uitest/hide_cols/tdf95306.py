@@ -20,7 +20,7 @@ def get_column_hidden(doc, index):
 class HideDisjointColumns(UITestCase):
 
     def test_hide_columns(self):
-        with self.ui_test.create_doc_in_start_center_guarded("calc") as doc:
+        with self.ui_test.create_doc_in_start_center("calc") as doc:
             xTopWindow = self.xUITest.getTopFocusWindow()
 
             gridwin = xTopWindow.getChild("grid_window")

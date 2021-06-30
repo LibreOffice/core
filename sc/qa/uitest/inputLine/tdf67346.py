@@ -18,7 +18,7 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 class tdf67346(UITestCase):
 
     def test_tdf67346_undo_paste_text_input_line(self):
-        with self.ui_test.create_doc_in_start_center_guarded("calc") as document:
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
             # type 'Apple' in A1

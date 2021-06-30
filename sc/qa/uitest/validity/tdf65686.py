@@ -14,7 +14,7 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 #Bug 65686 - EDITING Data > Validity broken (for list entries at least)
 class tdf65686(UITestCase):
     def test_tdf65686_validity_list(self):
-        with self.ui_test.create_doc_in_start_center_guarded("calc"):
+        with self.ui_test.create_doc_in_start_center("calc"):
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))

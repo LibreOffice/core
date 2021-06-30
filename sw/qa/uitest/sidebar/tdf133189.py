@@ -11,7 +11,7 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 
 class tdf133189(UITestCase):
     def test_tdf133189(self):
-        with self.ui_test.create_doc_in_start_center_guarded("writer"):
+        with self.ui_test.create_doc_in_start_center("writer"):
 
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")

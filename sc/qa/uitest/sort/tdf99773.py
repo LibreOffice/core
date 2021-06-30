@@ -17,7 +17,7 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 
 class tdf99773(UITestCase):
     def test_tdf99773_natural_sorting_space(self):
-        with self.ui_test.create_doc_in_start_center_guarded("calc") as document:
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
             #enter data

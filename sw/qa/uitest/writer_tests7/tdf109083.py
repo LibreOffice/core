@@ -12,7 +12,7 @@ from uitest.uihelper.common import select_pos
 #Bug 109083 - Updating table style: changes didn't propagate to other tables when selection was over two columns at the moment of updating
 class tdf109083(UITestCase):
     def test_tdf109083(self):
-        with self.ui_test.create_doc_in_start_center_guarded("writer"):
+        with self.ui_test.create_doc_in_start_center("writer"):
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")
             #generate two 2x2 tables with the same autoformat table style (Default Table Style)

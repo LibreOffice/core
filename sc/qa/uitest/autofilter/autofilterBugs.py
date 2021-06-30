@@ -23,7 +23,7 @@ class autofilter(UITestCase):
             self.assertEqual(calc_doc.getPropertyValue("UnnamedDatabaseRanges").getByTable(0).AutoFilter, True)
 
    def test_tdf94055(self):
-        with self.ui_test.create_doc_in_start_center_guarded("calc") as document:
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             calcDoc = self.xUITest.getTopFocusWindow()
             xGridWindow = calcDoc.getChild("grid_window")
             enter_text_to_cell(xGridWindow, "A1", "X")

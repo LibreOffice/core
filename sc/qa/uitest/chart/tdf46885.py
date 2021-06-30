@@ -15,7 +15,7 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 
 class tdf46885(UITestCase):
     def test_tdf46885_crash_chart_no_cell_selected_nextButton(self):
-        with self.ui_test.create_doc_in_start_center_guarded("calc") as document:
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
             enter_text_to_cell(gridwin, "A10", "col1")
@@ -29,7 +29,7 @@ class tdf46885(UITestCase):
 
 
     def test_tdf46885_crash_chart_multiple_empty_cells_selected(self):
-        with self.ui_test.create_doc_in_start_center_guarded("calc") as document:
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
             enter_text_to_cell(gridwin, "A10", "col1")

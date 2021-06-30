@@ -11,7 +11,7 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 
 class hideShowSheet(UITestCase):
     def test_hide_show_sheet(self):
-        with self.ui_test.create_doc_in_start_center_guarded("calc"):
+        with self.ui_test.create_doc_in_start_center("calc"):
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
             #insert sheet

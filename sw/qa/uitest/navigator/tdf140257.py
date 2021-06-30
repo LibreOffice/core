@@ -24,7 +24,7 @@ class Tdf140257(UITestCase):
 
 
   def test_tdf140257(self):
-    with self.ui_test.create_doc_in_start_center_guarded("writer") as document:
+    with self.ui_test.create_doc_in_start_center("writer") as document:
         xMainWindow = self.xUITest.getTopFocusWindow()
         xWriterEdit = xMainWindow.getChild("writer_edit")
 

@@ -12,7 +12,7 @@ from uitest.uihelper.common import change_measurement_unit
 class tdf128431(UITestCase):
 
     def test_tdf128431_pageFormat_sync_padding(self):
-        with self.ui_test.create_doc_in_start_center_guarded("writer"):
+        with self.ui_test.create_doc_in_start_center("writer"):
 
             change_measurement_unit(self, "Centimeter")
 

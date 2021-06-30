@@ -10,7 +10,7 @@ from uitest.uihelper.common import select_pos
 class tdf131715(UITestCase):
 
     def test_tdf131715(self):
-        with self.ui_test.create_doc_in_start_center_guarded("calc"):
+        with self.ui_test.create_doc_in_start_center("calc"):
             with self.ui_test.execute_dialog_through_command(".uno:InsertObjectChart", close_button="finish") as xChartDlg:
 
                 xWizard = xChartDlg.getChild('Wizard')

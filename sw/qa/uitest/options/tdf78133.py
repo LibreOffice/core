@@ -14,7 +14,7 @@ class tdf78133(UITestCase):
 
     def test_tdf78133_options_app_colors(self):
 
-        with self.ui_test.create_doc_in_start_center_guarded("writer") as document:
+        with self.ui_test.create_doc_in_start_center("writer") as document:
             xWriterDoc = self.xUITest.getTopFocusWindow()
             #New text document
             #open option, go to App colors

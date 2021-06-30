@@ -14,7 +14,7 @@ class ComboBoxTest(UITestCase):
 
     def test_select_entry_pos(self):
 
-        with self.ui_test.create_doc_in_start_center_guarded("calc"):
+        with self.ui_test.create_doc_in_start_center("calc"):
 
             self.ui_test.execute_modeless_dialog_through_command(".uno:AddName")
             xAddNameDlg = self.xUITest.getTopFocusWindow()

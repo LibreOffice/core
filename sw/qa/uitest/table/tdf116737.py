@@ -13,7 +13,7 @@ from uitest.uihelper.common import select_pos
 class tdf116737(UITestCase):
     def test_tdf116737_select_table_style(self):
 
-        with self.ui_test.create_doc_in_start_center_guarded("writer"):
+        with self.ui_test.create_doc_in_start_center("writer"):
             xWriterDoc = self.xUITest.getTopFocusWindow()
 
             #Insert => Insert Table / It's not possible to select a table style

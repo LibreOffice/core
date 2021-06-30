@@ -11,7 +11,7 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 
 class tdf45020(UITestCase):
     def test_tdf45020_hide_rows_select(self):
-        with self.ui_test.create_doc_in_start_center_guarded("calc"):
+        with self.ui_test.create_doc_in_start_center("calc"):
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
             #in cell A1-A4: apple pear melon mango

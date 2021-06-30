@@ -13,7 +13,7 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 
 class tdf79983(UITestCase):
     def test_tdf79983_sort_list_case_sensitive(self):
-        with self.ui_test.create_doc_in_start_center_guarded("calc") as document:
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
 

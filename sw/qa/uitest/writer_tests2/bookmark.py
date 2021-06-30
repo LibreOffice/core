@@ -15,7 +15,7 @@ class bookmarkDialog(UITestCase):
 
     def test_bookmark_dialog(self):
 
-        with self.ui_test.create_doc_in_start_center_guarded("writer"):
+        with self.ui_test.create_doc_in_start_center("writer"):
 
             with self.ui_test.execute_dialog_through_command(".uno:InsertBookmark", close_button="insert"):
                 pass
@@ -45,7 +45,7 @@ class bookmarkDialog(UITestCase):
 
 
     def test_bookmark_dialog_rename(self):
-        with self.ui_test.create_doc_in_start_center_guarded("writer"):
+        with self.ui_test.create_doc_in_start_center("writer"):
 
             with self.ui_test.execute_dialog_through_command(".uno:InsertBookmark", close_button="insert"):
                 pass
@@ -68,7 +68,7 @@ class bookmarkDialog(UITestCase):
 
 
     def test_bookmark_dialog_goto(self):
-        with self.ui_test.create_doc_in_start_center_guarded("writer"):
+        with self.ui_test.create_doc_in_start_center("writer"):
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")
 

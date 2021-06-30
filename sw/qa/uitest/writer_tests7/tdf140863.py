@@ -12,7 +12,7 @@ class tdf140863(UITestCase):
 
     def test_tdf140863(self):
 
-        with self.ui_test.create_doc_in_start_center_guarded("writer") as document:
+        with self.ui_test.create_doc_in_start_center("writer") as document:
 
             # Insert one section
             with self.ui_test.execute_dialog_through_command(".uno:InsertSection"):

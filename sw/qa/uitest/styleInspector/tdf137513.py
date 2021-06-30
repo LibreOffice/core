@@ -9,7 +9,7 @@ from uitest.uihelper.common import get_state_as_dict, type_text
 class tdf137513(UITestCase):
 
    def test_tdf137513(self):
-        with self.ui_test.create_doc_in_start_center_guarded("writer"):
+        with self.ui_test.create_doc_in_start_center("writer"):
 
             self.xUITest.executeCommand(".uno:InsertTable?Columns:short=2&Rows:short=2")
 

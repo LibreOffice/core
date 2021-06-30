@@ -14,7 +14,7 @@ class SpinFieldTest(UITestCase):
 
     def test_up(self):
 
-        with self.ui_test.create_doc_in_start_center_guarded("calc"):
+        with self.ui_test.create_doc_in_start_center("calc"):
 
             with self.ui_test.execute_dialog_through_command(".uno:FormatCellDialog") as xCellsDlg:
 
@@ -28,7 +28,7 @@ class SpinFieldTest(UITestCase):
 
     def test_down(self):
 
-        with self.ui_test.create_doc_in_start_center_guarded("calc"):
+        with self.ui_test.create_doc_in_start_center("calc"):
 
             with self.ui_test.execute_dialog_through_command(".uno:FormatCellDialog") as xCellsDlg:
 
@@ -48,7 +48,7 @@ class SpinFieldTest(UITestCase):
 
     def test_text(self):
 
-        with self.ui_test.create_doc_in_start_center_guarded("calc"):
+        with self.ui_test.create_doc_in_start_center("calc"):
 
             with self.ui_test.execute_dialog_through_command(".uno:FormatCellDialog") as xCellsDlg:
         

@@ -9,7 +9,7 @@ from uitest.framework import UITestCase
 
 class titlePage(UITestCase):
     def test_title_page(self):
-        with self.ui_test.create_doc_in_start_center_guarded("writer") as document:
+        with self.ui_test.create_doc_in_start_center("writer") as document:
             xWriterDoc = self.xUITest.getTopFocusWindow()
             #dialog Title Page
             with self.ui_test.execute_dialog_through_command(".uno:TitlePageDialog") as xDialog:

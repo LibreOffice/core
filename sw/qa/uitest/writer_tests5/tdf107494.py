@@ -12,7 +12,7 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 
 class tdf107494(UITestCase):
     def test_tdf107494_delete_header_with_image(self):
-        with self.ui_test.create_doc_in_start_center_guarded("writer") as document:
+        with self.ui_test.create_doc_in_start_center("writer") as document:
             xWriterDoc = self.xUITest.getTopFocusWindow()
             #insert header
             self.assertEqual(document.StyleFamilies.PageStyles.Standard.HeaderIsOn, False)
@@ -45,7 +45,7 @@ class tdf107494(UITestCase):
 
 
     def test_tdf107494_delete_footer_with_image(self):
-        with self.ui_test.create_doc_in_start_center_guarded("writer") as document:
+        with self.ui_test.create_doc_in_start_center("writer") as document:
             xWriterDoc = self.xUITest.getTopFocusWindow()
             #insert footer
             self.assertEqual(document.StyleFamilies.PageStyles.Standard.FooterIsOn, False)

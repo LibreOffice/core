@@ -105,7 +105,7 @@ class ImpressBackgrounds(UITestCase):
 
     def test_background_dialog(self):
 
-        with self.ui_test.create_doc_in_start_center_guarded("impress"):
+        with self.ui_test.create_doc_in_start_center("impress"):
 
             xTemplateDlg = self.xUITest.getTopFocusWindow()
             xCancelBtn = xTemplateDlg.getChild("close")

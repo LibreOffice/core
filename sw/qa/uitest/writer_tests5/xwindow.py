@@ -76,7 +76,7 @@ class XWindow(UITestCase):
     def test_listeners(self):
         global mouseListenerCount
 
-        with self.ui_test.create_doc_in_start_center_guarded("writer") as xDoc:
+        with self.ui_test.create_doc_in_start_center("writer") as xDoc:
 
             # create new mouse listener
             xFrame = xDoc.getCurrentController().getFrame()

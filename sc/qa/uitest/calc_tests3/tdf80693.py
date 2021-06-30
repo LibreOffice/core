@@ -12,7 +12,7 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 #Bug 80693 - EDITING: fill cell with random numbers with min = max
 class tdf80693(UITestCase):
     def test_tdf80693_random_numbers_min_max(self):
-        with self.ui_test.create_doc_in_start_center_guarded("calc") as document:
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:A2"}))

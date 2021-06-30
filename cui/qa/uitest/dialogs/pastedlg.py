@@ -14,7 +14,7 @@ class Test(UITestCase):
 
     def testGetFormat(self):
         # Copy a string in Impress.
-        with self.ui_test.create_doc_in_start_center_guarded("impress"):
+        with self.ui_test.create_doc_in_start_center("impress"):
             template = self.xUITest.getTopFocusWindow()
             self.ui_test.close_dialog_through_button(template.getChild("close"))
             doc = self.xUITest.getTopFocusWindow()

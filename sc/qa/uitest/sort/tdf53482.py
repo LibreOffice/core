@@ -44,7 +44,7 @@ class tdf53482(UITestCase):
             self.assertEqual(get_cell_by_position(calc_doc, 0, 6, 123).getString(), "13")
 
     def test_tdf53482_Range_contains_column_headings(self):
-        with self.ui_test.create_doc_in_start_center_guarded("calc") as document:
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
             #In column A enter: Misc; s; d; f; g

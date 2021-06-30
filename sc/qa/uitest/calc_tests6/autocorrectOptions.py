@@ -12,7 +12,7 @@ from uitest.uihelper.common import select_pos
 class autocorrectOptions(UITestCase):
 
    def test_autocorrect_options_calc(self):
-        with self.ui_test.create_doc_in_start_center_guarded("calc"):
+        with self.ui_test.create_doc_in_start_center("calc"):
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
 

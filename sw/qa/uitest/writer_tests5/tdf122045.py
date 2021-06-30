@@ -12,7 +12,7 @@ class tdf122045(UITestCase):
 
     def test_tdf122045(self):
 
-        with self.ui_test.create_doc_in_start_center_guarded("writer") as document:
+        with self.ui_test.create_doc_in_start_center("writer") as document:
             xWriterDoc = self.xUITest.getTopFocusWindow()
 
             with self.ui_test.execute_dialog_through_command(".uno:PageDialog", close_button="cancel") as xDialog:

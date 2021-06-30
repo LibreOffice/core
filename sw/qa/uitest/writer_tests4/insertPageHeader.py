@@ -34,7 +34,7 @@ class WriterInsertPageHeader(UITestCase):
             document.StyleFamilies.PageStyles.Standard.HeaderIsOn, False)
 
     def test_header(self):
-        with self.ui_test.create_doc_in_start_center_guarded("writer") as document:
+        with self.ui_test.create_doc_in_start_center("writer") as document:
 
             self.insert_header()
 
@@ -42,7 +42,7 @@ class WriterInsertPageHeader(UITestCase):
 
 
     def test_tdf107427(self):
-        with self.ui_test.create_doc_in_start_center_guarded("writer") as document:
+        with self.ui_test.create_doc_in_start_center("writer") as document:
 
             self.insert_header()
 

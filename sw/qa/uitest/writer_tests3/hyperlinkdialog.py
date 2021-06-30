@@ -18,7 +18,7 @@ class HyperlinkDialog(UITestCase):
 
     def test_hyperlink_dialog_vertical_tab(self):
 
-        with self.ui_test.create_doc_in_start_center_guarded("writer"):
+        with self.ui_test.create_doc_in_start_center("writer"):
             MainWindow = self.xUITest.getTopFocusWindow()
 
             with self.ui_test.execute_dialog_through_command(".uno:HyperlinkDialog", close_button="cancel") as xDialog:
@@ -47,7 +47,7 @@ class HyperlinkDialog(UITestCase):
 
     def test_insert_hyperlink(self):
 
-        with self.ui_test.create_doc_in_start_center_guarded("writer"):
+        with self.ui_test.create_doc_in_start_center("writer"):
             xMainWindow = self.xUITest.getTopFocusWindow()
 
             with self.ui_test.execute_dialog_through_command(".uno:HyperlinkDialog") as xDialog:
@@ -87,7 +87,7 @@ class HyperlinkDialog(UITestCase):
         if re.compile(r'XMLHELP\b').search(os.getenv('BUILD_TYPE')):
             return
 
-        with self.ui_test.create_doc_in_start_center_guarded("writer"):
+        with self.ui_test.create_doc_in_start_center("writer"):
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")
 

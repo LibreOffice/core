@@ -14,7 +14,7 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 class formatCell(UITestCase):
     def test_format_cell_numbers_tab(self):
         #numberingformatpage.ui
-        with self.ui_test.create_doc_in_start_center_guarded("calc"):
+        with self.ui_test.create_doc_in_start_center("calc"):
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
             #select cell A1
@@ -67,7 +67,7 @@ class formatCell(UITestCase):
 
     def test_format_cell_font_tab(self):
         #numberingformatpage.ui
-        with self.ui_test.create_doc_in_start_center_guarded("calc"):
+        with self.ui_test.create_doc_in_start_center("calc"):
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
             #select cell A1
@@ -117,7 +117,7 @@ class formatCell(UITestCase):
 
     def test_format_cell_font_effects_tab(self):
         #numberingformatpage.ui
-        with self.ui_test.create_doc_in_start_center_guarded("calc"):
+        with self.ui_test.create_doc_in_start_center("calc"):
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
             #select cell A1
@@ -164,7 +164,7 @@ class formatCell(UITestCase):
 
 
     def test_format_cell_alignment_tab(self):
-        with self.ui_test.create_doc_in_start_center_guarded("calc"):
+        with self.ui_test.create_doc_in_start_center("calc"):
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
             #select cell A1
@@ -213,7 +213,7 @@ class formatCell(UITestCase):
 
 
     def test_format_cell_asian_typography_tab(self):
-        with self.ui_test.create_doc_in_start_center_guarded("calc"):
+        with self.ui_test.create_doc_in_start_center("calc"):
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
             #select cell A1
@@ -236,7 +236,7 @@ class formatCell(UITestCase):
 
     def test_minimal_border_width(self):
         #borderpage.ui, tdf#137790
-        with self.ui_test.create_doc_in_start_center_guarded("calc"):
+        with self.ui_test.create_doc_in_start_center("calc"):
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
 
@@ -284,7 +284,7 @@ class formatCell(UITestCase):
 
     def test_format_cell_borders_tab(self):
         #borderpage.ui
-        with self.ui_test.create_doc_in_start_center_guarded("calc"):
+        with self.ui_test.create_doc_in_start_center("calc"):
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
 
@@ -343,7 +343,7 @@ class formatCell(UITestCase):
 
     def test_format_cell_cell_protection_tab(self):
         #cellprotectionpage.ui
-        with self.ui_test.create_doc_in_start_center_guarded("calc"):
+        with self.ui_test.create_doc_in_start_center("calc"):
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
             #select cell A1
@@ -377,7 +377,7 @@ class formatCell(UITestCase):
 
 
     def test_tdf130762(self):
-        with self.ui_test.create_doc_in_start_center_guarded("calc"):
+        with self.ui_test.create_doc_in_start_center("calc"):
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
             #select cell A1

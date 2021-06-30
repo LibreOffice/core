@@ -15,7 +15,7 @@ class tdf137459(UITestCase):
 
     def test_tdf137459(self):
 
-        with self.ui_test.create_doc_in_start_center_guarded("writer"):
+        with self.ui_test.create_doc_in_start_center("writer"):
 
             # adding new Comment
             self.xUITest.executeCommand(".uno:InsertAnnotation")

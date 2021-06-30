@@ -28,7 +28,7 @@ class LibreLogoTest(UITestCase):
         self.xUITest.executeCommand(self.LIBRELOGO_PATH %command)
 
    def test_librelogo(self):
-        with self.ui_test.create_doc_in_start_center_guarded("writer") as document:
+        with self.ui_test.create_doc_in_start_center("writer") as document:
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")
             # to check the state of LibreLogo program execution

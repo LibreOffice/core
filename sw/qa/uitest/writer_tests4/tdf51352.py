@@ -12,7 +12,7 @@ class tdf51352(UITestCase):
 
     def test_convert_nested_table_to_text_tdf51352(self):
 
-        with self.ui_test.create_doc_in_start_center_guarded("writer") as document:
+        with self.ui_test.create_doc_in_start_center("writer") as document:
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")
             #1. New a text document

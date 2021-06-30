@@ -40,7 +40,7 @@ class CalcTrackedChanges(UITestCase):
             xCancBtn.executeAction("CLICK", tuple())
 
     def test_tdf66263_Protect_Records(self):
-        with self.ui_test.create_doc_in_start_center_guarded("calc") as document:
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             self.ui_test.wait_until_child_is_available("grid_window")
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
@@ -59,7 +59,7 @@ class CalcTrackedChanges(UITestCase):
 
     def test_tracked_changes_accept(self):
 
-        with self.ui_test.create_doc_in_start_center_guarded("calc") as document:
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             self.ui_test.wait_until_child_is_available("grid_window")
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
@@ -112,7 +112,7 @@ class CalcTrackedChanges(UITestCase):
 
     def test_tracked_changes_acceptall(self):
 
-        with self.ui_test.create_doc_in_start_center_guarded("calc") as document:
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             self.ui_test.wait_until_child_is_available("grid_window")
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
@@ -157,7 +157,7 @@ class CalcTrackedChanges(UITestCase):
 
     def test_tracked_changes_reject(self):
 
-        with self.ui_test.create_doc_in_start_center_guarded("calc") as document:
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             self.ui_test.wait_until_child_is_available("grid_window")
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
@@ -222,7 +222,7 @@ class CalcTrackedChanges(UITestCase):
 
     def test_tracked_changes_rejectall(self):
 
-        with self.ui_test.create_doc_in_start_center_guarded("calc") as document:
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             self.ui_test.wait_until_child_is_available("grid_window")
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")

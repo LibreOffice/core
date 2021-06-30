@@ -18,7 +18,7 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 class tdf54197(UITestCase):
 
     def test_tdf54197_CTRL_D_input_line_change(self):
-        with self.ui_test.create_doc_in_start_center_guarded("calc") as document:
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
             # 1. go to cell A1 enter any text

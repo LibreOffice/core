@@ -11,7 +11,7 @@ from uitest.uihelper.common import get_state_as_dict
 class tdf115026(UITestCase):
 
     def test_pageBreak_and_tableAutoFormat(self):
-        with self.ui_test.create_doc_in_start_center_guarded("writer"):
+        with self.ui_test.create_doc_in_start_center("writer"):
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")
 

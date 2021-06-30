@@ -21,7 +21,7 @@ class tdf126306(UITestCase):
             self.assertEqual(bVisible, value)
 
     def test_run(self):
-        with self.ui_test.create_doc_in_start_center_guarded("calc") as document:
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             calcDoc = self.xUITest.getTopFocusWindow()
             xGridWin = calcDoc.getChild("grid_window")
 

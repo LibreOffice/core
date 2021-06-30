@@ -10,7 +10,7 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 class tdf133348(UITestCase):
     def test_tdf133348(self):
 
-        with self.ui_test.create_doc_in_start_center_guarded("writer") as document:
+        with self.ui_test.create_doc_in_start_center("writer") as document:
 
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")

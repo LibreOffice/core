@@ -11,7 +11,7 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 
 class tdf91726(UITestCase):
     def test_tdf91726_new_style(self):
-        with self.ui_test.create_doc_in_start_center_guarded("calc"):
+        with self.ui_test.create_doc_in_start_center("calc"):
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
             #select A1:E9

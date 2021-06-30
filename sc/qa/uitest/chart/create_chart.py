@@ -30,7 +30,7 @@ class CalcChartUIDemo(UITestCase):
 
     def test_cancel_immediately(self):
 
-        with self.ui_test.create_doc_in_start_center_guarded("calc"):
+        with self.ui_test.create_doc_in_start_center("calc"):
 
             self.fill_spreadsheet()
 
@@ -40,7 +40,7 @@ class CalcChartUIDemo(UITestCase):
 
     def test_create_from_first_page(self):
 
-        with self.ui_test.create_doc_in_start_center_guarded("calc"):
+        with self.ui_test.create_doc_in_start_center("calc"):
 
             self.fill_spreadsheet()
 
@@ -50,7 +50,7 @@ class CalcChartUIDemo(UITestCase):
 
     def test_create_from_second_page(self):
 
-        with self.ui_test.create_doc_in_start_center_guarded("calc"):
+        with self.ui_test.create_doc_in_start_center("calc"):
 
             self.fill_spreadsheet()
 
@@ -66,7 +66,7 @@ class CalcChartUIDemo(UITestCase):
 
 
     def test_deselect_chart(self):
-        with self.ui_test.create_doc_in_start_center_guarded("calc"):
+        with self.ui_test.create_doc_in_start_center("calc"):
 
             self.fill_spreadsheet()
 
@@ -83,7 +83,7 @@ class CalcChartUIDemo(UITestCase):
 
     def test_activate_chart(self):
 
-        with self.ui_test.create_doc_in_start_center_guarded("calc"):
+        with self.ui_test.create_doc_in_start_center("calc"):
 
             self.fill_spreadsheet()
 
@@ -103,7 +103,7 @@ class CalcChartUIDemo(UITestCase):
 
     def select_chart_element(self):
 
-        with self.ui_test.create_doc_in_start_center_guarded("calc"):
+        with self.ui_test.create_doc_in_start_center("calc"):
 
             self.fill_spreadsheet()
 

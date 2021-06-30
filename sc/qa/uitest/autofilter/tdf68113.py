@@ -13,7 +13,7 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 
 class tdf68113(UITestCase):
     def test_tdf68113_empty_notempty_button(self):
-        with self.ui_test.create_doc_in_start_center_guarded("calc"):
+        with self.ui_test.create_doc_in_start_center("calc"):
             calcDoc = self.xUITest.getTopFocusWindow()
             xGridWin = calcDoc.getChild("grid_window")
 

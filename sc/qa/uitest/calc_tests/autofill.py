@@ -107,7 +107,7 @@ class CalcAutofill(UITestCase):
             self.assertEqual(get_cell_by_position(calc_doc, 0, 15, 11).getString(), "10.64.127.7")
 
     def test_autofill_with_suffix(self):
-        with self.ui_test.create_doc_in_start_center_guarded("calc") as document:
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
             enter_text_to_cell(gridwin, "A1", "1st")

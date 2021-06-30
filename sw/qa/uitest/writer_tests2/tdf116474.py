@@ -11,7 +11,7 @@ from uitest.uihelper.common import get_url_for_data_file
 class tdf116474(UITestCase):
 
    def test_tdf116474_insert_caption_undo(self):
-        with self.ui_test.create_doc_in_start_center_guarded("writer") as document:
+        with self.ui_test.create_doc_in_start_center("writer") as document:
             xWriterDoc = self.xUITest.getTopFocusWindow()
             text = document.getText()
             cursor = text.createTextCursor()

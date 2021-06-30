@@ -14,7 +14,7 @@ class Test(UITestCase):
 
     def testSvxCharEffectsPage(self):
         # Start Impress.
-        with self.ui_test.create_doc_in_start_center_guarded("impress") as component:
+        with self.ui_test.create_doc_in_start_center("impress") as component:
             template = self.xUITest.getTopFocusWindow()
             self.ui_test.close_dialog_through_button(template.getChild("close"))
             doc = self.xUITest.getTopFocusWindow()
@@ -45,7 +45,7 @@ class Test(UITestCase):
 
     def testSvxCharEffectsPageWriter(self):
         # Start Writer.
-        with self.ui_test.create_doc_in_start_center_guarded("writer") as component:
+        with self.ui_test.create_doc_in_start_center("writer") as component:
             doc = self.xUITest.getTopFocusWindow()
             editWin = doc.getChild("writer_edit")
             # Type a character and select it.
@@ -73,7 +73,7 @@ class Test(UITestCase):
 
     def testSvxCharEffectsPageWriterAutomatic(self):
         # Start Writer.
-        with self.ui_test.create_doc_in_start_center_guarded("writer"):
+        with self.ui_test.create_doc_in_start_center("writer"):
             doc = self.xUITest.getTopFocusWindow()
             editWin = doc.getChild("writer_edit")
 

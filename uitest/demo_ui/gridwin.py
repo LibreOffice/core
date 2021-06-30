@@ -13,7 +13,7 @@ class GridWinTest(UITestCase):
 
     def test_select_cell(self):
 
-        with self.ui_test.create_doc_in_start_center_guarded("calc"):
+        with self.ui_test.create_doc_in_start_center("calc"):
             xCalcDoc = self.xUITest.getTopFocusWindow()
             xGridWindow = xCalcDoc.getChild("grid_window")
 
@@ -23,7 +23,7 @@ class GridWinTest(UITestCase):
 
     def test_select_range(self):
 
-        with self.ui_test.create_doc_in_start_center_guarded("calc"):
+        with self.ui_test.create_doc_in_start_center("calc"):
             xCalcDoc = self.xUITest.getTopFocusWindow()
             xGridWindow = xCalcDoc.getChild("grid_window")
 
@@ -33,7 +33,7 @@ class GridWinTest(UITestCase):
 
     def test_extend_range(self):
 
-        with self.ui_test.create_doc_in_start_center_guarded("calc"):
+        with self.ui_test.create_doc_in_start_center("calc"):
             xTopWindow = self.xUITest.getTopFocusWindow()
 
             xGridWindow = xTopWindow.getChild("grid_window")
