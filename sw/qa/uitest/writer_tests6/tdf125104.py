@@ -18,45 +18,43 @@ class tdf125104(UITestCase):
         select_by_text(comboLayoutFormat, format)
 
     def test_tdf125104_pageFormat_numbering(self):
-        self.ui_test.create_doc_in_start_center("writer")
-        document = self.ui_test.get_component()
+        with self.ui_test.create_doc_in_start_center_guarded("writer") as document:
 
-        # insert page numbers on multiple pages
-        self.xUITest.executeCommand(".uno:InsertPageNumberField")
-        self.xUITest.executeCommand(".uno:InsertPagebreak")
-        self.xUITest.executeCommand(".uno:InsertPageNumberField")
-        text = document.Text.String.replace('\r\n', '\n')
-        self.assertEqual(text[0:1], "1")
-        self.assertEqual(text[2:3], "2")
+            # insert page numbers on multiple pages
+            self.xUITest.executeCommand(".uno:InsertPageNumberField")
+            self.xUITest.executeCommand(".uno:InsertPagebreak")
+            self.xUITest.executeCommand(".uno:InsertPageNumberField")
+            text = document.Text.String.replace('\r\n', '\n')
+            self.assertEqual(text[0:1], "1")
+            self.assertEqual(text[2:3], "2")
 
-        # Bug 125104 - Changing page numbering to "1st, 2nd, 3rd,..." causes crashes when trying to change Page settings later
-        with self.ui_test.execute_dialog_through_command(".uno:PageDialog") as xDialog:
-            self.set_combo_layout_format(xDialog, "1st, 2nd, 3rd, ...")
+            # Bug 125104 - Changing page numbering to "1st, 2nd, 3rd,..." causes crashes when trying to change Page settings later
+            with self.ui_test.execute_dialog_through_command(".uno:PageDialog") as xDialog:
+                self.set_combo_layout_format(xDialog, "1st, 2nd, 3rd, ...")
 
-        text = document.Text.String.replace('\r\n', '\n')
-        self.assertEqual(text[0:3], "1st")
-        self.assertEqual(text[4:7], "2nd")
+            text = document.Text.String.replace('\r\n', '\n')
+            self.assertEqual(text[0:3], "1st")
+            self.assertEqual(text[4:7], "2nd")
 
-        with self.ui_test.execute_dialog_through_command(".uno:PageDialog", close_button="cancel") as xDialog:
-            comboLayoutFormat = xDialog.getChild("comboLayoutFormat")
-            self.assertEqual(get_state_as_dict(comboLayoutFormat)["SelectEntryText"], "1st, 2nd, 3rd, ...")
+            with self.ui_test.execute_dialog_through_command(".uno:PageDialog", close_button="cancel") as xDialog:
+                comboLayoutFormat = xDialog.getChild("comboLayoutFormat")
+                self.assertEqual(get_state_as_dict(comboLayoutFormat)["SelectEntryText"], "1st, 2nd, 3rd, ...")
 
-        # change to devanagari alphabet format
-        with self.ui_test.execute_dialog_through_command(".uno:PageDialog") as xDialog:
-            self.set_combo_layout_format(xDialog, "क, ख, ग, ...")
+            # change to devanagari alphabet format
+            with self.ui_test.execute_dialog_through_command(".uno:PageDialog") as xDialog:
+                self.set_combo_layout_format(xDialog, "क, ख, ग, ...")
 
-        text = document.Text.String.replace('\r\n', '\n')
-        self.assertEqual(text[0:1], "क")
-        self.assertEqual(text[2:3], "ख")
+            text = document.Text.String.replace('\r\n', '\n')
+            self.assertEqual(text[0:1], "क")
+            self.assertEqual(text[2:3], "ख")
 
-        # change to devanagari number format
-        with self.ui_test.execute_dialog_through_command(".uno:PageDialog") as xDialog:
-            self.set_combo_layout_format(xDialog, "१, २, ३, ...")
+            # change to devanagari number format
+            with self.ui_test.execute_dialog_through_command(".uno:PageDialog") as xDialog:
+                self.set_combo_layout_format(xDialog, "१, २, ३, ...")
 
-        text = document.Text.String.replace('\r\n', '\n')
-        self.assertEqual(text[0:1], "१")
-        self.assertEqual(text[2:3], "२")
+            text = document.Text.String.replace('\r\n', '\n')
+            self.assertEqual(text[0:1], "१")
+            self.assertEqual(text[2:3], "२")
 
-        self.ui_test.close_doc()
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

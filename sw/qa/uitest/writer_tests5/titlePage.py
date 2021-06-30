@@ -9,23 +9,21 @@ from uitest.framework import UITestCase
 
 class titlePage(UITestCase):
     def test_title_page(self):
-        writer_doc = self.ui_test.create_doc_in_start_center("writer")
-        document = self.ui_test.get_component()
-        xWriterDoc = self.xUITest.getTopFocusWindow()
-        #dialog Title Page
-        with self.ui_test.execute_dialog_through_command(".uno:TitlePageDialog") as xDialog:
-            #select new Pages; nr of pages =2 (click UP), save; verify pageCount = 3
-            newPages = xDialog.getChild("RB_INSERT_NEW_PAGES")
-            newPages.executeAction("CLICK", tuple())
-            xpageCount = xDialog.getChild("NF_PAGE_COUNT")
-            xpageCount.executeAction("UP", tuple())
-        self.assertEqual(document.CurrentController.PageCount, 3)
+        with self.ui_test.create_doc_in_start_center_guarded("writer") as document:
+            xWriterDoc = self.xUITest.getTopFocusWindow()
+            #dialog Title Page
+            with self.ui_test.execute_dialog_through_command(".uno:TitlePageDialog") as xDialog:
+                #select new Pages; nr of pages =2 (click UP), save; verify pageCount = 3
+                newPages = xDialog.getChild("RB_INSERT_NEW_PAGES")
+                newPages.executeAction("CLICK", tuple())
+                xpageCount = xDialog.getChild("NF_PAGE_COUNT")
+                xpageCount.executeAction("UP", tuple())
+            self.assertEqual(document.CurrentController.PageCount, 3)
 
-        # check cancel button
-        with self.ui_test.execute_dialog_through_command(".uno:TitlePageDialog", close_button="cancel"):
-            pass
-        self.assertEqual(document.CurrentController.PageCount, 3)
+            # check cancel button
+            with self.ui_test.execute_dialog_through_command(".uno:TitlePageDialog", close_button="cancel"):
+                pass
+            self.assertEqual(document.CurrentController.PageCount, 3)
 
-        self.ui_test.close_doc()
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

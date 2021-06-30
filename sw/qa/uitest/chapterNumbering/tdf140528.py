@@ -13,39 +13,37 @@ from uitest.uihelper.common import select_pos
 class Tdf140528(UITestCase):
 
     def test_tdf140528(self):
-        self.ui_test.create_doc_in_start_center("writer")
-        document = self.ui_test.get_component()
+        with self.ui_test.create_doc_in_start_center_guarded("writer"):
 
-        with self.ui_test.execute_dialog_through_command(".uno:ChapterNumberingDialog") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:ChapterNumberingDialog") as xDialog:
 
-            xTab = xDialog.getChild("tabcontrol")
-            select_pos(xTab, "0")
+                xTab = xDialog.getChild("tabcontrol")
+                select_pos(xTab, "0")
 
-            xFormat = xDialog.getChild("format")
+                xFormat = xDialog.getChild("format")
 
-            with self.ui_test.execute_blocking_action(xFormat.executeAction, args=('OPENFROMLIST', mkPropertyValues({"POS": "10"}))) as dialog:
-                xEntry = dialog.getChild("entry")
-                self.assertEqual("Untitled 1", get_state_as_dict(xEntry)['Text'])
+                with self.ui_test.execute_blocking_action(xFormat.executeAction, args=('OPENFROMLIST', mkPropertyValues({"POS": "10"}))) as dialog:
+                    xEntry = dialog.getChild("entry")
+                    self.assertEqual("Untitled 1", get_state_as_dict(xEntry)['Text'])
 
-                xEntry.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
-                xEntry.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
-                xEntry.executeAction("TYPE", mkPropertyValues({"TEXT" : "newFormat"}))
+                    xEntry.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+                    xEntry.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+                    xEntry.executeAction("TYPE", mkPropertyValues({"TEXT" : "newFormat"}))
 
-            self.assertEqual("saveas", get_state_as_dict(xFormat)['CurrentItem'])
+                self.assertEqual("saveas", get_state_as_dict(xFormat)['CurrentItem'])
 
-            # Go to Position tab
-            select_pos(xTab, "1")
+                # Go to Position tab
+                select_pos(xTab, "1")
 
-            # Go back to Numbering tab
-            select_pos(xTab, "0")
+                # Go back to Numbering tab
+                select_pos(xTab, "0")
 
-            xFormat.executeAction('OPENFROMLIST', mkPropertyValues({"POS": "0"}))
-            self.assertEqual("form1", get_state_as_dict(xFormat)['CurrentItem'])
+                xFormat.executeAction('OPENFROMLIST', mkPropertyValues({"POS": "0"}))
+                self.assertEqual("form1", get_state_as_dict(xFormat)['CurrentItem'])
 
-            # Without the fix in place, this test would have crashed here
-            select_pos(xTab, "1")
+                # Without the fix in place, this test would have crashed here
+                select_pos(xTab, "1")
 
 
-        self.ui_test.close_doc()
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

@@ -10,29 +10,27 @@ from uitest.uihelper.common import type_text
 class PasteSpecial(UITestCase):
 
    def test_pasteSpecial(self):
-        self.ui_test.create_doc_in_start_center("writer")
-        document = self.ui_test.get_component()
-        xWriterDoc = self.xUITest.getTopFocusWindow()
-        xWriterEdit = xWriterDoc.getChild("writer_edit")
+        with self.ui_test.create_doc_in_start_center_guarded("writer") as document:
+            xWriterDoc = self.xUITest.getTopFocusWindow()
+            xWriterEdit = xWriterDoc.getChild("writer_edit")
 
-        type_text(xWriterEdit, "test")
+            type_text(xWriterEdit, "test")
 
-        for i in range(5):
-            self.xUITest.executeCommand(".uno:SelectAll")
-            self.xUITest.executeCommand(".uno:Copy")
+            for i in range(5):
+                self.xUITest.executeCommand(".uno:SelectAll")
+                self.xUITest.executeCommand(".uno:Copy")
 
-            with self.ui_test.execute_dialog_through_command(".uno:PasteSpecial") as xDialog:
+                with self.ui_test.execute_dialog_through_command(".uno:PasteSpecial") as xDialog:
 
-                xList = xDialog.getChild('list')
-                xChild = xList.getChild(str(i))
+                    xList = xDialog.getChild('list')
+                    xChild = xList.getChild(str(i))
 
-                xChild.executeAction("SELECT", tuple())
+                    xChild.executeAction("SELECT", tuple())
 
 
-            self.xUITest.executeCommand(".uno:Undo")
+                self.xUITest.executeCommand(".uno:Undo")
 
-            self.assertEqual(document.Text.String, "test")
+                self.assertEqual(document.Text.String, "test")
 
-        self.ui_test.close_doc()
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

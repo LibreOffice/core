@@ -12,28 +12,26 @@ class tdf122045(UITestCase):
 
     def test_tdf122045(self):
 
-        self.ui_test.create_doc_in_start_center("writer")
-        xWriterDoc = self.xUITest.getTopFocusWindow()
-        document = self.ui_test.get_component()
+        with self.ui_test.create_doc_in_start_center_guarded("writer") as document:
+            xWriterDoc = self.xUITest.getTopFocusWindow()
 
-        with self.ui_test.execute_dialog_through_command(".uno:PageDialog", close_button="cancel") as xDialog:
+            with self.ui_test.execute_dialog_through_command(".uno:PageDialog", close_button="cancel") as xDialog:
 
-            xTabs = xDialog.getChild("tabcontrol")
-            select_pos(xTabs, "2")
+                xTabs = xDialog.getChild("tabcontrol")
+                select_pos(xTabs, "2")
 
-            btncolor = xDialog.getChild("btncolor")
-            btncolor.executeAction("CLICK", tuple())
+                btncolor = xDialog.getChild("btncolor")
+                btncolor.executeAction("CLICK", tuple())
 
-            xApplyBtn = xDialog.getChild("apply")
-            xApplyBtn.executeAction("CLICK", tuple())
+                xApplyBtn = xDialog.getChild("apply")
+                xApplyBtn.executeAction("CLICK", tuple())
+
+                self.assertTrue(document.isModified())
+                self.assertEqual("0x729fcf", hex(document.StyleFamilies.PageStyles.Standard.BackColor))
+
 
             self.assertTrue(document.isModified())
             self.assertEqual("0x729fcf", hex(document.StyleFamilies.PageStyles.Standard.BackColor))
 
-
-        self.assertTrue(document.isModified())
-        self.assertEqual("0x729fcf", hex(document.StyleFamilies.PageStyles.Standard.BackColor))
-
-        self.ui_test.close_doc()
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
