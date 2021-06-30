@@ -14,20 +14,18 @@ class ListBoxTest(UITestCase):
 
     def test_select_entry_pos(self):
 
-        self.ui_test.create_doc_in_start_center("calc")
+        with self.ui_test.create_doc_in_start_center_guarded("calc"):
 
-        with self.ui_test.execute_dialog_through_command(".uno:FormatCellDialog"):
-            pass
+            with self.ui_test.execute_dialog_through_command(".uno:FormatCellDialog"):
+                pass
 
-        self.ui_test.close_doc()
 
     def test_select_entry_text(self):
 
-        self.ui_test.create_doc_in_start_center("calc")
+        with self.ui_test.create_doc_in_start_center_guarded("calc"):
 
-        with self.ui_test.execute_dialog_through_command(".uno:FormatCellDialog"):
-            pass
+            with self.ui_test.execute_dialog_through_command(".uno:FormatCellDialog"):
+                pass
 
-        self.ui_test.close_doc()
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

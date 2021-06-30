@@ -105,38 +105,37 @@ class ImpressBackgrounds(UITestCase):
 
     def test_background_dialog(self):
 
-        self.ui_test.create_doc_in_start_center("impress")
+        with self.ui_test.create_doc_in_start_center_guarded("impress"):
 
-        xTemplateDlg = self.xUITest.getTopFocusWindow()
-        xCancelBtn = xTemplateDlg.getChild("close")
-        self.ui_test.close_dialog_through_button(xCancelBtn)
+            xTemplateDlg = self.xUITest.getTopFocusWindow()
+            xCancelBtn = xTemplateDlg.getChild("close")
+            self.ui_test.close_dialog_through_button(xCancelBtn)
 
-        buttons = ['btnbitmap', 'btncolor', 'btngradient', 'btnhatch', 'btnpattern']
-        for index, button in enumerate(buttons):
-            with self.ui_test.execute_dialog_through_command(".uno:PageSetup") as xPageSetupDlg:
+            buttons = ['btnbitmap', 'btncolor', 'btngradient', 'btnhatch', 'btnpattern']
+            for index, button in enumerate(buttons):
+                with self.ui_test.execute_dialog_through_command(".uno:PageSetup") as xPageSetupDlg:
 
-                tabcontrol = xPageSetupDlg.getChild("tabcontrol")
-                select_pos(tabcontrol, "1")
+                    tabcontrol = xPageSetupDlg.getChild("tabcontrol")
+                    select_pos(tabcontrol, "1")
 
-                xBtn = xPageSetupDlg.getChild(button)
-                xBtn.executeAction("CLICK", tuple())
+                    xBtn = xPageSetupDlg.getChild(button)
+                    xBtn.executeAction("CLICK", tuple())
 
-                # tdf#100024: Without the fix in place, this test would have crashed here
-                # changing the background to bitmap
+                    # tdf#100024: Without the fix in place, this test would have crashed here
+                    # changing the background to bitmap
 
-            self.checkDefaultBackground(button)
+                self.checkDefaultBackground(button)
 
-            with self.ui_test.execute_dialog_through_command(".uno:PageSetup") as xPageSetupDlg:
+                with self.ui_test.execute_dialog_through_command(".uno:PageSetup") as xPageSetupDlg:
 
-                tabcontrol = xPageSetupDlg.getChild("tabcontrol")
-                select_pos(tabcontrol, "1")
+                    tabcontrol = xPageSetupDlg.getChild("tabcontrol")
+                    select_pos(tabcontrol, "1")
 
-                xBtn = xPageSetupDlg.getChild('btnnone')
-                xBtn.executeAction("CLICK", tuple())
+                    xBtn = xPageSetupDlg.getChild('btnnone')
+                    xBtn.executeAction("CLICK", tuple())
 
 
-            self.checkDefaultBackground('btnnone')
+                self.checkDefaultBackground('btnnone')
 
-        self.ui_test.close_doc()
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
