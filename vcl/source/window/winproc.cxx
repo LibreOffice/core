@@ -831,21 +831,27 @@ bool ImplLOKHandleMouseEvent(const VclPtr<vcl::Window>& xWindow, MouseNotifyEven
     pFrameData->mbMouseIn = false;
 
     vcl::Window* pDragWin = pFrameData->mpMouseDownWin;
-    if (pDragWin && pFrameData->mbStartDragCalled &&
-        nEvent == MouseNotifyEvent::MOUSEMOVE)
+    if (pDragWin &&
+        nEvent == MouseNotifyEvent::MOUSEMOVE &&
+        pFrameData->mbDragging)
     {
         css::uno::Reference<css::datatransfer::dnd::XDropTargetDragContext> xDropTargetDragContext =
             new GenericDropTargetDragContext();
         css::uno::Reference<css::datatransfer::dnd::XDropTarget> xDropTarget(
             pDragWin->ImplGetWindowImpl()->mxDNDListenerContainer, css::uno::UNO_QUERY);
 
-        if (!xDropTargetDragContext.is() ||
-            !xDropTarget.is() ||
-            (nCode & (MOUSE_LEFT | MOUSE_RIGHT | MOUSE_MIDDLE)) ==
+        if ((nCode & (MOUSE_LEFT | MOUSE_RIGHT | MOUSE_MIDDLE)) !=
             (MouseSettings::GetStartDragCode() & (MOUSE_LEFT | MOUSE_RIGHT | MOUSE_MIDDLE)))
         {
+            pDragWin->ImplGetFrameData()->mbDragging = false;
+            return false;
+        }
+
+        if (!xDropTargetDragContext.is() ||
+            !xDropTarget.is())
+        {
             // cancel dragdrop
-            pDragWin->ImplGetFrameData()->mbStartDragCalled = false;
+            pDragWin->ImplGetFrameData()->mbDragging = false;
             return false;
         }
 
@@ -861,8 +867,9 @@ bool ImplLOKHandleMouseEvent(const VclPtr<vcl::Window>& xWindow, MouseNotifyEven
         return true;
     }
 
-    if (pDragWin && pFrameData->mbStartDragCalled &&
-        nEvent == MouseNotifyEvent::MOUSEBUTTONUP)
+    if (pDragWin &&
+        nEvent == MouseNotifyEvent::MOUSEBUTTONUP &&
+        pFrameData->mbDragging)
     {
         css::uno::Reference<css::datatransfer::dnd::XDropTargetDropContext> xDropTargetDropContext =
             new GenericDropTargetDropContext();
@@ -882,7 +889,8 @@ bool ImplLOKHandleMouseEvent(const VclPtr<vcl::Window>& xWindow, MouseNotifyEven
                 css::uno::Reference<css::datatransfer::XTransferable>());
         }
 
-        pDragWin->ImplGetFrameData()->mbStartDragCalled = false;
+        pDragWin->ImplGetFrameData()->mbDragging = false;
+        return true;
     }
 
     vcl::Window* pDownWin = pFrameData->mpMouseDownWin;
