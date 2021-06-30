@@ -442,6 +442,11 @@ void Window::SetMouseTransparent( bool bTransparent )
     mpWindowImpl->mbMouseTransparent = bTransparent;
 }
 
+void Window::LocalStartDrag()
+{
+    ImplGetFrameData()->mnMouseMode = MouseEventModifiers::DRAGSTART;
+}
+
 void Window::CaptureMouse()
 {
     ImplSVData* pSVData = ImplGetSVData();

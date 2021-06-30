@@ -803,21 +803,27 @@ static bool ImplHandleMouseEvent2( const VclPtr<vcl::Window>& xWindow, MouseNoti
     sal_uInt16      nOldCode = pWinFrameData->mnMouseCode;
 
     vcl::Window* pDragWin = pWinFrameData->mpMouseDownWin;
-    if (pDragWin && pDragWin->ImplGetFrameData()->mbStartDragCalled &&
-        nSVEvent == MouseNotifyEvent::MOUSEMOVE)
+    if (pDragWin &&
+        nSVEvent == MouseNotifyEvent::MOUSEMOVE &&
+        pDragWin->ImplGetFrameData()->mnMouseMode == MouseEventModifiers::DRAGSTART)
     {
         css::uno::Reference<css::datatransfer::dnd::XDropTargetDragContext> xDropTargetDragContext =
             new GenericDropTargetDragContext();
         css::uno::Reference<css::datatransfer::dnd::XDropTarget> xDropTarget(
             pDragWin->ImplGetWindowImpl()->mxDNDListenerContainer, css::uno::UNO_QUERY);
 
-        if (!xDropTargetDragContext.is() ||
-            !xDropTarget.is() ||
-            (nCode & (MOUSE_LEFT | MOUSE_RIGHT | MOUSE_MIDDLE)) ==
+        if ((nCode & (MOUSE_LEFT | MOUSE_RIGHT | MOUSE_MIDDLE)) !=
             (MouseSettings::GetStartDragCode() & (MOUSE_LEFT | MOUSE_RIGHT | MOUSE_MIDDLE)))
         {
+            pDragWin->ImplGetFrameData()->mnMouseMode = MouseEventModifiers::NONE;
+            return false;
+        }
+
+        if (!xDropTargetDragContext.is() ||
+            !xDropTarget.is())
+        {
             // cancel dragdrop
-            pDragWin->ImplGetFrameData()->mbStartDragCalled = false;
+            pDragWin->ImplGetFrameData()->mnMouseMode = MouseEventModifiers::NONE;
             return false;
         }
 
@@ -834,8 +840,9 @@ static bool ImplHandleMouseEvent2( const VclPtr<vcl::Window>& xWindow, MouseNoti
         return true;
     }
 
-    if (pDragWin && pDragWin->ImplGetFrameData()->mbStartDragCalled &&
-        nSVEvent == MouseNotifyEvent::MOUSEBUTTONUP)
+    if (pDragWin &&
+        nSVEvent == MouseNotifyEvent::MOUSEBUTTONUP &&
+        pDragWin->ImplGetFrameData()->mnMouseMode == MouseEventModifiers::DRAGSTART)
     {
         css::uno::Reference<css::datatransfer::dnd::XDropTargetDropContext> xDropTargetDropContext =
             new GenericDropTargetDropContext();
@@ -856,7 +863,8 @@ static bool ImplHandleMouseEvent2( const VclPtr<vcl::Window>& xWindow, MouseNoti
                 css::uno::Reference<css::datatransfer::XTransferable>());
         }
 
-        pDragWin->ImplGetFrameData()->mbStartDragCalled = false;
+        pDragWin->ImplGetFrameData()->mnMouseMode = MouseEventModifiers::NONE;
+        return true;
     }
 
     // we need a mousemove event, before we get a mousebuttondown or a
@@ -952,8 +960,6 @@ static bool ImplHandleMouseEvent2( const VclPtr<vcl::Window>& xWindow, MouseNoti
                          (((nMouseY-nDragH) > pMouseDownWin->ImplGetFrameData()->mnFirstMouseY) ||
                            ((nMouseY+nDragH) < pMouseDownWin->ImplGetFrameData()->mnFirstMouseY)) )
                     {
-                        pMouseDownWin->ImplGetFrameData()->mbStartDragCalled  = true;
-
                         // Check if drag source provides its own recognizer
                         if( pMouseDownWin->ImplGetFrameData()->mbInternalDragGestureRecognizer )
                         {
