@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6d4114a2_7ad17d1e",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 3086,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-06-30T17:55:20Z",
+      "side": 0,
+      "message": "I think we should also implement similar in tools::Time::GetClock() to get identical results from there. Either probably requires an extra parameter for which algorithm to use, as it currently assumes nanoseconds as smallest fraction. (or evaluate whether that is really needed and can hold). Or change its double\u0026 fFractionOfSecond to integer milli/micro/nanoseconds and adapt usage. Didn\u0027t investigate yet what would be more feasible, probably the latter. There aren\u0027t that many places using it, DataPilot, DataProvider and HOUR(), MINUTE(), SECOND(), and test cases.\n\nActually I\u0027d prefer if we then kept using GetClock() here to ensure identical results and have them visible, and only use the \"raw\" TimeToMs() in the else{} block. Specifically for DataPilot and filters it may be vital that the calculations of time display are identical.",
+      "revId": "e5ac6caf9efa3d3a8cb82dbc59ef00b193facdc4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "91b8db02_3a18ea1b",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 3972,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-06-30T17:55:20Z",
+      "side": 0,
+      "message": "Same GetClock() remarks here as above.",
+      "revId": "e5ac6caf9efa3d3a8cb82dbc59ef00b193facdc4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
