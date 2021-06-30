@@ -234,7 +234,12 @@ void OTempFileService::checkError () const
 void OTempFileService::checkConnected ()
 {
     if (!mpStream && mpTempFile)
-        mpStream = mpTempFile->GetStream( StreamMode::STD_READWRITE );
+    {
+        // Ideally we should open this SHARE_DENYALL, but the JunitTest_unotools_complex test wants to open
+        // this file directly and read from it.
+        mpStream = mpTempFile->GetStream(StreamMode::READ | StreamMode::WRITE
+                                         | StreamMode::SHARE_DENYWRITE);
+    }
 
     if (!mpStream)
         throw css::io::NotConnectedException ( OUString(), static_cast < css::uno::XWeak * > (this ) );
