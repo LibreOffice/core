@@ -25,6 +25,23 @@
     },
     {
       "key": {
+        "uuid": "6f0a1ef1_c752a300",
+        "filename": "basic/qa/cppunit/test_scanner.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-30T11:42:44Z",
+      "side": 1,
+      "message": "If required, use \u003ccmath\u003e in CXX files, not \u003cmath.h\u003e",
+      "revId": "4c9dfc3f45460c375e693c00867cc0ab8811e513",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "394d73a3_9fa1770f",
         "filename": "basic/qa/cppunit/test_scanner.cxx",
         "patchSetId": 2
@@ -42,6 +59,23 @@
         "endLine": 659,
         "endChar": 40
       },
+      "revId": "4c9dfc3f45460c375e693c00867cc0ab8811e513",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aa3c1e95_5ccbc0e9",
+        "filename": "chart2/source/view/axes/MinimumAndMaximumSupplier.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-30T11:42:44Z",
+      "side": 1,
+      "message": "Please keep headers sorted (where it makes sense - i.e., where it doesn\u0027t require changing unrelated headers\u0027 order). \u003ccmath\u003e should be above \u003climits\u003e",
       "revId": "4c9dfc3f45460c375e693c00867cc0ab8811e513",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
