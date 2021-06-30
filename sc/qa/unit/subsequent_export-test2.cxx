@@ -187,6 +187,7 @@ public:
     void testTdf139258_rotated_image();
     void testTdf126541_SheetVisibilityImportXlsx();
     void testTdf140431();
+    void testCheckboxFormControlXlsxExport();
 
     CPPUNIT_TEST_SUITE(ScExportTest2);
 
@@ -282,6 +283,7 @@ public:
     CPPUNIT_TEST(testTdf139258_rotated_image);
     CPPUNIT_TEST(testTdf126541_SheetVisibilityImportXlsx);
     CPPUNIT_TEST(testTdf140431);
+    CPPUNIT_TEST(testCheckboxFormControlXlsxExport);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2299,6 +2301,24 @@ void ScExportTest2::testTdf140431()
     CPPUNIT_ASSERT(pURLData->GetURL().startsWith("file://ndhlis"));
 
     xDocSh->DoClose();
+}
+
+void ScExportTest2::testCheckboxFormControlXlsxExport()
+{
+    // Given a document that has a checkbox form control:
+    ScDocShellRef xShell = loadDoc(u"checkbox-form-control.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xShell.is());
+
+    // When exporting to XLSX:
+    std::shared_ptr<utl::TempFile> pXPathFile
+        = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
+
+    // Then make sure its VML markup is written and it has a correct position + size:
+    xmlDocUniquePtr pDoc
+        = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/drawings/vmlDrawing1.vml");
+    // Without the fix in place, this test would have failed as there was no such stream.
+    CPPUNIT_ASSERT(pDoc);
+    assertXPathContent(pDoc, "/xml/v:shape/xx:ClientData/xx:Anchor", "1, 22, 3, 3, 3, 30, 6, 1");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest2);

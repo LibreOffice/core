@@ -178,7 +178,7 @@ bool IsVmlObject( const XclObj *rObj )
 sal_Int32 GetVmlObjectCount( XclExpObjList& rList )
 {
     return static_cast<sal_Int32>(std::count_if(rList.begin(), rList.end(),
-        [](const std::unique_ptr<XclObj>& rxObj) { return IsVmlObject( rxObj.get() ); }));
+        [](const std::unique_ptr<XclObj>& rxObj) { return IsVmlObject( rxObj.get() ) || IsFormControlObject( rxObj.get() ); }));
 }
 
 bool IsValidObject( const XclObj& rObj )
@@ -333,6 +333,7 @@ void SaveVmlObjects( XclExpObjList& rList, XclExpXmlStream& rStrm )
     rStrm.GetCurrentStream()->singleElement(XML_legacyDrawing, FSNS(XML_r, XML_id), sId.toUtf8());
 
     rStrm.PushStream( pVmlDrawing );
+    pVmlDrawing->write("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n");
     pVmlDrawing->startElement( XML_xml,
             FSNS(XML_xmlns, XML_v),   rStrm.getNamespaceURL(OOX_NS(vml)).toUtf8(),
             FSNS(XML_xmlns, XML_o),   rStrm.getNamespaceURL(OOX_NS(vmlOffice)).toUtf8(),
@@ -341,6 +342,15 @@ void SaveVmlObjects( XclExpObjList& rList, XclExpXmlStream& rStrm )
 
     for ( const auto& rxObj : rList )
     {
+        if (IsFormControlObject(rxObj.get()))
+        {
+            auto pFormControlObject = dynamic_cast<XclExpTbxControlObj*>(rxObj.get());
+            if (pFormControlObject)
+            {
+                pFormControlObject->SaveVml(rStrm);
+            }
+        }
+
         if( !IsVmlObject( rxObj.get() ) )
             continue;
         rxObj->SaveXml( rStrm );
