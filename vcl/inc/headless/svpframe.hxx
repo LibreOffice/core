@@ -54,6 +54,9 @@ class SvpSalFrame : public SalFrame
     std::vector< SvpSalGraphics* >      m_aGraphics;
 
     static SvpSalFrame*       s_pFocusFrame;
+
+    void ImplSetParent(SalFrame* pNewParent);
+
 public:
     SvpSalFrame( SvpSalInstance* pInstance,
                  SalFrame* pParent,
