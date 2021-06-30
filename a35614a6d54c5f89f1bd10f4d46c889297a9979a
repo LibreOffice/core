@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2ec71ca9_9a9e69ec",
+        "filename": "vcl/source/gdi/SvmReader.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1003158
+      },
+      "writtenOn": "2021-06-30T07:09:25Z",
+      "side": 1,
+      "message": "I kept all the other read methods as before to prevent test failures and I updated the LineColor, with it\u0027s handler",
+      "revId": "a35614a6d54c5f89f1bd10f4d46c889297a9979a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
