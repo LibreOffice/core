@@ -2,6 +2,86 @@
   "comments": [
     {
       "key": {
+        "uuid": "7411df88_05c19bd1",
+        "filename": "include/vcl/SvmReader.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-06-30T07:47:52Z",
+      "side": 1,
+      "message": "move to include/vcl/filter/SvmReader.hxx",
+      "revId": "a35614a6d54c5f89f1bd10f4d46c889297a9979a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9c2ae831_18907155",
+        "filename": "vcl/qa/cppunit/svm/svmtest.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 335,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-06-30T07:47:52Z",
+      "side": 1,
+      "message": "remove",
+      "range": {
+        "startLine": 335,
+        "startChar": 3,
+        "endLine": 335,
+        "endChar": 37
+      },
+      "revId": "a35614a6d54c5f89f1bd10f4d46c889297a9979a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "91927003_c2b20db1",
+        "filename": "vcl/source/gdi/SvmReader.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-06-30T07:47:52Z",
+      "side": 1,
+      "message": "move to vcl/source/filter/svm",
+      "revId": "a35614a6d54c5f89f1bd10f4d46c889297a9979a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "740316b6_a566dbfc",
+        "filename": "vcl/source/gdi/SvmReader.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-06-30T07:47:52Z",
+      "side": 1,
+      "message": "no need for indent here ... but the formatter will fix that anyway",
+      "range": {
+        "startLine": 32,
+        "startChar": 0,
+        "endLine": 32,
+        "endChar": 4
+      },
+      "revId": "a35614a6d54c5f89f1bd10f4d46c889297a9979a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2ec71ca9_9a9e69ec",
         "filename": "vcl/source/gdi/SvmReader.cxx",
         "patchSetId": 1
@@ -13,6 +93,24 @@
       "writtenOn": "2021-06-30T07:09:25Z",
       "side": 1,
       "message": "I kept all the other read methods as before to prevent test failures and I updated the LineColor, with it\u0027s handler",
+      "revId": "a35614a6d54c5f89f1bd10f4d46c889297a9979a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "546b15c9_780c73c7",
+        "filename": "vcl/source/gdi/SvmReader.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-06-30T07:47:52Z",
+      "side": 1,
+      "message": "well, that\u0027s OK - if you do it this way you could first just setup the class so the tests pass, and add LineColorHandler in a new commit",
+      "parentUuid": "2ec71ca9_9a9e69ec",
       "revId": "a35614a6d54c5f89f1bd10f4d46c889297a9979a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
