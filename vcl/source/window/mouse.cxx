@@ -443,6 +443,11 @@ void Window::SetMouseTransparent( bool bTransparent )
     mpWindowImpl->mbMouseTransparent = bTransparent;
 }
 
+void Window::LocalStartDrag()
+{
+    ImplGetFrameData()->mbDragging = true;
+}
+
 void Window::CaptureMouse()
 {
     ImplSVData* pSVData = ImplGetSVData();
