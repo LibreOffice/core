@@ -291,6 +291,13 @@ Try:
 		If VarType(vArg) = V_DATE Then pvArgs(i) = SF_Utils._CDateToIso(vArg)
 	Next i
 
+	&apos;	Intercept alternate Python helpers file when relevant
+	With _SF_
+		If SF_String.StartsWith(Script, .PythonHelper) And Len(.PythonHelper2) &gt; 0 Then
+			Scope = SCRIPTISPERSONAL
+			Script = .PythonHelper2 &amp; Mid(Script, Len(.PythonHelper) + 1)
+		End If
+	End With
 	&apos;	Find script
 	Set oScript = SF_Session._GetScript(&quot;Python&quot;, Scope, Script)
 

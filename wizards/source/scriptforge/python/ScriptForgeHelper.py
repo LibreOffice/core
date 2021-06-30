@@ -283,6 +283,7 @@ if __name__ == "__main__":
     print(_SF_Platform('OSRelease'))
     print(_SF_Platform('OSVersion'))
     print(_SF_Platform('Processor'))
+    print(_SF_Platform('PythonVersion'))
     #
     print(hashlib.algorithms_guaranteed)
     print(_SF_FileSystem__HashFile('/opt/libreoffice6.4/program/libbootstraplo.so', 'md5'))
