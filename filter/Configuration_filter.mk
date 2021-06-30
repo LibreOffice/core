@@ -358,6 +358,7 @@ $(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_writer_types.xcu
 	writer_OOXML \
 	writer_OOXML_Template \
 	writer_layout_dump_xml \
+	writer_indexing_export_xml \
 	writer_BroadBand_eBook \
 	writer_FictionBook_2 \
 	writer_PalmDoc \
@@ -407,6 +408,7 @@ $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_writer_filters
 	OOXML_Text \
 	OOXML_Text_Template \
 	writer_layout_dump \
+	writer_indexing_export \
 	BroadBand_eBook \
 	FictionBook_2 \
 	PalmDoc \

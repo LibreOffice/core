@@ -1,0 +1,22 @@
+<!--
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+-->
+
+<node oor:name="writer_indexing_export" oor:op="replace">
+    <prop oor:name="Flags"><value>EXPORT ALIEN 3RDPARTYFILTER</value></prop>
+    <prop oor:name="UIComponent"/>
+    <prop oor:name="FilterService"><value>com.sun.star.comp.Writer.IndexingExportFilter</value></prop>
+    <prop oor:name="UserData"><value></value></prop>
+    <prop oor:name="UIName">
+        <value xml:lang="en-US">Writer Indexing Export XML</value>
+    </prop>
+    <prop oor:name="FileFormatVersion"><value>0</value></prop>
+    <prop oor:name="Type"><value>writer_indexing_export_xml</value></prop>
+    <prop oor:name="TemplateName"/>
+    <prop oor:name="DocumentService"><value>com.sun.star.text.TextDocument</value></prop>
+</node>
