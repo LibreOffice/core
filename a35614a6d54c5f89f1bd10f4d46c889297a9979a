@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "1601ad31_c1d46706",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-06-30T07:53:21Z",
+      "side": 1,
+      "message": "should be LineColorAction",
+      "range": {
+        "startLine": 10,
+        "startChar": 18,
+        "endLine": 10,
+        "endChar": 34
+      },
+      "revId": "a35614a6d54c5f89f1bd10f4d46c889297a9979a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7411df88_05c19bd1",
         "filename": "include/vcl/SvmReader.hxx",
         "patchSetId": 1
