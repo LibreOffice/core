@@ -1276,8 +1276,6 @@ void SbRtl_Replace(StarBASIC *, SbxArray & rPar, bool)
     const OUString aExpStr = rPar.Get32(1)->GetOUString();
     OUString aFindStr = rPar.Get32(2)->GetOUString();
     const OUString aReplaceStr = rPar.Get32(3)->GetOUString();
-    const sal_Int32 nExpStrLen = aExpStr.getLength();
-    const sal_Int32 nFindStrLen = aFindStr.getLength();
 
     OUString aSrcStr(aExpStr);
     if (bCaseInsensitive)
@@ -1288,10 +1286,12 @@ void SbRtl_Replace(StarBASIC *, SbxArray & rPar, bool)
         aSrcStr = xCharClass->toUpper(aSrcStr, 0, aSrcStr.getLength(), rLocale);
         aFindStr = xCharClass->toUpper(aFindStr, 0, aFindStr.getLength(), rLocale);
     }
+    const sal_Int32 nSrcStrLen = aSrcStr.getLength();
+    const sal_Int32 nFindStrLen = aFindStr.getLength();
 
     // Note: the result starts from lStartPos, removing everything to the left. See i#94895.
-    sal_Int32 nPrevPos = std::min(lStartPos - 1, nExpStrLen);
-    OUStringBuffer sResult(nExpStrLen - nPrevPos);
+    sal_Int32 nPrevPos = std::min(lStartPos - 1, nSrcStrLen);
+    OUStringBuffer sResult(nSrcStrLen - nPrevPos);
     sal_Int32 nCounts = 0;
     while (lCount == -1 || lCount > nCounts)
     {
@@ -1308,7 +1308,7 @@ void SbRtl_Replace(StarBASIC *, SbxArray & rPar, bool)
             break;
         }
     }
-    sResult.append(aExpStr.getStr() + nPrevPos, nExpStrLen - nPrevPos);
+    sResult.append(aExpStr.getStr() + nPrevPos, nSrcStrLen - nPrevPos);
     rPar.Get32(0)->PutString(sResult.makeStringAndClear());
 }
 
