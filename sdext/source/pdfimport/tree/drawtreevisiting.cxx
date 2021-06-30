@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
-
+#include <sal/log.hxx>
 #include <pdfiprocessor.hxx>
 #include <xmlemitter.hxx>
 #include <pdfihelper.hxx>
@@ -828,23 +827,28 @@ void DrawXmlFinalizer::visit( TextElement& elem, const std::list< std::unique_pt
     PropertyMap aFontProps;
 
     // family name
+    // TODO: tdf#143095: use system font name rather than PSName
+    SAL_INFO("sdext.pdfimport", "The font used in xml is: " << rFont.familyName);
     aFontProps[ "fo:font-family" ] = rFont.familyName;
+    aFontProps[ "style:font-family-asia" ] = rFont.familyName;
     aFontProps[ "style:font-family-complex" ] = rFont.familyName;
 
     // bold
     if( rFont.isBold )
     {
         aFontProps[ "fo:font-weight" ]         = "bold";
-        aFontProps[ "fo:font-weight-asian" ]   = "bold";
+        aFontProps[ "style:font-weight-asian" ]   = "bold";
         aFontProps[ "style:font-weight-complex" ] = "bold";
     }
+
     // italic
     if( rFont.isItalic )
     {
         aFontProps[ "fo:font-style" ]         = "italic";
-        aFontProps[ "fo:font-style-asian" ]   = "italic";
+        aFontProps[ "style:font-style-asian" ]   = "italic";
         aFontProps[ "style:font-style-complex" ] = "italic";
     }
+
     // underline
     if( rFont.isUnderline )
     {
@@ -852,10 +856,20 @@ void DrawXmlFinalizer::visit( TextElement& elem, const std::list< std::unique_pt
         aFontProps[ "style:text-underline-width" ]  = "auto";
         aFontProps[ "style:text-underline-color" ]  = "font-color";
     }
+
     // outline
     if( rFont.isOutline )
     {
-        aFontProps[ "style:text-outline" ]  = "true";
+        if ( rFont.familyName == "SimSun" )
+        {   // tdf#81484: There is no bold for SimSun font. In pdf it uses "fill+stroke"
+            // effect for fake bold, and after xpdfimport processing the isOutline is true.
+            aFontProps[ "fo:font-weight" ]            = "bold";
+            aFontProps[ "style:font-weight-asian" ]   = "bold";
+            aFontProps[ "style:font-weight-complex" ] = "bold";
+        } else
+        {
+            aFontProps[ "style:text-outline" ]  = "true";
+        }
     }
 
     // size
