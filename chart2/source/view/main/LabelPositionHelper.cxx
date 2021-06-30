@@ -25,7 +25,8 @@
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
-#include <rtl/math.hxx>
+
+#include <cmath>
 
 namespace chart
 {
@@ -123,36 +124,36 @@ void lcl_correctRotation_Left( double& rfXCorrection, double& rfYCorrection
     }
     else if( fAnglePositiveDegree<= 90.0 )
     {
-        rfXCorrection = -aSize.Height*rtl::math::sin( fAnglePi )/2.0;
+        rfXCorrection = -aSize.Height*std::sin( fAnglePi )/2.0;
         if( bRotateAroundCenter )
-            rfYCorrection = -aSize.Width*rtl::math::sin( fAnglePi )/2.0;
+            rfYCorrection = -aSize.Width*std::sin( fAnglePi )/2.0;
     }
     else if( fAnglePositiveDegree<= 180.0 )
     {
         double beta = fAnglePi-F_PI2;
-        rfXCorrection = -aSize.Width *rtl::math::sin( beta )
-            -aSize.Height *rtl::math::cos( beta )/2.0;
+        rfXCorrection = -aSize.Width *std::sin( beta )
+            -aSize.Height *std::cos( beta )/2.0;
         if( bRotateAroundCenter )
-            rfYCorrection = -aSize.Width *rtl::math::cos( beta )/2.0;
+            rfYCorrection = -aSize.Width *std::cos( beta )/2.0;
         else
-            rfYCorrection = -aSize.Width *rtl::math::cos( beta );
+            rfYCorrection = -aSize.Width *std::cos( beta );
     }
     else if( fAnglePositiveDegree<= 270.0 )
     {
         double beta = fAnglePi - F_PI;
-        rfXCorrection = -aSize.Width *rtl::math::cos( beta )
-            -aSize.Height*rtl::math::sin( beta )/2.0;
+        rfXCorrection = -aSize.Width *std::cos( beta )
+            -aSize.Height*std::sin( beta )/2.0;
         if( bRotateAroundCenter )
-            rfYCorrection = aSize.Width *rtl::math::sin( beta )/2.0;
+            rfYCorrection = aSize.Width *std::sin( beta )/2.0;
         else
-            rfYCorrection = aSize.Width *rtl::math::sin( beta );
+            rfYCorrection = aSize.Width *std::sin( beta );
     }
     else
     {
         double beta = 2*F_PI - fAnglePi;
-        rfXCorrection = -aSize.Height*rtl::math::sin( beta )/2.0;
+        rfXCorrection = -aSize.Height*std::sin( beta )/2.0;
         if( bRotateAroundCenter )
-            rfYCorrection = aSize.Width*rtl::math::sin( beta )/2.0;
+            rfYCorrection = aSize.Width*std::sin( beta )/2.0;
     }
 }
 
@@ -166,35 +167,35 @@ void lcl_correctRotation_Right( double& rfXCorrection, double& rfYCorrection
     }
     else if( fAnglePositiveDegree<= 90.0 )
     {
-        rfXCorrection = aSize.Height*rtl::math::sin( fAnglePi )/2.0;
+        rfXCorrection = aSize.Height*std::sin( fAnglePi )/2.0;
         if( bRotateAroundCenter )
-            rfYCorrection = aSize.Width*rtl::math::sin( fAnglePi )/2.0;
+            rfYCorrection = aSize.Width*std::sin( fAnglePi )/2.0;
     }
     else if( fAnglePositiveDegree<= 180.0 )
     {
         double beta = F_PI - fAnglePi;
-        rfXCorrection = aSize.Width *rtl::math::cos( beta )
-            + aSize.Height*rtl::math::sin( beta )/2.0;
+        rfXCorrection = aSize.Width *std::cos( beta )
+            + aSize.Height*std::sin( beta )/2.0;
         if( bRotateAroundCenter )
-            rfYCorrection = aSize.Width *rtl::math::sin( beta )/2.0;
+            rfYCorrection = aSize.Width *std::sin( beta )/2.0;
         else
-            rfYCorrection = aSize.Width *rtl::math::sin( beta );
+            rfYCorrection = aSize.Width *std::sin( beta );
     }
     else if( fAnglePositiveDegree<= 270.0 )
     {
         double beta = 3*F_PI2 - fAnglePi;
-        rfXCorrection = aSize.Width *rtl::math::sin( beta )
-                    +aSize.Height*rtl::math::cos( beta )/2.0;
+        rfXCorrection = aSize.Width *std::sin( beta )
+                    +aSize.Height*std::cos( beta )/2.0;
         if( bRotateAroundCenter )
-            rfYCorrection = -aSize.Width *rtl::math::cos( beta )/2.0;
+            rfYCorrection = -aSize.Width *std::cos( beta )/2.0;
         else
-            rfYCorrection = -aSize.Width *rtl::math::cos( beta );
+            rfYCorrection = -aSize.Width *std::cos( beta );
     }
     else
     {
-        rfXCorrection  = aSize.Height*rtl::math::sin( 2*F_PI - fAnglePi )/2.0;
+        rfXCorrection  = aSize.Height*std::sin( 2*F_PI - fAnglePi )/2.0;
         if( bRotateAroundCenter )
-            rfYCorrection = -aSize.Width*rtl::math::sin( 2*F_PI - fAnglePi )/2.0;
+            rfYCorrection = -aSize.Width*std::sin( 2*F_PI - fAnglePi )/2.0;
     }
 }
 
@@ -208,35 +209,35 @@ void lcl_correctRotation_Top( double& rfXCorrection, double& rfYCorrection
     }
     else if( fAnglePositiveDegree<= 90.0 )
     {
-        rfXCorrection = aSize.Height*rtl::math::sin( fAnglePi )/2.0;
+        rfXCorrection = aSize.Height*std::sin( fAnglePi )/2.0;
         if( !bRotateAroundCenter )
-            rfXCorrection += aSize.Width*rtl::math::cos( fAnglePi )/2.0;
-        rfYCorrection = -aSize.Width*rtl::math::sin( fAnglePi )/2.0;
+            rfXCorrection += aSize.Width*std::cos( fAnglePi )/2.0;
+        rfYCorrection = -aSize.Width*std::sin( fAnglePi )/2.0;
     }
     else if( fAnglePositiveDegree<= 180.0 )
     {
         double beta = fAnglePi - F_PI2;
-        rfXCorrection = aSize.Height*rtl::math::cos( beta )/2.0;
+        rfXCorrection = aSize.Height*std::cos( beta )/2.0;
         if( !bRotateAroundCenter )
-            rfXCorrection -= aSize.Width*rtl::math::sin( beta )/2.0;
-        rfYCorrection = -aSize.Width*rtl::math::cos( beta )/2.0
-            - aSize.Height*rtl::math::sin( beta );
+            rfXCorrection -= aSize.Width*std::sin( beta )/2.0;
+        rfYCorrection = -aSize.Width*std::cos( beta )/2.0
+            - aSize.Height*std::sin( beta );
     }
     else if( fAnglePositiveDegree<= 270.0 )
     {
         double beta = fAnglePi - F_PI;
-        rfXCorrection = -aSize.Height *rtl::math::sin( beta )/2.0;
+        rfXCorrection = -aSize.Height *std::sin( beta )/2.0;
         if( !bRotateAroundCenter )
-            rfXCorrection += aSize.Width *rtl::math::cos( beta )/2.0;
-        rfYCorrection = -aSize.Width *rtl::math::sin( beta )/2.0
-            -aSize.Height *rtl::math::cos( beta );
+            rfXCorrection += aSize.Width *std::cos( beta )/2.0;
+        rfYCorrection = -aSize.Width *std::sin( beta )/2.0
+            -aSize.Height *std::cos( beta );
     }
     else
     {
-        rfXCorrection = aSize.Height*rtl::math::sin( fAnglePi )/2.0;
+        rfXCorrection = aSize.Height*std::sin( fAnglePi )/2.0;
         if( !bRotateAroundCenter )
-            rfXCorrection -= aSize.Width*rtl::math::cos( fAnglePi )/2.0;
-        rfYCorrection = aSize.Width*rtl::math::sin( fAnglePi )/2.0;
+            rfXCorrection -= aSize.Width*std::cos( fAnglePi )/2.0;
+        rfYCorrection = aSize.Width*std::sin( fAnglePi )/2.0;
     }
 }
 
@@ -250,36 +251,36 @@ void lcl_correctRotation_Bottom( double& rfXCorrection, double& rfYCorrection
     }
     else if( fAnglePositiveDegree<= 90.0 )
     {
-        rfXCorrection = -aSize.Height*rtl::math::sin( fAnglePi )/2.0;
+        rfXCorrection = -aSize.Height*std::sin( fAnglePi )/2.0;
         if( !bRotateAroundCenter )
-            rfXCorrection -= aSize.Width *rtl::math::cos( fAnglePi )/2.0;
-        rfYCorrection = aSize.Width*rtl::math::sin( fAnglePi )/2.0;
+            rfXCorrection -= aSize.Width *std::cos( fAnglePi )/2.0;
+        rfYCorrection = aSize.Width*std::sin( fAnglePi )/2.0;
     }
     else if( fAnglePositiveDegree<= 180.0 )
     {
         double beta = fAnglePi-F_PI2;
-        rfXCorrection = -aSize.Height*rtl::math::cos( beta )/2.0;
+        rfXCorrection = -aSize.Height*std::cos( beta )/2.0;
         if( !bRotateAroundCenter )
-            rfXCorrection += aSize.Width *rtl::math::sin( beta )/2.0;
-        rfYCorrection = aSize.Width *rtl::math::cos( beta )/2.0
-            +aSize.Height*rtl::math::sin( beta );
+            rfXCorrection += aSize.Width *std::sin( beta )/2.0;
+        rfYCorrection = aSize.Width *std::cos( beta )/2.0
+            +aSize.Height*std::sin( beta );
     }
     else if( fAnglePositiveDegree<= 270.0 )
     {
         double beta = 3*F_PI2 - fAnglePi;
-        rfXCorrection = aSize.Height*rtl::math::cos( beta )/2.0;
+        rfXCorrection = aSize.Height*std::cos( beta )/2.0;
         if( !bRotateAroundCenter )
-            rfXCorrection -= aSize.Width *rtl::math::sin( beta )/2.0;
-        rfYCorrection = aSize.Height*rtl::math::sin( beta )
-                        +aSize.Width*rtl::math::cos( beta )/2.0;
+            rfXCorrection -= aSize.Width *std::sin( beta )/2.0;
+        rfYCorrection = aSize.Height*std::sin( beta )
+                        +aSize.Width*std::cos( beta )/2.0;
     }
     else
     {
         double beta = 2*F_PI - fAnglePi;
-        rfXCorrection = aSize.Height*rtl::math::sin( beta )/2.0;
+        rfXCorrection = aSize.Height*std::sin( beta )/2.0;
         if( !bRotateAroundCenter )
-            rfXCorrection += aSize.Width*rtl::math::cos( beta )/2.0;
-        rfYCorrection = aSize.Width*rtl::math::sin( beta )/2.0;
+            rfXCorrection += aSize.Width*std::cos( beta )/2.0;
+        rfYCorrection = aSize.Width*std::sin( beta )/2.0;
     }
 }
 
@@ -293,25 +294,25 @@ void lcl_correctRotation_Left_Top( double& rfXCorrection, double& rfYCorrection
     }
     else if( fAnglePositiveDegree<= 90.0 )
     {
-        rfYCorrection = -aSize.Width*rtl::math::sin( fAnglePi );
+        rfYCorrection = -aSize.Width*std::sin( fAnglePi );
     }
     else if( fAnglePositiveDegree<= 180.0 )
     {
         double beta = fAnglePi-F_PI2;
-        rfXCorrection = -aSize.Width*rtl::math::sin( beta );
-        rfYCorrection = -aSize.Height*rtl::math::sin( beta )
-                        -aSize.Width*rtl::math::cos( beta );
+        rfXCorrection = -aSize.Width*std::sin( beta );
+        rfYCorrection = -aSize.Height*std::sin( beta )
+                        -aSize.Width*std::cos( beta );
     }
     else if( fAnglePositiveDegree<= 270.0 )
     {
         double beta = 3*F_PI2 - fAnglePi;
-        rfXCorrection = -aSize.Height*rtl::math::cos( beta )
-                        -aSize.Width*rtl::math::sin( beta );
-        rfYCorrection = -aSize.Height*rtl::math::sin( beta );
+        rfXCorrection = -aSize.Height*std::cos( beta )
+                        -aSize.Width*std::sin( beta );
+        rfYCorrection = -aSize.Height*std::sin( beta );
     }
     else
     {
-        rfXCorrection = aSize.Height*rtl::math::sin( fAnglePi );
+        rfXCorrection = aSize.Height*std::sin( fAnglePi );
     }
 }
 
@@ -325,25 +326,25 @@ void lcl_correctRotation_Left_Bottom( double& rfXCorrection, double& rfYCorrecti
     }
     else if( fAnglePositiveDegree<= 90.0 )
     {
-        rfXCorrection = -aSize.Height*rtl::math::sin( fAnglePi );
+        rfXCorrection = -aSize.Height*std::sin( fAnglePi );
     }
     else if( fAnglePositiveDegree<= 180.0 )
     {
         double beta = fAnglePi-F_PI2;
-        rfXCorrection = -aSize.Width*rtl::math::sin( beta )
-                        -aSize.Height*rtl::math::cos( beta );
-        rfYCorrection = aSize.Height*rtl::math::sin( beta );
+        rfXCorrection = -aSize.Width*std::sin( beta )
+                        -aSize.Height*std::cos( beta );
+        rfYCorrection = aSize.Height*std::sin( beta );
     }
     else if( fAnglePositiveDegree<= 270.0 )
     {
         double beta = 3*F_PI2 - fAnglePi;
-        rfXCorrection = -aSize.Width*rtl::math::sin( beta );
-        rfYCorrection = aSize.Width*rtl::math::cos( beta )
-                        +aSize.Height*rtl::math::sin( beta );
+        rfXCorrection = -aSize.Width*std::sin( beta );
+        rfYCorrection = aSize.Width*std::cos( beta )
+                        +aSize.Height*std::sin( beta );
     }
     else
     {
-        rfYCorrection = -aSize.Width*rtl::math::sin( fAnglePi );
+        rfYCorrection = -aSize.Width*std::sin( fAnglePi );
     }
 }
 
@@ -357,25 +358,25 @@ void lcl_correctRotation_Right_Top( double& rfXCorrection, double& rfYCorrection
     }
     else if( fAnglePositiveDegree<= 90.0 )
     {
-        rfXCorrection = aSize.Height*rtl::math::sin( fAnglePi );
+        rfXCorrection = aSize.Height*std::sin( fAnglePi );
     }
     else if( fAnglePositiveDegree<= 180.0 )
     {
         double beta = fAnglePi-F_PI2;
-        rfXCorrection = aSize.Width*rtl::math::sin( beta )
-                        +aSize.Height*rtl::math::cos( beta );
-        rfYCorrection = -aSize.Height*rtl::math::sin( beta );
+        rfXCorrection = aSize.Width*std::sin( beta )
+                        +aSize.Height*std::cos( beta );
+        rfYCorrection = -aSize.Height*std::sin( beta );
     }
     else if( fAnglePositiveDegree<= 270.0 )
     {
         double beta = 3*F_PI2 - fAnglePi;
-        rfXCorrection = aSize.Width*rtl::math::sin( beta );
-        rfYCorrection = -aSize.Width*rtl::math::cos( beta )
-                        -aSize.Height*rtl::math::sin( beta );
+        rfXCorrection = aSize.Width*std::sin( beta );
+        rfYCorrection = -aSize.Width*std::cos( beta )
+                        -aSize.Height*std::sin( beta );
     }
     else
     {
-        rfYCorrection = aSize.Width*rtl::math::sin( fAnglePi );
+        rfYCorrection = aSize.Width*std::sin( fAnglePi );
     }
 }
 
@@ -389,25 +390,25 @@ void lcl_correctRotation_Right_Bottom( double& rfXCorrection, double& rfYCorrect
     }
     else if( fAnglePositiveDegree<= 90.0 )
     {
-        rfYCorrection = aSize.Width*rtl::math::sin( fAnglePi );
+        rfYCorrection = aSize.Width*std::sin( fAnglePi );
     }
     else if( fAnglePositiveDegree<= 180.0 )
     {
         double beta = fAnglePi-F_PI2;
-        rfXCorrection = aSize.Width*rtl::math::sin( beta );
-        rfYCorrection = aSize.Height*rtl::math::sin( beta )
-                        +aSize.Width*rtl::math::cos( beta );
+        rfXCorrection = aSize.Width*std::sin( beta );
+        rfYCorrection = aSize.Height*std::sin( beta )
+                        +aSize.Width*std::cos( beta );
     }
     else if( fAnglePositiveDegree<= 270.0 )
     {
         double beta = 3*F_PI2 - fAnglePi;
-        rfXCorrection = aSize.Height*rtl::math::cos( beta )
-                        +aSize.Width*rtl::math::sin( beta );
-        rfYCorrection = aSize.Height*rtl::math::sin( beta );
+        rfXCorrection = aSize.Height*std::cos( beta )
+                        +aSize.Width*std::sin( beta );
+        rfYCorrection = aSize.Height*std::sin( beta );
     }
     else
     {
-        rfXCorrection = -aSize.Height*rtl::math::sin( fAnglePi );
+        rfXCorrection = -aSize.Height*std::sin( fAnglePi );
     }
 }
 

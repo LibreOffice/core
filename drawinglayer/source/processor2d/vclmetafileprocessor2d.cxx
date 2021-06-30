@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <cmath>
 #include <memory>
 #include "vclmetafileprocessor2d.hxx"
 #include "vclpixelprocessor2d.hxx"
 #include <rtl/ustring.hxx>
-#include <rtl/math.hxx>
 #include <tools/gen.hxx>
 #include <tools/stream.hxx>
 #include <tools/diagnose_ex.h>
@@ -443,7 +443,8 @@ std::unique_ptr<SvtGraphicStroke> VclMetafileProcessor2D::impTryToCreateSvtGraph
                 {
                     eJoin = SvtGraphicStroke::joinMiter;
                     // ATM 15 degrees is assumed
-                    fMiterLength /= rtl::math::sin(basegfx::deg2rad(15.0));
+                    // TODO wait for P1383R0 and C++20's std::numbers::pi
+                    fMiterLength /= std::sin(M_PI / 12);
                     break;
                 }
                 case basegfx::B2DLineJoin::Round:

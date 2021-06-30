@@ -658,7 +658,6 @@ inline double Complex::Abs() const
     return sqrt( r * r + i * i );
 }
 
-
 void Complex::Conjugate()
 {
     i = -i;
