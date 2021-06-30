@@ -387,6 +387,8 @@ class Complex
     double                  i;
     sal_Unicode             c;
 
+    inline bool             isInvalidArcArg(double fVal);
+
 public:
     inline                  Complex( double fReal, double fImag = 0.0, sal_Unicode cC = '\0' );
     /// @throws css::uno::RuntimeException
@@ -658,6 +660,10 @@ inline double Complex::Abs() const
     return sqrt( r * r + i * i );
 }
 
+inline bool Complex::isInvalidArcArg(double fVal)
+{
+    return std::fabs(fVal) > std::ldexp(1.0, 65);
+}
 
 void Complex::Conjugate()
 {

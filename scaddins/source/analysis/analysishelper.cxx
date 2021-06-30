@@ -1740,7 +1740,7 @@ void Complex::Sqrt()
 
 void Complex::Sin()
 {
-    if( !::rtl::math::isValidArcArg( r ) )
+    if( isInvalidArcArg(r) )
         throw lang::IllegalArgumentException();
 
     if( i )
@@ -1758,7 +1758,7 @@ void Complex::Sin()
 
 void Complex::Cos()
 {
-    if( !::rtl::math::isValidArcArg( r ) )
+    if( isInvalidArcArg(r) )
         throw lang::IllegalArgumentException();
 
     if( i )
@@ -1836,7 +1836,7 @@ void Complex::Tan()
 {
     if ( i )
     {
-        if( !::rtl::math::isValidArcArg( 2.0 * r ) )
+        if( isInvalidArcArg( 2.0 * r ) )
             throw lang::IllegalArgumentException();
         double fScale =1.0 / ( cos( 2.0 * r ) + cosh( 2.0 * i ));
         r = sin( 2.0 * r ) * fScale;
@@ -1844,7 +1844,7 @@ void Complex::Tan()
     }
     else
     {
-        if( !::rtl::math::isValidArcArg( r ) )
+        if( isInvalidArcArg( r ) )
             throw lang::IllegalArgumentException();
         r = tan( r );
     }
@@ -1855,7 +1855,7 @@ void Complex::Sec()
 {
     if( i )
     {
-        if( !::rtl::math::isValidArcArg( 2 * r ) )
+        if( isInvalidArcArg( 2 * r ) )
             throw lang::IllegalArgumentException();
         double fScale = 1.0 / (cosh( 2.0 * i) + cos ( 2.0 * r));
         double  r_;
@@ -1865,7 +1865,7 @@ void Complex::Sec()
     }
     else
     {
-        if( !::rtl::math::isValidArcArg( r ) )
+        if( isInvalidArcArg( r ) )
             throw lang::IllegalArgumentException();
         r = 1.0 / cos( r );
     }
@@ -1876,7 +1876,7 @@ void Complex::Csc()
 {
     if( i )
     {
-        if( !::rtl::math::isValidArcArg( 2 * r ) )
+        if( isInvalidArcArg( 2 * r ) )
             throw lang::IllegalArgumentException();
         double fScale = 1.0 / (cosh( 2.0 * i) - cos ( 2.0 * r));
         double  r_;
@@ -1886,7 +1886,7 @@ void Complex::Csc()
     }
     else
     {
-        if( !::rtl::math::isValidArcArg( r ) )
+        if( isInvalidArcArg( r ) )
             throw lang::IllegalArgumentException();
         r = 1.0 / sin( r );
     }
@@ -1897,7 +1897,7 @@ void Complex::Cot()
 {
     if ( i )
     {
-        if( !::rtl::math::isValidArcArg( 2.0 * r ) )
+        if( isInvalidArcArg( 2.0 * r ) )
             throw lang::IllegalArgumentException();
         double fScale =1.0 / ( cosh( 2.0 * i ) - cos( 2.0 * r ) );
         r = sin( 2.0 * r ) * fScale;
@@ -1905,7 +1905,7 @@ void Complex::Cot()
     }
     else
     {
-        if( !::rtl::math::isValidArcArg( r ) )
+        if( isInvalidArcArg( r ) )
             throw lang::IllegalArgumentException();
         r = 1.0 / tan( r );
     }
@@ -1914,7 +1914,7 @@ void Complex::Cot()
 
 void Complex::Sinh()
 {
-    if( !::rtl::math::isValidArcArg( r ) )
+    if( isInvalidArcArg( r ) )
         throw lang::IllegalArgumentException();
 
     if( i )
@@ -1931,7 +1931,7 @@ void Complex::Sinh()
 
 void Complex::Cosh()
 {
-    if( !::rtl::math::isValidArcArg( r ) )
+    if( isInvalidArcArg( r ) )
         throw lang::IllegalArgumentException();
 
     if( i )
@@ -1950,7 +1950,7 @@ void Complex::Sech()
 {
     if ( i )
     {
-        if( !::rtl::math::isValidArcArg( 2.0 * r ) )
+        if( isInvalidArcArg( 2.0 * r ) )
             throw lang::IllegalArgumentException();
         double fScale =1.0 / ( cosh( 2.0 * r ) + cos( 2.0 * i ));
         double r_;
@@ -1960,7 +1960,7 @@ void Complex::Sech()
     }
     else
     {
-        if( !::rtl::math::isValidArcArg( r ) )
+        if( isInvalidArcArg( r ) )
             throw lang::IllegalArgumentException();
         r = 1.0 / cosh( r );
     }
@@ -1971,7 +1971,7 @@ void Complex::Csch()
 {
     if ( i )
     {
-        if( !::rtl::math::isValidArcArg( 2.0 * r ) )
+        if( isInvalidArcArg( 2.0 * r ) )
             throw lang::IllegalArgumentException();
         double fScale =1.0 / ( cosh( 2.0 * r ) - cos( 2.0 * i ));
         double r_;
@@ -1981,7 +1981,7 @@ void Complex::Csch()
     }
     else
     {
-        if( !::rtl::math::isValidArcArg( r ) )
+        if( isInvalidArcArg( r ) )
             throw lang::IllegalArgumentException();
         r = 1.0 / sinh( r );
     }
