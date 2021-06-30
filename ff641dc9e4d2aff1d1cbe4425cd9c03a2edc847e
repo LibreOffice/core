@@ -16,6 +16,24 @@
       "revId": "ff641dc9e4d2aff1d1cbe4425cd9c03a2edc847e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "51d2a7ba_c2347498",
+        "filename": "uitest/uitest/test.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-06-30T07:44:07Z",
+      "side": 1,
+      "message": "Yes, in some cases the value of close_button is explicitly set to None on purpose. For instance when another dialog is displayed after closing the current one. In this case we don\u0027t want to call close_dialog_through_button at the end, instead, we will use execute_dialog_through_action to open the next dialog. That\u0027s why I created this patch, in case there is an assert in the current dialog and it fails, we will try to call the \u0027cancel\u0027 button if it exists, because close_dialog_through_button won\u0027t be called.",
+      "parentUuid": "a1c6e55f_315177ae",
+      "revId": "ff641dc9e4d2aff1d1cbe4425cd9c03a2edc847e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
