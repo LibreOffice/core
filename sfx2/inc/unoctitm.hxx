@@ -25,6 +25,7 @@
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/weakref.hxx>
 
+#include <svl/lstner.hxx>
 #include <sfx2/ctrlitem.hxx>
 #include <osl/mutex.hxx>
 
@@ -101,7 +102,13 @@ public:
     SfxDispatcher*          GetDispatcher_Impl();
 };
 
+<<<<<<< HEAD   (f64708 fix failure in JunitTest_unotools_complex)
 class SfxDispatchController_Impl : public SfxControllerItem
+=======
+class SfxDispatchController_Impl final
+    : public SfxControllerItem
+    , public SfxListener
+>>>>>>> CHANGE (7cbd6d sfx2: try to fix lifecycle of SfxOfficeDispatch)
 {
     css::util::URL              aDispatchURL;
     SfxDispatcher*              pDispatcher;
@@ -125,6 +132,8 @@ public:
                                                     const SfxSlot*                     pSlot,
                                                     const css::util::URL& rURL );
                         virtual ~SfxDispatchController_Impl() override;
+
+    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
 
     static OUString getSlaveCommand( const css::util::URL& rURL );
 
