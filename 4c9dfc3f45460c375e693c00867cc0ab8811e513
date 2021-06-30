@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "4e5e2eaf_8cc4e148",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-06-30T11:38:58Z",
+      "side": 1,
+      "message": "setInf, not setinf",
+      "range": {
+        "startLine": 7,
+        "startChar": 21,
+        "endLine": 7,
+        "endChar": 27
+      },
+      "revId": "4c9dfc3f45460c375e693c00867cc0ab8811e513",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "394d73a3_9fa1770f",
         "filename": "basic/qa/cppunit/test_scanner.cxx",
         "patchSetId": 2
