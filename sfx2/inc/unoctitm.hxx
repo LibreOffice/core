@@ -25,6 +25,7 @@
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/weakref.hxx>
 
+#include <svl/lstner.hxx>
 #include <sfx2/ctrlitem.hxx>
 #include <osl/mutex.hxx>
 
@@ -101,7 +102,9 @@ public:
     SfxDispatcher*          GetDispatcher_Impl();
 };
 
-class SfxDispatchController_Impl : public SfxControllerItem
+class SfxDispatchController_Impl
+    : public SfxControllerItem
+    , public SfxListener
 {
     css::util::URL              aDispatchURL;
     SfxDispatcher*              pDispatcher;
@@ -125,6 +128,8 @@ public:
                                                     const SfxSlot*                     pSlot,
                                                     const css::util::URL& rURL );
                         virtual ~SfxDispatchController_Impl() override;
+
+    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
 
     static OUString getSlaveCommand( const css::util::URL& rURL );
 
