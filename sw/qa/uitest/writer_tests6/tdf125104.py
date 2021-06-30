@@ -18,7 +18,7 @@ class tdf125104(UITestCase):
         select_by_text(comboLayoutFormat, format)
 
     def test_tdf125104_pageFormat_numbering(self):
-        with self.ui_test.create_doc_in_start_center_guarded("writer") as document:
+        with self.ui_test.create_doc_in_start_center("writer") as document:
 
             # insert page numbers on multiple pages
             self.xUITest.executeCommand(".uno:InsertPageNumberField")

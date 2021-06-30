@@ -11,7 +11,7 @@ from uitest.uihelper.common import get_state_as_dict, type_text
 class WriterInsertHorizontalLine(UITestCase):
 
     def test_insert_horizontal_line(self):
-        with self.ui_test.create_doc_in_start_center_guarded("writer"):
+        with self.ui_test.create_doc_in_start_center("writer"):
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")
 

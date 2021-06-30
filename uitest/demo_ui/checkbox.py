@@ -13,7 +13,7 @@ class CheckBoxTest(UITestCase):
 
     def test_toggle_checkbox(self):
 
-        with self.ui_test.create_doc_in_start_center_guarded("calc"):
+        with self.ui_test.create_doc_in_start_center("calc"):
 
             with self.ui_test.execute_dialog_through_command(".uno:FormatCellDialog") as xCellsDlg:
                 xNegativeNumRedCB = xCellsDlg.getChild("negnumred")

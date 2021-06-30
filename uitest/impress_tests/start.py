@@ -12,7 +12,7 @@ from uitest.framework import UITestCase
 class SimpleImpressTest(UITestCase):
     def test_start_impress(self):
 
-        with self.ui_test.create_doc_in_start_center_guarded("impress"):
+        with self.ui_test.create_doc_in_start_center("impress"):
 
             xTemplateDlg = self.xUITest.getTopFocusWindow()
             xCancelBtn = xTemplateDlg.getChild("close")
@@ -28,7 +28,7 @@ class SimpleImpressTest(UITestCase):
 
     def test_select_page(self):
 
-        with self.ui_test.create_doc_in_start_center_guarded("impress"):
+        with self.ui_test.create_doc_in_start_center("impress"):
 
             xTemplateDlg = self.xUITest.getTopFocusWindow()
             xCancelBtn = xTemplateDlg.getChild("close")

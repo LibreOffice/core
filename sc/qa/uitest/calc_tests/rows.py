@@ -11,7 +11,7 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 
 class CalcRows(UITestCase):
     def test_row_height(self):
-        with self.ui_test.create_doc_in_start_center_guarded("calc"):
+        with self.ui_test.create_doc_in_start_center("calc"):
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
 
@@ -45,7 +45,7 @@ class CalcRows(UITestCase):
 
 
     def test_row_height_two_rows(self):
-        with self.ui_test.create_doc_in_start_center_guarded("calc"):
+        with self.ui_test.create_doc_in_start_center("calc"):
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
 
@@ -76,7 +76,7 @@ class CalcRows(UITestCase):
 
     def test_tdf89140_row_height_copy(self):
         #Bug 89140 - Calc row paste doesn't keep row height
-        with self.ui_test.create_doc_in_start_center_guarded("calc"):
+        with self.ui_test.create_doc_in_start_center("calc"):
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
 
@@ -107,7 +107,7 @@ class CalcRows(UITestCase):
 
 
     def test_row_hide_show(self):
-        with self.ui_test.create_doc_in_start_center_guarded("calc"):
+        with self.ui_test.create_doc_in_start_center("calc"):
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
             #select A3
@@ -134,7 +134,7 @@ class CalcRows(UITestCase):
 
 
     def test_row_test_move(self):
-        with self.ui_test.create_doc_in_start_center_guarded("calc"):
+        with self.ui_test.create_doc_in_start_center("calc"):
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
             #select A3
@@ -153,7 +153,7 @@ class CalcRows(UITestCase):
 
 
     def test_row_height_insert_below(self):
-        with self.ui_test.create_doc_in_start_center_guarded("calc"):
+        with self.ui_test.create_doc_in_start_center("calc"):
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
 

@@ -15,7 +15,7 @@ from uitest.uihelper.common import select_pos
 class tdf115853(UITestCase):
 
     def test_tdf115853(self):
-        with self.ui_test.create_doc_in_start_center_guarded("writer"):
+        with self.ui_test.create_doc_in_start_center("writer"):
             with self.ui_test.execute_dialog_through_command(".uno:SetDocumentProperties") as xDialog:
 
                 xTabs = xDialog.getChild("tabcontrol")

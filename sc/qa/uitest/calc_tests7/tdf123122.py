@@ -14,7 +14,7 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 class tdf123122(UITestCase):
     def test_tdf123122_format_cell_datetime(self):
         #numberingformatpage.ui
-        with self.ui_test.create_doc_in_start_center_guarded("calc"):
+        with self.ui_test.create_doc_in_start_center("calc"):
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
             #select cell A1

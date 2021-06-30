@@ -13,7 +13,7 @@ from uitest.uihelper.calc import enter_text_to_cell
 class CalcPasteOnly(UITestCase):
 
     def test_paste_only(self):
-        with self.ui_test.create_doc_in_start_center_guarded("calc") as document:
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xTopWindow = self.xUITest.getTopFocusWindow()
             gridwin = xTopWindow.getChild("grid_window")
 

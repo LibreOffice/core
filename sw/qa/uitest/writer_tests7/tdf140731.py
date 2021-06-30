@@ -11,7 +11,7 @@ from uitest.uihelper.common import type_text
 
 class tdf140731(UITestCase):
     def test_tdf140731(self):
-        with self.ui_test.create_doc_in_start_center_guarded("writer") as document:
+        with self.ui_test.create_doc_in_start_center("writer") as document:
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")
             type_text(xWriterEdit, 'Lorem')

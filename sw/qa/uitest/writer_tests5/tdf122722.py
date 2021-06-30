@@ -12,7 +12,7 @@ from uitest.uihelper.common import select_pos
 
 class tdf122722(UITestCase):
    def test_tdf122722_format_character_hidden(self):
-        with self.ui_test.create_doc_in_start_center_guarded("writer") as document:
+        with self.ui_test.create_doc_in_start_center("writer") as document:
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")
             #1. Start LibreOffice

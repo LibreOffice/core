@@ -59,7 +59,7 @@ frog, dogg, catt"""
         # This automates the steps described in the bug report tdf#46852
 
         # Step 1: Create a document with repetitious misspelled words
-        with self.ui_test.create_doc_in_start_center_guarded("writer") as document:
+        with self.ui_test.create_doc_in_start_center("writer") as document:
             cursor = document.getCurrentController().getViewCursor()
             # Inserted text must be en_US, so make sure to set language in current location
             cursor.CharLocale = Locale("en", "US", "")

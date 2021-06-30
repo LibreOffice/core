@@ -133,7 +133,7 @@ class standardFilter(UITestCase):
             self.assertEqual(get_cell_by_position(calc_doc, 1, 7, 2).getValue(), 4)
 
     def test_standard_filter_case_sensitive(self):
-        with self.ui_test.create_doc_in_start_center_guarded("calc"):
+        with self.ui_test.create_doc_in_start_center("calc"):
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
 
@@ -179,7 +179,7 @@ class standardFilter(UITestCase):
             self.ui_test.close_dialog_through_button(xOKBtn)
 
     def test_standard_filter_regular_expression(self):
-        with self.ui_test.create_doc_in_start_center_guarded("calc"):
+        with self.ui_test.create_doc_in_start_center("calc"):
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
 
@@ -231,7 +231,7 @@ class standardFilter(UITestCase):
             self.ui_test.close_dialog_through_button(xOKBtn)
 
     def test_standard_filter_condition_contains(self):
-        with self.ui_test.create_doc_in_start_center_guarded("calc"):
+        with self.ui_test.create_doc_in_start_center("calc"):
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
 
@@ -284,7 +284,7 @@ class standardFilter(UITestCase):
 
         #from testcasespecification OOo
     def test_standard_filter_condition_contains2(self):
-        with self.ui_test.create_doc_in_start_center_guarded("calc"):
+        with self.ui_test.create_doc_in_start_center("calc"):
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
 
@@ -347,7 +347,7 @@ class standardFilter(UITestCase):
             self.ui_test.close_dialog_through_button(xCancelBtn)
 
     def test_standard_filter_condition_does_not_contains(self):
-        with self.ui_test.create_doc_in_start_center_guarded("calc"):
+        with self.ui_test.create_doc_in_start_center("calc"):
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
 
@@ -411,7 +411,7 @@ class standardFilter(UITestCase):
 
 
     def test_standard_filter_condition_Begins_with(self):
-        with self.ui_test.create_doc_in_start_center_guarded("calc"):
+        with self.ui_test.create_doc_in_start_center("calc"):
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
 
@@ -475,7 +475,7 @@ class standardFilter(UITestCase):
 
 
     def test_standard_filter_condition_Does_not_begin_with(self):
-        with self.ui_test.create_doc_in_start_center_guarded("calc"):
+        with self.ui_test.create_doc_in_start_center("calc"):
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
 
@@ -539,7 +539,7 @@ class standardFilter(UITestCase):
 
 
     def test_standard_filter_condition_Ends_with(self):
-        with self.ui_test.create_doc_in_start_center_guarded("calc"):
+        with self.ui_test.create_doc_in_start_center("calc"):
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
 
@@ -603,7 +603,7 @@ class standardFilter(UITestCase):
 
 
     def test_standard_filter_condition_Does_not_end_with(self):
-        with self.ui_test.create_doc_in_start_center_guarded("calc"):
+        with self.ui_test.create_doc_in_start_center("calc"):
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
 

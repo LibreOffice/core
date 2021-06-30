@@ -29,7 +29,7 @@ class CalcChartEditUIDemo(UITestCase):
 
     def test_select_secondary_axis(self):
 
-        with self.ui_test.create_doc_in_start_center_guarded("calc"):
+        with self.ui_test.create_doc_in_start_center("calc"):
 
             self.fill_spreadsheet()
 

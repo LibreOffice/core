@@ -126,7 +126,7 @@ class AutofilterTest(UITestCase):
             self.assertFalse(is_row_hidden(doc, 4))
 
     def test_differentSearches(self):
-        with self.ui_test.create_doc_in_start_center_guarded("calc") as document:
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             calcDoc = self.xUITest.getTopFocusWindow()
 
             xGridWindow = calcDoc.getChild("grid_window")
@@ -190,7 +190,7 @@ class AutofilterTest(UITestCase):
 
 
     def test_tdf89244(self):
-        with self.ui_test.create_doc_in_start_center_guarded("calc") as document:
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
 
@@ -368,7 +368,7 @@ class AutofilterTest(UITestCase):
             self.assertFalse(is_row_hidden(doc, 7))
 
     def test_tdf142350(self):
-        with self.ui_test.create_doc_in_start_center_guarded("calc") as document:
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             calcDoc = self.xUITest.getTopFocusWindow()
             gridwin = calcDoc.getChild("grid_window")
 

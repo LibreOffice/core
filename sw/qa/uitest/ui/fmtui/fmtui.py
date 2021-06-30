@@ -15,7 +15,7 @@ class TestTmpdlg(UITestCase):
 
     def test_para_style_semi_transparent_text(self):
 
-        with self.ui_test.create_doc_in_start_center_guarded("writer"):
+        with self.ui_test.create_doc_in_start_center("writer"):
             xWriterDoc = self.xUITest.getTopFocusWindow()
             with self.ui_test.execute_dialog_through_command(".uno:EditStyle", close_button="cancel") as xDialog:
 

@@ -13,7 +13,7 @@ import importlib
 
 class TestClass(UITestCase):
     def test_master_page_background(self):
-        with self.ui_test.create_doc_in_start_center_guarded("impress") as document:
+        with self.ui_test.create_doc_in_start_center("impress") as document:
             TemplateDialog = self.xUITest.getTopFocusWindow()
             close = TemplateDialog.getChild("close")
             self.ui_test.close_dialog_through_button(close)

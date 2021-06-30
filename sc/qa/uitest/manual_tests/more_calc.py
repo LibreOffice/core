@@ -21,7 +21,7 @@ class ManualCalcTests(UITestCase):
         # This test is to check that paste special combined with some options and link is ok.
         # Refers to tdf#84810
 
-        with self.ui_test.create_doc_in_start_center_guarded("calc") as document:
+        with self.ui_test.create_doc_in_start_center("calc") as document:
 
             # Write text to cell A1
             xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")

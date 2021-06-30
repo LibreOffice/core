@@ -12,7 +12,7 @@ from uitest.framework import UITestCase
 class FunctionWizardTest(UITestCase):
     # tdf#98427
     def test_open_function_wizard(self):
-        with self.ui_test.create_doc_in_start_center_guarded("calc"):
+        with self.ui_test.create_doc_in_start_center("calc"):
 
             self.ui_test.execute_modeless_dialog_through_command(".uno:FunctionDialog")
 

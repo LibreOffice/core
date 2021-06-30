@@ -38,7 +38,7 @@ class AutoRedactDialog(UITestCase):
         self.assertEqual(len(xTargetsListbox.getChildren()), 0)
 
     def test_add_target(self):
-        with self.ui_test.create_doc_in_start_center_guarded("writer"):
+        with self.ui_test.create_doc_in_start_center("writer"):
             with self.ui_test.execute_dialog_through_command(".uno:AutoRedactDoc", close_button="cancel") as xDialog:
                 xAddBtn = xDialog.getChild("add")
 
@@ -94,7 +94,7 @@ class AutoRedactDialog(UITestCase):
 
 
     def test_edit_target(self):
-        with self.ui_test.create_doc_in_start_center_guarded("writer"):
+        with self.ui_test.create_doc_in_start_center("writer"):
             with self.ui_test.execute_dialog_through_command(".uno:AutoRedactDoc", close_button="cancel") as xDialog:
                 xAddBtn = xDialog.getChild("add")
                 xEditBtn = xDialog.getChild("edit")

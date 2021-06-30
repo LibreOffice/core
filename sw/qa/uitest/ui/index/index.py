@@ -17,7 +17,7 @@ class TestSwuiidxmrk(UITestCase):
     def test_bibliography_page_number_insert(self):
 
         # Given an empty Writer document:
-        with self.ui_test.create_doc_in_start_center_guarded("writer") as component:
+        with self.ui_test.create_doc_in_start_center("writer") as component:
 
             self.ui_test.execute_modeless_dialog_through_command(".uno:InsertAuthoritiesEntry")
             insert_entry = self.xUITest.getTopFocusWindow()

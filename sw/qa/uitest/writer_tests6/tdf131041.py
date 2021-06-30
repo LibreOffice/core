@@ -10,7 +10,7 @@ from uitest.uihelper.common import select_pos, get_state_as_dict
 class tdf131041(UITestCase):
 
     def test_run(self):
-        with self.ui_test.create_doc_in_start_center_guarded("writer"):
+        with self.ui_test.create_doc_in_start_center("writer"):
 
             with self.ui_test.execute_dialog_through_command(".uno:PageDialog") as xDialog:
                 tabcontrol = xDialog.getChild("tabcontrol")

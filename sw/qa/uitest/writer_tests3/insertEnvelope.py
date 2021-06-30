@@ -14,7 +14,7 @@ from uitest.uihelper.common import get_state_as_dict
 class WriterInsertEnvelope(UITestCase):
 
     def test_insert_envelope(self):
-        with self.ui_test.create_doc_in_start_center_guarded("writer"):
+        with self.ui_test.create_doc_in_start_center("writer"):
             with self.ui_test.execute_dialog_through_command(".uno:InsertEnvelope", close_button="user") as xDialog:
                 xAddrTxt= xDialog.getChild("addredit")
                 xSenderTxt = xDialog.getChild("senderedit")

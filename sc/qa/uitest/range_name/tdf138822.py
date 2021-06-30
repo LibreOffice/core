@@ -11,7 +11,7 @@ from uitest.uihelper.common import type_text
 class tdf138822(UITestCase):
 
     def test_tdf138822(self):
-        with self.ui_test.create_doc_in_start_center_guarded("calc"):
+        with self.ui_test.create_doc_in_start_center("calc"):
 
             calcDoc = self.xUITest.getTopFocusWindow()
             xPosWindow = calcDoc.getChild('pos_window')

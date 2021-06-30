@@ -14,7 +14,7 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 #+ Bug 101904 - Delete Contents dialog -- won't delete cell content "Date & time"
 class clearCells(UITestCase):
     def test_clear_cells_text(self):
-        with self.ui_test.create_doc_in_start_center_guarded("calc") as document:
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
             enter_text_to_cell(gridwin, "A1", "aa")
@@ -54,7 +54,7 @@ class clearCells(UITestCase):
 
 
     def test_clear_cells_date_tdf101904(self):
-        with self.ui_test.create_doc_in_start_center_guarded("calc") as document:
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
             enter_text_to_cell(gridwin, "A1", "01/01/2000")
@@ -94,7 +94,7 @@ class clearCells(UITestCase):
 
 
     def test_clear_cells_number(self):
-        with self.ui_test.create_doc_in_start_center_guarded("calc") as document:
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
             enter_text_to_cell(gridwin, "A1", "aa")
@@ -133,7 +133,7 @@ class clearCells(UITestCase):
             self.assertEqual(get_cell_by_position(document, 0, 0, 1).getValue() , 0)
 
     def test_clear_cells_formulas(self):
-        with self.ui_test.create_doc_in_start_center_guarded("calc") as document:
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
             enter_text_to_cell(gridwin, "A1", "1")
@@ -173,7 +173,7 @@ class clearCells(UITestCase):
 
 
     def test_clear_cells_formats(self):
-        with self.ui_test.create_doc_in_start_center_guarded("calc") as document:
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
             enter_text_to_cell(gridwin, "A1", "aa")
@@ -223,7 +223,7 @@ class clearCells(UITestCase):
 
 
     def test_clear_cells_all(self):
-        with self.ui_test.create_doc_in_start_center_guarded("calc") as document:
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
             enter_text_to_cell(gridwin, "A1", "aa")
@@ -250,7 +250,7 @@ class clearCells(UITestCase):
 
 
     def test_cancel_clear_cells_all(self):
-        with self.ui_test.create_doc_in_start_center_guarded("calc") as document:
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
             enter_text_to_cell(gridwin, "A1", "aa")

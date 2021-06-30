@@ -12,7 +12,7 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 
 class tdf135590(UITestCase):
     def test_tdf135590(self):
-        with self.ui_test.create_doc_in_start_center_guarded("writer"):
+        with self.ui_test.create_doc_in_start_center("writer"):
 
             #change measurement to Centimeter
             change_measurement_unit(self, 'Centimeter')

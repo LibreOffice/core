@@ -14,7 +14,7 @@ class TabDialogTest(UITestCase):
 
     def test_select_tab_page_pos(self):
 
-        with self.ui_test.create_doc_in_start_center_guarded("calc"):
+        with self.ui_test.create_doc_in_start_center("calc"):
 
             with self.ui_test.execute_dialog_through_command(".uno:FormatCellDialog"):
                 pass
@@ -22,7 +22,7 @@ class TabDialogTest(UITestCase):
 
     def test_select_tab_page_name(self):
 
-        with self.ui_test.create_doc_in_start_center_guarded("calc"):
+        with self.ui_test.create_doc_in_start_center("calc"):
 
             with self.ui_test.execute_dialog_through_command(".uno:FormatCellDialog"):
                 pass

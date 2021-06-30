@@ -11,7 +11,7 @@ from uitest.uihelper.common import get_state_as_dict
 class Tdf106612(UITestCase):
 
    def test_tdf106612(self):
-        with self.ui_test.create_doc_in_start_center_guarded("impress"):
+        with self.ui_test.create_doc_in_start_center("impress"):
             xTemplateDlg = self.xUITest.getTopFocusWindow()
             xCancelBtn = xTemplateDlg.getChild("close")
             self.ui_test.close_dialog_through_button(xCancelBtn)

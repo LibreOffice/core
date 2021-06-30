@@ -15,7 +15,7 @@ class CheckBoxTest(UITestCase):
 
     def test_get_json(self):
 
-        with self.ui_test.create_doc_in_start_center_guarded("calc"):
+        with self.ui_test.create_doc_in_start_center("calc"):
 
             with self.ui_test.execute_dialog_through_command(".uno:About", close_button="btnClose") as xAboutDlg:
 

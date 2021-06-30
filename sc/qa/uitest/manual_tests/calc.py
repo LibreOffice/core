@@ -16,7 +16,7 @@ class ManualCalcTests(UITestCase):
     # http://manual-test.libreoffice.org/manage/case/189/
     def test_define_database_range(self):
 
-        with self.ui_test.create_doc_in_start_center_guarded("calc") as document:
+        with self.ui_test.create_doc_in_start_center("calc") as document:
 
             # Select range A1:D10
             xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
@@ -51,7 +51,7 @@ class ManualCalcTests(UITestCase):
 
     # http://manual-test.libreoffice.org/manage/case/190/
     def test_sort_data(self):
-        with self.ui_test.create_doc_in_start_center_guarded("calc") as document:
+        with self.ui_test.create_doc_in_start_center("calc") as document:
 
             # Insert data
             xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
@@ -87,7 +87,7 @@ class ManualCalcTests(UITestCase):
 
     # http://manual-test.libreoffice.org/manage/case/191/
     def test_validation(self):
-        with self.ui_test.create_doc_in_start_center_guarded("calc") as document:
+        with self.ui_test.create_doc_in_start_center("calc") as document:
 
             xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
             xGridWin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:C10"}))
@@ -117,7 +117,7 @@ class ManualCalcTests(UITestCase):
 
     # http://manual-test.libreoffice.org/manage/case/187/
     def test_transpose(self):
-        with self.ui_test.create_doc_in_start_center_guarded("calc") as document:
+        with self.ui_test.create_doc_in_start_center("calc") as document:
 
             xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
             enter_text_to_cell(xGridWin, "B3", "abcd")
@@ -165,7 +165,7 @@ class ManualCalcTests(UITestCase):
 
     # http://manual-test.libreoffice.org/manage/case/143/
     def test_random_numbers(self):
-        with self.ui_test.create_doc_in_start_center_guarded("calc") as document:
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
 
             xGridWin.executeAction("SELECT", mkPropertyValues({"RANGE": "A2:A10"}))

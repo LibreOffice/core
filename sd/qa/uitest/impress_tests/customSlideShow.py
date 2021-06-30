@@ -9,7 +9,7 @@ from uitest.uihelper.common import get_state_as_dict, type_text
 
 class customSlideShow(UITestCase):
     def test_customSlideShow(self):
-        with self.ui_test.create_doc_in_start_center_guarded("impress"):
+        with self.ui_test.create_doc_in_start_center("impress"):
             MainWindow = self.xUITest.getTopFocusWindow()
             TemplateDialog = self.xUITest.getTopFocusWindow()
             cancel = TemplateDialog.getChild("close")

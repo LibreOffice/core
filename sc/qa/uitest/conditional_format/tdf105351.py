@@ -15,7 +15,7 @@ from uitest.debug import sleep
 #Bug 105351 - FORMATTING: Unable to change Data Bar conditional formatting
 class tdf105351(UITestCase):
     def test_tdf105351_cond_format_data_bar(self):
-        with self.ui_test.create_doc_in_start_center_guarded("calc"):
+        with self.ui_test.create_doc_in_start_center("calc"):
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
             #2. Set the value of cell A1 to 5

@@ -12,7 +12,7 @@ class CommandWithParametersTest(UITestCase):
 
     def test_text_color_change(self):
 
-        with self.ui_test.create_doc_in_start_center_guarded("writer"):
+        with self.ui_test.create_doc_in_start_center("writer"):
 
             self.xUITest.executeCommandWithParameters(".uno:Color",
                 mkPropertyValues({"Color": 16776960}))

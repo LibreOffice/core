@@ -15,7 +15,7 @@ from com.sun.star.lang import IndexOutOfBoundsException
 class insertSignatureLineCalc(UITestCase):
 
    def test_insert_signature_line_calc(self):
-        with self.ui_test.create_doc_in_start_center_guarded("calc") as document:
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
 
@@ -54,7 +54,7 @@ class insertSignatureLineCalc(UITestCase):
 
 
    def test_insert_signature_line2_calc(self):
-        with self.ui_test.create_doc_in_start_center_guarded("calc") as document:
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
 

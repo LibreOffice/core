@@ -10,7 +10,7 @@ class tdf92611(UITestCase):
 
     def test_launch_and_close_bibliography(self):
 
-        with self.ui_test.create_doc_in_start_center_guarded("writer"):
+        with self.ui_test.create_doc_in_start_center("writer"):
 
             self.xUITest.executeCommand(".uno:BibliographyComponent")
 

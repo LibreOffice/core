@@ -14,7 +14,7 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 
 class validity(UITestCase):
     def test_validity_tab_criteria(self):
-        with self.ui_test.create_doc_in_start_center_guarded("calc"):
+        with self.ui_test.create_doc_in_start_center("calc"):
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
@@ -50,7 +50,7 @@ class validity(UITestCase):
 
     def test_validity_tab_inputHelp(self):
         #validationhelptabpage.ui
-        with self.ui_test.create_doc_in_start_center_guarded("calc"):
+        with self.ui_test.create_doc_in_start_center("calc"):
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
@@ -80,7 +80,7 @@ class validity(UITestCase):
 
     def test_validity_tab_errorAlert(self):
         # erroralerttabpage.ui
-        with self.ui_test.create_doc_in_start_center_guarded("calc"):
+        with self.ui_test.create_doc_in_start_center("calc"):
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))

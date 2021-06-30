@@ -13,7 +13,7 @@ class writerWordCount(UITestCase):
 
     def test_word_count_dialog(self):
 
-        with self.ui_test.create_doc_in_start_center_guarded("writer") as document:
+        with self.ui_test.create_doc_in_start_center("writer") as document:
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")
 
@@ -76,7 +76,7 @@ class writerWordCount(UITestCase):
             self.ui_test.close_dialog_through_button(xCloseBtn)
 
     def test_tdf91100(self):
-        with self.ui_test.create_doc_in_start_center_guarded("writer") as document:
+        with self.ui_test.create_doc_in_start_center("writer") as document:
             xWriterDoc = self.xUITest.getTopFocusWindow()
 
             self.ui_test.execute_modeless_dialog_through_command(".uno:WordCountDialog")
@@ -113,7 +113,7 @@ class writerWordCount(UITestCase):
 
     def test_word_count_interpunction_counted_tdf56975_a(self):
 
-        with self.ui_test.create_doc_in_start_center_guarded("writer") as document:
+        with self.ui_test.create_doc_in_start_center("writer") as document:
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")
             #Open writer, enter "Testing one two! Test?"
@@ -145,7 +145,7 @@ class writerWordCount(UITestCase):
 
     def test_word_count_interpunction_counted_tdf56975_b(self):
 
-        with self.ui_test.create_doc_in_start_center_guarded("writer") as document:
+        with self.ui_test.create_doc_in_start_center("writer") as document:
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")
             #1. Create a new text document.

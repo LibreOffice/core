@@ -12,7 +12,7 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 
 class tdf48025(UITestCase):
     def test_tdf48025_deleted_columns(self):
-        with self.ui_test.create_doc_in_start_center_guarded("calc"):
+        with self.ui_test.create_doc_in_start_center("calc"):
             calcDoc = self.xUITest.getTopFocusWindow()
             gridwin = calcDoc.getChild("grid_window")
 

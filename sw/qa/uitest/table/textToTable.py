@@ -12,7 +12,7 @@ from uitest.uihelper.common import get_url_for_data_file, type_text
 
 class textToTable(UITestCase):
     def test_text_to_table(self):
-        with self.ui_test.create_doc_in_start_center_guarded("writer") as document:
+        with self.ui_test.create_doc_in_start_center("writer") as document:
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")
             #Enter A;B ; select the text ; dialog Text to table - Semicolon; verify

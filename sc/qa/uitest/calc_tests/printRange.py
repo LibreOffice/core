@@ -10,7 +10,7 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 
 class printRange(UITestCase):
     def test_printRange(self):
-        with self.ui_test.create_doc_in_start_center_guarded("calc"):
+        with self.ui_test.create_doc_in_start_center("calc"):
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
 
@@ -64,7 +64,7 @@ class printRange(UITestCase):
             self.ui_test.close_dialog_through_button(xOK)
 
     def test_tdf33341_copy_sheet_with_print_range(self):
-        with self.ui_test.create_doc_in_start_center_guarded("calc"):
+        with self.ui_test.create_doc_in_start_center("calc"):
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
 

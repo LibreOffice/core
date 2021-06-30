@@ -17,7 +17,7 @@ class CreateRangeNameTest(UITestCase):
 
     def test_create_range_name(self):
 
-        with self.ui_test.create_doc_in_start_center_guarded("calc") as document:
+        with self.ui_test.create_doc_in_start_center("calc") as document:
 
             calcDoc = self.xUITest.getTopFocusWindow()
             xPosWindow = calcDoc.getChild('pos_window')
@@ -38,7 +38,7 @@ class CreateRangeNameTest(UITestCase):
 
     def test_create_range_name_from_ui(self):
 
-        with self.ui_test.create_doc_in_start_center_guarded("calc") as document:
+        with self.ui_test.create_doc_in_start_center("calc") as document:
 
             calcDoc = self.xUITest.getTopFocusWindow()
             gridwin = calcDoc.getChild("grid_window")
@@ -87,7 +87,7 @@ class CreateRangeNameTest(UITestCase):
 
     def test_create_local_range_name(self):
 
-        with self.ui_test.create_doc_in_start_center_guarded("calc") as document:
+        with self.ui_test.create_doc_in_start_center("calc") as document:
 
             calcDoc = self.xUITest.getTopFocusWindow()
             xPosWindow = calcDoc.getChild('pos_window')

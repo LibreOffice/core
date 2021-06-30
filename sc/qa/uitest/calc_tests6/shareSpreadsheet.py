@@ -12,7 +12,7 @@ from uitest.uihelper.common import get_state_as_dict
 class shareSpreadsheet(UITestCase):
 
    def test_share_spreadsheet(self):
-        with self.ui_test.create_doc_in_start_center_guarded("calc"):
+        with self.ui_test.create_doc_in_start_center("calc"):
             xCalcDoc = self.xUITest.getTopFocusWindow()
             xGridWindow = xCalcDoc.getChild("grid_window")
 

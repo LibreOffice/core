@@ -18,14 +18,14 @@ class SimpleMathTest(UITestCase):
 
     def test_start_math(self):
 
-        with self.ui_test.create_doc_in_start_center_guarded("math"):
+        with self.ui_test.create_doc_in_start_center("math"):
 
             xMathDoc = self.xUITest.getTopFocusWindow()
 
 
     def test_docking_window_listbox(self):
 
-        with self.ui_test.create_doc_in_start_center_guarded("math"):
+        with self.ui_test.create_doc_in_start_center("math"):
 
             xMathDoc = self.xUITest.getTopFocusWindow()
 
@@ -38,7 +38,7 @@ class SimpleMathTest(UITestCase):
 
 
     def test_math_edit(self):
-        with self.ui_test.create_doc_in_start_center_guarded("math"):
+        with self.ui_test.create_doc_in_start_center("math"):
 
             xMathDoc = self.xUITest.getTopFocusWindow()
 
@@ -48,7 +48,7 @@ class SimpleMathTest(UITestCase):
 
 
     def test_math_selector(self):
-        with self.ui_test.create_doc_in_start_center_guarded("math"):
+        with self.ui_test.create_doc_in_start_center("math"):
 
             xMathDoc = self.xUITest.getTopFocusWindow()
 
@@ -60,7 +60,7 @@ class SimpleMathTest(UITestCase):
 
     @unittest.skip("on windows the f4 does not always work")
     def test_complete_math(self):
-        with self.ui_test.create_doc_in_start_center_guarded("math"):
+        with self.ui_test.create_doc_in_start_center("math"):
 
             xMathDoc = self.xUITest.getTopFocusWindow()
 

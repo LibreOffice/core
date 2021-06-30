@@ -16,7 +16,7 @@ from com.sun.star.container import NoSuchElementException
 
 class tdf97926(UITestCase):
     def test_infobar_add(self):
-        with self.ui_test.create_doc_in_start_center_guarded("writer") as document:
+        with self.ui_test.create_doc_in_start_center("writer") as document:
             controller = document.getCurrentController()
             buttons = [StringPair("Close", ".uno:CloseDoc")]
             controller.appendInfobar(
@@ -28,7 +28,7 @@ class tdf97926(UITestCase):
                     "my", "Hello world", "The quick, brown fox jumps over a lazy dog.", InfobarType.INFO, buttons, True)
 
     def test_infobar_update(self):
-        with self.ui_test.create_doc_in_start_center_guarded("writer") as document:
+        with self.ui_test.create_doc_in_start_center("writer") as document:
             controller = document.getCurrentController()
             buttons = [StringPair("Close", ".uno:CloseDoc")]
             controller.appendInfobar(
@@ -44,7 +44,7 @@ class tdf97926(UITestCase):
                 controller.updateInfobar("my", "", "", 120)
 
     def test_infobar_remove(self):
-        with self.ui_test.create_doc_in_start_center_guarded("writer") as document:
+        with self.ui_test.create_doc_in_start_center("writer") as document:
             controller = document.getCurrentController()
             buttons = [StringPair("Close", ".uno:CloseDoc")]
             controller.appendInfobar(

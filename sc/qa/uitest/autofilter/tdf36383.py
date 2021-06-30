@@ -13,7 +13,7 @@ from libreoffice.calc.document import get_row
 
 class tdf36383(UITestCase):
     def test_tdf36383_row_height(self):
-        with self.ui_test.create_doc_in_start_center_guarded("calc") as document:
+        with self.ui_test.create_doc_in_start_center("calc") as document:
             calcDoc = self.xUITest.getTopFocusWindow()
             gridwin = calcDoc.getChild("grid_window")
 

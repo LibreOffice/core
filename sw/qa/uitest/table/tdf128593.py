@@ -9,7 +9,7 @@ from uitest.uihelper.common import get_state_as_dict
 
 class tdf128593(UITestCase):
     def test_tdf128593_table_background_color(self):
-        with self.ui_test.create_doc_in_start_center_guarded("writer"):
+        with self.ui_test.create_doc_in_start_center("writer"):
             MainWindow = self.xUITest.getTopFocusWindow()
 
             with self.ui_test.execute_dialog_through_command(".uno:InsertTable"):
