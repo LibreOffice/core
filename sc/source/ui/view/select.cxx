@@ -208,6 +208,8 @@ void ScViewFunctionSet::BeginDrag()
     {
         if (pWindow->IsLocalTracking())
             pWindow->LocalEndTracking(TrackingEventFlags::Cancel);
+
+        pWindow->LocalStartDrag();
     }
     else if (pWindow->IsTracking())
         pWindow->EndTracking(TrackingEventFlags::Cancel);    // abort selecting

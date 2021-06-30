@@ -83,6 +83,7 @@ enum class MouseEventModifiers
    SIMPLEMOVE        = 0x0001,
    DRAGMOVE          = 0x0002,
    DRAGCOPY          = 0x0004,
+   DRAGSTART         = 0x0008,
    ENTERWINDOW       = 0x0010,
    LEAVEWINDOW       = 0x0020,
    SYNTHETIC         = 0x0040,
@@ -95,7 +96,7 @@ enum class MouseEventModifiers
 };
 namespace o3tl
 {
-    template<> struct typed_flags<MouseEventModifiers> : is_typed_flags<MouseEventModifiers, 0xff7> {};
+    template<> struct typed_flags<MouseEventModifiers> : is_typed_flags<MouseEventModifiers, 0xfff> {};
 }
 
 // Mouse buttons
