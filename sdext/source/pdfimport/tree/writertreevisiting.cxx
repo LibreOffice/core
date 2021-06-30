@@ -18,7 +18,7 @@
  */
 
 #include <sal/config.h>
-
+#include <sal/log.hxx>
 #include <string_view>
 
 #include <pdfiprocessor.hxx>
@@ -899,21 +899,28 @@ void WriterXmlFinalizer::visit( TextElement& elem, const std::list< std::unique_
     PropertyMap aFontProps;
 
     // family name
+    // TODO: tdf#143095: use system font name rather than PSName
+    SAL_INFO("sdext.pdfimport", "The font used in xml is: " << rFont.familyName);
     aFontProps[ "fo:font-family" ] = rFont.familyName;
+    aFontProps[ "style:font-family-asia" ] = rFont.familyName;
+    aFontProps[ "style:font-family-complex" ] = rFont.familyName;
+
     // bold
     if( rFont.isBold )
     {
-        aFontProps[ "fo:font-weight" ]         = "bold";
-        aFontProps[ "fo:font-weight-asian" ]   = "bold";
-        aFontProps[ "fo:font-weight-complex" ] = "bold";
+        aFontProps[ "fo:font-weight" ]            = "bold";
+        aFontProps[ "style:font-weight-asian" ]   = "bold";
+        aFontProps[ "style:font-weight-complex" ] = "bold";
     }
+
     // italic
     if( rFont.isItalic )
     {
-        aFontProps[ "fo:font-style" ]         = "italic";
-        aFontProps[ "fo:font-style-asian" ]   = "italic";
-        aFontProps[ "fo:font-style-complex" ] = "italic";
+        aFontProps[ "fo:font-style" ]            = "italic";
+        aFontProps[ "style:font-style-asian" ]   = "italic";
+        aFontProps[ "style:font-style-complex" ] = "italic";
     }
+
     // underline
     if( rFont.isUnderline )
     {
@@ -921,19 +928,31 @@ void WriterXmlFinalizer::visit( TextElement& elem, const std::list< std::unique_
         aFontProps[ "style:text-underline-width" ]  = "auto";
         aFontProps[ "style:text-underline-color" ]  = "font-color";
     }
+
     // outline
     if( rFont.isOutline )
     {
-        aFontProps[ "style:text-outline" ]  = "true";
+        if ( rFont.familyName == "SimSun" )
+        {   // tdf#81484: There is no bold for SimSun font. In pdf it uses "fill+stroke"
+            // effect for fake bold, and after xpdfimport processing the isOutline is true.
+            aFontProps[ "fo:font-weight" ]            = "bold";
+            aFontProps[ "style:font-weight-asian" ]   = "bold";
+            aFontProps[ "style:font-weight-complex" ] = "bold";
+        } else
+        {
+            aFontProps[ "style:text-outline" ]  = "true";
+        }
     }
+
     // size
     OUString aFSize = OUString::number( rFont.size*72/PDFI_OUTDEV_RESOLUTION ) + "pt";
     aFontProps[ "fo:font-size" ]            = aFSize;
     aFontProps[ "style:font-size-asian" ]   = aFSize;
     aFontProps[ "style:font-size-complex" ] = aFSize;
+
     // color
     const GraphicsContext& rGC = m_rProcessor.getGraphicsContext( elem.GCId );
-    aFontProps[ "fo:color" ]                 =  getColorString( rFont.isOutline ? rGC.LineColor : rGC.FillColor );
+    aFontProps[ "fo:color" ] = getColorString( rFont.isOutline ? rGC.LineColor : rGC.FillColor );
 
     StyleContainer::Style aStyle( "style:style", aProps );
     StyleContainer::Style aSubStyle( "style:text-properties", aFontProps );
