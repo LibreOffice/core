@@ -151,6 +151,10 @@
       constructor="com_sun_star_util_comp_FinalThreadManager_get_implementation">
     <service name="com.sun.star.util.JobManager"/>
   </implementation>
+  <implementation name="com.sun.star.comp.Writer.IndexingExportFilter"
+      constructor="com_sun_star_comp_Writer_IndexingExportFilter_get_implementation">
+    <service name="com.sun.star.comp.Writer.IndexingExportFilter"/>
+  </implementation>
   <implementation name="com.sun.star.comp.Writer.LayoutDump"
       constructor="com_sun_star_comp_Writer_LayoutDump_get_implementation">
     <service name="com.sun.star.comp.Writer.LayoutDump"/>
