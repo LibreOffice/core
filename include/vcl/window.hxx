@@ -1025,6 +1025,7 @@ public:
     static VclPtr<vcl::Window>          SaveFocus();
     static void                         EndSaveFocus(const VclPtr<vcl::Window>& xFocusWin);
 
+    void                                StartDrag();
     void                                CaptureMouse();
     void                                ReleaseMouse();
     bool                                IsMouseCaptured() const;
