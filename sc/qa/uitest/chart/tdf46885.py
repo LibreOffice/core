@@ -15,35 +15,31 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 
 class tdf46885(UITestCase):
     def test_tdf46885_crash_chart_no_cell_selected_nextButton(self):
-        calc_doc = self.ui_test.create_doc_in_start_center("calc")
-        xCalcDoc = self.xUITest.getTopFocusWindow()
-        gridwin = xCalcDoc.getChild("grid_window")
-        document = self.ui_test.get_component()
-        enter_text_to_cell(gridwin, "A10", "col1")
-        #When you start a new chart and have one empty cell selected LibO will crash when you select the Next>> button.
-        with self.ui_test.execute_dialog_through_command(".uno:InsertObjectChart", close_button="finish") as xChartDlg:
-            xNextBtn = xChartDlg.getChild("next")
-            xNextBtn.executeAction("CLICK", tuple())
+        with self.ui_test.create_doc_in_start_center_guarded("calc") as document:
+            xCalcDoc = self.xUITest.getTopFocusWindow()
+            gridwin = xCalcDoc.getChild("grid_window")
+            enter_text_to_cell(gridwin, "A10", "col1")
+            #When you start a new chart and have one empty cell selected LibO will crash when you select the Next>> button.
+            with self.ui_test.execute_dialog_through_command(".uno:InsertObjectChart", close_button="finish") as xChartDlg:
+                xNextBtn = xChartDlg.getChild("next")
+                xNextBtn.executeAction("CLICK", tuple())
 
-        #verify, we didn't crash
-        self.assertEqual(get_cell_by_position(document, 0, 0, 9).getString(), "col1")
+            #verify, we didn't crash
+            self.assertEqual(get_cell_by_position(document, 0, 0, 9).getString(), "col1")
 
-        self.ui_test.close_doc()
 
     def test_tdf46885_crash_chart_multiple_empty_cells_selected(self):
-        calc_doc = self.ui_test.create_doc_in_start_center("calc")
-        xCalcDoc = self.xUITest.getTopFocusWindow()
-        gridwin = xCalcDoc.getChild("grid_window")
-        document = self.ui_test.get_component()
-        enter_text_to_cell(gridwin, "A10", "col1")
-        #If you select multiple empty cells and then start a new chart LibO will crash immediately.
-        gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:C4"}))
-        with self.ui_test.execute_dialog_through_command(".uno:InsertObjectChart", close_button="finish") as xChartDlg:
-            xNextBtn = xChartDlg.getChild("next")
-            xNextBtn.executeAction("CLICK", tuple())
+        with self.ui_test.create_doc_in_start_center_guarded("calc") as document:
+            xCalcDoc = self.xUITest.getTopFocusWindow()
+            gridwin = xCalcDoc.getChild("grid_window")
+            enter_text_to_cell(gridwin, "A10", "col1")
+            #If you select multiple empty cells and then start a new chart LibO will crash immediately.
+            gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:C4"}))
+            with self.ui_test.execute_dialog_through_command(".uno:InsertObjectChart", close_button="finish") as xChartDlg:
+                xNextBtn = xChartDlg.getChild("next")
+                xNextBtn.executeAction("CLICK", tuple())
 
-        #verify, we didn't crash
-        self.assertEqual(get_cell_by_position(document, 0, 0, 9).getString(), "col1")
+            #verify, we didn't crash
+            self.assertEqual(get_cell_by_position(document, 0, 0, 9).getString(), "col1")
 
-        self.ui_test.close_doc()
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

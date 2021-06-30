@@ -44,39 +44,37 @@ class tdf53482(UITestCase):
             self.assertEqual(get_cell_by_position(calc_doc, 0, 6, 123).getString(), "13")
 
     def test_tdf53482_Range_contains_column_headings(self):
-        calc_doc = self.ui_test.create_doc_in_start_center("calc")
-        xCalcDoc = self.xUITest.getTopFocusWindow()
-        gridwin = xCalcDoc.getChild("grid_window")
-        document = self.ui_test.get_component()
-        #In column A enter: Misc; s; d; f; g
-        enter_text_to_cell(gridwin, "A1", "Misc")
-        enter_text_to_cell(gridwin, "A2", "s")
-        enter_text_to_cell(gridwin, "A3", "d")
-        enter_text_to_cell(gridwin, "A4", "f")
-        enter_text_to_cell(gridwin, "A5", "g")
-        #1. Highlight cells to be sorted
-        gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:A5"}))
-        #2. Click Data menu, Sort
-        with self.ui_test.execute_dialog_through_command(".uno:DataSort") as xDialog:
-            xTabs = xDialog.getChild("tabcontrol")
-            select_pos(xTabs, "1")
-            #3. On Options tab, tick 'Range contains column labels'
-            xHeader = xDialog.getChild("header")
-            xHeader.executeAction("CLICK", tuple())
-            if (get_state_as_dict(xHeader)["Selected"]) == "false":
+        with self.ui_test.create_doc_in_start_center_guarded("calc") as document:
+            xCalcDoc = self.xUITest.getTopFocusWindow()
+            gridwin = xCalcDoc.getChild("grid_window")
+            #In column A enter: Misc; s; d; f; g
+            enter_text_to_cell(gridwin, "A1", "Misc")
+            enter_text_to_cell(gridwin, "A2", "s")
+            enter_text_to_cell(gridwin, "A3", "d")
+            enter_text_to_cell(gridwin, "A4", "f")
+            enter_text_to_cell(gridwin, "A5", "g")
+            #1. Highlight cells to be sorted
+            gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:A5"}))
+            #2. Click Data menu, Sort
+            with self.ui_test.execute_dialog_through_command(".uno:DataSort") as xDialog:
+                xTabs = xDialog.getChild("tabcontrol")
+                select_pos(xTabs, "1")
+                #3. On Options tab, tick 'Range contains column labels'
+                xHeader = xDialog.getChild("header")
                 xHeader.executeAction("CLICK", tuple())
-            #4. On Sort Criteria tab, set appropriate criteria
-            select_pos(xTabs, "0")
-            xDown = xDialog.getChild("down")
-            xDown.executeAction("CLICK", tuple())
-            #5. Click Ok
-        #6. Expected behavior:  Ignore column labels when sorting
-        self.assertEqual(get_cell_by_position(document, 0, 0, 0).getString(), "Misc")
-        self.assertEqual(get_cell_by_position(document, 0, 0, 1).getString(), "s")
-        self.assertEqual(get_cell_by_position(document, 0, 0, 2).getString(), "g")
-        self.assertEqual(get_cell_by_position(document, 0, 0, 3).getString(), "f")
-        self.assertEqual(get_cell_by_position(document, 0, 0, 4).getString(), "d")
+                if (get_state_as_dict(xHeader)["Selected"]) == "false":
+                    xHeader.executeAction("CLICK", tuple())
+                #4. On Sort Criteria tab, set appropriate criteria
+                select_pos(xTabs, "0")
+                xDown = xDialog.getChild("down")
+                xDown.executeAction("CLICK", tuple())
+                #5. Click Ok
+            #6. Expected behavior:  Ignore column labels when sorting
+            self.assertEqual(get_cell_by_position(document, 0, 0, 0).getString(), "Misc")
+            self.assertEqual(get_cell_by_position(document, 0, 0, 1).getString(), "s")
+            self.assertEqual(get_cell_by_position(document, 0, 0, 2).getString(), "g")
+            self.assertEqual(get_cell_by_position(document, 0, 0, 3).getString(), "f")
+            self.assertEqual(get_cell_by_position(document, 0, 0, 4).getString(), "d")
 
-        self.ui_test.close_doc()
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

@@ -16,25 +16,23 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 
 class protectSpreadsheet(UITestCase):
     def test_protect_spreadsheet(self):
-        calc_doc = self.ui_test.create_doc_in_start_center("calc")
-        xCalcDoc = self.xUITest.getTopFocusWindow()
-        gridwin = xCalcDoc.getChild("grid_window")
-        document = self.ui_test.get_component()
-        #enter password
-        with self.ui_test.execute_dialog_through_command(".uno:ToolProtectionDocument") as xDialog:
-            xpass1ed = xDialog.getChild("pass1ed")
-            xconfirm1ed = xDialog.getChild("confirm1ed")
+        with self.ui_test.create_doc_in_start_center_guarded("calc"):
+            xCalcDoc = self.xUITest.getTopFocusWindow()
+            gridwin = xCalcDoc.getChild("grid_window")
+            #enter password
+            with self.ui_test.execute_dialog_through_command(".uno:ToolProtectionDocument") as xDialog:
+                xpass1ed = xDialog.getChild("pass1ed")
+                xconfirm1ed = xDialog.getChild("confirm1ed")
 
-            xpass1ed.executeAction("TYPE", mkPropertyValues({"TEXT":"aa"}))
-            xconfirm1ed.executeAction("TYPE", mkPropertyValues({"TEXT":"aa"}))
+                xpass1ed.executeAction("TYPE", mkPropertyValues({"TEXT":"aa"}))
+                xconfirm1ed.executeAction("TYPE", mkPropertyValues({"TEXT":"aa"}))
 
-        #Verify
-        with self.ui_test.execute_dialog_through_command(".uno:ToolProtectionDocument", close_button="cancel") as xDialog:
-            xpass1ed = xDialog.getChild("pass1ed")
+            #Verify
+            with self.ui_test.execute_dialog_through_command(".uno:ToolProtectionDocument", close_button="cancel") as xDialog:
+                xpass1ed = xDialog.getChild("pass1ed")
 
-            xpass1ed.executeAction("TYPE", mkPropertyValues({"TEXT":"aa"}))
+                xpass1ed.executeAction("TYPE", mkPropertyValues({"TEXT":"aa"}))
 
 
-        self.ui_test.close_doc()
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

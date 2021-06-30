@@ -10,19 +10,18 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 class tdf121949 (UITestCase):
 
     def test_tdf121949_copy_block_with_single_cell_not_included(self):
-        self.ui_test.create_doc_in_start_center("calc")
-        xCalcDoc = self.xUITest.getTopFocusWindow()
-        gridwin = xCalcDoc.getChild("grid_window")
+        with self.ui_test.create_doc_in_start_center_guarded("calc"):
+            xCalcDoc = self.xUITest.getTopFocusWindow()
+            gridwin = xCalcDoc.getChild("grid_window")
 
-        # mark a range with a single cell left our and copy to clipboard
-        gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:A3"}))
-        gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "B1:B1", "EXTEND":"1"}))
-        gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "B3:B3", "EXTEND":"1"}))
-        gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "C1:C3", "EXTEND":"1"}))
-        with self.ui_test.execute_dialog_through_command(".uno:Copy"):
-            pass
+            # mark a range with a single cell left our and copy to clipboard
+            gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:A3"}))
+            gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "B1:B1", "EXTEND":"1"}))
+            gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "B3:B3", "EXTEND":"1"}))
+            gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "C1:C3", "EXTEND":"1"}))
+            with self.ui_test.execute_dialog_through_command(".uno:Copy"):
+                pass
 
-        self.ui_test.close_doc()
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
 

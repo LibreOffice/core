@@ -12,18 +12,16 @@ from uitest.uihelper.common import get_state_as_dict
 class shareSpreadsheet(UITestCase):
 
    def test_share_spreadsheet(self):
-        self.ui_test.create_doc_in_start_center("calc")
-        xCalcDoc = self.xUITest.getTopFocusWindow()
-        xGridWindow = xCalcDoc.getChild("grid_window")
-        document = self.ui_test.get_component()
+        with self.ui_test.create_doc_in_start_center_guarded("calc"):
+            xCalcDoc = self.xUITest.getTopFocusWindow()
+            xGridWindow = xCalcDoc.getChild("grid_window")
 
-        #dialog shareSpreadsheet
-        with self.ui_test.execute_dialog_through_command(".uno:ShareDocument", close_button="cancel") as xDialog:
+            #dialog shareSpreadsheet
+            with self.ui_test.execute_dialog_through_command(".uno:ShareDocument", close_button="cancel") as xDialog:
 
-            share = xDialog.getChild("share")
-            share.executeAction("CLICK", tuple())
-            users = xDialog.getChild("users")
-            self.assertEqual(get_state_as_dict(users)["Children"], "1")
+                share = xDialog.getChild("share")
+                share.executeAction("CLICK", tuple())
+                users = xDialog.getChild("users")
+                self.assertEqual(get_state_as_dict(users)["Children"], "1")
 
-        self.ui_test.close_doc()
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

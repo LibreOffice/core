@@ -10,16 +10,15 @@ from uitest.uihelper.common import select_pos
 class tdf131715(UITestCase):
 
     def test_tdf131715(self):
-        self.ui_test.create_doc_in_start_center("calc")
-        with self.ui_test.execute_dialog_through_command(".uno:InsertObjectChart", close_button="finish") as xChartDlg:
+        with self.ui_test.create_doc_in_start_center_guarded("calc"):
+            with self.ui_test.execute_dialog_through_command(".uno:InsertObjectChart", close_button="finish") as xChartDlg:
 
-            xWizard = xChartDlg.getChild('Wizard')
+                xWizard = xChartDlg.getChild('Wizard')
 
-            for i in range(10):
-                #without the fix in place, it would crash here
-                select_pos(xWizard, "2")
+                for i in range(10):
+                    #without the fix in place, it would crash here
+                    select_pos(xWizard, "2")
 
-            self.assertEqual(get_state_as_dict(xWizard)['CurrentStep'], "2")
+                self.assertEqual(get_state_as_dict(xWizard)['CurrentStep'], "2")
 
 
-        self.ui_test.close_doc()

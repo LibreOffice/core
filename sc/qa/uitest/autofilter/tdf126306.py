@@ -21,118 +21,115 @@ class tdf126306(UITestCase):
             self.assertEqual(bVisible, value)
 
     def test_run(self):
-        self.ui_test.create_doc_in_start_center("calc")
-        document = self.ui_test.get_component()
-        calcDoc = self.xUITest.getTopFocusWindow()
-        xGridWin = calcDoc.getChild("grid_window")
+        with self.ui_test.create_doc_in_start_center_guarded("calc") as document:
+            calcDoc = self.xUITest.getTopFocusWindow()
+            xGridWin = calcDoc.getChild("grid_window")
 
-        default_values = [25, 1023, 17, 9, 19, 0, 107, 89, 8, 453, 33, 3, 25, 204]
-        document = self.ui_test.get_component()
+            default_values = [25, 1023, 17, 9, 19, 0, 107, 89, 8, 453, 33, 3, 25, 204]
 
-        for i, value in enumerate(default_values, start=2):
-            enter_text_to_cell(xGridWin, "A" + str(i), str(value))
+            for i, value in enumerate(default_values, start=2):
+                enter_text_to_cell(xGridWin, "A" + str(i), str(value))
 
-        xGridWin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:A15"}))
+            xGridWin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:A15"}))
 
-        with self.ui_test.execute_dialog_through_command(".uno:DataFilterAutoFilter", close_button="yes"):
-            pass
+            with self.ui_test.execute_dialog_through_command(".uno:DataFilterAutoFilter", close_button="yes"):
+                pass
 
-        self.assertEqual(document.getPropertyValue("UnnamedDatabaseRanges").getByTable(0).AutoFilter, True)
+            self.assertEqual(document.getPropertyValue("UnnamedDatabaseRanges").getByTable(0).AutoFilter, True)
 
-        self.check_values(document, default_values)
-        self.check_row_hidden(document)
+            self.check_values(document, default_values)
+            self.check_row_hidden(document)
 
-        # Sort ascending button
-        xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "0", "ROW": "0"}))
-        xFloatWindow = self.xUITest.getFloatWindow()
-        xMenu = xFloatWindow.getChild("menu")
-        xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"SPACE"}))
-        xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"RETURN"}))
+            # Sort ascending button
+            xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "0", "ROW": "0"}))
+            xFloatWindow = self.xUITest.getFloatWindow()
+            xMenu = xFloatWindow.getChild("menu")
+            xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"SPACE"}))
+            xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"RETURN"}))
 
-        sort_asc_values = [0, 3, 8, 9, 17, 19, 25, 25, 33, 89, 107, 204, 453, 1023]
-        self.check_values(document, sort_asc_values)
-        self.check_row_hidden(document)
+            sort_asc_values = [0, 3, 8, 9, 17, 19, 25, 25, 33, 89, 107, 204, 453, 1023]
+            self.check_values(document, sort_asc_values)
+            self.check_row_hidden(document)
 
-        #Undo
-        self.xUITest.executeCommand(".uno:Undo")
-        self.check_values(document, default_values)
-        self.check_row_hidden(document)
+            #Undo
+            self.xUITest.executeCommand(".uno:Undo")
+            self.check_values(document, default_values)
+            self.check_row_hidden(document)
 
-        # Sort descending button
-        xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "0", "ROW": "0"}))
-        xFloatWindow = self.xUITest.getFloatWindow()
-        xMenu = xFloatWindow.getChild("menu")
-        xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
-        xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"RETURN"}))
+            # Sort descending button
+            xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "0", "ROW": "0"}))
+            xFloatWindow = self.xUITest.getFloatWindow()
+            xMenu = xFloatWindow.getChild("menu")
+            xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
+            xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"RETURN"}))
 
-        sort_des_values = [1023, 453, 204, 107, 89, 33, 25, 25, 19, 17, 9, 8, 3, 0]
-        self.check_values(document, sort_des_values)
-        self.check_row_hidden(document)
+            sort_des_values = [1023, 453, 204, 107, 89, 33, 25, 25, 19, 17, 9, 8, 3, 0]
+            self.check_values(document, sort_des_values)
+            self.check_row_hidden(document)
 
-        #Undo
-        self.xUITest.executeCommand(".uno:Undo")
-        self.check_values(document, default_values)
-        self.check_row_hidden(document)
+            #Undo
+            self.xUITest.executeCommand(".uno:Undo")
+            self.check_values(document, default_values)
+            self.check_row_hidden(document)
 
-        # Top 10 button
-        xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "0", "ROW": "0"}))
-        xFloatWindow = self.xUITest.getFloatWindow()
-        xMenu = xFloatWindow.getChild("menu")
-        xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
-        xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
-        xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"RETURN"}))
+            # Top 10 button
+            xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "0", "ROW": "0"}))
+            xFloatWindow = self.xUITest.getFloatWindow()
+            xMenu = xFloatWindow.getChild("menu")
+            xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
+            xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
+            xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"RETURN"}))
 
-        top10_hidden_values = [True, True, True, False, True, False, True,
-                True, False, True, True, False, True, True]
+            top10_hidden_values = [True, True, True, False, True, False, True,
+                    True, False, True, True, False, True, True]
 
-        #Values are the same
-        self.check_values(document, default_values)
-        self.check_row_hidden(document, top10_hidden_values)
+            #Values are the same
+            self.check_values(document, default_values)
+            self.check_row_hidden(document, top10_hidden_values)
 
-        #Undo
-        self.xUITest.executeCommand(".uno:Undo")
-        self.check_values(document, default_values)
-        self.check_row_hidden(document)
+            #Undo
+            self.xUITest.executeCommand(".uno:Undo")
+            self.check_values(document, default_values)
+            self.check_row_hidden(document)
 
-        # Empty button
-        xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "0", "ROW": "0"}))
-        xFloatWindow = self.xUITest.getFloatWindow()
-        xMenu = xFloatWindow.getChild("menu")
-        xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
-        xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
-        xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
-        xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"RETURN"}))
+            # Empty button
+            xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "0", "ROW": "0"}))
+            xFloatWindow = self.xUITest.getFloatWindow()
+            xMenu = xFloatWindow.getChild("menu")
+            xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
+            xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
+            xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
+            xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"RETURN"}))
 
-        empty_values = [False] * 14
-        #Values are the same
-        self.check_values(document, default_values)
-        self.check_row_hidden(document, empty_values)
+            empty_values = [False] * 14
+            #Values are the same
+            self.check_values(document, default_values)
+            self.check_row_hidden(document, empty_values)
 
-        #Undo
-        self.xUITest.executeCommand(".uno:Undo")
-        self.check_values(document, default_values)
-        self.check_row_hidden(document)
+            #Undo
+            self.xUITest.executeCommand(".uno:Undo")
+            self.check_values(document, default_values)
+            self.check_row_hidden(document)
 
-        # Not Empty button
-        xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "0", "ROW": "0"}))
-        xFloatWindow = self.xUITest.getFloatWindow()
-        xMenu = xFloatWindow.getChild("menu")
-        xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
-        xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
-        xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
-        xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
-        xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"RETURN"}))
+            # Not Empty button
+            xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "0", "ROW": "0"}))
+            xFloatWindow = self.xUITest.getFloatWindow()
+            xMenu = xFloatWindow.getChild("menu")
+            xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
+            xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
+            xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
+            xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
+            xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"RETURN"}))
 
-        #Nothing should change
-        self.check_values(document, default_values)
-        self.check_row_hidden(document)
+            #Nothing should change
+            self.check_values(document, default_values)
+            self.check_row_hidden(document)
 
-        #Undo
-        self.xUITest.executeCommand(".uno:Undo")
-        self.check_values(document, default_values)
-        self.check_row_hidden(document)
+            #Undo
+            self.xUITest.executeCommand(".uno:Undo")
+            self.check_values(document, default_values)
+            self.check_row_hidden(document)
 
-        # finish
-        self.ui_test.close_doc()
+            # finish
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
