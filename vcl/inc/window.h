@@ -176,6 +176,7 @@ struct ImplFrameData
     css::uno::Reference< css::datatransfer::clipboard::XClipboard > mxClipboard;
 
     bool                mbInternalDragGestureRecognizer;
+    bool                mbDragging;
     VclPtr<VirtualDevice> mpBuffer; ///< Buffer for the double-buffering
     bool mbInBufferedPaint; ///< PaintHelper is in the process of painting into this buffer.
     tools::Rectangle maBufferedRect; ///< Rectangle in the buffer that has to be painted to the screen.
