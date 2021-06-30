@@ -811,6 +811,7 @@ ImplFrameData::ImplFrameData( vcl::Window *pWindow )
     maResizeIdle.SetInvokeHandler( LINK( pWindow, vcl::Window, ImplHandleResizeTimerHdl ) );
     maResizeIdle.SetDebugName( "vcl::Window maResizeIdle" );
     mbInternalDragGestureRecognizer = false;
+    mbDragging = false;
     mbInBufferedPaint = false;
     mnDPIX = 96;
     mnDPIY = 96;
