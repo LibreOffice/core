@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cf6de2ad_14b621ff",
+        "filename": "sal/qa/rtl/math/test-rtl-math.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 455,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-06-30T11:53:50Z",
+      "side": 1,
+      "message": "Why exempt these tests?",
+      "revId": "eebb26f039c7a9777338f5d573958109be95018b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
