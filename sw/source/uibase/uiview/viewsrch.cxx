@@ -756,18 +756,17 @@ sal_uLong SwView::FUNC_Search( const SwSearchOptions& rOptions )
         ::SfxToSwPageDescAttr( *m_pWrtShell, aSrchSet );
     }
 
-    std::unique_ptr<SfxItemSet> pReplSet;
+    std::optional<SfxItemSet> xReplSet;
     if( bDoReplace && s_xReplaceList && s_xReplaceList->Count() )
     {
-        pReplSet.reset( new SfxItemSet( m_pWrtShell->GetAttrPool(),
-                                        aSearchAttrRange ) );
-        s_xReplaceList->Get( *pReplSet );
+        xReplSet.emplace( m_pWrtShell->GetAttrPool(), aSearchAttrRange );
+        s_xReplaceList->Get( *xReplSet );
 
         // -- Page break with page template
-        ::SfxToSwPageDescAttr( *m_pWrtShell, *pReplSet );
+        ::SfxToSwPageDescAttr( *m_pWrtShell, *xReplSet );
 
-        if( !pReplSet->Count() )        // too bad, we don't know
-            pReplSet.reset();        // the attributes
+        if( !xReplSet->Count() )        // too bad, we don't know
+            xReplSet.reset();        // the attributes
     }
 
     // build SearchOptions to be used
@@ -778,7 +777,7 @@ sal_uLong SwView::FUNC_Search( const SwSearchOptions& rOptions )
         aSearchOpt.replaceString.clear();
 
     sal_uLong nFound;
-    if( aSrchSet.Count() || ( pReplSet && pReplSet->Count() ))
+    if( aSrchSet.Count() || ( xReplSet && xReplSet->Count() ))
     {
         nFound = m_pWrtShell->SearchAttr(
             aSrchSet,
@@ -787,7 +786,7 @@ sal_uLong SwView::FUNC_Search( const SwSearchOptions& rOptions )
             rOptions.eEnd,
             eRanges,
             !s_pSrchItem->GetSearchString().isEmpty() ? &aSearchOpt : nullptr,
-            pReplSet.get() );
+            xReplSet ? &*xReplSet : nullptr );
     }
     else if( s_pSrchItem->GetPattern() )
     {

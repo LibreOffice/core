@@ -1445,18 +1445,18 @@ void SwAccessibleParagraph::_getDefaultAttributesImpl(
     // retrieve default attributes
     SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(GetFrame()));
     const SwTextNode *const pTextNode(pFrame->GetTextNodeForParaProps());
-    std::unique_ptr<SfxItemSet> pSet;
+    std::optional<SfxItemSet> pSet;
     if ( !bOnlyCharAttrs )
     {
-        pSet.reset( new SfxItemSet( const_cast<SwAttrPool&>(pTextNode->GetDoc().GetAttrPool()),
+        pSet.emplace( const_cast<SwAttrPool&>(pTextNode->GetDoc().GetAttrPool()),
                                svl::Items<RES_CHRATR_BEGIN, RES_CHRATR_END - 1,
                                RES_PARATR_BEGIN, RES_PARATR_END - 1,
-                               RES_FRMATR_BEGIN, RES_FRMATR_END - 1>{} ) );
+                               RES_FRMATR_BEGIN, RES_FRMATR_END - 1>{} );
     }
     else
     {
-        pSet.reset( new SfxItemSet( const_cast<SwAttrPool&>(pTextNode->GetDoc().GetAttrPool()),
-                               svl::Items<RES_CHRATR_BEGIN, RES_CHRATR_END - 1>{} ) );
+        pSet.emplace( const_cast<SwAttrPool&>(pTextNode->GetDoc().GetAttrPool()),
+                               svl::Items<RES_CHRATR_BEGIN, RES_CHRATR_END - 1>{} );
     }
     // #i82637# - From the perspective of the a11y API the default character
     // attributes are the character attributes, which are set at the paragraph style
@@ -1753,24 +1753,22 @@ void SwAccessibleParagraph::_getSupplementalAttributesImpl(
 {
     SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(GetFrame()));
     const SwTextNode *const pTextNode(pFrame->GetTextNodeForParaProps());
-    std::unique_ptr<SfxItemSet> pSet;
-    pSet.reset(
-        new SfxItemSet(
+    SfxItemSet aSet(
             const_cast<SwAttrPool&>(pTextNode->GetDoc().GetAttrPool()),
             svl::Items<
                 RES_PARATR_LINESPACING, RES_PARATR_ADJUST,
                 RES_PARATR_TABSTOP, RES_PARATR_TABSTOP,
                 RES_PARATR_NUMRULE, RES_PARATR_NUMRULE,
                 RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END - 1,
-                RES_LR_SPACE, RES_UL_SPACE>{}));
+                RES_LR_SPACE, RES_UL_SPACE>{});
 
     if ( pTextNode->HasBullet() || pTextNode->HasNumber() )
     {
-        pSet->Put( pTextNode->GetAttr(RES_PARATR_LIST_LEVEL) );
+        aSet.Put( pTextNode->GetAttr(RES_PARATR_LIST_LEVEL) );
     }
-    pSet->Put( pTextNode->SwContentNode::GetAttr(RES_UL_SPACE) );
-    pSet->Put( pTextNode->SwContentNode::GetAttr(RES_LR_SPACE) );
-    pSet->Put( pTextNode->SwContentNode::GetAttr(RES_PARATR_ADJUST) );
+    aSet.Put( pTextNode->SwContentNode::GetAttr(RES_UL_SPACE) );
+    aSet.Put( pTextNode->SwContentNode::GetAttr(RES_LR_SPACE) );
+    aSet.Put( pTextNode->SwContentNode::GetAttr(RES_PARATR_ADJUST) );
 
     tAccParaPropValMap aSupplementalAttrSeq;
     {
@@ -1778,7 +1776,7 @@ void SwAccessibleParagraph::_getSupplementalAttributesImpl(
                 aSwMapProvider.GetPropertyMapEntries( PROPERTY_MAP_ACCESSIBILITY_TEXT_ATTRIBUTE ) );
         while ( !pPropMap->aName.isEmpty() )
         {
-            const SfxPoolItem* pItem = pSet->GetItem( pPropMap->nWID );
+            const SfxPoolItem* pItem = aSet.GetItem( pPropMap->nWID );
             if ( pItem )
             {
                 uno::Any aVal;
