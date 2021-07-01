@@ -6,13 +6,13 @@
 ' file, You can obtain one at http://mozilla.org/MPL/2.0/.
 '
 
-Function doUnitTest as Integer
+Function doUnitTest as String
   ''' Return 'text' OR 'date' variable '''
 
   If ( TypeName(Date$)<>"String" Or Vartype(Date())<>V_DATE) Then
-    doUnitTest = 0 ' not successful
+    doUnitTest = "FAIL" ' not successful
   Else
-    doUnitTest = 1 ' Ok
+    doUnitTest = "OK" ' Ok
   End If
 End Function
 

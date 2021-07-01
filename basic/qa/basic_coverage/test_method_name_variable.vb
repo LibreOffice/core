@@ -20,9 +20,9 @@ Function assignVarToMethod() As Integer
 
 End Function
 
-Function doUnitTest() As Integer
+Function doUnitTest() As String
 
-    doUnitTest = 0
+    doUnitTest = "FAIL"
 
     ' tdf#85371 - check if the name of the method can be used as a variable in certain statements
     If (assignVarToMethod() <> 6) Then Exit Function
@@ -30,6 +30,6 @@ Function doUnitTest() As Integer
     assignVarToMethod = 0
     If (assignVarToMethod() <> 6) Then Exit Function
 
-    doUnitTest = 1
+    doUnitTest = "OK"
 
 End Function
