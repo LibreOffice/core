@@ -532,6 +532,14 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             sfx2::openUriExternally(sURL, false);
             break;
         }
+        case SID_HYPHENATIONMISSING:
+        {
+            // Open wiki page about hyphenation
+            OUString sURL(officecfg::Office::Common::Menus::HyphenationMissingURL::get() + //https://hub.libreoffice.org/HyphenationMissing/
+                "?LOlocale=" + LanguageTag(utl::ConfigManager::getUILocale()).getBcp47() );
+            sfx2::openUriExternally(sURL, false);
+            break;
+        }
         case SID_SHOW_LICENSE:
         {
             LicenseDialog aDialog(rReq.GetFrameWeld());
