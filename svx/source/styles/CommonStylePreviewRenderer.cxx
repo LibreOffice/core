@@ -62,7 +62,7 @@ bool CommonStylePreviewRenderer::recalculate()
 {
     m_pFont.reset();
 
-    std::unique_ptr<SfxItemSet> pItemSet(mpStyle->GetItemSetForPreview());
+    std::optional<SfxItemSet> pItemSet(mpStyle->GetItemSetForPreview());
 
     if (!pItemSet) return false;
 

@@ -1168,7 +1168,7 @@ void SvxStyleBox_Base::SetupEntry(vcl::RenderContext& rRenderContext, sal_Int32 
     if (!pStyle )
         return;
 
-    std::unique_ptr<const SfxItemSet> const pItemSet(pStyle->GetItemSetForPreview());
+    std::optional<SfxItemSet> const pItemSet(pStyle->GetItemSetForPreview());
     if (!pItemSet) return;
 
     const SvxFontItem * const pFontItem =

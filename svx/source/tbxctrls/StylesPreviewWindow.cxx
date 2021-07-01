@@ -143,7 +143,7 @@ bool StylesPreviewWindow_Base::Command(const CommandEvent& rEvent)
     return false;
 }
 
-static Color GetTextColorFromItemSet(std::unique_ptr<const SfxItemSet> const& pItemSet)
+static Color GetTextColorFromItemSet(std::optional<SfxItemSet> const& pItemSet)
 {
     const SfxPoolItem* pItem = pItemSet->GetItem(SID_ATTR_CHAR_COLOR);
     if (pItem)
@@ -152,7 +152,7 @@ static Color GetTextColorFromItemSet(std::unique_ptr<const SfxItemSet> const& pI
     return COL_AUTO;
 }
 
-static Color GetHighlightColorFromItemSet(std::unique_ptr<const SfxItemSet> const& pItemSet)
+static Color GetHighlightColorFromItemSet(std::optional<SfxItemSet> const& pItemSet)
 {
     const SfxPoolItem* pItem = pItemSet->GetItem(SID_ATTR_BRUSH_CHAR);
     if (pItem)
@@ -161,7 +161,7 @@ static Color GetHighlightColorFromItemSet(std::unique_ptr<const SfxItemSet> cons
     return COL_AUTO;
 }
 
-static Color GetBackgroundColorFromItemSet(std::unique_ptr<const SfxItemSet> const& pItemSet)
+static Color GetBackgroundColorFromItemSet(std::optional<SfxItemSet> const& pItemSet)
 {
     const SfxPoolItem* pItem = pItemSet->GetItem(XATTR_FILLCOLOR);
     if (pItem)
@@ -170,8 +170,7 @@ static Color GetBackgroundColorFromItemSet(std::unique_ptr<const SfxItemSet> con
     return COL_AUTO;
 }
 
-static css::drawing::FillStyle
-GetFillStyleFromItemSet(std::unique_ptr<const SfxItemSet> const& pItemSet)
+static css::drawing::FillStyle GetFillStyleFromItemSet(std::optional<SfxItemSet> const& pItemSet)
 {
     const SfxPoolItem* pItem = pItemSet->GetItem(XATTR_FILLSTYLE);
     if (pItem)
@@ -181,7 +180,7 @@ GetFillStyleFromItemSet(std::unique_ptr<const SfxItemSet> const& pItemSet)
 }
 
 static SvxFont GetFontFromItems(const SvxFontItem* pFontItem, Size aPixelFontSize,
-                                std::unique_ptr<const SfxItemSet> const& pItemSet)
+                                std::optional<SfxItemSet> const& pItemSet)
 {
     SvxFont aFont;
 
@@ -261,7 +260,7 @@ void StyleItemController::DrawEntry(vcl::RenderContext& rRenderContext)
 
     DrawContentBackground(rRenderContext, aContentRect, aOriginalColor);
 
-    std::unique_ptr<const SfxItemSet> const pItemSet(pStyle->GetItemSetForPreview());
+    std::optional<SfxItemSet> const pItemSet(pStyle->GetItemSetForPreview());
     if (!pItemSet)
         return;
 

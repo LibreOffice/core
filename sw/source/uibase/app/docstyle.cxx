@@ -1216,7 +1216,7 @@ bool   SwDocStyleSheet::SetFollow( const OUString& rStr)
 }
 
 static
-std::unique_ptr<SfxItemSet> lcl_SwFormatToFlatItemSet(SwFormat const *const pFormat)
+void lcl_SwFormatToFlatItemSet(SwFormat const *const pFormat, std::optional<SfxItemSet>& pRet)
 {
     // note: we don't add the odd items that GetItemSet() would add
     // because they don't seem relevant for preview
@@ -1227,21 +1227,20 @@ std::unique_ptr<SfxItemSet> lcl_SwFormatToFlatItemSet(SwFormat const *const pFor
         sets.push_back(pParent);
     }
     // start by copying top-level parent set
-    std::unique_ptr<SfxItemSet> pRet(new SfxItemSet(*sets.back()));
+    pRet.emplace(*sets.back());
     sets.pop_back();
     for (auto iter = sets.rbegin(); iter != sets.rend(); ++iter)
     {   // in reverse so child overrides parent
         pRet->Put(**iter);
     }
-    return pRet;
 }
 
-std::unique_ptr<SfxItemSet> SwDocStyleSheet::GetItemSetForPreview()
+std::optional<SfxItemSet> SwDocStyleSheet::GetItemSetForPreview()
 {
     if (SfxStyleFamily::Page == nFamily || SfxStyleFamily::Pseudo == nFamily || SfxStyleFamily::Table == nFamily)
     {
         SAL_WARN("sw.ui", "GetItemSetForPreview not implemented for page or number or table style");
-        return std::unique_ptr<SfxItemSet>();
+        return std::optional<SfxItemSet>();
     }
     if (!m_bPhysical)
     {
@@ -1249,7 +1248,7 @@ std::unique_ptr<SfxItemSet> SwDocStyleSheet::GetItemSetForPreview()
         // (or follow style) may not actually exist in the document at this
         // time, return one "flattened" item set that contains all items from
         // all parents.
-        std::unique_ptr<SfxItemSet> pRet;
+        std::optional<SfxItemSet> pRet;
 
         bool bModifiedEnabled = m_rDoc.getIDocumentState().IsEnableSetModified();
         m_rDoc.getIDocumentState().SetEnableSetModified(false);
@@ -1263,17 +1262,22 @@ std::unique_ptr<SfxItemSet> SwDocStyleSheet::GetItemSetForPreview()
     }
     else
     {
+        std::optional<SfxItemSet> pRet;
         switch (nFamily)
         {
             case SfxStyleFamily::Char:
-                return lcl_SwFormatToFlatItemSet(m_pCharFormat);
+                lcl_SwFormatToFlatItemSet(m_pCharFormat, pRet);
+                break;
             case SfxStyleFamily::Para:
-                return lcl_SwFormatToFlatItemSet(m_pColl);
+                lcl_SwFormatToFlatItemSet(m_pColl, pRet);
+                break;
             case SfxStyleFamily::Frame:
-                return lcl_SwFormatToFlatItemSet(m_pFrameFormat);
+                lcl_SwFormatToFlatItemSet(m_pFrameFormat, pRet);
+                break;
             default:
                 std::abort();
         }
+        return pRet;
     }
 }
 
@@ -1818,7 +1822,7 @@ static void lcl_DeleteInfoStyles( SfxStyleFamily nFamily, std::vector<void*> con
 
 // determine the format
 bool SwDocStyleSheet::FillStyleSheet(
-    FillStyleType const eFType, std::unique_ptr<SfxItemSet> *const o_ppFlatSet)
+    FillStyleType const eFType, std::optional<SfxItemSet> *const o_ppFlatSet)
 {
     bool bRet = false;
     sal_uInt16 nPoolId = USHRT_MAX;
@@ -2016,7 +2020,7 @@ bool SwDocStyleSheet::FillStyleSheet(
             if (FillPreview == eFType)
             {
                 assert(o_ppFlatSet);
-                *o_ppFlatSet = lcl_SwFormatToFlatItemSet(pFormat);
+                lcl_SwFormatToFlatItemSet(pFormat, *o_ppFlatSet);
             }
         }
 
