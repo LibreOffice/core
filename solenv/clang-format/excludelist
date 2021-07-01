@@ -3399,7 +3399,6 @@ drawinglayer/source/tools/emfpregion.cxx
 drawinglayer/source/tools/emfpregion.hxx
 drawinglayer/source/tools/emfpstringformat.cxx
 drawinglayer/source/tools/emfpstringformat.hxx
-drawinglayer/source/tools/primitive2dxmldump.cxx
 drawinglayer/source/tools/wmfemfhelper.cxx
 editeng/inc/AccessibleStringWrap.hxx
 editeng/inc/editattr.hxx
