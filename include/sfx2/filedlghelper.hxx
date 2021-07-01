@@ -32,6 +32,7 @@
 #include <o3tl/typed_flags_set.hxx>
 
 #include <memory>
+#include <optional>
 #include <vector>
 
 namespace com::sun::star::ui::dialogs
@@ -49,6 +50,7 @@ namespace weld { class Window; }
 class Graphic;
 class SfxFilter;
 class SfxItemSet;
+class SfxAllItemSet;
 
 enum class FileDialogFlags {
     NONE              = 0x00,
@@ -222,10 +224,10 @@ public:
    DECL_LINK( ExecuteSystemFilePicker, void*, void );
 
    ErrCode                  Execute( std::vector<OUString>& rpURLList,
-                                     std::unique_ptr<SfxItemSet>& rpSet,
+                                     std::optional<SfxAllItemSet>& rpSet,
                                      OUString&         rFilter,
                                      const OUString&   rDirPath );
-   ErrCode                  Execute( std::unique_ptr<SfxItemSet>& rpSet,
+   ErrCode                  Execute( std::optional<SfxAllItemSet>& rpSet,
                                      OUString&         rFilter );
 };
 
@@ -239,7 +241,7 @@ ErrCode FileOpenDialog_Impl( weld::Window* pParent,
                              FileDialogFlags nFlags,
                              std::vector<OUString>& rpURLList,
                              OUString& rFilter,
-                             std::unique_ptr<SfxItemSet>& rpSet,
+                             std::optional<SfxAllItemSet>& rpSet,
                              const OUString* pPath,
                              sal_Int16 nDialog,
                              const OUString& rStandardDir,
