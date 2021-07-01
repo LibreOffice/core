@@ -2751,6 +2751,10 @@ Label_MaskStateMachine:
                 cGroupSep != cArrayColSep && cGroupSep != cArrayRowSep &&
                 cGroupSep != cDecSep && cGroupSep != cDecSepAlt &&
                 cGroupSep != cSheetPrefix && cGroupSep != cSheetSep);
+        // If a numeric context triggered bi18n then use the default locale's
+        // CharClass, this may accept group separator as well.
+        const CharClass* pMyCharClass = (ScGlobal::getCharClassPtr()->isDigit( OUString(pStart[nSrcPos]), 0) ?
+                ScGlobal::getCharClassPtr() : pCharClass);
         OUStringBuffer aSymbol;
         mnRangeOpPosInSymbol = -1;
         FormulaError nErr = FormulaError::NONE;
@@ -2761,7 +2765,7 @@ Label_MaskStateMachine:
             if ( pStart[nSrcPos] == cSheetPrefix && pStart[nSrcPos+1] == '\'' )
                 aSymbol.append(pStart[nSrcPos++]);
 
-            ParseResult aRes = pConv->parseAnyToken( aFormula, nSrcPos, pCharClass, bGroupSeparator);
+            ParseResult aRes = pConv->parseAnyToken( aFormula, nSrcPos, pMyCharClass, bGroupSeparator);
 
             if ( !aRes.TokenType )
             {
