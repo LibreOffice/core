@@ -7,7 +7,7 @@
 '
 
 
-Function doUnitTest as Integer
+Function doUnitTest as String
 
 Dim s1 As String
 Dim s2 As String
@@ -17,9 +17,9 @@ Dim s2 As String
     s2 = Left(s1, 2)
 
     If s2 = "ab" Then
-        doUnitTest = 1
+        doUnitTest = "OK"
     Else
-        doUnitTest = 0
+        doUnitTest = "FAIL"
     End If
 
 End Function

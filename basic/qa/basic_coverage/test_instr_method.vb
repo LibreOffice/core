@@ -5,9 +5,9 @@
 ' file, You can obtain one at http://mozilla.org/MPL/2.0/.
 '
 
-Function doUnitTest as Integer
+Function doUnitTest as String
 
-    doUnitTest = 0
+    doUnitTest = "FAIL"
 
     Dim aString As Variant
     aString = "Hello"
@@ -17,6 +17,6 @@ Function doUnitTest as Integer
     ' tdf#139840 - case-insensitive operation for non-ASCII characters
     If (InStr(1, "α", "Α", 1) <> 1) Then Exit Function
 
-    doUnitTest = 1
+    doUnitTest = "OK"
 
 End Function

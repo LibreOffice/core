@@ -5,9 +5,9 @@
 ' file, You can obtain one at http://mozilla.org/MPL/2.0/.
 '
 
-Function doUnitTest as Integer
+Function doUnitTest as String
     ' CreateUnoListener
     Dim oListener
     oListener = CreateUnoListener( "ContListener_","com.sun.star.container.XContainerListener" )
-    doUnitTest = 1
+    doUnitTest = "OK"
 End Function

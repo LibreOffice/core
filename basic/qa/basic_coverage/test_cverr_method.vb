@@ -6,9 +6,9 @@
 ' file, You can obtain one at http://mozilla.org/MPL/2.0/.
 '
 
-Function doUnitTest as Integer
+Function doUnitTest as String
 
-    doUnitTest = 0
+    doUnitTest = "FAIL"
 
     ' CVERR
     If (CVerr(100) <> 100) Then Exit Function
@@ -17,7 +17,7 @@ Function doUnitTest as Integer
     ' tdf#79426 - test with Error-Code 448 ( ERRCODE_BASIC_NAMED_NOT_FOUND )
     If (TestCVErr(CVErr(448)) <> 448) Then Exit Function
 
-    doUnitTest = 1
+    doUnitTest = "OK"
 
 End Function
 

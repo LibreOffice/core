@@ -6,36 +6,36 @@
 ' file, You can obtain one at http://mozilla.org/MPL/2.0/.
 '
 
-Function doUnitTest as Integer
+Function doUnitTest as String
     ' CDateFromIso CDateToIso
     If ( CDateToIso( CDateFromIso("20161016") ) <> "20161016" ) Then
-        doUnitTest = 0
+        doUnitTest = "FAIL"
     ElseIf ( CDateToIso( CDateFromIso("2016-10-16") ) <> "20161016" ) Then
-        doUnitTest = 0
+        doUnitTest = "FAIL"
     ElseIf ( CDateToIso( CDateFromIso("-2016-10-16") ) <> "-20161016" ) Then
-        doUnitTest = 0
+        doUnitTest = "FAIL"
     ElseIf ( CDateToIso( CDateFromIso("-20161016") ) <> "-20161016" ) Then
-        doUnitTest = 0
+        doUnitTest = "FAIL"
     ElseIf ( CDateToIso( CDateFromIso("12016-10-16") ) <> "120161016" ) Then
-        doUnitTest = 0
+        doUnitTest = "FAIL"
     ElseIf ( CDateToIso( CDateFromIso("120161016") ) <> "120161016" ) Then
-        doUnitTest = 0
+        doUnitTest = "FAIL"
     ElseIf ( CDateToIso( CDateFromIso("-12016-10-16") ) <> "-120161016" ) Then
-        doUnitTest = 0
+        doUnitTest = "FAIL"
     ElseIf ( CDateToIso( CDateFromIso("-120161016") ) <> "-120161016" ) Then
-        doUnitTest = 0
+        doUnitTest = "FAIL"
     ElseIf ( CDateToIso( CDateFromIso("0001-01-01") ) <> "00010101" ) Then
-        doUnitTest = 0
+        doUnitTest = "FAIL"
     ElseIf ( CDateToIso( CDateFromIso("00010101") ) <> "00010101" ) Then
-        doUnitTest = 0
+        doUnitTest = "FAIL"
     ElseIf ( CDateToIso( CDateFromIso("-0001-12-31") ) <> "-00011231" ) Then
-        doUnitTest = 0
+        doUnitTest = "FAIL"
     ElseIf ( CDateToIso( CDateFromIso("-00011231") ) <> "-00011231" ) Then
-        doUnitTest = 0
+        doUnitTest = "FAIL"
     ElseIf ( CDateToIso( CDateFromIso("991231") ) <> "19991231" ) Then
-        doUnitTest = 0
+        doUnitTest = "FAIL"
     Else
-        doUnitTest = 1
+        doUnitTest = "OK"
     End If
     ' TODO: add some failure tests for misformed input, On Error whatever?
 End Function

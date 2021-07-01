@@ -1,80 +1,68 @@
-Dim passCount As Integer
-Dim failCount As Integer
-Dim result As String
-
 Const IsMissingNone = -1
 Const IsMissingA = 0
 Const IsMissingB = 1
 Const IsMissingAB = 2
 
 Function doUnitTest() As String
-    result = verify_testIsMissingBasic()
-    If failCount <> 0 Or passCount = 0 Then
-        doUnitTest = 0
-    Else
-        doUnitTest = 1
-    End If
+    TestUtil.TestInit
+    verify_testIsMissingBasic
+    doUnitTest = TestUtil.GetResult()
 End Function
 
 ' tdf#36737 - Test optionals with different datatypes. In LO Basic, optional
 ' parameters are allowed, but without any default values. Missing optional parameters
 ' will not be initialized to their respective default values of its datatype, either.
-Function verify_testIsMissingBasic() As String
+Sub verify_testIsMissingBasic()
 
-    passCount = 0
-    failCount = 0
-
-    result = "Test Results" & Chr$(10) & "============" & Chr$(10)
-    testName = "Test missing (Basic)"
     On Error GoTo errorHandler
 
     ' optionals with variant datatypes
-    TestLog_ASSERT TestOptVariant(), IsMissingAB, "TestOptVariant()"
-    TestLog_ASSERT TestOptVariant(123), IsMissingB, "TestOptVariant(123)"
-    TestLog_ASSERT TestOptVariant(, 456), IsMissingA, "TestOptVariant(, 456)"
-    TestLog_ASSERT TestOptVariant(123, 456), IsMissingNone, "TestOptVariant(123, 456)"
+    TestUtil.AssertEqual(TestOptVariant(), IsMissingAB, "TestOptVariant()")
+    TestUtil.AssertEqual(TestOptVariant(123), IsMissingB, "TestOptVariant(123)")
+    TestUtil.AssertEqual(TestOptVariant(, 456), IsMissingA, "TestOptVariant(, 456)")
+    TestUtil.AssertEqual(TestOptVariant(123, 456), IsMissingNone, "TestOptVariant(123, 456)")
 
     ' optionals with variant datatypes (ByRef and ByVal)
-    TestLog_ASSERT TestOptVariantByRefByVal(), IsMissingAB, "TestOptVariantByRefByVal()"
-    TestLog_ASSERT TestOptVariantByRefByVal(123), IsMissingB, "TestOptVariantByRefByVal(123)"
-    TestLog_ASSERT TestOptVariantByRefByVal(, 456), IsMissingA, "TestOptVariantByRefByVal(, 456)"
-    TestLog_ASSERT TestOptVariantByRefByVal(123, 456), IsMissingNone, "TestOptVariantByRefByVal(123, 456)"
+    TestUtil.AssertEqual(TestOptVariantByRefByVal(), IsMissingAB, "TestOptVariantByRefByVal()")
+    TestUtil.AssertEqual(TestOptVariantByRefByVal(123), IsMissingB, "TestOptVariantByRefByVal(123)")
+    TestUtil.AssertEqual(TestOptVariantByRefByVal(, 456), IsMissingA, "TestOptVariantByRefByVal(, 456)")
+    TestUtil.AssertEqual(TestOptVariantByRefByVal(123, 456), IsMissingNone, "TestOptVariantByRefByVal(123, 456)")
 
     ' optionals with double datatypes
-    TestLog_ASSERT TestOptDouble(), IsMissingAB, "TestOptDouble()"
-    TestLog_ASSERT TestOptDouble(123.4), IsMissingB, "TestOptDouble(123.4)"
-    TestLog_ASSERT TestOptDouble(, 567.8), IsMissingA, "TestOptDouble(, 567.8)"
-    TestLog_ASSERT TestOptDouble(123.4, 567.8), IsMissingNone, "TestOptDouble(123.4, 567.8)"
+    TestUtil.AssertEqual(TestOptDouble(), IsMissingAB, "TestOptDouble()")
+    TestUtil.AssertEqual(TestOptDouble(123.4), IsMissingB, "TestOptDouble(123.4)")
+    TestUtil.AssertEqual(TestOptDouble(, 567.8), IsMissingA, "TestOptDouble(, 567.8)")
+    TestUtil.AssertEqual(TestOptDouble(123.4, 567.8), IsMissingNone, "TestOptDouble(123.4, 567.8)")
 
     ' optionals with double datatypes (ByRef and ByVal)
-    TestLog_ASSERT TestOptDoubleByRefByVal(), IsMissingAB, "TestOptDouble()"
-    TestLog_ASSERT TestOptDoubleByRefByVal(123.4), IsMissingB, "TestOptDouble(123.4)"
-    TestLog_ASSERT TestOptDoubleByRefByVal(, 567.8), IsMissingA, "TestOptDoubleByRefByVal(, 567.8)"
-    TestLog_ASSERT TestOptDoubleByRefByVal(123.4, 567.8), IsMissingNone, "TestOptDoubleByRefByVal(123.4, 567.8)"
+    TestUtil.AssertEqual(TestOptDoubleByRefByVal(), IsMissingAB, "TestOptDouble()")
+    TestUtil.AssertEqual(TestOptDoubleByRefByVal(123.4), IsMissingB, "TestOptDouble(123.4)")
+    TestUtil.AssertEqual(TestOptDoubleByRefByVal(, 567.8), IsMissingA, "TestOptDoubleByRefByVal(, 567.8)")
+    TestUtil.AssertEqual(TestOptDoubleByRefByVal(123.4, 567.8), IsMissingNone, "TestOptDoubleByRefByVal(123.4, 567.8)")
 
     ' optionals with integer datatypes
-    TestLog_ASSERT TestOptInteger(), IsMissingAB, "TestOptInteger()"
-    TestLog_ASSERT TestOptInteger(123), IsMissingB, "TestOptInteger(123)"
-    TestLog_ASSERT TestOptInteger(, 456), IsMissingA, "TestOptInteger(, 456)"
-    TestLog_ASSERT TestOptInteger(123, 456), IsMissingNone, "TestOptInteger(123, 456)"
+    TestUtil.AssertEqual(TestOptInteger(), IsMissingAB, "TestOptInteger()")
+    TestUtil.AssertEqual(TestOptInteger(123), IsMissingB, "TestOptInteger(123)")
+    TestUtil.AssertEqual(TestOptInteger(, 456), IsMissingA, "TestOptInteger(, 456)")
+    TestUtil.AssertEqual(TestOptInteger(123, 456), IsMissingNone, "TestOptInteger(123, 456)")
 
     ' optionals with integer datatypes (ByRef and ByVal)
-    TestLog_ASSERT TestOptIntegerByRefByVal(), IsMissingAB, "TestOptIntegerByRefByVal()"
-    TestLog_ASSERT TestOptIntegerByRefByVal(123), IsMissingB, "TestOptIntegerByRefByVal(123)"
-    TestLog_ASSERT TestOptIntegerByRefByVal(, 456), IsMissingA, "TestOptIntegerByRefByVal(, 456)"
-    TestLog_ASSERT TestOptIntegerByRefByVal(123, 456), IsMissingNone, "TestOptIntegerByRefByVal(123, 456)"
+    TestUtil.AssertEqual(TestOptIntegerByRefByVal(), IsMissingAB, "TestOptIntegerByRefByVal()")
+    TestUtil.AssertEqual(TestOptIntegerByRefByVal(123), IsMissingB, "TestOptIntegerByRefByVal(123)")
+    TestUtil.AssertEqual(TestOptIntegerByRefByVal(, 456), IsMissingA, "TestOptIntegerByRefByVal(, 456)")
+    TestUtil.AssertEqual(TestOptIntegerByRefByVal(123, 456), IsMissingNone, "TestOptIntegerByRefByVal(123, 456)")
 
     ' optionals with string datatypes
-    TestLog_ASSERT TestOptString(), IsMissingAB, "TestOptString()"
-    TestLog_ASSERT TestOptString("123"), IsMissingB, "TestOptString(""123"")"
-    TestLog_ASSERT TestOptString(, "456"), IsMissingA, "TestOptString(, ""456"")"
-    TestLog_ASSERT TestOptString("123", "456"), IsMissingNone, "TestOptString(""123"", ""456"")"
+    TestUtil.AssertEqual(TestOptString(), IsMissingAB, "TestOptString()")
+    TestUtil.AssertEqual(TestOptString("123"), IsMissingB, "TestOptString(""123"")")
+    TestUtil.AssertEqual(TestOptString(, "456"), IsMissingA, "TestOptString(, ""456"")")
+    TestUtil.AssertEqual(TestOptString("123", "456"), IsMissingNone, "TestOptString(""123"", ""456"")")
 
     ' optionals with string datatypes (ByRef and ByVal)
-    TestLog_ASSERT TestOptStringByRefByVal(), IsMissingAB, "TestOptStringByRefByVal()"
-    TestLog_ASSERT TestOptStringByRefByVal("123"), IsMissingB, "TestOptStringByRefByVal(""123"")"
-    TestLog_ASSERT TestOptStringByRefByVal(, "456"), IsMissingA, "TestOptStringByRefByVal(, ""456"")"
-    TestLog_ASSERT TestOptStringByRefByVal("123", "456"), IsMissingNone, "TestOptStringByRefByVal(""123"", ""456"")"
+    TestUtil.AssertEqual(TestOptStringByRefByVal(), IsMissingAB, "TestOptStringByRefByVal()")
+    TestUtil.AssertEqual(TestOptStringByRefByVal("123"), IsMissingB, "TestOptStringByRefByVal(""123"")")
+    TestUtil.AssertEqual(TestOptStringByRefByVal(, "456"), IsMissingA, "TestOptStringByRefByVal(, ""456"")")
+    TestUtil.AssertEqual(TestOptStringByRefByVal("123", "456"), IsMissingNone, "TestOptStringByRefByVal(""123"", ""456"")")
 
     ' optionals with object datatypes
     Dim cA As New Collection
@@ -83,16 +71,16 @@ Function verify_testIsMissingBasic() As String
     Dim cB As New Collection
     cB.Add (123.4)
     cB.Add (567.8)
-    TestLog_ASSERT TestOptObject(), IsMissingAB, "TestOptObject()"
-    TestLog_ASSERT TestOptObject(cA), IsMissingB, "TestOptObject(A)"
-    TestLog_ASSERT TestOptObject(, cB), IsMissingA, "TestOptObject(, B)"
-    TestLog_ASSERT TestOptObject(cA, cB), IsMissingNone, "TestOptObject(A, B)"
+    TestUtil.AssertEqual(TestOptObject(), IsMissingAB, "TestOptObject()")
+    TestUtil.AssertEqual(TestOptObject(cA), IsMissingB, "TestOptObject(A)")
+    TestUtil.AssertEqual(TestOptObject(, cB), IsMissingA, "TestOptObject(, B)")
+    TestUtil.AssertEqual(TestOptObject(cA, cB), IsMissingNone, "TestOptObject(A, B)")
 
     ' optionals with object datatypes (ByRef and ByVal)
-    TestLog_ASSERT TestOptObjectByRefByVal(), IsMissingAB, "TestOptObjectByRefByVal()"
-    TestLog_ASSERT TestOptObjectByRefByVal(cA), IsMissingB, "TestOptObjectByRefByVal(A)"
-    TestLog_ASSERT TestOptObjectByRefByVal(, cB), IsMissingA, "TestOptObjectByRefByVal(, B)"
-    TestLog_ASSERT TestOptObjectByRefByVal(cA, cB), IsMissingNone, "TestOptObjectByRefByVal(A, B)"
+    TestUtil.AssertEqual(TestOptObjectByRefByVal(), IsMissingAB, "TestOptObjectByRefByVal()")
+    TestUtil.AssertEqual(TestOptObjectByRefByVal(cA), IsMissingB, "TestOptObjectByRefByVal(A)")
+    TestUtil.AssertEqual(TestOptObjectByRefByVal(, cB), IsMissingA, "TestOptObjectByRefByVal(, B)")
+    TestUtil.AssertEqual(TestOptObjectByRefByVal(cA, cB), IsMissingNone, "TestOptObjectByRefByVal(A, B)")
 
     ' optionals with array datatypes
     Dim aA(0 To 1) As Integer
@@ -101,24 +89,21 @@ Function verify_testIsMissingBasic() As String
     Dim aB(0 To 1) As Variant
     aB(0) = 123.4
     aB(1) = 567.8
-    TestLog_ASSERT TestOptArray(), IsMissingAB, "TestOptArray()"
-    TestLog_ASSERT TestOptArray(aA), IsMissingB, "TestOptArray(A)"
-    TestLog_ASSERT TestOptArray(, aB), IsMissingA, "TestOptArray(, B)"
-    TestLog_ASSERT TestOptArray(aA, aB), IsMissingNone, "TestOptArray(A, B)"
+    TestUtil.AssertEqual(TestOptArray(), IsMissingAB, "TestOptArray()")
+    TestUtil.AssertEqual(TestOptArray(aA), IsMissingB, "TestOptArray(A)")
+    TestUtil.AssertEqual(TestOptArray(, aB), IsMissingA, "TestOptArray(, B)")
+    TestUtil.AssertEqual(TestOptArray(aA, aB), IsMissingNone, "TestOptArray(A, B)")
 
     ' optionals with array datatypes (ByRef and ByVal)
-    TestLog_ASSERT TestOptArrayByRefByVal(), IsMissingAB, "TestOptArrayByRefByVal()"
-    TestLog_ASSERT TestOptArrayByRefByVal(aA), IsMissingB, "TestOptArrayByRefByVal(A)"
-    TestLog_ASSERT TestOptArrayByRefByVal(, aB), IsMissingA, "TestOptArrayByRefByVal(, B)"
-    TestLog_ASSERT TestOptArrayByRefByVal(aA, aB), IsMissingNone, "TestOptArrayByRefByVal(A, B)"
+    TestUtil.AssertEqual(TestOptArrayByRefByVal(), IsMissingAB, "TestOptArrayByRefByVal()")
+    TestUtil.AssertEqual(TestOptArrayByRefByVal(aA), IsMissingB, "TestOptArrayByRefByVal(A)")
+    TestUtil.AssertEqual(TestOptArrayByRefByVal(, aB), IsMissingA, "TestOptArrayByRefByVal(, B)")
+    TestUtil.AssertEqual(TestOptArrayByRefByVal(aA, aB), IsMissingNone, "TestOptArrayByRefByVal(A, B)")
 
-    result = result & Chr$(10) & "Tests passed: " & passCount & Chr$(10) & "Tests failed: " & failCount & Chr$(10)
-    verify_testIsMissingBasic = result
-
-    Exit Function
+    Exit Sub
 errorHandler:
-    TestLog_ASSERT False, True, Err.Description
-End Function
+    TestUtil.ReportErrorHandler("verify_testIsMissingBasic", Err, Error$, Erl)
+End Sub
 
 Function TestOptVariant(Optional A, Optional B As Variant)
     TestOptVariant = WhatIsMissing(IsMissing(A), IsMissing(B))
@@ -179,12 +164,3 @@ Function WhatIsMissing(is_missingA, is_missingB)
         WhatIsMissing = IsMissingNone
     End If
 End Function
-
-Sub TestLog_ASSERT(actual As Variant, expected As Integer, testName As String)
-    If expected = actual Then
-        passCount = passCount + 1
-    Else
-        result = result & Chr$(10) & " Failed: " & testName & " returned " & actual & ", expected " & expected
-        failCount = failCount + 1
-    End If
-End Sub
