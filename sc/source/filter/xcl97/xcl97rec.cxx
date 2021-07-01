@@ -161,6 +161,7 @@ bool IsFormControlObject( const XclObj *rObj )
     switch( rObj->GetObjType() )
     {
         case EXC_OBJTYPE_CHECKBOX:
+        case EXC_OBJTYPE_BUTTON:
             return true;
         default:
             return false;

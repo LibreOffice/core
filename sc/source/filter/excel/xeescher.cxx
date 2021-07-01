@@ -1153,6 +1153,9 @@ void VmlFormControlExporter::EndShape(sal_Int32 nShapeElement)
         case EXC_OBJTYPE_CHECKBOX:
             aObjectType = "Checkbox";
             break;
+        case EXC_OBJTYPE_BUTTON:
+            aObjectType = "Button";
+            break;
     }
     pVmlDrawing->startElement(FSNS(XML_x, XML_ClientData), XML_ObjectType, aObjectType);
     OString aAnchor = OString::number(m_aAreaFrom.Left());
@@ -1165,7 +1168,11 @@ void VmlFormControlExporter::EndShape(sal_Int32 nShapeElement)
     aAnchor += ", " + OString::number(m_aAreaTo.Bottom());
     XclXmlUtils::WriteElement(pVmlDrawing, FSNS(XML_x, XML_Anchor), aAnchor);
 
-    // XclExpOcxControlObj::WriteSubRecs() has the same fixed value.
+    // XclExpOcxControlObj::WriteSubRecs() has the same fixed values.
+    if (m_nObjType == EXC_OBJTYPE_BUTTON)
+    {
+        XclXmlUtils::WriteElement(pVmlDrawing, FSNS(XML_x, XML_TextHAlign), "Center");
+    }
     XclXmlUtils::WriteElement(pVmlDrawing, FSNS(XML_x, XML_TextVAlign), "Center");
 
     pVmlDrawing->endElement(FSNS(XML_x, XML_ClientData));
@@ -1393,6 +1400,21 @@ OUString XclExpTbxControlObj::SaveControlPropertiesXml(XclExpXmlStream& rStrm) c
 
             break;
         }
+        case EXC_OBJTYPE_BUTTON:
+        {
+            const sal_Int32 nDrawing = XclExpObjList::getNewDrawingUniqueId();
+            sax_fastparser::FSHelperPtr pFormControl = rStrm.CreateOutputStream(
+                XclXmlUtils::GetStreamName("xl/", "ctrlProps/ctrlProps", nDrawing),
+                XclXmlUtils::GetStreamName("../", "ctrlProps/ctrlProps", nDrawing),
+                rStrm.GetCurrentStream()->getOutputStream(),
+                "application/vnd.ms-excel.controlproperties+xml",
+                oox::getRelationship(Relationship::CTRLPROP), &sIdFormControlPr);
+
+            pFormControl->singleElement(XML_formControlPr, XML_xmlns,
+                                        rStrm.getNamespaceURL(OOX_NS(xls14Lst)), XML_objectType,
+                                        "Button", XML_lockText, "1");
+            break;
+        }
     }
 
     return sIdFormControlPr;
@@ -1448,6 +1470,45 @@ void XclExpTbxControlObj::SaveSheetXml(XclExpXmlStream& rStrm, const OUString& a
             rWorksheet->endElement( FSNS( XML_mc, XML_Choice ) );
             rWorksheet->endElement( FSNS( XML_mc, XML_AlternateContent ) );
 
+            break;
+        }
+        case EXC_OBJTYPE_BUTTON:
+        {
+            sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
+
+            rWorksheet->startElement(FSNS(XML_mc, XML_AlternateContent), FSNS(XML_xmlns, XML_mc),
+                                     rStrm.getNamespaceURL(OOX_NS(mce)));
+            rWorksheet->startElement(FSNS(XML_mc, XML_Choice), XML_Requires, "x14");
+
+            rWorksheet->startElement(XML_control, XML_shapeId, OString::number(mnShapeId).getStr(),
+                                     FSNS(XML_r, XML_id), aIdFormControlPr, XML_name, msLabel);
+
+            rWorksheet->startElement(XML_controlPr, XML_defaultSize, "0", XML_print,
+                                     mbPrint ? "true" : "false", XML_autoFill, "0", XML_autoPict,
+                                     "0");
+
+            rWorksheet->startElement(XML_anchor, XML_moveWithCells, "true", XML_sizeWithCells,
+                                     "false");
+
+            SdrObject* pObj = SdrObject::getSdrObjectFromXShape(mxShape);
+            tools::Rectangle aAreaFrom;
+            tools::Rectangle aAreaTo;
+            lcl_GetFromTo(mrRoot, pObj->GetLogicRect(), GetTab(), aAreaFrom, aAreaTo,
+                          /*bInEMU=*/true);
+
+            rWorksheet->startElement(XML_from);
+            lcl_WriteAnchorVertex(rWorksheet, aAreaFrom);
+            rWorksheet->endElement(XML_from);
+            rWorksheet->startElement(XML_to);
+            lcl_WriteAnchorVertex(rWorksheet, aAreaTo);
+            rWorksheet->endElement(XML_to);
+            rWorksheet->endElement(XML_anchor);
+
+            rWorksheet->endElement(XML_controlPr);
+
+            rWorksheet->endElement(XML_control);
+            rWorksheet->endElement(FSNS(XML_mc, XML_Choice));
+            rWorksheet->endElement(FSNS(XML_mc, XML_AlternateContent));
             break;
         }
     }
