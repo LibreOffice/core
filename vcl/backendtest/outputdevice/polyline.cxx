@@ -10,6 +10,9 @@
 
 #include <test/outputdevice.hxx>
 
+#include <cmath>
+#include <vector>
+
 namespace vcl::test {
 
 namespace
@@ -130,6 +133,156 @@ Bitmap OutputDeviceTestPolyLine::setupAALines()
     aDiagonalPolygon.SetPoint(aDiagonalLinePoint1, 0);
     aDiagonalPolygon.SetPoint(aDiagonalLinePoint2, 1);
     mpVirtualDevice->DrawPolyLine(aDiagonalPolygon);
+
+    return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
+}
+
+Bitmap OutputDeviceTestPolyLine::setupBezier()
+{
+    initialSetup(21, 21, constBackgroundColor);
+
+    mpVirtualDevice->SetLineColor(constLineColor);
+    mpVirtualDevice->SetFillColor();
+
+    std::vector<Point> aDiamondPoints;
+    Point aPoint1, aPoint2, aPoint3, aPoint4;
+    OutputDeviceTestCommon::createAndAppendDiamondPoints(maVDRectangle, 8, aPoint1, aPoint2, aPoint3, aPoint4, aDiamondPoints);
+
+    tools::Long distanceFromCoordinate = 4*(abs(aDiamondPoints[0].getY()-aDiamondPoints[2].getY())/2)*((sqrt(2)-1)/3);
+    tools::Long X,Y;
+    int aPointNumber = 0;
+
+    tools::Polygon aPolygon(16);
+
+    aPolygon.SetPoint(aPoint1,0);
+    aPolygon.SetFlags(0,PolyFlags::Normal);
+    X=aDiamondPoints[aPointNumber].getX();
+    Y=aDiamondPoints[aPointNumber].getY();
+    aPointNumber = (aPointNumber+1)%4;
+    aPolygon.SetPoint(Point(X+distanceFromCoordinate,Y),1);
+    aPolygon.SetFlags(1,PolyFlags::Control);
+    X=aDiamondPoints[aPointNumber].getX();
+    Y=aDiamondPoints[aPointNumber].getY();
+    aPointNumber = (aPointNumber+1)%4;
+    aPolygon.SetPoint(Point(X,Y-distanceFromCoordinate),2);
+    aPolygon.SetFlags(2,PolyFlags::Control);
+    aPolygon.SetPoint(aPoint2,3);
+
+    aPolygon.SetFlags(3,PolyFlags::Normal);
+    aPolygon.SetPoint(aPoint2,4);
+    aPolygon.SetFlags(4,PolyFlags::Normal);
+    aPolygon.SetPoint(Point(X,Y+distanceFromCoordinate),5);
+    aPolygon.SetFlags(5,PolyFlags::Control);
+    X=aDiamondPoints[aPointNumber].getX();
+    Y=aDiamondPoints[aPointNumber].getY();
+    aPointNumber = (aPointNumber+1)%4;
+    aPolygon.SetPoint(Point(X+distanceFromCoordinate,Y),6);
+    aPolygon.SetFlags(6,PolyFlags::Control);
+    aPolygon.SetPoint(aPoint3,7);
+    aPolygon.SetFlags(7,PolyFlags::Normal);
+
+    aPolygon.SetPoint(aPoint3,8);
+    aPolygon.SetFlags(8,PolyFlags::Normal);
+    aPolygon.SetPoint(Point(X-distanceFromCoordinate,Y),9);
+    aPolygon.SetFlags(9,PolyFlags::Control);
+    X=aDiamondPoints[aPointNumber].getX();
+    Y=aDiamondPoints[aPointNumber].getY();
+    aPointNumber = (aPointNumber+1)%4;
+    aPolygon.SetPoint(Point(X,Y+distanceFromCoordinate),10);
+    aPolygon.SetFlags(10,PolyFlags::Control);
+    aPolygon.SetPoint(aPoint4,11);
+    aPolygon.SetFlags(11,PolyFlags::Normal);
+
+    aPolygon.SetPoint(aPoint4,12);
+    aPolygon.SetFlags(12,PolyFlags::Normal);
+    aPolygon.SetPoint(Point(X,Y-distanceFromCoordinate),13);
+    X=aDiamondPoints[aPointNumber].getX();
+    Y=aDiamondPoints[aPointNumber].getY();
+    aPointNumber = (aPointNumber+1)%4;
+    aPolygon.SetFlags(13,PolyFlags::Control);
+    aPolygon.SetPoint(Point(X-distanceFromCoordinate,Y),14);
+    aPolygon.SetFlags(14,PolyFlags::Control);
+    aPolygon.SetPoint(aPoint1,15);
+    aPolygon.SetFlags(15,PolyFlags::Normal);
+
+    aPolygon.Optimize(PolyOptimizeFlags::CLOSE);
+
+    mpVirtualDevice->DrawPolyLine(aPolygon);
+
+    return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
+}
+
+Bitmap OutputDeviceTestPolyLine::setupAABezier()
+{
+    initialSetup(21, 21, constBackgroundColor,true);
+
+    mpVirtualDevice->SetLineColor(constLineColor);
+    mpVirtualDevice->SetFillColor();
+
+    std::vector<Point> aDiamondPoints;
+    Point aPoint1, aPoint2, aPoint3, aPoint4;
+    OutputDeviceTestCommon::createAndAppendDiamondPoints(maVDRectangle, 8, aPoint1, aPoint2, aPoint3, aPoint4, aDiamondPoints);
+
+    tools::Long distanceFromCoordinate = 4*(abs(aDiamondPoints[0].getY()-aDiamondPoints[2].getY())/2)*((sqrt(2)-1)/3);
+    tools::Long X,Y;
+    int aPointNumber = 0;
+
+    tools::Polygon aPolygon(16);
+
+    aPolygon.SetPoint(aPoint1,0);
+    aPolygon.SetFlags(0,PolyFlags::Normal);
+    X=aDiamondPoints[aPointNumber].getX();
+    Y=aDiamondPoints[aPointNumber].getY();
+    aPointNumber = (aPointNumber+1)%4;
+    aPolygon.SetPoint(Point(X+distanceFromCoordinate,Y),1);
+    aPolygon.SetFlags(1,PolyFlags::Control);
+    X=aDiamondPoints[aPointNumber].getX();
+    Y=aDiamondPoints[aPointNumber].getY();
+    aPointNumber = (aPointNumber+1)%4;
+    aPolygon.SetPoint(Point(X,Y-distanceFromCoordinate),2);
+    aPolygon.SetFlags(2,PolyFlags::Control);
+    aPolygon.SetPoint(aPoint2,3);
+
+    aPolygon.SetFlags(3,PolyFlags::Normal);
+    aPolygon.SetPoint(aPoint2,4);
+    aPolygon.SetFlags(4,PolyFlags::Normal);
+    aPolygon.SetPoint(Point(X,Y+distanceFromCoordinate),5);
+    aPolygon.SetFlags(5,PolyFlags::Control);
+    X=aDiamondPoints[aPointNumber].getX();
+    Y=aDiamondPoints[aPointNumber].getY();
+    aPointNumber = (aPointNumber+1)%4;
+    aPolygon.SetPoint(Point(X+distanceFromCoordinate,Y),6);
+    aPolygon.SetFlags(6,PolyFlags::Control);
+    aPolygon.SetPoint(aPoint3,7);
+    aPolygon.SetFlags(7,PolyFlags::Normal);
+
+    aPolygon.SetPoint(aPoint3,8);
+    aPolygon.SetFlags(8,PolyFlags::Normal);
+    aPolygon.SetPoint(Point(X-distanceFromCoordinate,Y),9);
+    aPolygon.SetFlags(9,PolyFlags::Control);
+    X=aDiamondPoints[aPointNumber].getX();
+    Y=aDiamondPoints[aPointNumber].getY();
+    aPointNumber = (aPointNumber+1)%4;
+    aPolygon.SetPoint(Point(X,Y+distanceFromCoordinate),10);
+    aPolygon.SetFlags(10,PolyFlags::Control);
+    aPolygon.SetPoint(aPoint4,11);
+    aPolygon.SetFlags(11,PolyFlags::Normal);
+
+    aPolygon.SetPoint(aPoint4,12);
+    aPolygon.SetFlags(12,PolyFlags::Normal);
+    aPolygon.SetPoint(Point(X,Y-distanceFromCoordinate),13);
+    X=aDiamondPoints[aPointNumber].getX();
+    Y=aDiamondPoints[aPointNumber].getY();
+    aPointNumber = (aPointNumber+1)%4;
+    aPolygon.SetFlags(13,PolyFlags::Control);
+    aPolygon.SetPoint(Point(X-distanceFromCoordinate,Y),14);
+    aPolygon.SetFlags(14,PolyFlags::Control);
+    aPolygon.SetPoint(aPoint1,15);
+    aPolygon.SetFlags(15,PolyFlags::Normal);
+
+    aPolygon.Optimize(PolyOptimizeFlags::CLOSE);
+
+    mpVirtualDevice->DrawPolyLine(aPolygon);
 
     return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
 }

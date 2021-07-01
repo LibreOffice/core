@@ -67,6 +67,11 @@ public:
                                     Point& rPoint1, Point& rPoint2,
                                     Point& rPoint3, Point& rPoint4);
 
+    static void createAndAppendDiamondPoints(tools::Rectangle rRect, int nOffset,
+                                             Point& rPoint1, Point& rPoint2,
+                                             Point& rPoint3, Point& rPoint4,
+                                             std::vector<Point>& diamondPtAry);
+
     static void createHorizontalVerticalDiagonalLinePoints(tools::Rectangle rRect,
                                 Point& rHorizontalLinePoint1, Point& rHorizontalLinePoint2,
                                 Point& rVerticalLinePoint1, Point& rVerticalLinePoint2,
@@ -161,6 +166,8 @@ public:
     Bitmap setupDiamond();
     Bitmap setupLines();
     Bitmap setupAALines();
+    Bitmap setupBezier();
+    Bitmap setupAABezier();
 };
 
 class VCL_DLLPUBLIC OutputDeviceTestPolyLineB2D : public OutputDeviceTestCommon
@@ -196,6 +203,8 @@ public:
     Bitmap setupDiamond();
     Bitmap setupLines();
     Bitmap setupAALines();
+    Bitmap setupBezier();
+    Bitmap setupAABezier();
 };
 
 class VCL_DLLPUBLIC OutputDeviceTestPolyPolygon : public OutputDeviceTestCommon
