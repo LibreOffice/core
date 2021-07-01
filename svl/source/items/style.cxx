@@ -262,9 +262,9 @@ SfxItemSet& SfxStyleSheetBase::GetItemSet()
     return *pSet;
 }
 
-std::unique_ptr<SfxItemSet> SfxStyleSheetBase::GetItemSetForPreview()
+std::optional<SfxItemSet> SfxStyleSheetBase::GetItemSetForPreview()
 {
-    return std::make_unique<SfxItemSet>(GetItemSet());
+    return GetItemSet();
 }
 
 /**
