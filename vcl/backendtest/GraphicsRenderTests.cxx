@@ -636,6 +636,47 @@ void GraphicsRenderTests::testDrawInvertTrackFrameWithRectangle()
     }
 }
 
+void GraphicsRenderTests::testDrawDropShapeWithPolyline()
+{
+    vcl::test::OutputDeviceTestPolyLine aOutDevTest;
+    Bitmap aBitmap = aOutDevTest.setupDropShape();
+    OUString atestName = "testDrawDropShapeWithPolyline";
+    if (!SHOULD_ASSERT)
+    {
+        appendTestResult(atestName, "SKIPPED");
+        return;
+    }
+    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkDropShape(aBitmap);
+    appendTestResult(atestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        BitmapEx aBitmapEx(aBitmap);
+        exportBitmapExToImage(m_aUserInstallPath + atestName + ".png", aBitmapEx);
+    }
+}
+
+void GraphicsRenderTests::testDrawDropShapeAAWithPolyline()
+{
+    vcl::test::OutputDeviceTestPolyLine aOutDevTest;
+    Bitmap aBitmap = aOutDevTest.setupAADropShape();
+    OUString atestName = "testDrawDropShapeAAWithPolyline";
+    if (!SHOULD_ASSERT)
+    {
+        appendTestResult(atestName, "SKIPPED");
+        return;
+    }
+    vcl::test::TestResult eResult
+        = vcl::test::OutputDeviceTestCommon::checkDropShape(aBitmap, true);
+    appendTestResult(atestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        BitmapEx aBitmapEx(aBitmap);
+        exportBitmapExToImage(m_aUserInstallPath + atestName + ".png", aBitmapEx);
+    }
+}
+
 void GraphicsRenderTests::testDrawBezierWithPolylineB2D()
 {
     vcl::test::OutputDeviceTestPolyLineB2D aOutDevTest;
@@ -667,6 +708,47 @@ void GraphicsRenderTests::testDrawBezierAAWithPolylineB2D()
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkBezier(aBitmap);
+    appendTestResult(atestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        BitmapEx aBitmapEx(aBitmap);
+        exportBitmapExToImage(m_aUserInstallPath + atestName + ".png", aBitmapEx);
+    }
+}
+
+void GraphicsRenderTests::testDrawDropShapeWithPolygon()
+{
+    vcl::test::OutputDeviceTestPolygon aOutDevTest;
+    Bitmap aBitmap = aOutDevTest.setupDropShape();
+    OUString atestName = "testDrawDropShapeWithPolygon";
+    if (!SHOULD_ASSERT)
+    {
+        appendTestResult(atestName, "SKIPPED");
+        return;
+    }
+    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkDropShape(aBitmap);
+    appendTestResult(atestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        BitmapEx aBitmapEx(aBitmap);
+        exportBitmapExToImage(m_aUserInstallPath + atestName + ".png", aBitmapEx);
+    }
+}
+
+void GraphicsRenderTests::testDrawDropShapeAAWithPolygon()
+{
+    vcl::test::OutputDeviceTestPolygon aOutDevTest;
+    Bitmap aBitmap = aOutDevTest.setupAADropShape();
+    OUString atestName = "testDrawDropShapeAAWithPolygon";
+    if (!SHOULD_ASSERT)
+    {
+        appendTestResult(atestName, "SKIPPED");
+        return;
+    }
+    vcl::test::TestResult eResult
+        = vcl::test::OutputDeviceTestCommon::checkDropShape(aBitmap, true);
     appendTestResult(atestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
@@ -1280,6 +1362,10 @@ void GraphicsRenderTests::runALLTests()
     testLineCapRound();
     testLineCapSquare();
     testLineCapButt();
+    testDrawDropShapeWithPolyline();
+    testDrawDropShapeAAWithPolyline();
+    testDrawDropShapeWithPolygon();
+    testDrawDropShapeAAWithPolygon();
 }
 
 void GraphicsRenderTests::appendTestResult(OUString aTestName, OUString aTestStatus,

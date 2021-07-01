@@ -67,6 +67,8 @@ public:
                                     Point& rPoint1, Point& rPoint2,
                                     Point& rPoint3, Point& rPoint4);
 
+    static tools::Polygon createDropShapePolygon();
+
     static void createHorizontalVerticalDiagonalLinePoints(tools::Rectangle rRect,
                                 Point& rHorizontalLinePoint1, Point& rHorizontalLinePoint2,
                                 Point& rVerticalLinePoint1, Point& rVerticalLinePoint2,
@@ -84,6 +86,7 @@ public:
     static TestResult checkLineJoinRound(Bitmap& rBitmap) { return checkLineJoin(rBitmap, basegfx::B2DLineJoin::Round); }
     static TestResult checkLineJoinMiter(Bitmap& rBitmap) { return checkLineJoin(rBitmap, basegfx::B2DLineJoin::Miter); }
     static TestResult checkLineJoinNone(Bitmap& rBitmap) { return checkLineJoin(rBitmap, basegfx::B2DLineJoin::NONE); }
+    static TestResult checkDropShape(Bitmap& rBitmap, bool aEnableAA = false);
 private:
     static TestResult checkLineCap(Bitmap& rBitmap, css::drawing::LineCap lineCap);
     static TestResult checkLineJoin(Bitmap& rBitmap, basegfx::B2DLineJoin lineJoin);
@@ -161,6 +164,8 @@ public:
     Bitmap setupDiamond();
     Bitmap setupLines();
     Bitmap setupAALines();
+    Bitmap setupDropShape();
+    Bitmap setupAADropShape();
 };
 
 class VCL_DLLPUBLIC OutputDeviceTestPolyLineB2D : public OutputDeviceTestCommon
@@ -196,6 +201,8 @@ public:
     Bitmap setupDiamond();
     Bitmap setupLines();
     Bitmap setupAALines();
+    Bitmap setupDropShape();
+    Bitmap setupAADropShape();
 };
 
 class VCL_DLLPUBLIC OutputDeviceTestPolyPolygon : public OutputDeviceTestCommon
