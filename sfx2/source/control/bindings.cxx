@@ -252,7 +252,7 @@ void SfxBindings::Update_Impl(SfxStateCache& rCache /*The up to date SfxStatusCa
     const SfxSlot *pRealSlot = nullptr;
     const SfxSlotServer* pMsgServer = nullptr;
     SfxFoundCacheArr_Impl aFound;
-    std::unique_ptr<SfxItemSet> pSet = CreateSet_Impl(rCache, pRealSlot, &pMsgServer, aFound);
+    std::optional<SfxItemSet> pSet = CreateSet_Impl(rCache, pRealSlot, &pMsgServer, aFound);
     bool bUpdated = false;
     if ( pSet )
     {
@@ -1090,7 +1090,7 @@ void SfxBindings::UpdateSlotServer_Impl()
 }
 
 
-std::unique_ptr<SfxItemSet> SfxBindings::CreateSet_Impl
+std::optional<SfxItemSet> SfxBindings::CreateSet_Impl
 (
     SfxStateCache&          rCache,     // in: Status-Cache from nId
     const SfxSlot*&         pRealSlot,  // out: RealSlot to nId
@@ -1103,7 +1103,7 @@ std::unique_ptr<SfxItemSet> SfxBindings::CreateSet_Impl
 
     const SfxSlotServer* pMsgSvr = rCache.GetSlotServer(*pDispatcher, pImpl->xProv);
     if (!pMsgSvr)
-        return nullptr;
+        return {};
 
     pRealSlot = nullptr;
     *pMsgServer = pMsgSvr;
@@ -1111,7 +1111,7 @@ std::unique_ptr<SfxItemSet> SfxBindings::CreateSet_Impl
     sal_uInt16 nShellLevel = pMsgSvr->GetShellLevel();
     SfxShell *pShell = pDispatcher->GetShell( nShellLevel );
     if ( !pShell ) // rare GPF when browsing through update from Inet-Notify
-        return nullptr;
+        return {};
 
     SfxItemPool &rPool = pShell->GetPool();
 
@@ -1167,7 +1167,7 @@ std::unique_ptr<SfxItemSet> SfxBindings::CreateSet_Impl
 
     // Create a Set from the ranges
     size_t i = 0;
-    auto pSet(std::make_unique<SfxItemSet>(rPool, nullptr));
+    SfxItemSet aSet(rPool, nullptr);
     while ( i < rFound.size() )
     {
         const sal_uInt16 nWhich1 = rFound[i].nWhichId;
@@ -1176,9 +1176,9 @@ std::unique_ptr<SfxItemSet> SfxBindings::CreateSet_Impl
             if ( rFound[i].nWhichId+1 != rFound[i+1].nWhichId )
                 break;
         const sal_uInt16 nWhich2 = rFound[i++].nWhichId;
-        pSet->MergeRange(nWhich1, nWhich2);
+        aSet.MergeRange(nWhich1, nWhich2);
     }
-    return pSet;
+    return aSet;
 }
 
 
