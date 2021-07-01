@@ -52,6 +52,24 @@
       "revId": "eebb26f039c7a9777338f5d573958109be95018b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "124c9dbe_0e92f6cf",
+        "filename": "sal/qa/rtl/math/test-rtl-math.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 455,
+      "author": {
+        "id": 1003291
+      },
+      "writtenOn": "2021-07-01T20:46:47Z",
+      "side": 1,
+      "message": "I did take back the changes on sal/qa/rtl/math/test-rtl-math.cxx in patchset 4 after ourconversation on https://gerrit.libreoffice.org/c/core/+/117952. Now it is untouched.",
+      "parentUuid": "13994982_5c87c6a5",
+      "revId": "eebb26f039c7a9777338f5d573958109be95018b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
