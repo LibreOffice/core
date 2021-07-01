@@ -37,6 +37,7 @@
 #include <tools/solar.h>
 
 #include <memory>
+#include <optional>
 
 // This is used as a flags enum in sw/, but only there,
 // so I don't pull in o3tl::typed_flags here
@@ -178,7 +179,7 @@ public:
     /// preview only; it shall not create the style in case it does not exist.
     /// If the style has parents, it is _not_ required that the returned item
     /// set has parents (i.e. use it for display purposes only).
-    virtual std::unique_ptr<SfxItemSet> GetItemSetForPreview();
+    virtual std::optional<SfxItemSet> GetItemSetForPreview();
 
     /// Fix for expensive dynamic_cast
     virtual bool isScStyleSheet() const { return false; }
