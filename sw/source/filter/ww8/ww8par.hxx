@@ -922,6 +922,14 @@ public:
     explicit wwExtraneousParas(SwDoc &rDoc) : m_rDoc(rDoc) {}
     ~wwExtraneousParas() { delete_all_from_doc(); }
     void insert(SwTextNode *pTextNode) { m_aTextNodes.insert(pTextNode); }
+    void check_anchor_destination(SwTextNode *pTextNode)
+    {
+        auto it = m_aTextNodes.find(pTextNode);
+        if (it == m_aTextNodes.end())
+            return;
+        SAL_WARN("sw.ww8", "It is unexpected to anchor something in a para scheduled for removal");
+        m_aTextNodes.erase(it);
+    }
     void delete_all_from_doc();
 };
 
