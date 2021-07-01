@@ -188,6 +188,7 @@ public:
     void testTdf126541_SheetVisibilityImportXlsx();
     void testTdf140431();
     void testCheckboxFormControlXlsxExport();
+    void testTdf142929_filterLessThanXLSX();
 
     CPPUNIT_TEST_SUITE(ScExportTest2);
 
@@ -284,6 +285,7 @@ public:
     CPPUNIT_TEST(testTdf126541_SheetVisibilityImportXlsx);
     CPPUNIT_TEST(testTdf140431);
     CPPUNIT_TEST(testCheckboxFormControlXlsxExport);
+    CPPUNIT_TEST(testTdf142929_filterLessThanXLSX);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2319,6 +2321,21 @@ void ScExportTest2::testCheckboxFormControlXlsxExport()
     // Without the fix in place, this test would have failed as there was no such stream.
     CPPUNIT_ASSERT(pDoc);
     assertXPathContent(pDoc, "/xml/v:shape/xx:ClientData/xx:Anchor", "1, 22, 3, 3, 3, 30, 6, 1");
+}
+
+void ScExportTest2::testTdf142929_filterLessThanXLSX()
+{
+    // Document contains a standard filter with '<' condition.
+    ScDocShellRef xDocSh = loadDoc(u"tdf142929.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory,
+                                                     "xl/worksheets/sheet1.xml", FORMAT_XLSX);
+    CPPUNIT_ASSERT(pDoc);
+    assertXPath(pDoc, "//x:customFilters/x:customFilter", "val", "2");
+    assertXPath(pDoc, "//x:customFilters/x:customFilter", "operator", "lessThan");
+
+    xDocSh->DoClose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest2);
