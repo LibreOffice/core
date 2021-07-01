@@ -282,6 +282,7 @@ public:
     void testTdf136721_paper_size();
     void testTdf139258_rotated_image();
     void testCheckboxFormControlXlsxExport();
+    void testButtonFormControlXlsxExport();
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
@@ -462,6 +463,7 @@ public:
     CPPUNIT_TEST(testTdf136721_paper_size);
     CPPUNIT_TEST(testTdf139258_rotated_image);
     CPPUNIT_TEST(testCheckboxFormControlXlsxExport);
+    CPPUNIT_TEST(testButtonFormControlXlsxExport);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -5867,6 +5869,29 @@ void ScExportTest::testCheckboxFormControlXlsxExport()
     // Without the fix in place, this test would have failed as there was no such stream.
     CPPUNIT_ASSERT(pDoc);
     assertXPathContent(pDoc, "/xml/v:shape/xx:ClientData/xx:Anchor", "1, 22, 3, 3, 3, 30, 6, 1");
+}
+
+void ScExportTest::testButtonFormControlXlsxExport()
+{
+    // Given a document that has a checkbox form control:
+    ScDocShellRef xShell = loadDoc(u"button-form-control.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xShell.is());
+
+    // When exporting to XLSX:
+    std::shared_ptr<utl::TempFile> pXPathFile
+        = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
+
+    // Then make sure its control markup is written and it has a correct position + size:
+    xmlDocUniquePtr pDoc
+        = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
+    CPPUNIT_ASSERT(pDoc);
+    // Without the fix in place, this test would have failed with:
+    // - XPath '//x:anchor/x:from/xdr:col' not found
+    // i.e. the control markup was missing, the button was lost on export.
+    assertXPathContent(pDoc, "//x:anchor/x:from/xdr:col", "1");
+    assertXPathContent(pDoc, "//x:anchor/x:from/xdr:row", "3");
+    assertXPathContent(pDoc, "//x:anchor/x:to/xdr:col", "3");
+    assertXPathContent(pDoc, "//x:anchor/x:to/xdr:row", "7");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest);
