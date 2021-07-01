@@ -188,6 +188,13 @@ public:
     void testTdf139258_rotated_image();
     void testTdf126541_SheetVisibilityImportXlsx();
     void testTdf140431();
+<<<<<<< HEAD   (21c56b tdf#143278 DOCX: support tracked table (row) insertion)
+=======
+    void testCheckboxFormControlXlsxExport();
+    void testButtonFormControlXlsxExport();
+    void testTdf142929_filterLessThanXLSX();
+    void testInvalidNamedRange();
+>>>>>>> CHANGE (0d3398 tdf#142929 XLSX: fix import of "Less than" filter condition)
 
     CPPUNIT_TEST_SUITE(ScExportTest2);
 
@@ -284,6 +291,13 @@ public:
     CPPUNIT_TEST(testTdf139258_rotated_image);
     CPPUNIT_TEST(testTdf126541_SheetVisibilityImportXlsx);
     CPPUNIT_TEST(testTdf140431);
+<<<<<<< HEAD   (21c56b tdf#143278 DOCX: support tracked table (row) insertion)
+=======
+    CPPUNIT_TEST(testCheckboxFormControlXlsxExport);
+    CPPUNIT_TEST(testButtonFormControlXlsxExport);
+    CPPUNIT_TEST(testTdf142929_filterLessThanXLSX);
+    CPPUNIT_TEST(testInvalidNamedRange);
+>>>>>>> CHANGE (0d3398 tdf#142929 XLSX: fix import of "Less than" filter condition)
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2320,6 +2334,90 @@ void ScExportTest2::testTdf140431()
     xDocSh->DoClose();
 }
 
+<<<<<<< HEAD   (21c56b tdf#143278 DOCX: support tracked table (row) insertion)
+=======
+void ScExportTest2::testCheckboxFormControlXlsxExport()
+{
+    if (!IsDefaultDPI())
+        return;
+    // Given a document that has a checkbox form control:
+    ScDocShellRef xShell = loadDoc(u"checkbox-form-control.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xShell.is());
+
+    // When exporting to XLSX:
+    std::shared_ptr<utl::TempFile> pXPathFile
+        = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
+
+    // Then make sure its VML markup is written and it has a correct position + size:
+    xmlDocUniquePtr pDoc
+        = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/drawings/vmlDrawing1.vml");
+    // Without the fix in place, this test would have failed as there was no such stream.
+    CPPUNIT_ASSERT(pDoc);
+    assertXPathContent(pDoc, "/xml/v:shape/xx:ClientData/xx:Anchor", "1, 22, 3, 3, 3, 30, 6, 1");
+}
+
+void ScExportTest2::testButtonFormControlXlsxExport()
+{
+    // Given a document that has a checkbox form control:
+    ScDocShellRef xShell = loadDoc(u"button-form-control.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xShell.is());
+
+    // When exporting to XLSX:
+    std::shared_ptr<utl::TempFile> pXPathFile
+        = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
+
+    // Then make sure its control markup is written and it has a correct position + size:
+    xmlDocUniquePtr pDoc
+        = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
+    CPPUNIT_ASSERT(pDoc);
+    // Without the fix in place, this test would have failed with:
+    // - XPath '//x:anchor/x:from/xdr:col' not found
+    // i.e. the control markup was missing, the button was lost on export.
+    assertXPathContent(pDoc, "//x:anchor/x:from/xdr:col", "1");
+    assertXPathContent(pDoc, "//x:anchor/x:from/xdr:row", "3");
+    assertXPathContent(pDoc, "//x:anchor/x:to/xdr:col", "3");
+    assertXPathContent(pDoc, "//x:anchor/x:to/xdr:row", "7");
+
+    // Also make sure that an empty macro attribute is not written.
+    // Without the fix in place, this test would have failed with:
+    // - XPath '//x:controlPr' unexpected 'macro' attribute
+    // i.e. macro in an xlsx file was not omitted, which is considered invalid by Excel.
+    assertXPathNoAttribute(pDoc, "//x:controlPr", "macro");
+}
+
+void ScExportTest2::testTdf142929_filterLessThanXLSX()
+{
+    // Document contains a standard filter with '<' condition.
+    ScDocShellRef xDocSh = loadDoc(u"tdf142929.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory,
+                                                     "xl/worksheets/sheet1.xml", FORMAT_XLSX);
+    CPPUNIT_ASSERT(pDoc);
+    assertXPath(pDoc, "//x:customFilters/x:customFilter", "val", "2");
+    assertXPath(pDoc, "//x:customFilters/x:customFilter", "operator", "lessThan");
+
+    xDocSh->DoClose();
+}
+
+void ScExportTest2::testInvalidNamedRange()
+{
+    // Given a document which has a named range (myname) that refers to the "1" external link, but
+    // the link's type is xlPathMissing, when importing that document:
+    ScDocShellRef xDocSh = loadDoc(u"invalid-named-range.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    // Then make sure that named range is ignored, as "1" can't be resolved, and exporting it back
+    // to XLSX (without the xlPathMissing link) would corrupt the document:
+    uno::Reference<beans::XPropertySet> xDocProps(xDocSh->GetModel(), uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xNamedRanges(xDocProps->getPropertyValue("NamedRanges"),
+                                                        uno::UNO_QUERY);
+    // Without the fix in place, this test would have failed, we didn't ignore the problematic named
+    // range on import.
+    CPPUNIT_ASSERT(!xNamedRanges->hasByName("myname"));
+}
+
+>>>>>>> CHANGE (0d3398 tdf#142929 XLSX: fix import of "Less than" filter condition)
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest2);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
