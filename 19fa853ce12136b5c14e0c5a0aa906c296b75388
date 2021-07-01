@@ -16,6 +16,24 @@
       "revId": "19fa853ce12136b5c14e0c5a0aa906c296b75388",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1be0101d_013a3d6a",
+        "filename": "reportdesign/source/core/api/ReportDefinition.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1002716
+      },
+      "writtenOn": "2021-07-01T13:10:09Z",
+      "side": 1,
+      "message": "I\u0027m not 100% sure but I seem to remember that this was necessary for the feature to work. Should we remove this definition if the feature turns out to work without it?",
+      "parentUuid": "01a71085_d8ab8b51",
+      "revId": "19fa853ce12136b5c14e0c5a0aa906c296b75388",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
