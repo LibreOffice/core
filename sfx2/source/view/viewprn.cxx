@@ -174,6 +174,7 @@ void SfxPrinterController::Notify( SfxBroadcaster& , const SfxHint& rHint )
     {
         EndListening(*mpViewShell);
         EndListening(*mpObjectShell);
+        dialogsParentClosing();
         mpViewShell = nullptr;
         mpObjectShell = nullptr;
     }
