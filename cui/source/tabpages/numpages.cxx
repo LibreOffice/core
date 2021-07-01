@@ -746,8 +746,11 @@ SvxBitmapPickTabPage::SvxBitmapPickTabPage(weld::Container* pPage, weld::DialogC
         m_xExamplesVS->InsertItem( i + 1, i);
 
         INetURLObject aObj(grfName);
-        if(aObj.GetProtocol() == INetProtocol::File)
-            grfName = aObj.PathToFileName();
+        if (aObj.GetProtocol() == INetProtocol::File)
+        {
+            aObj.removeExtension();
+            grfName = aObj.GetLastName(INetURLObject::DecodeMechanism::Unambiguous);
+        }
 
         m_xExamplesVS->SetItemText( i + 1, grfName );
         ++i;
