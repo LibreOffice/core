@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "64c32770_fbbeb6f3",
+        "filename": "scaddins/source/analysis/analysishelper.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 663,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-07-01T11:07:19Z",
+      "side": 1,
+      "message": "Duplicating the central definition into this local one is not a good idea. Please keep using rtl::math::isValidArcArg().",
+      "revId": "8d87ef7e3ce17aca44e81701949471cd99b9d5ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "706d3510_5cacdcf4",
+        "filename": "scaddins/source/analysis/analysishelper.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 665,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-07-01T11:07:19Z",
+      "side": 1,
+      "message": "Besides, this should be 64 instead, if I\u0027m not mistaken.",
+      "range": {
+        "startLine": 665,
+        "startChar": 45,
+        "endLine": 665,
+        "endChar": 47
+      },
+      "revId": "8d87ef7e3ce17aca44e81701949471cd99b9d5ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a0f5754b_afeb5259",
+        "filename": "scaddins/source/analysis/bessel.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 329,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-07-01T11:07:19Z",
+      "side": 1,
+      "message": "Good catch, but please use !rtl::math::isValidArcArg(fX) instead.",
+      "range": {
+        "startLine": 329,
+        "startChar": 19,
+        "endLine": 329,
+        "endChar": 43
+      },
+      "revId": "8d87ef7e3ce17aca44e81701949471cd99b9d5ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4e150e76_df73cf0d",
+        "filename": "scaddins/source/analysis/bessel.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 383,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-07-01T11:07:19Z",
+      "side": 1,
+      "message": "same",
+      "range": {
+        "startLine": 383,
+        "startChar": 19,
+        "endLine": 383,
+        "endChar": 43
+      },
+      "revId": "8d87ef7e3ce17aca44e81701949471cd99b9d5ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
