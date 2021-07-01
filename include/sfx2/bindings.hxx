@@ -23,6 +23,7 @@
 
 #include <cstddef>
 #include <memory>
+#include <optional>
 
 #include <o3tl/typed_flags_set.hxx>
 #include <sfx2/dllapi.h>
@@ -101,7 +102,7 @@ private:
                                     SfxCallMode nCall, const SfxPoolItem **pInternalArgs, bool bGlobalOnly=false);
     SAL_DLLPRIVATE void SetSubBindings_Impl( SfxBindings* );
     SAL_DLLPRIVATE void UpdateSlotServer_Impl(); // Update SlotServer
-    SAL_DLLPRIVATE std::unique_ptr<SfxItemSet> CreateSet_Impl(SfxStateCache& rCache, const SfxSlot* &pRealSlot,
+    SAL_DLLPRIVATE std::optional<SfxItemSet> CreateSet_Impl(SfxStateCache& rCache, const SfxSlot* &pRealSlot,
                                               const SfxSlotServer**, SfxFoundCacheArr_Impl&);
     SAL_DLLPRIVATE std::size_t GetSlotPos( sal_uInt16 nId, std::size_t nStartSearchAt = 0 );
     SAL_DLLPRIVATE void Update_Impl(SfxStateCache& rCache);
