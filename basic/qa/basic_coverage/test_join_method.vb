@@ -5,14 +5,14 @@
 ' file, You can obtain one at http://mozilla.org/MPL/2.0/.
 '
 
-Function doUnitTest as Integer
+Function doUnitTest as String
     ' Join
     Dim aStrings(2) as String
     aStrings(0) = "Hello"
     aStrings(1) = "world"
     If ( Join( aStrings, " " ) <> "Hello world " ) Then
-        doUnitTest = 0
+        doUnitTest = "FAIL"
     Else
-        doUnitTest = 1
+        doUnitTest = "OK"
     End If
 End Function

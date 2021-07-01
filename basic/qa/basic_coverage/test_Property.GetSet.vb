@@ -8,14 +8,14 @@
 
 Option Compatible
 
-Function doUnitTest as Integer
+Function doUnitTest as String
   ' PROPERTY GET/SET for classes or UNO services
 
   Set objSetter = New Collection ' OR objLetter = New Collection
   If ( objGetter.Count <> 3 ) Then
-    doUnitTest = 0 ' not Ok
+    doUnitTest = "FAIL" ' not Ok
   Else
-    doUnitTest = 1 ' Ok
+    doUnitTest = "OK" ' Ok
   End If
 End Function
 
