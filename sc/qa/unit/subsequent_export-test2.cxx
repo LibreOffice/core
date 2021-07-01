@@ -2305,6 +2305,8 @@ void ScExportTest2::testTdf140431()
 
 void ScExportTest2::testCheckboxFormControlXlsxExport()
 {
+    if (!IsDefaultDPI())
+        return;
     // Given a document that has a checkbox form control:
     ScDocShellRef xShell = loadDoc(u"checkbox-form-control.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xShell.is());
