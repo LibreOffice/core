@@ -8,12 +8,12 @@
 
 ' cf. <https://bugs.documentfoundation.org/show_bug.cgi?id=62090> "Mid statement doesn't work as
 ' expected":
-Function doUnitTest as Integer
+Function doUnitTest as String
     s = "The lightbrown fox"
     Mid(s, 5, 10, "lazy")
     If (s = "The lazy fox") Then
-        doUnitTest = 1
+        doUnitTest = "OK"
     Else
-        doUnitTest = 0
+        doUnitTest = "FAIL"
     End If
 End Function

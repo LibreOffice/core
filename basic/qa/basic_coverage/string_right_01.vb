@@ -6,7 +6,7 @@
 ' file, You can obtain one at http://mozilla.org/MPL/2.0/.
 '
 
-Function doUnitTest as Integer
+Function doUnitTest as String
 
 Dim s1 As String
 Dim s2 As String
@@ -16,9 +16,9 @@ Dim s2 As String
     s2 = Right(s1, 2)
 
     If s2 = "bc" Then
-        doUnitTest = 1
+        doUnitTest = "OK"
     Else
-        doUnitTest = 0
+        doUnitTest = "FAIL"
     End If
 
 End Function

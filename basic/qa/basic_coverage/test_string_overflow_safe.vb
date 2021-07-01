@@ -1,6 +1,6 @@
 Option Explicit
 
-Function doUnitTest As Integer
+Function doUnitTest As String
     ' Trying to create too long string should generate proper BASIC overflow error.
     ' Longest possible string is 2147483638 wchar_t (2G - 10).
     ' This tries to create string with 2G wchar_t. If it does not overflow, test fails.
@@ -11,12 +11,12 @@ Function doUnitTest As Integer
     For i=1 To 31
     s = s & s
     Next i
-    doUnitTest = 0
+    doUnitTest = "FAIL"
     Exit Function
 errorHandler:
     If ( Err <> 6 ) Then
-        doUnitTest = 0
+        doUnitTest = "FAIL"
     Else
-        doUnitTest = 1
+        doUnitTest = "OK"
     Endif
 End Function

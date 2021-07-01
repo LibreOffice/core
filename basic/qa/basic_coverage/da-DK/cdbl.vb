@@ -1,4 +1,4 @@
-Function doUnitTest() as Integer
+Function doUnitTest() as String
     Dim A As String
     Dim B As Double
     Dim Expected As String
@@ -7,8 +7,8 @@ Function doUnitTest() as Integer
     Expected = "222222"
     B = Cdbl(A)
     If B <> Expected Then
-        doUnitTest = 0
+        doUnitTest = "FAIL"
     Else
-        doUnitTest = 1
+        doUnitTest = "OK"
     End If
 End Function
