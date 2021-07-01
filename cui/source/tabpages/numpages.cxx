@@ -1884,8 +1884,12 @@ IMPL_LINK_NOARG(SvxNumOptionsTabPage, PopupActivateHdl_Impl, weld::Toggleable&, 
         sGrfName = grfName;
         OUString sItemId = "gallery" + OUString::number(i);
         INetURLObject aObj(sGrfName);
-        if(aObj.GetProtocol() == INetProtocol::File)
-            sGrfName = aObj.PathToFileName();
+        if (aObj.GetProtocol() == INetProtocol::File)
+        {
+            // tdf#141334 - only show the last name of the filename without its extension
+            aObj.removeExtension();
+            sGrfName = aObj.GetLastName(INetURLObject::DecodeMechanism::Unambiguous);
+        }
         if(GalleryExplorer::GetGraphicObj( GALLERY_THEME_BULLETS, i, &aGraphic))
         {
             BitmapEx aBitmap(aGraphic.GetBitmapEx());
