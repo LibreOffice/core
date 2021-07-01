@@ -70,7 +70,6 @@ class AbstractSdCustomShowDlg : public VclAbstractDialog
 protected:
     virtual ~AbstractSdCustomShowDlg() override = default;
 public:
-    virtual bool        IsModified() const = 0;
     virtual bool        IsCustomShow() const = 0;
 };
 

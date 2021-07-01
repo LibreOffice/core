@@ -133,12 +133,6 @@ namespace vcl
         void                SetPageSizePixel( const Size& rSize ) { maPageSize = rSize; }
         const Size&         GetPageSizePixel() const { return maPageSize; }
 
-        /// enable (or disable) buttons
-        void                enableButtons(WizardButtonFlags _nWizardButtonFlags, bool _bEnable);
-
-        /// determines whether there is a next state to which we can advance
-        bool            canAdvance() const;
-
         void            SetRoadmapHelpId( const OString& _rId );
 
         void            InsertRoadmapItem(int nIndex, const OUString& rLabel, int nId, bool bEnabled);
@@ -173,13 +167,6 @@ namespace vcl
 
         /// travel to the previous state
         void                travelPrevious();
-
-        /** enables the automatic enabled/disabled state of the "Next" button
-
-            If this is <TRUE/>, then upon entering a new state, the "Next" button will automatically be
-            enabled if and only if determineNextState does not return WZS_INVALID_STATE.
-        */
-        bool                isAutomaticNextButtonStateEnabled() const;
 
         /** removes a page from the history. Should be called when the page is being disabled
         */
@@ -267,7 +254,6 @@ namespace vcl
         DECL_LINK(OnPrevPage, Button*, void);
         DECL_LINK(OnFinish, Button*, void);
 
-        void     implUpdateTitle();
         void     implConstruct( const WizardButtonFlags _nButtonFlags );
     };
 
