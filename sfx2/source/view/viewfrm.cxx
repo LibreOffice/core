@@ -1504,6 +1504,15 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                                                     SfxViewFrame, HiddenTrackChangesHandler));
                     }
 
+                    // Hyphenation infobar: add a button to get more information
+                    if ( pInfoBar && aInfobarData.msId == "hyphenationmissing" )
+                    {
+                        weld::Button& rHyphenationButton = pInfoBar->addButton();
+                        rHyphenationButton.set_label(SfxResId(STR_HYPHENATION_BUTTON));
+                        rHyphenationButton.connect_clicked(LINK(this,
+                                                   SfxViewFrame, HypenationMissingHandler));
+                    }
+
                     aPendingInfobars.pop_back();
                 }
 
@@ -1642,6 +1651,12 @@ IMPL_LINK(SfxViewFrame, HiddenTrackChangesHandler, weld::Button&, rButton, void)
             RemoveInfoBar(u"hiddentrackchanges");
         }
     }
+}
+
+IMPL_LINK_NOARG(SfxViewFrame, HypenationMissingHandler, weld::Button&, void)
+{
+    GetDispatcher()->Execute(SID_HYPHENATIONMISSING);
+    RemoveInfoBar(u"hyphenationmissing");
 }
 
 void SfxViewFrame::Construct_Impl( SfxObjectShell *pObjSh )
