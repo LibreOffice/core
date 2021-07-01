@@ -28,6 +28,7 @@
 
 #include <unordered_map>
 #include <memory>
+#include <optional>
 #include <string_view>
 #include <vector>
 
@@ -72,7 +73,7 @@ class SW_DLLPUBLIC SwDocStyleSheet final : public SfxStyleSheetBase
     };
 
     SAL_DLLPRIVATE bool FillStyleSheet(FillStyleType eFType,
-            std::unique_ptr<SfxItemSet> * o_ppFlatSet = nullptr);
+            std::optional<SfxItemSet> * o_ppFlatSet = nullptr);
 
     virtual ~SwDocStyleSheet() override;
 
@@ -102,7 +103,7 @@ public:
                                         const bool bResetIndentAttrsAtParagraphStyle = false );
 
     virtual SfxItemSet&     GetItemSet() override;
-    virtual std::unique_ptr<SfxItemSet> GetItemSetForPreview() override;
+    virtual std::optional<SfxItemSet> GetItemSetForPreview() override;
     /** new method for paragraph styles to merge indent attributes of applied list
      style into the given item set, if the list style indent attributes are applicable. */
     void MergeIndentAttrsOfListStyle( SfxItemSet& rSet );
