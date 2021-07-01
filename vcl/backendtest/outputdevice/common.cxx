@@ -492,6 +492,25 @@ void OutputDeviceTestCommon::createDiamondPoints(tools::Rectangle rRect, int nOf
     rPoint4 = Point(midPointX - nOffset, midPointY         );
 }
 
+void OutputDeviceTestCommon::createAndAppendDiamondPoints(tools::Rectangle rRect, int nOffset,
+                                                 Point& rPoint1, Point& rPoint2,
+                                                 Point& rPoint3, Point& rPoint4,
+                                                 std::vector<Point>& diamondPtAry)
+{
+    tools::Long midPointX = rRect.Left() + (rRect.Right()  - rRect.Left()) / 2.0;
+    tools::Long midPointY = rRect.Top()  + (rRect.Bottom() - rRect.Top())  / 2.0;
+
+    rPoint1 = Point(midPointX         , midPointY - nOffset);
+    diamondPtAry.push_back(rPoint1);
+    rPoint2 = Point(midPointX + nOffset, midPointY         );
+    diamondPtAry.push_back(rPoint2);
+    rPoint3 = Point(midPointX         , midPointY + nOffset);
+    diamondPtAry.push_back(rPoint3);
+    rPoint4 = Point(midPointX - nOffset, midPointY         );
+    diamondPtAry.push_back(rPoint4);
+}
+
+
 void OutputDeviceTestCommon::createHorizontalVerticalDiagonalLinePoints(tools::Rectangle rRect,
                                 Point& rHorizontalLinePoint1, Point& rHorizontalLinePoint2,
                                 Point& rVerticalLinePoint1, Point& rVerticalLinePoint2,
