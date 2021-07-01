@@ -86,6 +86,54 @@ void checkValue(BitmapScopedWriteAccess& pAccess, int x, int y, Color aExpected,
     }
 }
 
+char returnDominantColor(Color aColor)
+{
+    int aRed = aColor.GetRed();
+    int aGreen = aColor.GetGreen();
+    int aBlue = aColor.GetBlue();
+    if (aRed == aGreen && aRed == aBlue)
+    {
+        return 'X'; //X here refers to Grey(since R=G=B would result into a shade of grey).
+    }
+    if (aRed > aGreen && aRed > aBlue)
+    {
+        return 'R';
+    }
+    if (aGreen > aRed && aGreen > aBlue)
+    {
+        return 'G';
+    }
+    return 'B';
+}
+
+void checkValueAA(BitmapScopedWriteAccess& pAccess, int x, int y, Color aExpected,
+                  int& nNumberOfQuirks, int& nNumberOfErrors, bool bQuirkMode,
+                  int nColorDeltaThresh = 64)
+{
+    const bool bColorize = false;
+    Color aColor = pAccess->GetPixel(y, x);
+    bool aColorResult = returnDominantColor(aExpected) == returnDominantColor(aColor);
+    int nColorDelta = deltaColor(aColor, aExpected);
+
+    if (nColorDelta <= nColorDeltaThresh && aColorResult)
+    {
+        if (bColorize)
+            pAccess->SetPixel(y, x, COL_LIGHTGREEN);
+    }
+    else if (bQuirkMode && aColorResult)
+    {
+        nNumberOfQuirks++;
+        if (bColorize)
+            pAccess->SetPixel(y, x, COL_YELLOW);
+    }
+    else
+    {
+        nNumberOfErrors++;
+        if (bColorize)
+            pAccess->SetPixel(y, x, COL_LIGHTRED);
+    }
+}
+
 // Return all colors in the rectangle and their count.
 std::map<Color, int> collectColors(Bitmap& bitmap, const tools::Rectangle& rectangle)
 {
@@ -490,6 +538,103 @@ void OutputDeviceTestCommon::createDiamondPoints(tools::Rectangle rRect, int nOf
     rPoint2 = Point(midPointX + nOffset, midPointY         );
     rPoint3 = Point(midPointX         , midPointY + nOffset);
     rPoint4 = Point(midPointX - nOffset, midPointY         );
+}
+
+tools::Polygon OutputDeviceTestCommon::createDropShapePolygon()
+{
+    tools::Polygon aPolygon(15);
+
+    aPolygon.SetPoint(Point(10, 2), 0);
+    aPolygon.SetFlags(0, PolyFlags::Normal);
+    aPolygon.SetPoint(Point(14, 2), 1);
+    aPolygon.SetFlags(1, PolyFlags::Control);
+    aPolygon.SetPoint(Point(18, 6), 2);
+    aPolygon.SetFlags(2, PolyFlags::Control);
+    aPolygon.SetPoint(Point(18, 10), 3);
+
+    aPolygon.SetFlags(3, PolyFlags::Normal);
+    aPolygon.SetPoint(Point(18, 10), 4);
+    aPolygon.SetFlags(4, PolyFlags::Normal);
+    aPolygon.SetPoint(Point(18, 14), 5);
+    aPolygon.SetFlags(5, PolyFlags::Control);
+    aPolygon.SetPoint(Point(14, 18), 6);
+    aPolygon.SetFlags(6, PolyFlags::Control);
+    aPolygon.SetPoint(Point(10, 18), 7);
+    aPolygon.SetFlags(7, PolyFlags::Normal);
+
+    aPolygon.SetPoint(Point(10, 18), 8);
+    aPolygon.SetFlags(8, PolyFlags::Normal);
+    aPolygon.SetPoint(Point(6, 18), 9);
+    aPolygon.SetFlags(9, PolyFlags::Control);
+    aPolygon.SetPoint(Point(2, 14), 10);
+    aPolygon.SetFlags(10, PolyFlags::Control);
+    aPolygon.SetPoint(Point(2, 10), 11);
+    aPolygon.SetFlags(11, PolyFlags::Normal);
+
+    aPolygon.SetPoint(Point(2, 10), 12);
+    aPolygon.SetFlags(12, PolyFlags::Normal);
+    aPolygon.SetPoint(Point(2, 2), 13);
+    aPolygon.SetFlags(13, PolyFlags::Normal);
+    aPolygon.SetPoint(Point(10, 2), 14);
+    aPolygon.SetFlags(14, PolyFlags::Normal);
+
+    aPolygon.Optimize(PolyOptimizeFlags::CLOSE);
+
+    return aPolygon;
+}
+
+TestResult OutputDeviceTestCommon::checkDropShape(Bitmap& rBitmap, bool aEnableAA)
+{
+    BitmapScopedWriteAccess pAccess(rBitmap);
+
+    TestResult aResult = TestResult::Passed;
+    int nNumberOfQuirks = 0;
+    int nNumberOfErrors = 0;
+
+    std::map<std::pair<int, int>, bool> SetPixels
+        = { { { 2, 2 }, true },  { { 3, 2 }, true },   { { 4, 2 }, true },   { { 5, 2 }, true },
+            { { 6, 2 }, true },  { { 7, 2 }, true },   { { 8, 2 }, true },   { { 9, 2 }, true },
+            { { 10, 2 }, true }, { { 11, 2 }, true },  { { 12, 2 }, true },  { { 2, 3 }, true },
+            { { 13, 3 }, true }, { { 14, 3 }, true },  { { 2, 4 }, true },   { { 15, 4 }, true },
+            { { 2, 5 }, true },  { { 16, 5 }, true },  { { 2, 6 }, true },   { { 17, 6 }, true },
+            { { 2, 7 }, true },  { { 17, 7 }, true },  { { 2, 8 }, true },   { { 18, 8 }, true },
+            { { 2, 9 }, true },  { { 18, 9 }, true },  { { 2, 10 }, true },  { { 18, 10 }, true },
+            { { 2, 11 }, true }, { { 18, 11 }, true }, { { 2, 12 }, true },  { { 18, 12 }, true },
+            { { 3, 13 }, true }, { { 17, 13 }, true }, { { 3, 14 }, true },  { { 17, 14 }, true },
+            { { 4, 15 }, true }, { { 16, 15 }, true }, { { 5, 16 }, true },  { { 15, 16 }, true },
+            { { 6, 17 }, true }, { { 7, 17 }, true },  { { 13, 17 }, true }, { { 14, 17 }, true },
+            { { 8, 18 }, true }, { { 9, 18 }, true },  { { 10, 18 }, true }, { { 11, 18 }, true },
+            { { 12, 18 }, true } };
+
+    for (tools::Long i = 0; i < pAccess->Height(); i++)
+    {
+        for (tools::Long j = 0; j < pAccess->Width(); j++)
+        {
+            if (SetPixels[{ j, i }])
+            {
+                if (aEnableAA)
+                    checkValueAA(pAccess, i, j, constLineColor, nNumberOfQuirks, nNumberOfErrors,
+                                 false);
+                else
+                    checkValue(pAccess, i, j, constLineColor, nNumberOfQuirks, nNumberOfErrors,
+                               false);
+            }
+            else
+            {
+                if (aEnableAA)
+                    continue;
+
+                checkValue(pAccess, i, j, constBackgroundColor, nNumberOfQuirks, nNumberOfErrors,
+                           false);
+            }
+        }
+    }
+
+    if (nNumberOfQuirks > 0)
+        aResult = TestResult::PassedWithQuirks;
+    if (nNumberOfErrors > 0)
+        aResult = TestResult::Failed;
+    return aResult;
 }
 
 void OutputDeviceTestCommon::createHorizontalVerticalDiagonalLinePoints(tools::Rectangle rRect,
