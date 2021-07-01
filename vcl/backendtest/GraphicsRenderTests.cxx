@@ -611,6 +611,44 @@ void GraphicsRenderTests::testDrawInvertTrackFrameWithRectangle()
     }
 }
 
+void GraphicsRenderTests::testDrawBezierWithPolyline()
+{
+    vcl::test::OutputDeviceTestPolyLine aOutDevTest;
+    Bitmap aBitmap = aOutDevTest.setupBezier();
+    OUString atestName = "testDrawBezierWithPolyline";
+    if (!SHOULD_ASSERT)
+    {
+        appendTestResult(atestName, "SKIPPED");
+        return;
+    }
+    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkBezier(aBitmap);
+    appendTestResult(atestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        exportBitmapToImage(m_aUserInstallPath + atestName + ".png", aBitmap);
+    }
+}
+
+void GraphicsRenderTests::testDrawBezierAAWithPolyline()
+{
+    vcl::test::OutputDeviceTestPolyLine aOutDevTest;
+    Bitmap aBitmap = aOutDevTest.setupAABezier();
+    OUString atestName = "testDrawBezierAAWithPolyline";
+    if (!SHOULD_ASSERT)
+    {
+        appendTestResult(atestName, "SKIPPED");
+        return;
+    }
+    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkBezier(aBitmap);
+    appendTestResult(atestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        exportBitmapToImage(m_aUserInstallPath + atestName + ".png", aBitmap);
+    }
+}
+
 void GraphicsRenderTests::testDrawBezierWithPolylineB2D()
 {
     vcl::test::OutputDeviceTestPolyLineB2D aOutDevTest;
@@ -635,6 +673,44 @@ void GraphicsRenderTests::testDrawBezierAAWithPolylineB2D()
     vcl::test::OutputDeviceTestPolyLineB2D aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupAABezier();
     OUString atestName = "testDrawBezierAAWithPolylineB2D";
+    if (!SHOULD_ASSERT)
+    {
+        appendTestResult(atestName, "SKIPPED");
+        return;
+    }
+    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkBezier(aBitmap);
+    appendTestResult(atestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        exportBitmapToImage(m_aUserInstallPath + atestName + ".png", aBitmap);
+    }
+}
+
+void GraphicsRenderTests::testDrawBezierWithPolygon()
+{
+    vcl::test::OutputDeviceTestPolygon aOutDevTest;
+    Bitmap aBitmap = aOutDevTest.setupBezier();
+    OUString atestName = "testDrawBezierWithPolygon";
+    if (!SHOULD_ASSERT)
+    {
+        appendTestResult(atestName, "SKIPPED");
+        return;
+    }
+    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkBezier(aBitmap);
+    appendTestResult(atestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        exportBitmapToImage(m_aUserInstallPath + atestName + ".png", aBitmap);
+    }
+}
+
+void GraphicsRenderTests::testDrawBezierAAWithPolygon()
+{
+    vcl::test::OutputDeviceTestPolygon aOutDevTest;
+    Bitmap aBitmap = aOutDevTest.setupAABezier();
+    OUString atestName = "testDrawBezierAAWithPolygon";
     if (!SHOULD_ASSERT)
     {
         appendTestResult(atestName, "SKIPPED");
@@ -1228,6 +1304,10 @@ void GraphicsRenderTests::runALLTests()
     testLineCapRound();
     testLineCapSquare();
     testLineCapButt();
+    testDrawBezierWithPolyline();
+    testDrawBezierAAWithPolyline();
+    testDrawBezierWithPolygon();
+    testDrawBezierAAWithPolygon();
 }
 
 void GraphicsRenderTests::appendTestResult(OUString aTestName, OUString aTestStatus,
