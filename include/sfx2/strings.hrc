@@ -297,6 +297,7 @@
 #define STR_SIGNATURE_SHOW                      NC_("STR_SIGNATURE_SHOW", "Show Signatures")
 #define STR_TRACK_CHANGES_BUTTON                NC_("STR_TRACK_CHANGES_BUTTON", "Show Toolbar")
 #define STR_TRACK_CHANGES_BUTTON_HIDE           NC_("STR_TRACK_CHANGES_BUTTON_HIDE", "Hide Toolbar")
+#define STR_HYPHENATION_BUTTON                  NC_("STR_HYPHENATION_BUTTON", "Learn more")
 
 #define STR_CLOSE_PANE                          NC_("STR_CLOSE_PANE", "Close Pane")
 
