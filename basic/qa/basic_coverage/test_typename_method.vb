@@ -60,7 +60,7 @@ Function doUnitTest ' TypeName()
         doUnitTest = "test_typename_method.vb failed" + messages
         Exit Function
     EndIf
-    doUnitTest = 1 ' All checks passed
+    doUnitTest = "OK" ' All checks passed
 End Function
 
 Sub DEV_TEST : Print doUnitTest : End Sub
