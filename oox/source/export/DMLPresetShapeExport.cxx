@@ -203,7 +203,7 @@ DMLPresetShapeExporter::GetAdjustmentPointYValue(sal_Int32 nPoint)
         aRet.nMinVal = GetHandleValueOfModificationPoint(nPoint, u"RangeYMinimum")
                            .get<EnhancedCustomShapeParameter>()
                            .Value.get<double>();
-        aRet.nMaxVal = GetHandleValueOfModificationPoint(nPoint, u"RangeXMaximum")
+        aRet.nMaxVal = GetHandleValueOfModificationPoint(nPoint, u"RangeYMaximum")
                            .get<EnhancedCustomShapeParameter>()
                            .Value.get<double>();
         aRet.nCurrVal = GetAdjustmentValues()[aValPos.Second.Value.get<long>()].Value.get<double>();
