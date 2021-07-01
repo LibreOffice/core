@@ -165,6 +165,8 @@ IMPL_LINK_NOARG(ScHFPage, BtnHdl, weld::Button&, void)
             {
                 aDataSet.Put( *pDlg->GetOutputItemSet() );
             }
+
+            pDlg->disposeOnce();
         });
     }
     else
