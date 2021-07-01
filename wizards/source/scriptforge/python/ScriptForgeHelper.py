@@ -85,6 +85,20 @@ def _SF_Dictionary__ImportFromJson(jsonstr: str):  # used by Dictionary.ImportFr
 
 
 # #################################################################
+# Exception service
+# #################################################################
+
+def _SF_Exception__PythonPrint(string: str) -> bool:
+    # used by SF_Exception.PythonPrint() Basic method
+    """
+    Write the argument to stdout.
+    If the APSO shell console is active, the argument will be displayed in the console window
+    """
+    print(string)
+    return True
+
+
+# #################################################################
 # FileSystem service
 # #################################################################
 
