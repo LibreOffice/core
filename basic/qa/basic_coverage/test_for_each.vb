@@ -6,7 +6,7 @@
 ' file, You can obtain one at http://mozilla.org/MPL/2.0/.
 '
 
-Function doUnitTest as Integer
+Function doUnitTest as String
     Dim n As Integer, i
     Dim a(3)
     n = 0
@@ -23,7 +23,7 @@ Function doUnitTest as Integer
         Exit Function
     End If
 
-    doUnitTest = 1
+    doUnitTest = "OK"
 End Function
 
 Function TestInvalidForEachWithErrorHandler

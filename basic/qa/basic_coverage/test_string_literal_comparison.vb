@@ -5,15 +5,15 @@
 ' file, You can obtain one at http://mozilla.org/MPL/2.0/.
 '
 
-Function doUnitTest as Integer
+Function doUnitTest as String
     ' tdf#142180 - Invalid text comparison result in Basic
 
-    doUnitTest = 0
+    doUnitTest = "FAIL"
     If ( "Z" < "A" ) Then Exit Function
     If ( "A" > "Z" ) Then Exit Function
     If ( "A" < "A" ) Then Exit Function
     If ( "A" > "A" ) Then Exit Function
     If ( "Z" <= "A" ) Then Exit Function
     If ( "A" >= "Z" ) Then Exit Function
-    doUnitTest = 1
+    doUnitTest = "OK"
 End Function

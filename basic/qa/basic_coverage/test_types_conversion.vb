@@ -12,7 +12,7 @@ Dim nPassCount As Integer
 Dim nFailCount As Integer
 
 ' For the following tests the en-US (English - United States) locale is required
-Function doUnitTest() As Integer
+Function doUnitTest() As String
     nTotalCount = 0
     nPassCount = 0
     nFailCount = 0
@@ -45,9 +45,9 @@ Function doUnitTest() As Integer
     AssertTest(nVal = -123456)
 
     If ((nFailCount > 0) Or (nPassCount <> nTotalCount)) Then
-        doUnitTest = 0
+        doUnitTest = "FAIL"
     Else
-        doUnitTest = 1
+        doUnitTest = "OK"
     End If
 End Function
 
