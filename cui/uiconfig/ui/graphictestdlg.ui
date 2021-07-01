@@ -137,7 +137,7 @@
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <child>
-                  <!-- n-columns=2 n-rows=60 -->
+                  <!-- n-columns=2 n-rows=64 -->
                   <object class="GtkGrid" id="gptests_grid">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
@@ -2080,6 +2080,134 @@
                       <packing>
                         <property name="left-attach">1</property>
                         <property name="top-attach">59</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="test_label_61">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="halign">start</property>
+                        <property name="margin-start">10</property>
+                        <property name="margin-end">10</property>
+                        <property name="margin-top">5</property>
+                        <property name="margin-bottom">5</property>
+                        <property name="label" translatable="yes" context="graphictestdlg|test_label_60">testName</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">60</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="test_label_62">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="halign">start</property>
+                        <property name="margin-start">10</property>
+                        <property name="margin-end">10</property>
+                        <property name="margin-top">5</property>
+                        <property name="margin-bottom">5</property>
+                        <property name="label" translatable="yes" context="graphictestdlg|test_label_60">testName</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">61</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="test_button_61">
+                        <property name="label" translatable="yes" context="graphictestdlg|test_button_60">button</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="margin-start">10</property>
+                        <property name="margin-end">10</property>
+                        <property name="margin-top">5</property>
+                        <property name="margin-bottom">5</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">60</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="test_button_62">
+                        <property name="label" translatable="yes" context="graphictestdlg|test_button_60">button</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="margin-start">10</property>
+                        <property name="margin-end">10</property>
+                        <property name="margin-top">5</property>
+                        <property name="margin-bottom">5</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">61</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="test_label_63">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="halign">start</property>
+                        <property name="margin-start">10</property>
+                        <property name="margin-end">10</property>
+                        <property name="margin-top">5</property>
+                        <property name="margin-bottom">5</property>
+                        <property name="label" translatable="yes" context="graphictestdlg|test_label_60">testName</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">62</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="test_label_64">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="halign">start</property>
+                        <property name="margin-start">10</property>
+                        <property name="margin-end">10</property>
+                        <property name="margin-top">5</property>
+                        <property name="margin-bottom">5</property>
+                        <property name="label" translatable="yes" context="graphictestdlg|test_label_60">testName</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">63</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="test_button_63">
+                        <property name="label" translatable="yes" context="graphictestdlg|test_button_60">button</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="margin-start">10</property>
+                        <property name="margin-end">10</property>
+                        <property name="margin-top">5</property>
+                        <property name="margin-bottom">5</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">62</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="test_button_64">
+                        <property name="label" translatable="yes" context="graphictestdlg|test_button_60">button</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="margin-start">10</property>
+                        <property name="margin-end">10</property>
+                        <property name="margin-top">5</property>
+                        <property name="margin-bottom">5</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">63</property>
                       </packing>
                     </child>
                   </object>

@@ -577,6 +577,42 @@ void GraphicsRenderTests::testDrawInvertTrackFrameWithRectangle()
     }
 }
 
+void GraphicsRenderTests::testDrawBezierWithPolyline()
+{
+    vcl::test::OutputDeviceTestPolyLine aOutDevTest;
+    Bitmap aBitmap = aOutDevTest.setupBezier();
+    if (!SHOULD_ASSERT)
+    {
+        m_aSkipped.push_back("testDrawBezierWithPolyline");
+        return;
+    }
+    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkBezier(aBitmap);
+    updateResult(eResult, "testDrawBezierWithPolyline");
+    if (m_aStoreResultantBitmap)
+    {
+        exportImage(aBitmap, m_aUserInstallPath + "testDrawBezierWithPolyline");
+        m_aResultantBitmap["testDrawBezierWithPolyline"] = aBitmap;
+    }
+}
+
+void GraphicsRenderTests::testDrawBezierAAWithPolyline()
+{
+    vcl::test::OutputDeviceTestPolyLine aOutDevTest;
+    Bitmap aBitmap = aOutDevTest.setupAABezier();
+    if (!SHOULD_ASSERT)
+    {
+        m_aSkipped.push_back("testDrawBezierAAWithPolyline");
+        return;
+    }
+    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkBezier(aBitmap);
+    updateResult(eResult, "testDrawBezierAAWithPolyline");
+    if (m_aStoreResultantBitmap)
+    {
+        exportImage(aBitmap, m_aUserInstallPath + "testDrawBezierAAWithPolyline");
+        m_aResultantBitmap["testDrawBezierAAWithPolyline"] = aBitmap;
+    }
+}
+
 void GraphicsRenderTests::testDrawBezierWithPolylineB2D()
 {
     vcl::test::OutputDeviceTestPolyLineB2D aOutDevTest;
@@ -610,6 +646,42 @@ void GraphicsRenderTests::testDrawBezierAAWithPolylineB2D()
     {
         exportImage(aBitmap, m_aUserInstallPath + "testDrawBezierAAWithPolylineB2D");
         m_aResultantBitmap["testDrawBezierAAWithPolylineB2D"] = aBitmap;
+    }
+}
+
+void GraphicsRenderTests::testDrawBezierWithPolygon()
+{
+    vcl::test::OutputDeviceTestPolygon aOutDevTest;
+    Bitmap aBitmap = aOutDevTest.setupBezier();
+    if (!SHOULD_ASSERT)
+    {
+        m_aSkipped.push_back("testDrawBezierWithPolygon");
+        return;
+    }
+    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkBezier(aBitmap);
+    updateResult(eResult, "testDrawBezierWithPolygon");
+    if (m_aStoreResultantBitmap)
+    {
+        exportImage(aBitmap, m_aUserInstallPath + "testDrawBezierWithPolygon");
+        m_aResultantBitmap["testDrawBezierWithPolygon"] = aBitmap;
+    }
+}
+
+void GraphicsRenderTests::testDrawBezierAAWithPolygon()
+{
+    vcl::test::OutputDeviceTestPolygon aOutDevTest;
+    Bitmap aBitmap = aOutDevTest.setupAABezier();
+    if (!SHOULD_ASSERT)
+    {
+        m_aSkipped.push_back("testDrawBezierAAWithPolygon");
+        return;
+    }
+    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkBezier(aBitmap);
+    updateResult(eResult, "testDrawBezierAAWithPolygon");
+    if (m_aStoreResultantBitmap)
+    {
+        exportImage(aBitmap, m_aUserInstallPath + "testDrawBezierAAWithPolygon");
+        m_aResultantBitmap["testDrawBezierAAWithPolygon"] = aBitmap;
     }
 }
 
@@ -1140,8 +1212,12 @@ void GraphicsRenderTests::runALLTests()
     testDrawInvertWithRectangle();
     testDrawInvertN50WithRectangle();
     testDrawInvertTrackFrameWithRectangle();
+    testDrawBezierWithPolyline();
+    testDrawBezierAAWithPolyline();
     testDrawBezierWithPolylineB2D();
     testDrawBezierAAWithPolylineB2D();
+    testDrawBezierWithPolygon();
+    testDrawBezierAAWithPolygon();
     testDrawBitmap();
     testDrawTransformedBitmap();
     testDrawBitmapExWithAlpha();

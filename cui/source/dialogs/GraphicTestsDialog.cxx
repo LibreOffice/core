@@ -26,7 +26,7 @@ GraphicsTestsDialog::GraphicsTestsDialog(weld::Container* pParent)
     m_xCreateFolderUrl = userProfile + "/GraphicTestResults";
     osl::Directory::create(m_xCreateFolderUrl);
     m_xDownloadResults->connect_clicked(LINK(this, GraphicsTestsDialog, HandleDownloadRequest));
-    for (int i = 1; i <= 60; i++)
+    for (int i = 1; i <= GraphicsRenderTests::getNumberOfTests(); i++)
     {
         OString labelID("test_label_" + std::to_string(i));
         OString buttonID("test_button_" + std::to_string(i));
