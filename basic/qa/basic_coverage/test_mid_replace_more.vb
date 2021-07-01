@@ -8,12 +8,12 @@
 
 ' cf. examples at <https://docs.microsoft.com/en-us/dotnet/visual-basic/language-reference/
 ' statements/mid-statement>:
-Function doUnitTest as Integer
+Function doUnitTest as String
     s = "The fox jumps"
     Mid(s, 5, 3, "duck")
     If (s = "The duc jumps") Then
-        doUnitTest = 1
+        doUnitTest = "OK"
     Else
-        doUnitTest = 0
+        doUnitTest = "FAIL"
     End If
 End Function

@@ -39,7 +39,7 @@ Function doUnitTest
         doUnitTest = "test_typelen_method.vb fails" + messages
         Exit Function
     EndIf
-    doUnitTest = 1 ' All checks passed
+    doUnitTest = "OK" ' All checks passed
 End Function
 
 Sub DEV_TEST
