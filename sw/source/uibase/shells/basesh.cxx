@@ -2261,7 +2261,7 @@ void SwBaseShell::GetTextFontCtrlState( SfxItemSet& rSet )
 {
     SwWrtShell &rSh = GetShell();
     bool bFirst = true;
-    std::unique_ptr<SfxItemSet> pFntCoreSet;
+    std::optional<SfxItemSet> pFntCoreSet;
     SvtScriptType nScriptType = SvtScriptType::LATIN;
     SfxWhichIter aIter( rSet );
     sal_uInt16 nWhich = aIter.FirstWhich();
@@ -2276,8 +2276,8 @@ void SwBaseShell::GetTextFontCtrlState( SfxItemSet& rSet )
             {
                 if( !pFntCoreSet )
                 {
-                    pFntCoreSet.reset(new SfxItemSet( *rSet.GetPool(),
-                                    svl::Items<RES_CHRATR_BEGIN, RES_CHRATR_END-1>{} ));
+                    pFntCoreSet.emplace( *rSet.GetPool(),
+                                    svl::Items<RES_CHRATR_BEGIN, RES_CHRATR_END-1>{} );
                     rSh.GetCurAttr( *pFntCoreSet );
                     nScriptType = rSh.GetScriptType();
                     // #i42732# input language should be preferred over

@@ -330,7 +330,7 @@ void SwAttrSet::CopyToModify( sw::BroadcastingModify& rMod ) const
                 }
             }
 
-            std::unique_ptr< SfxItemSet > tmpSet;
+            std::optional< SfxItemSet > tmpSet;
 
             if( pSrcDoc != pDstDoc && SfxItemState::SET == GetItemState(
                                             RES_PAGEDESC, false, &pItem ))
@@ -338,7 +338,7 @@ void SwAttrSet::CopyToModify( sw::BroadcastingModify& rMod ) const
                 const SwPageDesc* pPgDesc = pItem->StaticWhichCast(RES_PAGEDESC).GetPageDesc();
                 if( pPgDesc )
                 {
-                    tmpSet.reset(new SfxItemSet(*this));
+                    tmpSet.emplace(*this);
 
                     SwPageDesc* pDstPgDesc = pDstDoc->FindPageDesc(pPgDesc->GetName());
                     if( !pDstPgDesc )
@@ -356,7 +356,7 @@ void SwAttrSet::CopyToModify( sw::BroadcastingModify& rMod ) const
                 && pItem->StaticWhichCast(RES_ANCHOR).GetContentAnchor() != nullptr )
             {
                 if( !tmpSet )
-                    tmpSet.reset( new SfxItemSet( *this ));
+                    tmpSet.emplace( *this );
                 // Anchors at any node position cannot be copied to another document, because the SwPosition
                 // would still point to the old document. It needs to be fixed up explicitly.
                 tmpSet->ClearItem( RES_ANCHOR );
@@ -382,7 +382,7 @@ void SwAttrSet::CopyToModify( sw::BroadcastingModify& rMod ) const
                 item.SetStyleHandle(pNewSet);
                 if (!tmpSet)
                 {
-                    tmpSet.reset(new SfxItemSet(*this));
+                    tmpSet.emplace(*this);
                 }
                 tmpSet->Put(item);
             }
