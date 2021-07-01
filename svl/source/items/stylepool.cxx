@@ -24,6 +24,7 @@
 #include <algorithm>
 #include <map>
 #include <memory>
+#include <optional>
 #include <vector>
 
 namespace {
@@ -385,10 +386,10 @@ std::shared_ptr<SfxItemSet> StylePoolImpl::insertItemSet( const SfxItemSet& rSet
     // Every SfxPoolItem in the SfxItemSet causes a step deeper into the tree,
     // a complete empty SfxItemSet would stay at the root node.
     // #i86923# insert ignorable items to the tree leaves.
-    std::unique_ptr<SfxItemSet> xFoundIgnorableItems;
+    std::optional<SfxItemSet> xFoundIgnorableItems;
     if ( mpIgnorableItems )
     {
-        xFoundIgnorableItems.reset( new SfxItemSet( *mpIgnorableItems ) );
+        xFoundIgnorableItems.emplace( *mpIgnorableItems );
     }
     while( pItem )
     {

@@ -203,7 +203,7 @@ SwFlyFrameFormat* SwWW8ImplReader::InsertOle(SdrOle2Obj &rObject,
 
     SwFlyFrameFormat *pRet = nullptr;
 
-    std::unique_ptr<SfxItemSet> pMathFlySet;
+    std::optional<SfxItemSet> pMathFlySet;
     uno::Reference < embed::XClassifiedObject > xClass = rObject.GetObjRef();
     if( xClass.is() )
     {
@@ -212,7 +212,7 @@ SwFlyFrameFormat* SwWW8ImplReader::InsertOle(SdrOle2Obj &rObject,
         {
             // StarMath sets it own fixed size, so its counter productive to use
             // the size Word says it is. i.e. Don't attempt to override its size.
-            pMathFlySet.reset(new SfxItemSet(rFlySet));
+            pMathFlySet.emplace(rFlySet);
             pMathFlySet->ClearItem(RES_FRM_SIZE);
         }
     }
@@ -231,7 +231,7 @@ SwFlyFrameFormat* SwWW8ImplReader::InsertOle(SdrOle2Obj &rObject,
     OSL_ENSURE(bSuccess, "Insert OLE failed");
     if (bSuccess)
     {
-        const SfxItemSet *pFlySet = pMathFlySet ? pMathFlySet.get() : &rFlySet;
+        const SfxItemSet *pFlySet = pMathFlySet ? &*pMathFlySet : &rFlySet;
         pRet = m_rDoc.getIDocumentContentOperations().InsertOLE(*m_pPaM, sNewName, rObject.GetAspect(), pFlySet, rGrfSet);
     }
     return pRet;
@@ -249,13 +249,13 @@ SwFrameFormat* SwWW8ImplReader::ImportOle(const Graphic* pGrf,
     SdrObject* pRet = ImportOleBase(aGraph, pGrf, pFlySet, aVisArea );
 
     // create flyset
-    std::unique_ptr<SfxItemSet> pTempSet;
+    std::optional<SfxItemSet> pTempSet;
     if( !pFlySet )
     {
-        pTempSet.reset( new SfxItemSet( m_rDoc.GetAttrPool(), svl::Items<RES_FRMATR_BEGIN,
-            RES_FRMATR_END-1>{}) );
+        pTempSet.emplace( m_rDoc.GetAttrPool(), svl::Items<RES_FRMATR_BEGIN,
+            RES_FRMATR_END-1>{} );
 
-        pFlySet = pTempSet.get();
+        pFlySet = &*pTempSet;
 
         // Remove distance/borders
         Reader::ResetFrameFormatAttrs( *pTempSet );

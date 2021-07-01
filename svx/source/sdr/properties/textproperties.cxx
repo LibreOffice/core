@@ -269,13 +269,13 @@ namespace sdr::properties
                     {
                         for(sal_Int32 nPara = 0; nPara < nParaCount; nPara++)
                         {
-                            std::unique_ptr<SfxItemSet> pTempSet;
+                            std::optional<SfxItemSet> pTempSet;
 
                             // since setting the stylesheet removes all para attributes
                             if(bDontRemoveHardAttr)
                             {
                                 // we need to remember them if we want to keep them
-                                pTempSet.reset(new SfxItemSet(rOutliner.GetParaAttribs(nPara)));
+                                pTempSet.emplace(rOutliner.GetParaAttribs(nPara));
                             }
 
                             if(GetStyleSheet())
