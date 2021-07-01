@@ -770,11 +770,11 @@ void SvxUnoTextRangeBase::_setPropertyValues( const uno::Sequence< OUString >& a
         nEndPara = aSel.nEndPara;
     }
 
-    std::unique_ptr<SfxItemSet> pOldAttrSet;
-    std::unique_ptr<SfxItemSet> pNewAttrSet;
+    std::optional<SfxItemSet> pOldAttrSet;
+    std::optional<SfxItemSet> pNewAttrSet;
 
-    std::unique_ptr<SfxItemSet> pOldParaSet;
-    std::unique_ptr<SfxItemSet> pNewParaSet;
+    std::optional<SfxItemSet> pOldParaSet;
+    std::optional<SfxItemSet> pNewParaSet;
 
     for( ; nCount; nCount--, pPropertyNames++, pValues++ )
     {
@@ -786,11 +786,10 @@ void SvxUnoTextRangeBase::_setPropertyValues( const uno::Sequence< OUString >& a
 
             if( (nPara == -1) && !bParaAttrib )
             {
-                if( nullptr == pNewAttrSet )
+                if( !pNewAttrSet )
                 {
-                    const SfxItemSet aSet( pForwarder->GetAttribs( aSel ) );
-                    pOldAttrSet.reset(new SfxItemSet( aSet ));
-                    pNewAttrSet.reset(new SfxItemSet( *pOldAttrSet->GetPool(), pOldAttrSet->GetRanges() ));
+                    pOldAttrSet.emplace( pForwarder->GetAttribs( aSel ) );
+                    pNewAttrSet.emplace( *pOldAttrSet->GetPool(), pOldAttrSet->GetRanges() );
                 }
 
                 setPropertyValue( pMap, *pValues, GetSelection(), *pOldAttrSet, *pNewAttrSet );
@@ -806,11 +805,11 @@ void SvxUnoTextRangeBase::_setPropertyValues( const uno::Sequence< OUString >& a
             }
             else
             {
-                if( nullptr == pNewParaSet )
+                if( !pNewParaSet )
                 {
                     const SfxItemSet & rSet = pForwarder->GetParaAttribs( nTempPara );
-                    pOldParaSet.reset(new SfxItemSet( rSet ));
-                    pNewParaSet.reset(new SfxItemSet( *pOldParaSet->GetPool(), pOldParaSet->GetRanges() ));
+                    pOldParaSet.emplace( rSet );
+                    pNewParaSet.emplace( *pOldParaSet->GetPool(), pOldParaSet->GetRanges() );
                 }
 
                 setPropertyValue( pMap, *pValues, GetSelection(), *pOldParaSet, *pNewParaSet );
@@ -1037,23 +1036,23 @@ uno::Sequence< beans::PropertyState > SvxUnoTextRangeBase::_getPropertyStates(co
     SvxTextForwarder* pForwarder = mpEditSource ? mpEditSource->GetTextForwarder() : nullptr;
     if( pForwarder )
     {
-        std::unique_ptr<SfxItemSet> pSet;
+        std::optional<SfxItemSet> pSet;
         if( nPara != -1 )
         {
-            pSet.reset(new SfxItemSet( pForwarder->GetParaAttribs( nPara ) ));
+            pSet.emplace( pForwarder->GetParaAttribs( nPara ) );
         }
         else
         {
             ESelection aSel( GetSelection() );
             CheckSelection( aSel, pForwarder );
-            pSet.reset(new SfxItemSet( pForwarder->GetAttribs( aSel, EditEngineAttribs::OnlyHard ) ));
+            pSet.emplace( pForwarder->GetAttribs( aSel, EditEngineAttribs::OnlyHard ) );
         }
 
         beans::PropertyState* pState = aRet.getArray();
         for( const OUString& rName : PropertyName )
         {
             const SfxItemPropertyMapEntry* pMap = mpPropSet->getPropertyMapEntry( rName );
-            if( !_getOnePropertyStates(pSet.get(), pMap, *pState++) )
+            if( !_getOnePropertyStates(&*pSet, pMap, *pState++) )
             {
                 throw beans::UnknownPropertyException(rName);
             }

@@ -454,27 +454,22 @@ void ScCellShell::Execute( SfxRequest& rReq )
 
                     // set cell attribute without dialog:
 
-                    std::unique_ptr<SfxItemSet> pEmptySet(
-                                        new SfxItemSet( *pReqArgs->GetPool(),
-                                                        svl::Items<ATTR_PATTERN_START,
-                                                        ATTR_PATTERN_END>{} ));
+                    SfxItemSet aEmptySet( *pReqArgs->GetPool(),
+                                          svl::Items<ATTR_PATTERN_START,
+                                          ATTR_PATTERN_END>{} );
 
-                    std::unique_ptr<SfxItemSet> pNewSet(
-                                        new SfxItemSet( *pReqArgs->GetPool(),
-                                                        svl::Items<ATTR_PATTERN_START,
-                                                        ATTR_PATTERN_END>{} ));
+                    SfxItemSet aNewSet( *pReqArgs->GetPool(),
+                                        svl::Items<ATTR_PATTERN_START,
+                                        ATTR_PATTERN_END>{} );
 
                     const SfxPoolItem*  pAttr = nullptr;
                     sal_uInt16              nWhich = 0;
 
                     for ( nWhich=ATTR_PATTERN_START; nWhich<=ATTR_PATTERN_END; nWhich++ )
                         if ( pReqArgs->GetItemState( nWhich, true, &pAttr ) == SfxItemState::SET )
-                            pNewSet->Put( *pAttr );
+                            aNewSet.Put( *pAttr );
 
-                    pTabViewShell->ApplyAttributes( pNewSet.get(), pEmptySet.get() );
-
-                    pNewSet.reset();
-                    pEmptySet.reset();
+                    pTabViewShell->ApplyAttributes( &aNewSet, &aEmptySet );
 
                     rReq.Done();
                 }

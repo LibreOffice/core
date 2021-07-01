@@ -3049,7 +3049,7 @@ sal_uInt16 SdrPowerPointImport::GetMasterPageIndex( sal_uInt16 nPageNum, PptPage
 SdrObject* SdrPowerPointImport::ImportPageBackgroundObject( const SdrPage& rPage, sal_uInt32& nBgFileOffset )
 {
     SdrObject* pRet = nullptr;
-    std::unique_ptr<SfxItemSet> pSet;
+    std::optional<SfxItemSet> pSet;
     sal_uLong nOldFPos = rStCtrl.Tell(); // remember FilePos for restoring it later
     DffRecordHeader aPageHd;
     if ( SeekToCurrentPage( &aPageHd ) )
@@ -3074,7 +3074,7 @@ SdrObject* SdrPowerPointImport::ImportPageBackgroundObject( const SdrPage& rPage
                         ReadDffPropSet( rStCtrl, static_cast<DffPropertyReader&>(*this) );
                         mnFix16Angle = Fix16ToAngle( GetPropertyValue( DFF_Prop_Rotation, 0 ) );
                         sal_uInt32 nColor = GetPropertyValue( DFF_Prop_fillColor, 0xffffff );
-                        pSet.reset(new SfxItemSet( pSdrModel->GetItemPool() ));
+                        pSet.emplace( pSdrModel->GetItemPool() );
                         DffObjData aObjData( aEscherObjectHd, tools::Rectangle( 0, 0, 28000, 21000 ), 0 );
                         ApplyAttributes( rStCtrl, *pSet, aObjData );
                         Color aColor( MSO_CLR_ToColor( nColor ) );
@@ -3087,7 +3087,7 @@ SdrObject* SdrPowerPointImport::ImportPageBackgroundObject( const SdrPage& rPage
     rStCtrl.Seek( nOldFPos ); // restore FilePos
     if ( !pSet )
     {
-        pSet.reset(new SfxItemSet( pSdrModel->GetItemPool() ));
+        pSet.emplace( pSdrModel->GetItemPool() );
         pSet->Put( XFillStyleItem( drawing::FillStyle_NONE ) );
     }
     pSet->Put( XLineStyleItem( drawing::LineStyle_NONE ) );
