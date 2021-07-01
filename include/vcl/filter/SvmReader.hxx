@@ -29,11 +29,15 @@ class VCL_DLLPUBLIC SvmReader
 private:
     SvStream& mrStream;
 
+protected:
+    void ReadColor(::Color& rColor);
+
 public:
     SvmReader(SvStream& rIStm);
 
     SvStream& Read(GDIMetaFile& rMetaFile, ImplMetaReadData* pData = nullptr);
     rtl::Reference<MetaAction> MetaActionHandler(ImplMetaReadData* pData);
+    rtl::Reference<MetaAction> LineColorHandler();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
