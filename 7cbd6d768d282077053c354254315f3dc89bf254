@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5941316f_1b46121e",
+        "filename": "sal/rtl/math.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1026,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-01T20:34:04Z",
+      "side": 0,
+      "message": "This prevented the value from final negation in the end",
+      "revId": "7cbd6d768d282077053c354254315f3dc89bf254",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
