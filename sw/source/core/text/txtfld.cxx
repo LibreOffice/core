@@ -567,26 +567,24 @@ static void lcl_setRedlineAttr( SwTextFormatInfo &rInf, const SwTextNode& rTextN
     if (!pRedlineNum)
         return;
 
-    std::unique_ptr<SfxItemSet> pSet;
-
     SwAttrPool& rPool = rInf.GetVsh()->GetDoc()->GetAttrPool();
-    pSet = std::make_unique<SfxItemSet>(rPool, svl::Items<RES_CHRATR_BEGIN, RES_CHRATR_END-1>{});
+    SfxItemSet aSet(rPool, svl::Items<RES_CHRATR_BEGIN, RES_CHRATR_END-1>{});
 
     std::size_t aAuthor = (1 < pRedlineNum->GetStackCount())
             ? pRedlineNum->GetAuthor( 1 )
             : pRedlineNum->GetAuthor();
 
     if ( RedlineType::Delete == pRedlineNum->GetType() )
-        SW_MOD()->GetDeletedAuthorAttr(aAuthor, *pSet);
+        SW_MOD()->GetDeletedAuthorAttr(aAuthor, aSet);
     else
-        SW_MOD()->GetInsertAuthorAttr(aAuthor, *pSet);
+        SW_MOD()->GetInsertAuthorAttr(aAuthor, aSet);
 
     const SfxPoolItem* pItem = nullptr;
-    if (SfxItemState::SET == pSet->GetItemState(RES_CHRATR_COLOR, true, &pItem))
+    if (SfxItemState::SET == aSet.GetItemState(RES_CHRATR_COLOR, true, &pItem))
         pNumFnt->SetColor(static_cast<const SvxColorItem*>(pItem)->GetValue());
-    if (SfxItemState::SET == pSet->GetItemState(RES_CHRATR_UNDERLINE, true, &pItem))
+    if (SfxItemState::SET == aSet.GetItemState(RES_CHRATR_UNDERLINE, true, &pItem))
         pNumFnt->SetUnderline(static_cast<const SvxUnderlineItem*>(pItem)->GetLineStyle());
-    if (SfxItemState::SET == pSet->GetItemState(RES_CHRATR_CROSSEDOUT, true, &pItem))
+    if (SfxItemState::SET == aSet.GetItemState(RES_CHRATR_CROSSEDOUT, true, &pItem))
         pNumFnt->SetStrikeout( static_cast<const SvxCrossedOutItem*>(pItem)->GetStrikeout() );
 }
 

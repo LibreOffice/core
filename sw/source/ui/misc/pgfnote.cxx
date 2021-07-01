@@ -135,7 +135,7 @@ std::unique_ptr<SfxTabPage> SwFootNotePage::Create(weld::Container* pPage, weld:
 void SwFootNotePage::Reset(const SfxItemSet *rSet)
 {
     // if no example exists, otherwise Init here in Activate
-    std::unique_ptr<SwPageFootnoteInfo> pDefFootnoteInfo;
+    std::optional<SwPageFootnoteInfo> pDefFootnoteInfo;
     const SwPageFootnoteInfo* pFootnoteInfo;
     const SfxPoolItem* pItem = SfxTabPage::GetItem(*rSet, FN_PARAM_FTN_INFO);
     if( pItem )
@@ -146,8 +146,8 @@ void SwFootNotePage::Reset(const SfxItemSet *rSet)
     {
         // when "standard" is being activated the footnote item is deleted,
         // that's why a footnote structure has to be created here
-        pDefFootnoteInfo.reset(new SwPageFootnoteInfo());
-        pFootnoteInfo = pDefFootnoteInfo.get();
+        pDefFootnoteInfo.emplace();
+        pFootnoteInfo = &*pDefFootnoteInfo;
     }
         // footnote area's height
     SwTwips lHeight = pFootnoteInfo->GetHeight();
