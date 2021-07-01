@@ -42,6 +42,23 @@
     },
     {
       "key": {
+        "uuid": "aa116f3c_67851b39",
+        "filename": "scaddins/source/analysis/bessel.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 328,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-01T20:27:30Z",
+      "side": 1,
+      "message": "Why? std::sin/cos *may* fail for +/-INF, but not for finite double values. Or is this something not about sin/cos, but about the algorithm?",
+      "revId": "8d87ef7e3ce17aca44e81701949471cd99b9d5ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a0f5754b_afeb5259",
         "filename": "scaddins/source/analysis/bessel.cxx",
         "patchSetId": 4
