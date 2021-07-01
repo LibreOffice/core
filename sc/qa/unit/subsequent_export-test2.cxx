@@ -188,6 +188,7 @@ public:
     void testTdf139258_rotated_image();
     void testTdf126541_SheetVisibilityImportXlsx();
     void testTdf140431();
+    void testTdf142929_filterLessThanXLSX();
 
     CPPUNIT_TEST_SUITE(ScExportTest2);
 
@@ -284,6 +285,7 @@ public:
     CPPUNIT_TEST(testTdf139258_rotated_image);
     CPPUNIT_TEST(testTdf126541_SheetVisibilityImportXlsx);
     CPPUNIT_TEST(testTdf140431);
+    CPPUNIT_TEST(testTdf142929_filterLessThanXLSX);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2316,6 +2318,21 @@ void ScExportTest2::testTdf140431()
     const SvxFieldData* pData = pEditText->GetFieldData(0, 0, text::textfield::Type::URL);
     const SvxURLField* pURLData = static_cast<const SvxURLField*>(pData);
     CPPUNIT_ASSERT(pURLData->GetURL().startsWith("file://ndhlis"));
+
+    xDocSh->DoClose();
+}
+
+void ScExportTest2::testTdf142929_filterLessThanXLSX()
+{
+    // Document contains a standard filter with '<' condition.
+    ScDocShellRef xDocSh = loadDoc(u"tdf142929.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory,
+                                                     "xl/worksheets/sheet1.xml", FORMAT_XLSX);
+    CPPUNIT_ASSERT(pDoc);
+    assertXPath(pDoc, "//x:customFilters/x:customFilter", "val", "2");
+    assertXPath(pDoc, "//x:customFilters/x:customFilter", "operator", "lessThan");
 
     xDocSh->DoClose();
 }
