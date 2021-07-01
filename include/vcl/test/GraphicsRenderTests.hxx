@@ -75,8 +75,12 @@ class VCL_PLUGIN_PUBLIC GraphicsRenderTests
     void testDrawInvertWithRectangle();
     void testDrawInvertN50WithRectangle();
     void testDrawInvertTrackFrameWithRectangle();
+    void testDrawDropShapeWithPolyline();
+    void testDrawDropShapeAAWithPolyline();
     void testDrawBezierWithPolylineB2D();
     void testDrawBezierAAWithPolylineB2D();
+    void testDrawDropShapeWithPolygon();
+    void testDrawDropShapeAAWithPolygon();
     void testDrawBitmap();
     void testDrawTransformedBitmap();
     void testDrawBitmapExWithAlpha();
