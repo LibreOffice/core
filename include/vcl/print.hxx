@@ -380,7 +380,7 @@ class VCL_DLLPUBLIC PrinterController
     std::unique_ptr<ImplPrinterControllerData>
                                         mpImplData;
 protected:
-    PrinterController(const VclPtr<Printer>&, weld::Window*);
+    PrinterController(const VclPtr<Printer>&, weld::Window* pDialogParent);
 public:
     struct MultiPageSetup
     {
@@ -508,6 +508,8 @@ public:
 
     bool                                isShowDialogs() const;
     bool                                isDirectPrint() const;
+
+    void                                dialogsParentClosing();
 
     // implementation details, not usable outside vcl
     // don't use outside vcl. Some of these are exported for

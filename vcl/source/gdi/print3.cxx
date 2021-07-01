@@ -779,6 +779,17 @@ weld::Window* PrinterController::getWindow() const
     return mpImplData->mpWindow;
 }
 
+void PrinterController::dialogsParentClosing()
+{
+    mpImplData->mpWindow = nullptr;
+    if (mpImplData->mxProgress)
+    {
+        // close the dialog without doing anything, just get rid of it
+        mpImplData->mxProgress->response(RET_OK);
+        mpImplData->mxProgress.reset();
+    }
+}
+
 void PrinterController::setPrinter( const VclPtr<Printer>& i_rPrinter )
 {
     VclPtr<Printer> xPrinter = mpImplData->mxPrinter;
