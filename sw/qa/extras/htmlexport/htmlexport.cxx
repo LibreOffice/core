@@ -1755,6 +1755,34 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifEmbedShapeAsPNG)
                 OUString::number(aPixelSize.getWidth()));
 }
 
+CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testShapeAsImageHtml)
+{
+    // Given a document with a shape:
+    loadURL("private:factory/swriter", nullptr);
+    uno::Reference<css::lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(
+        xFactory->createInstance("com.sun.star.drawing.RectangleShape"), uno::UNO_QUERY);
+    xShape->setSize(awt::Size(5080, 2540));
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    xDrawPageSupplier->getDrawPage()->add(xShape);
+
+    // When exporting to plain HTML:
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aStoreProperties = {
+        comphelper::makePropertyValue("FilterName", OUString("HTML (StarWriter)")),
+    };
+    xStorable->storeToURL(maTempFile.GetURL(), aStoreProperties);
+    mxComponent->dispose();
+
+    // Then make sure importing it back results in a clean doc model:
+    mxComponent = loadFromDesktop(maTempFile.GetURL());
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected:
+    // - Actual  :  />
+    // i.e. the output was not well-formed.
+    CPPUNIT_ASSERT_EQUAL(OUString(" "), getParagraph(1)->getString());
+}
+
 CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifEmbedShapeAsPNGCustomDPI)
 {
     // Given a document with a shape:
