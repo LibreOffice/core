@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "79fc39e0_1c3039b1",
+        "filename": "sw/source/filter/ww8/docxsdrexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 592,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-01T20:40:54Z",
+      "side": 1,
+      "message": "Why use the numeric value of the angle, instead of the safe object, along with explicit units, as above?",
+      "revId": "1dcb2345ca7f309b3804995a16f9d7c7d412ca26",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
