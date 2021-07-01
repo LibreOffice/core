@@ -642,7 +642,7 @@ void sw::DocumentSettingManager::ReplaceCompatibilityOptions(const DocumentSetti
     mbConsiderWrapOnObjPos = rSource.mbConsiderWrapOnObjPos;
     // No mbMathBaselineAlignment
     // No mbStylesNoDefault
-    // No mbFloattableNomargins
+    mbFloattableNomargins = rSource.mbFloattableNomargins;
     mbOldNumbering = rSource.mbOldNumbering;
     mbIgnoreFirstLineIndentInNumbering = rSource.mbIgnoreFirstLineIndentInNumbering;
     mbDoNotJustifyLinesWithManualBreak = rSource.mbDoNotJustifyLinesWithManualBreak;
