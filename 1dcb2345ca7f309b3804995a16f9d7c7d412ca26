@@ -16,6 +16,24 @@
       "revId": "1dcb2345ca7f309b3804995a16f9d7c7d412ca26",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "304b0766_230b3670",
+        "filename": "sw/source/filter/ww8/docxsdrexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 592,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2021-07-01T21:19:37Z",
+      "side": 1,
+      "message": "You are right. I have changed it.",
+      "parentUuid": "79fc39e0_1c3039b1",
+      "revId": "1dcb2345ca7f309b3804995a16f9d7c7d412ca26",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
