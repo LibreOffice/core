@@ -8,6 +8,7 @@
  */
 
 #include <test/htmltesttools.hxx>
+#include <sal/log.hxx>
 
 #include <memory>
 
@@ -30,7 +31,9 @@ htmlDocUniquePtr HtmlTestTools::parseHtmlStream(SvStream* pStream)
     std::unique_ptr<sal_uInt8[]> pBuffer(new sal_uInt8[nSize + 1]);
     pStream->ReadBytes(pBuffer.get(), nSize);
     pBuffer[nSize] = 0;
-    return htmlDocUniquePtr(htmlParseDoc(reinterpret_cast<xmlChar*>(pBuffer.get()), nullptr));
+    auto pCharBuffer = reinterpret_cast<xmlChar*>(pBuffer.get());
+    SAL_INFO("test", "HtmlTestTools::parseXmlStream: pBuffer is '" << pCharBuffer << "'");
+    return htmlDocUniquePtr(htmlParseDoc(pCharBuffer, nullptr));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
