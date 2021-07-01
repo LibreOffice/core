@@ -74,10 +74,13 @@ void FuCustomShowDlg::DoExecute( SfxRequest& )
     }
     if (nRet == RET_OK)
     {
-        if (!pDlg->IsCustomShow())
+        if (mpDoc->GetCustomShowList())
         {
-            rSettings.mbCustomShow = false;
-            rSettings.mbAll = true;
+            if (!pDlg->IsCustomShow())
+            {
+                rSettings.mbCustomShow = false;
+                rSettings.mbAll = true;
+            }
         }
     }
     pDlg.disposeAndClear();
