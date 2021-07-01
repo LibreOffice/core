@@ -7,10 +7,10 @@
 '
 
 
-Function doUnitTest as Integer
+Function doUnitTest as String
   If #07/28/1977# = 28334 And #1977-07-28# = 28334 Then
-     doUnitTest = 1
+     doUnitTest = "OK"
   Else
-     doUnitTest = 0
+     doUnitTest = "FAIL"
   End If
 End Function

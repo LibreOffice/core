@@ -5,18 +5,18 @@
 ' file, You can obtain one at http://mozilla.org/MPL/2.0/.
 '
 
-Function doUnitTest as Integer
+Function doUnitTest as String
     ' ERR
     On Error GoTo ErrorHandler ' Set up error handler
     Dim nVar As Integer
     nVar = 0
     nVar = 1/nVar
-    doUnitTest = 0
+    doUnitTest = "FAIL"
     Exit Function
 ErrorHandler:
     If ( Err <> 11 ) Then
-        doUnitTest = 0
+        doUnitTest = "FAIL"
     Else
-        doUnitTest = 1
+        doUnitTest = "OK"
     Endif
 End Function
