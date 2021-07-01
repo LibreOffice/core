@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "97b016ff_a414df44",
+        "filename": "sc/source/filter/xml/XMLTableHeaderFooterContext.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-07-01T14:17:35Z",
+      "side": 0,
+      "message": "Are you sure, that it\u0027s safe to remove this? E.g. it is not for back-compatibility?",
+      "range": {
+        "startLine": 66,
+        "startChar": 8,
+        "endLine": 66,
+        "endChar": 70
+      },
+      "revId": "28ee6bc8cf9548a6c24e68e5804077a96605a1f2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
