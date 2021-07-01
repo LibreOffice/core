@@ -862,6 +862,46 @@ public:
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
 
+    void testDrawBezierWithPolyline()
+    {
+        vcl::test::OutputDeviceTestPolyLine aOutDevTest;
+        Bitmap aBitmap = aOutDevTest.setupBezier();
+        auto eResult = vcl::test::OutputDeviceTestCommon::checkBezier(aBitmap);
+        exportImage("15-01_bezier_test-polyline.png", aBitmap);
+        if (SHOULD_ASSERT)
+            CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
+    }
+
+    void testDrawBezierAAWithPolyline()
+    {
+        vcl::test::OutputDeviceTestPolyLine aOutDevTest;
+        Bitmap aBitmap = aOutDevTest.setupAABezier();
+        auto eResult = vcl::test::OutputDeviceTestCommon::checkBezier(aBitmap);
+        exportImage("15-02_bezier_AA_test-polyline.png", aBitmap);
+        if (SHOULD_ASSERT)
+            CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
+    }
+
+    void testDrawBezierWithPolygon()
+    {
+        vcl::test::OutputDeviceTestPolygon aOutDevTest;
+        Bitmap aBitmap = aOutDevTest.setupBezier();
+        auto eResult = vcl::test::OutputDeviceTestCommon::checkBezier(aBitmap);
+        exportImage("16-01_bezier_test-polygon.png", aBitmap);
+        if (SHOULD_ASSERT)
+            CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
+    }
+
+    void testDrawBezierAAWithPolygon()
+    {
+        vcl::test::OutputDeviceTestPolygon aOutDevTest;
+        Bitmap aBitmap = aOutDevTest.setupBezier();
+        auto eResult = vcl::test::OutputDeviceTestCommon::checkBezier(aBitmap);
+        exportImage("16-02_bezier_AA_test-polygon.png", aBitmap);
+        if (SHOULD_ASSERT)
+            CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
+    }
+
     // Test SalGraphics::blendBitmap() and blendAlphaBitmap() calls.
     void testDrawBlendExtended()
     {
@@ -1080,6 +1120,12 @@ public:
 
     CPPUNIT_TEST(testDrawBezierWithPolylineB2D);
     CPPUNIT_TEST(testDrawBezierAAWithPolylineB2D);
+
+    CPPUNIT_TEST(testDrawBezierWithPolyline);
+    CPPUNIT_TEST(testDrawBezierAAWithPolyline);
+
+    CPPUNIT_TEST(testDrawBezierWithPolygon);
+    CPPUNIT_TEST(testDrawBezierAAWithPolygon);
 
     CPPUNIT_TEST(testDrawBitmap);
     CPPUNIT_TEST(testDrawTransformedBitmap);
