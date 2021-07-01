@@ -77,7 +77,7 @@ bool lclGetApiOperatorFromToken( sal_Int32& rnApiOperator, sal_Int32 nToken )
 {
     switch( nToken )
     {
-        case XML_lessThan:              rnApiOperator = FilterOperator2::NOT_EQUAL;     return true;
+        case XML_lessThan:              rnApiOperator = FilterOperator2::LESS;          return true;
         case XML_equal:                 rnApiOperator = FilterOperator2::EQUAL;         return true;
         case XML_lessThanOrEqual:       rnApiOperator = FilterOperator2::LESS_EQUAL;    return true;
         case XML_greaterThan:           rnApiOperator = FilterOperator2::GREATER;       return true;

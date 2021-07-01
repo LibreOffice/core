@@ -189,6 +189,7 @@ public:
     void testTdf140431();
     void testCheckboxFormControlXlsxExport();
     void testButtonFormControlXlsxExport();
+    void testTdf142929_filterLessThanXLSX();
 
     CPPUNIT_TEST_SUITE(ScExportTest2);
 
@@ -286,6 +287,7 @@ public:
     CPPUNIT_TEST(testTdf140431);
     CPPUNIT_TEST(testCheckboxFormControlXlsxExport);
     CPPUNIT_TEST(testButtonFormControlXlsxExport);
+    CPPUNIT_TEST(testTdf142929_filterLessThanXLSX);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2346,6 +2348,21 @@ void ScExportTest2::testButtonFormControlXlsxExport()
     assertXPathContent(pDoc, "//x:anchor/x:from/xdr:row", "3");
     assertXPathContent(pDoc, "//x:anchor/x:to/xdr:col", "3");
     assertXPathContent(pDoc, "//x:anchor/x:to/xdr:row", "7");
+}
+
+void ScExportTest2::testTdf142929_filterLessThanXLSX()
+{
+    // Document contains a standard filter with '<' condition.
+    ScDocShellRef xDocSh = loadDoc(u"tdf142929.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory,
+                                                     "xl/worksheets/sheet1.xml", FORMAT_XLSX);
+    CPPUNIT_ASSERT(pDoc);
+    assertXPath(pDoc, "//x:customFilters/x:customFilter", "val", "2");
+    assertXPath(pDoc, "//x:customFilters/x:customFilter", "operator", "lessThan");
+
+    xDocSh->DoClose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest2);
