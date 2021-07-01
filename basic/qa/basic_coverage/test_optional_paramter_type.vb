@@ -1,8 +1,8 @@
 REM  *****  BASIC  *****
 Option Compatible
 
-Function doUnitTest() As Integer
-    doUnitTest = 0
+Function doUnitTest() As String
+    doUnitTest = "FAIL"
     If CheckType1(32) = 0 Then
         Exit Function
     End If
@@ -12,7 +12,7 @@ Function doUnitTest() As Integer
     If CheckType2() = 0 Then
         Exit Function
     End If
-    doUnitTest = 1
+    doUnitTest = "OK"
 End Function
 
 Function CheckType1(x As Integer) As Integer

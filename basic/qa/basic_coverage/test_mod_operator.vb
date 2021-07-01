@@ -6,9 +6,9 @@
 ' file, You can obtain one at http://mozilla.org/MPL/2.0/.
 '
 
-Function doUnitTest as Integer
+Function doUnitTest as String
 
-    doUnitTest = 0
+    doUnitTest = "FAIL"
 
     Dim a As Double, b as Double
     a = 16.4
@@ -20,6 +20,6 @@ Function doUnitTest as Integer
     if (15.9 MOD 6.4 <> 4) Then Exit Function
     if (2147483647.4 MOD 4 <> 3) Then Exit Function
 
-    doUnitTest = 1
+    doUnitTest = "OK"
 
 End Function

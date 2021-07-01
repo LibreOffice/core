@@ -10,13 +10,13 @@ Type MyType
     tName as String
 End Type
 
-Function doUnitTest as Integer
+Function doUnitTest as String
     dim aVariant as MyType
     aVariant.tName = "A string"
     ' ISERROR
     If ( IsError( aVariant ) ) Then
-        doUnitTest = 0
+        doUnitTest = "FAIL"
     Else
-        doUnitTest = 1
+        doUnitTest = "OK"
     End If
 End Function

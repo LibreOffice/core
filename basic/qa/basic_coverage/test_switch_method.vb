@@ -6,15 +6,15 @@
 ' file, You can obtain one at http://mozilla.org/MPL/2.0/.
 '
 
-Function doUnitTest as Integer
+Function doUnitTest as String
     dim aVariant as Object
     ' SWITCH
     If ( Switch( False, 10,_
                  True,  11,_
                  False, 12,_
                  True,  13  ) <> 11 ) Then
-        doUnitTest = 0
+        doUnitTest = "FAIL"
     Else
-        doUnitTest = 1
+        doUnitTest = "OK"
     End If
 End Function
