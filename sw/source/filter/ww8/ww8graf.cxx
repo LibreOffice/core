@@ -1447,7 +1447,16 @@ void SwWW8ImplReader::ReadGrafLayer1(WW8PLCFspecial& rPF, tools::Long nGrafAncho
         return;
     }
 
-    bool bCouldSeek = checkSeek(*m_pStrm, SVBT32ToUInt32(pF->fc));
+    sal_uInt32 nPosFc = SVBT32ToUInt32(pF->fc);
+
+    //skip duplicate graphics when fuzzing
+    if (m_bFuzzing)
+    {
+        if (!m_aGrafPosSet.insert(nPosFc).second)
+            return;
+    }
+
+    bool bCouldSeek = checkSeek(*m_pStrm, nPosFc);
     OSL_ENSURE(bCouldSeek, "Invalid graphic offset");
     if (!bCouldSeek)
         return;

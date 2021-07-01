@@ -258,18 +258,18 @@ bool SwWW8ImplReader::ReadGrafFile(OUString& rFileName, std::unique_ptr<Graphic>
             return !rFileName.isEmpty();        // read was successful
     }
 
-    GDIMetaFile aWMF;
-    bool bOk = checkSeek(*pSt, nPosFc) && ReadWindowMetafile( *pSt, aWMF );
-
-    if (!bOk || pSt->GetError() || !aWMF.GetActionSize())
-        return false;
-
     //skip duplicate graphics when fuzzing
     if (m_bFuzzing)
     {
         if (!m_aGrafPosSet.insert(nPosFc).second)
             return false;
     }
+
+    GDIMetaFile aWMF;
+    bool bOk = checkSeek(*pSt, nPosFc) && ReadWindowMetafile( *pSt, aWMF );
+
+    if (!bOk || pSt->GetError() || !aWMF.GetActionSize())
+        return false;
 
     if (m_xWwFib->m_envr != 1) // !MAC as creator
     {
