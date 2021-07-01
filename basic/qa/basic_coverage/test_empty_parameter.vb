@@ -10,13 +10,13 @@ Sub assignVar(v As Variant)
     v = 1
 End Sub
 
-Function doUnitTest() As Integer
+Function doUnitTest() As String
     ' tdf#132563 - check if empty parameters are converted to their respective types
     anEmptyVar = Empty
     assignVar(anEmptyVar)
     If (anEmptyVar = 1 And TypeName(anEmptyVar) = "Integer") Then
-        doUnitTest = 1
+        doUnitTest = "OK"
     Else
-        doUnitTest = 0
+        doUnitTest = "FAIL"
     End If
 End Function

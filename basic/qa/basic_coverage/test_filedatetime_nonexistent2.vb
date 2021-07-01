@@ -5,16 +5,16 @@
 ' file, You can obtain one at http://mozilla.org/MPL/2.0/.
 '
 'Bug 121337 - FileDateTime("\\nonexistent\smb\path") returns bogus result rather than throwing error
-Function doUnitTest as Integer
+Function doUnitTest as String
     On Error GoTo ErrorHandler ' Set up error handler
     Dim result
     result = FileDateTime("\\bogus\smb\path")
-    doUnitTest = 0
+    doUnitTest = "FAIL"
     Exit Function
 ErrorHandler:
     If ( Err <> 0 ) Then
-        doUnitTest = 0
+        doUnitTest = "FAIL"
     Else
-        doUnitTest = 1
+        doUnitTest = "OK"
     Endif
 End Function

@@ -11,11 +11,11 @@ Type address
     City As String
 End Type
 
-Function doUnitTest as Integer
+Function doUnitTest as String
     ' CREATEOBJECT
     If ( IsObject( CreateObject("address") ) = False ) Then
-        doUnitTest = 0
+        doUnitTest = "FAIL"
     Else
-        doUnitTest = 1
+        doUnitTest = "OK"
     End If
 End Function

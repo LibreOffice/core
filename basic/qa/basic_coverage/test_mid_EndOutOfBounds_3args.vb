@@ -6,10 +6,10 @@
 ' file, You can obtain one at http://mozilla.org/MPL/2.0/.
 '
 
-Function doUnitTest as Integer
+Function doUnitTest as String
     If (Mid("abc", 1, 4) = "abc") Then
-        doUnitTest = 1
+        doUnitTest = "OK"
     Else
-        doUnitTest = 0
+        doUnitTest = "FAIL"
     End If
 End Function

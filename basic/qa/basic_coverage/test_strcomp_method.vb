@@ -5,13 +5,13 @@
 ' file, You can obtain one at http://mozilla.org/MPL/2.0/.
 '
 
-Function doUnitTest as Integer
+Function doUnitTest as String
     dim aString as Variant
     aString = "Hello"
     ' STRCOMP
     If ( StrComp( aString, "Hello" ) <> 0 ) Then
-        doUnitTest = 0
+        doUnitTest = "FAIL"
     Else
-        doUnitTest = 1
+        doUnitTest = "OK"
     End If
 End Function
