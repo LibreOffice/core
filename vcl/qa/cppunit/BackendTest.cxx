@@ -862,6 +862,46 @@ public:
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
 
+    void testDrawDropShapeWithPolyline()
+    {
+        vcl::test::OutputDeviceTestPolyLine aOutDevTest;
+        Bitmap aBitmap = aOutDevTest.setupDropShape();
+        auto eResult = vcl::test::OutputDeviceTestCommon::checkDropShape(aBitmap);
+        exportImage("15-01_drop_shape_test-polyline.png", aBitmap);
+        if (SHOULD_ASSERT)
+            CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
+    }
+
+    void testDrawDropShapeAAWithPolyline()
+    {
+        vcl::test::OutputDeviceTestPolyLine aOutDevTest;
+        Bitmap aBitmap = aOutDevTest.setupAADropShape();
+        auto eResult = vcl::test::OutputDeviceTestCommon::checkDropShape(aBitmap, true);
+        exportImage("15-02_drop_shape_AA_test-polyline.png", aBitmap);
+        if (SHOULD_ASSERT)
+            CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
+    }
+
+    void testDrawDropShapeWithPolygon()
+    {
+        vcl::test::OutputDeviceTestPolygon aOutDevTest;
+        Bitmap aBitmap = aOutDevTest.setupDropShape();
+        auto eResult = vcl::test::OutputDeviceTestCommon::checkDropShape(aBitmap);
+        exportImage("16-01_drop_shape_test-polygon.png", aBitmap);
+        if (SHOULD_ASSERT)
+            CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
+    }
+
+    void testDrawDropShapeAAWithPolygon()
+    {
+        vcl::test::OutputDeviceTestPolygon aOutDevTest;
+        Bitmap aBitmap = aOutDevTest.setupAADropShape();
+        auto eResult = vcl::test::OutputDeviceTestCommon::checkDropShape(aBitmap, true);
+        exportImage("16-02_drop_shape_AA_test-polygon.png", aBitmap);
+        if (SHOULD_ASSERT)
+            CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
+    }
+
     // Test SalGraphics::blendBitmap() and blendAlphaBitmap() calls.
     void testDrawBlendExtended()
     {
@@ -1080,6 +1120,12 @@ public:
 
     CPPUNIT_TEST(testDrawBezierWithPolylineB2D);
     CPPUNIT_TEST(testDrawBezierAAWithPolylineB2D);
+
+    CPPUNIT_TEST(testDrawDropShapeWithPolyline);
+    CPPUNIT_TEST(testDrawDropShapeAAWithPolyline);
+
+    CPPUNIT_TEST(testDrawDropShapeWithPolygon);
+    CPPUNIT_TEST(testDrawDropShapeAAWithPolygon);
 
     CPPUNIT_TEST(testDrawBitmap);
     CPPUNIT_TEST(testDrawTransformedBitmap);
