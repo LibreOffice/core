@@ -626,6 +626,9 @@ int HWPFile::compareCharShape(CharShape const *shape)
 
 int HWPFile::compareParaShape(const ParaShape* shape)
 {
+    if (!shape->cshape)
+        return 0;
+
     int count = pslist.size();
     if (count > 0)
     {
@@ -642,7 +645,7 @@ int HWPFile::compareParaShape(const ParaShape* shape)
                 shape->outline == pshape->outline &&
                 shape->pagebreak == pshape->pagebreak)
             {
-                if (shape->cshape && pshape->cshape &&
+                if (pshape->cshape &&
                     shape->cshape->size == pshape->cshape->size &&
                     shape->cshape->font[0] == pshape->cshape->font[0] &&
                     shape->cshape->ratio[0] == pshape->cshape->ratio[0] &&
