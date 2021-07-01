@@ -22,6 +22,30 @@
       "revId": "28ee6bc8cf9548a6c24e68e5804077a96605a1f2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0dd4ac69_47c0e5ca",
+        "filename": "sc/source/filter/xml/XMLTableHeaderFooterContext.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1002716
+      },
+      "writtenOn": "2021-07-01T14:34:38Z",
+      "side": 0,
+      "message": "To be frank I\u0027m not even sure why the headers being off would affect sharing in the first place (in the case of bOn \u003d\u003d false, bDisplay \u003d\u003d true).\n\nSwitching all headers or footers on/off and having them shared/unshared are two independent, orthogonal settings. I figured if no unit tests are broken, it is be better to keep them apart. I don\u0027t know about back-compatibility though.",
+      "parentUuid": "97b016ff_a414df44",
+      "range": {
+        "startLine": 66,
+        "startChar": 8,
+        "endLine": 66,
+        "endChar": 70
+      },
+      "revId": "28ee6bc8cf9548a6c24e68e5804077a96605a1f2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
