@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f14019e_de7eb108",
+        "filename": "scaddins/source/analysis/analysishelper.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 735,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-01T21:01:20Z",
+      "side": 1,
+      "message": "The comments are obsoleted now.",
+      "revId": "1b78b2289c2c613b89a4bf83a967183dc372748a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "40640aff_e4ec75e8",
+        "filename": "scaddins/source/analysis/analysishelper.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 741,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-01T21:01:20Z",
+      "side": 1,
+      "message": "And this.",
+      "revId": "1b78b2289c2c613b89a4bf83a967183dc372748a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5ea75546_2f694ed9",
+        "filename": "scaddins/source/pricing/black_scholes.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-01T21:01:20Z",
+      "side": 1,
+      "message": "This comment is obsolete now - at least its last part",
+      "revId": "1b78b2289c2c613b89a4bf83a967183dc372748a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
