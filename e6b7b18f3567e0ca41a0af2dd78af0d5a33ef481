@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "847089d3_866cd8ff",
+        "filename": "odk/examples/python/DocumentLoader/DocumentLoader.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2021-07-01T06:23:21Z",
+      "side": 1,
+      "message": "No need for this part (see file TEMPLATE.SOURCECODE.HEADER in this repository)",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 63
+      },
+      "revId": "e6b7b18f3567e0ca41a0af2dd78af0d5a33ef481",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1f9bf767_5ee760d0",
+        "filename": "odk/examples/python/DocumentLoader/DocumentLoader.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2021-07-01T06:23:21Z",
+      "side": 1,
+      "message": "no version number",
+      "range": {
+        "startLine": 28,
+        "startChar": 38,
+        "endLine": 28,
+        "endChar": 41
+      },
+      "revId": "e6b7b18f3567e0ca41a0af2dd78af0d5a33ef481",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ef524705_ff9a8534",
+        "filename": "odk/examples/python/DocumentLoader/README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2021-07-01T06:23:21Z",
+      "side": 1,
+      "message": "Please just \"libreoffice\", no version numbers appended",
+      "range": {
+        "startLine": 5,
+        "startChar": 4,
+        "endLine": 5,
+        "endChar": 18
+      },
+      "revId": "e6b7b18f3567e0ca41a0af2dd78af0d5a33ef481",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ddff85af_f15fe413",
+        "filename": "odk/examples/python/DocumentLoader/README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2021-07-01T06:23:21Z",
+      "side": 1,
+      "message": "Same here",
+      "range": {
+        "startLine": 9,
+        "startChar": 9,
+        "endLine": 9,
+        "endChar": 23
+      },
+      "revId": "e6b7b18f3567e0ca41a0af2dd78af0d5a33ef481",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
