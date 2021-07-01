@@ -1,43 +1,26 @@
-Dim passCount As Integer
-Dim failCount As Integer
-Dim result As String
+Option VBASupport 0
 
 Function doUnitTest() As String
-    result = verify_stringReplace()
-    If failCount <> 0 Or passCount = 0 Then
-        doUnitTest = 0
-    Else
-        doUnitTest = 1
-    End If
+    TestUtil.TestInit
+    verify_stringReplace
+    doUnitTest = TestUtil.GetResult()
 End Function
 
-Function verify_stringReplace() As String
-    passCount = 0
-    failCount = 0
-
-    result = "Test Results" & Chr$(10) & "============" & Chr$(10)
-
+Sub verify_stringReplace()
+    On Error GoTo errorHandler
     ' tdf#132389 - case-insensitive operation for non-ASCII characters
     retStr = Replace("ABCabc", "b", "*")
-    TestLog_ASSERT retStr, "A*Ca*c", "case-insensitive ASCII: " & retStr
+    TestUtil.AssertEqual(retStr, "A*Ca*c", "case-insensitive ASCII: " & retStr)
     retStr = Replace("АБВабв", "б", "*")
-    TestLog_ASSERT retStr, "А*Ва*в", "case-insensitive non-ASCII: " & retStr
+    TestUtil.AssertEqual(retStr, "А*Ва*в", "case-insensitive non-ASCII: " & retStr)
 
     ' tdf#141045 - different length of search and replace string. It is important
     ' that the search string starts with the original string in order to test the error.
     ' Without the fix in place, the string index calculations result in a crash.
     retStr = Replace("a", "abc", "ab")
-    TestLog_ASSERT retStr, "a", "different length of search and replace string: " & retStr
+    TestUtil.AssertEqual(retStr, "a", "different length of search and replace string: " & retStr)
 
-    result = result & Chr$(10) & "Tests passed: " & passCount & Chr$(10) & "Tests failed: " & failCount & Chr$(10)
-    verify_stringReplace = result
-End Function
-
-Sub TestLog_ASSERT(actual As Variant, expected As Variant, testName As String)
-    If expected = actual Then
-        passCount = passCount + 1
-    Else
-        result = result & Chr$(10) & "Failed: " & testName & " returned " & actual & ", expected " & expected
-        failCount = failCount + 1
-    End If
+    Exit Sub
+errorHandler:
+    TestUtil.ReportErrorHandler("verify_stringReplace", Err, Error$, Erl)
 End Sub

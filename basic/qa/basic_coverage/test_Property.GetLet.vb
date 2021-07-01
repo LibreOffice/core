@@ -8,13 +8,13 @@
 
 Option Compatible
 
-Function doUnitTest as Integer
+Function doUnitTest as String
   ' PROPERTY GET/LET
   aString = "Office"
   If ( aString <> "LibreOffice") Then
-    doUnitTest = 0 ' Ko
+    doUnitTest = "FAIL" ' Ko
   Else
-    doUnitTest = 1 ' Ok
+    doUnitTest = "OK" ' Ok
   End If
 End Function
 
