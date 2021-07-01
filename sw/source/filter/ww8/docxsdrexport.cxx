@@ -586,6 +586,26 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
         // Adaption is missing here. Frames in LO have no stroke but border. The current conversion
         // from border to line treats borders like table borders. That might give wrong values
         // for drawing frames.
+
+        if (pObj && pObj->GetRotateAngle() != 0_deg100)
+        {
+            Degree100 nRotation = pObj->GetRotateAngle();
+            const SwRect aBoundRect(pFrameFormat->FindLayoutRect());
+            tools::Long nMSOWidth = rSize.Width();
+            tools::Long nMSOHeight = rSize.Height();
+            if ((nRotation > 4500_deg100 && nRotation <= 13500_deg100)
+                || (nRotation > 22500_deg100 && nRotation <= 31500_deg100))
+                std::swap(nMSOWidth, nMSOHeight);
+            nBottomExt += (aBoundRect.Height() - 1 - nMSOHeight) / 2;
+            nTopExt += (aBoundRect.Height() - 1 - nMSOHeight) / 2;
+            nLeftExt += (aBoundRect.Width() - nMSOWidth) / 2;
+            nRightExt += (aBoundRect.Width() - nMSOWidth) / 2;
+        }
+        lcl_makeDistAndExtentNonNegative(nDistT, nDistB, nDistL, nDistR, nLeftExt, nTopExt,
+                                         nRightExt, nBottomExt);
+
+        // ToDo: Inline rotated image fails because it would need wrapTight, what is not possible.
+        // ToDo: Image plus shadow fails because of wrong shadow direction.
     }
     else // other objects than frames. pObj exists.
     {
@@ -684,7 +704,8 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
 
         aPos.X += nPosXDiff; // Make the postponed position move of frames.
         aPos.Y += nPosYDiff;
-        if (pObj && lcl_IsRotateAngleValid(*pObj))
+        if (pObj && lcl_IsRotateAngleValid(*pObj)
+            && pObj->GetObjIdentifier() != SwFlyDrawObjIdentifier)
             lclMovePositionWithRotation(aPos, rSize, pObj->GetRotateAngle());
 
         const char* relativeFromH;

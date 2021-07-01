@@ -70,6 +70,18 @@ protected:
         return OString(filename).endsWith(".docx");
     }
 };
+DECLARE_OOXMLEXPORT_TEST(testTdf123569_rotWriterImage, "tdf123569_rotWriterImage_46deg.odt")
+{
+    uno::Reference<beans::XPropertySet> xFrame(getShape(1), uno::UNO_QUERY);
+    // Error was, that position of logical rectangle was treated as position of snap rectangle.
+    // Thus a wrong position was calculated.
+    // Without fix this would have failed with expected 4798, actual 4860
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(4798),
+                                 getProperty<sal_Int32>(xFrame, "HoriOrientPosition"), 1);
+    // Without fix this would have failed with expected 1438, actual 4062
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(1438),
+                                 getProperty<sal_Int32>(xFrame, "VertOrientPosition"), 1);
+}
 
 DECLARE_OOXMLEXPORT_TEST(testTdf142486_LeftMarginShadowLeft, "tdf142486_LeftMarginShadowLeft.docx")
 {
