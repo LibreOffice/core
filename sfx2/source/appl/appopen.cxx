@@ -608,7 +608,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
         // get FileName from dialog
         std::vector<OUString> aURLList;
         OUString aFilter;
-        std::unique_ptr<SfxItemSet> pSet;
+        std::optional<SfxAllItemSet> pSet;
         OUString aPath;
         const SfxStringItem* pFolderNameItem = rReq.GetArg<SfxStringItem>(SID_PATH);
         if ( pFolderNameItem )
@@ -662,7 +662,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
             return;
         }
 
-        rReq.SetArgs( *static_cast<SfxAllItemSet*>(pSet.get()) );
+        rReq.SetArgs( *pSet );
         if ( !aFilter.isEmpty() )
             rReq.AppendItem( SfxStringItem( SID_FILTER_NAME, aFilter ) );
         rReq.AppendItem( SfxStringItem( SID_TARGETNAME, "_default" ) );
