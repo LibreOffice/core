@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8846e9cc_3601d527",
+        "filename": "basic/qa/basic_coverage/test_string_replace.vb",
+        "patchSetId": 3
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-07-01T16:40:57Z",
+      "side": 1,
+      "message": "Hi Andreas,\nIn https://cgit.freedesktop.org/libreoffice/core/commit/?id\u003d3ff159d35770ac3454ee909b348cb4f4ca8b0b9b you added these two asserts here. Besides, you added the same two similar asserts in basic/qa/vba_tests/replace.vb. Any idea why my patch makes these two asserts to fail? Any idea how to fix it? This is the only place where \u0027make CppunitTest_basic_macros\u0027 fails after this refactor",
+      "revId": "17e9be5a6a75ad7f7667d00491d8fa70d8a8972b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
