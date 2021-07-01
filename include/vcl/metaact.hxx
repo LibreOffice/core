@@ -1223,6 +1223,8 @@ public:
 
     const Color&        GetColor() const { return maColor; }
     bool                IsSetting() const { return mbSet; }
+    void                SetColor(Color& rColor) { maColor = rColor; }
+    void                SetSetting(bool rSet) { mbSet = rSet; }
 };
 
 class VCL_DLLPUBLIC MetaFillColorAction final : public MetaAction

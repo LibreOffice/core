@@ -261,7 +261,7 @@ rtl::Reference<MetaAction> SvmReader::MetaActionHandler(ImplMetaReadData* pData)
             pAction = new MetaMoveClipRegionAction;
             break;
         case MetaActionType::LINECOLOR:
-            pAction = new MetaLineColorAction;
+            return LineColorHandler();
             break;
         case MetaActionType::FILLCOLOR:
             pAction = new MetaFillColorAction;
@@ -331,4 +331,26 @@ rtl::Reference<MetaAction> SvmReader::MetaActionHandler(ImplMetaReadData* pData)
     return pAction;
 }
 
+void SvmReader::ReadColor(Color& rColor)
+{
+    sal_uInt32 nTmp;
+    mrStream.ReadUInt32(nTmp);
+    rColor = ::Color(ColorTransparency, nTmp);
+}
+
+rtl::Reference<MetaAction> SvmReader::LineColorHandler()
+{
+    auto pAction = new MetaLineColorAction();
+
+    VersionCompatRead aCompat(mrStream);
+    Color aColor;
+    ReadColor(aColor);
+    bool aBool;
+    mrStream.ReadCharAsBool(aBool);
+
+    pAction->SetSetting(aBool);
+    pAction->SetColor(aColor);
+
+    return pAction;
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
