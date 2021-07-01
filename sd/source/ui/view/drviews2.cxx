@@ -1238,11 +1238,11 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
         case SID_SET_DEFAULT:
         {
-            std::unique_ptr<SfxItemSet> pSet;
+            std::optional<SfxItemSet> pSet;
 
             if (mpDrawView->IsTextEdit())
             {
-                pSet.reset(new SfxItemSet( GetPool(), svl::Items<EE_ITEMS_START, EE_ITEMS_END>{} ));
+                pSet.emplace( GetPool(), svl::Items<EE_ITEMS_START, EE_ITEMS_END>{} );
                 mpDrawView->SetAttributes( *pSet, true );
             }
             else
@@ -1269,7 +1269,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     }
                 }
 
-                pSet.reset(new SfxItemSet( GetPool() ));
+                pSet.emplace( GetPool() );
                 mpDrawView->SetAttributes( *pSet, true );
 
                 sal_uLong j = 0;

@@ -677,7 +677,7 @@ void ScEditEngineDefaulter::RepeatDefaults()
 
 void ScEditEngineDefaulter::RemoveParaAttribs()
 {
-    std::unique_ptr<SfxItemSet> pCharItems;
+    std::optional<SfxItemSet> pCharItems;
     bool bUpdateMode = GetUpdateMode();
     if ( bUpdateMode )
         SetUpdateMode( false );
@@ -695,7 +695,7 @@ void ScEditEngineDefaulter::RemoveParaAttribs()
                 if ( !pDefaults || *pParaItem != pDefaults->Get(nWhich) )
                 {
                     if (!pCharItems)
-                        pCharItems.reset(new SfxItemSet( GetEmptyItemSet() ));
+                        pCharItems.emplace( GetEmptyItemSet() );
                     pCharItems->Put( *pParaItem );
                 }
             }

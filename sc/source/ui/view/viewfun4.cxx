@@ -362,13 +362,12 @@ void ScViewFunc::DoThesaurus()
     pThesaurusEngine->SetRefDevice(GetViewData().GetActiveWin()->GetOutDev());
     pThesaurusEngine->SetSpeller(xSpeller);
     MakeEditView(pThesaurusEngine.get(), nCol, nRow );
-    std::unique_ptr<SfxItemSet> pEditDefaults(
-        new SfxItemSet(pThesaurusEngine->GetEmptyItemSet()));
+    SfxItemSet aEditDefaults(pThesaurusEngine->GetEmptyItemSet());
     const ScPatternAttr* pPattern = rDoc.GetPattern(nCol, nRow, nTab);
     if (pPattern)
     {
-        pPattern->FillEditItemSet( pEditDefaults.get() );
-        pThesaurusEngine->SetDefaults( *pEditDefaults );
+        pPattern->FillEditItemSet( &aEditDefaults );
+        pThesaurusEngine->SetDefaults( aEditDefaults );
     }
 
     if (aOldText.meType == CELLTYPE_EDIT)

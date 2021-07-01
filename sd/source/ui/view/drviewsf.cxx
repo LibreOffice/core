@@ -714,11 +714,11 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
         nWhich = aIter.NextWhich();
     }
 
-    std::unique_ptr<SfxItemSet> pSet;
+    std::optional<SfxItemSet> pSet;
 
     if( bAttr )
     {
-        pSet.reset(new SfxItemSet( GetDoc()->GetPool() ));
+        pSet.emplace( GetDoc()->GetPool() );
         mpDrawView->GetAttributes( *pSet );
         rSet.Put( *pSet, false );
     }

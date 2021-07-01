@@ -285,7 +285,7 @@ const SfxItemSet* FuPage::ExecuteDialog(weld::Window* pParent, const SfxRequest&
         MergePageBackgroundFilling(mpPage, pStyleSheet, mbMasterPage, aMergedAttr);
     }
 
-    std::unique_ptr< SfxItemSet > pTempSet;
+    std::optional< SfxItemSet > pTempSet;
 
     const sal_uInt16 nId = GetSlotID();
     if (nId == SID_SAVE_BACKGROUND)
@@ -330,14 +330,14 @@ const SfxItemSet* FuPage::ExecuteDialog(weld::Window* pParent, const SfxRequest&
 
         if (nError == ERRCODE_NONE)
         {
-            pTempSet.reset( new SfxItemSet( mpDoc->GetPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{}) );
+            pTempSet.emplace( mpDoc->GetPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{} );
 
             pTempSet->Put( XFillStyleItem( drawing::FillStyle_BITMAP ) );
 
             // MigrateItemSet makes sure the XFillBitmapItem will have a unique name
             SfxItemSet aMigrateSet( mpDoc->GetPool(), svl::Items<XATTR_FILLBITMAP, XATTR_FILLBITMAP>{} );
             aMigrateSet.Put(XFillBitmapItem("background", aGraphic));
-            SdrModel::MigrateItemSet( &aMigrateSet, pTempSet.get(), mpDoc );
+            SdrModel::MigrateItemSet( &aMigrateSet, &*pTempSet, mpDoc );
 
             pTempSet->Put( XFillBmpStretchItem( true ));
             pTempSet->Put( XFillBmpTileItem( false ));
@@ -352,7 +352,7 @@ const SfxItemSet* FuPage::ExecuteDialog(weld::Window* pParent, const SfxRequest&
         SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
         ScopedVclPtr<SfxAbstractTabDialog> pDlg( pFact->CreateSdTabPageDialog(mpViewShell->GetFrameWeld(), &aMergedAttr, mpDocSh, mbDisplayBackgroundTabPage, bIsImpressDoc) );
         if( pDlg->Execute() == RET_OK )
-            pTempSet.reset( new SfxItemSet(*pDlg->GetOutputItemSet()) );
+            pTempSet.emplace( *pDlg->GetOutputItemSet() );
     }
 
     if (pTempSet && pStyleSheet)
@@ -398,7 +398,7 @@ const SfxItemSet* FuPage::ExecuteDialog(weld::Window* pParent, const SfxRequest&
                 // MigrateItemSet guarantees unique gradient names
                 SfxItemSet aMigrateSet( mpDoc->GetPool(), svl::Items<XATTR_FILLGRADIENT, XATTR_FILLGRADIENT>{} );
                 aMigrateSet.Put( XFillGradientItem("gradient", pTempGradItem->GetGradientValue()) );
-                SdrModel::MigrateItemSet( &aMigrateSet, pTempSet.get(), mpDoc);
+                SdrModel::MigrateItemSet( &aMigrateSet, &*pTempSet, mpDoc);
             }
 
             const XFillHatchItem* pTempHatchItem = pTempSet->GetItem<XFillHatchItem>(XATTR_FILLHATCH);
@@ -407,7 +407,7 @@ const SfxItemSet* FuPage::ExecuteDialog(weld::Window* pParent, const SfxRequest&
                 // MigrateItemSet guarantees unique hatch names
                 SfxItemSet aMigrateSet( mpDoc->GetPool(), svl::Items<XATTR_FILLHATCH, XATTR_FILLHATCH>{} );
                 aMigrateSet.Put( XFillHatchItem("hatch", pTempHatchItem->GetHatchValue()) );
-                SdrModel::MigrateItemSet( &aMigrateSet, pTempSet.get(), mpDoc);
+                SdrModel::MigrateItemSet( &aMigrateSet, &*pTempSet, mpDoc);
             }
 
             if( !mbMasterPage && bChanges && mbPageBckgrdDeleted )
