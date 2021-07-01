@@ -152,6 +152,30 @@ Bitmap OutputDeviceTestPolygon::setupAALines()
     return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
 }
 
+Bitmap OutputDeviceTestPolygon::setupDropShape()
+{
+    initialSetup(21, 21, constBackgroundColor);
+
+    mpVirtualDevice->SetLineColor(constLineColor);
+    mpVirtualDevice->SetFillColor();
+
+    mpVirtualDevice->DrawPolygon(OutputDeviceTestCommon::createDropShapePolygon());
+
+    return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
+}
+
+Bitmap OutputDeviceTestPolygon::setupAADropShape()
+{
+    initialSetup(21, 21, constBackgroundColor,true);
+
+    mpVirtualDevice->SetLineColor(constLineColor);
+    mpVirtualDevice->SetFillColor();
+
+    mpVirtualDevice->DrawPolygon(OutputDeviceTestCommon::createDropShapePolygon());
+
+    return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
+}
+
 } // end namespace vcl::test
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
