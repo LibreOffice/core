@@ -3391,7 +3391,7 @@ void Window::ImplCallDeactivateListeners( vcl::Window *pNew )
     {
         VclPtr<vcl::Window> xWindow(this);
         CallEventListeners( VclEventId::WindowDeactivate, pNew );
-        if( xWindow->isDisposed() )
+        if( !xWindow->mpWindowImpl )
             return;
 
         // #100759#, avoid walking the wrong frame's hierarchy
@@ -3409,7 +3409,7 @@ void Window::ImplCallActivateListeners( vcl::Window *pOld )
 
     VclPtr<vcl::Window> xWindow(this);
     CallEventListeners( VclEventId::WindowActivate, pOld );
-    if( xWindow->isDisposed() )
+    if( !xWindow->mpWindowImpl )
         return;
 
     if ( ImplGetParent() )
