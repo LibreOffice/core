@@ -46,6 +46,30 @@
       "revId": "28ee6bc8cf9548a6c24e68e5804077a96605a1f2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a5e74871_720e7341",
+        "filename": "sc/source/filter/xml/XMLTableHeaderFooterContext.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-07-01T15:34:20Z",
+      "side": 0,
+      "message": "I\u0027m afraid, this depends on the (history) of the export code (i.e. old codes without public unit testing). There is no reason to drop the support for the old OpenOffice.org XML formats (sxw, swc, etc., see https://en.wikipedia.org/wiki/OpenOffice.org_XML), because they are still supported in LibreOffice. I suggest only minimal changes, keeping the old logic for the old file formats, if we aren\u0027t sure about its meaning (and likely we don\u0027t want to check the old XML export formats).",
+      "parentUuid": "0dd4ac69_47c0e5ca",
+      "range": {
+        "startLine": 66,
+        "startChar": 8,
+        "endLine": 66,
+        "endChar": 70
+      },
+      "revId": "28ee6bc8cf9548a6c24e68e5804077a96605a1f2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
