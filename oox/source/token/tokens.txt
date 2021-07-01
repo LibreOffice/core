@@ -713,6 +713,7 @@ autoLoad
 autoNoTable
 autoPage
 autoPageBreaks
+autoPict
 autoRecover
 autoRedefine
 autoRepublish
@@ -1403,6 +1404,7 @@ contributors
 control
 control1
 control2
+controlPr
 controls
 convMailMergeEsc
 convex
@@ -2372,6 +2374,7 @@ forcedash
 foredepth
 forestGreen
 forgetLastTabAlignment
+formControlPr
 formFld
 formLetters
 formProt
@@ -3179,6 +3182,7 @@ location
 lock
 lockRevision
 lockStructure
+lockText
 lockWindows
 locked
 lockedCanvas
@@ -3661,6 +3665,7 @@ objOverTx
 objTx
 object
 objectDefaults
+objectType
 objects
 obliqueBottom
 obliqueBottomLeft
