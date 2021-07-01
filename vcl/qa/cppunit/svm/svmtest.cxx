@@ -1870,6 +1870,8 @@ void SvmTest::checkMapMode(const GDIMetaFile& rMetafile)
 
 void SvmTest::testMapMode()
 {
+    if (!IsDefaultDPI())
+        return;
     GDIMetaFile aGDIMetafile;
     ScopedVclPtrInstance<VirtualDevice> pVirtualDev;
     setupBaseVirtualDevice(*pVirtualDev, aGDIMetafile);
