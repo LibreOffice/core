@@ -1047,7 +1047,7 @@ bool Bitmap::Replace(const Color* pSearchColors, const Color* pReplaceColors, si
     return bRet;
 }
 
-bool Bitmap::CombineSimple(const Bitmap& rMask, BmpCombine eCombine)
+bool Bitmap::CombineOr(const Bitmap& rMask)
 {
     ScopedReadAccess pMaskAcc(const_cast<Bitmap&>(rMask));
     BitmapScopedWriteAccess pAcc(*this);
@@ -1062,51 +1062,22 @@ bool Bitmap::CombineSimple(const Bitmap& rMask, BmpCombine eCombine)
         const BitmapColor aBlack(pAcc->GetBestMatchingColor(aColBlack));
         const BitmapColor aMaskBlack(pMaskAcc->GetBestMatchingColor(aColBlack));
 
-        switch (eCombine)
+        for (tools::Long nY = 0; nY < nHeight; nY++)
         {
-            case BmpCombine::And:
+            Scanline pScanline = pAcc->GetScanline(nY);
+            Scanline pScanlineMask = pMaskAcc->GetScanline(nY);
+            for (tools::Long nX = 0; nX < nWidth; nX++)
             {
-                for (tools::Long nY = 0; nY < nHeight; nY++)
+                if (pMaskAcc->GetPixelFromData(pScanlineMask, nX) != aMaskBlack
+                    || pAcc->GetPixelFromData(pScanline, nX) != aBlack)
                 {
-                    Scanline pScanline = pAcc->GetScanline(nY);
-                    Scanline pScanlineMask = pMaskAcc->GetScanline(nY);
-                    for (tools::Long nX = 0; nX < nWidth; nX++)
-                    {
-                        if (pMaskAcc->GetPixelFromData(pScanlineMask, nX) != aMaskBlack
-                            && pAcc->GetPixelFromData(pScanline, nX) != aBlack)
-                        {
-                            pAcc->SetPixelOnData(pScanline, nX, aWhite);
-                        }
-                        else
-                        {
-                            pAcc->SetPixelOnData(pScanline, nX, aBlack);
-                        }
-                    }
+                    pAcc->SetPixelOnData(pScanline, nX, aWhite);
+                }
+                else
+                {
+                    pAcc->SetPixelOnData(pScanline, nX, aBlack);
                 }
             }
-            break;
-
-            case BmpCombine::Or:
-            {
-                for (tools::Long nY = 0; nY < nHeight; nY++)
-                {
-                    Scanline pScanline = pAcc->GetScanline(nY);
-                    Scanline pScanlineMask = pMaskAcc->GetScanline(nY);
-                    for (tools::Long nX = 0; nX < nWidth; nX++)
-                    {
-                        if (pMaskAcc->GetPixelFromData(pScanlineMask, nX) != aMaskBlack
-                            || pAcc->GetPixelFromData(pScanline, nX) != aBlack)
-                        {
-                            pAcc->SetPixelOnData(pScanline, nX, aWhite);
-                        }
-                        else
-                        {
-                            pAcc->SetPixelOnData(pScanline, nX, aBlack);
-                        }
-                    }
-                }
-            }
-            break;
         }
 
         bRet = true;
