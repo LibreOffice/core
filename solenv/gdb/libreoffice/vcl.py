@@ -94,19 +94,17 @@ class ImplSchedulerContextPrinter(object):
         self.prio = gdb.lookup_type('TaskPriority')
 
     def to_string(self):
-        print('{')
+        res = "{\n"
         if self.value['mnTimerPeriod']:
-            print('mnTimerPeriod =', self.value['mnTimerPeriod'])
+            res = res + "mnTimerPeriod = " + str(self.value['mnTimerPeriod']) + "\n"
         if self.value['mpSchedulerStack']:
-            print('STACK', end =", ")
-            print(self.value['mpSchedulerStack'].dereference())
+            res = res + "STACK, " + str(self.value['mpSchedulerStack'].dereference())
         if self.value['mpFirstSchedulerData']:
             for key, value in self.prio.items():
                 first = self.value['mpFirstSchedulerData'][value.enumval]
                 if first:
-                    print(key.replace('TaskPriority::', ''), end =", ")
-                    print(first.dereference())
-        print('}')
+                    res = res + key.replace('TaskPriority::', '') + ", " + str(first.dereference())
+        return res + "}"
 
 printer = None
 
