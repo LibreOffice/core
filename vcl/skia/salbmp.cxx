@@ -1289,6 +1289,8 @@ void SkiaSalBitmap::ResetAllData()
     mImage.reset();
     mAlphaImage.reset();
     mEraseColorSet = false;
+    mPixelsSize = mSize;
+    ComputeScanlineSize();
 }
 
 void SkiaSalBitmap::ResetPendingScaling()
