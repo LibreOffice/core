@@ -125,10 +125,17 @@ void XclImpPageSettings::ReadHeaderFooter( XclImpStream& rStrm )
         default:    OSL_FAIL( "XclImpPageSettings::ReadHeaderFooter - unknown record" );
     }
 
-    if (maData.maHeader.getLength() > 10 && utl::ConfigManager::IsFuzzing())
-        maData.maHeader = maData.maHeader.copy(0, 10);
-    if (maData.maHeaderEven.getLength() > 10 && utl::ConfigManager::IsFuzzing())
-        maData.maHeaderEven = maData.maHeaderEven.copy(0, 10);
+    if (utl::ConfigManager::IsFuzzing())
+    {
+        if (maData.maHeader.getLength() > 10)
+            maData.maHeader = maData.maHeader.copy(0, 10);
+        if (maData.maFooter.getLength() > 10)
+            maData.maFooter = maData.maFooter.copy(0, 10);
+        if (maData.maHeaderEven.getLength() > 10)
+            maData.maHeaderEven = maData.maHeaderEven.copy(0, 10);
+        if (maData.maFooterEven.getLength() > 10)
+            maData.maFooterEven = maData.maFooterEven.copy(0, 10);
+    }
 }
 
 void XclImpPageSettings::ReadPageBreaks( XclImpStream& rStrm )
