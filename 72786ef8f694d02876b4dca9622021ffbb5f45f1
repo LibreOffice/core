@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "510bdb70_ca7cf237",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-01T00:00:25Z",
+      "side": 1,
+      "message": "Eike: Maybe better just ignore compatibility with other spreadsheets, and drop the rounding of SECOND from ODF (make it truncate)? Then we could have a universally correct (up to 0.5 ms) and consistent (everywhere) handling of time across he suite - without the abomination like my proposal OFFICE-4094?",
+      "revId": "72786ef8f694d02876b4dca9622021ffbb5f45f1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
