@@ -534,36 +534,6 @@ namespace vcl
         return aActivePathPos->second[ nNextStateIndex ];
     }
 
-    bool RoadmapWizard::canAdvance() const
-    {
-        if ( !m_xRoadmapImpl->bActivePathIsDefinite )
-        {
-            // check how many paths are still allowed
-            const WizardPath& rActivePath( m_xRoadmapImpl->aPaths[ m_xRoadmapImpl->nActivePath ] );
-            sal_Int32 nCurrentStatePathIndex = RoadmapWizardImpl::getStateIndexInPath( getCurrentState(), rActivePath );
-
-            size_t nPossiblePaths(0);
-            for (auto const& path : m_xRoadmapImpl->aPaths)
-            {
-                // the index from which on both paths differ
-                sal_Int32 nDivergenceIndex = RoadmapWizardImpl::getFirstDifferentIndex( rActivePath, path.second );
-
-                if ( nDivergenceIndex > nCurrentStatePathIndex )
-                    // this path is still a possible path
-                    nPossiblePaths += 1;
-            }
-
-            // if we have more than one path which is still possible, then we assume
-            // to always have a next state. Though there might be scenarios where this
-            // is not true, but this is too sophisticated (means not really needed) right now.
-            if ( nPossiblePaths > 1 )
-                return true;
-        }
-
-        const WizardPath& rPath = m_xRoadmapImpl->aPaths[ m_xRoadmapImpl->nActivePath ];
-        return *rPath.rbegin() != getCurrentState();
-    }
-
     bool RoadmapWizardMachine::canAdvance() const
     {
         if ( !m_pImpl->bActivePathIsDefinite )

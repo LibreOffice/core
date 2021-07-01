@@ -240,11 +240,6 @@ OString AbstractCopyDlg_Impl::GetScreenshotId() const
     return m_xDlg->get_help_id();
 }
 
-bool AbstractSdCustomShowDlg_Impl::IsModified() const
-{
-    return m_xDlg->IsModified();
-}
-
 bool AbstractSdCustomShowDlg_Impl::IsCustomShow() const
 {
     return m_xDlg->IsCustomShow();

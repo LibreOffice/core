@@ -85,24 +85,18 @@ public:
 
     css::uno::Reference< css::drawing::XShape > getShape();
 
-    css::uno::Reference< css::drawing::XDrawPage > getDrawPage();
     void setDrawPage(const css::uno::Reference< css::drawing::XDrawPage > & the_value);
 
-    css::uno::Reference< css::frame::XModel > getModel();
     void setModel(const css::uno::Reference< css::frame::XModel > & the_value);
 
-    OUString getRelationFragmentPath();
     void setRelationFragmentPath(const OUString & the_value);
 
     sal_Int32 getStartToken();
     void setStartToken( sal_Int32 _starttoken );
 
-    css::awt::Point getPosition();
     void setPosition(const css::awt::Point& rPosition);
 
     void setDocumentProperties(const css::uno::Reference<css::document::XDocumentProperties>& xDocProps);
-    css::uno::Reference<css::document::XDocumentProperties> getDocumentProperties();
-    css::uno::Sequence<css::beans::PropertyValue> getMediaDescriptor();
     void setMediaDescriptor(const css::uno::Sequence<css::beans::PropertyValue>& rMediaDescriptor);
 
     void setGraphicMapper(css::uno::Reference<css::graphic::XGraphicMapper> const & rGraphicMapper);

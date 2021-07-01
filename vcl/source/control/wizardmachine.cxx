@@ -384,20 +384,6 @@ namespace vcl
         Dialog::Resize();
     }
 
-    void RoadmapWizard::implUpdateTitle()
-    {
-        OUString sCompleteTitle(m_xWizardImpl->sTitleBase);
-
-        // append the page title
-        TabPage* pCurrentPage = GetPage(getCurrentState());
-        if ( pCurrentPage && !pCurrentPage->GetText().isEmpty() )
-        {
-            sCompleteTitle += " - " + pCurrentPage->GetText();
-        }
-
-        SetText(sCompleteTitle);
-    }
-
     void RoadmapWizard::CalcAndSetSize()
     {
         Size aDlgSize = GetPageSizePixel();
@@ -653,20 +639,6 @@ namespace vcl
         OSL_FAIL( "RoadmapWizard::RemoveButton() - Button not in list" );
     }
 
-    void RoadmapWizard::enableButtons(WizardButtonFlags _nWizardButtonFlags, bool _bEnable)
-    {
-        if (m_pFinish && (_nWizardButtonFlags & WizardButtonFlags::FINISH))
-            m_pFinish->Enable(_bEnable);
-        if (m_pNextPage && (_nWizardButtonFlags & WizardButtonFlags::NEXT))
-            m_pNextPage->Enable(_bEnable);
-        if (m_pPrevPage && (_nWizardButtonFlags & WizardButtonFlags::PREVIOUS))
-            m_pPrevPage->Enable(_bEnable);
-        if (m_pHelp && (_nWizardButtonFlags & WizardButtonFlags::HELP))
-            m_pHelp->Enable(_bEnable);
-        if (m_pCancel && (_nWizardButtonFlags & WizardButtonFlags::CANCEL))
-            m_pCancel->Enable(_bEnable);
-    }
-
     IMPL_LINK_NOARG(RoadmapWizard, OnFinish, Button*, void)
     {
         if ( isTravelingSuspended() )
@@ -785,11 +757,6 @@ namespace vcl
             m_xWizardImpl->aStateHistory.push( aTemp.top() );
             aTemp.pop();
         }
-    }
-
-    bool RoadmapWizard::isAutomaticNextButtonStateEnabled() const
-    {
-        return m_xWizardImpl->m_bAutoNextButtonState;
     }
 
     IMPL_LINK_NOARG(RoadmapWizard, OnPrevPage, Button*, void)

@@ -513,21 +513,9 @@ ShapeContextHandler::getShape()
     return xResult;
 }
 
-css::uno::Reference< css::drawing::XDrawPage > ShapeContextHandler::getDrawPage()
-{
-    return mxDrawPage;
-}
-
 void ShapeContextHandler::setDrawPage(const css::uno::Reference< css::drawing::XDrawPage > & the_value)
 {
     mxDrawPage = the_value;
-}
-
-css::uno::Reference< css::frame::XModel > ShapeContextHandler::getModel()
-{
-    if( !mxShapeFilterBase.is() )
-        throw uno::RuntimeException();
-    return mxShapeFilterBase->getModel();
 }
 
 void ShapeContextHandler::setModel(const css::uno::Reference< css::frame::XModel > & the_value)
@@ -536,11 +524,6 @@ void ShapeContextHandler::setModel(const css::uno::Reference< css::frame::XModel
         throw uno::RuntimeException();
     uno::Reference<lang::XComponent> xComp(the_value, uno::UNO_QUERY_THROW);
     mxShapeFilterBase->setTargetDocument(xComp);
-}
-
-OUString ShapeContextHandler::getRelationFragmentPath()
-{
-    return msRelationFragmentPath;
 }
 
 void ShapeContextHandler::setRelationFragmentPath(const OUString & the_value)
@@ -558,11 +541,6 @@ void ShapeContextHandler::setStartToken( sal_Int32 _starttoken )
     mnStartToken = _starttoken;
 }
 
-awt::Point ShapeContextHandler::getPosition()
-{
-    return maPosition;
-}
-
 void ShapeContextHandler::setPosition(const awt::Point& rPosition)
 {
     maPosition = rPosition;
@@ -572,16 +550,6 @@ void ShapeContextHandler::setDocumentProperties(const uno::Reference<document::X
 {
     mxDocumentProperties = xDocProps;
     mxShapeFilterBase->checkDocumentProperties(mxDocumentProperties);
-}
-
-uno::Reference<document::XDocumentProperties> ShapeContextHandler::getDocumentProperties()
-{
-    return mxDocumentProperties;
-}
-
-uno::Sequence<beans::PropertyValue> ShapeContextHandler::getMediaDescriptor()
-{
-    return maMediaDescriptor;
 }
 
 void ShapeContextHandler::setMediaDescriptor(const uno::Sequence<beans::PropertyValue>& rMediaDescriptor)

@@ -133,7 +133,6 @@ public:
     {
     }
     virtual short       Execute() override;
-    virtual bool        IsModified() const override ;
     virtual bool        IsCustomShow() const override ;
 
     // screenshotting
