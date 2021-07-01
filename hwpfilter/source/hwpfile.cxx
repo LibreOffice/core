@@ -633,6 +633,8 @@ int HWPFile::compareParaShape(const ParaShape* shape)
     for (int i = 0; i < count; ++i)
     {
         ParaShape *pshape = pslist[i].get();
+        if (!pshape->cshape)
+            continue;
         if (shape->left_margin == pshape->left_margin &&
             shape->right_margin == pshape->right_margin &&
             shape->pspacing_prev == pshape->pspacing_prev &&
@@ -643,8 +645,7 @@ int HWPFile::compareParaShape(const ParaShape* shape)
             shape->outline == pshape->outline &&
             shape->pagebreak == pshape->pagebreak)
         {
-            if (pshape->cshape &&
-                shape->cshape->size == pshape->cshape->size &&
+            if (shape->cshape->size == pshape->cshape->size &&
                 shape->cshape->font[0] == pshape->cshape->font[0] &&
                 shape->cshape->ratio[0] == pshape->cshape->ratio[0] &&
                 shape->cshape->space[0] == pshape->cshape->space[0] &&
