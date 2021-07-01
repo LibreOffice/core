@@ -34,6 +34,24 @@
       "revId": "eebb26f039c7a9777338f5d573958109be95018b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "13994982_5c87c6a5",
+        "filename": "sal/qa/rtl/math/test-rtl-math.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 455,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-01T20:29:10Z",
+      "side": 1,
+      "message": "No, the tests should stay, even though the functions are not used in the core. It would be silly to only test those by end users who happen to need the published API",
+      "parentUuid": "dbf816d8_ae1f9b03",
+      "revId": "eebb26f039c7a9777338f5d573958109be95018b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
