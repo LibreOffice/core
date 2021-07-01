@@ -10,6 +10,9 @@
 
 #include <test/outputdevice.hxx>
 
+#include <cmath>
+#include <vector>
+
 namespace vcl::test {
 
 namespace
@@ -130,6 +133,30 @@ Bitmap OutputDeviceTestPolyLine::setupAALines()
     aDiagonalPolygon.SetPoint(aDiagonalLinePoint1, 0);
     aDiagonalPolygon.SetPoint(aDiagonalLinePoint2, 1);
     mpVirtualDevice->DrawPolyLine(aDiagonalPolygon);
+
+    return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
+}
+
+Bitmap OutputDeviceTestPolyLine::setupDropShape()
+{
+    initialSetup(21, 21, constBackgroundColor);
+
+    mpVirtualDevice->SetLineColor(constLineColor);
+    mpVirtualDevice->SetFillColor();
+
+    mpVirtualDevice->DrawPolyLine(OutputDeviceTestCommon::createDropShapePolygon());
+
+    return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
+}
+
+Bitmap OutputDeviceTestPolyLine::setupAADropShape()
+{
+    initialSetup(21, 21, constBackgroundColor,true);
+
+    mpVirtualDevice->SetLineColor(constLineColor);
+    mpVirtualDevice->SetFillColor();
+
+    mpVirtualDevice->DrawPolyLine(OutputDeviceTestCommon::createDropShapePolygon());
 
     return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
 }
