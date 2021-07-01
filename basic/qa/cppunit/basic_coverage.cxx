@@ -18,17 +18,11 @@ namespace
 class Coverage : public test::BootstrapFixture
 {
 private:
-    int  m_nb_tests_ok;
-    OUString m_sCurrentTest;
     void process_directory(const OUString& sDirName);
-    void run_test(const OUString& sFileName);
-    void test_failed();
-    void test_success();
     std::vector< OUString > get_subdirnames( const OUString& sDirName );
 
 public:
     Coverage();
-    virtual ~Coverage() override;
 
     void Coverage_Iterator();
 
@@ -44,50 +38,7 @@ public:
 
 Coverage::Coverage()
     : BootstrapFixture(true, false)
-    , m_nb_tests_ok(0)
 {
-}
-
-Coverage::~Coverage()
-{
-    fprintf(stderr,"basic coverage Summary : pass:%d\n", m_nb_tests_ok );
-}
-
-void Coverage::test_failed()
-{
-    CPPUNIT_FAIL(
-        OUStringToOString(m_sCurrentTest, RTL_TEXTENCODING_UTF8).getStr());
-}
-
-void Coverage::test_success()
-{
-    m_nb_tests_ok += 1;
-    fprintf(stderr,"%s,PASS\n", OUStringToOString( m_sCurrentTest, RTL_TEXTENCODING_UTF8 ).getStr() );
-}
-
-void Coverage::run_test(const OUString& sFileURL)
-{
-    m_sCurrentTest = sFileURL;
-    bool bResult = false;
-    MacroSnippet testMacro;
-    testMacro.LoadSourceFromFile("TestModule", sFileURL);
-    testMacro.Compile();
-    if( !testMacro.HasError() )
-    {
-        SbxVariableRef pResult = testMacro.Run();
-        if( pResult.is() && pResult->GetInteger() == 1 )
-        {
-            bResult = true;
-        }
-    }
-    if(bResult)
-    {
-        test_success();
-    }
-    else
-    {
-        test_failed();
-    }
 }
 
 std::vector< OUString > Coverage::get_subdirnames( const OUString& sDirName )
@@ -113,6 +64,7 @@ void Coverage::process_directory(const OUString& sDirName)
     osl::Directory aDir(sDirName);
     osl::DirectoryItem aItem;
     osl::FileStatus aFileStatus(osl_FileStatus_Mask_FileURL|osl_FileStatus_Mask_Type);
+    OUString sMacroUtilsURL = m_directories.getURLFromSrc(u"basic/qa/basic_coverage/") + "_test_asserts.vb";
 
     if(aDir.open() == osl::FileBase::E_None)
     {
@@ -121,7 +73,20 @@ void Coverage::process_directory(const OUString& sDirName)
             aItem.getFileStatus(aFileStatus);
             if(aFileStatus.isRegular())
             {
-                run_test(aFileStatus.getFileURL());
+                OUString sFileURL = aFileStatus.getFileURL();
+                if(sFileURL.endsWith(".vb") && sFileURL != sMacroUtilsURL)
+                {
+                    MacroSnippet testMacro;
+                    testMacro.LoadSourceFromFile("TestUtil", sMacroUtilsURL);
+                    testMacro.LoadSourceFromFile("TestModule", sFileURL);
+                    SbxVariableRef pReturn = testMacro.Run();
+                    CPPUNIT_ASSERT_MESSAGE("No return variable huh?", pReturn.is());
+                    fprintf(stderr, "macro result for %s\n", OUStringToOString(sFileURL,RTL_TEXTENCODING_UTF8).getStr());
+                    fprintf(stderr, "macro returned:\n%s\n",
+                            OUStringToOString(pReturn->GetOUString(), RTL_TEXTENCODING_UTF8).getStr());
+                    CPPUNIT_ASSERT_EQUAL_MESSAGE("Result not as expected", OUString("OK"),
+                                                 pReturn->GetOUString());
+                }
             }
         }
     }
@@ -130,7 +95,7 @@ void Coverage::process_directory(const OUString& sDirName)
 
 void Coverage::Coverage_Iterator()
 {
-    OUString sDirName = m_directories.getURLFromSrc(u"/basic/qa/basic_coverage/");
+    OUString sDirName = m_directories.getURLFromSrc(u"basic/qa/basic_coverage");
 
     CPPUNIT_ASSERT(!sDirName.isEmpty());
     process_directory(sDirName); // any files in the root test dir are run in test harness default locale ( en-US )

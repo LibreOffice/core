@@ -5,8 +5,8 @@
 ' file, You can obtain one at http://mozilla.org/MPL/2.0/.
 '
 
-Function doUnitTest as Integer
+Function doUnitTest as String
     ' GetDefaultContext
     GetDefaultContext()
-    doUnitTest = 1
+    doUnitTest = "OK"
 End Function

@@ -18,17 +18,17 @@ Function assignLong( numericConstant ) As String
     assignLong = TypeName( numericConstant )
 End Function
 
-Function doUnitTest() As Integer
+Function doUnitTest() As String
     ' tdf#133913 - check if numeric constants are converted correctly to
     ' their respective types, if they are passed as arguments to a function
     ' with variant parameter types.
     On Error GoTo errorHandler
     If (assignInteger( 1 ) = "Integer" And assignLong( 1 ) = "Long") Then
-        doUnitTest = 1
+        doUnitTest = "OK"
     Else
-        doUnitTest = 0
+        doUnitTest = "FAIL"
     End If
     Exit Function
 errorHandler:
-    doUnitTest = 0
+    doUnitTest = "FAIL"
 End Function

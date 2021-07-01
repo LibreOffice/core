@@ -43,22 +43,22 @@ handler:
     overflow3 = 1
 End Function
 
-Function doUnitTest as Integer
+Function doUnitTest as String
     Chr(-32768)
     Chr(65535)
     Chr(&H8000)
     Chr(&HFFFF)
     if (overflow1 = 0) Then
-        doUnitTest = 0
+        doUnitTest = "FAIL"
         Exit Function
     Endif
     if (overflow2 = 0) Then
-        doUnitTest = 0
+        doUnitTest = "FAIL"
         Exit Function
     Endif
     if (overflow3 = 0) Then
-        doUnitTest = 0
+        doUnitTest = "FAIL"
         Exit Function
     Endif
-    doUnitTest = 1
+    doUnitTest = "OK"
 End Function

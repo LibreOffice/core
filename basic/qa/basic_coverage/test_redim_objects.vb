@@ -12,9 +12,9 @@ Type testType
     oColor As Object
 End Type
 
-Function doUnitTest as Integer
+Function doUnitTest as String
 
-    doUnitTest = 0
+    doUnitTest = "FAIL"
 
     ' tdf#136755 - ReDim did not work on an array of objects
     Dim aPropertyValues(1) As New com.sun.star.beans.PropertyValue
@@ -28,6 +28,6 @@ Function doUnitTest as Integer
     ReDim aType(5) As testType
     If (UBound(aType) <> 5) Then Exit Function
 
-    doUnitTest = 1
+    doUnitTest = "OK"
 
 End Function

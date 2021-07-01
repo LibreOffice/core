@@ -6,13 +6,13 @@
 ' file, You can obtain one at http://mozilla.org/MPL/2.0/.
 '
 
-Function doUnitTest as Integer
+Function doUnitTest as String
     dim aDate as Date
     aDate = Date()
     ' DATE DATEDIFF DATEADD
     If ( DateDiff( "d", aDate, DateAdd("d", 1, aDate) ) <> 1 ) Then
-        doUnitTest = 0
+        doUnitTest = "FAIL"
     Else
-        doUnitTest = 1
+        doUnitTest = "OK"
     End If
 End Function

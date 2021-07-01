@@ -6,9 +6,9 @@
 ' file, You can obtain one at http://mozilla.org/MPL/2.0/.
 '
 
-Function doUnitTest as Integer
+Function doUnitTest as String
 
-    doUnitTest = 0
+    doUnitTest = "FAIL"
 
     ' CCUR
     if (CCur("100") <> 100) Then Exit Function
@@ -17,6 +17,6 @@ Function doUnitTest as Integer
     ' tdf#141050 - passing a number with - sign
     if (CCur("-100") <> -100) Then Exit Function
 
-    doUnitTest = 1
+    doUnitTest = "OK"
 
 End Function
