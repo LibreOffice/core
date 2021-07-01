@@ -546,6 +546,49 @@ Public Function Properties() As Variant
 End Function	&apos;	ScriptForge.SF_Exception.Properties
 
 REM -----------------------------------------------------------------------------
+Public Sub PythonPrint(ParamArray pvArgs() As Variant)
+&apos;&apos;&apos;	Display the list of arguments in a readable form in the Python console
+&apos;&apos;&apos;	Arguments are separated by a TAB character (simulated by spaces)
+&apos;&apos;&apos;	The maximum length of each individual argument = 1024 characters
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		Any number of arguments of any type
+&apos;&apos;&apos;	Examples:
+&apos;&apos;&apos;		SF_Exception.PythonPrint(a, Array(1, 2, 3), , &quot;line1&quot; &amp; Chr(10) &amp; &quot;Line2&quot;, DateSerial(2020, 04, 09))
+
+Dim sOutput As String		&apos;	Line to write in console
+Dim sArg As String			&apos;	Single argument
+Dim i As Integer
+Const cstTab = 4
+Const cstMaxLength = 1024
+Const cstPyHelper = &quot;$&quot; &amp; &quot;_SF_Exception__PythonPrint&quot;
+Const cstThisSub = &quot;Exception.PythonPrint&quot;
+Const cstSubArgs = &quot;Arg0, [Arg1, ...]&quot;
+
+	If SF_Utils._ErrorHandling() Then On Local Error Goto Finally	&apos;	Never interrupt processing
+	SF_Utils._EnterFunction(cstThisSub, cstSubArgs)
+Try:
+	&apos;	Build new console line
+	sOutput = &quot;&quot;
+	For i = 0 To UBound(pvArgs)
+		If IsError(pvArgs(i)) Then pvArgs(i) = &quot;&quot;
+		sArg = Iif(i = 0, &quot;&quot;, SF_String.sfTAB) &amp; SF_Utils._Repr(pvArgs(i), cstMaxLength)
+		sOutput = sOutput &amp; sArg
+	Next i
+	
+	&apos;	Add to actual console
+	sOutput = SF_String.ExpandTabs(sOutput, cstTab)
+	_SF_._AddToConsole(sOutput)
+	&apos;	Display the message in the Python shell console
+	With ScriptForge.SF_Session
+		.ExecutePythonScript(.SCRIPTISSHARED, _SF_.PythonHelper &amp; cstPyHelper, sOutput)
+	End With
+	
+Finally:
+	SF_Utils._ExitFunction(cstThisSub)
+	Exit Sub
+End Sub			&apos;	ScriptForge.SF_Exception.PythonPrint
+
+REM -----------------------------------------------------------------------------
 Public Sub Raise(Optional ByVal Number As Variant _
 								, Optional ByVal Source As Variant _
 								, Optional ByVal Description As Variant _
