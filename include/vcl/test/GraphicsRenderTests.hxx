@@ -61,8 +61,12 @@ class VCL_PLUGIN_PUBLIC GraphicsRenderTests
     void testDrawInvertWithRectangle();
     void testDrawInvertN50WithRectangle();
     void testDrawInvertTrackFrameWithRectangle();
+    void testDrawBezierWithPolyline();
+    void testDrawBezierAAWithPolyline();
     void testDrawBezierWithPolylineB2D();
     void testDrawBezierAAWithPolylineB2D();
+    void testDrawBezierWithPolygon();
+    void testDrawBezierAAWithPolygon();
     void testDrawBitmap();
     void testDrawTransformedBitmap();
     void testDrawBitmapExWithAlpha();
@@ -99,6 +103,7 @@ public:
     std::vector<OUString> getFailedTests();
     std::vector<OUString> getSkippedTests();
     std::map<OUString, Bitmap> getResultBitmaps();
+    static int getNumberOfTests() { return 64; };
     OUString getResultString();
     void run(bool storeResultBitmap = false);
 };
