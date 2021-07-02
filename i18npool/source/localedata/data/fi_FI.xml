@@ -108,7 +108,7 @@
       <FormatCode>P.K.VVVV</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey9" default="true" type="long" usage="DATE" formatindex="19">
-      <FormatCode>P. KKKK VVVV</FormatCode>
+      <FormatCode>NNNNP. KKKK VVVV</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey8" default="true" type="medium" usage="DATE" formatindex="20">
       <FormatCode>PP.KK.VV</FormatCode>

@@ -91,7 +91,7 @@
       <FormatCode>DD/MM/YY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey2" default="true" type="long" usage="DATE" formatindex="19">
-      <FormatCode>YYYY"年"M"月"D"日"</FormatCode>
+      <FormatCode>YYYY"年"M"月"D"日" NNNN</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey4" default="false" type="medium" usage="DATE" formatindex="20">
       <FormatCode>YY"年"M"月"D"日"</FormatCode>
