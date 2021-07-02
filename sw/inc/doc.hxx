@@ -1269,7 +1269,7 @@ public:
 
     bool InsCopyOfTable( SwPosition& rInsPos, const SwSelBoxes& rBoxes,
                         const SwTable* pCpyTable, bool bCpyName = false,
-                        bool bCorrPos = false );
+                        bool bCorrPos = false, const OUString& rStyleName = "" );
 
     void UnProtectCells( std::u16string_view rTableName );
     bool UnProtectCells( const SwSelBoxes& rBoxes );
