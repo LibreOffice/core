@@ -16,6 +16,24 @@
       "revId": "0f62990d44d06b64d033f868701b902ebe1cb00a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e8ff8ab4_b62934b1",
+        "filename": "sal/rtl/math.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1248,
+      "author": {
+        "id": 1003291
+      },
+      "writtenOn": "2021-07-02T13:00:22Z",
+      "side": 1,
+      "message": "Now it\u0027s hardcoded.\nSince it\u0027s used a lot removed the extra assignation since the compiler shouldn\u0027t be able to do algebra.",
+      "parentUuid": "c1298045_3a39d928",
+      "revId": "0f62990d44d06b64d033f868701b902ebe1cb00a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
