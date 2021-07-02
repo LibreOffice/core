@@ -62,8 +62,6 @@ public:
 
     virtual void DataChanged(const DataChangedEvent& rEvent) override;
 
-    virtual void Resize() override;
-
     virtual void DumpAsPropertyTree(tools::JsonWriter&) override;
 
     static void PrintWindowSubTree(vcl::Window* pRoot, int nIndentation);

@@ -67,22 +67,12 @@ SidebarDockingWindow::~SidebarDockingWindow()
 
 void SidebarDockingWindow::dispose()
 {
-    if (comphelper::LibreOfficeKit::isActive())
-        LOKClose();
-
     Reference<lang::XComponent> xComponent (static_cast<XWeak*>(mpSidebarController.get()), UNO_QUERY);
     mpSidebarController.clear();
     if (xComponent.is())
         xComponent->dispose();
 
     SfxDockingWindow::dispose();
-}
-
-void SidebarDockingWindow::LOKClose()
-{
-    assert(comphelper::LibreOfficeKit::isActive());
-    if (GetLOKNotifier())
-        ReleaseLOKNotifier();
 }
 
 void SidebarDockingWindow::GetFocus()
@@ -104,33 +94,10 @@ bool SidebarDockingWindow::Close()
     return SfxDockingWindow::Close();
 }
 
-void SidebarDockingWindow::Resize()
-{
-    SfxDockingWindow::Resize();
-
-    NotifyResize();
-}
-
 void SidebarDockingWindow::SyncUpdate()
 {
     if (mpSidebarController.is())
         mpSidebarController->SyncUpdate();
-}
-
-void SidebarDockingWindow::NotifyResize()
-{
-    if (!(comphelper::LibreOfficeKit::isActive() && mpSidebarController.is() && SfxViewShell::Current()))
-        return;
-
-    const vcl::ILibreOfficeKitNotifier* pCurrentView = SfxViewShell::Current();
-    if (GetLOKNotifier() != pCurrentView)
-    {
-        // ViewShell not yet set, or has changed. Reset it.
-        // Note GetLOKWindowId will return a new value after resetting, so we must notify clients.
-        LOKClose();
-
-        SetLOKNotifier(pCurrentView);
-    }
 }
 
 SfxChildAlignment SidebarDockingWindow::CheckAlignment (
