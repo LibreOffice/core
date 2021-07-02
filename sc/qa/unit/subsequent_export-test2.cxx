@@ -113,6 +113,7 @@ public:
     void testAutofilterColorsODF();
     void testAutofilterColorsOOXML();
     void testAutofilterColorsStyleOOXML();
+    void testAutofilterTop10XLSX();
 
     void testRefStringXLSX();
     void testRefStringConfigXLSX();
@@ -211,6 +212,7 @@ public:
     CPPUNIT_TEST(testAutofilterColorsODF);
     CPPUNIT_TEST(testAutofilterColorsOOXML);
     CPPUNIT_TEST(testAutofilterColorsStyleOOXML);
+    CPPUNIT_TEST(testAutofilterTop10XLSX);
 
     CPPUNIT_TEST(testRefStringXLSX);
     CPPUNIT_TEST(testRefStringConfigXLSX);
@@ -734,6 +736,20 @@ void ScExportTest2::testAutofilterColorsStyleOOXML()
 
     assertXPath(pDoc, "/x:styleSheet/x:dxfs/x:dxf[5]/x:fill/x:patternFill/x:bgColor", "rgb",
                 "FFFFD7D7");
+}
+
+void ScExportTest2::testAutofilterTop10XLSX()
+{
+    ScDocShellRef xDocSh = loadDoc(u"tdf143068_top10filter.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory,
+                                                     "xl/worksheets/sheet1.xml", FORMAT_XLSX);
+    CPPUNIT_ASSERT(pDoc);
+    assertXPath(pDoc, "//x:autoFilter/x:filterColumn", "colId", "0");
+    assertXPath(pDoc, "//x:autoFilter/x:filterColumn/x:top10", "val", "4");
+
+    xDocSh->DoClose();
 }
 
 void ScExportTest2::testTdf88657ODS()
