@@ -231,7 +231,7 @@ namespace dbaui
             @return
                 The description of the specified object.
         */
-        virtual OUString GetAccessibleObjectDescription( ::vcl::AccessibleBrowseBoxObjType eObjType,sal_Int32 _nPosition = -1) const override;
+        virtual OUString GetAccessibleObjectDescription( AccessibleBrowseBoxObjType eObjType,sal_Int32 _nPosition = -1) const override;
 
         using FmGridControl::DeleteSelectedRows;
         /** copies the currently selected rows to the clipboard

@@ -1923,12 +1923,12 @@ namespace
 }
 
 // Object data and state
-OUString FmGridControl::GetAccessibleObjectName( ::vcl::AccessibleBrowseBoxObjType _eObjType,sal_Int32 _nPosition ) const
+OUString FmGridControl::GetAccessibleObjectName( AccessibleBrowseBoxObjType _eObjType,sal_Int32 _nPosition ) const
 {
     OUString sRetText;
     switch( _eObjType )
     {
-        case ::vcl::BBTYPE_BROWSEBOX:
+        case AccessibleBrowseBoxObjType::BrowseBox:
             if ( GetPeer() )
             {
                 Reference<XPropertySet> xProp(GetPeer()->getColumns(),UNO_QUERY);
@@ -1936,7 +1936,7 @@ OUString FmGridControl::GetAccessibleObjectName( ::vcl::AccessibleBrowseBoxObjTy
                     xProp->getPropertyValue(FM_PROP_NAME) >>= sRetText;
             }
             break;
-        case ::vcl::BBTYPE_COLUMNHEADERCELL:
+        case AccessibleBrowseBoxObjType::ColumnHeaderCell:
             sRetText = getColumnPropertyFromPeer(
                 GetPeer(),
                 GetModelColumnPos(
@@ -1949,12 +1949,12 @@ OUString FmGridControl::GetAccessibleObjectName( ::vcl::AccessibleBrowseBoxObjTy
     return sRetText;
 }
 
-OUString FmGridControl::GetAccessibleObjectDescription( ::vcl::AccessibleBrowseBoxObjType _eObjType,sal_Int32 _nPosition ) const
+OUString FmGridControl::GetAccessibleObjectDescription( AccessibleBrowseBoxObjType _eObjType,sal_Int32 _nPosition ) const
 {
     OUString sRetText;
     switch( _eObjType )
     {
-        case ::vcl::BBTYPE_BROWSEBOX:
+        case AccessibleBrowseBoxObjType::BrowseBox:
             if ( GetPeer() )
             {
                 Reference<XPropertySet> xProp(GetPeer()->getColumns(),UNO_QUERY);
@@ -1966,7 +1966,7 @@ OUString FmGridControl::GetAccessibleObjectDescription( ::vcl::AccessibleBrowseB
                 }
             }
             break;
-        case ::vcl::BBTYPE_COLUMNHEADERCELL:
+        case AccessibleBrowseBoxObjType::ColumnHeaderCell:
             sRetText = getColumnPropertyFromPeer(
                 GetPeer(),
                 GetModelColumnPos(

@@ -94,7 +94,7 @@ namespace accessibility
         if (nChildIndex == 0)
         {
             //! so far the actual implementation object only supports column headers
-            xRet = implGetHeaderBar( ::vcl::BBTYPE_COLUMNHEADERBAR );
+            xRet = implGetHeaderBar( AccessibleBrowseBoxObjType::ColumnHeaderBar );
         }
         else if (nChildIndex == 1)
             xRet = implGetTable();

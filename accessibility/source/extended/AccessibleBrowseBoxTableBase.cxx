@@ -40,7 +40,7 @@ namespace accessibility {
 AccessibleBrowseBoxTableBase::AccessibleBrowseBoxTableBase(
         const Reference< XAccessible >& rxParent,
         vcl::IAccessibleTableProvider& rBrowseBox,
-        vcl::AccessibleBrowseBoxObjType eObjType ) :
+        AccessibleBrowseBoxObjType eObjType ) :
     BrowseBoxAccessibleElement( rxParent, rBrowseBox,nullptr, eObjType )
 {
 }

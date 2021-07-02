@@ -193,11 +193,11 @@ public:
     virtual bool                    ConvertPointToRowHeader( sal_Int32& _rnRow, const Point& _rPoint ) override;
     virtual bool                    ConvertPointToColumnHeader( sal_uInt16& _rnColPos, const Point& _rPoint ) override;
 
-    virtual OUString                GetAccessibleObjectName( ::vcl::AccessibleBrowseBoxObjType _eType, sal_Int32 _nPos = -1 ) const override;
-    virtual OUString                GetAccessibleObjectDescription( ::vcl::AccessibleBrowseBoxObjType _eType, sal_Int32 _nPos = -1 ) const override;
+    virtual OUString                GetAccessibleObjectName( AccessibleBrowseBoxObjType _eType, sal_Int32 _nPos = -1 ) const override;
+    virtual OUString                GetAccessibleObjectDescription( AccessibleBrowseBoxObjType _eType, sal_Int32 _nPos = -1 ) const override;
     virtual vcl::Window*                 GetWindowInstance() override;
 
-    virtual void                    FillAccessibleStateSet( ::utl::AccessibleStateSetHelper& _rStateSet, ::vcl::AccessibleBrowseBoxObjType _eType ) const override;
+    virtual void                    FillAccessibleStateSet( ::utl::AccessibleStateSetHelper& _rStateSet, AccessibleBrowseBoxObjType _eType ) const override;
     virtual void                    FillAccessibleStateSetForCell( ::utl::AccessibleStateSetHelper& _rStateSet, sal_Int32 _nRow, sal_uInt16 _nColumn ) const override;
     virtual void                    GrabTableFocus() override;
 

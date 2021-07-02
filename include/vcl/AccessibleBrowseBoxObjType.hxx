@@ -16,29 +16,20 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
-
-#ifndef INCLUDED_VCL_ACCESSIBLEBROWSEBOXOBJTYPE_HXX
-#define INCLUDED_VCL_ACCESSIBLEBROWSEBOXOBJTYPE_HXX
-
-namespace vcl {
+#pragma once
 
 /** This enumeration contains a constant for each kind of accessible object of
     a BrowseBox. */
-enum AccessibleBrowseBoxObjType
+enum class AccessibleBrowseBoxObjType
 {
-    BBTYPE_BROWSEBOX,           /// The BrowseBox itself.
-    BBTYPE_TABLE,               /// The data table.
-    BBTYPE_ROWHEADERBAR,        /// The row header bar ("handle column").
-    BBTYPE_COLUMNHEADERBAR,     /// The horizontal column header bar.
-    BBTYPE_TABLECELL,           /// A cell of the data table.
-    BBTYPE_ROWHEADERCELL,       /// A cell of the row header bar.
-    BBTYPE_COLUMNHEADERCELL,    /// A cell of the column header bar.
-    BBTYPE_CHECKBOXCELL         /// A cell with a checkbox.
+    BrowseBox,           /// The BrowseBox itself.
+    Table,               /// The data table.
+    RowHeaderBar,        /// The row header bar ("handle column").
+    ColumnHeaderBar,     /// The horizontal column header bar.
+    TableCell,           /// A cell of the data table.
+    RowHeaderCell,       /// A cell of the row header bar.
+    ColumnHeaderCell,    /// A cell of the column header bar.
+    CheckBoxCell         /// A cell with a checkbox.
 };
-
-} // namespace svt
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -31,7 +31,7 @@ namespace accessibility
     AccessibleBrowseBoxCell::AccessibleBrowseBoxCell(
             const css::uno::Reference< css::accessibility::XAccessible >& _rxParent, ::vcl::IAccessibleTableProvider& _rBrowseBox,
             const css::uno::Reference< css::awt::XWindow >& _xFocusWindow,
-            sal_Int32 _nRowPos, sal_uInt16 _nColPos, ::vcl::AccessibleBrowseBoxObjType _eType )
+            sal_Int32 _nRowPos, sal_uInt16 _nColPos, AccessibleBrowseBoxObjType _eType )
         :AccessibleBrowseBoxBase( _rxParent, _rBrowseBox, _xFocusWindow, _eType )
         ,m_nRowPos( _nRowPos )
         ,m_nColPos( _nColPos )
@@ -39,7 +39,7 @@ namespace accessibility
         // set accessible name here, because for that we need the position of the cell
         // and so the base class isn't capable of doing this
         sal_Int32 nPos = _nRowPos * _rBrowseBox.GetColumnCount() + _nColPos;
-        OUString aAccName = _rBrowseBox.GetAccessibleObjectName( vcl::BBTYPE_TABLECELL, nPos );
+        OUString aAccName = _rBrowseBox.GetAccessibleObjectName( AccessibleBrowseBoxObjType::TableCell, nPos );
         implSetName( aAccName );
     }
 

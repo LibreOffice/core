@@ -36,7 +36,7 @@ namespace accessibility
                                 sal_uInt16 _nColPos
                                 ,const TriState& _eState,
                                 bool _bIsTriState)
-        :AccessibleBrowseBoxCell(_rxParent, _rBrowseBox, _xFocusWindow, _nRowPos, _nColPos, vcl::BBTYPE_CHECKBOXCELL)
+        :AccessibleBrowseBoxCell(_rxParent, _rBrowseBox, _xFocusWindow, _nRowPos, _nColPos, AccessibleBrowseBoxObjType::CheckBoxCell)
         ,m_eState(_eState)
         ,m_bIsTriState(_bIsTriState)
     {

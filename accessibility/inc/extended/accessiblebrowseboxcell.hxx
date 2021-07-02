@@ -56,7 +56,7 @@ namespace accessibility
             const css::uno::Reference< css::awt::XWindow >& _xFocusWindow,
             sal_Int32 _nRowPos,
             sal_uInt16 _nColPos,
-            ::vcl::AccessibleBrowseBoxObjType _eType = ::vcl::BBTYPE_TABLECELL
+            AccessibleBrowseBoxObjType _eType = AccessibleBrowseBoxObjType::TableCell
         );
 
         virtual ~AccessibleBrowseBoxCell() override;

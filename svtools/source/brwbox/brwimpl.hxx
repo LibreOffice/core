@@ -67,7 +67,7 @@ namespace svt
 
         /// @see AccessibleBrowseBox::getHeaderBar
         css::uno::Reference< css::accessibility::XAccessible >
-            getAccessibleHeaderBar( vcl::AccessibleBrowseBoxObjType _eObjType );
+            getAccessibleHeaderBar( AccessibleBrowseBoxObjType _eObjType );
 
         /// @see AccessibleBrowseBox::getTable
         css::uno::Reference< css::accessibility::XAccessible >

@@ -38,7 +38,7 @@ namespace accessibility {
 AccessibleBrowseBoxHeaderBar::AccessibleBrowseBoxHeaderBar(
         const Reference< XAccessible >& rxParent,
         vcl::IAccessibleTableProvider& rBrowseBox,
-        vcl::AccessibleBrowseBoxObjType eObjType ) :
+        AccessibleBrowseBoxObjType eObjType ) :
     AccessibleBrowseBoxTableBase( rxParent, rBrowseBox,eObjType )
 {
     OSL_ENSURE( isRowBar() || isColumnBar(),

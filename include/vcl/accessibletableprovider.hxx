@@ -103,10 +103,10 @@ public:
     virtual bool                    ConvertPointToRowHeader( sal_Int32& _rnRow, const Point& _rPoint ) = 0;
     virtual bool                    ConvertPointToColumnHeader( sal_uInt16& _rnColPos, const Point& _rPoint ) = 0;
 
-    virtual OUString                GetAccessibleObjectName( ::vcl::AccessibleBrowseBoxObjType _eType, sal_Int32 _nPos = -1 ) const = 0;
-    virtual OUString                GetAccessibleObjectDescription( ::vcl::AccessibleBrowseBoxObjType _eType, sal_Int32 _nPos = -1 ) const = 0;
+    virtual OUString                GetAccessibleObjectName( AccessibleBrowseBoxObjType _eType, sal_Int32 _nPos = -1 ) const = 0;
+    virtual OUString                GetAccessibleObjectDescription( AccessibleBrowseBoxObjType _eType, sal_Int32 _nPos = -1 ) const = 0;
 
-    virtual void                    FillAccessibleStateSet( ::utl::AccessibleStateSetHelper& _rStateSet, ::vcl::AccessibleBrowseBoxObjType _eType ) const = 0;
+    virtual void                    FillAccessibleStateSet( ::utl::AccessibleStateSetHelper& _rStateSet, AccessibleBrowseBoxObjType _eType ) const = 0;
     virtual void                    FillAccessibleStateSetForCell( ::utl::AccessibleStateSetHelper& _rStateSet, sal_Int32 _nRow, sal_uInt16 _nColumnPos ) const = 0;
     virtual void                    GrabTableFocus() = 0;
 
@@ -179,7 +179,7 @@ public:
     /** returns the accessible object for the row or the column header bar
     */
     virtual css::uno::Reference< css::accessibility::XAccessible >
-        getHeaderBar( ::vcl::AccessibleBrowseBoxObjType _eObjType ) = 0;
+        getHeaderBar( AccessibleBrowseBoxObjType _eObjType ) = 0;
 
     /** returns the accessible object for the table representation
     */

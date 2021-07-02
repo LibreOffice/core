@@ -795,13 +795,13 @@ void BrowseBox::RemoveColumns()
     commitBrowseBoxEvent(
         CHILD,
         Any(),
-        makeAny(m_pImpl->getAccessibleHeaderBar(vcl::BBTYPE_COLUMNHEADERBAR))
+        makeAny(m_pImpl->getAccessibleHeaderBar(AccessibleBrowseBoxObjType::ColumnHeaderBar))
     );
 
     // and now append it again
     commitBrowseBoxEvent(
         CHILD,
-        makeAny(m_pImpl->getAccessibleHeaderBar(vcl::BBTYPE_COLUMNHEADERBAR)),
+        makeAny(m_pImpl->getAccessibleHeaderBar(AccessibleBrowseBoxObjType::ColumnHeaderBar)),
         Any()
     );
 
@@ -1115,13 +1115,13 @@ void BrowseBox::Clear()
     commitBrowseBoxEvent(
         CHILD,
         Any(),
-        makeAny( m_pImpl->getAccessibleHeaderBar( vcl::BBTYPE_ROWHEADERBAR ) )
+        makeAny( m_pImpl->getAccessibleHeaderBar( AccessibleBrowseBoxObjType::RowHeaderBar ) )
     );
 
     // and now append it again
     commitBrowseBoxEvent(
         CHILD,
-        makeAny( m_pImpl->getAccessibleHeaderBar( vcl::BBTYPE_ROWHEADERBAR ) ),
+        makeAny( m_pImpl->getAccessibleHeaderBar( AccessibleBrowseBoxObjType::RowHeaderBar ) ),
         Any()
     );
 
@@ -1358,13 +1358,13 @@ void BrowseBox::RowRemoved( sal_Int32 nRow, sal_Int32 nNumRows, bool bDoPaint )
             commitBrowseBoxEvent(
                 CHILD,
                 Any(),
-                makeAny( m_pImpl->getAccessibleHeaderBar( vcl::BBTYPE_ROWHEADERBAR ) )
+                makeAny( m_pImpl->getAccessibleHeaderBar( AccessibleBrowseBoxObjType::RowHeaderBar ) )
             );
 
             // and now append it again
             commitBrowseBoxEvent(
                 CHILD,
-                makeAny(m_pImpl->getAccessibleHeaderBar(vcl::BBTYPE_ROWHEADERBAR)),
+                makeAny(m_pImpl->getAccessibleHeaderBar(AccessibleBrowseBoxObjType::RowHeaderBar)),
                 Any()
             );
             commitBrowseBoxEvent(

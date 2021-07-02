@@ -155,7 +155,7 @@ public:
         createAccessibleBrowseBoxHeaderBar(
             const css::uno::Reference< css::accessibility::XAccessible >& rxParent,
             vcl::IAccessibleTableProvider& _rOwningTable,
-            vcl::AccessibleBrowseBoxObjType _eObjType
+            AccessibleBrowseBoxObjType _eObjType
         ) const override;
 
     virtual css::uno::Reference< css::accessibility::XAccessible >
@@ -174,7 +174,7 @@ public:
             const css::uno::Reference< css::accessibility::XAccessible >& rxParent,
             vcl::IAccessibleTableProvider& _rBrowseBox,
             const css::uno::Reference< css::awt::XWindow >& _xFocusWindow,
-            vcl::AccessibleBrowseBoxObjType  _eObjType
+            AccessibleBrowseBoxObjType  _eObjType
         ) const override;
 
     virtual css::uno::Reference< css::accessibility::XAccessible >
@@ -395,7 +395,7 @@ Reference< XAccessible > AccessibleFactory::createAccessibleTreeListBox(
 
 Reference< XAccessible > AccessibleFactory::createAccessibleBrowseBoxHeaderBar(
     const Reference< XAccessible >& rxParent, vcl::IAccessibleTableProvider& _rOwningTable,
-    vcl::AccessibleBrowseBoxObjType _eObjType ) const
+    AccessibleBrowseBoxObjType _eObjType ) const
 {
     return new AccessibleBrowseBoxHeaderBar( rxParent, _rOwningTable, _eObjType );
 }
@@ -410,7 +410,7 @@ Reference< XAccessible > AccessibleFactory::createAccessibleBrowseBoxTableCell(
 
 Reference< XAccessible > AccessibleFactory::createAccessibleBrowseBoxHeaderCell(
     sal_Int32 _nColumnRowId, const Reference< XAccessible >& rxParent, vcl::IAccessibleTableProvider& _rBrowseBox,
-    const Reference< XWindow >& _xFocusWindow, vcl::AccessibleBrowseBoxObjType  _eObjType ) const
+    const Reference< XWindow >& _xFocusWindow, AccessibleBrowseBoxObjType  _eObjType ) const
 {
     return new AccessibleBrowseBoxHeaderCell( _nColumnRowId, rxParent, _rBrowseBox,
         _xFocusWindow, _eObjType );
