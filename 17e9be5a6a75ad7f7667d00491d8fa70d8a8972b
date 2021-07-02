@@ -16,6 +16,24 @@
       "revId": "17e9be5a6a75ad7f7667d00491d8fa70d8a8972b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5fa8049e_bdd7fe68",
+        "filename": "basic/qa/basic_coverage/test_string_replace.vb",
+        "patchSetId": 3
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-07-02T07:51:34Z",
+      "side": 1,
+      "message": "Hi Mike,\nDo you know why these two asserts fail now after my refactor and how to fix them ?",
+      "parentUuid": "8846e9cc_3601d527",
+      "revId": "17e9be5a6a75ad7f7667d00491d8fa70d8a8972b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
