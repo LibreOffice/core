@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "41648dcc_f1fe27be",
+        "filename": "sal/rtl/math.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1248,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-02T12:10:32Z",
+      "side": 1,
+      "message": "std::ldexp(1.0, 42) is 1*2^42 \u003d 4398046511104.0, not 2199023255552.0",
+      "range": {
+        "startLine": 1248,
+        "startChar": 61,
+        "endLine": 1248,
+        "endChar": 80
+      },
+      "revId": "c15e8218711833a9eb17d8675574565b56db6361",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
