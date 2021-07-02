@@ -204,6 +204,30 @@
       "revId": "8d87ef7e3ce17aca44e81701949471cd99b9d5ba",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0d27fb2c_80225b37",
+        "filename": "scaddins/source/analysis/bessel.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 383,
+      "author": {
+        "id": 1003291
+      },
+      "writtenOn": "2021-07-02T12:46:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4e150e76_df73cf0d",
+      "range": {
+        "startLine": 383,
+        "startChar": 19,
+        "endLine": 383,
+        "endChar": 43
+      },
+      "revId": "8d87ef7e3ce17aca44e81701949471cd99b9d5ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
