@@ -64,7 +64,7 @@ void Coverage::process_directory(const OUString& sDirName)
     osl::Directory aDir(sDirName);
     osl::DirectoryItem aItem;
     osl::FileStatus aFileStatus(osl_FileStatus_Mask_FileURL|osl_FileStatus_Mask_Type);
-    OUString sMacroUtilsURL = m_directories.getURLFromSrc(u"basic/qa/basic_coverage/") + "_test_asserts.bas";
+    OUString sMacroUtilsURL = m_directories.getURLFromSrc(u"basic/qa/cppunit/_test_asserts.bas");
 
     if(aDir.open() == osl::FileBase::E_None)
     {
@@ -74,7 +74,7 @@ void Coverage::process_directory(const OUString& sDirName)
             if(aFileStatus.isRegular())
             {
                 OUString sFileURL = aFileStatus.getFileURL();
-                if(sFileURL.endsWith(".bas") && sFileURL != sMacroUtilsURL)
+                if (sFileURL.endsWith(".bas"))
                 {
                     MacroSnippet testMacro;
                     testMacro.LoadSourceFromFile("TestUtil", sMacroUtilsURL);
