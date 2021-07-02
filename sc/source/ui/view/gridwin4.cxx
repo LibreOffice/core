@@ -1850,25 +1850,23 @@ void ScGridWindow::DrawButtons(SCCOL nX1, SCCOL nX2, const ScTableInfo& rTabInfo
 
                     //  pQueryParam can only include MAXQUERY entries
 
-                    bool bSimpleQuery = true;
-                    bool bColumnFound = false;
-                    if (!pQueryParam->bInplace)
-                        bSimpleQuery = false;
-                    SCSIZE nCount = pQueryParam->GetEntryCount();
-                    for (nQuery = 0; nQuery < nCount && bSimpleQuery; ++nQuery)
-                        if (pQueryParam->GetEntry(nQuery).bDoQuery)
+                    bool bArrowState = false;
+                    if (pQueryParam->bInplace)
+                    {
+                        SCSIZE nCount = pQueryParam->GetEntryCount();
+                        for (nQuery = 0; nQuery < nCount; ++nQuery)
                         {
                             //  Do no restrict to EQUAL here
                             //  (Column head should become blue also when ">1")
-
-                            if (pQueryParam->GetEntry(nQuery).nField == nCol)
-                                bColumnFound = true;
-                            if (nQuery > 0)
-                                if (pQueryParam->GetEntry(nQuery).eConnect != SC_AND)
-                                    bSimpleQuery = false;
+                            const ScQueryEntry& rEntry = pQueryParam->GetEntry(nQuery);
+                            if (rEntry.bDoQuery && rEntry.nField == nCol)
+                            {
+                                bArrowState = true;
+                                break;
+                            }
                         }
+                    }
 
-                    bool bArrowState = bSimpleQuery && bColumnFound;
                     tools::Long    nSizeX;
                     tools::Long    nSizeY;
                     SCCOL nStartCol= nCol;
