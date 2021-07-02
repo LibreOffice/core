@@ -59,6 +59,24 @@
     },
     {
       "key": {
+        "uuid": "bdf956a9_7b94b2ce",
+        "filename": "scaddins/source/analysis/bessel.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 328,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-07-02T10:09:28Z",
+      "side": 1,
+      "message": "That is the dreaded \"silently produces erroneous results for values \u003e 2^64\" situation mentioned for rtl::math::isValidArcArg() at https://opengrok.libreoffice.org/xref/core/include/rtl/math.hxx?r\u003db1fb6338#420",
+      "parentUuid": "aa116f3c_67851b39",
+      "revId": "8d87ef7e3ce17aca44e81701949471cd99b9d5ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a0f5754b_afeb5259",
         "filename": "scaddins/source/analysis/bessel.cxx",
         "patchSetId": 4
