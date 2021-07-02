@@ -112,7 +112,7 @@
                     <property name="receives_default">True</property>
                     <property name="relief">none</property>
                     <property name="xalign">0</property>
-                    <property name="uri">https://extensions.libreoffice.org/dictionaries/</property>
+                    <property name="uri">https://extensions.libreoffice.org/?Tags%5B0%5D=50</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
