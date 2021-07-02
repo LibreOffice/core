@@ -73,6 +73,7 @@
 #include <swmodule.hxx>
 #include <modcfg.hxx>
 #include <frameformats.hxx>
+#include <textboxhelper.hxx>
 #include <memory>
 
 using namespace ::com::sun::star::i18n;
@@ -475,6 +476,15 @@ void SwDoc::SetAttr( const SfxItemSet& rSet, SwFormat& rFormat )
     {
         rFormat.SetFormatAttr( rSet );
     }
+
+    // If the format is a shape, and it has a textbox, sync.
+    auto pShapeFormat = dynamic_cast<SwFrameFormat*>(&rFormat);
+    if (pShapeFormat && SwTextBoxHelper::isTextBox(pShapeFormat, RES_DRAWFRMFMT))
+    {
+        SwTextBoxHelper::syncFlyFrameAttr(*pShapeFormat, rSet);
+        SwTextBoxHelper::changeAnchor(pShapeFormat);
+    }
+
     getIDocumentState().SetModified();
 }
 
