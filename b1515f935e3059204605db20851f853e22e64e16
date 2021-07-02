@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "14cfbfa3_10bd21d9",
+        "filename": "basic/qa/cppunit/basic_coverage.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-02T10:55:23Z",
+      "side": 1,
+      "message": "I\u0027d just write\n\n  sFileURL !\u003d sMacroUtilsURL",
+      "range": {
+        "startLine": 77,
+        "startChar": 47,
+        "endLine": 77,
+        "endChar": 79
+      },
+      "revId": "b1515f935e3059204605db20851f853e22e64e16",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
