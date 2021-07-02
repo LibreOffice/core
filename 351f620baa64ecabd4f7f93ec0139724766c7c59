@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4d9d8ef7_88028fc7",
+        "filename": "starmath/source/visitors.cxx",
+        "patchSetId": 20
+      },
+      "lineNbr": 2399,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-02T08:26:16Z",
+      "side": 1,
+      "message": "This relies on the token being a mixed hexanumeric string - but IIUC parser will split decimal numbers from alphabetical, and \u002700ff00\u0027 will arrive as three tokens?",
+      "revId": "351f620baa64ecabd4f7f93ec0139724766c7c59",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
