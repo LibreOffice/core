@@ -164,43 +164,36 @@ bool isRepresentableInteger(double fAbsValue)
     return false;
 }
 
-// Returns 1-based index of least significant bit in a number, or zero if number is zero
+// Returns 52 - ( 0-based index of least significant bit in a number ), or zero if number is zero
 int findFirstSetBit(unsigned n)
 {
 #if defined _WIN32
-    unsigned long pos;
-    unsigned char bNonZero = _BitScanForward(&pos, n);
-    return (bNonZero == 0) ? 0 : pos + 1;
+    volatile unsigned long pos;
+    // _BitScanForward is 0-based, so : 52 - ( _BitScanForward(n) - 0 )
+    return _BitScanForward(&pos, n) == 0 ? 0 : 52 - pos;
 #else
-    return __builtin_ffs(n);
+    // __builtin_ffs is 1-based, so : 52 - ( __builtin_ffs(n) - 1 )
+    return n == 0 ? 0 : 53 - __builtin_ffs(n);
 #endif
 }
 
-/** Returns number of binary bits for fractional part of the number
-    Expects a proper non-negative double value, not +-INF, not NAN
+/** Returns if the fractional part is at least 2^-nDigits.
  */
-int getBitsInFracPart(double fAbsValue)
+bool notEnoughBitsInFracPart(double fAbsValue, int nDigits = 11)
 {
-    assert(std::isfinite(fAbsValue) && fAbsValue >= 0.0);
-    if (fAbsValue == 0.0)
-        return 0;
-    auto pValParts = reinterpret_cast< const sal_math_Double * >(&fAbsValue);
+    const sal_math_Double * pValParts = reinterpret_cast< const sal_math_Double * >(&fAbsValue);
     int nExponent = pValParts->inf_parts.exponent - 1023;
-    if (nExponent >= 52)
-        return 0; // All bits in fraction are in integer part of the number
+    // > 52 All bits in fraction are in integer part of the number 2^-52 * 2^52 = 2^0
+    // > 52-d There are only d decimals left at most: 2^-52 * 2^nExponent >= 2^-nDigits
+    // So if nExponent >= 52-nDigits then we fall over 2^0
+    if (nExponent >= 52 - nDigits)
+        return true;
+    // Find least signifiand digit
     int nLeastSignificant = findFirstSetBit(pValParts->inf_parts.fraction_lo);
-    if (nLeastSignificant == 0)
-    {
-        nLeastSignificant = findFirstSetBit(pValParts->inf_parts.fraction_hi);
-        if (nLeastSignificant == 0)
-            nLeastSignificant = 53; // the implied leading 1 is the least significant
-        else
-            nLeastSignificant += 32;
-    }
-    int nFracSignificant = 53 - nLeastSignificant;
-    int nBitsInFracPart = nFracSignificant - nExponent;
-
-    return std::max(nBitsInFracPart, 0);
+    // Now we have the last decimal: 2^nLeastSignificant * 2^nExponent >= 2^-d
+    // So: nLeastSignificant + nExponent >= -nDigits then we fall over 2^0
+    // In case no decimals: 2^(52-52) * 2^nExponent = 2^0 * 2^nExponent
+    return nLeastSignificant + nExponent >= -nDigits;
 }
 
 template< typename T >
@@ -1283,8 +1276,7 @@ double SAL_CALL rtl_math_pow10Exp(double fValue, int nExp) SAL_THROW_EXTERN_C()
 
 double SAL_CALL rtl_math_approxValue( double fValue ) SAL_THROW_EXTERN_C()
 {
-    const double fBigInt = 2199023255552.0; // 2^41 -> only 11 bits left for fractional part, fine as decimal
-    if (fValue == 0.0 || fValue == HUGE_VAL || !std::isfinite( fValue) || fValue > fBigInt)
+    if (fValue == 0.0 || !std::isfinite(fValue))
     {
         // We don't handle these conditions.  Bail out.
         return fValue;
@@ -1298,11 +1290,10 @@ double SAL_CALL rtl_math_approxValue( double fValue ) SAL_THROW_EXTERN_C()
 
     // If the value is either integer representable as double,
     // or only has small number of bits in fraction part, then we need not do any approximation
-    if (isRepresentableInteger(fValue) || getBitsInFracPart(fValue) <= 11)
+    if (isRepresentableInteger(fValue) || notEnoughBitsInFracPart(fValue))
         return fOrigValue;
 
-    int nExp = static_cast< int >(floor(log10(fValue)));
-    nExp = 14 - nExp;
+    int nExp = 14 - static_cast< int >(floor(log10(fValue)));
     double fExpValue = getN10Exp(abs(nExp));
 
     if (nExp < 0)
@@ -1332,8 +1323,8 @@ double SAL_CALL rtl_math_approxValue( double fValue ) SAL_THROW_EXTERN_C()
 
 bool SAL_CALL rtl_math_approxEqual(double a, double b) SAL_THROW_EXTERN_C()
 {
-    static const double e48 = 1.0 / (16777216.0 * 16777216.0);
-    static const double e44 = e48 * 16.0;
+    constexpr double e48 = 1.0 / (16777216.0 * 16777216.0);
+    constexpr double e44 = e48 * 16.0;
 
     if (a == b)
         return true;
