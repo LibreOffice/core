@@ -287,6 +287,8 @@ SwClipboardChangeListener::~SwClipboardChangeListener()
 
 void SAL_CALL SwClipboardChangeListener::disposing( const EventObject& /*rEventObject*/ )
 {
+    SolarMutexGuard aGuard;
+    pView = nullptr; // so we don't touch the view if changedContents somehow fires afterwards
 }
 
 void SAL_CALL SwClipboardChangeListener::changedContents( const css::datatransfer::clipboard::ClipboardEvent& rEventObject )
