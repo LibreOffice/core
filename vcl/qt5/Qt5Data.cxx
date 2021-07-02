@@ -156,7 +156,7 @@
 #include <unx/glyphcache.hxx>
 
 Qt5Data::Qt5Data(SalInstance* pInstance)
-    : GenericUnixSalData(SAL_DATA_QT5, pInstance)
+    : GenericUnixSalData(pInstance)
 {
     ImplSVData* pSVData = ImplGetSVData();
 

@@ -53,7 +53,7 @@ private:
     void InitPrintFontManager();
 
 public:
-    GenericUnixSalData(GenericUnixSalDataType const t, SalInstance* const pInstance);
+    GenericUnixSalData(SalInstance* const pInstance);
     virtual ~GenericUnixSalData() override;
     virtual void Dispose() {}
 
@@ -68,8 +68,6 @@ public:
     }
 
     OUString& GetUnicodeCommand() { return m_aUnicodeEntry; }
-
-    GenericUnixSalDataType GetType() const { return m_eType; }
 
     FreetypeManager* GetFreetypeManager()
     {
