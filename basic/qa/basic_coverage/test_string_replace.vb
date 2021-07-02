@@ -29,6 +29,10 @@ Function verify_stringReplace() As String
     retStr = Replace("a", "abc", "ab")
     TestLog_ASSERT retStr, "a", "different length of search and replace string: " & retStr
 
+    ' tdf#143081 - Without the fix in place, this test would have crashed here
+    retStr = Replace("""Straße""", """", "&quot;")
+    TestLog_ASSERT retStr, "&quot;Straße""&quot;", "replace doesn't crash: " & retStr
+
     result = result & Chr$(10) & "Tests passed: " & passCount & Chr$(10) & "Tests failed: " & failCount & Chr$(10)
     verify_stringReplace = result
 End Function
