@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "3680dcd2_722160b4",
+        "filename": "basic/qa/cppunit/basic_coverage.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-02T11:11:07Z",
+      "side": 1,
+      "message": "Or avoid the complexity, and move all the _test_asserts.vb files to /basic/qa/cppunit, together with the C++ files, having different names for VBA and StarBasic cases - so that the test directories will be clean again?",
+      "parentUuid": "d9999816_65086475",
+      "range": {
+        "startLine": 67,
+        "startChar": 60,
+        "endLine": 67,
+        "endChar": 61
+      },
+      "revId": "b1515f935e3059204605db20851f853e22e64e16",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "14cfbfa3_10bd21d9",
         "filename": "basic/qa/cppunit/basic_coverage.cxx",
         "patchSetId": 10
