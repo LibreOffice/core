@@ -2544,12 +2544,12 @@ void SvTreeListBox::ImplInitStyle()
     nTreeFlags |= SvTreeFlags::RECALCTABS;
     if (nWindowStyle & WB_SORT)
     {
-        GetModel()->SetSortMode(SortAscending);
+        GetModel()->SetSortMode(SvSortMode::Ascending);
         GetModel()->SetCompareHdl(LINK(this, SvTreeListBox, DefaultCompare));
     }
     else
     {
-        GetModel()->SetSortMode(SortNone);
+        GetModel()->SetSortMode(SvSortMode::None);
         GetModel()->SetCompareHdl(Link<const SvSortData&,sal_Int32>());
     }
     pImpl->SetStyle(nWindowStyle);

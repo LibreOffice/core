@@ -50,7 +50,7 @@ class SvTreeListEntry;
 class SvListView;
 class SvViewDataEntry;
 
-enum SvSortMode { SortAscending, SortDescending, SortNone };
+enum class SvSortMode { Ascending, Descending, None };
 
 // For the return values of Sortlink:
 // See International::Compare( pLeft, pRight )

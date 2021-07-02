@@ -65,7 +65,7 @@ SvTreeList::SvTreeList(SvListView& listView) :
     nEntryCount = 0;
     bAbsPositionsValid = false;
     pRootItem.reset(new SvTreeListEntry);
-    eSortMode = SortNone;
+    eSortMode = SvSortMode::None;
 }
 
 SvTreeList::~SvTreeList()
@@ -1391,7 +1391,7 @@ public:
                      std::unique_ptr<SvTreeListEntry> const& rpRight) const
     {
         int nCompare = mrList.Compare(rpLeft.get(), rpRight.get());
-        if (nCompare != 0 && mrList.GetSortMode() == SortDescending)
+        if (nCompare != 0 && mrList.GetSortMode() == SvSortMode::Descending)
         {
             if( nCompare < 0 )
                 nCompare = 1;
@@ -1429,7 +1429,7 @@ void SvTreeList::GetInsertionPos( SvTreeListEntry const * pEntry, SvTreeListEntr
 {
     DBG_ASSERT(pEntry,"No Entry");
 
-    if( eSortMode == SortNone )
+    if( eSortMode == SvSortMode::None )
         return;
 
     rPos = TREELIST_ENTRY_NOTFOUND;
@@ -1448,7 +1448,7 @@ void SvTreeList::GetInsertionPos( SvTreeListEntry const * pEntry, SvTreeListEntr
         k = (i+j)/2;
         const SvTreeListEntry* pTempEntry = rChildList[k].get();
         nCompare = Compare( pEntry, pTempEntry );
-        if (nCompare != 0 && eSortMode == SortDescending)
+        if (nCompare != 0 && eSortMode == SvSortMode::Descending)
         {
             if( nCompare < 0 )
                 nCompare = 1;
