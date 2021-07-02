@@ -34,6 +34,24 @@
       "revId": "17e9be5a6a75ad7f7667d00491d8fa70d8a8972b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6e90e0c4_719020fb",
+        "filename": "basic/qa/basic_coverage/test_string_replace.vb",
+        "patchSetId": 3
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-02T08:02:07Z",
+      "side": 1,
+      "message": "My guess would be that possibly the _test_asserts.vb, using VBA support in them, are interfering. So I\u0027d suggest to try to either implement an alternative _test_asserts.vb for non-VBA case, or even better to modify existing _test_asserts.vb to not use VBA support if possible (so to be usable in both VBA and non-VBA case).\n\nI haven\u0027t debugged, so it\u0027s just a shot into the blue.",
+      "parentUuid": "5fa8049e_bdd7fe68",
+      "revId": "17e9be5a6a75ad7f7667d00491d8fa70d8a8972b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
