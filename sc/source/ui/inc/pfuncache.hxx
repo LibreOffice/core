@@ -30,13 +30,13 @@ class OutputDevice;
 
 /** Possible types of selection for print functions */
 
-enum ScPrintSelectionMode
+enum class ScPrintSelectionMode
 {
-    SC_PRINTSEL_INVALID,
-    SC_PRINTSEL_DOCUMENT,
-    SC_PRINTSEL_CURSOR,
-    SC_PRINTSEL_RANGE,
-    SC_PRINTSEL_RANGE_EXCLUSIVELY_OLE_AND_DRAW_OBJECTS
+    Invalid,
+    Document,
+    Cursor,
+    Range,
+    RangeExclusivelyOleAndDrawObjects
 };
 
 /** Stores the selection in the ScPrintFuncCache so it is only used
@@ -49,7 +49,7 @@ class ScPrintSelectionStatus
     ScPrintOptions          aOptions;
 
 public:
-            ScPrintSelectionStatus() : eMode(SC_PRINTSEL_INVALID) {}
+            ScPrintSelectionStatus() : eMode(ScPrintSelectionMode::Invalid) {}
 
     void    SetMode(ScPrintSelectionMode eNew)  { eMode = eNew; }
     void    SetRanges(const ScRangeList& rNew)  { aRanges = rNew; }
