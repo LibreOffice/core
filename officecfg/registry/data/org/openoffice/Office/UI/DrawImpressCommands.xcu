@@ -44,7 +44,7 @@
       </node>
       <node oor:name=".uno:RenamePage" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Rename Page</value>
+          <value xml:lang="en-US">Rename Page...</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -52,7 +52,7 @@
       </node>
       <node oor:name=".uno:RenameSlide" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Rename Slide</value>
+          <value xml:lang="en-US">Rename Slide...</value>
         </prop>
         <prop oor:name="TargetURL" oor:type="xs:string">
           <value>.uno:RenamePage</value>
