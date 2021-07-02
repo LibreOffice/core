@@ -110,7 +110,7 @@
       <FormatCode>AA-M-J</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey9" default="true" type="long" usage="DATE" formatindex="19">
-      <FormatCode>J MMMM AAAA</FormatCode>
+      <FormatCode>NNNNJ MMMM AAAA</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey8" default="false" type="medium" usage="DATE" formatindex="20">
       <FormatCode>AA-MM-JJ</FormatCode>
