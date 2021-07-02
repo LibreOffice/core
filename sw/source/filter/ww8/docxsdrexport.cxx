@@ -177,7 +177,7 @@ void lcl_calculateMSOBaseRectangle(const SdrObject& rObj, double& rfMSOLeft, dou
     }
 }
 
-void lcl_calculateRawEffectExtent(sal_Int32& rLeft, sal_Int32& rRight, sal_Int32& rTop,
+void lcl_calculateRawEffectExtent(sal_Int32& rLeft, sal_Int32& rTop, sal_Int32& rRight,
                                   sal_Int32& rBottom, const SdrObject& rObj,
                                   const bool bUseBoundRect)
 {
@@ -613,7 +613,7 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
         // may not be negative. Take care of that.
         if (isAnchor)
         {
-            lcl_calculateRawEffectExtent(nLeftExt, nRightExt, nTopExt, nBottomExt, *pObj, true);
+            lcl_calculateRawEffectExtent(nLeftExt, nTopExt, nRightExt, nBottomExt, *pObj, true);
             // We have calculated the effectExtent from boundRect, therefore half stroke width is
             // already contained.
             // ToDo: The other half of the strokeWidth needs to be subtracted from padding.
@@ -625,7 +625,7 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
         }
         else
         {
-            lcl_calculateRawEffectExtent(nLeftExt, nRightExt, nTopExt, nBottomExt, *pObj, false);
+            lcl_calculateRawEffectExtent(nLeftExt, nTopExt, nRightExt, nBottomExt, *pObj, false);
             // nDistT,... contain the needed distances from import or set by user. But Word
             // ignores Dist attributes of inline shapes. So we move all needed distances to
             // effectExtent and force effectExtent to non-negative.
