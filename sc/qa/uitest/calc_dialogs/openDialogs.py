@@ -157,7 +157,7 @@ dialogs = [
         # tested in sc/qa/uitest/protect/protectSpreadsheet.py
     {"command": ".uno:RunMacro", "closeButton": "cancel"},
     {"command": ".uno:ScriptOrganizer", "closeButton": "close"},
-    {"command": ".uno:ShowLicense", "closeButton": "close"},
+    {"command": ".uno:ShowLicense", "closeButton": "close", "skipTestOK": True},
     # {"command": ".uno:About", "closeButton": "close"},
         # tested in sc/qa/uitest/calc_tests7/tdf106667.py
 ]
