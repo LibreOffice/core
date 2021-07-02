@@ -41,6 +41,7 @@
 #include <drawdoc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentDrawModelAccess.hxx>
+#include <frmatr.hxx>
 
 #include <com/sun/star/document/XActionLockable.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
@@ -1056,6 +1057,9 @@ void SwTextBoxHelper::updateTextBoxMargin(SdrObject* pObj)
 
     syncProperty(pParentFormat, RES_FRM_SIZE, MID_FRMSIZE_WIDTH_TYPE,
                  uno::Any(bIsAutoWrap ? text::SizeType::FIX : text::SizeType::MIN));
+
+    changeAnchor(pParentFormat);
+    DoTextBoxZOrderCorrection(pParentFormat);
 }
 
 bool SwTextBoxHelper::setWrapThrough(SwFrameFormat* pShape)
@@ -1194,8 +1198,10 @@ bool SwTextBoxHelper::doTextBoxPositioning(SwFrameFormat* pShape)
             {
                 tools::Rectangle aRect(getTextRectangle(pShape, false));
 
+                auto nLeftSpace = pShape->GetLRSpace().GetLeft();
+
                 SwFormatHoriOrient aNewHOri(pFormat->GetHoriOrient());
-                aNewHOri.SetPos(aRect.Left());
+                aNewHOri.SetPos(aRect.Left() + nLeftSpace);
 
                 SwFormatVertOrient aNewVOri(pFormat->GetVertOrient());
                 aNewVOri.SetPos(aRect.Top() + pShape->GetVertOrient().GetPos());
