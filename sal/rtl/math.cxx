@@ -19,17 +19,9 @@
 
 #include <rtl/math.h>
 
-#include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
-#include <rtl/alloc.h>
 #include <rtl/character.hxx>
 #include <rtl/math.hxx>
-#include <rtl/strbuf.h>
-#include <rtl/string.h>
-#include <rtl/ustrbuf.h>
-#include <rtl/ustring.h>
-#include <sal/mathconf.h>
-#include <sal/types.h>
 
 #include <algorithm>
 #include <cassert>
