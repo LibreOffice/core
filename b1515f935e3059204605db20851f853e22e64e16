@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "d9999816_65086475",
+        "filename": "basic/qa/cppunit/basic_coverage.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-02T11:07:15Z",
+      "side": 1,
+      "message": "... and test::Directories::Directories in fact ensures that its base URLs end with \u0027/\u0027, so it\u0027s perfectly safe and correct.",
+      "parentUuid": "b532309c_873b6a74",
+      "range": {
+        "startLine": 67,
+        "startChar": 60,
+        "endLine": 67,
+        "endChar": 61
+      },
+      "revId": "b1515f935e3059204605db20851f853e22e64e16",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "14cfbfa3_10bd21d9",
         "filename": "basic/qa/cppunit/basic_coverage.cxx",
         "patchSetId": 10
