@@ -1473,7 +1473,8 @@ void ScViewFunc::OnLOKInsertDeleteColumn(SCCOL nStartCol, tools::Long nOffset)
         ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(pViewShell);
         if (pTabViewShell && pTabViewShell->GetDocId() == pCurrentViewShell->GetDocId())
         {
-            pTabViewShell->GetViewData().GetLOKWidthHelper(nCurrentTabIndex)->invalidateByIndex(nStartCol);
+            if (ScPositionHelper* pPosHelper = pTabViewShell->GetViewData().GetLOKWidthHelper(nCurrentTabIndex))
+                pPosHelper->invalidateByIndex(nStartCol);
 
             // if we remove a column the cursor position  and the current selection
             // in other views could need to be moved on the left by one column.
@@ -1529,7 +1530,8 @@ void ScViewFunc::OnLOKInsertDeleteRow(SCROW nStartRow, tools::Long nOffset)
         ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(pViewShell);
         if (pTabViewShell && pTabViewShell->GetDocId() == pCurrentViewShell->GetDocId())
         {
-            pTabViewShell->GetViewData().GetLOKHeightHelper(nCurrentTabIndex)->invalidateByIndex(nStartRow);
+            if (ScPositionHelper* pPosHelper = pTabViewShell->GetViewData().GetLOKHeightHelper(nCurrentTabIndex))
+                pPosHelper->invalidateByIndex(nStartRow);
 
             // if we remove a row the cursor position and the current selection
             // in other views could need to be moved up by one row.
@@ -1586,9 +1588,15 @@ void ScViewFunc::OnLOKSetWidthOrHeight(SCCOLROW nStart, bool bWidth)
         if (pTabViewShell && pTabViewShell->GetDocId() == pCurrentViewShell->GetDocId())
         {
             if (bWidth)
-                pTabViewShell->GetViewData().GetLOKWidthHelper(nCurTab)->invalidateByIndex(nStart);
+            {
+                if (ScPositionHelper* pPosHelper = pTabViewShell->GetViewData().GetLOKWidthHelper(nCurTab))
+                    pPosHelper->invalidateByIndex(nStart);
+            }
             else
-                pTabViewShell->GetViewData().GetLOKHeightHelper(nCurTab)->invalidateByIndex(nStart);
+            {
+                if (ScPositionHelper* pPosHelper = pTabViewShell->GetViewData().GetLOKHeightHelper(nCurTab))
+                    pPosHelper->invalidateByIndex(nStart);
+            }
         }
         pViewShell = SfxViewShell::GetNext(*pViewShell);
     }
