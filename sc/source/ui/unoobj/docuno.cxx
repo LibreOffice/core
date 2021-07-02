@@ -1577,10 +1577,10 @@ bool ScModelObj::FillRenderMarkData( const uno::Any& aSelection,
                 if ( bCursor || bSheet )                // nothing selected -> use whole tables
                 {
                     rMark.ResetMark();      // doesn't change table selection
-                    rStatus.SetMode( SC_PRINTSEL_CURSOR );
+                    rStatus.SetMode( ScPrintSelectionMode::Cursor );
                 }
                 else
-                    rStatus.SetMode( SC_PRINTSEL_RANGE );
+                    rStatus.SetMode( ScPrintSelectionMode::Range );
 
                 rStatus.SetRanges( rRanges );
                 bDone = true;
@@ -1603,7 +1603,7 @@ bool ScModelObj::FillRenderMarkData( const uno::Any& aSelection,
 
                 if( rMark.IsMarked() && !rMark.IsMultiMarked() )
                 {
-                    rStatus.SetMode( SC_PRINTSEL_RANGE_EXCLUSIVELY_OLE_AND_DRAW_OBJECTS );
+                    rStatus.SetMode( ScPrintSelectionMode::RangeExclusivelyOleAndDrawObjects );
                     bDone = true;
                 }
             }
@@ -1616,7 +1616,7 @@ bool ScModelObj::FillRenderMarkData( const uno::Any& aSelection,
             SCTAB nTabCount = pDocShell->GetDocument().GetTableCount();
             for (SCTAB nTab = 0; nTab < nTabCount; nTab++)
                 rMark.SelectTable( nTab, true );
-            rStatus.SetMode( SC_PRINTSEL_DOCUMENT );
+            rStatus.SetMode( ScPrintSelectionMode::Document );
             bDone = true;
         }
         // other selection types aren't supported
@@ -1744,7 +1744,7 @@ static sal_Int32 lcl_GetRendererNum( sal_Int32 nSelRenderer, const OUString& rPa
 
 static bool lcl_renderSelectionToGraphic( bool bRenderToGraphic, const ScPrintSelectionStatus& rStatus )
 {
-    return bRenderToGraphic && rStatus.GetMode() == SC_PRINTSEL_RANGE;
+    return bRenderToGraphic && rStatus.GetMode() == ScPrintSelectionMode::Range;
 }
 
 uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 nSelRenderer,
@@ -2148,7 +2148,7 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
 
     pPrintFunc->SetDrawView( aDrawViewKeeper.mpDrawView.get() );
     pPrintFunc->SetRenderFlag( true );
-    if( aStatus.GetMode() == SC_PRINTSEL_RANGE_EXCLUSIVELY_OLE_AND_DRAW_OBJECTS )
+    if( aStatus.GetMode() == ScPrintSelectionMode::RangeExclusivelyOleAndDrawObjects )
         pPrintFunc->SetExclusivelyDrawOleAndDrawObjects();
 
     sal_Int32 nContent = 0;
