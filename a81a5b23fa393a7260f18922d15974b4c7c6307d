@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8c1273ac_f94c8b34",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-02T13:09:16Z",
+      "side": 1,
+      "message": "\u003e By using the exact value\n\nWhich exact value is meant?",
+      "revId": "a81a5b23fa393a7260f18922d15974b4c7c6307d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d0de4c43_fdadaf53",
+        "filename": "sal/rtl/math.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1256,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-02T13:09:16Z",
+      "side": 1,
+      "message": "Interesting that we only test for large positive values above, but not large absolute values of negatives...",
+      "revId": "a81a5b23fa393a7260f18922d15974b4c7c6307d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}

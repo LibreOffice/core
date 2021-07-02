@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bfcab863_86c18f0e",
+        "filename": "sal/rtl/math.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1301,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-02T13:09:16Z",
+      "side": 0,
+      "message": "I still don\u0027t understand the reasoning behind the removal of the check. The number might only have a few fractional bits, and then we just don\u0027t want to do any multiplication, rounding and division...",
+      "revId": "4213933042eaa869c43dbf91cc7d54fa2c9203a0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
