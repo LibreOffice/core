@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c1298045_3a39d928",
+        "filename": "sal/rtl/math.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1248,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-02T12:31:30Z",
+      "side": 1,
+      "message": "So we are calling a (potentially optimized - but not likely, since it\u0027s not constexpr!) function at every invocation of rtl_math_approxValue (and it\u0027s called a lot, esp. in Calc). I\u0027d think that having a hardcoded constant with the comment is better.",
+      "revId": "0f62990d44d06b64d033f868701b902ebe1cb00a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
