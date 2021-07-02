@@ -560,9 +560,8 @@ public:
         {
             ScQueryEntry::Item aNew;
             aNew.maString = mrPool.intern(rEntry.aName);
-            // set the filter type to ByValue, if the filter condition is value and not a duplicated value
-            aNew.meType = rEntry.bDate ? ScQueryEntry::ByDate : rEntry.bValue && !rEntry.bDuplicated ? ScQueryEntry::ByValue : ScQueryEntry::ByString;
-            aNew.mbFormattedValue = rEntry.bDuplicated;
+            // set the filter type to ByValue, if the filter condition is value
+            aNew.meType = rEntry.bDate ? ScQueryEntry::ByDate : rEntry.bValue ? ScQueryEntry::ByValue : ScQueryEntry::ByString;
             aNew.mfVal = rEntry.nValue;
             mrItems.push_back(aNew);
         }
@@ -709,14 +708,17 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
     {
         const OUString& aStringVal = rEntry.GetString();
         const double aDoubleVal = rEntry.GetValue();
+        const double aRDoubleVal = rEntry.GetRoundedValue();
         bool bSelected = true;
+
         if (!aSelectedValue.empty() || !aSelectedString.empty())
         {
             if (aStringVal.isEmpty())
                 bSelected = aSelectedString.count(aStringVal) > 0;
+            else if (aDoubleVal == aRDoubleVal)
+                bSelected = aSelectedValue.count(aDoubleVal) > 0 || aSelectedString.count(aStringVal) > 0;
             else
-                bSelected
-                    = aSelectedValue.count(aDoubleVal) > 0 || aSelectedString.count(aStringVal) > 0;
+                bSelected = aSelectedValue.count(aDoubleVal) > 0 || aSelectedValue.count(aRDoubleVal) > 0 || aSelectedString.count(aStringVal) > 0;
         }
         else if (bQueryByNonEmpty)
             bSelected = !aStringVal.isEmpty();
@@ -724,7 +726,7 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
         if ( rEntry.IsDate() )
             rControl.addDateMember( aStringVal, rEntry.GetValue(), bSelected );
         else
-            rControl.addMember( aStringVal, aDoubleVal, bSelected, rEntry.GetStringType() == ScTypedStrData::Value, rEntry.IsDuplicated() );
+            rControl.addMember( aStringVal, aRDoubleVal, bSelected, rEntry.GetStringType() == ScTypedStrData::Value );
     }
 
     // Populate the menu.

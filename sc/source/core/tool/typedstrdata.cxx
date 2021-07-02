@@ -47,22 +47,14 @@ bool ScTypedStrData::EqualCaseSensitive::operator() (const ScTypedStrData& left,
     if (left.meStrType != right.meStrType)
         return false;
 
-    if (left.meStrType == Value && left.mfValue != right.mfValue &&
-        !left.mbIsFormatted)
+    if (left.meStrType == Value && left.mfRoundedValue != right.mfRoundedValue)
         return false;
 
     if (left.mbIsDate != right.mbIsDate )
         return false;
 
-    if (ScGlobal::GetCaseCollator()->compareString(
-        left.maStrValue, right.maStrValue) == 0)
-    {
-        // hack: it's possible, because we only compare values of the same filter range
-        const_cast<bool&>(left.mbIsDuplicated) = true;
-        return true;
-    }
-    else
-        return false;
+    return ScGlobal::GetCaseCollator()->compareString(
+        left.maStrValue, right.maStrValue) == 0;
 }
 
 bool ScTypedStrData::EqualCaseInsensitive::operator() (const ScTypedStrData& left, const ScTypedStrData& right) const
@@ -70,22 +62,14 @@ bool ScTypedStrData::EqualCaseInsensitive::operator() (const ScTypedStrData& lef
     if (left.meStrType != right.meStrType)
         return false;
 
-    if (left.meStrType == Value && left.mfValue != right.mfValue &&
-        !left.mbIsFormatted)
+    if (left.meStrType == Value && left.mfRoundedValue != right.mfRoundedValue)
         return false;
 
     if (left.mbIsDate != right.mbIsDate )
         return false;
 
-    if (ScGlobal::GetCollator()->compareString(
-        left.maStrValue, right.maStrValue) == 0)
-    {
-        // hack: it's possible, because we only compare values of the same filter range
-        const_cast<bool&>(left.mbIsDuplicated) = true;
-        return true;
-    }
-    else
-        return false;
+    return ScGlobal::GetCollator()->compareString(
+        left.maStrValue, right.maStrValue) == 0;
 }
 
 bool ScTypedStrData::operator< (const ScTypedStrData& r) const
@@ -95,13 +79,12 @@ bool ScTypedStrData::operator< (const ScTypedStrData& r) const
 }
 
 ScTypedStrData::ScTypedStrData(
-    const OUString& rStr, double nVal, StringType nType, bool bDate, bool bFormatted, bool bDuplicated ) :
+    const OUString& rStr, double fVal, double fRVal, StringType nType, bool bDate ) :
     maStrValue(rStr),
-    mfValue(nVal),
+    mfValue(fVal),
+    mfRoundedValue(fRVal),
     meStrType(nType),
-    mbIsDate( bDate ),
-    mbIsFormatted( bFormatted ),
-    mbIsDuplicated( bDuplicated ) {}
+    mbIsDate( bDate ) {}
 
 FindTypedStrData::FindTypedStrData(const ScTypedStrData& rVal, bool bCaseSens) :
     maVal(rVal), mbCaseSens(bCaseSens) {}

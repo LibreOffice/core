@@ -42,7 +42,7 @@ struct SC_DLLPUBLIC ScQueryEntry
         bool              mbMatchEmpty;
         bool              mbFormattedValue;
 
-        Item() : meType(ByValue), mfVal(0.0), mbMatchEmpty(false), mbFormattedValue(false) {}
+        Item() : meType(ByValue), mfVal(0.0), mbMatchEmpty(false) {}
 
         bool operator== (const Item& r) const;
     };
