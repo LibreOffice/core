@@ -45,21 +45,16 @@ public:
     /// Force generation of all panels by completion.
     void SyncUpdate();
 
-    void NotifyResize();
     auto& GetSidebarController() const { return mpSidebarController; }
     using SfxDockingWindow::Close;
 
 private:
     // Window overridables
     virtual void GetFocus() override;
-    virtual void Resize() override;
 
     virtual SfxChildAlignment CheckAlignment (
         SfxChildAlignment eCurrentAlignment,
         SfxChildAlignment eRequestedAlignment) override;
-
-    /// Notify LOKit that we closed and release the LOKNotifier.
-    void LOKClose();
 
     ::rtl::Reference<sfx2::sidebar::SidebarController> mpSidebarController;
     bool mbIsReadyToDrag;

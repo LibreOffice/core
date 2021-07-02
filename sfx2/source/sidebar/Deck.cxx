@@ -114,20 +114,6 @@ void Deck::DataChanged(const DataChangedEvent&)
     RequestLayoutInternal();
 }
 
-void Deck::Resize()
-{
-    InterimItemWindow::Resize();
-
-    if (const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
-    {
-        std::vector<vcl::LOKPayloadItem> aItems;
-        aItems.emplace_back("type", "deck");
-        aItems.emplace_back(std::make_pair("position", Point(GetOutOffXPixel(), GetOutOffYPixel()).toString()));
-        aItems.emplace_back(std::make_pair("size", GetSizePixel().toString()));
-        pNotifier->notifyWindow(GetLOKWindowId(), "size_changed", aItems);
-    }
-}
-
 /*
  * Get the ordering as is shown in the layout, and our type as 'deck'
  * also elide nested panel windows.
