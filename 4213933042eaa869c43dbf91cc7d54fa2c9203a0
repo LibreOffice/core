@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "792a3c4a_7b581d62",
+        "filename": "sal/rtl/math.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-02T12:27:01Z",
+      "side": 1,
+      "message": "Personally I don\u0027t see why do we need this at all. traits::appendAscii calls rtl_[u]stringbuffer_insert, which ensures that capacity is enough.\n\nI\u0027d suggest to just drop these blocks.",
+      "range": {
+        "startLine": 230,
+        "startChar": 8,
+        "endLine": 236,
+        "endChar": 9
+      },
+      "revId": "4213933042eaa869c43dbf91cc7d54fa2c9203a0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7556e9ce_fff28a59",
+        "filename": "sal/rtl/math.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-02T12:27:01Z",
+      "side": 1,
+      "message": "Maybe just introduce a templated appendAscii taking a \u0027const char (\u0026literal)[N]\u0027 instead of the pointer plus length? And then you have not to use the constants here at all.",
+      "revId": "4213933042eaa869c43dbf91cc7d54fa2c9203a0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
