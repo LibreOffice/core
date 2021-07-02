@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ee6d2ba1_82627196",
+        "filename": "sc/source/filter/xml/XMLTableHeaderFooterContext.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-07-02T13:34:25Z",
+      "side": 1,
+      "message": "Couldn\u0027t we remove this? We have already set the shared content previously. Or do we want to support the stored, but hidden left header in ODT, too? Is it supported by the OpenDocument standard?\n\nIf yes, we could add a compatibility feature, i.e. using the new code checking ODF 1.x...",
+      "range": {
+        "startLine": 89,
+        "startChar": 8,
+        "endLine": 89,
+        "endChar": 77
+      },
+      "revId": "e282ec4c80c02e0a8de47c55cba073ad31d94b88",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
