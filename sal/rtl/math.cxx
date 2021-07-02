@@ -164,45 +164,6 @@ bool isRepresentableInteger(double fAbsValue)
     return false;
 }
 
-// Returns 1-based index of least significant bit in a number, or zero if number is zero
-int findFirstSetBit(unsigned n)
-{
-#if defined _WIN32
-    unsigned long pos;
-    unsigned char bNonZero = _BitScanForward(&pos, n);
-    return (bNonZero == 0) ? 0 : pos + 1;
-#else
-    return __builtin_ffs(n);
-#endif
-}
-
-/** Returns number of binary bits for fractional part of the number
-    Expects a proper non-negative double value, not +-INF, not NAN
- */
-int getBitsInFracPart(double fAbsValue)
-{
-    assert(std::isfinite(fAbsValue) && fAbsValue >= 0.0);
-    if (fAbsValue == 0.0)
-        return 0;
-    auto pValParts = reinterpret_cast< const sal_math_Double * >(&fAbsValue);
-    int nExponent = pValParts->inf_parts.exponent - 1023;
-    if (nExponent >= 52)
-        return 0; // All bits in fraction are in integer part of the number
-    int nLeastSignificant = findFirstSetBit(pValParts->inf_parts.fraction_lo);
-    if (nLeastSignificant == 0)
-    {
-        nLeastSignificant = findFirstSetBit(pValParts->inf_parts.fraction_hi);
-        if (nLeastSignificant == 0)
-            nLeastSignificant = 53; // the implied leading 1 is the least significant
-        else
-            nLeastSignificant += 32;
-    }
-    int nFracSignificant = 53 - nLeastSignificant;
-    int nBitsInFracPart = nFracSignificant - nExponent;
-
-    return std::max(nBitsInFracPart, 0);
-}
-
 template< typename T >
 void doubleToString(typename T::String ** pResult,
                            sal_Int32 * pResultCapacity, sal_Int32 nResultOffset,
@@ -1283,8 +1244,8 @@ double SAL_CALL rtl_math_pow10Exp(double fValue, int nExp) SAL_THROW_EXTERN_C()
 
 double SAL_CALL rtl_math_approxValue( double fValue ) SAL_THROW_EXTERN_C()
 {
-    const double fBigInt = 2199023255552.0; // 2^41 -> only 11 bits left for fractional part, fine as decimal
-    if (fValue == 0.0 || fValue == HUGE_VAL || !std::isfinite( fValue) || fValue > fBigInt)
+    // 2^41 -> only 11 bits left for fractional part, fine as decimal
+    if (fValue == 0.0 || !std::isfinite( fValue) || fValue >= 2199023255552.0 )
     {
         // We don't handle these conditions.  Bail out.
         return fValue;
@@ -1298,11 +1259,10 @@ double SAL_CALL rtl_math_approxValue( double fValue ) SAL_THROW_EXTERN_C()
 
     // If the value is either integer representable as double,
     // or only has small number of bits in fraction part, then we need not do any approximation
-    if (isRepresentableInteger(fValue) || getBitsInFracPart(fValue) <= 11)
+    if (isRepresentableInteger(fValue))
         return fOrigValue;
 
-    int nExp = static_cast< int >(floor(log10(fValue)));
-    nExp = 14 - nExp;
+    int nExp = 14 - static_cast< int >(floor(log10(fValue)));
     double fExpValue = getN10Exp(abs(nExp));
 
     if (nExp < 0)
