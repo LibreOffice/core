@@ -57,11 +57,7 @@
 
 X11SalData* GetX11SalData()
 {
-    SalData * p1 = ImplGetSVData()->mpSalData;
-    OSL_ASSERT(p1 != nullptr);
-    X11SalData * p2 = dynamic_cast< X11SalData * >(p1);
-    OSL_ASSERT(p2 != nullptr);
-    return p2;
+    return static_cast<X11SalData*>(ImplGetSVData()->mpSalData);
 }
 
 extern "C" {
@@ -236,8 +232,8 @@ static const char* XRequest[] = {
     "X_NoOperation"
 };
 
-X11SalData::X11SalData( GenericUnixSalDataType t, SalInstance *pInstance )
-    : GenericUnixSalData( t, pInstance )
+X11SalData::X11SalData(SalInstance *pInstance)
+    : GenericUnixSalData(pInstance)
 {
     pXLib_          = nullptr;
 

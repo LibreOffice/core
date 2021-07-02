@@ -15,7 +15,7 @@ namespace {
 class SvpSalData : public GenericUnixSalData
 {
 public:
-    explicit SvpSalData( SalInstance *pInstance ) : GenericUnixSalData( SAL_DATA_SVP, pInstance ) {}
+    explicit SvpSalData(SalInstance *pInstance) : GenericUnixSalData(pInstance) {}
     virtual void ErrorTrapPush() override {}
     virtual bool ErrorTrapPop( bool /*bIgnoreError*/ = true ) override { return false; }
 };

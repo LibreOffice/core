@@ -48,7 +48,7 @@ SalSystem *HeadlessSalInstance::CreateSalSystem()
 class HeadlessSalData : public GenericUnixSalData
 {
 public:
-    explicit HeadlessSalData( SalInstance *pInstance ) : GenericUnixSalData( SAL_DATA_HEADLESS, pInstance ) {}
+    explicit HeadlessSalData(SalInstance *pInstance) : GenericUnixSalData(pInstance) {}
     virtual void ErrorTrapPush() override {}
     virtual bool ErrorTrapPop( bool ) override { return false; }
 };

@@ -22,9 +22,8 @@
 #include <unx/fontmanager.hxx>
 #include <unx/glyphcache.hxx>
 
-GenericUnixSalData::GenericUnixSalData(GenericUnixSalDataType const t, SalInstance* const pInstance)
-    : m_eType(t)
-    , m_pDisplay(nullptr)
+GenericUnixSalData::GenericUnixSalData(SalInstance* const pInstance)
+    : m_pDisplay(nullptr)
 {
     m_pInstance = pInstance;
     SetSalData(this);
