@@ -227,7 +227,7 @@ void doubleToString(typename T::String ** pResult,
     if (std::isnan(fValue))
     {
         // #i112652# XMLSchema-2
-        sal_Int32 nCapacity = RTL_CONSTASCII_LENGTH("NaN");
+        sal_Int32 nCapacity = 3; //RTL_CONSTASCII_LENGTH("NaN")
         if (!pResultCapacity)
         {
             pResultCapacity = &nCapacity;
@@ -235,8 +235,7 @@ void doubleToString(typename T::String ** pResult,
             nResultOffset = 0;
         }
 
-        T::appendAscii(pResult, pResultCapacity, &nResultOffset,
-                       RTL_CONSTASCII_STRINGPARAM("NaN"));
+        T::appendAscii(pResult, pResultCapacity, &nResultOffset, "NaN", 3);
 
         return;
     }
@@ -245,7 +244,7 @@ void doubleToString(typename T::String ** pResult,
     if (bHuge || std::isinf(fValue))
     {
         // #i112652# XMLSchema-2
-        sal_Int32 nCapacity = RTL_CONSTASCII_LENGTH("-INF");
+        sal_Int32 nCapacity = 4; //RTL_CONSTASCII_LENGTH("-INF")
         if (!pResultCapacity)
         {
             pResultCapacity = &nCapacity;
@@ -254,11 +253,9 @@ void doubleToString(typename T::String ** pResult,
         }
 
         if ( bSign )
-            T::appendAscii(pResult, pResultCapacity, &nResultOffset,
-                           RTL_CONSTASCII_STRINGPARAM("-"));
-
-        T::appendAscii(pResult, pResultCapacity, &nResultOffset,
-                       RTL_CONSTASCII_STRINGPARAM("INF"));
+            T::appendAscii(pResult, pResultCapacity, &nResultOffset, "-INF", 4);
+        else
+            T::appendAscii(pResult, pResultCapacity, &nResultOffset, "INF", 3);
 
         return;
     }
@@ -300,19 +297,16 @@ void doubleToString(typename T::String ** pResult,
         }
 
         if (bSign)
-            T::appendAscii(pResult, pResultCapacity, &nResultOffset,
-                           RTL_CONSTASCII_STRINGPARAM("-"));
+            T::appendAscii(pResult, pResultCapacity, &nResultOffset, "-", 1);
 
         nDecPlaces = std::clamp<sal_Int32>( nDecPlaces, 0, RTL_CONSTASCII_LENGTH(pRou));
         if (nDecPlaces == 0)
         {
-            T::appendAscii(pResult, pResultCapacity, &nResultOffset,
-                           RTL_CONSTASCII_STRINGPARAM("2"));
+            T::appendAscii(pResult, pResultCapacity, &nResultOffset, "2", 1);
         }
         else
         {
-            T::appendAscii(pResult, pResultCapacity, &nResultOffset,
-                           RTL_CONSTASCII_STRINGPARAM("1"));
+            T::appendAscii(pResult, pResultCapacity, &nResultOffset, "1", 1);
             T::appendChars(pResult, pResultCapacity, &nResultOffset, &cDecSeparator, 1);
             if (nDecPlaces <= 2)
             {
@@ -335,8 +329,7 @@ void doubleToString(typename T::String ** pResult,
                 T::appendAscii(pResult, pResultCapacity, &nResultOffset, pSlot[nSlot][nDec-1], nDec);
             }
         }
-        T::appendAscii(pResult, pResultCapacity, &nResultOffset,
-                       RTL_CONSTASCII_STRINGPARAM("E+308"));
+        T::appendAscii(pResult, pResultCapacity, &nResultOffset, "E+308", 5);
 
         return;
     }
