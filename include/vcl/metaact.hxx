@@ -1252,6 +1252,9 @@ public:
 
     const Color&        GetColor() const { return maColor; }
     bool                IsSetting() const { return mbSet; }
+    void                SetSetting(bool rSet) { mbSet = rSet; }
+    void                SetColor(Color& rColor) { maColor = rColor; }
+
 };
 
 class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetaTextColorAction final : public MetaAction
