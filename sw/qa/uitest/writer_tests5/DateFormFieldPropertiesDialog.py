@@ -56,8 +56,15 @@ class dateFormFieldDialog(UITestCase):
         itemsList = xDialog.getChild("date_formats_treeview")
 
         # check whether we have the right format selected
-        self.assertEqual(get_state_as_dict(itemsList)["Children"], "20")
-        self.assertEqual(get_state_as_dict(itemsList)["SelectEntryText"], "1999. december 31., péntek")
+        # This is awkward though because checking for a fixed number of
+        # entries if the selected default format happens to equal a
+        # standard system format the entry gets duplicated with
+        # "[System]" appended. So this may be either 20 or 21 ... and
+        # in that case it is the selected format and the
+        # SelectEntryText doesn't match the sample string, so all this
+        # is rather fragile depending on actual locale data.
+        self.assertEqual(get_state_as_dict(itemsList)["Children"], "21")
+        self.assertEqual(get_state_as_dict(itemsList)["SelectEntryText"], "1999. december 31., péntek[System]")
 
         xOKBtn = xDialog.getChild("ok")
         self.ui_test.close_dialog_through_button(xOKBtn)
