@@ -2045,7 +2045,7 @@ void SwTable::CopyHeadlineIntoTable( SwTableNode& rTableNd )
 
 bool SwTable::MakeCopy( SwDoc& rInsDoc, const SwPosition& rPos,
                         const SwSelBoxes& rSelBoxes,
-                        bool bCpyName ) const
+                        bool bCpyName, const OUString& rStyleName ) const
 {
     // Find all Boxes/Lines
     FndBox_ aFndBox( nullptr, nullptr );
@@ -2081,6 +2081,7 @@ bool SwTable::MakeCopy( SwDoc& rInsDoc, const SwPosition& rPos,
 
     pNewTable->SetTableStyleName(pTableNd->GetTable().GetTableStyleName());
 
+    pTableNd->GetTable().SetTableStyleName(rStyleName);
     if( auto pSwDDETable = dynamic_cast<const SwDDETable*>(this) )
     {
         // A DDE-Table is being copied

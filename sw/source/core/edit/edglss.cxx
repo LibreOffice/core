@@ -190,7 +190,7 @@ bool SwEditShell::CopySelToDoc( SwDoc& rInsDoc )
                         break;
                     }
             }
-            bRet = rInsDoc.InsCopyOfTable( aPos, aBoxes, nullptr, bCpyTableNm );
+            bRet = rInsDoc.InsCopyOfTable( aPos, aBoxes, nullptr, bCpyTableNm, false, pTableNd->GetTable().GetTableStyleName() );
         }
         else
             bRet = false;

@@ -4283,7 +4283,7 @@ void SwDoc::ClearBoxNumAttrs( const SwNodeIndex& rNode )
  * This method is called by edglss.cxx/fecopy.cxx
  */
 bool SwDoc::InsCopyOfTable( SwPosition& rInsPos, const SwSelBoxes& rBoxes,
-                        const SwTable* pCpyTable, bool bCpyName, bool bCorrPos )
+                        const SwTable* pCpyTable, bool bCpyName, bool bCorrPos, const OUString& rStyleName )
 {
     bool bRet;
 
@@ -4306,7 +4306,7 @@ bool SwDoc::InsCopyOfTable( SwPosition& rInsPos, const SwSelBoxes& rBoxes,
         {
             ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
             bRet = pSrcTableNd->GetTable().MakeCopy( *this, rInsPos, rBoxes,
-                                                bCpyName );
+                                                bCpyName, rStyleName );
         }
 
         if( pUndo && bRet )
