@@ -23,23 +23,9 @@ namespace psp
 class PrintFontManager;
 }
 
-enum GenericUnixSalDataType
-{
-    SAL_DATA_GTK,
-    SAL_DATA_GTK3,
-    SAL_DATA_KF5,
-    SAL_DATA_UNX,
-    SAL_DATA_SVP,
-    SAL_DATA_ANDROID,
-    SAL_DATA_IOS,
-    SAL_DATA_HEADLESS,
-    SAL_DATA_QT5
-};
-
 class VCL_DLLPUBLIC GenericUnixSalData : public SalData
 {
 private:
-    GenericUnixSalDataType m_eType;
     SalGenericDisplay* m_pDisplay;
     // cached hostname to avoid slow lookup
     OUString m_aHostname;
@@ -53,7 +39,7 @@ private:
     void InitPrintFontManager();
 
 public:
-    GenericUnixSalData(GenericUnixSalDataType const t, SalInstance* const pInstance);
+    GenericUnixSalData(SalInstance* const pInstance);
     virtual ~GenericUnixSalData() override;
     virtual void Dispose() {}
 
@@ -68,8 +54,6 @@ public:
     }
 
     OUString& GetUnicodeCommand() { return m_aUnicodeEntry; }
-
-    GenericUnixSalDataType GetType() const { return m_eType; }
 
     FreetypeManager* GetFreetypeManager()
     {

@@ -112,9 +112,8 @@ void SalGenericInstance::jobEndedPrinterUpdate()
 
 using namespace psp;
 
-GenericUnixSalData::GenericUnixSalData(GenericUnixSalDataType const t, SalInstance *const pInstance)
-    : m_eType(t)
-    , m_pDisplay(nullptr)
+GenericUnixSalData::GenericUnixSalData(SalInstance *const pInstance)
+    : m_pDisplay(nullptr)
     , m_pFreetypeManager(new FreetypeManager)
     , m_pPrintFontManager(nullptr)
 {

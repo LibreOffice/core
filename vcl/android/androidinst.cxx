@@ -29,7 +29,7 @@ static int viewWidth = 1, viewHeight = 1;
 class AndroidSalData : public GenericUnixSalData
 {
 public:
-    explicit AndroidSalData( SalInstance *pInstance ) : GenericUnixSalData( SAL_DATA_ANDROID, pInstance ) {}
+    explicit AndroidSalData(SalInstance *pInstance) : GenericUnixSalData(pInstance) {}
     virtual void ErrorTrapPush() {}
     virtual bool ErrorTrapPop( bool ) { return false; }
 };
