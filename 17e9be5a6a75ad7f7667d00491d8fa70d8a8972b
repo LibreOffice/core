@@ -52,6 +52,24 @@
       "revId": "17e9be5a6a75ad7f7667d00491d8fa70d8a8972b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cd3745a8_0ba41543",
+        "filename": "basic/qa/basic_coverage/test_string_replace.vb",
+        "patchSetId": 3
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-02T08:13:44Z",
+      "side": 1,
+      "message": "See also: https://bugs.documentfoundation.org/show_bug.cgi?id\u003d84098#c12\n\nDo we actually need the VBA support in the _test_asserts.vb? I don\u0027t see how it could be needed (but I didn\u0027t test it)",
+      "parentUuid": "6e90e0c4_719020fb",
+      "revId": "17e9be5a6a75ad7f7667d00491d8fa70d8a8972b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
