@@ -214,13 +214,12 @@ void Test::TestDrawString()
 
 void Test::TestDrawStringAlign()
 {
-#if HAVE_MORE_FONTS
     // EMF+ DrawString with alignment (StringAlignmentNear, StringAlignmentFar, StringAlignmentCenter)
-    // It seems Arial font is replaced with Liberation Sans. These numbers are valid for Liberation Sans.
     Primitive2DSequence aSequence = parseEmf(u"/emfio/qa/cppunit/emf/data/TestDrawStringAlign.emf");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
     drawinglayer::Primitive2dXmlDump dumper;
-    xmlDocUniquePtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
+    xmlDocUniquePtr pDocument
+        = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
     CPPUNIT_ASSERT(pDocument);
 
     assertXPath(pDocument, "/primitive2D/metafile/transform/mask/transform", 9);
@@ -237,20 +236,19 @@ void Test::TestDrawStringAlign()
     assertXPath(pDocument, "/primitive2D/metafile/transform/mask/transform[1]/textsimpleportion",
                 "fontcolor", "#000000");
     assertXPath(pDocument, "/primitive2D/metafile/transform/mask/transform[1]/textsimpleportion",
-                "familyname", "ARIAL");
+                "familyname", "LIBERATION SAN");
 
     assertXPath(pDocument, "/primitive2D/metafile/transform/mask/transform[2]/textsimpleportion",
                 "width", "12");
     assertXPath(pDocument, "/primitive2D/metafile/transform/mask/transform[2]/textsimpleportion",
                 "height", "12");
     assertXPath(pDocument, "/primitive2D/metafile/transform/mask/transform[2]/textsimpleportion",
-                "x", "143");
+                "x", "144");
     assertXPath(pDocument, "/primitive2D/metafile/transform/mask/transform[2]/textsimpleportion",
                 "y", "22");
     assertXPath(pDocument, "/primitive2D/metafile/transform/mask/transform[2]/textsimpleportion",
                 "text", "HCVT");
 
-    // TODO Make the position of the text the same across the platforms (Arial vs Liberation Sans).
     assertXPath(pDocument, "/primitive2D/metafile/transform/mask/transform[3]/textsimpleportion",
                 "x", "276");
     assertXPath(pDocument, "/primitive2D/metafile/transform/mask/transform[3]/textsimpleportion",
@@ -266,14 +264,14 @@ void Test::TestDrawStringAlign()
                 "text", "HLVC");
 
     assertXPath(pDocument, "/primitive2D/metafile/transform/mask/transform[5]/textsimpleportion",
-                "x", "142");
+                "x", "143");
     assertXPath(pDocument, "/primitive2D/metafile/transform/mask/transform[5]/textsimpleportion",
                 "y", "66");
     assertXPath(pDocument, "/primitive2D/metafile/transform/mask/transform[5]/textsimpleportion",
                 "text", "HCVC");
 
     assertXPath(pDocument, "/primitive2D/metafile/transform/mask/transform[6]/textsimpleportion",
-                "x", "274");
+                "x", "275");
     assertXPath(pDocument, "/primitive2D/metafile/transform/mask/transform[6]/textsimpleportion",
                 "y", "66");
     assertXPath(pDocument, "/primitive2D/metafile/transform/mask/transform[6]/textsimpleportion",
@@ -299,7 +297,6 @@ void Test::TestDrawStringAlign()
                 "y", "110");
     assertXPath(pDocument, "/primitive2D/metafile/transform/mask/transform[9]/textsimpleportion",
                 "text", "HRVB");
-#endif
 }
 
 void Test::TestDrawStringTransparent()
