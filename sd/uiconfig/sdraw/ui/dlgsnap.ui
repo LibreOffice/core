@@ -2,21 +2,6 @@
 <!-- Generated with glade 3.38.2 -->
 <interface domain="sd">
   <requires lib="gtk+" version="3.20"/>
-  <object class="GtkImage" id="image1">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
-    <property name="icon-name">sd/res/hlppoint.png</property>
-  </object>
-  <object class="GtkImage" id="image2">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
-    <property name="icon-name">sd/res/hlplvert.png</property>
-  </object>
-  <object class="GtkImage" id="image3">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
-    <property name="icon-name">sd/res/hlplhorz.png</property>
-  </object>
   <object class="GtkDialog" id="SnapObjectDialog">
     <property name="can-focus">False</property>
     <property name="border-width">6</property>
@@ -215,22 +200,54 @@
                 <property name="label-xalign">0</property>
                 <property name="shadow-type">none</property>
                 <child>
-                  <object class="GtkBox" id="box2">
+                  <!-- n-columns=2 n-rows=3 -->
+                  <object class="GtkGrid">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="margin-start">12</property>
                     <property name="margin-top">6</property>
-                    <property name="orientation">vertical</property>
-                    <property name="spacing">12</property>
+                    <property name="row-spacing">6</property>
+                    <property name="column-spacing">12</property>
+                    <child>
+                      <object class="GtkImage" id="image1">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="icon-name">sd/res/hlppoint.png</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkImage" id="image2">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="icon-name">sd/res/hlplvert.png</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkImage" id="image3">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="icon-name">sd/res/hlplhorz.png</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">2</property>
+                      </packing>
+                    </child>
                     <child>
                       <object class="GtkRadioButton" id="point">
                         <property name="label" translatable="yes" context="dlgsnap|point">_Point</property>
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
-                        <property name="image">image1</property>
                         <property name="use-underline">True</property>
-                        <property name="always-show-image">True</property>
                         <property name="active">True</property>
                         <property name="draw-indicator">True</property>
                         <child internal-child="accessible">
@@ -240,9 +257,8 @@
                         </child>
                       </object>
                       <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">0</property>
                       </packing>
                     </child>
                     <child>
@@ -251,9 +267,7 @@
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
-                        <property name="image">image2</property>
                         <property name="use-underline">True</property>
-                        <property name="always-show-image">True</property>
                         <property name="draw-indicator">True</property>
                         <property name="group">point</property>
                         <child internal-child="accessible">
@@ -263,9 +277,8 @@
                         </child>
                       </object>
                       <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">1</property>
                       </packing>
                     </child>
                     <child>
@@ -274,9 +287,7 @@
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
-                        <property name="image">image3</property>
                         <property name="use-underline">True</property>
-                        <property name="always-show-image">True</property>
                         <property name="draw-indicator">True</property>
                         <property name="group">point</property>
                         <child internal-child="accessible">
@@ -286,9 +297,8 @@
                         </child>
                       </object>
                       <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">2</property>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">2</property>
                       </packing>
                     </child>
                   </object>
