@@ -121,7 +121,7 @@ public:
     void testMoveShapeHandle();
     void testEditCursorBounds();
     void testTextSelectionBounds();
-
+    void testSheetViewDataCrash();
 
     CPPUNIT_TEST_SUITE(ScTiledRenderingTest);
     CPPUNIT_TEST(testRowColumnHeaders);
@@ -175,6 +175,7 @@ public:
     CPPUNIT_TEST(testMoveShapeHandle);
     CPPUNIT_TEST(testEditCursorBounds);
     CPPUNIT_TEST(testTextSelectionBounds);
+    CPPUNIT_TEST(testSheetViewDataCrash);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -2816,6 +2817,47 @@ void ScTiledRenderingTest::testTextSelectionBounds()
         !aCellBounds.Intersection(aView.m_aTextSelectionResult.getBounds(0)).IsEmpty());
 
     SfxViewShell::Current()->registerLibreOfficeKitViewCallback(nullptr, nullptr);
+}
+
+void ScTiledRenderingTest::testSheetViewDataCrash()
+{
+    comphelper::LibreOfficeKit::setActive();
+
+    ScModelObj* pModelObj = createDoc("empty.ods");
+
+    // view #1
+    int nView1 = SfxLokHelper::getView();
+    SfxLokHelper::setView(nView1);
+
+    // Imitate online while creating a new sheet on empty.ods.
+    uno::Sequence<beans::PropertyValue> aArgs(
+        comphelper::InitPropertySequence({
+            { "Name",  uno::Any(OUString("NewSheet")) },
+            { "Index", uno::Any(sal_Int32(2)) }
+        }));
+    comphelper::dispatchCommand(".uno:Insert", aArgs);
+    Scheduler::ProcessEventsToIdle();
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::PAGEDOWN | KEY_MOD1);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::PAGEDOWN | KEY_MOD1);
+    Scheduler::ProcessEventsToIdle();
+    ScTabViewShell* pView1 = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    CPPUNIT_ASSERT(pView1);
+
+    // view #2
+    SfxLokHelper::createView();
+    ScTabViewShell* pView2 = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    CPPUNIT_ASSERT(pView2);
+    Scheduler::ProcessEventsToIdle();
+
+    SfxLokHelper::setView(nView1);
+    // Delete a range.
+    pView1->SetCursor(1, 1);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::DOWN | KEY_SHIFT);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::DOWN | KEY_SHIFT);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::DELETE);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::DELETE);
+    // It will crash at this point without the fix.
+    Scheduler::ProcessEventsToIdle();
 }
 
 }
