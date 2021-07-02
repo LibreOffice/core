@@ -5962,18 +5962,17 @@ void SwWW8ImplReader::SetOutlineStyles()
             if (bReRegister)
                 RegisterNumFormatOnStyle(nStyle);
 
-            // When ANYTHING is wrong or strange, prohibit eligibility for ChapterNumbering.
-            if (rSI.IsWW8BuiltInHeadingStyle() && rSI.m_nListLevel != rSI.mnWW8OutlineLevel
-                && rSI.IsOutlineNumbered())
-            {
-                aPreventUseAsChapterNumbering[rSI.m_pOutlineNumrule] = true;
-            }
-
             ++nStyle; // increment before the first "continue";
 
             if (!rSI.m_bColl || !rSI.IsWW8BuiltInHeadingStyle() || !rSI.HasWW8OutlineLevel())
             {
                 continue;
+            }
+
+            // When ANYTHING is wrong or strange, prohibit eligibility for ChapterNumbering.
+            if (rSI.IsOutlineNumbered() && rSI.m_nListLevel != rSI.mnWW8OutlineLevel)
+            {
+                aPreventUseAsChapterNumbering[rSI.m_pOutlineNumrule] = true;
             }
 
             aWW8BuiltInHeadingStyles.push_back(&rSI);
