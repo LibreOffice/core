@@ -287,6 +287,7 @@ public:
     void testTdf140431();
     void testDateStandardfilterXLSX();
     void testTdf142929_filterLessThanXLSX();
+    void testAutofilterTop10XLSX();
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
@@ -473,6 +474,7 @@ public:
 
     CPPUNIT_TEST(testDateStandardfilterXLSX);
     CPPUNIT_TEST(testTdf142929_filterLessThanXLSX);
+    CPPUNIT_TEST(testAutofilterTop10XLSX);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -5960,6 +5962,20 @@ void ScExportTest::testTdf142929_filterLessThanXLSX()
     CPPUNIT_ASSERT(pDoc);
     assertXPath(pDoc, "//x:customFilters/x:customFilter", "val", "2");
     assertXPath(pDoc, "//x:customFilters/x:customFilter", "operator", "lessThan");
+
+    xDocSh->DoClose();
+}
+
+void ScExportTest::testAutofilterTop10XLSX()
+{
+    ScDocShellRef xDocSh = loadDoc(u"tdf143068_top10filter.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory,
+                                                     "xl/worksheets/sheet1.xml", FORMAT_XLSX);
+    CPPUNIT_ASSERT(pDoc);
+    assertXPath(pDoc, "//x:autoFilter/x:filterColumn", "colId", "0");
+    assertXPath(pDoc, "//x:autoFilter/x:filterColumn/x:top10", "val", "4");
 
     xDocSh->DoClose();
 }
