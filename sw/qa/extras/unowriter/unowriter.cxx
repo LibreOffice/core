@@ -392,6 +392,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testSectionAnchorCopyTableAtStart)
         xTTS->getTransferableForTextRange(xAnchor));
 
     // check this doesn't throw
+    CPPUNIT_ASSERT(xAnchor->getText().is());
     CPPUNIT_ASSERT(xAnchor->getStart().is());
     CPPUNIT_ASSERT(xAnchor->getEnd().is());
 
@@ -451,6 +452,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testSectionAnchorCopyTableAtEnd)
         xTTS->getTransferableForTextRange(xAnchor));
 
     // check this doesn't throw
+    CPPUNIT_ASSERT(xAnchor->getText().is());
     CPPUNIT_ASSERT(xAnchor->getStart().is());
     CPPUNIT_ASSERT(xAnchor->getEnd().is());
 
@@ -512,6 +514,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testSectionAnchorCopyTable)
         xTTS->getTransferableForTextRange(xAnchor));
 
     // check this doesn't throw
+    CPPUNIT_ASSERT(xAnchor->getText().is());
     CPPUNIT_ASSERT(xAnchor->getStart().is());
     CPPUNIT_ASSERT(xAnchor->getEnd().is());
 

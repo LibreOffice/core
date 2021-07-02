@@ -722,7 +722,12 @@ public:
     {
         if (m_pTableOrSectionFormat)
         {
+            assert(m_eRangePosition == RANGE_IS_TABLE || m_eRangePosition == RANGE_IS_SECTION);
             StartListening(pTableOrSectionFormat->GetNotifier());
+        }
+        else
+        {
+            assert(m_eRangePosition != RANGE_IS_TABLE && m_eRangePosition != RANGE_IS_SECTION);
         }
     }
 
@@ -983,17 +988,23 @@ SwXTextRange::getText()
 {
     SolarMutexGuard aGuard;
 
-    if (!m_pImpl->m_xParentText.is())
+    if (!m_pImpl->m_xParentText.is() && m_pImpl->m_pTableOrSectionFormat)
     {
-        if (m_pImpl->m_eRangePosition == RANGE_IS_TABLE &&
-            m_pImpl->m_pTableOrSectionFormat)
+        std::optional<SwPosition> oPosition;
+        if (m_pImpl->m_eRangePosition == RANGE_IS_TABLE)
         {
             SwTable const*const pTable = SwTable::FindTable( m_pImpl->m_pTableOrSectionFormat );
             SwTableNode const*const pTableNode = pTable->GetTableNode();
-            const SwPosition aPosition( *pTableNode );
-            m_pImpl->m_xParentText =
-                ::sw::CreateParentXText(m_pImpl->m_rDoc, aPosition);
+            oPosition.emplace(*pTableNode);
         }
+        else
+        {
+            assert(m_pImpl->m_eRangePosition == RANGE_IS_SECTION);
+            auto const pSectFormat(static_cast<SwSectionFormat const*>(m_pImpl->m_pTableOrSectionFormat));
+            oPosition.emplace(pSectFormat->GetContent().GetContentIdx()->GetNode());
+        }
+        m_pImpl->m_xParentText =
+            ::sw::CreateParentXText(m_pImpl->m_rDoc, *oPosition);
     }
     OSL_ENSURE(m_pImpl->m_xParentText.is(), "SwXTextRange::getText: no text");
     return m_pImpl->m_xParentText;
