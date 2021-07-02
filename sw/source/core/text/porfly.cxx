@@ -26,6 +26,7 @@
 #include <frmfmt.hxx>
 #include <viewsh.hxx>
 #include <textboxhelper.hxx>
+#include <editeng/lrspitem.hxx>
 
 #include <sal/log.hxx>
 #include <fmtanchr.hxx>
@@ -400,7 +401,7 @@ void SwFlyCntPortion::SetBase( const SwTextFrame& rFrame, const Point &rBase,
 
             SwFormatAnchor aNewTxBxAnchor(pTextBox->GetAnchor());
             aNewTxBxAnchor.SetAnchor(aPos);
-            aHori.SetPos(nXoffs);
+            aHori.SetPos(nXoffs + pShape->GetLRSpace().GetLeft());
 
             pTextBox->LockModify();
             pTextBox->SetFormatAttr(aNewTxBxAnchor);
