@@ -417,7 +417,6 @@ namespace vcl_sal {
     inline SalDisplay *getSalDisplay(GenericUnixSalData const * data)
     {
         assert(data != nullptr);
-        assert(data->GetType() != SAL_DATA_GTK3);
         return static_cast<SalDisplay *>(data->GetDisplay());
     }
 }

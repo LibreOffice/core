@@ -44,7 +44,7 @@ class X11SalData final : public GenericUnixSalData
     std::unique_ptr<SalXLib>  pXLib_;
 
 public:
-             X11SalData( GenericUnixSalDataType t, SalInstance *pInstance );
+             X11SalData(SalInstance *pInstance);
     virtual ~X11SalData() override;
 
     virtual void            Init();

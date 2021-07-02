@@ -35,7 +35,7 @@ class IosSalData : public GenericUnixSalData
 {
 public:
     explicit IosSalData(SalInstance *pInstance)
-        : GenericUnixSalData(SAL_DATA_IOS, pInstance)
+        : GenericUnixSalData(pInstance)
     {
     }
     virtual void ErrorTrapPush() {}
