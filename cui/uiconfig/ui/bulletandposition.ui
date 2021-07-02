@@ -169,7 +169,6 @@
         </child>
         <child>
           <object class="GtkBox" id="NumberingOptionsPage">
-            <property name="height-request">490</property>
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="spacing">12</property>
@@ -181,7 +180,6 @@
                 <property name="shadow-type">none</property>
                 <child>
                   <object class="GtkScrolledWindow">
-                    <property name="width-request">78</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="margin-top">6</property>
@@ -197,6 +195,7 @@
                         <property name="headers-clickable">False</property>
                         <property name="search-column">0</property>
                         <property name="show-expanders">False</property>
+                        <property name="width-request">75</property>
                         <child internal-child="selection">
                           <object class="GtkTreeSelection"/>
                         </child>
@@ -235,6 +234,7 @@
               <object class="GtkBox" id="box1">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
+                <property name="hexpand">True</property>
                 <property name="orientation">vertical</property>
                 <property name="spacing">6</property>
                 <child>
@@ -1052,13 +1052,14 @@
                 <property name="shadow-type">none</property>
                 <child>
                   <object class="GtkBox">
-                    <property name="width-request">170</property>
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <child>
                       <object class="GtkScrolledWindow">
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
+                        <property name="hscrollbar-policy">never</property>
+                        <property name="vscrollbar-policy">never</property>
                         <property name="shadow-type">in</property>
                         <child>
                           <object class="GtkViewport">
