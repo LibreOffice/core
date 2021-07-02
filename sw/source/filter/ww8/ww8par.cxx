@@ -5971,7 +5971,7 @@ void SwWW8ImplReader::SetOutlineStyles()
 
             ++nStyle; // increment before the first "continue";
 
-            if (!rSI.IsWW8BuiltInHeadingStyle() || !rSI.HasWW8OutlineLevel())
+            if (!rSI.m_bColl || !rSI.IsWW8BuiltInHeadingStyle() || !rSI.HasWW8OutlineLevel())
             {
                 continue;
             }
@@ -6022,9 +6022,6 @@ void SwWW8ImplReader::SetOutlineStyles()
     bool bAppliedChangedOutlineStyle = false;
     for (const SwWW8StyInf* pStyleInf : aWW8BuiltInHeadingStyles)
     {
-        if (!pStyleInf->m_bColl) //Character Style
-            continue;
-
         const sal_uInt16 nOutlineStyleListLevelOfWW8BuiltInHeadingStyle
             = 1 << pStyleInf->mnWW8OutlineLevel;
         if (nOutlineStyleListLevelOfWW8BuiltInHeadingStyle
