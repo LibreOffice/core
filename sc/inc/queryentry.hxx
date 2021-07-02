@@ -40,9 +40,13 @@ struct SC_DLLPUBLIC ScQueryEntry
         double        mfVal;
         svl::SharedString maString;
         bool              mbMatchEmpty;
+<<<<<<< HEAD   (90bb84 sw: layout: fix table split loop caused by RemoveFollowFlowL)
         bool              mbFormattedValue;
+=======
+        Color maColor;
+>>>>>>> CHANGE (3069df tdf#142910 sc filter: fix "greater than" or "smaller than" e)
 
-        Item() : meType(ByValue), mfVal(0.0), mbMatchEmpty(false), mbFormattedValue(false) {}
+        Item() : meType(ByValue), mfVal(0.0), mbMatchEmpty(false) {}
 
         bool operator== (const Item& r) const;
     };

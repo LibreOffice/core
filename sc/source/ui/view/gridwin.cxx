@@ -560,9 +560,8 @@ public:
         {
             ScQueryEntry::Item aNew;
             aNew.maString = mrPool.intern(rEntry.aName);
-            // set the filter type to ByValue, if the filter condition is value and not a duplicated value
-            aNew.meType = rEntry.bDate ? ScQueryEntry::ByDate : rEntry.bValue && !rEntry.bDuplicated ? ScQueryEntry::ByValue : ScQueryEntry::ByString;
-            aNew.mbFormattedValue = rEntry.bDuplicated;
+            // set the filter type to ByValue, if the filter condition is value
+            aNew.meType = rEntry.bDate ? ScQueryEntry::ByDate : rEntry.bValue ? ScQueryEntry::ByValue : ScQueryEntry::ByString;
             aNew.mfVal = rEntry.nValue;
             mrItems.push_back(aNew);
         }
@@ -705,13 +704,36 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
 
     // Populate the check box list.
     rControl.setMemberSize(aFilterEntries.size());
+<<<<<<< HEAD   (90bb84 sw: layout: fix table split loop caused by RemoveFollowFlowL)
+=======
+    for (auto it = aFilterEntries.begin(); it != aFilterEntries.end(); ++it)
+    {
+        // tdf#140745 show (empty) entry on top of the checkbox list
+        if (it->GetString().isEmpty())
+        {
+            const OUString& aStringVal = it->GetString();
+            const double aDoubleVal = it->GetValue();
+            bool bSelected = true;
+            if (!aSelectedValue.empty() || !aSelectedString.empty())
+                bSelected = aSelectedString.count(aStringVal) > 0;
+            else if (bQueryByNonEmpty)
+                bSelected = false;
+            rControl.addMember(aStringVal, aDoubleVal, bSelected);
+            aFilterEntries.maStrData.erase(it);
+            break;
+        }
+    }
+>>>>>>> CHANGE (3069df tdf#142910 sc filter: fix "greater than" or "smaller than" e)
     for (const auto& rEntry : aFilterEntries)
     {
         const OUString& aStringVal = rEntry.GetString();
         const double aDoubleVal = rEntry.GetValue();
+        const double aRDoubleVal = rEntry.GetRoundedValue();
         bool bSelected = true;
+
         if (!aSelectedValue.empty() || !aSelectedString.empty())
         {
+<<<<<<< HEAD   (90bb84 sw: layout: fix table split loop caused by RemoveFollowFlowL)
             if (aStringVal.isEmpty())
                 bSelected = aSelectedString.count(aStringVal) > 0;
             else
@@ -720,11 +742,18 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
         }
         else if (bQueryByNonEmpty)
             bSelected = !aStringVal.isEmpty();
+=======
+            if (aDoubleVal == aRDoubleVal)
+                bSelected = aSelectedValue.count(aDoubleVal) > 0 || aSelectedString.count(aStringVal) > 0;
+            else
+                bSelected = aSelectedValue.count(aDoubleVal) > 0 || aSelectedValue.count(aRDoubleVal) > 0 || aSelectedString.count(aStringVal) > 0;
+        }
+>>>>>>> CHANGE (3069df tdf#142910 sc filter: fix "greater than" or "smaller than" e)
 
         if ( rEntry.IsDate() )
             rControl.addDateMember( aStringVal, rEntry.GetValue(), bSelected );
         else
-            rControl.addMember( aStringVal, aDoubleVal, bSelected, rEntry.GetStringType() == ScTypedStrData::Value, rEntry.IsDuplicated() );
+            rControl.addMember( aStringVal, aRDoubleVal, bSelected, rEntry.GetStringType() == ScTypedStrData::Value );
     }
 
     // Populate the menu.
