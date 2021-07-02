@@ -77,7 +77,7 @@ public:
     css::uno::Reference< css::accessibility::XAccessible >
         getHeaderBar() override
     {
-        return AccessibleBrowseBox::getHeaderBar( vcl::BBTYPE_COLUMNHEADERBAR );
+        return AccessibleBrowseBox::getHeaderBar( AccessibleBrowseBoxObjType::ColumnHeaderBar );
     }
 
 private:

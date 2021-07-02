@@ -120,7 +120,7 @@ public:
     */
     css::uno::Reference<
         css::accessibility::XAccessible >
-        getHeaderBar( ::vcl::AccessibleBrowseBoxObjType _eObjType )
+        getHeaderBar( AccessibleBrowseBoxObjType _eObjType )
         {
             return implGetHeaderBar(_eObjType);
         }
@@ -157,7 +157,7 @@ protected:
         @return  The XAccessible interface of the header bar. */
     css::uno::Reference<
         css::accessibility::XAccessible >
-        implGetHeaderBar( ::vcl::AccessibleBrowseBoxObjType eObjType );
+        implGetHeaderBar( AccessibleBrowseBoxObjType eObjType );
 
     /** This method returns one of the children that are always present:
         Data table, row and column header bar or corner control.
@@ -231,7 +231,7 @@ private:
         return m_xContext.is() && m_xContext->isAlive();
     }
     virtual css::uno::Reference< css::accessibility::XAccessible >
-        getHeaderBar( ::vcl::AccessibleBrowseBoxObjType _eObjType ) override
+        getHeaderBar( AccessibleBrowseBoxObjType _eObjType ) override
     {
         css::uno::Reference< css::accessibility::XAccessible > xAccessible;
         AccessibleBrowseBox* pContext( getContext() );

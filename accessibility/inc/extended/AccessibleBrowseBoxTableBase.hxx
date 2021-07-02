@@ -50,7 +50,7 @@ public:
     AccessibleBrowseBoxTableBase(
         const css::uno::Reference< css::accessibility::XAccessible >& rxParent,
         ::vcl::IAccessibleTableProvider& rBrowseBox,
-        ::vcl::AccessibleBrowseBoxObjType eObjType );
+        AccessibleBrowseBoxObjType eObjType );
 
 protected:
     virtual ~AccessibleBrowseBoxTableBase() override = default;

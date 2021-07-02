@@ -780,7 +780,7 @@ public:
         @return
             The name of the specified object.
     */
-    virtual OUString GetAccessibleObjectName( ::vcl::AccessibleBrowseBoxObjType eObjType,sal_Int32 _nPosition = -1) const override;
+    virtual OUString GetAccessibleObjectName( AccessibleBrowseBoxObjType eObjType,sal_Int32 _nPosition = -1) const override;
 
     /** return the description of the specified object.
         @param  eObjType
@@ -790,7 +790,7 @@ public:
         @return
             The description of the specified object.
     */
-    virtual OUString GetAccessibleObjectDescription( ::vcl::AccessibleBrowseBoxObjType eObjType,sal_Int32 _nPosition = -1) const override;
+    virtual OUString GetAccessibleObjectDescription( AccessibleBrowseBoxObjType eObjType,sal_Int32 _nPosition = -1) const override;
 
     /** @return  The header text of the specified row. */
     virtual OUString GetRowDescription( sal_Int32 nRow ) const override;
@@ -802,7 +802,7 @@ public:
         the accessible object), depending on the specified object type. */
     virtual void FillAccessibleStateSet(
             ::utl::AccessibleStateSetHelper& rStateSet,
-            ::vcl::AccessibleBrowseBoxObjType eObjType ) const override;
+            AccessibleBrowseBoxObjType eObjType ) const override;
 
     /** Fills the StateSet with all states for one cell (except DEFUNC and SHOWING, done by
         the accessible object). */

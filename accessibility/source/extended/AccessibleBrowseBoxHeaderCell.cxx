@@ -33,7 +33,7 @@ AccessibleBrowseBoxHeaderCell::AccessibleBrowseBoxHeaderCell(sal_Int32 _nColumnR
                                   const Reference< XAccessible >& rxParent,
                                   vcl::IAccessibleTableProvider& rBrowseBox,
                                   const css::uno::Reference< css::awt::XWindow >& _xFocusWindow,
-                                  vcl::AccessibleBrowseBoxObjType eObjType)
+                                  AccessibleBrowseBoxObjType eObjType)
 : BrowseBoxAccessibleElement(rxParent,
                           rBrowseBox,
                           _xFocusWindow,

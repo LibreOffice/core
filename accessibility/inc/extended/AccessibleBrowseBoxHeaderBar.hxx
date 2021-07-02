@@ -42,12 +42,12 @@ class AccessibleBrowseBoxHeaderBar final :
 public:
     /** @param rxParent         Parent that holds the browsebox headerbar control
         @param rBrowseBox       The BrowseBox control.
-        @param eObjType  One of the two allowed types BBTYPE_ROWHEADERBAR or
-                         BBTYPE_COLUMNHEADERBAR. */
+        @param eObjType  One of the two allowed types AccessibleBrowseBoxObjType::RowHeaderBar or
+                         AccessibleBrowseBoxObjType::ColumnHeaderBar. */
     AccessibleBrowseBoxHeaderBar(
         const css::uno::Reference< css::accessibility::XAccessible >& rxParent,
         ::vcl::IAccessibleTableProvider& rBrowseBox,
-        ::vcl::AccessibleBrowseBoxObjType eObjType );
+        AccessibleBrowseBoxObjType eObjType );
 
 private:
     virtual ~AccessibleBrowseBoxHeaderBar() override;
@@ -203,12 +203,12 @@ private:
 
 inline bool AccessibleBrowseBoxHeaderBar::isRowBar() const
 {
-    return getType() == ::vcl::BBTYPE_ROWHEADERBAR;
+    return getType() == AccessibleBrowseBoxObjType::RowHeaderBar;
 }
 
 inline bool AccessibleBrowseBoxHeaderBar::isColumnBar() const
 {
-    return getType() == ::vcl::BBTYPE_COLUMNHEADERBAR;
+    return getType() == AccessibleBrowseBoxObjType::ColumnHeaderBar;
 }
 
 

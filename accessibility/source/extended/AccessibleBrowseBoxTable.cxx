@@ -38,7 +38,7 @@ namespace accessibility {
 AccessibleBrowseBoxTable::AccessibleBrowseBoxTable(
         const Reference< XAccessible >& rxParent,
         vcl::IAccessibleTableProvider& rBrowseBox ) :
-    AccessibleBrowseBoxTableBase( rxParent, rBrowseBox, vcl::BBTYPE_TABLE )
+    AccessibleBrowseBoxTableBase( rxParent, rBrowseBox, AccessibleBrowseBoxObjType::Table )
 {
 }
 

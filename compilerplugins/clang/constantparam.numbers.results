@@ -1419,8 +1419,8 @@ include/unotools/useroptions.hxx:90
     enum UserOptToken nToken
     19
 include/vcl/accessiblefactory.hxx:113
-    class com::sun::star::uno::Reference<class com::sun::star::accessibility::XAccessible> vcl::IAccessibleFactory::createAccessibleBrowseBoxHeaderBar(const class com::sun::star::uno::Reference<class com::sun::star::accessibility::XAccessible> &,class vcl::IAccessibleTableProvider &,enum vcl::AccessibleBrowseBoxObjType) const
-    enum vcl::AccessibleBrowseBoxObjType _eObjType
+    class com::sun::star::uno::Reference<class com::sun::star::accessibility::XAccessible> vcl::IAccessibleFactory::createAccessibleBrowseBoxHeaderBar(const class com::sun::star::uno::Reference<class com::sun::star::accessibility::XAccessible> &,class vcl::IAccessibleTableProvider &,enum AccessibleBrowseBoxObjType) const
+    enum AccessibleBrowseBoxObjType _eObjType
     3
 include/vcl/bitmap.hxx:539
     _Bool Bitmap::ImplConvertDown(enum vcl::PixelFormat,const class Color *)

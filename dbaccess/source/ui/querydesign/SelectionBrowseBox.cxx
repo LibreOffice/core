@@ -2596,12 +2596,12 @@ OUString OSelectionBrowseBox::GetRowDescription( sal_Int32 _nRow ) const
     return aLabel.getToken(nToken, ';');
 }
 
-OUString OSelectionBrowseBox::GetAccessibleObjectName( ::vcl::AccessibleBrowseBoxObjType _eObjType,sal_Int32 _nPosition) const
+OUString OSelectionBrowseBox::GetAccessibleObjectName( AccessibleBrowseBoxObjType _eObjType,sal_Int32 _nPosition) const
 {
     OUString sRetText;
     switch( _eObjType )
     {
-        case ::vcl::BBTYPE_ROWHEADERCELL:
+        case AccessibleBrowseBoxObjType::RowHeaderCell:
             sRetText = GetRowDescription(_nPosition);
             break;
         default:

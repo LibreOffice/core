@@ -40,7 +40,7 @@ using namespace ::com::sun::star::accessibility;
 AccessibleBrowseBox::AccessibleBrowseBox(
             const css::uno::Reference< css::accessibility::XAccessible >& _rxParent, const css::uno::Reference< css::accessibility::XAccessible >& _rxCreator,
             ::vcl::IAccessibleTableProvider& _rBrowseBox )
-    : AccessibleBrowseBoxBase( _rxParent, _rBrowseBox,nullptr, vcl::BBTYPE_BROWSEBOX ),
+    : AccessibleBrowseBoxBase( _rxParent, _rBrowseBox,nullptr, AccessibleBrowseBoxObjType::BrowseBox ),
       m_aCreator(_rxCreator)
 {
     m_xFocusWindow = VCLUnoHelper::GetInterface(mpBrowseBox->GetWindowInstance());
@@ -198,14 +198,14 @@ css::uno::Reference< css::accessibility::XAccessible > AccessibleBrowseBox::impl
 }
 
 css::uno::Reference< css::accessibility::XAccessible >
-AccessibleBrowseBox::implGetHeaderBar(vcl::AccessibleBrowseBoxObjType eObjType)
+AccessibleBrowseBox::implGetHeaderBar(AccessibleBrowseBoxObjType eObjType)
 {
     css::uno::Reference< css::accessibility::XAccessible > xRet;
     rtl::Reference< AccessibleBrowseBoxHeaderBar >* pxMember = nullptr;
 
-    if( eObjType == vcl::BBTYPE_ROWHEADERBAR )
+    if( eObjType == AccessibleBrowseBoxObjType::RowHeaderBar )
         pxMember = &mxRowHeaderBar;
-    else if( eObjType == vcl::BBTYPE_COLUMNHEADERBAR )
+    else if( eObjType == AccessibleBrowseBoxObjType::ColumnHeaderBar )
         pxMember = &mxColumnHeaderBar;
 
     if( pxMember )
@@ -228,10 +228,10 @@ AccessibleBrowseBox::implGetFixedChild( sal_Int32 nChildIndex )
     switch( nChildIndex )
     {
         case vcl::BBINDEX_COLUMNHEADERBAR:
-            xRet = implGetHeaderBar( vcl::BBTYPE_COLUMNHEADERBAR );
+            xRet = implGetHeaderBar( AccessibleBrowseBoxObjType::ColumnHeaderBar );
         break;
         case vcl::BBINDEX_ROWHEADERBAR:
-            xRet = implGetHeaderBar( vcl::BBTYPE_ROWHEADERBAR );
+            xRet = implGetHeaderBar( AccessibleBrowseBoxObjType::RowHeaderBar );
         break;
         case vcl::BBINDEX_TABLE:
             xRet = implGetTable();

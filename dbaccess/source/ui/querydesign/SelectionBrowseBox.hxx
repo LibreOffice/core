@@ -172,7 +172,7 @@ namespace dbaui
             @return
                 The name of the specified object.
         */
-        virtual OUString     GetAccessibleObjectName( ::vcl::AccessibleBrowseBoxObjType eObjType,sal_Int32 _nPosition = -1) const override;
+        virtual OUString     GetAccessibleObjectName( AccessibleBrowseBoxObjType eObjType,sal_Int32 _nPosition = -1) const override;
 
         // IAccessibleTableProvider
         /** Creates the accessible object of a data table cell.

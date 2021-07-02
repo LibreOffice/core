@@ -113,7 +113,7 @@ namespace vcl
             createAccessibleBrowseBoxHeaderBar(
                 const css::uno::Reference< css::accessibility::XAccessible >& rxParent,
                 vcl::IAccessibleTableProvider& _rOwningTable,
-                vcl::AccessibleBrowseBoxObjType _eObjType
+                AccessibleBrowseBoxObjType _eObjType
             ) const = 0;
 
         virtual css::uno::Reference< css::accessibility::XAccessible >
@@ -132,7 +132,7 @@ namespace vcl
                 const css::uno::Reference< css::accessibility::XAccessible >& rxParent,
                 vcl::IAccessibleTableProvider& _rBrowseBox,
                 const css::uno::Reference< css::awt::XWindow >& _xFocusWindow,
-                vcl::AccessibleBrowseBoxObjType  _eObjType
+                AccessibleBrowseBoxObjType  _eObjType
             ) const = 0;
 
         virtual css::uno::Reference< css::accessibility::XAccessible >

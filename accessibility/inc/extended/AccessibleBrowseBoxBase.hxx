@@ -83,7 +83,7 @@ public:
         const css::uno::Reference< css::accessibility::XAccessible >& rxParent,
         ::vcl::IAccessibleTableProvider& rBrowseBox,
         const css::uno::Reference< css::awt::XWindow >& _xFocusWindow,
-        ::vcl::AccessibleBrowseBoxObjType eObjType );
+        AccessibleBrowseBoxObjType eObjType );
 
     /** Constructor sets specified name and description.
         @param rxParent         XAccessible interface of the parent object.
@@ -96,7 +96,7 @@ public:
         const css::uno::Reference< css::accessibility::XAccessible >& rxParent,
         ::vcl::IAccessibleTableProvider& rBrowseBox,
         const css::uno::Reference< css::awt::XWindow >& _xFocusWindow,
-        ::vcl::AccessibleBrowseBoxObjType eObjType,
+        AccessibleBrowseBoxObjType eObjType,
         const OUString& rName,
         const OUString& rDescription );
 
@@ -214,7 +214,7 @@ public:
     // helper methods
 
     /** @return  The BrowseBox object type. */
-    inline ::vcl::AccessibleBrowseBoxObjType getType() const;
+    inline AccessibleBrowseBoxObjType getType() const;
 
     /** Changes the name of the object and notifies listeners. */
     void setAccessibleName( const OUString& rName );
@@ -305,7 +305,7 @@ private:
     OUString maDescription;
 
     /** The type of this object (for names, descriptions, state sets, ...). */
-    ::vcl::AccessibleBrowseBoxObjType meObjType;
+    AccessibleBrowseBoxObjType meObjType;
 
     ::comphelper::AccessibleEventNotifier::TClientId    m_aClientId;
 };
@@ -337,7 +337,7 @@ protected:
         const css::uno::Reference< css::accessibility::XAccessible >& rxParent,
         ::vcl::IAccessibleTableProvider& rBrowseBox,
         const css::uno::Reference< css::awt::XWindow >& _xFocusWindow,
-        ::vcl::AccessibleBrowseBoxObjType eObjType );
+        AccessibleBrowseBoxObjType eObjType );
 
     /** Constructor sets specified name and description.
 
@@ -352,7 +352,7 @@ protected:
         const css::uno::Reference< css::accessibility::XAccessible >& rxParent,
         ::vcl::IAccessibleTableProvider& rBrowseBox,
         const css::uno::Reference< css::awt::XWindow >& _xFocusWindow,
-        ::vcl::AccessibleBrowseBoxObjType eObjType,
+        AccessibleBrowseBoxObjType eObjType,
         const OUString& rName,
         const OUString& rDescription );
 
@@ -390,7 +390,7 @@ public:
 
 // inlines
 
-inline ::vcl::AccessibleBrowseBoxObjType AccessibleBrowseBoxBase::getType() const
+inline AccessibleBrowseBoxObjType AccessibleBrowseBoxBase::getType() const
 {
     return meObjType;
 }
