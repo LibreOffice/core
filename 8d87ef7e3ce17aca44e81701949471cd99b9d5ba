@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "270ced8d_b6e1f110",
+        "filename": "scaddins/source/analysis/analysishelper.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 663,
+      "author": {
+        "id": 1003291
+      },
+      "writtenOn": "2021-07-02T12:40:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "64c32770_fbbeb6f3",
+      "revId": "8d87ef7e3ce17aca44e81701949471cd99b9d5ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "706d3510_5cacdcf4",
         "filename": "scaddins/source/analysis/analysishelper.hxx",
         "patchSetId": 4
@@ -39,6 +57,30 @@
       "revId": "8d87ef7e3ce17aca44e81701949471cd99b9d5ba",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8ee0be49_33bf4ddf",
+        "filename": "scaddins/source/analysis/analysishelper.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 665,
+      "author": {
+        "id": 1003291
+      },
+      "writtenOn": "2021-07-02T12:40:06Z",
+      "side": 1,
+      "message": "Yes.",
+      "parentUuid": "706d3510_5cacdcf4",
+      "range": {
+        "startLine": 665,
+        "startChar": 45,
+        "endLine": 665,
+        "endChar": 47
+      },
+      "revId": "8d87ef7e3ce17aca44e81701949471cd99b9d5ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -77,6 +119,24 @@
     },
     {
       "key": {
+        "uuid": "687b2364_34eb7f23",
+        "filename": "scaddins/source/analysis/bessel.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 328,
+      "author": {
+        "id": 1003291
+      },
+      "writtenOn": "2021-07-02T12:40:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bdf956a9_7b94b2ce",
+      "revId": "8d87ef7e3ce17aca44e81701949471cd99b9d5ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a0f5754b_afeb5259",
         "filename": "scaddins/source/analysis/bessel.cxx",
         "patchSetId": 4
@@ -97,6 +157,30 @@
       "revId": "8d87ef7e3ce17aca44e81701949471cd99b9d5ba",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "68736e82_3002d8b5",
+        "filename": "scaddins/source/analysis/bessel.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 329,
+      "author": {
+        "id": 1003291
+      },
+      "writtenOn": "2021-07-02T12:40:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a0f5754b_afeb5259",
+      "range": {
+        "startLine": 329,
+        "startChar": 19,
+        "endLine": 329,
+        "endChar": 43
+      },
+      "revId": "8d87ef7e3ce17aca44e81701949471cd99b9d5ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
