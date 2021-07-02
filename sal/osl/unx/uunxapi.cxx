@@ -214,14 +214,22 @@ template<> OUString fromOString(OString const & s)
 template<typename T> bool realpath_(const T& pstrFileName, T& ppstrResolvedName)
 {
     OString fn = toOString(pstrFileName);
-#ifdef ANDROID
+#if defined ANDROID || defined EMSCRIPTEN
+#if defined ANDROID
     if (fn == "/assets" || fn.startsWith("/assets/"))
+#else
+    if (fn == "/instdir" || fn.startsWith("/instdir/"))
+#endif
     {
         if (osl::access(fn, F_OK) == -1)
+        {
+            SAL_INFO("sal.file", "realpath(" << fn << "): FAILED");
             return false;
+        }
 
         ppstrResolvedName = pstrFileName;
 
+        SAL_INFO("sal.file", "realpath(" << fn << "): OK");
         return true;
     }
 #endif

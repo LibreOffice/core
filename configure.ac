@@ -1348,10 +1348,16 @@ if test "$_os" = "Emscripten"; then
         AC_MSG_WARN(["\$EMMAKEN_JUST_CONFIGURE wasn't set by emconfigure. Prefix configure or use autogen.sh])
         EMSCRIPTEN_ERROR=1
     fi
+    EMSDK_FILE_PACKAGER="$(em-config EMSCRIPTEN_ROOT)"/tools/file_packager
+    if ! test -x "$EMSDK_FILE_PACKAGER"; then
+        AC_MSG_WARN([No file_packager found in $(em-config EMSCRIPTEN_ROOT)/tools/file_packager.])
+	EMSCRIPTEN_ERROR=1
+    fi
     if test $EMSCRIPTEN_ERROR -ne 0; then
         AC_MSG_ERROR(["Please fix your EMSDK setup to build with Emscripten!"])
     fi
 fi
+AC_SUBST(EMSDK_FILE_PACKAGER)
 
 ###############################################################################
 # Extensions switches --enable/--disable

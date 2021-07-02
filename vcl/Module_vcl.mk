@@ -36,7 +36,7 @@ $(eval $(call gb_Module_add_targets,vcl,\
         Package_skia_denylist ) \
     $(if $(filter DESKTOP,$(BUILD_TYPE)), \
         StaticLibrary_vclmain \
-        $(if $(or $(DISABLE_GUI),$(DISABLE_DYNLOADING)),, \
+        $(if $(or $(DISABLE_GUI),$(DISABLE_DYNLOADING)),Executable_vcldemo, \
             $(if $(ENABLE_MACOSX_SANDBOX),, \
                 Executable_ui-previewer) \
             $(if $(filter LINUX MACOSX SOLARIS WNT %BSD,$(OS)), \

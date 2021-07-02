@@ -62,7 +62,11 @@ OUString cppu::getUnoIniUri() {
     //     defaultBootstrap_InitialComponentContext
     // and since rtlBootstrapHandle is not ref-counted doing anything
     // clean here is hardish.
+#if defined ANDROID
     OUString uri("file:///assets/program");
+#else
+    OUString uri("file:///instdir/program");
+#endif
 #else
 
     OUString uri;
