@@ -4777,13 +4777,13 @@ void SalInstanceTreeView::make_unsorted()
 void SalInstanceTreeView::set_sort_order(bool bAscending)
 {
     SvTreeList* pListModel = m_xTreeView->GetModel();
-    pListModel->SetSortMode(bAscending ? SortAscending : SortDescending);
+    pListModel->SetSortMode(bAscending ? SvSortMode::Ascending : SvSortMode::Descending);
     pListModel->Resort();
 }
 
 bool SalInstanceTreeView::get_sort_order() const
 {
-    return m_xTreeView->GetModel()->GetSortMode() == SortAscending;
+    return m_xTreeView->GetModel()->GetSortMode() == SvSortMode::Ascending;
 }
 
 void SalInstanceTreeView::set_sort_indicator(TriState eState, int col)
