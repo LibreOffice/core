@@ -420,20 +420,7 @@ private:
         explicit WriteSetItem(ScXMLExport& r, const ScDocument* pDoc) : mrExport(r), mpDoc(pDoc) {}
         void operator() (const ScQueryEntry::Item& rItem) const
         {
-            if (rItem.meType == ScQueryEntry::ByValue)
-            {
-                OUString aValStr;
-                SvNumberFormatter* pFormatter = mpDoc->GetFormatTable();
-                pFormatter->GetInputLineString(rItem.mfVal, 0, aValStr);
-                mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_VALUE, aValStr);
-            }
-            else
-            {
-                // Indicating the formatted filter values, by export the XML_DATA_TYPE with XML_TEXT
-                if (rItem.meType == ScQueryEntry::ByString && rItem.mbFormattedValue)
-                    mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATA_TYPE, XML_TEXT);
-                mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_VALUE, rItem.maString.getString());
-            }
+            mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_VALUE, rItem.maString.getString());
             SvXMLElementExport aElem(mrExport, XML_NAMESPACE_TABLE, XML_FILTER_SET_ITEM, true, true);
         }
     };
@@ -454,9 +441,6 @@ private:
             const ScQueryEntry::Item& rItem = rItems.front();
             if (rItem.meType == ScQueryEntry::ByString)
             {
-                // Indicating the formatted filter values, by export the XML_DATA_TYPE with XML_TEXT
-                if (rItem.mbFormattedValue)
-                    mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATA_TYPE, XML_TEXT);
                 mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_VALUE, rItem.maString.getString());
             }
             else if (rItem.meType == ScQueryEntry::ByDate)
@@ -482,9 +466,7 @@ private:
             else
             {
                 mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATA_TYPE, XML_NUMBER);
-                OUStringBuffer aBuf;
-                ::sax::Converter::convertDouble(aBuf, rItem.mfVal);
-                mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_VALUE, aBuf.makeStringAndClear());
+                mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_VALUE, rItem.maString.getString());
             }
 
             mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_OPERATOR, getOperatorXML(rEntry, eSearchType));
@@ -502,15 +484,10 @@ private:
             const ScQueryEntry::Item& rItem = rItems.front();
             if (rItem.meType == ScQueryEntry::ByValue)
             {
-                OUString aValStr;
-                SvNumberFormatter* pFormatter = mpDoc->GetFormatTable();
-                pFormatter->GetInputLineString(rItem.mfVal, 0, aValStr);
-                mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_VALUE, aValStr);
+                mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_VALUE, rItem.maString.getString());
             }
             else
             {
-                if (rItem.mbFormattedValue)
-                    mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATA_TYPE, XML_TEXT);
                 mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_VALUE, rItem.maString.getString());
             }
             mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_OPERATOR, OUString("="));

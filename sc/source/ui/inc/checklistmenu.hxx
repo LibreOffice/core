@@ -73,7 +73,6 @@ public:
         bool bValid;
         bool bDate;
         bool bValue; // true if the filter condition is value
-        bool bDuplicated; // true if there were duplicated values in the filter list
 
         bool operator<(const ResultEntry& rhs) const
         {
@@ -86,8 +85,7 @@ public:
                    bValid == rhs.bValid &&
                    bDate == rhs.bDate &&
                    bValue == rhs.bValue &&
-                   nValue == rhs.nValue &&
-                   bDuplicated == rhs.bDuplicated;
+                   nValue == rhs.nValue;
         }
     };
     typedef std::set<ResultEntry> ResultType;
@@ -136,7 +134,7 @@ public:
     void setMemberSize(size_t n);
     void addDateMember(const OUString& rName, double nVal, bool bVisible);
     void addMember(const OUString& rName, const double nVal, bool bVisible,
-                   bool bValue = false, bool bDuplicated = false);
+                   bool bValue = false);
     size_t initMembers(int nMaxMemberWidth = -1);
     void setConfig(const Config& rConfig);
 

@@ -48,10 +48,9 @@ struct SC_DLLPUBLIC ScQueryEntry
         double        mfVal;
         svl::SharedString maString;
         bool              mbMatchEmpty;
-        bool              mbFormattedValue;
         Color maColor;
 
-        Item() : meType(ByValue), mfVal(0.0), mbMatchEmpty(false), mbFormattedValue(false) {}
+        Item() : meType(ByValue), mfVal(0.0), mbMatchEmpty(false) {}
 
         bool operator== (const Item& r) const;
     };
