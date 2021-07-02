@@ -211,8 +211,29 @@ void SdImportTestSmartArt::testBase()
     uno::Reference<drawing::XShape> xShape2(xShapeGroup->getByIndex(3), uno::UNO_QUERY_THROW);
     uno::Reference<drawing::XShape> xShape3(xShapeGroup->getByIndex(4), uno::UNO_QUERY_THROW);
     uno::Reference<drawing::XShape> xShape4(xShapeGroup->getByIndex(5), uno::UNO_QUERY_THROW);
+
+    /*
+     *  Arrangement
+     *     (LTR)
+     *  ╭─────────╮
+     *  │  0   1  │
+     *  │  2   3  │
+     *  │    4    │
+     *  ╰─────────╯
+     */
     CPPUNIT_ASSERT_EQUAL(xShape0->getPosition().Y, xShape1->getPosition().Y);
     CPPUNIT_ASSERT_EQUAL(xShape2->getPosition().Y, xShape3->getPosition().Y);
+
+    CPPUNIT_ASSERT_EQUAL(xShape0->getPosition().X, xShape2->getPosition().X);
+    CPPUNIT_ASSERT_EQUAL(xShape1->getPosition().X, xShape3->getPosition().X);
+
+    CPPUNIT_ASSERT_EQUAL(xShape2->getPosition().Y - xShape0->getPosition().Y,
+                         xShape4->getPosition().Y - xShape2->getPosition().Y);
+    CPPUNIT_ASSERT_EQUAL(xShape1->getPosition().X - xShape0->getPosition().X,
+                         xShape3->getPosition().X - xShape2->getPosition().X);
+    CPPUNIT_ASSERT(
+        xShape2->getPosition().X + xShape3->getPosition().X - 2 * xShape4->getPosition().X < 0.001);
+
     CPPUNIT_ASSERT(xShape2->getPosition().Y > xShape0->getPosition().Y);
     CPPUNIT_ASSERT(xShape4->getPosition().Y > xShape2->getPosition().Y);
     CPPUNIT_ASSERT(xShape0->getPosition().X < xShape1->getPosition().X);
@@ -630,8 +651,29 @@ void SdImportTestSmartArt::testBaseRtoL()
     uno::Reference<drawing::XShape> xShape2(xShapeGroup->getByIndex(3), uno::UNO_QUERY_THROW);
     uno::Reference<drawing::XShape> xShape3(xShapeGroup->getByIndex(4), uno::UNO_QUERY_THROW);
     uno::Reference<drawing::XShape> xShape4(xShapeGroup->getByIndex(5), uno::UNO_QUERY_THROW);
+
+    /*
+     *  Arrangement
+     *     (RTL)
+     *  ╭─────────╮
+     *  │  1   0  │
+     *  │  3   2  │
+     *  │    4    │
+     *  ╰─────────╯
+     */
     CPPUNIT_ASSERT_EQUAL(xShape0->getPosition().Y, xShape1->getPosition().Y);
     CPPUNIT_ASSERT_EQUAL(xShape2->getPosition().Y, xShape3->getPosition().Y);
+
+    CPPUNIT_ASSERT_EQUAL(xShape0->getPosition().X, xShape2->getPosition().X);
+    CPPUNIT_ASSERT_EQUAL(xShape1->getPosition().X, xShape3->getPosition().X);
+
+    CPPUNIT_ASSERT_EQUAL(xShape2->getPosition().Y - xShape0->getPosition().Y,
+                         xShape4->getPosition().Y - xShape2->getPosition().Y);
+    CPPUNIT_ASSERT_EQUAL(xShape1->getPosition().X - xShape0->getPosition().X,
+                         xShape3->getPosition().X - xShape2->getPosition().X);
+    CPPUNIT_ASSERT(
+        xShape2->getPosition().X + xShape3->getPosition().X - 2 * xShape4->getPosition().X < 0.001);
+
     CPPUNIT_ASSERT(xShape2->getPosition().Y > xShape0->getPosition().Y);
     CPPUNIT_ASSERT(xShape4->getPosition().Y > xShape2->getPosition().Y);
     CPPUNIT_ASSERT(xShape0->getPosition().X > xShape1->getPosition().X);
