@@ -1062,6 +1062,9 @@ void SwTextBoxHelper::updateTextBoxMargin(SdrObject* pObj)
 
     syncProperty(pParentFormat, RES_FRM_SIZE, MID_FRMSIZE_WIDTH_TYPE,
                  uno::Any(bIsAutoWrap ? text::SizeType::FIX : text::SizeType::MIN));
+
+    changeAnchor(pParentFormat);
+    DoTextBoxZOrderCorrection(pParentFormat);
 }
 
 bool SwTextBoxHelper::setWrapThrough(SwFrameFormat* pShape)
