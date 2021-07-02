@@ -20,6 +20,10 @@ Sub verify_stringReplace()
     retStr = Replace("a", "abc", "ab")
     TestUtil.AssertEqual(retStr, "a", "different length of search and replace string: " & retStr)
 
+    ' tdf#143081 - Without the fix in place, this test would have crashed here
+    retStr = Replace("""Straße""", """", "&quot;")
+    TestUtil.AssertEqual(retStr, "&quot;Straße""&quot;", "replace doesn't crash: " & retStr)
+
     Exit Sub
 errorHandler:
     TestUtil.ReportErrorHandler("verify_stringReplace", Err, Error$, Erl)
