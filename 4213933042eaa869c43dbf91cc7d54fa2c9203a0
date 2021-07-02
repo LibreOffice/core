@@ -16,6 +16,24 @@
       "revId": "4213933042eaa869c43dbf91cc7d54fa2c9203a0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "13cbb536_48c6f31d",
+        "filename": "sal/rtl/math.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1301,
+      "author": {
+        "id": 1003291
+      },
+      "writtenOn": "2021-07-02T23:13:01Z",
+      "side": 0,
+      "message": "I apologize for making you loose your time with this.\nI misunderstood the code.\nNow it is fixed and rewrote the code in a more efficient and simple way.",
+      "parentUuid": "bfcab863_86c18f0e",
+      "revId": "4213933042eaa869c43dbf91cc7d54fa2c9203a0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }

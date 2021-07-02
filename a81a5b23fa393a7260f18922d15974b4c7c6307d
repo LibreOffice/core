@@ -33,6 +33,24 @@
       "revId": "a81a5b23fa393a7260f18922d15974b4c7c6307d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "44e1156c_830ed0a7",
+        "filename": "sal/rtl/math.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1256,
+      "author": {
+        "id": 1003291
+      },
+      "writtenOn": "2021-07-02T23:13:01Z",
+      "side": 1,
+      "message": "Now it is implicitly checked inside notEnoughBitsInFracPart for all signs.\nI did keep the 11 digits around so I keep a fraction of the generality that getBitsInFracPart was intended to have.",
+      "parentUuid": "d0de4c43_fdadaf53",
+      "revId": "a81a5b23fa393a7260f18922d15974b4c7c6307d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
