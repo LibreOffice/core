@@ -24,8 +24,8 @@
 
 #include <cassert>
 #include <cstdlib>
-#include <string.h>
-#include <stdio.h>
+#include <cstring>
+#include <cstdio>
 
 /**
     provided for cache_type allocations, and hash_table resizing.
@@ -49,7 +49,7 @@ rtl_cache_type * rtl_cache_activate(
 {
     assert(cache);
 
-    snprintf (cache->m_name, sizeof(cache->m_name), "%s", name);
+    std::snprintf (cache->m_name, sizeof(cache->m_name), "%s", name);
 
     if (objalign == 0)
     {
@@ -100,7 +100,7 @@ try_alloc:
     if (result)
     {
         rtl_cache_type * cache = result;
-        memset (cache, 0, sizeof(rtl_cache_type));
+        std::memset (cache, 0, sizeof(rtl_cache_type));
 
         result = rtl_cache_activate (
             cache,
@@ -174,24 +174,10 @@ void SAL_CALL rtl_cache_free(
     }
 }
 
-#if defined(SAL_UNX)
-
 void SAL_CALL rtl_secureZeroMemory(void *Ptr, sal_Size Bytes) SAL_THROW_EXTERN_C()
 {
-    //currently glibc doesn't implement memset_s
-    volatile char *p = static_cast<volatile char*>(Ptr);
-    while (Bytes--)
-        *p++ = 0;
+    std::memset(Ptr, 0, Bytes);
 }
-
-#elif defined(_WIN32)
-
-void SAL_CALL rtl_secureZeroMemory(void *Ptr, sal_Size Bytes) SAL_THROW_EXTERN_C()
-{
-    RtlSecureZeroMemory(Ptr, Bytes);
-}
-
-#endif /* SAL_UNX || _WIN32 */
 
 void rtl_cache_init()
 {
