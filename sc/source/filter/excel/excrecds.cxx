@@ -793,7 +793,7 @@ void XclExpAutofilter::WriteBody( XclExpStream& rStrm )
 
 void XclExpAutofilter::SaveXml( XclExpXmlStream& rStrm )
 {
-    if (meType == FilterCondition && !HasCondition())
+    if (meType == FilterCondition && !HasCondition() && !HasTop10())
         return;
 
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
@@ -817,6 +817,7 @@ void XclExpAutofilter::SaveXml( XclExpXmlStream& rStrm )
                         // OOXTODO: XML_filterVal
                 );
             }
+<<<<<<< HEAD   (c66c1f tdf#142929 XLSX: fix import of "Less than" filter condition)
 
             rWorksheet->startElement( XML_customFilters,
                     XML_and, ToPsz((nFlags & EXC_AFFLAG_ANDORMASK) == EXC_AFFLAG_AND) );
@@ -825,6 +826,31 @@ void XclExpAutofilter::SaveXml( XclExpXmlStream& rStrm )
             rWorksheet->endElement( XML_customFilters );
             // OOXTODO: XLM_colorFilter, XML_dynamicFilter,
             // XML_extLst, XML_filters, XML_iconFilter, XML_top10
+=======
+            else
+            {
+                rWorksheet->startElement(XML_customFilters, XML_and,
+                                         ToPsz((nFlags & EXC_AFFLAG_ANDORMASK) == EXC_AFFLAG_AND));
+                aCond[0].SaveXml(rStrm);
+                aCond[1].SaveXml(rStrm);
+                rWorksheet->endElement(XML_customFilters);
+            }
+            // OOXTODO: XML_dynamicFilter, XML_extLst, XML_filters, XML_iconFilter
+        }
+        break;
+        case ColorValue:
+        {
+            if (!maColorValues.empty())
+            {
+                Color color = maColorValues[0].first;
+                sal_Int32 nDxfId;
+                if (maColorValues[0].second) // is background color
+                    nDxfId = GetDxfs().GetDxfByBackColor(color);
+                else
+                    nDxfId = GetDxfs().GetDxfByForeColor(color);
+                rWorksheet->singleElement(XML_colorFilter, XML_dxfId, OString::number(nDxfId));
+            }
+>>>>>>> CHANGE (b17df2 tdf#143068 XLSX: fix export of top10 filter condition)
         }
         break;
         case BlankValue:
