@@ -469,20 +469,8 @@ class AutofilterTest(UITestCase):
 
         xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
 
-        xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "0", "ROW": "0"}))
-        xFloatWindow = self.xUITest.getFloatWindow()
-        #Choose Standard Filter... button
-        xMenu = xFloatWindow.getChild("menu")
-
-        xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
-        xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
-        xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
-        xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
-        xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
-        xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
-        xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"DOWN"}))
-        xMenu.executeAction("TYPE", mkPropertyValues({"KEYCODE":"RETURN"}))
-
+        xGridWin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:B8"}))
+        self.ui_test.execute_modeless_dialog_through_command(".uno:DataFilterStandardFilter")
         xDialog = self.xUITest.getTopFocusWindow()
         xval1 = xDialog.getChild("val1")
 
@@ -500,4 +488,61 @@ class AutofilterTest(UITestCase):
         self.assertTrue(is_row_hidden(doc, 6))
 
         self.ui_test.close_doc()
+
+    def test_tdf142910(self):
+        doc = self.ui_test.load_file(get_url_for_data_file("tdf140968.xlsx"))
+
+        xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
+
+        #Test '<' condition
+        xGridWin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:B8"}))
+        self.ui_test.execute_modeless_dialog_through_command(".uno:DataFilterStandardFilter")
+        xDialog = self.xUITest.getTopFocusWindow()
+
+        xfield1 = xDialog.getChild("field1")
+        xval1 = xDialog.getChild("val1")
+        xcond1 = xDialog.getChild("cond1")
+
+        select_by_text(xfield1, "Values")
+        select_by_text(xcond1, "<")
+        select_by_text(xval1, "0.365")
+
+        xOKBtn = xDialog.getChild("ok")
+        self.ui_test.close_dialog_through_button(xOKBtn)
+
+        self.assertFalse(is_row_hidden(doc, 0))
+        self.assertTrue(is_row_hidden(doc, 1))
+        self.assertFalse(is_row_hidden(doc, 2))
+        self.assertFalse(is_row_hidden(doc, 3))
+        self.assertFalse(is_row_hidden(doc, 4))
+        self.assertFalse(is_row_hidden(doc, 5))
+        self.assertTrue(is_row_hidden(doc, 6))
+        self.assertTrue(is_row_hidden(doc, 7))
+
+        #Test '>=' condition
+        xGridWin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:B8"}))
+        self.ui_test.execute_modeless_dialog_through_command(".uno:DataFilterStandardFilter")
+        xDialog = self.xUITest.getTopFocusWindow()
+        xfield1 = xDialog.getChild("field1")
+        xval1 = xDialog.getChild("val1")
+        xcond1 = xDialog.getChild("cond1")
+
+        select_by_text(xfield1, "Values")
+        select_by_text(xcond1, ">=")
+        select_by_text(xval1, "0.046")
+
+        xOKBtn = xDialog.getChild("ok")
+        self.ui_test.close_dialog_through_button(xOKBtn)
+
+        self.assertFalse(is_row_hidden(doc, 0))
+        self.assertFalse(is_row_hidden(doc, 1))
+        self.assertFalse(is_row_hidden(doc, 2))
+        self.assertFalse(is_row_hidden(doc, 3))
+        self.assertFalse(is_row_hidden(doc, 4))
+        self.assertTrue(is_row_hidden(doc, 5))
+        self.assertFalse(is_row_hidden(doc, 6))
+        self.assertFalse(is_row_hidden(doc, 7))
+
+        self.ui_test.close_doc()
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

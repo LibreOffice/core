@@ -1147,11 +1147,7 @@ void fillQueryParam(
                 aItem.mfVal    = rVal.NumericValue;
                 aItem.maString = rPool.intern(rVal.StringValue);
 
-                if (aItem.meType == ScQueryEntry::ByString)
-                {
-                    aItem.mbFormattedValue = true;
-                }
-                else if (aItem.meType == ScQueryEntry::ByValue)
+                if (aItem.meType == ScQueryEntry::ByValue)
                 {
                     OUString aStr;
                     pDoc->GetFormatTable()->GetInputLineString(aItem.mfVal, 0, aStr);
