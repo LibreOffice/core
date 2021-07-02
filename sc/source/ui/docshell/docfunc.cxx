@@ -161,7 +161,8 @@ bool ScDocFunc::AdjustRowHeight( const ScRange& rRange, bool bPaint )
             ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(pViewShell);
             if (pTabViewShell)
             {
-                pTabViewShell->GetViewData().GetLOKHeightHelper(nTab)->invalidateByIndex(nStartRow);
+                if (ScPositionHelper* pPosHelper = pTabViewShell->GetViewData().GetLOKHeightHelper(nTab))
+                    pPosHelper->invalidateByIndex(nStartRow);
             }
             pViewShell = SfxViewShell::GetNext(*pViewShell);
         }
