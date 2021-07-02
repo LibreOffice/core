@@ -16,6 +16,40 @@
       "revId": "b0482aa611aae3dce1e1b3980e424b0ad4724a0d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ba16eea2_9281397c",
+        "filename": "include/vcl/test/GraphicsRenderTests.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-07-02T09:52:56Z",
+      "side": 1,
+      "message": "return the vectors by reference so you don\u0027t make unnecessary copies.",
+      "revId": "b0482aa611aae3dce1e1b3980e424b0ad4724a0d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b999059b_e3638a9f",
+        "filename": "include/vcl/test/GraphicsRenderTests.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-07-02T09:52:56Z",
+      "side": 1,
+      "message": "Should be unordered_map",
+      "revId": "b0482aa611aae3dce1e1b3980e424b0ad4724a0d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
