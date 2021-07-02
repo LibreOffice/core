@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 
+#include <cstdlib>
 #include <utility>
 
 #include "system.h"
@@ -26,11 +27,9 @@
 #include <osl/socket.h>
 #include <osl/thread.h>
 #include <osl/diagnose.h>
-#include <rtl/alloc.h>
 #include <rtl/byteseq.h>
 #include <sal/log.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
-#include <o3tl/safeint.hxx>
 #include <comphelper/windowserrorstring.hxx>
 
 #include "sockimpl.hxx"
@@ -238,7 +237,7 @@ static LeakWarning socketWarning;
 
 static oslSocket createSocketImpl(SOCKET Socket)
 {
-    oslSocket pSockImpl = static_cast<oslSocket>(rtl_allocateZeroMemory( sizeof(struct oslSocketImpl)));
+    oslSocket pSockImpl = static_cast<oslSocket>(std::calloc(1, sizeof(struct oslSocketImpl)));
     pSockImpl->m_Socket = Socket;
     pSockImpl->m_nRefCount = 1;
     return pSockImpl;
@@ -254,7 +253,7 @@ static void destroySocketImpl(oslSocketImpl *pImpl)
 
 static oslSocketAddr createSocketAddr(  )
 {
-    oslSocketAddr pAddr = static_cast<oslSocketAddr>(rtl_allocateZeroMemory( sizeof( struct oslSocketAddrImpl )));
+    oslSocketAddr pAddr = static_cast<oslSocketAddr>(std::calloc(1, sizeof(struct oslSocketAddrImpl)));
     pAddr->m_nRefCount = 1;
 #if OSL_DEBUG_LEVEL > 0
     g_nSocketAddr ++;
@@ -481,7 +480,7 @@ oslHostAddr SAL_CALL osl_createHostAddr (
 
     rtl_uString_newFromString( &cn, strHostname);
 
-    pAddr= static_cast<oslHostAddr>(malloc (sizeof (struct oslHostAddrImpl)));
+    pAddr= static_cast<oslHostAddr>(std::malloc(sizeof (struct oslHostAddrImpl)));
 
     if (pAddr == nullptr)
     {
@@ -514,8 +513,7 @@ oslHostAddr SAL_CALL osl_createHostAddrByName(rtl_uString *strHostname)
     {
         if (AF_INET == pIter->ai_family)
         {
-            pRet = static_cast<oslHostAddr>(
-                rtl_allocateZeroMemory(sizeof(struct oslHostAddrImpl)));
+            pRet = static_cast<oslHostAddr>(std::calloc(1, sizeof(struct oslHostAddrImpl)));
             if (pIter->ai_canonname == nullptr) {
                 rtl_uString_new(&pRet->pHostName);
             } else {
@@ -555,8 +553,7 @@ oslHostAddr SAL_CALL osl_createHostAddrByAddr(const oslSocketAddr pAddr)
         return nullptr;
     }
 
-    oslHostAddr pRet = static_cast<oslHostAddr>(
-                rtl_allocateZeroMemory(sizeof(struct oslHostAddrImpl)));
+    oslHostAddr pRet = static_cast<oslHostAddr>(std::calloc(1, sizeof(struct oslHostAddrImpl)));
     rtl_uString_newFromStr(&pRet->pHostName, o3tl::toU(buf));
     pRet->pSockAddr = createSocketAddr();
     memcpy(& pRet->pSockAddr->m_sockaddr,
@@ -1618,7 +1615,7 @@ oslSocketSet SAL_CALL osl_createSocketSet()
 {
     oslSocketSetImpl* pSet;
 
-    pSet = static_cast<oslSocketSetImpl*>(malloc(sizeof(oslSocketSetImpl)));
+    pSet = static_cast<oslSocketSetImpl*>(std::calloc(1, sizeof(oslSocketSetImpl)));
 
     if(pSet)
     {

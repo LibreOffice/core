@@ -25,7 +25,7 @@
 #include <rtl/alloc.h>
 #include <rtl/digest.h>
 
-#define RTL_DIGEST_CREATE(T) (static_cast<T*>(rtl_allocateZeroMemory(sizeof(T))))
+#define RTL_DIGEST_CREATE(T) (static_cast<T*>(std::calloc(1,sizeof(T))))
 
 #define RTL_DIGEST_ROTL(a,n) (((a) << (n)) | ((a) >> (32 - (n))))
 

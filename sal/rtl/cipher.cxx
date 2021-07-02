@@ -19,7 +19,6 @@
 
 #include <string.h>
 
-#include <o3tl/safeint.hxx>
 #include <sal/types.h>
 #include <rtl/alloc.h>
 #include <rtl/cipher.h>
@@ -651,8 +650,8 @@ static rtlCipherError BF_init(
 
     key = &(ctx->m_key);
 
-    memcpy(key, &BF_key, sizeof (CipherKeyBF));
-    memset(&(ctx->m_iv), 0, sizeof(ctx->m_iv));
+    std::memcpy(key, &BF_key, sizeof (CipherKeyBF));
+    std::memset(&(ctx->m_iv), 0, sizeof(ctx->m_iv));
     ctx->m_offset = 0;
 
     for (i = 0, k = 0; i < CIPHER_ROUNDS_BF + 2; ++i)
@@ -718,7 +717,7 @@ static rtlCipherError BF_update(
     if (!pData || !pBuffer)
         return rtl_Cipher_E_Argument;
 
-    if ((nDatLen <= 0) || (nDatLen > nBufLen))
+    if ((nDatLen == 0) || (nDatLen > nBufLen))
         return rtl_Cipher_E_BufferSize;
 
     /* Update. */
@@ -726,7 +725,7 @@ static rtlCipherError BF_update(
     assert(eMode == rtl_Cipher_ModeStream);
     (void) eMode;
     (void) eDirection;
-    while (nDatLen > o3tl::make_unsigned(std::numeric_limits<int>::max())) {
+    while (nDatLen > static_cast<unsigned int>(std::numeric_limits<int>::max())) {
         int outl;
         if (EVP_CipherUpdate(ctx->m_context, pBuffer, &outl, pData, std::numeric_limits<int>::max())
             == 0)
@@ -1013,7 +1012,7 @@ rtlCipher SAL_CALL rtl_cipher_createBF(rtlCipherMode Mode) SAL_THROW_EXTERN_C()
     }
 #endif
 
-    pImpl = static_cast<CipherBF_Impl*>(rtl_allocateZeroMemory(sizeof (CipherBF_Impl)));
+    pImpl = static_cast<CipherBF_Impl*>(std::calloc(1, sizeof(CipherBF_Impl)));
     if (pImpl)
     {
         pImpl->m_cipher.m_algorithm = rtl_Cipher_AlgorithmBF;
@@ -1052,7 +1051,7 @@ rtlCipherError SAL_CALL rtl_cipher_initBF(
         // Cannot easily support DirectionBoth, and it isn't used in the LO code at least:
         return rtl_Cipher_E_Direction;
     }
-    if (nKeyLen > o3tl::make_unsigned(std::numeric_limits<int>::max())) {
+    if (nKeyLen > static_cast<unsigned int>(std::numeric_limits<int>::max())) {
         return rtl_Cipher_E_BufferSize;
     }
     if (pImpl->m_context.m_context != nullptr) {
@@ -1332,7 +1331,7 @@ rtlCipher SAL_CALL rtl_cipher_createARCFOUR(rtlCipherMode Mode)
     if (Mode != rtl_Cipher_ModeStream)
         return nullptr;
 
-    pImpl = static_cast<CipherARCFOUR_Impl*>(rtl_allocateZeroMemory(sizeof(CipherARCFOUR_Impl)));
+    pImpl = static_cast<CipherARCFOUR_Impl*>(std::calloc(1, sizeof(CipherARCFOUR_Impl)));
     if (pImpl)
     {
         pImpl->m_cipher.m_algorithm = rtl_Cipher_AlgorithmARCFOUR;

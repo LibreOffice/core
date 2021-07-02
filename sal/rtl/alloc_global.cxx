@@ -17,25 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "alloc_impl.hxx"
 #include <rtl/alloc.h>
 #include <sal/log.hxx>
-#include <sal/macros.h>
 
-#include <algorithm>
-#include <cassert>
-#include <string.h>
-#include <stdio.h>
-
-#include <rtllifecycle.h>
-#include <oslmemory.h>
+#include <cstdlib>
+#include <cstring>
 
 void* SAL_CALL rtl_allocateMemory(sal_Size n) SAL_THROW_EXTERN_C()
 {
     SAL_WARN_IF(
         n >= SAL_MAX_INT32, "sal.rtl",
         "suspicious massive alloc " << n);
-    return malloc (n);
+    return std::malloc (n);
 }
 
 void* SAL_CALL rtl_reallocateMemory(void * p, sal_Size n) SAL_THROW_EXTERN_C()
@@ -43,39 +36,43 @@ void* SAL_CALL rtl_reallocateMemory(void * p, sal_Size n) SAL_THROW_EXTERN_C()
     SAL_WARN_IF(
         n >= SAL_MAX_INT32, "sal.rtl",
         "suspicious massive alloc " << n);
-    return realloc (p, n);
+    return std::realloc (p, n);
 }
 
 void SAL_CALL rtl_freeMemory(void * p) SAL_THROW_EXTERN_C()
 {
-    free (p);
+    std::free (p);
 }
 
 void * SAL_CALL rtl_allocateZeroMemory(sal_Size n) SAL_THROW_EXTERN_C()
 {
-    void * p = rtl_allocateMemory (n);
-    if (p)
-        memset (p, 0, n);
-    return p;
+    SAL_WARN_IF(
+        n >= SAL_MAX_INT32, "sal.rtl",
+        "suspicious massive alloc " << n);
+    return calloc(1, n);
 }
 
 void SAL_CALL rtl_freeZeroMemory(void * p, sal_Size n) SAL_THROW_EXTERN_C()
 {
     if (p)
     {
-        rtl_secureZeroMemory (p, n);
-        rtl_freeMemory (p);
+        std::memset(p, 0, n);
+        std::free(p);
     }
 }
 
 void* SAL_CALL rtl_allocateAlignedMemory(sal_Size Alignment, sal_Size Bytes) SAL_THROW_EXTERN_C()
 {
-    return osl_aligned_alloc(Alignment, Bytes);
+    SAL_WARN_IF(
+        Bytes >= SAL_MAX_INT32, "sal.rtl",
+        "suspicious massive alloc " << Bytes);
+    // TODO std::aligned_alloc does not exist for current clang version
+    return aligned_alloc(Alignment, Bytes);
 }
 
 void SAL_CALL rtl_freeAlignedMemory(void* Ptr) SAL_THROW_EXTERN_C()
 {
-    osl_aligned_free(Ptr);
+    std::free(Ptr);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
