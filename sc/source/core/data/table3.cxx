@@ -2339,12 +2339,16 @@ public:
         bool bOk = false;
         bool bTestEqual = false;
         double nCellVal;
+        double fRoundedValue = rItem.mfVal;
+        sal_uInt32 nNumFmt = pContext ? mrTab.GetNumberFormat(*pContext, ScAddress(nCol, nRow, mrTab.GetTab())) :
+            mrTab.GetNumberFormat(nCol, nRow);
+
         if (!rCell.isEmpty())
         {
             switch (rCell.meType)
             {
                 case CELLTYPE_VALUE :
-                    nCellVal = rCell.mfValue;
+                    nCellVal = mrDoc.RoundValueAsShown(rCell.mfValue, nNumFmt);
                 break;
                 case CELLTYPE_FORMULA :
                     nCellVal = rCell.mpFormula->GetValue();
@@ -2352,7 +2356,6 @@ public:
                 default:
                     nCellVal = 0.0;
             }
-
         }
         else
             nCellVal = mrTab.GetValue(nCol, nRow);
@@ -2363,10 +2366,9 @@ public:
          * the same, in other words only if rEntry.nVal is an integer value
          * rEntry.bQueryByDate should be true and the time fraction be
          * stripped here. */
+
         if (rItem.meType == ScQueryEntry::ByDate)
         {
-            sal_uInt32 nNumFmt = pContext ? mrTab.GetNumberFormat(*pContext, ScAddress(nCol, nRow, mrTab.GetTab())) :
-                mrTab.GetNumberFormat(nCol, nRow);
             SvNumberFormatter* pFormatter = pContext ? pContext->GetFormatTable() : mrDoc.GetFormatTable();
             const SvNumberformat* pEntry = pFormatter->GetEntry(nNumFmt);
             if (pEntry)
@@ -2386,30 +2388,32 @@ public:
                 }
             }
         }
+        else if (nNumFmt)
+            fRoundedValue = mrDoc.RoundValueAsShown(rItem.mfVal, nNumFmt);
 
         switch (rEntry.eOp)
         {
             case SC_EQUAL :
-                bOk = ::rtl::math::approxEqual(nCellVal, rItem.mfVal);
+                bOk = ::rtl::math::approxEqual(nCellVal, fRoundedValue);
                 break;
             case SC_LESS :
-                bOk = (nCellVal < rItem.mfVal) && !::rtl::math::approxEqual(nCellVal, rItem.mfVal);
+                bOk = (nCellVal < fRoundedValue) && !::rtl::math::approxEqual(nCellVal, fRoundedValue);
                 break;
             case SC_GREATER :
-                bOk = (nCellVal > rItem.mfVal) && !::rtl::math::approxEqual(nCellVal, rItem.mfVal);
+                bOk = (nCellVal > fRoundedValue) && !::rtl::math::approxEqual(nCellVal, fRoundedValue);
                 break;
             case SC_LESS_EQUAL :
-                bOk = (nCellVal < rItem.mfVal) || ::rtl::math::approxEqual(nCellVal, rItem.mfVal);
+                bOk = (nCellVal < fRoundedValue) || ::rtl::math::approxEqual(nCellVal, fRoundedValue);
                 if ( bOk && mpTestEqualCondition )
-                    bTestEqual = ::rtl::math::approxEqual(nCellVal, rItem.mfVal);
+                    bTestEqual = ::rtl::math::approxEqual(nCellVal, fRoundedValue);
                 break;
             case SC_GREATER_EQUAL :
-                bOk = (nCellVal > rItem.mfVal) || ::rtl::math::approxEqual( nCellVal, rItem.mfVal);
+                bOk = (nCellVal > fRoundedValue) || ::rtl::math::approxEqual( nCellVal, fRoundedValue);
                 if ( bOk && mpTestEqualCondition )
-                    bTestEqual = ::rtl::math::approxEqual(nCellVal, rItem.mfVal);
+                    bTestEqual = ::rtl::math::approxEqual(nCellVal, fRoundedValue);
                 break;
             case SC_NOT_EQUAL :
-                bOk = !::rtl::math::approxEqual(nCellVal, rItem.mfVal);
+                bOk = !::rtl::math::approxEqual(nCellVal, fRoundedValue);
                 break;
             default:
             {
@@ -3054,10 +3058,6 @@ public:
     void operator() (ScQueryEntry::Item& rItem)
     {
         if (rItem.meType != ScQueryEntry::ByString && rItem.meType != ScQueryEntry::ByDate)
-            return;
-        // return only if the type is ByString and the values are formatted, in other cases
-        // we have to optimize the filter in CanOptimizeQueryStringToNumber().
-        if (rItem.mbFormattedValue && rItem.meType == ScQueryEntry::ByString)
             return;
 
         sal_uInt32 nIndex = 0;
