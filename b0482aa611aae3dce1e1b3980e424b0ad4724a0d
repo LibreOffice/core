@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a4ea82f3_22af32d9",
+        "filename": "cui/uiconfig/ui/graphictestdlg.ui",
+        "patchSetId": 5
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-07-02T09:50:23Z",
+      "side": 1,
+      "message": "Emm.. you definitely don\u0027t want to add a new test into the UI every-time a new test is added. You need to fill this in code not in the UI file.",
+      "revId": "b0482aa611aae3dce1e1b3980e424b0ad4724a0d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
