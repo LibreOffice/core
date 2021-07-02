@@ -1106,7 +1106,6 @@ IMPL_LINK( ScFilterDlg, ValModifyHdl, weld::ComboBox&, rEd, void )
         rItem.maString = pDoc->GetSharedStringPool().intern(aStrVal);
         rItem.mfVal = 0.0;
         rItem.meType = ScQueryEntry::ByString;
-        rItem.mbFormattedValue = true;
     }
 
     const sal_Int32 nField = pLbField->get_active();
