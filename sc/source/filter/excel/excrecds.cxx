@@ -809,7 +809,7 @@ void XclExpAutofilter::WriteBody( XclExpStream& rStrm )
 
 void XclExpAutofilter::SaveXml( XclExpXmlStream& rStrm )
 {
-    if (meType == FilterCondition && !HasCondition())
+    if (meType == FilterCondition && !HasCondition() && !HasTop10())
         return;
 
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
@@ -833,12 +833,14 @@ void XclExpAutofilter::SaveXml( XclExpXmlStream& rStrm )
                         // OOXTODO: XML_filterVal
                 );
             }
-
-            rWorksheet->startElement( XML_customFilters,
-                    XML_and, ToPsz((nFlags & EXC_AFFLAG_ANDORMASK) == EXC_AFFLAG_AND) );
-            aCond[ 0 ].SaveXml( rStrm );
-            aCond[ 1 ].SaveXml( rStrm );
-            rWorksheet->endElement( XML_customFilters );
+            else
+            {
+                rWorksheet->startElement(XML_customFilters, XML_and,
+                                         ToPsz((nFlags & EXC_AFFLAG_ANDORMASK) == EXC_AFFLAG_AND));
+                aCond[0].SaveXml(rStrm);
+                aCond[1].SaveXml(rStrm);
+                rWorksheet->endElement(XML_customFilters);
+            }
             // OOXTODO: XML_dynamicFilter, XML_extLst, XML_filters, XML_iconFilter
         }
         break;
