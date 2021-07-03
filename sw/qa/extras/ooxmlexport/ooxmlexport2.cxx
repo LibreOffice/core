@@ -166,6 +166,19 @@ DECLARE_OOXMLEXPORT_TEST(testUTF8CustomProperties, "tdf127864.docx")
     CPPUNIT_ASSERT_EQUAL(OUString(u"первый"), getProperty<OUString>(xPropertySet, u"первый"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testKeywords, "tdf143175.docx")
+{
+    uno::Reference<document::XDocumentPropertiesSupplier> xDocumentPropertiesSupplier(
+        mxComponent, uno::UNO_QUERY);
+    uno::Reference<document::XDocumentProperties> xDocumentProperties
+        = xDocumentPropertiesSupplier->getDocumentProperties();
+    uno::Sequence<OUString> aKeywords(xDocumentProperties->getKeywords());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), aKeywords.getLength());
+    CPPUNIT_ASSERT_EQUAL(OUString("One"), aKeywords[0]);
+    CPPUNIT_ASSERT_EQUAL(OUString("Two"), aKeywords[1]);
+    CPPUNIT_ASSERT_EQUAL(OUString("Three"), aKeywords[2]);
+}
+
 DECLARE_OOXMLEXPORT_TEST(testZoom, "zoom.docx")
 {
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
