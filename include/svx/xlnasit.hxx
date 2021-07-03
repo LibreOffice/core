@@ -31,7 +31,7 @@
 class SVXCORE_DLLPUBLIC XLineAttrSetItem final : public SfxSetItem
 {
 public:
-                            XLineAttrSetItem(std::unique_ptr<SfxItemSet>&& pItemSet );
+                            XLineAttrSetItem(SfxItemSet&& pItemSet );
                             XLineAttrSetItem(SfxItemPool* pItemPool);
                             XLineAttrSetItem(const XLineAttrSetItem& rAttr);
                             XLineAttrSetItem(const XLineAttrSetItem& rAttr,

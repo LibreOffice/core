@@ -5113,7 +5113,7 @@ std::unique_ptr<ScPatternAttr> ScDocument::CreateSelectionPattern( const ScMarkD
     OSL_ENSURE( aState.pItemSet, "SelectionPattern Null" );
     if (aState.pItemSet)
     {
-        std::unique_ptr<ScPatternAttr> pPattern(new ScPatternAttr( std::move(aState.pItemSet) ));
+        std::unique_ptr<ScPatternAttr> pPattern(new ScPatternAttr( std::move(*aState.pItemSet) ));
         if (aState.mbValidPatternId)
             pPattern->SetKey(aState.mnPatternId);
 

@@ -28,6 +28,7 @@
 
 #include <sal/log.hxx>
 #include <svl/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <svl/itempool.hxx>
 #include <svl/itemiter.hxx>
 #include <svl/setitem.hxx>

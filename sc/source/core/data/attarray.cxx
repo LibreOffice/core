@@ -1004,7 +1004,7 @@ void ScAttrArray::MergePatternArea( SCROW nStartRow, SCROW nEndRow,
             else
             {
                 // first pattern - copied from parent
-                rState.pItemSet = std::make_unique<SfxItemSet>( *rThisSet.GetPool(), rThisSet.GetRanges() );
+                rState.pItemSet.emplace( *rThisSet.GetPool(), rThisSet.GetRanges() );
                 rState.pItemSet->Set( rThisSet, bDeep );
                 rState.mnPatternId = pPattern->GetKey();
             }

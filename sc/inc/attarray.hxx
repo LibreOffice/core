@@ -25,6 +25,7 @@
 
 #include <algorithm>
 #include <memory>
+#include <optional>
 
 #include <svl/itemset.hxx>
 
@@ -64,7 +65,7 @@ struct ScLineFlags
 
 struct ScMergePatternState
 {
-    std::unique_ptr<SfxItemSet> pItemSet;
+    std::optional<SfxItemSet> pItemSet;
     const ScPatternAttr* pOld1;     ///< existing objects, temporary
     const ScPatternAttr* pOld2;
 

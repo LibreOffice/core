@@ -2998,14 +2998,14 @@ XFormTextHideFormItem* XFormTextHideFormItem::Clone(SfxItemPool* /*pPool*/) cons
 
 
 /// a line attribute set item
-XLineAttrSetItem::XLineAttrSetItem( std::unique_ptr<SfxItemSet>&& pItemSet ) :
+XLineAttrSetItem::XLineAttrSetItem( SfxItemSet&& pItemSet ) :
     SfxSetItem( XATTRSET_LINE, std::move(pItemSet))
 {
 }
 
 XLineAttrSetItem::XLineAttrSetItem( SfxItemPool* pItemPool ) :
     SfxSetItem( XATTRSET_LINE,
-        std::make_unique<SfxItemSet>( *pItemPool, svl::Items<XATTR_LINE_FIRST, XATTR_LINE_LAST>{}))
+        SfxItemSet( *pItemPool, svl::Items<XATTR_LINE_FIRST, XATTR_LINE_LAST>{}))
 {
 }
 
@@ -3026,14 +3026,14 @@ XLineAttrSetItem* XLineAttrSetItem::Clone( SfxItemPool* pPool ) const
 }
 
 /// fill attribute set item
-XFillAttrSetItem::XFillAttrSetItem( std::unique_ptr<SfxItemSet>&& pItemSet ) :
+XFillAttrSetItem::XFillAttrSetItem( SfxItemSet&& pItemSet ) :
     SfxSetItem( XATTRSET_FILL, std::move(pItemSet))
 {
 }
 
 XFillAttrSetItem::XFillAttrSetItem( SfxItemPool* pItemPool ) :
     SfxSetItem( XATTRSET_FILL,
-        std::make_unique<SfxItemSet>( *pItemPool, svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{}))
+        SfxItemSet( *pItemPool, svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{}))
 {
 }
 
