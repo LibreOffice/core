@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "01ae1e33_e1f8ec0c",
+        "filename": "external/ct2n/README",
+        "patchSetId": 1
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-07-03T04:50:53Z",
+      "side": 0,
+      "message": "A new line is added here. Please do not do extra formatting.",
+      "range": {
+        "startLine": 4,
+        "startChar": 0,
+        "endLine": 4,
+        "endChar": 1
+      },
+      "revId": "169b8d7e0eb0c4674ba59769a8ef54604f653680",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
