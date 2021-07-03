@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "01dd8c11_0a46bdb6",
+        "filename": "sal/rtl/alloc_impl.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-03T05:45:53Z",
+      "side": 1,
+      "message": "This uses _BitScanReverse, which takes long, which is 32-bit on both 32-bit and 64-bit platform on MSVC compilers. You need to use _BitScanReverse64 when _WIN64 is defined (or where SAL_TYPES_SIZEOFPOINTER is 8).",
+      "revId": "274317355855bfbcd45bf309efae589825c6da00",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dd14511a_d6f831c1",
+        "filename": "sal/rtl/alloc_impl.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-03T05:45:53Z",
+      "side": 1,
+      "message": "Not sure why SAL_TYPES_SIZEOFLONG is considered here. sal_Size is defined in include/sal/types.h to depend only on SAL_TYPES_SIZEOFPOINTER; and anyway, since this is not a part of public API, we may use \u0027if constexpr\u0027 of sizeof(n) to avoid all the complexity.\n\nI suspect that we might need to make use of the intrinsics conditional of __GCC__ defined (which is also true for clang IIRC?), and keep the old code as a fallback (do we need that?).",
+      "revId": "274317355855bfbcd45bf309efae589825c6da00",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
