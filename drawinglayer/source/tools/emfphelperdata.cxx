@@ -1444,9 +1444,8 @@ namespace emfplushelper
 
                             ::tools::Rectangle aSource(Point(sx, sy), Size(sw + 1, sh + 1));
                             SAL_INFO("drawinglayer.emf", "EMF+\t " << (type == EmfPlusRecordTypeDrawImagePoints ? "DrawImagePoints" : "DrawImage") << " source rectangle: " << sx << "," << sy << " " << sw << "x" << sh);
-                            ::basegfx::B2DPoint aDstPoint;
-                            ::basegfx::B2DSize aDstSize;
 
+                            float dx, dy, dw, dh;
                             double fShearX = 0.0;
                             double fShearY = 0.0;
                             if (type == EmfPlusRecordTypeDrawImagePoints)
@@ -1467,39 +1466,10 @@ namespace emfplushelper
                                              "EMF+\t destination points: " << x1 << "," << y1 << " "
                                                                            << x2 << "," << y2 << " "
                                                                            << x3 << "," << y3);
-                                    float xDstShift = x1;
-                                    float yDstShift = y2;
-                                    float xDstSize = x2 - x1;
-                                    float yDstSize = y3 - y1;
-                                    if (image.type == ImageDataTypeBitmap)
-                                    {
-                                        const Size aSize(image.graphic.GetBitmapEx().GetSizePixel());
-                                        if (sx < 0)
-                                        {
-                                            // If src position is negative then we need shift image to right
-                                            xDstShift = xDstShift + ((-sx) / sw) * (x2 - x1);
-                                            if (sx + sw <= aSize.Width())
-                                                xDstSize = ((sw + sx) / sw) * xDstSize;
-                                            else
-                                                xDstSize = (aSize.Width() / sw) * xDstSize;
-                                        }
-                                        else if (sx + sw > aSize.Width())
-                                            // If the src image is smaller that what we want to cut, then we need to scale down
-                                            xDstSize = ((aSize.Width() - sx) / sw) * xDstSize;
-
-                                        if (sy < 0)
-                                        {
-                                            yDstShift = yDstShift + ((-sy) / sh) * (y3 - y1);
-                                            if (sy + sh <= aSize.Height())
-                                                yDstSize = ((sh + sy) / sh) * yDstSize;
-                                            else
-                                                yDstSize = (aSize.Height() / sh) * yDstSize;
-                                        }
-                                        else if (sy + sh > aSize.Height())
-                                            yDstSize = ((aSize.Height() - sy) / sh) * yDstSize;
-                                    }
-                                    aDstPoint = ::basegfx::B2DPoint(xDstShift, yDstShift);
-                                    aDstSize = ::basegfx::B2DSize(xDstSize, yDstSize);
+                                    dx = x1;
+                                    dy = y2;
+                                    dw = x2 - x1;
+                                    dh = y3 - y1;
                                     fShearX = x3 - x1;
                                     fShearY = y2 - y1;
                                 }
@@ -1510,13 +1480,43 @@ namespace emfplushelper
                                 }
                             }
                             else if (type == EmfPlusRecordTypeDrawImage)
-                            {
-                                float dx, dy, dw, dh;
                                 ReadRectangle(rMS, dx, dy, dw, dh, bool(flags & 0x4000));
-                                SAL_INFO("drawinglayer.emf", "EMF+\t destination rectangle: " << dx << "," << dy << " " << dw << "x" << dh);
-                                aDstPoint = ::basegfx::B2DPoint(dx, dy);
-                                aDstSize = ::basegfx::B2DSize(dw, dh);
+
+                            SAL_INFO("drawinglayer.emf", "EMF+\t destination rectangle: " << dx << "," << dy << " " << dw << "x" << dh);
+
+                            Size aSize;
+                            if (image.type == ImageDataTypeBitmap)
+                                aSize = image.graphic.GetBitmapEx().GetSizePixel();
+                            else if (image.type == ImageDataTypeMetafile)
+                                aSize = image.graphic.GetGDIMetaFile().GetPrefSize();
+
+                            SAL_INFO("drawinglayer.emf", "EMF+\t Bitmap size: " << aSize.Width() << "x" << aSize.Height());
+                            if (sx < 0)
+                            {
+                                // If src position is negative then we need shift image to right
+                                dx = dx + ((-sx) / sw) * dw;
+                                if (sx + sw <= aSize.Width())
+                                    dw = ((sw + sx) / sw) * dw;
+                                else
+                                    dw = (aSize.Width() / sw) * dw;
                             }
+                            else if (sx + sw > aSize.Width())
+                                // If the src image is smaller that what we want to cut, then we need to scale down
+                                dw = ((aSize.Width() - sx) / sw) * dw;
+
+                            if (sy < 0)
+                            {
+                                dy = dy + ((-sy) / sh) * dh;
+                                if (sy + sh <= aSize.Height())
+                                    dh = ((sh + sy) / sh) * dh;
+                                else
+                                    dh = (aSize.Height() / sh) * dh;
+                            }
+                            else if (sy + sh > aSize.Height())
+                                dh = ((aSize.Height() - sy) / sh) * dh;
+
+                            ::basegfx::B2DPoint aDstPoint(dx, dy);
+                            ::basegfx::B2DSize aDstSize(dw, dh);
 
                             const basegfx::B2DHomMatrix aTransformMatrix = maMapTransform *
                                     basegfx::B2DHomMatrix(
@@ -1532,7 +1532,6 @@ namespace emfplushelper
                                 BitmapEx aBmp(image.graphic.GetBitmapEx());
                                 aBmp.Crop(aSource);
                                 Size aSize(aBmp.GetSizePixel());
-                                SAL_INFO("drawinglayer.emf", "EMF+\t Bitmap size: " << aSize.Width() << "x" << aSize.Height());
                                 if (aSize.Width() > 0 && aSize.Height() > 0)
                                 {
                                     mrTargetHolders.Current().append(
