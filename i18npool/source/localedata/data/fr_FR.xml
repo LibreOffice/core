@@ -212,8 +212,8 @@
     <IndexKey phonetic="false" default="true" unoid="alphanumeric">A-Z</IndexKey>
     <UnicodeScript>0</UnicodeScript>
     <UnicodeScript>1</UnicodeScript>
-    <FollowPageWord> sv</FollowPageWord>
-    <FollowPageWord> sv</FollowPageWord>
+    <FollowPageWord> sq.</FollowPageWord>
+    <FollowPageWord> sqq.</FollowPageWord>
   </LC_INDEX>
   <LC_CALENDAR>
     <Calendar unoid="gregorian" default="true">
