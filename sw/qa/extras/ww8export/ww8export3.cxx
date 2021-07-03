@@ -828,6 +828,27 @@ DECLARE_WW8EXPORT_TEST(testTdf75748_inheritChapterNumberingC, "tdf75748_inheritC
     CPPUNIT_ASSERT_EQUAL(OUString("II.B.1."), getProperty<OUString>(xPara, "ListLabelString"));
 }
 
+DECLARE_WW8EXPORT_TEST(testTdf104239_numbering, "tdf104239_numbering.doc")
+{
+    // The paragraph starts with "paraksta Pieņemšanas". [Roundtrip by Word 2016 avoids the problem.]
+    uno::Reference<beans::XPropertySet> xPara(getParagraph(51), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("3.3.1."), getProperty<OUString>(xPara, "ListLabelString"));
+}
+
+DECLARE_WW8EXPORT_TEST(testTdf104239_chapterNumberingLevels, "tdf104239_chapterNumberingLevels.doc")
+{
+    uno::Reference<beans::XPropertySet> xPara(getParagraph(1, "Heading 1"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Article I."), getProperty<OUString>(xPara, "ListLabelString"));
+    xPara.set(getParagraph(2, "Heading 2"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("1"), getProperty<OUString>(xPara, "ListLabelString"));
+    xPara.set(getParagraph(3, "Heading 3"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("First"), getProperty<OUString>(xPara, "ListLabelString"));
+    xPara.set(getParagraph(4, "Heading 4"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString(""), getProperty<OUString>(xPara, "ListLabelString"));
+    xPara.set(getParagraph(8, "Heading 9"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("1.1.1.1.1.1.1.1.1."), getProperty<OUString>(xPara, "ListLabelString"));
+}
+
 DECLARE_WW8EXPORT_TEST(testTdf104239_chapterNumberTortureTest, "tdf104239_chapterNumberTortureTest.doc")
 {
     // There is no point in identifying what the wrong values where in this test,
