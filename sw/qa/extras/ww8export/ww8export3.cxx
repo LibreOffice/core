@@ -25,6 +25,7 @@
 #include <com/sun/star/text/XTextSectionsSupplier.hpp>
 #include <com/sun/star/text/XFootnotesSupplier.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
+#include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/text/XLineNumberingProperties.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 
@@ -73,6 +74,30 @@ DECLARE_WW8EXPORT_TEST(testTdf100961_fixedDateTime, "tdf100961_fixedDateTime.doc
 {
     // This should be a fixed date/time field, not the current time.
     getParagraph(1, "05.01.19 04:06:08");
+
+    css::uno::Reference<css::text::XTextFieldsSupplier> xSupplier(mxComponent,
+                                                                  css::uno::UNO_QUERY_THROW);
+    auto xFieldsAccess(xSupplier->getTextFields());
+    auto xFields(xFieldsAccess->createEnumeration());
+
+    css::uno::Reference<css::text::XTextField> xField(xFields->nextElement(),
+                                                      css::uno::UNO_QUERY_THROW);
+    // Check fixed property was imported and date value was parsed correctly
+    CPPUNIT_ASSERT_EQUAL(OUString("Date (fixed)"), xField->getPresentation(true));
+    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xField, "IsFixed"));
+    auto datetime = getProperty<css::util::DateTime>(xField, "DateTimeValue");
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(5), datetime.Day);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), datetime.Month);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(2019), datetime.Year);
+
+    xField.set(xFields->nextElement(), css::uno::UNO_QUERY_THROW);
+    // Check fixed property was imported and time value was parsed correctly
+    CPPUNIT_ASSERT_EQUAL(OUString("Time (fixed)"), xField->getPresentation(true));
+    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xField, "IsFixed"));
+    datetime = getProperty<css::util::DateTime>(xField, "DateTimeValue");
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(4), datetime.Hours);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(6), datetime.Minutes);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(8), datetime.Seconds);
 }
 
 DECLARE_WW8EXPORT_TEST(testTdf138345_paraCharHighlight, "tdf138345_paraCharHighlight.doc")
