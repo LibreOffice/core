@@ -22,6 +22,30 @@
       "revId": "169b8d7e0eb0c4674ba59769a8ef54604f653680",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "003a2b8f_1aeef86d",
+        "filename": "external/ct2n/README",
+        "patchSetId": 1
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1002947
+      },
+      "writtenOn": "2021-07-03T06:15:00Z",
+      "side": 0,
+      "message": "Interesting, I can\u0027t see an empty line at the end of my local file.\nIs that a Unix vs Windows carriage return thing with Git maybe?",
+      "parentUuid": "01ae1e33_e1f8ec0c",
+      "range": {
+        "startLine": 4,
+        "startChar": 0,
+        "endLine": 4,
+        "endChar": 1
+      },
+      "revId": "169b8d7e0eb0c4674ba59769a8ef54604f653680",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }

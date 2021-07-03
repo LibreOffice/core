@@ -37,6 +37,23 @@
     },
     {
       "key": {
+        "uuid": "a0b95651_5036649e",
+        "filename": "postprocess/CustomTarget_registry.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 578,
+      "author": {
+        "id": 1002947
+      },
+      "writtenOn": "2021-07-03T06:15:00Z",
+      "side": 1,
+      "message": "@hossein: also wondering if it is safe to use the square bracket syntax in this .mk file?",
+      "revId": "70bc57f52b416b00ca4ea44d062d8cdc2d49c87d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b44437e9_5bbb6d19",
         "filename": "readlicense_oo/license/license.xml",
         "patchSetId": 1
