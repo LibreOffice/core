@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "300ee24a_ec45b8c6",
+        "filename": "cui/uiconfig/ui/editmodulesdialog.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-07-03T05:36:34Z",
+      "side": 1,
+      "message": "You can open the .ui file in glade, and as I\u0027ve tested, both versions should work. The brackets creates a better look in mouse hover, so I prefer square brackets.",
+      "parentUuid": "84f1952f_ecdbda14",
+      "revId": "70bc57f52b416b00ca4ea44d062d8cdc2d49c87d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b44437e9_5bbb6d19",
         "filename": "readlicense_oo/license/license.xml",
         "patchSetId": 1
@@ -54,6 +72,30 @@
       "side": 1,
       "message": "I assume you mean HTTPS instead of HTTP?",
       "parentUuid": "b44437e9_5bbb6d19",
+      "range": {
+        "startLine": 3734,
+        "startChar": 0,
+        "endLine": 3734,
+        "endChar": 4
+      },
+      "revId": "70bc57f52b416b00ca4ea44d062d8cdc2d49c87d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f6d16d7d_e9f256ee",
+        "filename": "readlicense_oo/license/license.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 3734,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-07-03T05:36:34Z",
+      "side": 1,
+      "message": "Yes, please convert http to https.",
+      "parentUuid": "e655b5c6_e4cf8caf",
       "range": {
         "startLine": 3734,
         "startChar": 0,
