@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa6bb86a_44e22420",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 4115,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-03T17:11:21Z",
+      "side": 1,
+      "message": "This \"1900-1-0\" seems misleading, actually being \"1899-12-30\", right?",
+      "revId": "8826934016d60d0a4a1e824e3f1cff814d915515",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
