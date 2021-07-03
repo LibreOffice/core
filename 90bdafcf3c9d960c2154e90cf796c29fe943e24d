@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "02c3bb90_61792e18",
+        "filename": "sdext/source/pdfimport/wrapper/wrapper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 682,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-07-03T09:41:56Z",
+      "side": 0,
+      "message": "this is unnecessary?",
+      "range": {
+        "startLine": 682,
+        "startChar": 8,
+        "endLine": 682,
+        "endChar": 42
+      },
+      "revId": "90bdafcf3c9d960c2154e90cf796c29fe943e24d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
