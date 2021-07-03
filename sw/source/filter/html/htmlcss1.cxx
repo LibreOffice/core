@@ -2277,21 +2277,19 @@ static void lcl_swcss1_setEncoding( SwFormat& rFormat, rtl_TextEncoding eEnc )
 
     const SfxItemSet& rItemSet = rFormat.GetAttrSet();
     static const sal_uInt16 aWhichIds[3] = { RES_CHRATR_FONT, RES_CHRATR_CJK_FONT,
-                                   RES_CHRATR_CTL_FONT };
+                                             RES_CHRATR_CTL_FONT };
     const SfxPoolItem *pItem;
-    for(sal_uInt16 i : aWhichIds)
+    for (sal_uInt16 i : aWhichIds)
     {
-        if( SfxItemState::SET == rItemSet.GetItemState( i, false,&pItem ) )
-        {
-            const SvxFontItem& rFont = *static_cast<const SvxFontItem *>(pItem);
-            if( RTL_TEXTENCODING_SYMBOL != rFont.GetCharSet() )
-            {
-                SvxFontItem aFont( rFont.GetFamily(), rFont.GetFamilyName(),
-                                   rFont.GetStyleName(), rFont.GetPitch(),
-                                   eEnc, i);
-                rFormat.SetFormatAttr( aFont );
-            }
-        }
+        if (SfxItemState::SET != rItemSet.GetItemState(i, false, &pItem))
+            continue;
+        const SvxFontItem& rFont = *static_cast<const SvxFontItem*>(pItem);
+        if (RTL_TEXTENCODING_SYMBOL == rFont.GetCharSet())
+            continue;
+        SvxFontItem aFont(rFont.GetFamily(), rFont.GetFamilyName(),
+                          rFont.GetStyleName(), rFont.GetPitch(),
+                          eEnc, i);
+        rFormat.SetFormatAttr(aFont);
     }
 }
 
