@@ -203,7 +203,6 @@ ScDocumentPool::ScDocumentPool()
     SvxFontItem* pCtlFont = getDefaultFontItem(nCtlLang, DefaultFontType::CTL_SPREADSHEET, ATTR_CTL_FONT);
 
     SvxBoxInfoItem* pGlobalBorderInnerAttr = new SvxBoxInfoItem( ATTR_BORDER_INNER );
-    auto pSet = std::make_unique<SfxItemSet>( *this, svl::Items<ATTR_PATTERN_START, ATTR_PATTERN_END>{} );
     SfxItemSet      aSetItemItemSet( *this,
                                      svl::Items<ATTR_BACKGROUND, ATTR_BACKGROUND,
                                      ATTR_BORDER,     ATTR_SHADOW,
@@ -281,9 +280,14 @@ ScDocumentPool::ScDocumentPool()
     // TODO: Write additional method ScGlobal::IsInit() or somesuch
     //       or detect whether this is the Secondary Pool for a MessagePool
     if ( ScGlobal::GetEmptyBrushItem() )
-        mvPoolDefaults[ ATTR_PATTERN     - ATTR_STARTINDEX ] = new ScPatternAttr( std::move(pSet), ScResId(STR_STYLENAME_STANDARD) );
+
+        mvPoolDefaults[ ATTR_PATTERN     - ATTR_STARTINDEX ] =
+            new ScPatternAttr( SfxItemSet( *this, svl::Items<ATTR_PATTERN_START, ATTR_PATTERN_END>{} ),
+                               ScResId(STR_STYLENAME_STANDARD) );
     else
-        mvPoolDefaults[ ATTR_PATTERN     - ATTR_STARTINDEX ] = new ScPatternAttr( std::move(pSet), STRING_STANDARD ); // FIXME: without name?
+        mvPoolDefaults[ ATTR_PATTERN     - ATTR_STARTINDEX ] =
+            new ScPatternAttr( SfxItemSet( *this, svl::Items<ATTR_PATTERN_START, ATTR_PATTERN_END>{} ),
+                               STRING_STANDARD ); // FIXME: without name?
 
     mvPoolDefaults[ ATTR_LRSPACE         - ATTR_STARTINDEX ] = new SvxLRSpaceItem( ATTR_LRSPACE );
     mvPoolDefaults[ ATTR_ULSPACE         - ATTR_STARTINDEX ] = new SvxULSpaceItem( ATTR_ULSPACE );

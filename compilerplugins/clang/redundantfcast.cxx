@@ -313,6 +313,9 @@ public:
         // compile-time check of constant
         if (fn == SRCDIR "/bridges/source/jni_uno/jni_bridge.cxx")
             return false;
+        // TODO constructing a temporary to pass to a && param
+        if (fn == SRCDIR "/sc/source/ui/view/viewfunc.cxx")
+            return false;
         return true;
     }
 

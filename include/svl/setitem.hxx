@@ -21,17 +21,18 @@
 
 #include <sal/config.h>
 
+#include <optional>
 #include <svl/poolitem.hxx>
-#include <memory>
+#include <svl/itemset.hxx>
 
 class SVL_DLLPUBLIC SfxSetItem : public SfxPoolItem
 {
-    std::unique_ptr<SfxItemSet> pSet;
+    SfxItemSet maSet;
 
     SfxSetItem& operator=(const SfxSetItem&) = delete;
 
 public:
-    SfxSetItem(sal_uInt16 nWhich, std::unique_ptr<SfxItemSet>&& pSet);
+    SfxSetItem(sal_uInt16 nWhich, SfxItemSet&& pSet);
     SfxSetItem(sal_uInt16 nWhich, const SfxItemSet& rSet);
     SfxSetItem(const SfxSetItem&, SfxItemPool* pPool = nullptr);
     virtual ~SfxSetItem() override;
@@ -45,8 +46,8 @@ public:
     // create a copy of itself
     virtual SfxSetItem* Clone(SfxItemPool* pPool = nullptr) const override = 0;
 
-    const SfxItemSet& GetItemSet() const { return *pSet; }
-    SfxItemSet& GetItemSet() { return *pSet; }
+    const SfxItemSet& GetItemSet() const { return maSet; }
+    SfxItemSet& GetItemSet() { return maSet; }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

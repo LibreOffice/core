@@ -56,8 +56,8 @@ class SC_DLLPUBLIC ScPatternAttr final : public SfxSetItem
     ScStyleSheet*              pStyle;
     sal_uInt64                 mnKey;
 public:
-                            ScPatternAttr(std::unique_ptr<SfxItemSet>&& pItemSet, const OUString& rStyleName);
-                            ScPatternAttr(std::unique_ptr<SfxItemSet>&& pItemSet);
+                            ScPatternAttr(SfxItemSet&& pItemSet, const OUString& rStyleName);
+                            ScPatternAttr(SfxItemSet&& pItemSet);
                             ScPatternAttr(SfxItemPool* pItemPool);
                             ScPatternAttr(const ScPatternAttr& rPatternAttr);
 

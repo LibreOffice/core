@@ -262,7 +262,7 @@ SvxSetItem::SvxSetItem( const SvxSetItem& rItem ) :
 {
 }
 
-SvxSetItem::SvxSetItem( const sal_uInt16 nId, std::unique_ptr<SfxItemSet>&& _pSet ) :
+SvxSetItem::SvxSetItem( const sal_uInt16 nId, SfxItemSet&& _pSet ) :
 
     SfxSetItem( nId, std::move(_pSet) )
 {
