@@ -182,7 +182,7 @@ void Test::testNumberFormat()
 
     const char* pDate[] = {
         "M/D/YY",
-        "NNNNMMMM DD, YYYY",
+        "NNNNMMMM D, YYYY",
         "MM/DD/YY",
         "MM/DD/YYYY",
         "MMM D, YY",
