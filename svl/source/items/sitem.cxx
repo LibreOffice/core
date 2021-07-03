@@ -29,23 +29,25 @@
 
 SfxSetItem::SfxSetItem( sal_uInt16 which, const SfxItemSet &rSet) :
     SfxPoolItem(which),
-    pSet(rSet.Clone())
+    maSet(rSet)
 {
+    assert(!dynamic_cast<const SfxAllItemSet*>(&rSet) && "cannot handle SfxAllItemSet here");
 }
 
 
-SfxSetItem::SfxSetItem( sal_uInt16 which, std::unique_ptr<SfxItemSet> &&pS) :
+SfxSetItem::SfxSetItem( sal_uInt16 which, SfxItemSet &&pS) :
     SfxPoolItem(which),
-    pSet(std::move(pS))
+    maSet(pS)
 {
-    DBG_ASSERT(pSet, "SfxSetItem without set constructed" );
+    assert(!dynamic_cast<SfxAllItemSet*>(&pS) && "cannot handle SfxAllItemSet here");
 }
 
 
 SfxSetItem::SfxSetItem( const SfxSetItem& rCopy, SfxItemPool *pPool ) :
     SfxPoolItem(rCopy),
-    pSet(rCopy.pSet->Clone(true, pPool))
+    maSet(rCopy.maSet.CloneAsValue(true, pPool))
 {
+    assert(!dynamic_cast<const SfxAllItemSet*>(&rCopy) && "cannot handle SfxAllItemSet here");
 }
 
 
@@ -57,7 +59,7 @@ SfxSetItem::~SfxSetItem()
 bool SfxSetItem::operator==( const SfxPoolItem& rCmp) const
 {
     assert(SfxPoolItem::operator==(rCmp));
-    return *pSet == *static_cast<const SfxSetItem &>(rCmp).pSet;
+    return maSet == static_cast<const SfxSetItem &>(rCmp).maSet;
 }
 
 

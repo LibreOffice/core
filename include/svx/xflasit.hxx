@@ -31,7 +31,7 @@
 class SVXCORE_DLLPUBLIC XFillAttrSetItem final : public SfxSetItem
 {
 public:
-                            XFillAttrSetItem(std::unique_ptr<SfxItemSet>&& pItemSet );
+                            XFillAttrSetItem(SfxItemSet&& pItemSet );
                             XFillAttrSetItem(SfxItemPool* pItemPool);
                             XFillAttrSetItem(const XFillAttrSetItem& rAttr);
                             XFillAttrSetItem(const XFillAttrSetItem& rAttr,

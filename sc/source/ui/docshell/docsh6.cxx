@@ -211,16 +211,16 @@ static void lcl_AdjustPool( SfxStyleSheetBasePool* pStylePool )
         if (rStyleSet.GetItemState(ATTR_PAGE_HEADERSET,false,&pItem) == SfxItemState::SET)
         {
             const SfxItemSet& rSrcSet = static_cast<const SvxSetItem*>(pItem)->GetItemSet();
-            auto pDestSet = std::make_unique<SfxItemSet>(*rStyleSet.GetPool(),rSrcSet.GetRanges());
-            pDestSet->Put(rSrcSet);
-            rStyleSet.Put(SvxSetItem(ATTR_PAGE_HEADERSET,std::move(pDestSet)));
+            SfxItemSet aDestSet(*rStyleSet.GetPool(),rSrcSet.GetRanges());
+            aDestSet.Put(rSrcSet);
+            rStyleSet.Put(SvxSetItem(ATTR_PAGE_HEADERSET, std::move(aDestSet)));
         }
         if (rStyleSet.GetItemState(ATTR_PAGE_FOOTERSET,false,&pItem) == SfxItemState::SET)
         {
             const SfxItemSet& rSrcSet = static_cast<const SvxSetItem*>(pItem)->GetItemSet();
-            auto pDestSet = std::make_unique<SfxItemSet>(*rStyleSet.GetPool(),rSrcSet.GetRanges());
-            pDestSet->Put(rSrcSet);
-            rStyleSet.Put(SvxSetItem(ATTR_PAGE_FOOTERSET,std::move(pDestSet)));
+            SfxItemSet aDestSet(*rStyleSet.GetPool(),rSrcSet.GetRanges());
+            aDestSet.Put(rSrcSet);
+            rStyleSet.Put(SvxSetItem(ATTR_PAGE_FOOTERSET, std::move(aDestSet)));
         }
 
         pStyle = pStylePool->Next();
