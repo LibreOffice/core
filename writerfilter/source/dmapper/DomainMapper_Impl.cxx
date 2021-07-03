@@ -6431,27 +6431,12 @@ void DomainMapper_Impl::AppendFieldResult(std::u16string_view rString)
     pContext->AppendResult(rString);
 }
 
-// Calculates css::DateTime based on ddddd.sssss since 1900-1-0
+// Calculates css::DateTime based on ddddd.sssss since 1899-12-30
 static util::DateTime lcl_dateTimeFromSerial(const double& dSerial)
 {
-    const sal_uInt32 secondsPerDay = 86400;
-    const sal_uInt16 secondsPerHour = 3600;
-
     DateTime d(Date(30, 12, 1899));
-    d.AddDays( static_cast<sal_Int32>(dSerial) );
-
-    double frac = std::modf(dSerial, &o3tl::temporary(double()));
-    sal_uInt32 seconds = frac * secondsPerDay;
-
-    util::DateTime date;
-    date.Year = d.GetYear();
-    date.Month = d.GetMonth();
-    date.Day = d.GetDay();
-    date.Hours = seconds / secondsPerHour;
-    date.Minutes = (seconds % secondsPerHour) / 60;
-    date.Seconds = seconds % 60;
-
-    return date;
+    d.AddTime(dSerial);
+    return d.GetUNODateTime();
 }
 
 void DomainMapper_Impl::SetFieldResult(OUString const& rResult)
