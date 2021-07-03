@@ -18,6 +18,7 @@
  */
 
 #include <svl/itempool.hxx>
+#include <svl/setitem.hxx>
 
 #include <string.h>
 #include <libxml/xmlwriter.h>

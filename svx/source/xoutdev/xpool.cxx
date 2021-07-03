@@ -141,10 +141,10 @@ XOutdevItemPool::XOutdevItemPool(SfxItemPool* _pMaster)
 
     // create SetItems
     rPoolDefaults[XATTRSET_LINE - XATTR_START] = new XLineAttrSetItem(
-        std::make_unique<SfxItemSet>(
+        SfxItemSet(
             *_pMaster, svl::Items<XATTR_LINE_FIRST, XATTR_LINE_LAST>{}));
     rPoolDefaults[XATTRSET_FILL - XATTR_START] = new XFillAttrSetItem(
-        std::make_unique<SfxItemSet>(
+        SfxItemSet(
             *_pMaster, svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{}));
 
     // create ItemInfos

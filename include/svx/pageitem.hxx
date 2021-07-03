@@ -101,7 +101,7 @@ class SVX_DLLPUBLIC SvxSetItem final : public SfxSetItem
 public:
     SvxSetItem( const sal_uInt16 nId, const SfxItemSet& rSet );
     SvxSetItem( const SvxSetItem& rItem );
-    SvxSetItem( const sal_uInt16 nId, std::unique_ptr<SfxItemSet>&& pSet );
+    SvxSetItem( const sal_uInt16 nId, SfxItemSet&& pSet );
 
     virtual SvxSetItem* Clone( SfxItemPool *pPool = nullptr ) const override;
 
