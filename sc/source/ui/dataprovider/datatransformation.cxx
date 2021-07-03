@@ -1170,6 +1170,52 @@ const std::set<SCCOL>& DateTimeTransformation::getColumn() const
     return mnCol;
 }
 
+FindReplaceTransformation::FindReplaceTransformation(SCCOL nCol, const OUString& aFindString, const OUString& aReplaceString)
+    : mnCol(nCol)
+    , maFindString(aFindString)
+    , maReplaceString(aReplaceString)
+{
+}
+
+void FindReplaceTransformation::Transform(ScDocument& rDoc) const
+{
+    if (mnCol == -1)
+        return;
+
+    SCROW nEndRow = getLastRow(rDoc, mnCol);
+    for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
+    {
+        CellType eType;
+        rDoc.GetCellType(mnCol, nRow, 0, eType);
+        if (eType != CELLTYPE_NONE)
+        {
+            OUString aStr = rDoc.GetString(mnCol, nRow, 0);
+            if (aStr == maFindString)
+                rDoc.SetString(mnCol, nRow, 0, maReplaceString);
+        }
+    }
+}
+
+TransformationType FindReplaceTransformation::getTransformationType() const
+{
+    return TransformationType::FINDREPLACE_TRANSFORMATION;
+}
+
+SCCOL FindReplaceTransformation::getColumn() const
+{
+    return mnCol;
+}
+
+const OUString& FindReplaceTransformation::getFindString() const
+{
+    return maFindString;
+}
+
+const OUString& FindReplaceTransformation::getReplaceString() const
+{
+    return maReplaceString;
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
