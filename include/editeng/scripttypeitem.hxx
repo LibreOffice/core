@@ -20,7 +20,7 @@
 #define INCLUDED_EDITENG_SCRIPTTYPEITEM_HXX
 
 #include <svl/languageoptions.hxx>
-#include <svl/poolitem.hxx>
+#include <svl/setitem.hxx>
 #include <editeng/editengdllapi.h>
 
 class EDITENG_DLLPUBLIC SvxScriptSetItem final : public SfxSetItem

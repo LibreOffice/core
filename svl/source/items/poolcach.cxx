@@ -20,6 +20,7 @@
 
 #include <svl/itempool.hxx>
 #include <svl/itemset.hxx>
+#include <svl/setitem.hxx>
 #include <svl/poolcach.hxx>
 #include <tools/debug.hxx>
 

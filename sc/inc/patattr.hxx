@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <svl/poolitem.hxx>
+#include <svl/setitem.hxx>
 #include <svl/itemset.hxx>
 #include <svl/languageoptions.hxx>
 #include <tools/degree.hxx>

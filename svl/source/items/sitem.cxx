@@ -23,6 +23,7 @@
 
 #include <rtl/ustring.hxx>
 #include <svl/itemset.hxx>
+#include <svl/setitem.hxx>
 #include <svl/poolitem.hxx>
 #include <tools/debug.hxx>
 
