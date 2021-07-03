@@ -1822,31 +1822,22 @@ eF_ResT SwWW8ImplReader::Read_F_DateTime( WW8FieldDesc*pF, OUString& rStr )
         }
     }
 
-    sal_uInt16 nDoNotRecalculate = (pF->nOpt & 0x10) ? FIXEDFLD : 0;
-    if (nDoNotRecalculate)
-    {
-        // TODO: Doing this properly would require setting the field to the original date/time.
-        // Unfortunately, none of the plumbing to do this exists AFAICS
-        //SAL_WARN("DEBUG","Need to aField.SetDateTime() to ["<<GetFieldResult(pF)<<"] based on format string["<<aReadParam.GetResult()<<"]");
-        // So instead, just drop the field and insert the plain text.
-        // That is at least better than having the current date/time.
-        return eF_ResT::TEXT;
-    }
-    if (nDT & SvNumFormatType::DATE)
+    if (nDT & SvNumFormatType::DATE || nDT == SvNumFormatType::TIME)
     {
         SwDateTimeField aField(static_cast<SwDateTimeFieldType*>(
             m_rDoc.getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::DateTime)),
-                                                              (DATEFLD | nDoNotRecalculate),
-                                                               nFormat);
-        ForceFieldLanguage(aField, nLang);
-        m_rDoc.getIDocumentContentOperations().InsertPoolItem( *m_pPaM, SwFormatField( aField ) );
-    }
-    else if (nDT == SvNumFormatType::TIME)
-    {
-        SwDateTimeField aField(static_cast<SwDateTimeFieldType*>(
-            m_rDoc.getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::DateTime)),
-                                                              (TIMEFLD | nDoNotRecalculate),
-                                                              nFormat);
+            nDT & SvNumFormatType::DATE ? DATEFLD : TIMEFLD, nFormat);
+        if (pF->nOpt & 0x10) // Fixed field
+        {
+            double fSerial;
+            if (!m_rDoc.GetNumberFormatter()->IsNumberFormat(GetFieldResult(pF), nFormat, fSerial,
+                                                             SvNumInputOptions::LAX_TIME))
+                return eF_ResT::TEXT; // just drop the field and insert the plain text.
+            aField.SetSubType(aField.GetSubType() | FIXEDFLD);
+            DateTime aSetDateTime(m_rDoc.GetNumberFormatter()->GetNullDate());
+            aSetDateTime.AddTime(fSerial);
+            aField.SetDateTime(aSetDateTime);
+        }
         ForceFieldLanguage(aField, nLang);
         m_rDoc.getIDocumentContentOperations().InsertPoolItem( *m_pPaM, SwFormatField( aField ) );
     }
