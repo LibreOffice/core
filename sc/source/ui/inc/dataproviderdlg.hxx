@@ -85,10 +85,13 @@ public:
     void deletefromList(sal_uInt32 nIndex);
     void replaceNullTransformation();
     void dateTimeTransformation();
+    void findReplaceTransformation();
+
     void updateApplyBtn(bool bValidConfig);
     void isValid();
 
     sc::ExternalDataSource getDataSource(ScDocument* pDoc);
+
 
     void import(ScDocument& rDoc, bool bInternal = false);
 };
