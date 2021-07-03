@@ -24,7 +24,7 @@
 
 #include <memory>
 
-#include <svl/poolitem.hxx>
+#include <svl/setitem.hxx>
 #include <svx/svxdllapi.h>
 
 // SetItem with all ItemSets of fill-attributes

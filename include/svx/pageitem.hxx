@@ -23,7 +23,7 @@
 
 #include <memory>
 
-#include <svl/poolitem.hxx>
+#include <svl/setitem.hxx>
 #include <svx/svxdllapi.h>
 #include <editeng/svxenum.hxx>
 
