@@ -133,7 +133,7 @@ public:
         initializeSender(aNotifierWindow, aContentWindow, sTypeOfJSON);
     }
 
-    virtual ~JSDialogSender();
+    virtual ~JSDialogSender() COVERITY_NOEXCEPT_FALSE;
 
     virtual void sendFullUpdate(bool bForce = false);
     void sendClose();
