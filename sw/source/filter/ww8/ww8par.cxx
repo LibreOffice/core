@@ -6011,7 +6011,17 @@ void SwWW8ImplReader::SetOutlineStyles()
     // assigned directly and
     //   its default outline level is applied.
     SwNumRule aOutlineRule(*m_rDoc.GetOutlineNumRule());
-    bool bAppliedChangedOutlineStyle = false;
+    if (m_pChosenWW8OutlineStyle)
+    {
+        for (int i = 0; i < WW8ListManager::nMaxLevel; ++i)
+        {
+            // Don't clobber existing outline levels.
+            const sal_uInt16 nLevel = 1 << i;
+            if (!(nOutlineStyleListLevelWithAssignment & nLevel))
+                aOutlineRule.Set(i, m_pChosenWW8OutlineStyle->Get(i));
+        }
+    }
+
     for (const SwWW8StyInf* pStyleInf : aWW8BuiltInHeadingStyles)
     {
         const sal_uInt16 nOutlineStyleListLevelOfWW8BuiltInHeadingStyle
@@ -6020,18 +6030,6 @@ void SwWW8ImplReader::SetOutlineStyles()
             & nOutlineStyleListLevelWithAssignment)
         {
             continue;
-        }
-
-        const sal_uInt8 nLvl = pStyleInf->m_nListLevel == MAXLEVEL ? 0 : pStyleInf->m_nListLevel;
-        if (m_pChosenWW8OutlineStyle != nullptr
-            && pStyleInf->mnWW8OutlineLevel < WW8ListManager::nMaxLevel
-            && pStyleInf->mnWW8OutlineLevel == nLvl)
-        {
-            // LibreOffice's Chapter Numbering only works when outlineLevel == listLevel
-            const SwNumFormat& rRule
-                = m_pChosenWW8OutlineStyle->Get(pStyleInf->mnWW8OutlineLevel);
-            aOutlineRule.Set(pStyleInf->mnWW8OutlineLevel, rRule);
-            bAppliedChangedOutlineStyle = true;
         }
 
         // in case that there are more styles on this level ignore them
@@ -6068,7 +6066,7 @@ void SwWW8ImplReader::SetOutlineStyles()
         }
     }
 
-    if (bAppliedChangedOutlineStyle)
+    if (m_pChosenWW8OutlineStyle)
     {
         m_rDoc.SetOutlineNumRule(aOutlineRule);
     }
