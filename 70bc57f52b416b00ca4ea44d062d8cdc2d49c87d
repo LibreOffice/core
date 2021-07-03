@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "67555ab8_6a8139bb",
+        "filename": "cui/uiconfig/ui/editmodulesdialog.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1002947
+      },
+      "writtenOn": "2021-07-03T08:18:22Z",
+      "side": 1,
+      "message": "This is great to know, thank you! I tried it, very easy to see what the dialogue looks like in glade.",
+      "parentUuid": "300ee24a_ec45b8c6",
+      "revId": "70bc57f52b416b00ca4ea44d062d8cdc2d49c87d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a0b95651_5036649e",
         "filename": "postprocess/CustomTarget_registry.mk",
         "patchSetId": 1
