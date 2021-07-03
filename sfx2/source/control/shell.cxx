@@ -23,7 +23,7 @@
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
-#include <svl/itempool.hxx>
+#include <svl/setitem.hxx>
 #include <svl/undo.hxx>
 #include <itemdel.hxx>
 #include <svtools/asynclink.hxx>
