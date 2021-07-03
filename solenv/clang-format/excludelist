@@ -3590,7 +3590,6 @@ embedserv/source/inprocserv/smartpointer.hxx
 emfio/inc/emfreader.hxx
 emfio/inc/mtftools.hxx
 emfio/inc/wmfreader.hxx
-emfio/qa/cppunit/emf/EmfImportTest.cxx
 emfio/source/emfuno/xemfparser.cxx
 emfio/source/reader/emfreader.cxx
 emfio/source/reader/mtftools.cxx
