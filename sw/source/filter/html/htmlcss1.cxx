@@ -2286,6 +2286,8 @@ static void lcl_swcss1_setEncoding( SwFormat& rFormat, rtl_TextEncoding eEnc )
         const SvxFontItem& rFont = *static_cast<const SvxFontItem*>(pItem);
         if (RTL_TEXTENCODING_SYMBOL == rFont.GetCharSet())
             continue;
+        if (eEnc == rFont.GetCharSet())
+            continue;
         SvxFontItem aFont(rFont.GetFamily(), rFont.GetFamilyName(),
                           rFont.GetStyleName(), rFont.GetPitch(),
                           eEnc, i);
