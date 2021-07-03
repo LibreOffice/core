@@ -66,7 +66,7 @@
 #include <fillinfo.hxx>
 #include <boost/functional/hash.hpp>
 
-ScPatternAttr::ScPatternAttr( std::unique_ptr<SfxItemSet>&& pItemSet, const OUString& rStyleName )
+ScPatternAttr::ScPatternAttr( SfxItemSet&& pItemSet, const OUString& rStyleName )
     :   SfxSetItem  ( ATTR_PATTERN, std::move(pItemSet) ),
         pName       ( rStyleName ),
         pStyle      ( nullptr ),
@@ -74,7 +74,7 @@ ScPatternAttr::ScPatternAttr( std::unique_ptr<SfxItemSet>&& pItemSet, const OUSt
 {
 }
 
-ScPatternAttr::ScPatternAttr( std::unique_ptr<SfxItemSet>&& pItemSet )
+ScPatternAttr::ScPatternAttr( SfxItemSet&& pItemSet )
     :   SfxSetItem  ( ATTR_PATTERN, std::move(pItemSet) ),
         pStyle      ( nullptr ),
         mnKey(0)
@@ -82,7 +82,7 @@ ScPatternAttr::ScPatternAttr( std::unique_ptr<SfxItemSet>&& pItemSet )
 }
 
 ScPatternAttr::ScPatternAttr( SfxItemPool* pItemPool )
-    :   SfxSetItem  ( ATTR_PATTERN, std::make_unique<SfxItemSet>( *pItemPool, svl::Items<ATTR_PATTERN_START, ATTR_PATTERN_END>{} ) ),
+    :   SfxSetItem  ( ATTR_PATTERN, SfxItemSet( *pItemPool, svl::Items<ATTR_PATTERN_START, ATTR_PATTERN_END>{} ) ),
         pStyle      ( nullptr ),
         mnKey(0)
 {
@@ -102,7 +102,7 @@ ScPatternAttr::~ScPatternAttr()
 
 ScPatternAttr* ScPatternAttr::Clone( SfxItemPool *pPool ) const
 {
-    ScPatternAttr* pPattern = new ScPatternAttr( GetItemSet().Clone(true, pPool) );
+    ScPatternAttr* pPattern = new ScPatternAttr( GetItemSet().CloneAsValue(true, pPool) );
 
     pPattern->pStyle = pStyle;
     pPattern->pName = pName;

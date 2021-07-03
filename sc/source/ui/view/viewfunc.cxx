@@ -895,8 +895,8 @@ void ScViewFunc::ApplyAttributes( const SfxItemSet* pDialogSet,
         return;
     }
 
-    ScPatternAttr aOldAttrs( std::make_unique<SfxItemSet>(*pOldSet) );
-    ScPatternAttr aNewAttrs( std::make_unique<SfxItemSet>(*pDialogSet) );
+    ScPatternAttr aOldAttrs( *pOldSet );
+    ScPatternAttr aNewAttrs( *pDialogSet );
     aNewAttrs.DeleteUnchanged( &aOldAttrs );
 
     if ( pDialogSet->GetItemState( ATTR_VALUE_FORMAT ) == SfxItemState::SET )
@@ -1005,7 +1005,7 @@ void ScViewFunc::ApplyAttr( const SfxPoolItem& rAttrItem, bool bAdjustBlockHeigh
         return;
     }
 
-    ScPatternAttr aNewAttrs( std::make_unique<SfxItemSet>( *GetViewData().GetDocument().GetPool(),
+    ScPatternAttr aNewAttrs( SfxItemSet( *GetViewData().GetDocument().GetPool(),
                                             svl::Items<ATTR_PATTERN_START, ATTR_PATTERN_END>{} ) );
 
     aNewAttrs.GetItemSet().Put( rAttrItem );
