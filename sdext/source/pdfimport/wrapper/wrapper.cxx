@@ -538,12 +538,16 @@ void LineParser::parseFontFamilyName( FontAttributes& rResult )
             sal_Int32 nAttribLen = RTL_CONSTASCII_LENGTH("Italic");
             nLen -= nAttribLen;
             pCopy += nAttribLen;
+            // Set italic to true if we remove the word Italic from font name.
+            rResult.isItalic = true;
         }
         else if (parseFontCheckForString(pCopy, nLen, RTL_CONSTASCII_STRINGPARAM("-LightOblique"), rResult, true, false))
         {
             sal_Int32 nAttribLen = RTL_CONSTASCII_LENGTH("-LightOblique");
             nLen -= nAttribLen;
             pCopy += nAttribLen;
+            // Set italic to true if we remove the word Oblique from font name.
+            rResult.isItalic = true;
         }
         else if (parseFontCheckForString(pCopy, nLen, RTL_CONSTASCII_STRINGPARAM("-Light"), rResult, false, false))
         {
@@ -556,18 +560,25 @@ void LineParser::parseFontFamilyName( FontAttributes& rResult )
             sal_Int32 nAttribLen = RTL_CONSTASCII_LENGTH("-BoldOblique");
             nLen -= nAttribLen;
             pCopy += nAttribLen;
+            // Set italic and bold to true if we remove the words Bold and Oblique from font name.
+            rResult.isItalic = true;
+            rResult.isBold = true;
         }
         else if (parseFontCheckForString(pCopy, nLen, RTL_CONSTASCII_STRINGPARAM("-Bold"), rResult, false, true))
         {
             sal_Int32 nAttribLen = RTL_CONSTASCII_LENGTH("-Bold");
             nLen -= nAttribLen;
             pCopy += nAttribLen;
+            // Set bold to true if we remove the word Bold from font name.
+            rResult.isBold = true;
         }
         else if (parseFontCheckForString(pCopy, nLen, RTL_CONSTASCII_STRINGPARAM("Bold"), rResult, false, true))
         {
             sal_Int32 nAttribLen = RTL_CONSTASCII_LENGTH("Bold");
             nLen -= nAttribLen;
             pCopy += nAttribLen;
+            // Set bold to true if we remove the word Bold from font name.
+            rResult.isBold = true;
         }
         else if (parseFontCheckForString(pCopy, nLen, RTL_CONSTASCII_STRINGPARAM("-Roman"), rResult, false, false))
         {
@@ -580,6 +591,8 @@ void LineParser::parseFontFamilyName( FontAttributes& rResult )
             sal_Int32 nAttribLen = RTL_CONSTASCII_LENGTH("-Oblique");
             nLen -= nAttribLen;
             pCopy += nAttribLen;
+            // Set italic to true if we remove the word Oblique from font name.
+            rResult.isItalic = true;
         }
         else if (parseFontCheckForString(pCopy, nLen, RTL_CONSTASCII_STRINGPARAM("-Reg"), rResult, false, false))
         {
@@ -667,9 +680,20 @@ void LineParser::readFont()
                         aResult.familyName = aFD.Name;
                         parseFontFamilyName(aResult);
                     }
-                    aResult.isBold      = (aFD.Weight > 100.0);
-                    aResult.isItalic    = (aFD.Slant == awt::FontSlant_OBLIQUE ||
-                                           aFD.Slant == awt::FontSlant_ITALIC );
+                    // For some reason the weight detected by xMat may be 0 which means the
+                    // detection has failed. In such case all the aFD attributes would be 0
+                    // and the slant is FontSlant_DONTKNOW.
+                    // Use the isBold and isItalic setting detected from the font name as done in parseFontFamilyName stage.
+                    SAL_WARN_IF(
+                        aFD.Weight == 0,
+                        "sdext.pdfimport",
+                        "Reading the font data may have failed, the bold/italic info is thus determined based on the font name and may be wrong. Font name: " << aFontName);
+                    if (aFD.Weight > 0)
+                    {
+                        aResult.isBold   = (aFD.Weight > 100.0);
+                        aResult.isItalic = (aFD.Slant == awt::FontSlant_OBLIQUE ||
+                                            aFD.Slant == awt::FontSlant_ITALIC );
+                    }
                     aResult.isUnderline = false;
                     aResult.size        = 0;
                 }
