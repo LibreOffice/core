@@ -40,6 +40,7 @@
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/calendarwrapper.hxx>
 #include <unotools/charclass.hxx>
+#include <svl/zforlist.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::comphelper;
@@ -1387,7 +1388,8 @@ namespace
 }
 
 OUString DateFormatter::FormatDate(const Date& rDate, ExtDateFieldFormat eExtFormat,
-                                   const LocaleDataWrapper& rLocaleData, CalendarWrapper& rCalendarWrapper)
+                                   const LocaleDataWrapper& rLocaleData, CalendarWrapper& rCalendarWrapper,
+                                   const Formatter::StaticFormatter* pStaticFormatter)
 {
     bool bShowCentury = false;
     switch (eExtFormat)
@@ -1437,7 +1439,22 @@ OUString DateFormatter::FormatDate(const Date& rDate, ExtDateFieldFormat eExtFor
     {
         case ExtDateFieldFormat::SystemLong:
         {
-            return rLocaleData.getLongDate( rDate, rCalendarWrapper, !bShowCentury );
+            /* TODO: adapt all callers to pass a StaticFormatter. */
+            if (!pStaticFormatter)
+                return rLocaleData.getLongDate( rDate, rCalendarWrapper, !bShowCentury );
+            else
+            {
+                SvNumberFormatter* pFormatter = (*pStaticFormatter);
+                const LanguageTag aFormatterLang( pFormatter->GetLanguageTag());
+                const sal_uInt32 nIndex = pFormatter->GetFormatIndex( NF_DATE_SYSTEM_LONG,
+                        rLocaleData.getLanguageTag().getLanguageType(false));
+                OUString aStr;
+                const Color* pCol;
+                pFormatter->GetOutputString( rDate - pFormatter->GetNullDate(), nIndex, aStr, &pCol);
+                // Reset to what other uses may expect.
+                pFormatter->ChangeIntl( aFormatterLang.getLanguageType(false));
+                return aStr;
+            }
         }
         case ExtDateFieldFormat::ShortDDMMYY:
         case ExtDateFieldFormat::ShortDDMMYYYY:
@@ -1482,7 +1499,8 @@ OUString DateFormatter::FormatDate(const Date& rDate, ExtDateFieldFormat eExtFor
 
 OUString DateFormatter::ImplGetDateAsText( const Date& rDate ) const
 {
-    return DateFormatter::FormatDate(rDate, GetExtDateFormat(), ImplGetLocaleDataWrapper(), GetCalendarWrapper());
+    return DateFormatter::FormatDate(rDate, GetExtDateFormat(), ImplGetLocaleDataWrapper(),
+            GetCalendarWrapper(), &maStaticFormatter);
 }
 
 static void ImplDateIncrementDay( Date& rDate, bool bUp )
