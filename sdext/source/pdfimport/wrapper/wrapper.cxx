@@ -611,13 +611,6 @@ void LineParser::readFont()
     readInt32(nIsItalic);
     readInt32(nIsUnderline);
     readDouble(nSize);
-    readInt32(nFileLen);
-
-    nSize = nSize < 0.0 ? -nSize : nSize;
-    aFontName = lcl_unescapeLineFeeds( m_aLine.subView( m_nCharIndex ) );
-
-    // name gobbles up rest of line
-    m_nCharIndex = std::string_view::npos;
 
     Parser::FontMapType::const_iterator pFont( m_parser.m_aFontMap.find(nFontID) );
     if( pFont != m_parser.m_aFontMap.end() )
@@ -629,6 +622,14 @@ void LineParser::readFont()
 
         return;
     }
+
+    readInt32(nFileLen);
+
+    nSize = nSize < 0.0 ? -nSize : nSize;
+    aFontName = lcl_unescapeLineFeeds( m_aLine.subView( m_nCharIndex ) );
+
+    // name gobbles up rest of line
+    m_nCharIndex = std::string_view::npos;
 
     // yet unknown font - get info and add to map
     FontAttributes aResult( OStringToOUString( aFontName,
