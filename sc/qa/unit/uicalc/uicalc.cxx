@@ -275,6 +275,16 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf92963)
     pMod->SetInputOptions(aInputOption);
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf92963)
+{
+    ScModelObj* pModelObj = createDoc("");
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    dispatchCommand(mxComponent, ".uno:AutoOutline", {});
+    CPPUNIT_ASSERT_EQUAL(OUString(""), pDoc->GetString(ScAddress(0, 0, 0)));
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf140151)
 {
 #if !defined(MACOSX) && !defined(_WIN32) //FIXME
