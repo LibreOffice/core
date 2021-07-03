@@ -30,7 +30,8 @@ enum class TransformationType
     AGGREGATE_FUNCTION,
     NUMBER_TRANSFORMATION,
     REMOVE_NULL_TRANSFORMATION,
-    DATETIME_TRANSFORMATION
+    DATETIME_TRANSFORMATION,
+    FINDREPLACE_TRANSFORMATION
 };
 
 enum class TEXT_TRANSFORM_TYPE { TO_LOWER, TO_UPPER, CAPITALIZE, TRIM };
@@ -179,6 +180,21 @@ class SC_DLLPUBLIC DateTimeTransformation : public DataTransformation
         virtual TransformationType getTransformationType() const override;
         DATETIME_TRANSFORMATION_TYPE getDateTimeTransformationType() const;
         const std::set<SCCOL>& getColumn() const;
+};
+
+class SC_DLLPUBLIC FindReplaceTransformation : public DataTransformation
+{
+    SCCOL mnCol;
+    OUString maFindString;
+    OUString maReplaceString;
+
+    public:
+        FindReplaceTransformation(SCCOL nCol, const OUString& aFindString, const OUString& aReplaceString);
+        virtual void Transform(ScDocument& rDoc) const override;
+        virtual TransformationType getTransformationType() const override;
+        SCCOL getColumn() const;
+        const OUString & getFindString() const;
+        const OUString & getReplaceString() const;
 };
 
 }

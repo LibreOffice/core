@@ -71,7 +71,8 @@ MenuData aTransformationData[] = {
     { "Aggregate Functions", &ScDataProviderDlg::aggregateFunction},
     { "Number Transformations", &ScDataProviderDlg::numberTransformation },
     { "Replace Null Transformations", &ScDataProviderDlg::replaceNullTransformation },
-    { "Date & Time Transformations", &ScDataProviderDlg::dateTimeTransformation }
+    { "Date & Time Transformations", &ScDataProviderDlg::dateTimeTransformation },
+    { "Find Replace Transformation", &ScDataProviderDlg::findReplaceTransformation},
 };
 
 class ScDeleteColumnTransformationControl : public ScDataTransformationBaseControl
@@ -613,6 +614,47 @@ std::shared_ptr<sc::DataTransformation> ScDateTimeTransformation::getTransformat
     return nullptr;
 }
 
+class ScFindReplaceTransformation : public ScDataTransformationBaseControl
+{
+private:
+    std::unique_ptr<weld::Entry> mxFindString;
+    std::unique_ptr<weld::Entry> mxReplaceString;
+    std::unique_ptr<weld::Entry> mxEdColumns;
+    std::unique_ptr<weld::Button> mxDelete;
+    std::function<void(sal_uInt32&)> maDeleteTransformation;
+    const ScDocument* mpDoc;
+
+public:
+    ScFindReplaceTransformation(const ScDocument* pDoc, weld::Container* pParent, sal_uInt32 nIndex, std::function<void(sal_uInt32&)> aDeleteTransformation);
+
+    virtual std::shared_ptr<sc::DataTransformation> getTransformation() override;
+    DECL_LINK(DeleteHdl, weld::Button&, void);
+};
+
+ScFindReplaceTransformation::ScFindReplaceTransformation(
+    const ScDocument *pDoc, weld::Container* pParent, sal_uInt32 nIndex,
+    std::function<void(sal_uInt32&)> aDeleteTransformation)
+    : ScDataTransformationBaseControl(pParent, "modules/scalc/ui/findreplaceentry.ui", nIndex)
+    , mxFindString(mxBuilder->weld_entry("ed_find"))
+    , mxReplaceString(mxBuilder->weld_entry("ed_replace"))
+    , mxEdColumns(mxBuilder->weld_entry("ed_columns"))
+    , mxDelete(mxBuilder->weld_button("ed_delete"))
+    , maDeleteTransformation(std::move(aDeleteTransformation))
+    , mpDoc(pDoc)
+{
+    mxDelete->connect_clicked(LINK(this, ScFindReplaceTransformation, DeleteHdl));
+}
+
+std::shared_ptr<sc::DataTransformation> ScFindReplaceTransformation::getTransformation()
+{
+    OUString aColStr = mxEdColumns->get_text();
+    SCCOL aColumn = -1;
+    sal_Int32 nCol = aColStr.toInt32();
+    if (nCol > 0 && nCol <= mpDoc->MaxCol())
+        aColumn = nCol - 1;
+    return std::make_shared<sc::FindReplaceTransformation>(aColumn, mxFindString->get_text(), mxReplaceString->get_text());
+}
+
 }
 
 ScDataProviderDlg::ScDataProviderDlg(weld::Window* pParent, std::shared_ptr<ScDocument> pDoc,
@@ -847,6 +889,12 @@ void ScDataProviderDlg::dateTimeTransformation()
     maControls.emplace_back(std::make_unique<ScDateTimeTransformation>(mxDoc.get(), mxTransformationList.get(), mnIndex++, adeleteTransformation));
 }
 
+void ScDataProviderDlg::findReplaceTransformation()
+{
+    std::function<void(sal_uInt32&)> adeleteTransformation = std::bind(&ScDataProviderDlg::deletefromList, this, std::placeholders::_1);
+    maControls.emplace_back(std::make_unique<ScFindReplaceTransformation>(mxDoc.get(), mxTransformationList.get(), mnIndex++, adeleteTransformation));
+}
+
 namespace {
 
 bool hasDBName(const OUString& rName, ScDBCollection* pDBCollection)
@@ -933,6 +981,11 @@ IMPL_LINK_NOARG(ScReplaceNullTransformation, DeleteHdl, weld::Button&, void)
 }
 
 IMPL_LINK_NOARG(ScDateTimeTransformation, DeleteHdl, weld::Button&, void)
+{
+   maDeleteTransformation(mnIndex);
+}
+
+IMPL_LINK_NOARG(ScFindReplaceTransformation, DeleteHdl, weld::Button&, void)
 {
    maDeleteTransformation(mnIndex);
 }
