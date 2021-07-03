@@ -85,7 +85,7 @@ enum class FORMAT_CHANGE_TYPE
 
 class VCL_DLLPUBLIC Formatter
 {
-private:
+public:
     // A SvNumberFormatter is very expensive (regarding time and space), it is a Singleton
     class StaticFormatter
     {
