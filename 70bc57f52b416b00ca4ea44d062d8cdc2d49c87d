@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "84f1952f_ecdbda14",
+        "filename": "cui/uiconfig/ui/editmodulesdialog.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1002947
+      },
+      "writtenOn": "2021-07-03T05:01:29Z",
+      "side": 1,
+      "message": "unsure if this should be the current form, or the original https://extensions.libreoffice.org/?Tags[0]\u003d50\n\nWould the square brackets be a problem?",
+      "revId": "70bc57f52b416b00ca4ea44d062d8cdc2d49c87d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b44437e9_5bbb6d19",
         "filename": "readlicense_oo/license/license.xml",
         "patchSetId": 1
