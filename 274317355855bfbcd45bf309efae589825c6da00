@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "e9dda52b_178a782d",
+        "filename": "sal/rtl/alloc_impl.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1003291
+      },
+      "writtenOn": "2021-07-03T14:11:03Z",
+      "side": 1,
+      "message": "I\u0027ll change it to _BitScanReverse64 for _WIN64.\nFor _WIN32 I\u0027ll let the old code.",
+      "parentUuid": "01dd8c11_0a46bdb6",
+      "revId": "274317355855bfbcd45bf309efae589825c6da00",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "dd14511a_d6f831c1",
         "filename": "sal/rtl/alloc_impl.hxx",
         "patchSetId": 6
@@ -30,6 +48,24 @@
       "writtenOn": "2021-07-03T05:45:53Z",
       "side": 1,
       "message": "Not sure why SAL_TYPES_SIZEOFLONG is considered here. sal_Size is defined in include/sal/types.h to depend only on SAL_TYPES_SIZEOFPOINTER; and anyway, since this is not a part of public API, we may use \u0027if constexpr\u0027 of sizeof(n) to avoid all the complexity.\n\nI suspect that we might need to make use of the intrinsics conditional of __GCC__ defined (which is also true for clang IIRC?), and keep the old code as a fallback (do we need that?).",
+      "revId": "274317355855bfbcd45bf309efae589825c6da00",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5c06db61_5be01843",
+        "filename": "sal/rtl/alloc_impl.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1003291
+      },
+      "writtenOn": "2021-07-03T14:11:03Z",
+      "side": 1,
+      "message": "No other compiler besides VS has complained.\nSo I understand it\u0027s defined for other compilers (clang / GCC).\nNo fallback needed. Besides works on sal/rtl/math.cxx.\nAnd that\u0027s why, can I create on include/rtl/alloc.hxx or where you prefer:\nrtl_highbit\nrtl_lowbit\nThat way I can fix https://gerrit.libreoffice.org/c/core/+/118249\nAnd also gives us a layer of abstraction for other uses.",
+      "parentUuid": "dd14511a_d6f831c1",
       "revId": "274317355855bfbcd45bf309efae589825c6da00",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
