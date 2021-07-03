@@ -39,6 +39,30 @@
       "revId": "70bc57f52b416b00ca4ea44d062d8cdc2d49c87d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e655b5c6_e4cf8caf",
+        "filename": "readlicense_oo/license/license.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 3734,
+      "author": {
+        "id": 1002947
+      },
+      "writtenOn": "2021-07-03T05:11:35Z",
+      "side": 1,
+      "message": "I assume you mean HTTPS instead of HTTP?",
+      "parentUuid": "b44437e9_5bbb6d19",
+      "range": {
+        "startLine": 3734,
+        "startChar": 0,
+        "endLine": 3734,
+        "endChar": 4
+      },
+      "revId": "70bc57f52b416b00ca4ea44d062d8cdc2d49c87d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
