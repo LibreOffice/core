@@ -1471,33 +1471,36 @@ namespace emfplushelper
                                     float yDstShift = y2;
                                     float xDstSize = x2 - x1;
                                     float yDstSize = y3 - y1;
+                                    Size aSize;
                                     if (image.type == ImageDataTypeBitmap)
-                                    {
-                                        const Size aSize(image.graphic.GetBitmapEx().GetSizePixel());
-                                        if (sx < 0)
-                                        {
-                                            // If src position is negative then we need shift image to right
-                                            xDstShift = xDstShift + ((-sx) / sw) * (x2 - x1);
-                                            if (sx + sw <= aSize.Width())
-                                                xDstSize = ((sw + sx) / sw) * xDstSize;
-                                            else
-                                                xDstSize = (aSize.Width() / sw) * xDstSize;
-                                        }
-                                        else if (sx + sw > aSize.Width())
-                                            // If the src image is smaller that what we want to cut, then we need to scale down
-                                            xDstSize = ((aSize.Width() - sx) / sw) * xDstSize;
+                                        aSize = image.graphic.GetBitmapEx().GetSizePixel();
+                                    else if (image.type == ImageDataTypeMetafile)
+                                        aSize = image.graphic.GetGDIMetaFile().GetPrefSize();
 
-                                        if (sy < 0)
-                                        {
-                                            yDstShift = yDstShift + ((-sy) / sh) * (y3 - y1);
-                                            if (sy + sh <= aSize.Height())
-                                                yDstSize = ((sh + sy) / sh) * yDstSize;
-                                            else
-                                                yDstSize = (aSize.Height() / sh) * yDstSize;
-                                        }
-                                        else if (sy + sh > aSize.Height())
-                                            yDstSize = ((aSize.Height() - sy) / sh) * yDstSize;
+                                    if (sx < 0)
+                                    {
+                                        // If src position is negative then we need shift image to right
+                                        xDstShift = xDstShift + ((-sx) / sw) * (x2 - x1);
+                                        if (sx + sw <= aSize.Width())
+                                            xDstSize = ((sw + sx) / sw) * xDstSize;
+                                        else
+                                            xDstSize = (aSize.Width() / sw) * xDstSize;
                                     }
+                                    else if (sx + sw > aSize.Width())
+                                        // If the src image is smaller that what we want to cut, then we need to scale down
+                                        xDstSize = ((aSize.Width() - sx) / sw) * xDstSize;
+
+                                    if (sy < 0)
+                                    {
+                                        yDstShift = yDstShift + ((-sy) / sh) * (y3 - y1);
+                                        if (sy + sh <= aSize.Height())
+                                            yDstSize = ((sh + sy) / sh) * yDstSize;
+                                        else
+                                            yDstSize = (aSize.Height() / sh) * yDstSize;
+                                    }
+                                    else if (sy + sh > aSize.Height())
+                                        yDstSize = ((aSize.Height() - sy) / sh) * yDstSize;
+
                                     aDstPoint = ::basegfx::B2DPoint(xDstShift, yDstShift);
                                     aDstSize = ::basegfx::B2DSize(xDstSize, yDstSize);
                                     fShearX = x3 - x1;
