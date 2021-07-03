@@ -56,6 +56,7 @@
 #include <com/sun/star/xml/dom/DocumentBuilder.hpp>
 #include <comphelper/processfactory.hxx>
 #include <oox/core/filterdetect.hxx>
+#include <comphelper/stl_types.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/ofopxmlhelper.hxx>
@@ -598,12 +599,9 @@ writeElement( const FSHelperPtr& pDoc, sal_Int32 nXmlElement, const Sequence< OU
         return;
 
     OUStringBuffer sRep;
-    sRep.append( aItems[ 0 ] );
-
-    for( const OUString& rItem : aItems )
-    {
-        sRep.append( " " + rItem );
-    }
+    // tdf#143175 - join elements including a delimiter using a standard iterator
+    ::comphelper::intersperse(aItems.begin(), aItems.end(),
+                              ::comphelper::OUStringBufferAppender(sRep), OUString(" "));
 
     writeElement( pDoc, nXmlElement, sRep.makeStringAndClear() );
 }
