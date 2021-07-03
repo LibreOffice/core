@@ -17,28 +17,37 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_XLNASIT_HXX
-#define INCLUDED_SVX_XLNASIT_HXX
+#pragma once
 
 #include <sal/config.h>
 
-#include <memory>
-
+#include <optional>
 #include <svl/poolitem.hxx>
-#include <svx/svxdllapi.h>
+#include <svl/itemset.hxx>
 
-// SetItem with all ItemSets of line-attributes
-class SVXCORE_DLLPUBLIC XLineAttrSetItem final : public SfxSetItem
+class SVL_DLLPUBLIC SfxSetItem : public SfxPoolItem
 {
-public:
-                            XLineAttrSetItem(SfxItemSet&& pItemSet );
-                            XLineAttrSetItem(SfxItemPool* pItemPool);
-                            XLineAttrSetItem(const XLineAttrSetItem& rAttr);
-                            XLineAttrSetItem(const XLineAttrSetItem& rAttr,
-                                             SfxItemPool* pItemPool);
-    virtual XLineAttrSetItem* Clone( SfxItemPool* pToPool = nullptr ) const override;
-};
+    SfxItemSet maSet;
 
-#endif
+    SfxSetItem& operator=(const SfxSetItem&) = delete;
+
+public:
+    SfxSetItem(sal_uInt16 nWhich, SfxItemSet&& pSet);
+    SfxSetItem(sal_uInt16 nWhich, const SfxItemSet& rSet);
+    SfxSetItem(const SfxSetItem&, SfxItemPool* pPool = nullptr);
+    virtual ~SfxSetItem() override;
+
+    virtual bool operator==(const SfxPoolItem&) const override;
+
+    virtual bool GetPresentation(SfxItemPresentation ePres, MapUnit eCoreMetric,
+                                 MapUnit ePresMetric, OUString& rText,
+                                 const IntlWrapper&) const override;
+
+    // create a copy of itself
+    virtual SfxSetItem* Clone(SfxItemPool* pPool = nullptr) const override = 0;
+
+    const SfxItemSet& GetItemSet() const { return maSet; }
+    SfxItemSet& GetItemSet() { return maSet; }
+};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

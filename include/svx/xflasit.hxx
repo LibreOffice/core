@@ -24,14 +24,14 @@
 
 #include <memory>
 
-#include <svl/poolitem.hxx>
+#include <svl/setitem.hxx>
 #include <svx/svxdllapi.h>
 
 // SetItem with all ItemSets of fill-attributes
 class SVXCORE_DLLPUBLIC XFillAttrSetItem final : public SfxSetItem
 {
 public:
-                            XFillAttrSetItem(std::unique_ptr<SfxItemSet>&& pItemSet );
+                            XFillAttrSetItem(SfxItemSet&& pItemSet );
                             XFillAttrSetItem(SfxItemPool* pItemPool);
                             XFillAttrSetItem(const XFillAttrSetItem& rAttr);
                             XFillAttrSetItem(const XFillAttrSetItem& rAttr,

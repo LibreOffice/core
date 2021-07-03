@@ -29,7 +29,7 @@
 #include <vcl/bitmapex.hxx>
 #include <vcl/builderpage.hxx>
 #include <svl/itempool.hxx>
-#include <svl/itemset.hxx>
+#include <svl/setitem.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
 class SfxTabPage;

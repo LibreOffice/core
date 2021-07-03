@@ -305,34 +305,6 @@ public:
     virtual bool            IsVoidItem() const override;
 };
 
-class SVL_DLLPUBLIC SfxSetItem: public SfxPoolItem
-{
-    std::unique_ptr<SfxItemSet>  pSet;
-
-    SfxSetItem & operator=( const SfxSetItem& ) = delete;
-
-public:
-                            SfxSetItem( sal_uInt16 nWhich, std::unique_ptr<SfxItemSet> &&pSet );
-                            SfxSetItem( sal_uInt16 nWhich, const SfxItemSet &rSet );
-                            SfxSetItem( const SfxSetItem&, SfxItemPool *pPool = nullptr );
-                            virtual ~SfxSetItem() override;
-
-    virtual bool            operator==( const SfxPoolItem& ) const override;
-
-    virtual bool GetPresentation( SfxItemPresentation ePres,
-                                    MapUnit eCoreMetric,
-                                    MapUnit ePresMetric,
-                                    OUString &rText,
-                                    const IntlWrapper& ) const override;
-
-    // create a copy of itself
-    virtual SfxSetItem*     Clone( SfxItemPool *pPool = nullptr ) const override = 0;
-
-    const SfxItemSet&       GetItemSet() const
-                            { return *pSet; }
-    SfxItemSet&             GetItemSet()
-                            { return *pSet; }
-};
 
 class SVL_DLLPUBLIC SfxPoolItemHint final : public SfxHint
 {
