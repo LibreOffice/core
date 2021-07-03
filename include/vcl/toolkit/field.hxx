@@ -29,6 +29,7 @@
 #include <tools/time.hxx>
 #include <vcl/toolkit/combobox.hxx>
 #include <vcl/toolkit/spinfld.hxx>
+#include <vcl/formatter.hxx>
 
 namespace com::sun::star::lang { struct Locale; }
 
@@ -391,6 +392,7 @@ public:
 class UNLESS_MERGELIBS(VCL_DLLPUBLIC) DateFormatter : public FormatterBase
 {
 private:
+    Formatter::StaticFormatter maStaticFormatter;
     std::unique_ptr<CalendarWrapper> mxCalendarWrapper;
     Date                    maFieldDate;
     Date                    maLastDate;
@@ -415,7 +417,7 @@ protected:
     SAL_DLLPRIVATE bool     ImplAllowMalformedInput() const;
 
 public:
-    static OUString         FormatDate(const Date& rNewDate, ExtDateFieldFormat eFormat, const LocaleDataWrapper& rLocaleData, CalendarWrapper& rCalendarWrapper);
+    static OUString         FormatDate(const Date& rNewDate, ExtDateFieldFormat eFormat, const LocaleDataWrapper& rLocaleData, CalendarWrapper& rCalendarWrapper, const Formatter::StaticFormatter* pStaticFormatter = nullptr);
     static bool             TextToDate(const OUString& rStr, Date& rTime, ExtDateFieldFormat eFormat, const LocaleDataWrapper& rLocaleDataWrapper, const CalendarWrapper& rCalendarWrapper);
     static int              GetDateArea(ExtDateFieldFormat eFormat, const OUString& rText, int nCursor, const LocaleDataWrapper& rLocaleDataWrapper);
 
