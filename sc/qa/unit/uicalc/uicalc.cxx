@@ -275,6 +275,12 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf92963)
     pMod->SetInputOptions(aInputOption);
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf129908)
+{
+    mxComponent = loadFromDesktop("private:factory/scalc");
+    dispatchCommand(mxComponent, ".uno:AutoOutline", {}); // should crash here without the fix
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf140151)
 {
 #if !defined(MACOSX) && !defined(_WIN32) //FIXME
