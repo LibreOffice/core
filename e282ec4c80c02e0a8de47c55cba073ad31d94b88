@@ -22,6 +22,30 @@
       "revId": "e282ec4c80c02e0a8de47c55cba073ad31d94b88",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "91b1c00f_e5a1362f",
+        "filename": "sc/source/filter/xml/XMLTableHeaderFooterContext.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1002716
+      },
+      "writtenOn": "2021-07-03T12:00:06Z",
+      "side": 1,
+      "message": "Oops... You\u0027re absolutely right, I meant to remove both this line and the similar one below in the \"right page\" if branch. Sorry for the trivial oversight. :S",
+      "parentUuid": "ee6d2ba1_82627196",
+      "range": {
+        "startLine": 89,
+        "startChar": 8,
+        "endLine": 89,
+        "endChar": 77
+      },
+      "revId": "e282ec4c80c02e0a8de47c55cba073ad31d94b88",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
