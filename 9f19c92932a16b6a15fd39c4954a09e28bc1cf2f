@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "15dd501e_5842d3b8",
+        "filename": "sw/source/core/inc/frmtool.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-07-04T12:21:15Z",
+      "side": 1,
+      "message": "would be nice to keep the\n  // prevent creation of Flys in InsertCnt_, e.g. for table headlines\ncomment here",
+      "revId": "9f19c92932a16b6a15fd39c4954a09e28bc1cf2f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
