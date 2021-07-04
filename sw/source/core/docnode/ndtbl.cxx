@@ -2904,9 +2904,9 @@ void SwDoc::SetRowsToRepeat( SwTable &rTable, sal_uInt16 nSet )
             std::make_unique<SwUndoTableHeadline>(rTable, rTable.GetRowsToRepeat(), nSet) );
     }
 
+    rTable.SetRowsToRepeat(nSet);
     const SwMsgPoolItem aChg(RES_TBLHEADLINECHG);
-    rTable.SetRowsToRepeat( nSet );
-    rTable.GetFrameFormat()->GetNotifier().Broadcast(sw::LegacyModifyHint(&aChg, &aChg));
+    rTable.GetFrameFormat()->CallSwClientNotify(sw::LegacyModifyHint(&aChg, &aChg));
     getIDocumentState().SetModified();
 }
 
