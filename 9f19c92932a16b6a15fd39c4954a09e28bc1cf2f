@@ -16,6 +16,24 @@
       "revId": "9f19c92932a16b6a15fd39c4954a09e28bc1cf2f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d54909dd_30d599f5",
+        "filename": "sw/source/core/inc/frmtool.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2021-07-04T13:27:18Z",
+      "side": 1,
+      "message": "hmm? The \"prevent creation of flys\" part of the comment became part of the source by naming this properly \"FlyCreationSuppressor\" instead of the nonsensical \"bDontCreateObjects\" and the \"e.g.\" part is misleading, as this has much wider use by now than just a hack for table headlines.",
+      "parentUuid": "15dd501e_5842d3b8",
+      "revId": "9f19c92932a16b6a15fd39c4954a09e28bc1cf2f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
