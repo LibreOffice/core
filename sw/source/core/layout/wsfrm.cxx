@@ -4494,10 +4494,10 @@ static void UnHideRedlines(SwRootFrame & rLayout,
                 // InsertCnt_ also checks for hidden sections
                 SwNodeIndex const start(rNodes, i);
                 SwNodeIndex const end(rNodes, j);
-                assert(!bDontCreateObjects);
-                bDontCreateObjects = true; // suppress here, to be called once
-                ::MakeFrames(rLayout.GetFormat()->GetDoc(), start, end);
-                bDontCreateObjects = false;
+                {
+                    sw::FlyCreationSuppressor aSuppressor;
+                    ::MakeFrames(rLayout.GetFormat()->GetDoc(), start, end);
+                }
                 i = j - 1; // will be incremented again
             }
         }

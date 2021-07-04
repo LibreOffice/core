@@ -79,8 +79,22 @@
 
 using namespace ::com::sun::star;
 
+namespace {
+    static bool bDontCreateObjects = false;
+}
+namespace sw {
+    FlyCreationSuppressor::FlyCreationSuppressor()
+    {
+        assert(!bDontCreateObjects);
+        bDontCreateObjects = true;
+    }
+    FlyCreationSuppressor::~FlyCreationSuppressor()
+    {
+        bDontCreateObjects = true;
+    }
+}
+
 bool bObjsDirect = true;
-bool bDontCreateObjects = false;
 bool bSetCompletePaintOnInvalidate = false;
 
 sal_uInt8 StackHack::s_nCnt = 0;
