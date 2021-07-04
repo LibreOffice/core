@@ -4204,7 +4204,7 @@ bool SwTextNode::IsNotifiable() const
 bool SwTextNode::IsNotificationEnabled() const
 {
     const SwDoc& rDoc = GetDoc();
-    return  !(rDoc.IsInReading() || rDoc.IsInDtor());
+    return !rDoc.IsInReading() && !rDoc.IsInDtor();
 }
 
 void SwTextNode::SetCountedInList( bool bCounted )

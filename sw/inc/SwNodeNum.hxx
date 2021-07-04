@@ -39,7 +39,7 @@ public:
     void ChangeNumRule(SwNumRule& rNumRule);
     SwTextNode* GetTextNode() const { return mpTextNode; }
 
-    virtual bool IsNotificationEnabled() const override;
+    virtual bool IsNotificationEnabled(const SwDoc& rDoc) const override;
 
     virtual bool IsContinuous() const override;
 

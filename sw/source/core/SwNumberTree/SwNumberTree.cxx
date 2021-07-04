@@ -487,7 +487,7 @@ void SwNumberTreeNode::AddChild(SwNumberTreeNode* pChild,
         if (aResult.second)
         {
             pChild->mpParent = this;
-            bool bNotification = pChild->IsNotificationEnabled();
+            bool bNotification = pChild->IsNotificationEnabled(rDoc);
             tSwNumberTreeChildren::iterator aInsertedIt = aResult.first;
 
             if (aInsertedIt != mChildren.begin())

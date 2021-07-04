@@ -122,22 +122,26 @@ void SwNodeNum::PostRemove()
     }
 }
 
-bool SwNodeNum::IsNotifiable(const SwDoc& /*rDoc*/) const
+bool SwNodeNum::IsNotifiable(const SwDoc& rDoc) const
 {
-    bool aResult = true;
+    bool aResult;
 
-    if ( GetTextNode() )
-        aResult = GetTextNode()->IsNotifiable();
+    if (const SwTextNode* pTextNode = GetTextNode())
+        aResult = pTextNode->IsNotifiable();
+    else
+        aResult = IsNotificationEnabled(rDoc);
 
     return aResult;
 }
 
-bool SwNodeNum::IsNotificationEnabled() const
+bool SwNodeNum::IsNotificationEnabled(const SwDoc& rDoc) const
 {
-    bool aResult = true;
+    bool aResult;
 
-    if ( GetTextNode() )
-        aResult = GetTextNode()->IsNotificationEnabled();
+    if (const SwTextNode* pTextNode = GetTextNode())
+        aResult = pTextNode->IsNotificationEnabled();
+    else
+        aResult = !rDoc.IsInReading() && !rDoc.IsInDtor();
 
     return aResult;
 }
