@@ -2482,10 +2482,7 @@ tools::Long ScPrintFunc::CountPages()                          // sets also nPag
                 CalcZoom(i);
                 if ( aTableParam.bSkipEmpty )
                     for (nY=0; nY< m_aRanges.m_nPagesY; nY++)
-                    {
-                        OSL_ENSURE(nY < m_aRanges.m_aPageRows.size(), "vector access error for aPageRows");
                         nPages += m_aRanges.m_aPageRows[nY].CountVisible();
-                    }
                 else
                     nPages += static_cast<tools::Long>(m_aRanges.m_nPagesX) * m_aRanges.m_nPagesY;
                 if ( pPageData )
@@ -2497,10 +2494,7 @@ tools::Long ScPrintFunc::CountPages()                          // sets also nPag
             CalcZoom(RANGENO_NORANGE);                      // calculate Zoom
             if ( aTableParam.bSkipEmpty )
                 for (nY=0; nY<m_aRanges.m_nPagesY; nY++)
-                {
-                    OSL_ENSURE(nY < m_aRanges.m_aPageRows.size(), "vector access error for aPageRows");
                     nPages += m_aRanges.m_aPageRows[nY].CountVisible();
-                }
             else
                 nPages += static_cast<tools::Long>(m_aRanges.m_nPagesX) * m_aRanges.m_nPagesY;
             if ( pPageData )
@@ -2695,7 +2689,6 @@ tools::Long ScPrintFunc::DoPrint( const MultiSelection& rPageRanges,
                 nX2 = m_aRanges.m_aPageEndX[nCountX];
                 for (nCountY=0; nCountY<m_aRanges.m_nPagesY; nCountY++)
                 {
-                    OSL_ENSURE(nCountY < m_aRanges.m_aPageRows.size(), "vector access error for aPageRows (!)");
                     nY1 = m_aRanges.m_aPageRows[nCountY].GetStartRow();
                     nY2 = m_aRanges.m_aPageRows[nCountY].GetEndRow();
                     if ( !aTableParam.bSkipEmpty || !m_aRanges.m_aPageRows[nCountY].IsHidden(nCountX) )
@@ -2716,7 +2709,6 @@ tools::Long ScPrintFunc::DoPrint( const MultiSelection& rPageRanges,
         {
             for (nCountY=0; nCountY<m_aRanges.m_nPagesY; nCountY++)
             {
-                OSL_ENSURE(nCountY < m_aRanges.m_aPageRows.size(), "vector access error for aPageRows");
                 nY1 = m_aRanges.m_aPageRows[nCountY].GetStartRow();
                 nY2 = m_aRanges.m_aPageRows[nCountY].GetEndRow();
                 nX1 = nStartCol;
@@ -3104,12 +3096,6 @@ void PrintPageRanges::calculate(ScDocument& rDoc,
         m_aPageEndY.resize(nRealCnt + 1, SCROW());
     }
 
-    // #i123672# use dynamic mem to react on size changes
-    if (m_aPageRows.size() < nRealCnt+1)
-    {
-        m_aPageRows.resize(nRealCnt+1, ScPageRowEntry());
-    }
-
     //  Page alignment/splitting after breaks in Col/RowFlags
     //  Of several breaks in a hidden area, only one counts.
 
@@ -3163,7 +3149,6 @@ void PrintPageRanges::calculate(ScDocument& rDoc,
 
             if (!bSkipEmpty || !rDoc.IsPrintEmpty(nPrintTab, nStartCol, nPageStartRow, nEndCol, nRow-1))
             {
-                OSL_ENSURE(m_nPagesY < m_aPageRows.size(), "vector access error for rPageRows");
                 m_aPageRows[m_nPagesY].SetStartRow(nPageStartRow);
                 m_aPageRows[m_nPagesY].SetEndRow(nRow - 1);
                 m_aPageRows[m_nPagesY].SetPagesX(m_nPagesX);
@@ -3204,7 +3189,6 @@ void PrintPageRanges::calculate(ScDocument& rDoc,
 
     if (!bSkipEmpty || !rDoc.IsPrintEmpty(nPrintTab, nStartCol, nPageStartRow, nEndCol, nEndRow))
     {
-        OSL_ENSURE(m_nPagesY < m_aPageRows.size(), "vector access error for maPageRows");
         m_aPageRows[m_nPagesY].SetStartRow(nPageStartRow);
         m_aPageRows[m_nPagesY].SetEndRow(nEndRow);
         m_aPageRows[m_nPagesY].SetPagesX(m_nPagesX);
