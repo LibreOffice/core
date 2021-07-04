@@ -20,6 +20,7 @@
 #pragma once
 
 #include <memory>
+#include <map>
 #include <pagepar.hxx>
 #include <editutil.hxx>
 
@@ -124,7 +125,7 @@ public:
 
     std::vector<SCCOL> m_aPageEndX;
     std::vector<SCROW> m_aPageEndY;
-    std::vector<ScPageRowEntry> m_aPageRows;
+    std::map<size_t, ScPageRowEntry> m_aPageRows;
 
     size_t m_nPagesX;
     size_t m_nPagesY;
@@ -166,7 +167,7 @@ struct ScPrintState                         //  Save Variables from ScPrintFunc
     size_t nTotalY;
     std::vector<SCCOL> aPageEndX;
     std::vector<SCROW> aPageEndY;
-    std::vector<ScPageRowEntry> aPageRows;
+    std::map<size_t, ScPageRowEntry> aPageRows;
 
     ScPrintState()
         : nPrintTab(0)
