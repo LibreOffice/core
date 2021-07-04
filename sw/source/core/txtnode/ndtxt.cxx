@@ -4267,7 +4267,7 @@ void SwTextNode::AddToList()
 
     assert(!mpNodeNum);
     mpNodeNum.reset(new SwNodeNum(this, false));
-    pList->InsertListItem(*mpNodeNum, false, GetAttrListLevel());
+    pList->InsertListItem(*mpNodeNum, false, GetAttrListLevel(), GetDoc());
     // iterate all frames & if there's one with hidden layout...
     SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> iter(*this);
     for (SwTextFrame* pFrame = iter.First(); pFrame; pFrame = iter.Next())
@@ -4297,7 +4297,7 @@ void SwTextNode::AddToListRLHidden()
     {
         assert(!mpNodeNumRLHidden);
         mpNodeNumRLHidden.reset(new SwNodeNum(this, true));
-        pList->InsertListItem(*mpNodeNumRLHidden, true, GetAttrListLevel());
+        pList->InsertListItem(*mpNodeNumRLHidden, true, GetAttrListLevel(), GetDoc());
     }
 }
 
@@ -4307,7 +4307,7 @@ void SwTextNode::RemoveFromList()
     RemoveFromListRLHidden();
     if ( IsInList() )
     {
-        SwList::RemoveListItem( *mpNodeNum );
+        SwList::RemoveListItem(*mpNodeNum, GetDoc());
         mpNodeNum.reset();
 
         SetWordCountDirty( true );
@@ -4319,7 +4319,7 @@ void SwTextNode::RemoveFromListRLHidden()
     if (mpNodeNumRLHidden) // direct access because RemoveFromList doesn't have layout
     {
         assert(mpNodeNumRLHidden->GetParent() || !GetNodes().IsDocNodes());
-        SwList::RemoveListItem(*mpNodeNumRLHidden);
+        SwList::RemoveListItem(*mpNodeNumRLHidden, GetDoc());
         mpNodeNumRLHidden.reset();
 
         SetWordCountDirty( true );
@@ -4831,16 +4831,18 @@ namespace {
             if ( mbUpdateListLevel && mrTextNode.IsInList() )
             {
                 auto const nLevel(mrTextNode.GetAttrListLevel());
+                const SwDoc& rDoc(mrTextNode.GetDoc());
                 mrTextNode.DoNum(
-                    [nLevel](SwNodeNum & rNum) { rNum.SetLevelInListTree(nLevel); });
+                    [nLevel, &rDoc](SwNodeNum & rNum) { rNum.SetLevelInListTree(nLevel, rDoc); });
             }
 
             if ( mbUpdateListRestart && mrTextNode.IsInList() )
             {
+                const SwDoc& rDoc(mrTextNode.GetDoc());
                 mrTextNode.DoNum(
-                    [](SwNodeNum & rNum) {
+                    [&rDoc](SwNodeNum & rNum) {
                         rNum.InvalidateMe();
-                        rNum.NotifyInvalidSiblings();
+                        rNum.NotifyInvalidSiblings(rDoc);
                     });
             }
 
@@ -4848,8 +4850,9 @@ namespace {
             {
                 // Repaint all text frames that belong to this numbering to avoid outdated generated
                 // numbers.
+                const SwDoc& rDoc(mrTextNode.GetDoc());
                 mrTextNode.DoNum(
-                    [](SwNodeNum & rNum) { rNum.InvalidateAndNotifyTree(); });
+                    [&rDoc](SwNodeNum & rNum) { rNum.InvalidateAndNotifyTree(rDoc); });
             }
         }
 
@@ -5084,23 +5087,26 @@ namespace {
         if ( mbUpdateListLevel )
         {
             auto const nLevel(mrTextNode.GetAttrListLevel());
+            const SwDoc& rDoc(mrTextNode.GetDoc());
             mrTextNode.DoNum(
-                [nLevel](SwNodeNum & rNum) { rNum.SetLevelInListTree(nLevel); });
+                [nLevel, &rDoc](SwNodeNum & rNum) { rNum.SetLevelInListTree(nLevel, rDoc); });
         }
 
         if ( mbUpdateListRestart )
         {
+            const SwDoc& rDoc(mrTextNode.GetDoc());
             mrTextNode.DoNum(
-                [](SwNodeNum & rNum) {
+                [&rDoc](SwNodeNum & rNum) {
                     rNum.InvalidateMe();
-                    rNum.NotifyInvalidSiblings();
+                    rNum.NotifyInvalidSiblings(rDoc);
                 });
         }
 
         if ( mbUpdateListCount )
         {
+            const SwDoc& rDoc(mrTextNode.GetDoc());
             mrTextNode.DoNum(
-                [](SwNodeNum & rNum) { rNum.InvalidateAndNotifyTree(); });
+                [&rDoc](SwNodeNum & rNum) { rNum.InvalidateAndNotifyTree(rDoc); });
         }
     }
     // End of class <HandleResetAttrAtTextNode>

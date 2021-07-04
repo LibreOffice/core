@@ -1177,7 +1177,7 @@ void SwXNumberingRules::replaceByIndex(sal_Int32 nIndex, const uno::Any& rElemen
         SwXNumberingRules::SetNumberingRuleByIndex( *pRule,
                             *rProperties, nIndex);
 
-        pRule->Validate();
+        pRule->Validate(*m_pDoc);
     }
     else
         throw uno::RuntimeException();
@@ -2025,7 +2025,7 @@ void SwXNumberingRules::setPropertyValue( const OUString& rPropertyName, const A
     }
     else if(pCreatedRule)
     {
-        pCreatedRule->Validate();
+        pCreatedRule->Validate(*m_pDoc);
     }
 }
 

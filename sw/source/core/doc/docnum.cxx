@@ -2577,7 +2577,7 @@ void SwDoc::UpdateNumRule()
     const SwNumRuleTable& rNmTable = GetNumRuleTable();
     for( size_t n = 0; n < rNmTable.size(); ++n )
         if( rNmTable[ n ]->IsInvalidRule() )
-            rNmTable[ n ]->Validate();
+            rNmTable[ n ]->Validate(*this);
 }
 
 void SwDoc::MarkListLevel( const OUString& sListId,

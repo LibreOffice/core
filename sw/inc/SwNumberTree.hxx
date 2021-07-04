@@ -23,6 +23,7 @@
 #include <vector>
 #include "SwNumberTreeTypes.hxx"
 
+class SwDoc;
 class SwNumberTreeNode;
 
 bool SwNumberTreeNodeLessThan(const SwNumberTreeNode* pA, const SwNumberTreeNode* pB);
@@ -125,19 +126,19 @@ public:
        @param pChild   child to add
        @param nDepth   depth in which to add the child
      */
-    void AddChild(SwNumberTreeNode* pChild, const int nDepth);
+    void AddChild(SwNumberTreeNode* pChild, const int nDepth, const SwDoc& rDoc);
 
     /**
        Remove a child.
 
        @param pChild     child to be removed
      */
-    void RemoveChild(SwNumberTreeNode* pChild);
+    void RemoveChild(SwNumberTreeNode* pChild, const SwDoc& rDoc);
 
     /**
        Remove this child from the tree.
      */
-    void RemoveMe();
+    void RemoveMe(const SwDoc& rDoc);
 
     /**
        Returns the parent of this node.
@@ -222,7 +223,7 @@ public:
 
         precondition: node is already member of a list tree
     */
-    void SetLevelInListTree(const int nLevel);
+    void SetLevelInListTree(const int nLevel, const SwDoc& rDoc);
 
     /**
        Return level of this node.
@@ -261,7 +262,7 @@ public:
        Notifies all invalid children of this node.
        #i83479# - made public
      */
-    void NotifyInvalidChildren();
+    void NotifyInvalidChildren(const SwDoc& rDoc);
 
     /**
        Notifies the node.
@@ -278,7 +279,7 @@ public:
     void ValidateMe();
 
     /** Notifies all invalid siblings of this node. */
-    void NotifyInvalidSiblings();
+    void NotifyInvalidSiblings(const SwDoc& rDoc);
 
     /** notification of all nodes in the list tree on certain list level */
     void NotifyNodesOnListLevel(const int nListLevel);
@@ -289,12 +290,12 @@ public:
         Usage: on <IsCounted()> state change it's needed to invalidate the
                complete numbering tree due to wide influence of this change.
     */
-    void InvalidateAndNotifyTree()
+    void InvalidateAndNotifyTree(const SwDoc& rDoc)
     {
         if (GetRoot())
         {
             GetRoot()->InvalidateTree();
-            GetRoot()->Notify();
+            GetRoot()->Notify(rDoc);
         }
     }
 
@@ -452,7 +453,7 @@ protected:
        @retval true   This node is notifiable.
        @retval false  else
      */
-    virtual bool IsNotifiable() const = 0;
+    virtual bool IsNotifiable(const SwDoc& rDoc) const = 0;
 
     /**
        Notifies the node.
@@ -462,7 +463,7 @@ protected:
     virtual void NotifyNode() = 0;
 
     /** Notifies this node (NotifyNode) and all descendants.*/
-    void Notify();
+    void Notify(const SwDoc& rDoc);
 
     /** notification of children nodes on certain depth */
     void NotifyChildrenOnDepth(const int nDepth);

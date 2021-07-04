@@ -269,7 +269,7 @@ public:
        indents accordingly */
     void SetIndentOfFirstListLevelAndChangeOthers( const short nNewIndent );
 
-    void Validate();
+    void Validate(const SwDoc& rDoc);
     void dumpAsXml(xmlTextWriterPtr w) const;
     void GetGrabBagItem(css::uno::Any& rVal) const;
     void SetGrabBagItem(const css::uno::Any& rVal);

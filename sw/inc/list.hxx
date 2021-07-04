@@ -28,6 +28,7 @@
 
 #include "swdllapi.h"
 
+class SwDoc;
 class SwNumRule;
 class SwNodes;
 
@@ -45,13 +46,14 @@ class SwList
 
         void SetDefaultListStyleName(OUString const&);
 
-        void InsertListItem( SwNodeNum& rNodeNum,
-                             bool isHiddenRedlines,
-                             const int nLevel );
-        static void RemoveListItem( SwNodeNum& rNodeNum );
+        void InsertListItem(SwNodeNum& rNodeNum,
+                            bool isHiddenRedlines,
+                            const int nLevel,
+                            const SwDoc& rDoc);
+        static void RemoveListItem(SwNodeNum& rNodeNum, const SwDoc& rDoc);
 
         void InvalidateListTree();
-        void ValidateListTree();
+        void ValidateListTree(const SwDoc& rDoc);
 
         void MarkListLevel( const int nListLevel,
                             const bool bValue );

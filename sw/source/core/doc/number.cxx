@@ -1037,7 +1037,7 @@ void SwNumRule::SetIndentOfFirstListLevelAndChangeOthers( const short nNewIndent
     }
 }
 
-void SwNumRule::Validate()
+void SwNumRule::Validate(const SwDoc& rDoc)
 {
     o3tl::sorted_vector< SwList* > aLists;
     for ( const SwTextNode* pTextNode : maTextNodeList )
@@ -1045,7 +1045,7 @@ void SwNumRule::Validate()
         aLists.insert( pTextNode->GetDoc().getIDocumentListsAccess().getListByName( pTextNode->GetListId() ) );
     }
     for ( auto aList : aLists )
-        aList->ValidateListTree();
+        aList->ValidateListTree(rDoc);
 
     SetInvalidRule(false);
 }

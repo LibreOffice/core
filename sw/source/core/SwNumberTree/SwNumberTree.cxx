@@ -413,8 +413,9 @@ void SwNumberTreeNode::MoveChildren(SwNumberTreeNode * pDest)
 #endif
 }
 
-void SwNumberTreeNode::AddChild( SwNumberTreeNode * pChild,
-                                 const int nDepth )
+void SwNumberTreeNode::AddChild(SwNumberTreeNode* pChild,
+                                const int nDepth,
+                                const SwDoc& rDoc)
 {
     /*
        Algorithm:
@@ -468,12 +469,12 @@ void SwNumberTreeNode::AddChild( SwNumberTreeNode * pChild,
             SetLastValid(mChildren.end());
 
             if (pNew)
-                pNew->AddChild(pChild, nDepth - 1);
+                pNew->AddChild(pChild, nDepth - 1, rDoc);
         }
         else
         {
             --aInsertDeepIt;
-            (*aInsertDeepIt)->AddChild(pChild, nDepth - 1);
+            (*aInsertDeepIt)->AddChild(pChild, nDepth - 1, rDoc);
         }
 
     }
@@ -553,9 +554,9 @@ void SwNumberTreeNode::AddChild( SwNumberTreeNode * pChild,
                 if ( !IsCounted() )
                 {
                     InvalidateMe();
-                    NotifyInvalidSiblings();
+                    NotifyInvalidSiblings(rDoc);
                 }
-                NotifyInvalidChildren();
+                NotifyInvalidChildren(rDoc);
             }
         }
     }
@@ -565,7 +566,7 @@ void SwNumberTreeNode::AddChild( SwNumberTreeNode * pChild,
 #endif
 }
 
-void SwNumberTreeNode::RemoveChild(SwNumberTreeNode * pChild)
+void SwNumberTreeNode::RemoveChild(SwNumberTreeNode* pChild, const SwDoc& rDoc)
 {
     /*
        Algorithm:
@@ -614,7 +615,7 @@ void SwNumberTreeNode::RemoveChild(SwNumberTreeNode * pChild)
         {
             pRemove->MoveChildren(*aItPred);
             (*aItPred)->InvalidateTree();
-            (*aItPred)->NotifyInvalidChildren();
+            (*aItPred)->NotifyInvalidChildren(rDoc);
         }
 
         // #i60652#
@@ -628,7 +629,7 @@ void SwNumberTreeNode::RemoveChild(SwNumberTreeNode * pChild)
 
         mChildren.erase(aRemoveIt);
 
-        NotifyInvalidChildren();
+        NotifyInvalidChildren(rDoc);
     }
     else
     {
@@ -638,14 +639,14 @@ void SwNumberTreeNode::RemoveChild(SwNumberTreeNode * pChild)
     pChild->PostRemove();
 }
 
-void SwNumberTreeNode::RemoveMe()
+void SwNumberTreeNode::RemoveMe(const SwDoc& rDoc)
 {
     if (!mpParent)
         return;
 
     SwNumberTreeNode * pSavedParent = mpParent;
 
-    pSavedParent->RemoveChild(this);
+    pSavedParent->RemoveChild(this, rDoc);
 
     while (pSavedParent && pSavedParent->IsPhantom() &&
            pSavedParent->HasOnlyPhantoms())
@@ -794,7 +795,7 @@ bool SwNumberTreeNode::IsFirst() const
     return bResult;
 }
 
-void SwNumberTreeNode::SetLevelInListTree( const int nLevel )
+void SwNumberTreeNode::SetLevelInListTree(const int nLevel, const SwDoc& rDoc)
 {
     if ( nLevel < 0 )
     {
@@ -812,8 +813,8 @@ void SwNumberTreeNode::SetLevelInListTree( const int nLevel )
             OSL_ENSURE( pRootTreeNode,
                     "<SwNumberTreeNode::SetLevelInListTree(..)> - no root tree node found. Serious defect." );
 
-            RemoveMe();
-            pRootTreeNode->AddChild( this, nLevel );
+            RemoveMe(rDoc);
+            pRootTreeNode->AddChild(this, nLevel, rDoc);
         }
     }
 }
@@ -1059,21 +1060,21 @@ void SwNumberTreeNode::ValidateMe()
         mpParent->Validate(this);
 }
 
-void SwNumberTreeNode::Notify()
+void SwNumberTreeNode::Notify(const SwDoc& rDoc)
 {
-    if (IsNotifiable())
+    if (IsNotifiable(rDoc))
     {
         if (! IsPhantom())
             NotifyNode();
 
         for (auto& rpChild : mChildren)
-            rpChild->Notify();
+            rpChild->Notify(rDoc);
     }
 }
 
-void SwNumberTreeNode::NotifyInvalidChildren()
+void SwNumberTreeNode::NotifyInvalidChildren(const SwDoc& rDoc)
 {
-    if (IsNotifiable())
+    if (IsNotifiable(rDoc))
     {
         tSwNumberTreeChildren::const_iterator aIt = mItLastValid;
 
@@ -1084,7 +1085,7 @@ void SwNumberTreeNode::NotifyInvalidChildren()
 
         while (aIt != mChildren.end())
         {
-            (*aIt)->Notify();
+            (*aIt)->Notify(rDoc);
 
             ++aIt;
         }
@@ -1099,7 +1100,7 @@ void SwNumberTreeNode::NotifyInvalidChildren()
                 SwNumberTreeNode* pNextNode( *aParentChildIt );
                 if ( !pNextNode->IsCounted() )
                 {
-                    pNextNode->NotifyInvalidChildren();
+                    pNextNode->NotifyInvalidChildren(rDoc);
                 }
             }
         }
@@ -1107,13 +1108,13 @@ void SwNumberTreeNode::NotifyInvalidChildren()
     }
 
     if (IsContinuous() && mpParent)
-        mpParent->NotifyInvalidChildren();
+        mpParent->NotifyInvalidChildren(rDoc);
 }
 
-void SwNumberTreeNode::NotifyInvalidSiblings()
+void SwNumberTreeNode::NotifyInvalidSiblings(const SwDoc& rDoc)
 {
     if (mpParent != nullptr)
-        mpParent->NotifyInvalidChildren();
+        mpParent->NotifyInvalidChildren(rDoc);
 }
 
 // #i81002#
