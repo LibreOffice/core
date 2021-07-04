@@ -354,7 +354,7 @@ protected:
        @retval true   Notification enabled in general.
        @retval false  else
      */
-    virtual bool IsNotificationEnabled() const = 0;
+    virtual bool IsNotificationEnabled(const SwDoc& rDoc) const = 0;
 
     // #i64010# - made pure virtual
     virtual bool HasCountedChildren() const = 0;
