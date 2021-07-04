@@ -10396,7 +10396,7 @@ AC_MSG_CHECKING([whether to enable fuzzers])
 if test "$enable_fuzzers" != yes; then
     AC_MSG_RESULT([no])
 else
-    if test $LIB_FUZZING_ENGINE == ""; then
+    if test -z $LIB_FUZZING_ENGINE; then
       AC_MSG_ERROR(['LIB_FUZZING_ENGINE' must be set when using --enable-fuzzers. Examples include '-fsanitize=fuzzer'.])
     fi
     AC_MSG_RESULT([yes])
