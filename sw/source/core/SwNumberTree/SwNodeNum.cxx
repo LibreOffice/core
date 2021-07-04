@@ -122,7 +122,7 @@ void SwNodeNum::PostRemove()
     }
 }
 
-bool SwNodeNum::IsNotifiable() const
+bool SwNodeNum::IsNotifiable(const SwDoc& /*rDoc*/) const
 {
     bool aResult = true;
 

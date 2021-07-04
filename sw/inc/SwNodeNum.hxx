@@ -91,7 +91,7 @@ private:
 
     virtual bool IsCountPhantoms() const override;
 
-    virtual bool IsNotifiable() const override;
+    virtual bool IsNotifiable(const SwDoc& rDoc) const override;
 
     virtual void NotifyNode() override;
 };

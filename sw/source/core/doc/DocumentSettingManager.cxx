@@ -287,7 +287,7 @@ void sw::DocumentSettingManager::set(/*[in]*/ DocumentSettingId id, /*[in]*/ boo
                 SwNumRule *pOutlineRule = m_rDoc.GetOutlineNumRule();
                 if (pOutlineRule)
                 {
-                    pOutlineRule->Validate();
+                    pOutlineRule->Validate(m_rDoc);
                     // counting of phantoms depends on <IsOldNumbering()>
                     pOutlineRule->SetCountPhantoms( !mbOldNumbering );
                 }

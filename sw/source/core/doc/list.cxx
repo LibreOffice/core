@@ -75,8 +75,8 @@ bool SwList::HasNodes() const
     return false;
 }
 
-void SwList::InsertListItem( SwNodeNum& rNodeNum, bool const isHiddenRedlines,
-                                 const int nLevel )
+void SwList::InsertListItem(SwNodeNum& rNodeNum, bool const isHiddenRedlines,
+                            const int nLevel, const SwDoc& rDoc)
 {
     const SwPosition aPosOfNodeNum( rNodeNum.GetPosition() );
     const SwNodes* pNodesOfNodeNum = &(aPosOfNodeNum.nNode.GetNode().GetNodes());
@@ -93,15 +93,15 @@ void SwList::InsertListItem( SwNodeNum& rNodeNum, bool const isHiddenRedlines,
             auto const& pRoot(isHiddenRedlines
                     ? rNumberTree.pRootRLHidden
                     : rNumberTree.pRoot);
-            pRoot->AddChild(&rNodeNum, nLevel);
+            pRoot->AddChild(&rNodeNum, nLevel, rDoc);
             break;
         }
     }
 }
 
-void SwList::RemoveListItem( SwNodeNum& rNodeNum )
+void SwList::RemoveListItem(SwNodeNum& rNodeNum, const SwDoc& rDoc)
 {
-    rNodeNum.RemoveMe();
+    rNodeNum.RemoveMe(rDoc);
 }
 
 void SwList::InvalidateListTree()
@@ -113,12 +113,12 @@ void SwList::InvalidateListTree()
     }
 }
 
-void SwList::ValidateListTree()
+void SwList::ValidateListTree(const SwDoc& rDoc)
 {
     for ( auto& rNumberTree : maListTrees )
     {
-        rNumberTree.pRoot->NotifyInvalidChildren();
-        rNumberTree.pRootRLHidden->NotifyInvalidChildren();
+        rNumberTree.pRoot->NotifyInvalidChildren(rDoc);
+        rNumberTree.pRootRLHidden->NotifyInvalidChildren(rDoc);
     }
 }
 
