@@ -295,8 +295,17 @@ bool lcl_IsNotAM(OUString const & rFmt, sal_Int32 nPos)
             )
         );
 }
+bool IsPreviousAM(OUString const& rParams, sal_Int32 nPos)
+{
+    return nPos >= 2 && rParams.matchIgnoreAsciiCase("am", nPos - 2);
+}
+bool IsNextPM(OUString const& rParams, sal_Int32 nPos)
+{
+    return nPos + 2 < rParams.getLength() && rParams.matchIgnoreAsciiCase("pm", nPos + 1);
+}
 }
 
+// See also sw::ms::MSDateTimeFormatToSwFormat
 OUString ConvertMSFormatStringToSO(
         const OUString& rFormat, lang::Locale& rLocale, bool bHijri)
 {
@@ -306,37 +315,38 @@ OUString ConvertMSFormatStringToSO(
     //#102782#, #102815#, #108341# & #111944# have to work at the same time :-)
     bool bForceJapanese(false);
     bool bForceNatNum(false);
-    sal_Int32 nLen = sFormat.getLength();
+    const sal_Int32 nLen = sFormat.getLength();
     sal_Int32 nI = 0;
+    sal_Int32 nAddedChars = 0;
 //    const sal_Unicode* pFormat = sFormat.getStr();
     OUStringBuffer aNewFormat( sFormat );
     while (nI < nLen)
     {
-        if (aNewFormat[nI] == '\\')
-            nI++;
-        else if (aNewFormat[nI] == '\"')
+        if (sFormat[nI] == '\\')
+            ++nI;
+        else if (sFormat[nI] == '\"')
         {
             ++nI;
             //While not at the end and not at an unescaped end quote
-            while ((nI < nLen) && ((aNewFormat[nI] != '\"') && (aNewFormat[nI-1] != '\\')))
+            while ((nI < nLen) && ((sFormat[nI] != '\"') && (sFormat[nI-1] != '\\')))
                 ++nI;
         }
         else //normal unquoted section
         {
-            sal_Unicode nChar = aNewFormat[nI];
+            sal_Unicode nChar = sFormat[nI];
             if (nChar == 'O')
             {
-                aNewFormat[nI] = 'M';
+                aNewFormat[nI + nAddedChars] = 'M';
                 bForceNatNum = true;
             }
             else if (nChar == 'o')
             {
-                aNewFormat[nI] = 'm';
+                aNewFormat[nI + nAddedChars] = 'm';
                 bForceNatNum = true;
             }
             else if ((nChar == 'A') && lcl_IsNotAM(sFormat, nI))
             {
-                aNewFormat[nI] = 'D';
+                aNewFormat[nI + nAddedChars] = 'D';
                 bForceNatNum = true;
             }
             else if ((nChar == 'g') || (nChar == 'G'))
@@ -345,38 +355,38 @@ OUString ConvertMSFormatStringToSO(
                 bForceJapanese = true;
             else if (nChar == 'E')
             {
-                if ((nI != nLen-1) && (aNewFormat[nI+1] == 'E'))
+                if ((nI != nLen-1) && (sFormat[nI+1] == 'E'))
                 {
                     //todo: this cannot be the right way to replace a part of the string!
-                    aNewFormat[nI] = 'Y';
-                    aNewFormat[nI + 1] = 'Y';
-                    aNewFormat.insert(nI + 2, "YY");
-                    nLen+=2;
-                    nI+=3;
+                    aNewFormat[nI + nAddedChars] = 'Y';
+                    aNewFormat[nI + nAddedChars + 1] = 'Y';
+                    aNewFormat.insert(nI + nAddedChars + 2, "YY");
+                    nAddedChars += 2;
+                    ++nI;
                 }
                 bForceJapanese = true;
             }
             else if (nChar == 'e')
             {
-                if ((nI != nLen-1) && (aNewFormat[nI+1] == 'e'))
+                if ((nI != nLen-1) && (sFormat[nI+1] == 'e'))
                 {
                     //todo: this cannot be the right way to replace a part of the string!
-                    aNewFormat[nI] = 'y';
-                    aNewFormat[nI + 1] = 'y';
-                    aNewFormat.insert(nI + 2, "yy");
-                    nLen+=2;
-                    nI+=3;
+                    aNewFormat[nI + nAddedChars] = 'y';
+                    aNewFormat[nI + nAddedChars + 1] = 'y';
+                    aNewFormat.insert(nI + nAddedChars + 2, "yy");
+                    nAddedChars += 2;
+                    ++nI;
                 }
                 bForceJapanese = true;
             }
-            else if (nChar == '/')
+            else if (nChar == '/' && !(IsPreviousAM(sFormat, nI) && IsNextPM(sFormat, nI)))
             {
                 // MM We have to escape '/' in case it's used as a char
                 //todo: this cannot be the right way to replace a part of the string!
-                aNewFormat[nI] = '\\';
-                aNewFormat.insert(nI + 1, "/");
-                nI++;
-                nLen++;
+                aNewFormat[nI + nAddedChars] = '\\';
+                aNewFormat.insert(nI + nAddedChars + 1, "/");
+                ++nAddedChars;
+                ++nI;
             }
         }
         ++nI;
