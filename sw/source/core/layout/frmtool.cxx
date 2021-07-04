@@ -79,8 +79,25 @@
 
 using namespace ::com::sun::star;
 
+namespace {
+    // FIXME: would likely better be a member of SwRootFrame instead of a global flag
+    bool isFlyCreationSuppressed = false;
+}
+namespace sw {
+    FlyCreationSuppressor::FlyCreationSuppressor(bool wasAlreadySuppressedAllowed)
+        : m_wasAlreadySuppressed(isFlyCreationSuppressed)
+    {
+        (void)wasAlreadySuppressedAllowed;
+        assert(wasAlreadySuppressedAllowed || !isFlyCreationSuppressed);
+        isFlyCreationSuppressed = true;
+    }
+    FlyCreationSuppressor::~FlyCreationSuppressor()
+    {
+        isFlyCreationSuppressed = m_wasAlreadySuppressed;
+    }
+}
+
 bool bObjsDirect = true;
-bool bDontCreateObjects = false;
 bool bSetCompletePaintOnInvalidate = false;
 
 sal_uInt8 StackHack::s_nCnt = 0;
@@ -1588,7 +1605,7 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
             lcl_SetPos( *pFrame, *pLay );
             pPrv = pFrame;
 
-            if ( !pTable->empty() && bObjsDirect && !bDontCreateObjects )
+            if ( !pTable->empty() && bObjsDirect && !isFlyCreationSuppressed )
                 AppendObjs( pTable, nIndex, pFrame, pPage, pDoc );
         }
         else if ( pNd->IsTableNode() )
@@ -1893,7 +1910,7 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
                 assert(false); // actually a fly-section can't be deleted?
                 continue; // skip it
             }
-            if ( !pTable->empty() && bObjsDirect && !bDontCreateObjects )
+            if ( !pTable->empty() && bObjsDirect && !isFlyCreationSuppressed )
             {
                 SwFlyFrame* pFly = pLay->FindFlyFrame();
                 if( pFly )
@@ -1922,7 +1939,7 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
 
     if ( bPages ) // let the Flys connect to each other
     {
-        if ( !bDontCreateObjects )
+        if ( !isFlyCreationSuppressed )
             AppendAllObjs( pTable, pLayout );
         bObjsDirect = true;
     }
@@ -2110,7 +2127,7 @@ void MakeFrames( SwDoc *pDoc, const SwNodeIndex &rSttIdx,
                               nEndIdx, pPrv, eMode );
                 // OD 23.06.2003 #108784# - correction: append objects doesn't
                 // depend on value of <bAllowMove>
-                if( !bDontCreateObjects )
+                if( !isFlyCreationSuppressed )
                 {
                     const SwFrameFormats *pTable = pDoc->GetSpzFrameFormats();
                     if( !pTable->empty() )

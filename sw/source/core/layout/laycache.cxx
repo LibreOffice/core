@@ -833,8 +833,7 @@ bool SwLayHelper::CheckInsert( sal_uLong nNodeIndex )
                             SwFrame *pPrv;
                             if( nRepeat > 0 )
                             {
-                                bDontCreateObjects = true; //frmtool
-
+                                sw::FlyCreationSuppressor aSuppressor;
                                 // Insert new headlines:
                                 sal_uInt16 nRowIdx = 0;
                                 SwRowFrame* pHeadline = nullptr;
@@ -849,8 +848,6 @@ bool SwLayHelper::CheckInsert( sal_uLong nNodeIndex )
 
                                     ++nRowIdx;
                                 }
-
-                                bDontCreateObjects = false;
                                 pPrv = pHeadline;
                                 nRows = nRows + nRepeat;
                             }

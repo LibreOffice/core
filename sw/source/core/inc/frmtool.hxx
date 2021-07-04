@@ -150,9 +150,6 @@ void MakeFrames( SwDoc *pDoc, const SwNodeIndex &rSttIdx,
 
 extern bool bObjsDirect;
 
-// prevent creation of Flys in InsertCnt_, e.g. for table headlines
-extern bool bDontCreateObjects;
-
 // for FlyCnts, see SwFlyAtContentFrame::MakeAll()
 extern bool bSetCompletePaintOnInvalidate;
 
@@ -161,9 +158,14 @@ SwTwips CalcRowRstHeight( SwLayoutFrame *pRow );
 tools::Long CalcHeightWithFlys( const SwFrame *pFrame );
 
 namespace sw {
-
-bool IsRightPageByNumber(SwRootFrame const& rLayout, sal_uInt16 nPageNum);
-
+    bool IsRightPageByNumber(SwRootFrame const& rLayout, sal_uInt16 nPageNum);
+    class FlyCreationSuppressor
+    {
+        const bool m_wasAlreadySuppressed;
+        public:
+            FlyCreationSuppressor(bool isAlreadySuppressedAllowed = true);
+            ~FlyCreationSuppressor();
+    };
 } // namespace sw
 
 SwPageFrame *InsertNewPage( SwPageDesc &rDesc, SwFrame *pUpper,
