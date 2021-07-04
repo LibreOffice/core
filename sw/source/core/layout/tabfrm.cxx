@@ -1215,14 +1215,15 @@ bool SwTabFrame::Split( const SwTwips nCutPos, bool bTryToSplit, bool bTableRowK
         pFoll->InsertBehind( GetUpper(), this );
 
         // Repeat the headlines.
+        auto& rLines = GetTable()->GetTabLines();
         for ( nRowCount = 0; nRowCount < nRepeat; ++nRowCount )
         {
             // Insert new headlines:
-            bDontCreateObjects = true;              //frmtool
-            SwRowFrame* pHeadline = new SwRowFrame(
-                                    *GetTable()->GetTabLines()[ nRowCount ], this );
-            pHeadline->SetRepeatedHeadline( true );
-            bDontCreateObjects = false;
+            SwRowFrame* pHeadline = new SwRowFrame(*rLines[nRowCount], this);
+            {
+                sw::FlyCreationSuppressor aSuppressor;
+                pHeadline->SetRepeatedHeadline(true);
+            }
             pHeadline->InsertBefore( pFoll, nullptr );
 
             SwPageFrame *pPage = pHeadline->FindPageFrame();
@@ -3377,12 +3378,14 @@ void SwTabFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
 
                 // insert new headlines
                 const sal_uInt16 nNewRepeat = GetTable()->GetRowsToRepeat();
+                auto& rLines = GetTable()->GetTabLines();
                 for ( sal_uInt16 nIdx = 0; nIdx < nNewRepeat; ++nIdx )
                 {
-                    bDontCreateObjects = true;          //frmtool
-                    SwRowFrame* pHeadline = new SwRowFrame( *GetTable()->GetTabLines()[ nIdx ], this );
-                    pHeadline->SetRepeatedHeadline( true );
-                    bDontCreateObjects = false;
+                    SwRowFrame* pHeadline = new SwRowFrame(*rLines[nIdx], this);
+                    {
+                        sw::FlyCreationSuppressor aSuppressor;
+                        pHeadline->SetRepeatedHeadline(true);
+                    }
                     pHeadline->Paste( this, pLowerRow );
                 }
             }
