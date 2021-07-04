@@ -123,9 +123,10 @@ class PrintPageRanges
 public:
     PrintPageRanges();
 
-    std::vector<SCCOL> m_aPageEndX;
-    std::vector<SCROW> m_aPageEndY;
-    std::map<size_t, ScPageRowEntry> m_aPageRows;
+    // use shared_ptr to avoid copying this (potentially large) data back and forth
+    std::shared_ptr<std::vector<SCCOL>> m_xPageEndX;
+    std::shared_ptr<std::vector<SCROW>> m_xPageEndY;
+    std::shared_ptr<std::map<size_t, ScPageRowEntry>> m_xPageRows;
 
     size_t m_nPagesX;
     size_t m_nPagesY;
@@ -165,9 +166,10 @@ struct ScPrintState                         //  Save Variables from ScPrintFunc
     bool bSavedStateRanges;
     sc::PrintPageRangesInput aPrintPageRangesInput;
     size_t nTotalY;
-    std::vector<SCCOL> aPageEndX;
-    std::vector<SCROW> aPageEndY;
-    std::map<size_t, ScPageRowEntry> aPageRows;
+    // use shared_ptr to avoid copying this (potentially large) map back and forth
+    std::shared_ptr<std::vector<SCCOL>> xPageEndX;
+    std::shared_ptr<std::vector<SCROW>> xPageEndY;
+    std::shared_ptr<std::map<size_t, ScPageRowEntry>> xPageRows;
 
     ScPrintState()
         : nPrintTab(0)
