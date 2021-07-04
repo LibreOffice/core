@@ -35,6 +35,7 @@ class SwTextNode;
 class SwTextFormatColl;
 class SwFrameFormat;
 class SwTableLine;
+class SwTableLineFormat;
 class SwTableBox;
 
 // Base class for all Message-Hints:
@@ -169,6 +170,14 @@ public:
 
 class DocumentDyingHint final : public SfxHint
 {
+};
+
+class TableLineFormatChanged final : public SfxHint
+{
+public:
+    const SwTableLineFormat& m_rNewFormat;
+    const SwTableLine& m_rTabLine;
+    TableLineFormatChanged(const SwTableLineFormat& rNewFormat, const SwTableLine& rTabLine) : m_rNewFormat(rNewFormat), m_rTabLine(rTabLine) {};
 };
 }
 
