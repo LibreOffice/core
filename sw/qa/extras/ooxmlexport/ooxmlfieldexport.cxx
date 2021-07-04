@@ -10,6 +10,7 @@
 #include <swmodeltestbase.hxx>
 
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
+#include <com/sun/star/text/XTextField.hpp>
 
 #include <xmloff/odffields.hxx>
 
@@ -686,6 +687,31 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testConditionalText, "conditional-text.fodt"
     // - In <...>, XPath '/w:document/w:body/w:p/w:r[2]/w:instrText' not found
     // i.e. the field was lost on export.
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:r[2]/w:instrText", OUString(aExpected));
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf142464_ampm, "tdf142464_ampm.docx")
+{
+    css::uno::Reference<css::text::XTextFieldsSupplier> xTextFieldsSupplier(
+        mxComponent, css::uno::UNO_QUERY_THROW);
+    auto xFieldsAccess(xTextFieldsSupplier->getTextFields());
+    auto xFields(xFieldsAccess->createEnumeration());
+    css::uno::Reference<css::text::XTextField> xField(xFields->nextElement(),
+                                                      css::uno::UNO_QUERY_THROW);
+
+    // Without the fix in place, this would have failed with:
+    //   - Expected: 12:32 PM
+    //   - Actual  : 12:32 a12/p12
+    CPPUNIT_ASSERT_EQUAL(OUString("12:32 PM"), xField->getPresentation(false));
+
+    if (xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml"))
+    {
+        // Without the fix in place, this would have failed with:
+        //   - Expected:  DATE \@"H:mm\ AM/PM"
+        //   - Actual  :  DATE \@"H:mm' a'M'/p'M"
+        // i.e., the AM/PM would be treated as literal 'a' and 'p' followed by a month code
+        assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:r[2]/w:instrText",
+                           " DATE \\@\"H:mm\\ AM/PM\" ");
+    }
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
