@@ -3916,7 +3916,34 @@ void SwRowFrame::OnFrameSize(const SfxPoolItem& rSize)
 
 void SwRowFrame::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
 {
-    if(auto pMoveTableLineHint = dynamic_cast<const sw::MoveTableLineHint*>(&rHint))
+    if(auto pNewFormatHint = dynamic_cast<const sw::TableLineFormatChanged*>(&rHint))
+    {
+        if(GetTabLine() != &pNewFormatHint->m_rTabLine)
+            return;
+        RegisterToFormat(const_cast<SwTableLineFormat&>(pNewFormatHint->m_rNewFormat));
+        InvalidateSize();
+        InvalidatePrt_();
+        SetCompletePaint();
+        ReinitializeFrameSizeAttrFlags();
+
+        // #i35063#
+        // consider 'split row allowed' attribute
+        SwTabFrame* pTab = FindTabFrame();
+        bool bInFollowFlowRow = false;
+        const bool bInFirstNonHeadlineRow = pTab->IsFollow() && this == pTab->GetFirstNonHeadlineRow();
+        if(bInFirstNonHeadlineRow ||
+             !GetNext() ||
+             (bInFollowFlowRow = IsInFollowFlowRow()) ||
+             nullptr != IsInSplitTableRow() )
+        {
+            if(bInFirstNonHeadlineRow || bInFollowFlowRow)
+                pTab = pTab->FindMaster();
+
+            pTab->SetRemoveFollowFlowLinePending(true);
+            pTab->InvalidatePos();
+        }
+    }
+    else if(auto pMoveTableLineHint = dynamic_cast<const sw::MoveTableLineHint*>(&rHint))
     {
 
         if(GetTabLine() != &pMoveTableLineHint->m_rTableLine)

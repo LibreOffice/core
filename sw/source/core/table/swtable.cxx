@@ -1496,47 +1496,13 @@ SwFrameFormat* SwTableLine::ClaimFrameFormat()
     return pRet;
 }
 
-void SwTableLine::ChgFrameFormat( SwTableLineFormat *pNewFormat )
+void SwTableLine::ChgFrameFormat(SwTableLineFormat* pNewFormat)
 {
-    SwFrameFormat *pOld = GetFrameFormat();
-    SwIterator<SwRowFrame,SwFormat> aIter( *pOld );
-
-    // First, re-register the Frames.
-    for( SwRowFrame* pRow = aIter.First(); pRow; pRow = aIter.Next() )
-    {
-        if( pRow->GetTabLine() == this )
-        {
-            pRow->RegisterToFormat( *pNewFormat );
-
-            pRow->InvalidateSize();
-            pRow->InvalidatePrt_();
-            pRow->SetCompletePaint();
-            pRow->ReinitializeFrameSizeAttrFlags();
-
-            // #i35063#
-            // consider 'split row allowed' attribute
-            SwTabFrame* pTab = pRow->FindTabFrame();
-            bool bInFollowFlowRow = false;
-            const bool bInFirstNonHeadlineRow = pTab->IsFollow() &&
-                                                pRow == pTab->GetFirstNonHeadlineRow();
-            if ( bInFirstNonHeadlineRow ||
-                 !pRow->GetNext() ||
-                 ( bInFollowFlowRow = pRow->IsInFollowFlowRow() ) ||
-                 nullptr != pRow->IsInSplitTableRow() )
-            {
-                if ( bInFirstNonHeadlineRow || bInFollowFlowRow )
-                    pTab = pTab->FindMaster();
-
-                pTab->SetRemoveFollowFlowLinePending( true );
-                pTab->InvalidatePos();
-            }
-        }
-    }
-
+    auto pOld = GetFrameFormat();
+    pOld->CallSwClientNotify(sw::TableLineFormatChanged(*pNewFormat, *this));
     // Now, re-register self.
-    pNewFormat->Add( this );
-
-    if ( !pOld->HasWriterListeners() )
+    pNewFormat->Add(this);
+    if(!pOld->HasWriterListeners())
         delete pOld;
 }
 
