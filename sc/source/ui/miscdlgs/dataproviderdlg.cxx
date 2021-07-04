@@ -39,7 +39,30 @@ public:
     void updateIndex(sal_uInt32 nIndex) { mnIndex = nIndex; }
 
     virtual std::shared_ptr<sc::DataTransformation> getTransformation() = 0;
+
+    SCROW getLastRow(const ScDocument& rDoc);
+    SCCOL getLastCol(const ScDocument& rDoc);
 };
+
+SCROW ScDataTransformationBaseControl::getLastRow(const ScDocument& rDoc)
+{
+    SCROW nEndRow = rDoc.MaxRow();
+    return rDoc.GetLastDataRow(0, 0, 0, nEndRow);
+}
+
+SCCOL ScDataTransformationBaseControl::getLastCol(const ScDocument& rDoc)
+{
+    for (SCCOL nCol = 1; nCol <= rDoc.MaxCol(); ++nCol)
+    {
+        CellType eType;
+        rDoc.GetCellType(nCol, 0, 0, eType);
+        if (eType == CELLTYPE_NONE)
+        {
+            return static_cast<SCCOL>(nCol - 1 );
+        }
+    }
+    return rDoc.MaxCol();
+}
 
 ScDataTransformationBaseControl::ScDataTransformationBaseControl(weld::Container* pParent, const OUString& rUIFile, sal_uInt32 nIndex)
     : mxBuilder(Application::CreateBuilder(pParent, rUIFile))
@@ -127,25 +150,25 @@ private:
     std::unique_ptr<weld::Entry> mxSeparator;
     std::unique_ptr<weld::Entry> mxNumColumns;
     std::unique_ptr<weld::Button> mxDelete;
-    SCCOL mnCol;
     std::function<void(sal_uInt32&)> maDeleteTransformation;
+    const ScDocument* mpDoc;
 
 public:
-    ScSplitColumnTransformationControl(weld::Container* pParent, SCCOL nCol, sal_uInt32 nIndex, std::function<void(sal_uInt32&)> aDeleteTransformation);
+    ScSplitColumnTransformationControl(const ScDocument* pDoc, weld::Container* pParent, sal_uInt32 nIndex, std::function<void(sal_uInt32&)> aDeleteTransformation);
 
     virtual std::shared_ptr<sc::DataTransformation> getTransformation() override;
     DECL_LINK(DeleteHdl, weld::Button&, void);
 };
 
 ScSplitColumnTransformationControl::ScSplitColumnTransformationControl(
-    weld::Container* pParent, SCCOL nCol, sal_uInt32 nIndex,
+    const ScDocument* pDoc, weld::Container* pParent, sal_uInt32 nIndex,
     std::function<void(sal_uInt32&)> aDeleteTransformation)
     : ScDataTransformationBaseControl(pParent, "modules/scalc/ui/splitcolumnentry.ui", nIndex)
     , mxSeparator(mxBuilder->weld_entry("ed_separator"))
     , mxNumColumns(mxBuilder->weld_entry("num_cols"))
     , mxDelete(mxBuilder->weld_button("ed_delete"))
-    , mnCol(nCol)
     , maDeleteTransformation(std::move(aDeleteTransformation))
+    , mpDoc(pDoc)
 {
     mxDelete->connect_clicked(LINK(this,ScSplitColumnTransformationControl, DeleteHdl));
 }
@@ -154,6 +177,11 @@ std::shared_ptr<sc::DataTransformation> ScSplitColumnTransformationControl::getT
 {
     OUString aSeparator = mxSeparator->get_text();
     sal_Unicode cSeparator = aSeparator.isEmpty() ? ',' : aSeparator[0];
+    OUString aColStr = mxNumColumns->get_text();
+    SCCOL mnCol = -1;
+    sal_Int32 nCol = aColStr.toInt32();
+    if (nCol > 0 && nCol <= mpDoc->MaxCol())
+        mnCol = nCol - 1;
     return std::make_shared<sc::SplitColumnTransformation>(mnCol, cSeparator);
 }
 
@@ -255,11 +283,13 @@ std::shared_ptr<sc::DataTransformation> ScSortTransformationControl::getTransfor
         aColumn = nCol - 1;     // translate from 1-based column notations to internal Calc one
 
     ScSortParam aSortParam;
-    ScSortKeyState aSortKey;
-    aSortKey.bDoSort = true;
-    aSortKey.nField = aColumn;
-    aSortKey.bAscending = aIsAscending;
-    aSortParam.maKeyState.push_back(aSortKey);
+    aSortParam.nRow1=0;
+    aSortParam.nRow2=getLastRow(*mpDoc);
+    aSortParam.nCol1=0;
+    aSortParam.nCol2=getLastCol(*mpDoc);
+    aSortParam.maKeyState[0].bDoSort = true;
+    aSortParam.maKeyState[0].nField = aColumn;
+    aSortParam.maKeyState[0].bAscending = aIsAscending;
     return std::make_shared<sc::SortTransformation>(aSortParam);
 }
 
@@ -795,11 +825,8 @@ void ScDataProviderDlg::deleteColumn()
 
 void ScDataProviderDlg::splitColumn()
 {
-    SCCOL nStartCol = -1;
-    SCCOL nEndCol = -1;
-    mxTable->getColRange(nStartCol, nEndCol);
     std::function<void(sal_uInt32&)> adeleteTransformation = std::bind(&ScDataProviderDlg::deletefromList,this, std::placeholders::_1);
-    maControls.emplace_back(std::make_unique<ScSplitColumnTransformationControl>(mxTransformationList.get(), nStartCol, mnIndex++, adeleteTransformation));
+    maControls.emplace_back(std::make_unique<ScSplitColumnTransformationControl>(mxDoc.get(), mxTransformationList.get(), mnIndex++, adeleteTransformation));
 }
 
 void ScDataProviderDlg::mergeColumns()

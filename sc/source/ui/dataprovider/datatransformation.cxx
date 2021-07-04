@@ -48,9 +48,11 @@ ColumnRemoveTransformation::~ColumnRemoveTransformation()
 
 void ColumnRemoveTransformation::Transform(ScDocument& rDoc) const
 {
+    sal_Int32 increment_index = 0;
     for (auto& rCol : maColumns)
     {
-        rDoc.DeleteCol(0, 0, rDoc.MaxRow(), 0, rCol, 1);
+        rDoc.DeleteCol(0, 0, rDoc.MaxRow(), 0, rCol - increment_index, 1);
+        increment_index++;
     }
 }
 
@@ -72,6 +74,9 @@ SplitColumnTransformation::SplitColumnTransformation(SCCOL nCol, sal_Unicode cSe
 
 void SplitColumnTransformation::Transform(ScDocument& rDoc) const
 {
+    if (mnCol == -1)
+        return;
+
     rDoc.InsertCol(0, 0, rDoc.MaxRow(), 0, mnCol + 1, 1);
 
     SCROW nEndRow = getLastRow(rDoc, mnCol);
