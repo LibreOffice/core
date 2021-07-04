@@ -72,6 +72,24 @@
     },
     {
       "key": {
+        "uuid": "906f635d_a91f88f3",
+        "filename": "postprocess/CustomTarget_registry.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 578,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-07-04T11:16:45Z",
+      "side": 1,
+      "message": "You should always test. I have built LibreOffice with the STARTCENTER_TEMPLREP_URL value which includes brackets, and there was no problem in the build and execution. In fact, the value is not currently in use in the code:\nhttps://opengrok.libreoffice.org/search?project\u003dcore\u0026full\u003dTemplateRepositoryURL\u0026\u0026nn\u003d1\u0026si\u003dfull\u0026si\u003dfull",
+      "parentUuid": "a0b95651_5036649e",
+      "revId": "70bc57f52b416b00ca4ea44d062d8cdc2d49c87d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b44437e9_5bbb6d19",
         "filename": "readlicense_oo/license/license.xml",
         "patchSetId": 1
