@@ -109,7 +109,7 @@
       <DefaultName>ISO 8601</DefaultName>
     </FormatElement>
     <FormatElement msgid="DateFormatskey1" default="true" type="long" usage="DATE" formatindex="19">
-      <FormatCode>YYYY "m." MMMM DD "d."</FormatCode>
+      <FormatCode>YYYY "m." MMMM DD "d." NNN</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey2" default="false" type="long" usage="DATE" formatindex="20">
       <FormatCode>YYYY "metų" MMMM "mėnesio" D "diena"</FormatCode>
