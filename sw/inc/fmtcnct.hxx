@@ -24,15 +24,15 @@
 #include "format.hxx"
 #include "calbck.hxx"
 #include "frmfmt.hxx"
+#include <svl/listener.hxx>
 
 class IntlWrapper;
 
 /// Connection (text flow) between two FlyFrames.
-class SW_DLLPUBLIC SwFormatChain final : public SfxPoolItem
+class SW_DLLPUBLIC SwFormatChain final : public SfxPoolItem, public SvtListener
 {
-    SwClient m_aPrev, ///< Previous SwFlyFrameFormat (if existent).
-             m_aNext; ///< Next SwFlyFrameFormat (if existent).
-
+    SwFlyFrameFormat* m_pPrev;
+    SwFlyFrameFormat* m_pNext;
 public:
     SwFormatChain() : SfxPoolItem( RES_CHAIN ) {}
     SwFormatChain( const SwFormatChain &rCpy );
@@ -49,12 +49,13 @@ public:
                                   const IntlWrapper& rIntl ) const override;
 
     virtual bool QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
+    virtual void Notify(const SfxHint& rHint) override;
 
-    SwFlyFrameFormat* GetPrev() const { return const_cast<SwFlyFrameFormat*>(static_cast<const SwFlyFrameFormat*>(m_aPrev.GetRegisteredIn())); }
-    SwFlyFrameFormat* GetNext() const { return const_cast<SwFlyFrameFormat*>(static_cast<const SwFlyFrameFormat*>(m_aNext.GetRegisteredIn())); }
+    SwFlyFrameFormat* GetPrev() const { return m_pPrev; }
+    SwFlyFrameFormat* GetNext() const { return m_pNext; }
 
-    void SetPrev( SwFlyFrameFormat *pFormat );
-    void SetNext( SwFlyFrameFormat *pFormat );
+    void SetPrev(SwFlyFrameFormat* pFormat);
+    void SetNext(SwFlyFrameFormat* pFormat);
 };
 
 SwFormatChain &SwFormatChain::operator=( const SwFormatChain &rCpy )

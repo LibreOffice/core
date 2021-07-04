@@ -29,6 +29,7 @@ class SwTable;
 class SwNode;
 class SwNodes;
 class SwPageFrame;
+class SwFlyFrameFormat;
 class SwFrame;
 class SwHistory;
 class SwTextNode;
@@ -169,6 +170,13 @@ public:
 
 class DocumentDyingHint final : public SfxHint
 {
+};
+
+class FlyFrameFormatDyingHint final : public SfxHint
+{
+public:
+    const SwFlyFrameFormat& m_rFormat;
+    FlyFrameFormatDyingHint(const SwFlyFrameFormat& rFormat): m_rFormat(rFormat) {};
 };
 }
 

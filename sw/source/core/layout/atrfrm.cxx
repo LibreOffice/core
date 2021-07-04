@@ -2112,8 +2112,9 @@ bool SwFormatChain::operator==( const SfxPoolItem &rAttr ) const
            GetNext() == static_cast<const SwFormatChain&>(rAttr).GetNext();
 }
 
-SwFormatChain::SwFormatChain( const SwFormatChain &rCpy ) :
-    SfxPoolItem( RES_CHAIN )
+SwFormatChain::SwFormatChain( const SwFormatChain &rCpy )
+    : SfxPoolItem( RES_CHAIN )
+    , SvtListener()
 {
     SetPrev( rCpy.GetPrev() );
     SetNext( rCpy.GetNext() );
@@ -2127,20 +2128,34 @@ SwFormatChain* SwFormatChain::Clone( SfxItemPool* ) const
     return pRet;
 }
 
-void SwFormatChain::SetPrev( SwFlyFrameFormat *pFormat )
+void SwFormatChain::SetPrev(SwFlyFrameFormat* pFormat)
 {
-    if ( pFormat )
-        pFormat->Add( &m_aPrev );
-    else
-        m_aPrev.EndListeningAll();
+    if(m_pPrev)
+        EndListening(m_pPrev->GetNotifier());
+    if(pFormat)
+        StartListening(pFormat->GetNotifier());
+    m_pPrev = pFormat;
 }
 
-void SwFormatChain::SetNext( SwFlyFrameFormat *pFormat )
+void SwFormatChain::SetNext(SwFlyFrameFormat* pFormat)
 {
-    if ( pFormat )
-        pFormat->Add( &m_aNext );
-    else
-        m_aNext.EndListeningAll();
+    if(m_pNext)
+        EndListening(m_pNext->GetNotifier());
+    if(pFormat)
+        StartListening(pFormat->GetNotifier());
+    m_pNext = pFormat;
+}
+
+void SwFormatChain::Notify(const SfxHint& rHint)
+{
+    auto pHint = dynamic_cast<const sw::FlyFrameFormatDyingHint*>(&rHint);
+    if(pHint)
+    {
+        if(m_pPrev == &pHint->m_rFormat)
+            m_pPrev = nullptr;
+        if(m_pNext == &pHint->m_rFormat)
+            m_pNext = nullptr;
+    }
 }
 
 bool SwFormatChain::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
@@ -2947,7 +2962,7 @@ SwFlyFrameFormat::~SwFlyFrameFormat()
         {
             SwFrame::DestroyFrame(pLast);
         } while( nullptr != ( pLast = aIter.Next() ));
-
+    GetNotifier().Broadcast(sw::FlyFrameFormatDyingHint(*this));
 }
 
 SwFlyDrawContact* SwFlyFrameFormat::GetOrCreateContact()
