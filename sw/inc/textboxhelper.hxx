@@ -74,7 +74,7 @@ public:
     static void getProperty(SwFrameFormat const* pShape, sal_uInt16 nWID, sal_uInt8 nMemberID,
                             css::uno::Any& rValue);
     /// Get a property of the underlying TextFrame.
-    static css::uno::Any getProperty(SwFrameFormat const* pShape, OUString sPropName);
+    static css::uno::Any getProperty(SwFrameFormat const* pShape, const OUString& rPropName);
 
     /// There are two types of enum of anchor type, so this function maps this.
     static css::text::TextContentAnchorType mapAnchorType(const RndStdIds& rAnchorID);
