@@ -154,6 +154,7 @@ public:
     virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const Point&        GetPoint() const { return maPt; }
+    void                SetPoint(Point& rPt) { maPt = rPt; }
 };
 
 class VCL_DLLPUBLIC MetaLineAction final : public MetaAction
