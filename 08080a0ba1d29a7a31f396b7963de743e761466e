@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f90da45f_48fc3e60",
+        "filename": "cui/source/dialogs/GraphicTestsDialog.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1002896
+      },
+      "writtenOn": "2021-07-05T13:11:20Z",
+      "side": 1,
+      "message": "There\u0027s an issue with these lines - they just don\u0027t work. I\u0027ve been stuck with this for a while now and I am unable to debunk as to why they\u0027re not working. Could you please look through them and guide me as to where am I going wrong? Thanks!",
+      "range": {
+        "startLine": 25,
+        "startChar": 4,
+        "endLine": 30,
+        "endChar": 90
+      },
+      "revId": "08080a0ba1d29a7a31f396b7963de743e761466e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
