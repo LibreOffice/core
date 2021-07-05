@@ -50,7 +50,8 @@ enum MessageType
     WidgetUpdate,
     Close,
     Action,
-    Popup
+    Popup,
+    PopupClose
 };
 }
 
