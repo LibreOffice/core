@@ -21,9 +21,9 @@ class tdf140731(UITestCase):
             #generating a big text with ~60k words and several paragraphs
             for i in range(0,8):
                 self.xUITest.executeCommand(".uno:SelectAll")
-                xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+c"}))
-                xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+v"}))
-                xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+v"}))
+                self.xUITest.executeCommand(".uno:Copy")
+                self.xUITest.executeCommand(".uno:Paste")
+                self.xUITest.executeCommand(".uno:Paste")
             xWriterEdit.executeAction("GOTO", mkPropertyValues({"PAGE": "1"}))
 
             #Format->Text operations on small selections (which would generate <~500 redlines), changetracking still working
