@@ -216,6 +216,7 @@ public:
     virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const tools::Rectangle&    GetRect() const { return maRect; }
+    void                SetRect(tools::Rectangle& rRect) { maRect = rRect; }
 };
 
 class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetaRoundRectAction final : public MetaAction
