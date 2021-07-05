@@ -41,6 +41,7 @@ public:
     rtl::Reference<MetaAction> FillColorHandler();
     rtl::Reference<MetaAction> RectHandler();
     rtl::Reference<MetaAction> PointHandler();
+    rtl::Reference<MetaAction> PixelHandler();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
