@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dca69557_95055c51",
+        "filename": "basic/source/runtime/methods1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2389,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-05T15:38:03Z",
+      "side": 0,
+      "message": "Please keep the \u0027if 0\u0027 optimization: it\u0027s quite common, when Basic is used e.g. in Calc UDFs, with large ranges using formulas on partially empty content.",
+      "revId": "94319445e2e5774b38805dea4cc54caf8e0a7320",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}

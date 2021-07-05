@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a9abb93c_e0eda2a4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-05T15:38:03Z",
+      "side": 1,
+      "message": "I\u0027d suggest to use more descriptive first line, mentioning half-to-even rounding.",
+      "range": {
+        "startLine": 7,
+        "startChar": 11,
+        "endLine": 7,
+        "endChar": 43
+      },
+      "revId": "bb351f92bc5344761361ab48182325dda922b7ac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "47843471_d9e84a58",
+        "filename": "basic/source/runtime/methods1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2403,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-05T15:38:03Z",
+      "side": 1,
+      "message": "When putting the \u0027if 0\u0027 back, this will be changed - but in the current form, it\u0027s a formatting that is not used here, and it fits one line with current 100-character limit.",
+      "range": {
+        "startLine": 2401,
+        "startChar": 4,
+        "endLine": 2403,
+        "endChar": 6
+      },
+      "revId": "bb351f92bc5344761361ab48182325dda922b7ac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
