@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8f60ebc0_a7abb3f6",
+        "filename": "sw/qa/uitest/writer_tests7/tdf131771.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-07-05T11:19:28Z",
+      "side": 1,
+      "message": "Just use \u0027self.xUITest.executeCommand(\".uno:SelectAll\")\u0027, self.xUITest.executeCommand(\".uno:Copy\"), etc...",
+      "revId": "38d620322dbf59cf6341036c4f74662497179775",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
