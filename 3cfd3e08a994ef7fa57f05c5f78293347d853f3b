@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f258a45_7bb62aba",
+        "filename": "include/tools/color.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2021-07-05T10:39:27Z",
+      "side": 1,
+      "message": "Hmm - that seems a bit drastic (?) surely there is an accessor for some sensible representation ?",
+      "revId": "3cfd3e08a994ef7fa57f05c5f78293347d853f3b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
