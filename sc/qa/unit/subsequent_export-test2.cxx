@@ -189,6 +189,7 @@ public:
     void testTdf140431();
     void testCheckboxFormControlXlsxExport();
     void testButtonFormControlXlsxExport();
+    void testInvalidNamedRange();
 
     CPPUNIT_TEST_SUITE(ScExportTest2);
 
@@ -286,6 +287,7 @@ public:
     CPPUNIT_TEST(testTdf140431);
     CPPUNIT_TEST(testCheckboxFormControlXlsxExport);
     CPPUNIT_TEST(testButtonFormControlXlsxExport);
+    CPPUNIT_TEST(testInvalidNamedRange);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2346,6 +2348,23 @@ void ScExportTest2::testButtonFormControlXlsxExport()
     assertXPathContent(pDoc, "//x:anchor/x:from/xdr:row", "3");
     assertXPathContent(pDoc, "//x:anchor/x:to/xdr:col", "3");
     assertXPathContent(pDoc, "//x:anchor/x:to/xdr:row", "7");
+}
+
+void ScExportTest2::testInvalidNamedRange()
+{
+    // Given a document which has a named range (myname) that refers to the "1" external link, but
+    // the link's type is xlPathMissing, when importing that document:
+    ScDocShellRef xDocSh = loadDoc(u"invalid-named-range.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    // Then make sure that named range is ignored, as "1" can't be resolved, and exporting it back
+    // to XLSX (without the xlPathMissing link) would corrupt the document:
+    uno::Reference<beans::XPropertySet> xDocProps(xDocSh->GetModel(), uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xNamedRanges(xDocProps->getPropertyValue("NamedRanges"),
+                                                        uno::UNO_QUERY);
+    // Without the fix in place, this test would have failed, we didn't ignore the problematic named
+    // range on import.
+    CPPUNIT_ASSERT(!xNamedRanges->hasByName("myname"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest2);

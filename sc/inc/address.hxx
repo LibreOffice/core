@@ -493,7 +493,7 @@ struct ScAddressHashFunctor
 }
 
 //  ScRange
-class SAL_WARN_UNUSED ScRange final
+class SAL_WARN_UNUSED SC_DLLPUBLIC ScRange final
 {
 public:
     ScAddress aStart;
