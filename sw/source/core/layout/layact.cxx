@@ -40,6 +40,7 @@
 #include <sfx2/event.hxx>
 
 #include <ftnidx.hxx>
+#include <comphelper/profilezone.hxx>
 #include <vcl/svapp.hxx>
 #include <editeng/opaqitem.hxx>
 #include <SwSmartTagMgr.hxx>
@@ -320,6 +321,8 @@ bool SwLayAction::RemoveEmptyBrowserPages()
 
 void SwLayAction::Action(OutputDevice* pRenderContext)
 {
+    comphelper::ProfileZone("SwLayAction::Action");
+
     m_bActionInProgress = true;
 
     //TurboMode? Hands-off during idle-format
@@ -1173,6 +1176,8 @@ bool SwLayAction::IsShortCut( SwPageFrame *&prPage )
 // introduce support for vertical layout
 bool SwLayAction::FormatLayout( OutputDevice *pRenderContext, SwLayoutFrame *pLay, bool bAddRect )
 {
+    comphelper::ProfileZone("SwLayAction::FormatLayout");
+
     // save page for loop control
     if( pLay->IsPageFrame() && static_cast<SwPageFrame*>(pLay) != m_pCurPage )
     {
@@ -1596,6 +1601,8 @@ bool SwLayAction::FormatLayoutTab( SwTabFrame *pTab, bool bAddRect )
 
 bool SwLayAction::FormatContent( const SwPageFrame *pPage )
 {
+    comphelper::ProfileZone("SwLayAction::FormatContent");
+
     const SwContentFrame *pContent = pPage->ContainsContent();
     const SwViewShell *pSh = m_pRoot->GetCurrShell();
     const bool bBrowse = pSh && pSh->GetViewOptions()->getBrowseMode();
@@ -2129,6 +2136,8 @@ SwLayIdle::SwLayIdle( SwRootFrame *pRt, SwViewShellImp *pI ) :
     , m_bIndicator( false )
 #endif
 {
+    comphelper::ProfileZone("SwLayIdle::SwLayIdle");
+
     SAL_INFO("sw.idle", "SwLayIdle() entry");
 
     pImp->m_pIdleAct = this;
