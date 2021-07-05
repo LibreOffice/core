@@ -49,7 +49,7 @@ void CGM::ImplDoClass0()
         break;
         case 0x03 : /*Begin Picture*/
         {
-            if ( mbPicture )
+            if (mbPicture || mbInDefaultReplacement)
                 mbStatus = false;
             else
             {
