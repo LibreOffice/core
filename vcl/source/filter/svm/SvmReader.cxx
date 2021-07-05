@@ -159,7 +159,7 @@ rtl::Reference<MetaAction> SvmReader::MetaActionHandler(ImplMetaReadData* pData)
             pAction = new MetaAction;
             break;
         case MetaActionType::PIXEL:
-            pAction = new MetaPixelAction;
+            return PixelHandler();
             break;
         case MetaActionType::POINT:
             return PointHandler();
@@ -395,6 +395,24 @@ rtl::Reference<MetaAction> SvmReader::PointHandler()
     Point aPoint;
     aSerializer.readPoint(aPoint);
     pAction->SetPoint(aPoint);
+
+    return pAction;
+}
+
+rtl::Reference<MetaAction> SvmReader::PixelHandler()
+{
+    auto pAction = new MetaPixelAction();
+
+    VersionCompatRead aCompat(mrStream);
+    TypeSerializer aSerializer(mrStream);
+
+    Point aPoint;
+    aSerializer.readPoint(aPoint);
+    Color aColor;
+    ReadColor(aColor);
+
+    pAction->SetPoint(aPoint);
+    pAction->SetColor(aColor);
 
     return pAction;
 }
