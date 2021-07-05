@@ -38,9 +38,7 @@ class COMPHELPER_DLLPUBLIC ProfileZone : public NamedEvent
     {
         if (s_bRecording || m_bConsole)
         {
-            TimeValue systemTime;
-            osl_getSystemTime( &systemTime );
-            m_nCreateTime = static_cast<long long>(systemTime.Seconds) * 1000000 + systemTime.Nanosec/1000;
+            m_nCreateTime = getNow();
 
             m_nNesting = s_nNesting++;
         }
