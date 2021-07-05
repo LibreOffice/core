@@ -162,7 +162,7 @@ rtl::Reference<MetaAction> SvmReader::MetaActionHandler(ImplMetaReadData* pData)
             pAction = new MetaPixelAction;
             break;
         case MetaActionType::POINT:
-            pAction = new MetaPointAction;
+            return PointHandler();
             break;
         case MetaActionType::LINE:
             pAction = new MetaLineAction;
@@ -381,6 +381,20 @@ rtl::Reference<MetaAction> SvmReader::RectHandler()
     tools::Rectangle aRectangle;
     aSerializer.readRectangle(aRectangle);
     pAction->SetRect(aRectangle);
+
+    return pAction;
+}
+
+rtl::Reference<MetaAction> SvmReader::PointHandler()
+{
+    auto pAction = new MetaPointAction();
+
+    VersionCompatRead aCompat(mrStream);
+    TypeSerializer aSerializer(mrStream);
+
+    Point aPoint;
+    aSerializer.readPoint(aPoint);
+    pAction->SetPoint(aPoint);
 
     return pAction;
 }
