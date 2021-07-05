@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4e0b34d0_b0befe3e",
+        "filename": "sw/qa/uitest/writer_tests7/tdf90401.py",
+        "patchSetId": 14
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-07-05T10:36:55Z",
+      "side": 1,
+      "message": "this is wrong. The assert will never fail inside the try/except",
+      "revId": "ded2452a52d21131347a0dc2e25c8161f20fcfad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "be79dcf0_b18d9466",
+        "filename": "sw/qa/uitest/writer_tests7/tdf90401.py",
+        "patchSetId": 14
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-07-05T10:36:55Z",
+      "side": 1,
+      "message": "Same here",
+      "revId": "ded2452a52d21131347a0dc2e25c8161f20fcfad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
