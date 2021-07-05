@@ -51,6 +51,7 @@
 #include <propacc.hxx>
 #include <sal/log.hxx>
 #include <eventatt.hxx>
+#include <rtl/math.h>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
@@ -2385,43 +2386,21 @@ void SbRtl_Round(StarBASIC *, SbxArray & rPar, bool)
 
     SbxVariable* pSbxVariable = rPar.Get(1);
     double dVal = pSbxVariable->GetDouble();
-    double dRes = 0.0;
-    if( dVal != 0.0 )
+    sal_Int16 numdecimalplaces = 0;
+
+    if( nParCount == 3 )
     {
-        bool bNeg = false;
-        if( dVal < 0.0 )
+        numdecimalplaces = rPar.Get(2)->GetInteger();
+        if( numdecimalplaces < 0 || numdecimalplaces > 22 )
         {
-            bNeg = true;
-            dVal = -dVal;
+            StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+            return;
         }
-
-        sal_Int16 numdecimalplaces = 0;
-        if( nParCount == 3 )
-        {
-            numdecimalplaces = rPar.Get(2)->GetInteger();
-            if( numdecimalplaces < 0 || numdecimalplaces > 22 )
-            {
-                StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
-                return;
-            }
-        }
-
-        if( numdecimalplaces == 0 )
-        {
-            dRes = floor( dVal + 0.5 );
-        }
-        else
-        {
-            double dFactor = pow( 10.0, numdecimalplaces );
-            dVal *= dFactor;
-            dRes = floor( dVal + 0.5 );
-            dRes /= dFactor;
-        }
-
-        if( bNeg )
-            dRes = -dRes;
     }
-    rPar.Get(0)->PutDouble(dRes);
+
+    rPar.Get(0)->PutDouble(
+        rtl_math_round(dVal, numdecimalplaces, rtl_math_RoundingMode_HalfEven)
+    );
 }
 
 static void CallFunctionAccessFunction( const Sequence< Any >& aArgs, const OUString& sFuncName, SbxVariable* pRet )
