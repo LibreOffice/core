@@ -5,6 +5,10 @@
 
 # This file is both a README and also, if run as a shell script, does what
 # it describes.
+# It should be invoked from the libreoffice core top-level source folder:
+#   ./oox/source/drawingml/customshapes/generate.sh
+# The logs will be created in the file:
+#   ./oox/source/drawingml/customshapes/custom-shapes.log
 
 # We want to exit on errors...
 
