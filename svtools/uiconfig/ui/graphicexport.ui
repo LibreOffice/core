@@ -377,7 +377,7 @@
                         <property name="adjustment">adjustment1</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="compressionjpgnf-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="graphicexport|extended_tip|compressionjpgnf">Sets the quality for the export. Choose from a low quality with minimal file size, up to a high quality and big file size</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="graphicexport|extended_tip|compressionjpgnf">Sets the quality for the export. Choose from a low quality with minimal file size, up to a high quality and big file size.</property>
                           </object>
                         </child>
                       </object>
