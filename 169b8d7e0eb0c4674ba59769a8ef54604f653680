@@ -70,6 +70,30 @@
       "revId": "169b8d7e0eb0c4674ba59769a8ef54604f653680",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3723f1cc_b19d3274",
+        "filename": "external/ct2n/README",
+        "patchSetId": 1
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1002947
+      },
+      "writtenOn": "2021-07-05T05:43:18Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "938515be_0b8ed81f",
+      "range": {
+        "startLine": 4,
+        "startChar": 0,
+        "endLine": 4,
+        "endChar": 1
+      },
+      "revId": "169b8d7e0eb0c4674ba59769a8ef54604f653680",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
