@@ -71,7 +71,13 @@
 #include "util.hxx"
 
 #include <comphelper/propertysequence.hxx>
-#include <algorithm> // std::swap
+#include <algorithm>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/range/b2drange.hxx>
+#include <basegfx/numeric/ftools.hxx>
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
 
 using namespace css;
 
@@ -939,6 +945,9 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                             }
                             m_xShape->setPosition(GetGraphicObjectPosition());
                         }
+                        // ToDo: Rotated shapes with position type "Alignment" (UI of Word) have
+                        // wrong position. Word aligns the unrotated logic rectangle, LO the rotated
+                        // snap rectangle.
 
                         // Margin correction
                         if (m_pImpl->eGraphicImportType == IMPORT_AS_DETECTED_INLINE)
@@ -949,14 +958,14 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                                 // stroke and shadow. Simple add it to the margins.
                                 sal_Int32 nEffectExtent = (m_pImpl->m_oEffectExtentLeft)
                                     ? oox::drawingml::convertEmuToHmm(*m_pImpl->m_oEffectExtentLeft)
-                                    : 0;                                    
-                                m_pImpl->nLeftMargin  += nEffectExtent;
+                                    : 0;
+                                m_pImpl->nLeftMargin += nEffectExtent;
                                 nEffectExtent = (m_pImpl->m_oEffectExtentRight)
                                     ? oox::drawingml::convertEmuToHmm(*m_pImpl->m_oEffectExtentRight) : 0;
                                 m_pImpl->nRightMargin += nEffectExtent;
                                 nEffectExtent = (m_pImpl->m_oEffectExtentTop)
                                     ? oox::drawingml::convertEmuToHmm(*m_pImpl->m_oEffectExtentTop) : 0;
-                                m_pImpl->nTopMargin  += nEffectExtent;
+                                m_pImpl->nTopMargin += nEffectExtent;
                                 nEffectExtent = (m_pImpl->m_oEffectExtentBottom)
                                     ? oox::drawingml::convertEmuToHmm(*m_pImpl->m_oEffectExtentBottom) : 0;
                                 m_pImpl->nBottomMargin += nEffectExtent;
@@ -1029,21 +1038,98 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                                 aLOBoundRect.Height = ConversionHelper::convertTwipToMM100(aBoundRect.getHeight());
                             }
 
-                            m_pImpl->nLeftMargin  += aLOBoundRect.X - aMSOBaseLeftTop.X;
+                            m_pImpl->nLeftMargin += aLOBoundRect.X - aMSOBaseLeftTop.X;
                             m_pImpl->nRightMargin += aMSOBaseLeftTop.X + aMSOBaseSize.Width
                                                      - (aLOBoundRect.X + aLOBoundRect.Width);
-                            m_pImpl->nTopMargin  += aLOBoundRect.Y - aMSOBaseLeftTop.Y;
+                            m_pImpl->nTopMargin += aLOBoundRect.Y - aMSOBaseLeftTop.Y;
                             m_pImpl->nBottomMargin += aMSOBaseLeftTop.Y + aMSOBaseSize.Height
                                                       - (aLOBoundRect.Y + aLOBoundRect.Height);
                         }
-                        else // WrapTextMode_THROUGH(T) or mpWrapPolygon exists
+                        else if (m_pImpl->mpWrapPolygon) // with contour
                         {
-                            // Word uses a wrap polygon in case of wrapTight or wrapThrough, which the
-                            // user can manipulate. Word writes values to effectExtent which would
-                            // be uses in case of wrapSquare, but ignores them for wrapTight or
-                            // wrapThrough. But they contain the information about the needed extent
-                            // for effects, rotation and fat stroke. So use them in that cases too
-                            // although LibreOffice has its own methods for contour.
+                            // Word uses a wrap polygon, LibreOffice has no explicit wrap polygon
+                            // but creates the wrap contour based on the shape geometry, without
+                            // stroke width and shadow, but with rotation and flip. The concepts
+                            // are not compatible. We approximate Word's rendering by setting
+                            // wrap margins.
+
+                            // Build a range from the wrap polygon from Word.
+                            const drawing::PointSequenceSequence aWrapPolygon
+                                = m_pImpl->mpWrapPolygon->getPointSequenceSequence();
+                            basegfx::B2DPolyPolygon aB2DWrapPolyPolygon
+                                = basegfx::utils::UnoPointSequenceSequenceToB2DPolyPolygon(
+                                    aWrapPolygon);
+                            // Wrap polygon values are relative to 0..21600|0..21600.
+                            // Scale to shape size (in Hmm).
+                            basegfx::B2DHomMatrix aMatrix = basegfx::utils::createScaleB2DHomMatrix(
+                                aImportSize.Width / 21600.0, aImportSize.Height / 21600.0);
+                            aB2DWrapPolyPolygon.transform(aMatrix);
+
+                            // Shape geometry will be rotated, rotate wrap polygon too.
+                            if (nOOXAngle != 0)
+                            {
+                                aMatrix = basegfx::utils::createRotateAroundPoint(
+                                    aImportSize.Width / 2.0, aImportSize.Height / 2.0,
+                                    basegfx::deg2rad( nOOXAngle / 60000.0));
+                                aB2DWrapPolyPolygon.transform(aMatrix);
+                            }
+                            basegfx::B2DRange aB2DWrapRange = aB2DWrapPolyPolygon.getB2DRange();
+
+                            // Build a range from shape geometry
+                            basegfx::B2DRange aShapeRange;
+                            if (pShape)
+                            {
+                                basegfx::B2DPolyPolygon aShapePolygon = pShape->TakeXorPoly(); // Twips
+                                constexpr double fTwips2Hmm = 127.0 / 72.0;
+                                aMatrix = basegfx::utils::createScaleB2DHomMatrix(fTwips2Hmm, fTwips2Hmm);
+                                aShapePolygon.transform(aMatrix);
+                                // Wrap polygon treats left/top of shape as origin, shift shape polygon accordingly
+                                aMatrix = basegfx::utils::createTranslateB2DHomMatrix(
+                                    -aImportPosition.X, -aImportPosition.Y);
+                                aShapePolygon.transform(aMatrix);
+                                aShapeRange = aShapePolygon.getB2DRange();
+                            }
+                            else // can this happen?
+                            {
+                                aShapeRange
+                                    = basegfx::B2DRange(0, 0, aImportSize.Width, aImportSize.Height);
+                                if (nOOXAngle != 0)
+                                {
+                                    aMatrix = basegfx::utils::createRotateB2DHomMatrix(
+                                        basegfx::deg2rad(nOOXAngle / 60000.0));
+                                    aShapeRange.transform(aMatrix);
+                                }
+                            }
+
+                            // Add difference between shape and wrap range to margin and remember
+                            // difference in Twips for export.
+                            comphelper::SequenceAsHashMap aAnchorDistDiff;
+                            constexpr double fHmm2Twips = 72.0 / 127.0;
+                            const double fTopDiff = aShapeRange.getMinY() - aB2DWrapRange.getMinY();
+                            m_pImpl->nTopMargin += basegfx::fround(fTopDiff);
+                            aAnchorDistDiff["distTDiff"] <<= basegfx::fround(fTopDiff * fHmm2Twips);
+                            const double fBottomDiff = aB2DWrapRange.getMaxY() - aShapeRange.getMaxY();
+                            m_pImpl->nBottomMargin += basegfx::fround(fBottomDiff);
+                            aAnchorDistDiff["distBDiff"] <<= basegfx::fround(fBottomDiff * fHmm2Twips);
+                            const double fLeftDiff = aShapeRange.getMinX() - aB2DWrapRange.getMinX();
+                            m_pImpl->nLeftMargin += basegfx::fround(fLeftDiff);
+                            aAnchorDistDiff["distLDiff"] <<= basegfx::fround(fLeftDiff * fHmm2Twips);
+                            const double fRightDiff = aB2DWrapRange.getMaxX() - aShapeRange.getMaxX();
+                            m_pImpl->nRightMargin += basegfx::fround(fRightDiff);
+                            aAnchorDistDiff["distRDiff"] <<= basegfx::fround(fRightDiff * fHmm2Twips);
+                            m_pImpl->m_aInteropGrabBag["AnchorDistDiff"] <<= aAnchorDistDiff.getAsConstPropertyValueList();
+
+                            // FixMe: tdf#141880. LibreOffice cannot handle negative horizontal margin in contour wrap
+                            if (m_pImpl->nLeftMargin < 0)
+                                m_pImpl->nLeftMargin = 0;
+                            if (m_pImpl->nRightMargin < 0)
+                                m_pImpl->nRightMargin = 0;
+                        }
+                        else // text::WrapTextMode_THROUGH
+                        {
+                            // Word writes and evaluates the effectExtent in case of position
+                            // type 'Alignment' (UI). We move these values to margin to approximate
+                            // Word's rendering.
                             if (m_pImpl->m_oEffectExtentLeft)
                             {
                                 m_pImpl->nLeftMargin
