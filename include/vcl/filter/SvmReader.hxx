@@ -43,6 +43,7 @@ public:
     rtl::Reference<MetaAction> PointHandler();
     rtl::Reference<MetaAction> PixelHandler();
     rtl::Reference<MetaAction> LineHandler();
+    rtl::Reference<MetaAction> RoundRectHandler();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
