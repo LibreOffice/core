@@ -40,7 +40,7 @@ private:
     css::uno::Reference<css::io::XOutputStream> m_xBase64Stream;
     css::uno::Reference<css::graphic::XGraphic> m_xGraphic;
 
-    std::unique_ptr<SvxBrushItem> pItem;
+    std::unique_ptr<SvxBrushItem> m_pItem;
 
     void ProcessAttrs(
                const css::uno::Reference<css::xml::sax::XFastAttributeList > & xAttrList,
@@ -69,7 +69,7 @@ public:
 
     virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
-    const SvxBrushItem& GetItem() const { return *pItem; }
+    const SvxBrushItem& GetItem() const { return *m_pItem; }
 };
 
 #endif  //  _XMLBRSHI_HXX

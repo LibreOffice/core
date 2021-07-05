@@ -56,15 +56,15 @@ void SwXMLBrushItemImportContext::ProcessAttrs(
             break;
         case XML_ELEMENT(STYLE, XML_POSITION):
             SvXMLImportItemMapper::PutXMLValue(
-                *pItem, sValue, MID_GRAPHIC_POSITION, rUnitConv );
+                *m_pItem, sValue, MID_GRAPHIC_POSITION, rUnitConv );
             break;
         case XML_ELEMENT(STYLE, XML_REPEAT):
             SvXMLImportItemMapper::PutXMLValue(
-                *pItem, sValue, MID_GRAPHIC_REPEAT, rUnitConv );
+                *m_pItem, sValue, MID_GRAPHIC_REPEAT, rUnitConv );
             break;
         case XML_ELEMENT(STYLE, XML_FILTER_NAME):
             SvXMLImportItemMapper::PutXMLValue(
-                *pItem, sValue, MID_GRAPHIC_FILTER, rUnitConv );
+                *m_pItem, sValue, MID_GRAPHIC_FILTER, rUnitConv );
             break;
         default:
             XMLOFF_WARN_UNKNOWN("sw", aIter);
@@ -101,16 +101,16 @@ void SwXMLBrushItemImportContext::endFastElement(sal_Int32 )
     if (m_xGraphic.is())
     {
         Graphic aGraphic(m_xGraphic);
-        SvxGraphicPosition eOldGraphicPos = pItem->GetGraphicPos();
-        pItem->SetGraphic(aGraphic);
-        if (GPOS_NONE == eOldGraphicPos && GPOS_NONE != pItem->GetGraphicPos())
-            pItem->SetGraphicPos(GPOS_TILED);
+        SvxGraphicPosition eOldGraphicPos = m_pItem->GetGraphicPos();
+        m_pItem->SetGraphic(aGraphic);
+        if (GPOS_NONE == eOldGraphicPos && GPOS_NONE != m_pItem->GetGraphicPos())
+            m_pItem->SetGraphicPos(GPOS_TILED);
     }
 
-    if (!(pItem->GetGraphic()))
-        pItem->SetGraphicPos(GPOS_NONE);
-    else if (GPOS_NONE == pItem->GetGraphicPos())
-        pItem->SetGraphicPos(GPOS_TILED);
+    if (!(m_pItem->GetGraphic()))
+        m_pItem->SetGraphicPos(GPOS_NONE);
+    else if (GPOS_NONE == m_pItem->GetGraphicPos())
+        m_pItem->SetGraphicPos(GPOS_TILED);
 }
 
 SwXMLBrushItemImportContext::SwXMLBrushItemImportContext(
@@ -119,10 +119,10 @@ SwXMLBrushItemImportContext::SwXMLBrushItemImportContext(
         const SvXMLUnitConverter& rUnitConv,
         const SvxBrushItem& rItem ) :
     SvXMLImportContext( rImport ),
-    pItem( new SvxBrushItem( rItem ) )
+    m_pItem( new SvxBrushItem( rItem ) )
 {
     // delete any graphic that is existing
-    pItem->SetGraphicPos( GPOS_NONE );
+    m_pItem->SetGraphicPos( GPOS_NONE );
 
     ProcessAttrs( xAttrList, rUnitConv );
 }
@@ -133,7 +133,7 @@ SwXMLBrushItemImportContext::SwXMLBrushItemImportContext(
         const SvXMLUnitConverter& rUnitConv,
         sal_uInt16 nWhich ) :
     SvXMLImportContext( rImport ),
-    pItem( new SvxBrushItem( nWhich ) )
+    m_pItem( new SvxBrushItem( nWhich ) )
 {
     ProcessAttrs( xAttrList, rUnitConv );
 }
@@ -143,7 +143,7 @@ SwXMLBrushItemImportContext::~SwXMLBrushItemImportContext()
 }
 
 SwXMLBrushItemExport::SwXMLBrushItemExport( SwXMLExport& rExp ) :
-    rExport( rExp )
+    m_rExport( rExp )
 {
 }
 
