@@ -39,6 +39,7 @@ public:
     rtl::Reference<MetaAction> MetaActionHandler(ImplMetaReadData* pData);
     rtl::Reference<MetaAction> LineColorHandler();
     rtl::Reference<MetaAction> FillColorHandler();
+    rtl::Reference<MetaAction> RectHandler();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
