@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8beb38ef_471b8fbd",
+        "filename": "basic/qa/basic_coverage/test_tdf134692.bas",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-05T16:51:11Z",
+      "side": 1,
+      "message": "What is \u0027retStr\u0027?",
+      "range": {
+        "startLine": 24,
+        "startChar": 95,
+        "endLine": 24,
+        "endChar": 101
+      },
+      "revId": "c6cc94ea781699b899ad92ca6ceab2e8f59d1606",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
