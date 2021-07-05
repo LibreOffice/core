@@ -417,7 +417,7 @@ protected:
     SAL_DLLPRIVATE bool     ImplAllowMalformedInput() const;
 
 public:
-    static OUString         FormatDate(const Date& rNewDate, ExtDateFieldFormat eFormat, const LocaleDataWrapper& rLocaleData, CalendarWrapper& rCalendarWrapper, const Formatter::StaticFormatter* pStaticFormatter = nullptr);
+    static OUString         FormatDate(const Date& rNewDate, ExtDateFieldFormat eFormat, const LocaleDataWrapper& rLocaleData, const Formatter::StaticFormatter& rStaticFormatter);
     static bool             TextToDate(const OUString& rStr, Date& rTime, ExtDateFieldFormat eFormat, const LocaleDataWrapper& rLocaleDataWrapper, const CalendarWrapper& rCalendarWrapper);
     static int              GetDateArea(ExtDateFieldFormat eFormat, const OUString& rText, int nCursor, const LocaleDataWrapper& rLocaleDataWrapper);
 
