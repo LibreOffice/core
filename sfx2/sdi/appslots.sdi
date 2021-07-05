@@ -321,6 +321,10 @@ shell SfxApplication
     [
         ExecMethod = OfaExec_Impl ;
     ]
+    SID_MORE_DICTIONARIES
+    [
+        ExecMethod = OfaExec_Impl ;
+    ]
 }
 
 shell SfxModule
