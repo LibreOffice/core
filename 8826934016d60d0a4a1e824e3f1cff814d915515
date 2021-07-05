@@ -16,6 +16,24 @@
       "revId": "8826934016d60d0a4a1e824e3f1cff814d915515",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b30826f0_8f922c91",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 4115,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-07-05T07:11:41Z",
+      "side": 1,
+      "message": "Yes. :-)",
+      "parentUuid": "fa6bb86a_44e22420",
+      "revId": "8826934016d60d0a4a1e824e3f1cff814d915515",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
