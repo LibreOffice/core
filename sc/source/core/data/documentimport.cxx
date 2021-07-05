@@ -53,13 +53,16 @@ struct ScDocumentImportImpl
     sc::StartListeningContext maListenCxt;
     std::vector<sc::TableColumnBlockPositionSet> maBlockPosSet;
     SvtScriptType mnDefaultScriptNumeric;
+    bool mbFuzzing;
     std::vector<TabAttr> maTabAttrs;
     std::unordered_map<sal_uInt32, bool> maIsLatinScriptMap;
 
     explicit ScDocumentImportImpl(ScDocument& rDoc) :
         mrDoc(rDoc),
         maListenCxt(rDoc),
-        mnDefaultScriptNumeric(SvtScriptType::UNKNOWN) {}
+        mnDefaultScriptNumeric(SvtScriptType::UNKNOWN),
+        mbFuzzing(utl::ConfigManager::IsFuzzing())
+    {}
 
     bool isValid( size_t nTab, size_t nCol )
     {
@@ -706,6 +709,9 @@ public:
         mpImpl->miPos = mpImpl->maAttrs.set(mpImpl->miPos, node.position, aDefaults.begin(), aDefaults.end());
 
         if (node.type != sc::element_type_formula)
+            return;
+
+        if (mrDocImpl.mbFuzzing) // skip listening when fuzzing
             return;
 
         // Have all formula cells start listening to the document.
