@@ -34,6 +34,8 @@ class SwHistory;
 class SwTextNode;
 class SwTextFormatColl;
 class SwFrameFormat;
+class SwTableBox;
+class SwTableBoxFormat;
 class SwTableLine;
 class SwTableLineFormat;
 class SwTableBox;
@@ -178,6 +180,13 @@ public:
     const SwTableLineFormat& m_rNewFormat;
     const SwTableLine& m_rTabLine;
     TableLineFormatChanged(const SwTableLineFormat& rNewFormat, const SwTableLine& rTabLine) : m_rNewFormat(rNewFormat), m_rTabLine(rTabLine) {};
+};
+class TableBoxFormatChanged final : public SfxHint
+{
+public:
+    const SwTableBoxFormat& m_rNewFormat;
+    const SwTableBox& m_rTableBox;
+    TableBoxFormatChanged(const SwTableBoxFormat& rNewFormat, const SwTableBox& rTableBox) : m_rNewFormat(rNewFormat), m_rTableBox(rTableBox) {};
 };
 }
 
