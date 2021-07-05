@@ -494,7 +494,7 @@ inline bool ValidAddress( const ScAddress& rAddress, SCCOL nMaxCol = MAXCOL, SCR
 }
 
 //  ScRange
-class SAL_WARN_UNUSED ScRange final
+class SAL_WARN_UNUSED SC_DLLPUBLIC ScRange final
 {
 public:
     ScAddress aStart;
@@ -551,18 +551,18 @@ public:
     inline bool In( const ScAddress& ) const;   ///< is Address& in Range?
     inline bool In( const ScRange& ) const;     ///< is Range& in Range?
 
-    SC_DLLPUBLIC ScRefFlags Parse( const OUString&, const ScDocument&,
+    ScRefFlags Parse( const OUString&, const ScDocument&,
                                    const ScAddress::Details& rDetails = ScAddress::detailsOOOa1,
                                    ScAddress::ExternalInfo* pExtInfo = nullptr,
                                    const css::uno::Sequence<css::sheet::ExternalLinkInfo>* pExternalLinks = nullptr,
                                    const OUString* pErrRef = nullptr );
 
-    SC_DLLPUBLIC ScRefFlags ParseAny( const OUString&, const ScDocument&,
+    ScRefFlags ParseAny( const OUString&, const ScDocument&,
                                       const ScAddress::Details& rDetails = ScAddress::detailsOOOa1 );
-    SC_DLLPUBLIC ScRefFlags ParseCols( const ScDocument& rDoc,
+    ScRefFlags ParseCols( const ScDocument& rDoc,
                                        const OUString&,
                                        const ScAddress::Details& rDetails = ScAddress::detailsOOOa1 );
-    SC_DLLPUBLIC void ParseRows( const ScDocument& rDoc,
+    void ParseRows( const ScDocument& rDoc,
                                        const OUString&,
                                        const ScAddress::Details& rDetails = ScAddress::detailsOOOa1 );
 
@@ -614,14 +614,14 @@ public:
         @returns
             String contains formatted cell range in address convention
      */
-    SC_DLLPUBLIC OUString Format( const ScDocument& rDocument,
+    OUString Format( const ScDocument& rDocument,
                                   ScRefFlags nFlags = ScRefFlags::ZERO,
                                   const ScAddress::Details& rDetails = ScAddress::detailsOOOa1,
                                   bool bFullAddressNotation = false ) const;
 
     inline void GetVars( SCCOL& nCol1, SCROW& nRow1, SCTAB& nTab1,
                          SCCOL& nCol2, SCROW& nRow2, SCTAB& nTab2 ) const;
-    SC_DLLPUBLIC void PutInOrder();
+    void PutInOrder();
 
     /**
         @param  rErrorRange
@@ -630,18 +630,18 @@ public:
         @param  pDocument
                 The document for the maximum defined sheet number.
      */
-    [[nodiscard]] SC_DLLPUBLIC bool Move( SCCOL aDeltaX, SCROW aDeltaY, SCTAB aDeltaZ,
+    [[nodiscard]] bool Move( SCCOL aDeltaX, SCROW aDeltaY, SCTAB aDeltaZ,
             ScRange& rErrorRange, const ScDocument* pDocument = nullptr );
 
     /** Same as Move() but with sticky end col/row anchors. */
-    [[nodiscard]] SC_DLLPUBLIC bool MoveSticky( const ScDocument& rDoc, SCCOL aDeltaX, SCROW aDeltaY, SCTAB aDeltaZ,
+    [[nodiscard]] bool MoveSticky( const ScDocument& rDoc, SCCOL aDeltaX, SCROW aDeltaY, SCTAB aDeltaZ,
             ScRange& rErrorRange );
 
-    SC_DLLPUBLIC void IncColIfNotLessThan(const ScDocument& rDoc, SCCOL nStartCol, SCCOL nOffset);
-    SC_DLLPUBLIC void IncRowIfNotLessThan(const ScDocument& rDoc, SCROW nStartRow, SCROW nOffset);
+    void IncColIfNotLessThan(const ScDocument& rDoc, SCCOL nStartCol, SCCOL nOffset);
+    void IncRowIfNotLessThan(const ScDocument& rDoc, SCROW nStartRow, SCROW nOffset);
 
-    SC_DLLPUBLIC void ExtendTo( const ScRange& rRange );
-    SC_DLLPUBLIC bool Intersects( const ScRange& rRange ) const;    // do two ranges intersect?
+    void ExtendTo( const ScRange& rRange );
+    bool Intersects( const ScRange& rRange ) const;    // do two ranges intersect?
 
     ScRange Intersection( const ScRange& rOther ) const;
 
