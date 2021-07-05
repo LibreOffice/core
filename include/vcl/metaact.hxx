@@ -127,6 +127,8 @@ public:
 
     const Point&        GetPoint() const { return maPt; }
     const Color&        GetColor() const { return maColor; }
+    void                SetPoint(Point& rPt) { maPt = rPt; }
+    void                SetColor(Color& rColor) { maColor = rColor; }
 };
 
 class SAL_DLLPUBLIC_RTTI MetaPointAction final : public MetaAction
