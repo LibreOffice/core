@@ -118,6 +118,7 @@ public:
     sal_Int32    getTokenIndex() const { return mnTokenIndex; }
     /** Tries to resolve the defined name to an absolute cell range. */
     bool                getAbsoluteRange( ScRange& orRange ) const;
+    bool isValid(const css::uno::Sequence<css::sheet::ExternalLinkInfo>& rExternalLinks) const;
 
 private:
     typedef ::std::unique_ptr< StreamDataSequence >   StreamDataSeqPtr;

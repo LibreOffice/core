@@ -238,6 +238,23 @@ void DefinedName::createNameObject( sal_Int32 nIndex )
     mnTokenIndex = nIndex;
 }
 
+bool DefinedName::isValid(
+    const css::uno::Sequence<css::sheet::ExternalLinkInfo>& rExternalLinks) const
+{
+    ScRange aRange;
+    OUString aExternDocName;
+    OUString aStartTabName;
+    OUString aEndTabName;
+    ScRefFlags nFlags = ScRefFlags::VALID | ScRefFlags::TAB_VALID;
+    aRange.Parse_XL_Header(maModel.maFormula.getStr(), getScDocument(), aExternDocName,
+                           aStartTabName, aEndTabName, nFlags, /*bOnlyAcceptSingle=*/false,
+                           &rExternalLinks);
+    // aExternDocName is something like 'file:///path/to/my.xlsx' in the valid case, and it's an int
+    // when it's invalid.
+    bool bInvalidExternalRef = aExternDocName.toInt32() > 0;
+    return !bInvalidExternalRef;
+}
+
 std::unique_ptr<ScTokenArray> DefinedName::getScTokens(
         const css::uno::Sequence<css::sheet::ExternalLinkInfo>& rExternalLinks )
 {
@@ -356,6 +373,11 @@ void DefinedNamesBuffer::finalizeImport()
     int index = 0;
     for( DefinedNameRef& xDefName : maDefNames )
     {
+        if (!xDefName->isValid(getExternalLinks().getLinkInfos()))
+        {
+            continue;
+        }
+
         xDefName->createNameObject( ++index );
         // map by sheet index and original model name
         maModelNameMap[ SheetNameKey( xDefName->getLocalCalcSheet(), xDefName->getUpcaseModelName() ) ] = xDefName;
