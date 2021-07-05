@@ -34,6 +34,24 @@
       "revId": "d9648d1cf6c4ec7407ff30cf814be98d089345d1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9ddba274_14bec5b0",
+        "filename": "vcl/headless/svpframe.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-07-05T07:40:49Z",
+      "side": 1,
+      "message": "WIP, as I know it crashes here: https://gerrit.libreoffice.org/c/core/+/118400",
+      "parentUuid": "7bc3f6b9_c98c30a4",
+      "revId": "d9648d1cf6c4ec7407ff30cf814be98d089345d1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
