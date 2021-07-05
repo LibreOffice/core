@@ -36,6 +36,7 @@
 #include <svdata.hxx>
 
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
+#include <com/sun/star/i18n/CalendarFieldIndex.hdl>
 
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/calendarwrapper.hxx>
@@ -1201,20 +1202,83 @@ static bool ImplCutMonthName( OUString& rStr, std::u16string_view _rLookupMonthN
     return index >= 0;
 }
 
-static sal_uInt16 ImplCutMonthFromString( OUString& rStr, const CalendarWrapper& rCalendarWrapper )
+static sal_uInt16 ImplGetMonthFromCalendarItem( OUString& rStr, const uno::Sequence< i18n::CalendarItem2 >& rMonths )
 {
-    // search for a month' name
-    for ( sal_uInt16 i=1; i <= 12; i++ )
+    const sal_uInt16 nMonths = rMonths.getLength();
+    for (sal_uInt16 i=0; i < nMonths; ++i)
     {
-        OUString aMonthName = rCalendarWrapper.getMonths()[i-1].FullName;
         // long month name?
-        if ( ImplCutMonthName( rStr, aMonthName ) )
-            return i;
+        if ( ImplCutMonthName( rStr, rMonths[i].FullName ) )
+            return i+1;
 
         // short month name?
-        OUString aAbbrevMonthName = rCalendarWrapper.getMonths()[i-1].AbbrevName;
-        if ( ImplCutMonthName( rStr, aAbbrevMonthName ) )
-            return i;
+        if ( ImplCutMonthName( rStr, rMonths[i].AbbrevName ) )
+            return i+1;
+    }
+    return 0;
+}
+
+static sal_uInt16 ImplCutMonthFromString( OUString& rStr, OUString& rCalendarName,
+        const LocaleDataWrapper& rLocaleData, const CalendarWrapper& rCalendarWrapper )
+{
+    const OUString aDefaultCalendarName( rCalendarWrapper.getUniqueID());
+    rCalendarName = aDefaultCalendarName;
+
+    // Search for a month name of the loaded default calendar.
+    const uno::Sequence< i18n::CalendarItem2 > aMonths = rCalendarWrapper.getMonths();
+    sal_uInt16 nMonth = ImplGetMonthFromCalendarItem( rStr, aMonths);
+    if (nMonth > 0)
+        return nMonth;
+
+    // And also possessive genitive and partitive month names.
+    const uno::Sequence< i18n::CalendarItem2 > aGenitiveMonths = rCalendarWrapper.getGenitiveMonths();
+    if (aGenitiveMonths != aMonths)
+    {
+        nMonth = ImplGetMonthFromCalendarItem( rStr, aGenitiveMonths);
+        if (nMonth > 0)
+            return nMonth;
+    }
+    const uno::Sequence< i18n::CalendarItem2 > aPartitiveMonths = rCalendarWrapper.getPartitiveMonths();
+    if (aPartitiveMonths != aMonths)
+    {
+        nMonth = ImplGetMonthFromCalendarItem( rStr, aPartitiveMonths);
+        if (nMonth > 0)
+            return nMonth;
+    }
+
+    // Check if there are more calendars and try them if so, as the long date
+    // format is obtained from the number formatter this is possible (e.g.
+    // ar_DZ "[~hijri] ...")
+    uno::Sequence< i18n::Calendar2 > aCalendars =  rLocaleData.getAllCalendars();
+    if (aCalendars.getLength() > 1)
+    {
+        for (const auto& rCalendar : aCalendars)
+        {
+            if (rCalendar.Name != aDefaultCalendarName)
+            {
+                rCalendarName = rCalendar.Name;
+
+                nMonth = ImplGetMonthFromCalendarItem( rStr, rCalendar.Months);
+                if (nMonth > 0)
+                    return nMonth;
+
+                if (rCalendar.Months != rCalendar.GenitiveMonths)
+                {
+                    nMonth = ImplGetMonthFromCalendarItem( rStr, rCalendar.GenitiveMonths);
+                    if (nMonth > 0)
+                        return nMonth;
+                }
+
+                if (rCalendar.Months != rCalendar.PartitiveMonths)
+                {
+                    nMonth = ImplGetMonthFromCalendarItem( rStr, rCalendar.PartitiveMonths);
+                    if (nMonth > 0)
+                        return nMonth;
+                }
+
+                rCalendarName = aDefaultCalendarName;
+            }
+        }
     }
 
     return ImplCutNumberFromString( rStr );
@@ -1251,25 +1315,49 @@ bool DateFormatter::TextToDate(const OUString& rStr, Date& rDate, ExtDateFieldFo
 
     if ( eDateOrder == ExtDateFieldFormat::SystemLong )
     {
+        OUString aCalendarName;
         DateOrder eFormat = rLocaleDataWrapper.getLongDateOrder();
         switch( eFormat )
         {
             case DateOrder::MDY:
-                nMonth = ImplCutMonthFromString( aStr, rCalendarWrapper );
+                nMonth = ImplCutMonthFromString( aStr, aCalendarName, rLocaleDataWrapper, rCalendarWrapper );
                 nDay = ImplCutNumberFromString( aStr );
                 nYear  = ImplCutNumberFromString( aStr );
                 break;
             case DateOrder::DMY:
                 nDay = ImplCutNumberFromString( aStr );
-                nMonth = ImplCutMonthFromString( aStr, rCalendarWrapper );
+                nMonth = ImplCutMonthFromString( aStr, aCalendarName, rLocaleDataWrapper, rCalendarWrapper );
                 nYear  = ImplCutNumberFromString( aStr );
                 break;
             case DateOrder::YMD:
             default:
                 nYear = ImplCutNumberFromString( aStr );
-                nMonth = ImplCutMonthFromString( aStr, rCalendarWrapper );
+                nMonth = ImplCutMonthFromString( aStr, aCalendarName, rLocaleDataWrapper, rCalendarWrapper );
                 nDay  = ImplCutNumberFromString( aStr );
                 break;
+        }
+        if (aCalendarName != "gregorian")
+        {
+            // Calendar widget is Gregorian, convert date.
+            // Need full date.
+            bError = !nDay || !nMonth || !nYear;
+            if (!bError)
+            {
+                CalendarWrapper aCW( rLocaleDataWrapper.getComponentContext());
+                aCW.loadCalendar( aCalendarName, rLocaleDataWrapper.getLoadedLanguageTag().getLocale());
+                aCW.setDateTime(0.5);   // get rid of current time, set some day noon
+                aCW.setValue( i18n::CalendarFieldIndex::DAY_OF_MONTH, nDay);
+                aCW.setValue( i18n::CalendarFieldIndex::MONTH, nMonth - 1);
+                aCW.setValue( i18n::CalendarFieldIndex::YEAR, nYear);
+                bError = !aCW.isValid();
+                if (!bError)
+                {
+                    Date aDate = aCW.getEpochStart() + aCW.getDateTime();
+                    nYear = aDate.GetYear();
+                    nMonth = aDate.GetMonth();
+                    nDay = aDate.GetDay();
+                }
+            }
         }
     }
     else
