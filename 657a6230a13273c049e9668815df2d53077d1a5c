@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ae75dcd6_a9f0eeb3",
+        "filename": "sc/uiconfig/scalc/ui/findreplaceentry.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-07-05T07:30:21Z",
+      "side": 1,
+      "message": "We use 12 by default.",
+      "range": {
+        "startLine": 10,
+        "startChar": 36,
+        "endLine": 10,
+        "endChar": 37
+      },
+      "revId": "657a6230a13273c049e9668815df2d53077d1a5c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
