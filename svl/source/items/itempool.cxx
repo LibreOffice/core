@@ -28,7 +28,6 @@
 #include <svl/SfxBroadcaster.hxx>
 #include <svl/hint.hxx>
 #include <svl/itemset.hxx>
-#include <svl/setitem.hxx>
 
 #include <items_helper.hxx>
 #include <poolio.hxx>
