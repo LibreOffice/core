@@ -286,24 +286,24 @@ namespace {
 class HTMLTableRow
 {
     std::vector<HTMLTableCell> m_aCells;                ///< cells of the row
-    std::unique_ptr<SvxBrushItem> xBGBrush; // background of cell from STYLE
+    std::unique_ptr<SvxBrushItem> m_xBGBrush; // background of cell from STYLE
 
-    SvxAdjust eAdjust;
-    sal_uInt16 nHeight;                     // options of <TR>/<TD>
-    sal_uInt16 nEmptyRows;                  // number of empty rows are following
-    sal_Int16 eVertOri;
-    bool bIsEndOfGroup : 1;
-    bool bBottomBorder : 1;            // Is there a line after the row?
+    SvxAdjust m_eAdjust;
+    sal_uInt16 m_nHeight;                     // options of <TR>/<TD>
+    sal_uInt16 m_nEmptyRows;                  // number of empty rows are following
+    sal_Int16 m_eVertOri;
+    bool m_bIsEndOfGroup : 1;
+    bool m_bBottomBorder : 1;            // Is there a line after the row?
 
 public:
 
     explicit HTMLTableRow( sal_uInt16 nCells );    // cells of the row are empty
 
-    void SetBottomBorder(bool bIn) { bBottomBorder = bIn; }
-    bool GetBottomBorder() const { return bBottomBorder; }
+    void SetBottomBorder(bool bIn) { m_bBottomBorder = bIn; }
+    bool GetBottomBorder() const { return m_bBottomBorder; }
 
     inline void SetHeight( sal_uInt16 nHeight );
-    sal_uInt16 GetHeight() const { return nHeight; }
+    sal_uInt16 GetHeight() const { return m_nHeight; }
 
     const HTMLTableCell& GetCell(sal_uInt16 nCell) const;
     HTMLTableCell& GetCell(sal_uInt16 nCell)
@@ -311,20 +311,20 @@ public:
         return const_cast<HTMLTableCell&>(const_cast<const HTMLTableRow&>(*this).GetCell(nCell));
     }
 
-    void SetAdjust( SvxAdjust eAdj ) { eAdjust = eAdj; }
-    SvxAdjust GetAdjust() const { return eAdjust; }
+    void SetAdjust( SvxAdjust eAdj ) { m_eAdjust = eAdj; }
+    SvxAdjust GetAdjust() const { return m_eAdjust; }
 
-    void SetVertOri( sal_Int16 eV) { eVertOri = eV; }
-    sal_Int16 GetVertOri() const { return eVertOri; }
+    void SetVertOri( sal_Int16 eV) { m_eVertOri = eV; }
+    sal_Int16 GetVertOri() const { return m_eVertOri; }
 
-    void SetBGBrush(std::unique_ptr<SvxBrushItem>& rBrush ) { xBGBrush = std::move(rBrush); }
-    const std::unique_ptr<SvxBrushItem>& GetBGBrush() const { return xBGBrush; }
+    void SetBGBrush(std::unique_ptr<SvxBrushItem>& rBrush ) { m_xBGBrush = std::move(rBrush); }
+    const std::unique_ptr<SvxBrushItem>& GetBGBrush() const { return m_xBGBrush; }
 
-    void SetEndOfGroup() { bIsEndOfGroup = true; }
-    bool IsEndOfGroup() const { return bIsEndOfGroup; }
+    void SetEndOfGroup() { m_bIsEndOfGroup = true; }
+    bool IsEndOfGroup() const { return m_bIsEndOfGroup; }
 
-    void IncEmptyRows() { nEmptyRows++; }
-    sal_uInt16 GetEmptyRows() const { return nEmptyRows; }
+    void IncEmptyRows() { m_nEmptyRows++; }
+    sal_uInt16 GetEmptyRows() const { return m_nEmptyRows; }
 
     // Expand row by adding empty cells
     void Expand( sal_uInt16 nCells, bool bOneCell=false );
@@ -776,12 +776,12 @@ std::unique_ptr<SwHTMLTableLayoutCell> HTMLTableCell::CreateLayoutInfo()
 
 HTMLTableRow::HTMLTableRow(sal_uInt16 const nCells)
     : m_aCells(nCells)
-    , eAdjust(SvxAdjust::End)
-    , nHeight(0)
-    , nEmptyRows(0)
-    , eVertOri(text::VertOrientation::TOP)
-    , bIsEndOfGroup(false)
-    , bBottomBorder(false)
+    , m_eAdjust(SvxAdjust::End)
+    , m_nHeight(0)
+    , m_nEmptyRows(0)
+    , m_eVertOri(text::VertOrientation::TOP)
+    , m_bIsEndOfGroup(false)
+    , m_bBottomBorder(false)
 {
     assert(nCells == m_aCells.size() &&
             "wrong Cell count in new HTML table row");
@@ -789,8 +789,8 @@ HTMLTableRow::HTMLTableRow(sal_uInt16 const nCells)
 
 inline void HTMLTableRow::SetHeight( sal_uInt16 nHght )
 {
-    if( nHght > nHeight  )
-        nHeight = nHght;
+    if( nHght > m_nHeight  )
+        m_nHeight = nHght;
 }
 
 const HTMLTableCell& HTMLTableRow::GetCell(sal_uInt16 nCell) const
@@ -4463,25 +4463,25 @@ void SwHTMLParser::BuildTableColGroup( HTMLTable *pCurTable,
 
 class CaptionSaveStruct : public SectionSaveStruct
 {
-    SwPosition aSavePos;
-    SwHTMLNumRuleInfo aNumRuleInfo; // valid numbering
+    SwPosition m_aSavePos;
+    SwHTMLNumRuleInfo m_aNumRuleInfo; // valid numbering
 
 public:
 
-    std::shared_ptr<HTMLAttrTable> xAttrTab;        // attributes
+    std::shared_ptr<HTMLAttrTable> m_xAttrTab;        // attributes
 
     CaptionSaveStruct( SwHTMLParser& rParser, const SwPosition& rPos ) :
-        SectionSaveStruct( rParser ), aSavePos( rPos ),
-        xAttrTab(std::make_shared<HTMLAttrTable>())
+        SectionSaveStruct( rParser ), m_aSavePos( rPos ),
+        m_xAttrTab(std::make_shared<HTMLAttrTable>())
     {
-        rParser.SaveAttrTab(xAttrTab);
+        rParser.SaveAttrTab(m_xAttrTab);
 
         // The current numbering was remembered and just needs to be closed
-        aNumRuleInfo.Set( rParser.GetNumInfo() );
+        m_aNumRuleInfo.Set( rParser.GetNumInfo() );
         rParser.GetNumInfo().Clear();
     }
 
-    const SwPosition& GetPos() const { return aSavePos; }
+    const SwPosition& GetPos() const { return m_aSavePos; }
 
     void RestoreAll( SwHTMLParser& rParser )
     {
@@ -4489,10 +4489,10 @@ public:
         Restore( rParser );
 
         // Recover the old attribute tables
-        rParser.RestoreAttrTab(xAttrTab);
+        rParser.RestoreAttrTab(m_xAttrTab);
 
         // Re-open the old numbering
-        rParser.GetNumInfo().Set( aNumRuleInfo );
+        rParser.GetNumInfo().Set( m_aNumRuleInfo );
     }
 };
 

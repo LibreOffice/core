@@ -25,9 +25,9 @@ class SwXMLExport;
 
 class SwXMLBrushItemExport
 {
-    SwXMLExport& rExport;
+    SwXMLExport& m_rExport;
 
-    SwXMLExport& GetExport() { return rExport; }
+    SwXMLExport& GetExport() { return m_rExport; }
 
 public:
     explicit SwXMLBrushItemExport(SwXMLExport& rExport);
