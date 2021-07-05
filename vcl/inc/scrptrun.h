@@ -111,7 +111,11 @@ private:
     static const char fgClassID;
 };
 
-inline ScriptRun::ScriptRun(const UChar chars[], int32_t length) { reset(chars, 0, length); }
+inline ScriptRun::ScriptRun(const UChar chars[], int32_t length)
+{
+    parenStack.reserve(128);
+    reset(chars, 0, length);
+}
 
 inline int32_t ScriptRun::getScriptStart() const { return scriptStart; }
 
@@ -125,7 +129,7 @@ inline void ScriptRun::reset()
     scriptEnd = charStart;
     scriptCode = USCRIPT_INVALID_CODE;
     parenSP = -1;
-    parenStack.resize(128);
+    parenStack.clear();
 }
 
 inline void ScriptRun::reset(int32_t start, int32_t length)
