@@ -48,6 +48,33 @@ public:
     }
 };
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf143219ContourWrapRotate)
+{
+    load(mpTestDocumentPath, "tdf143219_ContourWrap_rotate.docx");
+    const uno::Reference<drawing::XShape> xShape = getShape(1);
+    const uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY_THROW);
+    sal_Int32 nWrapDistanceLeft = -1;
+    sal_Int32 nWrapDistanceRight = -1;
+    sal_Int32 nWrapDistanceTop = -1;
+    sal_Int32 nWrapDistanceBottom = -1;
+    xShapeProps->getPropertyValue("LeftMargin") >>= nWrapDistanceLeft;
+    xShapeProps->getPropertyValue("RightMargin") >>= nWrapDistanceRight;
+    xShapeProps->getPropertyValue("TopMargin") >>= nWrapDistanceTop;
+    xShapeProps->getPropertyValue("BottomMargin") >>= nWrapDistanceBottom;
+    // Word and Writer use different concepts for contour wrap. LO needs wrap margins to
+    // approximate Word's rendering.
+    // Without the fix in place left and right margin were too large, top and bottom margin too
+    // small. The test would have failed
+    // ... with expected 182 actual 1005.
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("LeftMargin", 182, nWrapDistanceLeft, 1);
+    // ... with expected 183 actual 1005
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("RightMargin", 183, nWrapDistanceRight, 1);
+    // ... with expected 42 actual 0
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("TopMargin", 42, nWrapDistanceTop, 1);
+    // ... with expected 41 actual 0
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("BottomMargin", 41, nWrapDistanceBottom, 1);
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf108545_embeddedDocxIcon)
 {
     load(mpTestDocumentPath, "tdf108545_embeddedDocxIcon.docx");

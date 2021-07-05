@@ -221,8 +221,16 @@ bool lcl_makeSingleDistAndEffectExtentNonNegative(sal_Int64& rDist, sal_Int32& r
         return false;
     }
     // rDist + rExt >= 0
-    rDist += rExt;
-    rExt = 0;
+    if (rDist < 0)
+    {
+        rExt += rDist;
+        rDist = 0;
+    }
+    else // rExt < 0
+    {
+        rDist += rExt;
+        rExt = 0;
+    }
     return true;
 }
 
@@ -616,8 +624,30 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
             lcl_calculateRawEffectExtent(nLeftExt, nTopExt, nRightExt, nBottomExt, *pObj, true);
             // We have calculated the effectExtent from boundRect, therefore half stroke width is
             // already contained.
-            // ToDo: The other half of the strokeWidth needs to be subtracted from padding.
+            // ToDo: The other half of the stroke width needs to be subtracted from padding.
             //       Where is that?
+
+            // The import has added a difference to dist* in case of contour wrap for to give a
+            // rendering nearer to Word. In that case, we need to subtract it on export.
+            uno::Any aAny;
+            pObj->GetGrabBagItem(aAny);
+            comphelper::SequenceAsHashMap aGrabBag(aAny);
+            auto it = aGrabBag.find("AnchorDistDiff");
+            if (it != aGrabBag.end())
+            {
+                comphelper::SequenceAsHashMap aAnchorDistDiff(it->second);
+                for (const std::pair<const OUString, uno::Any>& rDiff : aAnchorDistDiff)
+                {
+                    if (rDiff.first == "distTDiff" && rDiff.second.has<sal_Int32>())
+                        nDistT -= round(rDiff.second.get<sal_Int32>());
+                    else if (rDiff.first == "distBDiff" && rDiff.second.has<sal_Int32>())
+                        nDistB -= round(rDiff.second.get<sal_Int32>());
+                    else if (rDiff.first == "distLDiff" && rDiff.second.has<sal_Int32>())
+                        nDistL -= rDiff.second.get<sal_Int32>();
+                    else if (rDiff.first == "distRDiff" && rDiff.second.has<sal_Int32>())
+                        nDistR -= rDiff.second.get<sal_Int32>();
+                }
+            }
             // ToDo: bool bCompansated = ... to be later able to switch from wrapSquare to wrapTight,
             //       if wrapSquare would require negative effectExtent.
             lcl_makeDistAndExtentNonNegative(nDistT, nDistB, nDistL, nDistR, nLeftExt, nTopExt,
