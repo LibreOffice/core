@@ -3543,27 +3543,69 @@ void ScGridWindow::DropScroll( const Point& rMousePos )
     ScDocument& rDoc = mrViewData.GetDocument();
     SCCOL nDx = 0;
     SCROW nDy = 0;
-    Size aSize = GetOutputSizePixel();
+    Size aSize;
 
-    if (aSize.Width() > SCROLL_SENSITIVE * 3)
+    if (comphelper::LibreOfficeKit::isActive())
     {
-        if ( rMousePos.X() < SCROLL_SENSITIVE && mrViewData.GetPosX(WhichH(eWhich)) > 0 )
+        tools::Rectangle aView = mrViewData.getLOKVisibleArea();
+
+        aView.SetLeft(aView.Left() * mrViewData.GetPPTX());
+        aView.SetRight(aView.Right() * mrViewData.GetPPTX());
+        aView.SetTop(aView.Top() * mrViewData.GetPPTY());
+        aView.SetBottom(aView.Bottom() * mrViewData.GetPPTY());
+
+        if (rMousePos.X() <= aView.Left() + 3)
             nDx = -1;
-        if ( rMousePos.X() >= aSize.Width() - SCROLL_SENSITIVE
-                && mrViewData.GetPosX(WhichH(eWhich)) < rDoc.MaxCol() )
+
+        if (rMousePos.X() >= aView.Right() - 3)
             nDx = 1;
-    }
-    if (aSize.Height() > SCROLL_SENSITIVE * 3)
-    {
-        if ( rMousePos.Y() < SCROLL_SENSITIVE && mrViewData.GetPosY(WhichV(eWhich)) > 0 )
+
+        if (rMousePos.Y() <= aView.Top() + 3)
             nDy = -1;
-        if ( rMousePos.Y() >= aSize.Height() - SCROLL_SENSITIVE
-                && mrViewData.GetPosY(WhichV(eWhich)) < rDoc.MaxRow() )
+
+        if (rMousePos.Y() >= aView.Bottom() - 3)
             nDy = 1;
+    }
+    else
+    {
+        aSize = GetOutputSizePixel();
+
+        if (aSize.Width() > SCROLL_SENSITIVE * 3)
+        {
+            if ( rMousePos.X() < SCROLL_SENSITIVE && mrViewData.GetPosX(WhichH(eWhich)) > 0 )
+                nDx = -1;
+            if ( rMousePos.X() >= aSize.Width() - SCROLL_SENSITIVE
+                 && mrViewData.GetPosX(WhichH(eWhich)) < rDoc.MaxCol() )
+                nDx = 1;
+        }
+        if (aSize.Height() > SCROLL_SENSITIVE * 3)
+        {
+            if ( rMousePos.Y() < SCROLL_SENSITIVE && mrViewData.GetPosY(WhichV(eWhich)) > 0 )
+                nDy = -1;
+            if ( rMousePos.Y() >= aSize.Height() - SCROLL_SENSITIVE
+                 && mrViewData.GetPosY(WhichV(eWhich)) < rDoc.MaxRow() )
+                nDy = 1;
+        }
     }
 
     if ( nDx != 0 || nDy != 0 )
     {
+        if (comphelper::LibreOfficeKit::isActive())
+        {
+            VclPtr<vcl::Window> pWin = GetParentWithLOKNotifier();
+            if (pWin)
+            {
+                OStringBuffer aPayload;
+                aPayload.append("{\"dx\":").
+                    append(nDx).
+                    append(",\"dy\":").
+                    append(nDy).
+                    append('}');
+
+                 pWin->GetLOKNotifier()->libreOfficeKitViewCallback(LOK_CALLBACK_VIEW_SCROLL, aPayload.getStr());
+            }
+        }
+
         if ( nDx != 0 )
             mrViewData.GetView()->ScrollX( nDx, WhichH(eWhich) );
         if ( nDy != 0 )
