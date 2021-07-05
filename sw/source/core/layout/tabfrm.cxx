@@ -5456,7 +5456,30 @@ void SwCellFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorder
 
 void SwCellFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
 {
-    if(auto pMoveTableBoxHint = dynamic_cast<const sw::MoveTableBoxHint*>(&rHint))
+    if(auto pNewFormatHint = dynamic_cast<const sw::TableBoxFormatChanged*>(&rHint))
+    {
+        if(GetTabBox() != &pNewFormatHint->m_rTableBox)
+            return;
+        RegisterToFormat(const_cast<SwTableBoxFormat&>(pNewFormatHint->m_rNewFormat));
+        InvalidateSize();
+        InvalidatePrt_();
+        SetCompletePaint();
+        SetDerivedVert(false);
+        CheckDirChange();
+
+        // #i47489#
+        // make sure that the row will be formatted, in order
+        // to have the correct Get(Top|Bottom)MarginForLowers values
+        // set at the row.
+        const SwTabFrame* pTab = FindTabFrame();
+        if(pTab && pTab->IsCollapsingBorders())
+        {
+            SwFrame* pRow = GetUpper();
+            pRow->InvalidateSize_();
+            pRow->InvalidatePrt_();
+        }
+    }
+    else if(auto pMoveTableBoxHint = dynamic_cast<const sw::MoveTableBoxHint*>(&rHint))
     {
         if(GetTabBox() != &pMoveTableBoxHint->m_rTableBox)
             return;

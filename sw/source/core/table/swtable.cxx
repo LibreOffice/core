@@ -1689,45 +1689,17 @@ SwFrameFormat* SwTableBox::ClaimFrameFormat()
     return pRet;
 }
 
-void SwTableBox::ChgFrameFormat( SwTableBoxFormat* pNewFormat, bool bNeedToReregister )
+void SwTableBox::ChgFrameFormat(SwTableBoxFormat* pNewFormat, bool bNeedToReregister)
 {
-    SwFrameFormat *pOld = GetFrameFormat();
-    SwIterator<SwCellFrame,SwFormat> aIter( *pOld );
-
+    SwFrameFormat* pOld = GetFrameFormat();
     // tdf#84635 We set bNeedToReregister=false to avoid a quadratic slowdown on loading large tables,
     // and since we are creating the table for the first time, no re-registration is necessary.
-
     // First, re-register the Frames.
-    if (bNeedToReregister)
-        for( SwCellFrame* pCell = aIter.First(); pCell; pCell = aIter.Next() )
-        {
-            if( pCell->GetTabBox() == this )
-            {
-                pCell->RegisterToFormat( *pNewFormat );
-                pCell->InvalidateSize();
-                pCell->InvalidatePrt_();
-                pCell->SetCompletePaint();
-                pCell->SetDerivedVert( false );
-                pCell->CheckDirChange();
-
-                // #i47489#
-                // make sure that the row will be formatted, in order
-                // to have the correct Get(Top|Bottom)MarginForLowers values
-                // set at the row.
-                const SwTabFrame* pTab = pCell->FindTabFrame();
-                if ( pTab && pTab->IsCollapsingBorders() )
-                {
-                    SwFrame* pRow = pCell->GetUpper();
-                    pRow->InvalidateSize_();
-                    pRow->InvalidatePrt_();
-                }
-            }
-        }
-
+    if(bNeedToReregister)
+        pOld->CallSwClientNotify(sw::TableBoxFormatChanged(*pNewFormat, *this));
     // Now, re-register self.
-    pNewFormat->Add( this );
-
-    if( !pOld->HasWriterListeners() )
+    pNewFormat->Add(this);
+    if(!pOld->HasWriterListeners())
         delete pOld;
 }
 
