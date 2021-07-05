@@ -353,7 +353,7 @@
 #define STR_RECENT                              NC_("STR_RECENT", "Recently used")
 #define STR_NORECENT                            NC_("STR_NORECENT", "No recent characters")
 
-#define STR_ACTION_RESET_ALL_DEAULT_TEMPLATES   NC_("STR_ACTION_RESET_ALL_DEAULT_TEMPLATES","Reset All De~fault Templates")
+#define STR_ACTION_RESET_ALL_DEFAULT_TEMPLATES  NC_("STR_ACTION_RESET_ALL_DEFAULT_TEMPLATES","Reset All De~fault Templates")
 #define STR_ACTION_RESET_WRITER_TEMPLATE        NC_("STR_ACTION_RESET_WRITER_TEMPLATE","Reset De~fault Text Document")
 #define STR_ACTION_RESET_CALC_TEMPLATE          NC_("STR_ACTION_RESET_CALC_TEMPLATE","Reset De~fault Spreadsheet")
 #define STR_ACTION_RESET_IMPRESS_TEMPLATE       NC_("STR_ACTION_RESET_IMPRESS_TEMPLATE","Reset De~fault Presentation")
