@@ -51,6 +51,7 @@
 #include <propacc.hxx>
 #include <sal/log.hxx>
 #include <eventatt.hxx>
+#include <rtl/math.h>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
@@ -2388,13 +2389,6 @@ void SbRtl_Round(StarBASIC *, SbxArray & rPar, bool)
     double dRes = 0.0;
     if( dVal != 0.0 )
     {
-        bool bNeg = false;
-        if( dVal < 0.0 )
-        {
-            bNeg = true;
-            dVal = -dVal;
-        }
-
         sal_Int16 numdecimalplaces = 0;
         if( nParCount == 3 )
         {
@@ -2406,20 +2400,7 @@ void SbRtl_Round(StarBASIC *, SbxArray & rPar, bool)
             }
         }
 
-        if( numdecimalplaces == 0 )
-        {
-            dRes = floor( dVal + 0.5 );
-        }
-        else
-        {
-            double dFactor = pow( 10.0, numdecimalplaces );
-            dVal *= dFactor;
-            dRes = floor( dVal + 0.5 );
-            dRes /= dFactor;
-        }
-
-        if( bNeg )
-            dRes = -dRes;
+        dRes = rtl_math_round(dVal, numdecimalplaces, rtl_math_RoundingMode_HalfEven);
     }
     rPar.Get(0)->PutDouble(dRes);
 }
