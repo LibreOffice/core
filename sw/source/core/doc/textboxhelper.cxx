@@ -584,7 +584,7 @@ void SwTextBoxHelper::getProperty(SwFrameFormat const* pShape, sal_uInt16 nWID, 
     }
 }
 
-css::uno::Any SwTextBoxHelper::getProperty(SwFrameFormat const* pShape, OUString sPropName)
+css::uno::Any SwTextBoxHelper::getProperty(SwFrameFormat const* pShape, const OUString& rPropName)
 {
     if (!pShape)
         return uno::Any();
@@ -596,7 +596,7 @@ css::uno::Any SwTextBoxHelper::getProperty(SwFrameFormat const* pShape, OUString
     uno::Reference<beans::XPropertySet> const xPropertySet(
         SwXTextFrame::CreateXTextFrame(*pFormat->GetDoc(), pFormat), uno::UNO_QUERY);
 
-    return xPropertySet->getPropertyValue(sPropName);
+    return xPropertySet->getPropertyValue(rPropName);
 }
 
 void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, sal_uInt16 nWID, sal_uInt8 nMemberID,
