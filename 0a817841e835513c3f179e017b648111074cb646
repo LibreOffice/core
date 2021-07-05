@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a5999c87_447e432f",
+        "filename": "sfx2/source/inc/StyleList.hxx",
+        "patchSetId": 23
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-05T19:31:00Z",
+      "side": 1,
+      "message": "Note the red warning in the end. This is an indicator of a trailing space - lines must not have spaces after meaningful characters",
+      "revId": "0a817841e835513c3f179e017b648111074cb646",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bb3846f0_b13b3a21",
+        "filename": "sfx2/source/inc/StyleList.hxx",
+        "patchSetId": 23
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-05T19:31:00Z",
+      "side": 1,
+      "message": "Why do you need \u0027protected\u0027 part? Are you expecting other classes to inherit from yours? Protected is only useful for classes that will be a base for other classes, otherwise just use public and private.",
+      "revId": "0a817841e835513c3f179e017b648111074cb646",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
