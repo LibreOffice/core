@@ -122,8 +122,8 @@ void SvpSalFrame::GetFocus()
         return;
     if( s_pFocusFrame == this )
         return;
-    // FIXME: return if !m_bVisible
-    // That's IMHO why CppunitTest_sd_tiledrendering crashes non-headless
+    if (!m_bVisible)
+        return;
 
     if( (m_nStyle & (SalFrameStyleFlags::OWNERDRAWDECORATION | SalFrameStyleFlags::FLOAT)) == SalFrameStyleFlags::NONE )
     {
