@@ -168,7 +168,7 @@ rtl::Reference<MetaAction> SvmReader::MetaActionHandler(ImplMetaReadData* pData)
             pAction = new MetaLineAction;
             break;
         case MetaActionType::RECT:
-            pAction = new MetaRectAction;
+            return RectHandler();
             break;
         case MetaActionType::ROUNDRECT:
             pAction = new MetaRoundRectAction;
@@ -367,6 +367,20 @@ rtl::Reference<MetaAction> SvmReader::FillColorHandler()
 
     pAction->SetColor(aColor);
     pAction->SetSetting(aBool);
+
+    return pAction;
+}
+
+rtl::Reference<MetaAction> SvmReader::RectHandler()
+{
+    auto pAction = new MetaRectAction();
+
+    VersionCompatRead aCompat(mrStream);
+    TypeSerializer aSerializer(mrStream);
+
+    tools::Rectangle aRectangle;
+    aSerializer.readRectangle(aRectangle);
+    pAction->SetRect(aRectangle);
 
     return pAction;
 }
