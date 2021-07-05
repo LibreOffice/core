@@ -171,7 +171,7 @@ rtl::Reference<MetaAction> SvmReader::MetaActionHandler(ImplMetaReadData* pData)
             return RectHandler();
             break;
         case MetaActionType::ROUNDRECT:
-            pAction = new MetaRoundRectAction;
+            return RoundRectHandler();
             break;
         case MetaActionType::ELLIPSE:
             pAction = new MetaEllipseAction;
@@ -440,6 +440,26 @@ rtl::Reference<MetaAction> SvmReader::LineHandler()
         ReadLineInfo(mrStream, aLineInfo);
         pAction->SetLineInfo(aLineInfo);
     }
+
+    return pAction;
+}
+
+rtl::Reference<MetaAction> SvmReader::RoundRectHandler()
+{
+    auto pAction = new MetaRoundRectAction();
+
+    VersionCompatRead aCompat(mrStream);
+    TypeSerializer aSerializer(mrStream);
+
+    tools::Rectangle aRectangle;
+    aSerializer.readRectangle(aRectangle);
+    sal_uInt32 HorzRound;
+    sal_uInt32 VertRound;
+    mrStream.ReadUInt32(HorzRound).ReadUInt32(VertRound);
+
+    pAction->SetRect(aRectangle);
+    pAction->SetHorzRound(HorzRound);
+    pAction->SetVertRound(VertRound);
 
     return pAction;
 }

@@ -256,6 +256,9 @@ public:
     const tools::Rectangle&    GetRect() const { return maRect; }
     sal_uInt32          GetHorzRound() const { return mnHorzRound; }
     sal_uInt32          GetVertRound() const { return mnVertRound; }
+    void                SetRect(const tools::Rectangle& rRect) { maRect = rRect; }
+    void                SetHorzRound(sal_uInt32 rHorzRound) { mnHorzRound = rHorzRound; }
+    void                SetVertRound(sal_uInt32 rVertRound) { mnVertRound = rVertRound; }
 };
 
 class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetaEllipseAction final : public MetaAction
