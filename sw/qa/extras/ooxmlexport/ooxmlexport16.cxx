@@ -72,6 +72,57 @@ protected:
         return OString(filename).endsWith(".docx");
     }
 };
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf134219ContourWrap_glow_rotate)
+{
+    auto verify = [this]() {
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(1461),
+                                     getProperty<sal_Int32>(getShape(1), "LeftMargin"), 2);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(1302),
+                                     getProperty<sal_Int32>(getShape(1), "RightMargin"), 1);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(1522),
+                                     getProperty<sal_Int32>(getShape(1), "TopMargin"), 1);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(1296),
+                                     getProperty<sal_Int32>(getShape(1), "BottomMargin"), 1);
+    };
+    // Given a document with a shape with contour wrap, that has glow effect and rotation.
+    load(mpTestDocumentPath, "tdf143219ContourWrap_glow_rotate.docx");
+
+    // Error was, that the margins, which were added on import to approximate Word's rendering of
+    // contour wrap, contained the effect extent for rotation. But LibreOffice extents the wrap
+    // distance automatically. The distance was too large on first load and because the extent was
+    // not removed on export, much larger on reload.
+    // Test fails on reload without fix with left: expected 1461 actual 2455; right: expected 1302
+    // actual 4177; top: expected 1522 actual 2457; bottom: expected 1296, actual 4179
+    verify();
+    reload(mpFilter, "tdf143219ContourWrap_glow_rotate.docx");
+    verify();
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf134219ContourWrap_stroke_shadow)
+{
+    auto verify = [this]() {
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(318),
+                                     getProperty<sal_Int32>(getShape(1), "LeftMargin"), 1);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(1164),
+                                     getProperty<sal_Int32>(getShape(1), "RightMargin"), 1);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(318),
+                                     getProperty<sal_Int32>(getShape(1), "TopMargin"), 1);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(1164),
+                                     getProperty<sal_Int32>(getShape(1), "BottomMargin"), 1);
+    };
+    // Given a document with a shape with contour wrap, that has a fat stroke and large shadow.
+    load(mpTestDocumentPath, "tdf143219ContourWrap_stroke_shadow.docx");
+
+    // Error was, that the margins, which were added on import to approximate Word's rendering of
+    // contour wrap, were not removed on export and so used twice on reload.
+    // Test after reload would fail without fix with
+    // left, top: expected 318 actual 635; right, bottom: expected 1164 actual 2434
+    verify();
+    reload(mpFilter, "tdf143219ContourWrap_stroke_shadow.docx");
+    verify();
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf123569_rotWriterImage, "tdf123569_rotWriterImage_46deg.odt")
 {
     uno::Reference<beans::XPropertySet> xFrame(getShape(1), uno::UNO_QUERY);
