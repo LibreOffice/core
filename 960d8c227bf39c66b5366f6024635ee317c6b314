@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "691ba1b8_e3ae46bd",
+        "filename": "include/vcl/filter/SvmReader.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-07-05T07:21:17Z",
+      "side": 1,
+      "message": "As a minimal effort, could you please add a one-liner doxygen comment for this new class, a one sentence description of what it does? Thanks. (And in general, do this for every new class you add.)",
+      "revId": "960d8c227bf39c66b5366f6024635ee317c6b314",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
