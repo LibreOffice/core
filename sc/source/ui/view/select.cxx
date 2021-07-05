@@ -315,7 +315,17 @@ void ScViewFunctionSet::SetCursorAtPoint( const Point& rPointPixel, bool /* bDon
         aEffPos.setY( -1 );
 
     //  Scrolling
-    Size aWinSize = pEngine->GetWindow()->GetOutputSizePixel();
+    Size aWinSize;
+
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        aWinSize = pViewData->getLOKVisibleArea().GetSize();
+        aWinSize.setWidth(aWinSize.getWidth() * pViewData->GetPPTX());
+        aWinSize.setHeight(aWinSize.getHeight() * pViewData->GetPPTY());
+    }
+    else
+        aWinSize = pEngine->GetWindow()->GetOutputSizePixel();
+
     bool bLeftScroll  = ( aEffPos.X() < 0 );
     bool bTopScroll = ( aEffPos.Y() < 0 );
 
