@@ -1,0 +1,29 @@
+Option VBASupport 0
+
+Function doUnitTest() As String
+    TestUtil.TestInit
+    verify_tdf134692
+    doUnitTest = TestUtil.GetResult()
+End Function
+
+Sub verify_tdf134692()
+    On Error GoTo errorHandler
+
+    dim a(2 to 5)
+    b = a
+    redim preserve b(4 to 6)
+    for i = lbound(b) to ubound(b)
+      b(i) = i
+    next i
+    for i = lbound(a) to ubound(a)
+      s$ = s$ & " a(" & i & ")=" & a(i)
+    next i
+    for i = lbound(b) to ubound(b)
+      s$ = s$ & " b(" & i & ")=" & b(i)
+    next i
+    TestUtil.AssertEqual(s$, " a(2)= a(3)= a(4)= a(5)= b(4)=4 b(5)=5 b(6)=6", "tdf#134692: " & retStr)
+
+    Exit Sub
+errorHandler:
+    TestUtil.ReportErrorHandler("verify_tdf134692", Err, Error$, Erl)
+End Sub
