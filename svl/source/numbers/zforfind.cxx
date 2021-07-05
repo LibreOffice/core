@@ -1263,6 +1263,17 @@ static bool lcl_IsSignedYearSep( const OUString& rStr, const OUString& rPat, sal
 }
 
 
+/** Length of separator usually is 1 but theoretically could be anything. */
+static sal_Int32 lcl_getPatternSeparatorLength( const OUString& rPat, sal_Int32 nPat )
+{
+    sal_Int32 nSep = nPat;
+    sal_Unicode c;
+    while (nSep < rPat.getLength() && (c = rPat[nSep]) != 'D' && c != 'M' && c != 'Y')
+        ++nSep;
+    return nSep - nPat;
+}
+
+
 bool ImpSvNumberInputScan::IsAcceptedDatePattern( sal_uInt16 nStartPatternAt )
 {
     if (nAcceptedDatePattern >= -1)
@@ -1383,8 +1394,11 @@ bool ImpSvNumberInputScan::IsAcceptedDatePattern( sal_uInt16 nStartPatternAt )
                 bOk = !IsNum[nNext];
                 if (bOk)
                 {
+                    const sal_Int32 nSepLen = lcl_getPatternSeparatorLength( rPat, nPat);
+                    // Non-numeric input must match separator exactly to be
+                    // accepted as such.
                     const sal_Int32 nLen = sStrArray[nNext].getLength();
-                    bOk = (rPat.indexOf( sStrArray[nNext], nPat) == nPat);
+                    bOk = (nLen == nSepLen && rPat.indexOf( sStrArray[nNext], nPat) == nPat);
                     if (bOk)
                     {
                         nPat += nLen - 1;
@@ -1503,8 +1517,9 @@ bool ImpSvNumberInputScan::SkipDatePatternSeparator( sal_uInt16 nParticle, sal_I
         default:
             if (nNext == nParticle)
             {
+                const sal_Int32 nSepLen = lcl_getPatternSeparatorLength( rPat, nPat);
                 const sal_Int32 nLen = sStrArray[nNext].getLength();
-                bool bOk = (rPat.indexOf( sStrArray[nNext], nPat) == nPat);
+                bool bOk = (nLen == nSepLen && rPat.indexOf( sStrArray[nNext], nPat) == nPat);
                 if (!bOk)
                 {
                     bOk = lcl_IsSignedYearSep( sStrArray[nNext], rPat, nPat);
