@@ -1135,6 +1135,7 @@ void Test::testIsNumberFormat()
         { "Jan1, 2000", true }, // tdf#91420
         { "Jan 1", true },
         { "Sept 1", true }, //tdf#127363
+        { "5/d", false }, //tdf#143165
         { "Jan 1 2000", true },
         { "5-12-14", false },
         { "005-12-14", true },
