@@ -16,6 +16,24 @@
       "revId": "d9648d1cf6c4ec7407ff30cf814be98d089345d1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7bc3f6b9_c98c30a4",
+        "filename": "vcl/headless/svpframe.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-07-05T07:15:08Z",
+      "side": 1,
+      "message": "Can you put a change that does this? Then I can easily test locally if core.git master and online.git master has broken focus behavior in dialogs or not. Thanks.",
+      "parentUuid": "ed64d1ed_cbdeea62",
+      "revId": "d9648d1cf6c4ec7407ff30cf814be98d089345d1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
