@@ -57,6 +57,20 @@ void Test::tearDown()
 
 constexpr OUStringLiteral DATA_DIRECTORY = u"/writerfilter/qa/cppunittests/dmapper/data/";
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf143208wrapTight)
+{
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf143208_wrapTight.docx";
+    // The document has a shape with indentation and contour wrap "wrapTight". Error was, that
+    // the corresponding shape property 'ContourOutside=true' was not set.
+    getComponent() = loadFromDesktop(aURL);
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
+    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    bool bContourOutside;
+    xShape->getPropertyValue("ContourOutside") >>= bContourOutside;
+    CPPUNIT_ASSERT(bContourOutside);
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf142305StrokeGlowMargin)
 {
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf142305StrokeGlowMargin.docx";

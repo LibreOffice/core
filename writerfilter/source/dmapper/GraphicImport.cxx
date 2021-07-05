@@ -1162,6 +1162,7 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                         m_pImpl->applyRelativePosition(xShapeProps, /*bRelativeOnly=*/true);
 
                         xShapeProps->setPropertyValue("SurroundContour", uno::makeAny(m_pImpl->bContour));
+                        xShapeProps->setPropertyValue("ContourOutside", uno::makeAny(m_pImpl->bContourOutside));
                         m_pImpl->applyMargins(xShapeProps);
                         xShapeProps->setPropertyValue("Opaque", uno::makeAny(m_pImpl->bOpaque));
                         xShapeProps->setPropertyValue("Surround", uno::makeAny(static_cast<sal_Int32>(m_pImpl->nWrap)));
