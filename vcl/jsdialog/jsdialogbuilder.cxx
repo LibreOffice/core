@@ -289,17 +289,13 @@ void JSDialogNotifyIdle::Invoke()
                 break;
 
             case jsdialog::MessageType::Popup:
-            {
-                OUString sParentId = (*rMessage.m_pData)[PARENT_ID];
-                OUString sWindowId = (*rMessage.m_pData)[WINDOW_ID];
-                OUString sCloseId = (*rMessage.m_pData)[CLOSE_ID];
-
-                if (!sParentId.isEmpty())
-                    send(*generatePopupMessage(rMessage.m_pWindow, sParentId, sCloseId));
-                else if (!sWindowId.isEmpty())
-                    send(*generateClosePopupMessage(sWindowId));
+                send(*generatePopupMessage(rMessage.m_pWindow, (*rMessage.m_pData)[PARENT_ID],
+                                           (*rMessage.m_pData)[CLOSE_ID]));
                 break;
-            }
+
+            case jsdialog::MessageType::PopupClose:
+                send(*generateClosePopupMessage((*rMessage.m_pData)[WINDOW_ID]));
+                break;
         }
     }
 }
@@ -376,7 +372,7 @@ void JSDialogSender::sendClosePopup(vcl::LOKWindowId nWindowId)
 
     std::unique_ptr<ActionDataMap> pData = std::make_unique<ActionDataMap>();
     (*pData)[WINDOW_ID] = OUString::number(nWindowId);
-    mpIdleNotify->sendMessage(jsdialog::MessageType::Popup, nullptr, std::move(pData));
+    mpIdleNotify->sendMessage(jsdialog::MessageType::PopupClose, nullptr, std::move(pData));
     mpIdleNotify->Start();
 }
 
