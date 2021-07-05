@@ -3910,8 +3910,6 @@ void ScTable::DoAutoOutline( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SC
     bool bFound;
     ScRange aRef;
 
-    nEndCol = ClampToAllocatedColumns(nEndCol);
-
     StartOutlineTable();
 
                             // Rows
