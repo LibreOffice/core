@@ -215,8 +215,7 @@ JSDialogNotifyIdle::generateActionMessage(VclPtr<vcl::Window> pWindow,
 }
 
 std::unique_ptr<tools::JsonWriter>
-JSDialogNotifyIdle::generatePopupMessage(VclPtr<vcl::Window> pWindow, OUString sParentId,
-                                         OUString sCloseId) const
+JSDialogNotifyIdle::generatePopupMessage(VclPtr<vcl::Window> pWindow, OUString sParentId) const
 {
     std::unique_ptr<tools::JsonWriter> aJsonWriter(new tools::JsonWriter());
 
@@ -238,7 +237,6 @@ JSDialogNotifyIdle::generatePopupMessage(VclPtr<vcl::Window> pWindow, OUString s
     aJsonWriter->put("type", "modalpopup");
     aJsonWriter->put("cancellable", true);
     aJsonWriter->put("popupParent", sParentId);
-    aJsonWriter->put("clickToClose", sCloseId);
     aJsonWriter->put("id", pWindow->GetParentWithLOKNotifier()->GetLOKWindowId());
 
     return aJsonWriter;
@@ -295,17 +293,12 @@ void JSDialogNotifyIdle::Invoke()
                 break;
 
             case jsdialog::MessageType::Popup:
-            {
-                OUString sParentId = (*rMessage.m_pData)[PARENT_ID];
-                OUString sWindowId = (*rMessage.m_pData)[WINDOW_ID];
-                OUString sCloseId = (*rMessage.m_pData)[CLOSE_ID];
-
-                if (!sParentId.isEmpty())
-                    send(*generatePopupMessage(rMessage.m_pWindow, sParentId, sCloseId));
-                else if (!sWindowId.isEmpty())
-                    send(*generateClosePopupMessage(sWindowId));
+                send(*generatePopupMessage(rMessage.m_pWindow, (*rMessage.m_pData)[PARENT_ID]));
                 break;
-            }
+
+            case jsdialog::MessageType::PopupClose:
+                send(*generateClosePopupMessage((*rMessage.m_pData)[WINDOW_ID]));
+                break;
         }
     }
 }
@@ -363,14 +356,13 @@ void JSDialogSender::sendAction(VclPtr<vcl::Window> pWindow, std::unique_ptr<Act
     mpIdleNotify->Start();
 }
 
-void JSDialogSender::sendPopup(VclPtr<vcl::Window> pWindow, OUString sParentId, OUString sCloseId)
+void JSDialogSender::sendPopup(VclPtr<vcl::Window> pWindow, OUString sParentId)
 {
     if (!mpIdleNotify)
         return;
 
     std::unique_ptr<ActionDataMap> pData = std::make_unique<ActionDataMap>();
     (*pData)[PARENT_ID] = sParentId;
-    (*pData)[CLOSE_ID] = sCloseId;
     mpIdleNotify->sendMessage(jsdialog::MessageType::Popup, pWindow, std::move(pData));
     mpIdleNotify->Start();
 }
@@ -382,7 +374,7 @@ void JSDialogSender::sendClosePopup(vcl::LOKWindowId nWindowId)
 
     std::unique_ptr<ActionDataMap> pData = std::make_unique<ActionDataMap>();
     (*pData)[WINDOW_ID] = OUString::number(nWindowId);
-    mpIdleNotify->sendMessage(jsdialog::MessageType::Popup, nullptr, std::move(pData));
+    mpIdleNotify->sendMessage(jsdialog::MessageType::PopupClose, nullptr, std::move(pData));
     mpIdleNotify->Start();
 }
 
@@ -1378,8 +1370,7 @@ void JSToolbar::set_menu_item_active(const OString& rIdent, bool bActive)
         if (pPopupRoot)
         {
             if (bActive)
-                sendPopup(pPopupRoot, m_xToolBox->get_id(),
-                          OStringToOUString(rIdent, RTL_TEXTENCODING_ASCII_US));
+                sendPopup(pPopupRoot, OUString::fromUtf8(rIdent));
             else
                 sendClosePopup(pPopupRoot->GetLOKWindowId());
         }
@@ -1643,7 +1634,7 @@ void JSMenuButton::set_active(bool bActive)
     if (pPopup)
     {
         if (bActive)
-            sendPopup(pPopup->GetChild(0), m_xMenuButton->get_id(), m_xMenuButton->get_id());
+            sendPopup(pPopup->GetChild(0), m_xMenuButton->get_id());
         else
             sendClosePopup(pPopup->GetChild(0)->GetLOKWindowId());
     }

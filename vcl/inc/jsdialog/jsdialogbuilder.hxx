@@ -31,7 +31,6 @@
 #define ACTION_TYPE "action_type"
 #define PARENT_ID "parent_id"
 #define WINDOW_ID "id"
-#define CLOSE_ID "close_id"
 
 class ToolBox;
 class ComboBox;
@@ -50,7 +49,8 @@ enum MessageType
     WidgetUpdate,
     Close,
     Action,
-    Popup
+    Popup,
+    PopupClose
 };
 }
 
@@ -126,8 +126,8 @@ private:
     std::unique_ptr<tools::JsonWriter> generateCloseMessage() const;
     std::unique_ptr<tools::JsonWriter>
     generateActionMessage(VclPtr<vcl::Window> pWindow, std::unique_ptr<ActionDataMap> pData) const;
-    std::unique_ptr<tools::JsonWriter>
-    generatePopupMessage(VclPtr<vcl::Window> pWindow, OUString sParentId, OUString sCloseId) const;
+    std::unique_ptr<tools::JsonWriter> generatePopupMessage(VclPtr<vcl::Window> pWindow,
+                                                            OUString sParentId) const;
     std::unique_ptr<tools::JsonWriter> generateClosePopupMessage(OUString sWindowId) const;
 };
 
@@ -149,7 +149,7 @@ public:
     void sendClose();
     virtual void sendUpdate(VclPtr<vcl::Window> pWindow, bool bForce = false);
     virtual void sendAction(VclPtr<vcl::Window> pWindow, std::unique_ptr<ActionDataMap> pData);
-    virtual void sendPopup(VclPtr<vcl::Window> pWindow, OUString sParentId, OUString sCloseId);
+    virtual void sendPopup(VclPtr<vcl::Window> pWindow, OUString sParentId);
     virtual void sendClosePopup(vcl::LOKWindowId nWindowId);
     void flush() { mpIdleNotify->Invoke(); }
 
@@ -299,7 +299,7 @@ public:
 
     virtual void sendAction(std::unique_ptr<ActionDataMap> pData) = 0;
 
-    virtual void sendPopup(vcl::Window* pPopup, OUString sParentId, OUString sCloseId) = 0;
+    virtual void sendPopup(vcl::Window* pPopup, OUString sParentId) = 0;
 
     virtual void sendClosePopup(vcl::LOKWindowId nWindowId) = 0;
 };
@@ -410,10 +410,10 @@ public:
             m_pSender->sendAction(BaseInstanceClass::m_xWidget, std::move(pData));
     }
 
-    virtual void sendPopup(vcl::Window* pPopup, OUString sParentId, OUString sCloseId) override
+    virtual void sendPopup(vcl::Window* pPopup, OUString sParentId) override
     {
         if (!m_bIsFreezed && m_pSender)
-            m_pSender->sendPopup(pPopup, sParentId, sCloseId);
+            m_pSender->sendPopup(pPopup, sParentId);
     }
 
     virtual void sendClosePopup(vcl::LOKWindowId nWindowId) override
