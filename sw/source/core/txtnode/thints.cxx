@@ -2846,7 +2846,7 @@ bool SwpHints::MergePortions( SwTextNode& rNode )
                                 break;
                             if (iter1.IsAtEnd() || iter2.IsAtEnd())
                             {
-                                eMerge = DIFFER;
+                                eMerge = DIFFER_ONLY_RSID;
                                 break;
                             }
                         }
