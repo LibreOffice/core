@@ -165,7 +165,7 @@ rtl::Reference<MetaAction> SvmReader::MetaActionHandler(ImplMetaReadData* pData)
             return PointHandler();
             break;
         case MetaActionType::LINE:
-            pAction = new MetaLineAction;
+            return LineHandler();
             break;
         case MetaActionType::RECT:
             return RectHandler();
@@ -413,6 +413,33 @@ rtl::Reference<MetaAction> SvmReader::PixelHandler()
 
     pAction->SetPoint(aPoint);
     pAction->SetColor(aColor);
+
+    return pAction;
+}
+
+rtl::Reference<MetaAction> SvmReader::LineHandler()
+{
+    auto pAction = new MetaLineAction();
+
+    VersionCompatRead aCompat(mrStream);
+
+    // Version 1
+    TypeSerializer aSerializer(mrStream);
+    Point aPoint;
+    Point aEndPoint;
+    aSerializer.readPoint(aPoint);
+    aSerializer.readPoint(aEndPoint);
+
+    pAction->SetStartPoint(aPoint);
+    pAction->SetEndPoint(aEndPoint);
+
+    // Version 2
+    if (aCompat.GetVersion() >= 2)
+    {
+        LineInfo aLineInfo;
+        ReadLineInfo(mrStream, aLineInfo);
+        pAction->SetLineInfo(aLineInfo);
+    }
 
     return pAction;
 }

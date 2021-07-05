@@ -191,6 +191,9 @@ public:
     const Point&        GetStartPoint() const { return maStartPt; }
     const Point&        GetEndPoint() const { return maEndPt; }
     const LineInfo&     GetLineInfo() const { return maLineInfo; }
+    void                SetStartPoint(Point& rPoint) { maStartPt = rPoint; }
+    void                SetEndPoint(Point& rPoint) { maEndPt = rPoint; }
+    void                SetLineInfo(LineInfo& rLineInfo) { maLineInfo = rLineInfo; }
 };
 
 class VCL_DLLPUBLIC MetaRectAction final : public MetaAction
