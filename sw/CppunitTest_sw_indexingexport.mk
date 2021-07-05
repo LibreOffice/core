@@ -15,6 +15,7 @@ $(eval $(call gb_CppunitTest_use_common_precompiled_header,sw_indexingexport))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,sw_indexingexport, \
     sw/qa/extras/indexing/IndexingExportTest \
+    sw/qa/extras/indexing/SearchResultLocatorTest \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,sw_indexingexport, \
