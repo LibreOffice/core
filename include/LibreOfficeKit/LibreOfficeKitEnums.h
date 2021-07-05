@@ -772,6 +772,20 @@ typedef enum
      * The payload format is JSON: { "title": "title text", "content": "content text" }
      */
     LOK_CALLBACK_VALIDITY_INPUT_HELP = 51,
+
+
+    /**
+     * Scroll view client visible area.
+     *
+     * The payload format:
+     *
+     * {
+     *     "dx": "1",
+     *     "dy": "1",
+     * }
+     *
+     */
+    LOK_CALLBACK_VIEW_SCROLL = 52,
 }
 LibreOfficeKitCallbackType;
 
@@ -904,6 +918,8 @@ static inline const char* lokCallbackTypeToString(int nType)
         return "LOK_CALLBACK_FORM_FIELD_BUTTON";
     case LOK_CALLBACK_INVALIDATE_SHEET_GEOMETRY:
         return "LOK_CALLBACK_INVALIDATE_SHEET_GEOMETRY";
+    case LOK_CALLBACK_VIEW_SCROLL:
+        return "LOK_CALLBACK_VIEW_SCROLL";
     }
 
     assert(!"Unknown LibreOfficeKitCallbackType type.");

@@ -31,6 +31,7 @@
 #include <gridwin.hxx>
 #include <sfx2/lokhelper.hxx>
 #include <comphelper/lok.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 #if defined(_WIN32)
 #define SC_SELENG_REFMODE_UPDATE_INTERVAL_MIN 65
@@ -348,6 +349,43 @@ void ScViewFunctionSet::SetCursorAtPoint( const Point& rPointPixel, bool /* bDon
     }
 
     bool bScroll = bRightScroll || bBottomScroll || bLeftScroll || bTopScroll;
+
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        short nDx = 0;
+        short nDy = 0;
+        tools::Rectangle aView = pViewData->getLOKVisibleArea();
+        VclPtr<vcl::Window> pWin = pEngine->GetWindow()->GetParentWithLOKNotifier();
+
+        aView.SetLeft(aView.Left() * pViewData->GetPPTX());
+        aView.SetRight(aView.Right() * pViewData->GetPPTX());
+        aView.SetTop(aView.Top() * pViewData->GetPPTY());
+        aView.SetBottom(aView.Bottom() * pViewData->GetPPTY());
+
+        if (rPointPixel.X() <= aView.Left() + 3)
+            nDx = -1;
+
+        if (rPointPixel.X() >= aView.Right() - 3)
+            nDx = 1;
+
+        if (rPointPixel.Y() <= aView.Top() + 3)
+            nDy = -1;
+
+        if (rPointPixel.Y() >= aView.Bottom() - 3)
+            nDy = 1;
+
+        if (pWin && ( nDx != 0 || nDy != 0 ))
+        {
+            OStringBuffer aPayload;
+            aPayload.append("{\"dx\":").
+                append(nDx).
+                append(",\"dy\":").
+                append(nDy).
+                append('}');
+
+            pWin->GetLOKNotifier()->libreOfficeKitViewCallback(LOK_CALLBACK_VIEW_SCROLL, aPayload.getStr());
+        }
+    }
 
     // for Autofill switch in the center of cell thereby don't prevent scrolling to bottom/right
     if (bFillingSelection)
