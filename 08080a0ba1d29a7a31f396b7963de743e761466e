@@ -22,6 +22,122 @@
       "revId": "08080a0ba1d29a7a31f396b7963de743e761466e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "db95d2e1_56a2417a",
+        "filename": "cui/source/dialogs/GraphicTestsDialog.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-07-06T04:56:07Z",
+      "side": 1,
+      "message": "No idea... maybe try set_background on m_xContainer instead. But then - it\u0027s not important.. don\u0027t waste time over this.",
+      "parentUuid": "f90da45f_48fc3e60",
+      "range": {
+        "startLine": 25,
+        "startChar": 4,
+        "endLine": 30,
+        "endChar": 90
+      },
+      "revId": "08080a0ba1d29a7a31f396b7963de743e761466e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1dda2b48_327e713e",
+        "filename": "cui/source/dialogs/GraphicTestsDialog.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-07-06T04:56:07Z",
+      "side": 1,
+      "message": "why is this upper case?",
+      "range": {
+        "startLine": 56,
+        "startChar": 24,
+        "endLine": 56,
+        "endChar": 34
+      },
+      "revId": "08080a0ba1d29a7a31f396b7963de743e761466e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5a10d598_ac2a946c",
+        "filename": "cui/source/dialogs/GraphicTestsDialog.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-07-06T04:56:07Z",
+      "side": 1,
+      "message": "aResultLog",
+      "range": {
+        "startLine": 58,
+        "startChar": 13,
+        "endLine": 58,
+        "endChar": 22
+      },
+      "revId": "08080a0ba1d29a7a31f396b7963de743e761466e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "af28c2af_97156c02",
+        "filename": "cui/source/dialogs/GraphicTestsDialog.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-07-06T04:56:07Z",
+      "side": 1,
+      "message": "nTestNumber",
+      "range": {
+        "startLine": 61,
+        "startChar": 14,
+        "endLine": 61,
+        "endChar": 24
+      },
+      "revId": "08080a0ba1d29a7a31f396b7963de743e761466e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f66bb686_05726527",
+        "filename": "cui/source/dialogs/GraphicTestsDialog.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-07-06T04:56:07Z",
+      "side": 1,
+      "message": "order of test should be incremental as they are run, not sorted by test status..",
+      "range": {
+        "startLine": 62,
+        "startChar": 3,
+        "endLine": 89,
+        "endChar": 5
+      },
+      "revId": "08080a0ba1d29a7a31f396b7963de743e761466e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
