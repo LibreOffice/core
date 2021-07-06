@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "62519d55_d607d86d",
+        "filename": "officecfg/registry/data/org/openoffice/Office/ExtensionManager.xcu",
+        "patchSetId": 5
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-07-06T16:12:04Z",
+      "side": 1,
+      "message": "We should use this variable at places where extensions.lo.org is hard-coded. Looking at the code it\u0027s just cui/source/dialogs/AdditionsDialog.cxx where the site is hard-coded with the /api/json parameter. And in editmodulesdialog.ui, which is explicitly named in BZ.",
+      "range": {
+        "startLine": 22,
+        "startChar": 20,
+        "endLine": 22,
+        "endChar": 31
+      },
+      "revId": "854a43f86b48cb1ab46494ade1df272a9a5734f7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
