@@ -22,7 +22,6 @@
 #include <com/sun/star/awt/XWindow.hpp>
 
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
-#include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/frame/FrameAction.hpp>
 
 #include <toolkit/helper/vclunohelper.hxx>
@@ -47,52 +46,31 @@ void SAL_CALL TagWindowAsModified::initialize(const css::uno::Sequence< css::uno
     if (lArguments.hasElements())
         lArguments[0] >>= xFrame;
 
-    if ( ! xFrame.is ())
+    if (!xFrame)
         return;
 
-    {
-        SolarMutexGuard g;
-        m_xFrame = xFrame;
-    }
-
+    m_xFrame = xFrame;
     xFrame->addFrameActionListener(this);
     impl_update (xFrame);
 }
 
 void SAL_CALL TagWindowAsModified::modified(const css::lang::EventObject& aEvent)
 {
-    css::uno::Reference< css::util::XModifiable > xModel;
-    css::uno::Reference< css::awt::XWindow >      xWindow;
-    {
-        SolarMutexGuard g;
-        xModel.set(m_xModel.get (), css::uno::UNO_QUERY);
-        xWindow.set(m_xWindow.get(), css::uno::UNO_QUERY);
-        if (
-            ( ! xModel.is  ()       ) ||
-            ( ! xWindow.is ()       ) ||
-            (aEvent.Source != xModel)
-        )
-            return;
-    }
+    if (!m_xModel || !m_xWindow || aEvent.Source != m_xModel)
+        return;
 
-    bool bModified = xModel->isModified ();
+    bool bModified = m_xModel->isModified ();
 
     // SYNCHRONIZED ->
     SolarMutexGuard aSolarGuard;
 
-    VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow(xWindow);
-    if ( ! pWindow)
-        return;
-
-    bool bSystemWindow = pWindow->IsSystemWindow();
-    bool bWorkWindow   = (pWindow->GetType() == WindowType::WORKWINDOW);
-    if (!bSystemWindow && !bWorkWindow)
+    if (m_xWindow->isDisposed())
         return;
 
     if (bModified)
-        pWindow->SetExtendedStyle(WindowExtendedStyle::DocModified);
+        m_xWindow->SetExtendedStyle(WindowExtendedStyle::DocModified);
     else
-        pWindow->SetExtendedStyle(WindowExtendedStyle::NONE);
+        m_xWindow->SetExtendedStyle(WindowExtendedStyle::NONE);
     // <- SYNCHRONIZED
 }
 
@@ -104,43 +82,26 @@ void SAL_CALL TagWindowAsModified::frameAction(const css::frame::FrameActionEven
        )
         return;
 
-    css::uno::Reference< css::frame::XFrame > xFrame;
-    {
-        SolarMutexGuard g;
-        xFrame.set(m_xFrame.get(), css::uno::UNO_QUERY);
-        if (
-            ( ! xFrame.is ()        ) ||
-            (aEvent.Source != xFrame)
-        )
-            return;
-    }
+    if ( aEvent.Source != m_xFrame )
+        return;
 
-    impl_update (xFrame);
+    impl_update (m_xFrame);
 }
 
 void SAL_CALL TagWindowAsModified::disposing(const css::lang::EventObject& aEvent)
 {
     SolarMutexGuard g;
 
-    css::uno::Reference< css::frame::XFrame > xFrame(m_xFrame.get(), css::uno::UNO_QUERY);
-    if (xFrame.is())
-        xFrame->addFrameActionListener(this);
-
-    if (
-        (xFrame.is ()           ) &&
-        (aEvent.Source == xFrame)
-       )
+    if (m_xFrame && aEvent.Source == m_xFrame)
     {
+        m_xFrame->removeFrameActionListener(this);
         m_xFrame.clear();
         return;
     }
 
-    css::uno::Reference< css::frame::XModel > xModel(m_xModel.get(), css::uno::UNO_QUERY);
-    if (
-        (xModel.is ()           ) &&
-        (aEvent.Source == xModel)
-       )
+    if (m_xModel && aEvent.Source == m_xModel)
     {
+        m_xModel->removeModifyListener(this);
         m_xModel.clear();
         return;
     }
@@ -148,32 +109,37 @@ void SAL_CALL TagWindowAsModified::disposing(const css::lang::EventObject& aEven
 
 void TagWindowAsModified::impl_update (const css::uno::Reference< css::frame::XFrame >& xFrame)
 {
-    if ( ! xFrame.is ())
+    if (!xFrame)
         return;
 
     css::uno::Reference< css::awt::XWindow >       xWindow     = xFrame->getContainerWindow ();
     css::uno::Reference< css::frame::XController > xController = xFrame->getController ();
-    css::uno::Reference< css::frame::XModel >      xModel;
+    css::uno::Reference< css::util::XModifiable >  xModel;
     if (xController.is ())
-        xModel = xController->getModel ();
+        xModel = css::uno::Reference< css::util::XModifiable >(xController->getModel(), css::uno::UNO_QUERY);
 
-    if (
-        ( ! xWindow.is ()) ||
-        ( ! xModel.is  ())
-       )
+    if (!xWindow || !xModel)
         return;
 
     {
         SolarMutexGuard g;
+
+        VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow(xWindow);
+        bool bSystemWindow = pWindow->IsSystemWindow();
+        bool bWorkWindow   = (pWindow->GetType() == WindowType::WORKWINDOW);
+        if (!bSystemWindow && !bWorkWindow)
+            return;
+
+        if (m_xModel)
+            m_xModel->removeModifyListener (this);
+
         // Note: frame was set as member outside ! we have to refresh connections
         // regarding window and model only here.
-        m_xWindow = xWindow;
+        m_xWindow = pWindow;
         m_xModel  = xModel;
     }
 
-    css::uno::Reference< css::util::XModifyBroadcaster > xModifiable(xModel, css::uno::UNO_QUERY);
-    if (xModifiable.is ())
-        xModifiable->addModifyListener (this);
+    m_xModel->addModifyListener (this);
 }
 
 } // namespace framework
