@@ -13,6 +13,8 @@
 #include <bitmap/BitmapWriteAccess.hxx>
 #include <salgdi.hxx>
 
+#include <set>
+
 namespace vcl::test {
 
 namespace
@@ -535,6 +537,48 @@ TestResult OutputDeviceTestCommon::checkBezier(Bitmap& rBitmap)
     // Check the bezier doesn't go over to the margins first
     // TODO extend the check with more exact assert
     return checkRectangles(rBitmap, aExpected);
+}
+
+TestResult OutputDeviceTestCommon::checkHalfEllipse(Bitmap& rBitmap)
+{
+    BitmapScopedWriteAccess pAccess(rBitmap);
+
+    TestResult aResult = TestResult::Passed;
+    int nNumberOfQuirks = 0;
+    int nNumberOfErrors = 0;
+
+    tools::Long height = pAccess->Height();
+    tools::Long width = pAccess->Width();
+
+    std::set<std::pair<tools::Long, tools::Long>> SetPixels
+        = { { 3, 7 },   { 3, 8 },   { 3, 9 },   { 3, 10 }, { 3, 11 },  { 4, 5 },   { 4, 6 },
+            { 4, 12 },  { 4, 13 },  { 5, 4 },   { 5, 14 }, { 6, 3 },   { 6, 15 },  { 7, 2 },
+            { 7, 16 },  { 8, 2 },   { 8, 16 },  { 9, 1 },  { 9, 17 },  { 10, 1 },  { 10, 17 },
+            { 11, 1 },  { 11, 17 }, { 12, 1 },  { 12, 2 }, { 12, 3 },  { 12, 4 },  { 12, 5 },
+            { 12, 6 },  { 12, 7 },  { 12, 8 },  { 12, 9 }, { 12, 10 }, { 12, 11 }, { 12, 12 },
+            { 12, 13 }, { 12, 14 }, { 12, 15 }, { 12, 16 } };
+
+    for (int x = 0; x < pAccess->Width(); x++)
+    {
+        for (int y = 0; y < pAccess->Height(); ++y)
+        {
+            if (SetPixels.count({ y, x }))
+            {
+                checkValue(pAccess, x, y, constLineColor, nNumberOfQuirks, nNumberOfErrors, true);
+            }
+            else
+            {
+                checkValue(pAccess, x, y, constBackgroundColor, nNumberOfQuirks, nNumberOfErrors,
+                           true);
+            }
+        }
+    }
+
+    if (nNumberOfQuirks > 0)
+        aResult = TestResult::PassedWithQuirks;
+    if (nNumberOfErrors > 0)
+        aResult = TestResult::Failed;
+    return aResult;
 }
 
 // Check 'count' pixels from (x,y) in (addX,addY) direction, the color values must not decrease.

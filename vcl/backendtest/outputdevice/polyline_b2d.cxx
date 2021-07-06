@@ -122,6 +122,32 @@ Bitmap OutputDeviceTestPolyLineB2D::setupAABezier()
 
     return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
 }
+
+Bitmap OutputDeviceTestPolyLineB2D::setupEllipse()
+{
+    initialSetup(21, 21, constBackgroundColor);
+
+    mpVirtualDevice->SetLineColor(constLineColor);
+    mpVirtualDevice->SetFillColor();
+
+    double minX = maVDRectangle.Left() + 4;
+    double maxX = maVDRectangle.Right() - 4;
+    double minY = maVDRectangle.Top() + 4;
+    double maxY = maVDRectangle.Bottom() - 4;
+
+    basegfx::B2DPolygon aPolygon;
+    aPolygon.setClosed(true);
+    addDiamondPoints(maVDRectangle, 8, aPolygon);
+
+    aPolygon.setControlPoints(0, { minX - 1.0, minY }, { maxX + 1.0, minY });
+    aPolygon.setControlPoints(1, { maxX + 1.0, minY }, { maxX + 1.0, maxY });
+    aPolygon.setControlPoints(2, { maxX, maxY }, { minX, maxY });
+    aPolygon.setControlPoints(3, { minX, maxY }, { minX, minY });
+
+    mpVirtualDevice->DrawPolyLine(aPolygon);
+
+    return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
+}
 } // end namespace vcl::test
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
