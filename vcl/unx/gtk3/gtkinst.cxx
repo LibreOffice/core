@@ -10725,32 +10725,28 @@ private:
 #endif
             g_signal_connect(pMenuButton, "toggled", G_CALLBACK(signalItemToggled), this);
 
-            if (pMenuButton)
+            // by default the GtkMenuButton down arrow button is as wide as
+            // a normal button and LibreOffice's original ones are very
+            // narrow, that assumption is fairly baked into the toolbar and
+            // sidebar designs, try and minimize the width of the dropdown
+            // zone.
+            GtkStyleContext *pButtonContext = gtk_widget_get_style_context(GTK_WIDGET(pMenuButton));
+
+            if (!m_pMenuButtonProvider)
             {
-                // by default the GtkMenuButton down arrow button is as wide as
-                // a normal button and LibreOffice's original ones are very
-                // narrow, that assumption is fairly baked into the toolbar and
-                // sidebar designs, try and minimize the width of the dropdown
-                // zone.
-                GtkStyleContext *pButtonContext = gtk_widget_get_style_context(GTK_WIDGET(pMenuButton));
-
-                if (!m_pMenuButtonProvider)
-                {
-                    m_pMenuButtonProvider = gtk_css_provider_new();
-                    static const gchar data[] = "* { "
-                      "padding: 0;"
-                      "margin-left: 0px;"
-                      "margin-right: 0px;"
-                      "min-width: 4px;"
-                      "}";
-                    css_provider_load_from_data(m_pMenuButtonProvider, data, -1);
-                }
-
-                gtk_style_context_add_provider(pButtonContext,
-                                               GTK_STYLE_PROVIDER(m_pMenuButtonProvider),
-                                               GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+                m_pMenuButtonProvider = gtk_css_provider_new();
+                static const gchar data[] = "* { "
+                  "padding: 0;"
+                  "margin-left: 0px;"
+                  "margin-right: 0px;"
+                  "min-width: 4px;"
+                  "}";
+                css_provider_load_from_data(m_pMenuButtonProvider, data, -1);
             }
 
+            gtk_style_context_add_provider(pButtonContext,
+                                           GTK_STYLE_PROVIDER(m_pMenuButtonProvider),
+                                           GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
         }
 #if !GTK_CHECK_VERSION(4, 0, 0)
         if (!GTK_IS_TOOL_BUTTON(pToolItem))
