@@ -65,6 +65,7 @@ AreaPropertyPanelBase::AreaPropertyPanelBase(
     weld::Widget* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame)
     : PanelLayout(pParent, "AreaPropertyPanel", "svx/ui/sidebararea.ui"),
+      mxFrame(rxFrame),
       meLastXFS(static_cast<sal_uInt16>(-1)),
       mnLastPosHatch(0),
       mnLastPosBitmap(0),
@@ -179,7 +180,7 @@ void AreaPropertyPanelBase::Initialize()
     mxMTRTransparent->connect_value_changed(LINK(this, AreaPropertyPanelBase, ModifyTransparentHdl_Impl));
     mxSldTransparent->connect_value_changed(LINK(this, AreaPropertyPanelBase, ModifyTransSliderHdl));
 
-    mxTrGrPopup = std::make_unique<AreaTransparencyGradientPopup>(*this, mxBTNGradient.get());
+    mxTrGrPopup = std::make_unique<AreaTransparencyGradientPopup>(mxFrame, *this, mxBTNGradient.get());
 
     mxBTNGradient->set_item_popover(SIDEBARGRADIENT, mxTrGrPopup->getTopLevel());
     mxBTNGradient->connect_clicked(LINK(this, AreaPropertyPanelBase, ToolbarHdl_Impl));
