@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2151930f_e1d780d4",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 26
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-07-06T19:11:49Z",
+      "side": 1,
+      "message": "Hii.. \n\nThere is a runtime error with the indication that a nullptr is being accessed. But I have made sure that pBindings is not null. Also, all the common variables in StyleList and Dialog seems to be in sync. Could you please help me with it?",
+      "range": {
+        "startLine": 286,
+        "startChar": 8,
+        "endLine": 286,
+        "endChar": 28
+      },
+      "revId": "1953fdb0a037bcf10363b49ab296cc4283fc44d4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
