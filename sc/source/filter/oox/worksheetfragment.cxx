@@ -466,17 +466,17 @@ ContextHandlerRef WorksheetFragment::onCreateContext( sal_Int32 nElement, const 
         case XLS_TOKEN( oleObjects ):
             if ( getCurrentElement() == XLS_TOKEN( controls ) )
             {
-                if( aMceState.empty() || aMceState.back() == MCE_STATE::Started )
+                if( isMCEStateEmpty() || getMCEState() == MCE_STATE::Started )
                 {
                     if ( getCurrentElement() == XLS_TOKEN( oleObjects ) ) importOleObject( rAttribs );
                     else
                         importControl( rAttribs );
                 }
-                else if ( !aMceState.empty() && aMceState.back() == MCE_STATE::FoundChoice )
+                else if ( !isMCEStateEmpty() && getMCEState() == MCE_STATE::FoundChoice )
                 {
                     // reset the handling within 'Choice'
                     // this will force attempted handling in Fallback
-                    aMceState.back() = MCE_STATE::Started;
+                    setMCEState( MCE_STATE::Started );
                 }
             }
         break;
