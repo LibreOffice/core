@@ -439,7 +439,11 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
             }
 
             if (sName == "label")
+            {
+                if (GetParentObjectType(xChild) == "GtkToolButton")
+                    xName->setNodeValue("tooltip-text");
                 xPropertyLabel = xChild;
+            }
 
             if (sName == "visible")
                 bHasVisible = true;
