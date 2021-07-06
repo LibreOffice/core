@@ -21,7 +21,6 @@
 #include <sal/log.hxx>
 
 #include <osl/diagnose.h>
-#include <osl/mutex.hxx>
 #include <cppuhelper/weakagg.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/queryinterface.hxx>
@@ -30,6 +29,7 @@
 
 #include <algorithm>
 #include <vector>
+#include <mutex>
 
 using namespace osl;
 using namespace com::sun::star::uno;
@@ -38,13 +38,8 @@ using namespace com::sun::star::uno;
 namespace cppu
 {
 
-// due to static Reflection destruction from usr, there must be a mutex leak (#73272#)
 // this is used to lock all instances of OWeakConnectionPoint and OWeakRefListener as well as OWeakObject::m_pWeakConnectionPoint
-static Mutex & getWeakMutex()
-{
-    static Mutex * s_pMutex = new Mutex();
-    return *s_pMutex;
-}
+static std::mutex gaWeakMutex;
 
 
 //-- OWeakConnectionPoint ----------------------------------------------------
@@ -123,7 +118,7 @@ void OWeakConnectionPoint::dispose()
 {
     std::vector<Reference<XReference>> aCopy;
     { // only hold the mutex while we access the field
-        MutexGuard aGuard(getWeakMutex());
+        std::scoped_lock aGuard(gaWeakMutex);
         // OWeakObject is not the only owner of this, so clear m_pObject
         // so that queryAdapted() won't use it now that it's dead
         m_pObject = nullptr;
@@ -155,25 +150,28 @@ Reference< XInterface > SAL_CALL OWeakConnectionPoint::queryAdapted()
 {
     Reference< XInterface > ret;
 
-    ClearableMutexGuard guard(getWeakMutex());
-
-    if (m_pObject)
     {
+        std::scoped_lock guard(gaWeakMutex);
+
+        if (!m_pObject)
+            return ret;
+
         oslInterlockedCount n = osl_atomic_increment( &m_pObject->m_refCount );
 
-        if (n > 1)
+        if (n <= 1)
         {
-            // The reference is incremented. The object cannot be destroyed.
-            // Release the guard at the earliest point.
-            guard.clear();
-            // WeakObject has a (XInterface *) cast operator
-            ret = *m_pObject;
-            osl_atomic_decrement( &m_pObject->m_refCount );
-        }
-        else
             // Another thread wait in the dispose method at the guard
             osl_atomic_decrement( &m_pObject->m_refCount );
+            return ret;
+        }
     }
+
+    // n is now > 1
+    // The reference is incremented. The object cannot be destroyed.
+    // Release the guard at the earliest point.
+    // WeakObject has a (XInterface *) cast operator
+    ret = *m_pObject;
+    osl_atomic_decrement( &m_pObject->m_refCount );
 
     return ret;
 }
@@ -181,14 +179,14 @@ Reference< XInterface > SAL_CALL OWeakConnectionPoint::queryAdapted()
 // XInterface
 void SAL_CALL OWeakConnectionPoint::addReference(const Reference< XReference >& rRef)
 {
-    MutexGuard aGuard(getWeakMutex());
+    std::scoped_lock aGuard(gaWeakMutex);
     m_aReferences.push_back( rRef );
 }
 
 // XInterface
 void SAL_CALL OWeakConnectionPoint::removeReference(const Reference< XReference >& rRef)
 {
-    MutexGuard aGuard(getWeakMutex());
+    std::scoped_lock aGuard(gaWeakMutex);
     // Search from end because the thing that last added a ref is most likely to be the
     // first to remove a ref.
     // It's not really valid to compare the pointer directly, but it's faster.
@@ -269,7 +267,7 @@ Reference< XAdapter > SAL_CALL OWeakObject::queryAdapter()
     if (!m_pWeakConnectionPoint)
     {
         // only acquire mutex if member is not created
-        MutexGuard aGuard( getWeakMutex() );
+        std::scoped_lock aGuard( gaWeakMutex );
         if( !m_pWeakConnectionPoint )
         {
             OWeakConnectionPoint * p = new OWeakConnectionPoint(this);
@@ -422,7 +420,7 @@ void SAL_CALL OWeakRefListener::dispose()
 {
     Reference< XAdapter > xAdp;
     {
-        MutexGuard guard(cppu::getWeakMutex());
+        std::scoped_lock guard(cppu::gaWeakMutex);
         if( m_XWeakConnectionPoint.is() )
         {
             xAdp = m_XWeakConnectionPoint;
@@ -518,7 +516,7 @@ Reference< XInterface > WeakReferenceHelper::get() const
         Reference< XAdapter > xAdp;
         {
             // must lock to access m_XWeakConnectionPoint
-            MutexGuard guard(cppu::getWeakMutex());
+            std::scoped_lock guard(cppu::gaWeakMutex);
             if( m_pImpl && m_pImpl->m_XWeakConnectionPoint.is() )
                 xAdp = m_pImpl->m_XWeakConnectionPoint;
         }
