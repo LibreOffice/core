@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "d6413479_1584a9ad",
+        "filename": "cui/source/dialogs/GraphicTestsDialog.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1002896
+      },
+      "writtenOn": "2021-07-06T07:31:45Z",
+      "side": 1,
+      "message": "The problem is that the connect_clicked is not working which is in turn preventing the ImageViewerDialog to open.",
+      "parentUuid": "db95d2e1_56a2417a",
+      "range": {
+        "startLine": 25,
+        "startChar": 4,
+        "endLine": 30,
+        "endChar": 90
+      },
+      "revId": "08080a0ba1d29a7a31f396b7963de743e761466e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1dda2b48_327e713e",
         "filename": "cui/source/dialogs/GraphicTestsDialog.cxx",
         "patchSetId": 8
@@ -161,6 +185,30 @@
       "revId": "08080a0ba1d29a7a31f396b7963de743e761466e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d6dcf35f_989683e9",
+        "filename": "include/vcl/test/GraphicsRenderTests.hxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1002896
+      },
+      "writtenOn": "2021-07-06T07:31:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "71341674_243c254f",
+      "range": {
+        "startLine": 24,
+        "startChar": 4,
+        "endLine": 31,
+        "endChar": 60
+      },
+      "revId": "08080a0ba1d29a7a31f396b7963de743e761466e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
