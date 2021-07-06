@@ -1,0 +1,303 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1fefe761_12c90ed9",
+        "filename": "sfx2/source/dialog/StyleList.cxx",
+        "patchSetId": 25
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-07-06T06:25:06Z",
+      "side": 1,
+      "message": "It gives a weird error that StyleList::Initialize cannot be redeclared outside its class.",
+      "range": {
+        "startLine": 243,
+        "startChar": 16,
+        "endLine": 243,
+        "endChar": 26
+      },
+      "revId": "247585f1198b8c963554c7821825581c370fb5e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9a33afae_212b6903",
+        "filename": "sfx2/source/dialog/StyleList.cxx",
+        "patchSetId": 25
+      },
+      "lineNbr": 273,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-07-06T06:25:06Z",
+      "side": 1,
+      "message": "It gives a weird error that TreeViewDropTarget* is incompatible with a parameter of type TreeViewDropTarget*",
+      "range": {
+        "startLine": 273,
+        "startChar": 39,
+        "endLine": 273,
+        "endChar": 42
+      },
+      "revId": "247585f1198b8c963554c7821825581c370fb5e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4327b97a_2bab1fb5",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 25
+      },
+      "lineNbr": 434,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-07-06T06:25:06Z",
+      "side": 1,
+      "message": "m_pStyleSheetPool is in StyleList. Please tell how to access it.",
+      "range": {
+        "startLine": 434,
+        "startChar": 15,
+        "endLine": 434,
+        "endChar": 32
+      },
+      "revId": "247585f1198b8c963554c7821825581c370fb5e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2066a4ec_d4671815",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 25
+      },
+      "lineNbr": 552,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-07-06T06:25:06Z",
+      "side": 1,
+      "message": "m_bDontUpdate in StyleList. How to access?",
+      "range": {
+        "startLine": 552,
+        "startChar": 8,
+        "endLine": 552,
+        "endChar": 19
+      },
+      "revId": "247585f1198b8c963554c7821825581c370fb5e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3a59e40d_ac8dc02b",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 25
+      },
+      "lineNbr": 559,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-07-06T06:25:06Z",
+      "side": 1,
+      "message": "FillTreeBox in StyleList..How to access it?",
+      "range": {
+        "startLine": 559,
+        "startChar": 12,
+        "endLine": 559,
+        "endChar": 26
+      },
+      "revId": "247585f1198b8c963554c7821825581c370fb5e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "45a9d9d6_95c9cf25",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 25
+      },
+      "lineNbr": 601,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-07-06T06:25:06Z",
+      "side": 1,
+      "message": "m_pStyleSheetPool is in StyleList. Please tell how to access it.",
+      "range": {
+        "startLine": 601,
+        "startChar": 33,
+        "endLine": 601,
+        "endChar": 48
+      },
+      "revId": "247585f1198b8c963554c7821825581c370fb5e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "10771680_b19fab2a",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 25
+      },
+      "lineNbr": 614,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-07-06T06:25:06Z",
+      "side": 1,
+      "message": "EnableHide is in StyleList. Please tell how to access it.",
+      "range": {
+        "startLine": 614,
+        "startChar": 41,
+        "endLine": 614,
+        "endChar": 51
+      },
+      "revId": "247585f1198b8c963554c7821825581c370fb5e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e51c4073_c6a26f61",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 25
+      },
+      "lineNbr": 615,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-07-06T06:25:06Z",
+      "side": 1,
+      "message": "EnableShow is in StyleList. Please tell how to access it.",
+      "range": {
+        "startLine": 615,
+        "startChar": 41,
+        "endLine": 615,
+        "endChar": 51
+      },
+      "revId": "247585f1198b8c963554c7821825581c370fb5e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e4231883_f9a5845c",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 25
+      },
+      "lineNbr": 636,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-07-06T06:25:06Z",
+      "side": 1,
+      "message": "m_pStyleSheetPool is in StyleList. Please tell how to access it.",
+      "range": {
+        "startLine": 636,
+        "startChar": 43,
+        "endLine": 636,
+        "endChar": 58
+      },
+      "revId": "247585f1198b8c963554c7821825581c370fb5e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c8ed1866_b12555ae",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 25
+      },
+      "lineNbr": 637,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-07-06T06:25:06Z",
+      "side": 1,
+      "message": "m_pStyleSheetPool is in StyleList. Please tell how to access it.",
+      "range": {
+        "startLine": 637,
+        "startChar": 29,
+        "endLine": 637,
+        "endChar": 44
+      },
+      "revId": "247585f1198b8c963554c7821825581c370fb5e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "98ac9e3d_c7fbd0b1",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 25
+      },
+      "lineNbr": 647,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-07-06T06:25:06Z",
+      "side": 1,
+      "message": "m_bDontUpdate is in StyleList. Please tell how to access it.",
+      "range": {
+        "startLine": 647,
+        "startChar": 8,
+        "endLine": 647,
+        "endChar": 19
+      },
+      "revId": "247585f1198b8c963554c7821825581c370fb5e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "08047f39_dbc3df70",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 25
+      },
+      "lineNbr": 766,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-07-06T06:25:06Z",
+      "side": 1,
+      "message": "m_pStyleSheetPool is in StyleList. Please tell how to access it.",
+      "range": {
+        "startLine": 766,
+        "startChar": 48,
+        "endLine": 766,
+        "endChar": 65
+      },
+      "revId": "247585f1198b8c963554c7821825581c370fb5e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9ab61f35_4258f3d3",
+        "filename": "sfx2/source/inc/StyleList.hxx",
+        "patchSetId": 25
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-07-06T06:25:06Z",
+      "side": 1,
+      "message": "It says that std::unique_ptr\u003c_Ty,_Dx\u003e::unique_ptr(const std::unique_ptr\u003c_Ty,_Dx\u003e \u0026) cannot be referenced -- it is a deleted function.. Any other way to access it?",
+      "range": {
+        "startLine": 79,
+        "startChar": 19,
+        "endLine": 79,
+        "endChar": 38
+      },
+      "revId": "247585f1198b8c963554c7821825581c370fb5e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
