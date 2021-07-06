@@ -89,9 +89,11 @@ public:
     static TestResult checkLineJoinRound(Bitmap& rBitmap) { return checkLineJoin(rBitmap, basegfx::B2DLineJoin::Round); }
     static TestResult checkLineJoinMiter(Bitmap& rBitmap) { return checkLineJoin(rBitmap, basegfx::B2DLineJoin::Miter); }
     static TestResult checkLineJoinNone(Bitmap& rBitmap) { return checkLineJoin(rBitmap, basegfx::B2DLineJoin::NONE); }
+    static TestResult checkEllipse(Bitmap& rBitmap);
 private:
     static TestResult checkLineCap(Bitmap& rBitmap, css::drawing::LineCap lineCap);
     static TestResult checkLineJoin(Bitmap& rBitmap, basegfx::B2DLineJoin lineJoin);
+    static TestResult checkEllipticalPath(Bitmap& rBitmap,int aLayerNumber, Color aExpectedColor);
 };
 
 class VCL_DLLPUBLIC OutputDeviceTestBitmap : public OutputDeviceTestCommon
@@ -168,6 +170,7 @@ public:
     Bitmap setupAALines();
     Bitmap setupBezier();
     Bitmap setupAABezier();
+    Bitmap setupEllipse();
 };
 
 class VCL_DLLPUBLIC OutputDeviceTestPolyLineB2D : public OutputDeviceTestCommon

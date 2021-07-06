@@ -344,8 +344,8 @@ public:
 
         aRectangle = aRegions[index++];
         {
-            vcl::test::OutputDeviceTestPolyLineB2D aOutDevTest;
-            Bitmap aBitmap = aOutDevTest.setupBezier();
+            vcl::test::OutputDeviceTestPolyLine aOutDevTest;
+            Bitmap aBitmap = aOutDevTest.setupEllipse();
             assertAndSetBackground(vcl::test::OutputDeviceTestCommon::checkBezier(aBitmap), aRectangle, rRenderContext);
             drawBitmapScaledAndCentered(aRectangle, aBitmap, rRenderContext);
         }

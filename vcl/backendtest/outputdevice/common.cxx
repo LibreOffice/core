@@ -13,6 +13,8 @@
 #include <bitmap/BitmapWriteAccess.hxx>
 #include <salgdi.hxx>
 
+#include <cmath>
+
 namespace vcl::test {
 
 namespace
@@ -535,6 +537,58 @@ TestResult OutputDeviceTestCommon::checkBezier(Bitmap& rBitmap)
     // Check the bezier doesn't go over to the margins first
     // TODO extend the check with more exact assert
     return checkRectangles(rBitmap, aExpected);
+}
+
+TestResult OutputDeviceTestCommon::checkEllipticalPath(Bitmap& rBitmap, int aLayerNumber,
+                                                       Color aExpectedColor)
+{
+    BitmapScopedWriteAccess pAccess(rBitmap);
+
+    TestResult aResult = TestResult::Passed;
+    int nNumberOfQuirks = 0;
+    int nNumberOfErrors = 0;
+
+    tools::Long height = pAccess->Height();
+    tools::Long width = pAccess->Width();
+
+    tools::Long midX = height / 2;
+    tools::Long midY = width / 2;
+    tools::Long calculatedOffsetX = midX + aLayerNumber;
+    tools::Long calculatedOffsetY = midY - 2 - aLayerNumber;
+
+    double PI = 3.141592653589793;
+    //Traverse elliptically
+    for (double angle = 0.0; angle <= 360.0; angle += 45.0)
+    {
+        double t = tan(((double)angle / 360) * PI);
+        double pTx = (calculatedOffsetX * (1 - (t * t)) / (1 + (t * t))) + midX,
+               pTy = (calculatedOffsetY * 2 * t / (1 + (t * t))) + midY;
+        tools::Long pX = std::min(std::max(static_cast<tools::Long>(round(pTx)), static_cast<tools::Long>(0)), width);
+        tools::Long pY = std::min(std::max(static_cast<tools::Long>(round(pTy)), static_cast<tools::Long>(0)), height);
+        checkValue(pAccess, pX, pY, aExpectedColor, nNumberOfQuirks, nNumberOfErrors, true);
+    }
+
+    if (nNumberOfQuirks > 0)
+        aResult = TestResult::PassedWithQuirks;
+    if (nNumberOfErrors > 0)
+        aResult = TestResult::Failed;
+    return aResult;
+}
+
+TestResult OutputDeviceTestCommon::checkEllipse(Bitmap& rBitmap)
+{
+    std::vector<Color> aExpectedColors{ constBackgroundColor, constLineColor,
+                                        constBackgroundColor };
+    TestResult aResultValue = TestResult::Passed;
+    for (size_t i = 1; i <= aExpectedColors.size(); i++)
+    {
+        TestResult eResult = checkEllipticalPath(rBitmap, i, aExpectedColors[i - 1]);
+        if (eResult == TestResult::Failed)
+            aResultValue = TestResult::Failed;
+        if (eResult == TestResult::PassedWithQuirks && aResultValue != TestResult::Failed)
+            aResultValue = TestResult::PassedWithQuirks;
+    }
+    return aResultValue;
 }
 
 // Check 'count' pixels from (x,y) in (addX,addY) direction, the color values must not decrease.

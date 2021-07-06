@@ -1246,6 +1246,25 @@ void GraphicsRenderTests::testLineCapButt()
     }
 }
 
+void GraphicsRenderTests::testEllipsePolyLine()
+{
+    vcl::test::OutputDeviceTestPolyLine aOutDevTest;
+    Bitmap aBitmap = aOutDevTest.setupEllipse();
+    OUString atestName = "testEllipsePolyLine";
+    if (!SHOULD_ASSERT)
+    {
+        appendTestResult(atestName, "SKIPPED");
+        return;
+    }
+    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestLine::checkEllipse(aBitmap);
+    appendTestResult(atestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        exportBitmapToImage(m_aUserInstallPath + atestName + ".png", aBitmap);
+    }
+}
+
 void GraphicsRenderTests::runALLTests()
 {
     testDrawRectWithRectangle();
@@ -1308,6 +1327,7 @@ void GraphicsRenderTests::runALLTests()
     testLineCapRound();
     testLineCapSquare();
     testLineCapButt();
+    testEllipsePolyLine();
 }
 
 void GraphicsRenderTests::appendTestResult(OUString aTestName, OUString aTestStatus,

@@ -278,6 +278,45 @@ Bitmap OutputDeviceTestPolyLine::setupAABezier()
     return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
 }
 
+Bitmap OutputDeviceTestPolyLine::setupEllipse()
+{
+    initialSetup(19, 21, constBackgroundColor);
+
+    mpVirtualDevice->SetLineColor(constLineColor);
+    mpVirtualDevice->SetFillColor();
+
+    int offset = 6;
+    tools::Long mPtX = maVDRectangle.Left() + (maVDRectangle.Right() - maVDRectangle.Left()) / 2.0;
+    tools::Long mPtY = maVDRectangle.Top() + (maVDRectangle.Bottom() - maVDRectangle.Top()) / 2.0;
+    Point aPoint1 = Point(mPtX, mPtY - offset);
+    Point aPoint2 = Point(mPtX, mPtY + offset);
+
+    tools::Polygon aPolygon(8);
+
+    aPolygon.SetPoint(aPoint1, 0);
+    aPolygon.SetFlags(0, PolyFlags::Normal);
+    aPolygon.SetPoint(Point(mPtX + (offset-1)*2 + 1, mPtY - offset), 1);
+    aPolygon.SetFlags(1, PolyFlags::Control);
+    aPolygon.SetPoint(Point(mPtX + (offset-1)*2 + 1, mPtY + offset), 2);
+    aPolygon.SetFlags(2, PolyFlags::Control);
+    aPolygon.SetPoint(aPoint2, 3);
+    aPolygon.SetFlags(3, PolyFlags::Normal);
+
+    aPolygon.SetPoint(aPoint2, 4);
+    aPolygon.SetFlags(4, PolyFlags::Normal);
+    aPolygon.SetPoint(Point(mPtX - (offset-1)*2 - 1, mPtY + offset), 5);
+    aPolygon.SetFlags(5, PolyFlags::Control);
+    aPolygon.SetPoint(Point(mPtX - (offset-1)*2 - 1, mPtY - offset), 6);
+    aPolygon.SetFlags(6, PolyFlags::Control);
+    aPolygon.SetPoint(aPoint1, 7);
+    aPolygon.SetFlags(7, PolyFlags::Normal);
+
+    aPolygon.Optimize(PolyOptimizeFlags::CLOSE);
+
+    mpVirtualDevice->DrawPolyLine(aPolygon);
+
+    return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
+}
 } // end namespace vcl::test
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
