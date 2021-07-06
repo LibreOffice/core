@@ -691,12 +691,12 @@ DateOrder LocaleDataWrapper::getDateOrder() const
     return nDateOrder;
 }
 
-DateOrder LocaleDataWrapper::getLongDateOrder() const
+LongDateOrder LocaleDataWrapper::getLongDateOrder() const
 {
     return nLongDateOrder;
 }
 
-DateOrder LocaleDataWrapper::scanDateOrderImpl( const OUString& rCode ) const
+LongDateOrder LocaleDataWrapper::scanDateOrderImpl( const OUString& rCode ) const
 {
     // Only some european versions were translated, the ones with different
     // keyword combinations are:
@@ -760,18 +760,40 @@ DateOrder LocaleDataWrapper::scanDateOrderImpl( const OUString& rCode ) const
     }
     // compare with <= because each position may equal rCode.getLength()
     if ( nDay <= nMonth && nMonth <= nYear )
-        return DateOrder::DMY;     // also if every position equals rCode.getLength()
+        return LongDateOrder::DMY;     // also if every position equals rCode.getLength()
     else if ( nMonth <= nDay && nDay <= nYear )
-        return DateOrder::MDY;
+        return LongDateOrder::MDY;
     else if ( nYear <= nMonth && nMonth <= nDay )
-        return DateOrder::YMD;
+        return LongDateOrder::YMD;
+    else if ( nYear <= nDay && nDay <= nMonth )
+        return LongDateOrder::YDM;
     else
     {
         if (areChecksEnabled())
         {
             outputCheckMessage( appendLocaleInfo( "LocaleDataWrapper::scanDateOrder: no magic applicable" ) );
         }
-        return DateOrder::DMY;
+        return LongDateOrder::DMY;
+    }
+}
+
+static DateOrder getDateOrderFromLongDateOrder( LongDateOrder eLong )
+{
+    switch (eLong)
+    {
+        case LongDateOrder::YMD:
+            return DateOrder::YMD;
+        break;
+        case LongDateOrder::DMY:
+            return DateOrder::DMY;
+        break;
+        case LongDateOrder::MDY:
+            return DateOrder::MDY;
+        break;
+        case LongDateOrder::YDM:
+        default:
+            assert(!"unhandled LongDateOrder to DateOrder");
+            return DateOrder::DMY;
     }
 }
 
@@ -786,7 +808,8 @@ void LocaleDataWrapper::loadDateOrders()
         {
             outputCheckMessage( appendLocaleInfo( "LocaleDataWrapper::getDateOrdersImpl: no date formats" ) );
         }
-        nDateOrder = nLongDateOrder = DateOrder::DMY;
+        nDateOrder = DateOrder::DMY;
+        nLongDateOrder = LongDateOrder::DMY;
         return;
     }
     // find the edit (21), a default (medium preferred),
@@ -844,16 +867,19 @@ void LocaleDataWrapper::loadDateOrders()
         }
         nEdit = nDef;
     }
-    DateOrder nDF = scanDateOrderImpl( pFormatArr[nEdit].Code );
+    LongDateOrder nDO = scanDateOrderImpl( pFormatArr[nEdit].Code );
     if ( pFormatArr[nEdit].Type == KNumberFormatType::LONG )
     {   // normally this is not the case
-        nLongDateOrder = nDateOrder = nDF;
+        nLongDateOrder = nDO;
+        nDateOrder = getDateOrderFromLongDateOrder(nDO);
     }
     else
     {
-        nDateOrder = nDF;
+        // YDM should not occur in a short/medium date (i.e. no locale has
+        // that) and is nowhere handled.
+        nDateOrder = getDateOrderFromLongDateOrder(nDO);
         if ( nLong == -1 )
-            nLongDateOrder = nDF;
+            nLongDateOrder = nDO;
         else
             nLongDateOrder = scanDateOrderImpl( pFormatArr[nLong].Code );
     }
