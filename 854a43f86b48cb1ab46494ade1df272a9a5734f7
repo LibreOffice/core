@@ -22,6 +22,30 @@
       "revId": "854a43f86b48cb1ab46494ade1df272a9a5734f7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f807786c_936bffbd",
+        "filename": "officecfg/registry/data/org/openoffice/Office/ExtensionManager.xcu",
+        "patchSetId": 5
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-07-06T22:50:15Z",
+      "side": 1,
+      "message": "You may know that cui/source/dialogs/AdditionsDialog.cxx:488 uses a temporary URL pattern like https://extensions.libreoffice.org/api/v0/allextensions.json which is introduced by cloph to replace a faulty personal URL remaining from a GSoC project. So, if this URL is needed to be changed in this patch, a new URL pattern will be needed. IMO, this change needs additional work to setup script and API, and it can be postponed.",
+      "parentUuid": "62519d55_d607d86d",
+      "range": {
+        "startLine": 22,
+        "startChar": 20,
+        "endLine": 22,
+        "endChar": 31
+      },
+      "revId": "854a43f86b48cb1ab46494ade1df272a9a5734f7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
