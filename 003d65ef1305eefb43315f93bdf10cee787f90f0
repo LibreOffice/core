@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3ada84_939b737e",
+        "filename": "sw/source/core/txtnode/thints.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2788,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-07-06T08:57:48Z",
+      "side": 1,
+      "message": "this looks wrong to me - at this point we don\u0027t know if the set that isn\u0027t at the end contains only a RSID or something else - the result must depend on that!\n\nactually the if (!pItem1 || !pItem2) handles the same situation *after* skipping RSID? maybe remove the loop condition and the IsAtEnd checks and rely on that?",
+      "revId": "003d65ef1305eefb43315f93bdf10cee787f90f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
