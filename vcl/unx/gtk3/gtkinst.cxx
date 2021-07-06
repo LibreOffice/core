@@ -10656,11 +10656,7 @@ private:
 #endif
     GtkCssProvider *m_pMenuButtonProvider;
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
-    std::map<OString, GtkToolItem*> m_aMap;
-#else
     std::map<OString, GtkWidget*> m_aMap;
-#endif
     std::map<OString, std::unique_ptr<GtkInstanceMenuButton>> m_aMenuButtonMap;
 
     // at the time of writing there is no gtk_menu_tool_button_set_popover available
@@ -10695,34 +10691,24 @@ private:
     static void collect(GtkWidget* pItem, gpointer widget)
     {
 #if !GTK_CHECK_VERSION(4, 0, 0)
-        if (GTK_IS_TOOL_ITEM(pItem))
+        if (!GTK_IS_TOOL_ITEM(pItem))
+            return;
 #endif
-        {
-#if !GTK_CHECK_VERSION(4, 0, 0)
-            GtkToolItem* pToolItem = GTK_TOOL_ITEM(pItem);
-#else
-            GtkWidget* pToolItem = pItem;
-#endif
-            GtkInstanceToolbar* pThis = static_cast<GtkInstanceToolbar*>(widget);
+        GtkInstanceToolbar* pThis = static_cast<GtkInstanceToolbar*>(widget);
 
-            GtkMenuButton* pMenuButton = nullptr;
+        GtkMenuButton* pMenuButton = nullptr;
 #if !GTK_CHECK_VERSION(4, 0, 0)
-            if (GTK_IS_MENU_TOOL_BUTTON(pItem))
-                find_menu_button(pItem, &pMenuButton);
+        if (GTK_IS_MENU_TOOL_BUTTON(pItem))
+            find_menu_button(pItem, &pMenuButton);
 #else
-            if (GTK_IS_MENU_BUTTON(pItem))
-                pMenuButton = GTK_MENU_BUTTON(pItem);
+        if (GTK_IS_MENU_BUTTON(pItem))
+            pMenuButton = GTK_MENU_BUTTON(pItem);
 #endif
 
-            pThis->add_to_map(pToolItem, pMenuButton);
-        }
+        pThis->add_to_map(pItem, pMenuButton);
     }
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
-    void add_to_map(GtkToolItem* pToolItem, GtkMenuButton* pMenuButton)
-#else
     void add_to_map(GtkWidget* pToolItem, GtkMenuButton* pMenuButton)
-#endif
     {
         OString id = ::get_buildable_id(GTK_BUILDABLE(pToolItem));
         m_aMap[id] = pToolItem;
@@ -10861,9 +10847,9 @@ private:
     }
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
-    GtkToolItem* toolbar_get_nth_item(int nIndex) const
+    GtkWidget* toolbar_get_nth_item(int nIndex) const
     {
-        return gtk_toolbar_get_nth_item(m_pToolbar, nIndex);
+        return GTK_WIDGET(gtk_toolbar_get_nth_item(m_pToolbar, nIndex));
     }
 #else
     GtkWidget* toolbar_get_nth_item(int nIndex) const
@@ -10952,11 +10938,7 @@ public:
     {
         disable_item_notify_events();
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
-        GtkToolItem* pToolButton = m_aMap.find(rIdent)->second;
-#else
         GtkWidget* pToolButton = m_aMap.find(rIdent)->second;
-#endif
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
         if (GTK_IS_TOGGLE_TOOL_BUTTON(pToolButton))
@@ -10985,11 +10967,7 @@ public:
 
     virtual bool get_item_active(const OString& rIdent) const override
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
-        GtkToolItem* pToolButton = m_aMap.find(rIdent)->second;
-#else
         GtkWidget* pToolButton = m_aMap.find(rIdent)->second;
-#endif
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
         if (GTK_IS_TOGGLE_TOOL_BUTTON(pToolButton))
@@ -11046,7 +11024,7 @@ public:
         gtk_box_insert_child_after(m_pToolbar, pItem, toolbar_get_nth_item(pos - 1));
 #endif
         gtk_widget_show(GTK_WIDGET(pItem));
-        add_to_map(pItem, nullptr);
+        add_to_map(GTK_WIDGET(pItem), nullptr);
     }
 
     virtual void insert_separator(int pos, const OUString& rId) override
@@ -11110,11 +11088,7 @@ public:
         auto aFind = m_aMap.find(rIdent);
         if (aFind != m_aMap.end())
         {
-#if !GTK_CHECK_VERSION(4, 0, 0)
-            GtkToolItem* pDupIdItem = aFind->second;
-#else
             GtkWidget* pDupIdItem = aFind->second;
-#endif
             ::set_buildable_id(GTK_BUILDABLE(pDupIdItem), sOldIdent);
             m_aMap[sOldIdent] = pDupIdItem;
         }
@@ -11138,13 +11112,12 @@ public:
 
     virtual void set_item_label(const OString& rIdent, const OUString& rLabel) override
     {
+        GtkWidget* pItem = m_aMap[rIdent];
 #if !GTK_CHECK_VERSION(4, 0, 0)
-        GtkToolItem* pItem = m_aMap[rIdent];
         if (!pItem || !GTK_IS_TOOL_BUTTON(pItem))
             return;
         gtk_tool_button_set_label(GTK_TOOL_BUTTON(pItem), MapToGtkAccelerator(rLabel).getStr());
 #else
-        GtkWidget* pItem = m_aMap[rIdent];
         if (!pItem || !GTK_IS_BUTTON(pItem))
             return;
         gtk_button_set_label(GTK_BUTTON(pItem), MapToGtkAccelerator(rLabel).getStr());
@@ -11163,12 +11136,11 @@ public:
 
     virtual void set_item_icon_name(const OString& rIdent, const OUString& rIconName) override
     {
+        GtkWidget* pItem = m_aMap[rIdent];
 #if !GTK_CHECK_VERSION(4, 0, 0)
-        GtkToolItem* pItem = m_aMap[rIdent];
         if (!pItem || !GTK_IS_TOOL_BUTTON(pItem))
             return;
 #else
-        GtkWidget* pItem = m_aMap[rIdent];
         if (!pItem || !GTK_IS_BUTTON(pItem))
             return;
 #endif
@@ -11191,13 +11163,12 @@ public:
 
     virtual void set_item_image(const OString& rIdent, const css::uno::Reference<css::graphic::XGraphic>& rIcon) override
     {
+        GtkWidget* pItem = m_aMap[rIdent];
 #if !GTK_CHECK_VERSION(4, 0, 0)
-        GtkToolItem* pItem = m_aMap[rIdent];
         if (!pItem || !GTK_IS_TOOL_BUTTON(pItem))
             return;
         set_item_image(GTK_TOOL_BUTTON(pItem), rIcon);
 #else
-        GtkWidget* pItem = m_aMap[rIdent];
         if (!pItem || !GTK_IS_BUTTON(pItem))
             return;
         set_item_image(GTK_BUTTON(pItem), rIcon);
@@ -11206,13 +11177,12 @@ public:
 
     virtual void set_item_image(const OString& rIdent, VirtualDevice* pDevice) override
     {
+        GtkWidget* pItem = m_aMap[rIdent];
 #if !GTK_CHECK_VERSION(4, 0, 0)
-        GtkToolItem* pItem = m_aMap[rIdent];
         if (!pItem || !GTK_IS_TOOL_BUTTON(pItem))
             return;
         set_item_image(GTK_TOOL_BUTTON(pItem), pDevice);
 #else
-        GtkWidget* pItem = m_aMap[rIdent];
         if (!pItem || !GTK_IS_BUTTON(pItem))
             return;
         set_item_image(GTK_BUTTON(pItem), pDevice);
