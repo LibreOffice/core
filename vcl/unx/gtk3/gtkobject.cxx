@@ -302,12 +302,15 @@ GtkSalObjectWidgetClip::GtkSalObjectWidgetClip(GtkSalFrame* pParent, bool bShow)
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
     m_pScrolledWindow = gtk_scrolled_window_new(nullptr, nullptr);
+    g_signal_connect(m_pScrolledWindow, "scroll-event", G_CALLBACK(signalScroll), this);
 #else
     m_pScrolledWindow = gtk_scrolled_window_new();
+    GtkEventController* pScrollController = gtk_event_controller_scroll_new(GTK_EVENT_CONTROLLER_SCROLL_BOTH_AXES);
+    g_signal_connect(pScrollController, "scroll", G_CALLBACK(signalScroll), this);
+    gtk_widget_add_controller(m_pScrolledWindow, pScrollController);
 #endif
     gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(m_pScrolledWindow),
                                    GTK_POLICY_EXTERNAL, GTK_POLICY_EXTERNAL);
-    g_signal_connect(m_pScrolledWindow, "scroll-event", G_CALLBACK(signalScroll), this);
 
     // insert into container
     gtk_fixed_put( pParent->getFixedContainer(),
@@ -524,16 +527,24 @@ void GtkSalObjectWidgetClip::signalDestroy( GtkWidget* pObj, gpointer object )
     }
 }
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
 gboolean GtkSalObjectWidgetClip::signalScroll(GtkWidget* pScrolledWindow, GdkEvent* pEvent, gpointer object)
 {
     GtkSalObjectWidgetClip* pThis = static_cast<GtkSalObjectWidgetClip*>(object);
     return pThis->signal_scroll(pScrolledWindow, pEvent);
 }
+#else
+gboolean GtkSalObjectWidgetClip::signalScroll(GtkEventControllerScroll* pController, double delta_x, double delta_y, gpointer object)
+{
+    GtkSalObjectWidgetClip* pThis = static_cast<GtkSalObjectWidgetClip*>(object);
+    return pThis->signal_scroll(pController, delta_x, delta_y);
+}
+#endif
 
 // forward the wheel scroll events onto the main window instead
+#if !GTK_CHECK_VERSION(4, 0, 0)
 bool GtkSalObjectWidgetClip::signal_scroll(GtkWidget*, GdkEvent* pEvent)
 {
-#if !GTK_CHECK_VERSION(4, 0, 0)
     GtkWidget* pEventWidget = gtk_get_event_widget(pEvent);
 
     GtkWidget* pMouseEventWidget = m_pParent->getMouseEventWidget();
@@ -549,10 +560,28 @@ bool GtkSalObjectWidgetClip::signal_scroll(GtkWidget*, GdkEvent* pEvent)
     pEvent->scroll.y = dest_y;
 
     GtkSalFrame::signalScroll(pMouseEventWidget, pEvent, m_pParent);
-#else
-    (void)pEvent;
-#endif
     return true;
 }
+#else
+bool GtkSalObjectWidgetClip::signal_scroll(GtkEventControllerScroll* pController, double delta_x, double delta_y)
+{
+    GtkWidget* pEventWidget = m_pScrolledWindow;
+
+    GtkWidget* pMouseEventWidget = m_pParent->getMouseEventWidget();
+
+    gtk_coord dest_x, dest_y;
+    gtk_widget_translate_coordinates(pEventWidget,
+                                     pMouseEventWidget,
+                                     delta_x,
+                                     delta_y,
+                                     &dest_x,
+                                     &dest_y);
+    delta_x = dest_x;
+    delta_y = dest_y;
+
+    GtkSalFrame::signalScroll(pController, delta_x, delta_y, m_pParent);
+    return true;
+}
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
