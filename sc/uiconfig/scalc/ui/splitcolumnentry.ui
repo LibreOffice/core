@@ -56,6 +56,7 @@
         <property name="can-focus">True</property>
         <property name="hexpand">True</property>
         <property name="width-chars">10</property>
+        <property name="truncate-multiline">True</property>
         <property name="placeholder-text" translatable="yes" context="splitcolumnentry/cols">Column</property>
       </object>
       <packing>
