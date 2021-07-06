@@ -22,6 +22,30 @@
       "revId": "b80e2bff25dc891457f79b8575f21ad94b50378d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "971e730c_9b818111",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport16.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-07-06T06:52:50Z",
+      "side": 1,
+      "message": "If you add a FYI comment (i.e. not a question), it helps if you mark the comment as \"resolved\", as I try to make sure all comments are resolved before submitting a change. :-)",
+      "parentUuid": "3433c2e4_93f0fa2e",
+      "range": {
+        "startLine": 105,
+        "startChar": 4,
+        "endLine": 106,
+        "endChar": 91
+      },
+      "revId": "b80e2bff25dc891457f79b8575f21ad94b50378d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
