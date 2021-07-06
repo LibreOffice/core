@@ -2954,6 +2954,18 @@ void RadioButton::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
 
     if (!sGroupId.isEmpty())
         rJsonWriter.put("group", sGroupId);
+
+    if (!!maImage)
+    {
+        SvMemoryStream aOStm(6535, 6535);
+        if(GraphicConverter::Export(aOStm, maImage.GetBitmapEx(), ConvertDataFormat::PNG) == ERRCODE_NONE)
+        {
+            css::uno::Sequence<sal_Int8> aSeq( static_cast<sal_Int8 const *>(aOStm.GetData()), aOStm.Tell());
+            OUStringBuffer aBuffer("data:image/png;base64,");
+            ::comphelper::Base64::encode(aBuffer, aSeq);
+            rJsonWriter.put("image", aBuffer.makeStringAndClear());
+        }
+    }
 }
 
 FactoryFunction RadioButton::GetUITestFactory() const
