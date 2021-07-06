@@ -267,6 +267,18 @@ def remove_double_buffered(current):
   if double_buffered != None:
     current.remove(double_buffered)
 
+def remove_skip_pager_hint(current):
+  skip_pager_hint = None
+  for child in current:
+    remove_skip_pager_hint(child)
+    if child.tag == "property":
+      attributes = child.attrib
+      if attributes.get("name") == "skip_pager_hint" or attributes.get("name") == "skip-pager-hint":
+        skip_pager_hint = child
+
+  if skip_pager_hint != None:
+    current.remove(skip_pager_hint)
+
 def remove_expander_label_fill(current):
   label_fill = None
   isexpander = current.get('class') == "GtkExpander"
@@ -389,6 +401,7 @@ remove_expander_spacing(root)
 enforce_menubutton_indicator_consistency(root)
 enforce_active_in_group_consistency(root)
 remove_double_buffered(root)
+remove_skip_pager_hint(root)
 
 with open(sys.argv[1], 'wb') as o:
   # without encoding='unicode' (and the matching encode("utf8")) we get &#XXXX replacements for non-ascii characters
