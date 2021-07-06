@@ -36,10 +36,9 @@ public:
     }
 };
 
-#define DECLARE_WW8IMPORT_TEST(TestName, filename) DECLARE_SW_IMPORT_TEST(TestName, filename, nullptr, Test)
-
-DECLARE_WW8IMPORT_TEST(testFloatingTableSectionMargins, "floating-table-section-margins.doc")
+CPPUNIT_TEST_FIXTURE(Test, testFloatingTableSectionMargins)
 {
+    load(mpTestDocumentPath, "floating-table-section-margins.doc");
     sal_Int32 pageLeft = parseDump("/root/page[2]/infos/bounds", "left").toInt32();
     sal_Int32 pageWidth = parseDump("/root/page[2]/infos/bounds", "width").toInt32();
     sal_Int32 tableLeft = parseDump("//tab/infos/bounds", "left").toInt32();
@@ -61,8 +60,9 @@ DECLARE_WW8IMPORT_TEST(testFloatingTableSectionMargins, "floating-table-section-
     CPPUNIT_ASSERT( xTextColumns->getColumnCount() != xPageColumns->getColumnCount());
 }
 
-DECLARE_WW8IMPORT_TEST(testN816593, "n816593.doc")
+CPPUNIT_TEST_FIXTURE(Test, testN816593)
 {
+    load(mpTestDocumentPath, "n816593.doc");
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
     // Make sure that even if we import the two tables as non-floating, we
@@ -70,39 +70,44 @@ DECLARE_WW8IMPORT_TEST(testN816593, "n816593.doc")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndexAccess->getCount());
 }
 
-DECLARE_WW8IMPORT_TEST(testBnc875715, "bnc875715.doc")
+CPPUNIT_TEST_FIXTURE(Test, testBnc875715)
 {
+    load(mpTestDocumentPath, "bnc875715.doc");
     uno::Reference<text::XTextSectionsSupplier> xTextSectionsSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xSections(xTextSectionsSupplier->getTextSections(), uno::UNO_QUERY);
     // Was incorrectly set as -1270.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xSections->getByIndex(0), "SectionLeftMargin"));
 }
 
-DECLARE_WW8IMPORT_TEST(testFloatingTableSectionColumns, "floating-table-section-columns.doc")
+CPPUNIT_TEST_FIXTURE(Test, testFloatingTableSectionColumns)
 {
+    load(mpTestDocumentPath, "floating-table-section-columns.doc");
     OUString tableWidth = parseDump("/root/page[1]/body/section/column[2]/body/txt/anchored/fly/tab/infos/bounds", "width");
     // table width was restricted by a column
     CPPUNIT_ASSERT( tableWidth.toInt32() > 10000 );
 }
 
-DECLARE_WW8IMPORT_TEST(testTdf124601, "tdf124601.doc")
+CPPUNIT_TEST_FIXTURE(Test, testTdf124601)
 {
+    load(mpTestDocumentPath, "tdf124601.doc");
     // Without the accompanying fix in place, this test would have failed, as the importer lost the
     // fLayoutInCell shape property for wrap-though shapes.
     CPPUNIT_ASSERT(getProperty<bool>(getShapeByName(u"Grafik 18"), "IsFollowingTextFlow"));
     CPPUNIT_ASSERT(getProperty<bool>(getShapeByName(u"Grafik 19"), "IsFollowingTextFlow"));
 }
 
-DECLARE_WW8IMPORT_TEST(testImageLazyRead, "image-lazy-read.doc")
+CPPUNIT_TEST_FIXTURE(Test, testImageLazyRead)
 {
+    load(mpTestDocumentPath, "image-lazy-read.doc");
     auto xGraphic = getProperty<uno::Reference<graphic::XGraphic>>(getShape(1), "Graphic");
     Graphic aGraphic(xGraphic);
     // This failed, import loaded the graphic, it wasn't lazy-read.
     CPPUNIT_ASSERT(!aGraphic.isAvailable());
 }
 
-DECLARE_WW8IMPORT_TEST(testImageLazyRead0size, "image-lazy-read-0size.doc")
+CPPUNIT_TEST_FIXTURE(Test, testImageLazyRead0size)
 {
+    load(mpTestDocumentPath, "image-lazy-read-0size.doc");
     // Load a document with a single bitmap in it: it's declared as a WMF one, but actually a TGA
     // bitmap.
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
@@ -117,8 +122,9 @@ DECLARE_WW8IMPORT_TEST(testImageLazyRead0size, "image-lazy-read-0size.doc")
     CPPUNIT_ASSERT_EQUAL(Size(7590, 10440), pGrfNode->GetTwipSize());
 }
 
-DECLARE_WW8IMPORT_TEST(testTdf106799, "tdf106799.doc")
+CPPUNIT_TEST_FIXTURE(Test, testTdf106799)
 {
+    load(mpTestDocumentPath, "tdf106799.doc");
     // Ensure that all text portions are calculated before testing.
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
@@ -140,8 +146,9 @@ DECLARE_WW8IMPORT_TEST(testTdf106799, "tdf106799.doc")
         }
 }
 
-DECLARE_WW8IMPORT_TEST(testTdf121734, "tdf121734.doc")
+CPPUNIT_TEST_FIXTURE(Test, testTdf121734)
 {
+    load(mpTestDocumentPath, "tdf121734.doc");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
     SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
@@ -180,8 +187,9 @@ DECLARE_WW8IMPORT_TEST(testTdf121734, "tdf121734.doc")
     }
 }
 
-DECLARE_WW8IMPORT_TEST(testTdf125281, "tdf125281.doc")
+CPPUNIT_TEST_FIXTURE(Test, testTdf125281)
 {
+    load(mpTestDocumentPath, "tdf125281.doc");
 #if !defined(_WIN32)
     // Windows fails with actual == 26171 for some reason; also lazy load isn't lazy in Windows
     // debug builds, reason is not known at the moment.
@@ -205,8 +213,9 @@ DECLARE_WW8IMPORT_TEST(testTdf125281, "tdf125281.doc")
 #endif
 }
 
-DECLARE_WW8IMPORT_TEST(testTdf122425_1, "tdf122425_1.doc")
+CPPUNIT_TEST_FIXTURE(Test, testTdf122425_1)
 {
+    load(mpTestDocumentPath, "tdf122425_1.doc");
     // This is for header text in case we use a hack for fixed-height headers
     // (see SwWW8ImplReader::Read_HdFtTextAsHackedFrame)
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
@@ -251,8 +260,9 @@ DECLARE_WW8IMPORT_TEST(testTdf122425_1, "tdf122425_1.doc")
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(0), nDist);
 }
 
-DECLARE_WW8IMPORT_TEST(testTdf110987, "tdf110987")
+CPPUNIT_TEST_FIXTURE(Test, testTdf110987)
 {
+    load(mpTestDocumentPath, "tdf110987");
     // The input document is an empty .doc, but without file name
     // extension. Check that it was loaded as a normal .doc document,
     // and not a template.
@@ -262,8 +272,9 @@ DECLARE_WW8IMPORT_TEST(testTdf110987, "tdf110987")
     CPPUNIT_ASSERT(sFilterName != "MS Word 97 Vorlage");
 }
 
-DECLARE_WW8IMPORT_TEST(testTdf120761_zOrder, "tdf120761_zOrder.doc")
+CPPUNIT_TEST_FIXTURE(Test, testTdf120761_zOrder)
 {
+    load(mpTestDocumentPath, "tdf120761_zOrder.doc");
     //The blue shape was covering everything (highest zorder = 2) instead of the lowest(0)
     uno::Reference<drawing::XShape> xShape(getShapeByName(u"Picture 2"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(0), getProperty<sal_uInt32>(xShape, "ZOrder"));

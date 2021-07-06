@@ -6,8 +6,9 @@ tests. This file documents how to add new testcases to this framework.
 == Import tests
 
 Import tests are the easier ones. First you need to use
-`DECLARE_SW_IMPORT_TEST()`, so the framework will load the specified file to
-`mxComponent`, which represents the UNO model of the document.
+`CPPUNIT_TEST_FIXTURE()` and `load()`, so the framework will load the
+specified file to `mxComponent`, which represents the UNO model of the
+document.
 
 The rest of the testcase is about implementing the test method asserting this
 document model: use the UNO API to retrieve properties, then use

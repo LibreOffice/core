@@ -33,7 +33,7 @@
 
 /**
  * Macro to declare a new test (with full round-trip. To test
- * import only use the DECLARE_SW_IMPORT_TEST macro instead).
+ * import only use the CPPUNIT_TEST_FIXTURE macro directly).
  * In order to add a new test, one only needs to use this macro
  * and then specify the test content, like this:
  *
@@ -84,23 +84,6 @@
 #define DECLARE_ODFEXPORT_EXPORTONLY_TEST(TestName, filename) DECLARE_SW_EXPORTONLY_TEST(TestName, filename, nullptr, Test)
 #define DECLARE_FODFEXPORT_TEST(TestName, filename) DECLARE_SW_ROUNDTRIP_TEST(TestName, filename, nullptr, Test)
 #define DECLARE_WW8EXPORT_TEST(TestName, filename) DECLARE_SW_ROUNDTRIP_TEST(TestName, filename, nullptr, Test)
-
-#define DECLARE_SW_IMPORT_TEST(TestName, filename, password, BaseClass) \
-    class TestName : public BaseClass { \
-        protected:\
-    virtual OUString getTestName() override { return #TestName; } \
-        public:\
-    CPPUNIT_TEST_SUITE(TestName); \
-    CPPUNIT_TEST(Import); \
-    CPPUNIT_TEST_SUITE_END(); \
-    \
-    void Import() { \
-        executeImportTest(filename, password);\
-    }\
-    void verify() override;\
-    }; \
-    CPPUNIT_TEST_SUITE_REGISTRATION(TestName); \
-    void TestName::verify()
 
 #define DECLARE_SW_EXPORT_TEST(TestName, filename, password, BaseClass) \
     class TestName : public BaseClass { \
