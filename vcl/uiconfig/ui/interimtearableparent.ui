@@ -10,7 +10,6 @@
     <property name="resizable">False</property>
     <property name="destroy_with_parent">True</property>
     <property name="type_hint">dock</property>
-    <property name="skip_pager_hint">True</property>
     <child>
       <object class="GtkBox" id="box">
         <property name="visible">True</property>
