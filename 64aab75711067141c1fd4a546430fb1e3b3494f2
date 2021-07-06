@@ -71,6 +71,30 @@
     },
     {
       "key": {
+        "uuid": "dc123067_70adef64",
+        "filename": "editeng/source/outliner/outliner.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 870,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2021-07-06T11:10:07Z",
+      "side": 1,
+      "message": "Suggestion was wrong. That is the true one:\nOUString sText \u003d GetText(GetParagraph(nPara));",
+      "parentUuid": "bce4c308_c5a242de",
+      "range": {
+        "startLine": 870,
+        "startChar": 4,
+        "endLine": 870,
+        "endChar": 43
+      },
+      "revId": "64aab75711067141c1fd4a546430fb1e3b3494f2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a2f98d5b_6ec0be12",
         "filename": "editeng/source/outliner/outliner.cxx",
         "patchSetId": 1
