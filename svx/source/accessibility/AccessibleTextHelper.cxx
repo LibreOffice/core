@@ -761,9 +761,7 @@ namespace accessibility
                 if (mxFrontEnd.is() && bBroadcastEvents)
                 {
                     // child not yet created?
-                    ::accessibility::AccessibleParaManager::WeakChild aChild( maParaManager.GetChild(nCurrPara) );
-                    if( aChild.second.Width == 0 &&
-                        aChild.second.Height == 0 )
+                    if (!maParaManager.HasCreatedChild(nCurrPara))
                     {
                         GotPropertyEvent( uno::makeAny( maParaManager.CreateChild( nCurrPara - mnFirstVisibleChild,
                                                                                    mxFrontEnd, GetEditSource(), nCurrPara ).first ),
@@ -794,8 +792,16 @@ namespace accessibility
     {
     public:
         explicit AccessibleTextHelper_UpdateChildBounds() {}
-        ::accessibility::AccessibleParaManager::WeakChild operator()( const ::accessibility::AccessibleParaManager::WeakChild& rChild )
+    };
+
+    }
+
+    void AccessibleTextHelper_Impl::UpdateBoundRect()
+    {
+        // send BOUNDRECT_CHANGED to affected children
+        for(auto it = maParaManager.begin(); it != maParaManager.end(); ++it)
         {
+            ::accessibility::AccessibleParaManager::WeakChild& rChild = *it;
             // retrieve hard reference from weak one
             auto aHardRef( rChild.first.get() );
 
@@ -813,22 +819,10 @@ namespace accessibility
                     aHardRef->FireEvent( AccessibleEventId::BOUNDRECT_CHANGED );
 
                     // update internal bounds
-                    return ::accessibility::AccessibleParaManager::WeakChild( rChild.first, aNewRect );
+                    rChild = ::accessibility::AccessibleParaManager::WeakChild( rChild.first, aNewRect );
                 }
             }
-
-            // identity transform
-            return rChild;
         }
-    };
-
-    }
-
-    void AccessibleTextHelper_Impl::UpdateBoundRect()
-    {
-        // send BOUNDRECT_CHANGED to affected children
-        AccessibleTextHelper_UpdateChildBounds aFunctor;
-        ::std::transform( maParaManager.begin(), maParaManager.end(), maParaManager.begin(), aFunctor );
     }
 
 #ifdef DBG_UTIL
