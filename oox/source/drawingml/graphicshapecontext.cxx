@@ -183,6 +183,7 @@ OleObjectGraphicDataContext::~OleObjectGraphicDataContext()
 {
     /*  Register the OLE shape at the VML drawing, this prevents that the
         related VML shape converts the OLE object by itself. */
+
     if( !mrOleObjectInfo.maShapeId.isEmpty() )
         if( ::oox::vml::Drawing* pVmlDrawing = getFilter().getVmlDrawing() )
             pVmlDrawing->registerOleObject( mrOleObjectInfo );
@@ -214,6 +215,7 @@ ContextHandlerRef OleObjectGraphicDataContext::onCreateContext( sal_Int32 nEleme
             mrOleObjectInfo.maName = rAttribs.getXString( XML_name, OUString() );
             mrOleObjectInfo.maProgId = rAttribs.getXString( XML_progId, OUString() );
             mrOleObjectInfo.mbShowAsIcon = rAttribs.getBool( XML_showAsIcon, false );
+            mrOleObjectInfo.mbHasPicture = false; // Initialize as false
             return this;
         }
         break;
@@ -227,11 +229,21 @@ ContextHandlerRef OleObjectGraphicDataContext::onCreateContext( sal_Int32 nEleme
             mrOleObjectInfo.mbAutoUpdate = rAttribs.getBool( XML_updateAutomatic, false );
         break;
         case PPT_TOKEN( pic ):
+            mrOleObjectInfo.mbHasPicture = true; // Set true if ole object has picture element.
             return new GraphicShapeContext( *this, mpMasterShapePtr, mpShapePtr );
     }
     SAL_WARN("oox", "OleObjectGraphicDataContext::onCreateContext: unhandled element: "
                         << getBaseToken(nElement));
     return nullptr;
+}
+
+void OleObjectGraphicDataContext::onEndElement()
+{
+    if( getCurrentElement() == PPT_TOKEN( oleObj ) && aMceState.back() == MCE_STATE::FoundChoice)
+    {
+        if(!mrOleObjectInfo.mbHasPicture)
+            aMceState.back() = MCE_STATE::Started;
+    }
 }
 
 DiagramGraphicDataContext::DiagramGraphicDataContext( ContextHandler2Helper const & rParent, const ShapePtr& pShapePtr )
