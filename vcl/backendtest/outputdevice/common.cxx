@@ -663,6 +663,45 @@ TestResult OutputDeviceTestCommon::checkBezier(Bitmap& rBitmap)
     return checkRectangles(rBitmap, aExpected);
 }
 
+TestResult OutputDeviceTestCommon::checkHalfEllipse(Bitmap& rBitmap)
+{
+    BitmapScopedWriteAccess pAccess(rBitmap);
+
+    TestResult aResult = TestResult::Passed;
+    int nNumberOfQuirks = 0;
+    int nNumberOfErrors = 0;
+
+    std::map<std::pair<tools::Long, tools::Long>,bool> SetPixels
+        = { {{ 3, 7 },true},   {{ 3, 8 },true},   {{ 3, 9 },true},   {{ 3, 10 },true}, {{ 3, 11 },true},  {{ 4, 5 },true},   {{ 4, 6 },true},
+            {{ 4, 12 },true},  {{ 4, 13 },true},  {{ 5, 4 },true},   {{ 5, 14 },true}, {{ 6, 3 },true},   {{ 6, 15 },true},  {{ 7, 2 },true},
+            {{ 7, 16 },true},  {{ 8, 2 },true},   {{ 8, 16 },true},  {{ 9, 1 },true},  {{ 9, 17 },true},  {{ 10, 1 },true},  {{ 10, 17 },true},
+            {{ 11, 1 },true},  {{ 11, 17 },true}, {{ 12, 1 },true},  {{ 12, 2 },true}, {{ 12, 3 },true},  {{ 12, 4 },true},  {{ 12, 5 },true},
+            {{ 12, 6 },true},  {{ 12, 7 },true},  {{ 12, 8 },true},  {{ 12, 9 },true}, {{ 12, 10 },true}, {{ 12, 11 },true}, {{ 12, 12 },true},
+            {{ 12, 13 },true}, {{ 12, 14 },true}, {{ 12, 15 },true}, {{ 12, 16 },true} };
+
+    for (tools::Long x = 0; x < pAccess->Width(); x++)
+    {
+        for (tools::Long y = 0; y < pAccess->Height(); ++y)
+        {
+            if (SetPixels[{ y, x }])
+            {
+                checkValue(pAccess, x, y, constLineColor, nNumberOfQuirks, nNumberOfErrors, true);
+            }
+            else
+            {
+                checkValue(pAccess, x, y, constBackgroundColor, nNumberOfQuirks, nNumberOfErrors,
+                           true);
+            }
+        }
+    }
+
+    if (nNumberOfQuirks > 0)
+        aResult = TestResult::PassedWithQuirks;
+    if (nNumberOfErrors > 0)
+        aResult = TestResult::Failed;
+    return aResult;
+}
+
 // Check 'count' pixels from (x,y) in (addX,addY) direction, the color values must not decrease.
 static bool checkGradient(BitmapScopedWriteAccess& pAccess, int x, int y, int count, int addX, int addY)
 {

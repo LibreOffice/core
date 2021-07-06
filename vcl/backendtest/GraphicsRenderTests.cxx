@@ -1366,6 +1366,8 @@ void GraphicsRenderTests::runALLTests()
     testDrawDropShapeAAWithPolyline();
     testDrawDropShapeWithPolygon();
     testDrawDropShapeAAWithPolygon();
+    testHalfEllipsePolyLine();
+    testHalfEllipsePolygon();
 }
 
 void GraphicsRenderTests::appendTestResult(OUString aTestName, OUString aTestStatus,
