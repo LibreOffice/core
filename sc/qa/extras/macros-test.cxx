@@ -14,6 +14,7 @@
 #include <unotools/tempfile.hxx>
 #include <vcl/svapp.hxx>
 #include <editeng/borderline.hxx>
+#include <unotools/mediadescriptor.hxx>
 
 #include <docsh.hxx>
 #include <document.hxx>
@@ -25,13 +26,17 @@
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 
+#include <helper/xpath.hxx>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
 /* Implementation of Macros test */
 
-class ScMacrosTest : public UnoApiTest
+class ScMacrosTest : public UnoApiTest, public XmlTestTools
 {
+protected:
+    void registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx) override;
 public:
     ScMacrosTest();
     void saveAndReload(css::uno::Reference<css::lang::XComponent>& xComponent,
@@ -55,6 +60,7 @@ public:
     void testTdf43003();
     void testTdf138646();
     void testTdf90278();
+    void testMacroButtonFormControlXlsxExport();
 
     CPPUNIT_TEST_SUITE(ScMacrosTest);
     CPPUNIT_TEST(testStarBasic);
@@ -75,9 +81,46 @@ public:
     CPPUNIT_TEST(testTdf43003);
     CPPUNIT_TEST(testTdf138646);
     CPPUNIT_TEST(testTdf90278);
+    CPPUNIT_TEST(testMacroButtonFormControlXlsxExport);
 
     CPPUNIT_TEST_SUITE_END();
 };
+
+void ScMacrosTest::registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx)
+{
+    static const struct { xmlChar* pPrefix; xmlChar* pURI; } aNamespaces[] =
+    {
+        { BAD_CAST("w"), BAD_CAST("http://schemas.openxmlformats.org/wordprocessingml/2006/main") },
+        { BAD_CAST("x"), BAD_CAST("http://schemas.openxmlformats.org/spreadsheetml/2006/main") },
+        { BAD_CAST("v"), BAD_CAST("urn:schemas-microsoft-com:vml") },
+        { BAD_CAST("c"), BAD_CAST("http://schemas.openxmlformats.org/drawingml/2006/chart") },
+        { BAD_CAST("a"), BAD_CAST("http://schemas.openxmlformats.org/drawingml/2006/main") },
+        { BAD_CAST("mc"), BAD_CAST("http://schemas.openxmlformats.org/markup-compatibility/2006") },
+        { BAD_CAST("wps"), BAD_CAST("http://schemas.microsoft.com/office/word/2010/wordprocessingShape") },
+        { BAD_CAST("wpg"), BAD_CAST("http://schemas.microsoft.com/office/word/2010/wordprocessingGroup") },
+        { BAD_CAST("wp"), BAD_CAST("http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing") },
+        { BAD_CAST("office"), BAD_CAST("urn:oasis:names:tc:opendocument:xmlns:office:1.0") },
+        { BAD_CAST("table"), BAD_CAST("urn:oasis:names:tc:opendocument:xmlns:table:1.0") },
+        { BAD_CAST("text"), BAD_CAST("urn:oasis:names:tc:opendocument:xmlns:text:1.0") },
+        { BAD_CAST("style"), BAD_CAST("urn:oasis:names:tc:opendocument:xmlns:style:1.0") },
+        { BAD_CAST("draw"), BAD_CAST("urn:oasis:names:tc:opendocument:xmlns:drawing:1.0") },
+        { BAD_CAST("xlink"), BAD_CAST("http://www.w3c.org/1999/xlink") },
+        { BAD_CAST("xdr"), BAD_CAST("http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing") },
+        { BAD_CAST("xx"), BAD_CAST("urn:schemas-microsoft-com:office:excel") },
+        { BAD_CAST("r"), BAD_CAST("http://schemas.openxmlformats.org/package/2006/relationships") },
+        { BAD_CAST("number"), BAD_CAST("urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0") },
+        { BAD_CAST("loext"), BAD_CAST("urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0") },
+        { BAD_CAST("tableooo"), BAD_CAST("http://openoffice.org/2009/table") },
+        { BAD_CAST("ContentType"), BAD_CAST("http://schemas.openxmlformats.org/package/2006/content-types") },
+        { BAD_CAST("x14"), BAD_CAST("http://schemas.microsoft.com/office/spreadsheetml/2009/9/main") },
+        { BAD_CAST("xm"), BAD_CAST("http://schemas.microsoft.com/office/excel/2006/main") },
+        { BAD_CAST("x12ac"), BAD_CAST("http://schemas.microsoft.com/office/spreadsheetml/2011/1/ac") },
+    };
+    for(size_t i = 0; i < SAL_N_ELEMENTS(aNamespaces); ++i)
+    {
+        xmlXPathRegisterNs(pXmlXPathCtx, aNamespaces[i].pPrefix, aNamespaces[i].pURI );
+    }
+}
 
 void ScMacrosTest::saveAndReload(css::uno::Reference<css::lang::XComponent>& xComponent,
                                  const OUString& rFilter)
@@ -471,6 +514,37 @@ void ScMacrosTest::testRowColumn()
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(4000), nWidth);
 
     pDocSh->DoClose();
+}
+
+void ScMacrosTest::testMacroButtonFormControlXlsxExport()
+{
+    // Given a button form control with an associated macro:
+    OUString aFileName;
+    createFileURL(u"macro-button-form-control.xlsm", aFileName);
+    uno::Reference<lang::XComponent> xComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+
+    // When exporting to XLSM:
+    uno::Reference<frame::XStorable> xStorable(xComponent, uno::UNO_QUERY);
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("Calc MS Excel 2007 VBA XML");
+    auto pTempFile = std::make_shared<utl::TempFile>();
+    pTempFile->EnableKillingFile();
+    xStorable->storeToURL(pTempFile->GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+    xComponent->dispose();
+
+    // Then make sure that the macro is associated with the control:
+    xmlDocUniquePtr pSheetDoc = XPathHelper::parseExport(pTempFile, m_xSFactory, "xl/worksheets/sheet1.xml");
+    CPPUNIT_ASSERT(pSheetDoc);
+    // Without the fix in place, this test would have failed with:
+    // - XPath '//x:controlPr' no attribute 'macro' exist
+    // i.e. the macro was lost on export.
+    assertXPath(pSheetDoc, "//x:controlPr", "macro", "Module1.Button1_Click");
+
+    // Then also make sure that there is no defined name for the macro, which is only needed for
+    // XLS:
+    xmlDocUniquePtr pWorkbookDoc = XPathHelper::parseExport(pTempFile, m_xSFactory, "xl/workbook.xml");
+    CPPUNIT_ASSERT(pWorkbookDoc);
+    assertXPath(pWorkbookDoc, "//x:workbook/definedNames", 0);
 }
 
 void ScMacrosTest::testTdf131562()
