@@ -72,13 +72,19 @@ struct ElementInfo;
 class OOX_DLLPUBLIC ContextHandler2Helper
 {
 public:
-    explicit            ContextHandler2Helper( bool bEnableTrimSpace );
+    explicit            ContextHandler2Helper( bool bEnableTrimSpace, XmlFilterBase& rFilter );
     explicit            ContextHandler2Helper( const ContextHandler2Helper& rParent );
     virtual             ~ContextHandler2Helper();
 
     // allow instances to be stored in ::rtl::Reference
     virtual void SAL_CALL acquire() noexcept = 0;
     virtual void SAL_CALL release() noexcept = 0;
+
+    enum class MCE_STATE
+    {
+        Started,
+        FoundChoice
+    };
 
     // interface --------------------------------------------------------------
 
@@ -201,6 +207,15 @@ protected:
     /** Must be called from endRecord() in derived classes. */
     void                implEndRecord( sal_Int32 nRecId );
 
+    bool                prepareMceContext( sal_Int32 nElement, const AttributeList& rAttribs );
+    XmlFilterBase&      getDocFilter() const { return mrFilter; }
+
+    MCE_STATE           getMCEState() const { return aMceState.back(); }
+    void                setMCEState( MCE_STATE aState ) { aMceState.back() = aState; }
+    void                addMCEState( MCE_STATE aState ) { aMceState.push_back( aState ); }
+    void                removeMCEState() { aMceState.pop_back(); }
+    bool                isMCEStateEmpty() { return aMceState.empty(); }
+
 private:
     ContextHandler2Helper& operator=( const ContextHandler2Helper& ) = delete;
 
@@ -214,9 +229,11 @@ private:
 
     ContextStackRef     mxContextStack;     ///< Stack of all processed elements.
     size_t              mnRootStackSize;    ///< Stack size on construction time.
+    std::vector<MCE_STATE> aMceState;
 
 protected:
     bool                mbEnableTrimSpace;  ///< True = trim whitespace in characters().
+    XmlFilterBase&      mrFilter;
 };
 
 class OOX_DLLPUBLIC ContextHandler2 : public ContextHandler, public ContextHandler2Helper
