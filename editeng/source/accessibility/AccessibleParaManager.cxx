@@ -144,6 +144,17 @@ namespace accessibility
         }
     }
 
+    bool AccessibleParaManager::HasCreatedChild( sal_Int32 nParagraphIndex ) const
+    {
+        if( 0 <= nParagraphIndex && maChildren.size() > o3tl::make_unsigned(nParagraphIndex) )
+        {
+            auto const & rChild = maChildren[ nParagraphIndex ];
+            return !(rChild.second.Width == 0 && rChild.second.Height == 0 );
+        }
+        else
+            return false;
+    }
+
     AccessibleParaManager::Child AccessibleParaManager::CreateChild( sal_Int32                              nChild,
                                                                      const uno::Reference< XAccessible >&   xFrontEnd,
                                                                      SvxEditSourceAdapter&                  rEditSource,
