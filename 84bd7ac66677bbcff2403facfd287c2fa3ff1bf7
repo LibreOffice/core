@@ -22,6 +22,30 @@
       "revId": "84bd7ac66677bbcff2403facfd287c2fa3ff1bf7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b5f25337_d50742b9",
+        "filename": "sfx2/source/appl/appserv.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 541,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-07-06T10:53:28Z",
+      "side": 1,
+      "message": "BCP47 returns en-US, which is wrong in case of the wiki. So I turned this intentionally into getLanguage().",
+      "parentUuid": "819ed803_b34f09cf",
+      "range": {
+        "startLine": 539,
+        "startChar": 0,
+        "endLine": 541,
+        "endChar": 0
+      },
+      "revId": "84bd7ac66677bbcff2403facfd287c2fa3ff1bf7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
