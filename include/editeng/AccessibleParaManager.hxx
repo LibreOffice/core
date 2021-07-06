@@ -138,6 +138,7 @@ namespace accessibility
                            sal_Int32                                                                                       nParagraphIndex );
 
         WeakChild GetChild( sal_Int32 nParagraphIndex ) const;
+        bool HasCreatedChild( sal_Int32 nParagraphIndex ) const;
 
         // forwarder to all paragraphs
         /// Make all children active and editable (or off)
