@@ -93,6 +93,7 @@ static void lcl_emitSearchResultCallbacks(SvxSearchItem const * pSearchItem, SwW
         return;
 
     std::vector<OString> aMatches;
+    OString textSelection;
     for (SwPaM& rPaM : pPaM->GetRingContainer())
     {
         if (SwShellCursor* pShellCursor = dynamic_cast<SwShellCursor*>(&rPaM))
@@ -108,6 +109,7 @@ static void lcl_emitSearchResultCallbacks(SvxSearchItem const * pSearchItem, SwW
             }
             OString sRect = comphelper::string::join("; ", aRect);
             aMatches.push_back(sRect);
+            textSelection = sRect;
         }
     }
     boost::property_tree::ptree aTree;
@@ -120,6 +122,12 @@ static void lcl_emitSearchResultCallbacks(SvxSearchItem const * pSearchItem, SwW
     OString aPayload = aStream.str().c_str();
 
     pWrtShell->GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_SEARCH_RESULT_SELECTION, aPayload.getStr());
+
+    if(bHighlightAll)
+    {   // FindAll disables this during find, do it once when done.
+        pWrtShell->GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, textSelection.getStr());
+        SfxLokHelper::notifyOtherViews(pWrtShell->GetSfxViewShell(), LOK_CALLBACK_TEXT_VIEW_SELECTION, "selection", textSelection);
+    }
 }
 
 void SwView::ExecSearch(SfxRequest& rReq)
