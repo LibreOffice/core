@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c7aa152f_f4490837",
+        "filename": "sc/qa/unit/uicalc/uicalc.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 839,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-07-06T07:50:01Z",
+      "side": 1,
+      "message": "this assert doesn\u0027t make sense, the cell is empty before cutting. Please, check a cell with content.\nYou can also add the same assert before cutting to make sure it has content.",
+      "revId": "9d806b5937bf55b8cefaebcf16517ab19d5fb08c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
