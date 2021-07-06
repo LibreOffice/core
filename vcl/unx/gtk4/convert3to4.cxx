@@ -452,6 +452,9 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
             if (sName == "icon-name")
                 xPropertyIconName = xChild;
 
+            if (sName == "show-arrow")
+                xRemoveList.push_back(xChild);
+
             if (sName == "events")
                 xRemoveList.push_back(xChild);
 
@@ -516,6 +519,9 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
 
                     xRemoveList.push_back(xChild);
                 }
+
+                if (GetParentObjectType(xChild) == "GtkToolbar")
+                    xRemoveList.push_back(xChild);
             }
 
             if (sName == "truncate-multiline")

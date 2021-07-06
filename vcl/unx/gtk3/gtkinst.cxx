@@ -22506,6 +22506,7 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "sfx/ui/linefragment.ui" &&
         rUIFile != "sfx/ui/loadtemplatedialog.ui" &&
         rUIFile != "sfx/ui/managestylepage.ui" &&
+        rUIFile != "sfx/ui/panel.ui" &&
         rUIFile != "sfx/ui/password.ui" &&
         rUIFile != "sfx/ui/printeroptionsdialog.ui" &&
         rUIFile != "sfx/ui/safemodequerydialog.ui" &&
@@ -22668,6 +22669,10 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "modules/swriter/ui/outlinenumbering.ui" &&
         rUIFile != "modules/swriter/ui/outlinenumberingpage.ui" &&
         rUIFile != "modules/swriter/ui/outlinepositionpage.ui" &&
+        rUIFile != "modules/swriter/ui/pagefooterpanel.ui" &&
+        rUIFile != "modules/swriter/ui/pageformatpanel.ui" &&
+        rUIFile != "modules/swriter/ui/pageheaderpanel.ui" &&
+        rUIFile != "modules/swriter/ui/pagestylespanel.ui" &&
         rUIFile != "modules/swriter/ui/paradialog.ui" &&
         rUIFile != "modules/swriter/ui/printeroptions.ui" &&
         rUIFile != "modules/swriter/ui/printoptionspage.ui" &&
