@@ -122,6 +122,7 @@ public:
     virtual void setUp() override;
 
     void testDocumentLayout();
+    void testTdf142918();
     void testTdf142913();
     void testTdf142590();
     void testCustomSlideShow();
@@ -243,6 +244,7 @@ public:
     CPPUNIT_TEST_SUITE(SdImportTest);
 
     CPPUNIT_TEST(testDocumentLayout);
+    CPPUNIT_TEST(testTdf142918);
     CPPUNIT_TEST(testTdf142913);
     CPPUNIT_TEST(testTdf142590);
     CPPUNIT_TEST(testCustomSlideShow);
@@ -438,6 +440,23 @@ void SdImportTest::testDocumentLayout()
                 OUString(m_directories.getPathFromSrc( u"/sd/qa/unit/data/" ) + OUString::createFromAscii( aFilesToCompare[i].pDump )),
                 i == nUpdateMe );
     }
+}
+
+void SdImportTest::testTdf142918()
+{
+    ::sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tdf142918.pptx"), PPTX);
+
+    uno::Reference<presentation::XPresentationSupplier> xPresentationSupplier(
+        xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xPresentationProps(xPresentationSupplier->getPresentation(),
+                                                           uno::UNO_QUERY_THROW);
+
+    const bool bAllowAnimation = xPresentationProps->getPropertyValue("AllowAnimations").get<bool>();
+
+    CPPUNIT_ASSERT_EQUAL(false, bAllowAnimation);
+
+    xDocShRef->DoClose();
 }
 
 void SdImportTest::testTdf142913()
