@@ -21,7 +21,7 @@ Sub verify_tdf134692()
     for i = lbound(b) to ubound(b)
       s$ = s$ & " b(" & i & ")=" & b(i)
     next i
-    TestUtil.AssertEqual(s$, " a(2)= a(3)= a(4)= a(5)= b(4)=4 b(5)=5 b(6)=6", "tdf#134692: " & retStr)
+    TestUtil.AssertEqual(s$, " a(2)= a(3)= a(4)= a(5)= b(4)=4 b(5)=5 b(6)=6", "tdf#134692")
 
     Exit Sub
 errorHandler:
