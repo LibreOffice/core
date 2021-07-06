@@ -47,6 +47,7 @@ struct OleObjectInfo
     bool                mbLinked;           ///< True = linked OLE object, false = embedded OLE object.
     bool                mbShowAsIcon;       ///< True = show as icon, false = show contents.
     bool                mbAutoUpdate;
+    bool                mbHasPicture;       ///<Ole object requires a picture element according to spec.>
 
     explicit            OleObjectInfo();
 };

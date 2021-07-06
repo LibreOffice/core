@@ -47,17 +47,6 @@ class XmlFilterBase;
 
 class OOX_DLLPUBLIC FragmentHandler2 : public FragmentHandler, public ContextHandler2Helper
 {
-protected:
-    enum class MCE_STATE
-    {
-        Started,
-        FoundChoice
-    };
-    ::std::vector<MCE_STATE>           aMceState;
-
-    bool                prepareMceContext( sal_Int32 nElement, const AttributeList& rAttribs );
-
-
 public:
     explicit            FragmentHandler2(
                             XmlFilterBase& rFilter,
