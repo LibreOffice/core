@@ -21,9 +21,11 @@
 #include <vcl/uitest/logger.hxx>
 #include <sal/log.hxx>
 
+#include <comphelper/base64.hxx>
 #include <comphelper/processfactory.hxx>
 #include <boost/property_tree/ptree.hpp>
 
+#include <vcl/cvtgrf.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/bitmap.hxx>
@@ -1756,6 +1758,19 @@ void ToolBox::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
                     rJsonWriter.put("dropdown", true);
                 if (!IsItemEnabled(nId))
                     rJsonWriter.put("enabled", false);
+
+                Image aImage = GetItemImage(nId);
+                if (!!aImage)
+                {
+                    SvMemoryStream aOStm(6535, 6535);
+                    if(GraphicConverter::Export(aOStm, aImage.GetBitmapEx(), ConvertDataFormat::PNG) == ERRCODE_NONE)
+                    {
+                        css::uno::Sequence<sal_Int8> aSeq( static_cast<sal_Int8 const *>(aOStm.GetData()), aOStm.Tell());
+                        OUStringBuffer aBuffer("data:image/png;base64,");
+                        ::comphelper::Base64::encode(aBuffer, aSeq);
+                        rJsonWriter.put("image", aBuffer.makeStringAndClear());
+                    }
+                }
             }
         }
     }
