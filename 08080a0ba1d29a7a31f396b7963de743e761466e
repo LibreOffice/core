@@ -97,6 +97,30 @@
     },
     {
       "key": {
+        "uuid": "887bd201_05454c56",
+        "filename": "cui/source/dialogs/GraphicTestsDialog.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1002896
+      },
+      "writtenOn": "2021-07-06T11:20:27Z",
+      "side": 1,
+      "message": "Thank you so much for this! This was the only thing that was missing I guess as it now works flawlessly. Thanks again!",
+      "parentUuid": "6ad7d08d_89376439",
+      "range": {
+        "startLine": 25,
+        "startChar": 4,
+        "endLine": 30,
+        "endChar": 90
+      },
+      "revId": "08080a0ba1d29a7a31f396b7963de743e761466e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8d033439_00a01ad0",
         "filename": "cui/source/dialogs/GraphicTestsDialog.cxx",
         "patchSetId": 8
