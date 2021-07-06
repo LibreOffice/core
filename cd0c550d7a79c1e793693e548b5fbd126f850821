@@ -1,0 +1,259 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "76fc576e_256b3592",
+        "filename": "basic/qa/basic_coverage/da-DK/cdbl.bas",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-06T14:28:08Z",
+      "side": 1,
+      "message": "So some seem to miss license headers :)",
+      "revId": "cd0c550d7a79c1e793693e548b5fbd126f850821",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "541d1e05_9db74bbf",
+        "filename": "basic/qa/basic_coverage/test_filedatetime_nonexistent.bas",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-06T14:28:08Z",
+      "side": 1,
+      "message": "This position looks wrong",
+      "revId": "cd0c550d7a79c1e793693e548b5fbd126f850821",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "64607aee_0b9a1552",
+        "filename": "basic/qa/basic_coverage/test_filedatetime_nonexistent2.bas",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-06T14:28:08Z",
+      "side": 1,
+      "message": "Same here",
+      "revId": "cd0c550d7a79c1e793693e548b5fbd126f850821",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "780c0585_9ee7e742",
+        "filename": "basic/qa/basic_coverage/test_iserror_method.bas",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-06T14:28:08Z",
+      "side": 1,
+      "message": "This looks inconsistent with no empty line below",
+      "revId": "cd0c550d7a79c1e793693e548b5fbd126f850821",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a76ccf76_03c83f09",
+        "filename": "basic/qa/basic_coverage/test_ismissing_compatible.bas",
+        "patchSetId": 1
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-06T14:28:08Z",
+      "side": 1,
+      "message": "Position is inconsistent, too - better put it together with the other Option above, having an empty line below.",
+      "revId": "cd0c550d7a79c1e793693e548b5fbd126f850821",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c63506c1_43b6e39a",
+        "filename": "basic/qa/basic_coverage/test_numeric_constant_parameter.bas",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-06T14:28:08Z",
+      "side": 1,
+      "message": "Something\u0027s strange with this file - does it have some CRLF together with LF?",
+      "revId": "cd0c550d7a79c1e793693e548b5fbd126f850821",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "15fdd678_cefe6049",
+        "filename": "basic/qa/basic_coverage/test_option_base.bas",
+        "patchSetId": 1
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-06T14:28:08Z",
+      "side": 1,
+      "message": "Again, better combines Options into one block",
+      "revId": "cd0c550d7a79c1e793693e548b5fbd126f850821",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "46645316_7c940cda",
+        "filename": "basic/qa/basic_coverage/test_option_base_compatible.bas",
+        "patchSetId": 1
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-06T14:28:08Z",
+      "side": 1,
+      "message": "And here",
+      "revId": "cd0c550d7a79c1e793693e548b5fbd126f850821",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "18c28e19_7b550132",
+        "filename": "basic/qa/basic_coverage/test_optional_paramters_compatible.bas",
+        "patchSetId": 1
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-06T14:28:08Z",
+      "side": 1,
+      "message": "And here",
+      "revId": "cd0c550d7a79c1e793693e548b5fbd126f850821",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "080b1458_ee09d765",
+        "filename": "basic/qa/basic_coverage/test_redim_objects.bas",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-06T14:28:08Z",
+      "side": 1,
+      "message": "No empty line below",
+      "revId": "cd0c550d7a79c1e793693e548b5fbd126f850821",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e5a30071_8d8413a4",
+        "filename": "basic/qa/basic_coverage/test_string_replace.bas",
+        "patchSetId": 1
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-06T14:28:08Z",
+      "side": 1,
+      "message": "Better combine Options together",
+      "revId": "cd0c550d7a79c1e793693e548b5fbd126f850821",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aa678c0b_b97965d7",
+        "filename": "basic/qa/basic_coverage/test_typelen_method.bas",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-06T14:28:08Z",
+      "side": 1,
+      "message": "Missing empty line below",
+      "revId": "cd0c550d7a79c1e793693e548b5fbd126f850821",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9cbb39a1_21224079",
+        "filename": "basic/qa/basic_coverage/test_typename_method.bas",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-06T14:28:08Z",
+      "side": 1,
+      "message": "Missing empty line below",
+      "revId": "cd0c550d7a79c1e793693e548b5fbd126f850821",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "af100c88_81d0522d",
+        "filename": "basic/qa/basic_coverage/test_vartype_method.bas",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-06T14:28:08Z",
+      "side": 1,
+      "message": "Better move Option above the Type",
+      "revId": "cd0c550d7a79c1e793693e548b5fbd126f850821",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3d65f1fb_9fd6e00f",
+        "filename": "basic/qa/basic_coverage/test_vartype_method.bas",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-06T14:28:08Z",
+      "side": 1,
+      "message": "A nitpick: trailing whitespace?",
+      "revId": "cd0c550d7a79c1e793693e548b5fbd126f850821",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
