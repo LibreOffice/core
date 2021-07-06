@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "819ed803_b34f09cf",
+        "filename": "sfx2/source/appl/appserv.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 541,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2021-07-06T09:39:58Z",
+      "side": 1,
+      "message": "There\u0027s three ways to pass locale/langauge info to hub URLs in use currently. LOlocale arg → should use …getUILocale()\nLOlang → should use (…getUILocale()).getLanguage()\nBCP47 → should use (…getUILocale()).getBcp47()\n\nplease don\u0027t mix and match.\n(passing more than one is OK, however for links pointing to wiki URLs, our server-side stuff is only dealing with LOlocale and LOvers parameters currently)",
+      "range": {
+        "startLine": 539,
+        "startChar": 0,
+        "endLine": 541,
+        "endChar": 0
+      },
+      "revId": "84bd7ac66677bbcff2403facfd287c2fa3ff1bf7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
