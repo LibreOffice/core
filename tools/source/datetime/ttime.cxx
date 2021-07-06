@@ -29,6 +29,7 @@
 #include <mmsystem.h>
 #elif defined UNX
 #include <sys/time.h>
+#include <unistd.h>
 #endif
 
 #include <time.h>
@@ -473,7 +474,7 @@ sal_uInt64 tools::Time::GetMonotonicTicks()
         mach_timebase_info( &info );
     nMicroSeconds = mach_absolute_time() * static_cast<double>(info.numer / info.denom) / 1000;
 #else
-#if defined(USE_CLOCK_GETTIME)
+#if defined(_POSIX_TIMERS)
     struct timespec currentTime;
     clock_gettime( CLOCK_MONOTONIC, &currentTime );
     nMicroSeconds = currentTime.tv_sec * 1000 * 1000 + currentTime.tv_nsec / 1000;
