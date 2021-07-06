@@ -1095,11 +1095,12 @@ class VmlFormControlExporter : public oox::vml::VMLExport
     tools::Rectangle m_aAreaFrom;
     tools::Rectangle m_aAreaTo;
     OUString m_aLabel;
+    OUString m_aMacroName;
 
 public:
     VmlFormControlExporter(const sax_fastparser::FSHelperPtr& p, sal_uInt16 nObjType,
                            const tools::Rectangle& rAreaFrom, const tools::Rectangle& rAreaTo,
-                           const OUString& rLabel);
+                           const OUString& rLabel, const OUString& rMacroName);
 
 protected:
     using VMLExport::StartShape;
@@ -1112,12 +1113,13 @@ VmlFormControlExporter::VmlFormControlExporter(const sax_fastparser::FSHelperPtr
                                                sal_uInt16 nObjType,
                                                const tools::Rectangle& rAreaFrom,
                                                const tools::Rectangle& rAreaTo,
-                                               const OUString& rLabel)
+                                               const OUString& rLabel, const OUString& rMacroName)
     : VMLExport(p)
     , m_nObjType(nObjType)
     , m_aAreaFrom(rAreaFrom)
     , m_aAreaTo(rAreaTo)
     , m_aLabel(rLabel)
+    , m_aMacroName(rMacroName)
 {
 }
 
@@ -1159,6 +1161,11 @@ void VmlFormControlExporter::EndShape(sal_Int32 nShapeElement)
     aAnchor += ", " + OString::number(m_aAreaTo.Bottom());
     XclXmlUtils::WriteElement(pVmlDrawing, FSNS(XML_x, XML_Anchor), aAnchor);
 
+    if (!m_aMacroName.isEmpty())
+    {
+        XclXmlUtils::WriteElement(pVmlDrawing, FSNS(XML_x, XML_FmlaMacro), m_aMacroName);
+    }
+
     // XclExpOcxControlObj::WriteSubRecs() has the same fixed values.
     if (m_nObjType == EXC_OBJTYPE_BUTTON)
     {
@@ -1181,7 +1188,7 @@ void XclExpTbxControlObj::SaveVml(XclExpXmlStream& rStrm)
     // Unlike XclExpTbxControlObj::SaveXml(), this is not calculated in EMUs.
     lcl_GetFromTo(mrRoot, pObj->GetLogicRect(), GetTab(), aAreaFrom, aAreaTo);
     VmlFormControlExporter aFormControlExporter(rStrm.GetCurrentStream(), GetObjType(), aAreaFrom,
-                                                aAreaTo, msLabel);
+                                                aAreaTo, msLabel, GetMacroName());
     aFormControlExporter.AddSdrObject(*pObj, /*bIsFollowingTextFlow=*/false, /*eHOri=*/-1,
                                       /*eVOri=*/-1, /*eHRel=*/-1, /*eVRel=*/-1,
                                       /*pWrapAttrList=*/nullptr, /*bOOxmlExport=*/true);
@@ -1472,11 +1479,11 @@ void XclExpTbxControlObj::SaveSheetXml(XclExpXmlStream& rStrm, const OUString& a
             rWorksheet->startElement(FSNS(XML_mc, XML_Choice), XML_Requires, "x14");
 
             rWorksheet->startElement(XML_control, XML_shapeId, OString::number(mnShapeId).getStr(),
-                                     FSNS(XML_r, XML_id), aIdFormControlPr, XML_name, msLabel);
+                                     FSNS(XML_r, XML_id), aIdFormControlPr, XML_name, msCtrlName);
 
             rWorksheet->startElement(XML_controlPr, XML_defaultSize, "0", XML_print,
                                      mbPrint ? "true" : "false", XML_autoFill, "0", XML_autoPict,
-                                     "0");
+                                     "0", XML_macro, GetMacroName());
 
             rWorksheet->startElement(XML_anchor, XML_moveWithCells, "true", XML_sizeWithCells,
                                      "false");
@@ -1800,13 +1807,15 @@ void XclMacroHelper::WriteMacroSubRec( XclExpStream& rStrm )
         WriteFormulaSubRec( rStrm, EXC_ID_OBJMACRO, *mxMacroLink );
 }
 
+OUString XclMacroHelper::GetMacroName() const { return maMacroName; }
+
 bool
 XclMacroHelper::SetMacroLink( const ScriptEventDescriptor& rEvent, const XclTbxEventType& nEventType )
 {
-    OUString aMacroName = XclControlHelper::ExtractFromMacroDescriptor( rEvent, nEventType );
-    if( !aMacroName.isEmpty() )
+    maMacroName = XclControlHelper::ExtractFromMacroDescriptor(rEvent, nEventType);
+    if (!maMacroName.isEmpty())
     {
-        return SetMacroLink( aMacroName );
+        return SetMacroLink(maMacroName);
     }
     return false;
 }
@@ -1814,10 +1823,13 @@ XclMacroHelper::SetMacroLink( const ScriptEventDescriptor& rEvent, const XclTbxE
 bool
 XclMacroHelper::SetMacroLink( const OUString& rMacroName )
 {
-    if( !rMacroName.isEmpty() )
+    // OOXML documents do not store any defined name for VBA macros (while BIFF documents do).
+    bool bOOXML = GetOutput() == EXC_OUTPUT_XML_2007;
+    if (!rMacroName.isEmpty() && !bOOXML)
     {
         sal_uInt16 nExtSheet = GetLocalLinkManager().FindExtSheet( EXC_EXTSH_OWNDOC );
-        sal_uInt16 nNameIdx = GetNameManager().InsertMacroCall( rMacroName, true, false );
+        sal_uInt16 nNameIdx
+            = GetNameManager().InsertMacroCall(rMacroName, /*bVBasic=*/true, /*bFunc=*/false);
         mxMacroLink = GetFormulaCompiler().CreateNameXFormula( nExtSheet, nNameIdx );
         return true;
     }

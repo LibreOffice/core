@@ -14,6 +14,7 @@
 #include <unotools/tempfile.hxx>
 #include <vcl/svapp.hxx>
 #include <editeng/borderline.hxx>
+#include <unotools/mediadescriptor.hxx>
 
 #include <docsh.hxx>
 #include <document.hxx>
@@ -25,13 +26,17 @@
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 
+#include <helper/xpath.hxx>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
 /* Implementation of Macros test */
 
-class ScMacrosTest : public UnoApiTest
+class ScMacrosTest : public UnoApiTest, public XmlTestTools
 {
+protected:
+    void registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx) override;
 public:
     ScMacrosTest();
     void saveAndReload(css::uno::Reference<css::lang::XComponent>& xComponent,
@@ -59,6 +64,7 @@ public:
     void testTdf138646();
     void testTdf105558();
     void testTdf90278();
+    void testMacroButtonFormControlXlsxExport();
 
     CPPUNIT_TEST_SUITE(ScMacrosTest);
     CPPUNIT_TEST(testStarBasic);
@@ -84,9 +90,16 @@ public:
     CPPUNIT_TEST(testTdf138646);
     CPPUNIT_TEST(testTdf105558);
     CPPUNIT_TEST(testTdf90278);
+    CPPUNIT_TEST(testMacroButtonFormControlXlsxExport);
 
     CPPUNIT_TEST_SUITE_END();
 };
+
+void ScMacrosTest::registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx)
+{
+    XmlTestTools::registerOOXMLNamespaces(pXmlXPathCtx);
+    XmlTestTools::registerODFNamespaces(pXmlXPathCtx);
+}
 
 void ScMacrosTest::saveAndReload(css::uno::Reference<css::lang::XComponent>& xComponent,
                                  const OUString& rFilter)
@@ -469,6 +482,37 @@ void ScMacrosTest::testRowColumn()
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(4000), nWidth);
 
     pDocSh->DoClose();
+}
+
+void ScMacrosTest::testMacroButtonFormControlXlsxExport()
+{
+    // Given a button form control with an associated macro:
+    OUString aFileName;
+    createFileURL(u"macro-button-form-control.xlsm", aFileName);
+    uno::Reference<lang::XComponent> xComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+
+    // When exporting to XLSM:
+    uno::Reference<frame::XStorable> xStorable(xComponent, uno::UNO_QUERY);
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("Calc MS Excel 2007 VBA XML");
+    auto pTempFile = std::make_shared<utl::TempFile>();
+    pTempFile->EnableKillingFile();
+    xStorable->storeToURL(pTempFile->GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+    xComponent->dispose();
+
+    // Then make sure that the macro is associated with the control:
+    xmlDocUniquePtr pSheetDoc = XPathHelper::parseExport(pTempFile, m_xSFactory, "xl/worksheets/sheet1.xml");
+    CPPUNIT_ASSERT(pSheetDoc);
+    // Without the fix in place, this test would have failed with:
+    // - XPath '//x:controlPr' no attribute 'macro' exist
+    // i.e. the macro was lost on export.
+    assertXPath(pSheetDoc, "//x:controlPr", "macro", "Module1.Button1_Click");
+
+    // Then also make sure that there is no defined name for the macro, which is only needed for
+    // XLS:
+    xmlDocUniquePtr pWorkbookDoc = XPathHelper::parseExport(pTempFile, m_xSFactory, "xl/workbook.xml");
+    CPPUNIT_ASSERT(pWorkbookDoc);
+    assertXPath(pWorkbookDoc, "//x:workbook/definedNames", 0);
 }
 
 void ScMacrosTest::testTdf131562()
