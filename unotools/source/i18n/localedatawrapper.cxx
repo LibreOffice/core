@@ -1160,46 +1160,6 @@ OUString LocaleDataWrapper::getTime( const tools::Time& rTime, bool bSec, bool b
     return aBuf.makeStringAndClear();
 }
 
-OUString LocaleDataWrapper::getLongDate( const Date& rDate, CalendarWrapper& rCal,
-        bool bTwoDigitYear ) const
-{
-    OUStringBuffer aBuf(20);
-    OUStringBuffer aStr(120); // complete guess
-    sal_Int16 nVal;
-    rCal.setGregorianDateTime( rDate );
-    // day of week
-    nVal = rCal.getValue( CalendarFieldIndex::DAY_OF_WEEK );
-    aStr.append(rCal.getDisplayName( CalendarDisplayIndex::DAY, nVal, 1 ));
-    aStr.append(aLocaleDataItem.LongDateDayOfWeekSeparator);
-    // day of month
-    nVal = rCal.getValue( CalendarFieldIndex::DAY_OF_MONTH );
-    ImplAdd2UNum( aBuf, nVal, false/*bDayOfMonthWithLeadingZero*/ );
-    OUString aDay = aBuf.makeStringAndClear();
-    // month of year
-    nVal = rCal.getValue( CalendarFieldIndex::MONTH );
-    OUString aMonth( rCal.getDisplayName( CalendarDisplayIndex::MONTH, nVal, 1 ) );
-    // year
-    nVal = rCal.getValue( CalendarFieldIndex::YEAR );
-    if ( bTwoDigitYear )
-        ImplAddUNum( aBuf, nVal % 100, 2 );
-    else
-        ImplAddUNum( aBuf, nVal );
-    OUString aYear = aBuf.makeStringAndClear();
-    // concatenate
-    switch ( getLongDateOrder() )
-    {
-        case DateOrder::DMY :
-            aStr.append(aDay + aLocaleDataItem.LongDateDaySeparator + aMonth + aLocaleDataItem.LongDateMonthSeparator + aYear);
-        break;
-        case DateOrder::MDY :
-            aStr.append(aMonth + aLocaleDataItem.LongDateMonthSeparator + aDay + aLocaleDataItem.LongDateDaySeparator + aYear);
-        break;
-        default:    // YMD
-            aStr.append(aYear + aLocaleDataItem.LongDateYearSeparator + aMonth + aLocaleDataItem.LongDateMonthSeparator + aDay);
-    }
-    return aStr.makeStringAndClear();
-}
-
 OUString LocaleDataWrapper::getDuration( const tools::Time& rTime, bool bSec, bool b100Sec ) const
 {
     OUStringBuffer aBuf(128);
