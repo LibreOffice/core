@@ -20,6 +20,7 @@
 #define INCLUDED_SVX_SOURCE_SIDEBAR_AREA_AREATRANSPARENCYGRADIENTPOPUP_HXX
 
 #include <vcl/weld.hxx>
+#include <svtools/toolbarmenu.hxx>
 
 class XFillFloatTransparenceItem;
 
@@ -28,12 +29,10 @@ namespace svx::sidebar
 class AreaTransparencyGradientControl;
 class AreaPropertyPanelBase;
 
-class AreaTransparencyGradientPopup final
+class AreaTransparencyGradientPopup final : public WeldToolbarPopup
 {
 private:
     AreaPropertyPanelBase& mrAreaPropertyPanel;
-    std::unique_ptr<weld::Builder> mxBuilder;
-    std::unique_ptr<weld::Container> mxTopLevel;
     std::unique_ptr<weld::Widget> mxCenterGrid;
     std::unique_ptr<weld::Widget> mxAngleGrid;
     std::unique_ptr<weld::MetricSpinButton> mxMtrTrgrCenterX;
@@ -53,12 +52,12 @@ private:
     DECL_LINK(FocusHdl, weld::Widget&, void);
 
 public:
-    AreaTransparencyGradientPopup(AreaPropertyPanelBase& rPanel, weld::Widget* pParent);
+    AreaTransparencyGradientPopup(const css::uno::Reference<css::frame::XFrame>& rFrame,
+                                  AreaPropertyPanelBase& rPanel, weld::Widget* pParent);
     ~AreaTransparencyGradientPopup();
 
-    weld::Container* getTopLevel() const { return mxTopLevel.get(); }
-
     void Rearrange(XFillFloatTransparenceItem const* pItem);
+    virtual void GrabFocus() override;
 };
 
 } // end of namespace svx::sidebar
