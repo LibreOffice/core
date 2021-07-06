@@ -307,17 +307,6 @@ public:
     OUString       getDuration( const tools::Time& rTime,
                             bool bSec = true, bool b100Sec = false ) const;
 
-                        /** The CalendarWrapper already <b>MUST</b>
-                            have loaded a calendar.
-                            @param bTwoDigitYear
-                                <FALSE/> := full year
-                                <TRUE/>  := year % 100
-                         */
-    OUString       getLongDate( const Date& rDate,
-                            CalendarWrapper& rCal,
-                            bool bTwoDigitYear
-                            ) const;
-
                         /** Simple number formatting
                             @param nNumber
                                 value * 10**nDecimals
