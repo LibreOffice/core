@@ -34,7 +34,7 @@ using namespace ::com::sun::star::xml::sax;
 
 FragmentHandler2::FragmentHandler2( XmlFilterBase& rFilter, const OUString& rFragmentPath, bool bEnableTrimSpace ) :
     FragmentHandler( rFilter, rFragmentPath ),
-    ContextHandler2Helper( bEnableTrimSpace )
+    ContextHandler2Helper( bEnableTrimSpace, rFilter )
 {
 }
 
@@ -52,72 +52,6 @@ void SAL_CALL FragmentHandler2::startDocument()
 void SAL_CALL FragmentHandler2::endDocument()
 {
     finalizeImport();
-}
-
-bool FragmentHandler2::prepareMceContext( sal_Int32 nElement, const AttributeList& rAttribs )
-{
-    switch( nElement )
-    {
-        case MCE_TOKEN( AlternateContent ):
-            aMceState.push_back( MCE_STATE::Started );
-            break;
-
-        case MCE_TOKEN( Choice ):
-            {
-                if (aMceState.empty() || aMceState.back() != MCE_STATE::Started)
-                    return false;
-
-                OUString aRequires = rAttribs.getString( XML_Requires, "none" );
-
-                // At this point we can't access namespaces as the correct xml filter
-                // is long gone. For now let's decide depending on a list of supported
-                // namespaces like we do in writerfilter
-
-                std::vector<OUString> aSupportedNS =
-                {
-                    "a14", // Impress needs this to import math formulas.
-                    "p14",
-                    "p15",
-                    "x12ac",
-                    "v",
-                };
-
-                uno::Reference<lang::XServiceInfo> xModel(getFilter().getModel(), uno::UNO_QUERY);
-                if (xModel.is() && xModel->supportsService("com.sun.star.sheet.SpreadsheetDocument"))
-                {
-                    // No a14 for Calc documents, it would cause duplicated shapes as-is.
-                    auto it = std::find(aSupportedNS.begin(), aSupportedNS.end(), "a14");
-                    if (it != aSupportedNS.end())
-                    {
-                        aSupportedNS.erase(it);
-                    }
-                }
-
-                if (std::find(aSupportedNS.begin(), aSupportedNS.end(), aRequires) != aSupportedNS.end())
-                    aMceState.back() = MCE_STATE::FoundChoice;
-                else
-                    return false;
-            }
-            break;
-
-        case MCE_TOKEN( Fallback ):
-            if( !aMceState.empty() && aMceState.back() == MCE_STATE::Started )
-                break;
-            return false;
-        default:
-            {
-                OUString str = rAttribs.getString( MCE_TOKEN( Ignorable ), OUString() );
-                if( !str.isEmpty() )
-                {
-                    // Sequence< css::xml::FastAttribute > attrs = rAttribs.getFastAttributeList()->getFastAttributes();
-                    // printf("MCE: %s\n", OUStringToOString( str, RTL_TEXTENCODING_UTF8 ).getStr() );
-                    // TODO: Check & Get the namespaces in "Ignorable"
-                    // printf("NS: %d : %s\n", attrs.getLength(), OUStringToOString( str, RTL_TEXTENCODING_UTF8 ).getStr() );
-                }
-            }
-            return false;
-    }
-    return true;
 }
 
 // com.sun.star.xml.sax.XFastContextHandler interface -------------------------

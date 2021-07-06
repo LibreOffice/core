@@ -71,8 +71,20 @@ struct ElementInfo;
  */
 class OOX_DLLPUBLIC ContextHandler2Helper
 {
+protected:
+
+    enum class MCE_STATE
+    {
+        Started,
+        FoundChoice
+    };
+    ::std::vector<MCE_STATE>           aMceState;
+
+    bool                prepareMceContext( sal_Int32 nElement, const AttributeList& rAttribs );
+    XmlFilterBase&      getDocFilter() const { return mrFilter; }
+
 public:
-    explicit            ContextHandler2Helper( bool bEnableTrimSpace );
+    explicit            ContextHandler2Helper( bool bEnableTrimSpace, XmlFilterBase& rFilter );
     explicit            ContextHandler2Helper( const ContextHandler2Helper& rParent );
     virtual             ~ContextHandler2Helper();
 
@@ -172,6 +184,7 @@ public:
         the context or fragment handler. */
     bool                isRootElement() const;
 
+
     // implementation ---------------------------------------------------------
 
 protected:
@@ -217,6 +230,7 @@ private:
 
 protected:
     bool                mbEnableTrimSpace;  ///< True = trim whitespace in characters().
+    XmlFilterBase&      mrFilter;
 };
 
 class OOX_DLLPUBLIC ContextHandler2 : public ContextHandler, public ContextHandler2Helper
@@ -248,6 +262,10 @@ public:
     virtual void SAL_CALL characters( const OUString& rChars ) final override;
 
     virtual void SAL_CALL endFastElement( sal_Int32 nElement ) final override;
+
+    /** Returns the com.sun.star.xml.sax.XFastContextHandler interface of this context. */
+    css::uno::Reference< css::xml::sax::XFastContextHandler >
+                        getFastContextHandler() { return static_cast< ContextHandler2* >( this ); }
 
     // oox.core.ContextHandler interface --------------------------------------
 
