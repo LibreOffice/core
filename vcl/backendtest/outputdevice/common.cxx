@@ -582,6 +582,21 @@ tools::Polygon OutputDeviceTestCommon::createDropShapePolygon()
     return aPolygon;
 }
 
+basegfx::B2DPolygon OutputDeviceTestCommon::createHalfEllipsePolygon()
+{
+    basegfx::B2DPolygon aPolygon;
+
+    aPolygon.append({ 9.0, 1.0 });
+    aPolygon.append({ 17.0, 10.0 });
+    aPolygon.append({ 1.0, 10.0 });
+    aPolygon.setClosed(true);
+
+    aPolygon.setControlPoints(0, { 1.5, 1.5 }, { 16.5, 1.5 });
+
+    return aPolygon;
+}
+
+
 TestResult OutputDeviceTestCommon::checkDropShape(Bitmap& rBitmap, bool aEnableAA)
 {
     BitmapScopedWriteAccess pAccess(rBitmap);
@@ -657,6 +672,55 @@ TestResult OutputDeviceTestCommon::checkBezier(Bitmap& rBitmap)
     // Check the bezier doesn't go over to the margins first
     // TODO extend the check with more exact assert
     return checkRectangles(rBitmap, aExpected);
+}
+
+TestResult OutputDeviceTestCommon::checkHalfEllipse(Bitmap& rBitmap, bool aEnableAA)
+{
+    BitmapScopedWriteAccess pAccess(rBitmap);
+
+    TestResult aResult = TestResult::Passed;
+    int nNumberOfQuirks = 0;
+    int nNumberOfErrors = 0;
+
+    std::map<std::pair<tools::Long, tools::Long>, bool> SetPixels = {
+        { { 8, 1 }, true },   { { 9, 1 }, true },   { { 10, 1 }, true },  { { 6, 2 }, true },
+        { { 7, 2 }, true },   { { 10, 2 }, true },  { { 4, 3 }, true },   { { 5, 3 }, true },
+        { { 10, 3 }, true },  { { 3, 4 }, true },   { { 10, 4 }, true },  { { 2, 5 }, true },
+        { { 10, 5 }, true },  { { 2, 6 }, true },   { { 10, 6 }, true },  { { 1, 7 }, true },
+        { { 10, 7 }, true },  { { 1, 8 }, true },   { { 10, 8 }, true },  { { 1, 9 }, true },
+        { { 10, 9 }, true },  { { 1, 10 }, true },  { { 10, 10 }, true }, { { 1, 11 }, true },
+        { { 10, 11 }, true }, { { 2, 12 }, true },  { { 10, 12 }, true }, { { 2, 13 }, true },
+        { { 10, 13 }, true }, { { 3, 14 }, true },  { { 10, 14 }, true }, { { 4, 15 }, true },
+        { { 5, 15 }, true },  { { 10, 15 }, true }, { { 6, 16 }, true },  { { 7, 16 }, true },
+        { { 10, 16 }, true }, { { 8, 17 }, true },  { { 9, 17 }, true },  { { 10, 17 }, true }
+    };
+
+    for (tools::Long x = 0; x < pAccess->Width(); x++)
+    {
+        for (tools::Long y = 0; y < pAccess->Height(); ++y)
+        {
+            if (SetPixels[{ y, x }])
+            {
+                if (aEnableAA)
+                    checkValueAA(pAccess, x, y, constLineColor, nNumberOfQuirks, nNumberOfErrors);
+                else
+                    checkValue(pAccess, x, y, constLineColor, nNumberOfQuirks, nNumberOfErrors,
+                               true);
+            }
+            else
+            {
+                if (!aEnableAA)
+                    checkValue(pAccess, x, y, constBackgroundColor, nNumberOfQuirks,
+                               nNumberOfErrors, true);
+            }
+        }
+    }
+
+    if (nNumberOfQuirks > 0)
+        aResult = TestResult::PassedWithQuirks;
+    if (nNumberOfErrors > 0)
+        aResult = TestResult::Failed;
+    return aResult;
 }
 
 // Check 'count' pixels from (x,y) in (addX,addY) direction, the color values must not decrease.
