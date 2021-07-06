@@ -5,6 +5,8 @@
 ' file, You can obtain one at http://mozilla.org/MPL/2.0/.
 '
 
+Option Explicit
+
 Function doUnitTest as String
     ' TAN
     If ( Abs( Tan(PI/4) - 1 ) > 1E-6 ) Then

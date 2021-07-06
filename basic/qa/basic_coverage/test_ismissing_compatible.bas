@@ -1,5 +1,6 @@
 Option Compatible
 
+Option Explicit
 Const IsMissingNone = -1
 Const IsMissingA = 0
 Const IsMissingB = 1

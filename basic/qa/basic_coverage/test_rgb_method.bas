@@ -5,6 +5,8 @@
 ' file, You can obtain one at http://mozilla.org/MPL/2.0/.
 '
 
+Option Explicit
+
 Function doUnitTest as String
     ' RGB
     If ( RGB( 128, 50, 200 ) <> 8401608 ) Then

@@ -1,3 +1,5 @@
+Option Explicit
+
 Function doUnitTest() as String
     Dim A As String
     Dim B As Double

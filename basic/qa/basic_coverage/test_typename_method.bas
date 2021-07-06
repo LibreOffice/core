@@ -11,6 +11,7 @@ Type UDF ' User defined type
 End Type
 Dim myUDF as UDF
 
+Option Explicit
 Dim int16 As Integer,   int32 As Long,    flt32 As Single, flt64 As Double, _
     curr  As Currency,  dat   As Date,    str   As String, obj   As Object, _
     myErr As Variant,   var   As Variant, byt3  As Byte,   bool  As Boolean

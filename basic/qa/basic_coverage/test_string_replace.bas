@@ -1,5 +1,7 @@
 Option VBASupport 0
 
+Option Explicit
+
 Function doUnitTest() As String
     TestUtil.TestInit
     verify_stringReplace
@@ -9,6 +11,7 @@ End Function
 Sub verify_stringReplace()
     On Error GoTo errorHandler
     ' tdf#132389 - case-insensitive operation for non-ASCII characters
+    Dim retStr
     retStr = Replace("ABCabc", "b", "*")
     TestUtil.AssertEqual(retStr, "A*Ca*c", "case-insensitive ASCII: " & retStr)
     retStr = Replace("АБВабв", "б", "*")
