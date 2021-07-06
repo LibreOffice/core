@@ -122,6 +122,19 @@ Bitmap OutputDeviceTestPolyLineB2D::setupAABezier()
 
     return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
 }
+
+Bitmap OutputDeviceTestPolyLineB2D::setupHalfEllipse(bool aEnableAA)
+{
+    initialSetup(19, 21, constBackgroundColor, aEnableAA);
+
+    mpVirtualDevice->SetLineColor(constLineColor);
+    mpVirtualDevice->SetFillColor();
+
+    mpVirtualDevice->DrawPolyLine(OutputDeviceTestCommon::createHalfEllipsePolygon());
+
+    return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
+}
+
 } // end namespace vcl::test
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
