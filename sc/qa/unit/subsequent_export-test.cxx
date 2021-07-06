@@ -104,6 +104,7 @@ public:
     void testConditionalFormatExportXLSX();
     void testCondFormatExportCellIs();
     void testTdf99856_dataValidationTest();
+    void testTdf126748();
     void testProtectionKeyODS_UTF16LErtlSHA1();
     void testProtectionKeyODS_UTF8SHA1();
     void testProtectionKeyODS_UTF8SHA256ODF12();
@@ -222,6 +223,7 @@ public:
     CPPUNIT_TEST(testCondFormatExportCellIs);
     CPPUNIT_TEST(testConditionalFormatExportXLSX);
     CPPUNIT_TEST(testTdf99856_dataValidationTest);
+    CPPUNIT_TEST(testTdf126748);
     CPPUNIT_TEST(testProtectionKeyODS_UTF16LErtlSHA1);
     CPPUNIT_TEST(testProtectionKeyODS_UTF8SHA1);
     CPPUNIT_TEST(testProtectionKeyODS_UTF8SHA256ODF12);
@@ -647,6 +649,24 @@ void ScExportTest::testTdf99856_dataValidationTest()
     CPPUNIT_ASSERT_EQUAL(OUString("18 Missis"), aList[17].GetString());
 
     xDocSh->DoClose();
+}
+
+void ScExportTest::testTdf126748()
+{
+    ScDocShellRef xShell = loadDoc(u"tdf126748.", FORMAT_ODS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load doc", xShell.is());
+
+    ScDocShellRef xDocSh = saveAndReload( xShell.get(), FORMAT_XLSX);
+    CPPUNIT_ASSERT_MESSAGE("Failed to reload doc", xDocSh.is());
+
+    ScDocShellRef xDocSh = saveAndReload( xShell.get(), FORMAT_XLSX);
+    CPPUNIT_ASSERT_MESSAGE("Failed to reload doc", xDocSh.is());
+
+    ScDocShellRef xDocSh = saveAndReload( xShell.get(), FORMAT_XLSX);
+    CPPUNIT_ASSERT_MESSAGE("Failed to reload doc", xDocSh.is());
+
+    ScDocShellRef xDocSh = saveAndReload( xShell.get(), FORMAT_XLSX);
+    CPPUNIT_ASSERT_MESSAGE("Failed to reload doc", xDocSh.is());
 }
 
 void ScExportTest::testProtectionKeyODS_UTF16LErtlSHA1()
