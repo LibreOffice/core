@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1266e84b_6d4b47dd",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2021-07-06T11:04:55Z",
+      "side": 1,
+      "message": "You are adding a new behaviour. As a new paragraph please expand the commit message and write the details about your work. for eg: If we pass a line empty in bullet mode we don\u0027t show the bullet but during edit a pale color will be shown. Please improve te comment.",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 1
+      },
+      "revId": "64aab75711067141c1fd4a546430fb1e3b3494f2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9006d0cf_7c373866",
+        "filename": "editeng/source/editeng/editdoc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2313,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2021-07-06T11:04:55Z",
+      "side": 1,
+      "message": "Rename this object as aCopyPaM and move it into if block to avoid unnecessary operations.",
+      "range": {
+        "startLine": 2313,
+        "startChar": 0,
+        "endLine": 2313,
+        "endChar": 3
+      },
+      "revId": "64aab75711067141c1fd4a546430fb1e3b3494f2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bce4c308_c5a242de",
+        "filename": "editeng/source/outliner/outliner.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 870,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2021-07-06T11:04:55Z",
+      "side": 1,
+      "message": "You don\u0027t need to keep pPara object, please edit here like this:\nOUString sText \u003d GetParagraph(nPara)-\u003eGetText(pPara);",
+      "range": {
+        "startLine": 870,
+        "startChar": 4,
+        "endLine": 870,
+        "endChar": 43
+      },
+      "revId": "64aab75711067141c1fd4a546430fb1e3b3494f2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a2f98d5b_6ec0be12",
+        "filename": "editeng/source/outliner/outliner.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 882,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2021-07-06T11:04:55Z",
+      "side": 1,
+      "message": "Please remove braces for one line code blocks for better readability",
+      "range": {
+        "startLine": 882,
+        "startChar": 0,
+        "endLine": 882,
+        "endChar": 1
+      },
+      "revId": "64aab75711067141c1fd4a546430fb1e3b3494f2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
