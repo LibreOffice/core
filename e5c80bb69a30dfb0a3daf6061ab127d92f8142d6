@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "29240ded_5c822f12",
+        "filename": "sal/rtl/math.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1016,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-07-06T09:41:35Z",
+      "side": 1,
+      "message": "Are you sure?  At least for IEEE 754, my interpretation of that standard is that the sign bit of the NaN result of NaN * -1 is unspecified.  (And my interpretation of the C++ standard is that there is no standard way to reliably generate positive or negative NaN values.)",
+      "revId": "e5c80bb69a30dfb0a3daf6061ab127d92f8142d6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
