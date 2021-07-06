@@ -18,16 +18,20 @@
  */
 
 #include <oox/core/contexthandler2.hxx>
+#include <oox/core/xmlfilterbase.hxx>
 #include <oox/helper/attributelist.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
+#include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 
 namespace oox::core {
 
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::xml::sax;
 
 /** Information about a processed element. */
@@ -40,10 +44,11 @@ struct ElementInfo
     explicit     ElementInfo() : maChars( 0), mnElement( XML_TOKEN_INVALID ), mbTrimSpaces( false ) {}
 };
 
-ContextHandler2Helper::ContextHandler2Helper( bool bEnableTrimSpace ) :
+ContextHandler2Helper::ContextHandler2Helper( bool bEnableTrimSpace, XmlFilterBase& rFilter ) :
     mxContextStack( std::make_shared<ContextStack>() ),
     mnRootStackSize( 0 ),
-    mbEnableTrimSpace( bEnableTrimSpace )
+    mbEnableTrimSpace( bEnableTrimSpace ),
+    mrFilter( rFilter )
 {
     pushElementInfo( XML_ROOT_CONTEXT );
 }
@@ -51,7 +56,8 @@ ContextHandler2Helper::ContextHandler2Helper( bool bEnableTrimSpace ) :
 ContextHandler2Helper::ContextHandler2Helper( const ContextHandler2Helper& rParent ) :
     mxContextStack( rParent.mxContextStack ),
     mnRootStackSize( rParent.mxContextStack->size() ),
-    mbEnableTrimSpace( rParent.mbEnableTrimSpace )
+    mbEnableTrimSpace( rParent.mbEnableTrimSpace ),
+    mrFilter(rParent.mrFilter)
 {
 }
 
@@ -188,6 +194,13 @@ ContextHandler2::~ContextHandler2()
 Reference< XFastContextHandler > SAL_CALL ContextHandler2::createFastChildContext(
         sal_Int32 nElement, const Reference< XFastAttributeList >& rxAttribs )
 {
+    if( getNamespace( nElement ) == NMSP_mce ) // TODO for checking 'Ignorable'
+    {
+        if( prepareMceContext( nElement, AttributeList( rxAttribs ) ) )
+            return this;
+        return nullptr;
+    }
+
     return implCreateChildContext( nElement, rxAttribs );
 }
 
@@ -205,6 +218,72 @@ void SAL_CALL ContextHandler2::characters( const OUString& rChars )
 void SAL_CALL ContextHandler2::endFastElement( sal_Int32 nElement )
 {
     implEndElement( nElement );
+}
+
+bool ContextHandler2Helper::prepareMceContext( sal_Int32 nElement, const AttributeList& rAttribs )
+{
+    switch( nElement )
+    {
+        case MCE_TOKEN( AlternateContent ):
+            addMCEState( MCE_STATE::Started );
+            break;
+
+        case MCE_TOKEN( Choice ):
+            {
+                if (isMCEStateEmpty() || getMCEState() != MCE_STATE::Started)
+                    return false;
+
+                OUString aRequires = rAttribs.getString( XML_Requires, "none" );
+
+                // At this point we can't access namespaces as the correct xml filter
+                // is long gone. For now let's decide depending on a list of supported
+                // namespaces like we do in writerfilter
+
+                std::vector<OUString> aSupportedNS =
+                {
+                    "a14", // Impress needs this to import math formulas.
+                    "p14",
+                    "p15",
+                    "x12ac",
+                    "v"
+                };
+
+                Reference<XServiceInfo> xModel(getDocFilter().getModel(), UNO_QUERY);
+                if (xModel.is() && xModel->supportsService("com.sun.star.sheet.SpreadsheetDocument"))
+                {
+                    // No a14 for Calc documents, it would cause duplicated shapes as-is.
+                    auto it = std::find(aSupportedNS.begin(), aSupportedNS.end(), "a14");
+                    if (it != aSupportedNS.end())
+                    {
+                        aSupportedNS.erase(it);
+                    }
+                }
+
+                if (std::find(aSupportedNS.begin(), aSupportedNS.end(), aRequires) != aSupportedNS.end())
+                    setMCEState( MCE_STATE::FoundChoice ) ;
+                else
+                    return false;
+            }
+            break;
+
+        case MCE_TOKEN( Fallback ):
+            if( !isMCEStateEmpty() && getMCEState() == MCE_STATE::Started )
+                break;
+            return false;
+        default:
+            {
+                OUString str = rAttribs.getString( MCE_TOKEN( Ignorable ), OUString() );
+                if( !str.isEmpty() )
+                {
+                    // Sequence< css::xml::FastAttribute > attrs = rAttribs.getFastAttributeList()->getFastAttributes();
+                    // printf("MCE: %s\n", OUStringToOString( str, RTL_TEXTENCODING_UTF8 ).getStr() );
+                    // TODO: Check & Get the namespaces in "Ignorable"
+                    // printf("NS: %d : %s\n", attrs.getLength(), OUStringToOString( str, RTL_TEXTENCODING_UTF8 ).getStr() );
+                }
+            }
+            return false;
+    }
+    return true;
 }
 
 // oox.core.RecordContext interface -------------------------------------------
