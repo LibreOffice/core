@@ -1132,6 +1132,14 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
             else if (sClass == "GtkToolbar")
             {
                 xClass->setNodeValue("GtkBox");
+                css::uno::Reference<css::xml::dom::XElement> xStyle = xDoc->createElement("style");
+                css::uno::Reference<css::xml::dom::XElement> xToolbarClass
+                    = xDoc->createElement("class");
+                css::uno::Reference<css::xml::dom::XAttr> xPropName = xDoc->createAttribute("name");
+                xPropName->setValue("toolbar");
+                xToolbarClass->setAttributeNode(xPropName);
+                xStyle->appendChild(xToolbarClass);
+                xChild->appendChild(xStyle);
             }
             else if (sClass == "GtkToolButton")
             {
