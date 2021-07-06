@@ -1749,9 +1749,10 @@ void ToolBox::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
             }
             else
             {
+                OUString sCommand = GetItemCommand(nId);
                 rJsonWriter.put("type", "toolitem");
                 rJsonWriter.put("text", GetItemText(nId));
-                rJsonWriter.put("command", GetItemCommand(nId));
+                rJsonWriter.put("command", sCommand);
                 if (!IsItemVisible(nId))
                     rJsonWriter.put("visible", false);
                 if (GetItemBits(nId) & ToolBoxItemBits::DROPDOWN)
@@ -1760,7 +1761,7 @@ void ToolBox::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
                     rJsonWriter.put("enabled", false);
 
                 Image aImage = GetItemImage(nId);
-                if (!!aImage)
+                if (!sCommand.startsWith(".uno:") && !!aImage)
                 {
                     SvMemoryStream aOStm(6535, 6535);
                     if(GraphicConverter::Export(aOStm, aImage.GetBitmapEx(), ConvertDataFormat::PNG) == ERRCODE_NONE)
