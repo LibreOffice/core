@@ -73,6 +73,53 @@
     },
     {
       "key": {
+        "uuid": "6ad7d08d_89376439",
+        "filename": "cui/source/dialogs/GraphicTestsDialog.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-07-06T09:42:15Z",
+      "side": 1,
+      "message": "There is one important difference between this code and AccessbilityCheckDialog. \n\nm_aAccessibilityCheckEntries.push_back(std::move(xEntry));\n\nyou don\u0027t do this in GraphicsTestsDialog::run() for GraphicTestEntry, so it is immediately destroyed when the for-loop goes out of scope... This is probably the cause",
+      "parentUuid": "d6413479_1584a9ad",
+      "range": {
+        "startLine": 25,
+        "startChar": 4,
+        "endLine": 30,
+        "endChar": 90
+      },
+      "revId": "08080a0ba1d29a7a31f396b7963de743e761466e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8d033439_00a01ad0",
+        "filename": "cui/source/dialogs/GraphicTestsDialog.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-07-06T09:42:15Z",
+      "side": 1,
+      "message": "this doesn\u0027t need to be a unique_ptr... does it",
+      "range": {
+        "startLine": 40,
+        "startChar": 20,
+        "endLine": 40,
+        "endChar": 37
+      },
+      "revId": "08080a0ba1d29a7a31f396b7963de743e761466e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1dda2b48_327e713e",
         "filename": "cui/source/dialogs/GraphicTestsDialog.cxx",
         "patchSetId": 8
