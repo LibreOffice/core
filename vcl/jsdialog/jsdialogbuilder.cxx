@@ -1382,6 +1382,12 @@ void JSToolbar::set_item_sensitive(const OString& rIdent, bool bSensitive)
     sendUpdate();
 }
 
+void JSToolbar::set_item_icon_name(const OString& rIdent, const OUString& rIconName)
+{
+    SalInstanceToolbar::set_item_icon_name(rIdent, rIconName);
+    sendUpdate();
+}
+
 JSTextView::JSTextView(JSDialogSender* pSender, ::VclMultiLineEdit* pTextView,
                        SalInstanceBuilder* pBuilder, bool bTakeOwnership)
     : JSWidget<SalInstanceTextView, ::VclMultiLineEdit>(pSender, pTextView, pBuilder,

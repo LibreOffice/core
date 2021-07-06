@@ -568,6 +568,7 @@ public:
 
     virtual void set_menu_item_active(const OString& rIdent, bool bActive) override;
     virtual void set_item_sensitive(const OString& rIdent, bool bSensitive) override;
+    virtual void set_item_icon_name(const OString& rIdent, const OUString& rIconName) override;
 };
 
 class JSTextView final : public JSWidget<SalInstanceTextView, ::VclMultiLineEdit>
