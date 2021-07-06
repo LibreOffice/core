@@ -26,6 +26,7 @@
 
 #include <unotools/localedatawrapper.hxx>
 
+#include <dndeventdispatcher.hxx>
 #include <comphelper/lok.hxx>
 #include <vcl/QueueInfo.hxx>
 #include <vcl/timer.hxx>
@@ -55,6 +56,7 @@
 #include <brdwin.hxx>
 #include <dndlistenercontainer.hxx>
 
+#include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
 #include <com/sun/star/datatransfer/dnd/XDragSource.hpp>
 #include <com/sun/star/awt/MouseEvent.hpp>
 
@@ -827,6 +829,61 @@ bool ImplLOKHandleMouseEvent(const VclPtr<vcl::Window>& xWindow, MouseNotifyEven
     pFrameData->mnClickCount = nClicks;
     pFrameData->mnMouseCode = nCode;
     pFrameData->mbMouseIn = false;
+
+    vcl::Window* pDragWin = pFrameData->mpMouseDownWin;
+    if (pDragWin && pFrameData->mbStartDragCalled &&
+        nEvent == MouseNotifyEvent::MOUSEMOVE)
+    {
+        css::uno::Reference<css::datatransfer::dnd::XDropTargetDragContext> xDropTargetDragContext =
+            new GenericDropTargetDragContext();
+        css::uno::Reference<css::datatransfer::dnd::XDropTarget> xDropTarget(
+            pDragWin->ImplGetWindowImpl()->mxDNDListenerContainer, css::uno::UNO_QUERY);
+
+        if (!xDropTargetDragContext.is() ||
+            !xDropTarget.is() ||
+            (nCode & (MOUSE_LEFT | MOUSE_RIGHT | MOUSE_MIDDLE)) ==
+            (MouseSettings::GetStartDragCode() & (MOUSE_LEFT | MOUSE_RIGHT | MOUSE_MIDDLE)))
+        {
+            // cancel dragdrop
+            pDragWin->ImplGetFrameData()->mbStartDragCalled = false;
+            return false;
+        }
+
+        static_cast<DNDListenerContainer *>(xDropTarget.get())->fireDragOverEvent(
+            xDropTargetDragContext,
+            css::datatransfer::dnd::DNDConstants::ACTION_MOVE,
+            aWinPos.X(),
+            aWinPos.Y(),
+            (css::datatransfer::dnd::DNDConstants::ACTION_COPY |
+             css::datatransfer::dnd::DNDConstants::ACTION_MOVE |
+             css::datatransfer::dnd::DNDConstants::ACTION_LINK));
+
+        return true;
+    }
+
+    if (pDragWin && pFrameData->mbStartDragCalled &&
+        nSVEvent == MouseNotifyEvent::MOUSEBUTTONUP)
+    {
+        css::uno::Reference<css::datatransfer::dnd::XDropTargetDropContext> xDropTargetDropContext =
+            new GenericDropTargetDropContext();
+        css::uno::Reference<css::datatransfer::dnd::XDropTarget> xDropTarget(
+            pDragWin->ImplGetWindowImpl()->mxDNDListenerContainer, css::uno::UNO_QUERY);
+
+        if (xDropTargetDropContext.is() && xDropTarget.is())
+        {
+            static_cast<DNDListenerContainer *>(xDropTarget.get())->fireDropEvent(
+                xDropTargetDropContext,
+                css::datatransfer::dnd::DNDConstants::ACTION_MOVE,
+                aWinPos.X(),
+                aWinPos.Y(),
+                (css::datatransfer::dnd::DNDConstants::ACTION_COPY |
+                 css::datatransfer::dnd::DNDConstants::ACTION_MOVE |
+                 css::datatransfer::dnd::DNDConstants::ACTION_LINK),
+                css::uno::Reference<css::datatransfer::XTransferable>());
+        }
+
+        pDragWin->ImplGetFrameData()->mbStartDragCalled = false;
+    }
 
     vcl::Window* pDownWin = pFrameData->mpMouseDownWin;
     if (pDownWin && nEvent == MouseNotifyEvent::MOUSEMOVE)
