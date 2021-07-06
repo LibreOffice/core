@@ -52,6 +52,14 @@ enum class DateOrder {
     YMD,
 };
 
+enum class LongDateOrder {
+    Invalid = -1,
+    MDY = 0,
+    DMY,
+    YMD,
+    YDM
+};
+
 enum class MeasurementSystem {
     Metric,
     US
@@ -80,7 +88,7 @@ class UNOTOOLS_DLLPUBLIC LocaleDataWrapper
     OUString                aCurrSymbol;
     OUString                aCurrBankSymbol;
     DateOrder               nDateOrder;
-    DateOrder               nLongDateOrder;
+    LongDateOrder           nLongDateOrder;
     sal_uInt16              nCurrPositiveFormat;
     sal_uInt16              nCurrNegativeFormat;
     sal_uInt16              nCurrDigits;
@@ -100,7 +108,7 @@ class UNOTOOLS_DLLPUBLIC LocaleDataWrapper
                             sal_Int32& nBlank, sal_Int32& nSym ) const;
 
     void                loadDateOrders();
-    DateOrder           scanDateOrderImpl( const OUString& rCode ) const;
+    LongDateOrder       scanDateOrderImpl( const OUString& rCode ) const;
 
     void                ImplAddFormatNum( rtl::OUStringBuffer& rBuf,
                             sal_Int64 nNumber, sal_uInt16 nDecimals,
@@ -299,7 +307,7 @@ public:
 
     // simple date and time formatting
     DateOrder          getDateOrder() const;
-    DateOrder          getLongDateOrder() const;
+    LongDateOrder      getLongDateOrder() const;
     /// only numerical values of Gregorian calendar
     OUString       getDate( const Date& rDate ) const;
     OUString       getTime( const tools::Time& rTime, bool bSec = true,

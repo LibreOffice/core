@@ -1170,13 +1170,15 @@ void PatternBox::ReformatAll()
     SetUpdateMode( true );
 }
 
-static ExtDateFieldFormat ImplGetExtFormat( DateOrder eOld )
+static ExtDateFieldFormat ImplGetExtFormat( LongDateOrder eOld )
 {
     switch( eOld )
     {
-        case DateOrder::DMY:   return ExtDateFieldFormat::ShortDDMMYY;
-        case DateOrder::MDY:   return ExtDateFieldFormat::ShortMMDDYY;
-        default:               return ExtDateFieldFormat::ShortYYMMDD;
+        case LongDateOrder::YDM:
+        case LongDateOrder::DMY:    return ExtDateFieldFormat::ShortDDMMYY;
+        case LongDateOrder::MDY:    return ExtDateFieldFormat::ShortMMDDYY;
+        case LongDateOrder::YMD:
+        default:                    return ExtDateFieldFormat::ShortYYMMDD;
     }
 }
 
@@ -1316,20 +1318,25 @@ bool DateFormatter::TextToDate(const OUString& rStr, Date& rDate, ExtDateFieldFo
     if ( eDateOrder == ExtDateFieldFormat::SystemLong )
     {
         OUString aCalendarName;
-        DateOrder eFormat = rLocaleDataWrapper.getLongDateOrder();
+        LongDateOrder eFormat = rLocaleDataWrapper.getLongDateOrder();
         switch( eFormat )
         {
-            case DateOrder::MDY:
+            case LongDateOrder::MDY:
                 nMonth = ImplCutMonthFromString( aStr, aCalendarName, rLocaleDataWrapper, rCalendarWrapper );
                 nDay = ImplCutNumberFromString( aStr );
                 nYear  = ImplCutNumberFromString( aStr );
                 break;
-            case DateOrder::DMY:
+            case LongDateOrder::DMY:
                 nDay = ImplCutNumberFromString( aStr );
                 nMonth = ImplCutMonthFromString( aStr, aCalendarName, rLocaleDataWrapper, rCalendarWrapper );
                 nYear  = ImplCutNumberFromString( aStr );
                 break;
-            case DateOrder::YMD:
+            case LongDateOrder::YDM:
+                nYear  = ImplCutNumberFromString( aStr );
+                nDay = ImplCutNumberFromString( aStr );
+                nMonth = ImplCutMonthFromString( aStr, aCalendarName, rLocaleDataWrapper, rCalendarWrapper );
+                break;
+            case LongDateOrder::YMD:
             default:
                 nYear = ImplCutNumberFromString( aStr );
                 nMonth = ImplCutMonthFromString( aStr, aCalendarName, rLocaleDataWrapper, rCalendarWrapper );
