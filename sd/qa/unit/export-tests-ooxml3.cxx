@@ -22,6 +22,7 @@
 #include <svx/svdotable.hxx>
 #include <svx/xlineit0.hxx>
 #include <svx/xlndsit.hxx>
+#include <svx/svdoole2.hxx>
 #include <rtl/ustring.hxx>
 
 #include <com/sun/star/drawing/XDrawPage.hpp>
@@ -116,6 +117,7 @@ public:
     void testTdf125560_textDeflate();
     void testTdf125560_textInflateTop();
     void testTdf96061_textHighlight();
+    void testTdf143222_embeddedWorksheet();
     void testTdf142235_TestPlaceholderTextAlignment();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest3);
@@ -185,6 +187,7 @@ public:
     CPPUNIT_TEST(testTdf125560_textDeflate);
     CPPUNIT_TEST(testTdf125560_textInflateTop);
     CPPUNIT_TEST(testTdf96061_textHighlight);
+    CPPUNIT_TEST(testTdf143222_embeddedWorksheet);
     CPPUNIT_TEST(testTdf142235_TestPlaceholderTextAlignment);
     CPPUNIT_TEST_SUITE_END();
 
@@ -1741,6 +1744,33 @@ void SdOOXMLExportTest3::testTdf96061_textHighlight()
     uno::Reference<beans::XPropertySet> xPropSet4(xRun4, uno::UNO_QUERY_THROW);
     xPropSet4->getPropertyValue("CharBackColor") >>= aColor;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), aColor);
+}
+
+void SdOOXMLExportTest3::testTdf143222_embeddedWorksheet()
+{
+    // Check import of embedded worksheet in slide.
+    ::sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/tdf143222.pptx"), PPTX);
+
+    const SdrPage* pPage = GetPage(1, xDocShRef.get());
+    const SdrOle2Obj* pOleObj = static_cast<SdrOle2Obj*>(pPage->GetObj(0));
+    CPPUNIT_ASSERT_MESSAGE("no object", pOleObj != nullptr);
+
+    // Without the fix we lost the graphic of ole object.
+    const Graphic* pGraphic = pOleObj->GetGraphic();
+    CPPUNIT_ASSERT_MESSAGE("no graphic", pGraphic != nullptr);
+
+    // Check export of embedded worksheet in slide.
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX);
+
+    pPage = GetPage(1, xDocShRef.get());
+    pOleObj = static_cast<SdrOle2Obj*>(pPage->GetObj(0));
+    CPPUNIT_ASSERT_MESSAGE("no object after the export", pOleObj != nullptr);
+
+    pGraphic = pOleObj->GetGraphic();
+    CPPUNIT_ASSERT_MESSAGE("no graphic after the export", pGraphic != nullptr);
+
+    xDocShRef->DoClose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdOOXMLExportTest3);
