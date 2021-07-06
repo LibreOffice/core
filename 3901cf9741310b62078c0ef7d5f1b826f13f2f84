@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fd60ebfc_8487c3d6",
+        "filename": "include/svx/svxids.hrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 439,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-06T06:44:17Z",
+      "side": 1,
+      "message": "Likely we need a better comment here describing the full range that is used in the sfxsids.hrc?",
+      "revId": "3901cf9741310b62078c0ef7d5f1b826f13f2f84",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
