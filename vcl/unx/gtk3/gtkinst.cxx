@@ -10892,7 +10892,13 @@ public:
 #endif
         , m_pMenuButtonProvider(nullptr)
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
+#if GTK_CHECK_VERSION(4, 0, 0)
+        for (GtkWidget* pChild = gtk_widget_get_first_child(GTK_WIDGET(pToolbar));
+             pChild; pChild = gtk_widget_get_next_sibling(pChild))
+        {
+            collect(pChild, this);
+        }
+#else
         gtk_container_foreach(GTK_CONTAINER(pToolbar), collect, this);
 #endif
     }
