@@ -283,6 +283,7 @@ public:
     void testTdf89954();
     void testTdf89720();
     void testTdf88986();
+    void testTdf78150();
     void testTdf87922();
     void testTdf77014();
     void testTdf92648();
@@ -403,6 +404,7 @@ public:
     CPPUNIT_TEST(testTdf89954);
     CPPUNIT_TEST(testTdf89720);
     CPPUNIT_TEST(testTdf88986);
+    CPPUNIT_TEST(testTdf78150);
     CPPUNIT_TEST(testTdf87922);
     CPPUNIT_TEST(testTdf77014);
     CPPUNIT_TEST(testTdf92648);
@@ -4290,6 +4292,19 @@ void SwUiWriterTest::testTdf88986()
 
     // This was missing along with the gradient and other tables.
     CPPUNIT_ASSERT(aSet.HasItem(SID_COLOR_TABLE));
+}
+
+void SwUiWriterTest::testTdf78150()
+{
+    SwDoc* pDoc = createSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->Insert("foobar");
+
+    CPPUNIT_ASSERT_EQUAL(OUString("foobar"), getParagraph(1)->getString());
+
+    dispatchCommand(mxComponent, ".uno:DelToStartOfWord", {});
+
+    CPPUNIT_ASSERT_EQUAL(OUString(""), getParagraph(1)->getString());
 }
 
 void SwUiWriterTest::testTdf87922()
