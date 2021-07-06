@@ -5,6 +5,8 @@
 ' file, You can obtain one at http://mozilla.org/MPL/2.0/.
 '
 
+Option Explicit
+
 Function doUnitTest as String
     ' ATN (arc tan)
     If (Atn(1) <> PI/4) Then

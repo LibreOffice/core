@@ -3,6 +3,8 @@ Const IsMissingA = 0
 Const IsMissingB = 1
 Const IsMissingAB = 2
 
+Option Explicit
+
 Function doUnitTest() As String
     TestUtil.TestInit
     verify_testIsMissingBasic

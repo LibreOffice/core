@@ -6,6 +6,8 @@
 ' file, You can obtain one at http://mozilla.org/MPL/2.0/.
 '
 
+Option Explicit
+
 Function doUnitTest as String
     ' CHOOSE
     If (Choose(2, 1, 100, 3) <> 100) Then

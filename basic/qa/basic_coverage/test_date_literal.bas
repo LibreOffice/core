@@ -6,6 +6,7 @@
 ' file, You can obtain one at http://mozilla.org/MPL/2.0/.
 '
 
+Option Explicit
 
 Function doUnitTest as String
   If #07/28/1977# = 28334 And #1977-07-28# = 28334 Then

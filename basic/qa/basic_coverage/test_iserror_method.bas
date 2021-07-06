@@ -6,6 +6,8 @@
 ' file, You can obtain one at http://mozilla.org/MPL/2.0/.
 '
 
+Option Explicit
+
 Type MyType
     tName as String
 End Type

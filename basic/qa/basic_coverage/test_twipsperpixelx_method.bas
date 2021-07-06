@@ -6,6 +6,8 @@
 ' file, You can obtain one at http://mozilla.org/MPL/2.0/.
 '
 
+Option Explicit
+
 Function doUnitTest as String
     ' TWIPSPERPIXELX
     If ( TwipsPerPixelX < 0 ) Then

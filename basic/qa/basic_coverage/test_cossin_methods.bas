@@ -5,6 +5,8 @@
 ' file, You can obtain one at http://mozilla.org/MPL/2.0/.
 '
 
+Option Explicit
+
 Function doUnitTest as String
     ' COS SIN
     If ( Abs(Cos(PI/3) - Sin(PI/6)) > 1E-6 ) Then

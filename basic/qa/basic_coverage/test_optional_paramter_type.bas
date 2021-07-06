@@ -1,5 +1,6 @@
 REM  *****  BASIC  *****
 Option Compatible
+Option Explicit
 
 Function doUnitTest() As String
     doUnitTest = "FAIL"

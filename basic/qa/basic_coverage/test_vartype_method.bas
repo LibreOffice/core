@@ -5,6 +5,9 @@
 ' License, v. 2.0. If a copy of the MPL was not distributed with this
 ' file, You can obtain one at http://mozilla.org/MPL/2.0/.
 '
+
+Option Explicit
+
 Type UDF ' User defined type
     l As Object
     s as String
@@ -14,7 +17,7 @@ Dim myUDF As UDF
 Dim int16 As Integer,   int32 As Long,    flt32 As Single, flt64 As Double, _
     curr  As Currency,  dat   As Date,    str   As String, obj   As Object, _
     myErr As Variant,   var   As Variant, byt3  As Byte,   bool  As Boolean
-    
+
 Dim int_%, long_&, single_!, double_#, currency_@, string_$, array_
 
 Dim intArray()  As Integer,  lngArray(5) As Long, sngArray!() As Single, dblArray#(8) As Double, _

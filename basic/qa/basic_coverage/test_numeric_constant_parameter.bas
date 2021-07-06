@@ -6,6 +6,9 @@
 ' file, You can obtain one at http://mozilla.org/MPL/2.0/.
 '
 
+
+Option Explicit
+
 ' assigns a numeric constant (integer) to a parameter of type variant
 Function assignInteger( numericConstant ) As String
     numericConstant = 1

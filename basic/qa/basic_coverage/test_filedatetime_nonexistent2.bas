@@ -5,6 +5,9 @@
 ' file, You can obtain one at http://mozilla.org/MPL/2.0/.
 '
 'Bug 121337 - FileDateTime("\\nonexistent\smb\path") returns bogus result rather than throwing error
+
+Option Explicit
+
 Function doUnitTest as String
     On Error GoTo ErrorHandler ' Set up error handler
     Dim result
