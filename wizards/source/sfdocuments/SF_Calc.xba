@@ -2767,7 +2767,7 @@ Const cstSubArgs = &quot;&quot;
 
 	_PropertyGet = False
 
-	cstThisSub = &quot;SFDocuments.SF_Calc.get&quot; &amp; psProperty
+	cstThisSub = &quot;SFDocuments.Calc.get&quot; &amp; psProperty
 	ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs)
 	If Not _IsStillAlive() Then GoTo Finally
 
