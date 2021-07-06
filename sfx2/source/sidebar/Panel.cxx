@@ -63,9 +63,9 @@ Panel::Panel(const PanelDescriptor& rPanelDescriptor,
     , mxFrame(rxFrame)
     , mpParentWindow(pParentWindow)
     , mxDeck(pDeck)
-    , mxContainer(mxBuilder->weld_container("Panel"))
+    , mxContainer(mxBuilder->weld_box("Panel"))
     , mxTitleBar(new PanelTitleBar(rPanelDescriptor.msTitle, *mxBuilder, this))
-    , mxContents(mxBuilder->weld_container("contents"))
+    , mxContents(mxBuilder->weld_box("contents"))
 {
     mxContents->set_visible(mbIsExpanded);
     mxContainer->connect_get_property_tree(LINK(this, Panel, DumpAsPropertyTreeHdl));
@@ -149,7 +149,7 @@ PanelTitleBar* Panel::GetTitleBar() const
     return mxTitleBar.get();
 }
 
-weld::Container* Panel::GetContents() const
+weld::Box* Panel::GetContents() const
 {
     return mxContents.get();
 }
