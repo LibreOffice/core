@@ -61,7 +61,7 @@ public:
     ~Panel();
 
     PanelTitleBar* GetTitleBar() const;
-    weld::Container* GetContents() const;
+    weld::Box* GetContents() const;
     void Show(bool bShow);
     bool IsTitleBarOptional() const { return mbIsTitleBarOptional; }
     void SetUIElement(const css::uno::Reference<css::ui::XUIElement>& rxElement);
@@ -108,9 +108,9 @@ private:
     const css::uno::Reference<css::frame::XFrame>& mxFrame;
     weld::Widget* mpParentWindow;
     VclPtr<Deck> mxDeck;
-    std::unique_ptr<weld::Container> mxContainer;
+    std::unique_ptr<weld::Box> mxContainer;
     std::unique_ptr<PanelTitleBar> mxTitleBar;
-    std::unique_ptr<weld::Container> mxContents;
+    std::unique_ptr<weld::Box> mxContents;
     css::uno::Reference<css::awt::XWindow> mxXWindow;
 
     DECL_LINK(DumpAsPropertyTreeHdl, tools::JsonWriter&, void);

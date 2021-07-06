@@ -80,7 +80,7 @@ private:
     VclPtr<SidebarDockingWindow> mxParentWindow;
     std::unique_ptr<DeckTitleBar> mxTitleBar;
     std::unique_ptr<weld::ScrolledWindow> mxVerticalScrollBar;
-    std::unique_ptr<weld::Container> mxContents;
+    std::unique_ptr<weld::Box> mxContents;
 };
 
 } // end of namespace sfx2::sidebar
