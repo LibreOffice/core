@@ -12,6 +12,7 @@ $(eval $(call gb_CppunitTest_CppunitTest,sc_macros_test))
 $(eval $(call gb_CppunitTest_use_externals,sc_macros_test, \
     boost_headers \
     mdds_headers \
+    libxml2 \
 ))
 
 $(eval $(call gb_CppunitTest_use_common_precompiled_header,sc_macros_test))
@@ -37,6 +38,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_macros_test, \
     sax \
     sb \
     sc \
+    scqahelper \
     sfx \
     sot \
     subsequenttest \
@@ -58,6 +60,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_macros_test, \
 $(eval $(call gb_CppunitTest_set_include,sc_macros_test,\
     -I$(SRCDIR)/sc/source/ui/inc \
     -I$(SRCDIR)/sc/inc \
+    -I$(SRCDIR)/sc/qa/unit \
     $$(INCLUDE) \
 ))
 
