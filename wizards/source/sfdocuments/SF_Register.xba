@@ -66,8 +66,9 @@ Public Sub RegisterScriptServices() As Variant
 
 	With GlobalScope.ScriptForge.SF_Services
 		.RegisterService(&quot;Document&quot;,			&quot;SFDocuments.SF_Register._NewDocument&quot;)		&apos;	Reference to the function initializing the service
-		.RegisterService(&quot;Calc&quot;,				&quot;SFDocuments.SF_Register._NewDocument&quot;)		&apos;	Same reference, distinction is made inside the function
 		.RegisterService(&quot;Base&quot;,				&quot;SFDocuments.SF_Register._NewDocument&quot;)		&apos;	Same reference, distinction is made inside the function
+		.RegisterService(&quot;Calc&quot;,				&quot;SFDocuments.SF_Register._NewDocument&quot;)		&apos;	Same reference, distinction is made inside the function
+		.RegisterService(&quot;Writer&quot;,				&quot;SFDocuments.SF_Register._NewDocument&quot;)		&apos;	Same reference, distinction is made inside the function
 		.RegisterEventManager(&quot;DocumentEvent&quot;,	&quot;SFDocuments.SF_Register._EventManager&quot;)	&apos;	Reference to the events manager
 		.RegisterEventManager(&quot;FormEvent&quot;,		&quot;SFDocuments.SF_Register._FormEventManager&quot;)&apos;	Reference to the form and controls events manager
 	End With
@@ -366,7 +367,7 @@ Check:
 	Set oDocument = Nothing
 
 Try:
-	Set oUi = ScriptForge.SF_Register.CreateScriptService(&quot;UI&quot;)
+	Set oUi = ScriptForge.SF_Services.CreateScriptService(&quot;UI&quot;)
 	Select Case VarType(vWindowName)
 		Case V_STRING
 			If Len(vWindowName) &gt; 0 Then
@@ -404,6 +405,11 @@ Try:
 				Set oSuperDocument.[_SubClass] = oDocument
 			Case &quot;Calc&quot;
 				Set oDocument = New SF_Calc
+				Set oSuperDocument = New SF_Document
+				Set oDocument.[_Super] = oSuperDocument		&apos;	Now both super and subclass are twinned
+				Set oSuperDocument.[_SubClass] = oDocument
+			Case &quot;Writer&quot;
+				Set oDocument = New SF_Writer
 				Set oSuperDocument = New SF_Document
 				Set oDocument.[_Super] = oSuperDocument		&apos;	Now both super and subclass are twinned
 				Set oSuperDocument.[_SubClass] = oDocument

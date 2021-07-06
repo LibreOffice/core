@@ -2071,6 +2071,32 @@ class SFDocuments:
         def SetFocus(self):
             return self.ExecMethod(self.vbMethod, 'SetFocus')
 
+    # #########################################################################
+    # SF_Writer CLASS
+    # #########################################################################
+    class SF_Writer(SF_Document, SFServices):
+        """
+            The SF_Writer module is focused on :
+                - TBD
+            """
+        # Mandatory class properties for service registration
+        serviceimplementation = 'basic'
+        servicename = 'SFDocuments.Writer'
+        servicesynonyms = ('writer', 'sfdocuments.writer')
+        serviceproperties = dict(Description = True, DocumentType = False, IsBase = False, IsCalc = False,
+                                 IsDraw = False, IsImpress = False, IsMath = False, IsWriter = False,
+                                 Keywords = True, Readonly = False, Subject = True, Title = True,
+                                 XComponent = False)
+        # Force for each property to get its value from Basic - due to intense interactivity with user
+        forceGetProperty = True
+
+        @classmethod
+        def ReviewServiceArgs(cls, windowname = ''):
+            """
+                Transform positional and keyword arguments into positional only
+                """
+            return (windowname,)
+
 
 # ##############################################False##################################################################
 #                           CreateScriptService()                                                                   ###
