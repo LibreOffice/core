@@ -5,6 +5,8 @@
 ' file, You can obtain one at http://mozilla.org/MPL/2.0/.
 '
 
+Option Explicit
+
 Function doUnitTest as String
     Dim aValue as variant
     aValue = DimArray( 1, 2, 4 )

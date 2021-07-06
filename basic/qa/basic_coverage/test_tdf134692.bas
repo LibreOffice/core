@@ -1,4 +1,5 @@
 Option VBASupport 0
+Option Explicit
 
 Function doUnitTest() As String
     TestUtil.TestInit
@@ -10,18 +11,19 @@ Sub verify_tdf134692()
     On Error GoTo errorHandler
 
     dim a(2 to 5)
+    dim b, i, s
     b = a
     redim preserve b(4 to 6)
     for i = lbound(b) to ubound(b)
       b(i) = i
     next i
     for i = lbound(a) to ubound(a)
-      s$ = s$ & " a(" & i & ")=" & a(i)
+      s = s & " a(" & i & ")=" & a(i)
     next i
     for i = lbound(b) to ubound(b)
-      s$ = s$ & " b(" & i & ")=" & b(i)
+      s = s & " b(" & i & ")=" & b(i)
     next i
-    TestUtil.AssertEqual(s$, " a(2)= a(3)= a(4)= a(5)= b(4)=4 b(5)=5 b(6)=6", "tdf#134692")
+    TestUtil.AssertEqual(s, " a(2)= a(3)= a(4)= a(5)= b(4)=4 b(5)=5 b(6)=6", "tdf#134692")
 
     Exit Sub
 errorHandler:

@@ -6,6 +6,8 @@
 ' file, You can obtain one at http://mozilla.org/MPL/2.0/.
 '
 
+Option Explicit
+
 Function doUnitTest as String
     If (Mid("abc", 1, 4) = "abc") Then
         doUnitTest = "OK"

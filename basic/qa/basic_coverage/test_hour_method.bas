@@ -6,6 +6,8 @@
 ' file, You can obtain one at http://mozilla.org/MPL/2.0/.
 '
 
+Option Explicit
+
 Function doUnitTest as String
     ' HOUR
     If ( Hour(TimeSerial(12,30,41)) <> 12 ) Then

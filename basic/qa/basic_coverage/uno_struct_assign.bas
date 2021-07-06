@@ -6,9 +6,10 @@
 ' file, You can obtain one at http://mozilla.org/MPL/2.0/.
 '
 
+Option Explicit
 
 Function doUnitTest as String
-  Dim oNamedValue as new com.sun.star.beans.NamedValue 
+  Dim oNamedValue as new com.sun.star.beans.NamedValue
   Dim oCellAddress as new com.sun.star.table.CellAddress
   oNamedValue.Value = oCellAddress ' fdo#60065 - this would throw an error
   doUnitTest = "OK"

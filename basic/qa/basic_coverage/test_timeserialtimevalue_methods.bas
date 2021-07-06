@@ -6,6 +6,8 @@
 ' file, You can obtain one at http://mozilla.org/MPL/2.0/.
 '
 
+Option Explicit
+
 Function doUnitTest as String
     ' TIMESERIAL TIMEVALUE
     If ( TimeSerial(13,54,48) <> TimeValue("13:54:48") ) Then

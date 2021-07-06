@@ -1,5 +1,6 @@
 Option Base 1
 Option Compatible
+Option Explicit
 
 Function doUnitTest() As String
     TestUtil.TestInit
