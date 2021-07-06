@@ -21546,6 +21546,27 @@ private:
                     gtk_widget_set_tooltip_text(pWidget, label);
             }
         }
+#else
+        else if (GTK_IS_BUTTON(pWidget))
+        {
+            GtkButton* pButton = GTK_BUTTON(pWidget);
+            if (const gchar* icon_name = gtk_button_get_icon_name(pButton))
+            {
+                OUString aIconName(icon_name, strlen(icon_name), RTL_TEXTENCODING_UTF8);
+                if (!IsAllowedBuiltInIcon(aIconName))
+                {
+                    if (GdkPixbuf* pixbuf = load_icon_by_name_theme_lang(aIconName, m_aIconTheme, m_aUILang))
+                    {
+                        GtkWidget* pImage = gtk_image_new_from_pixbuf(pixbuf);
+                        gtk_widget_set_halign(pImage, GTK_ALIGN_CENTER);
+                        gtk_widget_set_valign(pImage, GTK_ALIGN_CENTER);
+                        g_object_unref(pixbuf);
+                        gtk_button_set_child(pButton, pImage);
+                        gtk_widget_show(pImage);
+                    }
+                }
+            }
+        }
 #endif
 
         //set helpids
