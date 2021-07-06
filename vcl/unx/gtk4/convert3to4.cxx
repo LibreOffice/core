@@ -441,8 +441,11 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
             if (sName == "label")
             {
                 OUString sParentClass = GetParentObjectType(xChild);
-                if (sParentClass == "GtkToolButton" || sParentClass == "GtkToggleToolButton")
+                if (sParentClass == "GtkToolButton" || sParentClass == "GtkMenuToolButton"
+                    || sParentClass == "GtkToggleToolButton")
+                {
                     xName->setNodeValue("tooltip-text");
+                }
                 xPropertyLabel = xChild;
             }
 
@@ -1151,6 +1154,10 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
             else if (sClass == "GtkToolButton")
             {
                 xClass->setNodeValue("GtkButton");
+            }
+            else if (sClass == "GtkMenuToolButton")
+            {
+                xClass->setNodeValue("GtkMenuButton");
             }
             else if (sClass == "GtkToggleToolButton")
             {
