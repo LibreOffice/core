@@ -441,7 +441,8 @@ static GtkStyleProvider* CreateStyleProvider()
 
        1.a) little close button in menubar to close back to start-center
        1.b) and small buttons in view->data sources (button.small-button)
-       1.c) small toolbar button in infobars (toolbar.small-button button)
+       1.c.1) gtk3 small toolbar button in infobars (toolbar.small-button button)
+       1.c.2) gtk4 small toolbar button in infobars (box.small-button button)
        1.d) comboboxes in the data browser for tdf#137695 (box#combobox button.small-button,
           which would instead be combobox button.small-button if we didn't replace GtkComboBox,
           see GtkInstanceComboBox for an explanation for why we do that)
@@ -453,7 +454,8 @@ static GtkStyleProvider* CreateStyleProvider()
     */
     GtkCssProvider* pStyleProvider = gtk_css_provider_new();
     static const gchar data[] =
-      "button.small-button, toolbar.small-button button, combobox.small-button *.combo, box#combobox.small-button *.combo, entry.small-button { "
+      "button.small-button, toolbar.small-button button, box.small-button button, "
+      "combobox.small-button *.combo, box#combobox.small-button *.combo, entry.small-button { "
       "padding: 0; margin-left: 0px; margin-right: 0px;"
       "min-height: 18px; min-width: 18px; }"
       "notebook.overflow > header.top > tabs > tab:checked { "
