@@ -987,6 +987,10 @@ bool ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
         }
         if (bDoSize)
             nEndY = rDoc.MaxRow();
+
+        // remove AutoFilter button flags
+        rDocShell.DBAreaDeleted(nDestTab, aLocalParam.nCol1, aLocalParam.nRow1, aLocalParam.nCol2);
+
         rDocShell.PostPaint(
             ScRange(aLocalParam.nCol1, aLocalParam.nRow1, nDestTab, nEndX, nEndY, nDestTab),
             PaintPartFlags::Grid);
