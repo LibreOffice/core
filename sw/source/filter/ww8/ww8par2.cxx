@@ -1813,6 +1813,8 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp) :
 
     wwSprmParser aSprmParser(m_pIo->GetFib());
 
+    std::set<std::pair<WW8_CP, WW8_CP>> aPrevRes;
+
     // process pPap until end of table found
     do
     {
@@ -2098,9 +2100,10 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp) :
                 break;
         }
 
-        if (nStartCp == aRes.nEndPos)
+        auto aBounds(std::make_pair(aRes.nStartPos, aRes.nEndPos));
+        if (!aPrevRes.insert(aBounds).second) //already seen these bounds, infinite loop
         {
-            SAL_WARN("sw.ww8", "WW8TabDesc End same as Start, abandoning to avoid looping");
+            SAL_WARN("sw.ww8", "WW8TabDesc, loop in paragraph property chain");
             break;
         }
         nStartCp = aRes.nEndPos;
