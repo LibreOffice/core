@@ -22,6 +22,30 @@
       "revId": "c6cc94ea781699b899ad92ca6ceab2e8f59d1606",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "337ebcc1_37da1339",
+        "filename": "basic/qa/basic_coverage/test_tdf134692.bas",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-07-06T08:00:33Z",
+      "side": 1,
+      "message": "Ouch, copy\u0026pasta mistake. Fixed in https://gerrit.libreoffice.org/c/core/+/118464\nThanks for spotting",
+      "parentUuid": "8beb38ef_471b8fbd",
+      "range": {
+        "startLine": 24,
+        "startChar": 95,
+        "endLine": 24,
+        "endChar": 101
+      },
+      "revId": "c6cc94ea781699b899ad92ca6ceab2e8f59d1606",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
