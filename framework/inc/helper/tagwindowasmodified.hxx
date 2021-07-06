@@ -23,9 +23,11 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
 #include <com/sun/star/frame/XFrameActionListener.hpp>
+#include <com/sun/star/util/XModifiable.hpp>
 
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/weakref.hxx>
+#include <vcl/window.hxx>
 
 namespace framework{
 
@@ -51,13 +53,13 @@ class TagWindowAsModified final : public  ::cppu::WeakImplHelper<
     private:
 
         /// reference to the frame, where we listen for new loaded documents for updating our own xModel reference
-        css::uno::WeakReference< css::frame::XFrame > m_xFrame;
+        css::uno::Reference< css::frame::XFrame > m_xFrame;
 
         /// reference to the frame container window, where we must set the tag
-        css::uno::WeakReference< css::awt::XWindow > m_xWindow;
+        VclPtr<vcl::Window> m_xWindow;
 
         /// we list on the model for modify events
-        css::uno::WeakReference< css::frame::XModel > m_xModel;
+        css::uno::Reference< css::util::XModifiable > m_xModel;
 
     // interface
 
