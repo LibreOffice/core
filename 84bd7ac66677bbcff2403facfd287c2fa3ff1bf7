@@ -70,6 +70,30 @@
       "revId": "84bd7ac66677bbcff2403facfd287c2fa3ff1bf7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "96fedfdb_b4f50807",
+        "filename": "sfx2/source/appl/appserv.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 541,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2021-07-06T11:24:15Z",
+      "side": 1,
+      "message": "again: plaese don\u0027t mix LOLocale get parameter with different values like passing the BCP47 code to it.\n\nIf you want to sue BCP47 code, pass it to the BCP47 GET parameter, not to LOlocale\n(that being said: current wiki method on hub server only knows about LOlocale, see the regular reply for details - that can be changed of course, but in either case: don\u0027t mix randomly)",
+      "parentUuid": "b8a3bce7_5ca778d6",
+      "range": {
+        "startLine": 539,
+        "startChar": 0,
+        "endLine": 541,
+        "endChar": 0
+      },
+      "revId": "84bd7ac66677bbcff2403facfd287c2fa3ff1bf7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
