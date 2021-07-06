@@ -10720,10 +10720,14 @@ private:
             // left in the main document and not in the toolbar
 #if !GTK_CHECK_VERSION(4, 0, 0)
             gtk_button_set_focus_on_click(GTK_BUTTON(pMenuButton), false);
+            g_signal_connect(pMenuButton, "toggled", G_CALLBACK(signalItemToggled), this);
 #else
             gtk_widget_set_focus_on_click(GTK_WIDGET(pMenuButton), false);
+
+            GtkWidget* pToggleButton = gtk_widget_get_first_child(GTK_WIDGET(pMenuButton));
+            assert(GTK_IS_TOGGLE_BUTTON(pToggleButton));
+            g_signal_connect(pToggleButton, "state-flags-changed", G_CALLBACK(signalItemFlagsChanged), this);
 #endif
-            g_signal_connect(pMenuButton, "toggled", G_CALLBACK(signalItemToggled), this);
 
             // by default the GtkMenuButton down arrow button is as wide as
             // a normal button and LibreOffice's original ones are very
@@ -10779,6 +10783,7 @@ private:
         signal_clicked(::get_buildable_id(GTK_BUILDABLE(pItem)));
     }
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
     static void signalItemToggled(GtkToggleButton* pItem, gpointer widget)
     {
         GtkInstanceToolbar* pThis = static_cast<GtkInstanceToolbar*>(widget);
@@ -10797,6 +10802,30 @@ private:
             }
         }
     }
+#else
+    static void signalItemFlagsChanged(GtkToggleButton* pItem, GtkStateFlags flags, gpointer widget)
+    {
+        GtkInstanceToolbar* pThis = static_cast<GtkInstanceToolbar*>(widget);
+        bool bOldChecked = flags & GTK_STATE_FLAG_CHECKED;
+        bool bNewChecked = gtk_widget_get_state_flags(GTK_WIDGET(pItem)) & GTK_STATE_FLAG_CHECKED;
+        if (bOldChecked == bNewChecked)
+            return;
+        SolarMutexGuard aGuard;
+        pThis->signal_item_toggled(pItem);
+    }
+
+    void signal_item_toggled(GtkToggleButton* pItem)
+    {
+        for (auto& a : m_aMenuButtonMap)
+        {
+            if (a.second->getWidget() == gtk_widget_get_parent(GTK_WIDGET(pItem)))
+            {
+                signal_toggle_menu(a.first);
+                break;
+            }
+        }
+    }
+#endif
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
     static void set_item_image(GtkToolButton* pItem, const css::uno::Reference<css::graphic::XGraphic>& rIcon)
@@ -10939,10 +10968,6 @@ public:
 #if !GTK_CHECK_VERSION(4, 0, 0)
         if (GTK_IS_TOGGLE_TOOL_BUTTON(pToolButton))
             gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(pToolButton), bActive);
-#else
-        if (GTK_IS_TOGGLE_BUTTON(pToolButton))
-            gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pToolButton), bActive);
-#endif
         else
         {
             GtkButton* pButton = nullptr;
@@ -10957,6 +10982,20 @@ public:
                 gtk_widget_set_state_flags(GTK_WIDGET(pButton), static_cast<GtkStateFlags>(eState), true);
             }
         }
+#else
+        GtkWidget* pWidget;
+        if (GTK_IS_MENU_BUTTON(pToolButton))
+        {
+            pWidget = gtk_widget_get_first_child(pToolButton);
+            assert(GTK_IS_TOGGLE_BUTTON(pWidget));
+        }
+        else
+            pWidget = pToolButton;
+        auto eState = gtk_widget_get_state_flags(pWidget) & ~GTK_STATE_FLAG_CHECKED;
+        if (bActive)
+            eState |= GTK_STATE_FLAG_CHECKED;
+        gtk_widget_set_state_flags(pWidget, static_cast<GtkStateFlags>(eState), true);
+#endif
 
         enable_item_notify_events();
     }
@@ -10968,10 +11007,6 @@ public:
 #if !GTK_CHECK_VERSION(4, 0, 0)
         if (GTK_IS_TOGGLE_TOOL_BUTTON(pToolButton))
             return gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(pToolButton));
-#else
-        if (GTK_IS_TOGGLE_BUTTON(pToolButton))
-            return gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(pToolButton));
-#endif
         else
         {
             GtkButton* pButton = nullptr;
@@ -10983,6 +11018,17 @@ public:
                 return gtk_widget_get_state_flags(GTK_WIDGET(pButton)) & GTK_STATE_FLAG_CHECKED;
             }
         }
+#else
+        GtkWidget* pWidget;
+        if (GTK_IS_MENU_BUTTON(pToolButton))
+        {
+            pWidget = gtk_widget_get_first_child(pToolButton);
+            assert(GTK_IS_TOGGLE_BUTTON(pWidget));
+        }
+        else
+            pWidget = pToolButton;
+        return gtk_widget_get_state_flags(pWidget) & GTK_STATE_FLAG_CHECKED;
+#endif
 
         return false;
     }
