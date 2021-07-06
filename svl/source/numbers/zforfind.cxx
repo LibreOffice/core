@@ -2728,7 +2728,7 @@ bool ImpSvNumberInputScan::ScanMidString( const OUString& rString, sal_uInt16 nS
         switch (eScannedType)
         {
         case SvNumFormatType::DATE:
-            if (nMonthPos == 1 && pLoc->getLongDateOrder() == DateOrder::MDY)
+            if (nMonthPos == 1 && pLoc->getLongDateOrder() == LongDateOrder::MDY)
             {
                 // #68232# recognize long date separators like ", " in "September 5, 1999"
                 if (SkipString( pLoc->getLongDateDaySep(), rString, nPos ))
