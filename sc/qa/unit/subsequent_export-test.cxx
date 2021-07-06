@@ -104,6 +104,7 @@ public:
     void testConditionalFormatExportXLSX();
     void testCondFormatExportCellIs();
     void testTdf99856_dataValidationTest();
+    void testTdf126748();
     void testProtectionKeyODS_UTF16LErtlSHA1();
     void testProtectionKeyODS_UTF8SHA1();
     void testProtectionKeyODS_UTF8SHA256ODF12();
@@ -205,7 +206,6 @@ public:
     void testPreserveTextWhitespaceXLSX();
     void testPreserveTextWhitespace2XLSX();
     void testTdf113646();
-    void testDateStandardfilterXLSX();
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
@@ -222,6 +222,7 @@ public:
     CPPUNIT_TEST(testCondFormatExportCellIs);
     CPPUNIT_TEST(testConditionalFormatExportXLSX);
     CPPUNIT_TEST(testTdf99856_dataValidationTest);
+    CPPUNIT_TEST(testTdf126748);
     CPPUNIT_TEST(testProtectionKeyODS_UTF16LErtlSHA1);
     CPPUNIT_TEST(testProtectionKeyODS_UTF8SHA1);
     CPPUNIT_TEST(testProtectionKeyODS_UTF8SHA256ODF12);
@@ -309,7 +310,6 @@ public:
     CPPUNIT_TEST(testHyperlinkXLSX);
     CPPUNIT_TEST(testMoveCellAnchoredShapesODS);
     CPPUNIT_TEST(testTdf113646);
-    CPPUNIT_TEST(testDateStandardfilterXLSX);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -502,7 +502,7 @@ void ScExportTest::testTdf111876()
 
     xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/worksheets/_rels/sheet1.xml.rels", FORMAT_XLSX);
     CPPUNIT_ASSERT(pDoc);
-    OUString sTarget = getXPath(pDoc, "/rels:Relationships/rels:Relationship", "Target");
+    OUString sTarget = getXPath(pDoc, "/r:Relationships/r:Relationship", "Target");
 
     // Document is saved to the temporary directory, relative path should be different than original one
     CPPUNIT_ASSERT(sTarget != "../xls/bug-fixes.xls");
@@ -647,6 +647,15 @@ void ScExportTest::testTdf99856_dataValidationTest()
     CPPUNIT_ASSERT_EQUAL(OUString("18 Missis"), aList[17].GetString());
 
     xDocSh->DoClose();
+}
+
+void ScExportTest::testTdf126748()
+{
+    ScDocShellRef xShell = loadDoc(u"tdf126748.", FORMAT_ODS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load doc", xShell.is());
+
+    ScDocShellRef xDocSh = saveAndReload( xShell.get(), FORMAT_XLSX);
+    CPPUNIT_ASSERT_MESSAGE("Failed to reload doc", xDocSh.is());
 }
 
 void ScExportTest::testProtectionKeyODS_UTF16LErtlSHA1()
@@ -3330,8 +3339,8 @@ void ScExportTest::testCustomXml()
     CPPUNIT_ASSERT(pRelsDoc);
 
     // Check there is a relation to itemProps1.xml.
-    assertXPath(pRelsDoc, "/rels:Relationships/rels:Relationship", 1);
-    assertXPath(pRelsDoc, "/rels:Relationships/rels:Relationship[@Id='rId1']", "Target", "itemProps1.xml");
+    assertXPath(pRelsDoc, "/r:Relationships/r:Relationship", 1);
+    assertXPath(pRelsDoc, "/r:Relationships/r:Relationship[@Id='rId1']", "Target", "itemProps1.xml");
 
     std::unique_ptr<SvStream> pStream = XPathHelper::parseExportStream(pXPathFile, m_xSFactory, "ddp/ddpfile.xen");
     CPPUNIT_ASSERT(pStream);
@@ -3937,7 +3946,7 @@ void ScExportTest::testHyperlinkXLSX()
 
     xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/drawings/_rels/drawing1.xml.rels", FORMAT_XLSX);
     CPPUNIT_ASSERT(pDoc);
-    assertXPath(pDoc, "/rels:Relationships/rels:Relationship", "Target", "#Sheet2!A1");
+    assertXPath(pDoc, "/r:Relationships/r:Relationship", "Target", "#Sheet2!A1");
 
     xDocSh->DoClose();
 }
@@ -4184,24 +4193,6 @@ void ScExportTest::testTdf113646()
     assertXPath(pSheet, "/x:styleSheet/x:dxfs/x:dxf/x:font/x:sz", "val", "36");
 
     xShell->DoClose();
-}
-
-void ScExportTest::testDateStandardfilterXLSX()
-{
-    // XLSX Roundtripping standard filter with date
-    ScDocShellRef xDocSh = loadDoc(u"tdf142607.", FORMAT_ODS);
-    CPPUNIT_ASSERT(xDocSh.is());
-
-    xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory, "xl/worksheets/sheet1.xml", FORMAT_XLSX);
-    CPPUNIT_ASSERT(pDoc);
-
-    assertXPath(pDoc, "//x:autoFilter", "ref", "A1:B6");
-    assertXPath(pDoc, "//x:autoFilter/x:filterColumn/x:filters/x:dateGroupItem[1]", "day", "03");
-    assertXPath(pDoc, "//x:autoFilter/x:filterColumn/x:filters/x:dateGroupItem[1]", "month", "12");
-    assertXPath(pDoc, "//x:autoFilter/x:filterColumn/x:filters/x:dateGroupItem[1]", "year", "2011");
-    assertXPath(pDoc, "//x:autoFilter/x:filterColumn/x:filters/x:dateGroupItem[1]", "dateTimeGrouping", "day");
-
-    xDocSh->DoClose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest);
