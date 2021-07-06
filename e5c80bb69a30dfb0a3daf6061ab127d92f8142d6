@@ -16,6 +16,24 @@
       "revId": "e5c80bb69a30dfb0a3daf6061ab127d92f8142d6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8e6186b6_66daed1a",
+        "filename": "sal/rtl/math.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1016,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-06T09:44:26Z",
+      "side": 1,
+      "message": "So my comment was useful, explicitly stating the intent, and allowing to spot the flaw in the implementation :)",
+      "parentUuid": "29240ded_5c822f12",
+      "revId": "e5c80bb69a30dfb0a3daf6061ab127d92f8142d6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
