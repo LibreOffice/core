@@ -46,6 +46,30 @@
       "revId": "84bd7ac66677bbcff2403facfd287c2fa3ff1bf7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b8a3bce7_5ca778d6",
+        "filename": "sfx2/source/appl/appserv.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 541,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-07-06T11:01:06Z",
+      "side": 1,
+      "message": "Me is wrong, as always.\n\ngetBcp47() -\u003e en-US\ngetLanguage() -\u003e en\nhttps://hub.libreoffice.org/HyphenationMissing?LOlocale\u003dde-DE -\u003e de\nhttps://hub.libreoffice.org/HyphenationMissing?LOlocale\u003dde -\u003e de\n\nBut we have PT-BR or ZH-TW, for example.",
+      "parentUuid": "b5f25337_d50742b9",
+      "range": {
+        "startLine": 539,
+        "startChar": 0,
+        "endLine": 541,
+        "endChar": 0
+      },
+      "revId": "84bd7ac66677bbcff2403facfd287c2fa3ff1bf7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
