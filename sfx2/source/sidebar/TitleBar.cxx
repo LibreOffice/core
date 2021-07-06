@@ -23,7 +23,7 @@ namespace sfx2::sidebar {
 
 TitleBar::TitleBar(weld::Builder& rBuilder, Theme::ThemeItem eThemeItem)
     : mrBuilder(rBuilder)
-    , mxTitlebar(rBuilder.weld_container("titlebar"))
+    , mxTitlebar(rBuilder.weld_box("titlebar"))
     , mxAddonImage(rBuilder.weld_image("addonimage"))
     , mxToolBox(rBuilder.weld_toolbar("toolbar"))
     , meThemeItem(eThemeItem)

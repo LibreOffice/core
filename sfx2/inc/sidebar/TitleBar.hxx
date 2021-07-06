@@ -53,7 +53,7 @@ public:
 
 protected:
     weld::Builder& mrBuilder;
-    std::unique_ptr<weld::Container> mxTitlebar;
+    std::unique_ptr<weld::Box> mxTitlebar;
     std::unique_ptr<weld::Image> mxAddonImage;
     std::unique_ptr<weld::Toolbar> mxToolBox;
     Theme::ThemeItem meThemeItem;
