@@ -64,7 +64,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="tooltip_text" translatable="yes" context="infobar|close|tooltip_text">Close Infobar</property>
-                            <property name="icon_name">sfx2/res/closedoc.png</property>
+                            <property name="icon_name">window-close-symbolic</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
