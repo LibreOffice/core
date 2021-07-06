@@ -70,7 +70,8 @@ bool isBuilderEnabledForPopup(std::u16string_view rUIFile)
         || rUIFile == u"svx/ui/floatinglineproperty.ui" || rUIFile == u"svx/ui/floatinglinestyle.ui"
         || rUIFile == u"svx/ui/floatinglineend.ui"
         || rUIFile == u"svx/ui/fontworkalignmentcontrol.ui"
-        || rUIFile == u"svx/ui/fontworkcharacterspacingcontrol.ui")
+        || rUIFile == u"svx/ui/fontworkcharacterspacingcontrol.ui"
+        || rUIFile == u"svx/ui/floatingareastyle.ui")
         return true;
 
     return false;

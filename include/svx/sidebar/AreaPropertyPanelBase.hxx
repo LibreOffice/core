@@ -97,6 +97,8 @@ private:
     void Initialize();
 
 protected:
+    const css::uno::Reference<css::frame::XFrame>&      mxFrame;
+
     sal_uInt16                                          meLastXFS;
 
     sal_Int32                                           mnLastPosHatch;

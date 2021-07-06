@@ -25,20 +25,20 @@
 
 namespace svx::sidebar {
 
-AreaTransparencyGradientPopup::AreaTransparencyGradientPopup(AreaPropertyPanelBase& rPanel, weld::Widget* pParent)
-    : mrAreaPropertyPanel(rPanel)
-    , mxBuilder(Application::CreateBuilder(pParent, "svx/ui/floatingareastyle.ui"))
-    , mxTopLevel(mxBuilder->weld_container("FloatingAreaStyle"))
-    , mxCenterGrid(mxBuilder->weld_widget("centergrid"))
-    , mxAngleGrid(mxBuilder->weld_widget("anglegrid"))
-    , mxMtrTrgrCenterX(mxBuilder->weld_metric_spin_button("centerx", FieldUnit::PERCENT))
-    , mxMtrTrgrCenterY(mxBuilder->weld_metric_spin_button("centery", FieldUnit::PERCENT))
-    , mxMtrTrgrAngle(mxBuilder->weld_metric_spin_button("angle", FieldUnit::DEGREE))
-    , mxBtnLeft45(mxBuilder->weld_toolbar("lefttoolbox"))
-    , mxBtnRight45(mxBuilder->weld_toolbar("righttoolbox"))
-    , mxMtrTrgrStartValue(mxBuilder->weld_metric_spin_button("start", FieldUnit::PERCENT))
-    , mxMtrTrgrEndValue(mxBuilder->weld_metric_spin_button("end", FieldUnit::PERCENT))
-    , mxMtrTrgrBorder(mxBuilder->weld_metric_spin_button("border", FieldUnit::PERCENT))
+AreaTransparencyGradientPopup::AreaTransparencyGradientPopup(const css::uno::Reference<css::frame::XFrame>& rFrame,
+                                            AreaPropertyPanelBase& rPanel, weld::Widget* pParent)
+    : WeldToolbarPopup(rFrame, pParent, "svx/ui/floatingareastyle.ui", "FloatingAreaStyle")
+    , mrAreaPropertyPanel(rPanel)
+    , mxCenterGrid(m_xBuilder->weld_widget("centergrid"))
+    , mxAngleGrid(m_xBuilder->weld_widget("anglegrid"))
+    , mxMtrTrgrCenterX(m_xBuilder->weld_metric_spin_button("centerx", FieldUnit::PERCENT))
+    , mxMtrTrgrCenterY(m_xBuilder->weld_metric_spin_button("centery", FieldUnit::PERCENT))
+    , mxMtrTrgrAngle(m_xBuilder->weld_metric_spin_button("angle", FieldUnit::DEGREE))
+    , mxBtnLeft45(m_xBuilder->weld_toolbar("lefttoolbox"))
+    , mxBtnRight45(m_xBuilder->weld_toolbar("righttoolbox"))
+    , mxMtrTrgrStartValue(m_xBuilder->weld_metric_spin_button("start", FieldUnit::PERCENT))
+    , mxMtrTrgrEndValue(m_xBuilder->weld_metric_spin_button("end", FieldUnit::PERCENT))
+    , mxMtrTrgrBorder(m_xBuilder->weld_metric_spin_button("border", FieldUnit::PERCENT))
 {
     Link<weld::MetricSpinButton&,void> aLink = LINK(this, AreaTransparencyGradientPopup, ModifiedTrgrHdl_Impl);
     mxMtrTrgrCenterX->connect_value_changed(aLink);
@@ -49,7 +49,6 @@ AreaTransparencyGradientPopup::AreaTransparencyGradientPopup(AreaPropertyPanelBa
     mxMtrTrgrEndValue->connect_value_changed(aLink);
     mxBtnLeft45->connect_clicked(LINK(this, AreaTransparencyGradientPopup, Left_Click45_Impl));
     mxBtnRight45->connect_clicked(LINK(this, AreaTransparencyGradientPopup, Right_Click45_Impl));
-    mxTopLevel->connect_focus_in(LINK(this, AreaTransparencyGradientPopup, FocusHdl));
 }
 
 AreaTransparencyGradientPopup::~AreaTransparencyGradientPopup()
@@ -171,7 +170,7 @@ IMPL_LINK_NOARG(AreaTransparencyGradientPopup, Right_Click45_Impl, const OString
     ExecuteValueModify(nStartCol, nEndCol);
 }
 
-IMPL_LINK_NOARG(AreaTransparencyGradientPopup, FocusHdl, weld::Widget&, void)
+void AreaTransparencyGradientPopup::GrabFocus()
 {
     mxMtrTrgrCenterX->grab_focus();
 }
