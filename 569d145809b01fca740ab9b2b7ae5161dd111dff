@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9effeda1_6987c517",
+        "filename": "editeng/source/editeng/editdoc.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2313,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2021-07-06T21:48:36Z",
+      "side": 1,
+      "message": "Please move that copy object into if block as following\nif(pLeft-\u003eLen()\u003d\u003d0)\n{\n    EditPaM aCopyPaM(aPaM);\n    aCopyPaM.GetNode()-\u003eGetContentAttribs().....\n}",
+      "range": {
+        "startLine": 2313,
+        "startChar": 4,
+        "endLine": 2313,
+        "endChar": 27
+      },
+      "revId": "569d145809b01fca740ab9b2b7ae5161dd111dff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
