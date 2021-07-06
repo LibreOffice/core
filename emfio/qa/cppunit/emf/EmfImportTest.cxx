@@ -251,8 +251,11 @@ void Test::TestDrawStringAlign()
                 "text", "HCVT");
 
     // TODO Make the position of the text the same across the platforms (Arial vs Liberation Sans).
-    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/transform[3]/textsimpleportion",
-                "x", "276");
+    // This is usually 276, but can be 275 as well; depends on what fonts are installed?
+    sal_Int32 nX = getXPath(pDocument, "/primitive2D/metafile/transform/mask/transform[3]/textsimpleportion",
+                "x").toInt32();
+    CPPUNIT_ASSERT(nX >= 275);
+    CPPUNIT_ASSERT(nX <= 276);
     assertXPath(pDocument, "/primitive2D/metafile/transform/mask/transform[3]/textsimpleportion",
                 "y", "22");
     assertXPath(pDocument, "/primitive2D/metafile/transform/mask/transform[3]/textsimpleportion",
@@ -272,8 +275,11 @@ void Test::TestDrawStringAlign()
     assertXPath(pDocument, "/primitive2D/metafile/transform/mask/transform[5]/textsimpleportion",
                 "text", "HCVC");
 
-    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/transform[6]/textsimpleportion",
-                "x", "274");
+    // This is usually 274, but can be 273 as well; depends on what fonts are installed?
+    nX = getXPath(pDocument, "/primitive2D/metafile/transform/mask/transform[6]/textsimpleportion",
+                "x").toInt32();
+    CPPUNIT_ASSERT(nX >= 273);
+    CPPUNIT_ASSERT(nX <= 274);
     assertXPath(pDocument, "/primitive2D/metafile/transform/mask/transform[6]/textsimpleportion",
                 "y", "66");
     assertXPath(pDocument, "/primitive2D/metafile/transform/mask/transform[6]/textsimpleportion",
@@ -293,8 +299,11 @@ void Test::TestDrawStringAlign()
     assertXPath(pDocument, "/primitive2D/metafile/transform/mask/transform[8]/textsimpleportion",
                 "text", "HCVB");
 
-    assertXPath(pDocument, "/primitive2D/metafile/transform/mask/transform[9]/textsimpleportion",
-                "x", "275");
+    // This is usually 275, but can be 274 as well; depends on what fonts are installed?
+    nX = getXPath(pDocument, "/primitive2D/metafile/transform/mask/transform[9]/textsimpleportion",
+                "x").toInt32();
+    CPPUNIT_ASSERT(nX >= 274);
+    CPPUNIT_ASSERT(nX <= 275);
     assertXPath(pDocument, "/primitive2D/metafile/transform/mask/transform[9]/textsimpleportion",
                 "y", "110");
     assertXPath(pDocument, "/primitive2D/metafile/transform/mask/transform[9]/textsimpleportion",
