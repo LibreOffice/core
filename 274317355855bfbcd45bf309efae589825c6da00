@@ -2,6 +2,52 @@
   "comments": [
     {
       "key": {
+        "uuid": "ee92442e_c6bc8008",
+        "filename": "sal/rtl/alloc_impl.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-07-06T07:57:14Z",
+      "side": 1,
+      "message": "to make the code easier to read, I would move the early-return-on-0 out of the #if nest and keep it for all platforms",
+      "range": {
+        "startLine": 65,
+        "startChar": 4,
+        "endLine": 66,
+        "endChar": 17
+      },
+      "revId": "274317355855bfbcd45bf309efae589825c6da00",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "70c771a4_c39d87b1",
+        "filename": "sal/rtl/alloc_impl.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-07-06T07:57:14Z",
+      "side": 1,
+      "message": "why volatile?",
+      "range": {
+        "startLine": 67,
+        "startChar": 4,
+        "endLine": 67,
+        "endChar": 12
+      },
+      "revId": "274317355855bfbcd45bf309efae589825c6da00",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "01dd8c11_0a46bdb6",
         "filename": "sal/rtl/alloc_impl.hxx",
         "patchSetId": 6
@@ -66,6 +112,47 @@
       "side": 1,
       "message": "No other compiler besides VS has complained.\nSo I understand it\u0027s defined for other compilers (clang / GCC).\nNo fallback needed. Besides works on sal/rtl/math.cxx.\nAnd that\u0027s why, can I create on include/rtl/alloc.hxx or where you prefer:\nrtl_highbit\nrtl_lowbit\nThat way I can fix https://gerrit.libreoffice.org/c/core/+/118249\nAnd also gives us a layer of abstraction for other uses.",
       "parentUuid": "dd14511a_d6f831c1",
+      "revId": "274317355855bfbcd45bf309efae589825c6da00",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "25e1b7fd_096f550e",
+        "filename": "sal/rtl/alloc_impl.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-07-06T07:57:14Z",
+      "side": 1,
+      "message": "* Yes, please base this on sizeof(sal_Size) vs. sizeof(unsigned int/long/long long) rather than on the SAL_TYPES_SIZEOF* macros.\n* I think unconditionally using the builtins (provided by at least GCC and Clang) is fine.\n* If you later need these functions elsewhere in sal/rtl/, you can then move them to a new include file (e.g., sal/rtl/bits.hxx) in sal/rtl/; but no need for an \"rtl_\" prefix on the function names.  (In case you ever need them outside of sal/, you could then move these inline functions to include/o3tl/.)",
+      "parentUuid": "5c06db61_5be01843",
+      "revId": "274317355855bfbcd45bf309efae589825c6da00",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9bd98baa_501e29a3",
+        "filename": "sal/rtl/alloc_impl.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-07-06T07:57:14Z",
+      "side": 1,
+      "message": "why the check for zero (here and below)?  these builtins are documented as \"if x is zero, returns zero\" (\u003chttps://gcc.gnu.org/onlinedocs/gcc-11.1.0/gcc/Other-Builtins.html#Other-Builtins\u003e)",
+      "range": {
+        "startLine": 97,
+        "startChar": 11,
+        "endLine": 97,
+        "endChar": 21
+      },
       "revId": "274317355855bfbcd45bf309efae589825c6da00",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
