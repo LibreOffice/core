@@ -40,6 +40,7 @@
 #include <vcl/svapp.hxx>
 #include <splitwin.hxx>
 #include <tools/diagnose_ex.h>
+#include <tools/json_writer.hxx>
 #include <tools/link.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/processfactory.hxx>
@@ -1229,6 +1230,31 @@ IMPL_LINK(SidebarController, OnSubMenuItemSelected, const OString&, rCurItemId, 
 
 void SidebarController::RequestCloseDeck()
 {
+    if (comphelper::LibreOfficeKit::isActive() && mpCurrentDeck)
+    {
+        const SfxViewShell* pViewShell = SfxViewShell::Current();
+        if (pViewShell && pViewShell->isLOKMobilePhone())
+        {
+            // Mobile phone - TODO: unify with desktop
+            tools::JsonWriter aJsonWriter;
+            aJsonWriter.put("id", mpParentWindow->get_id());
+            aJsonWriter.put("type", "dockingwindow");
+            aJsonWriter.put("text", mpParentWindow->GetText());
+            aJsonWriter.put("enabled", false);
+            const std::string message = aJsonWriter.extractAsStdString();
+            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_JSDIALOG, message.c_str());
+        }
+        else if (pViewShell)
+        {
+            tools::JsonWriter aJsonWriter;
+            aJsonWriter.put("id", mpParentWindow->get_id());
+            aJsonWriter.put("action", "close");
+            aJsonWriter.put("jsontype", "sidebar");
+            const std::string message = aJsonWriter.extractAsStdString();
+            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_JSDIALOG, message.c_str());
+        }
+    }
+
     mbIsDeckRequestedOpen = false;
     UpdateDeckOpenState();
 
