@@ -92,7 +92,7 @@ private:
     // gtk will warn on loading a .ui with an accelerator defined, so use a
     // temporary toplevel to suppress that and move the contents after load
     std::unique_ptr<weld::Builder> mxAuxBuilder;
-    std::unique_ptr<weld::Container> mxTempToplevel;
+    std::unique_ptr<weld::Box> mxTempToplevel;
     std::unique_ptr<weld::Widget> mxContents;
 
     std::unique_ptr<weld::MenuButton> mxMenuButton;

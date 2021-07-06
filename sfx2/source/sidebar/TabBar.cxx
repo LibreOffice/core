@@ -48,7 +48,7 @@ TabBar::TabBar(vcl::Window* pParentWindow,
     : InterimItemWindow(pParentWindow, "sfx/ui/tabbar.ui", "TabBar")
     , mxFrame(rxFrame)
     , mxAuxBuilder(Application::CreateBuilder(m_xContainer.get(), "sfx/ui/tabbarcontents.ui"))
-    , mxTempToplevel(mxAuxBuilder->weld_container("toplevel"))
+    , mxTempToplevel(mxAuxBuilder->weld_box("toplevel"))
     , mxContents(mxAuxBuilder->weld_widget("TabBarContents"))
     , mxMenuButton(mxAuxBuilder->weld_menu_button("menubutton"))
     , mxMainMenu(mxAuxBuilder->weld_menu("mainmenu"))
