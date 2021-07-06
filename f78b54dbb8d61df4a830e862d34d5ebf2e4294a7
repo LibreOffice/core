@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "32e1eeb5_9b0b7790",
+        "filename": "sd/source/filter/eppt/pptx-epptooxml.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1577,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2021-07-06T06:16:26Z",
+      "side": 1,
+      "message": "I had a conflict before and that is why this comes from e22a70048ba0025107b1a6c4b14564a6e786bc5a (tdf#59323: pptx export: add placeholder index to master footer placeholders).",
+      "range": {
+        "startLine": 1563,
+        "startChar": 4,
+        "endLine": 1577,
+        "endChar": 8
+      },
+      "revId": "f78b54dbb8d61df4a830e862d34d5ebf2e4294a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
