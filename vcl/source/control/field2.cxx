@@ -1594,87 +1594,19 @@ OUString DateFormatter::ImplGetDateAsText( const Date& rDate ) const
 static void ImplDateIncrementDay( Date& rDate, bool bUp )
 {
     DateFormatter::ExpandCentury( rDate );
-
-    if ( bUp )
-    {
-        if ( (rDate.GetDay() != 31) || (rDate.GetMonth() != 12) || (rDate.GetYear() != SAL_MAX_INT16) )
-            ++rDate;
-    }
-    else
-    {
-        if ( (rDate.GetDay() != 1 ) || (rDate.GetMonth() != 1) || (rDate.GetYear() != SAL_MIN_INT16) )
-            --rDate;
-    }
+    rDate.AddDays( bUp ? 1 : -1 );
 }
 
 static void ImplDateIncrementMonth( Date& rDate, bool bUp )
 {
     DateFormatter::ExpandCentury( rDate );
-
-    sal_uInt16 nMonth = rDate.GetMonth();
-    sal_Int16 nYear = rDate.GetYear();
-    if ( bUp )
-    {
-        if ( (nMonth == 12) && (nYear < SAL_MAX_INT16) )
-        {
-            rDate.SetMonth( 1 );
-            rDate.SetYear( rDate.GetNextYear() );
-        }
-        else
-        {
-            if ( nMonth < 12 )
-                rDate.SetMonth( nMonth + 1 );
-        }
-    }
-    else
-    {
-        if ( (nMonth == 1) && (nYear > SAL_MIN_INT16) )
-        {
-            rDate.SetMonth( 12 );
-            rDate.SetYear( rDate.GetPrevYear() );
-        }
-        else
-        {
-            if ( nMonth > 1 )
-                rDate.SetMonth( nMonth - 1 );
-        }
-    }
-
-    sal_uInt16 nDaysInMonth = Date::GetDaysInMonth( rDate.GetMonth(), rDate.GetYear());
-    if ( rDate.GetDay() > nDaysInMonth )
-        rDate.SetDay( nDaysInMonth );
+    rDate.AddMonths( bUp ? 1 : -1 );
 }
 
 static void ImplDateIncrementYear( Date& rDate, bool bUp )
 {
     DateFormatter::ExpandCentury( rDate );
-
-    sal_Int16 nYear = rDate.GetYear();
-    sal_uInt16 nMonth = rDate.GetMonth();
-    if ( bUp )
-    {
-        if ( nYear < SAL_MAX_INT16 )
-            rDate.SetYear( rDate.GetNextYear() );
-    }
-    else
-    {
-        if ( nYear > SAL_MIN_INT16 )
-            rDate.SetYear( rDate.GetPrevYear() );
-    }
-    if (nMonth != 2)
-        return;
-
-    // Handle February 29 from leap year to non-leap year.
-    sal_uInt16 nDay = rDate.GetDay();
-    if (nDay > 28)
-    {
-        // The check would not be necessary if it was guaranteed that the
-        // date was valid before and actually was a leap year,
-        // de-/incrementing a leap year with 29 always results in 28.
-        sal_uInt16 nDaysInMonth = Date::GetDaysInMonth( nMonth, rDate.GetYear());
-        if (nDay > nDaysInMonth)
-            rDate.SetDay( nDaysInMonth);
-    }
+    rDate.AddYears( bUp ? 1 : -1 );
 }
 
 bool DateFormatter::ImplAllowMalformedInput() const
