@@ -138,20 +138,32 @@ public:
     void testTdf121615();
     void testTocLink();
 
+    // the following tests do *not* work when
+    // LIBO_ALLOW_PDF_TO_PDF_EMBEDDING is FALSE, so need
+    // to deactivate those. These are indeed the ones that
+    // check for reference/form and similar stuff
+    //BAD CPPUNIT_TEST(testTdf106059);
+    //BAD CPPUNIT_TEST(testTdf106693);
+    //BAD CPPUNIT_TEST(testForcePoint71);
+    //BAD CPPUNIT_TEST(testTdf106972);
+    //BAD CPPUNIT_TEST(testTdf106972Pdf17);
+    //BAD CPPUNIT_TEST(testTdf107018);
+    //BAD CPPUNIT_TEST(testTdf107089);
+
     CPPUNIT_TEST_SUITE(PdfExportTest);
-    CPPUNIT_TEST(testTdf106059);
+    // CPPUNIT_TEST(testTdf106059);
     CPPUNIT_TEST(testTdf105461);
     CPPUNIT_TEST(testTdf107868);
     CPPUNIT_TEST(testTdf105093);
     CPPUNIT_TEST(testTdf106206);
-    CPPUNIT_TEST(testTdf106693);
-    CPPUNIT_TEST(testForcePoint71);
-    CPPUNIT_TEST(testTdf106972);
-    CPPUNIT_TEST(testTdf106972Pdf17);
+    // CPPUNIT_TEST(testTdf106693);
+    // CPPUNIT_TEST(testForcePoint71);
+    // CPPUNIT_TEST(testTdf106972);
+    // CPPUNIT_TEST(testTdf106972Pdf17);
     CPPUNIT_TEST(testSofthyphenPos);
     CPPUNIT_TEST(testTdf107013);
-    CPPUNIT_TEST(testTdf107018);
-    CPPUNIT_TEST(testTdf107089);
+    // CPPUNIT_TEST(testTdf107018);
+    // CPPUNIT_TEST(testTdf107089);
     CPPUNIT_TEST(testTdf99680);
     CPPUNIT_TEST(testTdf99680_2);
     CPPUNIT_TEST(testTdf108963);

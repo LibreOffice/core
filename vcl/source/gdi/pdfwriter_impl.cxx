@@ -9338,7 +9338,9 @@ void PDFWriterImpl::createEmbeddedFile(const Graphic& rGraphic, ReferenceXObject
     // no pdf data.
     rEmit.m_nBitmapObject = nBitmapObject;
 
-    if (!rGraphic.hasPdfData())
+    static bool bAllowPdfToPdf(nullptr != getenv("LIBO_ALLOW_PDF_TO_PDF_EMBEDDING"));
+    const bool bHasPdfDFata(bAllowPdfToPdf && rGraphic.hasPdfData());
+    if (!bHasPdfDFata)
         return;
 
     if (m_aContext.UseReferenceXObject)
@@ -9406,7 +9408,9 @@ void PDFWriterImpl::drawJPGBitmap( SvStream& rDCTData, bool bIsTrueColor, const 
     {
         m_aJPGs.emplace( m_aJPGs.begin() );
         JPGEmit& rEmit = m_aJPGs.front();
-        if (!rGraphic.hasPdfData() || m_aContext.UseReferenceXObject)
+        static bool bAllowPdfToPdf(nullptr != getenv("LIBO_ALLOW_PDF_TO_PDF_EMBEDDING"));
+        const bool bHasPdfDFata(bAllowPdfToPdf && rGraphic.hasPdfData());
+        if (!bHasPdfDFata || m_aContext.UseReferenceXObject)
             rEmit.m_nObject = createObject();
         rEmit.m_aID         = aID;
         rEmit.m_pStream = std::move( pStream );
