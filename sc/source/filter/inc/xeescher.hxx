@@ -195,6 +195,7 @@ protected:
 class XclMacroHelper : public XclExpControlHelper
 {
     XclTokenArrayRef    mxMacroLink;    /// Token array containing a link to an attached macro.
+    OUString maMacroName;
 
 public:
     explicit            XclMacroHelper( const XclExpRoot& rRoot );
@@ -208,6 +209,7 @@ public:
     /** Sets the name of a macro
         @return  true = The passed macro name has been found. */
     bool                SetMacroLink( const OUString& rMacro );
+    OUString GetMacroName() const;
 };
 
 class XclExpShapeObj : public XclObjAny, public XclMacroHelper
