@@ -651,7 +651,8 @@ void GraphicsRenderTests::testDrawBezierWithPolyline()
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
     {
-        exportBitmapToImage(m_aUserInstallPath + atestName + ".png", aBitmap);
+        BitmapEx aBitmapEx(aBitmap);
+        exportBitmapExToImage(m_aUserInstallPath + atestName + ".png", aBitmapEx);
     }
 }
 
@@ -670,7 +671,8 @@ void GraphicsRenderTests::testDrawBezierAAWithPolyline()
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
     {
-        exportBitmapToImage(m_aUserInstallPath + atestName + ".png", aBitmap);
+        BitmapEx aBitmapEx(aBitmap);
+        exportBitmapExToImage(m_aUserInstallPath + atestName + ".png", aBitmapEx);
     }
 }
 
@@ -729,7 +731,8 @@ void GraphicsRenderTests::testDrawBezierWithPolygon()
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
     {
-        exportBitmapToImage(m_aUserInstallPath + atestName + ".png", aBitmap);
+        BitmapEx aBitmapEx(aBitmap);
+        exportBitmapExToImage(m_aUserInstallPath + atestName + ".png", aBitmapEx);
     }
 }
 
@@ -748,7 +751,8 @@ void GraphicsRenderTests::testDrawBezierAAWithPolygon()
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
     {
-        exportBitmapToImage(m_aUserInstallPath + atestName + ".png", aBitmap);
+        BitmapEx aBitmapEx(aBitmap);
+        exportBitmapExToImage(m_aUserInstallPath + atestName + ".png", aBitmapEx);
     }
 }
 
@@ -1356,10 +1360,8 @@ void GraphicsRenderTests::runALLTests()
     testLineCapRound();
     testLineCapSquare();
     testLineCapButt();
-    testDrawBezierWithPolyline();
-    testDrawBezierAAWithPolyline();
-    testDrawBezierWithPolygon();
-    testDrawBezierAAWithPolygon();
+    testHalfEllipsePolyLine();
+    testHalfEllipsePolygon();
 }
 
 void GraphicsRenderTests::appendTestResult(OUString aTestName, OUString aTestStatus,
