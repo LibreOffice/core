@@ -120,7 +120,7 @@ public:
         if (rMEvt.IsLeft())
         {
             OUString sURL = officecfg::Office::Common::Menus::VolunteerURL::get();
-            localizeWebserviceURI(sURL);
+            //localizeWebserviceURI(sURL);
 
             Reference<css::system::XSystemShellExecute> const xSystemShellExecute(
                 css::system::SystemShellExecute::create(
