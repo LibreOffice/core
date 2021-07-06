@@ -161,6 +161,18 @@ Bitmap OutputDeviceTestPolyLine::setupAADropShape()
     return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
 }
 
+Bitmap OutputDeviceTestPolyLine::setupHalfEllipse(bool aEnableAA)
+{
+    initialSetup(19, 21, constBackgroundColor, aEnableAA);
+
+    mpVirtualDevice->SetLineColor(constLineColor);
+    mpVirtualDevice->SetFillColor();
+
+    mpVirtualDevice->DrawPolyLine(
+        tools::Polygon(OutputDeviceTestCommon::createHalfEllipsePolygon()));
+
+    return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
+}
 } // end namespace vcl::test
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
