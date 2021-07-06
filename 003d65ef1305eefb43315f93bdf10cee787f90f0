@@ -16,6 +16,24 @@
       "revId": "003d65ef1305eefb43315f93bdf10cee787f90f0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1d7e1bb1_d2ede2ca",
+        "filename": "sw/source/core/txtnode/thints.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2788,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-07-06T10:48:52Z",
+      "side": 1,
+      "message": "In the old implementation there was this difference (https://gerrit.libreoffice.org/c/core/+/85298/3/sw/source/core/txtnode/thints.cxx at line 2821), and I have not enough insight yet in order to dig further into this process. However, I cannot reproduce any of the two bugs (tdf#140197 and tdf#140101) after this patch although not knowing if it could provoke other side effects.",
+      "parentUuid": "5a3ada84_939b737e",
+      "revId": "003d65ef1305eefb43315f93bdf10cee787f90f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
