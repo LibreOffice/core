@@ -1263,7 +1263,7 @@ public:
 
     virtual sal_uInt16 get_modifier_state() const override;
 
-    int get_drop_index(const Point& rPoint) const override;
+    virtual int get_drop_index(const Point& rPoint) const override;
 
     virtual ~SalInstanceToolbar() override;
 };

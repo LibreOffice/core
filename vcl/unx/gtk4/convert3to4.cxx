@@ -519,6 +519,12 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                     xRemoveList.push_back(xChild);
             }
 
+            if (sName == "toolbar-style")
+            {
+                // is there an equivalent for this ?
+                xRemoveList.push_back(xChild);
+            }
+
             if (sName == "homogeneous")
             {
                 // e.g. the buttonbox in xml filter dialog
@@ -1118,6 +1124,14 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                 }
                 else // GtkMessageDialog
                     xClass->setNodeValue("GtkBox");
+            }
+            else if (sClass == "GtkToolbar")
+            {
+                xClass->setNodeValue("GtkBox");
+            }
+            else if (sClass == "GtkToolButton")
+            {
+                xClass->setNodeValue("GtkButton");
             }
             else if (sClass == "GtkBox")
             {
