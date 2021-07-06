@@ -161,6 +161,34 @@ Bitmap OutputDeviceTestPolyLine::setupAADropShape()
     return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
 }
 
+Bitmap OutputDeviceTestPolyLine::setupHalfEllipse()
+{
+    initialSetup(19, 21, constBackgroundColor);
+
+    mpVirtualDevice->SetLineColor(constLineColor);
+    mpVirtualDevice->SetFillColor();
+
+    int offset = 8;
+    tools::Long aPtX = maVDRectangle.Left() + (maVDRectangle.Right() - maVDRectangle.Left()) / 2.0;
+    tools::Long aPtY = maVDRectangle.Top() + (maVDRectangle.Bottom() - maVDRectangle.Top()) / 2.0;
+    Point aPoint1 = Point(aPtX + offset, aPtY + 2);
+    Point aPoint2 = Point(aPtX - offset, aPtY + 2);
+
+    tools::Polygon aPolygon(4);
+
+    aPolygon.SetPoint(aPoint1,0);
+    aPolygon.SetPoint(Point(aPtX + offset,aPtY - offset - 2),1);
+    aPolygon.SetFlags(1,PolyFlags::Control);
+    aPolygon.SetPoint(Point(aPtX - offset, aPtY - offset - 2),2);
+    aPolygon.SetFlags(2,PolyFlags::Control);
+    aPolygon.SetPoint(aPoint2,3);
+
+    aPolygon.Optimize(PolyOptimizeFlags::CLOSE);
+
+    mpVirtualDevice->DrawPolyLine(aPolygon);
+
+    return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
+}
 } // end namespace vcl::test
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

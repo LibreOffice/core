@@ -902,6 +902,26 @@ public:
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
 
+    void testDrawHaflEllipseWithPolyLine()
+    {
+        vcl::test::OutputDeviceTestPolyLine aOutDevTest;
+        Bitmap aBitmap = aOutDevTest.setupHalfEllipse();
+        auto eResult = vcl::test::OutputDeviceTestCommon::checkHalfEllipse(aBitmap);
+        exportImage("17-01_half_ellipse_test-polyline.png", aBitmap);
+        if (SHOULD_ASSERT)
+            CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
+    }
+
+    void testDrawHaflEllipseWithPolygon()
+    {
+        vcl::test::OutputDeviceTestPolyLine aOutDevTest;
+        Bitmap aBitmap = aOutDevTest.setupHalfEllipse();
+        auto eResult = vcl::test::OutputDeviceTestCommon::checkHalfEllipse(aBitmap);
+        exportImage("17-02_half_ellipse_test-polygon.png", aBitmap);
+        if (SHOULD_ASSERT)
+            CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
+    }
+
     // Test SalGraphics::blendBitmap() and blendAlphaBitmap() calls.
     void testDrawBlendExtended()
     {
@@ -1126,6 +1146,9 @@ public:
 
     CPPUNIT_TEST(testDrawDropShapeWithPolygon);
     CPPUNIT_TEST(testDrawDropShapeAAWithPolygon);
+
+    CPPUNIT_TEST(testDrawHaflEllipseWithPolyLine);
+    CPPUNIT_TEST(testDrawHaflEllipseWithPolygon);
 
     CPPUNIT_TEST(testDrawBitmap);
     CPPUNIT_TEST(testDrawTransformedBitmap);

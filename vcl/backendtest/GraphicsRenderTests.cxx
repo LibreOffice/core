@@ -53,19 +53,19 @@ void GraphicsRenderTests::testDrawRectWithRectangle()
     vcl::test::OutputDeviceTestRect aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupRectangle(false);
     m_aCurGraphicsBackend = aOutDevTest.getRenderBackendName();
-    OUString atestName = "testDrawRectWithRectangle";
+    OUString aTestName = "testDrawRectWithRectangle";
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(atestName, "SKIPPED");
+        appendTestResult(aTestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap);
-    appendTestResult(atestName, returnTestStatus(eResult),
+    appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
     {
         BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + atestName + ".png", aBitmapEx);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
     }
 }
 
@@ -73,19 +73,19 @@ void GraphicsRenderTests::testDrawRectWithPixel()
 {
     vcl::test::OutputDeviceTestPixel aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupRectangle(false);
-    OUString atestName = "testDrawRectWithPixel";
+    OUString aTestName = "testDrawRectWithPixel";
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(atestName, "SKIPPED");
+        appendTestResult(aTestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap);
-    appendTestResult(atestName, returnTestStatus(eResult),
+    appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
     {
         BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + atestName + ".png", aBitmapEx);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
     }
 }
 
@@ -93,19 +93,19 @@ void GraphicsRenderTests::testDrawRectWithLine()
 {
     vcl::test::OutputDeviceTestLine aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupRectangle(false);
-    OUString atestName = "testDrawRectWithLine";
+    OUString aTestName = "testDrawRectWithLine";
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(atestName, "SKIPPED");
+        appendTestResult(aTestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap);
-    appendTestResult(atestName, returnTestStatus(eResult),
+    appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
     {
         BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + atestName + ".png", aBitmapEx);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
     }
 }
 
@@ -113,19 +113,19 @@ void GraphicsRenderTests::testDrawRectWithPolygon()
 {
     vcl::test::OutputDeviceTestPolygon aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupRectangle(false);
-    OUString atestName = "testDrawRectWithPolygon";
+    OUString aTestName = "testDrawRectWithPolygon";
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(atestName, "SKIPPED");
+        appendTestResult(aTestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap);
-    appendTestResult(atestName, returnTestStatus(eResult),
+    appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
     {
         BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + atestName + ".png", aBitmapEx);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
     }
 }
 
@@ -133,19 +133,19 @@ void GraphicsRenderTests::testDrawRectWithPolyLine()
 {
     vcl::test::OutputDeviceTestPolyLine aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupRectangle(false);
-    OUString atestName = "testDrawRectWithPolyLine";
+    OUString aTestName = "testDrawRectWithPolyLine";
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(atestName, "SKIPPED");
+        appendTestResult(aTestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap);
-    appendTestResult(atestName, returnTestStatus(eResult),
+    appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
     {
         BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + atestName + ".png", aBitmapEx);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
     }
 }
 
@@ -153,19 +153,19 @@ void GraphicsRenderTests::testDrawRectWithPolyLineB2D()
 {
     vcl::test::OutputDeviceTestPolyLineB2D aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupRectangle(false);
-    OUString atestName = "testDrawRectWithPolyLineB2D";
+    OUString aTestName = "testDrawRectWithPolyLineB2D";
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(atestName, "SKIPPED");
+        appendTestResult(aTestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap);
-    appendTestResult(atestName, returnTestStatus(eResult),
+    appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
     {
         BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + atestName + ".png", aBitmapEx);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
     }
 }
 
@@ -173,19 +173,19 @@ void GraphicsRenderTests::testDrawRectWithPolyPolygon()
 {
     vcl::test::OutputDeviceTestPolyPolygon aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupRectangle(false);
-    OUString atestName = "testDrawRectWithPolyPolygon";
+    OUString aTestName = "testDrawRectWithPolyPolygon";
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(atestName, "SKIPPED");
+        appendTestResult(aTestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap);
-    appendTestResult(atestName, returnTestStatus(eResult),
+    appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
     {
         BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + atestName + ".png", aBitmapEx);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
     }
 }
 
@@ -193,19 +193,19 @@ void GraphicsRenderTests::testDrawRectWithPolyPolygonB2D()
 {
     vcl::test::OutputDeviceTestPolyPolygonB2D aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupRectangle(false);
-    OUString atestName = "testDrawRectWithPolyPolygonB2D";
+    OUString aTestName = "testDrawRectWithPolyPolygonB2D";
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(atestName, "SKIPPED");
+        appendTestResult(aTestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap);
-    appendTestResult(atestName, returnTestStatus(eResult),
+    appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
     {
         BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + atestName + ".png", aBitmapEx);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
     }
 }
 
@@ -213,19 +213,19 @@ void GraphicsRenderTests::testDrawRectAAWithRectangle()
 {
     vcl::test::OutputDeviceTestRect aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupRectangle(true);
-    OUString atestName = "testDrawRectAAWithRectangle";
+    OUString aTestName = "testDrawRectAAWithRectangle";
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(atestName, "SKIPPED");
+        appendTestResult(aTestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangleAA(aBitmap);
-    appendTestResult(atestName, returnTestStatus(eResult),
+    appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
     {
         BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + atestName + ".png", aBitmapEx);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
     }
 }
 
@@ -233,19 +233,19 @@ void GraphicsRenderTests::testDrawRectAAWithPixel()
 {
     vcl::test::OutputDeviceTestPixel aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupRectangle(true);
-    OUString atestName = "testDrawRectAAWithPixel";
+    OUString aTestName = "testDrawRectAAWithPixel";
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(atestName, "SKIPPED");
+        appendTestResult(aTestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangleAA(aBitmap);
-    appendTestResult(atestName, returnTestStatus(eResult),
+    appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
     {
         BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + atestName + ".png", aBitmapEx);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
     }
 }
 
@@ -253,19 +253,19 @@ void GraphicsRenderTests::testDrawRectAAWithLine()
 {
     vcl::test::OutputDeviceTestLine aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupRectangle(true);
-    OUString atestName = "testDrawRectAAWithLine";
+    OUString aTestName = "testDrawRectAAWithLine";
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(atestName, "SKIPPED");
+        appendTestResult(aTestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangleAA(aBitmap);
-    appendTestResult(atestName, returnTestStatus(eResult),
+    appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
     {
         BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + atestName + ".png", aBitmapEx);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
     }
 }
 
@@ -273,19 +273,19 @@ void GraphicsRenderTests::testDrawRectAAWithPolygon()
 {
     vcl::test::OutputDeviceTestPolygon aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupRectangle(true);
-    OUString atestName = "testDrawRectAAWithPolygon";
+    OUString aTestName = "testDrawRectAAWithPolygon";
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(atestName, "SKIPPED");
+        appendTestResult(aTestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangleAA(aBitmap);
-    appendTestResult(atestName, returnTestStatus(eResult),
+    appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
     {
         BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + atestName + ".png", aBitmapEx);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
     }
 }
 
@@ -293,19 +293,19 @@ void GraphicsRenderTests::testDrawRectAAWithPolyLine()
 {
     vcl::test::OutputDeviceTestPolyLine aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupRectangle(true);
-    OUString atestName = "testDrawRectAAWithPolyLine";
+    OUString aTestName = "testDrawRectAAWithPolyLine";
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(atestName, "SKIPPED");
+        appendTestResult(aTestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangleAA(aBitmap);
-    appendTestResult(atestName, returnTestStatus(eResult),
+    appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
     {
         BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + atestName + ".png", aBitmapEx);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
     }
 }
 
@@ -313,19 +313,19 @@ void GraphicsRenderTests::testDrawRectAAWithPolyLineB2D()
 {
     vcl::test::OutputDeviceTestPolyLineB2D aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupRectangle(true);
-    OUString atestName = "testDrawRectAAWithPolyLineB2D";
+    OUString aTestName = "testDrawRectAAWithPolyLineB2D";
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(atestName, "SKIPPED");
+        appendTestResult(aTestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangleAA(aBitmap);
-    appendTestResult(atestName, returnTestStatus(eResult),
+    appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
     {
         BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + atestName + ".png", aBitmapEx);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
     }
 }
 
@@ -333,19 +333,19 @@ void GraphicsRenderTests::testDrawRectAAWithPolyPolygon()
 {
     vcl::test::OutputDeviceTestPolyPolygon aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupRectangle(true);
-    OUString atestName = "testDrawRectAAWithPolyPolygon";
+    OUString aTestName = "testDrawRectAAWithPolyPolygon";
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(atestName, "SKIPPED");
+        appendTestResult(aTestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangleAA(aBitmap);
-    appendTestResult(atestName, returnTestStatus(eResult),
+    appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
     {
         BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + atestName + ".png", aBitmapEx);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
     }
 }
 
@@ -353,19 +353,19 @@ void GraphicsRenderTests::testDrawRectAAWithPolyPolygonB2D()
 {
     vcl::test::OutputDeviceTestPolyPolygonB2D aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupRectangle(true);
-    OUString atestName = "testDrawRectAAWithPolyPolygonB2D";
+    OUString aTestName = "testDrawRectAAWithPolyPolygonB2D";
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(atestName, "SKIPPED");
+        appendTestResult(aTestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangleAA(aBitmap);
-    appendTestResult(atestName, returnTestStatus(eResult),
+    appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
     {
         BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + atestName + ".png", aBitmapEx);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
     }
 }
 
@@ -373,30 +373,30 @@ void GraphicsRenderTests::testDrawFilledRectWithRectangle()
 {
     vcl::test::OutputDeviceTestRect aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupFilledRectangle(false);
-    OUString atestName = "testDrawFilledRectWithRectangle";
+    OUString aTestName = "testDrawFilledRectWithRectangle";
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(atestName, "SKIPPED");
+        appendTestResult(aTestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult
         = vcl::test::OutputDeviceTestCommon::checkFilledRectangle(aBitmap, false);
-    appendTestResult(atestName, returnTestStatus(eResult),
+    appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
     {
         BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + atestName + ".png", aBitmapEx);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
     }
-    atestName += "WithAA";
+    aTestName += "WithAA";
     aBitmap = aOutDevTest.setupFilledRectangle(true);
     eResult = vcl::test::OutputDeviceTestCommon::checkFilledRectangle(aBitmap, true);
-    appendTestResult(atestName, returnTestStatus(eResult),
+    appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
     {
         BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + atestName + ".png", aBitmapEx);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
     }
 }
 
@@ -404,30 +404,30 @@ void GraphicsRenderTests::testDrawFilledRectWithPolygon()
 {
     vcl::test::OutputDeviceTestPolygon aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupFilledRectangle(false);
-    OUString atestName = "testDrawFilledRectWithPolygon";
+    OUString aTestName = "testDrawFilledRectWithPolygon";
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(atestName, "SKIPPED");
+        appendTestResult(aTestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult
         = vcl::test::OutputDeviceTestCommon::checkFilledRectangle(aBitmap, false);
-    appendTestResult(atestName, returnTestStatus(eResult),
+    appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
     {
         BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + atestName + ".png", aBitmapEx);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
     }
-    atestName += "WithAA";
+    aTestName += "WithAA";
     aBitmap = aOutDevTest.setupFilledRectangle(true);
     eResult = vcl::test::OutputDeviceTestCommon::checkFilledRectangle(aBitmap, true);
-    appendTestResult(atestName, returnTestStatus(eResult),
+    appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
     {
         BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + atestName + ".png", aBitmapEx);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
     }
 }
 
@@ -435,30 +435,30 @@ void GraphicsRenderTests::testDrawFilledRectWithPolyPolygon()
 {
     vcl::test::OutputDeviceTestPolyPolygon aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupFilledRectangle(false);
-    OUString atestName = "testDrawFilledRectWithPolyPolygon";
+    OUString aTestName = "testDrawFilledRectWithPolyPolygon";
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(atestName, "SKIPPED");
+        appendTestResult(aTestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult
         = vcl::test::OutputDeviceTestCommon::checkFilledRectangle(aBitmap, false);
-    appendTestResult(atestName, returnTestStatus(eResult),
+    appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
     {
         BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + atestName + ".png", aBitmapEx);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
     }
-    atestName += "WithAA";
+    aTestName += "WithAA";
     aBitmap = aOutDevTest.setupFilledRectangle(true);
     eResult = vcl::test::OutputDeviceTestCommon::checkFilledRectangle(aBitmap, true);
-    appendTestResult(atestName, returnTestStatus(eResult),
+    appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
     {
         BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + atestName + ".png", aBitmapEx);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
     }
 }
 
@@ -466,30 +466,30 @@ void GraphicsRenderTests::testDrawFilledRectWithPolyPolygon2D()
 {
     vcl::test::OutputDeviceTestPolyPolygonB2D aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupFilledRectangle(false);
-    OUString atestName = "testDrawFilledRectWithPolyPolygon2D";
+    OUString aTestName = "testDrawFilledRectWithPolyPolygon2D";
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(atestName, "SKIPPED");
+        appendTestResult(aTestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult
         = vcl::test::OutputDeviceTestCommon::checkFilledRectangle(aBitmap, false);
-    appendTestResult(atestName, returnTestStatus(eResult),
+    appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
     {
         BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + atestName + ".png", aBitmapEx);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
     }
-    atestName += "WithAA";
+    aTestName += "WithAA";
     aBitmap = aOutDevTest.setupFilledRectangle(true);
     eResult = vcl::test::OutputDeviceTestCommon::checkFilledRectangle(aBitmap, true);
-    appendTestResult(atestName, returnTestStatus(eResult),
+    appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
     {
         BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + atestName + ".png", aBitmapEx);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
     }
 }
 
@@ -497,19 +497,19 @@ void GraphicsRenderTests::testDrawDiamondWithPolygon()
 {
     vcl::test::OutputDeviceTestPolygon aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupDiamond();
-    OUString atestName = "testDrawDiamondWithPolygon";
+    OUString aTestName = "testDrawDiamondWithPolygon";
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(atestName, "SKIPPED");
+        appendTestResult(aTestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkDiamond(aBitmap);
-    appendTestResult(atestName, returnTestStatus(eResult),
+    appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
     {
         BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + atestName + ".png", aBitmapEx);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
     }
 }
 
@@ -517,19 +517,19 @@ void GraphicsRenderTests::testDrawDiamondWithLine()
 {
     vcl::test::OutputDeviceTestLine aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupDiamond();
-    OUString atestName = "testDrawDiamondWithLine";
+    OUString aTestName = "testDrawDiamondWithLine";
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(atestName, "SKIPPED");
+        appendTestResult(aTestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkDiamond(aBitmap);
-    appendTestResult(atestName, returnTestStatus(eResult),
+    appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
     {
         BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + atestName + ".png", aBitmapEx);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
     }
 }
 
@@ -537,19 +537,19 @@ void GraphicsRenderTests::testDrawDiamondWithPolyline()
 {
     vcl::test::OutputDeviceTestPolyLine aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupDiamond();
-    OUString atestName = "testDrawDiamondWithPolyline";
+    OUString aTestName = "testDrawDiamondWithPolyline";
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(atestName, "SKIPPED");
+        appendTestResult(aTestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkDiamond(aBitmap);
-    appendTestResult(atestName, returnTestStatus(eResult),
+    appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
     {
         BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + atestName + ".png", aBitmapEx);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
     }
 }
 
@@ -557,19 +557,19 @@ void GraphicsRenderTests::testDrawDiamondWithPolylineB2D()
 {
     vcl::test::OutputDeviceTestPolyLineB2D aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupDiamond();
-    OUString atestName = "testDrawDiamondWithPolylineB2D";
+    OUString aTestName = "testDrawDiamondWithPolylineB2D";
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(atestName, "SKIPPED");
+        appendTestResult(aTestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkDiamond(aBitmap);
-    appendTestResult(atestName, returnTestStatus(eResult),
+    appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
     {
         BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + atestName + ".png", aBitmapEx);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
     }
 }
 
@@ -577,20 +577,20 @@ void GraphicsRenderTests::testDrawInvertWithRectangle()
 {
     vcl::test::OutputDeviceTestRect aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupInvert_NONE();
-    OUString atestName = "testDrawInvertWithRectangle";
+    OUString aTestName = "testDrawInvertWithRectangle";
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(atestName, "SKIPPED");
+        appendTestResult(aTestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult
         = vcl::test::OutputDeviceTestCommon::checkInvertRectangle(aBitmap);
-    appendTestResult(atestName, returnTestStatus(eResult),
+    appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
     {
         BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + atestName + ".png", aBitmapEx);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
     }
 }
 
@@ -598,20 +598,20 @@ void GraphicsRenderTests::testDrawInvertN50WithRectangle()
 {
     vcl::test::OutputDeviceTestRect aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupInvert_N50();
-    OUString atestName = "testDrawInvertN50WithRectangle";
+    OUString aTestName = "testDrawInvertN50WithRectangle";
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(atestName, "SKIPPED");
+        appendTestResult(aTestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult
         = vcl::test::OutputDeviceTestCommon::checkInvertN50Rectangle(aBitmap);
-    appendTestResult(atestName, returnTestStatus(eResult),
+    appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
     {
         BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + atestName + ".png", aBitmapEx);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
     }
 }
 
@@ -619,20 +619,20 @@ void GraphicsRenderTests::testDrawInvertTrackFrameWithRectangle()
 {
     vcl::test::OutputDeviceTestRect aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupInvert_TrackFrame();
-    OUString atestName = "testDrawInvertTrackFrameWithRectangle";
+    OUString aTestName = "testDrawInvertTrackFrameWithRectangle";
     if (!(SHOULD_ASSERT && aOutDevTest.getRenderBackendName() != "svp"))
     {
-        appendTestResult(atestName, "SKIPPED");
+        appendTestResult(aTestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult
         = vcl::test::OutputDeviceTestCommon::checkInvertTrackFrameRectangle(aBitmap);
-    appendTestResult(atestName, returnTestStatus(eResult),
+    appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
     {
         BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + atestName + ".png", aBitmapEx);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
     }
 }
 
@@ -640,19 +640,19 @@ void GraphicsRenderTests::testDrawDropShapeWithPolyline()
 {
     vcl::test::OutputDeviceTestPolyLine aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupDropShape();
-    OUString atestName = "testDrawDropShapeWithPolyline";
+    OUString aTestName = "testDrawDropShapeWithPolyline";
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(atestName, "SKIPPED");
+        appendTestResult(aTestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkDropShape(aBitmap);
-    appendTestResult(atestName, returnTestStatus(eResult),
+    appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
     {
         BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + atestName + ".png", aBitmapEx);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
     }
 }
 
@@ -660,20 +660,20 @@ void GraphicsRenderTests::testDrawDropShapeAAWithPolyline()
 {
     vcl::test::OutputDeviceTestPolyLine aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupAADropShape();
-    OUString atestName = "testDrawDropShapeAAWithPolyline";
+    OUString aTestName = "testDrawDropShapeAAWithPolyline";
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(atestName, "SKIPPED");
+        appendTestResult(aTestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult
         = vcl::test::OutputDeviceTestCommon::checkDropShape(aBitmap, true);
-    appendTestResult(atestName, returnTestStatus(eResult),
+    appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
     {
         BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + atestName + ".png", aBitmapEx);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
     }
 }
 
@@ -681,19 +681,19 @@ void GraphicsRenderTests::testDrawBezierWithPolylineB2D()
 {
     vcl::test::OutputDeviceTestPolyLineB2D aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupBezier();
-    OUString atestName = "testDrawBezierWithPolylineB2D";
+    OUString aTestName = "testDrawBezierWithPolylineB2D";
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(atestName, "SKIPPED");
+        appendTestResult(aTestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkBezier(aBitmap);
-    appendTestResult(atestName, returnTestStatus(eResult),
+    appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
     {
         BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + atestName + ".png", aBitmapEx);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
     }
 }
 
@@ -701,19 +701,19 @@ void GraphicsRenderTests::testDrawBezierAAWithPolylineB2D()
 {
     vcl::test::OutputDeviceTestPolyLineB2D aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupAABezier();
-    OUString atestName = "testDrawBezierAAWithPolylineB2D";
+    OUString aTestName = "testDrawBezierAAWithPolylineB2D";
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(atestName, "SKIPPED");
+        appendTestResult(aTestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkBezier(aBitmap);
-    appendTestResult(atestName, returnTestStatus(eResult),
+    appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
     {
         BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + atestName + ".png", aBitmapEx);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
     }
 }
 
@@ -721,19 +721,19 @@ void GraphicsRenderTests::testDrawDropShapeWithPolygon()
 {
     vcl::test::OutputDeviceTestPolygon aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupDropShape();
-    OUString atestName = "testDrawDropShapeWithPolygon";
+    OUString aTestName = "testDrawDropShapeWithPolygon";
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(atestName, "SKIPPED");
+        appendTestResult(aTestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkDropShape(aBitmap);
-    appendTestResult(atestName, returnTestStatus(eResult),
+    appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
     {
         BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + atestName + ".png", aBitmapEx);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
     }
 }
 
@@ -741,20 +741,20 @@ void GraphicsRenderTests::testDrawDropShapeAAWithPolygon()
 {
     vcl::test::OutputDeviceTestPolygon aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupAADropShape();
-    OUString atestName = "testDrawDropShapeAAWithPolygon";
+    OUString aTestName = "testDrawDropShapeAAWithPolygon";
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(atestName, "SKIPPED");
+        appendTestResult(aTestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult
         = vcl::test::OutputDeviceTestCommon::checkDropShape(aBitmap, true);
-    appendTestResult(atestName, returnTestStatus(eResult),
+    appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
     {
         BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + atestName + ".png", aBitmapEx);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
     }
 }
 
@@ -762,20 +762,20 @@ void GraphicsRenderTests::testDrawBitmap()
 {
     vcl::test::OutputDeviceTestBitmap aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupDrawBitmap();
-    OUString atestName = "testDrawBitmap";
+    OUString aTestName = "testDrawBitmap";
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(atestName, "SKIPPED");
+        appendTestResult(aTestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult
         = vcl::test::OutputDeviceTestBitmap::checkTransformedBitmap(aBitmap);
-    appendTestResult(atestName, returnTestStatus(eResult),
+    appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
     {
         BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + atestName + ".png", aBitmapEx);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
     }
 }
 
@@ -783,20 +783,20 @@ void GraphicsRenderTests::testDrawTransformedBitmap()
 {
     vcl::test::OutputDeviceTestBitmap aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupDrawTransformedBitmap();
-    OUString atestName = "testDrawTransformedBitmap";
+    OUString aTestName = "testDrawTransformedBitmap";
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(atestName, "SKIPPED");
+        appendTestResult(aTestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult
         = vcl::test::OutputDeviceTestBitmap::checkTransformedBitmap(aBitmap);
-    appendTestResult(atestName, returnTestStatus(eResult),
+    appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
     {
         BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + atestName + ".png", aBitmapEx);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
     }
 }
 
@@ -804,20 +804,20 @@ void GraphicsRenderTests::testDrawBitmapExWithAlpha()
 {
     vcl::test::OutputDeviceTestBitmap aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupDrawBitmapExWithAlpha();
-    OUString atestName = "testDrawBitmapExWithAlpha";
+    OUString aTestName = "testDrawBitmapExWithAlpha";
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(atestName, "SKIPPED");
+        appendTestResult(aTestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult
         = vcl::test::OutputDeviceTestBitmap::checkBitmapExWithAlpha(aBitmap);
-    appendTestResult(atestName, returnTestStatus(eResult),
+    appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
     {
         BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + atestName + ".png", aBitmapEx);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
     }
 }
 
@@ -825,19 +825,19 @@ void GraphicsRenderTests::testDrawMask()
 {
     vcl::test::OutputDeviceTestBitmap aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupDrawMask();
-    OUString atestName = "testDrawMask";
+    OUString aTestName = "testDrawMask";
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(atestName, "SKIPPED");
+        appendTestResult(aTestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestBitmap::checkMask(aBitmap);
-    appendTestResult(atestName, returnTestStatus(eResult),
+    appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
     {
         BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + atestName + ".png", aBitmapEx);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
     }
 }
 
@@ -845,18 +845,18 @@ void GraphicsRenderTests::testDrawBlend()
 {
     vcl::test::OutputDeviceTestBitmap aOutDevTest;
     BitmapEx aBitmapEx = aOutDevTest.setupDrawBlend();
-    OUString atestName = "testDrawBlend";
+    OUString aTestName = "testDrawBlend";
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(atestName, "SKIPPED");
+        appendTestResult(aTestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestBitmap::checkBlend(aBitmapEx);
-    appendTestResult(atestName, returnTestStatus(eResult),
+    appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmapEx.GetBitmap() : Bitmap()));
     if (m_aStoreResultantBitmap)
     {
-        exportBitmapExToImage(m_aUserInstallPath + atestName + ".png", aBitmapEx);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
     }
 }
 
@@ -864,19 +864,19 @@ void GraphicsRenderTests::testDrawXor()
 {
     vcl::test::OutputDeviceTestAnotherOutDev aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupXOR();
-    OUString atestName = "testDrawXor";
+    OUString aTestName = "testDrawXor";
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(atestName, "SKIPPED");
+        appendTestResult(aTestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestAnotherOutDev::checkXOR(aBitmap);
-    appendTestResult(atestName, returnTestStatus(eResult),
+    appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
     {
         BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + atestName + ".png", aBitmapEx);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
     }
 }
 
@@ -884,19 +884,19 @@ void GraphicsRenderTests::testClipRectangle()
 {
     vcl::test::OutputDeviceTestClip aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupClipRectangle();
-    OUString atestName = "testClipRectangle";
+    OUString aTestName = "testClipRectangle";
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(atestName, "SKIPPED");
+        appendTestResult(aTestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestClip::checkClip(aBitmap);
-    appendTestResult(atestName, returnTestStatus(eResult),
+    appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
     {
         BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + atestName + ".png", aBitmapEx);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
     }
 }
 
@@ -904,19 +904,19 @@ void GraphicsRenderTests::testClipPolygon()
 {
     vcl::test::OutputDeviceTestClip aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupClipPolygon();
-    OUString atestName = "testClipPolygon";
+    OUString aTestName = "testClipPolygon";
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(atestName, "SKIPPED");
+        appendTestResult(aTestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestClip::checkClip(aBitmap);
-    appendTestResult(atestName, returnTestStatus(eResult),
+    appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
     {
         BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + atestName + ".png", aBitmapEx);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
     }
 }
 
@@ -924,19 +924,19 @@ void GraphicsRenderTests::testClipPolyPolygon()
 {
     vcl::test::OutputDeviceTestClip aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupClipPolyPolygon();
-    OUString atestName = "testClipPolyPolygon";
+    OUString aTestName = "testClipPolyPolygon";
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(atestName, "SKIPPED");
+        appendTestResult(aTestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestClip::checkClip(aBitmap);
-    appendTestResult(atestName, returnTestStatus(eResult),
+    appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
     {
         BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + atestName + ".png", aBitmapEx);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
     }
 }
 
@@ -944,19 +944,19 @@ void GraphicsRenderTests::testClipB2DPolyPolygon()
 {
     vcl::test::OutputDeviceTestClip aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupClipB2DPolyPolygon();
-    OUString atestName = "testClipB2DPolyPolygon";
+    OUString aTestName = "testClipB2DPolyPolygon";
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(atestName, "SKIPPED");
+        appendTestResult(aTestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestClip::checkClip(aBitmap);
-    appendTestResult(atestName, returnTestStatus(eResult),
+    appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
     {
         BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + atestName + ".png", aBitmapEx);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
     }
 }
 
@@ -964,20 +964,20 @@ void GraphicsRenderTests::testDrawOutDev()
 {
     vcl::test::OutputDeviceTestAnotherOutDev aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupDrawOutDev();
-    OUString atestName = "testDrawOutDev";
+    OUString aTestName = "testDrawOutDev";
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(atestName, "SKIPPED");
+        appendTestResult(aTestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult
         = vcl::test::OutputDeviceTestAnotherOutDev::checkDrawOutDev(aBitmap);
-    appendTestResult(atestName, returnTestStatus(eResult),
+    appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
     {
         BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + atestName + ".png", aBitmapEx);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
     }
 }
 
@@ -985,19 +985,19 @@ void GraphicsRenderTests::testDashedLine()
 {
     vcl::test::OutputDeviceTestLine aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupDashedLine();
-    OUString atestName = "testDashedLine";
+    OUString aTestName = "testDashedLine";
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(atestName, "SKIPPED");
+        appendTestResult(aTestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestLine::checkDashedLine(aBitmap);
-    appendTestResult(atestName, returnTestStatus(eResult),
+    appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
     {
         BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + atestName + ".png", aBitmapEx);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
     }
 }
 
@@ -1005,20 +1005,20 @@ void GraphicsRenderTests::testLinearGradient()
 {
     vcl::test::OutputDeviceTestGradient aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupLinearGradient();
-    OUString atestName = "testLinearGradient";
+    OUString aTestName = "testLinearGradient";
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(atestName, "SKIPPED");
+        appendTestResult(aTestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult
         = vcl::test::OutputDeviceTestGradient::checkLinearGradient(aBitmap);
-    appendTestResult(atestName, returnTestStatus(eResult),
+    appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
     {
         BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + atestName + ".png", aBitmapEx);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
     }
 }
 
@@ -1026,20 +1026,20 @@ void GraphicsRenderTests::testLinearGradientAngled()
 {
     vcl::test::OutputDeviceTestGradient aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupLinearGradientAngled();
-    OUString atestName = "testLinearGradientAngled";
+    OUString aTestName = "testLinearGradientAngled";
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(atestName, "SKIPPED");
+        appendTestResult(aTestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult
         = vcl::test::OutputDeviceTestGradient::checkLinearGradientAngled(aBitmap);
-    appendTestResult(atestName, returnTestStatus(eResult),
+    appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
     {
         BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + atestName + ".png", aBitmapEx);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
     }
 }
 
@@ -1047,20 +1047,20 @@ void GraphicsRenderTests::testLinearGradientBorder()
 {
     vcl::test::OutputDeviceTestGradient aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupLinearGradientBorder();
-    OUString atestName = "testLinearGradientBorder";
+    OUString aTestName = "testLinearGradientBorder";
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(atestName, "SKIPPED");
+        appendTestResult(aTestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult
         = vcl::test::OutputDeviceTestGradient::checkLinearGradientBorder(aBitmap);
-    appendTestResult(atestName, returnTestStatus(eResult),
+    appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
     {
         BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + atestName + ".png", aBitmapEx);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
     }
 }
 
@@ -1068,20 +1068,20 @@ void GraphicsRenderTests::testLinearGradientIntensity()
 {
     vcl::test::OutputDeviceTestGradient aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupLinearGradientIntensity();
-    OUString atestName = "testLinearGradientIntensity";
+    OUString aTestName = "testLinearGradientIntensity";
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(atestName, "SKIPPED");
+        appendTestResult(aTestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult
         = vcl::test::OutputDeviceTestGradient::checkLinearGradientIntensity(aBitmap);
-    appendTestResult(atestName, returnTestStatus(eResult),
+    appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
     {
         BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + atestName + ".png", aBitmapEx);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
     }
 }
 
@@ -1089,20 +1089,20 @@ void GraphicsRenderTests::testLinearGradientSteps()
 {
     vcl::test::OutputDeviceTestGradient aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupLinearGradientSteps();
-    OUString atestName = "testLinearGradientSteps";
+    OUString aTestName = "testLinearGradientSteps";
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(atestName, "SKIPPED");
+        appendTestResult(aTestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult
         = vcl::test::OutputDeviceTestGradient::checkLinearGradientSteps(aBitmap);
-    appendTestResult(atestName, returnTestStatus(eResult),
+    appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
     {
         BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + atestName + ".png", aBitmapEx);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
     }
 }
 
@@ -1110,20 +1110,20 @@ void GraphicsRenderTests::testAxialGradient()
 {
     vcl::test::OutputDeviceTestGradient aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupAxialGradient();
-    OUString atestName = "testAxialGradient";
+    OUString aTestName = "testAxialGradient";
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(atestName, "SKIPPED");
+        appendTestResult(aTestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult
         = vcl::test::OutputDeviceTestGradient::checkAxialGradient(aBitmap);
-    appendTestResult(atestName, returnTestStatus(eResult),
+    appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
     {
         BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + atestName + ".png", aBitmapEx);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
     }
 }
 
@@ -1131,20 +1131,20 @@ void GraphicsRenderTests::testRadialGradient()
 {
     vcl::test::OutputDeviceTestGradient aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupRadialGradient();
-    OUString atestName = "testRadialGradient";
+    OUString aTestName = "testRadialGradient";
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(atestName, "SKIPPED");
+        appendTestResult(aTestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult
         = vcl::test::OutputDeviceTestGradient::checkRadialGradient(aBitmap);
-    appendTestResult(atestName, returnTestStatus(eResult),
+    appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
     {
         BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + atestName + ".png", aBitmapEx);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
     }
 }
 
@@ -1152,15 +1152,15 @@ void GraphicsRenderTests::testRadialGradientOfs()
 {
     vcl::test::OutputDeviceTestGradient aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupRadialGradientOfs();
-    OUString atestName = "testRadialGradientOfs";
+    OUString aTestName = "testRadialGradientOfs";
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(atestName, "SKIPPED");
+        appendTestResult(aTestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult
         = vcl::test::OutputDeviceTestGradient::checkRadialGradientOfs(aBitmap);
-    appendTestResult(atestName, returnTestStatus(eResult),
+    appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
 }
 
@@ -1168,19 +1168,19 @@ void GraphicsRenderTests::testLineJoinBevel()
 {
     vcl::test::OutputDeviceTestLine aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupLineJoinBevel();
-    OUString atestName = "testLineJoinBevel";
+    OUString aTestName = "testLineJoinBevel";
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(atestName, "SKIPPED");
+        appendTestResult(aTestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestLine::checkLineJoinBevel(aBitmap);
-    appendTestResult(atestName, returnTestStatus(eResult),
+    appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
     {
         BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + atestName + ".png", aBitmapEx);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
     }
 }
 
@@ -1188,19 +1188,19 @@ void GraphicsRenderTests::testLineJoinRound()
 {
     vcl::test::OutputDeviceTestLine aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupLineJoinRound();
-    OUString atestName = "testLineJoinRound";
+    OUString aTestName = "testLineJoinRound";
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(atestName, "SKIPPED");
+        appendTestResult(aTestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestLine::checkLineJoinRound(aBitmap);
-    appendTestResult(atestName, returnTestStatus(eResult),
+    appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
     {
         BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + atestName + ".png", aBitmapEx);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
     }
 }
 
@@ -1208,19 +1208,19 @@ void GraphicsRenderTests::testLineJoinMiter()
 {
     vcl::test::OutputDeviceTestLine aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupLineJoinMiter();
-    OUString atestName = "testLineJoinMiter";
+    OUString aTestName = "testLineJoinMiter";
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(atestName, "SKIPPED");
+        appendTestResult(aTestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestLine::checkLineJoinMiter(aBitmap);
-    appendTestResult(atestName, returnTestStatus(eResult),
+    appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
     {
         BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + atestName + ".png", aBitmapEx);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
     }
 }
 
@@ -1228,19 +1228,19 @@ void GraphicsRenderTests::testLineJoinNone()
 {
     vcl::test::OutputDeviceTestLine aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupLineJoinNone();
-    OUString atestName = "testLineJoinNone";
+    OUString aTestName = "testLineJoinNone";
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(atestName, "SKIPPED");
+        appendTestResult(aTestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestLine::checkLineJoinNone(aBitmap);
-    appendTestResult(atestName, returnTestStatus(eResult),
+    appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
     {
         BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + atestName + ".png", aBitmapEx);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
     }
 }
 
@@ -1248,19 +1248,19 @@ void GraphicsRenderTests::testLineCapRound()
 {
     vcl::test::OutputDeviceTestLine aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupLineCapRound();
-    OUString atestName = "testLineCapRound";
+    OUString aTestName = "testLineCapRound";
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(atestName, "SKIPPED");
+        appendTestResult(aTestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestLine::checkLineCapRound(aBitmap);
-    appendTestResult(atestName, returnTestStatus(eResult),
+    appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
     {
         BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + atestName + ".png", aBitmapEx);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
     }
 }
 
@@ -1268,19 +1268,19 @@ void GraphicsRenderTests::testLineCapSquare()
 {
     vcl::test::OutputDeviceTestLine aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupLineCapSquare();
-    OUString atestName = "testLineCapSquare";
+    OUString aTestName = "testLineCapSquare";
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(atestName, "SKIPPED");
+        appendTestResult(aTestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestLine::checkLineCapSquare(aBitmap);
-    appendTestResult(atestName, returnTestStatus(eResult),
+    appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
     {
         BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + atestName + ".png", aBitmapEx);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
     }
 }
 
@@ -1288,19 +1288,59 @@ void GraphicsRenderTests::testLineCapButt()
 {
     vcl::test::OutputDeviceTestLine aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupLineCapButt();
-    OUString atestName = "testLineCapButt";
+    OUString aTestName = "testLineCapButt";
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(atestName, "SKIPPED");
+        appendTestResult(aTestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestLine::checkLineCapButt(aBitmap);
-    appendTestResult(atestName, returnTestStatus(eResult),
+    appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
     {
         BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + atestName + ".png", aBitmapEx);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
+    }
+}
+
+void GraphicsRenderTests::testHalfEllipsePolyLine()
+{
+    vcl::test::OutputDeviceTestPolyLine aOutDevTest;
+    Bitmap aBitmap = aOutDevTest.setupHalfEllipse();
+    OUString aTestName = "testHalfEllipsePolyLine";
+    if (!SHOULD_ASSERT)
+    {
+        appendTestResult(aTestName, "SKIPPED");
+        return;
+    }
+    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestLine::checkHalfEllipse(aBitmap);
+    appendTestResult(aTestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        BitmapEx aBitmapEx(aBitmap);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
+    }
+}
+
+void GraphicsRenderTests::testHalfEllipsePolygon()
+{
+    vcl::test::OutputDeviceTestPolygon aOutDevTest;
+    Bitmap aBitmap = aOutDevTest.setupHalfEllipse();
+    OUString aTestName = "testHalfEllipsePolygon";
+    if (!SHOULD_ASSERT)
+    {
+        appendTestResult(aTestName, "SKIPPED");
+        return;
+    }
+    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestLine::checkHalfEllipse(aBitmap);
+    appendTestResult(aTestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        BitmapEx aBitmapEx(aBitmap);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
     }
 }
 
@@ -1366,6 +1406,8 @@ void GraphicsRenderTests::runALLTests()
     testDrawDropShapeAAWithPolyline();
     testDrawDropShapeWithPolygon();
     testDrawDropShapeAAWithPolygon();
+    testHalfEllipsePolyLine();
+    testHalfEllipsePolygon();
 }
 
 void GraphicsRenderTests::appendTestResult(OUString aTestName, OUString aTestStatus,
