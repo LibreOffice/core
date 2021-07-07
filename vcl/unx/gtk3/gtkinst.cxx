@@ -4789,10 +4789,10 @@ private:
     {
         MenuHelper* pThis = static_cast<MenuHelper*>(widget);
         SolarMutexGuard aGuard;
-        pThis->signal_item_activate(pItem);
+        pThis->signal_item_activate(::get_buildable_id(GTK_BUILDABLE(pItem)));
     }
 
-    virtual void signal_item_activate(GtkMenuItem* pItem) = 0;
+    virtual void signal_item_activate(const OString& rIdent) = 0;
 #else
     static std::pair<GMenuModel*, int> find_id(GMenuModel* pMenuModel, const OString& rId)
     {
@@ -9835,9 +9835,9 @@ public:
         pThis->signal_selected(aStr);
     }
 #else
-    virtual void signal_item_activate(GtkMenuItem* pItem) override
+    virtual void signal_item_activate(const OString& rIdent) override
     {
-        signal_selected(::get_buildable_id(GTK_BUILDABLE(pItem)));
+        signal_selected(rIdent);
     }
 #endif
 
@@ -10200,9 +10200,9 @@ public:
         MenuHelper::set_item_visible(rIdent, bVisible);
     }
 
-    virtual void signal_item_activate(GtkMenuItem* pItem) override
+    virtual void signal_item_activate(const OString& rIdent) override
     {
-        signal_selected(::get_buildable_id(GTK_BUILDABLE(pItem)));
+        signal_selected(rIdent);
     }
 
     virtual void set_popover(weld::Widget* /*pPopover*/) override
@@ -10225,9 +10225,9 @@ protected:
 
 private:
 #if !GTK_CHECK_VERSION(4, 0, 0)
-    virtual void signal_item_activate(GtkMenuItem* pItem) override
+    virtual void signal_item_activate(const OString& rIdent) override
     {
-        m_sActivated = ::get_buildable_id(GTK_BUILDABLE(pItem));
+        m_sActivated = rIdent;
         weld::Menu::signal_activate(m_sActivated);
     }
 
@@ -17275,7 +17275,7 @@ public:
         , m_pComboBox(pComboBox)
     {
     }
-    virtual void signal_item_activate(GtkMenuItem*) override
+    virtual void signal_item_activate(const OString& /*rIdent*/) override
     {
         gtk_toggle_button_set_active(m_pComboBox, false);
     }
