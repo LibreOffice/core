@@ -1163,6 +1163,10 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
             {
                 xClass->setNodeValue("GtkMenuButton");
             }
+            else if (sClass == "GtkRadioToolButton")
+            {
+                xClass->setNodeValue("GtkCheckButton");
+            }
             else if (sClass == "GtkToggleToolButton")
             {
                 xClass->setNodeValue("GtkToggleButton");
