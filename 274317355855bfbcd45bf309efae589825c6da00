@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "ab8092a3_67b9d045",
+        "filename": "sal/rtl/alloc_impl.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1003291
+      },
+      "writtenOn": "2021-07-07T14:12:02Z",
+      "side": 1,
+      "message": "This has been left there because now is platform specific.",
+      "parentUuid": "ee92442e_c6bc8008",
+      "range": {
+        "startLine": 65,
+        "startChar": 4,
+        "endLine": 66,
+        "endChar": 17
+      },
+      "revId": "274317355855bfbcd45bf309efae589825c6da00",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "70c771a4_c39d87b1",
         "filename": "sal/rtl/alloc_impl.hxx",
         "patchSetId": 6
@@ -45,6 +69,30 @@
       "revId": "274317355855bfbcd45bf309efae589825c6da00",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4f126df5_c66b2d83",
+        "filename": "sal/rtl/alloc_impl.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1003291
+      },
+      "writtenOn": "2021-07-07T14:12:02Z",
+      "side": 1,
+      "message": "No reason. Removed it.",
+      "parentUuid": "70c771a4_c39d87b1",
+      "range": {
+        "startLine": 67,
+        "startChar": 4,
+        "endLine": 67,
+        "endChar": 12
+      },
+      "revId": "274317355855bfbcd45bf309efae589825c6da00",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -80,6 +128,24 @@
       "revId": "274317355855bfbcd45bf309efae589825c6da00",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ae28f791_4d2a18d0",
+        "filename": "sal/rtl/alloc_impl.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1003291
+      },
+      "writtenOn": "2021-07-07T14:12:02Z",
+      "side": 1,
+      "message": "OK, now it should work fine.",
+      "parentUuid": "e9dda52b_178a782d",
+      "revId": "274317355855bfbcd45bf309efae589825c6da00",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -136,6 +202,24 @@
     },
     {
       "key": {
+        "uuid": "67b0f6a0_251789c5",
+        "filename": "sal/rtl/alloc_impl.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1003291
+      },
+      "writtenOn": "2021-07-07T14:12:02Z",
+      "side": 1,
+      "message": "For now I\u0027m leaving it as is, because in that other place I need to ensure it is 64 bits long.",
+      "parentUuid": "25e1b7fd_096f550e",
+      "revId": "274317355855bfbcd45bf309efae589825c6da00",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9bd98baa_501e29a3",
         "filename": "sal/rtl/alloc_impl.hxx",
         "patchSetId": 6
@@ -156,6 +240,30 @@
       "revId": "274317355855bfbcd45bf309efae589825c6da00",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0cc8db07_93f4eca7",
+        "filename": "sal/rtl/alloc_impl.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1003291
+      },
+      "writtenOn": "2021-07-07T14:12:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9bd98baa_501e29a3",
+      "range": {
+        "startLine": 97,
+        "startChar": 11,
+        "endLine": 97,
+        "endChar": 21
+      },
+      "revId": "274317355855bfbcd45bf309efae589825c6da00",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }

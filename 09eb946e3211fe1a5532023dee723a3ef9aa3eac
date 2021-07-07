@@ -33,6 +33,24 @@
       "revId": "09eb946e3211fe1a5532023dee723a3ef9aa3eac",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cd6d7b07_6ed80ebc",
+        "filename": "sal/rtl/alloc_impl.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1003291
+      },
+      "writtenOn": "2021-07-07T14:12:02Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "b82a8b17_650d81da",
+      "revId": "09eb946e3211fe1a5532023dee723a3ef9aa3eac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
