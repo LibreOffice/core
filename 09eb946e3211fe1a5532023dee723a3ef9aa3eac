@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b82a8b17_650d81da",
+        "filename": "sal/rtl/alloc_impl.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-07T13:17:22Z",
+      "side": 1,
+      "message": "As Stephan mentioned, it\u0027s OK to use the builtins provided by at least GCC and Clang is fine - so my proposal to have the rest kept is wrong. But even if we needed to keep the fallback code, this would be wrong, since this would result in \"inaccessible code\" warnings from static analyzers on both Windows and elsewhere...",
+      "revId": "09eb946e3211fe1a5532023dee723a3ef9aa3eac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
