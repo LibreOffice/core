@@ -46,6 +46,7 @@ public:
     rtl::Reference<MetaAction> RoundRectHandler();
     rtl::Reference<MetaAction> EllipseHandler();
     rtl::Reference<MetaAction> ArcHandler();
+    rtl::Reference<MetaAction> PieHandler();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
