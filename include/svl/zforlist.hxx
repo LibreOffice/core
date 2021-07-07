@@ -473,7 +473,7 @@ public:
             nKey contains the index key of the format.
      */
     bool PutEntry( OUString& rString, sal_Int32& nCheckPos, SvNumFormatType& nType, sal_uInt32& nKey,
-                   LanguageType eLnge = LANGUAGE_DONTKNOW );
+                   LanguageType eLnge = LANGUAGE_DONTKNOW, bool bReplaceBooleanEquivalent = true );
 
     /** Same as <method>PutEntry</method> but the format code string is
          considered to be of language/country eLnge and is converted to
@@ -481,7 +481,7 @@ public:
     bool PutandConvertEntry( OUString& rString, sal_Int32& nCheckPos,
                              SvNumFormatType& nType, sal_uInt32& nKey,
                              LanguageType eLnge, LanguageType eNewLnge,
-                             bool bConvertDateOrder );
+                             bool bConvertDateOrder, bool bReplaceBooleanEquivalent = true );
 
     /** Same as <method>PutandConvertEntry</method> but the format code string
          is considered to be of the System language/country eLnge and is

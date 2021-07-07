@@ -85,12 +85,12 @@ const NfKeywordTable ImpSvNumberformatScan::sEnglishKeyword =
                 // used with Thai locale and converted to [NatNum1], only
                 // exception as lowercase
     "CCC",     // NF_KEY_CCC Currency abbreviation
+    "BOOLEAN", // NF_KEY_BOOLEAN boolean
     "GENERAL", // NF_KEY_GENERAL General / Standard
 
     // Reserved words translated and color names follow:
     "TRUE",    // NF_KEY_TRUE boolean true
     "FALSE",   // NF_KEY_FALSE boolean false
-    "BOOLEAN", // NF_KEY_BOOLEAN boolean
     "COLOR",   // NF_KEY_COLOR color
         // colours
     "BLACK",   // NF_KEY_BLACK
@@ -1353,7 +1353,10 @@ sal_Int32 ImpSvNumberformatScan::ScanType()
             case NF_KEY_CCC:                        // CCC
                 eNewType = SvNumFormatType::CURRENCY;
                 break;
-            case NF_KEY_GENERAL:                    // Standard
+            case NF_KEY_BOOLEAN:                    // BOOLEAN
+                eNewType = SvNumFormatType::LOGICAL;
+                break;
+            case NF_KEY_GENERAL:                    // General
                 eNewType = SvNumFormatType::NUMBER;
                 bHaveGeneral = true;
                 break;
@@ -3274,14 +3277,18 @@ void ImpSvNumberformatScan::CopyInfo(ImpSvNumberformatInfo* pInfo, sal_uInt16 nC
     pInfo->nCntExp      = nCntExp;
 }
 
-void ImpSvNumberformatScan::ReplaceBooleanEquivalent( OUString& rString )
+bool ImpSvNumberformatScan::ReplaceBooleanEquivalent( OUString& rString )
 {
     InitKeywords();
     /* TODO: compare case insensitive? Or rather leave as is and case not
      * matching indicates user supplied on purpose? Written to file / generated
      * was always uppercase. */
     if (rString == sBooleanEquivalent1 || rString == sBooleanEquivalent2)
+    {
         rString = GetKeywords()[NF_KEY_BOOLEAN];
+        return true;
+    }
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

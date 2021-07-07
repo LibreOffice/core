@@ -171,7 +171,8 @@ public:
                    ImpSvNumberformatScan* pSc,
                    ImpSvNumberInputScan* pISc,
                    sal_Int32& nCheckPos,
-                   LanguageType& eLan );
+                   LanguageType& eLan,
+                   bool bReplaceBooleanEquivalent = true );
 
     // Copy ctor
     SvNumberformat( SvNumberformat const & rFormat );
