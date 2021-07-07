@@ -310,6 +310,7 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bLineNumberingSet( false ),
         m_bIsInFootnoteProperties( false ),
         m_bIsParaMarkerChange( false ),
+        m_bRedlineImageInPreviousRun( false ),
         m_bParaChanged( false ),
         m_bIsFirstParaInSection( true ),
         m_bIsFirstParaInSectionAfterRedline( true ),
@@ -2182,6 +2183,40 @@ void DomainMapper_Impl::appendTextPortion( const OUString& rString, const Proper
                 if (rValue.Name == "CharHidden")
                     rValue.Value <<= false;
             }
+
+        // remove workaround for change tracked images, if they are part of a redline,
+        // i.e. if the next run is a tracked change with the same type, author and date,
+        // as in the change tracking of the image.
+        if ( m_bRedlineImageInPreviousRun )
+        {
+            auto pCurrentRedline = m_aRedlines.top().size() > 0
+                    ? m_aRedlines.top().back()
+                    : GetTopContextOfType(CONTEXT_CHARACTER) &&
+                                GetTopContextOfType(CONTEXT_CHARACTER)->Redlines().size() > 0
+                        ? GetTopContextOfType(CONTEXT_CHARACTER)->Redlines().back()
+                        : nullptr;
+            if ( m_previousRedline && pCurrentRedline &&
+                   // same redline
+                   (m_previousRedline->m_nToken & 0xffff) == (pCurrentRedline->m_nToken & 0xffff) &&
+                    m_previousRedline->m_sAuthor == pCurrentRedline->m_sAuthor &&
+                    m_previousRedline->m_sDate == pCurrentRedline->m_sDate )
+            {
+                uno::Reference< text::XTextCursor > xCursor = xTextAppend->getEnd()->getText( )->createTextCursor( );
+                assert(xCursor.is());
+                xCursor->gotoEnd(false);
+                xCursor->goLeft(2, true);
+                if ( xCursor->getString() == u"​​" )
+                {
+                    xCursor->goRight(1, true);
+                    xCursor->setString("");
+                    xCursor->gotoEnd(false);
+                    xCursor->goLeft(1, true);
+                    xCursor->setString("");
+                }
+            }
+
+            m_bRedlineImageInPreviousRun = false;
+        }
 
         uno::Reference< text::XTextRange > xTextRange;
         if (m_aTextAppendStack.top().xInsertPosition.is())
@@ -6882,7 +6917,36 @@ void  DomainMapper_Impl::ImportGraphic(const writerfilter::Reference< Properties
     OSL_ENSURE( xTextContent.is(), "DomainMapper_Impl::ImportGraphic");
     if( xTextContent.is())
     {
-        appendTextContent( xTextContent, uno::Sequence< beans::PropertyValue >() );
+        bool bAppend = true;
+        // workaround for images anchored to characters: add ZWSPs around the anchoring point
+        if ( eGraphicImportType != IMPORT_AS_DETECTED_INLINE && !m_aRedlines.top().empty() )
+        {
+            uno::Reference< text::XTextAppend > xTextAppend = m_aTextAppendStack.top().xTextAppend;
+            if(xTextAppend.is())
+            {
+                try
+                {
+                    uno::Reference< text::XText > xText = xTextAppend->getText();
+                    uno::Reference< text::XTextCursor > xCrsr = xText->createTextCursor();
+                    xCrsr->gotoEnd(false);
+                    PropertyMapPtr pEmpty(new PropertyMap());
+                    appendTextPortion(u"​", pEmpty);
+                    appendTextContent( xTextContent, uno::Sequence< beans::PropertyValue >() );
+                    bAppend = false;
+                    xCrsr->gotoEnd(false);
+                    appendTextPortion(u"​", pEmpty);
+
+                    m_bRedlineImageInPreviousRun = true;
+                    m_previousRedline = m_currentRedline;
+                }
+                catch( const uno::Exception& )
+                {
+                }
+            }
+        }
+
+        if ( bAppend )
+            appendTextContent( xTextContent, uno::Sequence< beans::PropertyValue >() );
 
         if (eGraphicImportType == IMPORT_AS_DETECTED_ANCHOR && !m_aTextAppendStack.empty())
         {
