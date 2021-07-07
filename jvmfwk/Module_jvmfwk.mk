@@ -28,6 +28,10 @@ $(eval $(call gb_Module_add_targets,jvmfwk,\
 endif
 endif
 
+$(eval $(call gb_Module_add_check_targets,jvmfwk, \
+    CppunitTest_jvmfwk_sunversion \
+))
+
 endif
 
 # vim:set noet sw=4 ts=4:

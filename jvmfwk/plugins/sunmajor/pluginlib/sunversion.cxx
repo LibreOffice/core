@@ -22,20 +22,8 @@
 #include <osl/thread.h>
 #include <rtl/character.hxx>
 #include <string.h>
-#if OSL_DEBUG_LEVEL >= 2
-#include <osl/diagnose.h>
-#include "diagnostics.h"
-#endif
 namespace jfw_plugin  { //stoc_javadetect
 
-
-#if OSL_DEBUG_LEVEL >= 2
-class SelfTest
-{
-public:
-    SelfTest();
-} test;
-#endif
 
 SunVersion::SunVersion(std::u16string_view usVer):
     m_nUpdateSpecial(0), m_preRelease(Rel_NONE)
@@ -313,104 +301,6 @@ bool SunVersion::operator == (const SunVersion& ver) const
     bRet = m_preRelease == ver.m_preRelease && bRet;
     return bRet;
 }
-
-
-#if OSL_DEBUG_LEVEL >= 2
-SelfTest::SelfTest()
-{
-    bool bRet = true;
-
-    static char const * versions[] = {"1.4.0", "1.4.1", "1.0.0", "10.0.0", "10.10.0",
-                         "10.2.2", "10.10.0", "10.10.10", "111.0.999",
-                         "1.4.1_01", "9.90.99_09", "1.4.1_99",
-                         "1.4.1_00a",
-                         "1.4.1-ea", "1.4.1-beta", "1.4.1-rc1",
-                         "1.5.0_01-ea", "1.5.0_01-rc2"};
-    static char const * badVersions[] = {".4.0", "..1", "", "10.0", "10.10.0.", "10.10.0-", "10.10.0.",
-                            "10.2-2", "10_10.0", "10..10","10.10", "a.0.999",
-                            "1.4b.1_01", "9.90.-99_09", "1.4.1_99-",
-                            "1.4.1_00a2", "1.4.0_z01z", "1.4.1__99A",
-                            "1.4.1-1ea", "1.5.0_010", "1.5.0._01-", "1.5.0_01-eac"};
-    static char const * orderedVer[] = { "1.3.1-ea", "1.3.1-beta", "1.3.1-rc1",
-                            "1.3.1", "1.3.1_00a", "1.3.1_01", "1.3.1_01a",
-                            "1.3.2", "1.4.0", "1.5.0_01-ea", "2.0.0"};
-
-    int num = SAL_N_ELEMENTS (versions);
-    int numBad = SAL_N_ELEMENTS (badVersions);
-    int numOrdered = SAL_N_ELEMENTS (orderedVer);
-    //parsing test (positive)
-    for (int i = 0; i < num; i++)
-    {
-        SunVersion ver(versions[i]);
-        if ( ! ver)
-        {
-            bRet = false;
-            break;
-        }
-    }
-    OSL_ENSURE(bRet, "SunVersion selftest failed");
-    //Parsing test (negative)
-    for ( int i = 0; i < numBad; i++)
-    {
-        SunVersion ver(badVersions[i]);
-        if (ver)
-        {
-            bRet = false;
-            break;
-        }
-    }
-    OSL_ENSURE(bRet, "SunVersion selftest failed");
-
-    // Ordering test
-    bRet = true;
-    int j = 0;
-    for (int i = 0; i < numOrdered; i ++)
-    {
-        SunVersion curVer(orderedVer[i]);
-        if ( ! curVer)
-        {
-            bRet = false;
-            break;
-        }
-        for (j = 0; j < numOrdered; j++)
-        {
-            SunVersion compVer(orderedVer[j]);
-            if (i < j)
-            {
-                if ( !(curVer < compVer))
-                {
-                    bRet = false;
-                    break;
-                }
-            }
-            else if ( i == j)
-            {
-                if (! (curVer == compVer
-                       && ! (curVer > compVer)
-                       && ! (curVer < compVer)))
-                {
-                    bRet = false;
-                    break;
-                }
-            }
-            else if (i > j)
-            {
-                if ( !(curVer > compVer))
-                {
-                    bRet = false;
-                    break;
-                }
-            }
-        }
-        if ( ! bRet)
-            break;
-    }
-    if (bRet)
-        JFW_TRACE2("Testing class SunVersion succeeded.");
-    else
-        OSL_ENSURE(bRet, "[Java framework] sunjavaplugin: SunVersion self test failed.");
-}
-#endif
 
 }
 
