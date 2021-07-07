@@ -9370,7 +9370,7 @@ private:
         }
     }
 
-    std::pair<GMenuModel*, int> find_id(GMenuModel* pMenuModel, const OString& rId)
+    static std::pair<GMenuModel*, int> find_id(GMenuModel* pMenuModel, const OString& rId)
     {
         for (int i = 0, nCount = g_menu_model_get_n_items(pMenuModel); i < nCount; ++i)
         {
@@ -9402,7 +9402,7 @@ private:
         return std::make_pair(nullptr, -1);
     }
 
-    bool remove_id(GMenuModel* pMenuModel, const OString& rId)
+    static bool remove_id(GMenuModel* pMenuModel, const OString& rId)
     {
         std::pair<GMenuModel*, int> aRes = find_id(pMenuModel, rId);
         if (!aRes.first)
@@ -9761,8 +9761,24 @@ public:
 #if !GTK_CHECK_VERSION(4, 0, 0)
         return MenuHelper::get_item_label(rIdent);
 #else
-        (void)rIdent;
-        std::abort();
+        GtkPopover* pPopover = gtk_menu_button_get_popover(m_pMenuButton);
+        if (GMenuModel* pMenuModel = GTK_IS_POPOVER_MENU(pPopover) ?
+                                     gtk_popover_menu_get_menu_model(GTK_POPOVER_MENU(pPopover)) :
+                                     nullptr)
+        {
+            std::pair<GMenuModel*, int> aRes = find_id(pMenuModel, rIdent);
+            if (!aRes.first)
+                return OUString();
+
+            // clone the original item to query its label
+            GMenuItem* pMenuItem = g_menu_item_new_from_model(aRes.first, aRes.second);
+            char *pLabel = nullptr;
+            g_menu_item_get_attribute(pMenuItem, G_MENU_ATTRIBUTE_LABEL, "&s", &pLabel);
+            OUString aRet(pLabel, pLabel ? strlen(pLabel) : 0, RTL_TEXTENCODING_UTF8);
+            g_free(pLabel);
+            g_object_unref(pMenuItem);
+            return aRet;
+        }
         return OUString();
 #endif
     }
