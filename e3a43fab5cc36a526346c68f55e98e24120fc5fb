@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f30d7634_44afe8a8",
+        "filename": "sal/rtl/alloc_impl.hxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-07-07T14:27:29Z",
+      "side": 1,
+      "message": "The above computation is wrong if `sizeof(sal_Size) \u003c sizeof(int)`.\n\nI would suggest staying with `\u003d\u003d` there, chaining the constexpr if statements with `else`, and adding a final\n\n  else\n      return; // cause compilation failure for unexpected sizeof(sal_Size)\n\n(which would also give proper motivation for using consteval if statements here, for which there has been no good reason here until now :)",
+      "revId": "e3a43fab5cc36a526346c68f55e98e24120fc5fb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
