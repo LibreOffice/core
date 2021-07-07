@@ -5248,6 +5248,30 @@ public:
 #endif
     }
 
+    OString get_item_id(int pos) const
+    {
+#if !GTK_CHECK_VERSION(4, 0, 0)
+        GList* pChildren = gtk_container_get_children(GTK_CONTAINER(m_pMenu));
+        gpointer pMenuItem = g_list_nth_data(pChildren, pos);
+        OString id = ::get_buildable_id(GTK_BUILDABLE(pMenuItem));
+        g_list_free(pChildren);
+        return id;
+#else
+        OString sTarget;
+        if (GMenuModel* pMenuModel = gtk_popover_menu_get_menu_model(m_pMenu))
+        {
+            auto aSectionAndPos = get_section_and_pos_for(pMenuModel, pos);
+            char *id;
+            if (g_menu_model_get_item_attribute(aSectionAndPos.first, aSectionAndPos.second, "target", "s", &id))
+            {
+                sTarget = OString(id);
+                g_free(id);
+            }
+        }
+        return sTarget;
+#endif
+    }
+
     void clear_items()
     {
 #if !GTK_CHECK_VERSION(4, 0, 0)
@@ -10486,15 +10510,7 @@ public:
 
     virtual OString get_id(int pos) const override
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
-        GList* pChildren = gtk_container_get_children(GTK_CONTAINER(m_pMenu));
-        gpointer pMenuItem = g_list_nth_data(pChildren, pos);
-        OString id = ::get_buildable_id(GTK_BUILDABLE(pMenuItem));
-        g_list_free(pChildren);
-        return id;
-#else
-        return OString();
-#endif
+        return get_item_id(pos);
     }
 
     virtual int n_children() const override
