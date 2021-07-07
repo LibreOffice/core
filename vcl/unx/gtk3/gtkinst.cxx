@@ -4998,7 +4998,7 @@ public:
     {
         clear_actions();
 
-        if (GMenuModel* pMenuModel = gtk_popover_menu_get_menu_model(m_pMenu))
+        if (GMenuModel* pMenuModel = m_pMenu ? gtk_popover_menu_get_menu_model(m_pMenu) : nullptr)
         {
             process_menu_model(pMenuModel);
         }
@@ -5061,7 +5061,7 @@ public:
 #else
         (void)pIconName; (void)pImageSurface;
 
-        if (GMenuModel* pMenuModel = gtk_popover_menu_get_menu_model(m_pMenu))
+        if (GMenuModel* pMenuModel = m_pMenu ? gtk_popover_menu_get_menu_model(m_pMenu) : nullptr)
         {
             auto aSectionAndPos = get_section_and_pos_for(pMenuModel, pos);
             GMenu* pMenu = G_MENU(aSectionAndPos.first);
@@ -5093,7 +5093,7 @@ public:
         if (pos != -1)
             gtk_menu_reorder_child(m_pMenu, pItem, pos);
 #else
-        if (GMenuModel* pMenuModel = gtk_popover_menu_get_menu_model(m_pMenu))
+        if (GMenuModel* pMenuModel = m_pMenu ? gtk_popover_menu_get_menu_model(m_pMenu) : nullptr)
         {
             auto aSectionAndPos = get_section_and_pos_for(pMenuModel, pos);
 
@@ -5132,7 +5132,7 @@ public:
         remove_from_map(pMenuItem);
         gtk_widget_destroy(GTK_WIDGET(pMenuItem));
 #else
-        if (GMenuModel* pMenuModel = gtk_popover_menu_get_menu_model(m_pMenu))
+        if (GMenuModel* pMenuModel = m_pMenu ? gtk_popover_menu_get_menu_model(m_pMenu) : nullptr)
         {
             std::pair<GMenuModel*, int> aRes = find_id(pMenuModel, rIdent);
             if (!aRes.first)
@@ -5198,7 +5198,7 @@ public:
 #if !GTK_CHECK_VERSION(4, 0, 0)
         gtk_menu_item_set_label(m_aMap[rIdent], MapToGtkAccelerator(rText).getStr());
 #else
-        if (GMenuModel* pMenuModel = gtk_popover_menu_get_menu_model(m_pMenu))
+        if (GMenuModel* pMenuModel = m_pMenu ? gtk_popover_menu_get_menu_model(m_pMenu) : nullptr)
         {
             std::pair<GMenuModel*, int> aRes = find_id(pMenuModel, rIdent);
             if (!aRes.first)
@@ -5220,7 +5220,7 @@ public:
         const gchar* pText = gtk_menu_item_get_label(m_aMap.find(rIdent)->second);
         return OUString(pText, pText ? strlen(pText) : 0, RTL_TEXTENCODING_UTF8);
 #else
-        if (GMenuModel* pMenuModel = gtk_popover_menu_get_menu_model(m_pMenu))
+        if (GMenuModel* pMenuModel = m_pMenu ? gtk_popover_menu_get_menu_model(m_pMenu) : nullptr)
         {
             std::pair<GMenuModel*, int> aRes = find_id(pMenuModel, rIdent);
             if (!aRes.first)
@@ -5279,7 +5279,7 @@ public:
         return id;
 #else
         OString sTarget;
-        if (GMenuModel* pMenuModel = gtk_popover_menu_get_menu_model(m_pMenu))
+        if (GMenuModel* pMenuModel = m_pMenu ? gtk_popover_menu_get_menu_model(m_pMenu) : nullptr)
         {
             auto aSectionAndPos = get_section_and_pos_for(pMenuModel, pos);
             char *id;
@@ -5301,7 +5301,7 @@ public:
         g_list_free(pChildren);
         return nLen;
 #else
-        if (GMenuModel* pMenuModel = gtk_popover_menu_get_menu_model(m_pMenu))
+        if (GMenuModel* pMenuModel = m_pMenu ? gtk_popover_menu_get_menu_model(m_pMenu) : nullptr)
             return count_immediate_children(pMenuModel);
         return 0;
 #endif
@@ -5318,7 +5318,7 @@ public:
         }
         m_aMap.clear();
 #else
-        if (GMenuModel* pMenuModel = gtk_popover_menu_get_menu_model(m_pMenu))
+        if (GMenuModel* pMenuModel = m_pMenu ? gtk_popover_menu_get_menu_model(m_pMenu) : nullptr)
         {
             GMenu* pMenu = G_MENU(pMenuModel);
             g_menu_remove_all(pMenu);
