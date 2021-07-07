@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "a8ed2c0b_abcf6ba8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-07-07T14:41:31Z",
+      "side": 1,
+      "message": "See the \"Commit Information\" section of the `git-commit` man page for details of how this is determined.  (I assume you may have different user.name git configuration values in two different git environments that you use?)\n\n(Anyway, the \"BaiXiaochun\" spelling without a space in the most recent patch sets of this Gerrit change is in line with the spelling in all of the seven commits of yours that have been submitted to master so far, so everything seems to be fine now.  It was just obsolete patch sets 4--6 that used the alternate \"Bai Xiaochun\" spelling with a space here.)",
+      "parentUuid": "c61af87d_c97f6681",
+      "revId": "09eb946e3211fe1a5532023dee723a3ef9aa3eac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b82a8b17_650d81da",
         "filename": "sal/rtl/alloc_impl.hxx",
         "patchSetId": 7
