@@ -1303,9 +1303,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
             if( IsStyleSheetImport() )
             {
                 //style sheets cannot have a numbering rule attached
-                StyleSheetPropertyMap* pStyleSheetPropertyMap = dynamic_cast< StyleSheetPropertyMap* >( rContext.get() );
-                if (pStyleSheetPropertyMap)
-                    pStyleSheetPropertyMap->SetListLevel( static_cast<sal_Int16>(nIntValue) );
+                static_cast<StyleSheetPropertyMap*>(rContext.get())->SetListLevel(nIntValue);
             }
             else
                 rContext->Insert( PROP_NUMBERING_LEVEL, uno::makeAny( static_cast<sal_Int16>(nIntValue) ));
@@ -1318,9 +1316,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
             if( IsStyleSheetImport() )
             {
                 //style sheets cannot have a numbering rule attached
-                StyleSheetPropertyMap* pStyleSheetPropertyMap = dynamic_cast< StyleSheetPropertyMap* >( rContext.get() );
-                if (pStyleSheetPropertyMap)
-                    pStyleSheetPropertyMap->SetListId( nIntValue );
+                static_cast<StyleSheetPropertyMap*>(rContext.get())->SetListId(nIntValue);
             }
             if( pList )
             {
@@ -1537,10 +1533,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
             sal_Int16 nLvl = static_cast< sal_Int16 >( nIntValue );
             if( IsStyleSheetImport() )
             {
-
-                StyleSheetPropertyMap* pStyleSheetPropertyMap = dynamic_cast< StyleSheetPropertyMap* >( rContext.get() );
-                if (pStyleSheetPropertyMap)
-                    pStyleSheetPropertyMap->SetOutlineLevel( nLvl );
+                static_cast<StyleSheetPropertyMap*>(rContext.get())->SetOutlineLevel(nLvl);
             }
             else
             {
