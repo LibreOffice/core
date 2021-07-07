@@ -1181,8 +1181,9 @@ ListDef::Pointer ListsManager::GetList( sal_Int32 nId )
 void ListsManager::CreateNumberingRules( )
 {
     // Try to determine which numId would best work as LO's Chapter Numbering Outline rule.
+    // (The best fix for many import bugs is just to prevent ANY assignment as chapter numbering.)
     sal_Int16 nChosenAsChapterNumberingId = -1;
-    sal_uInt16 nHighestWeight = 0;
+    sal_uInt16 nHighestWeight = 5; // arbitrarily chosen minimum threshold
     for (const auto& rList : m_aLists)
     {
         sal_uInt16 nWeight = rList->GetChapterNumberingWeight();
