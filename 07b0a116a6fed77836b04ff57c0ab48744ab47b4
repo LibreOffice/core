@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d7410df3_3ecd5145",
+        "filename": "include/svx/svxids.hrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-07T19:15:52Z",
+      "side": 1,
+      "message": "64 .. 69",
+      "revId": "07b0a116a6fed77836b04ff57c0ab48744ab47b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}

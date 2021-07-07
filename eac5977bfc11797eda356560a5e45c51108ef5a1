@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d1dd5498_03e6918f",
+        "filename": "include/svx/svxids.hrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-07T19:15:52Z",
+      "side": 0,
+      "message": "Since you remove use of 44-47, should this comment now mention \"24 .. 47\"?",
+      "revId": "eac5977bfc11797eda356560a5e45c51108ef5a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5291c136_bd187551",
+        "filename": "include/svx/svxids.hrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-07T19:15:52Z",
+      "side": 0,
+      "message": "... and maybe even 24 .. 49, and be consolidated, and this one removed?",
+      "revId": "eac5977bfc11797eda356560a5e45c51108ef5a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4a401035_8f40eead",
+        "filename": "include/svx/svxids.hrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 885,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-07T19:15:52Z",
+      "side": 0,
+      "message": "1062 .. 1067",
+      "revId": "eac5977bfc11797eda356560a5e45c51108ef5a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
