@@ -127,10 +127,8 @@ static void lcl_linenumberingHeaderFooter( const uno::Reference<container::XName
     const StyleSheetEntryPtr pEntry = dmapper->GetStyleSheetTable()->FindStyleSheetByISTD( rname );
     if (!pEntry)
         return;
-    const StyleSheetPropertyMap* pStyleSheetProperties = dynamic_cast<const StyleSheetPropertyMap*>( pEntry->pProperties.get() );
-    if ( !pStyleSheetProperties )
-        return;
-    sal_Int32 nListId = pStyleSheetProperties->GetListId();
+
+    sal_Int32 nListId = pEntry->pProperties->GetListId();
     if( xStyles.is() )
     {
         if( xStyles->hasByName( rname ) )
@@ -1424,11 +1422,7 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
 /// Check if the style or its parent has a list id, recursively.
 static sal_Int32 lcl_getListId(const StyleSheetEntryPtr& rEntry, const StyleSheetTablePtr& rStyleTable, bool & rNumberingFromBaseStyle)
 {
-    const StyleSheetPropertyMap* pEntryProperties = dynamic_cast<const StyleSheetPropertyMap*>(rEntry->pProperties.get());
-    if (!pEntryProperties)
-        return -1;
-
-    sal_Int32 nListId = pEntryProperties->GetListId();
+    sal_Int32 nListId = rEntry->pProperties->GetListId();
     // The style itself has a list id.
     if (nListId >= 0)
         return nListId;
@@ -1465,11 +1459,7 @@ sal_Int16 DomainMapper_Impl::GetListLevel(const StyleSheetEntryPtr& pEntry,
     if (!pEntry)
         return -1;
 
-    const StyleSheetPropertyMap* pEntryProperties = dynamic_cast<const StyleSheetPropertyMap*>(pEntry->pProperties.get());
-    if (!pEntryProperties)
-        return -1;
-
-    nListLevel = pEntryProperties->GetListLevel();
+    nListLevel = pEntry->pProperties->GetListLevel();
     // The style itself has a list level.
     if (nListLevel >= 0)
         return nListLevel;
@@ -1532,7 +1522,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
 
     const StyleSheetEntryPtr pEntry = GetStyleSheetTable()->FindStyleSheetByConvertedStyleName( GetCurrentParaStyleName() );
     OSL_ENSURE( pEntry, "no style sheet found" );
-    const StyleSheetPropertyMap* pStyleSheetProperties = dynamic_cast<const StyleSheetPropertyMap*>(pEntry ? pEntry->pProperties.get() : nullptr);
+    const StyleSheetPropertyMap* pStyleSheetProperties = pEntry ? pEntry->pProperties.get() : nullptr;
     bool isNumberingViaStyle(false);
     bool isNumberingViaRule = pParaContext && pParaContext->GetListId() > -1;
     sal_Int32 nListId = -1;
@@ -1583,7 +1573,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
             // So now import must also copy the para-style indents directly onto the paragraph to compensate.
             std::optional<PropertyMap::Property> oProperty;
             const StyleSheetEntryPtr pParent = (!pEntry->sBaseStyleIdentifier.isEmpty()) ? GetStyleSheetTable()->FindStyleSheetByISTD(pEntry->sBaseStyleIdentifier) : nullptr;
-            const StyleSheetPropertyMap* pParentProperties = dynamic_cast<const StyleSheetPropertyMap*>(pParent ? pParent->pProperties.get() : nullptr);
+            const StyleSheetPropertyMap* pParentProperties = pParent ? pParent->pProperties.get() : nullptr;
             if (!pEntry->sBaseStyleIdentifier.isEmpty())
             {
                 oProperty = pStyleSheetProperties->getProperty(PROP_PARA_FIRST_LINE_INDENT);
@@ -7617,10 +7607,7 @@ uno::Reference<container::XIndexAccess> DomainMapper_Impl::GetCurrentNumberingRu
         const StyleSheetEntryPtr pEntry = GetStyleSheetTable()->FindStyleSheetByConvertedStyleName(aStyle);
         if (!pEntry)
             return xRet;
-        const StyleSheetPropertyMap* pStyleSheetProperties = dynamic_cast<const StyleSheetPropertyMap*>(pEntry->pProperties.get());
-        if (!pStyleSheetProperties)
-            return xRet;
-        sal_Int32 nListId = pStyleSheetProperties->GetListId();
+        sal_Int32 nListId = pEntry->pProperties->GetListId();
         if (nListId < 0)
             return xRet;
         if (pListLevel)
