@@ -4775,6 +4775,8 @@ protected:
     bool m_bTakeOwnership;
 private:
 
+    virtual void signal_item_activate(const OString& rIdent) = 0;
+
 #if !GTK_CHECK_VERSION(4, 0, 0)
     static void collect(GtkWidget* pItem, gpointer widget)
     {
@@ -4791,8 +4793,6 @@ private:
         SolarMutexGuard aGuard;
         pThis->signal_item_activate(::get_buildable_id(GTK_BUILDABLE(pItem)));
     }
-
-    virtual void signal_item_activate(const OString& rIdent) = 0;
 #else
     static std::pair<GMenuModel*, int> find_id(GMenuModel* pMenuModel, const OString& rId)
     {
@@ -4824,6 +4824,28 @@ private:
         }
 
         return std::make_pair(nullptr, -1);
+    }
+
+    void clear_actions()
+    {
+        for (const auto& rAction : m_aActionEntries)
+        {
+            g_action_map_remove_action(G_ACTION_MAP(m_pActionGroup), rAction.name);
+            g_action_map_remove_action(G_ACTION_MAP(m_pHiddenActionGroup), rAction.name);
+        }
+        m_aActionEntries.clear();
+        m_aInsertedActions.clear();
+        m_aIdToAction.clear();
+    }
+
+    static void action_activated(GSimpleAction*, GVariant* pParameter, gpointer widget)
+    {
+        gsize nLength(0);
+        const gchar* pStr = g_variant_get_string(pParameter, &nLength);
+        OString aStr(pStr, nLength);
+        MenuHelper* pThis = static_cast<MenuHelper*>(widget);
+        SolarMutexGuard aGuard;
+        pThis->signal_item_activate(aStr);
     }
 #endif
 
@@ -4907,11 +4929,75 @@ public:
     }
 #endif
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
-    void insert_item(int pos, std::u16string_view rId, const OUString& rStr,
+#if GTK_CHECK_VERSION(4, 0, 0)
+    void process_menu_model(GMenuModel* pMenuModel)
+    {
+        for (int i = 0, nCount = g_menu_model_get_n_items(pMenuModel); i < nCount; ++i)
+        {
+            OString sAction, sTarget;
+            char *id;
+            if (g_menu_model_get_item_attribute(pMenuModel, i, "action", "s", &id))
+            {
+                assert(OString(id).startsWith("menu."));
+
+                sAction = OString(id + 5);
+
+                auto res = m_aInsertedActions.insert(sAction);
+                if (res.second)
+                {
+                    // the const char* arg isn't copied by anything so it must continue to exist for the life time of
+                    // the action group
+                    if (sAction.startsWith("radio."))
+                        m_aActionEntries.push_back({res.first->getStr(), action_activated, "s", "'none'", nullptr, {}});
+                    else
+                        m_aActionEntries.push_back({res.first->getStr(), action_activated, "s", nullptr, nullptr, {}});
+                }
+
+                g_free(id);
+            }
+
+            if (g_menu_model_get_item_attribute(pMenuModel, i, "target", "s", &id))
+            {
+                sTarget = OString(id);
+                g_free(id);
+            }
+
+            m_aIdToAction[sTarget] = sAction;
+
+            if (GMenuModel* pSectionModel = g_menu_model_get_item_link(pMenuModel, i, G_MENU_LINK_SECTION))
+                process_menu_model(pSectionModel);
+            if (GMenuModel* pSubMenuModel = g_menu_model_get_item_link(pMenuModel, i, G_MENU_LINK_SUBMENU))
+                process_menu_model(pSubMenuModel);
+        }
+    }
+
+    // build an action group for the menu, "action" is the normal menu entry case
+    // the others are radiogroups
+    void update_action_group_from_popover_model()
+    {
+        clear_actions();
+
+        if (GMenuModel* pMenuModel = gtk_popover_menu_get_menu_model(m_pMenu))
+        {
+            process_menu_model(pMenuModel);
+        }
+
+        // move hidden entries to m_pHiddenActionGroup
+        g_action_map_add_action_entries(G_ACTION_MAP(m_pActionGroup), m_aActionEntries.data(), m_aActionEntries.size(), this);
+        for (const auto& id : m_aHiddenIds)
+        {
+            GAction* pAction = g_action_map_lookup_action(G_ACTION_MAP(m_pActionGroup), m_aIdToAction[id].getStr());
+            g_action_map_add_action(G_ACTION_MAP(m_pHiddenActionGroup), pAction);
+            g_action_map_remove_action(G_ACTION_MAP(m_pActionGroup), m_aIdToAction[id].getStr());
+        }
+    }
+#endif
+
+    void insert_item(int pos, const OUString& rId, const OUString& rStr,
                      const OUString* pIconName, const VirtualDevice* pImageSurface,
                      TriState eCheckRadioFalse)
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
         GtkWidget* pImage = nullptr;
         if (pIconName && !pIconName->isEmpty())
         {
@@ -4951,8 +5037,29 @@ public:
         add_to_map(GTK_MENU_ITEM(pItem));
         if (pos != -1)
             gtk_menu_reorder_child(m_pMenu, pItem, pos);
-    }
+#else
+        (void)pIconName; (void)pImageSurface;
+
+        if (GMenuModel* pMenuModel = gtk_popover_menu_get_menu_model(m_pMenu))
+        {
+            auto aSectionAndPos = get_section_and_pos_for(pMenuModel, pos);
+            GMenu* pMenu = G_MENU(aSectionAndPos.first);
+            // action with a target value ... the action name and target value are separated by a double
+            // colon ... For example: "app.action::target"
+            OUString sActionAndTarget;
+            if (eCheckRadioFalse == TRISTATE_INDET)
+                sActionAndTarget = "menu.normal." + rId + "::" + rId;
+            else
+                sActionAndTarget = "menu.radio." + rId + "::" + rId;
+            g_menu_insert(pMenu, aSectionAndPos.second, MapToGtkAccelerator(rStr).getStr(), sActionAndTarget.toUtf8().getStr());
+
+            assert(eCheckRadioFalse == TRISTATE_INDET); // come back to this later
+
+            // TODO not redo entire group
+            update_action_group_from_popover_model();
+        }
 #endif
+    }
 
     void insert_separator(int pos, const OUString& rId)
     {
@@ -9499,88 +9606,6 @@ private:
 #endif
     }
 
-#if GTK_CHECK_VERSION(4, 0, 0)
-    void clear_actions()
-    {
-        for (const auto& rAction : m_aActionEntries)
-        {
-            g_action_map_remove_action(G_ACTION_MAP(m_pActionGroup), rAction.name);
-            g_action_map_remove_action(G_ACTION_MAP(m_pHiddenActionGroup), rAction.name);
-        }
-        m_aActionEntries.clear();
-        m_aInsertedActions.clear();
-        m_aIdToAction.clear();
-    }
-#endif
-
-#if GTK_CHECK_VERSION(4, 0, 0)
-    void process_menu_model(GMenuModel* pMenuModel)
-    {
-        for (int i = 0, nCount = g_menu_model_get_n_items(pMenuModel); i < nCount; ++i)
-        {
-            OString sAction, sTarget;
-            char *id;
-            if (g_menu_model_get_item_attribute(pMenuModel, i, "action", "s", &id))
-            {
-                assert(OString(id).startsWith("menu."));
-
-                sAction = OString(id + 5);
-
-                auto res = m_aInsertedActions.insert(sAction);
-                if (res.second)
-                {
-                    // the const char* arg isn't copied by anything so it must continue to exist for the life time of
-                    // the action group
-                    if (sAction.startsWith("radio."))
-                        m_aActionEntries.push_back({res.first->getStr(), action_activated, "s", "'none'", nullptr, {}});
-                    else
-                        m_aActionEntries.push_back({res.first->getStr(), action_activated, "s", nullptr, nullptr, {}});
-                }
-
-                g_free(id);
-            }
-
-            if (g_menu_model_get_item_attribute(pMenuModel, i, "target", "s", &id))
-            {
-                sTarget = OString(id);
-                g_free(id);
-            }
-
-            m_aIdToAction[sTarget] = sAction;
-
-            if (GMenuModel* pSectionModel = g_menu_model_get_item_link(pMenuModel, i, G_MENU_LINK_SECTION))
-                process_menu_model(pSectionModel);
-            if (GMenuModel* pSubMenuModel = g_menu_model_get_item_link(pMenuModel, i, G_MENU_LINK_SUBMENU))
-                process_menu_model(pSubMenuModel);
-        }
-    }
-
-    // build an action group for the menu, "action" is the normal menu entry case
-    // the others are radiogroups
-    void update_action_group_from_popover_model()
-    {
-        clear_actions();
-
-        GtkPopover* pPopover = gtk_menu_button_get_popover(m_pMenuButton);
-        if (GMenuModel* pMenuModel = GTK_IS_POPOVER_MENU(pPopover) ?
-                                     gtk_popover_menu_get_menu_model(GTK_POPOVER_MENU(pPopover)) :
-                                     nullptr)
-        {
-            process_menu_model(pMenuModel);
-        }
-
-        // move hidden entries to m_pHiddenActionGroup
-        g_action_map_add_action_entries(G_ACTION_MAP(m_pActionGroup), m_aActionEntries.data(), m_aActionEntries.size(), this);
-        for (const auto& id : m_aHiddenIds)
-        {
-            GAction* pAction = g_action_map_lookup_action(G_ACTION_MAP(m_pActionGroup), m_aIdToAction[id].getStr());
-            g_action_map_add_action(G_ACTION_MAP(m_pHiddenActionGroup), pAction);
-            g_action_map_remove_action(G_ACTION_MAP(m_pActionGroup), m_aIdToAction[id].getStr());
-        }
-    }
-
-#endif
-
     static void signalFlagsChanged(GtkToggleButton* pToggleButton, GtkStateFlags flags, gpointer widget)
     {
         GtkInstanceMenuButton* pThis = static_cast<GtkInstanceMenuButton*>(widget);
@@ -9741,33 +9766,7 @@ public:
     virtual void insert_item(int pos, const OUString& rId, const OUString& rStr,
                         const OUString* pIconName, VirtualDevice* pImageSurface, TriState eCheckRadioFalse) override
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
         MenuHelper::insert_item(pos, rId, rStr, pIconName, pImageSurface, eCheckRadioFalse);
-#else
-        (void)pIconName; (void)pImageSurface;
-
-        GtkPopover* pPopover = gtk_menu_button_get_popover(m_pMenuButton);
-        if (GMenuModel* pMenuModel = GTK_IS_POPOVER_MENU(pPopover) ?
-                                     gtk_popover_menu_get_menu_model(GTK_POPOVER_MENU(pPopover)) :
-                                     nullptr)
-        {
-            auto aSectionAndPos = get_section_and_pos_for(pMenuModel, pos);
-            GMenu* pMenu = G_MENU(aSectionAndPos.first);
-            // action with a target value ... the action name and target value are separated by a double
-            // colon ... For example: "app.action::target"
-            OUString sActionAndTarget;
-            if (eCheckRadioFalse == TRISTATE_INDET)
-                sActionAndTarget = "menu.normal." + rId + "::" + rId;
-            else
-                sActionAndTarget = "menu.radio." + rId + "::" + rId;
-            g_menu_insert(pMenu, aSectionAndPos.second, MapToGtkAccelerator(rStr).getStr(), sActionAndTarget.toUtf8().getStr());
-
-            assert(eCheckRadioFalse == TRISTATE_INDET); // come back to this later
-
-            // TODO not redo entire group
-            update_action_group_from_popover_model();
-        }
-#endif
     }
 
     virtual void insert_separator(int pos, const OUString& rId) override
@@ -9824,22 +9823,10 @@ public:
         MenuHelper::set_item_visible(rIdent, bVisible);
     }
 
-#if GTK_CHECK_VERSION(4, 0, 0)
-    static void action_activated(GSimpleAction*, GVariant* pParameter, gpointer widget)
-    {
-        gsize nLength;
-        const gchar* pStr = g_variant_get_string(pParameter, &nLength);
-        OString aStr(pStr, nLength);
-        GtkInstanceMenuButton* pThis = static_cast<GtkInstanceMenuButton*>(widget);
-        SolarMutexGuard aGuard;
-        pThis->signal_selected(aStr);
-    }
-#else
     virtual void signal_item_activate(const OString& rIdent) override
     {
         signal_selected(rIdent);
     }
-#endif
 
     virtual void set_popover(weld::Widget* pPopover) override
     {
@@ -10224,13 +10211,13 @@ protected:
 #endif
 
 private:
-#if !GTK_CHECK_VERSION(4, 0, 0)
     virtual void signal_item_activate(const OString& rIdent) override
     {
         m_sActivated = rIdent;
         weld::Menu::signal_activate(m_sActivated);
     }
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
     void clear_extras()
     {
         if (m_aExtraItems.empty())
