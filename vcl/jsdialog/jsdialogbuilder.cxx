@@ -253,6 +253,7 @@ JSDialogNotifyIdle::generateClosePopupMessage(OUString sWindowId) const
         return aJsonWriter;
 
     aJsonWriter->put("jsontype", "dialog");
+    aJsonWriter->put("type", "modalpopup");
     aJsonWriter->put("action", "close");
     aJsonWriter->put("id", sWindowId);
 
