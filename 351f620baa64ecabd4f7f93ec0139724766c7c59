@@ -16,6 +16,24 @@
       "revId": "351f620baa64ecabd4f7f93ec0139724766c7c59",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0f83f9f6_125f1953",
+        "filename": "starmath/source/visitors.cxx",
+        "patchSetId": 20
+      },
+      "lineNbr": 2399,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-07-07T12:14:53Z",
+      "side": 1,
+      "message": "This is an extra function derived from my work on custom colors.\nIt is supposed to call NextTokenFontSize().\nThis one relies on: coNum16StartFlags\nThat flag loads any alphanumerical as a single word.\nBut I forgot to add the entry on the parser and was added later.\nI believe it fell on 7.2, but I\u0027ḿ not sure.",
+      "parentUuid": "4d9d8ef7_88028fc7",
+      "revId": "351f620baa64ecabd4f7f93ec0139724766c7c59",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
