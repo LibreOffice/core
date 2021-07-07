@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9fef035d_fbe363cf",
+        "filename": "sal/rtl/math.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1003291
+      },
+      "writtenOn": "2021-07-07T13:16:29Z",
+      "side": 1,
+      "message": "Sorry. I\u0027ve been reviewing it, but I can\u0027t understand why this block can be removed.",
+      "parentUuid": "792a3c4a_7b581d62",
+      "range": {
+        "startLine": 230,
+        "startChar": 8,
+        "endLine": 236,
+        "endChar": 9
+      },
+      "revId": "4213933042eaa869c43dbf91cc7d54fa2c9203a0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7556e9ce_fff28a59",
         "filename": "sal/rtl/math.cxx",
         "patchSetId": 3
