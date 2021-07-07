@@ -33,6 +33,24 @@
       "revId": "8e5a7e1b86559fe6e1d3b61e101b3b6f808c3c3a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "239662f0_5919a200",
+        "filename": "sc/source/ui/dataprovider/datatransformation.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1002925
+      },
+      "writtenOn": "2021-07-07T19:56:45Z",
+      "side": 1,
+      "message": "Hey Markus .\nThis fix basically solves the following issue. Please refer to images below from my proposal.\n\nhttps://imgur.com/RWCvLkT conatins initial data imported .\n\nhttps://imgur.com/UWzdHcP conatins data after transformation .\n\nAnd yess the columns are sorted so decreasing index of all the next input columns does the job. Please provide your opinion .",
+      "parentUuid": "9ef5b3e3_3e3a45ad",
+      "revId": "8e5a7e1b86559fe6e1d3b61e101b3b6f808c3c3a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
