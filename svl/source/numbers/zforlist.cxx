@@ -569,7 +569,8 @@ bool SvNumberFormatter::PutEntry(OUString& rString,
                                  sal_Int32& nCheckPos,
                                  SvNumFormatType& nType,
                                  sal_uInt32& nKey,      // format key
-                                 LanguageType eLnge)
+                                 LanguageType eLnge,
+                                 bool bReplaceBooleanEquivalent)
 {
     ::osl::MutexGuard aGuard( GetInstanceMutex() );
     nKey = 0;
@@ -589,7 +590,8 @@ bool SvNumberFormatter::PutEntry(OUString& rString,
                                                                pFormatScanner.get(),
                                                                pStringScanner.get(),
                                                                nCheckPos,
-                                                               eLge));
+                                                               eLge,
+                                                               bReplaceBooleanEquivalent));
 
     if (nCheckPos == 0)                         // Format ok
     {                                           // Type comparison:
@@ -637,7 +639,8 @@ bool SvNumberFormatter::PutandConvertEntry(OUString& rString,
                                            sal_uInt32& nKey,
                                            LanguageType eLnge,
                                            LanguageType eNewLnge,
-                                           bool bConvertDateOrder )
+                                           bool bConvertDateOrder,
+                                           bool bReplaceBooleanEquivalent )
 {
     ::osl::MutexGuard aGuard( GetInstanceMutex() );
     bool bRes;
@@ -646,8 +649,43 @@ bool SvNumberFormatter::PutandConvertEntry(OUString& rString,
         eNewLnge = IniLnge;
     }
     pFormatScanner->SetConvertMode(eLnge, eNewLnge, false, bConvertDateOrder);
-    bRes = PutEntry(rString, nCheckPos, nType, nKey, eLnge);
+    bRes = PutEntry(rString, nCheckPos, nType, nKey, eLnge, bReplaceBooleanEquivalent);
     pFormatScanner->SetConvertMode(false);
+
+    if (bReplaceBooleanEquivalent && nType == SvNumFormatType::DEFINED && nCheckPos == 0
+            && nKey != NUMBERFORMAT_ENTRY_NOT_FOUND)
+    {
+        // The boolean string formats are always "user defined" without any
+        // other type.
+        const SvNumberformat* pEntry = GetFormatEntry(nKey);
+        if (pEntry && pEntry->GetType() == SvNumFormatType::DEFINED)
+        {
+            // Replace boolean string format with Boolean in target locale, in
+            // case the source strings are the target locale's.
+            const OUString aSaveString = rString;
+            ChangeIntl(eNewLnge);
+            if (pFormatScanner->ReplaceBooleanEquivalent( rString))
+            {
+                const sal_Int32 nSaveCheckPos = nCheckPos;
+                const SvNumFormatType nSaveType = nType;
+                const sal_uInt32 nSaveKey = nKey;
+                const bool bTargetRes = PutEntry(rString, nCheckPos, nType, nKey, eNewLnge, false);
+                if (nCheckPos == 0 && nType == SvNumFormatType::LOGICAL && nKey != NUMBERFORMAT_ENTRY_NOT_FOUND)
+                {
+                    bRes = bTargetRes;
+                }
+                else
+                {
+                    SAL_WARN("svl.numbers", "SvNumberFormatter::PutandConvertEntry: can't scan boolean replacement");
+                    // Live with the source boolean string format.
+                    rString = aSaveString;
+                    nCheckPos = nSaveCheckPos;
+                    nType = nSaveType;
+                    nKey = nSaveKey;
+                }
+            }
+        }
+    }
     return bRes;
 }
 
@@ -838,6 +876,20 @@ void SvNumberFormatter::FillKeywordTableForExcel( NfKeywordTable& rKeywords )
 }
 
 
+static OUString lcl_buildBooleanStringFormat( SvNumberformat* pEntry )
+{
+    // Build Boolean number format, which needs non-zero and zero subformat
+    // codes with TRUE and FALSE strings.
+    const Color* pColor = nullptr;
+    OUString aFormatStr, aTemp;
+    pEntry->GetOutputString( 1.0, aTemp, &pColor );
+    aFormatStr += "\"" + aTemp + "\";\"" + aTemp + "\";\"";
+    pEntry->GetOutputString( 0.0, aTemp, &pColor );
+    aFormatStr += aTemp + "\"";
+    return aFormatStr;
+}
+
+
 OUString SvNumberFormatter::GetFormatStringForExcel( sal_uInt32 nKey, const NfKeywordTable& rKeywords,
         SvNumberFormatter& rTempFormatter ) const
 {
@@ -847,14 +899,13 @@ OUString SvNumberFormatter::GetFormatStringForExcel( sal_uInt32 nKey, const NfKe
     {
         if (pEntry->GetType() == SvNumFormatType::LOGICAL)
         {
-            // Build Boolean number format, which needs non-zero and zero
-            // subformat codes with TRUE and FALSE strings.
-            const Color* pColor = nullptr;
-            OUString aTemp;
-            const_cast< SvNumberformat* >( pEntry )->GetOutputString( 1.0, aTemp, &pColor );
-            aFormatStr += "\"" + aTemp + "\";\"" + aTemp + "\";\"";
-            const_cast< SvNumberformat* >( pEntry )->GetOutputString( 0.0, aTemp, &pColor );
-            aFormatStr += aTemp + "\"";
+            // Build a source locale dependent string boolean. This is
+            // expected when loading the document in the same locale or if
+            // several locales are used, but not for other system/default
+            // locales. You can't have both. We could force to English for all
+            // locales like below, but Excel would display English strings then
+            // even for the system locale matching this locale. YMMV.
+            aFormatStr = lcl_buildBooleanStringFormat( const_cast< SvNumberformat* >(pEntry));
         }
         else
         {
@@ -871,7 +922,10 @@ OUString SvNumberFormatter::GetFormatStringForExcel( sal_uInt32 nKey, const NfKe
                 SvNumFormatType nType = SvNumFormatType::DEFINED;
                 sal_uInt32 nTempKey;
                 OUString aTemp( pEntry->GetFormatstring());
-                rTempFormatter.PutandConvertEntry( aTemp, nCheckPos, nType, nTempKey, nLang, LANGUAGE_ENGLISH_US, false);
+                /* TODO: do we want bReplaceBooleanEquivalent=true in any case
+                 * to write it as English string boolean? */
+                rTempFormatter.PutandConvertEntry( aTemp, nCheckPos, nType, nTempKey, nLang, LANGUAGE_ENGLISH_US,
+                        false /*bConvertDateOrder*/, false /*bReplaceBooleanEquivalent*/);
                 SAL_WARN_IF( nCheckPos != 0, "svl.numbers",
                         "SvNumberFormatter::GetFormatStringForExcel - format code not convertible");
                 if (nTempKey != NUMBERFORMAT_ENTRY_NOT_FOUND)
@@ -880,12 +934,24 @@ OUString SvNumberFormatter::GetFormatStringForExcel( sal_uInt32 nKey, const NfKe
 
             if (pEntry)
             {
-                // GetLocaleData() returns the current locale's data, so switch
-                // before (which doesn't do anything if it was the same locale
-                // already).
-                rTempFormatter.ChangeIntl( LANGUAGE_ENGLISH_US);
-                aFormatStr = pEntry->GetMappedFormatstring( rKeywords, *rTempFormatter.GetLocaleData(), nLang,
-                        bSystemLanguage);
+                if (pEntry->GetType() == SvNumFormatType::LOGICAL)
+                {
+                    // This would be reached if bReplaceBooleanEquivalent was
+                    // true and the source format is a string boolean like
+                    // >"VRAI";"VRAI";"FAUX"< recognized as real boolean and
+                    // properly converted. Then written as
+                    // >"TRUE";"TRUE";"FALSE"<
+                    aFormatStr = lcl_buildBooleanStringFormat( const_cast< SvNumberformat* >(pEntry));
+                }
+                else
+                {
+                    // GetLocaleData() returns the current locale's data, so switch
+                    // before (which doesn't do anything if it was the same locale
+                    // already).
+                    rTempFormatter.ChangeIntl( LANGUAGE_ENGLISH_US);
+                    aFormatStr = pEntry->GetMappedFormatstring( rKeywords, *rTempFormatter.GetLocaleData(), nLang,
+                            bSystemLanguage);
+                }
             }
         }
     }

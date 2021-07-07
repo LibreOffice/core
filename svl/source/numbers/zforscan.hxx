@@ -146,7 +146,7 @@ public:
         }
 
     /// Replace Boolean equivalent format codes with proper Boolean format.
-    void ReplaceBooleanEquivalent( OUString& rString );
+    bool ReplaceBooleanEquivalent( OUString& rString );
 
     void SetConvertMode(LanguageType eTmpLge, LanguageType eNewLge,
             bool bSystemToSystem, bool bConvertDateOrder)
