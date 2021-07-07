@@ -722,12 +722,14 @@ SvNumberformat::SvNumberformat(OUString& rString,
                                ImpSvNumberformatScan* pSc,
                                ImpSvNumberInputScan* pISc,
                                sal_Int32& nCheckPos,
-                               LanguageType& eLan)
+                               LanguageType& eLan,
+                               bool bReplaceBooleanEquivalent)
         : rScan(*pSc)
         , bAdditionalBuiltin( false )
         , bStarFlag( false )
 {
-    rScan.ReplaceBooleanEquivalent( rString);
+    if (bReplaceBooleanEquivalent)
+        rScan.ReplaceBooleanEquivalent( rString);
 
     OUStringBuffer sBuff(rString);
 

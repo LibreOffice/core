@@ -71,13 +71,13 @@ enum NfKeywordIndex
     NF_KEY_WW,          // week of year, as of version 8, 19.06.98
     NF_KEY_THAI_T,      // Thai T modifier, speciality of Thai Excel, only used with Thai locale and converted to [NatNum1]
     NF_KEY_CCC,         // currency bank symbol (old version)
+    NF_KEY_BOOLEAN,     // boolean
     NF_KEY_GENERAL,     // General / Standard
     NF_KEY_LASTKEYWORD = NF_KEY_GENERAL,
 
     // Reserved words translated and color names follow:
     NF_KEY_TRUE,        // boolean true
     NF_KEY_FALSE,       // boolean false
-    NF_KEY_BOOLEAN,     // boolean
     NF_KEY_COLOR,       // color
     NF_KEY_FIRSTCOLOR,
     NF_KEY_BLACK = NF_KEY_FIRSTCOLOR,   // you do know colors, don't you?
