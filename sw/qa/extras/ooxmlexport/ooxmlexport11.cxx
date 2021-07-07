@@ -1415,6 +1415,14 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf128913, "tdf128913.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:del/w:r/w:drawing/wp:inline/a:graphic");
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf142700, "tdf142700.docx")
+{
+    xmlDocUniquePtr pXmlDoc = parseExport();
+    // w:ins and w:del are imported correctly, if they contain only images anchored to character
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:ins/w:r/w:drawing/wp:anchor/a:graphic");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:del/w:r/w:drawing/wp:anchor/a:graphic");
+}
+
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf142387, "tdf142387.docx")
 {
     xmlDocUniquePtr pXmlDoc = parseExport();

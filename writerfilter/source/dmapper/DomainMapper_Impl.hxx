@@ -548,6 +548,11 @@ private:
     bool                            m_bIsParaMarkerChange;
     // redline data of the terminating run, if it's a moveFrom deletion
     RedlineParamsPtr                m_pParaMarkerRedlineMoveFrom;
+    // This is for removing workaround (double ZWSPs around the anchoring point) for track
+    // changed images anchored *to* character, if it's followed by a redline text run immediately.
+    // (In that case, the image is part of a tracked text range, no need for the dummy
+    // text ZWSPs to keep the change tracking of the image in Writer.)
+    bool                            m_bRedlineImageInPreviousRun;
 
     /// If the current paragraph has any runs.
     bool                            m_bParaChanged;
