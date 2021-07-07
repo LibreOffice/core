@@ -302,7 +302,9 @@ class GtkSalFrame final : public SalFrame
     static gboolean     signalFocus( GtkWidget*, GdkEventFocus*, gpointer );
 #endif
 #if !GTK_CHECK_VERSION(4, 0, 0)
-    static void         signalSetFocus( GtkWindow* pWindow, GtkWidget* pWidget, gpointer frame );
+    static void         signalSetFocus(GtkWindow* pWindow, GtkWidget* pWidget, gpointer frame);
+#else
+    static void         signalSetFocus(GtkWindow* pWindow, GParamSpec* pSpec, gpointer frame);
 #endif
     void WindowMap();
     void WindowUnmap();
