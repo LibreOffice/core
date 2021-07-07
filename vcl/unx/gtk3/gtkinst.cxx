@@ -9370,7 +9370,7 @@ private:
         }
     }
 
-    bool remove_id(GMenuModel* pMenuModel, const OString& rId)
+    std::pair<GMenuModel*, int> find_id(GMenuModel* pMenuModel, const OString& rId)
     {
         for (int i = 0, nCount = g_menu_model_get_n_items(pMenuModel); i < nCount; ++i)
         {
@@ -9383,23 +9383,32 @@ private:
             }
 
             if (sTarget == rId)
-            {
-                g_menu_remove(G_MENU(pMenuModel), i);
-                return true;
-            }
+                return std::make_pair(pMenuModel, i);
 
             if (GMenuModel* pSectionModel = g_menu_model_get_item_link(pMenuModel, i, G_MENU_LINK_SECTION))
             {
-                if (remove_id(pSectionModel, rId))
-                    return true;
+                std::pair<GMenuModel*, int> aRet = find_id(pSectionModel, rId);
+                if (aRet.first)
+                    return aRet;
             }
             if (GMenuModel* pSubMenuModel = g_menu_model_get_item_link(pMenuModel, i, G_MENU_LINK_SUBMENU))
             {
-                if (remove_id(pSubMenuModel, rId))
-                    return true;
+                std::pair<GMenuModel*, int> aRet = find_id(pSubMenuModel, rId);
+                if (aRet.first)
+                    return aRet;
             }
         }
-        return false;
+
+        return std::make_pair(nullptr, -1);
+    }
+
+    bool remove_id(GMenuModel* pMenuModel, const OString& rId)
+    {
+        std::pair<GMenuModel*, int> aRes = find_id(pMenuModel, rId);
+        if (!aRes.first)
+            return false;
+        g_menu_remove(G_MENU(aRes.first), aRes.second);
+        return true;
     }
 
 #endif
