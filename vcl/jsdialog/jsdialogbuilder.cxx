@@ -1352,6 +1352,7 @@ JSToolbar::JSToolbar(JSDialogSender* pSender, ::ToolBox* pToolbox, SalInstanceBu
 
 void JSToolbar::set_menu_item_active(const OString& rIdent, bool bActive)
 {
+    bool bWasActive = get_menu_item_active(rIdent);
     SalInstanceToolbar::set_menu_item_active(rIdent, bActive);
 
     ToolBoxItemId nItemId = m_xToolBox->GetItemId(OUString::fromUtf8(rIdent));
@@ -1370,7 +1371,7 @@ void JSToolbar::set_menu_item_active(const OString& rIdent, bool bActive)
             if (bActive)
                 sendPopup(pPopupRoot, m_xToolBox->get_id(),
                           OStringToOUString(rIdent, RTL_TEXTENCODING_ASCII_US));
-            else
+            else if (bWasActive)
                 sendClosePopup(pPopupRoot->GetLOKWindowId());
         }
     }
