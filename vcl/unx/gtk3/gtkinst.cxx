@@ -4916,16 +4916,6 @@ public:
         return OUString(pText, pText ? strlen(pText) : 0, RTL_TEXTENCODING_UTF8);
     }
 
-    void set_item_help_id(const OString& rIdent, const OString& rHelpId)
-    {
-        set_help_id(GTK_WIDGET(m_aMap[rIdent]), rHelpId);
-    }
-
-    OString get_item_help_id(const OString& rIdent) const
-    {
-        return get_help_id(GTK_WIDGET(m_aMap.find(rIdent)->second));
-    }
-
     void set_item_visible(const OString& rIdent, bool bShow)
     {
         GtkWidget* pWidget = GTK_WIDGET(m_aMap[rIdent]);
@@ -9809,27 +9799,6 @@ public:
 #endif
     }
 
-    virtual void set_item_help_id(const OString& rIdent, const OString& rHelpId) override
-    {
-#if !GTK_CHECK_VERSION(4, 0, 0)
-        MenuHelper::set_item_help_id(rIdent, rHelpId);
-#else
-        (void)rIdent; (void)rHelpId;
-        std::abort();
-#endif
-    }
-
-    virtual OString get_item_help_id(const OString& rIdent) const override
-    {
-#if !GTK_CHECK_VERSION(4, 0, 0)
-        return MenuHelper::get_item_help_id(rIdent);
-#else
-        (void)rIdent;
-        std::abort();
-        return OString();
-#endif
-    }
-
 #if GTK_CHECK_VERSION(4, 0, 0)
     static void action_activated(GSimpleAction*, GVariant* pParameter, gpointer widget)
     {
@@ -10206,16 +10175,6 @@ public:
     virtual void set_item_visible(const OString& rIdent, bool bVisible) override
     {
         MenuHelper::set_item_visible(rIdent, bVisible);
-    }
-
-    virtual void set_item_help_id(const OString& rIdent, const OString& rHelpId) override
-    {
-        MenuHelper::set_item_help_id(rIdent, rHelpId);
-    }
-
-    virtual OString get_item_help_id(const OString& rIdent) const override
-    {
-        return MenuHelper::get_item_help_id(rIdent);
     }
 
     virtual void signal_activate(GtkMenuItem* pItem) override

@@ -2765,18 +2765,6 @@ public:
         pMenu->ShowItem(pMenu->GetItemId(rIdent), bShow);
     }
 
-    virtual void set_item_help_id(const OString& rIdent, const OString& rHelpId) override
-    {
-        PopupMenu* pMenu = m_xMenuButton->GetPopupMenu();
-        pMenu->SetHelpId(pMenu->GetItemId(rIdent), rHelpId);
-    }
-
-    virtual OString get_item_help_id(const OString& rIdent) const override
-    {
-        PopupMenu* pMenu = m_xMenuButton->GetPopupMenu();
-        return pMenu->GetHelpId(pMenu->GetItemId(rIdent));
-    }
-
     virtual void set_popover(weld::Widget* pPopover) override
     {
         SalInstanceWidget* pPopoverWidget = dynamic_cast<SalInstanceWidget*>(pPopover);
