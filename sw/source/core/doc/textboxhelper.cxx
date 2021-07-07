@@ -921,8 +921,7 @@ void SwTextBoxHelper::syncFlyFrameAttr(SwFrameFormat& rShape, SfxItemSet const& 
                 syncProperty(&rShape, RES_ANCHOR, MID_ANCHOR_ANCHORTYPE, uno::Any(aNewAnchorType));
                 if (bInlineAnchored)
                     return;
-                auto& rOrient = static_cast<const SwFormatVertOrient&>(*pItem);
-                SwFormatVertOrient aOrient(rOrient);
+                SwFormatVertOrient aOrient(pItem->StaticWhichCast(RES_VERT_ORIENT));
 
                 tools::Rectangle aRect = getTextRectangle(&rShape, /*bAbsolute=*/false);
                 if (!aRect.IsEmpty())
@@ -948,10 +947,9 @@ void SwTextBoxHelper::syncFlyFrameAttr(SwFrameFormat& rShape, SfxItemSet const& 
                 const text::TextContentAnchorType aNewAnchorType
                     = mapAnchorType(rShape.GetAnchor().GetAnchorId());
                 syncProperty(&rShape, RES_ANCHOR, MID_ANCHOR_ANCHORTYPE, uno::Any(aNewAnchorType));
-                auto& rOrient = static_cast<const SwFormatHoriOrient&>(*pItem);
                 if (bInlineAnchored)
                     return;
-                SwFormatHoriOrient aOrient(rOrient);
+                SwFormatHoriOrient aOrient(pItem->StaticWhichCast(RES_HORI_ORIENT));
 
                 tools::Rectangle aRect = getTextRectangle(&rShape, /*bAbsolute=*/false);
                 if (!aRect.IsEmpty())
@@ -993,8 +991,7 @@ void SwTextBoxHelper::syncFlyFrameAttr(SwFrameFormat& rShape, SfxItemSet const& 
             break;
             case RES_ANCHOR:
             {
-                auto& rAnchor = static_cast<const SwFormatAnchor&>(*pItem);
-                if (rAnchor == rShape.GetAnchor())
+                if (pItem->StaticWhichCast(RES_ANCHOR) == rShape.GetAnchor())
                 // the anchor have to be synced
                 {
                     const text::TextContentAnchorType aNewAnchorType
