@@ -22,6 +22,30 @@
       "revId": "22b144370489f595a779b702f8ade4f4afb2b1e0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e4e26cd5_7a6820ec",
+        "filename": "svx/source/tbxctrls/tbcontrl.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1125,
+      "author": {
+        "id": 1001620
+      },
+      "writtenOn": "2021-07-07T22:49:47Z",
+      "side": 1,
+      "message": "Bounding rectangle of text without decenders or of text with small letters only causes different text scalings with same attributes. \"Text Body\" contains capital letters and descenders as will. \"Ag\" would be equivalent. As scope of change has been reduced, this part of change is no longer important currently.",
+      "parentUuid": "39717546_c4ede4cf",
+      "range": {
+        "startLine": 1125,
+        "startChar": 47,
+        "endLine": 1125,
+        "endChar": 58
+      },
+      "revId": "22b144370489f595a779b702f8ade4f4afb2b1e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
