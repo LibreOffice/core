@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "5d630c74_85b75e14",
+        "filename": "sal/rtl/math.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-07T13:33:17Z",
+      "side": 1,
+      "message": "Ah, yes, this guards against pResult \u003d\u003d nullptr, which is not valid for rtl_(u)Stringbuffer_insert*.",
+      "parentUuid": "9fef035d_fbe363cf",
+      "range": {
+        "startLine": 230,
+        "startChar": 8,
+        "endLine": 236,
+        "endChar": 9
+      },
+      "revId": "4213933042eaa869c43dbf91cc7d54fa2c9203a0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7556e9ce_fff28a59",
         "filename": "sal/rtl/math.cxx",
         "patchSetId": 3
