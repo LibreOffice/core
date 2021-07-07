@@ -9664,7 +9664,10 @@ public:
                         GMenuItem* pMenuItem = g_menu_item_new_from_model(pSectionModel, i);
                         g_menu_prepend_item(pNewSection, pMenuItem);
                         g_menu_remove(G_MENU(pSectionModel), i);
+                        g_object_unref(pMenuItem);
                     }
+                    g_object_unref(pSectionItem);
+                    g_object_unref(pNewSection);
                 }
             }
         }
@@ -9734,8 +9737,22 @@ public:
         MenuHelper::set_item_label(rIdent, rLabel);
 
 #else
-        (void)rIdent; (void)rLabel;
-        std::abort();
+        GtkPopover* pPopover = gtk_menu_button_get_popover(m_pMenuButton);
+        if (GMenuModel* pMenuModel = GTK_IS_POPOVER_MENU(pPopover) ?
+                                     gtk_popover_menu_get_menu_model(GTK_POPOVER_MENU(pPopover)) :
+                                     nullptr)
+        {
+            std::pair<GMenuModel*, int> aRes = find_id(pMenuModel, rIdent);
+            if (!aRes.first)
+                return;
+            // clone the original item, remove the original, insert the replacement at
+            // the original location
+            GMenuItem* pMenuItem = g_menu_item_new_from_model(aRes.first, aRes.second);
+            g_menu_remove(G_MENU(aRes.first), aRes.second);
+            g_menu_item_set_label(pMenuItem, MapToGtkAccelerator(rLabel).getStr());
+            g_menu_insert_item(G_MENU(aRes.first), aRes.second, pMenuItem);
+            g_object_unref(pMenuItem);
+        }
 #endif
     }
 
