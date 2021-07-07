@@ -204,10 +204,10 @@ class SdrAngleItem;
 
 // CAUTION! Range <24 .. 43> used by EditEngine (!)
 
-#define SID_ATTR_POSTIT_AUTHOR                          TypedWhichId<SvxPostItAuthorItem>( SID_SVX_START + 44 )
-#define SID_ATTR_POSTIT_DATE                            TypedWhichId<SvxPostItDateItem>( SID_SVX_START + 45 )
-#define SID_ATTR_POSTIT_TEXT                            TypedWhichId<SvxPostItTextItem>( SID_SVX_START + 46 )
-#define SID_ATTR_POSTIT_ID                              TypedWhichId<SvxPostItIdItem>( SID_SVX_START + 47 )
+#define SID_ATTR_POSTIT_AUTHOR                          TypedWhichId<SvxPostItAuthorItem>( SID_SVX_START + 1201 )
+#define SID_ATTR_POSTIT_DATE                            TypedWhichId<SvxPostItDateItem>( SID_SVX_START + 1202 )
+#define SID_ATTR_POSTIT_TEXT                            TypedWhichId<SvxPostItTextItem>( SID_SVX_START + 1203 )
+#define SID_ATTR_POSTIT_ID                              TypedWhichId<SvxPostItIdItem>( SID_SVX_START + 1204 )
 // free
 
 // CAUTION! Range <48 .. 49> used by EditEngine (!)
@@ -230,8 +230,8 @@ class SdrAngleItem;
 
 // CAUTION! Range <64 .. 67> used by EditEngine (!)
 
-#define SID_ATTR_POSTIT_POSITION_X                      TypedWhichId<SfxInt32Item>( SID_SVX_START + 68 )
-#define SID_ATTR_POSTIT_POSITION_Y                      TypedWhichId<SfxInt32Item>( SID_SVX_START + 69 )
+#define SID_ATTR_POSTIT_POSITION_X                      TypedWhichId<SfxInt32Item>( SID_SVX_START + 1205 )
+#define SID_ATTR_POSTIT_POSITION_Y                      TypedWhichId<SfxInt32Item>( SID_SVX_START + 1206 )
 
 #define SID_RULER_CHANGE_STATE                          ( SID_SVX_START + 78 )
 #define SID_RULER_NULL_OFFSET                           TypedWhichId<SfxPointItem>( SID_SVX_START + 79 )
@@ -883,12 +883,12 @@ class SdrAngleItem;
 #define SID_OPTIONS_DATABASES                           ( SID_SVX_START + 1060 )
 #define SID_OPEN_SMARTTAGMENU                           ( SID_SVX_START + 1061 )
 // (SID_SVX_START + 1062) is in include/sfx2/sfxsids.hrc
-#define SID_INSERT_TREECONTROL                          ( SID_SVX_START + 1063 )
-#define SID_ATTR_VIEWLAYOUT                             ( SID_SVX_START + 1064 )
-#define SID_ATTR_ZOOMSLIDER                             ( SID_SVX_START + 1065 )
-#define SID_LANGUAGE_STATUS                             ( SID_SVX_START + 1067 )
-#define SID_CHAR_DLG_FOR_PARAGRAPH                      ( SID_SVX_START + 1068 )
-#define SID_SET_DOCUMENT_LANGUAGE                       ( SID_SVX_START + 1069 )
+#define SID_INSERT_TREECONTROL                          ( SID_SVX_START + 1207 )
+#define SID_ATTR_VIEWLAYOUT                             ( SID_SVX_START + 1208 )
+#define SID_ATTR_ZOOMSLIDER                             ( SID_SVX_START + 1209 )
+#define SID_LANGUAGE_STATUS                             ( SID_SVX_START + 1210 )
+#define SID_CHAR_DLG_FOR_PARAGRAPH                      ( SID_SVX_START + 1211 )
+#define SID_SET_DOCUMENT_LANGUAGE                       ( SID_SVX_START + 1212 )
 
 #define SID_TABLE_MERGE_CELLS                           ( SID_SVX_START + 1070 )
 #define SID_TABLE_SPLIT_CELLS                           ( SID_SVX_START + 1071 )
