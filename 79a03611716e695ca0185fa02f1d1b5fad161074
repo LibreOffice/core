@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5bdf4113_51068b9d",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1504,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-07-07T07:12:19Z",
+      "side": 1,
+      "message": "NOTE: pEntry cannot be null, since pStyleSheetProperties is already known to be not null, so that check could safely be removed.",
+      "range": {
+        "startLine": 1504,
+        "startChar": 32,
+        "endLine": 1504,
+        "endChar": 38
+      },
+      "revId": "79a03611716e695ca0185fa02f1d1b5fad161074",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
