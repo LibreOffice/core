@@ -183,7 +183,7 @@ rtl::Reference<MetaAction> SvmReader::MetaActionHandler(ImplMetaReadData* pData)
             return PieHandler();
             break;
         case MetaActionType::CHORD:
-            pAction = new MetaChordAction;
+            return ChordHandler();
             break;
         case MetaActionType::POLYLINE:
             pAction = new MetaPolyLineAction;
@@ -503,6 +503,27 @@ rtl::Reference<MetaAction> SvmReader::ArcHandler()
 rtl::Reference<MetaAction> SvmReader::PieHandler()
 {
     auto pAction = new MetaPieAction();
+
+    VersionCompatRead aCompat(mrStream);
+    TypeSerializer aSerializer(mrStream);
+
+    tools::Rectangle aRectangle;
+    aSerializer.readRectangle(aRectangle);
+    Point aPoint;
+    aSerializer.readPoint(aPoint);
+    Point aEndPoint;
+    aSerializer.readPoint(aEndPoint);
+
+    pAction->SetRect(aRectangle);
+    pAction->SetStartPoint(aPoint);
+    pAction->SetEndPoint(aEndPoint);
+
+    return pAction;
+}
+
+rtl::Reference<MetaAction> SvmReader::ChordHandler()
+{
+    auto pAction = new MetaChordAction();
 
     VersionCompatRead aCompat(mrStream);
     TypeSerializer aSerializer(mrStream);
