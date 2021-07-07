@@ -219,12 +219,6 @@ IMPL_LINK_NOARG(SwOutlineTabDialog, FormHdl, weld::Toggleable&, void)
             continue;
         m_xMenuButton->set_item_label("form" + OString::number(i + 1), pRules->GetName());
     }
-
-    OString sHelpId(m_xMenuButton->get_item_help_id("form1"));
-    for (sal_Int32 i = 2; i <= 9; ++i)
-    {
-        m_xMenuButton->set_item_help_id("form" + OString::number(i), sHelpId);
-    }
 }
 
 IMPL_LINK(SwOutlineTabDialog, MenuSelectHdl, const OString&, rIdent, void)
