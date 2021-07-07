@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "20be4439_7b029ead",
+        "filename": "sc/source/ui/dataprovider/datatransformation.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2021-07-07T08:04:36Z",
+      "side": 1,
+      "message": "Should be nIncrementIndex to follow the style of the surrounding code.",
+      "revId": "8e5a7e1b86559fe6e1d3b61e101b3b6f808c3c3a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9ef5b3e3_3e3a45ad",
+        "filename": "sc/source/ui/dataprovider/datatransformation.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2021-07-07T08:04:36Z",
+      "side": 1,
+      "message": "I think both implementations are wrong. I think either case works as long as the maColumns list is sorted (ascending or descending).",
+      "revId": "8e5a7e1b86559fe6e1d3b61e101b3b6f808c3c3a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
