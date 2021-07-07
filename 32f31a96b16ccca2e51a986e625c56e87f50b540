@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "35c5db76_36466e94",
+        "filename": "sc/qa/uitest/calc_tests9/tdf95554.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-07-07T12:05:48Z",
+      "side": 1,
+      "message": "no need to add a file. you can create the issue from scratch and add the data to the cell",
+      "revId": "32f31a96b16ccca2e51a986e625c56e87f50b540",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "98be0254_e0df4c00",
+        "filename": "sc/qa/uitest/calc_tests9/tdf95554.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-07-07T12:05:48Z",
+      "side": 1,
+      "message": "you are selecting every cell individually. use a Range instead.",
+      "revId": "32f31a96b16ccca2e51a986e625c56e87f50b540",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "822ceb21_e8224152",
+        "filename": "sc/qa/uitest/calc_tests9/tdf95554.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-07-07T12:05:48Z",
+      "side": 1,
+      "message": "Use a UNO command instead",
+      "revId": "32f31a96b16ccca2e51a986e625c56e87f50b540",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
