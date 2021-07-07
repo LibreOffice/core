@@ -16,6 +16,24 @@
       "revId": "3901cf9741310b62078c0ef7d5f1b826f13f2f84",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5dedd0be_ceba8239",
+        "filename": "include/svx/svxids.hrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 439,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-07-07T09:36:34Z",
+      "side": 1,
+      "message": "There is no separate range for each of these 3 files. They are interleaved.\ninclude/sfx2/sfxsids.hrc\ninclude/svx/svxids.hrc\ninclude/editeng/editids.hrc\n\n    git grep -n \"SID_SVX_START[ ]*+\" *.hrc",
+      "parentUuid": "fd60ebfc_8487c3d6",
+      "revId": "3901cf9741310b62078c0ef7d5f1b826f13f2f84",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
