@@ -56,6 +56,7 @@ static rtl::Reference<VCLXWindow> CreateXWindow( vcl::Window const * pWindow )
         case WindowType::METRICBOX:
         case WindowType::COMBOBOX:       return new VCLXComboBox;
         case WindowType::SPINFIELD:
+        case WindowType::FORMATTEDFIELD:
         case WindowType::CURRENCYFIELD:  return new VCLXNumericField;
         case WindowType::DATEFIELD:      return new VCLXDateField;
         case WindowType::MULTILINEEDIT:
