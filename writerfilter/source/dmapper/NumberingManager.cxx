@@ -488,6 +488,8 @@ sal_uInt16 ListDef::GetChapterNumberingWeight() const
     for (sal_Int8 nLevel = 0; nLevel < nAbstLevels; ++nLevel)
     {
         const ListLevel::Pointer pAbsLevel = m_pAbstractDef->GetLevel(nLevel);
+        if (!pAbsLevel)
+            continue;
         const StyleSheetEntryPtr pParaStyle = pAbsLevel->GetParaStyle();
         if (!pParaStyle)
             continue;
