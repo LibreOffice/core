@@ -5282,6 +5282,15 @@ public:
             gtk_widget_destroy(GTK_WIDGET(pMenuItem));
         }
         m_aMap.clear();
+#else
+        if (GMenuModel* pMenuModel = gtk_popover_menu_get_menu_model(m_pMenu))
+        {
+            GMenu* pMenu = G_MENU(pMenuModel);
+            g_menu_remove_all(pMenu);
+            g_menu_insert_section(pMenu, 0, nullptr, G_MENU_MODEL(g_menu_new()));
+            m_aHiddenIds.clear();
+            update_action_group_from_popover_model();
+        }
 #endif
     }
 
@@ -9805,21 +9814,7 @@ public:
 
     virtual void clear() override
     {
-#if GTK_CHECK_VERSION(4, 0, 0)
-        GtkPopover* pPopover = gtk_menu_button_get_popover(m_pMenuButton);
-        if (GMenuModel* pMenuModel = GTK_IS_POPOVER_MENU(pPopover) ?
-                                     gtk_popover_menu_get_menu_model(GTK_POPOVER_MENU(pPopover)) :
-                                     nullptr)
-        {
-            GMenu* pMenu = G_MENU(pMenuModel);
-            g_menu_remove_all(pMenu);
-            g_menu_insert_section(pMenu, 0, nullptr, G_MENU_MODEL(g_menu_new()));
-            m_aHiddenIds.clear();
-            update_action_group_from_popover_model();
-        }
-#else
-        clear_items();
-#endif
+        MenuHelper::clear_items();
     }
 
     virtual void set_item_active(const OString& rIdent, bool bActive) override
@@ -10183,7 +10178,7 @@ public:
 
     virtual void clear() override
     {
-        clear_items();
+        MenuHelper::clear_items();
     }
 
     virtual void set_item_active(const OString& rIdent, bool bActive) override
@@ -10442,8 +10437,8 @@ public:
     {
 #if !GTK_CHECK_VERSION(4, 0, 0)
         clear_extras();
-        clear_items();
 #endif
+        MenuHelper::clear_items();
     }
 
     virtual void insert(int pos, const OUString& rId, const OUString& rStr,
