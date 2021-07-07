@@ -28,8 +28,6 @@
 
 namespace jfw_plugin
 {
-// Define OSL_DEBUG_LEVEL >= 2 to run a test when this lib is loaded
-
 /* SunVersion is used to compare java versions based on a string, as taken
    from the registry. The strings look like "1.3", "1.3.1", "1.3.1_02" etc.
    Versions such as "1.4.1_01a" are allowed although this is not specified.

@@ -6654,6 +6654,7 @@ jvmfwk/plugins/sunmajor/pluginlib/util.hxx
 jvmfwk/plugins/sunmajor/pluginlib/vendorbase.cxx
 jvmfwk/plugins/sunmajor/pluginlib/vendorlist.cxx
 jvmfwk/plugins/sunmajor/pluginlib/vendorlist.hxx
+jvmfwk/qa/unit/sunversion.cxx
 jvmfwk/source/elements.cxx
 jvmfwk/source/framework.cxx
 jvmfwk/source/framework.hxx
