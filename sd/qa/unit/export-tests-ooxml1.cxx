@@ -61,6 +61,7 @@ using namespace css;
 class SdOOXMLExportTest1 : public SdModelTestBaseXML
 {
 public:
+    void testTdf142648();
     void testTdf47365();
     void testTdf125071();
     void testTdf54037();
@@ -122,6 +123,7 @@ public:
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest1);
 
+    CPPUNIT_TEST(testTdf142648);
     CPPUNIT_TEST(testTdf47365);
     CPPUNIT_TEST(testTdf125071);
     CPPUNIT_TEST(testTdf54037);
@@ -208,6 +210,27 @@ void checkFontAttributes( const SdrTextObj* pObj, ItemValue nVal, sal_uInt32 nId
     }
 }
 
+}
+
+void SdOOXMLExportTest1::testTdf142648()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL( m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tdf142648.pptx"), PPTX );
+    utl::TempFile tempFile;
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDPS(xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPages> xDrawPages(xDPS->getDrawPages(), uno::UNO_SET_THROW);
+    uno::Reference<drawing::XDrawPage> xDrawPage;
+    xDrawPages->getByIndex(0) >>= xDrawPage;
+    uno::Reference<container::XNamed> xNamed(xDrawPage, uno::UNO_QUERY_THROW);
+    xNamed->setName("#Slide 1");
+
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+    xDocShRef->DoClose();
+
+    xmlDocUniquePtr pRelsDoc = parseExport(tempFile, "ppt/slides/_rels/slide2.xml.rels");
+
+    assertXPath(pRelsDoc, "/rels:Relationships/rels:Relationship[@Id='rId1']", "Target",
+                "slide1.xml");
 }
 
 void SdOOXMLExportTest1::testTdf47365()
