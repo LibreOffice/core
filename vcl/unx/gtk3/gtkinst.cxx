@@ -4900,7 +4900,7 @@ public:
 #if GTK_CHECK_VERSION(4, 0, 0)
     /* LibreOffice likes to think of separators between menu entries, while gtk likes
        to think of sections of menus with separators drawn between sections. We always
-       arrange to have a section in a menua so toplevel menumodels comprise of
+       arrange to have a section in a menu so toplevel menumodels comprise of
        sections and we move entries between sections on pretending to insert separators */
     static std::pair<GMenuModel*, int> get_section_and_pos_for(GMenuModel* pMenuModel, int pos)
     {
@@ -4926,6 +4926,27 @@ public:
         }
 
         return std::make_pair(pSectionModel, nIndexWithinSection);
+    }
+
+    static int count_immediate_children(GMenuModel* pMenuModel)
+    {
+        int nSectionCount = g_menu_model_get_n_items(pMenuModel);
+        assert(nSectionCount);
+
+        int nExternalPos = 0;
+        for (int nSection = 0; nSection < nSectionCount; ++nSection)
+        {
+            GMenuModel* pSectionModel = g_menu_model_get_item_link(pMenuModel, nSection, G_MENU_LINK_SECTION);
+            assert(pSectionModel);
+            int nCount = g_menu_model_get_n_items(pSectionModel);
+            for (int nIndexWithinSection = 0; nIndexWithinSection < nCount; ++nIndexWithinSection)
+            {
+                ++nExternalPos;
+            }
+            ++nExternalPos;
+        }
+
+        return nExternalPos - 1;
     }
 #endif
 
@@ -5269,6 +5290,20 @@ public:
             }
         }
         return sTarget;
+#endif
+    }
+
+    int get_n_children() const
+    {
+#if !GTK_CHECK_VERSION(4, 0, 0)
+        GList* pChildren = gtk_container_get_children(GTK_CONTAINER(m_pMenu));
+        int nLen = g_list_length(pChildren);
+        g_list_free(pChildren);
+        return nLen;
+#else
+        if (GMenuModel* pMenuModel = gtk_popover_menu_get_menu_model(m_pMenu))
+            return count_immediate_children(pMenuModel);
+        return 0;
 #endif
     }
 
@@ -10519,14 +10554,7 @@ public:
 
     virtual int n_children() const override
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
-        GList* pChildren = gtk_container_get_children(GTK_CONTAINER(m_pMenu));
-        int nLen = g_list_length(pChildren);
-        g_list_free(pChildren);
-        return nLen;
-#else
-        return 0;
-#endif
+        return get_n_children();
     }
 
     void remove(const OString& rIdent) override
