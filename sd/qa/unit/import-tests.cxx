@@ -122,6 +122,7 @@ public:
     virtual void setUp() override;
 
     void testDocumentLayout();
+    void testTdf142647();
     void testTdf142913();
     void testTdf142590();
     void testCustomSlideShow();
@@ -243,6 +244,7 @@ public:
     CPPUNIT_TEST_SUITE(SdImportTest);
 
     CPPUNIT_TEST(testDocumentLayout);
+    CPPUNIT_TEST(testTdf142647);
     CPPUNIT_TEST(testTdf142913);
     CPPUNIT_TEST(testTdf142590);
     CPPUNIT_TEST(testCustomSlideShow);
@@ -438,6 +440,20 @@ void SdImportTest::testDocumentLayout()
                 OUString(m_directories.getPathFromSrc( u"/sd/qa/unit/data/" ) + OUString::createFromAscii( aFilesToCompare[i].pDump )),
                 i == nUpdateMe );
     }
+}
+
+void SdImportTest::testTdf142647()
+{
+    sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tdf142647.pptx"), PPTX);
+    uno::Reference<drawing::XDrawPagesSupplier> xDoc(xDocShRef->GetDoc()->getUnoModel(),
+                                                     uno::UNO_QUERY_THROW);
+
+    uno::Reference<drawing::XDrawPage> xPage1(xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<container::XNamed> xNamed1(xPage1, uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(63), xNamed1->getName().getLength());
+
+    xDocShRef->DoClose();
 }
 
 void SdImportTest::testTdf142913()
