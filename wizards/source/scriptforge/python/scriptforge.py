@@ -1557,7 +1557,7 @@ class SFDatabases:
             """
                 Transform positional and keyword arguments into positional only
                 """
-            return (filename, registrationname, readonly, user, password)
+            return filename, registrationname, readonly, user, password
 
         def CloseDatabase(self):
             return self.ExecMethod(self.vbMethod, 'CloseDatabase')
@@ -1631,7 +1631,7 @@ class SFDialogs:
                 Transform positional and keyword arguments into positional only
                 Add the XComponentContext as last argument
                 """
-            return (container, library, dialogname, ScriptForge.componentcontext)
+            return container, library, dialogname, ScriptForge.componentcontext
 
         def Activate(self):
             return self.ExecMethod(self.vbMethod, 'Activate')
@@ -1740,16 +1740,13 @@ class SFDocuments:
             """
                 Transform positional and keyword arguments into positional only
                 """
-            return (windowname,)
+            return windowname,
 
         def Activate(self):
             return self.ExecMethod(self.vbMethod, 'Activate')
 
         def CloseDocument(self, saveask = True):
             return self.ExecMethod(self.vbMethod, 'CloseDocument', saveask)
-
-        def Forms(self, form = ''):
-            return self.ExecMethod(self.vbMethod + self.flgArrayRet, 'Forms', form)
 
         def RunCommand(self, command):
             return self.ExecMethod(self.vbMethod, 'RunCommand', command)
@@ -1786,7 +1783,7 @@ class SFDocuments:
             """
                 Transform positional and keyword arguments into positional only
                 """
-            return (windowname,)
+            return windowname,
 
         def CloseDocument(self, saveask = True):
             return self.ExecMethod(self.vbMethod, 'CloseDocument', saveask)
@@ -1832,7 +1829,7 @@ class SFDocuments:
             """
                 Transform positional and keyword arguments into positional only
                 """
-            return (windowname,)
+            return windowname,
 
         # Next functions are implemented in Basic as read-only properties with 1 argument
         def Height(self, rangename):
@@ -2096,6 +2093,9 @@ class SFDocuments:
                 Transform positional and keyword arguments into positional only
                 """
             return (windowname,)
+
+        def Forms(self, form = ''):
+            return self.ExecMethod(self.vbMethod + self.flgArrayRet, 'Forms', form)
 
 
 # ##############################################False##################################################################
