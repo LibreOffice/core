@@ -80,6 +80,7 @@
 #include <textlineinfo.hxx>
 #include <bitmapwriteaccess.hxx>
 #include <impglyphitem.hxx>
+#include <officecfg/Office/Common.hxx>
 
 #include "pdfwriter_impl.hxx"
 
@@ -9338,7 +9339,7 @@ void PDFWriterImpl::createEmbeddedFile(const Graphic& rGraphic, ReferenceXObject
     // no pdf data.
     rEmit.m_nBitmapObject = nBitmapObject;
 
-    static bool bAllowPdfToPdf(nullptr != getenv("LIBO_ALLOW_PDF_TO_PDF_EMBEDDING"));
+    static bool bAllowPdfToPdf(officecfg::Office::Common::VCL::AllowPdfToPdfEmbedding::get());
     const bool bHasPdfDFata(bAllowPdfToPdf && rGraphic.hasPdfData());
     if (!bHasPdfDFata)
         return;
@@ -9408,7 +9409,7 @@ void PDFWriterImpl::drawJPGBitmap( SvStream& rDCTData, bool bIsTrueColor, const 
     {
         m_aJPGs.emplace( m_aJPGs.begin() );
         JPGEmit& rEmit = m_aJPGs.front();
-        static bool bAllowPdfToPdf(nullptr != getenv("LIBO_ALLOW_PDF_TO_PDF_EMBEDDING"));
+        static bool bAllowPdfToPdf(officecfg::Office::Common::VCL::AllowPdfToPdfEmbedding::get());
         const bool bHasPdfDFata(bAllowPdfToPdf && rGraphic.hasPdfData());
         if (!bHasPdfDFata || m_aContext.UseReferenceXObject)
             rEmit.m_nObject = createObject();

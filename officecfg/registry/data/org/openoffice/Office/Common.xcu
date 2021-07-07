@@ -60,6 +60,9 @@
       <value install:module="unx">false</value>
       <value install:module="wnt">true</value>
     </prop>
+    <prop oor:name="AllowPdfToPdfEmbedding" oor:type="xs:boolean">
+      <value>false</value>
+    </prop>
   </node>
   <node oor:name="I18N">
     <node oor:name="CTL">

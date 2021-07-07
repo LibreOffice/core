@@ -857,6 +857,14 @@
         </info>
         <value>false</value>
       </prop>
+      <prop oor:name="AllowPdfToPdfEmbedding" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+           <desc>Specifies if at PDF export it is allowed to embed other PDFs which are
+               part of the Document in their original form or use another form of graphic
+               representation, e.g. pixel graphic.</desc>
+        </info>
+        <value>false</value>
+      </prop>
       <prop oor:name="ForceOpenGL" oor:type="xs:boolean" oor:nillable="false">
         <info>
            <desc>Specifies if OpenGL rendering should be used in VCL backends
