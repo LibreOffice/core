@@ -186,7 +186,7 @@ rtl::Reference<MetaAction> SvmReader::MetaActionHandler(ImplMetaReadData* pData)
             return ChordHandler();
             break;
         case MetaActionType::POLYLINE:
-            pAction = new MetaPolyLineAction;
+            return PolyLineHandler();
             break;
         case MetaActionType::POLYGON:
             pAction = new MetaPolygonAction;
@@ -538,6 +538,35 @@ rtl::Reference<MetaAction> SvmReader::ChordHandler()
     pAction->SetRect(aRectangle);
     pAction->SetStartPoint(aPoint);
     pAction->SetEndPoint(aEndPoint);
+
+    return pAction;
+}
+
+rtl::Reference<MetaAction> SvmReader::PolyLineHandler()
+{
+    auto pAction = new MetaPolyLineAction();
+
+    VersionCompatRead aCompat(mrStream);
+
+    // Version 1
+    tools::Polygon aPolygon;
+    ReadPolygon(mrStream, aPolygon);
+
+    // Version 2
+    if (aCompat.GetVersion() >= 2)
+    {
+        LineInfo aLineInfo;
+        ReadLineInfo(mrStream, aLineInfo);
+        pAction->SetLineInfo(aLineInfo);
+    }
+    if (aCompat.GetVersion() >= 3)
+    {
+        sal_uInt8 bHasPolyFlags(0);
+        mrStream.ReadUChar(bHasPolyFlags);
+        if (bHasPolyFlags)
+            aPolygon.Read(mrStream);
+    }
+    pAction->SetPolygon(aPolygon);
 
     return pAction;
 }

@@ -427,6 +427,8 @@ public:
 
     const tools::Polygon& GetPolygon() const { return maPoly; }
     const LineInfo&     GetLineInfo() const { return maLineInfo; }
+    void                SetLineInfo(LineInfo& rLineInfo) { maLineInfo = rLineInfo; }
+    void                SetPolygon(tools::Polygon& rPoly) { maPoly = rPoly; }
 };
 
 class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetaPolygonAction final : public MetaAction
