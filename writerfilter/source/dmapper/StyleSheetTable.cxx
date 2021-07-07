@@ -908,11 +908,10 @@ void StyleSheetTable::ApplyNumberingStyleNameToParaStyles()
 
         for ( auto& pEntry : m_pImpl->m_aStyleSheetEntries )
         {
-            StyleSheetPropertyMap* pStyleSheetProperties = nullptr;
-            if ( pEntry->nStyleTypeCode == STYLE_TYPE_PARA && (pStyleSheetProperties = pEntry->pProperties.get()) )
+            if (pEntry->nStyleTypeCode == STYLE_TYPE_PARA)
             {
                 // ListId 0 means turn off numbering - to cancel inheritance - so make sure that can be set.
-                if (pStyleSheetProperties->GetListId() > -1)
+                if (pEntry->pProperties->GetListId() > -1)
                 {
                     uno::Reference< style::XStyle > xStyle;
                     xParaStyles->getByName( ConvertStyleName(pEntry->sStyleName) ) >>= xStyle;
@@ -921,8 +920,8 @@ void StyleSheetTable::ApplyNumberingStyleNameToParaStyles()
                         break;
 
                     uno::Reference<beans::XPropertySet> xPropertySet( xStyle, uno::UNO_QUERY_THROW );
-                    const OUString sNumberingStyleName = m_pImpl->m_rDMapper.GetListStyleName( pStyleSheetProperties->GetListId() );
-                    if ( !sNumberingStyleName.isEmpty() || !pStyleSheetProperties->GetListId() )
+                    const OUString sNumberingStyleName = m_pImpl->m_rDMapper.GetListStyleName(pEntry->pProperties->GetListId());
+                    if (!sNumberingStyleName.isEmpty() || !pEntry->pProperties->GetListId())
                         xPropertySet->setPropertyValue( getPropertyName(PROP_NUMBERING_STYLE_NAME), uno::makeAny(sNumberingStyleName) );
                 }
             }
@@ -1003,8 +1002,7 @@ void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
                             xStyles->insertByName( sConvertedStyleName, uno::makeAny( xStyle ) );
                             xStyle.set(xStyles->getByName(sConvertedStyleName), uno::UNO_QUERY_THROW);
 
-                            StyleSheetPropertyMap* pPropertyMap = pEntry->pProperties.get();
-                            if (pPropertyMap && pPropertyMap->GetListId() == -1)
+                            if (pEntry->pProperties->GetListId() == -1)
                             {
                                 // No properties? Word default is 'none', Writer one is 'arabic', handle this.
                                 uno::Reference<beans::XPropertySet> xPropertySet(xStyle, uno::UNO_QUERY_THROW);
@@ -1116,9 +1114,8 @@ void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
                                         if (findIt != m_pImpl->m_aStyleSheetEntriesMap.end())
                                         {
                                             const auto& aSheetProps  = findIt->second;
-                                            StyleSheetPropertyMap& rStyleSheetProps = *aSheetProps->pProperties;
-                                            pStyleSheetProperties->SetListLevel(rStyleSheetProps.GetListLevel());
-                                            pStyleSheetProperties->SetOutlineLevel(rStyleSheetProps.GetOutlineLevel());
+                                            pStyleSheetProperties->SetListLevel(aSheetProps->pProperties->GetListLevel());
+                                            pStyleSheetProperties->SetOutlineLevel(aSheetProps->pProperties->GetOutlineLevel());
                                         }
                                     }
                                 }
