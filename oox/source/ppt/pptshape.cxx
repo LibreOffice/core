@@ -346,9 +346,10 @@ void PPTShape::addShape(
                     Reference<drawing::XDrawPagesSupplier> xDPS(rFilterBase.getModel(), uno::UNO_QUERY_THROW);
                     Reference<drawing::XDrawPages> xDrawPages(xDPS->getDrawPages(), uno::UNO_SET_THROW);
                     sal_uInt32 nMaxPages = xDrawPages->getCount();
-                    bool bUseTitleAsSlideName = !aTitleText.isEmpty() &&
-                          // just a magic value, but we don't want to set slide names which are too long
-                          aTitleText.getLength() < 64;
+                    // just a magic value but we don't want to drop out slide names which are too long
+                    if (aTitleText.getLength() > 63)
+                        aTitleText = aTitleText.copy(0, 63);
+                    bool bUseTitleAsSlideName = !aTitleText.isEmpty();
                     // check duplicated title name
                     if (bUseTitleAsSlideName)
                     {
