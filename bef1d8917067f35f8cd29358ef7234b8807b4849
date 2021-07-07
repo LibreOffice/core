@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d7deba30_8e45515c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-07T03:45:04Z",
+      "side": 1,
+      "message": "rather, _exactly_ one pic element :)",
+      "range": {
+        "startLine": 11,
+        "startChar": 44,
+        "endLine": 11,
+        "endChar": 52
+      },
+      "revId": "bef1d8917067f35f8cd29358ef7234b8807b4849",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
