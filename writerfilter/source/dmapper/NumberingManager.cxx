@@ -493,12 +493,11 @@ sal_uInt16 ListDef::GetChapterNumberingWeight() const
         const StyleSheetEntryPtr pParaStyle = pAbsLevel->GetParaStyle();
         if (!pParaStyle)
             continue;
-        const StyleSheetPropertyMap& rProps =
-            *static_cast<StyleSheetPropertyMap*>(pParaStyle->pProperties.get());
+
         // In LO, the level's paraStyle outlineLevel always matches this listLevel.
         // An undefined listLevel is treated as the first level.
-        sal_Int8 nListLevel = std::clamp<sal_Int8>(rProps.GetListLevel(), 0, 9);
-        if (nListLevel != nLevel || rProps.GetOutlineLevel() != nLevel)
+        sal_Int8 nListLevel = std::clamp<sal_Int8>(pParaStyle->pProperties->GetListLevel(), 0, 9);
+        if (nListLevel != nLevel || pParaStyle->pProperties->GetOutlineLevel() != nLevel)
             return 0;
         else if (pAbsLevel->GetNumberingType(style::NumberingType::NUMBER_NONE)
                  != style::NumberingType::NUMBER_NONE)
@@ -1134,8 +1133,8 @@ AbstractListDef::Pointer ListsManager::GetAbstractList( sal_Int32 nId )
                 const StyleSheetEntryPtr pStyleSheetEntry =
                     pStylesTable->FindStyleSheetByISTD(listDef->GetNumStyleLink() );
 
-                const StyleSheetPropertyMap* pStyleSheetProperties =
-                    dynamic_cast<const StyleSheetPropertyMap*>(pStyleSheetEntry ? pStyleSheetEntry->pProperties.get() : nullptr);
+                const StyleSheetPropertyMap* pStyleSheetProperties
+                    = pStyleSheetEntry ? pStyleSheetEntry->pProperties.get() : nullptr;
 
                 if( pStyleSheetProperties && pStyleSheetProperties->GetListId() >= 0 )
                 {

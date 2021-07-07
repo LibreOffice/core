@@ -172,7 +172,7 @@ PropertyMapPtr StyleSheetEntry::GetMergedInheritedProperties(const StyleSheetTab
     if ( !pRet )
         pRet = new PropertyMap;
 
-    pRet->InsertProps(pProperties);
+    pRet->InsertProps(pProperties.get());
 
     return pRet;
 }
@@ -763,10 +763,10 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
                     break;
 
                 tools::SvRef<TablePropertiesHandler> pTblHandler(new TablePropertiesHandler());
-                pTblHandler->SetProperties( m_pImpl->m_pCurrentEntry->pProperties );
+                pTblHandler->SetProperties(m_pImpl->m_pCurrentEntry->pProperties.get());
                 if ( !pTblHandler->sprm( rSprm ) )
                 {
-                    m_pImpl->m_rDMapper.PushStyleSheetProperties( m_pImpl->m_pCurrentEntry->pProperties );
+                    m_pImpl->m_rDMapper.PushStyleSheetProperties(m_pImpl->m_pCurrentEntry->pProperties.get());
 
                     PropertyMapPtr pProps(new PropertyMap());
                     if (m_pImpl->m_pCurrentEntry->nStyleTypeCode == STYLE_TYPE_TABLE)
@@ -802,7 +802,7 @@ void StyleSheetTable::lcl_entry(writerfilter::Reference<Properties>::Pointer_t r
     OSL_ENSURE( !m_pImpl->m_pCurrentEntry, "current entry has to be NULL here");
     StyleSheetEntryPtr pNewEntry( new StyleSheetEntry );
     m_pImpl->m_pCurrentEntry = pNewEntry;
-    m_pImpl->m_rDMapper.PushStyleSheetProperties( m_pImpl->m_pCurrentEntry->pProperties );
+    m_pImpl->m_rDMapper.PushStyleSheetProperties(m_pImpl->m_pCurrentEntry->pProperties.get());
     ref->resolve(*this);
     //append it to the table
     m_pImpl->m_rDMapper.PopStyleSheetProperties();
@@ -908,12 +908,11 @@ void StyleSheetTable::ApplyNumberingStyleNameToParaStyles()
 
         for ( auto& pEntry : m_pImpl->m_aStyleSheetEntries )
         {
-            StyleSheetPropertyMap* pStyleSheetProperties = nullptr;
-            if ( pEntry->nStyleTypeCode == STYLE_TYPE_PARA && (pStyleSheetProperties = dynamic_cast<StyleSheetPropertyMap*>(pEntry->pProperties.get())) )
+            if (pEntry->nStyleTypeCode == STYLE_TYPE_PARA)
             {
                 // ListId 0 means turn off numbering - to cancel inheritance - so make sure that can be set.
                 // Ignore the special "chapter numbering" outline styles as they are handled internally.
-                if ( pStyleSheetProperties->GetListId() > -1 && pStyleSheetProperties->GetOutlineLevel() == -1 )
+                if (pEntry->pProperties->GetListId() > -1 && pEntry->pProperties->GetOutlineLevel() == -1)
                 {
                     uno::Reference< style::XStyle > xStyle;
                     xParaStyles->getByName( ConvertStyleName(pEntry->sStyleName) ) >>= xStyle;
@@ -922,8 +921,8 @@ void StyleSheetTable::ApplyNumberingStyleNameToParaStyles()
                         break;
 
                     uno::Reference<beans::XPropertySet> xPropertySet( xStyle, uno::UNO_QUERY_THROW );
-                    const OUString sNumberingStyleName = m_pImpl->m_rDMapper.GetListStyleName( pStyleSheetProperties->GetListId() );
-                    if ( !sNumberingStyleName.isEmpty() || !pStyleSheetProperties->GetListId() )
+                    const OUString sNumberingStyleName = m_pImpl->m_rDMapper.GetListStyleName(pEntry->pProperties->GetListId());
+                    if (!sNumberingStyleName.isEmpty() || !pEntry->pProperties->GetListId())
                         xPropertySet->setPropertyValue( getPropertyName(PROP_NUMBERING_STYLE_NAME), uno::makeAny(sNumberingStyleName) );
                 }
             }
@@ -1004,8 +1003,7 @@ void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
                             xStyles->insertByName( sConvertedStyleName, uno::makeAny( xStyle ) );
                             xStyle.set(xStyles->getByName(sConvertedStyleName), uno::UNO_QUERY_THROW);
 
-                            StyleSheetPropertyMap* pPropertyMap = dynamic_cast<StyleSheetPropertyMap*>(pEntry->pProperties.get());
-                            if (pPropertyMap && pPropertyMap->GetListId() == -1)
+                            if (pEntry->pProperties->GetListId() == -1)
                             {
                                 // No properties? Word default is 'none', Writer one is 'arabic', handle this.
                                 uno::Reference<beans::XPropertySet> xPropertySet(xStyle, uno::UNO_QUERY_THROW);
@@ -1095,7 +1093,7 @@ void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
                         }
 
                         // Set the outline levels
-                        StyleSheetPropertyMap* pStyleSheetProperties = dynamic_cast<StyleSheetPropertyMap*>(pEntry ? pEntry->pProperties.get() : nullptr);
+                        StyleSheetPropertyMap* pStyleSheetProperties = pEntry ? pEntry->pProperties.get() : nullptr;
 
                         if ( pStyleSheetProperties )
                         {
@@ -1117,10 +1115,8 @@ void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
                                         if (findIt != m_pImpl->m_aStyleSheetEntriesMap.end())
                                         {
                                             const auto& aSheetProps  = findIt->second;
-                                            StyleSheetPropertyMap& rStyleSheetProps
-                                                = dynamic_cast<StyleSheetPropertyMap&>(*aSheetProps->pProperties);
-                                            pStyleSheetProperties->SetListLevel(rStyleSheetProps.GetListLevel());
-                                            pStyleSheetProperties->SetOutlineLevel(rStyleSheetProps.GetOutlineLevel());
+                                            pStyleSheetProperties->SetListLevel(aSheetProps->pProperties->GetListLevel());
+                                            pStyleSheetProperties->SetOutlineLevel(aSheetProps->pProperties->GetOutlineLevel());
                                         }
                                     }
                                 }
