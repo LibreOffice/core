@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9442aa9b_aa5a7b14",
+        "filename": "sw/qa/uitest/chart/tdf131679.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-07-07T12:02:11Z",
+      "side": 1,
+      "message": "UITestCase inherits from unittest.TestCase so you need to call your method, def test_foo",
+      "revId": "c6b557c74cbf7bdc5b114306c242f07bbfbb2628",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
