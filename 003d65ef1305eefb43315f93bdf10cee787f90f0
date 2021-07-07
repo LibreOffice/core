@@ -34,6 +34,24 @@
       "revId": "003d65ef1305eefb43315f93bdf10cee787f90f0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6ea4dec1_e386b9a5",
+        "filename": "sw/source/core/txtnode/thints.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2788,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-07-07T18:24:30Z",
+      "side": 1,
+      "message": "I have tried to make this code easier to read with\n   https://gerrit.libreoffice.org/c/core/+/118589\nperhaps that helps",
+      "parentUuid": "1d7e1bb1_d2ede2ca",
+      "revId": "003d65ef1305eefb43315f93bdf10cee787f90f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
