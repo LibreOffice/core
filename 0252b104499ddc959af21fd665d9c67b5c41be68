@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f24a4e1c_f4fa7623",
+        "filename": "sd/qa/unit/import-tests-smartart.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-07-07T07:01:38Z",
+      "side": 1,
+      "message": "We have CPPUNIT_ASSERT_DOUBLES_EQUAL() in case you want to assert equality with some tolerance, did you consider using that here?",
+      "revId": "0252b104499ddc959af21fd665d9c67b5c41be68",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
