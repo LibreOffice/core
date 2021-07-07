@@ -19,7 +19,7 @@
 
 #pragma once
 
-enum ActionMapTypesOOo
+enum ActionMapTypesOasis
 {
     PROP_OASIS_GRAPHIC_ATTR_ACTIONS,
     PROP_OASIS_DRAWING_PAGE_ATTR_ACTIONS,
