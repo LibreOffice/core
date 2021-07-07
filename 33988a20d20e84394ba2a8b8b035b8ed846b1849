@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8b7f8a51_a8e1d0ea",
+        "filename": "sc/source/filter/excel/xeescher.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1165,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-07-07T19:17:13Z",
+      "side": 1,
+      "message": "Nitpick: This is OStringBuffer style. For OString it\u0027s more efficient to have just one big statement with all the + operations.",
+      "revId": "33988a20d20e84394ba2a8b8b035b8ed846b1849",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
