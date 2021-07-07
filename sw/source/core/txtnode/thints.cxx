@@ -2611,6 +2611,15 @@ void SwpHints::NoteInHistory( SwTextAttr *pAttr, const bool bNew )
     if ( m_pHistory ) { m_pHistory->AddHint( pAttr, bNew ); }
 }
 
+typedef std::multimap< int, std::pair<SwTextAttr*, bool> > PortionMap;
+enum MergeResult { MATCH, DIFFER_ONLY_RSID, DIFFER };
+
+static MergeResult lcl_Compare_Attributes(
+        int i, int j,
+        std::pair< PortionMap::iterator, PortionMap::iterator > aRange1,
+        std::pair< PortionMap::iterator, PortionMap::iterator > aRange2,
+        std::unordered_map<int, bool>& RsidOnlyAutoFormatFlagMap);
+
 bool SwpHints::MergePortions( SwTextNode& rNode )
 {
     if ( !Count() )
@@ -2620,7 +2629,6 @@ bool SwpHints::MergePortions( SwTextNode& rNode )
     Resort();
 
     bool bRet = false;
-    typedef std::multimap< int, std::pair<SwTextAttr*, bool> > PortionMap;
     PortionMap aPortionMap;
     std::unordered_map<int, bool> RsidOnlyAutoFormatFlagMap;
     sal_Int32 nLastPorStart = COMPLETE_STRING;
@@ -2690,124 +2698,8 @@ bool SwpHints::MergePortions( SwTextNode& rNode )
     {
         std::pair< PortionMap::iterator, PortionMap::iterator > aRange1 = aPortionMap.equal_range( i );
         std::pair< PortionMap::iterator, PortionMap::iterator > aRange2 = aPortionMap.equal_range( j );
-        PortionMap::iterator aIter1 = aRange1.first;
-        PortionMap::iterator aIter2 = aRange2.first;
 
-        enum { MATCH, DIFFER_ONLY_RSID, DIFFER } eMerge(MATCH);
-        size_t const nAttributesInPor1 = std::distance(aRange1.first, aRange1.second);
-        size_t const nAttributesInPor2 = std::distance(aRange2.first, aRange2.second);
-        bool const isRsidOnlyAutoFormat1(RsidOnlyAutoFormatFlagMap[i]);
-        bool const isRsidOnlyAutoFormat2(RsidOnlyAutoFormatFlagMap[j]);
-
-        // if both have one they could be equal, but not if only one has it
-        bool const bSkipRsidOnlyAutoFormat(nAttributesInPor1 != nAttributesInPor2);
-
-        // this loop needs to handle the case where one has a CHARFMT and the
-        // other CHARFMT + RSID-only AUTOFMT, so...
-        // want to skip over RSID-only AUTOFMT here, hence the -1
-        if ((nAttributesInPor1 - (isRsidOnlyAutoFormat1 ? 1 : 0)) ==
-            (nAttributesInPor2 - (isRsidOnlyAutoFormat2 ? 1 : 0))
-            && (nAttributesInPor1 != 0 || nAttributesInPor2 != 0))
-        {
-            // _if_ there is one element more either in aRange1 or aRange2
-            // it _must_ be an RSID-only AUTOFMT, which can be ignored here...
-            // But if both have RSID-only AUTOFMT they could be equal, no skip!
-            while (aIter1 != aRange1.second || aIter2 != aRange2.second)
-            {
-                // first of all test if there's no gap (before skipping stuff!)
-                if (aIter1 != aRange1.second && aIter2 != aRange2.second &&
-                    *aIter1->second.first->End() < aIter2->second.first->GetStart())
-                {
-                    eMerge = DIFFER;
-                    break;
-                }
-                // skip it - cannot be equal if bSkipRsidOnlyAutoFormat is set
-                if (bSkipRsidOnlyAutoFormat
-                    && aIter1 != aRange1.second && aIter1->second.second)
-                {
-                    assert(DIFFER != eMerge);
-                    eMerge = DIFFER_ONLY_RSID;
-                    ++aIter1;
-                    continue;
-                }
-                if (bSkipRsidOnlyAutoFormat
-                    && aIter2 != aRange2.second && aIter2->second.second)
-                {
-                    assert(DIFFER != eMerge);
-                    eMerge = DIFFER_ONLY_RSID;
-                    ++aIter2;
-                    continue;
-                }
-                assert(aIter1 != aRange1.second && aIter2 != aRange2.second);
-                SwTextAttr const*const p1 = aIter1->second.first;
-                SwTextAttr const*const p2 = aIter2->second.first;
-                if (p1->Which() != p2->Which())
-                {
-                    eMerge = DIFFER;
-                    break;
-                }
-                if (!(*p1 == *p2))
-                {
-                    // fdo#52028: for auto styles, check if they differ only
-                    // in the RSID, which should have no effect on text layout
-                    if (RES_TXTATR_AUTOFMT == p1->Which())
-                    {
-                        const SfxItemSet& rSet1 = *p1->GetAutoFormat().GetStyleHandle();
-                        const SfxItemSet& rSet2 = *p2->GetAutoFormat().GetStyleHandle();
-
-                        // sadly SfxItemSet::operator== does not seem to work?
-                        SfxItemIter iter1(rSet1);
-                        SfxItemIter iter2(rSet2);
-                        for (SfxPoolItem const* pItem1 = iter1.GetCurItem(),
-                                              * pItem2 = iter2.GetCurItem();
-                             pItem1 && pItem2;
-                             pItem1 = iter1.NextItem(),
-                             pItem2 = iter2.NextItem())
-                        {
-                            if (pItem1->Which() == RES_CHRATR_RSID)
-                                pItem1 = iter1.NextItem();
-                            if (pItem2->Which() == RES_CHRATR_RSID)
-                                pItem2 = iter2.NextItem();
-                            if (!pItem1 && !pItem2)
-                                break;
-                            if (!pItem1 || !pItem2)
-                            {
-                                eMerge = DIFFER;
-                                break;
-                            }
-                            if (pItem1 != pItem2) // all are poolable
-                            {
-                                assert(IsInvalidItem(pItem1) || IsInvalidItem(pItem2) || pItem1->Which() != pItem2->Which() || *pItem1 != *pItem2);
-                                eMerge = DIFFER;
-                                break;
-                            }
-                            if (iter1.IsAtEnd() && iter2.IsAtEnd())
-                                break;
-                            if (iter1.IsAtEnd() || iter2.IsAtEnd())
-                            {
-                                eMerge = DIFFER_ONLY_RSID;
-                                break;
-                            }
-                        }
-                        if (DIFFER == eMerge)
-                            break; // outer loop too
-                        else
-                            eMerge = DIFFER_ONLY_RSID;
-                    }
-                    else
-                    {
-                        eMerge = DIFFER;
-                        break;
-                    }
-                }
-                ++aIter1;
-                ++aIter2;
-            }
-        }
-        else
-        {
-            eMerge = DIFFER;
-        }
+        MergeResult eMerge = lcl_Compare_Attributes(i, j, aRange1, aRange2, RsidOnlyAutoFormatFlagMap);
 
         if (MATCH == eMerge)
         {
@@ -2815,7 +2707,7 @@ bool SwpHints::MergePortions( SwTextNode& rNode )
             // range is still valid
             // erase all elements with key i + 1
             sal_Int32 nNewPortionEnd = 0;
-            for ( aIter2 = aRange2.first; aIter2 != aRange2.second; ++aIter2 )
+            for ( auto aIter2 = aRange2.first; aIter2 != aRange2.second; ++aIter2 )
             {
                 SwTextAttr *const p2 = aIter2->second.first;
                 nNewPortionEnd = *p2->GetEnd();
@@ -2832,7 +2724,7 @@ bool SwpHints::MergePortions( SwTextNode& rNode )
 
             // change all attributes with key i
             aRange1 = aPortionMap.equal_range( i );
-            for ( aIter1 = aRange1.first; aIter1 != aRange1.second; ++aIter1 )
+            for ( auto aIter1 = aRange1.first; aIter1 != aRange1.second; ++aIter1 )
             {
                 SwTextAttr *const p1 = aIter1->second.first;
                 NoteInHistory( p1 );
@@ -2851,7 +2743,7 @@ bool SwpHints::MergePortions( SwTextNode& rNode )
             // when not merging the ignore flags need to be either set or reset
             // (reset too in case one of the autofmts was recently changed)
             bool const bSetIgnoreFlag(DIFFER_ONLY_RSID == eMerge);
-            for (aIter1 = aRange1.first; aIter1 != aRange1.second; ++aIter1)
+            for (auto aIter1 = aRange1.first; aIter1 != aRange1.second; ++aIter1)
             {
                 if (!aIter1->second.second) // already set above, don't change
                 {
@@ -2864,7 +2756,7 @@ bool SwpHints::MergePortions( SwTextNode& rNode )
                     }
                 }
             }
-            for (aIter2 = aRange2.first; aIter2 != aRange2.second; ++aIter2)
+            for (auto aIter2 = aRange2.first; aIter2 != aRange2.second; ++aIter2)
             {
                 if (!aIter2->second.second) // already set above, don't change
                 {
@@ -2884,6 +2776,122 @@ bool SwpHints::MergePortions( SwTextNode& rNode )
 
     return bRet;
 }
+
+
+static MergeResult lcl_Compare_Attributes(
+        int i, int j,
+        std::pair< PortionMap::iterator, PortionMap::iterator > aRange1,
+        std::pair< PortionMap::iterator, PortionMap::iterator > aRange2,
+        std::unordered_map<int, bool>& RsidOnlyAutoFormatFlagMap)
+{
+    PortionMap::iterator aIter1 = aRange1.first;
+    PortionMap::iterator aIter2 = aRange2.first;
+
+    size_t const nAttributesInPor1 = std::distance(aRange1.first, aRange1.second);
+    size_t const nAttributesInPor2 = std::distance(aRange2.first, aRange2.second);
+    bool const isRsidOnlyAutoFormat1(RsidOnlyAutoFormatFlagMap[i]);
+    bool const isRsidOnlyAutoFormat2(RsidOnlyAutoFormatFlagMap[j]);
+
+    // if both have one they could be equal, but not if only one has it
+    bool const bSkipRsidOnlyAutoFormat(nAttributesInPor1 != nAttributesInPor2);
+
+    // this loop needs to handle the case where one has a CHARFMT and the
+    // other CHARFMT + RSID-only AUTOFMT, so...
+    // want to skip over RSID-only AUTOFMT here, hence the -1
+    if (!((nAttributesInPor1 - (isRsidOnlyAutoFormat1 ? 1 : 0)) ==
+         (nAttributesInPor2 - (isRsidOnlyAutoFormat2 ? 1 : 0))
+         && (nAttributesInPor1 != 0 || nAttributesInPor2 != 0)))
+    {
+        return DIFFER;
+    }
+
+    MergeResult eMerge(MATCH);
+
+    // _if_ there is one element more either in aRange1 or aRange2
+    // it _must_ be an RSID-only AUTOFMT, which can be ignored here...
+    // But if both have RSID-only AUTOFMT they could be equal, no skip!
+    while (aIter1 != aRange1.second || aIter2 != aRange2.second)
+    {
+        // first of all test if there's no gap (before skipping stuff!)
+        if (aIter1 != aRange1.second && aIter2 != aRange2.second &&
+            *aIter1->second.first->End() < aIter2->second.first->GetStart())
+        {
+            return DIFFER;
+        }
+        // skip it - cannot be equal if bSkipRsidOnlyAutoFormat is set
+        if (bSkipRsidOnlyAutoFormat
+            && aIter1 != aRange1.second && aIter1->second.second)
+        {
+            assert(DIFFER != eMerge);
+            eMerge = DIFFER_ONLY_RSID;
+            ++aIter1;
+            continue;
+        }
+        if (bSkipRsidOnlyAutoFormat
+            && aIter2 != aRange2.second && aIter2->second.second)
+        {
+            assert(DIFFER != eMerge);
+            eMerge = DIFFER_ONLY_RSID;
+            ++aIter2;
+            continue;
+        }
+        assert(aIter1 != aRange1.second && aIter2 != aRange2.second);
+        SwTextAttr const*const p1 = aIter1->second.first;
+        SwTextAttr const*const p2 = aIter2->second.first;
+        if (p1->Which() != p2->Which())
+        {
+            return DIFFER;
+        }
+        if (!(*p1 == *p2))
+        {
+            // fdo#52028: for auto styles, check if they differ only
+            // in the RSID, which should have no effect on text layout
+            if (RES_TXTATR_AUTOFMT != p1->Which())
+                return DIFFER;
+
+            const SfxItemSet& rSet1 = *p1->GetAutoFormat().GetStyleHandle();
+            const SfxItemSet& rSet2 = *p2->GetAutoFormat().GetStyleHandle();
+
+            // sadly SfxItemSet::operator== does not seem to work?
+            SfxItemIter iter1(rSet1);
+            SfxItemIter iter2(rSet2);
+            for (SfxPoolItem const* pItem1 = iter1.GetCurItem(),
+                                  * pItem2 = iter2.GetCurItem();
+                 pItem1 && pItem2;
+                 pItem1 = iter1.NextItem(),
+                 pItem2 = iter2.NextItem())
+            {
+                if (pItem1->Which() == RES_CHRATR_RSID)
+                    pItem1 = iter1.NextItem();
+                if (pItem2->Which() == RES_CHRATR_RSID)
+                    pItem2 = iter2.NextItem();
+                if (!pItem1 && !pItem2)
+                    break;
+                if (!pItem1 || !pItem2)
+                {
+                    return DIFFER;
+                }
+                if (pItem1 != pItem2) // all are poolable
+                {
+                    assert(IsInvalidItem(pItem1) || IsInvalidItem(pItem2) || pItem1->Which() != pItem2->Which() || *pItem1 != *pItem2);
+                    return DIFFER;
+                }
+                if (iter1.IsAtEnd() && iter2.IsAtEnd())
+                    break;
+                if (iter1.IsAtEnd() || iter2.IsAtEnd())
+                {
+                    eMerge = DIFFER_ONLY_RSID;
+                    break;
+                }
+            }
+            eMerge = DIFFER_ONLY_RSID;
+        }
+        ++aIter1;
+        ++aIter2;
+    }
+    return eMerge;
+}
+
 
 // check if there is already a character format and adjust the sort numbers
 static void lcl_CheckSortNumber( const SwpHints& rHints, SwTextCharFormat& rNewCharFormat )
