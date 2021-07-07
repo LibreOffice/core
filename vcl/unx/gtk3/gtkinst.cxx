@@ -4754,15 +4754,28 @@ namespace
     }
 
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
 class MenuHelper
 {
 protected:
+#if !GTK_CHECK_VERSION(4, 0, 0)
     GtkMenu* m_pMenu;
-    bool m_bTakeOwnership;
+
     std::map<OString, GtkMenuItem*> m_aMap;
+#else
+    GtkPopoverMenu* m_pMenu;
+
+    o3tl::sorted_vector<OString> m_aInsertedActions; // must outlive m_aActionEntries
+    std::map<OString, OString> m_aIdToAction;
+    std::set<OString> m_aHiddenIds;
+    std::vector<GActionEntry> m_aActionEntries;
+    GActionGroup* m_pActionGroup;
+    // move 'invisible' entries to m_pHiddenActionGroup
+    GActionGroup* m_pHiddenActionGroup;
+#endif
+    bool m_bTakeOwnership;
 private:
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
     static void collect(GtkWidget* pItem, gpointer widget)
     {
         GtkMenuItem* pMenuItem = GTK_MENU_ITEM(pItem);
@@ -4780,17 +4793,60 @@ private:
     }
 
     virtual void signal_activate(GtkMenuItem* pItem) = 0;
+#else
+    static std::pair<GMenuModel*, int> find_id(GMenuModel* pMenuModel, const OString& rId)
+    {
+        for (int i = 0, nCount = g_menu_model_get_n_items(pMenuModel); i < nCount; ++i)
+        {
+            OString sTarget;
+            char *id;
+            if (g_menu_model_get_item_attribute(pMenuModel, i, "target", "s", &id))
+            {
+                sTarget = OString(id);
+                g_free(id);
+            }
+
+            if (sTarget == rId)
+                return std::make_pair(pMenuModel, i);
+
+            if (GMenuModel* pSectionModel = g_menu_model_get_item_link(pMenuModel, i, G_MENU_LINK_SECTION))
+            {
+                std::pair<GMenuModel*, int> aRet = find_id(pSectionModel, rId);
+                if (aRet.first)
+                    return aRet;
+            }
+            if (GMenuModel* pSubMenuModel = g_menu_model_get_item_link(pMenuModel, i, G_MENU_LINK_SUBMENU))
+            {
+                std::pair<GMenuModel*, int> aRet = find_id(pSubMenuModel, rId);
+                if (aRet.first)
+                    return aRet;
+            }
+        }
+
+        return std::make_pair(nullptr, -1);
+    }
+#endif
 
 public:
+#if !GTK_CHECK_VERSION(4, 0, 0)
     MenuHelper(GtkMenu* pMenu, bool bTakeOwnership)
+#else
+    MenuHelper(GtkPopoverMenu* pMenu, bool bTakeOwnership)
+#endif
         : m_pMenu(pMenu)
         , m_bTakeOwnership(bTakeOwnership)
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
         if (!m_pMenu)
             return;
         gtk_container_foreach(GTK_CONTAINER(m_pMenu), collect, this);
+#else
+        m_pActionGroup = G_ACTION_GROUP(g_simple_action_group_new());
+        m_pHiddenActionGroup = G_ACTION_GROUP(g_simple_action_group_new());
+#endif
     }
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
     void add_to_map(GtkMenuItem* pMenuItem)
     {
         OString id = ::get_buildable_id(GTK_BUILDABLE(pMenuItem));
@@ -4817,7 +4873,41 @@ public:
         for (auto& a : m_aMap)
             g_signal_handlers_unblock_by_func(a.second, reinterpret_cast<void*>(signalActivate), this);
     }
+#endif
 
+#if GTK_CHECK_VERSION(4, 0, 0)
+    /* LibreOffice likes to think of separators between menu entries, while gtk likes
+       to think of sections of menus with separators drawn between sections. We always
+       arrange to have a section in a menua so toplevel menumodels comprise of
+       sections and we move entries between sections on pretending to insert separators */
+    static std::pair<GMenuModel*, int> get_section_and_pos_for(GMenuModel* pMenuModel, int pos)
+    {
+        int nSectionCount = g_menu_model_get_n_items(pMenuModel);
+        assert(nSectionCount);
+
+        GMenuModel* pSectionModel = nullptr;
+        int nIndexWithinSection = 0;
+
+        int nExternalPos = 0;
+        for (int nSection = 0; nSection < nSectionCount; ++nSection)
+        {
+            pSectionModel = g_menu_model_get_item_link(pMenuModel, nSection, G_MENU_LINK_SECTION);
+            assert(pSectionModel);
+            int nCount = g_menu_model_get_n_items(pSectionModel);
+            for (nIndexWithinSection = 0; nIndexWithinSection < nCount; ++nIndexWithinSection)
+            {
+                if (pos == nExternalPos)
+                    break;
+                ++nExternalPos;
+            }
+            ++nExternalPos;
+        }
+
+        return std::make_pair(pSectionModel, nIndexWithinSection);
+    }
+#endif
+
+#if !GTK_CHECK_VERSION(4, 0, 0)
     void insert_item(int pos, std::u16string_view rId, const OUString& rStr,
                      const OUString* pIconName, const VirtualDevice* pImageSurface,
                      TriState eCheckRadioFalse)
@@ -4841,12 +4931,10 @@ public:
             GtkBox *pBox = GTK_BOX(gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 6));
             GtkWidget *pLabel = gtk_label_new_with_mnemonic(MapToGtkAccelerator(rStr).getStr());
             pItem = eCheckRadioFalse != TRISTATE_INDET ? gtk_check_menu_item_new() : gtk_menu_item_new();
-#if !GTK_CHECK_VERSION(4, 0, 0)
             gtk_box_pack_start(pBox, pImage, true, true, 0);
             gtk_box_pack_start(pBox, pLabel, true, true, 0);
             gtk_container_add(GTK_CONTAINER(pItem), GTK_WIDGET(pBox));
             gtk_widget_show_all(pItem);
-#endif
         }
         else
         {
@@ -4864,9 +4952,11 @@ public:
         if (pos != -1)
             gtk_menu_reorder_child(m_pMenu, pItem, pos);
     }
+#endif
 
-    void insert_separator(int pos, std::u16string_view rId)
+    void insert_separator(int pos, const OUString& rId)
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
         GtkWidget* pItem = gtk_separator_menu_item_new();
         ::set_buildable_id(GTK_BUILDABLE(pItem), OUStringToOString(rId, RTL_TEXTENCODING_UTF8));
         gtk_menu_shell_append(GTK_MENU_SHELL(m_pMenu), pItem);
@@ -4874,59 +4964,186 @@ public:
         add_to_map(GTK_MENU_ITEM(pItem));
         if (pos != -1)
             gtk_menu_reorder_child(m_pMenu, pItem, pos);
+#else
+        if (GMenuModel* pMenuModel = gtk_popover_menu_get_menu_model(m_pMenu))
+        {
+            auto aSectionAndPos = get_section_and_pos_for(pMenuModel, pos);
+
+            for (int nSection = 0, nSectionCount = g_menu_model_get_n_items(pMenuModel); nSection < nSectionCount; ++nSection)
+            {
+                GMenuModel* pSectionModel = g_menu_model_get_item_link(pMenuModel, nSection, G_MENU_LINK_SECTION);
+                assert(pSectionModel);
+                if (aSectionAndPos.first == pSectionModel)
+                {
+                    GMenu* pNewSection = g_menu_new();
+                    GMenuItem* pSectionItem = g_menu_item_new_section(nullptr, G_MENU_MODEL(pNewSection));
+                    OUString sActionAndTarget = "menu.separator." + rId + "::" + rId;
+                    g_menu_item_set_detailed_action(pSectionItem, sActionAndTarget.toUtf8().getStr());
+                    g_menu_insert_item(G_MENU(pMenuModel), nSection + 1, pSectionItem);
+                    int nOldSectionCount = g_menu_model_get_n_items(pSectionModel);
+                    for (int i = nOldSectionCount - 1; i >= aSectionAndPos.second; --i)
+                    {
+                        GMenuItem* pMenuItem = g_menu_item_new_from_model(pSectionModel, i);
+                        g_menu_prepend_item(pNewSection, pMenuItem);
+                        g_menu_remove(G_MENU(pSectionModel), i);
+                        g_object_unref(pMenuItem);
+                    }
+                    g_object_unref(pSectionItem);
+                    g_object_unref(pNewSection);
+                }
+            }
+        }
+
+#endif
     }
 
     void remove_item(const OString& rIdent)
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
         GtkMenuItem* pMenuItem = m_aMap[rIdent];
         remove_from_map(pMenuItem);
         gtk_widget_destroy(GTK_WIDGET(pMenuItem));
+#else
+        if (GMenuModel* pMenuModel = gtk_popover_menu_get_menu_model(m_pMenu))
+        {
+            std::pair<GMenuModel*, int> aRes = find_id(pMenuModel, rIdent);
+            if (!aRes.first)
+                return;
+            g_menu_remove(G_MENU(aRes.first), aRes.second);
+        }
+#endif
     }
 
     void set_item_sensitive(const OString& rIdent, bool bSensitive)
     {
+#if GTK_CHECK_VERSION(4, 0, 0)
+        GActionGroup* pActionGroup = m_aHiddenIds.find(rIdent) == m_aHiddenIds.end() ? m_pActionGroup : m_pHiddenActionGroup;
+        GAction* pAction = g_action_map_lookup_action(G_ACTION_MAP(pActionGroup), m_aIdToAction[rIdent].getStr());
+        g_simple_action_set_enabled(G_SIMPLE_ACTION(pAction), bSensitive);
+#else
         gtk_widget_set_sensitive(GTK_WIDGET(m_aMap[rIdent]), bSensitive);
+#endif
     }
 
     bool get_item_sensitive(const OString& rIdent) const
     {
+#if GTK_CHECK_VERSION(4, 0, 0)
+        GActionGroup* pActionGroup = m_aHiddenIds.find(rIdent) == m_aHiddenIds.end() ? m_pActionGroup : m_pHiddenActionGroup;
+        GAction* pAction = g_action_map_lookup_action(G_ACTION_MAP(pActionGroup), m_aIdToAction.find(rIdent)->second.getStr());
+        return g_action_get_enabled(pAction);
+#else
         return gtk_widget_get_sensitive(GTK_WIDGET(m_aMap.find(rIdent)->second));
+#endif
     }
 
     void set_item_active(const OString& rIdent, bool bActive)
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
         disable_item_notify_events();
         gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(m_aMap[rIdent]), bActive);
         enable_item_notify_events();
+#else
+        GActionGroup* pActionGroup = m_aHiddenIds.find(rIdent) == m_aHiddenIds.end() ? m_pActionGroup : m_pHiddenActionGroup;
+        g_action_group_change_action_state(pActionGroup, m_aIdToAction[rIdent].getStr(),
+                                           g_variant_new_string(bActive ? rIdent.getStr() : "'none'"));
+#endif
     }
 
     bool get_item_active(const OString& rIdent) const
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
         return gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(m_aMap.find(rIdent)->second));
+#else
+        GActionGroup* pActionGroup = m_aHiddenIds.find(rIdent) == m_aHiddenIds.end() ? m_pActionGroup : m_pHiddenActionGroup;
+        GVariant* pState = g_action_group_get_action_state(pActionGroup, m_aIdToAction.find(rIdent)->second.getStr());
+        if (!pState)
+            return false;
+        const char *pStateString = g_variant_get_string(pState, nullptr);
+        bool bInactive = g_strcmp0(pStateString, "'none'") == 0;
+        g_variant_unref(pState);
+        return bInactive;
+#endif
     }
 
     void set_item_label(const OString& rIdent, const OUString& rText)
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
         gtk_menu_item_set_label(m_aMap[rIdent], MapToGtkAccelerator(rText).getStr());
+#else
+        if (GMenuModel* pMenuModel = gtk_popover_menu_get_menu_model(m_pMenu))
+        {
+            std::pair<GMenuModel*, int> aRes = find_id(pMenuModel, rIdent);
+            if (!aRes.first)
+                return;
+            // clone the original item, remove the original, insert the replacement at
+            // the original location
+            GMenuItem* pMenuItem = g_menu_item_new_from_model(aRes.first, aRes.second);
+            g_menu_remove(G_MENU(aRes.first), aRes.second);
+            g_menu_item_set_label(pMenuItem, MapToGtkAccelerator(rText).getStr());
+            g_menu_insert_item(G_MENU(aRes.first), aRes.second, pMenuItem);
+            g_object_unref(pMenuItem);
+        }
+#endif
     }
 
     OUString get_item_label(const OString& rIdent) const
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
         const gchar* pText = gtk_menu_item_get_label(m_aMap.find(rIdent)->second);
         return OUString(pText, pText ? strlen(pText) : 0, RTL_TEXTENCODING_UTF8);
+#else
+        if (GMenuModel* pMenuModel = gtk_popover_menu_get_menu_model(m_pMenu))
+        {
+            std::pair<GMenuModel*, int> aRes = find_id(pMenuModel, rIdent);
+            if (!aRes.first)
+                return OUString();
+
+            // clone the original item to query its label
+            GMenuItem* pMenuItem = g_menu_item_new_from_model(aRes.first, aRes.second);
+            char *pLabel = nullptr;
+            g_menu_item_get_attribute(pMenuItem, G_MENU_ATTRIBUTE_LABEL, "&s", &pLabel);
+            OUString aRet(pLabel, pLabel ? strlen(pLabel) : 0, RTL_TEXTENCODING_UTF8);
+            g_free(pLabel);
+            g_object_unref(pMenuItem);
+            return aRet;
+        }
+        return OUString();
+#endif
     }
 
     void set_item_visible(const OString& rIdent, bool bShow)
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
         GtkWidget* pWidget = GTK_WIDGET(m_aMap[rIdent]);
         if (bShow)
             gtk_widget_show(pWidget);
         else
             gtk_widget_hide(pWidget);
+#else
+        bool bOldVisible = m_aHiddenIds.find(rIdent) == m_aHiddenIds.end();
+        if (bShow == bOldVisible)
+            return;
+
+        if (!bShow)
+        {
+            GAction* pAction = g_action_map_lookup_action(G_ACTION_MAP(m_pActionGroup), m_aIdToAction[rIdent].getStr());
+            g_action_map_add_action(G_ACTION_MAP(m_pHiddenActionGroup), pAction);
+            g_action_map_remove_action(G_ACTION_MAP(m_pActionGroup), m_aIdToAction[rIdent].getStr());
+            m_aHiddenIds.insert(rIdent);
+        }
+        else
+        {
+            GAction* pAction = g_action_map_lookup_action(G_ACTION_MAP(m_pHiddenActionGroup), m_aIdToAction[rIdent].getStr());
+            g_action_map_add_action(G_ACTION_MAP(m_pActionGroup), pAction);
+            g_action_map_remove_action(G_ACTION_MAP(m_pHiddenActionGroup), m_aIdToAction[rIdent].getStr());
+            m_aHiddenIds.erase(rIdent);
+        }
+#endif
     }
 
     void clear_items()
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
         for (const auto& a : m_aMap)
         {
             GtkMenuItem* pMenuItem = a.second;
@@ -4934,22 +5151,31 @@ public:
             gtk_widget_destroy(GTK_WIDGET(pMenuItem));
         }
         m_aMap.clear();
+#endif
     }
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
     GtkMenu* getMenu() const
+#else
+    GtkPopoverMenu* getMenu() const
+#endif
     {
         return m_pMenu;
     }
 
     virtual ~MenuHelper()
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
         for (auto& a : m_aMap)
             g_signal_handlers_disconnect_by_data(a.second, this);
         if (m_bTakeOwnership)
             gtk_widget_destroy(GTK_WIDGET(m_pMenu));
+#else
+        g_object_unref(m_pActionGroup);
+        g_object_unref(m_pHiddenActionGroup);
+#endif
     }
 };
-#endif
 
 class GtkInstanceSizeGroup : public weld::SizeGroup
 {
@@ -9062,7 +9288,7 @@ namespace {
 #if !GTK_CHECK_VERSION(4, 0, 0)
 class GtkInstanceMenuButton : public GtkInstanceToggleButton, public MenuHelper, public virtual weld::MenuButton
 #else
-class GtkInstanceMenuButton : public GtkInstanceWidget, public virtual weld::MenuButton
+class GtkInstanceMenuButton : public GtkInstanceWidget, public MenuHelper, public virtual weld::MenuButton
 #endif
 {
 protected:
@@ -9074,13 +9300,6 @@ private:
 #else
     GtkPicture* m_pImage;
     GtkToggleButton* m_pMenuButtonToggleButton;
-    o3tl::sorted_vector<OString> m_aInsertedActions; // must outlive m_aActionEntries
-    std::map<OString, OString> m_aIdToAction;
-    std::set<OString> m_aHiddenIds;
-    std::vector<GActionEntry> m_aActionEntries;
-    GActionGroup* m_pActionGroup;
-    // move 'invisible' entries to m_pHiddenActionGroup
-    GActionGroup* m_pHiddenActionGroup;
 #endif
     GtkWidget* m_pLabel;
 #if !GTK_CHECK_VERSION(4, 0, 0)
@@ -9360,47 +9579,6 @@ private:
         }
     }
 
-    static std::pair<GMenuModel*, int> find_id(GMenuModel* pMenuModel, const OString& rId)
-    {
-        for (int i = 0, nCount = g_menu_model_get_n_items(pMenuModel); i < nCount; ++i)
-        {
-            OString sTarget;
-            char *id;
-            if (g_menu_model_get_item_attribute(pMenuModel, i, "target", "s", &id))
-            {
-                sTarget = OString(id);
-                g_free(id);
-            }
-
-            if (sTarget == rId)
-                return std::make_pair(pMenuModel, i);
-
-            if (GMenuModel* pSectionModel = g_menu_model_get_item_link(pMenuModel, i, G_MENU_LINK_SECTION))
-            {
-                std::pair<GMenuModel*, int> aRet = find_id(pSectionModel, rId);
-                if (aRet.first)
-                    return aRet;
-            }
-            if (GMenuModel* pSubMenuModel = g_menu_model_get_item_link(pMenuModel, i, G_MENU_LINK_SUBMENU))
-            {
-                std::pair<GMenuModel*, int> aRet = find_id(pSubMenuModel, rId);
-                if (aRet.first)
-                    return aRet;
-            }
-        }
-
-        return std::make_pair(nullptr, -1);
-    }
-
-    static bool remove_id(GMenuModel* pMenuModel, const OString& rId)
-    {
-        std::pair<GMenuModel*, int> aRes = find_id(pMenuModel, rId);
-        if (!aRes.first)
-            return false;
-        g_menu_remove(G_MENU(aRes.first), aRes.second);
-        return true;
-    }
-
 #endif
 
     static void signalFlagsChanged(GtkToggleButton* pToggleButton, GtkStateFlags flags, gpointer widget)
@@ -9422,6 +9600,7 @@ public:
 #else
     GtkInstanceMenuButton(GtkMenuButton* pMenuButton, GtkWidget* pMenuAlign, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
         : GtkInstanceWidget(GTK_WIDGET(pMenuButton), pBuilder, bTakeOwnership)
+        , MenuHelper(GTK_POPOVER_MENU(gtk_menu_button_get_popover(pMenuButton)), false)
 #endif
         , m_pMenuButton(pMenuButton)
         , m_pImage(nullptr)
@@ -9457,8 +9636,6 @@ public:
 #endif
 
 #if GTK_CHECK_VERSION(4, 0, 0)
-        m_pActionGroup = G_ACTION_GROUP(g_simple_action_group_new());
-        m_pHiddenActionGroup = G_ACTION_GROUP(g_simple_action_group_new());
         gtk_widget_insert_action_group(GTK_WIDGET(m_pMenuButton), "menu", m_pActionGroup);
 
         update_action_group_from_popover_model();
@@ -9561,38 +9738,6 @@ public:
 
 #endif
 
-#if GTK_CHECK_VERSION(4, 0, 0)
-    /* LibreOffice likes to think of separators between menu entries, while gtk likes
-       to think of sections of menus with separators drawn between sections. We always
-       arrange to have a section in a menua so toplevel menumodels comprise of
-       sections and we move entries between sections on pretending to insert separators */
-    static std::pair<GMenuModel*, int> get_section_and_pos_for(GMenuModel* pMenuModel, int pos)
-    {
-        int nSectionCount = g_menu_model_get_n_items(pMenuModel);
-        assert(nSectionCount);
-
-        GMenuModel* pSectionModel = nullptr;
-        int nIndexWithinSection = 0;
-
-        int nExternalPos = 0;
-        for (int nSection = 0; nSection < nSectionCount; ++nSection)
-        {
-            pSectionModel = g_menu_model_get_item_link(pMenuModel, nSection, G_MENU_LINK_SECTION);
-            assert(pSectionModel);
-            int nCount = g_menu_model_get_n_items(pSectionModel);
-            for (nIndexWithinSection = 0; nIndexWithinSection < nCount; ++nIndexWithinSection)
-            {
-                if (pos == nExternalPos)
-                    break;
-                ++nExternalPos;
-            }
-            ++nExternalPos;
-        }
-
-        return std::make_pair(pSectionModel, nIndexWithinSection);
-    }
-#endif
-
     virtual void insert_item(int pos, const OUString& rId, const OUString& rStr,
                         const OUString* pIconName, VirtualDevice* pImageSurface, TriState eCheckRadioFalse) override
     {
@@ -9627,57 +9772,12 @@ public:
 
     virtual void insert_separator(int pos, const OUString& rId) override
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
         MenuHelper::insert_separator(pos, rId);
-#else
-        GtkPopover* pPopover = gtk_menu_button_get_popover(m_pMenuButton);
-        if (GMenuModel* pMenuModel = GTK_IS_POPOVER_MENU(pPopover) ?
-                                     gtk_popover_menu_get_menu_model(GTK_POPOVER_MENU(pPopover)) :
-                                     nullptr)
-        {
-            auto aSectionAndPos = get_section_and_pos_for(pMenuModel, pos);
-
-            for (int nSection = 0, nSectionCount = g_menu_model_get_n_items(pMenuModel); nSection < nSectionCount; ++nSection)
-            {
-                GMenuModel* pSectionModel = g_menu_model_get_item_link(pMenuModel, nSection, G_MENU_LINK_SECTION);
-                assert(pSectionModel);
-                if (aSectionAndPos.first == pSectionModel)
-                {
-                    GMenu* pNewSection = g_menu_new();
-                    GMenuItem* pSectionItem = g_menu_item_new_section(nullptr, G_MENU_MODEL(pNewSection));
-                    OUString sActionAndTarget = "menu.separator." + rId + "::" + rId;
-                    g_menu_item_set_detailed_action(pSectionItem, sActionAndTarget.toUtf8().getStr());
-                    g_menu_insert_item(G_MENU(pMenuModel), nSection + 1, pSectionItem);
-                    int nOldSectionCount = g_menu_model_get_n_items(pSectionModel);
-                    for (int i = nOldSectionCount - 1; i >= aSectionAndPos.second; --i)
-                    {
-                        GMenuItem* pMenuItem = g_menu_item_new_from_model(pSectionModel, i);
-                        g_menu_prepend_item(pNewSection, pMenuItem);
-                        g_menu_remove(G_MENU(pSectionModel), i);
-                        g_object_unref(pMenuItem);
-                    }
-                    g_object_unref(pSectionItem);
-                    g_object_unref(pNewSection);
-                }
-            }
-        }
-
-#endif
     }
 
     virtual void remove_item(const OString& rId) override
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
         MenuHelper::remove_item(rId);
-#else
-        GtkPopover* pPopover = gtk_menu_button_get_popover(m_pMenuButton);
-        if (GMenuModel* pMenuModel = GTK_IS_POPOVER_MENU(pPopover) ?
-                                     gtk_popover_menu_get_menu_model(GTK_POPOVER_MENU(pPopover)) :
-                                     nullptr)
-        {
-            remove_id(pMenuModel, rId);
-        }
-#endif
     }
 
     virtual void clear() override
@@ -9701,102 +9801,27 @@ public:
 
     virtual void set_item_active(const OString& rIdent, bool bActive) override
     {
-#if GTK_CHECK_VERSION(4, 0, 0)
-        GActionGroup* pActionGroup = m_aHiddenIds.find(rIdent) == m_aHiddenIds.end() ? m_pActionGroup : m_pHiddenActionGroup;
-        g_action_group_change_action_state(pActionGroup, m_aIdToAction[rIdent].getStr(),
-                                           g_variant_new_string(bActive ? rIdent.getStr() : "'none'"));
-#else
         MenuHelper::set_item_active(rIdent, bActive);
-#endif
     }
 
     virtual void set_item_sensitive(const OString& rIdent, bool bSensitive) override
     {
-#if GTK_CHECK_VERSION(4, 0, 0)
-        GActionGroup* pActionGroup = m_aHiddenIds.find(rIdent) == m_aHiddenIds.end() ? m_pActionGroup : m_pHiddenActionGroup;
-        GAction* pAction = g_action_map_lookup_action(G_ACTION_MAP(pActionGroup), m_aIdToAction[rIdent].getStr());
-        g_simple_action_set_enabled(G_SIMPLE_ACTION(pAction), bSensitive);
-#else
         MenuHelper::set_item_sensitive(rIdent, bSensitive);
-#endif
     }
 
     virtual void set_item_label(const OString& rIdent, const OUString& rLabel) override
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
         MenuHelper::set_item_label(rIdent, rLabel);
-
-#else
-        GtkPopover* pPopover = gtk_menu_button_get_popover(m_pMenuButton);
-        if (GMenuModel* pMenuModel = GTK_IS_POPOVER_MENU(pPopover) ?
-                                     gtk_popover_menu_get_menu_model(GTK_POPOVER_MENU(pPopover)) :
-                                     nullptr)
-        {
-            std::pair<GMenuModel*, int> aRes = find_id(pMenuModel, rIdent);
-            if (!aRes.first)
-                return;
-            // clone the original item, remove the original, insert the replacement at
-            // the original location
-            GMenuItem* pMenuItem = g_menu_item_new_from_model(aRes.first, aRes.second);
-            g_menu_remove(G_MENU(aRes.first), aRes.second);
-            g_menu_item_set_label(pMenuItem, MapToGtkAccelerator(rLabel).getStr());
-            g_menu_insert_item(G_MENU(aRes.first), aRes.second, pMenuItem);
-            g_object_unref(pMenuItem);
-        }
-#endif
     }
 
     virtual OUString get_item_label(const OString& rIdent) const override
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
         return MenuHelper::get_item_label(rIdent);
-#else
-        GtkPopover* pPopover = gtk_menu_button_get_popover(m_pMenuButton);
-        if (GMenuModel* pMenuModel = GTK_IS_POPOVER_MENU(pPopover) ?
-                                     gtk_popover_menu_get_menu_model(GTK_POPOVER_MENU(pPopover)) :
-                                     nullptr)
-        {
-            std::pair<GMenuModel*, int> aRes = find_id(pMenuModel, rIdent);
-            if (!aRes.first)
-                return OUString();
-
-            // clone the original item to query its label
-            GMenuItem* pMenuItem = g_menu_item_new_from_model(aRes.first, aRes.second);
-            char *pLabel = nullptr;
-            g_menu_item_get_attribute(pMenuItem, G_MENU_ATTRIBUTE_LABEL, "&s", &pLabel);
-            OUString aRet(pLabel, pLabel ? strlen(pLabel) : 0, RTL_TEXTENCODING_UTF8);
-            g_free(pLabel);
-            g_object_unref(pMenuItem);
-            return aRet;
-        }
-        return OUString();
-#endif
     }
 
     virtual void set_item_visible(const OString& rIdent, bool bVisible) override
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
         MenuHelper::set_item_visible(rIdent, bVisible);
-#else
-        bool bOldVisible = m_aHiddenIds.find(rIdent) == m_aHiddenIds.end();
-        if (bVisible == bOldVisible)
-            return;
-
-        if (!bVisible)
-        {
-            GAction* pAction = g_action_map_lookup_action(G_ACTION_MAP(m_pActionGroup), m_aIdToAction[rIdent].getStr());
-            g_action_map_add_action(G_ACTION_MAP(m_pHiddenActionGroup), pAction);
-            g_action_map_remove_action(G_ACTION_MAP(m_pActionGroup), m_aIdToAction[rIdent].getStr());
-            m_aHiddenIds.insert(rIdent);
-        }
-        else
-        {
-            GAction* pAction = g_action_map_lookup_action(G_ACTION_MAP(m_pHiddenActionGroup), m_aIdToAction[rIdent].getStr());
-            g_action_map_add_action(G_ACTION_MAP(m_pActionGroup), pAction);
-            g_action_map_remove_action(G_ACTION_MAP(m_pHiddenActionGroup), m_aIdToAction[rIdent].getStr());
-            m_aHiddenIds.erase(rIdent);
-        }
-#endif
     }
 
 #if GTK_CHECK_VERSION(4, 0, 0)
@@ -9939,8 +9964,6 @@ public:
     {
 #if GTK_CHECK_VERSION(4, 0, 0)
         g_signal_handler_disconnect(m_pMenuButtonToggleButton, m_nToggledSignalId);
-        g_object_unref(m_pActionGroup);
-        g_object_unref(m_pHiddenActionGroup);
 #else
         if (m_pMenuHack)
         {
@@ -10189,11 +10212,7 @@ public:
 };
 #endif
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
 class GtkInstanceMenu : public MenuHelper, public virtual weld::Menu
-#else
-class GtkInstanceMenu : public virtual weld::Menu
-#endif
 {
 protected:
 #if !GTK_CHECK_VERSION(4, 0, 0)
@@ -10202,8 +10221,6 @@ protected:
     OString m_sActivated;
 #if !GTK_CHECK_VERSION(4, 0, 0)
     MenuHelper* m_pTopLevelMenuHelper;
-#else
-    GtkPopoverMenu* m_pMenu;
 #endif
 
 private:
@@ -10230,11 +10247,12 @@ private:
 public:
 #if !GTK_CHECK_VERSION(4, 0, 0)
     GtkInstanceMenu(GtkMenu* pMenu, bool bTakeOwnership)
-        : MenuHelper(pMenu, bTakeOwnership)
-        , m_pTopLevelMenuHelper(nullptr)
 #else
-    GtkInstanceMenu(GtkPopoverMenu* pMenu, bool /*bTakeOwnership*/)
-        : m_pMenu(pMenu)
+    GtkInstanceMenu(GtkPopoverMenu* pMenu, bool bTakeOwnership)
+#endif
+        : MenuHelper(pMenu, bTakeOwnership)
+#if !GTK_CHECK_VERSION(4, 0, 0)
+        , m_pTopLevelMenuHelper(nullptr)
 #endif
     {
         g_object_set_data(G_OBJECT(m_pMenu), "g-lo-GtkInstanceMenu", this);
@@ -10369,73 +10387,44 @@ public:
         return m_sActivated;
     }
 
-#if GTK_CHECK_VERSION(4, 0, 0)
-    GtkPopoverMenu* getMenu() const
-    {
-        return m_pMenu;
-    }
-#endif
-
     virtual void set_sensitive(const OString& rIdent, bool bSensitive) override
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
         set_item_sensitive(rIdent, bSensitive);
-#endif
     }
 
     virtual bool get_sensitive(const OString& rIdent) const override
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
         return get_item_sensitive(rIdent);
-#else
-        return false;
-#endif
     }
 
     virtual void set_active(const OString& rIdent, bool bActive) override
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
         set_item_active(rIdent, bActive);
-#endif
     }
 
     virtual bool get_active(const OString& rIdent) const override
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
         return get_item_active(rIdent);
-#else
-        return false;
-#endif
     }
 
     virtual void set_visible(const OString& rIdent, bool bShow) override
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
         set_item_visible(rIdent, bShow);
-#endif
     }
 
     virtual void set_label(const OString& rIdent, const OUString& rLabel) override
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
         set_item_label(rIdent, rLabel);
-#endif
     }
 
     virtual OUString get_label(const OString& rIdent) const override
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
         return get_item_label(rIdent);
-#else
-        return OUString();
-#endif
     }
 
     virtual void insert_separator(int pos, const OUString& rId) override
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
         MenuHelper::insert_separator(pos, rId);
-#endif
     }
 
     virtual void clear() override
@@ -10547,8 +10536,8 @@ public:
                 m_aExtraItems.erase(iter);
             }
         }
-        MenuHelper::remove_item(rIdent);
 #endif
+        MenuHelper::remove_item(rIdent);
     }
 
     virtual ~GtkInstanceMenu() override
