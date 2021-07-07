@@ -264,6 +264,8 @@ namespace emfio
         aTL = ReadYX();
         aBR.AdjustX( -1 );
         aBR.AdjustY( -1 );
+
+        SAL_INFO("emfio", "\t\t Rectangle " << aTL.X() << ":" << aTL.Y() << ", " << aBR.X() << ":" << aBR.Y());
         if (aTL.X() > aBR.X() || aTL.Y() > aBR.Y())
         {
             SAL_WARN("emfio", "broken rectangle");

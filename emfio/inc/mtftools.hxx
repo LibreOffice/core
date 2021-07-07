@@ -678,7 +678,8 @@ namespace emfio
             tools::Long* pDXArry = nullptr,
             tools::Long* pDYArry = nullptr,
             bool bRecordPath = false,
-            sal_Int32 nGraphicsMode = GM_COMPATIBLE);
+            sal_Int32 nGraphicsMode = GM_COMPATIBLE,
+            float nXScale = 1.0, float nYScale = 1.0);
 
         void                ResolveBitmapActions(std::vector<std::unique_ptr<BSaveStruct>>& rSaveList);
 

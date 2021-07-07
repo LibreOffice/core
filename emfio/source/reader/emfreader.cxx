@@ -1926,7 +1926,7 @@ namespace emfio
                                 Push(); // Save the current clip. It will be restored after text drawing
                                 IntersectClipRect( aRect );
                             }
-                            DrawText(aPos, aText, pDXAry.get(), pDYAry.get(), mbRecordPath, nGfxMode);
+                            DrawText(aPos, aText, pDXAry.get(), pDYAry.get(), mbRecordPath, nGfxMode, nXScale, nYScale);
                             if ( nOptions & ETO_CLIPPED )
                                 Pop();
                         }

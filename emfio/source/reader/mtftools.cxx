@@ -1702,7 +1702,7 @@ namespace emfio
         }
     }
 
-    void MtfTools::DrawText( Point& rPosition, OUString const & rText, tools::Long* pDXArry, tools::Long* pDYArry, bool bRecordPath, sal_Int32 nGfxMode )
+    void MtfTools::DrawText(Point& rPosition, OUString const& rText, tools::Long* pDXArry, tools::Long* pDYArry, bool bRecordPath, sal_Int32 nGfxMode, float nXScale, float nYScale)
     {
         UpdateClipRegion();
         rPosition = ImplMap( rPosition );
@@ -1805,7 +1805,9 @@ namespace emfio
                 fOrientation *= 10;
                 aTmp.SetOrientation( aTmp.GetOrientation() + Degree10( static_cast<sal_Int16>(fOrientation) ) );
             }
-        }
+        } else if ((nGfxMode == GM_COMPATIBLE) && (nXScale < 0.) && (nYScale < 0.))
+            // TODO Only support special case for 180 degrees rotation
+            aTmp.SetOrientation(aTmp.GetOrientation() + Degree10(1800));
 
         if( mnTextAlign & ( TA_UPDATECP | TA_RIGHT_CENTER ) )
         {
