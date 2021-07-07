@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "8a6e615d_3b1a6dea",
+        "filename": "sc/qa/uitest/calc_tests9/tdf95554.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1002857
+      },
+      "writtenOn": "2021-07-07T15:01:40Z",
+      "side": 1,
+      "message": "got it.",
+      "parentUuid": "35c5db76_36466e94",
+      "revId": "32f31a96b16ccca2e51a986e625c56e87f50b540",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "98be0254_e0df4c00",
         "filename": "sc/qa/uitest/calc_tests9/tdf95554.py",
         "patchSetId": 7
@@ -30,6 +48,24 @@
       "writtenOn": "2021-07-07T12:05:48Z",
       "side": 1,
       "message": "you are selecting every cell individually. use a Range instead.",
+      "revId": "32f31a96b16ccca2e51a986e625c56e87f50b540",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "acbfb235_7ad3676d",
+        "filename": "sc/qa/uitest/calc_tests9/tdf95554.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1002857
+      },
+      "writtenOn": "2021-07-07T15:01:40Z",
+      "side": 1,
+      "message": "For this I want to mimic picking out single cells like we do with holding down control. That\u0027s what I got when I tried it with LO_COLLECT_UIINFO\u003d\"test.log\"\nSAL_USE_VCLPLUGIN\u003dgen instdir/program/soffice.",
+      "parentUuid": "98be0254_e0df4c00",
       "revId": "32f31a96b16ccca2e51a986e625c56e87f50b540",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
@@ -50,6 +86,24 @@
       "revId": "32f31a96b16ccca2e51a986e625c56e87f50b540",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b46c858a_cb895a7d",
+        "filename": "sc/qa/uitest/calc_tests9/tdf95554.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1002857
+      },
+      "writtenOn": "2021-07-07T15:01:40Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "822ceb21_e8224152",
+      "revId": "32f31a96b16ccca2e51a986e625c56e87f50b540",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
