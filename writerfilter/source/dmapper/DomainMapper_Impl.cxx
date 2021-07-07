@@ -127,10 +127,8 @@ static void lcl_linenumberingHeaderFooter( const uno::Reference<container::XName
     const StyleSheetEntryPtr pEntry = dmapper->GetStyleSheetTable()->FindStyleSheetByISTD( rname );
     if (!pEntry)
         return;
-    const StyleSheetPropertyMap* pStyleSheetProperties = dynamic_cast<const StyleSheetPropertyMap*>( pEntry->pProperties.get() );
-    if ( !pStyleSheetProperties )
-        return;
-    sal_Int32 nListId = pStyleSheetProperties->GetListId();
+    const StyleSheetPropertyMap& rStyleSheetProperties = pEntry->aProperties;
+    sal_Int32 nListId = rStyleSheetProperties.GetListId();
     if( xStyles.is() )
     {
         if( xStyles->hasByName( rname ) )
@@ -911,17 +909,13 @@ uno::Any DomainMapper_Impl::GetPropertyFromStyleSheet(PropertyIds eId, StyleShee
 {
     while(pEntry)
     {
-        if(pEntry->pProperties)
+        std::optional<PropertyMap::Property> aProperty = pEntry->aProperties.getProperty(eId);
+        if (aProperty)
         {
-            std::optional<PropertyMap::Property> aProperty =
-                    pEntry->pProperties->getProperty(eId);
-            if( aProperty )
-            {
-                if (pIsDocDefault)
-                    *pIsDocDefault = pEntry->pProperties->isDocDefault(eId);
+            if (pIsDocDefault)
+                *pIsDocDefault = pEntry->aProperties.isDocDefault(eId);
 
-                return aProperty->second;
-            }
+            return aProperty->second;
         }
         //search until the property is set or no parent is available
         StyleSheetEntryPtr pNewEntry;
@@ -1203,13 +1197,11 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
 
         if ( pParaStyle )
         {
-            const ParagraphProperties* pStyleProperties = dynamic_cast<const ParagraphProperties*>( pParaStyle->pProperties.get() );
-            if (!pStyleProperties)
-                return;
+            const ParagraphProperties& rStyleProperties = pParaStyle->aProperties;
             sal_Int32 nWidth =
                 rAppendContext.pLastParagraphProperties->Getw() > 0 ?
                     rAppendContext.pLastParagraphProperties->Getw() :
-                    pStyleProperties->Getw();
+                    rStyleProperties.Getw();
             bool bAutoWidth = nWidth < 1;
             if( bAutoWidth )
                 nWidth = DEFAULT_FRAME_MIN_WIDTH;
@@ -1218,16 +1210,16 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
             aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_HEIGHT),
                 rAppendContext.pLastParagraphProperties->Geth() > 0 ?
                     rAppendContext.pLastParagraphProperties->Geth() :
-                    pStyleProperties->Geth() > 0 ? pStyleProperties->Geth() : DEFAULT_FRAME_MIN_HEIGHT));
+                    rStyleProperties.Geth() > 0 ? rStyleProperties.Geth() : DEFAULT_FRAME_MIN_HEIGHT));
 
             sal_Int16 nhRule = sal_Int16(
                 rAppendContext.pLastParagraphProperties->GethRule() >= 0 ?
                     rAppendContext.pLastParagraphProperties->GethRule() :
-                    pStyleProperties->GethRule());
+                    rStyleProperties.GethRule());
             if ( nhRule < 0 )
             {
                 if ( rAppendContext.pLastParagraphProperties->Geth() >= 0 ||
-                    pStyleProperties->GethRule() >= 0 )
+                    rStyleProperties.GethRule() >= 0)
                 {
                     // [MS-OE376] Word uses a default value of "atLeast" for
                     // this attribute when the value of the h attribute is not 0.
@@ -1250,55 +1242,55 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
             sal_Int16 nHoriOrient = sal_Int16(
                 rAppendContext.pLastParagraphProperties->GetxAlign() >= 0 ?
                     rAppendContext.pLastParagraphProperties->GetxAlign() :
-                    pStyleProperties->GetxAlign() >= 0 ? pStyleProperties->GetxAlign() : text::HoriOrientation::NONE );
+                    rStyleProperties.GetxAlign() >= 0 ? rStyleProperties.GetxAlign() : text::HoriOrientation::NONE);
             aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_HORI_ORIENT), nHoriOrient));
 
             //set a non negative default value
             aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_HORI_ORIENT_POSITION),
                 rAppendContext.pLastParagraphProperties->IsxValid() ?
                     rAppendContext.pLastParagraphProperties->Getx() :
-                    pStyleProperties->IsxValid() ? pStyleProperties->Getx() : DEFAULT_VALUE));
+                    rStyleProperties.IsxValid() ? rStyleProperties.Getx() : DEFAULT_VALUE));
 
             //Default the anchor in case FramePr_hAnchor is missing ECMA 17.3.1.11
             aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_HORI_ORIENT_RELATION), sal_Int16(
                 rAppendContext.pLastParagraphProperties->GethAnchor() >= 0 ?
                     rAppendContext.pLastParagraphProperties->GethAnchor() :
-                pStyleProperties->GethAnchor() >=0 ? pStyleProperties->GethAnchor() : text::RelOrientation::FRAME )));
+                rStyleProperties.GethAnchor() >=0 ? rStyleProperties.GethAnchor() : text::RelOrientation::FRAME)));
 
             sal_Int16 nVertOrient = sal_Int16(
                 rAppendContext.pLastParagraphProperties->GetyAlign() >= 0 ?
                     rAppendContext.pLastParagraphProperties->GetyAlign() :
-                    pStyleProperties->GetyAlign() >= 0 ? pStyleProperties->GetyAlign() : text::VertOrientation::NONE );
+                    rStyleProperties.GetyAlign() >= 0 ? rStyleProperties.GetyAlign() : text::VertOrientation::NONE);
             aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_VERT_ORIENT), nVertOrient));
 
             //set a non negative default value
             aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_VERT_ORIENT_POSITION),
                 rAppendContext.pLastParagraphProperties->IsyValid() ?
                     rAppendContext.pLastParagraphProperties->Gety() :
-                    pStyleProperties->IsyValid() ? pStyleProperties->Gety() : DEFAULT_VALUE));
+                    rStyleProperties.IsyValid() ? rStyleProperties.Gety() : DEFAULT_VALUE));
 
             //Default the anchor in case FramePr_vAnchor is missing ECMA 17.3.1.11
             if (rAppendContext.pLastParagraphProperties->GetWrap() == text::WrapTextMode::WrapTextMode_MAKE_FIXED_SIZE &&
-                pStyleProperties->GetWrap() == text::WrapTextMode::WrapTextMode_MAKE_FIXED_SIZE)
+                rStyleProperties.GetWrap() == text::WrapTextMode::WrapTextMode_MAKE_FIXED_SIZE)
             {
                 aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_VERT_ORIENT_RELATION), sal_Int16(
                     rAppendContext.pLastParagraphProperties->GetvAnchor() >= 0 ?
                     rAppendContext.pLastParagraphProperties->GetvAnchor() :
-                    pStyleProperties->GetvAnchor() >= 0 ? pStyleProperties->GetvAnchor() : text::RelOrientation::FRAME)));
+                    rStyleProperties.GetvAnchor() >= 0 ? rStyleProperties.GetvAnchor() : text::RelOrientation::FRAME)));
             }
             else
             {
                 aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_VERT_ORIENT_RELATION), sal_Int16(
                     rAppendContext.pLastParagraphProperties->GetvAnchor() >= 0 ?
                     rAppendContext.pLastParagraphProperties->GetvAnchor() :
-                    pStyleProperties->GetvAnchor() >= 0 ? pStyleProperties->GetvAnchor() : text::RelOrientation::PAGE_PRINT_AREA)));
+                    rStyleProperties.GetvAnchor() >= 0 ? rStyleProperties.GetvAnchor() : text::RelOrientation::PAGE_PRINT_AREA)));
             }
 
             aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_SURROUND),
                 rAppendContext.pLastParagraphProperties->GetWrap() != text::WrapTextMode::WrapTextMode_MAKE_FIXED_SIZE
                 ? rAppendContext.pLastParagraphProperties->GetWrap()
-                : pStyleProperties->GetWrap() != text::WrapTextMode::WrapTextMode_MAKE_FIXED_SIZE
-                  ? pStyleProperties->GetWrap()
+                : rStyleProperties.GetWrap() != text::WrapTextMode::WrapTextMode_MAKE_FIXED_SIZE
+                  ? rStyleProperties.GetWrap()
                   : text::WrapTextMode_NONE ));
 
             /** FDO#73546 : distL & distR should be unsigned integers <Ecma 20.4.3.6>
@@ -1309,7 +1301,7 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
             sal_Int32 nLeftDist = nRightDist =
                 rAppendContext.pLastParagraphProperties->GethSpace() >= 0 ?
                 rAppendContext.pLastParagraphProperties->GethSpace() :
-                pStyleProperties->GethSpace() >= 0 ? pStyleProperties->GethSpace() : 0;
+                rStyleProperties.GethSpace() >= 0 ? rStyleProperties.GethSpace() : 0;
 
             aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_LEFT_MARGIN), nHoriOrient == text::HoriOrientation::LEFT ? 0 : nLeftDist));
             aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_RIGHT_MARGIN), nHoriOrient == text::HoriOrientation::RIGHT ? 0 : nRightDist));
@@ -1318,7 +1310,7 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
             sal_Int32 nTopDist = nBottomDist =
                 rAppendContext.pLastParagraphProperties->GetvSpace() >= 0 ?
                 rAppendContext.pLastParagraphProperties->GetvSpace() :
-                pStyleProperties->GetvSpace() >= 0 ? pStyleProperties->GetvSpace() : 0;
+                rStyleProperties.GetvSpace() >= 0 ? rStyleProperties.GetvSpace() : 0;
 
             aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_TOP_MARGIN), nVertOrient == text::VertOrientation::TOP ? 0 : nTopDist));
             aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_BOTTOM_MARGIN), nVertOrient == text::VertOrientation::BOTTOM ? 0 : nBottomDist));
@@ -1423,11 +1415,8 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
 /// Check if the style or its parent has a list id, recursively.
 static sal_Int32 lcl_getListId(const StyleSheetEntryPtr& rEntry, const StyleSheetTablePtr& rStyleTable, bool & rNumberingFromBaseStyle)
 {
-    const StyleSheetPropertyMap* pEntryProperties = dynamic_cast<const StyleSheetPropertyMap*>(rEntry->pProperties.get());
-    if (!pEntryProperties)
-        return -1;
-
-    sal_Int32 nListId = pEntryProperties->GetListId();
+    const StyleSheetPropertyMap& rEntryProperties = rEntry->aProperties;
+    sal_Int32 nListId = rEntryProperties.GetListId();
     // The style itself has a list id.
     if (nListId >= 0)
         return nListId;
@@ -1464,11 +1453,8 @@ sal_Int16 DomainMapper_Impl::GetListLevel(const StyleSheetEntryPtr& pEntry,
     if (!pEntry)
         return -1;
 
-    const StyleSheetPropertyMap* pEntryProperties = dynamic_cast<const StyleSheetPropertyMap*>(pEntry->pProperties.get());
-    if (!pEntryProperties)
-        return -1;
-
-    nListLevel = pEntryProperties->GetListLevel();
+    const StyleSheetPropertyMap& rEntryProperties = pEntry->aProperties;
+    nListLevel = rEntryProperties.GetListLevel();
     // The style itself has a list level.
     if (nListLevel >= 0)
         return nListLevel;
@@ -1531,7 +1517,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
 
     const StyleSheetEntryPtr pEntry = GetStyleSheetTable()->FindStyleSheetByConvertedStyleName( GetCurrentParaStyleName() );
     OSL_ENSURE( pEntry, "no style sheet found" );
-    const StyleSheetPropertyMap* pStyleSheetProperties = dynamic_cast<const StyleSheetPropertyMap*>(pEntry ? pEntry->pProperties.get() : nullptr);
+    const StyleSheetPropertyMap* pStyleSheetProperties = pEntry ? &pEntry->aProperties : nullptr;
     bool isNumberingViaStyle(false);
     bool isNumberingViaRule = pParaContext && pParaContext->GetListId() > -1;
     sal_Int32 nListId = -1;
@@ -1581,7 +1567,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
             // So now import must also copy the para-style indents directly onto the paragraph to compensate.
             std::optional<PropertyMap::Property> oProperty;
             const StyleSheetEntryPtr pParent = (!pEntry->sBaseStyleIdentifier.isEmpty()) ? GetStyleSheetTable()->FindStyleSheetByISTD(pEntry->sBaseStyleIdentifier) : nullptr;
-            const StyleSheetPropertyMap* pParentProperties = dynamic_cast<const StyleSheetPropertyMap*>(pParent ? pParent->pProperties.get() : nullptr);
+            const StyleSheetPropertyMap* pParentProperties = pParent ? &pParent->aProperties : nullptr;
             if (!pEntry->sBaseStyleIdentifier.isEmpty())
             {
                 oProperty = pStyleSheetProperties->getProperty(PROP_PARA_FIRST_LINE_INDENT);
@@ -7552,10 +7538,8 @@ uno::Reference<container::XIndexAccess> DomainMapper_Impl::GetCurrentNumberingRu
         const StyleSheetEntryPtr pEntry = GetStyleSheetTable()->FindStyleSheetByConvertedStyleName(aStyle);
         if (!pEntry)
             return xRet;
-        const StyleSheetPropertyMap* pStyleSheetProperties = dynamic_cast<const StyleSheetPropertyMap*>(pEntry->pProperties.get());
-        if (!pStyleSheetProperties)
-            return xRet;
-        sal_Int32 nListId = pStyleSheetProperties->GetListId();
+        const StyleSheetPropertyMap& rStyleSheetProperties = pEntry->aProperties;
+        const sal_Int32 nListId = rStyleSheetProperties.GetListId();
         if (nListId < 0)
             return xRet;
         if (pListLevel)

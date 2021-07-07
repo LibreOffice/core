@@ -542,6 +542,8 @@ public:
 
     sal_Int16 GetOutlineLevel() const             { return mnOutlineLevel; }
     void      SetOutlineLevel( sal_Int16 nLevel ) { if ( nLevel < WW_OUTLINE_MAX ) mnOutlineLevel = nLevel; }
+
+    // didn't help     virtual ~StyleSheetPropertyMap() override;
 };
 
 class ParagraphPropertyMap

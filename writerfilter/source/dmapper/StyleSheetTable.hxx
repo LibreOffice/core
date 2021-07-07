@@ -58,7 +58,7 @@ public:
     OUString sBaseStyleIdentifier;
     OUString sNextStyleIdentifier;
     OUString sStyleName;
-    const PropertyMapPtr pProperties; ///< always StyleSheetPropertyMap
+    StyleSheetPropertyMap aProperties;
     OUString sConvertedStyleName;
     std::vector<css::beans::PropertyValue> aLatentStyles; ///< Attributes of latentStyles
     std::vector<css::beans::PropertyValue> aLsdExceptions; ///< List of lsdException attribute lists
