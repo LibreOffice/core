@@ -21,6 +21,7 @@ import net.adaptivebox.goodness.IGoodnessCompareEngine;
 import net.adaptivebox.knowledge.Library;
 import net.adaptivebox.knowledge.SearchPoint;
 import net.adaptivebox.problem.ProblemEncoder;
+import net.adaptivebox.space.BasicPoint;
 
 abstract public class AbsGTBehavior {
   // The referred social library
@@ -29,6 +30,8 @@ abstract public class AbsGTBehavior {
   public void setLibrary(Library lib) {
     socialLib = lib;
   }
+
+  abstract public void setMemPoints(SearchPoint pbest, BasicPoint pcurrent, BasicPoint pold);
 
   abstract public void generateBehavior(SearchPoint trailPoint, ProblemEncoder problemEncoder);
 

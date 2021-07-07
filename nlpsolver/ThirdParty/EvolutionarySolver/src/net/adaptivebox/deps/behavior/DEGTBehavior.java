@@ -52,7 +52,8 @@ public class DEGTBehavior extends AbsGTBehavior implements ILibEngine {
   // the own memory: store the point that generated in last learning cycle
   private SearchPoint pbest_t;
 
-  public void setPbest(SearchPoint pbest) {
+  @Override
+  public void setMemPoints(SearchPoint pbest, BasicPoint pcurrent, BasicPoint pold) {
     pbest_t = pbest;
   }
 

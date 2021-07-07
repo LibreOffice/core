@@ -66,7 +66,7 @@ public class DEPSAgent implements ILibEngine {
   // the own memory: store the personal best point
   private SearchPoint pbest_t;
 
-  // Generate-and-test Behaviors
+  // Generate-and-test behaviors.
   private DEGTBehavior deGTBehavior;
   private PSGTBehavior psGTBehavior;
   public double switchP = 0.5;
@@ -100,16 +100,7 @@ public class DEPSAgent implements ILibEngine {
   }
 
   public void setGTBehavior(AbsGTBehavior gtBehavior) {
-    if (gtBehavior instanceof DEGTBehavior) {
-      deGTBehavior = ((DEGTBehavior) gtBehavior);
-      deGTBehavior.setPbest(pbest_t);
-      return;
-    }
-    if (gtBehavior instanceof PSGTBehavior) {
-      psGTBehavior = ((PSGTBehavior) gtBehavior);
-      psGTBehavior.setMemPoints(pbest_t, pcurrent_t, pold_t);
-      return;
-    }
+    gtBehavior.setMemPoints(pbest_t, pcurrent_t, pold_t);
   }
 
   public void generatePoint() {
