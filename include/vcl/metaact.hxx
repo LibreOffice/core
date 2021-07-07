@@ -393,6 +393,9 @@ public:
     const tools::Rectangle&    GetRect() const { return maRect; }
     const Point&        GetStartPoint() const { return maStartPt; }
     const Point&        GetEndPoint() const { return maEndPt; }
+    void                SetRect(tools::Rectangle& rRect) { maRect = rRect; }
+    void                SetStartPoint(Point& rPoint) { maStartPt = rPoint; }
+    void                SetEndPoint(Point& rPoint) { maEndPt = rPoint; }
 };
 
 class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetaPolyLineAction final : public MetaAction
