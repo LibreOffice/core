@@ -10505,6 +10505,15 @@ public:
             m_pTopLevelMenuHelper->add_to_map(pMenuItem);
         if (pos != -1)
             gtk_menu_reorder_child(m_pMenu, pItem, pos);
+#else
+        SAL_WARN("vcl.gtk", "needs to be implemented for gtk4");
+        (void)pos;
+        (void)rId;
+        (void)rStr;
+        (void)pIconName;
+        (void)pImageSurface;
+        (void)rGraphic;
+        (void)eCheckRadioFalse;
 #endif
     }
 
