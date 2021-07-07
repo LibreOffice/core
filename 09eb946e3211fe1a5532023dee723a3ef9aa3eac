@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "c61af87d_c97f6681",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1003291
+      },
+      "writtenOn": "2021-07-07T14:26:04Z",
+      "side": 1,
+      "message": "This seems to be automatically handled by git.\nWhen commit -a --amend there is no option to edit it.\nI\u0027m sorry but I don\u0027t know how to.\nCare to explain?",
+      "parentUuid": "03d8e2a0_571bd322",
+      "revId": "09eb946e3211fe1a5532023dee723a3ef9aa3eac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b82a8b17_650d81da",
         "filename": "sal/rtl/alloc_impl.hxx",
         "patchSetId": 7
