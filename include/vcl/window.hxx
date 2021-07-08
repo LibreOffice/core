@@ -563,6 +563,14 @@ public:
     SAL_DLLPRIVATE void                 ImplCallResize();
     SAL_DLLPRIVATE void                 ImplCallMove();
 
+    // These methods call the relevant virtual method when not in/post dispose
+    SAL_DLLPRIVATE void                 CompatGetFocus();
+    SAL_DLLPRIVATE void                 CompatLoseFocus();
+    SAL_DLLPRIVATE void                 CompatStateChanged( StateChangedType nStateChange );
+    SAL_DLLPRIVATE void                 CompatDataChanged( const DataChangedEvent& rDCEvt );
+    SAL_DLLPRIVATE bool                 CompatPreNotify( NotifyEvent& rNEvt );
+    SAL_DLLPRIVATE bool                 CompatNotify( NotifyEvent& rNEvt );
+
                    void                 IncModalCount();
                    void                 DecModalCount();
 
@@ -764,14 +772,6 @@ public:
     virtual void                        DataChanged( const DataChangedEvent& rDCEvt );
     virtual bool                        PreNotify( NotifyEvent& rNEvt );
     virtual bool                        EventNotify( NotifyEvent& rNEvt );
-
-    // These methods call the relevant virtual method when not in/post dispose
-    void                                CompatGetFocus();
-    void                                CompatLoseFocus();
-    void                                CompatStateChanged( StateChangedType nStateChange );
-    void                                CompatDataChanged( const DataChangedEvent& rDCEvt );
-    bool                                CompatPreNotify( NotifyEvent& rNEvt );
-    bool                                CompatNotify( NotifyEvent& rNEvt );
 
     void                                AddEventListener( const Link<VclWindowEvent&,void>& rEventListener );
     void                                RemoveEventListener( const Link<VclWindowEvent&,void>& rEventListener );
