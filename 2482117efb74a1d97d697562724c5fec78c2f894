@@ -34,6 +34,24 @@
       "revId": "2482117efb74a1d97d697562724c5fec78c2f894",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "60bb322e_d100e324",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1453,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-07-08T11:57:11Z",
+      "side": 1,
+      "message": "Fair enough. :-) Seeing that this is tricky area, I was thinking what implicit code could be more explicit to improve safety and thought about this. But you\u0027re right, I didn\u0027t consider that the -1 is consistent with other parts. Thanks for brainstorming.",
+      "parentUuid": "89ae85ff_cb5ae4ab",
+      "revId": "2482117efb74a1d97d697562724c5fec78c2f894",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
