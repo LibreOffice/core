@@ -97,6 +97,7 @@ void DocumentInserter::StartExecuteModal( const Link<sfx2::FileDialogHelper*,voi
                 ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
                 m_nDlgFlags, m_sDocFactory, SfxFilterFlags::NONE, SfxFilterFlags::NONE, m_pParent ) );
     }
+    m_pFileDlg->SetContext(FileDialogHelper::InsertDoc);
     m_pFileDlg->StartExecuteModal( LINK( this, DocumentInserter, DialogClosedHdl ) );
 }
 

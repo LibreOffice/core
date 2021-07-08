@@ -401,11 +401,7 @@ void SdTPAction::OpenFileDialog()
             sfx2::FileDialogHelper aFileDialog(
                 ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION,
                 FileDialogFlags::NONE, GetFrameWeld());
-
-            if (bDocument && aFile.isEmpty())
-                aFile = SvtPathOptions().GetWorkPath();
-
-            aFileDialog.SetDisplayDirectory( aFile );
+            aFileDialog.SetContext(sfx2::FileDialogHelper::ImpressClickAction);
 
             // The following is a workaround for #i4306#:
             // The addition of the implicitly existing "all files"

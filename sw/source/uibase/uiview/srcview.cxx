@@ -295,7 +295,6 @@ void SwSrcView::Execute(SfxRequest& rReq)
                 xFP->setCurrentFilter( sHtml ) ;
             }
 
-            xFP->setDisplayDirectory( aPathOpt.GetWorkPath() );
             if( aDlgHelper.Execute() == ERRCODE_NONE)
             {
                 SfxMedium aMedium( xFP->getSelectedFiles().getConstArray()[0],

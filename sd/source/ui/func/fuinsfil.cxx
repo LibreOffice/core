@@ -133,6 +133,7 @@ void FuInsertFile::DoExecute( SfxRequest& rReq )
         sfx2::FileDialogHelper      aFileDialog(
                 ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
                 FileDialogFlags::Insert, mpWindow ? mpWindow->GetFrameWeld() : nullptr);
+        aFileDialog.SetContext(sfx2::FileDialogHelper::DrawImpressInsertFile);
         Reference< XFilePicker >    xFilePicker( aFileDialog.GetFilePicker() );
         Reference< XFilterManager > xFilterManager( xFilePicker, UNO_QUERY );
         OUString aOwnCont;

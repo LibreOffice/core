@@ -844,6 +844,16 @@
         <value/>
       </prop>
     </group>
+    <group oor:name="LastDirectory">
+      <info>
+        <desc>Stores the last selected directory for the filepicker for different contexts.</desc>
+      </info>
+      <prop oor:name="LastPath" oor:type="xs:string" oor:nillable="false">
+        <info>
+          <desc>The last used path for this context (context is the name of the parent node)</desc>
+        </info>
+      </prop>
+    </group>
   </templates>
   <component>
     <group oor:name="VCL">
@@ -5898,6 +5908,11 @@
           <desc>URL of the last used service in the remote file picker.</desc>
         </info>
       </prop>
+      <set oor:name="FilePickerLastDirectory" oor:node-type="LastDirectory">
+        <info>
+          <desc>Contains the last used directory for the filepicker for various contexts</desc>
+        </info>
+      </set>
       <prop oor:name="CmisServersUrls" oor:type="oor:string-list" oor:nillable="false">
         <info>
           <desc>List of sample URLs of the CMIS servers in the place edition dialog.</desc>
