@@ -549,6 +549,7 @@ void LibPage::InsertLib()
     Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
     // file open dialog
     sfx2::FileDialogHelper aDlg(ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, FileDialogFlags::NONE, m_pDialog->getDialog());
+    aDlg.SetContext(sfx2::FileDialogHelper::BasicInsertLib);
     const Reference <XFilePicker3>& xFP = aDlg.GetFilePicker();
 
     xFP->setTitle(IDEResId(RID_STR_APPENDLIBS));
@@ -567,16 +568,6 @@ void LibPage::InsertLib()
               ";*.sdd;*.sxi;*.odp"       // presentation
               ";*.sti;*.otp"             // presentation template
               ";*.sxm;*.odf" );          // formula
-
-    // set display directory and filter
-    OUString aPath(GetExtraData()->GetAddLibPath());
-    if ( !aPath.isEmpty() )
-        xFP->setDisplayDirectory( aPath );
-    else
-    {
-        // macro path from configuration management
-        xFP->setDisplayDirectory( SvtPathOptions().GetWorkPath() );
-    }
 
     OUString aLastFilter(GetExtraData()->GetAddLibFilter());
     if ( !aLastFilter.isEmpty() )
@@ -1005,6 +996,7 @@ void LibPage::ExportAsPackage( const OUString& aLibName )
 {
     // file open dialog
     sfx2::FileDialogHelper aDlg(ui::dialogs::TemplateDescription::FILESAVE_SIMPLE, FileDialogFlags::NONE, m_pDialog->getDialog());
+    aDlg.SetContext(sfx2::FileDialogHelper::BasicExportPackage);
     const Reference <XFilePicker3>& xFP = aDlg.GetFilePicker();
 
     Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
@@ -1017,17 +1009,6 @@ void LibPage::ExportAsPackage( const OUString& aLibName )
     OUString aTitle(IDEResId(RID_STR_PACKAGE_BUNDLE));
     xFP->appendFilter( aTitle, "*.oxt" ); // library files
 
-    // set display directory and filter
-    OUString aPath = GetExtraData()->GetAddLibPath();
-    if ( !aPath.isEmpty() )
-    {
-        xFP->setDisplayDirectory( aPath );
-    }
-    else
-    {
-        // macro path from configuration management
-        xFP->setDisplayDirectory( SvtPathOptions().GetWorkPath() );
-    }
     xFP->setCurrentFilter( aTitle );
 
     if ( xFP->execute() != RET_OK )
