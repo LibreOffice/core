@@ -38,7 +38,7 @@ void SAL_CALL StatusIndicator::start(const OUString& sText, sal_Int32 nRange)
         m_nRange = nRange;
         m_nLastCallbackPercent = -1;
 
-        comphelper::LibreOfficeKit::statusIndicatorStart();
+        comphelper::LibreOfficeKit::statusIndicatorStart(sText);
     }
 #if !defined(IOS) && !defined(ANDROID)
     css::uno::Reference<css::task::XStatusIndicatorFactory> xFactory(m_xFactory);
