@@ -251,13 +251,17 @@ TabBar::Item::~Item()
     mrTabBar.GetContainer()->move(mxButton.get(), nullptr);
 }
 
-
 IMPL_LINK_NOARG(TabBar::Item, HandleClick, const OString&, void)
 {
+    // tdf#143146 copy the functor and arg before calling
+    // GrabFocusToDocument which may destroy this object
+    auto aDeckActivationFunctor = maDeckActivationFunctor;
+    auto sDeckId = msDeckId;
+
     mrTabBar.GrabFocusToDocument();
     try
     {
-        maDeckActivationFunctor(msDeckId);
+        aDeckActivationFunctor(sDeckId);
     }
     catch(const css::uno::Exception&)
     {} // workaround for #i123198#
