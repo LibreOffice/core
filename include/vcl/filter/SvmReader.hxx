@@ -50,6 +50,7 @@ public:
     rtl::Reference<MetaAction> ChordHandler();
     rtl::Reference<MetaAction> PolyLineHandler();
     rtl::Reference<MetaAction> PolygonHandler();
+    rtl::Reference<MetaAction> PolyPolygonHandler();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
