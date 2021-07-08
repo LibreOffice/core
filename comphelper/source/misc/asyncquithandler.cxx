@@ -24,10 +24,7 @@
 #include <comphelper/asyncquithandler.hxx>
 #include <comphelper/processfactory.hxx>
 
-AsyncQuitHandler::AsyncQuitHandler()
-    : mbForceQuit(false)
-{
-}
+AsyncQuitHandler::AsyncQuitHandler() {}
 
 AsyncQuitHandler& AsyncQuitHandler::instance()
 {
@@ -41,10 +38,6 @@ void AsyncQuitHandler::QuitApplication()
         = css::frame::Desktop::create(comphelper::getProcessComponentContext());
     xDesktop->terminate();
 }
-
-void AsyncQuitHandler::SetForceQuit() { mbForceQuit = true; }
-
-bool AsyncQuitHandler::IsForceQuit() const { return mbForceQuit; }
 
 IMPL_STATIC_LINK_NOARG(AsyncQuitHandler, OnAsyncQuit, void*, void) { QuitApplication(); }
 
