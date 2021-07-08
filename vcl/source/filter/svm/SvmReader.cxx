@@ -204,7 +204,7 @@ rtl::Reference<MetaAction> SvmReader::MetaActionHandler(ImplMetaReadData* pData)
             return StretchTextHandler(pData);
             break;
         case MetaActionType::TEXTRECT:
-            pAction = new MetaTextRectAction;
+            return TextRectHandler(pData);
             break;
         case MetaActionType::TEXTLINE:
             pAction = new MetaTextLineAction;
@@ -768,6 +768,31 @@ rtl::Reference<MetaAction> SvmReader::StretchTextHandler(ImplMetaReadData* pData
     pAction->SetWidth(nTmpWidth);
     pAction->SetIndex(nTmpIndex);
     pAction->SetLen(nTmpLen);
+
+    if (aCompat.GetVersion() >= 2) // Version 2
+        aStr = read_uInt16_lenPrefixed_uInt16s_ToOUString(mrStream);
+
+    pAction->SetText(aStr);
+
+    return pAction;
+}
+
+rtl::Reference<MetaAction> SvmReader::TextRectHandler(ImplMetaReadData* pData)
+{
+    auto pAction = new MetaTextRectAction();
+
+    VersionCompatRead aCompat(mrStream);
+    TypeSerializer aSerializer(mrStream);
+
+    tools::Rectangle aRect;
+    aSerializer.readRectangle(aRect);
+    OUString aStr;
+    aStr = mrStream.ReadUniOrByteString(pData->meActualCharSet);
+    sal_uInt16 nTmp;
+    mrStream.ReadUInt16(nTmp);
+
+    pAction->SetRect(aRect);
+    pAction->SetStyle(static_cast<DrawTextFlags>(nTmp));
 
     if (aCompat.GetVersion() >= 2) // Version 2
         aStr = read_uInt16_lenPrefixed_uInt16s_ToOUString(mrStream);

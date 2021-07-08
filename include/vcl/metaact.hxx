@@ -644,6 +644,9 @@ public:
     const tools::Rectangle&    GetRect() const { return maRect; }
     const OUString&     GetText() const { return maStr; }
     DrawTextFlags       GetStyle() const { return mnStyle; }
+    void                SetRect(tools::Rectangle& rRect) { maRect = rRect; }
+    void                SetText(OUString& rStr) { maStr = rStr; }
+    void                SetStyle(DrawTextFlags rStyle) { mnStyle = rStyle; }
 };
 
 class SAL_DLLPUBLIC_RTTI MetaTextLineAction final : public MetaAction

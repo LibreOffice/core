@@ -54,6 +54,7 @@ public:
     rtl::Reference<MetaAction> TextHandler(ImplMetaReadData* pData);
     rtl::Reference<MetaAction> TextArrayHandler(ImplMetaReadData* pData);
     rtl::Reference<MetaAction> StretchTextHandler(ImplMetaReadData* pData);
+    rtl::Reference<MetaAction> TextRectHandler(ImplMetaReadData* pData);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
