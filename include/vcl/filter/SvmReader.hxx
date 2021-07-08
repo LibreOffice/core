@@ -49,6 +49,7 @@ public:
     rtl::Reference<MetaAction> PieHandler();
     rtl::Reference<MetaAction> ChordHandler();
     rtl::Reference<MetaAction> PolyLineHandler();
+    rtl::Reference<MetaAction> PolygonHandler();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
