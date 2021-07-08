@@ -1782,12 +1782,6 @@ void Window::SetModalHierarchyHdl(const Link<bool, void>& rLink)
     ImplGetFrame()->SetModalHierarchyHdl(rLink);
 }
 
-void Window::SetParentToDefaultWindow()
-{
-    Show(false);
-    // don't reparent: this window dies anyway and any children must have been disposed already
-}
-
 KeyIndicatorState Window::GetIndicatorState() const
 {
     return mpWindowImpl->mpFrame->GetIndicatorState();
