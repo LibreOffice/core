@@ -1104,6 +1104,7 @@ void PowerPointExport::WritePresentationProps()
         Reference<beans::XPropertySet> xPresentationProps(xPresentationSupplier->getPresentation(),
                                                           uno::UNO_QUERY);
         bool bEndlessVal = xPresentationProps->getPropertyValue("IsEndless").get<bool>();
+        OUString sFirstPage = xPresentationProps->getPropertyValue("FirstPage").get<OUString>();
 
         FSHelperPtr pFS = openFragmentStreamWithSerializer(
             "ppt/presProps.xml",
@@ -1114,8 +1115,33 @@ void PowerPointExport::WritePresentationProps()
 
         pFS->startElementNS(XML_p, XML_presentationPr, PPRNMSS);
 
-        pFS->singleElementNS(XML_p, XML_showPr, XML_loop, sax_fastparser::UseIf("1", bEndlessVal),
-                             XML_showNarration, sax_fastparser::UseIf("1", bEndlessVal));
+        pFS->startElementNS(XML_p, XML_showPr, XML_loop, sax_fastparser::UseIf("1", bEndlessVal),
+                            XML_showNarration, "1");
+
+        if (!sFirstPage.isEmpty())
+        {
+            sal_Int32 nStartSlide = 0;
+            sal_Int32 nEndSlide = 0;
+            Reference<drawing::XDrawPagesSupplier> xDPS(mXModel, uno::UNO_QUERY_THROW);
+            Reference<drawing::XDrawPages> xDrawPages(xDPS->getDrawPages(), uno::UNO_SET_THROW);
+            for (sal_Int32 i = 0; i < xDrawPages->getCount(); i++)
+            {
+                Reference<drawing::XDrawPage> xDrawPage;
+                xDrawPages->getByIndex(i) >>= xDrawPage;
+                Reference<container::XNamed> xNamed(xDrawPage, uno::UNO_QUERY_THROW);
+                if (xNamed->getName() == sFirstPage)
+                {
+                    nStartSlide = i+1;
+                    break;
+                }
+            }
+            nEndSlide = xDrawPages->getCount();
+
+            pFS->singleElementNS(XML_p, XML_sldRg, XML_st, OUString::number(nStartSlide), XML_end,
+                                 OUString::number(nEndSlide));
+        }
+
+        pFS->endElementNS(XML_p, XML_showPr);
 
         pFS->endElementNS(XML_p, XML_presentationPr);
     }
