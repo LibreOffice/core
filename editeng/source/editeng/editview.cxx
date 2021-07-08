@@ -282,7 +282,12 @@ void EditView::SetSelection( const ESelection& rESel )
     pImpEditView->SetEditSelection( aNewSelection );
     pImpEditView->DrawSelectionXOR();
     bool bGotoCursor = pImpEditView->DoAutoScroll();
-    ShowCursor( bGotoCursor );
+
+    // comments section in Writer:
+    // don't scroll to the selection if it is
+    // out of visible area of comment canvas.
+    if (HasSelection())
+        ShowCursor( bGotoCursor );
 }
 
 ESelection EditView::GetSelection() const
