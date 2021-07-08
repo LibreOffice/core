@@ -75,6 +75,22 @@ public:
         CPPUNIT_ASSERT(std::isnan(res));
 
         res = rtl::math::stringToDouble(
+                OUString("+1.#NAN"),
+                '.', ',', &status, &end);
+        CPPUNIT_ASSERT_EQUAL(rtl_math_ConversionStatus_Ok, status);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(7), end);
+        CPPUNIT_ASSERT(std::isnan(res));
+        CPPUNIT_ASSERT(!std::signbit(res));
+
+        res = rtl::math::stringToDouble(
+                OUString("-1.#NAN"),
+                '.', ',', &status, &end);
+        CPPUNIT_ASSERT_EQUAL(rtl_math_ConversionStatus_Ok, status);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(7), end);
+        CPPUNIT_ASSERT(std::isnan(res));
+        CPPUNIT_ASSERT(std::signbit(res));
+
+        res = rtl::math::stringToDouble(
                 OUString("INF"),
                 '.', ',', &status, &end);
         CPPUNIT_ASSERT_EQUAL(rtl_math_ConversionStatus_OutOfRange, status);

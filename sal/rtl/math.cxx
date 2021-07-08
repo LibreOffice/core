@@ -1004,8 +1004,8 @@ double stringToDouble(CharT const * pBegin, CharT const * pEnd,
             {
                 // "1.#NAN", "+1.#NAN", "-1.#NAN"
                 p += 4;
-                fVal = std::numeric_limits<double>::quiet_NaN();
-                // bSign will cause negation of fVal in the end, producing a negative NAN.
+                fVal = std::copysign(std::numeric_limits<double>::quiet_NaN(), bSign ? -1.0 : 1.0);
+                bSign = false; // don't negate again
 
                 // Eat any further digits:
                 while (p != pEnd && rtl::isAsciiDigit(*p))
