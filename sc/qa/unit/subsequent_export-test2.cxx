@@ -188,7 +188,7 @@ public:
     void testTdf84874();
     void testTdf136721_paper_size();
     void testTdf139258_rotated_image();
-    void testTdf126541_SheetVisibilityImportXlsx();
+    void testTdf142854_GridVisibilityImportXlsxInHeadlessMode();
     void testTdf140431();
     void testCheckboxFormControlXlsxExport();
     void testButtonFormControlXlsxExport();
@@ -290,7 +290,7 @@ public:
     CPPUNIT_TEST(testTdf84874);
     CPPUNIT_TEST(testTdf136721_paper_size);
     CPPUNIT_TEST(testTdf139258_rotated_image);
-    CPPUNIT_TEST(testTdf126541_SheetVisibilityImportXlsx);
+    CPPUNIT_TEST(testTdf142854_GridVisibilityImportXlsxInHeadlessMode);
     CPPUNIT_TEST(testTdf140431);
     CPPUNIT_TEST(testCheckboxFormControlXlsxExport);
     CPPUNIT_TEST(testButtonFormControlXlsxExport);
@@ -2347,17 +2347,19 @@ ScDocShellRef ScExportTest2::loadDocAndSetupModelViewController(std::u16string_v
     return xDocSh;
 }
 
-void ScExportTest2::testTdf126541_SheetVisibilityImportXlsx()
+void ScExportTest2::testTdf142854_GridVisibilityImportXlsxInHeadlessMode()
 {
+    // Tests are running in Headless mode
     // Import an ods file with 'Hide' global grid visibility setting.
     ScDocShellRef xShell
         = loadDocAndSetupModelViewController(u"tdf126541_GridOffGlobally.", FORMAT_ODS, true);
     CPPUNIT_ASSERT(!xShell->GetDocument().GetViewOptions().GetOption(VOPT_GRID));
 
-    // Importing xlsx file should set the global grid visibility setting to 'Show'
-    // Sheet based grid line visibility setting should not overwrite the global setting.
+    // To avoid regression, in headless mode leave the bug tdf126541
+    // It means Sheet based grid line visibility setting will overwrite the global setting.
+    // If there is only 1 sheet in the document, it will not result visible problems.
     xShell = loadDocAndSetupModelViewController(u"tdf126541_GridOff.", FORMAT_XLSX, true);
-    CPPUNIT_ASSERT(xShell->GetDocument().GetViewOptions().GetOption(VOPT_GRID));
+    CPPUNIT_ASSERT(!xShell->GetDocument().GetViewOptions().GetOption(VOPT_GRID));
 }
 
 void ScExportTest2::testTdf140431()
