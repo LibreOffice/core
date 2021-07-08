@@ -207,7 +207,7 @@ rtl::Reference<MetaAction> SvmReader::MetaActionHandler(ImplMetaReadData* pData)
             return TextRectHandler(pData);
             break;
         case MetaActionType::TEXTLINE:
-            pAction = new MetaTextLineAction;
+            return TextLineHandler();
             break;
         case MetaActionType::BMP:
             pAction = new MetaBmpAction;
@@ -798,6 +798,39 @@ rtl::Reference<MetaAction> SvmReader::TextRectHandler(ImplMetaReadData* pData)
         aStr = read_uInt16_lenPrefixed_uInt16s_ToOUString(mrStream);
 
     pAction->SetText(aStr);
+
+    return pAction;
+}
+
+rtl::Reference<MetaAction> SvmReader::TextLineHandler()
+{
+    auto pAction = new MetaTextLineAction();
+
+    VersionCompatRead aCompat(mrStream);
+    TypeSerializer aSerializer(mrStream);
+
+    Point aPos;
+    aSerializer.readPoint(aPos);
+    sal_Int32 nTempWidth(0);
+    mrStream.ReadInt32(nTempWidth);
+
+    pAction->SetStartPoint(aPos);
+    pAction->SetWidth(nTempWidth);
+
+    sal_uInt32 nTempStrikeout(0);
+    mrStream.ReadUInt32(nTempStrikeout);
+    sal_uInt32 nTempUnderline(0);
+    mrStream.ReadUInt32(nTempUnderline);
+
+    pAction->SetStrikeout(static_cast<FontStrikeout>(nTempStrikeout));
+    pAction->SetUnderline(static_cast<FontLineStyle>(nTempUnderline));
+
+    if (aCompat.GetVersion() >= 2)
+    {
+        sal_uInt32 nTempOverline(0);
+        mrStream.ReadUInt32(nTempOverline);
+        pAction->SetOverline(static_cast<FontLineStyle>(nTempOverline));
+    }
 
     return pAction;
 }
