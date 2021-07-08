@@ -948,8 +948,9 @@ bool ModelData_Impl::OutputFileDialog( sal_Int16 nStoreMode,
     }
 
     const OUString aRecommendedDir {GetRecommendedDir( aSuggestedDir )};
-    if ( !aRecommendedDir.isEmpty() )
-        pFileDlg->SetDisplayFolder( aRecommendedDir );
+    // TODO
+    /*if ( !aRecommendedDir.isEmpty() )
+        pFileDlg->SetDisplayFolder( aRecommendedDir );*/
     const OUString aRecommendedName {GetRecommendedName( aSuggestedName, aAdjustToType )};
     if ( !aRecommendedName.isEmpty() )
         pFileDlg->SetFileName( aRecommendedName );
@@ -1173,7 +1174,7 @@ OUString ModelData_Impl::GetRecommendedDir( const OUString& aSuggestedDir )
             }
 
             if ( aLocation.HasError() )
-                aLocation = INetURLObject( SvtPathOptions().GetWorkPath() );
+                aLocation = INetURLObject();
         }
 
         OUString sLocationURL( aLocation.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
@@ -1196,7 +1197,7 @@ OUString ModelData_Impl::GetRecommendedDir( const OUString& aSuggestedDir )
 #endif
         // Suggest somewhere other than the system's temp directory
         if( bIsInTempPath )
-            aLocation = INetURLObject( SvtPathOptions().GetWorkPath() );
+            aLocation = INetURLObject();
 
         aLocation.setFinalSlash();
         if ( !aLocation.HasError() )
@@ -1205,7 +1206,7 @@ OUString ModelData_Impl::GetRecommendedDir( const OUString& aSuggestedDir )
         return OUString();
     }
 
-    return INetURLObject( SvtPathOptions().GetWorkPath() ).GetMainURL( INetURLObject::DecodeMechanism::NONE );
+    return OUString();
 }
 
 

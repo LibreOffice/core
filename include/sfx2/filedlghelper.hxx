@@ -85,6 +85,7 @@ public:
         SI_EXPORT,                      // export in impress
         SW_EXPORT                       // export in writer
     };
+    static OUString contextToString(Context context);
 
 private:
     Link<FileDialogHelper*,void>  m_aDialogClosedLink;

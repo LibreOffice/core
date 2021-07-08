@@ -844,6 +844,21 @@
         <value/>
       </prop>
     </group>
+    <group oor:name="LastDirectory">
+      <info>
+        <desc>Stores the details of the installed personas.</desc>
+      </info>
+      <prop oor:name="Context" oor:type="xs:string" oor:nillable="false">
+        <info>
+          <desc>The context from where the filepicker was called (e.g. "pdf", "save", ...)</desc>
+        </info>
+      </prop>
+      <prop oor:name="LastPath" oor:type="xs:string" oor:nillable="false">
+        <info>
+          <desc>The last used path for this context</desc>
+        </info>
+      </prop>
+    </group>
   </templates>
   <component>
     <group oor:name="VCL">
@@ -5898,6 +5913,11 @@
           <desc>URL of the last used service in the remote file picker.</desc>
         </info>
       </prop>
+      <set oor:name="FilePickerLastDirectory" oor:node-type="LastDirectory">
+        <info>
+          <desc>Contains the last used directory for the filepicker for various contexts</desc>
+        </info>
+      </set>
       <prop oor:name="CmisServersUrls" oor:type="oor:string-list" oor:nillable="false">
         <info>
           <desc>List of sample URLs of the CMIS servers in the place edition dialog.</desc>

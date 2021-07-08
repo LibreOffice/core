@@ -38,12 +38,15 @@
 #include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
 #include <com/sun/star/ui/dialogs/XAsynchronousExecutableDialog.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/container/XContainerQuery.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/task/XInteractionRequest.hpp>
 #include <com/sun/star/util/RevisionTag.hpp>
@@ -88,6 +91,7 @@
 #include <sal/log.hxx>
 #include <comphelper/sequence.hxx>
 #include <tools/diagnose_ex.h>
+#include <officecfg/Office/Common.hxx>
 
 #ifdef UNX
 #include <errno.h>
@@ -1979,6 +1983,48 @@ static void SetToken( OUString& rOrigStr, sal_Int32 nToken, sal_Unicode cTok, co
         rOrigStr = rOrigStr.replaceAt( nFirstChar, i-nFirstChar, rStr );
 }
 
+namespace
+{
+void SaveLastDirectory(OUString const& sContext, OUString const& sDirectory)
+{
+    if (sContext.isEmpty())
+        return;
+
+    std::shared_ptr<comphelper::ConfigurationChanges> batch(
+        comphelper::ConfigurationChanges::create());
+    Reference<container::XNameContainer> set(
+        officecfg::Office::Common::Misc::FilePickerLastDirectory::get(batch));
+
+    bool found;
+    Any v;
+    try
+    {
+        v = set->getByName(sContext);
+        found = true;
+    }
+    catch (container::NoSuchElementException&)
+    {
+        found = false;
+    }
+    if (found)
+    {
+        Reference<XPropertySet> el(v.get<Reference<XPropertySet>>(), UNO_SET_THROW);
+        el->setPropertyValue("Context", makeAny(sContext));
+        el->setPropertyValue("LastPath", makeAny(sDirectory));
+    }
+    else
+    {
+        Reference<XPropertySet> el(
+            (Reference<lang::XSingleServiceFactory>(set, UNO_QUERY_THROW)->createInstance()),
+            UNO_QUERY_THROW);
+        el->setPropertyValue("Context", makeAny(sContext));
+        el->setPropertyValue("LastPath", makeAny(sDirectory));
+        Any v2(makeAny(el));
+        set->insertByName(sContext, v2);
+    }
+    batch->commit();
+}
+}
 
 void FileDialogHelper_Impl::saveConfig()
 {
@@ -2069,43 +2115,57 @@ void FileDialogHelper_Impl::saveConfig()
             aDlgOpt.SetUserItem( USERITEM_NAME, makeAny( aUserData ) );
     }
 
-    SfxApplication *pSfxApp = SfxGetpApp();
-    pSfxApp->SetLastDir_Impl( getPath() );
+    SaveLastDirectory(FileDialogHelper::contextToString(meContext), getPath());
 }
 
-namespace
+OUString FileDialogHelper_Impl::getInitPath(const OUString& _rFallback,
+                                            const sal_Int32 _nFallbackToken)
 {
-    OUString getInitPath( const OUString& _rFallback, const sal_Int32 _nFallbackToken )
+    OUString sPath;
+    OUString sContext = FileDialogHelper::contextToString(meContext);
+    Reference<XNameAccess> set(officecfg::Office::Common::Misc::FilePickerLastDirectory::get());
+    Any v;
+    try
     {
-        SfxApplication *pSfxApp = SfxGetpApp();
-        OUString sPath = pSfxApp->GetLastDir_Impl();
-
-        if ( sPath.isEmpty() )
-            sPath = _rFallback.getToken( _nFallbackToken, ' ' );
-
-        // check if the path points to a valid (accessible) directory
-        bool bValid = false;
-        if ( !sPath.isEmpty() )
-        {
-            OUString sPathCheck( sPath );
-            if ( sPathCheck[ sPathCheck.getLength() - 1 ] != '/' )
-                sPathCheck += "/";
-            sPathCheck += ".";
-            try
-            {
-                ::ucbhelper::Content aContent( sPathCheck,
-                                               utl::UCBContentHelper::getDefaultCommandEnvironment(),
-                                               comphelper::getProcessComponentContext() );
-                bValid = aContent.isFolder();
-            }
-            catch( const Exception& ) {}
-        }
-
-        if ( !bValid )
-            sPath.clear();
-
-        return sPath;
+        v = set->getByName(sContext);
+        Reference<XPropertySet> el(v.get<Reference<XPropertySet>>(), UNO_SET_THROW);
+        OUString sStoredContext = el->getPropertyValue("Context").get<OUString>();
+        if (sStoredContext == sContext)
+            sPath = el->getPropertyValue("LastPath").get<OUString>();
     }
+    catch (NoSuchElementException&)
+    {
+    }
+
+    //TODO: Do we want work path as fallback?
+    //INetURLObject( SvtPathOptions().GetWorkPath() ).GetMainURL( INetURLObject::DecodeMechanism::NONE );
+    if (sPath.isEmpty())
+        sPath = _rFallback.getToken(_nFallbackToken, ' ');
+
+    // check if the path points to a valid (accessible) directory
+    bool bValid = false;
+    if (!sPath.isEmpty())
+    {
+        OUString sPathCheck(sPath);
+        if (sPathCheck[sPathCheck.getLength() - 1] != '/')
+            sPathCheck += "/";
+        sPathCheck += ".";
+        try
+        {
+            ::ucbhelper::Content aContent(sPathCheck,
+                                          utl::UCBContentHelper::getDefaultCommandEnvironment(),
+                                          comphelper::getProcessComponentContext());
+            bValid = aContent.isFolder();
+        }
+        catch (const Exception&)
+        {
+        }
+    }
+
+    if (!bValid)
+        sPath.clear();
+
+    return sPath;
 }
 
 void FileDialogHelper_Impl::loadConfig()
@@ -2373,6 +2433,23 @@ void FileDialogHelper::SetControlHelpIds( const sal_Int16* _pControlId, const ch
 void FileDialogHelper::SetContext( Context _eNewContext )
 {
     mpImpl->SetContext( _eNewContext );
+}
+
+OUString FileDialogHelper::contextToString(Context context)
+{
+    switch(context) {
+        case SW_INSERT_GRAPHIC:
+            return "SW_INSERT_GRAPHIC";
+        case SD_EXPORT:
+            return "SD_EXPORT";
+        case SI_EXPORT:
+            return "SI_EXPORT";
+        case SW_EXPORT:
+            return "SW_EXPORT";
+        case UNKNOWN_CONTEXT:
+        default:
+            return "";
+    }
 }
 
 IMPL_LINK_NOARG(FileDialogHelper, ExecuteSystemFilePicker, void*, void)
