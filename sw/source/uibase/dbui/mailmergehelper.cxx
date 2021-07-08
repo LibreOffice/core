@@ -59,6 +59,7 @@ OUString CallSaveAsDialog(weld::Window* pParent, OUString& rFilter)
     ::sfx2::FileDialogHelper aDialog( ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION,
                 FileDialogFlags::NONE,
                 SwDocShell::Factory().GetFactoryName(), SfxFilterFlags::NONE, SfxFilterFlags::NONE, pParent);
+    aDialog.SetContext(sfx2::FileDialogHelper::WriterMailMergeSaveAs);
 
     if (aDialog.Execute()!=ERRCODE_NONE)
     {
