@@ -34,6 +34,24 @@
       "revId": "e5c80bb69a30dfb0a3daf6061ab127d92f8142d6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3672e5b6_3b30c796",
+        "filename": "sal/rtl/math.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1016,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-07-08T09:04:49Z",
+      "side": 1,
+      "message": "addressed with \u003chttps://gerrit.libreoffice.org/c/core/+/118604\u003e \"Reliably generate positive or negative NaN again\"",
+      "parentUuid": "8e6186b6_66daed1a",
+      "revId": "e5c80bb69a30dfb0a3daf6061ab127d92f8142d6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
