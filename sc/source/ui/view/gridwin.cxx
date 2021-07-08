@@ -823,18 +823,17 @@ void ScGridWindow::UpdateAutoFilterFromMenu(AutoFilterMode eMode)
             mrViewData.GetViewShell()->UISort(aSortParam);
             return;
         }
+        case AutoFilterMode::Custom:
+        {
+            ScRange aRange;
+            pDBData->GetArea(aRange);
+            mrViewData.GetView()->MarkRange(aRange);
+            mrViewData.GetView()->SetCursor(rPos.Col(), rPos.Row());
+            mrViewData.GetDispatcher().Execute(SID_FILTER, SfxCallMode::SLOT | SfxCallMode::RECORD);
+            return;
+        }
         default:
             ;
-    }
-
-    if (eMode == AutoFilterMode::Custom)
-    {
-        ScRange aRange;
-        pDBData->GetArea(aRange);
-        mrViewData.GetView()->MarkRange(aRange);
-        mrViewData.GetView()->SetCursor(rPos.Col(), rPos.Row());
-        mrViewData.GetDispatcher().Execute(SID_FILTER, SfxCallMode::SLOT|SfxCallMode::RECORD);
-        return;
     }
 
     ScQueryParam aParam;
@@ -868,7 +867,13 @@ void ScGridWindow::UpdateAutoFilterFromMenu(AutoFilterMode eMode)
     // Remove old entries in auto-filter rules
     aParam.RemoveAllEntriesByField(rPos.Col());
 
-    if( !(eMode == AutoFilterMode::Normal && rControl.isAllSelected() ) )
+    // tdf#46184 reset filter options to default values
+    aParam.eSearchType = utl::SearchParam::SearchType::Normal;
+    aParam.bCaseSens = false;
+    aParam.bDuplicate = true;
+    aParam.bInplace = true;
+
+    if ( !(eMode == AutoFilterMode::Normal && rControl.isAllSelected()) )
     {
         // Try to use the existing entry for the column (if one exists).
         ScQueryEntry* pEntry = aParam.FindEntryByField(rPos.Col(), true);
