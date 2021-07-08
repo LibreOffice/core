@@ -268,7 +268,6 @@ void SwSrcView::Execute(SfxRequest& rReq)
         case SID_SAVEACOPY:
         case SID_SAVEASDOC:
         {
-            SvtPathOptions aPathOpt;
             // filesave dialog with autoextension
             FileDialogHelper aDlgHelper(
                 TemplateDescription::FILESAVE_AUTOEXTENSION,
@@ -295,7 +294,6 @@ void SwSrcView::Execute(SfxRequest& rReq)
                 xFP->setCurrentFilter( sHtml ) ;
             }
 
-            xFP->setDisplayDirectory( aPathOpt.GetWorkPath() );
             if( aDlgHelper.Execute() == ERRCODE_NONE)
             {
                 SfxMedium aMedium( xFP->getSelectedFiles().getConstArray()[0],

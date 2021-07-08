@@ -772,15 +772,14 @@ bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
         ::sfx2::FileDialogHelper aFileDlg(
                 ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION,
                 FileDialogFlags::NONE, m_xAssistant.get());
+        aFileDlg.SetContext(sfx2::FileDialogHelper::BaseSaveAs);
         std::shared_ptr<const SfxFilter> pFilter = getStandardDatabaseFilter();
         if ( pFilter )
         {
-            INetURLObject aWorkURL( m_sWorkPath );
-            aFileDlg.SetDisplayFolder( aWorkURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ));
-
             OUString sDefaultName = DBA_RES( STR_DATABASEDEFAULTNAME );
             OUString sExtension = pFilter->GetDefaultExtension();
             sDefaultName += sExtension.replaceAt( 0, 1, OUString() );
+            INetURLObject aWorkURL( m_sWorkPath );
             aWorkURL.Append( sDefaultName );
             sDefaultName = createUniqueFileName( aWorkURL );
             aFileDlg.SetFileName( sDefaultName );

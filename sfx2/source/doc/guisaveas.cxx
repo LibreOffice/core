@@ -881,15 +881,17 @@ bool ModelData_Impl::OutputFileDialog( sal_Int16 nStoreMode,
             pFileDlg.reset(new sfx2::FileDialogHelper( aDialogMode, aDialogFlags, aDocServiceName, nDialog, nMust, nDont, rStandardDir, rDenyList, pFrameWin ));
         }
 
-        sfx2::FileDialogHelper::Context eCtxt = sfx2::FileDialogHelper::UNKNOWN_CONTEXT;
+        sfx2::FileDialogHelper::Context eCtxt = sfx2::FileDialogHelper::UnknownContext;
         if ( aDocServiceName == "com.sun.star.drawing.DrawingDocument" )
-            eCtxt = sfx2::FileDialogHelper::SD_EXPORT;
+            eCtxt = sfx2::FileDialogHelper::DrawExport;
         else if ( aDocServiceName == "com.sun.star.presentation.PresentationDocument" )
-            eCtxt = sfx2::FileDialogHelper::SI_EXPORT;
+            eCtxt = sfx2::FileDialogHelper::ImpressExport;
         else if ( aDocServiceName == "com.sun.star.text.TextDocument" )
-            eCtxt = sfx2::FileDialogHelper::SW_EXPORT;
+            eCtxt = sfx2::FileDialogHelper::WriterExport;
+        else if ( aDocServiceName == "com.sun.star.sheet.SpreadsheetDocument" )
+            eCtxt = sfx2::FileDialogHelper::CalcExport;
 
-        if ( eCtxt != sfx2::FileDialogHelper::UNKNOWN_CONTEXT )
+        if ( eCtxt != sfx2::FileDialogHelper::UnknownContext )
                pFileDlg->SetContext( eCtxt );
 
         pFileDlg->CreateMatcher( aDocServiceName );
@@ -905,10 +907,23 @@ bool ModelData_Impl::OutputFileDialog( sal_Int16 nStoreMode,
     }
     else
     {
-        // This is the normal dialog
+        // This is the normal save as dialog
         pFileDlg.reset(new sfx2::FileDialogHelper( aDialogMode, aDialogFlags, aDocServiceName, nDialog,
             nMust, nDont, rStandardDir, rDenyList, pFrameWin ));
         pFileDlg->CreateMatcher( aDocServiceName );
+
+        sfx2::FileDialogHelper::Context eCtxt = sfx2::FileDialogHelper::UnknownContext;
+        if ( aDocServiceName == "com.sun.star.drawing.DrawingDocument" )
+            eCtxt = sfx2::FileDialogHelper::DrawSaveAs;
+        else if ( aDocServiceName == "com.sun.star.presentation.PresentationDocument" )
+            eCtxt = sfx2::FileDialogHelper::ImpressSaveAs;
+        else if ( aDocServiceName == "com.sun.star.text.TextDocument" )
+            eCtxt = sfx2::FileDialogHelper::WriterSaveAs;
+        else if ( aDocServiceName == "com.sun.star.sheet.SpreadsheetDocument" )
+            eCtxt = sfx2::FileDialogHelper::CalcSaveAs;
+
+        if ( eCtxt != sfx2::FileDialogHelper::UnknownContext )
+               pFileDlg->SetContext( eCtxt );
     }
 
     OUString aAdjustToType;
@@ -1173,7 +1188,7 @@ OUString ModelData_Impl::GetRecommendedDir( const OUString& aSuggestedDir )
             }
 
             if ( aLocation.HasError() )
-                aLocation = INetURLObject( SvtPathOptions().GetWorkPath() );
+                aLocation = INetURLObject();
         }
 
         OUString sLocationURL( aLocation.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
@@ -1196,7 +1211,7 @@ OUString ModelData_Impl::GetRecommendedDir( const OUString& aSuggestedDir )
 #endif
         // Suggest somewhere other than the system's temp directory
         if( bIsInTempPath )
-            aLocation = INetURLObject( SvtPathOptions().GetWorkPath() );
+            aLocation = INetURLObject();
 
         aLocation.setFinalSlash();
         if ( !aLocation.HasError() )
@@ -1205,7 +1220,7 @@ OUString ModelData_Impl::GetRecommendedDir( const OUString& aSuggestedDir )
         return OUString();
     }
 
-    return INetURLObject( SvtPathOptions().GetWorkPath() ).GetMainURL( INetURLObject::DecodeMechanism::NONE );
+    return OUString();
 }
 
 
