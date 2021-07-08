@@ -788,18 +788,17 @@ void ScGridWindow::UpdateAutoFilterFromMenu(AutoFilterMode eMode)
             pViewData->GetViewShell()->UISort(aSortParam);
             return;
         }
+        case AutoFilterMode::Custom:
+        {
+            ScRange aRange;
+            pDBData->GetArea(aRange);
+            pViewData->GetView()->MarkRange(aRange);
+            pViewData->GetView()->SetCursor(rPos.Col(), rPos.Row());
+            pViewData->GetDispatcher().Execute(SID_FILTER, SfxCallMode::SLOT | SfxCallMode::RECORD);
+            return;
+        }
         default:
             ;
-    }
-
-    if (eMode == AutoFilterMode::Custom)
-    {
-        ScRange aRange;
-        pDBData->GetArea(aRange);
-        pViewData->GetView()->MarkRange(aRange);
-        pViewData->GetView()->SetCursor(rPos.Col(), rPos.Row());
-        pViewData->GetDispatcher().Execute(SID_FILTER, SfxCallMode::SLOT|SfxCallMode::RECORD);
-        return;
     }
 
     ScQueryParam aParam;
@@ -832,7 +831,15 @@ void ScGridWindow::UpdateAutoFilterFromMenu(AutoFilterMode eMode)
 
     // Remove old entries in auto-filter rules
     if (!bColorMode)
+    {
         aParam.RemoveAllEntriesByField(rPos.Col());
+
+        // tdf#46184 reset filter options to default values
+        aParam.eSearchType = utl::SearchParam::SearchType::Normal;
+        aParam.bCaseSens = false;
+        aParam.bDuplicate = true;
+        aParam.bInplace = true;
+    }
 
     if( !(eMode == AutoFilterMode::Normal && mpAutoFilterPopup->isAllSelected() ) )
     {
@@ -925,7 +932,15 @@ void ScGridWindow::UpdateAutoFilterFromMenu(AutoFilterMode eMode)
 
                 // Disable color filter when active color was selected
                 if (nSelected == nActive)
+                {
                     aParam.RemoveAllEntriesByField(rPos.Col());
+
+                    // tdf#46184 reset filter options to default values
+                    aParam.eSearchType = utl::SearchParam::SearchType::Normal;
+                    aParam.bCaseSens = false;
+                    aParam.bDuplicate = true;
+                    aParam.bInplace = true;
+                }
 
                 // Get selected color from set
                 std::set<Color>::iterator it = aColors.begin();
