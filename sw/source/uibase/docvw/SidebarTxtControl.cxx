@@ -147,6 +147,8 @@ void SidebarTextControl::LoseFocus()
     {
         Invalidate();
     }
+    // set false for autoscroll to typing location
+    mrSidebarWin.LockView(false);
 }
 
 OUString SidebarTextControl::RequestHelp(tools::Rectangle& rHelpRect)

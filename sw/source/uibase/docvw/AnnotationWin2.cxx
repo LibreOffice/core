@@ -994,7 +994,10 @@ void SwAnnotationWin::ActivatePostIt()
 
     CheckMetaText();
     SetViewState(ViewState::EDIT);
-    GetOutlinerView()->ShowCursor();
+
+    // prevent autoscroll to the old cursor location
+    // when cursor out of visible area
+    GetOutlinerView()->ShowCursor(false);
 
     mpOutlinerView->GetEditView().SetInsertMode(mrView.GetWrtShellPtr()->IsInsMode());
 
@@ -1168,10 +1171,10 @@ bool SwAnnotationWin::SetActiveSidebarWin()
 {
     if (mrMgr.GetActiveSidebarWin() == this)
         return false;
-    const bool bLockView = mrView.GetWrtShell().IsViewLocked();
     mrView.GetWrtShell().LockView( true );
     mrMgr.SetActiveSidebarWin(this);
-    mrView.GetWrtShell().LockView( bLockView );
+    mrView.GetWrtShell().LockView( true );
+
     return true;
 }
 
@@ -1179,10 +1182,14 @@ void SwAnnotationWin::UnsetActiveSidebarWin()
 {
     if (mrMgr.GetActiveSidebarWin() != this)
         return;
-    const bool bLockView = mrView.GetWrtShell().IsViewLocked();
     mrView.GetWrtShell().LockView( true );
     mrMgr.SetActiveSidebarWin(nullptr);
-    mrView.GetWrtShell().LockView( bLockView );
+    mrView.GetWrtShell().LockView( false );
+}
+
+void SwAnnotationWin::LockView(bool bLock)
+{
+    mrView.GetWrtShell().LockView( bLock );
 }
 
 IMPL_LINK(SwAnnotationWin, ScrollHdl, weld::ScrolledWindow&, rScrolledWindow, void)

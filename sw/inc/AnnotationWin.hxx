@@ -122,6 +122,7 @@ class SAL_DLLPUBLIC_RTTI SwAnnotationWin final : public InterimItemWindow
         void            DoResize();
         void            ResizeIfNecessary(tools::Long aOldHeight, tools::Long aNewHeight);
         void            SetScrollbar();
+        void            LockView(bool bLock);
 
         void            SetVirtualPosSize( const Point& aPoint, const Size& aSize);
         Point           VirtualPos()    { return mPosSize.TopLeft(); }
@@ -191,7 +192,7 @@ class SAL_DLLPUBLIC_RTTI SwAnnotationWin final : public InterimItemWindow
         bool IsResolved() const;
         bool IsThreadResolved();
 
-        // Set this SwAnnotationWin as the currently active one
+        // Set this SwAnnotationWin as the currently active one
         // return false if it was already active
         bool SetActiveSidebarWin();
         // Unset this SwAnnotationWin as the currently active one
