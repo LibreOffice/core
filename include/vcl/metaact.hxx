@@ -486,6 +486,7 @@ public:
     virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const tools::PolyPolygon&  GetPolyPolygon() const { return maPolyPoly; }
+    void                SetPolyPolygon(tools::PolyPolygon& rPolyPoly) { maPolyPoly = rPolyPoly; }
 };
 
 class SAL_DLLPUBLIC_RTTI MetaTextAction final : public MetaAction
