@@ -1151,14 +1151,11 @@ void VmlFormControlExporter::EndShape(sal_Int32 nShapeElement)
             break;
     }
     pVmlDrawing->startElement(FSNS(XML_x, XML_ClientData), XML_ObjectType, aObjectType);
-    OString aAnchor = OString::number(m_aAreaFrom.Left());
-    aAnchor += ", " + OString::number(m_aAreaFrom.Top());
-    aAnchor += ", " + OString::number(m_aAreaFrom.Right());
-    aAnchor += ", " + OString::number(m_aAreaFrom.Bottom());
-    aAnchor += ", " + OString::number(m_aAreaTo.Left());
-    aAnchor += ", " + OString::number(m_aAreaTo.Top());
-    aAnchor += ", " + OString::number(m_aAreaTo.Right());
-    aAnchor += ", " + OString::number(m_aAreaTo.Bottom());
+    OString aAnchor
+        = OString::number(m_aAreaFrom.Left()) + ", " + OString::number(m_aAreaFrom.Top()) + ", "
+          + OString::number(m_aAreaFrom.Right()) + ", " + OString::number(m_aAreaFrom.Bottom()) + ", "
+          + OString::number(m_aAreaTo.Left()) + ", " + OString::number(m_aAreaTo.Top()) + ", "
+          + OString::number(m_aAreaTo.Right()) + ", " + OString::number(m_aAreaTo.Bottom());
     XclXmlUtils::WriteElement(pVmlDrawing, FSNS(XML_x, XML_Anchor), aAnchor);
 
     if (!m_aMacroName.isEmpty())
