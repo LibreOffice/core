@@ -255,31 +255,31 @@ bool isAllowlistedLanguage(const OUString& lang)
 #endif
 }
 
-static void (*pStatusIndicatorCallback)(void *data, statusIndicatorCallbackType type, int percent)(nullptr);
+static void (*pStatusIndicatorCallback)(void *data, statusIndicatorCallbackType type, int percent, const char* pText)(nullptr);
 static void *pStatusIndicatorCallbackData(nullptr);
 
-void setStatusIndicatorCallback(void (*callback)(void *data, statusIndicatorCallbackType type, int percent), void *data)
+void setStatusIndicatorCallback(void (*callback)(void *data, statusIndicatorCallbackType type, int percent, const char* pText), void *data)
 {
     pStatusIndicatorCallback = callback;
     pStatusIndicatorCallbackData = data;
 }
 
-void statusIndicatorStart()
+void statusIndicatorStart(const OUString& sText)
 {
     if (pStatusIndicatorCallback)
-        pStatusIndicatorCallback(pStatusIndicatorCallbackData, statusIndicatorCallbackType::Start, 0);
+        pStatusIndicatorCallback(pStatusIndicatorCallbackData, statusIndicatorCallbackType::Start, 0, sText.toUtf8().getStr());
 }
 
 void statusIndicatorSetValue(int percent)
 {
     if (pStatusIndicatorCallback)
-        pStatusIndicatorCallback(pStatusIndicatorCallbackData, statusIndicatorCallbackType::SetValue, percent);
+        pStatusIndicatorCallback(pStatusIndicatorCallbackData, statusIndicatorCallbackType::SetValue, percent, nullptr);
 }
 
 void statusIndicatorFinish()
 {
     if (pStatusIndicatorCallback)
-        pStatusIndicatorCallback(pStatusIndicatorCallbackData, statusIndicatorCallbackType::Finish, 0);
+        pStatusIndicatorCallback(pStatusIndicatorCallbackData, statusIndicatorCallbackType::Finish, 0, nullptr);
 }
 
 } // namespace
