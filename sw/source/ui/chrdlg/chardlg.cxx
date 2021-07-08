@@ -294,6 +294,7 @@ IMPL_LINK_NOARG(SwCharURLPage, InsertFileHdl, weld::Button&, void)
 {
     FileDialogHelper aDlgHelper(TemplateDescription::FILEOPEN_SIMPLE,
                                 FileDialogFlags::NONE, GetFrameWeld());
+    aDlgHelper.SetContext(FileDialogHelper::WriterInsertHyperlink);
     if( aDlgHelper.Execute() == ERRCODE_NONE )
     {
         const Reference<XFilePicker3>& xFP = aDlgHelper.GetFilePicker();
