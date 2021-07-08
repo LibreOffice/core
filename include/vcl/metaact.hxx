@@ -563,6 +563,11 @@ public:
     sal_Int32       GetIndex() const { return mnIndex; }
     sal_Int32       GetLen() const { return mnLen; }
     tools::Long*           GetDXArray() const { return mpDXAry.get(); }
+    void            SetPoint(Point& rPt) { maStartPt = rPt; }
+    void            SetText(OUString& rStr) { maStr = rStr; }
+    void            SetIndex(sal_Int32 rIndex) { mnIndex = rIndex; }
+    void            SetLen(sal_Int32 rLen) { mnLen = rLen; }
+    void            SetDXArray(tools::Long* rDXAry);
 };
 
 class SAL_DLLPUBLIC_RTTI MetaStretchTextAction final : public MetaAction

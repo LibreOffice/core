@@ -198,7 +198,7 @@ rtl::Reference<MetaAction> SvmReader::MetaActionHandler(ImplMetaReadData* pData)
             return TextHandler(pData);
             break;
         case MetaActionType::TEXTARRAY:
-            pAction = new MetaTextArrayAction;
+            return TextArrayHandler(pData);
             break;
         case MetaActionType::STRETCHTEXT:
             pAction = new MetaStretchTextAction;
@@ -664,6 +664,85 @@ rtl::Reference<MetaAction> SvmReader::TextHandler(ImplMetaReadData* pData)
 
     pAction->SetText(aStr);
 
+    return pAction;
+}
+
+rtl::Reference<MetaAction> SvmReader::TextArrayHandler(ImplMetaReadData* pData)
+{
+    auto pAction = new MetaTextArrayAction();
+
+    std::unique_ptr<tools::Long[]> aArray;
+    aArray.reset();
+
+    VersionCompatRead aCompat(mrStream);
+    TypeSerializer aSerializer(mrStream);
+
+    Point aPoint;
+    aSerializer.readPoint(aPoint);
+    pAction->SetPoint(aPoint);
+
+    OUString aStr;
+    aStr = mrStream.ReadUniOrByteString(pData->meActualCharSet);
+    pAction->SetText(aStr);
+
+    sal_uInt16 nTmpIndex(0);
+    mrStream.ReadUInt16(nTmpIndex);
+    pAction->SetIndex(nTmpIndex);
+
+    sal_uInt16 nTmpLen(0);
+    mrStream.ReadUInt16(nTmpLen);
+    pAction->SetLen(nTmpLen);
+
+    sal_Int32 nAryLen(0);
+    mrStream.ReadInt32(nAryLen);
+
+    if (nTmpLen > aStr.getLength() - nTmpIndex)
+    {
+        pAction->SetIndex(0);
+        pAction->SetDXArray(nullptr);
+        return pAction;
+    }
+    if (nAryLen)
+    {
+        // #i9762#, #106172# Ensure that DX array is at least mnLen entries long
+        if (nTmpLen >= nAryLen)
+        {
+            aArray.reset(new (std::nothrow) tools::Long[nTmpLen]);
+            if (aArray)
+            {
+                sal_Int32 i;
+                sal_Int32 val;
+                for (i = 0; i < nAryLen; i++)
+                {
+                    mrStream.ReadInt32(val);
+                    aArray[i] = val;
+                }
+                // #106172# setup remainder
+                for (; i < nTmpLen; i++)
+                    aArray[i] = 0;
+            }
+        }
+        else
+        {
+            pAction->SetDXArray(nullptr);
+            return pAction;
+        }
+    }
+    else
+        pAction->SetDXArray(nullptr);
+
+    if (aCompat.GetVersion() >= 2) // Version 2
+    {
+        aStr = read_uInt16_lenPrefixed_uInt16s_ToOUString(mrStream);
+
+        if (nTmpIndex + nTmpLen > aStr.getLength())
+        {
+            pAction->SetIndex(0);
+            aArray.reset();
+        }
+    }
+
+    pAction->SetDXArray(aArray.get());
     return pAction;
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
