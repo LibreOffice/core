@@ -80,9 +80,6 @@ void PopupWindowControllerImpl::SetFloatingWindow()
     if( mpFloatingWindow )
     {
         mpFloatingWindow->RemoveEventListener( LINK( this, PopupWindowControllerImpl, WindowEventListener ) );
-        // tdf#119390 reparent the window, so focus is restored
-        // to the last focused control of the application window.
-        mpFloatingWindow->SetParentToDefaultWindow();
         mpFloatingWindow.disposeAndClear();
     }
     mpFloatingWindow = mpPopupWindow;

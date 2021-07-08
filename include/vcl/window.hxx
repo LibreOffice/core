@@ -1455,7 +1455,7 @@ public:
      * document window and not the first widget in the current parent of the floating
      * window.
     */
-    void SetParentToDefaultWindow();
+    SAL_DLLPRIVATE void SetParentToDefaultWindow();
 
 
     //  Keyboard access functions

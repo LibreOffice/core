@@ -182,9 +182,6 @@ public:
                 delete static_cast< AddonsParams* >( m_pToolBar->GetItemData( nItemId ));
         }
 
-        // tdf#119390 this will reparent the toolbar, so focus is restored from a
-        // floating toolbar to the last focused control of the application window.
-        m_pToolBar->SetParentToDefaultWindow();
         // #i93173# note we can still be in one of the toolbar's handlers
         m_pToolBar->SetSelectHdl( Link<ToolBox *, void>() );
         m_pToolBar->SetActivateHdl( Link<ToolBox *, void>() );
