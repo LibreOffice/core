@@ -203,7 +203,7 @@ CPPUNIT_TEST_FIXTURE(DispatchTest, testInterception)
     CPPUNIT_ASSERT_EQUAL(0, pInterceptor->getUnexpected());
 }
 
-constexpr OUStringLiteral DATA_DIRECTORY = u"/framework/qa/cppunit/data/";
+constexpr OUStringLiteral DATA_DIRECTORY = "/framework/qa/cppunit/data/";
 
 CPPUNIT_TEST_FIXTURE(DispatchTest, testSfxOfficeDispatchDispose)
 {
