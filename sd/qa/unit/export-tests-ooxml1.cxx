@@ -118,6 +118,7 @@ public:
     void testTdf140865Wordart3D();
     void testTdf124457();
     void testPlaceholderFillAndOutlineExport();
+    void testTdf143126();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest1);
 
@@ -178,6 +179,7 @@ public:
     CPPUNIT_TEST(testTdf140865Wordart3D);
     CPPUNIT_TEST(testTdf124457);
     CPPUNIT_TEST(testPlaceholderFillAndOutlineExport);
+    CPPUNIT_TEST(testTdf143126);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -1576,6 +1578,20 @@ void SdOOXMLExportTest1::testTdf124457()
                 "/p:sld/p:timing/p:tnLst/p:par/p:cTn/p:childTnLst/p:seq/p:cTn/"
                 "p:childTnLst/p:par/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:par[2]/p:cTn",
                 "repeatCount", "indefinite");
+}
+
+void SdOOXMLExportTest1::testTdf143126()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tdf143126.pptx"), PPTX);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+    xDocShRef->DoClose();
+
+    xmlDocUniquePtr pXmlDoc = parseExport(tempFile, "ppt/presProps.xml");
+
+    assertXPath(pXmlDoc, "/p:presentationPr/p:showPr", "showNarration", "1");
+    assertXPath(pXmlDoc, "/p:presentationPr/p:showPr/p:sldRg", "st", "2" );
+    assertXPath(pXmlDoc, "/p:presentationPr/p:showPr/p:sldRg", "end", "3" );
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdOOXMLExportTest1);
