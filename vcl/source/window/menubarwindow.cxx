@@ -373,7 +373,6 @@ void MenuBarWindow::KillActivePopup()
         }
         m_pActivePopup->ImplGetFloatingWindow()->StopExecute();
         m_pActivePopup->ImplGetFloatingWindow()->doShutdown();
-        m_pActivePopup->pWindow->SetParentToDefaultWindow();
         m_pActivePopup->pWindow.disposeAndClear();
     }
     m_pActivePopup = nullptr;
