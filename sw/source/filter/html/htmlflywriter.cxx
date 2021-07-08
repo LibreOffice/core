@@ -1801,7 +1801,7 @@ static void OutHTML_ImageOLEEnd(SwHTMLWriter& rHTMLWrt)
 static Writer & OutHTML_FrameFormatAsImage( Writer& rWrt, const SwFrameFormat& rFrameFormat, bool bPNGFallback)
 {
     SwHTMLWriter& rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
-    bool bWritePNGFallback = !rHTMLWrt.m_bExportImagesAsOLE && bPNGFallback;
+    bool bWritePNGFallback = rHTMLWrt.mbReqIF && !rHTMLWrt.m_bExportImagesAsOLE && bPNGFallback;
 
     if (rHTMLWrt.mbSkipImages)
         return rWrt;
@@ -1896,7 +1896,7 @@ static Writer& OutHTML_FrameFormatGrfNode( Writer& rWrt, const SwFrameFormat& rF
                                       bool bInCntnr, bool bPNGFallback )
 {
     SwHTMLWriter& rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
-    bool bWritePNGFallback = !rHTMLWrt.m_bExportImagesAsOLE && bPNGFallback;
+    bool bWritePNGFallback = rHTMLWrt.mbReqIF && !rHTMLWrt.m_bExportImagesAsOLE && bPNGFallback;
 
     if (rHTMLWrt.mbSkipImages)
         return rWrt;
