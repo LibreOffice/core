@@ -499,7 +499,6 @@ void MenuFloatingWindow::KillActivePopup( PopupMenu* pThisOnly )
     {
         pPopup->ImplGetFloatingWindow()->StopExecute();
         pPopup->ImplGetFloatingWindow()->doShutdown();
-        pPopup->pWindow->SetParentToDefaultWindow();
         pPopup->pWindow.disposeAndClear();
 
         PaintImmediately();
