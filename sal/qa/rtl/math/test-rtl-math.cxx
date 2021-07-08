@@ -75,6 +75,20 @@ public:
         CPPUNIT_ASSERT(std::isnan(res));
 
         res = rtl::math::stringToDouble(
+                OUString("+NaN"),
+                '.', ',', &status, &end);
+        CPPUNIT_ASSERT_EQUAL(rtl_math_ConversionStatus_Ok, status);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), end);
+        CPPUNIT_ASSERT_EQUAL(0.0, res);
+
+        res = rtl::math::stringToDouble(
+                OUString("-NaN"),
+                '.', ',', &status, &end);
+        CPPUNIT_ASSERT_EQUAL(rtl_math_ConversionStatus_Ok, status);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), end);
+        CPPUNIT_ASSERT_EQUAL(0.0, res);
+
+        res = rtl::math::stringToDouble(
                 OUString("+1.#NAN"),
                 '.', ',', &status, &end);
         CPPUNIT_ASSERT_EQUAL(rtl_math_ConversionStatus_Ok, status);

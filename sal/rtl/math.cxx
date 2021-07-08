@@ -835,16 +835,21 @@ double stringToDouble(CharT const * pBegin, CharT const * pEnd,
     }
 
     bool bSign;
+    bool explicitSign = false;
     if (p0 != pEnd && *p0 == CharT('-'))
     {
         bSign = true;
+        explicitSign = true;
         ++p0;
     }
     else
     {
         bSign = false;
         if (p0 != pEnd && *p0 == CharT('+'))
+        {
+            explicitSign = true;
             ++p0;
+        }
     }
 
     CharT const * p = p0;
@@ -853,7 +858,7 @@ double stringToDouble(CharT const * pBegin, CharT const * pEnd,
     // #i112652# XMLSchema-2
     if ((pEnd - p) >= 3)
     {
-        if ((CharT('N') == p[0]) && (CharT('a') == p[1])
+        if (!explicitSign && (CharT('N') == p[0]) && (CharT('a') == p[1])
             && (CharT('N') == p[2]))
         {
             p += 3;
