@@ -39,6 +39,24 @@
       "revId": "13c6ef9c422578aa37114746f6171b63e66ef695",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d333d4a4_8f850850",
+        "filename": "sal/rtl/math.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1059,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-07-08T09:14:47Z",
+      "side": 1,
+      "message": "My first attempt was to always use copysign here, but then there\u0027s the block above at lines 1019--1049 that resets `bSign \u003d false;` to avoid further sign manipulation here, so I figured the easiest approach would be to handle the NaN sign fiddling locally above and reinstate the `bSign \u003d false; // don\u0027t negate again` there.",
+      "parentUuid": "6a34b3df_ecd97dce",
+      "revId": "13c6ef9c422578aa37114746f6171b63e66ef695",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
