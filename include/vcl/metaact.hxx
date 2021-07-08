@@ -522,6 +522,10 @@ public:
     const OUString& GetText() const { return maStr; }
     sal_Int32       GetIndex() const { return mnIndex; }
     sal_Int32       GetLen() const { return mnLen; }
+    void            SetPoint(Point& rPt) { maPt = rPt; }
+    void            SetText(OUString& rStr) { maStr = rStr; }
+    void            SetIndex(sal_Int32 rIndex) { mnIndex = rIndex; }
+    void            SetLen(sal_Int32 rLen) { mnLen = rLen; }
 };
 
 class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetaTextArrayAction final : public MetaAction
