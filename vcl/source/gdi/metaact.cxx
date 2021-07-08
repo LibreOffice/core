@@ -1242,6 +1242,17 @@ void MetaTextArrayAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
     }
 }
 
+void MetaTextArrayAction::SetDXArray(tools::Long* pDXAry)
+{
+    const sal_Int32 nAryLen = pDXAry ? mnLen : 0;
+
+    if (nAryLen > 0)
+    {
+        mpDXAry.reset( new tools::Long[ nAryLen ] );
+        memcpy( mpDXAry.get(), pDXAry, nAryLen * sizeof(tools::Long) );
+    }
+}
+
 MetaStretchTextAction::MetaStretchTextAction() :
     MetaAction  ( MetaActionType::STRETCHTEXT ),
     mnWidth     ( 0 ),
