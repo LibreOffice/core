@@ -34,7 +34,8 @@ enum class statusIndicatorCallbackType
 };
 
 COMPHELPER_DLLPUBLIC void setStatusIndicatorCallback(
-    void (*callback)(void* data, statusIndicatorCallbackType type, int percent), void* data);
+    void (*callback)(void* data, statusIndicatorCallbackType type, int percent, const char* pText),
+    void* data);
 
 // Functions that can be called from arbitrary places in LibreOffice.
 
@@ -105,7 +106,7 @@ COMPHELPER_DLLPUBLIC bool isAllowlistedLanguage(const OUString& lang);
 // Status indicator handling. Even if in theory there could be several status indicators active at
 // the same time, in practice there is only one at a time, so we don't handle any identification of
 // status indicator in this API.
-COMPHELPER_DLLPUBLIC void statusIndicatorStart();
+COMPHELPER_DLLPUBLIC void statusIndicatorStart(const OUString& sText);
 COMPHELPER_DLLPUBLIC void statusIndicatorSetValue(int percent);
 COMPHELPER_DLLPUBLIC void statusIndicatorFinish();
 
