@@ -72,6 +72,24 @@
     },
     {
       "key": {
+        "uuid": "348774ae_ac86c7b9",
+        "filename": "sc/qa/uitest/calc_tests9/tdf95554.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-07-08T09:56:23Z",
+      "side": 1,
+      "message": "Do you need to use Ctrl or it\u0027s fine to select a range? what happens when you reproduce it manually ?",
+      "parentUuid": "acbfb235_7ad3676d",
+      "revId": "32f31a96b16ccca2e51a986e625c56e87f50b540",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "822ceb21_e8224152",
         "filename": "sc/qa/uitest/calc_tests9/tdf95554.py",
         "patchSetId": 7
