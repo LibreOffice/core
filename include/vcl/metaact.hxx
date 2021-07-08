@@ -606,6 +606,11 @@ public:
     sal_uInt32      GetWidth() const { return mnWidth; }
     sal_Int32       GetIndex() const { return mnIndex; }
     sal_Int32       GetLen() const { return mnLen; }
+    void            SetPoint(Point& rPt) { maPt = rPt; }
+    void            SetText(OUString& rStr) { maStr = rStr; }
+    void            SetWidth(sal_uInt32 rWidth) { mnWidth = rWidth; }
+    void            SetIndex(sal_uInt32 rIndex) { mnIndex = rIndex; }
+    void            SetLen(sal_uInt32 rLen) { mnLen = rLen; }
 };
 
 class SAL_DLLPUBLIC_RTTI MetaTextRectAction final : public MetaAction
