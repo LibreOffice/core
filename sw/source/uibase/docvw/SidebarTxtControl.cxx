@@ -147,6 +147,7 @@ void SidebarTextControl::LoseFocus()
     {
         Invalidate();
     }
+    mrSidebarWin.UnsetActiveSidebarWin();
 }
 
 OUString SidebarTextControl::RequestHelp(tools::Rectangle& rHelpRect)
