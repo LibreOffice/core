@@ -846,6 +846,7 @@ void XMLFilterSettingsDialog::onSave()
     ::sfx2::FileDialogHelper aDlg(
         css::ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION,
         FileDialogFlags::NONE, m_xDialog.get());
+    aDlg.SetContext(sfx2::FileDialogHelper::XMLFilterSettings);
 
     OUString aExtensions( "*.jar" );
     OUString aFilterName = XsltResId(STR_FILTER_PACKAGE) +
@@ -891,6 +892,7 @@ void XMLFilterSettingsDialog::onOpen()
     ::sfx2::FileDialogHelper aDlg(
     css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
     FileDialogFlags::NONE, m_xDialog.get());
+    aDlg.SetContext(sfx2::FileDialogHelper::XMLFilterSettings);
 
     OUString aExtensions( "*.jar" );
     OUString aFilterName = XsltResId(STR_FILTER_PACKAGE) +

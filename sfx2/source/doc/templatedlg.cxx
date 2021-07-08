@@ -843,6 +843,7 @@ void SfxTemplateManagerDlg::OnTemplateImportCategory(const OUString& sCategory)
 {
     sfx2::FileDialogHelper aFileDlg(css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
                                     FileDialogFlags::MultiSelection, m_xDialog.get());
+    aFileDlg.SetContext(sfx2::FileDialogHelper::TemplateImport);
 
     // add "All" filter
     aFileDlg.AddFilter( SfxResId(STR_SFX_FILTERNAME_ALL),

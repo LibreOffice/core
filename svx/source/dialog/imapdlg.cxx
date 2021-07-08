@@ -372,7 +372,7 @@ void SvxIMapDlg::DoOpen()
     aDlg.AddFilter( IMAP_BINARY_FILTER, IMAP_BINARY_TYPE );
 
     aDlg.SetCurrentFilter( aFilter );
-    aDlg.SetDisplayDirectory( SvtPathOptions().GetWorkPath() );
+    aDlg.SetContext(sfx2::FileDialogHelper::ImageMap);
 
     if( aDlg.Execute() == ERRCODE_NONE )
     {
@@ -415,7 +415,7 @@ bool SvxIMapDlg::DoSave()
     aDlg.AddFilter( aBinFilter, IMAP_BINARY_TYPE );
 
     aDlg.SetCurrentFilter( aCERNFilter );
-    aDlg.SetDisplayDirectory( SvtPathOptions().GetWorkPath() );
+    aDlg.SetContext(sfx2::FileDialogHelper::ImageMap);
 
     if( aDlg.Execute() == ERRCODE_NONE )
     {

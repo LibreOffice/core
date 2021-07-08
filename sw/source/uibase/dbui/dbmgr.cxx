@@ -2859,10 +2859,8 @@ OUString ConstructVndSunStarPkgUrl(const OUString& rMainURL, const OUString& rSt
 OUString SwDBManager::LoadAndRegisterDataSource(weld::Window* pParent, SwDocShell* pDocShell)
 {
     sfx2::FileDialogHelper aDlgHelper(ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, FileDialogFlags::NONE, pParent);
+    aDlgHelper.SetContext(sfx2::FileDialogHelper::WriterRegisterDataSource);
     uno::Reference < ui::dialogs::XFilePicker3 > xFP = aDlgHelper.GetFilePicker();
-
-    OUString sHomePath(SvtPathOptions().GetWorkPath());
-    aDlgHelper.SetDisplayDirectory( sHomePath );
 
     OUString sFilterAll(SwResId(STR_FILTER_ALL));
     OUString sFilterAllData(SwResId(STR_FILTER_ALL_DATA));

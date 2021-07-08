@@ -282,6 +282,7 @@ IMPL_LINK_NOARG(ScreenshotAnnotationDlg_Impl, saveButtonHandler, weld::Button&, 
 
     auto xFileDlg = std::make_unique<sfx2::FileDialogHelper>(ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION,
                                                              FileDialogFlags::NONE, mpParentWindow);
+    xFileDlg->SetContext(sfx2::FileDialogHelper::ScreenshotAnnotation);
 
     const uno::Reference< ui::dialogs::XFilePicker3 > xFilePicker = xFileDlg->GetFilePicker();
 

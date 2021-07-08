@@ -1455,6 +1455,7 @@ void SfxAcceleratorConfigPage::StartFileDialog(StartFileDialogType nType, const 
     m_pFileDlg->AddFilter(aFilterAllStr, FILEDIALOG_FILTER_ALL);
     m_pFileDlg->AddFilter(aFilterCfgStr, "*.cfg");
     m_pFileDlg->SetCurrentFilter(aFilterCfgStr);
+    m_pFileDlg->SetContext(sfx2::FileDialogHelper::AcceleratorConfig);
 
     Link<sfx2::FileDialogHelper*, void> aDlgClosedLink
         = bSave ? LINK(this, SfxAcceleratorConfigPage, SaveHdl)
