@@ -925,7 +925,7 @@ void ImageManagerImpl::insertImages( ::sal_Int16 nImageType, const Sequence< OUS
 // XUIConfigurationPersistence
 void ImageManagerImpl::reload()
 {
-    SolarMutexClearableGuard aGuard;
+    SolarMutexResettableGuard aGuard;
 
     if ( m_bDisposed )
         throw DisposedException();
@@ -1061,7 +1061,7 @@ void ImageManagerImpl::reload()
                 implts_notifyContainerListener( aRemoveEvent, NotifyOp_Remove );
             }
 
-            aGuard.clear();
+            aGuard.reset();
         }
     }
 }
