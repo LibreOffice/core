@@ -31,6 +31,7 @@
 #include <o3tl/typed_flags_set.hxx>
 
 #include <memory>
+#include <unordered_map>
 #include <vector>
 
 namespace com::sun::star::ui::dialogs
@@ -80,6 +81,7 @@ public:
         SI_EXPORT,                      // export in impress
         SW_EXPORT                       // export in writer
     };
+    static OUString contextToString(Context context);
 
 private:
     Link<FileDialogHelper*,void>  m_aDialogClosedLink;
