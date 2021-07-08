@@ -231,7 +231,7 @@ IMPL_LINK_NOARG( SwJavaEditDialog, InsertFileHdl, weld::Button&, void )
             ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
             FileDialogFlags::Insert, "swriter", SfxFilterFlags::NONE, SfxFilterFlags::NONE, m_xDialog.get()));
     }
-
+    m_pFileDlg->SetContext(sfx2::FileDialogHelper::WriterInsertScript);
     m_pFileDlg->StartExecuteModal( LINK( this, SwJavaEditDialog, DlgClosedHdl ) );
 }
 

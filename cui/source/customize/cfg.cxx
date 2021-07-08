@@ -2874,6 +2874,7 @@ IMPL_LINK_NOARG(SvxIconSelectorDialog, ImportHdl, weld::Button&, void)
     sfx2::FileDialogHelper aImportDialog(
         css::ui::dialogs::TemplateDescription::FILEOPEN_LINK_PREVIEW,
         FileDialogFlags::Graphic | FileDialogFlags::MultiSelection, m_xDialog.get());
+    aImportDialog.SetContext(sfx2::FileDialogHelper::IconImport);
 
     // disable the link checkbox in the dialog
     uno::Reference< css::ui::dialogs::XFilePickerControlAccess >

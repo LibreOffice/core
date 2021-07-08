@@ -37,12 +37,16 @@
 #include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
 #include <com/sun/star/ui/dialogs/XAsynchronousExecutableDialog.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/container/XContainerQuery.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/task/XInteractionRequest.hpp>
 #include <com/sun/star/util/RevisionTag.hpp>
@@ -87,6 +91,7 @@
 #include <sal/log.hxx>
 #include <comphelper/sequence.hxx>
 #include <tools/diagnose_ex.h>
+#include <officecfg/Office/Common.hxx>
 
 #ifdef UNX
 #include <errno.h>
@@ -132,9 +137,9 @@ static std::optional<OUString> GetLastFilterConfigId( FileDialogHelper::Context 
 
     switch( _eContext )
     {
-        case FileDialogHelper::SD_EXPORT: return aSD_EXPORT_IDENTIFIER;
-        case FileDialogHelper::SI_EXPORT: return aSI_EXPORT_IDENTIFIER;
-        case FileDialogHelper::SW_EXPORT: return aSW_EXPORT_IDENTIFIER;
+        case FileDialogHelper::DrawExport: return aSD_EXPORT_IDENTIFIER;
+        case FileDialogHelper::ImpressExport: return aSI_EXPORT_IDENTIFIER;
+        case FileDialogHelper::WriterExport: return aSW_EXPORT_IDENTIFIER;
         default: break;
     }
 
@@ -850,7 +855,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
     const css::uno::Sequence< OUString >& rDenyList
     )
     :m_nDialogType          ( nDialogType )
-    ,meContext              ( FileDialogHelper::UNKNOWN_CONTEXT )
+    ,meContext              ( FileDialogHelper::UnknownContext )
 {
     const char* pServiceName=nullptr;
     switch (nDialog)
@@ -1948,6 +1953,46 @@ static void SetToken( OUString& rOrigStr, sal_Int32 nToken, sal_Unicode cTok, co
         rOrigStr = rOrigStr.replaceAt( nFirstChar, i-nFirstChar, rStr );
 }
 
+namespace
+{
+void SaveLastDirectory(OUString const& sContext, OUString const& sDirectory)
+{
+    if (sContext.isEmpty())
+        return;
+
+    std::shared_ptr<comphelper::ConfigurationChanges> batch(
+        comphelper::ConfigurationChanges::create());
+    Reference<container::XNameContainer> set(
+        officecfg::Office::Common::Misc::FilePickerLastDirectory::get(batch));
+
+    bool found;
+    Any v;
+    try
+    {
+        v = set->getByName(sContext);
+        found = true;
+    }
+    catch (container::NoSuchElementException&)
+    {
+        found = false;
+    }
+    if (found)
+    {
+        Reference<XPropertySet> el(v.get<Reference<XPropertySet>>(), UNO_SET_THROW);
+        el->setPropertyValue("LastPath", makeAny(sDirectory));
+    }
+    else
+    {
+        Reference<XPropertySet> el(
+            (Reference<lang::XSingleServiceFactory>(set, UNO_QUERY_THROW)->createInstance()),
+            UNO_QUERY_THROW);
+        el->setPropertyValue("LastPath", makeAny(sDirectory));
+        Any v2(makeAny(el));
+        set->insertByName(sContext, v2);
+    }
+    batch->commit();
+}
+}
 
 void FileDialogHelper_Impl::saveConfig()
 {
@@ -2038,43 +2083,67 @@ void FileDialogHelper_Impl::saveConfig()
             aDlgOpt.SetUserItem( USERITEM_NAME, makeAny( aUserData ) );
     }
 
-    SfxApplication *pSfxApp = SfxGetpApp();
-    pSfxApp->SetLastDir_Impl( getPath() );
-}
-
-namespace
-{
-    OUString getInitPath( const OUString& _rFallback, const sal_Int32 _nFallbackToken )
+    // Store to config, if explicit context is set. Otherwise store in (global) runtime var.
+    if (meContext != FileDialogHelper::UnknownContext)
+    {
+        SaveLastDirectory(FileDialogHelper::contextToString(meContext), getPath());
+    }
+    else
     {
         SfxApplication *pSfxApp = SfxGetpApp();
-        OUString sPath = pSfxApp->GetLastDir_Impl();
-
-        if ( sPath.isEmpty() )
-            sPath = _rFallback.getToken( _nFallbackToken, ' ' );
-
-        // check if the path points to a valid (accessible) directory
-        bool bValid = false;
-        if ( !sPath.isEmpty() )
-        {
-            OUString sPathCheck( sPath );
-            if ( sPathCheck[ sPathCheck.getLength() - 1 ] != '/' )
-                sPathCheck += "/";
-            sPathCheck += ".";
-            try
-            {
-                ::ucbhelper::Content aContent( sPathCheck,
-                                               utl::UCBContentHelper::getDefaultCommandEnvironment(),
-                                               comphelper::getProcessComponentContext() );
-                bValid = aContent.isFolder();
-            }
-            catch( const Exception& ) {}
-        }
-
-        if ( !bValid )
-            sPath.clear();
-
-        return sPath;
+        pSfxApp->SetLastDir_Impl( getPath() );
     }
+}
+
+OUString FileDialogHelper_Impl::getInitPath(const OUString& _rFallback,
+                                            const sal_Int32 _nFallbackToken)
+{
+    OUString sPath;
+    // Load from config, if explicit context is set. Otherwise load from (global) runtime var.
+    if (meContext != FileDialogHelper::UnknownContext)
+    {
+        OUString sContext = FileDialogHelper::contextToString(meContext);
+        Reference<XNameAccess> set(officecfg::Office::Common::Misc::FilePickerLastDirectory::get());
+        Any v;
+        try
+        {
+            v = set->getByName(sContext);
+            Reference<XPropertySet> el(v.get<Reference<XPropertySet>>(), UNO_SET_THROW);
+            sPath = el->getPropertyValue("LastPath").get<OUString>();
+        }
+        catch (NoSuchElementException&)
+        {
+        }
+    }
+    else
+    {
+        SfxApplication *pSfxApp = SfxGetpApp();
+        sPath = pSfxApp->GetLastDir_Impl();
+    }
+
+    if ( sPath.isEmpty() )
+        sPath = _rFallback.getToken( _nFallbackToken, ' ' );
+
+    // check if the path points to a valid (accessible) directory
+    bool bValid = false;
+    if ( !sPath.isEmpty() )
+    {
+        OUString sPathCheck( sPath );
+        if ( sPathCheck[ sPathCheck.getLength() - 1 ] != '/' )
+            sPathCheck += "/";
+        sPathCheck += ".";
+        try
+        {
+            ::ucbhelper::Content aContent( sPathCheck,
+                                            utl::UCBContentHelper::getDefaultCommandEnvironment(),
+                                            comphelper::getProcessComponentContext() );
+            bValid = aContent.isFolder();
+        }
+        catch( const Exception& ) {}
+    }
+    if ( !bValid )
+        sPath.clear();
+    return sPath;
 }
 
 void FileDialogHelper_Impl::loadConfig()
@@ -2342,6 +2411,121 @@ void FileDialogHelper::SetControlHelpIds( const sal_Int16* _pControlId, const ch
 void FileDialogHelper::SetContext( Context _eNewContext )
 {
     mpImpl->SetContext( _eNewContext );
+}
+
+OUString FileDialogHelper::contextToString(Context context)
+{
+    // These strings are used in the configuration, to store the last used directory for each context.
+    // Please don't change them.
+    switch(context) {
+        case AcceleratorConfig:
+            return "AcceleratorConfig";
+        case AutoRedact:
+            return "AutoRedact";
+        case BaseDataSource:
+            return "BaseDataSource";
+        case BaseSaveAs:
+            return "BaseSaveAs";
+        case BasicExportPackage:
+            return "BasicExportPackage";
+        case BasicInsertLib:
+            return "BasicInsertLib";
+        case BulletsAddImage:
+            return "BulletsAddImage";
+        case CalcDataProvider:
+            return "CalcDataProvider";
+        case CalcDataStream:
+            return "CalcDataStream";
+        case CalcExport:
+            return "CalcExport";
+        case CalcSaveAs:
+            return "CalcSaveAs";
+        case CalcXMLSource:
+            return "CalcXMLSource";
+        case ExportImage:
+            return "ExportImage";
+        case ExtensionManager:
+            return "ExtensionManager";
+        case FormsAddInstance:
+            return "FormsAddInstance";
+        case FormsInsertImage:
+            return "FormsInsertImage";
+        case LinkClientOLE:
+            return "LinkClientOLE";
+        case LinkClientFile:
+            return "LinkClientFile";
+        case DrawImpressInsertFile:
+            return "DrawImpressInsertFile";
+        case DrawImpressOpenSound:
+            return "DrawImpressOpenSound";
+        case DrawExport:
+            return "DrawExport";
+        case DrawSaveAs:
+            return "DrawSaveAs";
+        case IconImport:
+            return "IconImport";
+        case ImpressClickAction:
+            return "ImpressClickAction";
+        case ImpressExport:
+            return "ImpressExport";
+        case ImpressPhotoDialog:
+            return "ImpressPhotoDialog";
+        case ImpressSaveAs:
+            return "ImpressSaveAs";
+        case ImageMap:
+            return "ImageMap";
+        case InsertDoc:
+            return "InsertDoc";
+        case InsertImage:
+            return "InsertImage";
+        case InsertOLE:
+            return "InsertOLE";
+        case InsertMedia:
+            return "InsertMedia";
+        case JavaClassPath:
+            return "JavaClassPath";
+        case ReportInsertImage:
+            return "ReportInsertImage";
+        case ScreenshotAnnotation:
+            return "ScreenshotAnnotation";
+        case SignatureLine:
+            return "SignatureLine";
+        case TemplateImport:
+            return "TemplateImport";
+        case WriterCreateAddressList:
+            return "WriterCreateAddressList";
+        case WriterExport:
+            return "WriterExport";
+        case WriterImportAutotext:
+            return "WriterImportAutotext";
+        case WriterInsertDoc:
+            return "WriterInsertDoc";
+        case WriterInsertHyperlink:
+            return "WriterInsertHyperlink";
+        case WriterInsertImage:
+            return "WriterInsertImage";
+        case WriterInsertScript:
+            return "WriterInsertScript";
+        case WriterLoadTemplate:
+            return "WriterLoadTemplate";
+        case WriterMailMerge:
+            return "WriterMailMerge";
+        case WriterMailMergeSaveAs:
+            return "WriterMailMergeSaveAs";
+        case WriterNewHTMLGlobalDoc:
+            return "WriterNewHTMLGlobalDoc";
+        case WriterRegisterDataSource:
+            return "WriterRegisterDataSource";
+        case WriterSaveAs:
+            return "WriterSaveAs";
+        case WriterSaveHTML:
+            return "WriterSaveHTML";
+        case XMLFilterSettings:
+            return "XMLFilterSettings";
+        case UnknownContext:
+        default:
+            return "";
+    }
 }
 
 IMPL_LINK_NOARG(FileDialogHelper, ExecuteSystemFilePicker, void*, void)

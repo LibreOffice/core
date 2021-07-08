@@ -2749,7 +2749,7 @@ namespace pcr
         ::sfx2::FileDialogHelper aFileDlg(
                 ui::dialogs::TemplateDescription::FILEOPEN_LINK_PREVIEW,
                 FileDialogFlags::Graphic, pWin);
-
+        aFileDlg.SetContext(sfx2::FileDialogHelper::FormsInsertImage);
         aFileDlg.SetTitle(aStrTrans);
         // non-linked images ( e.g. those located in the document
         // stream ) only if document is available

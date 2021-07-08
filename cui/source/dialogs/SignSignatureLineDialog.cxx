@@ -121,8 +121,10 @@ SignSignatureLineDialog::SignSignatureLineDialog(weld::Widget* pParent, Referenc
 IMPL_LINK_NOARG(SignSignatureLineDialog, loadImage, weld::Button&, void)
 {
     Reference<XComponentContext> xContext = comphelper::getProcessComponentContext();
-    Reference<XFilePicker3> xFilePicker
-        = FilePicker::createWithMode(xContext, TemplateDescription::FILEOPEN_PREVIEW);
+    sfx2::FileDialogHelper aHelper(TemplateDescription::FILEOPEN_PREVIEW, FileDialogFlags::NONE,
+                                   m_xDialog.get());
+    aHelper.SetContext(sfx2::FileDialogHelper::SignatureLine);
+    Reference<XFilePicker3> xFilePicker = aHelper.GetFilePicker();
     if (!xFilePicker->execute())
         return;
 
