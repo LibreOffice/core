@@ -41,6 +41,7 @@
 #include <addressconverter.hxx>
 #include <workbooksettings.hxx>
 #include <worksheetbuffer.hxx>
+#include <vcl/svapp.hxx>
 
 namespace com::sun::star::container { class XNameContainer; }
 
@@ -578,7 +579,22 @@ void ViewSettings::finalizeImport()
         aPropMap.setProperty( PROP_GridColor, rxActiveSheetView->getGridColor( getBaseFilter() ));
         aPropMap.setProperty( PROP_ShowPageBreakPreview, rxActiveSheetView->isPageBreakPreview());
         aPropMap.setProperty( PROP_ShowFormulas, rxActiveSheetView->mbShowFormulas);
-        aPropMap.setProperty( PROP_ShowGrid, true);
+        if (!Application::IsHeadlessModeEnabled())
+        {
+            // tdf#126541: The sheet based grid visibility shoud not overwrite the global grid visibility.
+            aPropMap.setProperty(PROP_ShowGrid, true);
+        }
+        else
+        {
+            // tdf#142854: Except for headless mode... because:
+            // The sheet based grid visibility (bShowGrid) is stored in view settings.
+            // Headless mode means not to export view setting.
+            // but the grid visibility is necessary. and can survive through the global visibility,
+            // although it only works if all sheets have the same grid visibility
+            // Maybe the sheet base bShowGrid should be moved to another location,
+            // that exist even at headless mode
+            aPropMap.setProperty(PROP_ShowGrid, rxActiveSheetView->mbShowGrid);
+        }
         aPropMap.setProperty( PROP_HasColumnRowHeaders, rxActiveSheetView->mbShowHeadings);
         aPropMap.setProperty( PROP_ShowZeroValues, rxActiveSheetView->mbShowZeros);
         aPropMap.setProperty( PROP_IsOutlineSymbolsSet, rxActiveSheetView->mbShowOutline);
