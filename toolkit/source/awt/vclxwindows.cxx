@@ -5725,7 +5725,7 @@ css::uno::Any VCLXNumericField::getProperty( const OUString& PropertyName )
             break;
             case BASEPROPERTY_NUMSHOWTHOUSANDSEP:
             {
-                NumericFormatter* pNumericFormatter = static_cast<NumericFormatter*>(GetFormatter());
+                NumericFormatter* pNumericFormatter = static_cast<NumericFormatter*>(pFormatter);
                 aProp <<= pNumericFormatter->IsUseThousandSep();
             }
             break;
@@ -5981,7 +5981,7 @@ css::uno::Any VCLXMetricField::getProperty( const OUString& PropertyName )
         {
             case BASEPROPERTY_NUMSHOWTHOUSANDSEP:
             {
-                NumericFormatter* pNumericFormatter = static_cast<NumericFormatter*>(GetFormatter());
+                NumericFormatter* pNumericFormatter = static_cast<NumericFormatter*>(pFormatter);
                 aProp <<= pNumericFormatter->IsUseThousandSep();
                 break;
             }
