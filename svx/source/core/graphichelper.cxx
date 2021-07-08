@@ -227,7 +227,7 @@ OUString GraphicHelper::ExportGraphic(weld::Window* pParent, const Graphic& rGra
     aPath.SetSmartURL( sGraphicsPath );
 
     // fish out the graphic's name
-
+    aDialogHelper.SetContext(FileDialogHelper::ExportImage);
     aDialogHelper.SetTitle( SvxResId(RID_SVXSTR_EXPORT_GRAPHIC_TITLE));
     aDialogHelper.SetDisplayDirectory( aPath.GetMainURL(INetURLObject::DecodeMechanism::ToIUri) );
     INetURLObject aURL;

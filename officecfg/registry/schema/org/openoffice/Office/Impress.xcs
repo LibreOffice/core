@@ -1644,19 +1644,5 @@
         <value>$(work)</value>
       </prop>
     </group>
-    <group oor:name="Sound">
-      <info>
-        <desc>Contains configuration items for Sound related functions.</desc>
-      </info>
-      <prop oor:name="Path" oor:type="xs:string" oor:nillable="false">
-        <info>
-          <desc>
-            Access path, where sounds were loaded last time.
-            The default is work directory.
-          </desc>
-        </info>
-        <value>$(work)</value>
-      </prop>
-    </group>
   </component>
 </oor:component-schema>

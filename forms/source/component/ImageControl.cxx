@@ -774,6 +774,7 @@ bool OImageControlControl::implInsertGraphics()
         Reference< XWindow > xWindow( static_cast< ::cppu::OWeakObject* >( this ), UNO_QUERY );
         ::sfx2::FileDialogHelper aDialog(TemplateDescription::FILEOPEN_LINK_PREVIEW, FileDialogFlags::Graphic,
                                          Application::GetFrameWeld(xWindow));
+        aDialog.SetContext(sfx2::FileDialogHelper::FormsInsertImage);
         aDialog.SetTitle( sTitle );
 
         Reference< XFilePickerControlAccess > xController( aDialog.GetFilePicker(), UNO_QUERY_THROW );

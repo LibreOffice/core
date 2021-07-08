@@ -20,7 +20,6 @@
 
 #include <unotools/pathoptions.hxx>
 #include <unotools/ucbstreamhelper.hxx>
-#include <officecfg/Office/Impress.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
@@ -500,35 +499,16 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, FileHdl, weld::Button&, void)
     ::sfx2::FileDialogHelper aDlg(
         css::ui::dialogs::TemplateDescription::FILEOPEN_PREVIEW,
         FileDialogFlags::Graphic | FileDialogFlags::MultiSelection, m_xDialog.get());
-    // Read configuration
-    OUString sUrl(officecfg::Office::Impress::Pictures::Path::get());
-
-    INetURLObject aFile( SvtPathOptions().GetUserConfigPath() );
-    if (!sUrl.isEmpty())
-        aDlg.SetDisplayDirectory(sUrl);
-    else
-        aDlg.SetDisplayDirectory( aFile.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
+    aDlg.SetContext(sfx2::FileDialogHelper::ImpressPhotoDialog);
 
     if ( aDlg.Execute() == ERRCODE_NONE )
     {
         const Sequence< OUString > aFilesArr = aDlg.GetSelectedFiles();
-        if( aFilesArr.hasElements() )
+        for ( const auto& rFile : aFilesArr )
         {
-            sUrl = aDlg.GetDisplayDirectory();
-            // Write out configuration
-            {
-                std::shared_ptr< comphelper::ConfigurationChanges > batch(
-                    comphelper::ConfigurationChanges::create());
-                officecfg::Office::Impress::Pictures::Path::set(sUrl, batch);
-                batch->commit();
-            }
-
-            for ( const auto& rFile : aFilesArr )
-            {
-                // Store full path, show filename only. Use INetURLObject to display spaces in filename correctly
-                INetURLObject aUrl(rFile);
-                m_xImagesLst->append(aUrl.GetMainURL(INetURLObject::DecodeMechanism::NONE), aUrl.GetLastName(INetURLObject::DecodeMechanism::WithCharset), "");
-            }
+            // Store full path, show filename only. Use INetURLObject to display spaces in filename correctly
+            INetURLObject aUrl(rFile);
+            m_xImagesLst->append(aUrl.GetMainURL(INetURLObject::DecodeMechanism::NONE), aUrl.GetLastName(INetURLObject::DecodeMechanism::WithCharset), "");
         }
     }
     EnableDisableButtons();

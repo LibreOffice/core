@@ -3069,13 +3069,12 @@ namespace svxform
         ::sfx2::FileDialogHelper aDlg(
             css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
             FileDialogFlags::NONE, m_xDialog.get());
-        INetURLObject aFile( SvtPathOptions().GetWorkPath() );
+        aDlg.SetContext(sfx2::FileDialogHelper::FormsAddInstance);
 
         aDlg.AddFilter( m_sAllFilterName, FILEDIALOG_FILTER_ALL );
         OUString sFilterName( "XML" );
         aDlg.AddFilter( sFilterName, "*.xml" );
         aDlg.SetCurrentFilter( sFilterName );
-        aDlg.SetDisplayDirectory( aFile.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
 
         if (aDlg.Execute() == ERRCODE_NONE)
             m_xURLED->set_entry_text(aDlg.GetPath());

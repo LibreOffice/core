@@ -215,6 +215,7 @@ bool MediaWindow::executeMediaURLDialog(weld::Window* pParent, OUString& rURL, b
     static const char               aSeparator[] = ";";
     OUStringBuffer                  aAllTypes;
 
+    aDlg.SetContext(sfx2::FileDialogHelper::InsertMedia);
     aDlg.SetTitle( AvmResId( o_pbLink != nullptr
                 ? AVMEDIA_STR_INSERTMEDIA_DLG : AVMEDIA_STR_OPENMEDIA_DLG ) );
 

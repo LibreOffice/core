@@ -57,6 +57,7 @@ namespace sfx2
         ::std::vector< OUString > mlLastURLs;
 
         OUString             maPath;
+        OUString             maLastPath;
         OUString             maFileName;
         OUString             maCurFilter;
         OUString             maSelectFilter;
@@ -204,6 +205,7 @@ namespace sfx2
         OUString                getFilterWithExtension( std::u16string_view rFilter ) const;
 
         void                    SetContext( FileDialogHelper::Context _eNewContext );
+        OUString                getInitPath( const OUString& _rFallback, const sal_Int32 _nFallbackToken );
 
         bool             isSystemFilePicker() const { return mbSystemPicker; }
         bool             isPasswordEnabled() const { return mbIsPwdEnabled; }

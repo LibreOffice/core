@@ -780,15 +780,15 @@ IMPL_LINK_NOARG(SvxJavaClassPathDlg, AddArchiveHdl_Impl, weld::Button&, void)
     sfx2::FileDialogHelper aDlg(TemplateDescription::FILEOPEN_SIMPLE, FileDialogFlags::NONE, m_xDialog.get());
     aDlg.SetTitle( CuiResId( RID_SVXSTR_ARCHIVE_TITLE ) );
     aDlg.AddFilter( CuiResId( RID_SVXSTR_ARCHIVE_HEADLINE ), "*.jar;*.zip" );
+    aDlg.SetContext(sfx2::FileDialogHelper::JavaClassPath);
     OUString sFolder;
     if (m_xPathList->count_selected_rows() > 0)
     {
         osl::FileBase::getFileURLFromSystemPath(m_xPathList->get_selected_text(), sFolder);
             // best effort
     }
-    if (sFolder.isEmpty())
-         sFolder = SvtPathOptions().GetWorkPath();
-    aDlg.SetDisplayDirectory( sFolder );
+    if (!sFolder.isEmpty())
+        aDlg.SetDisplayDirectory( sFolder );
     if ( aDlg.Execute() == ERRCODE_NONE )
     {
         OUString sURL = aDlg.GetPath();

@@ -72,14 +72,64 @@ class FileDialogHelper_Impl;
 class SFX2_DLLPUBLIC FileDialogHelper
 {
 public:
-    enum Context                        // context where the FileDialogHelper is used
+    // context where the FileDialogHelper is used
+    enum Context
     {
-        UNKNOWN_CONTEXT,                // unknown context
-        SW_INSERT_GRAPHIC,              // insert graphic in writer
-        SD_EXPORT,                      // export in draw
-        SI_EXPORT,                      // export in impress
-        SW_EXPORT                       // export in writer
+        UnknownContext,
+        AcceleratorConfig,
+        AutoRedact,
+        BaseDataSource,
+        BaseSaveAs,
+        BasicExportPackage,
+        BasicInsertLib,
+        BulletsAddImage,
+        ExtensionManager,
+        CalcDataProvider,
+        CalcDataStream,
+        CalcExport,
+        CalcSaveAs,
+        CalcXMLSource,
+        DrawExport,
+        DrawImpressInsertFile,
+        DrawImpressOpenSound,
+        DrawSaveAs,
+        ExportImage,
+        FormsAddInstance,
+        FormsInsertImage,
+        IconImport,
+        ImpressClickAction,
+        ImpressExport,
+        ImpressPhotoDialog,
+        ImpressSaveAs,
+        LinkClientOLE,
+        LinkClientFile,
+        ImageMap,
+        InsertDoc,
+        InsertImage,
+        InsertMedia,
+        InsertOLE,
+        JavaClassPath,
+        ReportInsertImage,
+        ScreenshotAnnotation,
+        SignatureLine,
+        TemplateImport,
+        WriterCreateAddressList,
+        WriterInsertDoc,
+        WriterInsertImage,
+        WriterInsertScript,
+        WriterExport,
+        WriterImportAutotext,
+        WriterInsertHyperlink,
+        WriterLoadTemplate,
+        WriterMailMerge,
+        WriterMailMergeSaveAs,
+        WriterNewHTMLGlobalDoc,
+        WriterRegisterDataSource,
+        WriterSaveAs,
+        WriterSaveHTML,
+        XMLFilterSettings
     };
+    static OUString contextToString(Context context);
 
 private:
     Link<FileDialogHelper*,void>  m_aDialogClosedLink;
@@ -211,6 +261,8 @@ public:
     void                    CreateMatcher( const OUString& rName );
 
     /** sets the context of the dialog and trigger necessary actions e.g. loading config, setting help id
+        This will also store the last used directory for this context, so that the last directory
+        gets preselected on next filepicker launch (with the same context)
         @param _eNewContext
             New context for the dialog.
     */

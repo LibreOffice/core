@@ -1078,13 +1078,13 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                     OUString sUrl;
                     if ( m_xModel.is() )
                         sUrl = m_xModel->getURL();
-                    if ( sUrl.isEmpty() )
-                        sUrl = SvtPathOptions().GetWorkPath();
 
                     ::sfx2::FileDialogHelper aFileDlg(
                         ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION,
                         FileDialogFlags::NONE, getFrameWeld());
-                    aFileDlg.SetDisplayDirectory( sUrl );
+                    aFileDlg.SetContext(sfx2::FileDialogHelper::BaseSaveAs);
+                    if (!sUrl.isEmpty())
+                        aFileDlg.SetDisplayDirectory( sUrl );
 
                     std::shared_ptr<const SfxFilter> pFilter = getStandardDatabaseFilter();
                     if ( pFilter )

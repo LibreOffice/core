@@ -34,7 +34,6 @@
 #include <filedlg.hxx>
 #include <sdresid.hxx>
 #include <strings.hrc>
-#include <officecfg/Office/Impress.hxx>
 
 // -----------      SdFileDialog_Imp        ---------------------------
 
@@ -214,6 +213,7 @@ SdOpenSoundFileDialog::SdOpenSoundFileDialog(weld::Window *pParent)
 {
     OUString aDescr = SdResId(STR_ALL_FILES);
     mpImpl->AddFilter( aDescr, "*.*");
+    mpImpl->SetContext(sfx2::FileDialogHelper::DrawImpressOpenSound);
 
     // setup filter
 #if defined UNX
@@ -233,9 +233,6 @@ SdOpenSoundFileDialog::SdOpenSoundFileDialog(weld::Window *pParent)
     aDescr = SdResId(STR_MIDI_FILE);
     mpImpl->AddFilter( aDescr, "*.mid" );
 #endif
-
-    // Restore last selected path
-    mpImpl->SetDisplayDirectory(officecfg::Office::Impress::Sound::Path::get());
 }
 
 SdOpenSoundFileDialog::~SdOpenSoundFileDialog()
@@ -249,12 +246,6 @@ ErrCode SdOpenSoundFileDialog::Execute()
 
 OUString SdOpenSoundFileDialog::GetPath() const
 {
-    // Save last selected path
-    std::shared_ptr<comphelper::ConfigurationChanges> batch(
-        comphelper::ConfigurationChanges::create());
-    officecfg::Office::Impress::Sound::Path::set(mpImpl->GetPath(), batch);
-    batch->commit();
-
     return mpImpl->GetPath();
 }
 
