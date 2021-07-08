@@ -6053,7 +6053,7 @@ static void lo_runLoop(LibreOfficeKit* /*pThis*/,
 
 static bool bInitialized = false;
 
-static void lo_status_indicator_callback(void *data, comphelper::LibreOfficeKit::statusIndicatorCallbackType type, int percent)
+static void lo_status_indicator_callback(void *data, comphelper::LibreOfficeKit::statusIndicatorCallbackType type, int percent, const char* pText)
 {
     LibLibreOffice_Impl* pLib = static_cast<LibLibreOffice_Impl*>(data);
 
@@ -6063,7 +6063,7 @@ static void lo_status_indicator_callback(void *data, comphelper::LibreOfficeKit:
     switch (type)
     {
     case comphelper::LibreOfficeKit::statusIndicatorCallbackType::Start:
-        pLib->mpCallback(LOK_CALLBACK_STATUS_INDICATOR_START, nullptr, pLib->mpCallbackData);
+        pLib->mpCallback(LOK_CALLBACK_STATUS_INDICATOR_START, pText, pLib->mpCallbackData);
         break;
     case comphelper::LibreOfficeKit::statusIndicatorCallbackType::SetValue:
         pLib->mpCallback(LOK_CALLBACK_STATUS_INDICATOR_SET_VALUE,
