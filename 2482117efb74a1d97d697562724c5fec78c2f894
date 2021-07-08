@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "733f6587_88d41b03",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1453,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-07-08T11:16:03Z",
+      "side": 1,
+      "message": "Nitpick: you could move the documentation to the header, which is where people usually search for documentation. Also, perhaps it would be cleaner to return an std::optional\u003csal_Int16\u003e and then -1 could be replaced by an empty value?",
+      "revId": "2482117efb74a1d97d697562724c5fec78c2f894",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
