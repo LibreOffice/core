@@ -192,7 +192,7 @@ rtl::Reference<MetaAction> SvmReader::MetaActionHandler(ImplMetaReadData* pData)
             return PolygonHandler();
             break;
         case MetaActionType::POLYPOLYGON:
-            pAction = new MetaPolyPolygonAction;
+            return PolyPolygonHandler();
             break;
         case MetaActionType::TEXT:
             pAction = new MetaTextAction;
@@ -589,6 +589,52 @@ rtl::Reference<MetaAction> SvmReader::PolygonHandler()
     }
 
     pAction->SetPolygon(aPolygon);
+
+    return pAction;
+}
+
+rtl::Reference<MetaAction> SvmReader::PolyPolygonHandler()
+{
+    auto pAction = new MetaPolyPolygonAction();
+
+    VersionCompatRead aCompat(mrStream);
+    tools::PolyPolygon aPolyPolygon;
+    ReadPolyPolygon(mrStream, aPolyPolygon); // Version 1
+
+    if (aCompat.GetVersion() < 2) // Version 2
+    {
+        pAction->SetPolyPolygon(aPolyPolygon);
+        return pAction;
+    }
+
+    sal_uInt16 nNumberOfComplexPolygons(0);
+    mrStream.ReadUInt16(nNumberOfComplexPolygons);
+    const size_t nMinRecordSize = sizeof(sal_uInt16);
+    const size_t nMaxRecords = mrStream.remainingSize() / nMinRecordSize;
+    if (nNumberOfComplexPolygons > nMaxRecords)
+    {
+        SAL_WARN("vcl.gdi", "Parsing error: " << nMaxRecords << " max possible entries, but "
+                                              << nNumberOfComplexPolygons
+                                              << " claimed, truncating");
+        nNumberOfComplexPolygons = nMaxRecords;
+    }
+    for (sal_uInt16 i = 0; i < nNumberOfComplexPolygons; ++i)
+    {
+        sal_uInt16 nIndex(0);
+        mrStream.ReadUInt16(nIndex);
+        tools::Polygon aPoly;
+        aPoly.Read(mrStream);
+        if (nIndex >= aPolyPolygon.Count())
+        {
+            SAL_WARN("vcl.gdi", "svm contains polygon index " << nIndex
+                                                              << " outside possible range "
+                                                              << aPolyPolygon.Count());
+            continue;
+        }
+        aPolyPolygon.Replace(aPoly, nIndex);
+    }
+
+    pAction->SetPolyPolygon(aPolyPolygon);
 
     return pAction;
 }
