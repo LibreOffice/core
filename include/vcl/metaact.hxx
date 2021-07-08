@@ -685,6 +685,11 @@ public:
     FontStrikeout       GetStrikeout() const { return meStrikeout; }
     FontLineStyle       GetUnderline() const { return meUnderline; }
     FontLineStyle       GetOverline()  const { return meOverline; }
+    void                SetStartPoint(Point& rPos) { maPos = rPos; }
+    void                SetWidth(tools::Long rWidth) { mnWidth = rWidth; }
+    void                SetStrikeout(FontStrikeout eStrikeout) { meStrikeout = eStrikeout; }
+    void                SetUnderline(FontLineStyle eUnderline) { meUnderline = eUnderline; }
+    void                SetOverline(FontLineStyle eOverline) { meOverline = eOverline; }
 };
 
 class VCL_DLLPUBLIC MetaBmpAction final : public MetaAction
