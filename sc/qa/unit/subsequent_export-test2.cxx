@@ -2367,6 +2367,12 @@ void ScExportTest2::testButtonFormControlXlsxExport()
     assertXPathContent(pDoc, "//x:anchor/x:from/xdr:row", "3");
     assertXPathContent(pDoc, "//x:anchor/x:to/xdr:col", "3");
     assertXPathContent(pDoc, "//x:anchor/x:to/xdr:row", "7");
+
+    // Also make sure that an empty macro attribute is not written.
+    // Without the fix in place, this test would have failed with:
+    // - XPath '//x:controlPr' unexpected 'macro' attribute
+    // i.e. macro in an xlsx file was not omitted, which is considered invalid by Excel.
+    assertXPathNoAttribute(pDoc, "//x:controlPr", "macro");
 }
 
 void ScExportTest2::testInvalidNamedRange()
