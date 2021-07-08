@@ -2868,7 +2868,10 @@ static MergeResult lcl_Compare_Attributes(
                 if (pItem2->Which() == RES_CHRATR_RSID)
                     pItem2 = iter2.NextItem();
                 if (!pItem1 && !pItem2)
+                {
+                    eMerge = DIFFER_ONLY_RSID;
                     break;
+                }
                 if (!pItem1 || !pItem2)
                 {
                     return DIFFER;
@@ -2877,13 +2880,6 @@ static MergeResult lcl_Compare_Attributes(
                 {
                     assert(IsInvalidItem(pItem1) || IsInvalidItem(pItem2) || pItem1->Which() != pItem2->Which() || *pItem1 != *pItem2);
                     return DIFFER;
-                }
-                if (iter1.IsAtEnd() && iter2.IsAtEnd())
-                    break;
-                if (iter1.IsAtEnd() || iter2.IsAtEnd())
-                {
-                    eMerge = DIFFER_ONLY_RSID;
-                    break;
                 }
             }
             eMerge = DIFFER_ONLY_RSID;
