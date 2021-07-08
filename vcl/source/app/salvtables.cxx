@@ -1212,10 +1212,14 @@ void SalInstanceContainer::move(weld::Widget* pWidget, weld::Container* pNewPare
     assert(pVclWidget);
     SalInstanceContainer* pNewVclParent = dynamic_cast<SalInstanceContainer*>(pNewParent);
     assert(!pNewParent || pNewVclParent);
+    vcl::Window* pVclWindow = pVclWidget->getWidget();
     if (pNewVclParent)
-        pVclWidget->getWidget()->SetParent(pNewVclParent->getWidget());
+        pVclWindow->SetParent(pNewVclParent->getWidget());
     else
-        pVclWidget->getWidget()->SetParentToDefaultWindow();
+    {
+        pVclWindow->Hide();
+        pVclWindow->SetParent(ImplGetDefaultWindow());
+    }
 }
 
 void SalInstanceContainer::child_grab_focus()
