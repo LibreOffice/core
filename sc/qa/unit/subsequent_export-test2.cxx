@@ -146,6 +146,7 @@ public:
     void testTdf91634XLSX();
     void testTdf115159();
     void testTdf112567();
+    void testTdf122191();
     void testTdf112567b();
     void testTdf123645XLSX();
     void testTdf125173XLSX();
@@ -245,6 +246,7 @@ public:
     CPPUNIT_TEST(testTdf91634XLSX);
     CPPUNIT_TEST(testTdf115159);
     CPPUNIT_TEST(testTdf112567);
+    CPPUNIT_TEST(testTdf122191);
     CPPUNIT_TEST(testTdf112567b);
     CPPUNIT_TEST(testTdf123645XLSX);
     CPPUNIT_TEST(testTdf125173XLSX);
@@ -1337,6 +1339,37 @@ void ScExportTest2::testTdf112567()
 
     //assert the existing OOXML built-in name is not duplicated
     assertXPath(pDoc, "/x:workbook/x:definedNames/x:definedName", 1);
+
+    xDocSh->DoClose();
+}
+
+void ScExportTest2::testTdf122191()
+{
+    // Set the system locale to Hungarian
+    SvtSysLocaleOptions aOptions;
+    OUString sLocaleConfigString = aOptions.GetLanguageTag().getBcp47();
+    aOptions.SetLocaleConfigString("hu-HU");
+    aOptions.Commit();
+    comphelper::ScopeGuard g([&aOptions, &sLocaleConfigString] {
+        aOptions.SetLocaleConfigString(sLocaleConfigString);
+        aOptions.Commit();
+    });
+
+    ScDocShellRef xShell = loadDoc(u"tdf122191.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xShell.is());
+
+    ScDocument& rDoc = xShell->GetDocument();
+    CPPUNIT_ASSERT_EQUAL(OUString("IGAZ"), rDoc.GetString(0, 0, 0));
+
+    ScDocShellRef xDocSh = saveAndReload(xShell.get(), FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+    xShell->DoClose();
+
+    ScDocument& rDoc2 = xDocSh->GetDocument();
+    // Without the fix in place, this test would have failed with
+    // - Expected: IGAZ
+    // - Actual  : BOOL00AN
+    CPPUNIT_ASSERT_EQUAL(OUString("IGAZ"), rDoc2.GetString(0, 0, 0));
 
     xDocSh->DoClose();
 }
