@@ -91,6 +91,7 @@ SvxOpenGraphicDialog::SvxOpenGraphicDialog(const OUString& rTitle, weld::Window*
     : mpImpl(new SvxOpenGrf_Impl(pPreferredParent, nDialogType))
 {
     mpImpl->aFileDlg.SetTitle(rTitle);
+    mpImpl->aFileDlg.SetContext(sfx2::FileDialogHelper::InsertImage);
 }
 
 SvxOpenGraphicDialog::~SvxOpenGraphicDialog()

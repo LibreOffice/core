@@ -492,6 +492,7 @@ void SfxAutoRedactDialog::StartFileDialog(StartFileDialogType nType, const OUStr
     Link<sfx2::FileDialogHelper*, void> aDlgClosedLink
         = bSave ? LINK(this, SfxAutoRedactDialog, SaveHdl)
                 : LINK(this, SfxAutoRedactDialog, LoadHdl);
+    m_pFileDlg->SetContext(sfx2::FileDialogHelper::AutoRedact);
     m_pFileDlg->StartExecuteModal(aDlgClosedLink);
 }
 

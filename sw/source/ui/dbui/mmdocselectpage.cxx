@@ -133,9 +133,8 @@ IMPL_LINK(SwMailMergeDocSelectPage, FileSelectHdl, weld::Button&, rButton, void)
     {
         sfx2::FileDialogHelper aDlgHelper(TemplateDescription::FILEOPEN_SIMPLE,
                                           FileDialogFlags::NONE, m_pWizard->getDialog());
+        aDlgHelper.SetContext(sfx2::FileDialogHelper::WriterMailMerge);
         Reference < XFilePicker3 > xFP = aDlgHelper.GetFilePicker();
-
-        xFP->setDisplayDirectory( SvtPathOptions().GetWorkPath() );
 
         SfxObjectFactory &rFact = m_pWizard->GetSwView()->GetDocShell()->GetFactory();
         SfxFilterMatcher aMatcher( rFact.GetFactoryName() );
