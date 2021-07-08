@@ -122,6 +122,7 @@ class SAL_DLLPUBLIC_RTTI SwAnnotationWin final : public InterimItemWindow
         void            DoResize();
         void            ResizeIfNecessary(tools::Long aOldHeight, tools::Long aNewHeight);
         void            SetScrollbar();
+        void            LockView(bool bLock);
 
         void            SetVirtualPosSize( const Point& aPoint, const Size& aSize);
         Point           VirtualPos()    { return mPosSize.TopLeft(); }
