@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6a34b3df_ecd97dce",
+        "filename": "sal/rtl/math.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1059,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-08T09:08:18Z",
+      "side": 1,
+      "message": "Or maybe simply use copysign here ?",
+      "revId": "13c6ef9c422578aa37114746f6171b63e66ef695",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
