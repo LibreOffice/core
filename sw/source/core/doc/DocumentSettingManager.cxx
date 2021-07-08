@@ -631,7 +631,7 @@ void sw::DocumentSettingManager::ReplaceCompatibilityOptions(const DocumentSetti
     mbTabCompat = rSource.mbTabCompat;
     mbUseVirtualDevice = rSource.mbUseVirtualDevice;
     mbAddFlyOffsets = rSource.mbAddFlyOffsets;
-    // No mbAddVerticalFlyOffsets
+    mbAddVerticalFlyOffsets = rSource.mbAddVerticalFlyOffsets;
     mbAddExternalLeading = rSource.mbAddExternalLeading;
     mbUseHiResolutionVirtualDevice = rSource.mbUseHiResolutionVirtualDevice;
     mbOldLineSpacing = rSource.mbOldLineSpacing;
