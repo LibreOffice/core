@@ -823,18 +823,17 @@ void ScGridWindow::UpdateAutoFilterFromMenu(AutoFilterMode eMode)
             mrViewData.GetViewShell()->UISort(aSortParam);
             return;
         }
+        case AutoFilterMode::Custom:
+        {
+            ScRange aRange;
+            pDBData->GetArea(aRange);
+            mrViewData.GetView()->MarkRange(aRange);
+            mrViewData.GetView()->SetCursor(rPos.Col(), rPos.Row());
+            mrViewData.GetDispatcher().Execute(SID_FILTER, SfxCallMode::SLOT | SfxCallMode::RECORD);
+            return;
+        }
         default:
             ;
-    }
-
-    if (eMode == AutoFilterMode::Custom)
-    {
-        ScRange aRange;
-        pDBData->GetArea(aRange);
-        mrViewData.GetView()->MarkRange(aRange);
-        mrViewData.GetView()->SetCursor(rPos.Col(), rPos.Row());
-        mrViewData.GetDispatcher().Execute(SID_FILTER, SfxCallMode::SLOT|SfxCallMode::RECORD);
-        return;
     }
 
     ScQueryParam aParam;
@@ -866,9 +865,27 @@ void ScGridWindow::UpdateAutoFilterFromMenu(AutoFilterMode eMode)
     }
 
     // Remove old entries in auto-filter rules
+<<<<<<< HEAD   (f93050 tdf#123598 sc UI: don't show autofilter dropdown arrows)
     aParam.RemoveAllEntriesByField(rPos.Col());
+=======
+    if (!bColorMode)
+    {
+        aParam.RemoveAllEntriesByField(rPos.Col());
+>>>>>>> CHANGE (92dbfa tdf#46184 sc AutoFilter: reset filter options to default val)
 
+<<<<<<< HEAD   (f93050 tdf#123598 sc UI: don't show autofilter dropdown arrows)
     if( !(eMode == AutoFilterMode::Normal && rControl.isAllSelected() ) )
+=======
+        // tdf#46184 reset filter options to default values
+        aParam.eSearchType = utl::SearchParam::SearchType::Normal;
+        aParam.bCaseSens = false;
+        aParam.bDuplicate = true;
+        aParam.bInplace = true;
+    }
+
+    if (eMode != AutoFilterMode::Clear
+        && !(eMode == AutoFilterMode::Normal && rControl.isAllSelected()))
+>>>>>>> CHANGE (92dbfa tdf#46184 sc AutoFilter: reset filter options to default val)
     {
         // Try to use the existing entry for the column (if one exists).
         ScQueryEntry* pEntry = aParam.FindEntryByField(rPos.Col(), true);
@@ -909,6 +926,70 @@ void ScGridWindow::UpdateAutoFilterFromMenu(AutoFilterMode eMode)
             case AutoFilterMode::NonEmpty:
                 pEntry->SetQueryByNonEmpty();
             break;
+<<<<<<< HEAD   (f93050 tdf#123598 sc UI: don't show autofilter dropdown arrows)
+=======
+            case AutoFilterMode::TextColor:
+            case AutoFilterMode::BackgroundColor:
+            {
+                ScFilterEntries aFilterEntries;
+                rDoc.GetFilterEntries(rPos.Col(), rPos.Row(), rPos.Tab(), aFilterEntries);
+
+                VclPtr<PopupMenu> pColorMenu = VclPtr<PopupMenu>::Create();
+                std::set<Color> aColors = eMode == AutoFilterMode::TextColor
+                                              ? aFilterEntries.getTextColors()
+                                              : aFilterEntries.getBackgroundColors();
+
+                sal_Int32 i = 1;
+                sal_Int32 nActive = -1;
+                for (auto& rColor : aColors)
+                {
+                    pColorMenu->InsertItem(i, OUString(), MenuItemBits::CHECKABLE);
+                    pColorMenu->SetItemColor(i, rColor);
+                    auto aItem = pEntry->GetQueryItem();
+                    if (aItem.maColor == rColor
+                        && ((eMode == AutoFilterMode::TextColor
+                             && aItem.meType == ScQueryEntry::ByTextColor)
+                            || (eMode == AutoFilterMode::BackgroundColor
+                                && aItem.meType == ScQueryEntry::ByBackgroundColor)))
+                    {
+                        nActive = i;
+                        pColorMenu->CheckItem(i, true);
+                    }
+                    i++;
+                }
+                Point pos(mpAutoFilterPopup->GetSizePixel().getWidth(), 150);
+                sal_uInt16 nSelected = pColorMenu->Execute(this, pos);
+                pColorMenu.disposeAndClear();
+                rControl.terminateAllPopupMenus();
+
+                if (nSelected == 0)
+                    return;
+
+                // Disable color filter when active color was selected
+                if (nSelected == nActive)
+                {
+                    aParam.RemoveAllEntriesByField(rPos.Col());
+
+                    // tdf#46184 reset filter options to default values
+                    aParam.eSearchType = utl::SearchParam::SearchType::Normal;
+                    aParam.bCaseSens = false;
+                    aParam.bDuplicate = true;
+                    aParam.bInplace = true;
+                }
+
+                // Get selected color from set
+                std::set<Color>::iterator it = aColors.begin();
+                std::advance(it, nSelected - 1);
+                Color selectedColor = *it;
+
+                if (eMode == AutoFilterMode::TextColor)
+                    pEntry->SetQueryByTextColor(selectedColor);
+                else
+                    pEntry->SetQueryByBackgroundColor(selectedColor);
+            }
+
+            break;
+>>>>>>> CHANGE (92dbfa tdf#46184 sc AutoFilter: reset filter options to default val)
             default:
                 // We don't know how to handle this!
                 return;
