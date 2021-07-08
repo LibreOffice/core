@@ -16,6 +16,23 @@
       "revId": "07b0a116a6fed77836b04ff57c0ab48744ab47b4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "51515459_8cff5639",
+        "filename": "include/svx/svxids.hrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1036,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-07-08T07:25:03Z",
+      "side": 1,
+      "message": "SID_SVX_FIRSTFREE is now wrong.\n\nIt would be better if the constants were moved so that the SIDs remained sorted by number",
+      "revId": "07b0a116a6fed77836b04ff57c0ab48744ab47b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
