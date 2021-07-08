@@ -420,10 +420,8 @@ IMPL_LINK_NOARG(SwCreateAddressListDialog, OkHdl_Impl, weld::Button&, void)
     {
         sfx2::FileDialogHelper aDlgHelper(TemplateDescription::FILESAVE_SIMPLE,
                                           FileDialogFlags::NONE, m_xDialog.get());
+        aDlgHelper.SetContext(sfx2::FileDialogHelper::WriterCreateAddressList);
         uno::Reference < XFilePicker3 > xFP = aDlgHelper.GetFilePicker();
-
-        const OUString sPath( SvtPathOptions().SubstituteVariable("$(userurl)/database") );
-        aDlgHelper.SetDisplayDirectory( sPath );
         xFP->appendFilter( m_sAddressListFilterName, "*.csv" );
         xFP->setCurrentFilter( m_sAddressListFilterName ) ;
 

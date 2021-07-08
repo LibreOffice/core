@@ -91,7 +91,6 @@ class ExtMgrDialog : public weld::GenericDialogController
 {
     const OUString       m_sAddPackages;
     OUString             m_sProgressText;
-    OUString             m_sLastFolderURL;
     ::osl::Mutex         m_aMutex;
     bool                 m_bHasProgress;
     bool                 m_bProgressChanged;
