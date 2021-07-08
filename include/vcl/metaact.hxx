@@ -457,6 +457,7 @@ public:
     virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const tools::Polygon& GetPolygon() const { return maPoly; }
+    void                SetPolygon(tools::Polygon& rPoly) { maPoly = rPoly; }
 };
 
 class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetaPolyPolygonAction final : public MetaAction
