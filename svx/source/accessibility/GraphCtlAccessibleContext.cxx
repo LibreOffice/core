@@ -176,7 +176,7 @@ Reference< XAccessible > SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleAt
     }
 
     Point aPnt( rPoint.X, rPoint.Y );
-    mpControl->GetDrawingArea()->get_ref_device().PixelToLogic( aPnt );
+    aPnt = mpControl->GetDrawingArea()->get_ref_device().PixelToLogic(aPnt);
 
     SdrObject* pObj = nullptr;
 
