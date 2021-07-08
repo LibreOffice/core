@@ -52,6 +52,7 @@ public:
     rtl::Reference<MetaAction> PolygonHandler();
     rtl::Reference<MetaAction> PolyPolygonHandler();
     rtl::Reference<MetaAction> TextHandler(ImplMetaReadData* pData);
+    rtl::Reference<MetaAction> TextArrayHandler(ImplMetaReadData* pData);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
