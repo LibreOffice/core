@@ -201,7 +201,7 @@ rtl::Reference<MetaAction> SvmReader::MetaActionHandler(ImplMetaReadData* pData)
             return TextArrayHandler(pData);
             break;
         case MetaActionType::STRETCHTEXT:
-            pAction = new MetaStretchTextAction;
+            return StretchTextHandler(pData);
             break;
         case MetaActionType::TEXTRECT:
             pAction = new MetaTextRectAction;
@@ -743,6 +743,37 @@ rtl::Reference<MetaAction> SvmReader::TextArrayHandler(ImplMetaReadData* pData)
     }
 
     pAction->SetDXArray(aArray.get());
+    return pAction;
+}
+
+rtl::Reference<MetaAction> SvmReader::StretchTextHandler(ImplMetaReadData* pData)
+{
+    auto pAction = new MetaStretchTextAction();
+
+    VersionCompatRead aCompat(mrStream);
+    TypeSerializer aSerializer(mrStream);
+
+    Point aPoint;
+    aSerializer.readPoint(aPoint);
+    OUString aStr;
+    aStr = mrStream.ReadUniOrByteString(pData->meActualCharSet);
+    sal_uInt32 nTmpWidth;
+    mrStream.ReadUInt32(nTmpWidth);
+    sal_uInt16 nTmpIndex(0);
+    mrStream.ReadUInt16(nTmpIndex);
+    sal_uInt16 nTmpLen(0);
+    mrStream.ReadUInt16(nTmpLen);
+
+    pAction->SetPoint(aPoint);
+    pAction->SetWidth(nTmpWidth);
+    pAction->SetIndex(nTmpIndex);
+    pAction->SetLen(nTmpLen);
+
+    if (aCompat.GetVersion() >= 2) // Version 2
+        aStr = read_uInt16_lenPrefixed_uInt16s_ToOUString(mrStream);
+
+    pAction->SetText(aStr);
+
     return pAction;
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
