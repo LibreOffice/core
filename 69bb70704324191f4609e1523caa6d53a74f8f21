@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6811c43f_790ec447",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Common.xcs",
+        "patchSetId": 2
+      },
+      "lineNbr": 5916,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-07-08T06:40:58Z",
+      "side": 1,
+      "message": "as you use the context value as the set element name, there should be no need to redundantly store it as a LastDirectory/Context prop",
+      "revId": "69bb70704324191f4609e1523caa6d53a74f8f21",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
