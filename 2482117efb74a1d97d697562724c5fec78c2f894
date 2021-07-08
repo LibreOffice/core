@@ -16,6 +16,24 @@
       "revId": "2482117efb74a1d97d697562724c5fec78c2f894",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "89ae85ff_cb5ae4ab",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1453,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-07-08T11:44:37Z",
+      "side": 1,
+      "message": "Noted.\nI guess std::optional could work here since -1 is never written to PROP_NUMBERING_LEVEL. But -1 matches what nListId is doing with the numbering Rule as well as what is returned by pEntryProperties-\u003eGetListLevel() (and I\u0027ve just come from doing DOC work, where -1 is used everywhere for this as well). Plus I don\u0027t really like std::optional variables...\n\nSo to use std::optional would suggest replacing it everywhere listLevel is used in order to be consistent.",
+      "parentUuid": "733f6587_88d41b03",
+      "revId": "2482117efb74a1d97d697562724c5fec78c2f894",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
