@@ -613,11 +613,9 @@ bool ExtMgrDialog::acceptLicense( const uno::Reference< deployment::XPackage > &
 uno::Sequence< OUString > ExtMgrDialog::raiseAddPicker()
 {
     sfx2::FileDialogHelper aDlgHelper(ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, FileDialogFlags::NONE, m_xDialog.get());
+    aDlgHelper.SetContext(sfx2::FileDialogHelper::ExtensionManager);
     const uno::Reference<ui::dialogs::XFilePicker3>& xFilePicker = aDlgHelper.GetFilePicker();
     xFilePicker->setTitle( m_sAddPackages );
-
-    if ( !m_sLastFolderURL.isEmpty() )
-        xFilePicker->setDisplayDirectory( m_sLastFolderURL );
 
     // collect and set filter list:
     typedef std::map< OUString, OUString > t_string2string;
@@ -673,7 +671,6 @@ uno::Sequence< OUString > ExtMgrDialog::raiseAddPicker()
     if ( xFilePicker->execute() != ui::dialogs::ExecutableDialogResults::OK )
         return uno::Sequence<OUString>(); // cancelled
 
-    m_sLastFolderURL = xFilePicker->getDisplayDirectory();
     uno::Sequence< OUString > files( xFilePicker->getSelectedFiles() );
     OSL_ASSERT( files.hasElements() );
     return files;
