@@ -48,6 +48,7 @@ public:
     void testPivotTableBasicODS();
     void testPivotTableNamedRangeSourceODS();
     void testPivotTableSharedCacheGroupODS();
+    void testTdf122110();
     void testGetPivotDataXLS();
     void testPivotTableSharedGroupXLSX();
     void testPivotTableSharedDateGroupXLSX(); // + export
@@ -100,6 +101,7 @@ public:
     CPPUNIT_TEST(testPivotTableBasicODS);
     CPPUNIT_TEST(testPivotTableNamedRangeSourceODS);
     CPPUNIT_TEST(testPivotTableSharedCacheGroupODS);
+    CPPUNIT_TEST(testTdf122110);
     CPPUNIT_TEST(testGetPivotDataXLS);
     CPPUNIT_TEST(testPivotTableSharedGroupXLSX);
     CPPUNIT_TEST(testPivotTableSharedDateGroupXLSX);
@@ -311,6 +313,22 @@ bool checkVisiblePageFieldMember(const ScDPSaveDimension::MemberList& rMembers,
 
     return bFound;
 }
+}
+
+void ScPivotTableFiltersTest::testTdf122110()
+{
+    ScDocShellRef xDocSh = loadDoc(u"tdf122110.", FORMAT_XLSX);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load file", xDocSh.is());
+
+    ScDocShellRef xDocSh2 = saveAndReload(xDocSh.get(), FORMAT_XLSX);
+    ScDocument* pDoc = &xDocSh2->GetDocument();
+
+    // get the font colour
+    const ScPatternAttr* pPattern = pDoc->GetPattern(6, 18, 0);
+    vcl::Font aFont;
+    pPattern->GetFont(aFont, SC_AUTOCOL_RAW);
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("font color should be black", COL_AUTO, aFont.GetColor());
 }
 
 void ScPivotTableFiltersTest::testPivotTableSharedCacheGroupODS()
