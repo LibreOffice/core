@@ -1490,9 +1490,12 @@ void XclExpTbxControlObj::SaveSheetXml(XclExpXmlStream& rStrm, const OUString& a
             rWorksheet->startElement(XML_control, XML_shapeId, OString::number(mnShapeId).getStr(),
                                      FSNS(XML_r, XML_id), aIdFormControlPr, XML_name, msCtrlName);
 
+            OString aMacroName = GetMacroName().toUtf8();
+            // Omit the macro attribute if it would be empty.
+            const char* pMacroName = aMacroName.isEmpty() ? nullptr : aMacroName.getStr();
             rWorksheet->startElement(XML_controlPr, XML_defaultSize, "0", XML_print,
                                      mbPrint ? "true" : "false", XML_autoFill, "0", XML_autoPict,
-                                     "0", XML_macro, GetMacroName());
+                                     "0", XML_macro, pMacroName);
 
             rWorksheet->startElement(XML_anchor, XML_moveWithCells, "true", XML_sizeWithCells,
                                      "false");
