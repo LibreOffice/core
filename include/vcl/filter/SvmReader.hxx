@@ -57,6 +57,7 @@ public:
     rtl::Reference<MetaAction> TextRectHandler(ImplMetaReadData* pData);
     rtl::Reference<MetaAction> TextLineHandler();
     rtl::Reference<MetaAction> BmpHandler();
+    rtl::Reference<MetaAction> BmpScaleHandler();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

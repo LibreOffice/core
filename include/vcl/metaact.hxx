@@ -755,6 +755,9 @@ public:
     const Bitmap&       GetBitmap() const { return maBmp; }
     const Point&        GetPoint() const { return maPt; }
     const Size&         GetSize() const { return maSz; }
+    void                SetBitmap(Bitmap& rBmp) { maBmp = rBmp; }
+    void                SetPoint(Point& rPt) { maPt = rPt; }
+    void                SetSize(Size& rSz) { maSz = rSz; }
 };
 
 class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetaBmpScalePartAction final : public MetaAction
