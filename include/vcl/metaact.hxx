@@ -909,6 +909,11 @@ public:
     const Size&         GetDestSize() const { return maDstSz; }
     const Point&        GetSrcPoint() const { return maSrcPt; }
     const Size&         GetSrcSize() const { return maSrcSz; }
+    void                SetBitmapEx(BitmapEx& rBmpEx) { maBmpEx = rBmpEx; }
+    void                SetDestPoint(Point& rDstPt) { maDstPt = rDstPt; }
+    void                SetDestSize(Size& rDstSz) { maDstSz = rDstSz; }
+    void                SetSrcPoint(Point& rSrcPt) { maSrcPt = rSrcPt; }
+    void                SetSrcSize(Size& rSrcSz) { maSrcSz = rSrcSz; }
     bool                IsTransparent() const override { return GetBitmapEx().IsAlpha(); }
 };
 
