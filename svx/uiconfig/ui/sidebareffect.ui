@@ -73,7 +73,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkLabel" id="color">
+                      <object class="GtkLabel" id="glowcolorlabel">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes" context="sidebarglow|color">Color:</property>
@@ -227,7 +227,7 @@
   <object class="GtkSizeGroup" id="sizegroupLabel">
     <widgets>
       <widget name="radiusglow"/>
-      <widget name="color"/>
+      <widget name="glowcolorlabel"/>
       <widget name="transparency"/>
       <widget name="radiussoftedge"/>
     </widgets>
