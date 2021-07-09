@@ -330,11 +330,9 @@ void PageMarginControl::FillHelpText( const bool bUserCustomValuesAvailable )
         aHelpText += m_xWidthHeightField->get_text();
         aHelpText += m_bUserCustomMirrored ? aOuter : aRight;
         SetMetricValue( *m_xWidthHeightField, m_nUserCustomPageRightMargin, m_eUnit );
-        aHelpText += m_xWidthHeightField->get_text();
-        aHelpText += aTop;
+        aHelpText += m_xWidthHeightField->get_text() + aTop;
         SetMetricValue( *m_xWidthHeightField, m_nUserCustomPageTopMargin, m_eUnit );
-        aHelpText += m_xWidthHeightField->get_text();
-        aHelpText += aBottom;
+        aHelpText += m_xWidthHeightField->get_text() + aBottom;
         SetMetricValue( *m_xWidthHeightField, m_nUserCustomPageBottomMargin, m_eUnit );
         aHelpText += m_xWidthHeightField->get_text();
     }

@@ -1365,9 +1365,7 @@ void HierarchyContent::insert( sal_Int32 nNameClashResolve,
                 }
                 else
                 {
-                    OUString aNewTitle( m_aProps.getTitle() );
-                    aNewTitle += "_" +
-                        OUString::number( nTry );
+                    OUString aNewTitle( m_aProps.getTitle() + "_" + OUString::number( nTry ) );
                     m_aProps.setTitle( aNewTitle );
                 }
             }

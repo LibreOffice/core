@@ -378,6 +378,36 @@ bool StringAdd::isSideEffectFree(Expr const* expr)
                         }
                     }
                 }
+                // Aggressively assume that calls to const member functions are side effect free (if
+                // all of the call's sub-expressions are):
+                if (calleeMethodDecl->isConst())
+                {
+                    auto sef = true;
+                    // Other options besides CXXMemberCallExpr are e.g. CXXOperatorCallExpr which
+                    // does not have such a target expression:
+                    if (auto const mce = dyn_cast<CXXMemberCallExpr>(callExpr))
+                    {
+                        if (!isSideEffectFree(mce->getImplicitObjectArgument()))
+                        {
+                            sef = false;
+                        }
+                    }
+                    if (sef)
+                    {
+                        for (unsigned i = 0; i != callExpr->getNumArgs(); ++i)
+                        {
+                            if (!isSideEffectFree(callExpr->getArg(i)))
+                            {
+                                sef = false;
+                                break;
+                            }
+                        }
+                    }
+                    if (sef)
+                    {
+                        return true;
+                    }
+                }
             }
         if (auto calleeFunctionDecl = dyn_cast_or_null<FunctionDecl>(callExpr->getCalleeDecl()))
             if (calleeFunctionDecl && calleeFunctionDecl->getIdentifier())
