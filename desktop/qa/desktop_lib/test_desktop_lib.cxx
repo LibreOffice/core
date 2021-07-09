@@ -59,6 +59,8 @@
 #include <svx/svxids.hrc>
 
 #include <cppunit/TestAssert.h>
+#include <vcl/BitmapTools.hxx>
+#include <vcl/pngwrite.hxx>
 
 #if USE_TLS_NSS
 #include <nss.h>
@@ -205,6 +207,7 @@ public:
     void testMetricField();
     void testMultiDocuments();
     void testJumpCursor();
+    void testRenderSearchResult();
     void testABI();
 
     CPPUNIT_TEST_SUITE(DesktopLOKTest);
@@ -268,6 +271,7 @@ public:
     CPPUNIT_TEST(testMetricField);
     CPPUNIT_TEST(testMultiDocuments);
     CPPUNIT_TEST(testJumpCursor);
+    CPPUNIT_TEST(testRenderSearchResult);
     CPPUNIT_TEST(testABI);
     CPPUNIT_TEST_SUITE_END();
 
@@ -3103,6 +3107,48 @@ void DesktopLOKTest::testJumpCursor()
     comphelper::LibreOfficeKit::setTiledAnnotations(true);
 }
 
+void DesktopLOKTest::testRenderSearchResult()
+{
+    constexpr const bool bDumpBitmap = false;
+
+    LibLODocument_Impl* pDocument = loadDoc("SearchIndexResultTest.odt");
+    pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
+
+    Scheduler::ProcessEventsToIdle();
+
+    unsigned char* pBuffer = nullptr;
+    OString aJSON = "{ \"node_index\" : 19 }";
+
+    int nWidth = 0;
+    int nHeight = 0;
+    size_t nByteSize = 0;
+
+    bool bResult = pDocument->m_pDocumentClass->renderSearchResult(pDocument, aJSON.getStr(), &pBuffer, &nWidth, &nHeight, &nByteSize);
+
+    CPPUNIT_ASSERT(bResult);
+    CPPUNIT_ASSERT(pBuffer);
+
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(642, nWidth);
+    CPPUNIT_ASSERT_EQUAL(561, nHeight);
+    CPPUNIT_ASSERT_EQUAL(size_t(1440648), nByteSize);
+
+    const sal_uInt8* pD = reinterpret_cast<const sal_uInt8*>(pBuffer);
+    BitmapEx aBitmap = vcl::bitmap::CreateFromData(pD, nWidth, nHeight, nWidth * 4, vcl::PixelFormat::N32_BPP, true, true);
+
+    if (bDumpBitmap)
+    {
+        SvFileStream aStream("~/SearchResultBitmap.png", StreamMode::WRITE | StreamMode::TRUNC);
+        vcl::PNGWriter aPNGWriter(aBitmap);
+        aPNGWriter.Write(aStream);
+    }
+    CPPUNIT_ASSERT_EQUAL(tools::Long(642), aBitmap.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(561), aBitmap.GetSizePixel().Height());
+
+    std::free(pBuffer);
+}
+
 namespace {
 
 constexpr size_t classOffset(int i)
@@ -3200,10 +3246,11 @@ void DesktopLOKTest::testABI()
     CPPUNIT_ASSERT_EQUAL(documentClassOffset(59), offsetof(struct _LibreOfficeKitDocumentClass, completeFunction));
     CPPUNIT_ASSERT_EQUAL(documentClassOffset(60), offsetof(struct _LibreOfficeKitDocumentClass, setWindowTextSelection));
     CPPUNIT_ASSERT_EQUAL(documentClassOffset(61), offsetof(struct _LibreOfficeKitDocumentClass, sendFormFieldEvent));
+    CPPUNIT_ASSERT_EQUAL(documentClassOffset(62), offsetof(struct _LibreOfficeKitDocumentClass, renderSearchResult));
 
     // Extending is fine, update this, and add new assert for the offsetof the
     // new method
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(62), sizeof(struct _LibreOfficeKitDocumentClass));
+    CPPUNIT_ASSERT_EQUAL(documentClassOffset(63), sizeof(struct _LibreOfficeKitDocumentClass));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(DesktopLOKTest);
