@@ -35,7 +35,12 @@ class tdf69981(UITestCase):
                 xtab = xDialog.getChild("tab")
                 xcomma = xDialog.getChild("comma")
                 xtab.executeAction("CLICK", tuple())
-                xcomma.executeAction("CLICK", tuple())
+
+                if get_state_as_dict(xcomma)['Selected'] == 'false':
+                    xcomma.executeAction("CLICK", tuple())
+
+                self.assertEqual('false', get_state_as_dict(xtab)['Selected'])
+                self.assertEqual('true', get_state_as_dict(xcomma)['Selected'])
                 #Click Ok
                 #overwrite warning come up
                 #press Ok.
