@@ -518,8 +518,8 @@ void RtfAttributeOutput::StartRuby(const SwTextNode& rNode, sal_Int32 /*nPos*/,
 {
     WW8Ruby aWW8Ruby(rNode, rRuby, GetExport());
     OUString aStr(FieldString(ww::eEQ) + "\\* jc");
-    aStr += OUString::number(aWW8Ruby.GetJC()) + " \\* \"Font:";
-    aStr += aWW8Ruby.GetFontFamily() + "\" \\* hps";
+    aStr += OUString::number(aWW8Ruby.GetJC()) + " \\* \"Font:" + aWW8Ruby.GetFontFamily()
+            + "\" \\* hps";
     aStr += OUString::number((aWW8Ruby.GetRubyHeight() + 5) / 10) + " \\o";
     if (aWW8Ruby.GetDirective())
     {

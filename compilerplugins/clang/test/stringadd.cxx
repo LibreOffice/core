@@ -235,4 +235,28 @@ void f2(char ch)
     s = s + OString(ch);
 }
 }
+
+namespace test10
+{
+struct C
+{
+    OString constStringFunction(int) const;
+    OString nonConstStringFunction();
+    int constIntFunction() const;
+    int nonConstIntFunction();
+};
+
+C getC();
+
+void f1(C c)
+{
+    OString s;
+    // expected-error@+1 {{simplify by merging with the preceding assignment [loplugin:stringadd]}}
+    s += c.constStringFunction(c.constIntFunction());
+    s += c.constStringFunction(c.nonConstIntFunction());
+    s += c.nonConstStringFunction();
+    s += getC().constStringFunction(c.constIntFunction());
+}
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

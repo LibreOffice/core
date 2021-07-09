@@ -848,9 +848,7 @@ void BibDataManager::startQueryWith(const OUString& rQuery)
     OUString aQueryString;
     if(!rQuery.isEmpty())
     {
-        aQueryString=aQuoteChar;
-        aQueryString+=getQueryField();
-        aQueryString+=aQuoteChar + " like '";
+        aQueryString=aQuoteChar + getQueryField() + aQuoteChar + " like '";
         OUString sQuery = rQuery.replaceAll("?","_").replaceAll("*","%");
         aQueryString += sQuery + "%'";
     }

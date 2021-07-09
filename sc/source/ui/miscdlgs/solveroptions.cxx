@@ -286,8 +286,8 @@ void ScSolverOptionsDialog::EditOption()
             {
                 pStringItem->SetIntValue(m_xIntDialog->GetValue());
 
-                OUString sTxt(pStringItem->GetText() + ": ");
-                sTxt += OUString::number(pStringItem->GetIntValue());
+                OUString sTxt(
+                    pStringItem->GetText() + ": " + OUString::number(pStringItem->GetIntValue()));
 
                 m_xLbSettings->set_text(nEntry, sTxt, 0);
             }

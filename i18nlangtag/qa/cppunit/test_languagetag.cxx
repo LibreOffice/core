@@ -760,8 +760,7 @@ void TestLanguageTag::testAllIsoLangEntries()
         LanguageTag aTagID( elem.mnLang);
         if (!checkMapping( elem.maBcp47, aTagString.getBcp47()))
         {
-            OString aMessage( OUStringToOString( elem.maBcp47, RTL_TEXTENCODING_ASCII_US));
-            aMessage += " -> " + OUStringToOString( aTagString.getBcp47(), RTL_TEXTENCODING_ASCII_US);
+            OString aMessage( OUStringToOString( elem.maBcp47, RTL_TEXTENCODING_ASCII_US) + " -> " + OUStringToOString( aTagString.getBcp47(), RTL_TEXTENCODING_ASCII_US) );
             CPPUNIT_ASSERT_EQUAL_MESSAGE( aMessage.getStr(), aTagString.getBcp47(), elem.maBcp47 );
         }
         if (elem.maBcp47 != aTagID.getBcp47())
