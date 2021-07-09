@@ -36,7 +36,7 @@ EffectPropertyPanel::EffectPropertyPanel(weld::Widget* pParent, SfxBindings* pBi
           m_xBuilder->weld_metric_spin_button("LB_GLOW_TRANSPARENCY", FieldUnit::PERCENT))
     , mxFTRadiusSoftEdge(m_xBuilder->weld_label("radiussoftedge"))
     , mxFTRadiusGlow(m_xBuilder->weld_label("radiusglow"))
-    , mxFTColor(m_xBuilder->weld_label("color"))
+    , mxFTColor(m_xBuilder->weld_label("glowcolorlabel"))
     , mxSoftEdgeRadius(m_xBuilder->weld_metric_spin_button("SB_SOFTEDGE_RADIUS", FieldUnit::POINT))
 {
     Initialize();
