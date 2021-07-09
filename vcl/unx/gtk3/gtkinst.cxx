@@ -17445,6 +17445,9 @@ private:
 
     void signal_entry_insert_text(GtkEntry* pEntry, const gchar* pNewText, gint nNewTextLength, gint* position)
     {
+        if (m_bPopupActive) // not entered by the user
+            return;
+
         // first filter inserted text
         if (m_aEntryInsertTextHdl.IsSet())
         {
@@ -17459,6 +17462,7 @@ private:
             }
             g_signal_stop_emission_by_name(pEntry, "insert-text");
         }
+
         if (m_bAutoComplete)
         {
             // now check for autocompletes
