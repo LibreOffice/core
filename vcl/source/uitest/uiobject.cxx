@@ -411,16 +411,16 @@ vcl::Window* findChild(vcl::Window* pParent, const OUString& rID, bool bRequireV
     for (size_t i = 0; i < nCount; ++i)
     {
         vcl::Window* pChild = pParent->GetChild(i);
-        if (pChild->get_id() == rID
-            && (!bRequireVisible || pChild->IsVisible()))
+        bool bCandidate = !bRequireVisible || pChild->IsVisible();
+        if (!bCandidate)
+            continue;
+
+        if (pChild->get_id() == rID)
             return pChild;
 
-        if (!bRequireVisible || pChild->IsVisible())
-        {
-            vcl::Window* pResult = findChild(pChild, rID);
-            if (pResult)
-                return pResult;
-        }
+        vcl::Window* pResult = findChild(pChild, rID);
+        if (pResult)
+            return pResult;
     }
 
     return nullptr;
