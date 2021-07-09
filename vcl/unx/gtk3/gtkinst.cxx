@@ -9496,12 +9496,12 @@ private:
     {
         GtkInstanceMenuButton* pThis = static_cast<GtkInstanceMenuButton*>(widget);
         SolarMutexGuard aGuard;
-        pThis->toggle_menu();
+        pThis->menu_toggled();
     }
 #endif
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
-    void toggle_menu()
+    void menu_toggled()
     {
         if (!m_pMenuHack)
             return;
@@ -17543,7 +17543,7 @@ private:
         return g_value_get_boolean(&value);
     }
 
-    void toggle_menu()
+    void menu_toggled()
     {
         if (!toggle_button_get_active())
         {
@@ -17584,7 +17584,7 @@ private:
     {
         m_aQuickSelectionEngine.Reset();
 
-        toggle_menu();
+        menu_toggled();
 
         bool bIsShown = toggle_button_get_active();
         if (m_bPopupActive != bIsShown)
@@ -19268,7 +19268,7 @@ private:
         return nHeight;
     }
 
-    void toggle_menu()
+    void menu_toggled()
     {
         if (!gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_pToggleButton)))
         {
@@ -19328,7 +19328,7 @@ private:
     {
         m_aQuickSelectionEngine.Reset();
 
-        toggle_menu();
+        menu_toggled();
 
         bool bIsShown = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_pToggleButton));
         if (m_bPopupActive != bIsShown)
