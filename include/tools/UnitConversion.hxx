@@ -29,6 +29,8 @@ constexpr sal_Int64 convertPointToMm100(sal_Int64 nNumber)
     return convertTwipToMm100(convertPointToTwip(nNumber));
 }
 
+constexpr double convertTwipToPixel(double nNumber) { return nNumber / 15.0; }
+
 constexpr double convertPointToTwip(double fNumber) { return fNumber * 20.0; }
 
 constexpr double convertPointToMm100(double fNumber) { return fNumber * (2540.0 / 72.0); }

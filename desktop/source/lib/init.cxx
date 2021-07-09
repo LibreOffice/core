@@ -123,6 +123,7 @@
 #include <unotools/resmgr.hxx>
 #include <tools/fract.hxx>
 #include <tools/json_writer.hxx>
+#include <tools/UnitConversion.hxx>
 #include <svtools/ctrltool.hxx>
 #include <svtools/langtab.hxx>
 #include <vcl/floatwin.hxx>
@@ -1199,6 +1200,11 @@ static void doc_completeFunction(LibreOfficeKitDocument* pThis, const char*);
 
 static void doc_sendFormFieldEvent(LibreOfficeKitDocument* pThis,
                                    const char* pArguments);
+
+static bool doc_renderSearchResult(LibreOfficeKitDocument* pThis,
+                                 const char* pSearchResult, unsigned char** pBitmapBuffer,
+                                 int* pWidth, int* pHeight, size_t* pByteSize);
+
 } // extern "C"
 
 namespace {
@@ -1338,6 +1344,7 @@ LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XCompone
         m_pDocumentClass->completeFunction = doc_completeFunction;
 
         m_pDocumentClass->sendFormFieldEvent = doc_sendFormFieldEvent;
+        m_pDocumentClass->renderSearchResult = doc_renderSearchResult;
 
         m_pDocumentClass->setFreemiumDenyList = doc_setFreemiumDenyList;
         m_pDocumentClass->setFreemiumView = doc_setFreemiumView;
@@ -5753,6 +5760,56 @@ static void doc_sendFormFieldEvent(LibreOfficeKitDocument* pThis, const char* pA
     }
 
     pDoc->executeFromFieldEvent(aMap);
+}
+
+static bool doc_renderSearchResult(LibreOfficeKitDocument* pThis,
+                                     const char* pSearchResult, unsigned char** pBitmapBuffer,
+                                     int* pWidth, int* pHeight, size_t* pByteSize)
+{
+    if (doc_getDocumentType(pThis) != LOK_DOCTYPE_TEXT)
+        return false;
+
+    if (pBitmapBuffer == nullptr)
+        return false;
+
+    if (!pSearchResult || pSearchResult[0] == '\0')
+        return false;
+
+    ITiledRenderable* pDoc = getTiledRenderable(pThis);
+    if (!pDoc)
+    {
+        SetLastExceptionMsg("Document doesn't support tiled rendering");
+        return false;
+    }
+
+    auto aRectangleVector = pDoc->getSearchResultRectangles(pSearchResult);
+
+    // combine into a rectangle union
+    basegfx::B2DRange aRangeUnion;
+    for (basegfx::B2DRange const & rRange : aRectangleVector)
+    {
+        aRangeUnion.expand(rRange);
+    }
+
+    int aPixelWidth = convertTwipToPixel(aRangeUnion.getWidth());
+    int aPixelHeight = convertTwipToPixel(aRangeUnion.getHeight());
+
+    size_t nByteSize = aPixelWidth * aPixelHeight * 4;
+
+    *pWidth = aPixelWidth;
+    *pHeight = aPixelHeight;
+    *pByteSize = nByteSize;
+
+    auto* pBuffer = static_cast<unsigned char*>(std::malloc(nByteSize));
+
+    doc_paintTile(pThis, pBuffer,
+        aPixelWidth, aPixelHeight,
+        aRangeUnion.getMinX(), aRangeUnion.getMinY(),
+        aRangeUnion.getWidth(), aRangeUnion.getHeight());
+
+    *pBitmapBuffer = pBuffer;
+
+    return true;
 }
 
 static char* lo_getError (LibreOfficeKit *pThis)
