@@ -360,13 +360,13 @@ bool OleComponentNative_Impl::ConvertDataForFlavor( const STGMEDIUM& aMedium,
         if ( pBuf && !bAnyIsReady )
         {
             for ( auto const & supportedFormat : std::as_const(m_aSupportedGraphFormats) )
-                 if ( aFlavor.MimeType.match( supportedFormat.MimeType )
+                if ( aFlavor.MimeType.match( supportedFormat.MimeType )
                   && aFlavor.DataType == supportedFormat.DataType
                   && aFlavor.DataType == cppu::UnoType<uno::Sequence< sal_Int8 >>::get() )
-            {
-                bAnyIsReady = ConvertBufferToFormat( pBuf.get(), nBufSize, aFormat, aResult );
-                break;
-            }
+                {
+                    bAnyIsReady = ConvertBufferToFormat( pBuf.get(), nBufSize, aFormat, aResult );
+                    break;
+                }
         }
     }
 
@@ -612,7 +612,7 @@ void OleComponent::RetrieveObjectDataFlavors_Impl()
                     if( hr2 == S_OK || hr2 == S_FALSE )
                     {
                         for( sal_uInt32 nInd = 0; nInd < FORMATS_NUM; nInd++ )
-                            {
+                        {
                             if ( pElem[nInd].cfFormat == pFormatTemplates[nInd].cfFormat
                               && pElem[nInd].tymed == pFormatTemplates[nInd].tymed )
                                 nSupportedAspects |= pElem[nInd].dwAspect;

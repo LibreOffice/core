@@ -207,44 +207,44 @@ void AccComponentEventListener::SetComponentState(short state, bool enable)
 void AccComponentEventListener::FireStatePropertyChange(short state, bool set)
 {
     if( set)
+    {
+        // new value
+        switch(state)
         {
-            // new value
-            switch(state)
-            {
-            case AccessibleStateType::CHECKED:
-            case AccessibleStateType::INDETERMINATE:
-                pAgent->IncreaseState(m_xAccessible.get(), state);
-                pAgent->UpdateAction(m_xAccessible.get());
+        case AccessibleStateType::CHECKED:
+        case AccessibleStateType::INDETERMINATE:
+            pAgent->IncreaseState(m_xAccessible.get(), state);
+            pAgent->UpdateAction(m_xAccessible.get());
 
-                if(!pAgent->IsSpecialToolboItem(m_xAccessible.get()))
-                {
-                    pAgent->NotifyAccEvent(UM_EVENT_STATE_CHECKED, m_xAccessible.get());
-                }
-                break;
-            case AccessibleStateType::PRESSED:
-                pAgent->IncreaseState(m_xAccessible.get(), state);
-                pAgent->NotifyAccEvent(UM_EVENT_STATE_PRESSED, m_xAccessible.get());
-                break;
-            case AccessibleStateType::SELECTED:
-                pAgent->IncreaseState(m_xAccessible.get(), state);
-                break;
-            case AccessibleStateType::ARMED:
-                pAgent->IncreaseState(m_xAccessible.get(), state);
-                pAgent->NotifyAccEvent(UM_EVENT_STATE_ARMED, m_xAccessible.get());
-                break;
-            case AccessibleStateType::SHOWING:
-                pAgent->DecreaseState(m_xAccessible.get(), AccessibleStateType::DEFUNC);
-                // UNO !SHOWING == MSAA OFFSCREEN
-                pAgent->IncreaseState(m_xAccessible.get(), AccessibleStateType::SHOWING );
-                break;
-            case AccessibleStateType::VISIBLE:
-                // UNO !VISIBLE == MSAA INVISIBLE
-                pAgent->IncreaseState(m_xAccessible.get(), AccessibleStateType::VISIBLE );
-                break;
-            default:
-                break;
+            if(!pAgent->IsSpecialToolboItem(m_xAccessible.get()))
+            {
+                pAgent->NotifyAccEvent(UM_EVENT_STATE_CHECKED, m_xAccessible.get());
             }
+            break;
+        case AccessibleStateType::PRESSED:
+            pAgent->IncreaseState(m_xAccessible.get(), state);
+            pAgent->NotifyAccEvent(UM_EVENT_STATE_PRESSED, m_xAccessible.get());
+            break;
+        case AccessibleStateType::SELECTED:
+            pAgent->IncreaseState(m_xAccessible.get(), state);
+            break;
+        case AccessibleStateType::ARMED:
+            pAgent->IncreaseState(m_xAccessible.get(), state);
+            pAgent->NotifyAccEvent(UM_EVENT_STATE_ARMED, m_xAccessible.get());
+            break;
+        case AccessibleStateType::SHOWING:
+            pAgent->DecreaseState(m_xAccessible.get(), AccessibleStateType::DEFUNC);
+            // UNO !SHOWING == MSAA OFFSCREEN
+            pAgent->IncreaseState(m_xAccessible.get(), AccessibleStateType::SHOWING );
+            break;
+        case AccessibleStateType::VISIBLE:
+            // UNO !VISIBLE == MSAA INVISIBLE
+            pAgent->IncreaseState(m_xAccessible.get(), AccessibleStateType::VISIBLE );
+            break;
+        default:
+            break;
         }
+    }
     else
     {
         // old value
