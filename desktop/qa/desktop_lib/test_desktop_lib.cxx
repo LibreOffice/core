@@ -3117,7 +3117,7 @@ void DesktopLOKTest::testRenderSearchResult()
     Scheduler::ProcessEventsToIdle();
 
     unsigned char* pBuffer = nullptr;
-    OString aJSON = "{ \"node_index\" : 19 }";
+    OString aJSON = "{ \"type\" : 1, \"node_index\" : 19 }";
 
     int nWidth = 0;
     int nHeight = 0;
