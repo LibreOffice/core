@@ -69,6 +69,30 @@
       "revId": "75d2114c3059c060b04c8212d5a45987f44c5f0e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c99a1be5_d5337758",
+        "filename": "vcl/backendtest/outputdevice/common.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 569,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-07-09T22:36:07Z",
+      "side": 1,
+      "message": "For rectangle it is a simple algorithm which is mostly used to make the asserting simple, and it is exact. This elliptical path check it is not exact (line rasterization problem) and you can\u0027t use it here. \n\nThere aren\u0027t a lot of pixels and this is intentionally so that you can just assert which pixel is set and which one isn\u0027t. You can just define it in a map which pixels should be set - that\u0027s quite fine.\n\nAlso as I explained in one of the previous mails - and irregular and non-symmetric but still simple shape is better for test - so the ellipse isn\u0027t really a good candidate. It\u0027s not much better than a circle.",
+      "parentUuid": "012ec34c_eac11467",
+      "range": {
+        "startLine": 559,
+        "startChar": 4,
+        "endLine": 569,
+        "endChar": 5
+      },
+      "revId": "75d2114c3059c060b04c8212d5a45987f44c5f0e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
