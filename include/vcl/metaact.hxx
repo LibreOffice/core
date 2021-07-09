@@ -867,6 +867,9 @@ public:
     const BitmapEx&     GetBitmapEx() const { return maBmpEx; }
     const Point&        GetPoint() const { return maPt; }
     const Size&         GetSize() const { return maSz; }
+    void                SetBitmapEx(BitmapEx& rBmpEx) { maBmpEx = rBmpEx; }
+    void                SetPoint(Point& rPt) { maPt = rPt; }
+    void                SetSize(Size& rSz) { maSz = rSz; }
     bool                IsTransparent() const override { return GetBitmapEx().IsAlpha(); }
 };
 
