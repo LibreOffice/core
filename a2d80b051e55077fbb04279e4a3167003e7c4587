@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "04ff7d4f_fedf3eb5",
+        "filename": "vcl/backendtest/GraphicsRenderTests.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-07-09T09:27:16Z",
+      "side": 1,
+      "message": "this shouldn\u0027t be necessary and usage of Bitmap outside of vcl is deprecated, because you can do BitmapEx(aBitmap)",
+      "range": {
+        "startLine": 28,
+        "startChar": 24,
+        "endLine": 33,
+        "endChar": 1
+      },
+      "revId": "a2d80b051e55077fbb04279e4a3167003e7c4587",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
