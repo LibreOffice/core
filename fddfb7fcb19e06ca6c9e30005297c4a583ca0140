@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2e53561f_a5e1d091",
+        "filename": "desktop/qa/desktop_lib/test_desktop_lib.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 2030,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-07-09T07:32:28Z",
+      "side": 1,
+      "message": "Nitpick: you could simplify this to\n\n m_bEmptyTableSelection \u003d std::string(pPayload) \u003d\u003d \"{\\n}\\n\";\n\nI guess.",
+      "revId": "fddfb7fcb19e06ca6c9e30005297c4a583ca0140",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
