@@ -27,9 +27,11 @@ private:
 
 public:
     void testSearchResultLocator();
+    void testSearchResultLocatorForSdrObjects();
 
     CPPUNIT_TEST_SUITE(SearchResultLocatorTest);
     CPPUNIT_TEST(testSearchResultLocator);
+    CPPUNIT_TEST(testSearchResultLocatorForSdrObjects);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -51,11 +53,12 @@ void SearchResultLocatorTest::testSearchResultLocator()
     SwDoc* pDoc = createDoc("IndexingExport_VariousParagraphs.odt");
     CPPUNIT_ASSERT(pDoc);
 
-    sw::SearchResultLocator aLocator(pDoc);
-    sw::SearchIndexData aData;
+    sw::search::SearchResultLocator aLocator(pDoc);
+    sw::search::SearchIndexData aData;
+    aData.eType = sw::search::NodeType::WriterNode;
     aData.nNodeIndex = 14;
 
-    sw::LocationResult aResult = aLocator.find(aData);
+    sw::search::LocationResult aResult = aLocator.find(aData);
     CPPUNIT_ASSERT_EQUAL(size_t(1), aResult.maRectangles.size());
     auto aRectangle = aResult.maRectangles[0];
 
@@ -65,6 +68,28 @@ void SearchResultLocatorTest::testSearchResultLocator()
     CPPUNIT_ASSERT_DOUBLES_EQUAL(9638.0, aRectangle.getWidth(), 1e-4);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(276.0, aRectangle.getHeight(), 1e-4);
 #endif
+}
+
+void SearchResultLocatorTest::testSearchResultLocatorForSdrObjects()
+{
+    SwDoc* pDoc = createDoc("IndexingExport_Shapes.odt");
+    CPPUNIT_ASSERT(pDoc);
+
+    sw::search::SearchResultLocator aLocator(pDoc);
+    sw::search::SearchIndexData aData;
+    aData.eType = sw::search::NodeType::SdrObject;
+    aData.aObjectName = u"Circle";
+    aData.nNodeIndex = 1;
+
+    sw::search::LocationResult aResult = aLocator.find(aData);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aResult.maRectangles.size());
+    auto aRectangle = aResult.maRectangles[0];
+
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1478.0, aRectangle.getMinX(), 1e-4);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(3223.0, aRectangle.getMinY(), 1e-4);
+
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(2059.0, aRectangle.getWidth(), 1e-4);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(2059.0, aRectangle.getHeight(), 1e-4);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SearchResultLocatorTest);
