@@ -458,6 +458,12 @@ struct _LibreOfficeKitDocumentClass
     void (*sendFormFieldEvent) (LibreOfficeKitDocument* pThis,
                                 const char* pArguments);
 
+    /// @see lok::Document::renderSearchResult
+    bool (*renderSearchResult) (LibreOfficeKitDocument* pThis,
+                                const char* pSearchResult,
+                                unsigned char** pBitmapBuffer,
+                                int* pWidth, int* pHeight, size_t* pByteSize);
+
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
 
