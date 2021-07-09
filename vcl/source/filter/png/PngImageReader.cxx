@@ -98,7 +98,8 @@ bool reader(SvStream& rStream, BitmapEx& rBitmapEx,
     AlphaScopedWriteAccess pWriteAccessAlphaInstance;
     std::vector<std::vector<png_byte>> aRows;
     auto pBackendCapabilities = ImplGetSVData()->mpDefInst->GetBackendCapabilities();
-    const bool bSupportsBitmap32 = pBackendCapabilities->mbSupportsBitmap32;
+    const bool bFuzzing = utl::ConfigManager::IsFuzzing();
+    const bool bSupportsBitmap32 = pBackendCapabilities->mbSupportsBitmap32 || bFuzzing;
     const bool bOnlyCreateBitmap
         = static_cast<bool>(nImportFlags & GraphicFilterImportFlags::OnlyCreateBitmap);
     const bool bUseExistingBitmap
@@ -129,7 +130,7 @@ bool reader(SvStream& rStream, BitmapEx& rBitmapEx,
 
     png_set_read_fn(pPng, &rStream, lclReadStream);
 
-    if (!utl::ConfigManager::IsFuzzing())
+    if (!bFuzzing)
         png_set_crc_action(pPng, PNG_CRC_ERROR_QUIT, PNG_CRC_WARN_DISCARD);
     else
         png_set_crc_action(pPng, PNG_CRC_QUIET_USE, PNG_CRC_QUIET_USE);
