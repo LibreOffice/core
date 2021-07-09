@@ -720,6 +720,8 @@ public:
 
     const Bitmap&       GetBitmap() const { return maBmp; }
     const Point&        GetPoint() const { return maPt; }
+    void                SetBitmap(Bitmap& rBmp) { maBmp = rBmp; }
+    void                SetPoint(Point& rPt) { maPt = rPt; }
 };
 
 class VCL_DLLPUBLIC MetaBmpScaleAction final : public MetaAction
