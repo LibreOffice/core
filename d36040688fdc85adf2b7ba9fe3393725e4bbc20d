@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c801b2ef_f838cad2",
+        "filename": "vcl/source/window/window.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3914,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-07-09T16:26:43Z",
+      "side": 1,
+      "message": "can\u0027t do that, returning ref to temporary, will need to declare a local static",
+      "revId": "d36040688fdc85adf2b7ba9fe3393725e4bbc20d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
