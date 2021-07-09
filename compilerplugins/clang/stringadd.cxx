@@ -346,69 +346,68 @@ bool StringAdd::isSideEffectFree(Expr const* expr)
     {
         // check for calls through OUString::number/OUString::unacquired
         if (auto calleeMethodDecl = dyn_cast_or_null<CXXMethodDecl>(callExpr->getCalleeDecl()))
-            if (calleeMethodDecl)
+        {
+            if (calleeMethodDecl->getIdentifier())
             {
-                if (calleeMethodDecl->getIdentifier())
+                auto name = calleeMethodDecl->getName();
+                if (callExpr->getNumArgs() > 0
+                    && (name == "number" || name == "unacquired" || name == "boolean"
+                        || name == "copy"))
                 {
-                    auto name = calleeMethodDecl->getName();
-                    if (callExpr->getNumArgs() > 0
-                        && (name == "number" || name == "unacquired" || name == "boolean"
-                            || name == "copy"))
+                    auto tc = loplugin::TypeCheck(calleeMethodDecl->getParent());
+                    if (tc.Class("OUString") || tc.Class("OString"))
                     {
-                        auto tc = loplugin::TypeCheck(calleeMethodDecl->getParent());
-                        if (tc.Class("OUString") || tc.Class("OString"))
-                        {
-                            if (isSideEffectFree(callExpr->getArg(0)))
-                                return true;
-                        }
-                    }
-                }
-                else if (auto const d = dyn_cast<CXXConversionDecl>(calleeMethodDecl))
-                {
-                    if (loplugin::TypeCheck(d->getConversionType())
-                            .ClassOrStruct("basic_string_view")
-                            .StdNamespace())
-                    {
-                        auto const tc = loplugin::TypeCheck(calleeMethodDecl->getParent());
-                        if (tc.Class("OUString").Namespace("rtl").GlobalNamespace()
-                            || tc.Class("OString").Namespace("rtl").GlobalNamespace())
-                        {
-                            if (isSideEffectFree(callExpr->getCallee()))
-                                return true;
-                        }
-                    }
-                }
-                // Aggressively assume that calls to const member functions are side effect free (if
-                // all of the call's sub-expressions are):
-                if (calleeMethodDecl->isConst())
-                {
-                    auto sef = true;
-                    // Other options besides CXXMemberCallExpr are e.g. CXXOperatorCallExpr which
-                    // does not have such a target expression:
-                    if (auto const mce = dyn_cast<CXXMemberCallExpr>(callExpr))
-                    {
-                        if (!isSideEffectFree(mce->getImplicitObjectArgument()))
-                        {
-                            sef = false;
-                        }
-                    }
-                    if (sef)
-                    {
-                        for (unsigned i = 0; i != callExpr->getNumArgs(); ++i)
-                        {
-                            if (!isSideEffectFree(callExpr->getArg(i)))
-                            {
-                                sef = false;
-                                break;
-                            }
-                        }
-                    }
-                    if (sef)
-                    {
-                        return true;
+                        if (isSideEffectFree(callExpr->getArg(0)))
+                            return true;
                     }
                 }
             }
+            else if (auto const d = dyn_cast<CXXConversionDecl>(calleeMethodDecl))
+            {
+                if (loplugin::TypeCheck(d->getConversionType())
+                        .ClassOrStruct("basic_string_view")
+                        .StdNamespace())
+                {
+                    auto const tc = loplugin::TypeCheck(calleeMethodDecl->getParent());
+                    if (tc.Class("OUString").Namespace("rtl").GlobalNamespace()
+                        || tc.Class("OString").Namespace("rtl").GlobalNamespace())
+                    {
+                        if (isSideEffectFree(callExpr->getCallee()))
+                            return true;
+                    }
+                }
+            }
+            // Aggressively assume that calls to const member functions are side effect free (if
+            // all of the call's sub-expressions are):
+            if (calleeMethodDecl->isConst())
+            {
+                auto sef = true;
+                // Other options besides CXXMemberCallExpr are e.g. CXXOperatorCallExpr which
+                // does not have such a target expression:
+                if (auto const mce = dyn_cast<CXXMemberCallExpr>(callExpr))
+                {
+                    if (!isSideEffectFree(mce->getImplicitObjectArgument()))
+                    {
+                        sef = false;
+                    }
+                }
+                if (sef)
+                {
+                    for (unsigned i = 0; i != callExpr->getNumArgs(); ++i)
+                    {
+                        if (!isSideEffectFree(callExpr->getArg(i)))
+                        {
+                            sef = false;
+                            break;
+                        }
+                    }
+                }
+                if (sef)
+                {
+                    return true;
+                }
+            }
+        }
         if (auto calleeFunctionDecl = dyn_cast_or_null<FunctionDecl>(callExpr->getCalleeDecl()))
             if (calleeFunctionDecl && calleeFunctionDecl->getIdentifier())
             {
