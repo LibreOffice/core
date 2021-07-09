@@ -21,6 +21,7 @@
 #include <sal/log.hxx>
 #include <tools/stream.hxx>
 #include <tools/vcompat.hxx>
+#include <vcl/dibtools.hxx>
 #include <vcl/TypeSerializer.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/metaact.hxx>
@@ -210,7 +211,7 @@ rtl::Reference<MetaAction> SvmReader::MetaActionHandler(ImplMetaReadData* pData)
             return TextLineHandler();
             break;
         case MetaActionType::BMP:
-            pAction = new MetaBmpAction;
+            return BmpHandler();
             break;
         case MetaActionType::BMPSCALE:
             pAction = new MetaBmpScaleAction;
@@ -831,6 +832,23 @@ rtl::Reference<MetaAction> SvmReader::TextLineHandler()
         mrStream.ReadUInt32(nTempOverline);
         pAction->SetOverline(static_cast<FontLineStyle>(nTempOverline));
     }
+
+    return pAction;
+}
+
+rtl::Reference<MetaAction> SvmReader::BmpHandler()
+{
+    auto pAction = new MetaBmpAction();
+
+    VersionCompatRead aCompat(mrStream);
+    Bitmap aBmp;
+    ReadDIB(aBmp, mrStream, true);
+    TypeSerializer aSerializer(mrStream);
+    Point aPoint;
+    aSerializer.readPoint(aPoint);
+
+    pAction->SetBitmap(aBmp);
+    pAction->SetPoint(aPoint);
 
     return pAction;
 }
