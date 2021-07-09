@@ -223,7 +223,7 @@ rtl::Reference<MetaAction> SvmReader::MetaActionHandler(ImplMetaReadData* pData)
             return BmpExHandler();
             break;
         case MetaActionType::BMPEXSCALE:
-            pAction = new MetaBmpExScaleAction;
+            return BmpExScaleHandler();
             break;
         case MetaActionType::BMPEXSCALEPART:
             pAction = new MetaBmpExScalePartAction;
@@ -912,6 +912,26 @@ rtl::Reference<MetaAction> SvmReader::BmpExHandler()
 
     pAction->SetPoint(aPoint);
     pAction->SetBitmapEx(aBmpEx);
+
+    return pAction;
+}
+
+rtl::Reference<MetaAction> SvmReader::BmpExScaleHandler()
+{
+    auto pAction = new MetaBmpExScaleAction();
+
+    VersionCompatRead aCompat(mrStream);
+    BitmapEx aBmpEx;
+    ReadDIBBitmapEx(aBmpEx, mrStream);
+    TypeSerializer aSerializer(mrStream);
+    Point aPoint;
+    aSerializer.readPoint(aPoint);
+    Size aSize;
+    aSerializer.readSize(aSize);
+
+    pAction->SetBitmapEx(aBmpEx);
+    pAction->SetPoint(aPoint);
+    pAction->SetSize(aSize);
 
     return pAction;
 }
