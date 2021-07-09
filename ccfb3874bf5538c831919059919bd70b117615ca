@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "a0722ee0_71bee058",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 39
+      },
+      "lineNbr": 280,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-07-09T08:25:04Z",
+      "side": 1,
+      "message": "It is if(nCount \u003e 4).. Made this change in the new patch",
+      "parentUuid": "d8c63d58_0c54c7dd",
+      "revId": "ccfb3874bf5538c831919059919bd70b117615ca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "edda225c_77fa8e23",
         "filename": "sfx2/source/dialog/templdlg.cxx",
         "patchSetId": 39
@@ -87,6 +105,24 @@
     },
     {
       "key": {
+        "uuid": "13737b93_42090576",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 39
+      },
+      "lineNbr": 670,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-07-09T08:25:04Z",
+      "side": 1,
+      "message": "StyleList has its own bHierarchical. SetbHierarchical sets the value of bHierarchical in StyleList, so that the variable bHierarchical here and bHierarchical there are in sync.\n\nSetHierarchical has a different differnt purpose altogether. Insisde this function in StyleList, m_xTreeBox and m_xFmtLb functions are called.",
+      "parentUuid": "35911c81_7d122f84",
+      "revId": "ccfb3874bf5538c831919059919bd70b117615ca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "70731386_b33b1ac4",
         "filename": "sfx2/source/dialog/templdlg.cxx",
         "patchSetId": 39
@@ -132,6 +168,24 @@
       "writtenOn": "2021-07-09T06:50:30Z",
       "side": 1,
       "message": "The \u0027\u0026\u0026\u0027 at 853 is indented inconsistently. Then, why the \u0027m_aStyleList.bCanNewGetter_updateFamImpl())\u0027 is split to two lines? Just because of the comment? Then simply move the comment to a separate line above if. And anyway, what the comment is telling me - I don\u0027t quite get the message :)",
+      "revId": "ccfb3874bf5538c831919059919bd70b117615ca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bbd54e7b_95b2f06b",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 39
+      },
+      "lineNbr": 854,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-07-09T08:25:04Z",
+      "side": 1,
+      "message": "The comment tells that the value returned by m_aStyleList.bCanNewGetter_updateFamImpl \u003d (mxTreeBox || mxFmtLb-\u003ecount_selected_rows() \u003c\u003d 1) )\n\n This method is used in many places. I was thinking to rename it.",
+      "parentUuid": "44592b6d_fc10bf8d",
       "revId": "ccfb3874bf5538c831919059919bd70b117615ca",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
