@@ -7206,16 +7206,17 @@ namespace
         return true;
     }
 
-    sal_Int32 getStringLength(
-        sal_uInt8 const * p, std::size_t offset, sal_uInt8 const * pEnd)
+    sal_Int32 getStringLengthWithMax(
+        sal_uInt8 const * p, std::size_t offset, sal_uInt8 const * pEnd, std::size_t maxchars)
     {
         assert(p <= pEnd);
         assert(pEnd - p <= SAL_MAX_INT32);
         if (offset >= o3tl::make_unsigned(pEnd - p)) {
             return -1;
         }
-        void const * p2 = std::memchr(
-            p + offset, 0, static_cast<std::size_t>(pEnd - p) - offset);
+        std::size_t nbytes = static_cast<std::size_t>(pEnd - p) - offset;
+        std::size_t nsearch = std::min(nbytes, maxchars + 1);
+        void const * p2 = std::memchr(p + offset, 0, nsearch);
         if (p2 == nullptr) {
             return -1;
         }
@@ -7315,7 +7316,7 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib const & rFib )
                     eEnc = RTL_TEXTENCODING_MS_1252;
 
                 const size_t nStringOffset = 1 + 2;
-                sal_Int32 n = getStringLength(pVer2, nStringOffset, pEnd);
+                sal_Int32 n = getStringLengthWithMax(pVer2, nStringOffset, pEnd, maxStrSize);
                 if (n == -1) {
                     break;
                 }
@@ -7367,7 +7368,7 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib const & rFib )
                 if ((eEnc == RTL_TEXTENCODING_SYMBOL) || (eEnc == RTL_TEXTENCODING_DONTKNOW))
                     eEnc = RTL_TEXTENCODING_MS_1252;
                 const size_t nStringOffset = offsetof(WW8_FFN_Ver6, szFfn);
-                sal_Int32 n = getStringLength(pVer6, nStringOffset, pEnd);
+                sal_Int32 n = getStringLengthWithMax(pVer6, nStringOffset, pEnd, maxStrSize);
                 if (n == -1) {
                     break;
                 }
@@ -7375,7 +7376,7 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib const & rFib )
                 if (p->aFFNBase.ibszAlt && p->aFFNBase.ibszAlt < maxStrSize) //don't start after end of string
                 {
                     const size_t nAltStringOffset = offsetof(WW8_FFN_Ver6, szFfn) + p->aFFNBase.ibszAlt;
-                    n = getStringLength(pVer6, nAltStringOffset, pEnd);
+                    n = getStringLengthWithMax(pVer6, nAltStringOffset, pEnd, maxStrSize);
                     if (n == -1) {
                         break;
                     }
