@@ -7314,12 +7314,13 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib const & rFib )
                 if ((eEnc == RTL_TEXTENCODING_SYMBOL) || (eEnc == RTL_TEXTENCODING_DONTKNOW))
                     eEnc = RTL_TEXTENCODING_MS_1252;
 
-                sal_Int32 n = getStringLength(pVer2, 1 + 2, pEnd);
+                const size_t nStringOffset = 1 + 2;
+                sal_Int32 n = getStringLength(pVer2, nStringOffset, pEnd);
                 if (n == -1) {
                     break;
                 }
                 p->sFontname = OUString(
-                    reinterpret_cast<char const *>(pVer2 + 1 + 2), n, eEnc);
+                    reinterpret_cast<char const *>(pVer2 + nStringOffset), n, eEnc);
                 pVer2 = pVer2 + p->aFFNBase.cbFfnM1 + 1;
             }
             nMax = i;
@@ -7365,26 +7366,20 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib const & rFib )
                 rtl_TextEncoding eEnc = WW8Fib::GetFIBCharset(p->aFFNBase.chs, rFib.m_lid);
                 if ((eEnc == RTL_TEXTENCODING_SYMBOL) || (eEnc == RTL_TEXTENCODING_DONTKNOW))
                     eEnc = RTL_TEXTENCODING_MS_1252;
-                sal_Int32 n = getStringLength(
-                    pVer6, offsetof(WW8_FFN_Ver6, szFfn), pEnd);
+                const size_t nStringOffset = offsetof(WW8_FFN_Ver6, szFfn);
+                sal_Int32 n = getStringLength(pVer6, nStringOffset, pEnd);
                 if (n == -1) {
                     break;
                 }
-                p->sFontname = OUString(
-                    reinterpret_cast<char const *>(
-                        pVer6 + offsetof(WW8_FFN_Ver6, szFfn)),
-                    n, eEnc);
+                p->sFontname = OUString(reinterpret_cast<char const*>(pVer6 + nStringOffset), n, eEnc);
                 if (p->aFFNBase.ibszAlt && p->aFFNBase.ibszAlt < maxStrSize) //don't start after end of string
                 {
-                    n = getStringLength(
-                        pVer6, offsetof(WW8_FFN_Ver6, szFfn) + p->aFFNBase.ibszAlt,
-                        pEnd);
+                    const size_t nAltStringOffset = offsetof(WW8_FFN_Ver6, szFfn) + p->aFFNBase.ibszAlt;
+                    n = getStringLength(pVer6, nAltStringOffset, pEnd);
                     if (n == -1) {
                         break;
                     }
-                    p->sFontname += ";" + OUString(
-                        reinterpret_cast<char const *>(
-                            pVer6 + offsetof(WW8_FFN_Ver6, szFfn) + p->aFFNBase.ibszAlt),
+                    p->sFontname += ";" + OUString(reinterpret_cast<char const*>(pVer6 + nAltStringOffset),
                         n, eEnc);
                 }
                 else
