@@ -395,7 +395,7 @@ vcl::Window* findChild(vcl::Window* pParent, const OUString& rID, bool bRequireV
     for (size_t i = 0; i < nCount; ++i)
     {
         vcl::Window* pChild = pParent->GetChild(i);
-        if (pChild && pChild->get_id() == rID
+        if (pChild && !pChild->isDisposed() && pChild->get_id() == rID
             && (!bRequireVisible || pChild->IsVisible()))
             return pChild;
 
