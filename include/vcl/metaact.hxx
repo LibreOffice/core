@@ -796,6 +796,11 @@ public:
     const Size&         GetDestSize() const { return maDstSz; }
     const Point&        GetSrcPoint() const { return maSrcPt; }
     const Size&         GetSrcSize() const { return maSrcSz; }
+    void                SetBitmap(Bitmap& rBmp) { maBmp = rBmp; }
+    void                SetDestPoint(Point& rPt) { maDstPt = rPt; }
+    void                SetDestSize(Size& rSz) { maDstSz = rSz; }
+    void                SetSrcPoint(Point& rPt) { maSrcPt = rPt; }
+    void                SetSrcSize(Size& rSz) { maSrcSz = rSz; }
 };
 
 class VCL_DLLPUBLIC MetaBmpExAction final : public MetaAction
