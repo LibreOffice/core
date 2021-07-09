@@ -47,10 +47,6 @@ SwDoc* SearchResultLocatorTest::createDoc(const char* pName)
 
 void SearchResultLocatorTest::testSearchResultLocator()
 {
-#if !defined(_WIN32) && !defined(MACOSX)
-    if (!IsDefaultDPI())
-        return;
-
     SwDoc* pDoc = createDoc("IndexingExport_VariousParagraphs.odt");
     CPPUNIT_ASSERT(pDoc);
 
@@ -60,8 +56,9 @@ void SearchResultLocatorTest::testSearchResultLocator()
 
     sw::LocationResult aResult = aLocator.find(aData);
     CPPUNIT_ASSERT_EQUAL(size_t(1), aResult.maRectangles.size());
-    auto aRectangle = aResult.maRectangles[0];
 
+#if !defined(_WIN32) && !defined(MACOSX)
+    auto aRectangle = aResult.maRectangles[0];
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1418.0, aRectangle.getMinX(), 1e-4);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(4444.0, aRectangle.getMinY(), 1e-4);
 
