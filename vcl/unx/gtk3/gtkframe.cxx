@@ -962,6 +962,10 @@ void GtkSalFrame::InitCommon()
 #else
     GtkGesture *pClick = gtk_gesture_click_new();
     gtk_gesture_single_set_button(GTK_GESTURE_SINGLE(pClick), 0);
+    // use GTK_PHASE_TARGET instead of default GTK_PHASE_BUBBLE because I don't
+    // want click events in gtk widgets inside the overlay, e.g. the font size
+    // combobox GtkEntry in the toolbar, to be propagated down to this widget
+    gtk_event_controller_set_propagation_phase(GTK_EVENT_CONTROLLER(pClick), GTK_PHASE_TARGET);
     gtk_widget_add_controller(pEventWidget, GTK_EVENT_CONTROLLER(pClick));
     g_signal_connect(pClick, "pressed", G_CALLBACK(gesturePressed), this);
     g_signal_connect(pClick, "released", G_CALLBACK(gestureReleased), this);
@@ -970,6 +974,7 @@ void GtkSalFrame::InitCommon()
     g_signal_connect(pMotionController, "motion", G_CALLBACK(signalMotion), this);
     g_signal_connect(pMotionController, "enter", G_CALLBACK(signalEnter), this);
     g_signal_connect(pMotionController, "leave", G_CALLBACK(signalLeave), this);
+    gtk_event_controller_set_propagation_phase(pMotionController, GTK_PHASE_TARGET);
     gtk_widget_add_controller(pEventWidget, pMotionController);
 
     GtkEventController* pScrollController = gtk_event_controller_scroll_new(GTK_EVENT_CONTROLLER_SCROLL_BOTH_AXES);
