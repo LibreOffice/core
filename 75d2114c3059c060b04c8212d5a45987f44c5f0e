@@ -45,6 +45,30 @@
       "revId": "75d2114c3059c060b04c8212d5a45987f44c5f0e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "012ec34c_eac11467",
+        "filename": "vcl/backendtest/outputdevice/common.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 569,
+      "author": {
+        "id": 1002896
+      },
+      "writtenOn": "2021-07-09T10:05:48Z",
+      "side": 1,
+      "message": "So, should I only assert the pixel of the boundary of the ellipse which I would achieve using a std::map in this case instead of checking the pixels layer-wise?\nAlso, I choose this approach of checking the ellipse via an elliptical traversal because most of the tests does this -  they traverse the bitmap in a regular fashion like traversing in a rectangular path and checking the pixels along the way etc. but since, it\u0027s seems like this is not what we\u0027re supposed to do what should be the best approach - just asserting the pixels of the shape drawn(the shape\u0027s boundary) or something else and should every test in the future use the same testing mechainism? Thanks!",
+      "parentUuid": "af1cd719_ad5a3d2c",
+      "range": {
+        "startLine": 559,
+        "startChar": 4,
+        "endLine": 569,
+        "endChar": 5
+      },
+      "revId": "75d2114c3059c060b04c8212d5a45987f44c5f0e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
