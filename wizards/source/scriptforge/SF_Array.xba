@@ -1008,8 +1008,8 @@ Public Function IndexOf(Optional ByRef Array_1D As Variant _
 &apos;&apos;&apos;		SF_Array.IndexOf(Array(&quot;A&quot;,&quot;B&quot;,&quot;c&quot;,&quot;D&quot;), &quot;C&quot;, SortOrder := &quot;ASC&quot;) returns 2
 &apos;&apos;&apos;		SF_Array.IndexOf(Array(&quot;A&quot;,&quot;B&quot;,&quot;c&quot;,&quot;D&quot;), &quot;C&quot;, CaseSensitive := True) returns -1
 
-Dim vFindItem() As Variant			&apos;	2-items array (0) = True if found, (1) = Index where found
-Dim lIndex As Long				&apos;	Return value
+Dim vFindItem As Variant			&apos;	2-items array (0) = True if found, (1) = Index where found
+Dim lIndex As Long					&apos;	Return value
 Dim iToFindType As Integer			&apos;	VarType of ToFind
 Const cstThisSub = &quot;Array.IndexOf&quot;
 Const cstSubArgs = &quot;Array_1D, ToFind, [CaseSensitive=False], [SortOrder=&quot;&quot;&quot;&quot;|&quot;&quot;ASC&quot;&quot;|&quot;&quot;DESC&quot;&quot;]&quot;

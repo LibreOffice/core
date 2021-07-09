@@ -2026,11 +2026,11 @@ Try:
 	&apos;	Initialize the sort descriptor
 	Set oRange = oRangeAddress.XCellRange
 	vSortDescriptor = oRange.createSortDescriptor
-	ScriptForge.SF_Utils._SetPropertyValue(vSortDescriptor, &quot;IsSortColumns&quot;, SortColumns)
-	ScriptForge.SF_Utils._SetPropertyValue(vSortDescriptor, &quot;ContainsHeader&quot;, ContainsHeader)
-	ScriptForge.SF_Utils._SetPropertyValue(vSortDescriptor, &quot;BindFormatsToContent&quot;, True)
+	vSortDescriptor = ScriptForge.SF_Utils._SetPropertyValue(vSortDescriptor, &quot;IsSortColumns&quot;, SortColumns)
+	vSortDescriptor = ScriptForge.SF_Utils._SetPropertyValue(vSortDescriptor, &quot;ContainsHeader&quot;, ContainsHeader)
+	vSortDescriptor = ScriptForge.SF_Utils._SetPropertyValue(vSortDescriptor, &quot;BindFormatsToContent&quot;, True)
 	If Len(DestinationCell) = 0 Then
-		ScriptForge.SF_Utils._SetPropertyValue(vSortDescriptor, &quot;CopyOutputData&quot;, False)
+		vSortDescriptor = ScriptForge.SF_Utils._SetPropertyValue(vSortDescriptor, &quot;CopyOutputData&quot;, False)
 	Else
 		Set oDestAddress = oDestRange.XCellRange.RangeAddress
 		Set oDestCell = New com.sun.star.table.CellAddress
@@ -2039,10 +2039,10 @@ Try:
 			oDestCell.Column = .StartColumn
 			oDestCell.Row = .StartRow
 		End With
-		ScriptForge.SF_Utils._SetPropertyValue(vSortDescriptor, &quot;CopyOutputData&quot;, true)
-		ScriptForge.SF_Utils._SetPropertyValue(vSortDescriptor, &quot;OutputPosition&quot;, oDestCell)
+		vSortDescriptor = ScriptForge.SF_Utils._SetPropertyValue(vSortDescriptor, &quot;CopyOutputData&quot;, True)
+		vSortDescriptor = ScriptForge.SF_Utils._SetPropertyValue(vSortDescriptor, &quot;OutputPosition&quot;, oDestCell)
 	End If
-	ScriptForge.SF_Utils._SetPropertyValue(vSortDescriptor, &quot;IsUserListEnabled&quot;, False)
+	vSortDescriptor = ScriptForge.SF_Utils._SetPropertyValue(vSortDescriptor, &quot;IsUserListEnabled&quot;, False)
 
 	&apos;	Define the sorting keys
 	vSortFields = Array()
@@ -2059,7 +2059,7 @@ Try:
 	Next i
 
 	&apos;	Associate the keys and the descriptor, and sort
-	ScriptForge.SF_Utils._SetPropertyValue(vSortDescriptor, &quot;SortFields&quot;, vSortFields)
+	vSortDescriptor = ScriptForge.SF_Utils._SetPropertyValue(vSortDescriptor, &quot;SortFields&quot;, vSortFields)
 	oRange.sort(vSortDescriptor)
 
 	&apos;	Compute the changed area
@@ -2222,6 +2222,14 @@ Public Function SaveCopyAs(Optional ByVal FileName As Variant _
 							) As Boolean
 	SaveCopyAs = [_Super].SaveCopyAs(FileName, Overwrite, Password, FilterName, FilterOptions)
 End Function   &apos;   SFDocuments.SF_Calc.SaveCopyAs
+
+REM -----------------------------------------------------------------------------
+Public Function SetPrinter(Optional ByVal Printer As Variant _
+							, Optional ByVal Orientation As Variant _
+							, Optional ByVal PaperFormat As Variant _
+							) As Boolean
+	SetPrinter = [_Super].SetPrinter(Printer, Orientation, PaperFormat)
+End Function	&apos;   SFDocuments.SF_Calc.SetPrinter
 
 REM =========================================================== PRIVATE FUNCTIONS
 

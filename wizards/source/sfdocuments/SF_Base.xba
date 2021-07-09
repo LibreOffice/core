@@ -194,7 +194,7 @@ Public Function Forms(Optional ByVal FormDocument As Variant _
 &apos;&apos;&apos;				Set myForm = oDoc.Forms(&quot;Folder1/myFormDocument&quot;, 0)
 
 Dim oForm As Object					&apos;	The new Form class instance
-Dim oFormDocument As Object				&apos;	com.sun.star.comp.sdb.Content
+Dim oFormDocument As Object			&apos;	com.sun.star.comp.sdb.Content
 Dim oXForm As Object				&apos;	com.sun.star.form.XForm
 Dim vFormDocuments As Variant		&apos;	Array of form documents
 Dim vFormNames As Variant			&apos;	Array of form names
@@ -485,6 +485,67 @@ Public Function Properties() As Variant
 					)
 
 End Function	&apos;	SFDocuments.SF_Base.Properties
+
+REM -----------------------------------------------------------------------------
+Public Function SetPrinter(Optional ByVal FormDocument As Variant _
+							, Optional ByVal Printer As Variant _
+							, Optional ByVal Orientation As Variant _
+							, Optional ByVal PaperFormat As Variant _
+							) As Boolean
+&apos;&apos;&apos; Define the printer options for a form document. The form document must be open.
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		FormDocument: a valid document form name as a case-sensitive string
+&apos;&apos;&apos;		Printer: the name of the printer queue where to print to
+&apos;&apos;&apos;			When absent or space, the default printer is set
+&apos;&apos;&apos;		Orientation: either &quot;PORTRAIT&quot; or &quot;LANDSCAPE&quot;. Left unchanged when absent
+&apos;&apos;&apos;		PaperFormat: one of next values
+&apos;&apos;&apos;			&quot;A3&quot;, &quot;A4&quot;, &quot;A5&quot;, &quot;B4&quot;, &quot;B5&quot;, &quot;LETTER&quot;, &quot;LEGAL&quot;, &quot;TABLOID&quot;
+&apos;&apos;&apos;			Left unchanged when absent
+&apos;&apos;&apos;		_PrintComponent: undocumented argument to determine the component
+&apos;&apos;&apos;			Useful typically to apply printer settings on a Base form document
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		True when successful
+&apos;&apos;&apos;	Examples:
+&apos;&apos;&apos;		oDoc.SetPrinter(&quot;myForm&quot;, Orientation := &quot;PORTRAIT&quot;)
+
+Dim bPrinter As Boolean				&apos;	Return value
+Dim vFormDocuments As Variant		&apos;	Array of form documents
+Dim oFormDocument As Object			&apos;	com.sun.star.comp.sdb.Content
+
+Const cstThisSub = &quot;SFDocuments.Base.SetPrinter&quot;
+Const cstSubArgs = &quot;FormDocument, [Printer=&quot;&quot;&quot;&quot;], [Orientation=&quot;&quot;PORTRAIT&quot;&quot;|&quot;&quot;LANDSCAPE&quot;&quot;]&quot; _
+						&amp; &quot;, [PaperFormat=&quot;&quot;A3&quot;&quot;|&quot;&quot;A4&quot;&quot;|&quot;&quot;A5&quot;&quot;|&quot;&quot;B4&quot;&quot;|&quot;&quot;B5&quot;&quot;|&quot;&quot;LETTER&quot;&quot;|&quot;&quot;LEGAL&quot;&quot;|&quot;&quot;TABLOID&quot;&quot;&quot;
+
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	bPrinter = False
+
+Check:
+	If IsMissing(Printer) Or IsEmpty(Printer) Then Printer = &quot;&quot;
+	If IsMissing(Orientation) Or IsEmpty(Orientation) Then Orientation = &quot;&quot;
+	If IsMissing(PaperFormat) Or IsEmpty(PaperFormat) Then PaperFormat = &quot;&quot;
+	
+	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not _IsStillAlive() Then GoTo Finally
+		&apos;	Build list of available FormDocuments recursively with _CollectFormDocuments
+		If IsNull(_FormDocuments) Then Set _FormDocuments = _Component.getFormDocuments()
+		vFormDocuments = Split(_CollectFormDocuments(_FormDocuments), cstToken)
+		If Not ScriptForge.SF_Utils._Validate(FormDocument, &quot;FormDocument&quot;, V_STRING, vFormDocuments) Then GoTo Finally
+	End If
+	If Not IsLoaded(FormDocument) Then GoTo CatchClosed
+
+Try:
+	Set oFormDocument = _FormDocuments.getByHierarchicalName(FormDocument)
+	bPrinter = [_Super].SetPrinter(Printer, Orientation, PaperFormat, oFormDocument.Component)
+
+Finally:
+	SetPrinter = bPrinter
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+CatchClosed:
+	ScriptForge.SF_Exception.RaiseFatal(FORMDEADERROR, FormDocument, _FileIdent())
+End Function   &apos;   SFDocuments.SF_Base.SetPrinter
 
 REM -----------------------------------------------------------------------------
 Public Function SetProperty(Optional ByVal PropertyName As Variant _
