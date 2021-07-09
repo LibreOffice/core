@@ -62,6 +62,7 @@ public:
     rtl::Reference<MetaAction> BmpExHandler();
     rtl::Reference<MetaAction> BmpExScaleHandler();
     rtl::Reference<MetaAction> BmpExScalePartHandler();
+    rtl::Reference<MetaAction> MaskHandler();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
