@@ -128,7 +128,9 @@ void loadFromSvg(SvStream& rStream, const OUString& sPath, BitmapEx& rBitmapEx, 
     @param bReversColors
     In case the endianness of pData is wrong, you could reverse colors
 */
-BitmapEx CreateFromData( sal_uInt8 const *pData, sal_Int32 nWidth, sal_Int32 nHeight, sal_Int32 nStride, vcl::PixelFormat ePixelFormat, bool bReversColors )
+BitmapEx CreateFromData(sal_uInt8 const *pData, sal_Int32 nWidth, sal_Int32 nHeight,
+                        sal_Int32 nStride, vcl::PixelFormat ePixelFormat,
+                        bool bReversColors, bool bReverseAlpha)
 {
     auto nBitCount = sal_uInt16(ePixelFormat);
 
@@ -184,7 +186,8 @@ BitmapEx CreateFromData( sal_uInt8 const *pData, sal_Int32 nWidth, sal_Int32 nHe
                 Scanline pMaskScanLine = xMaskAcc->GetScanline(y);
                 for (tools::Long x = 0; x < nWidth; ++x)
                 {
-                    xMaskAcc->SetPixelOnData(pMaskScanLine, x, BitmapColor(*p));
+                    const sal_uInt8 nValue = bReverseAlpha ? 0xff - *p : *p;
+                    xMaskAcc->SetPixelOnData(pMaskScanLine, x, BitmapColor(nValue));
                     p += 4;
                 }
             }
