@@ -1352,10 +1352,10 @@ char *hcolor2str(uchar color, uchar shade, char *buf, bool bIsChar)
 {
     std::string ret;
     if( !_strnicmp(src, "http", 4))
-     {
+    {
         // nothing special here, just copy
     }
-     else
+    else
     {
         unsigned int srclen = strlen(src);
         if (3 < srclen)

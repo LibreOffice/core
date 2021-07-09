@@ -1977,10 +1977,10 @@ static bool releaseProfile(osl_TProfileImpl* pProfile)
         else
         {
 #ifdef DEBUG_OSL_PROFILE
-        SAL_INFO("sal.osl", "DEFAULT MODE");
+            SAL_INFO("sal.osl", "DEFAULT MODE");
 #endif
-        if (! (pProfile->m_Flags & (osl_Profile_READLOCK |
-                                    osl_Profile_WRITELOCK | osl_Profile_FLUSHWRITE)))
+            if (! (pProfile->m_Flags & (osl_Profile_READLOCK |
+                                        osl_Profile_WRITELOCK | osl_Profile_FLUSHWRITE)))
             {
                 if (pProfile->m_Flags & FLG_MODIFIED)
                     storeProfile(pProfile, false);

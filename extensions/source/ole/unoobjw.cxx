@@ -1731,7 +1731,7 @@ static bool writeBackOutParameter(VARIANTARG* pDest, VARIANT* pSource)
         else
         {
             // variantarg and variant must have same type
-              if ((V_VT(pDest) & oleTypeFlags) == oleTypeFlags)
+            if ((V_VT(pDest) & oleTypeFlags) == oleTypeFlags)
             {
                 if ((oleTypeFlags & VT_ARRAY) != 0)
                 {

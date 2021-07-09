@@ -614,7 +614,7 @@ static void addJavaInfoFromWinReg(
         {
             getAndAddJREInfoByPath(javaHome, allInfos, addedInfos);
         }
-   }
+    }
 
     vecJavaHome.clear();
     if (getJavaInfoFromRegistry(L"Software\\JavaSoft\\JDK", vecJavaHome)) {
