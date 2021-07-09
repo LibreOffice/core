@@ -682,10 +682,12 @@ void SwTableAutoFormat::RestoreTableProperties(SwTable &table) const
         return;
 
     SfxItemSet rSet(pDoc->GetAttrPool(), aTableSetRange);
-
-    if ( m_aBreak->GetBreak() != SvxBreak::NONE )
-        rSet.Put(*m_aBreak);
-    rSet.Put(m_aPageDesc);
+    if( !( SfxItemState::SET == pFormat->GetAttrSet().GetItemState( RES_PAGEDESC ) || SfxItemState::SET == pFormat->GetAttrSet().GetItemState( RES_BREAK ))  )
+    {
+        if ( m_aBreak->GetBreak() != SvxBreak::NONE )
+            rSet.Put(*m_aBreak);
+        rSet.Put(m_aPageDesc);
+    }
     rSet.Put(SwFormatLayoutSplit(m_bLayoutSplit));
     rSet.Put(SfxBoolItem(RES_COLLAPSING_BORDERS, m_bCollapsingBorders));
     if ( m_aKeepWithNextPara->GetValue() )
