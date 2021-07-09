@@ -18,6 +18,7 @@
 #include <vcl/vclptr.hxx>
 #include <map>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
+#include <basegfx/range/b2drange.hxx>
 
 namespace com::sun::star::beans { struct PropertyValue; }
 namespace com::sun::star::datatransfer::clipboard { class XClipboard; }
@@ -327,6 +328,14 @@ public:
      */
     virtual void executeFromFieldEvent(const StringMap&)
     {
+    }
+
+    /**
+     * Returns the rectangles of the input search result JSON
+     */
+    virtual std::vector<basegfx::B2DRange> getSearchResultRectangles(const char* /*pPayload*/)
+    {
+        return std::vector<basegfx::B2DRange>();
     }
 };
 } // namespace vcl
