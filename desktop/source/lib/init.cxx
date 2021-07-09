@@ -43,6 +43,7 @@
 #include <vcl/errinf.hxx>
 #include <vcl/lok.hxx>
 #include <o3tl/any.hxx>
+#include <o3tl/unit_conversion.hxx>
 #include <osl/file.hxx>
 #include <osl/process.h>
 #include <osl/thread.h>
@@ -1192,6 +1193,11 @@ static void doc_completeFunction(LibreOfficeKitDocument* pThis, const char*);
 
 static void doc_sendFormFieldEvent(LibreOfficeKitDocument* pThis,
                                    const char* pArguments);
+
+static bool doc_renderSearchResult(LibreOfficeKitDocument* pThis,
+                                 const char* pSearchResult, unsigned char** pBitmapBuffer,
+                                 int* pWidth, int* pHeight, size_t* pByteSize);
+
 } // extern "C"
 
 namespace {
@@ -1331,6 +1337,7 @@ LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XCompone
         m_pDocumentClass->completeFunction = doc_completeFunction;
 
         m_pDocumentClass->sendFormFieldEvent = doc_sendFormFieldEvent;
+        m_pDocumentClass->renderSearchResult = doc_renderSearchResult;
 
         gDocumentClass = m_pDocumentClass;
     }
@@ -5724,6 +5731,56 @@ static void doc_sendFormFieldEvent(LibreOfficeKitDocument* pThis, const char* pA
     }
 
     pDoc->executeFromFieldEvent(aMap);
+}
+
+static bool doc_renderSearchResult(LibreOfficeKitDocument* pThis,
+                                     const char* pSearchResult, unsigned char** pBitmapBuffer,
+                                     int* pWidth, int* pHeight, size_t* pByteSize)
+{
+    if (doc_getDocumentType(pThis) != LOK_DOCTYPE_TEXT)
+        return false;
+
+    if (pBitmapBuffer == nullptr)
+        return false;
+
+    if (!pSearchResult || pSearchResult[0] == '\0')
+        return false;
+
+    ITiledRenderable* pDoc = getTiledRenderable(pThis);
+    if (!pDoc)
+    {
+        SetLastExceptionMsg("Document doesn't support tiled rendering");
+        return false;
+    }
+
+    auto aRectangleVector = pDoc->getSearchResultRectangles(pSearchResult);
+
+    // combine into a rectangle union
+    basegfx::B2DRange aRangeUnion;
+    for (basegfx::B2DRange const & rRange : aRectangleVector)
+    {
+        aRangeUnion.expand(rRange);
+    }
+
+    int aPixelWidth = o3tl::convert(aRangeUnion.getWidth(), o3tl::Length::twip, o3tl::Length::px);
+    int aPixelHeight = o3tl::convert(aRangeUnion.getHeight(), o3tl::Length::twip, o3tl::Length::px);
+
+    size_t nByteSize = aPixelWidth * aPixelHeight * 4;
+
+    *pWidth = aPixelWidth;
+    *pHeight = aPixelHeight;
+    *pByteSize = nByteSize;
+
+    auto* pBuffer = static_cast<unsigned char*>(std::malloc(nByteSize));
+
+    doc_paintTile(pThis, pBuffer,
+        aPixelWidth, aPixelHeight,
+        aRangeUnion.getMinX(), aRangeUnion.getMinY(),
+        aRangeUnion.getWidth(), aRangeUnion.getHeight());
+
+    *pBitmapBuffer = pBuffer;
+
+    return true;
 }
 
 static char* lo_getError (LibreOfficeKit *pThis)
