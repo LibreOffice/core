@@ -17587,11 +17587,15 @@ private:
         {
             m_bPopupActive = bIsShown;
             ComboBox::signal_popup_toggled();
-            if (!m_bPopupActive && m_pEntry)
+            // restore focus to the GtkEntry when the popup is gone, which
+            // is what the vcl case does, to ease the transition a little,
+            // but don't do it if the focus was moved out of togglebutton
+            // by something else already (e.g. font combobox in toolbar
+            // on a "direct pick" from the menu which moves focus into
+            // the main document
+            if (!m_bPopupActive && m_pEntry && has_child_focus())
             {
                 disable_notify_events();
-                //restore focus to the GtkEntry when the popup is gone, which
-                //is what the vcl case does, to ease the transition a little
                 gtk_widget_grab_focus(m_pEntry);
                 enable_notify_events();
             }
