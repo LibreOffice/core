@@ -1071,7 +1071,8 @@ static void InterceptLOKStateChangeEvent(sal_uInt16 nSID, SfxViewFrame* pViewFra
              aEvent.FeatureURL.Path == "CharBackColor" ||
              aEvent.FeatureURL.Path == "Color" ||
              aEvent.FeatureURL.Path == "FontColor" ||
-             aEvent.FeatureURL.Path == "FrameLineColor")
+             aEvent.FeatureURL.Path == "FrameLineColor" ||
+             aEvent.FeatureURL.Path == "GlowColor")
     {
         sal_Int32 nColor = -1;
         aEvent.State >>= nColor;
