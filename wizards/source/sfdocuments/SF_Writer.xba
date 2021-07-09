@@ -444,6 +444,14 @@ Public Function SaveCopyAs(Optional ByVal FileName As Variant _
 	SaveCopyAs = [_Super].SaveCopyAs(FileName, Overwrite, Password, FilterName, FilterOptions)
 End Function   &apos;   SFDocuments.SF_Writer.SaveCopyAs
 
+REM -----------------------------------------------------------------------------
+Public Function SetPrinter(Optional ByVal Printer As Variant _
+							, Optional ByVal Orientation As Variant _
+							, Optional ByVal PaperFormat As Variant _
+							) As Boolean
+	SetPrinter = [_Super].SetPrinter(Printer, Orientation, PaperFormat)
+End Function	&apos;   SFDocuments.SF_Writer.SetPrinter
+
 REM =========================================================== PRIVATE FUNCTIONS
 
 REM -----------------------------------------------------------------------------

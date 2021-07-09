@@ -586,35 +586,40 @@ Const cstContinue = &quot;…&quot;			&apos;	Unicode continuation char U+2026
 End Function	&apos;	ScriptForge.SF_Utils._ReprValues
 
 REM -----------------------------------------------------------------------------
-Public Sub _SetPropertyValue(ByRef pvPropertyValue As Variant _
+Public Function _SetPropertyValue(ByVal pvPropertyValue As Variant _
 									, ByVal psName As String _
 									, ByRef pvValue As Variant _
-									)
-&apos;&apos;&apos;	Update the 1st argument (passed by reference), which is an array of property values
-&apos;&apos;&apos;	If the property psName exists, update it with pvValue, otherwise create it on top of the array
+									) As variant
+&apos;&apos;&apos;	Return the 1st argument (passed by reference), which is an array of property values
+&apos;&apos;&apos;	If the property psName exists, update it with pvValue, otherwise create it on top of the returned array
 
 Dim oPropertyValue As New com.sun.star.beans.PropertyValue
 Dim lIndex As Long				&apos;	Found entry
 Dim vValue As Variant			&apos;	Alias of pvValue
+Dim vProperties As Variant		&apos;	Alias of pvPropertyValue
 Dim i As Long
 
 	lIndex = -1
-	For i = 0 To UBound(pvPropertyValue)
-		If pvPropertyValue(i).Name = psName Then
+	vProperties = pvPropertyValue
+	For i = 0 To UBound(vProperties)
+		If vProperties(i).Name = psName Then
 			lIndex = i
 			Exit For
 		End If
 	Next i
 	If lIndex &lt; 0 Then		&apos;	Not found
-		lIndex = UBound(pvPropertyValue) + 1
-		ReDim Preserve pvPropertyValue(0 To lIndex)
+		lIndex = UBound(vProperties) + 1
+		ReDim Preserve vProperties(0 To lIndex)
 		Set oPropertyValue = SF_Utils._MakePropertyValue(psName, pvValue)
-		pvPropertyValue(lIndex) = oPropertyValue
+		vProperties(lIndex) = oPropertyValue
+		vProperties = vProperties
 	Else					&apos;	psName exists already in array of property values
-		pvPropertyValue(lIndex).Value = SF_Utils._CPropertyValue(pvValue)
+		vProperties(lIndex).Value = SF_Utils._CPropertyValue(pvValue)
 	End If
+
+	_SetPropertyValue = vProperties
 	
-End Sub			&apos;	ScriptForge.SF_Utils._SetPropertyValue
+End Function	&apos;	ScriptForge.SF_Utils._SetPropertyValue
 
 REM -----------------------------------------------------------------------------
 Private Function _TypeNames(Optional ByVal pvArgs As Variant) As String

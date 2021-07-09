@@ -1761,6 +1761,9 @@ class SFDocuments:
             return self.ExecMethod(self.vbMethod, 'SaveCopyAs', filename, overwrite,
                                    password, filtername, filteroptions)
 
+        def SetPrinter(self, printer = '', orientation = '', paperformat = ''):
+            return self.ExecMethod(self.vbMethod, 'SetPrinter', printer, orientation, paperformat)
+
     # #########################################################################
     # SF_Base CLASS
     # #########################################################################
@@ -1802,6 +1805,9 @@ class SFDocuments:
 
         def OpenFormDocument(self, formdocument, designmode = False):
             return self.ExecMethod(self.vbMethod, 'OpenFormDocument', formdocument, designmode)
+
+        def SetPrinter(self, formdocument = '', printer = '', orientation = '', paperformat = ''):
+            return self.ExecMethod(self.vbMethod, 'SetPrinter', formdocument, printer, orientation, paperformat)
 
     # #########################################################################
     # SF_Calc CLASS
@@ -2092,7 +2098,7 @@ class SFDocuments:
             """
                 Transform positional and keyword arguments into positional only
                 """
-            return (windowname,)
+            return windowname,
 
         def Forms(self, form = ''):
             return self.ExecMethod(self.vbMethod + self.flgArrayRet, 'Forms', form)

@@ -808,6 +808,98 @@ CatchError:
 End Function   &apos;   SFDocuments.SF_Document.SaveCopyAs
 
 REM -----------------------------------------------------------------------------
+Public Function SetPrinter(Optional ByVal Printer As Variant _
+							, Optional ByVal Orientation As Variant _
+							, Optional ByVal PaperFormat As Variant _
+							, Optional ByRef _PrintComponent As Variant _
+							) As Boolean
+&apos;&apos;&apos; Define the printer options for the document
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		Printer: the name of the printer queue where to print to
+&apos;&apos;&apos;			When absent or space, the default printer is set
+&apos;&apos;&apos;		Orientation: either &quot;PORTRAIT&quot; or &quot;LANDSCAPE&quot;. Left unchanged when absent
+&apos;&apos;&apos;		PaperFormat: one of next values
+&apos;&apos;&apos;			&quot;A3&quot;, &quot;A4&quot;, &quot;A5&quot;, &quot;B4&quot;, &quot;B5&quot;, &quot;LETTER&quot;, &quot;LEGAL&quot;, &quot;TABLOID&quot;
+&apos;&apos;&apos;			Left unchanged when absent
+&apos;&apos;&apos;		_PrintComponent: undocumented argument to determine the component
+&apos;&apos;&apos;			Useful typically to apply printer settings on a Base form document
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		True when successful
+&apos;&apos;&apos;	Examples:
+&apos;&apos;&apos;		oDoc.SetPrinter(Orientation := &quot;PORTRAIT&quot;)
+
+Dim bPrinter As Boolean				&apos;	Return value
+Dim vPrinters As Variant			&apos;	Array of known printers
+Dim vOrientations As Variant		&apos;	Array of allowed paper orientations
+Dim vPaperFormats As Variant		&apos;	Array of allowed formats
+Dim vPrinterSettings As Variant		&apos;	Array of property values
+Dim oPropertyValue As New com.sun.star.beans.PropertyValue
+									&apos;	A single property value item
+Const cstThisSub = &quot;SFDocuments.Document.SetPrinter&quot;
+Const cstSubArgs = &quot;[Printer=&quot;&quot;&quot;&quot;], [Orientation=&quot;&quot;PORTRAIT&quot;&quot;|&quot;&quot;LANDSCAPE&quot;&quot;]&quot; _
+						&amp; &quot;, [PaperFormat=&quot;&quot;A3&quot;&quot;|&quot;&quot;A4&quot;&quot;|&quot;&quot;A5&quot;&quot;|&quot;&quot;B4&quot;&quot;|&quot;&quot;B5&quot;&quot;|&quot;&quot;LETTER&quot;&quot;|&quot;&quot;LEGAL&quot;&quot;|&quot;&quot;TABLOID&quot;&quot;&quot;
+
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	bPrinter = False
+
+Check:
+	If IsMissing(Printer) Or IsEmpty(Printer) Then Printer = &quot;&quot;
+	If IsMissing(Orientation) Or IsEmpty(Orientation) Then Orientation = &quot;&quot;
+	If IsMissing(PaperFormat) Or IsEmpty(PaperFormat) Then PaperFormat = &quot;&quot;
+	If IsMissing(_PrintComponent) Or IsEmpty(_PrintComponent) Then Set _PrintComponent = _Component
+	
+	ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs)		&apos;	Unconditional validation
+	If Not _IsStillAlive() Then GoTo Finally
+	If VarType(Printer) = V_STRING Then
+		vPrinters = ScriptForge.SF_Platform.Printers
+		If Len(Printer) &gt; 0 Then
+			If Not ScriptForge.SF_Utils._Validate(Printer, &quot;Printer&quot;, V_STRING, vPrinters) Then GoTo Finally
+		End If
+	Else
+		If Not ScriptForge.SF_Utils._Validate(Printer, &quot;Printer&quot;, V_STRING) Then GoTo Finally	&apos;	Manage here the VarType error
+	End If
+	If VarType(Orientation) = V_STRING Then
+		vOrientations = Array(&quot;PORTRAIT&quot;, &quot;LANDSCAPE&quot;)
+		If Len(Orientation) &gt; 0 Then
+			If Not ScriptForge.SF_Utils._Validate(Orientation, &quot;Orientation&quot;, V_STRING, vOrientations) Then GoTo Finally
+		End If
+	Else
+		If Not ScriptForge.SF_Utils._Validate(Orientation, &quot;Orientation&quot;, V_STRING) Then GoTo Finally
+	End If
+	If VarType(PaperFormat) = V_STRING Then
+		vPaperFormats = Array(&quot;A3&quot;, &quot;A4&quot;, &quot;A5&quot;, &quot;B4&quot;, &quot;B5&quot;, &quot;LETTER&quot;, &quot;LEGAL&quot;, &quot;TABLOID&quot;)
+		If Len(PaperFormat) &gt; 0 Then
+			If Not ScriptForge.SF_Utils._Validate(PaperFormat, &quot;PaperFormat&quot;, V_STRING, vPaperFormats) Then GoTo Finally
+		End If
+	Else
+		If Not ScriptForge.SF_Utils._Validate(PaperFormat, &quot;PaperFormat&quot;, V_STRING) Then GoTo Finally
+	End If
+
+Try:
+	With _PrintComponent
+		Set oPropertyValue = ScriptForge.SF_Utils._MakePropertyValue(&quot;Name&quot;, Iif(Len(Printer) &gt; 0, Printer, vPrinters(0)))
+		vPrinterSettings = Array(oPropertyValue)
+		If Len(Orientation) &gt; 0 Then
+			vPrinterSettings = ScriptForge.SF_Utils._SetPropertyValue(vPrinterSettings, &quot;PaperOrientation&quot; _
+					, ScriptForge.SF_Array.IndexOf(vOrientations, Orientation, CaseSensitive := False))
+		End If
+		If Len(PaperFormat) &gt; 0 Then
+			vPrinterSettings = ScriptForge.SF_Utils._SetPropertyValue(vPrinterSettings, &quot;PaperFormat&quot; _
+					, ScriptForge.SF_Array.IndexOf(vPaperFormats, PaperFormat, CaseSensitive := False))
+		End If
+		.setPrinter(vPrinterSettings)
+	End With
+	bPrinter = True
+
+Finally:
+	SetPrinter = bPrinter
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function   &apos;   SFDocuments.SF_Document.SetPrinter
+
+REM -----------------------------------------------------------------------------
 Private Function SetProperty(Optional ByVal psProperty As String _
 								, Optional ByVal pvValue As Variant _
 								) As Boolean
