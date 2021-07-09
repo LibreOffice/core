@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6449383c_5b571010",
+        "filename": "cui/source/options/optgdlg.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 606,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-07-09T09:27:09Z",
+      "side": 1,
+      "message": "that doesn\u0027t need to be unique_ptr\n\njust GraphicsTestsDialog aDialog(m_xContainer.get()); should work",
+      "range": {
+        "startLine": 604,
+        "startChar": 3,
+        "endLine": 606,
+        "endChar": 33
+      },
+      "revId": "9908894453b72a0ac6272896e361fc1685f2ac08",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
