@@ -31,11 +31,12 @@
 #include <editeng/acorrcfg.hxx>
 #include <sfx2/docfile.hxx>
 #include <docsh.hxx>
+#include <svl/listener.hxx>
 
 #include <cassert>
 #include <vector>
 
-class SwAutoCompleteClient : public SwClient
+class SwAutoCompleteClient : public SvtListener
 {
     SwAutoCompleteWord* m_pAutoCompleteWord;
     SwDoc*              m_pDoc;
@@ -54,7 +55,7 @@ public:
     static sal_uLong GetElementCount() {return s_nSwAutoCompleteClientCount;}
 #endif
 protected:
-    virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
+    virtual void Notify(const SfxHint&) override;
 };
 
 class SwAutoCompleteWord_Impl
@@ -96,18 +97,18 @@ SwAutoCompleteClient::SwAutoCompleteClient(SwAutoCompleteWord& rToTell, SwDoc& r
         m_pAutoCompleteWord(&rToTell),
         m_pDoc(&rSwDoc)
 {
-    m_pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
+    StartListening(m_pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD)->GetNotifier());
 #if OSL_DEBUG_LEVEL > 0
     ++s_nSwAutoCompleteClientCount;
 #endif
 }
 
-SwAutoCompleteClient::SwAutoCompleteClient(const SwAutoCompleteClient& rClient) :
-    SwClient(),
-    m_pAutoCompleteWord(rClient.m_pAutoCompleteWord),
-    m_pDoc(rClient.m_pDoc)
+SwAutoCompleteClient::SwAutoCompleteClient(const SwAutoCompleteClient& rClient)
+    : SvtListener()
+    , m_pAutoCompleteWord(rClient.m_pAutoCompleteWord)
+    , m_pDoc(rClient.m_pDoc)
 {
-    m_pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
+    StartListening(m_pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD)->GetNotifier());
 #if OSL_DEBUG_LEVEL > 0
     ++s_nSwAutoCompleteClientCount;
 #endif
@@ -126,21 +127,31 @@ SwAutoCompleteClient& SwAutoCompleteClient::operator=(const SwAutoCompleteClient
 {
     m_pAutoCompleteWord = rClient.m_pAutoCompleteWord;
     m_pDoc = rClient.m_pDoc;
-    StartListeningToSameModifyAs(rClient);
+    EndListeningAll();
+    StartListening(m_pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD)->GetNotifier());
     return *this;
 }
 
-void SwAutoCompleteClient::SwClientNotify(const SwModify&, const SfxHint& rHint)
+void SwAutoCompleteClient::Notify(const SfxHint& rHint)
 {
-    if (rHint.GetId() != SfxHintId::SwLegacyModify)
-        return;
-    auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
-    switch(pLegacy->GetWhich())
+    bool bClear = false;
+    if (rHint.GetId() == SfxHintId::Dying)
+        bClear = true;
+    else if (rHint.GetId() == SfxHintId::SwLegacyModify)
     {
-        case RES_REMOVE_UNO_OBJECT:
-        case RES_OBJECTDYING:
-            EndListeningAll();
-            m_pAutoCompleteWord->DocumentDying(*m_pDoc);
+        auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
+        switch(pLegacy->GetWhich())
+        {
+            case RES_REMOVE_UNO_OBJECT:
+            case RES_OBJECTDYING:
+                bClear = true;
+        }
+    }
+    if(bClear)
+    {
+        EndListeningAll();
+        m_pAutoCompleteWord->DocumentDying(*m_pDoc);
+        m_pDoc = nullptr;
     }
 }
 
