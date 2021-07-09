@@ -22,6 +22,30 @@
       "revId": "9908894453b72a0ac6272896e361fc1685f2ac08",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "39bfdd0b_89bbb545",
+        "filename": "cui/source/options/optgdlg.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 606,
+      "author": {
+        "id": 1002896
+      },
+      "writtenOn": "2021-07-09T09:48:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6449383c_5b571010",
+      "range": {
+        "startLine": 604,
+        "startChar": 3,
+        "endLine": 606,
+        "endChar": 33
+      },
+      "revId": "9908894453b72a0ac6272896e361fc1685f2ac08",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
