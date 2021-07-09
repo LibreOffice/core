@@ -3939,7 +3939,7 @@ void Window::set_id(const OUString& rID)
 
 const OUString& Window::get_id() const
 {
-    return mpWindowImpl->maID;
+    return mpWindowImpl ? mpWindowImpl->maID : OUString();
 }
 
 FactoryFunction Window::GetUITestFactory() const
