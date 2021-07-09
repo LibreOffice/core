@@ -1,0 +1,293 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3e32b693_a1f85434",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 39
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-09T06:50:30Z",
+      "side": 1,
+      "message": "Why this new line?",
+      "revId": "ccfb3874bf5538c831919059919bd70b117615ca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d8c63d58_0c54c7dd",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 39
+      },
+      "lineNbr": 280,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-09T06:50:30Z",
+      "side": 1,
+      "message": "What does this loop do?",
+      "revId": "ccfb3874bf5538c831919059919bd70b117615ca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "edda225c_77fa8e23",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 39
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-09T06:50:30Z",
+      "side": 1,
+      "message": "Why this whitespace-only change?",
+      "revId": "ccfb3874bf5538c831919059919bd70b117615ca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0cc05b75_38028f13",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 39
+      },
+      "lineNbr": 337,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-09T06:50:30Z",
+      "side": 1,
+      "message": "We do not call destructor - it will be called automatically upon destruction of the holding object (dialog) after its destructor finishes. But if you need some specific cleanup to happen *before* the style list destructor is called (e.g., when calling it later will try to access some already-released data), you need to introduce a specialized destructor-like function, like \u0027StyleList::Cleanup()\u0027, and call it here (it\u0027s similar to StyleList::Initialize()).",
+      "revId": "ccfb3874bf5538c831919059919bd70b117615ca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "35911c81_7d122f84",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 39
+      },
+      "lineNbr": 670,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-09T06:50:30Z",
+      "side": 1,
+      "message": "How the two functions (SetbHierarchical vs SetHierarchical) differ?",
+      "revId": "ccfb3874bf5538c831919059919bd70b117615ca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "70731386_b33b1ac4",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 39
+      },
+      "lineNbr": 682,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-09T06:50:30Z",
+      "side": 1,
+      "message": "Why the whitespace-only change?",
+      "revId": "ccfb3874bf5538c831919059919bd70b117615ca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "37a71904_dc3f2d9d",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 39
+      },
+      "lineNbr": 767,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-09T06:50:30Z",
+      "side": 1,
+      "message": "Why the whitespace-only change? Both this line, and the next one, should simply be indented like they were before.",
+      "revId": "ccfb3874bf5538c831919059919bd70b117615ca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "44592b6d_fc10bf8d",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 39
+      },
+      "lineNbr": 854,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-09T06:50:30Z",
+      "side": 1,
+      "message": "The \u0027\u0026\u0026\u0027 at 853 is indented inconsistently. Then, why the \u0027m_aStyleList.bCanNewGetter_updateFamImpl())\u0027 is split to two lines? Just because of the comment? Then simply move the comment to a separate line above if. And anyway, what the comment is telling me - I don\u0027t quite get the message :)",
+      "revId": "ccfb3874bf5538c831919059919bd70b117615ca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ea33c29a_a369c91c",
+        "filename": "sfx2/source/inc/templdgi.hxx",
+        "patchSetId": 39
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-09T06:50:30Z",
+      "side": 1,
+      "message": "Why this whitespace-only change?",
+      "revId": "ccfb3874bf5538c831919059919bd70b117615ca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4ba849e7_cc625d14",
+        "filename": "sfx2/source/inc/templdgi.hxx",
+        "patchSetId": 39
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-09T06:50:30Z",
+      "side": 1,
+      "message": "Why the order of these has been changed? Why bCanEdit suddenly became below bWaterDisabled? And why the whitespace-only changes?",
+      "revId": "ccfb3874bf5538c831919059919bd70b117615ca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "15d0b8c2_cf463e91",
+        "filename": "sfx2/source/inc/templdgi.hxx",
+        "patchSetId": 39
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-09T06:50:30Z",
+      "side": 1,
+      "message": "Why the whitespace-only change?",
+      "revId": "ccfb3874bf5538c831919059919bd70b117615ca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2a2ff427_47d71c23",
+        "filename": "sfx2/source/inc/templdgi.hxx",
+        "patchSetId": 39
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-09T06:50:30Z",
+      "side": 1,
+      "message": "Why the whitespace-only change?",
+      "revId": "ccfb3874bf5538c831919059919bd70b117615ca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7d346453_15b25073",
+        "filename": "sfx2/source/inc/templdgi.hxx",
+        "patchSetId": 39
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-09T06:50:30Z",
+      "side": 1,
+      "message": "Why the whitespace-only change?",
+      "revId": "ccfb3874bf5538c831919059919bd70b117615ca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cb6edb79_dcc0a363",
+        "filename": "sfx2/source/inc/templdgi.hxx",
+        "patchSetId": 39
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-09T06:50:30Z",
+      "side": 1,
+      "message": "Why the whitespace-only change?",
+      "revId": "ccfb3874bf5538c831919059919bd70b117615ca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "46831f15_8fbfff80",
+        "filename": "sfx2/source/inc/templdgi.hxx",
+        "patchSetId": 39
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-09T06:50:30Z",
+      "side": 1,
+      "message": "Why the whitespace-only change?",
+      "revId": "ccfb3874bf5538c831919059919bd70b117615ca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4ddd4254_807a32a4",
+        "filename": "sfx2/source/inc/templdgi.hxx",
+        "patchSetId": 39
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-09T06:50:30Z",
+      "side": 1,
+      "message": "Why the change?",
+      "revId": "ccfb3874bf5538c831919059919bd70b117615ca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d912484e_466a3df9",
+        "filename": "sfx2/source/inc/templdgi.hxx",
+        "patchSetId": 39
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-09T06:50:30Z",
+      "side": 1,
+      "message": "Why the whitespace-only change?",
+      "revId": "ccfb3874bf5538c831919059919bd70b117615ca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
