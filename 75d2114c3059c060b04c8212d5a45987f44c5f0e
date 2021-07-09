@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d3296283_30a92160",
+        "filename": "vcl/backendtest/GraphicsRenderTests.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1253,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-07-09T09:42:19Z",
+      "side": 1,
+      "message": "aTestName",
+      "range": {
+        "startLine": 1253,
+        "startChar": 13,
+        "endLine": 1253,
+        "endChar": 22
+      },
+      "revId": "75d2114c3059c060b04c8212d5a45987f44c5f0e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "af1cd719_ad5a3d2c",
+        "filename": "vcl/backendtest/outputdevice/common.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 569,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-07-09T09:42:19Z",
+      "side": 1,
+      "message": "You want to assert explicit pixels what value they have in this case - not calculate the ellipse path (that\u0027s what the drawing algorithm must do).\n\nFor example: if I draw an ellipse - this, that, and that pixel must be black, that pixel must be a shade of grey and that pixel must always be white. And this is how you need to write the asserting checks. \n\nIf it seems that in the test you are writing what the algorithm should do, then you are thinking about the test in a wrong way.",
+      "range": {
+        "startLine": 559,
+        "startChar": 4,
+        "endLine": 569,
+        "endChar": 5
+      },
+      "revId": "75d2114c3059c060b04c8212d5a45987f44c5f0e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
