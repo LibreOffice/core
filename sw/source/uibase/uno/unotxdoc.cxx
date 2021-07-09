@@ -3401,14 +3401,14 @@ SwXTextDocument::getSearchResultRectangles(const char* pPayload)
     std::stringstream aStream(pPayload);
     boost::property_tree::read_json(aStream, aTree);
 
-    sw::SearchIndexData aData;
+    sw::search::SearchIndexData aData;
 
     aData.nNodeIndex = sal_uInt32(aTree.get<int>("node_index"));
 
     SwDoc* pDoc = m_pDocShell->GetDoc();
 
-    sw::SearchResultLocator aLocator(pDoc);
-    sw::LocationResult aResult = aLocator.find(aData);
+    sw::search::SearchResultLocator aLocator(pDoc);
+    sw::search::LocationResult aResult = aLocator.find(aData);
     if (aResult.mbFound)
         aRectangles = aResult.maRectangles;
 
