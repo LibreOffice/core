@@ -14,11 +14,20 @@
 #include <doc.hxx>
 #include <basegfx/range/b2drange.hxx>
 
-namespace sw
+namespace sw::search
 {
+enum class NodeType
+{
+    Undefined,
+    WriterNode,
+    SdrObject
+};
+
 struct SearchIndexData
 {
-    sal_uInt32 nNodeIndex;
+    NodeType eType = NodeType::Undefined;
+    OUString aObjectName;
+    sal_uInt32 nNodeIndex = 0;
 };
 
 struct LocationResult
