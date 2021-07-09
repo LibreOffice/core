@@ -122,7 +122,7 @@ void loadFromSvg(SvStream& rStream, const OUString& sPath, BitmapEx& rBitmapEx, 
     @param nStride
     The number of bytes in a scanline, must >= (width * nBitCount / 8)
 */
-BitmapEx CreateFromData( sal_uInt8 const *pData, sal_Int32 nWidth, sal_Int32 nHeight, sal_Int32 nStride, sal_uInt16 nBitCount )
+BitmapEx CreateFromData( sal_uInt8 const *pData, sal_Int32 nWidth, sal_Int32 nHeight, sal_Int32 nStride, sal_uInt16 nBitCount, bool bReverseAlpha)
 {
     assert(nStride >= (nWidth * nBitCount / 8));
     assert( nBitCount == 1 || nBitCount == 24 || nBitCount == 32);
@@ -170,7 +170,8 @@ BitmapEx CreateFromData( sal_uInt8 const *pData, sal_Int32 nWidth, sal_Int32 nHe
                 Scanline pMaskScanLine = xMaskAcc->GetScanline(y);
                 for (tools::Long x = 0; x < nWidth; ++x)
                 {
-                    xMaskAcc->SetPixelOnData(pMaskScanLine, x, BitmapColor(*p));
+                    const sal_uInt8 nValue = bReverseAlpha ? 0xff - *p : *p;
+                    xMaskAcc->SetPixelOnData(pMaskScanLine, x, BitmapColor(nValue));
                     p += 4;
                 }
              }
