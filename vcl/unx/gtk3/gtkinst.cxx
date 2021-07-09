@@ -17482,7 +17482,7 @@ private:
     void fire_signal_changed()
     {
         m_bUserSelectEntry = true;
-        m_bChangedByMenu = toggle_button_get_active();
+        m_bChangedByMenu = m_bPopupActive;
         signal_changed();
         m_bChangedByMenu = false;
     }
@@ -17545,7 +17545,7 @@ private:
 
     void menu_toggled()
     {
-        if (!toggle_button_get_active())
+        if (!m_bPopupActive)
         {
 #if 0
             if (m_bHoverSelection)
@@ -17584,12 +17584,13 @@ private:
     {
         m_aQuickSelectionEngine.Reset();
 
+        bool bOldPopupActive = m_bPopupActive;
+        m_bPopupActive = toggle_button_get_active();
+
         menu_toggled();
 
-        bool bIsShown = toggle_button_get_active();
-        if (m_bPopupActive != bIsShown)
+        if (bOldPopupActive != m_bPopupActive)
         {
-            m_bPopupActive = bIsShown;
             ComboBox::signal_popup_toggled();
             // restore focus to the GtkEntry when the popup is gone, which
             // is what the vcl case does, to ease the transition a little,
