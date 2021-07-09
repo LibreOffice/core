@@ -46,7 +46,7 @@ void loadFromSvg(SvStream& rStream, const OUString& sPath, BitmapEx& rBitmapEx, 
     @param nStride
     The number of bytes in a scanline, must be >= (width * nBitCount / 8)
 */
-BitmapEx VCL_DLLPUBLIC CreateFromData( sal_uInt8 const *pData, sal_Int32 nWidth, sal_Int32 nHeight, sal_Int32 nStride, sal_uInt16 nBitCount );
+BitmapEx VCL_DLLPUBLIC CreateFromData( sal_uInt8 const *pData, sal_Int32 nWidth, sal_Int32 nHeight, sal_Int32 nStride, sal_uInt16 nBitCount, bool bReverseAlpha = false);
 
 BitmapEx VCL_DLLPUBLIC CreateFromData( RawBitmap && data );
 
