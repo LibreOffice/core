@@ -14,29 +14,67 @@
 #include <frame.hxx>
 #include <cntfrm.hxx>
 #include <viewsh.hxx>
+#include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentLayoutAccess.hxx>
 
-namespace sw
+#include <tools/UnitConversion.hxx>
+#include <svx/svdpage.hxx>
+#include <svx/svdobj.hxx>
+
+namespace sw::search
 {
 LocationResult SearchResultLocator::find(SearchIndexData const& rSearchIndexData)
 {
     LocationResult aResult;
-    SwNodes const& rNodes = mpDocument->GetNodes();
-    if (rSearchIndexData.nNodeIndex >= rNodes.Count())
-        return aResult;
-    SwNode* pNode = rNodes[rSearchIndexData.nNodeIndex];
-
-    auto* pContentNode = pNode->GetContentNode();
-    auto* pShell = mpDocument->getIDocumentLayoutAccess().GetCurrentViewShell();
-
-    if (pContentNode && pShell)
+    if (rSearchIndexData.eType == NodeType::WriterNode)
     {
-        const SwFrame* pFrame = pContentNode->getLayoutFrame(pShell->GetLayout(), nullptr, nullptr);
-        SwRect const& rArea = pFrame->getFrameArea();
+        SwNodes const& rNodes = mpDocument->GetNodes();
+        if (rSearchIndexData.nNodeIndex >= rNodes.Count())
+            return aResult;
+        SwNode* pNode = rNodes[rSearchIndexData.nNodeIndex];
 
-        aResult.mbFound = true;
-        aResult.maRectangles.emplace_back(rArea.Left(), rArea.Top(), rArea.Left() + rArea.Width(),
-                                          rArea.Top() + rArea.Height());
+        auto* pContentNode = pNode->GetContentNode();
+        auto* pShell = mpDocument->getIDocumentLayoutAccess().GetCurrentViewShell();
+
+        if (pContentNode && pShell)
+        {
+            const SwFrame* pFrame
+                = pContentNode->getLayoutFrame(pShell->GetLayout(), nullptr, nullptr);
+            SwRect const& rArea = pFrame->getFrameArea();
+
+            aResult.mbFound = true;
+            aResult.maRectangles.emplace_back(rArea.Left(), rArea.Top(),
+                                              rArea.Left() + rArea.Width(),
+                                              rArea.Top() + rArea.Height());
+        }
+    }
+    else if (rSearchIndexData.eType == NodeType::SdrObject)
+    {
+        IDocumentDrawModelAccess& rDrawModelAccess = mpDocument->getIDocumentDrawModelAccess();
+        auto* pModel = rDrawModelAccess.GetDrawModel();
+        for (sal_uInt16 nPage = 0; nPage < pModel->GetPageCount(); ++nPage)
+        {
+            SdrPage* pPage = pModel->GetPage(nPage);
+            for (size_t nObject = 0; nObject < pPage->GetObjCount(); ++nObject)
+            {
+                SdrObject* pObject = pPage->GetObj(nObject);
+                if (pObject)
+                {
+                    if (pObject->GetName() == rSearchIndexData.aObjectName)
+                    {
+                        auto aLogicRect = pObject->GetLogicRect();
+                        auto nLeft = convertMm100ToTwip(aLogicRect.Left());
+                        auto nTop = convertMm100ToTwip(aLogicRect.Top());
+                        auto nWidth = convertMm100ToTwip(aLogicRect.GetWidth());
+                        auto nHeight = convertMm100ToTwip(aLogicRect.GetHeight());
+
+                        aResult.mbFound = true;
+                        aResult.maRectangles.emplace_back(nLeft, nTop, nLeft + nWidth,
+                                                          nTop + nHeight);
+                    }
+                }
+            }
+        }
     }
 
     return aResult;
