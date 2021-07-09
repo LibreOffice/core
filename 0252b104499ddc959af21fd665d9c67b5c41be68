@@ -16,6 +16,24 @@
       "revId": "0252b104499ddc959af21fd665d9c67b5c41be68",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4ca9d8d4_0c72848b",
+        "filename": "sd/qa/unit/import-tests-smartart.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-07-09T12:53:30Z",
+      "side": 1,
+      "message": "Previously I was comparing to 0 and it was failing. Now I have used CPPUNIT_ASSERT_EQUAL for two values and it worked.",
+      "parentUuid": "f24a4e1c_f4fa7623",
+      "revId": "0252b104499ddc959af21fd665d9c67b5c41be68",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
