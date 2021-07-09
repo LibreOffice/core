@@ -2040,6 +2040,7 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::createSystemChild( con
         SolarMutexGuard aGuard;
         pPeer->SetWindow( pChildWindow );
         xPeer = pPeer;
+        pChildWindow->SetWindowPeer(xPeer, pPeer);
     }
 
     return xPeer;
