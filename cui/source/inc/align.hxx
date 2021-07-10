@@ -45,14 +45,14 @@ namespace svx {
 
 class AlignmentTabPage : public SfxTabPage
 {
-    static const sal_uInt16 s_pRanges[];
+    static const WhichRangesContainer s_pRanges;
 
 public:
     virtual             ~AlignmentTabPage() override;
     static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rAttrSet );
     explicit            AlignmentTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreSet);
 
-    static const sal_uInt16*  GetRanges() { return s_pRanges; }
+    static WhichRangesContainer GetRanges() { return s_pRanges; }
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;

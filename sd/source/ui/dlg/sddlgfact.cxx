@@ -271,7 +271,7 @@ const SfxItemSet* SdAbstractTabController_Impl::GetOutputItemSet() const
     return m_xDlg->GetOutputItemSet();
 }
 
-const sal_uInt16* SdAbstractTabController_Impl::GetInputRanges(const SfxItemPool& pItem )
+WhichRangesContainer SdAbstractTabController_Impl::GetInputRanges(const SfxItemPool& pItem )
 {
     return m_xDlg->GetInputRanges( pItem );
 }
@@ -313,7 +313,7 @@ const SfxItemSet* AbstractBulletDialog_Impl::GetOutputItemSet() const
     return static_cast< ::sd::OutlineBulletDlg*>(m_xDlg.get())->GetBulletOutputItemSet();
 }
 
-const sal_uInt16* AbstractBulletDialog_Impl::GetInputRanges(const SfxItemPool& pItem )
+WhichRangesContainer AbstractBulletDialog_Impl::GetInputRanges(const SfxItemPool& pItem )
 {
     return m_xDlg->GetInputRanges(pItem);
 }
@@ -349,7 +349,7 @@ const SfxItemSet* SdPresLayoutTemplateDlg_Impl::GetOutputItemSet() const
     return m_xDlg->GetOutputItemSet();
 }
 
-const sal_uInt16* SdPresLayoutTemplateDlg_Impl::GetInputRanges(const SfxItemPool& pItem )
+WhichRangesContainer SdPresLayoutTemplateDlg_Impl::GetInputRanges(const SfxItemPool& pItem )
 {
     return m_xDlg->GetInputRanges( pItem );
 }

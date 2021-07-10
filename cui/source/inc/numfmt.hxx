@@ -56,7 +56,7 @@ public:
 
 class SvxNumberFormatTabPage : public SfxTabPage
 {
-    static const sal_uInt16 pRanges[];
+    static const WhichRangesContainer pRanges;
 
 public:
     SvxNumberFormatTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreAttrs);
@@ -64,7 +64,7 @@ public:
                                     const SfxItemSet* rAttrSet );
     virtual ~SvxNumberFormatTabPage() override;
     // Returns area information.
-    static const sal_uInt16* GetRanges() { return pRanges; }
+    static WhichRangesContainer GetRanges() { return pRanges; }
 
     virtual bool            FillItemSet( SfxItemSet* rSet ) override;
     virtual void            Reset( const SfxItemSet* rSet ) override;

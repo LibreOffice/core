@@ -64,7 +64,7 @@ typedef sal_uInt16 MarginPosition;
 
 class SvxPageDescPage : public SfxTabPage
 {
-    static const sal_uInt16 pRanges[];
+    static const WhichRangesContainer pRanges;
 private:
     OUString            sStandardRegister;
     tools::Long                nFirstLeftMargin;
@@ -174,7 +174,7 @@ public:
     virtual ~SvxPageDescPage() override;
 
     // returns the range of the Which values
-    static const sal_uInt16* GetRanges() { return pRanges; }
+    static WhichRangesContainer GetRanges() { return pRanges; }
 
     virtual bool        FillItemSet( SfxItemSet* rOutSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;
