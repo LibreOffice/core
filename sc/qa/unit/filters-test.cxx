@@ -514,7 +514,7 @@ void ScFiltersTest::testCommentSize()
 
     const tools::Rectangle& rNewRect = pCaption->GetLogicRect();
     CPPUNIT_ASSERT_EQUAL(rOldRect.getWidth(), rNewRect.getWidth());
-    CPPUNIT_ASSERT_EQUAL(tools::Long(1606), rNewRect.getHeight());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(1605), rNewRect.getHeight());
 
     rDoc.GetUndoManager()->Undo();
 
