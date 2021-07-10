@@ -15,6 +15,7 @@ public:
     void testTdf136949();
     void testTdf128212();
     void testColumnsLayout();
+    void tdf143258_testTbRlLayout();
 
     CPPUNIT_TEST_SUITE(SdLayoutTest);
 
@@ -22,6 +23,7 @@ public:
     CPPUNIT_TEST(testTdf136949);
     CPPUNIT_TEST(testTdf128212);
     CPPUNIT_TEST(testColumnsLayout);
+    CPPUNIT_TEST(tdf143258_testTbRlLayout);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -79,10 +81,10 @@ void SdLayoutTest::testTdf128212()
     CPPUNIT_ASSERT(pXmlDoc);
 
     // Without the fix in place, this test would have failed with
-    // - Expected: 7798
+    // - Expected: 7797
     // - Actual  : 12068
     assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray", "x", "4525");
-    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray", "y", "7798");
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray", "y", "7797");
 
     xDocShRef->DoClose();
 }
@@ -181,6 +183,67 @@ void SdLayoutTest::testColumnsLayout()
         assertXPathContent(pXmlDoc, sXPath + "/text", sText[sentence]);
         assertXPath(pXmlDoc, sXPath, "index", OUString::number(index));
         assertXPath(pXmlDoc, sXPath, "length", OUString::number(length));
+        assertXPath(pXmlDoc, sXPath, "x", OUString::number(x));
+        assertXPath(pXmlDoc, sXPath, "y", OUString::number(y));
+    }
+
+    xDocShRef->DoClose();
+}
+
+void SdLayoutTest::tdf143258_testTbRlLayout()
+{
+    // This tests a 1-column and a 2-column text boxes' layout
+
+    const OUString sText[] = {
+        "tb-rl text within a small text box", // Box 1
+        "tb-rl text within a small 2-column text box", // Box 2
+    };
+
+    // sentence#, index, length, x, y
+    const std::tuple<int, int, int, int, int> strings[] = {
+        // Box 1
+        { 0, 0, 11, 5346, 3250 },
+        { 0, 11, 9, 4635, 3250 },
+        { 0, 20, 6, 3924, 3250 },
+        { 0, 26, 8, 3213, 3250 },
+        // Box 2 column 1
+        { 1, 0, 6, 5346, 7250 },
+        { 1, 6, 5, 4635, 7250 },
+        { 1, 11, 9, 3924, 7250 },
+        { 1, 20, 6, 3213, 7250 },
+        // Box 2 column 2
+        { 1, 26, 2, 5346, 9600 },
+        { 1, 28, 7, 4635, 9600 },
+        { 1, 35, 5, 3924, 9600 },
+        { 1, 40, 3, 3213, 9600 },
+    };
+
+    sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/odg/tb-rl-textbox.odg"), ODG);
+
+    std::shared_ptr<GDIMetaFile> xMetaFile = xDocShRef->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+
+    xmlDocUniquePtr pXmlDoc = XmlTestTools::dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/font", SAL_N_ELEMENTS(strings));
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray", SAL_N_ELEMENTS(strings));
+    for (size_t i = 0; i < SAL_N_ELEMENTS(strings); ++i)
+    {
+        const auto & [ sentence, index, length, x, y ] = strings[i];
+        OString sXPath = "/metafile/push[1]/push[1]/font[" + OString::number(i + 1) + "]";
+        assertXPath(pXmlDoc, sXPath, "orientation", "-900");
+        assertXPath(pXmlDoc, sXPath, "vertical", "true");
+        sXPath = "/metafile/push[1]/push[1]/textarray[" + OString::number(i + 1) + "]";
+        assertXPathContent(pXmlDoc, sXPath + "/text", sText[sentence]);
+        assertXPath(pXmlDoc, sXPath, "index", OUString::number(index));
+        assertXPath(pXmlDoc, sXPath, "length", OUString::number(length));
+
+        // Without the fix in place, this would have failed with
+        // - Expected: 5346
+        // - Actual  : 503924
+        // - In <>, attribute 'x' of '/metafile/push[1]/push[1]/textarray[1]' incorrect value.
         assertXPath(pXmlDoc, sXPath, "x", OUString::number(x));
         assertXPath(pXmlDoc, sXPath, "y", OUString::number(y));
     }

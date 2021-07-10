@@ -570,7 +570,8 @@ void ImpEditView::DrawSelectionXOR( EditSelection aTmpSel, vcl::Region* pRegion,
 
             tools::Rectangle aTmpRect(pEditEngine->pImpEditEngine->GetEditCursor(
                 &rInfo.rPortion, rInfo.pLine, nStartIndex, GetCursorFlags::NONE));
-            aTmpRect.Move(0, pEditEngine->pImpEditEngine->getTopDirectionAware(rInfo.aArea));
+            const Size aLineOffset = pEditEngine->pImpEditEngine->getTopLeftDocOffset(rInfo.aArea);
+            aTmpRect.Move(0, aLineOffset.Height());
 
             // Only paint if in the visible range ...
             if (aTmpRect.Top() > GetVisDocBottom())
@@ -591,7 +592,7 @@ void ImpEditView::DrawSelectionXOR( EditSelection aTmpSel, vcl::Region* pRegion,
                     = pEditEngine->GetLineXPosStartEnd(&rInfo.rPortion, rInfo.pLine);
                 aTmpRect.SetLeft(aLineXPosStartEnd.Min());
                 aTmpRect.SetRight(aLineXPosStartEnd.Max());
-                aTmpRect.Move(pEditEngine->pImpEditEngine->getLeftDirectionAware(rInfo.aArea), 0);
+                aTmpRect.Move(aLineOffset.Width(), 0);
                 ImplDrawHighlightRect(pTarget, aTmpRect.TopLeft(), aTmpRect.BottomRight(),
                                       pPolyPoly.get());
             }
@@ -599,8 +600,6 @@ void ImpEditView::DrawSelectionXOR( EditSelection aTmpSel, vcl::Region* pRegion,
             {
                 sal_Int32 nTmpStartIndex = nStartIndex;
                 sal_Int32 nWritingDirStart, nTmpEndIndex;
-                const sal_Int32 nLeftOffset
-                    = pEditEngine->pImpEditEngine->getLeftDirectionAware(rInfo.aArea);
 
                 while (nTmpStartIndex < nEndIndex)
                 {
@@ -618,7 +617,7 @@ void ImpEditView::DrawSelectionXOR( EditSelection aTmpSel, vcl::Region* pRegion,
 
                     aTmpRect.SetLeft(std::min(nX1, nX2));
                     aTmpRect.SetRight(std::max(nX1, nX2));
-                    aTmpRect.Move(nLeftOffset, 0);
+                    aTmpRect.Move(aLineOffset.Width(), 0);
 
                     ImplDrawHighlightRect(pTarget, aTmpRect.TopLeft(), aTmpRect.BottomRight(),
                                           pPolyPoly.get());

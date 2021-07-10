@@ -395,6 +395,8 @@ public:
     // the one of the EditOutliner) and sets the PaperSize.
     virtual void TakeTextRect( SdrOutliner& rOutliner, tools::Rectangle& rTextRect, bool bNoEditText,
         tools::Rectangle* pAnchorRect, bool bLineWidth = true ) const;
+    // Takes writing direction into account when adjusting the rectangle
+    void AdjustRectToTextDistance(tools::Rectangle& rAnchorRect) const;
     virtual void TakeTextAnchorRect(::tools::Rectangle& rAnchorRect) const;
     const GeoStat& GetGeoStat() const { return aGeo; }
 
@@ -545,6 +547,7 @@ public:
     void ForceOutlinerParaObject();
     virtual bool IsVerticalWriting() const;
     virtual void SetVerticalWriting(bool bVertical);
+    bool IsTopToBottom() const;
 
     /** called from the SdrObjEditView during text edit when the status of the edit outliner changes */
     virtual void onEditOutlinerStatusEvent( EditStatus* pEditStatus );

@@ -2957,22 +2957,6 @@ void ImpEditEngine::RecalcFormatterFontMetrics( FormatterFontMetric& rCurMetrics
     }
 }
 
-tools::Long ImpEditEngine::getXDirectionAware(const Point& pt) const
-{
-    if (!IsVertical())
-        return pt.X();
-    else
-        return pt.Y();
-}
-
-tools::Long ImpEditEngine::getYDirectionAware(const Point& pt) const
-{
-    if (!IsVertical())
-        return pt.Y();
-    else
-        return pt.X();
-}
-
 tools::Long ImpEditEngine::getWidthDirectionAware(const Size& sz) const
 {
     return !IsVertical() ? sz.Width() : sz.Height();
@@ -2999,20 +2983,20 @@ void ImpEditEngine::adjustYDirectionAware(Point& pt, tools::Long y) const
         pt.AdjustX(IsTopToBottom() ? -y : y);
 }
 
-void ImpEditEngine::setXDirectionAware(Point& pt, tools::Long x) const
+void ImpEditEngine::setXDirectionAwareFrom(Point& ptDest, const Point& ptSrc) const
 {
     if (!IsVertical())
-        pt.setX(x);
+        ptDest.setX(ptSrc.X());
     else
-        pt.setY(x);
+        ptDest.setY(ptSrc.Y());
 }
 
-void ImpEditEngine::setYDirectionAware(Point& pt, tools::Long y) const
+void ImpEditEngine::setYDirectionAwareFrom(Point& ptDest, const Point& ptSrc) const
 {
     if (!IsVertical())
-        pt.setY(y);
+        ptDest.setY(ptSrc.Y());
     else
-        pt.setX(y);
+        ptDest.setX(ptSrc.Y());
 }
 
 tools::Long ImpEditEngine::getYOverflowDirectionAware(const Point& pt,
@@ -3039,48 +3023,26 @@ bool ImpEditEngine::isXOverflowDirectionAware(const Point& pt, const tools::Rect
         return pt.Y() < rectMax.Top();
 }
 
-tools::Long ImpEditEngine::getLeftDirectionAware(const tools::Rectangle& rect) const
-{
-    if (!IsVertical())
-        return rect.Left();
-
-    if (IsTopToBottom())
-        return rect.Top();
-    else
-        return rect.Bottom();
-}
-
-tools::Long ImpEditEngine::getRightDirectionAware(const tools::Rectangle& rect) const
-{
-    if (!IsVertical())
-        return rect.Right();
-
-    if (IsTopToBottom())
-        return rect.Bottom();
-    else
-        return rect.Top();
-}
-
-tools::Long ImpEditEngine::getTopDirectionAware(const tools::Rectangle& rect) const
-{
-    if (!IsVertical())
-        return rect.Top();
-
-    if (IsTopToBottom())
-        return rect.Right();
-    else
-        return rect.Left();
-}
-
-tools::Long ImpEditEngine::getBottomDirectionAware(const tools::Rectangle& rect) const
+tools::Long ImpEditEngine::getBottomDocOffset(const tools::Rectangle& rect) const
 {
     if (!IsVertical())
         return rect.Bottom();
 
     if (IsTopToBottom())
-        return rect.Left();
+        return -rect.Left();
     else
         return rect.Right();
+}
+
+Size ImpEditEngine::getTopLeftDocOffset(const tools::Rectangle& rect) const
+{
+    if (!IsVertical())
+        return { rect.Left(), rect.Top() };
+
+    if (IsTopToBottom())
+        return { rect.Top(), -rect.Right() };
+    else
+        return { -rect.Bottom(), rect.Left() };
 }
 
 // Returns the resulting shift for the point; allows to apply the same shift to other points
@@ -3099,12 +3061,11 @@ Point ImpEditEngine::MoveToNextLine(
     // Check if the resulting position has moved beyond the limits, and more columns left.
     // The limits are defined by a rectangle starting from aOrigin with width of aPaperSize
     // and height of nCurTextHeight
-    Size aActPaperSize(aPaperSize);
-    if (IsVertical())
-        aActPaperSize.setWidth(nCurTextHeight);
-    else
-        aActPaperSize.setHeight(nCurTextHeight);
-    tools::Long nNeeded = getYOverflowDirectionAware(rMovePos, { aOrigin, aActPaperSize });
+    Point aOtherCorner = aOrigin;
+    adjustXDirectionAware(aOtherCorner, getWidthDirectionAware(aPaperSize));
+    adjustYDirectionAware(aOtherCorner, nCurTextHeight);
+    tools::Long nNeeded
+        = getYOverflowDirectionAware(rMovePos, tools::Rectangle::Justify(aOrigin, aOtherCorner));
     if (pnHeightNeededToNotWrap)
         *pnHeightNeededToNotWrap = nNeeded;
     if (nNeeded && rColumn < mnColumns)
@@ -3115,7 +3076,7 @@ Point ImpEditEngine::MoveToNextLine(
         if (rColumn < mnColumns)
         {
             // Set Y position of the point to that of aOrigin
-            setYDirectionAware(rMovePos, getYDirectionAware(aOrigin));
+            setYDirectionAwareFrom(rMovePos, aOrigin);
             // Move the point by the requested distance in Y direction
             adjustYDirectionAware(rMovePos, nLineHeight);
             // Move the point by the column+spacing distance in X direction
@@ -3251,7 +3212,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
                         const TextPortion& rTextPortion = pPortion->GetTextPortions()[nPortion];
 
                         tools::Long nPortionXOffset = GetPortionXOffset( pPortion, pLine, nPortion );
-                        setXDirectionAware(aTmpPos, getXDirectionAware(aStartPos));
+                        setXDirectionAwareFrom(aTmpPos, aStartPos);
                         adjustXDirectionAware(aTmpPos, nPortionXOffset);
                         if (isXOverflowDirectionAware(aTmpPos, aClipRect))
                             break; // No further output in line necessary
@@ -3373,7 +3334,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
                                                     const Size aSlashSize = aTmpFont.QuickGetTextSize( pOutDev, aSlash, 0, 1 );
                                                     Point aSlashPos( aTmpPos );
                                                     const tools::Long nAddX = nHalfBlankWidth - aSlashSize.Width() / 2;
-                                                    setXDirectionAware(aSlashPos, getXDirectionAware(aTopLeftRectPos));
+                                                    setXDirectionAwareFrom(aSlashPos, aTopLeftRectPos);
                                                     adjustXDirectionAware(aSlashPos, nAddX);
 
                                                     aTmpFont.QuickDrawText( pOutDev, aSlashPos, aSlash, 0, 1 );
