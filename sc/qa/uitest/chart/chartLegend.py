@@ -94,7 +94,7 @@ class chartLegend(UITestCase):
 
       with guarded.execute_dialog_through_action(self, xLegends, "COMMAND", mkPropertyValues({"COMMAND": "TransformDialog"})) as xDialog:
         self.assertEqual("4.61", get_state_as_dict(xDialog.getChild("MTR_FLD_POS_X"))['Value'])
-        self.assertEqual("1.53", get_state_as_dict(xDialog.getChild("MTR_FLD_POS_Y"))['Value'])
+        self.assertEqual("1.54", get_state_as_dict(xDialog.getChild("MTR_FLD_POS_Y"))['Value'])
 
       xChartMain.executeAction("TYPE", mkPropertyValues({"KEYCODE": "UP"}))
       xChartMain.executeAction("TYPE", mkPropertyValues({"KEYCODE": "LEFT"}))
@@ -102,6 +102,6 @@ class chartLegend(UITestCase):
       # Check the position has changed after moving the label using the arrows keys
       with guarded.execute_dialog_through_action(self, xLegends, "COMMAND", mkPropertyValues({"COMMAND": "TransformDialog"})) as xDialog:
         self.assertEqual("4.51", get_state_as_dict(xDialog.getChild("MTR_FLD_POS_X"))['Value'])
-        self.assertEqual("1.43", get_state_as_dict(xDialog.getChild("MTR_FLD_POS_Y"))['Value'])
+        self.assertEqual("1.44", get_state_as_dict(xDialog.getChild("MTR_FLD_POS_Y"))['Value'])
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
