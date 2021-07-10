@@ -175,15 +175,15 @@
        <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
       </Transformation>
      </XShape>
-     <XShape positionX="8395" positionY="4386" sizeX="9178" sizeY="8066" type="com.sun.star.drawing.GroupShape">
+     <XShape positionX="8394" positionY="4386" sizeX="9180" sizeY="8065" type="com.sun.star.drawing.GroupShape">
       <XShapes>
-       <XShape positionX="8395" positionY="4386" sizeX="9178" sizeY="8066" type="com.sun.star.drawing.GroupShape">
+       <XShape positionX="8394" positionY="4386" sizeX="9180" sizeY="8065" type="com.sun.star.drawing.GroupShape">
         <XShapes>
-         <XShape positionX="8395" positionY="4386" sizeX="9178" sizeY="8066" type="com.sun.star.drawing.GroupShape" name="CID/D=0:CS=0:CT=0:Series=0:DataLabels=">
+         <XShape positionX="8394" positionY="4386" sizeX="9180" sizeY="8065" type="com.sun.star.drawing.GroupShape" name="CID/D=0:CS=0:CT=0:Series=0:DataLabels=">
           <XShapes>
-           <XShape positionX="16433" positionY="9300" sizeX="1140" sizeY="850" type="com.sun.star.drawing.GroupShape" name="CID/MultiClick/CID/D=0:CS=0:CT=0:Series=0:DataLabels=:DataLabel=0">
+           <XShape positionX="16434" positionY="9300" sizeX="1140" sizeY="849" type="com.sun.star.drawing.GroupShape" name="CID/MultiClick/CID/D=0:CS=0:CT=0:Series=0:DataLabels=:DataLabel=0">
             <XShapes>
-             <XShape positionX="16433" positionY="9300" sizeX="1140" sizeY="850" type="com.sun.star.drawing.TextShape" text="Yellow&#10;33%" fontHeight="12.000000" fontColor="595959" textAutoGrowHeight="true" textAutoGrowWidth="true" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="CENTER" textVerticalAdjust="CENTER" textLeftDistance="0" textRightDistance="0" textUpperDistance="0" textLowerDistance="0" textMaximumFrameHeight="0" textMaximumFrameWidth="3889" textMinimumFrameHeight="1" textMinimumFrameWidth="1" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="NONE" fillColor="ffffff" fillTransparence="0" fillTransparenceGradientName="">
+             <XShape positionX="16434" positionY="9300" sizeX="1140" sizeY="849" type="com.sun.star.drawing.TextShape" text="Yellow&#10;33%" fontHeight="12.000000" fontColor="595959" textAutoGrowHeight="true" textAutoGrowWidth="true" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="CENTER" textVerticalAdjust="CENTER" textLeftDistance="0" textRightDistance="0" textUpperDistance="0" textLowerDistance="0" textMaximumFrameHeight="0" textMaximumFrameWidth="3889" textMinimumFrameHeight="1" textMinimumFrameWidth="1" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="NONE" fillColor="ffffff" fillTransparence="0" fillTransparenceGradientName="">
               <FillTransparenceGradient style="LINEAR" startColor="000000" endColor="000000" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
               <FillGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
               <FillHatch style="SINGLE" color="3465a4" distance="20" angle="0"/>
@@ -192,21 +192,21 @@
               <LineStart/>
               <LineEnd/>
               <Transformation>
-               <Line1 column1="1141.000000" column2="0.000000" column3="16433.000000"/>
-               <Line2 column1="0.000000" column2="851.000000" column3="9300.000000"/>
+               <Line1 column1="1141.000000" column2="0.000000" column3="16434.000000"/>
+               <Line2 column1="0.000000" column2="850.000000" column3="9300.000000"/>
                <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
               </Transformation>
              </XShape>
             </XShapes>
             <Transformation>
-             <Line1 column1="1141.000000" column2="0.000000" column3="16433.000000"/>
-             <Line2 column1="0.000000" column2="851.000000" column3="9300.000000"/>
+             <Line1 column1="1141.000000" column2="0.000000" column3="16434.000000"/>
+             <Line2 column1="0.000000" column2="850.000000" column3="9300.000000"/>
              <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
             </Transformation>
            </XShape>
-           <XShape positionX="10198" positionY="11602" sizeX="928" sizeY="850" type="com.sun.star.drawing.GroupShape" name="CID/MultiClick/CID/D=0:CS=0:CT=0:Series=0:DataLabels=:DataLabel=1">
+           <XShape positionX="10197" positionY="11602" sizeX="928" sizeY="849" type="com.sun.star.drawing.GroupShape" name="CID/MultiClick/CID/D=0:CS=0:CT=0:Series=0:DataLabels=:DataLabel=1">
             <XShapes>
-             <XShape positionX="10198" positionY="11602" sizeX="928" sizeY="850" type="com.sun.star.drawing.TextShape" text="Black&#10;28%" fontHeight="12.000000" fontColor="595959" textAutoGrowHeight="true" textAutoGrowWidth="true" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="CENTER" textVerticalAdjust="CENTER" textLeftDistance="0" textRightDistance="0" textUpperDistance="0" textLowerDistance="0" textMaximumFrameHeight="0" textMaximumFrameWidth="3889" textMinimumFrameHeight="1" textMinimumFrameWidth="1" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="NONE" fillColor="ffffff" fillTransparence="0" fillTransparenceGradientName="">
+             <XShape positionX="10197" positionY="11602" sizeX="928" sizeY="849" type="com.sun.star.drawing.TextShape" text="Black&#10;28%" fontHeight="12.000000" fontColor="595959" textAutoGrowHeight="true" textAutoGrowWidth="true" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="CENTER" textVerticalAdjust="CENTER" textLeftDistance="0" textRightDistance="0" textUpperDistance="0" textLowerDistance="0" textMaximumFrameHeight="0" textMaximumFrameWidth="3889" textMinimumFrameHeight="1" textMinimumFrameWidth="1" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="NONE" fillColor="ffffff" fillTransparence="0" fillTransparenceGradientName="">
               <FillTransparenceGradient style="LINEAR" startColor="000000" endColor="000000" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
               <FillGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
               <FillHatch style="SINGLE" color="3465a4" distance="20" angle="0"/>
@@ -215,21 +215,21 @@
               <LineStart/>
               <LineEnd/>
               <Transformation>
-               <Line1 column1="929.000000" column2="0.000000" column3="10198.000000"/>
-               <Line2 column1="0.000000" column2="851.000000" column3="11602.000000"/>
+               <Line1 column1="929.000000" column2="0.000000" column3="10197.000000"/>
+               <Line2 column1="0.000000" column2="850.000000" column3="11602.000000"/>
                <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
               </Transformation>
              </XShape>
             </XShapes>
             <Transformation>
-             <Line1 column1="929.000000" column2="0.000000" column3="10198.000000"/>
-             <Line2 column1="0.000000" column2="851.000000" column3="11602.000000"/>
+             <Line1 column1="929.000000" column2="0.000000" column3="10197.000000"/>
+             <Line2 column1="0.000000" column2="850.000000" column3="11602.000000"/>
              <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
             </Transformation>
            </XShape>
-           <XShape positionX="8395" positionY="7893" sizeX="1060" sizeY="850" type="com.sun.star.drawing.GroupShape" name="CID/MultiClick/CID/D=0:CS=0:CT=0:Series=0:DataLabels=:DataLabel=2">
+           <XShape positionX="8394" positionY="7893" sizeX="1060" sizeY="849" type="com.sun.star.drawing.GroupShape" name="CID/MultiClick/CID/D=0:CS=0:CT=0:Series=0:DataLabels=:DataLabel=2">
             <XShapes>
-             <XShape positionX="8395" positionY="7893" sizeX="1060" sizeY="850" type="com.sun.star.drawing.TextShape" text="Green&#10;6%" fontHeight="12.000000" fontColor="595959" textAutoGrowHeight="true" textAutoGrowWidth="true" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="CENTER" textVerticalAdjust="CENTER" textLeftDistance="0" textRightDistance="0" textUpperDistance="0" textLowerDistance="0" textMaximumFrameHeight="0" textMaximumFrameWidth="3889" textMinimumFrameHeight="1" textMinimumFrameWidth="1" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="NONE" fillColor="ffffff" fillTransparence="0" fillTransparenceGradientName="">
+             <XShape positionX="8394" positionY="7893" sizeX="1060" sizeY="849" type="com.sun.star.drawing.TextShape" text="Green&#10;6%" fontHeight="12.000000" fontColor="595959" textAutoGrowHeight="true" textAutoGrowWidth="true" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="CENTER" textVerticalAdjust="CENTER" textLeftDistance="0" textRightDistance="0" textUpperDistance="0" textLowerDistance="0" textMaximumFrameHeight="0" textMaximumFrameWidth="3889" textMinimumFrameHeight="1" textMinimumFrameWidth="1" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="NONE" fillColor="ffffff" fillTransparence="0" fillTransparenceGradientName="">
               <FillTransparenceGradient style="LINEAR" startColor="000000" endColor="000000" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
               <FillGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
               <FillHatch style="SINGLE" color="3465a4" distance="20" angle="0"/>
@@ -238,21 +238,21 @@
               <LineStart/>
               <LineEnd/>
               <Transformation>
-               <Line1 column1="1061.000000" column2="0.000000" column3="8395.000000"/>
-               <Line2 column1="0.000000" column2="851.000000" column3="7893.000000"/>
+               <Line1 column1="1061.000000" column2="0.000000" column3="8394.000000"/>
+               <Line2 column1="0.000000" column2="850.000000" column3="7893.000000"/>
                <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
               </Transformation>
              </XShape>
             </XShapes>
             <Transformation>
-             <Line1 column1="1061.000000" column2="0.000000" column3="8395.000000"/>
-             <Line2 column1="0.000000" column2="851.000000" column3="7893.000000"/>
+             <Line1 column1="1061.000000" column2="0.000000" column3="8394.000000"/>
+             <Line2 column1="0.000000" column2="850.000000" column3="7893.000000"/>
              <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
             </Transformation>
            </XShape>
-           <XShape positionX="10043" positionY="5033" sizeX="716" sizeY="850" type="com.sun.star.drawing.GroupShape" name="CID/MultiClick/CID/D=0:CS=0:CT=0:Series=0:DataLabels=:DataLabel=3">
+           <XShape positionX="10043" positionY="5033" sizeX="716" sizeY="849" type="com.sun.star.drawing.GroupShape" name="CID/MultiClick/CID/D=0:CS=0:CT=0:Series=0:DataLabels=:DataLabel=3">
             <XShapes>
-             <XShape positionX="10043" positionY="5033" sizeX="716" sizeY="850" type="com.sun.star.drawing.TextShape" text="Red&#10;19%" fontHeight="12.000000" fontColor="595959" textAutoGrowHeight="true" textAutoGrowWidth="true" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="CENTER" textVerticalAdjust="CENTER" textLeftDistance="0" textRightDistance="0" textUpperDistance="0" textLowerDistance="0" textMaximumFrameHeight="0" textMaximumFrameWidth="3889" textMinimumFrameHeight="1" textMinimumFrameWidth="1" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="NONE" fillColor="ffffff" fillTransparence="0" fillTransparenceGradientName="">
+             <XShape positionX="10043" positionY="5033" sizeX="716" sizeY="849" type="com.sun.star.drawing.TextShape" text="Red&#10;19%" fontHeight="12.000000" fontColor="595959" textAutoGrowHeight="true" textAutoGrowWidth="true" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="CENTER" textVerticalAdjust="CENTER" textLeftDistance="0" textRightDistance="0" textUpperDistance="0" textLowerDistance="0" textMaximumFrameHeight="0" textMaximumFrameWidth="3889" textMinimumFrameHeight="1" textMinimumFrameWidth="1" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="NONE" fillColor="ffffff" fillTransparence="0" fillTransparenceGradientName="">
               <FillTransparenceGradient style="LINEAR" startColor="000000" endColor="000000" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
               <FillGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
               <FillHatch style="SINGLE" color="3465a4" distance="20" angle="0"/>
@@ -262,20 +262,20 @@
               <LineEnd/>
               <Transformation>
                <Line1 column1="717.000000" column2="0.000000" column3="10043.000000"/>
-               <Line2 column1="0.000000" column2="851.000000" column3="5033.000000"/>
+               <Line2 column1="0.000000" column2="850.000000" column3="5033.000000"/>
                <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
               </Transformation>
              </XShape>
             </XShapes>
             <Transformation>
              <Line1 column1="717.000000" column2="0.000000" column3="10043.000000"/>
-             <Line2 column1="0.000000" column2="851.000000" column3="5033.000000"/>
+             <Line2 column1="0.000000" column2="850.000000" column3="5033.000000"/>
              <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
             </Transformation>
            </XShape>
-           <XShape positionX="14034" positionY="4386" sizeX="1034" sizeY="850" type="com.sun.star.drawing.GroupShape" name="CID/MultiClick/CID/D=0:CS=0:CT=0:Series=0:DataLabels=:DataLabel=4">
+           <XShape positionX="14035" positionY="4386" sizeX="1034" sizeY="849" type="com.sun.star.drawing.GroupShape" name="CID/MultiClick/CID/D=0:CS=0:CT=0:Series=0:DataLabels=:DataLabel=4">
             <XShapes>
-             <XShape positionX="14034" positionY="4386" sizeX="1034" sizeY="850" type="com.sun.star.drawing.TextShape" text="White&#10;14%" fontHeight="12.000000" fontColor="595959" textAutoGrowHeight="true" textAutoGrowWidth="true" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="CENTER" textVerticalAdjust="CENTER" textLeftDistance="0" textRightDistance="0" textUpperDistance="0" textLowerDistance="0" textMaximumFrameHeight="0" textMaximumFrameWidth="3889" textMinimumFrameHeight="1" textMinimumFrameWidth="1" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="NONE" fillColor="ffffff" fillTransparence="0" fillTransparenceGradientName="">
+             <XShape positionX="14035" positionY="4386" sizeX="1034" sizeY="849" type="com.sun.star.drawing.TextShape" text="White&#10;14%" fontHeight="12.000000" fontColor="595959" textAutoGrowHeight="true" textAutoGrowWidth="true" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="CENTER" textVerticalAdjust="CENTER" textLeftDistance="0" textRightDistance="0" textUpperDistance="0" textLowerDistance="0" textMaximumFrameHeight="0" textMaximumFrameWidth="3889" textMinimumFrameHeight="1" textMinimumFrameWidth="1" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="NONE" fillColor="ffffff" fillTransparence="0" fillTransparenceGradientName="">
               <FillTransparenceGradient style="LINEAR" startColor="000000" endColor="000000" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
               <FillGradient style="LINEAR" startColor="000000" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
               <FillHatch style="SINGLE" color="3465a4" distance="20" angle="0"/>
@@ -284,36 +284,36 @@
               <LineStart/>
               <LineEnd/>
               <Transformation>
-               <Line1 column1="1035.000000" column2="0.000000" column3="14034.000000"/>
-               <Line2 column1="0.000000" column2="851.000000" column3="4386.000000"/>
+               <Line1 column1="1035.000000" column2="0.000000" column3="14035.000000"/>
+               <Line2 column1="0.000000" column2="850.000000" column3="4386.000000"/>
                <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
               </Transformation>
              </XShape>
             </XShapes>
             <Transformation>
-             <Line1 column1="1035.000000" column2="0.000000" column3="14034.000000"/>
-             <Line2 column1="0.000000" column2="851.000000" column3="4386.000000"/>
+             <Line1 column1="1035.000000" column2="0.000000" column3="14035.000000"/>
+             <Line2 column1="0.000000" column2="850.000000" column3="4386.000000"/>
              <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
             </Transformation>
            </XShape>
           </XShapes>
           <Transformation>
-           <Line1 column1="9179.000000" column2="0.000000" column3="8395.000000"/>
-           <Line2 column1="0.000000" column2="8067.000000" column3="4386.000000"/>
+           <Line1 column1="9181.000000" column2="0.000000" column3="8394.000000"/>
+           <Line2 column1="0.000000" column2="8066.000000" column3="4386.000000"/>
            <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
           </Transformation>
          </XShape>
         </XShapes>
         <Transformation>
-         <Line1 column1="9179.000000" column2="0.000000" column3="8395.000000"/>
-         <Line2 column1="0.000000" column2="8067.000000" column3="4386.000000"/>
+         <Line1 column1="9181.000000" column2="0.000000" column3="8394.000000"/>
+         <Line2 column1="0.000000" column2="8066.000000" column3="4386.000000"/>
          <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
         </Transformation>
        </XShape>
       </XShapes>
       <Transformation>
-       <Line1 column1="9179.000000" column2="0.000000" column3="8395.000000"/>
-       <Line2 column1="0.000000" column2="8067.000000" column3="4386.000000"/>
+       <Line1 column1="9181.000000" column2="0.000000" column3="8394.000000"/>
+       <Line2 column1="0.000000" column2="8066.000000" column3="4386.000000"/>
        <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
       </Transformation>
      </XShape>
