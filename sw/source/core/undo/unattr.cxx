@@ -649,7 +649,7 @@ void SwUndoResetAttr::SetAttrs( const o3tl::sorted_vector<sal_uInt16> &rAttrs )
 SwUndoAttr::SwUndoAttr( const SwPaM& rRange, const SfxPoolItem& rAttr,
                         const SetAttrMode nFlags )
     : SwUndo( SwUndoId::INSATTR, &rRange.GetDoc() ), SwUndRng( rRange )
-    , m_AttrSet( rRange.GetDoc().GetAttrPool(), {{rAttr.Which(), rAttr.Which()}} )
+    , m_AttrSet( rRange.GetDoc().GetAttrPool(), rAttr.Which(), rAttr.Which() )
     , m_pHistory( new SwHistory )
     , m_nNodeIndex( ULONG_MAX )
     , m_nInsertFlags( nFlags )
@@ -735,8 +735,8 @@ void SwUndoAttr::UndoImpl(::sw::UndoRedoContext & rContext)
     }
 
     const bool bToLast =  (1 == m_AttrSet.Count())
-                          && (RES_TXTATR_FIELD <= *m_AttrSet.GetRanges())
-                          && (*m_AttrSet.GetRanges() <= RES_TXTATR_ANNOTATION);
+                          && (RES_TXTATR_FIELD <= m_AttrSet.GetRanges()[0].first)
+                          && (m_AttrSet.GetRanges()[0].first <= RES_TXTATR_ANNOTATION);
 
     // restore old values
     m_pHistory->TmpRollback( pDoc, 0, !bToLast );

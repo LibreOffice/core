@@ -26,13 +26,13 @@
 // footnote settings TabPage
 class SwFootNotePage final : public SfxTabPage
 {
-    static const sal_uInt16 aPageRg[];
+    static const WhichRangesContainer aPageRg;
 public:
     SwFootNotePage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet &rSet);
     static std::unique_ptr<SfxTabPage> Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet *rSet);
     virtual ~SwFootNotePage() override;
 
-    static const sal_uInt16* GetRanges() { return aPageRg; }
+    static WhichRangesContainer GetRanges() { return aPageRg; }
 
     virtual bool FillItemSet(SfxItemSet *rSet) override;
     virtual void Reset(const SfxItemSet *rSet) override;

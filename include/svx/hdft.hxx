@@ -50,7 +50,7 @@ public:
     void            EnableDynamicSpacing();
 
 protected:
-    static const sal_uInt16 pRanges[];
+    static const WhichRangesContainer pRanges;
 
     virtual void    ActivatePage( const SfxItemSet& rSet ) override;
     virtual DeactivateRC   DeactivatePage( SfxItemSet* pSet ) override;
@@ -97,7 +97,7 @@ class SVX_DLLPUBLIC SvxHeaderPage final : public SvxHFPage
 public:
     static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet );
     // returns the Which values to the range
-    static const sal_uInt16*  GetRanges() { return pRanges; }
+    static WhichRangesContainer GetRanges() { return pRanges; }
     SVX_DLLPRIVATE SvxHeaderPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
 };
 
@@ -105,7 +105,7 @@ class SVX_DLLPUBLIC SvxFooterPage final : public SvxHFPage
 {
 public:
     static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet );
-    static const sal_uInt16*  GetRanges() { return pRanges; }
+    static WhichRangesContainer GetRanges() { return pRanges; }
     SVX_DLLPRIVATE SvxFooterPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
 };
 

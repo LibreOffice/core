@@ -40,7 +40,7 @@ class SvxLineSpacingItem;
 
 class SvxStdParagraphTabPage: public SfxTabPage
 {
-    static const sal_uInt16 pStdRanges[];
+    static const WhichRangesContainer pStdRanges;
 
 private:
     tools::Long                    nWidth;
@@ -102,7 +102,7 @@ public:
 
     DECL_LINK(ELRLoseFocusHdl, weld::MetricSpinButton&, void);
 
-    static const sal_uInt16* GetRanges() { return pStdRanges; }
+    static WhichRangesContainer GetRanges() { return pStdRanges; }
 
     virtual bool            FillItemSet( SfxItemSet* rSet ) override;
     virtual void            Reset( const SfxItemSet* rSet ) override;
@@ -121,7 +121,7 @@ public:
 
 class SvxParaAlignTabPage : public SfxTabPage
 {
-    static const sal_uInt16 pAlignRanges[];
+    static const WhichRangesContainer pAlignRanges;
 
     SvxParaPrevWindow m_aExampleWin;
 
@@ -163,7 +163,7 @@ public:
     static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet );
     virtual ~SvxParaAlignTabPage() override;
 
-    static const sal_uInt16* GetRanges() { return pAlignRanges; }
+    static WhichRangesContainer GetRanges() { return pAlignRanges; }
 
     virtual bool            FillItemSet( SfxItemSet* rSet ) override;
     virtual void            Reset( const SfxItemSet* rSet ) override;
@@ -189,7 +189,7 @@ public:
 
 class SvxExtParagraphTabPage: public SfxTabPage
 {
-    static const sal_uInt16 pExtRanges[];
+    static const WhichRangesContainer pExtRanges;
 
 public:
     SvxExtParagraphTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
@@ -197,7 +197,7 @@ public:
                                 const SfxItemSet* rSet );
     virtual ~SvxExtParagraphTabPage() override;
 
-    static const sal_uInt16* GetRanges() { return pExtRanges; }
+    static WhichRangesContainer GetRanges() { return pExtRanges; }
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;
@@ -289,7 +289,7 @@ public:
     static std::unique_ptr<SfxTabPage> Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet);
     virtual ~SvxAsianTabPage() override;
 
-    static const sal_uInt16*      GetRanges();
+    static WhichRangesContainer GetRanges();
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;
