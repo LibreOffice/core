@@ -69,15 +69,13 @@ using ::com::sun::star::uno::UNO_QUERY;
 
 // static ----------------------------------------------------------------
 
-const sal_uInt16 SvxBorderTabPage::pRanges[] =
-{
-    SID_ATTR_BORDER_INNER,      SID_ATTR_BORDER_SHADOW,
-    SID_ATTR_ALIGN_MARGIN,      SID_ATTR_ALIGN_MARGIN,
-    SID_ATTR_BORDER_CONNECT,    SID_ATTR_BORDER_CONNECT,
-    SID_SW_COLLAPSING_BORDERS,  SID_SW_COLLAPSING_BORDERS,
-    SID_ATTR_BORDER_DIAG_TLBR,  SID_ATTR_BORDER_DIAG_BLTR,
-    0
-};
+const WhichRangesContainer SvxBorderTabPage::pRanges(
+    svl::Items<
+        SID_ATTR_BORDER_INNER,      SID_ATTR_BORDER_SHADOW,
+        SID_ATTR_ALIGN_MARGIN,      SID_ATTR_ALIGN_MARGIN,
+        SID_ATTR_BORDER_CONNECT,    SID_ATTR_BORDER_CONNECT,
+        SID_SW_COLLAPSING_BORDERS,  SID_SW_COLLAPSING_BORDERS,
+        SID_ATTR_BORDER_DIAG_TLBR,  SID_ATTR_BORDER_DIAG_BLTR>::value);
 
 static void lcl_SetDecimalDigitsTo1(weld::MetricSpinButton& rField)
 {

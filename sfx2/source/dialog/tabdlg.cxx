@@ -421,14 +421,12 @@ IMPL_LINK_NOARG(SfxTabDialogController, ResetHdl, weld::Button&, void)
         m_xExampleSet.reset(new SfxItemSet(*m_pSet));
 
     const SfxItemPool* pPool = m_pSet->GetPool();
-    const sal_uInt16* pTmpRanges = (pDataObject->fnGetRanges)();
+    const WhichRangesContainer& pTmpRanges = (pDataObject->fnGetRanges)();
 
-    while (*pTmpRanges)
+    for (const auto & rPair : pTmpRanges)
     {
-        const sal_uInt16* pU = pTmpRanges + 1;
-
         // Correct Range with multiple values
-        sal_uInt16 nTmp = *pTmpRanges, nTmpEnd = *pU;
+        sal_uInt16 nTmp = rPair.first, nTmpEnd = rPair.second;
         DBG_ASSERT(nTmp <= nTmpEnd, "Range is sorted the wrong way");
 
         if (nTmp > nTmpEnd)
@@ -454,8 +452,6 @@ IMPL_LINK_NOARG(SfxTabDialogController, ResetHdl, weld::Button&, void)
             }
             nTmp++;
         }
-        // Go to the next pair
-        pTmpRanges += 2;
     }
 }
 
@@ -479,15 +475,13 @@ IMPL_LINK_NOARG(SfxTabDialogController, BaseFmtHdl, weld::Button&, void)
         m_xExampleSet.reset(new SfxItemSet(*m_pSet));
 
     const SfxItemPool* pPool = m_pSet->GetPool();
-    const sal_uInt16* pTmpRanges = (pDataObject->fnGetRanges)();
+    const WhichRangesContainer& pTmpRanges = (pDataObject->fnGetRanges)();
     SfxItemSet aTmpSet(*m_xExampleSet);
 
-    while (*pTmpRanges)
+    for (const auto& rPair : pTmpRanges)
     {
-        const sal_uInt16* pU = pTmpRanges + 1;
-
         // Correct Range with multiple values
-        sal_uInt16 nTmp = *pTmpRanges, nTmpEnd = *pU;
+        sal_uInt16 nTmp = rPair.first, nTmpEnd = rPair.second;
         DBG_ASSERT( nTmp <= nTmpEnd, "Range is sorted the wrong way" );
 
         if ( nTmp > nTmpEnd )
@@ -507,8 +501,6 @@ IMPL_LINK_NOARG(SfxTabDialogController, BaseFmtHdl, weld::Button&, void)
             m_pOutSet->InvalidateItem(nWh);
             nTmp++;
         }
-        // Go to the next pair
-        pTmpRanges += 2;
     }
     // Set all Items as new  -> the call the current Page Reset()
     assert(pDataObject->xTabPage && "the Page is gone");
@@ -659,7 +651,7 @@ bool SfxTabDialogController::PrepareLeaveCurrentPage()
     return bEnd;
 }
 
-const sal_uInt16* SfxTabDialogController::GetInputRanges(const SfxItemPool& rPool)
+const WhichRangesContainer & SfxTabDialogController::GetInputRanges(const SfxItemPool& rPool)
 
 /*  [Description]
 
@@ -686,8 +678,8 @@ const sal_uInt16* SfxTabDialogController::GetInputRanges(const SfxItemPool& rPoo
         return m_pSet->GetRanges();
     }
 
-    if ( m_pRanges )
-        return m_pRanges.get();
+    if ( !m_pRanges.empty() )
+        return m_pRanges;
     SfxItemSet aUS(const_cast<SfxItemPool&>(rPool));
 
     for (auto const& elem : m_pImpl->aData)
@@ -695,26 +687,19 @@ const sal_uInt16* SfxTabDialogController::GetInputRanges(const SfxItemPool& rPoo
 
         if ( elem->fnGetRanges )
         {
-            const sal_uInt16* pTmpRanges = (elem->fnGetRanges)();
+            const WhichRangesContainer& pTmpRanges = (elem->fnGetRanges)();
 
-            for (const sal_uInt16* pIter = pTmpRanges; *pIter;)
+            for (const auto & rPair : pTmpRanges)
             {
-                sal_uInt16 nWidFrom = rPool.GetWhich(*pIter++);
-                assert(*pIter);
-                sal_uInt16 nWidTo = rPool.GetWhich(*pIter++);
+                sal_uInt16 nWidFrom = rPool.GetWhich(rPair.first);
+                sal_uInt16 nWidTo = rPool.GetWhich(rPair.second);
                 aUS.MergeRange(nWidFrom, nWidTo); // Keep it valid
             }
         }
     }
 
-    int nSize = 0;
-    for (const sal_uInt16* pIter = aUS.GetRanges(); pIter && *pIter; pIter++)
-        ++nSize;
-
-    m_pRanges.reset(new sal_uInt16[nSize + 1]);
-    std::copy(aUS.GetRanges(), aUS.GetRanges() + nSize, m_pRanges.get());
-    m_pRanges[nSize] = 0;
-    return m_pRanges.get();
+    m_pRanges = aUS.GetRanges();
+    return m_pRanges;
 }
 
 SfxTabDialogController::~SfxTabDialogController()

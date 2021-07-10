@@ -16,6 +16,7 @@
 
 #include <sal/types.h>
 #include <svx/svdetc.hxx>
+#include <svl/itemset.hxx>
 
 namespace
 {
@@ -28,98 +29,88 @@ class TestRemoveWhichRange : public CppUnit::TestFixture
     void testRemoveWhichRange()
     {
         {
-            sal_uInt16 const in[] = { 0 };
+            WhichRangesContainer in;
             auto const out = RemoveWhichRange(in, 10, 20);
-            CPPUNIT_ASSERT_EQUAL(sal_uInt16(0), out[0]);
+            CPPUNIT_ASSERT(out.empty());
         }
         {
-            sal_uInt16 const in[] = { 10, 20, 30, 40, 0 };
+            WhichRangesContainer in(svl::Items<10, 20, 30, 40>::value);
             auto const out = RemoveWhichRange(in, 0, 20);
-            CPPUNIT_ASSERT_EQUAL(sal_uInt16(30), out[0]);
-            CPPUNIT_ASSERT_EQUAL(sal_uInt16(40), out[1]);
-            CPPUNIT_ASSERT_EQUAL(sal_uInt16(0), out[2]);
+            CPPUNIT_ASSERT_EQUAL(sal_uInt16(30), out[0].first);
+            CPPUNIT_ASSERT_EQUAL(sal_uInt16(40), out[0].second);
         }
         {
-            sal_uInt16 const in[] = { 10, 20, 30, 40, 0 };
+            WhichRangesContainer in(svl::Items<10, 20, 30, 40>::value);
             auto const out = RemoveWhichRange(in, 10, 20);
-            CPPUNIT_ASSERT_EQUAL(sal_uInt16(30), out[0]);
-            CPPUNIT_ASSERT_EQUAL(sal_uInt16(40), out[1]);
-            CPPUNIT_ASSERT_EQUAL(sal_uInt16(0), out[2]);
+            CPPUNIT_ASSERT_EQUAL(sal_uInt16(30), out[0].first);
+            CPPUNIT_ASSERT_EQUAL(sal_uInt16(40), out[0].second);
         }
         {
-            sal_uInt16 const in[] = { 10, 20, 30, 40, 0 };
+            WhichRangesContainer in(svl::Items<10, 20, 30, 40>::value);
             auto const out = RemoveWhichRange(in, 15, 20);
-            CPPUNIT_ASSERT_EQUAL(sal_uInt16(10), out[0]);
-            CPPUNIT_ASSERT_EQUAL(sal_uInt16(14), out[1]);
-            CPPUNIT_ASSERT_EQUAL(sal_uInt16(30), out[2]);
-            CPPUNIT_ASSERT_EQUAL(sal_uInt16(40), out[3]);
-            CPPUNIT_ASSERT_EQUAL(sal_uInt16(0), out[4]);
+            CPPUNIT_ASSERT_EQUAL(sal_uInt16(10), out[0].first);
+            CPPUNIT_ASSERT_EQUAL(sal_uInt16(14), out[0].second);
+            CPPUNIT_ASSERT_EQUAL(sal_uInt16(30), out[1].first);
+            CPPUNIT_ASSERT_EQUAL(sal_uInt16(40), out[1].second);
         }
         {
-            sal_uInt16 const in[] = { 10, 20, 30, 40, 0 };
+            WhichRangesContainer in(svl::Items<10, 20, 30, 40>::value);
             auto const out = RemoveWhichRange(in, 30, 40);
-            CPPUNIT_ASSERT_EQUAL(sal_uInt16(10), out[0]);
-            CPPUNIT_ASSERT_EQUAL(sal_uInt16(20), out[1]);
-            CPPUNIT_ASSERT_EQUAL(sal_uInt16(0), out[2]);
+            CPPUNIT_ASSERT_EQUAL(sal_uInt16(10), out[0].first);
+            CPPUNIT_ASSERT_EQUAL(sal_uInt16(20), out[0].second);
         }
         {
-            sal_uInt16 const in[] = { 10, 20, 30, 40, 0 };
+            WhichRangesContainer in(svl::Items<10, 20, 30, 40>::value);
             auto const out = RemoveWhichRange(in, 30, 50);
-            CPPUNIT_ASSERT_EQUAL(sal_uInt16(10), out[0]);
-            CPPUNIT_ASSERT_EQUAL(sal_uInt16(20), out[1]);
-            CPPUNIT_ASSERT_EQUAL(sal_uInt16(0), out[2]);
+            CPPUNIT_ASSERT_EQUAL(sal_uInt16(10), out[0].first);
+            CPPUNIT_ASSERT_EQUAL(sal_uInt16(20), out[0].second);
         }
         {
-            sal_uInt16 const in[] = { 10, 20, 30, 40, 0 };
+            WhichRangesContainer in(svl::Items<10, 20, 30, 40>::value);
             auto const out = RemoveWhichRange(in, 30, 35);
-            CPPUNIT_ASSERT_EQUAL(sal_uInt16(10), out[0]);
-            CPPUNIT_ASSERT_EQUAL(sal_uInt16(20), out[1]);
-            CPPUNIT_ASSERT_EQUAL(sal_uInt16(36), out[2]);
-            CPPUNIT_ASSERT_EQUAL(sal_uInt16(40), out[3]);
-            CPPUNIT_ASSERT_EQUAL(sal_uInt16(0), out[4]);
+            CPPUNIT_ASSERT_EQUAL(sal_uInt16(10), out[0].first);
+            CPPUNIT_ASSERT_EQUAL(sal_uInt16(20), out[0].second);
+            CPPUNIT_ASSERT_EQUAL(sal_uInt16(36), out[1].first);
+            CPPUNIT_ASSERT_EQUAL(sal_uInt16(40), out[1].second);
         }
         {
-            sal_uInt16 const in[] = { 10, 20, 30, 40, 0 };
+            WhichRangesContainer in(svl::Items<10, 20, 30, 40>::value);
             auto const out = RemoveWhichRange(in, 15, 35);
-            CPPUNIT_ASSERT_EQUAL(sal_uInt16(10), out[0]);
-            CPPUNIT_ASSERT_EQUAL(sal_uInt16(14), out[1]);
-            CPPUNIT_ASSERT_EQUAL(sal_uInt16(36), out[2]);
-            CPPUNIT_ASSERT_EQUAL(sal_uInt16(40), out[3]);
-            CPPUNIT_ASSERT_EQUAL(sal_uInt16(0), out[4]);
+            CPPUNIT_ASSERT_EQUAL(sal_uInt16(10), out[0].first);
+            CPPUNIT_ASSERT_EQUAL(sal_uInt16(14), out[0].second);
+            CPPUNIT_ASSERT_EQUAL(sal_uInt16(36), out[1].first);
+            CPPUNIT_ASSERT_EQUAL(sal_uInt16(40), out[1].second);
         }
         {
-            sal_uInt16 const in[] = { 10, 20, 30, 40, 0 };
+            WhichRangesContainer in(svl::Items<10, 20, 30, 40>::value);
             auto const out = RemoveWhichRange(in, 12, 15);
-            CPPUNIT_ASSERT_EQUAL(sal_uInt16(10), out[0]);
-            CPPUNIT_ASSERT_EQUAL(sal_uInt16(11), out[1]);
-            CPPUNIT_ASSERT_EQUAL(sal_uInt16(16), out[2]);
-            CPPUNIT_ASSERT_EQUAL(sal_uInt16(20), out[3]);
-            CPPUNIT_ASSERT_EQUAL(sal_uInt16(30), out[4]);
-            CPPUNIT_ASSERT_EQUAL(sal_uInt16(40), out[5]);
-            CPPUNIT_ASSERT_EQUAL(sal_uInt16(0), out[6]);
+            CPPUNIT_ASSERT_EQUAL(sal_uInt16(10), out[0].first);
+            CPPUNIT_ASSERT_EQUAL(sal_uInt16(11), out[0].second);
+            CPPUNIT_ASSERT_EQUAL(sal_uInt16(16), out[1].first);
+            CPPUNIT_ASSERT_EQUAL(sal_uInt16(20), out[1].second);
+            CPPUNIT_ASSERT_EQUAL(sal_uInt16(30), out[2].first);
+            CPPUNIT_ASSERT_EQUAL(sal_uInt16(40), out[2].second);
         }
         {
-            sal_uInt16 const in[] = { 10, 20, 30, 40, 0 };
+            WhichRangesContainer in(svl::Items<10, 20, 30, 40>::value);
             auto const out = RemoveWhichRange(in, 0, 100);
-            CPPUNIT_ASSERT_EQUAL(sal_uInt16(0), out[0]);
+            CPPUNIT_ASSERT(out.empty());
         }
         {
-            sal_uInt16 const in[] = { 10, 20, 40, 50, 0 };
+            WhichRangesContainer in(svl::Items<10, 20, 40, 50>::value);
             auto const out = RemoveWhichRange(in, 25, 35);
-            CPPUNIT_ASSERT_EQUAL(sal_uInt16(10), out[0]);
-            CPPUNIT_ASSERT_EQUAL(sal_uInt16(20), out[1]);
-            CPPUNIT_ASSERT_EQUAL(sal_uInt16(40), out[2]);
-            CPPUNIT_ASSERT_EQUAL(sal_uInt16(50), out[3]);
-            CPPUNIT_ASSERT_EQUAL(sal_uInt16(0), out[4]);
+            CPPUNIT_ASSERT_EQUAL(sal_uInt16(10), out[0].first);
+            CPPUNIT_ASSERT_EQUAL(sal_uInt16(20), out[0].second);
+            CPPUNIT_ASSERT_EQUAL(sal_uInt16(40), out[1].first);
+            CPPUNIT_ASSERT_EQUAL(sal_uInt16(50), out[1].second);
         }
         {
-            sal_uInt16 const in[] = { 10, 20, 40, 50, 0 };
+            WhichRangesContainer in(svl::Items<10, 20, 40, 50>::value);
             auto const out = RemoveWhichRange(in, 50, 100);
-            CPPUNIT_ASSERT_EQUAL(sal_uInt16(10), out[0]);
-            CPPUNIT_ASSERT_EQUAL(sal_uInt16(20), out[1]);
-            CPPUNIT_ASSERT_EQUAL(sal_uInt16(40), out[2]);
-            CPPUNIT_ASSERT_EQUAL(sal_uInt16(49), out[3]);
-            CPPUNIT_ASSERT_EQUAL(sal_uInt16(0), out[4]);
+            CPPUNIT_ASSERT_EQUAL(sal_uInt16(10), out[0].first);
+            CPPUNIT_ASSERT_EQUAL(sal_uInt16(20), out[0].second);
+            CPPUNIT_ASSERT_EQUAL(sal_uInt16(40), out[1].first);
+            CPPUNIT_ASSERT_EQUAL(sal_uInt16(49), out[1].second);
         }
     }
 };

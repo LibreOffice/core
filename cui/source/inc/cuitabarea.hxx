@@ -126,7 +126,7 @@ public:
 
 class SvxTransparenceTabPage : public SfxTabPage
 {
-    static const sal_uInt16 pTransparenceRanges[];
+    static const WhichRangesContainer pTransparenceRanges;
 
     const SfxItemSet&   rOutAttrs;
 
@@ -188,7 +188,7 @@ public:
     virtual ~SvxTransparenceTabPage() override;
 
     static std::unique_ptr<SfxTabPage> Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet*);
-    static const sal_uInt16* GetRanges() { return pTransparenceRanges; }
+    static WhichRangesContainer GetRanges() { return pTransparenceRanges; }
 
     virtual bool FillItemSet(SfxItemSet*) override;
     virtual void Reset(const SfxItemSet*) override;
@@ -205,7 +205,7 @@ public:
 
 class SvxAreaTabPage : public SfxTabPage
 {
-    static const sal_uInt16 pAreaRanges[];
+    static const WhichRangesContainer pAreaRanges;
 private:
     std::unique_ptr<SfxTabPage> m_xFillTabPage;
     ButtonBox                  maBox;
@@ -264,7 +264,7 @@ public:
     virtual ~SvxAreaTabPage() override;
 
     static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* );
-    static const sal_uInt16* GetRanges() { return pAreaRanges; }
+    static WhichRangesContainer GetRanges() { return pAreaRanges; }
 
     virtual bool FillItemSet( SfxItemSet* ) override;
     virtual void Reset( const SfxItemSet * ) override;
@@ -290,7 +290,7 @@ public:
 
 class SvxShadowTabPage : public SvxTabPage
 {
-    static const sal_uInt16 pShadowRanges[];
+    static const WhichRangesContainer pShadowRanges;
 
 private:
     const SfxItemSet&   m_rOutAttrs;
@@ -324,7 +324,7 @@ public:
     virtual ~SvxShadowTabPage() override;
 
     static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* );
-    static const sal_uInt16* GetRanges() { return pShadowRanges; }
+    static WhichRangesContainer GetRanges() { return pShadowRanges; }
 
     virtual bool FillItemSet( SfxItemSet* ) override;
     virtual void Reset( const SfxItemSet * ) override;

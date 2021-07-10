@@ -387,21 +387,19 @@ FrameMap const aVAsCharHtmlMap[] =
     {SwFPos::CENTER_VERT,   SwFPos::CENTER_VERT,    text::VertOrientation::LINE_CENTER,   LB::RelRow}
 };
 
-const sal_uInt16 SwFramePage::aPageRg[] = {
+const WhichRangesContainer SwFramePage::aPageRg(svl::Items<
     RES_FRM_SIZE, RES_FRM_SIZE,
     RES_VERT_ORIENT, RES_ANCHOR,
     RES_COL, RES_COL,
-    RES_FOLLOW_TEXT_FLOW, RES_FOLLOW_TEXT_FLOW,
-    0
-};
-const sal_uInt16 SwFrameAddPage::aAddPgRg[] = {
+    RES_FOLLOW_TEXT_FLOW, RES_FOLLOW_TEXT_FLOW
+>::value);
+const WhichRangesContainer SwFrameAddPage::aAddPgRg(svl::Items<
     RES_PROTECT,            RES_PROTECT,
     RES_PRINT,              RES_PRINT,
     FN_SET_FRM_NAME,        FN_SET_FRM_NAME,
     FN_SET_FRM_ALT_NAME,    FN_SET_FRM_ALT_NAME,
-    FN_UNO_DESCRIPTION,     FN_UNO_DESCRIPTION,
-    0
-};
+    FN_UNO_DESCRIPTION,     FN_UNO_DESCRIPTION
+>::value);
 
 static size_t lcl_GetFrameMapCount( const FrameMap* pMap)
 {
