@@ -912,8 +912,7 @@ void StyleSheetTable::ApplyNumberingStyleNameToParaStyles()
             if ( pEntry->nStyleTypeCode == STYLE_TYPE_PARA && (pStyleSheetProperties = dynamic_cast<StyleSheetPropertyMap*>(pEntry->pProperties.get())) )
             {
                 // ListId 0 means turn off numbering - to cancel inheritance - so make sure that can be set.
-                // Ignore the special "chapter numbering" outline styles as they are handled internally.
-                if ( pStyleSheetProperties->GetListId() > -1 && pStyleSheetProperties->GetOutlineLevel() == -1 )
+                if (pStyleSheetProperties->GetListId() > -1)
                 {
                     uno::Reference< style::XStyle > xStyle;
                     xParaStyles->getByName( ConvertStyleName(pEntry->sStyleName) ) >>= xStyle;
