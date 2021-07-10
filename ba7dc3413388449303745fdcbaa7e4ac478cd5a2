@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a7afa71_52aa8b18",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1558,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-07-10T05:24:40Z",
+      "side": 0,
+      "message": "Unnecessary: if cancelled by direct formatting, PROP_NUMBERING_STYLE_NAME is already set. If cancelled by the paragraph style, the paragraph style also has PROP_NUMBERING_STYLE_NAME set as an empty name, so the style is not going to apply numbering either. So no need to spam a NONE setting into the paragraph in the cancelled-by-style case.",
+      "range": {
+        "startLine": 1558,
+        "startChar": 48,
+        "endLine": 1558,
+        "endChar": 84
+      },
+      "revId": "ba7dc3413388449303745fdcbaa7e4ac478cd5a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
