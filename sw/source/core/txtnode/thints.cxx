@@ -2973,13 +2973,11 @@ bool SwpHints::TryInsertHint(
             rNode.SetCalcHiddenCharFlags();
 
         // fdo#71556: populate aWhichFormatAttr member of SwMsgPoolItem
-        const sal_uInt16 *pRanges = pSet->GetRanges();
-        while( (*pRanges) != 0 )
+        const WhichRangesContainer& pRanges = pSet->GetRanges();
+        for(auto const & rPair : pRanges)
         {
-            const sal_uInt16 nBeg = *pRanges;
-            ++pRanges;
-            const sal_uInt16 nEnd = *pRanges;
-            ++pRanges;
+            const sal_uInt16 nBeg = rPair.first;
+            const sal_uInt16 nEnd = rPair.second;
             for( sal_uInt16 nSubElem = nBeg; nSubElem <= nEnd; ++nSubElem )
                 if( pSet->HasItem( nSubElem ) )
                     aWhichSublist.push_back( nSubElem );

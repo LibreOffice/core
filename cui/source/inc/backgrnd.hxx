@@ -37,7 +37,7 @@ class SvxBrushItem;
 
 class SvxBkgTabPage : public SvxAreaTabPage
 {
-    static const sal_uInt16 pPageRanges[];
+    static const WhichRangesContainer pPageRanges;
 
     std::unique_ptr<weld::ComboBox> m_xTblLBox;
     bool        bHighlighting       : 1;
@@ -53,7 +53,7 @@ public:
     virtual ~SvxBkgTabPage() override;
 
     // returns the area of the which-values
-    static const sal_uInt16* GetRanges() { return pPageRanges; }
+    static WhichRangesContainer GetRanges() { return pPageRanges; }
 
     static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* );
     virtual bool FillItemSet( SfxItemSet* ) override;

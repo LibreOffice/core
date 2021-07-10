@@ -60,16 +60,11 @@
 // #i19922# - tdf#126051 see svx/source/dialog/hdft.cxx and sw/source/uibase/sidebar/PageMarginControl.hxx
 const tools::Long MINBODY = 56;  // 1mm in twips rounded
 
-const sal_uInt16 SvxPageDescPage::pRanges[] =
-{
-    SID_ATTR_BORDER_OUTER,
-    SID_ATTR_BORDER_SHADOW,
-    SID_ATTR_LRSPACE,
-    SID_ATTR_PAGE_SHARED,
-    SID_SWREGISTER_COLLECTION,
-    SID_SWREGISTER_MODE,
-    0
-};
+const WhichRangesContainer SvxPageDescPage::pRanges(
+    svl::Items<
+    SID_ATTR_BORDER_OUTER, SID_ATTR_BORDER_SHADOW,
+    SID_ATTR_LRSPACE, SID_ATTR_PAGE_SHARED,
+    SID_SWREGISTER_COLLECTION, SID_SWREGISTER_MODE>::value);
 // ------- Mapping page layout ------------------------------------------
 
 const SvxPageUsage aArr[] =
@@ -1287,7 +1282,7 @@ void SvxPageDescPage::InitHeadFoot_Impl( const SfxItemSet& rSet )
             {
                 // aBspWin.SetHdColor(rItem.GetColor());
                 const SvxBrushItem& rItem = static_cast< const SvxBrushItem& >(rHeaderSet.Get(nWhich));
-                SfxItemSet aTempSet(*rHeaderSet.GetPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{});
+                SfxItemSet aTempSet(*rHeaderSet.GetPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>::value);
 
                 setSvxBrushItemAsFillAttributesToTargetSet(rItem, aTempSet);
                 aHeaderFillAttributes = std::make_shared<drawinglayer::attribute::SdrAllFillAttributesHelper>(aTempSet);
@@ -1342,7 +1337,7 @@ void SvxPageDescPage::InitHeadFoot_Impl( const SfxItemSet& rSet )
         {
             // aBspWin.SetFtColor(rItem.GetColor());
             const SvxBrushItem& rItem = static_cast<const SvxBrushItem&>(rFooterSet.Get(nWhich));
-            SfxItemSet aTempSet(*rFooterSet.GetPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{});
+            SfxItemSet aTempSet(*rFooterSet.GetPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>::value);
 
             setSvxBrushItemAsFillAttributesToTargetSet(rItem, aTempSet);
             aFooterFillAttributes = std::make_shared<drawinglayer::attribute::SdrAllFillAttributesHelper>(aTempSet);

@@ -351,10 +351,7 @@ sal_uInt16 GetMaxWidth( SwColMgr const * pColMgr, sal_uInt16 nCols )
     return nMax;
 }
 
-const sal_uInt16 SwColumnPage::aPageRg[] = {
-    RES_COL, RES_COL,
-    0
-};
+const WhichRangesContainer SwColumnPage::aPageRg(svl::Items<RES_COL, RES_COL>::value);
 
 void SwColumnPage::ResetColWidth()
 {

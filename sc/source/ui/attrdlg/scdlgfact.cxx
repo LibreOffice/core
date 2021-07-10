@@ -932,7 +932,7 @@ const SfxItemSet* ScAbstractTabController_Impl::GetOutputItemSet() const
     return m_xDlg->GetOutputItemSet();
 }
 
-const sal_uInt16* ScAbstractTabController_Impl::GetInputRanges(const SfxItemPool& pItem )
+WhichRangesContainer ScAbstractTabController_Impl::GetInputRanges(const SfxItemPool& pItem )
 {
     return m_xDlg->GetInputRanges( pItem );
 }

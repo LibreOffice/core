@@ -77,21 +77,20 @@ namespace sd {
 
 static void mergeItemSetsImpl( SfxItemSet& rTarget, const SfxItemSet& rSource )
 {
-    const sal_uInt16* pPtr = rSource.GetRanges();
+    const WhichRangesContainer& rRanges = rSource.GetRanges();
     sal_uInt16 p1, p2;
-    while( *pPtr )
+    for (sal_Int32 i = 0; i < rRanges.size(); ++i)
     {
-        p1 = pPtr[0];
-        p2 = pPtr[1];
+        p1 = rRanges[i].first;
+        p2 = rRanges[i].second;
 
         // make ranges discrete
-        while(pPtr[2] && (pPtr[2] - p2 == 1))
+        while(i < rRanges.size()-1 && (rRanges[i+1].first - p2 == 1))
         {
-            p2 = pPtr[3];
-            pPtr += 2;
+            p2 = rRanges[i+1].second;
+            ++i;
         }
         rTarget.MergeRange( p1, p2 );
-        pPtr += 2;
     }
 
     rTarget.Put(rSource);
@@ -266,14 +265,15 @@ const SfxItemSet* FuPage::ExecuteDialog(weld::Window* pParent, const SfxRequest&
 
     // Merge ItemSet for dialog
 
-    const sal_uInt16* pPtr = aNewAttr.GetRanges();
-    sal_uInt16 p1 = pPtr[0], p2 = pPtr[1];
-    while(pPtr[2] && (pPtr[2] - p2 == 1))
+    const WhichRangesContainer& rRanges = aNewAttr.GetRanges();
+    sal_uInt16 p1 = rRanges[0].first, p2 = rRanges[0].second;
+    sal_Int32 idx = 1;
+    while(idx < rRanges.size() && (rRanges[idx].first - p2 == 1))
     {
-        p2 = pPtr[3];
-        pPtr += 2;
+        p2 = rRanges[idx].second;
+        ++idx;
     }
-    SfxItemSet aMergedAttr( *aNewAttr.GetPool(), {{p1, p2}} );
+    SfxItemSet aMergedAttr( *aNewAttr.GetPool(), p1, p2 );
 
     mergeItemSetsImpl( aMergedAttr, aNewAttr );
 

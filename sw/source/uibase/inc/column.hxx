@@ -164,14 +164,14 @@ class SwColumnPage final : public SfxTabPage
 
     bool isLineNotNone() const;
 
-    static const sal_uInt16 aPageRg[];
+    static const WhichRangesContainer aPageRg;
 
 public:
     SwColumnPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet &rSet);
     virtual ~SwColumnPage() override;
 
     static std::unique_ptr<SfxTabPage> Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet *rSet);
-    static const sal_uInt16* GetRanges() { return aPageRg; }
+    static WhichRangesContainer GetRanges() { return aPageRg; }
 
     virtual bool    FillItemSet(SfxItemSet *rSet) override;
     virtual void    Reset(const SfxItemSet *rSet) override;

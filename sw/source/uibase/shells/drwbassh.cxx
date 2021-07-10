@@ -198,7 +198,7 @@ void SwDrawBaseShell::Execute(SfxRequest const &rReq)
                         }
                         SfxItemSet aNewAttr(pSdrView->GetGeoAttrFromMarked());
 
-                        const sal_uInt16* pRange = pDlg->GetInputRanges( *aNewAttr.GetPool() );
+                        const WhichRangesContainer& pRange = pDlg->GetInputRanges( *aNewAttr.GetPool() );
                         SfxItemSet aSet( *aNewAttr.GetPool(), pRange );
                         FieldUnit eMetric = ::GetDfltMetric( dynamic_cast<SwWebView*>(&GetView()) != nullptr );
                         SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)) );

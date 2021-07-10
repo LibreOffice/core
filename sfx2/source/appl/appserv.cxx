@@ -1080,11 +1080,11 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
 
 void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
 {
-    const sal_uInt16 *pRanges = rSet.GetRanges();
-    DBG_ASSERT(pRanges && *pRanges, "Set without range");
-    while ( *pRanges )
+    const WhichRangesContainer & pRanges = rSet.GetRanges();
+    DBG_ASSERT(!pRanges.empty(), "Set without range");
+    for ( auto const & pRange : pRanges )
     {
-        for(sal_uInt16 nWhich = *pRanges++; nWhich <= *pRanges; ++nWhich)
+        for(sal_uInt16 nWhich = pRange.first; nWhich <= pRange.second; ++nWhich)
         {
             switch(nWhich)
             {
@@ -1278,8 +1278,6 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
                     break;
             }
         }
-
-        ++pRanges;
     }
 }
 

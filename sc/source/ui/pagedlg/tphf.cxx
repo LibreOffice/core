@@ -218,7 +218,7 @@ std::unique_ptr<SfxTabPage> ScHeaderPage::Create(weld::Container* pPage, weld::D
     return std::make_unique<ScHeaderPage>(pPage, pController, *rCoreSet);
 }
 
-const sal_uInt16* ScHeaderPage::GetRanges()
+WhichRangesContainer ScHeaderPage::GetRanges()
 {
     return SvxHeaderPage::GetRanges();
 }
@@ -234,7 +234,7 @@ std::unique_ptr<SfxTabPage> ScFooterPage::Create(weld::Container* pPage, weld::D
     return std::make_unique<ScFooterPage>(pPage, pController, *rCoreSet);
 }
 
-const sal_uInt16* ScFooterPage::GetRanges()
+WhichRangesContainer ScFooterPage::GetRanges()
 {
     return SvxHeaderPage::GetRanges();
 }
