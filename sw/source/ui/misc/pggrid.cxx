@@ -323,12 +323,9 @@ void SwTextGridPage::SetLinesOrCharsRanges(weld::Label& rField, const sal_Int32 
     rField.set_label(aFieldStr);
 }
 
-const sal_uInt16* SwTextGridPage::GetRanges()
+WhichRangesContainer SwTextGridPage::GetRanges()
 {
-    static const sal_uInt16 aPageRg[] = {
-        RES_TEXTGRID, RES_TEXTGRID,
-        0};
-    return aPageRg;
+    return WhichRangesContainer(svl::Items<RES_TEXTGRID, RES_TEXTGRID>::value);
 }
 
 IMPL_LINK(SwTextGridPage, CharorLineChangedHdl, weld::SpinButton&, rField, void)

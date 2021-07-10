@@ -41,18 +41,12 @@
 
 using namespace com::sun::star;
 
-const sal_uInt16 SvxShadowTabPage::pShadowRanges[] =
-{
-    SDRATTR_SHADOWCOLOR,
-    SDRATTR_SHADOWTRANSPARENCE,
-    SDRATTR_SHADOWBLUR,
-    SID_ATTR_FILL_SHADOW,
-    SID_ATTR_FILL_SHADOW,
-    SID_ATTR_SHADOW_TRANSPARENCE,
-    SID_ATTR_SHADOW_BLUR,
-    SID_ATTR_SHADOW_YDISTANCE,
-    0
-};
+const WhichRangesContainer SvxShadowTabPage::pShadowRanges(svl::Items<
+    SDRATTR_SHADOWCOLOR, SDRATTR_SHADOWTRANSPARENCE,
+    SDRATTR_SHADOWBLUR, SID_ATTR_FILL_SHADOW,
+    SID_ATTR_FILL_SHADOW, SID_ATTR_SHADOW_TRANSPARENCE,
+    SID_ATTR_SHADOW_BLUR, SID_ATTR_SHADOW_YDISTANCE
+>::value);
 
 SvxShadowTabPage::SvxShadowTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs)
     : SvxTabPage(pPage, pController, "cui/ui/shadowtabpage.ui", "ShadowTabPage", rInAttrs)

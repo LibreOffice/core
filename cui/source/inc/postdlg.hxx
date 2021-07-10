@@ -44,7 +44,7 @@ public:
                     bool bPrevNext);
     virtual ~SvxPostItDialog() override;
 
-    static const sal_uInt16*      GetRanges();
+    static WhichRangesContainer GetRanges();
     const SfxItemSet*   GetOutputItemSet() const { return m_xOutSet.get(); }
 
     void                SetPrevHdl( const Link<SvxPostItDialog&,void>& rLink )

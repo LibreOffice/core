@@ -23,14 +23,14 @@
 
 class ScTabPageProtection : public SfxTabPage
 {
-    static const sal_uInt16 pProtectionRanges[];
+    static const WhichRangesContainer pProtectionRanges;
 public:
     ScTabPageProtection(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreAttrs);
     static std::unique_ptr<SfxTabPage> Create(weld::Container* pPage, weld::DialogController* pController,
                                               const SfxItemSet* rAttrSet);
     virtual ~ScTabPageProtection() override;
 
-    static  const sal_uInt16* GetRanges () { return pProtectionRanges; }
+    static WhichRangesContainer GetRanges () { return pProtectionRanges; }
     virtual bool        FillItemSet     ( SfxItemSet* rCoreAttrs ) override;
     virtual void        Reset           ( const SfxItemSet* ) override;
 

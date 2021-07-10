@@ -54,8 +54,7 @@ const tools::Long MINBODY = 56;  // 1mm in twips rounded
 const tools::Long DEF_DIST_WRITER = 500;    // 5mm (Writer)
 const tools::Long DEF_DIST_CALC = 250;      // 2.5mm (Calc)
 
-const sal_uInt16 SvxHFPage::pRanges[] =
-{
+const WhichRangesContainer SvxHFPage::pRanges(svl::Items<
     SID_ATTR_BRUSH,          SID_ATTR_BRUSH,
 
     // Support DrawingLayer FillStyles (no real call to below GetRanges()
@@ -74,9 +73,8 @@ const sal_uInt16 SvxHFPage::pRanges[] =
     SID_ATTR_PAGE_DYNAMIC,   SID_ATTR_PAGE_DYNAMIC,
     SID_ATTR_PAGE_SHARED,    SID_ATTR_PAGE_SHARED,
     SID_ATTR_PAGE_SHARED_FIRST,    SID_ATTR_PAGE_SHARED_FIRST,
-    SID_ATTR_HDFT_DYNAMIC_SPACING, SID_ATTR_HDFT_DYNAMIC_SPACING,
-    0
-};
+    SID_ATTR_HDFT_DYNAMIC_SPACING, SID_ATTR_HDFT_DYNAMIC_SPACING
+>::value);
 
 namespace svx {
 

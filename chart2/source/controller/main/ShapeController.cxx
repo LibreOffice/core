@@ -361,7 +361,7 @@ void ShapeController::executeDispatch_TransformDialog()
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         ScopedVclPtr< SfxAbstractTabDialog > pDlg(
             pFact->CreateCaptionDialog(pChartWindow, pDrawViewWrapper));
-        const sal_uInt16* pRange = pDlg->GetInputRanges( *aAttr.GetPool() );
+        const WhichRangesContainer& pRange = pDlg->GetInputRanges( *aAttr.GetPool() );
         SfxItemSet aCombAttr( *aAttr.GetPool(), pRange );
         aCombAttr.Put( aAttr );
         aCombAttr.Put( aGeoAttr );
