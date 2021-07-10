@@ -54,18 +54,13 @@ using ::com::sun::star::uno::UNO_QUERY;
 
 // static ----------------------------------------------------------------
 
-const sal_uInt16 SvxNumberFormatTabPage::pRanges[] =
-{
-    SID_ATTR_NUMBERFORMAT_VALUE,
-    SID_ATTR_NUMBERFORMAT_INFO,
-    SID_ATTR_NUMBERFORMAT_NOLANGUAGE,
-    SID_ATTR_NUMBERFORMAT_NOLANGUAGE,
-    SID_ATTR_NUMBERFORMAT_ONE_AREA,
-    SID_ATTR_NUMBERFORMAT_ONE_AREA,
-    SID_ATTR_NUMBERFORMAT_SOURCE,
-    SID_ATTR_NUMBERFORMAT_SOURCE,
-    0
-};
+const WhichRangesLiteral ranges { {
+    {SID_ATTR_NUMBERFORMAT_VALUE, SID_ATTR_NUMBERFORMAT_INFO},
+    {SID_ATTR_NUMBERFORMAT_NOLANGUAGE, SID_ATTR_NUMBERFORMAT_NOLANGUAGE},
+    {SID_ATTR_NUMBERFORMAT_ONE_AREA, SID_ATTR_NUMBERFORMAT_ONE_AREA},
+    {SID_ATTR_NUMBERFORMAT_SOURCE, SID_ATTR_NUMBERFORMAT_SOURCE},
+} };
+const WhichRangesContainer SvxNumberFormatTabPage::pRanges(ranges);
 
 /*************************************************************************
 #*  Method:        SvxNumberPreview

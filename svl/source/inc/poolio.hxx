@@ -157,7 +157,7 @@ struct SfxItemPool_Impl
     std::vector<SfxPoolItem*>*      mpStaticDefaults;
     SfxItemPool*                    mpMaster;
     rtl::Reference<SfxItemPool>     mpSecondary;
-    std::unique_ptr<sal_uInt16[]>   mpPoolRanges;
+    WhichRangesContainer            mpPoolRanges;
     sal_uInt16                      mnStart;
     sal_uInt16                      mnEnd;
     MapUnit                         eDefMetric;

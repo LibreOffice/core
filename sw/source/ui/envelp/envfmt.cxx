@@ -44,68 +44,6 @@
 #include <swabstdlg.hxx>
 #include <swuiexp.hxx>
 
-namespace {
-    /// Converts a ranges array to a list containing one entry for each
-    /// element covered by the ranges.
-    /// @param aRanges An array containing zero or more range specifications and
-    ///                terminated by one or more zero entries. A range
-    ///                specification is two consecutive entries that specify
-    ///                the start and end points of the range.
-    /// @returns A vector containing one element for each item covered by the
-    ///          ranges. This is not guaranteed to be sorted and may contain
-    ///          duplicates if the original ranges contained overlaps.
-    std::vector<sal_uInt16> lcl_convertRangesToList(const sal_uInt16 aRanges[]) {
-        std::vector<sal_uInt16> aVec;
-        int i = 0;
-        while (aRanges[i])
-        {
-            for (sal_uInt16 n = aRanges[i]; n <= aRanges[i+1]; ++n)
-            {
-                aVec.push_back(n);
-            }
-            i += 2;
-        }
-        return aVec;
-    }
-
-    /// Converts a list of elements to a ranges array.
-    /// @param rElements Vector of the initial elements, this need not be sorted,
-    ///                  and may contain duplicate items. The vector is sorted
-    ///                  on exit from this function but may still contain duplicates.
-    /// @returns An array containing zero or more range specifications and
-    ///          terminated by one or more zero entries. A range specification
-    ///          is two consecutive entries that specify the start and end
-    ///          points of the range. This list will be sorted and will not
-    ///          contain any overlapping ranges.
-    sal_uInt16* lcl_convertListToRanges(std::vector<sal_uInt16> &rElements) {
-        std::sort(rElements.begin(), rElements.end());
-        std::vector<sal_uInt16> aRanges;
-        size_t i;
-        for (i = 0; i < rElements.size(); ++i)
-        {
-            //Push the start of the this range.
-            aRanges.push_back(rElements[i]);
-            //Seek to the end of this range.
-            while (i + 1 < rElements.size() && rElements[i+1] - rElements[i] <= 1)
-            {
-                ++i;
-            }
-            //Push the end of this range (may be the same as the start).
-            aRanges.push_back( rElements[i] );
-        }
-
-        // Convert the vector to an array with terminating zero
-        sal_uInt16 *pNewRanges = new sal_uInt16[aRanges.size() + 1];
-        for (i = 0; i < aRanges.size(); ++i)
-        {
-            pNewRanges[i] = aRanges[i];
-        }
-        pNewRanges[i] = 0;
-        return pNewRanges;
-    }
-
-}
-
 static tools::Long lUserW = 5669; // 10 cm
 static tools::Long lUserH = 5669; // 10 cm
 
@@ -316,29 +254,24 @@ SfxItemSet *SwEnvFormatPage::GetCollItemSet(SwTextFormatColl const * pColl, bool
     if (!pAddrSet)
     {
         // determine range (merge both Itemsets' ranges)
-        const sal_uInt16 *pRanges = pColl->GetAttrSet().GetRanges();
+        const WhichRangesContainer& pRanges = pColl->GetAttrSet().GetRanges();
 
-        static sal_uInt16 const aRanges[] =
+        static WhichRangesLiteral const aRanges(
         {
-            RES_PARATR_BEGIN, RES_PARATR_ADJUST,
-            RES_PARATR_TABSTOP, RES_PARATR_END-1,
-            RES_LR_SPACE, RES_UL_SPACE,
-            RES_BACKGROUND, RES_SHADOW,
-            SID_ATTR_TABSTOP_POS, SID_ATTR_TABSTOP_POS,
-            SID_ATTR_TABSTOP_DEFAULTS, SID_ATTR_TABSTOP_DEFAULTS,
-            SID_ATTR_TABSTOP_OFFSET, SID_ATTR_TABSTOP_OFFSET,
-            SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER,
-            0, 0
-        };
-
-        // BruteForce merge because MergeRange in SvTools is buggy:
-        std::vector<sal_uInt16> aVec2 = ::lcl_convertRangesToList(pRanges);
-        std::vector<sal_uInt16> aVec = ::lcl_convertRangesToList(aRanges);
-        aVec2.insert(aVec2.end(), aVec.begin(), aVec.end());
-        std::unique_ptr<sal_uInt16[]> pNewRanges(::lcl_convertListToRanges(aVec2));
+            {RES_PARATR_BEGIN, RES_PARATR_ADJUST},
+            {RES_PARATR_TABSTOP, RES_PARATR_END-1},
+            {RES_LR_SPACE, RES_UL_SPACE},
+            {RES_BACKGROUND, RES_SHADOW},
+            {SID_ATTR_TABSTOP_POS, SID_ATTR_TABSTOP_POS},
+            {SID_ATTR_TABSTOP_DEFAULTS, SID_ATTR_TABSTOP_DEFAULTS},
+            {SID_ATTR_TABSTOP_OFFSET, SID_ATTR_TABSTOP_OFFSET},
+            {SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER},
+        });
 
         pAddrSet.reset(new SfxItemSet(GetParentSwEnvDlg()->pSh->GetView().GetCurShell()->GetPool(),
-                                  pNewRanges.get()));
+                                  pRanges));
+        for (const auto& rPair : aRanges.ranges)
+            pAddrSet->MergeRange(rPair.first, rPair.second);
         pAddrSet->Put(pColl->GetAttrSet());
     }
 

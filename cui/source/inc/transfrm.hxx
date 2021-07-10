@@ -60,7 +60,7 @@ public:
 
 class SvxPositionSizeTabPage : public SvxTabPage
 {
-    static const sal_uInt16 pPosSizeRanges[];
+    static const WhichRangesContainer pPosSizeRanges;
 
 private:
     const SfxItemSet&   mrOutAttrs;
@@ -132,7 +132,7 @@ public:
     virtual ~SvxPositionSizeTabPage() override;
 
     static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* );
-    static const sal_uInt16* GetRanges() {  return pPosSizeRanges; }
+    static WhichRangesContainer GetRanges() {  return pPosSizeRanges; }
 
     virtual bool FillItemSet( SfxItemSet* ) override;
     virtual void Reset( const SfxItemSet * ) override;
@@ -160,7 +160,7 @@ public:
 \************************************************************************/
 class SvxAngleTabPage : public SvxTabPage
 {
-    static const sal_uInt16 pAngleRanges[];
+    static const WhichRangesContainer pAngleRanges;
 
 private:
     const SdrView*      pView;
@@ -188,7 +188,7 @@ public:
     virtual ~SvxAngleTabPage() override;
 
     static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* );
-    static const sal_uInt16*  GetRanges() { return pAngleRanges; }
+    static WhichRangesContainer GetRanges() { return pAngleRanges; }
 
     virtual bool FillItemSet( SfxItemSet* ) override;
     virtual void Reset( const SfxItemSet * ) override;
@@ -209,7 +209,7 @@ public:
 \************************************************************************/
 class SvxSlantTabPage : public SfxTabPage
 {
-    static const sal_uInt16 pSlantRanges[];
+    static const WhichRangesContainer pSlantRanges;
 
 private:
     const SdrView*      pView;
@@ -232,7 +232,7 @@ public:
     virtual ~SvxSlantTabPage() override;
 
     static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* );
-    static const sal_uInt16* GetRanges() {  return pSlantRanges; }
+    static WhichRangesContainer GetRanges() {  return pSlantRanges; }
 
     virtual bool FillItemSet( SfxItemSet* ) override;
     virtual void Reset( const SfxItemSet * ) override;

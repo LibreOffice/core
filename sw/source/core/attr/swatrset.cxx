@@ -73,7 +73,7 @@ SwAttrPool::SwAttrPool( SwDoc* pD )
 
     pSdrPool->SetSecondaryPool(pEEgPool.get());
 
-    if(!GetFrozenIdRanges())
+    if(GetFrozenIdRanges().empty())
     {
         FreezeIdRanges();
     }
@@ -98,6 +98,11 @@ SwAttrSet::SwAttrSet( SwAttrPool& rPool, sal_uInt16 nWh1, sal_uInt16 nWh2 )
 }
 
 SwAttrSet::SwAttrSet( SwAttrPool& rPool, const sal_uInt16* nWhichPairTable )
+    : SfxItemSet( rPool, nWhichPairTable ), m_pOldSet( nullptr ), m_pNewSet( nullptr )
+{
+}
+
+SwAttrSet::SwAttrSet( SwAttrPool& rPool, const WhichRangesContainer& nWhichPairTable )
     : SfxItemSet( rPool, nWhichPairTable ), m_pOldSet( nullptr ), m_pNewSet( nullptr )
 {
 }
