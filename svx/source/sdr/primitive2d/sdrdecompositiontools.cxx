@@ -57,6 +57,72 @@ using namespace com::sun::star;
 
 namespace drawinglayer::primitive2d
 {
+namespace
+{
+// See also: SdrTextObj::AdjustRectToTextDistance
+basegfx::B2DRange getTextAnchorRange(const attribute::SdrTextAttribute& rText,
+                                     const basegfx::B2DRange& rSnapRange)
+{
+    // Take vertical text orientation into account when deciding
+    // which dimension is its width, and which is its height
+    const OutlinerParaObject& rOutlinerParaObj = rText.getOutlinerParaObject();
+    const bool bVerticalWriting(rOutlinerParaObj.IsVertical());
+    const double fWidthForText = bVerticalWriting ? rSnapRange.getHeight() : rSnapRange.getWidth();
+    // create a range describing the wanted text position and size (aTextAnchorRange). This
+    // means to use the text distance values here
+    // If the margin is larger than the entire width of the text area, then limit the
+    // margin.
+    const double fTextLeftDistance
+        = std::min(static_cast<double>(rText.getTextLeftDistance()), fWidthForText);
+    const double nTextRightDistance
+        = std::min(static_cast<double>(rText.getTextRightDistance()), fWidthForText);
+    double fDistanceForTextL, fDistanceForTextT, fDistanceForTextR, fDistanceForTextB;
+    if (!bVerticalWriting)
+    {
+        fDistanceForTextL = fTextLeftDistance;
+        fDistanceForTextT = rText.getTextUpperDistance();
+        fDistanceForTextR = nTextRightDistance;
+        fDistanceForTextB = rText.getTextLowerDistance();
+    }
+    else if (rOutlinerParaObj.IsTopToBottom())
+    {
+        fDistanceForTextL = rText.getTextLowerDistance();
+        fDistanceForTextT = fTextLeftDistance;
+        fDistanceForTextR = rText.getTextUpperDistance();
+        fDistanceForTextB = nTextRightDistance;
+    }
+    else
+    {
+        fDistanceForTextL = rText.getTextUpperDistance();
+        fDistanceForTextT = nTextRightDistance;
+        fDistanceForTextR = rText.getTextLowerDistance();
+        fDistanceForTextB = fTextLeftDistance;
+    }
+    const basegfx::B2DPoint aTopLeft(rSnapRange.getMinX() + fDistanceForTextL,
+                                     rSnapRange.getMinY() + fDistanceForTextT);
+    const basegfx::B2DPoint aBottomRight(rSnapRange.getMaxX() - fDistanceForTextR,
+                                         rSnapRange.getMaxY() - fDistanceForTextB);
+    basegfx::B2DRange aAnchorRange;
+    aAnchorRange.expand(aTopLeft);
+    aAnchorRange.expand(aBottomRight);
+
+    // If the shape has no width, then don't attempt to break the text into multiple
+    // lines, not a single character would satisfy a zero width requirement.
+    // SdrTextObj::impDecomposeBlockTextPrimitive() uses the same constant to
+    // effectively set no limits.
+    if (!bVerticalWriting && aAnchorRange.getWidth() == 0)
+    {
+        aAnchorRange.expand(basegfx::B2DPoint(aTopLeft.getX() - 1000000, aTopLeft.getY()));
+        aAnchorRange.expand(basegfx::B2DPoint(aBottomRight.getX() + 1000000, aBottomRight.getY()));
+    }
+    else if (bVerticalWriting && aAnchorRange.getHeight() == 0)
+    {
+        aAnchorRange.expand(basegfx::B2DPoint(aTopLeft.getX(), aTopLeft.getY() - 1000000));
+        aAnchorRange.expand(basegfx::B2DPoint(aBottomRight.getX(), aBottomRight.getY() + 1000000));
+    }
+    return aAnchorRange;
+}
+};
 
         class TransparencePrimitive2D;
 
@@ -274,39 +340,8 @@ namespace drawinglayer::primitive2d
                 aJustScaleTransform.set(1, 1, aScale.getY());
                 basegfx::B2DPolyPolygon aScaledUnitPolyPolygon(rUnitPolyPolygon);
                 aScaledUnitPolyPolygon.transform(aJustScaleTransform);
-                const basegfx::B2DRange aSnapRange(basegfx::utils::getRange(aScaledUnitPolyPolygon));
-
-                // create a range describing the wanted text position and size (aTextAnchorRange). This
-                // means to use the text distance values here
-                sal_Int32 nTextLeftDistance = rText.getTextLeftDistance();
-                // If the margin is larger than the entire width of the text area, then limit the
-                // margin.
-                if (nTextLeftDistance > aSnapRange.getWidth())
-                    nTextLeftDistance = aSnapRange.getWidth();
-                sal_Int32 nTextRightDistance = rText.getTextRightDistance();
-                if (nTextRightDistance > aSnapRange.getWidth())
-                    nTextRightDistance = aSnapRange.getWidth();
-                const basegfx::B2DPoint aTopLeft(aSnapRange.getMinX() + nTextLeftDistance,
-                                                 aSnapRange.getMinY()
-                                                     + rText.getTextUpperDistance());
-                const basegfx::B2DPoint aBottomRight(aSnapRange.getMaxX() - nTextRightDistance,
-                                                     aSnapRange.getMaxY()
-                                                         - rText.getTextLowerDistance());
-                basegfx::B2DRange aTextAnchorRange;
-                aTextAnchorRange.expand(aTopLeft);
-                aTextAnchorRange.expand(aBottomRight);
-
-                if (aTextAnchorRange.getWidth() == 0)
-                {
-                    // If the shape has no width, then don't attempt to break the text into multiple
-                    // lines, not a single character would satisfy a zero width requirement.
-                    // SdrTextObj::impDecomposeBlockTextPrimitive() uses the same constant to
-                    // effectively set no limits.
-                    aTextAnchorRange.expand(
-                        basegfx::B2DPoint(aTopLeft.getX() - 1000000, aTopLeft.getY()));
-                    aTextAnchorRange.expand(
-                        basegfx::B2DPoint(aBottomRight.getX() + 1000000, aBottomRight.getY()));
-                }
+                const basegfx::B2DRange aTextAnchorRange
+                    = getTextAnchorRange(rText, basegfx::utils::getRange(aScaledUnitPolyPolygon));
 
                 // now create a transformation from this basic range (aTextAnchorRange)
                 // #i121494# if we have no scale use at least 1.0 to have a carrier e.g. for

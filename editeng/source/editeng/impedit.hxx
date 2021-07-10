@@ -1146,6 +1146,7 @@ public:
         EditLine* pLine; // Current line, or nullptr for paragraph start
         sal_Int32 nLine;
         tools::Rectangle aArea; // The area for the line (or for rPortion's first line offset)
+                                // Bottom coordinate *does not* belong to the area
         tools::Long nHeightNeededToNotWrap;
     };
     using IterateLinesAreasFunc = std::function<CallbackResult(const LineAreaInfo&)>;
@@ -1161,20 +1162,17 @@ public:
     Point MoveToNextLine(Point& rMovePos, tools::Long nLineHeight, sal_Int32& nColumn,
                          Point aOrigin, tools::Long* pnHeightNeededToNotWrap = nullptr) const;
 
-    tools::Long getXDirectionAware(const Point& pt) const;
-    tools::Long getYDirectionAware(const Point& pt) const;
     tools::Long getWidthDirectionAware(const Size& sz) const;
     tools::Long getHeightDirectionAware(const Size& sz) const;
     void adjustXDirectionAware(Point& pt, tools::Long x) const;
     void adjustYDirectionAware(Point& pt, tools::Long y) const;
-    void setXDirectionAware(Point& pt, tools::Long x) const;
-    void setYDirectionAware(Point& pt, tools::Long y) const;
+    void setXDirectionAwareFrom(Point& ptDest, const Point& ptSrc) const;
+    void setYDirectionAwareFrom(Point& ptDest, const Point& ptSrc) const;
     tools::Long getYOverflowDirectionAware(const Point& pt, const tools::Rectangle& rectMax) const;
     bool isXOverflowDirectionAware(const Point& pt, const tools::Rectangle& rectMax) const;
-    tools::Long getLeftDirectionAware(const tools::Rectangle& rect) const;
-    tools::Long getRightDirectionAware(const tools::Rectangle& rect) const;
-    tools::Long getTopDirectionAware(const tools::Rectangle& rect) const;
-    tools::Long getBottomDirectionAware(const tools::Rectangle& rect) const;
+    // Offset of the rectangle's direction-aware corners in document coordinates
+    tools::Long getBottomDocOffset(const tools::Rectangle& rect) const;
+    Size getTopLeftDocOffset(const tools::Rectangle& rect) const;
 };
 
 inline EPaM ImpEditEngine::CreateEPaM( const EditPaM& rPaM )

@@ -584,26 +584,49 @@ void SdrTextObj::TakeUnrotatedSnapRect(tools::Rectangle& rRect) const
     rRect=maRect;
 }
 
+// See also: <unnamed>::getTextAnchorRange in svx/source/sdr/primitive2d/sdrdecompositiontools.cxx
+void SdrTextObj::AdjustRectToTextDistance(tools::Rectangle& rAnchorRect) const
+{
+    const tools::Long nLeftDist = GetTextLeftDistance();
+    const tools::Long nRightDist = GetTextRightDistance();
+    const tools::Long nUpperDist = GetTextUpperDistance();
+    const tools::Long nLowerDist = GetTextLowerDistance();
+    if (!IsVerticalWriting())
+    {
+        rAnchorRect.AdjustLeft(nLeftDist);
+        rAnchorRect.AdjustTop(nUpperDist);
+        rAnchorRect.AdjustRight(-nRightDist);
+        rAnchorRect.AdjustBottom(-nLowerDist);
+    }
+    else if (IsTopToBottom())
+    {
+        rAnchorRect.AdjustLeft(nLowerDist);
+        rAnchorRect.AdjustTop(nLeftDist);
+        rAnchorRect.AdjustRight(-nUpperDist);
+        rAnchorRect.AdjustBottom(-nRightDist);
+    }
+    else
+    {
+        rAnchorRect.AdjustLeft(nUpperDist);
+        rAnchorRect.AdjustTop(nRightDist);
+        rAnchorRect.AdjustRight(-nLowerDist);
+        rAnchorRect.AdjustBottom(-nLeftDist);
+    }
+
+    // Since sizes may be bigger than the object bounds it is necessary to
+    // justify the rect now.
+    ImpJustifyRect(rAnchorRect);
+}
+
 void SdrTextObj::TakeTextAnchorRect(tools::Rectangle& rAnchorRect) const
 {
-    tools::Long nLeftDist=GetTextLeftDistance();
-    tools::Long nRightDist=GetTextRightDistance();
-    tools::Long nUpperDist=GetTextUpperDistance();
-    tools::Long nLowerDist=GetTextLowerDistance();
     tools::Rectangle aAnkRect(maRect); // the rectangle in which we anchor
     bool bFrame=IsTextFrame();
     if (!bFrame) {
         TakeUnrotatedSnapRect(aAnkRect);
     }
     Point aRotateRef(aAnkRect.TopLeft());
-    aAnkRect.AdjustLeft(nLeftDist );
-    aAnkRect.AdjustTop(nUpperDist );
-    aAnkRect.AdjustRight( -nRightDist );
-    aAnkRect.AdjustBottom( -nLowerDist );
-
-    // Since sizes may be bigger than the object bounds it is necessary to
-    // justify the rect now.
-    ImpJustifyRect(aAnkRect);
+    AdjustRectToTextDistance(aAnkRect);
 
     if (bFrame) {
         // TODO: Optimize this.
@@ -1523,6 +1546,17 @@ void SdrTextObj::SetVerticalWriting(bool bVertical)
 
     // restore object size
     SetSnapRect(aObjectRect);
+}
+
+bool SdrTextObj::IsTopToBottom() const
+{
+    if (pEdtOutl)
+        return pEdtOutl->IsTopToBottom();
+
+    if (OutlinerParaObject* pOutlinerParaObject = GetOutlinerParaObject())
+        return pOutlinerParaObject->IsTopToBottom();
+
+    return false;
 }
 
 // transformation interface for StarOfficeAPI. This implements support for

@@ -567,8 +567,7 @@ void ImpEditEngine::Command( const CommandEvent& rCEvt, EditView* pView )
                             {
                                 tools::Rectangle aR = GetEditCursor(pParaPortion, rInfo.pLine, n,
                                                                     GetCursorFlags::NONE);
-                                aR.Move(getLeftDirectionAware(rInfo.aArea),
-                                        getTopDirectionAware(rInfo.aArea));
+                                aR.Move(getTopLeftDocOffset(rInfo.aArea));
                                 aRects[n - nMinPos] = pView->GetImpEditView()->GetWindowPos(aR);
                             }
                         }
@@ -3126,7 +3125,7 @@ tools::Rectangle ImpEditEngine::PaMtoEditCursor( EditPaM aPaM, GetCursorFlags nF
     if (pLastLine)
     {
         aEditCursor = GetEditCursor(pPortion, pLastLine, nIndex, nFlags);
-        aEditCursor.Move(getLeftDirectionAware(aLineArea), getTopDirectionAware(aLineArea));
+        aEditCursor.Move(getTopLeftDocOffset(aLineArea));
     }
     else
         OSL_FAIL("Line not found!");
@@ -3240,6 +3239,8 @@ ImpEditEngine::GetPortionAndLine(Point aDocPos)
     const ParaPortion* pLastPortion = nullptr;
     const EditLine* pLastLine = nullptr;
     tools::Long nLineStartX = 0;
+    Point aPos;
+    adjustYDirectionAware(aPos, aDocPos.Y());
 
     auto FindLastMatchingPortionAndLine = [&](const LineAreaInfo& rInfo) {
         if (rInfo.pLine) // Only handle lines, not ParaPortion starts
@@ -3248,8 +3249,8 @@ ImpEditEngine::GetPortionAndLine(Point aDocPos)
                 return CallbackResult::Stop;
             pLastPortion = &rInfo.rPortion; // Candidate paragraph
             pLastLine = rInfo.pLine; // Last visible line not later than click position
-            nLineStartX = getLeftDirectionAware(rInfo.aArea);
-            if (rInfo.nColumn == nClickColumn && getBottomDirectionAware(rInfo.aArea) > aDocPos.Y())
+            nLineStartX = getTopLeftDocOffset(rInfo.aArea).Width();
+            if (rInfo.nColumn == nClickColumn && getYOverflowDirectionAware(aPos, rInfo.aArea) == 0)
                 return CallbackResult::Stop; // Found it
         }
         return CallbackResult::Continue;
@@ -3446,7 +3447,8 @@ tools::Long ImpEditEngine::Calc1ColumnTextHeight(tools::Long* pHeightNTP)
     auto FindLastLineBottom = [&](const LineAreaInfo& rInfo) {
         if (rInfo.pLine)
         {
-            nHeight = getBottomDirectionAware(rInfo.aArea) + 1;
+            // bottom coordinate does not belong to area, so no need to do +1
+            nHeight = getBottomDocOffset(rInfo.aArea);
             if (pHeightNTP && !rInfo.rPortion.IsEmpty())
                 *pHeightNTP = nHeight;
         }
@@ -3469,8 +3471,6 @@ tools::Long ImpEditEngine::CalcTextHeight(tools::Long* pHeightNTP)
     tools::Long nTentativeColHeight = mnMinColumnWrapHeight;
     tools::Long nWantedIncrease = 0;
     tools::Long nCurrentTextHeight;
-    if (pHeightNTP)
-        *pHeightNTP = 0;
 
     // This does the necessary column balancing for the case when the text does not fit min height.
     // When the height of column (taken from nCurTextHeight) is too small, the last column will
@@ -3519,6 +3519,8 @@ tools::Long ImpEditEngine::CalcTextHeight(tools::Long* pHeightNTP)
         nTentativeColHeight += nWantedIncrease;
         nWantedIncrease = std::numeric_limits<tools::Long>::max();
         nCurrentTextHeight = 0;
+        if (pHeightNTP)
+            *pHeightNTP = 0;
         auto GetHeightAndWantedIncrease = [&, minHeight = tools::Long(0), lastCol = sal_Int32(0)](
                                               const LineAreaInfo& rInfo) mutable {
             if (rInfo.pLine)
@@ -3528,13 +3530,13 @@ tools::Long ImpEditEngine::CalcTextHeight(tools::Long* pHeightNTP)
                     minHeight = std::max(nCurrentTextHeight,
                                     minHeight); // total height can't be less than previous columns
                     nWantedIncrease = std::min(rInfo.nHeightNeededToNotWrap, nWantedIncrease);
+                    lastCol = rInfo.nColumn;
                 }
-                lastCol = rInfo.nColumn;
-                nCurrentTextHeight = std::max(getBottomDirectionAware(rInfo.aArea) + 1, minHeight);
+                // bottom coordinate does not belong to area, so no need to do +1
+                nCurrentTextHeight = std::max(getBottomDocOffset(rInfo.aArea), minHeight);
                 if (pHeightNTP)
                 {
                     if (rInfo.rPortion.IsEmpty())
-
                         *pHeightNTP = std::max(*pHeightNTP, minHeight);
                     else
                         *pHeightNTP = nCurrentTextHeight;
@@ -3544,7 +3546,8 @@ tools::Long ImpEditEngine::CalcTextHeight(tools::Long* pHeightNTP)
         };
         comphelper::ValueRestorationGuard aGuard(nCurTextHeight, nTentativeColHeight);
         IterateLineAreas(GetHeightAndWantedIncrease, IterFlag::none);
-    } while (nCurrentTextHeight > nTentativeColHeight && nWantedIncrease > 0);
+    } while (nCurrentTextHeight > nTentativeColHeight && nWantedIncrease > 0
+             && nWantedIncrease != std::numeric_limits<tools::Long>::max());
     return nCurrentTextHeight;
 }
 
