@@ -36,7 +36,7 @@
 class SfxTabPage;
 
 typedef std::unique_ptr<SfxTabPage> (*CreateTabPage)(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet *rAttrSet);
-typedef const sal_uInt16*     (*GetTabPageRanges)(); // provides international Which-value
+typedef WhichRangesContainer (*GetTabPageRanges)(); // provides international Which-value
 struct TabPageImpl;
 
 struct TabDlg_Impl;
@@ -76,7 +76,7 @@ private:
     std::unique_ptr<SfxItemSet>           m_pSet;
     std::unique_ptr<SfxItemSet>           m_pOutSet;
     std::unique_ptr<TabDlg_Impl>          m_pImpl;
-    std::unique_ptr<sal_uInt16[]>         m_pRanges;
+    WhichRangesContainer                  m_pRanges;
     OString             m_sAppPageId;
     bool                m_bStandardPushed;
     std::unique_ptr<SfxAllItemSet>       m_xItemSet;
@@ -134,7 +134,7 @@ public:
     SfxTabPage*         GetCurTabPage() const { return GetTabPage(GetCurPageId()); }
 
     // may provide local slots converted by Map
-    const sal_uInt16*   GetInputRanges( const SfxItemPool& );
+    const WhichRangesContainer& GetInputRanges( const SfxItemPool& );
     void                SetInputSet( const SfxItemSet* pInSet );
     const SfxItemSet*   GetOutputItemSet() const { return m_pOutSet.get(); }
 

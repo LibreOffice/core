@@ -1026,8 +1026,8 @@ SwTextAttr* MakeTextAttr(
         // Somebody wants to build a SwTextAttr for a character attribute.
         // Sorry, this is not allowed any longer.
         // You'll get a brand new autostyle attribute:
-        SfxItemSet aItemSet( rDoc.GetAttrPool(),
-                svl::Items<RES_CHRATR_BEGIN, RES_CHRATR_END>{} );
+        static const WhichRangesLiteral ranges { { {RES_CHRATR_BEGIN, RES_CHRATR_END} } };
+        SfxItemSet aItemSet( rDoc.GetAttrPool(), ranges );
         aItemSet.Put( rAttr );
         return MakeTextAttr( rDoc, aItemSet, nStt, nEnd );
     }
@@ -1835,7 +1835,8 @@ bool SwTextNode::SetAttr(
 
     // split sets (for selection in nodes)
     const SfxItemSet* pSet = &rSet;
-    SfxItemSet aTextSet( *rSet.GetPool(), svl::Items<RES_TXTATR_BEGIN, RES_TXTATR_END-1>{} );
+    static const WhichRangesLiteral ranges { { {RES_TXTATR_BEGIN, RES_TXTATR_END-1} } };
+    SfxItemSet aTextSet( *rSet.GetPool(), ranges );
 
     // entire paragraph
     if ( !nStt && (nEnd == m_Text.getLength()) &&
@@ -2969,13 +2970,11 @@ bool SwpHints::TryInsertHint(
             rNode.SetCalcHiddenCharFlags();
 
         // fdo#71556: populate aWhichFormatAttr member of SwMsgPoolItem
-        const sal_uInt16 *pRanges = pSet->GetRanges();
-        while( (*pRanges) != 0 )
+        const WhichRangesContainer& pRanges = pSet->GetRanges();
+        for(auto const & rPair : pRanges)
         {
-            const sal_uInt16 nBeg = *pRanges;
-            ++pRanges;
-            const sal_uInt16 nEnd = *pRanges;
-            ++pRanges;
+            const sal_uInt16 nBeg = rPair.first;
+            const sal_uInt16 nEnd = rPair.second;
             for( sal_uInt16 nSubElem = nBeg; nSubElem <= nEnd; ++nSubElem )
                 if( pSet->HasItem( nSubElem ) )
                     aWhichSublist.push_back( nSubElem );

@@ -61,7 +61,7 @@ struct SvxCharNamePage_Impl;
 class SvxCharNamePage : public SvxCharBasePage
 {
 private:
-    static const sal_uInt16 pNameRanges[];
+    static const WhichRangesContainer pNameRanges;
 
     std::unique_ptr<SvxCharNamePage_Impl>   m_pImpl;
 
@@ -140,7 +140,7 @@ public:
     static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet );
     virtual ~SvxCharNamePage() override;
 
-    static const sal_uInt16* GetRanges() { return pNameRanges; }
+    static WhichRangesContainer GetRanges() { return pNameRanges; }
 
     virtual void        Reset( const SfxItemSet* rSet ) override;
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
@@ -159,7 +159,7 @@ public:
 class SvxCharEffectsPage : public SvxCharBasePage
 {
 private:
-    static const sal_uInt16 pEffectsRanges[];
+    static const WhichRangesContainer pEffectsRanges;
     bool                       m_bOrigFontColor;
     bool                       m_bNewFontColor;
     bool                       m_bEnableNoneFontColor;
@@ -220,7 +220,7 @@ public:
     virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
 
 public:
-    static const sal_uInt16* GetRanges() { return pEffectsRanges; }
+    static WhichRangesContainer GetRanges() { return pEffectsRanges; }
 
     virtual void        Reset( const SfxItemSet* rSet ) override;
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
@@ -233,7 +233,7 @@ public:
 // class SvxCharPositionPage ---------------------------------------------
 class SvxCharPositionPage : public SvxCharBasePage
 {
-    static const sal_uInt16 pPositionRanges[];
+    static const WhichRangesContainer pPositionRanges;
 
 private:
     short               m_nSuperEsc;
@@ -289,7 +289,7 @@ public:
     virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
 
 public:
-    static const sal_uInt16*      GetRanges() { return pPositionRanges; }
+    static WhichRangesContainer GetRanges() { return pPositionRanges; }
 
     virtual void        Reset( const SfxItemSet* rSet ) override;
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
@@ -303,7 +303,7 @@ public:
 class SvxCharTwoLinesPage : public SvxCharBasePage
 {
 private:
-    static const sal_uInt16 pTwoLinesRanges[];
+    static const WhichRangesContainer pTwoLinesRanges;
     sal_uInt16              m_nStartBracketPosition;
     sal_uInt16              m_nEndBracketPosition;
 
@@ -328,7 +328,7 @@ public:
     virtual void        ActivatePage( const SfxItemSet& rSet ) override;
     virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
 
-    static const sal_uInt16*  GetRanges() { return pTwoLinesRanges; }
+    static WhichRangesContainer GetRanges() { return pTwoLinesRanges; }
 
     virtual void        Reset( const SfxItemSet* rSet ) override;
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;

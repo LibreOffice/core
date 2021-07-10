@@ -44,12 +44,12 @@
 
 using namespace ::com::sun::star;
 
-const sal_uInt16 SwWrapTabPage::m_aWrapPageRg[] = {
-    RES_LR_SPACE, RES_UL_SPACE,
-    RES_PROTECT, RES_SURROUND,
-    RES_PRINT, RES_PRINT,
-    0
-};
+const WhichRangesLiteral ranges { {
+    {RES_LR_SPACE, RES_UL_SPACE},
+    {RES_PROTECT, RES_SURROUND},
+    {RES_PRINT, RES_PRINT},
+} };
+const WhichRangesContainer SwWrapTabPage::m_aWrapPageRg(ranges);
 
 SwWrapDlg::SwWrapDlg(weld::Window* pParent, SfxItemSet& rSet, SwWrtShell* pWrtShell, bool bDrawMode)
     : SfxSingleTabDialogController(pParent, &rSet, "modules/swriter/ui/wrapdialog.ui", "WrapDialog")
