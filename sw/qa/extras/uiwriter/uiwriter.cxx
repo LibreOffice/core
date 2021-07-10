@@ -196,6 +196,7 @@ public:
     void testFdo75898();
     void testFdo74981();
     void testTdf98512();
+    void testTdf109267();
     void testShapeTextboxSelect();
     void testShapeTextboxDelete();
     void testAnchorChangeSelection();
@@ -316,6 +317,7 @@ public:
     CPPUNIT_TEST(testFdo75898);
     CPPUNIT_TEST(testFdo74981);
     CPPUNIT_TEST(testTdf98512);
+    CPPUNIT_TEST(testTdf109267);
     CPPUNIT_TEST(testShapeTextboxSelect);
     CPPUNIT_TEST(testShapeTextboxDelete);
     CPPUNIT_TEST(testAnchorChangeSelection);
@@ -1047,6 +1049,24 @@ void SwUiWriterTest::testFdo74981()
         pTextNode = aIdx.GetNode().GetTextNode();
         CPPUNIT_ASSERT(!pTextNode->HasHints());
     }
+}
+
+
+void SwUiWriterTest::testTdf109267()
+{
+    SwDoc* pDoc = createSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    // start tracking changes
+    dispatchCommand(mxComponent, ".uno:TrackChanges", {});
+
+    pWrtShell->Insert("abc");
+
+    // remove the middle word
+    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    dispatchCommand(mxComponent, ".uno:Delete", {});
+
+    dispatchCommand(mxComponent, ".uno:Undo", {}); // test should fail here without the fix
 }
 
 void SwUiWriterTest::testTdf98512()
