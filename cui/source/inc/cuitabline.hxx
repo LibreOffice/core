@@ -87,7 +87,7 @@ struct SvxBmpItemInfo
 
 class SvxLineTabPage : public SfxTabPage
 {
-    static const sal_uInt16 pLineRanges[];
+    static const WhichRangesContainer pLineRanges;
 private:
     //#58425# symbols on a line (e. g. StarChart) ->
     /** a list of symbols to be shown in menu. Symbol at position SID_ATTR_SYMBOLTYPE is to be shown in preview.
@@ -206,7 +206,7 @@ public:
     void    Construct();
 
     static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* );
-    static const sal_uInt16* GetRanges() { return pLineRanges; }
+    static WhichRangesContainer GetRanges() { return pLineRanges; }
 
     virtual bool FillItemSet( SfxItemSet* ) override;
     virtual void Reset( const SfxItemSet* ) override;

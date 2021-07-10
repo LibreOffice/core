@@ -130,11 +130,13 @@ void ConvertAttrCharToGen(SfxItemSet& rSet, bool bIsPara)
     SfxGrabBagItem aGrabBag(RES_PARATR_GRABBAG);
     aGrabBag.GetGrabBag()["DialogUseCharAttr"] <<= true;
     // Store initial ranges to allow restoring later
-    const sal_uInt16* pRanges = rSet.GetRanges();
-    const sal_uInt16* pEnd = pRanges;
-    while (*pEnd)
-        ++pEnd;
-    const uno::Sequence<sal_uInt16> aOrigRanges(pRanges, pEnd - pRanges + 1);
+    uno::Sequence<sal_uInt16> aOrigRanges(rSet.GetRanges().size() * 2);
+    int i = 0;
+    for (const auto& rPair : rSet.GetRanges())
+    {
+        aOrigRanges.getArray()[i++] = rPair.first;
+        aOrigRanges.getArray()[i++] = rPair.second;
+    }
     aGrabBag.GetGrabBag()["OrigItemSetRanges"] <<= aOrigRanges;
     rSet.MergeRange(RES_PARATR_GRABBAG, RES_PARATR_GRABBAG);
     rSet.Put(aGrabBag);
@@ -176,10 +178,17 @@ void ConvertAttrGenToChar(SfxItemSet& rSet, const SfxItemSet& rOrigSet, bool bIs
         auto aIterator = rMap.find("OrigItemSetRanges");
         if (aIterator != rMap.end())
         {
-            if (uno::Sequence<sal_uInt16> aOrigRanges; (aIterator->second >>= aOrigRanges)
-                                                       && aOrigRanges.getLength() % 2 == 1
-                                                       && *(std::cend(aOrigRanges) - 1) == 0)
-                rSet.SetRanges(aOrigRanges.getConstArray());
+            uno::Sequence<sal_uInt16> aOrigRanges;
+            if ( (aIterator->second >>= aOrigRanges)
+                   && aOrigRanges.getLength() % 2 == 0)
+            {
+                std::unique_ptr<WhichPair[]> xPairs(new WhichPair[aOrigRanges.getLength()/2]);
+                for(int i=0; i<aOrigRanges.getLength(); i += 2)
+                {
+                    xPairs[i/2] = { aOrigRanges[i], aOrigRanges[i+1] };
+                }
+                rSet.SetRanges(WhichRangesContainer(std::move(xPairs), aOrigRanges.getLength()/2));
+            }
         }
     }
     assert(SfxItemState::SET != rSet.GetItemState(RES_PARATR_GRABBAG, false));
@@ -189,8 +198,9 @@ void ApplyCharBackground(const Color& rBackgroundColor, SwWrtShell& rShell)
 {
     rShell.StartUndo(SwUndoId::INSATTR);
 
-    SfxItemSet aCoreSet(rShell.GetView().GetPool(), svl::Items<
-        RES_CHRATR_GRABBAG, RES_CHRATR_GRABBAG>{});
+    static const WhichRangesLiteral ranges { {
+        {RES_CHRATR_GRABBAG, RES_CHRATR_GRABBAG} } };
+    SfxItemSet aCoreSet(rShell.GetView().GetPool(), ranges);
 
     rShell.GetCurAttr(aCoreSet);
 
@@ -504,16 +514,17 @@ void PageDescToItemSet( const SwPageDesc& rPageDesc, SfxItemSet& rSet)
         OSL_ENSURE(pHeaderFormat != nullptr, "no header format");
 
         // HeaderInfo, margins, background, border
-        SfxItemSet aHeaderSet(*rSet.GetPool(),
-            svl::Items<RES_FRMATR_BEGIN,RES_FRMATR_END - 1,            // [82
+        static const WhichRangesLiteral ranges { {
+            {RES_FRMATR_BEGIN,RES_FRMATR_END - 1},            // [82
 
             // FillAttribute support
-            XATTR_FILL_FIRST, XATTR_FILL_LAST,              // [1014
+            {XATTR_FILL_FIRST, XATTR_FILL_LAST},              // [1014
 
-            SID_ATTR_BORDER_INNER,SID_ATTR_BORDER_INNER,    // [10023
-            SID_ATTR_PAGE_SIZE,SID_ATTR_PAGE_SIZE,          // [10051
-            SID_ATTR_PAGE_ON,SID_ATTR_PAGE_SHARED,          // [10060
-            SID_ATTR_PAGE_SHARED_FIRST,SID_ATTR_PAGE_SHARED_FIRST>{});
+            {SID_ATTR_BORDER_INNER,SID_ATTR_BORDER_INNER},    // [10023
+            {SID_ATTR_PAGE_SIZE,SID_ATTR_PAGE_SIZE},          // [10051
+            {SID_ATTR_PAGE_ON,SID_ATTR_PAGE_SHARED},          // [10060
+            {SID_ATTR_PAGE_SHARED_FIRST,SID_ATTR_PAGE_SHARED_FIRST} } };
+        SfxItemSet aHeaderSet(*rSet.GetPool(), ranges);
 
         // set correct parent to get the XFILL_NONE FillStyle as needed
         aHeaderSet.SetParent(&rMaster.GetDoc()->GetDfltFrameFormat()->GetAttrSet());
@@ -554,16 +565,17 @@ void PageDescToItemSet( const SwPageDesc& rPageDesc, SfxItemSet& rSet)
         OSL_ENSURE(pFooterFormat != nullptr, "no footer format");
 
         // FooterInfo, margins, background, border
-        SfxItemSet aFooterSet(*rSet.GetPool(),
-            svl::Items<RES_FRMATR_BEGIN,RES_FRMATR_END - 1,            // [82
+        static const WhichRangesLiteral ranges { {
+            {RES_FRMATR_BEGIN,RES_FRMATR_END - 1},            // [82
 
             // FillAttribute support
-            XATTR_FILL_FIRST, XATTR_FILL_LAST,              // [1014
+            {XATTR_FILL_FIRST, XATTR_FILL_LAST},              // [1014
 
-            SID_ATTR_BORDER_INNER,SID_ATTR_BORDER_INNER,    // [10023
-            SID_ATTR_PAGE_SIZE,SID_ATTR_PAGE_SIZE,          // [10051
-            SID_ATTR_PAGE_ON,SID_ATTR_PAGE_SHARED,          // [10060
-            SID_ATTR_PAGE_SHARED_FIRST,SID_ATTR_PAGE_SHARED_FIRST>{});
+            {SID_ATTR_BORDER_INNER,SID_ATTR_BORDER_INNER},    // [10023
+            {SID_ATTR_PAGE_SIZE,SID_ATTR_PAGE_SIZE},          // [10051
+            {SID_ATTR_PAGE_ON,SID_ATTR_PAGE_SHARED},          // [10060
+            {SID_ATTR_PAGE_SHARED_FIRST,SID_ATTR_PAGE_SHARED_FIRST} } };
+        SfxItemSet aFooterSet(*rSet.GetPool(), ranges);
 
         // set correct parent to get the XFILL_NONE FillStyle as needed
         aFooterSet.SetParent(&rMaster.GetDoc()->GetDfltFrameFormat()->GetAttrSet());
@@ -695,7 +707,8 @@ void SfxToSwPageDescAttr( const SwWrtShell& rShell, SfxItemSet& rSet )
     }
     else
     {
-        SfxItemSet aCoreSet(rShell.GetView().GetPool(), svl::Items<RES_PAGEDESC, RES_PAGEDESC>{} );
+        static const WhichRangesLiteral ranges { { {RES_PAGEDESC, RES_PAGEDESC} } };
+        SfxItemSet aCoreSet(rShell.GetView().GetPool(), ranges );
         rShell.GetCurAttr( aCoreSet );
         if(SfxItemState::SET == aCoreSet.GetItemState( RES_PAGEDESC, true, &pItem ) )
         {

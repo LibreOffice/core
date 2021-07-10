@@ -56,7 +56,7 @@ class SwParagraphNumTabPage final : public SfxTabPage
     DECL_LINK(EditNumStyleHdl_Impl, weld::Button&, void);
     DECL_LINK(EditNumStyleSelectHdl_Impl, weld::ComboBox&, void);
 
-    static const sal_uInt16 aPageRg[];
+    static const WhichRangesContainer aPageRg;
 
     static bool ExecuteEditNumStyle_Impl( sal_uInt16 nId, const OUString& rStr,
                           SfxStyleFamily nFamily );
@@ -67,7 +67,7 @@ public:
 
     static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController,
                                       const SfxItemSet* rSet );
-    static const sal_uInt16* GetRanges() { return aPageRg; }
+    static WhichRangesContainer GetRanges() { return aPageRg; }
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;

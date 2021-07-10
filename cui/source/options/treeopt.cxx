@@ -1034,16 +1034,16 @@ std::unique_ptr<SfxItemSet> OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId 
     {
         case SID_GENERAL_OPTIONS:
         {
-            pRet = std::make_unique<SfxItemSet>(
-                SfxGetpApp()->GetPool(),
-                svl::Items<
-                    SID_HTML_MODE, SID_HTML_MODE,
-                    SID_ATTR_METRIC, SID_ATTR_METRIC,
-                    SID_AUTOSPELL_CHECK, SID_AUTOSPELL_CHECK,
-                    SID_ATTR_QUICKLAUNCHER, SID_ATTR_QUICKLAUNCHER,
-                    SID_ATTR_YEAR2000, SID_ATTR_YEAR2000>{} );
+            static const WhichRangesLiteral ranges { {
+                    {SID_HTML_MODE, SID_HTML_MODE},
+                    {SID_ATTR_METRIC, SID_ATTR_METRIC},
+                    {SID_AUTOSPELL_CHECK, SID_AUTOSPELL_CHECK},
+                    {SID_ATTR_QUICKLAUNCHER, SID_ATTR_QUICKLAUNCHER},
+                    {SID_ATTR_YEAR2000, SID_ATTR_YEAR2000} } };
+            pRet = std::make_unique<SfxItemSet>(SfxGetpApp()->GetPool(), ranges);
 
-            SfxItemSet aOptSet( SfxGetpApp()->GetPool(), svl::Items<SID_ATTR_QUICKLAUNCHER, SID_ATTR_QUICKLAUNCHER>{} );
+            static const WhichRangesLiteral optRanges { { {SID_ATTR_QUICKLAUNCHER, SID_ATTR_QUICKLAUNCHER} } };
+            SfxItemSet aOptSet( SfxGetpApp()->GetPool(), optRanges );
             SfxGetpApp()->GetOptions(aOptSet);
             pRet->Put(aOptSet);
 
@@ -1074,15 +1074,14 @@ std::unique_ptr<SfxItemSet> OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId 
         break;
         case SID_LANGUAGE_OPTIONS :
         {
-            pRet = std::make_unique<SfxItemSet>(
-                SfxGetpApp()->GetPool(),
-                svl::Items<
-                    SID_ATTR_CHAR_CJK_LANGUAGE, SID_ATTR_CHAR_CJK_LANGUAGE,
-                    SID_ATTR_CHAR_CTL_LANGUAGE, SID_ATTR_CHAR_CTL_LANGUAGE,
-                    SID_SET_DOCUMENT_LANGUAGE, SID_SET_DOCUMENT_LANGUAGE,
-                    SID_ATTR_LANGUAGE, SID_ATTR_LANGUAGE,
-                    SID_AUTOSPELL_CHECK, SID_AUTOSPELL_CHECK,
-                    SID_OPT_LOCALE_CHANGED, SID_OPT_LOCALE_CHANGED>{});
+            static const WhichRangesLiteral ranges { {
+                    {SID_ATTR_CHAR_CJK_LANGUAGE, SID_ATTR_CHAR_CJK_LANGUAGE},
+                    {SID_ATTR_CHAR_CTL_LANGUAGE, SID_ATTR_CHAR_CTL_LANGUAGE},
+                    {SID_SET_DOCUMENT_LANGUAGE, SID_SET_DOCUMENT_LANGUAGE},
+                    {SID_ATTR_LANGUAGE, SID_ATTR_LANGUAGE},
+                    {SID_AUTOSPELL_CHECK, SID_AUTOSPELL_CHECK},
+                    {SID_OPT_LOCALE_CHANGED, SID_OPT_LOCALE_CHANGED} } };
+            pRet = std::make_unique<SfxItemSet>(SfxGetpApp()->GetPool(), ranges);
 
             // for linguistic
             SfxHyphenRegionItem aHyphen( SID_ATTR_HYPHENREGION );
@@ -1141,36 +1140,42 @@ std::unique_ptr<SfxItemSet> OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId 
         }
         break;
         case SID_INET_DLG :
-                pRet = std::make_unique<SfxItemSet>( SfxGetpApp()->GetPool(),
-                                svl::Items<
-                //SID_OPTIONS_START - ..END
-                                SID_SAVEREL_INET, SID_SAVEREL_FSYS,
-                                SID_INET_NOPROXY, SID_INET_FTP_PROXY_PORT,
-                                SID_SECURE_URL, SID_SECURE_URL>{} );
+        {
+                static const WhichRangesLiteral ranges { {
+                    //SID_OPTIONS_START - ..END
+                        {SID_SAVEREL_INET, SID_SAVEREL_FSYS},
+                        {SID_INET_NOPROXY, SID_INET_FTP_PROXY_PORT},
+                        {SID_SECURE_URL, SID_SECURE_URL} } };
+                pRet = std::make_unique<SfxItemSet>( SfxGetpApp()->GetPool(), ranges);
                 SfxGetpApp()->GetOptions(*pRet);
+        }
         break;
         case SID_FILTER_DLG:
-            pRet = std::make_unique<SfxItemSet>(
-                SfxGetpApp()->GetPool(),
-                svl::Items<
-                    SID_ATTR_WARNALIENFORMAT, SID_ATTR_WARNALIENFORMAT,
-                    SID_ATTR_DOCINFO, SID_ATTR_AUTOSAVEMINUTE,
-                    SID_SAVEREL_INET, SID_SAVEREL_FSYS,
-                    SID_ATTR_PRETTYPRINTING, SID_ATTR_PRETTYPRINTING>{} );
+        {
+            static const WhichRangesLiteral ranges { {
+                    {SID_ATTR_WARNALIENFORMAT, SID_ATTR_WARNALIENFORMAT},
+                    {SID_ATTR_DOCINFO, SID_ATTR_AUTOSAVEMINUTE},
+                    {SID_SAVEREL_INET, SID_SAVEREL_FSYS},
+                    {SID_ATTR_PRETTYPRINTING, SID_ATTR_PRETTYPRINTING} } };
+            pRet = std::make_unique<SfxItemSet>(SfxGetpApp()->GetPool(), ranges);
             SfxGetpApp()->GetOptions(*pRet);
-            break;
+        }
+        break;
 
         case SID_SB_STARBASEOPTIONS:
-            pRet = std::make_unique<SfxItemSet>( SfxGetpApp()->GetPool(),
-            svl::Items<SID_SB_POOLING_ENABLED, SID_SB_DB_REGISTER>{} );
+        {
+            static const WhichRangesLiteral ranges { { {SID_SB_POOLING_ENABLED, SID_SB_DB_REGISTER} } };
+            pRet = std::make_unique<SfxItemSet>( SfxGetpApp()->GetPool(), ranges );
             ::offapp::ConnectionPoolConfig::GetOptions(*pRet);
             svx::DbRegisteredNamesConfig::GetOptions(*pRet);
-            break;
+        }
+        break;
 
         case SID_SCH_EDITOPTIONS:
         {
             SvxChartOptions aChartOpt;
-            pRet = std::make_unique<SfxItemSet>( SfxGetpApp()->GetPool(), svl::Items<SID_SCH_EDITOPTIONS, SID_SCH_EDITOPTIONS>{} );
+            static const WhichRangesLiteral ranges { { {SID_SCH_EDITOPTIONS, SID_SCH_EDITOPTIONS} } };
+            pRet = std::make_unique<SfxItemSet>( SfxGetpApp()->GetPool(), ranges );
             pRet->Put( SvxChartColorTableItem( SID_SCH_EDITOPTIONS, aChartOpt.GetDefaultColors() ) );
             break;
         }
@@ -1187,7 +1192,8 @@ void OfaTreeOptionsDialog::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet 
             std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
 
             const SfxPoolItem* pItem = nullptr;
-            SfxItemSet aOptSet(SfxGetpApp()->GetPool(), svl::Items<SID_ATTR_QUICKLAUNCHER, SID_ATTR_QUICKLAUNCHER>{} );
+            static const WhichRangesLiteral ranges { { {SID_ATTR_QUICKLAUNCHER, SID_ATTR_QUICKLAUNCHER} } };
+            SfxItemSet aOptSet(SfxGetpApp()->GetPool(), ranges );
             aOptSet.Put(rSet);
             if(aOptSet.Count())
                 SfxGetpApp()->SetOptions( aOptSet );

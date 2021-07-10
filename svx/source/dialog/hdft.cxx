@@ -54,29 +54,29 @@ const tools::Long MINBODY = 56;  // 1mm in twips rounded
 const tools::Long DEF_DIST_WRITER = 500;    // 5mm (Writer)
 const tools::Long DEF_DIST_CALC = 250;      // 2.5mm (Calc)
 
-const sal_uInt16 SvxHFPage::pRanges[] =
+const WhichRangesLiteral ranges {
 {
-    SID_ATTR_BRUSH,          SID_ATTR_BRUSH,
+    {SID_ATTR_BRUSH,          SID_ATTR_BRUSH},
 
     // Support DrawingLayer FillStyles (no real call to below GetRanges()
     // detected, still do the complete transition)
-    XATTR_FILL_FIRST,        XATTR_FILL_LAST,
+    {XATTR_FILL_FIRST,        XATTR_FILL_LAST},
 
-    SID_ATTR_BORDER_OUTER,   SID_ATTR_BORDER_OUTER,
-    SID_ATTR_BORDER_INNER,   SID_ATTR_BORDER_INNER,
-    SID_ATTR_BORDER_SHADOW,  SID_ATTR_BORDER_SHADOW,
-    SID_ATTR_LRSPACE,        SID_ATTR_LRSPACE,
-    SID_ATTR_ULSPACE,        SID_ATTR_ULSPACE,
-    SID_ATTR_PAGE_SIZE,      SID_ATTR_PAGE_SIZE,
-    SID_ATTR_PAGE_HEADERSET, SID_ATTR_PAGE_HEADERSET,
-    SID_ATTR_PAGE_FOOTERSET, SID_ATTR_PAGE_FOOTERSET,
-    SID_ATTR_PAGE_ON,        SID_ATTR_PAGE_ON,
-    SID_ATTR_PAGE_DYNAMIC,   SID_ATTR_PAGE_DYNAMIC,
-    SID_ATTR_PAGE_SHARED,    SID_ATTR_PAGE_SHARED,
-    SID_ATTR_PAGE_SHARED_FIRST,    SID_ATTR_PAGE_SHARED_FIRST,
-    SID_ATTR_HDFT_DYNAMIC_SPACING, SID_ATTR_HDFT_DYNAMIC_SPACING,
-    0
-};
+    {SID_ATTR_BORDER_OUTER,   SID_ATTR_BORDER_OUTER},
+    {SID_ATTR_BORDER_INNER,   SID_ATTR_BORDER_INNER},
+    {SID_ATTR_BORDER_SHADOW,  SID_ATTR_BORDER_SHADOW},
+    {SID_ATTR_LRSPACE,        SID_ATTR_LRSPACE},
+    {SID_ATTR_ULSPACE,        SID_ATTR_ULSPACE},
+    {SID_ATTR_PAGE_SIZE,      SID_ATTR_PAGE_SIZE},
+    {SID_ATTR_PAGE_HEADERSET, SID_ATTR_PAGE_HEADERSET},
+    {SID_ATTR_PAGE_FOOTERSET, SID_ATTR_PAGE_FOOTERSET},
+    {SID_ATTR_PAGE_ON,        SID_ATTR_PAGE_ON},
+    {SID_ATTR_PAGE_DYNAMIC,   SID_ATTR_PAGE_DYNAMIC},
+    {SID_ATTR_PAGE_SHARED,    SID_ATTR_PAGE_SHARED},
+    {SID_ATTR_PAGE_SHARED_FIRST,    SID_ATTR_PAGE_SHARED_FIRST},
+    {SID_ATTR_HDFT_DYNAMIC_SPACING, SID_ATTR_HDFT_DYNAMIC_SPACING},
+} };
+const WhichRangesContainer SvxHFPage::pRanges(ranges);
 
 namespace svx {
 
@@ -207,7 +207,8 @@ bool SvxHFPage::FillItemSet( SfxItemSet* rSet )
     DBG_ASSERT(pPool,"no pool :-(");
     MapUnit eUnit = pPool->GetMetric(nWSize);
     // take over DrawingLayer FillStyles
-    SfxItemSet aSet(*pPool, svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{});
+    static const WhichRangesLiteral ranges { { {XATTR_FILL_FIRST, XATTR_FILL_LAST} } };
+    SfxItemSet aSet(*pPool, ranges);
     // Keep it valid
     aSet.MergeRange(nWSize, nWSize);
     aSet.MergeRange(nWLRSpace, nWLRSpace);
@@ -533,10 +534,10 @@ IMPL_LINK_NOARG(SvxHFPage, BackgroundHdl, weld::Button&, void)
 
         if(mbEnableDrawingLayerFillStyles)
         {
-            pBBSet.reset(new SfxItemSet(
-                *GetItemSet().GetPool(),
-                svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST,      // DrawingLayer FillStyle definitions
-                           SID_COLOR_TABLE, SID_PATTERN_LIST>{})); // XPropertyLists for Color, Gradient, Hatch and Graphic fills
+            static const WhichRangesLiteral ranges { {
+                    {XATTR_FILL_FIRST, XATTR_FILL_LAST},      // DrawingLayer FillStyle definitions
+                    {SID_COLOR_TABLE, SID_PATTERN_LIST} } }; // XPropertyLists for Color, Gradient, Hatch and Graphic fills
+            pBBSet.reset(new SfxItemSet(*GetItemSet().GetPool(), ranges));
             // Keep it valid
             pBBSet->MergeRange(nOuter, nOuter);
             pBBSet->MergeRange(nInner, nInner);
@@ -571,9 +572,9 @@ IMPL_LINK_NOARG(SvxHFPage, BackgroundHdl, weld::Button&, void)
         {
             const sal_uInt16 nBrush(GetWhich(SID_ATTR_BRUSH));
 
-            pBBSet.reset( new SfxItemSet(
-                *GetItemSet().GetPool(),
-                svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{}) );
+            static const WhichRangesLiteral ranges { {
+                {XATTR_FILL_FIRST, XATTR_FILL_LAST} } };
+            pBBSet.reset( new SfxItemSet(*GetItemSet().GetPool(), ranges) );
             // Keep it valid
             pBBSet->MergeRange(nBrush, nBrush);
             pBBSet->MergeRange(nOuter, nOuter);
@@ -646,8 +647,9 @@ IMPL_LINK_NOARG(SvxHFPage, BackgroundHdl, weld::Button&, void)
                         // create FillAttributes from SvxBrushItem
                         const SvxBrushItem& rItem
                             = static_cast<const SvxBrushItem&>(pBBSet->Get(nWhich));
-                        SfxItemSet aTempSet(*pBBSet->GetPool(),
-                                            svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{});
+                        static const WhichRangesLiteral ranges { {
+                                {XATTR_FILL_FIRST, XATTR_FILL_LAST} } };
+                        SfxItemSet aTempSet(*pBBSet->GetPool(), ranges);
 
                         setSvxBrushItemAsFillAttributesToTargetSet(rItem, aTempSet);
                         aFillAttributes =
@@ -721,7 +723,8 @@ void SvxHFPage::ResetBackground_Impl( const SfxItemSet& rSet )
                 {
                     // create FillAttributes from SvxBrushItem
                     const SvxBrushItem& rItem = static_cast< const SvxBrushItem& >(rTmpSet.Get(nWhich));
-                    SfxItemSet aTempSet(*rTmpSet.GetPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{});
+                    static const WhichRangesLiteral ranges { { {XATTR_FILL_FIRST, XATTR_FILL_LAST} } };
+                    SfxItemSet aTempSet(*rTmpSet.GetPool(), ranges);
 
                     setSvxBrushItemAsFillAttributesToTargetSet(rItem, aTempSet);
                     aHeaderFillAttributes = std::make_shared<drawinglayer::attribute::SdrAllFillAttributesHelper>(aTempSet);
@@ -757,7 +760,8 @@ void SvxHFPage::ResetBackground_Impl( const SfxItemSet& rSet )
                 {
                     // create FillAttributes from SvxBrushItem
                     const SvxBrushItem& rItem = static_cast< const SvxBrushItem& >(rTmpSet.Get(nWhich));
-                    SfxItemSet aTempSet(*rTmpSet.GetPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{});
+                    static const WhichRangesLiteral ranges { { {XATTR_FILL_FIRST, XATTR_FILL_LAST} } };
+                    SfxItemSet aTempSet(*rTmpSet.GetPool(), ranges);
 
                     setSvxBrushItemAsFillAttributesToTargetSet(rItem, aTempSet);
                     aFooterFillAttributes = std::make_shared<drawinglayer::attribute::SdrAllFillAttributesHelper>(aTempSet);
@@ -783,7 +787,8 @@ void SvxHFPage::ResetBackground_Impl( const SfxItemSet& rSet )
         {
             // create FillAttributes from SvxBrushItem
             const SvxBrushItem& rItem = static_cast< const SvxBrushItem& >(rSet.Get(nWhich));
-            SfxItemSet aTempSet(*rSet.GetPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{});
+            static const WhichRangesLiteral ranges { { {XATTR_FILL_FIRST, XATTR_FILL_LAST} } };
+            SfxItemSet aTempSet(*rSet.GetPool(), ranges);
 
             setSvxBrushItemAsFillAttributesToTargetSet(rItem, aTempSet);
             aPageFillAttributes = std::make_shared<drawinglayer::attribute::SdrAllFillAttributesHelper>(aTempSet);

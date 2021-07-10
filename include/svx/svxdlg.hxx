@@ -55,7 +55,7 @@ class SdrObject;
 class SvxSpellWrapper;
 struct FmSearchContext;
 
-typedef const sal_uInt16*  (*DialogGetRanges)();
+typedef WhichRangesContainer (*DialogGetRanges)();
 
 typedef ::std::vector< OUString > TargetList;
 
@@ -350,7 +350,7 @@ public:
     virtual VclPtr<SfxAbstractTabDialog> CreateTabItemDialog(weld::Window* pParent, const SfxItemSet& rSet) = 0;
     virtual VclPtr<VclAbstractDialog>      CreateSvxSearchAttributeDialog(weld::Window* pParent,
                                             SearchAttrItemList& rLst,
-                                            const sal_uInt16* pWhRanges)=0;
+                                            const WhichRangesContainer& pWhRanges)=0;
     virtual VclPtr<AbstractSvxSearchSimilarityDialog> CreateSvxSearchSimilarityDialog( weld::Window* pParent,
                                                             bool bRelax,
                                                             sal_uInt16 nOther,
