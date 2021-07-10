@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "818f59e5_ae85b2a1",
+        "filename": "sd/source/ui/remotecontrol/Communicator.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000120
+      },
+      "writtenOn": "2021-07-10T16:43:41Z",
+      "side": 1,
+      "message": "Some notes - feel free to ignore.\n\nAt first I was wondering if we can use xPS because it\u0027s already pointing to the model - but guessing that won\u0027t compile because xPS doesn\u0027t declare the right interface. It would be possible to add a temporary XRerence\u003cXModel\u003e but that\u0027s probably not a reasonable change if we\u0027re just trying to fix the crash.\n\nWhich is also when I realised that we should probably be doing this inside Listener::init which is  where we send slideshow_started. But that\u0027s also beyond the scope of a simple crash fix - so I filed https://bugs.documentfoundation.org/show_bug.cgi?id\u003d143293 to look into making that change in future. (This will need more testing because I\u0027m not sure how clients actually handle slideshow_info in the first place.)",
+      "range": {
+        "startLine": 80,
+        "startChar": 81,
+        "endLine": 80,
+        "endChar": 116
+      },
+      "revId": "464d8356b14004152c822e9cd79a0d0b5a9c34e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
