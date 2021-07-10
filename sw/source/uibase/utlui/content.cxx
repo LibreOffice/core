@@ -1468,6 +1468,11 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
     if (rCEvt.GetCommand() != CommandEventId::ContextMenu)
         return false;
 
+    if (std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator());
+            rCEvt.IsMouseEvent() &&  m_xTreeView->get_dest_row_at_pos(
+                rCEvt.GetMousePosPixel(), xEntry.get(), false))
+        m_xTreeView->set_cursor(*xEntry);
+
     std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(m_xTreeView.get(), "modules/swriter/ui/navigatorcontextmenu.ui"));
     std::unique_ptr<weld::Menu> xPop = xBuilder->weld_menu("navmenu");
 
