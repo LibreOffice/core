@@ -488,12 +488,6 @@ void Parser::parseFontFamilyName( FontAttributes& rResult )
 
     const sal_Unicode* pCopy = rResult.familyName.getStr();
     sal_Int32 nLen = rResult.familyName.getLength();
-    // parse out truetype subsets (e.g. BAAAAA+Thorndale)
-    if( nLen > 8 && pCopy[6] == '+' )
-    {
-        pCopy += 7;
-        nLen -= 7;
-    }
 
     // TODO: Looks like this block needs to be refactored
     while( nLen )
@@ -615,52 +609,6 @@ void Parser::readFont()
 
     // extract textual attributes (bold, italic in the name, etc.)
     parseFontFamilyName(aResult);
-    // need to read font file?
-    if( nFileLen )
-    {
-        uno::Sequence<sal_Int8> aFontFile(nFileLen);
-        readBinaryData( aFontFile );
-
-        awt::FontDescriptor aFD;
-        uno::Sequence< uno::Any > aArgs(1);
-        aArgs[0] <<= aFontFile;
-
-        try
-        {
-            uno::Reference< beans::XMaterialHolder > xMat(
-                m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-                    "com.sun.star.awt.FontIdentificator", aArgs, m_xContext ),
-                uno::UNO_QUERY );
-            if( xMat.is() )
-            {
-                uno::Any aRes( xMat->getMaterial() );
-                if( aRes >>= aFD )
-                {
-                    if (!aFD.Name.isEmpty())
-                    {
-                        aResult.familyName = aFD.Name;
-                        parseFontFamilyName(aResult);
-                    }
-                    aResult.isBold      = (aFD.Weight > 100.0);
-                    aResult.isItalic    = (aFD.Slant == awt::FontSlant_OBLIQUE ||
-                                           aFD.Slant == awt::FontSlant_ITALIC );
-                    aResult.isUnderline = false;
-                    aResult.size        = 0;
-                }
-            }
-        }
-        catch( uno::Exception& )
-        {
-        }
-
-        if( aResult.familyName.isEmpty() )
-        {
-            // last fallback
-            aResult.familyName  = "Arial";
-            aResult.isUnderline = false;
-        }
-
-    }
 
     if (!m_xDev)
         m_xDev.disposeAndReset(VclPtr<VirtualDevice>::Create());
