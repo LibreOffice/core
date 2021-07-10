@@ -420,10 +420,10 @@ typedef std::vector< std::unique_ptr< SfxPoolItem > > ItemVector;
 // collect all PoolItems from the applied styles
 static void lcl_AppendSetItems( ItemVector& rItemVector, const SfxItemSet& rStyleAttrSet )
 {
-    const sal_uInt16*  pRanges = rStyleAttrSet.GetRanges();
-    while( *pRanges )
+    const WhichRangesContainer& pRanges = rStyleAttrSet.GetRanges();
+    for(const auto & rPair : pRanges)
     {
-        for ( sal_uInt16 nWhich = *pRanges; nWhich <= *(pRanges+1); ++nWhich )
+        for ( sal_uInt16 nWhich = rPair.first; nWhich <= rPair.second; ++nWhich )
         {
             const SfxPoolItem* pItem;
             if( SfxItemState::SET == rStyleAttrSet.GetItemState( nWhich, false, &pItem ) )
@@ -431,7 +431,6 @@ static void lcl_AppendSetItems( ItemVector& rItemVector, const SfxItemSet& rStyl
                 rItemVector.emplace_back( pItem->Clone() );
             }
         }
-        pRanges += 2;
     }
 }
 // remove all items that are inherited from the styles

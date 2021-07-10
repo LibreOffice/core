@@ -35,14 +35,11 @@
 
 using namespace ::com::sun::star;
 
-const sal_uInt16 SvxTextAttrPage::pRanges[] =
-{
-      SDRATTR_MISC_FIRST
-    , SDRATTR_TEXT_HORZADJUST
-    , SDRATTR_TEXT_WORDWRAP
-    , SDRATTR_TEXT_WORDWRAP
-    , 0
-};
+const WhichRangesContainer SvxTextAttrPage::pRanges(
+    svl::Items<
+      SDRATTR_MISC_FIRST ,SDRATTR_TEXT_HORZADJUST,
+      SDRATTR_TEXT_WORDWRAP, SDRATTR_TEXT_WORDWRAP
+>::value);
 
 /*************************************************************************
 |*

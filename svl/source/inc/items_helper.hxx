@@ -30,12 +30,7 @@
 
 namespace svl::detail
 {
-/**
- * Determines the number of sal_uInt16s in a 0-terminated array of pairs of
- * sal_uInt16s, each representing a range of sal_uInt16s, and total capacity of the ranges.
- * The terminating 0 is included in the count.
- */
-inline std::pair<sal_uInt16, sal_uInt16> CountRanges(const sal_uInt16* pRanges)
+inline std::pair<sal_uInt16, sal_uInt16> CountRangesOld(const sal_uInt16* pRanges)
 {
     sal_uInt16 nCount = 0;
     sal_uInt16 nCapacity = 0;
@@ -51,75 +46,32 @@ inline std::pair<sal_uInt16, sal_uInt16> CountRanges(const sal_uInt16* pRanges)
     }
     return { nCount, nCapacity };
 }
-
-// Adds a range to which ranges, keeping the ranges in valid state (sorted, non-overlapping)
-inline std::unique_ptr<sal_uInt16[]> MergeRange(const sal_uInt16* pWhichRanges, sal_uInt16 nFrom,
-                                                sal_uInt16 nTo)
+/**
+ * Determines the number of sal_uInt16s in a container of pairs of
+ * sal_uInt16s, each representing a range of sal_uInt16s, and total capacity of the ranges.
+ */
+inline sal_uInt16 CountRanges(const WhichRangesContainer& pRanges)
 {
-    assert(validRange(nFrom, nTo));
-
-    if (!pWhichRanges)
+    sal_uInt16 nCapacity = 0;
+    for (const auto& rPair : pRanges)
     {
-        auto pNewRanges = std::make_unique<sal_uInt16[]>(3);
-        pNewRanges[0] = nFrom;
-        pNewRanges[1] = nTo;
-        pNewRanges[2] = 0;
-        return pNewRanges;
+        nCapacity += rangeSize(rPair.first, rPair.second);
     }
+    return nCapacity;
+}
 
-    assert(validRanges(pWhichRanges));
-
-    // create vector of ranges (sal_uInt16 pairs of lower and upper bound)
-    const size_t nOldCount = CountRanges(pWhichRanges).first;
-    std::vector<std::pair<sal_uInt16, sal_uInt16>> aRangesTable;
-    aRangesTable.reserve(nOldCount / 2 + 1);
-    bool bAdded = false;
-    for (size_t i = 0; i + 1 < nOldCount; i += 2)
+inline bool validRanges2(const WhichRangesContainer& pRanges)
+{
+    for (sal_Int32 i = 0; i < pRanges.size(); ++i)
     {
-        if (!bAdded && pWhichRanges[i] >= nFrom)
-        { // insert new range, keep ranges sorted
-            aRangesTable.emplace_back(std::pair<sal_uInt16, sal_uInt16>(nFrom, nTo));
-            bAdded = true;
-        }
-        // insert current range
-        aRangesTable.emplace_back(
-            std::pair<sal_uInt16, sal_uInt16>(pWhichRanges[i], pWhichRanges[i + 1]));
+        auto p = pRanges[i];
+        if (!validRange(p.first, p.second))
+            return false;
+        // ranges must be sorted
+        if (i < pRanges.size() - 1 && !validGap(p.second, pRanges[i + 1].first))
+            return false;
     }
-    if (!bAdded)
-        aRangesTable.emplace_back(std::pair<sal_uInt16, sal_uInt16>(nFrom, nTo));
-
-    // true if ranges overlap or adjoin, false if ranges are separate
-    auto needMerge
-        = [](std::pair<sal_uInt16, sal_uInt16> lhs, std::pair<sal_uInt16, sal_uInt16> rhs) {
-              return (lhs.first - 1) <= rhs.second && (rhs.first - 1) <= lhs.second;
-          };
-
-    auto it = aRangesTable.begin();
-    // we got at least one range
-    for (;;)
-    {
-        auto itNext = std::next(it);
-        if (itNext == aRangesTable.end())
-            break;
-        // check neighbouring ranges, find first range which overlaps or adjoins a previous range
-        if (needMerge(*it, *itNext))
-        {
-            // lower bounds are sorted, implies: it->first = min(it[0].first, it[1].first)
-            it->second = std::max(it->second, itNext->second);
-            aRangesTable.erase(itNext);
-        }
-        else
-            ++it;
-    }
-
-    // construct range array
-    const size_t nNewSize = 2 * aRangesTable.size() + 1;
-    auto pNewRanges = std::make_unique<sal_uInt16[]>(nNewSize);
-    for (size_t i = 0; i < (nNewSize - 1); i += 2)
-        std::tie(pNewRanges[i], pNewRanges[i + 1]) = aRangesTable[i / 2];
-
-    pNewRanges[nNewSize - 1] = 0;
-    return pNewRanges;
+    return true;
 }
 }
 
