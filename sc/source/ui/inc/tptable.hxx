@@ -23,13 +23,13 @@
 
 class ScTablePage : public SfxTabPage
 {
-    static const sal_uInt16 pPageTableRanges[];
+    static const WhichRangesContainer pPageTableRanges;
 public:
     ScTablePage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreSet);
     static std::unique_ptr<SfxTabPage> Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rCoreSet);
     virtual         ~ScTablePage() override;
 
-    static  const sal_uInt16* GetRanges () { return pPageTableRanges; }
+    static WhichRangesContainer GetRanges () { return pPageTableRanges; }
     virtual bool        FillItemSet     ( SfxItemSet* rCoreSet ) override;
     virtual void        Reset           ( const SfxItemSet* rCoreSet ) override;
     virtual DeactivateRC   DeactivatePage  ( SfxItemSet* pSet ) override;

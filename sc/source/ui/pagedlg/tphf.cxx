@@ -40,9 +40,13 @@
 #include <helpids.h>
 
 
+const WhichRangesLiteral ranges { {
+        {ATTR_PAGE, ATTR_PAGE},
+        {ATTR_PAGE_HEADERLEFT, ATTR_PAGE_FOOTERFIRST}
+} };
 ScHFPage::ScHFPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet, sal_uInt16 nSetId)
     : SvxHFPage(pPage, pController, rSet, nSetId)
-    , aDataSet(*rSet.GetPool(), svl::Items<ATTR_PAGE, ATTR_PAGE, ATTR_PAGE_HEADERLEFT, ATTR_PAGE_FOOTERFIRST>{})
+    , aDataSet(*rSet.GetPool(), ranges)
     , nPageUsage(SvxPageUsage::All)
     , pStyleDlg(nullptr)
     , m_xBtnEdit(m_xBuilder->weld_button("buttonEdit"))
@@ -218,7 +222,7 @@ std::unique_ptr<SfxTabPage> ScHeaderPage::Create(weld::Container* pPage, weld::D
     return std::make_unique<ScHeaderPage>(pPage, pController, *rCoreSet);
 }
 
-const sal_uInt16* ScHeaderPage::GetRanges()
+WhichRangesContainer ScHeaderPage::GetRanges()
 {
     return SvxHeaderPage::GetRanges();
 }
@@ -234,7 +238,7 @@ std::unique_ptr<SfxTabPage> ScFooterPage::Create(weld::Container* pPage, weld::D
     return std::make_unique<ScFooterPage>(pPage, pController, *rCoreSet);
 }
 
-const sal_uInt16* ScFooterPage::GetRanges()
+WhichRangesContainer ScFooterPage::GetRanges()
 {
     return SvxHeaderPage::GetRanges();
 }

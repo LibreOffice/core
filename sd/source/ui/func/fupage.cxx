@@ -77,21 +77,20 @@ namespace sd {
 
 static void mergeItemSetsImpl( SfxItemSet& rTarget, const SfxItemSet& rSource )
 {
-    const sal_uInt16* pPtr = rSource.GetRanges();
+    const WhichRangesContainer& rRanges = rSource.GetRanges();
     sal_uInt16 p1, p2;
-    while( *pPtr )
+    for (sal_Int32 i = 0; i < rRanges.size(); ++i)
     {
-        p1 = pPtr[0];
-        p2 = pPtr[1];
+        p1 = rRanges[i].first;
+        p2 = rRanges[i].second;
 
         // make ranges discrete
-        while(pPtr[2] && (pPtr[2] - p2 == 1))
+        while(i < rRanges.size()-1 && (rRanges[i+1].first - p2 == 1))
         {
-            p2 = pPtr[3];
-            pPtr += 2;
+            p2 = rRanges[i+1].second;
+            ++i;
         }
         rTarget.MergeRange( p1, p2 );
-        pPtr += 2;
     }
 
     rTarget.Put(rSource);
@@ -201,15 +200,16 @@ const SfxItemSet* FuPage::ExecuteDialog(weld::Window* pParent, const SfxRequest&
     if (!mpDrawViewShell)
         return nullptr;
 
-    SfxItemSet aNewAttr(mpDoc->GetPool(), {
-                                              { XATTR_FILL_FIRST, XATTR_FILL_LAST },
-                                              { EE_PARA_WRITINGDIR, EE_PARA_WRITINGDIR },
-                                              { SID_ATTR_BORDER_OUTER, SID_ATTR_BORDER_OUTER },
-                                              { SID_ATTR_BORDER_SHADOW, SID_ATTR_BORDER_SHADOW },
-                                              { SID_ATTR_PAGE, SID_ATTR_PAGE_SHARED },
-                                              { SID_ATTR_CHAR_GRABBAG, SID_ATTR_CHAR_GRABBAG },
-                                              { SID_ATTR_PAGE_COLOR, SID_ATTR_PAGE_FILLSTYLE },
-                                          });
+    static const WhichRangesLiteral ranges { {
+            { XATTR_FILL_FIRST, XATTR_FILL_LAST },
+            { EE_PARA_WRITINGDIR, EE_PARA_WRITINGDIR },
+            { SID_ATTR_BORDER_OUTER, SID_ATTR_BORDER_OUTER },
+            { SID_ATTR_BORDER_SHADOW, SID_ATTR_BORDER_SHADOW },
+            { SID_ATTR_PAGE, SID_ATTR_PAGE_SHARED },
+            { SID_ATTR_CHAR_GRABBAG, SID_ATTR_CHAR_GRABBAG },
+            { SID_ATTR_PAGE_COLOR, SID_ATTR_PAGE_FILLSTYLE } } };
+    SfxItemSet aNewAttr(mpDoc->GetPool(), ranges);
+
     // Keep it sorted
     aNewAttr.MergeRange(mpDoc->GetPool().GetWhich(SID_ATTR_LRSPACE),
                         mpDoc->GetPool().GetWhich(SID_ATTR_ULSPACE));
@@ -266,14 +266,14 @@ const SfxItemSet* FuPage::ExecuteDialog(weld::Window* pParent, const SfxRequest&
 
     // Merge ItemSet for dialog
 
-    const sal_uInt16* pPtr = aNewAttr.GetRanges();
-    sal_uInt16 p1 = pPtr[0], p2 = pPtr[1];
-    while(pPtr[2] && (pPtr[2] - p2 == 1))
+    const WhichRangesContainer& rRanges = aNewAttr.GetRanges();
+    sal_uInt16 p1 = rRanges[0].first, p2 = rRanges[0].second;
+    sal_Int32 idx = 1;
+    while(idx < rRanges.size() && (rRanges[idx].first - p2 == 1))
     {
-        p2 = pPtr[3];
-        pPtr += 2;
+        p2 = rRanges[idx].second;
     }
-    SfxItemSet aMergedAttr( *aNewAttr.GetPool(), {{p1, p2}} );
+    SfxItemSet aMergedAttr( *aNewAttr.GetPool(), p1, p2 );
 
     mergeItemSetsImpl( aMergedAttr, aNewAttr );
 
@@ -330,12 +330,14 @@ const SfxItemSet* FuPage::ExecuteDialog(weld::Window* pParent, const SfxRequest&
 
         if (nError == ERRCODE_NONE)
         {
-            pTempSet.emplace( mpDoc->GetPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{} );
+            static const WhichRangesLiteral ranges2 { { {XATTR_FILL_FIRST, XATTR_FILL_LAST} } };
+            pTempSet.emplace( mpDoc->GetPool(), ranges2 );
 
             pTempSet->Put( XFillStyleItem( drawing::FillStyle_BITMAP ) );
 
             // MigrateItemSet makes sure the XFillBitmapItem will have a unique name
-            SfxItemSet aMigrateSet( mpDoc->GetPool(), svl::Items<XATTR_FILLBITMAP, XATTR_FILLBITMAP>{} );
+            static const WhichRangesLiteral migrateRanges { { {XATTR_FILLBITMAP, XATTR_FILLBITMAP} } };
+            SfxItemSet aMigrateSet( mpDoc->GetPool(), migrateRanges );
             aMigrateSet.Put(XFillBitmapItem("background", aGraphic));
             SdrModel::MigrateItemSet( &aMigrateSet, &*pTempSet, mpDoc );
 
@@ -396,7 +398,8 @@ const SfxItemSet* FuPage::ExecuteDialog(weld::Window* pParent, const SfxRequest&
             if (pTempGradItem && pTempGradItem->GetName().isEmpty())
             {
                 // MigrateItemSet guarantees unique gradient names
-                SfxItemSet aMigrateSet( mpDoc->GetPool(), svl::Items<XATTR_FILLGRADIENT, XATTR_FILLGRADIENT>{} );
+                static const WhichRangesLiteral ranges2 { { {XATTR_FILLGRADIENT, XATTR_FILLGRADIENT} } };
+                SfxItemSet aMigrateSet( mpDoc->GetPool(), ranges2 );
                 aMigrateSet.Put( XFillGradientItem("gradient", pTempGradItem->GetGradientValue()) );
                 SdrModel::MigrateItemSet( &aMigrateSet, &*pTempSet, mpDoc);
             }
@@ -405,7 +408,8 @@ const SfxItemSet* FuPage::ExecuteDialog(weld::Window* pParent, const SfxRequest&
             if (pTempHatchItem && pTempHatchItem->GetName().isEmpty())
             {
                 // MigrateItemSet guarantees unique hatch names
-                SfxItemSet aMigrateSet( mpDoc->GetPool(), svl::Items<XATTR_FILLHATCH, XATTR_FILLHATCH>{} );
+                static const WhichRangesLiteral ranges2 { { {XATTR_FILLHATCH, XATTR_FILLHATCH} } };
+                SfxItemSet aMigrateSet( mpDoc->GetPool(), ranges2 );
                 aMigrateSet.Put( XFillHatchItem("hatch", pTempHatchItem->GetHatchValue()) );
                 SdrModel::MigrateItemSet( &aMigrateSet, &*pTempSet, mpDoc);
             }
