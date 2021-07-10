@@ -1166,8 +1166,8 @@ std::optional<SfxItemSet> SfxBindings::CreateSet_Impl
     }
 
     // Create a Set from the ranges
+    WhichRangesContainer ranges;
     size_t i = 0;
-    SfxItemSet aSet(rPool, nullptr);
     while ( i < rFound.size() )
     {
         const sal_uInt16 nWhich1 = rFound[i].nWhichId;
@@ -1176,8 +1176,9 @@ std::optional<SfxItemSet> SfxBindings::CreateSet_Impl
             if ( rFound[i].nWhichId+1 != rFound[i+1].nWhichId )
                 break;
         const sal_uInt16 nWhich2 = rFound[i++].nWhichId;
-        aSet.MergeRange(nWhich1, nWhich2);
+        ranges = ranges.MergeRange(nWhich1, nWhich2);
     }
+    SfxItemSet aSet(rPool, std::move(ranges));
     return aSet;
 }
 

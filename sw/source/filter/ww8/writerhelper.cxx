@@ -279,7 +279,7 @@ namespace sw
         sal_uInt16 GetSetWhichFromSwDocWhich(const SfxItemSet &rSet,
             const SwDoc &rDoc, sal_uInt16 nWhich)
         {
-            if (RES_WHICHHINT_END < *(rSet.GetRanges()))
+            if (RES_WHICHHINT_END < rSet.GetRanges()[0].first)
             {
                 nWhich = TransformWhichBetweenPools(*rSet.GetPool(),
                     rDoc.GetAttrPool(), nWhich);

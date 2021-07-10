@@ -291,7 +291,7 @@ const SfxItemSet* AbstractTabController_Impl::GetOutputItemSet() const
     return m_xDlg->GetOutputItemSet();
 }
 
-const sal_uInt16* AbstractTabController_Impl::GetInputRanges(const SfxItemPool& pItem )
+WhichRangesContainer AbstractTabController_Impl::GetInputRanges(const SfxItemPool& pItem )
 {
     return m_xDlg->GetInputRanges( pItem );
 }
@@ -425,7 +425,7 @@ const SfxItemSet* AbstractSwLabDlg_Impl::GetOutputItemSet() const
     return m_xDlg->GetOutputItemSet();
 }
 
-const sal_uInt16* AbstractSwLabDlg_Impl::GetInputRanges(const SfxItemPool& pItem )
+WhichRangesContainer AbstractSwLabDlg_Impl::GetInputRanges(const SfxItemPool& pItem )
 {
     return m_xDlg->GetInputRanges( pItem );
 }
@@ -480,7 +480,7 @@ const SfxItemSet* AbstractSwFieldDlg_Impl::GetOutputItemSet() const
     return m_xDlg->GetOutputItemSet();
 }
 
-const sal_uInt16* AbstractSwFieldDlg_Impl::GetInputRanges(const SfxItemPool& pItem )
+WhichRangesContainer AbstractSwFieldDlg_Impl::GetInputRanges(const SfxItemPool& pItem )
 {
     return m_xDlg->GetInputRanges( pItem );
 }

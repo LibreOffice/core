@@ -130,11 +130,14 @@ void ConvertAttrCharToGen(SfxItemSet& rSet, bool bIsPara)
     SfxGrabBagItem aGrabBag(RES_PARATR_GRABBAG);
     aGrabBag.GetGrabBag()["DialogUseCharAttr"] <<= true;
     // Store initial ranges to allow restoring later
-    const sal_uInt16* pRanges = rSet.GetRanges();
-    const sal_uInt16* pEnd = pRanges;
-    while (*pEnd)
-        ++pEnd;
-    const uno::Sequence<sal_uInt16> aOrigRanges(pRanges, pEnd - pRanges + 1);
+    uno::Sequence<sal_uInt16> aOrigRanges(rSet.GetRanges().size() * 2 + 1);
+    int i = 0;
+    for (const auto& rPair : rSet.GetRanges())
+    {
+        aOrigRanges.getArray()[i++] = rPair.first;
+        aOrigRanges.getArray()[i++] = rPair.second;
+    }
+    aOrigRanges.getArray()[i++] = 0;
     aGrabBag.GetGrabBag()["OrigItemSetRanges"] <<= aOrigRanges;
     rSet.MergeRange(RES_PARATR_GRABBAG, RES_PARATR_GRABBAG);
     rSet.Put(aGrabBag);
@@ -176,10 +179,18 @@ void ConvertAttrGenToChar(SfxItemSet& rSet, const SfxItemSet& rOrigSet, bool bIs
         auto aIterator = rMap.find("OrigItemSetRanges");
         if (aIterator != rMap.end())
         {
-            if (uno::Sequence<sal_uInt16> aOrigRanges; (aIterator->second >>= aOrigRanges)
-                                                       && aOrigRanges.getLength() % 2 == 1
-                                                       && *(std::cend(aOrigRanges) - 1) == 0)
-                rSet.SetRanges(aOrigRanges.getConstArray());
+            uno::Sequence<sal_uInt16> aOrigRanges;
+            if ( aIterator->second >>= aOrigRanges )
+            {
+                assert(aOrigRanges.getLength() % 2 == 1);
+                int numPairs = (aOrigRanges.getLength()-1)/2;
+                std::unique_ptr<WhichPair[]> xPairs(new WhichPair[numPairs]);
+                for(int i=0; i<aOrigRanges.getLength()-1; i += 2)
+                {
+                    xPairs[i/2] = { aOrigRanges[i], aOrigRanges[i+1] };
+                }
+                rSet.SetRanges(WhichRangesContainer(std::move(xPairs), numPairs));
+            }
         }
     }
     assert(SfxItemState::SET != rSet.GetItemState(RES_PARATR_GRABBAG, false));
