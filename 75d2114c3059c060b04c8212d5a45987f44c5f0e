@@ -93,6 +93,30 @@
       "revId": "75d2114c3059c060b04c8212d5a45987f44c5f0e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bf5e70bf_236a611b",
+        "filename": "vcl/backendtest/outputdevice/common.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 569,
+      "author": {
+        "id": 1002896
+      },
+      "writtenOn": "2021-07-10T09:51:16Z",
+      "side": 1,
+      "message": "Alright, Thanks for the clarification! However, there\u0027s still one confusion though and that is - are we supposed to manually store the set(pixel of the shape\u0027s boundary) coordinates in a std::map to be checked and asserted later or should we store the pixel accordingly the color at runtime in std::map and run our checks then and there?\n\nAlso, I\u0027ll reconfigure this patch accordingly and draw a new shape, irregular and non-symmetric one then.",
+      "parentUuid": "c99a1be5_d5337758",
+      "range": {
+        "startLine": 559,
+        "startChar": 4,
+        "endLine": 569,
+        "endChar": 5
+      },
+      "revId": "75d2114c3059c060b04c8212d5a45987f44c5f0e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
