@@ -20,19 +20,20 @@
 #define INCLUDED_SVL_WHITER_HXX
 
 #include <svl/svldllapi.h>
+#include <svl/whichranges.hxx>
 
 class SfxItemSet;
 
 class SVL_DLLPUBLIC SfxWhichIter
 {
-    const sal_uInt16* const pStart;
-    const sal_uInt16* pRanges;
+    const WhichRangesContainer& pStart;
+    const WhichPair* pRanges;
     sal_uInt16 nOffset;
 
 public:
     SfxWhichIter(const SfxItemSet& rSet);
 
-    sal_uInt16 GetCurWhich() const { return pRanges[0] + nOffset; }
+    sal_uInt16 GetCurWhich() const { return pRanges->first + nOffset; }
     sal_uInt16 NextWhich();
     sal_uInt16 FirstWhich();
 };

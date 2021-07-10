@@ -23,6 +23,7 @@
 #include <svl/poolitem.hxx>
 #include <svl/svldllapi.h>
 #include <svl/typedwhich.hxx>
+#include <svl/whichranges.hxx>
 #include <memory>
 #include <vector>
 #include <o3tl/sorted_vector.hxx>
@@ -63,8 +64,8 @@ private:
 
 public:
     // for default SfxItemSet::CTOR, set default WhichRanges
-    void                            FillItemIdRanges_Impl( std::unique_ptr<sal_uInt16[]>& pWhichRanges ) const;
-    const sal_uInt16*               GetFrozenIdRanges() const;
+    void                            FillItemIdRanges_Impl( WhichRangesContainer& pWhichRanges ) const;
+    const WhichRangesContainer &    GetFrozenIdRanges() const;
 
 protected:
     static inline void              ClearRefCount(SfxPoolItem& rItem);
