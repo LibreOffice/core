@@ -79,10 +79,10 @@ void SdLayoutTest::testTdf128212()
     CPPUNIT_ASSERT(pXmlDoc);
 
     // Without the fix in place, this test would have failed with
-    // - Expected: 7798
+    // - Expected: 7797
     // - Actual  : 12068
     assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray", "x", "4525");
-    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray", "y", "7798");
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray", "y", "7797");
 
     xDocShRef->DoClose();
 }
