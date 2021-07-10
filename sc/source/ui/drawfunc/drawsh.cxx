@@ -198,7 +198,8 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
 
         case SID_TEXT_STANDARD: // delete hard text attributes
             {
-                SfxItemSet aEmptyAttr(GetPool(), svl::Items<EE_ITEMS_START, EE_ITEMS_END>{});
+                static const WhichRangesLiteral ranges { { {EE_ITEMS_START, EE_ITEMS_END} } };
+                SfxItemSet aEmptyAttr(GetPool(), ranges);
                 pView->SetAttributes(aEmptyAttr, true);
             }
             break;
@@ -365,7 +366,7 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
                                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                                 VclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateCaptionDialog(pWin ? pWin->GetFrameWeld() : nullptr, pView));
 
-                                const sal_uInt16* pRange = pDlg->GetInputRanges( *aNewAttr.GetPool() );
+                                const WhichRangesContainer& pRange = pDlg->GetInputRanges( *aNewAttr.GetPool() );
                                 SfxItemSet aCombSet( *aNewAttr.GetPool(), pRange );
                                 aCombSet.Put( aNewAttr );
                                 aCombSet.Put( aNewGeoAttr );
@@ -442,7 +443,10 @@ void ScDrawShell::ExecuteMacroAssign(SdrObject* pObj, weld::Window* pWin)
     }
 
     // create empty itemset for macro-dlg
-    SfxItemSet aItemSet(SfxGetpApp()->GetPool(), svl::Items<SID_ATTR_MACROITEM, SID_ATTR_MACROITEM, SID_EVENTCONFIG, SID_EVENTCONFIG>{} );
+    static const WhichRangesLiteral ranges { {
+        {SID_ATTR_MACROITEM, SID_ATTR_MACROITEM},
+        {SID_EVENTCONFIG, SID_EVENTCONFIG} } };
+    SfxItemSet aItemSet(SfxGetpApp()->GetPool(), ranges);
     aItemSet.Put ( aItem );
 
     SfxEventNamesItem aNamesItem(SID_EVENTCONFIG);
