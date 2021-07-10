@@ -47,22 +47,21 @@ std::unique_ptr<SfxItemSet> lcl_CreateEmptyItemSet( SelectionType nSelectionType
     std::unique_ptr<SfxItemSet> pItemSet;
     if( nSelectionType & (SelectionType::Frame | SelectionType::Ole | SelectionType::Graphic) )
     {
-        pItemSet = std::make_unique<SfxItemSet>(
-            rPool,
-            svl::Items<
-                RES_FRMATR_BEGIN, RES_FILL_ORDER,
+        static const WhichRangesLiteral ranges { {
+                {RES_FRMATR_BEGIN, RES_FILL_ORDER},
                 // no RES_FRM_SIZE
-                RES_PAPER_BIN, RES_SURROUND,
+                {RES_PAPER_BIN, RES_SURROUND},
                 // no RES_VERT_ORIENT
                 // no RES_HORI_ORIENT
                 // no RES_ANCHOR
-                RES_BACKGROUND, RES_SHADOW,
+                {RES_BACKGROUND, RES_SHADOW},
                 // no RES_FRMMACRO
-                RES_COL, RES_KEEP,
+                {RES_COL, RES_KEEP},
                 // no RES_URL
-                RES_EDIT_IN_READONLY, RES_LAYOUT_SPLIT,
+                {RES_EDIT_IN_READONLY, RES_LAYOUT_SPLIT},
                 // no RES_CHAIN
-                RES_TEXTGRID, RES_FRMATR_END - 1>{});
+                {RES_TEXTGRID, RES_FRMATR_END - 1} } };
+        pItemSet = std::make_unique<SfxItemSet>(rPool, ranges);
     }
     else if( nSelectionType & SelectionType::DrawObject )
     {
@@ -71,26 +70,30 @@ std::unique_ptr<SfxItemSet> lcl_CreateEmptyItemSet( SelectionType nSelectionType
     else if( nSelectionType & SelectionType::Text )
     {
         if( bNoParagraphFormats )
-            pItemSet = std::make_unique<SfxItemSet>(rPool,
-                    svl::Items<RES_CHRATR_BEGIN, RES_CHRATR_END - 1>{});
+        {
+            static const WhichRangesLiteral ranges { {
+                    {RES_CHRATR_BEGIN, RES_CHRATR_END - 1} } };
+            pItemSet = std::make_unique<SfxItemSet>(rPool, ranges);
+        }
         else
-            pItemSet = std::make_unique<SfxItemSet>(
-                rPool,
-                svl::Items<
-                    RES_CHRATR_BEGIN, RES_CHRATR_END - 1,
-                    RES_PARATR_BEGIN, RES_FILL_ORDER,
+        {
+            static const WhichRangesLiteral ranges { {
+                    {RES_CHRATR_BEGIN, RES_CHRATR_END - 1},
+                    {RES_PARATR_BEGIN, RES_FILL_ORDER},
                     // no RES_FRM_SIZE
-                    RES_PAPER_BIN, RES_SURROUND,
+                    {RES_PAPER_BIN, RES_SURROUND},
                     // no RES_VERT_ORIENT
                     // no RES_HORI_ORIENT
                     // no RES_ANCHOR
-                    RES_BACKGROUND, RES_SHADOW,
+                    {RES_BACKGROUND, RES_SHADOW},
                     // no RES_FRMMACRO
-                    RES_COL, RES_KEEP,
+                    {RES_COL, RES_KEEP},
                     // no RES_URL
-                    RES_EDIT_IN_READONLY, RES_LAYOUT_SPLIT,
+                    {RES_EDIT_IN_READONLY, RES_LAYOUT_SPLIT},
                     // no RES_CHAIN
-                    RES_TEXTGRID, RES_FRMATR_END - 1>{});
+                    {RES_TEXTGRID, RES_FRMATR_END - 1} } };
+            pItemSet = std::make_unique<SfxItemSet>(rPool, ranges);
+        }
     }
     return pItemSet;
 }
@@ -377,21 +380,20 @@ void SwFormatClipboard::Copy( SwWrtShell& rWrtShell, SfxItemPool& rPool, bool bP
 
     if( nSelectionType & SelectionType::TableCell )//only copy table attributes if really cells are selected (not only text in tables)
     {
-        m_pTableItemSet = std::make_unique<SfxItemSet>(
-            rPool,
-            svl::Items<
-                RES_PAGEDESC, RES_BREAK,
-                RES_BACKGROUND, RES_SHADOW, // RES_BOX is inbetween
-                RES_KEEP, RES_KEEP,
-                RES_LAYOUT_SPLIT, RES_LAYOUT_SPLIT,
-                RES_FRAMEDIR, RES_FRAMEDIR,
-                RES_ROW_SPLIT, RES_ROW_SPLIT,
-                SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_SHADOW,
+        static const WhichRangesLiteral ranges { {
+                {RES_PAGEDESC, RES_BREAK},
+                {RES_BACKGROUND, RES_SHADOW}, // RES_BOX is inbetween
+                {RES_KEEP, RES_KEEP},
+                {RES_LAYOUT_SPLIT, RES_LAYOUT_SPLIT},
+                {RES_FRAMEDIR, RES_FRAMEDIR},
+                {RES_ROW_SPLIT, RES_ROW_SPLIT},
+                {SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_SHADOW},
                     // SID_ATTR_BORDER_OUTER is inbetween
-                SID_ATTR_BRUSH_ROW, SID_ATTR_BRUSH_TABLE,
-                FN_TABLE_SET_VERT_ALIGN, FN_TABLE_SET_VERT_ALIGN,
-                FN_TABLE_BOX_TEXTORIENTATION, FN_TABLE_BOX_TEXTORIENTATION,
-                FN_PARAM_TABLE_HEADLINE, FN_PARAM_TABLE_HEADLINE>{});
+                {SID_ATTR_BRUSH_ROW, SID_ATTR_BRUSH_TABLE},
+                {FN_TABLE_SET_VERT_ALIGN, FN_TABLE_SET_VERT_ALIGN},
+                {FN_TABLE_BOX_TEXTORIENTATION, FN_TABLE_BOX_TEXTORIENTATION},
+                {FN_PARAM_TABLE_HEADLINE, FN_PARAM_TABLE_HEADLINE} } };
+        m_pTableItemSet = std::make_unique<SfxItemSet>(rPool, ranges);
         lcl_getTableAttributes( *m_pTableItemSet, rWrtShell );
     }
 
@@ -420,10 +422,10 @@ typedef std::vector< std::unique_ptr< SfxPoolItem > > ItemVector;
 // collect all PoolItems from the applied styles
 static void lcl_AppendSetItems( ItemVector& rItemVector, const SfxItemSet& rStyleAttrSet )
 {
-    const sal_uInt16*  pRanges = rStyleAttrSet.GetRanges();
-    while( *pRanges )
+    const WhichRangesContainer& pRanges = rStyleAttrSet.GetRanges();
+    for(const auto & rPair : pRanges)
     {
-        for ( sal_uInt16 nWhich = *pRanges; nWhich <= *(pRanges+1); ++nWhich )
+        for ( sal_uInt16 nWhich = rPair.first; nWhich <= rPair.second; ++nWhich )
         {
             const SfxPoolItem* pItem;
             if( SfxItemState::SET == rStyleAttrSet.GetItemState( nWhich, false, &pItem ) )
@@ -431,7 +433,6 @@ static void lcl_AppendSetItems( ItemVector& rItemVector, const SfxItemSet& rStyl
                 rItemVector.emplace_back( pItem->Clone() );
             }
         }
-        pRanges += 2;
     }
 }
 // remove all items that are inherited from the styles

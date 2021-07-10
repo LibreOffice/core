@@ -32,6 +32,7 @@
 #include <svl/svldllapi.h>
 #include <svl/poolitem.hxx>
 #include <svl/typedwhich.hxx>
+#include <svl/whichranges.hxx>
 
 class SfxItemPool;
 
@@ -96,15 +97,19 @@ class SAL_WARN_UNUSED SVL_DLLPUBLIC SfxItemSet
     const SfxItemSet* m_pParent;       ///< derivation
     std::unique_ptr<SfxPoolItem const*[]>
                       m_pItems;        ///< array of items
-    sal_uInt16*       m_pWhichRanges;  ///< array of Which Ranges
+    WhichRangesContainer m_pWhichRanges;  ///< array of Which Ranges
     sal_uInt16        m_nCount;        ///< number of items
 
 friend class SfxItemPoolCache;
 friend class SfxAllItemSet;
 
 private:
-    SVL_DLLPRIVATE sal_uInt16 InitRanges_Impl(const sal_uInt16 *nWhichPairTable);
+    SVL_DLLPRIVATE void       RecreateRanges_Impl(const WhichRangesContainer& pNewRanges);
 
+    SfxItemSet(
+        SfxItemPool & pool,
+        const WhichRangesContainer& wids,
+        std::size_t items);
     SfxItemSet(
         SfxItemPool & pool, std::initializer_list<sal_uInt16> wids,
         std::size_t items);
@@ -125,19 +130,23 @@ protected:
 
 public:
     struct Pair { sal_uInt16 wid1, wid2; };
+    SfxItemSet( const SfxItemSet& );
+    SfxItemSet( SfxItemSet&& ) noexcept;
+    SfxItemSet( SfxItemPool& );
+    SfxItemSet( SfxItemPool&, const WhichRangesContainer& ranges );
+    SfxItemSet( SfxItemPool&, WhichRangesContainer&& ranges );
+    SfxItemSet( SfxItemPool& rPool, sal_uInt16 nWhichStart, sal_uInt16 nWhichEnd )
+        : SfxItemSet(rPool, WhichRangesContainer(nWhichStart, nWhichEnd)) {}
 
-                                SfxItemSet( const SfxItemSet& );
-                                SfxItemSet( SfxItemSet&& ) noexcept;
-
-                                SfxItemSet( SfxItemPool&);
     template<sal_uInt16... WIDs> SfxItemSet(
         typename std::enable_if<
             svl::detail::validRanges<WIDs...>(), SfxItemPool &>::type pool,
         svl::Items<WIDs...>):
-        SfxItemSet(pool, {WIDs...}, svl::detail::rangesSize<WIDs...>()) {}
-                                SfxItemSet( SfxItemPool&, std::initializer_list<Pair> wids );
-                                SfxItemSet( SfxItemPool&, const sal_uInt16* nWhichPairTable );
-    virtual                     ~SfxItemSet();
+    SfxItemSet(pool, {WIDs...}, svl::detail::rangesSize<WIDs...>()) {}
+    SfxItemSet( SfxItemPool&, std::initializer_list<Pair> wids );
+    SfxItemSet( SfxItemPool&, const sal_uInt16* nWhichPairTable );
+
+    virtual ~SfxItemSet();
 
     virtual std::unique_ptr<SfxItemSet> Clone(bool bItems = true, SfxItemPool *pToPool = nullptr) const;
     virtual SfxItemSet CloneAsValue(bool bItems = true, SfxItemPool *pToPool = nullptr) const;
@@ -231,8 +240,9 @@ public:
     void                        MergeValue( const SfxPoolItem& rItem, bool bOverwriteDefaults = false  );
 
     SfxItemPool*                GetPool() const { return m_pPool; }
-    const sal_uInt16*           GetRanges() const { return m_pWhichRanges; }
-    void                        SetRanges( const sal_uInt16 *pRanges );
+    const WhichRangesContainer & GetRanges() const { return m_pWhichRanges; }
+    void                        SetRanges( const WhichRangesContainer& );
+    void                        SetRanges( WhichRangesContainer&& );
     void                        MergeRange( sal_uInt16 nFrom, sal_uInt16 nTo );
     const SfxItemSet*           GetParent() const { return m_pParent; }
 
