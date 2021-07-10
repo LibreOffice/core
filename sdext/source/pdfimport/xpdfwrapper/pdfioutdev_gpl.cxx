@@ -435,11 +435,11 @@ int PDFOutDev::parseFont( long long nNewId, GfxFont* gfxFont, GfxState* state ) 
 #if POPPLER_CHECK_VERSION(0, 64, 0)
     const
 #endif
-    GooString* pFamily = gfxFont->getName();
-    if( pFamily )
+    std::string familyName = gfxFont->getNameWithoutSubsetTag();
+    if( familyName != "" )
     {
         aNewFont.familyName.clear();
-        aNewFont.familyName.append( gfxFont->getName() );
+        aNewFont.familyName.append( familyName );
     }
     else
     {
@@ -786,9 +786,6 @@ void PDFOutDev::updateFont(GfxState *state)
                 aEsc.data() );
     }
     printf( "\n" );
-
-    if( nEmbedSize )
-        writeFontFile(gfxFont);
 }
 
 void PDFOutDev::updateRender(GfxState *state)
