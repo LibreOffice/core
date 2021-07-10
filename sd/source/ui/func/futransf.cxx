@@ -95,7 +95,7 @@ void FuTransform::DoExecute( SfxRequest& rReq )
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         pDlg.reset(pFact->CreateCaptionDialog(mpViewShell->GetFrameWeld(), mpView));
 
-        const sal_uInt16* pRange = pDlg->GetInputRanges( *aNewAttr.GetPool() );
+        const WhichRangesContainer& pRange = pDlg->GetInputRanges( *aNewAttr.GetPool() );
         SfxItemSet aCombSet( *aNewAttr.GetPool(), pRange );
         aCombSet.Put( aNewAttr );
         aCombSet.Put( aSet );

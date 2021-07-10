@@ -163,6 +163,7 @@ class SW_DLLPUBLIC SwAttrSet final : public SfxItemSet
 public:
     SwAttrSet( SwAttrPool&, sal_uInt16 nWhich1, sal_uInt16 nWhich2 );
     SwAttrSet( SwAttrPool&, const sal_uInt16* nWhichPairTable );
+    SwAttrSet( SwAttrPool&, const WhichRangesContainer& nWhichPairTable );
     SwAttrSet( const SwAttrSet& );
 
     virtual std::unique_ptr<SfxItemSet> Clone(bool bItems = true, SfxItemPool *pToPool = nullptr) const override;

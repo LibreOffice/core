@@ -30,12 +30,7 @@
 
 namespace svl::detail
 {
-/**
- * Determines the number of sal_uInt16s in a 0-terminated array of pairs of
- * sal_uInt16s, each representing a range of sal_uInt16s, and total capacity of the ranges.
- * The terminating 0 is included in the count.
- */
-inline std::pair<sal_uInt16, sal_uInt16> CountRanges(const sal_uInt16* pRanges)
+inline std::pair<sal_uInt16, sal_uInt16> CountRangesOld(const sal_uInt16* pRanges)
 {
     sal_uInt16 nCount = 0;
     sal_uInt16 nCapacity = 0;
@@ -51,48 +46,55 @@ inline std::pair<sal_uInt16, sal_uInt16> CountRanges(const sal_uInt16* pRanges)
     }
     return { nCount, nCapacity };
 }
+/**
+ * Determines the number of sal_uInt16s in a span pairs of
+ * sal_uInt16s, each representing a range of sal_uInt16s, and total capacity of the ranges.
+ */
+inline sal_uInt16 CountRanges(const WhichRangesContainer& pRanges)
+{
+    sal_uInt16 nCapacity = 0;
+    for (const auto& rPair : pRanges)
+    {
+        nCapacity += rangeSize(rPair.first, rPair.second);
+    }
+    return nCapacity;
+}
 
 // Adds a range to which ranges, keeping the ranges in valid state (sorted, non-overlapping)
-inline std::unique_ptr<sal_uInt16[]> MergeRange(const sal_uInt16* pWhichRanges, sal_uInt16 nFrom,
-                                                sal_uInt16 nTo)
+inline WhichRangesContainer MergeRange(const WhichRangesContainer& pWhichRanges, sal_uInt16 nFrom,
+                                       sal_uInt16 nTo)
 {
     assert(validRange(nFrom, nTo));
 
-    if (!pWhichRanges)
+    if (pWhichRanges.empty())
     {
-        auto pNewRanges = std::make_unique<sal_uInt16[]>(3);
-        pNewRanges[0] = nFrom;
-        pNewRanges[1] = nTo;
-        pNewRanges[2] = 0;
-        return pNewRanges;
+        return WhichRangesContainer(nFrom, nTo);
     }
 
-    assert(validRanges(pWhichRanges));
+    //    assert(validRanges(pWhichRanges));
 
     // create vector of ranges (sal_uInt16 pairs of lower and upper bound)
-    const size_t nOldCount = CountRanges(pWhichRanges).first;
-    std::vector<std::pair<sal_uInt16, sal_uInt16>> aRangesTable;
-    aRangesTable.reserve(nOldCount / 2 + 1);
+    const size_t nOldCount = pWhichRanges.size();
+    std::vector<WhichPair> aRangesTable;
+    aRangesTable.reserve(nOldCount);
     bool bAdded = false;
-    for (size_t i = 0; i + 1 < nOldCount; i += 2)
+    for (const auto& rPair : pWhichRanges)
     {
-        if (!bAdded && pWhichRanges[i] >= nFrom)
+        if (!bAdded && rPair.first >= nFrom)
         { // insert new range, keep ranges sorted
-            aRangesTable.emplace_back(std::pair<sal_uInt16, sal_uInt16>(nFrom, nTo));
+            aRangesTable.push_back({ nFrom, nTo });
             bAdded = true;
         }
         // insert current range
-        aRangesTable.emplace_back(
-            std::pair<sal_uInt16, sal_uInt16>(pWhichRanges[i], pWhichRanges[i + 1]));
+        aRangesTable.emplace_back(rPair);
     }
     if (!bAdded)
-        aRangesTable.emplace_back(std::pair<sal_uInt16, sal_uInt16>(nFrom, nTo));
+        aRangesTable.push_back({ nFrom, nTo });
 
     // true if ranges overlap or adjoin, false if ranges are separate
-    auto needMerge
-        = [](std::pair<sal_uInt16, sal_uInt16> lhs, std::pair<sal_uInt16, sal_uInt16> rhs) {
-              return (lhs.first - 1) <= rhs.second && (rhs.first - 1) <= lhs.second;
-          };
+    auto needMerge = [](WhichPair lhs, WhichPair rhs) {
+        return (lhs.first - 1) <= rhs.second && (rhs.first - 1) <= lhs.second;
+    };
 
     auto it = aRangesTable.begin();
     // we got at least one range
@@ -112,14 +114,21 @@ inline std::unique_ptr<sal_uInt16[]> MergeRange(const sal_uInt16* pWhichRanges, 
             ++it;
     }
 
-    // construct range array
-    const size_t nNewSize = 2 * aRangesTable.size() + 1;
-    auto pNewRanges = std::make_unique<sal_uInt16[]>(nNewSize);
-    for (size_t i = 0; i < (nNewSize - 1); i += 2)
-        std::tie(pNewRanges[i], pNewRanges[i + 1]) = aRangesTable[i / 2];
+    return WhichRangesContainer(aRangesTable.data(), aRangesTable.size());
+}
 
-    pNewRanges[nNewSize - 1] = 0;
-    return pNewRanges;
+inline bool validRanges2(const WhichRangesContainer& pRanges)
+{
+    for (sal_Int32 i = 0; i < pRanges.size(); ++i)
+    {
+        auto p = pRanges[i];
+        if (!validRange(p.first, p.second))
+            return false;
+        // ranges must be sorted
+        if (i < pRanges.size() - 1 && !validGap(p.second, pRanges[i + 1].first))
+            return false;
+    }
+    return true;
 }
 }
 

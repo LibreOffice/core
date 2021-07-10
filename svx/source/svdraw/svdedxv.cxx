@@ -2218,10 +2218,9 @@ bool SdrObjEditView::SetAttributes(const SfxItemSet& rSet, bool bReplaceAll)
             // Otherwise split Set, if necessary.
             // Now we build an ItemSet aSet that doesn't contain EE_Items from
             // *pSet (otherwise it would be a copy).
-            std::unique_ptr<sal_uInt16[]> pNewWhichTable
+            WhichRangesContainer pNewWhichTable
                 = RemoveWhichRange(pSet->GetRanges(), EE_ITEMS_START, EE_ITEMS_END);
-            SfxItemSet aSet(mpModel->GetItemPool(), pNewWhichTable.get());
-            pNewWhichTable.reset();
+            SfxItemSet aSet(mpModel->GetItemPool(), std::move(pNewWhichTable));
             SfxWhichIter aIter(aSet);
             sal_uInt16 nWhich = aIter.FirstWhich();
             while (nWhich != 0)
@@ -2626,37 +2625,23 @@ bool SdrObjEditView::SupportsFormatPaintbrush(SdrInventor nObjectInventor,
     }
 }
 
-static const sal_uInt16* GetFormatRangeImpl(bool bTextOnly)
+static WhichRangesContainer GetFormatRangeImpl(bool bTextOnly)
 {
-    static const sal_uInt16 gFull[] = { XATTR_LINE_FIRST,
-                                        XATTR_LINE_LAST,
-                                        XATTR_FILL_FIRST,
-                                        XATTRSET_FILL,
-                                        SDRATTR_SHADOW_FIRST,
-                                        SDRATTR_SHADOW_LAST,
-                                        SDRATTR_MISC_FIRST,
-                                        SDRATTR_MISC_LAST, // table cell formats
-                                        SDRATTR_GRAF_FIRST,
-                                        SDRATTR_GRAF_LAST,
-                                        SDRATTR_TABLE_FIRST,
-                                        SDRATTR_TABLE_LAST,
-                                        EE_PARA_START,
-                                        EE_PARA_END,
-                                        EE_CHAR_START,
-                                        EE_CHAR_END,
-                                        0,
-                                        0 };
+    static const WhichRangesLiteral gFull{ { { XATTR_LINE_FIRST, XATTR_LINE_LAST },
+                                             { XATTR_FILL_FIRST, XATTRSET_FILL },
+                                             { SDRATTR_SHADOW_FIRST, SDRATTR_SHADOW_LAST },
+                                             { SDRATTR_MISC_FIRST,
+                                               SDRATTR_MISC_LAST }, // table cell formats
+                                             { SDRATTR_GRAF_FIRST, SDRATTR_GRAF_LAST },
+                                             { SDRATTR_TABLE_FIRST, SDRATTR_TABLE_LAST },
+                                             { EE_PARA_START, EE_PARA_END },
+                                             { EE_CHAR_START, EE_CHAR_END } } };
 
-    static const sal_uInt16 gTextOnly[] = { SDRATTR_MISC_FIRST,
-                                            SDRATTR_MISC_LAST,
-                                            EE_PARA_START,
-                                            EE_PARA_END,
-                                            EE_CHAR_START,
-                                            EE_CHAR_END,
-                                            0,
-                                            0 };
+    static const WhichRangesLiteral gTextOnly{ { { SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST },
+                                                 { EE_PARA_START, EE_PARA_END },
+                                                 { EE_CHAR_START, EE_CHAR_END } } };
 
-    return bTextOnly ? gTextOnly : gFull;
+    return bTextOnly ? WhichRangesContainer(gTextOnly) : WhichRangesContainer(gFull);
 }
 
 void SdrObjEditView::TakeFormatPaintBrush(std::shared_ptr<SfxItemSet>& rFormatSet)
@@ -2692,16 +2677,16 @@ void SdrObjEditView::TakeFormatPaintBrush(std::shared_ptr<SfxItemSet>& rFormatSe
     }
 }
 
-static SfxItemSet CreatePaintSet(const sal_uInt16* pRanges, SfxItemPool& rPool,
+static SfxItemSet CreatePaintSet(const WhichRangesContainer& pRanges, SfxItemPool& rPool,
                                  const SfxItemSet& rSourceSet, const SfxItemSet& rTargetSet,
                                  bool bNoCharacterFormats, bool bNoParagraphFormats)
 {
     SfxItemSet aPaintSet(rPool, pRanges);
 
-    while (*pRanges)
+    for (const auto& pRange : pRanges)
     {
-        sal_uInt16 nWhich = *pRanges++;
-        const sal_uInt16 nLastWhich = *pRanges++;
+        sal_uInt16 nWhich = pRange.first;
+        const sal_uInt16 nLastWhich = pRange.second;
 
         if (bNoCharacterFormats && (nWhich == EE_CHAR_START))
             continue;
@@ -2779,17 +2764,16 @@ void SdrObjEditView::ApplyFormatPaintBrush(SfxItemSet& rFormatSet, bool bNoChara
         // All formatting items (see ranges above) that are unequal in selected shape and
         // the format paintbrush are hard set on the selected shape.
 
-        const sal_uInt16* pRanges = rFormatSet.GetRanges();
+        const WhichRangesContainer& pRanges = rFormatSet.GetRanges();
         bool bTextOnly = true;
 
-        while (*pRanges)
+        for (const auto& pRange : pRanges)
         {
-            if ((*pRanges != EE_PARA_START) && (*pRanges != EE_CHAR_START))
+            if ((pRange.first != EE_PARA_START) && (pRange.first != EE_CHAR_START))
             {
                 bTextOnly = false;
                 break;
             }
-            pRanges += 2;
         }
 
         if (!bTextOnly)
