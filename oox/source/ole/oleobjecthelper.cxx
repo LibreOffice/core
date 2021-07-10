@@ -47,7 +47,8 @@ using namespace ::com::sun::star::uno;
 OleObjectInfo::OleObjectInfo() :
     mbLinked( false ),
     mbShowAsIcon( false ),
-    mbAutoUpdate( false )
+    mbAutoUpdate( false ),
+    mbHasPicture( false )
 {
 }
 
