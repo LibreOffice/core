@@ -3174,6 +3174,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTrackImageDeletion)
     const SwRedlineTable& rTable = rIDRA.GetRedlineTable();
     // this was 0 (missing recording of deletion of images)
     CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(1), rTable.size());
+
+    uno::Reference<beans::XPropertySet> xShape(getShape(1), uno::UNO_QUERY);
+    // tdf#142701 this was AS_CHARACTER (convert AT_PARA to AT_CHAR to keep the layout)
+    CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AT_CHARACTER,
+                         getProperty<text::TextContentAnchorType>(xShape, "AnchorType"));
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTrackImageInsertion)
