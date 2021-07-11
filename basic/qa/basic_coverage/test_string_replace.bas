@@ -24,7 +24,14 @@ Sub verify_stringReplace()
 
     ' tdf#143081 - Without the fix in place, this test would have crashed here
     retStr = Replace("""Straße""", """", "&quot;")
-    TestUtil.AssertEqual(retStr, "&quot;Straße""&quot;", "replace doesn't crash: " & retStr)
+    TestUtil.AssertEqual(retStr, "&quot;Straße&quot;", "replace doesn't crash: " & retStr)
+    
+    ' tdf#142487 - replace of special unicode characters.
+    ' Without the fix in place, this test would have failed with:
+    ' - Expected: Straßen
+    ' - Actual  : Straßeen
+    retStr = Replace("Straße", "e", "en")
+    TestUtil.AssertEqual(retStr, "Straßen", "special unicode character: " & retStr)
 
     Exit Sub
 errorHandler:
