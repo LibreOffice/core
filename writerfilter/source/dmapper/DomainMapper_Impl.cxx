@@ -128,8 +128,6 @@ static void lcl_linenumberingHeaderFooter( const uno::Reference<container::XName
     if (!pEntry)
         return;
     const StyleSheetPropertyMap* pStyleSheetProperties = pEntry->pProperties.get();
-    if ( !pStyleSheetProperties )
-        return;
     sal_Int32 nListId = pStyleSheetProperties->GetListId();
     if( xStyles.is() )
     {
@@ -912,17 +910,14 @@ uno::Any DomainMapper_Impl::GetPropertyFromStyleSheet(PropertyIds eId, StyleShee
 {
     while(pEntry)
     {
-        if(pEntry->pProperties)
+        std::optional<PropertyMap::Property> aProperty =
+                pEntry->pProperties->getProperty(eId);
+        if( aProperty )
         {
-            std::optional<PropertyMap::Property> aProperty =
-                    pEntry->pProperties->getProperty(eId);
-            if( aProperty )
-            {
-                if (pIsDocDefault)
-                    *pIsDocDefault = pEntry->pProperties->isDocDefault(eId);
+            if (pIsDocDefault)
+                *pIsDocDefault = pEntry->pProperties->isDocDefault(eId);
 
-                return aProperty->second;
-            }
+            return aProperty->second;
         }
         //search until the property is set or no parent is available
         StyleSheetEntryPtr pNewEntry;
@@ -1205,8 +1200,6 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
         if ( pParaStyle )
         {
             const StyleSheetPropertyMap* pStyleProperties = pParaStyle->pProperties.get();
-            if (!pStyleProperties)
-                return;
             sal_Int32 nWidth =
                 rAppendContext.pLastParagraphProperties->Getw() > 0 ?
                     rAppendContext.pLastParagraphProperties->Getw() :
@@ -1425,8 +1418,6 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
 static sal_Int32 lcl_getListId(const StyleSheetEntryPtr& rEntry, const StyleSheetTablePtr& rStyleTable, bool & rNumberingFromBaseStyle)
 {
     const StyleSheetPropertyMap* pEntryProperties = rEntry->pProperties.get();
-    if (!pEntryProperties)
-        return -1;
 
     sal_Int32 nListId = pEntryProperties->GetListId();
     // The style itself has a list id.
@@ -1466,8 +1457,6 @@ sal_Int16 DomainMapper_Impl::GetListLevel(const StyleSheetEntryPtr& pEntry,
         return -1;
 
     const StyleSheetPropertyMap* pEntryProperties = pEntry->pProperties.get();
-    if (!pEntryProperties)
-        return -1;
 
     nListLevel = pEntryProperties->GetListLevel();
     // The style itself has a list level.
@@ -7613,8 +7602,6 @@ uno::Reference<container::XIndexAccess> DomainMapper_Impl::GetCurrentNumberingRu
         if (!pEntry)
             return xRet;
         const StyleSheetPropertyMap* pStyleSheetProperties = pEntry->pProperties.get();
-        if (!pStyleSheetProperties)
-            return xRet;
         sal_Int32 nListId = pStyleSheetProperties->GetListId();
         if (nListId < 0)
             return xRet;
