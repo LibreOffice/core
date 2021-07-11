@@ -255,7 +255,12 @@ SwTextNode::~SwTextNode()
     InitSwParaStatistics( false );
     DelFrames(nullptr); // must be called here while it's still a SwTextNode
     DelFrames_TextNodePart();
+#if defined(FUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION)
+    if (!GetDoc().IsInDtor())
+        ResetAttr(RES_PAGEDESC);
+#else
     ResetAttr(RES_PAGEDESC);
+#endif
     InvalidateInSwCache(RES_OBJECTDYING);
 }
 
