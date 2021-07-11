@@ -178,7 +178,7 @@ public:
 
         RETURN values   ==  true: something is found
                         - pStart start pos of the found text,
-                        - pStart end pos of the found text,
+                        - pEnd end pos of the found text,
                         - pSrchResult - the search result with all found
                              positions. Is only filled with more positions
                              if the regular expression handles groups.
