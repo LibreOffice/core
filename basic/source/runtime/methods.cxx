@@ -67,6 +67,14 @@
 #include <string_view>
 #include <o3tl/char16_t2wchar_t.hxx>
 
+// include search util
+#include <com/sun/star/util/SearchFlags.hpp>
+#include <com/sun/star/util/SearchAlgorithms2.hpp>
+#include <i18nutil/searchopt.hxx>
+#include <unotools/textsearch.hxx>
+
+
+
 using namespace comphelper;
 using namespace osl;
 using namespace com::sun::star;
@@ -1283,34 +1291,32 @@ void SbRtl_Replace(StarBASIC *, SbxArray & rPar, bool)
     }
 
     const OUString aExpStr = rPar.Get(1)->GetOUString();
-    OUString aFindStr = rPar.Get(2)->GetOUString();
+    const OUString aFindStr = rPar.Get(2)->GetOUString();
     const OUString aReplaceStr = rPar.Get(3)->GetOUString();
-
-    OUString aSrcStr(aExpStr);
-    if (bCaseInsensitive)
-    {
-        // tdf#132389 - case-insensitive operation for non-ASCII characters
-        const css::lang::Locale& rLocale = Application::GetSettings().GetLanguageTag().getLocale();
-        css::uno::Reference<i18n::XCharacterClassification> xCharClass
-            = vcl::unohelper::CreateCharacterClassification();
-        aSrcStr = xCharClass->toUpper(aSrcStr, 0, aSrcStr.getLength(), rLocale);
-        aFindStr = xCharClass->toUpper(aFindStr, 0, aFindStr.getLength(), rLocale);
-    }
-    const sal_Int32 nSrcStrLen = aSrcStr.getLength();
+    const sal_Int32 nExpStrLen = aExpStr.getLength();
     const sal_Int32 nFindStrLen = aFindStr.getLength();
 
+    // tdf#142487 - use utl::TextSearch in order to implement the replace algorithm
+    i18nutil::SearchOptions2 aSearchOptions;
+    aSearchOptions.searchString = aFindStr;
+    aSearchOptions.AlgorithmType2 = util::SearchAlgorithms2::ABSOLUTE;
+    if (bCaseInsensitive)
+        aSearchOptions.transliterateFlags |= TransliterationFlags::IGNORE_CASE;
+    utl::TextSearch textSearch(aSearchOptions);
+
     // Note: the result starts from lStartPos, removing everything to the left. See i#94895.
-    sal_Int32 nPrevPos = std::min(lStartPos - 1, nSrcStrLen);
-    OUStringBuffer sResult(nSrcStrLen - nPrevPos);
+    sal_Int32 nPrevPos = std::min(lStartPos - 1, nExpStrLen);
+    OUStringBuffer sResult(nExpStrLen - nPrevPos);
     sal_Int32 nCounts = 0;
     while (lCount == -1 || lCount > nCounts)
     {
-        sal_Int32 nPos = aSrcStr.indexOf(aFindStr, nPrevPos);
-        if (nPos >= 0)
+        sal_Int32 nStartPos = nPrevPos;
+        sal_Int32 aEndPos = aExpStr.getLength();
+        if (textSearch.SearchForward(aExpStr, &nStartPos, &aEndPos))
         {
-            sResult.append(aExpStr.getStr() + nPrevPos, nPos - nPrevPos);
+            sResult.append(aExpStr.getStr() + nPrevPos, nStartPos - nPrevPos);
             sResult.append(aReplaceStr);
-            nPrevPos = nPos + nFindStrLen;
+            nPrevPos = nStartPos + nFindStrLen;
             nCounts++;
         }
         else
@@ -1318,7 +1324,7 @@ void SbRtl_Replace(StarBASIC *, SbxArray & rPar, bool)
             break;
         }
     }
-    sResult.append(aExpStr.getStr() + nPrevPos, nSrcStrLen - nPrevPos);
+    sResult.append(aExpStr.getStr() + nPrevPos, nExpStrLen - nPrevPos);
     rPar.Get(0)->PutString(sResult.makeStringAndClear());
 }
 
