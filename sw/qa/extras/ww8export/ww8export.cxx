@@ -296,6 +296,11 @@ DECLARE_WW8EXPORT_TEST(testN816603, "n816603.doc")
     CPPUNIT_ASSERT(getPages() > 1);
 }
 
+DECLARE_WW8EXPORT_TEST(test126127, "tdf126127.docx")
+{
+    CPPUNIT_ASSERT(getPages() >= 1);
+}
+
 DECLARE_WW8EXPORT_TEST(testPageBorder, "page-border.doc")
 {
     // Page border was missing (LineWidth was 0), due to wrong interpretation of pgbApplyTo.
