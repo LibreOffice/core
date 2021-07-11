@@ -37,11 +37,16 @@ private:
     ::sd::IBluetoothSocket* pStreamSocket;
 
     ::osl::Condition mQueuesNotEmpty;
-    ::osl::Condition mFinishRequested;
 
-    ::osl::Mutex mQueueMutex;
-
+    ::osl::Mutex mMutex;
+    /**
+     * Used to indicate that we're done and the transmitter loop should exit.
+     * All access must be guarded my `mMutex`.
+     */
+    bool mFinishRequested;
+    /// Queue for low priority messages. All access must be guarded my `mMutex`.
     std::queue<OString> mLowPriority;
+    /// Queue for high priority messages. All access must be guarded my `mMutex`.
     std::queue<OString> mHighPriority;
 };
 
