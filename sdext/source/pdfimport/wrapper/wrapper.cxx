@@ -165,20 +165,14 @@ public:
 };
 
 class LineParser {
-    Parser & m_parser;
-    OString                               m_aLine;
+    Parser  & m_parser;
+    OString m_aLine;
 
-    static sal_Int32 parseFontCheckForString(const sal_Unicode* pCopy, sal_Int32 nCopyLen,
-                                      const char* pAttrib, sal_Int32 nAttribLen,
-                                      FontAttributes& rResult, bool bItalic, bool bBold);
-    static sal_Int32 parseFontRemoveSuffix(const sal_Unicode* pCopy, sal_Int32 nCopyLen,
-                              const char* pAttrib, sal_Int32 nAttribLen);
-    static void          parseFontFamilyName( FontAttributes& aResult );
-
-    void           readInt32( sal_Int32& o_Value );
-    void           readInt64( sal_Int64& o_Value );
-    void           readDouble( double& o_Value );
-    void           readBinaryData( uno::Sequence<sal_Int8>& rBuf );
+    void    parseFontFamilyName( FontAttributes& aResult );
+    void    readInt32( sal_Int32& o_Value );
+    void    readInt64( sal_Int64& o_Value );
+    void    readDouble( double& o_Value );
+    void    readBinaryData( uno::Sequence<sal_Int8>& rBuf );
 
     uno::Sequence<beans::PropertyValue> readImageImpl();
 
@@ -477,119 +471,34 @@ rendering::ARGBColor LineParser::readColor()
     return aRes;
 }
 
-sal_Int32 LineParser::parseFontCheckForString(
-    const sal_Unicode* pCopy, sal_Int32 nCopyLen,
-    const char* pAttrib, sal_Int32 nAttribLen,
-    FontAttributes& rResult, bool bItalic, bool bBold)
-{
-    if (nCopyLen < nAttribLen)
-        return 0;
-    for (sal_Int32 i = 0; i < nAttribLen; ++i)
-    {
-        sal_uInt32 nCode = pAttrib[i];
-        if (rtl::toAsciiLowerCase(pCopy[i]) != nCode
-            && rtl::toAsciiUpperCase(pCopy[i]) != nCode)
-            return 0;
-    }
-    rResult.isItalic |= bItalic;
-    rResult.isBold |= bBold;
-    return nAttribLen;
-}
+/* Parse and convert the font family name (passed from xpdfimport) to correct font names
+e.g. TimesNewRomanPSMT            -> TimesNewRoman
+      TimesNewRomanPS-BoldMT       -> TimesNewRoman
+      TimesNewRomanPS-BoldItalicMT -> TimesNewRoman
+During the conversion, also apply the font features (bold italic etc) to the result.
 
-sal_Int32 LineParser::parseFontRemoveSuffix(
-    const sal_Unicode* pCopy, sal_Int32 nCopyLen,
-    const char* pAttrib, sal_Int32 nAttribLen)
-{
-    if (nCopyLen < nAttribLen)
-        return 0;
-    for (sal_Int32 i = 0; i < nAttribLen; ++i)
-        if ( pCopy[nCopyLen - nAttribLen + i] != pAttrib[i] )
-            return 0;
-    return nAttribLen;
-}
-
+TODO: Further convert the font names to real font names in the system rather than the PS names.
+e.g., TimesNewRoman -> Times New Roman
+*/
 void LineParser::parseFontFamilyName( FontAttributes& rResult )
 {
-    OUStringBuffer aNewFamilyName( rResult.familyName.getLength() );
-
-    const sal_Unicode* pCopy = rResult.familyName.getStr();
-    sal_Int32 nLen = rResult.familyName.getLength();
-
-    // TODO: Looks like this block needs to be refactored
-    while( nLen )
+    SAL_INFO("sdext.pdfimport", "Processing " << rResult.familyName << " ---");
+    rResult.familyName = rResult.familyName.trim();
+    for (const OUString& fontAttributesSuffix: fontAttributesSuffixes)
     {
-        if (parseFontRemoveSuffix(pCopy, nLen, RTL_CONSTASCII_STRINGPARAM("PSMT")))
+        if ( rResult.familyName.endsWith(fontAttributesSuffix) )
         {
-            nLen -= RTL_CONSTASCII_LENGTH("PSMT");
-        }
-        else if (parseFontRemoveSuffix(pCopy, nLen, RTL_CONSTASCII_STRINGPARAM("MT")))
-        {
-            nLen -= RTL_CONSTASCII_LENGTH("MT");
-        }
-
-        if (parseFontCheckForString(pCopy, nLen, RTL_CONSTASCII_STRINGPARAM("Italic"), rResult, true, false))
-        {
-            sal_Int32 nAttribLen = RTL_CONSTASCII_LENGTH("Italic");
-            nLen -= nAttribLen;
-            pCopy += nAttribLen;
-        }
-        else if (parseFontCheckForString(pCopy, nLen, RTL_CONSTASCII_STRINGPARAM("-LightOblique"), rResult, true, false))
-        {
-            sal_Int32 nAttribLen = RTL_CONSTASCII_LENGTH("-LightOblique");
-            nLen -= nAttribLen;
-            pCopy += nAttribLen;
-        }
-        else if (parseFontCheckForString(pCopy, nLen, RTL_CONSTASCII_STRINGPARAM("-Light"), rResult, false, false))
-        {
-            sal_Int32 nAttribLen = RTL_CONSTASCII_LENGTH("-Light");
-            nLen -= nAttribLen;
-            pCopy += nAttribLen;
-        }
-        else if (parseFontCheckForString(pCopy, nLen, RTL_CONSTASCII_STRINGPARAM("-BoldOblique"), rResult, true, true))
-        {
-            sal_Int32 nAttribLen = RTL_CONSTASCII_LENGTH("-BoldOblique");
-            nLen -= nAttribLen;
-            pCopy += nAttribLen;
-        }
-        else if (parseFontCheckForString(pCopy, nLen, RTL_CONSTASCII_STRINGPARAM("-Bold"), rResult, false, true))
-        {
-            sal_Int32 nAttribLen = RTL_CONSTASCII_LENGTH("-Bold");
-            nLen -= nAttribLen;
-            pCopy += nAttribLen;
-        }
-        else if (parseFontCheckForString(pCopy, nLen, RTL_CONSTASCII_STRINGPARAM("Bold"), rResult, false, true))
-        {
-            sal_Int32 nAttribLen = RTL_CONSTASCII_LENGTH("Bold");
-            nLen -= nAttribLen;
-            pCopy += nAttribLen;
-        }
-        else if (parseFontCheckForString(pCopy, nLen, RTL_CONSTASCII_STRINGPARAM("-Roman"), rResult, false, false))
-        {
-            sal_Int32 nAttribLen = RTL_CONSTASCII_LENGTH("-Roman");
-            nLen -= nAttribLen;
-            pCopy += nAttribLen;
-        }
-        else if (parseFontCheckForString(pCopy, nLen, RTL_CONSTASCII_STRINGPARAM("-Oblique"), rResult, true, false))
-        {
-            sal_Int32 nAttribLen = RTL_CONSTASCII_LENGTH("-Oblique");
-            nLen -= nAttribLen;
-            pCopy += nAttribLen;
-        }
-        else if (parseFontCheckForString(pCopy, nLen, RTL_CONSTASCII_STRINGPARAM("-Reg"), rResult, false, false))
-        {
-            sal_Int32 nAttribLen = RTL_CONSTASCII_LENGTH("-Reg");
-            nLen -= nAttribLen;
-            pCopy += nAttribLen;
-        }
-        else if(nLen > 0)
-        {
-            if( *pCopy != '-' )
-                aNewFamilyName.append( *pCopy );
-            pCopy++;
-            nLen--;
+            rResult.familyName = rResult.familyName.replaceAll(fontAttributesSuffix, "");
+            SAL_INFO("sdext.pdfimport", rResult.familyName);
+            if (fontAttributesSuffix == "Bold")
+            {
+                rResult.isBold = true;
+            } else if ( (fontAttributesSuffix == "Italic") or (fontAttributesSuffix == "Oblique") )
+            {
+                rResult.isItalic = true;
+            }
         }
     }
-    rResult.familyName = aNewFamilyName.makeStringAndClear();
 }
 
 void LineParser::readFont()
