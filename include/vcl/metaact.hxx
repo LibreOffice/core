@@ -567,7 +567,7 @@ public:
     void            SetText(OUString& rStr) { maStr = rStr; }
     void            SetIndex(sal_Int32 rIndex) { mnIndex = rIndex; }
     void            SetLen(sal_Int32 rLen) { mnLen = rLen; }
-    void            SetDXArray(tools::Long* rDXAry);
+    void            SetDXArray(tools::Long* rDXAry, sal_Int32 nAryLen);
 };
 
 class SAL_DLLPUBLIC_RTTI MetaStretchTextAction final : public MetaAction
