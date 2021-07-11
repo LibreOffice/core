@@ -260,6 +260,7 @@ public:
     void testTdf75137();
     void testTdf83798();
     void testTdf89714();
+    void testTdf141924();
     void testTdf130287();
     void testPropertyDefaults();
     void testTableBackgroundColor();
@@ -380,6 +381,7 @@ public:
     CPPUNIT_TEST(testTdf75137);
     CPPUNIT_TEST(testTdf83798);
     CPPUNIT_TEST(testTdf89714);
+    CPPUNIT_TEST(testTdf141924);
     CPPUNIT_TEST(testTdf130287);
     CPPUNIT_TEST(testPropertyDefaults);
     CPPUNIT_TEST(testTableBackgroundColor);
@@ -3574,6 +3576,17 @@ void SwUiWriterTest::testTdf89714()
     //enabled Paragraph Orphan and Widows by default starting in LO5.1
     CPPUNIT_ASSERT_EQUAL( uno::makeAny(sal_Int8(2)), xPropState->getPropertyDefault("ParaOrphans") );
     CPPUNIT_ASSERT_EQUAL( uno::makeAny(sal_Int8(2)), xPropState->getPropertyDefault("ParaWidows")  );
+}
+
+void SwUiWriterTest::testTdf141924()
+{
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf141924.docx");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    // move the pointer to page 4
+
+    pWrtShell->EndPara();
+    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    dispatchCommand(mxComponent, ".uno:Delete", {}); // test should crash here before the fix
 }
 
 void SwUiWriterTest::testTdf130287()
