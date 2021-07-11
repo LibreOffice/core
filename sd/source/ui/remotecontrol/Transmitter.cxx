@@ -16,7 +16,7 @@ using namespace sd;
 
 Transmitter::Transmitter( IBluetoothSocket* aSocket )
   : pStreamSocket( aSocket ),
-    mQueuesNotEmpty(),
+    mProcessingRequired(),
     mMutex(),
     mFinishRequested( false ),
     mLowPriority(),
@@ -30,7 +30,7 @@ void SAL_CALL Transmitter::run()
 
     while ( true )
     {
-        mQueuesNotEmpty.wait();
+        mProcessingRequired.wait();
 
         ::osl::MutexGuard aGuard( mMutex );
 
@@ -52,9 +52,9 @@ void SAL_CALL Transmitter::run()
             pStreamSocket->write( aMessage.getStr(), aMessage.getLength() );
         }
 
-        if ( mLowPriority.empty() && mHighPriority.empty() )
+        if ( mLowPriority.empty() && mHighPriority.empty())
         {
-            mQueuesNotEmpty.reset();
+            mProcessingRequired.reset();
         }
     }
 }
@@ -63,7 +63,7 @@ void Transmitter::notifyFinished()
 {
     ::osl::MutexGuard aGuard( mMutex );
     mFinishRequested = true;
-    mQueuesNotEmpty.set();
+    mProcessingRequired.set();
 }
 
 Transmitter::~Transmitter()
@@ -82,9 +82,9 @@ void Transmitter::addMessage( const OString& aMessage, const Priority aPriority 
             mHighPriority.push( aMessage );
             break;
     }
-    if ( !mQueuesNotEmpty.check() )
+    if ( !mProcessingRequired.check() )
     {
-        mQueuesNotEmpty.set();
+        mProcessingRequired.set();
     }
 }
 
