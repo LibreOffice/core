@@ -17,8 +17,8 @@ using namespace sd;
 Transmitter::Transmitter( IBluetoothSocket* aSocket )
   : pStreamSocket( aSocket ),
     mQueuesNotEmpty(),
-    mFinishRequested(),
-    mQueueMutex(),
+    mMutex(),
+    mFinishRequested( false ),
     mLowPriority(),
     mHighPriority()
 {
@@ -32,10 +32,11 @@ void SAL_CALL Transmitter::run()
     {
         mQueuesNotEmpty.wait();
 
-        if ( mFinishRequested.check() )
-            return;
+        ::osl::MutexGuard aGuard( mMutex );
 
-        ::osl::MutexGuard aQueueGuard( mQueueMutex );
+        if ( mFinishRequested ) {
+            return;
+        }
         if ( !mHighPriority.empty() )
         {
             OString aMessage( mHighPriority.front() );
@@ -60,7 +61,8 @@ void SAL_CALL Transmitter::run()
 
 void Transmitter::notifyFinished()
 {
-    mFinishRequested.set();
+    ::osl::MutexGuard aGuard( mMutex );
+    mFinishRequested = true;
     mQueuesNotEmpty.set();
 }
 
@@ -70,7 +72,7 @@ Transmitter::~Transmitter()
 
 void Transmitter::addMessage( const OString& aMessage, const Priority aPriority )
 {
-    ::osl::MutexGuard aQueueGuard( mQueueMutex );
+    ::osl::MutexGuard aGuard( mMutex );
     switch ( aPriority )
     {
         case PRIORITY_LOW:
