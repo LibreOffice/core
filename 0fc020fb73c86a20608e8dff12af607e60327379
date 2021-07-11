@@ -16,6 +16,24 @@
       "revId": "0fc020fb73c86a20608e8dff12af607e60327379",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9cc90081_a682e811",
+        "filename": "odk/examples/cpp/DocumentLoader/DocumentLoader.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2021-07-11T23:25:04Z",
+      "side": 1,
+      "message": "Target audience for SDK examples is different though - so project-internal idioms \u0026 preferences don\u0027t necessarily apply.\n\nStylistically, I agree that using std::cout \u0026 using std::endl would have been cleaner c++ (though slightly more verbose). Perhaps worth doing a separate cleanup run on the samples; as you say there\u0027s more to modernise. I\u0027d leave the delicate balance between concise \u0026 idiomatic (that then also builds on all the oldish compilers we support for the sdk) to Hossein though..",
+      "parentUuid": "96996186_7cf7f5de",
+      "revId": "0fc020fb73c86a20608e8dff12af607e60327379",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
