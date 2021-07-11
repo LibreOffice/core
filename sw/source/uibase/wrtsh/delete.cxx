@@ -33,6 +33,7 @@
 #include <i18nutil/unicode.hxx>
 #include <rtl/character.hxx>
 #include <doc.hxx>
+#include <IDocumentRedlineAccess.hxx>
 
 inline void SwWrtShell::OpenMark()
 {
@@ -428,18 +429,20 @@ bool SwWrtShell::DelRight()
             std::unique_ptr<SwPosition> pAnchor;
             RndStdIds eAnchorId = RndStdIds::FLY_AT_PARA;
             SwFlyFrame* pFly = GetSelectedFlyFrame();
+            SwFrameFormat* pFormat = nullptr;
             if (pFly)
             {
-                SwFrameFormat* pFormat = pFly->GetFormat();
+                pFormat = pFly->GetFormat();
                 if (pFormat)
                 {
                     eAnchorId = pFormat->GetAnchor().GetAnchorId();
-                    // as-character anchor conversion at track changes
-                    if ( IsRedlineOn() && eAnchorId != RndStdIds::FLY_AS_CHAR )
+                    // to-character anchor conversion at track changes
+                    if ( IsRedlineOn() && (eAnchorId != RndStdIds::FLY_AS_CHAR &&
+                                           eAnchorId != RndStdIds::FLY_AT_CHAR) )
                     {
                         SfxItemSet aSet(GetAttrPool(), svl::Items<RES_ANCHOR, RES_ANCHOR>{});
                         GetFlyFrameAttr(aSet);
-                        SwFormatAnchor aAnch(RndStdIds::FLY_AS_CHAR);
+                        SwFormatAnchor aAnch(RndStdIds::FLY_AT_CHAR);
                         aSet.Put(aAnch);
                         SetFlyFrameAttr(aSet);
                         eAnchorId = pFormat->GetAnchor().GetAnchorId();
@@ -455,12 +458,30 @@ bool SwWrtShell::DelRight()
                 }
             }
 
-            // track changes: delete the anchor point of the image to record the deletion
-            if ( IsRedlineOn() && pAnchor && SelectionType::Graphic & nSelection
-                && eAnchorId == RndStdIds::FLY_AS_CHAR )
+            // track changes: create redline at anchor point of the image to record the deletion
+            if ( IsRedlineOn() && pAnchor && SelectionType::Graphic & nSelection && pFormat &&
+                    ( eAnchorId == RndStdIds::FLY_AT_CHAR || eAnchorId == RndStdIds::FLY_AS_CHAR ) )
             {
+                sal_Int32 nRedlineLength = 1;
+                // create a double ZWJ anchor point of the image to record the deletion, if needed
+                // (otherwise use the existing anchor point of the image anchored *as* character)
+                if ( eAnchorId == RndStdIds::FLY_AT_CHAR )
+                {
+                    nRedlineLength = 2;
+                    LeaveSelFrameMode();
+                    UnSelectFrame();
+                    RedlineFlags eOld = GetRedlineFlags();
+                    SetRedlineFlags( eOld | RedlineFlags::Ignore );
+                    Insert( OUString( u"‍‍" ) );
+                    SwFormatAnchor anchor(RndStdIds::FLY_AT_CHAR);
+                    SwCursorShell::Left(1, CRSR_SKIP_CHARS);
+                    anchor.SetAnchor(GetCursor()->GetPoint());
+                    GetDoc()->SetAttr(anchor, *pFormat);
+                    SetRedlineFlags( eOld );
+                    SwCursorShell::Left(1, CRSR_SKIP_CHARS);
+                }
                 OpenMark();
-                SwCursorShell::Right(1, CRSR_SKIP_CHARS);
+                SwCursorShell::Right(nRedlineLength, CRSR_SKIP_CHARS);
                 bRet = Delete();
                 CloseMark( bRet );
             }
