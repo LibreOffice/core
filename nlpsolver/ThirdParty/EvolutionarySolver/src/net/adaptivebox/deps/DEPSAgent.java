@@ -101,6 +101,17 @@ public class DEPSAgent implements ILibEngine {
 
   public void setGTBehavior(AbsGTBehavior gtBehavior) {
     gtBehavior.setMemPoints(pbest_t, pcurrent_t, pold_t);
+
+    // see getGTBehavior and setLibrary for uses of
+    // deGTBehavior and psGTBehavior
+    if (gtBehavior instanceof DEGTBehavior) {
+      deGTBehavior = ((DEGTBehavior) gtBehavior);
+      return;
+    }
+    if (gtBehavior instanceof PSGTBehavior) {
+      psGTBehavior = ((PSGTBehavior) gtBehavior);
+      return;
+    }
   }
 
   public void generatePoint() {
