@@ -52,6 +52,24 @@ namespace pdfi
                                 const css::uno::Reference<
                                       css::uno::XComponentContext >&    xContext,
                                 const OUString&        rFilterOptions );
+
+    const OUString fontAttributesSuffixes[] = {
+        "MT",
+        "PS",
+        "PSMT",
+        "Regular",
+        "Bold",
+        "Italic",
+        "Bold",
+        "Oblique",
+        "Light",
+        "Reg",
+        "VKana",
+        "-",
+        ",",
+        ";",
+        "PS",
+    };
 }
 
 #endif // INCLUDED_SDEXT_SOURCE_PDFIMPORT_INC_WRAPPER_HXX
