@@ -1242,13 +1242,9 @@ void MetaTextArrayAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
     }
 }
 
-void MetaTextArrayAction::SetDXArray(tools::Long* pDXAry, sal_Int32 nAryLen)
+void MetaTextArrayAction::SetDXArray(std::unique_ptr<tools::Long[]> aArray)
 {
-    if (nAryLen > 0)
-    {
-        mpDXAry.reset( new tools::Long[ nAryLen ] );
-        memcpy( mpDXAry.get(), pDXAry, nAryLen * sizeof(tools::Long) );
-    }
+    mpDXAry = std::move(aArray);
 }
 
 MetaStretchTextAction::MetaStretchTextAction() :
