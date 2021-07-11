@@ -2732,7 +2732,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
                 if( !sStyleName.isEmpty() && GetStyleSheetTable() )
                     pStyle = GetStyleSheetTable()->FindStyleSheetByConvertedStyleName( sStyleName );
 
-                if( pStyle
+                if( pStyle && pStyle->pProperties
                     && pStyle->pProperties->isSet(PROP_BREAK_TYPE)
                     && pStyle->pProperties->getProperty(PROP_BREAK_TYPE)->second == aBreakType )
                 {
