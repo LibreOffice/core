@@ -401,6 +401,13 @@ ShapeExport& ShapeExport::WritePolyPolygonShape( const Reference< XShape >& xSha
 
     tools::PolyPolygon aPolyPolygon = EscherPropertyContainer::GetPolyPolygon( xShape );
     awt::Point aPos = xShape->getPosition();
+    // Position is relative to group for child elements in Word, but absolute in API.
+    if (GetDocumentType() == DOCUMENT_DOCX && m_xParent.is())
+    {
+        awt::Point aParentPos = m_xParent->getPosition();
+        aPos.X -= aParentPos.X;
+        aPos.Y -= aParentPos.Y;
+    }
     awt::Size aSize = xShape->getSize();
     tools::Rectangle aRect(Point(aPos.X, aPos.Y), Size(aSize.Width, aSize.Height));
 
@@ -1305,8 +1312,16 @@ ShapeExport& ShapeExport::WriteConnectorShape( const Reference< XShape >& xShape
         GET( rXShapeA, EdgeStartConnection );
         GET( rXShapeB, EdgeEndConnection );
     }
+    // Position is relative to group in Word, but relative to anchor of group in API.
+    if (GetDocumentType() == DOCUMENT_DOCX && m_xParent.is())
+    {
+        awt::Point aParentPos = m_xParent->getPosition();
+        aStartPoint.X -= aParentPos.X;
+        aStartPoint.Y -= aParentPos.Y;
+        aEndPoint.X -= aParentPos.X;
+        aEndPoint.Y -= aParentPos.Y;
+    }
     EscherConnectorListEntry aConnectorEntry( xShape, aStartPoint, rXShapeA, aEndPoint, rXShapeB );
-
     tools::Rectangle aRect( Point( aStartPoint.X, aStartPoint.Y ), Point( aEndPoint.X, aEndPoint.Y ) );
     if( aRect.getWidth() < 0 ) {
         bFlipH = true;

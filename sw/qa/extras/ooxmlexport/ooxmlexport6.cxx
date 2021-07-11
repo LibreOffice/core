@@ -125,14 +125,21 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testDmlTextshapeB, "dml-textshapeB.docx")
     uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xShape(xGroup->getByIndex(3), uno::UNO_QUERY);
     // Connector was incorrectly shifted towards the top left corner, X was 192, Y was -5743.
+<<<<<<< HEAD   (90bb84 sw: layout: fix table split loop caused by RemoveFollowFlowL)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3776), xShape->getPosition().X);
     // Value as of LO7.2. Whole group is still shifted 3mm to rigth and 5mm down.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-5063), xShape->getPosition().Y);
+=======
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3896), xShape->getPosition().X);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-4775), xShape->getPosition().Y);
+    // Values are as in LO7.3, the original problem is still fixed.
+    // FixMe: The shape is a VML group, not a DML. Connector handles are still wrong and whole group
+    // is still shifted.
+>>>>>>> CHANGE (d9cee5 tdf#141786 correct position of child elements in group)
 
     xShape.set(xGroup->getByIndex(5), uno::UNO_QUERY);
     // This was incorrectly shifted towards the top of the page, Y was -5011.
-    // Value as of LO 7.2
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(-4712), xShape->getPosition().Y);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-4719), xShape->getPosition().Y);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testDMLSolidfillAlpha, "dml-solidfill-alpha.docx")
