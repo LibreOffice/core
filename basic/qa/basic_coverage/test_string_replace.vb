@@ -31,7 +31,14 @@ Function verify_stringReplace() As String
 
     ' tdf#143081 - Without the fix in place, this test would have crashed here
     retStr = Replace("""Straße""", """", "&quot;")
-    TestLog_ASSERT retStr, "&quot;Straße""&quot;", "replace doesn't crash: " & retStr
+    TestLog_ASSERT retStr, "&quot;Straße&quot;", "replace doesn't crash: " & retStr
+
+    ' tdf#142487 - replace of special unicode characters.
+    ' Without the fix in place, this test would have failed with:
+    ' - Expected: Straßen
+    ' - Actual  : Straßeen
+    retStr = Replace("Straße", "e", "en")
+    TestLog_ASSERT retStr, "Straßen", "special unicode character: " & retStr
 
     result = result & Chr$(10) & "Tests passed: " & passCount & Chr$(10) & "Tests failed: " & failCount & Chr$(10)
     verify_stringReplace = result
