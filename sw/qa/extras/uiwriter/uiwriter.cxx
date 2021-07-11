@@ -220,6 +220,7 @@ public:
     void testCaretPositionMovingUp();
     void testTdf93441();
     void testTdf81226();
+    void testTdf132326();
     void testTdf79717();
     void testTdf137532();
     void testFdo87448();
@@ -340,6 +341,7 @@ public:
     CPPUNIT_TEST(testCaretPositionMovingUp);
     CPPUNIT_TEST(testTdf93441);
     CPPUNIT_TEST(testTdf81226);
+    CPPUNIT_TEST(testTdf132326);
     CPPUNIT_TEST(testTdf79717);
     CPPUNIT_TEST(testTdf137532);
     CPPUNIT_TEST(testFdo87448);
@@ -1653,6 +1655,17 @@ void SwUiWriterTest::testTdf81226()
     // - Expected: beforeafter
     // - Actual  : beafterfore
     CPPUNIT_ASSERT_EQUAL(OUString("beforeafter"), getParagraph(1)->getString());
+}
+
+void SwUiWriterTest::testTdf132326()
+{
+    createSwDoc(DATA_DIRECTORY, "tdf132326.docx");
+
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, ".uno:Cut", {});
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, ".uno:Paste", {});
+    dispatchCommand(mxComponent, ".uno:Undo", {});
 }
 
 void SwUiWriterTest::testTdf79717()
