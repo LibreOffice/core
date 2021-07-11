@@ -673,7 +673,6 @@ rtl::Reference<MetaAction> SvmReader::TextArrayHandler(ImplMetaReadData* pData)
     auto pAction = new MetaTextArrayAction();
 
     std::unique_ptr<tools::Long[]> aArray;
-    aArray.reset();
 
     VersionCompatRead aCompat(mrStream);
     TypeSerializer aSerializer(mrStream);
