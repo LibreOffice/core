@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "96996186_7cf7f5de",
+        "filename": "odk/examples/cpp/DocumentLoader/DocumentLoader.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-11T22:20:33Z",
+      "side": 1,
+      "message": "I\u0027d say that promoting the `using namespace` is not universally considered a good thing (personally I think it\u0027s a bad thing most of the time, helping to create name collisions).\n\nPrevious use of explicit \"using ::rtl::OUString*;\" was consistent with the project\u0027s overall policy, where we indeed have those names in \"using\", but generally clean up other cases of \"using\" - e.g., 78023f61db40028cb30a25ce540aca9a76362660, 6e8448cdf0541f017e8b54734dd0928e935c73fa, d36331d63a68f3dea9123a4a699aea143aaac2ed, e3f013dadb3aef25763ba08c37abd84a50171b2f.",
+      "revId": "0fc020fb73c86a20608e8dff12af607e60327379",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
