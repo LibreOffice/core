@@ -1004,7 +1004,7 @@ void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
                             xStyle.set(xStyles->getByName(sConvertedStyleName), uno::UNO_QUERY_THROW);
 
                             StyleSheetPropertyMap* pPropertyMap = pEntry->pProperties.get();
-                            if (pPropertyMap->GetListId() == -1)
+                            if (pPropertyMap && pPropertyMap->GetListId() == -1)
                             {
                                 // No properties? Word default is 'none', Writer one is 'arabic', handle this.
                                 uno::Reference<beans::XPropertySet> xPropertySet(xStyle, uno::UNO_QUERY_THROW);
