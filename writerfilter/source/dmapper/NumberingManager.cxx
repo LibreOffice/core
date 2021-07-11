@@ -493,8 +493,7 @@ sal_uInt16 ListDef::GetChapterNumberingWeight() const
         const StyleSheetEntryPtr pParaStyle = pAbsLevel->GetParaStyle();
         if (!pParaStyle)
             continue;
-        const StyleSheetPropertyMap& rProps =
-            *static_cast<StyleSheetPropertyMap*>(pParaStyle->pProperties.get());
+        const StyleSheetPropertyMap& rProps = *pParaStyle->pProperties;
         // In LO, the level's paraStyle outlineLevel always matches this listLevel.
         // An undefined listLevel is treated as the first level.
         sal_Int8 nListLevel = std::clamp<sal_Int8>(rProps.GetListLevel(), 0, 9);
@@ -1135,7 +1134,7 @@ AbstractListDef::Pointer ListsManager::GetAbstractList( sal_Int32 nId )
                     pStylesTable->FindStyleSheetByISTD(listDef->GetNumStyleLink() );
 
                 const StyleSheetPropertyMap* pStyleSheetProperties =
-                    dynamic_cast<const StyleSheetPropertyMap*>(pStyleSheetEntry ? pStyleSheetEntry->pProperties.get() : nullptr);
+                    pStyleSheetEntry ? pStyleSheetEntry->pProperties.get() : nullptr;
 
                 if( pStyleSheetProperties && pStyleSheetProperties->GetListId() >= 0 )
                 {

@@ -172,7 +172,7 @@ PropertyMapPtr StyleSheetEntry::GetMergedInheritedProperties(const StyleSheetTab
     if ( !pRet )
         pRet = new PropertyMap;
 
-    pRet->InsertProps(pProperties);
+    pRet->InsertProps(pProperties.get());
 
     return pRet;
 }
@@ -763,10 +763,10 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
                     break;
 
                 tools::SvRef<TablePropertiesHandler> pTblHandler(new TablePropertiesHandler());
-                pTblHandler->SetProperties( m_pImpl->m_pCurrentEntry->pProperties );
+                pTblHandler->SetProperties( m_pImpl->m_pCurrentEntry->pProperties.get() );
                 if ( !pTblHandler->sprm( rSprm ) )
                 {
-                    m_pImpl->m_rDMapper.PushStyleSheetProperties( m_pImpl->m_pCurrentEntry->pProperties );
+                    m_pImpl->m_rDMapper.PushStyleSheetProperties( m_pImpl->m_pCurrentEntry->pProperties.get() );
 
                     PropertyMapPtr pProps(new PropertyMap());
                     if (m_pImpl->m_pCurrentEntry->nStyleTypeCode == STYLE_TYPE_TABLE)
@@ -802,7 +802,7 @@ void StyleSheetTable::lcl_entry(writerfilter::Reference<Properties>::Pointer_t r
     OSL_ENSURE( !m_pImpl->m_pCurrentEntry, "current entry has to be NULL here");
     StyleSheetEntryPtr pNewEntry( new StyleSheetEntry );
     m_pImpl->m_pCurrentEntry = pNewEntry;
-    m_pImpl->m_rDMapper.PushStyleSheetProperties( m_pImpl->m_pCurrentEntry->pProperties );
+    m_pImpl->m_rDMapper.PushStyleSheetProperties( m_pImpl->m_pCurrentEntry->pProperties.get() );
     ref->resolve(*this);
     //append it to the table
     m_pImpl->m_rDMapper.PopStyleSheetProperties();
@@ -909,7 +909,7 @@ void StyleSheetTable::ApplyNumberingStyleNameToParaStyles()
         for ( auto& pEntry : m_pImpl->m_aStyleSheetEntries )
         {
             StyleSheetPropertyMap* pStyleSheetProperties = nullptr;
-            if ( pEntry->nStyleTypeCode == STYLE_TYPE_PARA && (pStyleSheetProperties = dynamic_cast<StyleSheetPropertyMap*>(pEntry->pProperties.get())) )
+            if ( pEntry->nStyleTypeCode == STYLE_TYPE_PARA && (pStyleSheetProperties = pEntry->pProperties.get()) )
             {
                 // ListId 0 means turn off numbering - to cancel inheritance - so make sure that can be set.
                 if (pStyleSheetProperties->GetListId() > -1)
@@ -1003,7 +1003,7 @@ void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
                             xStyles->insertByName( sConvertedStyleName, uno::makeAny( xStyle ) );
                             xStyle.set(xStyles->getByName(sConvertedStyleName), uno::UNO_QUERY_THROW);
 
-                            StyleSheetPropertyMap* pPropertyMap = dynamic_cast<StyleSheetPropertyMap*>(pEntry->pProperties.get());
+                            StyleSheetPropertyMap* pPropertyMap = pEntry->pProperties.get();
                             if (pPropertyMap && pPropertyMap->GetListId() == -1)
                             {
                                 // No properties? Word default is 'none', Writer one is 'arabic', handle this.
@@ -1094,7 +1094,7 @@ void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
                         }
 
                         // Set the outline levels
-                        StyleSheetPropertyMap* pStyleSheetProperties = dynamic_cast<StyleSheetPropertyMap*>(pEntry ? pEntry->pProperties.get() : nullptr);
+                        StyleSheetPropertyMap* pStyleSheetProperties = pEntry ? pEntry->pProperties.get() : nullptr;
 
                         if ( pStyleSheetProperties )
                         {
@@ -1116,8 +1116,7 @@ void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
                                         if (findIt != m_pImpl->m_aStyleSheetEntriesMap.end())
                                         {
                                             const auto& aSheetProps  = findIt->second;
-                                            StyleSheetPropertyMap& rStyleSheetProps
-                                                = dynamic_cast<StyleSheetPropertyMap&>(*aSheetProps->pProperties);
+                                            StyleSheetPropertyMap& rStyleSheetProps = *aSheetProps->pProperties;
                                             pStyleSheetProperties->SetListLevel(rStyleSheetProps.GetListLevel());
                                             pStyleSheetProperties->SetOutlineLevel(rStyleSheetProps.GetOutlineLevel());
                                         }
