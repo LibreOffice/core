@@ -1,0 +1,20 @@
+Test-Text 
+in ASCII-8-Bit (CP 437)
+
+normal characters (ex lower 7-Bit) 
+abcdefghijklmnopqrstuvwxyz
+ABCDEFGHIJKLMNOPQRSTUVWXYZ
+
+Number-Keys (shift down+up) 
+1234567890
+!"õ$%&/()=
+
+German Umlauts 
+ŽŽ™™šš
+„„””
+ááá\\\
+
+square - part of the drawing-characters
+ÚÄÄÄÄ¿ 
+³°±²Û³ 
+ÔÍÍÍÍ¾ 
