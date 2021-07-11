@@ -39,6 +39,8 @@
 #include <tools/diagnose_ex.h>
 #include <comphelper/processfactory.hxx>
 #include <i18nlangtag/languagetag.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <basegfx/range/b2drange.hxx>
 
 #include <numeric>
 #include <string_view>
@@ -104,6 +106,7 @@
 #include <comphelper/xmltools.hxx>
 #include <o3tl/any.hxx>
 #include <o3tl/safeint.hxx>
+#include <o3tl/unit_conversion.hxx>
 #include <tools/stream.hxx>
 #include <unotools/fontdefs.hxx>
 #include <vcl/cvtgrf.hxx>
@@ -123,6 +126,7 @@
 #include <svx/unoshape.hxx>
 #include <svx/EnhancedCustomShape2d.hxx>
 #include <drawingml/presetgeometrynames.hxx>
+
 
 using namespace ::css;
 using namespace ::css::beans;
@@ -1800,6 +1804,17 @@ void DrawingML::WriteShapeTransformation( const Reference< XShape >& rXShape, sa
             int facsin=bFlipH ? -1 : 1;
             aPos.X-=(1-faccos*cos(nRotation.get()*F_PI18000))*aSize.Width/2-facsin*sin(nRotation.get()*F_PI18000)*aSize.Height/2;
             aPos.Y-=(1-faccos*cos(nRotation.get()*F_PI18000))*aSize.Height/2+facsin*sin(nRotation.get()*F_PI18000)*aSize.Width/2;
+        }
+        else  if (m_xParent.is() && nRotation != 0_deg100)
+        {
+            // Position for rotated shapes inside group is not set by DocxSdrExport.
+            basegfx::B2DRange aRect(-aSize.Width / 2.0, -aSize.Height / 2.0, aSize.Width / 2.0,
+                                    aSize.Height / 2.0);
+            basegfx::B2DHomMatrix aRotateMatrix =
+                basegfx::utils::createRotateB2DHomMatrix(toRadians(nRotation));
+            aRect.transform(aRotateMatrix);
+            aPos.X += -aSize.Width / 2.0 - aRect.getMinX();
+            aPos.Y += -aSize.Height / 2.0 - aRect.getMinY();
         }
 
         // The RotateAngle property's value is independent from any flipping, and that's exactly what we need here.

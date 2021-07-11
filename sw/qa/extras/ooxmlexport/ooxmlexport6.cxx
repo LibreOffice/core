@@ -124,16 +124,15 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testDmlTextshapeB, "dml-textshapeB.docx")
     uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xShape(xGroup->getByIndex(3), uno::UNO_QUERY);
     // Connector was incorrectly shifted towards the top left corner, X was 192, Y was -5743.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(3776), xShape->getPosition().X);
-    // Values are as in LO7.2, the original problem is still fixed.
-    // FixMe: The shape is a VML group, not a DML. Export writes the connector shifted up, resulting
-    // in different routing. LO7.2 reads and writes the second connector wrongly. Whole group is
-    // still shifted.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(-5061), xShape->getPosition().Y);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3896), xShape->getPosition().X);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-4775), xShape->getPosition().Y);
+    // Values are as in LO7.3, the original problem is still fixed.
+    // FixMe: The shape is a VML group, not a DML. Connector handles are still wrong and whole group
+    // is still shifted.
 
     xShape.set(xGroup->getByIndex(5), uno::UNO_QUERY);
     // This was incorrectly shifted towards the top of the page, Y was -5011.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(-4710), xShape->getPosition().Y);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-4717), xShape->getPosition().Y);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testDMLSolidfillAlpha, "dml-solidfill-alpha.docx")
