@@ -37,7 +37,8 @@ WpsContext::WpsContext(ContextHandler2Helper const& rParent, uno::Reference<draw
     : ShapeContext(rParent, pMasterShapePtr, pShapePtr)
     , mxShape(std::move(xShape))
 {
-    mpShapePtr->setWps(true);
+    if (mpShapePtr)
+        mpShapePtr->setWps(true);
 }
 
 WpsContext::~WpsContext() = default;
