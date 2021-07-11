@@ -36,7 +36,7 @@ private:
 
     ::sd::IBluetoothSocket* pStreamSocket;
 
-    ::osl::Condition mQueuesNotEmpty;
+    ::osl::Condition mProcessingRequired;
 
     ::osl::Mutex mMutex;
     /**
