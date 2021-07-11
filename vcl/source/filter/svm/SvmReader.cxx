@@ -699,9 +699,9 @@ rtl::Reference<MetaAction> SvmReader::TextArrayHandler(ImplMetaReadData* pData)
     if (nTmpLen > aStr.getLength() - nTmpIndex)
     {
         pAction->SetIndex(0);
-        pAction->SetDXArray(nullptr);
         return pAction;
     }
+
     if (nAryLen)
     {
         // #i9762#, #106172# Ensure that DX array is at least mnLen entries long
@@ -724,12 +724,9 @@ rtl::Reference<MetaAction> SvmReader::TextArrayHandler(ImplMetaReadData* pData)
         }
         else
         {
-            pAction->SetDXArray(nullptr);
             return pAction;
         }
     }
-    else
-        pAction->SetDXArray(nullptr);
 
     if (aCompat.GetVersion() >= 2) // Version 2
     {
