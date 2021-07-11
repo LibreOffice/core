@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "83793a92_418395e8",
+        "filename": "sc/qa/unit/pivottable_filters_test.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 331,
+      "author": {
+        "id": 1002857
+      },
+      "writtenOn": "2021-07-11T12:04:52Z",
+      "side": 1,
+      "message": "Need help here. The color of this cell is supposed to be black but it fails at the assertion saying that the actual color is R:201 G:33 B: 30 which is RED not Black. How did this happen ? Is this another bug?",
+      "range": {
+        "startLine": 331,
+        "startChar": 4,
+        "endLine": 331,
+        "endChar": 91
+      },
+      "revId": "4d910008d8851d69a1d3f4a4cff2da11de2c4845",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
