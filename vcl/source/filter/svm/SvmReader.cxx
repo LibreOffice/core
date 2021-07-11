@@ -739,7 +739,8 @@ rtl::Reference<MetaAction> SvmReader::TextArrayHandler(ImplMetaReadData* pData)
         }
     }
 
-    pAction->SetDXArray(aArray.get());
+    if (aArray)
+        pAction->SetDXArray(aArray.get(), nTmpLen);
     return pAction;
 }
 

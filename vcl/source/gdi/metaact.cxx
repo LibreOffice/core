@@ -1242,10 +1242,8 @@ void MetaTextArrayAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
     }
 }
 
-void MetaTextArrayAction::SetDXArray(tools::Long* pDXAry)
+void MetaTextArrayAction::SetDXArray(tools::Long* pDXAry, sal_Int32 nAryLen)
 {
-    const sal_Int32 nAryLen = pDXAry ? mnLen : 0;
-
     if (nAryLen > 0)
     {
         mpDXAry.reset( new tools::Long[ nAryLen ] );
