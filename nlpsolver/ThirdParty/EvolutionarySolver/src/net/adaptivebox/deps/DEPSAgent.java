@@ -69,7 +69,23 @@ public class DEPSAgent implements ILibEngine {
   // Generate-and-test behaviors.
   private DEGTBehavior deGTBehavior;
   private PSGTBehavior psGTBehavior;
-  public double switchP = 0.5;
+
+  private double switchP = 0.5;
+
+  public DEPSAgent(ProblemEncoder encoder, DEGTBehavior deGTBehavior, PSGTBehavior psGTBehavior, double switchP, IGoodnessCompareEngine comparer, Library lib) {
+      setProblemEncoder(encoder);
+
+      this.switchP = switchP;
+
+      deGTBehavior.setLibrary(lib);
+      psGTBehavior.setLibrary(lib);
+      setGTBehavior(deGTBehavior);
+      setGTBehavior(psGTBehavior);
+      this.deGTBehavior = deGTBehavior;
+      this.psGTBehavior = psGTBehavior;
+
+      qualityComparator = comparer;
+  }
 
   public void setLibrary(Library lib) {
     deGTBehavior.setLibrary(lib);
@@ -101,17 +117,6 @@ public class DEPSAgent implements ILibEngine {
 
   public void setGTBehavior(AbsGTBehavior gtBehavior) {
     gtBehavior.setMemPoints(pbest_t, pcurrent_t, pold_t);
-
-    // see getGTBehavior and setLibrary for uses of
-    // deGTBehavior and psGTBehavior
-    if (gtBehavior instanceof DEGTBehavior) {
-      deGTBehavior = ((DEGTBehavior) gtBehavior);
-      return;
-    }
-    if (gtBehavior instanceof PSGTBehavior) {
-      psGTBehavior = ((PSGTBehavior) gtBehavior);
-      return;
-    }
   }
 
   public void generatePoint() {

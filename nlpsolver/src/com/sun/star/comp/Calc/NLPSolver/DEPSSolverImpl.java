@@ -127,10 +127,6 @@ public final class DEPSSolverImpl extends BaseEvolutionarySolver
         //Init:
         DEPSAgent[] agents = new DEPSAgent[m_swarmSize.getValue()];
         for (int i = 0; i < m_swarmSize.getValue(); i++) {
-            agents[i] = new DEPSAgent();
-            agents[i].setProblemEncoder(m_problemEncoder);
-            agents[i].setPbest(m_library.getSelectedPoint(i));
-
             DEGTBehavior deGTBehavior = new DEGTBehavior();
             deGTBehavior.MIN_FACTOR = Math.min(m_minFactor.getValue(), m_maxFactor.getValue());
             deGTBehavior.MAX_FACTOR = Math.max(m_minFactor.getValue(), m_maxFactor.getValue());
@@ -142,12 +138,8 @@ public final class DEPSSolverImpl extends BaseEvolutionarySolver
             psGTBehavior.CL = m_CL.getValue();
             psGTBehavior.weight = m_weight.getValue();
 
-            agents[i].switchP = m_agentSwitchRate.getValue();
-            agents[i].setGTBehavior(deGTBehavior);
-            agents[i].setGTBehavior(psGTBehavior);
-
-            agents[i].setSpecComparator(m_specCompareEngine);
-            agents[i].setLibrary(m_library);
+            agents[i] = new DEPSAgent(m_problemEncoder, deGTBehavior, psGTBehavior, m_agentSwitchRate.getValue(), m_specCompareEngine, m_library);
+            agents[i].setPbest(m_library.getSelectedPoint(i));
         }
 
         //Learn:
