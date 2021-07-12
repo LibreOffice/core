@@ -962,6 +962,26 @@ public:
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
 
+    void testClosedBezierWithPolyline()
+    {
+        vcl::test::OutputDeviceTestPolyLine aOutDevTest;
+        Bitmap aBitmap = aOutDevTest.setupClosedBezier();
+        auto eResult = vcl::test::OutputDeviceTestCommon::checkClosedBezier(aBitmap);
+        exportImage("18-01_closed_bezier-polyline.png", aBitmap);
+        if (SHOULD_ASSERT)
+            CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
+    }
+
+    void testClosedBezierWithPolygon()
+    {
+        vcl::test::OutputDeviceTestPolygon aOutDevTest;
+        Bitmap aBitmap = aOutDevTest.setupClosedBezier();
+        auto eResult = vcl::test::OutputDeviceTestCommon::checkClosedBezier(aBitmap);
+        exportImage("18-02_closed_bezier-polygon.png", aBitmap);
+        if (SHOULD_ASSERT)
+            CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
+    }
+
     // Test SalGraphics::blendBitmap() and blendAlphaBitmap() calls.
     void testDrawBlendExtended()
     {
@@ -1193,6 +1213,9 @@ public:
     CPPUNIT_TEST(testDrawHaflEllipseAAWithPolyLineB2D);
     CPPUNIT_TEST(testDrawHaflEllipseWithPolygon);
     CPPUNIT_TEST(testDrawHaflEllipseAAWithPolygon);
+
+    CPPUNIT_TEST(testClosedBezierWithPolyline);
+    CPPUNIT_TEST(testClosedBezierWithPolygon);
 
     CPPUNIT_TEST(testDrawBitmap);
     CPPUNIT_TEST(testDrawTransformedBitmap);
