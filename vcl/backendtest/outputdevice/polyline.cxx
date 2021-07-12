@@ -189,6 +189,36 @@ Bitmap OutputDeviceTestPolyLine::setupEllipse()
 
     return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
 }
+
+Bitmap OutputDeviceTestPolyLine::setupClosedBezier()
+{
+    initialSetup(21, 16, constBackgroundColor);
+
+    mpVirtualDevice->SetLineColor(constLineColor);
+    mpVirtualDevice->SetFillColor();
+
+    tools::Long minX = maVDRectangle.Left();
+    tools::Long maxX = maVDRectangle.Right() - 2;
+    tools::Long minY = maVDRectangle.Top();
+    tools::Long maxY = maVDRectangle.Bottom() - 2;
+
+    tools::Polygon aPolygon(4);
+
+    aPolygon.SetPoint(Point((maxX/2.0),maxY),0);
+    aPolygon.SetFlags(0,PolyFlags::Normal);
+    aPolygon.SetPoint(Point(maxX,minY),1);
+    aPolygon.SetFlags(1,PolyFlags::Control);
+    aPolygon.SetPoint(Point(minX,minY),2);
+    aPolygon.SetFlags(2,PolyFlags::Control);
+    aPolygon.SetPoint(Point((maxX/2.0),maxY),3);
+    aPolygon.SetFlags(3,PolyFlags::Normal);
+
+    aPolygon.Optimize(PolyOptimizeFlags::CLOSE);
+
+    mpVirtualDevice->DrawPolyLine(aPolygon);
+
+    return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
+}
 } // end namespace vcl::test
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
