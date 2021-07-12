@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "6301661f_5e188cc0",
+        "filename": "sfx2/source/inc/StyleList.hxx",
+        "patchSetId": 52
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-07-12T09:57:18Z",
+      "side": 1,
+      "message": "This simply returns the size of m_xStyleFamilies (which is usually 6).\nM_XStyleFamilies consists of families like Paragraph, Character, List etc.\n\nThe next is simply used when we close the application. It clears the dynamically allocated space, resets all the parameters to default etc.",
+      "parentUuid": "455ba6d0_f2d1bae3",
+      "range": {
+        "startLine": 66,
+        "startChar": 11,
+        "endLine": 66,
+        "endChar": 28
+      },
+      "revId": "4adafd69c470c2d7a2afa86ecd482a37d84549a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "11338bfb_771eaf31",
         "filename": "sfx2/source/inc/StyleList.hxx",
         "patchSetId": 52
@@ -36,6 +60,30 @@
       "writtenOn": "2021-07-12T07:40:43Z",
       "side": 1,
       "message": "Can we a) get rid of watercan, b) \"hide\" it in StyleList, or c) have one function like StartWaterCan() checking conditions and doing the work? \n\nUI-wise we should to move the function into the context menu to avoid a duplication of headers on PS and CS. And at this point it\u0027s unclear if the watercan applies to PS or CS.\n\nHave a look at the commenting style itself.",
+      "range": {
+        "startLine": 72,
+        "startChar": 0,
+        "endLine": 78,
+        "endChar": 35
+      },
+      "revId": "4adafd69c470c2d7a2afa86ecd482a37d84549a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ddce9cda_7d031b2d",
+        "filename": "sfx2/source/inc/StyleList.hxx",
+        "patchSetId": 52
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-07-12T09:57:18Z",
+      "side": 1,
+      "message": "Well, the architechture is made in a way that uses WaterCan. I don\u0027t think we can get rid of it.\n\nI had an earlier discussion with Mike, where we discussed that watercan should remain in the Dialog. I have moved only the specific part which relates to treeview in the StyleList.\n\nI think that the current implementation is nice, because we have only 2 functions in Dialog, namely SetWaterCanState and IsSafeForWaterCan and it is not the case that one function is used in another. Hence I don\u0027t think they can be grouped as one single function.",
+      "parentUuid": "11338bfb_771eaf31",
       "range": {
         "startLine": 72,
         "startChar": 0,
@@ -117,6 +165,30 @@
     },
     {
       "key": {
+        "uuid": "c6f3d216_ae489b12",
+        "filename": "sfx2/source/inc/StyleList.hxx",
+        "patchSetId": 52
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-07-12T09:57:18Z",
+      "side": 1,
+      "message": "I named it like this because the first subpart of UpdateFamily_Impl() is above and is named like UpdateFamily_Impl(). \nAfter a family, let say Paragraph Styles is selected, it fills the treeview by calling fillTreeBox. Hence all the styles like \"Default Paragaraph Style\", \"Addressee\" etc. are loaded into the treeview",
+      "parentUuid": "d299fe84_086d387d",
+      "range": {
+        "startLine": 104,
+        "startChar": 9,
+        "endLine": 104,
+        "endChar": 22
+      },
+      "revId": "4adafd69c470c2d7a2afa86ecd482a37d84549a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "82cff359_27284b77",
         "filename": "sfx2/source/inc/StyleList.hxx",
         "patchSetId": 52
@@ -151,6 +223,30 @@
       "writtenOn": "2021-07-12T07:40:43Z",
       "side": 1,
       "message": "Cur \u003d Current. Is this function really the position of the style family in the toolbar buttons? Like CS \u003d 2 \u003d the second item.",
+      "range": {
+        "startLine": 111,
+        "startChar": 9,
+        "endLine": 111,
+        "endChar": 21
+      },
+      "revId": "4adafd69c470c2d7a2afa86ecd482a37d84549a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a123b0a2_4f980f8c",
+        "filename": "sfx2/source/inc/StyleList.hxx",
+        "patchSetId": 52
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-07-12T09:57:18Z",
+      "side": 1,
+      "message": "Yes",
+      "parentUuid": "248c7e03_e3a08a4c",
       "range": {
         "startLine": 111,
         "startChar": 9,
@@ -209,6 +305,30 @@
     },
     {
       "key": {
+        "uuid": "f544ea05_0926f6ad",
+        "filename": "sfx2/source/inc/StyleList.hxx",
+        "patchSetId": 52
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-07-12T09:57:18Z",
+      "side": 1,
+      "message": "In the action select in Dialog, it handles the action when new or newmenu is selected. I will rename it to NewMenu_ExecuteAction.",
+      "parentUuid": "33783950_1c600d41",
+      "range": {
+        "startLine": 118,
+        "startChar": 9,
+        "endLine": 118,
+        "endChar": 24
+      },
+      "revId": "4adafd69c470c2d7a2afa86ecd482a37d84549a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8e7e8394_1e5e2725",
         "filename": "sfx2/source/inc/StyleList.hxx",
         "patchSetId": 52
@@ -220,6 +340,30 @@
       "writtenOn": "2021-07-12T07:40:43Z",
       "side": 1,
       "message": "Does it need to be public?",
+      "range": {
+        "startLine": 122,
+        "startChar": 9,
+        "endLine": 122,
+        "endChar": 19
+      },
+      "revId": "4adafd69c470c2d7a2afa86ecd482a37d84549a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9bf95822_29eb72eb",
+        "filename": "sfx2/source/inc/StyleList.hxx",
+        "patchSetId": 52
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-07-12T09:57:18Z",
+      "side": 1,
+      "message": "Yes..It needs to be public because it is called in SfxCommonTemplateDialog_Impl::Initialize()",
+      "parentUuid": "8e7e8394_1e5e2725",
       "range": {
         "startLine": 122,
         "startChar": 9,
@@ -255,6 +399,30 @@
     },
     {
       "key": {
+        "uuid": "21117a91_808a8802",
+        "filename": "sfx2/source/inc/StyleList.hxx",
+        "patchSetId": 52
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-07-12T09:57:18Z",
+      "side": 1,
+      "message": "It is not needed in the current implementation. However, we can do this in the future.",
+      "parentUuid": "a6ac3558_26bf3949",
+      "range": {
+        "startLine": 124,
+        "startChar": 9,
+        "endLine": 124,
+        "endChar": 25
+      },
+      "revId": "4adafd69c470c2d7a2afa86ecd482a37d84549a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9b0e95f0_6a4e0248",
         "filename": "sfx2/source/inc/StyleList.hxx",
         "patchSetId": 52
@@ -266,6 +434,30 @@
       "writtenOn": "2021-07-12T07:40:43Z",
       "side": 1,
       "message": "Since we have different filters I don\u0027t understand which one is set here.",
+      "range": {
+        "startLine": 130,
+        "startChar": 9,
+        "endLine": 130,
+        "endChar": 21
+      },
+      "revId": "4adafd69c470c2d7a2afa86ecd482a37d84549a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f9d03014_e600ec36",
+        "filename": "sfx2/source/inc/StyleList.hxx",
+        "patchSetId": 52
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-07-12T09:57:18Z",
+      "side": 1,
+      "message": "All the filters except Hierarchical are set here.",
+      "parentUuid": "9b0e95f0_6a4e0248",
       "range": {
         "startLine": 130,
         "startChar": 9,
@@ -301,6 +493,30 @@
     },
     {
       "key": {
+        "uuid": "a1eab1e0_3009f275",
+        "filename": "sfx2/source/inc/StyleList.hxx",
+        "patchSetId": 52
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-07-12T09:57:18Z",
+      "side": 1,
+      "message": "Yes, we need it public because it is called in SfxCommonTemplateDialog_Impl::UpdateStyles_Impl",
+      "parentUuid": "f094e308_5feecd8e",
+      "range": {
+        "startLine": 133,
+        "startChar": 20,
+        "endLine": 133,
+        "endChar": 21
+      },
+      "revId": "4adafd69c470c2d7a2afa86ecd482a37d84549a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "731ed75e_26f4a7f9",
         "filename": "sfx2/source/inc/StyleList.hxx",
         "patchSetId": 52
@@ -312,6 +528,30 @@
       "writtenOn": "2021-07-12T07:40:43Z",
       "side": 1,
       "message": "Why default? What is the difference to SetHierarchical()?",
+      "range": {
+        "startLine": 139,
+        "startChar": 9,
+        "endLine": 139,
+        "endChar": 16
+      },
+      "revId": "4adafd69c470c2d7a2afa86ecd482a37d84549a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c7184973_6e40e6aa",
+        "filename": "sfx2/source/inc/StyleList.hxx",
+        "patchSetId": 52
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-07-12T09:57:18Z",
+      "side": 1,
+      "message": "If we open LibreOffice, then by default if Treeview is visible the filter is Hierarchical.",
+      "parentUuid": "731ed75e_26f4a7f9",
       "range": {
         "startLine": 139,
         "startChar": 9,
@@ -347,6 +587,30 @@
     },
     {
       "key": {
+        "uuid": "ef04c7d1_ecbca4a3",
+        "filename": "sfx2/source/inc/StyleList.hxx",
+        "patchSetId": 52
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-07-12T09:57:18Z",
+      "side": 1,
+      "message": "Yess.. I will rename it to SetUpdateFamily",
+      "parentUuid": "ba4061f0_d3f52686",
+      "range": {
+        "startLine": 142,
+        "startChar": 9,
+        "endLine": 142,
+        "endChar": 10
+      },
+      "revId": "4adafd69c470c2d7a2afa86ecd482a37d84549a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a464aefd_8f7cf67e",
         "filename": "sfx2/source/inc/StyleList.hxx",
         "patchSetId": 52
@@ -358,6 +622,30 @@
       "writtenOn": "2021-07-12T07:40:43Z",
       "side": 1,
       "message": "Is this function part of the item state affecting the context menu?",
+      "range": {
+        "startLine": 144,
+        "startChar": 9,
+        "endLine": 144,
+        "endChar": 21
+      },
+      "revId": "4adafd69c470c2d7a2afa86ecd482a37d84549a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "741dfb58_e0625623",
+        "filename": "sfx2/source/inc/StyleList.hxx",
+        "patchSetId": 52
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-07-12T09:57:18Z",
+      "side": 1,
+      "message": "I took it directly from the Dialog. In the Dialog it had no comments. I am not very sure about it but I don\u0027t think it is used for that.",
+      "parentUuid": "a464aefd_8f7cf67e",
       "range": {
         "startLine": 144,
         "startChar": 9,
@@ -393,6 +681,30 @@
     },
     {
       "key": {
+        "uuid": "25a1380a_9f579a7a",
+        "filename": "sfx2/source/inc/StyleList.hxx",
+        "patchSetId": 52
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-07-12T09:57:18Z",
+      "side": 1,
+      "message": "There is a LINK in Dialog named IMPL_LINK_NOARG(SfxCommonTemplateDialog_Impl, TimeOut, Timer*, void). I have moved that part to StyleList, that contained the treeview parameters so that I don\u0027t have to make treeviews in StyleList public. But I am not very sure about what the function does in Dialog since it had no comments. In the stylelist, it just does what te dialog  used to do.",
+      "parentUuid": "70f206fc_b5d72435",
+      "range": {
+        "startLine": 146,
+        "startChar": 9,
+        "endLine": 146,
+        "endChar": 16
+      },
+      "revId": "4adafd69c470c2d7a2afa86ecd482a37d84549a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2f81b93c_dd9830ac",
         "filename": "sfx2/source/inc/StyleList.hxx",
         "patchSetId": 52
@@ -404,6 +716,24 @@
       "writtenOn": "2021-07-12T07:40:43Z",
       "side": 1,
       "message": "Stopping here. Please put as much love in the work as at the beginning. Combine the context menu function into some state. Use consistent and meaningful names.",
+      "revId": "4adafd69c470c2d7a2afa86ecd482a37d84549a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a66993af_a223c611",
+        "filename": "sfx2/source/inc/StyleList.hxx",
+        "patchSetId": 52
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-07-12T09:57:18Z",
+      "side": 1,
+      "message": "I think the implementation is fine here because it relates with the Enable* funcions in the Dialog.",
+      "parentUuid": "2f81b93c_dd9830ac",
       "revId": "4adafd69c470c2d7a2afa86ecd482a37d84549a9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
