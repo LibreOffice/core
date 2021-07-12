@@ -110,6 +110,8 @@ class VCL_PLUGIN_PUBLIC GraphicsRenderTests
     void testLineCapButt();
     void testHalfEllipsePolyLine();
     void testHalfEllipsePolygon();
+    void testClosedBezierPolyline();
+    void testClosedBezierPolygon();
     static OUString returnTestStatus(vcl::test::TestResult const result);
     void runALLTests();
     void appendTestResult(OUString aTestName, OUString aTestStatus, Bitmap aTestBitmap = Bitmap());
