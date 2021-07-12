@@ -285,6 +285,12 @@ void SvpSalFrame::SetPosSize( tools::Long nX, tools::Long nY, tools::Long nWidth
                                                 aFrameSize.getX(),
                                                 aFrameSize.getY());
 
+        // In headless mode we need to paint actual window content, avoid any cairo drawing
+        // to the cairo surface. This may lead to CAIRO_STATUS_SURFACE_FINISHED error status,
+        // but that should be harmless.
+        if (Application::IsHeadlessModeEnabled())
+            cairo_surface_finish(m_pSurface);
+
         // update device in existing graphics
         for (auto const& graphic : m_aGraphics)
         {
