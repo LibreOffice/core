@@ -141,6 +141,30 @@ std::map<Color, int> collectColors(Bitmap& bitmap, const tools::Rectangle& recta
     return colors;
 }
 
+bool checkConvexHullProperty(Bitmap& bitmap, Color constLineColor, int nOffset)
+{
+    BitmapScopedWriteAccess pAccess(bitmap);
+    tools::Long thresholdWidth = pAccess->Width() - nOffset;
+    tools::Long thresholdHeight = pAccess->Height() - nOffset;
+    for (tools::Long y = 0; y < pAccess->Height(); ++y)
+    {
+        for (tools::Long x = 0; x < pAccess->Width(); ++x)
+        {
+            /*
+                If the shape exceeds the threshold limit of height or width or both,
+                this would indicate that the bezier curve is not within its convex polygon and
+                hence is faulty.
+            */
+            if (pAccess->GetPixel(y, x) == constLineColor
+                && (thresholdHeight < y || thresholdWidth < x))
+            {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
 TestResult checkRect(Bitmap& rBitmap, int aLayerNumber, Color aExpectedColor)
 {
     BitmapScopedWriteAccess pAccess(rBitmap);
@@ -593,6 +617,28 @@ basegfx::B2DPolygon OutputDeviceTestCommon::createHalfEllipsePolygon()
     return aPolygon;
 }
 
+tools::Polygon OutputDeviceTestCommon::createClosedBezierLoop(tools::Rectangle& rRect)
+{
+    tools::Long minX = rRect.Left();
+    tools::Long maxX = rRect.Right() - 2;
+    tools::Long minY = rRect.Top();
+    tools::Long maxY = rRect.Bottom() - 2;
+
+    tools::Polygon aPolygon(4);
+
+    aPolygon.SetPoint(Point((maxX / 2.0), maxY), 0);
+    aPolygon.SetFlags(0, PolyFlags::Normal);
+    aPolygon.SetPoint(Point(maxX, minY), 1);
+    aPolygon.SetFlags(1, PolyFlags::Control);
+    aPolygon.SetPoint(Point(minX, minY), 2);
+    aPolygon.SetFlags(2, PolyFlags::Control);
+    aPolygon.SetPoint(Point((maxX / 2.0), maxY), 3);
+    aPolygon.SetFlags(3, PolyFlags::Normal);
+
+    aPolygon.Optimize(PolyOptimizeFlags::CLOSE);
+
+    return aPolygon;
+}
 
 TestResult OutputDeviceTestCommon::checkDropShape(Bitmap& rBitmap, bool aEnableAA)
 {
@@ -719,6 +765,46 @@ TestResult OutputDeviceTestCommon::checkHalfEllipse(Bitmap& rBitmap, bool aEnabl
     if (nNumberOfQuirks > 0)
         aResult = TestResult::PassedWithQuirks;
     if (nNumberOfErrors > 0)
+        aResult = TestResult::Failed;
+    return aResult;
+}
+
+TestResult OutputDeviceTestCommon::checkClosedBezier(Bitmap& rBitmap)
+{
+    BitmapScopedWriteAccess pAccess(rBitmap);
+
+    TestResult aResult = TestResult::Passed;
+    int nNumberOfQuirks = 0;
+    int nNumberOfErrors = 0;
+
+    std::map<std::pair<tools::Long, tools::Long>, bool> SetPixels
+        = { { { 3, 8 }, true },  { { 3, 9 }, true },   { { 3, 10 }, true },  { { 4, 7 }, true },
+            { { 4, 8 }, true },  { { 4, 9 }, true },   { { 4, 10 }, true },  { { 4, 11 }, true },
+            { { 5, 7 }, true },  { { 5, 11 }, true },  { { 6, 6 }, true },   { { 6, 12 }, true },
+            { { 7, 6 }, true },  { { 7, 12 }, true },  { { 8, 7 }, true },   { { 8, 11 }, true },
+            { { 9, 7 }, true },  { { 9, 11 }, true },  { { 10, 7 }, true },  { { 10, 11 }, true },
+            { { 11, 8 }, true }, { { 11, 9 }, true },  { { 11, 10 }, true }, { { 12, 8 }, true },
+            { { 12, 9 }, true }, { { 12, 10 }, true }, { { 13, 9 }, true } };
+
+    for (tools::Long x = 0; x < pAccess->Width(); x++)
+    {
+        for (tools::Long y = 0; y < pAccess->Height(); ++y)
+        {
+            if (SetPixels[{ y, x }])
+            {
+                checkValue(pAccess, x, y, constLineColor, nNumberOfQuirks, nNumberOfErrors, true);
+            }
+            else
+            {
+                checkValue(pAccess, x, y, constBackgroundColor, nNumberOfQuirks, nNumberOfErrors,
+                           true);
+            }
+        }
+    }
+
+    if (nNumberOfQuirks > 0)
+        aResult = TestResult::PassedWithQuirks;
+    if (nNumberOfErrors > 0 || !checkConvexHullProperty(rBitmap, constLineColor, 2))
         aResult = TestResult::Failed;
     return aResult;
 }
