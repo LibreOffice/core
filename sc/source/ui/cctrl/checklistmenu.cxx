@@ -704,12 +704,12 @@ IMPL_LINK_NOARG(ScCheckListMenuControl, EdModifyHdl, weld::Entry&, void)
     size_t n = maMembers.size();
     size_t nSelCount = 0;
 
-    mpChecks->freeze();
-
     // This branch is the general case, the other is an optimized variant of
     // this one where we can take advantage of knowing we have no hierarchy
     if (mbHasDates)
     {
+        mpChecks->freeze();
+
         bool bSomeDateDeletes = false;
 
         for (size_t i = 0; i < n; ++i)
@@ -768,12 +768,18 @@ IMPL_LINK_NOARG(ScCheckListMenuControl, EdModifyHdl, weld::Entry&, void)
                 updateMemberParents(nullptr, i);
             }
         }
+
+        mpChecks->thaw();
     }
     else
     {
+        mpChecks->freeze();
+
         // when there are a lot of rows, it is cheaper to simply clear the tree and either
         // re-initialise or just insert the filtered lines
         mpChecks->clear();
+
+        mpChecks->thaw();
 
         if (bSearchTextEmpty)
             nSelCount = initMembers();
@@ -806,9 +812,6 @@ IMPL_LINK_NOARG(ScCheckListMenuControl, EdModifyHdl, weld::Entry&, void)
             }, nullptr, &aFixedWidths);
         }
     }
-
-
-    mpChecks->thaw();
 
     if ( nSelCount == n )
         mxChkToggleAll->set_state( TRISTATE_TRUE );
