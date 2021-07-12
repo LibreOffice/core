@@ -19,9 +19,12 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_uicalc, \
     comphelper \
     cppu \
     cppuhelper \
+    i18nlangtag \
     sal \
     sc \
     sfx \
+    svl \
+    svl \
     svx \
     svxcore \
     test \
