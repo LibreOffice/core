@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d6109a31_0eff06c2",
+        "filename": "writerfilter/source/dmapper/DomainMapper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2735,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-07-12T08:51:44Z",
+      "side": 1,
+      "message": "This one was probably your problem. Too many ways for it to not get set. The other ones are probably fine.",
+      "range": {
+        "startLine": 2735,
+        "startChar": 20,
+        "endLine": 2735,
+        "endChar": 26
+      },
+      "revId": "a7eb2f57d8e586577679ecd085b9aa90746ec36b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
