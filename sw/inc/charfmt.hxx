@@ -27,10 +27,6 @@ class SwCharFormat final : public SwFormat
     friend class SwDoc;
     friend class SwTextFormatColl;
 
-    SwCharFormat( SwAttrPool& rPool, const char* pFormatName,
-                SwCharFormat *pDerivedFrom )
-          : SwFormat( rPool, pFormatName, aCharFormatSetRange, pDerivedFrom, RES_CHRFMT )
-    {}
     SwCharFormat( SwAttrPool& rPool, const OUString &rFormatName,
                 SwCharFormat *pDerivedFrom )
           : SwFormat( rPool, rFormatName, aCharFormatSetRange, pDerivedFrom, RES_CHRFMT )

@@ -51,7 +51,6 @@ private:
 public:
     SdCustomShowDlg(weld::Window* pWindow, SdDrawDocument& rDrawDoc);
     virtual ~SdCustomShowDlg() override;
-    bool         IsModified() const { return bModified; }
     bool         IsCustomShow() const;
 };
 
