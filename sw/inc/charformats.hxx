@@ -84,8 +84,6 @@ public:
 
     // search for formats by name
     ByName::const_iterator findByName(const OUString& name) const;
-    // So we can actually check for end()
-    ByName::const_iterator byNameEnd() const { return m_NameIndex.end(); }
 
     SwCharFormat* operator[](size_t index_) const { return m_PosIndex.operator[](index_); }
     const_iterator begin() const { return m_PosIndex.begin(); }
@@ -99,8 +97,6 @@ public:
     /// fast check if given format is contained here
     /// @precond pFormat must not have been deleted
     bool ContainsFormat(SwCharFormat* pFormat) const;
-    /// not so fast check that given format is still alive (i.e. contained here)
-    bool IsAlive(SwCharFormat const*) const;
 
     void DeleteAndDestroyAll(bool keepDefault = false);
 

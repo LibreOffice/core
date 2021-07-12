@@ -86,9 +86,6 @@ public:
     const_iterator find(const value_type& x) const;
 
     ByTypeAndName::const_iterator findByTypeAndName(sal_uInt16 type, const OUString& name) const;
-    // Convenience function, which just uses type and name!
-    // To look for the exact object use find.
-    ByTypeAndName::const_iterator findSimilar(const value_type& x) const;
     // search for formats by name
     std::pair<ByTypeAndName::const_iterator, ByTypeAndName::const_iterator>
     findRangeByName(const OUString& name) const;

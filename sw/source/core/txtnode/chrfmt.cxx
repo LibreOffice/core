@@ -97,8 +97,6 @@ void SwCharFormats::erase(const_iterator const& position) { m_PosIndex.erase(pos
 
 bool SwCharFormats::ContainsFormat(SwCharFormat* x) const { return find(x) != end(); }
 
-bool SwCharFormats::IsAlive(SwCharFormat const* const p) const { return find(p) != end(); }
-
 /** Need to call this when the format name changes */
 void SwCharFormats::SetFormatNameAndReindex(SwCharFormat* v, const OUString& sNewName)
 {

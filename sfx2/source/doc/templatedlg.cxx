@@ -1376,12 +1376,6 @@ void SfxTemplateCategoryDialog::SetCategoryLBEntries(std::vector<OUString> aFold
     mxLBCategory->select(0);
 }
 
-void SfxTemplateCategoryDialog::HideNewCategoryOption()
-{
-    mxCreateLabel->hide();
-    mxNewCategoryEdit->hide();
-}
-
 // SfxTemplateSelectionDialog -----------------------------------------------------------------
 
 SfxTemplateSelectionDlg::SfxTemplateSelectionDlg(weld::Window* pParent)

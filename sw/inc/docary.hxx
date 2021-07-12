@@ -162,12 +162,6 @@ public:
     size_t GetPos(const SwFormat *p) const
         { return SwVectorModifyBase<Value>::GetPos( static_cast<Value>( const_cast<SwFormat*>( p ) ) ); }
 
-    /// check if given format is contained here
-    /// @precond pFormat must not have been deleted
-    bool ContainsFormat(Value pFormat) const {
-        return SwVectorModifyBase<Value>::IsAlive(pFormat);
-    }
-
     // Override return type to reduce casting
     virtual Value FindFormatByName(const OUString& rName) const override
     { return static_cast<Value>(SwFormatsBase::FindFormatByName(rName)); }

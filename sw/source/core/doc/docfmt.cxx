@@ -2079,12 +2079,6 @@ SwFrameFormats::findByTypeAndName( sal_uInt16 type, const OUString& name ) const
     return m_TypeAndNameIndex.find( boost::make_tuple(name, type) );
 }
 
-SwFrameFormats::ByTypeAndName::const_iterator
-SwFrameFormats::findSimilar( const value_type& x ) const
-{
-    return findByTypeAndName( x->Which(), x->GetName() );
-}
-
 std::pair<SwFrameFormats::ByTypeAndName::const_iterator, SwFrameFormats::ByTypeAndName::const_iterator>
 SwFrameFormats::findRangeByName( const OUString& rName ) const
 {

@@ -276,17 +276,6 @@ void ListView::rename(const OUString& rId, const OUString& rTitle)
         }
 }
 
-void ListView::remove(const OUString& rId)
-{
-    mxTreeView->remove_id(rId);
-    for (auto it = mListViewItems.begin(); it != mListViewItems.end(); ++it)
-        if ((*it)->maId == rId)
-        {
-            mListViewItems.erase(it);
-            break;
-        }
-}
-
 void ListView::clearListView()
 {
     mxTreeView->clear();

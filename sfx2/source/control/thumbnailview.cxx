@@ -248,7 +248,6 @@ void ThumbnailView::ImplInit()
     mbHasVisibleItems = false;
     mbShowTooltips = false;
     mbDrawMnemonics = false;
-    mbIsMultiSelectionEnabled = true;
     maFilterFunc = ViewFilterAll();
 
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
@@ -671,7 +670,7 @@ bool ThumbnailView::KeyInput( const KeyEvent& rKEvt )
             bHandled = CustomWidgetController::KeyInput(rKEvt);
     }
 
-    if ( pNext  && mbIsMultiSelectionEnabled)
+    if ( pNext )
     {
         if (aKeyCode.IsShift() && bValidRange)
         {
@@ -735,12 +734,6 @@ bool ThumbnailView::KeyInput( const KeyEvent& rKEvt )
 
         MakeItemVisible(pNext->mnId);
     }
-    else if(pNext && !mbIsMultiSelectionEnabled)
-    {
-        deselectItems();
-        SelectItem(pNext->mnId);
-        MakeItemVisible(pNext->mnId);
-    }
     return bHandled;
 }
 
@@ -794,17 +787,7 @@ bool ThumbnailView::MouseButtonDown( const MouseEvent& rMEvt )
         return true;
     }
 
-    if ( rMEvt.GetClicks() == 1 && !mbIsMultiSelectionEnabled )
-    {
-        deselectItems();
-        pItem->setSelection(!pItem->isSelected());
-
-        if (!pItem->isHighlighted())
-            DrawItem(pItem);
-
-        maItemStateHdl.Call(pItem);
-    }
-    else if(rMEvt.GetClicks() == 1)
+    if(rMEvt.GetClicks() == 1)
     {
         if (rMEvt.IsMod1())
         {
@@ -1180,11 +1163,6 @@ void ThumbnailView::ShowTooltips( bool bShowTooltips )
 void ThumbnailView::DrawMnemonics( bool bDrawMnemonics )
 {
     mbDrawMnemonics = bDrawMnemonics;
-}
-
-void ThumbnailView::SetMultiSelectionEnabled( bool bIsMultiSelectionEnabled )
-{
-    mbIsMultiSelectionEnabled = bIsMultiSelectionEnabled;
 }
 
 void ThumbnailView::filterItems(const std::function<bool (const ThumbnailViewItem*)> &func)

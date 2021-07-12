@@ -61,7 +61,6 @@ protected:
 
     DECL_LINK(OkClickHdl, weld::Button&, void);
     void ImportActionHdl();
-    void ExportActionHdl();
     static void ExtensionsActionHdl();
 
     DECL_LINK(TVItemStateHdl, const ThumbnailViewItem*, void);
@@ -158,11 +157,7 @@ public:
 
     void SetCategoryLBEntries(std::vector<OUString> names);
 
-    void HideNewCategoryOption();
-
     const OUString& GetSelectedCategory() const { return msSelectedCategory; };
-
-    void SetSelectLabelText(OUString const& sText) const { mxSelectLabel->set_label(sText); };
 
     bool IsNewCategoryCreated() const { return mbIsNewCategory; }
 
