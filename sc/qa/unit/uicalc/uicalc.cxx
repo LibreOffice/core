@@ -11,11 +11,13 @@
 #include <unotest/macros_test.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <svx/svdpage.hxx>
+#include <unotools/syslocaleoptions.hxx>
 #include <unotools/tempfile.hxx>
 #include <vcl/keycodes.hxx>
 #include <vcl/scheduler.hxx>
 
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
@@ -28,6 +30,7 @@
 #include <inputopt.hxx>
 #include <postit.hxx>
 #include <rangeutl.hxx>
+#include <scitems.hxx>
 #include <scmod.hxx>
 #include <tabvwsh.hxx>
 #include <viewdata.hxx>
@@ -163,6 +166,66 @@ ScModelObj* ScUiCalcTest::saveAndReload(css::uno::Reference<css::lang::XComponen
     ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
     CPPUNIT_ASSERT(pModelObj);
     return pModelObj;
+}
+
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf138432)
+{
+    mxComponent = loadFromDesktop("private:factory/scalc");
+    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    CPPUNIT_ASSERT(pModelObj);
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    // Set the system locale to Hungarian
+    SvtSysLocaleOptions aOptions;
+    OUString sLocaleConfigString = aOptions.GetLanguageTag().getBcp47();
+    aOptions.SetLocaleConfigString("hu-HU");
+    aOptions.Commit();
+    comphelper::ScopeGuard g([&aOptions, &sLocaleConfigString] {
+        aOptions.SetLocaleConfigString(sLocaleConfigString);
+        aOptions.Commit();
+    });
+
+    OUString aCode = "# ##0,00";
+    sal_Int32 nCheckPos;
+    SvNumFormatType nType;
+    sal_uInt32 nFormat;
+    SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
+    pFormatter->PutEntry(aCode, nCheckPos, nType, nFormat);
+
+    ScPatternAttr* aNewAttrs = const_cast<ScPatternAttr*>(pDoc->GetPattern(0, 0, 0));
+    SfxItemSet& rSet = aNewAttrs->GetItemSet();
+    rSet.Put(SfxUInt32Item(ATTR_VALUE_FORMAT, nFormat));
+    pDoc->ApplyPattern(0, 0, 0, *aNewAttrs);
+
+    insertStringToCell(*pModelObj, "A1", "12345,67");
+
+    OUString sExpected = "12" + OUStringChar(u'\xa0') + "345,67";
+
+    CPPUNIT_ASSERT_EQUAL(sExpected, pDoc->GetString(ScAddress(0, 0, 0)));
+
+    goToCell("A1");
+
+    dispatchCommand(mxComponent, ".uno:Copy", {});
+    Scheduler::ProcessEventsToIdle();
+
+    goToCell("A2");
+
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, '=', 0);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, '=', 0);
+    Scheduler::ProcessEventsToIdle();
+
+    dispatchCommand(mxComponent, ".uno:Paste", {});
+    Scheduler::ProcessEventsToIdle();
+
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
+    Scheduler::ProcessEventsToIdle();
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 12 345,67
+    // - Actual  : Err:509
+    CPPUNIT_ASSERT_EQUAL(sExpected, pDoc->GetString(ScAddress(0, 1, 0)));
 }
 
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf100582)
