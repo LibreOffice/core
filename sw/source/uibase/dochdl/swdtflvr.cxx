@@ -487,7 +487,7 @@ bool SwTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDo
         const bool bPending(m_pWrtShell->ActionPend());
 
         // SEL_GRF is from ContentType of editsh
-        if(bPending || ((SelectionType::Graphic | SelectionType::DbForm) & nSelectionType))
+        if(bPending || ((SelectionType::Graphic | SelectionType::DrawObject | SelectionType::DbForm) & nSelectionType))
         {
             m_pClpGraphic.reset(new Graphic);
             if( !m_pWrtShell->GetDrawObjGraphic( SotClipboardFormatId::GDIMETAFILE, *m_pClpGraphic ))
@@ -3604,13 +3604,6 @@ void SwTransferable::SetDataForDragAndDrop( const Point& rSttPos )
                 AddFormat( SotClipboardFormatId::BITMAP );
             }
             m_eBufferType = TransferBufferType::Graphic | m_eBufferType;
-
-            m_pClpGraphic.reset(new Graphic);
-            if( !m_pWrtShell->GetDrawObjGraphic( SotClipboardFormatId::GDIMETAFILE, *m_pClpGraphic ))
-                m_pOrigGraphic = m_pClpGraphic.get();
-            m_pClpBitmap.reset(new Graphic);
-            if( !m_pWrtShell->GetDrawObjGraphic( SotClipboardFormatId::BITMAP, *m_pClpBitmap ))
-                m_pOrigGraphic = m_pClpBitmap.get();
 
             // is it a URL-Button ?
             OUString sURL;
