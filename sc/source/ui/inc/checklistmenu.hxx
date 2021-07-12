@@ -40,7 +40,6 @@ struct ScCheckListMember
     bool                     mbDate;
     bool                     mbLeaf;
     bool                     mbValue; // true if the filter condition is value
-    bool                     mbDuplicated; // true if there were duplicated values in the filter list
     DatePartType             meDatePartType;
     // To store Year and Month if the member if DAY type
     std::vector<OUString>    maDateParts;
