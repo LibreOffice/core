@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4b26a4ea_767f86b7",
+        "filename": "sw/qa/extras/uiwriter/uiwriter4.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1849,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-07-12T08:49:27Z",
+      "side": 1,
+      "message": "In here you are opening tdf128898.txt, while the file attached is sw/qa/extras/uiwriter/data/tdf142157.txt.\nAgain, did you ever run the test locally ?",
+      "revId": "22fff6d16cbfba621623aad8755b5ee2bc5b4b3f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
