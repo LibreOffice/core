@@ -731,7 +731,7 @@ ErrCode RtfExport::ExportDocument_Impl()
     }
 
     // Init sections
-    m_pSections.reset(new MSWordSections(*this));
+    m_pSections = std::make_unique<MSWordSections>(*this);
 
     // Page description
     WritePageDescTable();
