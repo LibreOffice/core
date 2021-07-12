@@ -73,6 +73,7 @@ gb_CXXFLAGS_COMMON := \
 	-Wextra \
 	-Wundef \
 	-Wunreachable-code \
+	-Wshadow \
 	$(if $(or $(and $(COM_IS_CLANG),$(or $(findstring icecc,$(CXX)),$(findstring icecc,$(CCACHE_PREFIX)))),$(findstring sccache,$(CXX))),,-Wunused-macros) \
 	$(if $(COM_IS_CLANG),-Wembedded-directive) \
 	-finput-charset=UTF-8 \
