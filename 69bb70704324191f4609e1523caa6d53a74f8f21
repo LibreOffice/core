@@ -16,6 +16,24 @@
       "revId": "69bb70704324191f4609e1523caa6d53a74f8f21",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "387a4893_8544989e",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Common.xcs",
+        "patchSetId": 2
+      },
+      "lineNbr": 5916,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2021-07-12T12:31:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6811c43f_790ec447",
+      "revId": "69bb70704324191f4609e1523caa6d53a74f8f21",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
