@@ -35,7 +35,7 @@ using namespace ::com::sun::star;
 
 
 ValueSetItem::ValueSetItem( ValueSet& rParent )
-    : mpParent(&rParent)
+    : mrParent(rParent)
     , mnId(0)
     , meType(VALUESETITEM_NONE)
     , mbVisible(true)
@@ -122,7 +122,7 @@ uno::Reference< accessibility::XAccessible > SAL_CALL ValueItemAcc::getAccessibl
     uno::Reference< accessibility::XAccessible >    xRet;
 
     if( mpParent )
-        xRet = mpParent->mpParent->mxAccessible;
+        xRet = mpParent->mrParent.mxAccessible;
 
     return xRet;
 }
@@ -139,7 +139,7 @@ sal_Int32 SAL_CALL ValueItemAcc::getAccessibleIndexInParent()
     {
         bool bDone = false;
 
-        sal_uInt16 nCount = mpParent->mpParent->ImplGetVisibleItemCount();
+        sal_uInt16 nCount = mpParent->mrParent.ImplGetVisibleItemCount();
         ValueSetItem* pItem;
         for (sal_uInt16 i=0; i<nCount && !bDone; i++)
         {
@@ -147,7 +147,7 @@ sal_Int32 SAL_CALL ValueItemAcc::getAccessibleIndexInParent()
             // just in case the number of children changes in the meantime.
             try
             {
-                pItem = mpParent->mpParent->ImplGetItem(i);
+                pItem = mpParent->mrParent.ImplGetItem(i);
             }
             catch (const lang::IndexOutOfBoundsException&)
             {
@@ -165,9 +165,9 @@ sal_Int32 SAL_CALL ValueItemAcc::getAccessibleIndexInParent()
     }
 
     //if this valueset contain a none field(common value is default), then we should increase the real index and set the noitem index value equal 0.
-    if ( mpParent && ( (mpParent->mpParent->GetStyle() & WB_NONEFIELD) != 0 ) )
+    if ( mpParent && ( (mpParent->mrParent.GetStyle() & WB_NONEFIELD) != 0 ) )
     {
-        ValueSetItem* pFirstItem = mpParent->mpParent->ImplGetItem (VALUESET_ITEM_NONEITEM);
+        ValueSetItem* pFirstItem = mpParent->mrParent.ImplGetItem (VALUESET_ITEM_NONEITEM);
         if( pFirstItem && pFirstItem ->GetAccessible(mbIsTransientChildrenDisabled).get() == this )
             nIndexInParent = 0;
         else
@@ -230,7 +230,7 @@ uno::Reference< accessibility::XAccessibleStateSet > SAL_CALL ValueItemAcc::getA
         //      pStateSet->AddState( accessibility::AccessibleStateType::FOCUSABLE );
 
         // SELECTED
-        if( mpParent->mpParent->GetSelectedItemId() == mpParent->mnId )
+        if( mpParent->mrParent.GetSelectedItemId() == mpParent->mnId )
         {
             pStateSet->AddState( accessibility::AccessibleStateType::SELECTED );
             //              pStateSet->AddState( accessibility::AccessibleStateType::FOCUSED );
@@ -319,8 +319,8 @@ awt::Rectangle SAL_CALL ValueItemAcc::getBounds()
 
     if( mpParent )
     {
-        tools::Rectangle   aRect( mpParent->mpParent->GetItemRect(mpParent->mnId) );
-        tools::Rectangle   aParentRect( Point(), mpParent->mpParent->GetOutputSizePixel() );
+        tools::Rectangle   aRect( mpParent->mrParent.GetItemRect(mpParent->mnId) );
+        tools::Rectangle   aParentRect( Point(), mpParent->mrParent.GetOutputSizePixel() );
 
         aRect.Intersection( aParentRect );
 
@@ -351,8 +351,8 @@ awt::Point SAL_CALL ValueItemAcc::getLocationOnScreen()
 
     if( mpParent )
     {
-        const Point aPos = mpParent->mpParent->GetItemRect(mpParent->mnId).TopLeft();
-        const Point aScreenPos(mpParent->mpParent->GetDrawingArea()->get_accessible_location_on_screen());
+        const Point aPos = mpParent->mrParent.GetItemRect(mpParent->mnId).TopLeft();
+        const Point aScreenPos(mpParent->mrParent.GetDrawingArea()->get_accessible_location_on_screen());
 
         aRet.X = aPos.X() + aScreenPos.X();
         aRet.Y = aPos.Y() + aScreenPos.Y();
@@ -729,8 +729,8 @@ uno::Reference< accessibility::XAccessible > SAL_CALL ValueSetAcc::getAccessible
 
         if( VALUESET_ITEM_NONEITEM != nItemPos )
         {
-            ValueSetItem & rItem = mpParent->mItemList[nItemPos];
-            xRet = rItem.GetAccessible( false/*bIsTransientChildrenDisabled*/ );
+            ValueSetItem *const pItem = mpParent->mItemList[nItemPos].get();
+            xRet = pItem->GetAccessible( false/*bIsTransientChildrenDisabled*/ );
         }
     }
 

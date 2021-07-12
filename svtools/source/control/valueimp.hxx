@@ -50,7 +50,7 @@ class ValueSet;
 
 struct ValueSetItem
 {
-    ValueSet*           mpParent;
+    ValueSet&        mrParent;
     sal_uInt16          mnId;
     sal_uInt8           meType;
     bool                mbVisible;
@@ -62,10 +62,6 @@ struct ValueSetItem
 
     explicit ValueSetItem( ValueSet& rParent );
     ~ValueSetItem();
-    ValueSetItem( const ValueSetItem& ) = default;
-    ValueSetItem( ValueSetItem&& ) = default;
-    ValueSetItem& operator=( const ValueSetItem& ) = default;
-    ValueSetItem& operator=( ValueSetItem&& ) = default;
 
     css::uno::Reference< css::accessibility::XAccessible >
                         GetAccessible( bool bIsTransientChildrenDisabled );
