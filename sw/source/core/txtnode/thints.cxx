@@ -2858,14 +2858,11 @@ static MergeResult lcl_Compare_Attributes(
             SfxItemIter iter1(rSet1);
             SfxItemIter iter2(rSet2);
             for (SfxPoolItem const* pItem1 = iter1.GetCurItem(),
-                                  * pItem2 = iter2.GetCurItem();
-                 pItem1 && pItem2;
-                 pItem1 = iter1.NextItem(),
-                 pItem2 = iter2.NextItem())
+                                  * pItem2 = iter2.GetCurItem();;)
             {
-                if (pItem1->Which() == RES_CHRATR_RSID)
+                if (pItem1 && pItem1->Which() == RES_CHRATR_RSID)
                     pItem1 = iter1.NextItem();
-                if (pItem2->Which() == RES_CHRATR_RSID)
+                if (pItem2 && pItem2->Which() == RES_CHRATR_RSID)
                     pItem2 = iter2.NextItem();
                 if (!pItem1 && !pItem2)
                 {
@@ -2881,8 +2878,9 @@ static MergeResult lcl_Compare_Attributes(
                     assert(IsInvalidItem(pItem1) || IsInvalidItem(pItem2) || pItem1->Which() != pItem2->Which() || *pItem1 != *pItem2);
                     return DIFFER;
                 }
+                pItem1 = iter1.NextItem();
+                pItem2 = iter2.NextItem();
             }
-            eMerge = DIFFER_ONLY_RSID;
         }
         ++aIter1;
         ++aIter2;
