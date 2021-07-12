@@ -1402,22 +1402,22 @@ void makeTableRowRedline( SwTableLine& rTableLine,
     else if ( rRedlineType == "TableRowDelete" )
     {
         eType = RedlineType::TableRowDelete;
-
-        // set table row property "HasTextChangesOnly" to false
-        // to handle tracked deletion of the table row on the UI
-        const SvxPrintItem *pHasTextChangesOnlyProp =
-             rTableLine.GetFrameFormat()->GetAttrSet().GetItem<SvxPrintItem>(RES_PRINT);
-        if ( !pHasTextChangesOnlyProp || pHasTextChangesOnlyProp->GetValue() )
-        {
-            SvxPrintItem aSetTracking(RES_PRINT, false);
-            SwPosition aPos( *rTableLine.GetTabBoxes()[0]->GetSttNd() );
-            SwCursor aCursor( aPos, nullptr );
-            pDoc->SetRowNotTracked( aCursor, aSetTracking );
-        }
     }
     else
     {
         throw lang::IllegalArgumentException();
+    }
+
+    // set table row property "HasTextChangesOnly" to false
+    // to handle tracked deletion or insertion of the table row on the UI
+    const SvxPrintItem *pHasTextChangesOnlyProp =
+         rTableLine.GetFrameFormat()->GetAttrSet().GetItem<SvxPrintItem>(RES_PRINT);
+    if ( !pHasTextChangesOnlyProp || pHasTextChangesOnlyProp->GetValue() )
+    {
+        SvxPrintItem aSetTracking(RES_PRINT, false);
+        SwPosition aPos( *rTableLine.GetTabBoxes()[0]->GetSttNd() );
+        SwCursor aCursor( aPos, nullptr );
+        pDoc->SetRowNotTracked( aCursor, aSetTracking );
     }
 
     comphelper::SequenceAsHashMap aPropMap( rRedlineProperties );

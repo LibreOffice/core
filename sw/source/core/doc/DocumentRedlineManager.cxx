@@ -725,7 +725,10 @@ namespace
                     rDoc.getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld & ~RedlineFlags(RedlineFlags::On | RedlineFlags::Ignore));
 
                     if( pCSttNd && pCEndNd )
+                    {
                         rDoc.getIDocumentContentOperations().DeleteAndJoin( aPam );
+                        lcl_DeleteTrackedTableRow( aPam.End() );
+                    }
                     else if (pCSttNd && !pCEndNd)
                         {
                             aPam.GetBound().nContent.Assign( nullptr, 0 );
