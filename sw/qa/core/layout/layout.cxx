@@ -475,7 +475,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testVerticallyMergedCellBorder)
         bool bFound = false;
         for (const auto nLayoutPosition : aLayoutPositions)
         {
-            if (std::abs(nBorderPosition - nLayoutPosition) <= 15)
+            if (std::abs(nBorderPosition - nLayoutPosition) <= 30)
             {
                 bFound = true;
                 break;
