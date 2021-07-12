@@ -16,6 +16,24 @@
       "revId": "4a93efcf6e7982146fb71e4d32760a07a0f984c2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bd54747b_3bff9a6c",
+        "filename": "sw/source/core/txtnode/thints.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2862,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-07-12T10:50:15Z",
+      "side": 1,
+      "message": "how about\n   https://gerrit.libreoffice.org/c/core/+/118772",
+      "parentUuid": "6fcaeab4_186e26b6",
+      "revId": "4a93efcf6e7982146fb71e4d32760a07a0f984c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
