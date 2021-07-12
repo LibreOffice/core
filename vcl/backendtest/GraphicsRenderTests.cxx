@@ -1342,6 +1342,46 @@ void GraphicsRenderTests::testHalfEllipsePolygon()
     }
 }
 
+void GraphicsRenderTests::testClosedBezierPolyline()
+{
+    vcl::test::OutputDeviceTestPolygon aOutDevTest;
+    Bitmap aBitmap = aOutDevTest.setupClosedBezier();
+    OUString atestName = "testClosedBezierPolyline";
+    if (!SHOULD_ASSERT)
+    {
+        appendTestResult(atestName, "SKIPPED");
+        return;
+    }
+    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestLine::checkClosedBezier(aBitmap);
+    appendTestResult(atestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        BitmapEx aBitmapEx(aBitmap);
+        exportBitmapExToImage(m_aUserInstallPath + atestName + ".png", aBitmapEx);
+    }
+}
+
+void GraphicsRenderTests::testClosedBezierPolygon()
+{
+    vcl::test::OutputDeviceTestPolygon aOutDevTest;
+    Bitmap aBitmap = aOutDevTest.setupClosedBezier();
+    OUString atestName = "testClosedBezierPolygon";
+    if (!SHOULD_ASSERT)
+    {
+        appendTestResult(atestName, "SKIPPED");
+        return;
+    }
+    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestLine::checkClosedBezier(aBitmap);
+    appendTestResult(atestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        BitmapEx aBitmapEx(aBitmap);
+        exportBitmapExToImage(m_aUserInstallPath + atestName + ".png", aBitmapEx);
+    }
+}
+
 void GraphicsRenderTests::runALLTests()
 {
     testDrawRectWithRectangle();
@@ -1406,6 +1446,8 @@ void GraphicsRenderTests::runALLTests()
     testLineCapButt();
     testHalfEllipsePolyLine();
     testHalfEllipsePolygon();
+    testClosedBezierPolyline();
+    testClosedBezierPolygon();
 }
 
 void GraphicsRenderTests::appendTestResult(OUString aTestName, OUString aTestStatus,
