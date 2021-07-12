@@ -31,10 +31,10 @@ struct SvXMLItemMapEntry;
 
 class SwXMLItemSetContext final : public SvXMLImportContext
 {
-    SfxItemSet                  &rItemSet;
-    const SvXMLImportItemMapper &rIMapper;
-    const SvXMLUnitConverter    &rUnitConv;
-    SvXMLImportContextRef xBackground;
+    SfxItemSet                  &m_rItemSet;
+    const SvXMLImportItemMapper &m_rIMapper;
+    const SvXMLUnitConverter    &m_rUnitConv;
+    SvXMLImportContextRef m_xBackground;
 
 public:
 

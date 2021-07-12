@@ -33,21 +33,21 @@ SwXMLItemSetContext::SwXMLItemSetContext( SvXMLImport& rImp, sal_Int32 /*nElemen
                                           SvXMLImportItemMapper& rIMap,
                                           const SvXMLUnitConverter& rUnitConverter ):
     SvXMLImportContext( rImp ),
-    rItemSet( rISet ),
-    rIMapper( rIMap ),
-    rUnitConv( rUnitConverter )
+    m_rItemSet( rISet ),
+    m_rIMapper( rIMap ),
+    m_rUnitConv( rUnitConverter )
 {
-    rIMap.importXML( rItemSet, xAttrList, rUnitConv,
+    rIMap.importXML( m_rItemSet, xAttrList, m_rUnitConv,
                            GetImport().GetNamespaceMap() );
 }
 
 SwXMLItemSetContext::~SwXMLItemSetContext()
 {
-    if( xBackground.is() )
+    if( m_xBackground.is() )
     {
         const SvxBrushItem& rItem =
-            static_cast<SwXMLBrushItemImportContext*>(xBackground.get())->GetItem();
-        rItemSet.Put( rItem );
+            static_cast<SwXMLBrushItemImportContext*>(m_xBackground.get())->GetItem();
+        m_rItemSet.Put( rItem );
     }
 }
 
@@ -55,7 +55,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SwXMLItemSetContext::c
     sal_Int32 nElement,
     const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
-    SvXMLItemMapEntriesRef xMapEntries = rIMapper.getMapEntries();
+    SvXMLItemMapEntriesRef xMapEntries = m_rIMapper.getMapEntries();
     SvXMLItemMapEntry const * pEntry = xMapEntries->getByName( nElement );
 
     if( pEntry && 0 != (pEntry->nMemberId & MID_SW_FLAG_ELEMENT_ITEM_IMPORT) )
@@ -82,20 +82,20 @@ SvXMLImportContextRef SwXMLItemSetContext::createFastChildContext( sal_Int32 nEl
     case RES_BACKGROUND:
         {
             const SfxPoolItem *pItem;
-            if( SfxItemState::SET == rItemSet.GetItemState( RES_BACKGROUND,
+            if( SfxItemState::SET == m_rItemSet.GetItemState( RES_BACKGROUND,
                                                        false, &pItem ) )
             {
                 xContext = new SwXMLBrushItemImportContext(
                                 GetImport(), nElement, xAttrList,
-                                rUnitConv, *static_cast<const SvxBrushItem *>(pItem) );
+                                m_rUnitConv, *static_cast<const SvxBrushItem *>(pItem) );
             }
             else
             {
                 xContext = new SwXMLBrushItemImportContext(
                                 GetImport(), nElement, xAttrList,
-                                rUnitConv, RES_BACKGROUND );
+                                m_rUnitConv, RES_BACKGROUND );
             }
-            xBackground = xContext;
+            m_xBackground = xContext;
         }
         break;
     }
