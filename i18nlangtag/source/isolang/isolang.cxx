@@ -955,6 +955,7 @@ IsoLangOtherEntry const aImplPrivateUseEntries[] =
     { LANGUAGE_USER_PRIV_NOTRANSLATE,       "x-no-translate" }, //! not BCP47 but legacy in .xcu configmgr
     { LANGUAGE_USER_PRIV_DEFAULT,           "x-default"      },
     { LANGUAGE_USER_PRIV_COMMENT,           "x-comment"      },
+    { LANGUAGE_USER_PRIV_NONE,              "x-none"         },
     { LANGUAGE_USER_PRIV_JOKER,             "*"              }, //! not BCP47 but transferable in configmgr
     { LANGUAGE_DONTKNOW,                    nullptr             }  // marks end of table
 };
