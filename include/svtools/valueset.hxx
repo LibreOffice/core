@@ -175,6 +175,8 @@ to be set (before Show) with SetStyle().
 
 *************************************************************************/
 
+typedef std::vector<std::unique_ptr<ValueSetItem>> ValueItemList;
+
 #define WB_ITEMBORDER           (WinBits(0x00010000))
 #define WB_DOUBLEBORDER         (WinBits(0x00020000))
 #define WB_NAMEFIELD            (WinBits(0x00040000))
@@ -191,7 +193,7 @@ class SVT_DLLPUBLIC ValueSet : public weld::CustomWidgetController
 private:
     ScopedVclPtr<VirtualDevice> maVirDev;
     css::uno::Reference<css::accessibility::XAccessible> mxAccessible;
-    std::vector<ValueSetItem>  mItemList;
+    ValueItemList   mItemList;
     std::unique_ptr<ValueSetItem> mpNoneItem;
     std::unique_ptr<weld::ScrolledWindow> mxScrolledWindow;
     tools::Rectangle  maNoneItemRect;
@@ -234,7 +236,7 @@ private:
     friend class ValueSetAcc;
 
     SVT_DLLPRIVATE void         ImplDeleteItems();
-    SVT_DLLPRIVATE void         ImplFormatItem(vcl::RenderContext const & rRenderContext, ValueSetItem& rItem, tools::Rectangle aRect);
+    SVT_DLLPRIVATE void         ImplFormatItem(vcl::RenderContext const & rRenderContext, ValueSetItem* pItem, tools::Rectangle aRect);
     SVT_DLLPRIVATE void         ImplDrawItemText(vcl::RenderContext& rRenderContext, const OUString& rStr);
     SVT_DLLPRIVATE void         ImplDrawSelect(vcl::RenderContext& rRenderContext, sal_uInt16 nItemId, const bool bFocus, const bool bDrawSel);
     SVT_DLLPRIVATE void         ImplDrawSelect(vcl::RenderContext& rRenderContext);
@@ -244,7 +246,7 @@ private:
     SVT_DLLPRIVATE ValueSetItem*    ImplGetItem( size_t nPos );
     SVT_DLLPRIVATE ValueSetItem*    ImplGetFirstItem();
     SVT_DLLPRIVATE sal_uInt16          ImplGetVisibleItemCount() const;
-    SVT_DLLPRIVATE void         ImplInsertItem( const ValueSetItem& rItem, const size_t nPos );
+    SVT_DLLPRIVATE void         ImplInsertItem( std::unique_ptr<ValueSetItem> pItem, const size_t nPos );
     SVT_DLLPRIVATE tools::Rectangle    ImplGetItemRect( size_t nPos ) const;
     SVT_DLLPRIVATE void         ImplFireAccessibleEvent( short nEventId, const css::uno::Any& rOldValue, const css::uno::Any& rNewValue );
     SVT_DLLPRIVATE bool         ImplHasAccessibleListeners();
