@@ -1361,6 +1361,7 @@ Public Function Methods() As Variant
 					, &quot;MoveRange&quot; _
 					, &quot;MoveSheet&quot; _
 					, &quot;Offset&quot; _
+					, &quot;PrintOut&quot; _
 					, &quot;RemoveSheet&quot; _
 					, &quot;RenameSheet&quot; _
 					, &quot;RunCommand&quot; _
@@ -1370,6 +1371,7 @@ Public Function Methods() As Variant
 					, &quot;SetArray&quot; _
 					, &quot;SetCellStyle&quot; _
 					, &quot;SetFormula&quot; _
+					, &quot;SetPrinter&quot; _
 					, &quot;SetValue&quot; _
 					, &quot;SortRange&quot; _
 					)
@@ -1552,6 +1554,63 @@ Finally:
 Catch:
 	GoTo Finally
 End Function	&apos;	SF_Documents.SF_Calc.Offset
+
+REM -----------------------------------------------------------------------------
+Public Function PrintOut(Optional ByVal SheetName As Variant _
+							, Optional ByVal Pages As Variant _
+							, Optional ByVal Copies As Variant _
+							) As Boolean
+&apos;&apos;&apos; Send the content of the given sheet to the printer.
+&apos;&apos;&apos;	The printer might be defined previously by default, by the user or by the SetPrinter() method
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		SheetName: the sheet to print. Default = the active sheet
+&apos;&apos;&apos;		Pages: the pages to print as a string, like in the user interface. Example: &quot;1-4;10;15-18&quot;. Default = all pages
+&apos;&apos;&apos;		Copies: the number of copies
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		True when successful
+&apos;&apos;&apos;	Examples:
+&apos;&apos;&apos;		oDoc.PrintOut(&quot;SheetX&quot;, &quot;1-4;10;15-18&quot;, Copies := 2)
+
+Dim bPrint As Boolean				&apos;	Return value
+Dim oSheet As Object				&apos;	SheetName as a reference
+
+Const cstThisSub = &quot;SFDocuments.Calc.PrintOut&quot;
+Const cstSubArgs = &quot;[SheetName=&quot;&quot;~&quot;&quot;], [Pages=&quot;&quot;&quot;&quot;], [Copies=1]&quot;
+
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	bPrint = False
+
+Check:
+	If IsMissing(SheetName) Or IsEmpty(SheetName) Then SheetName = &quot;&quot;
+	If IsMissing(Pages) Or IsEmpty(Pages) Then Pages = &quot;&quot;
+	If IsMissing(Copies) Or IsEmpty(Copies) Then Copies = 1
+	
+	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not _IsStillAlive() Then GoTo Finally
+		If Not _ValidateSheet(SheetName, &quot;SheetName&quot;, , True, True) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(Pages, &quot;Pages&quot;, V_STRING) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(Copies, &quot;Copies&quot;, ScriptForge.V_NUMERIC) Then GoTo Finally
+	End If
+
+Try:
+	If SheetName = &quot;~&quot; Then SheetName = &quot;&quot;
+	&apos;	Make given sheet active
+	If Len(SheetName) &gt; 0 Then
+		With _Component
+			Set oSheet = .getSheets.getByName(SheetName)
+			Set .CurrentController.ActiveSheet = oSheet
+		End With
+	End If
+
+	bPrint = [_Super].PrintOut(Pages, Copies, _Component)
+
+Finally:
+	PrintOut = bPrint
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function   &apos;   SFDocuments.SF_Calc.PrintOut
 
 REM -----------------------------------------------------------------------------
 Public Function Properties() As Variant

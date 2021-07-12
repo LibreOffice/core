@@ -1748,6 +1748,9 @@ class SFDocuments:
         def CloseDocument(self, saveask = True):
             return self.ExecMethod(self.vbMethod, 'CloseDocument', saveask)
 
+        def PrintOut(self, pages = '', copies = 1):
+            return self.ExecMethod(self.vbMethod, 'PrintOut', pages, copies)
+
         def RunCommand(self, command):
             return self.ExecMethod(self.vbMethod, 'RunCommand', command)
 
@@ -1805,6 +1808,9 @@ class SFDocuments:
 
         def OpenFormDocument(self, formdocument, designmode = False):
             return self.ExecMethod(self.vbMethod, 'OpenFormDocument', formdocument, designmode)
+
+        def PrintOut(self, formdocument, pages = '', copies = 1):
+            return self.ExecMethod(self.vbMethod, 'PrintOut', formdocument, pages, copies)
 
         def SetPrinter(self, formdocument = '', printer = '', orientation = '', paperformat = ''):
             return self.ExecMethod(self.vbMethod, 'SetPrinter', formdocument, printer, orientation, paperformat)
@@ -1944,6 +1950,9 @@ class SFDocuments:
         def Offset(self, range, rows = 0, columns = 0, height = ScriptForge.cstSymEmpty,
                    width = ScriptForge.cstSymEmpty):
             return self.ExecMethod(self.vbMethod, 'Offset', range, rows, columns, height, width)
+
+        def PrintOut(self, sheetname = '~', pages = '', copies = 1):
+            return self.ExecMethod(self.vbMethod, 'PrintOut', sheetname, pages, copies)
 
         def RemoveSheet(self, sheetname):
             return self.ExecMethod(self.vbMethod, 'RemoveSheet', sheetname)
@@ -2102,6 +2111,11 @@ class SFDocuments:
 
         def Forms(self, form = ''):
             return self.ExecMethod(self.vbMethod + self.flgArrayRet, 'Forms', form)
+
+        def PrintOut(self, pages = '', copies = 1, printbackground = True, printblankpages = False,
+                     printevenpages = True, printoddpages = True, printimages = True):
+            return self.ExecMethod(self.vbMethod, 'PrintOut', pages, copies, printbackground, printblankpages,
+                                   printevenpages, printoddpages, printimages)
 
 
 # ##############################################False##################################################################

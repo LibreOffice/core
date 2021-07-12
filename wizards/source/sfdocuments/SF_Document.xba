@@ -500,13 +500,70 @@ Public Function Methods() As Variant
 	Methods = Array( _
 					&quot;Activate&quot; _
 					, &quot;CloseDocument&quot; _
+					, &quot;PrintOut&quot; _
 					, &quot;RunCommand&quot; _
 					, &quot;Save&quot; _
 					, &quot;SaveAs&quot; _
 					, &quot;SaveCopyAs&quot; _
+					, &quot;SetPrinter&quot; _
 					)
 
 End Function	&apos;	SFDocuments.SF_Document.Methods
+
+REM -----------------------------------------------------------------------------
+Public Function PrintOut(Optional ByVal Pages As Variant _
+							, Optional ByVal Copies As Variant _
+							, Optional ByRef _Document As Variant _
+							) As Boolean
+&apos;&apos;&apos; Send the content of the document to the printer.
+&apos;&apos;&apos;	The printer might be defined previously by default, by the user or by the SetPrinter() method
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		Pages: the pages to print as a string, like in the user interface. Example: &quot;1-4;10;15-18&quot;. Default = all pages
+&apos;&apos;&apos;		Copies: the number of copies
+&apos;&apos;&apos;		_Document: undocumented argument to designate the document to print when called from a subclass
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		True when successful
+&apos;&apos;&apos;	Examples:
+&apos;&apos;&apos;		oDoc.PrintOut(&quot;1-4;10;15-18&quot;, Copies := 2)
+
+Dim bPrint As Boolean				&apos;	Return value
+Dim vPrintGoal As Variant			&apos;	Array of property values
+
+Const cstThisSub = &quot;SFDocuments.Document.PrintOut&quot;
+Const cstSubArgs = &quot;[Pages=&quot;&quot;&quot;&quot;], [Copies=1]&quot;
+
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	bPrint = False
+
+Check:
+	If IsMissing(Pages) Or IsEmpty(Pages) Then Pages = &quot;&quot;
+	If IsMissing(Copies) Or IsEmpty(Copies) Then Copies = 1
+	If IsMissing(_Document) Or IsEmpty(_Document) Or IsNull(_Document) Then Set _Document = _Component
+	
+	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not _IsStillAlive() Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(Pages, &quot;Pages&quot;, V_STRING) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(Copies, &quot;Copies&quot;, ScriptForge.V_NUMERIC) Then GoTo Finally
+	End If
+
+Try:
+	vPrintGoal = Array( _
+						ScriptForge.SF_Utils._MakePropertyValue(&quot;CopyCount&quot;, CInt(Copies)) _
+						, ScriptForge.SF_Utils._MakePropertyValue(&quot;Collate&quot;, True) _
+						, ScriptForge.SF_Utils._MakePropertyValue(&quot;Pages&quot;, Pages) _
+						, ScriptForge.SF_Utils._MakePropertyValue(&quot;Wait&quot;, False) _
+						)
+
+	_Document.Print(vPrintGoal)
+	bPrint = True
+
+Finally:
+	PrintOut = bPrint
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function   &apos;   SFDocuments.SF_Document.PrintOut
 
 REM -----------------------------------------------------------------------------
 Public Function Properties() As Variant
