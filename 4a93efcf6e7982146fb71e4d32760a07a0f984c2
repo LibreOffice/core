@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6fcaeab4_186e26b6",
+        "filename": "sw/source/core/txtnode/thints.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2862,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-07-12T10:05:48Z",
+      "side": 1,
+      "message": "i think we need to get rid of this condition.\n\nassume we have 1 non-rsid items in set 1 and 2 non-rsid item in set 2 - first the condition is true, after loop iteration 1 the condition is false and 2885 will set it to DIFFER_ONLY_RSID but it should be DIFFER",
+      "revId": "4a93efcf6e7982146fb71e4d32760a07a0f984c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
