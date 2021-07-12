@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "95e0bfe6_5fd9891c",
+        "filename": "writerfilter/source/dmapper/DomainMapper.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1306,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-07-12T07:40:00Z",
+      "side": 1,
+      "message": "Ah, it looks like this is likely where I got carried away...",
+      "range": {
+        "startLine": 1306,
+        "startChar": 16,
+        "endLine": 1306,
+        "endChar": 93
+      },
+      "revId": "e626a736a18266944a731af26f407ab30ac755bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}

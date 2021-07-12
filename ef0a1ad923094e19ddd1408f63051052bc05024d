@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "74f0beec_76dd4f36",
+        "filename": "writerfilter/source/dmapper/StyleSheetTable.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-07-12T07:40:00Z",
+      "side": 1,
+      "message": "I don\u0027t see how it would be possible for it to be null.  Something would need to delete the pointer contents in order for it to become null, wouldn\u0027t it?",
+      "range": {
+        "startLine": 63,
+        "startChar": 9,
+        "endLine": 63,
+        "endChar": 47
+      },
+      "revId": "ef0a1ad923094e19ddd1408f63051052bc05024d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
