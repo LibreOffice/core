@@ -2570,7 +2570,11 @@ SwFlyCntPortion *SwTextFormatter::NewFlyCntPortion( SwTextFormatInfo &rInf,
     SwFlyInContentFrame *pFly;
     SwFrameFormat* pFrameFormat = static_cast<SwTextFlyCnt*>(pHint)->GetFlyCnt().GetFrameFormat();
     if( RES_FLYFRMFMT == pFrameFormat->Which() )
+    {
+        // set Lock pFrame to avoid m_pCurr getting deleted
+        TextFrameLockGuard aGuard(m_pFrame);
         pFly = static_cast<SwTextFlyCnt*>(pHint)->GetFlyFrame(pFrame);
+    }
     else
         pFly = nullptr;
     // aBase is the document-global position, from which the new extra portion is placed
