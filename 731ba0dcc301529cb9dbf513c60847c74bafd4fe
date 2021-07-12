@@ -22,6 +22,30 @@
       "revId": "731ba0dcc301529cb9dbf513c60847c74bafd4fe",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e7f33332_47393aed",
+        "filename": "writerfilter/source/dmapper/StyleSheetTable.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-07-12T11:26:32Z",
+      "side": 1,
+      "message": "Yes, normally you get a linker failure when you try to use it. And this is wanted in headers.. but as you say we could have a clang plugin to enforce this in non-header files.",
+      "parentUuid": "deacbb0f_7ede783d",
+      "range": {
+        "startLine": 74,
+        "startChar": 4,
+        "endLine": 74,
+        "endChar": 88
+      },
+      "revId": "731ba0dcc301529cb9dbf513c60847c74bafd4fe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
