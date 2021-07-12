@@ -141,6 +141,25 @@ std::map<Color, int> collectColors(Bitmap& bitmap, const tools::Rectangle& recta
     return colors;
 }
 
+bool checkConvexHullProperty(Bitmap& bitmap, Color constLineColor)
+{
+    BitmapScopedWriteAccess pAccess(bitmap);
+    tools::Long thresholdWidth = pAccess->Width();
+    tools::Long thresholdHeight = pAccess->Height() - 2;
+    for (tools::Long y = 0; y < pAccess->Height(); ++y)
+    {
+        for (tools::Long x = 0; x < pAccess->Width(); ++x)
+        {
+            if (pAccess->GetPixel(y, x) == constLineColor
+                && (thresholdHeight < y || thresholdWidth < x))
+            {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
 TestResult checkRect(Bitmap& rBitmap, int aLayerNumber, Color aExpectedColor)
 {
     BitmapScopedWriteAccess pAccess(rBitmap);
@@ -716,6 +735,46 @@ TestResult OutputDeviceTestCommon::checkHalfEllipse(Bitmap& rBitmap, bool aEnabl
     if (nNumberOfQuirks > 0)
         aResult = TestResult::PassedWithQuirks;
     if (nNumberOfErrors > 0)
+        aResult = TestResult::Failed;
+    return aResult;
+}
+
+TestResult OutputDeviceTestCommon::checkClosedBezier(Bitmap& rBitmap)
+{
+    BitmapScopedWriteAccess pAccess(rBitmap);
+
+    TestResult aResult = TestResult::Passed;
+    int nNumberOfQuirks = 0;
+    int nNumberOfErrors = 0;
+
+    std::map<std::pair<tools::Long, tools::Long>, bool> SetPixels
+        = { { { 3, 8 }, true },  { { 3, 9 }, true },   { { 3, 10 }, true },  { { 4, 7 }, true },
+            { { 4, 8 }, true },  { { 4, 9 }, true },   { { 4, 10 }, true },  { { 4, 11 }, true },
+            { { 5, 7 }, true },  { { 5, 11 }, true },  { { 6, 6 }, true },   { { 6, 12 }, true },
+            { { 7, 6 }, true },  { { 7, 12 }, true },  { { 8, 7 }, true },   { { 8, 11 }, true },
+            { { 9, 7 }, true },  { { 9, 11 }, true },  { { 10, 7 }, true },  { { 10, 11 }, true },
+            { { 11, 8 }, true }, { { 11, 9 }, true },  { { 11, 10 }, true }, { { 12, 8 }, true },
+            { { 12, 9 }, true }, { { 12, 10 }, true }, { { 13, 9 }, true } };
+
+    for (tools::Long x = 0; x < pAccess->Width(); x++)
+    {
+        for (tools::Long y = 0; y < pAccess->Height(); ++y)
+        {
+            if (SetPixels.count({ y, x }))
+            {
+                checkValue(pAccess, x, y, constLineColor, nNumberOfQuirks, nNumberOfErrors, true);
+            }
+            else
+            {
+                checkValue(pAccess, x, y, constBackgroundColor, nNumberOfQuirks, nNumberOfErrors,
+                           true);
+            }
+        }
+    }
+
+    if (nNumberOfQuirks > 0)
+        aResult = TestResult::PassedWithQuirks;
+    if (nNumberOfErrors > 0 || !checkConvexHullProperty(rBitmap, constLineColor))
         aResult = TestResult::Failed;
     return aResult;
 }
