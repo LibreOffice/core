@@ -411,6 +411,8 @@ css::ui::LayoutSize SlideTransitionPane::GetHeightForWidth(const sal_Int32 /*nWi
     return css::ui::LayoutSize(nMinimumHeight, -1, nMinimumHeight);
 }
 
+constexpr sal_uInt16 nNoneId = std::numeric_limits<sal_uInt16>::max();
+
 void SlideTransitionPane::Initialize(SdDrawDocument* pDoc)
 {
     mxFT_VARIANT = m_xBuilder->weld_label("variant_label");
@@ -446,7 +448,7 @@ void SlideTransitionPane::Initialize(SdDrawDocument* pDoc)
 
     // dummy list box of slide transitions for startup.
     mxVS_TRANSITION_ICONS->InsertItem(
-        0, Image( StockImage::Yes, "sd/cmd/transition-none.png" ),
+        nNoneId, Image( StockImage::Yes, "sd/cmd/transition-none.png" ),
         SdResId( STR_SLIDETRANSITION_NONE ),
         VALUESET_APPEND, /* show legend */ true );
     mxVS_TRANSITION_ICONS->Recalculate();
@@ -567,14 +569,14 @@ void SlideTransitionPane::updateControls()
     if( aEffect.mbEffectAmbiguous )
     {
         SAL_WARN( "sd.transitions", "Unusual, ambiguous transition effect" );
-        mxVS_TRANSITION_ICONS->SetNoSelection();
+        mxVS_TRANSITION_ICONS->SelectItem(nNoneId);
     }
     else
     {
         // ToDo: That 0 is "no transition" is documented nowhere except in the
         // CTOR of sdpage
         if( aEffect.mnType == 0 )
-            mxVS_TRANSITION_ICONS->SetNoSelection();
+            mxVS_TRANSITION_ICONS->SelectItem(nNoneId);
         else
             updateVariants( getPresetOffset( aEffect ) );
     }
@@ -758,9 +760,11 @@ impl::TransitionEffect SlideTransitionPane::getTransitionEffectFromControls() co
     impl::TransitionEffect aResult;
     aResult.setAllAmbiguous();
 
+    bool bNoneSelected = mxVS_TRANSITION_ICONS->IsNoSelection() || mxVS_TRANSITION_ICONS->GetSelectedItemId() == nNoneId;
+
     // check first (aResult might be overwritten)
     if(  mxVS_TRANSITION_ICONSWin->get_sensitive() &&
-        !mxVS_TRANSITION_ICONS->IsNoSelection() &&
+        !bNoneSelected &&
          mxVS_TRANSITION_ICONS->GetSelectedItemId() > 0 )
     {
         const sd::TransitionPresetList& rPresetList = sd::TransitionPreset::getTransitionPresetList();
@@ -801,7 +805,7 @@ impl::TransitionEffect SlideTransitionPane::getTransitionEffectFromControls() co
         }
         aResult.mbEffectAmbiguous = false;
     }
-    else if (mxVS_TRANSITION_ICONS->IsNoSelection())
+    else if (bNoneSelected)
     {
         aResult.mbEffectAmbiguous = false;
     }
@@ -1008,7 +1012,7 @@ void SlideTransitionPane::updateVariants( size_t nPresetOffset )
 {
     const sd::TransitionPresetList& rPresetList = sd::TransitionPreset::getTransitionPresetList();
     mxLB_VARIANT->clear();
-    mxVS_TRANSITION_ICONS->SetNoSelection();
+    mxVS_TRANSITION_ICONS->SelectItem(nNoneId);
 
     if( nPresetOffset >= rPresetList.size() )
     {
