@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "deacbb0f_7ede783d",
+        "filename": "writerfilter/source/dmapper/StyleSheetTable.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-07-12T11:03:57Z",
+      "side": 1,
+      "message": "Oops - this is leftover. Can I really define a function without any implementation of it and not get a compiler or Jenkins failure?",
+      "range": {
+        "startLine": 74,
+        "startChar": 4,
+        "endLine": 74,
+        "endChar": 88
+      },
+      "revId": "731ba0dcc301529cb9dbf513c60847c74bafd4fe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
