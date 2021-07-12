@@ -781,6 +781,7 @@ namespace o3tl
 #define LANGUAGE_ON_THE_FLY_SUB_END         LanguageType(0x3E)
 
 /* 0xFFE0 to 0xFFFF reserved for privateuse and specials. */
+#define LANGUAGE_USER_PRIV_NONE             LanguageType(0xFFEA)  /* privateuse "x-none", MS ill-escaped into the wild, primary 0x3ea, sub 0x3f */
 #define LANGUAGE_USER_PRIV_JOKER            LanguageType(0xFFEB)  /* privateuse "*" (sic! bad! nasty!), primary 0x3eb, sub 0x3f */
 #define LANGUAGE_USER_PRIV_COMMENT          LanguageType(0xFFEC)  /* privateuse "x-comment", primary 0x3ec, sub 0x3f */
 #define LANGUAGE_USER_PRIV_DEFAULT          LanguageType(0xFFED)  /* privateuse "x-default", primary 0x3ed, sub 0x3f */
