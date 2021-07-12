@@ -11,11 +11,13 @@
 #include <unotest/macros_test.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <svx/svdpage.hxx>
+#include <unotools/syslocaleoptions.hxx>
 #include <unotools/tempfile.hxx>
 #include <vcl/keycodes.hxx>
 #include <vcl/scheduler.hxx>
 
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
@@ -163,6 +165,49 @@ ScModelObj* ScUiCalcTest::saveAndReload(css::uno::Reference<css::lang::XComponen
     ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
     CPPUNIT_ASSERT(pModelObj);
     return pModelObj;
+}
+
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf138432)
+{
+    ScModelObj* pModelObj = createDoc("tdf138432.ods");
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    // Set the system locale to Hungarian
+    SvtSysLocaleOptions aOptions;
+    OUString sLocaleConfigString = aOptions.GetLanguageTag().getBcp47();
+    aOptions.SetLocaleConfigString("hu-HU");
+    aOptions.Commit();
+    comphelper::ScopeGuard g([&aOptions, &sLocaleConfigString] {
+        aOptions.SetLocaleConfigString(sLocaleConfigString);
+        aOptions.Commit();
+    });
+
+    OUString sExpectedA1 = "12" + OUStringChar(u'\xa0') + "345,67";
+    CPPUNIT_ASSERT_EQUAL(sExpectedA1, pDoc->GetString(ScAddress(0, 0, 0)));
+
+    goToCell("A1");
+
+    dispatchCommand(mxComponent, ".uno:Copy", {});
+    Scheduler::ProcessEventsToIdle();
+
+    goToCell("A2");
+
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, '=', 0);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, '=', 0);
+    Scheduler::ProcessEventsToIdle();
+
+    dispatchCommand(mxComponent, ".uno:Paste", {});
+    Scheduler::ProcessEventsToIdle();
+
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
+    Scheduler::ProcessEventsToIdle();
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 12345,67
+    // - Actual  : Err:509
+    CPPUNIT_ASSERT_EQUAL(OUString("12345,67"), pDoc->GetString(ScAddress(0, 1, 0)));
 }
 
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf100582)
