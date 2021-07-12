@@ -185,6 +185,11 @@ SfxOfficeDispatch::~SfxOfficeDispatch()
     {
         // when dispatch object is released, destroy its connection to this object and destroy it
         pImpl->UnBindController();
+
+        // Ensure that SfxDispatchController_Impl is deleted while the solar mutex is locked, since
+        // that derives from SfxListener.
+        SolarMutexGuard aGuard;
+        pImpl.reset();
     }
 }
 
