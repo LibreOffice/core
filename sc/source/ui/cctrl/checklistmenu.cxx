@@ -424,7 +424,6 @@ ScCheckListMember::ScCheckListMember()
     , mbDate(false)
     , mbLeaf(false)
     , mbValue(false)
-    , mbDuplicated(false)
     , meDatePartType(YEAR)
 {
 }
