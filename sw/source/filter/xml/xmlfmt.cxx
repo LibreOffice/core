@@ -199,10 +199,10 @@ namespace {
 
 class SwXMLConditionContext_Impl : public SvXMLImportContext
 {
-    Master_CollCondition nCondition;
-    sal_uInt32 nSubCondition;
+    Master_CollCondition m_nCondition;
+    sal_uInt32 m_nSubCondition;
 
-    OUString sApplyStyle;
+    OUString m_sApplyStyle;
 
 public:
 
@@ -210,11 +210,11 @@ public:
             SvXMLImport& rImport, sal_Int32 nElement,
             const uno::Reference< xml::sax::XFastAttributeList > & xAttrList );
 
-    bool IsValid() const { return Master_CollCondition::NONE != nCondition; }
+    bool IsValid() const { return Master_CollCondition::NONE != m_nCondition; }
 
-    Master_CollCondition getCondition() const { return nCondition; }
-    sal_uInt32 getSubCondition() const { return nSubCondition; }
-    OUString const &getApplyStyle() const { return sApplyStyle; }
+    Master_CollCondition getCondition() const { return m_nCondition; }
+    sal_uInt32 getSubCondition() const { return m_nSubCondition; }
+    OUString const &getApplyStyle() const { return m_sApplyStyle; }
 };
 
 }
@@ -223,8 +223,8 @@ SwXMLConditionContext_Impl::SwXMLConditionContext_Impl(
             SvXMLImport& rImport, sal_Int32 /*nElement*/,
             const uno::Reference< xml::sax::XFastAttributeList > & xAttrList ) :
     SvXMLImportContext( rImport ),
-    nCondition( Master_CollCondition::NONE ),
-    nSubCondition( 0 )
+    m_nCondition( Master_CollCondition::NONE ),
+    m_nSubCondition( 0 )
 {
     for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
     {
@@ -236,13 +236,13 @@ SwXMLConditionContext_Impl::SwXMLConditionContext_Impl(
                 SwXMLConditionParser_Impl aCondParser( sValue );
                 if( aCondParser.IsValid() )
                 {
-                    nCondition = aCondParser.GetCondition();
-                    nSubCondition = aCondParser.GetSubCondition();
+                    m_nCondition = aCondParser.GetCondition();
+                    m_nSubCondition = aCondParser.GetSubCondition();
                 }
                 break;
             }
             case XML_ELEMENT(STYLE, XML_APPLY_STYLE_NAME):
-                sApplyStyle = sValue;
+                m_sApplyStyle = sValue;
                 break;
             default:
                 XMLOFF_WARN_UNKNOWN("sw", aIter);

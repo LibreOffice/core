@@ -263,9 +263,9 @@ namespace {
 
 class SwXMLAutoStylePoolP : public SvXMLAutoStylePoolP
 {
-    SvXMLExport& rExport;
-    const OUString sListStyleName;
-    const OUString sMasterPageName;
+    SvXMLExport& m_rExport;
+    const OUString m_sListStyleName;
+    const OUString m_sMasterPageName;
 
 protected:
 
@@ -312,12 +312,12 @@ void SwXMLAutoStylePoolP::exportStyleAttributes(
                     // #i70748# - export also empty list styles
                     if( !sStyleName.isEmpty() )
                     {
-                        OUString sTmp = rExport.GetTextParagraphExport()->GetListAutoStylePool().Find( sStyleName );
+                        OUString sTmp = m_rExport.GetTextParagraphExport()->GetListAutoStylePool().Find( sStyleName );
                         if( !sTmp.isEmpty() )
                             sStyleName = sTmp;
                     }
                     GetExport().AddAttribute( XML_NAMESPACE_STYLE,
-                          sListStyleName,
+                          m_sListStyleName,
                           GetExport().EncodeStyleName( sStyleName ) );
                 }
                 break;
@@ -326,7 +326,7 @@ void SwXMLAutoStylePoolP::exportStyleAttributes(
                     OUString sStyleName;
                     rProperty.maValue >>= sStyleName;
                     GetExport().AddAttribute( XML_NAMESPACE_STYLE,
-                                  sMasterPageName,
+                                  m_sMasterPageName,
                                   GetExport().EncodeStyleName( sStyleName ) );
                 }
                 break;
@@ -337,9 +337,9 @@ void SwXMLAutoStylePoolP::exportStyleAttributes(
 
 SwXMLAutoStylePoolP::SwXMLAutoStylePoolP(SvXMLExport& rExp ) :
     SvXMLAutoStylePoolP( rExp ),
-    rExport( rExp ),
-    sListStyleName( GetXMLToken( XML_LIST_STYLE_NAME ) ),
-    sMasterPageName( GetXMLToken( XML_MASTER_PAGE_NAME ) )
+    m_rExport( rExp ),
+    m_sListStyleName( GetXMLToken( XML_LIST_STYLE_NAME ) ),
+    m_sMasterPageName( GetXMLToken( XML_MASTER_PAGE_NAME ) )
 {
 }
 

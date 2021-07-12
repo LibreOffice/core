@@ -87,8 +87,8 @@ namespace {
 
 class XTextRangeOrNodeIndexPosition
 {
-    Reference<XTextRange> xRange;
-    std::unique_ptr<SwNodeIndex> pIndex;    // pIndex will point to the *previous* node
+    Reference<XTextRange> m_xRange;
+    std::unique_ptr<SwNodeIndex> m_pIndex;    // pIndex will point to the *previous* node
 
 public:
     XTextRangeOrNodeIndexPosition();
@@ -111,15 +111,15 @@ XTextRangeOrNodeIndexPosition::XTextRangeOrNodeIndexPosition()
 
 void XTextRangeOrNodeIndexPosition::Set( Reference<XTextRange> const & rRange )
 {
-    xRange = rRange->getStart();    // set bookmark
-    pIndex.reset();
+    m_xRange = rRange->getStart();    // set bookmark
+    m_pIndex.reset();
 }
 
 void XTextRangeOrNodeIndexPosition::Set( SwNodeIndex const & rIndex )
 {
-    pIndex.reset( new SwNodeIndex(rIndex) );
-    (*pIndex)-- ;   // previous node!!!
-    xRange = nullptr;
+    m_pIndex.reset( new SwNodeIndex(rIndex) );
+    (*m_pIndex)-- ;   // previous node!!!
+    m_xRange = nullptr;
 }
 
 void XTextRangeOrNodeIndexPosition::SetAsNodeIndex(
@@ -149,17 +149,17 @@ XTextRangeOrNodeIndexPosition::CopyPositionInto(SwPosition& rPos, SwDoc & rDoc)
     OSL_ENSURE(IsValid(), "Can't get Position");
 
     // create PAM from start cursor (if no node index is present)
-    if (nullptr == pIndex)
+    if (nullptr == m_pIndex)
     {
         SwUnoInternalPaM aUnoPaM(rDoc);
-        bool bSuccess = ::sw::XTextRangeToSwPaM(aUnoPaM, xRange);
+        bool bSuccess = ::sw::XTextRangeToSwPaM(aUnoPaM, m_xRange);
         OSL_ENSURE(bSuccess, "illegal range");
 
         rPos = *aUnoPaM.GetPoint();
     }
     else
     {
-        rPos.nNode = *pIndex;
+        rPos.nNode = *m_pIndex;
         rPos.nNode++;           // pIndex points to previous index !!!
         rPos.nContent.Assign( rPos.nNode.GetNode().GetContentNode(), 0 );
     }
@@ -169,12 +169,12 @@ SwDoc* XTextRangeOrNodeIndexPosition::GetDoc()
 {
     OSL_ENSURE(IsValid(), "Can't get Doc");
 
-    return (nullptr != pIndex) ? &pIndex->GetNodes().GetDoc() : lcl_GetDocViaTunnel(xRange);
+    return (nullptr != m_pIndex) ? &m_pIndex->GetNodes().GetDoc() : lcl_GetDocViaTunnel(m_xRange);
 }
 
 bool XTextRangeOrNodeIndexPosition::IsValid() const
 {
-    return ( xRange.is() || (pIndex != nullptr) );
+    return ( m_xRange.is() || (m_pIndex != nullptr) );
 }
 
 // RedlineInfo: temporary storage for redline data
