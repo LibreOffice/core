@@ -220,13 +220,90 @@ Public Function Methods() As Variant
 					&quot;Activate&quot; _
 					, &quot;CloseDocument&quot; _
 					, &quot;Forms&quot; _
+					, &quot;PrintOut&quot; _
 					, &quot;RunCommand&quot; _
 					, &quot;Save&quot; _
 					, &quot;SaveAs&quot; _
 					, &quot;SaveCopyAs&quot; _
+					, &quot;SetPrinter&quot; _
 					)
 
 End Function	&apos;	SFDocuments.SF_Writer.Methods
+
+REM -----------------------------------------------------------------------------
+Public Function PrintOut(Optional ByVal Pages As Variant _
+							, Optional ByVal Copies As Variant _
+							, Optional ByVal PrintBackground As Variant _
+							, Optional ByVal PrintBlankPages As Variant _
+							, Optional ByVal PrintEvenPages As Variant _
+							, Optional ByVal PrintOddPages As Variant _
+							, Optional ByVal PrintImages As Variant _
+							) As Boolean
+&apos;&apos;&apos; Send the content of the document to the printer.
+&apos;&apos;&apos;	The printer might be defined previously by default, by the user or by the SetPrinter() method
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		Pages: the pages to print as a string, like in the user interface. Example: &quot;1-4;10;15-18&quot;. Default = all pages
+&apos;&apos;&apos;		Copies: the number of copies
+&apos;&apos;&apos;		PrintBackground: print the background image when True (default)
+&apos;&apos;&apos;		PrintBlankPages: when False (default), omit empty pages
+&apos;&apos;&apos;		PrintEvenPages: print the left pages when True (default)
+&apos;&apos;&apos;		PrintOddPages: print the right pages when True (default)
+&apos;&apos;&apos;		PrintImages: print the graphic objects when True (default)
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		True when successful
+&apos;&apos;&apos;	Examples:
+&apos;&apos;&apos;		oDoc.PrintOut(&quot;1-4;10;15-18&quot;, Copies := 2, PrintImages := False)
+
+Dim bPrint As Boolean				&apos;	Return value
+Dim vPrintOptions As Variant		&apos;	com.sun.star.text.DocumentSettings
+
+Const cstThisSub = &quot;SFDocuments.Writer.PrintOut&quot;
+Const cstSubArgs = &quot;[Pages=&quot;&quot;&quot;&quot;], [Copies=1], [PrintBackground=True], [PrintBlankPages=False], [PrintEvenPages=True]&quot; _
+						&amp; &quot;, [PrintOddPages=True], [PrintImages=True]&quot;
+
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	bPrint = False
+
+Check:
+	If IsMissing(Pages) Or IsEmpty(Pages) Then Pages = &quot;&quot;
+	If IsMissing(Copies) Or IsEmpty(Copies) Then Copies = 1
+	If IsMissing(PrintBackground) Or IsEmpty(PrintBackground) Then PrintBackground = True
+	If IsMissing(PrintBlankPages) Or IsEmpty(PrintBlankPages) Then PrintBlankPages = False
+	If IsMissing(PrintEvenPages) Or IsEmpty(PrintEvenPages) Then PrintEvenPages = True
+	If IsMissing(PrintOddPages) Or IsEmpty(PrintOddPages) Then PrintOddPages = True
+	If IsMissing(PrintImages) Or IsEmpty(PrintImages) Then PrintImages = True
+	
+	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not _IsStillAlive() Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(Pages, &quot;Pages&quot;, V_STRING) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(Copies, &quot;Copies&quot;, ScriptForge.V_NUMERIC) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(PrintBackground, &quot;PrintBackground&quot;, ScriptForge.V_BOOLEAN) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(PrintBlankPages, &quot;PrintBlankPages&quot;, ScriptForge.V_BOOLEAN) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(PrintEvenPages, &quot;PrintEvenPages&quot;, ScriptForge.V_BOOLEAN) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(PrintOddPages, &quot;PrintOddPages&quot;, ScriptForge.V_BOOLEAN) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(PrintImages, &quot;PrintImages&quot;, ScriptForge.V_BOOLEAN) Then GoTo Finally
+	End If
+
+Try:
+	vPrintOptions = _Component.createInstance(&quot;com.sun.star.text.DocumentSettings&quot;)
+	With vPrintOptions
+		.PrintPageBackground = PrintBackground
+		.PrintEmptyPages = PrintBlankPages
+		.PrintLeftPages = PrintEvenPages
+		.PrintRightPages = PrintOddPages
+		.PrintGraphics = PrintImages
+		.PrintDrawings = PrintImages
+	End With
+
+	bPrint = [_Super].PrintOut(Pages, Copies, _Component)
+
+Finally:
+	PrintOut = bPrint
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function   &apos;   SFDocuments.SF_Writer.PrintOut
 
 REM -----------------------------------------------------------------------------
 Public Function Properties() As Variant

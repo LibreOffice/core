@@ -404,10 +404,12 @@ Public Function Methods() As Variant
 					, &quot;GetDatabase&quot; _
 					, &quot;IsLoaded&quot; _
 					, &quot;OpenFormDocument&quot; _
+					, &quot;PrintOut&quot; _
 					, &quot;RunCommand&quot; _
 					, &quot;Save&quot; _
 					, &quot;SaveAs&quot; _
 					, &quot;SaveCopyAs&quot; _
+					, &quot;SetPrinter&quot; _
 					)
 
 End Function	&apos;	SFDocuments.SF_Base.Methods
@@ -468,6 +470,64 @@ Finally:
 Catch:
 	GoTo Finally
 End Function	&apos;	SFDocuments.SF_Base.OpenFormDocument
+
+REM -----------------------------------------------------------------------------
+Public Function PrintOut(Optional ByVal FormDocument As Variant _
+							, Optional ByVal Pages As Variant _
+							, Optional ByVal Copies As Variant _
+							) As Boolean
+&apos;&apos;&apos; Send the content of the given form document to the printer.
+&apos;&apos;&apos;	The printer might be defined previously by default, by the user or by the SetPrinter() method
+&apos;&apos;&apos;	The given form document must be open. It is activated by the method.
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		FormDocument: a valid document form name as a case-sensitive string
+&apos;&apos;&apos;		Pages: the pages to print as a string, like in the user interface. Example: &quot;1-4;10;15-18&quot;. Default = all pages
+&apos;&apos;&apos;		Copies: the number of copies
+&apos;&apos;&apos;	Exceptions:
+&apos;&apos;&apos;		FORMDEADERROR			The form is not open
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		True when successful
+&apos;&apos;&apos;	Examples:
+&apos;&apos;&apos;		oDoc.PrintOut(&quot;myForm&quot;, &quot;1-4;10;15-18&quot;, Copies := 2)
+
+Dim bPrint As Boolean				&apos;	Return value
+Dim vFormNames As Variant			&apos;	Array of all document form names present in the document
+Dim oFormDocument As Object			&apos;	com.sun.star.comp.sdb.Content
+
+Const cstThisSub = &quot;SFDocuments.Base.PrintOut&quot;
+Const cstSubArgs = &quot;FormDocument, [Pages=&quot;&quot;&quot;&quot;], [Copies=1]&quot;
+
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	bPrint = False
+
+Check:
+	If IsMissing(Pages) Or IsEmpty(Pages) Then Pages = &quot;&quot;
+	If IsMissing(Copies) Or IsEmpty(Copies) Then Copies = 1
+	
+	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not _IsStillAlive() Then GoTo Finally
+		&apos;	Build list of available FormDocuments recursively with _CollectFormDocuments
+		If IsNull(_FormDocuments) Then Set _FormDocuments = _Component.getFormDocuments()
+		vFormNames = Split(_CollectFormDocuments(_FormDocuments), cstToken)
+		If Not ScriptForge.SF_Utils._Validate(FormDocument, &quot;FormDocument&quot;, V_STRING, vFormNames) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(Pages, &quot;Pages&quot;, V_STRING) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(Copies, &quot;Copies&quot;, ScriptForge.V_NUMERIC) Then GoTo Finally
+	End If
+	If Not IsLoaded(FormDocument) Then GoTo CatchClosed
+
+Try:
+	Set oFormDocument = _FormDocuments.getByHierarchicalName(FormDocument)
+	bPrint = [_Super].PrintOut(Pages, Copies, oFormDocument.Component)
+
+Finally:
+	PrintOut = bPrint
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+CatchClosed:
+	ScriptForge.SF_Exception.RaiseFatal(FORMDEADERROR, FormDocument, _FileIdent())
+End Function   &apos;   SFDocuments.SF_Base.PrintOut
 
 REM -----------------------------------------------------------------------------
 Public Function Properties() As Variant
