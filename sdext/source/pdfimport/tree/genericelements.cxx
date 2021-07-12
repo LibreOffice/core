@@ -156,8 +156,8 @@ void PolyPolyElement::visitedBy( ElementTreeVisitor&                          rV
 #if OSL_DEBUG_LEVEL > 0
 void PolyPolyElement::emitStructure( int nLevel)
 {
-    SAL_WARN( "sdext", std::string(nLevel, ' ') << "<" << typeid( *this ).name() << " " << this << ">" );
-    SAL_WARN( "sdext", "path=" );
+    SAL_INFO( "sdext", std::string(nLevel, ' ') << "<" << typeid( *this ).name() << " " << this << ">" );
+    SAL_INFO( "sdext", "path=" );
     int nPoly = PolyPoly.count();
     for( int i = 0; i < nPoly; i++ )
     {
@@ -169,11 +169,11 @@ void PolyPolyElement::emitStructure( int nLevel)
             basegfx::B2DPoint aPoint = aPoly.getB2DPoint( n );
             buff.append( " (" + OUString::number(aPoint.getX()) + "," + OUString::number(aPoint.getY()) + ")");
         }
-        SAL_WARN( "sdext", "    " << buff.makeStringAndClear() );
+        SAL_INFO( "sdext", "    " << buff.makeStringAndClear() );
     }
     for (auto const& child : Children)
         child->emitStructure( nLevel+1 );
-    SAL_WARN( "sdext", std::string(nLevel, ' ') << "</" << typeid( *this ).name() << ">");
+    SAL_INFO( "sdext", std::string(nLevel, ' ') << "</" << typeid( *this ).name() << ">");
 }
 #endif
 
