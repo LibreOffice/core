@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7e044e97_d183785b",
+        "filename": "sfx2/source/doc/templatedlg.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-07-12T10:45:20Z",
+      "side": 1,
+      "message": "This MNI_ACTION_EXPORT entry does not exist in the menu. Above there is a append_item(MNI_ACTION_IMPORT... but no append_item(MNI_ACTION_EXPORT.\nThere is also no MNI_ACTION_MOVE inserted above.",
+      "revId": "06d063a9de41a24922f15cd3aa47411b61d30c23",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
