@@ -1,0 +1,412 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "455ba6d0_f2d1bae3",
+        "filename": "sfx2/source/inc/StyleList.hxx",
+        "patchSetId": 52
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-07-12T07:40:43Z",
+      "side": 1,
+      "message": "While I like the first comments this one and the next are still a bit unclear to me.",
+      "range": {
+        "startLine": 66,
+        "startChar": 11,
+        "endLine": 66,
+        "endChar": 28
+      },
+      "revId": "4adafd69c470c2d7a2afa86ecd482a37d84549a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "11338bfb_771eaf31",
+        "filename": "sfx2/source/inc/StyleList.hxx",
+        "patchSetId": 52
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-07-12T07:40:43Z",
+      "side": 1,
+      "message": "Can we a) get rid of watercan, b) \"hide\" it in StyleList, or c) have one function like StartWaterCan() checking conditions and doing the work? \n\nUI-wise we should to move the function into the context menu to avoid a duplication of headers on PS and CS. And at this point it\u0027s unclear if the watercan applies to PS or CS.\n\nHave a look at the commenting style itself.",
+      "range": {
+        "startLine": 72,
+        "startChar": 0,
+        "endLine": 78,
+        "endChar": 35
+      },
+      "revId": "4adafd69c470c2d7a2afa86ecd482a37d84549a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1ba76af0_2576e35b",
+        "filename": "sfx2/source/inc/StyleList.hxx",
+        "patchSetId": 52
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-07-12T07:40:43Z",
+      "side": 1,
+      "message": "If you comment \"part of the dialog foo\" (typo, btw) I understand that this function works together with another to do some magic. But SelectStyle() is more or less clear by itself and what needs to be commented is the bIsCallback parameter.\nAnd perhaps some internal magic like selecting \"Text Body\" (PS) when CS is the current family.",
+      "range": {
+        "startLine": 80,
+        "startChar": 0,
+        "endLine": 82,
+        "endChar": 61
+      },
+      "revId": "4adafd69c470c2d7a2afa86ecd482a37d84549a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2f991149_b4a3ea6e",
+        "filename": "sfx2/source/inc/StyleList.hxx",
+        "patchSetId": 52
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-07-12T07:40:43Z",
+      "side": 1,
+      "message": "Some stylefamily related function are above.",
+      "range": {
+        "startLine": 94,
+        "startChar": 30,
+        "endLine": 94,
+        "endChar": 48
+      },
+      "revId": "4adafd69c470c2d7a2afa86ecd482a37d84549a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d299fe84_086d387d",
+        "filename": "sfx2/source/inc/StyleList.hxx",
+        "patchSetId": 52
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-07-12T07:40:43Z",
+      "side": 1,
+      "message": "Careful naming includes in my opinion consistency. Impl is upper case and separated by an underscore. \"Fam\" could be spelled fully \"Family\". Why do we need to call Update after Selection?",
+      "range": {
+        "startLine": 104,
+        "startChar": 9,
+        "endLine": 104,
+        "endChar": 22
+      },
+      "revId": "4adafd69c470c2d7a2afa86ecd482a37d84549a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "82cff359_27284b77",
+        "filename": "sfx2/source/inc/StyleList.hxx",
+        "patchSetId": 52
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-07-12T07:40:43Z",
+      "side": 1,
+      "message": "I don\u0027t understand this function. Please comment or better remove it.",
+      "range": {
+        "startLine": 106,
+        "startChar": 16,
+        "endLine": 106,
+        "endChar": 23
+      },
+      "revId": "4adafd69c470c2d7a2afa86ecd482a37d84549a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "248c7e03_e3a08a4c",
+        "filename": "sfx2/source/inc/StyleList.hxx",
+        "patchSetId": 52
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-07-12T07:40:43Z",
+      "side": 1,
+      "message": "Cur \u003d Current. Is this function really the position of the style family in the toolbar buttons? Like CS \u003d 2 \u003d the second item.",
+      "range": {
+        "startLine": 111,
+        "startChar": 9,
+        "endLine": 111,
+        "endChar": 21
+      },
+      "revId": "4adafd69c470c2d7a2afa86ecd482a37d84549a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9522d4c0_a2c62557",
+        "filename": "sfx2/source/inc/StyleList.hxx",
+        "patchSetId": 52
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-07-12T07:40:43Z",
+      "side": 1,
+      "message": "If this was a handler it wouldn\u0027t just set a boolean value. The function is likely EnablePreview().",
+      "range": {
+        "startLine": 114,
+        "startChar": 16,
+        "endLine": 114,
+        "endChar": 20
+      },
+      "revId": "4adafd69c470c2d7a2afa86ecd482a37d84549a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "33783950_1c600d41",
+        "filename": "sfx2/source/inc/StyleList.hxx",
+        "patchSetId": 52
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-07-12T07:40:43Z",
+      "side": 1,
+      "message": "I\u0027d expect a parameter here what action is to execute. Without it means something has been set before and if you need to keep that it requires documentation in the comment.",
+      "range": {
+        "startLine": 118,
+        "startChar": 9,
+        "endLine": 118,
+        "endChar": 24
+      },
+      "revId": "4adafd69c470c2d7a2afa86ecd482a37d84549a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8e7e8394_1e5e2725",
+        "filename": "sfx2/source/inc/StyleList.hxx",
+        "patchSetId": 52
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-07-12T07:40:43Z",
+      "side": 1,
+      "message": "Does it need to be public?",
+      "range": {
+        "startLine": 122,
+        "startChar": 9,
+        "endLine": 122,
+        "endChar": 19
+      },
+      "revId": "4adafd69c470c2d7a2afa86ecd482a37d84549a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a6ac3558_26bf3949",
+        "filename": "sfx2/source/inc/StyleList.hxx",
+        "patchSetId": 52
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-07-12T07:40:43Z",
+      "side": 1,
+      "message": "Can we merge this with another function like GetStyleIndex() returning -1 for none?",
+      "range": {
+        "startLine": 124,
+        "startChar": 9,
+        "endLine": 124,
+        "endChar": 25
+      },
+      "revId": "4adafd69c470c2d7a2afa86ecd482a37d84549a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9b0e95f0_6a4e0248",
+        "filename": "sfx2/source/inc/StyleList.hxx",
+        "patchSetId": 52
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-07-12T07:40:43Z",
+      "side": 1,
+      "message": "Since we have different filters I don\u0027t understand which one is set here.",
+      "range": {
+        "startLine": 130,
+        "startChar": 9,
+        "endLine": 130,
+        "endChar": 21
+      },
+      "revId": "4adafd69c470c2d7a2afa86ecd482a37d84549a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f094e308_5feecd8e",
+        "filename": "sfx2/source/inc/StyleList.hxx",
+        "patchSetId": 52
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-07-12T07:40:43Z",
+      "side": 1,
+      "message": "I dislike this Impl thing in general and checking the next function apparently iterating over all styles it looks like this one is working on one item. But anyway, do we need update* in the public part at all?",
+      "range": {
+        "startLine": 133,
+        "startChar": 20,
+        "endLine": 133,
+        "endChar": 21
+      },
+      "revId": "4adafd69c470c2d7a2afa86ecd482a37d84549a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "731ed75e_26f4a7f9",
+        "filename": "sfx2/source/inc/StyleList.hxx",
+        "patchSetId": 52
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-07-12T07:40:43Z",
+      "side": 1,
+      "message": "Why default? What is the difference to SetHierarchical()?",
+      "range": {
+        "startLine": 139,
+        "startChar": 9,
+        "endLine": 139,
+        "endChar": 16
+      },
+      "revId": "4adafd69c470c2d7a2afa86ecd482a37d84549a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ba4061f0_d3f52686",
+        "filename": "sfx2/source/inc/StyleList.hxx",
+        "patchSetId": 52
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-07-12T07:40:43Z",
+      "side": 1,
+      "message": "Typo? And don\u0027t we have enough Update functions? If you toggle a flag, should it be labeled Set*()?",
+      "range": {
+        "startLine": 142,
+        "startChar": 9,
+        "endLine": 142,
+        "endChar": 10
+      },
+      "revId": "4adafd69c470c2d7a2afa86ecd482a37d84549a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a464aefd_8f7cf67e",
+        "filename": "sfx2/source/inc/StyleList.hxx",
+        "patchSetId": 52
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-07-12T07:40:43Z",
+      "side": 1,
+      "message": "Is this function part of the item state affecting the context menu?",
+      "range": {
+        "startLine": 144,
+        "startChar": 9,
+        "endLine": 144,
+        "endChar": 21
+      },
+      "revId": "4adafd69c470c2d7a2afa86ecd482a37d84549a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "70f206fc_b5d72435",
+        "filename": "sfx2/source/inc/StyleList.hxx",
+        "patchSetId": 52
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-07-12T07:40:43Z",
+      "side": 1,
+      "message": "There is a time out? Wait a second, void () means you do timeout the StyleList. Don\u0027t get it.",
+      "range": {
+        "startLine": 146,
+        "startChar": 9,
+        "endLine": 146,
+        "endChar": 16
+      },
+      "revId": "4adafd69c470c2d7a2afa86ecd482a37d84549a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2f81b93c_dd9830ac",
+        "filename": "sfx2/source/inc/StyleList.hxx",
+        "patchSetId": 52
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-07-12T07:40:43Z",
+      "side": 1,
+      "message": "Stopping here. Please put as much love in the work as at the beginning. Combine the context menu function into some state. Use consistent and meaningful names.",
+      "revId": "4adafd69c470c2d7a2afa86ecd482a37d84549a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
