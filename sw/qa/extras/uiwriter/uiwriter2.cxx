@@ -3602,6 +3602,29 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testRedlineTableRowDeletionWithDOCXExport)
     assertXPath(pXmlDoc, "//page[1]//body/tab", 0);
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testRedlineDOCXTableInsertion)
+{
+    // load a 3-row table inserted with change tracking by text to table conversion
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "TC-table-converttotable.docx");
+
+    // check table count (1)
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(),
+                                                    uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
+
+    // reject the text insertions of the table cells (also reject deletion of the tabulated
+    // text source of the table, which was used by the tracked text to table conversion)
+    SwEditShell* const pEditShell(pDoc->GetEditShell());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(10), pEditShell->GetRedlineCount());
+    while (pEditShell->GetRedlineCount())
+        pEditShell->RejectRedline(0);
+
+    // rejecting all text insertions must undo the table insertion
+    // This was 1 (remaining empty table after rejecting all table text insertions)
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xTables->getCount());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf128335)
 {
     // Load the bugdoc, which has 3 textboxes.
