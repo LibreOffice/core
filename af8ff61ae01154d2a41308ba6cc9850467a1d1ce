@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c369a5d7_59aa4faa",
+        "filename": "sc/qa/unit/uicalc/uicalc.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-07-12T09:14:56Z",
+      "side": 1,
+      "message": "I think it\u0027s a good idea to have an assert after calling AutoOutline. Could you please check that the document is modified after that ?",
+      "revId": "af8ff61ae01154d2a41308ba6cc9850467a1d1ce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
