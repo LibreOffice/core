@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e76e33a8_7b23b376",
+        "filename": "i18npool/source/localedata/data/ko_KR.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-07-12T12:12:38Z",
+      "side": 1,
+      "message": "Adding Y-M-D is unnecessary as the ISO date format is always accepted. You might want to add M-D though.",
+      "revId": "37350a64eeae8941b23d40af434d3892fd110fc2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "be7745bc_0a84effe",
+        "filename": "i18npool/source/localedata/data/ko_KR.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-07-12T12:12:38Z",
+      "side": 1,
+      "message": "Just came across this, formatindex\u003d\"21\" is the full year edit format but defines only YY. I\u0027m also not sure that the character+space combinations as separators actually work, would have to try.\nSee also definition comments at\nhttps://opengrok.libreoffice.org/xref/core/i18npool/source/localedata/data/locale.dtd?r\u003d160a4852#268\nThose descriptions in that file provide a wealth of information, maybe it\u0027s worth to cross-check this locale against requirements and recommendations.",
+      "revId": "37350a64eeae8941b23d40af434d3892fd110fc2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bdb0e9a4_4ca443f1",
+        "filename": "i18npool/source/localedata/data/ko_KR.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-07-12T12:12:38Z",
+      "side": 0,
+      "message": "Removing this M/D pattern is odd because DateSeparator is defined to be /",
+      "revId": "e09f22aa2626267e01b9e759c152f3a0d70ddc68",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
