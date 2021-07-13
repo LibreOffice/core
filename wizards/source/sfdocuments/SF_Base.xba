@@ -136,6 +136,49 @@ Catch:
 End Function   &apos;   SFDocuments.SF_Base.CloseDocument
 
 REM -----------------------------------------------------------------------------
+Public Function CloseFormDocument(Optional ByVal FormDocument As Variant) As Boolean
+&apos;&apos;&apos;	Close the given form document
+&apos;&apos;&apos;	Nothing happens if the form document is not open
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		FormDocument: a valid document form name as a case-sensitive string
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		True if closure is successful
+&apos;&apos;&apos;	Example:
+&apos;&apos;&apos;			oDoc.CloseFormDocument(&quot;Folder1/myFormDocument&quot;)
+
+Dim bClose As Boolean				&apos;	Return value
+Dim oMainForm As Object				&apos;	com.sun.star.comp.sdb.Content
+Dim vFormNames As Variant			&apos;	Array of all document form names present in the document
+
+Const cstThisSub = &quot;SFDocuments.Base.CloseFormDocument&quot;
+Const cstSubArgs = &quot;FormDocument&quot;
+
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	bClose = False
+
+Check:
+	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not _IsStillAlive() Then GoTo Finally
+		&apos;	Build list of available FormDocuments recursively with _CollectFormDocuments
+		If IsNull(_FormDocuments) Then Set _FormDocuments = _Component.getFormDocuments()
+		vFormNames = Split(_CollectFormDocuments(_FormDocuments), cstToken)
+		If Not ScriptForge.SF_Utils._Validate(FormDocument, &quot;FormDocument&quot;, V_STRING, vFormNames) Then GoTo Finally
+	End If
+	If Not IsLoaded(FormDocument) Then GoTo Finally
+
+Try:
+	Set oMainForm = _FormDocuments.getByHierarchicalName(FormDocument)
+	bClose = oMainForm.close()
+
+Finally:
+	CloseFormDocument = bClose
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function	&apos;	SFDocuments.SF_Base.CloseFormDocument
+
+REM -----------------------------------------------------------------------------
 Public Function FormDocuments() As Variant
 &apos;&apos;&apos;	Return the list of the FormDocuments contained in the Base document
 &apos;&apos;&apos;	Args:

@@ -1794,6 +1794,9 @@ class SFDocuments:
         def CloseDocument(self, saveask = True):
             return self.ExecMethod(self.vbMethod, 'CloseDocument', saveask)
 
+        def CloseFormDocument(self, formdocument):
+            return self.ExecMethod(self.vbMethod, 'CloseFormDocument', formdocument)
+
         def FormDocuments(self):
             return self.ExecMethod(self.vbMethod + self.flgArrayRet, 'FormDocuments')
 
