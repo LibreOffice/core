@@ -162,8 +162,9 @@ public:
     static SdrObject *GetOrCreateSdrObject(SwFlyFrameFormat &rFormat);
 };
 
-typedef cppu::WeakImplHelper
+typedef cppu::ImplInheritanceHelper
 <
+    SwXFrame,
     css::text::XTextFrame,
     css::container::XEnumerationAccess,
     css::document::XEventsSupplier
@@ -171,8 +172,7 @@ typedef cppu::WeakImplHelper
 SwXTextFrameBaseClass;
 
 class SwXTextFrame final : public SwXTextFrameBaseClass,
-    public SwXText,
-    public SwXFrame
+    public SwXText
 {
     friend class SwXFrame; // just for CreateXFrame
 
