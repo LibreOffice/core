@@ -150,6 +150,16 @@ bool ScRefTokenHelper::getRangeFromToken(
             rRange = rRefData.toAbs(*pDoc, rPos);
             return true;
         }
+        case svIndex:
+        {
+            if (pToken->GetOpCode() == ocName)
+            {
+                ScRangeData* pNameRange = pDoc->FindRangeNameBySheetAndIndex(pToken->GetSheet(), pToken->GetIndex());
+                if (pNameRange->IsReference(rRange, rPos))
+                    return true;
+            }
+            return false;
+        }
         default:
             ; // do nothing
     }
