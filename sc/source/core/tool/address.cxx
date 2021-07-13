@@ -421,8 +421,8 @@ static const sal_Unicode * lcl_XL_ParseSheetRef( const sal_Unicode* start,
     TRUE in all other cases, also when there is no index sequence or the input
     name is not numeric.
  */
-static bool lcl_XL_getExternalDoc( const sal_Unicode** ppErrRet, OUString& rExternDocName,
-                                   const uno::Sequence<sheet::ExternalLinkInfo>* pExternalLinks )
+static bool lcl_XL_getExternalDoc( const sal_Unicode** ppErrRet, OUString& rExternDocName, sal_Int32* pSheetEndPos,
+                                   const sal_Unicode* p, const uno::Sequence<sheet::ExternalLinkInfo>* pExternalLinks )
 {
     // 1-based, sequence starts with an empty element.
     if (pExternalLinks && pExternalLinks->hasElements())
@@ -437,26 +437,36 @@ static bool lcl_XL_getExternalDoc( const sal_Unicode** ppErrRet, OUString& rExte
             switch (rInfo.Type)
             {
                 case sheet::ExternalLinkType::DOCUMENT :
+                {
+                    OUString aStr;
+                    if (!(rInfo.Data >>= aStr))
                     {
-                        OUString aStr;
-                        if (!(rInfo.Data >>= aStr))
-                        {
-                            SAL_INFO(
-                                "sc.core",
-                                "Data type mismatch for ExternalLinkInfo "
-                                    << i);
-                            *ppErrRet = nullptr;
-                            return false;
-                        }
-                        rExternDocName = aStr;
-                    }
-                    break;
-                    case sheet::ExternalLinkType::SELF :
-                        return false;   // ???
-                    case sheet::ExternalLinkType::SPECIAL :
-                        // silently return nothing (do not assert), caller has to handle this
+                        SAL_INFO(
+                            "sc.core",
+                            "Data type mismatch for ExternalLinkInfo "
+                                << i);
                         *ppErrRet = nullptr;
                         return false;
+                    }
+                    rExternDocName = aStr;
+                }
+                break;
+                case sheet::ExternalLinkType::SELF :
+                {
+                    // if we link to ourselves we need the position of the end of filenames
+                    if (pSheetEndPos && *p++ == '!')
+                    {
+                        lcl_eatWhiteSpace(p);
+                        *pSheetEndPos = p - *ppErrRet;
+                    }
+                    *ppErrRet = nullptr;
+                    return false;
+                }
+                break;
+                case sheet::ExternalLinkType::SPECIAL :
+                    // silently return nothing (do not assert), caller has to handle this
+                    *ppErrRet = nullptr;
+                    return false;
                 default:
                     SAL_INFO(
                         "sc.core",
@@ -478,6 +488,7 @@ const sal_Unicode* ScRange::Parse_XL_Header(
                                 OUString& rEndTabName,
                                 ScRefFlags& nFlags,
                                 bool bOnlyAcceptSingle,
+                                sal_Int32* pSheetEndPos,
                                 const uno::Sequence<sheet::ExternalLinkInfo>* pExternalLinks,
                                 const OUString* pErrRef )
 {
@@ -514,7 +525,7 @@ const sal_Unicode* ScRange::Parse_XL_Header(
         ++p;
 
         const sal_Unicode* pErrRet = start;
-        if (!lcl_XL_getExternalDoc( &pErrRet, rExternDocName, pExternalLinks))
+        if (!lcl_XL_getExternalDoc( &pErrRet, rExternDocName, pSheetEndPos, p, pExternalLinks))
             return pErrRet;
 
         rExternDocName = ScGlobal::GetAbsDocName(rExternDocName, rDoc.GetDocumentShell());
@@ -561,7 +572,7 @@ const sal_Unicode* ScRange::Parse_XL_Header(
                     if (nOpen == 0)
                     {
                         const sal_Unicode* pErrRet = start;
-                        if (!lcl_XL_getExternalDoc( &pErrRet, rExternDocName, pExternalLinks))
+                        if (!lcl_XL_getExternalDoc( &pErrRet, rExternDocName, pSheetEndPos, p, pExternalLinks))
                             return pErrRet;
                     }
                 }
@@ -767,7 +778,7 @@ static ScRefFlags lcl_ScRange_Parse_XL_R1C1( ScRange& r,
     ScRefFlags nFlags2 = ScRefFlags::TAB_VALID;
 
     p = r.Parse_XL_Header( p, rDoc, aExternDocName, aStartTabName,
-            aEndTabName, nFlags, bOnlyAcceptSingle );
+            aEndTabName, nFlags, bOnlyAcceptSingle, pSheetEndPos );
 
     ScRefFlags nBailOutFlags = ScRefFlags::ZERO;
     if (pSheetEndPos && pStart < p && (nFlags & ScRefFlags::TAB_VALID) && (nFlags & ScRefFlags::TAB_3D))
@@ -992,7 +1003,7 @@ static ScRefFlags lcl_ScRange_Parse_XL_A1( ScRange& r,
     ScRefFlags nFlags = ScRefFlags::VALID | ScRefFlags::TAB_VALID, nFlags2 = ScRefFlags::TAB_VALID;
 
     p = r.Parse_XL_Header( p, rDoc, aExternDocName, aStartTabName,
-            aEndTabName, nFlags, bOnlyAcceptSingle, pExternalLinks, pErrRef );
+            aEndTabName, nFlags, bOnlyAcceptSingle, pSheetEndPos, pExternalLinks, pErrRef );
 
     ScRefFlags nBailOutFlags = ScRefFlags::ZERO;
     if (pSheetEndPos && pStart < p && (nFlags & ScRefFlags::TAB_VALID) && (nFlags & ScRefFlags::TAB_3D))
@@ -1434,7 +1445,7 @@ static ScRefFlags lcl_ScAddress_Parse_OOo( const sal_Unicode* p, const ScDocumen
     {
         // Pass partial info up to caller, there may be an external name
         // following, and if after *pSheetEndPos it's external sheet-local.
-        // For global names aTab is empty and *pSheetEndPos==0.
+        // For global names aTab is empty.
         pExtInfo->mbExternal = true;
         pExtInfo->maTabName = aTab;
         pExtInfo->mnFileId = rDoc.GetExternalRefManager()->getExternalFileId(aDocName);

@@ -150,8 +150,22 @@ bool ScRefTokenHelper::getRangeFromToken(
             rRange = rRefData.toAbs(*pDoc, rPos);
             return true;
         }
+        case svIndex:
+        {
+            ScRangeData* pNameRange = pDoc->FindRangeNameBySheetAndIndex(pToken->GetSheet(), pToken->GetIndex());
+            if (pNameRange)
+            {
+                ScTokenArray* pRangeNameToken = pNameRange->GetCode();
+                if (pRangeNameToken->GetLen() == 1)
+                {
+                    ScTokenRef pRangeTokenRef = pRangeNameToken->FirstToken();
+                    return getRangeFromToken(pDoc, rRange, pRangeTokenRef, rPos, bExternal);
+                }
+            }
+            break;
+        }
         default:
-            ; // do nothing
+            break; // do nothing
     }
     return false;
 }

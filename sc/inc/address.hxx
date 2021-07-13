@@ -589,7 +589,7 @@ public:
     const sal_Unicode* Parse_XL_Header( const sal_Unicode* pString, const ScDocument& rDocument,
                                         OUString& rExternDocName, OUString& rStartTabName,
                                         OUString& rEndTabName, ScRefFlags& nFlags,
-                                        bool bOnlyAcceptSingle,
+                                        bool bOnlyAcceptSingle, sal_Int32* pSheetEndPos,
                                         const css::uno::Sequence<css::sheet::ExternalLinkInfo>* pExternalLinks = nullptr,
                                         const OUString* pErrRef = nullptr );
 

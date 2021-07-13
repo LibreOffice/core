@@ -224,6 +224,20 @@ public:
         }
     }
 
+    /// If convention is an Excel syntax convention.
+    static bool isExcelConvention( const AddressConvention eConv )
+    {
+        switch (eConv)
+        {
+            case FormulaGrammar::AddressConvention::CONV_XL_A1:
+            case FormulaGrammar::AddressConvention::CONV_XL_R1C1:
+            case FormulaGrammar::AddressConvention::CONV_XL_OOX:
+                return true;
+            default:
+                return false;
+        }
+    }
+
 };
 
 } // formula

@@ -522,7 +522,7 @@ static bool lcl_parseExternalName(
         OUString aStartTabName, aEndTabName;
         ScRefFlags nFlags = ScRefFlags::ZERO;
         p = aRange.Parse_XL_Header( p, rDoc, aTmpFile, aStartTabName,
-                aEndTabName, nFlags, true, pExternalLinks );
+                aEndTabName, nFlags, true, nullptr, pExternalLinks );
         if (!p || p == pStart)
             return false;
         i = sal_Int32(p - pStart);
@@ -3531,19 +3531,25 @@ bool ScCompiler::IsNamedRange( const OUString& rUpperName )
         return true;
     }
 
-    // Sheet-local name with sheet specified.
-    if (mnCurrentSheetEndPos > 0 && mnCurrentSheetTab >= 0)
+    // Sheet-local name with sheet specified and global names.
+    if (mnCurrentSheetEndPos > 0 && mnCurrentSheetTab >= -1)
     {
+        // mnCurrentSheetTab = -1 --> Global name.
         OUString aName( rUpperName.copy( mnCurrentSheetEndPos));
         pRangeName = rDoc.GetRangeName( mnCurrentSheetTab);
         if (pRangeName)
-        {
             pData = pRangeName->findByUpperName(aName);
-            if (pData)
-            {
-                maRawToken.SetName( mnCurrentSheetTab, pData->GetIndex());
-                return true;
-            }
+        if (!pData)
+        {
+            pRangeName = rDoc.GetRangeName();
+            if (pRangeName)
+                pData = pRangeName->findByUpperName(aName);
+        }
+
+        if (pData)
+        {
+            maRawToken.SetName(mnCurrentSheetTab, pData->GetIndex());
+            return true;
         }
     }
 
@@ -5275,7 +5281,8 @@ void ScCompiler::CreateStringFromIndex( OUStringBuffer& rBuffer, const FormulaTo
             if (pData)
             {
                 SCTAB nTab = _pTokenP->GetSheet();
-                if (nTab >= 0 && nTab != aPos.Tab())
+                bool bExcelConvention = FormulaGrammar::isExcelConvention(pConv->meConv);
+                if (nTab >= 0 && (nTab != aPos.Tab() || bExcelConvention))
                 {
                     // Sheet-local on other sheet.
                     OUString aName;
@@ -5288,6 +5295,13 @@ void ScCompiler::CreateStringFromIndex( OUStringBuffer& rBuffer, const FormulaTo
                         aBuffer.append(ScCompiler::GetNativeSymbol(ocErrName));
                     aBuffer.append( pConv->getSpecialSymbol( ScCompiler::Convention::SHEET_SEPARATOR));
                 }
+                else if (bExcelConvention)
+                {
+                    // For global names require an extra 'external file' ooxml prefix, which links to themselves.
+                    aBuffer.append("[0]");
+                    aBuffer.append(pConv->getSpecialSymbol(ScCompiler::Convention::SHEET_SEPARATOR));
+                }
+
                 aBuffer.append(pData->GetName());
             }
         }
