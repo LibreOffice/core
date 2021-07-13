@@ -4400,9 +4400,9 @@ void TestFormula::testFormulaRefUpdateSheetLocalMove()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Move x: Sheet2.B3", 2.0, m_pDoc->GetValue(ScAddress(1,2,nSheet2)));
     // Formulas not changed.
     m_pDoc->GetFormula( 1,2,nSheet1, aFormula);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Move x: Sheet1.B3", OUString("=MyCell"), aFormula);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Move x: Sheet1.B3", OUString("=Sheet1.MyCell"), aFormula);
     m_pDoc->GetFormula( 1,2,nSheet2, aFormula);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Move x: Sheet2.B3", OUString("=MyCell"), aFormula);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Move x: Sheet2.B3", OUString("=Sheet2.MyCell"), aFormula);
 
     // Move Sheet2.B2 ("2.0") to Sheet1.C2
     bOk = rFunc.MoveBlock( ScRange(1,1,nSheet2,1,1,nSheet2), ScAddress(2,1,nSheet1), true, false, false, false);
@@ -4412,9 +4412,9 @@ void TestFormula::testFormulaRefUpdateSheetLocalMove()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Move 2.0: Sheet2.B3", 2.0, m_pDoc->GetValue(ScAddress(1,2,nSheet2)));
     // Formulas not changed.
     m_pDoc->GetFormula( 1,2,nSheet1, aFormula);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Move 2.0: Sheet1.B3", OUString("=MyCell"), aFormula);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Move 2.0: Sheet1.B3", OUString("=Sheet1.MyCell"), aFormula);
     m_pDoc->GetFormula( 1,2,nSheet2, aFormula);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Move 2.0: Sheet2.B3", OUString("=MyCell"), aFormula);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Move 2.0: Sheet2.B3", OUString("=Sheet2.MyCell"), aFormula);
 
     ScRangeData* pName;
 
@@ -4434,7 +4434,7 @@ void TestFormula::testFormulaRefUpdateSheetLocalMove()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Move =MyCell: Sheet1.C3", 2.0, m_pDoc->GetValue(ScAddress(2,2,nSheet1)));
     // One formula identical, one adjusted.
     m_pDoc->GetFormula( 1,2,nSheet1, aFormula);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Move =MyCell: Sheet1.B3", OUString("=MyCell"), aFormula);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Move =MyCell: Sheet1.B3", OUString("=Sheet1.MyCell"), aFormula);
     m_pDoc->GetFormula( 2,2,nSheet1, aFormula);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Move =MyCell: Sheet1.C3", OUString("=Sheet2.MyCell"), aFormula);
 
@@ -4461,7 +4461,7 @@ void TestFormula::testFormulaRefUpdateSheetLocalMove()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Insert Sheet0: Sheet1.B3", 1.0, m_pDoc->GetValue(ScAddress(1,2,nSheet1)));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Insert Sheet0: Sheet1.C3", 2.0, m_pDoc->GetValue(ScAddress(2,2,nSheet1)));
     m_pDoc->GetFormula( 1,2,nSheet1, aFormula);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Insert Sheet0: Sheet1.B3", OUString("=MyCell"), aFormula);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Insert Sheet0: Sheet1.B3", OUString("=Sheet1.MyCell"), aFormula);
     m_pDoc->GetFormula( 2,2,nSheet1, aFormula);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Insert Sheet0: Sheet1.C3", OUString("=Sheet2.MyCell"), aFormula);
     pName = m_pDoc->GetRangeName(nSheet1)->findByUpperName("MYCELL");
@@ -4482,7 +4482,7 @@ void TestFormula::testFormulaRefUpdateSheetLocalMove()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Delete Sheet0: Sheet1.B3", 1.0, m_pDoc->GetValue(ScAddress(1,2,nSheet1)));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Delete Sheet0: Sheet1.C3", 2.0, m_pDoc->GetValue(ScAddress(2,2,nSheet1)));
     m_pDoc->GetFormula( 1,2,nSheet1, aFormula);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Delete Sheet0: Sheet1.B3", OUString("=MyCell"), aFormula);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Delete Sheet0: Sheet1.B3", OUString("=Sheet1.MyCell"), aFormula);
     m_pDoc->GetFormula( 2,2,nSheet1, aFormula);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Delete Sheet0: Sheet1.C3", OUString("=Sheet2.MyCell"), aFormula);
     pName = m_pDoc->GetRangeName(nSheet1)->findByUpperName("MYCELL");
@@ -4505,7 +4505,7 @@ void TestFormula::testFormulaRefUpdateSheetLocalMove()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Delete Sheet2: Sheet1.C3", 0.0, m_pDoc->GetValue(ScAddress(2,2,nSheet1)));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Delete Sheet2: Sheet1.C3", OUString("#NAME?"), m_pDoc->GetString(ScAddress(2,2,nSheet1)));
     m_pDoc->GetFormula( 1,2,nSheet1, aFormula);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Delete Sheet2: Sheet1.B3", OUString("=MyCell"), aFormula);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Delete Sheet2: Sheet1.B3", OUString("=Sheet1.MyCell"), aFormula);
     m_pDoc->GetFormula( 2,2,nSheet1, aFormula);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Delete Sheet2: Sheet1.C3", OUString("=#NAME?"), aFormula);
     pName = m_pDoc->GetRangeName(nSheet1)->findByUpperName("MYCELL");

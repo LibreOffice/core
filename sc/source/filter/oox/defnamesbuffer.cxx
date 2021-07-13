@@ -249,7 +249,7 @@ bool DefinedName::isValid(
     ScRefFlags nFlags = ScRefFlags::VALID | ScRefFlags::TAB_VALID;
     aRange.Parse_XL_Header(maModel.maFormula.getStr(), getScDocument(), aExternDocName,
                            aStartTabName, aEndTabName, nFlags, /*bOnlyAcceptSingle=*/false,
-                           &rExternalLinks);
+                           nullptr, &rExternalLinks);
     // aExternDocName is something like 'file:///path/to/my.xlsx' in the valid case, and it's an int
     // when it's invalid.
     bool bInvalidExternalRef = aExternDocName.toInt32() > 0;
