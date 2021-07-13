@@ -2227,6 +2227,18 @@ Label_MaskStateMachine:
                     if (c == '[' && FormulaGrammar::isExcelSyntax( meGrammar)
                             && eLastOp != ocDBArea && maTableRefs.empty())
                     {
+                        // [0]!Global_Range_Name, is a special case in OOXML
+                        // syntax, where the '0' is referencing to self and we
+                        // do not need it, so we should skip it, in order to
+                        // later it will be more recognisable for IsNamedRange.
+                        if (FormulaGrammar::isRefConventionOOXML(meGrammar) &&
+                                pSrc[0] == '0' && pSrc[1] == ']' && pSrc[2] == '!')
+                        {
+                            pSrc += 3;
+                            c = *pSrc;
+                            continue;
+                        }
+
                         nMask &= ~ScCharFlags::Char;
                         goto Label_MaskStateMachine;
                     }
