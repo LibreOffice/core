@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f1ff2d6_bd332026",
+        "filename": "basic/source/runtime/methods.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 894,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-07-13T15:44:41Z",
+      "side": 1,
+      "message": "I just came across this.. it\u0027s unnecessary to create a temporary XCharacterClassification for the default locale, instead use the refcounted SvtSysLocale from include/unotools/syslocale.hxx like\n\n  SvtSysLocale aSysLocale;\n  ... \u003d aSysLocale.GetCharClass().uppercase(...);",
+      "revId": "7a578c06352328799c644e0399f14d58b05246f9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
