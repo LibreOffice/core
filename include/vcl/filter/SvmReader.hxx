@@ -66,6 +66,7 @@ public:
     rtl::Reference<MetaAction> MaskScaleHandler();
     rtl::Reference<MetaAction> MaskScalePartHandler();
     rtl::Reference<MetaAction> GradientHandler();
+    rtl::Reference<MetaAction> GradientExHandler();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

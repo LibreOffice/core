@@ -1099,6 +1099,8 @@ public:
 
     const tools::PolyPolygon&  GetPolyPolygon() const { return maPolyPoly; }
     const Gradient&     GetGradient() const { return maGradient; }
+    void                SetPolyPolygon(tools::PolyPolygon& rPolyPoly) { maPolyPoly = rPolyPoly; }
+    void                SetGradient(Gradient& rGradient) { maGradient = rGradient; }
 };
 
 class SAL_DLLPUBLIC_RTTI MetaHatchAction final : public MetaAction
