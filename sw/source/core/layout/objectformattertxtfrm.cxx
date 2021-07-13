@@ -547,7 +547,9 @@ SwAnchoredObject* SwObjectFormatterTextFrame::GetFirstObjWithMovedFwdAnchor(
     sal_uInt32 i = 0;
     for ( ; i < CountOfCollected(); ++i )
     {
+
         SwAnchoredObject* pAnchoredObj = GetCollectedObj(i);
+
         if ( pAnchoredObj->ConsiderObjWrapInfluenceOnObjPos() &&
              pAnchoredObj->GetFrameFormat().GetWrapInfluenceOnObjPos().
                     // #i35017# - handle ITERATIVE as ONCE_SUCCESSIVE

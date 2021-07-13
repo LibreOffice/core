@@ -34,11 +34,13 @@
 #include <cppuhelper/implbase6.hxx>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
+#include <textboxhelper.hxx>
 
 class SdrMarkList;
 class SdrView;
 class SwDoc;
 class SwXShape;
+class SwTextBoxHandler;
 
 class SwFmDrawPage final : public SvxFmDrawPage
 {
@@ -136,6 +138,8 @@ class SwXShape : public SwXShapeBaseClass, public SvtListener
     friend class SwFmDrawPage;
     const SwFmDrawPage* m_pPage;
     SwFrameFormat* m_pFormat;
+
+    SwTextBoxHandler* m_pTextBoxHandler;
 
     css::uno::Reference< css::uno::XAggregation > m_xShapeAgg;
     // reference to <XShape>, determined in the
@@ -260,6 +264,12 @@ public:
 
     // helper
     static void AddExistingShapeToFormat( SdrObject const & _rObj );
+
+    bool AddTextBox(SdrObject* pObj);
+    bool HasTextBox();
+    bool RemoveTextBox();
+
+    SwTextBoxHandler* GetTextBoxHandler() { return m_pTextBoxHandler; };
 };
 
 class SwXGroupShape final :

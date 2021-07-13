@@ -55,11 +55,11 @@ SwUndoFlyBase::~SwUndoFlyBase()
 {
     if( m_bDelFormat )       // delete during an Undo?
     {
-        if (m_pFrameFormat->GetOtherTextBoxFormat())
-        {   // clear that before delete
-            m_pFrameFormat->SetOtherTextBoxFormat(nullptr);
-        }
-        delete m_pFrameFormat;
+        //if (m_pFrameFormat->GetOtherTextBoxFormat())
+        //{   // clear that before delete
+        //    m_pFrameFormat->SetOtherTextBoxFormat(nullptr);
+        //}
+        if (m_pFrameFormat) delete m_pFrameFormat;
     }
 }
 

@@ -370,9 +370,13 @@ void SwDrawShell::Execute(SfxRequest &rReq)
         {
             if (SdrObject* pObj = IsSingleFillableNonOLESelected())
             {
-                SwFrameFormat* pFrameFormat = ::FindFrameFormat(pObj);
-                if (pFrameFormat)
-                    SwTextBoxHelper::create(pFrameFormat, pObj->HasText());
+                if (auto pShape = dynamic_cast<SwXShape*>(pObj->getUnoShape().get()))
+                    if (!pShape->HasTextBox())
+                        pShape->AddTextBox(pObj);
+
+                //SwFrameFormat* pFrameFormat = ::FindFrameFormat(pObj);
+                //if (pFrameFormat)
+                //    SwTextBoxHelper::create(pFrameFormat, pObj->HasText());
             }
             break;
         }
@@ -380,9 +384,13 @@ void SwDrawShell::Execute(SfxRequest &rReq)
         {
             if (SdrObject* pObj = IsSingleFillableNonOLESelected())
             {
-                SwFrameFormat* pFrameFormat = ::FindFrameFormat(pObj);
-                if (pFrameFormat)
-                    SwTextBoxHelper::destroy(pFrameFormat);
+                if (auto pShape = dynamic_cast<SwXShape*>(pObj->getUnoShape().get()))
+                    if (pShape->HasTextBox())
+                        pShape->RemoveTextBox();
+
+                //SwFrameFormat* pFrameFormat = ::FindFrameFormat(pObj);
+                //if (pFrameFormat)
+                //    SwTextBoxHelper::destroy(pFrameFormat);
             }
             break;
         }
@@ -496,18 +504,20 @@ void SwDrawShell::GetState(SfxItemSet& rSet)
                 bool bDisable = true;
                 if (SdrObject* pObj = IsSingleFillableNonOLESelected())
                 {
-                    SwFrameFormat* pFrameFormat = ::FindFrameFormat(pObj);
-                    // Allow creating a TextBox only in case this is a draw format without a TextBox so far.
-                    if (pFrameFormat && pFrameFormat->Which() == RES_DRAWFRMFMT && !SwTextBoxHelper::isTextBox(pFrameFormat, RES_DRAWFRMFMT))
-                    {
-                        if (SdrObjCustomShape* pCustomShape = dynamic_cast<SdrObjCustomShape*>( pObj) )
+                    if (auto pShape = dynamic_cast<SwXShape*>(pObj->getUnoShape().get()))
+                        if (!pShape->HasTextBox())
+                    //SwFrameFormat* pFrameFormat = ::FindFrameFormat(pObj);
+                    //// Allow creating a TextBox only in case this is a draw format without a TextBox so far.
+                    //if (pFrameFormat && pFrameFormat->Which() == RES_DRAWFRMFMT && !SwTextBoxHelper::isTextBox(pFrameFormat, RES_DRAWFRMFMT))
                         {
-                            const SdrCustomShapeGeometryItem& rGeometryItem = pCustomShape->GetMergedItem(SDRATTR_CUSTOMSHAPE_GEOMETRY);
-                            if (const uno::Any* pAny = rGeometryItem.GetPropertyValueByName("Type"))
-                                // But still disallow fontwork shapes.
-                                bDisable = pAny->get<OUString>().startsWith("fontwork-");
+                            if (SdrObjCustomShape* pCustomShape = dynamic_cast<SdrObjCustomShape*>( pObj) )
+                            {
+                                const SdrCustomShapeGeometryItem& rGeometryItem = pCustomShape->GetMergedItem(SDRATTR_CUSTOMSHAPE_GEOMETRY);
+                                if (const uno::Any* pAny = rGeometryItem.GetPropertyValueByName("Type"))
+                                    // But still disallow fontwork shapes.
+                                    bDisable = pAny->get<OUString>().startsWith("fontwork-");
+                            }
                         }
-                    }
                 }
 
                 if (bDisable)
@@ -519,10 +529,13 @@ void SwDrawShell::GetState(SfxItemSet& rSet)
                 bool bDisable = true;
                 if (SdrObject* pObj = IsSingleFillableNonOLESelected())
                 {
-                    SwFrameFormat* pFrameFormat = ::FindFrameFormat(pObj);
-                    // Allow removing a TextBox only in case it has one.
-                    if (pFrameFormat && SwTextBoxHelper::isTextBox(pFrameFormat, RES_DRAWFRMFMT))
-                        bDisable = false;
+                    if (auto pShape = dynamic_cast<SwXShape*>(pObj->getUnoShape().get()))
+                        if (pShape->HasTextBox())
+                            bDisable = false;
+                    //SwFrameFormat* pFrameFormat = ::FindFrameFormat(pObj);
+                    //// Allow removing a TextBox only in case it has one.
+                    //if (pFrameFormat && SwTextBoxHelper::isTextBox(pFrameFormat, RES_DRAWFRMFMT))
+                    //    bDisable = false;
                 }
 
                 if (bDisable)

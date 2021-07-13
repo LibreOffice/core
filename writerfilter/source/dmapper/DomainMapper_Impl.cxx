@@ -3391,7 +3391,19 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
                                 TOOLS_WARN_EXCEPTION( "writerfilter.dmapper", "PushShapeContext() text stylesheet property exception" );
                             }
                         }
+
+
                     }
+                    uno::Reference<text::XTextContent> xTextContent(xShapes->getByIndex(i), uno::UNO_QUERY_THROW);
+                    auto xTextBox = xSyncedPropertySet->getPropertyValue("TextBox").get < uno::Reference<text::XText>>();
+
+                    //uno::Reference<text::XTextRange> xTextRange(xTextAppend->createTextCursorByRange(xTextAppend->getEnd()), uno::UNO_QUERY_THROW);
+                    xTextAppend->insertTextContent(xTextBox->getText()->createTextCursor(), xTextContent, false);
+                    //auto xChildShape(xShapes->getByIndex(i).get< uno::Reference< drawing::XShape > >());
+                    //uno::Reference<text::XTextRange> xText(xChildShape, uno::UNO_QUERY);
+                    //m_aTextAppendStack.push(TextAppendContext(uno::Reference<text::XTextAppend>(xText->getText(), uno::UNO_QUERY), xText->getText()->createTextCursor()));
+                    //uno::Reference<text::XTextContent> xTxtContent(xChildShape, uno::UNO_QUERY);
+                    //m_aAnchoredStack.push(AnchoredContext(xTxtContent));
                 }
                 catch (const uno::Exception&)
                 {
@@ -3403,9 +3415,9 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
             // an empty reference to the stacks still makes sense, because this
             // way bToRemove can be set, and we won't end up with duplicated
             // shapes for OLE objects.
-            m_aTextAppendStack.push(TextAppendContext(uno::Reference<text::XTextAppend>(xShape, uno::UNO_QUERY), uno::Reference<text::XTextCursor>()));
-            uno::Reference<text::XTextContent> xTxtContent(xShape, uno::UNO_QUERY);
-            m_aAnchoredStack.push(AnchoredContext(xTxtContent));
+            //m_aTextAppendStack.push(TextAppendContext(uno::Reference<text::XTextAppend>(xShape, uno::UNO_QUERY), uno::Reference<text::XTextCursor>()));
+            //uno::Reference<text::XTextContent> xTxtContent(xShape, uno::UNO_QUERY);
+            //m_aAnchoredStack.push(AnchoredContext(xTxtContent));
         }
         else if (xSInfo->supportsService("com.sun.star.drawing.OLE2Shape"))
         {
@@ -3426,10 +3438,14 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
         }
         else
         {
+            uno::Reference< beans::XPropertySet > xShapeProperties(xShape, uno::UNO_QUERY);
+            auto xTextBox = xShapeProperties->getPropertyValue("TextBox").get<uno::Reference<text::XText>>();
+
+
             uno::Reference< text::XTextRange > xShapeText( xShape, uno::UNO_QUERY_THROW);
             // Add the shape to the text append stack
             m_aTextAppendStack.push( TextAppendContext(uno::Reference< text::XTextAppend >( xShape, uno::UNO_QUERY_THROW ),
-                        m_bIsNewDoc ? uno::Reference<text::XTextCursor>() : m_xBodyText->createTextCursorByRange(xShapeText->getStart() )));
+                        m_bIsNewDoc ? uno::Reference<text::XTextCursor>() : m_xBodyText->createTextCursorByRange(xTextBox->getStart() )));
 
             // Add the shape to the anchored objects stack
             uno::Reference< text::XTextContent > xTxtContent( xShape, uno::UNO_QUERY_THROW );
@@ -3447,7 +3463,7 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
                 SetIsTextFrameInserted(true);
                 // Extract the special "btLr text frame" mode, requested by oox, if needed.
                 // Extract vml ZOrder from FrameInteropGrabBag
-                uno::Reference<beans::XPropertySet> xShapePropertySet(xShape, uno::UNO_QUERY);
+                uno::Reference<beans::XPropertySet> xShapePropertySet(xTextBox, uno::UNO_QUERY);
                 uno::Sequence<beans::PropertyValue> aGrabBag;
                 xShapePropertySet->getPropertyValue("FrameInteropGrabBag") >>= aGrabBag;
 

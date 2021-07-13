@@ -397,6 +397,7 @@ void Shape::addChildren(
     for (auto const& child : rMaster.maChildren)
     {
         child->setMasterTextListStyle( mpMasterTextListStyle );
+        //child->mbTextBox = true;
         child->addShape( rFilterBase, pTheme, rxShapes, aTransformation, getFillProperties(), pShapeMap, rMaster.shared_from_this());
     }
 }

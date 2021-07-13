@@ -1086,14 +1086,36 @@ class NestedUserCallHdl
 /// Notify the format's textbox that it should reconsider its position / size.
 static void lcl_textBoxSizeNotify(SwFrameFormat* pFormat)
 {
-    if (SwTextBoxHelper::isTextBox(pFormat, RES_DRAWFRMFMT))
-    {
-        // Just notify the textbox that the size has changed, the actual object size is not interesting.
-        SfxItemSet aResizeSet(pFormat->GetDoc()->GetAttrPool(), svl::Items<RES_FRM_SIZE, RES_FRM_SIZE>{});
-        SwFormatFrameSize aSize;
-        aResizeSet.Put(aSize);
-        SwTextBoxHelper::syncFlyFrameAttr(*pFormat, aResizeSet);
-    }
+    uno::Reference<drawing::XShape> xShape(pFormat->FindRealSdrObject()->getUnoShape(), uno::UNO_QUERY);
+
+        if (xShape && xShape->getShapeType() == "com.sun.star.drawing.GroupShape")
+        {
+            auto pChildShapes = dynamic_cast<SwXGroupShape*>(xShape.get());
+            for (sal_uInt16 i = 0; i < pChildShapes->getCount(); i++)
+            {
+                auto xChildShape = pChildShapes->getByIndex(i).get<uno::Reference<drawing::XShape>>();
+                if (auto pChildShape = dynamic_cast<SwXShape*>(xChildShape.get()))
+                    if (auto pTextBox = pChildShape->GetTextBoxHandler())
+                        pTextBox->UpdateTextBoxProperties();
+            }
+        }
+        else
+        {
+            auto pShape = dynamic_cast<SwXShape*>(xShape.get());
+            if (pShape->GetTextBoxHandler())
+                pShape->GetTextBoxHandler()->UpdateTextBoxProperties();
+        }
+
+
+
+    //if (SwTextBoxHelper::isTextBox(pFormat, RES_DRAWFRMFMT))
+    //{
+    //    // Just notify the textbox that the size has changed, the actual object size is not interesting.
+    //    SfxItemSet aResizeSet(pFormat->GetDoc()->GetAttrPool(), svl::Items<RES_FRM_SIZE, RES_FRM_SIZE>{});
+    //    SwFormatFrameSize aSize;
+    //    aResizeSet.Put(aSize);
+    //    SwTextBoxHelper::syncFlyFrameAttr(*pFormat, aResizeSet);
+    //}
 }
 
 // !!!ATTENTION!!! The object may commit suicide!!!
@@ -1361,6 +1383,7 @@ void SwDrawContact::Changed_( const SdrObject& rObj,
 
                 pDoc->getIDocumentState().SetEnableSetModified(bEnableSetModified);
             }
+            lcl_textBoxSizeNotify(GetFormat());
         }
         break;
         case SdrUserCallType::ChangeAttr:

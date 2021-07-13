@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <drawingml/table/tablecontext.hxx>
 #include <drawingml/textbodycontext.hxx>
 #include <drawingml/textbodypropertiescontext.hxx>
 #include <drawingml/textparagraph.hxx>

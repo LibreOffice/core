@@ -59,23 +59,76 @@ using namespace com::sun::star;
 
 void SwTextBoxHelper::create(SwFrameFormat* pShape, bool bCopyText)
 {
+    if (!pShape)
+        return;
+
+    uno::Reference<drawing::XShape> xSourceShape;
+    if (auto pSdrShape = pShape->FindRealSdrObject())
+        xSourceShape.set(pSdrShape->getUnoShape(), uno::UNO_QUERY);
+
+    if (xSourceShape && xSourceShape->getShapeType() == "com.sun.star.drawing.GroupShape")
+    {
+        uno::Reference<drawing::XShapes> xGroupShape(xSourceShape, uno::UNO_QUERY);
+        if (!xGroupShape)
+        {
+            //create_Imp(pShape, bCopyText);
+            return;
+        }
+
+        for (sal_Int32 i = 0; i < xGroupShape->getCount(); i++)
+        {
+            try
+            {
+                auto pChildShape = dynamic_cast<SwXShape*>(
+                    xGroupShape->getByIndex(i).get<uno::Reference<drawing::XShape>>().get());
+                if (!pChildShape)
+                    continue;
+                auto pCustomShape = dynamic_cast<SdrObjCustomShape*>(
+                    xGroupShape->getByIndex(i).get<uno::Reference<drawing::XShape>>().get());
+                pChildShape->AddTextBox(pCustomShape);
+                //SwFrameFormat* pChildFormat = pChildShape->GetFrameFormat();
+                //if (!pChildFormat)
+                //    continue;
+                //
+                //if (pChildFormat->FindRealSdrObject()->HasText())
+                //    create_Imp(pChildFormat, bCopyText);
+                //else
+                //    create_Imp(pChildFormat, false);
+            }
+            catch (...)
+            {
+                continue;
+            }
+        }
+    }
+    else
+    {
+        if (auto pSourceShape = dynamic_cast<SwXShape*>(xSourceShape.get()))
+            pSourceShape->AddTextBox(pShape->FindRealSdrObject());
+        //create_Imp(pShape, bCopyText);
+    }
+}
+
+void SwTextBoxHelper::create_Imp(SwFrameFormat* pShape, bool bCopyText)
+{
     // If TextBox wasn't enabled previously
     if (pShape->GetAttrSet().HasItem(RES_CNTNT) && pShape->GetOtherTextBoxFormat())
         return;
 
+    uno::Reference<drawing::XShape> xSourceShape;
+    if (auto pSdrShape = pShape->FindRealSdrObject())
+        xSourceShape.set(pSdrShape->getUnoShape(), uno::UNO_QUERY);
+
     // Store the current text content of the shape
     OUString sCopyableText;
 
-    if (bCopyText)
+    if (bCopyText && xSourceShape)
     {
-        if (auto pSdrShape = pShape->FindRealSdrObject())
-        {
-            uno::Reference<text::XText> xSrcCnt(pSdrShape->getWeakUnoShape(), uno::UNO_QUERY);
-            auto xCur = xSrcCnt->createTextCursor();
-            xCur->gotoStart(false);
-            xCur->gotoEnd(true);
-            sCopyableText = xCur->getText()->getString();
-        }
+        uno::Reference<text::XText> xSrcCnt(xSourceShape, uno::UNO_QUERY);
+        auto xCur = xSrcCnt->createTextCursor();
+        xCur->gotoStart(false);
+        xCur->gotoEnd(true);
+        sCopyableText = xCur->getText()->getString();
     }
 
     // Create the associated TextFrame and insert it into the document.
@@ -88,11 +141,9 @@ void SwTextBoxHelper::create(SwFrameFormat* pShape, bool bCopyText)
                                                                 uno::UNO_QUERY);
     try
     {
-        SdrObject* pSourceSDRShape = pShape->FindRealSdrObject();
-        uno::Reference<text::XTextContent> XSourceShape(pSourceSDRShape->getUnoShape(),
-                                                        uno::UNO_QUERY_THROW);
+        uno::Reference<text::XTextContent> xSourceShapeContent(xSourceShape, uno::UNO_QUERY_THROW);
         xTextContentAppend->insertTextContentWithProperties(
-            xTextFrame, uno::Sequence<beans::PropertyValue>(), XSourceShape->getAnchor());
+            xTextFrame, uno::Sequence<beans::PropertyValue>(), xSourceShapeContent->getAnchor());
     }
     catch (uno::Exception&)
     {
@@ -169,7 +220,6 @@ void SwTextBoxHelper::create(SwFrameFormat* pShape, bool bCopyText)
     if (xShapePropertySet->getPropertyValue(UNO_NAME_TEXT_WRITINGMODE) >>= eMode)
         syncProperty(pShape, RES_FRAMEDIR, 0, uno::makeAny(sal_Int16(eMode)));
 
-    // Check if the shape had text before and move it to the new textframe
     if (!bCopyText || sCopyableText.isEmpty())
         return;
 
@@ -190,6 +240,21 @@ void SwTextBoxHelper::create(SwFrameFormat* pShape, bool bCopyText)
 
 void SwTextBoxHelper::destroy(SwFrameFormat* pShape)
 {
+    if (!pShape)
+        return;
+
+    uno::Reference<drawing::XShape> xSourceShape;
+    if (auto pSdrShape = pShape->FindRealSdrObject())
+        xSourceShape.set(pSdrShape->getUnoShape(), uno::UNO_QUERY);
+
+    if (xSourceShape && xSourceShape->getShapeType() == "com.sun.star.drawing.GroupShape")
+    {
+        auto pSwShape = dynamic_cast<SwXShape*>(xSourceShape.get());
+        if (pSwShape->HasTextBox())
+            pSwShape->RemoveTextBox();
+        return;
+    }
+
     // If a TextBox was enabled previously
     if (pShape->GetAttrSet().HasItem(RES_CNTNT))
     {
@@ -1318,6 +1383,241 @@ bool SwTextBoxHelper::DoTextBoxZOrderCorrection(SwFrameFormat* pShape)
                         "No Valid TextFrame!");
 
     return false;
+}
+
+/// The start of the implementation of the SwTextBoxHandler class
+
+SwTextBoxHandler::SwTextBoxHandler(SwXShape* pOwnerShape, SdrObject* pObj)
+{
+    if (!pObj)
+        OSL_ASSERT(!"No source shape to add the textbox to!");
+    if (!pOwnerShape)
+        OSL_ASSERT(!"No source shape to add the textbox to!");
+
+    m_pObject = pObj;
+    m_pOwnerShape = pOwnerShape;
+    m_xOwnerShape.set(dynamic_cast<drawing::XShape*>(m_pOwnerShape));
+
+    m_pOwnerShapeFormat = pOwnerShape->GetFrameFormat();
+    if (!m_pOwnerShapeFormat)
+        OSL_ASSERT(!"No source shape format!");
+
+    m_pDoc = m_pOwnerShapeFormat->GetDoc();
+    if (!m_pDoc)
+        OSL_ASSERT(!"Where is the SwDoc?!");
+
+    Init();
+
+    m_bIsFormattingInProgress = false;
+
+    UpdateTextBoxProperties();
+}
+
+SwTextBoxHandler::~SwTextBoxHandler()
+{
+    if (m_pTextBoxFormat)
+        m_pTextBoxFormat->GetDoc()->getIDocumentLayoutAccess().DelLayoutFormat(m_pTextBoxFormat);
+}
+
+bool SwTextBoxHandler::Init()
+{
+    ::sw::UndoGuard const UndoGuard(m_pDoc->GetIDocumentUndoRedo());
+    try
+    {
+        uno::Reference<text::XTextContent> xTextFrame(
+            SwXServiceProvider::MakeInstance(SwServiceType::TypeTextFrame, *m_pDoc),
+            uno::UNO_QUERY);
+        uno::Reference<text::XTextDocument> xTextDocument(m_pDoc->GetDocShell()->GetBaseModel(),
+                                                          uno::UNO_QUERY);
+        uno::Reference<text::XTextContentAppend> xTextContentAppend(xTextDocument->getText(),
+                                                                    uno::UNO_QUERY);
+        xTextContentAppend->appendTextContent(xTextFrame, css::beans::PropertyValues());
+        m_xAttachedTextBoxFrame.set(xTextFrame, uno::UNO_QUERY);
+
+        uno::Reference<beans::XPropertySet> xPropertySet(xTextFrame, uno::UNO_QUERY);
+        uno::Any aEmptyBorder = uno::makeAny(table::BorderLine2());
+        xPropertySet->setPropertyValue(UNO_NAME_TOP_BORDER, aEmptyBorder);
+        xPropertySet->setPropertyValue(UNO_NAME_BOTTOM_BORDER, aEmptyBorder);
+        xPropertySet->setPropertyValue(UNO_NAME_LEFT_BORDER, aEmptyBorder);
+        xPropertySet->setPropertyValue(UNO_NAME_RIGHT_BORDER, aEmptyBorder);
+
+        xPropertySet->setPropertyValue(UNO_NAME_FILL_TRANSPARENCE, uno::makeAny(sal_Int32(100)));
+
+        xPropertySet->setPropertyValue(UNO_NAME_SIZE_TYPE, uno::makeAny(text::SizeType::FIX));
+
+        xPropertySet->setPropertyValue(UNO_NAME_SURROUND, uno::makeAny(text::WrapTextMode_THROUGH));
+
+        uno::Reference<container::XNamed> xNamed(xTextFrame, uno::UNO_QUERY);
+        xNamed->setName(m_pDoc->GetUniqueFrameName());
+
+        m_pTextBoxFormat
+            = dynamic_cast<SwXTextFrame*>(m_xAttachedTextBoxFrame.get())->GetFrameFormat();
+
+        uno::Reference<text::XTextRange> xTextBox(xTextFrame, uno::UNO_QUERY_THROW);
+        //m_pOwnerShape->attach(xTextBox);
+        //SwUnoInternalPaM aInternalPaM(*m_pDoc);
+        //if (sw::XTextRangeToSwPaM(aInternalPaM, xTextBox))
+        //{
+        //    auto ize = dynamic_cast<SdrObjCustomShape*>(m_pObject);
+        //
+        //    SwFormatContent aContent(aInternalPaM.GetNode().StartOfSectionNode());
+        //    //aSet.Put(aContent);
+        //    //m_pOwnerShapeFormat->SetFormatAttr(aSet);
+        //    //m_pObject->SetMergedItem(aContent);
+        //    //auto bigyo = ize->GetObjectItemPool();
+        //    //bigyo.Put(aContent);
+        //    ize->SetObjectItemNoBroadcast(aContent);
+        //
+        //}
+    }
+    catch (...)
+    {
+        return false;
+    }
+    return true;
+}
+
+tools::Rectangle SwTextBoxHandler::GetTextAreaOfOwnerShape()
+{
+    tools::Rectangle aRet(0, 0, 0, 0);
+    auto pCustomShape = dynamic_cast<SdrObjCustomShape*>(m_pObject);
+    if (pCustomShape)
+    {
+        pCustomShape->GetTextBounds(aRet);
+
+        aRet.Move(Size(-pCustomShape->GetAnchorPos().X(), -pCustomShape->GetAnchorPos().Y()));
+    }
+    return aRet;
+}
+
+bool SwTextBoxHandler::UpdateTextBoxProperties()
+{
+    if (m_bIsFormattingInProgress)
+        return false;
+
+    m_bIsFormattingInProgress = true;
+
+    if (!m_xOwnerShape)
+        return false;
+    try
+    {
+        auto aTextRectangle = GetTextAreaOfOwnerShape();
+        if (aTextRectangle.IsEmpty())
+            return false;
+
+        ::sw::UndoGuard const UndoGuard(m_pDoc->GetIDocumentUndoRedo());
+        uno::Reference<beans::XPropertySet> xShapeProperties(m_xOwnerShape, uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xFrameProperties(m_xAttachedTextBoxFrame,
+                                                             uno::UNO_QUERY);
+
+        if (m_pOwnerShapeFormat->GetAnchor().GetAnchorId() == RndStdIds::FLY_AT_PAGE)
+        {
+            sal_Int16 nPageNum = m_pOwnerShapeFormat->GetAnchor().GetPageNum();
+            auto aHori = SwFormatHoriOrient(aTextRectangle.getX(), text::HoriOrientation::NONE,
+                                            text::RelOrientation::FRAME);
+            auto aVori = SwFormatVertOrient(aTextRectangle.getY(), text::HoriOrientation::NONE,
+                                            text::RelOrientation::FRAME);
+            xFrameProperties->setPropertyValue(
+                UNO_NAME_ANCHOR_TYPE,
+                uno::makeAny(text::TextContentAnchorType::TextContentAnchorType_AT_PAGE));
+            xFrameProperties->setPropertyValue(UNO_NAME_HORI_ORIENT_RELATION,
+                                               uno::makeAny(text::RelOrientation::PAGE_FRAME));
+            xFrameProperties->setPropertyValue(UNO_NAME_VERT_ORIENT_RELATION,
+                                               uno::makeAny(text::RelOrientation::PAGE_FRAME));
+            nPageNum = nPageNum ? nPageNum : 1;
+            xFrameProperties->setPropertyValue(UNO_NAME_ANCHOR_PAGE_NO,
+                                               uno::makeAny(sal_uInt16(nPageNum)));
+
+            m_pTextBoxFormat->SetFormatAttr(aHori);
+            m_pTextBoxFormat->SetFormatAttr(aVori);
+            m_pTextBoxFormat->SetFormatAttr(SwFormatFrameSize(
+                SwFrameSize::Fixed, aTextRectangle.GetWidth(), aTextRectangle.getHeight()));
+        }
+        else if (m_pOwnerShapeFormat->GetAnchor().GetAnchorId() == RndStdIds::FLY_AT_PARA)
+        {
+            auto aHori = SwFormatHoriOrient(aTextRectangle.getX(), text::HoriOrientation::NONE,
+                                            text::RelOrientation::FRAME);
+            auto aVori = SwFormatVertOrient(aTextRectangle.getY(), text::HoriOrientation::NONE,
+                                            text::RelOrientation::FRAME);
+
+            xFrameProperties->setPropertyValue(
+                UNO_NAME_ANCHOR_TYPE,
+                uno::makeAny(text::TextContentAnchorType::TextContentAnchorType_AT_PARAGRAPH));
+            xFrameProperties->setPropertyValue(UNO_NAME_HORI_ORIENT_RELATION,
+                                               uno::makeAny(text::RelOrientation::FRAME));
+            xFrameProperties->setPropertyValue(UNO_NAME_VERT_ORIENT_RELATION,
+                                               uno::makeAny(text::RelOrientation::FRAME));
+
+            m_pTextBoxFormat->SetFormatAttr(m_pOwnerShapeFormat->GetAnchor());
+            m_pTextBoxFormat->SetFormatAttr(aHori);
+            m_pTextBoxFormat->SetFormatAttr(aVori);
+            m_pTextBoxFormat->SetFormatAttr(SwFormatFrameSize(
+                SwFrameSize::Fixed, aTextRectangle.GetWidth(), aTextRectangle.getHeight()));
+        }
+        else if (m_pOwnerShapeFormat->GetAnchor().GetAnchorId() == RndStdIds::FLY_AT_CHAR)
+        {
+            xFrameProperties->setPropertyValue(
+                UNO_NAME_ANCHOR_TYPE,
+                uno::makeAny(text::TextContentAnchorType::TextContentAnchorType_AT_CHARACTER));
+            xFrameProperties->setPropertyValue(UNO_NAME_HORI_ORIENT_RELATION,
+                                               uno::makeAny(text::RelOrientation::FRAME));
+            xFrameProperties->setPropertyValue(UNO_NAME_VERT_ORIENT_RELATION,
+                                               uno::makeAny(text::RelOrientation::FRAME));
+            auto aHori = SwFormatHoriOrient(aTextRectangle.getX(), text::HoriOrientation::NONE,
+                                            text::RelOrientation::FRAME);
+            auto aVori = SwFormatVertOrient(aTextRectangle.getY(), text::HoriOrientation::NONE,
+                                            text::RelOrientation::FRAME);
+
+            m_pTextBoxFormat->SetFormatAttr(m_pOwnerShapeFormat->GetAnchor());
+            m_pTextBoxFormat->SetFormatAttr(aHori);
+            m_pTextBoxFormat->SetFormatAttr(aVori);
+            m_pTextBoxFormat->SetFormatAttr(SwFormatFrameSize(
+                SwFrameSize::Fixed, aTextRectangle.GetWidth(), aTextRectangle.getHeight()));
+        }
+        else if (m_pOwnerShapeFormat->GetAnchor().GetAnchorId() == RndStdIds::FLY_AS_CHAR)
+        {
+            m_pTextBoxFormat->SetFormatAttr(SwFormatFrameSize(
+                SwFrameSize::Fixed, aTextRectangle.GetWidth(), aTextRectangle.getHeight()));
+            auto aHori = m_pTextBoxFormat->GetHoriOrient();
+            auto aVori = m_pTextBoxFormat->GetVertOrient();
+
+            auto ize = m_pObject->GetName();
+            //aTextRectangle.SetPos(Point(aTextRectangle.getX(), m_pObject->GetLogicRect().Center().getY() / 2));
+            //aTextRectangle.Move(Size(-m_pObject->GetAnchorPos().X(), -m_pObject->GetAnchorPos().Y()));
+
+            //aHori.SetRelationOrient(text::RelOrientation::CHAR);
+            //aHori.SetHoriOrient(text::HoriOrientation::NONE);
+            //aVori.SetRelationOrient(text::RelOrientation::CHAR);
+            //aVori.SetVertOrient(text::HoriOrientation::NONE);
+
+            aHori.SetPos(aTextRectangle.Left());
+            aVori.SetPos(m_pObject->GetAnchorPos().getY());
+
+            //SwFormatAnchor aNewAnchor(RndStdIds::FLY_AT_PAGE, 1);
+            //aNewAnchor.SetAnchor(m_pOwnerShapeFormat->GetAnchor().GetContentAnchor());
+
+            //m_pTextBoxFormat->SetFormatAttr(aNewAnchor);
+            m_pTextBoxFormat->SetFormatAttr(aHori);
+            m_pTextBoxFormat->SetFormatAttr(aVori);
+        }
+    }
+    catch (...)
+    {
+        m_bIsFormattingInProgress = false;
+        return false;
+    }
+    m_bIsFormattingInProgress = false;
+    return true;
+}
+
+uno::Any SwTextBoxHandler::GetTextBoxContent()
+{
+    uno::Any aRet = uno::Any();
+
+    if (m_xAttachedTextBoxFrame)
+        aRet = uno::Any(uno::Reference<uno::XInterface>(m_xAttachedTextBoxFrame->getText()));
+
+    return aRet;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

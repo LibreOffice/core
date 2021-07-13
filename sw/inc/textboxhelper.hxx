@@ -20,6 +20,9 @@
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <svx/swframetypes.hxx>
 
+#include <unodraw.hxx>
+#include <unoframe.hxx>
+
 #include "swdllapi.h"
 
 class SdrPage;
@@ -29,6 +32,9 @@ class SwFrameFormat;
 class SwFrameFormats;
 class SwFormatContent;
 class SwDoc;
+class SwXShape;
+class SwShapeDescriptor_Impl;
+
 namespace tools
 {
 class Rectangle;
@@ -59,6 +65,9 @@ public:
     /// Create a TextBox for a shape. If the second parameter is true,
     /// the original text in the shape will be copied to the frame
     static void create(SwFrameFormat* pShape, bool bCopyText = false);
+    /// Create a TextBox for a shape. If the second parameter is true,
+    /// the original text in the shape will be copied to the frame
+    static void create_Imp(SwFrameFormat* pShape, bool bCopyText = false);
     /// Destroy a TextBox for a shape.
     static void destroy(SwFrameFormat* pShape);
     /// Get interface of a shape's TextBox, if there is any.
@@ -162,6 +171,56 @@ public:
     /// Undo the effect of saveLinks() + individual resetLink() calls.
     static void restoreLinks(std::set<ZSortFly>& rOld, std::vector<SwFrameFormat*>& rNew,
                              SavedLink& rSavedLinks);
+};
+
+/// This is a new class for handling the SwTextBoxes, exactly the
+/// shape + frame pairs. When new textbox created, SwXTextFrame
+/// added to the given SwXShape. When the xShape modified, this
+/// class does the formatting of the textbox attached to its shape.
+class SW_DLLPUBLIC SwTextBoxHandler
+{
+    // Private members of this class:
+
+    /// The SwDoc document model pointer.
+    SwDoc* m_pDoc;
+    /// The format of the xShape what has this textbox
+    SwFrameFormat* m_pOwnerShapeFormat;
+    /// The xShape where this textbox belongs to.
+    SwXShape* m_pOwnerShape;
+    /// The UNO xShape where this textbox belongs to.
+    css::uno::Reference<css::drawing::XShape> m_xOwnerShape;
+    /// The SDR form of the shape which the textbox belongs to.
+    SdrObject* m_pObject;
+    /// The textframe of the textbox.
+    css::uno::Reference<css::text::XTextFrame> m_xAttachedTextBoxFrame;
+    /// The format of the textframe of the textbox.
+    SwFrameFormat* m_pTextBoxFormat;
+
+    /// This indicates if the textbox is under formatting.ű
+    bool m_bIsFormattingInProgress;
+
+    // Private methods of this class:
+
+    /// This method creates the textframe for the shape and attaches it to
+    /// the shape. Returns true on success else false.
+    bool Init();
+
+    tools::Rectangle GetTextAreaOfOwnerShape();
+
+public:
+    /// This have to be deleted because the shape essential for the textbox.
+    SwTextBoxHandler() = delete;
+    /// Makes the textbox handler object for the given xShape.
+    SwTextBoxHandler(SwXShape* pOwnerShape, SdrObject* pObj);
+
+    /// Removes the textbox.
+    ~SwTextBoxHandler();
+
+    /// If this method called, this makes the textframe for the right position
+    /// size and other properties according to its shape. True on success.
+    bool UpdateTextBoxProperties();
+
+    css::uno::Any GetTextBoxContent();
 };
 
 #endif // INCLUDED_SW_INC_TEXTBOXHELPER_HXX

@@ -93,6 +93,7 @@ ContextHandlerRef ShapeContext::onCreateContext( sal_Int32 aElementToken, const 
     {
         if (!mpShapePtr->getTextBody())
             mpShapePtr->setTextBody( std::make_shared<TextBody>() );
+        //mpShapePtr->setTextBox(true);
         return new TextBodyContext( *this, mpShapePtr );
     }
     case XML_txXfrm:
