@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9576addc_1d53cc3e",
+        "filename": "sw/source/uibase/uiview/formatclipboard.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-13T19:24:54Z",
+      "side": 0,
+      "message": "We have svl::Items. I supposed that that class could have a static const member - and maybe your approach could be useful here, and then this code wouldn\u0027t have to be changed, just the respective constructor would use svl::Items\u003c...\u003e::ranges or somesuch internally?",
+      "revId": "0d3398e5d141b79706653c04f1ab6dc9381a5cc1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}

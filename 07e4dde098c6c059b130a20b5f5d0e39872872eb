@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "023434dc_4a8ca19f",
+        "filename": "svl/source/items/itemset.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 865,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-13T19:24:54Z",
+      "side": 1,
+      "message": "So here and below, the bEqual is only used once in the if :)",
+      "revId": "07e4dde098c6c059b130a20b5f5d0e39872872eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
