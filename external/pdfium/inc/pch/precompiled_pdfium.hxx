@@ -46,6 +46,7 @@
 #include <limits>
 #include <list>
 #include <map>
+#include <math.h>
 #include <memory>
 #include <numeric>
 #include <ostream>
@@ -53,6 +54,7 @@
 #include <setjmp.h>
 #include <sstream>
 #include <stack>
+#include <stdarg.h>
 #include <stddef.h>
 #include <stdlib.h>
 #include <string.h>
@@ -70,6 +72,7 @@
 #include <constants/access_permissions.h>
 #include <constants/annotation_common.h>
 #include <constants/annotation_flags.h>
+#include <constants/appearance.h>
 #include <constants/form_fields.h>
 #include <constants/form_flags.h>
 #include <constants/page_object.h>
@@ -241,7 +244,7 @@
 #include <core/fxcodec/flate/flatemodule.h>
 #include <core/fxcodec/fx_codec.h>
 #include <core/fxcodec/gif/cfx_gif.h>
-#include <core/fxcodec/gif/cfx_lzwdecompressor.h>
+#include <core/fxcodec/gif/lzw_decompressor.h>
 #include <core/fxcodec/icc/iccmodule.h>
 #include <core/fxcodec/jbig2/JBig2_ArithDecoder.h>
 #include <core/fxcodec/jbig2/JBig2_ArithIntDecoder.h>
@@ -320,6 +323,9 @@
 #include <core/fxcrt/observed_ptr.h>
 #include <core/fxcrt/pauseindicator_iface.h>
 #include <core/fxcrt/retain_ptr.h>
+#include <core/fxcrt/scoped_set_insertion.h>
+#include <core/fxcrt/span_util.h>
+#include <core/fxcrt/stl_util.h>
 #include <core/fxcrt/string_data_template.h>
 #include <core/fxcrt/string_pool_template.h>
 #include <core/fxcrt/unowned_ptr.h>
@@ -348,7 +354,7 @@
 #include <core/fxge/cfx_glyphcache.h>
 #include <core/fxge/cfx_graphstate.h>
 #include <core/fxge/cfx_graphstatedata.h>
-#include <core/fxge/cfx_pathdata.h>
+#include <core/fxge/cfx_path.h>
 #include <core/fxge/cfx_renderdevice.h>
 #include <core/fxge/cfx_substfont.h>
 #include <core/fxge/cfx_textrenderoptions.h>
@@ -396,7 +402,7 @@
 #include <fpdfsdk/formfiller/cffl_button.h>
 #include <fpdfsdk/formfiller/cffl_checkbox.h>
 #include <fpdfsdk/formfiller/cffl_combobox.h>
-#include <fpdfsdk/formfiller/cffl_formfiller.h>
+#include <fpdfsdk/formfiller/cffl_formfield.h>
 #include <fpdfsdk/formfiller/cffl_interactiveformfiller.h>
 #include <fpdfsdk/formfiller/cffl_listbox.h>
 #include <fpdfsdk/formfiller/cffl_privatedata.h>
@@ -472,16 +478,18 @@
 #include <third_party/base/check_op.h>
 #include <third_party/base/compiler_specific.h>
 #include <third_party/base/containers/adapters.h>
+#include <third_party/base/containers/contains.h>
+#include <third_party/base/cxx17_backports.h>
 #include <third_party/base/debug/alias.h>
 #include <third_party/base/memory/aligned_memory.h>
 #include <third_party/base/no_destructor.h>
 #include <third_party/base/notreached.h>
+#include <third_party/base/numerics/ranges.h>
 #include <third_party/base/numerics/safe_conversions.h>
 #include <third_party/base/numerics/safe_math.h>
 #include <third_party/base/optional.h>
 #include <third_party/base/ptr_util.h>
 #include <third_party/base/span.h>
-#include <third_party/base/stl_util.h>
 #include <third_party/skia_shared/SkFloatToDecimal.h>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4

@@ -681,7 +681,8 @@ void PdfExportTest::testSofthyphenPos()
         FPDF_PAGEOBJECT pPdfPageObject = FPDFPage_GetObject(pPdfPage.get(), i);
         CPPUNIT_ASSERT_EQUAL(FPDF_PAGEOBJ_TEXT, FPDFPageObj_GetType(pPdfPageObject));
         haveText = true;
-        double const size(FPDFTextObj_GetFontSize(pPdfPageObject));
+        float size{};
+        FPDFTextObj_GetFontSize(pPdfPageObject, &size);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(11.05, size, 1E-06);
     }
 

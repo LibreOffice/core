@@ -769,7 +769,7 @@ void ImpSdrPdfImport::ImportForm(FPDF_PAGEOBJECT pPageObject, FPDF_TEXTPAGE pTex
     const Matrix aOldMatrix = mCurMatrix;
 
     FS_MATRIX matrix;
-    FPDFFormObj_GetMatrix(pPageObject, &matrix);
+    FPDFPageObj_GetMatrix(pPageObject, &matrix);
     mCurMatrix = Matrix(matrix.a, matrix.b, matrix.c, matrix.d, matrix.e, matrix.f);
 
     const int nCount = FPDFFormObj_CountObjects(pPageObject);
@@ -799,7 +799,7 @@ void ImpSdrPdfImport::ImportText(FPDF_PAGEOBJECT pPageObject, FPDF_TEXTPAGE pTex
         return;
 
     FS_MATRIX matrix;
-    FPDFTextObj_GetMatrix(pPageObject, &matrix);
+    FPDFPageObj_GetMatrix(pPageObject, &matrix);
     Matrix aTextMatrix(mCurMatrix);
 
     aTextMatrix.Transform(left, right, top, bottom);
@@ -816,7 +816,8 @@ void ImpSdrPdfImport::ImportText(FPDF_PAGEOBJECT pPageObject, FPDF_TEXTPAGE pTex
 
     OUString sText(pText.get(), nActualChars);
 
-    const double dFontSize = FPDFTextObj_GetFontSize(pPageObject);
+    float dFontSize{};
+    FPDFTextObj_GetFontSize(pPageObject, &dFontSize);
     double dFontSizeH = fabs(sqrt2(matrix.a, matrix.c) * dFontSize);
     double dFontSizeV = fabs(sqrt2(matrix.b, matrix.d) * dFontSize);
     dFontSizeH = lcl_PointToPixel(dFontSizeH);
@@ -1035,7 +1036,7 @@ void ImpSdrPdfImport::ImportImage(FPDF_PAGEOBJECT pPageObject, int /*nPageObject
 void ImpSdrPdfImport::ImportPath(FPDF_PAGEOBJECT pPageObject, int /*nPageObjectIndex*/)
 {
     FS_MATRIX matrix;
-    FPDFPath_GetMatrix(pPageObject, &matrix);
+    FPDFPageObj_GetMatrix(pPageObject, &matrix);
     Matrix aPathMatrix(matrix.a, matrix.b, matrix.c, matrix.d, matrix.e, matrix.f);
     aPathMatrix.Concatinate(mCurMatrix);
 
