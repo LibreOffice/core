@@ -77,6 +77,12 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/fpdfsdk/cpdfsdk_interactiveform \
     UnpackedTarball/pdfium/fpdfsdk/cpdfsdk_renderpage \
     UnpackedTarball/pdfium/fpdfsdk/fpdf_signature \
+	UnpackedTarball/pdfium/constants/annotation_common \
+	UnpackedTarball/pdfium/constants/appearance \
+	UnpackedTarball/pdfium/constants/form_fields \
+	UnpackedTarball/pdfium/constants/page_object \
+	UnpackedTarball/pdfium/constants/stream_dict_common \
+	UnpackedTarball/pdfium/constants/transparency \
 ))
 
 # fdrm
@@ -90,7 +96,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
 $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/fpdfsdk/formfiller/cffl_checkbox \
     UnpackedTarball/pdfium/fpdfsdk/formfiller/cffl_combobox \
-    UnpackedTarball/pdfium/fpdfsdk/formfiller/cffl_formfiller \
+    UnpackedTarball/pdfium/fpdfsdk/formfiller/cffl_formfield \
     UnpackedTarball/pdfium/fpdfsdk/formfiller/cffl_interactiveformfiller \
     UnpackedTarball/pdfium/fpdfsdk/formfiller/cffl_listbox \
     UnpackedTarball/pdfium/fpdfsdk/formfiller/cffl_pushbutton \
@@ -347,7 +353,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/core/fxcodec/jbig2/JBig2_SymbolDict \
     UnpackedTarball/pdfium/core/fxcodec/jbig2/JBig2_TrdProc \
     UnpackedTarball/pdfium/core/fxcodec/gif/cfx_gif \
-    UnpackedTarball/pdfium/core/fxcodec/gif/cfx_lzwdecompressor \
+    UnpackedTarball/pdfium/core/fxcodec/gif/lzw_decompressor \
     UnpackedTarball/pdfium/core/fxcodec/cfx_codec_memory \
     UnpackedTarball/pdfium/core/fxcodec/fax/faxmodule \
     UnpackedTarball/pdfium/core/fxcodec/scanlinedecoder \
@@ -460,7 +466,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/core/fxge/cfx_gemodule \
     UnpackedTarball/pdfium/core/fxge/cfx_graphstate \
     UnpackedTarball/pdfium/core/fxge/cfx_graphstatedata \
-    UnpackedTarball/pdfium/core/fxge/cfx_pathdata \
+    UnpackedTarball/pdfium/core/fxge/cfx_path \
     UnpackedTarball/pdfium/core/fxge/cfx_renderdevice \
     UnpackedTarball/pdfium/core/fxge/cfx_substfont \
     UnpackedTarball/pdfium/core/fxge/cfx_unicodeencoding \
