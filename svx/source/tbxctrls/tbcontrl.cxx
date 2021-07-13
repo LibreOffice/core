@@ -636,7 +636,7 @@ private:
         , m_nWidth( 5 )
         , m_sNone()
         , aVirDev(VclPtr<VirtualDevice>::Create())
-        , aColor(COL_BLACK)
+        , aColor(Application::GetSettings().GetStyleSettings().GetWindowTextColor())
         , maPaintCol(COL_BLACK)
         , eSourceUnit(FieldUnit::POINT)
     {
