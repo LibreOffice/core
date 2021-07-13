@@ -234,6 +234,18 @@ Bitmap OutputDeviceTestPolygon::setupClosedBezier()
 
     return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
 }
+
+Bitmap OutputDeviceTestPolygon::setupFilledAsymmetricalDropShape()
+{
+    initialSetup(21, 18, constBackgroundColor);
+
+    mpVirtualDevice->SetLineColor();
+    mpVirtualDevice->SetFillColor(constFillColor);
+
+    mpVirtualDevice->DrawPolygon(OutputDeviceTestCommon::createDropShapePolygon());
+
+    return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
+}
 } // end namespace vcl::test
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
