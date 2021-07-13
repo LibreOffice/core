@@ -44,6 +44,7 @@
 #include <sfx2/objface.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svl/documentlockfile.hxx>
+#include <svl/fstathelper.hxx>
 #include <svl/sharecontrolfile.hxx>
 #include <svl/urihelper.hxx>
 #include <osl/file.hxx>
@@ -120,6 +121,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <unotools/configmgr.hxx>
+#include <unotools/ucbstreamhelper.hxx>
 #include <uiitems.hxx>
 #include <dpobject.hxx>
 #include <markdata.hxx>
@@ -1926,7 +1928,7 @@ void escapeTextSep(sal_Int32 nPos, const StrT& rStrDelim, StrT& rStr)
 
 }
 
-void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt )
+void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt, SCTAB nTab )
 {
     sal_Unicode cDelim    = rAsciiOpt.nFieldSepCode;
     sal_Unicode cStrDelim = rAsciiOpt.nTextSepCode;
@@ -1972,7 +1974,6 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
 
     SCCOL nStartCol = 0;
     SCROW nStartRow = 0;
-    SCTAB nTab = GetSaveTab();
     SCCOL nEndCol;
     SCROW nEndRow;
     m_aDocument.GetCellArea( nTab, nEndCol, nEndRow );
@@ -2390,35 +2391,81 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
     }
     else if (aFltName == pFilterAscii)
     {
-        SvStream* pStream = rMed.GetOutStream();
-        if (pStream)
+        OUString sItStr;
+        SfxItemSet*  pSet = rMed.GetItemSet();
+        const SfxPoolItem* pItem;
+        if ( pSet && SfxItemState::SET ==
+             pSet->GetItemState( SID_FILE_FILTEROPTIONS, true, &pItem ) )
         {
-            OUString sItStr;
-            SfxItemSet*  pSet = rMed.GetItemSet();
-            const SfxPoolItem* pItem;
-            if ( pSet && SfxItemState::SET ==
-                 pSet->GetItemState( SID_FILE_FILTEROPTIONS, true, &pItem ) )
-            {
-                sItStr = static_cast<const SfxStringItem*>(pItem)->GetValue();
-            }
+            sItStr = static_cast<const SfxStringItem*>(pItem)->GetValue();
+        }
 
-            if ( sItStr.isEmpty() )
-            {
-                //  default for ascii export (from API without options):
-                //  ISO8859-1/MS_1252 encoding, comma, double quotes
+        if ( sItStr.isEmpty() )
+        {
+            //  default for ascii export (from API without options):
+            //  ISO8859-1/MS_1252 encoding, comma, double quotes
 
-                ScImportOptions aDefOptions( ',', '"', RTL_TEXTENCODING_MS_1252 );
-                sItStr = aDefOptions.BuildString();
-            }
+            ScImportOptions aDefOptions( ',', '"', RTL_TEXTENCODING_MS_1252 );
+            sItStr = aDefOptions.BuildString();
+        }
 
-            weld::WaitObject aWait( GetActiveDialogParent() );
-            ScImportOptions aOptions( sItStr );
-            AsciiSave( *pStream, aOptions );
+        weld::WaitObject aWait( GetActiveDialogParent() );
+        ScImportOptions aOptions( sItStr );
+
+        if (aOptions.bNewFilePerSheet)
+        {
             bRet = true;
 
-            if (m_aDocument.GetTableCount() > 1)
-                if (!rMed.GetError())
-                    rMed.SetError(SCWARN_EXPORT_ASCII);
+            INetURLObject aURLObject(rMed.GetURLObject());
+            OUString sExt = aURLObject.CutExtension();
+            OUString sBaseName = aURLObject.GetLastName();
+            aURLObject.CutLastName();
+
+            for (SCTAB i = 0, nCount = m_aDocument.GetTableCount(); i < nCount; ++i)
+            {
+                OUString sTabName;
+                if (!m_aDocument.GetName(i, sTabName))
+                    sTabName = OUString::number(i);
+                INetURLObject aSheetURLObject(aURLObject);
+                OUString sFileName = sBaseName + "-" + sTabName;
+                if (!sExt.isEmpty())
+                    sFileName = sFileName + "." + sExt;
+                aSheetURLObject.Append(sFileName);
+
+                // log similar to DispatchWatcher::executeDispatchRequests
+                OUString aOutFile = aSheetURLObject.GetMainURL(INetURLObject::DecodeMechanism::NONE);
+                OUString aDisplayedName;
+                if (osl::FileBase::E_None != osl::FileBase::getSystemPathFromFileURL(aOutFile, aDisplayedName))
+                    aDisplayedName = aOutFile;
+                std::cout << "Writing sheet " << OUStringToOString(sTabName, osl_getThreadTextEncoding()) << " -> "
+                                              << OUStringToOString(aDisplayedName, osl_getThreadTextEncoding())
+                                              << std::endl;
+
+                if (FStatHelper::IsDocument(aOutFile))
+                    std::cout << "Overwriting: " << OUStringToOString(aDisplayedName, osl_getThreadTextEncoding()) << std::endl ;
+
+                std::unique_ptr<SvStream> xStm = ::utl::UcbStreamHelper::CreateStream(aOutFile, StreamMode::TRUNC | StreamMode::WRITE);
+                if (!xStm)
+                {
+                    SetError(SCERR_IMPORT_UNKNOWN);
+                    bRet = false;
+                    break;
+                }
+                AsciiSave(*xStm, aOptions, i);
+            }
+        }
+        else
+        {
+            SvStream* pStream = rMed.GetOutStream();
+            if (pStream)
+            {
+                AsciiSave(*pStream, aOptions, GetSaveTab());
+                bRet = true;
+
+                if (m_aDocument.GetTableCount() > 1)
+                    if (!rMed.GetError())
+                        rMed.SetError(SCWARN_EXPORT_ASCII);
+            }
         }
     }
     else if (aFltName == pFilterDBase)
