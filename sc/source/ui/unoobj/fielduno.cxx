@@ -1041,7 +1041,7 @@ void ScEditFieldObj::setPropertyValueSheet(const OUString& rName, const uno::Any
 ScEditFieldObj::ScEditFieldObj(
     const uno::Reference<text::XTextRange>& rContent,
     std::unique_ptr<ScEditSource> pEditSrc, sal_Int32 eType, const ESelection& rSel) :
-    OComponentHelper(getMutex()),
+    ScEditFieldObj_Base(getMutex()),
     pPropSet(nullptr),
     mpEditSource(std::move(pEditSrc)),
     aSelection(rSel),
@@ -1174,25 +1174,6 @@ uno::Reference<text::XTextRange> SAL_CALL ScEditFieldObj::getAnchor()
     return mpContent;
 }
 
-// XComponent
-
-void SAL_CALL ScEditFieldObj::dispose()
-{
-    OComponentHelper::dispose();
-}
-
-void SAL_CALL ScEditFieldObj::addEventListener(
-                        const uno::Reference<lang::XEventListener>& xListener )
-{
-    OComponentHelper::addEventListener( xListener );
-}
-
-void SAL_CALL ScEditFieldObj::removeEventListener(
-                        const uno::Reference<lang::XEventListener>& xListener )
-{
-    OComponentHelper::removeEventListener( xListener );
-}
-
 // XPropertySet
 
 uno::Reference<beans::XPropertySetInfo> SAL_CALL ScEditFieldObj::getPropertySetInfo()
@@ -1306,7 +1287,7 @@ uno::Sequence<OUString> SAL_CALL ScEditFieldObj::getSupportedServiceNames()
 uno::Sequence<uno::Type> SAL_CALL ScEditFieldObj::getTypes()
 {
     return comphelper::concatSequences(
-        OComponentHelper::getTypes(),
+        ScEditFieldObj_Base::getTypes(),
         uno::Sequence<uno::Type>
         {
             cppu::UnoType<text::XTextField>::get(),

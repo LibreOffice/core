@@ -36,6 +36,7 @@
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/component.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <osl/mutex.hxx>
 
 #include <memory>
@@ -159,13 +160,12 @@ public:
  * Generic UNO wrapper for edit engine's field item in cells, headers, and
  * footers.
  */
-class ScEditFieldObj final : public cppu::WeakImplHelper<
+typedef cppu::WeakComponentImplHelper<
                             css::text::XTextField,
                             css::beans::XPropertySet,
                             css::lang::XUnoTunnel,
-                            css::lang::XServiceInfo>,
-                        public ScMutexHelper,
-                        public ::cppu::OComponentHelper
+                            css::lang::XServiceInfo> ScEditFieldObj_Base;
+class ScEditFieldObj final : public ScMutexHelper, public ScEditFieldObj_Base
 {
     ScEditFieldObj() = delete;
     ScEditFieldObj(const ScEditFieldObj&) = delete;
@@ -219,11 +219,6 @@ public:
     virtual void SAL_CALL attach( const css::uno::Reference< css::text::XTextRange >& xTextRange ) override;
     virtual css::uno::Reference< css::text::XTextRange > SAL_CALL
                             getAnchor() override;
-
-                            // XComponent
-    virtual void SAL_CALL dispose() override;
-    virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
-    virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
                             // XPropertySet
     virtual css::uno::Reference< css::beans::XPropertySetInfo >
