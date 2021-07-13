@@ -133,6 +133,9 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
         break;
         case RTFKeyword::SECT:
         {
+            if (m_bNeedCr)
+                dispatchSymbol(RTFKeyword::PAR);
+
             m_bHadSect = true;
             if (m_bIgnoreNextContSectBreak)
                 m_bIgnoreNextContSectBreak = false;

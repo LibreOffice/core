@@ -1223,6 +1223,11 @@ DECLARE_RTFEXPORT_TEST(testPgndec, "pgndec.rtf")
     CPPUNIT_ASSERT_EQUAL(
         style::NumberingType::ARABIC,
         getProperty<sal_Int16>(xPageStyles->getByName(pageStyleName), "NumberingType"));
+
+    // tdf#82111 ensure a pargraph exists before a section break.
+    // This was only two paragraphs, and both page number fields were in one para on page 2 ("11").
+    getParagraph(2, "1");
+    CPPUNIT_ASSERT_EQUAL(3, getParagraphs());
 }
 
 DECLARE_RTFEXPORT_TEST(testTdf98806, "tdf98806.rtf")
