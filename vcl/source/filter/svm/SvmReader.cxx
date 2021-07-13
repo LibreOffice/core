@@ -238,7 +238,7 @@ rtl::Reference<MetaAction> SvmReader::MetaActionHandler(ImplMetaReadData* pData)
             return MaskScalePartHandler();
             break;
         case MetaActionType::GRADIENT:
-            pAction = new MetaGradientAction;
+            return GradientHandler();
             break;
         case MetaActionType::GRADIENTEX:
             pAction = new MetaGradientExAction;
@@ -1022,6 +1022,24 @@ rtl::Reference<MetaAction> SvmReader::MaskScalePartHandler()
     pAction->SetDestSize(aDstSz);
     pAction->SetSrcPoint(aSrcPt);
     pAction->SetSrcSize(aSrcSz);
+
+    return pAction;
+}
+
+rtl::Reference<MetaAction> SvmReader::GradientHandler()
+{
+    auto pAction = new MetaGradientAction();
+
+    VersionCompatRead aCompat(mrStream);
+    TypeSerializer aSerializer(mrStream);
+
+    tools::Rectangle aRect;
+    aSerializer.readRectangle(aRect);
+    Gradient aGradient;
+    aSerializer.readGradient(aGradient);
+
+    pAction->SetRect(aRect);
+    pAction->SetGradient(aGradient);
 
     return pAction;
 }
