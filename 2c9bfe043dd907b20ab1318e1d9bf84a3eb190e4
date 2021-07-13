@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2134489b_c3a6c498",
+        "filename": "desktop/source/app/dispatchwatcher.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 632,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-07-13T20:52:28Z",
+      "side": 1,
+      "message": "We could use a numeric option here.\n\n0 for current behaviour with GetSaveTab()\n-1 for all sheets\n\nWe could then also pass any 1-based sheet number or (later) even a set like 2/3/4 or some such.",
+      "revId": "2c9bfe043dd907b20ab1318e1d9bf84a3eb190e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
