@@ -14455,7 +14455,6 @@ vcl/inc/fontselect.hxx
 vcl/inc/fontsubset.hxx
 vcl/inc/graphic/UnoGraphic.hxx
 vcl/inc/graphic/UnoGraphicDescriptor.hxx
-vcl/inc/graphic/UnoGraphicTransformer.hxx
 vcl/inc/headless/svpbmp.hxx
 vcl/inc/headless/svpdummies.hxx
 vcl/inc/headless/svpframe.hxx
@@ -15015,7 +15014,6 @@ vcl/source/graphic/UnoGraphic.cxx
 vcl/source/graphic/UnoGraphicDescriptor.cxx
 vcl/source/graphic/UnoGraphicObject.cxx
 vcl/source/graphic/UnoGraphicProvider.cxx
-vcl/source/graphic/UnoGraphicTransformer.cxx
 vcl/source/graphic/grfattr.cxx
 vcl/source/helper/canvasbitmap.cxx
 vcl/source/helper/canvastools.cxx

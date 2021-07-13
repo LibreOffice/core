@@ -23,9 +23,9 @@
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/awt/XBitmap.hpp>
+#include <com/sun/star/graphic/XGraphicTransformer.hpp>
 
 #include <graphic/UnoGraphicDescriptor.hxx>
-#include <graphic/UnoGraphicTransformer.hxx>
 
 #include <vcl/graph.hxx>
 
@@ -34,8 +34,8 @@ namespace unographic {
 class Graphic final : public css::graphic::XGraphic,
                 public css::awt::XBitmap,
                 public css::lang::XUnoTunnel,
-                public ::unographic::GraphicDescriptor,
-                public ::unographic::GraphicTransformer
+                public css::graphic::XGraphicTransformer,
+                public ::unographic::GraphicDescriptor
 {
 public:
     Graphic();
@@ -69,6 +69,19 @@ private:
 
     // XUnoTunnel
     virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& rId ) override;
+
+    // XGraphicTransformer
+    virtual css::uno::Reference< css::graphic::XGraphic > SAL_CALL colorChange(
+        const css::uno::Reference< css::graphic::XGraphic >& rGraphic,
+        sal_Int32 nColorFrom, sal_Int8 nTolerance, sal_Int32 nColorTo, sal_Int8 nAlphaTo ) override;
+
+    virtual css::uno::Reference< css::graphic::XGraphic > SAL_CALL applyDuotone(
+        const css::uno::Reference< css::graphic::XGraphic >& rGraphic,
+        sal_Int32 nColorOne, sal_Int32 nColorTwo ) override;
+
+    virtual css::uno::Reference< css::graphic::XGraphic > SAL_CALL applyBrightnessContrast(
+        const css::uno::Reference< css::graphic::XGraphic >& rxGraphic,
+        sal_Int32 nBrightness, sal_Int32 nContrast, sal_Bool mso ) override;
 
     ::Graphic maGraphic;
 };
