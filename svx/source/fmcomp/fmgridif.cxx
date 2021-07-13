@@ -2085,7 +2085,10 @@ void FmXGridPeer::dispose()
 
     VclPtr< FmGridControl > pGrid = GetAs< FmGridControl >();
     if (pGrid)
+    {
         pGrid->setDataSource(Reference< XRowSet > ());
+        pGrid->DisposeAccessible();
+    }
 
     VCLXWindow::dispose();
 }
