@@ -38,12 +38,115 @@ index 0fb627ba8..dda1fc8bc 100644
    template <
        typename Container,
 diff --git a/core/fxcodec/jpx/cjpx_decoder.cpp b/core/fxcodec/jpx/cjpx_decoder.cpp
-index dbc1b1045..36b72461d 100644
+index c66985a7f..9c1122b75 100644
 --- a/core/fxcodec/jpx/cjpx_decoder.cpp
 +++ b/core/fxcodec/jpx/cjpx_decoder.cpp
-@@ -70,7 +70,7 @@ Optional<OpjImageRgbData> alloc_rgb(size_t size) {
+@@ -6,6 +6,8 @@
+ 
+ #include "core/fxcodec/jpx/cjpx_decoder.h"
+ 
++#include <string.h>
++
+ #include <algorithm>
+ #include <limits>
+ #include <utility>
+diff --git a/core/fxcodec/jpeg/jpegmodule.cpp b/core/fxcodec/jpeg/jpegmodule.cpp
+index cea0679aa..036f25003 100644
+--- a/core/fxcodec/jpeg/jpegmodule.cpp
++++ b/core/fxcodec/jpeg/jpegmodule.cpp
+@@ -7,6 +7,7 @@
+ #include "core/fxcodec/jpeg/jpegmodule.h"
+ 
+ #include <setjmp.h>
++#include <string.h>
+ 
+ #include <memory>
+ #include <utility>
+diff --git a/core/fxge/dib/cfx_bitmapcomposer.cpp b/core/fxge/dib/cfx_bitmapcomposer.cpp
+index 6f9b42013..0f1ffae2c 100644
+--- a/core/fxge/dib/cfx_bitmapcomposer.cpp
++++ b/core/fxge/dib/cfx_bitmapcomposer.cpp
+@@ -6,6 +6,8 @@
+ 
+ #include "core/fxge/dib/cfx_bitmapcomposer.h"
+ 
++#include <string.h>
++
+ #include "core/fxge/cfx_cliprgn.h"
+ #include "core/fxge/dib/cfx_dibitmap.h"
+ 
+diff --git a/core/fxge/dib/cfx_dibitmap.cpp b/core/fxge/dib/cfx_dibitmap.cpp
+index d7ccf6cfa..94e8accdd 100644
+--- a/core/fxge/dib/cfx_dibitmap.cpp
++++ b/core/fxge/dib/cfx_dibitmap.cpp
+@@ -6,6 +6,8 @@
+ 
+ #include "core/fxge/dib/cfx_dibitmap.h"
+ 
++#include <string.h>
++
+ #include <limits>
+ #include <memory>
+ #include <utility>
+diff --git a/core/fxge/dib/cfx_bitmapstorer.cpp b/core/fxge/dib/cfx_bitmapstorer.cpp
+index f57c00eaa..45a0a180c 100644
+--- a/core/fxge/dib/cfx_bitmapstorer.cpp
++++ b/core/fxge/dib/cfx_bitmapstorer.cpp
+@@ -6,6 +6,8 @@
+ 
+ #include "core/fxge/dib/cfx_bitmapstorer.h"
+ 
++#include <string.h>
++
+ #include <utility>
+ 
+ #include "core/fxge/dib/cfx_dibitmap.h"
+diff --git a/core/fxge/cfx_cliprgn.cpp b/core/fxge/cfx_cliprgn.cpp
+index 5369d522c..d198852e3 100644
+--- a/core/fxge/cfx_cliprgn.cpp
++++ b/core/fxge/cfx_cliprgn.cpp
+@@ -6,6 +6,8 @@
+ 
+ #include "core/fxge/cfx_cliprgn.h"
+ 
++#include <string.h>
++
+ #include <utility>
+ 
+ #include "core/fxge/dib/cfx_dibitmap.h"
+diff --git a/core/fxge/dib/cfx_scanlinecompositor.cpp b/core/fxge/dib/cfx_scanlinecompositor.cpp
+index e8362d708..c04c6dcab 100644
+--- a/core/fxge/dib/cfx_scanlinecompositor.cpp
++++ b/core/fxge/dib/cfx_scanlinecompositor.cpp
+@@ -6,6 +6,8 @@
+ 
+ #include "core/fxge/dib/cfx_scanlinecompositor.h"
+ 
++#include <string.h>
++
+ #include <algorithm>
+ 
+ #include "core/fxge/dib/fx_dib.h"
+diff --git a/core/fxge/dib/cfx_dibbase.cpp b/core/fxge/dib/cfx_dibbase.cpp
+index 4ec0ddbf9..a1de2fbec 100644
+--- a/core/fxge/dib/cfx_dibbase.cpp
++++ b/core/fxge/dib/cfx_dibbase.cpp
+@@ -6,6 +6,8 @@
+ 
+ #include "core/fxge/dib/cfx_dibbase.h"
+ 
++#include <string.h>
++
+ #include <algorithm>
+ #include <memory>
+ #include <utility>
+diff --git a/core/fxcodec/jpx/cjpx_decoder.cpp b/core/fxcodec/jpx/cjpx_decoder.cpp
+index c66985a7f..817f81dfa 100644
+--- a/core/fxcodec/jpx/cjpx_decoder.cpp
++++ b/core/fxcodec/jpx/cjpx_decoder.cpp
+@@ -71,7 +71,7 @@ Optional<OpjImageRgbData> alloc_rgb(size_t size) {
    if (!data.b)
-     return {};
+     return pdfium::nullopt;
  
 -  return data;
 +  return std::move(data);
