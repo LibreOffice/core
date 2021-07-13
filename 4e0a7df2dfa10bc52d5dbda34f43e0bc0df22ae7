@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff3357d2_f00f1ac9",
+        "filename": "svx/source/core/graphichelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 277,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2021-07-13T07:29:14Z",
+      "side": 0,
+      "message": "I hope this comment is obsolete with my patch - the used path is remembered via FileDialogHelper now.",
+      "range": {
+        "startLine": 277,
+        "startChar": 12,
+        "endLine": 277,
+        "endChar": 63
+      },
+      "revId": "4e0a7df2dfa10bc52d5dbda34f43e0bc0df22ae7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
