@@ -437,26 +437,27 @@ static bool lcl_XL_getExternalDoc( const sal_Unicode** ppErrRet, OUString& rExte
             switch (rInfo.Type)
             {
                 case sheet::ExternalLinkType::DOCUMENT :
+                {
+                    OUString aStr;
+                    if (!(rInfo.Data >>= aStr))
                     {
-                        OUString aStr;
-                        if (!(rInfo.Data >>= aStr))
-                        {
-                            SAL_INFO(
-                                "sc.core",
-                                "Data type mismatch for ExternalLinkInfo "
-                                    << i);
-                            *ppErrRet = nullptr;
-                            return false;
-                        }
-                        rExternDocName = aStr;
-                    }
-                    break;
-                    case sheet::ExternalLinkType::SELF :
-                        return false;   // ???
-                    case sheet::ExternalLinkType::SPECIAL :
-                        // silently return nothing (do not assert), caller has to handle this
+                        SAL_INFO(
+                            "sc.core",
+                            "Data type mismatch for ExternalLinkInfo "
+                                << i);
                         *ppErrRet = nullptr;
                         return false;
+                    }
+                    rExternDocName = aStr;
+                }
+                break;
+                case sheet::ExternalLinkType::SELF :
+                    return false;   // ???
+                break;
+                case sheet::ExternalLinkType::SPECIAL :
+                    // silently return nothing (do not assert), caller has to handle this
+                    *ppErrRet = nullptr;
+                    return false;
                 default:
                     SAL_INFO(
                         "sc.core",
