@@ -386,6 +386,9 @@ public:
     SwTwips GetTableLineHeight( bool& bLayoutAvailable ) const;
 
     bool hasSoftPageBreak() const;
+
+    // it doesn't contain box content
+    bool IsEmpty() const;
 };
 
 /// SwTableBox is one table cell in the document model.
