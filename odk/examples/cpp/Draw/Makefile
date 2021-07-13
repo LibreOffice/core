@@ -64,7 +64,7 @@ endif
 
 CppDrawExample : $(OUT_BIN)/Draw$(EXE_EXT)
 	@echo --------------------------------------------------------------------------------
-	@echo The example connects to the office server, create an empy documents and puts some
+	@echo The example connects to the office server, create an empty documents and puts some
 	@echo   shapes on it.
 	@echo -
 	@echo Use the following command to execute the example!

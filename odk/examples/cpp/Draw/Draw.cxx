@@ -133,7 +133,7 @@ Reference<XShape> createShape(Reference<XComponent> xDocComp, int height, int wi
     Point position;
     Reference<XShape> xShape;
 
-    // get the mutliservice factory
+    // get the multiservice factory
     Reference<XMultiServiceFactory> xDocMSF(xDocComp, UNO_QUERY);
 
     try
