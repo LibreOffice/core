@@ -210,9 +210,9 @@ public:
     }
 
     /// If grammar has an Excel syntax, determined by address convention.
-    static bool isExcelSyntax( const Grammar eGrammar )
+    static bool isExcelSyntax(const Grammar eGrammar)
     {
-        AddressConvention eConv = extractRefConvention( eGrammar );
+        AddressConvention eConv = extractRefConvention(eGrammar);
         switch (eConv)
         {
             case FormulaGrammar::AddressConvention::CONV_XL_A1:
