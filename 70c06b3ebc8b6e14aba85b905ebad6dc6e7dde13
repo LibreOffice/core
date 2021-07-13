@@ -16,6 +16,24 @@
       "revId": "70c06b3ebc8b6e14aba85b905ebad6dc6e7dde13",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "15466b30_d333fd3d",
+        "filename": "include/vcl/metaact.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 991,
+      "author": {
+        "id": 1003158
+      },
+      "writtenOn": "2021-07-13T12:36:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5d57efde_ecfda9fd",
+      "revId": "70c06b3ebc8b6e14aba85b905ebad6dc6e7dde13",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
