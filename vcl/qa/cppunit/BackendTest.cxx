@@ -982,6 +982,17 @@ public:
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
 
+    void testFilledAsymmetricalDropShape()
+    {
+        vcl::test::OutputDeviceTestPolygon aOutDevTest;
+        Bitmap aBitmap = aOutDevTest.setupFilledAsymmetricalDropShape();
+        vcl::test::TestResult eResult
+            = vcl::test::OutputDeviceTestLine::checkFilledAsymmetricalDropShape(aBitmap);
+        exportImage("19-01_filled_drop_shape-polygon.png", aBitmap);
+        if (SHOULD_ASSERT)
+            CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
+    }
+
     // Test SalGraphics::blendBitmap() and blendAlphaBitmap() calls.
     void testDrawBlendExtended()
     {
@@ -1216,6 +1227,8 @@ public:
 
     CPPUNIT_TEST(testClosedBezierWithPolyline);
     CPPUNIT_TEST(testClosedBezierWithPolygon);
+
+    CPPUNIT_TEST(testFilledAsymmetricalDropShape);
 
     CPPUNIT_TEST(testDrawBitmap);
     CPPUNIT_TEST(testDrawTransformedBitmap);

@@ -10,22 +10,22 @@
 
 #include <test/outputdevice.hxx>
 
-namespace vcl::test {
-
+namespace vcl::test
+{
 namespace
 {
-
-void drawPolygonOffset(OutputDevice& rDevice, tools::Rectangle const & rRect, int nOffset, int nFix = 0)
+void drawPolygonOffset(OutputDevice& rDevice, tools::Rectangle const& rRect, int nOffset,
+                       int nFix = 0)
 {
     // Note: According to https://lists.freedesktop.org/archives/libreoffice/2019-November/083709.html
     // filling polygons always skips the right-most and bottom-most pixels, in order to avoid
     // overlaps when drawing adjacent polygons. Specifying nFix = 1 allows to visually compensate
     // for this by making the polygon explicitly larger.
     tools::Polygon aPolygon(4);
-    aPolygon.SetPoint(Point(rRect.Left()  + nOffset, rRect.Top()    + nOffset), 0);
-    aPolygon.SetPoint(Point(rRect.Right() - nOffset + nFix, rRect.Top()    + nOffset), 1);
+    aPolygon.SetPoint(Point(rRect.Left() + nOffset, rRect.Top() + nOffset), 0);
+    aPolygon.SetPoint(Point(rRect.Right() - nOffset + nFix, rRect.Top() + nOffset), 1);
     aPolygon.SetPoint(Point(rRect.Right() - nOffset + nFix, rRect.Bottom() - nOffset + nFix), 2);
-    aPolygon.SetPoint(Point(rRect.Left()  + nOffset, rRect.Bottom() - nOffset + nFix), 3);
+    aPolygon.SetPoint(Point(rRect.Left() + nOffset, rRect.Bottom() - nOffset + nFix), 3);
     aPolygon.Optimize(PolyOptimizeFlags::CLOSE);
 
     rDevice.DrawPolygon(aPolygon);
@@ -50,7 +50,7 @@ Bitmap OutputDeviceTestPolygon::setupFilledRectangle(bool useLineColor)
 {
     initialSetup(13, 13, constBackgroundColor);
 
-    if(useLineColor)
+    if (useLineColor)
         mpVirtualDevice->SetLineColor(constLineColor);
     else
         mpVirtualDevice->SetLineColor();
@@ -68,7 +68,8 @@ Bitmap OutputDeviceTestPolygon::setupDiamond()
     mpVirtualDevice->SetFillColor();
 
     Point aPoint1, aPoint2, aPoint3, aPoint4;
-    OutputDeviceTestCommon::createDiamondPoints(maVDRectangle, 4, aPoint1, aPoint2, aPoint3, aPoint4);
+    OutputDeviceTestCommon::createDiamondPoints(maVDRectangle, 4, aPoint1, aPoint2, aPoint3,
+                                                aPoint4);
 
     tools::Polygon aPolygon(4);
 
@@ -95,9 +96,8 @@ Bitmap OutputDeviceTestPolygon::setupLines()
     Point aDiagonalLinePoint1, aDiagonalLinePoint2;
 
     OutputDeviceTestCommon::createHorizontalVerticalDiagonalLinePoints(
-                          maVDRectangle, aHorizontalLinePoint1, aHorizontalLinePoint2,
-                                         aVerticalLinePoint1,   aVerticalLinePoint2,
-                                         aDiagonalLinePoint1,   aDiagonalLinePoint2);
+        maVDRectangle, aHorizontalLinePoint1, aHorizontalLinePoint2, aVerticalLinePoint1,
+        aVerticalLinePoint2, aDiagonalLinePoint1, aDiagonalLinePoint2);
 
     tools::Polygon aHorizontalPolygon(2);
     aHorizontalPolygon.SetPoint(aHorizontalLinePoint1, 0);
@@ -130,9 +130,8 @@ Bitmap OutputDeviceTestPolygon::setupAALines()
     Point aDiagonalLinePoint1, aDiagonalLinePoint2;
 
     OutputDeviceTestCommon::createHorizontalVerticalDiagonalLinePoints(
-                          maVDRectangle, aHorizontalLinePoint1, aHorizontalLinePoint2,
-                                         aVerticalLinePoint1,   aVerticalLinePoint2,
-                                         aDiagonalLinePoint1,   aDiagonalLinePoint2);
+        maVDRectangle, aHorizontalLinePoint1, aHorizontalLinePoint2, aVerticalLinePoint1,
+        aVerticalLinePoint2, aDiagonalLinePoint1, aDiagonalLinePoint2);
 
     tools::Polygon aHorizontalPolygon(2);
     aHorizontalPolygon.SetPoint(aHorizontalLinePoint1, 0);
@@ -166,7 +165,7 @@ Bitmap OutputDeviceTestPolygon::setupDropShape()
 
 Bitmap OutputDeviceTestPolygon::setupAADropShape()
 {
-    initialSetup(21, 21, constBackgroundColor,true);
+    initialSetup(21, 21, constBackgroundColor, true);
 
     mpVirtualDevice->SetLineColor(constLineColor);
     mpVirtualDevice->SetFillColor();
@@ -197,6 +196,18 @@ Bitmap OutputDeviceTestPolygon::setupClosedBezier()
     mpVirtualDevice->SetFillColor();
 
     mpVirtualDevice->DrawPolyLine(OutputDeviceTestCommon::createClosedBezierLoop(maVDRectangle));
+
+    return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
+}
+
+Bitmap OutputDeviceTestPolygon::setupFilledAsymmetricalDropShape()
+{
+    initialSetup(21, 21, constBackgroundColor);
+
+    mpVirtualDevice->SetLineColor();
+    mpVirtualDevice->SetFillColor(constFillColor);
+
+    mpVirtualDevice->DrawPolygon(OutputDeviceTestCommon::createDropShapePolygon());
 
     return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
 }
