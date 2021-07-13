@@ -209,19 +209,25 @@ public:
             css::sheet::FormulaLanguage::OOXML;
     }
 
+    /// If convention is an Excel syntax convention.
+    static bool isExcelConvention(const AddressConvention eConv)
+    {
+        switch (eConv)
+        {
+        case FormulaGrammar::AddressConvention::CONV_XL_A1:
+        case FormulaGrammar::AddressConvention::CONV_XL_R1C1:
+        case FormulaGrammar::AddressConvention::CONV_XL_OOX:
+            return true;
+        default:
+            return false;
+        }
+    }
+
     /// If grammar has an Excel syntax, determined by address convention.
     static bool isExcelSyntax( const Grammar eGrammar )
     {
         AddressConvention eConv = extractRefConvention( eGrammar );
-        switch (eConv)
-        {
-            case FormulaGrammar::AddressConvention::CONV_XL_A1:
-            case FormulaGrammar::AddressConvention::CONV_XL_R1C1:
-            case FormulaGrammar::AddressConvention::CONV_XL_OOX:
-                return true;
-            default:
-                return false;
-        }
+        return isExcelConvention(eConv);
     }
 
 };
