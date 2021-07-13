@@ -3532,18 +3532,26 @@ bool ScCompiler::IsNamedRange( const OUString& rUpperName )
     }
 
     // Sheet-local name with sheet specified.
-    if (mnCurrentSheetEndPos > 0 && mnCurrentSheetTab >= 0)
+    if (mnCurrentSheetEndPos > 0 && mnCurrentSheetTab >= -1)
     {
+        // if mnCurrentSheetTab == -1 and mnCurrentSheetEndPos > 1,
+        // it means we have a global range name which came from an ooxml,
+        // where the original string looks like this: [0]!Global_range_name
         OUString aName( rUpperName.copy( mnCurrentSheetEndPos));
         pRangeName = rDoc.GetRangeName( mnCurrentSheetTab);
         if (pRangeName)
-        {
             pData = pRangeName->findByUpperName(aName);
-            if (pData)
-            {
-                maRawToken.SetName( mnCurrentSheetTab, pData->GetIndex());
-                return true;
-            }
+        if (!pData)
+        {
+            pRangeName = rDoc.GetRangeName();
+            if (pRangeName)
+                pData = pRangeName->findByUpperName(aName);
+        }
+
+        if (pData)
+        {
+            maRawToken.SetName(mnCurrentSheetTab, pData->GetIndex());
+            return true;
         }
     }
 
@@ -5275,7 +5283,8 @@ void ScCompiler::CreateStringFromIndex( OUStringBuffer& rBuffer, const FormulaTo
             if (pData)
             {
                 SCTAB nTab = _pTokenP->GetSheet();
-                if (nTab >= 0 && nTab != aPos.Tab())
+                bool bExcelConvention = FormulaGrammar::isExcelConvention(pConv->meConv);
+                if (nTab >= 0 && (nTab != aPos.Tab() || bExcelConvention))
                 {
                     // Sheet-local on other sheet.
                     OUString aName;
@@ -5288,6 +5297,13 @@ void ScCompiler::CreateStringFromIndex( OUStringBuffer& rBuffer, const FormulaTo
                         aBuffer.append(ScCompiler::GetNativeSymbol(ocErrName));
                     aBuffer.append( pConv->getSpecialSymbol( ScCompiler::Convention::SHEET_SEPARATOR));
                 }
+                else if (bExcelConvention)
+                {
+                    // For global names require an extra 'external file' ooxml prefix, which links to themselves.
+                    aBuffer.append("[0]");
+                    aBuffer.append(pConv->getSpecialSymbol(ScCompiler::Convention::SHEET_SEPARATOR));
+                }
+
                 aBuffer.append(pData->GetName());
             }
         }
