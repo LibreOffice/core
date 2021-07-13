@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2a147687_e3b43c1d",
+        "filename": "include/oox/export/drawingml.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 291,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-13T09:13:40Z",
+      "side": 1,
+      "message": "FTR:\n\nThe change had added the \u0027nElement\u0027 argument. Several issues with it:\n\n1. It is declared \u0027const\u0027 in the declaration, but non-const in the CXX. In C++, by-value const has no meaning *in function argument declaration*, and thus this passed; but generally, this is only a noise. On the other hand, having a by-value argument const *in the definition* is useful, to express intent to not modify the passed value, just as with other variables. So it is useful to write:\n\n  class foo{\n    void bar(int baz);\n  };\n  ...\n  void foo::bar(const int baz){ ... }\n\nso that the interface is clear and free of the \u0027const\u0027 noise, while implementation has the useful \u0027const\u0027. Indeed, this only relates to the passed value itself; referenced types must be consistent in declaration and definition (so const int\u0026, or const int*).\n\n2. The default value had been introduced, only to avoid changing a single use of the function in DrawingML::WriteParagraphProperties. This is not reasonable, and obfuscates the logic: it\u0027s more difficult later to see which element is used where (one needs to look for omitted default values, instead of seeing this explicitly in the code). Only use default values where the change would affect much of existing code, or where the benefit would be otherwise significant. Generally default values often make the code inconveniently difficult to understand.\n\nAddressed in https://gerrit.libreoffice.org/c/core/+/118796.",
+      "revId": "0f9dc676eefce79ea63218edd910af486a09a52b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
