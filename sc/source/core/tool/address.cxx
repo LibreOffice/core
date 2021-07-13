@@ -437,26 +437,38 @@ static bool lcl_XL_getExternalDoc( const sal_Unicode** ppErrRet, OUString& rExte
             switch (rInfo.Type)
             {
                 case sheet::ExternalLinkType::DOCUMENT :
+                {
+                    OUString aStr;
+                    if (!(rInfo.Data >>= aStr))
                     {
-                        OUString aStr;
-                        if (!(rInfo.Data >>= aStr))
-                        {
-                            SAL_INFO(
-                                "sc.core",
-                                "Data type mismatch for ExternalLinkInfo "
-                                    << i);
-                            *ppErrRet = nullptr;
-                            return false;
-                        }
-                        rExternDocName = aStr;
-                    }
-                    break;
-                    case sheet::ExternalLinkType::SELF :
-                        return false;   // ???
-                    case sheet::ExternalLinkType::SPECIAL :
-                        // silently return nothing (do not assert), caller has to handle this
+                        SAL_INFO(
+                            "sc.core",
+                            "Data type mismatch for ExternalLinkInfo "
+                                << i);
                         *ppErrRet = nullptr;
                         return false;
+                    }
+                    rExternDocName = aStr;
+                }
+                break;
+                case sheet::ExternalLinkType::SELF :
+                {
+                    // For handling the [0]!Global_range_name, where [0] is the external
+                    // doc's index, which points to itself and we do not need it later in
+                    // the ScCompiler::IsNamedRange.
+                    while (*(*ppErrRet) != '!')
+                    {
+                        ++(*ppErrRet);
+                    }
+                    ++(*ppErrRet);
+                    lcl_eatWhiteSpace(*ppErrRet);
+                    return false;
+                }
+                break;
+                case sheet::ExternalLinkType::SPECIAL :
+                    // silently return nothing (do not assert), caller has to handle this
+                    *ppErrRet = nullptr;
+                    return false;
                 default:
                     SAL_INFO(
                         "sc.core",
@@ -770,10 +782,20 @@ static ScRefFlags lcl_ScRange_Parse_XL_R1C1( ScRange& r,
             aEndTabName, nFlags, bOnlyAcceptSingle );
 
     ScRefFlags nBailOutFlags = ScRefFlags::ZERO;
-    if (pSheetEndPos && pStart < p && (nFlags & ScRefFlags::TAB_VALID) && (nFlags & ScRefFlags::TAB_3D))
+    if (pSheetEndPos && pStart < p)
     {
-        *pSheetEndPos = p - pStart;
-        nBailOutFlags = ScRefFlags::TAB_VALID | ScRefFlags::TAB_3D;
+        if (nFlags & ScRefFlags::TAB_VALID && nFlags & ScRefFlags::TAB_3D)
+        {
+            *pSheetEndPos = p - pStart;
+            nBailOutFlags = ScRefFlags::TAB_VALID | ScRefFlags::TAB_3D;
+        }
+        else if (CharClass::isAsciiNumeric(aExternDocName) && aExternDocName.toInt32() == 0)
+        {
+            // For handling the [0]!Global_range_name, where [0] is the external
+            // doc's index, which points to itself and we do not need it later in
+            // the ScCompiler::IsNamedRange.
+            *pSheetEndPos = p - pStart;
+        }
     }
 
     if (!aExternDocName.isEmpty())
@@ -995,10 +1017,20 @@ static ScRefFlags lcl_ScRange_Parse_XL_A1( ScRange& r,
             aEndTabName, nFlags, bOnlyAcceptSingle, pExternalLinks, pErrRef );
 
     ScRefFlags nBailOutFlags = ScRefFlags::ZERO;
-    if (pSheetEndPos && pStart < p && (nFlags & ScRefFlags::TAB_VALID) && (nFlags & ScRefFlags::TAB_3D))
+    if (pSheetEndPos && pStart < p)
     {
-        *pSheetEndPos = p - pStart;
-        nBailOutFlags = ScRefFlags::TAB_VALID | ScRefFlags::TAB_3D;
+        if (nFlags & ScRefFlags::TAB_VALID && nFlags & ScRefFlags::TAB_3D)
+        {
+            *pSheetEndPos = p - pStart;
+            nBailOutFlags = ScRefFlags::TAB_VALID | ScRefFlags::TAB_3D;
+        }
+        else if (CharClass::isAsciiNumeric(aExternDocName) && aExternDocName.toInt32() == 0)
+        {
+            // For handling the [0]!Global_range_name, where [0] is the external
+            // doc's index, which points to itself and we do not need it later in
+            // the ScCompiler::IsNamedRange.
+            *pSheetEndPos = p - pStart;
+        }
     }
 
     if (!aExternDocName.isEmpty())
