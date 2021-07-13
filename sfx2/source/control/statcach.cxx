@@ -41,6 +41,7 @@
 #include <unoctitm.hxx>
 #include <sfx2/msgpool.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <sal/log.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -144,7 +145,14 @@ void BindDispatch_Impl::Release()
 {
     if ( xDisp.is() )
     {
-        xDisp->removeStatusListener( static_cast<css::frame::XStatusListener*>(this), aURL );
+        try
+        {
+            xDisp->removeStatusListener(static_cast<css::frame::XStatusListener*>(this), aURL);
+        }
+        catch (const lang::DisposedException& rException)
+        {
+            SAL_WARN("sfx", "BindDispatch_Impl::Release: xDisp is disposed: " << rException);
+        }
         xDisp.clear();
     }
     pCache = nullptr;
