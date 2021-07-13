@@ -341,11 +341,6 @@ void SAL_CALL SwXTextDocument::release()noexcept
     SfxBaseModel::release();
 }
 
-Reference< XAdapter > SwXTextDocument::queryAdapter(  )
-{
-    return SfxBaseModel::queryAdapter();
-}
-
 Sequence< uno::Type > SAL_CALL SwXTextDocument::getTypes()
 {
     Sequence< uno::Type > aNumTypes;
@@ -370,7 +365,7 @@ Sequence< uno::Type > SAL_CALL SwXTextDocument::getTypes()
 }
 
 SwXTextDocument::SwXTextDocument(SwDocShell* pShell)
-    : SfxBaseModel(pShell)
+    : SwXTextDocumentBaseClass(pShell)
     , m_pImpl(new Impl)
     ,
     m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_DOCUMENT)),
