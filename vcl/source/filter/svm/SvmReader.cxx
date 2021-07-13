@@ -241,7 +241,7 @@ rtl::Reference<MetaAction> SvmReader::MetaActionHandler(ImplMetaReadData* pData)
             return GradientHandler();
             break;
         case MetaActionType::GRADIENTEX:
-            pAction = new MetaGradientExAction;
+            return GradientExHandler();
             break;
         case MetaActionType::HATCH:
             pAction = new MetaHatchAction;
@@ -1038,6 +1038,23 @@ rtl::Reference<MetaAction> SvmReader::GradientHandler()
 
     pAction->SetRect(aRect);
     pAction->SetGradient(aGradient);
+
+    return pAction;
+}
+
+rtl::Reference<MetaAction> SvmReader::GradientExHandler()
+{
+    auto pAction = new MetaGradientExAction();
+
+    VersionCompatRead aCompat(mrStream);
+    tools::PolyPolygon aPolyPoly;
+    ReadPolyPolygon(mrStream, aPolyPoly);
+    TypeSerializer aSerializer(mrStream);
+    Gradient aGradient;
+    aSerializer.readGradient(aGradient);
+
+    pAction->SetGradient(aGradient);
+    pAction->SetPolyPolygon(aPolyPoly);
 
     return pAction;
 }
