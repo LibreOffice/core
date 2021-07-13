@@ -48,7 +48,10 @@ public:
 
         // not a real address convention, a special case for INDIRECT function interpretation
         // only -> try using CONV_OOO, failing that CONV_XL_A1
-        CONV_A1_XL_A1
+        CONV_A1_XL_A1,
+        // not a real address convention, we handel the special cases of excel chart syntax at
+        // ooxml chart export, such as [0]!NameRanges, Sheet1!LocalSheetRangename
+        CONV_XL_OOX_CHART
     };
 
     //! CONV_UNSPECIFIED is a negative value!
@@ -143,6 +146,11 @@ public:
                                 ((CONV_XL_OOX        +
                                   kConventionOffset) << kConventionShift)       |
                                 kEnglishBit,
+        /// Special Excel Chart reference style.
+        GRAM_CHART_OOXML     = css::sheet::FormulaLanguage::OOXML               |
+                                ((CONV_XL_OOX_CHART  +
+                                  kConventionOffset) << kConventionShift)       |
+                                kEnglishBit,
         /// API English with A1 reference style, unbracketed.
         GRAM_API            = css::sheet::FormulaLanguage::API                  |
                                 ((CONV_OOO           +
@@ -231,10 +239,18 @@ public:
             case FormulaGrammar::AddressConvention::CONV_XL_A1:
             case FormulaGrammar::AddressConvention::CONV_XL_R1C1:
             case FormulaGrammar::AddressConvention::CONV_XL_OOX:
+            case FormulaGrammar::AddressConvention::CONV_XL_OOX_CHART:
                 return true;
             default:
                 return false;
         }
+    }
+
+    /// If grammar has an Chart Excel syntax, determined by address convention.
+    static bool isRefConventionChartOOXML( const Grammar eGrammar )
+    {
+        AddressConvention eConv = extractRefConvention(eGrammar);
+        return eConv == FormulaGrammar::AddressConvention::CONV_XL_OOX_CHART;
     }
 
 };

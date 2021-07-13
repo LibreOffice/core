@@ -389,7 +389,8 @@ ScCompiler::Convention::Convention( FormulaGrammar::AddressConvention eConv )
 /* \ */     // FREE
 /* ] */     t[93] = ScCharFlags::Char;
     }
-    else if (FormulaGrammar::CONV_XL_OOX == meConv)
+    else if (FormulaGrammar::CONV_XL_OOX == meConv ||
+             FormulaGrammar::CONV_XL_OOX_CHART == meConv)
     {
 /* [ */     t[91] = ScCharFlags::Char | ScCharFlags::CharIdent;
 /* \ */     // FREE
@@ -427,7 +428,7 @@ ScCompiler::Convention::Convention( FormulaGrammar::AddressConvention eConv )
 /* ~ */     t[126] = ScCharFlags::Char;        // OOo specific
 /* 127 */   // FREE
 
-    if( !(FormulaGrammar::CONV_XL_A1 == meConv || FormulaGrammar::CONV_XL_R1C1 == meConv || FormulaGrammar::CONV_XL_OOX == meConv) )
+    if( !(FormulaGrammar::CONV_XL_A1 == meConv || FormulaGrammar::CONV_XL_R1C1 == meConv || FormulaGrammar::CONV_XL_OOX == meConv || FormulaGrammar::CONV_XL_OOX_CHART == meConv) )
 return;
 
 /*   */     t[32] |=   ScCharFlags::Word;
@@ -1443,6 +1444,7 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
 struct ConventionXL_OOX : public ConventionXL_A1
 {
     ConventionXL_OOX() : ConventionXL_A1( FormulaGrammar::CONV_XL_OOX ) { }
+    explicit ConventionXL_OOX(FormulaGrammar::AddressConvention eConv) : ConventionXL_A1(eConv) { }
 
     virtual void makeRefStr( ScSheetLimits& rLimits,
                      OUStringBuffer&   rBuf,
@@ -1601,6 +1603,11 @@ struct ConventionXL_OOX : public ConventionXL_A1
     {
         rBuffer.append('[').append( static_cast<sal_Int32>(nFileId+1) ).append(']');
     }
+};
+
+struct ConventionXL_OOX_CHART : public ConventionXL_OOX
+{
+    ConventionXL_OOX_CHART() : ConventionXL_OOX(FormulaGrammar::CONV_XL_OOX_CHART) { }
 };
 
 }
@@ -2010,6 +2017,11 @@ const ScCompiler::Convention* ScCompiler::GetRefConvention( FormulaGrammar::Addr
             static const ConventionXL_OOX ConvXL_OOX;
             return &ConvXL_OOX;
         }
+        case FormulaGrammar::CONV_XL_OOX_CHART:
+        {
+            static const ConventionXL_OOX_CHART ConvXL_OOX_CHART;
+            return &ConvXL_OOX_CHART;
+        }
         case FormulaGrammar::CONV_UNSPECIFIED:
         default:
             ;
@@ -2244,6 +2256,18 @@ Label_MaskStateMachine:
                     if (c == '[' && FormulaGrammar::isExcelSyntax( meGrammar)
                             && eLastOp != ocDBArea && maTableRefs.empty())
                     {
+                        // [0]!Global_Range_Name, is a special case in OOXML
+                        // syntax, where the '0' is referencing to self and we
+                        // do not need it, so we should skip it, in order to
+                        // later it will be more recognisable for IsNamedRange.
+                        if (FormulaGrammar::isRefConventionOOXML(meGrammar) &&
+                                pSrc[0] == '0' && pSrc[1] == ']' && pSrc[2] == '!')
+                        {
+                            pSrc += 3;
+                            c = *pSrc;
+                            continue;
+                        }
+
                         nMask &= ~ScCharFlags::Char;
                         goto Label_MaskStateMachine;
                     }
@@ -5313,7 +5337,8 @@ void ScCompiler::CreateStringFromIndex( OUStringBuffer& rBuffer, const FormulaTo
             if (pData)
             {
                 SCTAB nTab = _pTokenP->GetSheet();
-                if (nTab >= 0 && nTab != aPos.Tab())
+                bool bIsSpecialOOXMLChartSyntax = FormulaGrammar::isRefConventionChartOOXML(meGrammar);
+                if (nTab >= 0 && (nTab != aPos.Tab() || bIsSpecialOOXMLChartSyntax))
                 {
                     // Sheet-local on other sheet.
                     OUString aName;
@@ -5325,6 +5350,11 @@ void ScCompiler::CreateStringFromIndex( OUStringBuffer& rBuffer, const FormulaTo
                     else
                         aBuffer.append(ScCompiler::GetNativeSymbol(ocErrName));
                     aBuffer.append( pConv->getSpecialSymbol( ScCompiler::Convention::SHEET_SEPARATOR));
+                }
+                else if (bIsSpecialOOXMLChartSyntax)
+                {
+                    aBuffer.append("[0]");
+                    aBuffer.append(pConv->getSpecialSymbol(ScCompiler::Convention::SHEET_SEPARATOR));
                 }
                 aBuffer.append(pData->GetName());
             }

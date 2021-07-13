@@ -65,7 +65,8 @@ const formula::FormulaGrammar::AddressConvention aConvMap[] = {
     formula::FormulaGrammar::CONV_XL_A1,      // <- AddressConvention::XL_A1
     formula::FormulaGrammar::CONV_XL_R1C1,    // <- AddressConvention::XL_R1C1
     formula::FormulaGrammar::CONV_XL_OOX,     // <- AddressConvention::XL_OOX
-    formula::FormulaGrammar::CONV_LOTUS_A1    // <- AddressConvention::LOTUS_A1
+    formula::FormulaGrammar::CONV_LOTUS_A1,   // <- AddressConvention::LOTUS_A1
+    formula::FormulaGrammar::CONV_XL_OOX_CHART// <- AddressConvention::XL_OOX_CHART
 };
 // sal_Int16 because of comparison of integer expressions below.
 constexpr sal_Int16 nConvMapCount = SAL_N_ELEMENTS(aConvMap);
@@ -111,8 +112,8 @@ void ScFormulaParserObj::SetCompilerFlags( ScCompiler& rCompiler ) const
         rCompiler.SetFormulaLanguage( mxOpCodeMap );
     else
     {
-        const sal_Int32 nFormulaLanguage = (eConv == formula::FormulaGrammar::CONV_XL_OOX ?
-                sheet::FormulaLanguage::OOXML :
+        const sal_Int32 nFormulaLanguage = (eConv == formula::FormulaGrammar::CONV_XL_OOX ||
+                eConv == formula::FormulaGrammar::CONV_XL_OOX_CHART ? sheet::FormulaLanguage::OOXML :
                 (mbEnglish ? sheet::FormulaLanguage::ENGLISH : sheet::FormulaLanguage::NATIVE));
         ScCompiler::OpCodeMapPtr xMap = rCompiler.GetOpCodeMap( nFormulaLanguage);
         rCompiler.SetFormulaLanguage( xMap);
