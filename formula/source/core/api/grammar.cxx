@@ -57,6 +57,7 @@ bool FormulaGrammar::isSupported( const Grammar eGrammar )
         case GRAM_ENGLISH_XL_R1C1:
         case GRAM_ENGLISH_XL_OOX :
         case GRAM_OOXML          :
+        case GRAM_CHART_OOXML    :
         case GRAM_API            :
             return true;
         default:

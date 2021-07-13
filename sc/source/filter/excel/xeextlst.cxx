@@ -574,6 +574,7 @@ XclExpExtCalcPr::XclExpExtCalcPr( const XclExpRoot& rRoot, formula::FormulaGramm
         case formula::FormulaGrammar::CONV_UNSPECIFIED:
         case formula::FormulaGrammar::CONV_ODF:
         case formula::FormulaGrammar::CONV_XL_OOX:
+        case formula::FormulaGrammar::CONV_XL_OOX_CHART:
         case formula::FormulaGrammar::CONV_LOTUS_A1:
         case formula::FormulaGrammar::CONV_LAST:
             maSyntax = OString("Unspecified");
