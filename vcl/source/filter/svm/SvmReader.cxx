@@ -244,7 +244,7 @@ rtl::Reference<MetaAction> SvmReader::MetaActionHandler(ImplMetaReadData* pData)
             return GradientExHandler();
             break;
         case MetaActionType::HATCH:
-            pAction = new MetaHatchAction;
+            return HatchHandler();
             break;
         case MetaActionType::WALLPAPER:
             pAction = new MetaWallpaperAction;
@@ -1059,6 +1059,22 @@ rtl::Reference<MetaAction> SvmReader::GradientExHandler()
 
     pAction->SetGradient(aGradient);
     pAction->SetPolyPolygon(aPolyPoly);
+
+    return pAction;
+}
+
+rtl::Reference<MetaAction> SvmReader::HatchHandler()
+{
+    auto pAction = new MetaHatchAction();
+
+    VersionCompatRead aCompat(mrStream);
+    tools::PolyPolygon aPolyPoly;
+    ReadPolyPolygon(mrStream, aPolyPoly);
+    Hatch aHatch;
+    ReadHatch(mrStream, aHatch);
+
+    pAction->SetPolyPolygon(aPolyPoly);
+    pAction->SetHatch(aHatch);
 
     return pAction;
 }
