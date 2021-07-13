@@ -215,6 +215,7 @@ Try:
 		.MsgStr = MsgStr
 	End With
 	_Dictionary.Add(sKey, vItem)
+	bAdd = True
 
 Finally:
 	AddText = bAdd
