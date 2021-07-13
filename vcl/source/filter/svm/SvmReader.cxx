@@ -232,7 +232,7 @@ rtl::Reference<MetaAction> SvmReader::MetaActionHandler(ImplMetaReadData* pData)
             return MaskHandler();
             break;
         case MetaActionType::MASKSCALE:
-            pAction = new MetaMaskScaleAction;
+            return MaskScaleHandler();
             break;
         case MetaActionType::MASKSCALEPART:
             pAction = new MetaMaskScalePartAction;
@@ -975,6 +975,26 @@ rtl::Reference<MetaAction> SvmReader::MaskHandler()
 
     pAction->SetBitmap(aBmp);
     pAction->SetPoint(aPoint);
+
+    return pAction;
+}
+
+rtl::Reference<MetaAction> SvmReader::MaskScaleHandler()
+{
+    auto pAction = new MetaMaskScaleAction();
+
+    VersionCompatRead aCompat(mrStream);
+    Bitmap aBmp;
+    ReadDIB(aBmp, mrStream, true);
+    TypeSerializer aSerializer(mrStream);
+    Point aPoint;
+    aSerializer.readPoint(aPoint);
+    Size aSize;
+    aSerializer.readSize(aSize);
+
+    pAction->SetBitmap(aBmp);
+    pAction->SetPoint(aPoint);
+    pAction->SetSize(aSize);
 
     return pAction;
 }
