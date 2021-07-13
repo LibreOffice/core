@@ -2229,7 +2229,7 @@ void FileDialogHelper_Impl::loadConfig()
         }
 
         if ( maPath.isEmpty() )
-            displayFolder( SvtPathOptions().GetGraphicPath() );
+            displayFolder( SvtPathOptions().GetWorkPath() );
     }
     else
     {
