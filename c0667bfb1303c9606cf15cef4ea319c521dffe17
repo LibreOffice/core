@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c945f9bf_a759f5f5",
+        "filename": "framework/source/dispatch/interceptionhelper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-07-13T11:05:06Z",
+      "side": 1,
+      "message": "xSlaveI is disposed?",
+      "revId": "c0667bfb1303c9606cf15cef4ea319c521dffe17",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
