@@ -43,6 +43,7 @@ ScImportOptions::ScImportOptions( const OUString& rStr )
     bSaveNumberAsSuch = true;
     bSaveFormulas = false;
     bRemoveSpace = false;
+    bNewFilePerSheet = false;
     sal_Int32 nTokenCount = comphelper::string::getTokenCount(rStr, ',');
     if ( nTokenCount < 3 )
         return;
@@ -77,6 +78,8 @@ ScImportOptions::ScImportOptions( const OUString& rStr )
             bSaveFormulas = rStr.getToken(0, ',', nIdx) == "true";
         if ( nTokenCount >= 11 )
             bRemoveSpace = rStr.getToken(0, ',', nIdx) == "true";
+        if ( nTokenCount >= 12 )
+            bNewFilePerSheet = rStr.getToken(0, ',', nIdx) == "-1";
     }
 }
 
@@ -99,7 +102,9 @@ OUString ScImportOptions::BuildString() const
             "," +
             OUString::boolean( bSaveFormulas ) +  // "save formulas": not in ScAsciiOptions
             "," +
-            OUString::boolean( bRemoveSpace );    // same as "Remove space" in ScAsciiOptions
+            OUString::boolean( bRemoveSpace ) +  // same as "Remove space" in ScAsciiOptions
+            "," +
+            std::u16string_view(bNewFilePerSheet ? u"-1" : u"0") ;  // Only available for command line --convert-to
 
     return aResult;
 }
