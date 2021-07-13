@@ -89,6 +89,7 @@ public:
     static TestResult checkDropShape(Bitmap& rBitmap);
     static TestResult checkHalfEllipse(Bitmap& rBitmap);
     static TestResult checkClosedBezier(Bitmap& rBitmap);
+    static TestResult checkFilledAsymmetricalDropShape(Bitmap& rBitmap);
 private:
     static TestResult checkLineCap(Bitmap& rBitmap, css::drawing::LineCap lineCap);
     static TestResult checkLineJoin(Bitmap& rBitmap, basegfx::B2DLineJoin lineJoin);
@@ -209,6 +210,7 @@ public:
     Bitmap setupAADropShape();
     Bitmap setupEllipse();
     Bitmap setupClosedBezier();
+    Bitmap setupFilledAsymmetricalDropShape();
 };
 
 class VCL_DLLPUBLIC OutputDeviceTestPolyPolygon : public OutputDeviceTestCommon
