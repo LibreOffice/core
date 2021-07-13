@@ -20,8 +20,12 @@
 #include <dispatch/interceptionhelper.hxx>
 
 #include <com/sun/star/frame/XInterceptorInfo.hpp>
+#include <com/sun/star/lang/DisposedException.hpp>
 #include <osl/diagnose.h>
 #include <vcl/svapp.hxx>
+#include <tools/diagnose_ex.h>
+
+using namespace com::sun::star;
 
 namespace framework{
 
@@ -185,7 +189,18 @@ void SAL_CALL InterceptionHelper::releaseDispatchProviderInterceptor(const css::
             xMasterI->setSlaveDispatchProvider(xSlaveD);
 
         if (xSlaveI.is())
-            xSlaveI->setMasterDispatchProvider(xMasterD);
+        {
+            try
+            {
+                xSlaveI->setMasterDispatchProvider(xMasterD);
+            }
+            catch (const lang::DisposedException&)
+            {
+                TOOLS_WARN_EXCEPTION("fwk.dispatch",
+                                     "InterceptionHelper::releaseDispatchProviderInterceptor: "
+                                     "xSlaveI is disposed: ");
+            }
+        }
 
         xInterceptor->setSlaveDispatchProvider (css::uno::Reference< css::frame::XDispatchProvider >());
         xInterceptor->setMasterDispatchProvider(css::uno::Reference< css::frame::XDispatchProvider >());
