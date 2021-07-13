@@ -110,4 +110,9 @@ public:
     std::vector<VclTestResult>& getTestResults();
     OUString getResultString();
     void run(bool storeResultBitmap = false);
+
+    GraphicsRenderTests()
+        : m_aStoreResultantBitmap(false)
+    {
+    }
 };
