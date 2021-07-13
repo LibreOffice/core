@@ -308,12 +308,23 @@ def main(argv):
                     help='Don\'t stop on errors. Useful for periodic re-check of large amount of files')
     parser.add_argument('Files' , nargs='*',
                     help='The files to be checked')
+    parser.add_argument('--recursive', metavar='DIR', nargs=1, type=str,
+                    help='Recursively search a directory for source files to check')
 
     args = parser.parse_args()
 
     if not len(argv):
         parser.print_help()
         return
+
+    list_of_files = []
+    if args.recursive:
+        for root, dirs, files in os.walk(args.recursive[0]):
+               for file in files:
+                   if (file.endswith(".cxx") or file.endswith(".hxx") or file.endswith(".hrc") or file.endswith(".h") or file.endswith(".c")):
+                        list_of_files.append(os.path.join(root,file))
+    else:
+        list_of_files = args.Files
 
     try:
         with open("compile_commands.json", 'r') as compileCommandsSock:
@@ -322,7 +333,7 @@ def main(argv):
         print ("File 'compile_commands.json' does not exist, please run:\nmake vim-ide-integration")
         sys.exit(-1)
 
-    tidy(compileCommands, paths=args.Files, dontstop=args.dontstop)
+    tidy(compileCommands, paths=list_of_files, dontstop=args.dontstop)
 
 if __name__ == '__main__':
     main(sys.argv[1:])
