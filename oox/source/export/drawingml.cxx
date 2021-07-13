@@ -3002,7 +3002,7 @@ void DrawingML::WriteParagraph( const Reference< XTextContent >& rParagraph,
                 Reference< XPropertySetInfo > xFirstRunPropSetInfo = xFirstRunPropSet->getPropertySetInfo();
                 if( xFirstRunPropSetInfo->hasPropertyByName("CharHeight") )
                     fFirstCharHeight = xFirstRunPropSet->getPropertyValue("CharHeight").get<float>();
-                WriteParagraphProperties( rParagraph, fFirstCharHeight );
+                WriteParagraphProperties(rParagraph, fFirstCharHeight, XML_pPr);
                 bPropertiesWritten = true;
             }
             WriteRun( run, rbOverridingCharHeight, rnCharHeight, rXShapePropSet);
