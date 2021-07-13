@@ -1031,6 +1031,12 @@ public:
     const Size&         GetDestSize() const { return maDstSz; }
     const Point&        GetSrcPoint() const { return maSrcPt; }
     const Size&         GetSrcSize() const { return maSrcSz; }
+    void                SetBitmap(Bitmap& rBmp) { maBmp = rBmp; }
+    void                SetColor(Color& rColor) { maColor = rColor; }
+    void                SetDestPoint(Point& rPt) { maDstPt = rPt; }
+    void                SetDestSize(Size& rSz) { maDstSz = rSz; }
+    void                SetSrcPoint(Point& rPt) { maSrcPt = rPt; }
+    void                SetSrcSize(Size& rSz) { maSrcSz = rSz; }
 };
 
 class SAL_DLLPUBLIC_RTTI MetaGradientAction final : public MetaAction
