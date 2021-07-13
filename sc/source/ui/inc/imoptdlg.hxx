@@ -31,7 +31,8 @@ public:
         ScImportOptions( sal_Unicode nFieldSep, sal_Unicode nTextSep, rtl_TextEncoding nEnc )
             : nFieldSepCode(nFieldSep), nTextSepCode(nTextSep),
             bFixedWidth(false), bSaveAsShown(false), bQuoteAllText(false),
-            bSaveNumberAsSuch(true), bSaveFormulas(false), bRemoveSpace(false)
+            bSaveNumberAsSuch(true), bSaveFormulas(false), bRemoveSpace(false),
+            bNewFilePerSheet(false)
         { SetTextEncoding( nEnc ); }
 
     ScImportOptions& operator=( const ScImportOptions& rCpy ) = default;
@@ -50,6 +51,9 @@ public:
     bool        bSaveNumberAsSuch;
     bool        bSaveFormulas;
     bool        bRemoveSpace;
+    // currently only "0" for 'current sheet' and "-1" for all sheets (each to
+    // a separate file) are options
+    bool        bNewFilePerSheet;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

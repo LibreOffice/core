@@ -227,7 +227,7 @@ public:
 
     ScDrawLayer*    MakeDrawLayer();
 
-    void            AsciiSave( SvStream& rStream, const ScImportOptions& rOpt );
+    void            AsciiSave( SvStream& rStream, const ScImportOptions& rOpt, SCTAB nTab );
 
     void            Execute( SfxRequest& rReq );
     void            GetState( SfxItemSet &rSet );
