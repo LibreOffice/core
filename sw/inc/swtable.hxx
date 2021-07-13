@@ -387,6 +387,9 @@ public:
 
     bool hasSoftPageBreak() const;
     void RegisterToFormat( SwFormat& rFormat );
+
+    // it doesn't contain box content
+    bool IsEmpty() const;
 };
 
 /// SwTableBox is one table cell in the document model.
