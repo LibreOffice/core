@@ -90,8 +90,9 @@ namespace com::sun::star::uno { class XAggregation; }
 
 namespace com::sun::star::util { class XReplaceDescriptor; }
 
-typedef cppu::WeakImplHelper
+typedef cppu::ImplInheritanceHelper
 <
+    SfxBaseModel,
     css::text::XTextDocument,
     css::text::XLineNumberingProperties,
     css::text::XChapterNumberingSupplier,
@@ -131,7 +132,6 @@ SwXTextDocumentBaseClass;
 
 class SW_DLLPUBLIC SwXTextDocument final : public SwXTextDocumentBaseClass,
     public SvxFmMSFactory,
-    public SfxBaseModel,
     public vcl::ITiledRenderable,
     public css::tiledrendering::XTiledRenderable
 {
@@ -216,8 +216,6 @@ public:
     virtual void SAL_CALL release(  ) noexcept override;
 
     //XWeak
-    virtual css::uno::Reference< css::uno::XAdapter > SAL_CALL queryAdapter(  ) override;
-
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
 
     static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId();
