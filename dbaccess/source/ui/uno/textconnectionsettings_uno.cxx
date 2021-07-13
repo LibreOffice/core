@@ -32,6 +32,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/svapp.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <cppuhelper/implbase1.hxx>
 
 namespace dbaui
 {
@@ -64,7 +65,6 @@ namespace dbaui
     class OTextConnectionSettingsDialog
             :public OTextConnectionSettingsDialog_BASE
             ,public OTextConnectionSettingsDialog_PBASE
-            ,public ::cppu::WeakImplHelper< css::sdb::XTextConnectionSettings >
     {
         PropertyValues  m_aPropertyValues;
 
