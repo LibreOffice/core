@@ -66,7 +66,8 @@ ScFormulaParserObj::ScFormulaParserObj(ScDocShell* pDocSh) :
     mnConv( sheet::AddressConvention::UNSPECIFIED ),
     mbEnglish( false ),
     mbIgnoreSpaces( true ),
-    mbCompileFAP( false )
+    mbCompileFAP( false ),
+    mbRefConventionChartOOXML( false )
 {
     mpDocShell->GetDocument().AddUnoObject(*this);
 }
@@ -119,7 +120,8 @@ void ScFormulaParserObj::SetCompilerFlags( ScCompiler& rCompiler ) const
     rCompiler.EnableJumpCommandReorder(!mbCompileFAP);
     rCompiler.EnableStopOnError(!mbCompileFAP);
 
-    rCompiler.SetExternalLinks( maExternalLinks);
+    rCompiler.SetExternalLinks(maExternalLinks);
+    rCompiler.SetRefConventionChartOOXML(mbRefConventionChartOOXML);
 }
 
 uno::Sequence<sheet::FormulaToken> SAL_CALL ScFormulaParserObj::parseFormula(
@@ -226,6 +228,11 @@ void SAL_CALL ScFormulaParserObj::setPropertyValue(
         if (!(aValue >>= maExternalLinks))
             throw lang::IllegalArgumentException();
     }
+    else if ( aPropertyName == SC_UNO_REF_CONV_CHARTOOXML )
+    {
+        if (!(aValue >>= mbRefConventionChartOOXML))
+            throw lang::IllegalArgumentException();
+    }
     else
         throw beans::UnknownPropertyException(aPropertyName);
 }
@@ -257,6 +264,10 @@ uno::Any SAL_CALL ScFormulaParserObj::getPropertyValue( const OUString& aPropert
     else if ( aPropertyName == SC_UNO_EXTERNALLINKS )
     {
         aRet <<= maExternalLinks;
+    }
+    else if ( aPropertyName == SC_UNO_REF_CONV_CHARTOOXML )
+    {
+        aRet <<= mbRefConventionChartOOXML;
     }
     else
         throw beans::UnknownPropertyException(aPropertyName);

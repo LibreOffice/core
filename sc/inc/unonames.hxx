@@ -671,6 +671,7 @@
 #define SC_UNO_OPCODEMAP            "OpCodeMap"
 #define SC_UNO_EXTERNALLINKS        "ExternalLinks"
 #define SC_UNO_COMPILEFAP           "CompileFAP"
+#define SC_UNO_REF_CONV_CHARTOOXML  "RefConventionChartOOXML"
 
 // Chart2
 #define SC_UNONAME_ROLE                 "Role"

@@ -186,6 +186,7 @@ public:
     void testTdf138181();
     void testCustomShapeText();
     void testuserShapesXLSX();
+    void testNameRangeXLSX();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(testErrorBarXLSX);
@@ -334,6 +335,7 @@ public:
     CPPUNIT_TEST(testTdf138181);
     CPPUNIT_TEST(testCustomShapeText);
     CPPUNIT_TEST(testuserShapesXLSX);
+    CPPUNIT_TEST(testNameRangeXLSX);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -3084,6 +3086,21 @@ void Chart2ExportTest::testuserShapesXLSX()
     // test custom shape text
     Reference< text::XText > xRange(xCustomShape, uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT(!xRange->getString().isEmpty());
+}
+
+void Chart2ExportTest2::testNameRangeXLSX()
+{
+    load(u"/chart2/qa/extras/data/xlsx/", "chart_with_name_range.xlsx");
+    xmlDocUniquePtr pXmlDoc = parseExport("xl/charts/chart", "Calc Office Open XML");
+    CPPUNIT_ASSERT(pXmlDoc);
+    // test the syntax of local range name on the the local sheet.
+    assertXPathContent(pXmlDoc,
+        "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser/c:cat/c:strRef/c:f",
+        "Sheet1!local_name_range");
+    // test the syntax of a global range name.
+    assertXPathContent(pXmlDoc,
+        "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser/c:val/c:numRef/c:f",
+        "[0]!series1");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest);
