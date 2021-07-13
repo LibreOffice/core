@@ -181,10 +181,12 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf100582)
     goToCell("C10");
 
     dispatchCommand(mxComponent, ".uno:Copy", {});
+    Scheduler::ProcessEventsToIdle();
 
     goToCell("C10:H14");
 
     dispatchCommand(mxComponent, ".uno:Paste", {});
+    Scheduler::ProcessEventsToIdle();
 
     pModelObj = saveAndReload(mxComponent, "MS Excel 97");
     pDoc = pModelObj->GetDocument();
@@ -263,10 +265,12 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf92963)
     goToCell("A3:C4");
 
     dispatchCommand(mxComponent, ".uno:Copy", {});
+    Scheduler::ProcessEventsToIdle();
 
     goToCell("A1:C1");
 
     dispatchCommand(mxComponent, ".uno:Paste", {});
+    Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(size_t(2), pList->size());
 
@@ -380,10 +384,12 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf120660)
     goToCell("A8:E8");
 
     dispatchCommand(mxComponent, ".uno:Copy", {});
+    Scheduler::ProcessEventsToIdle();
 
     goToCell("A4:E4");
 
     dispatchCommand(mxComponent, ".uno:Paste", {});
+    Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(1200.0, pDoc->GetValue(ScAddress(4, 3, 0)));
     CPPUNIT_ASSERT_EQUAL(-100.0, pDoc->GetValue(ScAddress(4, 7, 0)));
@@ -396,10 +402,12 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf120660)
     goToCell("A8:D8");
 
     dispatchCommand(mxComponent, ".uno:Copy", {});
+    Scheduler::ProcessEventsToIdle();
 
     goToCell("A4:D4");
 
     dispatchCommand(mxComponent, ".uno:Paste", {});
+    Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(1200.0, pDoc->GetValue(ScAddress(4, 3, 0)));
 
@@ -445,6 +453,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf117706)
     Scheduler::ProcessEventsToIdle();
 
     dispatchCommand(mxComponent, ".uno:Copy", {});
+    Scheduler::ProcessEventsToIdle();
 
     mxComponent->dispose();
 
@@ -456,6 +465,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf117706)
     CPPUNIT_ASSERT(pDoc);
 
     dispatchCommand(mxComponent, ".uno:Paste", {});
+    Scheduler::ProcessEventsToIdle();
 
     // Without the fix in place, this test would have failed with
     // - Expected: A1
@@ -493,6 +503,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testMultiRangeCol)
     Scheduler::ProcessEventsToIdle();
 
     dispatchCommand(mxComponent, ".uno:Copy", {});
+    Scheduler::ProcessEventsToIdle();
 
     mxComponent->dispose();
 
@@ -504,6 +515,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testMultiRangeCol)
     CPPUNIT_ASSERT(pDoc);
 
     dispatchCommand(mxComponent, ".uno:Paste", {});
+    Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(OUString("A1"), pDoc->GetString(ScAddress(0, 0, 0)));
     CPPUNIT_ASSERT_EQUAL(OUString("C1"), pDoc->GetString(ScAddress(1, 0, 0)));
@@ -544,6 +556,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testPasteTransposed)
     goToCell("A1:A3");
 
     dispatchCommand(mxComponent, ".uno:Copy", {});
+    Scheduler::ProcessEventsToIdle();
 
     mxComponent->dispose();
 
@@ -555,6 +568,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testPasteTransposed)
     CPPUNIT_ASSERT(pDoc);
 
     dispatchCommand(mxComponent, ".uno:PasteTransposed", {});
+    Scheduler::ProcessEventsToIdle();
 
     OUString aFormula;
     CPPUNIT_ASSERT_EQUAL(OUString("1"), pDoc->GetString(0, 0, 0)); // A1
@@ -607,10 +621,12 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testPasteAsLink)
     goToCell("A1:A3");
 
     dispatchCommand(mxComponent, ".uno:Copy", {});
+    Scheduler::ProcessEventsToIdle();
 
     goToCell("C1");
 
     dispatchCommand(mxComponent, ".uno:PasteAsLink", {});
+    Scheduler::ProcessEventsToIdle();
 
     OUString aFormula;
     pDoc->GetFormula(2, 0, 0, aFormula);
@@ -752,10 +768,12 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf108654)
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
 
     dispatchCommand(mxComponent, ".uno:Copy", {});
+    Scheduler::ProcessEventsToIdle();
 
     insertNewSheet(*pDoc);
 
     dispatchCommand(mxComponent, ".uno:Paste", {});
+    Scheduler::ProcessEventsToIdle();
 
     OUString aFormula;
     pDoc->GetFormula(3, 126, 1, aFormula);
@@ -783,6 +801,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf133326)
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
 
     dispatchCommand(mxComponent, ".uno:Copy", {});
+    Scheduler::ProcessEventsToIdle();
 
     insertNewSheet(*pDoc);
 
@@ -791,6 +810,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf133326)
     CPPUNIT_ASSERT_EQUAL(OUString(""), aFormula);
 
     dispatchCommand(mxComponent, ".uno:Paste", {});
+    Scheduler::ProcessEventsToIdle();
 
     pDoc->GetFormula(0, 0, 1, aFormula);
     CPPUNIT_ASSERT_EQUAL(OUString("=RAND()*1000000"), aFormula);
@@ -837,7 +857,9 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf126685)
     CPPUNIT_ASSERT_EQUAL(
         OUString("Control Height will change from 0.65 to 0.61 cm with 120dpi ..."),
         pDoc->GetString(ScAddress(3, 1, 1)));
+
     dispatchCommand(mxComponent, ".uno:Cut", {});
+    Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(OUString(""), pDoc->GetString(ScAddress(3, 1, 1)));
 }
@@ -1073,6 +1095,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf124822)
     Scheduler::ProcessEventsToIdle();
 
     dispatchCommand(mxComponent, ".uno:Cut", {});
+    Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(OUString(""), pDoc->GetString(ScAddress(0, 0, 2)));
 
@@ -1093,6 +1116,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf118189)
     goToCell("A:A");
 
     dispatchCommand(mxComponent, ".uno:Copy", {});
+    Scheduler::ProcessEventsToIdle();
 
     mxComponent->dispose();
 
@@ -1104,12 +1128,14 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf118189)
     CPPUNIT_ASSERT(pDoc);
 
     dispatchCommand(mxComponent, ".uno:Paste", {});
+    Scheduler::ProcessEventsToIdle();
 
     OUString aFormula;
     pDoc->GetFormula(0, 77, 0, aFormula);
     CPPUNIT_ASSERT_EQUAL(OUString("=FALSE()"), aFormula);
 
     dispatchCommand(mxComponent, ".uno:Cut", {});
+    Scheduler::ProcessEventsToIdle();
 
     pDoc->GetFormula(0, 77, 0, aFormula);
     CPPUNIT_ASSERT_EQUAL(OUString(""), aFormula);
@@ -1144,6 +1170,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf118207)
     CPPUNIT_ASSERT_EQUAL(OUString("=FALSE()"), aFormula);
 
     dispatchCommand(mxComponent, ".uno:Cut", {});
+    Scheduler::ProcessEventsToIdle();
 
     pDoc->GetFormula(0, 77, 0, aFormula);
     CPPUNIT_ASSERT_EQUAL(OUString(""), aFormula);
@@ -1152,11 +1179,13 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf118207)
     goToCell("B:B");
 
     dispatchCommand(mxComponent, ".uno:Paste", {});
+    Scheduler::ProcessEventsToIdle();
 
     pDoc->GetFormula(1, 77, 0, aFormula);
     CPPUNIT_ASSERT_EQUAL(OUString("=FALSE()"), aFormula);
 
     dispatchCommand(mxComponent, ".uno:Paste", {});
+    Scheduler::ProcessEventsToIdle();
 
     pDoc->GetFormula(1, 77, 0, aFormula);
     CPPUNIT_ASSERT_EQUAL(OUString("=FALSE()"), aFormula);
@@ -1234,11 +1263,13 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf138428)
     CPPUNIT_ASSERT_MESSAGE("There shouldn't be a note on B1", !pDoc->HasNote(ScAddress(1, 0, 0)));
 
     dispatchCommand(mxComponent, ".uno:Copy", {});
+    Scheduler::ProcessEventsToIdle();
 
     dispatchCommand(mxComponent, ".uno:GoRight", {});
     lcl_AssertCurrentCursorPosition(1, 0);
 
     dispatchCommand(mxComponent, ".uno:Paste", {});
+    Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_MESSAGE("There should be a note on A1", pDoc->HasNote(ScAddress(0, 0, 0)));
     CPPUNIT_ASSERT_MESSAGE("There should be a note on B1", pDoc->HasNote(ScAddress(1, 0, 0)));
