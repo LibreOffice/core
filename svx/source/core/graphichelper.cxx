@@ -217,19 +217,12 @@ bool lcl_ExecuteFilterDialog( const Sequence< PropertyValue >& rPropsForDialog,
 
 OUString GraphicHelper::ExportGraphic(weld::Window* pParent, const Graphic& rGraphic, const OUString& rGraphicName)
 {
-    SvtPathOptions aPathOpt;
-    OUString sGraphicsPath( aPathOpt.GetGraphicPath() );
-
     FileDialogHelper aDialogHelper(TemplateDescription::FILESAVE_AUTOEXTENSION, FileDialogFlags::NONE, pParent);
     Reference < XFilePicker3 > xFilePicker = aDialogHelper.GetFilePicker();
-
-    INetURLObject aPath;
-    aPath.SetSmartURL( sGraphicsPath );
 
     // fish out the graphic's name
     aDialogHelper.SetContext(FileDialogHelper::ExportImage);
     aDialogHelper.SetTitle( SvxResId(RID_SVXSTR_EXPORT_GRAPHIC_TITLE));
-    aDialogHelper.SetDisplayDirectory( aPath.GetMainURL(INetURLObject::DecodeMechanism::ToIUri) );
     INetURLObject aURL;
     aURL.SetSmartURL( rGraphicName );
     aDialogHelper.SetFileName(aURL.GetLastName());
@@ -274,10 +267,6 @@ OUString GraphicHelper::ExportGraphic(weld::Window* pParent, const Graphic& rGra
         if( aDialogHelper.Execute() == ERRCODE_NONE )
         {
             OUString sPath( xFilePicker->getFiles().getConstArray()[0] );
-            // remember used path - please don't optimize away!
-            aPath.SetSmartURL( sPath);
-            sGraphicsPath = aPath.GetPath();
-
             if( !rGraphicName.isEmpty() &&
                 nDefaultFilter == rGraphicFilter.GetExportFormatNumber( xFilePicker->getCurrentFilter()))
             {
@@ -383,17 +372,10 @@ void GraphicHelper::SaveShapeAsGraphic(weld::Window* pParent,  const Reference< 
         Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
         Reference< XPropertySet > xShapeSet( xShape, UNO_QUERY_THROW );
 
-        SvtPathOptions aPathOpt;
-        const OUString& sGraphicPath( aPathOpt.GetGraphicPath() );
-
         FileDialogHelper aDialogHelper(TemplateDescription::FILESAVE_AUTOEXTENSION, FileDialogFlags::NONE, pParent);
         Reference < XFilePicker3 > xFilePicker = aDialogHelper.GetFilePicker();
-
+        aDialogHelper.SetContext(FileDialogHelper::ExportImage);
         aDialogHelper.SetTitle( SvxResId(RID_SVXSTR_SAVEAS_IMAGE) );
-
-        INetURLObject aPath;
-        aPath.SetSmartURL( sGraphicPath );
-        xFilePicker->setDisplayDirectory( aPath.GetMainURL(INetURLObject::DecodeMechanism::ToIUri) );
 
         // populate filter dialog filter list and select default filter to match graphic mime type
 
