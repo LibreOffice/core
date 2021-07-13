@@ -247,7 +247,7 @@ rtl::Reference<MetaAction> SvmReader::MetaActionHandler(ImplMetaReadData* pData)
             return HatchHandler();
             break;
         case MetaActionType::WALLPAPER:
-            pAction = new MetaWallpaperAction;
+            return WallpaperHandler();
             break;
         case MetaActionType::CLIPREGION:
             pAction = new MetaClipRegionAction;
@@ -1073,6 +1073,19 @@ rtl::Reference<MetaAction> SvmReader::HatchHandler()
 
     pAction->SetPolyPolygon(aPolyPoly);
     pAction->SetHatch(aHatch);
+
+    return pAction;
+}
+
+rtl::Reference<MetaAction> SvmReader::WallpaperHandler()
+{
+    auto pAction = new MetaWallpaperAction();
+
+    VersionCompatRead aCompat(mrStream);
+    Wallpaper aWallpaper;
+    ReadWallpaper(mrStream, aWallpaper);
+
+    pAction->SetWallpaper(aWallpaper);
 
     return pAction;
 }
