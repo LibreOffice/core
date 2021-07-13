@@ -16,6 +16,24 @@
       "revId": "7a578c06352328799c644e0399f14d58b05246f9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a617e16d_c245da9e",
+        "filename": "basic/source/runtime/methods.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 894,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-07-13T16:03:21Z",
+      "side": 1,
+      "message": "Thank you for the hint! I just want to align the InStr implementation with the replace implementation as in https://gerrit.libreoffice.org/c/core/+/118812",
+      "parentUuid": "1f1ff2d6_bd332026",
+      "revId": "7a578c06352328799c644e0399f14d58b05246f9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
