@@ -674,7 +674,8 @@ void PdfExportTest::testSofthyphenPos()
         FPDF_PAGEOBJECT pPdfPageObject = FPDFPage_GetObject(pPdfPage.get(), i);
         CPPUNIT_ASSERT_EQUAL(FPDF_PAGEOBJ_TEXT, FPDFPageObj_GetType(pPdfPageObject));
         haveText = true;
-        double const size(FPDFTextObj_GetFontSize(pPdfPageObject));
+        float size{};
+        FPDFTextObj_GetFontSize(pPdfPageObject, &size);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(11.05, size, 1E-06);
     }
 
@@ -1950,7 +1951,7 @@ void PdfExportTest::testPdfImageResourceInlineXObjectRef()
     FPDF_PAGEOBJECT pImage = FPDFFormObj_GetObject(pInnerFormObject, 0);
     CPPUNIT_ASSERT_EQUAL(FPDF_PAGEOBJ_IMAGE, FPDFPageObj_GetType(pImage));
     FS_MATRIX aMatrix;
-    FPDFFormObj_GetMatrix(pInnerFormObject, &aMatrix);
+    FPDFPageObj_GetMatrix(pInnerFormObject, &aMatrix);
     basegfx::B2DHomMatrix aMat{ aMatrix.a, aMatrix.c, aMatrix.e, aMatrix.b, aMatrix.d, aMatrix.f };
     basegfx::B2DTuple aScale;
     basegfx::B2DTuple aTranslate;
