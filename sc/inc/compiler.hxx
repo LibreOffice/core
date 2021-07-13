@@ -294,6 +294,8 @@ private:
     ExtendedErrorDetection  meExtendedErrorDetection;
     bool        mbCloseBrackets;            // whether to close open brackets automatically, default TRUE
     bool        mbRewind;                   // whether symbol is to be rewound to some step during lexical analysis
+    bool        mbRefConventionChartOOXML;  // whether to use special ooxml chart syntax in case of OOXML reference convention,
+                                            // when parsing a formula string. [0]!GlobalNamedRange, LocalSheet!LocalNamedRange
     std::vector<sal_uInt16> maExternalFiles;
 
     std::vector<OUString> maTabNames;                /// sheet names mangled for the current grammar for output
@@ -409,6 +411,7 @@ public:
      */
     void SetAutoCorrection( bool bVal );
     void            SetCloseBrackets( bool bVal ) { mbCloseBrackets = bVal; }
+    void            SetRefConventionChartOOXML( bool bVal ) { mbRefConventionChartOOXML = bVal; }
     void            SetRefConvention( const Convention *pConvP );
     void            SetRefConvention( const formula::FormulaGrammar::AddressConvention eConv );
 

@@ -712,6 +712,8 @@ OUString ChartExport::parseFormula( const OUString& rRange )
         if( xParserProps.is() )
         {
             xParserProps->setPropertyValue("FormulaConvention", uno::makeAny(css::sheet::AddressConvention::XL_OOX) );
+            // For referencing named ranges correctly with special excel chart syntax.
+            xParserProps->setPropertyValue("RefConventionChartOOXML", uno::makeAny(true) );
         }
         aResult = xParser->printFormula( aTokens, CellAddress( 0, 0, 0 ) );
     }
