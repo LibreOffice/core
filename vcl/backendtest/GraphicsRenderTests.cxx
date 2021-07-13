@@ -1311,16 +1311,16 @@ void GraphicsRenderTests::testHalfEllipseWithPolyLine()
     OUString aTestName = "testHalfEllipseWithPolyLine";
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(atestName, "SKIPPED");
+        appendTestResult(aTestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestLine::checkHalfEllipse(aBitmap);
-    appendTestResult(atestName, returnTestStatus(eResult),
+    appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
     {
         BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + atestName + ".png", aBitmapEx);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
     }
 }
 
@@ -1393,16 +1393,16 @@ void GraphicsRenderTests::testHalfEllipseWithPolygon()
     OUString aTestName = "testHalfEllipseWithPolygon";
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(atestName, "SKIPPED");
+        appendTestResult(aTestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestLine::checkHalfEllipse(aBitmap);
-    appendTestResult(atestName, returnTestStatus(eResult),
+    appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
     {
         BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + atestName + ".png", aBitmapEx);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
     }
 }
 
@@ -1410,19 +1410,19 @@ void GraphicsRenderTests::testClosedBezierPolyline()
 {
     vcl::test::OutputDeviceTestPolygon aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupClosedBezier();
-    OUString atestName = "testClosedBezierPolyline";
+    OUString aTestName = "testClosedBezierPolyline";
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(atestName, "SKIPPED");
+        appendTestResult(aTestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestLine::checkClosedBezier(aBitmap);
-    appendTestResult(atestName, returnTestStatus(eResult),
+    appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
     {
         BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + atestName + ".png", aBitmapEx);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
     }
 }
 
@@ -1430,19 +1430,40 @@ void GraphicsRenderTests::testClosedBezierPolygon()
 {
     vcl::test::OutputDeviceTestPolygon aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupClosedBezier();
-    OUString atestName = "testClosedBezierPolygon";
+    OUString aTestName = "testClosedBezierPolygon";
     if (!SHOULD_ASSERT)
     {
-        appendTestResult(atestName, "SKIPPED");
+        appendTestResult(aTestName, "SKIPPED");
         return;
     }
     vcl::test::TestResult eResult = vcl::test::OutputDeviceTestLine::checkClosedBezier(aBitmap);
-    appendTestResult(atestName, returnTestStatus(eResult),
+    appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
     {
         BitmapEx aBitmapEx(aBitmap);
-        exportBitmapExToImage(m_aUserInstallPath + atestName + ".png", aBitmapEx);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
+    }
+}
+
+void GraphicsRenderTests::testFilledAsymmetricalDropShape()
+{
+    vcl::test::OutputDeviceTestPolygon aOutDevTest;
+    Bitmap aBitmap = aOutDevTest.setupFilledAsymmetricalDropShape();
+    OUString aTestName = "testFilledAsymmetricalDropShape";
+    if (!SHOULD_ASSERT)
+    {
+        appendTestResult(aTestName, "SKIPPED");
+        return;
+    }
+    vcl::test::TestResult eResult
+        = vcl::test::OutputDeviceTestLine::checkFilledAsymmetricalDropShape(aBitmap);
+    appendTestResult(aTestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        BitmapEx aBitmapEx(aBitmap);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
     }
 }
 
@@ -1537,6 +1558,7 @@ void GraphicsRenderTests::runALLTests()
     testHalfEllipseAAWithPolygon();
     testClosedBezierPolyline();
     testClosedBezierPolygon();
+    testFilledAsymmetricalDropShape();
 }
 
 void GraphicsRenderTests::appendTestResult(OUString aTestName, OUString aTestStatus,
