@@ -49,6 +49,9 @@ constants AddressConvention
 
 
     const short LOTUS_A1 = 4;
+
+
+    const short XL_OOX_CHART = 5;
 };
 
 
