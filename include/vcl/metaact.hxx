@@ -1132,6 +1132,8 @@ public:
 
     const tools::PolyPolygon&  GetPolyPolygon() const { return maPolyPoly; }
     const Hatch&        GetHatch() const { return maHatch; }
+    void                SetPolyPolygon(tools::PolyPolygon& rPolyPoly) { maPolyPoly = rPolyPoly; }
+    void                SetHatch(Hatch& rHatch) { maHatch = rHatch; }
 };
 
 class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetaWallpaperAction final : public MetaAction
