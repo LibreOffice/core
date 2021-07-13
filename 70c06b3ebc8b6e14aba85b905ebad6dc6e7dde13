@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5d57efde_ecfda9fd",
+        "filename": "include/vcl/metaact.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 991,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-07-13T12:03:18Z",
+      "side": 1,
+      "message": "Is this used anywhere? If you don\u0027t need it in this change, then please remove it. Thanks.",
+      "revId": "70c06b3ebc8b6e14aba85b905ebad6dc6e7dde13",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
