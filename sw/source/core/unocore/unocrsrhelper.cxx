@@ -1415,8 +1415,20 @@ void makeTableRowRedline( SwTableLine& rTableLine,
     if ( !pHasTextChangesOnlyProp || pHasTextChangesOnlyProp->GetValue() )
     {
         SvxPrintItem aSetTracking(RES_PRINT, false);
-        SwPosition aPos( *rTableLine.GetTabBoxes()[0]->GetSttNd() );
-        SwCursor aCursor( aPos, nullptr );
+        SwNodeIndex aInsPos( *(rTableLine.GetTabBoxes()[0]->GetSttNd()), 1 );
+        // as a workaround for the rows without text content,
+        // add a redline with invisible text ZWJ
+        if ( rTableLine.IsEmpty() )
+        {
+            SwPaM aPaM(aInsPos);
+            pDoc->getIDocumentContentOperations().InsertString( aPaM, u"‍" );
+            aPaM.SetMark();
+            aPaM.GetMark()->nContent.Assign(aPaM.GetContentNode(), 0);
+            makeRedline(aPaM, RedlineType::TableRowInsert == eType
+                    ? u"Insert"
+                    : u"Delete", rRedlineProperties);
+        }
+        SwCursor aCursor( SwPosition(aInsPos), nullptr );
         pDoc->SetRowNotTracked( aCursor, aSetTracking );
     }
 

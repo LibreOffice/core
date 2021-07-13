@@ -435,24 +435,12 @@ namespace
             const SwTableLine* pLine = pBox->GetUpper();
             const SvxPrintItem *pHasTextChangesOnlyProp =
                     pLine->GetFrameFormat()->GetAttrSet().GetItem<SvxPrintItem>(RES_PRINT);
-            // table row property "HasTextChangesOnly" is set and its value is false
-            if ( pHasTextChangesOnlyProp && !pHasTextChangesOnlyProp->GetValue() )
+            // empty table row with property "HasTextChangesOnly" = false
+            if ( pHasTextChangesOnlyProp && !pHasTextChangesOnlyProp->GetValue() &&
+                 pLine->IsEmpty() )
             {
-                bool bEmptyLine = true;
-                const SwTableBoxes & rBoxes = pLine->GetTabBoxes();
-                for (size_t nBox = 0; nBox < rBoxes.size(); ++nBox)
-                {
-                    if ( !rBoxes[nBox]->IsEmpty() )
-                    {
-                        bEmptyLine = false;
-                        break;
-                    }
-                }
-                if ( bEmptyLine )
-                {
-                    SwCursor aCursor( *pPos, nullptr );
-                    pPos->GetDoc().DeleteRow( aCursor );
-                }
+                SwCursor aCursor( *pPos, nullptr );
+                pPos->GetDoc().DeleteRow( aCursor );
             }
         }
     }

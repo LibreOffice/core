@@ -386,7 +386,13 @@ public:
     SwTwips GetTableLineHeight( bool& bLayoutAvailable ) const;
 
     bool hasSoftPageBreak() const;
+<<<<<<< HEAD   (44dd8f tdf#143068 XLSX: fix export of top10 filter condition)
     void RegisterToFormat( SwFormat& rFormat );
+=======
+
+    // it doesn't contain box content
+    bool IsEmpty() const;
+>>>>>>> CHANGE (c59b6c tdf#143215 DOCX import: fix tracked empty row insertion/dele)
 };
 
 /// SwTableBox is one table cell in the document model.

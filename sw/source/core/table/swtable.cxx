@@ -1578,6 +1578,16 @@ SwTwips SwTableLine::GetTableLineHeight( bool& bLayoutAvailable ) const
     return nRet;
 }
 
+bool SwTableLine::IsEmpty() const
+{
+    for (size_t i = 0; i < m_aBoxes.size(); ++i)
+    {
+        if ( !m_aBoxes[i]->IsEmpty() )
+            return false;
+    }
+    return true;
+}
+
 SwTableBox::SwTableBox( SwTableBoxFormat* pFormat, sal_uInt16 nLines, SwTableLine *pUp )
     : SwClient(nullptr)
     , m_aLines()
