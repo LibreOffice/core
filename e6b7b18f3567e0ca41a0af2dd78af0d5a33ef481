@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "cfa851cd_fa3faa5a",
+        "filename": "odk/examples/python/DocumentLoader/DocumentLoader.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-07-13T07:55:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "847089d3_866cd8ff",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 63
+      },
+      "revId": "e6b7b18f3567e0ca41a0af2dd78af0d5a33ef481",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1f9bf767_5ee760d0",
         "filename": "odk/examples/python/DocumentLoader/DocumentLoader.py",
         "patchSetId": 1
@@ -45,6 +69,30 @@
       "revId": "e6b7b18f3567e0ca41a0af2dd78af0d5a33ef481",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e11b86ac_91830dd1",
+        "filename": "odk/examples/python/DocumentLoader/DocumentLoader.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-07-13T07:55:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1f9bf767_5ee760d0",
+      "range": {
+        "startLine": 28,
+        "startChar": 38,
+        "endLine": 28,
+        "endChar": 41
+      },
+      "revId": "e6b7b18f3567e0ca41a0af2dd78af0d5a33ef481",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "5b8af857_3eb97b9e",
+        "filename": "odk/examples/python/DocumentLoader/README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-07-13T07:55:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ef524705_ff9a8534",
+      "range": {
+        "startLine": 5,
+        "startChar": 4,
+        "endLine": 5,
+        "endChar": 18
+      },
+      "revId": "e6b7b18f3567e0ca41a0af2dd78af0d5a33ef481",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ddff85af_f15fe413",
         "filename": "odk/examples/python/DocumentLoader/README.md",
         "patchSetId": 1
@@ -91,6 +163,30 @@
       "revId": "e6b7b18f3567e0ca41a0af2dd78af0d5a33ef481",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "51121fe2_0c442698",
+        "filename": "odk/examples/python/DocumentLoader/README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-07-13T07:55:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ddff85af_f15fe413",
+      "range": {
+        "startLine": 9,
+        "startChar": 9,
+        "endLine": 9,
+        "endChar": 23
+      },
+      "revId": "e6b7b18f3567e0ca41a0af2dd78af0d5a33ef481",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
