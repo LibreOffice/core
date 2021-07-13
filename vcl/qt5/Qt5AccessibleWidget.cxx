@@ -563,6 +563,9 @@ void lcl_addState(QAccessible::State* state, sal_Int16 nState)
         case AccessibleStateType::EXPANDABLE:
             state->expandable = true;
             break;
+        case AccessibleStateType::EXPANDED:
+            state->expanded = true;
+            break;
         case AccessibleStateType::FOCUSABLE:
             state->focusable = true;
             break;
