@@ -925,6 +925,8 @@ SwXShape::SwXShape(
         m_pImpl->m_bInitializedPropertyNotifier = true;
     }
 
+    m_pTextBoxHandler = nullptr;
+
 }
 
 void SwXShape::AddExistingShapeToFormat( SdrObject const & _rObj )
@@ -957,6 +959,30 @@ void SwXShape::AddExistingShapeToFormat( SdrObject const & _rObj )
     }
 }
 
+bool SwXShape::AddTextBox(SdrObject* pObj)
+{
+    if (m_pTextBoxHandler)
+        return false;
+
+    m_pTextBoxHandler = new SwTextBoxHandler(this, pObj);
+    return m_pTextBoxHandler;
+}
+
+bool SwXShape::HasTextBox()
+{
+    return m_pTextBoxHandler;
+}
+
+bool SwXShape::RemoveTextBox()
+{
+    if (!m_pTextBoxHandler)
+        return false;
+
+    delete m_pTextBoxHandler;
+    m_pTextBoxHandler = nullptr;
+    return true;
+}
+
 SwXShape::~SwXShape()
 {
     SolarMutexGuard aGuard;
@@ -970,6 +996,11 @@ SwXShape::~SwXShape()
     if(m_pPage)
        const_cast<SwFmDrawPage*>(m_pPage)->RemoveShape(this);
     m_pPage = nullptr;
+    if (m_pTextBoxHandler)
+    {
+        delete m_pTextBoxHandler;
+        m_pTextBoxHandler = nullptr;
+    }
 }
 
 uno::Any SwXShape::queryInterface( const uno::Type& aType )
@@ -1166,9 +1197,16 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                 bool bValue(false);
                 aValue >>= bValue;
                 if (bValue)
-                    SwTextBoxHelper::create(pFormat);
+                {
+                    auto pObj = GetSvxShape()->GetSdrObject();
+                    AddTextBox(pObj);
+
+                }
+                //SwTextBoxHelper::create(pFormat);
                 else
-                    SwTextBoxHelper::destroy(pFormat);
+                    RemoveTextBox();
+                    //SwTextBoxHelper::destroy(pFormat);
+
 
             }
             else if (pEntry->nWID == RES_CHAIN)
@@ -1516,8 +1554,10 @@ uno::Any SwXShape::getPropertyValue(const OUString& rPropertyName)
                 }
                 else if (pEntry->nWID == FN_TEXT_BOX)
                 {
-                    bool bValue = SwTextBoxHelper::isTextBox(pFormat, RES_DRAWFRMFMT);
-                    aRet <<= bValue;
+                    if (HasTextBox())
+                        aRet = GetTextBoxHandler()->GetTextBoxContent();
+                    else
+                        aRet = uno::Any();
                 }
                 else if (pEntry->nWID == RES_CHAIN)
                 {
@@ -2108,6 +2148,11 @@ void SwXShape::dispose()
 {
     SolarMutexGuard aGuard;
     SwFrameFormat* pFormat = GetFrameFormat();
+    if (m_pTextBoxHandler)
+    {
+        delete m_pTextBoxHandler;
+        m_pTextBoxHandler = nullptr;
+    }
     if(pFormat)
     {
         // determine correct <SdrObject>

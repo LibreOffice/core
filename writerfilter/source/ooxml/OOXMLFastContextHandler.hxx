@@ -442,7 +442,8 @@ protected:
 class OOXMLFastContextHandlerShape: public OOXMLFastContextHandlerProperties
 {
     bool m_bShapeSent;
-    bool m_bShapeStarted;
+    sal_uInt16 m_nShapeStarted;
+    bool m_bGroupShape;
     /// Is it necessary to pop the stack in the dtor?
     bool m_bShapeContextPushed;
     rtl::Reference<oox::shape::ShapeContextHandler> mrShapeContext;
