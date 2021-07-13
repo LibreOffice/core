@@ -1842,6 +1842,7 @@ ScCompiler::ScCompiler( sc::CompileFormulaContext& rCxt, const ScAddress& rPos, 
     meExtendedErrorDetection(EXTENDED_ERROR_DETECTION_NONE),
     mbCloseBrackets(true),
     mbRewind(false),
+    mbRefConventionChartOOXML(false),
     maTabNames(rCxt.getTabNames())
 {
     SetGrammar(rCxt.getGrammar());
@@ -1865,7 +1866,8 @@ ScCompiler::ScCompiler( ScDocument& rDocument, const ScAddress& rPos, ScTokenArr
         pConv( GetRefConvention( FormulaGrammar::CONV_OOO ) ),
         meExtendedErrorDetection( EXTENDED_ERROR_DETECTION_NONE ),
         mbCloseBrackets( true ),
-        mbRewind( false )
+        mbRewind( false ),
+        mbRefConventionChartOOXML( false )
 {
     SetGrammar( (eGrammar == formula::FormulaGrammar::GRAM_UNSPECIFIED) ?
                 rDocument.GetGrammar() :
@@ -1889,6 +1891,7 @@ ScCompiler::ScCompiler( sc::CompileFormulaContext& rCxt, const ScAddress& rPos,
     meExtendedErrorDetection(EXTENDED_ERROR_DETECTION_NONE),
     mbCloseBrackets(true),
     mbRewind(false),
+    mbRefConventionChartOOXML(false),
     maTabNames(rCxt.getTabNames())
 {
     SetGrammar(rCxt.getGrammar());
@@ -1912,7 +1915,8 @@ ScCompiler::ScCompiler( ScDocument& rDocument, const ScAddress& rPos,
         pConv( GetRefConvention( FormulaGrammar::CONV_OOO ) ),
         meExtendedErrorDetection( EXTENDED_ERROR_DETECTION_NONE ),
         mbCloseBrackets( true ),
-        mbRewind( false )
+        mbRewind( false ),
+        mbRefConventionChartOOXML( false )
 {
     SetGrammar( (eGrammar == formula::FormulaGrammar::GRAM_UNSPECIFIED) ?
                 rDocument.GetGrammar() :
@@ -2244,6 +2248,18 @@ Label_MaskStateMachine:
                     if (c == '[' && FormulaGrammar::isExcelSyntax( meGrammar)
                             && eLastOp != ocDBArea && maTableRefs.empty())
                     {
+                        // [0]!Global_Range_Name, is a special case in OOXML
+                        // syntax, where the '0' is referencing to self and we
+                        // do not need it, so we should skip it, in order to
+                        // later it will be more recognisable for IsNamedRange.
+                        if (FormulaGrammar::isRefConventionOOXML(meGrammar) &&
+                                pSrc[0] == '0' && pSrc[1] == ']' && pSrc[2] == '!')
+                        {
+                            pSrc += 3;
+                            c = *pSrc;
+                            continue;
+                        }
+
                         nMask &= ~ScCharFlags::Char;
                         goto Label_MaskStateMachine;
                     }
@@ -5313,7 +5329,7 @@ void ScCompiler::CreateStringFromIndex( OUStringBuffer& rBuffer, const FormulaTo
             if (pData)
             {
                 SCTAB nTab = _pTokenP->GetSheet();
-                if (nTab >= 0 && nTab != aPos.Tab())
+                if (nTab >= 0 && (nTab != aPos.Tab() || mbRefConventionChartOOXML))
                 {
                     // Sheet-local on other sheet.
                     OUString aName;
@@ -5325,6 +5341,11 @@ void ScCompiler::CreateStringFromIndex( OUStringBuffer& rBuffer, const FormulaTo
                     else
                         aBuffer.append(ScCompiler::GetNativeSymbol(ocErrName));
                     aBuffer.append( pConv->getSpecialSymbol( ScCompiler::Convention::SHEET_SEPARATOR));
+                }
+                else if (mbRefConventionChartOOXML)
+                {
+                    aBuffer.append("[0]");
+                    aBuffer.append(pConv->getSpecialSymbol(ScCompiler::Convention::SHEET_SEPARATOR));
                 }
                 aBuffer.append(pData->GetName());
             }
