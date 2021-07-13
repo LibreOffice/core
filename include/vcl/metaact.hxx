@@ -987,6 +987,10 @@ public:
     const Color&        GetColor() const { return maColor; }
     const Point&        GetPoint() const { return maPt; }
     const Size&         GetSize() const { return maSz; }
+    void                SetBitmap(Bitmap& rBmp) { maBmp = rBmp; }
+    void                SetColor(Color& rColor) { maColor = rColor; }
+    void                SetPoint(Point& rPt) { maPt = rPt; }
+    void                SetSize(Size& rSz) { maSz = rSz; }
 };
 
 class SAL_DLLPUBLIC_RTTI MetaMaskScalePartAction final : public MetaAction
