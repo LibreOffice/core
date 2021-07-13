@@ -1165,6 +1165,8 @@ public:
 
     const tools::Rectangle&    GetRect() const { return maRect; }
     const Wallpaper&    GetWallpaper() const { return maWallpaper; }
+    void                SetRect(tools::Rectangle& rRect) { maRect = rRect; }
+    void                SetWallpaper(Wallpaper& rWallpaper) { maWallpaper = rWallpaper; }
 };
 
 class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetaClipRegionAction final : public MetaAction

@@ -68,6 +68,7 @@ public:
     rtl::Reference<MetaAction> GradientHandler();
     rtl::Reference<MetaAction> GradientExHandler();
     rtl::Reference<MetaAction> HatchHandler();
+    rtl::Reference<MetaAction> WallpaperHandler();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
