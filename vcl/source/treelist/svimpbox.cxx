@@ -2017,7 +2017,16 @@ void SvImpLBox::MouseButtonUp( const MouseEvent& rMEvt)
     }
 
     if (m_pView->mbActivateOnSingleClick)
+    {
+        Point aPos(rMEvt.GetPosPixel());
+        SvTreeListEntry* pEntry = GetEntry(aPos);
+        // tdf#143245 ActivateOnSingleClick only
+        // if the 'up' is at the active entry
+        // typically selected by the 'down'
+        if (!pEntry || pEntry != m_pCursor)
+            return;
         m_pView->DoubleClickHdl();
+    }
 }
 
 void SvImpLBox::MouseMove( const MouseEvent& rMEvt)
