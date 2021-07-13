@@ -30,6 +30,7 @@
 #include "officeipcthread.hxx"
 #include <rtl/ustring.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
 #include <comphelper/synchronousdispatch.hxx>
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
@@ -598,6 +599,8 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
                                 aFilter = impl_GuessFilter( aOutFile, aDocService );
                             }
 
+                            bool bMultiFileTarget = false;
+
                             if (aFilter.isEmpty())
                             {
                                 std::cerr << "Error: no export filter" << std::endl;
@@ -616,10 +619,23 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
                                 conversionProperties[1].Name = "FilterName";
                                 if( 0 < nFilterOptionsIndex )
                                 {
-                                    conversionProperties[1].Value <<= aFilter.copy(0, nFilterOptionsIndex);
+                                    OUString sFilterName = aFilter.copy(0, nFilterOptionsIndex);
+                                    OUString sFilterOptions = aFilter.copy(nFilterOptionsIndex + 1);
+
+                                    if (sFilterName == "Text - txt - csv (StarCalc)")
+                                    {
+                                        sal_Int32 nIdx(0);
+                                        // If the 11th token token is 'true' then we export a file
+                                        // per sheet where the file name is based on the suggested
+                                        // output filename concatenated with the sheet name, so adjust
+                                        // the output and overwrite messages
+                                        bMultiFileTarget = sFilterOptions.getToken(11, ',', nIdx) == "true";
+                                    }
+
+                                    conversionProperties[1].Value <<= sFilterName;
 
                                     conversionProperties[2].Name = "FilterOptions";
-                                    conversionProperties[2].Value <<= aFilter.copy(nFilterOptionsIndex + 1);
+                                    conversionProperties[2].Value <<= sFilterOptions;
                                 }
                                 else
                                 {
@@ -639,9 +655,11 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
                                 OString aTargetURL8 = OUStringToOString(aTempName, osl_getThreadTextEncoding());
                                 if (aDispatchRequest.aRequestType != REQUEST_CAT)
                                 {
-                                    std::cout << "convert " << aSource8 << " -> " << aTargetURL8;
+                                    std::cout << "convert " << aSource8;
+                                    if (!bMultiFileTarget)
+                                        std::cout << " -> " << aTargetURL8;
                                     std::cout << " using filter : " << OUStringToOString(aFilter, osl_getThreadTextEncoding()) << std::endl;
-                                    if (FStatHelper::IsDocument(aOutFile))
+                                    if (!bMultiFileTarget && FStatHelper::IsDocument(aOutFile))
                                         std::cout << "Overwriting: " << OUStringToOString(aTempName, osl_getThreadTextEncoding()) << std::endl ;
                                 }
                                 try
