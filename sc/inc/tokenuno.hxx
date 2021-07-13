@@ -62,6 +62,7 @@ private:
     bool                mbEnglish;
     bool                mbIgnoreSpaces;
     bool                mbCompileFAP;
+    bool                mbRefConventionChartOOXML;
 
     void                    SetCompilerFlags( ScCompiler& rCompiler ) const;
 
