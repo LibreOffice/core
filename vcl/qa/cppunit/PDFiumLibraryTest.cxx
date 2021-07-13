@@ -144,7 +144,11 @@ void PDFiumLibraryTest::testPageObjects()
     CPPUNIT_ASSERT_EQUAL(COL_BLACK, pPageObject->getFillColor());
     CPPUNIT_ASSERT_EQUAL(COL_BLACK, pPageObject->getStrokeColor());
 
-    CPPUNIT_ASSERT_EQUAL(true, pPageObject->getMatrix().isIdentity());
+    basegfx::B2DHomMatrix aMatrix = pPageObject->getMatrix();
+    // Ignore translation, ensure there is no rotate/scale.
+    aMatrix.set(0, 2, 0);
+    aMatrix.set(1, 2, 0);
+    CPPUNIT_ASSERT_EQUAL(true, aMatrix.isIdentity());
 
     CPPUNIT_ASSERT_DOUBLES_EQUAL(057.01, pPageObject->getBounds().getMinX(), 1E-2);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(721.51, pPageObject->getBounds().getMinY(), 1E-2);

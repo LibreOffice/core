@@ -783,7 +783,7 @@ basegfx::B2DHomMatrix PDFiumPageObjectImpl::getMatrix()
 {
     basegfx::B2DHomMatrix aB2DMatrix;
     FS_MATRIX matrix;
-    if (FPDFFormObj_GetMatrix(mpPageObject, &matrix))
+    if (FPDFPageObj_GetMatrix(mpPageObject, &matrix))
         aB2DMatrix = basegfx::B2DHomMatrix::abcdef(matrix.a, matrix.b, matrix.c, matrix.d, matrix.e,
                                                    matrix.f);
     return aB2DMatrix;
@@ -804,7 +804,12 @@ basegfx::B2DRectangle PDFiumPageObjectImpl::getBounds()
     return aB2DRectangle;
 }
 
-double PDFiumPageObjectImpl::getFontSize() { return FPDFTextObj_GetFontSize(mpPageObject); }
+double PDFiumPageObjectImpl::getFontSize()
+{
+    float nSize{};
+    FPDFTextObj_GetFontSize(mpPageObject, &nSize);
+    return nSize;
+}
 
 OUString PDFiumPageObjectImpl::getFontName()
 {
