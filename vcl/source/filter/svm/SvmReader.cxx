@@ -250,7 +250,7 @@ rtl::Reference<MetaAction> SvmReader::MetaActionHandler(ImplMetaReadData* pData)
             return WallpaperHandler();
             break;
         case MetaActionType::CLIPREGION:
-            pAction = new MetaClipRegionAction;
+            return ClipRegionHandler();
             break;
         case MetaActionType::ISECTRECTCLIPREGION:
             pAction = new MetaISectRectClipRegionAction;
@@ -1086,6 +1086,22 @@ rtl::Reference<MetaAction> SvmReader::WallpaperHandler()
     ReadWallpaper(mrStream, aWallpaper);
 
     pAction->SetWallpaper(aWallpaper);
+
+    return pAction;
+}
+
+rtl::Reference<MetaAction> SvmReader::ClipRegionHandler()
+{
+    auto pAction = new MetaClipRegionAction();
+
+    VersionCompatRead aCompat(mrStream);
+    vcl::Region aRegion;
+    ReadRegion(mrStream, aRegion);
+    bool aClip;
+    mrStream.ReadCharAsBool(aClip);
+
+    pAction->SetRegion(aRegion);
+    pAction->SetClipping(aClip);
 
     return pAction;
 }
