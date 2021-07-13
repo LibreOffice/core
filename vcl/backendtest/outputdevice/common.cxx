@@ -761,6 +761,91 @@ TestResult OutputDeviceTestCommon::checkClosedBezier(Bitmap& rBitmap)
     return aResult;
 }
 
+TestResult OutputDeviceTestCommon::checkFilledAsymmetricalDropShape(Bitmap& rBitmap)
+{
+    BitmapScopedWriteAccess pAccess(rBitmap);
+
+    TestResult aResult = TestResult::Passed;
+    int nNumberOfQuirks = 0;
+    int nNumberOfErrors = 0;
+
+    std::map<std::pair<tools::Long, tools::Long>, bool> SetPixels
+        = { { { 2, 2 }, true },   { { 3, 2 }, true },   { { 4, 2 }, true },   { { 5, 2 }, true },
+            { { 6, 2 }, true },   { { 7, 2 }, true },   { { 8, 2 }, true },   { { 9, 2 }, true },
+            { { 10, 2 }, true },  { { 11, 2 }, true },  { { 2, 3 }, true },   { { 3, 3 }, true },
+            { { 4, 3 }, true },   { { 5, 3 }, true },   { { 6, 3 }, true },   { { 7, 3 }, true },
+            { { 8, 3 }, true },   { { 9, 3 }, true },   { { 10, 3 }, true },  { { 11, 3 }, true },
+            { { 12, 3 }, true },  { { 13, 3 }, true },  { { 2, 4 }, true },   { { 3, 4 }, true },
+            { { 4, 4 }, true },   { { 5, 4 }, true },   { { 6, 4 }, true },   { { 7, 4 }, true },
+            { { 8, 4 }, true },   { { 9, 4 }, true },   { { 10, 4 }, true },  { { 11, 4 }, true },
+            { { 12, 4 }, true },  { { 13, 4 }, true },  { { 14, 4 }, true },  { { 15, 4 }, true },
+            { { 2, 5 }, true },   { { 3, 5 }, true },   { { 4, 5 }, true },   { { 5, 5 }, true },
+            { { 6, 5 }, true },   { { 7, 5 }, true },   { { 8, 5 }, true },   { { 9, 5 }, true },
+            { { 10, 5 }, true },  { { 11, 5 }, true },  { { 12, 5 }, true },  { { 13, 5 }, true },
+            { { 14, 5 }, true },  { { 15, 5 }, true },  { { 2, 6 }, true },   { { 3, 6 }, true },
+            { { 4, 6 }, true },   { { 5, 6 }, true },   { { 6, 6 }, true },   { { 7, 6 }, true },
+            { { 8, 6 }, true },   { { 9, 6 }, true },   { { 10, 6 }, true },  { { 11, 6 }, true },
+            { { 12, 6 }, true },  { { 13, 6 }, true },  { { 14, 6 }, true },  { { 15, 6 }, true },
+            { { 16, 6 }, true },  { { 2, 7 }, true },   { { 3, 7 }, true },   { { 4, 7 }, true },
+            { { 5, 7 }, true },   { { 6, 7 }, true },   { { 7, 7 }, true },   { { 8, 7 }, true },
+            { { 9, 7 }, true },   { { 10, 7 }, true },  { { 11, 7 }, true },  { { 12, 7 }, true },
+            { { 13, 7 }, true },  { { 14, 7 }, true },  { { 15, 7 }, true },  { { 16, 7 }, true },
+            { { 2, 8 }, true },   { { 3, 8 }, true },   { { 4, 8 }, true },   { { 5, 8 }, true },
+            { { 6, 8 }, true },   { { 7, 8 }, true },   { { 8, 8 }, true },   { { 9, 8 }, true },
+            { { 10, 8 }, true },  { { 11, 8 }, true },  { { 12, 8 }, true },  { { 13, 8 }, true },
+            { { 14, 8 }, true },  { { 15, 8 }, true },  { { 16, 8 }, true },  { { 17, 8 }, true },
+            { { 2, 9 }, true },   { { 3, 9 }, true },   { { 4, 9 }, true },   { { 5, 9 }, true },
+            { { 6, 9 }, true },   { { 7, 9 }, true },   { { 8, 9 }, true },   { { 9, 9 }, true },
+            { { 10, 9 }, true },  { { 11, 9 }, true },  { { 12, 9 }, true },  { { 13, 9 }, true },
+            { { 14, 9 }, true },  { { 15, 9 }, true },  { { 16, 9 }, true },  { { 17, 9 }, true },
+            { { 2, 10 }, true },  { { 3, 10 }, true },  { { 4, 10 }, true },  { { 5, 10 }, true },
+            { { 6, 10 }, true },  { { 7, 10 }, true },  { { 8, 10 }, true },  { { 9, 10 }, true },
+            { { 10, 10 }, true }, { { 11, 10 }, true }, { { 12, 10 }, true }, { { 13, 10 }, true },
+            { { 14, 10 }, true }, { { 15, 10 }, true }, { { 16, 10 }, true }, { { 17, 10 }, true },
+            { { 2, 11 }, true },  { { 3, 11 }, true },  { { 4, 11 }, true },  { { 5, 11 }, true },
+            { { 6, 11 }, true },  { { 7, 11 }, true },  { { 8, 11 }, true },  { { 9, 11 }, true },
+            { { 10, 11 }, true }, { { 11, 11 }, true }, { { 12, 11 }, true }, { { 13, 11 }, true },
+            { { 14, 11 }, true }, { { 15, 11 }, true }, { { 16, 11 }, true }, { { 17, 11 }, true },
+            { { 3, 12 }, true },  { { 4, 12 }, true },  { { 5, 12 }, true },  { { 6, 12 }, true },
+            { { 7, 12 }, true },  { { 8, 12 }, true },  { { 9, 12 }, true },  { { 10, 12 }, true },
+            { { 11, 12 }, true }, { { 12, 12 }, true }, { { 13, 12 }, true }, { { 14, 12 }, true },
+            { { 15, 12 }, true }, { { 16, 12 }, true }, { { 3, 13 }, true },  { { 4, 13 }, true },
+            { { 5, 13 }, true },  { { 6, 13 }, true },  { { 7, 13 }, true },  { { 8, 13 }, true },
+            { { 9, 13 }, true },  { { 10, 13 }, true }, { { 11, 13 }, true }, { { 12, 13 }, true },
+            { { 13, 13 }, true }, { { 14, 13 }, true }, { { 15, 13 }, true }, { { 16, 13 }, true },
+            { { 4, 14 }, true },  { { 5, 14 }, true },  { { 6, 14 }, true },  { { 7, 14 }, true },
+            { { 8, 14 }, true },  { { 9, 14 }, true },  { { 10, 14 }, true }, { { 11, 14 }, true },
+            { { 12, 14 }, true }, { { 13, 14 }, true }, { { 14, 14 }, true }, { { 15, 14 }, true },
+            { { 5, 15 }, true },  { { 6, 15 }, true },  { { 7, 15 }, true },  { { 8, 15 }, true },
+            { { 9, 15 }, true },  { { 10, 15 }, true }, { { 11, 15 }, true }, { { 12, 15 }, true },
+            { { 13, 15 }, true }, { { 14, 15 }, true }, { { 15, 15 }, true }, { { 6, 16 }, true },
+            { { 7, 16 }, true },  { { 8, 16 }, true },  { { 9, 16 }, true },  { { 10, 16 }, true },
+            { { 11, 16 }, true }, { { 12, 16 }, true }, { { 13, 16 }, true }, { { 8, 17 }, true },
+            { { 9, 17 }, true },  { { 10, 17 }, true }, { { 11, 17 }, true } };
+
+    for (tools::Long x = 0; x < pAccess->Width(); x++)
+    {
+        for (tools::Long y = 0; y < pAccess->Height(); ++y)
+        {
+            if (SetPixels[{ x, y }])
+            {
+                checkValue(pAccess, y, x, constFillColor, nNumberOfQuirks, nNumberOfErrors, true);
+            }
+            else
+            {
+                checkValue(pAccess, x, y, constBackgroundColor, nNumberOfQuirks, nNumberOfErrors,
+                           true);
+            }
+        }
+    }
+
+    if (nNumberOfQuirks > 0)
+        aResult = TestResult::PassedWithQuirks;
+    if (nNumberOfErrors > 0)
+        aResult = TestResult::Failed;
+    return aResult;
+}
+
 // Check 'count' pixels from (x,y) in (addX,addY) direction, the color values must not decrease.
 static bool checkGradient(BitmapScopedWriteAccess& pAccess, int x, int y, int count, int addX, int addY)
 {

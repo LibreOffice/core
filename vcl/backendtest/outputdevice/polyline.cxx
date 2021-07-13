@@ -171,8 +171,8 @@ Bitmap OutputDeviceTestPolyLine::setupEllipse()
     int offset = 8;
     tools::Long aPtX = maVDRectangle.Left() + (maVDRectangle.Right() - maVDRectangle.Left()) / 2.0;
     tools::Long aPtY = maVDRectangle.Top() + (maVDRectangle.Bottom() - maVDRectangle.Top()) / 2.0;
-    Point aPoint1 = Point(aPtX + offset, aPtY + 2);
-    Point aPoint2 = Point(aPtX - offset, aPtY + 2);
+    Point aPoint1(aPtX + offset, aPtY + 2);
+    Point aPoint2(aPtX - offset, aPtY + 2);
 
     tools::Polygon aPolygon(4);
 
