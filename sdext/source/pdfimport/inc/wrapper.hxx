@@ -54,21 +54,25 @@ namespace pdfi
                                 const OUString&        rFilterOptions );
 
     const OUString fontAttributesSuffixes[] = {
+        // Note: for performance consideration, each one listed here is evaluated once,
+        // and they are checked from the suffix, thus the order matters.
+        // e.g. for "TimesNewRomanPS-BoldItalic", to get "TimesNewRoman", you should
+        //      first have "Italic", and then "Bold", then "-", and then "PS".
         "MT",
         "PS",
         "PSMT",
         "Regular",
         "Bold",
         "Italic",
-        "Bold",
         "Oblique",
+        "Bold", //BoldItalic, BoldObique
         "Light",
         "Reg",
         "VKana",
         "-",
         ",",
         ";",
-        "PS",
+        "PS", // e.g. TimesNewRomanPS-BoldMT
     };
 }
 
