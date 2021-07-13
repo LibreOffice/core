@@ -1089,4 +1089,20 @@ rtl::Reference<MetaAction> SvmReader::WallpaperHandler()
 
     return pAction;
 }
+
+rtl::Reference<MetaAction> SvmReader::ClipRegionHandler()
+{
+    auto pAction = new MetaClipRegionAction();
+
+    VersionCompatRead aCompat(mrStream);
+    vcl::Region aRegion;
+    ReadRegion(mrStream, aRegion);
+    bool aClip;
+    mrStream.ReadCharAsBool(aClip);
+
+    pAction->SetRegion(aRegion);
+    pAction->SetClipping(aClip);
+
+    return pAction;
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
