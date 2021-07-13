@@ -1467,6 +1467,27 @@ void GraphicsRenderTests::testHalfEllipseAAWithPolygon()
     }
 }
 
+void GraphicsRenderTests::testFilledAsymmetricalDropShape()
+{
+    vcl::test::OutputDeviceTestPolygon aOutDevTest;
+    Bitmap aBitmap = aOutDevTest.setupFilledAsymmetricalDropShape();
+    OUString aTestName = "testFilledAsymmetricalDropShape";
+    if (!SHOULD_ASSERT)
+    {
+        appendTestResult(aTestName, "SKIPPED");
+        return;
+    }
+    vcl::test::TestResult eResult
+        = vcl::test::OutputDeviceTestLine::checkFilledAsymmetricalDropShape(aBitmap);
+    appendTestResult(aTestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        BitmapEx aBitmapEx(aBitmap);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
+    }
+}
+
 void GraphicsRenderTests::runALLTests()
 {
     testDrawRectWithRectangle();
@@ -1537,6 +1558,7 @@ void GraphicsRenderTests::runALLTests()
     testHalfEllipseAAWithPolygon();
     testClosedBezierWithPolyline();
     testClosedBezierWithPolygon();
+    testFilledAsymmetricalDropShape();
 }
 
 void GraphicsRenderTests::appendTestResult(OUString aTestName, OUString aTestStatus,
