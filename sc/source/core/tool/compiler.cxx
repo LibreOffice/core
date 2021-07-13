@@ -2227,6 +2227,17 @@ Label_MaskStateMachine:
                     if (c == '[' && FormulaGrammar::isExcelSyntax( meGrammar)
                             && eLastOp != ocDBArea && maTableRefs.empty())
                     {
+                        // [0]!Global_Range_Name, is a special case in Excel syntax,
+                        // where the '0' is referencing to self and we do not need it,
+                        // so we should skip it, in order to later it will be more
+                        // recognisable for IsNamedRange.
+                        if (pSrc[0] == '0' && pSrc[1] == ']' && pSrc[2] == '!')
+                        {
+                            pSrc = pSrc + 3;
+                            c = *pSrc;
+                            continue;
+                        }
+
                         nMask &= ~ScCharFlags::Char;
                         goto Label_MaskStateMachine;
                     }
@@ -5275,7 +5286,8 @@ void ScCompiler::CreateStringFromIndex( OUStringBuffer& rBuffer, const FormulaTo
             if (pData)
             {
                 SCTAB nTab = _pTokenP->GetSheet();
-                if (nTab >= 0 && nTab != aPos.Tab())
+                bool bExcelExcelSyntax = FormulaGrammar::isExcelSyntax(meGrammar);
+                if (nTab >= 0 && (nTab != aPos.Tab() || bExcelExcelSyntax))
                 {
                     // Sheet-local on other sheet.
                     OUString aName;
@@ -5288,6 +5300,13 @@ void ScCompiler::CreateStringFromIndex( OUStringBuffer& rBuffer, const FormulaTo
                         aBuffer.append(ScCompiler::GetNativeSymbol(ocErrName));
                     aBuffer.append( pConv->getSpecialSymbol( ScCompiler::Convention::SHEET_SEPARATOR));
                 }
+                else if (bExcelExcelSyntax)
+                {
+                    // For global names require an extra 'external file' ooxml prefix, which links to themselves.
+                    aBuffer.append("[0]");
+                    aBuffer.append(pConv->getSpecialSymbol(ScCompiler::Convention::SHEET_SEPARATOR));
+                }
+
                 aBuffer.append(pData->GetName());
             }
         }
