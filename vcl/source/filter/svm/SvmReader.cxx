@@ -699,6 +699,7 @@ rtl::Reference<MetaAction> SvmReader::TextArrayHandler(ImplMetaReadData* pData)
     if (nTmpLen > aStr.getLength() - nTmpIndex)
     {
         pAction->SetIndex(0);
+        pAction->SetLen(aStr.getLength());
         return pAction;
     }
 
@@ -735,6 +736,7 @@ rtl::Reference<MetaAction> SvmReader::TextArrayHandler(ImplMetaReadData* pData)
         if (nTmpIndex + nTmpLen > aStr.getLength())
         {
             pAction->SetIndex(0);
+            pAction->SetLen(aStr.getLength());
             aArray.reset();
         }
     }
