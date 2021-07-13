@@ -1067,6 +1067,8 @@ public:
 
     const tools::Rectangle&    GetRect() const { return maRect; }
     const Gradient&     GetGradient() const { return maGradient; }
+    void                SetGradient(Gradient& rGradient) { maGradient = rGradient; }
+    void                SetRect(tools::Rectangle& rRect) { maRect = rRect; }
 };
 
 class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetaGradientExAction final : public MetaAction
