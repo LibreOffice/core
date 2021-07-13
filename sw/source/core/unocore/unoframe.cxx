@@ -3170,14 +3170,14 @@ OUString SwXFrame::getShapeType()
 }
 
 SwXTextFrame::SwXTextFrame( SwDoc *_pDoc ) :
-    SwXText(nullptr, CursorType::Frame),
-    SwXFrame(FLYCNTTYPE_FRM, aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_FRAME), _pDoc )
+    SwXTextFrameBaseClass(FLYCNTTYPE_FRM, aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_FRAME), _pDoc ),
+    SwXText(nullptr, CursorType::Frame)
 {
 }
 
 SwXTextFrame::SwXTextFrame(SwFrameFormat& rFormat) :
-    SwXText(rFormat.GetDoc(), CursorType::Frame),
-    SwXFrame(rFormat, FLYCNTTYPE_FRM, aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_FRAME))
+    SwXTextFrameBaseClass(rFormat, FLYCNTTYPE_FRM, aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_FRAME)),
+    SwXText(rFormat.GetDoc(), CursorType::Frame)
 {
 
 }
