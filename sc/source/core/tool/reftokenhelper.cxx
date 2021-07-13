@@ -108,6 +108,16 @@ void ScRefTokenHelper::compileRangeRepresentation(
                 if (p->GetString().isEmpty())
                     bFailure = true;
                 break;
+            case svIndex:
+                {
+                    if (p->GetOpCode() == ocName)
+                    {
+                        ScRangeData* pNameRange = rDoc.FindRangeNameBySheetAndIndex(p->GetSheet(), p->GetIndex());
+                        if (!pNameRange->HasReferences())
+                            bFailure = true;
+                    }
+                }
+                break;
             default:
                 bFailure = true;
                 break;
@@ -149,6 +159,16 @@ bool ScRefTokenHelper::getRangeFromToken(
             const ScComplexRefData& rRefData = *pToken->GetDoubleRef();
             rRange = rRefData.toAbs(*pDoc, rPos);
             return true;
+        }
+        case svIndex:
+        {
+            if (pToken->GetOpCode() == ocName)
+            {
+                ScRangeData* pNameRange = pDoc->FindRangeNameBySheetAndIndex(pToken->GetSheet(), pToken->GetIndex());
+                if (pNameRange->IsReference(rRange, rPos))
+                    return true;
+            }
+            return false;
         }
         default:
             ; // do nothing

@@ -410,6 +410,7 @@ RangeYMaximum
 RangeYMinimum
 ReadOnly
 RefAngle
+RefConventionChartOOXML
 RefR
 RefX
 RefY
