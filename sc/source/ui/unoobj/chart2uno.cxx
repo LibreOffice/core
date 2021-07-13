@@ -874,9 +874,21 @@ public:
 
         ScTokenRef aStart, aEnd;
         bool bValidToken = splitRangeToken(*mpDoc, rToken, aStart, aEnd);
+        // Check there is a valid reference in named range
+        if (!bValidToken && rToken->GetType() == svIndex && rToken->GetOpCode() == ocName)
+        {
+            ScRangeData* pNameRange = mpDoc->FindRangeNameBySheetAndIndex(rToken->GetSheet(), rToken->GetIndex());
+            if (pNameRange->HasReferences())
+            {
+                const ScTokenRef aTempToken = pNameRange->GetCode()->FirstToken();
+                bValidToken = splitRangeToken(*mpDoc, aTempToken, aStart, aEnd);
+            }
+        }
+
         OSL_ENSURE(bValidToken, "invalid token");
         if (!bValidToken)
             return;
+
         ScCompiler aCompiler(*mpDoc, ScAddress(0,0,0), FormulaGrammar::GRAM_ENGLISH);
         {
             OUString aStr;
@@ -1592,7 +1604,7 @@ class RangeAnalyzer
 {
 public:
     RangeAnalyzer();
-    void initRangeAnalyzer( const vector<ScTokenRef>& rTokens );
+    void initRangeAnalyzer( const ScDocument* pDoc, const vector<ScTokenRef>& rTokens );
     void analyzeRange( sal_Int32& rnDataInRows, sal_Int32& rnDataInCols,
             bool& rbRowSourceAmbiguous ) const;
     bool inSameSingleRow( const RangeAnalyzer& rOther );
@@ -1620,7 +1632,7 @@ RangeAnalyzer::RangeAnalyzer()
 {
 }
 
-void RangeAnalyzer::initRangeAnalyzer( const vector<ScTokenRef>& rTokens )
+void RangeAnalyzer::initRangeAnalyzer( const ScDocument* pDoc, const vector<ScTokenRef>& rTokens )
 {
     mnRowCount=0;
     mnColumnCount=0;
@@ -1673,6 +1685,28 @@ void RangeAnalyzer::initRangeAnalyzer( const vector<ScTokenRef>& rTokens )
                 if (mnStartColumn != r.Col() && mnStartRow != r.Row())
                     mbAmbiguous=true;
             }
+        }
+        else if (eVar == svIndex && aRefToken->GetOpCode() == ocName)
+        {
+            ScRangeData* pNameRange = pDoc->FindRangeNameBySheetAndIndex(aRefToken->GetSheet(), aRefToken->GetIndex());
+            ScRange aRange;
+            if (pNameRange->IsReference(aRange))
+            {
+                mnColumnCount = std::max<SCCOL>(mnColumnCount, static_cast<SCCOL>(abs(aRange.aEnd.Col() - aRange.aStart.Col()) + 1));
+                mnRowCount = std::max<SCROW>(mnRowCount, static_cast<SCROW>(abs(aRange.aEnd.Row() - aRange.aStart.Row()) + 1));
+                if (mnStartColumn == -1)
+                {
+                    mnStartColumn = aRange.aStart.Col();
+                    mnStartRow = aRange.aStart.Row();
+                }
+                else
+                {
+                    if (mnStartColumn != aRange.aStart.Col() && mnStartRow != aRange.aStart.Row())
+                        mbAmbiguous = true;
+                }
+            }
+            else
+                mbAmbiguous = true;
         }
         else
             mbAmbiguous=true;
@@ -1776,10 +1810,22 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
                     const sal_Unicode cSep = ScCompiler::GetNativeSymbolChar(ocSep);
                     ScRefTokenHelper::compileRangeRepresentation(
                         aTokens, xLabel->getSourceRangeRepresentation(), *m_pDocument, cSep, m_pDocument->GetGrammar(), true);
-                    aLabel.initRangeAnalyzer(aTokens);
+                    aLabel.initRangeAnalyzer(m_pDocument, aTokens);
                     for (const auto& rxToken : aTokens)
                     {
-                        ScRefTokenHelper::join(m_pDocument, aAllTokens, rxToken, ScAddress());
+                        if (rxToken->GetType() == svIndex && rxToken->GetOpCode() == ocName)
+                        {
+                            ScRangeData* pNameRange = m_pDocument->FindRangeNameBySheetAndIndex(rxToken->GetSheet(), rxToken->GetIndex());
+                            if (pNameRange->HasReferences())
+                            {
+                                const ScTokenRef aTempToken = pNameRange->GetCode()->FirstToken();
+                                ScRefTokenHelper::join(m_pDocument, aAllTokens, aTempToken, ScAddress());
+                            }
+                            else
+                                ScRefTokenHelper::join(m_pDocument, aAllTokens, rxToken, ScAddress());
+                        }
+                        else
+                            ScRefTokenHelper::join(m_pDocument, aAllTokens, rxToken, ScAddress());
                         if(!bThisIsCategories)
                             ScRefTokenHelper::join(m_pDocument, aAllSeriesLabelTokens, rxToken, ScAddress());
                     }
@@ -1794,10 +1840,22 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
                     const sal_Unicode cSep = ScCompiler::GetNativeSymbolChar(ocSep);
                     ScRefTokenHelper::compileRangeRepresentation(
                         aTokens, xValues->getSourceRangeRepresentation(), *m_pDocument, cSep, m_pDocument->GetGrammar(), true);
-                    aValues.initRangeAnalyzer(aTokens);
+                    aValues.initRangeAnalyzer(m_pDocument, aTokens);
                     for (const auto& rxToken : aTokens)
                     {
-                        ScRefTokenHelper::join(m_pDocument, aAllTokens, rxToken, ScAddress());
+                        if (rxToken->GetType() == svIndex && rxToken->GetOpCode() == ocName)
+                        {
+                            ScRangeData* pNameRange = m_pDocument->FindRangeNameBySheetAndIndex(rxToken->GetSheet(), rxToken->GetIndex());
+                            if (pNameRange->HasReferences())
+                            {
+                                const ScTokenRef aTempToken = pNameRange->GetCode()->FirstToken();
+                                ScRefTokenHelper::join(m_pDocument, aAllTokens, aTempToken, ScAddress());
+                            }
+                            else
+                                ScRefTokenHelper::join(m_pDocument, aAllTokens, rxToken, ScAddress());
+                        }
+                        else
+                            ScRefTokenHelper::join(m_pDocument, aAllTokens, rxToken, ScAddress());
                         if(bThisIsCategories)
                             ScRefTokenHelper::join(m_pDocument, aAllCategoriesValuesTokens, rxToken, ScAddress());
                     }
@@ -1884,13 +1942,13 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
         RangeAnalyzer aTop,aLeft;
         if( eRowSource==chart::ChartDataRowSource_COLUMNS )
         {
-            aTop.initRangeAnalyzer(aAllSeriesLabelTokens);
-            aLeft.initRangeAnalyzer(aAllCategoriesValuesTokens);
+            aTop.initRangeAnalyzer(m_pDocument, aAllSeriesLabelTokens);
+            aLeft.initRangeAnalyzer(m_pDocument, aAllCategoriesValuesTokens);
         }
         else
         {
-            aTop.initRangeAnalyzer(aAllCategoriesValuesTokens);
-            aLeft.initRangeAnalyzer(aAllSeriesLabelTokens);
+            aTop.initRangeAnalyzer(m_pDocument, aAllCategoriesValuesTokens);
+            aLeft.initRangeAnalyzer(m_pDocument, aAllSeriesLabelTokens);
         }
         lcl_addUpperLeftCornerIfMissing(m_pDocument, aAllTokens, aTop.getRowCount(), aLeft.getColumnCount());//e.g. #i91212#
     }
@@ -2126,6 +2184,7 @@ ScChart2DataProvider::createDataSequenceByFormulaTokens(
                 }
             }
             break;
+            case svIndex:
             case svString:
             case svSingleRef:
             case svDoubleRef:
