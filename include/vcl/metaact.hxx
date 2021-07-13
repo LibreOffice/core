@@ -1195,6 +1195,8 @@ public:
 
     const vcl::Region&  GetRegion() const { return maRegion; }
     bool                IsClipping() const { return mbClip; }
+    void                SetRegion(vcl::Region& rRegion) { maRegion = rRegion; }
+    void                SetClipping(bool bClip) { mbClip = bClip; }
 };
 
 class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetaISectRectClipRegionAction final : public MetaAction
