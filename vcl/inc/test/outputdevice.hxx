@@ -91,6 +91,7 @@ public:
     static TestResult checkLineJoinNone(Bitmap& rBitmap) { return checkLineJoin(rBitmap, basegfx::B2DLineJoin::NONE); }
     static TestResult checkHalfEllipse(Bitmap& rBitmap);
     static TestResult checkClosedBezier(Bitmap& rBitmap);
+    static TestResult checkFilledAsymmetricalCircle(Bitmap& rBitmap);
 private:
     static TestResult checkLineCap(Bitmap& rBitmap, css::drawing::LineCap lineCap);
     static TestResult checkLineJoin(Bitmap& rBitmap, basegfx::B2DLineJoin lineJoin);
@@ -211,6 +212,7 @@ public:
     Bitmap setupAABezier();
     Bitmap setupEllipse();
     Bitmap setupClosedBezier();
+    Bitmap setupFilledAsymmetricalCircle();
 };
 
 class VCL_DLLPUBLIC OutputDeviceTestPolyPolygon : public OutputDeviceTestCommon
