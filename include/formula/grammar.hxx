@@ -41,6 +41,7 @@ public:
         CONV_XL_A1,         /* [doc]sheet:sheet2!A1:B2 */
         CONV_XL_R1C1,       /* [doc]sheet:sheet2!R1C1:R2C2 */
         CONV_XL_OOX,        /* [#]sheet:sheet2!A1:B2 */
+        CONV_XL_OOX_CHART,  /* [0]!NameRanges, Sheet1!LocalSheetRangename*/
 
         CONV_LOTUS_A1,      /* external? 3d? A1.B2 <placeholder/> */
 
@@ -143,6 +144,11 @@ public:
                                 ((CONV_XL_OOX        +
                                   kConventionOffset) << kConventionShift)       |
                                 kEnglishBit,
+        /// Special Excel Chart reference style.
+        GRAM_CHART_OOXML     = css::sheet::FormulaLanguage::OOXML               |
+                                ((CONV_XL_OOX_CHART  +
+                                  kConventionOffset) << kConventionShift)       |
+                                kEnglishBit,
         /// API English with A1 reference style, unbracketed.
         GRAM_API            = css::sheet::FormulaLanguage::API                  |
                                 ((CONV_OOO           +
@@ -231,10 +237,18 @@ public:
             case FormulaGrammar::AddressConvention::CONV_XL_A1:
             case FormulaGrammar::AddressConvention::CONV_XL_R1C1:
             case FormulaGrammar::AddressConvention::CONV_XL_OOX:
+            case FormulaGrammar::AddressConvention::CONV_XL_OOX_CHART:
                 return true;
             default:
                 return false;
         }
+    }
+
+    /// If grammar has an Chart Excel syntax, determined by address convention.
+    static bool isOOXMLChartSyntax( const Grammar eGrammar )
+    {
+        AddressConvention eConv = extractRefConvention(eGrammar);
+        return eConv == FormulaGrammar::AddressConvention::CONV_XL_OOX_CHART;
     }
 
 };
