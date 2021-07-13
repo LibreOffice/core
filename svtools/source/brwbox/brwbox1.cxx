@@ -173,16 +173,22 @@ BrowseBox::~BrowseBox()
     disposeOnce();
 }
 
-void BrowseBox::dispose()
+void BrowseBox::DisposeAccessible()
 {
-    SAL_INFO("svtools", "BrowseBox:dispose " << this );
-
-    if ( m_pImpl->m_pAccessible )
+    if (m_pImpl->m_pAccessible )
     {
         disposeAndClearHeaderCell(m_pImpl->m_aColHeaderCellMap);
         disposeAndClearHeaderCell(m_pImpl->m_aRowHeaderCellMap);
         m_pImpl->m_pAccessible->dispose();
+        m_pImpl->m_pAccessible = nullptr;
     }
+}
+
+void BrowseBox::dispose()
+{
+    SAL_INFO("svtools", "BrowseBox:dispose " << this );
+
+    DisposeAccessible();
 
     Hide();
     pDataWin->pHeaderBar.disposeAndClear();

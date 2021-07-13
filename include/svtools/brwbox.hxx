@@ -449,6 +449,8 @@ protected:
 
     bool            IsDropFormatSupported( SotClipboardFormatId nFormat );     // need this because the base class' IsDropFormatSupported is not const ...
 
+    void            DisposeAccessible();
+
 protected:
     // callbacks for the data window
     virtual void    ImplStartTracking();
