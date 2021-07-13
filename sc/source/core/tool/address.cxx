@@ -437,26 +437,37 @@ static bool lcl_XL_getExternalDoc( const sal_Unicode** ppErrRet, OUString& rExte
             switch (rInfo.Type)
             {
                 case sheet::ExternalLinkType::DOCUMENT :
+                {
+                    OUString aStr;
+                    if (!(rInfo.Data >>= aStr))
                     {
-                        OUString aStr;
-                        if (!(rInfo.Data >>= aStr))
-                        {
-                            SAL_INFO(
-                                "sc.core",
-                                "Data type mismatch for ExternalLinkInfo "
-                                    << i);
-                            *ppErrRet = nullptr;
-                            return false;
-                        }
-                        rExternDocName = aStr;
-                    }
-                    break;
-                    case sheet::ExternalLinkType::SELF :
-                        return false;   // ???
-                    case sheet::ExternalLinkType::SPECIAL :
-                        // silently return nothing (do not assert), caller has to handle this
+                        SAL_INFO(
+                            "sc.core",
+                            "Data type mismatch for ExternalLinkInfo "
+                                << i);
                         *ppErrRet = nullptr;
                         return false;
+                    }
+                    rExternDocName = aStr;
+                }
+                break;
+                case sheet::ExternalLinkType::SELF :
+                {
+                    // For handleing the [0]!Global_range_name, where [0] is the external doc's index,
+                    // which points to itself and we do not need it later in the ScCompiler::IsNamedRange.
+                    while (*(*ppErrRet) != '!')
+                    {
+                        ++(*ppErrRet);
+                    }
+                    ++(*ppErrRet);
+                    lcl_eatWhiteSpace(*ppErrRet);
+                    return false;
+                }
+                break;
+                case sheet::ExternalLinkType::SPECIAL :
+                    // silently return nothing (do not assert), caller has to handle this
+                    *ppErrRet = nullptr;
+                    return false;
                 default:
                     SAL_INFO(
                         "sc.core",
@@ -775,6 +786,8 @@ static ScRefFlags lcl_ScRange_Parse_XL_R1C1( ScRange& r,
         *pSheetEndPos = p - pStart;
         nBailOutFlags = ScRefFlags::TAB_VALID | ScRefFlags::TAB_3D;
     }
+    else if (pSheetEndPos && pStart < p && aExternDocName == "0")
+        *pSheetEndPos = p - pStart;
 
     if (!aExternDocName.isEmpty())
         lcl_ScRange_External_TabSpan( r, nFlags, pExtInfo, aExternDocName,
@@ -1000,6 +1013,8 @@ static ScRefFlags lcl_ScRange_Parse_XL_A1( ScRange& r,
         *pSheetEndPos = p - pStart;
         nBailOutFlags = ScRefFlags::TAB_VALID | ScRefFlags::TAB_3D;
     }
+    else if (pSheetEndPos && pStart < p && aExternDocName == "0")
+        *pSheetEndPos = p - pStart;
 
     if (!aExternDocName.isEmpty())
         lcl_ScRange_External_TabSpan( r, nFlags, pExtInfo, aExternDocName,
