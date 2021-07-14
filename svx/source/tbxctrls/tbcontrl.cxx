@@ -2179,15 +2179,15 @@ SvxFrameWindow_Impl::SvxFrameWindow_Impl(SvxFrameToolBoxControl* pControl, weld:
 
     sal_uInt16 i = 0;
 
-    for ( i=1; i<9; i++ )
+    for ( i=1; i<11; i++ )
         mxFrameSet->InsertItem(i, Image(aImgVec[i-1].first), aImgVec[i-1].second);
 
     //bParagraphMode should have been set in StateChanged
     if ( !bParagraphMode )
-        for ( i = 9; i < 13; i++ )
+        for ( i = 11; i < 15; i++ )
             mxFrameSet->InsertItem(i, Image(aImgVec[i-1].first), aImgVec[i-1].second);
 
-    mxFrameSet->SetColCount( 4 );
+    mxFrameSet->SetColCount( 5 );
     mxFrameSet->SetSelectHdl( LINK( this, SvxFrameWindow_Impl, SelectHdl ) );
     CalcSizeValueSet();
 
@@ -2245,42 +2245,44 @@ IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl, ValueSet*, void)
         case 4: pLeft = pRight = &theDefLine;
                 nValidFlags |=  FrmValidFlags::Right|FrmValidFlags::Left;
         break;  // LEFTRIGHT
-        case 5: pTop = &theDefLine;
+        case 5: break;  // DIAGONAL LEFT
+        case 6: pTop = &theDefLine;
                 nValidFlags |= FrmValidFlags::Top;
         break;  // TOP
-        case 6: pBottom = &theDefLine;
+        case 7: pBottom = &theDefLine;
                 nValidFlags |= FrmValidFlags::Bottom;
         break;  // BOTTOM
-        case 7: pTop =  pBottom = &theDefLine;
+        case 8: pTop =  pBottom = &theDefLine;
                 nValidFlags |= FrmValidFlags::Bottom|FrmValidFlags::Top;
         break;  // TOPBOTTOM
-        case 8: pLeft = pRight = pTop = pBottom = &theDefLine;
+        case 9: pLeft = pRight = pTop = pBottom = &theDefLine;
                 nValidFlags |= FrmValidFlags::Left | FrmValidFlags::Right | FrmValidFlags::Top | FrmValidFlags::Bottom;
         break;  // OUTER
+        case 10: break;  // DIAGONAL RIGHT
 
         // Inner Table:
-        case 9: // HOR
+        case 11: // HOR
             pTop = pBottom = &theDefLine;
             aBorderInner.SetLine( &theDefLine, SvxBoxInfoItemLine::HORI );
             aBorderInner.SetLine( nullptr, SvxBoxInfoItemLine::VERT );
             nValidFlags |= FrmValidFlags::HInner|FrmValidFlags::Top|FrmValidFlags::Bottom;
             break;
 
-        case 10: // HORINNER
+        case 12: // HORINNER
             pLeft = pRight = pTop = pBottom = &theDefLine;
             aBorderInner.SetLine( &theDefLine, SvxBoxInfoItemLine::HORI );
             aBorderInner.SetLine( nullptr, SvxBoxInfoItemLine::VERT );
             nValidFlags |= FrmValidFlags::Right|FrmValidFlags::Left|FrmValidFlags::HInner|FrmValidFlags::Top|FrmValidFlags::Bottom;
             break;
 
-        case 11: // VERINNER
+        case 13: // VERINNER
             pLeft = pRight = pTop = pBottom = &theDefLine;
             aBorderInner.SetLine( nullptr, SvxBoxInfoItemLine::HORI );
             aBorderInner.SetLine( &theDefLine, SvxBoxInfoItemLine::VERT );
             nValidFlags |= FrmValidFlags::Right|FrmValidFlags::Left|FrmValidFlags::VInner|FrmValidFlags::Top|FrmValidFlags::Bottom;
         break;
 
-        case 12: // ALL
+        case 14: // ALL
             pLeft = pRight = pTop = pBottom = &theDefLine;
             aBorderInner.SetLine( &theDefLine, SvxBoxInfoItemLine::HORI );
             aBorderInner.SetLine( &theDefLine, SvxBoxInfoItemLine::VERT );
@@ -2342,18 +2344,18 @@ void SvxFrameWindow_Impl::statusChanged( const css::frame::FeatureStateEvent& rE
     if(!mxFrameSet->GetItemCount())
         return;
 
-    bool bTableMode = ( mxFrameSet->GetItemCount() == 12 );
+    bool bTableMode = ( mxFrameSet->GetItemCount() == 14 );
     bool bResize    = false;
 
     if ( bTableMode && bParagraphMode )
     {
-        for ( sal_uInt16 i = 9; i < 13; i++ )
+        for ( sal_uInt16 i = 11; i < 15; i++ )
             mxFrameSet->RemoveItem(i);
         bResize = true;
     }
     else if ( !bTableMode && !bParagraphMode )
     {
-        for ( sal_uInt16 i = 9; i < 13; i++ )
+        for ( sal_uInt16 i = 11; i < 15; i++ )
             mxFrameSet->InsertItem(i, Image(aImgVec[i-1].first), aImgVec[i-1].second);
         bResize = true;
     }
@@ -2381,10 +2383,14 @@ void SvxFrameWindow_Impl::InitImageList()
         {BitmapEx(RID_SVXBMP_FRAME2), SvxResId(RID_SVXSTR_PARA_PRESET_ONLYLEFT)},
         {BitmapEx(RID_SVXBMP_FRAME3), SvxResId(RID_SVXSTR_PARA_PRESET_ONLYRIGHT)},
         {BitmapEx(RID_SVXBMP_FRAME4), SvxResId(RID_SVXSTR_PARA_PRESET_LEFTRIGHT)},
+        {BitmapEx(RID_SVXBMP_FRAME14), SvxResId(RID_SVXSTR_PARA_PRESET_DIAGONALLEFT)}, // diagonal left border
+
         {BitmapEx(RID_SVXBMP_FRAME5), SvxResId(RID_SVXSTR_PARA_PRESET_ONLYTOP)},
         {BitmapEx(RID_SVXBMP_FRAME6), SvxResId(RID_SVXSTR_PARA_PRESET_ONLYTBOTTOM)},
         {BitmapEx(RID_SVXBMP_FRAME7), SvxResId(RID_SVXSTR_PARA_PRESET_TOPBOTTOM)},
         {BitmapEx(RID_SVXBMP_FRAME8), SvxResId(RID_SVXSTR_TABLE_PRESET_ONLYOUTER)},
+        {BitmapEx(RID_SVXBMP_FRAME13), SvxResId(RID_SVXSTR_PARA_PRESET_DIAGONALRIGHT)}, // diagonal right border
+
         {BitmapEx(RID_SVXBMP_FRAME9), SvxResId(RID_SVXSTR_PARA_PRESET_TOPBOTTOMHORI)},
         {BitmapEx(RID_SVXBMP_FRAME10), SvxResId(RID_SVXSTR_TABLE_PRESET_OUTERHORI)},
         {BitmapEx(RID_SVXBMP_FRAME11), SvxResId(RID_SVXSTR_TABLE_PRESET_OUTERVERI)},
