@@ -663,6 +663,13 @@ rtl::Reference<MetaAction> SvmReader::TextHandler(ImplMetaReadData* pData)
     if (aCompat.GetVersion() >= 2) // Version 2
         aStr = read_uInt16_lenPrefixed_uInt16s_ToOUString(mrStream);
 
+    if (nTmpIndex + nTmpLen > aStr.getLength())
+    {
+        SAL_WARN("vcl.gdi", "inconsistent offset and len");
+        pAction->SetIndex(0);
+        pAction->SetLen(aStr.getLength());
+    }
+
     pAction->SetText(aStr);
 
     return pAction;
@@ -696,8 +703,9 @@ rtl::Reference<MetaAction> SvmReader::TextArrayHandler(ImplMetaReadData* pData)
     sal_Int32 nAryLen(0);
     mrStream.ReadInt32(nAryLen);
 
-    if (nTmpLen > aStr.getLength() - nTmpIndex)
+    if (nTmpIndex + nTmpLen > aStr.getLength())
     {
+        SAL_WARN("vcl.gdi", "inconsistent offset and len");
         pAction->SetIndex(0);
         pAction->SetLen(aStr.getLength());
         return pAction;
@@ -735,6 +743,7 @@ rtl::Reference<MetaAction> SvmReader::TextArrayHandler(ImplMetaReadData* pData)
 
         if (nTmpIndex + nTmpLen > aStr.getLength())
         {
+            SAL_WARN("vcl.gdi", "inconsistent offset and len");
             pAction->SetIndex(0);
             pAction->SetLen(aStr.getLength());
             aArray.reset();
