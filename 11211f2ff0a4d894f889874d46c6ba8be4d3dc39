@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "de823280_30979c66",
+        "filename": "writerfilter/source/dmapper/NumberingManager.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1181,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-07-14T07:54:32Z",
+      "side": 1,
+      "message": "This assert is triggered quite a few times in the most recent crashtesting run. e.g. the backtrace at https://dev-builds.libreoffice.org/crashtest/7e016df70d4ceb6c90ec5f1b129b50a65ff07505/backtraces/task447-core.backtrace.txt\non loading the rtf document from https://bz.apache.org/ooo/attachment.cgi?id\u003d31950",
+      "revId": "11211f2ff0a4d894f889874d46c6ba8be4d3dc39",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
