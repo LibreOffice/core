@@ -80,6 +80,46 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf129382)
     CPPUNIT_ASSERT_EQUAL(8, getShapes());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf143320)
+{
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf143320.odt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+
+    rtl::Reference<SwTransferable> xTransfer = new SwTransferable(*pWrtShell);
+    xTransfer->Copy();
+    Scheduler::ProcessEventsToIdle();
+    TransferableDataHelper aHelper(xTransfer);
+
+    mxComponent->dispose();
+    mxComponent.clear();
+
+    // Create a new document
+    pDoc = createSwDoc();
+    pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+
+    // Without the fix in place, this test would have crashed here
+    for (sal_Int32 i = 0; i < 5; ++i)
+    {
+        SwTransferable::Paste(*pWrtShell, aHelper);
+        Scheduler::ProcessEventsToIdle();
+
+        CPPUNIT_ASSERT_EQUAL(1, getShapes());
+        CPPUNIT_ASSERT_EQUAL(1, getPages());
+
+        dispatchCommand(mxComponent, ".uno:Undo", {});
+        Scheduler::ProcessEventsToIdle();
+
+        CPPUNIT_ASSERT_EQUAL(0, getShapes());
+        CPPUNIT_ASSERT_EQUAL(1, getPages());
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf135662)
 {
     SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf135662.odt");
@@ -1887,6 +1927,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf134626)
     xTransfer->Copy();
     Scheduler::ProcessEventsToIdle();
     TransferableDataHelper aHelper(xTransfer);
+
+    mxComponent->dispose();
+    mxComponent.clear();
 
     // Create a new document
     pDoc = createSwDoc();
