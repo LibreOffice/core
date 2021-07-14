@@ -3589,6 +3589,46 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf143176)
                          getParagraph(2)->getString());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf143320)
+{
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf143320.odt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+    CPPUNIT_ASSERT(getParagraph(1)->getString().startsWith("x"));
+
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+
+    rtl::Reference<SwTransferable> xTransfer = new SwTransferable(*pWrtShell);
+    xTransfer->Copy();
+    Scheduler::ProcessEventsToIdle();
+    TransferableDataHelper aHelper(xTransfer);
+
+    // Create a new document
+    pDoc = createSwDoc();
+    pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+
+    SwTransferable::Paste(*pWrtShell, aHelper);
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+    CPPUNIT_ASSERT(getParagraph(1)->getString().startsWith("x"));
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+    CPPUNIT_ASSERT_EQUAL(OUString(""), getParagraph(1)->getString());
+
+    // Without the fix in place, this test would have crashed here
+    SwTransferable::Paste(*pWrtShell, aHelper);
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+    CPPUNIT_ASSERT(getParagraph(1)->getString().startsWith("x"));
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testInsertLongDateFormat)
 {
     // only for Hungarian, yet
