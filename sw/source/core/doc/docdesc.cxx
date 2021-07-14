@@ -552,9 +552,12 @@ void SwDoc::ChgPageDesc( size_t i, const SwPageDesc &rChged )
     const SwFrameFormat* pStashedLeftFormat = bRestoreStashedLeftHead ? rChged.GetStashedFrameFormat(true, true, false) : nullptr;
     const SwFrameFormat* pStashedFirstMasterFormat = bRestoreStashedFirstMasterHead ? rChged.GetStashedFrameFormat(true, false, true) : nullptr;
     const SwFrameFormat* pStashedFirstLeftFormat = bRestoreStashedFirstLeftHead ? rChged.GetStashedFrameFormat(true, true, true) : nullptr;
-    CopyMasterHeader(rChged, pStashedLeftFormat ? pStashedLeftFormat->GetHeader() : rMasterHead, rDesc, true, false); // Copy left header
-    CopyMasterHeader(rChged, pStashedFirstMasterFormat ? pStashedFirstMasterFormat->GetHeader() : rMasterHead, rDesc, false, true); // Copy first master
-    CopyMasterHeader(rChged, pStashedFirstLeftFormat ? pStashedFirstLeftFormat->GetHeader() : rMasterHead, rDesc, true, true); // Copy first left
+    if (rChged.IsHeaderShared() && !rDesc.IsHeaderShared())
+        CopyMasterHeader(rChged, pStashedLeftFormat ? pStashedLeftFormat->GetHeader() : rMasterHead, rDesc, true, false); // Copy left header
+    if (rChged.IsFirstShared() != rDesc.IsFirstShared())
+        CopyMasterHeader(rChged, pStashedFirstMasterFormat ? pStashedFirstMasterFormat->GetHeader() : rMasterHead, rDesc, false, true); // Copy first master
+    if (rChged.IsHeaderShared() != rDesc.IsHeaderShared() || rChged.IsFirstShared() != rDesc.IsFirstShared())
+        CopyMasterHeader(rChged, pStashedFirstLeftFormat ? pStashedFirstLeftFormat->GetHeader() : rMasterHead, rDesc, true, true); // Copy first left
 
     if (pStashedLeftFormat)
         rDesc.RemoveStashedFormat(true, true, false);
@@ -576,9 +579,12 @@ void SwDoc::ChgPageDesc( size_t i, const SwPageDesc &rChged )
     const SwFrameFormat* pStashedLeftFoot = bRestoreStashedLeftFoot ? rChged.GetStashedFrameFormat(false, true, false) : nullptr;
     const SwFrameFormat* pStashedFirstMasterFoot = bRestoreStashedFirstMasterFoot ? rChged.GetStashedFrameFormat(false, false, true) : nullptr;
     const SwFrameFormat* pStashedFirstLeftFoot = bRestoreStashedFirstLeftFoot ? rChged.GetStashedFrameFormat(false, true, true) : nullptr;
-    CopyMasterFooter(rChged, pStashedLeftFoot ? pStashedLeftFoot->GetFooter() : rMasterFoot, rDesc, true, false); // Copy left footer
-    CopyMasterFooter(rChged, pStashedFirstMasterFoot ? pStashedFirstMasterFoot->GetFooter() : rMasterFoot, rDesc, false, true); // Copy first master
-    CopyMasterFooter(rChged, pStashedFirstLeftFoot ? pStashedFirstLeftFoot->GetFooter() : rMasterFoot, rDesc, true, true); // Copy first left
+    if (rChged.IsFooterShared() && !rDesc.IsFooterShared())
+        CopyMasterFooter(rChged, pStashedLeftFoot ? pStashedLeftFoot->GetFooter() : rMasterFoot, rDesc, true, false); // Copy left footer
+    if (rChged.IsFirstShared() != rDesc.IsFirstShared())
+        CopyMasterFooter(rChged, pStashedFirstMasterFoot ? pStashedFirstMasterFoot->GetFooter() : rMasterFoot, rDesc, false, true); // Copy first master
+    if (rChged.IsFooterShared() != rDesc.IsFooterShared() || rChged.IsFirstShared() != rDesc.IsFirstShared())
+        CopyMasterFooter(rChged, pStashedFirstLeftFoot ? pStashedFirstLeftFoot->GetFooter() : rMasterFoot, rDesc, true, true); // Copy first left
 
     if (pStashedLeftFormat)
         rDesc.RemoveStashedFormat(false, true, false);
