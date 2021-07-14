@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "58e1363b_2b7888c8",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1556,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-07-14T15:27:14Z",
+      "side": 0,
+      "message": "safe to remove this for DOCX because pList will always be false if nListId \u003d\u003d 0 or -1 (or probably any negative number for that matter).",
+      "range": {
+        "startLine": 1556,
+        "startChar": 21,
+        "endLine": 1556,
+        "endChar": 36
+      },
+      "revId": "f49339715eb161574217873cf8f08df954bf485b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

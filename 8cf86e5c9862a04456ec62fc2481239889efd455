@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b5dded8b_24695b6c",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1549,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-07-14T15:27:14Z",
+      "side": 1,
+      "message": "this pretty clearly tells the code-reader that there is a difference between DOCX and RTF.",
+      "range": {
+        "startLine": 1549,
+        "startChar": 42,
+        "endLine": 1549,
+        "endChar": 68
+      },
+      "revId": "8cf86e5c9862a04456ec62fc2481239889efd455",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
