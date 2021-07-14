@@ -23,6 +23,7 @@
 #include <tools/fract.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/filter/SvmReader.hxx>
+#include <vcl/filter/SvmWriter.hxx>
 #include <salhelper/simplereferenceobject.hxx>
 
 #include <bitmap/BitmapWriteAccess.hxx>
@@ -325,7 +326,8 @@ GDIMetaFile SvmTest::writeAndReadStream(GDIMetaFile& rMetaFile, std::u16string_v
         writeToFile(rMetaFile, rName);
 
     SvMemoryStream aStream;
-    rMetaFile.Write(aStream);
+    SvmWriter aWriter(aStream);
+    aWriter.Write(rMetaFile);
     aStream.Seek(STREAM_SEEK_TO_BEGIN);
 
     GDIMetaFile aResultMetafile;
