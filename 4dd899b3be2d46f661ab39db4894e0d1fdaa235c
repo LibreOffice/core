@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "efa4e3bc_453e7ce1",
+        "filename": "sw/inc/tblafmt.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-07-14T09:25:00Z",
+      "side": 1,
+      "message": "this member can be replaced with 2 local variables in  the Load/Save functions, with a comment that these only exist for file format compatibility",
+      "range": {
+        "startLine": 176,
+        "startChar": 40,
+        "endLine": 176,
+        "endChar": 48
+      },
+      "revId": "4dd899b3be2d46f661ab39db4894e0d1fdaa235c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
