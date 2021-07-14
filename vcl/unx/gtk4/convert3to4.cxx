@@ -1171,6 +1171,10 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
             {
                 xClass->setNodeValue("GtkToggleButton");
             }
+            else if (sClass == "GtkSeparatorToolItem")
+            {
+                xClass->setNodeValue("GtkSeparator");
+            }
             else if (sClass == "GtkBox")
             {
                 // reverse the order of the pack-type=end widgets
