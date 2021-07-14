@@ -14,9 +14,6 @@ import re
 import json
 import requests
 
-def isOpen(status):
-    return status == 'NEW' or status == 'ASSIGNED' or status == 'REOPENED'
-
 def splitList(lst, n):
     for i in range(0, len(lst), n):
         yield lst[i:i + n]
@@ -182,18 +179,19 @@ def main(ignoredBugs):
             print('\n=== ' + k1 + ' ===')
             for bugId, info in v1.items():
 
-                status = ''
+                resolution = ''
                 keywords = []
                 priority = ''
                 for bug in bugzillaJson:
                     if str(bug['id']) == str(bugId):
-                        status = bug['status']
+                        resolution = bug['resolution']
                         keywords = bug['keywords']
                         priority = bug['priority']
                         break
 
-                #Ignore open bugs, performance bugs and accessibility bugs
-                if status and not isOpen(status) and 'perf' not in keywords \
+                # Only care about FIXED bugs
+                # Ignore performance bugs and accessibility bugs
+                if resolution and resolution == 'FIXED' and 'perf' not in keywords \
                         and 'accessibility' not in keywords:
                     print(
                         "# {} - [{}] {} - [https://bugs.documentfoundation.org/show_bug.cgi?id={} tdf#{}]".format(
