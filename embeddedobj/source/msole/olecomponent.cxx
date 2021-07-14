@@ -35,6 +35,7 @@
 #include <cppuhelper/interfacecontainer.h>
 #include <comphelper/mimeconfighelper.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/windowserrorstring.hxx>
 #include <osl/file.hxx>
 #include <rtl/ref.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
@@ -445,9 +446,14 @@ OleComponent::OleComponent( const uno::Reference< uno::XComponentContext >& xCon
     OSL_ENSURE( m_pUnoOleObject, "No owner object is provided!" );
 
     HRESULT hr = OleInitialize( nullptr );
-    OSL_ENSURE( hr == S_OK || hr == S_FALSE, "The ole can not be successfully initialized" );
     if ( hr == S_OK || hr == S_FALSE )
         m_bOleInitialized = true;
+    else
+    {
+        SAL_WARN("embeddedobj.ole", "OleComponent ctor: OleInitialize() failed with 0x"
+                                        << OUString::number(static_cast<sal_uInt32>(hr), 16) << ": "
+                                        << WindowsErrorStringFromHRESULT(hr));
+    }
 
     m_pOleWrapClientSite = new OleWrapperClientSite( this );
     m_pOleWrapClientSite->AddRef();

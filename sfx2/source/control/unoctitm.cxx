@@ -78,6 +78,8 @@
 #include <comphelper/lok.hxx>
 
 #include <desktop/crashreport.hxx>
+#include <vcl/threadex.hxx>
+#include <unotools/mediadescriptor.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -233,7 +235,24 @@ void SAL_CALL SfxOfficeDispatch::dispatch( const css::util::URL& aURL, const css
 #if HAVE_FEATURE_JAVA
         std::unique_ptr< css::uno::ContextLayer > layer(EnsureJavaContext());
 #endif
-        pImpl->dispatch( aURL, aArgs, css::uno::Reference < css::frame::XDispatchResultListener >() );
+        utl::MediaDescriptor aDescriptor(aArgs);
+        bool bOnMainThread = aDescriptor.getUnpackedValueOrDefault("OnMainThread", false);
+        if (bOnMainThread)
+        {
+            // Make sure that we own the solar mutex, otherwise later
+            // vcl::SolarThreadExecutor::execute() will release the solar mutex, even if it's owned by
+            // an other thread, leading to an std::abort() at the end.
+            SolarMutexGuard aGuard;
+            vcl::solarthread::syncExecute([this, &aURL, &aArgs]() {
+                pImpl->dispatch(aURL, aArgs,
+                                css::uno::Reference<css::frame::XDispatchResultListener>());
+            });
+        }
+        else
+        {
+            pImpl->dispatch(aURL, aArgs,
+                            css::uno::Reference<css::frame::XDispatchResultListener>());
+        }
     }
 }
 
