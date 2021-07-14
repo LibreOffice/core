@@ -71,6 +71,7 @@ public:
     rtl::Reference<MetaAction> WallpaperHandler();
     rtl::Reference<MetaAction> ClipRegionHandler();
     rtl::Reference<MetaAction> ISectRectClipRegionHandler();
+    rtl::Reference<MetaAction> ISectRegionClipRegionHandler();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

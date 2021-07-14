@@ -1254,6 +1254,7 @@ public:
     virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const vcl::Region&  GetRegion() const { return maRegion; }
+    void                SetRegion(vcl::Region& rRegion) { maRegion = rRegion; }
 };
 
 class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetaMoveClipRegionAction final : public MetaAction
