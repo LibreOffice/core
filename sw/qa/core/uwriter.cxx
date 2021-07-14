@@ -1324,17 +1324,9 @@ void SwDocTest::testTableAutoFormats()
     //Set m_eNumFormatLanguage
     LanguageType aNFLang( LANGUAGE_GERMAN );
     aBoxAF.SetNumFormatLanguage(aNFLang);
-    //Set m_aBreak
-    SvxFormatBreakItem aBreak( SvxBreak::PageBefore, 0 );
-    aTableAF.SetBreak(aBreak);
     //Set m_aKeepWithNextPara
     SvxFormatKeepItem aKWNPara( true, 0 );
     aTableAF.SetKeepWithNextPara(aKWNPara);
-    //Set m_aPageDesc
-    SwFormatPageDesc aPDesc;
-    uno::Any aPDAny( sal_uInt16(3) );
-    aPDesc.PutValue( aPDAny, 0 );
-    aTableAF.m_aPageDesc = aPDesc;
     //Set m_aRepeatHeading
     sal_uInt16 aRHeading = 3;
     aTableAF.m_aRepeatHeading = aRHeading;
@@ -1466,12 +1458,8 @@ void SwDocTest::testTableAutoFormats()
     CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).GetSysLanguage() == aSLang ) );
     //Get m_eNumFormatLanguage
     CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).GetNumFormatLanguage() == aNFLang ) );
-    //Get m_aBreak
-    CPPUNIT_ASSERT( bool( pLoadAF->GetBreak() == aBreak ) );
     //Get m_aKeepWithNextPara
     CPPUNIT_ASSERT( bool( pLoadAF->GetKeepWithNextPara() == aKWNPara ) );
-    //Get m_aPageDesc
-    CPPUNIT_ASSERT( bool( pLoadAF->m_aPageDesc == aPDesc ) );
     //Get m_aRepeatHeading
     CPPUNIT_ASSERT( bool( pLoadAF->m_aRepeatHeading == aRHeading ) );
     //Get m_bLayoutSplit
