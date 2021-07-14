@@ -43,6 +43,7 @@
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <comphelper/processfactory.hxx>
 #include <sfx2/dispatch.hxx>
+#include <sfx2/filedlghelper.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svl/visitem.hxx>
@@ -602,17 +603,17 @@ void DialogWindow::UpdateBrowser()
 
 void DialogWindow::SaveDialog()
 {
-    Reference< XComponentContext > xContext( comphelper::getProcessComponentContext() );
-    Reference < XFilePicker3 > xFP = FilePicker::createWithMode(xContext, TemplateDescription::FILESAVE_AUTOEXTENSION_PASSWORD);
+    Reference<uno::XComponentContext> xContext(::comphelper::getProcessComponentContext());
+    sfx2::FileDialogHelper aDlg(ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION_PASSWORD,
+                                FileDialogFlags::NONE, this->GetFrameWeld());
+    aDlg.SetContext(sfx2::FileDialogHelper::BasicExportDialog);
+    Reference<XFilePicker3> xFP = aDlg.GetFilePicker();
 
     Reference< XFilePickerControlAccess > xFPControl(xFP, UNO_QUERY);
     xFPControl->enableControl(ExtendedFilePickerElementIds::CHECKBOX_PASSWORD, false);
     Any aValue;
     aValue <<= true;
     xFPControl->setValue(ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION, 0, aValue);
-
-    if ( !m_sCurPath.isEmpty() )
-        xFP->setDisplayDirectory ( m_sCurPath );
 
     xFP->setDefaultName( GetName() );
 
@@ -621,11 +622,10 @@ void DialogWindow::SaveDialog()
     xFP->appendFilter( IDEResId(RID_STR_FILTER_ALLFILES), FilterMask_All );
     xFP->setCurrentFilter( aDialogStr );
 
-    if( xFP->execute() != RET_OK )
+    if( aDlg.Execute() != ERRCODE_NONE )
         return;
 
     Sequence< OUString > aPaths = xFP->getSelectedFiles();
-    m_sCurPath = aPaths[0];
 
     // export dialog model to xml
     Reference< container::XNameContainer > xDialogModel = GetDialog();
@@ -637,9 +637,9 @@ void DialogWindow::SaveDialog()
     Reference< XOutputStream > xOutput;
     try
     {
-        if( xSFI->exists( m_sCurPath ) )
-            xSFI->kill( m_sCurPath );
-        xOutput = xSFI->openFileWrite( m_sCurPath );
+        if( xSFI->exists( aPaths[0] ) )
+            xSFI->kill( aPaths[0] );
+        xOutput = xSFI->openFileWrite( aPaths[0] );
     }
     catch(const Exception& )
     {}
@@ -830,12 +830,15 @@ public:
 
 }
 
-bool implImportDialog(weld::Window* pWin, const OUString& rCurPath, const ScriptDocument& rDocument, const OUString& aLibName)
+bool implImportDialog(weld::Window* pWin, const ScriptDocument& rDocument, const OUString& aLibName)
 {
     bool bDone = false;
 
-    Reference< XComponentContext > xContext( comphelper::getProcessComponentContext() );
-    Reference < XFilePicker3 > xFP = FilePicker::createWithMode(xContext, TemplateDescription::FILEOPEN_SIMPLE);
+    Reference<uno::XComponentContext> xContext(::comphelper::getProcessComponentContext());
+    sfx2::FileDialogHelper aDlg(ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
+                                FileDialogFlags::NONE, pWin);
+    aDlg.SetContext(sfx2::FileDialogHelper::BasicImportDialog);
+    Reference<XFilePicker3> xFP = aDlg.GetFilePicker();
 
     Reference< XFilePickerControlAccess > xFPControl(xFP, UNO_QUERY);
     xFPControl->enableControl(ExtendedFilePickerElementIds::CHECKBOX_PASSWORD, false);
@@ -843,22 +846,17 @@ bool implImportDialog(weld::Window* pWin, const OUString& rCurPath, const Script
     aValue <<= true;
     xFPControl->setValue(ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION, 0, aValue);
 
-    OUString aCurPath( rCurPath );
-    if ( !aCurPath.isEmpty() )
-        xFP->setDisplayDirectory ( aCurPath );
-
     OUString aDialogStr(IDEResId(RID_STR_STDDIALOGNAME));
     xFP->appendFilter( aDialogStr, "*.xdl" );
     xFP->appendFilter( IDEResId(RID_STR_FILTER_ALLFILES), FilterMask_All );
     xFP->setCurrentFilter( aDialogStr );
 
-    if( xFP->execute() == RET_OK )
+    if( aDlg.Execute() != ERRCODE_NONE )
     {
         Sequence< OUString > aPaths = xFP->getSelectedFiles();
-        aCurPath = aPaths[0];
 
         OUString aBasePath;
-        OUString aOUCurPath( aCurPath );
+        OUString aOUCurPath( aPaths[0] );
         sal_Int32 iSlash = aOUCurPath.lastIndexOf( '/' );
         if( iSlash != -1 )
             aBasePath = aOUCurPath.copy( 0, iSlash + 1 );
@@ -873,8 +871,8 @@ bool implImportDialog(weld::Window* pWin, const OUString& rCurPath, const Script
             Reference< XSimpleFileAccess3 > xSFI( SimpleFileAccess::create(xContext) );
 
             Reference< XInputStream > xInput;
-            if( xSFI->exists( aCurPath ) )
-                xInput = xSFI->openFileRead( aCurPath );
+            if( xSFI->exists( aOUCurPath ) )
+                xInput = xSFI->openFileRead( aOUCurPath );
 
             ::xmlscript::importDialogModel( xInput, xDialogModel, xContext, rDocument.isDocument() ? rDocument.getDocument() : Reference< frame::XModel >() );
 
@@ -1106,7 +1104,7 @@ void DialogWindow::ImportDialog()
 {
     const ScriptDocument& rDocument = GetDocument();
     OUString aLibName = GetLibName();
-    implImportDialog(GetFrameWeld(), m_sCurPath, rDocument, aLibName);
+    implImportDialog(GetFrameWeld(), rDocument, aLibName);
 }
 
 DlgEdModel& DialogWindow::GetModel() const

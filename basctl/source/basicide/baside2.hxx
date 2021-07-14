@@ -281,7 +281,6 @@ private:
     VclPtr<ComplexEditorWindow> m_aXEditorWindow;
     BasicStatus         m_aStatus;
     SbModuleRef         m_xModule;
-    OUString            m_sCurPath;
     OUString            m_aModule;
 
     void                CheckCompileBasic();

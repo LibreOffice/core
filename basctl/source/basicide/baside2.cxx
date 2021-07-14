@@ -45,6 +45,7 @@
 #include <svl/srchdefs.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/docfile.hxx>
+#include <sfx2/filedlghelper.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sot/exchange.hxx>
@@ -423,22 +424,20 @@ void ModulWindow::BasicStop()
 
 void ModulWindow::LoadBasic()
 {
-    Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
-    Reference < XFilePicker3 > xFP = FilePicker::createWithMode(xContext, TemplateDescription::FILEOPEN_SIMPLE);
-
-    if ( !m_sCurPath.isEmpty() )
-        xFP->setDisplayDirectory ( m_sCurPath );
+    sfx2::FileDialogHelper aDlg(ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
+                                FileDialogFlags::NONE, this->GetFrameWeld());
+    aDlg.SetContext(sfx2::FileDialogHelper::BasicImportSource);
+    Reference<XFilePicker3> xFP = aDlg.GetFilePicker();
 
     xFP->appendFilter( "BASIC" , "*.bas" );
     xFP->appendFilter( IDEResId(RID_STR_FILTER_ALLFILES), FilterMask_All );
     xFP->setCurrentFilter( "BASIC" );
 
-    if( xFP->execute() != RET_OK )
+    if( aDlg.Execute() != ERRCODE_NONE )
         return;
 
     Sequence< OUString > aPaths = xFP->getSelectedFiles();
-    m_sCurPath = aPaths[0];
-    SfxMedium aMedium( m_sCurPath, StreamMode::READ | StreamMode::SHARE_DENYWRITE | StreamMode::NOCREATE );
+    SfxMedium aMedium( aPaths[0], StreamMode::READ | StreamMode::SHARE_DENYWRITE | StreamMode::NOCREATE );
     SvStream* pStream = aMedium.GetInStream();
     if ( pStream )
     {
@@ -470,7 +469,10 @@ void ModulWindow::LoadBasic()
 void ModulWindow::SaveBasicSource()
 {
     Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
-    Reference < XFilePicker3 > xFP = FilePicker::createWithMode(xContext, TemplateDescription::FILESAVE_AUTOEXTENSION_PASSWORD);
+    sfx2::FileDialogHelper aDlg(ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION_PASSWORD,
+                                FileDialogFlags::NONE, this->GetFrameWeld());
+    aDlg.SetContext(sfx2::FileDialogHelper::BasicExportSource);
+    const Reference<XFilePicker3>& xFP = aDlg.GetFilePicker();
 
     Reference< XFilePickerControlAccess > xFPControl(xFP, UNO_QUERY);
     xFPControl->enableControl(ExtendedFilePickerElementIds::CHECKBOX_PASSWORD, false);
@@ -478,19 +480,15 @@ void ModulWindow::SaveBasicSource()
     aValue <<= true;
     xFPControl->setValue(ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION, 0, aValue);
 
-    if ( !m_sCurPath.isEmpty() )
-        xFP->setDisplayDirectory ( m_sCurPath );
-
     xFP->appendFilter( "BASIC", "*.bas" );
     xFP->appendFilter( IDEResId(RID_STR_FILTER_ALLFILES), FilterMask_All );
     xFP->setCurrentFilter( "BASIC" );
 
-    if( xFP->execute() != RET_OK )
+    if( aDlg.Execute() != ERRCODE_NONE )
         return;
 
     Sequence< OUString > aPaths = xFP->getSelectedFiles();
-    m_sCurPath = aPaths[0];
-    SfxMedium aMedium( m_sCurPath, StreamMode::WRITE | StreamMode::SHARE_DENYWRITE | StreamMode::TRUNC );
+    SfxMedium aMedium( aPaths[0], StreamMode::WRITE | StreamMode::SHARE_DENYWRITE | StreamMode::TRUNC );
     SvStream* pStream = aMedium.GetOutStream();
     if ( pStream )
     {
@@ -518,7 +516,7 @@ void ModulWindow::ImportDialog()
 {
     const ScriptDocument& rDocument = GetDocument();
     OUString aLibName = GetLibName();
-    implImportDialog(GetFrameWeld(), m_sCurPath, rDocument, aLibName);
+    implImportDialog(GetFrameWeld(), rDocument, aLibName);
 }
 
 void ModulWindow::ToggleBreakPoint( sal_uInt16 nLine )
