@@ -63,6 +63,14 @@ DECLARE_RTFEXPORT_TEST(testTdf108949, "tdf108949_footnoteCharFormat.odt")
                                    getRun(getParagraphOfText(1, xFootnoteText), 1), "CharColor"));
 }
 
+DECLARE_RTFEXPORT_TEST(testTdf141964_numId0, "tdf141964_numId0.rtf")
+{
+    // Unit test added where numId is zero - which is only possible in RTF.
+    uno::Reference<beans::XPropertySet> xPara(getParagraph(3, "Geschichte"), uno::UNO_QUERY);
+    // Pre-emptive test: ensure that paragraph 3 remains numbered and numId0 doesn't mean no numbering.
+    CPPUNIT_ASSERT(!getProperty<OUString>(xPara, "NumberingStyleName").isEmpty());
+}
+
 DECLARE_RTFEXPORT_TEST(testTdf108949_footnote, "tdf108949_footnote.rtf")
 {
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Paragraph Numbering style", OUString(),
