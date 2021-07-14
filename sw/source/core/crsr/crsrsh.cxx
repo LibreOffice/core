@@ -2035,7 +2035,8 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd )
 void SwCursorShell::sendLOKCursorUpdates()
 {
     SwView* pView = static_cast<SwView*>(GetSfxViewShell());
-    if (!pView)
+    // The view may not have a writer shell if the view's ctor did not finish yet.
+    if (!pView || !pView->GetWrtShellPtr())
         return;
 
     SwWrtShell* pShell = &pView->GetWrtShell();
