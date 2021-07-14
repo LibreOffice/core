@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <vcl/svapp.hxx>
 #include "customcellrenderer.hxx"
 #if !GTK_CHECK_VERSION(4, 0, 0)
 #include <gtk/gtk-a11y.h>
@@ -250,6 +251,9 @@ void custom_cell_renderer_render(GtkCellRenderer* cell, cairo_t* cr, GtkWidget* 
     gpointer pWidget = g_value_get_pointer(&value);
     if (!pWidget)
         return;
+
+    SolarMutexGuard aGuard;
+
     custom_cell_renderer_ensure_device(cellsurface, pWidget);
 
     Size aSize(cell_area->width, cell_area->height);
