@@ -428,15 +428,17 @@ XclExpHyperlink::XclExpHyperlink( const XclExpRoot& rRoot, const SvxURLField& rU
            aTextMark = aTextMark.replaceAt( nSepPos, 1, "!" );
         }
 
-        if(nSepPos != -1)
+        if (nSepPos != -1)
         {
-            OUString aSheetName( aTextMark.copy(0, nSepPos));
+            OUString aSheetName(aTextMark.copy(0, nSepPos));
 
-            if ( aSheetName.indexOf(' ') != -1 && aSheetName[0] != '\'')
+            if (aSheetName.indexOf(' ') != -1 && aSheetName[0] != '\'')
             {
                 aTextMark = "'" + aTextMark.replaceAt(nSepPos, 0, "'");
             }
         }
+        else
+            aTextMark += "!A1";    // tdf#143220 link to sheet not valid without cell reference
 
         mxTextMark.reset( new XclExpString( aTextMark, XclStrFlags::ForceUnicode, 255 ) );
     }
