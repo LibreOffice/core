@@ -272,6 +272,8 @@
 #define RID_SVXBMP_FRAME10                          "svx/res/fr010.png"
 #define RID_SVXBMP_FRAME11                          "svx/res/fr011.png"
 #define RID_SVXBMP_FRAME12                          "svx/res/fr012.png"
+#define RID_SVXBMP_FRAME13                          "svx/res/fr013.png"
+#define RID_SVXBMP_FRAME14                          "svx/res/fr014.png"
 #define RID_SVXBMP_GRAF_RED                         "res/sc10865.png"
 #define RID_SVXBMP_GRAF_GREEN                       "res/sc10866.png"
 #define RID_SVXBMP_GRAF_BLUE                        "res/sc10867.png"
