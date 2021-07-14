@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "073ec89d_ff00f2f1",
+        "filename": "bin/find-unneeded-includes",
+        "patchSetId": 2
+      },
+      "lineNbr": 324,
+      "author": {
+        "id": 1000446
+      },
+      "writtenOn": "2021-07-14T06:32:46Z",
+      "side": 1,
+      "message": "I plan to split these up to a --headers option in a followup, as generally it makes more sense to first clean headers then source files.",
+      "range": {
+        "startLine": 324,
+        "startChar": 19,
+        "endLine": 324,
+        "endChar": 142
+      },
+      "revId": "2d8ee5b4304ba957eab82f89c8d20c4f701295bb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
