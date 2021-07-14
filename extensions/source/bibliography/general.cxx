@@ -25,6 +25,8 @@
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
+
 #include <toolkit/helper/vclunohelper.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <vcl/event.hxx>
@@ -42,6 +44,7 @@
 #include <vcl/i18nhelp.hxx>
 #include <algorithm>
 #include <tools/urlobj.hxx>
+#include <sfx2/filedlghelper.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -121,6 +124,7 @@ BibGeneralPage::BibGeneralPage(vcl::Window* pParent, BibDataManager* pMan)
     , xNoteED(m_xBuilder->weld_entry("notecontrol"))
     , xURLFT(m_xBuilder->weld_label("url"))
     , xURLED(m_xBuilder->weld_entry("urlcontrol"))
+    , m_xBrowseButton(m_xBuilder->weld_button("browse"))
     , xCustom1FT(m_xBuilder->weld_label("custom1"))
     , xCustom1ED(m_xBuilder->weld_entry("custom1control"))
     , xCustom2FT(m_xBuilder->weld_label("custom2"))
@@ -248,6 +252,8 @@ BibGeneralPage::BibGeneralPage(vcl::Window* pParent, BibDataManager* pMan)
         xURLFT->get_label(), *xURLED,
         sTableErrorString, HID_BIB_URL_POS);
 
+    m_xBrowseButton->connect_clicked(LINK(this, BibGeneralPage, BrowseHdl));
+
     AddControlWithError(lcl_GetColumnName(pMapping, CUSTOM1_POS),
         xCustom1FT->get_label(), *xCustom1ED,
         sTableErrorString, HID_BIB_CUSTOM1_POS);
@@ -278,6 +284,24 @@ BibGeneralPage::BibGeneralPage(vcl::Window* pParent, BibDataManager* pMan)
     Size aSize(LogicToPixel(Size(0, 209), MapMode(MapUnit::MapAppFont)));
     set_height_request(aSize.Height());
 }
+
+IMPL_LINK_NOARG(BibGeneralPage, BrowseHdl, weld::Button&, void)
+{
+    sfx2::FileDialogHelper aFileDlg(ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
+                                    FileDialogFlags::NONE, GetFrameWeld());
+    OUString aPath = xURLED->get_text();
+    if (!aPath.isEmpty())
+    {
+        aFileDlg.SetDisplayDirectory(aPath);
+    }
+
+    if (aFileDlg.Execute() != ERRCODE_NONE)
+    {
+        return;
+    }
+
+    xURLED->set_text(aFileDlg.GetPath());
+};
 
 IMPL_LINK(BibGeneralPage, FirstElementKeyInputHdl, const KeyEvent&, rKeyEvent, bool)
 {
@@ -586,6 +610,7 @@ void BibGeneralPage::dispose()
     xNoteED.reset();
     xURLFT.reset();
     xURLED.reset();
+    m_xBrowseButton.reset();
     xCustom1FT.reset();
     xCustom1ED.reset();
     xCustom2FT.reset();
