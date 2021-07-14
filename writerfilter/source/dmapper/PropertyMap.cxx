@@ -468,7 +468,7 @@ SectionPropertyMap::SectionPropertyMap( bool bIsFirstSection )
 
     if ( m_bIsFirstSection )
     {
-        m_sFirstPageStyleName = getPropertyName( PROP_FIRST_PAGE );
+        m_sFirstPageStyleName = getPropertyName( PROP_STANDARD );
         m_sFollowPageStyleName = getPropertyName( PROP_STANDARD );
     }
 }
