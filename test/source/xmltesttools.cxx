@@ -247,8 +247,8 @@ void XmlTestTools::assertXPathNoAttribute(const xmlDocUniquePtr& pXmlDoc, const 
     CPPUNIT_ASSERT_EQUAL_MESSAGE(OString(OString::Concat("In <") + pXmlDoc->name + ">, XPath '" + rXPath + "' number of nodes is incorrect").getStr(),
                                  1, xmlXPathNodeSetGetLength(pXmlNodes));
     xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
-    CPPUNIT_ASSERT_EQUAL_MESSAGE(OString(OString::Concat("In <") + pXmlDoc->name + ">, XPath '" + rXPath + "' unexpected '" + rAttribute + "' attribute").getStr(),
-                                 static_cast<xmlChar*>(nullptr), xmlGetProp(pXmlNode, BAD_CAST(rAttribute.getStr())));
+    CPPUNIT_ASSERT_MESSAGE(OString(OString::Concat("In <") + pXmlDoc->name + ">, XPath '" + rXPath + "' unexpected '" + rAttribute + "' attribute").getStr(),
+                                 !xmlGetProp(pXmlNode, BAD_CAST(rAttribute.getStr())));
     xmlXPathFreeObject(pXmlObj);
 }
 
