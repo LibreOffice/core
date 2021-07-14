@@ -20,6 +20,11 @@ Sub verify_testDateAdd()
     ' tdf#117612
     TestUtil.AssertEqual(DateAdd("m", 1, "2014-01-29"), CDate("2014-02-28"), "DateAdd(""m"", 1, ""2014-01-29"")")
 
+    ' tdf#114011 Without the fix in place, this test would have failed with
+    ' returned 01/31/32767, expected 12/31/32767
+    TestUtil.AssertEqual(DateAdd("m", 1, 31012004), CDate("32767-12-31"), "DateAdd(""m"", 1, 31012004)")
+    TestUtil.AssertEqual(DateAdd("M", 1, 31012005), CDate("32767-12-31"), "DateAdd(""M"", 1, 31012005)")
+
     Exit Sub
 errorHandler:
     TestUtil.ReportErrorHandler("verify_testDateAdd", Err, Error$, Erl)
