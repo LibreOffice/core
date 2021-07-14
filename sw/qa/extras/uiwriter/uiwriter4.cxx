@@ -272,6 +272,7 @@ public:
     void testTdf123786();
     void testTdf133589();
     void testTdf143176();
+    void testTdf143320();
     void testInconsistentBookmark();
     void testInsertLongDateFormat();
     void testSpellOnlineParameter();
@@ -390,6 +391,7 @@ public:
     CPPUNIT_TEST(testTdf123786);
     CPPUNIT_TEST(testTdf133589);
     CPPUNIT_TEST(testTdf143176);
+    CPPUNIT_TEST(testTdf143320);
     CPPUNIT_TEST(testInsertLongDateFormat);
     CPPUNIT_TEST(testSpellOnlineParameter);
     CPPUNIT_TEST(testRedlineAutoCorrect);
@@ -3592,6 +3594,46 @@ void SwUiWriterTest4::testTdf143176()
     CPPUNIT_ASSERT_EQUAL(OUString(u"𐳄𐳛𐳙𐳤𐳉𐳄𐳦𐳉𐳦𐳪𐳢 "
                                   u"𐳀𐳇𐳐𐳠𐳐𐳤𐳄𐳐𐳙𐳍 𐳉𐳖𐳐𐳦."),
                          getParagraph(2)->getString());
+}
+
+void SwUiWriterTest4::testTdf143320()
+{
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf143320.odt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+    CPPUNIT_ASSERT(getParagraph(1)->getString().startsWith("x"));
+
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+
+    rtl::Reference<SwTransferable> xTransfer = new SwTransferable(*pWrtShell);
+    xTransfer->Copy();
+    Scheduler::ProcessEventsToIdle();
+    TransferableDataHelper aHelper(xTransfer);
+
+    // Create a new document
+    pDoc = createSwDoc();
+    pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+
+    SwTransferable::Paste(*pWrtShell, aHelper);
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+    CPPUNIT_ASSERT(getParagraph(1)->getString().startsWith("x"));
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+    CPPUNIT_ASSERT_EQUAL(OUString(""), getParagraph(1)->getString());
+
+    // Without the fix in place, this test would have crashed here
+    SwTransferable::Paste(*pWrtShell, aHelper);
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+    CPPUNIT_ASSERT(getParagraph(1)->getString().startsWith("x"));
 }
 
 void SwUiWriterTest4::testInsertLongDateFormat()
