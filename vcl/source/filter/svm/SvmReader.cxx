@@ -268,7 +268,7 @@ rtl::Reference<MetaAction> SvmReader::MetaActionHandler(ImplMetaReadData* pData)
             return FillColorHandler();
             break;
         case MetaActionType::TEXTCOLOR:
-            pAction = new MetaTextColorAction;
+            return TextColorHandler();
             break;
         case MetaActionType::TEXTFILLCOLOR:
             pAction = new MetaTextFillColorAction;
@@ -1142,6 +1142,19 @@ rtl::Reference<MetaAction> SvmReader::MoveClipRegionHandler()
 
     pAction->SetHorzMove(nTmpHM);
     pAction->SetVertMove(nTmpVM);
+
+    return pAction;
+}
+
+rtl::Reference<MetaAction> SvmReader::TextColorHandler()
+{
+    auto pAction = new MetaTextColorAction();
+
+    VersionCompatRead aCompat(mrStream);
+    Color aColor;
+    ReadColor(aColor);
+
+    pAction->SetColor(aColor);
 
     return pAction;
 }
