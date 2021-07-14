@@ -1510,7 +1510,7 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                         weld::Button& rHyphenationButton = pInfoBar->addButton();
                         rHyphenationButton.set_label(SfxResId(STR_HYPHENATION_BUTTON));
                         rHyphenationButton.connect_clicked(LINK(this,
-                                                   SfxViewFrame, HypenationMissingHandler));
+                                                   SfxViewFrame, HyphenationMissingHandler));
                     }
 
                     aPendingInfobars.pop_back();
@@ -1653,7 +1653,7 @@ IMPL_LINK(SfxViewFrame, HiddenTrackChangesHandler, weld::Button&, rButton, void)
     }
 }
 
-IMPL_LINK_NOARG(SfxViewFrame, HypenationMissingHandler, weld::Button&, void)
+IMPL_LINK_NOARG(SfxViewFrame, HyphenationMissingHandler, weld::Button&, void)
 {
     GetDispatcher()->Execute(SID_HYPHENATIONMISSING);
     RemoveInfoBar(u"hyphenationmissing");
