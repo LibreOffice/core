@@ -1375,9 +1375,10 @@ void RtfExport::OutPageDescription(const SwPageDesc& rPgDsc, bool bCheckForFirst
         WriteHeaderFooter(*pItem, false);
 
     // title page
-    if (m_pCurrentPageDesc != &rPgDsc)
+    if (m_pCurrentPageDesc != &rPgDsc || m_pCurrentPageDesc->GetFollow() == m_pCurrentPageDesc)
     {
-        Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_TITLEPG);
+        if (m_pCurrentPageDesc != &rPgDsc)
+            Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_TITLEPG);
         m_pCurrentPageDesc = &rPgDsc;
         if (m_pCurrentPageDesc->GetMaster().GetAttrSet().GetItemState(RES_HEADER, false, &pItem)
             == SfxItemState::SET)
