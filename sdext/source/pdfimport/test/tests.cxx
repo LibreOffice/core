@@ -34,6 +34,7 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
 #include <test/bootstrapfixture.hxx>
+#include <test/xmltesttools.hxx>
 
 #include <com/sun/star/geometry/RealRectangle2D.hpp>
 #include <com/sun/star/geometry/RealSize2D.hpp>
@@ -448,8 +449,13 @@ namespace
         bool                      m_bImageSeen;
     };
 
-    class PDFITest : public test::BootstrapFixture
+    class PDFITest : public test::BootstrapFixture, public XmlTestTools
     {
+    protected:
+            virtual void registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx) override
+            {
+                XmlTestTools::registerODFNamespaces(pXmlXPathCtx);
+            };
     public:
         void testXPDFParser()
         {
@@ -577,6 +583,133 @@ namespace
 #endif
         }
 
+        void testFontFeatures() // tdf#78427
+        {
+            rtl::Reference<pdfi::PDFIRawAdaptor> xAdaptor(new pdfi::PDFIRawAdaptor(OUString(), getComponentContext()));
+            xAdaptor->setTreeVisitorFactory(createDrawTreeVisitorFactory());
+
+            OString aOutput;
+            CPPUNIT_ASSERT_MESSAGE("Converting PDF to ODF XML",
+                                   xAdaptor->odfConvert( m_directories.getURLFromSrc(u"/sdext/source/pdfimport/test/testdocs/testFontFeatures.pdf"),
+                                                        new OutputWrapString(aOutput),
+                                                        nullptr ));
+            std::cout << aOutput << std::endl;
+            xmlDocUniquePtr pXmlDoc(xmlParseDoc(reinterpret_cast<xmlChar const *>(aOutput.getStr())));
+            //CPPUNIT_ASSERT(pXmlDoc);
+
+            /* Test for the 1st paragraph */
+            OUString styleName = getXPath(pXmlDoc, "//draw:frame[1]//text:span[1]", "style-name");
+            OString xpath = "//office:automatic-styles/style:style[@style:name=\"" +
+                OUStringToOString(styleName,  RTL_TEXTENCODING_UTF8) +
+                "\"]/style:text-properties";
+            // the font-weight and  font-style should be normal (e.g., no such attribute)
+            assertXPathNoAttribute(pXmlDoc, xpath, "font-weight");
+            assertXPathNoAttribute(pXmlDoc, xpath, "font-style");
+
+            /* Test for the 2nd paragraph */
+            styleName = getXPath(pXmlDoc, "//draw:frame[2]//text:span[1]", "style-name");
+            xpath = "//office:automatic-styles/style:style[@style:name=\"" +
+                OUStringToOString(styleName,  RTL_TEXTENCODING_UTF8) +
+                "\"]/style:text-properties";
+            // there should be a font-weight="bold", but no font-style italic
+            assertXPath(pXmlDoc, xpath, "font-weight", "bold");
+            assertXPathNoAttribute(pXmlDoc, xpath, "font-style");
+
+            /* Test for the 3rd paragraph */
+            styleName = getXPath(pXmlDoc, "//draw:frame[3]//text:span[1]", "style-name");
+            xpath = "//office:automatic-styles/style:style[@style:name=\"" +
+                OUStringToOString(styleName,  RTL_TEXTENCODING_UTF8) +
+                "\"]/style:text-properties";
+            // there should be a font-style="italic", but no font-weight bold
+            assertXPathNoAttribute(pXmlDoc, xpath, "font-weight");
+            assertXPath(pXmlDoc, xpath, "font-style", "italic");
+
+            /* Test for the 4th paragraph */
+            styleName = getXPath(pXmlDoc, "//draw:frame[4]//text:span[1]", "style-name");
+            xpath = "//office:automatic-styles/style:style[@style:name=\"" +
+                OUStringToOString(styleName,  RTL_TEXTENCODING_UTF8) +
+                "\"]/style:text-properties";
+            // there should be both font-style="italic" and font-weight="bold"
+            assertXPath(pXmlDoc, xpath, "font-weight", "bold");
+            assertXPath(pXmlDoc, xpath, "font-style", "italic");
+
+            /* Test for the 5th paragraph */
+            styleName = getXPath(pXmlDoc, "//draw:frame[5]//text:span[1]", "style-name");
+            xpath = "//office:automatic-styles/style:style[@style:name=\"" +
+                OUStringToOString(styleName,  RTL_TEXTENCODING_UTF8) +
+                "\"]/style:text-properties";
+            // the font should be Arial and font-weight="bold", no font-style
+            assertXPath(pXmlDoc, xpath, "font-family", "Arial");
+            assertXPath(pXmlDoc, xpath, "font-weight", "bold");
+            assertXPathNoAttribute(pXmlDoc, xpath, "font-style");
+
+            /* Test for the 6th paragraph */
+            styleName = getXPath(pXmlDoc, "//draw:frame[6]//text:span[1]", "style-name");
+            xpath = "//office:automatic-styles/style:style[@style:name=\"" +
+                OUStringToOString(styleName,  RTL_TEXTENCODING_UTF8) +
+                "\"]/style:text-properties";
+            // the font should be Arial without font-weight and font-style
+            assertXPath(pXmlDoc, xpath, "font-family", "Arial");
+            assertXPathNoAttribute(pXmlDoc, xpath, "font-weight");
+            assertXPathNoAttribute(pXmlDoc, xpath, "font-style");
+
+            /* Test for the 7th paragraph */
+            styleName = getXPath(pXmlDoc, "//draw:frame[7]//text:span[1]", "style-name");
+            xpath = "//office:automatic-styles/style:style[@style:name=\"" +
+                OUStringToOString(styleName,  RTL_TEXTENCODING_UTF8) +
+                "\"]/style:text-properties";
+            // the font should be SimSun without font-weight and font-style
+            assertXPath(pXmlDoc, xpath, "font-family", "SimSun"); // TODO: tdf#143095 use localized font name rather than PS name
+            assertXPathNoAttribute(pXmlDoc, xpath, "font-weight");
+            assertXPathNoAttribute(pXmlDoc, xpath, "font-style");
+
+            /* Test for the 8th paragraph */
+            styleName = getXPath(pXmlDoc, "//draw:frame[8]//text:span[1]", "style-name");
+            xpath = "//office:automatic-styles/style:style[@style:name=\"" +
+                OUStringToOString(styleName,  RTL_TEXTENCODING_UTF8) +
+                "\"]/style:text-properties";
+            // the font should be SimSun and font-weight="bold", no font-style italic
+            assertXPath(pXmlDoc, xpath, "font-family", "SimSun");
+            assertXPath(pXmlDoc, xpath, "font-weight", "bold");
+            assertXPathNoAttribute(pXmlDoc, xpath, "font-style");
+
+            /* Test for the 9th paragraph */
+            styleName = getXPath(pXmlDoc, "//draw:frame[9]//text:span[1]", "style-name");
+            xpath = "//office:automatic-styles/style:style[@style:name=\"" +
+                OUStringToOString(styleName,  RTL_TEXTENCODING_UTF8) +
+                "\"]/style:text-properties";
+            // the font should be SimSun, no font-weight="bold", with font-style="italic"
+            assertXPath(pXmlDoc, xpath, "font-family", "SimSun");
+            assertXPathNoAttribute(pXmlDoc, xpath, "font-weight");
+            // FIXME and remove the below comment:
+            // the chinese chars are shown in pdf as faux italic (fake italic). It is currencly imported wrongly as normal font style.
+            // See tdf#78427 for how the faux bold problem was handled. Faux italic may be handled using the transformation pattern.
+            // assertXPath(pXmlDoc, xpath, "font-style", "italic");
+
+            /* Test for the 10th paragraph */
+            styleName = getXPath(pXmlDoc, "//draw:frame[10]//text:span[1]", "style-name");
+            xpath = "//office:automatic-styles/style:style[@style:name=\"" +
+                OUStringToOString(styleName,  RTL_TEXTENCODING_UTF8) +
+                "\"]/style:text-properties";
+            // the font should be SimSun font-weight="bold" and font-style="italic"
+            assertXPath(pXmlDoc, xpath, "font-family", "SimSun");
+            assertXPath(pXmlDoc, xpath, "font-weight", "bold");
+            // FIXME: faux italic, see above
+            // assertXPath(pXmlDoc, xpath, "font-style", "italic");
+
+            /* Test for the 11th paragraph */
+            styleName = getXPath(pXmlDoc, "//draw:frame[11]//text:span[1]", "style-name");
+            xpath = "//office:automatic-styles/style:style[@style:name=\"" +
+                OUStringToOString(styleName,  RTL_TEXTENCODING_UTF8) +
+                "\"]/style:text-properties";
+            // the font should be SimSun and there should be style:text-outline="true"
+            // (i.e., the real "outline" font rather than faux bold / fake bold)
+            assertXPath(pXmlDoc, xpath, "font-family", "SimSun");
+            assertXPathNoAttribute(pXmlDoc, xpath, "font-weight");
+            assertXPathNoAttribute(pXmlDoc, xpath, "font-style");
+            assertXPath(pXmlDoc, xpath, "text-outline", "true");
+        }
+
         CPPUNIT_TEST_SUITE(PDFITest);
         CPPUNIT_TEST(testXPDFParser);
         CPPUNIT_TEST(testOdfWriterExport);
@@ -585,6 +718,7 @@ namespace
         CPPUNIT_TEST(testTdf98421);
         CPPUNIT_TEST(testTdf105536);
         CPPUNIT_TEST(testTdf141709);
+        CPPUNIT_TEST(testFontFeatures);
         CPPUNIT_TEST_SUITE_END();
     };
 

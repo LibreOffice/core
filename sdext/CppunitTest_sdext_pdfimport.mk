@@ -19,6 +19,7 @@ $(eval $(call gb_CppunitTest_set_include,sdext_pdfimport,\
 $(eval $(call gb_CppunitTest_use_externals,sdext_pdfimport,\
     boost_headers \
     zlib \
+    libxml2 \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,sdext_pdfimport,\
