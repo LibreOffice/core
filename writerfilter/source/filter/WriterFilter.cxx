@@ -332,7 +332,6 @@ void WriterFilter::setTargetDocument(const uno::Reference<lang::XComponent>& xDo
     xSettings->setPropertyValue("PropLineSpacingShrinksFirstLine", uno::makeAny(true));
     xSettings->setPropertyValue("DoNotCaptureDrawObjsOnPage", uno::makeAny(true));
     xSettings->setPropertyValue("DisableOffPagePositioning", uno::makeAny(true));
-    xSettings->setPropertyValue("ContinuousEndnotes", uno::makeAny(true));
 }
 
 void WriterFilter::setSourceDocument(const uno::Reference<lang::XComponent>& xDoc)
