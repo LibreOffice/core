@@ -70,6 +70,7 @@ public:
     rtl::Reference<MetaAction> HatchHandler();
     rtl::Reference<MetaAction> WallpaperHandler();
     rtl::Reference<MetaAction> ClipRegionHandler();
+    rtl::Reference<MetaAction> ISectRectClipRegionHandler();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
