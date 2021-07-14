@@ -39,6 +39,7 @@ $(eval $(call gb_Library_add_exception_objects,bib,\
 
 $(eval $(call gb_Library_use_libraries,bib,\
 	dbtools \
+	sfx \
 	sot \
 	svt \
 	svl \

@@ -107,6 +107,7 @@ class BibGeneralPage : public InterimItemWindow
     std::unique_ptr<weld::Entry> xNoteED;
     std::unique_ptr<weld::Label> xURLFT;
     std::unique_ptr<weld::Entry> xURLED;
+    std::unique_ptr<weld::Button> m_xBrowseButton;
 
     std::unique_ptr<weld::Label> xCustom1FT;
     std::unique_ptr<weld::Entry> xCustom1ED;
@@ -137,6 +138,7 @@ class BibGeneralPage : public InterimItemWindow
 
     DECL_LINK(FirstElementKeyInputHdl, const KeyEvent&, bool);
     DECL_LINK(LastElementKeyInputHdl, const KeyEvent&, bool);
+    DECL_LINK(BrowseHdl, weld::Button&, void);
 
 public:
                                 BibGeneralPage(vcl::Window* pParent, BibDataManager* pDatMan);
