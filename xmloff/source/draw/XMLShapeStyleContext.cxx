@@ -22,6 +22,7 @@
 #include <xmloff/XMLShapeStyleContext.hxx>
 #include <XMLShapePropertySetContext.hxx>
 #include <xmloff/contextid.hxx>
+#include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
@@ -186,18 +187,18 @@ void XMLShapeStyleContext::FillPropertySet( const Reference< beans::XPropertySet
 
     struct ContextID_Index_Pair aContextIDs[] =
     {
-        { CTF_DASHNAME , -1 },
-        { CTF_LINESTARTNAME , -1 },
-        { CTF_LINEENDNAME , -1 },
-        { CTF_FILLGRADIENTNAME, -1 },
-        { CTF_FILLTRANSNAME , -1 },
-        { CTF_FILLHATCHNAME , -1 },
-        { CTF_FILLBITMAPNAME , -1 },
-        { CTF_SD_OLE_VIS_AREA_IMPORT_LEFT, -1 },
-        { CTF_SD_OLE_VIS_AREA_IMPORT_TOP, -1 },
-        { CTF_SD_OLE_VIS_AREA_IMPORT_WIDTH, -1 },
-        { CTF_SD_OLE_VIS_AREA_IMPORT_HEIGHT, -1 },
-        { -1, -1 }
+        { CTF_DASHNAME, -1, drawing::FillStyle::FillStyle_MAKE_FIXED_SIZE },
+        { CTF_LINESTARTNAME, -1, drawing::FillStyle::FillStyle_MAKE_FIXED_SIZE },
+        { CTF_LINEENDNAME, -1, drawing::FillStyle::FillStyle_MAKE_FIXED_SIZE },
+        { CTF_FILLGRADIENTNAME, -1, drawing::FillStyle::FillStyle_GRADIENT },
+        { CTF_FILLTRANSNAME, -1, drawing::FillStyle::FillStyle_MAKE_FIXED_SIZE },
+        { CTF_FILLHATCHNAME, -1, drawing::FillStyle::FillStyle_HATCH },
+        { CTF_FILLBITMAPNAME, -1, drawing::FillStyle::FillStyle_BITMAP },
+        { CTF_SD_OLE_VIS_AREA_IMPORT_LEFT, -1, drawing::FillStyle::FillStyle_MAKE_FIXED_SIZE },
+        { CTF_SD_OLE_VIS_AREA_IMPORT_TOP, -1, drawing::FillStyle::FillStyle_MAKE_FIXED_SIZE },
+        { CTF_SD_OLE_VIS_AREA_IMPORT_WIDTH, -1, drawing::FillStyle::FillStyle_MAKE_FIXED_SIZE },
+        { CTF_SD_OLE_VIS_AREA_IMPORT_HEIGHT, -1, drawing::FillStyle::FillStyle_MAKE_FIXED_SIZE },
+        { -1, -1, drawing::FillStyle::FillStyle_MAKE_FIXED_SIZE }
     };
     static const XmlStyleFamily aFamilies[] =
     {
@@ -252,6 +253,12 @@ void XMLShapeStyleContext::FillPropertySet( const Reference< beans::XPropertySet
                     XMLERROR_STYLE_PROP_VALUE | XMLERROR_FLAG_WARNING,
                     seq, "empty style name reference", nullptr );
                 break;
+            }
+
+            if (::xmloff::IsIgnoreFillStyleNamedItem(rPropSet, aContextIDs[i].nExpectedFillStyle))
+            {
+                SAL_INFO("xmloff.style", "ShapeStyleContext: dropping fill named item: " << sStyleName);
+                break; // ignore it, it's not used
             }
 
             try

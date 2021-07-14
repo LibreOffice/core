@@ -544,6 +544,8 @@ bool ScXMLImportWrapper::Import( ImportFlags nMode, ErrCode& rError )
     else
         bRet = true;
 
+    ::svx::DropUnusedNamedItems(xModel);
+
     // set BuildId on XModel for later OLE object loading
     if( xInfoSet.is() )
     {

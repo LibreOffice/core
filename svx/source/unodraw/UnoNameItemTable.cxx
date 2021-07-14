@@ -47,6 +47,8 @@ SvxUnoNameItemTable::SvxUnoNameItemTable( SdrModel* pModel, sal_uInt16 nWhich, s
 
 SvxUnoNameItemTable::~SvxUnoNameItemTable() throw()
 {
+    SolarMutexGuard aGuard;
+
     if( mpModel )
         EndListening( *mpModel );
     dispose();
@@ -101,19 +103,18 @@ void SAL_CALL SvxUnoNameItemTable::insertByName( const OUString& aApiName, const
     ImplInsertByName( aName, aElement );
 }
 
+void SAL_CALL SvxUnoNameItemTable::cancel()
+{
+    SolarMutexGuard aGuard;
+    // drop all items that are owned by this service and not the document
+    // (i.e. they are unused)
+    dispose();
+}
 
 void SAL_CALL SvxUnoNameItemTable::removeByName( const OUString& aApiName )
 {
     SolarMutexGuard aGuard;
     comphelper::ProfileZone aZone("SvxUnoNameItemTable::removeByName");
-
-    // a little quickfix for 2.0 to let applications clear api
-    // created items that are not used
-    if ( aApiName == "~clear~" )
-    {
-        dispose();
-        return;
-    }
 
     OUString sName = SvxUnogetInternalNameForItem(mnWhich, aApiName);
 

@@ -45,6 +45,7 @@ class SdExportTest : public SdModelTestBaseXML
 public:
     void testBackgroundImage();
     void testMediaEmbedding();
+    void testFillBitmapUnused();
     void testFdo84043();
     void testTdf97630();
     void testSwappedOutImageExport();
@@ -82,6 +83,7 @@ public:
 
     CPPUNIT_TEST(testBackgroundImage);
     CPPUNIT_TEST(testMediaEmbedding);
+    CPPUNIT_TEST(testFillBitmapUnused);
     CPPUNIT_TEST(testFdo84043);
     CPPUNIT_TEST(testTdf97630);
     CPPUNIT_TEST(testSwappedOutImageExport);
@@ -307,6 +309,53 @@ void SdExportTest::testMediaEmbedding()
     CPPUNIT_ASSERT_MESSAGE( "missing media object", pMediaObj != nullptr);
     CPPUNIT_ASSERT_EQUAL( OUString( "vnd.sun.star.Package:Media/button-1.wav" ), pMediaObj->getMediaProperties().getURL());
     CPPUNIT_ASSERT_EQUAL( OUString( "application/vnd.sun.star.media" ), pMediaObj->getMediaProperties().getMimeType());
+
+    xDocShRef->DoClose();
+}
+
+void SdExportTest::testFillBitmapUnused()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/odp/fillbitmap2.odp"), ODP);
+    utl::TempFile aTempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), ODP, &aTempFile);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(aTempFile, "content.xml");
+    // shapes
+    assertXPath(pXmlDoc, "//style:style[@style:family='graphic']/style:graphic-properties[@draw:fill='bitmap']", 1);
+    assertXPath(pXmlDoc, "//style:style[@style:family='graphic']/style:graphic-properties[@draw:fill='bitmap']", "fill-image-name", "nav_5f_up");
+    assertXPath(pXmlDoc, "//style:style[@style:family='graphic']/style:graphic-properties[@draw:fill='solid']", 1);
+    assertXPath(pXmlDoc, "//style:style[@style:family='graphic']/style:graphic-properties[@draw:fill='solid' and @draw:fill-image-name]", 0);
+    assertXPath(pXmlDoc, "//style:style[@style:family='graphic']/style:graphic-properties[@draw:fill='solid']", "fill-color", "#808080");
+
+    xmlDocUniquePtr pStyles = parseExport(aTempFile, "styles.xml");
+    // master slide presentation style
+    assertXPath(pStyles,
+        "/office:document-styles/office:styles/style:style[@style:family='presentation' and @style:name='Default-background']/style:graphic-properties", "fill", "bitmap");
+    assertXPath(pStyles,
+        "/office:document-styles/office:styles/style:style[@style:family='presentation' and @style:name='Default-background']/style:graphic-properties", "fill-image-name", "nav_5f_up");
+    assertXPath(pStyles,
+        "/office:document-styles/office:styles/style:style[@style:family='presentation' and @style:name='Default_20_1-background']/style:graphic-properties", "fill", "solid");
+    assertXPath(pStyles,
+        "/office:document-styles/office:styles/style:style[@style:family='presentation' and @style:name='Default_20_1-background']/style:graphic-properties", "fill-color", "#808080");
+    assertXPath(pStyles,
+        "/office:document-styles/office:styles/style:style[@style:family='presentation' and @style:name='Default_20_1-background']/style:graphic-properties[@draw:fill-image-name]", 0);
+    // master slide drawing-page style
+    assertXPath(pStyles,
+        "/office:document-styles/office:automatic-styles/style:style[@style:name='Mdp1']/style:drawing-page-properties", "fill", "bitmap");
+    assertXPath(pStyles,
+        "/office:document-styles/office:automatic-styles/style:style[@style:name='Mdp1']/style:drawing-page-properties", "fill-image-name", "nav_5f_up");
+    assertXPath(pStyles,
+        "/office:document-styles/office:automatic-styles/style:style[@style:name='Mdp2']/style:drawing-page-properties", "fill", "solid");
+    assertXPath(pStyles,
+        "/office:document-styles/office:automatic-styles/style:style[@style:name='Mdp2']/style:drawing-page-properties", "fill-color", "#808080");
+    assertXPath(pStyles,
+        "/office:document-styles/office:automatic-styles/style:style[@style:name='Mdp2']/style:drawing-page-properties[@draw:fill-image-name]", 0);
+
+    // the named items
+    assertXPath(pStyles,
+        "/office:document-styles/office:styles/draw:fill-image", 1);
+    assertXPath(pStyles,
+        "/office:document-styles/office:styles/draw:fill-image", "name", "nav_5f_up");
 
     xDocShRef->DoClose();
 }

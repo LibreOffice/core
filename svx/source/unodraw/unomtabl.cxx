@@ -24,6 +24,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/drawing/PointSequence.hpp>
+#include <com/sun/star/util/XCancellable.hpp>
 
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -51,8 +52,12 @@ typedef std::vector<std::unique_ptr<SfxItemSet>> ItemPoolVector;
 
 namespace {
 
-class SvxUnoMarkerTable : public WeakImplHelper< container::XNameContainer, lang::XServiceInfo >,
-                          public SfxListener
+class SvxUnoMarkerTable
+    : public WeakImplHelper<
+        util::XCancellable,
+        container::XNameContainer,
+        lang::XServiceInfo>
+    , public SfxListener
 {
 private:
     SdrModel*       mpModel;
@@ -75,6 +80,9 @@ public:
     virtual OUString SAL_CALL getImplementationName(  ) override;
     virtual sal_Bool SAL_CALL supportsService( const  OUString& ServiceName ) override;
     virtual uno::Sequence<  OUString > SAL_CALL getSupportedServiceNames(  ) override;
+
+    // XCancellable
+    virtual void SAL_CALL cancel() override;
 
     // XNameContainer
     virtual void SAL_CALL insertByName( const  OUString& aName, const  uno::Any& aElement ) override;
@@ -105,6 +113,8 @@ SvxUnoMarkerTable::SvxUnoMarkerTable( SdrModel* pModel ) throw()
 
 SvxUnoMarkerTable::~SvxUnoMarkerTable() throw()
 {
+    SolarMutexGuard aGuard;
+
     if( mpModel )
         EndListening( *mpModel );
     dispose();
@@ -174,17 +184,17 @@ void SAL_CALL SvxUnoMarkerTable::insertByName( const OUString& aApiName, const u
     ImplInsertByName( aName, aElement );
 }
 
+void SAL_CALL SvxUnoMarkerTable::cancel()
+{
+    SolarMutexGuard aGuard;
+    // drop all items that are owned by this service and not the document
+    // (i.e. they are unused)
+    dispose();
+}
+
 void SAL_CALL SvxUnoMarkerTable::removeByName( const OUString& aApiName )
 {
     SolarMutexGuard aGuard;
-
-    // a little quickfix for 2.0 to let applications clear api
-    // created items that are not used
-    if ( aApiName == "~clear~" )
-    {
-        dispose();
-        return;
-    }
 
     OUString aName = SvxUnogetInternalNameForItem(XATTR_LINEEND, aApiName);
 

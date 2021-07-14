@@ -206,24 +206,24 @@ void PageStyleContext::FillPropertySet_PageStyle(
         // properties that need special handling because they need the used name to be translated first
         struct ContextID_Index_Pair aContextIDs[] =
         {
-            { CTF_PM_FILLGRADIENTNAME, -1 },
-            { CTF_PM_FILLTRANSNAME, -1 },
-            { CTF_PM_FILLHATCHNAME, -1 },
-            { CTF_PM_FILLBITMAPNAME, -1 },
+            { CTF_PM_FILLGRADIENTNAME, -1, drawing::FillStyle::FillStyle_GRADIENT },
+            { CTF_PM_FILLTRANSNAME, -1, drawing::FillStyle::FillStyle_MAKE_FIXED_SIZE },
+            { CTF_PM_FILLHATCHNAME, -1, drawing::FillStyle::FillStyle_HATCH },
+            { CTF_PM_FILLBITMAPNAME, -1, drawing::FillStyle::FillStyle_BITMAP },
 
             // also need to special handling for header entries
-            { CTF_PM_HEADERFILLGRADIENTNAME, -1 },
-            { CTF_PM_HEADERFILLTRANSNAME, -1 },
-            { CTF_PM_HEADERFILLHATCHNAME, -1 },
-            { CTF_PM_HEADERFILLBITMAPNAME, -1 },
+            { CTF_PM_HEADERFILLGRADIENTNAME, -1, drawing::FillStyle::FillStyle_GRADIENT },
+            { CTF_PM_HEADERFILLTRANSNAME, -1, drawing::FillStyle::FillStyle_MAKE_FIXED_SIZE },
+            { CTF_PM_HEADERFILLHATCHNAME, -1, drawing::FillStyle::FillStyle_HATCH },
+            { CTF_PM_HEADERFILLBITMAPNAME, -1, drawing::FillStyle::FillStyle_BITMAP },
 
             // also need to special handling for footer entries
-            { CTF_PM_FOOTERFILLGRADIENTNAME, -1 },
-            { CTF_PM_FOOTERFILLTRANSNAME, -1 },
-            { CTF_PM_FOOTERFILLHATCHNAME, -1 },
-            { CTF_PM_FOOTERFILLBITMAPNAME, -1 },
+            { CTF_PM_FOOTERFILLGRADIENTNAME, -1, drawing::FillStyle::FillStyle_GRADIENT },
+            { CTF_PM_FOOTERFILLTRANSNAME, -1, drawing::FillStyle::FillStyle_MAKE_FIXED_SIZE },
+            { CTF_PM_FOOTERFILLHATCHNAME, -1, drawing::FillStyle::FillStyle_HATCH },
+            { CTF_PM_FOOTERFILLBITMAPNAME, -1, drawing::FillStyle::FillStyle_BITMAP },
 
-            {-1, -1}
+            {-1, -1, drawing::FillStyle::FillStyle_GRADIENT}
         };
 
         // the style families associated with the same index modulo 4
@@ -240,7 +240,19 @@ void PageStyleContext::FillPropertySet_PageStyle(
 
         // get property set mapper
         const rtl::Reference< XMLPropertySetMapper >& rMapper = xImpPrMap->getPropertySetMapper();
-        Reference< XPropertySetInfo > xInfo;
+        Reference<XPropertySetInfo> const xInfo(rPropSet->getPropertySetInfo());
+
+        // don't look at the attributes, look at the property, could
+        // theoretically be inherited and we don't want to delete erroneously
+        drawing::FillStyle fillStyle{drawing::FillStyle_NONE};
+        drawing::FillStyle fillStyleHeader{drawing::FillStyle_NONE};
+        drawing::FillStyle fillStyleFooter{drawing::FillStyle_NONE};
+        if (xInfo->hasPropertyByName("FillStyle")) // SwXTextDefaults lacks it?
+        {
+            rPropSet->getPropertyValue("FillStyle") >>= fillStyle;
+            rPropSet->getPropertyValue("HeaderFillStyle") >>= fillStyleHeader;
+            rPropSet->getPropertyValue("FooterFillStyle") >>= fillStyleFooter;
+        }
 
         // handle special attributes which have MID_FLAG_NO_PROPERTY_IMPORT set
         for(sal_uInt16 i = 0; aContextIDs[i].nContextID != -1; i++)
@@ -249,27 +261,37 @@ void PageStyleContext::FillPropertySet_PageStyle(
 
             if(nIndex != -1)
             {
+                drawing::FillStyle const* pFillStyle(nullptr);
                 switch(aContextIDs[i].nContextID)
                 {
                     case CTF_PM_FILLGRADIENTNAME:
                     case CTF_PM_FILLTRANSNAME:
                     case CTF_PM_FILLHATCHNAME:
                     case CTF_PM_FILLBITMAPNAME:
-
+                        pFillStyle = &fillStyle;
+                        [[fallthrough]];
                     case CTF_PM_HEADERFILLGRADIENTNAME:
                     case CTF_PM_HEADERFILLTRANSNAME:
                     case CTF_PM_HEADERFILLHATCHNAME:
                     case CTF_PM_HEADERFILLBITMAPNAME:
-
+                        if (!pFillStyle) { pFillStyle = &fillStyleHeader; }
+                        [[fallthrough]];
                     case CTF_PM_FOOTERFILLGRADIENTNAME:
                     case CTF_PM_FOOTERFILLTRANSNAME:
                     case CTF_PM_FOOTERFILLHATCHNAME:
                     case CTF_PM_FOOTERFILLBITMAPNAME:
                     {
+                        if (!pFillStyle) { pFillStyle = &fillStyleFooter; }
                         struct XMLPropertyState& rState = GetProperties()[nIndex];
                         OUString sStyleName;
                         rState.maValue >>= sStyleName;
 
+                        if (aContextIDs[i].nExpectedFillStyle != drawing::FillStyle::FillStyle_MAKE_FIXED_SIZE
+                            && aContextIDs[i].nExpectedFillStyle != *pFillStyle)
+                        {
+                            SAL_INFO("xmloff.style", "PageStyleContext: dropping fill named item: " << sStyleName);
+                            break; // ignore it, it's not used
+                        }
                         // translate the used name from ODF intern to the name used in the Model
                         sStyleName = GetImport().GetStyleDisplayName(aFamilies[i%4], sStyleName);
 
@@ -277,11 +299,6 @@ void PageStyleContext::FillPropertySet_PageStyle(
                         {
                             // set property
                             const OUString& rPropertyName = rMapper->GetEntryAPIName(rState.mnIndex);
-
-                            if(!xInfo.is())
-                            {
-                                xInfo = rPropSet->getPropertySetInfo();
-                            }
 
                             if(xInfo->hasPropertyByName(rPropertyName))
                             {
@@ -326,12 +343,12 @@ void PageStyleContext::FillPropertySet_PageStyle(
 
 extern ContextID_Index_Pair const g_MasterPageContextIDs[] =
 {
-    { CTF_PM_FILLGRADIENTNAME, -1 },
-    { CTF_PM_FILLTRANSNAME, -1 },
-    { CTF_PM_FILLHATCHNAME, -1 },
-    { CTF_PM_FILLBITMAPNAME, -1 },
+    { CTF_PM_FILLGRADIENTNAME, -1, drawing::FillStyle::FillStyle_GRADIENT },
+    { CTF_PM_FILLTRANSNAME, -1, drawing::FillStyle::FillStyle_MAKE_FIXED_SIZE },
+    { CTF_PM_FILLHATCHNAME, -1, drawing::FillStyle::FillStyle_HATCH },
+    { CTF_PM_FILLBITMAPNAME, -1, drawing::FillStyle::FillStyle_BITMAP },
 
-    {-1, -1}
+    {-1, -1, drawing::FillStyle::FillStyle_MAKE_FIXED_SIZE}
 };
 
 extern XmlStyleFamily const g_MasterPageFamilies[] =

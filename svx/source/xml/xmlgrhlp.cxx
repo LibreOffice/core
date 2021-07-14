@@ -26,6 +26,8 @@
 #include <com/sun/star/io/NotConnectedException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/util/XCancellable.hpp>
 #include <comphelper/fileformat.h>
 #include <comphelper/graphicmimetype.hxx>
 #include <cppuhelper/compbase.hxx>
@@ -40,6 +42,7 @@
 #include <vcl/gfxlink.hxx>
 #include <vcl/metaact.hxx>
 #include <tools/zcodec.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <vcl/GraphicObject.hxx>
 #include <vcl/graphicfilter.hxx>
@@ -1116,5 +1119,69 @@ com_sun_star_comp_Svx_GraphicExportHelper_get_implementation(
 {
     return cppu::acquire(new SvXMLGraphicImportExportHelper(SvXMLGraphicHelperMode::Write));
 }
+
+namespace svx {
+
+    void DropUnusedNamedItems(css::uno::Reference<css::uno::XInterface> const& xModel)
+    {
+        uno::Reference<lang::XMultiServiceFactory> const xModelFactory(xModel, uno::UNO_QUERY);
+        assert(xModelFactory.is());
+        try
+        {
+            uno::Reference<util::XCancellable> const xGradient(
+                xModelFactory->createInstance("com.sun.star.drawing.GradientTable"),
+                uno::UNO_QUERY );
+            if (xGradient.is())
+            {
+                xGradient->cancel();
+            }
+
+            uno::Reference<util::XCancellable> const xHatch(
+                xModelFactory->createInstance("com.sun.star.drawing.HatchTable"),
+                uno::UNO_QUERY );
+            if (xHatch.is())
+            {
+                xHatch->cancel();
+            }
+
+            uno::Reference<util::XCancellable> const xBitmap(
+                xModelFactory->createInstance("com.sun.star.drawing.BitmapTable"),
+                uno::UNO_QUERY );
+            if (xBitmap.is())
+            {
+                xBitmap->cancel();
+            }
+
+            uno::Reference<util::XCancellable> const xTransGradient(
+                xModelFactory->createInstance("com.sun.star.drawing.TransparencyGradientTable"),
+                uno::UNO_QUERY );
+            if (xTransGradient.is())
+            {
+                xTransGradient->cancel();
+            }
+
+            uno::Reference<util::XCancellable> const xMarker(
+                xModelFactory->createInstance("com.sun.star.drawing.MarkerTable"),
+                uno::UNO_QUERY );
+            if (xMarker.is())
+            {
+                xMarker->cancel();
+            }
+
+            uno::Reference<util::XCancellable> const xDashes(
+                xModelFactory->createInstance("com.sun.star.drawing.DashTable"),
+                uno::UNO_QUERY );
+            if (xDashes.is())
+            {
+                xDashes->cancel();
+            }
+        }
+        catch (const Exception&)
+        {
+            TOOLS_WARN_EXCEPTION("svx", "dropUnusedNamedItems(): exception during clearing of unused named items");
+        }
+    }
+
+} // namespace svx
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

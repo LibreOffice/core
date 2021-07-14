@@ -672,41 +672,7 @@ bool SdXMLFilter::Import( ErrCode& nError )
 
     // clear unused named items from item pool
 
-    uno::Reference< lang::XMultiServiceFactory> xModelFactory( mxModel, uno::UNO_QUERY );
-    if( xModelFactory.is() )
-    {
-        try
-        {
-            const OUString aName("~clear~" );
-            uno::Reference< container::XNameContainer > xGradient( xModelFactory->createInstance( "com.sun.star.drawing.GradientTable" ), uno::UNO_QUERY );
-            if( xGradient.is() )
-                xGradient->removeByName( aName );
-
-            uno::Reference< container::XNameContainer > xHatch( xModelFactory->createInstance( "com.sun.star.drawing.HatchTable" ), uno::UNO_QUERY );
-            if( xHatch.is() )
-                xHatch->removeByName( aName );
-
-            uno::Reference< container::XNameContainer > xBitmap( xModelFactory->createInstance( "com.sun.star.drawing.BitmapTable" ), uno::UNO_QUERY );
-            if( xBitmap.is() )
-                xBitmap->removeByName( aName );
-
-            uno::Reference< container::XNameContainer > xTransGradient( xModelFactory->createInstance( "com.sun.star.drawing.TransparencyGradientTable" ), uno::UNO_QUERY );
-            if( xTransGradient.is() )
-                xTransGradient->removeByName( aName );
-
-            uno::Reference< container::XNameContainer > xMarker( xModelFactory->createInstance( "com.sun.star.drawing.MarkerTable" ), uno::UNO_QUERY );
-            if( xMarker.is() )
-                xMarker->removeByName( aName );
-
-            uno::Reference< container::XNameContainer > xDashes( xModelFactory->createInstance( "com.sun.star.drawing.DashTable" ), uno::UNO_QUERY );
-            if( xDashes.is() )
-                xDashes->removeByName( aName );
-        }
-        catch (const Exception&)
-        {
-            TOOLS_WARN_EXCEPTION( "sd.filter","sd::SdXMLFilter::Import(), exception during clearing of unused named items");
-        }
-    }
+    ::svx::DropUnusedNamedItems(mxModel);
 
     // set BuildId on XModel for later OLE object loading
     if( xInfoSet.is() )

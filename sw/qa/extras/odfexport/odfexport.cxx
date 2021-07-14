@@ -1692,6 +1692,65 @@ DECLARE_ODFEXPORT_TEST(testMasterPageWithDrawingPage, "sw_hatch.odt")
     CPPUNIT_ASSERT_EQUAL(sal_Int16(0), getProperty<sal_Int16>(xStyle, "FillTransparence"));
 }
 
+DECLARE_ODFEXPORT_EXPORTONLY_TEST(testFillBitmapUnused, "fillbitmap3.odt")
+{
+    // nav_5f_home and all its references are completely gone
+    xmlDocUniquePtr pXmlDoc = parseExport("styles.xml");
+
+    // paragraph style
+    assertXPath(pXmlDoc,
+        "/office:document-styles/office:styles/style:style[@style:name='Text_20_body']/loext:graphic-properties", "fill", "solid");
+    assertXPath(pXmlDoc,
+        "/office:document-styles/office:styles/style:style[@style:name='Text_20_body']/loext:graphic-properties", "fill-color", "#c0c0c0");
+    assertXPath(pXmlDoc,
+        "/office:document-styles/office:styles/style:style[@style:name='Text_20_body']/loext:graphic-properties[@draw:fill-image-name]", 0);
+
+    // page style page-layout
+    assertXPath(pXmlDoc,
+        "/office:document-styles/office:automatic-styles/style:page-layout[@style:name='Mpm1']/style:page-layout-properties", "fill", "bitmap");
+    assertXPath(pXmlDoc,
+        "/office:document-styles/office:automatic-styles/style:page-layout[@style:name='Mpm1']/style:page-layout-properties", "fill-image-name", "nav_5f_up");
+    assertXPath(pXmlDoc,
+        "/office:document-styles/office:automatic-styles/style:page-layout[@style:name='Mpm1']/style:header-style/style:header-footer-properties", "fill", "bitmap");
+    assertXPath(pXmlDoc,
+        "/office:document-styles/office:automatic-styles/style:page-layout[@style:name='Mpm1']/style:header-style/style:header-footer-properties", "fill-image-name", "nav_5f_up");
+    assertXPath(pXmlDoc,
+        "/office:document-styles/office:automatic-styles/style:page-layout[@style:name='Mpm1']/style:footer-style/style:header-footer-properties", "fill", "bitmap");
+    assertXPath(pXmlDoc,
+        "/office:document-styles/office:automatic-styles/style:page-layout[@style:name='Mpm1']/style:footer-style/style:header-footer-properties", "fill-image-name", "nav_5f_up");
+
+    assertXPath(pXmlDoc,
+        "/office:document-styles/office:automatic-styles/style:page-layout[@style:name='Mpm2']/style:page-layout-properties", "fill", "solid");
+    assertXPath(pXmlDoc,
+        "/office:document-styles/office:automatic-styles/style:page-layout[@style:name='Mpm2']/style:page-layout-properties[@draw:fill-image-name]", 0);
+    assertXPath(pXmlDoc,
+        "/office:document-styles/office:automatic-styles/style:page-layout[@style:name='Mpm2']/style:header-style/style:header-footer-properties", "fill", "solid");
+    assertXPath(pXmlDoc,
+        "/office:document-styles/office:automatic-styles/style:page-layout[@style:name='Mpm2']/style:header-style/style:header-footer-properties[@draw:fill-image-name]", 0);
+    assertXPath(pXmlDoc,
+        "/office:document-styles/office:automatic-styles/style:page-layout[@style:name='Mpm2']/style:footer-style/style:header-footer-properties", "fill", "solid");
+    assertXPath(pXmlDoc,
+        "/office:document-styles/office:automatic-styles/style:page-layout[@style:name='Mpm2']/style:footer-style/style:header-footer-properties[@draw:fill-image-name]", 0);
+
+    // page style drawing-page
+    assertXPath(pXmlDoc,
+        "/office:document-styles/office:automatic-styles/style:style[@style:name='Mdp1']/style:drawing-page-properties", "fill", "bitmap");
+    assertXPath(pXmlDoc,
+        "/office:document-styles/office:automatic-styles/style:style[@style:name='Mdp1']/style:drawing-page-properties", "fill-image-name", "nav_5f_up");
+    assertXPath(pXmlDoc,
+        "/office:document-styles/office:automatic-styles/style:style[@style:name='Mdp2']/style:drawing-page-properties", "fill", "solid");
+    assertXPath(pXmlDoc,
+        "/office:document-styles/office:automatic-styles/style:style[@style:name='Mdp2']/style:drawing-page-properties", "fill-color", "#c0c0c0");
+    assertXPath(pXmlDoc,
+        "/office:document-styles/office:automatic-styles/style:style[@style:name='Mdp2']/style:drawing-page-properties[@draw:fill-image-name]", 0);
+
+    // the named items
+    assertXPath(pXmlDoc,
+        "/office:document-styles/office:styles/draw:fill-image", 1);
+    assertXPath(pXmlDoc,
+        "/office:document-styles/office:styles/draw:fill-image", "name", "nav_5f_up");
+}
+
 DECLARE_ODFEXPORT_TEST(testCellUserDefineAttr, "userdefattr-tablecell.odt")
 {
     CPPUNIT_ASSERT_EQUAL(1, getPages());

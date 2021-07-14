@@ -34,6 +34,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/document/XEventsSupplier.hpp>
+#include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/style/ParagraphStyleCategory.hpp>
@@ -398,21 +399,21 @@ void XMLTextStyleContext::FillPropertySet(
     // intelligent solution.
     struct ContextID_Index_Pair aContextIDs[] =
     {
-        { CTF_COMBINED_CHARACTERS_FIELD, -1 },
-        { CTF_KEEP_TOGETHER, -1 },
-        { CTF_BORDER_MODEL, -1 },
-        { CTF_TEXT_DISPLAY, -1 },
-        { CTF_FONTFAMILYNAME, -1 },
-        { CTF_FONTFAMILYNAME_CJK, -1 },
-        { CTF_FONTFAMILYNAME_CTL, -1 },
+        { CTF_COMBINED_CHARACTERS_FIELD, -1, drawing::FillStyle::FillStyle_MAKE_FIXED_SIZE },
+        { CTF_KEEP_TOGETHER, -1, drawing::FillStyle::FillStyle_MAKE_FIXED_SIZE },
+        { CTF_BORDER_MODEL, -1, drawing::FillStyle::FillStyle_MAKE_FIXED_SIZE },
+        { CTF_TEXT_DISPLAY, -1, drawing::FillStyle::FillStyle_MAKE_FIXED_SIZE },
+        { CTF_FONTFAMILYNAME, -1, drawing::FillStyle::FillStyle_MAKE_FIXED_SIZE },
+        { CTF_FONTFAMILYNAME_CJK, -1, drawing::FillStyle::FillStyle_MAKE_FIXED_SIZE },
+        { CTF_FONTFAMILYNAME_CTL, -1, drawing::FillStyle::FillStyle_MAKE_FIXED_SIZE },
 
         //UUU need special handling for DrawingLayer FillStyle names
-        { CTF_FILLGRADIENTNAME, -1 },
-        { CTF_FILLTRANSNAME, -1 },
-        { CTF_FILLHATCHNAME, -1 },
-        { CTF_FILLBITMAPNAME, -1 },
+        { CTF_FILLGRADIENTNAME, -1, drawing::FillStyle::FillStyle_GRADIENT },
+        { CTF_FILLTRANSNAME, -1, drawing::FillStyle::FillStyle_MAKE_FIXED_SIZE },
+        { CTF_FILLHATCHNAME, -1, drawing::FillStyle::FillStyle_HATCH },
+        { CTF_FILLBITMAPNAME, -1, drawing::FillStyle::FillStyle_BITMAP },
 
-        { -1, -1 }
+        { -1, -1, drawing::FillStyle::FillStyle_MAKE_FIXED_SIZE }
     };
 
     // the style families associated with the same index modulo 4
@@ -548,6 +549,12 @@ void XMLTextStyleContext::FillPropertySet(
                         // For convenience, still Write back the corrected value to the XMLPropertyState entry
                         rState.maValue <<= sStyleName;
                         break;
+                    }
+
+                    if (::xmloff::IsIgnoreFillStyleNamedItem(rPropSet, aContextIDs[i].nExpectedFillStyle))
+                    {
+                        SAL_INFO("xmloff.style", "XMLTextStyleContext: dropping fill named item: " << sStyleName);
+                        break; // ignore it, it's not used
                     }
 
                     // Still needed if it's not an AutomaticStyle (!)

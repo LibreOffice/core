@@ -120,6 +120,10 @@ public:
     virtual OUString SAL_CALL resolveOutputStream( const css::uno::Reference< css::io::XOutputStream >& rxBinaryStream ) override;
 };
 
+namespace svx {
+    SVXCORE_DLLPUBLIC void DropUnusedNamedItems(css::uno::Reference<css::uno::XInterface> const& xModel);
+}
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

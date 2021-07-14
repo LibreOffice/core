@@ -34,6 +34,7 @@
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/presentation/XPresentationPage.hpp>
+#include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/XDrawPages.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -153,14 +154,14 @@ public:
 static const sal_uInt16 MAX_SPECIAL_DRAW_STYLES = 7;
 static ContextID_Index_Pair const g_ContextIDs[MAX_SPECIAL_DRAW_STYLES+1] =
 {
-    { CTF_DASHNAME , -1 },
-    { CTF_LINESTARTNAME , -1 },
-    { CTF_LINEENDNAME , -1 },
-    { CTF_FILLGRADIENTNAME, -1 },
-    { CTF_FILLTRANSNAME , -1 },
-    { CTF_FILLHATCHNAME , -1 },
-    { CTF_FILLBITMAPNAME , -1 },
-    { -1, -1 }
+    { CTF_DASHNAME,         -1, drawing::FillStyle::FillStyle_MAKE_FIXED_SIZE },
+    { CTF_LINESTARTNAME,    -1, drawing::FillStyle::FillStyle_MAKE_FIXED_SIZE },
+    { CTF_LINEENDNAME,      -1, drawing::FillStyle::FillStyle_MAKE_FIXED_SIZE },
+    { CTF_FILLGRADIENTNAME, -1, drawing::FillStyle::FillStyle_GRADIENT},
+    { CTF_FILLTRANSNAME,    -1, drawing::FillStyle::FillStyle_MAKE_FIXED_SIZE },
+    { CTF_FILLHATCHNAME,    -1, drawing::FillStyle::FillStyle_HATCH },
+    { CTF_FILLBITMAPNAME,   -1, drawing::FillStyle::FillStyle_BITMAP },
+    { -1, -1, drawing::FillStyle::FillStyle_MAKE_FIXED_SIZE }
 };
 static XmlStyleFamily const g_Families[MAX_SPECIAL_DRAW_STYLES] =
 {
@@ -287,6 +288,13 @@ void XMLDrawingPageStyleContext::FillPropertySet(
             struct XMLPropertyState& rState = GetProperties()[nIndex];
             OUString sStyleName;
             rState.maValue >>= sStyleName;
+
+            if (::xmloff::IsIgnoreFillStyleNamedItem(rPropSet, m_pContextIDs[i].nExpectedFillStyle))
+            {
+                SAL_INFO("xmloff.style", "XMLDrawingPageStyleContext: dropping fill named item: " << sStyleName);
+                break; // ignore it, it's not used
+            }
+
             sStyleName = GetImport().GetStyleDisplayName( m_pFamilies[i],
                                                           sStyleName );
             // get property set mapper
@@ -1540,5 +1548,25 @@ void SdXMLHeaderFooterDeclContext::Characters( const OUString& rChars )
 {
     maStrText += rChars;
 }
+
+namespace xmloff {
+
+bool IsIgnoreFillStyleNamedItem(
+        css::uno::Reference<css::beans::XPropertySet> const& xProps,
+        drawing::FillStyle const nExpectedFillStyle)
+{
+    assert(xProps.is());
+    if (nExpectedFillStyle == drawing::FillStyle::FillStyle_MAKE_FIXED_SIZE)
+    {
+        return false;
+    }
+
+    // note: the caller must have called FillPropertySet() previously
+    drawing::FillStyle fillStyle{drawing::FillStyle_NONE};
+    xProps->getPropertyValue("FillStyle") >>= fillStyle;
+    return fillStyle != nExpectedFillStyle;
+}
+
+} // namespace xmloff
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
