@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fe751ce6_9311a5f5",
+        "filename": "sw/source/core/doc/tblafmt.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 742,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-07-14T17:35:49Z",
+      "side": 1,
+      "message": "1. there\u0027s no point to retain the \"m_\" prefix on the name which indicates it\u0027s a member, when it isn\u0027t a member now\n2. nobody is initializing this shared_ptr, so it\u0027s not surprising that it\u0027s still crashing in the unit test\n3. there\u0027s no point in this being a shared_ptr, it can be a plain value now\n4. why not move it to the place where it\u0027s used, smaller variable scope is better",
+      "revId": "7bea7a2eeb029d661f5d0037041af277d23eea99",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
