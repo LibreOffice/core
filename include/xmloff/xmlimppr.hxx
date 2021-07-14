@@ -39,6 +39,7 @@ namespace com::sun::star::uno { template <typename > class Reference; }
 namespace com::sun::star::uno { template <typename > class Sequence; }
 namespace com::sun::star::xml::sax { class XAttributeList; }
 namespace com::sun::star::xml::sax { class XFastAttributeList; }
+namespace com::sun::star::drawing { enum class SAL_DLLPUBLIC_RTTI FillStyle; }
 
 struct XMLPropertyState;
 class XMLPropertySetMapper;
@@ -55,8 +56,9 @@ class SvXMLImport;
  */
 struct ContextID_Index_Pair
 {
-    sal_Int16 nContextID;
+    sal_Int16 /*const*/ nContextID;
     sal_Int32 nIndex;
+    css::drawing::FillStyle /*const*/ nExpectedFillStyle;
 };
 
 class XMLOFF_DLLPUBLIC SvXMLImportPropertyMapper : public salhelper::SimpleReferenceObject
@@ -195,6 +197,14 @@ inline const rtl::Reference< XMLPropertySetMapper >&
     SvXMLImportPropertyMapper::getPropertySetMapper() const
 {
     return maPropMapper;
+}
+
+namespace xmloff {
+
+bool IsIgnoreFillStyleNamedItem(
+        css::uno::Reference<css::beans::XPropertySet> const& xProps,
+        css::drawing::FillStyle nExpectedFillStyle);
+
 }
 
 #endif // INCLUDED_XMLOFF_XMLIMPPR_HXX
