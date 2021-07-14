@@ -2457,8 +2457,16 @@ OUString FileDialogHelper::contextToString(Context context)
             return "BaseDataSource";
         case BaseSaveAs:
             return "BaseSaveAs";
+        case BasicExportDialog:
+            return "BasicExportDialog";
         case BasicExportPackage:
             return "BasicExportPackage";
+        case BasicExportSource:
+            return "BasicExportSource";
+        case BasicImportDialog:
+            return "BasicImportDialog";
+        case BasicImportSource:
+            return "BasicImportSource";
         case BasicInsertLib:
             return "BasicInsertLib";
         case BulletsAddImage:

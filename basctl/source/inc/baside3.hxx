@@ -43,7 +43,7 @@ class DlgEdView;
 class DialogWindowLayout;
 class ObjectCatalog;
 
-bool implImportDialog(weld::Window* pWin, const OUString& rCurPath, const ScriptDocument& rDocument, const OUString& rLibName);
+bool implImportDialog(weld::Window* pWin, const ScriptDocument& rDocument, const OUString& rLibName);
 
 class DialogWindow: public BaseWindow
 {
