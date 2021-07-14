@@ -1546,16 +1546,16 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
         //does not specify the numbering
         sal_Int16 nListLevel = GetListLevel(pEntry, pParaContext);
         // Undefined listLevel with a valid numId is treated as a first level numbering.
-        if (nListLevel == -1 && nListId > 0)
+        if (nListLevel == -1 && nListId > (IsOOXMLImport() ? 0 : -1))
             nListLevel = 0;
 
         if (!bNoNumbering && nListLevel >= 0 && nListLevel < 9)
             pParaContext->Insert( PROP_NUMBERING_LEVEL, uno::makeAny(nListLevel), false );
 
         auto const pList(GetListTable()->GetList(nListId));
-        if (pList && nListId > 0 && !pParaContext->isSet(PROP_NUMBERING_STYLE_NAME))
+        if (pList && !pParaContext->isSet(PROP_NUMBERING_STYLE_NAME))
         {
-            // ListLevel 9 means Body Level/no numbering.  numId 0 means no numbering.
+            // ListLevel 9 means Body Level/no numbering.
             if (bNoNumbering || nListLevel == 9)
                 pParaContext->Insert(PROP_NUMBERING_STYLE_NAME, uno::makeAny(OUString()), true);
             else if ( !isNumberingViaRule )
@@ -1634,7 +1634,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
 
         if (nListId == 0 && !pList)
         {
-            // Seems situation with listid=0 and missing list definition is used by MS Word
+            // Seems situation with listid=0 and missing list definition is used by DOCX
             // to remove numbering defined previously. But some default numbering attributes
             // are still applied. This is first line indent, probably something more?
             if (!pParaContext->isSet(PROP_PARA_FIRST_LINE_INDENT))
