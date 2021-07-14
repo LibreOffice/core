@@ -190,6 +190,7 @@ public:
     void testTdf142854_GridVisibilityImportXlsxInHeadlessMode();
     void testTdf140431();
     void testTdf142929_filterLessThanXLSX();
+    void testTdf143220XLSX();
 
     CPPUNIT_TEST_SUITE(ScExportTest2);
 
@@ -288,6 +289,7 @@ public:
     CPPUNIT_TEST(testTdf142854_GridVisibilityImportXlsxInHeadlessMode);
     CPPUNIT_TEST(testTdf140431);
     CPPUNIT_TEST(testTdf142929_filterLessThanXLSX);
+    CPPUNIT_TEST(testTdf143220XLSX);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2351,6 +2353,19 @@ void ScExportTest2::testTdf142929_filterLessThanXLSX()
     CPPUNIT_ASSERT(pDoc);
     assertXPath(pDoc, "//x:customFilters/x:customFilter", "val", "2");
     assertXPath(pDoc, "//x:customFilters/x:customFilter", "operator", "lessThan");
+
+    xDocSh->DoClose();
+}
+
+void ScExportTest2::testTdf143220XLSX()
+{
+    ScDocShellRef xDocSh = loadDoc(u"tdf143220.", FORMAT_ODS);
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh, m_xSFactory,
+                                                     "xl/worksheets/sheet1.xml", FORMAT_XLSX);
+    CPPUNIT_ASSERT(pDoc);
+    assertXPath(pDoc, "/x:worksheet/x:hyperlinks/x:hyperlink", "location", "Sheet2!A1");
 
     xDocSh->DoClose();
 }
