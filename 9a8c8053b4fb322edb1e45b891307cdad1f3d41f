@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "95370a6d_2a537b96",
+        "filename": "sw/source/uibase/uiview/viewstat.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 605,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-07-14T15:34:49Z",
+      "side": 1,
+      "message": "you should indent it for better readability\n@Noel, should has the indent plugin flagged this ?",
+      "revId": "9a8c8053b4fb322edb1e45b891307cdad1f3d41f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
