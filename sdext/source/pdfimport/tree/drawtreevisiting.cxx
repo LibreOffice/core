@@ -126,6 +126,7 @@ void DrawXmlEmitter::visit( TextElement& elem, const std::list< std::unique_ptr<
 
     m_rEmitContext.rEmitter.beginTag( "text:span", aProps );
 
+    aProps = {};
     for(int i=0; i< elem.Text.getLength(); i++)
     {
         OUString strToken=  str.copy(i,1) ;
