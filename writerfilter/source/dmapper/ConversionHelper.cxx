@@ -423,6 +423,11 @@ sal_Int32 convertTwipToMM100(sal_Int32 _t)
     return ::convertTwipToMm100( _t );
 }
 
+sal_Int32 convertTwipToMM100WithoutLimit(sal_Int32 _t)
+{
+    return ::convertTwipToMm100(_t);
+}
+
 double convertTwipToMM100Double(sal_Int32 _t)
 {
     // It appears that MSO handles large twip values specially, probably legacy 16bit handling,

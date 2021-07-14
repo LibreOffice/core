@@ -1226,6 +1226,13 @@ DECLARE_OOXMLEXPORT_TEST(testTdf127741, "tdf127741.docx")
     CPPUNIT_ASSERT(visitedStyleName.equalsIgnoreAsciiCase("Visited Internet Link"));
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf142693_hugePaperSizeImport, "tdf142693_hugePaperSizeImport.docx")
+{
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:pgSz", "w", "90369");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:pgSz", "h", "104372");
+}
+
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf127925, "tdf127925.odt")
 {
     CPPUNIT_ASSERT_EQUAL(1, getPages());
