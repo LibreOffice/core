@@ -747,7 +747,7 @@ void RtfAttributeOutput::TableDefaultBorders(
     if (!pCellFormat->GetAttrSet().HasItem(RES_BOX, &pItem))
         return;
 
-    auto& rBox = static_cast<const SvxBoxItem&>(*pItem);
+    auto& rBox = pItem->StaticWhichCast(RES_BOX);
     static const SvxBoxItemLine aBorders[] = { SvxBoxItemLine::TOP, SvxBoxItemLine::LEFT,
                                                SvxBoxItemLine::BOTTOM, SvxBoxItemLine::RIGHT };
     static const char* aBorderNames[]
@@ -801,7 +801,7 @@ void RtfAttributeOutput::TableBackgrounds(
     const SfxPoolItem* pItem;
     if (pCellFormat->GetAttrSet().HasItem(RES_BACKGROUND, &pItem))
     {
-        auto& rBack = static_cast<const SvxBrushItem&>(*pItem);
+        auto& rBack = pItem->StaticWhichCast(RES_BACKGROUND);
         if (rBack.GetColor() != COL_AUTO)
             aColor = rBack.GetColor();
     }
@@ -905,7 +905,7 @@ void RtfAttributeOutput::TableVerticalCell(
     if (!pCellFormat->GetAttrSet().HasItem(RES_VERT_ORIENT, &pItem))
         return;
 
-    switch (static_cast<const SwFormatVertOrient*>(pItem)->GetVertOrient())
+    switch (pItem->StaticWhichCast(RES_VERT_ORIENT).GetVertOrient())
     {
         case text::VertOrientation::CENTER:
             m_aRowDefs.append(OOO_STRING_SVTOOLS_RTF_CLVERTALC);
@@ -2559,6 +2559,8 @@ void RtfAttributeOutput::CharUnderline(const SvxUnderlineItem& rUnderline)
     const char* pStr = nullptr;
     const SfxPoolItem* pItem = m_rExport.HasItem(RES_CHRATR_WORDLINEMODE);
     bool bWord = false;
+    // No StaticWhichCast(RES_CHRATR_WORDLINEMODE), this may be for a postit, where the which ids
+    // don't match.
     if (pItem)
         bWord = static_cast<const SvxWordLineModeItem*>(pItem)->GetValue();
     switch (rUnderline.GetLineStyle())
@@ -3586,7 +3588,7 @@ void RtfAttributeOutput::FormatBox(const SvxBoxItem& rBox)
     {
         SvxShadowLocation eShadowLocation = SvxShadowLocation::NONE;
         if (const SfxPoolItem* pItem = GetExport().HasItem(RES_SHADOW))
-            eShadowLocation = static_cast<const SvxShadowItem*>(pItem)->GetLocation();
+            eShadowLocation = pItem->StaticWhichCast(RES_SHADOW).GetLocation();
 
         const SvxBoxItemLine* pBrd = aBorders;
         const char** pBrdNms = aBorderNames;
