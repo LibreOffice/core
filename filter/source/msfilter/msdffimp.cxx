@@ -3662,6 +3662,9 @@ void SvxMSDffManager::ReadObjText( const OUString& rText, SdrObject* pObj )
     rOutliner.Clear();
     rOutliner.SetUpdateMode( bOldUpdateMode );
     pText->SetOutlinerParaObject( std::move(pNewText) );
+    // tdf#143315: restore stylesheet applied to Outliner's nodes when SdrTextObj initializes
+    // its attributes, but removed by Outliner::Init, which calls Outliner::Clear.
+    pText->SetStyleSheet(pText->GetStyleSheet(), true);
 }
 
 //static

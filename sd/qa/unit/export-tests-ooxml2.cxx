@@ -215,6 +215,7 @@ public:
     void testTextColumns_3columns();
     void testTdf59323_slideFooters();
     void testTdf143222_embeddedWorksheet();
+    void testTdf143315();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest2);
 
@@ -342,6 +343,7 @@ public:
     CPPUNIT_TEST(testTextColumns_3columns);
     CPPUNIT_TEST(testTdf59323_slideFooters);
     CPPUNIT_TEST(testTdf143222_embeddedWorksheet);
+    CPPUNIT_TEST(testTdf143315);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -3319,6 +3321,30 @@ void SdOOXMLExportTest2::testTdf143222_embeddedWorksheet()
     xDocShRef->DoClose();
 }
 
+void SdOOXMLExportTest2::testTdf143315()
+{
+    auto xDocShRef = loadURL(
+        m_directories.getURLFromSrc(u"sd/qa/unit/data/ppt/tdf143315-WordartWithoutBullet.ppt"),
+        PPT);
+
+    utl::TempFile tmpfile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tmpfile);
+    xDocShRef->DoClose();
+
+    xmlDocUniquePtr pXml = parseExport(tmpfile, "ppt/slides/slide1.xml");
+
+    // Without the fix in place, whis would have failed with
+    // - Expected:
+    // - Actual  : 216000
+    // - In <file:///tmp/lu161922zcvd.tmp>, XPath '/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:pPr' unexpected 'marL' attribute
+
+    assertXPathNoAttribute(pXml, "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:pPr", "marL");
+    assertXPathNoAttribute(pXml, "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:pPr", "indent");
+    assertXPath(pXml, "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:pPr/a:buClr", 0);
+    assertXPath(pXml, "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:pPr/a:buSzPct", 0);
+    assertXPath(pXml, "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:pPr/a:buFont", 0);
+    assertXPath(pXml, "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:pPr/a:buChar", 0);
+}
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdOOXMLExportTest2);
 
