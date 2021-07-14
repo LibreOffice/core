@@ -1284,6 +1284,8 @@ public:
 
     tools::Long                GetHorzMove() const { return mnHorzMove; }
     tools::Long                GetVertMove() const { return mnVertMove; }
+    void                SetHorzMove(tools::Long nHorzMove) { mnHorzMove = nHorzMove; }
+    void                SetVertMove(tools::Long nVertMove) { mnVertMove = nVertMove; }
 };
 
 class VCL_DLLPUBLIC MetaLineColorAction final : public MetaAction
