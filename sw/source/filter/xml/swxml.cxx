@@ -867,6 +867,8 @@ ErrCode XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, con
 
     nRet = nRet ? nRet : (nWarn ? nWarn : (nWarn2 ? nWarn2 : nWarnRDF ) );
 
+    ::svx::dropUnusedNamedItems(xModelComp);
+
     m_aOption.ResetAllFormatsOnly();
 
     // redline password
