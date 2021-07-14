@@ -992,6 +992,27 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf107784)
     CPPUNIT_ASSERT_EQUAL(OUString("(Smith, 1950)"), xEnumerationAccess->getPresentation(false).trim());
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf136472)
+{
+    load(mpTestDocumentPath, "tdf136472.docx");
+    uno::Reference<container::XNameAccess> xPageStyles = getStyles("PageStyles");
+    uno::Reference<style::XStyle> xPageStyle(xPageStyles->getByName("Standard"), uno::UNO_QUERY);
+
+    uno::Reference<text::XText> xHeaderText
+        = getProperty<uno::Reference<text::XText>>(xPageStyle, "HeaderText");
+    uno::Reference<text::XText> xHeaderTextFirst
+        = getProperty<uno::Reference<text::XText>>(xPageStyle, "HeaderTextFirst");
+    CPPUNIT_ASSERT_EQUAL(OUString("right page header"), xHeaderText->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("first page header"), xHeaderTextFirst->getString());
+
+    uno::Reference<text::XText> xFooterText
+        = getProperty<uno::Reference<text::XText>>(xPageStyle, "FooterText");
+    uno::Reference<text::XText> xFooterTextFirst
+        = getProperty<uno::Reference<text::XText>>(xPageStyle, "FooterTextFirst");
+    CPPUNIT_ASSERT_EQUAL(OUString("right page footer"), xFooterText->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("first page footer"), xFooterTextFirst->getString());
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf115883)
 {
     load(mpTestDocumentPath, "tdf115883.docx");
