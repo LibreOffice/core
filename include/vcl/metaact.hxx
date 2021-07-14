@@ -1370,6 +1370,7 @@ public:
     explicit            MetaTextColorAction( const Color& );
 
     const Color&        GetColor() const { return maColor; }
+    void                SetColor(Color& rColor) { maColor = rColor; }
 };
 
 class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetaTextFillColorAction final : public MetaAction
