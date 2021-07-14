@@ -602,6 +602,7 @@ void SwView::GetDrawState(SfxItemSet &rSet)
             if ( bWeb )
                 rSet.DisableItem( nWhich );
             else
+            if (nWhich != SID_DRAW_TEXT) //tdf#113171
                 rSet.Put( SfxBoolItem( nWhich, m_nDrawSfxId == nWhich ) );
             break;
 
@@ -610,6 +611,7 @@ void SwView::GetDrawState(SfxItemSet &rSet)
             if ( bWeb || !SvtLanguageOptions().IsVerticalTextEnabled() )
                 rSet.DisableItem( nWhich );
             else
+            if (nWhich != SID_DRAW_TEXT_VERTICAL) //tdf#113171
                 rSet.Put( SfxBoolItem( nWhich, m_nDrawSfxId == nWhich ) );
             break;
 
