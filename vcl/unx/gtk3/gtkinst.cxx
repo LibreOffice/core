@@ -17490,6 +17490,7 @@ private:
     static void signalPopupToggled(GObject*, GParamSpec*, gpointer widget)
     {
         GtkInstanceComboBox* pThis = static_cast<GtkInstanceComboBox*>(widget);
+        SolarMutexGuard aGuard;
         pThis->signal_popup_toggled();
     }
 
