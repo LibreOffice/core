@@ -197,7 +197,7 @@ IMPL_LINK_NOARG(CommandListBox, RowActivated, weld::TreeView&, bool)
 {
     OUString aCommandURL;
     int nSelected = mpCommandTreeView->get_selected_index();
-    if (nSelected < int(maCommandList.size()))
+    if (nSelected != -1 && nSelected < int(maCommandList.size()))
     {
         auto const& rCurrent = maCommandList[nSelected];
         aCommandURL = rCurrent.m_aCommandURL;
