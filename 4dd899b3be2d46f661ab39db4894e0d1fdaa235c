@@ -22,6 +22,30 @@
       "revId": "4dd899b3be2d46f661ab39db4894e0d1fdaa235c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "255cac48_a5cc6610",
+        "filename": "sw/inc/tblafmt.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1002855
+      },
+      "writtenOn": "2021-07-14T13:42:04Z",
+      "side": 1,
+      "message": "I did it, thanks for the suggestion!",
+      "parentUuid": "efa4e3bc_453e7ce1",
+      "range": {
+        "startLine": 176,
+        "startChar": 40,
+        "endLine": 176,
+        "endChar": 48
+      },
+      "revId": "4dd899b3be2d46f661ab39db4894e0d1fdaa235c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
