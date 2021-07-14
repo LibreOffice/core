@@ -1397,7 +1397,10 @@ public:
                         MetaTextFillColorAction( const Color& rColor, bool bSet );
 
     const Color&        GetColor() const { return maColor; }
+    void                SetColor(Color& rColor) { maColor = rColor; }
+    void                SetSetting(bool bSet) { mbSet = bSet; }
     bool                IsSetting() const { return mbSet; }
+
 };
 
 class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetaTextLineColorAction final : public MetaAction

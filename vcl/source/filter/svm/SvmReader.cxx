@@ -271,7 +271,7 @@ rtl::Reference<MetaAction> SvmReader::MetaActionHandler(ImplMetaReadData* pData)
             return TextColorHandler();
             break;
         case MetaActionType::TEXTFILLCOLOR:
-            pAction = new MetaTextFillColorAction;
+            return TextFillColorHandler();
             break;
         case MetaActionType::TEXTLINECOLOR:
             pAction = new MetaTextLineColorAction;
@@ -1155,6 +1155,22 @@ rtl::Reference<MetaAction> SvmReader::TextColorHandler()
     ReadColor(aColor);
 
     pAction->SetColor(aColor);
+
+    return pAction;
+}
+
+rtl::Reference<MetaAction> SvmReader::TextFillColorHandler()
+{
+    auto pAction = new MetaTextFillColorAction();
+
+    VersionCompatRead aCompat(mrStream);
+    Color aColor;
+    ReadColor(aColor);
+    bool bSet;
+    mrStream.ReadCharAsBool(bSet);
+
+    pAction->SetColor(aColor);
+    pAction->SetSetting(bSet);
 
     return pAction;
 }

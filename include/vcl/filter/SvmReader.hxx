@@ -74,6 +74,7 @@ public:
     rtl::Reference<MetaAction> ISectRegionClipRegionHandler();
     rtl::Reference<MetaAction> MoveClipRegionHandler();
     rtl::Reference<MetaAction> TextColorHandler();
+    rtl::Reference<MetaAction> TextFillColorHandler();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
