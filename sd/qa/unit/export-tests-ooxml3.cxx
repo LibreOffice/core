@@ -117,6 +117,7 @@ public:
     void testTdf125560_textInflateTop();
     void testTdf96061_textHighlight();
     void testTdf142235_TestPlaceholderTextAlignment();
+    void testTdf143315();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest3);
 
@@ -186,6 +187,7 @@ public:
     CPPUNIT_TEST(testTdf125560_textInflateTop);
     CPPUNIT_TEST(testTdf96061_textHighlight);
     CPPUNIT_TEST(testTdf142235_TestPlaceholderTextAlignment);
+    CPPUNIT_TEST(testTdf143315);
     CPPUNIT_TEST_SUITE_END();
 
     virtual void registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx) override
@@ -1741,6 +1743,31 @@ void SdOOXMLExportTest3::testTdf96061_textHighlight()
     uno::Reference<beans::XPropertySet> xPropSet4(xRun4, uno::UNO_QUERY_THROW);
     xPropSet4->getPropertyValue("CharBackColor") >>= aColor;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), aColor);
+}
+
+void SdOOXMLExportTest3::testTdf143315()
+{
+    auto xDocShRef = loadURL(
+        m_directories.getURLFromSrc(u"sd/qa/unit/data/ppt/tdf143315-WordartWithoutBullet.ppt"),
+        PPT);
+
+    utl::TempFile tmpfile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tmpfile);
+    xDocShRef->DoClose();
+
+    xmlDocUniquePtr pXml = parseExport(tmpfile, "ppt/slides/slide1.xml");
+
+    // Without the fix in place, whis would have failed with
+    // - Expected:
+    // - Actual  : 216000
+    // - In <file:///tmp/lu161922zcvd.tmp>, XPath '/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:pPr' unexpected 'marL' attribute
+
+    assertXPathNoAttribute(pXml, "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:pPr", "marL");
+    assertXPathNoAttribute(pXml, "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:pPr", "indent");
+    assertXPath(pXml, "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:pPr/a:buClr", 0);
+    assertXPath(pXml, "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:pPr/a:buSzPct", 0);
+    assertXPath(pXml, "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:pPr/a:buFont", 0);
+    assertXPath(pXml, "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:pPr/a:buChar", 0);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdOOXMLExportTest3);
