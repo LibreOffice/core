@@ -1,34 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.38.2 -->
 <interface domain="svx">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkPopover" id="FloatingFrameBorder">
-    <property name="can_focus">False</property>
-    <property name="no_show_all">True</property>
-    <property name="border_width">4</property>
+    <property name="can-focus">False</property>
+    <property name="no-show-all">True</property>
+    <property name="border-width">5</property>
     <child>
       <object class="GtkBox" id="container">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="orientation">vertical</property>
         <property name="spacing">6</property>
         <child>
           <object class="GtkScrolledWindow" id="valuesetwin">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
+            <property name="can-focus">True</property>
             <property name="hexpand">True</property>
             <property name="vexpand">True</property>
-            <property name="hscrollbar_policy">never</property>
-            <property name="vscrollbar_policy">never</property>
-            <property name="shadow_type">in</property>
+            <property name="hscrollbar-policy">never</property>
+            <property name="vscrollbar-policy">never</property>
+            <property name="shadow-type">in</property>
             <child>
               <object class="GtkViewport">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <child>
                   <object class="GtkDrawingArea" id="valueset">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
+                    <property name="can-focus">True</property>
                     <property name="events">GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
                     <property name="hexpand">True</property>
                     <property name="vexpand">True</property>
