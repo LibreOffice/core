@@ -76,6 +76,7 @@ public:
     rtl::Reference<MetaAction> TextColorHandler();
     rtl::Reference<MetaAction> TextFillColorHandler();
     rtl::Reference<MetaAction> TextLineColorHandler();
+    rtl::Reference<MetaAction> OverlineColorHandler();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
