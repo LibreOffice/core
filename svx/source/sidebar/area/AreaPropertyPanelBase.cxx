@@ -438,7 +438,7 @@ IMPL_LINK_NOARG(AreaPropertyPanelBase, SelectFillTypeHdl, weld::ComboBox&, void)
 
     meLastXFS = static_cast<sal_uInt16>(nPos);
 
-    if (m_pPanel)
+    if (m_pPanel && !comphelper::LibreOfficeKit::isActive())
         m_pPanel->TriggerDeckLayouting();
 }
 
@@ -597,7 +597,7 @@ void AreaPropertyPanelBase::SelectFillAttrHdl_Impl()
             break;
         }
     }
-    if (m_pPanel)
+    if (m_pPanel && !comphelper::LibreOfficeKit::isActive())
         m_pPanel->TriggerDeckLayouting();
 }
 
@@ -853,7 +853,7 @@ void AreaPropertyPanelBase::updateFillStyle(bool bDisabled, bool bDefaultOrSet, 
     mxToolBoxColor->hide();
     meLastXFS = static_cast<sal_uInt16>(-1);
     mpStyleItem.reset();
-    if (m_pPanel)
+    if (m_pPanel && !comphelper::LibreOfficeKit::isActive())
         m_pPanel->TriggerDeckLayouting();
 }
 
@@ -894,7 +894,7 @@ void AreaPropertyPanelBase::updateFillGradient(bool bDisabled, bool bDefaultOrSe
             mxLbFillGradTo->SetNoSelection();
         }
     }
-    if (m_pPanel)
+    if (m_pPanel && !comphelper::LibreOfficeKit::isActive())
         m_pPanel->TriggerDeckLayouting();
 }
 
@@ -927,7 +927,7 @@ void AreaPropertyPanelBase::updateFillHatch(bool bDisabled, bool bDefaultOrSet, 
             mxLbFillAttr->set_active(-1);
         }
     }
-    if (m_pPanel)
+    if (m_pPanel && !comphelper::LibreOfficeKit::isActive())
         m_pPanel->TriggerDeckLayouting();
 }
 
@@ -946,7 +946,7 @@ void AreaPropertyPanelBase::updateFillColor(bool bDefaultOrSet, const SfxPoolIte
         mxLbFillType->set_active(SOLID);
         Update();
     }
-    if (m_pPanel)
+    if (m_pPanel && !comphelper::LibreOfficeKit::isActive())
         m_pPanel->TriggerDeckLayouting();
 }
 
@@ -981,7 +981,7 @@ void AreaPropertyPanelBase::updateFillBitmap(bool bDisabled, bool bDefaultOrSet,
             mxLbFillAttr->set_active(-1);
         }
     }
-    if (m_pPanel)
+    if (m_pPanel && !comphelper::LibreOfficeKit::isActive())
         m_pPanel->TriggerDeckLayouting();
 }
 
@@ -1249,7 +1249,7 @@ void AreaPropertyPanelBase::Update()
                 OSL_ENSURE(false, "Non supported FillType (!)");
             break;
         }
-        if (m_pPanel)
+        if (m_pPanel && !comphelper::LibreOfficeKit::isActive())
             m_pPanel->TriggerDeckLayouting();
 }
 
