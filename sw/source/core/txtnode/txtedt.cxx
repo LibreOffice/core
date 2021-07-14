@@ -144,8 +144,7 @@ static bool lcl_HasComments(const SwTextNode& rNode)
 
 static sal_Int32
 lcl_MaskRedlines( const SwTextNode& rNode, OUStringBuffer& rText,
-                         sal_Int32 nStt, sal_Int32 nEnd,
-                         const sal_Unicode cChar )
+                         sal_Int32 nStt, sal_Int32 nEnd )
 {
     sal_Int32 nNumOfMaskedRedlines = 0;
 
@@ -172,7 +171,7 @@ lcl_MaskRedlines( const SwTextNode& rNode, OUStringBuffer& rText,
             {
                 if (nRedlineStart >= nStt)
                 {
-                    rText[nRedlineStart] = cChar;
+                    rText[nRedlineStart] = CH_TXTATR_INWORD;
                     ++nNumOfMaskedRedlines;
                 }
                 ++nRedlineStart;
@@ -188,8 +187,7 @@ lcl_MaskRedlines( const SwTextNode& rNode, OUStringBuffer& rText,
  */
 static bool
 lcl_MaskRedlinesAndHiddenText( const SwTextNode& rNode, OUStringBuffer& rText,
-                                      sal_Int32 nStt, sal_Int32 nEnd,
-                                      const sal_Unicode cChar = CH_TXTATR_INWORD )
+                                      sal_Int32 nStt, sal_Int32 nEnd )
 {
     sal_Int32 nRedlinesMasked = 0;
     sal_Int32 nHiddenCharsMasked = 0;
@@ -201,7 +199,7 @@ lcl_MaskRedlinesAndHiddenText( const SwTextNode& rNode, OUStringBuffer& rText,
     // should be masked:
     if ( bShowChg )
     {
-        nRedlinesMasked = lcl_MaskRedlines( rNode, rText, nStt, nEnd, cChar );
+        nRedlinesMasked = lcl_MaskRedlines(rNode, rText, nStt, nEnd);
     }
 
     const bool bHideHidden = !SW_MOD()->GetViewOption(rDoc.GetDocumentSettingManager().get(DocumentSettingId::HTML_MODE))->IsShowHiddenChar();
@@ -211,7 +209,7 @@ lcl_MaskRedlinesAndHiddenText( const SwTextNode& rNode, OUStringBuffer& rText,
     if ( bHideHidden )
     {
         nHiddenCharsMasked =
-            SwScriptInfo::MaskHiddenRanges( rNode, rText, nStt, nEnd, cChar );
+            SwScriptInfo::MaskHiddenRanges(rNode, rText, nStt, nEnd, CH_TXTATR_INWORD);
     }
 
     return (nRedlinesMasked > 0) || (nHiddenCharsMasked > 0);
