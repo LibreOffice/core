@@ -621,7 +621,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             break;
         case NS_ooxml::LN_CT_PageSz_h:
             {
-                sal_Int32 nHeight = ConversionHelper::convertTwipToMM100(nIntValue);
+                sal_Int32 nHeight = ConversionHelper::convertTwipToMM100WithoutLimit(nIntValue);
                 CT_PageSz.h = PaperInfo::sloppyFitPageDimension(nHeight);
             }
             break;
@@ -630,7 +630,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             break;
         case NS_ooxml::LN_CT_PageSz_w:
             {
-                sal_Int32 nWidth = ConversionHelper::convertTwipToMM100(nIntValue);
+                sal_Int32 nWidth = ConversionHelper::convertTwipToMM100WithoutLimit(nIntValue);
                 CT_PageSz.w = PaperInfo::sloppyFitPageDimension(nWidth);
             }
             break;
