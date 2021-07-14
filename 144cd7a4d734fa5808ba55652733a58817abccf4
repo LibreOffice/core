@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1e7e7634_2c1fbcf2",
+        "filename": "sc/source/ui/miscdlgs/linkarea.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-07-14T08:28:40Z",
+      "side": 1,
+      "message": "Caveat, theoretically there can be empty index slots if a ScRangeData was erased from the map and the index wasn\u0027t reused, as findByIndex() finds the ScRangeData index, not a positional index. So it should be checked if findByIndex(i) returned nullptr. \n\nAlso, pRangeName-\u003esize() does not have to equal the maximum index used if ScRangeData was erased. However, this may work here because during import ScRangeData are only added and a comment should state that circumstance. It would be cleaner though to obtain the highest possible index as ScRangeName::maIndexToData.size()+1 (would need a new getter function as maIndexToData can\u0027t be accessed).",
+      "revId": "144cd7a4d734fa5808ba55652733a58817abccf4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
