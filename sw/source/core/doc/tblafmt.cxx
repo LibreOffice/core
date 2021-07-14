@@ -366,7 +366,6 @@ bool SwBoxAutoFormat::Save( SvStream& rStream, sal_uInt16 fileVersion ) const
 SwTableAutoFormat::SwTableAutoFormat( const OUString& rName )
     : m_aName( rName )
     , m_nStrResId( USHRT_MAX )
-    , m_aBreak(std::make_shared<SvxFormatBreakItem>(SvxBreak::NONE, RES_BREAK))
     , m_aKeepWithNextPara(std::make_shared<SvxFormatKeepItem>(false, RES_KEEP))
     , m_aRepeatHeading( 0 )
     , m_bLayoutSplit( true )
@@ -385,8 +384,7 @@ SwTableAutoFormat::SwTableAutoFormat( const OUString& rName )
 }
 
 SwTableAutoFormat::SwTableAutoFormat( const SwTableAutoFormat& rNew )
-    : m_aBreak()
-    , m_aKeepWithNextPara()
+    : m_aKeepWithNextPara()
     , m_aShadow(std::make_shared<SvxShadowItem>(RES_SHADOW))
 {
     for(SwBoxAutoFormat* & rp : m_aBoxAutoFormat)
@@ -420,8 +418,6 @@ SwTableAutoFormat& SwTableAutoFormat::operator=( const SwTableAutoFormat& rNew )
     m_bInclValueFormat = rNew.m_bInclValueFormat;
     m_bInclWidthHeight = rNew.m_bInclWidthHeight;
 
-    m_aBreak.reset(rNew.m_aBreak->Clone());
-    m_aPageDesc = rNew.m_aPageDesc;
     m_aKeepWithNextPara.reset(rNew.m_aKeepWithNextPara->Clone());
     m_aRepeatHeading = rNew.m_aRepeatHeading;
     m_bLayoutSplit = rNew.m_bLayoutSplit;
@@ -683,9 +679,6 @@ void SwTableAutoFormat::RestoreTableProperties(SwTable &table) const
 
     SfxItemSet rSet(pDoc->GetAttrPool(), aTableSetRange);
 
-    if ( m_aBreak->GetBreak() != SvxBreak::NONE )
-        rSet.Put(*m_aBreak);
-    rSet.Put(m_aPageDesc);
     rSet.Put(SwFormatLayoutSplit(m_bLayoutSplit));
     rSet.Put(SfxBoolItem(RES_COLLAPSING_BORDERS, m_bCollapsingBorders));
     if ( m_aKeepWithNextPara->GetValue() )
@@ -717,8 +710,6 @@ void SwTableAutoFormat::StoreTableProperties(const SwTable &table)
 
     const SfxItemSet &rSet = pFormat->GetAttrSet();
 
-    m_aBreak.reset(rSet.Get(RES_BREAK).Clone());
-    m_aPageDesc = rSet.Get(RES_PAGEDESC);
     const SwFormatLayoutSplit &layoutSplit = rSet.Get(RES_LAYOUT_SPLIT);
     m_bLayoutSplit = layoutSplit.GetValue();
     m_bCollapsingBorders = rSet.Get(RES_COLLAPSING_BORDERS).GetValue();
@@ -778,8 +769,9 @@ bool SwTableAutoFormat::Load( SvStream& rStream, const SwAfVersions& rVersions )
 
         if (nVal >= AUTOFORMAT_DATA_ID_31005 && WriterSpecificBlockExists(rStream))
         {
-            legacy::SvxFormatBreak::Create(*m_aBreak, rStream, AUTOFORMAT_FILE_VERSION);
-//unimplemented            READ(m_aPageDesc, SwFormatPageDesc, AUTOFORMAT_FILE_VERSION);
+            //this only exists for file format compat
+            SvxFormatBreakItem aBreak(SvxBreak::NONE, RES_BREAK);
+            legacy::SvxFormatBreak::Create(aBreak, rStream, AUTOFORMAT_FILE_VERSION);
             legacy::SvxFormatKeep::Create(*m_aKeepWithNextPara, rStream, AUTOFORMAT_FILE_VERSION);
 
             rStream.ReadUInt16( m_aRepeatHeading ).ReadCharAsBool( m_bLayoutSplit ).ReadCharAsBool( m_bRowSplit ).ReadCharAsBool( m_bCollapsingBorders );
@@ -822,9 +814,9 @@ bool SwTableAutoFormat::Save( SvStream& rStream, sal_uInt16 fileVersion ) const
 
     {
         WriterSpecificAutoFormatBlock block(rStream);
-
-        legacy::SvxFormatBreak::Store(*m_aBreak, rStream, legacy::SvxFormatBreak::GetVersion(fileVersion));
-//unimplemented        m_aPageDesc.Store(rStream, m_aPageDesc.GetVersion(fileVersion));
+        //this only exists for file format compat
+        SvxFormatBreakItem aBreak(SvxBreak::NONE, RES_BREAK);
+        legacy::SvxFormatBreak::Store(aBreak, rStream, legacy::SvxFormatBreak::GetVersion(fileVersion));
         legacy::SvxFormatKeep::Store(*m_aKeepWithNextPara, rStream, legacy::SvxFormatKeep::GetVersion(fileVersion));
         rStream.WriteUInt16( m_aRepeatHeading ).WriteBool( m_bLayoutSplit ).WriteBool( m_bRowSplit ).WriteBool( m_bCollapsingBorders );
         legacy::SvxShadow::Store(*m_aShadow, rStream, legacy::SvxShadow::GetVersion(fileVersion));

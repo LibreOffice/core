@@ -173,8 +173,6 @@ class SW_DLLPUBLIC SwTableAutoFormat
     SwBoxAutoFormat* m_aBoxAutoFormat[ 16 ] = {};
 
     // Writer-specific options
-    std::shared_ptr<SvxFormatBreakItem> m_aBreak;
-    SwFormatPageDesc m_aPageDesc;
     std::shared_ptr<SvxFormatKeepItem> m_aKeepWithNextPara;
     sal_uInt16 m_aRepeatHeading;
     bool m_bLayoutSplit;
@@ -191,11 +189,9 @@ public:
 
     SwTableAutoFormat& operator=( const SwTableAutoFormat& rNew );
 
-    const SvxFormatBreakItem& GetBreak() const { return *m_aBreak; }
     const SvxFormatKeepItem& GetKeepWithNextPara() const { return *m_aKeepWithNextPara; }
     const SvxShadowItem& GetShadow() const { return *m_aShadow; }
 
-    void SetBreak(const SvxFormatBreakItem& rNew) { m_aBreak.reset(rNew.Clone()); }
     void SetKeepWithNextPara(const SvxFormatKeepItem& rNew) { m_aKeepWithNextPara.reset(rNew.Clone()); }
     void SetShadow(const SvxShadowItem& rNew) { m_aShadow.reset(rNew.Clone()); }
 
