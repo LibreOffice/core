@@ -259,7 +259,7 @@ rtl::Reference<MetaAction> SvmReader::MetaActionHandler(ImplMetaReadData* pData)
             return ISectRegionClipRegionHandler();
             break;
         case MetaActionType::MOVECLIPREGION:
-            pAction = new MetaMoveClipRegionAction;
+            return MoveClipRegionHandler();
             break;
         case MetaActionType::LINECOLOR:
             return LineColorHandler();
@@ -1128,6 +1128,20 @@ rtl::Reference<MetaAction> SvmReader::ISectRegionClipRegionHandler()
     vcl::Region aRegion;
     ReadRegion(mrStream, aRegion);
     pAction->SetRegion(aRegion);
+
+    return pAction;
+}
+
+rtl::Reference<MetaAction> SvmReader::MoveClipRegionHandler()
+{
+    auto pAction = new MetaMoveClipRegionAction();
+
+    VersionCompatRead aCompat(mrStream);
+    sal_Int32 nTmpHM(0), nTmpVM(0);
+    mrStream.ReadInt32(nTmpHM).ReadInt32(nTmpVM);
+
+    pAction->SetHorzMove(nTmpHM);
+    pAction->SetVertMove(nTmpVM);
 
     return pAction;
 }
