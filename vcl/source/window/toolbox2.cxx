@@ -1755,6 +1755,8 @@ void ToolBox::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
                 rJsonWriter.put("type", "toolitem");
                 rJsonWriter.put("text", GetItemText(nId));
                 rJsonWriter.put("command", sCommand);
+                if (IsItemChecked(nId))
+                    rJsonWriter.put("selected", true);
                 if (!IsItemVisible(nId))
                     rJsonWriter.put("visible", false);
                 if (GetItemBits(nId) & ToolBoxItemBits::DROPDOWN)
