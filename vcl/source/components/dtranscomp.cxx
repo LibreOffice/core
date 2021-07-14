@@ -33,6 +33,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/script/XDirectInvocation.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboardListener.hpp>
 #include <com/sun/star/datatransfer/clipboard/XSystemClipboard.hpp>
@@ -204,13 +205,14 @@ namespace {
 *   generic DragSource dummy
 */
 class GenericDragSource : public cppu::WeakComponentImplHelper<
-            datatransfer::dnd::XDragSource,
-            XInitialization,
-            css::lang::XServiceInfo
-            >
+    datatransfer::dnd::XDragSource,
+    css::script::XDirectInvocation,
+    XInitialization,
+    css::lang::XServiceInfo>
 {
     osl::Mutex                          m_aMutex;
     css::uno::Reference<css::datatransfer::XTransferable> m_xTrans;
+    css::uno::Reference<datatransfer::dnd::XDragSourceListener> m_xListener;
 public:
     GenericDragSource() : WeakComponentImplHelper( m_aMutex ) {}
 
@@ -240,6 +242,13 @@ public:
     {
        return { "com.sun.star.datatransfer.dnd.GenericDragSource" };
     }
+
+    // XDirectInvocation
+    virtual css::uno::Any SAL_CALL directInvoke(const OUString& aName,
+                                                const css::uno::Sequence< css::uno::Any >& aParams) override;
+    virtual sal_Bool SAL_CALL hasMember(const OUString& aName) override;
+
+    void fireDragEnd();
 };
 
 }
@@ -262,6 +271,7 @@ void GenericDragSource::startDrag( const datatransfer::dnd::DragGestureEvent&,
 {
     if (comphelper::LibreOfficeKit::isActive()) {
         m_xTrans = rTrans;
+        m_xListener = listener;
         return;
     }
 
@@ -273,6 +283,34 @@ void GenericDragSource::startDrag( const datatransfer::dnd::DragGestureEvent&,
 
 void GenericDragSource::initialize( const Sequence< Any >& )
 {
+}
+
+// XDirectInvocation
+uno::Any GenericDragSource::directInvoke(const OUString& aName, const uno::Sequence< uno::Any >& /*aParams*/)
+{
+    uno::Any aRet;
+    const OUString sId("dragend");
+    if (aName == sId)
+        fireDragEnd();
+
+    return aRet;
+}
+sal_Bool GenericDragSource::hasMember( const OUString& aName )
+{
+    const OUString sId("dragend");
+    return aName == sId;
+}
+
+void GenericDragSource::fireDragEnd()
+{
+    if (m_xListener.is())
+    {
+        datatransfer::dnd::DragSourceDropEvent aEv;
+        aEv.DropAction = datatransfer::dnd::DNDConstants::ACTION_NONE;
+        aEv.DropSuccess = false;
+        m_xListener->dragDropEnd(aEv);
+        m_xListener.clear();
+    }
 }
 
 Sequence< OUString > DragSource_getSupportedServiceNames()
