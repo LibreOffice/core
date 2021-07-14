@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3168965a_6400a8d6",
+        "filename": "sc/source/core/tool/address.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1437,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-07-14T09:35:13Z",
+      "side": 0,
+      "message": "When can we have a global name if *pSheetEndPos\u003d\u003d0 is not fulfilled?",
+      "range": {
+        "startLine": 1437,
+        "startChar": 42,
+        "endLine": 1437,
+        "endChar": 62
+      },
+      "revId": "a483a44ca00f43a64ae51d62b8fbb4129a413f6d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}

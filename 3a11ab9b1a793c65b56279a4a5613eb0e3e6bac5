@@ -1,0 +1,95 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dc8d34de_0ec8d6ee",
+        "filename": "include/formula/grammar.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-07-14T09:35:13Z",
+      "side": 1,
+      "message": "Then please use\n\n  return isExcelConvention(eConv);\n\nhere instead of having duplicated code.",
+      "revId": "3a11ab9b1a793c65b56279a4a5613eb0e3e6bac5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "49668ba5_488faeca",
+        "filename": "sc/source/core/tool/address.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 459,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-07-14T09:35:13Z",
+      "side": 1,
+      "message": "p is not passed per reference nor is it returned to the caller; would the caller need to know this \"advancing behind !\" position happened to continue processing at position p? i.e. in ScRange::Parse_XL_Header() there is\n\n  startTabs \u003d p;\n\nfollowing.",
+      "revId": "3a11ab9b1a793c65b56279a4a5613eb0e3e6bac5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a4be3d25_f34fb1f5",
+        "filename": "sc/source/core/tool/compiler.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 3537,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-07-14T09:35:13Z",
+      "side": 1,
+      "message": "This looks wrong. If we have a sheet name it can not be a global name.\n\nCould you please elaborate on the exact conditions which this is supposed to handle?",
+      "revId": "3a11ab9b1a793c65b56279a4a5613eb0e3e6bac5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a93e9b38_efcff0ab",
+        "filename": "sc/source/core/tool/reftokenhelper.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-07-14T09:35:13Z",
+      "side": 1,
+      "message": "For svIndex you have to check the OpCode as well, it can be a named range ocName, ocDBArea or ocTableRef; only ocName can be handled as ScRangeData.",
+      "revId": "3a11ab9b1a793c65b56279a4a5613eb0e3e6bac5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "53b34ab7_c4e4a78b",
+        "filename": "sc/source/core/tool/reftokenhelper.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-07-14T09:35:13Z",
+      "side": 1,
+      "message": "Instead of all this and calling recursively just ask\n\n  if (pNameRange-\u003eIsReference( rRange, rPos))\n      return true;",
+      "range": {
+        "startLine": 158,
+        "startChar": 0,
+        "endLine": 163,
+        "endChar": 1
+      },
+      "revId": "3a11ab9b1a793c65b56279a4a5613eb0e3e6bac5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
