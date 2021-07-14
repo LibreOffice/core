@@ -22,6 +22,7 @@
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/util/XCancellable.hpp>
 
 #include <cppuhelper/implbase.hxx>
 
@@ -35,8 +36,12 @@ class SfxItemPool;
 class SfxItemSet;
 
 typedef std::vector< std::unique_ptr< SfxItemSet > > ItemPoolVector;
-class SvxUnoNameItemTable : public cppu::WeakImplHelper< css::container::XNameContainer, css::lang::XServiceInfo >,
-                            public SfxListener
+class SvxUnoNameItemTable
+    : public cppu::WeakImplHelper<
+        css::util::XCancellable,
+        css::container::XNameContainer,
+        css::lang::XServiceInfo >
+    , public SfxListener
 {
 private:
     SdrModel*       mpModel;
@@ -44,6 +49,8 @@ private:
     sal_uInt16          mnWhich;
     sal_uInt8           mnMemberId;
 
+    /// vector contains all items that were created by this service and will
+    /// keep them alive even if nothing in the document references them
     ItemPoolVector maItemSetVector;
 
     void ImplInsertByName( const OUString& aName, const css::uno::Any& aElement );
@@ -62,6 +69,9 @@ public:
 
     // XServiceInfo
     virtual sal_Bool SAL_CALL supportsService( const  OUString& ServiceName ) override;
+
+    // XCancellable
+    virtual void SAL_CALL cancel() override;
 
     // XNameContainer
     virtual void SAL_CALL insertByName( const  OUString& aName, const  css::uno::Any& aElement ) override;
