@@ -29,6 +29,7 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <osl/diagnose.h>
+#include <optional>
 
 //
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -235,36 +236,76 @@ void PageStyleContext::FillPropertySet_PageStyle(
 
         // get property set mapper
         const rtl::Reference< XMLPropertySetMapper >& rMapper = xImpPrMap->getPropertySetMapper();
-        Reference< XPropertySetInfo > xInfo;
+        Reference<XPropertySetInfo> const xInfo(xPropSet->getPropertySetInfo());
+
+        // don't look at the attributes, look at the property, could
+        // theoretically be inherited and we don't want to delete erroneously
+        drawing::FillStyle fillStyle{drawing::FillStyle_NONE};
+        drawing::FillStyle fillStyleHeader{drawing::FillStyle_NONE};
+        drawing::FillStyle fillStyleFooter{drawing::FillStyle_NONE};
+        if (xInfo->hasPropertyByName("FillStyle")) // SwXTextDefaults lacks it?
+        {
+            xPropSet->getPropertyValue("FillStyle") >>= fillStyle;
+            xPropSet->getPropertyValue("HeaderFillStyle") >>= fillStyleHeader;
+            xPropSet->getPropertyValue("FooterFillStyle") >>= fillStyleFooter;
+        }
 
         // handle special attributes which have MID_FLAG_NO_PROPERTY_IMPORT set
         for(sal_uInt16 i = 0; aContextIDs[i].nContextID != -1; i++)
         {
             sal_Int32 nIndex = aContextIDs[i].nIndex;
+            drawing::FillStyle const* pFillStyle(nullptr);
+            std::optional<drawing::FillStyle> oExpectedFillStyle;
 
             if(nIndex != -1)
             {
                 switch(aContextIDs[i].nContextID)
                 {
                     case CTF_PM_FILLGRADIENTNAME:
+                    case CTF_PM_HEADERFILLGRADIENTNAME:
+                    case CTF_PM_FOOTERFILLGRADIENTNAME:
+                        oExpectedFillStyle.emplace(drawing::FillStyle_GRADIENT);
+                        break;
+                    case CTF_PM_FILLHATCHNAME:
+                    case CTF_PM_HEADERFILLHATCHNAME:
+                    case CTF_PM_FOOTERFILLHATCHNAME:
+                        oExpectedFillStyle.emplace(drawing::FillStyle_HATCH);
+                        break;
+                    case CTF_PM_FILLBITMAPNAME:
+                    case CTF_PM_HEADERFILLBITMAPNAME:
+                    case CTF_PM_FOOTERFILLBITMAPNAME:
+                        oExpectedFillStyle.emplace(drawing::FillStyle_BITMAP);
+                        break;
+                }
+                switch(aContextIDs[i].nContextID)
+                {
+                    case CTF_PM_FILLGRADIENTNAME:
                     case CTF_PM_FILLTRANSNAME:
                     case CTF_PM_FILLHATCHNAME:
                     case CTF_PM_FILLBITMAPNAME:
-
+                        pFillStyle = &fillStyle;
+                        [[fallthrough]];
                     case CTF_PM_HEADERFILLGRADIENTNAME:
                     case CTF_PM_HEADERFILLTRANSNAME:
                     case CTF_PM_HEADERFILLHATCHNAME:
                     case CTF_PM_HEADERFILLBITMAPNAME:
-
+                        if (!pFillStyle) { pFillStyle = &fillStyleHeader; }
+                        [[fallthrough]];
                     case CTF_PM_FOOTERFILLGRADIENTNAME:
                     case CTF_PM_FOOTERFILLTRANSNAME:
                     case CTF_PM_FOOTERFILLHATCHNAME:
                     case CTF_PM_FOOTERFILLBITMAPNAME:
                     {
+                        if (!pFillStyle) { pFillStyle = &fillStyleFooter; }
                         struct XMLPropertyState& rState = GetProperties()[nIndex];
                         OUString sStyleName;
                         rState.maValue >>= sStyleName;
 
+                        if (oExpectedFillStyle && *pFillStyle != *oExpectedFillStyle)
+                        {
+                            SAL_INFO("xmloff.style", "PageStyleContext: dropping fill named item: " << sStyleName);
+                            break; // ignore it, it's not used
+                        }
                         // translate the used name from ODF intern to the name used in the Model
                         sStyleName = GetImport().GetStyleDisplayName(aFamilies[i%4], sStyleName);
 
@@ -272,11 +313,6 @@ void PageStyleContext::FillPropertySet_PageStyle(
                         {
                             // set property
                             const OUString& rPropertyName = rMapper->GetEntryAPIName(rState.mnIndex);
-
-                            if(!xInfo.is())
-                            {
-                                xInfo = xPropSet->getPropertySetInfo();
-                            }
 
                             if(xInfo->hasPropertyByName(rPropertyName))
                             {

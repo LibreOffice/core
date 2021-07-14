@@ -668,33 +668,47 @@ bool SdXMLFilter::Import( ErrCode& nError )
 
     // clear unused named items from item pool
 
+    ::svx::dropUnusedNamedItems(mxModel);
+#if 0
     uno::Reference< lang::XMultiServiceFactory> xModelFactory( mxModel, uno::UNO_QUERY );
     if( xModelFactory.is() )
     {
         try
         {
-            static const OUStringLiteral aName(u"~clear~" );
-            uno::Reference< container::XNameContainer > xGradient( xModelFactory->createInstance( "com.sun.star.drawing.GradientTable" ), uno::UNO_QUERY );
+            //static const OUStringLiteral aName(u"~clear~" );
+            uno::Reference<util::XCancellable> const xGradient(
+                xModelFactory->createInstance("com.sun.star.drawing.GradientTable"),
+                uno::UNO_QUERY );
             if( xGradient.is() )
-                xGradient->removeByName( aName );
+                xGradient->cancel();
 
-            uno::Reference< container::XNameContainer > xHatch( xModelFactory->createInstance( "com.sun.star.drawing.HatchTable" ), uno::UNO_QUERY );
+            uno::Reference<util::XCancellable> const xHatch(
+                xModelFactory->createInstance("com.sun.star.drawing.HatchTable"),
+                uno::UNO_QUERY );
             if( xHatch.is() )
-                xHatch->removeByName( aName );
+                xHatch->cancel();
 
-            uno::Reference< container::XNameContainer > xBitmap( xModelFactory->createInstance( "com.sun.star.drawing.BitmapTable" ), uno::UNO_QUERY );
+            uno::Reference<util::XCancellable> const xBitmap(
+                xModelFactory->createInstance("com.sun.star.drawing.BitmapTable"),
+                uno::UNO_QUERY );
             if( xBitmap.is() )
-                xBitmap->removeByName( aName );
+                xBitmap->cancel();
 
-            uno::Reference< container::XNameContainer > xTransGradient( xModelFactory->createInstance( "com.sun.star.drawing.TransparencyGradientTable" ), uno::UNO_QUERY );
+            uno::Reference<util::XCancellable> const xTransGradient(
+                xModelFactory->createInstance("com.sun.star.drawing.TransparencyGradientTable"),
+                uno::UNO_QUERY );
             if( xTransGradient.is() )
                 xTransGradient->removeByName( aName );
 
-            uno::Reference< container::XNameContainer > xMarker( xModelFactory->createInstance( "com.sun.star.drawing.MarkerTable" ), uno::UNO_QUERY );
+            uno::Reference<util::XCancellable> const xMarker(
+                xModelFactory->createInstance("com.sun.star.drawing.MarkerTable"),
+                uno::UNO_QUERY );
             if( xMarker.is() )
                 xMarker->removeByName( aName );
 
-            uno::Reference< container::XNameContainer > xDashes( xModelFactory->createInstance( "com.sun.star.drawing.DashTable" ), uno::UNO_QUERY );
+            uno::Reference<util::XCancellable> const xDashes(
+                xModelFactory->createInstance("com.sun.star.drawing.DashTable"),
+                uno::UNO_QUERY );
             if( xDashes.is() )
                 xDashes->removeByName( aName );
         }
@@ -703,6 +717,7 @@ bool SdXMLFilter::Import( ErrCode& nError )
             TOOLS_WARN_EXCEPTION( "sd.filter","sd::SdXMLFilter::Import(), exception during clearing of unused named items");
         }
     }
+#endif
 
     // set BuildId on XModel for later OLE object loading
     if( xInfoSet.is() )
