@@ -2572,6 +2572,43 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf142157)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSections->getCount());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf143320)
+{
+    createSwDoc("tdf143320.odt");
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+    CPPUNIT_ASSERT(getParagraph(1)->getString().startsWith("x"));
+
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+
+    dispatchCommand(mxComponent, ".uno:Copy", {});
+
+    // Create a new document
+    createSwDoc();
+    pDoc = getSwDoc();
+    pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+
+    dispatchCommand(mxComponent, ".uno:Paste", {});
+
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+    CPPUNIT_ASSERT(getParagraph(1)->getString().startsWith("x"));
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+    CPPUNIT_ASSERT_EQUAL(OUString(""), getParagraph(1)->getString());
+
+    // Without the fix in place, this test would have crashed here
+    dispatchCommand(mxComponent, ".uno:Paste", {});
+
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+    CPPUNIT_ASSERT(getParagraph(1)->getString().startsWith("x"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
