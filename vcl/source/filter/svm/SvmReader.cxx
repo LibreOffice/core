@@ -256,7 +256,7 @@ rtl::Reference<MetaAction> SvmReader::MetaActionHandler(ImplMetaReadData* pData)
             return ISectRectClipRegionHandler();
             break;
         case MetaActionType::ISECTREGIONCLIPREGION:
-            pAction = new MetaISectRegionClipRegionAction;
+            return ISectRegionClipRegionHandler();
             break;
         case MetaActionType::MOVECLIPREGION:
             pAction = new MetaMoveClipRegionAction;
@@ -1116,6 +1116,18 @@ rtl::Reference<MetaAction> SvmReader::ISectRectClipRegionHandler()
     aSerializer.readRectangle(aRect);
 
     pAction->SetRect(aRect);
+
+    return pAction;
+}
+
+rtl::Reference<MetaAction> SvmReader::ISectRegionClipRegionHandler()
+{
+    auto pAction = new MetaISectRegionClipRegionAction();
+
+    VersionCompatRead aCompat(mrStream);
+    vcl::Region aRegion;
+    ReadRegion(mrStream, aRegion);
+    pAction->SetRegion(aRegion);
 
     return pAction;
 }
