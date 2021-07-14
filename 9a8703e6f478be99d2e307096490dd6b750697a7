@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3bebdb41_1da10ecd",
+        "filename": "writerfilter/source/dmapper/GraphicImport.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1064,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-07-14T09:34:41Z",
+      "side": 1,
+      "message": "This conversion from 21600x21600 coordinates is also done in writerfilter/source/dmapper/WrapPolygonHandler.cxx, perhaps that could be unified later?",
+      "revId": "9a8703e6f478be99d2e307096490dd6b750697a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6c046443_9efa0d01",
+        "filename": "writerfilter/source/dmapper/GraphicImport.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1083,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-07-14T09:34:41Z",
+      "side": 1,
+      "message": "You could use o3tl::convert() instead of introducing this variable here. (Can be done in a follow-up commit.)",
+      "revId": "9a8703e6f478be99d2e307096490dd6b750697a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
