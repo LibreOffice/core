@@ -1177,7 +1177,7 @@ ListDef::Pointer ListsManager::GetList( sal_Int32 nId )
     }
 
     // nId 0 is only valid for abstractNum, not numId (which has an abstract definition)
-    assert(nId || !pList || !pList->GetAbstractDefinition());
+    assert(!pList || nId || !pList->GetAbstractDefinition() || m_rDMapper.IsRTFImport());
 
     return pList;
 }
