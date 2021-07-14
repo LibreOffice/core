@@ -16,6 +16,24 @@
       "revId": "dbdcceb9d77c602ea1161ab0f4e3899071333a92",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "28d07c24_f5b59365",
+        "filename": "sd/qa/unit/export-tests-ooxml3.cxx",
+        "patchSetId": 18
+      },
+      "lineNbr": 1698,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-14T21:22:25Z",
+      "side": 1,
+      "message": "Ah, ignore me - saveAndReload does the magic.",
+      "parentUuid": "a60f2fff_27bb5639",
+      "revId": "dbdcceb9d77c602ea1161ab0f4e3899071333a92",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
