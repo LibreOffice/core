@@ -2869,7 +2869,7 @@ void SwXPageStyle::SetPropertyValues_Impl(const uno::Sequence<OUString>& rProper
         if(pEntry->nFlags & beans::PropertyAttribute::READONLY)
             throw beans::PropertyVetoException("Property is read-only: " + rPropName, static_cast<cppu::OWeakObject*>(this));
 
-        const bool bHeader(rPropName.startsWith("Header"));
+        const bool bHeader(rPropName.startsWith("Header") || rPropName == UNO_NAME_FIRSTHEADER_IS_SHARED);
         const bool bFooter(rPropName.startsWith("Footer"));
         const bool bFirstIsShared(rPropName == UNO_NAME_FIRST_IS_SHARED);
         if(bHeader || bFooter || bFirstIsShared)

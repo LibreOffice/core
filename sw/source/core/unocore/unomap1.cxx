@@ -483,6 +483,7 @@ const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetPageStylePropertyMa
         { u"" UNO_NAME_HEADER_BODY_DISTANCE, RES_UL_SPACE,    cppu::UnoType<sal_Int32>::get(),            PROPERTY_NONE ,MID_LO_MARGIN|CONVERT_TWIPS       },
         { u"" UNO_NAME_HEADER_IS_DYNAMIC_HEIGHT, SID_ATTR_PAGE_DYNAMIC,   cppu::UnoType<bool>::get(),            PROPERTY_NONE ,0         },
         { u"" UNO_NAME_HEADER_IS_SHARED, SID_ATTR_PAGE_SHARED,    cppu::UnoType<bool>::get(),          PROPERTY_NONE ,0         },
+        { u"" UNO_NAME_FIRSTHEADER_IS_SHARED, SID_ATTR_PAGE_SHARED_FIRST,    cppu::UnoType<bool>::get(),          PROPERTY_NONE ,0         },
         { u"" UNO_NAME_HEADER_HEIGHT, SID_ATTR_PAGE_SIZE,       cppu::UnoType<sal_Int32>::get(),           PROPERTY_NONE ,MID_SIZE_HEIGHT|CONVERT_TWIPS         },
         { u"" UNO_NAME_HEADER_IS_ON, SID_ATTR_PAGE_ON,            cppu::UnoType<bool>::get(),         PROPERTY_NONE ,0         },
         { u"" UNO_NAME_HEADER_DYNAMIC_SPACING, RES_HEADER_FOOTER_EAT_SPACING,            cppu::UnoType<bool>::get(),         PropertyAttribute::MAYBEVOID ,0         },

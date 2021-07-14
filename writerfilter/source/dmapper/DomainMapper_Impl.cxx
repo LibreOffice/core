@@ -2777,6 +2777,8 @@ void DomainMapper_Impl::PushPageHeaderFooter(bool bHeader, SectionPropertyMap::P
 
     const PropertyIds ePropIsOn = bHeader? PROP_HEADER_IS_ON: PROP_FOOTER_IS_ON;
     const PropertyIds ePropShared = bHeader? PROP_HEADER_IS_SHARED: PROP_FOOTER_IS_SHARED;
+    const PropertyIds ePropFirstShared = /*bHeader?*/ PROP_FIRSTHEADER_IS_SHARED/*: PROP_FIRSTFOOTER_IS_SHARED*/;
+    const PropertyIds ePropTextFirst = /*bHeader?*/ PROP_HEADER_TEXT_FIRST/*: PROP_FOOTER_TEXT_LEFT*/;
     const PropertyIds ePropTextLeft = bHeader? PROP_HEADER_TEXT_LEFT: PROP_FOOTER_TEXT_LEFT;
     const PropertyIds ePropText = bHeader? PROP_HEADER_TEXT: PROP_FOOTER_TEXT;
 
@@ -2817,6 +2819,8 @@ void DomainMapper_Impl::PushPageHeaderFooter(bool bHeader, SectionPropertyMap::P
                     getPropertyName(ePropIsOn),
                     uno::makeAny(true));
 
+            if (bFirst)
+                xPageStyle->setPropertyValue(getPropertyName(ePropFirstShared), uno::makeAny(false));
             // If the 'Different Even & Odd Pages' flag is turned on - do not ignore it
             // Even if the 'Even' header/footer is blank - the flag should be imported (so it would look in LO like in Word)
             if (!bFirst && GetSettingsTable()->GetEvenAndOddHeaders())
@@ -2824,7 +2828,7 @@ void DomainMapper_Impl::PushPageHeaderFooter(bool bHeader, SectionPropertyMap::P
 
             //set the interface
             uno::Reference< text::XText > xText;
-            xPageStyle->getPropertyValue(getPropertyName(bLeft? ePropTextLeft: ePropText)) >>= xText;
+            xPageStyle->getPropertyValue(getPropertyName(bFirst? ePropTextFirst : (bLeft? ePropTextLeft: ePropText))) >>= xText;
 
             m_aTextAppendStack.push(TextAppendContext(uno::Reference< text::XTextAppend >(xText, uno::UNO_QUERY_THROW),
                 m_bIsNewDoc
@@ -2849,7 +2853,7 @@ void DomainMapper_Impl::PushPageHeaderFooter(bool bHeader, SectionPropertyMap::P
             xPageStyle->setPropertyValue(getPropertyName(ePropShared), uno::makeAny(false));
             // Add the content of the headers footers to the doc
             uno::Reference<text::XText> xText;
-            xPageStyle->getPropertyValue(getPropertyName(bLeft ? ePropTextLeft : ePropText))
+            xPageStyle->getPropertyValue(getPropertyName(bFirst? ePropTextFirst : (bLeft? ePropTextLeft: ePropText)))
                 >>= xText;
 
             m_aTextAppendStack.push(

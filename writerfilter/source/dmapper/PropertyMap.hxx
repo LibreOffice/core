@@ -369,6 +369,7 @@ public:
     void AppendColumnSpacing( sal_Int32 nDist ) { m_aColDistance.push_back( nDist ); }
 
     void SetTitlePage( bool bSet )           { m_bTitlePage = bSet; }
+    //bool GetTitlePage() const                { return m_bTitlePage; }
     void SetSeparatorLine( bool bSet )       { m_bSeparatorLineIsOn = bSet; }
     void SetEvenlySpaced( bool bSet )        { m_bEvenlySpaced = bSet; }
     void SetPageNumber( sal_Int32 nSet )     { m_nPageNumber = nSet; }

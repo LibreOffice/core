@@ -468,7 +468,7 @@ SectionPropertyMap::SectionPropertyMap( bool bIsFirstSection )
 
     if ( m_bIsFirstSection )
     {
-        m_sFirstPageStyleName = getPropertyName( PROP_FIRST_PAGE );
+        m_sFirstPageStyleName = getPropertyName( PROP_STANDARD );
         m_sFollowPageStyleName = getPropertyName( PROP_STANDARD );
     }
 }
@@ -1784,6 +1784,12 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
         //todo: creating a "First Page" style depends on HasTitlePage and _fFacingPage_
         if ( m_bTitlePage )
         {
+            // ez nem tom, hova kell
+            uno::Reference< beans::XPropertySet > xPageStyle = GetPageStyle(rDM_Impl, true);
+            if (!xPageStyle.is())
+                return;
+            //xPageStyle->setPropertyValue(getPropertyName(PROP_FIRSTHEADER_IS_SHARED), uno::makeAny(false));
+
             CopyLastHeaderFooter( true, rDM_Impl );
             PrepareHeaderFooterProperties( true );
             uno::Reference< beans::XPropertySet > xFirstPageStyle = GetPageStyle(

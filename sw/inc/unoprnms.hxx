@@ -380,6 +380,7 @@
 #define UNO_NAME_HEADER_BODY_DISTANCE "HeaderBodyDistance"
 #define UNO_NAME_HEADER_IS_DYNAMIC_HEIGHT "HeaderIsDynamicHeight"
 #define UNO_NAME_HEADER_IS_SHARED "HeaderIsShared"
+#define UNO_NAME_FIRSTHEADER_IS_SHARED "FirstPageHeaderIsShared"
 #define UNO_NAME_HEADER_HEIGHT "HeaderHeight"
 #define UNO_NAME_HEADER_IS_ON "HeaderIsOn"
 #define UNO_NAME_FOOTER_BACK_COLOR "FooterBackColor"

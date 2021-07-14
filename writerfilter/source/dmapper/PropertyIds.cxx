@@ -160,9 +160,11 @@ OUString getPropertyName( PropertyIds eId )
         case PROP_BACK_COLOR           :    sName = "BackColor"; break;
         case PROP_BACK_COLOR_TRANSPARENCY:  sName = "BackColorTransparency"; break;
         case PROP_ALTERNATIVE_TEXT     :    sName = "AlternativeText"; break;
+        case PROP_HEADER_TEXT_FIRST    :    sName = "HeaderTextFirst"; break;
         case PROP_HEADER_TEXT_LEFT     :    sName = "HeaderTextLeft"; break;
         case PROP_HEADER_TEXT          :    sName = "HeaderText"; break;
         case PROP_HEADER_IS_SHARED     :    sName = "HeaderIsShared"; break;
+        case PROP_FIRSTHEADER_IS_SHARED:    sName = "FirstPageHeaderIsShared"; break;
         case PROP_HEADER_IS_ON         :    sName = "HeaderIsOn"; break;
         case PROP_FOOTER_TEXT_LEFT     :    sName = "FooterTextLeft"; break;
         case PROP_FOOTER_TEXT          :    sName = "FooterText"; break;
