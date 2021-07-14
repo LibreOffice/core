@@ -16,6 +16,24 @@
       "revId": "48f6ce530f3546570eabdf398388185ab988636b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "efa79718_b258b6d6",
+        "filename": "sd/qa/unit/export-tests-ooxml2.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 375,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-14T21:22:39Z",
+      "side": 1,
+      "message": "This does not remove the tempfile in the absence of EnableKillingFile, right?",
+      "parentUuid": "ae948f59_4529580e",
+      "revId": "48f6ce530f3546570eabdf398388185ab988636b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
