@@ -1427,6 +1427,8 @@ public:
                         MetaTextLineColorAction( const Color& rColor, bool bSet );
 
     const Color&        GetColor() const { return maColor; }
+    void                SetColor(const Color& rColor) { maColor = rColor; }
+    void                SetSetting(bool bSet) { mbSet = bSet; }
     bool                IsSetting() const { return mbSet; }
 };
 
