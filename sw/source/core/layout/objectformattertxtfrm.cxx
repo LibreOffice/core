@@ -316,7 +316,7 @@ bool SwObjectFormatterTextFrame::DoFormatObjs()
         {
             // notify layout action, thus is can restart the layout process on
             // a previous page.
-            GetLayAction()->SetAgain();
+            GetLayAction()->SetAgain(true);
         }
         else
         {
