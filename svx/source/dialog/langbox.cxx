@@ -95,6 +95,7 @@ bool lcl_isPrerequisite( LanguageType nLangType )
         nLangType != LANGUAGE_DONTKNOW &&
         nLangType != LANGUAGE_SYSTEM &&
         nLangType != LANGUAGE_NONE &&
+        nLangType != LANGUAGE_USER_KEYID &&
         !MsLangId::isLegacy( nLangType) &&
         MsLangId::getSubLanguage( nLangType);
 }
