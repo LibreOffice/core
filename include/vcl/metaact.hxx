@@ -1689,6 +1689,10 @@ public:
     const Point&        GetPoint() const { return maPoint; }
     const Size&         GetSize() const { return maSize; }
     const Gradient&     GetGradient() const { return maGradient; }
+    void                SetGDIMetaFile(const GDIMetaFile &rMtf) { maMtf  = rMtf; }
+    void                SetPoint(const Point& rPoint) { maPoint = rPoint; }
+    void                SetSize(const Size& rSize) { maSize = rSize; }
+    void                SetGradient(const Gradient& rGradient) { maGradient = rGradient; }
     bool                IsTransparent() const override { return true; }
 };
 

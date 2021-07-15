@@ -302,7 +302,7 @@ rtl::Reference<MetaAction> SvmReader::MetaActionHandler(ImplMetaReadData* pData)
             return TransparentHandler();
             break;
         case MetaActionType::FLOATTRANSPARENT:
-            pAction = new MetaFloatTransparentAction;
+            return FloatTransparentHandler(pData);
             break;
         case MetaActionType::EPS:
             pAction = new MetaEPSAction;
@@ -1309,6 +1309,30 @@ rtl::Reference<MetaAction> SvmReader::TransparentHandler()
 
     pAction->SetPolyPolygon(aPolyPoly);
     pAction->SetTransparence(nTransPercent);
+
+    return pAction;
+}
+
+rtl::Reference<MetaAction> SvmReader::FloatTransparentHandler(ImplMetaReadData* pData)
+{
+    auto pAction = new MetaFloatTransparentAction();
+
+    VersionCompatRead aCompat(mrStream);
+    GDIMetaFile aMtf;
+    SvmReader aReader(mrStream);
+    aReader.Read(aMtf, pData);
+    TypeSerializer aSerializer(mrStream);
+    Point aPoint;
+    aSerializer.readPoint(aPoint);
+    Size aSize;
+    aSerializer.readSize(aSize);
+    Gradient aGradient;
+    aSerializer.readGradient(aGradient);
+
+    pAction->SetGDIMetaFile(aMtf);
+    pAction->SetPoint(aPoint);
+    pAction->SetSize(aSize);
+    pAction->SetGradient(aGradient);
 
     return pAction;
 }
