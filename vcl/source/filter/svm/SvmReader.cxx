@@ -311,7 +311,7 @@ rtl::Reference<MetaAction> SvmReader::MetaActionHandler(ImplMetaReadData* pData)
             return RefPointHandler();
             break;
         case MetaActionType::COMMENT:
-            pAction = new MetaCommentAction;
+            return CommentHandler();
             break;
         case MetaActionType::LAYOUTMODE:
             pAction = new MetaLayoutModeAction;
@@ -1374,6 +1374,43 @@ rtl::Reference<MetaAction> SvmReader::RefPointHandler()
 
     pAction->SetRefPoint(aRefPoint);
     pAction->SetSetting(bSet);
+
+    return pAction;
+}
+
+rtl::Reference<MetaAction> SvmReader::CommentHandler()
+{
+    auto pAction = new MetaCommentAction();
+
+    VersionCompatRead aCompat(mrStream);
+    OString aComment;
+    aComment = read_uInt16_lenPrefixed_uInt8s_ToOString(mrStream);
+    sal_Int32 nValue;
+    sal_uInt32 nDataSize;
+    mrStream.ReadInt32(nValue).ReadUInt32(nDataSize);
+
+    if (nDataSize > mrStream.remainingSize())
+    {
+        SAL_WARN("vcl.gdi", "Parsing error: " << mrStream.remainingSize() << " available data, but "
+                                              << nDataSize << " claimed, truncating");
+        nDataSize = mrStream.remainingSize();
+    }
+
+    SAL_INFO("vcl.gdi", "MetaCommentAction::Read " << aComment);
+
+    std::unique_ptr<sal_uInt8[]> pData;
+    pData.reset();
+
+    if (nDataSize)
+    {
+        pData.reset(new sal_uInt8[nDataSize]);
+        mrStream.ReadBytes(pData.get(), nDataSize);
+    }
+
+    pAction->SetComment(aComment);
+    pAction->SetDataSize(nDataSize);
+    pAction->SetValue(nValue);
+    pAction->SetData(pData.get(), nDataSize);
 
     return pAction;
 }
