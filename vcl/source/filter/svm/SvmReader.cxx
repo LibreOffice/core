@@ -299,7 +299,7 @@ rtl::Reference<MetaAction> SvmReader::MetaActionHandler(ImplMetaReadData* pData)
             return RasterOpHandler();
             break;
         case MetaActionType::Transparent:
-            pAction = new MetaTransparentAction;
+            return TransparentHandler();
             break;
         case MetaActionType::FLOATTRANSPARENT:
             pAction = new MetaFloatTransparentAction;
@@ -1293,6 +1293,22 @@ rtl::Reference<MetaAction> SvmReader::RasterOpHandler()
     mrStream.ReadUInt16(nTmp16);
 
     pAction->SetRasterOp(static_cast<RasterOp>(nTmp16));
+
+    return pAction;
+}
+
+rtl::Reference<MetaAction> SvmReader::TransparentHandler()
+{
+    auto pAction = new MetaTransparentAction();
+
+    VersionCompatRead aCompat(mrStream);
+    tools::PolyPolygon aPolyPoly;
+    ReadPolyPolygon(mrStream, aPolyPoly);
+    sal_uInt16 nTransPercent;
+    mrStream.ReadUInt16(nTransPercent);
+
+    pAction->SetPolyPolygon(aPolyPoly);
+    pAction->SetTransparence(nTransPercent);
 
     return pAction;
 }

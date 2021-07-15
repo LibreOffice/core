@@ -83,6 +83,7 @@ public:
     rtl::Reference<MetaAction> PushHandler();
     rtl::Reference<MetaAction> PopHandler();
     rtl::Reference<MetaAction> RasterOpHandler();
+    rtl::Reference<MetaAction> TransparentHandler();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
