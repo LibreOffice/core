@@ -41,6 +41,7 @@ typedef ::o3tl::sorted_vector< OUString > NameSet;
 typedef ::o3tl::sorted_vector< sal_Int16 > ValueSet;
 
 namespace cssi = ::com::sun::star::i18n;
+using namespace std;
 
 LocaleNode::LocaleNode (const OUString& name, const Reference< XAttributeList > & attr)
     : aName(name)

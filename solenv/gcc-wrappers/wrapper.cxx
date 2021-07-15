@@ -15,6 +15,8 @@
 
 #define BUFLEN 2048
 
+using namespace std;
+
 string getexe(string exename, bool maybeempty) {
     char* cmdbuf;
     size_t cmdlen;

@@ -27,8 +27,6 @@
 
 #define MAX_STRING_LENGTH_TO_ANALYSE 200
 
-using namespace std;
-
 class SimpleGuesser final
 {
 public:
@@ -50,7 +48,7 @@ public:
      * @param char* text is the text to analyze
      * @return the list of guess
      */
-    vector<Guess> GuessLanguage(const char* text);
+    std::vector<Guess> GuessLanguage(const char* text);
 
     /**
      * Analyze a text and return the most probable language of the text
@@ -63,31 +61,31 @@ public:
      * List all available languages (possibly to be in guesses)
      * @return the list of languages
      */
-    vector<Guess> GetAvailableLanguages();
+    std::vector<Guess> GetAvailableLanguages();
 
     /**
      * List all languages (possibly in guesses or not)
      * @return the list of languages
      */
-    vector<Guess> GetAllManagedLanguages();
+    std::vector<Guess> GetAllManagedLanguages();
 
     /**
      * List all Unavailable languages (disable for any reason)
      * @return the list of languages
      */
-    vector<Guess> GetUnavailableLanguages();
+    std::vector<Guess> GetUnavailableLanguages();
 
     /**
      * Mark a language enabled
      * @param string lang the language to enable (build like language-COUNTRY-encoding)
      */
-    void EnableLanguage(const string& lang);
+    void EnableLanguage(const std::string& lang);
 
     /**
      * Mark a language disabled
      * @param string lang the language to disable (build like language-COUNTRY-encoding)
      */
-    void DisableLanguage(const string& lang);
+    void DisableLanguage(const std::string& lang);
 
     /**
      * Load a new DB of fingerprints
@@ -101,10 +99,10 @@ private:
     void* h;
 
     //Is used to select languages into the fingerprints DB, the mask is used to indicate if we want enabled disabled or both
-    vector<Guess> GetManagedLanguages(const char mask);
+    std::vector<Guess> GetManagedLanguages(const char mask);
 
     //Like getManagedLanguages, this function enable or disable a language and it depends of the mask
-    void XableLanguage(const string& lang, char mask);
+    void XableLanguage(const std::string& lang, char mask);
 };
 
 #endif

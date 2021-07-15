@@ -30,7 +30,6 @@
 
 using namespace com::sun::star::bridge;
 using namespace cppu;
-using namespace std;
 
 /// @throws Exception
 Reference< XInterface> ConverterProvider_CreateInstance2(  const Reference<XMultiServiceFactory> & xSMgr);
@@ -176,7 +175,7 @@ public:
 protected:
     bool provideInstance(std::function<const Reference<XInterface>()> xInstFunction, GUID const * guid);
 
-    list< OneInstanceOleWrapper* > m_wrapperList;
+    std::list< OneInstanceOleWrapper* > m_wrapperList;
     Reference< XBridgeSupplier2 >   m_bridgeSupplier;
 
     Reference<XMultiServiceFactory> m_smgr;

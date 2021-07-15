@@ -28,8 +28,6 @@
 
 #include <string>
 
-using namespace std;
-
 class Guess final {
     public:
 
@@ -43,12 +41,12 @@ class Guess final {
          */
         Guess(const char * guess_str);
 
-        const string& GetLanguage() const { return language_str;}
-        const string& GetCountry() const { return country_str;}
+        const std::string& GetLanguage() const { return language_str;}
+        const std::string& GetCountry() const { return country_str;}
 
     private:
-        string language_str;
-        string country_str;
+        std::string language_str;
+        std::string country_str;
 };
 
 #endif

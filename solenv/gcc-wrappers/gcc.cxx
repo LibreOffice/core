@@ -9,6 +9,8 @@
 
 #include "wrapper.hxx"
 
+using namespace std;
+
 int main(int argc, char* argv[])
 {
     vector<string> rawargs(argv + 1, argv + argc);
