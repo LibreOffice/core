@@ -305,7 +305,7 @@ rtl::Reference<MetaAction> SvmReader::MetaActionHandler(ImplMetaReadData* pData)
             return FloatTransparentHandler(pData);
             break;
         case MetaActionType::EPS:
-            pAction = new MetaEPSAction;
+            return EPSHandler();
             break;
         case MetaActionType::REFPOINT:
             pAction = new MetaRefPointAction;
@@ -1333,6 +1333,29 @@ rtl::Reference<MetaAction> SvmReader::FloatTransparentHandler(ImplMetaReadData* 
     pAction->SetPoint(aPoint);
     pAction->SetSize(aSize);
     pAction->SetGradient(aGradient);
+
+    return pAction;
+}
+
+rtl::Reference<MetaAction> SvmReader::EPSHandler()
+{
+    auto pAction = new MetaEPSAction();
+
+    VersionCompatRead aCompat(mrStream);
+    TypeSerializer aSerializer(mrStream);
+    GfxLink aGfxLink;
+    aSerializer.readGfxLink(aGfxLink);
+    Point aPoint;
+    aSerializer.readPoint(aPoint);
+    Size aSize;
+    aSerializer.readSize(aSize);
+    GDIMetaFile aSubst;
+    Read(aSubst);
+
+    pAction->SetLink(aGfxLink);
+    pAction->SetPoint(aPoint);
+    pAction->SetSize(aSize);
+    pAction->SetSubstitute(aSubst);
 
     return pAction;
 }
