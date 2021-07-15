@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9cd845a1_8a67e732",
+        "filename": "sdext/source/pdfimport/test/testdocs/makefile.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2021-07-15T22:48:57Z",
+      "side": 0,
+      "message": "so this just adds _pdfi_unittest_draw_succeeded to all test pdfs -",
+      "revId": "717dc8e3575a18e1e18dc446031e6db4e60a873d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c5110dad_629ef0f6",
+        "filename": "sdext/source/pdfimport/test/testdocs/makefile.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2021-07-15T22:48:57Z",
+      "side": 0,
+      "message": "and this diffs the known-good xml against the newly-generated one -",
+      "revId": "717dc8e3575a18e1e18dc446031e6db4e60a873d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "11b8cf20_fa406190",
+        "filename": "sdext/source/pdfimport/xpdftest/makefile.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2021-07-15T22:48:57Z",
+      "side": 0,
+      "message": "Same here - diffing generated binary and text outputs against known-good versions in git",
+      "revId": "717dc8e3575a18e1e18dc446031e6db4e60a873d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
