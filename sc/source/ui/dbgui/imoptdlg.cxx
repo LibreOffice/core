@@ -20,6 +20,7 @@
 #include <imoptdlg.hxx>
 #include <asciiopt.hxx>
 #include <comphelper/string.hxx>
+#include <unotools/charclass.hxx>
 #include <osl/thread.h>
 #include <global.hxx>
 
@@ -43,7 +44,7 @@ ScImportOptions::ScImportOptions( const OUString& rStr )
     bSaveNumberAsSuch = true;
     bSaveFormulas = false;
     bRemoveSpace = false;
-    bNewFilePerSheet = false;
+    nSheetToExport = 0;
     sal_Int32 nTokenCount = comphelper::string::getTokenCount(rStr, ',');
     if ( nTokenCount < 3 )
         return;
@@ -79,7 +80,15 @@ ScImportOptions::ScImportOptions( const OUString& rStr )
         if ( nTokenCount >= 11 )
             bRemoveSpace = rStr.getToken(0, ',', nIdx) == "true";
         if ( nTokenCount >= 12 )
-            bNewFilePerSheet = rStr.getToken(0, ',', nIdx) == "-1";
+        {
+            const OUString aTok(rStr.getToken(0, ',', nIdx));
+            if (aTok == "-1")
+                nSheetToExport = -1;    // all
+            else if (aTok.isEmpty() || CharClass::isAsciiNumeric(aTok))
+                nSheetToExport = aTok.toInt32();
+            else
+                nSheetToExport = -23;   // invalid, force error
+        }
     }
 }
 
@@ -104,7 +113,7 @@ OUString ScImportOptions::BuildString() const
             "," +
             OUString::boolean( bRemoveSpace ) +  // same as "Remove space" in ScAsciiOptions
             "," +
-            std::u16string_view(bNewFilePerSheet ? u"-1" : u"0") ;  // Only available for command line --convert-to
+            OUString::number(nSheetToExport) ;  // Only available for command line --convert-to
 
     return aResult;
 }
