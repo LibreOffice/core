@@ -80,6 +80,7 @@ public:
     rtl::Reference<MetaAction> TextAlignHandler();
     rtl::Reference<MetaAction> MapModeHandler();
     rtl::Reference<MetaAction> FontHandler(ImplMetaReadData* pData);
+    rtl::Reference<MetaAction> PushHandler();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
