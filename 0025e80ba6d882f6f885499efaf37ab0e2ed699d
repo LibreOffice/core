@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4a3e72a2_e8ce431d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-15T06:48:12Z",
+      "side": 1,
+      "message": "I meditated over this some time, to understand what a sum of which id and a pointer could give, before realized that a combination of two matching concepts was meant :)",
+      "revId": "0025e80ba6d882f6f885499efaf37ab0e2ed699d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
