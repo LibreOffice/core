@@ -124,6 +124,19 @@ struct SwParaIdleData_Impl
         bAutoComplDirty     ( true ) {};
 };
 
+static bool lcl_HasComments(const SwTextNode& rNode)
+{
+    sal_Int32 nPosition = rNode.GetText().indexOf(CH_TXTATR_INWORD);
+    while (nPosition != -1)
+    {
+        const SwTextAttr* pAttr = rNode.GetTextAttrForCharAt(nPosition);
+        if (pAttr && pAttr->Which() == RES_TXTATR_ANNOTATION)
+            return true;
+        nPosition = rNode.GetText().indexOf(CH_TXTATR_INWORD, nPosition + 1);
+    }
+    return false;
+}
+
 /*
  * This has basically the same function as SwScriptInfo::MaskHiddenRanges,
  * only for deleted redlines
@@ -939,6 +952,7 @@ bool SwTextNode::Spell(SwSpellArgs* pArgs)
     // modify string according to redline information and hidden text
     const OUString aOldText( m_Text );
     OUStringBuffer buf(m_Text);
+    const bool bContainsComments = lcl_HasComments(*this);
     const bool bRestoreString =
         lcl_MaskRedlinesAndHiddenText(*this, buf, 0, m_Text.getLength());
     if (bRestoreString)
@@ -1024,7 +1038,7 @@ bool SwTextNode::Spell(SwSpellArgs* pArgs)
                         // redlines can leave "in word" character within word,
                         // we must remove them before spell checking
                         // to avoid false alarm
-                        ( bRestoreString && pArgs->xSpeller->isValid( rWord.replaceAll(OUStringChar(CH_TXTATR_INWORD), ""),
+                        ( (bRestoreString || bContainsComments) && pArgs->xSpeller->isValid( rWord.replaceAll(OUStringChar(CH_TXTATR_INWORD), ""),
                             static_cast<sal_uInt16>(eActLang), Sequence< PropertyValue >() ) ) )
                     {
                         pArgs->xSpellAlt = nullptr;
@@ -1243,6 +1257,7 @@ SwRect SwTextFrame::AutoSpell_(SwTextNode & rNode, sal_Int32 nActPos)
     // modify string according to redline information and hidden text
     const OUString aOldText( pNode->GetText() );
     OUStringBuffer buf(pNode->m_Text);
+    const bool bContainsComments = lcl_HasComments(rNode);
     const bool bRestoreString =
         lcl_MaskRedlinesAndHiddenText(*pNode, buf, 0, pNode->GetText().getLength());
     if (bRestoreString)
@@ -1326,7 +1341,7 @@ SwRect SwTextFrame::AutoSpell_(SwTextNode & rNode, sal_Int32 nActPos)
                     // redlines can leave "in word" character within word,
                     // we must remove them before spell checking
                     // to avoid false alarm
-                    (!bRestoreString || !xSpell->isValid( rWord.replaceAll(OUStringChar(CH_TXTATR_INWORD), ""),
+                    ((!bRestoreString && !bContainsComments) || !xSpell->isValid( rWord.replaceAll(OUStringChar(CH_TXTATR_INWORD), ""),
                             static_cast<sal_uInt16>(eActLang), Sequence< PropertyValue >() ) ) )
                 {
                     sal_Int32 nSmartTagStt = nBegin;
