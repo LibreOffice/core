@@ -2412,16 +2412,44 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
         weld::WaitObject aWait( GetActiveDialogParent() );
         ScImportOptions aOptions( sItStr );
 
-        if (aOptions.bNewFilePerSheet)
+        if (aOptions.nSheetToExport)
         {
+            // Only from command line --convert-to
             bRet = true;
+
+            SCTAB nStartTab;
+            SCTAB nCount = m_aDocument.GetTableCount();
+            if (aOptions.nSheetToExport == -1)
+            {
+                // All sheets.
+                nStartTab = 0;
+            }
+            else if (0 < aOptions.nSheetToExport && aOptions.nSheetToExport <= nCount)
+            {
+                // One sheet, 1-based.
+                nCount = aOptions.nSheetToExport;
+                nStartTab = nCount - 1;
+            }
+            else
+            {
+                // Usage error, no export but log.
+                if (aOptions.nSheetToExport < 0)
+                    std::cout << "Bad sheet number string given." << std::endl;
+                else
+                    std::cout << "No sheet number " << OString::number(aOptions.nSheetToExport)
+                                                    << ", number of sheets is " << nCount << std::endl;
+                nStartTab = 0;
+                nCount = 0;
+                SetError(SCERR_EXPORT_DATA);
+                bRet = false;
+            }
 
             INetURLObject aURLObject(rMed.GetURLObject());
             OUString sExt = aURLObject.CutExtension();
             OUString sBaseName = aURLObject.GetLastName();
             aURLObject.CutLastName();
 
-            for (SCTAB i = 0, nCount = m_aDocument.GetTableCount(); i < nCount; ++i)
+            for (SCTAB i = nStartTab; i < nCount; ++i)
             {
                 OUString sTabName;
                 if (!m_aDocument.GetName(i, sTabName))
@@ -2447,7 +2475,7 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
                 std::unique_ptr<SvStream> xStm = ::utl::UcbStreamHelper::CreateStream(aOutFile, StreamMode::TRUNC | StreamMode::WRITE);
                 if (!xStm)
                 {
-                    SetError(SCERR_IMPORT_UNKNOWN);
+                    SetError(ERRCODE_IO_CANTCREATE);
                     bRet = false;
                     break;
                 }
