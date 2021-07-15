@@ -57,7 +57,6 @@
 
 //  namespaces
 
-using namespace ::std;
 using namespace ::cppu;
 using namespace ::com::sun::star::datatransfer;
 using namespace ::com::sun::star::datatransfer::clipboard;
