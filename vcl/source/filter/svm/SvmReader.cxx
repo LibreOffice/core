@@ -314,7 +314,7 @@ rtl::Reference<MetaAction> SvmReader::MetaActionHandler(ImplMetaReadData* pData)
             return CommentHandler();
             break;
         case MetaActionType::LAYOUTMODE:
-            pAction = new MetaLayoutModeAction;
+            return LayoutModeHandler();
             break;
         case MetaActionType::TEXTLANGUAGE:
             pAction = new MetaTextLanguageAction;
@@ -1411,6 +1411,19 @@ rtl::Reference<MetaAction> SvmReader::CommentHandler()
     pAction->SetDataSize(nDataSize);
     pAction->SetValue(nValue);
     pAction->SetData(pData.get(), nDataSize);
+
+    return pAction;
+}
+
+rtl::Reference<MetaAction> SvmReader::LayoutModeHandler()
+{
+    auto pAction = new MetaLayoutModeAction();
+
+    VersionCompatRead aCompat(mrStream);
+    sal_uInt32 tmp;
+    mrStream.ReadUInt32(tmp);
+
+    pAction->SetLayoutMode(static_cast<ComplexTextLayoutFlags>(tmp));
 
     return pAction;
 }
