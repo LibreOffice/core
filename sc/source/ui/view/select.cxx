@@ -30,6 +30,7 @@
 #include <markdata.hxx>
 #include <gridwin.hxx>
 #include <sfx2/lokhelper.hxx>
+#include <comphelper/lok.hxx>
 
 #if defined(_WIN32)
 #define SC_SELENG_REFMODE_UPDATE_INTERVAL_MIN 65
@@ -206,8 +207,9 @@ void ScViewFunctionSet::BeginDrag()
 
     if (comphelper::LibreOfficeKit::isActive())
         pWindow->LocalStartDrag();
+    else
+        SC_MOD()->SetDragObject( pTransferObj.get(), nullptr );      // for internal D&D
 
-    SC_MOD()->SetDragObject( pTransferObj.get(), nullptr );      // for internal D&D
     pTransferObj->StartDrag( pWindow, nDragActions );
 
     return;         // dragging started
