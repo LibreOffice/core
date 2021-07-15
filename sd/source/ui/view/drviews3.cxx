@@ -817,13 +817,10 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
                 const SvxLRSpaceItem& rItem = static_cast<const SvxLRSpaceItem&>(
                             pArgs->Get( nId ));
 
-                static const sal_uInt16 aWhichTable[]=
-                {
-                    EE_PARA_OUTLLEVEL, EE_PARA_OUTLLEVEL,
-                    EE_PARA_LRSPACE, EE_PARA_LRSPACE,
+                static const auto aWhichTable = svl::Items<
                     EE_PARA_NUMBULLET, EE_PARA_NUMBULLET,
-                    0, 0
-                };
+                    EE_PARA_OUTLLEVEL, EE_PARA_OUTLLEVEL,
+                    EE_PARA_LRSPACE, EE_PARA_LRSPACE>{};
 
                 SfxItemSet aEditAttr( GetDoc()->GetPool(),
                                       aWhichTable );
