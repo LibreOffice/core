@@ -173,6 +173,8 @@ public:
     virtual bool    set_property(const OString &rKey, const OUString &rValue) override;
 
     static Image loadThemeImage(const OUString &rFileName);
+
+    void DumpAsPropertyTree(tools::JsonWriter& rJsonWriter) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
