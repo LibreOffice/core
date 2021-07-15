@@ -498,6 +498,7 @@ typedef bool (SwWrtShell::*FNSimpleMove)();
     void MakeAllFoldedOutlineContentVisible(bool bMakeVisible = true);
     void InvalidateOutlineContentVisibility();
     bool GetAttrOutlineContentVisible(const size_t nPos);
+    void SetContinuousEndnotes(bool bContinuousEndnotes);
 
 private:
 

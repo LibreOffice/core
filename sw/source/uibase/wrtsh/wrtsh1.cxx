@@ -2277,4 +2277,13 @@ bool SwWrtShell::GetAttrOutlineContentVisible(const size_t nPos)
     return bVisibleAttr;
 }
 
+void SwWrtShell::SetContinuousEndnotes(bool bSetContinuousEndnotes)
+{
+    StartAllAction();
+    IDocumentSettingAccess& rIDSA = getIDocumentSettingAccess();
+    rIDSA.set(DocumentSettingId::CONTINUOUS_ENDNOTES, bSetContinuousEndnotes);
+    InvalidateLayout(true);
+    EndAllAction();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
