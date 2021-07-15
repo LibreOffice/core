@@ -40,7 +40,6 @@
 #define DISPID_GET_STRUCT_FUNC      -102
 #define DISPID_CREATE_TYPE_FUNC     -103
 
-using namespace std;
 using namespace cppu;
 using namespace com::sun::star::bridge;
 using namespace com::sun::star::script;

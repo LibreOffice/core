@@ -30,7 +30,6 @@
 
 using namespace com::sun::star::bridge;
 using namespace cppu;
-using namespace std;
 
 /// @throws Exception
 Reference< XInterface> ConverterProvider_CreateInstance2(  const Reference<XMultiServiceFactory> & xSMgr);
