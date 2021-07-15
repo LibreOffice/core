@@ -88,6 +88,7 @@ public:
     rtl::Reference<MetaAction> EPSHandler();
     rtl::Reference<MetaAction> RefPointHandler();
     rtl::Reference<MetaAction> CommentHandler();
+    rtl::Reference<MetaAction> LayoutModeHandler();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

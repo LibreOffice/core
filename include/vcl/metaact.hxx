@@ -1825,6 +1825,7 @@ public:
     explicit            MetaLayoutModeAction( ComplexTextLayoutFlags nLayoutMode );
 
     ComplexTextLayoutFlags  GetLayoutMode() const { return mnLayoutMode; }
+    void                SetLayoutMode(const ComplexTextLayoutFlags nLayoutMode) { mnLayoutMode = nLayoutMode; }
 };
 
 class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetaTextLanguageAction final : public MetaAction
