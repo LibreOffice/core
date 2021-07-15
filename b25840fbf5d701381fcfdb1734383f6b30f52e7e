@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6b653c11_a6f25e08",
+        "filename": "sc/source/core/tool/address.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 792,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-07-15T15:05:58Z",
+      "side": 1,
+      "message": "As this is for the \"[0]\" case you can simply test\n\n  else if (aExternDocName \u003d\u003d \"0\")\n\nOtherwise it would also be true for \"00\" for example.",
+      "revId": "b25840fbf5d701381fcfdb1734383f6b30f52e7e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d4a2b2a2_35f8639b",
+        "filename": "sc/source/core/tool/address.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 1027,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-07-15T15:05:58Z",
+      "side": 1,
+      "message": "Same,\n\n  else if (aExternDocName \u003d\u003d \"0\")",
+      "revId": "b25840fbf5d701381fcfdb1734383f6b30f52e7e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
