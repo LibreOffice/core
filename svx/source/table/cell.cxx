@@ -1117,7 +1117,7 @@ void SAL_CALL Cell::setPropertyValue( const OUString& rPropertyName, const Any& 
         }
         default:
         {
-            SfxItemSet aSet(GetObject().getSdrModelFromSdrObject().GetItemPool(), {{pMap->nWID, pMap->nWID}});
+            SfxItemSet aSet(GetObject().getSdrModelFromSdrObject().GetItemPool(), pMap->nWID, pMap->nWID);
             aSet.Put(mpProperties->GetItem(pMap->nWID));
 
             bool bSpecial = false;
@@ -1237,7 +1237,7 @@ Any SAL_CALL Cell::getPropertyValue( const OUString& PropertyName )
         }
         default:
         {
-            SfxItemSet aSet(GetObject().getSdrModelFromSdrObject().GetItemPool(), {{pMap->nWID, pMap->nWID}});
+            SfxItemSet aSet(GetObject().getSdrModelFromSdrObject().GetItemPool(), pMap->nWID, pMap->nWID);
             aSet.Put(mpProperties->GetItem(pMap->nWID));
 
             Any aAny;
@@ -1565,7 +1565,7 @@ Any SAL_CALL Cell::getPropertyDefault( const OUString& aPropertyName )
         {
             if( SfxItemPool::IsWhich(pMap->nWID) )
             {
-                SfxItemSet aSet(GetObject().getSdrModelFromSdrObject().GetItemPool(), {{pMap->nWID, pMap->nWID}});
+                SfxItemSet aSet(GetObject().getSdrModelFromSdrObject().GetItemPool(), pMap->nWID, pMap->nWID);
                 aSet.Put(GetObject().getSdrModelFromSdrObject().GetItemPool().GetDefaultItem(pMap->nWID));
                 return GetAnyForItem( aSet, pMap );
             }

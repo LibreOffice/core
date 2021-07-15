@@ -1612,7 +1612,7 @@ void SwXStyle::SetPropertyValue<HINT_BEGIN>(const SfxItemPropertyMapEntry& rEntr
 {
     // default ItemSet handling
     SfxItemSet& rStyleSet = o_rStyleBase.GetItemSet();
-    SfxItemSet aSet(*rStyleSet.GetPool(), {{rEntry.nWID, rEntry.nWID}});
+    SfxItemSet aSet(*rStyleSet.GetPool(), rEntry.nWID, rEntry.nWID);
     aSet.SetParent(&rStyleSet);
     rPropSet.setPropertyValue(rEntry, rValue, aSet);
     rStyleSet.Put(aSet);
@@ -1721,7 +1721,7 @@ void SwXStyle::SetPropertyValue<sal_uInt16(RES_PAPER_BIN)>(const SfxItemProperty
     if(nBin == std::numeric_limits<printeridx_t>::max())
         throw lang::IllegalArgumentException();
     SfxItemSet& rStyleSet = o_rStyleBase.GetItemSet();
-    SfxItemSet aSet(*rStyleSet.GetPool(), {{rEntry.nWID, rEntry.nWID}});
+    SfxItemSet aSet(*rStyleSet.GetPool(), rEntry.nWID, rEntry.nWID);
     aSet.SetParent(&rStyleSet);
     rPropSet.setPropertyValue(rEntry, uno::makeAny(static_cast<sal_Int8>(nBin == std::numeric_limits<printeridx_t>::max()-1 ? -1 : nBin)), aSet);
     rStyleSet.Put(aSet);
@@ -3346,7 +3346,7 @@ void SwXFrameStyle::SetItem(sal_uInt16 eAtr, const SfxPoolItem& rItem)
         return;
     rtl::Reference<SwDocStyleSheet> xStyle(new SwDocStyleSheet(*static_cast<SwDocStyleSheet*>(pBase)));
     SfxItemSet& rStyleSet = xStyle->GetItemSet();
-    SfxItemSet aSet(*rStyleSet.GetPool(), {{sal_uInt16(eAtr), sal_uInt16(eAtr)}});
+    SfxItemSet aSet(*rStyleSet.GetPool(), sal_uInt16(eAtr), sal_uInt16(eAtr));
     aSet.Put(rItem);
     xStyle->SetItemSet(aSet);
 }

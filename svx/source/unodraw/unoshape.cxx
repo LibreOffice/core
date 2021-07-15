@@ -1387,7 +1387,7 @@ bool SvxShape::SetFillAttribute( sal_uInt16 nWID, const OUString& rName )
 {
     if(HasSdrObject())
     {
-        SfxItemSet aSet( GetSdrObject()->getSdrModelFromSdrObject().GetItemPool(), {{nWID, nWID}} );
+        SfxItemSet aSet( GetSdrObject()->getSdrModelFromSdrObject().GetItemPool(), nWID, nWID );
 
         if( SetFillAttribute( nWID, rName, aSet, &GetSdrObject()->getSdrModelFromSdrObject() ) )
         {
@@ -1730,7 +1730,7 @@ uno::Any SvxShape::_getPropertyValue( const OUString& PropertyName )
             DBG_ASSERT( pMap->nWID == SDRATTR_TEXTDIRECTION || (pMap->nWID < SDRATTR_NOTPERSIST_FIRST || pMap->nWID > SDRATTR_NOTPERSIST_LAST), "Not persist item not handled!" );
             DBG_ASSERT( pMap->nWID < OWN_ATTR_VALUE_START || pMap->nWID > OWN_ATTR_VALUE_END, "Not item property not handled!" );
 
-            SfxItemSet aSet( GetSdrObject()->getSdrModelFromSdrObject().GetItemPool(),    {{pMap->nWID, pMap->nWID}});
+            SfxItemSet aSet( GetSdrObject()->getSdrModelFromSdrObject().GetItemPool(), pMap->nWID, pMap->nWID );
             aSet.Put(GetSdrObject()->GetMergedItem(pMap->nWID));
 
             if(SvxUnoTextRangeBase::GetPropertyValueHelper(  aSet, pMap, aAny ))
@@ -3067,7 +3067,7 @@ uno::Any SvxShape::_getPropertyDefault( const OUString& aPropertyName )
     if(!SfxItemPool::IsWhich(pMap->nWID))
         throw beans::UnknownPropertyException( "No WhichID " + OUString::number(pMap->nWID) + " for " + aPropertyName, static_cast<cppu::OWeakObject*>(this));
 
-    SfxItemSet aSet( GetSdrObject()->getSdrModelFromSdrObject().GetItemPool(),    {{pMap->nWID, pMap->nWID}});
+    SfxItemSet aSet( GetSdrObject()->getSdrModelFromSdrObject().GetItemPool(), pMap->nWID, pMap->nWID );
     aSet.Put(GetSdrObject()->getSdrModelFromSdrObject().GetItemPool().GetDefaultItem(pMap->nWID));
 
     return GetAnyForItem( aSet, pMap );

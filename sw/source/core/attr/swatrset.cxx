@@ -93,7 +93,7 @@ SwAttrPool::~SwAttrPool()
 }
 
 SwAttrSet::SwAttrSet( SwAttrPool& rPool, sal_uInt16 nWh1, sal_uInt16 nWh2 )
-    : SfxItemSet( rPool, {{nWh1, nWh2}} ), m_pOldSet( nullptr ), m_pNewSet( nullptr )
+    : SfxItemSet( rPool, nWh1, nWh2 ), m_pOldSet( nullptr ), m_pNewSet( nullptr )
 {
 }
 
