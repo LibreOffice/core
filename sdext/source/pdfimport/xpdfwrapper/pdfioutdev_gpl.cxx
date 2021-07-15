@@ -435,8 +435,13 @@ int PDFOutDev::parseFont( long long nNewId, GfxFont* gfxFont, GfxState* state ) 
 #if POPPLER_CHECK_VERSION(0, 64, 0)
     const
 #endif
+#if POPPLER_CHECK_VERSION(20, 12, 0)
     std::string familyName = gfxFont->getNameWithoutSubsetTag();
     if( familyName != "" )
+#else
+    GooString* familyName = gfxFont->getName();
+    if( familyName )
+#endif
     {
         aNewFont.familyName.clear();
         aNewFont.familyName.append( familyName );
