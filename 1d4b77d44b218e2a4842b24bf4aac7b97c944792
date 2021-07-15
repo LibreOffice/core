@@ -16,6 +16,24 @@
       "revId": "1d4b77d44b218e2a4842b24bf4aac7b97c944792",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2e9af442_da017f31",
+        "filename": "sdext/source/pdfimport/xpdfwrapper/pdfioutdev_gpl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 435,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2021-07-15T11:09:47Z",
+      "side": 1,
+      "message": "this is the old content and not the change. can this please be done in a follow-up commit? Only want a minimal-invasive fix because this also broke in libreoffice-7-2 and needs to be backported there....",
+      "parentUuid": "2d8e73a5_8b4a6b3a",
+      "revId": "1d4b77d44b218e2a4842b24bf4aac7b97c944792",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
