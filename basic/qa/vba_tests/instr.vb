@@ -32,6 +32,12 @@ Sub verify_testInStr()
 
     ' tdf#139840 - case-insensitive operation for non-ASCII characters
     TestUtil.AssertEqual(InStr(1, "α", "Α", 1), 1, "InStr(1, ""α"", ""Α"", 1)")
+    ' tdf#139840 - German Eszett is uppercased to a two-character 'SS'.
+    ' This test should fail after tdf#110003 has been fixed.
+    TestUtil.AssertEqual(InStr(2, "Straße", "s", 1), 5, "InStr(2, ""Straße"", ""s"", 1)")
+
+    ' Start position is greater than the length of the string being searched.
+    TestUtil.AssertEqual(InStr(2, "α", "Α", 1), 0, "InStr(2, ""α"", ""Α"", 1)")
 
     Exit Sub
 errorHandler:
