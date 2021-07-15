@@ -135,6 +135,7 @@
 #include <comphelper/lok.hxx>
 #include <sfx2/lokhelper.hxx>
 
+#include <com/sun/star/script/XDirectInvocation.hpp>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 #include <vector>
@@ -3763,7 +3764,33 @@ sal_Int8 ScGridWindow::AcceptPrivateDrop( const AcceptDropEvent& rEvt, const ScD
 
 sal_Int8 ScGridWindow::AcceptDrop( const AcceptDropEvent& rEvt )
 {
-    const ScDragData& rData = SC_MOD()->GetDragData();
+    ScDragData aDragData = {0, 0, 0, "", "", "", "", ""};
+
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        css::uno::Any aRet;
+        const OUString aMethod("gettransfer");
+        const css::uno::Sequence<css::uno::Any> aParam;
+        css::uno::Reference<css::datatransfer::XTransferable> xTransfer;
+        css::uno::Reference<css::script::XDirectInvocation> xInvoke(GetDragSource(),
+                                                                    css::uno::UNO_QUERY);
+        if (xInvoke.is())
+        {
+            aRet = xInvoke->directInvoke(aMethod, aParam);
+            aRet >>= xTransfer;
+        }
+
+        uno::Reference<lang::XUnoTunnel> xTunnel(xTransfer, uno::UNO_QUERY);
+        if (xTunnel.is())
+        {
+            sal_Int64 nHandle = xTunnel->getSomething(ScTransferObj::getUnoTunnelId());
+            if (nHandle)
+                aDragData.pCellTransfer = dynamic_cast<ScTransferObj*>(reinterpret_cast<TransferableHelper*>( static_cast<sal_IntPtr>(nHandle)));
+        }
+    }
+
+    const ScDragData& rData = comphelper::LibreOfficeKit::isActive() ?
+        aDragData : SC_MOD()->GetDragData();
     if ( rEvt.mbLeaving )
     {
         DrawMarkDropObj( nullptr );
@@ -4417,13 +4444,29 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
 
 sal_Int8 ScGridWindow::ExecuteDrop( const ExecuteDropEvent& rEvt )
 {
+    ScDragData aDragData = {0, 0, 0, "", "", "", "", ""};;
+
     if (comphelper::LibreOfficeKit::isActive())
+    {
+        sal_Int64 nHandle;
+        uno::Reference<lang::XUnoTunnel> xTunnel(rEvt.maDropEvent.Transferable, uno::UNO_QUERY);
+
         SetPointer(PointerStyle::Arrow);
+
+        if (xTunnel.is())
+        {
+            nHandle = xTunnel->getSomething(ScTransferObj::getUnoTunnelId());
+            if (nHandle)
+                aDragData.pCellTransfer = dynamic_cast<ScTransferObj*>(reinterpret_cast<TransferableHelper*>( static_cast<sal_IntPtr>(nHandle)));
+        }
+
+    }
 
     DrawMarkDropObj( nullptr );    // drawing layer
 
     ScModule* pScMod = SC_MOD();
-    const ScDragData& rData = pScMod->GetDragData();
+    const ScDragData& rData = comphelper::LibreOfficeKit::isActive() ?
+        aDragData : pScMod->GetDragData();
     if (rData.pCellTransfer)
         return ExecutePrivateDrop( rEvt, rData );
 
