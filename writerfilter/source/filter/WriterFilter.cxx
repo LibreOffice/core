@@ -299,7 +299,7 @@ void WriterFilter::setTargetDocument(const uno::Reference<lang::XComponent>& xDo
 {
     m_xDstDoc = xDoc;
 
-    // Set some compatibility options that are valid for all the formats
+    // Set some compatibility options that are valid for the DOCX format
     uno::Reference<lang::XMultiServiceFactory> xFactory(xDoc, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xSettings(
         xFactory->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY);

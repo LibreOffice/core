@@ -219,7 +219,7 @@ DomainMapper::~DomainMapper()
         }
 
 
-        // Apply the document settings after everything else
+        // Apply the document settings for both DOCX and RTF after everything else
         m_pImpl->GetSettingsTable()->ApplyProperties( m_pImpl->GetTextDocument( ) );
 
         // now that importing is finished, re-enable default styles for any that were never defined/imported.
