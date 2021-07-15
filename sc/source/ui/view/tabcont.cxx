@@ -502,7 +502,8 @@ void ScTabControl::DoDrag()
     pTransferObj->SetSourceCursorPos( pViewData->GetCurX(), pViewData->GetCurY() );
 
     vcl::Window* pWindow = pViewData->GetActiveWin();
-    SC_MOD()->SetDragObject( pTransferObj.get(), nullptr );      // for internal D&D
+    if (!comphelper::LibreOfficeKit::isActive())
+        SC_MOD()->SetDragObject( pTransferObj.get(), nullptr );      // for internal D&D
     pTransferObj->StartDrag( pWindow, DND_ACTION_COPYMOVE | DND_ACTION_LINK );
 }
 
