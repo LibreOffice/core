@@ -285,7 +285,7 @@ void SwPageFrame::DestroyImpl()
             SwViewShellImp *pImp = pSh->Imp();
             pImp->SetFirstVisPageInvalid();
             if ( pImp->IsAction() )
-                pImp->GetLayAction().SetAgain();
+                pImp->GetLayAction().SetAgain(true);
             // #i9719# - retouche area of page
             // including border and shadow area.
             const bool bRightSidebar = (SidebarPosition() == sw::sidebarwindows::SidebarPosition::RIGHT);
