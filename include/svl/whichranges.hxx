@@ -31,7 +31,7 @@ struct SVL_DLLPUBLIC WhichRangesContainer
       * at a global const literal */
     bool m_bOwnRanges = false;
 
-    WhichRangesContainer() {}
+    WhichRangesContainer() = default;
 
     WhichRangesContainer(std::unique_ptr<WhichPair[]> wids, sal_Int32 nSize)
         : m_pairs(wids.release())
@@ -40,9 +40,9 @@ struct SVL_DLLPUBLIC WhichRangesContainer
     {
     }
     template <std::size_t N>
-    WhichRangesContainer(const std::array<sal_uInt16, N>& ranges)
-        : m_pairs(reinterpret_cast<const WhichPair*>(ranges.data()))
-        , m_size(static_cast<sal_Int32>(N / 2))
+    WhichRangesContainer(const std::array<WhichPair, N>& ranges)
+        : m_pairs(ranges.data())
+        , m_size(N)
         , m_bOwnRanges(false)
     {
     }
