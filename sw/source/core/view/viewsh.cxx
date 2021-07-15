@@ -949,6 +949,12 @@ void SwViewShell::SetEmptyDbFieldHidesPara(bool bEmptyDbFieldHidesPara)
     EndAction();
 }
 
+void SwViewShell::SetContinuousEndnotes(bool bSetContinuousEndnotes)
+{
+    IDocumentSettingAccess& rIDSA = getIDocumentSettingAccess();
+    rIDSA.set(DocumentSettingId::CONTINUOUS_ENDNOTES, bSetContinuousEndnotes);
+}
+
 void SwViewShell::Reformat()
 {
     SwWait aWait( *GetDoc()->GetDocShell(), true );

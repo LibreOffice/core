@@ -164,7 +164,7 @@ class DocumentSettingManager final :
     bool mbLastBrowseMode                           : 1;
     bool mbDisableOffPagePositioning; // tdf#112443
     bool mbEmptyDbFieldHidesPara;
-    bool mbContinuousEndnotes = false;
+    bool mbContinuousEndnotes;
     bool mbProtectBookmarks;
     bool mbProtectFields;
     bool mbHeaderSpacingBelowLastPara;

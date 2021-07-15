@@ -415,6 +415,8 @@ public:
 
     void SetEmptyDbFieldHidesPara(bool bEmptyDbFieldHidesPara);
 
+    void SetContinuousEndnotes(bool bContinuousEndnotes);
+
     // DOCUMENT COMPATIBILITY FLAGS END
 
     // Calls Idle-formatter of Layout.

@@ -126,7 +126,8 @@ static sal_uInt32 convertBools2Ulong_Impl
     bool _bProtectForm,
     bool _bMsWordCompTrailingBlanks,
     bool bSubtractFlysAnchoredAtFlys,
-    bool bEmptyDbFieldHidesPara
+    bool bEmptyDbFieldHidesPara,
+    bool bContinuousEndnotes
 )
 {
     sal_uInt32 nRet = 0;
@@ -178,6 +179,9 @@ static sal_uInt32 convertBools2Ulong_Impl
         nRet |= nSetBit;
     nSetBit = nSetBit << 1;
     if (bEmptyDbFieldHidesPara)
+        nRet |= nSetBit;
+    nSetBit = nSetBit << 1;
+    if (bContinuousEndnotes)
         nRet |= nSetBit;
 
     return nRet;
@@ -260,7 +264,8 @@ void SwCompatibilityOptPage::InitControls( const SfxItemSet& rSet )
             aEntry.getValue<bool>( SvtCompatibilityEntry::Index::ProtectForm ),
             aEntry.getValue<bool>( SvtCompatibilityEntry::Index::MsWordTrailingBlanks ),
             aEntry.getValue<bool>( SvtCompatibilityEntry::Index::SubtractFlysAnchoredAtFlys ),
-            aEntry.getValue<bool>( SvtCompatibilityEntry::Index::EmptyDbFieldHidesPara ) );
+            aEntry.getValue<bool>( SvtCompatibilityEntry::Index::EmptyDbFieldHidesPara ),
+            aEntry.getValue<bool>( SvtCompatibilityEntry::Index::ContinuousEndnotes ) );
         m_xFormattingLB->append(OUString::number(nOptions), sNewEntry);
     }
 }
@@ -348,7 +353,8 @@ sal_uInt32 SwCompatibilityOptPage::GetDocumentOptions() const
             rIDocumentSettingAccess.get( DocumentSettingId::PROTECT_FORM ),
             rIDocumentSettingAccess.get( DocumentSettingId::MS_WORD_COMP_TRAILING_BLANKS ),
             rIDocumentSettingAccess.get( DocumentSettingId::SUBTRACT_FLYS ),
-            rIDocumentSettingAccess.get( DocumentSettingId::EMPTY_DB_FIELD_HIDES_PARA ) );
+            rIDocumentSettingAccess.get( DocumentSettingId::EMPTY_DB_FIELD_HIDES_PARA ),
+            rIDocumentSettingAccess.get( DocumentSettingId::CONTINUOUS_ENDNOTES ) );
     }
     return nRet;
 }
@@ -452,6 +458,10 @@ bool SwCompatibilityOptPage::FillItemSet( SfxItemSet*  )
 
                     case SvtCompatibilityEntry::Index::EmptyDbFieldHidesPara:
                         m_pWrtShell->SetEmptyDbFieldHidesPara(bChecked);
+                        break;
+
+                    case SvtCompatibilityEntry::Index::ContinuousEndnotes:
+                        m_pWrtShell->SetContinuousEndnotes(bChecked);
                         break;
 
                     default:
