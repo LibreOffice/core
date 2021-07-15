@@ -1,0 +1,257 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "241b6b81_76c7eed3",
+        "filename": "sfx2/source/inc/StyleList.hxx",
+        "patchSetId": 54
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-07-15T07:56:39Z",
+      "side": 1,
+      "message": "Please use a consistent naming style; upper/lower/camel case, underscore, comment with // or /* etc.",
+      "range": {
+        "startLine": 94,
+        "startChar": 15,
+        "endLine": 94,
+        "endChar": 21
+      },
+      "revId": "8a751fd94b4b0a82b7e4808de51e33d0fd969e03",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c3d55345_382034ec",
+        "filename": "sfx2/source/inc/StyleList.hxx",
+        "patchSetId": 54
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-07-15T07:56:39Z",
+      "side": 1,
+      "message": "If this is all about the watercan function, can\u0027t we have it with the IsSafeForWC (or otherwise named properly)",
+      "range": {
+        "startLine": 95,
+        "startChar": 4,
+        "endLine": 95,
+        "endChar": 33
+      },
+      "revId": "8a751fd94b4b0a82b7e4808de51e33d0fd969e03",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "60db77d5_a7a64bbd",
+        "filename": "sfx2/source/inc/StyleList.hxx",
+        "patchSetId": 54
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-07-15T07:56:39Z",
+      "side": 1,
+      "message": "temnpldlg has bUpdateFamily, another copy of this variable.\n\nStumbling in this context over StyleList::Update() ... if (m_bUpdateFamily) m_pParentDialog-\u003eUpdateFamily_Impl();... void SfxCommonTemplateDialog_Impl::UpdateFamily_Impl() bUpdateFamily \u003d false; ... m_aStyleList.UpdateFamily();",
+      "range": {
+        "startLine": 98,
+        "startChar": 48,
+        "endLine": 98,
+        "endChar": 63
+      },
+      "revId": "8a751fd94b4b0a82b7e4808de51e33d0fd969e03",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6c832f52_a77d39ef",
+        "filename": "sfx2/source/inc/StyleList.hxx",
+        "patchSetId": 54
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-07-15T07:56:39Z",
+      "side": 1,
+      "message": "\"Toolbox\" in this class? Looks like the styles family is set here to manage the styles list together with filterselect().",
+      "range": {
+        "startLine": 107,
+        "startChar": 9,
+        "endLine": 107,
+        "endChar": 21
+      },
+      "revId": "8a751fd94b4b0a82b7e4808de51e33d0fd969e03",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7485080a_21da4012",
+        "filename": "sfx2/source/inc/StyleList.hxx",
+        "patchSetId": 54
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-07-15T07:56:39Z",
+      "side": 1,
+      "message": "Does not _set_ a filter but shows/hides controls. Pretty sure you can remove this since and use the other filter methods.",
+      "range": {
+        "startLine": 112,
+        "startChar": 9,
+        "endLine": 112,
+        "endChar": 18
+      },
+      "revId": "8a751fd94b4b0a82b7e4808de51e33d0fd969e03",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7edd887e_9a9b40a0",
+        "filename": "sfx2/source/inc/StyleList.hxx",
+        "patchSetId": 54
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-07-15T07:56:39Z",
+      "side": 1,
+      "message": "This function is rather bool IsTreeView(), isn\u0027t it?",
+      "range": {
+        "startLine": 114,
+        "startChar": 9,
+        "endLine": 114,
+        "endChar": 31
+      },
+      "revId": "8a751fd94b4b0a82b7e4808de51e33d0fd969e03",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3d613658_56a0c5d4",
+        "filename": "sfx2/source/inc/StyleList.hxx",
+        "patchSetId": 54
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-07-15T07:56:39Z",
+      "side": 1,
+      "message": "Explanation would be nice here.",
+      "range": {
+        "startLine": 116,
+        "startChar": 9,
+        "endLine": 116,
+        "endChar": 16
+      },
+      "revId": "8a751fd94b4b0a82b7e4808de51e33d0fd969e03",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "607be3c7_1bd8b2c8",
+        "filename": "sfx2/source/inc/StyleList.hxx",
+        "patchSetId": 54
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-07-15T07:56:39Z",
+      "side": 1,
+      "message": "Please comment this function. It starts listening a style, what means _Filter_Select?",
+      "range": {
+        "startLine": 119,
+        "startChar": 9,
+        "endLine": 119,
+        "endChar": 21
+      },
+      "revId": "8a751fd94b4b0a82b7e4808de51e33d0fd969e03",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "82cd7d5d_b2aa8cc5",
+        "filename": "sfx2/source/inc/StyleList.hxx",
+        "patchSetId": 54
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-07-15T07:56:39Z",
+      "side": 1,
+      "message": "This function is used in UpdateStyles_Hdl only and I guess it can be replaced by FilterSelect(). It is used only once in void SfxCommonTemplateDialog_Impl::UpdateStyleDependents() and could be private.",
+      "range": {
+        "startLine": 120,
+        "startChar": 9,
+        "endLine": 120,
+        "endChar": 21
+      },
+      "revId": "8a751fd94b4b0a82b7e4808de51e33d0fd969e03",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "28c52bba_fdc363bb",
+        "filename": "sfx2/source/inc/StyleList.hxx",
+        "patchSetId": 54
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-07-15T07:56:39Z",
+      "side": 1,
+      "message": "These flags are still suspicious to me. See for example SfxTemplateDialog_Impl::EnableItem(). Using enumeration might improve readability, like\n\nenum MenuOptions { moEdit \u003d 0x001, moHide \u003d 0x002... } \nMenuOptions options;\noptions +\u003d moEdit;\n\nBut I wonder if we need it in Stylelist at all. All the flags are set in the dialog too and I imagine  a callback method for the ContextMenu().",
+      "range": {
+        "startLine": 136,
+        "startChar": 9,
+        "endLine": 136,
+        "endChar": 19
+      },
+      "revId": "8a751fd94b4b0a82b7e4808de51e33d0fd969e03",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "25351557_d58b9ccd",
+        "filename": "sfx2/source/inc/StyleList.hxx",
+        "patchSetId": 54
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2021-07-15T07:56:39Z",
+      "side": 1,
+      "message": "This needs a different name and description.",
+      "range": {
+        "startLine": 137,
+        "startChar": 9,
+        "endLine": 137,
+        "endChar": 21
+      },
+      "revId": "8a751fd94b4b0a82b7e4808de51e33d0fd969e03",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
