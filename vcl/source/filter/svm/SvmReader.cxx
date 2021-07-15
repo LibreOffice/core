@@ -308,7 +308,7 @@ rtl::Reference<MetaAction> SvmReader::MetaActionHandler(ImplMetaReadData* pData)
             return EPSHandler();
             break;
         case MetaActionType::REFPOINT:
-            pAction = new MetaRefPointAction;
+            return RefPointHandler();
             break;
         case MetaActionType::COMMENT:
             pAction = new MetaCommentAction;
@@ -1356,6 +1356,24 @@ rtl::Reference<MetaAction> SvmReader::EPSHandler()
     pAction->SetPoint(aPoint);
     pAction->SetSize(aSize);
     pAction->SetSubstitute(aSubst);
+
+    return pAction;
+}
+
+rtl::Reference<MetaAction> SvmReader::RefPointHandler()
+{
+    auto pAction = new MetaRefPointAction();
+
+    VersionCompatRead aCompat(mrStream);
+    TypeSerializer aSerializer(mrStream);
+
+    Point aRefPoint;
+    aSerializer.readPoint(aRefPoint);
+    bool bSet;
+    mrStream.ReadCharAsBool(bSet);
+
+    pAction->SetRefPoint(aRefPoint);
+    pAction->SetSetting(bSet);
 
     return pAction;
 }

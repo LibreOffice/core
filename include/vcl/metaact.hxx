@@ -1759,6 +1759,8 @@ public:
                         MetaRefPointAction( const Point& rRefPoint, bool bSet );
 
     const Point&        GetRefPoint() const { return maRefPoint; }
+    void                SetRefPoint(const Point& rRefPoint) { maRefPoint = rRefPoint; }
+    void                SetSetting(const bool bSet) { mbSet = bSet; }
     bool                IsSetting() const { return mbSet; }
 };
 
