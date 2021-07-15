@@ -16,6 +16,24 @@
       "revId": "07e4dde098c6c059b130a20b5f5d0e39872872eb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a2125ed4_56fc1f10",
+        "filename": "svl/source/items/itemset.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 865,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-07-15T09:20:41Z",
+      "side": 1,
+      "message": "done",
+      "parentUuid": "023434dc_4a8ca19f",
+      "revId": "07e4dde098c6c059b130a20b5f5d0e39872872eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }

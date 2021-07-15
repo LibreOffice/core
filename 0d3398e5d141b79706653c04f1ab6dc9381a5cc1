@@ -16,6 +16,24 @@
       "revId": "0d3398e5d141b79706653c04f1ab6dc9381a5cc1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "145fb07d_94c07fa5",
+        "filename": "sw/source/uibase/uiview/formatclipboard.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-07-15T09:20:41Z",
+      "side": 0,
+      "message": "Good idea! Implemented",
+      "parentUuid": "9576addc_1d53cc3e",
+      "revId": "0d3398e5d141b79706653c04f1ab6dc9381a5cc1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
