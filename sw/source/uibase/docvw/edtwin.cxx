@@ -803,7 +803,7 @@ static sal_uInt16 lcl_isNonDefaultLanguage(LanguageType eBufferLanguage, SwView 
         }
         if(bLang)
         {
-            SfxItemSet aLangSet(rView.GetPool(), {{nWhich, nWhich}});
+            SfxItemSet aLangSet(rView.GetPool(), nWhich, nWhich);
             SwWrtShell& rSh = rView.GetWrtShell();
             rSh.GetCurAttr(aLangSet);
             if(SfxItemState::DEFAULT <= aLangSet.GetItemState(nWhich))

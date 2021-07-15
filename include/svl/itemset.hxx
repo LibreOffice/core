@@ -134,7 +134,6 @@ protected:
     SfxItemSet( SfxItemPool&, SfxAllItemSetFlag );
 
 public:
-    struct Pair { sal_uInt16 wid1, wid2; };
     SfxItemSet( const SfxItemSet& );
     SfxItemSet( SfxItemSet&& ) noexcept;
     SfxItemSet( SfxItemPool& );
@@ -151,7 +150,6 @@ public:
         svl::Items<WIDs...>)
         : SfxItemSet(pool, WhichRangesContainer(svl::Items<WIDs...>::value), svl::detail::rangesSize<WIDs...>()) {}
 
-    SfxItemSet( SfxItemPool&, std::initializer_list<Pair> wids );
     SfxItemSet( SfxItemPool&, const sal_uInt16* nWhichPairTable );
 
     virtual ~SfxItemSet();

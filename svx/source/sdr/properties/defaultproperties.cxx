@@ -115,7 +115,7 @@ namespace sdr::properties
                 ItemChange(nWhichID, &rItem);
                 PostItemChange(nWhichID);
 
-                SfxItemSet aSet(GetSdrObject().GetObjectItemPool(), {{nWhichID, nWhichID}});
+                SfxItemSet aSet(GetSdrObject().GetObjectItemPool(), nWhichID, nWhichID);
                 aSet.Put(rItem);
                 ItemSetChanged(aSet);
             }
@@ -140,7 +140,7 @@ namespace sdr::properties
 
                 if(nWhich)
                 {
-                    SfxItemSet aSet(GetSdrObject().GetObjectItemPool(), {{nWhich, nWhich}});
+                    SfxItemSet aSet(GetSdrObject().GetObjectItemPool(), nWhich, nWhich);
                     ItemSetChanged(aSet);
                 }
             }

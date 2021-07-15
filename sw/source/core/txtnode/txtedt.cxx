@@ -1069,7 +1069,7 @@ void SwTextNode::SetLanguageAndFont( const SwPaM &rPaM,
     const vcl::Font *pFont,  sal_uInt16 nFontWhichId )
 {
     SwEditShell *pEditShell = GetDoc().GetEditShell();
-    SfxItemSet aSet(pEditShell->GetAttrPool(), { { nLangWhichId, nLangWhichId } });
+    SfxItemSet aSet(pEditShell->GetAttrPool(), nLangWhichId, nLangWhichId );
     if (pFont)
         aSet.MergeRange(nFontWhichId, nFontWhichId); // Keep it sorted
     aSet.Put( SvxLanguageItem( nLang, nLangWhichId ) );

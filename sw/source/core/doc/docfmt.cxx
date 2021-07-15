@@ -450,7 +450,7 @@ bool SwDoc::UpdateParRsid( SwTextNode *pTextNode, sal_uInt32 nVal )
 /// If Undo is enabled, the old values is added to the Undo history.
 void SwDoc::SetAttr( const SfxPoolItem& rAttr, SwFormat& rFormat )
 {
-    SfxItemSet aSet( GetAttrPool(), {{rAttr.Which(), rAttr.Which()}} );
+    SfxItemSet aSet( GetAttrPool(), rAttr.Which(), rAttr.Which() );
     aSet.Put( rAttr );
     SetAttr( aSet, rFormat );
 }
@@ -526,7 +526,7 @@ static bool lcl_SetNewDefTabStops( SwTwips nOldWidth, SwTwips nNewWidth,
 /// If Undo is enabled, the old value is added to the Undo history.
 void SwDoc::SetDefault( const SfxPoolItem& rAttr )
 {
-    SfxItemSet aSet( GetAttrPool(), {{rAttr.Which(), rAttr.Which()}} );
+    SfxItemSet aSet( GetAttrPool(), rAttr.Which(), rAttr.Which() );
     aSet.Put( rAttr );
     SetDefault( aSet );
 }

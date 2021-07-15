@@ -99,7 +99,7 @@ sal_Bool SAL_CALL SvxUnoNameItemTable::supportsService( const  OUString& Service
 
 void SvxUnoNameItemTable::ImplInsertByName( const OUString& aName, const uno::Any& aElement )
 {
-    maItemSetVector.push_back( std::make_unique< SfxItemSet >( *mpModelPool, std::initializer_list<SfxItemSet::Pair>{{mnWhich, mnWhich}} ) );
+    maItemSetVector.push_back( std::make_unique< SfxItemSet >( *mpModelPool, mnWhich, mnWhich ) );
 
     std::unique_ptr<NameOrIndex> xNewItem(createItem());
     xNewItem->SetName(aName);
