@@ -41,12 +41,11 @@
 #include "unoconversionutilities.hxx"
 #include "windata.hxx"
 using namespace cppu;
-using namespace std;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::bridge;
 using namespace com::sun::star::bridge::oleautomation;
 
-typedef std::unordered_map<OUString, pair<DISPID, unsigned short>> DispIdMap;
+typedef std::unordered_map<OUString, std::pair<DISPID, unsigned short>> DispIdMap;
 
 typedef std::unordered_multimap<OUString, unsigned int> TLBFuncIndexMap;
 

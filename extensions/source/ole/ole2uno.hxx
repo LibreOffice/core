@@ -45,7 +45,6 @@ using namespace com::sun::star::registry;
 using namespace com::sun::star::reflection;
 using namespace com::sun::star::beans;
 using namespace osl;
-using namespace std;
 
 VARTYPE getVarType(const Any& val);
 /* creates a Type object for a given type name.

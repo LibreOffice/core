@@ -40,7 +40,6 @@
 #define DISPID_GET_STRUCT_FUNC      -102
 #define DISPID_CREATE_TYPE_FUNC     -103
 
-using namespace std;
 using namespace cppu;
 using namespace com::sun::star::bridge;
 using namespace com::sun::star::script;
@@ -196,7 +195,7 @@ protected:
     Reference<XExactName>                   m_xExactName;
     Reference<XInterface>                   m_xOrigin;
     NameToIdMap                     m_nameToDispIdMap;
-    vector<MemberInfo>              m_MemberInfos;
+    std::vector<MemberInfo>              m_MemberInfos;
     // This member is used to determine the default value
     // denoted by DISPID_VALUE (0). For proper results in JavaScript
     // we have to return the default value when we write an object
