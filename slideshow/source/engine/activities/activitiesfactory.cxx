@@ -573,7 +573,7 @@ public:
         // this is discrete, thus no lerp here.
         (*mpAnim)(
             getPresentationValue(
-                accumulate<ValueType>( maValues.back(),
+                slideshow::internal::accumulate<ValueType>( maValues.back(),
                             mbCumulative ? nRepeatCount : 0,
                             maValues[ nFrame ] ) ) );
     }
