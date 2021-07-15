@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "ae0b8eb9_c39431b8",
+        "filename": "cui/source/tabpages/chardlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 515,
+      "author": {
+        "id": 1002754
+      },
+      "writtenOn": "2021-07-15T06:09:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "53020ca8_a8e9aa63",
+      "range": {
+        "startLine": 515,
+        "startChar": 0,
+        "endLine": 515,
+        "endChar": 41
+      },
+      "revId": "142d9e90c02da74c838aef3ee9520c473549b8eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0bb1db41_6098dc88",
         "filename": "cui/source/tabpages/chardlg.cxx",
         "patchSetId": 1
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "5cb63cf7_d87a066d",
+        "filename": "cui/source/tabpages/chardlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 527,
+      "author": {
+        "id": 1002754
+      },
+      "writtenOn": "2021-07-15T06:09:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0bb1db41_6098dc88",
+      "range": {
+        "startLine": 527,
+        "startChar": 6,
+        "endLine": 527,
+        "endChar": 14
+      },
+      "revId": "142d9e90c02da74c838aef3ee9520c473549b8eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d2b62099_2c7be361",
         "filename": "cui/source/tabpages/chardlg.cxx",
         "patchSetId": 1
@@ -68,6 +116,30 @@
       "revId": "142d9e90c02da74c838aef3ee9520c473549b8eb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5d986547_5b9968c9",
+        "filename": "cui/source/tabpages/chardlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 536,
+      "author": {
+        "id": 1002754
+      },
+      "writtenOn": "2021-07-15T06:09:09Z",
+      "side": 1,
+      "message": "I tried that originally. It crashes if you quickly scroll through the list. I think Windows does not like creating and destroying HDCs quickly.",
+      "parentUuid": "d2b62099_2c7be361",
+      "range": {
+        "startLine": 536,
+        "startChar": 52,
+        "endLine": 536,
+        "endChar": 59
+      },
+      "revId": "142d9e90c02da74c838aef3ee9520c473549b8eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
