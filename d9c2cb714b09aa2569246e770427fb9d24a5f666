@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6d2de18e_dcb6b3ea",
+        "filename": "sd/qa/uitest/impress_tests/customSlideShowDialog.py",
+        "patchSetId": 10
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-07-15T11:05:17Z",
+      "side": 1,
+      "message": "Unused variable",
+      "range": {
+        "startLine": 13,
+        "startChar": 12,
+        "endLine": 13,
+        "endChar": 57
+      },
+      "revId": "d9c2cb714b09aa2569246e770427fb9d24a5f666",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
