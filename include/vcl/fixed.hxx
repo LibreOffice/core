@@ -106,6 +106,8 @@ public:
     virtual bool    set_property(const OString &rKey, const OUString &rValue) override;
 
     static Image loadThemeImage(const OUString &rFileName);
+
+    void DumpAsPropertyTree(tools::JsonWriter& rJsonWriter) override;
 };
 
 #endif // INCLUDED_VCL_FIXED_HXX
