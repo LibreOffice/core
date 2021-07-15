@@ -858,6 +858,11 @@ bool ImplHandleMouseEvent2( const VclPtr<vcl::Window>& xWindow, MouseNotifyEvent
         nSVEvent == MouseNotifyEvent::MOUSEBUTTONUP &&
         pDragWin->ImplGetFrameData()->mbDragging)
     {
+        css::uno::Any aRet;
+        const OUString aMethod("gettransfer");
+        const css::uno::Sequence<css::uno::Any> aParam;
+
+        css::uno::Reference<css::datatransfer::XTransferable> xTransfer;
         css::uno::Reference<css::datatransfer::dnd::XDropTargetDropContext> xDropTargetDropContext =
             new GenericDropTargetDropContext();
         css::uno::Reference<css::datatransfer::dnd::XDropTarget> xDropTarget(
