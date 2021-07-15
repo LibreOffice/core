@@ -21,6 +21,7 @@
 #include <comphelper/storagehelper.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
+#include <sfx2/filedlghelper.hxx>
 #include <sfx2/objsh.hxx>
 #include <svx/xoutbmp.hxx>
 #include <tools/date.hxx>
