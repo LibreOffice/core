@@ -177,6 +177,8 @@ public:
     virtual bool    set_property(const OString &rKey, const OUString &rValue) override;
 
     static Image loadThemeImage(const OUString &rFileName);
+
+    boost::property_tree::ptree DumpAsPropertyTree() override;
 };
 
 #endif // INCLUDED_VCL_FIXED_HXX
