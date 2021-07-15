@@ -92,6 +92,7 @@ public:
     static TestResult checkHalfEllipse(Bitmap& rBitmap);
     static TestResult checkClosedBezier(Bitmap& rBitmap);
     static TestResult checkFilledAsymmetricalCircle(Bitmap& rBitmap);
+    static TestResult checkTextLocation(Bitmap& rBitmap);
 private:
     static TestResult checkLineCap(Bitmap& rBitmap, css::drawing::LineCap lineCap);
     static TestResult checkLineJoin(Bitmap& rBitmap, basegfx::B2DLineJoin lineJoin);
@@ -259,6 +260,11 @@ public:
     static TestResult checkClip(Bitmap& rBitmap);
 };
 
+class VCL_DLLPUBLIC OutputDeviceTestText : public OutputDeviceTestCommon
+{
+public:
+    Bitmap setupTextBitmap();
+};
 
 } // end namespace vcl::test
 
