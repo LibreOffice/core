@@ -95,10 +95,14 @@ endef
 ifeq ($(COM_IS_CLANG),TRUE)
 gb_PrecompiledHeader_get_enableflags = -include-pch $(call gb_PrecompiledHeader_get_target,$(1),$(2))
 gb_PrecompiledHeader_EXT := .pch
+# Workaround: Apple Clang version 12.0.5 sometimes tries to compile instead of generating PCH
+# when used just with -c c++-header, so help it by being explicit.
+gb_PrecompiledHeader_emit_pch := -Xclang -emit-pch
 else
 gb_PrecompiledHeader_get_enableflags = \
 -include $(dir $(call gb_PrecompiledHeader_get_target,$(1),$(2)))$(notdir $(subst .gch,,$(call gb_PrecompiledHeader_get_target,$(1),$(2))))
 gb_PrecompiledHeader_EXT := .gch
+gb_PrecompiledHeader_emit_pch :=
 endif
 
 gb_PrecompiledHeader_extra_pch_cxxflags += $(PCH_INSTANTIATE_TEMPLATES)
@@ -133,7 +137,7 @@ $(call gb_Helper_abbreviate_dirs,\
 	cd $(BUILDDIR)/ && \
 	CCACHE_DISABLE=1 $(gb_COMPILER_SETUP) \
 	$(if $(8),$(8),$(gb_CXX)) \
-		-x c++-header \
+		-x c++-header $(gb_PrecompiledHeader_emit_pch) \
 		$(4) \
 		$(if $(7), $(call gb_CObject__filter_out_clang_cflags,$(5)),$(5)) \
 		$(if $(WARNINGS_DISABLED),$(gb_CXXFLAGS_DISABLE_WARNINGS)) \
