@@ -1671,7 +1671,7 @@ void SwXTextTableCursor::setPropertyValue(const OUString& rPropertyName, const u
         break;
         default:
         {
-            SfxItemSet aItemSet(rDoc.GetAttrPool(), {{pEntry->nWID, pEntry->nWID}});
+            SfxItemSet aItemSet(rDoc.GetAttrPool(), pEntry->nWID, pEntry->nWID);
             SwUnoCursorHelper::GetCursorAttr(rTableCursor.GetSelRing(),
                     aItemSet);
 
@@ -3460,7 +3460,7 @@ SwXCellRange::setPropertyValue(const OUString& rPropertyName, const uno::Any& aV
         break;
         default:
         {
-            SfxItemSet aItemSet( rDoc.GetAttrPool(), {{pEntry->nWID, pEntry->nWID}} );
+            SfxItemSet aItemSet( rDoc.GetAttrPool(), pEntry->nWID, pEntry->nWID );
             SwUnoCursorHelper::GetCursorAttr(rCursor.GetSelRing(),
                     aItemSet);
 

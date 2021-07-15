@@ -1910,7 +1910,7 @@ SwUnoCursorHelper::GetPropertyStates(
                         case SW_PROPERTY_STATE_CALLER_SINGLE_VALUE_ONLY:
                             pSet.reset(
                                 new SfxItemSet( rPaM.GetDoc().GetAttrPool(),
-                                    {{pEntry->nWID, pEntry->nWID}} ));
+                                    pEntry->nWID, pEntry->nWID ));
                         break;
                         default:
                             pSet.reset( new SfxItemSet(

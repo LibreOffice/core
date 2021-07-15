@@ -1885,7 +1885,7 @@ void SwXShape::setPropertyToDefault( const OUString& rPropertyName )
         if(pFormat)
         {
             const SfxItemSet& rSet = pFormat->GetAttrSet();
-            SfxItemSet aSet(pFormat->GetDoc()->GetAttrPool(), {{pEntry->nWID, pEntry->nWID}});
+            SfxItemSet aSet(pFormat->GetDoc()->GetAttrPool(), pEntry->nWID, pEntry->nWID);
             aSet.SetParent(&rSet);
             aSet.ClearItem(pEntry->nWID);
             pFormat->GetDoc()->SetAttr(aSet, *pFormat);

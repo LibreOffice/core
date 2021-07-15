@@ -776,7 +776,7 @@ bool openAreaDialog( const uno::Reference<report::XShape >& _xShape,const uno::R
     try
     {
         SfxItemPool& rItemPool = pModel->GetItemPool();
-        SfxItemSet aDescriptor( rItemPool, {{rItemPool.GetFirstWhich(),rItemPool.GetLastWhich()}} );
+        SfxItemSet aDescriptor( rItemPool, rItemPool.GetFirstWhich(), rItemPool.GetLastWhich() );
         lcl_fillShapeToItems(_xShape, aDescriptor);
 
         {   // want the dialog to be destroyed before our set

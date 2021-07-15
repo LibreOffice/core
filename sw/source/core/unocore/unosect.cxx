@@ -836,7 +836,7 @@ void SwXTextSection::Impl::SetPropertyValues_Impl(
                 if (pFormat)
                 {
                     const SfxItemSet& rOldAttrSet = pFormat->GetAttrSet();
-                    pItemSet.reset( new SfxItemSet(*rOldAttrSet.GetPool(), {{pEntry->nWID, pEntry->nWID}}));
+                    pItemSet.reset( new SfxItemSet(*rOldAttrSet.GetPool(), pEntry->nWID, pEntry->nWID));
                     pItemSet->Put(rOldAttrSet);
                     m_rPropSet.setPropertyValue(*pEntry,
                             pValues[nProperty], *pItemSet);
@@ -1568,7 +1568,7 @@ SwXTextSection::setPropertyToDefault(const OUString& rPropertyName)
                 if (pFormat)
                 {
                     const SfxItemSet& rOldAttrSet = pFormat->GetAttrSet();
-                    pNewAttrSet.reset( new SfxItemSet(*rOldAttrSet.GetPool(), {{pEntry->nWID, pEntry->nWID}}));
+                    pNewAttrSet.reset( new SfxItemSet(*rOldAttrSet.GetPool(), pEntry->nWID, pEntry->nWID));
                     pNewAttrSet->ClearItem(pEntry->nWID);
                 }
                 else

@@ -145,26 +145,6 @@ SfxItemSet::SfxItemSet(
     m_pItems.reset( new SfxPoolItem const *[size]{} );
 }
 
-SfxItemSet::SfxItemSet(
-    SfxItemPool & pool, std::initializer_list<Pair> wids):
-    m_pPool(&pool), m_pParent(nullptr),
-    m_nCount(0)
-{
-    assert(wids.size() != 0);
-    std::unique_ptr<WhichPair[]> xPairs = std::make_unique<WhichPair[]>(wids.size());
-    std::size_t i = 0;
-    std::size_t size = 0;
-    for (auto const & p: wids) {
-        xPairs[i++] = { p.wid1, p.wid2 };
-        size += svl::detail::rangeSize(p.wid1, p.wid2);
-            // cannot overflow, assuming std::size_t is no smaller than
-            // sal_uInt16
-    }
-    m_pWhichRanges = WhichRangesContainer(std::move(xPairs), wids.size());
-    assert(svl::detail::validRanges2(m_pWhichRanges));
-    m_pItems.reset( new SfxPoolItem const *[size]{} );
-}
-
 SfxItemSet::SfxItemSet( SfxItemPool& rPool, const sal_uInt16* pWhichPairTable )
     : m_pPool(&rPool)
     , m_pParent(nullptr)

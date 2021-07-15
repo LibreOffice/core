@@ -129,7 +129,7 @@ const sal_uInt16* SwuiGetUITableAttrRange()
 
 static void lcl_SetAttr( SwWrtShell &rSh, const SfxPoolItem &rItem )
 {
-    SfxItemSet aSet( rSh.GetView().GetPool(), {{rItem.Which(), rItem.Which()}});
+    SfxItemSet aSet( rSh.GetView().GetPool(), rItem.Which(), rItem.Which());
     aSet.Put( rItem );
     rSh.SetTableAttr( aSet );
 }

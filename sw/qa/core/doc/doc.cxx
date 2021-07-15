@@ -103,7 +103,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testLocaleIndependentTemplate)
     SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "locale-independent-template.odt");
     SwDocShell* pDocShell = pDoc->GetDocShell();
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
-    SfxItemSet aSet(pWrtShell->GetAttrPool(), { { RES_CHRATR_LANGUAGE, RES_CHRATR_LANGUAGE } });
+    SfxItemSet aSet(pWrtShell->GetAttrPool(),
+                    svl::Items<RES_CHRATR_LANGUAGE, RES_CHRATR_LANGUAGE>{});
     pWrtShell->GetCurAttr(aSet);
     const SvxLanguageItem* pItem = aSet.GetItem(RES_CHRATR_LANGUAGE);
     CPPUNIT_ASSERT(pItem);

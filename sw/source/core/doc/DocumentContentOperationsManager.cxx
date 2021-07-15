@@ -3346,7 +3346,7 @@ bool DocumentContentOperationsManager::InsertPoolItem(
         pUndoAttr.reset(new SwUndoAttr( rRg, rHt, nFlags ));
     }
 
-    SfxItemSet aSet( m_rDoc.GetAttrPool(), {{rHt.Which(), rHt.Which()}} );
+    SfxItemSet aSet( m_rDoc.GetAttrPool(), rHt.Which(), rHt.Which() );
     aSet.Put( rHt );
     const bool bRet = lcl_InsAttr(m_rDoc, rRg, aSet, nFlags, pUndoAttr.get(), pLayout, ppNewTextAttr);
 
