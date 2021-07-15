@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1e18e962_99bc249c",
+        "filename": "include/vcl/metaact.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1430,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-07-15T07:03:08Z",
+      "side": 1,
+      "message": "Could you make this \u0027const Color\u0026 rColor\u0027? You don\u0027t modify rColor, so no need to have it mutable.",
+      "revId": "2b94d1e68226c1d99c97cb9263fee947b5a714e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
