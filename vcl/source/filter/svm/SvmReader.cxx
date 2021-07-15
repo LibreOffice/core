@@ -280,7 +280,7 @@ rtl::Reference<MetaAction> SvmReader::MetaActionHandler(ImplMetaReadData* pData)
             return OverlineColorHandler();
             break;
         case MetaActionType::TEXTALIGN:
-            pAction = new MetaTextAlignAction;
+            return TextAlignHandler();
             break;
         case MetaActionType::MAPMODE:
             pAction = new MetaMapModeAction;
@@ -1203,6 +1203,20 @@ rtl::Reference<MetaAction> SvmReader::OverlineColorHandler()
 
     pAction->SetColor(aColor);
     pAction->SetSetting(bSet);
+
+    return pAction;
+}
+
+rtl::Reference<MetaAction> SvmReader::TextAlignHandler()
+{
+    auto pAction = new MetaTextAlignAction();
+
+    sal_uInt16 nTmp16(0);
+
+    VersionCompatRead aCompat(mrStream);
+    mrStream.ReadUInt16(nTmp16);
+
+    pAction->SetTextAlign(static_cast<TextAlign>(nTmp16));
 
     return pAction;
 }
