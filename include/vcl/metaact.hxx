@@ -1548,6 +1548,8 @@ public:
     virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const vcl::Font&    GetFont() const { return maFont; }
+    void                SetFont(vcl::Font& rFont) { maFont = rFont; }
+
 };
 
 class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetaPushAction final : public MetaAction

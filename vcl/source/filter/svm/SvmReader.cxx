@@ -19,6 +19,7 @@
 
 #include <vcl/filter/SvmReader.hxx>
 #include <sal/log.hxx>
+#include <osl/thread.h>
 #include <tools/stream.hxx>
 #include <tools/vcompat.hxx>
 #include <vcl/dibtools.hxx>
@@ -286,7 +287,7 @@ rtl::Reference<MetaAction> SvmReader::MetaActionHandler(ImplMetaReadData* pData)
             return MapModeHandler();
             break;
         case MetaActionType::FONT:
-            pAction = new MetaFontAction;
+            return FontHandler(pData);
             break;
         case MetaActionType::PUSH:
             pAction = new MetaPushAction;
@@ -1240,6 +1241,22 @@ rtl::Reference<MetaAction> SvmReader::MapModeHandler()
     aSerializer.readMapMode(aMapMode);
 
     pAction->SetMapMode(aMapMode);
+
+    return pAction;
+}
+
+rtl::Reference<MetaAction> SvmReader::FontHandler(ImplMetaReadData* pData)
+{
+    auto pAction = new MetaFontAction();
+
+    VersionCompatRead aCompat(mrStream);
+    vcl::Font aFont;
+    ReadFont(mrStream, aFont);
+    pData->meActualCharSet = aFont.GetCharSet();
+    if (pData->meActualCharSet == RTL_TEXTENCODING_DONTKNOW)
+        pData->meActualCharSet = osl_getThreadTextEncoding();
+
+    pAction->SetFont(aFont);
 
     return pAction;
 }
