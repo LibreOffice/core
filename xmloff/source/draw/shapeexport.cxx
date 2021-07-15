@@ -583,29 +583,32 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
 
     // export hyperlinks with <a><shape/></a>. Currently only in draw since draw
     // does not support document events
-    if( xSet.is() && (GetExport().GetModelType() == SvtModuleOptions::EFactory::DRAW) ) try
+    if( xSet.is() && (GetExport().GetModelType() == SvtModuleOptions::EFactory::DRAW) )
     {
-        presentation::ClickAction eAction = presentation::ClickAction_NONE;
-        xSet->getPropertyValue("OnClick") >>= eAction;
-
-        if( (eAction == presentation::ClickAction_DOCUMENT) ||
-            (eAction == presentation::ClickAction_BOOKMARK) )
+        try
         {
-            OUString sURL;
-            xSet->getPropertyValue(gsBookmark) >>= sURL;
+            presentation::ClickAction eAction = presentation::ClickAction_NONE;
+            xSet->getPropertyValue("OnClick") >>= eAction;
 
-            if( !sURL.isEmpty() )
+            if( (eAction == presentation::ClickAction_DOCUMENT) ||
+                (eAction == presentation::ClickAction_BOOKMARK) )
             {
-                mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, sURL );
-                mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
-                mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED );
-                pHyperlinkElement.reset( new SvXMLElementExport(mrExport, XML_NAMESPACE_DRAW, XML_A, true, true) );
+                OUString sURL;
+                xSet->getPropertyValue(gsBookmark) >>= sURL;
+
+                if( !sURL.isEmpty() )
+                {
+                    mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, sURL );
+                    mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
+                    mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED );
+                    pHyperlinkElement.reset( new SvXMLElementExport(mrExport, XML_NAMESPACE_DRAW, XML_A, true, true) );
+                }
             }
         }
-    }
-    catch(const uno::Exception&)
-    {
-        TOOLS_WARN_EXCEPTION("xmloff", "XMLShapeExport::exportShape(): exception during hyperlink export");
+        catch(const uno::Exception&)
+        {
+            TOOLS_WARN_EXCEPTION("xmloff", "XMLShapeExport::exportShape(): exception during hyperlink export");
+        }
     }
 
     if( xSet.is() )
