@@ -1512,6 +1512,7 @@ public:
     virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const MapMode&      GetMapMode() const { return maMapMode; }
+    void                SetMapMode(MapMode& rMapMode) { maMapMode = rMapMode; }
 };
 
 // tdf#127471 decl for friend below
