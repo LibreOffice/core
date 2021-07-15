@@ -293,7 +293,7 @@ rtl::Reference<MetaAction> SvmReader::MetaActionHandler(ImplMetaReadData* pData)
             return PushHandler();
             break;
         case MetaActionType::POP:
-            pAction = new MetaPopAction;
+            return PopHandler();
             break;
         case MetaActionType::RASTEROP:
             pAction = new MetaRasterOpAction;
@@ -1270,6 +1270,15 @@ rtl::Reference<MetaAction> SvmReader::PushHandler()
     mrStream.ReadUInt16(tmp);
 
     pAction->SetPushFlags(static_cast<PushFlags>(tmp));
+
+    return pAction;
+}
+
+rtl::Reference<MetaAction> SvmReader::PopHandler()
+{
+    auto pAction = new MetaPopAction();
+
+    VersionCompatRead aCompat(mrStream);
 
     return pAction;
 }
