@@ -3545,7 +3545,7 @@ static ScRange lcl_MakeDropRange( const ScDocument& rDoc, SCCOL nPosX, SCROW nPo
     return ScRange( nCol1, nRow1, nTab, nCol2, nRow2, nTab );
 }
 
-sal_Int8 ScGridWindow::AcceptPrivateDrop( const AcceptDropEvent& rEvt )
+sal_Int8 ScGridWindow::AcceptPrivateDrop( const AcceptDropEvent& rEvt, const ScDragData& rData )
 {
     if ( rEvt.mbLeaving )
     {
@@ -3554,7 +3554,6 @@ sal_Int8 ScGridWindow::AcceptPrivateDrop( const AcceptDropEvent& rEvt )
         return rEvt.mnAction;
     }
 
-    const ScDragData& rData = SC_MOD()->GetDragData();
     if ( rData.pCellTransfer )
     {
         // Don't move source that would include filtered rows.
@@ -3767,7 +3766,7 @@ sal_Int8 ScGridWindow::AcceptDrop( const AcceptDropEvent& rEvt )
     {
         DrawMarkDropObj( nullptr );
         if ( rData.pCellTransfer )
-            return AcceptPrivateDrop( rEvt );   // hide drop marker for internal D&D
+            return AcceptPrivateDrop( rEvt, rData );   // hide drop marker for internal D&D
         else
             return rEvt.mnAction;
     }
@@ -3785,7 +3784,7 @@ sal_Int8 ScGridWindow::AcceptDrop( const AcceptDropEvent& rEvt )
              aSource.aStart.Row() != 0 || aSource.aEnd.Row() != rThisDoc.MaxRow() )
             DropScroll( rEvt.maPosPixel );
 
-        nRet = AcceptPrivateDrop( rEvt );
+        nRet = AcceptPrivateDrop( rEvt, rData );
     }
     else
     {
@@ -4044,14 +4043,11 @@ static SotClipboardFormatId lcl_GetDropLinkId( const uno::Reference<datatransfer
     return nFormatId;
 }
 
-sal_Int8 ScGridWindow::ExecutePrivateDrop( const ExecuteDropEvent& rEvt )
+sal_Int8 ScGridWindow::ExecutePrivateDrop( const ExecuteDropEvent& rEvt, const ScDragData& rData )
 {
     // hide drop marker
     bDragRect = false;
     UpdateDragRectOverlay();
-
-    ScModule* pScMod = SC_MOD();
-    const ScDragData& rData = pScMod->GetDragData();
 
     return DropTransferObj( rData.pCellTransfer, nDragStartX, nDragStartY,
                                 PixelToLogic(rEvt.maPosPixel), rEvt.mnAction );
@@ -4421,7 +4417,7 @@ sal_Int8 ScGridWindow::ExecuteDrop( const ExecuteDropEvent& rEvt )
     ScModule* pScMod = SC_MOD();
     const ScDragData& rData = pScMod->GetDragData();
     if (rData.pCellTransfer)
-        return ExecutePrivateDrop( rEvt );
+        return ExecutePrivateDrop( rEvt, rData );
 
     Point aPos = rEvt.maPosPixel;
 
