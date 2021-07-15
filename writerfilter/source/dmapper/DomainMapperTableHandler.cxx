@@ -1413,6 +1413,53 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel, bool bTab
         if (bConvertToFloating)
             DomainMapper_Impl::fillEmptyFrameProperties(aFrameProperties, true);
 
+        //copy run props to para props only to the last rows' paragraphs, to support copying rows when inserting new rows
+        TableParagraphVectorPtr pTableParagraphs = m_rDMapper_Impl.getTableManager().getCurrentParagraphs();
+        for(size_t nRow = 0; nRow < m_aTableRanges.size(); ++nRow)
+        {
+            for(size_t nCell = 0; nCell < m_aTableRanges[nRow].size(); ++nCell)
+            {
+                std::vector<TableParagraph>::iterator aIt2 = pTableParagraphs->begin();
+                if(nRow >= m_aTableRanges.size()-1)
+                {
+                //we are in the last row
+                auto rStartPara = m_aTableRanges[nRow][nCell][0];
+                if (!rStartPara.is())
+                    continue;
+                uno::Reference<text::XTextRangeCompare> xTextRangeCompare(rStartPara->getText(), uno::UNO_QUERY);
+                while ( aIt2 != pTableParagraphs->end() ) try
+                {
+                        if (xTextRangeCompare->compareRegionStarts(rStartPara, aIt2->m_rStartParagraph) == 0)
+                        {
+                            //copying run props to the para
+                            css::uno::Reference<css::beans::XPropertySet> xParaProps(rStartPara, uno::UNO_QUERY);
+                            uno::Sequence< beans::PropertyValue > aParaProps = aIt2->m_pPropertyMap->GetPropertyValues(false);
+                            uno::Reference<text::XTextCursor> xCur =  rStartPara->getText()->createTextCursorByRange(rStartPara);
+                            uno::Reference< beans::XPropertyState > xRunProperties( xCur, uno::UNO_QUERY_THROW );
+                            for( const auto& rParaProp : std::as_const(aParaProps) )
+                            {
+                                if ( rParaProp.Name.startsWith("Char") && rParaProp.Name != "CharStyleName" && rParaProp.Name != "CharInteropGrabBag" &&
+                                // all text portions contain the same value, so next setPropertyValue() won't overwrite part of them
+                                xRunProperties->getPropertyState(rParaProp.Name) == css::beans::PropertyState_DIRECT_VALUE )
+                                {
+                                    uno::Reference<beans::XPropertySet> xRunPropertySet(xCur, uno::UNO_QUERY);
+                                    xParaProps->setPropertyValue( rParaProp.Name, xRunPropertySet->getPropertyValue(rParaProp.Name) );
+                                    // remember this for table style handling
+                                    m_rDMapper_Impl.getTableManager().getCurrentParagraphs()->back().m_aParaOverrideApplied.insert(rParaProp.Name);
+                                }
+                            }
+                        }
+                        ++aIt2;
+                    }
+                    catch( const lang::IllegalArgumentException & )
+                    {
+                        // skip compareRegion with nested tables
+                        ++aIt2;
+                    }
+                }
+            }
+        }
+
         // OOXML table style may contain paragraph properties, apply these on cell paragraphs
         if ( m_aTableRanges[0].hasElements() && m_aTableRanges[0][0].hasElements() )
         {
@@ -1430,7 +1477,6 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel, bool bTab
 
             if ( !aAllTableParaProperties.empty() )
             {
-                TableParagraphVectorPtr pTableParagraphs = m_rDMapper_Impl.getTableManager().getCurrentParagraphs();
                 for (size_t nRow = 0; nRow < m_aTableRanges.size(); ++nRow)
                 {
                     // Note that this is "cell" since you must not treat it as "column".
