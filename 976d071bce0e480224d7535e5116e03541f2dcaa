@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "26421ff5_c83ba985",
+        "filename": "include/vcl/metaact.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1515,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-07-15T11:30:21Z",
+      "side": 1,
+      "message": "Could you go with \u0027SetMapMode(const MapMode\u0026 rMapMode) { ... }\u0027 here? To avoid a not needed copy + not confuse the reader: the \"r\" prefix is for references, but you had a value there. Thanks.",
+      "revId": "976d071bce0e480224d7535e5116e03541f2dcaa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
