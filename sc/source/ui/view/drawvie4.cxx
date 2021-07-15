@@ -41,6 +41,7 @@
 #include <scresid.hxx>
 #include <gridwin.hxx>
 #include <userdat.hxx>
+#include <comphelper/lok.hxx>
 
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
@@ -96,7 +97,8 @@ void ScDrawView::BeginDrag( vcl::Window* pWindow, const Point& rStartPos )
     pTransferObj->SetDrawPersist( aDragShellRef.get() );    // keep persist for ole objects alive
     pTransferObj->SetDragSource( this );               // copies selection
 
-    SC_MOD()->SetDragObject( nullptr, pTransferObj.get() );     // for internal D&D
+    if (!comphelper::LibreOfficeKit::isActive())
+        SC_MOD()->SetDragObject( nullptr, pTransferObj.get() );     // for internal D&D
     pTransferObj->StartDrag( pWindow, DND_ACTION_COPYMOVE | DND_ACTION_LINK );
 }
 
