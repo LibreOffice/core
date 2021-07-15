@@ -2363,12 +2363,10 @@ void OReportController::openPageDialog(const uno::Reference<report::XSection>& _
 
     MeasurementSystem eSystem = SvtSysLocale().GetLocaleData().getMeasurementSystemEnum();
     FieldUnit eUserMetric = MeasurementSystem::Metric == eSystem ? FieldUnit::CM : FieldUnit::INCH;
-    static const sal_uInt16 pRanges[] =
-    {
+    static const WhichRangesContainer pRanges(svl::Items<
         RPTUI_ID_LRSPACE, XATTR_FILL_LAST,
-        SID_ATTR_METRIC,SID_ATTR_METRIC,
-        0
-    };
+        SID_ATTR_METRIC,SID_ATTR_METRIC
+    >::value);
     rtl::Reference<SfxItemPool> pPool( new SfxItemPool("ReportPageProperties", RPTUI_ID_LRSPACE, RPTUI_ID_METRIC, aItemInfos ) );
 
     const Graphic aNullGraphic;
@@ -4214,11 +4212,9 @@ void OReportController::openZoomDialog()
     {
         new SvxZoomItem()
     };
-    static const sal_uInt16 pRanges[] =
-    {
-        SID_ATTR_ZOOM,SID_ATTR_ZOOM,
-        0
-    };
+    static const WhichRangesContainer pRanges(svl::Items<
+        SID_ATTR_ZOOM,SID_ATTR_ZOOM
+    >::value);
     rtl::Reference<SfxItemPool> pPool( new SfxItemPool("ZoomProperties", SID_ATTR_ZOOM,SID_ATTR_ZOOM, aItemInfos, &pDefaults) );
     pPool->SetDefaultMetric( MapUnit::Map100thMM );    // ripped, don't understand why
     pPool->FreezeIdRanges();                        // the same
