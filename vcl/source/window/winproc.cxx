@@ -872,6 +872,7 @@ bool LOKHandleMouseEvent(const VclPtr<vcl::Window>& xWindow, MouseNotifyEvent nE
         pFrameData->mbDragging)
     {
         css::uno::Any aRet;
+        const OUString aClear("clear");
         const OUString aTransfer("gettransfer");
         const css::uno::Sequence<css::uno::Any> aParam;
         css::uno::Reference<css::datatransfer::XTransferable> xTransfer;
@@ -906,6 +907,9 @@ bool LOKHandleMouseEvent(const VclPtr<vcl::Window>& xWindow, MouseNotifyEvent nE
              css::datatransfer::dnd::DNDConstants::ACTION_MOVE |
              css::datatransfer::dnd::DNDConstants::ACTION_LINK),
             xTransfer);
+
+        if (xInvoke.is())
+            xInvoke->directInvoke(aClear, aParam);
 
         pFrameData->mbStartDragCalled = pFrameData->mbDragging = false;
         return true;
