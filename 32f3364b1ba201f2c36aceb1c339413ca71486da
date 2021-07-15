@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "794f8c56_780f5691",
+        "filename": "include/vcl/metaact.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1459,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-07-15T09:49:12Z",
+      "side": 1,
+      "message": "Could you please turn this into a const Color\u0026? No need for mutability there.",
+      "revId": "32f3364b1ba201f2c36aceb1c339413ca71486da",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
