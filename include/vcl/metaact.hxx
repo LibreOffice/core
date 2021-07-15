@@ -1729,6 +1729,10 @@ public:
     const GDIMetaFile&  GetSubstitute() const { return maSubst; }
     const Point&        GetPoint() const { return maPoint; }
     const Size&         GetSize() const { return maSize; }
+    void                SetLink(const GfxLink& rGfxLink) { maGfxLink = rGfxLink; }
+    void                SetSubstitute(const GDIMetaFile& rSubst) { maSubst = rSubst; }
+    void                SetPoint(const Point& rPoint) { maPoint = rPoint; }
+    void                SetSize(const Size& rSize) { maSize = rSize; }
 };
 
 class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetaRefPointAction final : public MetaAction

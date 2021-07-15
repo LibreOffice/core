@@ -85,6 +85,7 @@ public:
     rtl::Reference<MetaAction> RasterOpHandler();
     rtl::Reference<MetaAction> TransparentHandler();
     rtl::Reference<MetaAction> FloatTransparentHandler(ImplMetaReadData* pData);
+    rtl::Reference<MetaAction> EPSHandler();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
