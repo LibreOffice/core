@@ -1796,6 +1796,10 @@ public:
     sal_Int32           GetValue() const { return mnValue; }
     sal_uInt32          GetDataSize() const { return mnDataSize; }
     const sal_uInt8*    GetData() const { return mpData.get(); }
+    void                SetComment(const OString& rComment) { maComment = rComment; }
+    void                SetValue(const sal_Int32 nValue) { mnValue = nValue; }
+    void                SetDataSize(const sal_Int32 nDataSize) { mnDataSize = nDataSize; }
+    void                SetData(const sal_uInt8* pData, const sal_uInt32 nDataSize) { ImplInitDynamicData(pData, nDataSize); }
 };
 
 class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetaLayoutModeAction final : public MetaAction
