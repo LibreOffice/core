@@ -133,6 +133,8 @@ sw::DocumentSettingManager::DocumentSettingManager(SwDoc &rDoc)
         mbSubtractFlys                      = aOptions.GetDefault( SvtCompatibilityEntry::Index::SubtractFlysAnchoredAtFlys );
         mbEmptyDbFieldHidesPara
             = aOptions.GetDefault(SvtCompatibilityEntry::Index::EmptyDbFieldHidesPara);
+        mbContinuousEndnotes
+            = aOptions.GetDefault(SvtCompatibilityEntry::Index::ContinuousEndnotes);
     }
     else
     {
@@ -152,6 +154,7 @@ sw::DocumentSettingManager::DocumentSettingManager(SwDoc &rDoc)
         mbMsWordCompTrailingBlanks          = false;
         mbSubtractFlys                      = false;
         mbEmptyDbFieldHidesPara             = true;
+        mbContinuousEndnotes                = false;
     }
 
     // COMPATIBILITY FLAGS END
