@@ -1484,6 +1484,7 @@ public:
     explicit            MetaTextAlignAction( TextAlign eAlign );
 
     TextAlign           GetTextAlign() const { return maAlign; }
+    void                SetTextAlign(TextAlign eAlign) { maAlign = eAlign; }
 };
 
 class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetaMapModeAction final : public MetaAction
