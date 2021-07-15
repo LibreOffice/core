@@ -170,7 +170,8 @@ rtl::Reference<SidebarController> SidebarController::create(SidebarDockingWindow
     instance->mpParentWindow->AddEventListener(LINK(instance.get(), SidebarController, WindowEventHandler));
 
     // Listen for theme property changes.
-    Theme::GetPropertySet()->addPropertyChangeListener(
+    instance->mxThemePropertySet = Theme::GetPropertySet();
+    instance->mxThemePropertySet->addPropertyChangeListener(
         "",
         static_cast<css::beans::XPropertyChangeListener*>(instance.get()));
 
@@ -305,9 +306,10 @@ void SAL_CALL SidebarController::disposing()
         mpParentWindow = nullptr;
     }
 
-    Theme::GetPropertySet()->removePropertyChangeListener(
-        "",
-        static_cast<css::beans::XPropertyChangeListener*>(this));
+    if (mxThemePropertySet.is())
+        mxThemePropertySet->removePropertyChangeListener(
+            "",
+            static_cast<css::beans::XPropertyChangeListener*>(this));
 
     maContextChangeUpdate.CancelRequest();
 }

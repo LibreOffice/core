@@ -34,6 +34,7 @@ namespace sfx2::sidebar {
 
 Theme& Theme::GetCurrentTheme()
 {
+    OSL_ASSERT(SfxGetpApp());
     return SfxGetpApp()->GetSidebarTheme();
 }
 
@@ -198,7 +199,10 @@ void SAL_CALL Theme::disposing()
 
 Reference<beans::XPropertySet> Theme::GetPropertySet()
 {
-    return Reference<beans::XPropertySet>(static_cast<XWeak*>(&GetCurrentTheme()), UNO_QUERY);
+    if (SfxGetpApp())
+        return Reference<beans::XPropertySet>(static_cast<XWeak*>(&GetCurrentTheme()), UNO_QUERY);
+    else
+        return Reference<beans::XPropertySet>();
 }
 
 Reference<beans::XPropertySetInfo> SAL_CALL Theme::getPropertySetInfo()
