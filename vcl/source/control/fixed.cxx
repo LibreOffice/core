@@ -17,14 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <vcl/cvtgrf.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/event.hxx>
 #include <vcl/toolkit/fixed.hxx>
 #include <vcl/settings.hxx>
 
+#include <comphelper/base64.hxx>
 #include <comphelper/string.hxx>
 #include <sal/log.hxx>
 #include <tools/json_writer.hxx>
+#include <tools/stream.hxx>
 
 #define FIXEDLINE_TEXT_BORDER    4
 
@@ -962,5 +965,22 @@ bool FixedImage::set_property(const OString &rKey, const OUString &rValue)
         return Control::set_property(rKey, rValue);
     return true;
 }
+
+void FixedImage::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
+{
+    rJsonWriter.put("type", "image");
+    if (!!maImage)
+    {
+        SvMemoryStream aOStm(6535, 6535);
+        if(GraphicConverter::Export(aOStm, maImage.GetBitmapEx(), ConvertDataFormat::PNG) == ERRCODE_NONE)
+        {
+            css::uno::Sequence<sal_Int8> aSeq( static_cast<sal_Int8 const *>(aOStm.GetData()), aOStm.Tell());
+            OUStringBuffer aBuffer("data:image/png;base64,");
+            ::comphelper::Base64::encode(aBuffer, aSeq);
+            rJsonWriter.put("image", aBuffer.makeStringAndClear());
+        }
+    }
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
