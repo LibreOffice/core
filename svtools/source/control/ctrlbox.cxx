@@ -357,8 +357,11 @@ IMPL_LINK(FontNameBox, SettingsChangedHdl, VclSimpleEvent&, rEvent, void)
         gFontPreviewVirDevs.clear();
         gRenderedFontNames.clear();
         calcCustomItemSize(*m_xComboBox);
-        if (mbWYSIWYG)
+        if (mbWYSIWYG && nFontCount)
+        {
+            mnPreviewProgress = 0;
             maUpdateIdle.Start();
+        }
     }
 }
 
