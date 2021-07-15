@@ -394,8 +394,8 @@ const WhichRangesContainer SwFramePage::aPageRg(svl::Items<
     RES_FOLLOW_TEXT_FLOW, RES_FOLLOW_TEXT_FLOW
 >::value);
 const WhichRangesContainer SwFrameAddPage::aAddPgRg(svl::Items<
-    RES_PROTECT,            RES_PROTECT,
     RES_PRINT,              RES_PRINT,
+    RES_PROTECT,            RES_PROTECT,
     FN_SET_FRM_NAME,        FN_SET_FRM_NAME,
     FN_SET_FRM_ALT_NAME,    FN_SET_FRM_ALT_NAME,
     FN_UNO_DESCRIPTION,     FN_UNO_DESCRIPTION

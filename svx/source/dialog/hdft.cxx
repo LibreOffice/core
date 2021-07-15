@@ -55,14 +55,13 @@ const tools::Long DEF_DIST_WRITER = 500;    // 5mm (Writer)
 const tools::Long DEF_DIST_CALC = 250;      // 2.5mm (Calc)
 
 const WhichRangesContainer SvxHFPage::pRanges(svl::Items<
-    SID_ATTR_BRUSH,          SID_ATTR_BRUSH,
-
     // Support DrawingLayer FillStyles (no real call to below GetRanges()
     // detected, still do the complete transition)
     XATTR_FILL_FIRST,        XATTR_FILL_LAST,
 
-    SID_ATTR_BORDER_OUTER,   SID_ATTR_BORDER_OUTER,
+    SID_ATTR_BRUSH,          SID_ATTR_BRUSH,
     SID_ATTR_BORDER_INNER,   SID_ATTR_BORDER_INNER,
+    SID_ATTR_BORDER_OUTER,   SID_ATTR_BORDER_OUTER,
     SID_ATTR_BORDER_SHADOW,  SID_ATTR_BORDER_SHADOW,
     SID_ATTR_LRSPACE,        SID_ATTR_LRSPACE,
     SID_ATTR_ULSPACE,        SID_ATTR_ULSPACE,
@@ -72,8 +71,8 @@ const WhichRangesContainer SvxHFPage::pRanges(svl::Items<
     SID_ATTR_PAGE_ON,        SID_ATTR_PAGE_ON,
     SID_ATTR_PAGE_DYNAMIC,   SID_ATTR_PAGE_DYNAMIC,
     SID_ATTR_PAGE_SHARED,    SID_ATTR_PAGE_SHARED,
-    SID_ATTR_PAGE_SHARED_FIRST,    SID_ATTR_PAGE_SHARED_FIRST,
-    SID_ATTR_HDFT_DYNAMIC_SPACING, SID_ATTR_HDFT_DYNAMIC_SPACING
+    SID_ATTR_HDFT_DYNAMIC_SPACING, SID_ATTR_HDFT_DYNAMIC_SPACING,
+    SID_ATTR_PAGE_SHARED_FIRST,    SID_ATTR_PAGE_SHARED_FIRST
 >::value);
 
 namespace svx {

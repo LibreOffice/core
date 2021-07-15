@@ -55,41 +55,36 @@ constexpr bool validRanges() {
         && validRanges<WID3, WIDs...>();
 }
 
-inline constexpr bool validRanges(const sal_uInt16* pRanges)
-{
-    for (auto p = pRanges; p && *p; p += 2)
-    {
-        if (!validRange(p[0], p[1]))
-            return false;
-        // ranges must be sorted
-        if (p[2] != 0 && !validGap(p[1], p[2]))
-            return false;
-    }
-    return true;
-}
-
-// The calculations in rangeSize and rangesSize cannot overflow, assuming
+// The calculations in rangeSize cannot overflow, assuming
 // std::size_t is no smaller than sal_uInt16:
-
 constexpr std::size_t rangeSize(sal_uInt16 wid1, sal_uInt16 wid2) {
     assert(validRange(wid1, wid2));
     return wid2 - wid1 + 1;
 }
 
-template<sal_uInt16 WID1, sal_uInt16 WID2> constexpr std::size_t rangesSize()
-{ return rangeSize(WID1, WID2); }
-
-template<sal_uInt16 WID1, sal_uInt16 WID2, sal_uInt16 WID3, sal_uInt16... WIDs>
-constexpr std::size_t rangesSize()
-{ return rangeSize(WID1, WID2) + rangesSize<WID3, WIDs...>(); }
-
 }
 
 template<sal_uInt16... WIDs> struct Items
 {
+    using Array = std::array<WhichPair, sizeof...(WIDs) / 2>;
+    template <sal_uInt16 WID1, sal_uInt16 WID2, sal_uInt16... Rest>
+    static constexpr void fill(typename Array::iterator it)
+    {
+        it->first = WID1;
+        it->second = WID2;
+        if constexpr (sizeof...(Rest) > 0)
+            fill<Rest...>(++it);
+    }
+    static constexpr Array make()
+    {
+        assert(svl::detail::validRanges<WIDs...>());
+        Array a{};
+        fill<WIDs...>(a.begin());
+        return a;
+    }
     // This is passed to WhichRangesContainer so we can avoid needing to malloc()
     // for compile-time data.
-    static constexpr std::array<sal_uInt16, sizeof...(WIDs)> value = { { WIDs... } };
+    static constexpr Array value = make();
 };
 
 }
@@ -144,11 +139,8 @@ public:
         : SfxItemSet(rPool, WhichRangesContainer(nWhichStart, nWhichEnd)) {}
 
     template<sal_uInt16... WIDs>
-    SfxItemSet(
-        typename std::enable_if<
-            svl::detail::validRanges<WIDs...>(), SfxItemPool &>::type pool,
-        svl::Items<WIDs...>)
-        : SfxItemSet(pool, WhichRangesContainer(svl::Items<WIDs...>::value), svl::detail::rangesSize<WIDs...>()) {}
+    SfxItemSet(SfxItemPool& pool, svl::Items<WIDs...>)
+        : SfxItemSet(pool, WhichRangesContainer(svl::Items<WIDs...>::value)) {}
 
     SfxItemSet( SfxItemPool&, const sal_uInt16* nWhichPairTable );
 
