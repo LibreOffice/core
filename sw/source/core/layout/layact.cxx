@@ -276,12 +276,13 @@ SwLayAction::~SwLayAction()
 
 void SwLayAction::Reset()
 {
+    SetAgain(false);
     m_pOptTab = nullptr;
     m_nStartTicks = std::clock();
     m_nInputType = VclInputFlags::NONE;
     m_nEndPage = m_nPreInvaPage = m_nCheckPageNum = USHRT_MAX;
     m_bPaint = m_bComplete = m_bWaitAllowed = m_bCheckPages = true;
-    m_bInput = m_bAgain = m_bNextCycle = m_bCalcLayout = m_bIdle = m_bReschedule =
+    m_bInput = m_bNextCycle = m_bCalcLayout = m_bIdle = m_bReschedule =
     m_bUpdateExpFields = m_bBrowseActionStop = false;
 }
 
@@ -339,12 +340,15 @@ void SwLayAction::Action(OutputDevice* pRenderContext)
         SetCheckPages( false );
 
     InternalAction(pRenderContext);
-    m_bAgain |= RemoveEmptyBrowserPages();
+    if (RemoveEmptyBrowserPages())
+        SetAgain(true);
     while ( IsAgain() )
     {
-        m_bAgain = m_bNextCycle = false;
+        SetAgain(false);
+        m_bNextCycle = false;
         InternalAction(pRenderContext);
-        m_bAgain |= RemoveEmptyBrowserPages();
+        if (RemoveEmptyBrowserPages())
+            SetAgain(true);
     }
     m_pRoot->DeleteEmptySct();
 
@@ -635,7 +639,7 @@ void SwLayAction::InternalAction(OutputDevice* pRenderContext)
             {
                 bool bOld = IsAgain();
                 m_pRoot->RemoveSuperfluous();
-                m_bAgain = bOld;
+                SetAgain(bOld);
             }
             if ( IsAgain() )
             {
