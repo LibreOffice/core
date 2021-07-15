@@ -76,20 +76,35 @@ constexpr std::size_t rangeSize(sal_uInt16 wid1, sal_uInt16 wid2) {
     return wid2 - wid1 + 1;
 }
 
-template<sal_uInt16 WID1, sal_uInt16 WID2> constexpr std::size_t rangesSize()
-{ return rangeSize(WID1, WID2); }
-
-template<sal_uInt16 WID1, sal_uInt16 WID2, sal_uInt16 WID3, sal_uInt16... WIDs>
-constexpr std::size_t rangesSize()
-{ return rangeSize(WID1, WID2) + rangesSize<WID3, WIDs...>(); }
+template <sal_uInt16 WID1, sal_uInt16 WID2, sal_uInt16... WIDs> constexpr std::size_t rangesSize()
+{
+    std::size_t n = rangeSize(WID1, WID2);
+    if constexpr (sizeof...(WIDs) > 0)
+        n += rangesSize<WIDs...>();
+    return n;
+}
 
 }
 
 template<sal_uInt16... WIDs> struct Items
 {
+    using Array = std::array<WhichPair, sizeof...(WIDs) / 2>;
+    template <sal_uInt16 WID1, sal_uInt16 WID2, sal_uInt16... Rest>
+    static constexpr void putToArray(Array& a, int i)
+    {
+        a[i].first = WID1, a[i].second = WID2;
+        if constexpr (sizeof...(Rest) > 0)
+            putToArray<Rest...>(a, i + 1);
+    }
+    static constexpr auto make()
+    {
+        Array a{};
+        putToArray<WIDs...>(a, 0);
+        return a;
+    }
     // This is passed to WhichRangesContainer so we can avoid needing to malloc()
     // for compile-time data.
-    static constexpr std::array<sal_uInt16, sizeof...(WIDs)> value = { { WIDs... } };
+    static constexpr std::enable_if_t<svl::detail::validRanges<WIDs...>(), Array> value = make();
 };
 
 }
@@ -144,11 +159,10 @@ public:
         : SfxItemSet(rPool, WhichRangesContainer(nWhichStart, nWhichEnd)) {}
 
     template<sal_uInt16... WIDs>
-    SfxItemSet(
-        typename std::enable_if<
-            svl::detail::validRanges<WIDs...>(), SfxItemPool &>::type pool,
-        svl::Items<WIDs...>)
-        : SfxItemSet(pool, WhichRangesContainer(svl::Items<WIDs...>::value), svl::detail::rangesSize<WIDs...>()) {}
+    SfxItemSet(SfxItemPool& pool, svl::Items<WIDs...>)
+        : SfxItemSet(pool, WhichRangesContainer(svl::Items<WIDs...>::value))
+    {
+    }
 
     SfxItemSet( SfxItemPool&, const sal_uInt16* nWhichPairTable );
 
