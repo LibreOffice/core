@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "563bddd3_f3c5f307",
+        "filename": "cui/source/tabpages/tpshadow.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-15T21:52:09Z",
+      "side": 1,
+      "message": "This is not how which ranges are added. Pairs should be added between other pairs in ascending order; if a single value is added, then a pair is added, consisting of two identical ids.",
+      "revId": "6dbfbebad37fd84208e4c336f0864d26019db153",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
