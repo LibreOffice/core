@@ -33,6 +33,7 @@
 #include <tools/urlobj.hxx>
 #include <sal/log.hxx>
 #include <unotools/charclass.hxx>
+#include <comphelper/lok.hxx>
 
 #include <content.hxx>
 #include <navipi.hxx>
@@ -1132,7 +1133,8 @@ static bool lcl_DoDragObject( ScDocShell* pSrcShell, const OUString& rName, ScCo
             pTransferObj->SetDragSourceObj( *pObject, nTab );
             pTransferObj->SetDragSourceFlags(ScDragSrc::Navigator);
 
-            SC_MOD()->SetDragObject( nullptr, pTransferObj.get() );
+            if (!comphelper::LibreOfficeKit::isActive())
+                SC_MOD()->SetDragObject( nullptr, pTransferObj.get() );
 
             rtl::Reference<TransferDataContainer> xHelper(pTransferObj.get());
             rTreeView.enable_drag_source(xHelper, DND_ACTION_COPY | DND_ACTION_LINK);
@@ -1172,7 +1174,8 @@ static bool lcl_DoDragCells( ScDocShell* pSrcShell, const ScRange& rRange, ScDra
         pTransferObj->SetDragSource( pSrcShell, aMark );
         pTransferObj->SetDragSourceFlags( nFlags );
 
-        SC_MOD()->SetDragObject( pTransferObj.get(), nullptr );      // for internal D&D
+        if (!comphelper::LibreOfficeKit::isActive())
+            SC_MOD()->SetDragObject( pTransferObj.get(), nullptr );      // for internal D&D
 
         rtl::Reference<TransferDataContainer> xHelper(pTransferObj.get());
         rTreeView.enable_drag_source(xHelper, DND_ACTION_COPY | DND_ACTION_LINK);
