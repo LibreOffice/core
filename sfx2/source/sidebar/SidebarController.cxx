@@ -305,9 +305,11 @@ void SAL_CALL SidebarController::disposing()
         mpParentWindow = nullptr;
     }
 
-    Theme::GetPropertySet()->removePropertyChangeListener(
-        "",
-        static_cast<css::beans::XPropertyChangeListener*>(this));
+    Reference<beans::XPropertySet> xThemePropertySet = Theme::GetPropertySet();
+    if (xThemePropertySet.is())
+        xThemePropertySet->removePropertyChangeListener(
+            "",
+            static_cast<css::beans::XPropertyChangeListener*>(this));
 
     maContextChangeUpdate.CancelRequest();
 }
