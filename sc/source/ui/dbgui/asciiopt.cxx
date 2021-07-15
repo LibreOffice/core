@@ -174,6 +174,16 @@ void ScAsciiOptions::ReadFromString( const OUString& rString )
     }
     else
         bRemoveSpace = false;
+
+    // Token 11: sheet to export for --convert-to csv
+    // Does not need to be evaluated here but may be present, so in case
+    // there'll be yet another token 12 then do some dummy like
+#if 0
+    if (nPos >= 0)
+    {
+        rString.getToken(0, ',', nPos);
+    }
+#endif
 }
 
 OUString ScAsciiOptions::WriteToString() const
@@ -225,6 +235,7 @@ OUString ScAsciiOptions::WriteToString() const
 
     // #i112025# the options string is used in macros and linked sheets,
     // so new options must be added at the end, to remain compatible
+    // Always keep in sync with ScImportOptions.
 
     aOutStr.append("," +
                //Token 5: Language
@@ -238,7 +249,10 @@ OUString ScAsciiOptions::WriteToString() const
                // Token 9: used for "Save cell formulas" in export options
                OUString::boolean( bSaveFormulas ) + "," +
                //Token 10: Trim Space
-               OUString::boolean( bRemoveSpace ));
+               OUString::boolean( bRemoveSpace ) + "," +
+               //Token 11: sheet to export, always 0 for current sheet
+               "0"
+            );
     return aOutStr.makeStringAndClear();
 }
 
