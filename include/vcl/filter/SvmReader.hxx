@@ -78,6 +78,7 @@ public:
     rtl::Reference<MetaAction> TextLineColorHandler();
     rtl::Reference<MetaAction> OverlineColorHandler();
     rtl::Reference<MetaAction> TextAlignHandler();
+    rtl::Reference<MetaAction> MapModeHandler();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

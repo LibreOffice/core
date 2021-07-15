@@ -283,7 +283,7 @@ rtl::Reference<MetaAction> SvmReader::MetaActionHandler(ImplMetaReadData* pData)
             return TextAlignHandler();
             break;
         case MetaActionType::MAPMODE:
-            pAction = new MetaMapModeAction;
+            return MapModeHandler();
             break;
         case MetaActionType::FONT:
             pAction = new MetaFontAction;
@@ -1217,6 +1217,20 @@ rtl::Reference<MetaAction> SvmReader::TextAlignHandler()
     mrStream.ReadUInt16(nTmp16);
 
     pAction->SetTextAlign(static_cast<TextAlign>(nTmp16));
+
+    return pAction;
+}
+
+rtl::Reference<MetaAction> SvmReader::MapModeHandler()
+{
+    auto pAction = new MetaMapModeAction();
+
+    VersionCompatRead aCompat(mrStream);
+    TypeSerializer aSerializer(mrStream);
+    MapMode aMapMode;
+    aSerializer.readMapMode(aMapMode);
+
+    pAction->SetMapMode(aMapMode);
 
     return pAction;
 }
