@@ -317,7 +317,7 @@ rtl::Reference<MetaAction> SvmReader::MetaActionHandler(ImplMetaReadData* pData)
             return LayoutModeHandler();
             break;
         case MetaActionType::TEXTLANGUAGE:
-            pAction = new MetaTextLanguageAction;
+            return TextLanguageHandler();
             break;
 
         default:
@@ -1424,6 +1424,19 @@ rtl::Reference<MetaAction> SvmReader::LayoutModeHandler()
     mrStream.ReadUInt32(tmp);
 
     pAction->SetLayoutMode(static_cast<ComplexTextLayoutFlags>(tmp));
+
+    return pAction;
+}
+
+rtl::Reference<MetaAction> SvmReader::TextLanguageHandler()
+{
+    auto pAction = new MetaTextLanguageAction();
+
+    VersionCompatRead aCompat(mrStream);
+    sal_uInt16 nTmp = 0;
+    mrStream.ReadUInt16(nTmp);
+
+    pAction->SetTextLanguage(static_cast<LanguageType>(nTmp));
 
     return pAction;
 }

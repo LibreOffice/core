@@ -1851,6 +1851,7 @@ public:
     explicit            MetaTextLanguageAction( LanguageType );
 
     LanguageType        GetTextLanguage() const { return meTextLanguage; }
+    void                SetTextLanguage(const LanguageType eTextLanguage) { meTextLanguage = eTextLanguage; }
 };
 
 #endif // INCLUDED_VCL_METAACT_HXX
