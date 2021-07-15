@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "d27ce2bd_e76a9973",
+        "filename": "writerfilter/source/dmapper/DomainMapper.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-07-15T06:44:02Z",
+      "side": 1,
+      "message": "Will fix in a follow-up change.",
+      "parentUuid": "f863696e_e302a758",
+      "range": {
+        "startLine": 222,
+        "startChar": 8,
+        "endLine": 222,
+        "endChar": 60
+      },
+      "revId": "dc37e4b4415201e03f9501f953d408037b4ae6df",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3f79133f_98e1e4bd",
         "filename": "writerfilter/source/filter/WriterFilter.cxx",
         "patchSetId": 3
@@ -45,6 +69,30 @@
       "revId": "dc37e4b4415201e03f9501f953d408037b4ae6df",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dbc79074_a70e4ccd",
+        "filename": "writerfilter/source/filter/WriterFilter.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 302,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-07-15T06:44:02Z",
+      "side": 1,
+      "message": "Will fix in a follow-up change. FWIW \"all\" was written at the time when this code was shared between DOCX and the dead-end \"new\" DOC import.",
+      "parentUuid": "3f79133f_98e1e4bd",
+      "range": {
+        "startLine": 302,
+        "startChar": 3,
+        "endLine": 302,
+        "endChar": 72
+      },
+      "revId": "dc37e4b4415201e03f9501f953d408037b4ae6df",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
