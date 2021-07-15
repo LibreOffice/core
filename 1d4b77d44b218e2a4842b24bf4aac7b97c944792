@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2d8e73a5_8b4a6b3a",
+        "filename": "sdext/source/pdfimport/xpdfwrapper/pdfioutdev_gpl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 435,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-07-15T11:04:20Z",
+      "side": 1,
+      "message": "I think this ifdef block should move to line 442? I imagine its to put \"const\" in front of GooString* since version 0.64",
+      "revId": "1d4b77d44b218e2a4842b24bf4aac7b97c944792",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
