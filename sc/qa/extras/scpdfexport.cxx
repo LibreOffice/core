@@ -65,11 +65,13 @@ public:
     void testExportRange_Tdf120161();
     void testExportFitToPage_Tdf103516();
     void testUnoCommands_Tdf120161();
+    void testTdf64703_hiddenPageBreak();
 
     CPPUNIT_TEST_SUITE(ScPDFExportTest);
     CPPUNIT_TEST(testExportRange_Tdf120161);
     CPPUNIT_TEST(testExportFitToPage_Tdf103516);
     CPPUNIT_TEST(testUnoCommands_Tdf120161);
+    CPPUNIT_TEST(testTdf64703_hiddenPageBreak);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -434,6 +436,23 @@ void ScPDFExportTest::testUnoCommands_Tdf120161()
         std::shared_ptr<utl::TempFile> pPDFFile = exportToPDFWithUnoCommands("H1:I1");
         bool bFound = false;
         CPPUNIT_ASSERT(hasTextInPdf(pPDFFile, "DejaVuSans", bFound));
+        CPPUNIT_ASSERT_EQUAL(true, bFound);
+    }
+}
+
+void ScPDFExportTest::testTdf64703_hiddenPageBreak()
+{
+    mxComponent = loadFromDesktop(m_directories.getURLFromSrc(DATA_DIRECTORY)
+                                      + "tdf64703_hiddenPageBreak.ods",
+                                  "com.sun.star.sheet.SpreadsheetDocument");
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+
+    // A1:A11: 4-page export
+    {
+        ScRange range1(0, 0, 0, 0, 10, 0);
+        std::shared_ptr<utl::TempFile> pPDFFile = exportToPDF(xModel, range1);
+        bool bFound = false;
+        CPPUNIT_ASSERT(hasTextInPdf(pPDFFile, "/Count 4>>", bFound));
         CPPUNIT_ASSERT_EQUAL(true, bFound);
     }
 }
