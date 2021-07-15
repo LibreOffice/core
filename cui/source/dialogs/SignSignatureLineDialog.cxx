@@ -17,6 +17,7 @@
 
 #include <comphelper/graphicmimetype.hxx>
 #include <comphelper/processfactory.hxx>
+#include <sfx2/filedlghelper.hxx>
 #include <sfx2/objsh.hxx>
 #include <svx/xoutbmp.hxx>
 #include <utility>
