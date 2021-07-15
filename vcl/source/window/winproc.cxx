@@ -849,10 +849,24 @@ static bool ImplHandleMouseEvent2( const VclPtr<vcl::Window>& xWindow, MouseNoti
         nSVEvent == MouseNotifyEvent::MOUSEBUTTONUP &&
         pDragWin->ImplGetFrameData()->mnMouseMode == MouseEventModifiers::DRAGSTART)
     {
+        css::uno::Any aRet;
+        const OUString aMethod("gettransfer");
+        const css::uno::Sequence<css::uno::Any> aParam;
+
+        css::uno::Reference<css::datatransfer::XTransferable> xTransfer;
         css::uno::Reference<css::datatransfer::dnd::XDropTargetDropContext> xDropTargetDropContext =
             new GenericDropTargetDropContext();
         css::uno::Reference<css::datatransfer::dnd::XDropTarget> xDropTarget(
             pDragWin->ImplGetWindowImpl()->mxDNDListenerContainer, css::uno::UNO_QUERY);
+
+        css::uno::Reference<css::script::XDirectInvocation> xInvoke(
+            pDragWin->GetDragSource(), css::uno::UNO_QUERY);
+
+        if (xInvoke.is())
+        {
+            aRet = xInvoke->directInvoke(aMethod, aParam);
+            aRet >>= xTransfer;
+        }
 
         if (xDropTargetDropContext.is() && xDropTarget.is())
         {
@@ -865,7 +879,7 @@ static bool ImplHandleMouseEvent2( const VclPtr<vcl::Window>& xWindow, MouseNoti
                 (css::datatransfer::dnd::DNDConstants::ACTION_COPY |
                  css::datatransfer::dnd::DNDConstants::ACTION_MOVE |
                  css::datatransfer::dnd::DNDConstants::ACTION_LINK),
-                css::uno::Reference<css::datatransfer::XTransferable>());
+                 xTransfer);
         }
 
         pDragWin->ImplGetFrameData()->mnMouseMode = MouseEventModifiers::NONE;
