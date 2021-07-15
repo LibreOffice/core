@@ -500,6 +500,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/backendtest/outputdevice/polypolygon_b2d \
     vcl/backendtest/outputdevice/polyline \
     vcl/backendtest/outputdevice/polyline_b2d \
+    vcl/backendtest/outputdevice/text \
     vcl/backendtest/outputdevice/rectangle \
     vcl/backendtest/GraphicsRenderTests \
     vcl/jsdialog/enabled \

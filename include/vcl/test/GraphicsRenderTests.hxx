@@ -117,6 +117,7 @@ class VCL_PLUGIN_PUBLIC GraphicsRenderTests
     void testClosedBezierPolyline();
     void testClosedBezierPolygon();
     void testFilledAsymmetricalDropShape();
+    void testTextDrawing();
     static OUString returnTestStatus(vcl::test::TestResult const result);
     void runALLTests();
     void appendTestResult(OUString aTestName, OUString aTestStatus, Bitmap aTestBitmap = Bitmap());

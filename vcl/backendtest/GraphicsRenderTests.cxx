@@ -1406,6 +1406,27 @@ void GraphicsRenderTests::testHalfEllipseWithPolygon()
     }
 }
 
+void GraphicsRenderTests::testHalfEllipseAAWithPolygon()
+{
+    vcl::test::OutputDeviceTestPolygon aOutDevTest;
+    Bitmap aBitmap = aOutDevTest.setupHalfEllipse(true);
+    OUString aTestName = "testHalfEllipseAAWithPolygon";
+    if (!SHOULD_ASSERT)
+    {
+        appendTestResult(aTestName, "SKIPPED");
+        return;
+    }
+    vcl::test::TestResult eResult
+        = vcl::test::OutputDeviceTestLine::checkHalfEllipse(aBitmap, true);
+    appendTestResult(aTestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        BitmapEx aBitmapEx(aBitmap);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
+    }
+}
+
 void GraphicsRenderTests::testClosedBezierPolyline()
 {
     vcl::test::OutputDeviceTestPolygon aOutDevTest;
@@ -1467,18 +1488,17 @@ void GraphicsRenderTests::testFilledAsymmetricalDropShape()
     }
 }
 
-void GraphicsRenderTests::testHalfEllipseAAWithPolygon()
+void GraphicsRenderTests::testTextDrawing()
 {
-    vcl::test::OutputDeviceTestPolygon aOutDevTest;
-    Bitmap aBitmap = aOutDevTest.setupHalfEllipse(true);
-    OUString aTestName = "testHalfEllipseAAWithPolygon";
+    vcl::test::OutputDeviceTestText aOutDevTest;
+    Bitmap aBitmap = aOutDevTest.setupTextBitmap();
+    OUString aTestName = "testTextDrawing";
     if (!SHOULD_ASSERT)
     {
         appendTestResult(aTestName, "SKIPPED");
         return;
     }
-    vcl::test::TestResult eResult
-        = vcl::test::OutputDeviceTestLine::checkHalfEllipse(aBitmap, true);
+    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestLine::checkTextLocation(aBitmap);
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
@@ -1559,6 +1579,7 @@ void GraphicsRenderTests::runALLTests()
     testClosedBezierPolyline();
     testClosedBezierPolygon();
     testFilledAsymmetricalDropShape();
+    testTextDrawing();
 }
 
 void GraphicsRenderTests::appendTestResult(OUString aTestName, OUString aTestStatus,

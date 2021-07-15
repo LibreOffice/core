@@ -1080,6 +1080,16 @@ public:
 #endif
     }
 
+    void testDrawingText()
+    {
+        vcl::test::OutputDeviceTestText aOutDevTest;
+        Bitmap aBitmap = aOutDevTest.setupTextBitmap();
+        auto eResult = vcl::test::OutputDeviceTestCommon::checkTextLocation(aBitmap);
+        exportImage("17-01_test_text_Drawing.png", aBitmap);
+        if (SHOULD_ASSERT)
+            CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
+    }
+
     void testTdf124848()
     {
 // TODO: This unit test is not executed for macOS unless bitmap scaling is implemented
@@ -1233,6 +1243,8 @@ public:
 
     CPPUNIT_TEST(testDrawBlendExtended);
     CPPUNIT_TEST(testDrawAlphaBitmapMirrored);
+
+    CPPUNIT_TEST(testDrawingText);
 
     CPPUNIT_TEST(testTdf124848);
     CPPUNIT_TEST(testTdf136171);

@@ -864,6 +864,79 @@ TestResult OutputDeviceTestCommon::checkFilledAsymmetricalDropShape(Bitmap& rBit
     return aResult;
 }
 
+TestResult OutputDeviceTestCommon::checkTextLocation(Bitmap& rBitmap)
+{
+    BitmapScopedWriteAccess pAccess(rBitmap);
+
+    TestResult aResult = TestResult::Passed;
+
+    //The limit to which error would be tolerated.
+    tools::Long textThreshold = 3;
+    tools::Long textWidth = 3, textHeight = 8;
+    tools::Long deviationX = 0, deviationY = 0;
+    tools::Long verticalStart, verticalEnd;
+    tools::Long horizontalStart, horizontalEnd;
+    tools::Long midX = pAccess->Width() / 2.0;
+    tools::Long midY = pAccess->Height() / 2.0;
+    bool insideFlag = false;
+
+    //Traversing horizontally
+    for (int x = 0, y = pAccess->Height() / 2.0; x < pAccess->Width(); ++x)
+    {
+        if (pAccess->GetPixel(y, x) != constBackgroundColor)
+        {
+            if (!insideFlag)
+            {
+                horizontalStart = x;
+                insideFlag = true;
+            }
+            else
+            {
+                horizontalEnd = x;
+            }
+        }
+    }
+
+    deviationX = abs(midX - horizontalStart);
+    midY -= midY / 2.0;
+    midY += 1;
+
+    insideFlag = false;
+    //Traversing vertically
+    for (int x = 0, y = pAccess->Height() / 2.0; x < pAccess->Height(); ++x)
+    {
+        if (pAccess->GetPixel(x, y) != constBackgroundColor)
+        {
+            if (!insideFlag)
+            {
+                verticalStart = x;
+                insideFlag = true;
+            }
+            else
+            {
+                verticalEnd = x;
+            }
+        }
+    }
+
+    deviationY = abs(midY - verticalStart);
+
+    if (deviationX != 0 || deviationY != 0 || abs(horizontalStart - horizontalEnd) + 1 != textWidth
+        || abs(verticalStart - verticalEnd) + 1 != textHeight)
+    {
+        aResult = TestResult::PassedWithQuirks;
+    }
+
+    if (deviationX > textThreshold || deviationY > textThreshold
+        || abs((abs(horizontalStart - horizontalEnd) + 1) - textWidth) > textThreshold
+        || abs((abs(verticalStart - verticalEnd) + 1) - textHeight) > textThreshold)
+    {
+        aResult = TestResult::Failed;
+    }
+
+    return aResult;
+}
+
 // Check 'count' pixels from (x,y) in (addX,addY) direction, the color values must not decrease.
 static bool checkGradient(BitmapScopedWriteAccess& pAccess, int x, int y, int count, int addX, int addY)
 {
