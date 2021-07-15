@@ -32,7 +32,7 @@ public:
             : nFieldSepCode(nFieldSep), nTextSepCode(nTextSep),
             bFixedWidth(false), bSaveAsShown(false), bQuoteAllText(false),
             bSaveNumberAsSuch(true), bSaveFormulas(false), bRemoveSpace(false),
-            bNewFilePerSheet(false)
+            nSheetToExport(0)
         { SetTextEncoding( nEnc ); }
 
     ScImportOptions& operator=( const ScImportOptions& rCpy ) = default;
@@ -51,9 +51,9 @@ public:
     bool        bSaveNumberAsSuch;
     bool        bSaveFormulas;
     bool        bRemoveSpace;
-    // currently only "0" for 'current sheet' and "-1" for all sheets (each to
-    // a separate file) are options
-    bool        bNewFilePerSheet;
+    // "0" for 'current sheet', "-1" for all sheets (each to a separate file),
+    // or 1-based specific sheet number (to a separate file).
+    sal_Int32   nSheetToExport;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

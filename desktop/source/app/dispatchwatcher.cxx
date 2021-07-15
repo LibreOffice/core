@@ -625,11 +625,20 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
                                     if (sFilterName == "Text - txt - csv (StarCalc)")
                                     {
                                         sal_Int32 nIdx(0);
-                                        // If the 11th token token is '-1' then we export a file
+                                        // If the 11th token is '-1' then we export a file
                                         // per sheet where the file name is based on the suggested
                                         // output filename concatenated with the sheet name, so adjust
                                         // the output and overwrite messages
-                                        bMultiFileTarget = sFilterOptions.getToken(11, ',', nIdx) == "-1";
+                                        // If the 11th token is not present or numeric 0 then the
+                                        // default sheet is exported with the output filename. If it
+                                        // is numeric >0 then that sheet (1-based) with the output
+                                        // filename concatenated with the sheet name. So even if
+                                        // that is a single file, the multi file target mechanism is
+                                        // used.
+                                        const OUString aTok(sFilterOptions.getToken(11, ',', nIdx));
+                                        // Actual validity is checked in Calc, here just check for
+                                        // presence of numeric value at start.
+                                        bMultiFileTarget = (!aTok.isEmpty() && aTok.toInt32() != 0);
                                     }
 
                                     conversionProperties[1].Value <<= sFilterName;
