@@ -885,25 +885,32 @@ void SbRtl_InStr(StarBASIC *, SbxArray & rPar, bool)
         }
         else
         {
-            if( !bTextMode )
+            const OUString& rStr1 = rPar.Get(nFirstStringPos)->GetOUString();
+            const sal_Int32 nrStr1Len = rStr1.getLength();
+            if (nStartPos > nrStr1Len)
             {
-                const OUString& rStr1 = rPar.Get(nFirstStringPos)->GetOUString();
-                nPos = rStr1.indexOf( rToken, nStartPos - 1 ) + 1;
+                // Start position is greater than the string being searched
+                nPos = 0;
             }
             else
             {
-                OUString aStr1 = rPar.Get(nFirstStringPos)->GetOUString();
-                OUString aToken = rToken;
+                if( !bTextMode )
+                {
+                    nPos = rStr1.indexOf( rToken, nStartPos - 1 ) + 1;
+                }
+                else
+                {
+                    // tdf#139840 - case-insensitive operation for non-ASCII characters
+                    i18nutil::SearchOptions2 aSearchOptions;
+                    aSearchOptions.searchString = rToken;
+                    aSearchOptions.AlgorithmType2 = util::SearchAlgorithms2::ABSOLUTE;
+                    aSearchOptions.transliterateFlags |= TransliterationFlags::IGNORE_CASE;
+                    utl::TextSearch textSearch(aSearchOptions);
 
-                // tdf#139840 - case-insensitive operation for non-ASCII characters
-                const css::lang::Locale& rLocale
-                    = Application::GetSettings().GetLanguageTag().getLocale();
-                css::uno::Reference<i18n::XCharacterClassification> xCharClass
-                    = vcl::unohelper::CreateCharacterClassification();
-                aStr1 = xCharClass->toUpper(aStr1, 0, aStr1.getLength(), rLocale);
-                aToken = xCharClass->toUpper(aToken, 0, aToken.getLength(), rLocale);
-
-                nPos = aStr1.indexOf( aToken, nStartPos-1 ) + 1;
+                    sal_Int32 nStart = nStartPos - 1;
+                    sal_Int32 nEnd = nrStr1Len;
+                    nPos = textSearch.SearchForward(rStr1, &nStart, &nEnd) ? nStart + 1 : 0;
+                }
             }
         }
         rPar.Get(0)->PutLong(nPos);
