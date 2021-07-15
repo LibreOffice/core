@@ -291,10 +291,16 @@ uno::Any GenericDragSource::directInvoke(const OUString& aName, const uno::Seque
     uno::Any aRet;
     const OUString sId("dragend");
     const OUString sTrans("gettransfer");
+    const OUString sClear("clear");
     if (aName == sId)
         fireDragEnd();
     else if (aName == sTrans)
         aRet <<= m_xTrans;
+    else if (aName == sClear)
+    {
+        m_xTrans.clear();
+        m_xListener.clear();
+    }
 
     return aRet;
 }
@@ -314,6 +320,7 @@ void GenericDragSource::fireDragEnd()
         m_xListener->dragDropEnd(aEv);
         m_xListener.clear();
     }
+    m_xTrans.clear();
 }
 
 Sequence< OUString > DragSource_getSupportedServiceNames()
