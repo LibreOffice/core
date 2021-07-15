@@ -25,68 +25,55 @@
 
 #include <chartview/ChartSfxItemIds.hxx>
 
-const sal_uInt16 nTitleWhichPairs[] =
-{
+const WhichRangesContainer nTitleWhichPairs(svl::Items<
     SCHATTR_TEXT_START, SCHATTR_TEXT_END,
     XATTR_LINE_FIRST, XATTR_LINE_LAST,              //  1000 -  1016  svx/xdef.hxx
     XATTR_FILL_FIRST, XATTR_FILL_LAST,              //  1018 -  1046  svx/xdef.hxx
     SDRATTR_SHADOW_FIRST, SDRATTR_SHADOW_LAST,      //  1067 -  1078  svx/svddef.hxx
     EE_ITEMS_START, EE_ITEMS_END,                             // Characters
-    SID_CHAR_DLG_PREVIEW_STRING, SID_CHAR_DLG_PREVIEW_STRING, // Characters
-    0
-};
+    SID_CHAR_DLG_PREVIEW_STRING, SID_CHAR_DLG_PREVIEW_STRING // Characters
+>::value);
 
-const sal_uInt16 nAxisWhichPairs[] =
-{
+const WhichRangesContainer nAxisWhichPairs(svl::Items<
     SCHATTR_TEXT_START, SCHATTR_TEXT_END,
     SCHATTR_AXIS_START, SCHATTR_AXIS_END,
     XATTR_LINE_FIRST, XATTR_LINE_LAST,                          //  1000 -  1016  svx/xdef.hxx
     EE_ITEMS_START, EE_ITEMS_END,                             // Characters
     SID_ATTR_NUMBERFORMAT_VALUE, SID_ATTR_NUMBERFORMAT_VALUE,   // 10585 - 10585  svx/svxids.hrc
     SID_ATTR_NUMBERFORMAT_SOURCE, SID_ATTR_NUMBERFORMAT_SOURCE, // 11432          svx/svxids.hrc
-    SID_CHAR_DLG_PREVIEW_STRING, SID_CHAR_DLG_PREVIEW_STRING, // Characters
-    0
-};
+    SID_CHAR_DLG_PREVIEW_STRING, SID_CHAR_DLG_PREVIEW_STRING // Characters
+>::value);
 
-const sal_uInt16 nAllAxisWhichPairs[] =
-{
+const WhichRangesContainer nAllAxisWhichPairs(svl::Items<
     SCHATTR_TEXT_START, SCHATTR_TEXT_END,
     SCHATTR_AXIS_LABEL_START, SCHATTR_AXIS_LABEL_END,
     XATTR_LINE_FIRST, XATTR_LINE_LAST,
     EE_ITEMS_START, EE_ITEMS_END,                             // Characters
-    SID_CHAR_DLG_PREVIEW_STRING, SID_CHAR_DLG_PREVIEW_STRING, // Characters
-    0
-};
+    SID_CHAR_DLG_PREVIEW_STRING, SID_CHAR_DLG_PREVIEW_STRING // Characters
+>::value);
 
-const sal_uInt16 nGridWhichPairs[] =
-{
-    XATTR_LINE_FIRST, XATTR_LINE_LAST,              //  1000 -  1016  svx/xdef.hxx
-    0
-};
+const WhichRangesContainer nGridWhichPairs(svl::Items<
+    XATTR_LINE_FIRST, XATTR_LINE_LAST              //  1000 -  1016  svx/xdef.hxx
+>::value);
 
-const sal_uInt16 nLegendWhichPairs[] =
-{
+const WhichRangesContainer nLegendWhichPairs(svl::Items<
     SCHATTR_LEGEND_START, SCHATTR_LEGEND_END,       //     3 -     3  sch/schattr.hxx
     XATTR_LINE_FIRST, XATTR_LINE_LAST,              //  1000 -  1016  svx/xdef.hxx
     XATTR_FILL_FIRST, XATTR_FILL_LAST,              //  1018 -  1046  svx/xdef.hxx
     SDRATTR_SHADOW_FIRST, SDRATTR_SHADOW_LAST,      //  1067 -  1078  svx/svddef.hxx
     EE_ITEMS_START, EE_ITEMS_END,                             // Characters
-    SID_CHAR_DLG_PREVIEW_STRING, SID_CHAR_DLG_PREVIEW_STRING, // Characters
-    0
-};
+    SID_CHAR_DLG_PREVIEW_STRING, SID_CHAR_DLG_PREVIEW_STRING // Characters
+>::value);
 
-const sal_uInt16 nDataLabelWhichPairs[] =
-{
+const WhichRangesContainer nDataLabelWhichPairs(svl::Items<
     SCHATTR_DATADESCR_START, SCHATTR_DATADESCR_END,
     SCHATTR_TEXT_DEGREES,SCHATTR_TEXT_DEGREES,
     EE_PARA_WRITINGDIR,EE_PARA_WRITINGDIR,
     SID_ATTR_NUMBERFORMAT_VALUE, SID_ATTR_NUMBERFORMAT_INFO,    /* 10585 - 10585  svx/svxids.hrc */
-    SID_ATTR_NUMBERFORMAT_SOURCE, SID_ATTR_NUMBERFORMAT_SOURCE, /* 11432          svx/svxids.hrc */
-    0
-};
+    SID_ATTR_NUMBERFORMAT_SOURCE, SID_ATTR_NUMBERFORMAT_SOURCE /* 11432          svx/svxids.hrc */
+>::value);
 
-const sal_uInt16 nDataPointWhichPairs[] =
-{
+const WhichRangesContainer nDataPointWhichPairs(svl::Items<
     SCHATTR_DATADESCR_START, SCHATTR_DATADESCR_END, /*     1 -     2  sch/schattr.hxx*/
     SCHATTR_TEXT_DEGREES, SCHATTR_TEXT_DEGREES,
     SCHATTR_STYLE_START,SCHATTR_STYLE_END,          /*    59 -    68  sch/schattr.hxx*/
@@ -99,12 +86,10 @@ const sal_uInt16 nDataPointWhichPairs[] =
     EE_ITEMS_START, EE_ITEMS_END,                   /*  3994 -  4037  editeng/eeitem.hxx */
     SID_ATTR_NUMBERFORMAT_VALUE, SID_ATTR_NUMBERFORMAT_INFO,    /* 10585 - 10585  svx/svxids.hrc */
     SID_ATTR_NUMBERFORMAT_SOURCE, SID_ATTR_NUMBERFORMAT_SOURCE, /* 11432          svx/svxids.hrc */
-    SID_CHAR_DLG_PREVIEW_STRING, SID_CHAR_DLG_PREVIEW_STRING,
-    0
-};
+    SID_CHAR_DLG_PREVIEW_STRING, SID_CHAR_DLG_PREVIEW_STRING
+>::value);
 
-const sal_uInt16 nTextLabelWhichPairs[] =
-{
+const WhichRangesContainer nTextLabelWhichPairs(svl::Items<
     SCHATTR_DATADESCR_START, SCHATTR_DATADESCR_END,
     SCHATTR_TEXT_DEGREES, SCHATTR_TEXT_DEGREES,
     SCHATTR_STYLE_SYMBOL, SCHATTR_STYLE_SYMBOL,
@@ -115,21 +100,17 @@ const sal_uInt16 nTextLabelWhichPairs[] =
     EE_ITEMS_START, EE_ITEMS_END,
     SID_ATTR_NUMBERFORMAT_VALUE, SID_ATTR_NUMBERFORMAT_INFO,
     SID_ATTR_NUMBERFORMAT_SOURCE, SID_ATTR_NUMBERFORMAT_SOURCE,
-    SID_CHAR_DLG_PREVIEW_STRING, SID_CHAR_DLG_PREVIEW_STRING,
-    0
-};
+    SID_CHAR_DLG_PREVIEW_STRING, SID_CHAR_DLG_PREVIEW_STRING
+>::value);
 
-const sal_uInt16 nSeriesOptionsWhichPairs[] =
-{
+const WhichRangesContainer nSeriesOptionsWhichPairs(svl::Items<
     SCHATTR_AXIS,SCHATTR_AXIS,                      /*    69          sch/schattr.hxx*/
     SCHATTR_BAR_OVERLAP,SCHATTR_BAR_CONNECT,         /*    98 - 100 (incl. SCHATTR_GAPWIDTH) */
-    SCHATTR_GROUP_BARS_PER_AXIS,SCHATTR_AXIS_FOR_ALL_SERIES,
-    0
-};
+    SCHATTR_GROUP_BARS_PER_AXIS,SCHATTR_AXIS_FOR_ALL_SERIES
+>::value);
 
 // nDataPointWhichPairs + nSeriesOptionsWhichPairs
-const sal_uInt16 nRowWhichPairs[] =
-{
+const WhichRangesContainer nRowWhichPairs(svl::Items<
     SCHATTR_DATADESCR_START, SCHATTR_DATADESCR_END, /*     1 -     2  sch/schattr.hxx*/
     SCHATTR_TEXT_DEGREES, SCHATTR_TEXT_DEGREES,
     SCHATTR_STYLE_START,SCHATTR_STYLE_END,          /*    59 -    68  sch/schattr.hxx*/
@@ -145,63 +126,48 @@ const sal_uInt16 nRowWhichPairs[] =
     EE_ITEMS_START, EE_ITEMS_END,                   /*  3994 -  4037  editeng/eeitem.hxx */
     SID_ATTR_NUMBERFORMAT_VALUE, SID_ATTR_NUMBERFORMAT_INFO,    /* 10585 - 10585  svx/svxids.hrc */
     SID_ATTR_NUMBERFORMAT_SOURCE, SID_ATTR_NUMBERFORMAT_SOURCE, /* 11432          svx/svxids.hrc */
-    SID_CHAR_DLG_PREVIEW_STRING, SID_CHAR_DLG_PREVIEW_STRING,
-    0
-};
+    SID_CHAR_DLG_PREVIEW_STRING, SID_CHAR_DLG_PREVIEW_STRING
+>::value);
 
-const sal_uInt16 nStatWhichPairs[]=
-{
+const WhichRangesContainer nStatWhichPairs(svl::Items<
     SCHATTR_STAT_START, SCHATTR_STAT_END,           //    45 -    52  sch/schattr.hxx
-    SCHATTR_REGRESSION_START, SCHATTR_REGRESSION_END, // 108 -   109
-    0
-};
+    SCHATTR_REGRESSION_START, SCHATTR_REGRESSION_END // 108 -   109
+>::value);
 
-const sal_uInt16 nErrorBarWhichPairs[]=
-{
+const WhichRangesContainer nErrorBarWhichPairs(svl::Items<
     SCHATTR_STAT_START, SCHATTR_STAT_END,           //    45 -    52  sch/schattr.hxx
-    XATTR_LINE_FIRST, XATTR_LINE_LAST,              //  1000 -  1016  svx/xdef.hxx
-    0
-};
+    XATTR_LINE_FIRST, XATTR_LINE_LAST              //  1000 -  1016  svx/xdef.hxx
+>::value);
 
 // for CharacterProperties
 
-const sal_uInt16 nCharacterPropertyWhichPairs[] =
-{
+const WhichRangesContainer nCharacterPropertyWhichPairs(svl::Items<
     EE_ITEMS_START, EE_ITEMS_END,                             // Characters
-    SID_CHAR_DLG_PREVIEW_STRING, SID_CHAR_DLG_PREVIEW_STRING, // Characters
-    0
-};
+    SID_CHAR_DLG_PREVIEW_STRING, SID_CHAR_DLG_PREVIEW_STRING // Characters
+>::value);
 
-const sal_uInt16 nLinePropertyWhichPairs[] =
-{
-    XATTR_LINE_FIRST, XATTR_LINE_LAST,              //  1000 -  1016  svx/xdef.hxx
-    0
-};
+const WhichRangesContainer nLinePropertyWhichPairs(svl::Items<
+    XATTR_LINE_FIRST, XATTR_LINE_LAST              //  1000 -  1016  svx/xdef.hxx
+>::value);
 
-const sal_uInt16 nLineAndFillPropertyWhichPairs[] =
-{
+const WhichRangesContainer nLineAndFillPropertyWhichPairs(svl::Items<
     XATTR_LINE_FIRST, XATTR_LINE_LAST,              //  1000 -  1016  svx/xdef.hxx
     XATTR_FILL_FIRST, XATTR_FILL_LAST,              //  1000 -  1016  svx/xdef.hxx
-    SDRATTR_SHADOW_FIRST, SDRATTR_SHADOW_LAST,      //  1067 -  1078  svx/svddef.hxx
-    0
-};
+    SDRATTR_SHADOW_FIRST, SDRATTR_SHADOW_LAST      //  1067 -  1078  svx/svddef.hxx
+>::value);
 
-const sal_uInt16 nRegressionCurveWhichPairs[] =
-{
+const WhichRangesContainer nRegressionCurveWhichPairs(svl::Items<
     SCHATTR_REGRESSION_START, SCHATTR_REGRESSION_END, // 108 -   109
-    XATTR_LINE_FIRST, XATTR_LINE_LAST,              //  1000 -  1016  svx/xdef.hxx
-    0
-};
+    XATTR_LINE_FIRST, XATTR_LINE_LAST              //  1000 -  1016  svx/xdef.hxx
+>::value);
 
-const sal_uInt16 nRegEquationWhichPairs[] =
-{
+const WhichRangesContainer nRegEquationWhichPairs(svl::Items<
     XATTR_LINE_FIRST, XATTR_LINE_LAST,              //  1000 -  1016  svx/xdef.hxx
     XATTR_FILL_FIRST, XATTR_FILL_LAST,              //  1018 -  1046  svx/xdef.hxx
     SDRATTR_SHADOW_FIRST, SDRATTR_SHADOW_LAST,      //  1067 -  1078  svx/svddef.hxx
     EE_ITEMS_START, EE_ITEMS_END,                             // Characters
     SID_ATTR_NUMBERFORMAT_VALUE, SID_ATTR_NUMBERFORMAT_VALUE,   // 10585 - 10585  svx/svxids.hrc
-    SID_CHAR_DLG_PREVIEW_STRING, SID_CHAR_DLG_PREVIEW_STRING, // Characters
-    0
-};
+    SID_CHAR_DLG_PREVIEW_STRING, SID_CHAR_DLG_PREVIEW_STRING // Characters
+>::value);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
