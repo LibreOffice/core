@@ -29,6 +29,7 @@
 #include <sfx2/sidebar/TabBar.hxx>
 #include <sfx2/viewfrm.hxx>
 
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
 #include <com/sun/star/frame/XFrameActionListener.hpp>
@@ -194,6 +195,7 @@ private:
     OUString msCurrentDeckId;
     AsynchronousCall maPropertyChangeForwarder;
     AsynchronousCall maContextChangeUpdate;
+    css::uno::Reference<css::beans::XPropertySet> mxThemePropertySet;
 
     /** Two flags control whether the deck is displayed or if only the
         tab bar remains visible.
