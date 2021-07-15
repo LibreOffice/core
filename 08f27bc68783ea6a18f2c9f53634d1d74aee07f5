@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "38d96ea0_ca74d111",
+        "filename": "sd/source/ui/func/fuolbull.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-15T19:58:40Z",
+      "side": 1,
+      "message": "I believe that there\u0027s no need to have a static const variable like this. It may be simply put to the SfxItemSet ctor below - the instance itself doesn\u0027t take memory, and only needed to pass its static member, right?\n\n    SfxItemSet aNewAttr(mpViewShell-\u003eGetPool(), svl::Items\u003cEE_PARA_NUMBULLET, EE_PARA_BULLET\u003e{});",
+      "revId": "08f27bc68783ea6a18f2c9f53634d1d74aee07f5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
