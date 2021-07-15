@@ -16,6 +16,24 @@
       "revId": "7bea7a2eeb029d661f5d0037041af277d23eea99",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "94cec928_af7058f5",
+        "filename": "sw/source/core/doc/tblafmt.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 742,
+      "author": {
+        "id": 1002855
+      },
+      "writtenOn": "2021-07-15T10:19:50Z",
+      "side": 1,
+      "message": "Done, thanks for the points!",
+      "parentUuid": "fe751ce6_9311a5f5",
+      "revId": "7bea7a2eeb029d661f5d0037041af277d23eea99",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
