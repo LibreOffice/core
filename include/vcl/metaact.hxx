@@ -1650,6 +1650,8 @@ public:
 
     const tools::PolyPolygon&  GetPolyPolygon() const { return maPolyPoly; }
     sal_uInt16              GetTransparence() const { return mnTransPercent; }
+    void                SetPolyPolygon(const tools::PolyPolygon& rPolyPoly) { maPolyPoly = rPolyPoly; }
+    void                SetTransparence(const sal_uInt16 nTransPercent) { mnTransPercent = nTransPercent; }
 
     bool                IsTransparent() const override { return true; }
 };
