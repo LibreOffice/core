@@ -1575,6 +1575,7 @@ public:
     explicit            MetaPushAction( PushFlags nFlags );
 
     PushFlags           GetFlags() const { return mnFlags; }
+    void                SetPushFlags(PushFlags nFlags) { mnFlags = nFlags; }
 };
 
 class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetaPopAction final : public MetaAction

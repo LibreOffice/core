@@ -290,7 +290,7 @@ rtl::Reference<MetaAction> SvmReader::MetaActionHandler(ImplMetaReadData* pData)
             return FontHandler(pData);
             break;
         case MetaActionType::PUSH:
-            pAction = new MetaPushAction;
+            return PushHandler();
             break;
         case MetaActionType::POP:
             pAction = new MetaPopAction;
@@ -1257,6 +1257,19 @@ rtl::Reference<MetaAction> SvmReader::FontHandler(ImplMetaReadData* pData)
         pData->meActualCharSet = osl_getThreadTextEncoding();
 
     pAction->SetFont(aFont);
+
+    return pAction;
+}
+
+rtl::Reference<MetaAction> SvmReader::PushHandler()
+{
+    auto pAction = new MetaPushAction();
+
+    VersionCompatRead aCompat(mrStream);
+    sal_uInt16 tmp;
+    mrStream.ReadUInt16(tmp);
+
+    pAction->SetPushFlags(static_cast<PushFlags>(tmp));
 
     return pAction;
 }
