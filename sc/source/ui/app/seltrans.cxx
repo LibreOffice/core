@@ -25,6 +25,7 @@
 #include <sfx2/docfile.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdouno.hxx>
+#include <comphelper/lok.hxx>
 
 #include <seltrans.hxx>
 #include <transobj.hxx>
@@ -157,6 +158,9 @@ ScSelectionTransferObj::~ScSelectionTransferObj()
         ForgetView();
         pScMod->SetSelectionTransfer( nullptr );
     }
+    else if (comphelper::LibreOfficeKit::isActive())
+        ForgetView();
+
 
     OSL_ENSURE( !pView, "ScSelectionTransferObj dtor: ForgetView not called" );
 }
