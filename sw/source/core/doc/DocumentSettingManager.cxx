@@ -653,7 +653,7 @@ void sw::DocumentSettingManager::ReplaceCompatibilityOptions(const DocumentSetti
     mbClipAsCharacterAnchoredWriterFlyFrames = rSource.mbClipAsCharacterAnchoredWriterFlyFrames;
     mbUnixForceZeroExtLeading = rSource.mbUnixForceZeroExtLeading;
     mbTabRelativeToIndent = rSource.mbTabRelativeToIndent;
-    // No mbProtectForm
+    mbProtectForm = rSource.mbProtectForm;
     mbMsWordCompTrailingBlanks = rSource.mbMsWordCompTrailingBlanks;
     mbMsWordCompMinLineHeightByFly = rSource.mbMsWordCompMinLineHeightByFly;
     mbInvertBorderSpacing = rSource.mbInvertBorderSpacing;
