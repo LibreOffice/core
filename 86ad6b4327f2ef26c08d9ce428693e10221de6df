@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "82ffbd29_06121274",
+        "filename": "writerfilter/source/dmapper/DomainMapperTableHandler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1421,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-07-15T17:19:43Z",
+      "side": 1,
+      "message": "we can skip the loops:\n\nsize_t nRow \u003d m_aTableRanges.size();\nsize_t nCell \u003d m_aTableRanges[nRow].size();",
+      "range": {
+        "startLine": 1418,
+        "startChar": 7,
+        "endLine": 1421,
+        "endChar": 13
+      },
+      "revId": "86ad6b4327f2ef26c08d9ce428693e10221de6df",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "043d454c_c9f01289",
+        "filename": "writerfilter/source/dmapper/DomainMapperTableHandler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1448,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-07-15T17:19:43Z",
+      "side": 1,
+      "message": "If this is really needed, likely it\u0027s not enough to modify the last paragraph of the last cell. (I was wrong, when I said that.) We need to modify last paragraphs of all cells of the last row.",
+      "range": {
+        "startLine": 1448,
+        "startChar": 36,
+        "endLine": 1448,
+        "endChar": 147
+      },
+      "revId": "86ad6b4327f2ef26c08d9ce428693e10221de6df",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
