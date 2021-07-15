@@ -1619,6 +1619,7 @@ public:
     explicit            MetaRasterOpAction( RasterOp eRasterOp );
 
     RasterOp            GetRasterOp() const { return meRasterOp; }
+    void                SetRasterOp(const RasterOp eRasterOp) { meRasterOp = eRasterOp; }
 };
 
 class SAL_DLLPUBLIC_RTTI MetaTransparentAction final : public MetaAction

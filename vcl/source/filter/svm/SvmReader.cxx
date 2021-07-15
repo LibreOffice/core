@@ -296,7 +296,7 @@ rtl::Reference<MetaAction> SvmReader::MetaActionHandler(ImplMetaReadData* pData)
             return PopHandler();
             break;
         case MetaActionType::RASTEROP:
-            pAction = new MetaRasterOpAction;
+            return RasterOpHandler();
             break;
         case MetaActionType::Transparent:
             pAction = new MetaTransparentAction;
@@ -1279,6 +1279,20 @@ rtl::Reference<MetaAction> SvmReader::PopHandler()
     auto pAction = new MetaPopAction();
 
     VersionCompatRead aCompat(mrStream);
+
+    return pAction;
+}
+
+rtl::Reference<MetaAction> SvmReader::RasterOpHandler()
+{
+    auto pAction = new MetaRasterOpAction();
+
+    sal_uInt16 nTmp16(0);
+
+    VersionCompatRead aCompat(mrStream);
+    mrStream.ReadUInt16(nTmp16);
+
+    pAction->SetRasterOp(static_cast<RasterOp>(nTmp16));
 
     return pAction;
 }
