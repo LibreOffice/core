@@ -850,7 +850,8 @@ bool ImplHandleMouseEvent2( const VclPtr<vcl::Window>& xWindow, MouseNotifyEvent
         pDragWin->ImplGetFrameData()->mnMouseMode == MouseEventModifiers::DRAGSTART)
     {
         css::uno::Any aRet;
-        const OUString aMethod("gettransfer");
+        const OUString aClear("clear");
+        const OUString aTransfer("gettransfer");
         const css::uno::Sequence<css::uno::Any> aParam;
 
         css::uno::Reference<css::datatransfer::XTransferable> xTransfer;
@@ -864,7 +865,7 @@ bool ImplHandleMouseEvent2( const VclPtr<vcl::Window>& xWindow, MouseNotifyEvent
 
         if (xInvoke.is())
         {
-            aRet = xInvoke->directInvoke(aMethod, aParam);
+            aRet = xInvoke->directInvoke(aTransfer, aParam);
             aRet >>= xTransfer;
         }
 
@@ -881,6 +882,9 @@ bool ImplHandleMouseEvent2( const VclPtr<vcl::Window>& xWindow, MouseNotifyEvent
                  css::datatransfer::dnd::DNDConstants::ACTION_LINK),
                  xTransfer);
         }
+
+        if (xInvoke.is())
+            xInvoke->directInvoke(aClear, aParam);
 
         pDragWin->ImplGetFrameData()->mnMouseMode = MouseEventModifiers::NONE;
         return true;
