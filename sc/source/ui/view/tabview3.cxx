@@ -485,7 +485,8 @@ void ScTabView::CheckSelectionTransfer()
     if (pOld)
         pOld->ForgetView();
 
-    pScMod->SetSelectionTransfer( pNew.get() );
+    if (!comphelper::LibreOfficeKit::isActive())
+        pScMod->SetSelectionTransfer( pNew.get() );
 
     // tdf#124975/tdf#136242 changing the calc selection can trigger removal of the
     // selection of an open RefDlg dialog, so don't inform the
