@@ -41,7 +41,6 @@
 #include "unoconversionutilities.hxx"
 #include "windata.hxx"
 using namespace cppu;
-using namespace std;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::bridge;
 using namespace com::sun::star::bridge::oleautomation;

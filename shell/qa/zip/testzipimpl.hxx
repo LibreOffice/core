@@ -26,13 +26,11 @@
 #include <algorithm>
 #include <sal/types.h>
 
-using namespace std;
-
 class TestZipImpl
 {
 private:
     ZipFile zipFile;
-    vector<string> expectedContents;
+    std::vector<std::string> expectedContents;
 
 public:
     explicit TestZipImpl(StreamInterface* stream);
