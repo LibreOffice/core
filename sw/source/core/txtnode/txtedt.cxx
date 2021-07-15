@@ -1357,7 +1357,11 @@ SwRect SwTextFrame::AutoSpell_(SwTextNode & rNode, sal_Int32 nActPos)
                 }
                 else if( bAddAutoCmpl && rACW.GetMinWordLen() <= rWord.getLength() )
                 {
-                    rACW.InsertWord( rWord, rDoc );
+                    // tdf#119695 only add the word if the cursor position is outside the word
+                    // so that the incomplete words are not added as autocomplete candidates
+                    bool bCursorOutsideWord = nActPos > nBegin + nLen || nActPos < nBegin;
+                    if (bCursorOutsideWord)
+                        rACW.InsertWord(rWord, rDoc);
                 }
             }
         }
