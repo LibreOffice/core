@@ -290,8 +290,11 @@ uno::Any GenericDragSource::directInvoke(const OUString& aName, const uno::Seque
 {
     uno::Any aRet;
     const OUString sId("dragend");
+    const OUString sTrans("gettransfer");
     if (aName == sId)
         fireDragEnd();
+    else if (aName == sTrans)
+        aRet <<= m_xTrans;
 
     return aRet;
 }
