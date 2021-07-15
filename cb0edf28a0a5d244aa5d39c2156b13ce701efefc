@@ -1,0 +1,164 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f93b9128_bc5e2f6b",
+        "filename": "sc/source/core/tool/address.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 455,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-07-15T15:00:09Z",
+      "side": 1,
+      "message": "This lacks a check if it\u0027s really the [0] case that we want to detect here. i.e. the rExternDocName index i must be 0.",
+      "revId": "cb0edf28a0a5d244aa5d39c2156b13ce701efefc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bc2218b2_3cf0b3db",
+        "filename": "sc/source/core/tool/address.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 458,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-07-15T15:00:09Z",
+      "side": 1,
+      "message": "What exactly can occur between the passed position and the \u0027!\u0027 that we want to parse away here? The \"[0]\" string? Then that should be checked and not quietly skip something else.",
+      "revId": "cb0edf28a0a5d244aa5d39c2156b13ce701efefc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "71d3dd47_ee87e925",
+        "filename": "sc/source/core/tool/address.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 463,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-07-15T15:00:09Z",
+      "side": 1,
+      "message": "If there was whitespace occuring behind the \u0027!\u0027 wouldn\u0027t that be an error, so it shouldn\u0027t be silently parsed away?",
+      "range": {
+        "startLine": 463,
+        "startChar": 20,
+        "endLine": 463,
+        "endChar": 37
+      },
+      "revId": "cb0edf28a0a5d244aa5d39c2156b13ce701efefc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4134e2d7_6054a05c",
+        "filename": "sc/source/core/tool/compiler.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 3535,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-07-15T15:00:09Z",
+      "side": 1,
+      "message": "This now would be an always true condition because mnCurrentSheetTab is already initialized and reset with -1. Looks wrong to me. If this is intended to indicate that [0]!GlobalName case then mnCurrentSheetTab should be initialized/reset to -2 and explicitly set to -1 if the case is detected.",
+      "range": {
+        "startLine": 3535,
+        "startChar": 36,
+        "endLine": 3535,
+        "endChar": 59
+      },
+      "revId": "cb0edf28a0a5d244aa5d39c2156b13ce701efefc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e9133df6_326505a2",
+        "filename": "sc/source/core/tool/compiler.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 3543,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-07-15T15:00:09Z",
+      "side": 1,
+      "message": "Asking ScDocument::GetRangeName(-1) always returns nullptr, so that should be checked beforehand.",
+      "range": {
+        "startLine": 3541,
+        "startChar": 8,
+        "endLine": 3543,
+        "endChar": 55
+      },
+      "revId": "cb0edf28a0a5d244aa5d39c2156b13ce701efefc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b1e9dcf2_e4c90953",
+        "filename": "sc/source/core/tool/compiler.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 5287,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-07-15T15:00:09Z",
+      "side": 1,
+      "message": "I think this is not correct, or at least unnecessary. Why prefix the sheet name for sheet-local names on the same sheet (they always take precedence over a same global name), and if so, why only for Excel conventions? Is it something Excel always does? Furthermore, is it expected or required to also/only be stored as such in the OOXML format?\n\nIf the intention is only to indicate all sheet-local names in the UI then we should do it for all syntax, but in a separate unrelated change.",
+      "revId": "cb0edf28a0a5d244aa5d39c2156b13ce701efefc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "210d59ba_1dbfbcfe",
+        "filename": "sc/source/core/tool/compiler.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 5300,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-07-15T15:00:09Z",
+      "side": 1,
+      "message": "This is wrong, certainly unexpected at least in the UI. If it is necessary to do so for OOXML storage (if so, could you please point me to the relevant OOXML/ECMA specification section), but I doubt that because global names always worked without, then it shouldn\u0027t be done for all Excel address conventions but only for OOXML formula grammar, i.e. would require to ask FormulaGrammar::isOOXML(meGrammar).",
+      "revId": "cb0edf28a0a5d244aa5d39c2156b13ce701efefc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "640e05bc_25b8c0a4",
+        "filename": "sc/source/core/tool/reftokenhelper.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-07-15T15:00:09Z",
+      "side": 1,
+      "message": "This return false is unnecessary as it\u0027s done at the function\u0027s end. Just break after the switch case.",
+      "range": {
+        "startLine": 161,
+        "startChar": 12,
+        "endLine": 161,
+        "endChar": 24
+      },
+      "revId": "cb0edf28a0a5d244aa5d39c2156b13ce701efefc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
