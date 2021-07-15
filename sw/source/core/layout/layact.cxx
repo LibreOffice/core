@@ -1348,7 +1348,10 @@ bool SwLayAction::FormatLayout( OutputDevice *pRenderContext, SwLayoutFrame *pLa
             }
             // Skip the ones already registered for deletion
             else if( !pLow->IsSctFrame() || static_cast<SwSectionFrame*>(pLow)->GetSection() )
+            {
+                SwFrameDeleteGuard aDelGuard(pLow); // crash seen in crashtesting with fdo53985-1.docx
                 bChanged |= FormatLayout( pRenderContext, static_cast<SwLayoutFrame*>(pLow), bAddRect );
+            }
         }
         else if ( m_pImp->GetShell()->IsPaintLocked() )
             // Shortcut to minimize the cycles. With Lock, the
