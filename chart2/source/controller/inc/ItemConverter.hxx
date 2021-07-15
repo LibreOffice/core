@@ -116,18 +116,9 @@ public:
 
 protected:
 
-    /** implement this method to provide an array of which-ranges of the form:
-
-        const sal_uInt16 aMyPairs[] =
-        {
-            from_1, to_1,
-            from_2, to_2,
-            ...
-            from_n, to_n,
-            0
-        };
+    /** implement this method to provide an array of which-ranges
     */
-    virtual const sal_uInt16 * GetWhichPairs() const = 0;
+    virtual const WhichRangesContainer& GetWhichPairs() const = 0;
 
     /** implement this method to return a Property object for a given which id.
 

@@ -148,22 +148,21 @@ GraphicPropertyItemConverter::GraphicPropertyItemConverter(
 GraphicPropertyItemConverter::~GraphicPropertyItemConverter()
 {}
 
-const sal_uInt16 * GraphicPropertyItemConverter::GetWhichPairs() const
+const WhichRangesContainer& GraphicPropertyItemConverter::GetWhichPairs() const
 {
-    const sal_uInt16 * pResult = nullptr;
-
     switch( m_GraphicObjectType )
     {
         case GraphicObjectType::LineDataPoint:
         case GraphicObjectType::FilledDataPoint:
-            pResult = nRowWhichPairs; break;
+            return nRowWhichPairs;
         case GraphicObjectType::LineProperties:
-            pResult = nLinePropertyWhichPairs; break;
+            return nLinePropertyWhichPairs;
         case GraphicObjectType::LineAndFillProperties:
-            pResult = nLineAndFillPropertyWhichPairs; break;
+            return nLineAndFillPropertyWhichPairs;
     }
 
-    return pResult;
+    static const WhichRangesContainer empty;
+    return empty;
 }
 
 bool GraphicPropertyItemConverter::GetItemProperty( tWhichIdType nWhichId, tPropertyNameWithMemberId & rOutProperty ) const
