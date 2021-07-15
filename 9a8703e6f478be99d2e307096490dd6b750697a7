@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "0c15b4c2_91bc75a8",
+        "filename": "writerfilter/source/dmapper/GraphicImport.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1064,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2021-07-15T23:23:45Z",
+      "side": 1,
+      "message": "Doing the conversion in double has together with the following rotation less rounding errors.",
+      "parentUuid": "3bebdb41_1da10ecd",
+      "revId": "9a8703e6f478be99d2e307096490dd6b750697a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6c046443_9efa0d01",
         "filename": "writerfilter/source/dmapper/GraphicImport.cxx",
         "patchSetId": 4
