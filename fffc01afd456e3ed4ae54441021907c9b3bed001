@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a6a618c_764a2254",
+        "filename": "cui/source/inc/FontFeatures.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-07-15T07:34:33Z",
+      "side": 1,
+      "message": "needs a \n   /* vim:set shiftwidth\u003d4 softtabstop\u003d4 expandtab: */\nline at the end",
+      "revId": "fffc01afd456e3ed4ae54441021907c9b3bed001",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "302373e6_100d058c",
+        "filename": "cui/source/util/FontFeatures.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-07-15T07:34:33Z",
+      "side": 1,
+      "message": "and here",
+      "revId": "fffc01afd456e3ed4ae54441021907c9b3bed001",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
