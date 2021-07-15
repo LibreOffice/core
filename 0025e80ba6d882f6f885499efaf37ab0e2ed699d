@@ -16,6 +16,24 @@
       "revId": "0025e80ba6d882f6f885499efaf37ab0e2ed699d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0241d4d5_0b5123e1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-07-15T06:50:02Z",
+      "side": 1,
+      "message": "Yes, \"+\" is really \"and\" this commit message, sorry. :-)",
+      "parentUuid": "4a3e72a2_e8ce431d",
+      "revId": "0025e80ba6d882f6f885499efaf37ab0e2ed699d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
