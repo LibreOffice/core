@@ -43,6 +43,7 @@ namespace sdr::overlay { class OverlayManager; }
 
 class FmFormView;
 struct ScTableInfo;
+struct ScDragData;
 class ScDPObject;
 class ScDPFieldButton;
 class ScOutputData;
@@ -253,8 +254,8 @@ class SAL_DLLPUBLIC_RTTI ScGridWindow : public vcl::Window, public DropTargetHel
 
     void            DropScroll( const Point& rMousePos );
 
-    sal_Int8        AcceptPrivateDrop( const AcceptDropEvent& rEvt );
-    sal_Int8        ExecutePrivateDrop( const ExecuteDropEvent& rEvt );
+    sal_Int8        AcceptPrivateDrop( const AcceptDropEvent& rEvt, const ScDragData& rData );
+    sal_Int8        ExecutePrivateDrop( const ExecuteDropEvent& rEvt, const ScDragData& rData );
     sal_Int8        DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPosX, SCROW nDestPosY,
                                      const Point& rLogicPos, sal_Int8 nDndAction );
 
