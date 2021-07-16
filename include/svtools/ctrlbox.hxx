@@ -291,7 +291,7 @@ private:
 class SVT_DLLPUBLIC SvtCalendarBox
 {
 public:
-    SvtCalendarBox(std::unique_ptr<weld::MenuButton> pControl);
+    SvtCalendarBox(std::unique_ptr<weld::MenuButton> pControl, bool bUseLabel = true);
     ~SvtCalendarBox();
 
     weld::MenuButton& get_button() { return *m_xControl; }
@@ -316,6 +316,8 @@ public:
 private:
     DECL_LINK(SelectHdl, weld::Calendar&, void);
     DECL_LINK(ActivateHdl, weld::Calendar&, void);
+
+    bool m_bUseLabel;
 
     std::unique_ptr<weld::MenuButton> m_xControl;
     std::unique_ptr<weld::Builder> m_xBuilder;
