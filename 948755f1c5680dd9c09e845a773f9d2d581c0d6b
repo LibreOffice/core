@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "630f493f_b2865794",
+        "filename": "basic/source/runtime/methods.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 889,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-07-16T07:04:38Z",
+      "side": 1,
+      "message": "A question: is it worth here to declare it as const? Does it help the compiler to optimize further or is the compiler smart enough to check that this variable does not get changed? Is it good practice in LO? Thx for the clarificarions in adavance.",
+      "revId": "948755f1c5680dd9c09e845a773f9d2d581c0d6b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
