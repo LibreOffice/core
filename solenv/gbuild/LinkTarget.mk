@@ -166,9 +166,9 @@ endef
 # Overview of dependencies and tasks of LinkTarget
 #
 # target                      task                         depends on
-# LinkTarget                  linking                      AsmObject CObject CxxObject GenCObject GenCxxObject ObjCObject ObjCxxObject CxxClrObject GenCxxClrObject
+# LinkTarget                  linking                      AsmObject CObject CxxObject GenCObject GenCxxObject ObjCObject ObjCxxObject GenObjCObject GenObjCxxObject CxxClrObject GenCxxClrObject
 #                                                          LinkTarget/headers
-# LinkTarget/dep              joined dep file              AsmObject/dep CObject/dep CxxObject/dep GenCObject/dep GenCxxObject/dep ObjCObject/dep ObjCxxObject/dep CxxClrObject/dep GenCxxClrObject/dep
+# LinkTarget/dep              joined dep file              AsmObject/dep CObject/dep CxxObject/dep GenCObject/dep GenCxxObject/dep ObjCObject/dep ObjCxxObject/dep GenObjCObject/dep GenObjCxxObject/dep CxxClrObject/dep GenCxxClrObject/dep
 #                                                          | LinkTarget/headers
 # LinkTarget/headers          all headers available
 #                             including own generated
@@ -181,6 +181,10 @@ endef
 #                              generated source
 # ObjCObject                  objective c compile          | LinkTarget/headers
 # ObjCxxObject                objective c++ compile        | LinkTarget/headers
+# GenObjCObject               objective c compile from     | LinkTarget/headers
+#                              generated source
+# GenObjCxxObject             objective c++ compile from   | LinkTarget/headers
+#                              generated source
 # CxxClrObject                C++ CLR compile              | LinkTarget/headers
 # GenCxxClrObject             C++ CLR compile from         | LinkTarget/headers
 #                              generated source
@@ -191,8 +195,10 @@ endef
 # CxxObject/dep               dependencies                 that are populated upon compile
 # GenCObject/dep              dependencies
 # GenCxxObject/dep            dependencies
-# ObjCObject/dep            dependencies
+# ObjCObject/dep              dependencies
 # ObjCxxObject/dep            dependencies
+# GenObjCObject/dep           dependencies
+# GenObjCxxObject/dep         dependencies
 # CxxClrObject/dep            dependencies
 # GenCxxClrObject/dep         dependencies
 # AsmObject/dep               dependencies
@@ -510,6 +516,54 @@ $(call gb_ObjCObject_get_dep_target,%) :
 endif
 
 
+# GenObjCObject class
+
+gb_GenObjCObject_get_source = $(WORKDIR)/$(1).m
+
+$(call gb_GenObjCObject_get_target,%) : $(gb_FORCE_COMPILE_ALL_TARGET)
+	$(call gb_Output_announce,$*.m,$(true),OCC,3)
+	$(call gb_Trace_StartRange,$*.m,OCC)
+	test -f $(call gb_GenObjCObject_get_source,$*) || (echo "Missing generated source file $(call gb_GenObjCObject_get_source,$*)" && false)
+	$(call gb_CObject__command_pattern,$@,$(T_OBJCFLAGS) $(T_OBJCFLAGS_APPEND),$(call gb_GenObjCObject_get_source,$*),$(call gb_GenObjCObject_get_dep_target,$*),$(COMPILER_PLUGINS),$(T_SYMBOLS))
+	$(call gb_Trace_EndRange,$*.m,OCC)
+
+ifeq ($(gb_FULLDEPS),$(true))
+$(dir $(call gb_GenObjCObject_get_dep_target,%)).dir :
+	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
+
+$(dir $(call gb_GenObjCObject_get_dep_target,%))%/.dir :
+	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
+
+$(call gb_GenObjCObject_get_dep_target,%) :
+	$(if $(wildcard $@),touch $@)
+
+endif
+
+
+# GenObjCxxObject class
+
+gb_GenObjCxxObject_get_source = $(WORKDIR)/$(1).mm
+
+$(call gb_GenObjCxxObject_get_target,%) : $(gb_FORCE_COMPILE_ALL_TARGET)
+	$(call gb_Output_announce,$*.mm,$(true),OCX,3)
+	$(call gb_Trace_StartRange,$*.mm,OCX)
+	test -f $(call gb_GenObjCxxObject_get_source,$*) || (echo "Missing generated source file $(call gb_GenObjCxxObject_get_source,$*)" && false)
+	$(call gb_CObject__command_pattern,$@,$(T_OBJCXXFLAGS) $(T_OBJCXXFLAGS_APPEND),$(call gb_GenObjCxxObject_get_source,$*),$(call gb_GenObjCxxObject_get_dep_target,$*),$(COMPILER_PLUGINS),$(T_SYMBOLS))
+	$(call gb_Trace_EndRange,$*.mm,OCX)
+
+ifeq ($(gb_FULLDEPS),$(true))
+$(dir $(call gb_GenObjCxxObject_get_dep_target,%)).dir :
+	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
+
+$(dir $(call gb_GenObjCxxObject_get_dep_target,%))%/.dir :
+	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
+
+$(call gb_GenObjCxxObject_get_dep_target,%) :
+	$(if $(wildcard $@),touch $@)
+
+endif
+
+
 # CxxClrObject class
 #
 
@@ -592,6 +646,12 @@ $(WORKDIR)/Clean/LinkTarget/% :
 		$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object))) \
 		$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_dep_target,$(object))) \
 		$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_dwo_target,$(object))) \
+		$(foreach object,$(GENOBJCOBJECTS),$(call gb_GenObjCObject_get_target,$(object))) \
+		$(foreach object,$(GENOBJCOBJECTS),$(call gb_GenObjCObject_get_dep_target,$(object))) \
+		$(foreach object,$(GENOBJCOBJECTS),$(call gb_GenObjCObject_get_dwo_target,$(object))) \
+		$(foreach object,$(GENOBJCXXOBJECTS),$(call gb_GenObjCxxObject_get_target,$(object))) \
+		$(foreach object,$(GENOBJCXXOBJECTS),$(call gb_GenObjCxxObject_get_dep_target,$(object))) \
+		$(foreach object,$(GENOBJCXXOBJECTS),$(call gb_GenObjCxxObject_get_dwo_target,$(object))) \
 		$(foreach object,$(GENCXXCLROBJECTS),$(call gb_GenCxxClrObject_get_target,$(object))) \
 		$(foreach object,$(GENCXXCLROBJECTS),$(call gb_GenCxxClrObject_get_dep_target,$(object))) \
 		$(foreach object,$(GENCXXCLROBJECTS),$(call gb_GenCxxClrObject_get_dwo_target,$(object))) \
@@ -623,6 +683,8 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(foreach object,$(ASMOBJECTS),$(call gb_AsmObject_get_dep_target,$(object)))\
 		$(foreach object,$(GENCOBJECTS),$(call gb_GenCObject_get_dep_target,$(object))) \
 		$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_dep_target,$(object))) \
+		$(foreach object,$(GENOBJCOBJECTS),$(call gb_GenObjCObject_get_dep_target,$(object))) \
+		$(foreach object,$(GENOBJCXXOBJECTS),$(call gb_GenObjCxxObject_get_dep_target,$(object))) \
 		$(foreach object,$(GENCXXCLROBJECTS),$(call gb_GenCxxClrObject_get_dep_target,$(object))) \
 		) && \
 	$(call gb_Executable_get_command,concat-deps) $${RESPONSEFILE} > $(1)) && \
@@ -642,6 +704,8 @@ TEMPFILE=$(call var2file,$(shell $(gb_MKTEMP)),200,\
 	$(foreach object,$(ASMOBJECTS),$(call gb_AsmObject_get_target,$(object))) \
 	$(foreach object,$(GENCOBJECTS),$(call gb_GenCObject_get_target,$(object))) \
 	$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object))) \
+	$(foreach object,$(GENOBJCOBJECTS),$(call gb_GenObjCObject_get_target,$(object))) \
+	$(foreach object,$(GENOBJCXXOBJECTS),$(call gb_GenObjCxxObject_get_target,$(object))) \
 	$(foreach object,$(GENCXXCLROBJECTS),$(call gb_GenCxxClrObject_get_target,$(object))) \
 	$(PCHOBJS) \
 	$(foreach extraobjectlist,$(EXTRAOBJECTLISTS),$(shell cat $(extraobjectlist)))) && \
@@ -788,6 +852,10 @@ $(call gb_LinkTarget_get_target,$(1)) : GENCOBJECTS :=
 $(call gb_LinkTarget_get_clean_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : GENCXXOBJECTS :=
 $(call gb_LinkTarget_get_clean_target,$(1)) \
+$(call gb_LinkTarget_get_target,$(1)) : GENOBJCOBJECTS :=
+$(call gb_LinkTarget_get_clean_target,$(1)) \
+$(call gb_LinkTarget_get_target,$(1)) : GENOBJCXXOBJECTS :=
+$(call gb_LinkTarget_get_clean_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : GENCXXCLROBJECTS :=
 $(call gb_LinkTarget_get_target,$(1)) : T_CFLAGS := $$(gb_LinkTarget_CFLAGS)
 $(call gb_LinkTarget_get_target,$(1)) : T_CFLAGS_APPEND :=
@@ -849,6 +917,8 @@ $(call gb_LinkTarget_get_dep_target,$(1)) : CXXCLROBJECTS :=
 $(call gb_LinkTarget_get_dep_target,$(1)) : ASMOBJECTS :=
 $(call gb_LinkTarget_get_dep_target,$(1)) : GENCOBJECTS :=
 $(call gb_LinkTarget_get_dep_target,$(1)) : GENCXXOBJECTS :=
+$(call gb_LinkTarget_get_dep_target,$(1)) : GENOBJCOBJECTS :=
+$(call gb_LinkTarget_get_dep_target,$(1)) : GENOBJCXXOBJECTS :=
 $(call gb_LinkTarget_get_dep_target,$(1)) : GENCXXCLROBJECTS :=
 $(call gb_LinkTarget_get_dep_target,$(1)) : YACCOBJECTS :=
 endif
@@ -1331,6 +1401,56 @@ define gb_LinkTarget_add_generated_cxx_object
 $(call gb_LinkTarget_add_generated_cxx_object_internal,$(1),$(2),$(3),$(4))
 endef
 
+# call gb_LinkTarget_add_generated_objc_object,linktarget,sourcefile,cflags,linktargetmakefilename
+define gb_LinkTarget_add_generated_objc_object
+$(call gb_LinkTarget_get_target,$(1)) : GENOBJCOBJECTS += $(2)
+$(call gb_LinkTarget_get_clean_target,$(1)) : GENOBJCOBJECTS += $(2)
+
+$(call gb_LinkTarget_get_target,$(1)) : $(call gb_GenObjCObject_get_target,$(2))
+$(call gb_GenObjCObject_get_target,$(2)) : $(call gb_GenObjCObject_get_source,$(2))
+# Often gb_GenObjCObject_get_source does not have its own rule and is only a byproduct.
+# That's why we need this order-only dependency on gb_Helper_MISCDUMMY
+$(call gb_GenObjCObject_get_source,$(2)) : | $(gb_Helper_MISCDUMMY)
+$(call gb_GenObjCObject_get_target,$(2)) : | $(call gb_LinkTarget_get_headers_target,$(1))
+$(call gb_GenObjCObject_get_target,$(2)) : WARNINGS_NOT_ERRORS := $(true)
+$(call gb_GenObjCObject_get_target,$(2)) : T_OBJCFLAGS += $(call gb_LinkTarget__get_objcflags,$(4)) $(3)
+$(call gb_GenObjCObject_get_target,$(2)) : \
+	OBJECTOWNER := $(call gb_Object__owner,$(2),$(1))
+
+ifeq ($(gb_FULLDEPS),$(true))
+$(call gb_LinkTarget_get_dep_target,$(1)) : GENOBJCOBJECTS += $(2)
+$(call gb_LinkTarget_get_dep_target,$(1)) : $(call gb_GenObjCObject_get_dep_target,$(2))
+$(call gb_GenObjCObject_get_dep_target,$(2)) :| $(dir $(call gb_GenObjCObject_get_dep_target,$(2))).dir
+$(call gb_GenObjCObject_get_target,$(2)) :| $(dir $(call gb_GenObjCObject_get_dep_target,$(2))).dir
+endif
+
+endef
+
+# call gb_LinkTarget_add_generated_objcxx_object,linktarget,sourcefile,cflags,linktargetmakefilename
+define gb_LinkTarget_add_generated_objcxx_object
+$(call gb_LinkTarget_get_target,$(1)) : GENOBJCXXOBJECTS += $(2)
+$(call gb_LinkTarget_get_clean_target,$(1)) : GENOBJCXXOBJECTS += $(2)
+
+$(call gb_LinkTarget_get_target,$(1)) : $(call gb_GenObjCxxObject_get_target,$(2))
+$(call gb_GenObjCxxObject_get_target,$(2)) : $(call gb_GenObjCxxObject_get_source,$(2))
+# Often gb_GenObjCxxObject_get_source does not have its own rule and is only a byproduct.
+# That's why we need this order-only dependency on gb_Helper_MISCDUMMY
+$(call gb_GenObjCxxObject_get_source,$(2)) : | $(gb_Helper_MISCDUMMY)
+$(call gb_GenObjCxxObject_get_target,$(2)) : | $(call gb_LinkTarget_get_headers_target,$(1))
+$(call gb_GenObjCxxObject_get_target,$(2)) : WARNINGS_NOT_ERRORS := $(true)
+$(call gb_GenObjCxxObject_get_target,$(2)) : T_OBJCXXFLAGS += $(call gb_LinkTarget__get_objcxxflags,$(4)) $(3)
+$(call gb_GenObjCxxObject_get_target,$(2)) : \
+	OBJECTOWNER := $(call gb_Object__owner,$(2),$(1))
+
+ifeq ($(gb_FULLDEPS),$(true))
+$(call gb_LinkTarget_get_dep_target,$(1)) : GENOBJCXXOBJECTS += $(2)
+$(call gb_LinkTarget_get_dep_target,$(1)) : $(call gb_GenObjCxxObject_get_dep_target,$(2))
+$(call gb_GenObjCxxObject_get_dep_target,$(2)) :| $(dir $(call gb_GenObjCxxObject_get_dep_target,$(2))).dir
+$(call gb_GenObjCxxObject_get_target,$(2)) :| $(dir $(call gb_GenObjCxxObject_get_dep_target,$(2))).dir
+endif
+
+endef
+
 # call gb_LinkTarget_add_generated_cxxclrobject,linktarget,sourcefile,cxxclrflags,linktargetmakefilename
 define gb_LinkTarget_add_generated_cxxclrobject
 $(call gb_LinkTarget_get_target,$(1)) : GENCXXCLROBJECTS += $(2)
@@ -1480,6 +1600,16 @@ endef
 # call gb_LinkTarget_add_generated_exception_objects,linktarget,sourcefile,cxxflags,linktargetmakefilename
 define gb_LinkTarget_add_generated_exception_objects
 $(foreach obj,$(2),$(call gb_LinkTarget_add_generated_exception_object,$(1),$(obj),$(3),$(4)))
+endef
+
+# call gb_LinkTarget_add_generated_objcobjects,linktarget,sourcefiles,cflags,linktargetmakefilename
+define gb_LinkTarget_add_generated_objcobjects
+$(foreach obj,$(2),$(call gb_LinkTarget_add_generated_objc_object,$(1),$(obj),$(3),$(4)))
+endef
+
+# call gb_LinkTarget_add_generated_objcxxobjects,linktarget,sourcefiles,cflags,linktargetmakefilename
+define gb_LinkTarget_add_generated_objcxxobjects
+$(foreach obj,$(2),$(call gb_LinkTarget_add_generated_objcxx_object,$(1),$(obj),$(3),$(4)))
 endef
 
 # call gb_LinkTarget_add_generated_cxxclrobjects,linktarget,sourcefiles,cxxclrflags,linktargetmakefilename
