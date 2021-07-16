@@ -206,7 +206,7 @@ class SvxCSS1Parser : public CSS1Parser
 
     rtl_TextEncoding    m_eDefaultEnc;
     bool m_bIgnoreFontFamily;
-    std::vector<sal_uInt16> m_aWhichMap;        // Which-Map of Parser
+    std::vector<WhichPair> m_aWhichMap;        // Which-Map of Parser
 
     using CSS1Parser::ParseStyleOption;
 
@@ -264,7 +264,7 @@ public:
 
     virtual const FontList *GetFontList() const;
 
-    const sal_uInt16 *GetWhichMap() const { return m_aWhichMap.data(); }
+    WhichRangesContainer GetWhichMap() const { return WhichRangesContainer(m_aWhichMap.data(), m_aWhichMap.size()); }
 
     static void InsertMapEntry( const OUString& rKey, const SfxItemSet& rItemSet,
                          const SvxCSS1PropertyInfo& rProp, CSS1Map& rMap );

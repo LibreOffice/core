@@ -20,6 +20,7 @@
 #pragma once
 
 #include <svtools/svtdllapi.h>
+#include <svl/whichranges.hxx>
 #include <tools/link.hxx>
 #include <tools/ref.hxx>
 #include <tools/long.hxx>
@@ -144,7 +145,7 @@ public:
 // build a Which-Map 'rWhichMap' from an array of WhichIds
 // 'pWhichIds'. It has the length 'nWhichIds'.
 // The WhichMap is not deleted.
-SVT_DLLPUBLIC void BuildWhichTable( std::vector<sal_uInt16> &rWhichMap,
+SVT_DLLPUBLIC void BuildWhichTable( std::vector<WhichPair> &rWhichMap,
                                sal_uInt16 const *pWhichIds,
                                sal_uInt16 nWhichIds );
 
