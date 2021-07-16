@@ -55,32 +55,6 @@ SfxItemSet::SfxItemSet(SfxItemPool& rPool)
     m_pItems.reset(new const SfxPoolItem*[nSize]{});
 }
 
-SfxItemSet::SfxItemSet(
-    SfxItemPool & pool, std::initializer_list<sal_uInt16> wids,
-    std::size_t items):
-    m_pPool(&pool), m_pParent(nullptr),
-    m_pItems(new SfxPoolItem const *[items]{}),
-        // cannot overflow, assuming std::size_t is no smaller than sal_uInt16,
-        // as wids.size() must be substantially smaller than
-        // std::numeric_limits<sal_uInt16>::max() by construction in
-        // SfxItemSet::create
-    m_nCount(0)
-{
-    assert(wids.size() != 0);
-    assert(wids.size() % 2 == 0);
-    std::unique_ptr<WhichPair[]> xPairs = std::make_unique<WhichPair[]>(wids.size()/2);
-    std::size_t i = 0;
-    for (auto it = wids.begin(); it != wids.end(); ) {
-        sal_uInt16 nStart = *it;
-        ++it;
-        sal_uInt16 nEnd = *it;
-        ++it;
-        xPairs[i++] = { nStart, nEnd };
-    }
-    m_pWhichRanges = WhichRangesContainer(std::move(xPairs), wids.size()/2);
-    assert(svl::detail::validRanges2(m_pWhichRanges));
-}
-
 SfxItemSet::SfxItemSet( SfxItemPool& rPool, SfxAllItemSetFlag )
     : m_pPool(&rPool)
     , m_pParent(nullptr)

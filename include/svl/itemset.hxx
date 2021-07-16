@@ -108,7 +108,6 @@ private:
 
     SfxItemSet( SfxItemPool & pool, const WhichRangesContainer& wids, std::size_t items );
     SfxItemSet( SfxItemPool & pool, WhichRangesContainer&& wids, std::size_t items );
-    SfxItemSet( SfxItemPool & pool, std::initializer_list<sal_uInt16> wids, std::size_t items );
 
 public:
     SfxPoolItem const**         GetItems_Impl() const { return m_pItems.get(); }
