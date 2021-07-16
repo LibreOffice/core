@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "ce270bc4_e2451533",
+        "filename": "sfx2/source/inc/StyleList.hxx",
+        "patchSetId": 54
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-07-16T07:52:41Z",
+      "side": 1,
+      "message": "Sure..I will remove the \u0027_\u0027 in Update_Styles",
+      "parentUuid": "241b6b81_76c7eed3",
+      "range": {
+        "startLine": 94,
+        "startChar": 15,
+        "endLine": 94,
+        "endChar": 21
+      },
+      "revId": "8a751fd94b4b0a82b7e4808de51e33d0fd969e03",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c3d55345_382034ec",
         "filename": "sfx2/source/inc/StyleList.hxx",
         "patchSetId": 54
@@ -36,6 +60,30 @@
       "writtenOn": "2021-07-15T07:56:39Z",
       "side": 1,
       "message": "If this is all about the watercan function, can\u0027t we have it with the IsSafeForWC (or otherwise named properly)",
+      "range": {
+        "startLine": 95,
+        "startChar": 4,
+        "endLine": 95,
+        "endChar": 33
+      },
+      "revId": "8a751fd94b4b0a82b7e4808de51e33d0fd969e03",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0d54a0a8_8daaa134",
+        "filename": "sfx2/source/inc/StyleList.hxx",
+        "patchSetId": 54
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-07-16T07:52:41Z",
+      "side": 1,
+      "message": "IsSafeForWC is used in the Dialog\u0027s function named IsSafeForWC. \nUpdateStyleDependents is called in Dialog\u0027s UpdateStyleDependents. \nI am not sure if we can actually merge these two.\nRegarding naming, I think, since it is called in Dialog\u0027s UpdateStyleDependents, it should be named like this. However, I will surely add a comment that it is used for WaterCan",
+      "parentUuid": "c3d55345_382034ec",
       "range": {
         "startLine": 95,
         "startChar": 4,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "4d432c32_51c63ebd",
+        "filename": "sfx2/source/inc/StyleList.hxx",
+        "patchSetId": 54
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-07-16T07:52:41Z",
+      "side": 1,
+      "message": "What\u0027s the problem here?",
+      "parentUuid": "60db77d5_a7a64bbd",
+      "range": {
+        "startLine": 98,
+        "startChar": 48,
+        "endLine": 98,
+        "endChar": 63
+      },
+      "revId": "8a751fd94b4b0a82b7e4808de51e33d0fd969e03",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6c832f52_a77d39ef",
         "filename": "sfx2/source/inc/StyleList.hxx",
         "patchSetId": 54
@@ -82,6 +154,30 @@
       "writtenOn": "2021-07-15T07:56:39Z",
       "side": 1,
       "message": "\"Toolbox\" in this class? Looks like the styles family is set here to manage the styles list together with filterselect().",
+      "range": {
+        "startLine": 107,
+        "startChar": 9,
+        "endLine": 107,
+        "endChar": 21
+      },
+      "revId": "8a751fd94b4b0a82b7e4808de51e33d0fd969e03",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9dedc5a4_c6386f17",
+        "filename": "sfx2/source/inc/StyleList.hxx",
+        "patchSetId": 54
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-07-16T07:52:41Z",
+      "side": 1,
+      "message": "Yes..Will rename this..",
+      "parentUuid": "6c832f52_a77d39ef",
       "range": {
         "startLine": 107,
         "startChar": 9,
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "4ab900d5_3096659f",
+        "filename": "sfx2/source/inc/StyleList.hxx",
+        "patchSetId": 54
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-07-16T07:52:41Z",
+      "side": 1,
+      "message": "I don\u0027t think we can remove this..However it can be renamed something like \"SetFilterControlsHandle\".",
+      "parentUuid": "7485080a_21da4012",
+      "range": {
+        "startLine": 112,
+        "startChar": 9,
+        "endLine": 112,
+        "endChar": 18
+      },
+      "revId": "8a751fd94b4b0a82b7e4808de51e33d0fd969e03",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7edd887e_9a9b40a0",
         "filename": "sfx2/source/inc/StyleList.hxx",
         "patchSetId": 54
@@ -128,6 +248,30 @@
       "writtenOn": "2021-07-15T07:56:39Z",
       "side": 1,
       "message": "This function is rather bool IsTreeView(), isn\u0027t it?",
+      "range": {
+        "startLine": 114,
+        "startChar": 9,
+        "endLine": 114,
+        "endChar": 31
+      },
+      "revId": "8a751fd94b4b0a82b7e4808de51e33d0fd969e03",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e1c0868f_e05e2e74",
+        "filename": "sfx2/source/inc/StyleList.hxx",
+        "patchSetId": 54
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-07-16T07:52:41Z",
+      "side": 1,
+      "message": "Sure.. Will rename it..",
+      "parentUuid": "7edd887e_9a9b40a0",
       "range": {
         "startLine": 114,
         "startChar": 9,
@@ -163,6 +307,30 @@
     },
     {
       "key": {
+        "uuid": "e65c28ba_fa490a1f",
+        "filename": "sfx2/source/inc/StyleList.hxx",
+        "patchSetId": 54
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-07-16T07:52:41Z",
+      "side": 1,
+      "message": "I am not very sure what this function does as there were no comments in the original function in dialog.",
+      "parentUuid": "3d613658_56a0c5d4",
+      "range": {
+        "startLine": 116,
+        "startChar": 9,
+        "endLine": 116,
+        "endChar": 16
+      },
+      "revId": "8a751fd94b4b0a82b7e4808de51e33d0fd969e03",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "607be3c7_1bd8b2c8",
         "filename": "sfx2/source/inc/StyleList.hxx",
         "patchSetId": 54
@@ -174,6 +342,30 @@
       "writtenOn": "2021-07-15T07:56:39Z",
       "side": 1,
       "message": "Please comment this function. It starts listening a style, what means _Filter_Select?",
+      "range": {
+        "startLine": 119,
+        "startChar": 9,
+        "endLine": 119,
+        "endChar": 21
+      },
+      "revId": "8a751fd94b4b0a82b7e4808de51e33d0fd969e03",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "109cc095_208e38d6",
+        "filename": "sfx2/source/inc/StyleList.hxx",
+        "patchSetId": 54
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-07-16T07:52:41Z",
+      "side": 1,
+      "message": "Well, it is used in Dialog\u0027s FilterSelect. Hence it is named like this.\nIt is a small part which deals with m_pStyleSheetPool in FilterSelect in StyleList.",
+      "parentUuid": "607be3c7_1bd8b2c8",
       "range": {
         "startLine": 119,
         "startChar": 9,
@@ -209,6 +401,30 @@
     },
     {
       "key": {
+        "uuid": "476b44c2_993d2009",
+        "filename": "sfx2/source/inc/StyleList.hxx",
+        "patchSetId": 54
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-07-16T07:52:41Z",
+      "side": 1,
+      "message": "It is actually used in Dilaog::UpdateStyles_Hdl and Dialog::UpdateStyleDependents so because Dialog and StyleList both have their copy of this variable. It is used so that the variables remain in sync in both the files.. I don\u0027t think this can be replaces or removed.",
+      "parentUuid": "82cd7d5d_b2aa8cc5",
+      "range": {
+        "startLine": 120,
+        "startChar": 9,
+        "endLine": 120,
+        "endChar": 21
+      },
+      "revId": "8a751fd94b4b0a82b7e4808de51e33d0fd969e03",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "28c52bba_fdc363bb",
         "filename": "sfx2/source/inc/StyleList.hxx",
         "patchSetId": 54
@@ -232,6 +448,30 @@
     },
     {
       "key": {
+        "uuid": "4569cfbe_ba956fc5",
+        "filename": "sfx2/source/inc/StyleList.hxx",
+        "patchSetId": 54
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-07-16T07:52:41Z",
+      "side": 1,
+      "message": "Well, the Dialog file and the StyleList File have their own copy of variables and these are used in many other places other than context menu.",
+      "parentUuid": "28c52bba_fdc363bb",
+      "range": {
+        "startLine": 136,
+        "startChar": 9,
+        "endLine": 136,
+        "endChar": 19
+      },
+      "revId": "8a751fd94b4b0a82b7e4808de51e33d0fd969e03",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "25351557_d58b9ccd",
         "filename": "sfx2/source/inc/StyleList.hxx",
         "patchSetId": 54
@@ -243,6 +483,30 @@
       "writtenOn": "2021-07-15T07:56:39Z",
       "side": 1,
       "message": "This needs a different name and description.",
+      "range": {
+        "startLine": 137,
+        "startChar": 9,
+        "endLine": 137,
+        "endChar": 21
+      },
+      "revId": "8a751fd94b4b0a82b7e4808de51e33d0fd969e03",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c4aa436a_bf21511a",
+        "filename": "sfx2/source/inc/StyleList.hxx",
+        "patchSetId": 54
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-07-16T07:52:41Z",
+      "side": 1,
+      "message": "I have directly moved this function. It was named the same without any description in the original code.",
+      "parentUuid": "25351557_d58b9ccd",
       "range": {
         "startLine": 137,
         "startChar": 9,
