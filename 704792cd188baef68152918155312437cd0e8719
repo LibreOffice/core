@@ -16,6 +16,24 @@
       "revId": "704792cd188baef68152918155312437cd0e8719",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d6d8aefc_42f0ba4d",
+        "filename": "editeng/source/rtf/svxrtf.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 620,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-07-16T11:38:38Z",
+      "side": 1,
+      "message": "good point, fixed",
+      "parentUuid": "ce0507d2_5b297508",
+      "revId": "704792cd188baef68152918155312437cd0e8719",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
