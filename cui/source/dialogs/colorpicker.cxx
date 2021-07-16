@@ -19,6 +19,7 @@
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
+#include <com/sun/star/ui/dialogs/XAsynchronousExecutableDialog.hpp>
 #include <com/sun/star/beans/XPropertyAccess.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -31,6 +32,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/weld.hxx>
+#include <sfx2/basedlgs.hxx>
 #include <svx/hexcolorcontrol.hxx>
 #include <basegfx/color/bcolortools.hxx>
 #include <cmath>
@@ -727,7 +729,7 @@ void ColorSliderControl::SetValue(const Color& rColor, ColorMode eMode, double d
 
 namespace {
 
-class ColorPickerDialog : public weld::GenericDialogController
+class ColorPickerDialog : public SfxDialogController
 {
 private:
     ColorFieldControl m_aColorField;
@@ -790,7 +792,7 @@ private:
 }
 
 ColorPickerDialog::ColorPickerDialog(weld::Window* pParent, Color nColor, sal_Int16 nDialogMode)
-    : GenericDialogController(pParent, "cui/ui/colorpickerdialog.ui", "ColorPicker")
+    : SfxDialogController(pParent, "cui/ui/colorpickerdialog.ui", "ColorPicker")
     , m_xColorField(new weld::CustomWeld(*m_xBuilder, "colorField", m_aColorField))
     , m_xColorSlider(new weld::CustomWeld(*m_xBuilder, "colorSlider", m_aColorSlider))
     , m_xColorPreview(new weld::CustomWeld(*m_xBuilder, "preview", m_aColorPreview))
@@ -1205,7 +1207,7 @@ void ColorPickerDialog::setColorComponent( ColorComponent nComp, double dValue )
     }
 }
 
-typedef ::cppu::WeakComponentImplHelper< XServiceInfo, XExecutableDialog, XInitialization, XPropertyAccess > ColorPickerBase;
+typedef ::cppu::WeakComponentImplHelper< XServiceInfo, XExecutableDialog, XAsynchronousExecutableDialog, XInitialization, XPropertyAccess > ColorPickerBase;
 
 namespace {
 
@@ -1230,6 +1232,10 @@ public:
     // XExecutableDialog
     virtual void SAL_CALL setTitle( const OUString& aTitle ) override;
     virtual sal_Int16 SAL_CALL execute(  ) override;
+
+    // XAsynchronousExecutableDialog
+    virtual void SAL_CALL setDialogTitle( const OUString& aTitle ) override;
+    virtual void SAL_CALL startExecuteModal( const css::uno::Reference< css::ui::dialogs::XDialogClosedListener >& xListener ) override;
 
 private:
     Color mnColor;
@@ -1279,7 +1285,8 @@ sal_Bool SAL_CALL ColorPicker::supportsService( const OUString& sServiceName )
 
 Sequence< OUString > SAL_CALL ColorPicker::getSupportedServiceNames(  )
 {
-    return { "com.sun.star.ui.dialogs.ColorPicker" };
+    return { "com.sun.star.ui.dialogs.ColorPicker",
+             "com.sun.star.ui.dialogs.AsyncColorPicker" };
 }
 
 // XPropertyAccess
@@ -1318,6 +1325,24 @@ sal_Int16 SAL_CALL ColorPicker::execute()
     if (ret)
         mnColor = xDlg->GetColor();
     return ret;
+}
+
+// XAsynchronousExecutableDialog
+void SAL_CALL ColorPicker::setDialogTitle( const OUString& )
+{
+}
+
+void SAL_CALL ColorPicker::startExecuteModal( const css::uno::Reference< css::ui::dialogs::XDialogClosedListener >& xListener )
+{
+    std::shared_ptr<ColorPickerDialog> xDlg = std::make_shared<ColorPickerDialog>(Application::GetFrameWeld(mxParent), mnColor, mnMode);
+    weld::DialogController::runAsync(xDlg, [this, xDlg, xListener] (sal_Int32 nResult) {
+        if (nResult)
+            mnColor = xDlg->GetColor();
+
+        sal_Int16 nRet = static_cast<sal_Int16>(nResult);
+        css::ui::dialogs::DialogClosedEvent aEvent( *this, nRet );
+        xListener->dialogClosed( aEvent );
+    });
 }
 
 }

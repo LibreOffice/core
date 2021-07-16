@@ -22,6 +22,7 @@
 #include <svx/Palette.hxx>
 #include <rtl/ustring.hxx>
 #include <svx/xtable.hxx>
+#include <svtools/colrdlg.hxx>
 
 #include <deque>
 #include <vector>
@@ -47,6 +48,8 @@ class SVXCORE_DLLPUBLIC PaletteManager
 
     ColorSelectFunction maColorSelectFunction;
     css::uno::Reference < css::uno::XComponentContext > m_context;
+
+    std::unique_ptr<SvColorDialog> m_pColorDlg;
 public:
     PaletteManager();
     ~PaletteManager();
