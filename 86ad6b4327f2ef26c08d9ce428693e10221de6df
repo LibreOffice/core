@@ -69,6 +69,30 @@
       "revId": "86ad6b4327f2ef26c08d9ce428693e10221de6df",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "03ed5766_33ade35e",
+        "filename": "writerfilter/source/dmapper/DomainMapperTableHandler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1448,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-07-16T10:02:11Z",
+      "side": 1,
+      "message": "In this case, we can jump out from the while loop after the first paragraph of the cells of the last rows.\n\nBut it would be fine to skip all paragraph collecting and Apply...() later.\nOther option is (to avoid the regression at inserting rows inside the tables) to move this to the Writer core: manual row insertion could made the logic to copy the full paragraph (except paragraph break) character formatting to the new line. Maybe it would be enough to copy as a direct character formatting. Let\u0027s talk about later. Otherwise this fix could be a good start for the optimization.",
+      "parentUuid": "538faa44_a898b917",
+      "range": {
+        "startLine": 1448,
+        "startChar": 36,
+        "endLine": 1448,
+        "endChar": 147
+      },
+      "revId": "86ad6b4327f2ef26c08d9ce428693e10221de6df",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
