@@ -93,8 +93,8 @@ class EDITENG_DLLPUBLIC SvxRTFParser : public SvRTFParser
     std::deque< std::unique_ptr<SvxRTFItemStackType> >  aAttrStack;
     SvxRTFItemStackList   m_AttrSetList;
 
-    std::map<sal_uInt16, sal_uInt16> aPlainMap;
-    std::map<sal_uInt16, sal_uInt16> aPardMap;
+    RTFPlainAttrMapIds aPlainMap;
+    RTFPardAttrMapIds aPardMap;
     WhichRangesContainer aWhichMap;
 
     std::optional<EditPosition> mxInsertPosition;
