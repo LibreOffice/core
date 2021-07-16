@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bac6bb22_94e77df6",
+        "filename": "sw/inc/frmfmt.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-16T11:38:27Z",
+      "side": 1,
+      "message": "Given the implementation, we could also use\n\n    const WhichRangesContainer\u0026 pWhichRange \u003d aFrameFormatSetRange\n\nand have a simpler constructor code without conditionals",
+      "revId": "b225b87ef922bd549a3e8373ce03fb82b2012416",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
