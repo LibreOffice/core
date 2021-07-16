@@ -141,12 +141,6 @@ public:
     T GetSaveToken() const;
 };
 
-// build a Which-Map 'rWhichMap' from an array of WhichIds
-// 'pWhichIds'. It has the length 'nWhichIds'.
-// The WhichMap is not deleted.
-SVT_DLLPUBLIC void BuildWhichTable( std::vector<sal_uInt16> &rWhichMap,
-                               sal_uInt16 const *pWhichIds,
-                               sal_uInt16 nWhichIds );
 
 /*========================================================================
  *

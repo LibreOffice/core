@@ -694,6 +694,14 @@ void SvxCSS1Parser::SelectorParsed( std::unique_ptr<CSS1Selector> pSelector, boo
     m_Selectors.push_back(std::move(pSelector));
 }
 
+static void BuildWhichTable( WhichRangesContainer& rWhichMap,
+                               sal_uInt16 const *pWhichIds,
+                               sal_uInt16 nWhichIds )
+{
+    for (sal_uInt16 i = 0; i < nWhichIds; ++i)
+        rWhichMap = rWhichMap.MergeRange(pWhichIds[i], pWhichIds[i]);
+}
+
 SvxCSS1Parser::SvxCSS1Parser( SfxItemPool& rPool, const OUString& rBaseURL,
                               sal_uInt16 const *pWhichIds, sal_uInt16 nWhichIds ) :
     CSS1Parser(),
@@ -740,13 +748,12 @@ SvxCSS1Parser::SvxCSS1Parser( SfxItemPool& rPool, const OUString& rBaseURL,
     aItemIds.nLanguageCTL = rPool.GetTrueWhich( SID_ATTR_CHAR_CTL_LANGUAGE, false );
     aItemIds.nDirection = rPool.GetTrueWhich( SID_ATTR_FRAMEDIRECTION, false );
 
-    m_aWhichMap.insert( m_aWhichMap.begin(), 0 );
     BuildWhichTable( m_aWhichMap, reinterpret_cast<sal_uInt16 *>(&aItemIds),
                              sizeof(aItemIds) / sizeof(sal_uInt16) );
     if( pWhichIds && nWhichIds )
         BuildWhichTable( m_aWhichMap, pWhichIds, nWhichIds );
 
-    m_pSheetItemSet.reset( new SfxItemSet( rPool, m_aWhichMap.data() ) );
+    m_pSheetItemSet.reset( new SfxItemSet( rPool, m_aWhichMap ) );
     m_pSheetPropInfo.reset( new SvxCSS1PropertyInfo );
 }
 
