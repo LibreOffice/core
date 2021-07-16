@@ -747,6 +747,31 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL rtl_str_toBoolean(
 SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_str_toInt32(
         const char * str, sal_Int16 radix ) SAL_THROW_EXTERN_C();
 
+/** Interpret a string as a integer.
+
+    This function cannot be used for language-specific conversion.  The string
+    must be null-terminated.
+
+    @param str
+    a null-terminated string.
+
+    @param radix
+    the radix.  Must be between RTL_STR_MIN_RADIX (2) and RTL_STR_MAX_RADIX
+    (36), inclusive.
+
+    @param nStrLength
+    number of chars to process
+
+    @return
+    the integer value represented by the string, or 0 if the string does
+    not represent a integer.
+
+    @internal
+    @since LibreOffice 7.3
+*/
+SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_str_toInt32_WithLength(
+        const char * str, sal_Int16 radix, sal_Int32 nStrLength ) SAL_THROW_EXTERN_C();
+
 /** Interpret a string as an unsigned integer.
 
     This function cannot be used for language-specific conversion.  The string
@@ -862,6 +887,26 @@ SAL_DLLPUBLIC float SAL_CALL rtl_str_toFloat(
  */
 SAL_DLLPUBLIC double SAL_CALL rtl_str_toDouble(
         const char * str ) SAL_THROW_EXTERN_C();
+
+/** Interpret a string as a double.
+
+    This function cannot be used for language-specific conversion.  The string
+    must be null-terminated.
+
+    @param str
+    a null-terminated string.
+
+    @param nStrLength
+    number of chars to process
+
+    @return
+    the double value represented by the string, or 0.0 if the string does not
+    represent a double.
+
+    @since LibreOffice 7.3
+ */
+SAL_DLLPUBLIC double SAL_CALL rtl_str_toDouble_WithLength(
+        const char * str, sal_Int32 nStrLength ) SAL_THROW_EXTERN_C();
 
 /* ======================================================================= */
 
