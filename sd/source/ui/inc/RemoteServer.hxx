@@ -28,6 +28,7 @@ namespace com::sun::star::uno { template <class interface_type> class Reference;
 
 namespace sd
 {
+    class BufferedStreamSocket;
     class Communicator;
 
     struct ClientInfo
@@ -81,6 +82,7 @@ namespace sd
             ::std::vector< std::shared_ptr< ClientInfoInternal > > mAvailableClients;
 
             void execute() override;
+            void handleAcceptedConnection( BufferedStreamSocket *pSocket ) ;
     };
 }
 
