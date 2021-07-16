@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1fce40f8_96db2de9",
+        "filename": "cui/source/inc/FontFeatures.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1002754
+      },
+      "writtenOn": "2021-07-16T04:41:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3a6a618c_764a2254",
+      "revId": "fffc01afd456e3ed4ae54441021907c9b3bed001",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "302373e6_100d058c",
         "filename": "cui/source/util/FontFeatures.cxx",
         "patchSetId": 2
@@ -33,6 +51,24 @@
       "revId": "fffc01afd456e3ed4ae54441021907c9b3bed001",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9ec98e0d_4e5a2d19",
+        "filename": "cui/source/util/FontFeatures.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1002754
+      },
+      "writtenOn": "2021-07-16T04:41:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "302373e6_100d058c",
+      "revId": "fffc01afd456e3ed4ae54441021907c9b3bed001",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
