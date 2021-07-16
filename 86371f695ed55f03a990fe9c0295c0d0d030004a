@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d0d947ce_f03b0c4e",
+        "filename": "editeng/source/rtf/svxrtf.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 979,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-16T11:42:04Z",
+      "side": 1,
+      "message": "I believe it\u0027s the same here",
+      "revId": "86371f695ed55f03a990fe9c0295c0d0d030004a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
