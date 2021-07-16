@@ -1,0 +1,9 @@
+Verified+1: René Engelhard <rene@debian.org>
+Verified+1: Caolán McNamara <caolanm@redhat.com>
+Verified+1: Jenkins
+Code-Review+2: Caolán McNamara <caolanm@redhat.com>
+Submitted-by: Caolán McNamara <caolanm@redhat.com>
+Submitted-at: Fri, 16 Jul 2021 10:15:47 +0200
+Reviewed-on: https://gerrit.libreoffice.org/c/core/+/118929
+Project: core
+Branch: refs/heads/libreoffice-7-2
