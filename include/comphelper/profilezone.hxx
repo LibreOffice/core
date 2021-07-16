@@ -22,26 +22,12 @@ namespace comphelper
 {
 class COMPHELPER_DLLPUBLIC ProfileZone : public NamedEvent
 {
-    static int s_nNesting; // level of nested zones.
-
     long long m_nCreateTime;
     int m_nNesting;
 
     void addRecording();
 
-    ProfileZone(const char* sName, const OUString& sArgs)
-        : NamedEvent(sName, sArgs)
-        , m_nNesting(-1)
-    {
-        if (s_bRecording)
-        {
-            m_nCreateTime = getNow();
-
-            m_nNesting = s_nNesting++;
-        }
-        else
-            m_nCreateTime = 0;
-    }
+    ProfileZone(const char* sName, const OUString& sArgs);
 
 public:
     /**
@@ -61,23 +47,7 @@ public:
     {
     }
 
-    ~ProfileZone()
-    {
-        if (m_nCreateTime > 0)
-        {
-            s_nNesting--;
-
-            if (m_nNesting != s_nNesting)
-            {
-                SAL_WARN("comphelper.traceevent", "Incorrect ProfileZone nesting for " << m_sName);
-            }
-            else
-            {
-                if (s_bRecording)
-                    addRecording();
-            }
-        }
-    }
+    ~ProfileZone();
 
     ProfileZone(const ProfileZone&) = delete;
     void operator=(const ProfileZone&) = delete;
