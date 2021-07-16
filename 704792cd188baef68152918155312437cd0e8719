@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ce0507d2_5b297508",
+        "filename": "editeng/source/rtf/svxrtf.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 620,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-16T11:35:36Z",
+      "side": 1,
+      "message": "Can we actually std::move a const reference?",
+      "revId": "704792cd188baef68152918155312437cd0e8719",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
