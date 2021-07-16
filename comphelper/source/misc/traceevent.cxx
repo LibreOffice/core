@@ -29,7 +29,7 @@ std::size_t TraceEvent::s_nBufferSize = 0;
 void (*TraceEvent::s_pBufferFullCallback)() = nullptr;
 
 int AsyncEvent::s_nIdCounter = 0;
-int ProfileZone::s_nNesting = 0;
+thread_local int ProfileZone::s_nNesting = 0;
 
 namespace
 {

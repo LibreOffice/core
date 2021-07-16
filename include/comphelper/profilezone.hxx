@@ -22,7 +22,7 @@ namespace comphelper
 {
 class COMPHELPER_DLLPUBLIC ProfileZone : public NamedEvent
 {
-    static int s_nNesting; // level of nested zones.
+    thread_local static int s_nNesting; // level of nested zones.
 
     long long m_nCreateTime;
     bool m_bConsole;
