@@ -595,61 +595,6 @@ void SvParser<T>::Continue( T )
 {
 }
 
-void BuildWhichTable( std::vector<sal_uInt16> &rWhichMap,
-                      sal_uInt16 const *pWhichIds,
-                      sal_uInt16 nWhichIds )
-{
-    sal_uInt16 aNewRange[2];
-
-    for( sal_uInt16 nCnt = 0; nCnt < nWhichIds; ++nCnt, ++pWhichIds )
-        if( *pWhichIds )
-        {
-            aNewRange[0] = aNewRange[1] = *pWhichIds;
-            bool bIns = true;
-
-            // search position
-            for ( sal_uInt16 nOfs = 0; rWhichMap[nOfs]; nOfs += 2 )
-            {
-                if( *pWhichIds < rWhichMap[nOfs] - 1 )
-                {
-                    // new range before
-                    rWhichMap.insert( rWhichMap.begin() + nOfs, aNewRange, aNewRange + 2 );
-                    bIns = false;
-                    break;
-                }
-                else if( *pWhichIds == rWhichMap[nOfs] - 1 )
-                {
-                    // extend range downwards
-                    rWhichMap[nOfs] = *pWhichIds;
-                    bIns = false;
-                    break;
-                }
-                else if( *pWhichIds == rWhichMap[nOfs+1] + 1 )
-                {
-                    if( rWhichMap[nOfs+2] != 0 && rWhichMap[nOfs+2] == *pWhichIds + 1 )
-                    {
-                        // merge with next field
-                        rWhichMap[nOfs+1] = rWhichMap[nOfs+3];
-                        rWhichMap.erase( rWhichMap.begin() + nOfs + 2,
-                                rWhichMap.begin() + nOfs + 4 );
-                    }
-                    else
-                        // extend range upwards
-                        rWhichMap[nOfs+1] = *pWhichIds;
-                    bIns = false;
-                    break;
-                }
-            }
-
-            // append range
-            if( bIns )
-            {
-                rWhichMap.insert( rWhichMap.begin() + rWhichMap.size() - 1,
-                        aNewRange, aNewRange + 2 );
-            }
-        }
-}
-
 
 // expanded out version of
 //   IMPL_LINK_NOARG( SvParser, NewDataRead, LinkParamNone*, void )
