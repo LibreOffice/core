@@ -222,13 +222,12 @@ private:
 
 };
 
-sal_uInt16 const aSave_BoxContentSet[] = {
+WhichRangesContainer const aSave_BoxContentSet(svl::Items<
     RES_CHRATR_COLOR, RES_CHRATR_CROSSEDOUT,
     RES_CHRATR_FONT, RES_CHRATR_FONTSIZE,
     RES_CHRATR_POSTURE, RES_CHRATR_POSTURE,
     RES_CHRATR_SHADOWED, RES_CHRATR_WEIGHT,
-    RES_PARATR_ADJUST, RES_PARATR_ADJUST,
-    0 };
+    RES_PARATR_ADJUST, RES_PARATR_ADJUST>::value);
 
 SwUndoInsTable::SwUndoInsTable( const SwPosition& rPos, sal_uInt16 nCl, sal_uInt16 nRw,
                             sal_uInt16 nAdj, const SwInsertTableOptions& rInsTableOpts,
@@ -1243,12 +1242,8 @@ void SaveBox::RestoreAttr( SwTableBox& rBox, SaveTable& rSTable )
                     std::shared_ptr<SfxItemSet> pSet((*m_Ptrs.pContentAttrs)[nSet++]);
                     if( pSet )
                     {
-                        sal_uInt16 const *pRstAttr = aSave_BoxContentSet;
-                        while( *pRstAttr )
-                        {
-                            pCNd->ResetAttr( *pRstAttr, *(pRstAttr+1) );
-                            pRstAttr += 2;
-                        }
+                        for( const WhichPair& rPair : aSave_BoxContentSet )
+                            pCNd->ResetAttr( rPair.first, rPair.second );
                         pCNd->SetAttr( *pSet );
                     }
                     else

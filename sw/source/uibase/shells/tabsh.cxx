@@ -94,8 +94,7 @@ void SwTableShell::InitInterface_Impl()
 }
 
 
-const sal_uInt16 aUITableAttrRange[] =
-{
+const WhichRangesContainer aUITableAttrRange(svl::Items<
     RES_LR_SPACE,                   RES_UL_SPACE,
     RES_PAGEDESC,                   RES_BREAK,
     RES_BACKGROUND,                 RES_BACKGROUND,
@@ -118,11 +117,10 @@ const sal_uInt16 aUITableAttrRange[] =
     FN_TABLE_BOX_TEXTORIENTATION,   FN_TABLE_BOX_TEXTORIENTATION,
     FN_PARAM_TABLE_NAME,            FN_PARAM_TABLE_NAME,
     FN_PARAM_TABLE_HEADLINE,        FN_PARAM_TABLE_HEADLINE,
-    FN_PARAM_TABLE_SPACE,           FN_PARAM_TABLE_SPACE,
-    0
-};
+    FN_PARAM_TABLE_SPACE,           FN_PARAM_TABLE_SPACE
+>::value);
 
-const sal_uInt16* SwuiGetUITableAttrRange()
+const WhichRangesContainer& SwuiGetUITableAttrRange()
 {
     return aUITableAttrRange;
 }

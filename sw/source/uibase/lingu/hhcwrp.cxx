@@ -315,9 +315,9 @@ void SwHHCWrapper::ChangeText_impl( const OUString &rNewText, bool bKeepAttribut
     if (bKeepAttributes)
     {
         // get item set with all relevant attributes
-        sal_uInt16 const aRanges[] {
-                RES_CHRATR_BEGIN, RES_FRMATR_END,
-                0, 0, 0  };
+        static const WhichRangesContainer aRanges(svl::Items<
+                RES_CHRATR_BEGIN, RES_FRMATR_END
+                >::value);
         SfxItemSet aItemSet( m_rWrtShell.GetAttrPool(), aRanges );
         // get all attributes spanning the whole selection in order to
         // restore those for the new text
