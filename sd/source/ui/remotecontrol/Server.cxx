@@ -149,7 +149,6 @@ void RemoteServer::handleAcceptedConnection( BufferedStreamSocket *pSocket )
         // Check if we already have this server.
         Reference< XNameAccess > const xConfig = officecfg::Office::Impress::Misc::AuthorisedRemotes::get();
         const Sequence< OUString > aNames = xConfig->getElementNames();
-        bool aFound = false;
         for ( const auto& rName : aNames )
         {
             if ( rName == pClient->mName )
@@ -162,18 +161,14 @@ void RemoteServer::handleAcceptedConnection( BufferedStreamSocket *pSocket )
                 if ( sPin == pClient->mPin ) {
                     SAL_INFO( "sdremote", "client found on validated list -- connecting" );
                     connectClient( pClient, sPin );
-                    aFound = true;
-                    break;
+                    return;
                 }
             }
         }
         // Pin not found so inform the client.
-        if ( !aFound )
-        {
-            SAL_INFO( "sdremote", "client not found on validated list" );
-            pSocket->write( "LO_SERVER_VALIDATING_PIN\n\n",
+        SAL_INFO( "sdremote", "client not found on validated list" );
+        pSocket->write( "LO_SERVER_VALIDATING_PIN\n\n",
                         strlen( "LO_SERVER_VALIDATING_PIN\n\n" ) );
-        }
     } else {
         SAL_INFO( "sdremote", "client failed to send LO_SERVER_CLIENT_PAIR, ignoring" );
         delete pSocket;
