@@ -29,7 +29,13 @@ class SVT_DLLPUBLIC SvtLanguageTable
 public:
 
     static bool         HasLanguageType( const LanguageType eType );
+    /** Obtain the UI name for a LanguageType of a language/locale (string
+        resource STR_ARR_SVT_LANGUAGE_TABLE).
+     */
     static OUString     GetLanguageString( const LanguageType eType );
+    /** Obtain the LanguageType for a UI name of a language/locale (string
+        resource STR_ARR_SVT_LANGUAGE_TABLE).
+     */
     static LanguageType GetLanguageType( std::u16string_view rStr );
     static sal_uInt32   GetLanguageEntryCount();
     static LanguageType GetLanguageTypeAtIndex( sal_uInt32 nIndex );
