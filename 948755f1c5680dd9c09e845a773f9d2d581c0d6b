@@ -16,6 +16,24 @@
       "revId": "948755f1c5680dd9c09e845a773f9d2d581c0d6b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8b0160dd_2949e6d6",
+        "filename": "basic/source/runtime/methods.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 889,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-16T07:16:19Z",
+      "side": 1,
+      "message": "I believe that compilers are smart enough - but at the same time I believe it\u0027s a good practice for us. It helps developer to understand that this value does not change below, so you don\u0027t need to read it all to see that it doesn\u0027t get modified somewhere. I *always* define non-changing stuff const, and even put it to function arguments in function definitions, to make it clear for readers.",
+      "parentUuid": "630f493f_b2865794",
+      "revId": "948755f1c5680dd9c09e845a773f9d2d581c0d6b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
