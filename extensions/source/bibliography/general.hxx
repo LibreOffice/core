@@ -108,6 +108,8 @@ class BibGeneralPage : public InterimItemWindow
     std::unique_ptr<weld::Label> xURLFT;
     std::unique_ptr<weld::Entry> xURLED;
     std::unique_ptr<weld::Button> m_xBrowseButton;
+    std::unique_ptr<weld::CheckButton> m_xPageCB;
+    std::unique_ptr<weld::SpinButton> m_xPageSB;
 
     std::unique_ptr<weld::Label> xCustom1FT;
     std::unique_ptr<weld::Entry> xCustom1ED;
@@ -123,6 +125,7 @@ class BibGeneralPage : public InterimItemWindow
     OUString            sTableErrorString;
 
     std::vector<rtl::Reference<ChangeListener>> maChangeListeners;
+    rtl::Reference<ChangeListener> m_aURLListener;
 
     BibDataManager*     pDatMan;
 
@@ -139,6 +142,7 @@ class BibGeneralPage : public InterimItemWindow
     DECL_LINK(FirstElementKeyInputHdl, const KeyEvent&, bool);
     DECL_LINK(LastElementKeyInputHdl, const KeyEvent&, bool);
     DECL_LINK(BrowseHdl, weld::Button&, void);
+    DECL_LINK(LosePageFocusHdl, weld::Widget&, void);
 
 public:
                                 BibGeneralPage(vcl::Window* pParent, BibDataManager* pDatMan);
@@ -149,6 +153,10 @@ public:
     {
         return sTableErrorString;
     }
+
+    weld::Entry& GetURLED();
+    weld::CheckButton& GetPageCB();
+    weld::SpinButton& GetPageSB();
 };
 
 
