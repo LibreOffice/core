@@ -1501,7 +1501,7 @@ bool SwTextFormatInfo::IsHyphenate() const
             pShell->AppendInfoBarWhenReady(
                 "hyphenationmissing", SwResId(STR_HYPH_MISSING),
                 SwResId(STR_HYPH_MISSING_DETAIL)
-                    .replaceFirst("%1", g_pBreakIt->GetLocale(eTmp).Language),
+                    .replaceFirst("%1", LanguageTag::convertToBcp47( g_pBreakIt->GetLocale(eTmp))),
                 InfobarType::WARNING);
         }
     }
