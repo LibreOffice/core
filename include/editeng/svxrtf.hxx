@@ -82,78 +82,8 @@ struct SvxRTFStyleType
     sal_uInt16 nBasedOn;
     sal_uInt8 nOutlineNo;
 
-    SvxRTFStyleType( SfxItemPool& rPool, const sal_uInt16* pWhichRange );
+    SvxRTFStyleType(SfxItemPool& rPool, const WhichRangesContainer& pWhichRange);
 };
-
-
-// Here are the IDs for all character attributes, which can be detected by
-// SvxParser and can be set in a SfxItemSet. The IDs are set correctly through
-// the SlotIds from POOL.
-struct RTFPlainAttrMapIds
-{
-    sal_uInt16  nCaseMap,
-            nBgColor,
-            nColor,
-            nContour,
-            nCrossedOut,
-            nEscapement,
-            nFont,
-            nFontHeight,
-            nKering,
-            nLanguage,
-            nPosture,
-            nShadowed,
-            nUnderline,
-            nOverline,
-            nWeight,
-            nWordlineMode,
-            nAutoKerning,
-            nCJKFont,
-            nCJKFontHeight,
-            nCJKLanguage,
-            nCJKPosture,
-            nCJKWeight,
-            nCTLFont,
-            nCTLFontHeight,
-            nCTLLanguage,
-            nCTLPosture,
-            nCTLWeight,
-            nEmphasis,
-            nTwoLines,
-            nCharScaleX,
-            nHorzVert,
-            nRelief,
-            nHidden
-            ;
-    RTFPlainAttrMapIds( const SfxItemPool& rPool );
-};
-
-// Here are the IDs for all paragraph attributes, which can be detected by
-// SvxParser and can be set in a SfxItemSet. The IDs are set correctly through
-// the SlotIds from POOL.
-struct RTFPardAttrMapIds
-{
-    sal_uInt16  nLinespacing,
-            nAdjust,
-            nTabStop,
-            nHyphenzone,
-            nLRSpace,
-            nULSpace,
-            nBrush,
-            nBox,
-            nShadow,
-            nOutlineLvl,
-            nSplit,
-            nKeep,
-            nFontAlign,
-            nScriptSpace,
-            nHangPunct,
-            nForbRule,
-            nDirection
-            ;
-    RTFPardAttrMapIds( const SfxItemPool& rPool );
-};
-
 
 class EDITENG_DLLPUBLIC SvxRTFParser : public SvRTFParser
 {
@@ -163,9 +93,9 @@ class EDITENG_DLLPUBLIC SvxRTFParser : public SvRTFParser
     std::deque< std::unique_ptr<SvxRTFItemStackType> >  aAttrStack;
     SvxRTFItemStackList   m_AttrSetList;
 
-    RTFPlainAttrMapIds aPlainMap;
-    RTFPardAttrMapIds aPardMap;
-    std::vector<sal_uInt16> aWhichMap;
+    std::map<sal_uInt16, sal_uInt16> aPlainMap;
+    std::map<sal_uInt16, sal_uInt16> aPardMap;
+    WhichRangesContainer aWhichMap;
 
     std::optional<EditPosition> mxInsertPosition;
     SfxItemPool* pAttrPool;
@@ -272,7 +202,7 @@ public:
     // The maps are not generated anew!
     void SetAttrPool( SfxItemPool* pNewPool )   { pAttrPool = pNewPool; }
     // to set different WhichIds for a different pool.
-    RTFPardAttrMapIds& GetPardMap() { return aPardMap; }
+    void SetPardMap(sal_uInt16 wid, sal_uInt16 widTrue) { aPardMap[wid] = widTrue; }
     // to be able to assign them from the outside as for example table cells
     void ReadBorderAttr( int nToken, SfxItemSet& rSet, bool bTableDef=false );
     void ReadBackgroundAttr( int nToken, SfxItemSet& rSet, bool bTableDef=false  );
@@ -301,11 +231,11 @@ class SvxRTFItemStackType
     SvxRTFItemStackType(SvxRTFItemStackType const&) = delete;
     void operator=(SvxRTFItemStackType const&) = delete;
 
-    SvxRTFItemStackType( SfxItemPool&, const sal_uInt16* pWhichRange,
+    SvxRTFItemStackType( SfxItemPool&, const WhichRangesContainer& pWhichRange,
                             const EditPosition& );
 
     static std::unique_ptr<SvxRTFItemStackType> createSvxRTFItemStackType(
-        SfxItemPool&, const sal_uInt16* pWhichRange, const EditPosition&);
+        SfxItemPool&, const WhichRangesContainer& pWhichRange, const EditPosition&);
 
     void Add(std::unique_ptr<SvxRTFItemStackType>);
     void Compress( const SvxRTFParser& );
