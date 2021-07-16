@@ -45,6 +45,30 @@
       "revId": "86ad6b4327f2ef26c08d9ce428693e10221de6df",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "538faa44_a898b917",
+        "filename": "writerfilter/source/dmapper/DomainMapperTableHandler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1448,
+      "author": {
+        "id": 1002855
+      },
+      "writtenOn": "2021-07-16T07:02:46Z",
+      "side": 1,
+      "message": "You are right. Previously I checked how it works, and when inserting a new row, each new cell gets the cell\u0027s properties which is above it in the previous row. I also noted that, if in a cell there are several paragraphs, the first ones\u0027 props will be copied into the new row\u0027s cells.\nSo I think we can skip the first loop, but the one which goes through the last row\u0027s cells still needed.",
+      "parentUuid": "043d454c_c9f01289",
+      "range": {
+        "startLine": 1448,
+        "startChar": 36,
+        "endLine": 1448,
+        "endChar": 147
+      },
+      "revId": "86ad6b4327f2ef26c08d9ce428693e10221de6df",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
