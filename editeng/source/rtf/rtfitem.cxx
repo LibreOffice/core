@@ -81,33 +81,33 @@ void SvxRTFParser::SetScriptAttr( RTF_CharTypeDef eType, SfxItemSet& rSet,
     switch( rItem.Which() )
     {
     case SID_ATTR_CHAR_FONT:
-        pNormal = &aPlainMap.nFont;
-        pCJK = &aPlainMap.nCJKFont;
-        pCTL = &aPlainMap.nCTLFont;
+        pNormal = &aPlainMap[SID_ATTR_CHAR_FONT];
+        pCJK = &aPlainMap[SID_ATTR_CHAR_CJK_FONT];
+        pCTL = &aPlainMap[SID_ATTR_CHAR_CTL_FONT];
         break;
 
     case SID_ATTR_CHAR_FONTHEIGHT:
-        pNormal = &aPlainMap.nFontHeight;
-        pCJK = &aPlainMap.nCJKFontHeight;
-        pCTL = &aPlainMap.nCTLFontHeight;
+        pNormal = &aPlainMap[SID_ATTR_CHAR_FONTHEIGHT];
+        pCJK = &aPlainMap[SID_ATTR_CHAR_CJK_FONTHEIGHT];
+        pCTL = &aPlainMap[SID_ATTR_CHAR_CTL_FONTHEIGHT];
         break;
 
     case SID_ATTR_CHAR_POSTURE:
-        pNormal = &aPlainMap.nPosture;
-        pCJK = &aPlainMap.nCJKPosture;
-        pCTL = &aPlainMap.nCTLPosture;
+        pNormal = &aPlainMap[SID_ATTR_CHAR_POSTURE];
+        pCJK = &aPlainMap[SID_ATTR_CHAR_CJK_POSTURE];
+        pCTL = &aPlainMap[SID_ATTR_CHAR_CTL_POSTURE];
         break;
 
     case SID_ATTR_CHAR_WEIGHT:
-        pNormal = &aPlainMap.nWeight;
-        pCJK = &aPlainMap.nCJKWeight;
-        pCTL = &aPlainMap.nCTLWeight;
+        pNormal = &aPlainMap[SID_ATTR_CHAR_WEIGHT];
+        pCJK = &aPlainMap[SID_ATTR_CHAR_CJK_WEIGHT];
+        pCTL = &aPlainMap[SID_ATTR_CHAR_CTL_WEIGHT];
         break;
 
     case SID_ATTR_CHAR_LANGUAGE:
-        pNormal = &aPlainMap.nLanguage;
-        pCJK = &aPlainMap.nCJKLanguage;
-        pCTL = &aPlainMap.nCTLLanguage;
+        pNormal = &aPlainMap[SID_ATTR_CHAR_LANGUAGE];
+        pCJK = &aPlainMap[SID_ATTR_CHAR_CJK_LANGUAGE];
+        pCTL = &aPlainMap[SID_ATTR_CHAR_CTL_LANGUAGE];
         break;
 
     case 0:
@@ -267,57 +267,55 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
                 break;
 
             case RTF_KEEP:
-                if( aPardMap.nSplit )
+                if (const sal_uInt16 wid = aPardMap[SID_ATTR_PARA_SPLIT])
                 {
-                    pSet->Put( SvxFormatSplitItem( false, aPardMap.nSplit ));
+                    pSet->Put(SvxFormatSplitItem(false, wid));
                 }
                 break;
 
             case RTF_KEEPN:
-                if( aPardMap.nKeep )
+                if (const sal_uInt16 wid = aPardMap[SID_ATTR_PARA_KEEP])
                 {
-                    pSet->Put( SvxFormatKeepItem( true, aPardMap.nKeep ));
+                    pSet->Put(SvxFormatKeepItem(true, wid));
                 }
                 break;
 
             case RTF_LEVEL:
-                if( aPardMap.nOutlineLvl )
+                if (const sal_uInt16 wid = aPardMap[SID_ATTR_PARA_OUTLLEVEL])
                 {
-                    pSet->Put( SfxInt16Item( aPardMap.nOutlineLvl,
-                                                static_cast<sal_uInt16>(nTokenValue) ));
+                    pSet->Put(SfxInt16Item(wid, static_cast<sal_uInt16>(nTokenValue)));
                 }
                 break;
 
             case RTF_QL:
-                if( aPardMap.nAdjust )
+                if (const sal_uInt16 wid = aPardMap[SID_ATTR_PARA_ADJUST])
                 {
-                    pSet->Put( SvxAdjustItem( SvxAdjust::Left, aPardMap.nAdjust ));
+                    pSet->Put(SvxAdjustItem(SvxAdjust::Left, wid));
                 }
                 break;
             case RTF_QR:
-                if( aPardMap.nAdjust )
+                if (const sal_uInt16 wid = aPardMap[SID_ATTR_PARA_ADJUST])
                 {
-                    pSet->Put( SvxAdjustItem( SvxAdjust::Right, aPardMap.nAdjust ));
+                    pSet->Put(SvxAdjustItem(SvxAdjust::Right, wid));
                 }
                 break;
             case RTF_QJ:
-                if( aPardMap.nAdjust )
+                if (const sal_uInt16 wid = aPardMap[SID_ATTR_PARA_ADJUST])
                 {
-                    pSet->Put( SvxAdjustItem( SvxAdjust::Block, aPardMap.nAdjust ));
+                    pSet->Put(SvxAdjustItem(SvxAdjust::Block, wid));
                 }
                 break;
             case RTF_QC:
-                if( aPardMap.nAdjust )
+                if (const sal_uInt16 wid = aPardMap[SID_ATTR_PARA_ADJUST])
                 {
-                    pSet->Put( SvxAdjustItem( SvxAdjust::Center, aPardMap.nAdjust ));
+                    pSet->Put(SvxAdjustItem(SvxAdjust::Center, wid));
                 }
                 break;
 
             case RTF_FI:
-                if( aPardMap.nLRSpace )
+                if (const sal_uInt16 wid = aPardMap[SID_ATTR_LRSPACE])
                 {
-                    SvxLRSpaceItem aLR(
-                        static_cast<const SvxLRSpaceItem&>(pSet->Get(aPardMap.nLRSpace)));
+                    SvxLRSpaceItem aLR(static_cast<const SvxLRSpaceItem&>(pSet->Get(wid)));
                     sal_uInt16 nSz = 0;
                     if( -1 != nTokenValue )
                     {
@@ -332,10 +330,9 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
 
             case RTF_LI:
             case RTF_LIN:
-                if( aPardMap.nLRSpace )
+                if (const sal_uInt16 wid = aPardMap[SID_ATTR_LRSPACE])
                 {
-                    SvxLRSpaceItem aLR(
-                        static_cast<const SvxLRSpaceItem&>(pSet->Get(aPardMap.nLRSpace)));
+                    SvxLRSpaceItem aLR(static_cast<const SvxLRSpaceItem&>(pSet->Get(wid)));
                     sal_uInt16 nSz = 0;
                     if( 0 < nTokenValue )
                     {
@@ -350,10 +347,9 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
 
             case RTF_RI:
             case RTF_RIN:
-                if( aPardMap.nLRSpace )
+                if (const sal_uInt16 wid = aPardMap[SID_ATTR_LRSPACE])
                 {
-                    SvxLRSpaceItem aLR(
-                        static_cast<const SvxLRSpaceItem&>(pSet->Get(aPardMap.nLRSpace)));
+                    SvxLRSpaceItem aLR(static_cast<const SvxLRSpaceItem&>(pSet->Get(wid)));
                     sal_uInt16 nSz = 0;
                     if( 0 < nTokenValue )
                     {
@@ -367,10 +363,9 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
                 break;
 
             case RTF_SB:
-                if( aPardMap.nULSpace )
+                if (const sal_uInt16 wid = aPardMap[SID_ATTR_ULSPACE])
                 {
-                    SvxULSpaceItem aUL(
-                        static_cast<const SvxULSpaceItem&>(pSet->Get(aPardMap.nULSpace)));
+                    SvxULSpaceItem aUL(static_cast<const SvxULSpaceItem&>(pSet->Get(wid)));
                     sal_uInt16 nSz = 0;
                     if( 0 < nTokenValue )
                     {
@@ -384,10 +379,9 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
                 break;
 
             case RTF_SA:
-                if( aPardMap.nULSpace )
+                if (const sal_uInt16 wid = aPardMap[SID_ATTR_ULSPACE])
                 {
-                    SvxULSpaceItem aUL(
-                        static_cast<const SvxULSpaceItem&>(pSet->Get(aPardMap.nULSpace)));
+                    SvxULSpaceItem aUL(static_cast<const SvxULSpaceItem&>(pSet->Get(wid)));
                     sal_uInt16 nSz = 0;
                     if( 0 < nTokenValue )
                     {
@@ -401,11 +395,12 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
                 break;
 
             case RTF_SLMULT:
-                if( aPardMap.nLinespacing && 1 == nTokenValue )
+                if (const sal_uInt16 wid = aPardMap[SID_ATTR_PARA_LINESPACE];
+                    wid && 1 == nTokenValue)
                 {
                     // then switches to multi-line!
                     SvxLineSpacingItem aLSpace(
-                            static_cast<const SvxLineSpacingItem&>(pSet->Get( aPardMap.nLinespacing,false)));
+                        static_cast<const SvxLineSpacingItem&>(pSet->Get(wid, false)));
 
                     // how much do you get from the line height value?
 
@@ -426,12 +421,12 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
                 break;
 
             case RTF_SL:
-                if( aPardMap.nLinespacing )
+                if (const sal_uInt16 wid = aPardMap[SID_ATTR_PARA_LINESPACE])
                 {
                     // Calculate the ratio between the default font and the
                     // specified size. The distance consists of the line height
                     // (100%) and the space above the line (20%).
-                    SvxLineSpacingItem aLSpace(0, aPardMap.nLinespacing);
+                    SvxLineSpacingItem aLSpace(0, wid);
 
                     nTokenValue = !bTokenHasValue ? 0 : nTokenValue;
                     if (1000 == nTokenValue )
@@ -464,25 +459,22 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
                 break;
 
             case RTF_NOCWRAP:
-                if( aPardMap.nForbRule )
+                if (const sal_uInt16 wid = aPardMap[SID_ATTR_PARA_FORBIDDEN_RULES])
                 {
-                    pSet->Put( SvxForbiddenRuleItem( false,
-                                                    aPardMap.nForbRule ));
+                    pSet->Put(SvxForbiddenRuleItem(false, wid));
                 }
                 break;
             case RTF_NOOVERFLOW:
-                if( aPardMap.nHangPunct )
+                if (const sal_uInt16 wid = aPardMap[SID_ATTR_PARA_HANGPUNCTUATION])
                 {
-                    pSet->Put( SvxHangingPunctuationItem( false,
-                                                    aPardMap.nHangPunct ));
+                    pSet->Put(SvxHangingPunctuationItem(false, wid));
                 }
                 break;
 
             case RTF_ASPALPHA:
-                if( aPardMap.nScriptSpace )
+                if (const sal_uInt16 wid = aPardMap[SID_ATTR_PARA_SCRIPTSPACE])
                 {
-                    pSet->Put( SvxScriptSpaceItem( true,
-                                                aPardMap.nScriptSpace ));
+                    pSet->Put(SvxScriptSpaceItem(true, wid));
                 }
                 break;
 
@@ -498,10 +490,9 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
             case RTF_FAROMAN:   nFontAlign = SvxParaVertAlignItem::Align::Baseline;
                                 goto SET_FONTALIGNMENT;
 SET_FONTALIGNMENT:
-            if( aPardMap.nFontAlign )
+            if (const sal_uInt16 wid = aPardMap[SID_PARA_VERTALIGN])
             {
-                pSet->Put( SvxParaVertAlignItem( nFontAlign,
-                                                aPardMap.nFontAlign ));
+                pSet->Put(SvxParaVertAlignItem(nFontAlign, wid));
             }
             break;
 
@@ -519,8 +510,8 @@ SET_FONTALIGNMENT:
 
             case RTF_CAPS:
             case RTF_SCAPS:
-                if( aPlainMap.nCaseMap &&
-                    IsAttrSttPos() )        // not in the text flow?
+                if (const sal_uInt16 wid = aPlainMap[SID_ATTR_CHAR_CASEMAP];
+                    wid && IsAttrSttPos()) // not in the text flow?
                 {
                     SvxCaseMap eCaseMap;
                     if( !nTokenValue )
@@ -530,15 +521,14 @@ SET_FONTALIGNMENT:
                     else
                         eCaseMap = SvxCaseMap::SmallCaps;
 
-                    pSet->Put( SvxCaseMapItem( eCaseMap, aPlainMap.nCaseMap ));
+                    pSet->Put(SvxCaseMapItem(eCaseMap, wid));
                 }
                 break;
 
             case RTF_DN:
             case RTF_SUB:
-                if( aPlainMap.nEscapement )
+                if (const sal_uInt16 nEsc = aPlainMap[SID_ATTR_CHAR_ESCAPEMENT])
                 {
-                    const sal_uInt16 nEsc = aPlainMap.nEscapement;
                     if( -1 == nTokenValue )
                          nTokenValue = 6;  //RTF default \dn value in half-points
                     if( IsCalcValue() )
@@ -562,15 +552,14 @@ SET_FONTALIGNMENT:
                 break;
 
             case RTF_NOSUPERSUB:
-                if( aPlainMap.nEscapement )
+                if (const sal_uInt16 nEsc = aPlainMap[SID_ATTR_CHAR_ESCAPEMENT])
                 {
-                    const sal_uInt16 nEsc = aPlainMap.nEscapement;
                     pSet->Put( SvxEscapementItem( nEsc ));
                 }
                 break;
 
             case RTF_EXPND:
-                if( aPlainMap.nKering )
+                if (const sal_uInt16 wid = aPlainMap[SID_ATTR_CHAR_KERNING])
                 {
                     if( -1 == nTokenValue )
                         nTokenValue = 0;
@@ -578,12 +567,12 @@ SET_FONTALIGNMENT:
                         nTokenValue *= 5;
                     if( IsCalcValue() )
                         CalcValue();
-                    pSet->Put( SvxKerningItem( static_cast<short>(nTokenValue), aPlainMap.nKering ));
+                    pSet->Put(SvxKerningItem(static_cast<short>(nTokenValue), wid));
                 }
                 break;
 
             case RTF_KERNING:
-                if( aPlainMap.nAutoKerning )
+                if (const sal_uInt16 wid = aPlainMap[SID_ATTR_CHAR_AUTOKERN])
                 {
                     if( -1 == nTokenValue )
                         nTokenValue = 0;
@@ -591,19 +580,18 @@ SET_FONTALIGNMENT:
                         nTokenValue *= 10;
                     if( IsCalcValue() )
                         CalcValue();
-                    pSet->Put( SvxAutoKernItem( 0 != nTokenValue,
-                                                aPlainMap.nAutoKerning ));
+                    pSet->Put(SvxAutoKernItem(0 != nTokenValue, wid));
                 }
                 break;
 
             case RTF_EXPNDTW:
-                if( aPlainMap.nKering )
+                if (const sal_uInt16 wid = aPlainMap[SID_ATTR_CHAR_KERNING])
                 {
                     if( -1 == nTokenValue )
                         nTokenValue = 0;
                     if( IsCalcValue() )
                         CalcValue();
-                    pSet->Put( SvxKerningItem( static_cast<short>(nTokenValue), aPlainMap.nKering ));
+                    pSet->Put(SvxKerningItem(static_cast<short>(nTokenValue), wid));
                 }
                 break;
 
@@ -656,39 +644,37 @@ SET_FONTALIGNMENT:
                 break;
 
             case RTF_OUTL:
-                if( aPlainMap.nContour &&
-                    IsAttrSttPos() )        // not in the text flow?
+                if (const sal_uInt16 wid = aPlainMap[SID_ATTR_CHAR_CONTOUR];
+                    wid && IsAttrSttPos()) // not in the text flow?
                 {
-                    pSet->Put( SvxContourItem(nTokenValue != 0,
-                                aPlainMap.nContour ));
+                    pSet->Put(SvxContourItem(nTokenValue != 0, wid));
                 }
                 break;
 
             case RTF_SHAD:
-                if( aPlainMap.nShadowed &&
-                    IsAttrSttPos() )        // not in the text flow?
+                if (const sal_uInt16 wid = aPlainMap[SID_ATTR_CHAR_SHADOWED];
+                    wid && IsAttrSttPos()) // not in the text flow?
                 {
-                    pSet->Put( SvxShadowedItem(nTokenValue != 0,
-                                aPlainMap.nShadowed ));
+                    pSet->Put(SvxShadowedItem(nTokenValue != 0, wid));
                 }
                 break;
 
             case RTF_STRIKE:
-                if( aPlainMap.nCrossedOut &&
-                    IsAttrSttPos() )        // not in the text flow?
+                if (const sal_uInt16 wid = aPlainMap[SID_ATTR_CHAR_STRIKEOUT];
+                    wid && IsAttrSttPos()) // not in the text flow?
                 {
                     pSet->Put( SvxCrossedOutItem(
                         nTokenValue ? STRIKEOUT_SINGLE : STRIKEOUT_NONE,
-                        aPlainMap.nCrossedOut ));
+                        wid ));
                 }
                 break;
 
             case RTF_STRIKED:
-                if( aPlainMap.nCrossedOut )      // not in the text flow?
+                if (const sal_uInt16 wid = aPlainMap[SID_ATTR_CHAR_STRIKEOUT]) // not in the text flow?
                 {
                     pSet->Put( SvxCrossedOutItem(
                         nTokenValue ? STRIKEOUT_DOUBLE : STRIKEOUT_NONE,
-                        aPlainMap.nCrossedOut ));
+                        wid ));
                 }
                 break;
 
@@ -750,26 +736,26 @@ SET_FONTALIGNMENT:
             case RTF_ULW:
                 eUnderline = LINESTYLE_SINGLE;
 
-                if( aPlainMap.nWordlineMode )
+                if (const sal_uInt16 wid = aPlainMap[SID_ATTR_CHAR_WORDLINEMODE])
                 {
-                    pSet->Put( SvxWordLineModeItem( true, aPlainMap.nWordlineMode ));
+                    pSet->Put(SvxWordLineModeItem(true, wid));
                 }
                 goto ATTR_SETUNDERLINE;
 
 ATTR_SETUNDERLINE:
-                if( aPlainMap.nUnderline )
+                if (const sal_uInt16 wid = aPlainMap[SID_ATTR_CHAR_UNDERLINE])
                 {
-                    pSet->Put( SvxUnderlineItem( eUnderline, aPlainMap.nUnderline ));
+                    pSet->Put(SvxUnderlineItem(eUnderline, wid));
                 }
                 break;
 
             case RTF_ULC:
-                if( aPlainMap.nUnderline )
+                if (const sal_uInt16 wid = aPlainMap[SID_ATTR_CHAR_UNDERLINE])
                 {
-                    std::unique_ptr<SvxUnderlineItem> aUL(std::make_unique<SvxUnderlineItem>(LINESTYLE_SINGLE, aPlainMap.nUnderline));
+                    std::unique_ptr<SvxUnderlineItem> aUL(std::make_unique<SvxUnderlineItem>(LINESTYLE_SINGLE, wid));
                     const SfxPoolItem* pItem(nullptr);
 
-                    if( SfxItemState::SET == pSet->GetItemState(aPlainMap.nUnderline, false, &pItem ) )
+                    if (SfxItemState::SET == pSet->GetItemState(wid, false, &pItem))
                     {
                         // is switched off ?
                         if( LINESTYLE_NONE == static_cast<const SvxUnderlineItem*>(pItem)->GetLineStyle() )
@@ -779,7 +765,7 @@ ATTR_SETUNDERLINE:
                     }
                     else
                     {
-                        aUL.reset(static_cast<SvxUnderlineItem*>(pSet->Get( aPlainMap.nUnderline, false).Clone()));
+                        aUL.reset(static_cast<SvxUnderlineItem*>(pSet->Get(wid, false).Clone()));
                     }
 
                     if(LINESTYLE_NONE == aUL->GetLineStyle())
@@ -851,26 +837,26 @@ ATTR_SETUNDERLINE:
             case RTF_OLW:
                 eOverline = LINESTYLE_SINGLE;
 
-                if( aPlainMap.nWordlineMode )
+                if (const sal_uInt16 wid = aPlainMap[SID_ATTR_CHAR_WORDLINEMODE])
                 {
-                    pSet->Put( SvxWordLineModeItem( true, aPlainMap.nWordlineMode ));
+                    pSet->Put(SvxWordLineModeItem(true, wid));
                 }
                 goto ATTR_SETOVERLINE;
 
 ATTR_SETOVERLINE:
-                if( aPlainMap.nUnderline )
+                if (const sal_uInt16 wid = aPlainMap[SID_ATTR_CHAR_OVERLINE])
                 {
-                    pSet->Put( SvxOverlineItem( eOverline, aPlainMap.nOverline ));
+                    pSet->Put(SvxOverlineItem(eOverline, wid));
                 }
                 break;
 
             case RTF_OLC:
-                if( aPlainMap.nOverline )
+                if (const sal_uInt16 wid = aPlainMap[SID_ATTR_CHAR_OVERLINE])
                 {
-                    std::unique_ptr<SvxOverlineItem> aOL(std::make_unique<SvxOverlineItem>(LINESTYLE_SINGLE, aPlainMap.nOverline));
+                    std::unique_ptr<SvxOverlineItem> aOL(std::make_unique<SvxOverlineItem>(LINESTYLE_SINGLE, wid));
                     const SfxPoolItem* pItem(nullptr);
 
-                    if( SfxItemState::SET == pSet->GetItemState(aPlainMap.nOverline, false, &pItem ) )
+                    if (SfxItemState::SET == pSet->GetItemState(wid, false, &pItem))
                     {
                         // is switched off ?
                         if( LINESTYLE_NONE == static_cast<const SvxOverlineItem*>(pItem)->GetLineStyle() )
@@ -880,7 +866,7 @@ ATTR_SETOVERLINE:
                     }
                     else
                     {
-                        aOL.reset(static_cast<SvxOverlineItem*>(pSet->Get( aPlainMap.nOverline, false).Clone()));
+                        aOL.reset(static_cast<SvxOverlineItem*>(pSet->Get(wid, false).Clone()));
                     }
 
                     if(LINESTYLE_NONE == aOL->GetLineStyle())
@@ -896,9 +882,8 @@ ATTR_SETOVERLINE:
 
             case RTF_UP:
             case RTF_SUPER:
-                if( aPlainMap.nEscapement )
+                if (const sal_uInt16 nEsc = aPlainMap[SID_ATTR_CHAR_ESCAPEMENT])
                 {
-                    const sal_uInt16 nEsc = aPlainMap.nEscapement;
                     if( -1 == nTokenValue )
                         nTokenValue = 6;  //RTF default \up value in half-points
                     if( IsCalcValue() )
@@ -922,37 +907,33 @@ ATTR_SETOVERLINE:
                 break;
 
             case RTF_CF:
-                if( aPlainMap.nColor )
+                if (const sal_uInt16 wid = aPlainMap[SID_ATTR_CHAR_COLOR])
                 {
-                    pSet->Put( SvxColorItem( GetColor( sal_uInt16(nTokenValue) ),
-                                aPlainMap.nColor ));
+                    pSet->Put(SvxColorItem(GetColor(sal_uInt16(nTokenValue)), wid));
                 }
                 break;
             //#i12501# While cb is clearly documented in the rtf spec, word
             //doesn't accept it at all
 #if 0
             case RTF_CB:
-                if( aPlainMap.nBgColor )
+                if (const sal_uInt16 wid = aPlainMap[SID_ATTR_BRUSH_CHAR])
                 {
-                    pSet->Put( SvxBrushItem( GetColor( sal_uInt16(nTokenValue) ),
-                                aPlainMap.nBgColor ));
+                    pSet->Put(SvxBrushItem(GetColor(sal_uInt16(nTokenValue)), wid));
                 }
                 break;
 #endif
 
             case RTF_LANG:
-                if( aPlainMap.nLanguage )
+                if (const sal_uInt16 wid = aPlainMap[SID_ATTR_CHAR_LANGUAGE])
                 {
-                    pSet->Put( SvxLanguageItem( LanguageType(nTokenValue),
-                                aPlainMap.nLanguage ));
+                    pSet->Put(SvxLanguageItem(LanguageType(nTokenValue), wid));
                 }
                 break;
 
             case RTF_LANGFE:
-                if( aPlainMap.nCJKLanguage )
+                if (const sal_uInt16 wid = aPlainMap[SID_ATTR_CHAR_CJK_LANGUAGE])
                 {
-                    pSet->Put( SvxLanguageItem( LanguageType(nTokenValue),
-                                                aPlainMap.nCJKLanguage ));
+                    pSet->Put(SvxLanguageItem(LanguageType(nTokenValue), wid));
                 }
                 break;
             case RTF_ALANG:
@@ -970,17 +951,15 @@ ATTR_SETOVERLINE:
                 bIsLeftToRightDef = true;
                 break;
             case RTF_RTLPAR:
-                if (aPardMap.nDirection)
+                if (const sal_uInt16 wid = aPardMap[SID_ATTR_FRAMEDIRECTION])
                 {
-                    pSet->Put(SvxFrameDirectionItem(SvxFrameDirection::Horizontal_RL_TB,
-                        aPardMap.nDirection));
+                    pSet->Put(SvxFrameDirectionItem(SvxFrameDirection::Horizontal_RL_TB, wid));
                 }
                 break;
             case RTF_LTRPAR:
-                if (aPardMap.nDirection)
+                if (const sal_uInt16 wid = aPardMap[SID_ATTR_FRAMEDIRECTION])
                 {
-                    pSet->Put(SvxFrameDirectionItem(SvxFrameDirection::Horizontal_LR_TB,
-                        aPardMap.nDirection));
+                    pSet->Put(SvxFrameDirectionItem(SvxFrameDirection::Horizontal_LR_TB, wid));
                 }
                 break;
             case RTF_LOCH:      eCharType = LOW_CHARTYPE;           break;
@@ -998,15 +977,14 @@ ATTR_SETOVERLINE:
             case RTF_ACCCOMMA:
                 eEmphasis = (FontEmphasisMark::Accent | FontEmphasisMark::PosAbove);
 ATTR_SETEMPHASIS:
-                if( aPlainMap.nEmphasis )
+                if (const sal_uInt16 wid = aPlainMap[SID_ATTR_CHAR_EMPHASISMARK])
                 {
-                    pSet->Put( SvxEmphasisMarkItem( eEmphasis,
-                                                       aPlainMap.nEmphasis ));
+                    pSet->Put(SvxEmphasisMarkItem(eEmphasis, wid));
                 }
                 break;
 
             case RTF_TWOINONE:
-                if( aPlainMap.nTwoLines )
+                if (const sal_uInt16 wid = aPlainMap[SID_ATTR_CHAR_TWO_LINES])
                 {
                     sal_Unicode cStt, cEnd;
                     switch ( nTokenValue )
@@ -1018,50 +996,44 @@ ATTR_SETEMPHASIS:
                     default: cStt = 0; cEnd = 0; break;
                     }
 
-                    pSet->Put( SvxTwoLinesItem( true, cStt, cEnd,
-                                                       aPlainMap.nTwoLines ));
+                    pSet->Put(SvxTwoLinesItem(true, cStt, cEnd, wid));
                 }
                 break;
 
             case RTF_CHARSCALEX :
-                if (aPlainMap.nCharScaleX)
+                if (const sal_uInt16 wid = aPlainMap[SID_ATTR_CHAR_SCALEWIDTH])
                 {
                     //i21372
                     if (nTokenValue < 1 || nTokenValue > 600)
                         nTokenValue = 100;
-                    pSet->Put( SvxCharScaleWidthItem( sal_uInt16(nTokenValue),
-                                                       aPlainMap.nCharScaleX ));
+                    pSet->Put(SvxCharScaleWidthItem(sal_uInt16(nTokenValue), wid));
                 }
                 break;
 
             case RTF_HORZVERT:
-                if( aPlainMap.nHorzVert )
+                if (const sal_uInt16 wid = aPlainMap[SID_ATTR_CHAR_ROTATED])
                 {
                     // RTF knows only 90deg
-                    pSet->Put( SvxCharRotateItem( 900_deg10, 1 == nTokenValue,
-                                                       aPlainMap.nHorzVert ));
+                    pSet->Put(SvxCharRotateItem(900_deg10, 1 == nTokenValue, wid));
                 }
                 break;
 
             case RTF_EMBO:
-                if (aPlainMap.nRelief)
+                if (const sal_uInt16 wid = aPlainMap[SID_ATTR_CHAR_RELIEF])
                 {
-                    pSet->Put(SvxCharReliefItem(FontRelief::Embossed,
-                        aPlainMap.nRelief));
+                    pSet->Put(SvxCharReliefItem(FontRelief::Embossed, wid));
                 }
                 break;
             case RTF_IMPR:
-                if (aPlainMap.nRelief)
+                if (const sal_uInt16 wid = aPlainMap[SID_ATTR_CHAR_RELIEF])
                 {
-                    pSet->Put(SvxCharReliefItem(FontRelief::Engraved,
-                        aPlainMap.nRelief));
+                    pSet->Put(SvxCharReliefItem(FontRelief::Engraved, wid));
                 }
                 break;
             case RTF_V:
-                if (aPlainMap.nHidden)
+                if (const sal_uInt16 wid = aPlainMap[SID_ATTR_CHAR_HIDDEN])
                 {
-                    pSet->Put(SvxCharHiddenItem(nTokenValue != 0,
-                        aPlainMap.nHidden));
+                    pSet->Put(SvxCharHiddenItem(nTokenValue != 0, wid));
                 }
                 break;
             case RTF_CHBGFDIAG:
@@ -1079,7 +1051,7 @@ ATTR_SETEMPHASIS:
             case RTF_CHCBPAT:
             case RTF_CHCFPAT:
             case RTF_CHSHDNG:
-                if( aPlainMap.nBgColor )
+                if (aPlainMap[SID_ATTR_BRUSH_CHAR] != 0)
                     ReadBackgroundAttr( nToken, *pSet );
                 break;
 
@@ -1111,9 +1083,8 @@ ATTR_SETEMPHASIS:
                                     // Recognize own auto-flags!
                                     nEsc = DFLT_ESC_AUTO_SUPER;
 
-                                if( aPlainMap.nEscapement )
-                                    pSet->Put( SvxEscapementItem( nEsc, nProp,
-                                                       aPlainMap.nEscapement ));
+                                if (const sal_uInt16 wid = aPlainMap[SID_ATTR_CHAR_ESCAPEMENT])
+                                    pSet->Put(SvxEscapementItem(nEsc, nProp, wid));
                             }
                             break;
 
@@ -1121,10 +1092,10 @@ ATTR_SETEMPHASIS:
                             {
                                 SvxHyphenZoneItem aHypenZone(
                                             (nTokenValue & 1) != 0,
-                                                aPardMap.nHyphenzone );
+                                            aPardMap[SID_ATTR_PARA_HYPHENZONE]);
                                 aHypenZone.SetPageEnd((nTokenValue & 2) != 0);
 
-                                if( aPardMap.nHyphenzone &&
+                                if( aPardMap[SID_ATTR_PARA_HYPHENZONE] != 0 &&
                                     RTF_HYPHLEAD == GetNextToken() &&
                                     RTF_HYPHTRAIL == GetNextToken() &&
                                     RTF_HYPHMAX == GetNextToken() )
@@ -1164,9 +1135,8 @@ ATTR_SETEMPHASIS:
 
                                     Color aColor = GetColor( nCol );
 
-                                    if( aPardMap.nShadow )
-                                        pSet->Put( SvxShadowItem( aPardMap.nShadow,
-                                                                  &aColor, nDist, eSL ) );
+                                    if (const sal_uInt16 wid = aPardMap[SID_ATTR_BORDER_SHADOW])
+                                        pSet->Put(SvxShadowItem(wid, &aColor, nDist, eSL));
 
                                     bSkip = false;
                                 } while( false );
@@ -1266,7 +1236,7 @@ void SvxRTFParser::ReadTabAttr( int nToken, SfxItemSet& rSet )
     bool bMethodOwnsToken = false; // #i52542# patch from cmc.
 // then read all the TabStops
     SvxTabStop aTabStop;
-    SvxTabStopItem aAttr( 0, 0, SvxTabAdjust::Default, aPardMap.nTabStop );
+    SvxTabStopItem aAttr(0, 0, SvxTabAdjust::Default, aPardMap[SID_ATTR_TABSTOP]);
     bool bContinue = true;
     do {
         switch( nToken )
@@ -1372,10 +1342,10 @@ void SvxRTFParser::ReadBorderAttr( int nToken, SfxItemSet& rSet,
                                    bool bTableDef )
 {
     // then read the border attribute
-    std::unique_ptr<SvxBoxItem> aAttr(std::make_unique<SvxBoxItem>(aPardMap.nBox));
+    std::unique_ptr<SvxBoxItem> aAttr(std::make_unique<SvxBoxItem>(aPardMap[SID_ATTR_BORDER_OUTER]));
     const SfxPoolItem* pItem(nullptr);
 
-    if( SfxItemState::SET == rSet.GetItemState( aPardMap.nBox, false, &pItem ) )
+    if (SfxItemState::SET == rSet.GetItemState(aPardMap[SID_ATTR_BORDER_OUTER], false, &pItem))
     {
         aAttr.reset(static_cast<SvxBoxItem*>(pItem->Clone()));
     }
@@ -1500,7 +1470,7 @@ void SvxRTFParser::ReadBorderAttr( int nToken, SfxItemSet& rSet,
                 break;
 
         case RTF_BRDRSH:        // Shadowed border
-                rSet.Put( SvxShadowItem( aPardMap.nShadow, nullptr, 60 /*3pt*/,
+                rSet.Put( SvxShadowItem( aPardMap[SID_ATTR_BORDER_SHADOW], nullptr, 60 /*3pt*/,
                                         SvxShadowLocation::BottomRight ) );
                 break;
 
@@ -1569,8 +1539,8 @@ void SvxRTFParser::ReadBackgroundAttr( int nToken, SfxItemSet& rSet,
     sal_uInt8 nFillValue = 0;
 
     sal_uInt16 nWh = ( nToken & ~0xff ) == RTF_CHRFMT
-                    ? aPlainMap.nBgColor
-                    : aPardMap.nBrush;
+                    ? aPlainMap[SID_ATTR_BRUSH_CHAR]
+                    : aPardMap[SID_ATTR_BRUSH];
 
     do {
         switch( nToken )
@@ -1726,49 +1696,48 @@ void SvxRTFParser::RTFPardPlain( bool const bPard, SfxItemSet** ppSet )
         ( pCurrent->aAttrSet.GetParent() || pCurrent->aAttrSet.Count() ))
     {
         const SfxPoolItem *pItem, *pDef;
-        const sal_uInt16* pPtr;
-        sal_uInt16 nCnt;
+        std::map<sal_uInt16, sal_uInt16>::const_iterator aIt;
+        std::map<sal_uInt16, sal_uInt16>::const_iterator aEnd;
         const SfxItemSet* pDfltSet = &GetRTFDefaults();
         if( bPard )
         {
             pCurrent->nStyleNo = 0;
-            pPtr = reinterpret_cast<sal_uInt16*>(&aPardMap);
-            nCnt = sizeof(aPardMap) / sizeof(sal_uInt16);
+            aIt = aPardMap.begin();
+            aEnd = aPardMap.end();
         }
         else
         {
-            pPtr = reinterpret_cast<sal_uInt16*>(&aPlainMap);
-            nCnt = sizeof(aPlainMap) / sizeof(sal_uInt16);
+            aIt = aPlainMap.begin();
+            aEnd = aPlainMap.end();
         }
 
-        for( sal_uInt16 n = 0; n < nCnt; ++n, ++pPtr )
+        for (; aIt != aEnd; ++aIt)
         {
+            const sal_uInt16 wid = aIt->second;
             // Item set and different -> Set the Default Pool
-            if( !*pPtr )
+            if (!wid)
                 ;
-            else if (SfxItemPool::IsSlot(*pPtr))
-                pCurrent->aAttrSet.ClearItem( *pPtr );
+            else if (SfxItemPool::IsSlot(wid))
+                pCurrent->aAttrSet.ClearItem(wid);
             else if( IsChkStyleAttr() )
-                pCurrent->aAttrSet.Put( pDfltSet->Get( *pPtr ) );
+                pCurrent->aAttrSet.Put(pDfltSet->Get(wid));
             else if( !pCurrent->aAttrSet.GetParent() )
             {
-                if( SfxItemState::SET ==
-                    pDfltSet->GetItemState( *pPtr, false, &pDef ))
+                if (SfxItemState::SET == pDfltSet->GetItemState(wid, false, &pDef))
                     pCurrent->aAttrSet.Put( *pDef );
                 else
-                    pCurrent->aAttrSet.ClearItem( *pPtr );
+                    pCurrent->aAttrSet.ClearItem(wid);
             }
             else if( SfxItemState::SET == pCurrent->aAttrSet.GetParent()->
-                        GetItemState( *pPtr, true, &pItem ) &&
-                    *( pDef = &pDfltSet->Get( *pPtr )) != *pItem )
+                        GetItemState(wid, true, &pItem) &&
+                    *( pDef = &pDfltSet->Get(wid)) != *pItem )
                 pCurrent->aAttrSet.Put( *pDef );
             else
             {
-                if( SfxItemState::SET ==
-                    pDfltSet->GetItemState( *pPtr, false, &pDef ))
+                if (SfxItemState::SET == pDfltSet->GetItemState(wid, false, &pDef))
                     pCurrent->aAttrSet.Put( *pDef );
                 else
-                    pCurrent->aAttrSet.ClearItem( *pPtr );
+                    pCurrent->aAttrSet.ClearItem(wid);
             }
         }
     }
@@ -1797,7 +1766,7 @@ void SvxRTFParser::SetDefault( int nToken, int nValue )
     if( !bNewDoc )
         return;
 
-    SfxItemSet aTmp( *pAttrPool, aWhichMap.data() );
+    SfxItemSet aTmp(*pAttrPool, aWhichMap);
     bool bOldFlag = bIsLeftToRightDef;
     bIsLeftToRightDef = true;
     switch( nToken )
@@ -1831,7 +1800,7 @@ void SvxRTFParser::SetDefault( int nToken, int nValue )
         break;
 
     case RTF_DEFTAB:
-        if( aPardMap.nTabStop )
+        if (const sal_uInt16 wid = aPardMap[SID_ATTR_TABSTOP])
         {
             // RTF defines 720 twips as default
             bIsSetDfltTab = true;
@@ -1858,8 +1827,7 @@ void SvxRTFParser::SetDefault( int nToken, int nValue )
                 nTabCount = 1;
 
             // we want Defaulttabs
-            SvxTabStopItem aNewTab( nTabCount, sal_uInt16(nValue),
-                                SvxTabAdjust::Default, aPardMap.nTabStop );
+            SvxTabStopItem aNewTab(nTabCount, sal_uInt16(nValue), SvxTabAdjust::Default, wid);
             while( nTabCount )
                 const_cast<SvxTabStop&>(aNewTab[ --nTabCount ]).GetAdjustment() = SvxTabAdjust::Default;
 

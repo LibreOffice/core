@@ -37,6 +37,7 @@
 #include <editeng/editeng.hxx>
 #include <editeng/editdata.hxx>
 #include <svx/svdmodel.hxx>
+#include <editeng/editids.hrc>
 #include <editeng/svxrtf.hxx>
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
@@ -184,8 +185,7 @@ IMPL_LINK( SdrTableRTFParser, RTFImportHdl, RtfImportInfo&, rInfo, void )
         {
             SvxRTFParser* pParser = static_cast<SvxRTFParser*>(rInfo.pParser);
             pParser->SetAttrPool( &mrItemPool );
-            RTFPardAttrMapIds& rMap = pParser->GetPardMap();
-            rMap.nBox = SDRATTR_TABLE_BORDER;
+            pParser->SetPardMap(SID_ATTR_BORDER_OUTER, SDRATTR_TABLE_BORDER);
         }
             break;
         case RtfImportState::End:

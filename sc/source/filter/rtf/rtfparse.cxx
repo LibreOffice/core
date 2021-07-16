@@ -21,6 +21,7 @@
 #include <scitems.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/editeng.hxx>
+#include <editeng/editids.hrc>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/svxrtf.hxx>
 #include <vcl/outdev.hxx>
@@ -164,10 +165,9 @@ IMPL_LINK( ScRTFParser, RTFImportHdl, RtfImportInfo&, rInfo, void )
         {
             SvxRTFParser* pParser = static_cast<SvxRTFParser*>(rInfo.pParser);
             pParser->SetAttrPool( pPool.get() );
-            RTFPardAttrMapIds& rMap = pParser->GetPardMap();
-            rMap.nBrush = ATTR_BACKGROUND;
-            rMap.nBox = ATTR_BORDER;
-            rMap.nShadow = ATTR_SHADOW;
+            pParser->SetPardMap(SID_ATTR_BRUSH, ATTR_BACKGROUND);
+            pParser->SetPardMap(SID_ATTR_BORDER_OUTER, ATTR_BORDER);
+            pParser->SetPardMap(SID_ATTR_BORDER_SHADOW, ATTR_SHADOW);
         }
             break;
         case RtfImportState::End:
