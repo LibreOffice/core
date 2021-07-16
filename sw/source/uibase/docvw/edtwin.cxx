@@ -1449,9 +1449,6 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
     // look for vertical mappings
     if( !bIsDocReadOnly && !rSh.IsSelFrameMode() && !rSh.IsObjSelected() )
     {
-        // must changed from switch to if, because the Linux
-        // compiler has problem with the code. Has to remove if the new general
-        // handler exist.
         sal_uInt16 nKey = rKEvt.GetKeyCode().GetCode();
 
         if( KEY_UP == nKey || KEY_DOWN == nKey ||
