@@ -97,15 +97,18 @@ namespace pcr
 
     void SAL_CALL ODateControl::setValue( const Any& _rValue )
     {
+        SvtCalendarBox* pCalendarBox = getTypedControlWindow();
+
         util::Date aUNODate;
         if ( !( _rValue >>= aUNODate ) )
         {
-            getTypedControlWindow()->set_date(::Date(::Date::SYSTEM));
+            pCalendarBox->set_date(::Date(::Date::SYSTEM));
+            pCalendarBox->set_label("");
         }
         else
         {
             ::Date aDate( aUNODate.Day, aUNODate.Month, aUNODate.Year );
-            getTypedControlWindow()->set_date(aDate);
+            pCalendarBox->set_date(aDate);
         }
     }
 
