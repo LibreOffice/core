@@ -110,6 +110,14 @@ double SAL_CALL rtl_str_toDouble(char const * pStr) SAL_THROW_EXTERN_C()
                                    nullptr, nullptr);
 }
 
+double SAL_CALL rtl_str_toDouble_WithLength(const char* pStr,
+                                              sal_Int32 nStrLength) SAL_THROW_EXTERN_C()
+{
+    assert(pStr);
+    return rtl_math_stringToDouble(pStr, pStr + nStrLength, '.', 0,
+                                   nullptr, nullptr);
+}
+
 /* ======================================================================= */
 
 static int rtl_ImplGetFastUTF8ByteLen( const sal_Unicode* pStr, sal_Int32 nLen )
@@ -557,6 +565,12 @@ sal_Bool SAL_CALL rtl_str_toBoolean(const char* pStr) SAL_THROW_EXTERN_C()
 sal_Int32 SAL_CALL rtl_str_toInt32(const char* pStr, sal_Int16 nRadix) SAL_THROW_EXTERN_C()
 {
     return rtl::str::toInt32(pStr, nRadix);
+}
+
+sal_Int32 SAL_CALL rtl_str_toInt32_WithLength(const char* pStr, sal_Int16 nRadix,
+                                              sal_Int32 nStrLength) SAL_THROW_EXTERN_C()
+{
+    return rtl::str::toInt32_WithLength(pStr, nRadix, nStrLength);
 }
 
 sal_Int64 SAL_CALL rtl_str_toInt64(const char* pStr, sal_Int16 nRadix) SAL_THROW_EXTERN_C()

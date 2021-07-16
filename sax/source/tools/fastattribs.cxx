@@ -196,7 +196,7 @@ bool FastAttributeList::getAsInteger( sal_Int32 nToken, sal_Int32 &rInt) const
     for (size_t i = 0; i < maAttributeTokens.size(); ++i)
         if (maAttributeTokens[i] == nToken)
         {
-            rInt = rtl_str_toInt32( getFastAttributeValue(i), 10 );
+            rInt = rtl_str_toInt32_WithLength( getFastAttributeValue(i), 10, AttributeValueLength(i) );
             return true;
         }
     return false;
@@ -204,7 +204,7 @@ bool FastAttributeList::getAsInteger( sal_Int32 nToken, sal_Int32 &rInt) const
 
 sal_Int32 FastAttributeList::getAsIntegerByIndex( sal_Int32 nTokenIndex ) const
 {
-    return rtl_str_toInt32( getFastAttributeValue(nTokenIndex), 10 );
+    return rtl_str_toInt32_WithLength( getFastAttributeValue(nTokenIndex), 10, AttributeValueLength(nTokenIndex) );
 }
 
 bool FastAttributeList::getAsDouble( sal_Int32 nToken, double &rDouble) const
@@ -213,7 +213,7 @@ bool FastAttributeList::getAsDouble( sal_Int32 nToken, double &rDouble) const
     for (size_t i = 0; i < maAttributeTokens.size(); ++i)
         if (maAttributeTokens[i] == nToken)
         {
-            rDouble = rtl_str_toDouble( getFastAttributeValue(i) );
+            rDouble = rtl_str_toDouble_WithLength( getFastAttributeValue(i),  AttributeValueLength(i) );
             return true;
         }
     return false;
