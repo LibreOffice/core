@@ -34,7 +34,7 @@ class tdf134452(UITestCase):
                 self.assertEqual("true", get_state_as_dict(xpagestyle)["Selected"])
 
             #applying table style on the table
-            #without the fix, break and pageDesc properties would be overriden and lost
+            #without the fix, break and pageDesc properties would be overridden and lost
             document = self.ui_test.get_component()
             tables = document.getTextTables()
             tables[0].setPropertyValue("TableTemplateName", "Box List Red")

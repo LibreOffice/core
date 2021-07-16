@@ -1787,7 +1787,7 @@ void SdOOXMLExportTest3::testTdf143315()
 
     xmlDocUniquePtr pXml = parseExport(tmpfile, "ppt/slides/slide1.xml");
 
-    // Without the fix in place, whis would have failed with
+    // Without the fix in place, this would have failed with
     // - Expected:
     // - Actual  : 216000
     // - In <file:///tmp/lu161922zcvd.tmp>, XPath '/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:pPr' unexpected 'marL' attribute
