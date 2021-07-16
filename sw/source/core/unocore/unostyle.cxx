@@ -3530,13 +3530,13 @@ uno::Reference< style::XAutoStyle > SwXAutoStyleFamily::insertStyle(
         throw uno::RuntimeException();
     }
 
-    const sal_uInt16* pRange = nullptr;
+    const WhichRangesContainer* pRange = nullptr;
     const SfxItemPropertySet* pPropSet = nullptr;
     switch( m_eFamily )
     {
         case IStyleAccess::AUTO_STYLE_CHAR:
         {
-            pRange = aCharAutoFormatSetRange;
+            pRange = &aCharAutoFormatSetRange;
             pPropSet = aSwMapProvider.GetPropertySet(PROPERTY_MAP_CHAR_AUTO_STYLE);
             break;
         }
@@ -3548,7 +3548,7 @@ uno::Reference< style::XAutoStyle > SwXAutoStyleFamily::insertStyle(
         }
         case IStyleAccess::AUTO_STYLE_PARA:
         {
-            pRange = aTextNodeSetRange; // checked, already added support for [XATTR_FILL_FIRST, XATTR_FILL_LAST]
+            pRange = &aTextNodeSetRange; // checked, already added support for [XATTR_FILL_FIRST, XATTR_FILL_LAST]
             pPropSet = aSwMapProvider.GetPropertySet(PROPERTY_MAP_PARA_AUTO_STYLE);
             break;
         }
@@ -3558,7 +3558,7 @@ uno::Reference< style::XAutoStyle > SwXAutoStyleFamily::insertStyle(
     if( !pPropSet)
         throw uno::RuntimeException();
 
-    SwAttrSet aSet( m_pDocShell->GetDoc()->GetAttrPool(), pRange );
+    SwAttrSet aSet( m_pDocShell->GetDoc()->GetAttrPool(), pRange ? *pRange : WhichRangesContainer() );
     const bool bTakeCareOfDrawingLayerFillStyle(IStyleAccess::AUTO_STYLE_PARA == m_eFamily);
 
     if(!bTakeCareOfDrawingLayerFillStyle)

@@ -38,10 +38,10 @@
 using namespace com::sun::star;
 
 SwFormat::SwFormat( SwAttrPool& rPool, const char* pFormatNm,
-              const sal_uInt16* pWhichRanges, SwFormat *pDrvdFrame,
+              const WhichRangesContainer* pWhichRanges, SwFormat *pDrvdFrame,
               sal_uInt16 nFormatWhich ) :
     m_aFormatName( OUString::createFromAscii(pFormatNm) ),
-    m_aSet( rPool, pWhichRanges ),
+    m_aSet( rPool, pWhichRanges ? *pWhichRanges : WhichRangesContainer() ),
     m_nWhichId( nFormatWhich ),
     m_nPoolFormatId( USHRT_MAX ),
     m_nPoolHelpId( USHRT_MAX ),
@@ -59,10 +59,10 @@ SwFormat::SwFormat( SwAttrPool& rPool, const char* pFormatNm,
 }
 
 SwFormat::SwFormat( SwAttrPool& rPool, const OUString& rFormatNm,
-              const sal_uInt16* pWhichRanges, SwFormat* pDrvdFrame,
+              const WhichRangesContainer* pWhichRanges, SwFormat* pDrvdFrame,
               sal_uInt16 nFormatWhich ) :
     m_aFormatName( rFormatNm ),
-    m_aSet( rPool, pWhichRanges ),
+    m_aSet( rPool, pWhichRanges ? *pWhichRanges : WhichRangesContainer() ),
     m_nWhichId( nFormatWhich ),
     m_nPoolFormatId( USHRT_MAX ),
     m_nPoolHelpId( USHRT_MAX ),

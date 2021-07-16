@@ -36,13 +36,13 @@ class SAL_DLLPUBLIC_RTTI SwFormatColl: public SwFormat
 {
 protected:
     SwFormatColl( SwAttrPool& rPool, const char* pFormatName,
-                const sal_uInt16* pWhichRanges, SwFormatColl* pDerFrom,
+                const WhichRangesContainer* pWhichRanges, SwFormatColl* pDerFrom,
                 sal_uInt16 nFormatWhich )
           : SwFormat( rPool, pFormatName, pWhichRanges, pDerFrom, nFormatWhich )
     { SetAuto(false); }
 
     SwFormatColl( SwAttrPool& rPool, const OUString &rFormatName,
-                const sal_uInt16* pWhichRanges, SwFormatColl* pDerFrom,
+                const WhichRangesContainer* pWhichRanges, SwFormatColl* pDerFrom,
                 sal_uInt16 nFormatWhich )
           : SwFormat( rPool, rFormatName, pWhichRanges, pDerFrom, nFormatWhich )
     { SetAuto(false); }
@@ -74,7 +74,7 @@ protected:
     SwTextFormatColl( SwAttrPool& rPool, const char* pFormatCollName,
                     SwTextFormatColl* pDerFrom = nullptr,
                     sal_uInt16 nFormatWh = RES_TXTFMTCOLL )
-        : SwFormatColl(rPool, pFormatCollName, aTextFormatCollSetRange, pDerFrom, nFormatWh)
+        : SwFormatColl(rPool, pFormatCollName, &aTextFormatCollSetRange, pDerFrom, nFormatWh)
         , mbStayAssignedToListLevelOfOutlineStyle(false)
         , mbAssignedToOutlineStyle(false)
         , m_bInSwFntCache(false)
@@ -85,7 +85,7 @@ protected:
     SwTextFormatColl( SwAttrPool& rPool, const OUString &rFormatCollName,
                     SwTextFormatColl* pDerFrom,
                     sal_uInt16 nFormatWh = RES_TXTFMTCOLL )
-        : SwFormatColl(rPool, rFormatCollName, aTextFormatCollSetRange, pDerFrom, nFormatWh)
+        : SwFormatColl(rPool, rFormatCollName, &aTextFormatCollSetRange, pDerFrom, nFormatWh)
         , mbStayAssignedToListLevelOfOutlineStyle(false)
         , mbAssignedToOutlineStyle(false)
         , m_bInSwFntCache(false)
@@ -170,13 +170,13 @@ class SwGrfFormatColl final : public SwFormatColl
 
     SwGrfFormatColl( SwAttrPool& rPool, const char* pFormatCollName,
                     SwGrfFormatColl* pDerFrom = nullptr )
-        : SwFormatColl( rPool, pFormatCollName, aGrfFormatCollSetRange,
+        : SwFormatColl( rPool, pFormatCollName, &aGrfFormatCollSetRange,
                     pDerFrom, RES_GRFFMTCOLL )
     {}
 
     SwGrfFormatColl( SwAttrPool& rPool, const OUString &rFormatCollName,
                     SwGrfFormatColl* pDerFrom )
-        : SwFormatColl( rPool, rFormatCollName, aGrfFormatCollSetRange,
+        : SwFormatColl( rPool, rFormatCollName, &aGrfFormatCollSetRange,
                     pDerFrom, RES_GRFFMTCOLL )
     {}
 };
