@@ -50,6 +50,142 @@
       "revId": "d1ea945f8a1a1bdc0bc80c30a08cddc199523397",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ff5d0961_86966fb8",
+        "filename": "bin/Mapping.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2021-07-16T12:08:02Z",
+      "side": 1,
+      "message": "oh, and obviously dumping the same content into multiple files is unnecessary...",
+      "revId": "d1ea945f8a1a1bdc0bc80c30a08cddc199523397",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b3b095b6_2dd202ed",
+        "filename": "bin/fetch-unit-id.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2021-07-16T12:08:02Z",
+      "side": 1,
+      "message": "This should be handled as a commandline parameter/option, and not be asked interactively (only add confirmation to proceed without api key, pointing to risk of being blocked due to api limits (or in case the the script is extended to read the limit-headers stating that it will take long time since it will have to wait for timers to reset)",
+      "revId": "d1ea945f8a1a1bdc0bc80c30a08cddc199523397",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fdf16a0a_15cd0661",
+        "filename": "bin/fetch-unit-id.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2021-07-16T12:08:02Z",
+      "side": 1,
+      "message": "should strip trailing newlines at EOF here. → ….rstrip()",
+      "revId": "d1ea945f8a1a1bdc0bc80c30a08cddc199523397",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "42e37788_4fdc8236",
+        "filename": "bin/fetch-unit-id.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2021-07-16T12:08:02Z",
+      "side": 1,
+      "message": "should add a check whether file exists/whether open is successful. If not tell user to create the file using the mapping script.",
+      "revId": "d1ea945f8a1a1bdc0bc80c30a08cddc199523397",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e4edfb73_498f5b15",
+        "filename": "bin/fetch-unit-id.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2021-07-16T12:08:02Z",
+      "side": 1,
+      "message": "only headers parameter is getting special handling in the if, url should be assembled outside the if/else block, header value can be set to empty value instead, so the actual request can be done outside of the block, passing in the url and header value",
+      "revId": "d1ea945f8a1a1bdc0bc80c30a08cddc199523397",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a492dad0_30bc00fe",
+        "filename": "bin/fetch-unit-id.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2021-07-16T12:08:02Z",
+      "side": 1,
+      "message": "unnecessary. If using API key then you\u0027ll have enough quota to not have to throttle, and when not being authenticated, waiting a second is not enough.\n\nProper solution would be to look at the response headers and look at the x-ratelimit headers.",
+      "revId": "d1ea945f8a1a1bdc0bc80c30a08cddc199523397",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "713edd79_853fbc8f",
+        "filename": "bin/fetch-unit-id.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2021-07-16T12:08:02Z",
+      "side": 1,
+      "message": "see above.",
+      "revId": "d1ea945f8a1a1bdc0bc80c30a08cddc199523397",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "59cb8796_80986aac",
+        "filename": "bin/fetch-unit-id.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2021-07-16T12:08:02Z",
+      "side": 1,
+      "message": "besides spelling would be nice to have a countdown (x screenshots remaining) instead of a countup. or at least add a total screenshot count (screenshot x of y)",
+      "revId": "d1ea945f8a1a1bdc0bc80c30a08cddc199523397",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
