@@ -112,67 +112,69 @@ void RemoteServer::execute()
 void RemoteServer::handleAcceptedConnection( BufferedStreamSocket *pSocket )
 {
     OString aLine;
-    if ( pSocket->readLine( aLine)
-        && aLine == "LO_SERVER_CLIENT_PAIR"
-        && pSocket->readLine( aLine ) )
+    if ( ! ( pSocket->readLine( aLine)
+             && aLine == "LO_SERVER_CLIENT_PAIR"
+             && pSocket->readLine( aLine ) ) )
     {
-        OString aName( aLine );
+        SAL_INFO( "sdremote", "client failed to send LO_SERVER_CLIENT_PAIR, ignoring" );
+        delete pSocket;
+        return;
+    }
 
-        if ( ! pSocket->readLine( aLine ) )
-        {
+    OString aName( aLine );
+
+    if ( ! pSocket->readLine( aLine ) )
+    {
+        delete pSocket;
+        return;
+    }
+    OString aPin( aLine );
+
+    SocketAddr aClientAddr;
+    pSocket->getPeerAddr( aClientAddr );
+
+    do
+    {
+        // Read off any additional non-empty lines
+        // We know that we at least have the empty termination line to read.
+        if ( ! pSocket->readLine( aLine ) ) {
             delete pSocket;
             return;
         }
-        OString aPin( aLine );
+    }
+    while ( aLine.getLength() > 0 );
 
-        SocketAddr aClientAddr;
-        pSocket->getPeerAddr( aClientAddr );
+    MutexGuard aGuard( sDataMutex );
+    std::shared_ptr< ClientInfoInternal > pClient =
+        std::make_shared<ClientInfoInternal>(
+            OStringToOUString( aName, RTL_TEXTENCODING_UTF8 ),
+            pSocket, OStringToOUString( aPin, RTL_TEXTENCODING_UTF8 ) );
+    mAvailableClients.push_back( pClient );
 
-        do
+    // Check if we already have this server.
+    Reference< XNameAccess > const xConfig = officecfg::Office::Impress::Misc::AuthorisedRemotes::get();
+    const Sequence< OUString > aNames = xConfig->getElementNames();
+    for ( const auto& rName : aNames )
+    {
+        if ( rName == pClient->mName )
         {
-            // Read off any additional non-empty lines
-            // We know that we at least have the empty termination line to read.
-            if ( ! pSocket->readLine( aLine ) ) {
-                delete pSocket;
+            Reference<XNameAccess> xSetItem( xConfig->getByName(rName), UNO_QUERY );
+            Any axPin(xSetItem->getByName("PIN"));
+            OUString sPin;
+            axPin >>= sPin;
+
+            if ( sPin == pClient->mPin ) {
+                SAL_INFO( "sdremote", "client found on validated list -- connecting" );
+                connectClient( pClient, sPin );
                 return;
             }
         }
-        while ( aLine.getLength() > 0 );
-
-        MutexGuard aGuard( sDataMutex );
-        std::shared_ptr< ClientInfoInternal > pClient =
-            std::make_shared<ClientInfoInternal>(
-                OStringToOUString( aName, RTL_TEXTENCODING_UTF8 ),
-                pSocket, OStringToOUString( aPin, RTL_TEXTENCODING_UTF8 ) );
-        mAvailableClients.push_back( pClient );
-
-        // Check if we already have this server.
-        Reference< XNameAccess > const xConfig = officecfg::Office::Impress::Misc::AuthorisedRemotes::get();
-        const Sequence< OUString > aNames = xConfig->getElementNames();
-        for ( const auto& rName : aNames )
-        {
-            if ( rName == pClient->mName )
-            {
-                Reference<XNameAccess> xSetItem( xConfig->getByName(rName), UNO_QUERY );
-                Any axPin(xSetItem->getByName("PIN"));
-                OUString sPin;
-                axPin >>= sPin;
-
-                if ( sPin == pClient->mPin ) {
-                    SAL_INFO( "sdremote", "client found on validated list -- connecting" );
-                    connectClient( pClient, sPin );
-                    return;
-                }
-            }
-        }
-        // Pin not found so inform the client.
-        SAL_INFO( "sdremote", "client not found on validated list" );
-        pSocket->write( "LO_SERVER_VALIDATING_PIN\n\n",
-                        strlen( "LO_SERVER_VALIDATING_PIN\n\n" ) );
-    } else {
-        SAL_INFO( "sdremote", "client failed to send LO_SERVER_CLIENT_PAIR, ignoring" );
-        delete pSocket;
     }
+
+    // Pin not found so inform the client.
+    SAL_INFO( "sdremote", "client not found on validated list" );
+    pSocket->write( "LO_SERVER_VALIDATING_PIN\n\n",
+                    strlen( "LO_SERVER_VALIDATING_PIN\n\n" ) );
 }
 
 RemoteServer *sd::RemoteServer::spServer = nullptr;
