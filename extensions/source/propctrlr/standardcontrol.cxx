@@ -90,32 +90,33 @@ namespace pcr
     }
 
     //= ODateControl
-    ODateControl::ODateControl(std::unique_ptr<SvtCalendarBox> xWidget, std::unique_ptr<weld::Builder> xBuilder, bool bReadOnly)
+    ODateControl::ODateControl(std::unique_ptr<weld::Container> xWidget, std::unique_ptr<weld::Builder> xBuilder, bool bReadOnly)
         : ODateControl_Base(PropertyControlType::DateField, std::move(xBuilder), std::move(xWidget), bReadOnly)
+        , m_xEntry(m_xBuilder->weld_entry("entry"))
+        , m_xCalendarBox(std::make_unique<SvtCalendarBox>(m_xBuilder->weld_menu_button("button")))
     {
+        m_xEntryFormatter.reset(new weld::DateFormatter(*m_xEntry));
     }
 
     void SAL_CALL ODateControl::setValue( const Any& _rValue )
     {
-        SvtCalendarBox* pCalendarBox = getTypedControlWindow();
-
         util::Date aUNODate;
         if ( !( _rValue >>= aUNODate ) )
         {
-            pCalendarBox->set_date(::Date(::Date::SYSTEM));
-            pCalendarBox->set_label("");
+            m_xEntry->set_text(OUString());
         }
         else
         {
             ::Date aDate( aUNODate.Day, aUNODate.Month, aUNODate.Year );
-            pCalendarBox->set_date(aDate);
+            m_xEntryFormatter->SetDate(aDate);
+            m_xCalendarBox->set_date(aDate);
         }
     }
 
     Any SAL_CALL ODateControl::getValue()
     {
         Any aPropValue;
-        ::Date aDate(getTypedControlWindow()->get_date());
+        ::Date aDate(m_xEntryFormatter->GetDate());
         if (!aDate.IsEmpty())
             aPropValue <<= aDate.GetUNODate();
         return aPropValue;
