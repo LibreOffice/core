@@ -141,8 +141,6 @@ public:
     SfxItemSet(SfxItemPool& pool, svl::Items<WIDs...>)
         : SfxItemSet(pool, WhichRangesContainer(svl::Items<WIDs...>::value)) {}
 
-    SfxItemSet( SfxItemPool&, const sal_uInt16* nWhichPairTable );
-
     virtual ~SfxItemSet();
 
     virtual std::unique_ptr<SfxItemSet> Clone(bool bItems = true, SfxItemPool *pToPool = nullptr) const;
