@@ -1505,7 +1505,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             OUString sWord(xSpellAlt->getWord());
             linguistic::DictionaryError nAddRes = linguistic::AddEntryToDic( xDictionary,
                     sWord, false, OUString() );
-            if (linguistic::DictionaryError::NONE != nAddRes && !xDictionary->getEntry(sWord).is())
+            if (linguistic::DictionaryError::NONE != nAddRes && xDictionary.is() && !xDictionary->getEntry(sWord).is())
             {
                 SvxDicError(rWrtSh.GetView().GetFrameWeld(), nAddRes);
             }
