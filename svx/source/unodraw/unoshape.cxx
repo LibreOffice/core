@@ -1646,8 +1646,7 @@ void SvxShape::_setPropertyValue( const OUString& rPropertyName, const uno::Any&
     {
         if( !mpImpl->mxItemSet )
         {
-            sal_uInt16 aWhichPairTable[] = { pMap->nWID, pMap->nWID, 0, 0 };
-            mpImpl->mxItemSet.emplace( GetSdrObject()->getSdrModelFromSdrObject().GetItemPool(), aWhichPairTable);
+            mpImpl->mxItemSet.emplace( GetSdrObject()->getSdrModelFromSdrObject().GetItemPool(), pMap->nWID, pMap->nWID );
         }
         else
         {
@@ -1657,8 +1656,7 @@ void SvxShape::_setPropertyValue( const OUString& rPropertyName, const uno::Any&
     }
     else
     {
-        sal_uInt16 aWhichPairTable[] = { pMap->nWID, pMap->nWID, 0, 0 };
-        xLocalSet.emplace( GetSdrObject()->getSdrModelFromSdrObject().GetItemPool(), aWhichPairTable);
+        xLocalSet.emplace( GetSdrObject()->getSdrModelFromSdrObject().GetItemPool(), pMap->nWID, pMap->nWID);
         pSet = &*xLocalSet;
     }
 
