@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "d036576a_650003e0",
+        "filename": "sc/source/core/tool/address.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 455,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-07-16T09:03:03Z",
+      "side": 1,
+      "message": "Balázs: could you list examples for all possible cases of the string in the comments, please? It\u0027s not obvious, that this must be a const string \"[0]\", or \"[\" + n + \"]\" or \"^[[][0-9]+[]]\" (mandatory starting position of \"[\" + n + \"]\").",
+      "parentUuid": "f93b9128_bc5e2f6b",
+      "revId": "cb0edf28a0a5d244aa5d39c2156b13ce701efefc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "bc2218b2_3cf0b3db",
         "filename": "sc/source/core/tool/address.cxx",
         "patchSetId": 6
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "588482c3_b1a25b8a",
+        "filename": "sc/source/core/tool/address.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 458,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-07-16T09:03:03Z",
+      "side": 1,
+      "message": "Balázs, if we don\u0027t want to permit bad formula syntax, we need strict parsing, i.e. instead of .*!, we need something [a-zA-Z][-0-9a-zA-Z]*!, moreover handle encoded acuted letters, special characters, if needed. Likely it must be a helper function for this.",
+      "parentUuid": "bc2218b2_3cf0b3db",
+      "revId": "cb0edf28a0a5d244aa5d39c2156b13ce701efefc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "71d3dd47_ee87e925",
         "filename": "sc/source/core/tool/address.cxx",
         "patchSetId": 6
@@ -47,6 +83,30 @@
       "writtenOn": "2021-07-15T15:00:09Z",
       "side": 1,
       "message": "If there was whitespace occuring behind the \u0027!\u0027 wouldn\u0027t that be an error, so it shouldn\u0027t be silently parsed away?",
+      "range": {
+        "startLine": 463,
+        "startChar": 20,
+        "endLine": 463,
+        "endChar": 37
+      },
+      "revId": "cb0edf28a0a5d244aa5d39c2156b13ce701efefc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d923b697_1bba1202",
+        "filename": "sc/source/core/tool/address.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 463,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-07-16T09:03:03Z",
+      "side": 1,
+      "message": "Balázs, we don\u0027t want to accept [0]!$ (an incomplete address). This may be a theoretical bad address, but a malicious document can contain it.",
+      "parentUuid": "71d3dd47_ee87e925",
       "range": {
         "startLine": 463,
         "startChar": 20,
@@ -122,6 +182,24 @@
     },
     {
       "key": {
+        "uuid": "89f6c963_193942b8",
+        "filename": "sc/source/core/tool/compiler.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 5287,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-07-16T09:03:03Z",
+      "side": 1,
+      "message": "Balázs, could you list examples, where this was really needed, please? If I right understand, we don\u0027t need this with full conversion of Excel\u0027s formulas or the problem is that is missing in the chart import?",
+      "parentUuid": "b1e9dcf2_e4c90953",
+      "revId": "cb0edf28a0a5d244aa5d39c2156b13ce701efefc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "210d59ba_1dbfbcfe",
         "filename": "sc/source/core/tool/compiler.cxx",
         "patchSetId": 6
@@ -133,6 +211,24 @@
       "writtenOn": "2021-07-15T15:00:09Z",
       "side": 1,
       "message": "This is wrong, certainly unexpected at least in the UI. If it is necessary to do so for OOXML storage (if so, could you please point me to the relevant OOXML/ECMA specification section), but I doubt that because global names always worked without, then it shouldn\u0027t be done for all Excel address conventions but only for OOXML formula grammar, i.e. would require to ask FormulaGrammar::isOOXML(meGrammar).",
+      "revId": "cb0edf28a0a5d244aa5d39c2156b13ce701efefc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b773bb0f_d26f9cf8",
+        "filename": "sc/source/core/tool/compiler.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 5300,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-07-16T09:03:03Z",
+      "side": 1,
+      "message": "Balázs: there are different formula syntaxes of Excel, but this is only for OOXML (or for old MSO XML?), so it\u0027s better to use something\n\n else if (bExcelConvention \u0026\u0026 FormulaGrammar::isOOXML(meGrammar))\n\nFrom the patch, it seems, \"[0]\" is only for the export, and we don\u0027t want to add this to the UI, because this hidden/undocumented/not standardized(?) magic is annoying/frustrating for the users. We need to move or limit this only for the export code.\n\nBy the way, what about the \"[1]\" or the other possible external chart data source. Or does it not exist? More examples, and more information about the standard or about the de facto interoperability requirements will help to choose the best approach.",
+      "parentUuid": "210d59ba_1dbfbcfe",
       "revId": "cb0edf28a0a5d244aa5d39c2156b13ce701efefc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
