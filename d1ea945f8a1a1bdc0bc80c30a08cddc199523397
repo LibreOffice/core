@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cdc6f52f_5be00041",
+        "filename": "bin/Mapping.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2021-07-16T11:24:28Z",
+      "side": 1,
+      "message": "please format the file with unix-style lineends, otherwise the script will fail on linux/ trying to run/locate python3\\r",
+      "revId": "d1ea945f8a1a1bdc0bc80c30a08cddc199523397",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0184277e_1e4346dc",
+        "filename": "bin/Mapping.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2021-07-16T11:24:28Z",
+      "side": 1,
+      "message": "This fails, you\u0027re assuming naming of the sourcedirectory and also that sourcedirectory \u003d builddirectory.\nAlso you assume that the part of that name never appears earlier in the file \nYou should strip the cwd \u003d builddir from the pathname instead, but you don\u0027t even have to do that manually, since python has the os.path.relpath function",
+      "revId": "d1ea945f8a1a1bdc0bc80c30a08cddc199523397",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c9a99645_087abfc3",
+        "filename": "bin/Mapping.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2021-07-16T11:24:28Z",
+      "side": 1,
+      "message": "you added variables for screenshotdir already at the top, just reuse that here instead of assembling it again, same for next block",
+      "revId": "d1ea945f8a1a1bdc0bc80c30a08cddc199523397",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
