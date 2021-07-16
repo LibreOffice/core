@@ -320,6 +320,53 @@ bool SwLayAction::RemoveEmptyBrowserPages()
     return bRet;
 }
 
+void SwLayAction::SetAgain(bool bAgain)
+{
+    if (bAgain == m_bAgain)
+        return;
+
+    m_bAgain = bAgain;
+
+    assert(m_aFrameStack.size() == m_aFrameDeleteGuards.size());
+    size_t nCount = m_aFrameStack.size();
+    if (m_bAgain)
+    {
+        // LayAction::FormatLayout is now flagged to exit early and will avoid
+        // dereferencing any SwFrames in the stack of FormatLayouts so allow
+        // their deletion
+        for (size_t i = 0; i < nCount; ++i)
+            m_aFrameDeleteGuards[i].reset();
+    }
+    else
+    {
+        // LayAction::FormatLayout is now continue normally and will
+        // dereference the top SwFrame in the stack of m_aFrameStack as each
+        // FormatLevel returns so disallow their deletion
+        for (size_t i = 0; i < nCount; ++i)
+            m_aFrameDeleteGuards[i] = std::make_unique<SwFrameDeleteGuard>(m_aFrameStack[i]);
+    }
+}
+
+void SwLayAction::PushFormatLayout(SwFrame* pLow)
+{
+    /* Workaround crash seen in crashtesting with fdo53985-1.docx
+
+       Lock pLow against getting deleted when it will be dereferenced
+       after FormatLayout
+
+       If SetAgain is called to make SwLayAction exit early to avoid that
+       dereference, then it clears these guards
+    */
+    m_aFrameStack.push_back(pLow);
+    m_aFrameDeleteGuards.push_back(std::make_unique<SwFrameDeleteGuard>(pLow));
+}
+
+void SwLayAction::PopFormatLayout()
+{
+    m_aFrameDeleteGuards.pop_back();
+    m_aFrameStack.pop_back();
+}
+
 void SwLayAction::Action(OutputDevice* pRenderContext)
 {
     m_bActionInProgress = true;
@@ -1384,7 +1431,11 @@ bool SwLayAction::FormatLayout( OutputDevice *pRenderContext, SwLayoutFrame *pLa
             }
             // Skip the ones already registered for deletion
             else if( !pLow->IsSctFrame() || static_cast<SwSectionFrame*>(pLow)->GetSection() )
+            {
+                PushFormatLayout(pLow);
                 bChanged |= FormatLayout( pRenderContext, static_cast<SwLayoutFrame*>(pLow), bAddRect );
+                PopFormatLayout();
+            }
         }
         else if ( m_pImp->GetShell()->IsPaintLocked() )
             // Shortcut to minimize the cycles. With Lock, the
