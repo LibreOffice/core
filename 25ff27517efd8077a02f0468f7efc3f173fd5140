@@ -16,6 +16,24 @@
       "revId": "25ff27517efd8077a02f0468f7efc3f173fd5140",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c068a25d_89d17255",
+        "filename": "include/svtools/svparser.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-07-16T18:38:49Z",
+      "side": 1,
+      "message": "good idea\n   https://gerrit.libreoffice.org/c/core/+/119086",
+      "parentUuid": "c2235e45_cf68f5c6",
+      "revId": "25ff27517efd8077a02f0468f7efc3f173fd5140",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
