@@ -789,12 +789,12 @@ public:
 
     void setFreemiumDenyList(const char* freemiumDenyList)
     {
-        mpDoc->pClass->setFreemiumDenyList(freemiumDenyList);
+        mpDoc->pClass->setFreemiumDenyList(mpDoc, freemiumDenyList);
     }
 
     void setFreemiumView(int nViewId, bool isFreemium)
     {
-        mpDoc->pClass->setFreemiumView(nViewId, isFreemium);
+        mpDoc->pClass->setFreemiumView(mpDoc, nViewId, isFreemium);
     }
 
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
