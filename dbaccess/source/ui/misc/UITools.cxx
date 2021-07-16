@@ -768,13 +768,10 @@ bool callColumnFormatDialog(weld::Widget* _pParent,
         { SID_ATTR_NUMBERFORMAT_ONE_AREA,   true },
         { SID_ATTR_NUMBERFORMAT_INFO,       true }
     };
-    static const sal_uInt16 aAttrMap[] =
-    {
+    static const auto aAttrMap = svl::Items<
         SBA_DEF_RANGEFORMAT, SBA_ATTR_ALIGN_HOR_JUSTIFY,
-        SID_ATTR_NUMBERFORMAT_ONE_AREA, SID_ATTR_NUMBERFORMAT_ONE_AREA,
         SID_ATTR_NUMBERFORMAT_INFO, SID_ATTR_NUMBERFORMAT_INFO,
-        0
-    };
+        SID_ATTR_NUMBERFORMAT_ONE_AREA, SID_ATTR_NUMBERFORMAT_ONE_AREA>{};
 
     std::vector<SfxPoolItem*> pDefaults
     {

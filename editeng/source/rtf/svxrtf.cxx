@@ -277,7 +277,7 @@ void SvxRTFParser::ReadStyleTable()
     bool bHasStyleNo = false;
     int _nOpenBrakets = 1;      // the first was already detected earlier!!
     std::unique_ptr<SvxRTFStyleType> pStyle(
-            new SvxRTFStyleType( *pAttrPool, aWhichMap.data() ));
+            new SvxRTFStyleType( *pAttrPool, WhichRangesContainer(aWhichMap.data(), aWhichMap.size()) ));
     pStyle->aAttrSet.Put( GetRTFDefaults() );
 
     bIsInReadStyleTab = true;
@@ -335,7 +335,7 @@ void SvxRTFParser::ReadStyleTable()
                 }
                 // All data from the font is available, so off to the table
                 m_StyleTable.insert(std::make_pair(nStyleNo, std::move(pStyle)));
-                pStyle.reset(new SvxRTFStyleType( *pAttrPool, aWhichMap.data() ));
+                pStyle.reset(new SvxRTFStyleType( *pAttrPool, WhichRangesContainer(aWhichMap.data(), aWhichMap.size()) ));
                 pStyle->aAttrSet.Put( GetRTFDefaults() );
                 nStyleNo = 0;
                 bHasStyleNo = false;
@@ -611,16 +611,16 @@ const vcl::Font& SvxRTFParser::GetFont( sal_uInt16 nId )
 }
 
 std::unique_ptr<SvxRTFItemStackType> SvxRTFItemStackType::createSvxRTFItemStackType(
-    SfxItemPool& rPool, const sal_uInt16* pWhichRange, const EditPosition& rEditPosition)
+    SfxItemPool& rPool, WhichRangesContainer&& pWhichRange, const EditPosition& rEditPosition)
 {
     struct MakeUniqueEnabler : public SvxRTFItemStackType
     {
-        MakeUniqueEnabler(SfxItemPool& rPool, const sal_uInt16* pWhichRange, const EditPosition& rEditPosition)
-            : SvxRTFItemStackType(rPool, pWhichRange, rEditPosition)
+        MakeUniqueEnabler(SfxItemPool& rPool, WhichRangesContainer&& pWhichRange, const EditPosition& rEditPosition)
+            : SvxRTFItemStackType(rPool, std::move(pWhichRange), rEditPosition)
         {
         }
     };
-    return std::make_unique<MakeUniqueEnabler>(rPool, pWhichRange, rEditPosition);
+    return std::make_unique<MakeUniqueEnabler>(rPool, std::move(pWhichRange), rEditPosition);
 }
 
 SvxRTFItemStackType* SvxRTFParser::GetAttrSet_()
@@ -630,7 +630,7 @@ SvxRTFItemStackType* SvxRTFParser::GetAttrSet_()
     if( pCurrent )
         xNew = std::make_unique<SvxRTFItemStackType>(*pCurrent, *mxInsertPosition, false/*bCopyAttr*/);
     else
-        xNew = SvxRTFItemStackType::createSvxRTFItemStackType(*pAttrPool, aWhichMap.data(), *mxInsertPosition);
+        xNew = SvxRTFItemStackType::createSvxRTFItemStackType(*pAttrPool, WhichRangesContainer(aWhichMap.data(), aWhichMap.size()), *mxInsertPosition);
     xNew->SetRTFDefaults( GetRTFDefaults() );
 
     aAttrStack.push_back( std::move(xNew) );
@@ -900,7 +900,6 @@ void SvxRTFParser::SetAttrInDoc( SvxRTFItemStackType & )
 void SvxRTFParser::BuildWhichTable()
 {
     aWhichMap.clear();
-    aWhichMap.push_back( 0 );
 
     // Building a Which-Map 'rWhichMap' from an array of
     // 'pWhichIds' from Which-Ids. It has the long 'nWhichIds'.
@@ -913,7 +912,7 @@ const SfxItemSet& SvxRTFParser::GetRTFDefaults()
 {
     if( !pRTFDefaults )
     {
-        pRTFDefaults.reset( new SfxItemSet( *pAttrPool, aWhichMap.data() ) );
+        pRTFDefaults.reset( new SfxItemSet( *pAttrPool, WhichRangesContainer(aWhichMap.data(), aWhichMap.size()) ) );
         sal_uInt16 nId;
         if( 0 != ( nId = aPardMap.nScriptSpace ))
         {
@@ -928,17 +927,17 @@ const SfxItemSet& SvxRTFParser::GetRTFDefaults()
 }
 
 
-SvxRTFStyleType::SvxRTFStyleType( SfxItemPool& rPool, const sal_uInt16* pWhichRange )
-    : aAttrSet(rPool, pWhichRange)
+SvxRTFStyleType::SvxRTFStyleType( SfxItemPool& rPool, WhichRangesContainer&& pWhichRange )
+    : aAttrSet(rPool, std::move(pWhichRange))
     , nBasedOn(0)
     , nOutlineNo(sal_uInt8(-1))         // not set
 {
 }
 
 SvxRTFItemStackType::SvxRTFItemStackType(
-        SfxItemPool& rPool, const sal_uInt16* pWhichRange,
+        SfxItemPool& rPool, WhichRangesContainer&& pWhichRange,
         const EditPosition& rPos )
-    : aAttrSet( rPool, pWhichRange )
+    : aAttrSet( rPool, std::move(pWhichRange) )
     , mxStartNodeIdx(rPos.MakeNodeIdx())
 #if !defined(__COVERITY__)
     // coverity 2020 has difficulty wrt std::optional leading to bogus 'Uninitialized scalar variable'
