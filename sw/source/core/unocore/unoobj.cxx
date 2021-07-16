@@ -1771,8 +1771,7 @@ void SwUnoCursorHelper::SetPropertyValues(
     OUString aUnknownExMsg, aPropertyVetoExMsg;
 
     // Build set of attributes we want to fetch
-    const sal_uInt16 zero = 0;
-    SfxItemSet aItemSet(rDoc.GetAttrPool(), &zero);
+    SfxItemSet aItemSet(rDoc.GetAttrPool(), WhichRangesContainer());
     std::vector<std::pair<const SfxItemPropertyMapEntry*, const uno::Any&>> aEntries;
     aEntries.reserve(rPropertyValues.getLength());
     for (const auto& rPropVal : rPropertyValues)
