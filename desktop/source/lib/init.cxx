@@ -6056,7 +6056,7 @@ static void preloadData()
     uno::Sequence< css::lang::Locale > aLocales = xSpellLocales->getLocales();
     for (auto &it : aLocales)
     {
-        std::cerr << it.Language << "_" << it.Country << " ";
+        std::cerr << LanguageTag::convertToBcp47(it) << " ";
         css::beans::PropertyValues aNone;
         xSpellChecker->isValid("forcefed", it, aNone);
     }
@@ -6077,7 +6077,7 @@ static void preloadData()
     std::cerr << "Preloading thesauri: ";
     for (auto &it : aLocales)
     {
-        std::cerr << it.Language << "_" << it.Country << " ";
+        std::cerr << LanguageTag::convertToBcp47(it) << " ";
         css::beans::PropertyValues aNone;
         xThesaurus->queryMeanings("forcefed", it, aNone);
     }
