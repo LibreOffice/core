@@ -516,6 +516,23 @@
       "revId": "8a751fd94b4b0a82b7e4808de51e33d0fd969e03",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c38262c3_57c8485f",
+        "filename": "sfx2/source/inc/StyleList.hxx",
+        "patchSetId": 54
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-16T10:13:12Z",
+      "side": 1,
+      "message": "Why is this called \"connect_selected\"? Are you handling an \"selected\" event? each \"connect_foo\" links handlers to respective \"foo\" events; and even your code connects this with \"UpdateStyles_Hdl\" - so you have some \"update styles\" event - so shouldn\u0027t it be a \"connect_update_styles\"?",
+      "revId": "8a751fd94b4b0a82b7e4808de51e33d0fd969e03",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
