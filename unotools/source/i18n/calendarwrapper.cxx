@@ -19,6 +19,7 @@
 
 #include <sal/log.hxx>
 #include <unotools/calendarwrapper.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <com/sun/star/i18n/LocaleCalendar2.hpp>
 #include <tools/diagnose_ex.h>
 
@@ -62,7 +63,7 @@ void CalendarWrapper::loadCalendar( const OUString& rUniqueID, const css::lang::
     catch (const Exception&)
     {
         TOOLS_WARN_EXCEPTION( "unotools.i18n", "loadCalendar: "
-            << rUniqueID << "   Locale: " << rLocale.Language << "_" << rLocale.Country );
+            << rUniqueID << "   Locale: " << LanguageTag::convertToBcp47(rLocale) );
     }
 }
 
