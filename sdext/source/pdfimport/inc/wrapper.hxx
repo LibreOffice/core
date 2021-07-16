@@ -65,7 +65,7 @@ namespace pdfi
         "Bold",
         "Italic",
         "Oblique",
-        "Bold", //BoldItalic, BoldObique
+        "Bold", //BoldItalic, BoldOblique
         "Light",
         "Reg",
         "VKana",

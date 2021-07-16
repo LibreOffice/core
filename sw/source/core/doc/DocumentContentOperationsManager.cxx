@@ -2208,7 +2208,7 @@ bool DocumentContentOperationsManager::MoveRange( SwPaM& rPaM, SwPosition& rPos,
     SwTextNode* pSrcNd = rPaM.GetPoint()->nNode.GetNode().GetTextNode();
     bool bCorrSavePam = pSrcNd && pStt->nNode != pEnd->nNode;
 
-    // If one ore more TextNodes are moved, SwNodes::Move will do a SplitNode.
+    // If one or more TextNodes are moved, SwNodes::Move will do a SplitNode.
     // However, this does not update the cursor. So we create a TextNode to keep
     // updating the indices. After the Move the Node is optionally deleted.
     SwTextNode * pTNd = rPos.nNode.GetNode().GetTextNode();
