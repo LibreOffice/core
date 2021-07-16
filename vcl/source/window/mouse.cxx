@@ -467,7 +467,8 @@ void Window::ReleaseMouse()
     {
         ImplSVData* pSVData = ImplGetSVData();
         pSVData->mpWinData->mpCaptureWin = nullptr;
-        mpWindowImpl->mpFrame->CaptureMouse( false );
+        if (mpWindowImpl && mpWindowImpl->mpFrame)
+            mpWindowImpl->mpFrame->CaptureMouse( false );
         ImplGenerateMouseMove();
     }
 }
