@@ -186,6 +186,74 @@
       "revId": "d1ea945f8a1a1bdc0bc80c30a08cddc199523397",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fe836b7b_411f0743",
+        "filename": "bin/post-screenshots.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2021-07-16T13:02:32Z",
+      "side": 1,
+      "message": "not sure what the idea behind splitting at a quotation mark is, but that\u0027s wrong,  on linux the path delimiter is / so the if block is unnecessary.",
+      "revId": "d1ea945f8a1a1bdc0bc80c30a08cddc199523397",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9bf6d770_970305a5",
+        "filename": "bin/post-screenshots.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2021-07-16T13:02:32Z",
+      "side": 1,
+      "message": "should be response.text to be more useful/hidden behind a verbose toggle.\n\nMisses errorhandling.",
+      "revId": "d1ea945f8a1a1bdc0bc80c30a08cddc199523397",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ddb9f05a_54828100",
+        "filename": "bin/post-screenshots.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2021-07-16T13:02:32Z",
+      "side": 1,
+      "message": "TypeError: \u0027Response\u0027 object is not subscriptable. response.json() is what you want here...",
+      "revId": "d1ea945f8a1a1bdc0bc80c30a08cddc199523397",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a25422be_2fbb43b4",
+        "filename": "bin/post-screenshots.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2021-07-16T13:02:32Z",
+      "side": 1,
+      "message": "ant to refer to screenshotsWithUnitId[screenshotpath] instead here....",
+      "revId": "d1ea945f8a1a1bdc0bc80c30a08cddc199523397",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
