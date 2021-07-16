@@ -26,6 +26,7 @@
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
+#include <com/sun/star/uri/UriReferenceFactory.hpp>
 
 #include <toolkit/helper/vclunohelper.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -50,6 +51,65 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::form;
 using namespace ::com::sun::star::sdb;
+
+namespace
+{
+/// Tries to split rText into rURL and nPageNumber.
+bool SplitUrlAndPage(const OUString& rText, OUString& rUrl, int& nPageNumber)
+{
+    uno::Reference<uri::XUriReferenceFactory> xUriReferenceFactory
+        = uri::UriReferenceFactory::create(comphelper::getProcessComponentContext());
+    uno::Reference<uri::XUriReference> xUriRef;
+    try
+    {
+        xUriRef = xUriReferenceFactory->parse(rText);
+    }
+    catch (const uno::Exception& rException)
+    {
+        SAL_WARN("extensions.biblio",
+                 "SplitUrlAndPage: failed to parse url: " << rException.Message);
+        return false;
+    }
+
+    OUString aPagePrefix("page=");
+    if (!xUriRef->getFragment().startsWith(aPagePrefix))
+    {
+        return false;
+    }
+
+    nPageNumber = xUriRef->getFragment().copy(aPagePrefix.getLength()).toInt32();
+    xUriRef->clearFragment();
+    rUrl = xUriRef->getUriReference();
+    return true;
+}
+
+/// Merges rUrl and rPageSB to a URL string.
+OUString MergeUrlAndPage(const OUString& rUrl, weld::SpinButton& rPageSB)
+{
+    if (!rPageSB.get_sensitive())
+    {
+        return rUrl;
+    }
+
+    uno::Reference<uri::XUriReferenceFactory> xUriReferenceFactory
+        = uri::UriReferenceFactory::create(comphelper::getProcessComponentContext());
+    uno::Reference<uri::XUriReference> xUriRef;
+    try
+    {
+        xUriRef = xUriReferenceFactory->parse(rUrl);
+    }
+    catch (const uno::Exception& rException)
+    {
+        SAL_WARN("extensions.biblio",
+                 "MergeUrlAndPage: failed to parse url: " << rException.Message);
+        return rUrl;
+    }
+
+    OUString aFragment("page=" + OUString::number(rPageSB.get_value()));
+    xUriRef->setFragment(aFragment);
+    return xUriRef->getUriReference();
+}
+}
 
 static OUString lcl_GetColumnName( const Mapping* pMapping, sal_uInt16 nIndexPos )
 {
@@ -125,6 +185,8 @@ BibGeneralPage::BibGeneralPage(vcl::Window* pParent, BibDataManager* pMan)
     , xURLFT(m_xBuilder->weld_label("url"))
     , xURLED(m_xBuilder->weld_entry("urlcontrol"))
     , m_xBrowseButton(m_xBuilder->weld_button("browse"))
+    , m_xPageCB(m_xBuilder->weld_check_button("pagecb"))
+    , m_xPageSB(m_xBuilder->weld_spin_button("pagesb"))
     , xCustom1FT(m_xBuilder->weld_label("custom1"))
     , xCustom1ED(m_xBuilder->weld_entry("custom1control"))
     , xCustom2FT(m_xBuilder->weld_label("custom2"))
@@ -402,12 +464,11 @@ public:
         WriteBack();
     }
 
+    virtual void WriteBack() = 0;
+
 protected:
     css::uno::Reference<css::beans::XPropertySet> m_xPropSet;
     bool m_bSelfChanging;
-
-private:
-    virtual void WriteBack() = 0;
 };
 
 namespace
@@ -415,9 +476,11 @@ namespace
     class EntryChangeListener : public ChangeListener
     {
     public:
-        explicit EntryChangeListener(weld::Entry& rEntry, css::uno::Reference<css::beans::XPropertySet>& rPropSet)
+        explicit EntryChangeListener(weld::Entry& rEntry, css::uno::Reference<css::beans::XPropertySet>& rPropSet,
+                                     BibGeneralPage& rPage)
             : ChangeListener(rPropSet)
             , m_rEntry(rEntry)
+            , m_rPage(rPage)
         {
             rEntry.connect_focus_out(LINK(this, EntryChangeListener, LoseFocusHdl));
             setValue(rPropSet->getPropertyValue("Text"));
@@ -443,24 +506,66 @@ namespace
 
     private:
         weld::Entry& m_rEntry;
+        BibGeneralPage& m_rPage;
 
         DECL_LINK(LoseFocusHdl, weld::Widget&, void);
 
+        /// Updates the UI widget(s) based on rValue.
         void setValue(const css::uno::Any& rValue)
         {
             OUString sNewName;
             rValue >>= sNewName;
-            m_rEntry.set_text(sNewName);
+            if (&m_rEntry != &m_rPage.GetURLED())
+            {
+                m_rEntry.set_text(sNewName);
+            }
+            else
+            {
+                OUString aUrl;
+                int nPageNumber;
+                if (SplitUrlAndPage(sNewName, aUrl, nPageNumber))
+                {
+                    m_rEntry.set_text(aUrl);
+                    m_rPage.GetPageCB().set_active(true);
+                    m_rPage.GetPageSB().set_sensitive(true);
+                    m_rPage.GetPageSB().set_value(nPageNumber);
+                }
+                else
+                {
+                    m_rEntry.set_text(sNewName);
+                    m_rPage.GetPageCB().set_active(false);
+                    m_rPage.GetPageSB().set_sensitive(false);
+                    m_rPage.GetPageSB().set_value(0);
+                }
+            }
+
             m_rEntry.save_value();
+            if (&m_rEntry == &m_rPage.GetURLED())
+            {
+                m_rPage.GetPageSB().save_value();
+            }
         }
 
+        /// Updates m_xPropSet based on the UI widget(s).
         virtual void WriteBack() override
         {
-            if (!m_rEntry.get_value_changed_from_saved())
+            if (!m_rEntry.get_value_changed_from_saved()
+                && !(&m_rEntry == &m_rPage.GetURLED()
+                     && m_rPage.GetPageSB().get_value_changed_from_saved()))
                 return;
+
             m_bSelfChanging = true;
 
-            m_xPropSet->setPropertyValue("Text", makeAny(m_rEntry.get_text()));
+            OUString aText;
+            if (&m_rEntry != &m_rPage.GetURLED())
+            {
+                aText = m_rEntry.get_text();
+            }
+            else
+            {
+                aText = MergeUrlAndPage(m_rEntry.get_text(), m_rPage.GetPageSB());
+            }
+            m_xPropSet->setPropertyValue("Text", makeAny(aText));
 
             css::uno::Reference<css::form::XBoundComponent> xBound(m_xPropSet, css::uno::UNO_QUERY);
             if (xBound.is())
@@ -468,6 +573,10 @@ namespace
 
             m_bSelfChanging = false;
             m_rEntry.save_value();
+            if (&m_rEntry == &m_rPage.GetURLED())
+            {
+                m_rPage.GetPageSB().save_value();
+            }
         }
 
     };
@@ -611,6 +720,8 @@ void BibGeneralPage::dispose()
     xURLFT.reset();
     xURLED.reset();
     m_xBrowseButton.reset();
+    m_xPageCB.reset();
+    m_xPageSB.reset();
     xCustom1FT.reset();
     xCustom1ED.reset();
     xCustom2FT.reset();
@@ -623,6 +734,12 @@ void BibGeneralPage::dispose()
     xCustom5ED.reset();
     InterimItemWindow::dispose();
 }
+
+weld::Entry& BibGeneralPage::GetURLED() { return *xURLED; }
+
+weld::CheckButton& BibGeneralPage::GetPageCB() { return *m_xPageCB; }
+
+weld::SpinButton& BibGeneralPage::GetPageSB() { return *m_xPageSB; }
 
 bool BibGeneralPage::AddXControl(const OUString& rName, weld::Entry& rEntry)
 {
@@ -637,8 +754,13 @@ bool BibGeneralPage::AddXControl(const OUString& rName, weld::Entry& rEntry)
             if( xPropSet.is())
             {
                 uno::Reference< beans::XPropertySetInfo >  xPropInfo = xPropSet->getPropertySetInfo();
-                maChangeListeners.emplace_back(new EntryChangeListener(rEntry, xPropSet));
+                maChangeListeners.emplace_back(new EntryChangeListener(rEntry, xPropSet, *this));
                 maChangeListeners.back()->start();
+                if (&rEntry == xURLED.get())
+                {
+                    m_aURLListener = maChangeListeners.back();
+                    m_xPageSB->connect_focus_out(LINK(this, BibGeneralPage, LosePageFocusHdl));
+                }
             }
         }
     }
@@ -647,6 +769,11 @@ bool BibGeneralPage::AddXControl(const OUString& rName, weld::Entry& rEntry)
         OSL_FAIL("BibGeneralPage::AddXControl: something went wrong!");
     }
     return xCtrModel.is();
+}
+
+IMPL_LINK_NOARG(BibGeneralPage, LosePageFocusHdl, weld::Widget&, void)
+{
+    m_aURLListener->WriteBack();
 }
 
 IMPL_LINK(BibGeneralPage, GainFocusHdl, weld::Widget&, rWidget, void)
