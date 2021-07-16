@@ -28,7 +28,6 @@
 #include <svx/svxids.hrc>
 #include <svx/dialmgr.hxx>
 #include <tbxcolorupdate.hxx>
-#include <svtools/colrdlg.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <stack>
@@ -301,19 +300,21 @@ void PaletteManager::PopupColorPicker(weld::Window* pParent, const OUString& aCo
 {
     // The calling object goes away during aColorDlg.Execute(), so we must copy this
     OUString aCommandCopy = aCommand;
-    SvColorDialog aColorDlg;
-    aColorDlg.SetColor(rInitialColor);
-    aColorDlg.SetMode(svtools::ColorPickerMode::Modify);
-    if (aColorDlg.Execute(pParent) == RET_OK)
-    {
-        Color aLastColor = aColorDlg.GetColor();
-        OUString sColorName = "#" + aLastColor.AsRGBHexString().toAsciiUpperCase();
-        NamedColor aNamedColor = std::make_pair(aLastColor, sColorName);
-        if (mpBtnUpdater)
-            mpBtnUpdater->Update(aNamedColor);
-        AddRecentColor(aLastColor, sColorName);
-        maColorSelectFunction(aCommandCopy, aNamedColor);
-    }
+    m_pColorDlg = std::make_unique<SvColorDialog>();
+    m_pColorDlg->SetColor(rInitialColor);
+    m_pColorDlg->SetMode(svtools::ColorPickerMode::Modify);
+    m_pColorDlg->ExecuteAsync(pParent, [this, aCommandCopy] (sal_Int32 nResult) {
+        if (nResult == RET_OK)
+        {
+            Color aLastColor = m_pColorDlg->GetColor();
+            OUString sColorName = "#" + aLastColor.AsRGBHexString().toAsciiUpperCase();
+            NamedColor aNamedColor = std::make_pair(aLastColor, sColorName);
+            if (mpBtnUpdater)
+                mpBtnUpdater->Update(aNamedColor);
+            AddRecentColor(aLastColor, sColorName);
+            maColorSelectFunction(aCommandCopy, aNamedColor);
+        }
+    });
 }
 
 void PaletteManager::DispatchColorCommand(const OUString& aCommand, const NamedColor& rColor)
