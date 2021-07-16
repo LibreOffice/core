@@ -119,17 +119,6 @@ SfxItemSet::SfxItemSet(
     m_pItems.reset( new SfxPoolItem const *[size]{} );
 }
 
-SfxItemSet::SfxItemSet( SfxItemPool& rPool, const sal_uInt16* pWhichPairTable )
-    : m_pPool(&rPool)
-    , m_pParent(nullptr)
-    , m_nCount(0)
-{
-    const auto& [nCnt, nCap] = svl::detail::CountRangesOld(pWhichPairTable);
-    m_pItems.reset(new const SfxPoolItem* [nCap] {});
-    m_pWhichRanges = WhichRangesContainer(reinterpret_cast<const WhichPair*>(pWhichPairTable), (nCnt-1)/2);
-    assert(svl::detail::validRanges2(m_pWhichRanges));
-}
-
 SfxItemSet::SfxItemSet( const SfxItemSet& rASet )
     : m_pPool( rASet.m_pPool )
     , m_pParent( rASet.m_pParent )
