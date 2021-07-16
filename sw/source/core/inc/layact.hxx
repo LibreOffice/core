@@ -68,6 +68,9 @@ class SwLayAction
 
     std::unique_ptr<SwWait> m_pWait;
 
+    std::vector<SwFrame*> m_aFrameStack;
+    std::vector<std::unique_ptr<SwFrameDeleteGuard>> m_aFrameDeleteGuards;
+
     // If a paragraph (or anything else) moved more than one page when
     // formatting, it adds its new page number here.
     // The InternalAction can then take the appropriate steps.
@@ -124,6 +127,9 @@ class SwLayAction
 
     bool RemoveEmptyBrowserPages();
 
+    void PushFormatLayout(SwFrame* pLow);
+    void PopFormatLayout();
+
 public:
     SwLayAction(SwRootFrame *pRt, SwViewShellImp *pImp, TaskStopwatch* pWatch = nullptr);
     ~SwLayAction();
@@ -148,7 +154,7 @@ public:
     void SetReschedule  ( bool bNew )   { m_bReschedule = bNew; }
     void SetWaitAllowed ( bool bNew )   { m_bWaitAllowed = bNew; }
 
-    void SetAgain(bool bAgain) { m_bAgain = bAgain; }
+    void SetAgain(bool bAgain);
     void SetUpdateExpFields() {m_bUpdateExpFields = true; }
 
     inline void SetCheckPageNum( sal_uInt16 nNew );
