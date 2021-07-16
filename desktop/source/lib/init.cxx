@@ -1043,9 +1043,12 @@ static void doc_postKeyEvent(LibreOfficeKitDocument* pThis,
                              int nType,
                              int nCharCode,
                              int nKeyCode);
-static void doc_setFreemiumDenyList(const char* freemiumDenyList);
+static void doc_setFreemiumDenyList(LibreOfficeKitDocument* pThis,
+                                    const char* freemiumDenyList);
 
-static void doc_setFreemiumView(int nViewId, bool isFreemium);
+static void doc_setFreemiumView(LibreOfficeKitDocument* pThis,
+                                int nViewId,
+                                bool isFreemium);
 
 static void doc_postWindowExtTextInputEvent(LibreOfficeKitDocument* pThis,
                                             unsigned nWindowId,
@@ -3557,12 +3560,12 @@ static void doc_postKeyEvent(LibreOfficeKitDocument* pThis, int nType, int nChar
     }
 }
 
-static void doc_setFreemiumDenyList(const char* freemiumDenyList)
+static void doc_setFreemiumDenyList(LibreOfficeKitDocument* /*pThis*/, const char* freemiumDenyList)
 {
     comphelper::LibreOfficeKit::setFreemiumDenyList(freemiumDenyList);
 }
 
-static void doc_setFreemiumView(int nViewId, bool isFreemium)
+static void doc_setFreemiumView(LibreOfficeKitDocument* /*pThis*/, int nViewId, bool isFreemium)
 {
     SolarMutexGuard aGuard;
     SfxLokHelper::setFreemiumView(nViewId, isFreemium);
