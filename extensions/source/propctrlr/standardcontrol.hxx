@@ -61,11 +61,18 @@ namespace pcr
     };
 
     //= ODateControl
-    typedef CommonBehaviourControl<css::inspection::XPropertyControl, SvtCalendarBox> ODateControl_Base;
+    typedef CommonBehaviourControl<css::inspection::XPropertyControl, weld::Container> ODateControl_Base;
     class ODateControl : public ODateControl_Base
     {
+        std::unique_ptr<weld::Entry> m_xEntry;
+        std::unique_ptr<SvtCalendarBox> m_xCalendarBox;
+        std::unique_ptr<weld::DateFormatter> m_xEntryFormatter;
+
+        DECL_LINK(ActivateHdl, SvtCalendarBox&, void);
+        DECL_LINK(ToggleHdl, weld::ToggleButton&, void);
+
     public:
-        ODateControl(std::unique_ptr<SvtCalendarBox> xWidget, std::unique_ptr<weld::Builder> xBuilder, bool bReadOnly);
+        ODateControl(std::unique_ptr<weld::Container> xWidget, std::unique_ptr<weld::Builder> xBuilder, bool bReadOnly);
 
         // XPropertyControl
         virtual css::uno::Any SAL_CALL getValue() override;
@@ -75,10 +82,18 @@ namespace pcr
         virtual void SetModifyHandler() override
         {
             ODateControl_Base::SetModifyHandler();
-            getTypedControlWindow()->connect_selected( LINK( this, CommonBehaviourControlHelper, DateModifiedHdl ) );
+
+            m_xEntry->connect_focus_in( LINK( this, CommonBehaviourControlHelper, GetFocusHdl ) );
+            m_xEntryFormatter->connect_focus_out( LINK( this, CommonBehaviourControlHelper, LoseFocusHdl ) );
+            m_xCalendarBox->connect_focus_in( LINK( this, CommonBehaviourControlHelper, GetFocusHdl ) );
+            m_xCalendarBox->connect_focus_out( LINK( this, CommonBehaviourControlHelper, LoseFocusHdl ) );
+
+            m_xEntryFormatter->connect_changed(LINK(this, CommonBehaviourControlHelper, EditModifiedHdl));
         }
 
-        virtual weld::Widget* getWidget() override { return &getTypedControlWindow()->get_button(); }
+        virtual void SAL_CALL disposing() override;
+
+        virtual weld::Widget* getWidget() override { return getTypedControlWindow(); }
     };
 
     //= OEditControl
