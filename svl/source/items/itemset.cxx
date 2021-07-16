@@ -1418,7 +1418,8 @@ SfxItemSet SfxAllItemSet::CloneAsValue(bool , SfxItemPool * ) const
 WhichRangesContainer::WhichRangesContainer( const WhichPair* wids, sal_Int32 nSize )
 {
     auto p = new WhichPair[nSize];
-    memcpy(p, wids, nSize * sizeof(WhichPair));
+    for (int i=0; i<nSize; ++i)
+        p[i] = wids[i];
     m_pairs = p;
     m_size = nSize;
     m_bOwnRanges = true;
@@ -1455,7 +1456,8 @@ WhichRangesContainer& WhichRangesContainer::operator=(WhichRangesContainer const
     if (m_bOwnRanges)
     {
         auto p = new WhichPair[m_size];
-        memcpy(p, other.m_pairs, m_size * sizeof(WhichPair));
+        for (int i=0; i<m_size; ++i)
+            p[i] = other.m_pairs[i];
         m_pairs = p;
     }
     else
