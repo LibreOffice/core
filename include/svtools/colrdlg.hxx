@@ -21,6 +21,10 @@
 
 #include <svtools/svtdllapi.h>
 #include <tools/color.hxx>
+#include <tools/link.hxx>
+#include <com/sun/star/ui/dialogs/XAsynchronousExecutableDialog.hpp>
+
+#include <functional>
 
 namespace weld { class Window; }
 
@@ -43,10 +47,15 @@ public:
     void            SetMode( svtools::ColorPickerMode eMode );
 
     short           Execute(weld::Window* pParent);
+    void            ExecuteAsync(weld::Window* pParent, const std::function<void(sal_Int32)>& func);
 
 private:
     Color               maColor;
     svtools::ColorPickerMode meMode;
+    ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XAsynchronousExecutableDialog > mxDialog;
+    std::function<void(sal_Int32)> m_aResultFunc;
+
+    DECL_LINK( DialogClosedHdl, css::ui::dialogs::DialogClosedEvent*, void );
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

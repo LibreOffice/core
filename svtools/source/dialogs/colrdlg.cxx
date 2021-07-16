@@ -20,12 +20,15 @@
 
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/beans/XPropertyAccess.hpp>
+#include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
+#include <com/sun/star/cui/AsyncColorPicker.hpp>
 #include <com/sun/star/cui/ColorPicker.hpp>
 
 #include <comphelper/processfactory.hxx>
 
 #include <svtools/colrdlg.hxx>
+#include <svtools/dialogclosedlistener.hxx>
 #include <vcl/weld.hxx>
 #include <osl/diagnose.h>
 
@@ -34,6 +37,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::ui::dialogs;
 
+const OUStringLiteral sColor = u"Color";
 
 SvColorDialog::SvColorDialog()
     : meMode(svtools::ColorPickerMode::Select)
@@ -58,7 +62,6 @@ short SvColorDialog::Execute(weld::Window* pParent)
     short ret = 0;
     try
     {
-        static const OUStringLiteral sColor( u"Color" );
         Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
 
         Reference<css::awt::XWindow> xParent;
@@ -69,7 +72,7 @@ short SvColorDialog::Execute(weld::Window* pParent)
         Reference< XPropertyAccess > xPropertyAccess( xDialog, UNO_QUERY_THROW );
 
         Sequence< PropertyValue > props( 2 );
-        props[0].Name = sColor;
+        props[0].Name = OUString( sColor );
         props[0].Value <<= maColor;
         props[1].Name = "Mode";
         props[1].Value <<= static_cast<sal_Int16>(meMode);
@@ -96,6 +99,64 @@ short SvColorDialog::Execute(weld::Window* pParent)
     }
 
     return ret;
+}
+
+void SvColorDialog::ExecuteAsync(weld::Window* pParent, const std::function<void(sal_Int32)>& func)
+{
+    m_aResultFunc = func;
+
+    try
+    {
+        Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+
+        Reference<css::awt::XWindow> xParent;
+        if (pParent)
+            xParent = pParent->GetXWindow();
+
+        mxDialog = css::cui::AsyncColorPicker::createWithParent(xContext, xParent);
+        Reference< XPropertyAccess > xPropertyAccess( mxDialog, UNO_QUERY_THROW );
+
+        Sequence< PropertyValue > props( 2 );
+        props[0].Name = OUString( sColor );
+        props[0].Value <<= maColor;
+        props[1].Name = "Mode";
+        props[1].Value <<= static_cast<sal_Int16>(meMode);
+
+        xPropertyAccess->setPropertyValues( props );
+
+        rtl::Reference< ::svt::DialogClosedListener > pListener = new ::svt::DialogClosedListener();
+        pListener->SetDialogClosedLink( LINK( this, SvColorDialog, DialogClosedHdl ) );
+
+        mxDialog->startExecuteModal( pListener );
+    }
+    catch(Exception&)
+    {
+        OSL_ASSERT(false);
+    }
+}
+
+IMPL_LINK( SvColorDialog, DialogClosedHdl, css::ui::dialogs::DialogClosedEvent*, pEvent, void )
+{
+    sal_Int32 nResult = 0;
+    sal_Int16 nDialogRet = pEvent->DialogResult;
+    if( nDialogRet == ExecutableDialogResults::OK )
+    {
+        nResult = RET_OK;
+
+        Reference< XPropertyAccess > xPropertyAccess( mxDialog, UNO_QUERY_THROW );
+        Sequence< PropertyValue > props = xPropertyAccess->getPropertyValues();
+
+        for( const auto& rProp : std::as_const(props) )
+        {
+            if( rProp.Name == sColor )
+            {
+                rProp.Value >>= maColor;
+            }
+        }
+    }
+
+    m_aResultFunc(nResult);
+    mxDialog.clear();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
