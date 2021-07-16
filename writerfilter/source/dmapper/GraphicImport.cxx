@@ -78,6 +78,7 @@
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <o3tl/unit_conversion.hxx>
 
 using namespace css;
 
@@ -1080,8 +1081,9 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                             if (pShape)
                             {
                                 basegfx::B2DPolyPolygon aShapePolygon = pShape->TakeXorPoly(); // Twips
-                                constexpr double fTwips2Hmm = 127.0 / 72.0;
-                                aMatrix = basegfx::utils::createScaleB2DHomMatrix(fTwips2Hmm, fTwips2Hmm);
+                                aMatrix = basegfx::utils::createScaleB2DHomMatrix(
+                                    o3tl::convert(1.0, o3tl::Length::twip, o3tl::Length::mm100),
+                                    o3tl::convert(1.0, o3tl::Length::twip, o3tl::Length::mm100));
                                 aShapePolygon.transform(aMatrix);
                                 // Wrap polygon treats left/top of shape as origin, shift shape polygon accordingly
                                 aMatrix = basegfx::utils::createTranslateB2DHomMatrix(
@@ -1104,20 +1106,29 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                             // Add difference between shape and wrap range to margin and remember
                             // difference in Twips for export.
                             comphelper::SequenceAsHashMap aAnchorDistDiff;
-                            constexpr double fHmm2Twips = 72.0 / 127.0;
+
                             const double fTopDiff = aShapeRange.getMinY() - aB2DWrapRange.getMinY();
                             m_pImpl->nTopMargin += basegfx::fround(fTopDiff);
-                            aAnchorDistDiff["distTDiff"] <<= basegfx::fround(fTopDiff * fHmm2Twips);
+                            aAnchorDistDiff["distTDiff"] <<= basegfx::fround(
+                                o3tl::convert(fTopDiff, o3tl::Length::mm100, o3tl::Length::twip));
+
                             const double fBottomDiff = aB2DWrapRange.getMaxY() - aShapeRange.getMaxY();
                             m_pImpl->nBottomMargin += basegfx::fround(fBottomDiff);
-                            aAnchorDistDiff["distBDiff"] <<= basegfx::fround(fBottomDiff * fHmm2Twips);
+                            aAnchorDistDiff["distBDiff"] <<= basegfx::fround(
+                                o3tl::convert(fBottomDiff, o3tl::Length::mm100, o3tl::Length::twip));
+
                             const double fLeftDiff = aShapeRange.getMinX() - aB2DWrapRange.getMinX();
                             m_pImpl->nLeftMargin += basegfx::fround(fLeftDiff);
-                            aAnchorDistDiff["distLDiff"] <<= basegfx::fround(fLeftDiff * fHmm2Twips);
+                            aAnchorDistDiff["distLDiff"] <<= basegfx::fround(
+                                o3tl::convert(fLeftDiff, o3tl::Length::mm100, o3tl::Length::twip));
+
                             const double fRightDiff = aB2DWrapRange.getMaxX() - aShapeRange.getMaxX();
                             m_pImpl->nRightMargin += basegfx::fround(fRightDiff);
-                            aAnchorDistDiff["distRDiff"] <<= basegfx::fround(fRightDiff * fHmm2Twips);
-                            m_pImpl->m_aInteropGrabBag["AnchorDistDiff"] <<= aAnchorDistDiff.getAsConstPropertyValueList();
+                            aAnchorDistDiff["distRDiff"] <<= basegfx::fround(
+                                o3tl::convert(fRightDiff, o3tl::Length::mm100, o3tl::Length::twip));
+
+                            m_pImpl->m_aInteropGrabBag["AnchorDistDiff"]
+                                <<= aAnchorDistDiff.getAsConstPropertyValueList();
 
                             // FixMe: tdf#141880. LibreOffice cannot handle negative horizontal margin in contour wrap
                             if (m_pImpl->nLeftMargin < 0)
