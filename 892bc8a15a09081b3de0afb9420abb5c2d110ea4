@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "71ba51c6_f619e0f3",
+        "filename": "svl/source/items/itemset.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1422,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-16T14:13:55Z",
+      "side": 1,
+      "message": "Another option would be\n\n    std::copy(wids, wids + nSize, p);",
+      "revId": "892bc8a15a09081b3de0afb9420abb5c2d110ea4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
