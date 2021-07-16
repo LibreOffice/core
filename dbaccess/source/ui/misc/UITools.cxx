@@ -765,14 +765,14 @@ bool callColumnFormatDialog(weld::Widget* _pParent,
         { 0, false },
         { SID_ATTR_NUMBERFORMAT_VALUE,      true },
         { SID_ATTR_ALIGN_HOR_JUSTIFY,       true },
-        { SID_ATTR_NUMBERFORMAT_ONE_AREA,   true },
-        { SID_ATTR_NUMBERFORMAT_INFO,       true }
+        { SID_ATTR_NUMBERFORMAT_INFO,       true },
+        { SID_ATTR_NUMBERFORMAT_ONE_AREA,   true }
     };
     static const sal_uInt16 aAttrMap[] =
     {
         SBA_DEF_RANGEFORMAT, SBA_ATTR_ALIGN_HOR_JUSTIFY,
-        SID_ATTR_NUMBERFORMAT_ONE_AREA, SID_ATTR_NUMBERFORMAT_ONE_AREA,
         SID_ATTR_NUMBERFORMAT_INFO, SID_ATTR_NUMBERFORMAT_INFO,
+        SID_ATTR_NUMBERFORMAT_ONE_AREA, SID_ATTR_NUMBERFORMAT_ONE_AREA,
         0
     };
 
@@ -781,8 +781,8 @@ bool callColumnFormatDialog(weld::Widget* _pParent,
         new SfxRangeItem(SBA_DEF_RANGEFORMAT, SBA_DEF_FMTVALUE, SBA_ATTR_ALIGN_HOR_JUSTIFY),
         new SfxUInt32Item(SBA_DEF_FMTVALUE),
         new SvxHorJustifyItem(SvxCellHorJustify::Standard, SBA_ATTR_ALIGN_HOR_JUSTIFY),
-        new SfxBoolItem(SID_ATTR_NUMBERFORMAT_ONE_AREA, false),
-        new SvxNumberInfoItem(SID_ATTR_NUMBERFORMAT_INFO)
+        new SvxNumberInfoItem(SID_ATTR_NUMBERFORMAT_INFO),
+        new SfxBoolItem(SID_ATTR_NUMBERFORMAT_ONE_AREA, false)
     };
 
     rtl::Reference<SfxItemPool> pPool(new SfxItemPool("GridBrowserProperties", SBA_DEF_RANGEFORMAT, SBA_ATTR_ALIGN_HOR_JUSTIFY, aItemInfos, &pDefaults));
