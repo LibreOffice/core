@@ -10,8 +10,8 @@
 #include <svl/sharedstringpool.hxx>
 #include <svl/sharedstring.hxx>
 #include <unotools/charclass.hxx>
-#include <osl/mutex.hxx>
 
+#include <mutex>
 #include <unordered_map>
 #include <unordered_set>
 
@@ -54,7 +54,7 @@ sal_Int32 getRefCount(const rtl_uString* p) { return (p->refCount & 0x3FFFFFFF);
 
 struct SharedStringPool::Impl
 {
-    mutable osl::Mutex maMutex;
+    mutable std::mutex maMutex;
     // We use this map for two purposes - to store lower->upper case mappings
     // and to retrieve a shared uppercase object, so the management logic
     // is quite complex.
@@ -77,7 +77,7 @@ SharedStringPool::~SharedStringPool() {}
 SharedString SharedStringPool::intern(const OUString& rStr)
 {
     StringWithHash aStrWithHash(rStr);
-    osl::MutexGuard aGuard(&mpImpl->maMutex);
+    std::lock_guard<std::mutex> aGuard(mpImpl->maMutex);
 
     auto[mapIt, bInserted] = mpImpl->maStrMap.emplace(aStrWithHash, rStr);
     if (!bInserted)
@@ -112,7 +112,7 @@ SharedString SharedStringPool::intern(const OUString& rStr)
 
 void SharedStringPool::purge()
 {
-    osl::MutexGuard aGuard(&mpImpl->maMutex);
+    std::lock_guard<std::mutex> aGuard(mpImpl->maMutex);
 
     // Because we can have an uppercase entry mapped to itself,
     // and then a bunch of lowercase entries mapped to that same
@@ -163,13 +163,13 @@ void SharedStringPool::purge()
 
 size_t SharedStringPool::getCount() const
 {
-    osl::MutexGuard aGuard(&mpImpl->maMutex);
+    std::lock_guard<std::mutex> aGuard(mpImpl->maMutex);
     return mpImpl->maStrMap.size();
 }
 
 size_t SharedStringPool::getCountIgnoreCase() const
 {
-    osl::MutexGuard aGuard(&mpImpl->maMutex);
+    std::lock_guard<std::mutex> aGuard(mpImpl->maMutex);
     // this is only called from unit tests, so no need to be efficient
     std::unordered_set<OUString> aUpperSet;
     for (auto const& pair : mpImpl->maStrMap)
