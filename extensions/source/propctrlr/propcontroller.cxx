@@ -755,8 +755,8 @@ namespace pcr
             case PropertyControlType::DateField:
             {
                 std::unique_ptr<weld::Builder> xBuilder(PropertyHandlerHelper::makeBuilder("modules/spropctrlr/ui/datefield.ui", m_xContext));
-                auto pMenuButton = xBuilder->weld_menu_button("datefield");
-                auto pControl = new ODateControl(std::make_unique<SvtCalendarBox>(std::move(pMenuButton)), std::move(xBuilder), bCreateReadOnly);
+                auto pContainer = xBuilder->weld_container("datefield");
+                auto pControl = new ODateControl(std::move(pContainer), std::move(xBuilder), bCreateReadOnly);
                 pControl->SetModifyHandler();
                 xControl = pControl;
                 break;

@@ -90,34 +90,75 @@ namespace pcr
     }
 
     //= ODateControl
-    ODateControl::ODateControl(std::unique_ptr<SvtCalendarBox> xWidget, std::unique_ptr<weld::Builder> xBuilder, bool bReadOnly)
+    ODateControl::ODateControl(std::unique_ptr<weld::Container> xWidget, std::unique_ptr<weld::Builder> xBuilder, bool bReadOnly)
         : ODateControl_Base(PropertyControlType::DateField, std::move(xBuilder), std::move(xWidget), bReadOnly)
+        , m_xEntry(m_xBuilder->weld_entry("entry"))
+        , m_xCalendarBox(std::make_unique<SvtCalendarBox>(m_xBuilder->weld_menu_button("button"), false))
     {
+        m_xEntryFormatter.reset(new weld::DateFormatter(*m_xEntry));
+
+        m_xEntryFormatter->SetStrictFormat(true);
+        m_xEntryFormatter->SetMin(::Date(1, 1, 1600));
+        m_xEntryFormatter->SetMax(::Date(1, 1, 9999));
+
+        m_xEntryFormatter->SetExtDateFormat(ExtDateFieldFormat::SystemShortYYYY);
+        m_xEntryFormatter->EnableEmptyField(true);
+
+        m_xCalendarBox->connect_activated(LINK(this, ODateControl, ActivateHdl));
+
+        m_xCalendarBox->get_button().connect_toggled(LINK(this, ODateControl, ToggleHdl));
+    }
+
+    void SAL_CALL ODateControl::disposing()
+    {
+        m_xEntryFormatter.reset();
+        m_xEntry.reset();
+        m_xCalendarBox.reset();
+        ODateControl_Base::disposing();
     }
 
     void SAL_CALL ODateControl::setValue( const Any& _rValue )
     {
-        SvtCalendarBox* pCalendarBox = getTypedControlWindow();
-
         util::Date aUNODate;
         if ( !( _rValue >>= aUNODate ) )
         {
-            pCalendarBox->set_date(::Date(::Date::SYSTEM));
-            pCalendarBox->set_label("");
+            m_xEntry->set_text(OUString());
         }
         else
         {
             ::Date aDate( aUNODate.Day, aUNODate.Month, aUNODate.Year );
-            pCalendarBox->set_date(aDate);
+            m_xEntryFormatter->SetDate(aDate);
         }
+    }
+
+    IMPL_LINK_NOARG(ODateControl, ActivateHdl, SvtCalendarBox&, void)
+    {
+        m_xEntryFormatter->SetDate(m_xCalendarBox->get_date());
+        setModified();
+        m_xEntry->grab_focus();
+    }
+
+    IMPL_LINK(ODateControl, ToggleHdl, weld::ToggleButton&, rToggle, void)
+    {
+        if (!rToggle.get_active())
+            return;
+        ::Date aDate = m_xEntryFormatter->GetDate();
+        if (aDate.IsEmpty())
+        {
+            // with an empty date preselect today in the calendar
+            aDate = ::Date(::Date::SYSTEM);
+        }
+        m_xCalendarBox->set_date(aDate);
     }
 
     Any SAL_CALL ODateControl::getValue()
     {
         Any aPropValue;
-        ::Date aDate(getTypedControlWindow()->get_date());
-        if (!aDate.IsEmpty())
+        if (!m_xEntry->get_text().isEmpty())
+        {
+            ::Date aDate(m_xEntryFormatter->GetDate());
             aPropValue <<= aDate.GetUNODate();
+        }
         return aPropValue;
     }
 
