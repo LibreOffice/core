@@ -1643,8 +1643,9 @@ void SvtLineListBox::UpdatePreview()
     }
 }
 
-SvtCalendarBox::SvtCalendarBox(std::unique_ptr<weld::MenuButton> pControl)
-    : m_xControl(std::move(pControl))
+SvtCalendarBox::SvtCalendarBox(std::unique_ptr<weld::MenuButton> pControl, bool bUseLabel)
+    : m_bUseLabel(bUseLabel)
+    , m_xControl(std::move(pControl))
     , m_xBuilder(Application::CreateBuilder(m_xControl.get(), "svt/ui/datewindow.ui"))
     , m_xTopLevel(m_xBuilder->weld_widget("date_popup_window"))
     , m_xCalendar(m_xBuilder->weld_calendar("date"))
@@ -1662,6 +1663,8 @@ void SvtCalendarBox::set_date(const Date& rDate)
 
 void SvtCalendarBox::set_label_from_date()
 {
+    if (!m_bUseLabel)
+        return;
     const LocaleDataWrapper& rLocaleData = Application::GetSettings().GetLocaleDataWrapper();
     m_xControl->set_label(rLocaleData.getDate(m_xCalendar->get_date()));
 }
