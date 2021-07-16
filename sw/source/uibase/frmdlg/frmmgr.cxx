@@ -46,7 +46,7 @@
 
 using namespace ::com::sun::star;
 
-static sal_uInt16 aFrameMgrRange[] = {
+const WhichRangesContainer aFrameMgrRange(svl::Items<
                             RES_FRMATR_BEGIN, RES_FRMATR_END-1, // 87-129
 
                             // RotGrfFlyFrame: Support here, but seems not to be
@@ -58,8 +58,8 @@ static sal_uInt16 aFrameMgrRange[] = {
                             XATTR_FILL_FIRST, XATTR_FILL_LAST, // 1014-1033
 
                             SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER,
-                            FN_SET_FRM_NAME, FN_SET_FRM_NAME,
-                            0};
+                            FN_SET_FRM_NAME, FN_SET_FRM_NAME
+                            >::value);
 
 // determine frame attributes via Shell
 SwFlyFrameAttrMgr::SwFlyFrameAttrMgr( bool bNew, SwWrtShell* pSh, Frmmgr_Type nType, const SvGlobalName* pName ) :

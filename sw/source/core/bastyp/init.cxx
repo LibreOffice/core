@@ -138,36 +138,33 @@ using namespace ::com::sun::star;
 // some ranges for sets in collections/ nodes
 
 // AttrSet range for the 2 break attributes
-sal_uInt16 const aBreakSetRange[] = {
-    RES_PAGEDESC, RES_BREAK,
-    0
-};
+WhichRangesContainer const aBreakSetRange(svl::Items<
+    RES_PAGEDESC, RES_BREAK
+>::value);
 
 // AttrSet range for TextFormatColl
 // list attributes ( RES_PARATR_LIST_BEGIN - RES_PARATR_LIST_END ) are not
 // included in the paragraph style's itemset.
-sal_uInt16 const aTextFormatCollSetRange[] = {
+WhichRangesContainer const aTextFormatCollSetRange(svl::Items<
     RES_CHRATR_BEGIN, RES_CHRATR_END-1,
     RES_PARATR_BEGIN, RES_PARATR_END-1,
     RES_FRMATR_BEGIN, RES_FRMATR_END-1,
     RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
 
     // FillAttribute support
-    XATTR_FILL_FIRST, XATTR_FILL_LAST,
+    XATTR_FILL_FIRST, XATTR_FILL_LAST
 
-    0
-};
+>::value);
 
 // AttrSet range for GrfFormatColl
-sal_uInt16 const aGrfFormatCollSetRange[] = {
+WhichRangesContainer const aGrfFormatCollSetRange(svl::Items<
     RES_FRMATR_BEGIN, RES_FRMATR_END-1,
     RES_GRFATR_BEGIN, RES_GRFATR_END-1,
-    RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
-    0
-};
+    RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1
+>::value);
 
 // AttrSet range for TextNode
-sal_uInt16 const aTextNodeSetRange[] = {
+WhichRangesContainer const aTextNodeSetRange(svl::Items<
     RES_CHRATR_BEGIN, RES_CHRATR_END-1,
     RES_PARATR_BEGIN, RES_PARATR_END-1,
     RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END-1,
@@ -175,20 +172,18 @@ sal_uInt16 const aTextNodeSetRange[] = {
     RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
 
     // FillAttribute support (paragraph FillStyle)
-    XATTR_FILL_FIRST, XATTR_FILL_LAST,
+    XATTR_FILL_FIRST, XATTR_FILL_LAST
 
-    0
-};
+>::value);
 
 // AttrSet range for NoTextNode
-sal_uInt16 const aNoTextNodeSetRange[] = {
+WhichRangesContainer const aNoTextNodeSetRange(svl::Items<
     RES_FRMATR_BEGIN, RES_FRMATR_END-1,
     RES_GRFATR_BEGIN, RES_GRFATR_END-1,
-    RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
-    0
-};
+    RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1
+>::value);
 
-sal_uInt16 const aTableSetRange[] = {
+WhichRangesContainer const aTableSetRange(svl::Items<
     RES_FILL_ORDER,     RES_FRM_SIZE,
     RES_LR_SPACE,       RES_BREAK,
     RES_HORI_ORIENT,    RES_HORI_ORIENT,
@@ -200,11 +195,10 @@ sal_uInt16 const aTableSetRange[] = {
     RES_COLLAPSING_BORDERS, RES_COLLAPSING_BORDERS,
     // <-- collapsing
     RES_FRMATR_GRABBAG, RES_FRMATR_GRABBAG,
-    RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
-    0
-};
+    RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1
+>::value);
 
-sal_uInt16 const aTableLineSetRange[] = {
+WhichRangesContainer const aTableLineSetRange(svl::Items<
     RES_FILL_ORDER,     RES_FRM_SIZE,
     // HasTextChangesOnly
     RES_LR_SPACE,       RES_UL_SPACE,
@@ -214,11 +208,10 @@ sal_uInt16 const aTableLineSetRange[] = {
     RES_BACKGROUND,     RES_SHADOW,
     RES_ROW_SPLIT,      RES_ROW_SPLIT,
     RES_FRMATR_GRABBAG, RES_FRMATR_GRABBAG,
-    RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
-    0
-};
+    RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1
+>::value);
 
-sal_uInt16 const aTableBoxSetRange[] = {
+WhichRangesContainer const aTableBoxSetRange(svl::Items<
     RES_FILL_ORDER,     RES_FRM_SIZE,
     RES_LR_SPACE,       RES_UL_SPACE,
     RES_PROTECT,        RES_PROTECT,
@@ -227,42 +220,37 @@ sal_uInt16 const aTableBoxSetRange[] = {
     RES_FRAMEDIR,       RES_FRAMEDIR,
     RES_FRMATR_GRABBAG, RES_FRMATR_GRABBAG,
     RES_BOXATR_BEGIN,   RES_BOXATR_END-1,
-    RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
-    0
-};
+    RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1
+>::value);
 
 // AttrSet range for SwFrameFormat
-sal_uInt16 const aFrameFormatSetRange[] = {
+WhichRangesContainer const aFrameFormatSetRange(svl::Items<
     RES_FRMATR_BEGIN, RES_FRMATR_END-1,
     RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
 
     // FillAttribute support (TextFrame, OLE, Writer GraphicObject)
-    XATTR_FILL_FIRST, XATTR_FILL_LAST,
+    XATTR_FILL_FIRST, XATTR_FILL_LAST
 
-    0
-};
+>::value);
 
 // AttrSet range for SwCharFormat
-sal_uInt16 const aCharFormatSetRange[] = {
+WhichRangesContainer const aCharFormatSetRange(svl::Items<
     RES_CHRATR_BEGIN, RES_CHRATR_END-1,
-    RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
-    0
-};
+    RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1
+>::value);
 
 // AttrSet range for character autostyles
-sal_uInt16 const aCharAutoFormatSetRange[] = {
+WhichRangesContainer const aCharAutoFormatSetRange(svl::Items<
     RES_CHRATR_BEGIN, RES_CHRATR_END-1,
     RES_TXTATR_UNKNOWN_CONTAINER, RES_TXTATR_UNKNOWN_CONTAINER,
-    RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
-    0
-};
+    RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1
+>::value);
 
 // AttrSet range for SwPageDescFormat
-sal_uInt16 const aPgFrameFormatSetRange[] = {
+WhichRangesContainer const aPgFrameFormatSetRange(svl::Items<
     RES_FRMATR_BEGIN, RES_FRMATR_END-1,
-    RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
-    0
-};
+    RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1
+>::value);
 
 // create table for accessing default format attributes
 SwDfltAttrTab aAttrTab( POOLATTR_END - POOLATTR_BEGIN, nullptr );

@@ -3211,17 +3211,15 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
             // the table has no content yet, this means the actual table needs
             // to be created first
 
-            static sal_uInt16 aWhichIds[] =
-            {
+            static const WhichRangesContainer aWhichIds(svl::Items<
                 RES_PARATR_SPLIT,   RES_PARATR_SPLIT,
                 RES_PAGEDESC,       RES_PAGEDESC,
                 RES_BREAK,          RES_BREAK,
                 RES_BACKGROUND,     RES_BACKGROUND,
                 RES_KEEP,           RES_KEEP,
                 RES_LAYOUT_SPLIT,   RES_LAYOUT_SPLIT,
-                RES_FRAMEDIR,       RES_FRAMEDIR,
-                0
-            };
+                RES_FRAMEDIR,       RES_FRAMEDIR
+            >::value);
 
             SfxItemSet aItemSet( m_xDoc->GetAttrPool(), aWhichIds );
             SvxCSS1PropertyInfo aPropInfo;

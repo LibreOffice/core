@@ -2707,22 +2707,16 @@ void SwXFrame::attachToRange(uno::Reference<text::XTextRange> const& xTextRange,
     SwNode& rNode = pDoc->GetNodes().GetEndOfContent();
     SwPaM aPam(rNode);
     aPam.Move( fnMoveBackward, GoInDoc );
-    static sal_uInt16 const aFrameAttrRange[] =
-    {
+    static WhichRangesContainer const aFrameAttrRange(svl::Items<
         RES_FRMATR_BEGIN,       RES_FRMATR_END-1,
         RES_UNKNOWNATR_CONTAINER, RES_UNKNOWNATR_CONTAINER,
 
         // FillAttribute support
         XATTR_FILL_FIRST, XATTR_FILL_LAST,
 
-        SID_ATTR_BORDER_INNER,  SID_ATTR_BORDER_INNER,
-        0
-    };
-    static sal_uInt16 const aGrAttrRange[] =
-    {
-        RES_GRFATR_BEGIN,       RES_GRFATR_END-1,
-        0
-    };
+        SID_ATTR_BORDER_INNER,  SID_ATTR_BORDER_INNER>::value);
+    static WhichRangesContainer const aGrAttrRange(svl::Items<
+        RES_GRFATR_BEGIN,       RES_GRFATR_END-1>::value);
     SfxItemSet aGrSet(pDoc->GetAttrPool(), aGrAttrRange );
 
     SfxItemSet aFrameSet(pDoc->GetAttrPool(), aFrameAttrRange );
