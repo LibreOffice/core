@@ -1,4 +1,6 @@
 extensions/uiconfig/spropctrlr/ui/browserline.ui://GtkLabel[@id='label'] orphan-label
+extensions/uiconfig/spropctrlr/ui/datefield.ui://GtkEntry[@id='entry'] no-labelled-by
+extensions/uiconfig/spropctrlr/ui/datefield.ui://GtkMenuButton[@id='button'] button-no-label
 extensions/uiconfig/spropctrlr/ui/datetimefield.ui://GtkSpinButton[@id='timefield'] no-labelled-by
 extensions/uiconfig/spropctrlr/ui/formattedcontrol.ui://GtkSpinButton[@id='formattedcontrol'] no-labelled-by
 extensions/uiconfig/spropctrlr/ui/formattedsample.ui://GtkEntry[@id='entry'] no-labelled-by
