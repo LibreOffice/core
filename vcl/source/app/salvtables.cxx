@@ -219,7 +219,6 @@ void SalInstanceWidget::ensure_mouse_listener()
 {
     if (!m_bMouseEventListener)
     {
-        m_xWidget->AddEventListener(LINK(this, SalInstanceWidget, MouseEventListener));
         m_xWidget->AddChildEventListener(LINK(this, SalInstanceWidget, MouseEventListener));
         m_bMouseEventListener = true;
     }
@@ -518,10 +517,7 @@ SalInstanceWidget::~SalInstanceWidget()
     if (m_aMnemonicActivateHdl.IsSet())
         m_xWidget->SetMnemonicActivateHdl(Link<vcl::Window&, bool>());
     if (m_bMouseEventListener)
-    {
         m_xWidget->RemoveChildEventListener(LINK(this, SalInstanceWidget, MouseEventListener));
-        m_xWidget->RemoveEventListener(LINK(this, SalInstanceWidget, MouseEventListener));
-    }
     if (m_bKeyEventListener)
         Application::RemoveKeyListener(LINK(this, SalInstanceWidget, KeyEventListener));
     if (m_bEventListener)
