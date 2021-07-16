@@ -2176,7 +2176,7 @@ vcl::Font Window::GetPointFont(vcl::RenderContext const & rRenderContext) const
 
 void Window::Show(bool bVisible, ShowFlags nFlags)
 {
-    if ( isDisposed() || mpWindowImpl->mbVisible == bVisible )
+    if ( !mpWindowImpl || mpWindowImpl->mbVisible == bVisible )
         return;
 
     VclPtr<vcl::Window> xWindow(this);
@@ -2187,7 +2187,7 @@ void Window::Show(bool bVisible, ShowFlags nFlags)
     if ( !bVisible )
     {
         ImplHideAllOverlaps();
-        if( xWindow->isDisposed() )
+        if( !xWindow->mpWindowImpl )
             return;
 
         if ( mpWindowImpl->mpBorderWindow )
@@ -2213,7 +2213,7 @@ void Window::Show(bool bVisible, ShowFlags nFlags)
 
             vcl::Region aInvRegion = mpWindowImpl->maWinClipRegion;
 
-            if( xWindow->isDisposed() )
+            if( !xWindow->mpWindowImpl )
                 return;
 
             bRealVisibilityChanged = mpWindowImpl->mbReallyVisible;
@@ -2349,7 +2349,7 @@ void Window::Show(bool bVisible, ShowFlags nFlags)
                 bool bNoActivate(nFlags & (ShowFlags::NoActivate|ShowFlags::NoFocusChange));
                 mpWindowImpl->mpFrame->Show( true, bNoActivate );
             }
-            if( xWindow->isDisposed() )
+            if( !xWindow->mpWindowImpl )
                 return;
 
             // Query the correct size of the window, if we are waiting for
@@ -2367,13 +2367,13 @@ void Window::Show(bool bVisible, ShowFlags nFlags)
                 mpWindowImpl->mpFrameData->mpBuffer->SetOutputSizePixel(GetOutputSizePixel());
         }
 
-        if( xWindow->isDisposed() )
+        if( !xWindow->mpWindowImpl )
             return;
 
         ImplShowAllOverlaps();
     }
 
-    if( xWindow->isDisposed() )
+    if( !xWindow->mpWindowImpl )
         return;
 
     // the SHOW/HIDE events also serve as indicators to send child creation/destroy events to the access bridge
