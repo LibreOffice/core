@@ -844,23 +844,21 @@ void SwDoc::InitTOXTypes()
 void SwDoc::ReplaceDefaults(const SwDoc& rSource)
 {
     // copy property defaults
-    const sal_uInt16 aRangeOfDefaults[] =
-    {
+    static const WhichRangesContainer aRangeOfDefaults(svl::Items<
         RES_CHRATR_BEGIN, RES_CHRATR_END-1,
         RES_PARATR_BEGIN, RES_PARATR_END-1,
         RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END-1,
         RES_FRMATR_BEGIN, RES_FRMATR_END-1,
         RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
-        XATTR_START, XATTR_END-1,
-        0
-    };
+        XATTR_START, XATTR_END-1
+    >::value);
 
     SfxItemSet aNewDefaults(GetAttrPool(), aRangeOfDefaults);
 
-    for (auto nRange = 0; aRangeOfDefaults[nRange] != 0; nRange += 2)
+    for (const WhichPair& rPair : aRangeOfDefaults)
     {
-        for (sal_uInt16 nWhich = aRangeOfDefaults[nRange];
-             nWhich <= aRangeOfDefaults[nRange + 1]; ++nWhich)
+        for (sal_uInt16 nWhich = rPair.first;
+             nWhich <= rPair.second; ++nWhich)
         {
             const SfxPoolItem& rSourceAttr =
                 rSource.mpAttrPool->GetDefaultItem(nWhich);

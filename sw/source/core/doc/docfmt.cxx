@@ -1834,19 +1834,17 @@ void SwDoc::SetFormatItemByAutoFormat( const SwPaM& rPam, const SfxItemSet& rSet
     }
 
     const sal_Int32 nEnd(rPam.End()->nContent.GetIndex());
-    std::vector<sal_uInt16> whichIds;
+    std::vector<WhichPair> whichIds;
     SfxItemIter iter(rSet);
     for (SfxPoolItem const* pItem = iter.GetCurItem(); pItem; pItem = iter.NextItem())
     {
-        whichIds.push_back(pItem->Which());
-        whichIds.push_back(pItem->Which());
+        whichIds.push_back({pItem->Which(), pItem->Which()});
     }
-    whichIds.push_back(0);
-    SfxItemSet currentSet(GetAttrPool(), whichIds.data());
+    SfxItemSet currentSet(GetAttrPool(), WhichRangesContainer(whichIds.data(), whichIds.size()));
     pTNd->GetParaAttr(currentSet, nEnd, nEnd);
-    for (size_t i = 0; whichIds[i]; i += 2)
+    for (const WhichPair& rPair : whichIds)
     {   // yuk - want to explicitly set the pool defaults too :-/
-        currentSet.Put(currentSet.Get(whichIds[i]));
+        currentSet.Put(currentSet.Get(rPair.first));
     }
 
     getIDocumentContentOperations().InsertItemSet( rPam, rSet, SetAttrMode::DONTEXPAND );
