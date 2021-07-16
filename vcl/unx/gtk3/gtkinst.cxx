@@ -9681,6 +9681,11 @@ private:
         bool bNewChecked = gtk_widget_get_state_flags(GTK_WIDGET(pToggleButton)) & GTK_STATE_FLAG_CHECKED;
         if (bOldChecked == bNewChecked)
             return;
+        if (bOldChecked && gtk_widget_get_focus_on_click(GTK_WIDGET(pToggleButton)))
+        {
+            // grab focus back to the toggle button if the menu was popped down
+            gtk_widget_grab_focus(GTK_WIDGET(pToggleButton));
+        }
         SolarMutexGuard aGuard;
         pThis->signal_toggled();
     }
@@ -9828,7 +9833,17 @@ public:
             return *m_xFont;
         return GtkInstanceWidget::get_font();
     }
-
+#else
+    virtual void set_active(bool bActive) override
+    {
+        bool bWasActive = get_active();
+        GtkInstanceToggleButton::set_active(bActive);
+        if (bWasActive && !bActive && gtk_widget_get_focus_on_click(GTK_WIDGET(m_pMenuButton)))
+        {
+            // grab focus back to the toggle button if the menu was popped down
+            gtk_widget_grab_focus(GTK_WIDGET(m_pMenuButton));
+        }
+    }
 #endif
 
     virtual void insert_item(int pos, const OUString& rId, const OUString& rStr,
