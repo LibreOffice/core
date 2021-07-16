@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c2235e45_cf68f5c6",
+        "filename": "include/svtools/svparser.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-16T14:10:58Z",
+      "side": 1,
+      "message": "Basically, this function is equal to\n\n    WhichRangesContainer aIds;\n    for (sal_uInt16 i \u003d i; i \u003c nWhichIds; ++i)\n        aIds.MergeRanges(pWhichIds[i]);\n\nso I suggest to remove it at all.",
+      "revId": "25ff27517efd8077a02f0468f7efc3f173fd5140",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
