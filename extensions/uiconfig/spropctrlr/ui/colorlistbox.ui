@@ -5,6 +5,7 @@
   <object class="GtkMenuButton" id="colorlistbox">
     <property name="visible">True</property>
     <property name="can_focus">True</property>
+    <property name="focus-on-click">True</property>
     <property name="receives_default">True</property>
     <property name="hexpand">True</property>
     <property name="draw_indicator">True</property>
