@@ -29,7 +29,8 @@ std::size_t TraceEvent::s_nBufferSize = 0;
 void (*TraceEvent::s_pBufferFullCallback)() = nullptr;
 
 int AsyncEvent::s_nIdCounter = 0;
-int ProfileZone::s_nNesting = 0;
+
+thread_local int s_nNesting = 0; // level of nested zones (Making it a member of class causes C2492 - windows)
 
 namespace
 {
@@ -132,6 +133,37 @@ void ProfileZone::addRecording()
                              + ","
                                "\"tid\":"
                              + OUString::number(osl_getThreadIdentifier(nullptr)) + "},");
+}
+
+ProfileZone::ProfileZone(const char* sName, const OUString& sArgs)
+        : NamedEvent(sName, sArgs),
+          m_nNesting(-1)
+{
+    if (s_bRecording)
+    {
+        m_nCreateTime = getNow();
+        m_nNesting = s_nNesting++;
+    }
+    else
+        m_nCreateTime = 0;
+
+}
+
+ProfileZone::~ProfileZone()
+{
+    if (m_nCreateTime > 0)
+    {
+        s_nNesting--;
+        if (m_nNesting != s_nNesting)
+        {
+            SAL_WARN("comphelper.traceevent", "Incorrect ProfileZone nesting for " << m_sName);
+        }
+        else
+        {
+            if (s_bRecording)
+                addRecording();
+        }
+    }
 }
 
 } // namespace comphelper
