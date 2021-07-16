@@ -976,7 +976,7 @@ SvxRTFStyleType::SvxRTFStyleType(SfxItemPool& rPool, const WhichRangesContainer&
 SvxRTFItemStackType::SvxRTFItemStackType(
         SfxItemPool& rPool, const WhichRangesContainer& pWhichRange,
         const EditPosition& rPos )
-    : aAttrSet( rPool, pWhichRange )
+    : aAttrSet( rPool, std::move(pWhichRange) )
     , mxStartNodeIdx(rPos.MakeNodeIdx())
 #if !defined(__COVERITY__)
     // coverity 2020 has difficulty wrt std::optional leading to bogus 'Uninitialized scalar variable'
