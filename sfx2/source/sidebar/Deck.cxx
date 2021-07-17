@@ -143,6 +143,9 @@ void Deck::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
         rJsonWriter.put("hidden", it->IsLurking());
         rJsonWriter.put("expanded", it->IsExpanded());
 
+        if (it->GetTitleBar() && !it->GetTitleBar()->GetMoreOptionsCommand().isEmpty())
+            rJsonWriter.put("command", it->GetTitleBar()->GetMoreOptionsCommand());
+
         {
             auto children2Node = rJsonWriter.startArray("children");
             {
