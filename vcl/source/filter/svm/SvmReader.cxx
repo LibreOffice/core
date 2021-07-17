@@ -158,7 +158,7 @@ rtl::Reference<MetaAction> SvmReader::MetaActionHandler(ImplMetaReadData* pData)
     switch (nType)
     {
         case MetaActionType::NONE:
-            pAction = new MetaAction;
+            return DefaultHandler();
             break;
         case MetaActionType::PIXEL:
             return PixelHandler();
@@ -326,9 +326,6 @@ rtl::Reference<MetaAction> SvmReader::MetaActionHandler(ImplMetaReadData* pData)
         }
         break;
     }
-
-    if (pAction)
-        pAction->Read(mrStream, pData);
 
     return pAction;
 }
@@ -1437,6 +1434,13 @@ rtl::Reference<MetaAction> SvmReader::TextLanguageHandler()
     mrStream.ReadUInt16(nTmp);
 
     pAction->SetTextLanguage(static_cast<LanguageType>(nTmp));
+
+    return pAction;
+}
+
+rtl::Reference<MetaAction> SvmReader::DefaultHandler()
+{
+    auto pAction = new MetaAction();
 
     return pAction;
 }
