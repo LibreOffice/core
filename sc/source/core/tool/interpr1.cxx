@@ -2372,6 +2372,7 @@ void ScInterpreter::ScCell()
             mrDoc.GetDefPattern()->GetFont( aDefFont, SC_AUTOCOL_BLACK, pPrinter );
             pPrinter->SetFont( aDefFont );
             tools::Long nZeroWidth = pPrinter->GetTextWidth( OUString( '0' ) );
+            assert(nZeroWidth != 0);
             pPrinter->SetFont( aOldFont );
             pPrinter->SetMapMode( aOldMode );
             int nZeroCount = static_cast<int>(mrDoc.GetColWidth( aCellPos.Col(), aCellPos.Tab() ) / nZeroWidth);
