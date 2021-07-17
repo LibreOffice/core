@@ -1425,6 +1425,48 @@ void GraphicsRenderTests::testTextDrawing()
     }
 }
 
+void GraphicsRenderTests::testEvenOddRuleInIntersectingRectsWithPolyPolygon()
+{
+    vcl::test::OutputDeviceTestPolyPolygon aOutDevTest;
+    Bitmap aBitmap = aOutDevTest.setupIntersectingRectangles();
+    OUString aTestName = "testEvenOddRuleInIntersectingRectsWithPolyPolygon";
+    if (!SHOULD_ASSERT)
+    {
+        appendTestResult(aTestName, "SKIPPED");
+        return;
+    }
+    vcl::test::TestResult eResult
+        = vcl::test::OutputDeviceTestLine::checkEvenOddRuleInIntersectingRecs(aBitmap);
+    appendTestResult(aTestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        BitmapEx aBitmapEx(aBitmap);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
+    }
+}
+
+void GraphicsRenderTests::testEvenOddRuleInIntersectingRectsWithPolyPolygonB2D()
+{
+    vcl::test::OutputDeviceTestPolyPolygonB2D aOutDevTest;
+    Bitmap aBitmap = aOutDevTest.setupIntersectingRectangles();
+    OUString aTestName = "testEvenOddRuleInIntersectingRectsWithPolyPolygonB2D";
+    if (!SHOULD_ASSERT)
+    {
+        appendTestResult(aTestName, "SKIPPED");
+        return;
+    }
+    vcl::test::TestResult eResult
+        = vcl::test::OutputDeviceTestLine::checkEvenOddRuleInIntersectingRecs(aBitmap);
+    appendTestResult(aTestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        BitmapEx aBitmapEx(aBitmap);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
+    }
+}
+
 void GraphicsRenderTests::runALLTests()
 {
     testDrawRectWithRectangle();
@@ -1493,6 +1535,8 @@ void GraphicsRenderTests::runALLTests()
     testClosedBezierPolygon();
     testFilledAsymmetricalDropShape();
     testTextDrawing();
+    testEvenOddRuleInIntersectingRectsWithPolyPolygon();
+    testEvenOddRuleInIntersectingRectsWithPolyPolygonB2D();
 }
 
 void GraphicsRenderTests::appendTestResult(OUString aTestName, OUString aTestStatus,
