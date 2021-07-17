@@ -13708,7 +13708,7 @@ else
         CUSTOM_BRAND_DIR="$with_branding"
         for lfile in $brand_files
         do
-            if ! test -f $with_branding/$lfile ; then
+            if ! test -f "$with_branding/$lfile" -o -f "$with_branding/shell/$lfile" ; then
                 AC_MSG_WARN([Branded file $lfile does not exist, using the default one])
                 DEFAULT_BRAND_IMAGES="$DEFAULT_BRAND_IMAGES $lfile"
             else
