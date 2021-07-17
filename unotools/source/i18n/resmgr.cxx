@@ -199,14 +199,12 @@ namespace Translate
 
     OUString get(std::string_view sContextAndId, const std::locale &loc)
     {
-        std::string_view sContext;
         std::string_view sId;
         const char *p = strchr(sContextAndId.data(), '\004');
         if (!p)
             sId = sContextAndId;
         else
         {
-            sContext = std::string_view(sContextAndId.data(), p - sContextAndId.data());
             sId = sContextAndId.substr(p - sContextAndId.data() + 1);
             assert(!strchr(sId.data(), '\004') && "should be using nget, not get");
         }
@@ -219,7 +217,7 @@ namespace Translate
         }
 
         //otherwise translate it
-        const std::string ret = boost::locale::pgettext(sContext.data(), sId.data(), loc);
+        const std::string ret = boost::locale::pgettext(std::string(sContextAndId.data(), p - sContextAndId.data()).c_str(), sId.data(), loc);
         OUString result(ExpandVariables(createFromUtf8(ret.data(), ret.size())));
 
         if (comphelper::LibreOfficeKit::isActive())
