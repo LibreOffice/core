@@ -90,6 +90,7 @@ public:
     rtl::Reference<MetaAction> CommentHandler();
     rtl::Reference<MetaAction> LayoutModeHandler();
     rtl::Reference<MetaAction> TextLanguageHandler();
+    static rtl::Reference<MetaAction> DefaultHandler();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
