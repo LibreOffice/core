@@ -194,7 +194,10 @@ tools::Long SvxBoundArgs::CalcMax( const Point& rPt1, const Point& rPt2,
         nB = nStart;
     nB *= nB;
     nB += nDa * nDa;
-    nB = nRange + nDa * ( nFarRange - nRange ) / sqrt( nB );
+    nB = sqrt( nB );
+    if (nB == 0) // avoid div / 0
+        return 0;
+    nB = nRange + nDa * ( nFarRange - nRange ) / nB;
 
     bool bNote;
     if( nB < B(rPt2) )
