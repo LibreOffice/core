@@ -333,13 +333,13 @@ public:
 
     virtual Reference<XInputStream> SAL_CALL getInputStream() override
     {
-        osl::MutexGuard aGuard(m_aMutex);
+        std::lock_guard aGuard(m_aMutex);
         return m_xStream;
     }
 
 private:
     Moderator& m_aModerator;
-    osl::Mutex m_aMutex;
+    std::mutex m_aMutex;
     Reference<XInputStream> m_xStream;
 };
 
@@ -357,7 +357,7 @@ ModeratorsActiveDataSink::setInputStream (
 )
 {
     m_aModerator.setInputStream(rxInputStream);
-    osl::MutexGuard aGuard(m_aMutex);
+    std::lock_guard aGuard(m_aMutex);
     m_xStream = rxInputStream;
 }
 
