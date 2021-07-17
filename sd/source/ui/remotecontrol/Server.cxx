@@ -78,13 +78,6 @@ RemoteServer::~RemoteServer()
 void RemoteServer::execute()
 {
     SAL_INFO( "sdremote", "RemoteServer::execute called" );
-    uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
-    if (!xContext.is()/* || !officecfg::Office::Common::Misc::ExperimentalMode::get(xContext)*/)
-    {
-        // SAL_INFO("sdremote", "not in experimental mode, disabling TCP server");
-        spServer = nullptr;
-        return;
-    }
     osl::SocketAddr aAddr( "0.0.0.0", PORT );
     if ( !mSocket.bind( aAddr ) )
     {
