@@ -1669,7 +1669,7 @@ private:
     bool deep_;
 
     std::mutex mutex_;
-    std::stack< Position > positions_;
+    std::stack< Position, std::vector<Position> > positions_;
     OUString current_;
 };
 
