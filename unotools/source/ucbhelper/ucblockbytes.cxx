@@ -308,14 +308,14 @@ public:
 
     virtual Reference<XStream> SAL_CALL getStream () override
     {
-        osl::MutexGuard aGuard(m_aMutex);
+        std::lock_guard aGuard(m_aMutex);
         return m_xStream;
     }
 
 private:
     Moderator& m_aModerator;
 
-    osl::Mutex m_aMutex;
+    std::mutex m_aMutex;
     Reference<XStream> m_xStream;
 };
 
@@ -376,7 +376,7 @@ ModeratorsActiveDataStreamer::setStream (
 )
 {
     m_aModerator.setStream(rxStream);
-    osl::MutexGuard aGuard(m_aMutex);
+    std::lock_guard aGuard(m_aMutex);
     m_xStream = rxStream;
 }
 
