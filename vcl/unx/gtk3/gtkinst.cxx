@@ -22483,7 +22483,7 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
         rUIFile != "cui/ui/areatabpage.ui" &&
         rUIFile != "cui/ui/asiantypography.ui" &&
         rUIFile != "cui/ui/autocorrectdialog.ui" &&
-        rUIFile != "cui/ui/bitmaptabpage.ui" &&
+        rUIFile != "cui/ui/imagetabpage.ui" &&
         rUIFile != "cui/ui/borderpage.ui" &&
         rUIFile != "cui/ui/breaknumberoption.ui" &&
         rUIFile != "cui/ui/bulletandposition.ui" &&

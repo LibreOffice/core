@@ -103,7 +103,7 @@
             </child>
             <child>
               <object class="GtkToggleButton" id="btnbitmap">
-                <property name="label" translatable="yes" context="areatabpage|btnbitmap">Bitmap</property>
+                <property name="label" translatable="yes" context="areatabpage|btnbitmap">Image</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
