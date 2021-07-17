@@ -929,8 +929,8 @@ void SbRtl_InStrRev(StarBASIC *, SbxArray & rPar, bool)
     }
     else
     {
-        OUString aStr1 = rPar.Get(1)->GetOUString();
-        OUString aToken = rPar.Get(2)->GetOUString();
+        const OUString aStr1 = rPar.Get(1)->GetOUString();
+        const OUString aToken = rPar.Get(2)->GetOUString();
 
         sal_Int32 nStartPos = -1;
         if ( nArgCount >= 3 )
@@ -959,7 +959,7 @@ void SbRtl_InStrRev(StarBASIC *, SbxArray & rPar, bool)
         {
             bTextMode = rPar.Get(4)->GetInteger();
         }
-        sal_Int32 nStrLen = aStr1.getLength();
+        const sal_Int32 nStrLen = aStr1.getLength();
         if( nStartPos == -1 )
         {
             nStartPos = nStrLen;
@@ -982,10 +982,16 @@ void SbRtl_InStrRev(StarBASIC *, SbxArray & rPar, bool)
                 }
                 else
                 {
-                    aStr1 = aStr1.toAsciiUpperCase();
-                    aToken = aToken.toAsciiUpperCase();
+                    // tdf#143332 - case-insensitive operation for non-ASCII characters
+                    i18nutil::SearchOptions2 aSearchOptions;
+                    aSearchOptions.searchString = aToken;
+                    aSearchOptions.AlgorithmType2 = util::SearchAlgorithms2::ABSOLUTE;
+                    aSearchOptions.transliterateFlags |= TransliterationFlags::IGNORE_CASE;
+                    utl::TextSearch textSearch(aSearchOptions);
 
-                    nPos = aStr1.lastIndexOf( aToken, nStartPos ) + 1;
+                    sal_Int32 nStart = 0;
+                    sal_Int32 nEnd = nStartPos;
+                    nPos = textSearch.SearchBackward(aStr1, &nEnd, &nStart) ? nStart : 0;
                 }
             }
         }
