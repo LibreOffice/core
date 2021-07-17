@@ -1668,7 +1668,7 @@ private:
     css::uno::Sequence< css::uno::TypeClass > types_;
     bool deep_;
 
-    osl::Mutex mutex_;
+    std::mutex mutex_;
     std::stack< Position > positions_;
     OUString current_;
 };
@@ -1678,7 +1678,7 @@ Enumeration::nextTypeDescription()
 {
     OUString name;
     {
-        osl::MutexGuard g(mutex_);
+        std::lock_guard g(mutex_);
         if (positions_.empty()) {
             throw css::container::NoSuchElementException(
                 "exhausted XTypeDescriptionEnumeration",
