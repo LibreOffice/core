@@ -895,14 +895,14 @@ TestResult OutputDeviceTestCommon::checkTextLocation(Bitmap& rBitmap)
     tools::Long textThreshold = 3;
     tools::Long textWidth = 3, textHeight = 8;
     tools::Long deviationX = 0, deviationY = 0;
-    tools::Long verticalStart, verticalEnd;
-    tools::Long horizontalStart, horizontalEnd;
+    tools::Long verticalStart = 0, verticalEnd = 0;
+    tools::Long horizontalStart = 0, horizontalEnd = 0;
     tools::Long midX = pAccess->Width() / 2.0;
     tools::Long midY = pAccess->Height() / 2.0;
     bool insideFlag = false;
 
     //Traversing horizontally
-    for (int x = 0, y = pAccess->Height() / 2.0; x < pAccess->Width(); ++x)
+    for (tools::Long x = 0, y = pAccess->Height() / 2.0; x < pAccess->Width(); ++x)
     {
         if (pAccess->GetPixel(y, x) != constBackgroundColor)
         {
@@ -924,7 +924,7 @@ TestResult OutputDeviceTestCommon::checkTextLocation(Bitmap& rBitmap)
 
     insideFlag = false;
     //Traversing vertically
-    for (int x = 0, y = pAccess->Height() / 2.0; x < pAccess->Height(); ++x)
+    for (tools::Long x = 0, y = pAccess->Height() / 2.0; x < pAccess->Height(); ++x)
     {
         if (pAccess->GetPixel(x, y) != constBackgroundColor)
         {
@@ -956,6 +956,54 @@ TestResult OutputDeviceTestCommon::checkTextLocation(Bitmap& rBitmap)
     }
 
     return aResult;
+}
+
+TestResult OutputDeviceTestCommon::checkIntersectingRecs(Bitmap& rBitmap, int aLayerNumber,
+                                                         Color aExpected)
+{
+    BitmapScopedWriteAccess pAccess(rBitmap);
+
+    TestResult aResult = TestResult::Passed;
+    int nNumberOfQuirks = 0;
+    int nNumberOfErrors = 0;
+
+    for (int x = 4; x <= 19; ++x)
+    {
+        checkValue(pAccess, x, aLayerNumber, aExpected, nNumberOfQuirks, nNumberOfErrors, true);
+    }
+
+    if (nNumberOfQuirks > 0)
+        aResult = TestResult::PassedWithQuirks;
+    if (nNumberOfErrors > 0)
+        aResult = TestResult::Failed;
+    return aResult;
+}
+
+TestResult OutputDeviceTestCommon::checkEvenOddRuleInIntersectingRecs(Bitmap& rBitmap)
+{
+    /*
+    The even-odd rule would be tested via the below pattern as layers both of the
+    constFillColor & constBackgroundColor appears in an even-odd fashion.
+     */
+    std::vector<Color> aExpectedColors
+        = { constBackgroundColor, constBackgroundColor, constLineColor,       constFillColor,
+            constFillColor,       constLineColor,       constBackgroundColor, constBackgroundColor,
+            constLineColor,       constFillColor,       constFillColor,       constLineColor,
+            constBackgroundColor, constBackgroundColor, constLineColor,       constFillColor,
+            constFillColor,       constLineColor,       constBackgroundColor, constBackgroundColor,
+            constLineColor,       constFillColor,       constLineColor };
+
+    TestResult aReturnValue = TestResult::Passed;
+    for (size_t i = 0; i < aExpectedColors.size(); i++)
+    {
+        TestResult eResult = checkIntersectingRecs(rBitmap, i, aExpectedColors[i]);
+
+        if (eResult == TestResult::Failed)
+            aReturnValue = TestResult::Failed;
+        if (eResult == TestResult::PassedWithQuirks && aReturnValue != TestResult::Failed)
+            aReturnValue = TestResult::PassedWithQuirks;
+    }
+    return aReturnValue;
 }
 
 // Check 'count' pixels from (x,y) in (addX,addY) direction, the color values must not decrease.
