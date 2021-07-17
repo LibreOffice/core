@@ -85,6 +85,12 @@ void SvmWriter::MetaActionHandler(MetaAction* pAct, ImplMetaWriteData* pData)
             PixelHandler(pMetaAction);
         }
         break;
+        case MetaActionType::POINT:
+        {
+            auto pMetaAction = static_cast<MetaPointAction*>(pAct);
+            PointHandler(pMetaAction);
+        }
+        break;
         default:
             pAct->Write(mrStream, pData);
     }
@@ -102,5 +108,13 @@ void SvmWriter::PixelHandler(MetaPixelAction* pAct)
     TypeSerializer aSerializer(mrStream);
     aSerializer.writePoint(pAct->GetPoint());
     WriteColor(pAct->GetColor());
+}
+
+void SvmWriter::PointHandler(MetaPointAction* pAct)
+{
+    ActionHandler(pAct->GetType());
+    VersionCompatWrite aCompat(mrStream, 1);
+    TypeSerializer aSerializer(mrStream);
+    aSerializer.writePoint(pAct->GetPoint());
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
