@@ -791,6 +791,11 @@ void PDFOutDev::updateFont(GfxState *state)
                 aEsc.data() );
     }
     printf( "\n" );
+
+    if (nEmbedSize)
+    {
+        writeFontFile(gfxFont);
+    }
 }
 
 void PDFOutDev::updateRender(GfxState *state)
