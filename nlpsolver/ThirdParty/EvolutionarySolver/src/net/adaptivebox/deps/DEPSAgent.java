@@ -38,7 +38,6 @@ import net.adaptivebox.deps.behavior.PSGTBehavior;
 import net.adaptivebox.global.RandomGenerator;
 import net.adaptivebox.goodness.IGoodnessCompareEngine;
 import net.adaptivebox.knowledge.ILibEngine;
-import net.adaptivebox.knowledge.Library;
 import net.adaptivebox.knowledge.SearchPoint;
 import net.adaptivebox.problem.ProblemEncoder;
 import net.adaptivebox.space.BasicPoint;
@@ -72,31 +71,21 @@ public class DEPSAgent implements ILibEngine {
 
   private double switchP = 0.5;
 
-  public DEPSAgent(ProblemEncoder encoder, DEGTBehavior deGTBehavior, PSGTBehavior psGTBehavior, double switchP, IGoodnessCompareEngine comparer, Library lib) {
-      setProblemEncoder(encoder);
-
-      this.switchP = switchP;
-
-      deGTBehavior.setLibrary(lib);
-      psGTBehavior.setLibrary(lib);
-      setGTBehavior(deGTBehavior);
-      setGTBehavior(psGTBehavior);
-      this.deGTBehavior = deGTBehavior;
-      this.psGTBehavior = psGTBehavior;
-
-      qualityComparator = comparer;
-  }
-
-  public void setLibrary(Library lib) {
-    deGTBehavior.setLibrary(lib);
-    psGTBehavior.setLibrary(lib);
-  }
-
-  public void setProblemEncoder(ProblemEncoder encoder) {
+  public DEPSAgent(ProblemEncoder encoder, DEGTBehavior deGTBehavior, PSGTBehavior psGTBehavior, double switchP, IGoodnessCompareEngine comparer) {
     problemEncoder = encoder;
+
     trailPoint = problemEncoder.getFreshSearchPoint();
     pold_t = problemEncoder.getFreshSearchPoint();
     pcurrent_t = problemEncoder.getFreshSearchPoint();
+
+    this.switchP = switchP;
+
+    setGTBehavior(deGTBehavior);
+    setGTBehavior(psGTBehavior);
+    this.deGTBehavior = deGTBehavior;
+    this.psGTBehavior = psGTBehavior;
+
+    qualityComparator = comparer;
   }
 
   public void setSpecComparator(IGoodnessCompareEngine comparer) {
