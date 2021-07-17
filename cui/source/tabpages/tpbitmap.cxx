@@ -67,7 +67,7 @@ enum TileOffset
 }
 
 SvxBitmapTabPage::SvxBitmapTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs)
-    : SfxTabPage(pPage, pController, "cui/ui/bitmaptabpage.ui", "BitmapTabPage", &rInAttrs)
+    : SfxTabPage(pPage, pController, "cui/ui/imagetabpage.ui", "ImageTabPage", &rInAttrs)
     , m_rOutAttrs(rInAttrs)
     , m_pnBitmapListState(nullptr)
     , m_fObjectWidth(0.0)
@@ -76,8 +76,8 @@ SvxBitmapTabPage::SvxBitmapTabPage(weld::Container* pPage, weld::DialogControlle
     , m_aXFillAttr(rInAttrs.GetPool())
     , m_rXFSet(m_aXFillAttr.GetItemSet())
     , mpView(nullptr)
-    , m_xBitmapLB(new SvxPresetListBox(m_xBuilder->weld_scrolled_window("bitmapwin", true)))
-    , m_xBitmapStyleLB(m_xBuilder->weld_combo_box("bitmapstyle"))
+    , m_xBitmapLB(new SvxPresetListBox(m_xBuilder->weld_scrolled_window("imagewin", true)))
+    , m_xBitmapStyleLB(m_xBuilder->weld_combo_box("imagestyle"))
     , m_xSizeBox(m_xBuilder->weld_container("sizebox"))
     , m_xTsbScale(m_xBuilder->weld_check_button("scaletsb"))
     , m_xBitmapWidth(m_xBuilder->weld_metric_spin_button("width", FieldUnit::PERCENT))
@@ -91,8 +91,8 @@ SvxBitmapTabPage::SvxBitmapTabPage(weld::Container* pPage, weld::DialogControlle
     , m_xTileOffLB(m_xBuilder->weld_combo_box("tileofflb"))
     , m_xTileOffset(m_xBuilder->weld_metric_spin_button("tileoffmtr", FieldUnit::PERCENT))
     , m_xBtnImport(m_xBuilder->weld_button("BTN_IMPORT"))
-    , m_xCtlBitmapPreview(new weld::CustomWeld(*m_xBuilder, "CTL_BITMAP_PREVIEW", m_aCtlBitmapPreview))
-    , m_xBitmapLBWin(new weld::CustomWeld(*m_xBuilder, "BITMAP", *m_xBitmapLB))
+    , m_xCtlBitmapPreview(new weld::CustomWeld(*m_xBuilder, "CTL_IMAGE_PREVIEW", m_aCtlBitmapPreview))
+    , m_xBitmapLBWin(new weld::CustomWeld(*m_xBuilder, "IMAGE", *m_xBitmapLB))
 {
     // setting the output device
     m_rXFSet.Put( XFillStyleItem(drawing::FillStyle_BITMAP) );

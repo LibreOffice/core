@@ -211,7 +211,7 @@ SvxTransparenceTabPage::SvxTransparenceTabPage(weld::Container* pPage, weld::Dia
     , m_xMtrTrgrEndValue(m_xBuilder->weld_metric_spin_button("MTR_TRGR_END_VALUE", FieldUnit::PERCENT))
     , m_xCtlBitmapBorder(m_xBuilder->weld_widget("bitmap_border"))
     , m_xCtlXRectBorder(m_xBuilder->weld_widget("trans_border"))
-    , m_xCtlBitmapPreview(new weld::CustomWeld(*m_xBuilder, "CTL_BITMAP_PREVIEW", m_aCtlBitmapPreview))
+    , m_xCtlBitmapPreview(new weld::CustomWeld(*m_xBuilder, "CTL_IMAGE_PREVIEW", m_aCtlBitmapPreview))
     , m_xCtlXRectPreview(new weld::CustomWeld(*m_xBuilder, "CTL_TRANS_PREVIEW", m_aCtlXRectPreview))
 {
     // main selection

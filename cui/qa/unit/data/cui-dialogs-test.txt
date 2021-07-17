@@ -35,7 +35,7 @@ cui/ui/textdialog.ui
 # This is typically a hint that these should be hard-coded in the
 # test case since they need some document and model data to work
 #
-# cui/ui/bitmaptabpage.ui
+# cui/ui/imagetabpage.ui
 # cui/ui/connpooloptions.ui <- not calling DriverListControl::Init for
 #   ConnectionPoolOptionsPage::m_pDriverList leaves its BrowseBox::mvCols empty, causing "implicit
 #   conversion from type 'int' of value -1 (32-bit, signed) to type 'sal_uInt16' (aka 'unsigned
