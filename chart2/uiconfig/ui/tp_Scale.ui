@@ -278,9 +278,9 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <items>
-                  <item id="0" translatable="yes" context="tp_Scale|liststoreDATE">Days</item>
-                  <item id="1" translatable="yes" context="tp_Scale|liststoreDATE">Months</item>
-                  <item id="2" translatable="yes" context="tp_Scale|liststoreDATE">Years</item>
+                  <item id="0" translatable="yes" context="tp_Scale|DATE-RESOLUTION">Days</item>
+                  <item id="1" translatable="yes" context="tp_Scale|DATE-RESOLUTION">Months</item>
+                  <item id="2" translatable="yes" context="tp_Scale|DATE-RESOLUTION">Years</item>
                 </items>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="LB_TIME_RESOLUTION-atkobject">
