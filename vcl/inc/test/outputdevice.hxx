@@ -92,6 +92,8 @@ public:
     static TestResult checkClosedBezier(Bitmap& rBitmap);
     static TestResult checkFilledAsymmetricalDropShape(Bitmap& rBitmap);
     static TestResult checkTextLocation(Bitmap& rBitmap);
+    static TestResult checkEvenOddRuleInIntersectingRecs(Bitmap &rBitmap);
+    static TestResult checkIntersectingRecs(Bitmap& rBitmap,int aLayerNumber, Color aExpectedColor);
 private:
     static TestResult checkLineCap(Bitmap& rBitmap, css::drawing::LineCap lineCap);
     static TestResult checkLineJoin(Bitmap& rBitmap, basegfx::B2DLineJoin lineJoin);
@@ -223,6 +225,7 @@ public:
 
     Bitmap setupRectangle(bool bEnableAA);
     Bitmap setupFilledRectangle(bool useLineColor);
+    Bitmap setupIntersectingRectangles();
 };
 
 class VCL_DLLPUBLIC OutputDeviceTestPolyPolygonB2D : public OutputDeviceTestCommon
@@ -232,6 +235,7 @@ public:
 
     Bitmap setupRectangle(bool bEnableAA);
     Bitmap setupFilledRectangle(bool useLineColor);
+    Bitmap setupIntersectingRectangles();
 };
 
 class VCL_DLLPUBLIC OutputDeviceTestGradient : public OutputDeviceTestCommon

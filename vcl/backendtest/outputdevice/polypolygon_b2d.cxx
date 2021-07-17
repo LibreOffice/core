@@ -65,6 +65,80 @@ Bitmap OutputDeviceTestPolyPolygonB2D::setupFilledRectangle(bool useLineColor)
 
     return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
 }
+
+Bitmap OutputDeviceTestPolyPolygonB2D::setupIntersectingRectangles()
+{
+    initialSetup(24, 24, constBackgroundColor);
+
+    mpVirtualDevice->SetLineColor(constLineColor);
+    mpVirtualDevice->SetFillColor(constFillColor);
+
+    basegfx::B2DPolyPolygon aPolyPolygon;
+
+    int nOffset = 2, nFix = 1;
+    basegfx::B2DPolygon aPolygon1, aPolygon2, aPolygon3, aPolygon4;
+
+    /*
+        The intersection between different rectangles has been
+        acheived by stacking them on top of each other and decreasing and
+        increasing the top and bottom offset accordingly to the rectangle
+        which in turn coalesced them to each other and enabling the fill color
+        which in turn should work accordingly to the even-odd rule.
+    */
+
+    //Rect - 1
+    aPolygon1.append(basegfx::B2DPoint(maVDRectangle.Left() + nOffset + nFix,
+                                       maVDRectangle.Top() + (nOffset - 1) + nFix));
+    aPolygon1.append(basegfx::B2DPoint(maVDRectangle.Right() - (nOffset + 2) + nFix,
+                                       maVDRectangle.Top() + (nOffset - 1) + nFix));
+    aPolygon1.append(basegfx::B2DPoint(maVDRectangle.Right() - (nOffset + 2) + nFix,
+                                       maVDRectangle.Bottom() - (nOffset + 8) + nFix));
+    aPolygon1.append(basegfx::B2DPoint(maVDRectangle.Left() + nOffset + nFix,
+                                       maVDRectangle.Bottom() - (nOffset + 8) + nFix));
+    aPolygon1.setClosed(true);
+    aPolyPolygon.append(aPolygon1);
+
+    //Rect - 2
+    aPolygon2.append(basegfx::B2DPoint(maVDRectangle.Left() + nOffset + nFix,
+                                       maVDRectangle.Top() + (nOffset + 2) + nFix));
+    aPolygon2.append(basegfx::B2DPoint(maVDRectangle.Right() - (nOffset + 2) + nFix,
+                                       maVDRectangle.Top() + (nOffset + 2) + nFix));
+    aPolygon2.append(basegfx::B2DPoint(maVDRectangle.Right() - (nOffset + 2) + nFix,
+                                       maVDRectangle.Bottom() - (nOffset + 5) + nFix));
+    aPolygon2.append(basegfx::B2DPoint(maVDRectangle.Left() + nOffset + nFix,
+                                       maVDRectangle.Bottom() - (nOffset + 5) + nFix));
+    aPolygon2.setClosed(true);
+    aPolyPolygon.append(aPolygon2);
+
+    //Rect - 3
+    aPolygon3.append(basegfx::B2DPoint(maVDRectangle.Left() + nOffset + nFix,
+                                       maVDRectangle.Top() + (nOffset + 5) + nFix));
+    aPolygon3.append(basegfx::B2DPoint(maVDRectangle.Right() - (nOffset + 2) + nFix,
+                                       maVDRectangle.Top() + (nOffset + 5) + nFix));
+    aPolygon3.append(basegfx::B2DPoint(maVDRectangle.Right() - (nOffset + 2) + nFix,
+                                       maVDRectangle.Bottom() - (nOffset + 2) + nFix));
+    aPolygon3.append(basegfx::B2DPoint(maVDRectangle.Left() + nOffset + nFix,
+                                       maVDRectangle.Bottom() - (nOffset + 2) + nFix));
+    aPolygon3.setClosed(true);
+    aPolyPolygon.append(aPolygon3);
+
+    //Rect - 4
+    aPolygon4.append(basegfx::B2DPoint(maVDRectangle.Left() + nOffset + nFix,
+                                       maVDRectangle.Top() + (nOffset + 8) + nFix));
+    aPolygon4.append(basegfx::B2DPoint(maVDRectangle.Right() - (nOffset + 2) + nFix,
+                                       maVDRectangle.Top() + (nOffset + 8) + nFix));
+    aPolygon4.append(basegfx::B2DPoint(maVDRectangle.Right() - (nOffset + 2) + nFix,
+                                       maVDRectangle.Bottom() - nOffset + nFix));
+    aPolygon4.append(basegfx::B2DPoint(maVDRectangle.Left() + nOffset + nFix,
+                                       maVDRectangle.Bottom() - nOffset + nFix));
+    aPolygon4.setClosed(true);
+    aPolyPolygon.append(aPolygon4);
+
+    mpVirtualDevice->DrawPolyPolygon(aPolyPolygon);
+
+    return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
+}
+
 } // end namespace vcl::test
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1090,6 +1090,17 @@ public:
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
 
+    void testEvenOddRuleInIntersectionRectangles()
+    {
+        vcl::test::OutputDeviceTestPolyPolygon aOutDevTest;
+        Bitmap aBitmap = aOutDevTest.setupIntersectingRectangles();
+        auto eResult
+            = vcl::test::OutputDeviceTestCommon::checkEvenOddRuleInIntersectingRecs(aBitmap);
+        exportImage("18-01_test_Even-Odd-rule_intersecting_Recs.png", aBitmap);
+        if (SHOULD_ASSERT)
+            CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
+    }
+
     void testTdf124848()
     {
 // TODO: This unit test is not executed for macOS unless bitmap scaling is implemented
@@ -1245,6 +1256,7 @@ public:
     CPPUNIT_TEST(testDrawAlphaBitmapMirrored);
 
     CPPUNIT_TEST(testDrawingText);
+    CPPUNIT_TEST(testEvenOddRuleInIntersectionRectangles);
 
     CPPUNIT_TEST(testTdf124848);
     CPPUNIT_TEST(testTdf136171);

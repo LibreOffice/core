@@ -937,6 +937,54 @@ TestResult OutputDeviceTestCommon::checkTextLocation(Bitmap& rBitmap)
     return aResult;
 }
 
+TestResult OutputDeviceTestCommon::checkIntersectingRecs(Bitmap& rBitmap, int aLayerNumber,
+                                                         Color aExpected)
+{
+    BitmapScopedWriteAccess pAccess(rBitmap);
+
+    TestResult aResult = TestResult::Passed;
+    int nNumberOfQuirks = 0;
+    int nNumberOfErrors = 0;
+
+    for (int x = 4; x <= 19; ++x)
+    {
+        checkValue(pAccess, x, aLayerNumber, aExpected, nNumberOfQuirks, nNumberOfErrors, true);
+    }
+
+    if (nNumberOfQuirks > 0)
+        aResult = TestResult::PassedWithQuirks;
+    if (nNumberOfErrors > 0)
+        aResult = TestResult::Failed;
+    return aResult;
+}
+
+TestResult OutputDeviceTestCommon::checkEvenOddRuleInIntersectingRecs(Bitmap& rBitmap)
+{
+    /*
+    The even-odd rule would be tested via the below pattern as layers both of the
+    constFillColor & constBackgroundColor appears in an even-odd fashion.
+     */
+    std::vector<Color> aExpectedColors
+        = { constBackgroundColor, constBackgroundColor, constLineColor,       constFillColor,
+            constFillColor,       constLineColor,       constBackgroundColor, constBackgroundColor,
+            constLineColor,       constFillColor,       constFillColor,       constLineColor,
+            constBackgroundColor, constBackgroundColor, constLineColor,       constFillColor,
+            constFillColor,       constLineColor,       constBackgroundColor, constBackgroundColor,
+            constLineColor,       constFillColor,       constLineColor };
+
+    TestResult aReturnValue = TestResult::Passed;
+    for (size_t i = 0; i < aExpectedColors.size(); i++)
+    {
+        TestResult eResult = checkIntersectingRecs(rBitmap, i, aExpectedColors[i]);
+
+        if (eResult == TestResult::Failed)
+            aReturnValue = TestResult::Failed;
+        if (eResult == TestResult::PassedWithQuirks && aReturnValue != TestResult::Failed)
+            aReturnValue = TestResult::PassedWithQuirks;
+    }
+    return aReturnValue;
+}
+
 // Check 'count' pixels from (x,y) in (addX,addY) direction, the color values must not decrease.
 static bool checkGradient(BitmapScopedWriteAccess& pAccess, int x, int y, int count, int addX, int addY)
 {
