@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <map>
+#include <mutex>
 
 #include <comphelper/namecontainer.hxx>
 #include <comphelper/sequence.hxx>
@@ -58,7 +59,7 @@ namespace comphelper
     private:
         SvGenericNameContainerMapImpl maProperties;
         const css::uno::Type maType;
-        osl::Mutex maMutex;
+        std::mutex maMutex;
     };
 
     }
@@ -79,7 +80,7 @@ NameContainer::NameContainer( const css::uno::Type& aType )
 // XNameContainer
 void SAL_CALL NameContainer::insertByName( const OUString& aName, const Any& aElement )
 {
-    MutexGuard aGuard( maMutex );
+    std::lock_guard aGuard( maMutex );
 
     if( maProperties.find( aName ) != maProperties.end() )
         throw ElementExistException();
@@ -92,7 +93,7 @@ void SAL_CALL NameContainer::insertByName( const OUString& aName, const Any& aEl
 
 void SAL_CALL NameContainer::removeByName( const OUString& Name )
 {
-    MutexGuard aGuard( maMutex );
+    std::lock_guard aGuard( maMutex );
 
     SvGenericNameContainerMapImpl::iterator aIter = maProperties.find( Name );
     if( aIter == maProperties.end() )
@@ -105,7 +106,7 @@ void SAL_CALL NameContainer::removeByName( const OUString& Name )
 
 void SAL_CALL NameContainer::replaceByName( const OUString& aName, const Any& aElement )
 {
-    MutexGuard aGuard( maMutex );
+    std::lock_guard aGuard( maMutex );
 
     SvGenericNameContainerMapImpl::iterator aIter( maProperties.find( aName ) );
     if( aIter == maProperties.end() )
@@ -121,7 +122,7 @@ void SAL_CALL NameContainer::replaceByName( const OUString& aName, const Any& aE
 
 Any SAL_CALL NameContainer::getByName( const OUString& aName )
 {
-    MutexGuard aGuard( maMutex );
+    std::lock_guard aGuard( maMutex );
 
     SvGenericNameContainerMapImpl::iterator aIter = maProperties.find( aName );
     if( aIter == maProperties.end() )
@@ -132,14 +133,14 @@ Any SAL_CALL NameContainer::getByName( const OUString& aName )
 
 Sequence< OUString > SAL_CALL NameContainer::getElementNames(  )
 {
-    MutexGuard aGuard( maMutex );
+    std::lock_guard aGuard( maMutex );
 
     return comphelper::mapKeysToSequence(maProperties);
 }
 
 sal_Bool SAL_CALL NameContainer::hasByName( const OUString& aName )
 {
-    MutexGuard aGuard( maMutex );
+    std::lock_guard aGuard( maMutex );
 
     SvGenericNameContainerMapImpl::iterator aIter = maProperties.find( aName );
     return aIter != maProperties.end();
@@ -147,7 +148,7 @@ sal_Bool SAL_CALL NameContainer::hasByName( const OUString& aName )
 
 sal_Bool SAL_CALL NameContainer::hasElements(  )
 {
-    MutexGuard aGuard( maMutex );
+    std::lock_guard aGuard( maMutex );
 
     return !maProperties.empty();
 }
