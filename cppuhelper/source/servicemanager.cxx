@@ -12,6 +12,7 @@
 #include <algorithm>
 #include <cassert>
 #include <iostream>
+#include <mutex>
 #include <vector>
 
 #include <com/sun/star/beans/NamedValue.hpp>
@@ -462,20 +463,20 @@ private:
 
     virtual css::uno::Any SAL_CALL nextElement() override;
 
-    osl::Mutex mutex_;
+    std::mutex mutex_;
     std::vector< css::uno::Any > factories_;
     std::vector< css::uno::Any >::const_iterator iterator_;
 };
 
 sal_Bool ContentEnumeration::hasMoreElements()
 {
-    osl::MutexGuard g(mutex_);
+    std::lock_guard g(mutex_);
     return iterator_ != factories_.end();
 }
 
 css::uno::Any ContentEnumeration::nextElement()
 {
-    osl::MutexGuard g(mutex_);
+    std::lock_guard g(mutex_);
     if (iterator_ == factories_.end()) {
         throw css::container::NoSuchElementException(
             "Bootstrap service manager service enumerator has no more elements",
