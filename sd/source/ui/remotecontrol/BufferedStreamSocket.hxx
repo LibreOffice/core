@@ -25,7 +25,7 @@ namespace sd
      * returned to being a StreamSocket wrapper if/when Bluetooth is
      * integrated into osl Sockets.
      */
-    class BufferedStreamSocket :
+    class BufferedStreamSocket final :
         public IBluetoothSocket,
         private ::osl::StreamSocket
     {
@@ -40,6 +40,9 @@ namespace sd
              */
             explicit BufferedStreamSocket( int aSocket );
             BufferedStreamSocket( const BufferedStreamSocket &aSocket );
+
+            ~BufferedStreamSocket();
+
             /**
              * Blocks until a line is read.
              * Returns whatever the last call of recv returned, i.e. 0 or less

@@ -47,6 +47,10 @@ BufferedStreamSocket::BufferedStreamSocket( int aSocket ):
 {
 }
 
+BufferedStreamSocket::~BufferedStreamSocket() {
+    close();
+}
+
 void BufferedStreamSocket::getPeerAddr(osl::SocketAddr& rAddr)
 {
     assert ( !usingCSocket );
