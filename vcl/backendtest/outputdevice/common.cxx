@@ -577,9 +577,9 @@ TestResult OutputDeviceTestCommon::checkDropShape(Bitmap& rBitmap)
             { { 8, 18 }, true }, { { 9, 18 }, true },  { { 10, 18 }, true }, { { 11, 18 }, true },
             { { 12, 18 }, true } };
 
-    for (int i = 0; i < pAccess->Height(); i++)
+    for (tools::Long i = 0; i < pAccess->Height(); i++)
     {
-        for (int j = 0; j < pAccess->Width(); j++)
+        for (tools::Long j = 0; j < pAccess->Width(); j++)
         {
             if (SetPixels[{ j, i }])
             {
@@ -642,9 +642,9 @@ TestResult OutputDeviceTestCommon::checkHalfEllipse(Bitmap& rBitmap)
             {{ 12, 6 },true},  {{ 12, 7 },true},  {{ 12, 8 },true},  {{ 12, 9 },true}, {{ 12, 10 },true}, {{ 12, 11 },true}, {{ 12, 12 },true},
             {{ 12, 13 },true}, {{ 12, 14 },true}, {{ 12, 15 },true}, {{ 12, 16 },true} };
 
-    for (int x = 0; x < pAccess->Width(); x++)
+    for (tools::Long x = 0; x < pAccess->Width(); x++)
     {
-        for (int y = 0; y < pAccess->Height(); ++y)
+        for (tools::Long y = 0; y < pAccess->Height(); ++y)
         {
             if (SetPixels[{ y, x }])
             {
@@ -682,9 +682,9 @@ TestResult OutputDeviceTestCommon::checkClosedBezier(Bitmap& rBitmap)
             { { 11, 8 }, true }, { { 11, 9 }, true },  { { 11, 10 }, true }, { { 12, 8 }, true },
             { { 12, 9 }, true }, { { 12, 10 }, true }, { { 13, 9 }, true } };
 
-    for (int x = 0; x < pAccess->Width(); x++)
+    for (tools::Long x = 0; x < pAccess->Width(); x++)
     {
-        for (int y = 0; y < pAccess->Height(); ++y)
+        for (tools::Long y = 0; y < pAccess->Height(); ++y)
         {
             if (SetPixels.count({ y, x }))
             {
@@ -767,9 +767,9 @@ TestResult OutputDeviceTestCommon::checkFilledAsymmetricalDropShape(Bitmap& rBit
             { { 11, 16 }, true }, { { 12, 16 }, true }, { { 13, 16 }, true }, { { 8, 17 }, true },
             { { 9, 17 }, true },  { { 10, 17 }, true }, { { 11, 17 }, true } };
 
-    for (int x = 0; x < pAccess->Width(); x++)
+    for (tools::Long x = 0; x < pAccess->Width(); x++)
     {
-        for (int y = 0; y < pAccess->Height(); ++y)
+        for (tools::Long y = 0; y < pAccess->Height(); ++y)
         {
             if (SetPixels[{ x, y }])
             {
@@ -861,6 +861,54 @@ TestResult OutputDeviceTestCommon::checkTextLocation(Bitmap& rBitmap)
     }
 
     return aResult;
+}
+
+TestResult OutputDeviceTestCommon::checkIntersectingRecs(Bitmap& rBitmap, int aLayerNumber,
+                                                         Color aExpected)
+{
+    BitmapScopedWriteAccess pAccess(rBitmap);
+
+    TestResult aResult = TestResult::Passed;
+    int nNumberOfQuirks = 0;
+    int nNumberOfErrors = 0;
+
+    for (int x = 4; x <= 19; ++x)
+    {
+        checkValue(pAccess, x, aLayerNumber, aExpected, nNumberOfQuirks, nNumberOfErrors, true);
+    }
+
+    if (nNumberOfQuirks > 0)
+        aResult = TestResult::PassedWithQuirks;
+    if (nNumberOfErrors > 0)
+        aResult = TestResult::Failed;
+    return aResult;
+}
+
+TestResult OutputDeviceTestCommon::checkEvenOddRuleInIntersectingRecs(Bitmap& rBitmap)
+{
+    /*
+    The even-odd rule would be tested via the below pattern as layers both of the
+    constFillColor & constBackgroundColor appears in an even-odd fashion.
+     */
+    std::vector<Color> aExpectedColors
+        = { constBackgroundColor, constBackgroundColor, constLineColor,       constFillColor,
+            constFillColor,       constLineColor,       constBackgroundColor, constBackgroundColor,
+            constLineColor,       constFillColor,       constFillColor,       constLineColor,
+            constBackgroundColor, constBackgroundColor, constLineColor,       constFillColor,
+            constFillColor,       constLineColor,       constBackgroundColor, constBackgroundColor,
+            constLineColor,       constFillColor,       constLineColor };
+
+    TestResult aReturnValue = TestResult::Passed;
+    for (size_t i = 0; i < aExpectedColors.size(); i++)
+    {
+        TestResult eResult = checkIntersectingRecs(rBitmap, i, aExpectedColors[i]);
+
+        if (eResult == TestResult::Failed)
+            aReturnValue = TestResult::Failed;
+        if (eResult == TestResult::PassedWithQuirks && aReturnValue != TestResult::Failed)
+            aReturnValue = TestResult::PassedWithQuirks;
+    }
+    return aReturnValue;
 }
 
 // Check 'count' pixels from (x,y) in (addX,addY) direction, the color values must not decrease.

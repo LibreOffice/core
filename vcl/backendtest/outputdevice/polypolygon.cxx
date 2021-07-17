@@ -65,6 +65,90 @@ Bitmap OutputDeviceTestPolyPolygon::setupFilledRectangle(bool useLineColor)
     return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
 }
 
+Bitmap OutputDeviceTestPolyPolygon::setupIntersectingRectangles()
+{
+    initialSetup(24, 24, constBackgroundColor);
+
+    mpVirtualDevice->SetLineColor(constLineColor);
+    mpVirtualDevice->SetFillColor(constFillColor);
+
+    tools::PolyPolygon aPolyPolygon(4);
+
+    int nOffset = 2, nFix = 1;
+    tools::Polygon aPolygon1(4), aPolygon2(4), aPolygon3(4), aPolygon4(4);
+
+    /*
+        The intersection between different rectangles has been
+        acheived by stacking them on top of each other and decreasing and
+        increasing the top and bottom offset accordingly to the rectangle
+        which in turn coalesced them to each other and enabling the fill color
+        which in turn should work accordingly to the even-odd rule.
+    */
+
+    //Rect - 1
+    aPolygon1.SetPoint(
+        Point(maVDRectangle.Left() + nOffset + nFix, maVDRectangle.Top() + (nOffset - 1) + nFix),
+        0);
+    aPolygon1.SetPoint(Point(maVDRectangle.Right() - (nOffset + 2) + nFix,
+                             maVDRectangle.Top() + (nOffset - 1) + nFix),
+                       1);
+    aPolygon1.SetPoint(Point(maVDRectangle.Right() - (nOffset + 2) + nFix,
+                             maVDRectangle.Bottom() - (nOffset + 8) + nFix),
+                       2);
+    aPolygon1.SetPoint(
+        Point(maVDRectangle.Left() + nOffset + nFix, maVDRectangle.Bottom() - (nOffset + 8) + nFix),
+        3);
+    aPolyPolygon.Insert(aPolygon1);
+
+    //Rect - 2
+    aPolygon2.SetPoint(
+        Point(maVDRectangle.Left() + nOffset + nFix, maVDRectangle.Top() + (nOffset + 2) + nFix),
+        0);
+    aPolygon2.SetPoint(Point(maVDRectangle.Right() - (nOffset + 2) + nFix,
+                             maVDRectangle.Top() + (nOffset + 2) + nFix),
+                       1);
+    aPolygon2.SetPoint(Point(maVDRectangle.Right() - (nOffset + 2) + nFix,
+                             maVDRectangle.Bottom() - (nOffset + 5) + nFix),
+                       2);
+    aPolygon2.SetPoint(
+        Point(maVDRectangle.Left() + nOffset + nFix, maVDRectangle.Bottom() - (nOffset + 5) + nFix),
+        3);
+    aPolyPolygon.Insert(aPolygon2);
+
+    //Rect - 3
+    aPolygon3.SetPoint(
+        Point(maVDRectangle.Left() + nOffset + nFix, maVDRectangle.Top() + (nOffset + 5) + nFix),
+        0);
+    aPolygon3.SetPoint(Point(maVDRectangle.Right() - (nOffset + 2) + nFix,
+                             maVDRectangle.Top() + (nOffset + 5) + nFix),
+                       1);
+    aPolygon3.SetPoint(Point(maVDRectangle.Right() - (nOffset + 2) + nFix,
+                             maVDRectangle.Bottom() - (nOffset + 2) + nFix),
+                       2);
+    aPolygon3.SetPoint(
+        Point(maVDRectangle.Left() + nOffset + nFix, maVDRectangle.Bottom() - (nOffset + 2) + nFix),
+        3);
+    aPolyPolygon.Insert(aPolygon3);
+
+    //Rect - 4
+    aPolygon4.SetPoint(
+        Point(maVDRectangle.Left() + nOffset + nFix, maVDRectangle.Top() + (nOffset + 8) + nFix),
+        0);
+    aPolygon4.SetPoint(Point(maVDRectangle.Right() - (nOffset + 2) + nFix,
+                             maVDRectangle.Top() + (nOffset + 8) + nFix),
+                       1);
+    aPolygon4.SetPoint(Point(maVDRectangle.Right() - (nOffset + 2) + nFix,
+                             maVDRectangle.Bottom() - nOffset + nFix),
+                       2);
+    aPolygon4.SetPoint(
+        Point(maVDRectangle.Left() + nOffset + nFix, maVDRectangle.Bottom() - nOffset + nFix), 3);
+    aPolyPolygon.Insert(aPolygon4);
+
+    mpVirtualDevice->DrawPolyPolygon(aPolyPolygon);
+
+    return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
+}
+
 } // end namespace vcl::test
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
