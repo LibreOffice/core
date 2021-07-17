@@ -49,6 +49,7 @@
 #include <com/sun/star/geometry/RealRectangle2D.hpp>
 #include <com/sun/star/geometry/RealSize2D.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
+#include <tools/diagnose_ex.h>
 
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
@@ -503,25 +504,36 @@ void LineParser::parseFontFamilyName( FontAttributes& rResult )
 
 void LineParser::readFont()
 {
-    OString aFontName;
+    /*
+    xpdf line is like (separated by space):
+    updateFont <FontID> <isEmbedded> <isBold> <isItalic> <isUnderline> <TransformedFontSize> <nEmbedSize> <FontName>
+    updateFont 14       1            0        0          0             1200.000000           23068        TimesNewRomanPSMT
+
+    If nEmbedSize > 0, then a fontFile is followed as a stream.
+    */
+
+    OString        aFontName;
     sal_Int64      nFontID;
     sal_Int32      nIsEmbedded, nIsBold, nIsItalic, nIsUnderline, nFileLen;
     double         nSize;
 
-    readInt64(nFontID);
-    readInt32(nIsEmbedded);
-    readInt32(nIsBold);
-    readInt32(nIsItalic);
-    readInt32(nIsUnderline);
-    readDouble(nSize);
-    readInt32(nFileLen);
+    readInt64(nFontID);     // read FontID
+    readInt32(nIsEmbedded); // read isEmbedded
+    readInt32(nIsBold);     // read isBold
+    readInt32(nIsItalic);   // read isItalic
+    readInt32(nIsUnderline);// read isUnderline
+    readDouble(nSize);      // read TransformedFontSize
+    readInt32(nFileLen);    // read nEmbedSize
 
     nSize = nSize < 0.0 ? -nSize : nSize;
-    aFontName = lcl_unescapeLineFeeds( m_aLine.subView( m_nCharIndex ) );
+    // Read FontName. From the current position to the end (any white spaces will be included).
+    aFontName = lcl_unescapeLineFeeds(m_aLine.subView(m_nCharIndex));
 
     // name gobbles up rest of line
     m_nCharIndex = std::string_view::npos;
 
+    // Check if this font is already in our font map list.
+    // If yes, update the font size and skip.
     Parser::FontMapType::const_iterator pFont( m_parser.m_aFontMap.find(nFontID) );
     if( pFont != m_parser.m_aFontMap.end() )
     {
@@ -534,16 +546,75 @@ void LineParser::readFont()
     }
 
     // yet unknown font - get info and add to map
-    FontAttributes aResult( OStringToOUString( aFontName,
-                                                    RTL_TEXTENCODING_UTF8 ),
+    FontAttributes aResult( OStringToOUString( aFontName, RTL_TEXTENCODING_UTF8 ),
                             nIsBold != 0,
                             nIsItalic != 0,
                             nIsUnderline != 0,
                             nSize,
                             1.0);
 
-    // extract textual attributes (bold, italic in the name, etc.)
-    parseFontFamilyName(aResult);
+    /* The above font attributes (fontName, bold, italic) are based on
+       xpdf line output and may not be reliable. To get correct attributes,
+       we do the following:
+    1. Read the embeded font file and determine the attributes based on the
+       font file.
+    2. If we failed to read the font file, or empty result is returned, then
+       determine the font attributes from the font name.
+    3. If all these attemps have failed, then use a fallback font.
+    */
+    if (nFileLen > 0)
+    {
+        uno::Sequence<sal_Int8> aFontFile(nFileLen);
+        readBinaryData(aFontFile);  // Read fontFile.
+
+        uno::Sequence<uno::Any> aArgs(1);
+        awt::FontDescriptor aFontDescriptor;
+        aArgs[0] <<= aFontFile;
+
+        try
+        {
+            uno::Reference<beans::XMaterialHolder> xHolder(
+                m_parser.m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
+                    "com.sun.star.awt.FontIdentificator", aArgs, m_parser.m_xContext),
+                uno::UNO_QUERY);
+            if (xHolder.is())
+            {
+                uno::Any aFontReadResult(xHolder->getMaterial());
+                aFontReadResult >>= aFontDescriptor;
+                if (!aFontDescriptor.Name.isEmpty())
+                {
+                    aResult.familyName = aFontDescriptor.Name;
+                    aResult.isBold = (aFontDescriptor.Weight > 100.0);
+                    aResult.isItalic = (aFontDescriptor.Slant == awt::FontSlant_OBLIQUE ||
+                                        aFontDescriptor.Slant == awt::FontSlant_ITALIC);
+                } else
+                {
+                    SAL_WARN("sdext.pdfimport",
+                        "Font detection from fontFile returned empty result.\
+                        Guessing font info from font name.");
+                    parseFontFamilyName(aResult);
+                }
+            } else
+            {
+                SAL_WARN("sdext.pdfimport",
+                    "Failed to run FontIdentificator service.\
+                    Guessing font info from font name.");
+                parseFontFamilyName(aResult);
+            }
+        } catch (uno::Exception&)
+        {
+            TOOLS_WARN_EXCEPTION("sdext.pdfimport", "Exception when trying to read font file.");
+            parseFontFamilyName(aResult);
+        }
+    } else
+        parseFontFamilyName(aResult);
+
+    // last fallback
+    if (aResult.familyName.isEmpty())
+    {
+        SAL_WARN("sdext.pdfimport", "Failed to determine the font, using a fallback font Arial.");
+        aResult.familyName = "Arial";
+    }
 
     if (!m_parser.m_xDev)
         m_parser.m_xDev.disposeAndReset(VclPtr<VirtualDevice>::Create());
