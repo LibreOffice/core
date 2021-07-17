@@ -93,30 +93,27 @@ namespace
 {
     struct CachedTextSearch
     {
-        ::osl::Mutex mutex;
+        std::mutex mutex;
         i18nutil::SearchOptions2 Options;
         css::uno::Reference< css::util::XTextSearch2 > xTextSearch;
     };
-
-    struct theCachedTextSearch
-        : public rtl::Static< CachedTextSearch, theCachedTextSearch > {};
 }
 
 Reference<XTextSearch2> TextSearch::getXTextSearch( const i18nutil::SearchOptions2& rPara )
 {
-    CachedTextSearch &rCache = theCachedTextSearch::get();
+    static CachedTextSearch theCachedTextSearch;
 
-    osl::MutexGuard aGuard(rCache.mutex);
+    std::lock_guard aGuard(theCachedTextSearch.mutex);
 
-    if ( lcl_Equals(rCache.Options, rPara) )
-        return rCache.xTextSearch;
+    if ( lcl_Equals(theCachedTextSearch.Options, rPara) )
+        return theCachedTextSearch.xTextSearch;
 
     Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
-    rCache.xTextSearch.set( ::TextSearch2::create(xContext) );
-    rCache.xTextSearch->setOptions2( rPara.toUnoSearchOptions2() );
-    rCache.Options = rPara;
+    theCachedTextSearch.xTextSearch.set( ::TextSearch2::create(xContext) );
+    theCachedTextSearch.xTextSearch->setOptions2( rPara.toUnoSearchOptions2() );
+    theCachedTextSearch.Options = rPara;
 
-    return rCache.xTextSearch;
+    return theCachedTextSearch.xTextSearch;
 }
 
 TextSearch::TextSearch(const SearchParam & rParam, LanguageType eLang )
