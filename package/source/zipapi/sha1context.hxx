@@ -24,6 +24,7 @@
 #include <comphelper/hash.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <osl/mutex.hxx>
+#include <mutex>
 
 class StarOfficeSHA1DigestContext
     : public cppu::WeakImplHelper<css::xml::crypto::XDigestContext>
@@ -49,7 +50,7 @@ public:
 class CorrectSHA1DigestContext
     : public cppu::WeakImplHelper<css::xml::crypto::XDigestContext>
 {
-    ::osl::Mutex m_Mutex;
+    std::mutex m_Mutex;
     ::comphelper::Hash m_Hash{::comphelper::HashType::SHA1};
     bool m_bDisposed{false};
 

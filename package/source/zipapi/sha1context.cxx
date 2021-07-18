@@ -98,7 +98,7 @@ CorrectSHA1DigestContext::~CorrectSHA1DigestContext()
 
 void SAL_CALL CorrectSHA1DigestContext::updateDigest(const uno::Sequence<::sal_Int8>& rData)
 {
-    ::osl::MutexGuard aGuard(m_Mutex);
+    std::lock_guard aGuard(m_Mutex);
     if (m_bDisposed)
         throw lang::DisposedException();
 
@@ -107,7 +107,7 @@ void SAL_CALL CorrectSHA1DigestContext::updateDigest(const uno::Sequence<::sal_I
 
 uno::Sequence<::sal_Int8> SAL_CALL CorrectSHA1DigestContext::finalizeDigestAndDispose()
 {
-    ::osl::MutexGuard aGuard(m_Mutex);
+    std::lock_guard aGuard(m_Mutex);
     if (m_bDisposed)
         throw lang::DisposedException();
 
