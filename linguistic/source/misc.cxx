@@ -46,6 +46,7 @@
 
 #include <linguistic/misc.hxx>
 #include <linguistic/hyphdta.hxx>
+#include <mutex>
 
 using namespace osl;
 using namespace com::sun::star;
@@ -571,15 +572,11 @@ static CharClass & lcl_GetCharClass()
     return aCC;
 }
 
-static osl::Mutex & lcl_GetCharClassMutex()
-{
-    static osl::Mutex   aMutex;
-    return aMutex;
-}
+static std::mutex s_GetCharClassMutex;
 
 bool IsUpper( const OUString &rText, sal_Int32 nPos, sal_Int32 nLen, LanguageType nLanguage )
 {
-    MutexGuard  aGuard( lcl_GetCharClassMutex() );
+    std::lock_guard  aGuard( s_GetCharClassMutex );
 
     CharClass &rCC = lcl_GetCharClass();
     rCC.setLanguageTag( LanguageTag( nLanguage ));
@@ -615,7 +612,7 @@ CapType capitalType(const OUString& aTerm, CharClass const * pCC)
 
 OUString ToLower( const OUString &rText, LanguageType nLanguage )
 {
-    MutexGuard  aGuard( lcl_GetCharClassMutex() );
+    std::lock_guard  aGuard( s_GetCharClassMutex );
 
     CharClass &rCC = lcl_GetCharClass();
     rCC.setLanguageTag( LanguageTag( nLanguage ));
