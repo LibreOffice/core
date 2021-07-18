@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 
-#include <comphelper/hash.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <rtl/digest.h>
 #include <rtl/ref.hxx>
@@ -89,15 +88,7 @@ uno::Reference<xml::crypto::XDigestContext> CorrectSHA1DigestContext::Create()
     return new CorrectSHA1DigestContext();
 }
 
-struct CorrectSHA1DigestContext::Impl
-{
-    ::osl::Mutex m_Mutex;
-    ::comphelper::Hash m_Hash{::comphelper::HashType::SHA1};
-    bool m_bDisposed{false};
-};
-
 CorrectSHA1DigestContext::CorrectSHA1DigestContext()
-    : m_pImpl(new Impl)
 {
 }
 
@@ -107,21 +98,21 @@ CorrectSHA1DigestContext::~CorrectSHA1DigestContext()
 
 void SAL_CALL CorrectSHA1DigestContext::updateDigest(const uno::Sequence<::sal_Int8>& rData)
 {
-    ::osl::MutexGuard aGuard(m_pImpl->m_Mutex);
-    if (m_pImpl->m_bDisposed)
+    ::osl::MutexGuard aGuard(m_Mutex);
+    if (m_bDisposed)
         throw lang::DisposedException();
 
-    m_pImpl->m_Hash.update(reinterpret_cast<unsigned char const*>(rData.getConstArray()), rData.getLength());
+    m_Hash.update(reinterpret_cast<unsigned char const*>(rData.getConstArray()), rData.getLength());
 }
 
 uno::Sequence<::sal_Int8> SAL_CALL CorrectSHA1DigestContext::finalizeDigestAndDispose()
 {
-    ::osl::MutexGuard aGuard(m_pImpl->m_Mutex);
-    if (m_pImpl->m_bDisposed)
+    ::osl::MutexGuard aGuard(m_Mutex);
+    if (m_bDisposed)
         throw lang::DisposedException();
 
-    m_pImpl->m_bDisposed = true;
-    std::vector<unsigned char> const sha1(m_pImpl->m_Hash.finalize());
+    m_bDisposed = true;
+    std::vector<unsigned char> const sha1(m_Hash.finalize());
     return uno::Sequence<sal_Int8>(reinterpret_cast<sal_Int8 const*>(sha1.data()), sha1.size());
 }
 

@@ -21,6 +21,7 @@
 
 #include <com/sun/star/xml/crypto/XDigestContext.hpp>
 
+#include <comphelper/hash.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <osl/mutex.hxx>
 
@@ -48,8 +49,9 @@ public:
 class CorrectSHA1DigestContext
     : public cppu::WeakImplHelper<css::xml::crypto::XDigestContext>
 {
-    struct Impl;
-    std::unique_ptr<Impl> m_pImpl;
+    ::osl::Mutex m_Mutex;
+    ::comphelper::Hash m_Hash{::comphelper::HashType::SHA1};
+    bool m_bDisposed{false};
 
     CorrectSHA1DigestContext();
 
