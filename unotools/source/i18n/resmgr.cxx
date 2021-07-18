@@ -48,6 +48,7 @@
 #include <boost/locale.hpp>
 #include <boost/locale/gnu_gettext.hpp>
 
+#include <array>
 #include <unordered_map>
 #include <memory>
 
@@ -199,27 +200,49 @@ namespace Translate
 
     OUString get(std::string_view sContextAndId, const std::locale &loc)
     {
-        std::string_view sContext;
-        std::string_view sId;
-        const char *p = strchr(sContextAndId.data(), '\004');
-        if (!p)
-            sId = sContextAndId;
+        constexpr int BUFLEN = 128;
+        // this function is performance-sensitive, so we allocate string data on stack
+        std::array<char, BUFLEN> sStackBuffer;
+        std::unique_ptr<char[]> xHeapBuffer;
+        char* pBuffer;
+        if (sContextAndId.size() < BUFLEN - 1)
+            pBuffer = sStackBuffer.data();
         else
         {
-            sContext = std::string_view(sContextAndId.data(), p - sContextAndId.data());
-            sId = sContextAndId.substr(p - sContextAndId.data() + 1);
-            assert(!strchr(sId.data(), '\004') && "should be using nget, not get");
+            xHeapBuffer = std::make_unique<char[]>(sContextAndId.size()+1);
+            pBuffer = xHeapBuffer.get();
+        }
+
+        const char* pContext;
+        const char* pId;
+        auto idx = sContextAndId.find('\004');
+        memcpy(pBuffer, sContextAndId.data(), sContextAndId.size());
+        if (idx == std::string_view::npos)
+        {
+            pBuffer[sContextAndId.size()] = 0;
+            // point pContext at the null byte so it is an empty string
+            pContext = pBuffer + sContextAndId.size();
+            pId = pBuffer;
+        }
+        else
+        {
+            // stick a null byte in the middle to split it into two null-terminated strings
+            pBuffer[idx] = 0;
+            pBuffer[sContextAndId.size()] = 0;
+            pContext = pBuffer;
+            pId = pBuffer + idx + 1;
+            assert(!strchr(pId, '\004') && "should be using nget, not get");
         }
 
         //if it's a key id locale, generate it here
         if (std::use_facet<boost::locale::info>(loc).language() == "qtz")
         {
             OString sKeyId(genKeyId(OString(sContextAndId).replace('\004', '|')));
-            return OUString::fromUtf8(sKeyId) + u"\u2016" + createFromUtf8(sId.data(), sId.size());
+            return OUString::fromUtf8(sKeyId) + u"\u2016" + createFromUtf8(pId, strlen(pId));
         }
 
         //otherwise translate it
-        const std::string ret = boost::locale::pgettext(sContext.data(), sId.data(), loc);
+        const std::string ret = boost::locale::pgettext(pContext, pId, loc);
         OUString result(ExpandVariables(createFromUtf8(ret.data(), ret.size())));
 
         if (comphelper::LibreOfficeKit::isActive())
