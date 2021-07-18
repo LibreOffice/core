@@ -199,27 +199,37 @@ namespace Translate
 
     OUString get(std::string_view sContextAndId, const std::locale &loc)
     {
-        std::string_view sContext;
-        std::string_view sId;
-        const char *p = strchr(sContextAndId.data(), '\004');
-        if (!p)
-            sId = sContextAndId;
+        // this function is performance-sensitive, so we allocate string data on stack
+        std::array<char, 128> sContextBuffer;
+        std::array<char, 128> sIdBuffer;
+        const char* pContext;
+        const char* pId;
+        auto p = sContextAndId.find('\004');
+        if (p == std::string_view::npos)
+        {
+            sContextBuffer[0] = 0;
+            pContext = sContextBuffer.data();
+            strncpy(sIdBuffer.data(), sContextAndId.data(), sContextAndId.size());
+            pId = sIdBuffer.data();
+        }
         else
         {
-            sContext = std::string_view(sContextAndId.data(), p - sContextAndId.data());
-            sId = sContextAndId.substr(p - sContextAndId.data() + 1);
-            assert(!strchr(sId.data(), '\004') && "should be using nget, not get");
+            strncpy(sContextBuffer.data(), sContextAndId.data(), p);
+            pContext = sContextBuffer.data();
+            strncpy(sIdBuffer.data(), sContextAndId.data() + p + 1, sContextAndId.size() - p - 1);
+            pId = sIdBuffer.data();
+            assert(!strchr(pId, '\004') && "should be using nget, not get");
         }
 
         //if it's a key id locale, generate it here
         if (std::use_facet<boost::locale::info>(loc).language() == "qtz")
         {
             OString sKeyId(genKeyId(OString(sContextAndId).replace('\004', '|')));
-            return OUString::fromUtf8(sKeyId) + u"\u2016" + createFromUtf8(sId.data(), sId.size());
+            return OUString::fromUtf8(sKeyId) + u"\u2016" + createFromUtf8(pId, strlen(pId));
         }
 
         //otherwise translate it
-        const std::string ret = boost::locale::pgettext(sContext.data(), sId.data(), loc);
+        const std::string ret = boost::locale::pgettext(pContext, pId, loc);
         OUString result(ExpandVariables(createFromUtf8(ret.data(), ret.size())));
 
         if (comphelper::LibreOfficeKit::isActive())
