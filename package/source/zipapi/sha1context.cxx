@@ -49,7 +49,7 @@ StarOfficeSHA1DigestContext::~StarOfficeSHA1DigestContext()
 
 void SAL_CALL StarOfficeSHA1DigestContext::updateDigest(const uno::Sequence<::sal_Int8>& aData)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::lock_guard aGuard( m_aMutex );
     if ( !m_pDigest )
         throw lang::DisposedException();
 
@@ -64,7 +64,7 @@ void SAL_CALL StarOfficeSHA1DigestContext::updateDigest(const uno::Sequence<::sa
 
 uno::Sequence<::sal_Int8> SAL_CALL StarOfficeSHA1DigestContext::finalizeDigestAndDispose()
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::lock_guard aGuard( m_aMutex );
     if ( !m_pDigest )
         throw lang::DisposedException();
 

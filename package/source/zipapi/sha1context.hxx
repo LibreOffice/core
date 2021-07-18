@@ -23,13 +23,12 @@
 
 #include <comphelper/hash.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <osl/mutex.hxx>
 #include <mutex>
 
 class StarOfficeSHA1DigestContext
     : public cppu::WeakImplHelper<css::xml::crypto::XDigestContext>
 {
-    ::osl::Mutex m_aMutex;
+    std::mutex m_aMutex;
     void* m_pDigest;
 
     StarOfficeSHA1DigestContext()
