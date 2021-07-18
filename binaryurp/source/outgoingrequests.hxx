@@ -22,9 +22,8 @@
 #include <sal/config.h>
 
 #include <map>
+#include <mutex>
 #include <vector>
-
-#include <osl/mutex.hxx>
 
 namespace binaryurp
 {
@@ -56,7 +55,7 @@ private:
 
     typedef std::map<rtl::ByteSequence, std::vector<OutgoingRequest>> Map;
 
-    osl::Mutex mutex_;
+    std::mutex mutex_;
     Map map_;
 };
 }
