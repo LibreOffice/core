@@ -22,12 +22,12 @@
 
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <cppuhelper/implbase.hxx>
-#include <osl/mutex.hxx>
+#include <mutex>
 
 class OStorage;
 class OChildDispListener_Impl : public ::cppu::WeakImplHelper<css::lang::XEventListener>
 {
-    ::osl::Mutex m_aMutex;
+    std::mutex m_aMutex;
     OStorage* m_pStorage;
 
 public:

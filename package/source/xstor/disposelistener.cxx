@@ -31,13 +31,13 @@ OChildDispListener_Impl::~OChildDispListener_Impl()
 
 void OChildDispListener_Impl::OwnerIsDisposed()
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::lock_guard aGuard( m_aMutex );
     m_pStorage = nullptr;
 }
 
 void SAL_CALL OChildDispListener_Impl::disposing( const lang::EventObject& Source )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::lock_guard aGuard( m_aMutex );
     // ObjectIsDisposed must not contain any locking!
     if ( m_pStorage && Source.Source.is() )
         m_pStorage->ChildIsDisposed( Source.Source );
