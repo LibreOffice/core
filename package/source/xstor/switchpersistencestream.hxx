@@ -31,7 +31,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 #include <com/sun/star/io/XAsyncOutputMonitor.hpp>
-#include <osl/mutex.hxx>
+#include <mutex>
 #include <cppuhelper/implbase.hxx>
 
 // SwitchablePersistenceStream
@@ -50,7 +50,7 @@ class SwitchablePersistenceStream
                                         css::io::XSeekable,
                                         css::io::XAsyncOutputMonitor >
 {
-    ::osl::Mutex    m_aMutex;
+    std::mutex    m_aMutex;
 
     const css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
