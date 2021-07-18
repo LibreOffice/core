@@ -24,6 +24,7 @@
 #include "IdentityMapping.hxx"
 
 #include <cassert>
+#include <mutex>
 #include <set>
 #include <unordered_map>
 
@@ -158,7 +159,7 @@ struct MappingsData
     set< uno_getMappingFunc >
                         aCallbacks;
 
-    Mutex               aNegativeLibsMutex;
+    std::mutex          aNegativeLibsMutex;
     set<OUString>       aNegativeLibs;
 };
 
@@ -318,7 +319,7 @@ static OUString getBridgeName(
 static void setNegativeBridge( const OUString & rBridgeName )
 {
     MappingsData & rData = getMappingsData();
-    MutexGuard aGuard( rData.aNegativeLibsMutex );
+    std::lock_guard aGuard( rData.aNegativeLibsMutex );
     rData.aNegativeLibs.insert( rBridgeName );
 }
 
@@ -355,7 +356,7 @@ static bool loadModule(osl::Module & rModule, const OUString & rBridgeName)
     bool bNeg;
     {
     MappingsData & rData = getMappingsData();
-    MutexGuard aGuard( rData.aNegativeLibsMutex );
+    std::lock_guard aGuard( rData.aNegativeLibsMutex );
     const auto iFind( rData.aNegativeLibs.find( rBridgeName ) );
     bNeg = (iFind != rData.aNegativeLibs.end());
     }
