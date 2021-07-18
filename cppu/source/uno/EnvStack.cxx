@@ -27,8 +27,8 @@
 
 #include <osl/thread.h>
 #include <osl/thread.hxx>
-#include <osl/mutex.hxx>
 
+#include <mutex>
 #include <unordered_map>
 
 using namespace com::sun::star;
@@ -70,7 +70,7 @@ typedef std::unordered_map<oslThreadIdentifier,
 
 namespace
 {
-    struct s_threadMap_mutex : public rtl::Static< osl::Mutex, s_threadMap_mutex > {};
+    std::mutex s_threadMap_mutex;
     struct s_threadMap : public rtl::Static< ThreadMap, s_threadMap > {};
 }
 
@@ -78,7 +78,7 @@ static void s_setCurrent(uno_Environment * pEnv)
 {
     oslThreadIdentifier threadId = osl::Thread::getCurrentIdentifier();
 
-    osl::MutexGuard guard(s_threadMap_mutex::get());
+    std::lock_guard guard(s_threadMap_mutex);
     ThreadMap &rThreadMap = s_threadMap::get();
     if (pEnv)
     {
@@ -98,7 +98,7 @@ static uno_Environment * s_getCurrent()
 
     oslThreadIdentifier threadId = osl::Thread::getCurrentIdentifier();
 
-    osl::MutexGuard guard(s_threadMap_mutex::get());
+    std::lock_guard guard(s_threadMap_mutex);
     ThreadMap &rThreadMap = s_threadMap::get();
     ThreadMap::iterator iEnv = rThreadMap.find(threadId);
     if(iEnv != rThreadMap.end())
