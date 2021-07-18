@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4001d928_5d670b04",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3229,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-07-18T15:51:51Z",
+      "side": 1,
+      "message": "Is 1 the right index for \"footnotefirst\" here ? If it is, should the above getCount() \u003e 1 test be \u003e 2 instead. With a getCount() of 2 then index 1 for xFootnoteFirst will have xFootnoteLast also at 2 (getCount() - 1) and the resulting self-copy asserts (which seems a reasonable assert)",
+      "revId": "2edfa9201dd9aac95013332f73828e6cf7bdf732",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
