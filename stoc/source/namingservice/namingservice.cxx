@@ -18,7 +18,6 @@
  */
 
 
-#include <osl/mutex.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -26,6 +25,7 @@
 #include <com/sun/star/uno/XNamingService.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
+#include <mutex>
 #include <unordered_map>
 
 using namespace cppu;
@@ -47,7 +47,7 @@ namespace {
 class NamingService_Impl
     : public WeakImplHelper < XServiceInfo, XNamingService >
 {
-    Mutex                               aMutex;
+    std::mutex                          aMutex;
     HashMap_OWString_Interface          aMap;
 public:
     NamingService_Impl();
@@ -89,7 +89,7 @@ Sequence< OUString > NamingService_Impl::getSupportedServiceNames()
 // XServiceInfo
 Reference< XInterface > NamingService_Impl::getRegisteredObject( const OUString& Name )
 {
-    Guard< Mutex > aGuard( aMutex );
+    std::lock_guard aGuard( aMutex );
     Reference< XInterface > xRet;
     HashMap_OWString_Interface::iterator aIt = aMap.find( Name );
     if( aIt != aMap.end() )
@@ -100,14 +100,14 @@ Reference< XInterface > NamingService_Impl::getRegisteredObject( const OUString&
 // XServiceInfo
 void NamingService_Impl::registerObject( const OUString& Name, const Reference< XInterface >& Object )
 {
-    Guard< Mutex > aGuard( aMutex );
+    std::lock_guard aGuard( aMutex );
     aMap[ Name ] = Object;
 }
 
 // XServiceInfo
 void NamingService_Impl::revokeObject( const OUString& Name )
 {
-    Guard< Mutex > aGuard( aMutex );
+    std::lock_guard aGuard( aMutex );
     aMap.erase( Name );
 }
 
