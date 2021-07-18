@@ -27,6 +27,7 @@
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <map>
+#include <mutex>
 #include <memory>
 #include <string_view>
 #include <unordered_map>
@@ -70,7 +71,7 @@ namespace i18npool {
 
 namespace {
 
-struct theNatNumMutex : public rtl::Static<osl::Mutex, theNatNumMutex> {};
+std::mutex theNatNumMutex;
 
 }
 
@@ -553,7 +554,7 @@ struct Separators
 Separators getLocaleSeparators(const Locale& rLocale, const OUString& rLocStr)
 {
     // Guard the static variable below.
-    osl::MutexGuard aGuard(theNatNumMutex::get());
+    std::lock_guard aGuard(theNatNumMutex);
     // Maximum a couple hundred of pairs with 4-byte structs - so no need for smart managing
     static std::unordered_map<OUString, Separators> aLocaleSeparatorsBuf;
     auto it = aLocaleSeparatorsBuf.find(rLocStr);
@@ -598,11 +599,12 @@ OUString getNumberText(const Locale& rLocale, const OUString& rNumberString,
     // Handle also month and day names for NatNum12 date formatting
     const OUString& rNumberStr = (count == 0) ? rNumberString : sBuf.makeStringAndClear();
 
-    // Guard the static variables below.
-    osl::MutexGuard aGuard( theNatNumMutex::get());
-
     static auto xNumberText
         = css::linguistic2::NumberText::create(comphelper::getProcessComponentContext());
+
+    // Guard the static variables below.
+    std::lock_guard aGuard( theNatNumMutex );
+
     OUString numbertext_prefix;
     // default "cardinal" gets empty prefix
     if (!sNumberTextParams.empty() && sNumberTextParams != u"cardinal")
