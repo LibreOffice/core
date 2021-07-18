@@ -216,7 +216,7 @@ public:
     virtual Any SAL_CALL nextElement() override;
 
 private:
-    Mutex                           aMutex;
+    std::mutex                      aMutex;
     HashSet_Ref                     aImplementationMap;
     HashSet_Ref::iterator           aIt;
 };
@@ -224,14 +224,14 @@ private:
 // XEnumeration
 sal_Bool ImplementationEnumeration_Impl::hasMoreElements()
 {
-    MutexGuard aGuard( aMutex );
+    std::lock_guard aGuard( aMutex );
     return aIt != aImplementationMap.end();
 }
 
 // XEnumeration
 Any ImplementationEnumeration_Impl::nextElement()
 {
-    MutexGuard aGuard( aMutex );
+    std::lock_guard aGuard( aMutex );
     if( aIt == aImplementationMap.end() )
         throw NoSuchElementException("no more elements");
 
