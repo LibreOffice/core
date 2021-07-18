@@ -27,6 +27,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include <deque>
+#include <mutex>
 #include <utility>
 
 namespace com::sun::star::i18n { class XLocaleData5; }
@@ -55,7 +56,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
 private:
-    osl::Mutex maMutex;
+    std::mutex maMutex;
     css::uno::Reference < css::i18n::XLocaleData5 > m_xLocaleData;
     typedef std::pair< css::lang::Locale, css::uno::Sequence< css::i18n::FormatElement > > FormatElementCacheItem;
     std::deque < FormatElementCacheItem > m_aFormatElementCache;
