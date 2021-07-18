@@ -23,7 +23,6 @@
 
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <rtl/byteseq.hxx>
-#include <osl/mutex.hxx>
 
 #include "lessoperators.hxx"
 #include "outgoingrequest.hxx"
@@ -38,12 +37,12 @@ OutgoingRequests::~OutgoingRequests() {}
 void OutgoingRequests::push(
     rtl::ByteSequence const & tid, OutgoingRequest const & request)
 {
-    osl::MutexGuard g(mutex_);
+    std::lock_guard g(mutex_);
     map_[tid].push_back(request);
 }
 
 OutgoingRequest OutgoingRequests::top(rtl::ByteSequence const & tid) {
-    osl::MutexGuard g(mutex_);
+    std::lock_guard g(mutex_);
     Map::iterator i(map_.find(tid));
     if (i == map_.end()) {
         throw css::uno::RuntimeException(
@@ -54,7 +53,7 @@ OutgoingRequest OutgoingRequests::top(rtl::ByteSequence const & tid) {
 }
 
 void OutgoingRequests::pop(rtl::ByteSequence const & tid) noexcept {
-    osl::MutexGuard g(mutex_);
+    std::lock_guard  g(mutex_);
     Map::iterator i(map_.find(tid));
     assert(i != map_.end());
     i->second.pop_back();
