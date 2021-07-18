@@ -22,11 +22,11 @@
 #include <com/sun/star/xml/crypto/XCipherContext.hpp>
 
 #include <cppuhelper/implbase.hxx>
-#include <osl/mutex.hxx>
+#include <mutex>
 
 class BlowfishCFB8CipherContext : public cppu::WeakImplHelper< css::xml::crypto::XCipherContext >
 {
-    ::osl::Mutex m_aMutex;
+    std::mutex m_aMutex;
     void* m_pCipher;
     bool m_bEncrypt;
 

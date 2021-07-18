@@ -62,7 +62,7 @@ BlowfishCFB8CipherContext::~BlowfishCFB8CipherContext()
 
 uno::Sequence< sal_Int8 > SAL_CALL BlowfishCFB8CipherContext::convertWithCipherContext( const uno::Sequence< ::sal_Int8 >& aData )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::lock_guard aGuard( m_aMutex );
     if ( !m_pCipher )
         throw lang::DisposedException();
 
@@ -96,7 +96,7 @@ uno::Sequence< sal_Int8 > SAL_CALL BlowfishCFB8CipherContext::convertWithCipherC
 
 uno::Sequence< ::sal_Int8 > SAL_CALL BlowfishCFB8CipherContext::finalizeCipherContextAndDispose()
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::lock_guard aGuard( m_aMutex );
     if ( !m_pCipher )
         throw lang::DisposedException();
 
