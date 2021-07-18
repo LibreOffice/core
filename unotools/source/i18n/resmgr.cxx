@@ -48,6 +48,7 @@
 #include <boost/locale.hpp>
 #include <boost/locale/gnu_gettext.hpp>
 
+#include <array>
 #include <unordered_map>
 #include <memory>
 
@@ -199,27 +200,40 @@ namespace Translate
 
     OUString get(std::string_view sContextAndId, const std::locale &loc)
     {
-        std::string_view sContext;
-        std::string_view sId;
-        const char *p = strchr(sContextAndId.data(), '\004');
-        if (!p)
-            sId = sContextAndId;
+        constexpr int BUFLEN = 512;
+        assert(sContextAndId.size() < BUFLEN);
+        // this function is performance-sensitive, so we allocate string data on stack
+        std::array<char, BUFLEN> sBuffer;
+        const char* pContext;
+        const char* pId;
+        auto idx = sContextAndId.find('\004');
+        memcpy(sBuffer.data(), sContextAndId.data(), sContextAndId.size());
+        if (idx == std::string_view::npos)
+        {
+            sBuffer[sContextAndId.size()] = 0;
+            // point pContext at the null byte so it is an empty string
+            pContext = sBuffer.data() + sContextAndId.size();
+            pId = sBuffer.data();
+        }
         else
         {
-            sContext = std::string_view(sContextAndId.data(), p - sContextAndId.data());
-            sId = sContextAndId.substr(p - sContextAndId.data() + 1);
-            assert(!strchr(sId.data(), '\004') && "should be using nget, not get");
+            // stick a null byte in the middle to split it into two null-terminated strings
+            sBuffer[idx] = 0;
+            sBuffer[sContextAndId.size()] = 0;
+            pContext = sBuffer.data();
+            pId = sBuffer.data() + idx + 1;
+            assert(!strchr(pId, '\004') && "should be using nget, not get");
         }
 
         //if it's a key id locale, generate it here
         if (std::use_facet<boost::locale::info>(loc).language() == "qtz")
         {
             OString sKeyId(genKeyId(OString(sContextAndId).replace('\004', '|')));
-            return OUString::fromUtf8(sKeyId) + u"\u2016" + createFromUtf8(sId.data(), sId.size());
+            return OUString::fromUtf8(sKeyId) + u"\u2016" + createFromUtf8(pId, strlen(pId));
         }
 
         //otherwise translate it
-        const std::string ret = boost::locale::pgettext(sContext.data(), sId.data(), loc);
+        const std::string ret = boost::locale::pgettext(pContext, pId, loc);
         OUString result(ExpandVariables(createFromUtf8(ret.data(), ret.size())));
 
         if (comphelper::LibreOfficeKit::isActive())
