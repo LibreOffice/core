@@ -469,7 +469,7 @@ bool Picture::Read(HWPFile & hwpf)
     {
         follow.clear();
 
-        //read potentially compressed data in blocks as its more
+        //read potentially compressed data in blocks as it's more
         //likely large values are simply broken and we'll run out
         //of data before we need to realloc
         for (size_t i = 0; i < follow_block_size; i+= SAL_N_ELEMENTS(hwpf.scratch))

@@ -248,7 +248,7 @@ namespace
 {
     void readDataInBlocks(SvStream& rSt, sal_uInt64 nDLen, std::vector<sal_uInt8>& rData)
     {
-        //read data in blocks as its more likely large values are simply broken
+        //read data in blocks as it's more likely large values are simply broken
         //and we'll run out of data before we need to realloc
         for (sal_uInt64 i = 0; i < nDLen; i+= SAL_MAX_UINT16)
         {
