@@ -27,14 +27,14 @@
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
-#include <osl/mutex.hxx>
+#include <mutex>
 
 namespace com::sun::star {
     namespace io { class XSeekable; class XInputStream; }
 }
 class ByteGrabber final
 {
-    ::osl::Mutex m_aMutex;
+    std::mutex m_aMutex;
 
     css::uno::Reference < css::io::XInputStream > xStream;
     css::uno::Reference < css::io::XSeekable > xSeek;
