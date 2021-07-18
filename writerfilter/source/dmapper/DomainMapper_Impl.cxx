@@ -3229,7 +3229,7 @@ void DomainMapper_Impl::PopFootOrEndnote()
                 xFootnotes->getByIndex(1) >>= xFootnoteFirst;
             else
                 xEndnotes->getByIndex(1) >>= xFootnoteFirst;
-            if (!m_bSaxError)
+            if (!m_bSaxError && xFootnoteFirst != xFootnoteLast)
             {
                 uno::Reference< text::XText > xSrc( xFootnoteFirst, uno::UNO_QUERY_THROW );
                 uno::Reference< text::XText > xDest( xFootnoteLast, uno::UNO_QUERY_THROW );
@@ -3248,10 +3248,10 @@ void DomainMapper_Impl::PopFootOrEndnote()
                 // remove processed redlines
                 for( size_t i = 0; redIdx > -1 && i <= sal::static_int_cast<size_t>(redIdx) + 2; i++)
                     m_aStoredRedlines[eType].pop_front();
-            }
 
-            // remove temporary footnote
-            xFootnoteFirst->getAnchor()->setString("");
+                // remove temporary footnote
+                xFootnoteFirst->getAnchor()->setString("");
+            }
         }
     }
 
