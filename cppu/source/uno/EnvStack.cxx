@@ -23,8 +23,6 @@
 #include <cppu/EnvDcp.hxx>
 #include <cppu/Enterable.hxx>
 
-#include <rtl/instance.hxx>
-
 #include <osl/thread.h>
 #include <osl/thread.hxx>
 
@@ -71,7 +69,7 @@ typedef std::unordered_map<oslThreadIdentifier,
 namespace
 {
     std::mutex s_threadMap_mutex;
-    struct s_threadMap : public rtl::Static< ThreadMap, s_threadMap > {};
+    ThreadMap s_threadMap;
 }
 
 static void s_setCurrent(uno_Environment * pEnv)
@@ -79,16 +77,15 @@ static void s_setCurrent(uno_Environment * pEnv)
     oslThreadIdentifier threadId = osl::Thread::getCurrentIdentifier();
 
     std::lock_guard guard(s_threadMap_mutex);
-    ThreadMap &rThreadMap = s_threadMap::get();
     if (pEnv)
     {
-        rThreadMap[threadId] = pEnv;
+        s_threadMap[threadId] = pEnv;
     }
     else
     {
-        ThreadMap::iterator iEnv = rThreadMap.find(threadId);
-        if( iEnv != rThreadMap.end())
-            rThreadMap.erase(iEnv);
+        ThreadMap::iterator iEnv = s_threadMap.find(threadId);
+        if( iEnv != s_threadMap.end())
+            s_threadMap.erase(iEnv);
     }
 }
 
@@ -99,9 +96,8 @@ static uno_Environment * s_getCurrent()
     oslThreadIdentifier threadId = osl::Thread::getCurrentIdentifier();
 
     std::lock_guard guard(s_threadMap_mutex);
-    ThreadMap &rThreadMap = s_threadMap::get();
-    ThreadMap::iterator iEnv = rThreadMap.find(threadId);
-    if(iEnv != rThreadMap.end())
+    ThreadMap::iterator iEnv = s_threadMap.find(threadId);
+    if(iEnv != s_threadMap.end())
         pEnv = iEnv->second;
 
     return pEnv;
