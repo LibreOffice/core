@@ -361,7 +361,7 @@ void HWPFile::TagsRead()
 
                      _hwpInfo.back_info.data.clear();
 
-                     //read potentially compressed data in blocks as its more
+                     //read potentially compressed data in blocks as it's more
                      //likely large values are simply broken and we'll run out
                      //of data before we need to realloc
                      for (int i = 0; i < _hwpInfo.back_info.size; i+= SAL_MAX_UINT16)
