@@ -18,12 +18,13 @@
 package net.adaptivebox.deps.behavior;
 
 import net.adaptivebox.goodness.IGoodnessCompareEngine;
+import net.adaptivebox.knowledge.ILibEngine;
 import net.adaptivebox.knowledge.Library;
 import net.adaptivebox.knowledge.SearchPoint;
 import net.adaptivebox.problem.ProblemEncoder;
 import net.adaptivebox.space.BasicPoint;
 
-abstract public class AbsGTBehavior {
+abstract public class AbsGTBehavior implements ILibEngine {
   // The referred social library
   protected Library socialLib;
 
