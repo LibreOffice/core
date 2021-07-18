@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <algorithm>
+#include <array>
 #include <cassert>
 
 #include <osl/mutex.hxx>
@@ -112,56 +113,52 @@ typelib_TypeDescriptionReference ** SAL_CALL typelib_static_type_getByTypeClass(
     typelib_TypeClass eTypeClass )
     SAL_THROW_EXTERN_C()
 {
-    static typelib_TypeDescriptionReference * s_aTypes[] = {
-        nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr,
-        nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr,
-        nullptr, nullptr, nullptr };
-
-    if (! s_aTypes[eTypeClass])
+    static std::array<typelib_TypeDescriptionReference *,33> s_aTypes = [] ()
     {
-        MutexGuard aGuard( typelib_StaticInitMutex::get() );
-        if (! s_aTypes[eTypeClass])
-        {
-            static const char * s_aTypeNames[] = {
-                "void", "char", "boolean", "byte",
-                "short", "unsigned short", "long", "unsigned long",
-                "hyper", "unsigned hyper", "float", "double",
-                "string", "type", "any" };
+        std::array<typelib_TypeDescriptionReference *,33> aTypes;
 
-            switch (eTypeClass)
+        static const char * s_aTypeNames[] = {
+            "void", "char", "boolean", "byte",
+            "short", "unsigned short", "long", "unsigned long",
+            "hyper", "unsigned hyper", "float", "double",
+            "string", "type", "any" };
+
+        for (size_t i=0; i<aTypes.size(); ++i)
+        {
+            switch (i)
             {
             case typelib_TypeClass_EXCEPTION:
             case typelib_TypeClass_INTERFACE:
             {
                 // type
-                if (! s_aTypes[typelib_TypeClass_TYPE])
+                if (! aTypes[typelib_TypeClass_TYPE])
                 {
                     OUString sTypeName("type");
                     ::typelib_typedescriptionreference_new(
-                        &s_aTypes[typelib_TypeClass_TYPE], typelib_TypeClass_TYPE, sTypeName.pData );
+                        &aTypes[typelib_TypeClass_TYPE], typelib_TypeClass_TYPE, sTypeName.pData );
                     // another static ref:
-                    ++s_aTypes[typelib_TypeClass_TYPE]->nStaticRefCount;
+                    ++aTypes[typelib_TypeClass_TYPE]->nStaticRefCount;
                 }
                 // any
-                if (! s_aTypes[typelib_TypeClass_ANY])
+                if (! aTypes[typelib_TypeClass_ANY])
                 {
                     OUString sTypeName("any");
                     ::typelib_typedescriptionreference_new(
-                        &s_aTypes[typelib_TypeClass_ANY], typelib_TypeClass_ANY, sTypeName.pData );
+                        &aTypes[typelib_TypeClass_ANY], typelib_TypeClass_ANY, sTypeName.pData );
                     // another static ref:
-                    ++s_aTypes[typelib_TypeClass_ANY]->nStaticRefCount;
+                    ++aTypes[typelib_TypeClass_ANY]->nStaticRefCount;
                 }
                 // string
-                if (! s_aTypes[typelib_TypeClass_STRING])
+                if (! aTypes[typelib_TypeClass_STRING])
                 {
                     OUString sTypeName("string");
                     ::typelib_typedescriptionreference_new(
-                        &s_aTypes[typelib_TypeClass_STRING], typelib_TypeClass_STRING, sTypeName.pData );
+                        &aTypes[typelib_TypeClass_STRING], typelib_TypeClass_STRING, sTypeName.pData );
                     // another static ref:
-                    ++s_aTypes[typelib_TypeClass_STRING]->nStaticRefCount;
+                    ++aTypes[typelib_TypeClass_STRING]->nStaticRefCount;
                 }
                 // XInterface
-                if (! s_aTypes[typelib_TypeClass_INTERFACE])
+                if (! aTypes[typelib_TypeClass_INTERFACE])
                 {
                     OUString sTypeName("com.sun.star.uno.XInterface");
 
@@ -182,18 +179,18 @@ typelib_TypeDescriptionReference ** SAL_CALL typelib_static_type_getByTypeClass(
                         &pTD, sTypeName.pData, 0, 0, 0, 0, 0, nullptr, 3, pMembers );
 
                     ::typelib_typedescription_register( reinterpret_cast<typelib_TypeDescription **>(&pTD) );
-                    s_aTypes[typelib_TypeClass_INTERFACE] = pTD->aBase.pWeakRef;
+                    aTypes[typelib_TypeClass_INTERFACE] = pTD->aBase.pWeakRef;
                     ::typelib_typedescriptionreference_acquire(
-                        s_aTypes[typelib_TypeClass_INTERFACE] );
+                        aTypes[typelib_TypeClass_INTERFACE] );
                     // another static ref:
-                    ++s_aTypes[typelib_TypeClass_INTERFACE]->nStaticRefCount;
+                    ++aTypes[typelib_TypeClass_INTERFACE]->nStaticRefCount;
                     ::typelib_typedescription_release( &pTD->aBase );
 
                     ::typelib_typedescriptionreference_release( pMembers[0] );
                     ::typelib_typedescriptionreference_release( pMembers[1] );
                     ::typelib_typedescriptionreference_release( pMembers[2] );
                     // Exception
-                    assert( ! s_aTypes[typelib_TypeClass_EXCEPTION] );
+                    assert( ! aTypes[typelib_TypeClass_EXCEPTION] );
                     {
                     typelib_TypeDescription * pTD1 = nullptr;
                     OUString sTypeName1("com.sun.star.uno.Exception");
@@ -213,15 +210,15 @@ typelib_TypeDescriptionReference ** SAL_CALL typelib_static_type_getByTypeClass(
                     ::typelib_typedescription_new(
                         &pTD1, typelib_TypeClass_EXCEPTION, sTypeName1.pData, nullptr, 2, aMembers );
                     typelib_typedescription_register( &pTD1 );
-                    s_aTypes[typelib_TypeClass_EXCEPTION] = pTD1->pWeakRef;
+                    aTypes[typelib_TypeClass_EXCEPTION] = pTD1->pWeakRef;
                     typelib_typedescriptionreference_acquire(
-                        s_aTypes[typelib_TypeClass_EXCEPTION]);
+                        aTypes[typelib_TypeClass_EXCEPTION]);
                     // another static ref:
-                    ++s_aTypes[typelib_TypeClass_EXCEPTION]->nStaticRefCount;
+                    ++aTypes[typelib_TypeClass_EXCEPTION]->nStaticRefCount;
                     // RuntimeException
                     OUString sTypeName2("com.sun.star.uno.RuntimeException");
                     ::typelib_typedescription_new(
-                        &pTD1, typelib_TypeClass_EXCEPTION, sTypeName2.pData, s_aTypes[typelib_TypeClass_EXCEPTION], 0, nullptr );
+                        &pTD1, typelib_TypeClass_EXCEPTION, sTypeName2.pData, aTypes[typelib_TypeClass_EXCEPTION], 0, nullptr );
                     ::typelib_typedescription_register( &pTD1 );
                     ::typelib_typedescription_release( pTD1 );
                     }
@@ -262,14 +259,16 @@ typelib_TypeDescriptionReference ** SAL_CALL typelib_static_type_getByTypeClass(
             }
             default:
             {
-                OUString aTypeName( OUString::createFromAscii( s_aTypeNames[eTypeClass] ) );
-                ::typelib_typedescriptionreference_new( &s_aTypes[eTypeClass], eTypeClass, aTypeName.pData );
+                OUString aTypeName( OUString::createFromAscii( s_aTypeNames[i] ) );
+                ::typelib_typedescriptionreference_new( &aTypes[i], static_cast<typelib_TypeClass>(i), aTypeName.pData );
                 // another static ref:
-                ++s_aTypes[eTypeClass]->nStaticRefCount;
+                ++aTypes[i]->nStaticRefCount;
             }
             }
         }
-    }
+
+        return aTypes;
+    }();
     return &s_aTypes[eTypeClass];
 }
 
