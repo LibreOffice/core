@@ -51,6 +51,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <iterator>
+#include <mutex>
 #include <string_view>
 #include <unordered_map>
 #include <unordered_set>
@@ -137,7 +138,7 @@ public:
     sal_Bool SAL_CALL hasMoreElements() override;
     Any SAL_CALL nextElement() override;
 private:
-    Mutex                               aMutex;
+    std::mutex                          aMutex;
     Sequence< Reference<XInterface > >  aFactories;
     sal_Int32                           nIt;
 };
@@ -145,14 +146,14 @@ private:
 // XEnumeration
 sal_Bool ServiceEnumeration_Impl::hasMoreElements()
 {
-    MutexGuard aGuard( aMutex );
+    std::lock_guard aGuard( aMutex );
     return nIt != aFactories.getLength();
 }
 
 // XEnumeration
 Any ServiceEnumeration_Impl::nextElement()
 {
-    MutexGuard aGuard( aMutex );
+    std::lock_guard aGuard( aMutex );
     if( nIt == aFactories.getLength() )
         throw NoSuchElementException("no more elements");
 
