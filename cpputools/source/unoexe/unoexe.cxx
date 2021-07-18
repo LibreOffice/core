@@ -67,7 +67,7 @@ static bool s_quiet = false;
 static void out( const char * pText )
 {
     if (! s_quiet)
-        fprintf( stderr, "%s", pText );
+        fputs( pText, stderr );
 }
 
 static void out( std::u16string_view rText )
@@ -75,7 +75,7 @@ static void out( std::u16string_view rText )
     if (! s_quiet)
     {
         OString aText( OUStringToOString( rText, RTL_TEXTENCODING_ASCII_US ) );
-        fprintf( stderr, "%s", aText.getStr() );
+        fputs( aText.getStr(), stderr );
     }
 }
 
