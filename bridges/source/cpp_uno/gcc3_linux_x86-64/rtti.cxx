@@ -21,6 +21,7 @@
 
 #include <cassert>
 #include <memory>
+#include <mutex>
 #include <typeinfo>
 #include <unordered_map>
 #include <utility>
@@ -75,7 +76,7 @@ class RTTI
 {
     typedef std::unordered_map< OUString, std::type_info * > t_rtti_map;
 
-    osl::Mutex m_mutex;
+    std::mutex m_mutex;
     t_rtti_map m_rttis;
     std::vector<OString> m_rttiNames;
     std::unordered_map<OUString, std::unique_ptr<Generated>> m_generatedRttis;
@@ -111,7 +112,7 @@ std::type_info * RTTI::getRTTI(typelib_TypeDescription const & pTypeDescr)
 
     OUString const & unoName = OUString::unacquired(&pTypeDescr.pTypeName);
 
-    osl::MutexGuard guard( m_mutex );
+    std::lock_guard guard( m_mutex );
     t_rtti_map::const_iterator iFind( m_rttis.find( unoName ) );
     if (iFind == m_rttis.end())
     {
