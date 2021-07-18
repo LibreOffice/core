@@ -45,7 +45,7 @@ using ::com::sun::star::text::WritingMode;
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <osl/diagnose.h>
-#include <osl/mutex.hxx>
+#include <mutex>
 #include <sal/log.hxx>
 #include <oox/token/properties.hxx>
 #include <oox/token/propertynames.hxx>
@@ -109,7 +109,7 @@ public:
     virtual sal_Bool SAL_CALL hasPropertyByName( const OUString& Name ) override;
 
 private:
-    osl::Mutex mMutex;
+    std::mutex mMutex;
     PropertyNameMap     maPropMap;
 };
 
@@ -125,7 +125,7 @@ Reference< XPropertySetInfo > SAL_CALL GenericPropertySet::getPropertySetInfo()
 
 void SAL_CALL GenericPropertySet::setPropertyValue( const OUString& rPropertyName, const Any& rValue )
 {
-    ::osl::MutexGuard aGuard( mMutex );
+    std::lock_guard aGuard( mMutex );
     maPropMap[ rPropertyName ] = rValue;
 }
 
