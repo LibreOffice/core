@@ -19,13 +19,13 @@
 
 #pragma once
 
-#include <osl/mutex.hxx>
 #include <rtl/alloc.h>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <typelib/typedescription.hxx>
 
 #include <memory>
+#include <mutex>
 #include <unordered_map>
 
 /*See: http://people.redhat.com/drepper/selinux-mem.html*/
@@ -210,7 +210,7 @@ private:
 
     typedef std::unordered_map< OUString, Vtables > Map;
 
-    osl::Mutex m_mutex;
+    std::mutex m_mutex;
     Map m_map;
 
     rtl_arena_type * m_arena;
