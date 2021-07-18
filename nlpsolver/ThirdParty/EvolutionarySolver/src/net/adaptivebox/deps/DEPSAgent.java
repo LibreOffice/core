@@ -43,7 +43,7 @@ import net.adaptivebox.knowledge.SearchPoint;
 import net.adaptivebox.problem.ProblemEncoder;
 import net.adaptivebox.space.BasicPoint;
 
-public class DEPSAgent implements ILibEngine {
+public class DEPSAgent {
 
   // Describes the problem to be solved
   private ProblemEncoder problemEncoder;
