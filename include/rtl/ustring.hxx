@@ -110,6 +110,7 @@ private:
     static constexpr void assertLayout() {
         // These static_asserts verifying the layout compatibility with rtl_uString cannot be class
         // member declarations, as offsetof requires a complete type, so defer them to here:
+        static_assert(std::is_standard_layout_v<OUStringLiteral>);
         static_assert(offsetof(OUStringLiteral, str.refCount) == offsetof(OUStringLiteral, more.refCount));
         static_assert(offsetof(OUStringLiteral, str.length) == offsetof(OUStringLiteral, more.length));
         static_assert(offsetof(OUStringLiteral, str.buffer) == offsetof(OUStringLiteral, more.buffer));
