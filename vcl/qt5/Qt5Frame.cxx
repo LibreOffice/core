@@ -132,7 +132,7 @@ Qt5Frame::Qt5Frame(Qt5Frame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
     m_nStyle = nStyle;
     m_pParent = pParent;
 
-    Qt::WindowFlags aWinFlags;
+    Qt::WindowFlags aWinFlags = 0;
     if (!(nStyle & SalFrameStyleFlags::SYSTEMCHILD))
     {
         if (nStyle & SalFrameStyleFlags::INTRO)
@@ -142,7 +142,7 @@ Qt5Frame::Qt5Frame(Qt5Frame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
         else if ((nStyle & SalFrameStyleFlags::FLOAT)
                  && (nStyle & SalFrameStyleFlags::OWNERDRAWDECORATION))
             aWinFlags |= Qt::Tool | Qt::FramelessWindowHint;
-        else if (nStyle & (SalFrameStyleFlags::FLOAT | SalFrameStyleFlags::TOOLTIP))
+        else if (nStyle & SalFrameStyleFlags::TOOLTIP)
             aWinFlags |= Qt::ToolTip;
         else if ((nStyle & SalFrameStyleFlags::FLOAT)
                  && !(nStyle & SalFrameStyleFlags::OWNERDRAWDECORATION))
