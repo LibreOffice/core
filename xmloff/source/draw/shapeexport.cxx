@@ -167,6 +167,7 @@ constexpr OUStringLiteral gsVerb( u"Verb" );
 constexpr OUStringLiteral gsSoundURL( u"SoundURL" );
 constexpr OUStringLiteral gsSpeed( u"Speed" );
 constexpr OUStringLiteral gsStarBasic( u"StarBasic" );
+constexpr OUStringLiteral gsHyperlink( u"Hyperlink" );
 
 XMLShapeExport::XMLShapeExport(SvXMLExport& rExp,
                                 SvXMLExportPropertyMapper *pExtMapper )
@@ -578,17 +579,30 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
     }
     sal_Int32 nZIndex = 0;
     uno::Reference< beans::XPropertySet > xSet( xShape, uno::UNO_QUERY );
+    OUString sHyperlink;
+    try
+    {
+        xSet->getPropertyValue(gsHyperlink) >>= sHyperlink;
+    }
+    catch (beans::UnknownPropertyException)
+    {
+    }
 
     std::unique_ptr< SvXMLElementExport >  pHyperlinkElement;
 
-    // export hyperlinks with <a><shape/></a>. Currently only in draw since draw
-    // does not support document events
+    // Need to stash the attributes that are pre-loaded for the shape export
+    // (otherwise they will become attributes of the draw:a element)
+    uno::Reference<xml::sax::XAttributeList> xSaveAttribs(
+        new SvXMLAttributeList(GetExport().GetAttrList()));
+    GetExport().ClearAttrList();
     if( xSet.is() && (GetExport().GetModelType() == SvtModuleOptions::EFactory::DRAW) )
     {
+        // export hyperlinks with <a><shape/></a>. Currently only in draw since draw
+        // does not support document events
         try
         {
             presentation::ClickAction eAction = presentation::ClickAction_NONE;
-            xSet->getPropertyValue("OnClick") >>= eAction;
+            xSet->getPropertyValue(gsOnClick) >>= eAction;
 
             if( (eAction == presentation::ClickAction_DOCUMENT) ||
                 (eAction == presentation::ClickAction_BOOKMARK) )
@@ -610,6 +624,14 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
             TOOLS_WARN_EXCEPTION("xmloff", "XMLShapeExport::exportShape(): exception during hyperlink export");
         }
     }
+    else if (xSet.is() && !sHyperlink.isEmpty())
+    {
+        mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, sHyperlink );
+        mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
+        pHyperlinkElement.reset( new SvXMLElementExport(mrExport, XML_NAMESPACE_DRAW, XML_A, true, true) );
+    }
+    // re-add stashed attributes
+    GetExport().AddAttributeList(xSaveAttribs);
 
     if( xSet.is() )
         xSet->getPropertyValue(gsZIndex) >>= nZIndex;

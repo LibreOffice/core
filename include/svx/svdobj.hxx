@@ -868,6 +868,9 @@ public:
     // If fillstyle is drawing::FillStyle_BITMAP, returns the graphic.
     const Graphic* getFillGraphic() const;
 
+    OUString getHyperlink() const { return msHyperlink; }
+    void setHyperlink(const OUString& sHyperlink) { msHyperlink = sHyperlink; }
+
 protected:
     mutable tools::Rectangle    m_aOutRect;     // surrounding rectangle for Paint (incl. LineWidth, ...)
     Point                       m_aAnchor;      // anchor position (Writer)
@@ -971,6 +974,8 @@ private:
     // HACK: Do not automatically insert newly created object into a page.
     // The user needs to do it manually later.
     bool                        mbDoNotInsertIntoPageAutomatically;
+    // Hyperlink for the whole shape
+    OUString msHyperlink;
 
     // only for internal use!
     SvxShape* getSvxShape();

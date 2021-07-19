@@ -813,6 +813,10 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
         if(!maTypeModel.maWrapStyle.isEmpty())
             PropertySet(xShape).setAnyProperty(PROP_TextWordWrap, makeAny(maTypeModel.maWrapStyle == "square"));
 
+        // tdf#123626
+        if (!maTypeModel.maHyperlink.isEmpty())
+            PropertySet(xShape).setAnyProperty(PROP_Hyperlink, makeAny(maTypeModel.maHyperlink));
+
         PropertySet(xShape).setAnyProperty(PROP_TextAutoGrowHeight,
                                            makeAny(maTypeModel.mbAutoHeight));
 

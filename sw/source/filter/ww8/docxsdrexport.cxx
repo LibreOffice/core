@@ -19,6 +19,7 @@
 #include <svx/svdogrp.hxx>
 #include <svx/svdobjkind.hxx>
 #include <oox/token/namespaces.hxx>
+#include <oox/token/relationship.hxx>
 #include <textboxhelper.hxx>
 #include <fmtanchr.hxx>
 #include <fmtsrnd.hxx>
@@ -1269,7 +1270,20 @@ void DocxSdrExport::writeDMLDrawing(const SdrObject* pSdrObject, const SwFrameFo
         && pFrameFormat->GetAnchor().GetAnchorId() != RndStdIds::FLY_AS_CHAR)
 
         pDocPrAttrList->add(XML_hidden, OString::number(1).getStr());
-    pFS->singleElementNS(XML_wp, XML_docPr, pDocPrAttrList);
+
+    pFS->startElementNS(XML_wp, XML_docPr, pDocPrAttrList);
+    OUString sHyperlink = pSdrObject->getHyperlink();
+    if (!sHyperlink.isEmpty())
+    {
+        OUString sRelId = m_pImpl->getExport().GetFilter().addRelation(
+            pFS->getOutputStream(), oox::getRelationship(Relationship::HYPERLINK),
+            oox::drawingml::URLTransformer().getTransformedString(sHyperlink),
+            oox::drawingml::URLTransformer().isExternalURL(sHyperlink));
+        pFS->singleElementNS(XML_a, XML_hlinkClick, FSNS(XML_r, XML_id), sRelId,
+                             FSNS(XML_xmlns, XML_a),
+                             m_pImpl->getExport().GetFilter().getNamespaceURL(OOX_NS(dml)));
+    }
+    pFS->endElementNS(XML_wp, XML_docPr);
 
     uno::Reference<lang::XServiceInfo> xServiceInfo(xShape, uno::UNO_QUERY_THROW);
     const char* pNamespace = "http://schemas.microsoft.com/office/word/2010/wordprocessingShape";

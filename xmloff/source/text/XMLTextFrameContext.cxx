@@ -1648,6 +1648,10 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTextFrameContext::c
         }
         xContext = &dynamic_cast<SvXMLImportContext&>(*m_xImplContext->createFastChildContext(nElement, xAttrList));
     }
+    else if (nElement == XML_ELEMENT(DRAW, XML_A))
+    {
+        xContext = &dynamic_cast<SvXMLImportContext&>(*m_xImplContext->createFastChildContext(nElement, xAttrList));
+    }
     else
     {
         // the child is a drawing shape
