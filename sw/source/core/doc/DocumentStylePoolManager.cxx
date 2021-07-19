@@ -810,7 +810,7 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
         case RES_POOLCOLL_GREETING:             // Greeting
         case RES_POOLCOLL_REGISTER_BASE:        // Base indexes
         case RES_POOLCOLL_SIGNATURE:            // Signatures
-        case RES_POOLCOLL_TABLE:                // Tabele content
+        case RES_POOLCOLL_TABLE:                // Table content
             {
                 SwFormatLineNumber aLN;
                 aLN.SetCountLines( false );
@@ -820,6 +820,14 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
                     aSet.Put( SvxWidowsItem( 0, RES_PARATR_WIDOWS ) );
                     aSet.Put( SvxOrphansItem( 0, RES_PARATR_ORPHANS ) );
                 }
+                // tdf#143066 : set language to 'none' to prevent spell checking for indices
+                if (nId == RES_POOLCOLL_REGISTER_BASE)
+                {
+                    aSet.Put( SvxLanguageItem( LANGUAGE_NONE, RES_CHRATR_LANGUAGE ) );
+                    aSet.Put( SvxLanguageItem( LANGUAGE_NONE, RES_CHRATR_CJK_LANGUAGE ) );
+                    aSet.Put( SvxLanguageItem( LANGUAGE_NONE, RES_CHRATR_CTL_LANGUAGE ) );
+                }
+                break;
             }
             break;
 
@@ -995,7 +1003,6 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
                 aSet.Put( aLN );
             }
             break;
-
         // User defined indexes:
         case RES_POOLCOLL_TOX_USERH:            // Header
             lcl_SetRegister( m_rDoc, aSet, 0, true, false );
