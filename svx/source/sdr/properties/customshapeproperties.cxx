@@ -74,7 +74,7 @@ namespace sdr::properties
                     SDRATTR_GLOW_FIRST, SDRATTR_SOFTEDGE_LAST,
                     SDRATTR_TEXTCOLUMNS_FIRST, SDRATTR_TEXTCOLUMNS_LAST,
                     // Range from SdrTextObj:
-                    EE_ITEMS_START, EE_ITEMS_END>{});
+                    EE_ITEMS_START, EE_ITEMS_END>);
         }
 
         bool CustomShapeProperties::AllowItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem ) const

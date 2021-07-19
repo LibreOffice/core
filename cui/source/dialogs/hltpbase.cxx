@@ -343,7 +343,7 @@ IMPL_LINK_NOARG(SvxHyperlinkTabPageBase, ClickScriptHdl_Impl, weld::Button&, voi
     // create empty itemset for macro-dlg
     SfxItemSet aItemSet( SfxGetpApp()->GetPool(),
                          svl::Items<SID_ATTR_MACROITEM,
-                                    SID_ATTR_MACROITEM>{} );
+                                    SID_ATTR_MACROITEM> );
     aItemSet.Put ( aItem );
 
     DisableClose( true );

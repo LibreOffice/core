@@ -349,7 +349,7 @@ void ScModule::Execute( SfxRequest& rReq )
                         bSet = !GetDocOptions().IsAutoSpell();
                 }
 
-                SfxItemSet aSet( GetPool(), svl::Items<SID_AUTOSPELL_CHECK, SID_AUTOSPELL_CHECK>{} );
+                SfxItemSet aSet( GetPool(), svl::Items<SID_AUTOSPELL_CHECK, SID_AUTOSPELL_CHECK> );
                 aSet.Put( SfxBoolItem( SID_AUTOSPELL_CHECK, bSet ) );
                 ModifyOptions( aSet );
                 rReq.Done();
@@ -1891,7 +1891,7 @@ std::unique_ptr<SfxItemSet> ScModule::CreateItemSet( sal_uInt16 nId )
                 SID_SC_INPUT_TEXTWYSIWYG, SID_SC_INPUT_TEXTWYSIWYG,
                 SID_SC_INPUT_REPLCELLSWARN, SID_SC_INPUT_REPLCELLSWARN,
                 // TP_VIEW:
-                SID_SC_OPT_SYNCZOOM, SID_SC_OPT_KEY_BINDING_COMPAT>{});
+                SID_SC_OPT_SYNCZOOM, SID_SC_OPT_KEY_BINDING_COMPAT>);
 
         const ScAppOptions& rAppOpt = GetAppOptions();
 

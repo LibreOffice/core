@@ -104,7 +104,7 @@ std::unique_ptr<SfxItemSet> SwModule::CreateItemSet( sal_uInt16 nId )
             FN_PARAM_PRINTER, FN_PARAM_STDFONTS,
             FN_PARAM_WRTSHELL, FN_PARAM_WRTSHELL,
             FN_PARAM_SHADOWCURSOR, FN_PARAM_SHADOWCURSOR,
-            FN_PARAM_CRSR_IN_PROTECTED, FN_PARAM_CRSR_IN_PROTECTED>{});
+            FN_PARAM_CRSR_IN_PROTECTED, FN_PARAM_CRSR_IN_PROTECTED>);
 
     pRet->Put( SwDocDisplayItem( aViewOpt ) );
     pRet->Put( SwElemItem( aViewOpt ) );

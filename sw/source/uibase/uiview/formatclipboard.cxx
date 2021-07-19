@@ -62,7 +62,7 @@ std::unique_ptr<SfxItemSet> lcl_CreateEmptyItemSet( SelectionType nSelectionType
                 // no RES_URL
                 RES_EDIT_IN_READONLY, RES_LAYOUT_SPLIT,
                 // no RES_CHAIN
-                RES_TEXTGRID, RES_FRMATR_END - 1>{});
+                RES_TEXTGRID, RES_FRMATR_END - 1>);
     }
     else if( nSelectionType & SelectionType::DrawObject )
     {
@@ -72,7 +72,7 @@ std::unique_ptr<SfxItemSet> lcl_CreateEmptyItemSet( SelectionType nSelectionType
     {
         if( bNoParagraphFormats )
             pItemSet = std::make_unique<SfxItemSet>(rPool,
-                    svl::Items<RES_CHRATR_BEGIN, RES_CHRATR_END - 1>{});
+                    svl::Items<RES_CHRATR_BEGIN, RES_CHRATR_END - 1>);
         else
             pItemSet = std::make_unique<SfxItemSet>(
                 rPool,
@@ -90,7 +90,7 @@ std::unique_ptr<SfxItemSet> lcl_CreateEmptyItemSet( SelectionType nSelectionType
                     // no RES_URL
                     RES_EDIT_IN_READONLY, RES_LAYOUT_SPLIT,
                     // no RES_CHAIN
-                    RES_TEXTGRID, RES_FRMATR_END - 1>{});
+                    RES_TEXTGRID, RES_FRMATR_END - 1>);
     }
     return pItemSet;
 }
@@ -391,7 +391,7 @@ void SwFormatClipboard::Copy( SwWrtShell& rWrtShell, SfxItemPool& rPool, bool bP
                 SID_ATTR_BRUSH_ROW, SID_ATTR_BRUSH_TABLE,
                 FN_TABLE_SET_VERT_ALIGN, FN_TABLE_SET_VERT_ALIGN,
                 FN_TABLE_BOX_TEXTORIENTATION, FN_TABLE_BOX_TEXTORIENTATION,
-                FN_PARAM_TABLE_HEADLINE, FN_PARAM_TABLE_HEADLINE>{});
+                FN_PARAM_TABLE_HEADLINE, FN_PARAM_TABLE_HEADLINE>);
         lcl_getTableAttributes( *m_pTableItemSet, rWrtShell );
     }
 

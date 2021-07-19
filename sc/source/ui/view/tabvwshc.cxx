@@ -276,7 +276,7 @@ std::shared_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
         {
             SfxItemSet aArgSet( GetPool(),
                                 svl::Items<SCITEM_CONSOLIDATEDATA,
-                                SCITEM_CONSOLIDATEDATA>{} );
+                                SCITEM_CONSOLIDATEDATA> );
 
             const ScConsolidateParam* pDlgData =
                             rDoc.GetConsolidateDlgData();
@@ -315,7 +315,7 @@ std::shared_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
             ScQueryParam    aQueryParam;
             SfxItemSet      aArgSet( GetPool(),
                                      svl::Items<SCITEM_QUERYDATA,
-                                     SCITEM_QUERYDATA>{} );
+                                     SCITEM_QUERYDATA> );
 
             ScDBData* pDBData = GetDBData(false, SC_DB_MAKE, ScGetDBSelection::RowDown);
             pDBData->ExtendDataArea(rDoc);
@@ -340,7 +340,7 @@ std::shared_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
             ScQueryParam    aQueryParam;
             SfxItemSet      aArgSet( GetPool(),
                                      svl::Items<SCITEM_QUERYDATA,
-                                     SCITEM_QUERYDATA>{} );
+                                     SCITEM_QUERYDATA> );
 
             ScDBData* pDBData = GetDBData(false, SC_DB_MAKE, ScGetDBSelection::RowDown);
             pDBData->ExtendDataArea(rDoc);

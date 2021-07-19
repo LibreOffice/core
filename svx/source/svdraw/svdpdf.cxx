@@ -111,11 +111,11 @@ ImpSdrPdfImport::ImpSdrPdfImport(SdrModel& rModel, SdrLayerID nLay, const tools:
     mpVD->SetFillColor();
     maOldLineColor.SetRed(mpVD->GetLineColor().GetRed() + 1);
     mpLineAttr = std::make_unique<SfxItemSet>(rModel.GetItemPool(),
-                                              svl::Items<XATTR_LINE_FIRST, XATTR_LINE_LAST>{});
+                                              svl::Items<XATTR_LINE_FIRST, XATTR_LINE_LAST>);
     mpFillAttr = std::make_unique<SfxItemSet>(rModel.GetItemPool(),
-                                              svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{});
+                                              svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>);
     mpTextAttr = std::make_unique<SfxItemSet>(rModel.GetItemPool(),
-                                              svl::Items<EE_ITEMS_START, EE_ITEMS_END>{});
+                                              svl::Items<EE_ITEMS_START, EE_ITEMS_END>);
     checkClip();
 
     // Load the buffer using pdfium.
@@ -831,7 +831,7 @@ void ImpSdrPdfImport::InsertTextObject(const Point& rPos, const Size& rSize, con
 
     if (!aFont.IsTransparent())
     {
-        SfxItemSet aAttr(*mpFillAttr->GetPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{});
+        SfxItemSet aAttr(*mpFillAttr->GetPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>);
         aAttr.Put(XFillStyleItem(drawing::FillStyle_SOLID));
         aAttr.Put(XFillColorItem(OUString(), aFont.GetFillColor()));
         pText->SetMergedItemSet(aAttr);

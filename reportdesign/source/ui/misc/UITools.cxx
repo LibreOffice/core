@@ -723,7 +723,7 @@ bool openCharDialog( const uno::Reference<report::XReportControlFormat >& _rxRep
 
     static const WhichRangesContainer pRanges(svl::Items<
         XATTR_FILL_FIRST, ITEMID_WEIGHT_COMPLEX
-    >::value);
+    >);
 
     rtl::Reference<SfxItemPool> pPool(new SfxItemPool("ReportCharProperties", XATTR_FILL_FIRST,ITEMID_WEIGHT_COMPLEX, aItemInfos, &pDefaults));
     // not needed for font height pPool->SetDefaultMetric( MapUnit::Map100thMM );  // ripped, don't understand why

@@ -176,7 +176,7 @@ void SwFrameDlg::PageCreated(const OString& rId, SfxTabPage &rPage)
     {
         SfxItemSet aNew(*GetInputSetImpl()->GetPool(),
                         svl::Items<SID_COLOR_TABLE, SID_PATTERN_LIST,
-                        SID_OFFER_IMPORT, SID_OFFER_IMPORT>{});
+                        SID_OFFER_IMPORT, SID_OFFER_IMPORT>);
 
         aNew.Put(m_rSet);
 

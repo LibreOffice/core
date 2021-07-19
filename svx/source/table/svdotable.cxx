@@ -139,7 +139,7 @@ SfxItemSet TableProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
         SDRATTR_TABLE_FIRST, SDRATTR_TABLE_LAST,
 
         // range from SdrTextObj
-        EE_ITEMS_START, EE_ITEMS_END>{});
+        EE_ITEMS_START, EE_ITEMS_END>);
 }
 
 namespace {

@@ -211,7 +211,7 @@ void DocumentDeviceManager::setJobsetup(/*[in]*/ const JobSetup &rJobSetup )
                 SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN,
                 SID_PRINTER_CHANGESTODOC, SID_PRINTER_CHANGESTODOC,
                 SID_HTML_MODE, SID_HTML_MODE,
-                FN_PARAM_ADDPRINTER, FN_PARAM_ADDPRINTER>{});
+                FN_PARAM_ADDPRINTER, FN_PARAM_ADDPRINTER>);
         VclPtr<SfxPrinter> p = VclPtr<SfxPrinter>::Create( std::move(pSet), rJobSetup );
         if ( bCheckPageDescs )
             setPrinter( p, true, true );
@@ -296,7 +296,7 @@ SfxPrinter& DocumentDeviceManager::CreatePrinter_() const
             SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN,
             SID_PRINTER_CHANGESTODOC, SID_PRINTER_CHANGESTODOC,
             SID_HTML_MODE, SID_HTML_MODE,
-            FN_PARAM_ADDPRINTER, FN_PARAM_ADDPRINTER>{});
+            FN_PARAM_ADDPRINTER, FN_PARAM_ADDPRINTER>);
 
     VclPtr<SfxPrinter> pNewPrt = VclPtr<SfxPrinter>::Create( std::move(pSet) );
 

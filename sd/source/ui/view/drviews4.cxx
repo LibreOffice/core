@@ -905,7 +905,7 @@ void DrawViewShell::ShowMousePosInfo(const ::tools::Rectangle& rRect,
         GetPool(),
         svl::Items<
             SID_CONTEXT, SID_CONTEXT,
-            SID_ATTR_POSITION, SID_ATTR_SIZE>{});
+            SID_ATTR_POSITION, SID_ATTR_SIZE>);
 
     GetStatusBarState(aSet);
 

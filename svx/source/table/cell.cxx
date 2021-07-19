@@ -190,7 +190,7 @@ namespace sdr::properties
                 SDRATTR_TABLE_FIRST, SDRATTR_TABLE_LAST,
 
                 // range from SdrTextObj
-                EE_ITEMS_START, EE_ITEMS_END>{});
+                EE_ITEMS_START, EE_ITEMS_END>);
         }
 
         const svx::ITextProvider& CellProperties::getTextProvider() const
@@ -361,7 +361,7 @@ namespace sdr::properties
 
                 // prepare ItemSet to set exchanged width and height items
                 SfxItemSet aNewSet(*rSet.GetPool(),
-                    svl::Items<SDRATTR_TEXT_AUTOGROWHEIGHT, SDRATTR_TEXT_AUTOGROWHEIGHT>{});
+                    svl::Items<SDRATTR_TEXT_AUTOGROWHEIGHT, SDRATTR_TEXT_AUTOGROWHEIGHT>);
 
                 aNewSet.Put(rSet);
                 aNewSet.Put(makeSdrTextAutoGrowWidthItem(bAutoGrowHeight));

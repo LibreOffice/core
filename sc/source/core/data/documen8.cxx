@@ -119,7 +119,7 @@ SfxPrinter* ScDocument::GetPrinter(bool bCreateIfNotExist)
                             svl::Items<SID_PRINTER_NOTFOUND_WARN,  SID_PRINTER_NOTFOUND_WARN,
                             SID_PRINTER_CHANGESTODOC,   SID_PRINTER_CHANGESTODOC,
                             SID_PRINT_SELECTEDSHEET,    SID_PRINT_SELECTEDSHEET,
-                            SID_SCPRINTOPTIONS,         SID_SCPRINTOPTIONS>{} );
+                            SID_SCPRINTOPTIONS,         SID_SCPRINTOPTIONS> );
 
         SfxPrinterChangeFlags nFlags = SfxPrinterChangeFlags::NONE;
         if (officecfg::Office::Common::Print::Warning::PaperOrientation::get())

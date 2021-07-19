@@ -265,7 +265,7 @@ SfxItemSet *SwEnvFormatPage::GetCollItemSet(SwTextFormatColl const * pColl, bool
             SID_ATTR_TABSTOP_POS, SID_ATTR_TABSTOP_POS,
             SID_ATTR_TABSTOP_OFFSET, SID_ATTR_TABSTOP_OFFSET,
             SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER
-        >::value);
+        >);
 
         pAddrSet.reset(new SfxItemSet(GetParentSwEnvDlg()->pSh->GetView().GetCurShell()->GetPool(),
                                   pRanges));

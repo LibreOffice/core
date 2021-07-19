@@ -1119,7 +1119,7 @@ SwChainRet SwDoc::Chain( SwFrameFormat &rSource, const SwFrameFormat &rDest )
         SetAttr( aChain, rDestFormat );
 
         SfxItemSet aSet( GetAttrPool(), svl::Items<RES_FRM_SIZE, RES_FRM_SIZE,
-                                        RES_CHAIN,  RES_CHAIN>{} );
+                                        RES_CHAIN,  RES_CHAIN> );
 
         // Attach Follow to the Master.
         aChain.SetPrev( &static_cast<SwFlyFrameFormat&>(rSource) );

@@ -590,7 +590,7 @@ bool SwAutoFormat::DoUnderline()
         }
         SfxItemSet aSet(m_pDoc->GetAttrPool(),
                     svl::Items<RES_PARATR_CONNECT_BORDER, RES_PARATR_CONNECT_BORDER,
-                    RES_BOX, RES_BOX>{});
+                    RES_BOX, RES_BOX>);
         aSet.Put( SwParaConnectBorderItem( false ) );
         SvxBoxItem aBox( RES_BOX );
         aBox.SetLine( &aLine, SvxBoxItemLine::BOTTOM );
@@ -1009,7 +1009,7 @@ void SwAutoFormat::SetColl( sal_uInt16 nId, bool bHdLineOrText )
             RES_CHRATR_LANGUAGE, RES_CHRATR_LANGUAGE,
             RES_PARATR_ADJUST, RES_PARATR_ADJUST,
             RES_PARATR_TABSTOP, RES_PARATR_DROP,
-            RES_BACKGROUND, RES_SHADOW>{});
+            RES_BACKGROUND, RES_SHADOW>);
 
     if (m_aDelPam.GetPoint()->nNode.GetNode().GetTextNode()->HasSwAttrSet())
     {

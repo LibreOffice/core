@@ -456,11 +456,11 @@ void ScCellShell::Execute( SfxRequest& rReq )
 
                     SfxItemSet aEmptySet( *pReqArgs->GetPool(),
                                           svl::Items<ATTR_PATTERN_START,
-                                          ATTR_PATTERN_END>{} );
+                                          ATTR_PATTERN_END> );
 
                     SfxItemSet aNewSet( *pReqArgs->GetPool(),
                                         svl::Items<ATTR_PATTERN_START,
-                                        ATTR_PATTERN_END>{} );
+                                        ATTR_PATTERN_END> );
 
                     const SfxPoolItem*  pAttr = nullptr;
                     sal_uInt16              nWhich = 0;

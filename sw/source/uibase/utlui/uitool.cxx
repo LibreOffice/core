@@ -201,7 +201,7 @@ void ApplyCharBackground(const Color& rBackgroundColor, SwWrtShell& rShell)
     rShell.StartUndo(SwUndoId::INSATTR);
 
     SfxItemSet aCoreSet(rShell.GetView().GetPool(), svl::Items<
-        RES_CHRATR_GRABBAG, RES_CHRATR_GRABBAG>{});
+        RES_CHRATR_GRABBAG, RES_CHRATR_GRABBAG>);
 
     rShell.GetCurAttr(aCoreSet);
 
@@ -524,7 +524,7 @@ void PageDescToItemSet( const SwPageDesc& rPageDesc, SfxItemSet& rSet)
             SID_ATTR_BORDER_INNER,SID_ATTR_BORDER_INNER,    // [10023
             SID_ATTR_PAGE_SIZE,SID_ATTR_PAGE_SIZE,          // [10051
             SID_ATTR_PAGE_ON,SID_ATTR_PAGE_SHARED,          // [10060
-            SID_ATTR_PAGE_SHARED_FIRST,SID_ATTR_PAGE_SHARED_FIRST>{});
+            SID_ATTR_PAGE_SHARED_FIRST,SID_ATTR_PAGE_SHARED_FIRST>);
 
         // set correct parent to get the XFILL_NONE FillStyle as needed
         aHeaderSet.SetParent(&rMaster.GetDoc()->GetDfltFrameFormat()->GetAttrSet());
@@ -574,7 +574,7 @@ void PageDescToItemSet( const SwPageDesc& rPageDesc, SfxItemSet& rSet)
             SID_ATTR_BORDER_INNER,SID_ATTR_BORDER_INNER,    // [10023
             SID_ATTR_PAGE_SIZE,SID_ATTR_PAGE_SIZE,          // [10051
             SID_ATTR_PAGE_ON,SID_ATTR_PAGE_SHARED,          // [10060
-            SID_ATTR_PAGE_SHARED_FIRST,SID_ATTR_PAGE_SHARED_FIRST>{});
+            SID_ATTR_PAGE_SHARED_FIRST,SID_ATTR_PAGE_SHARED_FIRST>);
 
         // set correct parent to get the XFILL_NONE FillStyle as needed
         aFooterSet.SetParent(&rMaster.GetDoc()->GetDfltFrameFormat()->GetAttrSet());
@@ -706,7 +706,7 @@ void SfxToSwPageDescAttr( const SwWrtShell& rShell, SfxItemSet& rSet )
     }
     else
     {
-        SfxItemSet aCoreSet(rShell.GetView().GetPool(), svl::Items<RES_PAGEDESC, RES_PAGEDESC>{} );
+        SfxItemSet aCoreSet(rShell.GetView().GetPool(), svl::Items<RES_PAGEDESC, RES_PAGEDESC> );
         rShell.GetCurAttr( aCoreSet );
         if(SfxItemState::SET == aCoreSet.GetItemState( RES_PAGEDESC, true, &pItem ) )
         {

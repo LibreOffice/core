@@ -220,7 +220,7 @@ SfxItemSet& SdStyleSheet::GetItemSet()
                     SDRATTR_TEXT_MINFRAMEHEIGHT, SDRATTR_TEXT_WORDWRAP,
                     SDRATTR_EDGE_FIRST, SDRATTR_MEASURE_LAST,
                     SDRATTR_3D_FIRST, SDRATTR_3D_LAST,
-                    EE_PARA_START, EE_CHAR_END>{});
+                    EE_PARA_START, EE_CHAR_END>);
             bMySet = true;
         }
 
@@ -240,7 +240,7 @@ SfxItemSet& SdStyleSheet::GetItemSet()
                     SDRATTR_TEXT_MINFRAMEHEIGHT, SDRATTR_XMLATTRIBUTES,
                     SDRATTR_TEXT_WORDWRAP, SDRATTR_TEXT_WORDWRAP,
                     SDRATTR_TABLE_FIRST, SDRATTR_TABLE_LAST,
-                    EE_PARA_START, EE_CHAR_END>{});
+                    EE_PARA_START, EE_CHAR_END>);
             bMySet = true;
         }
 
@@ -271,7 +271,7 @@ SfxItemSet& SdStyleSheet::GetItemSet()
                         SDRATTR_TEXT_MINFRAMEHEIGHT, SDRATTR_TEXT_WORDWRAP,
                         SDRATTR_EDGE_FIRST, SDRATTR_MEASURE_LAST,
                         SDRATTR_3D_FIRST, SDRATTR_3D_LAST,
-                        EE_PARA_START, EE_CHAR_END>{});
+                        EE_PARA_START, EE_CHAR_END>);
                 bMySet = true;
             }
 

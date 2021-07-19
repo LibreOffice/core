@@ -530,7 +530,7 @@ IMPL_LINK(SwGlossaryDlg, MenuHdl, const OString&, rItemIdent, void)
     }
     else if (rItemIdent == "macro")
     {
-        SfxItemSet aSet( m_pShell->GetAttrPool(), svl::Items<RES_FRMMACRO, RES_FRMMACRO, SID_EVENTCONFIG, SID_EVENTCONFIG>{} );
+        SfxItemSet aSet( m_pShell->GetAttrPool(), svl::Items<RES_FRMMACRO, RES_FRMMACRO, SID_EVENTCONFIG, SID_EVENTCONFIG> );
 
         SvxMacro aStart(OUString(), OUString(), STARBASIC);
         SvxMacro aEnd(OUString(), OUString(), STARBASIC);
