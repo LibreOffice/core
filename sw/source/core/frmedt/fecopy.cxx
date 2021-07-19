@@ -70,6 +70,8 @@
 #include <frameformats.hxx>
 #include <vcl/virdev.hxx>
 #include <svx/svdundo.hxx>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <unoprnms.hxx>
 
 using namespace ::com::sun::star;
 
@@ -368,6 +370,7 @@ bool SwFEShell::CopyDrawSel( SwFEShell& rDestShell, const Point& rSttPt,
 
             if( bRet )
             {
+                SwFrameFormat* pTextBox = nullptr;
                 if( pSrcDrwView->IsGroupEntered() ||
                     ( !pObj->GetUserCall() && pObj->getParentSdrObjectFromSdrObject()) )
                 {
@@ -378,8 +381,31 @@ bool SwFEShell::CopyDrawSel( SwFEShell& rDestShell, const Point& rSttPt,
                     pFormat = pDestDoc->getIDocumentContentOperations().InsertDrawObj( *rDestShell.GetCursor(), *pNew, aSet );
                 }
                 else
-                    pFormat = pDestDoc->getIDocumentLayoutAccess().CopyLayoutFormat( *pFormat, aAnchor, true, true );
+                {
+                    if (const auto aOldTextBox = SwTextBoxHelper::getOtherTextBoxFormat(pFormat, RES_DRAWFRMFMT))
+                        pTextBox =  pDestDoc->getIDocumentLayoutAccess().CopyLayoutFormat(*aOldTextBox, aAnchor, true, true);
 
+                    pFormat = pDestDoc->getIDocumentLayoutAccess().CopyLayoutFormat(*pFormat, aAnchor, true, true);
+
+                    if (pTextBox)
+                    {
+                        //pTextBox = pDestDoc->getIDocumentLayoutAccess().CopyLayoutFormat(*pTextBox, aAnchor, true, true);
+                        auto pShapeObj = pFormat->FindRealSdrObject();
+                        auto pFrameObj = pTextBox->FindRealSdrObject();
+                        if (pShapeObj && pFrameObj)
+                        {
+                            uno::Reference<drawing::XShape> xShape(pShapeObj->getUnoShape(), uno::UNO_QUERY);
+                            if (xShape)
+                            {
+                                uno::Reference<beans::XPropertySet>xProps(xShape, uno::UNO_QUERY);
+
+                                uno::Reference<text::XTextFrame> xFrame(pFrameObj->getUnoShape(), uno::UNO_QUERY);
+                                if (xFrame)
+                                    xProps->setPropertyValue(UNO_NAME_TEXT_BOX_CONTENT, uno::Any(xFrame));
+                            }
+                        }
+                    }
+                }
                 // Can be 0, as Draws are not allowed in Headers/Footers
                 if ( pFormat )
                 {
@@ -399,11 +425,13 @@ bool SwFEShell::CopyDrawSel( SwFEShell& rDestShell, const Point& rSttPt,
                         // that position attributes are already set.
                         if (SwDrawFrameFormat *pDrawFormat = dynamic_cast<SwDrawFrameFormat*>(pFormat))
                             pDrawFormat->PosAttrSet();
+                        if (pTextBox)
+                        {
+                            pTextBox->SetFormatAttr( SwFormatHoriOrient( aPos.getX(), text::HoriOrientation::NONE, text::RelOrientation::FRAME ) );
+                            pTextBox->SetFormatAttr( SwFormatVertOrient( aPos.getY(), text::VertOrientation::NONE, text::RelOrientation::FRAME ) );
+                        }
                     }
-                    if (SwTextBoxHelper::getOtherTextBoxFormat(pFormat, RES_DRAWFRMFMT))
-                    {
-                        SwTextBoxHelper::syncFlyFrameAttr(*pFormat, pFormat->GetAttrSet());
-                    }
+
 
                     if( bSelectInsert )
                         pDestDrwView->MarkObj( pNew, pDestPgView );
