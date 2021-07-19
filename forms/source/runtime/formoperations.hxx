@@ -35,6 +35,7 @@
 #include <cppuhelper/compbase.hxx>
 #include <connectivity/dbtools.hxx>
 #include <tools/long.hxx>
+#include <unotools/resmgr.hxx>
 
 namespace frm
 {
@@ -293,7 +294,7 @@ namespace frm
                 the id of the resources string to use as error message
         */
         template < typename FunctObj >
-        void        impl_doActionInSQLContext_throw( FunctObj f, const char* pErrorResourceId ) const;
+        void        impl_doActionInSQLContext_throw( FunctObj f, TranslateId pErrorResourceId ) const;
 
         // functionoid to call appendOrderByColumn
         class impl_appendOrderByColumn_throw

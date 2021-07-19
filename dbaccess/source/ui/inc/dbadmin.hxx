@@ -22,6 +22,7 @@
 #include <sfx2/tabdlg.hxx>
 #include <dsntypes.hxx>
 #include "IItemSetHelper.hxx"
+#include <unotools/resmgr.hxx>
 #include <memory>
 
 namespace com::sun::star {
@@ -88,7 +89,7 @@ public:
 
 private:
     // adds a new detail page and remove all the old ones
-    void addDetailPage(const OString& rPageId, const char* pTextId, CreateTabPage pCreateFunc);
+    void addDetailPage(const OString& rPageId, TranslateId pTextId, CreateTabPage pCreateFunc);
 
     virtual void PageCreated(const OString& rId, SfxTabPage& _rPage) override;
     virtual short Ok() override;

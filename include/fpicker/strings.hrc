@@ -9,7 +9,7 @@
 #ifndef INCLUDED_FPICKER_FPICKER_HRC
 #define INCLUDED_FPICKER_FPICKER_HRC
 
-#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
+#define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
 
 #define STR_SVT_FILEPICKER_AUTO_EXTENSION           NC_("STR_SVT_FILEPICKER_AUTO_EXTENSION", "~Automatic file name extension")
 #define STR_SVT_FILEPICKER_PASSWORD                 NC_("STR_SVT_FILEPICKER_PASSWORD", "Save with pass~word")

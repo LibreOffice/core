@@ -20,8 +20,9 @@
 #pragma once
 
 #include <utility>
+#include <unotools/resmgr.hxx>
 
-#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
+#define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
 
 #define DI_TITLE                1
 #define DI_FROM                 2
@@ -36,7 +37,7 @@
 #define DI_THEME                11
 #define DI_SIZE                 12
 
-const std::pair<const char*, int> STRARY_SVT_DOCINFO[] =
+const std::pair<TranslateId, int> STRARY_SVT_DOCINFO[] =
 {
     { NC_("STRARY_SVT_DOCINFO", "Title") , DI_TITLE },
     { NC_("STRARY_SVT_DOCINFO", "By") , DI_FROM },

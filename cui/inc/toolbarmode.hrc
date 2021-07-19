@@ -9,15 +9,16 @@
 
 #pragma once
 
-#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
+#define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
 
 #include <rtl/ustring.hxx>
 #include <tuple>
+#include <unotools/resmgr.hxx>
 
 /*
  Description, ui file name, preview file name
 */
-const std::tuple<const char*, OUString, OUString> TOOLBARMODES_ARRAY[] =
+const std::tuple<TranslateId, OUString, OUString> TOOLBARMODES_ARRAY[] =
 {
     { NC_("RID_CUI_TOOLBARMODES", "Standard user interface with menu, toolbar, and collapsed sidebar. Intended for users who are familiar with the classic interface."), "Default", "default.png" },
     { NC_("RID_CUI_TOOLBARMODES", "The Tabbed user interface is the most similar to the Ribbons used in Microsoft Office. It organizes functions in tabs and makes the main menu obsolete."), "notebookbar.ui", "notebookbar.png" },

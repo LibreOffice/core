@@ -594,7 +594,7 @@ TextAndReading SwTOXPara::GetText_Impl(SwRootFrame const*const pLayout) const
                 return TextAndReading(pFly->GetName(), OUString());
 
             OSL_ENSURE( false, "Graphic/object without name" );
-            const char* pId = SwTOXElement::Ole == eType
+            TranslateId pId = SwTOXElement::Ole == eType
                             ? STR_OBJECT_DEFNAME
                             : SwTOXElement::Graphic == eType
                                 ? STR_GRAPHIC_DEFNAME

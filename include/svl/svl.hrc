@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SVL_SVL_HRC
 #define INCLUDED_SVL_SVL_HRC
 
-#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
+#define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
 
 //  Internet Media Type Presentations
 

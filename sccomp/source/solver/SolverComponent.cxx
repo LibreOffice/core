@@ -41,7 +41,7 @@ constexpr OUStringLiteral STR_LIMITBBDEPTH = u"LimitBBDepth";
 
 //  Resources from tools are used for translated strings
 
-OUString SolverComponent::GetResourceString(std::string_view aId)
+OUString SolverComponent::GetResourceString(TranslateId aId)
 {
     return Translate::get(aId, Translate::Create("scc"));
 }
@@ -140,7 +140,7 @@ OUString SAL_CALL SolverComponent::getStatusDescription()
 
 OUString SAL_CALL SolverComponent::getPropertyDescription( const OUString& rPropertyName )
 {
-    const char* pResId = nullptr;
+    TranslateId pResId;
     sal_Int32 nHandle = getInfoHelper().getHandleByName( rPropertyName );
     switch (nHandle)
     {

@@ -44,7 +44,7 @@ DescriptionGenerator::DescriptionGenerator(const uno::Reference<drawing::XShape>
 
 DescriptionGenerator::~DescriptionGenerator() {}
 
-void DescriptionGenerator::Initialize(const char* pResourceId)
+void DescriptionGenerator::Initialize(TranslateId pResourceId)
 {
     // Get the string from the resource for the specified id.
     OUString sPrefix;

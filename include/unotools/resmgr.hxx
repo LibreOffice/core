@@ -64,8 +64,6 @@ struct UNOTOOLS_DLLPUBLIC TranslateNId
 namespace Translate
 {
     UNOTOOLS_DLLPUBLIC std::locale Create(std::string_view aPrefixName, const LanguageTag& rLocale = SvtSysLocale().GetUILanguageTag());
-    UNOTOOLS_DLLPUBLIC OUString get(std::string_view aId, const std::locale &loc);
-    UNOTOOLS_DLLPUBLIC OUString nget(std::string_view aId, int n, const std::locale &loc);
     UNOTOOLS_DLLPUBLIC OUString get(TranslateId sContextAndId, const std::locale &loc);
     UNOTOOLS_DLLPUBLIC OUString nget(TranslateNId aContextSingularPlural, int n, const std::locale &loc);
     UNOTOOLS_DLLPUBLIC void SetReadStringHook( ResHookProc pProc );

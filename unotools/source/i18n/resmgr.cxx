@@ -198,63 +198,6 @@ namespace Translate
         return aRet;
     }
 
-    OUString get(std::string_view sContextAndId, const std::locale &loc)
-    {
-        constexpr int BUFLEN = 128;
-        // this function is performance-sensitive, so we allocate string data on stack
-        std::array<char, BUFLEN> sStackBuffer;
-        std::unique_ptr<char[]> xHeapBuffer;
-        char* pBuffer;
-        if (sContextAndId.size() < BUFLEN - 1)
-            pBuffer = sStackBuffer.data();
-        else
-        {
-            xHeapBuffer = std::make_unique<char[]>(sContextAndId.size()+1);
-            pBuffer = xHeapBuffer.get();
-        }
-
-        const char* pContext;
-        const char* pId;
-        auto idx = sContextAndId.find('\004');
-        memcpy(pBuffer, sContextAndId.data(), sContextAndId.size());
-        if (idx == std::string_view::npos)
-        {
-            pBuffer[sContextAndId.size()] = 0;
-            // point pContext at the null byte so it is an empty string
-            pContext = pBuffer + sContextAndId.size();
-            pId = pBuffer;
-        }
-        else
-        {
-            // stick a null byte in the middle to split it into two null-terminated strings
-            pBuffer[idx] = 0;
-            pBuffer[sContextAndId.size()] = 0;
-            pContext = pBuffer;
-            pId = pBuffer + idx + 1;
-            assert(!strchr(pId, '\004') && "should be using nget, not get");
-        }
-
-        //if it's a key id locale, generate it here
-        if (std::use_facet<boost::locale::info>(loc).language() == "qtz")
-        {
-            OString sKeyId(genKeyId(OString(sContextAndId).replace('\004', '|')));
-            return OUString::fromUtf8(sKeyId) + u"\u2016" + createFromUtf8(pId, strlen(pId));
-        }
-
-        //otherwise translate it
-        const std::string ret = boost::locale::pgettext(pContext, pId, loc);
-        OUString result(ExpandVariables(createFromUtf8(ret.data(), ret.size())));
-
-        if (comphelper::LibreOfficeKit::isActive())
-        {
-            // If it is de-CH, change sharp s to double s.
-            if (std::use_facet<boost::locale::info>(loc).country() == "CH" &&
-                std::use_facet<boost::locale::info>(loc).language() == "de")
-                result = result.replaceAll(OUString::fromUtf8("\xC3\x9F"), "ss");
-        }
-        return result;
-    }
-
     OUString get(TranslateId sContextAndId, const std::locale &loc)
     {
         assert(!strchr(sContextAndId.mpId, '\004') && "should be using nget, not get");
@@ -273,39 +216,6 @@ namespace Translate
         if (comphelper::LibreOfficeKit::isActive())
         {
             // If it is de-CH, change sharp s to double s.
-            if (std::use_facet<boost::locale::info>(loc).country() == "CH" &&
-                std::use_facet<boost::locale::info>(loc).language() == "de")
-                result = result.replaceAll(OUString::fromUtf8("\xC3\x9F"), "ss");
-        }
-        return result;
-    }
-
-    OUString nget(std::string_view aContextAndIds, int n, const std::locale &loc)
-    {
-        OString sContextIdId(aContextAndIds);
-        std::vector<OString> aContextIdId;
-        sal_Int32 nIndex = 0;
-        do
-        {
-            aContextIdId.push_back(sContextIdId.getToken(0, '\004', nIndex));
-        }
-        while (nIndex >= 0);
-        assert(aContextIdId.size() == 3 && "should be using get, not nget");
-
-        //if it's a key id locale, generate it here
-        if (std::use_facet<boost::locale::info>(loc).language() == "qtz")
-        {
-            OString sKeyId(genKeyId(aContextIdId[0] + "|" + aContextIdId[1]));
-            int nForm = n == 0 ? 1 : 2;
-            return OUString::fromUtf8(sKeyId) + u"\u2016" + createFromUtf8(aContextIdId[nForm].getStr(), aContextIdId[nForm].getLength());
-        }
-
-        //otherwise translate it
-        const std::string ret = boost::locale::npgettext(aContextIdId[0].getStr(), aContextIdId[1].getStr(), aContextIdId[2].getStr(), n, loc);
-        OUString result(ExpandVariables(createFromUtf8(ret.data(), ret.size())));
-
-        if (comphelper::LibreOfficeKit::isActive())
-        {
             if (std::use_facet<boost::locale::info>(loc).country() == "CH" &&
                 std::use_facet<boost::locale::info>(loc).language() == "de")
                 result = result.replaceAll(OUString::fromUtf8("\xC3\x9F"), "ss");
@@ -358,14 +268,44 @@ namespace Translate
 
 bool TranslateId::operator==(const TranslateId& other) const
 {
-    return strcmp(mpContext, other.mpContext) == 0 && strcmp(mpId,other.mpId) == 0;
+    if (mpContext == nullptr || other.mpContext == nullptr)
+    {
+        if (mpContext != other.mpContext)
+            return false;
+    }
+    else if (strcmp(mpContext, other.mpContext) != 0)
+        return false;
+
+    if (mpId == nullptr || other.mpId == nullptr)
+    {
+        return mpId == other.mpId;
+    }
+    return strcmp(mpId,other.mpId) == 0;
 }
 
 bool TranslateNId::operator==(const TranslateNId& other) const
 {
-    return strcmp(mpContext, other.mpContext) == 0
-        && strcmp(mpSingular, other.mpSingular) == 0
-        && strcmp(mpPlural, other.mpPlural) == 0;
+    if (mpContext == nullptr || other.mpContext == nullptr)
+    {
+        if (mpContext != other.mpContext)
+            return false;
+    }
+    else if (strcmp(mpContext, other.mpContext) != 0)
+        return false;
+
+    if (mpSingular == nullptr || other.mpSingular == nullptr)
+    {
+        if (mpSingular != other.mpSingular)
+            return false;
+    }
+    else if (strcmp(mpSingular, other.mpSingular) != 0)
+        return false;
+
+    if (mpPlural == nullptr || other.mpPlural == nullptr)
+    {
+        return mpPlural == other.mpPlural;
+    }
+    return strcmp(mpPlural,other.mpPlural) == 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -62,7 +62,7 @@ namespace rptui
         * @return sal_True when title was set otherwise FALSE
         */
         bool setGroupSectionTitle(
-            const css::uno::Reference<css::report::XGroup>& _xGroup, const char* pResId,
+            const css::uno::Reference<css::report::XGroup>& _xGroup, TranslateId pResId,
             const ::std::function<css::uno::Reference<css::report::XSection>(OGroupHelper*)>&
                 _pGetSection,
             const ::std::function<bool(OGroupHelper*)>& _pIsSectionOn);
@@ -76,7 +76,7 @@ namespace rptui
         * @return sal_True when title was set otherwise FALSE
         */
         bool setReportSectionTitle(
-            const css::uno::Reference<css::report::XReportDefinition>& _xReport, const char* pResId,
+            const css::uno::Reference<css::report::XReportDefinition>& _xReport, TranslateId pResId,
             const ::std::function<css::uno::Reference<css::report::XSection>(OReportHelper*)>&
                 _pGetSection,
             const ::std::function<bool(OReportHelper*)>& _pIsSectionOn);

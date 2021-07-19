@@ -25,7 +25,7 @@ namespace dbaui {
 
 OPropColumnEditCtrl::OPropColumnEditCtrl(std::unique_ptr<weld::Entry> xEntry,
                                          OUString const & _rAllowedChars,
-                                         const char* pHelpId,
+                                         TranslateId pHelpId,
                                          short nPosition)
     : OSQLNameEntry(std::move(xEntry), _rAllowedChars)
     , m_nPos(nPosition)
@@ -33,7 +33,7 @@ OPropColumnEditCtrl::OPropColumnEditCtrl(std::unique_ptr<weld::Entry> xEntry,
     m_strHelpText = DBA_RES(pHelpId);
 }
 
-OPropEditCtrl::OPropEditCtrl(std::unique_ptr<weld::Entry> xEntry, const char* pHelpId, short nPosition)
+OPropEditCtrl::OPropEditCtrl(std::unique_ptr<weld::Entry> xEntry, TranslateId pHelpId, short nPosition)
     : OWidgetBase(xEntry.get())
     , m_xEntry(std::move(xEntry))
     , m_nPos(nPosition)
@@ -41,7 +41,7 @@ OPropEditCtrl::OPropEditCtrl(std::unique_ptr<weld::Entry> xEntry, const char* pH
     m_strHelpText = DBA_RES(pHelpId);
 }
 
-OPropNumericEditCtrl::OPropNumericEditCtrl(std::unique_ptr<weld::SpinButton> xSpinButton, const char* pHelpId, short nPosition)
+OPropNumericEditCtrl::OPropNumericEditCtrl(std::unique_ptr<weld::SpinButton> xSpinButton, TranslateId pHelpId, short nPosition)
     : OWidgetBase(xSpinButton.get())
     , m_xSpinButton(std::move(xSpinButton))
     , m_nPos(nPosition)
@@ -49,7 +49,7 @@ OPropNumericEditCtrl::OPropNumericEditCtrl(std::unique_ptr<weld::SpinButton> xSp
     m_strHelpText = DBA_RES(pHelpId);
 }
 
-OPropListBoxCtrl::OPropListBoxCtrl(std::unique_ptr<weld::ComboBox> xComboBox, const char* pHelpId, short nPosition)
+OPropListBoxCtrl::OPropListBoxCtrl(std::unique_ptr<weld::ComboBox> xComboBox, TranslateId pHelpId, short nPosition)
     : OWidgetBase(xComboBox.get())
     , m_xComboBox(std::move(xComboBox))
     , m_nPos(nPosition)

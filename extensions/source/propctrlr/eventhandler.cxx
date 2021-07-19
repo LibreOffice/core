@@ -123,7 +123,7 @@ namespace pcr
     namespace FormComponentType = css::form::FormComponentType;
 
     EventDescription::EventDescription( EventId _nId, const char* _pListenerNamespaceAscii, const char* _pListenerClassAsciiName,
-            const char* _pListenerMethodAsciiName, const char* pDisplayNameResId, const OString& _sHelpId, const OString& _sUniqueBrowseId )
+            const char* _pListenerMethodAsciiName, TranslateId pDisplayNameResId, const OString& _sHelpId, const OString& _sUniqueBrowseId )
         :sDisplayName(PcrRes( pDisplayNameResId ))
         ,sListenerMethodName( OUString::createFromAscii( _pListenerMethodAsciiName ) )
         ,sHelpId( _sHelpId )

@@ -20,9 +20,9 @@
 #ifndef INCLUDED_SVX_INC_FRMSEL_HRC
 #define INCLUDED_SVX_INC_FRMSEL_HRC
 
-#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
+#define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
 
-const char* RID_SVXSW_CONVERTMENU[] =
+const TranslateId RID_SVXSW_CONVERTMENU[] =
 {
     NC_("RID_SVXSW_CONVERTMENU|ConvertToEdit", "~Text Box"),
     NC_("RID_SVXSW_CONVERTMENU|ConvertToButton", "~Button"),

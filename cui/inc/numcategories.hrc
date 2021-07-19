@@ -9,9 +9,11 @@
 
 #pragma once
 
-#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
+#include <unotools/resmgr.hxx>
 
-const char* NUM_CATEGORIES[] =
+#define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
+
+const TranslateId NUM_CATEGORIES[] =
 {
     NC_("numberingformatpage|liststore1", "All"),
     NC_("numberingformatpage|liststore1", "User-defined"),

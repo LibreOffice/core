@@ -193,7 +193,7 @@ void SfxErrorHandler::GetClassString(ErrCodeClass lClassId, OUString &rStr)
     */
 
 {
-    for (const std::pair<const char*, ErrCodeClass>* pItem = RID_ERRHDL_CLASS; pItem->first; ++pItem)
+    for (const std::pair<TranslateId, ErrCodeClass>* pItem = RID_ERRHDL_CLASS; pItem->first; ++pItem)
     {
         if (pItem->second == lClassId)
         {

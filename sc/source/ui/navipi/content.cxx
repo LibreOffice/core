@@ -163,7 +163,7 @@ ScContentTree::~ScContentTree()
     }
 }
 
-static const char* SCSTR_CONTENT_ARY[] =
+const TranslateId SCSTR_CONTENT_ARY[] =
 {
     SCSTR_CONTENT_ROOT,
     SCSTR_CONTENT_TABLE,

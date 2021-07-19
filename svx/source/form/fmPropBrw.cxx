@@ -92,7 +92,7 @@ FmPropBrwMgr::FmPropBrwMgr( vcl::Window* _pParent, sal_uInt16 _nId,
 
 static OUString GetUIHeadlineName(sal_Int16 nClassId, const Any& aUnoObj)
 {
-    const char* pClassNameResourceId = nullptr;
+    TranslateId pClassNameResourceId;
 
     switch ( nClassId )
     {

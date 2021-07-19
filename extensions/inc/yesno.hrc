@@ -20,11 +20,13 @@
 #ifndef INCLUDED_EXTENSIONS_INC_YESNO_HRC
 #define INCLUDED_EXTENSIONS_INC_YESNO_HRC
 
-#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
+#include <unotools/resmgr.hxx>
+
+#define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
 
 namespace {
 
-const char* RID_RSC_ENUM_YESNO[] =
+const TranslateId RID_RSC_ENUM_YESNO[] =
 {
     NC_("RID_RSC_ENUM_YESNO", "No" ),
     NC_("RID_RSC_ENUM_YESNO", "Yes" )

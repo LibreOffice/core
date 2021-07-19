@@ -11,9 +11,9 @@
 #define INCLUDED_OOX_INC_RESID_HXX
 
 #include <rtl/ustring.hxx>
-#include <string_view>
+#include <unotools/resmgr.hxx>
 
-OUString OoxResId(std::string_view aId);
+OUString OoxResId(TranslateId aId);
 
 #endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

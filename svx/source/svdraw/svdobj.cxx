@@ -1097,7 +1097,7 @@ OUString SdrObject::TakeObjNamePlural() const
     return SvxResId(STR_ObjNamePluralNONE);
 }
 
-OUString SdrObject::ImpGetDescriptionStr(const char* pStrCacheID) const
+OUString SdrObject::ImpGetDescriptionStr(TranslateId pStrCacheID) const
 {
     OUString aStr = SvxResId(pStrCacheID);
     sal_Int32 nPos = aStr.indexOf("%1");
