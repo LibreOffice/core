@@ -196,10 +196,10 @@ CommandProcessorInfo::~CommandProcessorInfo()
 uno::Sequence< css::ucb::CommandInfo > SAL_CALL
 CommandProcessorInfo::getCommands()
 {
-    if ( !m_pCommands )
+    if ( !m_xCommands )
     {
         osl::MutexGuard aGuard( m_aMutex );
-        if ( !m_pCommands )
+        if ( !m_xCommands )
         {
 
             // Get info for commands.
@@ -207,9 +207,7 @@ CommandProcessorInfo::getCommands()
 
             try
             {
-                uno::Sequence< css::ucb::CommandInfo > aCmds
-                    = m_pContent->getCommands( m_xEnv );
-                m_pCommands.reset(new uno::Sequence< css::ucb::CommandInfo >( aCmds ));
+                m_xCommands = m_pContent->getCommands( m_xEnv );
             }
             catch ( uno::RuntimeException const & )
             {
@@ -217,11 +215,11 @@ CommandProcessorInfo::getCommands()
             }
             catch ( uno::Exception const & )
             {
-                m_pCommands.reset(new uno::Sequence< css::ucb::CommandInfo >( 0 ));
+                m_xCommands.emplace();
             }
         }
     }
-    return *m_pCommands;
+    return *m_xCommands;
 }
 
 
@@ -273,7 +271,7 @@ sal_Bool SAL_CALL CommandProcessorInfo::hasCommandByHandle( sal_Int32 Handle )
 void CommandProcessorInfo::reset()
 {
     osl::MutexGuard aGuard( m_aMutex );
-    m_pCommands.reset();
+    m_xCommands.reset();
 }
 
 
@@ -286,8 +284,8 @@ bool CommandProcessorInfo::queryCommand(
     getCommands();
 
     const css::ucb::CommandInfo* pCommands
-        = m_pCommands->getConstArray();
-    sal_Int32 nCount = m_pCommands->getLength();
+        = m_xCommands->getConstArray();
+    sal_Int32 nCount = m_xCommands->getLength();
     for ( sal_Int32 n = 0; n < nCount; ++n )
     {
         const css::ucb::CommandInfo& rCurrCommand = pCommands[ n ];
@@ -310,8 +308,8 @@ bool CommandProcessorInfo::queryCommand(
 
     getCommands();
 
-    const css::ucb::CommandInfo* pCommands = m_pCommands->getConstArray();
-    sal_Int32 nCount = m_pCommands->getLength();
+    const css::ucb::CommandInfo* pCommands = m_xCommands->getConstArray();
+    sal_Int32 nCount = m_xCommands->getLength();
     for ( sal_Int32 n = 0; n < nCount; ++n )
     {
         const css::ucb::CommandInfo& rCurrCommand = pCommands[ n ];
