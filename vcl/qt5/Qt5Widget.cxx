@@ -177,7 +177,14 @@ void Qt5Widget::handleMouseButtonEvent(const Qt5Frame& rFrame, const QMouseEvent
     rFrame.CallCallback(nEventType, &aEvent);
 }
 
-void Qt5Widget::mousePressEvent(QMouseEvent* pEvent) { handleMousePressEvent(m_rFrame, pEvent); }
+void Qt5Widget::mousePressEvent(QMouseEvent* pEvent)
+{
+    if ((windowFlags() & Qt::Popup)
+        && !geometry().translated(geometry().topLeft() * -1).contains(pEvent->pos()))
+        close();
+    else
+        handleMousePressEvent(m_rFrame, pEvent);
+}
 
 void Qt5Widget::mouseReleaseEvent(QMouseEvent* pEvent)
 {
@@ -601,7 +608,8 @@ Qt5Widget::Qt5Widget(Qt5Frame& rFrame, Qt::WindowFlags f)
 {
     create();
     setMouseTracking(true);
-    setFocusPolicy(Qt::StrongFocus);
+    if (!(f & Qt::Popup))
+        setFocusPolicy(Qt::StrongFocus);
 }
 
 static ExtTextInputAttr lcl_MapUndrelineStyle(QTextCharFormat::UnderlineStyle us)
