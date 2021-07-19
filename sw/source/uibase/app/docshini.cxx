@@ -626,7 +626,7 @@ void SwDocShell::SubInitNew()
         RES_CHRATR_CJK_LANGUAGE, RES_CHRATR_CJK_LANGUAGE,
         RES_CHRATR_CTL_LANGUAGE, RES_CHRATR_CTL_LANGUAGE,
         RES_PARATR_ADJUST, RES_PARATR_ADJUST
-        >::value);
+        >);
     static const WhichRangesContainer nRange2(svl::Items<
         RES_CHRATR_COLOR, RES_CHRATR_COLOR,
         RES_CHRATR_LANGUAGE, RES_CHRATR_LANGUAGE,
@@ -634,7 +634,7 @@ void SwDocShell::SubInitNew()
         RES_CHRATR_CTL_LANGUAGE, RES_CHRATR_CTL_LANGUAGE,
         RES_PARATR_ADJUST, RES_PARATR_ADJUST,
         RES_PARATR_TABSTOP, RES_PARATR_HYPHENZONE
-        >::value);
+        >);
     SfxItemSet aDfltSet( m_xDoc->GetAttrPool(), bWeb ? nRange1 : nRange2 );
 
     //! get lingu options without loading lingu DLL

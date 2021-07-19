@@ -364,7 +364,7 @@ SwXTextSection::attach(const uno::Reference< text::XTextRange > & xTextRange)
             RES_BACKGROUND, RES_BACKGROUND,
             RES_COL, RES_COL,
             RES_FTN_AT_TXTEND, RES_FRAMEDIR,
-            RES_UNKNOWNATR_CONTAINER,RES_UNKNOWNATR_CONTAINER>{});
+            RES_UNKNOWNATR_CONTAINER,RES_UNKNOWNATR_CONTAINER>);
     if (m_pImpl->m_pProps->m_pBrushItem)
     {
         aSet.Put(*m_pImpl->m_pProps->m_pBrushItem);

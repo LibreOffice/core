@@ -597,7 +597,7 @@ static void OutHTML_SwFormat( Writer& rWrt, const SwFormat& rFormat,
 
             if (!rInfo.pItemSet)
             {
-                rInfo.pItemSet.reset(new SfxItemSet(*rFormat.GetAttrSet().GetPool(), svl::Items<RES_UL_SPACE, RES_UL_SPACE>{}));
+                rInfo.pItemSet.reset(new SfxItemSet(*rFormat.GetAttrSet().GetPool(), svl::Items<RES_UL_SPACE, RES_UL_SPACE>));
             }
             rInfo.pItemSet->Put( aULSpaceItem );
         }
@@ -1848,7 +1848,7 @@ void HTMLEndPosLst::Insert( const SwDrawFrameFormat& rFormat, sal_Int32 nPos,
     // are not considered!
     const SfxItemSet& rFormatItemSet = rFormat.GetAttrSet();
     SfxItemSet aItemSet( *rFormatItemSet.GetPool(), svl::Items<RES_CHRATR_BEGIN,
-                                                 RES_CHRATR_END>{} );
+                                                 RES_CHRATR_END> );
     SwHTMLWriter::GetEEAttrsFromDrwObj( aItemSet, pTextObj );
     bool bOutStylesOld = m_bOutStyles;
     m_bOutStyles = false;

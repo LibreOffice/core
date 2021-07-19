@@ -1233,7 +1233,7 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
                     const SfxItemSet& rOldSet =
                         pTabViewShell->GetSelectionPattern()->GetItemSet();
                     SfxItemPool* pDocPool = GetViewData().GetDocument().GetPool();
-                    SfxItemSet aNewSet( *pDocPool, svl::Items<ATTR_PATTERN_START, ATTR_PATTERN_END>{} );
+                    SfxItemSet aNewSet( *pDocPool, svl::Items<ATTR_PATTERN_START, ATTR_PATTERN_END> );
                     aNewSet.Put( *pItem );
                     pTabViewShell->ApplyAttributes( &aNewSet, &rOldSet );
                 }
@@ -1899,10 +1899,10 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
                     const ScPatternAttr*    pOldAttrs = pTabViewShell->GetSelectionPattern();
                     SfxItemSet aOldSet( *rDoc.GetPool(),
                                         svl::Items<ATTR_PATTERN_START,
-                                                    ATTR_PATTERN_END>{} );
+                                                    ATTR_PATTERN_END> );
                     SfxItemSet aNewSet( *rDoc.GetPool(),
                                         svl::Items<ATTR_PATTERN_START,
-                                                    ATTR_PATTERN_END>{} );
+                                                    ATTR_PATTERN_END> );
                     const SfxPoolItem&      rBorderAttr =
                                                 pOldAttrs->GetItemSet().
                                                     Get( ATTR_BORDER );

@@ -125,7 +125,7 @@ static void sw_CharDialog(SwWrtShell &rWrtSh, bool bUseDialog, sal_uInt16 nSlot,
             SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER,
             SID_HTML_MODE, SID_HTML_MODE,
             SID_ATTR_CHAR_WIDTH_FIT_TO_LINE, SID_ATTR_CHAR_WIDTH_FIT_TO_LINE,
-            FN_PARAM_SELECTION, FN_PARAM_SELECTION>{});
+            FN_PARAM_SELECTION, FN_PARAM_SELECTION>);
     rWrtSh.GetCurAttr(*pCoreSet);
 
     bool bSel = rWrtSh.HasSelection();
@@ -447,7 +447,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     SfxItemSet aCoreSet( GetPool(),
                             svl::Items<RES_CHRATR_LANGUAGE,        RES_CHRATR_LANGUAGE,
                             RES_CHRATR_CJK_LANGUAGE,    RES_CHRATR_CJK_LANGUAGE,
-                            RES_CHRATR_CTL_LANGUAGE,    RES_CHRATR_CTL_LANGUAGE>{} );
+                            RES_CHRATR_CTL_LANGUAGE,    RES_CHRATR_CTL_LANGUAGE> );
 
                     sal_Int32 nPos = 0;
                     bool bForSelection = true;
@@ -549,7 +549,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             if ( bFont )
             {
                 rWrtSh.Left( CRSR_SKIP_CHARS, true, 1, false );
-                SfxItemSet aSet( rWrtSh.GetAttrPool(), svl::Items<RES_CHRATR_FONT, RES_CHRATR_FONT>{} );
+                SfxItemSet aSet( rWrtSh.GetAttrPool(), svl::Items<RES_CHRATR_FONT, RES_CHRATR_FONT> );
                 rWrtSh.GetCurAttr( aSet );
                 rWrtSh.SetAttrSet( aSet, SetAttrMode::DONTEXPAND );
                 rWrtSh.ResetSelect(nullptr, false);
@@ -853,7 +853,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 {
                     if( rWrtSh.IsCursorInTable() )
                     {
-                        SfxItemSet aSet( rWrtSh.GetAttrPool(), svl::Items<RES_BOXATR_FORMULA, RES_BOXATR_FORMULA>{} );
+                        SfxItemSet aSet( rWrtSh.GetAttrPool(), svl::Items<RES_BOXATR_FORMULA, RES_BOXATR_FORMULA> );
                         aSet.Put( SwTableBoxFormula( sFormula ));
                         rWrtSh.SetTableBoxFormulaAttrs( aSet );
                         rWrtSh.UpdateTable();
@@ -993,7 +993,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     SID_ATTR_PARA_PAGENUM, SID_ATTR_PARA_PAGENUM,
                     FN_PARAM_1, FN_PARAM_1,
                     FN_NUMBER_NEWSTART, FN_NUMBER_NEWSTART_AT,
-                    FN_DROP_TEXT, FN_DROP_CHAR_STYLE_NAME>{});
+                    FN_DROP_TEXT, FN_DROP_CHAR_STYLE_NAME>);
 
             // get also the list level indent values merged as LR-SPACE item, if needed.
             rWrtSh.GetPaMAttr( pPaM, aCoreSet, true );
@@ -1110,7 +1110,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                         if (pTempGradItem && pTempGradItem->GetName().isEmpty())
                         {
                             // MigrateItemSet guarantees unique gradient names
-                            SfxItemSet aMigrateSet(rWrtSh.GetView().GetPool(), svl::Items<XATTR_FILLGRADIENT, XATTR_FILLGRADIENT>{});
+                            SfxItemSet aMigrateSet(rWrtSh.GetView().GetPool(), svl::Items<XATTR_FILLGRADIENT, XATTR_FILLGRADIENT>);
                             aMigrateSet.Put(XFillGradientItem("gradient", pTempGradItem->GetGradientValue()));
                             SdrModel::MigrateItemSet(&aMigrateSet, pSet, pDrawModel);
                         }
@@ -1118,7 +1118,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                         const XFillHatchItem* pTempHatchItem = pSet->GetItem<XFillHatchItem>(XATTR_FILLHATCH);
                         if (pTempHatchItem && pTempHatchItem->GetName().isEmpty())
                         {
-                            SfxItemSet aMigrateSet(rWrtSh.GetView().GetPool(), svl::Items<XATTR_FILLHATCH, XATTR_FILLHATCH>{});
+                            SfxItemSet aMigrateSet(rWrtSh.GetView().GetPool(), svl::Items<XATTR_FILLHATCH, XATTR_FILLHATCH>);
                             aMigrateSet.Put(XFillHatchItem("hatch", pTempHatchItem->GetHatchValue()));
                             SdrModel::MigrateItemSet(&aMigrateSet, pSet, pDrawModel);
                         }
@@ -1261,7 +1261,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 if (nSlot != SID_ATTR_CHAR_COLOR_EXT)
                 {
                     SfxItemSet aCoreSet( rWrtSh.GetView().GetPool(), svl::Items<
-                                         RES_CHRATR_BACKGROUND, RES_CHRATR_BACKGROUND>{} );
+                                         RES_CHRATR_BACKGROUND, RES_CHRATR_BACKGROUND> );
 
                     rWrtSh.GetCurAttr( aCoreSet );
 
@@ -1356,7 +1356,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
     {
         SfxItemSet aSet(GetPool(),
                         svl::Items<RES_TXTATR_INETFMT,
-                        RES_TXTATR_INETFMT>{});
+                        RES_TXTATR_INETFMT>);
         rWrtSh.GetCurAttr(aSet);
         if(SfxItemState::SET <= aSet.GetItemState( RES_TXTATR_INETFMT ))
         {
@@ -1962,7 +1962,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                 {
                     SfxItemSet aSet(GetPool(),
                         svl::Items<RES_TXTATR_INETFMT,
-                        RES_TXTATR_INETFMT>{});
+                        RES_TXTATR_INETFMT>);
                     rSh.GetCurAttr(aSet);
                     if(SfxItemState::SET > aSet.GetItemState( RES_TXTATR_INETFMT ) || rSh.HasReadonlySel())
                     {
@@ -1974,7 +1974,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
             {
                 SfxItemSet aSet(GetPool(),
                                 svl::Items<RES_TXTATR_INETFMT,
-                                RES_TXTATR_INETFMT>{});
+                                RES_TXTATR_INETFMT>);
                 rSh.GetCurAttr(aSet);
 
                 // If a hyperlink is selected, either alone or along with other text...
@@ -2017,7 +2017,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
             {
                 SfxItemSet aSet(GetPool(),
                                 svl::Items<RES_TXTATR_INETFMT,
-                                RES_TXTATR_INETFMT>{});
+                                RES_TXTATR_INETFMT>);
                 rSh.GetCurAttr(aSet);
 
                 bool bAuthorityFieldURL = false;
@@ -2164,7 +2164,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                 bool bDisable = false;
 
                 // First get the state from the form shell
-                SfxItemSet aSet(GetShell().GetAttrPool(), svl::Items<SID_FM_CTL_PROPERTIES, SID_FM_CTL_PROPERTIES>{});
+                SfxItemSet aSet(GetShell().GetAttrPool(), svl::Items<SID_FM_CTL_PROPERTIES, SID_FM_CTL_PROPERTIES>);
                 aSet.Put(SfxBoolItem( SID_FM_CTL_PROPERTIES, true ));
                 GetShell().GetView().GetFormShell()->GetState( aSet );
 

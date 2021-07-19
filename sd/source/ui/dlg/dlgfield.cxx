@@ -281,7 +281,7 @@ IMPL_LINK_NOARG(SdModifyFieldDlg, LanguageChangeHdl, weld::ComboBox&, void)
 
 SfxItemSet SdModifyFieldDlg::GetItemSet() const
 {
-    SfxItemSet aOutput( *m_aInputSet.GetPool(), svl::Items<EE_CHAR_LANGUAGE, EE_CHAR_LANGUAGE_CTL>{} );
+    SfxItemSet aOutput( *m_aInputSet.GetPool(), svl::Items<EE_CHAR_LANGUAGE, EE_CHAR_LANGUAGE_CTL> );
 
     if (m_xLbLanguage->get_active_id_changed_from_saved())
     {

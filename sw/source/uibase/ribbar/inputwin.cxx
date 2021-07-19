@@ -255,7 +255,7 @@ void SwInputWindow::ShowWin()
             }
             pWrtShell->DoUndo(false);
 
-            SfxItemSet aSet( pWrtShell->GetAttrPool(), svl::Items<RES_BOXATR_FORMULA, RES_BOXATR_FORMULA>{} );
+            SfxItemSet aSet( pWrtShell->GetAttrPool(), svl::Items<RES_BOXATR_FORMULA, RES_BOXATR_FORMULA> );
             if( pWrtShell->GetTableBoxFormulaAttrs( aSet ))
                 sEdit += aSet.Get( RES_BOXATR_FORMULA ).GetFormula();
         }

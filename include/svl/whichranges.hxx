@@ -17,6 +17,60 @@
 
 typedef std::pair<sal_uInt16, sal_uInt16> WhichPair;
 
+namespace svl
+{
+namespace detail
+{
+constexpr bool validRange(sal_uInt16 wid1, sal_uInt16 wid2) { return wid1 != 0 && wid1 <= wid2; }
+
+constexpr bool validGap(sal_uInt16 wid1, sal_uInt16 wid2) { return wid2 > wid1; }
+
+template <sal_uInt16 WID1, sal_uInt16 WID2> constexpr bool validRanges()
+{
+    return validRange(WID1, WID2);
+}
+
+template <sal_uInt16 WID1, sal_uInt16 WID2, sal_uInt16 WID3, sal_uInt16... WIDs>
+constexpr bool validRanges()
+{
+    return validRange(WID1, WID2) && validGap(WID2, WID3) && validRanges<WID3, WIDs...>();
+}
+
+// The calculations in rangeSize cannot overflow, assuming
+// std::size_t is no smaller than sal_uInt16:
+constexpr std::size_t rangeSize(sal_uInt16 wid1, sal_uInt16 wid2)
+{
+    assert(validRange(wid1, wid2));
+    return wid2 - wid1 + 1;
+}
+}
+
+template <sal_uInt16... WIDs> struct Items_t
+{
+    using Array = std::array<WhichPair, sizeof...(WIDs) / 2>;
+    template <sal_uInt16 WID1, sal_uInt16 WID2, sal_uInt16... Rest>
+    static constexpr void fill(typename Array::iterator it)
+    {
+        it->first = WID1;
+        it->second = WID2;
+        if constexpr (sizeof...(Rest) > 0)
+            fill<Rest...>(++it);
+    }
+    static constexpr Array make()
+    {
+        assert(svl::detail::validRanges<WIDs...>());
+        Array a{};
+        fill<WIDs...>(a.begin());
+        return a;
+    }
+    // This is passed to WhichRangesContainer so we can avoid needing to malloc()
+    // for compile-time data.
+    static constexpr Array value = make();
+};
+
+template <sal_uInt16... WIDs> inline static constexpr auto Items = Items_t<WIDs...>{};
+}
+
 /**
  * Most of the time, the which ranges we point at are a compile-time literal.
  * So we take advantage of that, and avoid the cost of allocating our own array and copying into it.
@@ -39,10 +93,10 @@ struct SVL_DLLPUBLIC WhichRangesContainer
         , m_bOwnRanges(true)
     {
     }
-    template <std::size_t N>
-    WhichRangesContainer(const std::array<WhichPair, N>& ranges)
-        : m_pairs(ranges.data())
-        , m_size(N)
+    template <sal_uInt16... WIDs>
+    WhichRangesContainer(svl::Items_t<WIDs...>)
+        : m_pairs(svl::Items_t<WIDs...>::value.data())
+        , m_size(svl::Items_t<WIDs...>::value.size())
         , m_bOwnRanges(false)
     {
     }

@@ -1413,7 +1413,7 @@ bool SwFieldMgr::InsertField(
                 }
 
                 SfxItemSet aBoxSet( pCurShell->GetAttrPool(),
-                    svl::Items<RES_BOXATR_FORMULA, RES_BOXATR_FORMULA>{} );
+                    svl::Items<RES_BOXATR_FORMULA, RES_BOXATR_FORMULA> );
 
                 OUString sFormula(comphelper::string::stripStart(rData.m_sPar2, ' '));
                 if ( sFormula.startsWith("=") )

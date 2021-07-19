@@ -115,13 +115,13 @@ static bool lcl_RstAttr( const SwNodePtr& rpNd, void* pArgs )
             svl::Items<
                 RES_PARATR_NUMRULE, RES_PARATR_NUMRULE,
                 RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END - 1,
-                RES_PAGEDESC, RES_BREAK>{});
+                RES_PAGEDESC, RES_BREAK>);
         const SfxItemSet* pAttrSetOfNode = pNode->GetpSwAttrSet();
 
         std::vector<sal_uInt16> aClearWhichIds;
         // restoring all paragraph list attributes
         {
-            SfxItemSet aListAttrSet( rDoc.GetAttrPool(), svl::Items<RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END - 1>{} );
+            SfxItemSet aListAttrSet( rDoc.GetAttrPool(), svl::Items<RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END - 1> );
             aListAttrSet.Set(*pAttrSetOfNode);
             if ( aListAttrSet.Count() )
             {
@@ -322,7 +322,7 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
     SfxItemSet aDelSet(GetAttrPool(), svl::Items<RES_CHRATR_BEGIN, RES_CHRATR_END - 1,
                                                  RES_TXTATR_INETFMT, RES_TXTATR_UNKNOWN_CONTAINER,
                                                  RES_PARATR_BEGIN, RES_FRMATR_END - 1,
-                                                 RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END - 1>{});
+                                                 RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END - 1>);
     for( auto it = rAttrs.rbegin(); it != rAttrs.rend(); ++it )
     {
         if( POOLATTR_END > *it )
@@ -414,7 +414,7 @@ void SwDoc::UpdateRsid( const SwPaM &rRg, const sal_Int32 nLen )
     const sal_Int32 nStart(rRg.GetPoint()->nContent.GetIndex() - nLen);
     SvxRsidItem aRsid( mnRsid, RES_CHRATR_RSID );
 
-    SfxItemSet aSet(GetAttrPool(), svl::Items<RES_CHRATR_RSID, RES_CHRATR_RSID>{});
+    SfxItemSet aSet(GetAttrPool(), svl::Items<RES_CHRATR_RSID, RES_CHRATR_RSID>);
     aSet.Put(aRsid);
     bool const bRet(pTextNode->SetAttr(aSet, nStart,
         rRg.GetPoint()->nContent.GetIndex()));

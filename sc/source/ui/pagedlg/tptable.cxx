@@ -31,7 +31,7 @@
 // Static Data
 
 const WhichRangesContainer ScTablePage::pPageTableRanges(
-    svl::Items<ATTR_PAGE_NOTES, ATTR_PAGE_FIRSTPAGENO>::value);
+    svl::Items<ATTR_PAGE_NOTES, ATTR_PAGE_FIRSTPAGENO>);
 
 static bool lcl_PutVObjModeItem(sal_uInt16  nWhich,
                           SfxItemSet&       rCoreSet,

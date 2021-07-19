@@ -2015,7 +2015,7 @@ static Writer& OutHTML_FrameFormatAsMarquee( Writer& rWrt, const SwFrameFormat& 
     // sort them as Hints
     const SfxItemSet& rFormatItemSet = rFrameFormat.GetAttrSet();
     SfxItemSet aItemSet( *rFormatItemSet.GetPool(), svl::Items<RES_CHRATR_BEGIN,
-                                                 RES_CHRATR_END>{} );
+                                                 RES_CHRATR_END> );
     SwHTMLWriter::GetEEAttrsFromDrwObj( aItemSet, &rSdrObj );
     bool bCfgOutStylesOld = rHTMLWrt.m_bCfgOutStyles;
     rHTMLWrt.m_bCfgOutStyles = false;

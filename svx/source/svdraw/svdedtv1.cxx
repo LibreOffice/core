@@ -1344,7 +1344,7 @@ SfxItemSet SdrEditView::GetGeoAttrFromMarked() const
         svl::Items< // SID_ATTR_TRANSFORM_... from s:svxids.hrc
             SDRATTR_CORNER_RADIUS, SDRATTR_CORNER_RADIUS,
             SID_ATTR_TRANSFORM_POS_X, SID_ATTR_TRANSFORM_ANGLE,
-            SID_ATTR_TRANSFORM_PROTECT_POS, SID_ATTR_TRANSFORM_AUTOHEIGHT>{});
+            SID_ATTR_TRANSFORM_PROTECT_POS, SID_ATTR_TRANSFORM_AUTOHEIGHT>);
 
     if (AreObjectsMarked())
     {

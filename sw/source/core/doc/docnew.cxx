@@ -350,7 +350,7 @@ SwDoc::SwDoc()
     // pass empty item set containing the paragraph's list attributes
     // as ignorable items to the stype manager.
     {
-        SfxItemSet aIgnorableParagraphItems( GetAttrPool(), svl::Items<RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END-1>{});
+        SfxItemSet aIgnorableParagraphItems( GetAttrPool(), svl::Items<RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END-1>);
         mpStyleAccess = createStyleManager( &aIgnorableParagraphItems );
     }
 
@@ -851,7 +851,7 @@ void SwDoc::ReplaceDefaults(const SwDoc& rSource)
         RES_FRMATR_BEGIN, RES_FRMATR_END-1,
         RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
         XATTR_START, XATTR_END-1
-    >::value);
+    >);
 
     SfxItemSet aNewDefaults(GetAttrPool(), aRangeOfDefaults);
 

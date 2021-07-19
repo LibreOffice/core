@@ -74,7 +74,7 @@ using namespace com::sun::star;
 const WhichRangesContainer SvxLineTabPage::pLineRanges(svl::Items<
     XATTR_LINETRANSPARENCE, XATTR_LINETRANSPARENCE,
     SID_ATTR_LINE_STYLE, SID_ATTR_LINE_ENDCENTER
->::value);
+>);
 
 SvxLineTabPage::SvxLineTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs)
     : SfxTabPage(pPage, pController, "cui/ui/linetabpage.ui", "LineTabPage", &rInAttrs)

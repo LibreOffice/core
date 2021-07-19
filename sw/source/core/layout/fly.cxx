@@ -1129,7 +1129,7 @@ void SwFlyFrame::ChgRelPos( const Point &rNewPos )
     if( bVert )
         nTmpY = -nTmpY;
     SfxItemSet aSet( pFormat->GetDoc()->GetAttrPool(),
-                     svl::Items<RES_VERT_ORIENT, RES_HORI_ORIENT>{});
+                     svl::Items<RES_VERT_ORIENT, RES_HORI_ORIENT>);
 
     SwFormatVertOrient aVert( pFormat->GetVertOrient() );
     const SwTextFrame *pAutoFrame = nullptr;

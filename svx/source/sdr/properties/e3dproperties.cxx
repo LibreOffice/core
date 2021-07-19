@@ -38,7 +38,7 @@ namespace sdr::properties
                 SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION,
 
                 // ranges from E3dObject, contains object and scene because of GetMergedItemSet()
-                SDRATTR_3D_FIRST, SDRATTR_3D_LAST>{});
+                SDRATTR_3D_FIRST, SDRATTR_3D_LAST>);
         }
 
         E3dProperties::E3dProperties(SdrObject& rObj)

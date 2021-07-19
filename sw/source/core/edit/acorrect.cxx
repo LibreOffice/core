@@ -320,7 +320,7 @@ bool SwAutoCorrDoc::SetINetAttr( sal_Int32 nStt, sal_Int32 nEnd, const OUString&
                pFrame->MapViewToModelPos(TextFrameIndex(nEnd)));
 
     SfxItemSet aSet( m_rEditSh.GetDoc()->GetAttrPool(),
-                        svl::Items<RES_TXTATR_INETFMT, RES_TXTATR_INETFMT>{} );
+                        svl::Items<RES_TXTATR_INETFMT, RES_TXTATR_INETFMT> );
     aSet.Put( SwFormatINetFormat( rURL, OUString() ));
     m_rEditSh.GetDoc()->SetFormatItemByAutoFormat( aPam, aSet );
     if( m_bUndoIdInitialized )

@@ -1089,7 +1089,7 @@ static void lcl_textBoxSizeNotify(SwFrameFormat* pFormat)
     if (SwTextBoxHelper::isTextBox(pFormat, RES_DRAWFRMFMT))
     {
         // Just notify the textbox that the size has changed, the actual object size is not interesting.
-        SfxItemSet aResizeSet(pFormat->GetDoc()->GetAttrPool(), svl::Items<RES_FRM_SIZE, RES_FRM_SIZE>{});
+        SfxItemSet aResizeSet(pFormat->GetDoc()->GetAttrPool(), svl::Items<RES_FRM_SIZE, RES_FRM_SIZE>);
         SwFormatFrameSize aSize;
         aResizeSet.Put(aSize);
         SwTextBoxHelper::syncFlyFrameAttr(*pFormat, aResizeSet);
@@ -1279,7 +1279,7 @@ void SwDrawContact::Changed_( const SdrObject& rObj,
                     }
                 }
                 SfxItemSet aSet( GetFormat()->GetDoc()->GetAttrPool(),
-                                 svl::Items<RES_VERT_ORIENT, RES_HORI_ORIENT>{} );
+                                 svl::Items<RES_VERT_ORIENT, RES_HORI_ORIENT> );
                 const SwFormatVertOrient& rVert = GetFormat()->GetVertOrient();
                 if ( nYPosDiff != 0 )
                 {
@@ -1351,7 +1351,7 @@ void SwDrawContact::Changed_( const SdrObject& rObj,
                 pDoc->getIDocumentState().SetEnableSetModified(false);
 
                 SfxItemSet aSyncSet(pDoc->GetAttrPool(),
-                                    svl::Items<RES_VERT_ORIENT, RES_ANCHOR>{});
+                                    svl::Items<RES_VERT_ORIENT, RES_ANCHOR>);
                 aSyncSet.Put(SwFormatVertOrient(aObjRect.Top() - rPageFrame->getFrameArea().Top(),
                                                 text::VertOrientation::NONE,
                                                 text::RelOrientation::PAGE_FRAME));

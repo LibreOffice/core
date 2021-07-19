@@ -82,7 +82,7 @@ ScPatternAttr::ScPatternAttr( SfxItemSet&& pItemSet )
 }
 
 ScPatternAttr::ScPatternAttr( SfxItemPool* pItemPool )
-    :   SfxSetItem  ( ATTR_PATTERN, SfxItemSet( *pItemPool, svl::Items<ATTR_PATTERN_START, ATTR_PATTERN_END>{} ) ),
+    :   SfxSetItem  ( ATTR_PATTERN, SfxItemSet( *pItemPool, svl::Items<ATTR_PATTERN_START, ATTR_PATTERN_END> ) ),
         pStyle      ( nullptr ),
         mnKey(0)
 {

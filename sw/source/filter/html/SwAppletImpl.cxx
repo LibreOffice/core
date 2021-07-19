@@ -109,7 +109,7 @@ SwHtmlOptType SwApplet_Impl::GetOptionType( const OUString& rName, bool bApplet 
     return nType;
 }
 SwApplet_Impl::SwApplet_Impl( SfxItemPool& rPool ) :
-        m_aItemSet( rPool, svl::Items<RES_FRMATR_BEGIN, RES_FRMATR_END-1>{} )
+        m_aItemSet( rPool, svl::Items<RES_FRMATR_BEGIN, RES_FRMATR_END-1> )
 {
 }
 

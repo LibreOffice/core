@@ -55,7 +55,7 @@ const WhichRangesContainer SvxCaptionTabPage::pCaptionRanges(
     SDRATTR_CAPTIONANGLE, SDRATTR_CAPTIONGAP,
     SDRATTR_CAPTIONESCDIR, SDRATTR_CAPTIONESCISREL,
     SDRATTR_CAPTIONESCREL, SDRATTR_CAPTIONESCABS,
-    SDRATTR_CAPTIONLINELEN, SDRATTR_CAPTIONFITLINELEN>::value);
+    SDRATTR_CAPTIONLINELEN, SDRATTR_CAPTIONFITLINELEN>);
 
 SvxCaptionTabPage::SvxCaptionTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs)
     : SfxTabPage(pPage, pController, "cui/ui/calloutpage.ui", "CalloutPage", &rInAttrs)
