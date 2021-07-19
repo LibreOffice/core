@@ -759,7 +759,8 @@ void SwUiWriterTest::testFdo69893()
 
 void SwUiWriterTest::testFdo70807()
 {
-    createSwDoc(DATA_DIRECTORY, "fdo70807.odt");
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "fdo70807.odt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     uno::Reference<container::XIndexAccess> xStylesIter(getStyles("PageStyles"), uno::UNO_QUERY);
 
@@ -783,6 +784,17 @@ void SwUiWriterTest::testFdo70807()
         CPPUNIT_ASSERT_EQUAL(expectedUserDefined, bool(xStyle->isUserDefined()));
         CPPUNIT_ASSERT_EQUAL(expectedUsedStyle, bool(xStyle->isInUse()));
     }
+
+    // tdf#60632: Turn on Bulleting. We want to test if this can be repeated.
+    dispatchCommand(mxComponent, ".uno:DefaultNumbering", {});
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(!getProperty<OUString>(getParagraph(1), "NumberingStyleName").isEmpty());
+
+    pWrtShell->Down(/*bSelect=*/false);
+    dispatchCommand(mxComponent, ".uno:Repeat", {});
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(OUString("2."), getProperty<OUString>(getParagraph(2), "ListLabelString"));
+    CPPUNIT_ASSERT(!getProperty<OUString>(getParagraph(2), "NumberingStyleName").isEmpty());
 }
 
 void SwUiWriterTest::testImportRTF()
