@@ -21,8 +21,10 @@
 #define INCLUDED_SW_INC_DBUI_HRC
 
 #include <utility>
+#include <unotools/resmgr.hxx>
 
-#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
+
+#define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
 
 // Elements -----------------------------------------------------------------
 #define MM_PART_TITLE                   0
@@ -40,7 +42,7 @@
 #define MM_PART_E_MAIL                  12
 #define MM_PART_GENDER                  13
 
-const std::pair<const char*, int> SA_ADDRESS_HEADER[] =
+const std::pair<TranslateId, int> SA_ADDRESS_HEADER[] =
 {
     { NC_("SA_ADDRESS_HEADER", "Title") ,                 MM_PART_TITLE           },
     { NC_("SA_ADDRESS_HEADER", "First Name") ,            MM_PART_FIRSTNAME       },

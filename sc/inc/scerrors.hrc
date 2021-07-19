@@ -19,7 +19,7 @@
 
 #pragma once
 
-#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
+#define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
 
 #include <svtools/ehdl.hxx>
 #include "scerrors.hxx"
@@ -103,7 +103,7 @@ const ErrMsgCode RID_ERRHDLSC[] =
       SCWARN_IMPORT_FILE_ROWCOL },
     { NC_("RID_ERRHDLSC", "Not all attributes could be read.") ,
       SCWARN_IMPORT_FEATURES_LOST },
-    { nullptr, ERRCODE_NONE }
+    { {}, ERRCODE_NONE }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

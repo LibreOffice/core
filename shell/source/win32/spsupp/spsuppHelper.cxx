@@ -43,7 +43,7 @@ const OUString& GetSofficeExe()
     return s_sPath;
 }
 
-OUString GetString(const char* pResId)
+OUString GetString(TranslateId pResId)
 {
     static const std::locale s_pLocale = [] {
         // Initialize soffice bootstrap: see getIniFileName_Impl for reference

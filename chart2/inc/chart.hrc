@@ -9,9 +9,9 @@
 
 #pragma once
 
-#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
+#define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
 
-const char* CHART_TYPE[] =
+const TranslateId CHART_TYPE[] =
 {
     NC_("tp_ChartType|liststore1", "Bar"),
     NC_("tp_ChartType|liststore1", "Cylinder"),

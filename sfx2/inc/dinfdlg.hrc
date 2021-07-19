@@ -20,9 +20,9 @@
 #ifndef INCLUDED_SFX2_INC_DINFDLG_HRC
 #define INCLUDED_SFX2_INC_DINFDLG_HRC
 
-#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
+#define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
 
-const char* SFX_CB_PROPERTY_STRINGARRAY[] =
+const TranslateId SFX_CB_PROPERTY_STRINGARRAY[] =
 {
     NC_("SFX_CB_PROPERTY_STRINGARRAY", "Checked by"),
     NC_("SFX_CB_PROPERTY_STRINGARRAY", "Client"),
@@ -64,7 +64,7 @@ const char* SFX_CB_PROPERTY_STRINGARRAY[] =
 #define CUSTOM_TYPE_DURATION    5
 #define CUSTOM_TYPE_DATETIME    6
 
-const std::pair<const char*, int> SFX_LB_PROPERTY_STRINGARRAY[] =
+const std::pair<TranslateId, int> SFX_LB_PROPERTY_STRINGARRAY[] =
 {
     { NC_("SFX_CB_PROPERTY_STRINGARRAY", "Text")        , CUSTOM_TYPE_TEXT },
     { NC_("SFX_CB_PROPERTY_STRINGARRAY", "DateTime")    , CUSTOM_TYPE_DATETIME },

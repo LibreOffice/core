@@ -58,7 +58,7 @@ using namespace com::sun::star::util;
 
 using ::rtl::Uri;
 
-OUString XsltResId(std::string_view aId)
+OUString XsltResId(TranslateId aId)
 {
     return Translate::get(aId, Translate::Create("flt"));
 }

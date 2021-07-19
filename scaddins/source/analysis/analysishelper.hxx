@@ -20,6 +20,7 @@
 
 
 #include <com/sun/star/uno/Reference.hxx>
+#include <unotools/resmgr.hxx>
 
 #include <math.h>
 
@@ -188,8 +189,8 @@ enum class FDCategory
 struct FuncDataBase
 {
     const char*         pIntName;
-    const char*             pUINameID;          // resource ID to UI name
-    const char**            pDescrID;           // resource ID to description, parameter names and ~ description
+    TranslateId             pUINameID;          // resource ID to UI name
+    const TranslateId*      pDescrID;           // resource ID to description, parameter names and ~ description
     bool                    bDouble;            // name already exist in Calc
     bool                    bWithOpt;           // first parameter is internal
     const char**            pCompListID;        // list of valid names
@@ -203,8 +204,8 @@ class FuncData final
 {
 private:
     OUString                aIntName;
-    const char*             pUINameID;
-    const char**            pDescrID;           // leads also to parameter descriptions!
+    TranslateId             pUINameID;
+    const TranslateId*      pDescrID;           // leads also to parameter descriptions!
     bool                    bDouble;            // flag for names that already exist in Calc
     bool                    bWithOpt;           // has internal parameter on first position
 
@@ -216,8 +217,8 @@ private:
 public:
                             FuncData(const FuncDataBase& rBaseData);
 
-    inline const char*      GetUINameID() const;
-    inline const char**     GetDescrID() const;
+    inline const TranslateId& GetUINameID() const;
+    inline const TranslateId* GetDescrID() const;
     inline bool             IsDouble() const;
     inline const OUString&  GetSuffix() const;
 
@@ -593,13 +594,13 @@ inline double GetYearFrac( const css::uno::Reference< css::beans::XPropertySet >
 }
 
 
-inline const char* FuncData::GetUINameID() const
+inline const TranslateId& FuncData::GetUINameID() const
 {
     return pUINameID;
 }
 
 
-inline const char** FuncData::GetDescrID() const
+inline const TranslateId* FuncData::GetDescrID() const
 {
     return pDescrID;
 }

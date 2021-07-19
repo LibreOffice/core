@@ -170,12 +170,12 @@ OUString SidebarTextControl::RequestHelp(tools::Rectangle& rHelpRect)
         }
     }
 
-    const char* pResId = nullptr;
+    TranslateId pResId;
     switch( mrSidebarWin.GetLayoutStatus() )
     {
         case SwPostItHelper::INSERTED:  pResId = STR_REDLINE_INSERT; break;
         case SwPostItHelper::DELETED:   pResId = STR_REDLINE_DELETE; break;
-        default: pResId = nullptr;
+        default: break;
     }
 
     SwContentAtPos aContentAtPos( IsAttrAtPos::Redline );

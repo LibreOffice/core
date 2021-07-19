@@ -20,8 +20,8 @@
 #pragma once
 
 #include <rtl/ustring.hxx>
-#include <string_view>
+#include <unotools/resmgr.hxx>
 
-OUString FwkResId(std::string_view aId);
+OUString FwkResId(TranslateId aId);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

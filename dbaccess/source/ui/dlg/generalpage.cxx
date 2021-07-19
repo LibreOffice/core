@@ -181,7 +181,7 @@ namespace dbaui
 
         if ( eMessage != m_eLastMessage )
         {
-            const char* pResId = nullptr;
+            TranslateId pResId;
             if ( smUnsupportedType == eMessage )
                 pResId = STR_UNSUPPORTED_DATASOURCE_TYPE;
             OUString sMessage;

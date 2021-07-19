@@ -747,7 +747,7 @@ enum FMT_REF_IDX
 
 }
 
-static const char* FMT_REF_ARY[] =
+const TranslateId FMT_REF_ARY[] =
 {
     FMT_REF_PAGE,
     FMT_REF_CHAPTER,

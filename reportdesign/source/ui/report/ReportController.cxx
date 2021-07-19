@@ -2581,7 +2581,7 @@ void OReportController::Notify(SfxBroadcaster & /* _rBc */, SfxHint const & _rHi
         });
 }
 
-void OReportController::executeMethodWithUndo(const char* pUndoStrId,const ::std::function<void(ODesignView *)>& _pMemfun)
+void OReportController::executeMethodWithUndo(TranslateId pUndoStrId,const ::std::function<void(ODesignView *)>& _pMemfun)
 {
     const OUString sUndoAction = RptResId(pUndoStrId);
     UndoContext aUndoContext( getUndoManager(), sUndoAction );
@@ -2589,7 +2589,7 @@ void OReportController::executeMethodWithUndo(const char* pUndoStrId,const ::std
     InvalidateFeature( SID_UNDO );
 }
 
-void OReportController::alignControlsWithUndo(const char* pUndoStrId, ControlModification _nControlModification, bool _bAlignAtSection)
+void OReportController::alignControlsWithUndo(TranslateId pUndoStrId, ControlModification _nControlModification, bool _bAlignAtSection)
 {
     const OUString sUndoAction = RptResId(pUndoStrId);
     UndoContext aUndoContext( getUndoManager(), sUndoAction );
@@ -2665,7 +2665,7 @@ void OReportController::shrinkSectionTop(const uno::Reference<report::XSection>&
     _xSection->setHeight(nNewSectionHeight);
 }
 
-void OReportController::shrinkSection(const char* pUndoStrId, const uno::Reference<report::XSection>& _xSection, sal_Int32 _nSid)
+void OReportController::shrinkSection(TranslateId pUndoStrId, const uno::Reference<report::XSection>& _xSection, sal_Int32 _nSid)
 {
     if ( _xSection.is() )
     {
@@ -2838,7 +2838,7 @@ uno::Reference<frame::XModel> OReportController::executeReport()
     uno::Reference<frame::XModel> xModel;
     if ( m_xReportDefinition.is() )
     {
-        const char* pErrorId = RID_ERR_NO_COMMAND;
+        TranslateId pErrorId = RID_ERR_NO_COMMAND;
         bool bEnabled = !m_xReportDefinition->getCommand().isEmpty();
         if ( bEnabled )
         {
@@ -2864,7 +2864,7 @@ uno::Reference<frame::XModel> OReportController::executeReport()
             if ( isEditable() )
             {
                 sal_uInt16 nCommand = 0;
-                if (!strcmp(pErrorId, RID_ERR_NO_COMMAND))
+                if (pErrorId != RID_ERR_NO_COMMAND)
                 {
                     if ( !m_bShowProperties )
                         executeUnChecked(SID_SHOW_PROPERTYBROWSER,uno::Sequence< beans::PropertyValue>());
@@ -4151,7 +4151,7 @@ bool OReportController::isFormatCommandEnabled(sal_uInt16 _nCommand,const uno::R
     return bRet;
 }
 
-bool OReportController::impl_setPropertyAtControls_throw(const char* pUndoResId,const OUString& _sProperty,const uno::Any& _aValue,const Sequence< PropertyValue >& _aArgs)
+bool OReportController::impl_setPropertyAtControls_throw(TranslateId pUndoResId,const OUString& _sProperty,const uno::Any& _aValue,const Sequence< PropertyValue >& _aArgs)
 {
     ::std::vector< uno::Reference< uno::XInterface > > aSelection;
     uno::Reference< awt::XWindow> xWindow;

@@ -50,7 +50,7 @@ struct SvtExtensionResIdMapping_Impl
 {
     const char* _pExt;
     bool        _bExt;
-    const char* pStrId;
+    TranslateId  pStrId;
     SvImageId   _nImgId;
 };
 
@@ -91,7 +91,7 @@ SvtExtensionResIdMapping_Impl const ExtensionMap_Impl[] =
     { "jpg",   true,  STR_DESCRIPTION_GRAPHIC_DOC,           SvImageId::JPG },
     { "lha",   true,  STR_DESCRIPTION_ARCHIVFILE,            SvImageId::NONE },
 #ifdef _WIN32
-    { "lnk",   false, nullptr,                               SvImageId::NONE },
+    { "lnk",   false, {},                                    SvImageId::NONE },
 #endif
     { "log",   true,  STR_DESCRIPTION_LOGFILE,               SvImageId::NONE },
     { "lst",   true,  STR_DESCRIPTION_LOGFILE,               SvImageId::NONE },
@@ -118,20 +118,20 @@ SvtExtensionResIdMapping_Impl const ExtensionMap_Impl[] =
     { "png",   true,  STR_DESCRIPTION_GRAPHIC_DOC,           SvImageId::PNG },
     { "rar",   true,  STR_DESCRIPTION_ARCHIVFILE,            SvImageId::NONE },
     { "rtf",   false, STR_DESCRIPTION_WORD_DOC,              SvImageId::Writer },
-    { "sbl",   false, nullptr,                               SvImageId::NONE },
-    { "sch",   false, nullptr,                               SvImageId::NONE },
-    { "sda",   false, STR_DESCRIPTION_SDRAW_DOC,             SvImageId::Draw },
+    { "sbl",   false, {},                                    SvImageId::NONE },
+    { "sch",   false, {},                                    SvImageId::NONE },
+    { "sda",   false, { nullptr, STR_DESCRIPTION_SDRAW_DOC}, SvImageId::Draw },
     { "sdb",   false, STR_DESCRIPTION_SDATABASE_DOC,         SvImageId::Database },
-    { "sdc",   false, STR_DESCRIPTION_SCALC_DOC,             SvImageId::Calc },
-    { "sdd",   false, STR_DESCRIPTION_SIMPRESS_DOC,          SvImageId::Impress },
-    { "sdp",   false, STR_DESCRIPTION_SIMPRESS_DOC,          SvImageId::NONE },
-    { "sds",   false, STR_DESCRIPTION_SCHART_DOC,            SvImageId::NONE },
-    { "sdw",   false, STR_DESCRIPTION_SWRITER_DOC,           SvImageId::Writer },
-    { "sga",   false, nullptr,                               SvImageId::NONE },
+    { "sdc",   false, { nullptr, STR_DESCRIPTION_SCALC_DOC}, SvImageId::Calc },
+    { "sdd",   false, { nullptr, STR_DESCRIPTION_SIMPRESS_DOC},          SvImageId::Impress },
+    { "sdp",   false, { nullptr, STR_DESCRIPTION_SIMPRESS_DOC},          SvImageId::NONE },
+    { "sds",   false, { nullptr, STR_DESCRIPTION_SCHART_DOC},            SvImageId::NONE },
+    { "sdw",   false, { nullptr, STR_DESCRIPTION_SWRITER_DOC},           SvImageId::Writer },
+    { "sga",   false, {},                                    SvImageId::NONE },
     { "sgl",   false, STR_DESCRIPTION_GLOBALDOC,             SvImageId::GlobalDoc },
     { "shtml", false, STR_DESCRIPTION_HTMLFILE,              SvImageId::HTML },
     { "sim",   false, STR_DESCRIPTION_SIMAGE_DOC,            SvImageId::SIM },
-    { "smf",   false, STR_DESCRIPTION_SMATH_DOC,             SvImageId::Math },
+    { "smf",   false, { nullptr, STR_DESCRIPTION_SMATH_DOC},             SvImageId::Math },
     { "src",   true,  STR_DESCRIPTION_SOURCEFILE,            SvImageId::NONE },
     { "svh",   false, STR_DESCRIPTION_HELP_DOC,              SvImageId::NONE },
     { "svm",   true,  STR_DESCRIPTION_GRAPHIC_DOC,           SvImageId::SVM },
@@ -168,7 +168,7 @@ SvtExtensionResIdMapping_Impl const ExtensionMap_Impl[] =
     { "pps",   false, STR_DESCRIPTION_POWERPOINT_SHOW,       SvImageId::Impress },
     { "pptx",  false, STR_DESCRIPTION_POWERPOINT,            SvImageId::Impress },
     { "oxt",   false, STR_DESCRIPTION_EXTENSION,             SvImageId::Extension },
-    { nullptr, false, nullptr, SvImageId::NONE }
+    { nullptr, false, {}, SvImageId::NONE }
 };
 
 namespace {
@@ -431,9 +431,9 @@ static SvImageId GetImageId_Impl(
     return nImage;
 }
 
-static const char* GetDescriptionId_Impl( const OUString& rExtension, bool& rbShowExt )
+static TranslateId GetDescriptionId_Impl( const OUString& rExtension, bool& rbShowExt )
 {
-    const char* pId = nullptr;
+    TranslateId pId;
     sal_Int32  nIndex = GetIndexOfExtension_Impl( rExtension );
     if ( nIndex != NO_INDEX )
     {
@@ -446,7 +446,7 @@ static const char* GetDescriptionId_Impl( const OUString& rExtension, bool& rbSh
 
 static OUString GetDescriptionByFactory_Impl( const OUString& rFactory )
 {
-    const char* pResId = nullptr;
+    TranslateId pResId;
     if ( rFactory.startsWithIgnoreAsciiCase( "swriter" ) )
         pResId = STR_DESCRIPTION_FACTORY_WRITER;
     else if ( rFactory.startsWithIgnoreAsciiCase( "scalc" ) )
@@ -471,9 +471,9 @@ static OUString GetDescriptionByFactory_Impl( const OUString& rFactory )
     return OUString();
 }
 
-static const char* GetFolderDescriptionId_Impl( const OUString& rURL )
+static TranslateId GetFolderDescriptionId_Impl( const OUString& rURL )
 {
-    const char* pRet = STR_DESCRIPTION_FOLDER;
+    TranslateId pRet = STR_DESCRIPTION_FOLDER;
     try
     {
         ::ucbhelper::Content aCnt( rURL, css::uno::Reference< css::ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
@@ -742,7 +742,7 @@ OUString SvFileInformationManager::GetDescription_Impl( const INetURLObject& rOb
 {
     OUString sExtension(rObject.getExtension());
     OUString sDescription, sURL( rObject.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
-    const char* pResId = nullptr;
+    TranslateId pResId;
     bool bShowExt = false, bOnlyFile = false;
     bool bFolder = bDetectFolder && CONTENT_HELPER::IsFolder( sURL );
     if ( !bFolder )
@@ -866,7 +866,7 @@ OUString SvFileInformationManager::GetFileDescription( const INetURLObject& rObj
 
 OUString SvFileInformationManager::GetFolderDescription( const svtools::VolumeInfo& rInfo )
 {
-    const char* pResId = STR_DESCRIPTION_FOLDER;
+    TranslateId pResId = STR_DESCRIPTION_FOLDER;
     if ( rInfo.m_bIsRemote )
         pResId = STR_DESCRIPTION_REMOTE_VOLUME;
     else if ( rInfo.m_bIsFloppy )

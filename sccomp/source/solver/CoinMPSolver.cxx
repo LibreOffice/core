@@ -25,6 +25,7 @@
 
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
+#include <unotools/resmgr.hxx>
 
 #include <rtl/math.hxx>
 #include <stdexcept>

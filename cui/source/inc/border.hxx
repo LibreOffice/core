@@ -27,6 +27,7 @@
 #include <svx/colorbox.hxx>
 #include <svx/frmsel.hxx>
 #include <svx/flagsdef.hxx>
+#include <unotools/resmgr.hxx>
 
 #include <set>
 
@@ -169,7 +170,7 @@ private:
     DECL_LINK(RemoveAdjacentCellBorderHdl_Impl, weld::Toggleable&, void);
 
     sal_uInt16          GetPresetImageId(sal_uInt16 nValueSetIdx) const;
-    const char*         GetPresetStringId(sal_uInt16 nValueSetIdx) const;
+    TranslateId         GetPresetStringId(sal_uInt16 nValueSetIdx) const;
 
     void                FillPresetVS();
     void                FillShadowVS();

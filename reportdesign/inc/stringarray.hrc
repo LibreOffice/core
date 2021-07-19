@@ -10,72 +10,72 @@
 #ifndef INCLUDED_REPORTDESIGN_INC_FNP_HRC
 #define INCLUDED_REPORTDESIGN_INC_FNP_HRC
 
-#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
+#define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
 
-const char* RID_STR_FORCENEWPAGE_CONST[] =
+const TranslateId RID_STR_FORCENEWPAGE_CONST[] =
 {
     NC_("RID_STR_FORCENEWPAGE_CONST", "None"),
     NC_("RID_STR_FORCENEWPAGE_CONST", "Before Section"),
     NC_("RID_STR_FORCENEWPAGE_CONST", "After Section"),
     NC_("RID_STR_FORCENEWPAGE_CONST", "Before & After Section"),
-    nullptr
+    {}
 };
 
-const char* RID_STR_GROUPKEEPTOGETHER_CONST[] =
+const TranslateId RID_STR_GROUPKEEPTOGETHER_CONST[] =
 {
     NC_("RID_STR_GROUPKEEPTOGETHER_CONST", "Per Page"),
     NC_("RID_STR_GROUPKEEPTOGETHER_CONST", "Per Column"),
-    nullptr
+    {}
 };
 
-const char* RID_STR_REPORTPRINTOPTION_CONST[] =
+const TranslateId RID_STR_REPORTPRINTOPTION_CONST[] =
 {
     NC_("RID_STR_REPORTPRINTOPTION_CONST", "All Pages"),
     NC_("RID_STR_REPORTPRINTOPTION_CONST", "Not With Report Header"),
     NC_("RID_STR_REPORTPRINTOPTION_CONST", "Not With Report Footer"),
     NC_("RID_STR_REPORTPRINTOPTION_CONST", "Not With Report Header/Footer"),
-    nullptr
+    {}
 };
 
-const char* RID_STR_TYPE_CONST[] =
+const TranslateId RID_STR_TYPE_CONST[] =
 {
     NC_("RID_STR_TYPE_CONST", "Field or Formula"),
     NC_("RID_STR_TYPE_CONST", "Function"),
     NC_("RID_STR_TYPE_CONST", "Counter"),
     NC_("RID_STR_TYPE_CONST", "User defined Function"),
-    nullptr
+    {}
 };
 
-const char* RID_STR_BOOL[] =
+const TranslateId RID_STR_BOOL[] =
 {
     NC_("RID_STR_BOOL", "No"),
     NC_("RID_STR_BOOL", "Yes"),
-    nullptr
+    {}
 };
 
-const char* RID_STR_KEEPTOGETHER_CONST[] =
+const TranslateId RID_STR_KEEPTOGETHER_CONST[] =
 {
     NC_("RID_STR_KEEPTOGETHER_CONST", "No"),
     NC_("RID_STR_KEEPTOGETHER_CONST", "Whole Group"),
     NC_("RID_STR_KEEPTOGETHER_CONST", "With First Detail"),
-    nullptr
+    {}
 };
 
-const char* RID_STR_VERTICAL_ALIGN_CONST[] =
+const TranslateId RID_STR_VERTICAL_ALIGN_CONST[] =
 {
     NC_("RID_STR_VERTICAL_ALIGN_CONST", "Top"),
     NC_("RID_STR_VERTICAL_ALIGN_CONST", "Middle"),
     NC_("RID_STR_VERTICAL_ALIGN_CONST", "Bottom"),
-    nullptr
+    {}
 };
 
-const char* RID_STR_PARAADJUST_CONST[] =
+const TranslateId RID_STR_PARAADJUST_CONST[] =
 {
     NC_("RID_STR_PARAADJUST_CONST", "Left"),
     NC_("RID_STR_PARAADJUST_CONST", "Right"),
     NC_("RID_STR_PARAADJUST_CONST", "Block"),
     NC_("RID_STR_PARAADJUST_CONST", "Center"),
-    nullptr
+    {}
 };
 
 #endif

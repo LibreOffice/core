@@ -21,9 +21,10 @@
 
 #include <rtl/ustring.hxx>
 #include <svx/svxdllapi.h>
+#include <unotools/resmgr.hxx>
 
 SVXCORE_DLLPUBLIC std::locale SvxResLocale();
-SVXCORE_DLLPUBLIC OUString SvxResId(std::string_view aId);
+SVXCORE_DLLPUBLIC OUString SvxResId(TranslateId aId);
 
 #endif
 

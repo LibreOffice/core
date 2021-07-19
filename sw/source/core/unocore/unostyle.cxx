@@ -136,11 +136,11 @@ class SwStyleProperties_Impl;
         uno::Reference<beans::XPropertySetInfo> m_xPSInfo;
         SwGetPoolIdFromName m_aPoolId;
         OUString m_sName;
-        const char* m_pResId;
+        TranslateId m_pResId;
         GetCountOrName_t m_fGetCountOrName;
         CreateStyle_t m_fCreateStyle;
         TranslateIndex_t m_fTranslateIndex;
-        StyleFamilyEntry(SfxStyleFamily eFamily, sal_uInt16 nPropMapType, SwGetPoolIdFromName aPoolId, OUString const& sName, const char* pResId, GetCountOrName_t const & fGetCountOrName, CreateStyle_t const & fCreateStyle, TranslateIndex_t const & fTranslateIndex)
+        StyleFamilyEntry(SfxStyleFamily eFamily, sal_uInt16 nPropMapType, SwGetPoolIdFromName aPoolId, OUString const& sName, TranslateId pResId, GetCountOrName_t const & fGetCountOrName, CreateStyle_t const & fCreateStyle, TranslateIndex_t const & fTranslateIndex)
                 : m_eFamily(eFamily)
                 , m_nPropMapType(nPropMapType)
                 , m_xPSInfo(aSwMapProvider.GetPropertySet(nPropMapType)->getPropertySetInfo())
@@ -1546,7 +1546,7 @@ public:
     };
 };
 
-    const char* STR_POOLPAGE_ARY[] =
+    const TranslateId STR_POOLPAGE_ARY[] =
     {
         // Page styles
         STR_POOLPAGE_STANDARD,

@@ -25,6 +25,7 @@
 #include <com/sun/star/inspection/XPropertyControlFactory.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/Optional.hpp>
+#include <unotools/resmgr.hxx>
 
 #include <vector>
 
@@ -116,7 +117,7 @@ namespace pcr
         static css::uno::Reference< css::inspection::XPropertyControl >
             createListBoxControl(
                 const css::uno::Reference< css::inspection::XPropertyControlFactory >& _rxControlFactory,
-                const char** pTransIds, size_t nElements,
+                const TranslateId* pTransIds, size_t nElements,
                 bool _bReadOnlyControl
             );
 

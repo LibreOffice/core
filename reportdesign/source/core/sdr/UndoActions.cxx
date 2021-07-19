@@ -68,7 +68,7 @@ namespace rptui
 }
 
 
-OCommentUndoAction::OCommentUndoAction(SdrModel& _rMod,const char* pCommentID)
+OCommentUndoAction::OCommentUndoAction(SdrModel& _rMod, TranslateId pCommentID)
     :SdrUndoAction(_rMod)
 {
     m_pController = static_cast< OReportModel& >( _rMod ).getController();
@@ -91,7 +91,7 @@ OUndoContainerAction::OUndoContainerAction(SdrModel& _rMod
                                              ,Action _eAction
                                              ,const uno::Reference< container::XIndexContainer >& rContainer
                                              ,const Reference< XInterface > & xElem
-                                             ,const char* pCommentId)
+                                             ,TranslateId pCommentId)
                       :OCommentUndoAction(_rMod, pCommentId)
                       ,m_xElement(xElem)
                       ,m_xContainer(rContainer)
@@ -233,7 +233,7 @@ OUndoGroupSectionAction::OUndoGroupSectionAction(
     SdrModel& _rMod, Action _eAction,
     ::std::function<uno::Reference<report::XSection>(OGroupHelper*)> _pMemberFunction,
     const uno::Reference<report::XGroup>& _xGroup, const Reference<XInterface>& xElem,
-    const char* pCommentId)
+    TranslateId pCommentId)
     : OUndoContainerAction(_rMod, _eAction, nullptr, xElem, pCommentId)
     , m_aGroupHelper(_xGroup)
     , m_pMemberFunction(std::move(_pMemberFunction))
@@ -277,7 +277,7 @@ OUndoReportSectionAction::OUndoReportSectionAction(
     SdrModel& _rMod, Action _eAction,
     ::std::function<uno::Reference<report::XSection>(OReportHelper*)> _pMemberFunction,
     const uno::Reference<report::XReportDefinition>& _xReport, const Reference<XInterface>& xElem,
-    const char* pCommentId)
+    TranslateId pCommentId)
     : OUndoContainerAction(_rMod, _eAction, nullptr, xElem, pCommentId)
     , m_aReportHelper(_xReport)
     , m_pMemberFunction(std::move(_pMemberFunction))
@@ -323,7 +323,7 @@ void OUndoReportSectionAction::implReRemove( )
 }
 
 ORptUndoPropertyAction::ORptUndoPropertyAction(SdrModel& rNewMod, const PropertyChangeEvent& evt)
-                     :OCommentUndoAction(rNewMod,nullptr)
+                     :OCommentUndoAction(rNewMod,{})
                      ,m_xObj(evt.Source, UNO_QUERY)
                      ,m_aPropertyName(evt.PropertyName)
                      ,m_aNewValue(evt.NewValue)

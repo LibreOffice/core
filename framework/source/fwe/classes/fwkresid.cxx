@@ -18,8 +18,7 @@
  */
 
 #include <classes/fwkresid.hxx>
-#include <unotools/resmgr.hxx>
 
-OUString FwkResId(std::string_view aId) { return Translate::get(aId, Translate::Create("fwk")); }
+OUString FwkResId(TranslateId aId) { return Translate::get(aId, Translate::Create("fwk")); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

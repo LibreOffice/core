@@ -23,6 +23,9 @@
 #include <svl/svlresid.hxx>
 #include <unotools/resmgr.hxx>
 
-OUString SvlResId(std::string_view id) { return Translate::get(id, Translate::Create("svl")); }
+OUString SvlResId(TranslateId sContextAndId)
+{
+    return Translate::get(sContextAndId, Translate::Create("svl"));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
