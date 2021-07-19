@@ -23,9 +23,9 @@
 #include <tools/fldunit.hxx>
 #include <utility>
 
-#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
+#define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
 
-const std::pair<const char*, FieldUnit> RID_SVXSTR_FIELDUNIT_TABLE[] =
+const std::pair<TranslateId, FieldUnit> RID_SVXSTR_FIELDUNIT_TABLE[] =
 {
     { NC_("RID_SVXSTR_FIELDUNIT_TABLE", "Millimeter") , FieldUnit::MM },
     { NC_("RID_SVXSTR_FIELDUNIT_TABLE", "Centimeter") , FieldUnit::CM },

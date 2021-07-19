@@ -125,7 +125,7 @@ NameOrIndex* NameOrIndex::Clone(SfxItemPool* /*pPool*/) const
     Argument pPool2 can be null.
     If returned string equals NameOrIndex->GetName(), the name was already unique.
 */
-OUString NameOrIndex::CheckNamedItem( const NameOrIndex* pCheckItem, const sal_uInt16 nWhich, const SfxItemPool* pPool1, SvxCompareValueFunc pCompareValueFunc, const char* pPrefixResId, const XPropertyListRef &pDefaults )
+OUString NameOrIndex::CheckNamedItem( const NameOrIndex* pCheckItem, const sal_uInt16 nWhich, const SfxItemPool* pPool1, SvxCompareValueFunc pCompareValueFunc, TranslateId pPrefixResId, const XPropertyListRef &pDefaults )
 {
     bool bForceNew = false;
 
@@ -354,7 +354,7 @@ bool XLineStyleItem::GetPresentation
 {
     rText.clear();
 
-    const char* pId = nullptr;
+    TranslateId pId;
 
     switch( GetValue() )
     {
@@ -1756,7 +1756,7 @@ bool XFillStyleItem::GetPresentation
 {
     rText.clear();
 
-    const char* pId = nullptr;
+    TranslateId pId;
 
     switch( GetValue() )
     {

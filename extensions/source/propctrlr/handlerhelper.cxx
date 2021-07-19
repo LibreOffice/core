@@ -139,7 +139,7 @@ namespace pcr
     }
 
     Reference< XPropertyControl > PropertyHandlerHelper::createListBoxControl( const Reference< XPropertyControlFactory >& _rxControlFactory,
-                const char** pTransIds, size_t nElements, bool _bReadOnlyControl )
+                const TranslateId* pTransIds, size_t nElements, bool _bReadOnlyControl )
     {
         std::vector<OUString> aInitialListEntries;
         for (size_t i = 0; i < nElements; ++i)

@@ -1773,7 +1773,7 @@ void ScViewFunc::DeleteMulti( bool bRows )
 
     //  test if allowed
 
-    const char* pErrorId = nullptr;
+    TranslateId pErrorId;
     bool bNeedRefresh = false;
     for (size_t i = 0, n = aSpans.size(); i < n && !pErrorId; ++i)
     {

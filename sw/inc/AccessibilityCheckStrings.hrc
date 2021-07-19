@@ -11,7 +11,7 @@
 #ifndef INCLUDED_SW_INC_ACCESSIBILITY_CHECK_STRINGS_HRC
 #define INCLUDED_SW_INC_ACCESSIBILITY_CHECK_STRINGS_HRC
 
-#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
+#define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
 
 #define STR_NO_ALT                      NC_("STR_NO_ALT", "No alt text for graphic '%OBJECT_NAME%'")
 #define STR_TABLE_MERGE_SPLIT           NC_("STR_TABLE_MERGE_SPLIT", "Table '%OBJECT_NAME%' contains merges or splits")

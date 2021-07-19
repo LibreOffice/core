@@ -5751,7 +5751,7 @@ void ScDocFunc::ConvertFormulaToValue( const ScRange& rRange, bool bInteraction 
     aModificator.SetDocumentModified();
 }
 
-void ScDocFunc::EnterListAction(const char* pNameResId)
+void ScDocFunc::EnterListAction(TranslateId pNameResId)
 {
     OUString aUndo(ScResId(pNameResId));
     ViewShellId nViewShellId(-1);

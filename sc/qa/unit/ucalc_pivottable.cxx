@@ -466,7 +466,7 @@ void TestPivottable::testPivotTable()
     // This time clear the cache to refresh the data from the source range.
     CPPUNIT_ASSERT_MESSAGE("This datapilot should be based on sheet data.", pDPObj2->IsSheetData());
     o3tl::sorted_vector<ScDPObject*> aRefs;
-    const char* pErrId = pDPs->ReloadCache(pDPObj2, aRefs);
+    TranslateId pErrId = pDPs->ReloadCache(pDPObj2, aRefs);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Cache reload failed.", static_cast<const char*>(nullptr), pErrId);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Reloading a cache shouldn't remove any cache.",
                            static_cast<size_t>(1), pDPs->GetSheetCaches().size());
@@ -1718,7 +1718,7 @@ void TestPivottable::testPivotTableEmptyRows()
     m_pDoc->SetString(1, 2, 0, "B");
 
     o3tl::sorted_vector<ScDPObject*> aRefs;
-    const char* pErr = pDPs->ReloadCache(pDPObj, aRefs);
+    TranslateId pErr = pDPs->ReloadCache(pDPObj, aRefs);
     CPPUNIT_ASSERT_MESSAGE("Failed to reload cache.", !pErr);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("There should only be one pivot table linked to this cache.",
                            o3tl::sorted_vector<ScDPObject*>::size_type(1), aRefs.size());

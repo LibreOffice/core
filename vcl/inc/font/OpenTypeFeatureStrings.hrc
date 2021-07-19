@@ -20,7 +20,7 @@
 #ifndef INCLUDED_VCL_INC_FONT_OPENTYPEFEATRESTRINGS_HRC
 #define INCLUDED_VCL_INC_FONT_OPENTYPEFEATRESTRINGS_HRC
 
-#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
+#define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
 
 #define STR_FONT_FEATURE_ID_AALT          NC_("STR_FONT_FEATURE_ID_AALT", "Access All Alternates")
 #define STR_FONT_FEATURE_ID_AFRC          NC_("STR_FONT_FEATURE_ID_AFRC", "Alternative (Vertical) Fractions")

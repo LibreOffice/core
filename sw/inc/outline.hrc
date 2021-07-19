@@ -20,9 +20,9 @@
 #ifndef INCLUDED_SW_INC_OUTLINE_HRC
 #define INCLUDED_SW_INC_OUTLINE_HRC
 
-#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
+#define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
 
-const char* OUTLINE_STYLE[] =
+const TranslateId OUTLINE_STYLE[] =
 {
     NC_("numberingnamedialog|liststore1", "Untitled 1"),
     NC_("numberingnamedialog|liststore1", "Untitled 2"),

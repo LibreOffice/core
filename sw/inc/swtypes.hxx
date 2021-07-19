@@ -28,6 +28,7 @@
 #include <i18nlangtag/lang.h>
 #include <vcl/outdev.hxx>
 #include <svx/flagsdef.hxx>
+#include <unotools/resmgr.hxx>
 
 namespace com::sun::star {
     namespace linguistic2{
@@ -109,8 +110,8 @@ constexpr short lOutlineMinTextDistance = 216; // 0.15 inch = 0.38 cm
 #define INIT_SEQ_FLDTYPES   5
 
 // defined in sw/source/uibase/app/swmodule.cxx
-SW_DLLPUBLIC OUString SwResId(std::string_view aId);
-OUString SwResId(std::string_view aId, int nCardinality);
+SW_DLLPUBLIC OUString SwResId(TranslateId aId);
+OUString SwResId(TranslateNId aContextSingularPlural, int nCardinality);
 
 css::uno::Reference< css::linguistic2::XSpellChecker1 > GetSpellChecker();
 css::uno::Reference< css::linguistic2::XHyphenator >    GetHyphenator();

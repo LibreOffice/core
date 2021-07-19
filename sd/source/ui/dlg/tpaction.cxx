@@ -232,7 +232,7 @@ void SdTPAction::Construct()
     // fill Action-Listbox
     for (const presentation::ClickAction & rAction : maCurrentActions)
     {
-        const char* pRId = GetClickActionSdResId(rAction);
+        TranslateId pRId = GetClickActionSdResId(rAction);
         m_xLbAction->append_text(SdResId(pRId));
     }
 
@@ -798,7 +798,7 @@ OUString SdTPAction::GetEditText( bool bFullDocDestination )
     return aStr;
 }
 
-const char* SdTPAction::GetClickActionSdResId( presentation::ClickAction eCA )
+TranslateId SdTPAction::GetClickActionSdResId( presentation::ClickAction eCA )
 {
     switch( eCA )
     {
@@ -816,7 +816,7 @@ const char* SdTPAction::GetClickActionSdResId( presentation::ClickAction eCA )
         case presentation::ClickAction_STOPPRESENTATION: return STR_CLICK_ACTION_STOPPRESENTATION;
         default: OSL_FAIL( "No StringResource for ClickAction available!" );
     }
-    return nullptr;
+    return {};
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

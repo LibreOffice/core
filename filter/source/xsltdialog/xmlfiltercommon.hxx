@@ -20,6 +20,7 @@
 
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
+#include <unotools/resmgr.hxx>
 
 #include <string_view>
 #include <vector>
@@ -77,6 +78,6 @@ struct application_info_impl
 extern std::vector< application_info_impl > const & getApplicationInfos();
 extern OUString getApplicationUIName( std::u16string_view rServiceName );
 extern const application_info_impl* getApplicationInfo( std::u16string_view rServiceName );
-OUString XsltResId(std::string_view pId);
+OUString XsltResId(TranslateId pId);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

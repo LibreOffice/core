@@ -492,7 +492,7 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
             rSh.SetFrameFormat( pFormat );
         }
 
-        const char* pResId(nullptr);
+        TranslateId pResId;
         if( nError == ERRCODE_GRFILTER_OPENERROR )
             pResId = STR_GRFILTER_OPENERROR;
         else if( nError == ERRCODE_GRFILTER_IOERROR )
@@ -1522,9 +1522,9 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
 
                 sal_uLong nWord = selectionStats.nWord ? selectionStats.nWord : documentStats.nWord;
                 sal_uLong nChar = selectionStats.nChar ? selectionStats.nChar : documentStats.nChar;
-                const char* pResId = selectionStats.nWord ? STR_WORDCOUNT : STR_WORDCOUNT_NO_SELECTION;
-                const char* pWordResId = selectionStats.nWord ? STR_WORDCOUNT_WORDARG : STR_WORDCOUNT_WORDARG_NO_SELECTION;
-                const char* pCharResId = selectionStats.nWord ? STR_WORDCOUNT_CHARARG : STR_WORDCOUNT_CHARARG_NO_SELECTION;
+                TranslateId pResId = selectionStats.nWord ? STR_WORDCOUNT : STR_WORDCOUNT_NO_SELECTION;
+                TranslateNId pWordResId = selectionStats.nWord ? STR_WORDCOUNT_WORDARG : STR_WORDCOUNT_WORDARG_NO_SELECTION;
+                TranslateNId pCharResId = selectionStats.nWord ? STR_WORDCOUNT_CHARARG : STR_WORDCOUNT_CHARARG_NO_SELECTION;
 
                 const LocaleDataWrapper& rLocaleData = Application::GetSettings().GetUILocaleDataWrapper();
                 OUString aWordArg = SwResId(pWordResId, nWord).replaceAll("$1", rLocaleData.getNum(nWord, 0));

@@ -49,7 +49,7 @@ void ScFourierAnalysisDialog::Close()
     DoClose(ScFourierAnalysisDialogWrapper::GetChildWindowId());
 }
 
-const char* ScFourierAnalysisDialog::GetUndoNameId() { return STR_FOURIER_ANALYSIS; }
+TranslateId ScFourierAnalysisDialog::GetUndoNameId() { return STR_FOURIER_ANALYSIS; }
 
 ScRange ScFourierAnalysisDialog::ApplyOutput(ScDocShell* pDocShell)
 {

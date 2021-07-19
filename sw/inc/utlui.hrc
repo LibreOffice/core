@@ -20,9 +20,9 @@
 #ifndef INCLUDED_SW_INC_UTLUI_HRC
 #define INCLUDED_SW_INC_UTLUI_HRC
 
-#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
+#define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
 
-const char* RID_SHELLRES_AUTOFMTSTRS[] =
+const TranslateId RID_SHELLRES_AUTOFMTSTRS[] =
 {
     NC_("RID_SHELLRES_AUTOFMTSTRS", "Remove empty paragraphs"),
     NC_("RID_SHELLRES_AUTOFMTSTRS", "Use replacement table"),

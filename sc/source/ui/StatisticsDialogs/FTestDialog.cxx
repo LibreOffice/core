@@ -34,7 +34,7 @@ void ScFTestDialog::Close()
     DoClose( ScFTestDialogWrapper::GetChildWindowId() );
 }
 
-const char* ScFTestDialog::GetUndoNameId()
+TranslateId ScFTestDialog::GetUndoNameId()
 {
     return STR_FTEST_UNDO_NAME;
 }

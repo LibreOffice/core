@@ -19,9 +19,9 @@
 
 #pragma once
 
-#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
+#define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
 
-std::pair<const char*, ErrCode> const RID_BASIC_START[] =
+std::pair<TranslateId, ErrCode> const RID_BASIC_START[] =
 {
     { NC_("RID_BASIC_START", "Syntax error."), ERRCODE_BASIC_SYNTAX },
     { NC_("RID_BASIC_START", "Return without Gosub."), ERRCODE_BASIC_NO_GOSUB },
@@ -152,7 +152,7 @@ std::pair<const char*, ErrCode> const RID_BASIC_START[] =
     { NC_("RID_BASIC_START", "Too many DLL application clients."), ERRCODE_BASIC_TOO_MANY_DLL },
     { NC_("RID_BASIC_START", "For loop not initialized."), ERRCODE_BASIC_LOOP_NOT_INIT },
     { NC_("RID_BASIC_START", "$(ARG1)"), ERRCODE_BASIC_COMPAT },
-    { nullptr, ERRCODE_NONE }
+    { {}, ERRCODE_NONE }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

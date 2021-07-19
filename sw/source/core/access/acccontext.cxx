@@ -1434,7 +1434,7 @@ bool SwAccessibleContext::Select( SwPaM *pPaM, SdrObject *pObj,
     return bRet;
 }
 
-OUString SwAccessibleContext::GetResource(const char* pResId,
+OUString SwAccessibleContext::GetResource(TranslateId pResId,
                                           const OUString *pArg1,
                                           const OUString *pArg2)
 {

@@ -22,6 +22,7 @@
 
 #include <editeng/editengdllapi.h>
 #include <rtl/ustring.hxx>
+#include <unotools/resmgr.hxx>
 #include <memory>
 
 class GlobalEditData;
@@ -30,7 +31,7 @@ namespace editeng
 class SharedVclResources;
 }
 
-OUString EDITENG_DLLPUBLIC EditResId(std::string_view aId);
+OUString EDITENG_DLLPUBLIC EditResId(TranslateId aId);
 
 class EditDLL
 {

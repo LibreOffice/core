@@ -26,9 +26,9 @@
 #include <editeng/editids.hrc>
 #include <utility>
 
-#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
+#define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
 
-const std::pair<const char*, sal_uInt16> RID_ATTR_NAMES[] =
+const std::pair<TranslateId, sal_uInt16> RID_ATTR_NAMES[] =
 {
     { NC_("RID_ATTR_NAMES", "Scale")           ,           SID_ATTR_ZOOM },
     { NC_("RID_ATTR_NAMES", "Brush")           ,           SID_ATTR_BRUSH },

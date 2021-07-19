@@ -20,10 +20,10 @@
 #ifndef INCLUDED_SVX_INC_SWFRAMEPOSSTRINGS_HRC
 #define INCLUDED_SVX_INC_SWFRAMEPOSSTRINGS_HRC
 
-#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
+#define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
 
 //the following string have to match the (enum values) positions in svx/swframeposstrings.hxx!
-const char* RID_SVXSW_FRAMEPOSITIONS[] =
+const TranslateId RID_SVXSW_FRAMEPOSITIONS[] =
 {
     NC_("RID_SVXSW_FRAMEPOSITIONS", "Left"),
     NC_("RID_SVXSW_FRAMEPOSITIONS", "Right"),
