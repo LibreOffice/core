@@ -87,9 +87,9 @@ SwXMLTextParagraphExport::SwXMLTextParagraphExport(
         SwXMLExport& rExp,
          SvXMLAutoStylePoolP& _rAutoStylePool ) :
     XMLTextParagraphExport( rExp, _rAutoStylePool ),
-    aAppletClassId( SO3_APPLET_CLASSID ),
-    aPluginClassId( SO3_PLUGIN_CLASSID ),
-    aIFrameClassId( SO3_IFRAME_CLASSID )
+    m_aAppletClassId( SO3_APPLET_CLASSID ),
+    m_aPluginClassId( SO3_PLUGIN_CLASSID ),
+    m_aIFrameClassId( SO3_IFRAME_CLASSID )
 {
 }
 
@@ -198,7 +198,7 @@ void SwXMLTextParagraphExport::_collectTextEmbeddedAutoStyles(
     aStates.reserve(8);
     SvGlobalName aClassId( rObjRef->getClassID() );
 
-    if( aIFrameClassId == aClassId )
+    if( m_aIFrameClassId == aClassId )
     {
         lcl_addFrameProperties( rObjRef.GetObject(), aStates,
                GetAutoFramePropMapper()->getPropertySetMapper() );
@@ -228,15 +228,15 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
     SvGlobalName aClassId( rObjRef->getClassID() );
 
     SvEmbeddedObjectTypes nType = SV_EMBEDDED_OWN;
-    if( aPluginClassId == aClassId )
+    if( m_aPluginClassId == aClassId )
     {
         nType = SV_EMBEDDED_PLUGIN;
     }
-    else if( aAppletClassId == aClassId )
+    else if( m_aAppletClassId == aClassId )
     {
         nType = SV_EMBEDDED_APPLET;
     }
-    else if( aIFrameClassId == aClassId )
+    else if( m_aIFrameClassId == aClassId )
     {
         nType = SV_EMBEDDED_FRAME;
     }
