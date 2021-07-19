@@ -83,7 +83,6 @@ class VCLPLUG_QT5_PUBLIC Qt5Frame : public QObject, public SalFrame
     bool m_bNullRegion;
 
     bool m_bGraphicsInUse;
-    bool m_bGraphicsInvalid;
     SalFrameStyleFlags m_nStyle;
     Qt5Frame* m_pParent;
     PointerStyle m_ePointerStyle;
