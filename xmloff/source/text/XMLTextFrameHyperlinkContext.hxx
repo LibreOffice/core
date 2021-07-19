@@ -29,6 +29,7 @@ namespace com::sun::star {
     namespace beans { class XPropertySet; }
 }
 
+/// Used for hyperlinks attached to objects (drawing objects, text boxes, Writer frames)
 class XMLTextFrameHyperlinkContext : public SvXMLImportContext
 {
     OUString              sHRef;

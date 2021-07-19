@@ -20,6 +20,7 @@
 #include <sal/log.hxx>
 #include <sax/tools/converter.hxx>
 
+#include <xmloff/shapeimport.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/namespacemap.hxx>
 #include <xmloff/xmlnamespace.hxx>
@@ -27,6 +28,9 @@
 #include "XMLTextFrameContext.hxx"
 #include "XMLTextFrameHyperlinkContext.hxx"
 
+#include <com/sun/star/drawing/XShapes.hpp>
+
+using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::xml::sax;
@@ -105,6 +109,14 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTextFrameHyperlinkC
         pTextFrameContext->SetHyperlink( sHRef, sName, sTargetFrameName, bMap );
         pContext = pTextFrameContext;
         xFrameContext = pContext;
+    }
+    if (nElement == XML_ELEMENT(DRAW, XML_CUSTOM_SHAPE))
+    {
+        Reference<XShapes> xShapes;
+        SvXMLShapeContext* pShapeContext
+            = XMLShapeImportHelper::CreateGroupChildContext(GetImport(), nElement, xAttrList, xShapes);
+        pShapeContext->setHyperlink(sHRef);
+        pContext = pShapeContext;
     }
 
     if (!pContext)
