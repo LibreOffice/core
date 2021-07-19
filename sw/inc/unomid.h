@@ -57,6 +57,9 @@
 #define MID_CHAIN_NEXTNAME                      1
 #define MID_CHAIN_NAME                          2
 
+#define MID_TEXTBOX                             0
+#define MID_TEXTBOX_CONTENT                     1
+
 #define MID_LINENUMBER_COUNT                    0
 #define MID_LINENUMBER_STARTVALUE               1
 

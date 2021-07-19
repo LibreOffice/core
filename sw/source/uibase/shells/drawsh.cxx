@@ -370,9 +370,13 @@ void SwDrawShell::Execute(SfxRequest &rReq)
         {
             if (SdrObject* pObj = IsSingleFillableNonOLESelected())
             {
-                SwFrameFormat* pFrameFormat = ::FindFrameFormat(pObj);
-                if (pFrameFormat)
-                    SwTextBoxHelper::create(pFrameFormat, pObj->HasText());
+                uno::Reference<drawing::XShape> xShape(pObj->getUnoShape(), uno::UNO_QUERY);
+                if (xShape)
+                {
+                    SwTextBoxHelper::createTextBox(xShape, rSh.GetDoc(), pObj->HasText());
+                    if (auto pFormat = ::FindFrameFormat(pObj))
+                        SwTextBoxHelper::handleTextBox(pFormat);
+                }
             }
             break;
         }
@@ -380,9 +384,9 @@ void SwDrawShell::Execute(SfxRequest &rReq)
         {
             if (SdrObject* pObj = IsSingleFillableNonOLESelected())
             {
-                SwFrameFormat* pFrameFormat = ::FindFrameFormat(pObj);
-                if (pFrameFormat)
-                    SwTextBoxHelper::destroy(pFrameFormat);
+                uno::Reference<drawing::XShape> xShape(pObj->getUnoShape(), uno::UNO_QUERY);
+                if (xShape)
+                    SwTextBoxHelper::removeTextBox(xShape);
             }
             break;
         }
@@ -496,9 +500,10 @@ void SwDrawShell::GetState(SfxItemSet& rSet)
                 bool bDisable = true;
                 if (SdrObject* pObj = IsSingleFillableNonOLESelected())
                 {
-                    SwFrameFormat* pFrameFormat = ::FindFrameFormat(pObj);
+
+                    uno::Reference<drawing::XShape> xShape(pObj->getUnoShape(), uno::UNO_QUERY);
                     // Allow creating a TextBox only in case this is a draw format without a TextBox so far.
-                    if (pFrameFormat && pFrameFormat->Which() == RES_DRAWFRMFMT && !SwTextBoxHelper::isTextBox(pFrameFormat, RES_DRAWFRMFMT))
+                    if (xShape && !SwTextBoxHelper::isTextBox(xShape))
                     {
                         if (SdrObjCustomShape* pCustomShape = dynamic_cast<SdrObjCustomShape*>( pObj) )
                         {
@@ -519,9 +524,10 @@ void SwDrawShell::GetState(SfxItemSet& rSet)
                 bool bDisable = true;
                 if (SdrObject* pObj = IsSingleFillableNonOLESelected())
                 {
-                    SwFrameFormat* pFrameFormat = ::FindFrameFormat(pObj);
+                    uno::Reference<drawing::XShape> xShape(pObj->getUnoShape(), uno::UNO_QUERY);
+
                     // Allow removing a TextBox only in case it has one.
-                    if (pFrameFormat && SwTextBoxHelper::isTextBox(pFrameFormat, RES_DRAWFRMFMT))
+                    if (xShape && SwTextBoxHelper::isTextBox(xShape))
                         bDisable = false;
                 }
 

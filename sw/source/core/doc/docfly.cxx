@@ -76,7 +76,7 @@ size_t SwDoc::GetFlyCount( FlyCntType eType, bool bIgnoreTextBoxes ) const
     {
         const SwFrameFormat* pFlyFormat = rFormats[ i ];
 
-        if (bIgnoreTextBoxes && SwTextBoxHelper::isTextBox(pFlyFormat, RES_FLYFRMFMT))
+         if (bIgnoreTextBoxes && SwTextBoxHelper::isTextBox(pFlyFormat, RES_FLYFRMFMT))
             continue;
 
         if( RES_FLYFRMFMT != pFlyFormat->Which() )
@@ -577,7 +577,6 @@ bool SwDoc::SetFlyFrameAttr( SwFrameFormat& rFlyFormat, SfxItemSet& rSet )
 
     getIDocumentState().SetModified();
 
-    SwTextBoxHelper::syncFlyFrameAttr(rFlyFormat, rSet);
 
     return bRet;
 }
