@@ -205,7 +205,7 @@ class formatCharacter(UITestCase):
                 self.assertEqual(get_state_as_dict(x90deg)["Checked"], "true")
                 self.assertEqual(get_state_as_dict(xScalewidth)["Text"], "100%")
                 self.assertEqual(get_state_as_dict(xKerning)["Text"], "0.1 pt")
-                self.assertEqual(get_state_as_dict(xPairKerning)["Selected"], "false")
+                self.assertEqual(get_state_as_dict(xPairKerning)["Selected"], "true")
                 self.assertEqual(get_state_as_dict(xFitToLine)["Selected"], "true")
 
 

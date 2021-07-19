@@ -298,8 +298,9 @@ bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
     m_xDoc->SetDefault( SfxBoolItem( RES_COLLAPSING_BORDERS, true ) );
 // <-- collapsing
 
-    //#i16874# AutoKerning as default for new documents
-    m_xDoc->SetDefault( SvxAutoKernItem( true, RES_CHRATR_AUTOKERN ) );
+    //was true because of #i16874# AutoKerning as default for new documents
+    //set to false to resolve tdf#142940
+    m_xDoc->SetDefault( SvxAutoKernItem( false, RES_CHRATR_AUTOKERN ) );
 
     // #i42080# - Due to the several calls of method <SetDefault(..)>
     // at the document instance, the document is modified. Thus, reset this
