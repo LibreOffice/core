@@ -172,7 +172,7 @@ size_t RenderPDFBitmaps(const void* pBuffer, int nSize, std::vector<BitmapEx>& r
         const size_t nPageWidth = pointToPixel(nPageWidthPoints, fResolutionDPI);
         const size_t nPageHeight = pointToPixel(nPageHeightPoints, fResolutionDPI);
         std::unique_ptr<vcl::pdf::PDFiumBitmap> pPdfBitmap
-            = pPdfium->createBitmap(nPageWidth, nPageHeight, /*alpha=*/1);
+            = pPdfium->createBitmap(nPageWidth, nPageHeight, /*nAlpha=*/1);
         if (!pPdfBitmap)
             break;
 
@@ -185,8 +185,8 @@ size_t RenderPDFBitmaps(const void* pBuffer, int nSize, std::vector<BitmapEx>& r
         }
         const sal_uInt32 nColor = bTransparent ? 0x00000000 : 0xFFFFFFFF;
         pPdfBitmap->fillRect(0, 0, nPageWidth, nPageHeight, nColor);
-        pPdfBitmap->renderPageBitmap(pPdfDocument.get(), pPdfPage.get(), /*start_x=*/0,
-                                     /*start_y=*/0, nPageWidth, nPageHeight);
+        pPdfBitmap->renderPageBitmap(pPdfDocument.get(), pPdfPage.get(), /*nStartX=*/0,
+                                     /*nStartY=*/0, nPageWidth, nPageHeight);
 
         // Save the buffer as a bitmap.
         Bitmap aBitmap(Size(nPageWidth, nPageHeight), vcl::PixelFormat::N24_BPP);
