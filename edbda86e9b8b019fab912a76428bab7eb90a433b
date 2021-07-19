@@ -34,6 +34,24 @@
       "revId": "edbda86e9b8b019fab912a76428bab7eb90a433b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bad13c0d_73fdaf01",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-07-19T07:17:48Z",
+      "side": 1,
+      "message": "\"DOC/DOCX export\" can work; I think the helpful part is to clarify that this is an export problem, since the bugreport is misleading when it has FILEOPEN in its summary.",
+      "parentUuid": "4758193b_8f0e9383",
+      "revId": "edbda86e9b8b019fab912a76428bab7eb90a433b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
