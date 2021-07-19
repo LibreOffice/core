@@ -2514,6 +2514,17 @@ bool SvxShape::setPropertyValueImpl( const OUString&, const SfxItemPropertyMapEn
         return true;
     }
 
+    case OWN_ATTR_HYPERLINK:
+    {
+        OUString sHyperlink;
+        if (rValue >>= sHyperlink)
+        {
+            GetSdrObject()->setHyperlink(sHyperlink);
+            return true;
+        }
+        break;
+    }
+
     default:
     {
         return false;
@@ -2932,6 +2943,12 @@ bool SvxShape::getPropertyValueImpl( const OUString&, const SfxItemPropertyMapEn
                 rValue <<= xIf;
             }
         }
+        break;
+    }
+
+    case OWN_ATTR_HYPERLINK:
+    {
+        rValue <<= GetSdrObject()->getHyperlink();
         break;
     }
 
