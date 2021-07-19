@@ -57,6 +57,14 @@ class customSlideShow(UITestCase):
 #        delete.executeAction("CLICK",tuple())
 #        self.assertEqual(get_state_as_dict(customshowlist)["Children"], "0")
 
-
+    def test_tdf143125(self):
+        with self.ui_test.create_doc_in_start_center("impress"):
+            MainWindow = self.xUITest.getTopFocusWindow()
+            TemplateDialog = self.xUITest.getTopFocusWindow()
+            cancel = TemplateDialog.getChild("close")
+            self.ui_test.close_dialog_through_button(cancel)
+            with self.ui_test.execute_dialog_through_command(".uno:CustomShowDialog") as CustomSlideShows:
+                # Without the fix in place, this test would have crashed here
+                pass
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
