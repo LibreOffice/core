@@ -21,6 +21,8 @@
 #include <unoframe.hxx>
 #include <unodraw.hxx>
 #include <unotextrange.hxx>
+//#include <unotext.hxx>
+//#include <unotextcursor.hxx>
 #include <cmdid.h>
 #include <unomid.h>
 #include <unoprnms.hxx>
@@ -28,6 +30,7 @@
 #include <fmtsrnd.hxx>
 #include <frmfmt.hxx>
 #include <frameformats.hxx>
+//#include <unocrsrhelper.hxx>
 
 #include <editeng/unoprnms.hxx>
 #include <editeng/memberids.h>
@@ -62,6 +65,11 @@ void SwTextBoxHelper::create(SwFrameFormat* pShape, bool bCopyText)
     // If TextBox wasn't enabled previously
     if (pShape->GetAttrSet().HasItem(RES_CNTNT) && pShape->GetOtherTextBoxFormat())
         return;
+
+    uno::Reference<drawing::XShape> xpShape(pShape->FindRealSdrObject()->getUnoShape(),
+                                            uno::UNO_QUERY);
+    createTextBox(xpShape, pShape->GetDoc(), bCopyText);
+    return;
 
     // Store the current text content of the shape
     OUString sCopyableText;
@@ -168,6 +176,9 @@ void SwTextBoxHelper::create(SwFrameFormat* pShape, bool bCopyText)
     text::WritingMode eMode;
     if (xShapePropertySet->getPropertyValue(UNO_NAME_TEXT_WRITINGMODE) >>= eMode)
         syncProperty(pShape, RES_FRAMEDIR, 0, uno::makeAny(sal_Int16(eMode)));
+
+    // Save the reference to the textframe for later use:
+    xShapePropertySet->setPropertyValue(UNO_NAME_TEXT_BOX_CONTENT, uno::makeAny(xRealTextFrame));
 
     // Check if the shape had text before and move it to the new textframe
     if (!bCopyText || sCopyableText.isEmpty())
@@ -1318,6 +1329,121 @@ bool SwTextBoxHelper::DoTextBoxZOrderCorrection(SwFrameFormat* pShape)
                         "No Valid TextFrame!");
 
     return false;
+}
+
+bool SwTextBoxHelper::createTextBox(css::uno::Reference<css::drawing::XShape> xShape, SwDoc* pDoc,
+                                    bool bCopy)
+{
+    bool bRet = false;
+
+    if (pDoc && xShape)
+    {
+        //const auto pShape = dynamic_cast<SwXShape*>(xShape.get())->GetFrameFormat();
+        // if (pShape)
+        {
+            if (xShape->getShapeType() == "com.sun.star.drawing.GroupShape")
+            {
+                return bRet;
+            }
+            else
+            {
+                bRet = SwTextBoxHelper::createTextBox_lcl(xShape, pDoc, bCopy);
+            }
+        }
+    }
+    return bRet;
+}
+
+bool SwTextBoxHelper::isTextBox(css::uno::Reference<css::drawing::XShape> xShape)
+{
+    if (xShape)
+    {
+        uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
+        if (xShapeProps)
+        {
+            return xShapeProps->getPropertyValue(UNO_NAME_TEXT_BOX_CONTENT)
+                .get<uno::Reference<text::XTextFrame>>()
+                .is();
+        }
+    }
+
+    return false;
+}
+
+bool SwTextBoxHelper::createTextBox_lcl(css::uno::Reference<css::drawing::XShape> xShape,
+                                        SwDoc* pDoc, bool bCopy)
+{
+    bool bRet = false;
+    if (xShape && !isTextBox(xShape))
+    {
+        uno::Sequence<beans::PropertyValue> sSourceTextProps;
+        OUString sSourceText;
+        uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
+
+        if (bCopy)
+        {
+            uno::Reference<text::XSimpleText> xSrcText(xShape, uno::UNO_QUERY);
+
+            auto xCursor = xSrcText->createTextCursorByRange(xSrcText->getText()->getStart());
+            xCursor->gotoStart(false);
+            xCursor->gotoEnd(true);
+
+            sSourceText = xCursor->getText()->getString();
+            xCursor->getText()->setString("");
+            //auto& rCursor = (dynamic_cast<SwXTextCursor*>(xCursor.get())->GetCursor());
+            //::SwUnoCursorHelper::CreateSortDescriptor()
+            //rCursor.
+        }
+
+        uno::Reference<text::XTextFrame> xTextBox;
+
+        if (pDoc)
+        {
+            uno::Reference<text::XTextContent> xTextFrame(
+                SwXServiceProvider::MakeInstance(SwServiceType::TypeTextFrame, *pDoc),
+                uno::UNO_QUERY);
+            uno::Reference<text::XTextDocument> xTextDocument(pDoc->GetDocShell()->GetBaseModel(),
+                                                              uno::UNO_QUERY);
+            uno::Reference<text::XTextContentAppend> xTextContentAppend(xTextDocument->getText(),
+                                                                        uno::UNO_QUERY);
+            xTextContentAppend->appendTextContent(xTextFrame,
+                                                  uno::Sequence<beans::PropertyValue>());
+
+            xTextBox.set(xTextFrame, uno::UNO_QUERY);
+
+            uno::Reference<beans::XPropertySet> xTextboxPropertySet(xTextBox, uno::UNO_QUERY);
+            uno::Any aEmptyBorder = uno::makeAny(table::BorderLine2());
+            xTextboxPropertySet->setPropertyValue(UNO_NAME_TOP_BORDER, aEmptyBorder);
+            xTextboxPropertySet->setPropertyValue(UNO_NAME_BOTTOM_BORDER, aEmptyBorder);
+            xTextboxPropertySet->setPropertyValue(UNO_NAME_LEFT_BORDER, aEmptyBorder);
+            xTextboxPropertySet->setPropertyValue(UNO_NAME_RIGHT_BORDER, aEmptyBorder);
+
+            xTextboxPropertySet->setPropertyValue(UNO_NAME_FILL_TRANSPARENCE,
+                                                  uno::makeAny(sal_Int32(100)));
+
+            xTextboxPropertySet->setPropertyValue(UNO_NAME_SIZE_TYPE,
+                                                  uno::makeAny(text::SizeType::FIX));
+
+            xTextboxPropertySet->setPropertyValue(UNO_NAME_SURROUND,
+                                                  uno::makeAny(text::WrapTextMode_THROUGH));
+
+            uno::Reference<container::XNamed> xNamed(xTextBox, uno::UNO_QUERY);
+            xNamed->setName(pDoc->GetUniqueFrameName());
+        }
+
+        if (xTextBox && xShapeProps)
+        {
+            xShapeProps->setPropertyValue(UNO_NAME_TEXT_BOX_CONTENT, uno::makeAny(xTextBox));
+            bRet = true;
+
+            if (sSourceText.getLength())
+            {
+                uno::Reference<text::XTextAppend> xTextAppend(xTextBox->getText(), uno::UNO_QUERY);
+                xTextAppend->appendTextPortion(sSourceText, sSourceTextProps);
+            }
+        }
+    }
+    return bRet;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
