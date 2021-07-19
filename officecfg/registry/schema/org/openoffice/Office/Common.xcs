@@ -5663,14 +5663,6 @@
         </info>
         <value>false</value>
       </prop>
-      <prop oor:name="CollectUsageInformation" oor:type="xs:boolean" oor:nillable="false">
-        <info>
-          <desc>Determines whether the usage information (like what actions
-          the user has performed) can be collected, and potentially sent for
-          examination.</desc>
-        </info>
-        <value>false</value>
-      </prop>
       <prop oor:name="CrashReport" oor:type="xs:boolean" oor:nillable="false">
         <!-- UIHints: Tools - Options - General -->
         <info>
