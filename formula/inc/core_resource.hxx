@@ -21,8 +21,8 @@
 
 #include <rtl/ustring.hxx>
 #include <formula/formuladllapi.h>
-#include <string_view>
+#include <unotools/resmgr.hxx>
 
-FORMULA_DLLPUBLIC OUString ForResId(std::string_view aId);
+FORMULA_DLLPUBLIC OUString ForResId(TranslateId aId);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

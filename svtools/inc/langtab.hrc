@@ -21,9 +21,9 @@
 
 #include <i18nlangtag/lang.h>
 
-#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
+#define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
 
-const std::pair<const char*, LanguageType> STR_ARR_SVT_LANGUAGE_TABLE[] =
+const std::pair<TranslateId, LanguageType> STR_ARR_SVT_LANGUAGE_TABLE[] =
 {
     { NC_("STR_ARR_SVT_LANGUAGE_TABLE", "[None]") , LANGUAGE_NONE },
     { NC_("STR_ARR_SVT_LANGUAGE_TABLE", "Unknown") , LANGUAGE_DONTKNOW },

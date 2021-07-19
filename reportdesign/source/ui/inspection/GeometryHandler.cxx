@@ -634,13 +634,13 @@ beans::PropertyState SAL_CALL GeometryHandler::getPropertyState(const OUString &
 void GeometryHandler::implCreateListLikeControl(
         const uno::Reference< inspection::XPropertyControlFactory >& _rxControlFactory
         ,inspection::LineDescriptor & out_Descriptor
-        ,const char** pResId
+        ,const TranslateId* pResId
         ,bool _bReadOnlyControl
         ,bool _bTrueIfListBoxFalseIfComboBox
     )
 {
     std::vector<OUString> aList;
-    for (const char** pItem = pResId; *pItem; ++pItem)
+    for (const TranslateId* pItem = pResId; *pItem; ++pItem)
         aList.push_back(RptResId(*pItem));
     implCreateListLikeControl(_rxControlFactory, out_Descriptor, aList, _bReadOnlyControl, _bTrueIfListBoxFalseIfComboBox);
 }
@@ -724,7 +724,7 @@ inspection::LineDescriptor SAL_CALL GeometryHandler::describePropertyLine(const 
         case PROPERTY_ID_BACKTRANSPARENT:
         case PROPERTY_ID_CONTROLBACKGROUNDTRANSPARENT:
             {
-                const char** pResId = RID_STR_BOOL;
+                const TranslateId* pResId = RID_STR_BOOL;
                 if ( PROPERTY_ID_KEEPTOGETHER == nId && uno::Reference< report::XGroup>(m_xReportComponent,uno::UNO_QUERY).is())
                     pResId = RID_STR_KEEPTOGETHER_CONST;
                 implCreateListLikeControl(_xControlFactory,aOut,pResId,false,true);
@@ -892,10 +892,10 @@ beans::Property GeometryHandler::getProperty(const OUString & PropertyName)
         return beans::Property();
     return *pFind;
 }
-uno::Any GeometryHandler::getConstantValue(bool _bToControlValue,const char** pResId,const uno::Any& _aValue,const OUString& _sConstantName,const OUString & PropertyName )
+uno::Any GeometryHandler::getConstantValue(bool _bToControlValue,const TranslateId* pResId,const uno::Any& _aValue,const OUString& _sConstantName,const OUString & PropertyName )
 {
     std::vector<OUString> aList;
-    for (const char** pItem = pResId; *pItem; ++pItem)
+    for (const TranslateId* pItem = pResId; *pItem; ++pItem)
         aList.push_back(RptResId(*pItem));
     uno::Sequence< OUString > aSeq(aList.size());
     for (size_t i = 0; i < aList.size(); ++i)
@@ -1037,7 +1037,7 @@ uno::Any SAL_CALL GeometryHandler::convertToPropertyValue(const OUString & Prope
 
                 sal_uInt32 nFound(RESARRAY_INDEX_NOTFOUND);
                 sal_uInt32 i = 0;
-                for (const char** pItem = RID_STR_TYPE_CONST; *pItem; ++pItem)
+                for (const TranslateId* pItem = RID_STR_TYPE_CONST; *pItem; ++pItem)
                 {
                     if (sValue == RptResId(*pItem))
                     {
@@ -1060,7 +1060,7 @@ uno::Any SAL_CALL GeometryHandler::convertToPropertyValue(const OUString & Prope
 
                 sal_uInt32 nFound(RESARRAY_INDEX_NOTFOUND);
                 sal_uInt32 i = 0;
-                for (const char** pItem = RID_STR_VERTICAL_ALIGN_CONST; *pItem; ++pItem)
+                for (const TranslateId* pItem = RID_STR_VERTICAL_ALIGN_CONST; *pItem; ++pItem)
                 {
                     if (sValue == RptResId(*pItem))
                     {
@@ -1080,7 +1080,7 @@ uno::Any SAL_CALL GeometryHandler::convertToPropertyValue(const OUString & Prope
 
                 sal_uInt32 nFound(RESARRAY_INDEX_NOTFOUND);
                 sal_uInt32 i = 0;
-                for (const char** pItem = RID_STR_PARAADJUST_CONST; *pItem; ++pItem)
+                for (const TranslateId* pItem = RID_STR_PARAADJUST_CONST; *pItem; ++pItem)
                 {
                     if (sValue == RptResId(*pItem))
                     {

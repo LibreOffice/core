@@ -119,7 +119,7 @@ namespace abp
 
     OUString OAddressBookSourcePilot::getStateDisplayName( WizardState _nState ) const
     {
-        const char* pResId = nullptr;
+        TranslateId pResId;
         switch ( _nState )
         {
             case STATE_SELECT_ABTYPE:        pResId = RID_STR_SELECT_ABTYPE; break;

@@ -20,7 +20,7 @@ namespace
 {
 
 struct StatisticCalculation {
-    const char* aCalculationNameId;
+    TranslateId aCalculationNameId;
     const char* aFormula;
 };
 
@@ -41,7 +41,7 @@ const StatisticCalculation lclCalcDefinitions[] =
     { STRID_CALC_MAX,            "=MAX(%RANGE%)"},
     { STRID_CALC_SUM,            "=SUM(%RANGE%)"},
     { STRID_CALC_COUNT,          "=COUNT(%RANGE%)" },
-    { nullptr,                   nullptr }
+    { {},                        nullptr }
 };
 
 }
@@ -63,7 +63,7 @@ void ScDescriptiveStatisticsDialog::Close()
     DoClose( ScDescriptiveStatisticsDialogWrapper::GetChildWindowId() );
 }
 
-const char* ScDescriptiveStatisticsDialog::GetUndoNameId()
+TranslateId ScDescriptiveStatisticsDialog::GetUndoNameId()
 {
     return STR_DESCRIPTIVE_STATISTICS_UNDO_NAME;
 }

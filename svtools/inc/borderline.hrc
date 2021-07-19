@@ -10,9 +10,9 @@
 
 #include <editeng/borderline.hxx>
 
-#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
+#define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
 
-const std::pair<const char*, SvxBorderLineStyle> RID_SVXSTR_BORDERLINE[] =
+const std::pair<TranslateId, SvxBorderLineStyle> RID_SVXSTR_BORDERLINE[] =
 {
     { NC_("RID_SVXSTR_BORDERLINE", "None"), SvxBorderLineStyle::NONE },
     { NC_("RID_SVXSTR_BORDERLINE", "Solid"), SvxBorderLineStyle::SOLID },

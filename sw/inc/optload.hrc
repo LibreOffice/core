@@ -23,9 +23,9 @@
 #include <tools/fldunit.hxx>
 #include <utility>
 
-#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
+#define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
 
-const std::pair<const char*, FieldUnit> STR_ARR_METRIC[] =
+const std::pair<TranslateId, FieldUnit> STR_ARR_METRIC[] =
 {
     { NC_("STR_ARR_METRIC", "Millimeter") , FieldUnit::MM },
     { NC_("STR_ARR_METRIC", "Centimeter") , FieldUnit::CM },

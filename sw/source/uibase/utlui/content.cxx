@@ -238,7 +238,7 @@ SwTOXBaseContent::~SwTOXBaseContent()
 {
 }
 
-static const char* STR_CONTENT_TYPE_ARY[] =
+const TranslateId STR_CONTENT_TYPE_ARY[] =
 {
     STR_CONTENT_TYPE_OUTLINE,
     STR_CONTENT_TYPE_TABLE,
@@ -255,7 +255,7 @@ static const char* STR_CONTENT_TYPE_ARY[] =
     STR_CONTENT_TYPE_TEXTFIELD
 };
 
-static const char* STR_CONTENT_TYPE_SINGLE_ARY[] =
+const TranslateId STR_CONTENT_TYPE_SINGLE_ARY[] =
 {
     STR_CONTENT_TYPE_SINGLE_OUTLINE,
     STR_CONTENT_TYPE_SINGLE_TABLE,
@@ -1038,7 +1038,7 @@ enum STR_CONTEXT_IDX
 
 }
 
-static const char* STR_CONTEXT_ARY[] =
+const TranslateId STR_CONTEXT_ARY[] =
 {
     STR_OUTLINE_LEVEL,
     STR_DRAGMODE,

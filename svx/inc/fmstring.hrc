@@ -20,9 +20,9 @@
 #ifndef INCLUDED_SVX_INC_FMSTRING_HRC
 #define INCLUDED_SVX_INC_FMSTRING_HRC
 
-#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
+#define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
 
-const char* RID_RSC_SQL_INTERNATIONAL[] =
+const TranslateId RID_RSC_SQL_INTERNATIONAL[] =
 {
     NC_("RID_RSC_SQL_INTERNATIONAL", "LIKE"),
     NC_("RID_RSC_SQL_INTERNATIONAL", "NOT"),

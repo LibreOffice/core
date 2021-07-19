@@ -17,11 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <unotools/resmgr.hxx>
 #include <svx/dialmgr.hxx>
 
 std::locale SvxResLocale() { return Translate::Create("svx"); }
 
-OUString SvxResId(std::string_view aId) { return Translate::get(aId, SvxResLocale()); }
+OUString SvxResId(TranslateId aId) { return Translate::get(aId, SvxResLocale()); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

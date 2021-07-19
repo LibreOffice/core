@@ -904,7 +904,7 @@ bool SvxPrintItem::GetPresentation
     OUString&           rText, const IntlWrapper&
 )   const
 {
-    const char* pId = RID_SVXITEMS_PRINT_FALSE;
+    TranslateId pId = RID_SVXITEMS_PRINT_FALSE;
 
     if ( GetValue() )
         pId = RID_SVXITEMS_PRINT_TRUE;
@@ -925,7 +925,7 @@ bool SvxOpaqueItem::GetPresentation
     OUString&           rText, const IntlWrapper&
 )   const
 {
-    const char* pId = RID_SVXITEMS_OPAQUE_FALSE;
+    TranslateId pId = RID_SVXITEMS_OPAQUE_FALSE;
 
     if ( GetValue() )
         pId = RID_SVXITEMS_OPAQUE_TRUE;
@@ -993,7 +993,7 @@ bool SvxProtectItem::GetPresentation
     OUString&           rText, const IntlWrapper&
 )   const
 {
-    const char* pId = RID_SVXITEMS_PROT_CONTENT_FALSE;
+    TranslateId pId = RID_SVXITEMS_PROT_CONTENT_FALSE;
 
     if ( bCntnt )
         pId = RID_SVXITEMS_PROT_CONTENT_TRUE;
@@ -1185,7 +1185,7 @@ sal_uInt16 SvxShadowItem::CalcShadowSpace( SvxShadowItemSide nShadow ) const
     return nSpace;
 }
 
-static const char* RID_SVXITEMS_SHADOW[] =
+static TranslateId RID_SVXITEMS_SHADOW[] =
 {
     RID_SVXITEMS_SHADOW_NONE,
     RID_SVXITEMS_SHADOW_TOPLEFT,
@@ -1207,7 +1207,7 @@ bool SvxShadowItem::GetPresentation
         case SfxItemPresentation::Nameless:
         {
             rText = ::GetColorString( aShadowColor ) + cpDelim;
-            const char* pId = RID_SVXITEMS_TRANSPARENT_FALSE;
+            TranslateId pId = RID_SVXITEMS_TRANSPARENT_FALSE;
 
             if ( aShadowColor.IsTransparent() )
                 pId = RID_SVXITEMS_TRANSPARENT_TRUE;
@@ -1224,7 +1224,7 @@ bool SvxShadowItem::GetPresentation
                     ::GetColorString( aShadowColor ) +
                     cpDelim;
 
-            const char* pId = RID_SVXITEMS_TRANSPARENT_FALSE;
+            TranslateId pId = RID_SVXITEMS_TRANSPARENT_FALSE;
             if ( aShadowColor.IsTransparent() )
                 pId = RID_SVXITEMS_TRANSPARENT_TRUE;
             rText += EditResId(pId) +
@@ -2571,7 +2571,7 @@ bool SvxFormatBreakItem::GetPresentation
 
 OUString SvxFormatBreakItem::GetValueTextByPos( sal_uInt16 nPos )
 {
-    static const char* RID_SVXITEMS_BREAK[] =
+    static TranslateId RID_SVXITEMS_BREAK[] =
     {
         RID_SVXITEMS_BREAK_NONE,
         RID_SVXITEMS_BREAK_COLUMN_BEFORE,
@@ -2655,7 +2655,7 @@ bool SvxFormatKeepItem::GetPresentation
     OUString&           rText, const IntlWrapper&
     ) const
 {
-    const char* pId = RID_SVXITEMS_FMTKEEP_FALSE;
+    TranslateId pId = RID_SVXITEMS_FMTKEEP_FALSE;
 
     if ( GetValue() )
         pId = RID_SVXITEMS_FMTKEEP_TRUE;
@@ -3113,7 +3113,7 @@ bool SvxBrushItem::GetPresentation
     if ( GPOS_NONE  == eGraphicPos )
     {
         rText = ::GetColorString( aColor ) + cpDelim;
-        const char* pId = RID_SVXITEMS_TRANSPARENT_FALSE;
+        TranslateId pId = RID_SVXITEMS_TRANSPARENT_FALSE;
 
         if ( aColor.IsTransparent() )
             pId = RID_SVXITEMS_TRANSPARENT_TRUE;
@@ -3366,9 +3366,9 @@ SvxFrameDirectionItem* SvxFrameDirectionItem::Clone( SfxItemPool * ) const
     return new SvxFrameDirectionItem( *this );
 }
 
-const char* getFrmDirResId(size_t nIndex)
+TranslateId getFrmDirResId(size_t nIndex)
 {
-    const char* const RID_SVXITEMS_FRMDIR[] =
+    TranslateId const RID_SVXITEMS_FRMDIR[] =
     {
         RID_SVXITEMS_FRMDIR_HORI_LEFT_TOP,
         RID_SVXITEMS_FRMDIR_HORI_RIGHT_TOP,

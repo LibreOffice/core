@@ -19,11 +19,12 @@
 
 #pragma once
 
-#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
+#define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
 
 #include <rtl/ustring.hxx>
 #include <config_python.h>
 #include <tuple>
+#include <unotools/resmgr.hxx>
 
 /*
  * std:tuple consists of <text, uri, image>
@@ -44,7 +45,7 @@
    * images are scaled to 150x150px; const ThumbSize() in tipoftheday.cxx
 */
 
-const std::tuple<const char*, OUString, OUString> TIPOFTHEDAY_STRINGARRAY[] =
+const std::tuple<TranslateId, OUString, OUString> TIPOFTHEDAY_STRINGARRAY[] =
 {
      { NC_("RID_CUI_TIPOFTHEDAY", "%PRODUCTNAME offers a variety of user interface options to make you feel at home"), ".uno:ToolbarModeUI", "toolbarmode.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Need to allow changes to parts of a read-only document in Writer? Insert frames or sections that can authorize changes."), "https://help.libreoffice.org/%PRODUCTVERSION/%LANGUAGENAME/text/swriter/guide/section_edit.html", "tipoftheday_w.png"}, //local help missing

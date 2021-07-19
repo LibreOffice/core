@@ -66,7 +66,7 @@ namespace
     private:
         OUString  m_label;
     public:
-        explicit LabelProvider(const char* labelResourceID)
+        explicit LabelProvider(TranslateId labelResourceID)
             : m_label(DBA_RES(labelResourceID))
         {
         }
@@ -121,7 +121,7 @@ namespace
         std::shared_ptr< LabelProvider > const & getLabelProvider( SQLExceptionInfo::TYPE _eType, bool _bSubLabel ) const
         {
             std::shared_ptr< LabelProvider >* ppProvider( &m_pErrorLabel );
-            const char* pLabelID( STR_EXCEPTION_ERROR );
+            TranslateId pLabelID( STR_EXCEPTION_ERROR );
 
             switch ( _eType )
             {

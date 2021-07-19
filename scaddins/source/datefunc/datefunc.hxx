@@ -30,6 +30,7 @@
 #include <com/sun/star/sheet/addin/XDateFunctions.hpp>
 #include <com/sun/star/sheet/addin/XMiscFunctions.hpp>
 #include <cppuhelper/implbase.hxx>
+#include <unotools/resmgr.hxx>
 
 namespace com::sun::star::lang { class XMultiServiceFactory; }
 
@@ -46,8 +47,8 @@ enum class ScaCategory
 struct ScaFuncDataBase
 {
     const char*                 pIntName;           // internal name (get***)
-    const char*                 pUINameID;          // resource ID to UI name
-    const char**                pDescrID;           // resource ID to description, parameter names and ~ description
+    TranslateId                 pUINameID;          // resource ID to UI name
+    const TranslateId*          pDescrID;           // resource ID to description, parameter names and ~ description
     const char**                pCompListID;        // list of valid names
     sal_uInt16                  nParamCount;        // number of named / described parameters
     ScaCategory                 eCat;               // function category
@@ -59,8 +60,8 @@ class ScaFuncData final
 {
 private:
     OUString                    aIntName;           // internal name (get***)
-    const char*                 pUINameID;          // resource ID to UI name
-    const char**                pDescrID;           // leads also to parameter descriptions!
+    TranslateId                 pUINameID;          // resource ID to UI name
+    const TranslateId*          pDescrID;           // leads also to parameter descriptions!
     sal_uInt16                  nParamCount;        // num of parameters
     std::vector<OUString>       aCompList;          // list of all valid names
     ScaCategory                 eCat;               // function category
@@ -70,8 +71,8 @@ private:
 public:
                                 ScaFuncData(const ScaFuncDataBase& rBaseData);
 
-    const char*          GetUINameID() const     { return pUINameID; }
-    const char**         GetDescrID() const      { return pDescrID; }
+    const TranslateId &  GetUINameID() const     { return pUINameID; }
+    const TranslateId*    GetDescrID() const      { return pDescrID; }
     ScaCategory          GetCategory() const     { return eCat; }
     bool                 IsDouble() const        { return bDouble; }
 
@@ -115,12 +116,12 @@ private:
     void                        InitData();
 
     /// @throws css::uno::RuntimeException
-    OUString                    GetFuncDescrStr(const char** pResId, sal_uInt16 nStrIndex);
+    OUString                    GetFuncDescrStr(const TranslateId* pResId, sal_uInt16 nStrIndex);
 
 public:
                                 ScaDateAddIn();
 
-    OUString ScaResId(std::string_view aId);
+    OUString ScaResId(TranslateId aId);
 
                                 // XAddIn
     virtual OUString SAL_CALL getProgrammaticFuntionName( const OUString& aDisplayName ) override;

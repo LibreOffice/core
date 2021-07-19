@@ -395,7 +395,7 @@ DeactivateRC ScaleTabPage::DeactivatePage(SfxItemSet* pItemSet)
         nStepFmt = 0;
 
     weld::Widget* pControl = nullptr;
-    const char* pErrStrId = nullptr;
+    TranslateId pErrStrId;
     double fDummy;
 
     fMax = m_xFmtFldMax->GetFormatter().GetValue();
@@ -583,9 +583,9 @@ void ScaleTabPage::ShowAxisOrigin( bool bShowOrigin )
         m_bShowAxisOrigin = true;
 }
 
-bool ScaleTabPage::ShowWarning(const char* pResIdMessage, weld::Widget* pControl /* = nullptr */)
+bool ScaleTabPage::ShowWarning(TranslateId pResIdMessage, weld::Widget* pControl /* = nullptr */)
 {
-    if (pResIdMessage == nullptr)
+    if (!pResIdMessage)
         return false;
 
     std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(GetFrameWeld(),

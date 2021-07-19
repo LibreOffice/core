@@ -19,7 +19,7 @@
 
 #pragma once
 
-#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
+#define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
 
 // function names as accessible from cells
 #define PRICING_FUNCNAME_OptBarrier                     NC_("PRICING_FUNCNAME_OptBarrier", "OPT_BARRIER")

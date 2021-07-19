@@ -195,7 +195,7 @@ SdrUndoObj::SdrUndoObj(SdrObject& rNewObj)
 {
 }
 
-OUString SdrUndoObj::GetDescriptionStringForObject( const SdrObject& _rForObject, const char* pStrCacheID, bool bRepeat )
+OUString SdrUndoObj::GetDescriptionStringForObject( const SdrObject& _rForObject, TranslateId pStrCacheID, bool bRepeat )
 {
     const OUString rStr {SvxResId(pStrCacheID)};
 
@@ -209,7 +209,7 @@ OUString SdrUndoObj::GetDescriptionStringForObject( const SdrObject& _rForObject
     return rStr.replaceAt(nPos, 2, _rForObject.TakeObjNameSingul());
 }
 
-OUString SdrUndoObj::ImpGetDescriptionStr(const char* pStrCacheID, bool bRepeat) const
+OUString SdrUndoObj::ImpGetDescriptionStr(TranslateId pStrCacheID, bool bRepeat) const
 {
     if ( pObj )
         return GetDescriptionStringForObject( *pObj, pStrCacheID, bRepeat );
@@ -1330,7 +1330,7 @@ void SdrUndoPage::ImpMovePage(sal_uInt16 nOldNum, sal_uInt16 nNewNum)
     }
 }
 
-OUString SdrUndoPage::ImpGetDescriptionStr(const char* pStrCacheID)
+OUString SdrUndoPage::ImpGetDescriptionStr(TranslateId pStrCacheID)
 {
     return SvxResId(pStrCacheID);
 }

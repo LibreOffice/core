@@ -50,7 +50,7 @@ using namespace ::com::sun::star::beans;
 using ::com::sun::star::util::URL;
 using ::com::sun::star::sdb::application::NamedDatabaseObject;
 
-TaskEntry::TaskEntry( const char* _pAsciiUNOCommand, const char* _pHelpID, const char* pTitleResourceID, bool _bHideWhenDisabled )
+TaskEntry::TaskEntry( const char* _pAsciiUNOCommand, TranslateId _pHelpID, TranslateId pTitleResourceID, bool _bHideWhenDisabled )
     :sUNOCommand( OUString::createFromAscii( _pAsciiUNOCommand ) )
     ,pHelpID( _pHelpID )
     ,sTitle( DBA_RES(pTitleResourceID) )
@@ -60,7 +60,7 @@ TaskEntry::TaskEntry( const char* _pAsciiUNOCommand, const char* _pHelpID, const
 
 void OTasksWindow::updateHelpText()
 {
-    const char* pHelpTextId = nullptr;
+    TranslateId pHelpTextId;
     int nCurEntry = m_xTreeView->get_selected_index();
     if (nCurEntry != -1)
         pHelpTextId = reinterpret_cast<TaskEntry*>(m_xTreeView->get_id(nCurEntry).toUInt64())->pHelpID;
@@ -135,7 +135,7 @@ OTasksWindow::~OTasksWindow()
     Clear();
 }
 
-void OTasksWindow::setHelpText(const char* pId)
+void OTasksWindow::setHelpText(TranslateId pId)
 {
     if (pId)
         m_xHelpText->set_text(DBA_RES(pId));
@@ -208,7 +208,7 @@ OApplicationDetailView::OApplicationDetailView(weld::Container* pParent, OAppBor
     , m_xTasksParent(m_xBuilder->weld_container("tasks"))
     , m_xContainerParent(m_xBuilder->weld_container("container"))
     , m_xTasks(new dbaui::OTitleWindow(m_xTasksParent.get(), STR_TASKS))
-    , m_xTitleContainer(new dbaui::OTitleWindow(m_xContainerParent.get(), nullptr))
+    , m_xTitleContainer(new dbaui::OTitleWindow(m_xContainerParent.get(), TranslateId()))
     , m_rBorderWin(rBorder)
 {
     m_xControlHelper = std::make_shared<OAppDetailPageHelper>(m_xTitleContainer->getChildContainer(), m_rBorderWin, ePreviewMode);

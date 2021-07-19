@@ -29,6 +29,7 @@
 #include <com/sun/star/task/InteractionClassification.hpp>
 
 #include <vcl/errcode.hxx>
+#include <unotools/resmgr.hxx>
 
 #include <unordered_map>
 #include <vector>
@@ -251,10 +252,10 @@ private:
 
 class ErrorResource
 {
-    const std::pair<const char*, ErrCode>* m_pStringArray;
+    const std::pair<TranslateId, ErrCode>* m_pStringArray;
     const std::locale& m_rResLocale;
 public:
-    explicit ErrorResource(const std::pair<const char*, ErrCode>* pStringArray, const std::locale& rResLocale)
+    explicit ErrorResource(const std::pair<TranslateId, ErrCode>* pStringArray, const std::locale& rResLocale)
         : m_pStringArray(pStringArray)
         , m_rResLocale(rResLocale)
     {

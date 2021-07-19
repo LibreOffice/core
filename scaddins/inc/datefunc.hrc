@@ -19,9 +19,11 @@
 
 #pragma once
 
-#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
+#include <unotools/resmgr.hxx>
 
-const char* DATE_FUNCDESC_DiffWeeks[] =
+#define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
+
+const TranslateId DATE_FUNCDESC_DiffWeeks[] =
 {
     NC_("DATE_FUNCDESC_DiffWeeks", "Calculates the number of weeks in a specific period"),
     NC_("DATE_FUNCDESC_DiffWeeks", "Start date"),
@@ -32,7 +34,7 @@ const char* DATE_FUNCDESC_DiffWeeks[] =
     NC_("DATE_FUNCDESC_DiffWeeks", "Type of calculation: Type=0 means the time interval, Type=1 means calendar weeks.")
 };
 
-const char* DATE_FUNCDESC_DiffMonths[] =
+const TranslateId DATE_FUNCDESC_DiffMonths[] =
 {
     NC_("DATE_FUNCDESC_DiffMonths", "Determines the number of months in a specific period."),
     NC_("DATE_FUNCDESC_DiffMonths", "Start date"),
@@ -43,7 +45,7 @@ const char* DATE_FUNCDESC_DiffMonths[] =
     NC_("DATE_FUNCDESC_DiffMonths", "Type of calculation: Type=0 means the time interval, Type=1 means calendar months.")
 };
 
-const char* DATE_FUNCDESC_DiffYears[] =
+const TranslateId DATE_FUNCDESC_DiffYears[] =
 {
     NC_("DATE_FUNCDESC_DiffYears", "Calculates the number of years in a specific period."),
     NC_("DATE_FUNCDESC_DiffYears", "Start date"),
@@ -54,35 +56,35 @@ const char* DATE_FUNCDESC_DiffYears[] =
     NC_("DATE_FUNCDESC_DiffYears", "Type of calculation: Type=0 means the time interval, Type=1 means calendar years.")
 };
 
-const char* DATE_FUNCDESC_IsLeapYear[] =
+const TranslateId DATE_FUNCDESC_IsLeapYear[] =
 {
     NC_("DATE_FUNCDESC_IsLeapYear", "Returns 1 (TRUE) if the date is a day of a leap year, otherwise 0 (FALSE)."),
     NC_("DATE_FUNCDESC_IsLeapYear", "Date"),
     NC_("DATE_FUNCDESC_IsLeapYear", "Any day in the desired year")
 };
 
-const char* DATE_FUNCDESC_DaysInMonth[] =
+const TranslateId DATE_FUNCDESC_DaysInMonth[] =
 {
     NC_("DATE_FUNCDESC_DaysInMonth", "Returns the number of days of the month in which the date entered occurs"),
     NC_("DATE_FUNCDESC_DaysInMonth", "Date"),
     NC_("DATE_FUNCDESC_DaysInMonth", "Any day in the desired month")
 };
 
-const char* DATE_FUNCDESC_DaysInYear[] =
+const TranslateId DATE_FUNCDESC_DaysInYear[] =
 {
     NC_("DATE_FUNCDESC_DaysInYear", "Returns the number of days of the year in which the date entered occurs."),
     NC_("DATE_FUNCDESC_DaysInYear", "Date"),
     NC_("DATE_FUNCDESC_DaysInYear", "Any day in the desired year")
 };
 
-const char* DATE_FUNCDESC_WeeksInYear[] =
+const TranslateId DATE_FUNCDESC_WeeksInYear[] =
 {
     NC_("DATE_FUNCDESC_WeeksInYear", "Returns the number of weeks of the year in which the date entered occurs"),
     NC_("DATE_FUNCDESC_WeeksInYear", "Date"),
     NC_("DATE_FUNCDESC_WeeksInYear", "Any day in the desired year")
 };
 
-const char* DATE_FUNCDESC_Rot13[] =
+const TranslateId DATE_FUNCDESC_Rot13[] =
 {
     NC_("DATE_FUNCDESC_Rot13", "Encrypts or decrypts a text using the ROT13 algorithm"),
     NC_("DATE_FUNCDESC_Rot13", "Text"),

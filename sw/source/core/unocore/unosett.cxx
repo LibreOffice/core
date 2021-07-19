@@ -1226,7 +1226,7 @@ sal_Bool SwXNumberingRules::hasElements()
     return true;
 }
 
-static const char* STR_POOLCOLL_HEADLINE_ARY[]
+const TranslateId STR_POOLCOLL_HEADLINE_ARY[]
 {
     STR_POOLCOLL_HEADLINE1,
     STR_POOLCOLL_HEADLINE2,

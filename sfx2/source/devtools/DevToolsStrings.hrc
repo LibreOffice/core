@@ -9,7 +9,8 @@
  */
 
 #pragma once
-#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
+
+#define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
 
 #define STR_TEXT_PORTION NC_("STR_TEXT_PORTION", "Text Portion %1")
 #define STR_PARAGRAPH NC_("STR_PARAGRAPH", "Paragraph %1")

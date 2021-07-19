@@ -80,7 +80,7 @@ void ODbAdminDialog::PageCreated(const OString& rId, SfxTabPage& _rPage)
     SfxTabDialogController::PageCreated(rId, _rPage);
 }
 
-void ODbAdminDialog::addDetailPage(const OString& rPageId, const char* pTextId, CreateTabPage pCreateFunc)
+void ODbAdminDialog::addDetailPage(const OString& rPageId, TranslateId pTextId, CreateTabPage pCreateFunc)
 {
     AddTabPage(rPageId, DBA_RES(pTextId), pCreateFunc);
 }

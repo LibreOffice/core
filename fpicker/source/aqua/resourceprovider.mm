@@ -42,7 +42,7 @@ namespace {
 struct Entry
 {
     sal_Int32 ctrlId;
-    const char* resId;
+    TranslateId resId;
 };
 
 }
@@ -71,9 +71,9 @@ Entry const CtrlIdToResIdTable[] = {
 
 const sal_Int32 SIZE_TABLE = SAL_N_ELEMENTS( CtrlIdToResIdTable );
 
-static const char* CtrlIdToResId(sal_Int32 aControlId)
+static TranslateId CtrlIdToResId(sal_Int32 aControlId)
 {
-    const char *pResId = nullptr;
+    TranslateId pResId;
 
     for ( sal_Int32 i = 0; i < SIZE_TABLE; i++ )
     {
@@ -94,7 +94,7 @@ namespace CResourceProvider_Impl
         OUString aResString;
 
         // translate the control id to a resource id
-        const char* pResId = CtrlIdToResId(aId);
+        TranslateId pResId = CtrlIdToResId(aId);
         if (pResId)
             aResString = FpsResId(pResId);
 

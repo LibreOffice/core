@@ -155,7 +155,9 @@ class OpCodeList
 {
 public:
 
-    OpCodeList(bool bLocalized, const std::pair<const char*, int>* pSymbols, const FormulaCompiler::NonConstOpCodeMapPtr&,
+    OpCodeList(const std::pair<const char*, int>* pSymbols, const FormulaCompiler::NonConstOpCodeMapPtr&,
+            FormulaCompiler::SeparatorType = FormulaCompiler::SeparatorType::SEMICOLON_BASE );
+    OpCodeList(const std::pair<TranslateId, int>* pSymbols, const FormulaCompiler::NonConstOpCodeMapPtr&,
             FormulaCompiler::SeparatorType = FormulaCompiler::SeparatorType::SEMICOLON_BASE );
 
 private:
@@ -164,15 +166,43 @@ private:
 
 private:
     FormulaCompiler::SeparatorType meSepType;
-    const std::pair<const char*, int>* mpSymbols;
-    bool mbLocalized;
+    const std::pair<const char*, int>* mpSymbols1;
+    const std::pair<TranslateId, int>* mpSymbols2;
 };
 
-OpCodeList::OpCodeList(bool bLocalized, const std::pair<const char*, int>* pSymbols, const FormulaCompiler::NonConstOpCodeMapPtr& xMap,
+OpCodeList::OpCodeList(const std::pair<const char*, int>* pSymbols, const FormulaCompiler::NonConstOpCodeMapPtr& xMap,
         FormulaCompiler::SeparatorType eSepType)
     : meSepType(eSepType)
-    , mpSymbols(pSymbols)
-    , mbLocalized(bLocalized)
+    , mpSymbols1(pSymbols)
+    , mpSymbols2(nullptr)
+{
+    std::unique_ptr<CharClass> xCharClass( xMap->isEnglish() ? nullptr : createCharClassIfNonEnglishUI());
+    const CharClass* pCharClass = xCharClass.get();
+    if (meSepType == FormulaCompiler::SeparatorType::RESOURCE_BASE)
+    {
+        for (sal_uInt16 i = 0; i <= SC_OPCODE_LAST_OPCODE_ID; ++i)
+        {
+            putDefaultOpCode( xMap, i, pCharClass);
+        }
+    }
+    else
+    {
+        for (sal_uInt16 i = 0; i <= SC_OPCODE_LAST_OPCODE_ID; ++i)
+        {
+            OUString aOpStr;
+            if ( getOpCodeString( aOpStr, i) )
+                xMap->putOpCode( aOpStr, OpCode(i), pCharClass);
+            else
+                putDefaultOpCode( xMap, i, pCharClass);
+        }
+    }
+}
+
+OpCodeList::OpCodeList(const std::pair<TranslateId, int>* pSymbols, const FormulaCompiler::NonConstOpCodeMapPtr& xMap,
+        FormulaCompiler::SeparatorType eSepType)
+    : meSepType(eSepType)
+    , mpSymbols1(nullptr)
+    , mpSymbols2(pSymbols)
 {
     std::unique_ptr<CharClass> xCharClass( xMap->isEnglish() ? nullptr : createCharClassIfNonEnglishUI());
     const CharClass* pCharClass = xCharClass.get();
@@ -235,18 +265,37 @@ bool OpCodeList::getOpCodeString( OUString& rStr, sal_uInt16 nOp )
 void OpCodeList::putDefaultOpCode( const FormulaCompiler::NonConstOpCodeMapPtr& xMap, sal_uInt16 nOp,
         const CharClass* pCharClass )
 {
-    const char* pKey = nullptr;
-    for (const std::pair<const char*, int>* pSymbol = mpSymbols; pSymbol->first; ++pSymbol)
+    OUString sKey;
+    if (mpSymbols1)
     {
-        if (nOp == pSymbol->second)
+        const char* pKey = nullptr;
+        for (const std::pair<const char*, int>* pSymbol = mpSymbols1; pSymbol->first; ++pSymbol)
         {
-            pKey = pSymbol->first;
-            break;
+            if (nOp == pSymbol->second)
+            {
+                pKey = pSymbol->first;
+                break;
+            }
         }
+        if (!pKey)
+            return;
+        sKey = OUString::createFromAscii(pKey);
     }
-    if (!pKey)
-        return;
-    OUString sKey = !mbLocalized ? OUString::createFromAscii(pKey) : ForResId(pKey);
+    else
+    {
+        TranslateId pKey;
+        for (const std::pair<TranslateId, int>* pSymbol = mpSymbols2; pSymbol->first; ++pSymbol)
+        {
+            if (nOp == pSymbol->second)
+            {
+                pKey = pSymbol->first;
+                break;
+            }
+        }
+        if (!pKey)
+            return;
+        sKey = ForResId(pKey);
+    }
     xMap->putOpCode(sKey, OpCode(nOp), pCharClass);
 }
 
@@ -857,8 +906,8 @@ static void lcl_fillNativeSymbols( FormulaCompiler::NonConstOpCodeMapPtr& xMap, 
         aSymbolMap.mxSymbolMap =
             std::make_shared<FormulaCompiler::OpCodeMap>(
                 SC_OPCODE_LAST_OPCODE_ID + 1, true, FormulaGrammar::GRAM_NATIVE_UI);
-        OpCodeList aOpCodeListSymbols(false, RID_STRLIST_FUNCTION_NAMES_SYMBOLS, aSymbolMap.mxSymbolMap);
-        OpCodeList aOpCodeListNative(true, RID_STRLIST_FUNCTION_NAMES, aSymbolMap.mxSymbolMap);
+        OpCodeList aOpCodeListSymbols(RID_STRLIST_FUNCTION_NAMES_SYMBOLS, aSymbolMap.mxSymbolMap);
+        OpCodeList aOpCodeListNative(RID_STRLIST_FUNCTION_NAMES, aSymbolMap.mxSymbolMap);
         // No AddInMap for native core mapping.
     }
 
@@ -953,7 +1002,7 @@ void FormulaCompiler::loadSymbols(const std::pair<const char*, int>* pSymbols, F
 
     // not Core
     rxMap = std::make_shared<OpCodeMap>( SC_OPCODE_LAST_OPCODE_ID + 1, eGrammar != FormulaGrammar::GRAM_ODFF, eGrammar );
-    OpCodeList aOpCodeList(false, pSymbols, rxMap, eSepType);
+    OpCodeList aOpCodeList(pSymbols, rxMap, eSepType);
 
     fillFromAddInMap( rxMap, eGrammar);
     // Fill from collection for AddIns not already present.

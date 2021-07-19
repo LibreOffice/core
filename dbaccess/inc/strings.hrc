@@ -19,7 +19,9 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_CORE_INC_CORE_RESOURCE_HRC
 #define INCLUDED_DBACCESS_SOURCE_CORE_INC_CORE_RESOURCE_HRC
 
-#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
+#include <unotools/resmgr.hxx>
+
+#define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
 
 #define RID_STR_CONNECTION_INVALID                  NC_("RID_STR_CONNECTION_INVALID", "No connection could be established.")
 #define RID_STR_TABLE_IS_FILTERED                   NC_("RID_STR_TABLE_IS_FILTERED", "The table $name$ already exists. It is not visible because it has been filtered out.")

@@ -200,7 +200,7 @@ OUString SvPasteObjectHelper::GetSotFormatUIName( SotClipboardFormatId nId )
     struct SotResourcePair
     {
         SotClipboardFormatId   mnSotId;
-        const char* mpResId;
+        TranslateId            mpResId;
     };
 
     static const SotResourcePair aSotResourcePairs[] =
@@ -276,7 +276,7 @@ OUString SvPasteObjectHelper::GetSotFormatUIName( SotClipboardFormatId nId )
         { SotClipboardFormatId::PNG,                 STR_FORMAT_ID_PNG_BITMAP },
     };
 
-    const char* pResId = nullptr;
+    TranslateId pResId;
 
     sal_uInt32 const nCount = SAL_N_ELEMENTS( aSotResourcePairs );
     for (sal_uInt32 i = 0; ( i < nCount ) && !pResId; ++i)

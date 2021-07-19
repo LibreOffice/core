@@ -23,7 +23,7 @@
 
 namespace dbaui
 {
-OTitleWindow::OTitleWindow(weld::Container* pParent, const char* pTitleId)
+OTitleWindow::OTitleWindow(weld::Container* pParent, TranslateId pTitleId)
     : m_xBuilder(Application::CreateBuilder(pParent, "dbaccess/ui/titlewindow.ui"))
     , m_xContainer(m_xBuilder->weld_container("TitleWindow"))
     , m_xTitleFrame(m_xBuilder->weld_container("titleparent"))
@@ -46,7 +46,7 @@ void OTitleWindow::setChildWindow(const std::shared_ptr<OChildWindow>& rChild)
     m_xChild = rChild;
 }
 
-void OTitleWindow::setTitle(const char* pTitleId)
+void OTitleWindow::setTitle(TranslateId pTitleId)
 {
     if (!pTitleId)
         return;

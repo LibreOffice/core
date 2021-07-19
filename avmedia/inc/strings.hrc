@@ -19,7 +19,7 @@
 
 #pragma once
 
-#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
+#define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
 
 #define AVMEDIA_STR_OPEN            NC_("AVMEDIA_STR_OPEN", "Open")
 #define AVMEDIA_STR_INSERT          NC_("AVMEDIA_STR_INSERT", "Apply")
