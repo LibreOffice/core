@@ -19,7 +19,7 @@
 
 #pragma once
 
-#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
+#define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
 
 #define RID_SOLVER_COMPONENT        NC_("RID_SOLVER_COMPONENT", "%PRODUCTNAME Linear Solver")
 #define RID_COINMP_SOLVER_COMPONENT NC_("RID_COINMP_SOLVER_COMPONENT", "%PRODUCTNAME CoinMP Linear Solver")

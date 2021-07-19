@@ -22,9 +22,9 @@
 
 #include "tox.hxx"
 
-#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
+#define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
 
-const std::pair<const char*, SwTOOElements> RES_SRCTYPES[] =
+const std::pair<TranslateId, SwTOOElements> RES_SRCTYPES[] =
 {
     { NC_("RES_SRCTYPES", "%PRODUCTNAME Math"), SwTOOElements::Math},
     { NC_("RES_SRCTYPES", "%PRODUCTNAME Chart"), SwTOOElements::Chart},

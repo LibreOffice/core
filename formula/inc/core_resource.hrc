@@ -22,7 +22,7 @@
 #include <formula/compiler.hxx>
 #include <utility>
 
-#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
+#define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
 
 /** These English names are used to store/load ODFF as of ODF v1.2. */
 // NAMES CAN ONLY BE CHANGED WHEN PROVIDING BACKWARD AND FORWARD COMPATIBILITY
@@ -31,7 +31,7 @@
 // If there is a reason for another name for some function then add an
 // *additional* name to be recognized to sc/source/core/tool/compiler.cxx
 // ScCompiler::IsOpCode() in the if (mxSymbols->isODFF()) block.
-const std::pair<const char*, int> RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF[] =
+const std::pair<const char *, int> RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF[] =
 {
     { "IF" , SC_OPCODE_IF },
     { "IFERROR" , SC_OPCODE_IF_ERROR },
@@ -472,7 +472,7 @@ const std::pair<const char*, int> RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF[] =
 };
 
 /** These function names are used in the OOXML XLSX import/export. */
-const std::pair<const char*, int> RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML[] =
+const std::pair<const char *, int> RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML[] =
 {
     { "IF" , SC_OPCODE_IF },
     { "IFERROR" , SC_OPCODE_IF_ERROR },
@@ -922,7 +922,7 @@ const std::pair<const char*, int> RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML[] =
 // If there is a reason for another name for some function then add an
 // *additional* name to be recognized to sc/source/core/tool/compiler.cxx
 // ScCompiler::IsOpCode() in the else if (mxSymbols->isPODF()) block.
-const std::pair<const char*, int> RID_STRLIST_FUNCTION_NAMES_ENGLISH_PODF[] =
+const std::pair<const char *, int> RID_STRLIST_FUNCTION_NAMES_ENGLISH_PODF[] =
 {
     { "IF" , SC_OPCODE_IF },
     { "IFERROR" , SC_OPCODE_IF_ERROR },
@@ -1373,7 +1373,7 @@ const std::pair<const char*, int> RID_STRLIST_FUNCTION_NAMES_ENGLISH_PODF[] =
 // If there is a reason for another name for some function then add an
 // *additional* name to be recognized to sc/source/core/tool/compiler.cxx
 // ScCompiler::IsOpCode().
-const std::pair<const char*, int> RID_STRLIST_FUNCTION_NAMES_ENGLISH_API[] =
+const std::pair<const char *, int> RID_STRLIST_FUNCTION_NAMES_ENGLISH_API[] =
 {
     { "IF" , SC_OPCODE_IF },
     { "IFERROR" , SC_OPCODE_IF_ERROR },
@@ -1822,7 +1822,7 @@ const std::pair<const char*, int> RID_STRLIST_FUNCTION_NAMES_ENGLISH_API[] =
     should match the [en-US] names of RID_STRLIST_FUNCTION_NAMES below. */
 // As such they are a duplicate, but we can not have two string localizations
 // at the same time.
-const std::pair<const char*, int> RID_STRLIST_FUNCTION_NAMES_ENGLISH[] =
+const std::pair<const char *, int> RID_STRLIST_FUNCTION_NAMES_ENGLISH[] =
 {
     { "IF" , SC_OPCODE_IF },
     { "IFERROR" , SC_OPCODE_IF_ERROR },
@@ -2272,7 +2272,7 @@ const std::pair<const char*, int> RID_STRLIST_FUNCTION_NAMES_ENGLISH[] =
     change has to be mentioned in the release notes, i.e.
     https://wiki.documentfoundation.org/ReleaseNotes/...
  */
-const std::pair<const char*, int> RID_STRLIST_FUNCTION_NAMES[] =
+const std::pair<TranslateId, int> RID_STRLIST_FUNCTION_NAMES[] =
 {
     { NC_("RID_STRLIST_FUNCTION_NAMES", "IF") , SC_OPCODE_IF },
     { NC_("RID_STRLIST_FUNCTION_NAMES", "IFERROR") , SC_OPCODE_IF_ERROR },
@@ -2711,10 +2711,10 @@ const std::pair<const char*, int> RID_STRLIST_FUNCTION_NAMES[] =
     { NC_("RID_STRLIST_FUNCTION_NAMES", "RAND.NV"), SC_OPCODE_RANDOM_NV },
     { NC_("RID_STRLIST_FUNCTION_NAMES", "RANDBETWEEN.NV"), SC_OPCODE_RANDBETWEEN_NV },
 
-    { nullptr, -1 }
+    { {}, -1 }
 };
 
-const std::pair<const char*, int> RID_STRLIST_FUNCTION_NAMES_SYMBOLS[] =
+const std::pair<const char *, int> RID_STRLIST_FUNCTION_NAMES_SYMBOLS[] =
 {
     { "(" , SC_OPCODE_OPEN  },
     { ")" , SC_OPCODE_CLOSE  },

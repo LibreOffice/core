@@ -40,7 +40,7 @@
 
 namespace
 {
-    void ERRORBOX(weld::Window* pParent, const char* rid)
+    void ERRORBOX(weld::Window* pParent, TranslateId rid)
     {
         std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pParent,
                                                   VclMessageType::Warning, VclButtonsType::Ok,

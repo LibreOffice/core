@@ -591,7 +591,7 @@ std::locale BasResLocale()
     return Translate::Create("sb");
 }
 
-OUString BasResId(std::string_view aId)
+OUString BasResId(TranslateId aId)
 {
     return Translate::get(aId, BasResLocale());
 }

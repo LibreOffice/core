@@ -67,7 +67,7 @@ using ::std::vector;
 
 //  former viewfunc/dbfunc methods
 
-void ScDocShell::ErrorMessage(const char* pGlobStrId)
+void ScDocShell::ErrorMessage(TranslateId pGlobStrId)
 {
     //! StopMarking at the (active) view?
 
@@ -75,7 +75,7 @@ void ScDocShell::ErrorMessage(const char* pGlobStrId)
     weld::WaitObject aWaitOff( pParent );
     bool bFocus = pParent && pParent->has_focus();
 
-    if (pGlobStrId && strcmp(pGlobStrId, STR_PROTECTIONERR) == 0)
+    if (pGlobStrId && pGlobStrId == STR_PROTECTIONERR)
     {
         if (IsReadOnly())
         {

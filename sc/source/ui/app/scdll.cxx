@@ -86,14 +86,14 @@
 #include <filter.hxx>
 #include <scabstdlg.hxx>
 
-OUString ScResId(std::string_view aId)
+OUString ScResId(TranslateId aId)
 {
     return Translate::get(aId, SC_MOD()->GetResLocale());
 }
 
-OUString ScResId(std::string_view aId, int nCardinality)
+OUString ScResId(TranslateNId aContextSingularPlural, int nCardinality)
 {
-    return Translate::nget(aId, nCardinality, SC_MOD()->GetResLocale());
+    return Translate::nget(aContextSingularPlural, nCardinality, SC_MOD()->GetResLocale());
 }
 
 void ScDLL::Init()

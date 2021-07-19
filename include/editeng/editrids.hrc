@@ -20,7 +20,7 @@
 #ifndef INCLUDED_INCLUDE_EDITENG_EDITRIDS_HRC
 #define INCLUDED_INCLUDE_EDITENG_EDITRIDS_HRC
 
-#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
+#define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
 
 // enum SvxBreak ------------------------------------------------------------
 #define RID_SVXITEMS_BREAK_NONE                 NC_("RID_SVXITEMS_BREAK_NONE", "No break")

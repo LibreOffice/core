@@ -25,7 +25,7 @@
 
 #include "swerror.h"
 
-#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
+#define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
 
 #define ERR_CODE( class, err )  ErrCode(ErrCodeArea::Sw, class, err.GetCode())
 #define WARN_CODE( class, err ) ErrCode(ErrCodeArea::Sw, class, err.GetCode())
@@ -58,7 +58,7 @@ const ErrMsgCode RID_SW_ERRHDL[] =
     { NC_("RID_SW_ERRHDL", "This HTML document contains Basic macros.\nThey were not saved with the current export settings."), WARN_SWG_HTML_NO_MACROS },
     { NC_("RID_SW_ERRHDL", "Error in writing sub-document $(ARG1)."), WARN_WRITE_ERROR_FILE },
     { NC_("RID_SW_ERRHDL", "Format error discovered in the file in sub-document $(ARG1) at $(ARG2)(row,col)."), WARN_FORMAT_FILE_ROWCOL },
-    { nullptr, ERRCODE_NONE }
+    { {}, ERRCODE_NONE }
 };
 
 #endif

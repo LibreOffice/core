@@ -65,7 +65,7 @@ StringMap ElementSelectorUIObject::get_state()
     if (pElement)
         aMap["CurrentEntry"] = pElement->getText();
 
-    aMap["CurrentSelection"] = OUString::fromUtf8(mpElementsSelector->msCurrentSetId);
+    aMap["CurrentSelection"] = OUString::fromUtf8(mpElementsSelector->msCurrentSetId.mpId);
 
     return aMap;
 }

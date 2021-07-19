@@ -11,13 +11,13 @@
 
 #include <utility>
 
-#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
+#define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
 
 namespace sd
 {
 
 // To translators: this is a listbox labelled by "Margins:", inch units
-const std::pair<const char*, int> RID_PAGEFORMATPANEL_MARGINS_INCH[] =
+const std::pair<TranslateId, int> RID_PAGEFORMATPANEL_MARGINS_INCH[] =
 {
     { NC_("RID_PAGEFORMATPANEL_MARGINS_INCH", "None"), 0 },
     { NC_("RID_PAGEFORMATPANEL_MARGINS_INCH", "Narrow"), 0 },
@@ -32,7 +32,7 @@ const std::pair<const char*, int> RID_PAGEFORMATPANEL_MARGINS_INCH[] =
 };
 
 // To translators: this is a listbox labelled by "Margins:", cm units
-const std::pair<const char*, int> RID_PAGEFORMATPANEL_MARGINS_CM[] =
+const std::pair<TranslateId, int> RID_PAGEFORMATPANEL_MARGINS_CM[] =
 {
     { NC_("RID_PAGEFORMATPANEL_MARGINS_CM", "None"), 0 },
     { NC_("RID_PAGEFORMATPANEL_MARGINS_CM", "Narrow"), 0 },

@@ -284,7 +284,7 @@ void ScDPOutputImpl::OutputBlockFrame ( SCCOL nStartCol, SCROW nStartRow, SCCOL 
 
 void lcl_SetStyleById(ScDocument* pDoc, SCTAB nTab,
                       SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-                      const char* pStrId)
+                      TranslateId pStrId)
 {
     if ( nCol1 > nCol2 || nRow1 > nRow2 )
     {
@@ -303,12 +303,12 @@ void lcl_SetStyleById(ScDocument* pDoc, SCTAB nTab,
                                                     SfxStyleSearchBits::UserDefined ) );
         pStyle->SetParent( ScResId(STR_STYLENAME_STANDARD) );
         SfxItemSet& rSet = pStyle->GetItemSet();
-        if (strcmp(pStrId, STR_PIVOT_STYLENAME_RESULT) == 0 || strcmp(pStrId, STR_PIVOT_STYLENAME_TITLE) == 0){
+        if (pStrId == STR_PIVOT_STYLENAME_RESULT || pStrId == STR_PIVOT_STYLENAME_TITLE){
             rSet.Put( SvxWeightItem( WEIGHT_BOLD, ATTR_FONT_WEIGHT ) );
             rSet.Put( SvxWeightItem( WEIGHT_BOLD, ATTR_CJK_FONT_WEIGHT ) );
             rSet.Put( SvxWeightItem( WEIGHT_BOLD, ATTR_CTL_FONT_WEIGHT ) );
         }
-        if (strcmp(pStrId, STR_PIVOT_STYLENAME_CATEGORY) == 0 || strcmp(pStrId, STR_PIVOT_STYLENAME_TITLE) == 0)
+        if (pStrId == STR_PIVOT_STYLENAME_CATEGORY || pStrId == STR_PIVOT_STYLENAME_TITLE)
             rSet.Put( SvxHorJustifyItem( SvxCellHorJustify::Left, ATTR_HOR_JUSTIFY ) );
     }
 
@@ -1483,7 +1483,7 @@ namespace {
 
 OUString lcl_GetDataFieldName( std::u16string_view rSourceName, sal_Int16 eFunc )
 {
-    const char* pStrId = nullptr;
+    TranslateId pStrId;
     switch ( eFunc )
     {
         case sheet::GeneralFunction2::SUM:        pStrId = STR_FUN_TEXT_SUM;      break;

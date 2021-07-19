@@ -25,7 +25,7 @@ namespace
 
 OUString lclGetFunctionMaskName(const PivotFunc nFunctionMask)
 {
-    const char* pStrId = nullptr;
+    TranslateId pStrId;
     switch (nFunctionMask)
     {
         case PivotFunc::Sum:        pStrId = STR_FUN_TEXT_SUM;      break;

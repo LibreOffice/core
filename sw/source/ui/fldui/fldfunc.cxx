@@ -174,7 +174,7 @@ void SwFieldFuncPage::Reset(const SfxItemSet* )
     }
 }
 
-static const char* FMT_MARK_ARY[] =
+const TranslateId FMT_MARK_ARY[] =
 {
     FMT_MARK_TEXT,
     FMT_MARK_TABLE,

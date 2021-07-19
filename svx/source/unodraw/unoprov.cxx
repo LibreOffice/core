@@ -1118,7 +1118,7 @@ static const char* RID_SVXSTR_BMP_DEF[] =
     RID_SVXSTR_BMP92_DEF
 };
 
-static const char* RID_SVXSTR_BMP[] =
+const TranslateId RID_SVXSTR_BMP[] =
 {
     RID_SVXSTR_BMP0,
     RID_SVXSTR_BMP1,
@@ -1251,7 +1251,7 @@ static const char* RID_SVXSTR_DASH_DEF[] =
 
 };
 
-static const char* RID_SVXSTR_DASH[] =
+const TranslateId RID_SVXSTR_DASH[] =
 {
     RID_SVXSTR_DASH0,
     RID_SVXSTR_DASH1,
@@ -1322,7 +1322,7 @@ static const char* RID_SVXSTR_LEND_DEF[] =
     RID_SVXSTR_LEND31_DEF
 };
 
-static const char* RID_SVXSTR_LEND[] =
+const TranslateId RID_SVXSTR_LEND[] =
 {
     RID_SVXSTR_LEND0,
     RID_SVXSTR_LEND1,
@@ -1447,7 +1447,7 @@ static const char* RID_SVXSTR_GRDT_DEF[] =
     RID_SVXSTR_GRDT84_DEF
 };
 
-static const char* RID_SVXSTR_GRDT[] =
+const TranslateId RID_SVXSTR_GRDT[] =
 {
     RID_SVXSTR_GRDT0,
     RID_SVXSTR_GRDT1,
@@ -1556,7 +1556,7 @@ static const char* RID_SVXSTR_HATCHS_DEF[] =
     RID_SVXSTR_HATCH15_DEF
 };
 
-static const char* RID_SVXSTR_HATCHS[] =
+const TranslateId RID_SVXSTR_HATCHS[] =
 {
     RID_SVXSTR_HATCH0,
     RID_SVXSTR_HATCH1,
@@ -1581,12 +1581,12 @@ static const char* RID_SVXSTR_TRASNGR_DEF[] =
     RID_SVXSTR_TRASNGR0_DEF
 };
 
-static const char* RID_SVXSTR_TRASNGR[] =
+const TranslateId RID_SVXSTR_TRASNGR[] =
 {
     RID_SVXSTR_TRASNGR0
 };
 
-static bool SvxUnoGetResourceRanges( const sal_uInt16 nWhich, const char**& pApiResIds, const char**& pIntResIds, int& nCount ) noexcept
+static bool SvxUnoGetResourceRanges( const sal_uInt16 nWhich, const char**& pApiResIds, const TranslateId*& pIntResIds, int& nCount ) noexcept
 {
     switch( nWhich )
     {
@@ -1633,7 +1633,7 @@ static bool SvxUnoGetResourceRanges( const sal_uInt16 nWhich, const char**& pApi
 }
 
 /// @throws std::exception
-static bool SvxUnoConvertResourceString(const char **pSourceResIds, const char** pDestResIds, int nCount, OUString& rString, bool bToApi)
+static bool SvxUnoConvertResourceStringToApi(const TranslateId* pSourceResIds, const char** pDestResIds, int nCount, OUString& rString)
 {
     // first, calculate the search string length without an optional number after the name
     sal_Int32 nLength = rString.getLength();
@@ -1663,39 +1663,67 @@ static bool SvxUnoConvertResourceString(const char **pSourceResIds, const char**
 
     for (int i = 0; i < nCount; ++i)
     {
-        if (bToApi)
+        const OUString & aCompare = SvxResId(pSourceResIds[i]);
+        if( aShortString == aCompare )
         {
-            const OUString & aCompare = SvxResId(pSourceResIds[i]);
-            if( aShortString == aCompare )
-            {
-                rString = rString.replaceAt( 0, aShortString.getLength(), OUString::createFromAscii(pDestResIds[i]) );
-                return true;
-            }
-            else if( rString == aCompare )
-            {
-                rString = OUString::createFromAscii(pDestResIds[i]);
-                return true;
-            }
+            rString = rString.replaceAt( 0, aShortString.getLength(), OUString::createFromAscii(pDestResIds[i]) );
+            return true;
         }
-        else
+        else if( rString == aCompare )
         {
-            auto pCompare = pSourceResIds[i];
-            if( aShortString.equalsAscii(pCompare) )
-            {
-                rString = rString.replaceAt( 0, aShortString.getLength(), SvxResId(pDestResIds[i]) );
-                return true;
-            }
-            else if( rString.equalsAscii(pCompare) )
-            {
-                rString = SvxResId(pDestResIds[i]);
-                return true;
-            }
+            rString = OUString::createFromAscii(pDestResIds[i]);
+            return true;
         }
     }
 
     return false;
 }
 
+static bool SvxUnoConvertResourceStringFromApi(const char** pSourceResIds, const TranslateId* pDestResIds, int nCount, OUString& rString)
+{
+    // first, calculate the search string length without an optional number after the name
+    sal_Int32 nLength = rString.getLength();
+    while( nLength > 0 )
+    {
+        const sal_Unicode nChar = rString[ nLength - 1 ];
+        if( (nChar < '0') || (nChar > '9') )
+            break;
+
+        nLength--;
+    }
+
+    // if we cut off a number, also cut of some spaces
+    if( nLength != rString.getLength() )
+    {
+        while( nLength > 0 )
+        {
+            const sal_Unicode nChar = rString[ nLength - 1 ];
+            if( nChar != ' ' )
+                break;
+
+            nLength--;
+        }
+    }
+
+    const OUString aShortString( rString.copy( 0, nLength ) );
+
+    for (int i = 0; i < nCount; ++i)
+    {
+        auto pCompare = pSourceResIds[i];
+        if( aShortString.equalsAscii(pCompare) )
+        {
+            rString = rString.replaceAt( 0, aShortString.getLength(), SvxResId(pDestResIds[i]) );
+            return true;
+        }
+        else if( rString.equalsAscii(pCompare) )
+        {
+            rString = SvxResId(pDestResIds[i]);
+            return true;
+        }
+    }
+
+    return false;
+}
 
 // #i122649# Some comments on the below arrays:
 // - They need to have the same order and count of items
@@ -1812,7 +1840,7 @@ static const char* SvxUnoColorNameDefResId[] =
     RID_SVXSTR_COLOR_LIBRE_YELLOW_ACCENT_DEF
 };
 
-static const char* SvxUnoColorNameResId[] =
+const TranslateId SvxUnoColorNameResId[] =
 {
     RID_SVXSTR_COLOR_BLUEGREY,
     RID_SVXSTR_COLOR_BLACK,
@@ -1917,7 +1945,7 @@ static const char* SvxUnoColorNameResId[] =
 };
 
 /// @throws std::exception
-static bool SvxUnoConvertResourceStringBuiltIn(const char** pSourceResIds, const char** pDestResIds, int nCount, OUString& rString, bool bToApi)
+static bool SvxUnoConvertResourceStringBuiltInToApi(const TranslateId* pSourceResIds, const char** pDestResIds, int nCount, OUString& rString)
 {
     //We replace e.g. "Gray 10%" with the translation of Gray, but we shouldn't
     //replace "Red Hat 1" with the translation of Red :-)
@@ -1933,24 +1961,39 @@ static bool SvxUnoConvertResourceStringBuiltIn(const char** pSourceResIds, const
 
     for(int i = 0; i < nCount; ++i )
     {
-        if (bToApi)
+        OUString aStrDefName = SvxResId(pSourceResIds[i]);
+        if( sStr == aStrDefName )
         {
-            OUString aStrDefName = SvxResId(pSourceResIds[i]);
-            if( sStr == aStrDefName )
-            {
-                OUString aReplace = OUString::createFromAscii(pDestResIds[i]);
-                rString = rString.replaceAt( 0, aStrDefName.getLength(), aReplace );
-                return true;
-            }
+            OUString aReplace = OUString::createFromAscii(pDestResIds[i]);
+            rString = rString.replaceAt( 0, aStrDefName.getLength(), aReplace );
+            return true;
         }
-        else
+    }
+
+    return false;
+}
+
+static bool SvxUnoConvertResourceStringBuiltInFromApi(const char** pSourceResIds, const TranslateId* pDestResIds, int nCount, OUString& rString)
+{
+    //We replace e.g. "Gray 10%" with the translation of Gray, but we shouldn't
+    //replace "Red Hat 1" with the translation of Red :-)
+    sal_Int32 nLength = rString.getLength();
+    while( nLength > 0 )
+    {
+        const sal_Unicode nChar = rString[nLength-1];
+        if (nChar != '%' && (nChar < '0' || nChar > '9'))
+            break;
+        nLength--;
+    }
+    OUString sStr = rString.copy(0, nLength).trim();
+
+    for(int i = 0; i < nCount; ++i )
+    {
+        if( sStr.equalsAscii(pSourceResIds[i]) )
         {
-            if( sStr.equalsAscii(pSourceResIds[i]) )
-            {
-                OUString aReplace = SvxResId(pDestResIds[i]);
-                rString = rString.replaceAt( 0, strlen(pSourceResIds[i]), aReplace );
-                return true;
-            }
+            OUString aReplace = SvxResId(pDestResIds[i]);
+            rString = rString.replaceAt( 0, strlen(pSourceResIds[i]), aReplace );
+            return true;
         }
     }
 
@@ -1966,7 +2009,7 @@ OUString SvxUnogetApiNameForItem(const sal_uInt16 nWhich, const OUString& rInter
 
     if( nWhich == sal_uInt16(XATTR_LINECOLOR) )
     {
-        if (SvxUnoConvertResourceStringBuiltIn(SvxUnoColorNameResId, SvxUnoColorNameDefResId, SAL_N_ELEMENTS(SvxUnoColorNameResId), aNew, true))
+        if (SvxUnoConvertResourceStringBuiltInToApi(SvxUnoColorNameResId, SvxUnoColorNameDefResId, SAL_N_ELEMENTS(SvxUnoColorNameResId), aNew))
         {
             return aNew;
         }
@@ -1974,12 +2017,12 @@ OUString SvxUnogetApiNameForItem(const sal_uInt16 nWhich, const OUString& rInter
     else
     {
         const char** pApiResIds;
-        const char** pIntResIds;
+        const TranslateId* pIntResIds;
         int nCount;
 
         if( SvxUnoGetResourceRanges(nWhich, pApiResIds, pIntResIds, nCount))
         {
-            if (SvxUnoConvertResourceString(pIntResIds, pApiResIds, nCount, aNew, true))
+            if (SvxUnoConvertResourceStringToApi(pIntResIds, pApiResIds, nCount, aNew))
             {
                 return aNew;
             }
@@ -1999,7 +2042,7 @@ OUString SvxUnogetInternalNameForItem(const sal_uInt16 nWhich, const OUString& r
 
     if( nWhich == sal_uInt16(XATTR_LINECOLOR) )
     {
-        if (SvxUnoConvertResourceStringBuiltIn(SvxUnoColorNameDefResId, SvxUnoColorNameResId, SAL_N_ELEMENTS(SvxUnoColorNameResId), aNew, false))
+        if (SvxUnoConvertResourceStringBuiltInFromApi(SvxUnoColorNameDefResId, SvxUnoColorNameResId, SAL_N_ELEMENTS(SvxUnoColorNameResId), aNew))
         {
             return aNew;
         }
@@ -2007,12 +2050,12 @@ OUString SvxUnogetInternalNameForItem(const sal_uInt16 nWhich, const OUString& r
     else
     {
         const char** pApiResIds;
-        const char** pIntResIds;
+        const TranslateId* pIntResIds;
         int nCount;
 
         if (SvxUnoGetResourceRanges(nWhich, pApiResIds, pIntResIds, nCount))
         {
-            if (SvxUnoConvertResourceString(pApiResIds, pIntResIds, nCount, aNew, false))
+            if (SvxUnoConvertResourceStringFromApi(pApiResIds, pIntResIds, nCount, aNew))
             {
                 return aNew;
             }

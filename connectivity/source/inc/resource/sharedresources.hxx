@@ -22,7 +22,7 @@
 #include <rtl/ustring.hxx>
 #include <vector>
 #include <connectivity/dbtoolsdllapi.hxx>
-
+#include <unotools/resmgr.hxx>
 
 namespace connectivity
 {
@@ -47,7 +47,7 @@ namespace connectivity
         */
         OUString
             getResourceString(
-                const char* pResId
+                TranslateId pResId
             ) const;
 
         /** loads a string from the shared resource file, and replaces
@@ -65,7 +65,7 @@ namespace connectivity
         */
         OUString
             getResourceStringWithSubstitution(
-                const char* pResId,
+                TranslateId pResId,
                 const char* _pAsciiPatternToReplace,
                 const OUString& _rStringToSubstitute
             ) const;
@@ -89,7 +89,7 @@ namespace connectivity
         */
         OUString
             getResourceStringWithSubstitution(
-                const char* pResId,
+                TranslateId pResId,
                 const char* _pAsciiPatternToReplace1,
                 const OUString& _rStringToSubstitute1,
                 const char* _pAsciiPatternToReplace2,
@@ -119,7 +119,7 @@ namespace connectivity
         */
         OUString
             getResourceStringWithSubstitution(
-                const char* pResId,
+                TranslateId pResId,
                 const char* _pAsciiPatternToReplace1,
                 const OUString& _rStringToSubstitute1,
                 const char* _pAsciiPatternToReplace2,
@@ -138,7 +138,7 @@ namespace connectivity
             @return
                 the string from the resource file, with applied string substitution
         */
-        OUString getResourceStringWithSubstitution( const char* pResId,
+        OUString getResourceStringWithSubstitution( TranslateId pResId,
                     const std::vector< std::pair<const char* , OUString > >& _rStringToSubstitutes) const;
     };
 

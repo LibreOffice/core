@@ -30,6 +30,7 @@
 #include <rtl/ustring.hxx>
 
 #include <cppuhelper/implbase.hxx>
+#include <unotools/resmgr.hxx>
 
 #include <com/sun/star/deployment/XPackage.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -76,7 +77,7 @@ public:
     static bool     IsSharedPkgMgr( const css::uno::Reference< css::deployment::XPackage > &);
            bool     continueOnSharedExtension( const css::uno::Reference< css::deployment::XPackage > &,
                                                weld::Widget* pParent,
-                                               const char* pResID,
+                                               TranslateId pResID,
                                                bool &bHadWarning );
 
     void            incBusy() { m_aBusy.incBusy(m_pWindow); }

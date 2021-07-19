@@ -1410,7 +1410,7 @@ void ScTabView::MakeDrawLayer()
     }
 }
 
-void ScTabView::ErrorMessage(const char* pGlobStrId)
+void ScTabView::ErrorMessage(TranslateId pGlobStrId)
 {
     if ( SC_MOD()->IsInExecuteDrop() )
     {
@@ -1424,7 +1424,7 @@ void ScTabView::ErrorMessage(const char* pGlobStrId)
     weld::WaitObject aWaitOff( pParent );
     bool bFocus = pParent && pParent->has_focus();
 
-    if (pGlobStrId && strcmp(pGlobStrId, STR_PROTECTIONERR) == 0)
+    if (pGlobStrId && pGlobStrId == STR_PROTECTIONERR)
     {
         if (aViewData.GetDocShell()->IsReadOnly())
         {

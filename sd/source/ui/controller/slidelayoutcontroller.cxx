@@ -79,7 +79,7 @@ private:
 struct snewfoil_value_info_layout
 {
     const char* msBmpResId;
-    const char* mpStrResId;
+    TranslateId mpStrResId;
     AutoLayout maAutoLayout;
 };
 
@@ -88,7 +88,7 @@ struct snewfoil_value_info_layout
 const snewfoil_value_info_layout notes[] =
 {
     {BMP_FOILN_01, STR_AUTOLAYOUT_NOTES, AUTOLAYOUT_NOTES},
-    {nullptr, nullptr, AUTOLAYOUT_NONE},
+    {nullptr, {}, AUTOLAYOUT_NONE},
 };
 
 const snewfoil_value_info_layout handout[] =
@@ -99,7 +99,7 @@ const snewfoil_value_info_layout handout[] =
     {BMP_FOILH_04, STR_AUTOLAYOUT_HANDOUT4, AUTOLAYOUT_HANDOUT4},
     {BMP_FOILH_06, STR_AUTOLAYOUT_HANDOUT6, AUTOLAYOUT_HANDOUT6},
     {BMP_FOILH_09, STR_AUTOLAYOUT_HANDOUT9, AUTOLAYOUT_HANDOUT9},
-    {nullptr, nullptr, AUTOLAYOUT_NONE},
+    {nullptr, {}, AUTOLAYOUT_NONE},
 };
 
 const snewfoil_value_info_layout standard[] =
@@ -116,7 +116,7 @@ const snewfoil_value_info_layout standard[] =
     {BMP_LAYOUT_HEAD02B,  STR_AUTOLAYOUT_CONTENT_OVER_CONTENT, AUTOLAYOUT_TITLE_CONTENT_OVER_CONTENT },
     {BMP_LAYOUT_HEAD04,   STR_AUTOLAYOUT_4CONTENT,             AUTOLAYOUT_TITLE_4CONTENT },
     {BMP_LAYOUT_HEAD06,   STR_AUTOLAYOUT_6CONTENT,             AUTOLAYOUT_TITLE_6CONTENT },
-    {nullptr, nullptr, AUTOLAYOUT_NONE}
+    {nullptr, {}, AUTOLAYOUT_NONE}
 };
 
 const snewfoil_value_info_layout v_standard[] =
@@ -126,7 +126,7 @@ const snewfoil_value_info_layout v_standard[] =
     {BMP_LAYOUT_VERTICAL01, STR_AL_VERT_TITLE_VERT_OUTLINE,    AUTOLAYOUT_VTITLE_VCONTENT                 },
     {BMP_LAYOUT_HEAD02,     STR_AL_TITLE_VERT_OUTLINE,         AUTOLAYOUT_TITLE_VCONTENT                  },
     {BMP_LAYOUT_HEAD02A,    STR_AL_TITLE_VERT_OUTLINE_CLIPART, AUTOLAYOUT_TITLE_2VTEXT                    },
-    {nullptr, nullptr, AUTOLAYOUT_NONE}
+    {nullptr, {}, AUTOLAYOUT_NONE}
 };
 
 static void fillLayoutValueSet( ValueSet* pValue, const snewfoil_value_info_layout* pInfo )

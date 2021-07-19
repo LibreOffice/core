@@ -75,7 +75,7 @@ Sequence< sal_Int8 > OMetaConnection::getUnoTunnelId()
     return s_aPropertyNameMap;
 }
 
-void OMetaConnection::throwGenericSQLException(const char* pErrorResourceId, const Reference< XInterface>& _xContext )
+void OMetaConnection::throwGenericSQLException(TranslateId pErrorResourceId, const Reference< XInterface>& _xContext )
 {
     OUString sErrorMessage;
     if (pErrorResourceId)
