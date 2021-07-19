@@ -619,6 +619,8 @@ void ToolBarMerger::RemoveItems(
 
 void ToolBarMerger::CreateToolbarItem( ToolBox* pToolbar, ToolBox::ImplToolItems::size_type nPos, sal_uInt16 nItemId, const AddonToolbarItem& rItem )
 {
+    assert(pToolbar->GetItemData(nItemId) == nullptr); // that future would contain a double free
+
     pToolbar->InsertItem( nItemId, rItem.aLabel, ToolBoxItemBits::NONE, nPos );
     pToolbar->SetItemCommand( nItemId, rItem.aCommandURL );
     pToolbar->SetQuickHelpText( nItemId, rItem.aLabel );
