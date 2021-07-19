@@ -1306,7 +1306,7 @@ void SwNoTextFrame::PaintPicture( vcl::RenderContext* pOut, const SwRect &rGrfAr
             }
             else
             {
-                const char* pResId = nullptr;
+                TranslateId pResId;
 
                 if( GraphicType::NONE == rGrfObj.GetType() )
                     pResId = STR_COMCORE_READERROR;

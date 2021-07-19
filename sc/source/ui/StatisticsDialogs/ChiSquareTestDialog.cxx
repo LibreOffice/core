@@ -32,7 +32,7 @@ void ScChiSquareTestDialog::Close()
     DoClose(ScChiSquareTestDialogWrapper::GetChildWindowId());
 }
 
-const char* ScChiSquareTestDialog::GetUndoNameId()
+TranslateId ScChiSquareTestDialog::GetUndoNameId()
 {
     return STR_CHI_SQUARE_TEST;
 }

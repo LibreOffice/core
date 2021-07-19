@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVX_INC_STRINGS_HRC
 #define INCLUDED_SVX_INC_STRINGS_HRC
 
-#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
+#define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
 
 #define STR_ObjNameSingulNONE                               NC_("STR_ObjNameSingulNONE", "Drawing object")
 #define STR_ObjNamePluralNONE                               NC_("STR_ObjNamePluralNONE", "Drawing objects")

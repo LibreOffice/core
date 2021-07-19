@@ -23,7 +23,7 @@
 #include <svtools/svtresid.hxx>
 #include <vcl/errinf.hxx>
 
-typedef std::pair<const char*, ErrCode> ErrMsgCode;
+typedef std::pair<TranslateId, ErrCode> ErrMsgCode;
 SVT_DLLPUBLIC extern const ErrMsgCode RID_ERRHDL[];
 SVT_DLLPUBLIC extern const ErrMsgCode RID_ERRCTX[];
 

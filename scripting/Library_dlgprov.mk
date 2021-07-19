@@ -34,6 +34,7 @@ $(eval $(call gb_Library_use_libraries,dlgprov,\
 	sfx \
 	tl \
 	ucbhelper \
+	utl \
 	vbahelper \
 	vcl \
 	xmlscript \

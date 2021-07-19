@@ -24,6 +24,7 @@
 #include <tools/color.hxx>
 #include <tools/solar.h>
 #include <vcl/errinf.hxx>
+#include <unotools/resmgr.hxx>
 
 #include "htmlpublishmode.hxx"
 
@@ -63,7 +64,7 @@ class ButtonSet;
 class HtmlErrorContext : public ErrorContext
 {
 private:
-    const char* mpResId;
+    TranslateId mpResId;
     OUString  maURL1;
     OUString  maURL2;
 
@@ -72,8 +73,8 @@ public:
 
     virtual bool    GetString( ErrCode nErrId, OUString& rCtxStr ) override;
 
-    void            SetContext(const char* pResId, const OUString& rURL);
-    void            SetContext(const char* pResId, const OUString& rURL1, const OUString& rURL2);
+    void            SetContext(TranslateId pResId, const OUString& rURL);
+    void            SetContext(TranslateId pResId, const OUString& rURL1, const OUString& rURL2);
 };
 
 /// this class exports an Impress Document as a HTML Presentation.

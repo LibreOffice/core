@@ -23,9 +23,9 @@
 #include <i18nutil/paper.hxx>
 #include <utility>
 
-#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
+#define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
 
-const std::pair<const char*, int> RID_SVXSTRARY_PAPERSIZE_STD[] =
+const std::pair<TranslateId, int> RID_SVXSTRARY_PAPERSIZE_STD[] =
 {
     { NC_("RID_SVXSTRARY_PAPERSIZE_STD", "A6") , PAPER_A6 },
     { NC_("RID_SVXSTRARY_PAPERSIZE_STD", "A5") , PAPER_A5 },
@@ -59,7 +59,7 @@ const std::pair<const char*, int> RID_SVXSTRARY_PAPERSIZE_STD[] =
     { NC_("RID_SVXSTRARY_PAPERSIZE_STD", "Japanese Postcard") , PAPER_POSTCARD_JP}
 };
 
-const std::pair<const char*, int> RID_SVXSTRARY_PAPERSIZE_DRAW[] =
+const std::pair<TranslateId, int> RID_SVXSTRARY_PAPERSIZE_DRAW[] =
 {
     { NC_("RID_SVXSTRARY_PAPERSIZE_DRAW", "A6") , PAPER_A6 },
     { NC_("RID_SVXSTRARY_PAPERSIZE_DRAW", "A5") , PAPER_A5 },

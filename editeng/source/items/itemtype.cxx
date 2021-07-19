@@ -152,7 +152,7 @@ OUString GetColorString( const Color& rCol )
         nColor += 1;
     }
 
-    static const char* RID_SVXITEMS_COLORS[] =
+    static TranslateId RID_SVXITEMS_COLORS[] =
     {
         RID_SVXITEMS_COLOR_BLACK,
         RID_SVXITEMS_COLOR_BLUE,
@@ -188,9 +188,9 @@ OUString GetColorString( const Color& rCol )
     return sStr;
 }
 
-const char* GetMetricId( MapUnit eUnit )
+TranslateId GetMetricId( MapUnit eUnit )
 {
-    const char* pId = RID_SVXITEMS_METRIC_MM;
+    TranslateId pId = RID_SVXITEMS_METRIC_MM;
 
     switch ( eUnit )
     {

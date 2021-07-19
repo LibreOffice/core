@@ -19,13 +19,13 @@
 
 #pragma once
 
-#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
+#define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
 
 #include <tools/fldunit.hxx>
 
 #include <utility>
 
-const std::pair<const char*, FieldUnit> SCSTR_UNIT[] =
+const std::pair<TranslateId, FieldUnit> SCSTR_UNIT[] =
 {
     { NC_("SCSTR_UNIT", "Millimeter") , FieldUnit::MM },
     { NC_("SCSTR_UNIT", "Centimeter") , FieldUnit::CM },

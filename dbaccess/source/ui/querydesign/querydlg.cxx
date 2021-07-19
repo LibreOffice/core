@@ -150,7 +150,7 @@ IMPL_LINK_NOARG( DlgQryJoin, LBChangeHdl, weld::ComboBox&, void )
     OUString sFirstWinName    = m_pConnData->getReferencingTable()->GetWinName();
     OUString sSecondWinName   = m_pConnData->getReferencedTable()->GetWinName();
     const EJoinType eOldJoinType = eJoinType;
-    const char* pResId = nullptr;
+    TranslateId pResId;
     const sal_Int32 nPos = m_xLB_JoinType->get_active();
     const sal_Int32 nJoinType = m_xLB_JoinType->get_id(nPos).toInt32();
     bool bAddHint = true;

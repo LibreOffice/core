@@ -10,7 +10,7 @@
 #ifndef OOX_STRINGS_HRC
 #define OOX_STRINGS_HRC
 
-#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
+#define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
 
 #define STR_DIAGRAM_TITLE                        NC_("STR_DIAGRAM_TITLE", "Chart Title")
 #define STR_DIAGRAM_AXISTITLE                    NC_("STR_DIAGRAM_AXISTITLE", "Axis Title")

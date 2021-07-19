@@ -29,6 +29,7 @@ $(eval $(call gb_Library_use_libraries,mysql_jdbc,\
 	cppuhelper \
 	sal \
 	salhelper \
+	utl \
 	dbtools \
 	comphelper \
 ))

@@ -22,7 +22,7 @@
 #include <svtools/sfxecode.hxx>
 #include <svtools/soerr.hxx>
 
-#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
+#define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
 
 const ErrMsgCode RID_ERRCTX[] =
 {
@@ -41,10 +41,10 @@ const ErrMsgCode RID_ERRCTX[] =
     { NC_("RID_ERRCTX", "$(ERR) expanding entry") , ErrCode(ERRCTX_SFX_CREATEOBJSH) },
     { NC_("RID_ERRCTX", "$(ERR) loading BASIC of document $(ARG1)") , ErrCode(ERRCTX_SFX_LOADBASIC) },
     { NC_("RID_ERRCTX", "$(ERR) searching for an address"), ErrCode(ERRCTX_SFX_SEARCHADDRESS) },
-    { nullptr, ERRCODE_NONE }
+    { {}, ERRCODE_NONE }
 };
 
-const std::pair<const char*, ErrCodeClass> RID_ERRHDL_CLASS[] =
+const std::pair<TranslateId, ErrCodeClass> RID_ERRHDL_CLASS[] =
 {
     { NC_("RID_ERRHDL", "Abort") , ErrCodeClass::Abort },
     { NC_("RID_ERRHDL", "Nonexistent object") , ErrCodeClass::NotExists },
@@ -65,7 +65,7 @@ const std::pair<const char*, ErrCodeClass> RID_ERRHDL_CLASS[] =
     { NC_("RID_ERRHDL", "Inadmissible value or data type") , ErrCodeClass::Sbx },
     { NC_("RID_ERRHDL", "BASIC runtime error") , ErrCodeClass::Runtime },
     { NC_("RID_ERRHDL", "BASIC syntax error") , ErrCodeClass::Compiler },
-    { nullptr, ErrCodeClass::NONE }
+    { {}, ErrCodeClass::NONE }
 };
 
 const ErrMsgCode RID_ERRHDL[] =
@@ -132,7 +132,7 @@ const ErrMsgCode RID_ERRHDL[] =
     { NC_("RID_ERRHDL", "The password of a shared spreadsheet cannot be set or changed.\nDeactivate sharing mode first."), ERRCODE_SFX_SHARED_NOPASSWORDCHANGE },
     { NC_("RID_ERRHDL", "File format error found at $(ARG1)(row,col)."), ERRCODE_SFX_FORMAT_ROWCOL },
     { NC_("RID_ERRHDL", "The filter for this file format is disabled in configuration. Please contact your systems administrator."), ERRCODE_IO_FILTERDISABLED },
-    { nullptr, ERRCODE_NONE }
+    { {}, ERRCODE_NONE }
 };
 
 const ErrMsgCode RID_SO_ERROR_HANDLER[] =
@@ -145,13 +145,13 @@ const ErrMsgCode RID_SO_ERROR_HANDLER[] =
       ERRCODE_SO_NOVERBS },
     { NC_("RID_ERRHDL", "Object does not support this action."),
       ERRCODE_SO_NOTIMPL },
-    { nullptr, ERRCODE_NONE }
+    { {}, ERRCODE_NONE }
 };
 
 const ErrMsgCode RID_SO_ERRCTX[] =
 {
     { NC_("RID_ERRHDL", "$(ERR) activating object") , ErrCode(ERRCTX_SO_DOVERB) },
-    { nullptr, ERRCODE_NONE }
+    { {}, ERRCODE_NONE }
 };
 
 

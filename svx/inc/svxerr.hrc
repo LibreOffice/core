@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVX_INC_SVXERR_HRC
 #define INCLUDED_SVX_INC_SVXERR_HRC
 
-#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
+#define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
 
 #include <svx/svxerr.hxx>
 #include <editeng/editerr.hxx>
@@ -40,7 +40,7 @@ const ErrMsgCode RID_SVXERRCTX[] =
       ErrCode(ERRCTX_SVX_BACKGROUND) },
     { NC_("RID_SVXERRCTX", "$(ERR) loading the graphics.") ,
       ErrCode(ERRCTX_SVX_IMPORT_GRAPHIC) },
-    { nullptr, ERRCODE_NONE }
+    { {}, ERRCODE_NONE }
 };
 
 // Error-Code ------------------------------------------------------------
@@ -70,7 +70,7 @@ const ErrMsgCode RID_SVXERRCODE[] =
       ERRCODE_SVX_READ_FILTER_PPOINT },
     { NC_("RID_SVXERRCODE", "Password protection is not supported when documents are saved in a Microsoft Office format.\nDo you want to save the document without password protection?"),
       ERRCODE_SVX_EXPORT_FILTER_CRYPT },
-    { nullptr, ERRCODE_NONE }
+    { {}, ERRCODE_NONE }
 };
 
 #endif

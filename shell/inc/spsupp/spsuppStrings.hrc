@@ -10,7 +10,7 @@
 #ifndef INCLUDED_SHELL_INC_SPSUPP_STRINGS_HRC
 #define INCLUDED_SHELL_INC_SPSUPP_STRINGS_HRC
 
-#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
+#define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
 
 #define RID_STR_SP_VIEW_OR_EDIT_TITLE   NC_("RID_STR_SP_VIEW_OR_EDIT_TITLE", "Open Document")
 #define RID_STR_SP_VIEW_OR_EDIT_MESSAGE NC_("RID_STR_SP_VIEW_OR_EDIT_MESSAGE", "You are opening document\n\n  %DOCNAME\n\nDo you want to open it to view or to edit?")

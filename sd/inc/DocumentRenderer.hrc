@@ -19,9 +19,11 @@
 
 #pragma once
 
-#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
+#include <unotools/resmgr.hxx>
 
-const char* STR_IMPRESS_PRINT_UI_CONTENT_CHOICES[] =
+#define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
+
+const TranslateId STR_IMPRESS_PRINT_UI_CONTENT_CHOICES[] =
 {
     NC_("STR_IMPRESS_PRINT_UI_CONTENT_CHOICES", "Slides"),
     NC_("STR_IMPRESS_PRINT_UI_CONTENT_CHOICES", "Handouts"),
@@ -29,7 +31,7 @@ const char* STR_IMPRESS_PRINT_UI_CONTENT_CHOICES[] =
     NC_("STR_IMPRESS_PRINT_UI_CONTENT_CHOICES", "Outline")
 };
 
-const char* STR_IMPRESS_PRINT_UI_SLIDESPERPAGE_CHOICES[] =
+const TranslateId STR_IMPRESS_PRINT_UI_SLIDESPERPAGE_CHOICES[] =
 {
     NC_("STR_IMPRESS_PRINT_UI_SLIDESPERPAGE_CHOICES", "According to layout"),
     NC_("STR_IMPRESS_PRINT_UI_SLIDESPERPAGE_CHOICES", "1"),
@@ -40,20 +42,20 @@ const char* STR_IMPRESS_PRINT_UI_SLIDESPERPAGE_CHOICES[] =
     NC_("STR_IMPRESS_PRINT_UI_SLIDESPERPAGE_CHOICES", "9")
 };
 
-const char* STR_IMPRESS_PRINT_UI_ORDER_CHOICES[] =
+const TranslateId STR_IMPRESS_PRINT_UI_ORDER_CHOICES[] =
 {
     NC_("STR_IMPRESS_PRINT_UI_ORDER_CHOICES", "Left to right, then down"),
     NC_("STR_IMPRESS_PRINT_UI_ORDER_CHOICES", "Top to bottom, then right")
 };
 
-const char* STR_IMPRESS_PRINT_UI_QUALITY_CHOICES[] =
+const TranslateId STR_IMPRESS_PRINT_UI_QUALITY_CHOICES[] =
 {
     NC_("STR_IMPRESS_PRINT_UI_QUALITY_CHOICES", "Original colors"),
     NC_("STR_IMPRESS_PRINT_UI_QUALITY_CHOICES", "Grayscale"),
     NC_("STR_IMPRESS_PRINT_UI_QUALITY_CHOICES", "Black & white")
 };
 
-const char* STR_IMPRESS_PRINT_UI_PAGE_OPTIONS_CHOICES[] =
+const TranslateId STR_IMPRESS_PRINT_UI_PAGE_OPTIONS_CHOICES[] =
 {
     NC_("STR_IMPRESS_PRINT_UI_PAGE_OPTIONS_CHOICES", "Original size"),
     NC_("STR_IMPRESS_PRINT_UI_PAGE_OPTIONS_CHOICES", "Fit to printable page"),
@@ -61,7 +63,7 @@ const char* STR_IMPRESS_PRINT_UI_PAGE_OPTIONS_CHOICES[] =
     NC_("STR_IMPRESS_PRINT_UI_PAGE_OPTIONS_CHOICES", "Tile sheet of paper with repeated slides")
 };
 
-const char* STR_IMPRESS_PRINT_UI_PAGE_OPTIONS_CHOICES_DRAW[] =
+const TranslateId STR_IMPRESS_PRINT_UI_PAGE_OPTIONS_CHOICES_DRAW[] =
 {
     NC_("STR_IMPRESS_PRINT_UI_PAGE_OPTIONS_CHOICES_DRAW", "Original size"),
     NC_("STR_IMPRESS_PRINT_UI_PAGE_OPTIONS_CHOICES_DRAW", "Fit to printable page"),
@@ -69,21 +71,21 @@ const char* STR_IMPRESS_PRINT_UI_PAGE_OPTIONS_CHOICES_DRAW[] =
     NC_("STR_IMPRESS_PRINT_UI_PAGE_OPTIONS_CHOICES_DRAW", "Tile sheet of paper with repeated pages")
 };
 
-const char* STR_IMPRESS_PRINT_UI_BROCHURE_INCLUDE_LIST[] =
+const TranslateId STR_IMPRESS_PRINT_UI_BROCHURE_INCLUDE_LIST[] =
 {
     NC_("STR_IMPRESS_PRINT_UI_BROCHURE_INCLUDE_LIST", "All pages"),
     NC_("STR_IMPRESS_PRINT_UI_BROCHURE_INCLUDE_LIST", "Front sides / right pages"),
     NC_("STR_IMPRESS_PRINT_UI_BROCHURE_INCLUDE_LIST", "Back sides / left pages")
 };
 
-const char* STR_IMPRESS_PRINT_UI_PAGE_RANGE_CHOICE[] =
+const TranslateId STR_IMPRESS_PRINT_UI_PAGE_RANGE_CHOICE[] =
 {
     NC_("STR_IMPRESS_PRINT_UI_PAGE_RANGE_CHOICE", "All ~Slides"),
     NC_("STR_IMPRESS_PRINT_UI_PAGE_RANGE_CHOICE", "S~lides:"),
     NC_("STR_IMPRESS_PRINT_UI_PAGE_RANGE_CHOICE", "~Selection")
 };
 
-const char* STR_DRAW_PRINT_UI_PAGE_RANGE_CHOICE[] =
+const TranslateId STR_DRAW_PRINT_UI_PAGE_RANGE_CHOICE[] =
 {
     NC_("STR_DRAW_PRINT_UI_PAGE_RANGE_CHOICE", "All ~Pages"),
     NC_("STR_DRAW_PRINT_UI_PAGE_RANGE_CHOICE", "~Pages:"),

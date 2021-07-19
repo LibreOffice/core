@@ -20,11 +20,11 @@
 #ifndef INCLUDED_SW_INC_APP_HRC
 #define INCLUDED_SW_INC_APP_HRC
 
-#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
+#define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
 
 #include <svl/style.hxx>
 
-const std::pair<const char*, SfxStyleSearchBits> RID_PARAGRAPHSTYLEFAMILY[] =
+const std::pair<TranslateId, SfxStyleSearchBits> RID_PARAGRAPHSTYLEFAMILY[] =
 {
     { NC_("RID_PARAGRAPHSTYLEFAMILY", "All Styles")          , SfxStyleSearchBits::AllVisible },
     { NC_("RID_PARAGRAPHSTYLEFAMILY", "Hidden Styles")       , SfxStyleSearchBits::Hidden    },
@@ -38,52 +38,52 @@ const std::pair<const char*, SfxStyleSearchBits> RID_PARAGRAPHSTYLEFAMILY[] =
     { NC_("RID_PARAGRAPHSTYLEFAMILY", "Special Styles")      , SfxStyleSearchBits::SwExtra      },
     { NC_("RID_PARAGRAPHSTYLEFAMILY", "HTML Styles")         , SfxStyleSearchBits::SwHtml       },
     { NC_("RID_PARAGRAPHSTYLEFAMILY", "Conditional Styles")  , SfxStyleSearchBits::SwCondColl   },
-    { nullptr, SfxStyleSearchBits::Auto }
+    { {}, SfxStyleSearchBits::Auto }
 };
 
-const std::pair<const char*, SfxStyleSearchBits> RID_CHARACTERSTYLEFAMILY[] =
+const std::pair<TranslateId, SfxStyleSearchBits> RID_CHARACTERSTYLEFAMILY[] =
 {
     { NC_("RID_CHARACTERSTYLEFAMILY", "All Styles")      , SfxStyleSearchBits::AllVisible },
     { NC_("RID_CHARACTERSTYLEFAMILY", "Hidden Styles")   , SfxStyleSearchBits::Hidden    },
     { NC_("RID_CHARACTERSTYLEFAMILY", "Applied Styles")  , SfxStyleSearchBits::Used      },
     { NC_("RID_CHARACTERSTYLEFAMILY", "Custom Styles")   , SfxStyleSearchBits::UserDefined   },
-    { nullptr, SfxStyleSearchBits::Auto }
+    { {}, SfxStyleSearchBits::Auto }
 };
 
-const std::pair<const char*, SfxStyleSearchBits> RID_FRAMESTYLEFAMILY[] =
+const std::pair<TranslateId, SfxStyleSearchBits> RID_FRAMESTYLEFAMILY[] =
 {
     { NC_("RID_FRAMESTYLEFAMILY", "All Styles")      , SfxStyleSearchBits::AllVisible },
     { NC_("RID_FRAMESTYLEFAMILY", "Hidden Styles")   , SfxStyleSearchBits::Hidden    },
     { NC_("RID_FRAMESTYLEFAMILY", "Applied Styles")  , SfxStyleSearchBits::Used      },
     { NC_("RID_FRAMESTYLEFAMILY", "Custom Styles")   , SfxStyleSearchBits::UserDefined   },
-    { nullptr, SfxStyleSearchBits::Auto }
+    { {}, SfxStyleSearchBits::Auto }
 };
 
-const std::pair<const char*, SfxStyleSearchBits> RID_PAGESTYLEFAMILY[] =
+const std::pair<TranslateId, SfxStyleSearchBits> RID_PAGESTYLEFAMILY[] =
 {
     { NC_("RID_PAGESTYLEFAMILY", "All Styles")      , SfxStyleSearchBits::AllVisible },
     { NC_("RID_PAGESTYLEFAMILY", "Hidden Styles")   , SfxStyleSearchBits::Hidden    },
     { NC_("RID_PAGESTYLEFAMILY", "Applied Styles")  , SfxStyleSearchBits::Used      },
     { NC_("RID_PAGESTYLEFAMILY", "Custom Styles")   , SfxStyleSearchBits::UserDefined   },
-    { nullptr, SfxStyleSearchBits::Auto }
+    { {}, SfxStyleSearchBits::Auto }
 };
 
-const std::pair<const char*, SfxStyleSearchBits> RID_LISTSTYLEFAMILY[] =
+const std::pair<TranslateId, SfxStyleSearchBits> RID_LISTSTYLEFAMILY[] =
 {
     { NC_("RID_LISTSTYLEFAMILY", "All Styles")      , SfxStyleSearchBits::AllVisible },
     { NC_("RID_LISTSTYLEFAMILY", "Hidden Styles")   , SfxStyleSearchBits::Hidden    },
     { NC_("RID_LISTSTYLEFAMILY", "Applied Styles")  , SfxStyleSearchBits::Used      },
     { NC_("RID_LISTSTYLEFAMILY", "Custom Styles")   , SfxStyleSearchBits::UserDefined   },
-    { nullptr, SfxStyleSearchBits::Auto }
+    { {}, SfxStyleSearchBits::Auto }
 };
 
-const std::pair<const char*, SfxStyleSearchBits> RID_TABLESTYLEFAMILY[] =
+const std::pair<TranslateId, SfxStyleSearchBits> RID_TABLESTYLEFAMILY[] =
 {
     { NC_("RID_TABLESTYLEFAMILY", "All Styles")      , SfxStyleSearchBits::AllVisible },
     { NC_("RID_TABLESTYLEFAMILY", "Hidden Styles")   , SfxStyleSearchBits::Hidden    },
     { NC_("RID_TABLESTYLEFAMILY", "Applied Styles")  , SfxStyleSearchBits::Used      },
     { NC_("RID_TABLESTYLEFAMILY", "Custom Styles")   , SfxStyleSearchBits::UserDefined   },
-    { nullptr, SfxStyleSearchBits::Auto }
+    { {}, SfxStyleSearchBits::Auto }
 };
 
 #endif

@@ -25,7 +25,7 @@
 OUString ActionDescriptionProvider::createDescription( ActionType eActionType
                         , std::u16string_view rObjectName )
 {
-    const char* pResID = nullptr;
+    TranslateId pResID;
     switch( eActionType )
     {
     case ActionType::Insert:

@@ -26,9 +26,9 @@
 
 #include <utility>
 
-#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
+#define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
 
-const std::pair<const char*, sal_uInt16> SID_GENERAL_OPTIONS_RES[] =
+const std::pair<TranslateId, sal_uInt16> SID_GENERAL_OPTIONS_RES[] =
 {
     { NC_("SID_GENERAL_OPTIONS_RES", "%PRODUCTNAME"), 0 },
     { NC_("SID_GENERAL_OPTIONS_RES", "User Data"),  RID_SFXPAGE_GENERAL },
@@ -47,7 +47,7 @@ const std::pair<const char*, sal_uInt16> SID_GENERAL_OPTIONS_RES[] =
     { NC_("SID_GENERAL_OPTIONS_RES", "OpenCL"), RID_SVXPAGE_OPENCL  }
 };
 
-const std::pair<const char*, sal_uInt16> SID_LANGUAGE_OPTIONS_RES[] =
+const std::pair<TranslateId, sal_uInt16> SID_LANGUAGE_OPTIONS_RES[] =
 {
     { NC_("SID_LANGUAGE_OPTIONS_RES", "Language Settings"), 0 },
     { NC_("SID_LANGUAGE_OPTIONS_RES", "Languages"), OFA_TP_LANGUAGES },
@@ -57,14 +57,14 @@ const std::pair<const char*, sal_uInt16> SID_LANGUAGE_OPTIONS_RES[] =
     { NC_("SID_LANGUAGE_OPTIONS_RES", "Complex Text Layout"),  RID_SVXPAGE_OPTIONS_CTL }
 };
 
-const std::pair<const char*, sal_uInt16> SID_INET_DLG_RES[] =
+const std::pair<TranslateId, sal_uInt16> SID_INET_DLG_RES[] =
 {
     { NC_("SID_INET_DLG_RES", "Internet"), 0 },
     { NC_("SID_INET_DLG_RES", "Proxy"),  RID_SVXPAGE_INET_PROXY },
     { NC_("SID_INET_DLG_RES", "Email"),  RID_SVXPAGE_INET_MAIL }
 };
 
-const std::pair<const char*, sal_uInt16> SID_SW_EDITOPTIONS_RES[] =
+const std::pair<TranslateId, sal_uInt16> SID_SW_EDITOPTIONS_RES[] =
 {
     { NC_("SID_SW_EDITOPTIONS_RES", "%PRODUCTNAME Writer"), 0 },
     { NC_("SID_SW_EDITOPTIONS_RES", "General"),     RID_SW_TP_OPTLOAD_PAGE    },
@@ -83,7 +83,7 @@ const std::pair<const char*, sal_uInt16> SID_SW_EDITOPTIONS_RES[] =
     { NC_("SID_SW_EDITOPTIONS_RES", "Mail Merge Email"), RID_SW_TP_MAILCONFIG }
 };
 
-const std::pair<const char*, sal_uInt16> SID_SW_ONLINEOPTIONS_RES[] =
+const std::pair<TranslateId, sal_uInt16> SID_SW_ONLINEOPTIONS_RES[] =
 {
     { NC_("SID_SW_ONLINEOPTIONS_RES", "%PRODUCTNAME Writer/Web"), 0 },
     { NC_("SID_SW_ONLINEOPTIONS_RES", "View"),       RID_SW_TP_HTML_CONTENT_OPT      },
@@ -94,13 +94,13 @@ const std::pair<const char*, sal_uInt16> SID_SW_ONLINEOPTIONS_RES[] =
     { NC_("SID_SW_ONLINEOPTIONS_RES", "Background"),    RID_SW_TP_BACKGROUND   }
 };
 
-const std::pair<const char*, sal_uInt16> SID_SM_EDITOPTIONS_RES[] =
+const std::pair<TranslateId, sal_uInt16> SID_SM_EDITOPTIONS_RES[] =
 {
     { NC_("SID_SM_EDITOPTIONS_RES", "%PRODUCTNAME Math"), 0 },
     { NC_("SID_SM_EDITOPTIONS_RES", "Settings"), SID_SM_TP_PRINTOPTIONS },
 };
 
-const std::pair<const char*, sal_uInt16> SID_SC_EDITOPTIONS_RES[] =
+const std::pair<TranslateId, sal_uInt16> SID_SC_EDITOPTIONS_RES[] =
 {
     { NC_("SID_SC_EDITOPTIONS_RES", "%PRODUCTNAME Calc"), 0 },
     { NC_("SID_SC_EDITOPTIONS_RES", "General"),           SID_SC_TP_LAYOUT            },
@@ -115,7 +115,7 @@ const std::pair<const char*, sal_uInt16> SID_SC_EDITOPTIONS_RES[] =
     { NC_("SID_SC_EDITOPTIONS_RES", "Print"),         RID_SC_TP_PRINT             }
 };
 
-const std::pair<const char*, sal_uInt16> SID_SD_EDITOPTIONS_RES[] =
+const std::pair<TranslateId, sal_uInt16> SID_SD_EDITOPTIONS_RES[] =
 {
     { NC_("SID_SD_EDITOPTIONS_RES", "%PRODUCTNAME Impress"),   0                  },
     { NC_("SID_SD_EDITOPTIONS_RES", "General"),                SID_SI_TP_MISC     },
@@ -124,7 +124,7 @@ const std::pair<const char*, sal_uInt16> SID_SD_EDITOPTIONS_RES[] =
     { NC_("SID_SD_EDITOPTIONS_RES", "Print"),                  SID_SI_TP_PRINT    }
 };
 
-const std::pair<const char*, sal_uInt16> SID_SD_GRAPHIC_OPTIONS_RES[] =
+const std::pair<TranslateId, sal_uInt16> SID_SD_GRAPHIC_OPTIONS_RES[] =
 {
     { NC_("SID_SD_GRAPHIC_OPTIONS_RES", "%PRODUCTNAME Draw"), 0 },
     { NC_("SID_SD_GRAPHIC_OPTIONS_RES", "General"),           SID_SD_TP_MISC               },
@@ -133,13 +133,13 @@ const std::pair<const char*, sal_uInt16> SID_SD_GRAPHIC_OPTIONS_RES[] =
     { NC_("SID_SD_GRAPHIC_OPTIONS_RES", "Print"),             SID_SD_TP_PRINT              }
 };
 
-const std::pair<const char*, sal_uInt16> SID_SCH_EDITOPTIONS_RES[] =
+const std::pair<TranslateId, sal_uInt16> SID_SCH_EDITOPTIONS_RES[] =
 {
     { NC_("SID_SCH_EDITOPTIONS_RES", "Charts"), 0 },
     { NC_("SID_SCH_EDITOPTIONS_RES", "Default Colors"),        RID_OPTPAGE_CHART_DEFCOLORS  }
 };
 
-const std::pair<const char*, sal_uInt16> SID_FILTER_DLG_RES[] =
+const std::pair<TranslateId, sal_uInt16> SID_FILTER_DLG_RES[] =
 {
     { NC_("SID_FILTER_DLG_RES", "Load/Save"), 0 },
     { NC_("SID_FILTER_DLG_RES", "General"),  RID_SFXPAGE_SAVE },
@@ -148,7 +148,7 @@ const std::pair<const char*, sal_uInt16> SID_FILTER_DLG_RES[] =
     { NC_("SID_FILTER_DLG_RES", "HTML Compatibility"), RID_OFAPAGE_HTMLOPT  }
 };
 
-const std::pair<const char*, sal_uInt16> SID_SB_STARBASEOPTIONS_RES[] =
+const std::pair<TranslateId, sal_uInt16> SID_SB_STARBASEOPTIONS_RES[] =
 {
     { NC_("SID_SB_STARBASEOPTIONS_RES", "%PRODUCTNAME Base"), 0 },
     { NC_("SID_SB_STARBASEOPTIONS_RES", "Connections"), SID_SB_CONNECTIONPOOLING },

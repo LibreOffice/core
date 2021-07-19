@@ -26,7 +26,7 @@
 
 #pragma once
 
-#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
+#define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
 
 // clang-format off
 #define RID_PLUSX_HELP                      NC_("RID_PLUSX_HELP", "+ Sign" )

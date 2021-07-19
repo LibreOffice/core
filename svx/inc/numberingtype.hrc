@@ -22,9 +22,9 @@
 
 #include <utility>
 
-#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
+#define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
 
-const std::pair<const char*, int> RID_SVXSTRARY_NUMBERINGTYPE[] =
+const std::pair<TranslateId, int> RID_SVXSTRARY_NUMBERINGTYPE[] =
 {
     { /* SVX_NUM_NUMBER_NONE              */ NC_("RID_SVXSTRARY_NUMBERINGTYPE", "None") ,                                5  },
     { /* SVX_NUM_CHAR_SPECIAL             */ NC_("RID_SVXSTRARY_NUMBERINGTYPE", "Bullet") ,                              6  },

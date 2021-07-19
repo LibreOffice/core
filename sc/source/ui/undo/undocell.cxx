@@ -893,7 +893,7 @@ ScUndoDetective::~ScUndoDetective()
 
 OUString ScUndoDetective::GetComment() const
 {
-    const char* pId = STR_UNDO_DETDELALL;
+    TranslateId pId = STR_UNDO_DETDELALL;
     if ( !bIsDelete )
         switch ( static_cast<ScDetOpType>(nAction) )
         {

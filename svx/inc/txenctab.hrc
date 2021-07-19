@@ -23,11 +23,11 @@
 #include <rtl/textenc.h>
 #include <utility>
 
-#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
+#define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
 
 // Encodings for which no conversion exist yet are commented out.
 
-const std::pair<const char*, rtl_TextEncoding> RID_SVXSTR_TEXTENCODING_TABLE[] =
+const std::pair<TranslateId, rtl_TextEncoding> RID_SVXSTR_TEXTENCODING_TABLE[] =
 {
     { NC_("RID_SVXSTR_TEXTENCODING_TABLE", "Western Europe (Windows-1252/WinLatin 1)")           , RTL_TEXTENCODING_MS_1252          },
     { NC_("RID_SVXSTR_TEXTENCODING_TABLE", "Western Europe (Apple Macintosh)")                    , RTL_TEXTENCODING_APPLE_ROMAN      },

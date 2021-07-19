@@ -62,7 +62,7 @@ private:
 
     template<class RNG>
 
-    void GenerateNumbers(RNG& randomGenerator, const char* pDistributionStringId, const std::optional<sal_Int8> aDecimalPlaces);
+    void GenerateNumbers(RNG& randomGenerator, TranslateId pDistributionStringId, const std::optional<sal_Int8> aDecimalPlaces);
 
     void SelectGeneratorAndGenerateNumbers();
 

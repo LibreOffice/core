@@ -19,7 +19,9 @@
 
 #pragma once
 
-#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
+#include <unotools/resmgr.hxx>
+
+#define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
 
 #define RID_BASELISTBOX_ERROR_FILLLIST              NC_("RID_BASELISTBOX_ERROR_FILLLIST", "The contents of a combo box or list field could not be determined.")
 #define RID_STR_IMPORT_GRAPHIC                      NC_("RID_STR_IMPORT_GRAPHIC", "Insert Image" )

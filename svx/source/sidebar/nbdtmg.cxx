@@ -263,7 +263,8 @@ void BulletsTypeMgr::Init()
         pActualBullets[i] = new BulletsSettings;
         pActualBullets[i]->cBulletChar = aDefaultBulletTypes[i];
         pActualBullets[i]->aFont = rActBulletFont;
-        pActualBullets[i]->sDescription = SvxResId( RID_SVXSTR_BULLET_DESCRIPTION_0 + i );
+        OString id = OString::Concat(RID_SVXSTR_BULLET_DESCRIPTION_0.mpId) + OString::number(i);
+        pActualBullets[i]->sDescription = SvxResId( TranslateId(RID_SVXSTR_BULLET_DESCRIPTION_0.mpContext, id.getStr()) );
     }
 }
 sal_uInt16 BulletsTypeMgr::GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 mLevel,sal_uInt16 nFromIndex)
@@ -380,7 +381,7 @@ NumberingTypeMgr::~NumberingTypeMgr()
 {
 }
 
-static const char* RID_SVXSTR_SINGLENUM_DESCRIPTIONS[] =
+const TranslateId RID_SVXSTR_SINGLENUM_DESCRIPTIONS[] =
 {
     RID_SVXSTR_SINGLENUM_DESCRIPTION_0,
     RID_SVXSTR_SINGLENUM_DESCRIPTION_1,
@@ -588,7 +589,8 @@ void OutlineTypeMgr::Init()
         {
             pOutlineSettingsArrs[ nItem ] = new OutlineSettings_Impl;
             OutlineSettings_Impl* pItemArr = pOutlineSettingsArrs[ nItem ];
-            pItemArr->sDescription = SvxResId( RID_SVXSTR_OUTLINENUM_DESCRIPTION_0 + nItem );
+            OString id = OString::Concat(RID_SVXSTR_OUTLINENUM_DESCRIPTION_0.mpId) + OString::number(nItem);
+            pItemArr->sDescription = SvxResId( TranslateId(RID_SVXSTR_OUTLINENUM_DESCRIPTION_0.mpContext, id.getStr()) );
             pItemArr->pNumSettingsArr = new NumSettingsArr_Impl;
             Reference<XIndexAccess> xLevel = aOutlineAccess.getConstArray()[nItem];
             for(sal_Int32 nLevel = 0; nLevel < xLevel->getCount() && nLevel < 5; nLevel++)

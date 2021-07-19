@@ -19,9 +19,11 @@
 
 #pragma once
 
-#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
+#include <unotools/resmgr.hxx>
 
-const char* ANALYSIS_Workday[] =
+#define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
+
+const TranslateId ANALYSIS_Workday[] =
 {
     NC_("ANALYSIS_Workday", "Returns the serial number of the date before or after a specified number of workdays"),
     NC_("ANALYSIS_Workday", "Start date"),
@@ -32,7 +34,7 @@ const char* ANALYSIS_Workday[] =
     NC_("ANALYSIS_Workday", "List of date values of days off (vacation, holidays, etc.)")
 };
 
-const char* ANALYSIS_Yearfrac[] =
+const TranslateId ANALYSIS_Yearfrac[] =
 {
     NC_("ANALYSIS_Yearfrac", "Returns the number of years (including fractional part) between two dates"),
     NC_("ANALYSIS_Yearfrac", "Start date"),
@@ -43,7 +45,7 @@ const char* ANALYSIS_Yearfrac[] =
     NC_("ANALYSIS_Yearfrac", "Basis indicates the day-count convention to use in the calculation")
 };
 
-const char* ANALYSIS_Edate[] =
+const TranslateId ANALYSIS_Edate[] =
 {
     NC_("ANALYSIS_Edate", "Returns the serial number of the date that is a specified number of months before or after the start date"),
     NC_("ANALYSIS_Edate", "Start date"),
@@ -52,7 +54,7 @@ const char* ANALYSIS_Edate[] =
     NC_("ANALYSIS_Edate", "Number of months before or after the start date")
 };
 
-const char* ANALYSIS_Weeknum[] =
+const TranslateId ANALYSIS_Weeknum[] =
 {
     NC_("ANALYSIS_Weeknum", "Returns the number of the calendar week in which the specified date occurs.\nThis function exists for interoperability with older Microsoft Excel documents, for new documents use WEEKNUM instead."),
     NC_("ANALYSIS_Weeknum", "Date"),
@@ -61,7 +63,7 @@ const char* ANALYSIS_Weeknum[] =
     NC_("ANALYSIS_Weeknum", "Indicates the first day of the week (1 = Sunday, 2 = Monday)")
 };
 
-const char* ANALYSIS_Eomonth[] =
+const TranslateId ANALYSIS_Eomonth[] =
 {
     NC_("ANALYSIS_Eomonth", "Returns the serial number of the last day of the month that comes a certain number of months before or after the start date"),
     NC_("ANALYSIS_Eomonth", "Start date"),
@@ -70,7 +72,7 @@ const char* ANALYSIS_Eomonth[] =
     NC_("ANALYSIS_Eomonth", "Number of months before or after the start date")
 };
 
-const char* ANALYSIS_Networkdays[] =
+const TranslateId ANALYSIS_Networkdays[] =
 {
     NC_("ANALYSIS_Networkdays", "Returns the number of workdays between two dates.\nThis function exists for interoperability with older Microsoft Excel documents, for new documents use NETWORKDAYS instead."),
     NC_("ANALYSIS_Networkdays", "Start date"),
@@ -81,28 +83,28 @@ const char* ANALYSIS_Networkdays[] =
     NC_("ANALYSIS_Networkdays", "List of date values representing days off (vacation, holidays, etc.)")
 };
 
-const char* ANALYSIS_Iseven[] =
+const TranslateId ANALYSIS_Iseven[] =
 {
     NC_("ANALYSIS_Iseven", "Returns the value 'true' if the number is even"),
     NC_("ANALYSIS_Iseven", "Number"),
     NC_("ANALYSIS_Iseven", "The number")
 };
 
-const char* ANALYSIS_Isodd[] =
+const TranslateId ANALYSIS_Isodd[] =
 {
     NC_("ANALYSIS_Isodd", "Returns the value 'true' if the number is odd"),
     NC_("ANALYSIS_Isodd", "Number"),
     NC_("ANALYSIS_Isodd", "The number")
 };
 
-const char* ANALYSIS_Multinomial[] =
+const TranslateId ANALYSIS_Multinomial[] =
 {
     NC_("ANALYSIS_Multinomial", "Returns the multinomial coefficient of a set of numbers"),
     NC_("ANALYSIS_Multinomial", "Number"),
     NC_("ANALYSIS_Multinomial", "Number or list of numbers for which you want the multinomial coefficient")
 };
 
-const char* ANALYSIS_Seriessum[] =
+const TranslateId ANALYSIS_Seriessum[] =
 {
     NC_("ANALYSIS_Seriessum", "Returns the sum of a power series"),
     NC_("ANALYSIS_Seriessum", "X"),
@@ -115,7 +117,7 @@ const char* ANALYSIS_Seriessum[] =
     NC_("ANALYSIS_Seriessum", "Set of coefficients by which each successive power of the variable x is multiplied")
 };
 
-const char* ANALYSIS_Quotient[] =
+const TranslateId ANALYSIS_Quotient[] =
 {
     NC_("ANALYSIS_Quotient", "Returns the integer portion of a division"),
     NC_("ANALYSIS_Quotient", "Numerator"),
@@ -124,7 +126,7 @@ const char* ANALYSIS_Quotient[] =
     NC_("ANALYSIS_Quotient", "The divisor")
 };
 
-const char* ANALYSIS_Mround[] =
+const TranslateId ANALYSIS_Mround[] =
 {
     NC_("ANALYSIS_Mround", "Returns a number rounded to a specified multiple"),
     NC_("ANALYSIS_Mround", "Number"),
@@ -133,14 +135,14 @@ const char* ANALYSIS_Mround[] =
     NC_("ANALYSIS_Mround", "The multiple to which you want to round number")
 };
 
-const char* ANALYSIS_Sqrtpi[] =
+const TranslateId ANALYSIS_Sqrtpi[] =
 {
     NC_("ANALYSIS_Sqrtpi", "Returns the square root of a number which has been multiplied by pi"),
     NC_("ANALYSIS_Sqrtpi", "Number"),
     NC_("ANALYSIS_Sqrtpi", "The number by which pi is multiplied")
 };
 
-const char* ANALYSIS_Randbetween[] =
+const TranslateId ANALYSIS_Randbetween[] =
 {
     NC_("ANALYSIS_Randbetween", "Returns a random integer between the numbers you specify"),
     NC_("ANALYSIS_Randbetween", "Bottom"),
@@ -149,21 +151,21 @@ const char* ANALYSIS_Randbetween[] =
     NC_("ANALYSIS_Randbetween", "The largest integer returned")
 };
 
-const char* ANALYSIS_Gcd[] =
+const TranslateId ANALYSIS_Gcd[] =
 {
     NC_("ANALYSIS_Gcd", "Returns the greatest common divisor.\nThis function exists for interoperability with older Microsoft Excel documents, for new documents use GCD instead."),
     NC_("ANALYSIS_Gcd", "Number"),
     NC_("ANALYSIS_Gcd", "Number or list of numbers")
 };
 
-const char* ANALYSIS_Lcm[] =
+const TranslateId ANALYSIS_Lcm[] =
 {
     NC_("ANALYSIS_Lcm", "Returns the least common multiple.\nThis function exists for interoperability with older Microsoft Excel documents, for new documents use LCM instead."),
     NC_("ANALYSIS_Lcm", "Number"),
     NC_("ANALYSIS_Lcm", "Number or list of numbers")
 };
 
-const char* ANALYSIS_Besseli[] =
+const TranslateId ANALYSIS_Besseli[] =
 {
     NC_("ANALYSIS_Besseli", "Returns the modified Bessel function In(x)"),
     NC_("ANALYSIS_Besseli", "X"),
@@ -172,7 +174,7 @@ const char* ANALYSIS_Besseli[] =
     NC_("ANALYSIS_Besseli", "The order of the Bessel function")
 };
 
-const char* ANALYSIS_Besselj[] =
+const TranslateId ANALYSIS_Besselj[] =
 {
     NC_("ANALYSIS_Besselj", "Returns the Bessel function Jn(x)"),
     NC_("ANALYSIS_Besselj", "X"),
@@ -181,7 +183,7 @@ const char* ANALYSIS_Besselj[] =
     NC_("ANALYSIS_Besselj", "The order of the Bessel function")
 };
 
-const char* ANALYSIS_Besselk[] =
+const TranslateId ANALYSIS_Besselk[] =
 {
     NC_("ANALYSIS_Besselk", "Returns the Bessel function Kn(x)"),
     NC_("ANALYSIS_Besselk", "X"),
@@ -190,7 +192,7 @@ const char* ANALYSIS_Besselk[] =
     NC_("ANALYSIS_Besselk", "The order of the Bessel function")
 };
 
-const char* ANALYSIS_Bessely[] =
+const TranslateId ANALYSIS_Bessely[] =
 {
     NC_("ANALYSIS_Bessely", "Returns the Bessel function Yn(x)"),
     NC_("ANALYSIS_Bessely", "X"),
@@ -199,7 +201,7 @@ const char* ANALYSIS_Bessely[] =
     NC_("ANALYSIS_Bessely", "The order of the Bessel function")
 };
 
-const char* ANALYSIS_Bin2Oct[] =
+const TranslateId ANALYSIS_Bin2Oct[] =
 {
     NC_("ANALYSIS_Bin2Oct", "Converts a binary number to an octal number"),
     NC_("ANALYSIS_Bin2Oct", "Number"),
@@ -208,14 +210,14 @@ const char* ANALYSIS_Bin2Oct[] =
     NC_("ANALYSIS_Bin2Oct", "Number of places used")
 };
 
-const char* ANALYSIS_Bin2Dec[] =
+const TranslateId ANALYSIS_Bin2Dec[] =
 {
     NC_("ANALYSIS_Bin2Dec", "Converts a binary number to a decimal number"),
     NC_("ANALYSIS_Bin2Dec", "Number"),
     NC_("ANALYSIS_Bin2Dec", "The binary number to be converted (as text)")
 };
 
-const char* ANALYSIS_Bin2Hex[] =
+const TranslateId ANALYSIS_Bin2Hex[] =
 {
     NC_("ANALYSIS_Bin2Hex", "Converts a binary number to a hexadecimal number"),
     NC_("ANALYSIS_Bin2Hex", "Number"),
@@ -224,7 +226,7 @@ const char* ANALYSIS_Bin2Hex[] =
     NC_("ANALYSIS_Bin2Hex", "Number of places used.")
 };
 
-const char* ANALYSIS_Oct2Bin[] =
+const TranslateId ANALYSIS_Oct2Bin[] =
 {
     NC_("ANALYSIS_Oct2Bin", "Converts an octal number to a binary number"),
     NC_("ANALYSIS_Oct2Bin", "Number"),
@@ -233,14 +235,14 @@ const char* ANALYSIS_Oct2Bin[] =
     NC_("ANALYSIS_Oct2Bin", "Number of places used")
 };
 
-const char* ANALYSIS_Oct2Dec[] =
+const TranslateId ANALYSIS_Oct2Dec[] =
 {
     NC_("ANALYSIS_Oct2Dec", "Converts an octal number to a decimal number"),
     NC_("ANALYSIS_Oct2Dec", "Number"),
     NC_("ANALYSIS_Oct2Dec", "The octal number to be converted (as text)")
 };
 
-const char* ANALYSIS_Oct2Hex[] =
+const TranslateId ANALYSIS_Oct2Hex[] =
 {
     NC_("ANALYSIS_Oct2Hex", "Converts an octal number to a hexadecimal number"),
     NC_("ANALYSIS_Oct2Hex", "Number"),
@@ -249,7 +251,7 @@ const char* ANALYSIS_Oct2Hex[] =
     NC_("ANALYSIS_Oct2Hex", "Number of places used")
 };
 
-const char* ANALYSIS_Dec2Bin[] =
+const TranslateId ANALYSIS_Dec2Bin[] =
 {
     NC_("ANALYSIS_Dec2Bin", "Converts a decimal number to a binary number"),
     NC_("ANALYSIS_Dec2Bin", "Number"),
@@ -258,7 +260,7 @@ const char* ANALYSIS_Dec2Bin[] =
     NC_("ANALYSIS_Dec2Bin", "Number of places used")
 };
 
-const char* ANALYSIS_Dec2Hex[] =
+const TranslateId ANALYSIS_Dec2Hex[] =
 {
     NC_("ANALYSIS_Dec2Hex", "Converts a decimal number to a hexadecimal number"),
     NC_("ANALYSIS_Dec2Hex", "Number"),
@@ -267,7 +269,7 @@ const char* ANALYSIS_Dec2Hex[] =
     NC_("ANALYSIS_Dec2Hex", "Number of places used")
 };
 
-const char* ANALYSIS_Dec2Oct[] =
+const TranslateId ANALYSIS_Dec2Oct[] =
 {
     NC_("ANALYSIS_Dec2Oct", "Converts a decimal number into an octal number"),
     NC_("ANALYSIS_Dec2Oct", "Number"),
@@ -276,7 +278,7 @@ const char* ANALYSIS_Dec2Oct[] =
     NC_("ANALYSIS_Dec2Oct", "Number of places used")
 };
 
-const char* ANALYSIS_Hex2Bin[] =
+const TranslateId ANALYSIS_Hex2Bin[] =
 {
     NC_("ANALYSIS_Hex2Bin", "Converts a hexadecimal number to a binary number"),
     NC_("ANALYSIS_Hex2Bin", "Number"),
@@ -285,14 +287,14 @@ const char* ANALYSIS_Hex2Bin[] =
     NC_("ANALYSIS_Hex2Bin", "Number of places used")
 };
 
-const char* ANALYSIS_Hex2Dec[] =
+const TranslateId ANALYSIS_Hex2Dec[] =
 {
     NC_("ANALYSIS_Hex2Dec", "Converts a hexadecimal number to a decimal number"),
     NC_("ANALYSIS_Hex2Dec", "Number"),
     NC_("ANALYSIS_Hex2Dec", "The hexadecimal number to be converted (as text)")
 };
 
-const char* ANALYSIS_Hex2Oct[] =
+const TranslateId ANALYSIS_Hex2Oct[] =
 {
     NC_("ANALYSIS_Hex2Oct", "Converts a hexadecimal number to an octal number"),
     NC_("ANALYSIS_Hex2Oct", "Number"),
@@ -301,7 +303,7 @@ const char* ANALYSIS_Hex2Oct[] =
     NC_("ANALYSIS_Hex2Oct", "Number of places used")
 };
 
-const char* ANALYSIS_Delta[] =
+const TranslateId ANALYSIS_Delta[] =
 {
     NC_("ANALYSIS_Delta", "Tests whether two values are equal"),
     NC_("ANALYSIS_Delta", "Number 1"),
@@ -310,7 +312,7 @@ const char* ANALYSIS_Delta[] =
     NC_("ANALYSIS_Delta", "The second number")
 };
 
-const char* ANALYSIS_Erf[] =
+const TranslateId ANALYSIS_Erf[] =
 {
     NC_("ANALYSIS_Erf", "Returns the error function"),
     NC_("ANALYSIS_Erf", "Lower limit"),
@@ -319,14 +321,14 @@ const char* ANALYSIS_Erf[] =
     NC_("ANALYSIS_Erf", "The upper limit for integration")
 };
 
-const char* ANALYSIS_Erfc[] =
+const TranslateId ANALYSIS_Erfc[] =
 {
     NC_("ANALYSIS_Erfc", "Returns the complementary error function"),
     NC_("ANALYSIS_Erfc", "Lower limit"),
     NC_("ANALYSIS_Erfc", "The lower limit for integration")
 };
 
-const char* ANALYSIS_Gestep[] =
+const TranslateId ANALYSIS_Gestep[] =
 {
     NC_("ANALYSIS_Gestep", "Tests whether a number is greater than a threshold value"),
     NC_("ANALYSIS_Gestep", "Number"),
@@ -335,28 +337,28 @@ const char* ANALYSIS_Gestep[] =
     NC_("ANALYSIS_Gestep", "The threshold value")
 };
 
-const char* ANALYSIS_Factdouble[] =
+const TranslateId ANALYSIS_Factdouble[] =
 {
     NC_("ANALYSIS_Factdouble", "Returns the double factorial of Number"),
     NC_("ANALYSIS_Factdouble", "Number"),
     NC_("ANALYSIS_Factdouble", "The number")
 };
 
-const char* ANALYSIS_Imabs[] =
+const TranslateId ANALYSIS_Imabs[] =
 {
     NC_("ANALYSIS_Imabs", "Returns the absolute value (modulus) of a complex number"),
     NC_("ANALYSIS_Imabs", "Complex number"),
     NC_("ANALYSIS_Imabs", "The complex number")
 };
 
-const char* ANALYSIS_Imaginary[] =
+const TranslateId ANALYSIS_Imaginary[] =
 {
     NC_("ANALYSIS_Imaginary", "Returns the imaginary coefficient of a complex number"),
     NC_("ANALYSIS_Imaginary", "Complex number"),
     NC_("ANALYSIS_Imaginary", "The complex number")
 };
 
-const char* ANALYSIS_Impower[] =
+const TranslateId ANALYSIS_Impower[] =
 {
     NC_("ANALYSIS_Impower", "Returns a complex number raised to a real power"),
     NC_("ANALYSIS_Impower", "Complex number"),
@@ -365,21 +367,21 @@ const char* ANALYSIS_Impower[] =
     NC_("ANALYSIS_Impower", "Power to which the complex number is raised")
 };
 
-const char* ANALYSIS_Imargument[] =
+const TranslateId ANALYSIS_Imargument[] =
 {
     NC_("ANALYSIS_Imargument", "Returns the argument theta, an angle expressed in radians"),
     NC_("ANALYSIS_Imargument", "Complex number"),
     NC_("ANALYSIS_Imargument", "A complex number")
 };
 
-const char* ANALYSIS_Imcos[] =
+const TranslateId ANALYSIS_Imcos[] =
 {
     NC_("ANALYSIS_Imcos", "Returns the cosine of a complex number"),
     NC_("ANALYSIS_Imcos", "Complex number"),
     NC_("ANALYSIS_Imcos", "A complex number")
 };
 
-const char* ANALYSIS_Imdiv[] =
+const TranslateId ANALYSIS_Imdiv[] =
 {
     NC_("ANALYSIS_Imdiv", "Returns the quotient of two complex numbers"),
     NC_("ANALYSIS_Imdiv", "Numerator"),
@@ -388,42 +390,42 @@ const char* ANALYSIS_Imdiv[] =
     NC_("ANALYSIS_Imdiv", "The divisor")
 };
 
-const char* ANALYSIS_Imexp[] =
+const TranslateId ANALYSIS_Imexp[] =
 {
     NC_("ANALYSIS_Imexp", "Returns the algebraic form of the exponential of a complex number"),
     NC_("ANALYSIS_Imexp", "Complex number"),
     NC_("ANALYSIS_Imexp", "The complex number")
 };
 
-const char* ANALYSIS_Imconjugate[] =
+const TranslateId ANALYSIS_Imconjugate[] =
 {
     NC_("ANALYSIS_Imconjugate", "Returns the complex conjugate of a complex number"),
     NC_("ANALYSIS_Imconjugate", "Complex number"),
     NC_("ANALYSIS_Imconjugate", "The complex number")
 };
 
-const char* ANALYSIS_Imln[] =
+const TranslateId ANALYSIS_Imln[] =
 {
     NC_("ANALYSIS_Imln", "Returns the natural logarithm of a complex number"),
     NC_("ANALYSIS_Imln", "Complex number"),
     NC_("ANALYSIS_Imln", "The complex number")
 };
 
-const char* ANALYSIS_Imlog10[] =
+const TranslateId ANALYSIS_Imlog10[] =
 {
     NC_("ANALYSIS_Imlog10", "Returns the base-10 logarithm of a complex number"),
     NC_("ANALYSIS_Imlog10", "Complex number"),
     NC_("ANALYSIS_Imlog10", "The complex number")
 };
 
-const char* ANALYSIS_Imlog2[] =
+const TranslateId ANALYSIS_Imlog2[] =
 {
     NC_("ANALYSIS_Imlog2", "Returns the base-2 logarithm of a complex number"),
     NC_("ANALYSIS_Imlog2", "Complex number"),
     NC_("ANALYSIS_Imlog2", "The complex number")
 };
 
-const char* ANALYSIS_Improduct[] =
+const TranslateId ANALYSIS_Improduct[] =
 {
     NC_("ANALYSIS_Improduct", "Returns the product of several complex numbers"),
     NC_("ANALYSIS_Improduct", "Complex number"),
@@ -432,21 +434,21 @@ const char* ANALYSIS_Improduct[] =
     NC_("ANALYSIS_Improduct", "Another complex number")
 };
 
-const char* ANALYSIS_Imreal[] =
+const TranslateId ANALYSIS_Imreal[] =
 {
     NC_("ANALYSIS_Imreal", "Returns the real coefficient of a complex number"),
     NC_("ANALYSIS_Imreal", "Complex number"),
     NC_("ANALYSIS_Imreal", "The complex number")
 };
 
-const char* ANALYSIS_Imsin[] =
+const TranslateId ANALYSIS_Imsin[] =
 {
     NC_("ANALYSIS_Imsin", "Returns the sine of a complex number"),
     NC_("ANALYSIS_Imsin", "Complex number"),
     NC_("ANALYSIS_Imsin", "The complex number")
 };
 
-const char* ANALYSIS_Imsub[] =
+const TranslateId ANALYSIS_Imsub[] =
 {
     NC_("ANALYSIS_Imsub", "Returns the difference of two complex numbers"),
     NC_("ANALYSIS_Imsub", "Complex number 1"),
@@ -455,77 +457,77 @@ const char* ANALYSIS_Imsub[] =
     NC_("ANALYSIS_Imsub", "Complex number 2")
 };
 
-const char* ANALYSIS_Imsqrt[] =
+const TranslateId ANALYSIS_Imsqrt[] =
 {
     NC_("ANALYSIS_Imsqrt", "Returns the square root of a complex number"),
     NC_("ANALYSIS_Imsqrt", "Complex number"),
     NC_("ANALYSIS_Imsqrt", "The complex number")
 };
 
-const char* ANALYSIS_Imsum[] =
+const TranslateId ANALYSIS_Imsum[] =
 {
     NC_("ANALYSIS_Imsum", "Returns the sum of complex numbers"),
     NC_("ANALYSIS_Imsum", "Complex number"),
     NC_("ANALYSIS_Imsum", "The complex number")
 };
 
-const char* ANALYSIS_Imtan[] =
+const TranslateId ANALYSIS_Imtan[] =
 {
     NC_("ANALYSIS_Imtan", "Returns the tangent of a complex number"),
     NC_("ANALYSIS_Imtan", "Complex number"),
     NC_("ANALYSIS_Imtan", "A complex number")
 };
 
-const char* ANALYSIS_Imsec[] =
+const TranslateId ANALYSIS_Imsec[] =
 {
     NC_("ANALYSIS_Imsec", "Returns the secant of a complex number"),
     NC_("ANALYSIS_Imsec", "Complex number"),
     NC_("ANALYSIS_Imsec", "A complex number")
 };
 
-const char* ANALYSIS_Imcsc[] =
+const TranslateId ANALYSIS_Imcsc[] =
 {
     NC_("ANALYSIS_Imcsc", "Returns the cosecant of a complex number"),
     NC_("ANALYSIS_Imcsc", "Complex number"),
     NC_("ANALYSIS_Imcsc", "A complex number")
 };
 
-const char* ANALYSIS_Imcot[] =
+const TranslateId ANALYSIS_Imcot[] =
 {
     NC_("ANALYSIS_Imcot", "Returns the cotangent of a complex number"),
     NC_("ANALYSIS_Imcot", "Complex number"),
     NC_("ANALYSIS_Imcot", "A complex number")
 };
 
-const char* ANALYSIS_Imsinh[] =
+const TranslateId ANALYSIS_Imsinh[] =
 {
     NC_("ANALYSIS_Imsinh", "Returns the hyperbolic sine of a complex number"),
     NC_("ANALYSIS_Imsinh", "Complex number"),
     NC_("ANALYSIS_Imsinh", "A complex number")
 };
 
-const char* ANALYSIS_Imcosh[] =
+const TranslateId ANALYSIS_Imcosh[] =
 {
     NC_("ANALYSIS_Imcosh", "Returns the hyperbolic cosine of a complex number"),
     NC_("ANALYSIS_Imcosh", "Complex number"),
     NC_("ANALYSIS_Imcosh", "A complex number")
 };
 
-const char* ANALYSIS_Imsech[] =
+const TranslateId ANALYSIS_Imsech[] =
 {
     NC_("ANALYSIS_Imsech", "Returns the hyperbolic secant of a complex number"),
     NC_("ANALYSIS_Imsech", "Complex number"),
     NC_("ANALYSIS_Imsech", "A complex number")
 };
 
-const char* ANALYSIS_Imcsch[] =
+const TranslateId ANALYSIS_Imcsch[] =
 {
     NC_("ANALYSIS_Imcsch", "Returns the hyperbolic cosecant of a complex number"),
     NC_("ANALYSIS_Imcsch", "Complex number"),
     NC_("ANALYSIS_Imcsch", "A complex number")
 };
 
-const char* ANALYSIS_Complex[] =
+const TranslateId ANALYSIS_Complex[] =
 {
     NC_("ANALYSIS_Complex", "Converts real and imaginary coefficients into a complex number"),
     NC_("ANALYSIS_Complex", "Real num"),
@@ -536,7 +538,7 @@ const char* ANALYSIS_Complex[] =
     NC_("ANALYSIS_Complex", "The suffix")
 };
 
-const char* ANALYSIS_Convert[] =
+const TranslateId ANALYSIS_Convert[] =
 {
     NC_("ANALYSIS_Convert", "Converts a number from one measurement system to another"),
     NC_("ANALYSIS_Convert", "Number"),
@@ -547,7 +549,7 @@ const char* ANALYSIS_Convert[] =
     NC_("ANALYSIS_Convert", "Unit of measure for the result")
 };
 
-const char* ANALYSIS_Amordegrc[] =
+const TranslateId ANALYSIS_Amordegrc[] =
 {
     NC_("ANALYSIS_Amordegrc", "Returns the prorated linear depreciation of an asset for each accounting period"),
     NC_("ANALYSIS_Amordegrc", "Cost"),
@@ -566,7 +568,7 @@ const char* ANALYSIS_Amordegrc[] =
     NC_("ANALYSIS_Amordegrc", "The year basis to be used")
 };
 
-const char* ANALYSIS_Amorlinc[] =
+const TranslateId ANALYSIS_Amorlinc[] =
 {
     NC_("ANALYSIS_Amorlinc", "Returns the prorated linear depreciation of an asset for each accounting period"),
     NC_("ANALYSIS_Amorlinc", "Cost"),
@@ -585,7 +587,7 @@ const char* ANALYSIS_Amorlinc[] =
     NC_("ANALYSIS_Amorlinc", "The year basis to be used")
 };
 
-const char* ANALYSIS_Accrint[] =
+const TranslateId ANALYSIS_Accrint[] =
 {
     NC_("ANALYSIS_Accrint", "Returns the accrued interest for a security that pays periodic interest"),
     NC_("ANALYSIS_Accrint", "Issue"),
@@ -604,7 +606,7 @@ const char* ANALYSIS_Accrint[] =
     NC_("ANALYSIS_Accrint", "The basis")
 };
 
-const char* ANALYSIS_Accrintm[] =
+const TranslateId ANALYSIS_Accrintm[] =
 {
     NC_("ANALYSIS_Accrintm", "Returns the accrued interest for a security that pays interest at maturity"),
     NC_("ANALYSIS_Accrintm", "Issue"),
@@ -619,7 +621,7 @@ const char* ANALYSIS_Accrintm[] =
     NC_("ANALYSIS_Accrintm", "The basis")
 };
 
-const char* ANALYSIS_Received[] =
+const TranslateId ANALYSIS_Received[] =
 {
     NC_("ANALYSIS_Received", "Returns the amount paid out at maturity for a fully invested security"),
     NC_("ANALYSIS_Received", "Settlement"),
@@ -634,7 +636,7 @@ const char* ANALYSIS_Received[] =
     NC_("ANALYSIS_Received", "The basis")
 };
 
-const char* ANALYSIS_Disc[] =
+const TranslateId ANALYSIS_Disc[] =
 {
     NC_("ANALYSIS_Disc", "Returns the discount rate for a security"),
     NC_("ANALYSIS_Disc", "Settlement"),
@@ -649,7 +651,7 @@ const char* ANALYSIS_Disc[] =
     NC_("ANALYSIS_Disc", "The basis")
 };
 
-const char* ANALYSIS_Duration[] =
+const TranslateId ANALYSIS_Duration[] =
 {
     NC_("ANALYSIS_Duration", "Returns the annual Macaulay duration of a security with periodic interest payments"),
     NC_("ANALYSIS_Duration", "Settlement"),
@@ -666,7 +668,7 @@ const char* ANALYSIS_Duration[] =
     NC_("ANALYSIS_Duration", "The basis")
 };
 
-const char* ANALYSIS_Effect[] =
+const TranslateId ANALYSIS_Effect[] =
 {
     NC_("ANALYSIS_Effect", "Returns the effective annual interest rate"),
     NC_("ANALYSIS_Effect", "Nominal rate"),
@@ -675,7 +677,7 @@ const char* ANALYSIS_Effect[] =
     NC_("ANALYSIS_Effect", "The periods")
 };
 
-const char* ANALYSIS_Cumprinc[] =
+const TranslateId ANALYSIS_Cumprinc[] =
 {
     NC_("ANALYSIS_Cumprinc", "Returns the cumulative principal on a loan to be paid between two periods"),
     NC_("ANALYSIS_Cumprinc", "Rate"),
@@ -692,7 +694,7 @@ const char* ANALYSIS_Cumprinc[] =
     NC_("ANALYSIS_Cumprinc", "The type of maturity")
 };
 
-const char* ANALYSIS_Cumipmt[] =
+const TranslateId ANALYSIS_Cumipmt[] =
 {
     NC_("ANALYSIS_Cumipmt", "Returns the cumulative interest to be paid between two periods"),
     NC_("ANALYSIS_Cumipmt", "Rate"),
@@ -709,7 +711,7 @@ const char* ANALYSIS_Cumipmt[] =
     NC_("ANALYSIS_Cumipmt", "The type of maturity")
 };
 
-const char* ANALYSIS_Price[] =
+const TranslateId ANALYSIS_Price[] =
 {
     NC_("ANALYSIS_Price", "Returns the price per 100 currency units face value of a security that pays periodic interest"),
     NC_("ANALYSIS_Price", "Settlement"),
@@ -728,7 +730,7 @@ const char* ANALYSIS_Price[] =
     NC_("ANALYSIS_Price", "The basis")
 };
 
-const char* ANALYSIS_Pricedisc[] =
+const TranslateId ANALYSIS_Pricedisc[] =
 {
     NC_("ANALYSIS_Pricedisc", "Returns the price per 100 currency units face value of a discounted security"),
     NC_("ANALYSIS_Pricedisc", "Settlement"),
@@ -743,7 +745,7 @@ const char* ANALYSIS_Pricedisc[] =
     NC_("ANALYSIS_Pricedisc", "The basis")
 };
 
-const char* ANALYSIS_Pricemat[] =
+const TranslateId ANALYSIS_Pricemat[] =
 {
     NC_("ANALYSIS_Pricemat", "Returns the price per 100 currency units face value of a security that pays interest at maturity"),
     NC_("ANALYSIS_Pricemat", "Settlement"),
@@ -760,7 +762,7 @@ const char* ANALYSIS_Pricemat[] =
     NC_("ANALYSIS_Pricemat", "The basis")
 };
 
-const char* ANALYSIS_Mduration[] =
+const TranslateId ANALYSIS_Mduration[] =
 {
     NC_("ANALYSIS_Mduration", "Returns the Macaulay modified duration for a security with an assumed par value of 100 currency units"),
     NC_("ANALYSIS_Mduration", "Settlement"),
@@ -777,7 +779,7 @@ const char* ANALYSIS_Mduration[] =
     NC_("ANALYSIS_Mduration", "The basis")
 };
 
-const char* ANALYSIS_Nominal[] =
+const TranslateId ANALYSIS_Nominal[] =
 {
     NC_("ANALYSIS_Nominal", "Returns the annual nominal interest rate"),
     NC_("ANALYSIS_Nominal", "Effective rate"),
@@ -786,7 +788,7 @@ const char* ANALYSIS_Nominal[] =
     NC_("ANALYSIS_Nominal", "The periods")
 };
 
-const char* ANALYSIS_Dollarfr[] =
+const TranslateId ANALYSIS_Dollarfr[] =
 {
     NC_("ANALYSIS_Dollarfr", "Converts a price expressed as a decimal into a price expressed as a fraction"),
     NC_("ANALYSIS_Dollarfr", "Decimal dollar"),
@@ -795,7 +797,7 @@ const char* ANALYSIS_Dollarfr[] =
     NC_("ANALYSIS_Dollarfr", "The divisor")
 };
 
-const char* ANALYSIS_Dollarde[] =
+const TranslateId ANALYSIS_Dollarde[] =
 {
     NC_("ANALYSIS_Dollarde", "Converts a price expressed as a fraction into a price expressed as a decimal"),
     NC_("ANALYSIS_Dollarde", "Fractional dollar"),
@@ -804,7 +806,7 @@ const char* ANALYSIS_Dollarde[] =
     NC_("ANALYSIS_Dollarde", "The divisor")
 };
 
-const char* ANALYSIS_Yield[] =
+const TranslateId ANALYSIS_Yield[] =
 {
     NC_("ANALYSIS_Yield", "Returns the yield on a security that pays periodic interest"),
     NC_("ANALYSIS_Yield", "Settlement"),
@@ -823,7 +825,7 @@ const char* ANALYSIS_Yield[] =
     NC_("ANALYSIS_Yield", "The basis")
 };
 
-const char* ANALYSIS_Yielddisc[] =
+const TranslateId ANALYSIS_Yielddisc[] =
 {
     NC_("ANALYSIS_Yielddisc", "Returns the annual yield for a discounted security"),
     NC_("ANALYSIS_Yielddisc", "Settlement"),
@@ -838,7 +840,7 @@ const char* ANALYSIS_Yielddisc[] =
     NC_("ANALYSIS_Yielddisc", "The basis")
 };
 
-const char* ANALYSIS_Yieldmat[] =
+const TranslateId ANALYSIS_Yieldmat[] =
 {
     NC_("ANALYSIS_Yieldmat", "Returns the annual yield of a security that pays interest at maturity"),
     NC_("ANALYSIS_Yieldmat", "Settlement"),
@@ -855,7 +857,7 @@ const char* ANALYSIS_Yieldmat[] =
     NC_("ANALYSIS_Yieldmat", "The basis")
 };
 
-const char* ANALYSIS_Tbilleq[] =
+const TranslateId ANALYSIS_Tbilleq[] =
 {
     NC_("ANALYSIS_Tbilleq", "Returns the bond-equivalent yield for a treasury bill"),
     NC_("ANALYSIS_Tbilleq", "Settlement"),
@@ -866,7 +868,7 @@ const char* ANALYSIS_Tbilleq[] =
     NC_("ANALYSIS_Tbilleq", "The discount rate")
 };
 
-const char* ANALYSIS_Tbillprice[] =
+const TranslateId ANALYSIS_Tbillprice[] =
 {
     NC_("ANALYSIS_Tbillprice", "Returns the price of 100 currency units face value for a treasury bill"),
     NC_("ANALYSIS_Tbillprice", "Settlement"),
@@ -877,7 +879,7 @@ const char* ANALYSIS_Tbillprice[] =
     NC_("ANALYSIS_Tbillprice", "The discount rate")
 };
 
-const char* ANALYSIS_Tbillyield[] =
+const TranslateId ANALYSIS_Tbillyield[] =
 {
     NC_("ANALYSIS_Tbillyield", "Returns the yield for a treasury bill"),
     NC_("ANALYSIS_Tbillyield", "Settlement"),
@@ -888,7 +890,7 @@ const char* ANALYSIS_Tbillyield[] =
     NC_("ANALYSIS_Tbillyield", "The price")
 };
 
-const char* ANALYSIS_Oddfprice[] =
+const TranslateId ANALYSIS_Oddfprice[] =
 {
     NC_("ANALYSIS_Oddfprice", "Returns the price per $100 face value of a security with an odd first period"),
     NC_("ANALYSIS_Oddfprice", "Settlement"),
@@ -911,7 +913,7 @@ const char* ANALYSIS_Oddfprice[] =
     NC_("ANALYSIS_Oddfprice", "The basis")
 };
 
-const char* ANALYSIS_Oddfyield[] =
+const TranslateId ANALYSIS_Oddfyield[] =
 {
     NC_("ANALYSIS_Oddfyield", "Returns the yield of a security with an odd first period"),
     NC_("ANALYSIS_Oddfyield", "Settlement"),
@@ -934,7 +936,7 @@ const char* ANALYSIS_Oddfyield[] =
     NC_("ANALYSIS_Oddfyield", "The basis")
 };
 
-const char* ANALYSIS_Oddlprice[] =
+const TranslateId ANALYSIS_Oddlprice[] =
 {
     NC_("ANALYSIS_Oddlprice", "Returns the price per $100 face value of a security with an odd last period"),
     NC_("ANALYSIS_Oddlprice", "Settlement"),
@@ -955,7 +957,7 @@ const char* ANALYSIS_Oddlprice[] =
     NC_("ANALYSIS_Oddlprice", "The basis")
 };
 
-const char* ANALYSIS_Oddlyield[] =
+const TranslateId ANALYSIS_Oddlyield[] =
 {
     NC_("ANALYSIS_Oddlyield", "Returns the yield of a security with an odd last period"),
     NC_("ANALYSIS_Oddlyield", "Settlement"),
@@ -976,7 +978,7 @@ const char* ANALYSIS_Oddlyield[] =
     NC_("ANALYSIS_Oddlyield", "The basis")
 };
 
-const char* ANALYSIS_Xirr[] =
+const TranslateId ANALYSIS_Xirr[] =
 {
     NC_("ANALYSIS_Xirr", "Returns the internal rate of return for a non-periodic schedule of payments"),
     NC_("ANALYSIS_Xirr", "Values"),
@@ -987,7 +989,7 @@ const char* ANALYSIS_Xirr[] =
     NC_("ANALYSIS_Xirr", "The guess")
 };
 
-const char* ANALYSIS_Xnpv[] =
+const TranslateId ANALYSIS_Xnpv[] =
 {
     NC_("ANALYSIS_Xnpv", "Returns the net present value for a non-periodic schedule of payments"),
     NC_("ANALYSIS_Xnpv", "Rate"),
@@ -998,7 +1000,7 @@ const char* ANALYSIS_Xnpv[] =
     NC_("ANALYSIS_Xnpv", "The dates")
 };
 
-const char* ANALYSIS_Intrate[] =
+const TranslateId ANALYSIS_Intrate[] =
 {
     NC_("ANALYSIS_Intrate", "Returns the interest rate for a fully invested security"),
     NC_("ANALYSIS_Intrate", "Settlement"),
@@ -1013,7 +1015,7 @@ const char* ANALYSIS_Intrate[] =
     NC_("ANALYSIS_Intrate", "The basis")
 };
 
-const char* ANALYSIS_Coupncd[] =
+const TranslateId ANALYSIS_Coupncd[] =
 {
     NC_("ANALYSIS_Coupncd", "Returns the first coupon date after the settlement date"),
     NC_("ANALYSIS_Coupncd", "Settlement"),
@@ -1026,7 +1028,7 @@ const char* ANALYSIS_Coupncd[] =
     NC_("ANALYSIS_Coupncd", "The basis")
 };
 
-const char* ANALYSIS_Coupdays[] =
+const TranslateId ANALYSIS_Coupdays[] =
 {
     NC_("ANALYSIS_Coupdays", "Returns the number of days in the coupon period containing the settlement date"),
     NC_("ANALYSIS_Coupdays", "Settlement"),
@@ -1039,7 +1041,7 @@ const char* ANALYSIS_Coupdays[] =
     NC_("ANALYSIS_Coupdays", "The basis")
 };
 
-const char* ANALYSIS_Coupdaysnc[] =
+const TranslateId ANALYSIS_Coupdaysnc[] =
 {
     NC_("ANALYSIS_Coupdaysnc", "Returns the number of days from the settlement date to the next coupon date"),
     NC_("ANALYSIS_Coupdaysnc", "Settlement"),
@@ -1052,7 +1054,7 @@ const char* ANALYSIS_Coupdaysnc[] =
     NC_("ANALYSIS_Coupdaysnc", "The basis")
 };
 
-const char* ANALYSIS_Coupdaybs[] =
+const TranslateId ANALYSIS_Coupdaybs[] =
 {
     NC_("ANALYSIS_Coupdaybs", "Returns the number of days from the beginning of the coupon period to the settlement date"),
     NC_("ANALYSIS_Coupdaybs", "Settlement"),
@@ -1065,7 +1067,7 @@ const char* ANALYSIS_Coupdaybs[] =
     NC_("ANALYSIS_Coupdaybs", "The basis")
 };
 
-const char* ANALYSIS_Couppcd[] =
+const TranslateId ANALYSIS_Couppcd[] =
 {
     NC_("ANALYSIS_Couppcd", "Returns the last coupon date preceding the settlement date"),
     NC_("ANALYSIS_Couppcd", "Settlement"),
@@ -1078,7 +1080,7 @@ const char* ANALYSIS_Couppcd[] =
     NC_("ANALYSIS_Couppcd", "The basis")
 };
 
-const char* ANALYSIS_Coupnum[] =
+const TranslateId ANALYSIS_Coupnum[] =
 {
     NC_("ANALYSIS_Coupnum", "Returns the number of coupons payable between the settlement and maturity dates"),
     NC_("ANALYSIS_Coupnum", "Settlement"),
@@ -1091,7 +1093,7 @@ const char* ANALYSIS_Coupnum[] =
     NC_("ANALYSIS_Coupnum", "The basis")
 };
 
-const char* ANALYSIS_Fvschedule[] =
+const TranslateId ANALYSIS_Fvschedule[] =
 {
     NC_("ANALYSIS_Fvschedule", "Returns the future value of the initial principal after a series of compound interest rates are applied"),
     NC_("ANALYSIS_Fvschedule", "Principal"),

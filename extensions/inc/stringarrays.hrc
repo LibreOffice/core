@@ -20,29 +20,29 @@
 #ifndef INCLUDED_EXTENSIONS_INC_STRINGARRAYS_HRC
 #define INCLUDED_EXTENSIONS_INC_STRINGARRAYS_HRC
 
-#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
+#define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
 
-const char* RID_RSC_ENUM_VERTICAL_ALIGN[] =
+const TranslateId RID_RSC_ENUM_VERTICAL_ALIGN[] =
 {
     NC_("RID_RSC_ENUM_VERTICAL_ALIGN", "Top"),
     NC_("RID_RSC_ENUM_VERTICAL_ALIGN", "Middle"),
     NC_("RID_RSC_ENUM_VERTICAL_ALIGN", "Bottom")
 };
 
-const char* RID_RSC_ENUM_ICONSIZE_TYPE[] =
+const TranslateId RID_RSC_ENUM_ICONSIZE_TYPE[] =
 {
     NC_("RID_RSC_ENUM_ICONSIZE_TYPE", "Small"),
     NC_("RID_RSC_ENUM_ICONSIZE_TYPE", "Large")
 };
 
-const char* RID_RSC_ENUM_BORDER_TYPE[] =
+const TranslateId RID_RSC_ENUM_BORDER_TYPE[] =
 {
     NC_("RID_RSC_ENUM_BORDER_TYPE", "Without frame"),
     NC_("RID_RSC_ENUM_BORDER_TYPE", "3D look"),
     NC_("RID_RSC_ENUM_BORDER_TYPE", "Flat")
 };
 
-const char* RID_RSC_ENUM_LISTSOURCE_TYPE[] =
+const TranslateId RID_RSC_ENUM_LISTSOURCE_TYPE[] =
 {
     NC_("RID_RSC_ENUM_LISTSOURCE_TYPE", "Valuelist"),
     NC_("RID_RSC_ENUM_LISTSOURCE_TYPE", "Table"),
@@ -52,14 +52,14 @@ const char* RID_RSC_ENUM_LISTSOURCE_TYPE[] =
     NC_("RID_RSC_ENUM_LISTSOURCE_TYPE", "Tablefields" )
 };
 
-const char* RID_RSC_ENUM_ALIGNMENT[] =
+const TranslateId RID_RSC_ENUM_ALIGNMENT[] =
 {
     NC_("RID_RSC_ENUM_ALIGNMENT", "Left"),
     NC_("RID_RSC_ENUM_ALIGNMENT", "Center"),
     NC_("RID_RSC_ENUM_ALIGNMENT", "Right" )
 };
 
-const char* RID_RSC_ENUM_BUTTONTYPE[] =
+const TranslateId RID_RSC_ENUM_BUTTONTYPE[] =
 {
     NC_("RID_RSC_ENUM_BUTTONTYPE", "None"),
     NC_("RID_RSC_ENUM_BUTTONTYPE", "Submit form"),
@@ -76,20 +76,20 @@ const char* RID_RSC_ENUM_BUTTONTYPE[] =
     NC_("RID_RSC_ENUM_BUTTONTYPE", "Refresh form")
 };
 
-const char* RID_RSC_ENUM_SUBMIT_METHOD[] =
+const TranslateId RID_RSC_ENUM_SUBMIT_METHOD[] =
 {
     NC_("RID_RSC_ENUM_SUBMIT_METHOD", "Get"),
     NC_("RID_RSC_ENUM_SUBMIT_METHOD", "Post" )
 };
 
-const char* RID_RSC_ENUM_SUBMIT_ENCODING[] =
+const TranslateId RID_RSC_ENUM_SUBMIT_ENCODING[] =
 {
     NC_("RID_RSC_ENUM_SUBMIT_ENCODING", "URL"),
     NC_("RID_RSC_ENUM_SUBMIT_ENCODING", "Multipart"),
     NC_("RID_RSC_ENUM_SUBMIT_ENCODING", "Text" )
 };
 
-const char* RID_RSC_ENUM_DATEFORMAT_LIST[] =
+const TranslateId RID_RSC_ENUM_DATEFORMAT_LIST[] =
 {
     NC_("RID_RSC_ENUM_DATEFORMAT_LIST", "Standard (short)"),
     NC_("RID_RSC_ENUM_DATEFORMAT_LIST", "Standard (short YY)"),
@@ -105,7 +105,7 @@ const char* RID_RSC_ENUM_DATEFORMAT_LIST[] =
     NC_("RID_RSC_ENUM_DATEFORMAT_LIST", "YYYY-MM-DD" ),
 };
 
-const char* RID_RSC_ENUM_TIMEFORMAT_LIST[] =
+const TranslateId RID_RSC_ENUM_TIMEFORMAT_LIST[] =
 {
     NC_("RID_RSC_ENUM_TIMEFORMAT_LIST", "13:45"),
     NC_("RID_RSC_ENUM_TIMEFORMAT_LIST", "13:45:00"),
@@ -113,28 +113,28 @@ const char* RID_RSC_ENUM_TIMEFORMAT_LIST[] =
     NC_("RID_RSC_ENUM_TIMEFORMAT_LIST", "01:45:00 PM" ),
 };
 
-const char* RID_RSC_ENUM_CHECKED[] =
+const TranslateId RID_RSC_ENUM_CHECKED[] =
 {
     NC_("RID_RSC_ENUM_CHECKED", "Not Selected"),
     NC_("RID_RSC_ENUM_CHECKED", "Selected"),
     NC_("RID_RSC_ENUM_CHECKED", "Not Defined" )
 };
 
-const char* RID_RSC_ENUM_CYCLE[] =
+const TranslateId RID_RSC_ENUM_CYCLE[] =
 {
     NC_("RID_RSC_ENUM_CYCLE", "All records"),
     NC_("RID_RSC_ENUM_CYCLE", "Active record"),
     NC_("RID_RSC_ENUM_CYCLE", "Current page" )
 };
 
-const char* RID_RSC_ENUM_NAVIGATION[] =
+const TranslateId RID_RSC_ENUM_NAVIGATION[] =
 {
     NC_("RID_RSC_ENUM_NAVIGATION", "No"),
     NC_("RID_RSC_ENUM_NAVIGATION", "Yes"),
     NC_("RID_RSC_ENUM_NAVIGATION", "Parent Form")
 };
 
-const char* RID_RSC_ENUM_SUBMIT_TARGET[] =
+const TranslateId RID_RSC_ENUM_SUBMIT_TARGET[] =
 {
     NC_("RID_RSC_ENUM_SUBMIT_TARGET", "_blank"),
     NC_("RID_RSC_ENUM_SUBMIT_TARGET", "_parent"),
@@ -142,7 +142,7 @@ const char* RID_RSC_ENUM_SUBMIT_TARGET[] =
     NC_("RID_RSC_ENUM_SUBMIT_TARGET", "_top")
 };
 
-const char* RID_RSC_ENUM_SELECTION_TYPE[] =
+const TranslateId RID_RSC_ENUM_SELECTION_TYPE[] =
 {
     NC_("RID_RSC_ENUM_SELECTION_TYPE", "None" ),
     NC_("RID_RSC_ENUM_SELECTION_TYPE", "Single" ),
@@ -150,13 +150,13 @@ const char* RID_RSC_ENUM_SELECTION_TYPE[] =
     NC_("RID_RSC_ENUM_SELECTION_TYPE", "Range" )
 };
 
-const char* RID_RSC_ENUM_ORIENTATION[] =
+const TranslateId RID_RSC_ENUM_ORIENTATION[] =
 {
     NC_("RID_RSC_ENUM_ORIENTATION", "Horizontal"),
     NC_("RID_RSC_ENUM_ORIENTATION", "Vertical")
 };
 
-const char* RID_RSC_ENUM_PUSHBUTTONTYPE[] =
+const TranslateId RID_RSC_ENUM_PUSHBUTTONTYPE[] =
 {
     NC_("RID_RSC_ENUM_PUSHBUTTONTYPE", "Default"),
     NC_("RID_RSC_ENUM_PUSHBUTTONTYPE", "OK"),
@@ -164,26 +164,26 @@ const char* RID_RSC_ENUM_PUSHBUTTONTYPE[] =
     NC_("RID_RSC_ENUM_PUSHBUTTONTYPE", "Help")
 };
 
-const char* RID_RSC_ENUM_CELL_EXCHANGE_TYPE[] =
+const TranslateId RID_RSC_ENUM_CELL_EXCHANGE_TYPE[] =
 {
     NC_("RID_RSC_ENUM_CELL_EXCHANGE_TYPE", "The selected entry"),
     NC_("RID_RSC_ENUM_CELL_EXCHANGE_TYPE", "Position of the selected entry")
 };
 
-const char* RID_RSC_ENUM_TEXTTYPE[] =
+const TranslateId RID_RSC_ENUM_TEXTTYPE[] =
 {
     NC_("RID_RSC_ENUM_TEXTTYPE", "Single-line"),
     NC_("RID_RSC_ENUM_TEXTTYPE", "Multi-line"),
     NC_("RID_RSC_ENUM_TEXTTYPE", "Multi-line with formatting")
 };
 
-const char* RID_RSC_ENUM_LINEEND_FORMAT[] =
+const TranslateId RID_RSC_ENUM_LINEEND_FORMAT[] =
 {
     NC_("RID_RSC_ENUM_LINEEND_FORMAT", "LF (Unix)"),
     NC_("RID_RSC_ENUM_LINEEND_FORMAT", "CR+LF (Windows)")
 };
 
-const char* RID_RSC_ENUM_SCROLLBARS[] =
+const TranslateId RID_RSC_ENUM_SCROLLBARS[] =
 {
     NC_("RID_RSC_ENUM_SCROLLBARS", "None"),
     NC_("RID_RSC_ENUM_SCROLLBARS", "Horizontal"),
@@ -191,13 +191,13 @@ const char* RID_RSC_ENUM_SCROLLBARS[] =
     NC_("RID_RSC_ENUM_SCROLLBARS", "Both")
 };
 
-const char* RID_RSC_ENUM_VISUALEFFECT[] =
+const TranslateId RID_RSC_ENUM_VISUALEFFECT[] =
 {
     NC_("RID_RSC_ENUM_VISUALEFFECT", "3D"),
     NC_("RID_RSC_ENUM_VISUALEFFECT", "Flat"),
 };
 
-const char* RID_RSC_ENUM_IMAGE_POSITION[] =
+const TranslateId RID_RSC_ENUM_IMAGE_POSITION[] =
 {
     NC_("RID_RSC_ENUM_IMAGE_POSITION", "Left top"),
     NC_("RID_RSC_ENUM_IMAGE_POSITION", "Left centered"),
@@ -214,35 +214,35 @@ const char* RID_RSC_ENUM_IMAGE_POSITION[] =
     NC_("RID_RSC_ENUM_IMAGE_POSITION", "Centered"),
 };
 
-const char* RID_RSC_ENUM_WHITESPACE_HANDLING[] =
+const TranslateId RID_RSC_ENUM_WHITESPACE_HANDLING[] =
 {
     NC_("RID_RSC_ENUM_WHITESPACE_HANDLING", "Preserve"),
     NC_("RID_RSC_ENUM_WHITESPACE_HANDLING", "Replace"),
     NC_("RID_RSC_ENUM_WHITESPACE_HANDLING", "Collapse")
 };
 
-const char* RID_RSC_ENUM_SCALE_MODE[] =
+const TranslateId RID_RSC_ENUM_SCALE_MODE[] =
 {
     NC_("RID_RSC_ENUM_SCALE_MODE", "No"),
     NC_("RID_RSC_ENUM_SCALE_MODE", "Keep Ratio"),
     NC_("RID_RSC_ENUM_SCALE_MODE", "Fit to Size")
 };
 
-const char* RID_RSC_ENUM_WRITING_MODE[] =
+const TranslateId RID_RSC_ENUM_WRITING_MODE[] =
 {
     NC_("RID_RSC_ENUM_WRITING_MODE", "Left-to-right"),
     NC_("RID_RSC_ENUM_WRITING_MODE", "Right-to-left"),
     NC_("RID_RSC_ENUM_WRITING_MODE", "Use superordinate object settings")
 };
 
-const char* RID_RSC_ENUM_WHEEL_BEHAVIOR[] =
+const TranslateId RID_RSC_ENUM_WHEEL_BEHAVIOR[] =
 {
     NC_("RID_RSC_ENUM_WHEEL_BEHAVIOR", "Never"),
     NC_("RID_RSC_ENUM_WHEEL_BEHAVIOR", "When focused"),
     NC_("RID_RSC_ENUM_WHEEL_BEHAVIOR", "Always")
 };
 
-const char* RID_RSC_ENUM_TEXT_ANCHOR_TYPE[] =
+const TranslateId RID_RSC_ENUM_TEXT_ANCHOR_TYPE[] =
 {
     NC_("RID_RSC_ENUM_TEXT_ANCHOR_TYPE", "To Paragraph"),
     NC_("RID_RSC_ENUM_TEXT_ANCHOR_TYPE", "As Character"),
@@ -251,7 +251,7 @@ const char* RID_RSC_ENUM_TEXT_ANCHOR_TYPE[] =
     NC_("RID_RSC_ENUM_TEXT_ANCHOR_TYPE", "To Character")
 };
 
-const char* RID_RSC_ENUM_SHEET_ANCHOR_TYPE[] =
+const TranslateId RID_RSC_ENUM_SHEET_ANCHOR_TYPE[] =
 {
     NC_("RID_RSC_ENUM_SHEET_ANCHOR_TYPE", "To Page"),
     NC_("RID_RSC_ENUM_SHEET_ANCHOR_TYPE", "To Cell")

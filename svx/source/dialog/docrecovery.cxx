@@ -622,7 +622,7 @@ void SaveProgressDialog::end()
     m_xDialog->response(DLG_RET_OK);
 }
 
-static short impl_askUserForWizardCancel(weld::Widget* pParent, const char* pRes)
+static short impl_askUserForWizardCancel(weld::Widget* pParent, TranslateId pRes)
 {
     std::unique_ptr<weld::MessageDialog> xQuery(Application::CreateMessageDialog(pParent,
                                                 VclMessageType::Question, VclButtonsType::YesNo, SvxResId(pRes)));

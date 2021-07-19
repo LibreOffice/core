@@ -20,16 +20,16 @@
 #ifndef INCLUDED_SW_INC_MMADDRESSBLOCK_HRC
 #define INCLUDED_SW_INC_MMADDRESSBLOCK_HRC
 
-#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
+#define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
 
-const char* RA_SALUTATION[] =
+const TranslateId RA_SALUTATION[] =
 {
     NC_("RA_SALUTATION", "Dear"),
     NC_("RA_SALUTATION", "Hello"),
     NC_("RA_SALUTATION", "Hi")
 };
 
-const char* RA_PUNCTUATION[] =
+const TranslateId RA_PUNCTUATION[] =
 {
     NC_("RA_PUNCTUATION", ","),
     NC_("RA_PUNCTUATION", ":"),

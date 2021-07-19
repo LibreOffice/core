@@ -70,7 +70,7 @@ static OUString lcl_BuildTitleWithRedline( const SwRangeRedline *pRedline )
 {
     const OUString sTitle(SwResId(STR_REDLINE_COMMENT));
 
-    const char* pResId = nullptr;
+    TranslateId pResId;
     switch( pRedline->GetType() )
     {
         case RedlineType::Insert:
