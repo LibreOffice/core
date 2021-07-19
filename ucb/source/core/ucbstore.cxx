@@ -24,7 +24,7 @@
 
   *************************************************************************/
 
-#include <memory>
+#include <optional>
 #include <unordered_map>
 #include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
@@ -112,8 +112,8 @@ namespace {
 
 class PropertySetInfo_Impl : public cppu::WeakImplHelper < XPropertySetInfo >
 {
-    std::unique_ptr<Sequence< Property >>
-                                      m_pProps;
+    std::optional<Sequence< Property >>
+                                      m_xProps;
     PersistentPropertySet*            m_pOwner;
 
 public:
@@ -125,7 +125,7 @@ public:
     virtual sal_Bool SAL_CALL hasPropertyByName( const OUString& Name ) override;
 
     // Non-interface methods.
-    void reset() { m_pProps.reset(); }
+    void reset() { m_xProps.reset(); }
 };
 
 }
@@ -2041,7 +2041,7 @@ PropertySetInfo_Impl::PropertySetInfo_Impl(
 // virtual
 Sequence< Property > SAL_CALL PropertySetInfo_Impl::getProperties()
 {
-    if ( !m_pProps )
+    if ( !m_xProps )
     {
         Reference< XHierarchicalNameAccess > xRootHierNameAccess(
             m_pOwner->getPropertySetRegistry().getRootConfigReadAccess(),
@@ -2062,8 +2062,7 @@ Sequence< Property > SAL_CALL PropertySetInfo_Impl::getProperties()
                                             = xNameAccess->getElementNames();
 
                     sal_uInt32 nCount = aElems.getLength();
-                    Sequence< Property >* pPropSeq
-                                        = new Sequence< Property >( nCount );
+                    Sequence< Property > aPropSeq( nCount );
 
                     if ( nCount )
                     {
@@ -2080,7 +2079,7 @@ Sequence< Property > SAL_CALL PropertySetInfo_Impl::getProperties()
                             static const OUStringLiteral aValueName(u"/Value");
                             static const OUStringLiteral aAttrName(u"/Attributes");
 
-                            Property* pProps = pPropSeq->getArray();
+                            Property* pProps = aPropSeq.getArray();
 
                             for ( sal_uInt32 n = 0; n < nCount; ++n )
                             {
@@ -2163,8 +2162,8 @@ Sequence< Property > SAL_CALL PropertySetInfo_Impl::getProperties()
                     }
 
                     // Success.
-                    m_pProps.reset( pPropSeq );
-                    return *m_pProps;
+                    m_xProps = std::move(aPropSeq);
+                    return *m_xProps;
                 }
             }
             catch (const NoSuchElementException&)
@@ -2174,10 +2173,10 @@ Sequence< Property > SAL_CALL PropertySetInfo_Impl::getProperties()
         }
 
         OSL_FAIL( "PropertySetInfo_Impl::getProperties - Error!" );
-        m_pProps.reset( new Sequence< Property >( 0 ) );
+        m_xProps.emplace();
     }
 
-    return *m_pProps;
+    return *m_xProps;
 }
 
 
