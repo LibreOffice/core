@@ -694,14 +694,6 @@ void SvxCSS1Parser::SelectorParsed( std::unique_ptr<CSS1Selector> pSelector, boo
     m_Selectors.push_back(std::move(pSelector));
 }
 
-static void BuildWhichTable( WhichRangesContainer& rWhichMap,
-                               sal_uInt16 const *pWhichIds,
-                               sal_uInt16 nWhichIds )
-{
-    for (sal_uInt16 i = 0; i < nWhichIds; ++i)
-        rWhichMap = rWhichMap.MergeRange(pWhichIds[i], pWhichIds[i]);
-}
-
 SvxCSS1Parser::SvxCSS1Parser( SfxItemPool& rPool, const OUString& rBaseURL,
                               sal_uInt16 const *pWhichIds, sal_uInt16 nWhichIds ) :
     CSS1Parser(),
@@ -712,46 +704,52 @@ SvxCSS1Parser::SvxCSS1Parser( SfxItemPool& rPool, const OUString& rBaseURL,
     m_bIgnoreFontFamily( false )
 {
     // also initialize item IDs
-    aItemIds.nFont = rPool.GetTrueWhich( SID_ATTR_CHAR_FONT, false );
-    aItemIds.nFontCJK = rPool.GetTrueWhich( SID_ATTR_CHAR_CJK_FONT, false );
-    aItemIds.nFontCTL = rPool.GetTrueWhich( SID_ATTR_CHAR_CTL_FONT, false );
-    aItemIds.nPosture = rPool.GetTrueWhich( SID_ATTR_CHAR_POSTURE, false );
-    aItemIds.nPostureCJK = rPool.GetTrueWhich( SID_ATTR_CHAR_CJK_POSTURE, false );
-    aItemIds.nPostureCTL = rPool.GetTrueWhich( SID_ATTR_CHAR_CTL_POSTURE, false );
-    aItemIds.nWeight = rPool.GetTrueWhich( SID_ATTR_CHAR_WEIGHT, false );
-    aItemIds.nWeightCJK = rPool.GetTrueWhich( SID_ATTR_CHAR_CJK_WEIGHT, false );
-    aItemIds.nWeightCTL = rPool.GetTrueWhich( SID_ATTR_CHAR_CTL_WEIGHT, false );
-    aItemIds.nFontHeight = rPool.GetTrueWhich( SID_ATTR_CHAR_FONTHEIGHT, false );
-    aItemIds.nFontHeightCJK = rPool.GetTrueWhich( SID_ATTR_CHAR_CJK_FONTHEIGHT, false );
-    aItemIds.nFontHeightCTL = rPool.GetTrueWhich( SID_ATTR_CHAR_CTL_FONTHEIGHT, false );
-    aItemIds.nUnderline = rPool.GetTrueWhich( SID_ATTR_CHAR_UNDERLINE, false );
-    aItemIds.nOverline = rPool.GetTrueWhich( SID_ATTR_CHAR_OVERLINE, false );
-    aItemIds.nCrossedOut = rPool.GetTrueWhich( SID_ATTR_CHAR_STRIKEOUT, false );
-    aItemIds.nColor = rPool.GetTrueWhich( SID_ATTR_CHAR_COLOR, false );
-    aItemIds.nKerning = rPool.GetTrueWhich( SID_ATTR_CHAR_KERNING, false );
-    aItemIds.nCaseMap = rPool.GetTrueWhich( SID_ATTR_CHAR_CASEMAP, false );
-    aItemIds.nBlink = rPool.GetTrueWhich( SID_ATTR_FLASH, false );
+    auto initTrueWhich = [&rPool, this](sal_uInt16 rWid)
+    {
+        rWid = rPool.GetTrueWhich(rWid, false);
+        m_aWhichMap = m_aWhichMap.MergeRange(rWid, rWid);
+        return rWid;
+    };
 
-    aItemIds.nLineSpacing = rPool.GetTrueWhich( SID_ATTR_PARA_LINESPACE, false );
-    aItemIds.nAdjust = rPool.GetTrueWhich( SID_ATTR_PARA_ADJUST, false );
-    aItemIds.nWidows = rPool.GetTrueWhich( SID_ATTR_PARA_WIDOWS, false );
-    aItemIds.nOrphans = rPool.GetTrueWhich( SID_ATTR_PARA_ORPHANS, false );
-    aItemIds.nFormatSplit = rPool.GetTrueWhich( SID_ATTR_PARA_SPLIT, false );
+    aItemIds.nFont = initTrueWhich( SID_ATTR_CHAR_FONT );
+    aItemIds.nFontCJK = initTrueWhich( SID_ATTR_CHAR_CJK_FONT );
+    aItemIds.nFontCTL = initTrueWhich( SID_ATTR_CHAR_CTL_FONT );
+    aItemIds.nPosture = initTrueWhich( SID_ATTR_CHAR_POSTURE );
+    aItemIds.nPostureCJK = initTrueWhich( SID_ATTR_CHAR_CJK_POSTURE );
+    aItemIds.nPostureCTL = initTrueWhich( SID_ATTR_CHAR_CTL_POSTURE );
+    aItemIds.nWeight = initTrueWhich( SID_ATTR_CHAR_WEIGHT );
+    aItemIds.nWeightCJK = initTrueWhich( SID_ATTR_CHAR_CJK_WEIGHT );
+    aItemIds.nWeightCTL = initTrueWhich( SID_ATTR_CHAR_CTL_WEIGHT );
+    aItemIds.nFontHeight = initTrueWhich( SID_ATTR_CHAR_FONTHEIGHT );
+    aItemIds.nFontHeightCJK = initTrueWhich( SID_ATTR_CHAR_CJK_FONTHEIGHT );
+    aItemIds.nFontHeightCTL = initTrueWhich( SID_ATTR_CHAR_CTL_FONTHEIGHT );
+    aItemIds.nUnderline = initTrueWhich( SID_ATTR_CHAR_UNDERLINE );
+    aItemIds.nOverline = initTrueWhich( SID_ATTR_CHAR_OVERLINE );
+    aItemIds.nCrossedOut = initTrueWhich( SID_ATTR_CHAR_STRIKEOUT );
+    aItemIds.nColor = initTrueWhich( SID_ATTR_CHAR_COLOR );
+    aItemIds.nKerning = initTrueWhich( SID_ATTR_CHAR_KERNING );
+    aItemIds.nCaseMap = initTrueWhich( SID_ATTR_CHAR_CASEMAP );
+    aItemIds.nBlink = initTrueWhich( SID_ATTR_FLASH );
 
-    aItemIds.nLRSpace = rPool.GetTrueWhich( SID_ATTR_LRSPACE, false );
-    aItemIds.nULSpace = rPool.GetTrueWhich( SID_ATTR_ULSPACE, false );
-    aItemIds.nBox = rPool.GetTrueWhich( SID_ATTR_BORDER_OUTER, false );
-    aItemIds.nBrush = rPool.GetTrueWhich( SID_ATTR_BRUSH, false );
+    aItemIds.nLineSpacing = initTrueWhich( SID_ATTR_PARA_LINESPACE );
+    aItemIds.nAdjust = initTrueWhich( SID_ATTR_PARA_ADJUST );
+    aItemIds.nWidows = initTrueWhich( SID_ATTR_PARA_WIDOWS );
+    aItemIds.nOrphans = initTrueWhich( SID_ATTR_PARA_ORPHANS );
+    aItemIds.nFormatSplit = initTrueWhich( SID_ATTR_PARA_SPLIT );
 
-    aItemIds.nLanguage = rPool.GetTrueWhich( SID_ATTR_CHAR_LANGUAGE, false );
-    aItemIds.nLanguageCJK = rPool.GetTrueWhich( SID_ATTR_CHAR_CJK_LANGUAGE, false );
-    aItemIds.nLanguageCTL = rPool.GetTrueWhich( SID_ATTR_CHAR_CTL_LANGUAGE, false );
-    aItemIds.nDirection = rPool.GetTrueWhich( SID_ATTR_FRAMEDIRECTION, false );
+    aItemIds.nLRSpace = initTrueWhich( SID_ATTR_LRSPACE );
+    aItemIds.nULSpace = initTrueWhich( SID_ATTR_ULSPACE );
+    aItemIds.nBox = initTrueWhich( SID_ATTR_BORDER_OUTER );
+    aItemIds.nBrush = initTrueWhich( SID_ATTR_BRUSH );
 
-    BuildWhichTable( m_aWhichMap, reinterpret_cast<sal_uInt16 *>(&aItemIds),
-                             sizeof(aItemIds) / sizeof(sal_uInt16) );
+    aItemIds.nLanguage = initTrueWhich( SID_ATTR_CHAR_LANGUAGE );
+    aItemIds.nLanguageCJK = initTrueWhich( SID_ATTR_CHAR_CJK_LANGUAGE );
+    aItemIds.nLanguageCTL = initTrueWhich( SID_ATTR_CHAR_CTL_LANGUAGE );
+    aItemIds.nDirection = initTrueWhich( SID_ATTR_FRAMEDIRECTION );
+
     if( pWhichIds && nWhichIds )
-        BuildWhichTable( m_aWhichMap, pWhichIds, nWhichIds );
+        for (sal_uInt16 i = 0; i < nWhichIds; ++i)
+            m_aWhichMap = m_aWhichMap.MergeRange(pWhichIds[i], pWhichIds[i]);
 
     m_pSheetItemSet.reset( new SfxItemSet( rPool, m_aWhichMap ) );
     m_pSheetPropInfo.reset( new SvxCSS1PropertyInfo );
