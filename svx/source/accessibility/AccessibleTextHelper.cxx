@@ -21,9 +21,9 @@
 
 #include <cstdlib>
 #include <memory>
+#include <mutex>
 #include <utility>
 #include <algorithm>
-#include <osl/mutex.hxx>
 #include <sal/log.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
@@ -109,7 +109,7 @@ namespace accessibility
         void SetOffset( const Point& );
         Point GetOffset() const
         {
-            ::osl::MutexGuard aGuard( maMutex ); Point aPoint( maOffset );
+            std::lock_guard aGuard( maMutex ); Point aPoint( maOffset );
             return aPoint;
         }
 
@@ -216,7 +216,7 @@ namespace accessibility
         // whether we (this object) has the focus set (guarded by solar mutex)
         bool mbThisHasFocus;
 
-        mutable ::osl::Mutex maMutex;
+        mutable std::mutex maMutex;
 
         /// our current offset to the containing shape/cell (guarded by maMutex)
         Point maOffset;
@@ -732,7 +732,7 @@ namespace accessibility
     {
         // guard against non-atomic access to maOffset data structure
         {
-            ::osl::MutexGuard aGuard( maMutex );
+            std::lock_guard aGuard( maMutex );
             maOffset = rPoint;
         }
 
@@ -1383,7 +1383,7 @@ namespace accessibility
         // -- object locked --
         AccessibleEventObject aEvent;
         {
-            osl::MutexGuard aGuard(maMutex);
+            std::lock_guard aGuard(maMutex);
 
             DBG_ASSERT(mxFrontEnd.is(), "AccessibleTextHelper::FireEvent: no event source set");
 
