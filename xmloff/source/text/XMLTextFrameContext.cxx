@@ -1675,6 +1675,10 @@ SvXMLImportContextRef XMLTextFrameContext::CreateChildContext(
         }
         xContext = m_xImplContext->CreateChildContext(p_nPrefix, rLocalName, xAttrList);
     }
+    else if (p_nPrefix == XML_NAMESPACE_DRAW && (IsXMLToken(rLocalName, XML_A)))
+    {
+        xContext = m_xImplContext->CreateChildContext(p_nPrefix, rLocalName, xAttrList);
+    }
     else
     {
         // the child is a drawing shape

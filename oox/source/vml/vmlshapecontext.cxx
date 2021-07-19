@@ -303,6 +303,7 @@ ShapeTypeContext::ShapeTypeContext(ContextHandler2Helper const & rParent,
     mrTypeModel.moCoordPos = lclDecodeInt32Pair( rAttribs, XML_coordorigin );
     mrTypeModel.moCoordSize = lclDecodeInt32Pair( rAttribs, XML_coordsize );
     setStyle( rAttribs.getString( XML_style, OUString() ) );
+    setHyperlink( rAttribs.getString( XML_href, OUString() ) );
     if( lclDecodeBool( rAttribs, O_TOKEN( hr )).get( false ))
     {   // MSO's handling of o:hr width is nowhere near what the spec says:
         // - o:hrpct is not in % but in 0.1%
@@ -458,6 +459,11 @@ void ShapeTypeContext::setStyle( const OUString& rStyle )
             else if ( aName == "mso-wrap-distance-bottom" ) mrTypeModel.maWrapDistanceBottom = aValue;
         }
     }
+}
+
+void ShapeTypeContext::setHyperlink( const OUString& rHyperlink )
+{
+    mrTypeModel.maHyperlink = rHyperlink;
 }
 
 ShapeContext::ShapeContext(ContextHandler2Helper const& rParent,

@@ -1192,6 +1192,13 @@ DECLARE_OOXMLEXPORT_TEST(testActiveXControlAtRunEnd, "activex_control_at_run_end
     CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AT_CHARACTER,getProperty<text::TextContentAnchorType>(xPropertySet2,"AnchorType"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testShapeHyperlink, "hyperlinkshape.docx")
+{
+    // Test import/export of hyperlink property on shapes
+    auto xShape(getShape(1));
+    CPPUNIT_ASSERT_EQUAL(OUString("https://libreoffice.org/"), getProperty<OUString>(xShape, "Hyperlink"));
+}
+
 DECLARE_OOXMLEXPORT_TEST(testActiveXOptionButtonGroup, "activex_option_button_group.docx")
 {
     // Optionbutton groups were not handled

@@ -917,6 +917,9 @@ public:
 
     void setSuitableOutlinerBg(Outliner& rOutliner) const;
 
+    OUString getHyperlink() const { return msHyperlink; }
+    void setHyperlink(const OUString& sHyperlink) { msHyperlink = sHyperlink; }
+
 protected:
     tools::Rectangle            aOutRect;     // surrounding rectangle for Paint (incl. LineWidth, ...)
     Point                       aAnchor;      // anchor position (Writer)
@@ -1024,6 +1027,8 @@ private:
     // HACK: Do not automatically insert newly created object into a page.
     // The user needs to do it manually later.
     bool                        mbDoNotInsertIntoPageAutomatically;
+    // Hyperlink for the whole shape
+    OUString msHyperlink;
 
     // only for internal use!
     SvxShape* getSvxShape();

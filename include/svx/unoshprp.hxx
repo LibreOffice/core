@@ -192,7 +192,8 @@
 #define OWN_ATTR_SIGNATURELINE_UNSIGNED_IMAGE   (OWN_ATTR_VALUE_START+102)
 #define OWN_ATTR_SIGNATURELINE_IS_SIGNED        (OWN_ATTR_VALUE_START+103)
 #define OWN_ATTR_QRCODE                         (OWN_ATTR_VALUE_START+104)
-// ATTENTION: maximum is OWN_ATTR_VALUE_START+104 svx, see include/svl/solar.hrc
+#define OWN_ATTR_HYPERLINK                      (OWN_ATTR_VALUE_START+105)
+// ATTENTION: maximum is OWN_ATTR_VALUE_START+105 svx, see include/svl/solar.hrc
 
 // #FontWork#
 #define FONTWORK_PROPERTIES \
@@ -340,7 +341,8 @@
     { OUString("UINamePlural"),                 OWN_ATTR_UINAME_PLURAL          , ::cppu::UnoType<OUString>::get(),    css::beans::PropertyAttribute::READONLY,   0}, \
     /* #i68101# */ \
     { OUString(UNO_NAME_MISC_OBJ_TITLE),        OWN_ATTR_MISC_OBJ_TITLE         , ::cppu::UnoType<OUString>::get(),    0,  0}, \
-    { OUString(UNO_NAME_MISC_OBJ_DESCRIPTION),  OWN_ATTR_MISC_OBJ_DESCRIPTION   , ::cppu::UnoType<OUString>::get(),    0,  0},
+    { OUString(UNO_NAME_MISC_OBJ_DESCRIPTION),  OWN_ATTR_MISC_OBJ_DESCRIPTION   , ::cppu::UnoType<OUString>::get(),    0,  0}, \
+    { OUString(UNO_NAME_HYPERLINK),             OWN_ATTR_HYPERLINK              , ::cppu::UnoType<OUString>::get(),    0,  0},
 
 #define LINKTARGET_PROPERTIES \
     { OUString(UNO_NAME_LINKDISPLAYNAME),   OWN_ATTR_LDNAME             , ::cppu::UnoType<OUString>::get(),    css::beans::PropertyAttribute::READONLY, 0}, \

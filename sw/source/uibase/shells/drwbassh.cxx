@@ -30,6 +30,7 @@
 #include <svx/swframevalidation.hxx>
 #include <svx/anchorid.hxx>
 #include <sfx2/htmlmode.hxx>
+#include <svx/hlnkitem.hxx>
 #include <drawdoc.hxx>
 #include <uitool.hxx>
 #include <fmtornt.hxx>
@@ -54,16 +55,23 @@
 #include <swslots.hxx>
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
+#include <vcl/unohelp2.hxx>
 #include <swabstdlg.hxx>
 #include <swundo.hxx>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
+#include <com/sun/star/uno/Reference.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <memory>
 #include <fmtfollowtextflow.hxx>
 
 using namespace ::com::sun::star;
+using namespace css::beans;
+using namespace css::drawing;
+using namespace css::uno;
 
 SFX_IMPL_SUPERCLASS_INTERFACE(SwDrawBaseShell, SwBaseShell)
 
@@ -603,6 +611,43 @@ void SwDrawBaseShell::Execute(SfxRequest const &rReq)
             break;
         }
 
+        case SID_EDIT_HYPERLINK:
+        case SID_HYPERLINK_DIALOG:
+        {
+            GetView().GetViewFrame()->SetChildWindow(SID_HYPERLINK_DIALOG, true);
+            break;
+        }
+
+        case SID_HYPERLINK_SETLINK:
+        {
+            if(pItem)
+            {
+                const SvxHyperlinkItem& rHLinkItem = *static_cast<const SvxHyperlinkItem *>(pItem);
+                const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
+                SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
+                pObj->setHyperlink(rHLinkItem.GetURL());
+            }
+            break;
+        }
+
+        case SID_REMOVE_HYPERLINK:
+        {
+            const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
+            SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
+            pObj->setHyperlink(OUString());
+            break;
+        }
+
+        case SID_COPY_HYPERLINK_LOCATION:
+        {
+            const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
+            SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
+            uno::Reference<datatransfer::clipboard::XClipboard> xClipboard
+                = GetView().GetEditWin().GetClipboard();
+            vcl::unohelper::TextDataObject::CopyStringTo(pObj->getHyperlink(), xClipboard);
+            break;
+        }
+
         default:
             OSL_ENSURE(false, "wrong Dispatcher");
             return;
@@ -736,6 +781,35 @@ void SwDrawBaseShell::GetState(SfxItemSet& rSet)
                     }
                 }
                 break;
+
+            case SID_EDIT_HYPERLINK:
+            case SID_HYPERLINK_DIALOG:
+            case SID_REMOVE_HYPERLINK:
+            case SID_COPY_HYPERLINK_LOCATION:
+            {
+                if (pSdrView->GetMarkedObjectCount() != 1)
+                    rSet.DisableItem(nWhich);
+                else if (nWhich == SID_REMOVE_HYPERLINK || nWhich == SID_EDIT_HYPERLINK
+                         || nWhich == SID_COPY_HYPERLINK_LOCATION)
+                {
+                    const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
+                    SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
+                    if (pObj->getHyperlink().isEmpty())
+                        rSet.DisableItem(nWhich);
+                }
+            }
+            break;
+
+            case SID_HYPERLINK_GETLINK:
+            {
+                const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
+                SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
+                OUString sHyperLink = pObj->getHyperlink();
+                SvxHyperlinkItem aHLinkItem;
+                aHLinkItem.SetURL(sHyperLink);
+                rSet.Put(aHLinkItem);
+            }
+            break;
         }
         nWhich = aIter.NextWhich();
     }
