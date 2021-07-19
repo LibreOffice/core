@@ -16,6 +16,24 @@
       "revId": "3fec689480644c274501740013ff83388cb24245",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "558e7e0a_0043542e",
+        "filename": "sw/source/core/unocore/unostyle.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 3545,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-19T20:21:20Z",
+      "side": 1,
+      "message": "I suppose I\u0027ll add a reasonable 1-element range (RES_TXTATR_CJK_RUBY, RES_TXTATR_CJK_RUBY) there, based on the return value of aSwMapProvider.GetPropertySet(PROPERTY_MAP_RUBY_AUTO_STYLE).",
+      "parentUuid": "bcd405c8_b21ecdaf",
+      "revId": "3fec689480644c274501740013ff83388cb24245",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
