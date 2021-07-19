@@ -52,6 +52,11 @@
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/accessibility/XAccessibleEditableText.hpp>
 
+#if QT5_USING_X11
+#define XK_MISCELLANY
+#include <X11/keysymdef.h>
+#endif
+
 using namespace com::sun::star;
 
 void Qt5Widget::paintEvent(QPaintEvent* pEvent)
@@ -442,6 +447,82 @@ bool Qt5Widget::handleKeyEvent(Qt5Frame& rFrame, const QWidget& rWidget, QKeyEve
         commitText(rFrame, pEvent->text());
         pEvent->accept();
         return true;
+    }
+
+    if (nCode == 0)
+    {
+        sal_uInt16 nModCode = GetKeyModCode(pEvent->modifiers());
+        SalKeyModEvent aModEvt;
+        aModEvt.mbDown = eState == ButtonKeyState::Pressed;
+        aModEvt.mnModKeyCode = ModKeyFlags::NONE;
+
+#if QT5_USING_X11
+        if (QGuiApplication::platformName() == "xcb")
+        {
+            // pressing just the ctrl key leads to a keysym of XK_Control but
+            // the event state does not contain ControlMask. In the release
+            // event it's the other way round: it does contain the Control mask.
+            // The modifier mode therefore has to be adapted manually.
+            ModKeyFlags nExtModMask = ModKeyFlags::NONE;
+            sal_uInt16 nModMask = 0;
+            switch (pEvent->nativeVirtualKey())
+            {
+                case XK_Control_L:
+                    nExtModMask = ModKeyFlags::LeftMod1;
+                    nModMask = KEY_MOD1;
+                    break;
+                case XK_Control_R:
+                    nExtModMask = ModKeyFlags::RightMod1;
+                    nModMask = KEY_MOD1;
+                    break;
+                case XK_Alt_L:
+                    nExtModMask = ModKeyFlags::LeftMod2;
+                    nModMask = KEY_MOD2;
+                    break;
+                case XK_Alt_R:
+                    nExtModMask = ModKeyFlags::RightMod2;
+                    nModMask = KEY_MOD2;
+                    break;
+                case XK_Shift_L:
+                    nExtModMask = ModKeyFlags::LeftShift;
+                    nModMask = KEY_SHIFT;
+                    break;
+                case XK_Shift_R:
+                    nExtModMask = ModKeyFlags::RightShift;
+                    nModMask = KEY_SHIFT;
+                    break;
+                // Map Meta/Super keys to MOD3 modifier on all Unix systems
+                // except macOS
+                case XK_Meta_L:
+                case XK_Super_L:
+                    nExtModMask = ModKeyFlags::LeftMod3;
+                    nModMask = KEY_MOD3;
+                    break;
+                case XK_Meta_R:
+                case XK_Super_R:
+                    nExtModMask = ModKeyFlags::RightMod3;
+                    nModMask = KEY_MOD3;
+                    break;
+            }
+
+            if (eState == ButtonKeyState::Released)
+            {
+                aModEvt.mnModKeyCode = rFrame.m_nKeyModifiers;
+                nModCode &= ~nModMask;
+                rFrame.m_nKeyModifiers &= ~nExtModMask;
+            }
+            else
+            {
+                nModCode |= nModMask;
+                rFrame.m_nKeyModifiers |= nExtModMask;
+                aModEvt.mnModKeyCode = rFrame.m_nKeyModifiers;
+            }
+        }
+#endif
+        aModEvt.mnCode = nModCode;
+
+        rFrame.CallCallback(SalEvent::KeyModChange, &aModEvt);
+        return false;
     }
 
     SalKeyEvent aEvent;
