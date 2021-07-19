@@ -190,7 +190,7 @@ private:
     css::uno::Reference< css::uno::XComponentContext >        m_xContext;
     osl::Mutex                                                m_mutex;
     cppu::OMultiTypeInterfaceContainerHelper                  m_aListenerContainer;   /// container for ALL Listener
-    css::uno::Reference< css::lang::XComponent >              m_xImageManager;
+    rtl::Reference< ImageManager >                            m_xImageManager;
     css::uno::Reference< css::ui::XAcceleratorConfiguration > m_xAccConfig;
 };
 
@@ -1111,9 +1111,7 @@ Reference< XInterface > SAL_CALL UIConfigurationManager::getImageManager()
 
     if ( !m_xImageManager.is() )
     {
-        m_xImageManager.set( static_cast< cppu::OWeakObject *>( new ImageManager( m_xContext )),
-                             UNO_QUERY );
-        Reference< XInitialization > xInit( m_xImageManager, UNO_QUERY );
+        m_xImageManager = new ImageManager( m_xContext, /*bForModule*/false );
 
         Sequence<Any> aPropSeq(comphelper::InitAnyPropertySequence(
         {
@@ -1121,10 +1119,10 @@ Reference< XInterface > SAL_CALL UIConfigurationManager::getImageManager()
             {"ModuleIdentifier", Any(OUString())},
         }));
 
-        xInit->initialize( aPropSeq );
+        m_xImageManager->initialize( aPropSeq );
     }
 
-    return Reference< XInterface >( m_xImageManager, UNO_QUERY );
+    return Reference< XInterface >( static_cast<cppu::OWeakObject*>(m_xImageManager.get()), UNO_QUERY );
 }
 
 Reference< XAcceleratorConfiguration > SAL_CALL UIConfigurationManager::getShortCutManager()
@@ -1178,12 +1176,8 @@ void SAL_CALL UIConfigurationManager::setStorage( const Reference< XStorage >& S
     if ( m_xAccConfig.is() )
         m_xAccConfig->setStorage( m_xDocConfigStorage );
 
-    if ( m_xImageManager.is() )
-    {
-        ImageManager* pImageManager = static_cast<ImageManager*>(m_xImageManager.get());
-        if ( pImageManager )
-            pImageManager->setStorage( m_xDocConfigStorage );
-    }
+    if ( m_xImageManager )
+        m_xImageManager->setStorage( m_xDocConfigStorage );
 
     if ( m_xDocConfigStorage.is() )
     {

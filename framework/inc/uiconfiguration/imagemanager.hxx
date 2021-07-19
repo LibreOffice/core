@@ -35,7 +35,7 @@ namespace framework
     class ImageManager final : public ::cppu::WeakImplHelper< css::ui::XImageManager, css::lang::XServiceInfo>
     {
         public:
-            ImageManager( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+            ImageManager( const css::uno::Reference< css::uno::XComponentContext >& rxContext, bool bForModule );
             virtual ~ImageManager() override;
 
             virtual OUString SAL_CALL getImplementationName() override
