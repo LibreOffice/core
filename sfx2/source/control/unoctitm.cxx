@@ -596,55 +596,6 @@ void UsageInfo::save()
 
 class theUsageInfo : public rtl::Static<UsageInfo, theUsageInfo> {};
 
-/// Extracts information about the command + args, and stores that.
-void collectUsageInformation(const util::URL& rURL, const uno::Sequence<beans::PropertyValue>& rArgs)
-{
-    bool bCollecting = getenv("LO_COLLECT_USAGE") || officecfg::Office::Common::Misc::CollectUsageInformation::get();
-    theUsageInfo::get().setCollecting(bCollecting);
-    if (!bCollecting)
-        return;
-
-    OUStringBuffer aBuffer;
-
-    // app identification [uh, several UNO calls :-(]
-    uno::Reference<uno::XComponentContext> xContext = ::comphelper::getProcessComponentContext();
-    uno::Reference<frame::XModuleManager2> xModuleManager(frame::ModuleManager::create(xContext));
-    uno::Reference<frame::XDesktop2> xDesktop = frame::Desktop::create(xContext);
-    uno::Reference<frame::XFrame> xFrame = xDesktop->getCurrentFrame();
-
-    OUString aModule(xModuleManager->identify(xFrame));
-    sal_Int32 nLastDot = aModule.lastIndexOf('.');
-    if (nLastDot >= 0)
-        aModule = aModule.copy(nLastDot + 1);
-
-    aBuffer.append(aModule);
-    aBuffer.append(';');
-
-    // command
-    aBuffer.append(rURL.Protocol);
-    aBuffer.append(rURL.Path);
-    sal_Int32 nCount = rArgs.getLength();
-
-    // parameters - only their names, not the values (could be sensitive!)
-    if (nCount > 0)
-    {
-        aBuffer.append('(');
-        for (sal_Int32 n = 0; n < nCount; n++)
-        {
-            const css::beans::PropertyValue& rProp = rArgs[n];
-            if (n > 0)
-                aBuffer.append(',');
-            aBuffer.append(rProp.Name);
-        }
-        aBuffer.append(')');
-    }
-
-    OUString aCommand(aBuffer.makeStringAndClear());
-
-    // store
-    theUsageInfo::get().increment(aCommand);
-}
-
 void collectUIInformation(const util::URL& rURL, const css::uno::Sequence< css::beans::PropertyValue >& rArgs)
 {
     static const char* pFile = std::getenv("LO_COLLECT_UIINFO");
@@ -664,7 +615,6 @@ void SfxDispatchController_Impl::dispatch( const css::util::URL& aURL,
     {
         CrashReporter::logUnoCommand(aURL.Path);
     }
-    collectUsageInformation(aURL, aArgs);
     collectUIInformation(aURL, aArgs);
 
     SolarMutexGuard aGuard;

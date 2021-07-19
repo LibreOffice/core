@@ -280,26 +280,6 @@
             <property name="margin-start">12</property>
             <property name="margin-top">6</property>
             <child>
-              <object class="GtkCheckButton" id="collectusageinfo">
-                <property name="label" translatable="yes" context="optgeneralpage|collectusageinfo">Collect usage data and send it to The Document Foundation</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="margin_top">1</property>
-                <property name="use_underline">True</property>
-                <property name="draw_indicator">True</property>
-                <child internal-child="accessible">
-                  <object class="AtkObject" id="collectusageinfo-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip | collectusageinfo">Send usage data to help The Document Foundation improve the software usability.</property>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">0</property>
-              </packing>
-            </child>
-            <child>
               <object class="GtkCheckButton" id="crashreport">
                 <property name="label" translatable="yes" context="optgeneralpage|crashreport">Sen_d crash reports to The Document Foundation</property>
                 <property name="visible">True</property>
