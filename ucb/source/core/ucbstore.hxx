@@ -33,6 +33,7 @@
 #include <com/sun/star/beans/XPropertyAccess.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
+#include <comphelper/interfacecontainer2.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <unordered_map>
@@ -140,7 +141,8 @@ public:
 };
 
 
-struct PersistentPropertySet_Impl;
+class PropertySetInfo_Impl;
+typedef cppu::OMultiTypeInterfaceContainerHelperVar<OUString> PropertyListeners_Impl;
 
 class PersistentPropertySet : public cppu::WeakImplHelper <
     css::lang::XServiceInfo,
@@ -151,7 +153,14 @@ class PersistentPropertySet : public cppu::WeakImplHelper <
     css::beans::XPropertySetInfoChangeNotifier,
     css::beans::XPropertyAccess >
 {
-    std::unique_ptr<PersistentPropertySet_Impl> m_pImpl;
+    rtl::Reference<PropertySetRegistry>  m_pCreator;
+    rtl::Reference<PropertySetInfo_Impl> m_pInfo;
+    OUString                    m_aKey;
+    OUString                    m_aFullKey;
+    osl::Mutex                  m_aMutex;
+    std::unique_ptr<comphelper::OInterfaceContainerHelper2>  m_pDisposeEventListeners;
+    std::unique_ptr<comphelper::OInterfaceContainerHelper2>  m_pPropSetChangeListeners;
+    std::unique_ptr<PropertyListeners_Impl>      m_pPropertyChangeListeners;
 
 private:
     void notifyPropertyChangeEvent(
