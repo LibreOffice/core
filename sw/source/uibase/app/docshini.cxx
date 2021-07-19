@@ -299,7 +299,7 @@ bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
 // <-- collapsing
 
     //#i16874# AutoKerning as default for new documents
-    m_xDoc->SetDefault( SvxAutoKernItem( true, RES_CHRATR_AUTOKERN ) );
+    m_xDoc->SetDefault( SvxAutoKernItem( false, RES_CHRATR_AUTOKERN ) );
 
     // #i42080# - Due to the several calls of method <SetDefault(..)>
     // at the document instance, the document is modified. Thus, reset this
