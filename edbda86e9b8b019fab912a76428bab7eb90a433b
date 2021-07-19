@@ -16,6 +16,24 @@
       "revId": "edbda86e9b8b019fab912a76428bab7eb90a433b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4758193b_8f0e9383",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-07-19T07:15:00Z",
+      "side": 1,
+      "message": "Yes. But it also fixes the problem with DOCX export. I can change the title to something better understandable by the user.",
+      "parentUuid": "1bd37c65_26ad8f9e",
+      "revId": "edbda86e9b8b019fab912a76428bab7eb90a433b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
