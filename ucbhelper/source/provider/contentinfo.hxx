@@ -20,7 +20,6 @@
 #ifndef UCBHELPER_SOURCE_PROVIDER_CONTENTINFO_HXX
 #define UCBHELPER_SOURCE_PROVIDER_CONTENTINFO_HXX
 
-#include <memory>
 #include <optional>
 #include <com/sun/star/ucb/XCommandInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
@@ -89,8 +88,8 @@ class CommandProcessorInfo :
 {
     css::uno::Reference< css::ucb::XCommandEnvironment >
                                 m_xEnv;
-    std::unique_ptr<css::uno::Sequence< css::ucb::CommandInfo >>
-                                m_pCommands;
+    std::optional<css::uno::Sequence< css::ucb::CommandInfo >>
+                                m_xCommands;
     osl::Mutex                  m_aMutex;
     ContentImplHelper*          m_pContent;
 
