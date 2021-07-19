@@ -24,6 +24,7 @@
 #include <svx/fmdpage.hxx>
 #include "frmfmt.hxx"
 #include <com/sun/star/text/XTextContent.hpp>
+#include <com/sun/star/text/XTextFrame.hpp>
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
@@ -136,6 +137,8 @@ class SwXShape : public SwXShapeBaseClass, public SvtListener
     friend class SwFmDrawPage;
     const SwFmDrawPage* m_pPage;
     SwFrameFormat* m_pFormat;
+
+    css::uno::Reference< css::text::XTextFrame > m_xTextBox;
 
     css::uno::Reference< css::uno::XAggregation > m_xShapeAgg;
     // reference to <XShape>, determined in the

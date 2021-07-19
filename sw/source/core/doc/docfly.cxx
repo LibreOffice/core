@@ -76,7 +76,7 @@ size_t SwDoc::GetFlyCount( FlyCntType eType, bool bIgnoreTextBoxes ) const
     {
         const SwFrameFormat* pFlyFormat = rFormats[ i ];
 
-        if (bIgnoreTextBoxes && SwTextBoxHelper::isTextBox(pFlyFormat, RES_FLYFRMFMT))
+         if (bIgnoreTextBoxes && SwTextBoxHelper::isTextBox(pFlyFormat, RES_FLYFRMFMT))
             continue;
 
         if( RES_FLYFRMFMT != pFlyFormat->Which() )
@@ -577,7 +577,6 @@ bool SwDoc::SetFlyFrameAttr( SwFrameFormat& rFlyFormat, SfxItemSet& rSet )
 
     getIDocumentState().SetModified();
 
-    SwTextBoxHelper::syncFlyFrameAttr(rFlyFormat, rSet);
 
     return bRet;
 }
@@ -920,11 +919,10 @@ bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
                     pNd->InsertItem( aFormat, aPos.nContent.GetIndex(), 0 );
 
                     // Has a textbox attached to the format? Sync it as well!
-                    if (SwTextBoxHelper::getOtherTextBoxFormat(pContact->GetFormat(),
-                                                               RES_DRAWFRMFMT))
+                    if (auto pShapeFormat = pContact->GetFormat())
                     {
-                        SwTextBoxHelper::syncFlyFrameAttr(*pContact->GetFormat(),
-                                                          pContact->GetFormat()->GetAttrSet());
+                        if (pShapeFormat->Which() == RES_DRAWFRMFMT)
+                            SwTextBoxHelper::handleTextBox(pShapeFormat);
                     }
                 }
                 break;

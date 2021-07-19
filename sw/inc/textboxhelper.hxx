@@ -29,6 +29,8 @@ class SwFrameFormat;
 class SwFrameFormats;
 class SwFormatContent;
 class SwDoc;
+class SwRect;
+
 namespace tools
 {
 class Rectangle;
@@ -73,8 +75,6 @@ public:
     /// Get a property of the underlying TextFrame.
     static void getProperty(SwFrameFormat const* pShape, sal_uInt16 nWID, sal_uInt8 nMemberID,
                             css::uno::Any& rValue);
-    /// Get a property of the underlying TextFrame.
-    static css::uno::Any getProperty(SwFrameFormat const* pShape, const OUString& rPropName);
 
     /// There are two types of enum of anchor type, so this function maps this.
     static css::text::TextContentAnchorType mapAnchorType(const RndStdIds& rAnchorID);
@@ -162,6 +162,43 @@ public:
     /// Undo the effect of saveLinks() + individual resetLink() calls.
     static void restoreLinks(std::set<ZSortFly>& rOld, std::vector<SwFrameFormat*>& rNew,
                              SavedLink& rSavedLinks);
+
+    /// New method to create textbox for a shape, returns true on success.
+    static bool createTextBox(css::uno::Reference<css::drawing::XShape> xShape, SwDoc* pDoc,
+                              bool bCopy = false);
+    /// Returns true if the given shape is a textbox else false.
+    static bool isTextBox(css::uno::Reference<css::drawing::XShape> xShape);
+    /// Maintains the textbox of the given shape automatically.
+    static bool handleTextBox(css::uno::Reference<css::drawing::XShape> xShape);
+    static bool handleTextBox(SwFrameFormat* pFormat);
+    /// Removes the textbox from the shape
+    static bool removeTextBox(css::uno::Reference<css::drawing::XShape> xShape);
+
+    static bool dispose(css::uno::Reference<css::text::XTextFrame> xFrame);
+
+    /// If the given format is a fly-frame-format, and it is a textbox,
+    /// finds the shape-format what assigned to the given frame.
+    static SwFrameFormat* findShapeFormat(const SwFrameFormat* pFlyFormat);
+
+    /// Does the creation of the textframe for the given tartget shape,
+    /// and copies the content from the gicen source shape to the target.
+    static void copyTextBox(const SdrObject* pSourceObj, SdrObject* pTargetObj);
+
+private:
+    static bool createTextBox_lcl(css::uno::Reference<css::drawing::XShape> xShape, SwDoc* pDoc,
+                                  bool bCopy = false);
+
+    static bool setTextBoxAttributes_lcl(SwFrameFormat* pSourceFormat, SdrObject* pSourceObject,
+                                         SwFrameFormat* pTargetTextBoxFormat, bool bIsGroupShape);
+
+    static std::vector<std::pair<std::pair<OUString, OUString>, OUString>>
+    setTextBoxProperties_lcl(std::vector<std::pair<OUString, OUString>> vProperties,
+                             css::uno::Reference<css::drawing::XShape> xShape);
+
+    static SdrObject* findSdrObjectOfUNOShape(css::uno::Reference<css::drawing::XShape> xShape);
+
+    static std::vector<css::uno::Reference<css::drawing::XShape>>
+    getGroupMembers(css::uno::Reference<css::drawing::XShape> xShape);
 };
 
 #endif // INCLUDED_SW_INC_TEXTBOXHELPER_HXX

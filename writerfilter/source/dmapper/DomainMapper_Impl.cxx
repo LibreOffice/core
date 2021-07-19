@@ -3464,11 +3464,10 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
         }
         else
         {
-            uno::Reference< text::XTextRange > xShapeText( xShape, uno::UNO_QUERY_THROW);
+            uno::Reference< text::XTextRange > xShapeText(xShape, uno::UNO_QUERY_THROW);
             // Add the shape to the text append stack
             m_aTextAppendStack.push( TextAppendContext(uno::Reference< text::XTextAppend >( xShape, uno::UNO_QUERY_THROW ),
                         m_bIsNewDoc ? uno::Reference<text::XTextCursor>() : m_xBodyText->createTextCursorByRange(xShapeText->getStart() )));
-
             // Add the shape to the anchored objects stack
             uno::Reference< text::XTextContent > xTxtContent( xShape, uno::UNO_QUERY_THROW );
             m_aAnchoredStack.push( AnchoredContext(xTxtContent) );

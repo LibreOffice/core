@@ -202,7 +202,7 @@ void SwTextFlyCnt::SetAnchor( const SwTextNode *pNode )
             }
         }
         pFormat->SetFormatAttr( aAnchor );  // only set the anchor
-
+#if 0 // Removed due to regression.
         // If the draw format has a TextBox, then set its anchor as well.
         if (SwFrameFormat* pTextBox
             = SwTextBoxHelper::getOtherTextBoxFormat(pFormat, RES_DRAWFRMFMT))
@@ -237,6 +237,7 @@ void SwTextFlyCnt::SetAnchor( const SwTextNode *pNode )
                 pTextBox->MakeFrames();
             }
         }
+#endif
     }
 
     // The node may have several SwTextFrames - for every SwTextFrame a

@@ -462,44 +462,26 @@ SwFrameFormat *DocumentLayoutManager::CopyLayoutFormat(
     if( bMakeFrames )
         pDest->MakeFrames();
 
-    // If the draw format has a TextBox, then copy its fly format as well.
-    if (SwFrameFormat* pSourceTextBox = SwTextBoxHelper::getOtherTextBoxFormat(&rSource, RES_DRAWFRMFMT))
-    {
-        SwFormatAnchor boxAnchor(rNewAnchor);
-        if (RndStdIds::FLY_AS_CHAR == boxAnchor.GetAnchorId())
-        {
-            // AS_CHAR *must not* be set on textbox fly-frame
-            boxAnchor.SetType(RndStdIds::FLY_AT_CHAR);
-        }
-        // presumably these anchors are supported though not sure
-        assert(RndStdIds::FLY_AT_CHAR == boxAnchor.GetAnchorId() || RndStdIds::FLY_AT_PARA == boxAnchor.GetAnchorId()
-        || boxAnchor.GetAnchorId() == RndStdIds::FLY_AT_PAGE);
-
-        if (!bMakeFrames && rNewAnchor.GetAnchorId() == RndStdIds::FLY_AS_CHAR)
-        {
-            // If the draw format is as-char, then it will be copied with bMakeFrames=false, but
-            // doing the same for the fly format would result in not making fly frames at all.
-            bMakeFrames = true;
-        }
-
-        SwFrameFormat* pDestTextBox = CopyLayoutFormat(*pSourceTextBox,
-                boxAnchor, bSetTextFlyAtt, bMakeFrames);
-        SwAttrSet aSet(pDest->GetAttrSet());
-        SwFormatContent aContent(pDestTextBox->GetContent().GetContentIdx()->GetNode().GetStartNode());
-        aSet.Put(aContent);
-        pDest->SetFormatAttr(aSet);
-
-        // Link FLY and DRAW formats, so it becomes a text box
-        pDest->SetOtherTextBoxFormat(pDestTextBox);
-        pDestTextBox->SetOtherTextBoxFormat(pDest);
-    }
-
     if (pDest->GetName().isEmpty())
     {
         // Format name should have unique name. Let's use object name as a fallback
         SdrObject *pObj = pDest->FindSdrObject();
         if (pObj)
             pDest->SetName(pObj->GetName());
+    }
+
+    if (bDraw)
+    {
+        auto pMasterObj = rSource.FindRealSdrObject();
+        auto pTargetObj = pDest->FindRealSdrObject();
+
+        try
+        {
+            SwTextBoxHelper::copyTextBox(pMasterObj, pTargetObj);
+        }
+        catch (...)
+        {
+        }
     }
 
     return pDest;

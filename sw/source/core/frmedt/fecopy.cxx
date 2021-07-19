@@ -378,8 +378,9 @@ bool SwFEShell::CopyDrawSel( SwFEShell& rDestShell, const Point& rSttPt,
                     pFormat = pDestDoc->getIDocumentContentOperations().InsertDrawObj( *rDestShell.GetCursor(), *pNew, aSet );
                 }
                 else
-                    pFormat = pDestDoc->getIDocumentLayoutAccess().CopyLayoutFormat( *pFormat, aAnchor, true, true );
-
+                {
+                    pFormat = pDestDoc->getIDocumentLayoutAccess().CopyLayoutFormat(*pFormat, aAnchor, true, true);
+                }
                 // Can be 0, as Draws are not allowed in Headers/Footers
                 if ( pFormat )
                 {
@@ -399,10 +400,6 @@ bool SwFEShell::CopyDrawSel( SwFEShell& rDestShell, const Point& rSttPt,
                         // that position attributes are already set.
                         if (SwDrawFrameFormat *pDrawFormat = dynamic_cast<SwDrawFrameFormat*>(pFormat))
                             pDrawFormat->PosAttrSet();
-                    }
-                    if (SwTextBoxHelper::getOtherTextBoxFormat(pFormat, RES_DRAWFRMFMT))
-                    {
-                        SwTextBoxHelper::syncFlyFrameAttr(*pFormat, pFormat->GetAttrSet());
                     }
 
                     if( bSelectInsert )

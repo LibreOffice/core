@@ -51,6 +51,7 @@
 #include <textboxhelper.hxx>
 #include <fmtfollowtextflow.hxx>
 #include <unoprnms.hxx>
+#include <com/sun/star/beans/XPropertySet.hpp>
 
 using namespace ::com::sun::star;
 
@@ -89,7 +90,7 @@ void SwFlyAtContentFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rH
         return;
     auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
     const SwFormatAnchor* pAnch = pLegacy->m_pNew ? GetAnchorFromPoolItem(*pLegacy->m_pNew) : nullptr;
-    if(!pAnch)
+    if(!pAnch || !pAnch->GetContentAnchor())
     {
         SwFlyFrame::SwClientNotify(rMod, rHint);
         return;
@@ -522,14 +523,24 @@ void SwFlyAtContentFrame::MakeAll(vcl::RenderContext* pRenderContext)
             }
         }
     }
+
     // tdf#137803: Fix the position of the shape during autoSize
     SwFrameFormat* pShapeFormat
         = SwTextBoxHelper::getOtherTextBoxFormat(GetFormat(), RES_FLYFRMFMT);
+    bool bIsAutoSized = false;
+    if (pShapeFormat)
+    {
+        if (auto xFrame
+            = SwTextBoxHelper::queryInterface(pShapeFormat, cppu::UnoType<text::XTextFrame>::get())
+                  .get<uno::Reference<text::XTextFrame>>())
+            bIsAutoSized = (uno::Reference<beans::XPropertySet>(xFrame, uno::UNO_QUERY))
+                               ->getPropertyValue(UNO_NAME_FRAME_ISAUTOMATIC_HEIGHT)
+                               .get<bool>();
+    }
+
     // FIXME: According to tdf37153, ignore FollowTextFlow objs, because
     // wrong position will applied in that case. FollowTextFlow needs fix.
-    if (pShapeFormat && !pShapeFormat->GetFollowTextFlow().GetValue() &&
-        SwTextBoxHelper::getProperty(pShapeFormat,
-            UNO_NAME_FRAME_ISAUTOMATIC_HEIGHT).get<bool>() )
+    if (pShapeFormat && !pShapeFormat->GetFollowTextFlow().GetValue() && bIsAutoSized)
     {
         // get the text area of the shape
         const tools::Rectangle aTextRectangle
@@ -544,6 +555,7 @@ void SwFlyAtContentFrame::MakeAll(vcl::RenderContext* pRenderContext)
         GetFormat()->SetFormatAttr(aHOri);
         GetFormat()->SetFormatAttr(aVOri);
     }
+
     if ( bOsz || bConsiderWrapInfluenceDueToOverlapPrevCol ||
          // #i40444#
          bConsiderWrapInfluenceDueToMovedFwdAnchor )

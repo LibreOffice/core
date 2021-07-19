@@ -7302,7 +7302,7 @@ bool SwFrame::GetBackgroundBrush(
             {
                 const SwFlyFrame* pFlyFrame = static_cast<const SwFlyFrame*>(pFrame);
                 SwFrameFormat* pShape
-                    = SwTextBoxHelper::getOtherTextBoxFormat(pFlyFrame->GetFormat(), RES_FLYFRMFMT);
+                    = SwTextBoxHelper::findShapeFormat(pFlyFrame->GetFormat());
                 if (pShape)
                 {
                     SdrObject* pObject = pShape->FindRealSdrObject();
