@@ -70,6 +70,24 @@
       "revId": "edbda86e9b8b019fab912a76428bab7eb90a433b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9b7d33e0_31299036",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-07-19T07:25:06Z",
+      "side": 1,
+      "message": "Fair enough :-) Then something like \"DOC/DOCX filter\"? Anyway, the important piece is to cover this with a test, the commit message improvement is just a cherry on the cake. Thanks!",
+      "parentUuid": "dd7183d0_5d2d3d7c",
+      "revId": "edbda86e9b8b019fab912a76428bab7eb90a433b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
