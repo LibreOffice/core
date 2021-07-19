@@ -86,6 +86,7 @@ public:
     virtual sal_uInt32 GetHdlCount() const override;
     virtual void AddToHdlList(SdrHdlList& rHdlList) const override;
     virtual void AddToPlusHdlList(SdrHdlList& rHdlList, SdrHdl& rHdl) const override;
+    virtual const tools::Rectangle& GetLogicRect() const override;
 
     // special drag methods
     virtual bool hasSpecialDrag() const override;
