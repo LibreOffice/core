@@ -117,163 +117,158 @@ std::type_info * RTTI::getRTTI(typelib_TypeDescription const & pTypeDescr)
 
 std::type_info * RTTI::getRTTI_NoLock(typelib_TypeDescription const & pTypeDescr)
 {
-    std::type_info * rtti;
-
     OUString const & unoName = OUString::unacquired(&pTypeDescr.pTypeName);
 
     t_rtti_map::const_iterator iFind( m_rttis.find( unoName ) );
-    if (iFind == m_rttis.end())
+    if (iFind != m_rttis.end())
+        return iFind->second;
+
+    std::type_info * rtti;
+
+    // RTTI symbol
+    OStringBuffer buf( 64 );
+    buf.append( "_ZTIN" );
+    sal_Int32 index = 0;
+    do
     {
-        // RTTI symbol
-        OStringBuffer buf( 64 );
-        buf.append( "_ZTIN" );
-        sal_Int32 index = 0;
-        do
-        {
-            OUString token( unoName.getToken( 0, '.', index ) );
-            buf.append( token.getLength() );
-            OString c_token( OUStringToOString( token, RTL_TEXTENCODING_ASCII_US ) );
-            buf.append( c_token );
-        }
-        while (index >= 0);
-        buf.append( 'E' );
-
-        OString symName( buf.makeStringAndClear() );
-#if !defined ANDROID
-        rtti = static_cast<std::type_info *>(dlsym( m_hApp, symName.getStr() ));
-#else
-        rtti = static_cast<std::type_info *>(dlsym( RTLD_DEFAULT, symName.getStr() ));
-#endif
-
-        if (rtti)
-        {
-            std::pair< t_rtti_map::iterator, bool > insertion (
-                m_rttis.insert( t_rtti_map::value_type( unoName, rtti ) ) );
-            SAL_WARN_IF( !insertion.second, "bridges", "key " << unoName << " already in rtti map" );
-        }
-        else
-        {
-            // try to lookup the symbol in the generated rtti map
-            auto iFind2( m_generatedRttis.find( unoName ) );
-            if (iFind2 == m_generatedRttis.end())
-            {
-                // we must generate it !
-                // symbol and rtti-name is nearly identical,
-                // the symbol is prefixed with _ZTI
-                char const * rttiName = symName.getStr() +4;
-#if OSL_DEBUG_LEVEL > 1
-                fprintf( stderr,"generated rtti for %s\n", rttiName );
-#endif
-                std::unique_ptr<Generated> newRtti;
-                switch (pTypeDescr.eTypeClass) {
-                case typelib_TypeClass_EXCEPTION:
-                    {
-                        typelib_CompoundTypeDescription const & ctd
-                            = reinterpret_cast<
-                                typelib_CompoundTypeDescription const &>(
-                                    pTypeDescr);
-                        if (ctd.pBaseTypeDescription)
-                        {
-                            // ensure availability of base
-                            std::type_info * base_rtti = getRTTI_NoLock(
-                                ctd.pBaseTypeDescription->aBase);
-                            m_rttiNames.emplace_back(OString(rttiName));
-                            std::unique_ptr<std::type_info> info(
-                                new __cxxabiv1::__si_class_type_info(
-                                    m_rttiNames.back().getStr(), static_cast<__cxxabiv1::__class_type_info *>(base_rtti) ));
-                            newRtti.reset(new GeneratedPlain(std::move(info)));
-                        }
-                        else
-                        {
-                            // this class has no base class
-                            m_rttiNames.emplace_back(OString(rttiName));
-                            std::unique_ptr<std::type_info> info(
-                                new __cxxabiv1::__class_type_info(m_rttiNames.back().getStr()));
-                            newRtti.reset(new GeneratedPlain(std::move(info)));
-                        }
-                        break;
-                    }
-                case typelib_TypeClass_INTERFACE:
-                    {
-                        typelib_InterfaceTypeDescription const & itd
-                            = reinterpret_cast<
-                                typelib_InterfaceTypeDescription const &>(
-                                    pTypeDescr);
-                        std::vector<std::type_info *> bases;
-                        for (sal_Int32 i = 0; i != itd.nBaseTypes; ++i) {
-                            bases.push_back(getRTTI_NoLock(itd.ppBaseTypes[i]->aBase));
-                        }
-                        switch (itd.nBaseTypes) {
-                        case 0:
-                            {
-                                m_rttiNames.emplace_back(OString(rttiName));
-                                std::unique_ptr<std::type_info> info(
-                                    new __cxxabiv1::__class_type_info(
-                                        m_rttiNames.back().getStr()));
-                                newRtti.reset(new GeneratedPlain(std::move(info)));
-                                break;
-                            }
-                        case 1:
-                            {
-                                m_rttiNames.emplace_back(OString(rttiName));
-                                std::unique_ptr<std::type_info> info(
-                                    new __cxxabiv1::__si_class_type_info(
-                                        m_rttiNames.back().getStr(),
-                                        static_cast<
-                                            __cxxabiv1::__class_type_info *>(
-                                                bases[0])));
-                                newRtti.reset(new GeneratedPlain(std::move(info)));
-                                break;
-                            }
-                        default:
-                            {
-                                m_rttiNames.emplace_back(OString(rttiName));
-                                auto pad = std::make_unique<char[]>(
-                                    sizeof (__cxxabiv1::__vmi_class_type_info)
-                                    + ((itd.nBaseTypes - 1)
-                                       * sizeof (
-                                           __cxxabiv1::__base_class_type_info)));
-                                __cxxabiv1::__vmi_class_type_info * info
-                                    = new(pad.get())
-                                        __cxxabiv1::__vmi_class_type_info(
-                                            m_rttiNames.back().getStr(),
-                                            __cxxabiv1::__vmi_class_type_info::__flags_unknown_mask);
-                                info->__base_count = itd.nBaseTypes;
-                                for (sal_Int32 i = 0; i != itd.nBaseTypes; ++i)
-                                {
-                                    info->__base_info[i].__base_type
-                                        = static_cast<
-                                            __cxxabiv1::__class_type_info *>(
-                                                bases[i]);
-                                    info->__base_info[i].__offset_flags
-                                        = (__cxxabiv1::__base_class_type_info::__public_mask
-                                           | ((8 * i) << __cxxabiv1::__base_class_type_info::__offset_shift));
-                                }
-                                newRtti.reset(new GeneratedPad(std::move(pad)));
-                                break;
-                            }
-                        }
-                        break;
-                    }
-                default:
-                    assert(false); // cannot happen
-                }
-                rtti = newRtti->get();
-                if (newRtti) {
-                    auto insertion (
-                        m_generatedRttis.emplace(unoName, std::move(newRtti)));
-                    SAL_WARN_IF( !insertion.second, "bridges", "key " << unoName << " already in generated rtti map" );
-                }
-            }
-            else // taking already generated rtti
-            {
-                rtti = iFind2->second->get();
-            }
-        }
+        OUString token( unoName.getToken( 0, '.', index ) );
+        buf.append( token.getLength() );
+        OString c_token( OUStringToOString( token, RTL_TEXTENCODING_ASCII_US ) );
+        buf.append( c_token );
     }
-    else
+    while (index >= 0);
+    buf.append( 'E' );
+
+    OString symName( buf.makeStringAndClear() );
+#if !defined ANDROID
+    rtti = static_cast<std::type_info *>(dlsym( m_hApp, symName.getStr() ));
+#else
+    rtti = static_cast<std::type_info *>(dlsym( RTLD_DEFAULT, symName.getStr() ));
+#endif
+
+    if (rtti)
     {
-        rtti = iFind->second;
+        std::pair< t_rtti_map::iterator, bool > insertion (
+            m_rttis.insert( t_rtti_map::value_type( unoName, rtti ) ) );
+        SAL_WARN_IF( !insertion.second, "bridges", "key " << unoName << " already in rtti map" );
+        return rtti;
+    }
+
+    // try to lookup the symbol in the generated rtti map
+    auto iFind2( m_generatedRttis.find( unoName ) );
+    if (iFind2 != m_generatedRttis.end())
+    {
+        // taking already generated rtti
+        rtti = iFind2->second->get();
+        return rtti;
+    }
+
+    // we must generate it !
+    // symbol and rtti-name is nearly identical,
+    // the symbol is prefixed with _ZTI
+    char const * rttiName = symName.getStr() +4;
+#if OSL_DEBUG_LEVEL > 1
+    fprintf( stderr,"generated rtti for %s\n", rttiName );
+#endif
+    std::unique_ptr<Generated> newRtti;
+    switch (pTypeDescr.eTypeClass) {
+    case typelib_TypeClass_EXCEPTION:
+        {
+            typelib_CompoundTypeDescription const & ctd
+                = reinterpret_cast<
+                    typelib_CompoundTypeDescription const &>(
+                        pTypeDescr);
+            if (ctd.pBaseTypeDescription)
+            {
+                // ensure availability of base
+                std::type_info * base_rtti = getRTTI_NoLock(
+                    ctd.pBaseTypeDescription->aBase);
+                m_rttiNames.emplace_back(OString(rttiName));
+                std::unique_ptr<std::type_info> info(
+                    new __cxxabiv1::__si_class_type_info(
+                       m_rttiNames.back().getStr(), static_cast<__cxxabiv1::__class_type_info *>(base_rtti) ));
+                newRtti.reset(new GeneratedPlain(std::move(info)));
+            }
+            else
+            {
+                // this class has no base class
+                m_rttiNames.emplace_back(OString(rttiName));
+                std::unique_ptr<std::type_info> info(
+                    new __cxxabiv1::__class_type_info(m_rttiNames.back().getStr()));
+                newRtti.reset(new GeneratedPlain(std::move(info)));
+            }
+            break;
+        }
+    case typelib_TypeClass_INTERFACE:
+        {
+            typelib_InterfaceTypeDescription const & itd
+                = reinterpret_cast<
+                   typelib_InterfaceTypeDescription const &>(
+                        pTypeDescr);
+            std::vector<std::type_info *> bases;
+            for (sal_Int32 i = 0; i != itd.nBaseTypes; ++i) {
+                bases.push_back(getRTTI_NoLock(itd.ppBaseTypes[i]->aBase));
+            }
+            switch (itd.nBaseTypes) {
+            case 0:
+                {
+                    m_rttiNames.emplace_back(OString(rttiName));
+                    std::unique_ptr<std::type_info> info(
+                        new __cxxabiv1::__class_type_info(
+                            m_rttiNames.back().getStr()));
+                    newRtti.reset(new GeneratedPlain(std::move(info)));
+                    break;
+                }
+            case 1:
+                {
+                    m_rttiNames.emplace_back(OString(rttiName));
+                    std::unique_ptr<std::type_info> info(
+                        new __cxxabiv1::__si_class_type_info(
+                            m_rttiNames.back().getStr(),
+                            static_cast<
+                                __cxxabiv1::__class_type_info *>(
+                                    bases[0])));
+                    newRtti.reset(new GeneratedPlain(std::move(info)));
+                    break;
+                }
+            default:
+                {
+                    m_rttiNames.emplace_back(OString(rttiName));
+                    auto pad = std::make_unique<char[]>(
+                        sizeof (__cxxabiv1::__vmi_class_type_info)
+                        + ((itd.nBaseTypes - 1)
+                           * sizeof (
+                               __cxxabiv1::__base_class_type_info)));
+                    __cxxabiv1::__vmi_class_type_info * info
+                       = new(pad.get())
+                            __cxxabiv1::__vmi_class_type_info(
+                                m_rttiNames.back().getStr(),
+                                __cxxabiv1::__vmi_class_type_info::__flags_unknown_mask);
+                    info->__base_count = itd.nBaseTypes;
+                    for (sal_Int32 i = 0; i != itd.nBaseTypes; ++i)
+                    {
+                        info->__base_info[i].__base_type
+                            = static_cast<
+                                __cxxabiv1::__class_type_info *>(
+                                    bases[i]);
+                        info->__base_info[i].__offset_flags
+                           = (__cxxabiv1::__base_class_type_info::__public_mask
+                              | ((8 * i) << __cxxabiv1::__base_class_type_info::__offset_shift));
+                    }
+                    newRtti.reset(new GeneratedPad(std::move(pad)));
+                    break;
+                }
+            }
+            break;
+        }
+    default:
+        assert(false); // cannot happen
+    }
+    rtti = newRtti->get();
+    if (newRtti) {
+        auto insertion (
+            m_generatedRttis.emplace(unoName, std::move(newRtti)));
+        SAL_WARN_IF( !insertion.second, "bridges", "key " << unoName << " already in generated rtti map" );
     }
 
     return rtti;
