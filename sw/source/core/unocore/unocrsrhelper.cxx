@@ -1292,7 +1292,7 @@ void makeRedline( SwPaM const & rPaM,
             SwDoc& rDoc = rPaM.GetDoc();
 
             // Build set of attributes we want to fetch
-            std::vector<std::pair<sal_uInt16, sal_uInt16>> aWhichPairs;
+            WhichRangesContainer aWhichPairs;
             std::vector<SfxItemPropertyMapEntry const*> aEntries;
             std::vector<uno::Any> aValues;
             aEntries.reserve(aRevertProperties.getLength());
@@ -1314,12 +1314,12 @@ void makeRedline( SwPaM const & rPaM,
                 }
                 else if (rPropertyName == "NumberingRules")
                 {
-                    aWhichPairs.emplace_back(RES_PARATR_NUMRULE, RES_PARATR_NUMRULE);
+                    aWhichPairs = aWhichPairs.MergeRange(RES_PARATR_NUMRULE, RES_PARATR_NUMRULE);
                     nNumId = aEntries.size();
                 }
                 else
                 {
-                    aWhichPairs.emplace_back(pEntry->nWID, pEntry->nWID);
+                    aWhichPairs = aWhichPairs.MergeRange(pEntry->nWID, pEntry->nWID);
                     if (rPropertyName == "ParaStyleName")
                         nStyleId = aEntries.size();
                 }
@@ -1331,9 +1331,7 @@ void makeRedline( SwPaM const & rPaM,
             {
                 sal_uInt16 nStylePoolId = USHRT_MAX;
                 OUString sParaStyleName;
-                SfxItemSet aItemSet(rDoc.GetAttrPool(), WhichRangesContainer());
-                for (const auto& [nWhich1, nWhich2] : aWhichPairs)
-                    aItemSet.MergeRange(nWhich1, nWhich2);
+                SfxItemSet aItemSet(rDoc.GetAttrPool(), aWhichPairs);
 
                 for (size_t i = 0; i < aEntries.size(); ++i)
                 {
