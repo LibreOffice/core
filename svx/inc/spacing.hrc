@@ -9,11 +9,11 @@
 #ifndef INCLUDED_SVX_INC_SPACING_HRC
 #define INCLUDED_SVX_INC_SPACING_HRC
 
-#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
+#define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
 
 struct measurement
 {
-    const char* key;
+    TranslateId key;
     int twips;
     int human;
 };
@@ -29,7 +29,7 @@ const measurement RID_SVXSTRARY_SPACING_INCH[] =
     { NC_("RID_SVXSTRARY_SPACING_INCH", "Medium Large (1/2″)"),  720, 0 },
     { NC_("RID_SVXSTRARY_SPACING_INCH", "Large (3/4″)"),        1077, 0 },
     { NC_("RID_SVXSTRARY_SPACING_INCH", "Extra Large (1″)"),    1440, 0 },
-    { nullptr, 0, 0 }
+    { {}, 0, 0 }
 };
 
 // To translators: this is a listbox labelled by "Spacing:", cm units
@@ -50,7 +50,7 @@ const measurement RID_SVXSTRARY_SPACING_CM[] =
     { NC_("RID_SVXSTRARY_SPACING_CM", "Large (%1)"),       1077, 190 },
     // Extra Large (2.54 cm)
     { NC_("RID_SVXSTRARY_SPACING_CM", "Extra Large (%1)"), 1440, 254 },
-    { nullptr, 0, 0 }
+    { {}, 0, 0 }
 };
 
 // To translators: this is a listbox labelled by "Margins:", inch units
@@ -64,7 +64,7 @@ const measurement RID_SVXSTRARY_MARGINS_INCH[] =
     { NC_("RID_SVXSTRARY_MARGINS_INCH", "Medium Large (1/2″)"),  720, 0 },
     { NC_("RID_SVXSTRARY_MARGINS_INCH", "Large (3/4″)"),        1077, 0 },
     { NC_("RID_SVXSTRARY_MARGINS_INCH", "Extra Large (1″)"),    1440, 0 },
-    { nullptr, 0, 0 }
+    { {}, 0, 0 }
 };
 
 // To translators: this is a listbox labelled by "Margins:", cm units
@@ -85,7 +85,7 @@ const measurement RID_SVXSTRARY_MARGINS_CM[] =
     { NC_("RID_SVXSTRARY_MARGINS_CM", "Large (%1)"),       1077, 190 },
     // Extra Large (2.54 cm)
     { NC_("RID_SVXSTRARY_MARGINS_CM", "Extra Large (%1)"), 1440, 254 },
-    { nullptr, 0, 0 }
+    { {}, 0, 0 }
 };
 
 #endif

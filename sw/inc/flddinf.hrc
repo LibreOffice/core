@@ -20,9 +20,9 @@
 #ifndef INCLUDED_SW_INC_FLDDINF_HRC
 #define INCLUDED_SW_INC_FLDDINF_HRC
 
-#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
+#define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
 
-const char* FLD_SELECT[] =
+const TranslateId FLD_SELECT[] =
 {
     NC_("flddocinfopage|liststore1", "Author"),
     NC_("flddocinfopage|liststore1", "Time"),

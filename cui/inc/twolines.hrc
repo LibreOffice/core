@@ -13,7 +13,7 @@
 
 #include <utility>
 
-#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
+#define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
 
 #define CHRDLG_ENCLOSE_NONE                 0
 #define CHRDLG_ENCLOSE_ROUND                1
@@ -22,7 +22,7 @@
 #define CHRDLG_ENCLOSE_CURVED               4
 #define CHRDLG_ENCLOSE_SPECIAL_CHAR         5
 
-const std::pair<const char*, sal_uInt16> TWOLINE_OPEN[] =
+const std::pair<TranslateId, sal_uInt16> TWOLINE_OPEN[] =
 {
     { NC_("twolinespage|liststore1", "(None)"), CHRDLG_ENCLOSE_NONE },
     { NC_("twolinespage|liststore1", "("), CHRDLG_ENCLOSE_ROUND },
@@ -32,7 +32,7 @@ const std::pair<const char*, sal_uInt16> TWOLINE_OPEN[] =
     { NC_("twolinespage|liststore1", "Other Characters..."), CHRDLG_ENCLOSE_SPECIAL_CHAR }
 };
 
-const std::pair<const char*, sal_uInt16> TWOLINE_CLOSE[] =
+const std::pair<TranslateId, sal_uInt16> TWOLINE_CLOSE[] =
 {
     { NC_("twolinespage|liststore2", "(None)"), CHRDLG_ENCLOSE_NONE },
     { NC_("twolinespage|liststore2", ")"), CHRDLG_ENCLOSE_ROUND },

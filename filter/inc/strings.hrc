@@ -19,7 +19,7 @@
 
 #pragma once
 
-#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
+#define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
 
 #define STR_UNKNOWN_APPLICATION                 NC_("STR_UNKNOWN_APPLICATION", "Unknown")
 #define STR_IMPORT_ONLY                         NC_("STR_IMPORT_ONLY", "import filter")

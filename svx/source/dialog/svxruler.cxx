@@ -3280,7 +3280,7 @@ void SvxRuler::TabMenuSelect(const OString& rIdent)
     }
 }
 
-static const char* RID_SVXSTR_RULER_TAB[] =
+const TranslateId RID_SVXSTR_RULER_TAB[] =
 {
     RID_SVXSTR_RULER_TAB_LEFT,
     RID_SVXSTR_RULER_TAB_RIGHT,

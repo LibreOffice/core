@@ -648,7 +648,7 @@ void FuConstructRectangle::SetAttributes(SfxItemSet& rAttr, SdrObject* pObj)
 /**
  * set line starts and ends for the object to be created
  */
-static ::basegfx::B2DPolyPolygon getPolygon(const char* pResId, const SdrModel& rModel)
+static ::basegfx::B2DPolyPolygon getPolygon(TranslateId pResId, const SdrModel& rModel)
 {
     ::basegfx::B2DPolyPolygon aRetval;
     XLineEndListRef pLineEndList(rModel.GetLineEndList());

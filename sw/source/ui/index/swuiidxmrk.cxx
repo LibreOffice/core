@@ -1526,7 +1526,7 @@ void SwAuthorMarkPane::Activate()
 
 namespace
 {
-    const char* STR_AUTH_FIELD_ARY[] =
+    const TranslateId STR_AUTH_FIELD_ARY[] =
     {
         STR_AUTH_FIELD_IDENTIFIER,
         STR_AUTH_FIELD_AUTHORITY_TYPE,

@@ -10,9 +10,9 @@
 #ifndef INCLUDED_SVX_INC_ROTATIONSTRINGS_HRC
 #define INCLUDED_SVX_INC_ROTATIONSTRINGS_HRC
 
-#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
+#define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
 
-const char* RID_SVXITEMS_ROTATE_MODE[] =
+const TranslateId RID_SVXITEMS_ROTATE_MODE[] =
 {
     // enum SvxRotateMode ----------------------------------------------------
     NC_("RID_SVXITEMS_ROTATE_MODE_STANDARD", "Rotation only within cell"),

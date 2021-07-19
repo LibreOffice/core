@@ -490,7 +490,7 @@ void BackendImpl::implProcessHelp(
 
                         if( !bSuccess )
                         {
-                            const char* pErrStrId = nullptr;
+                            TranslateId pErrStrId;
                             switch( aErrorInfo.m_eErrorClass )
                             {
                             case HelpProcessingErrorClass::General:      pErrStrId = RID_STR_HELPPROCESSING_GENERAL_ERROR; break;
@@ -521,7 +521,7 @@ void BackendImpl::implProcessHelp(
                                     aErrMsg = aErrMsg.copy( 0, nCopy );
                                 }
                                 aErrStr += aErrMsg;
-                                if (!strcmp(pErrStrId, RID_STR_HELPPROCESSING_XMLPARSING_ERROR) && !aErrorInfo.m_aXMLParsingFile.isEmpty() )
+                                if (pErrStrId != RID_STR_HELPPROCESSING_XMLPARSING_ERROR && !aErrorInfo.m_aXMLParsingFile.isEmpty() )
                                 {
                                     aErrStr += " in ";
 

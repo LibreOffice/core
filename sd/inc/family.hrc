@@ -21,22 +21,22 @@
 
 #include <svl/style.hxx>
 
-#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
+#define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
 
-const std::pair<const char*, SfxStyleSearchBits> RID_GRAPHICSTYLEFAMILY[] =
+const std::pair<TranslateId, SfxStyleSearchBits> RID_GRAPHICSTYLEFAMILY[] =
 {
     { NC_("RID_GRAPHICSTYLEFAMILY", "All Styles") , SfxStyleSearchBits::AllVisible },
     { NC_("RID_GRAPHICSTYLEFAMILY", "Hidden Styles") , SfxStyleSearchBits::Hidden },
     { NC_("RID_GRAPHICSTYLEFAMILY", "Applied Styles") , SfxStyleSearchBits::Used },
     { NC_("RID_GRAPHICSTYLEFAMILY", "Custom Styles") , SfxStyleSearchBits::UserDefined },
-    { nullptr, SfxStyleSearchBits::Auto }
+    { {}, SfxStyleSearchBits::Auto }
 };
 
-const std::pair<const char*, SfxStyleSearchBits> RID_PRESENTATIONSTYLEFAMILY[] =
+const std::pair<TranslateId, SfxStyleSearchBits> RID_PRESENTATIONSTYLEFAMILY[] =
 {
     { NC_("RID_PRESENTATIONSTYLEFAMILY", "All Styles") , SfxStyleSearchBits::AllVisible },
     { NC_("RID_PRESENTATIONSTYLEFAMILY", "Hidden Styles") , SfxStyleSearchBits::Hidden },
-    { nullptr, SfxStyleSearchBits::Auto }
+    { {}, SfxStyleSearchBits::Auto }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

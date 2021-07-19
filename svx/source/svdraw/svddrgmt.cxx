@@ -552,7 +552,7 @@ void SdrDragMethod::createSdrDragEntries_GlueDrag()
     }
 }
 
-OUString SdrDragMethod::ImpGetDescriptionStr(const char* pStrCacheID) const
+OUString SdrDragMethod::ImpGetDescriptionStr(TranslateId pStrCacheID) const
 {
     ImpGetDescriptionOptions nOpt=ImpGetDescriptionOptions::NONE;
     if (IsDraggingPoints()) {

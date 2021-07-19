@@ -19,9 +19,11 @@
 
 #pragma once
 
-#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
+#include <unotools/resmgr.hxx>
 
-const char* RID_FUNCTION_CATEGORIES[] =
+#define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
+
+const TranslateId RID_FUNCTION_CATEGORIES[] =
 {
     NC_("RID_FUNCTION_CATEGORIES", "Database"),
     NC_("RID_FUNCTION_CATEGORIES", "Date&Time"),

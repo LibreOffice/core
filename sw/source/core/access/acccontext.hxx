@@ -26,6 +26,7 @@
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase.hxx>
+#include <unotools/resmgr.hxx>
 
 #include <memory>
 #include <mutex>
@@ -353,7 +354,7 @@ public:
     virtual bool SetSelectedState(bool bSeleted);
     bool  IsSeletedInDoc() const { return m_isSelectedInDoc; }
 
-    static OUString GetResource(const char* pResId,
+    static OUString GetResource(TranslateId pResId,
                                 const OUString *pArg1 = nullptr,
                                 const OUString *pArg2 = nullptr);
 };

@@ -31,7 +31,7 @@ namespace dbaui
         OUString         m_strComment; // undo, redo comment
 
     public:
-        OCommentUndoAction(const char* pCommentID) { m_strComment = DBA_RES(pCommentID); }
+        OCommentUndoAction(TranslateId pCommentID) { m_strComment = DBA_RES(pCommentID); }
 
         virtual OUString GetComment() const override { return m_strComment; }
     };

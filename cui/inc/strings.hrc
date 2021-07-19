@@ -18,7 +18,7 @@
  */
 #pragma once
 
-#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
+#define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
 
 #define RID_SVXSTR_KEY_CONFIG_DIR                   NC_("RID_SVXSTR_KEY_CONFIG_DIR", "Configuration")
 #define RID_SVXSTR_KEY_WORK_PATH                    NC_("RID_SVXSTR_KEY_WORK_PATH", "My Documents")

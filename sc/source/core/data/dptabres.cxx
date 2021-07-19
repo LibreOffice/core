@@ -59,9 +59,9 @@ using ::com::sun::star::uno::Sequence;
 
 namespace {
 
-const char* aFuncStrIds[] =     // matching enum ScSubTotalFunc
+const TranslateId aFuncStrIds[] =     // matching enum ScSubTotalFunc
 {
-    nullptr,                        // SUBTOTAL_FUNC_NONE
+    {},                             // SUBTOTAL_FUNC_NONE
     STR_FUN_TEXT_AVG,               // SUBTOTAL_FUNC_AVE
     STR_FUN_TEXT_COUNT,             // SUBTOTAL_FUNC_CNT
     STR_FUN_TEXT_COUNT,             // SUBTOTAL_FUNC_CNT2
@@ -74,7 +74,7 @@ const char* aFuncStrIds[] =     // matching enum ScSubTotalFunc
     STR_FUN_TEXT_VAR,               // SUBTOTAL_FUNC_VAR
     STR_FUN_TEXT_VAR,               // SUBTOTAL_FUNC_VARP
     STR_FUN_TEXT_MEDIAN,            // SUBTOTAL_FUNC_MED
-    nullptr                         // SUBTOTAL_FUNC_SELECTION_COUNT - not used for pivot table
+    {}                              // SUBTOTAL_FUNC_SELECTION_COUNT - not used for pivot table
 };
 
 bool lcl_SearchMember( const std::vector<std::unique_ptr<ScDPResultMember>>& list, SCROW nOrder, SCROW& rIndex)

@@ -24,7 +24,7 @@ public:
 protected:
     virtual OUString getLabel() override;
     virtual OUString getTemplate() override;
-    virtual const char* GetUndoNameId() override;
+    virtual TranslateId GetUndoNameId() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

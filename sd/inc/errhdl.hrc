@@ -19,7 +19,7 @@
 
 #pragma once
 
-#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
+#define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
 
 #include <svtools/ehdl.hxx>
 #include <vcl/errcode.hxx>
@@ -33,7 +33,7 @@ const ErrMsgCode RID_SD_ERRHDL[] =
       ERR_FORMAT_FILE_ROWCOL },
     { NC_("RID_SD_ERRHDL", "Format error discovered in the file in sub-document $(ARG1) at position $(ARG2)(row,col)."),
       WARN_FORMAT_FILE_ROWCOL },
-    { nullptr, ERRCODE_NONE }
+    { {}, ERRCODE_NONE }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

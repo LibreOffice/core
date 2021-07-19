@@ -19,7 +19,7 @@
 #ifndef CHART_STRINGS_HRC
 #define CHART_STRINGS_HRC
 
-#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
+#define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
 
 #define STR_DLG_CHART_WIZARD                        NC_("STR_DLG_CHART_WIZARD", "Chart Wizard")
 #define STR_DLG_SMOOTH_LINE_PROPERTIES              NC_("STR_DLG_SMOOTH_LINE_PROPERTIES", "Smooth Lines")

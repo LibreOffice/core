@@ -23,9 +23,9 @@
 #include <utility>
 #include <sal/types.h>
 
-#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
+#define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
 
-std::pair<const char*, sal_uInt16> RID_SVXSTR_FRMSEL_TEXTS[] =
+std::pair<TranslateId, sal_uInt16> RID_SVXSTR_FRMSEL_TEXTS[] =
 {
     { NC_("RID_SVXSTR_FRMSEL_TEXTS", "Border setting") , 0 },
     { NC_("RID_SVXSTR_FRMSEL_TEXTS", "Left border line") , 1 },
@@ -38,7 +38,7 @@ std::pair<const char*, sal_uInt16> RID_SVXSTR_FRMSEL_TEXTS[] =
     { NC_("RID_SVXSTR_FRMSEL_TEXTS", "Diagonal border line from bottom left to top right") , 8 },
 };
 
-std::pair<const char*, sal_uInt16> RID_SVXSTR_FRMSEL_DESCRIPTIONS[] =
+std::pair<TranslateId, sal_uInt16> RID_SVXSTR_FRMSEL_DESCRIPTIONS[] =
 {
     { NC_("RID_SVXSTR_FRMSEL_DESCRIPTIONS", "Border setting") , 0 },
     { NC_("RID_SVXSTR_FRMSEL_DESCRIPTIONS", "Left border line") , 1 },
