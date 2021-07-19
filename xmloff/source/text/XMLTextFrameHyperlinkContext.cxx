@@ -20,6 +20,7 @@
 #include <sal/log.hxx>
 #include <sax/tools/converter.hxx>
 
+#include <xmloff/shapeimport.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/namespacemap.hxx>
 #include <xmloff/xmlnamespace.hxx>
@@ -105,6 +106,15 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTextFrameHyperlinkC
         pTextFrameContext->SetHyperlink( sHRef, sName, sTargetFrameName, bMap );
         pContext = pTextFrameContext;
         xFrameContext = pContext;
+    }
+    if (nElement == XML_ELEMENT(DRAW, XML_CUSTOM_SHAPE))
+    {
+        // TODO: Initialize mxShapes here?
+        Reference<XShapes> xShapes;
+        SvXMLShapeContext* pShapeContext
+            = XMLShapeImportHelper::CreateGroupChildContext(GetImport(), nElement, xAttrList, xShapes);
+        pShapeContext->setHyperlink(sHRef);
+        pContext = pShapeContext;
     }
 
     if (!pContext)
