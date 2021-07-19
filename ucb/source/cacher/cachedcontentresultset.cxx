@@ -142,7 +142,7 @@ void CachedContentResultSet::CCRS_Cache
     ::loadData( const FetchResult& rResult )
 {
     clear();
-    m_pResult.reset( new FetchResult( rResult ) );
+    m_pResult = rResult;
 }
 
 bool CachedContentResultSet::CCRS_Cache

@@ -33,7 +33,6 @@
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
 
-#include <memory>
 #include <optional>
 
 namespace com::sun::star::script {
@@ -51,7 +50,7 @@ class CachedContentResultSet
     class CCRS_Cache
     {
     private:
-        std::unique_ptr<css::ucb::FetchResult>
+        std::optional<css::ucb::FetchResult>
                                          m_pResult;
         css::uno::Reference< css::ucb::XContentIdentifierMapping >
                                          m_xContentIdentifierMapping;
