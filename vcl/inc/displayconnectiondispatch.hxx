@@ -23,8 +23,8 @@
 #include <sal/config.h>
 #include <com/sun/star/awt/XDisplayConnection.hpp>
 #include <cppuhelper/implbase.hxx>
-#include <osl/mutex.hxx>
 #include <com/sun/star/uno/Reference.hxx>
+#include <mutex>
 #include <vector>
 
 namespace vcl {
@@ -32,7 +32,7 @@ namespace vcl {
 class DisplayConnectionDispatch final :
     public cppu::WeakImplHelper< css::awt::XDisplayConnection >
 {
-    ::osl::Mutex                    m_aMutex;
+    std::mutex                      m_aMutex;
     ::std::vector< css::uno::Reference< css::awt::XEventHandler > >
                                     m_aHandlers;
     OUString                        m_ConnectionIdentifier;
