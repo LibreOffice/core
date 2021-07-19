@@ -422,6 +422,36 @@ DECLARE_WW8EXPORT_TEST(testTdf108072, "tdf108072.doc")
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xTableRows->getByIndex(0), "IsSplitAllowed"));
 }
 
+DECLARE_WW8EXPORT_TEST(testTdf123321, "shapes-line-ellipse.doc")
+{
+    // These are the 3 lines in which 1st and 3rd one were disappearing before
+    uno::Reference<drawing::XShape> l1 = getShape(7);
+    uno::Reference<drawing::XShape> l2 = getShape(8);
+    uno::Reference<drawing::XShape> l3 = getShape(9);
+
+    // first line (smallest)
+    // Fails without the fix: Expected: 423, Actual: 2
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(423), l1->getSize().Height);
+    // Fails without the fix: Expected: 0, Actual: 2
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), l1->getSize().Width);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(7908), l1->getPosition().X);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(37), l1->getPosition().Y);
+
+    // second line (larger)
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2542), l2->getSize().Height);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), l2->getSize().Width);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(7916), l2->getPosition().X);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(289), l2->getPosition().Y);
+
+    // third line (largest)
+    // Fails without the fix: Expected: 7027, Actual: 2
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(7027), l3->getSize().Height);
+    // Fails without the fix: Expected: 0, Actual: 2
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), l3->getSize().Width);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(7911), l3->getPosition().X);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(231), l3->getPosition().Y);
+}
+
 DECLARE_WW8EXPORT_TEST(testTdf91687, "tdf91687.doc")
 {
     // Exported Watermarks were resized

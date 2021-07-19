@@ -2064,6 +2064,19 @@ void SdrPathObj::AddToPlusHdlList(SdrHdlList& rHdlList, SdrHdl& rHdl) const
     }
 }
 
+// tdf#123321: Make sure that SdrPathObj (e.g. line) has big enough extent for
+// visibility. This is realised by ensuring GetLogicRect() is the same as
+// GetSnapRect() for the SdrPathObj. Other SdrTextObj objects like
+// SdrObjCustomShape will still use a different version of this method that
+// does not consider the rotation. Otherwise, the rotated SdrObjCustomShape
+// would become mistakenly larger after save and reload (tdf#91687).
+// The invokation of the GetLogicRect() method that caused tdf#123321 was in
+// PlcDrawObj::WritePlc().
+const tools::Rectangle &SdrPathObj::GetLogicRect() const
+{
+    return GetSnapRect();
+}
+
 // dragging
 
 bool SdrPathObj::hasSpecialDrag() const
