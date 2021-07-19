@@ -35,10 +35,7 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
-#include <memory>
 
-
-struct UcbStore_Impl;
 
 using UcbStore_Base = cppu::WeakComponentImplHelper <
                         css::lang::XServiceInfo,
@@ -47,8 +44,9 @@ using UcbStore_Base = cppu::WeakComponentImplHelper <
 
 class UcbStore : public cppu::BaseMutex, public UcbStore_Base
 {
-    css::uno::Reference< css::uno::XComponentContext > m_xContext;
-    std::unique_ptr<UcbStore_Impl> m_pImpl;
+    css::uno::Reference< css::uno::XComponentContext >    m_xContext;
+    css::uno::Sequence< css::uno::Any >                   m_aInitArgs;
+    css::uno::Reference< css::ucb::XPropertySetRegistry > m_xTheRegistry;
 
 public:
     explicit UcbStore( const css::uno::Reference< css::uno::XComponentContext >& xContext );

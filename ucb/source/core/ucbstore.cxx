@@ -130,24 +130,13 @@ public:
 
 }
 
-// UcbStore_Impl.
-
-
-struct UcbStore_Impl
-{
-    osl::Mutex                        m_aMutex;
-    Sequence< Any >                   m_aInitArgs;
-    Reference< XPropertySetRegistry > m_xTheRegistry;
-};
-
 
 // UcbStore Implementation.
 
 
 UcbStore::UcbStore( const Reference< XComponentContext >& xContext )
 : UcbStore_Base(m_aMutex),
-  m_xContext( xContext ),
-  m_pImpl( new UcbStore_Impl )
+  m_xContext( xContext )
 {
 }
 
@@ -190,14 +179,14 @@ UcbStore::createPropertySetRegistry( const OUString& )
     // The URL parameter is ignored by this interface implementation. It always
     // uses the configuration server as storage medium.
 
-    if ( !m_pImpl->m_xTheRegistry.is() )
+    if ( !m_xTheRegistry.is() )
     {
-        osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
-        if ( !m_pImpl->m_xTheRegistry.is() )
-            m_pImpl->m_xTheRegistry = new PropertySetRegistry( m_xContext, m_pImpl->m_aInitArgs );
+        osl::Guard< osl::Mutex > aGuard( m_aMutex );
+        if ( !m_xTheRegistry.is() )
+            m_xTheRegistry = new PropertySetRegistry( m_xContext, m_aInitArgs );
     }
 
-    return m_pImpl->m_xTheRegistry;
+    return m_xTheRegistry;
 }
 
 
@@ -207,8 +196,8 @@ UcbStore::createPropertySetRegistry( const OUString& )
 // virtual
 void SAL_CALL UcbStore::initialize( const Sequence< Any >& aArguments )
 {
-    osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
-    m_pImpl->m_aInitArgs = aArguments;
+    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    m_aInitArgs = aArguments;
 }
 
 
