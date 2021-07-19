@@ -82,6 +82,16 @@ DECLARE_ODFEXPORT_TEST(testListFormatDocx, "listformat.docx")
         "text:list-level-style-number[@text:level='3']", "num-suffix", "<<");
 }
 
+DECLARE_ODFEXPORT_TEST(testShapeWithHyperlink, "shape-with-hyperlink.odt")
+{
+    if (xmlDocUniquePtr pXmlDoc = parseExport("content.xml"))
+    {
+        // Check how conversion from prefix/suffix to list format did work
+        assertXPath(pXmlDoc, "/office:document-content/office:body/office:text/text:p/draw:a",
+                    "href", "http://shape.com/");
+    }
+}
+
 DECLARE_ODFEXPORT_TEST(testListFormatOdt, "listformat.odt")
 {
     // Ensure in resulting ODT we also have not just prefix/suffix, but custom delimiters
