@@ -27,7 +27,7 @@ class SAL_DLLPUBLIC_RTTI SwTableFormat final : public SwFrameFormat
 
     SwTableFormat( SwAttrPool& rPool, const OUString &rFormatNm,
                     SwFrameFormat *pDrvdFrame )
-        : SwFrameFormat( rPool, rFormatNm, pDrvdFrame, RES_FRMFMT, &aTableSetRange )
+        : SwFrameFormat( rPool, rFormatNm, pDrvdFrame, RES_FRMFMT, aTableSetRange )
     {}
 
 public:
@@ -39,7 +39,7 @@ class SwTableLineFormat final : public SwFrameFormat
     friend class SwDoc;
 
     SwTableLineFormat( SwAttrPool& rPool, SwFrameFormat *pDrvdFrame )
-        : SwFrameFormat( rPool, OUString(), pDrvdFrame, RES_FRMFMT, &aTableLineSetRange )
+        : SwFrameFormat( rPool, OUString(), pDrvdFrame, RES_FRMFMT, aTableLineSetRange )
     {}
 
 public:
@@ -51,7 +51,7 @@ class SAL_DLLPUBLIC_RTTI SwTableBoxFormat final : public SwFrameFormat
     friend class SwDoc;
 
     SwTableBoxFormat( SwAttrPool& rPool, SwFrameFormat *pDrvdFrame )
-        : SwFrameFormat( rPool, OUString(), pDrvdFrame, RES_FRMFMT, &aTableBoxSetRange )
+        : SwFrameFormat( rPool, OUString(), pDrvdFrame, RES_FRMFMT, aTableBoxSetRange )
     {}
 
     // For recognition of changes (especially TableBoxAttribute).

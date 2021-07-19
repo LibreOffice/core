@@ -29,7 +29,7 @@ class SwCharFormat final : public SwFormat
 
     SwCharFormat( SwAttrPool& rPool, const OUString &rFormatName,
                 SwCharFormat *pDerivedFrom )
-          : SwFormat( rPool, rFormatName, &aCharFormatSetRange, pDerivedFrom, RES_CHRFMT )
+          : SwFormat( rPool, rFormatName, aCharFormatSetRange, pDerivedFrom, RES_CHRFMT )
     {}
 
 public:
