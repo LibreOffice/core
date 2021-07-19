@@ -110,23 +110,24 @@ public:
 
     // Iteration.
 
-    struct iterator_Impl;
-
     class iterator
     {
     friend class HierarchyEntry;
 
-        std::unique_ptr<iterator_Impl>  m_pImpl;
-
     public:
-        iterator();
-        ~iterator();
+        iterator() : pos( -1 /* before first */ ) {};
 
-        const HierarchyEntryData& operator*() const;
+        const HierarchyEntryData& operator*();
+    private:
+        HierarchyEntryData                                     entry;
+        css::uno::Reference< css::container::XHierarchicalNameAccess >   dir;
+        css::uno::Reference< css::util::XOfficeInstallationDirectories > officeDirs;
+        css::uno::Sequence< OUString>                          names;
+        sal_Int32                                              pos;
     };
 
-    bool first( iterator const & it );
-    bool next ( iterator const & it );
+    bool first( iterator& it );
+    bool next ( iterator& it );
 };
 
 } // namespace hierarchy_ucp
