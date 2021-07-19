@@ -20,20 +20,21 @@ class ColumnSpanSet;
 
 class BulkDataHint final : public SfxHint
 {
-    struct Impl;
-    std::unique_ptr<Impl> mpImpl;
-
-    BulkDataHint(const BulkDataHint&) = delete;
-    BulkDataHint& operator=(const BulkDataHint&) = delete;
+    ScDocument& mrDoc;
+    const ColumnSpanSet* mpSpans;
 
 public:
-    BulkDataHint(ScDocument& rDoc, SfxHintId nHintId);
-    virtual ~BulkDataHint() override;
+    BulkDataHint(ScDocument& rDoc, SfxHintId nHintId)
+        : SfxHint(nHintId)
+        , mrDoc(rDoc)
+        , mpSpans(nullptr)
+    {
+    }
 
-    void setSpans(const ColumnSpanSet* pSpans);
-    const ColumnSpanSet* getSpans() const;
+    void setSpans(const ColumnSpanSet* pSpans) { mpSpans = pSpans; }
+    const ColumnSpanSet* getSpans() const { return mpSpans; }
 
-    ScDocument& getDoc();
+    ScDocument& getDoc() { return mrDoc; }
 };
 }
 
