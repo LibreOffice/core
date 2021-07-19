@@ -1,0 +1,112 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cbc83ef2_02ddbbcb",
+        "filename": "sc/source/core/tool/address.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 460,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-07-19T13:21:01Z",
+      "side": 1,
+      "message": "This now only re-indents the switch case. Please omit this cosmetical change from the commit.",
+      "revId": "7c2a0531943af001b07b5f058b4f182ddea261f6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "49221e0c_a9b01e83",
+        "filename": "sc/source/core/tool/compiler.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 2230,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-07-19T13:21:01Z",
+      "side": 1,
+      "message": "This only in OOXML though, isn\u0027t it?",
+      "range": {
+        "startLine": 2230,
+        "startChar": 27,
+        "endLine": 2230,
+        "endChar": 83
+      },
+      "revId": "7c2a0531943af001b07b5f058b4f182ddea261f6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6630f4c3_875094b2",
+        "filename": "sc/source/core/tool/compiler.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 2234,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-07-19T13:21:01Z",
+      "side": 1,
+      "message": "You have to check if there are actually 2 more characters following, not blindly access memory.",
+      "revId": "7c2a0531943af001b07b5f058b4f182ddea261f6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0334f731_719d5ef1",
+        "filename": "sc/source/core/tool/compiler.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 5290,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-07-19T13:21:01Z",
+      "side": 1,
+      "message": "This is still the same. You didn\u0027t answer my questions and László\u0027s remarks from\nhttps://gerrit.libreoffice.org/c/core/+/118862/6/sc/source/core/tool/compiler.cxx#5287\n\nCould you please do and comment? Thanks.",
+      "revId": "7c2a0531943af001b07b5f058b4f182ddea261f6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b6fa400a_0a424a68",
+        "filename": "sc/source/core/tool/compiler.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 5303,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-07-19T13:21:01Z",
+      "side": 1,
+      "message": "Same. Please answer/comment questions/remarks of\nhttps://gerrit.libreoffice.org/c/core/+/118862/6/sc/source/core/tool/compiler.cxx#5300",
+      "revId": "7c2a0531943af001b07b5f058b4f182ddea261f6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d54e4b7a_ebea4c4a",
+        "filename": "sc/source/core/tool/reftokenhelper.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-07-19T13:21:01Z",
+      "side": 1,
+      "message": "While at it, shouldn\u0027t also ocDBArea names be handled as a valid range?",
+      "revId": "7c2a0531943af001b07b5f058b4f182ddea261f6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
