@@ -93,7 +93,7 @@ public:
     virtual vcl::ImageType GetImageSize() = 0;
     virtual void ConnectCallbacks(ToolBarManager* pManager) = 0;
     virtual void SetMenuType(ToolBoxMenuType eType) = 0;
-    virtual void MergeToolbar(sal_uInt16 nItemId,
+    virtual void MergeToolbar(sal_uInt16 & rItemId,
                               const OUString& rModuleIdentifier,
                               CommandToInfoMap& rCommandMap,
                               MergeToolbarInstruction& rInstruction) = 0;
