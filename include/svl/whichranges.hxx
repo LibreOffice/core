@@ -122,7 +122,7 @@ struct SVL_DLLPUBLIC WhichRangesContainer
     void reset();
 
     // Adds a range to which ranges, keeping the ranges in valid state (sorted, non-overlapping)
-    WhichRangesContainer MergeRange(sal_uInt16 nFrom, sal_uInt16 nTo) const;
+    SAL_WARN_UNUSED_RESULT WhichRangesContainer MergeRange(sal_uInt16 nFrom, sal_uInt16 nTo) const;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

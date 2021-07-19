@@ -922,7 +922,7 @@ void SvxRTFParser::BuildWhichTable()
     {
         sal_uInt16 nTrueWid = pAttrPool->GetTrueWhich(nWid, false);
         aPardMap[nWid] = nTrueWid;
-        aWhichMap.MergeRange(nTrueWid, nTrueWid);
+        aWhichMap = aWhichMap.MergeRange(nTrueWid, nTrueWid);
     }
 
     // Here are the IDs for all character attributes, which can be detected by
@@ -944,7 +944,7 @@ void SvxRTFParser::BuildWhichTable()
     {
         sal_uInt16 nTrueWid = pAttrPool->GetTrueWhich(nWid, false);
         aPlainMap[nWid] = nTrueWid;
-        aWhichMap.MergeRange(nTrueWid, nTrueWid);
+        aWhichMap = aWhichMap.MergeRange(nTrueWid, nTrueWid);
     }
 }
 
