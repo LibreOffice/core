@@ -333,7 +333,7 @@ public:
         m_pToolBar->SetMenuType( eType );
     }
 
-    virtual void MergeToolbar(ToolBoxItemId nItemId,
+    virtual void MergeToolbar(ToolBoxItemId & rItemId,
                               const OUString& rModuleIdentifier,
                               CommandToInfoMap& rCommandMap,
                               MergeToolbarInstruction& rInstruction) override
@@ -349,7 +349,7 @@ public:
         {
             ToolBarMerger::ProcessMergeOperation( m_pToolBar,
                                                     aRefPoint.nPos,
-                                                    nItemId,
+                                                    rItemId,
                                                     rCommandMap,
                                                     rModuleIdentifier,
                                                     rInstruction.aMergeCommand,
@@ -359,7 +359,7 @@ public:
         else
         {
             ToolBarMerger::ProcessMergeFallback( m_pToolBar,
-                                                    nItemId,
+                                                    rItemId,
                                                     rCommandMap,
                                                     rModuleIdentifier,
                                                     rInstruction.aMergeCommand,
@@ -521,7 +521,7 @@ public:
 
     virtual void SetMenuType(ToolBoxMenuType /*eType*/) override {}
 
-    virtual void MergeToolbar(ToolBoxItemId /*nItemId*/,
+    virtual void MergeToolbar(ToolBoxItemId & /*rItemId*/,
                               const OUString& /*rModuleIdentifier*/,
                               CommandToInfoMap& /*rCommandMap*/,
                               MergeToolbarInstruction& /*rInstruction*/) override {}
