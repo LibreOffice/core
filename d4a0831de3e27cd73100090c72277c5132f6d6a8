@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a475c4e1_e01ceebe",
+        "filename": "xmloff/source/draw/shapeexport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 618,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2021-07-19T12:04:39Z",
+      "side": 1,
+      "message": "The attribute hlink:type is mandatory, see https://docs.oasis-open.org/office/OpenDocument/v1.3/os/schemas/OpenDocument-v1.3-schema-rng.html#draw-a-attlist",
+      "revId": "d4a0831de3e27cd73100090c72277c5132f6d6a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
