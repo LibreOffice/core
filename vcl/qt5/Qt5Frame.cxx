@@ -113,6 +113,9 @@ Qt5Frame::Qt5Frame(Qt5Frame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
     , m_bDefaultPos(true)
     , m_bFullScreen(false)
     , m_bFullScreenSpanAll(false)
+#if QT5_USING_X11
+    , m_nKeyModifiers(ModKeyFlags::NONE)
+#endif
     , m_nInputLanguage(LANGUAGE_DONTKNOW)
 {
     Qt5Instance* pInst = static_cast<Qt5Instance*>(GetSalData()->m_pInstance);
