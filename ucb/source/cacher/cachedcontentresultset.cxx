@@ -32,7 +32,7 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <ucbhelper/macros.hxx>
-#include <memory>
+#include <optional>
 #include <string_view>
 
 using namespace com::sun::star::beans;
@@ -363,8 +363,8 @@ class CCRS_PropertySetInfo :
     friend class CachedContentResultSet;
 
     //my Properties
-    std::unique_ptr<Sequence< css::beans::Property >>
-                            m_pProperties;
+    std::optional<Sequence< css::beans::Property >>
+                            m_xProperties;
 
     sal_Int32               m_nFetchSizePropertyHandle;
     sal_Int32               m_nFetchDirectionPropertyHandle;
@@ -428,13 +428,12 @@ CCRS_PropertySetInfo::CCRS_PropertySetInfo(
 
     if( xInfo.is() )
     {
-        Sequence<Property> aProps = xInfo->getProperties();
-        m_pProperties.reset( new Sequence<Property> ( aProps ) );
+        m_xProperties = xInfo->getProperties();
     }
     else
     {
         OSL_FAIL( "The received XPropertySetInfo doesn't contain required properties" );
-        m_pProperties.reset( new Sequence<Property> );
+        m_xProperties.emplace();
     }
 
     //ensure, that we haven't got the Properties 'FetchSize' and 'Direction' twice:
@@ -446,19 +445,19 @@ CCRS_PropertySetInfo::CCRS_PropertySetInfo(
     if( nFetchDirection != -1 )
         nDeleted++;
 
-    Sequence< Property > aOrigProps( *m_pProperties );
+    Sequence< Property > aOrigProps( *m_xProperties );
     sal_Int32 nOrigProps = aOrigProps.getLength();
 
-    m_pProperties->realloc( nOrigProps + 2 - nDeleted );//note that nDeleted is <= 2
+    m_xProperties->realloc( nOrigProps + 2 - nDeleted );//note that nDeleted is <= 2
     for( sal_Int32 n = 0, m = 0; n < nOrigProps; n++, m++ )
     {
         if( n == nFetchSize || n == nFetchDirection )
             m--;
         else
-            (*m_pProperties)[ m ] = aOrigProps[ n ];
+            (*m_xProperties)[ m ] = aOrigProps[ n ];
     }
     {
-        Property& rMyProp = (*m_pProperties)[ nOrigProps - nDeleted ];
+        Property& rMyProp = (*m_xProperties)[ nOrigProps - nDeleted ];
         rMyProp.Name = g_sPropertyNameForFetchSize;
         rMyProp.Type = cppu::UnoType<sal_Int32>::get();
         rMyProp.Attributes = PropertyAttribute::BOUND | PropertyAttribute::MAYBEDEFAULT;
@@ -472,7 +471,7 @@ CCRS_PropertySetInfo::CCRS_PropertySetInfo(
 
     }
     {
-        Property& rMyProp = (*m_pProperties)[ nOrigProps - nDeleted + 1 ];
+        Property& rMyProp = (*m_xProperties)[ nOrigProps - nDeleted + 1 ];
         rMyProp.Name = g_sPropertyNameForFetchDirection;
         rMyProp.Type = cppu::UnoType<sal_Bool>::get();
         rMyProp.Attributes = PropertyAttribute::BOUND | PropertyAttribute::MAYBEDEFAULT;
@@ -518,7 +517,7 @@ XTYPEPROVIDER_IMPL_2( CCRS_PropertySetInfo
 Sequence< Property > SAL_CALL CCRS_PropertySetInfo
     ::getProperties()
 {
-    return *m_pProperties;
+    return *m_xProperties;
 }
 
 //virtual
@@ -546,9 +545,9 @@ sal_Bool SAL_CALL CCRS_PropertySetInfo
 sal_Int32 CCRS_PropertySetInfo
             ::impl_getPos( std::u16string_view rName ) const
 {
-    for( sal_Int32 nN = m_pProperties->getLength(); nN--; )
+    for( sal_Int32 nN = m_xProperties->getLength(); nN--; )
     {
-        const Property& rMyProp = (*m_pProperties)[nN];
+        const Property& rMyProp = (*m_xProperties)[nN];
         if( rMyProp.Name == rName )
             return nN;
     }
@@ -558,7 +557,7 @@ sal_Int32 CCRS_PropertySetInfo
 bool CCRS_PropertySetInfo
         ::impl_queryProperty( std::u16string_view rName, Property& rProp ) const
 {
-    for( const Property& rMyProp : std::as_const(*m_pProperties) )
+    for( const Property& rMyProp : std::as_const(*m_xProperties) )
     {
         if( rMyProp.Name == rName )
         {
@@ -588,7 +587,7 @@ sal_Int32 CCRS_PropertySetInfo
 {
     sal_Int32 nHandle = 1;
 
-    if( !m_pProperties )
+    if( !m_xProperties )
     {
         OSL_FAIL( "Properties not initialized yet" );
         return nHandle;
@@ -597,7 +596,7 @@ sal_Int32 CCRS_PropertySetInfo
     while( bFound )
     {
         bFound = false;
-        for( const auto & rProp : std::as_const(*m_pProperties) )
+        for( const auto & rProp : std::as_const(*m_xProperties) )
         {
             if( nHandle == rProp.Handle )
             {
