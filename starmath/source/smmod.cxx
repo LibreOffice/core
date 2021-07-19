@@ -23,7 +23,6 @@
 #include <svl/whiter.hxx>
 #include <sfx2/viewsh.hxx>
 #include <svx/svxids.hrc>
-#include <unotools/resmgr.hxx>
 #include <vcl/virdev.hxx>
 #include <unotools/syslocale.hxx>
 #include <smmod.hxx>
@@ -39,7 +38,7 @@
 #define ShellClass_SmModule
 #include <smslots.hxx>
 
-OUString SmResId(std::string_view aId)
+OUString SmResId(TranslateId aId)
 {
     return Translate::get(aId, SM_MOD()->GetResLocale());
 }
@@ -50,7 +49,7 @@ OUString SmLocalizedSymbolData::GetUiSymbolName( const OUString &rExportName )
 
     for (size_t i = 0; i < SAL_N_ELEMENTS(RID_UI_SYMBOL_NAMES); ++i)
     {
-        if (rExportName.equalsAscii(strchr(RID_UI_SYMBOL_NAMES[i], '\004') + 1))
+        if (rExportName.equalsAscii(RID_UI_SYMBOL_NAMES[i].mpId))
         {
             aRes = SmResId(RID_UI_SYMBOL_NAMES[i]);
             break;
@@ -68,7 +67,7 @@ OUString SmLocalizedSymbolData::GetExportSymbolName( std::u16string_view rUiName
     {
         if (rUiName == SmResId(RID_UI_SYMBOL_NAMES[i]))
         {
-            const char *pKey = strchr(RID_UI_SYMBOL_NAMES[i], '\004') + 1;
+            const char *pKey = RID_UI_SYMBOL_NAMES[i].mpId;
             aRes = OUString(pKey, strlen(pKey), RTL_TEXTENCODING_UTF8);
             break;
         }
@@ -83,7 +82,7 @@ OUString SmLocalizedSymbolData::GetUiSymbolSetName( const OUString &rExportName 
 
     for (size_t i = 0; i < SAL_N_ELEMENTS(RID_UI_SYMBOLSET_NAMES); ++i)
     {
-        if (rExportName.equalsAscii(strchr(RID_UI_SYMBOLSET_NAMES[i], '\004') + 1))
+        if (rExportName.equalsAscii(RID_UI_SYMBOLSET_NAMES[i].mpId))
         {
             aRes = SmResId(RID_UI_SYMBOLSET_NAMES[i]);
             break;
@@ -101,7 +100,7 @@ OUString SmLocalizedSymbolData::GetExportSymbolSetName( std::u16string_view rUiN
     {
         if (rUiName == SmResId(RID_UI_SYMBOLSET_NAMES[i]))
         {
-            const char *pKey = strchr(RID_UI_SYMBOLSET_NAMES[i], '\004') + 1;
+            const char *pKey = RID_UI_SYMBOLSET_NAMES[i].mpId;
             aRes = OUString(pKey, strlen(pKey), RTL_TEXTENCODING_UTF8);
             break;
         }

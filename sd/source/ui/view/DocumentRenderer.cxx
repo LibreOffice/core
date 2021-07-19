@@ -665,7 +665,7 @@ namespace {
             maProperties.push_back( aVal );
         }
 
-        static Sequence<OUString> CreateChoice(const char** pResourceId, size_t nCount)
+        static Sequence<OUString> CreateChoice(const TranslateId* pResourceId, size_t nCount)
         {
             Sequence<OUString> aChoices (nCount);
             for (size_t nIndex=0; nIndex < nCount; ++nIndex)

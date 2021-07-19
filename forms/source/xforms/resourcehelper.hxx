@@ -20,20 +20,19 @@
 
 #include <sal/config.h>
 
-#include <string_view>
-
 #include <rtl/ustring.hxx>
+#include <unotools/resmgr.hxx>
 
 namespace xforms
 {
     /// get a resource string for the current language
-    OUString getResource(const char*);
+    OUString getResource(TranslateId);
 
     // overloaded: get a resource string, and substitute parameters
-    OUString getResource(const char*, std::u16string_view);
-    OUString getResource(const char*, std::u16string_view,
+    OUString getResource(TranslateId, std::u16string_view);
+    OUString getResource(TranslateId, std::u16string_view,
                                            std::u16string_view);
-    OUString getResource(const char*, std::u16string_view,
+    OUString getResource(TranslateId, std::u16string_view,
                                            std::u16string_view,
                                            std::u16string_view);
 

@@ -56,7 +56,7 @@ namespace frm
                 || ( _nFeatureId == LID_RECORD_FILLER );
         }
 
-        OUString getLabelString(const char* pResId)
+        OUString getLabelString(TranslateId pResId)
         {
             OUString sLabel( " " + FRM_RES_STRING(pResId) + " " );
             return sLabel;

@@ -300,7 +300,7 @@ void ScGlobal::SetUserList( const ScUserList* pNewList )
 
 OUString ScGlobal::GetErrorString(FormulaError nErr)
 {
-    const char* pErrNumber;
+    TranslateId pErrNumber;
     switch (nErr)
     {
         case FormulaError::NoRef:
@@ -332,7 +332,7 @@ OUString ScGlobal::GetErrorString(FormulaError nErr)
 
 OUString ScGlobal::GetLongErrorString(FormulaError nErr)
 {
-    const char* pErrNumber;
+    TranslateId pErrNumber;
     switch (nErr)
     {
         case FormulaError::NONE:

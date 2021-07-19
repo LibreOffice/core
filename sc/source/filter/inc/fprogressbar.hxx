@@ -23,6 +23,7 @@
 #include <memory>
 #include <rtl/ustring.hxx>
 #include <progress.hxx>
+#include <unotools/resmgr.hxx>
 
 class SfxObjectShell;
 class SvStream;
@@ -105,7 +106,7 @@ public:
     const ScfProgressBar operator=(const ScfProgressBar&) = delete;
 
     explicit            ScfProgressBar(SfxObjectShell* pDocShell, const OUString& rText);
-    explicit            ScfProgressBar(SfxObjectShell* pDocShell, const char* pResId);
+    explicit            ScfProgressBar(SfxObjectShell* pDocShell, TranslateId pResId);
                         ~ScfProgressBar();
 
     /** Adds a new segment to the progress bar.
@@ -186,7 +187,7 @@ class ScfSimpleProgressBar
 {
 public:
     explicit            ScfSimpleProgressBar(std::size_t nSize, SfxObjectShell* pDocShell, const OUString& rText);
-    explicit            ScfSimpleProgressBar(std::size_t nSize, SfxObjectShell* pDocShell, const char* pResId);
+    explicit            ScfSimpleProgressBar(std::size_t nSize, SfxObjectShell* pDocShell, TranslateId pResId);
 
     /** Set progress bar to the specified position. */
     void         ProgressAbs( std::size_t nPos ) { maProgress.ProgressAbs( nPos ); }

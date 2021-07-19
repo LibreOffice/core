@@ -929,7 +929,7 @@ void SdStyleSheetPool::UpdateStdNames()
             SfxStyleFamily eFam = pStyle->GetFamily();
 
             bool bHelpKnown = true;
-            const char* pNameId = nullptr;
+            TranslateId pNameId;
             switch( nHelpId )
             {
                 case HID_STANDARD_STYLESHEET_NAME:  pNameId = STR_STANDARD_STYLESHEET_NAME; break;
@@ -989,7 +989,7 @@ void SdStyleSheetPool::UpdateStdNames()
                 OUString aNewName;
                 if (pNameId)
                 {
-                    if (strcmp(pNameId, STR_PSEUDOSHEET_OUTLINE) == 0)
+                    if (pNameId == STR_PSEUDOSHEET_OUTLINE)
                     {
                         aNewName += " " + OUString::number( sal_Int32( nHelpId - HID_PSEUDOSHEET_OUTLINE ) );
                     }

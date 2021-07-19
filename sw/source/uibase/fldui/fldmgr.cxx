@@ -127,7 +127,7 @@ const sal_uInt16 VF_COUNT = 1; // { 0 }
 const sal_uInt16 VF_USR_COUNT = 2; // { 0, nsSwExtendedSubType::SUB_CMD }
 const sal_uInt16 VF_DB_COUNT = 1; // { nsSwExtendedSubType::SUB_OWN_FMT }
 
-static const char* FLD_EU_ARY[] =
+const TranslateId FLD_EU_ARY[] =
 {
     FLD_EU_COMPANY,
     FLD_EU_GIVENNAME,
@@ -146,25 +146,25 @@ static const char* FLD_EU_ARY[] =
     FLD_EU_REGION
 };
 
-static const char* FMT_AUTHOR_ARY[] =
+const TranslateId FMT_AUTHOR_ARY[] =
 {
     FMT_AUTHOR_NAME,
     FMT_AUTHOR_SCUT
 };
 
-static const char* FLD_DATE_ARY[] =
+const TranslateId FLD_DATE_ARY[] =
 {
     FLD_DATE_FIX,
     FLD_DATE_STD,
 };
 
-static const char* FLD_TIME_ARY[] =
+const TranslateId FLD_TIME_ARY[] =
 {
     FLD_TIME_FIX,
     FLD_TIME_STD
 };
 
-static const char* FMT_NUM_ARY[] =
+const TranslateId FMT_NUM_ARY[] =
 {
     FMT_NUM_ABC,
     FMT_NUM_SABC,
@@ -177,7 +177,7 @@ static const char* FMT_NUM_ARY[] =
     FMT_NUM_PAGESPECIAL
 };
 
-static const char* FMT_FF_ARY[] =
+const TranslateId FMT_FF_ARY[] =
 {
     FMT_FF_NAME,
     FMT_FF_PATHNAME,
@@ -187,7 +187,7 @@ static const char* FMT_FF_ARY[] =
     FMT_FF_UI_RANGE
 };
 
-static const char* FLD_STAT_ARY[] =
+const TranslateId FLD_STAT_ARY[] =
 {
     FLD_STAT_PAGE,
     FLD_STAT_PARA,
@@ -198,7 +198,7 @@ static const char* FLD_STAT_ARY[] =
     FLD_STAT_OBJ
 };
 
-static const char* FMT_CHAPTER_ARY[] =
+const TranslateId FMT_CHAPTER_ARY[] =
 {
     FMT_CHAPTER_NO,
     FMT_CHAPTER_NAME,
@@ -206,12 +206,12 @@ static const char* FMT_CHAPTER_ARY[] =
     FMT_CHAPTER_NO_NOSEPARATOR
 };
 
-static const char* FLD_INPUT_ARY[] =
+const TranslateId FLD_INPUT_ARY[] =
 {
     FLD_INPUT_TEXT
 };
 
-static const char* FMT_MARK_ARY[] =
+const TranslateId FMT_MARK_ARY[] =
 {
     FMT_MARK_TEXT,
     FMT_MARK_TABLE,
@@ -220,7 +220,7 @@ static const char* FMT_MARK_ARY[] =
     FMT_MARK_OLE
 };
 
-static const char* FMT_REF_ARY[] =
+const TranslateId FMT_REF_ARY[] =
 {
     FMT_REF_PAGE,
     FMT_REF_CHAPTER,
@@ -235,44 +235,44 @@ static const char* FMT_REF_ARY[] =
     FMT_REF_NUMBER_FULL_CONTEXT
 };
 
-static const char* FMT_REG_ARY[] =
+const TranslateId FMT_REG_ARY[] =
 {
     FMT_REG_AUTHOR,
     FMT_REG_TIME,
     FMT_REG_DATE
 };
 
-static const char* FMT_DBFLD_ARY[] =
+const TranslateId FMT_DBFLD_ARY[] =
 {
     FMT_DBFLD_DB,
     FMT_DBFLD_SYS
 };
 
-static const char* FMT_SETVAR_ARY[] =
+const TranslateId FMT_SETVAR_ARY[] =
 {
     FMT_SETVAR_SYS,
     FMT_SETVAR_TEXT
 };
 
-static const char* FMT_GETVAR_ARY[] =
+const TranslateId FMT_GETVAR_ARY[] =
 {
     FMT_GETVAR_TEXT,
     FMT_GETVAR_NAME
 };
 
-static const char* FMT_DDE_ARY[] =
+const TranslateId FMT_DDE_ARY[] =
 {
     FMT_DDE_NORMAL,
     FMT_DDE_HOT
 };
 
-static const char* FLD_PAGEREF_ARY[] =
+const TranslateId FLD_PAGEREF_ARY[] =
 {
     FLD_PAGEREF_OFF,
     FLD_PAGEREF_ON
 };
 
-static const char* FMT_USERVAR_ARY[] =
+const TranslateId FMT_USERVAR_ARY[] =
 {
     FMT_USERVAR_TEXT,
     FMT_USERVAR_CMD
@@ -285,10 +285,10 @@ struct SwFieldPack
 {
     SwFieldTypesEnum nTypeId;
 
-    const char** pSubTypeResIds;
+    const TranslateId* pSubTypeResIds;
     size_t       nSubTypeLength;
 
-    const char** pFormatResIds;
+    const TranslateId* pFormatResIds;
     size_t       nFormatLength;
 };
 
@@ -684,17 +684,17 @@ sal_uInt16 SwFieldMgr::GetFormatCount(SwFieldTypesEnum nTypeId, bool bHtmlMode) 
         if (nTypeId == SwFieldTypesEnum::Filename)
             nCount -= 2;  // no range or template
 
-        const char** pStart = aSwFields[nPos].pFormatResIds;
+        const TranslateId* pStart = aSwFields[nPos].pFormatResIds;
         if (!pStart)
             return nCount;
 
-        if (strcmp(*pStart, FMT_GETVAR_ARY[0]) == 0 || strcmp(*pStart, FMT_SETVAR_ARY[0]) == 0)
+        if (*pStart == FMT_GETVAR_ARY[0] || *pStart == FMT_SETVAR_ARY[0])
             return VF_COUNT;
-        else if (strcmp(*pStart, FMT_USERVAR_ARY[0]) == 0)
+        else if (*pStart == FMT_USERVAR_ARY[0])
             return VF_USR_COUNT;
-        else if (strcmp(*pStart, FMT_DBFLD_ARY[0]) == 0)
+        else if (*pStart == FMT_DBFLD_ARY[0])
             return VF_DB_COUNT;
-        else if (strcmp(*pStart, FMT_NUM_ARY[0]) == 0)
+        else if (*pStart == FMT_NUM_ARY[0])
         {
             GetNumberingInfo();
             if(m_xNumberingInfo.is())
@@ -721,7 +721,7 @@ OUString SwFieldMgr::GetFormatStr(SwFieldTypesEnum nTypeId, sal_uInt32 nFormatId
     if (nPos == USHRT_MAX)
         return OUString();
 
-    const char** pStart = aSwFields[nPos].pFormatResIds;
+    const TranslateId* pStart = aSwFields[nPos].pFormatResIds;
     if (!pStart)
         return OUString();
 
@@ -774,7 +774,7 @@ sal_uInt16 SwFieldMgr::GetFormatId(SwFieldTypesEnum nTypeId, sal_uInt32 nFormatI
     {
         case SwFieldTypesEnum::DocumentInfo:
         {
-            const OString sId(aSwFields[GetPos(nTypeId)].pFormatResIds[nFormatId]);
+            TranslateId sId = aSwFields[GetPos(nTypeId)].pFormatResIds[nFormatId];
             if (sId == FMT_REG_AUTHOR)
                 nId = DI_SUB_AUTHOR;
             else if (sId == FMT_REG_TIME)
@@ -794,7 +794,7 @@ sal_uInt16 SwFieldMgr::GetFormatId(SwFieldTypesEnum nTypeId, sal_uInt32 nFormatI
             sal_uInt16 nPos = GetPos(nTypeId);
             if (nFormatId < aSwFields[nPos].nFormatLength)
             {
-                const OString sId(aSwFields[nPos].pFormatResIds[nFormatId]);
+                const TranslateId sId = aSwFields[nPos].pFormatResIds[nFormatId];
                 if (sId == FMT_NUM_ABC)
                     nId = SVX_NUM_CHARS_UPPER_LETTER;
                 else if (sId == FMT_NUM_SABC)
@@ -836,7 +836,7 @@ sal_uInt16 SwFieldMgr::GetFormatId(SwFieldTypesEnum nTypeId, sal_uInt32 nFormatI
         }
         case SwFieldTypesEnum::DDE:
         {
-            const OString sId(aSwFields[GetPos(nTypeId)].pFormatResIds[nFormatId]);
+            const TranslateId sId = aSwFields[GetPos(nTypeId)].pFormatResIds[nFormatId];
             if (sId == FMT_DDE_NORMAL)
                 nId = static_cast<sal_uInt16>(SfxLinkUpdateMode::ONCALL);
             else if (sId == FMT_DDE_HOT)
@@ -1743,7 +1743,7 @@ LanguageType SwFieldMgr::GetCurrLanguage() const
 
 void SwFieldType::GetFieldName_()
 {
-    static const char* coFieldNms[] =
+    static const TranslateId coFieldNms[] =
     {
         FLD_DATE_STD,
         FLD_TIME_STD,
@@ -1795,7 +1795,7 @@ void SwFieldType::GetFieldName_()
     // insert infos for fields
     SwFieldType::s_pFieldNames = new std::vector<OUString>;
     SwFieldType::s_pFieldNames->reserve(SAL_N_ELEMENTS(coFieldNms));
-    for (const char* id : coFieldNms)
+    for (const TranslateId & id : coFieldNms)
     {
         const OUString aTmp(SwResId(id));
         SwFieldType::s_pFieldNames->push_back(MnemonicGenerator::EraseAllMnemonicChars( aTmp ));

@@ -894,7 +894,7 @@ uno::Any SAL_CALL ScStyleFamilyObj::getPropertyValue( const OUString& sPropertyN
     }
 
     SolarMutexGuard aGuard;
-    const char* pResId = nullptr;
+    TranslateId pResId;
     switch ( eFamily )
     {
         case SfxStyleFamily::Para:

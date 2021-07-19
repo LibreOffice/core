@@ -192,13 +192,13 @@ void FmSearchDialog::Init(const OUString& strVisibleFields, const OUString& sIni
 
     // fill the listboxes
     // method of field comparison
-    const char* const aResIds[] = {
+    const TranslateId aResIds[] = {
         RID_STR_SEARCH_ANYWHERE,
         RID_STR_SEARCH_BEGINNING,
         RID_STR_SEARCH_END,
         RID_STR_SEARCH_WHOLE
     };
-    for (auto pResId : aResIds)
+    for (auto const & pResId : aResIds)
         m_plbPosition->append_text(CuiResId(pResId));
     m_plbPosition->set_active(MATCHING_ANYWHERE);
 
@@ -600,7 +600,7 @@ IMPL_LINK(FmSearchDialog, OnSearchProgress, const FmSearchProgress*, pProgress, 
         case FmSearchProgress::State::Error:
         case FmSearchProgress::State::NothingFound:
         {
-            const char* pErrorId = (FmSearchProgress::State::Error == pProgress->aSearchState)
+            TranslateId pErrorId = (FmSearchProgress::State::Error == pProgress->aSearchState)
                 ? RID_STR_SEARCH_GENERAL_ERROR
                 : RID_STR_SEARCH_NORECORD;
             std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(m_xDialog.get(),

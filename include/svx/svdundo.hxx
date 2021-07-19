@@ -31,6 +31,7 @@
 #include <svx/svdtypes.hxx>
 #include <svx/svdsob.hxx>
 #include <svx/svxdllapi.h>
+#include <unotools/resmgr.hxx>
 
 class SfxItemSet;
 class SfxPoolItem;
@@ -125,9 +126,9 @@ protected:
 protected:
     SdrUndoObj(SdrObject& rNewObj);
 
-    OUString ImpGetDescriptionStr(const char* pStrCacheID, bool bRepeat = false) const;
+    OUString ImpGetDescriptionStr(TranslateId pStrCacheID, bool bRepeat = false) const;
 
-    [[nodiscard]] static OUString GetDescriptionStringForObject( const SdrObject& _rForObject, const char* pStrCacheID, bool bRepeat = false );
+    [[nodiscard]] static OUString GetDescriptionStringForObject( const SdrObject& _rForObject, TranslateId pStrCacheID, bool bRepeat = false );
 
     // #94278# new method for evtl. PageChange at UNDO/REDO
     void ImpShowPageOfThisObject();
@@ -526,7 +527,7 @@ protected:
     SdrUndoPage(SdrPage& rNewPg);
     ~SdrUndoPage();
 
-    static OUString ImpGetDescriptionStr(const char* pStrCacheID);
+    static OUString ImpGetDescriptionStr(TranslateId pStrCacheID);
 };
 
 /**

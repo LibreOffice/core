@@ -775,7 +775,7 @@ namespace frm
 
             default:
             {
-                const char* pErrorResourceId = RID_STR_FEATURE_UNKNOWN;
+                TranslateId pErrorResourceId = RID_STR_FEATURE_UNKNOWN;
                 if ( lcl_requiresArguments( _nFeature ) )
                     pErrorResourceId = RID_STR_FEATURE_REQUIRES_PARAMETERS;
                 else if ( !lcl_isExecutableFeature( _nFeature ) )
@@ -1733,7 +1733,7 @@ namespace frm
 
 
     template < typename FunctObj >
-    void FormOperations::impl_doActionInSQLContext_throw( FunctObj f, const char* pErrorResourceId ) const
+    void FormOperations::impl_doActionInSQLContext_throw( FunctObj f, TranslateId pErrorResourceId ) const
     {
         try
         {

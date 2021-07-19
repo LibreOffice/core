@@ -58,16 +58,16 @@ namespace dbaui
 
     std::unique_ptr<OGenericAdministrationPage> OConnectionTabPageSetup::CreateUserDefinedTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& _rAttrSet)
     {
-        return std::make_unique<OConnectionTabPageSetup>(pPage, pController, "dbaccess/ui/dbwizconnectionpage.ui", "ConnectionPage", _rAttrSet, nullptr, nullptr, STR_COMMONURL);
+        return std::make_unique<OConnectionTabPageSetup>(pPage, pController, "dbaccess/ui/dbwizconnectionpage.ui", "ConnectionPage", _rAttrSet, TranslateId(), TranslateId(), STR_COMMONURL);
     }
 
-    OConnectionTabPageSetup::OConnectionTabPageSetup(weld::Container* pPage, weld::DialogController* pController, const OUString& _rUIXMLDescription, const OString& _rId, const SfxItemSet& _rCoreAttrs, const char* pHelpTextResId, const char* pHeaderResId, const char* pUrlResId)
+    OConnectionTabPageSetup::OConnectionTabPageSetup(weld::Container* pPage, weld::DialogController* pController, const OUString& _rUIXMLDescription, const OString& _rId, const SfxItemSet& _rCoreAttrs, TranslateId pHelpTextResId, TranslateId pHeaderResId, TranslateId pUrlResId)
         : OConnectionHelper(pPage, pController, _rUIXMLDescription, _rId, _rCoreAttrs)
         , m_xHelpText(m_xBuilder->weld_label("helptext"))
         , m_xHeaderText(m_xBuilder->weld_label("header"))
     {
 
-        if (pHelpTextResId != nullptr)
+        if (pHelpTextResId)
         {
             OUString sHelpText = DBA_RES(pHelpTextResId);
             m_xHelpText->set_label(sHelpText);
@@ -75,10 +75,10 @@ namespace dbaui
         else
             m_xHelpText->hide();
 
-        if (pHeaderResId != nullptr)
+        if (pHeaderResId)
             m_xHeaderText->set_label(DBA_RES(pHeaderResId));
 
-        if (pUrlResId != nullptr)
+        if (pUrlResId)
         {
             OUString sLabelText = DBA_RES(pUrlResId);
             m_xFT_Connection->set_label(sLabelText);

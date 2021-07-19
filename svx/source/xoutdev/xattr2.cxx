@@ -101,7 +101,7 @@ bool XLineJointItem::GetPresentation( SfxItemPresentation /*ePres*/, MapUnit /*e
 {
     rText.clear();
 
-    const char* pId = nullptr;
+    TranslateId pId;
 
     switch( GetValue() )
     {
@@ -256,7 +256,7 @@ XLineCapItem* XLineCapItem::Clone(SfxItemPool* /*pPool*/) const
 bool XLineCapItem::GetPresentation( SfxItemPresentation /*ePres*/, MapUnit /*eCoreUnit*/,
                                                      MapUnit /*ePresUnit*/, OUString& rText, const IntlWrapper&) const
 {
-    const char* pId;
+    TranslateId pId;
 
     switch( GetValue() )
     {

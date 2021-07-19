@@ -21,7 +21,7 @@
 #include <strings.hrc>
 #include <smmod.hxx>
 
-const char* starmathdatabase::SmParseErrorDesc[] = {
+const TranslateId starmathdatabase::SmParseErrorDesc[] = {
     // clang-format off
     RID_ERR_NONE,
     RID_ERR_UNEXPECTEDCHARACTER,

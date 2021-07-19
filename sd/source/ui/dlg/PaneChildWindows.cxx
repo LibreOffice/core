@@ -40,7 +40,7 @@ PaneChildWindow::PaneChildWindow (
     sal_uInt16 nId,
     SfxBindings* pBindings,
     SfxChildWinInfo* pInfo,
-    const char* pTitleBarResId)
+    TranslateId pTitleBarResId)
     : SfxChildWindow (pParentWindow, nId)
 {
     SetWindow( VclPtr<PaneDockingWindow>::Create(

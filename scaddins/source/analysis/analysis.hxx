@@ -28,6 +28,7 @@
 
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
+#include <unotools/resmgr.hxx>
 
 #include "analysishelper.hxx"
 
@@ -56,7 +57,7 @@ private:
     sca::analysis::ScaAnyConverter aAnyConv;
 
     /// @throws css::uno::RuntimeException
-    OUString                    GetFuncDescrStr(const char** pResId, sal_uInt16 nStrIndex);
+    OUString                    GetFuncDescrStr(const TranslateId* pResId, sal_uInt16 nStrIndex);
     void                        InitDefLocales();
     inline const css::lang::Locale& GetLocale( sal_uInt32 nInd );
     void                        InitData();
@@ -73,7 +74,7 @@ public:
     explicit                    AnalysisAddIn(
                                     const css::uno::Reference< css::uno::XComponentContext >& xContext );
 
-    OUString AnalysisResId(std::string_view aId);
+    OUString AnalysisResId(TranslateId aId);
 
     virtual                     ~AnalysisAddIn() override;
 

@@ -146,7 +146,7 @@ bool AboutDialog::IsStringValidGitHash(const OUString &hash) {
 }
 
 OUString AboutDialog::GetVersionString() {
-  OUString sVersion = CuiResId("%ABOUTBOXPRODUCTVERSION%ABOUTBOXPRODUCTVERSIONSUFFIX");
+  OUString sVersion = CuiResId(TranslateId(nullptr, "%ABOUTBOXPRODUCTVERSION%ABOUTBOXPRODUCTVERSIONSUFFIX"));
 
 #ifdef _WIN64
   sVersion += " (x64)";

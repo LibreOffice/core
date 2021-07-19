@@ -19,6 +19,7 @@
 #pragma once
 
 #include <ChildWindow.hxx>
+#include <unotools/resmgr.hxx>
 
 namespace dbaui
 {
@@ -32,7 +33,7 @@ namespace dbaui
         std::shared_ptr<OChildWindow> m_xChild;
 
     public:
-        OTitleWindow(weld::Container* pParent, const char* pTitleId);
+        OTitleWindow(weld::Container* pParent, TranslateId pTitleId);
         ~OTitleWindow();
 
         void GrabFocus();
@@ -59,7 +60,7 @@ namespace dbaui
             @param  pTitleId
                 The resource id of the title text.
         */
-        void setTitle(const char* pTitleId);
+        void setTitle(TranslateId pTitleId);
     };
 } // namespace dbaui
 

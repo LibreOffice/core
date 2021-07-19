@@ -54,7 +54,7 @@ public:
     virtual void Close() override;
 
 protected:
-    virtual const char* GetUndoNameId() override;
+    virtual TranslateId GetUndoNameId() override;
     virtual ScRange ApplyOutput(ScDocShell* pDocShell) override;
 };
 

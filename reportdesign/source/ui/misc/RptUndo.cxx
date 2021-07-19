@@ -113,7 +113,7 @@ namespace
 OSectionUndo::OSectionUndo(OReportModel& _rMod
                            ,sal_uInt16 _nSlot
                            ,Action _eAction
-                           ,const char* pCommentID)
+                           ,TranslateId pCommentID)
 : OCommentUndoAction(_rMod,pCommentID)
 ,m_eAction(_eAction)
 ,m_nSlot(_nSlot)
@@ -214,7 +214,7 @@ OReportSectionUndo::OReportSectionUndo(
     OReportModel& _rMod, sal_uInt16 _nSlot,
     ::std::function<uno::Reference<report::XSection>(OReportHelper*)> _pMemberFunction,
     const uno::Reference<report::XReportDefinition>& _xReport, Action _eAction)
-    : OSectionUndo(_rMod, _nSlot, _eAction, nullptr)
+    : OSectionUndo(_rMod, _nSlot, _eAction, {})
     , m_aReportHelper(_xReport)
     , m_pMemberFunction(std::move(_pMemberFunction))
 {
@@ -248,7 +248,7 @@ void OReportSectionUndo::implReRemove( )
 OGroupSectionUndo::OGroupSectionUndo(
     OReportModel& _rMod, sal_uInt16 _nSlot,
     ::std::function<uno::Reference<report::XSection>(OGroupHelper*)> _pMemberFunction,
-    const uno::Reference<report::XGroup>& _xGroup, Action _eAction, const char* pCommentID)
+    const uno::Reference<report::XGroup>& _xGroup, Action _eAction, TranslateId pCommentID)
     : OSectionUndo(_rMod, _nSlot, _eAction, pCommentID)
     , m_aGroupHelper(_xGroup)
     , m_pMemberFunction(std::move(_pMemberFunction))
@@ -314,7 +314,7 @@ void OGroupSectionUndo::implReRemove( )
 
 
 OGroupUndo::OGroupUndo(OReportModel& _rMod
-                       ,const char* pCommentID
+                       ,TranslateId pCommentID
                        ,Action  _eAction
                        ,const uno::Reference< report::XGroup>& _xGroup
                        ,const uno::Reference< report::XReportDefinition >& _xReportDefinition)

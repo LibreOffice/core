@@ -95,7 +95,7 @@ short CertificateChooser::run()
     return GenericDialogController::run();
 }
 
-void CertificateChooser::HandleOneUsageBit(OUString& string, int& bits, int bit, const char *pResId)
+void CertificateChooser::HandleOneUsageBit(OUString& string, int& bits, int bit, TranslateId pResId)
 {
     if (bits & bit)
     {

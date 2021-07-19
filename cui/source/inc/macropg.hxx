@@ -25,6 +25,7 @@
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <rtl/ustring.hxx>
+#include <unotools/resmgr.hxx>
 
 #include <unordered_map>
 #include <vector>
@@ -34,8 +35,8 @@ typedef std::unordered_map< OUString, std::pair< OUString, OUString > > EventsHa
 struct EventDisplayName
 {
     const char* pAsciiEventName;
-    const char*     pEventResourceID;
-    EventDisplayName(const char* pAsciiName, const char* pResId)
+    TranslateId pEventResourceID;
+    EventDisplayName(const char* pAsciiName, TranslateId pResId)
         : pAsciiEventName(pAsciiName)
         , pEventResourceID(pResId)
     {

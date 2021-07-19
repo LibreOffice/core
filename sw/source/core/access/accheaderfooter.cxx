@@ -62,7 +62,7 @@ OUString SAL_CALL SwAccessibleHeaderFooter::getAccessibleDescription()
 
     ThrowIfDisposed();
 
-    const char* pResId = AccessibleRole::HEADER == GetRole()
+    TranslateId pResId = AccessibleRole::HEADER == GetRole()
         ? STR_ACCESS_HEADER_DESC
         : STR_ACCESS_FOOTER_DESC ;
 

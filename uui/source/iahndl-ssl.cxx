@@ -176,8 +176,8 @@ executeSSLWarnDialog(
 
     // Get correct resource string
     std::vector< OUString > aArguments_1;
-    char const * pMessageKey = nullptr;
-    char const * pTitleKey = nullptr;
+    TranslateId pMessageKey;
+    TranslateId pTitleKey;
 
     switch( failure )
     {

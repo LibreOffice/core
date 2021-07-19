@@ -43,7 +43,7 @@
 
 using  namespace ::com::sun::star;
 
-static const char* aTypeResIds[SC_LINKTARGETTYPE_COUNT] =
+const TranslateId aTypeResIds[SC_LINKTARGETTYPE_COUNT] =
 {
     SCSTR_CONTENT_TABLE,        // SC_LINKTARGETTYPE_SHEET
     SCSTR_CONTENT_RANGENAME,    // SC_LINKTARGETTYPE_RANGENAME

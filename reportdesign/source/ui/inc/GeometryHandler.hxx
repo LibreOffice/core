@@ -33,6 +33,7 @@
 #include <com/sun/star/report/XFunctionsSupplier.hpp>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/sdbc/XRowSet.hpp>
+#include <unotools/resmgr.hxx>
 #include <map>
 #include <memory>
 #include <string_view>
@@ -92,12 +93,12 @@ namespace rptui
         */
         sal_uInt32 impl_getDataFieldType_throw(const OUString& _sDataField = OUString()) const;
 
-        css::uno::Any getConstantValue(bool bToControlValue,const char** pResId,const css::uno::Any& _aValue,const OUString& _sConstantName,const OUString & PropertyName );
+        css::uno::Any getConstantValue(bool bToControlValue,const TranslateId* pResId,const css::uno::Any& _aValue,const OUString& _sConstantName,const OUString & PropertyName );
         css::beans::Property getProperty(const OUString & PropertyName);
         static void implCreateListLikeControl(
                 const css::uno::Reference< css::inspection::XPropertyControlFactory >& _rxControlFactory
                 ,css::inspection::LineDescriptor & out_Descriptor
-                ,const char** pResId
+                ,const TranslateId* pResId
                 ,bool _bReadOnlyControl
                 ,bool _bTrueIfListBoxFalseIfComboBox
             );

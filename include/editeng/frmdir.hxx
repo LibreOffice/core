@@ -21,6 +21,7 @@
 #define INCLUDED_EDITENG_FRMDIR_HXX
 
 #include <com/sun/star/text/WritingMode2.hpp>
+#include <unotools/resmgr.hxx>
 
 /**
  * Defines possible text directions in frames.
@@ -54,7 +55,7 @@ enum class SvxFrameDirection
     Vertical_LR_BT = css::text::WritingMode2::BT_LR,
 };
 
-const char* getFrmDirResId(size_t nIndex);
+TranslateId getFrmDirResId(size_t nIndex);
 
 #endif // INCLUDED_EDITENG_FRMDIR_HXX
 

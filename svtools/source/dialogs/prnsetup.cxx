@@ -134,7 +134,7 @@ static OUString ImplPrnDlgAddString(const OUString& rStr, std::u16string_view rA
 }
 
 
-static OUString ImplPrnDlgAddResString(const OUString& rStr, const char* pResId)
+static OUString ImplPrnDlgAddResString(const OUString& rStr, TranslateId pResId)
 {
     return ImplPrnDlgAddString(rStr, SvtResId(pResId));
 }

@@ -558,7 +558,7 @@ void SwPageDesc::RemoveStashedFormat(bool bHeader, bool bLeft, bool bFirst)
 }
 
 // Page styles
-static const char* STR_POOLPAGE[] =
+const TranslateId STR_POOLPAGE[] =
 {
     STR_POOLPAGE_STANDARD,
     STR_POOLPAGE_FIRST,

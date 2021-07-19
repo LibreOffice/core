@@ -91,7 +91,7 @@ void InitUI()
     SwEditWin::InitStaticData();
 }
 
-static const char* FLD_DOCINFO_ARY[] =
+const TranslateId FLD_DOCINFO_ARY[] =
 {
     FLD_DOCINFO_TITLE,
     FLD_DOCINFO_SUBJECT,
@@ -202,7 +202,7 @@ void ShellResource::GetAutoFormatNameLst_() const
 
 namespace
 {
-    const char* STR_AUTH_FIELD_ARY[] =
+    const TranslateId STR_AUTH_FIELD_ARY[] =
     {
         STR_AUTH_FIELD_IDENTIFIER,
         STR_AUTH_FIELD_AUTHORITY_TYPE,
@@ -251,7 +251,7 @@ OUString const & SwAuthorityFieldType::GetAuthFieldName(ToxAuthorityField eType)
     return (*pAuthFieldNameList)[static_cast< sal_uInt16 >(eType)];
 }
 
-static const char* STR_AUTH_TYPE_ARY[] =
+const TranslateId STR_AUTH_TYPE_ARY[] =
 {
     STR_AUTH_TYPE_ARTICLE,
     STR_AUTH_TYPE_BOOK,

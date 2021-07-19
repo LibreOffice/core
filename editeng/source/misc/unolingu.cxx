@@ -731,7 +731,7 @@ short SvxDicError(weld::Window *pParent, linguistic::DictionaryError nError)
     short nRes = 0;
     if (linguistic::DictionaryError::NONE != nError)
     {
-        const char* pRid;
+        TranslateId pRid;
         switch (nError)
         {
             case linguistic::DictionaryError::FULL     : pRid = RID_SVXSTR_DIC_ERR_FULL;  break;

@@ -405,7 +405,7 @@ void ProgressCmdEnv::handle( uno::Reference< task::XInteractionRequest > const &
     }
     else if (request >>= verExc)
     {
-        const char* id;
+        TranslateId id;
         switch (dp_misc::compareVersions(
                     verExc.NewVersion, verExc.Deployed->getVersion() ))
         {
@@ -435,18 +435,18 @@ void ProgressCmdEnv::handle( uno::Reference< task::XInteractionRequest > const &
             {
                 s = xBox->get_primary_text();
             }
-            else if (!strcmp(id, RID_STR_WARNING_VERSION_EQUAL))
+            else if (id != RID_STR_WARNING_VERSION_EQUAL)
             {
                 //hypothetical: requires two instances of an extension with the same
                 //version to have different display names. Probably the developer forgot
                 //to change the version.
                 s = DpResId(RID_STR_WARNINGBOX_VERSION_EQUAL_DIFFERENT_NAMES);
             }
-            else if (!strcmp(id, RID_STR_WARNING_VERSION_LESS))
+            else if (id != RID_STR_WARNING_VERSION_LESS)
             {
                 s = DpResId(RID_STR_WARNINGBOX_VERSION_LESS_DIFFERENT_NAMES);
             }
-            else if (!strcmp(id, RID_STR_WARNING_VERSION_GREATER))
+            else if (id != RID_STR_WARNING_VERSION_GREATER)
             {
                s = DpResId(RID_STR_WARNINGBOX_VERSION_GREATER_DIFFERENT_NAMES);
             }

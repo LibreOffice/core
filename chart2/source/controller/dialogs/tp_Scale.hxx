@@ -19,6 +19,7 @@
 #pragma once
 
 #include <sfx2/tabdlg.hxx>
+#include <unotools/resmgr.hxx>
 
 namespace chart
 {
@@ -98,7 +99,7 @@ private:
 
         @return false, if nResIdMessage was 0, true otherwise
      */
-    bool ShowWarning(const char* pResIdMessage, weld::Widget* pControl);
+    bool ShowWarning(TranslateId pResIdMessage, weld::Widget* pControl);
 
     void HideAllControls();
 };

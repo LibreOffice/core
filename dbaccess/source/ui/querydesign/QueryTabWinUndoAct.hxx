@@ -39,7 +39,7 @@ namespace dbaui
         // am I the only owner of the managed objects? (changes with every redo or undo)
 
     public:
-        OQueryTabWinUndoAct(OQueryTableView* pOwner, const char* pCommentID);
+        OQueryTabWinUndoAct(OQueryTableView* pOwner, TranslateId pCommentID);
         virtual ~OQueryTabWinUndoAct() override;
 
         void SetOwnership(bool bTakeIt) { m_bOwnerOfObjects = bTakeIt; }

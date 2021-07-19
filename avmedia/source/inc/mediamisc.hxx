@@ -35,7 +35,7 @@
 // Mime types
 #define AVMEDIA_MIMETYPE_COMMON "application/vnd.sun.star.media"
 
-inline OUString AvmResId(std::string_view aId)
+inline OUString AvmResId(TranslateId aId)
 {
     return Translate::get(aId, Translate::Create("avmedia"));
 }

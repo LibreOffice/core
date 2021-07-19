@@ -34,7 +34,7 @@ namespace dbaui
         // am I the only owner of the connection? (changes with every redo and undo)
 
     public:
-        OQueryTabConnUndoAction(OQueryTableView* pOwner, const char* pCommentID);
+        OQueryTabConnUndoAction(OQueryTableView* pOwner, TranslateId pCommentID);
         virtual ~OQueryTabConnUndoAction() override;
 
         virtual void Undo() override = 0;

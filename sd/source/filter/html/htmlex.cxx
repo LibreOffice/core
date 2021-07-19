@@ -3164,7 +3164,6 @@ void EasyFile::close()
 // This class helps reporting errors during file i/o
 HtmlErrorContext::HtmlErrorContext()
     : ErrorContext(nullptr)
-    , mpResId(nullptr)
 {
 }
 
@@ -3182,14 +3181,14 @@ bool HtmlErrorContext::GetString( ErrCode, OUString& rCtxStr )
     return true;
 }
 
-void HtmlErrorContext::SetContext(const char* pResId, const OUString& rURL)
+void HtmlErrorContext::SetContext(TranslateId pResId, const OUString& rURL)
 {
     mpResId = pResId;
     maURL1 = rURL;
     maURL2.clear();
 }
 
-void HtmlErrorContext::SetContext(const char* pResId, const OUString& rURL1, const OUString& rURL2 )
+void HtmlErrorContext::SetContext(TranslateId pResId, const OUString& rURL1, const OUString& rURL2 )
 {
     mpResId = pResId;
     maURL1 = rURL1;

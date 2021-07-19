@@ -19,6 +19,7 @@
 #pragma once
 
 #include "SqlNameEdit.hxx"
+#include <unotools/resmgr.hxx>
 
 namespace dbaui
 {
@@ -28,7 +29,7 @@ namespace dbaui
         short                m_nPos;
         OUString             m_strHelpText;
     public:
-        OPropColumnEditCtrl(std::unique_ptr<weld::Entry> xEntry, OUString const & _rAllowedChars, const char* pHelpId, short nPosition);
+        OPropColumnEditCtrl(std::unique_ptr<weld::Entry> xEntry, OUString const & _rAllowedChars, TranslateId pHelpId, short nPosition);
 
         short GetPos() const { return m_nPos; }
         const OUString& GetHelp() const { return m_strHelpText; }
@@ -41,7 +42,7 @@ namespace dbaui
         OUString             m_strHelpText;
 
     public:
-        OPropEditCtrl(std::unique_ptr<weld::Entry> xEntry, const char* pHelpId, short nPosition);
+        OPropEditCtrl(std::unique_ptr<weld::Entry> xEntry, TranslateId pHelpId, short nPosition);
 
         void set_text(const OUString& rText) { m_xEntry->set_text(rText); }
         OUString get_text() const { return m_xEntry->get_text(); }
@@ -61,7 +62,7 @@ namespace dbaui
         OUString  m_strHelpText;
 
     public:
-        OPropNumericEditCtrl(std::unique_ptr<weld::SpinButton> xSpinButton, const char* pHelpId, short nPosition);
+        OPropNumericEditCtrl(std::unique_ptr<weld::SpinButton> xSpinButton, TranslateId pHelpId, short nPosition);
 
         void set_text(const OUString& rText) { m_xSpinButton->set_text(rText); }
         OUString get_text() const { return m_xSpinButton->get_text(); }
@@ -87,7 +88,7 @@ namespace dbaui
         OUString  m_strHelpText;
 
     public:
-        OPropListBoxCtrl(std::unique_ptr<weld::ComboBox> xComboBox, const char* pHelpId, short nPosition);
+        OPropListBoxCtrl(std::unique_ptr<weld::ComboBox> xComboBox, TranslateId pHelpId, short nPosition);
         virtual ~OPropListBoxCtrl() override
         {
             m_xComboBox->clear();

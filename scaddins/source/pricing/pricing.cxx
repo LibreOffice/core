@@ -134,7 +134,7 @@ void ScaPricingAddIn::InitData()
     pDefLocales.reset();
 }
 
-OUString ScaPricingAddIn::GetFuncDescrStr(const char** pResId, sal_uInt16 nStrIndex)
+OUString ScaPricingAddIn::GetFuncDescrStr(const TranslateId* pResId, sal_uInt16 nStrIndex)
 {
     return ScaResId(pResId[nStrIndex - 1]);
 }
@@ -500,7 +500,7 @@ double SAL_CALL ScaPricingAddIn::getOptProbInMoney( double spot, double vol,
     RETURN_FINITE( fRet );
 }
 
-OUString ScaPricingAddIn::ScaResId(std::string_view aResId)
+OUString ScaPricingAddIn::ScaResId(TranslateId aResId)
 {
     return Translate::get(aResId, aResLocale);
 }

@@ -870,7 +870,7 @@ OUString lclGetDataFieldCaption( std::u16string_view rFieldName, ScGeneralFuncti
 {
     OUString aCaption;
 
-    const char* pResIdx = nullptr;
+    TranslateId pResIdx;
     switch( eFunc )
     {
         case ScGeneralFunction::SUM:       pResIdx = STR_FUN_TEXT_SUM;     break;

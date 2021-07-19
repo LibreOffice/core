@@ -12,6 +12,7 @@
 
 #include <vcl/dllapi.h>
 #include <rtl/ustring.hxx>
+#include <unotools/resmgr.hxx>
 #include <vector>
 
 namespace vcl::font
@@ -41,11 +42,11 @@ struct VCL_DLLPUBLIC FeatureParameter
 private:
     uint32_t m_nCode;
     OUString m_sDescription;
-    const char* m_pDescriptionID;
+    TranslateId m_pDescriptionID;
 
 public:
     FeatureParameter(uint32_t nCode, OUString aDescription);
-    FeatureParameter(uint32_t nCode, const char* pDescriptionID);
+    FeatureParameter(uint32_t nCode, TranslateId pDescriptionID);
 
     uint32_t getCode() const;
     OUString getDescription() const;
@@ -55,7 +56,7 @@ class VCL_DLLPUBLIC FeatureDefinition
 {
 private:
     OUString m_sDescription;
-    const char* m_pDescriptionID;
+    TranslateId m_pDescriptionID;
     OUString m_sNumericPart;
     uint32_t m_nCode;
     uint32_t m_nDefault;
@@ -70,9 +71,9 @@ public:
                       std::vector<FeatureParameter> const& rEnumParameters
                       = std::vector<FeatureParameter>{},
                       uint32_t nDefault = 0);
-    FeatureDefinition(uint32_t nCode, const char* pDescriptionID,
+    FeatureDefinition(uint32_t nCode, TranslateId pDescriptionID,
                       OUString const& rNumericPart = OUString());
-    FeatureDefinition(uint32_t nCode, const char* pDescriptionID,
+    FeatureDefinition(uint32_t nCode, TranslateId pDescriptionID,
                       std::vector<FeatureParameter> aEnumParameters);
 
     const std::vector<FeatureParameter>& getEnumParameters() const;

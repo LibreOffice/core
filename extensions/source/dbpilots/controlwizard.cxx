@@ -185,7 +185,7 @@ namespace dbp
             m_xFormDatasource->set_label(sDataSource);
             m_xFormTable->set_label(sCommand);
 
-            const char* pCommandTypeResourceId = nullptr;
+            TranslateId pCommandTypeResourceId;
             switch (nCommandType)
             {
                 case CommandType::TABLE:

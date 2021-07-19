@@ -362,8 +362,8 @@ sal_Int32 ScDPUtil::getDatePartValue(
 
 namespace {
 
-const char* aFuncStrIds[] = {
-    nullptr,                        // SUBTOTAL_FUNC_NONE
+const TranslateId aFuncStrIds[] = {
+    {},                             // SUBTOTAL_FUNC_NONE
     STR_FUN_TEXT_AVG,               // SUBTOTAL_FUNC_AVE
     STR_FUN_TEXT_COUNT,             // SUBTOTAL_FUNC_CNT
     STR_FUN_TEXT_COUNT,             // SUBTOTAL_FUNC_CNT2
@@ -376,7 +376,7 @@ const char* aFuncStrIds[] = {
     STR_FUN_TEXT_VAR,               // SUBTOTAL_FUNC_VAR
     STR_FUN_TEXT_VAR,               // SUBTOTAL_FUNC_VARP
     STR_FUN_TEXT_MEDIAN,            // SUBTOTAL_FUNC_MED
-    nullptr                         // SUBTOTAL_FUNC_SELECTION_COUNT - not used for pivot table
+    {}                              // SUBTOTAL_FUNC_SELECTION_COUNT - not used for pivot table
 };
 
 }
@@ -384,7 +384,7 @@ const char* aFuncStrIds[] = {
 OUString ScDPUtil::getDisplayedMeasureName(const OUString& rName, ScSubTotalFunc eFunc)
 {
     assert(unsigned(eFunc) < SAL_N_ELEMENTS(aFuncStrIds));
-    const char* pId = aFuncStrIds[eFunc];
+    TranslateId pId = aFuncStrIds[eFunc];
     if (!pId)
         return rName;
     return ScResId(pId) +        // function name

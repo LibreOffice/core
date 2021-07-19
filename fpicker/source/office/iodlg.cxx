@@ -378,8 +378,8 @@ SvtFileDialog::SvtFileDialog(weld::Window* pParent, PickerFlags nStyle)
     AddControls_Impl( );
 
     // adjust the labels to the mode
-    const char* pResId = STR_EXPLORERFILE_OPEN;
-    const char* pButtonResId = nullptr;
+    TranslateId pResId = STR_EXPLORERFILE_OPEN;
+    TranslateId pButtonResId;
 
     if ( nStyle & PickerFlags::SaveAs )
     {

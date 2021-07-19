@@ -81,7 +81,7 @@ private:
     void                    SetActualClickAction( css::presentation::ClickAction eCA );
     void                    SetEditText( OUString const & rStr );
     OUString                GetEditText( bool bURL = false );
-    static const char*      GetClickActionSdResId(css::presentation::ClickAction eCA);
+    static TranslateId      GetClickActionSdResId(css::presentation::ClickAction eCA);
 
 public:
     SdTPAction(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs);

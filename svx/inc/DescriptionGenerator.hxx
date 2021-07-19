@@ -21,6 +21,7 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <unotools/resmgr.hxx>
 
 namespace com::sun::star::beans
 {
@@ -75,7 +76,7 @@ public:
             shape that is made more specific by later calls to
             <member>addProperty</member>.
     */
-    void Initialize(const char* pResourceId);
+    void Initialize(TranslateId pResourceId);
 
     /**  Returns the description string and then resets it.  Usually called
          as last method before destroying the object.

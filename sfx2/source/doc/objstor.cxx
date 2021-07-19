@@ -3026,7 +3026,7 @@ HiddenInformation SfxObjectShell::GetHiddenInformationState( HiddenInformation n
 sal_Int16 SfxObjectShell::QueryHiddenInformation(HiddenWarningFact eFact, weld::Window* pParent)
 {
     sal_Int16 nRet = RET_YES;
-    const char* pResId = nullptr;
+    TranslateId pResId;
     SvtSecurityOptions::EOption eOption = SvtSecurityOptions::EOption();
 
     switch ( eFact )

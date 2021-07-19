@@ -456,7 +456,7 @@ namespace svxform
                     OUString sInitialLabel;
                     OSL_VERIFY( _rxControlModel->getPropertyValue( FM_PROP_NAME ) >>= sInitialLabel );
 
-                    const char* pTitleResId = nullptr;
+                    TranslateId pTitleResId;
                     switch ( nClassId )
                     {
                         case FormComponentType::COMMANDBUTTON:  pTitleResId = RID_STR_PROPTITLE_PUSHBUTTON;      break;
@@ -630,7 +630,7 @@ namespace svxform
 
     OUString FormControlFactory::getDefaultName( sal_Int16 _nClassId, const Reference< XServiceInfo >& _rxObject )
     {
-        const char* pResId(nullptr);
+        TranslateId pResId;
 
         switch ( _nClassId )
         {

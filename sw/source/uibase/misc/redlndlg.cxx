@@ -1091,7 +1091,7 @@ IMPL_LINK(SwRedlineAcceptDlg, CommandHdl, const CommandEvent&, rCEvt, bool)
 
             pDlg->HideAuthor();
 
-            const char* pResId = nullptr;
+            TranslateId pResId;
             switch( rRedline.GetType() )
             {
                 case RedlineType::Insert:

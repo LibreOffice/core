@@ -75,7 +75,7 @@ namespace {
 struct snewfoil_value_info
 {
     const char* msBmpResId;
-    const char* mpStrResId;
+    TranslateId mpStrResId;
     WritingMode meWritingMode;
     AutoLayout maAutoLayout;
 };
@@ -86,7 +86,7 @@ const snewfoil_value_info notes[] =
 {
     {BMP_FOILN_01, STR_AUTOLAYOUT_NOTES, WritingMode_LR_TB,
      AUTOLAYOUT_NOTES},
-    {"", nullptr, WritingMode_LR_TB, AUTOLAYOUT_NONE},
+    {"", {}, WritingMode_LR_TB, AUTOLAYOUT_NONE},
 };
 
 const snewfoil_value_info handout[] =
@@ -103,7 +103,7 @@ const snewfoil_value_info handout[] =
      AUTOLAYOUT_HANDOUT6},
     {BMP_FOILH_09, STR_AUTOLAYOUT_HANDOUT9, WritingMode_LR_TB,
      AUTOLAYOUT_HANDOUT9},
-    {"", nullptr, WritingMode_LR_TB, AUTOLAYOUT_NONE},
+    {"", {}, WritingMode_LR_TB, AUTOLAYOUT_NONE},
 };
 
 const snewfoil_value_info standard[] =
@@ -126,7 +126,7 @@ const snewfoil_value_info standard[] =
     {BMP_LAYOUT_VERTICAL01, STR_AL_VERT_TITLE_VERT_OUTLINE, WritingMode_TB_RL, AUTOLAYOUT_VTITLE_VCONTENT},
     {BMP_LAYOUT_HEAD02, STR_AL_TITLE_VERT_OUTLINE, WritingMode_TB_RL, AUTOLAYOUT_TITLE_VCONTENT},
     {BMP_LAYOUT_HEAD02A, STR_AL_TITLE_VERT_OUTLINE_CLIPART,   WritingMode_TB_RL, AUTOLAYOUT_TITLE_2VTEXT},
-    {"", nullptr, WritingMode_LR_TB, AUTOLAYOUT_NONE}
+    {"", {}, WritingMode_LR_TB, AUTOLAYOUT_NONE}
 };
 
 class LayoutValueSet : public ValueSet
@@ -538,7 +538,7 @@ void LayoutMenu::Fill()
     }
 
     Clear();
-    for (sal_uInt16 i=1; pInfo!=nullptr && pInfo->mpStrResId != nullptr; i++, pInfo++)
+    for (sal_uInt16 i=1; pInfo!=nullptr && pInfo->mpStrResId; i++, pInfo++)
     {
         if ((WritingMode_TB_RL != pInfo->meWritingMode) || bVertical)
         {

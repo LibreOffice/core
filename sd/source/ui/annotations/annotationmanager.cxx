@@ -826,7 +826,7 @@ void AnnotationManagerImpl::SelectNextAnnotation(bool bForward)
 
         // The question text depends on the search direction.
         bool bImpress = mpDoc->GetDocumentType() == DocumentType::Impress;
-        const char* pStringId;
+        TranslateId pStringId;
         if(bForward)
             pStringId = bImpress ? STR_ANNOTATION_WRAP_FORWARD : STR_ANNOTATION_WRAP_FORWARD_DRAW;
         else

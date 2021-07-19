@@ -25,7 +25,7 @@ namespace rptui
 {
     using namespace ::com::sun::star;
 
-static std::unique_ptr<SdrUndoAction> lcl_createUndo(SdrObject& rObject, Action _eAction, const char* pCommentId)
+static std::unique_ptr<SdrUndoAction> lcl_createUndo(SdrObject& rObject, Action _eAction, TranslateId pCommentId)
 {
     OObjectBase* pObj = dynamic_cast<OObjectBase*>(&rObject);
     if ( !pObj )

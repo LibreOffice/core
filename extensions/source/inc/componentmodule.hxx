@@ -20,12 +20,13 @@
 #pragma once
 
 #include <rtl/ustring.hxx>
+#include <unotools/resmgr.hxx>
 
 namespace compmodule
 {
 
     // specialized ResId, using the resource locale provided by the global module
-    OUString ModuleRes(const char* pId);
+    OUString ModuleRes(TranslateId pId);
 
 }   // namespace compmodule
 

@@ -20,6 +20,7 @@
 #pragma once
 
 #include <sfx2/childwin.hxx>
+#include <unotools/resmgr.hxx>
 
 namespace sd {
 
@@ -33,7 +34,7 @@ public:
         sal_uInt16 nId,
         SfxBindings* pBindings,
         SfxChildWinInfo* pInfo,
-        const char* pTitleBarResId);
+        TranslateId pTitleBarResId);
     virtual ~PaneChildWindow() override;
 };
 

@@ -403,7 +403,7 @@ bool SdrItemPool::GetPresentation(
 
 OUString SdrItemPool::GetItemName(sal_uInt16 nWhich)
 {
-    const char* pResId = SIP_UNKNOWN_ATTR;
+    TranslateId pResId = SIP_UNKNOWN_ATTR;
 
     switch (nWhich)
     {
@@ -938,7 +938,7 @@ sal_uInt16 SdrCaptionTypeItem::GetValueCount() const { return 4; }
 
 OUString SdrCaptionTypeItem::GetValueTextByPos(sal_uInt16 nPos)
 {
-    static const char* ITEMVALCAPTIONTYPES[] =
+    static TranslateId ITEMVALCAPTIONTYPES[] =
     {
         STR_ItemValCAPTIONTYPE1,
         STR_ItemValCAPTIONTYPE2,
@@ -966,7 +966,7 @@ sal_uInt16 SdrCaptionEscDirItem::GetValueCount() const { return 3; }
 
 OUString SdrCaptionEscDirItem::GetValueTextByPos(sal_uInt16 nPos)
 {
-    static const char* ITEMVALCAPTIONTYPES[] =
+    static TranslateId ITEMVALCAPTIONTYPES[] =
     {
         STR_ItemValCAPTIONESCHORI,
         STR_ItemValCAPTIONESCVERT,
@@ -1010,7 +1010,7 @@ sal_uInt16 SdrTextFitToSizeTypeItem::GetValueCount() const { return 4; }
 
 OUString SdrTextFitToSizeTypeItem::GetValueTextByPos(sal_uInt16 nPos)
 {
-    static const char* ITEMVALFITTISIZETYPES[] =
+    static TranslateId ITEMVALFITTISIZETYPES[] =
     {
         STR_ItemValFITTOSIZENONE,
         STR_ItemValFITTOSIZEPROP,
@@ -1072,7 +1072,7 @@ sal_uInt16 SdrTextVertAdjustItem::GetValueCount() const { return 5; }
 
 OUString SdrTextVertAdjustItem::GetValueTextByPos(sal_uInt16 nPos)
 {
-    static const char* ITEMVALTEXTVADJTYPES[] =
+    static TranslateId ITEMVALTEXTVADJTYPES[] =
     {
         STR_ItemValTEXTVADJTOP,
         STR_ItemValTEXTVADJCENTER,
@@ -1131,7 +1131,7 @@ sal_uInt16 SdrTextHorzAdjustItem::GetValueCount() const { return 5; }
 
 OUString SdrTextHorzAdjustItem::GetValueTextByPos(sal_uInt16 nPos)
 {
-    static const char* ITEMVALTEXTHADJTYPES[] =
+    static TranslateId ITEMVALTEXTHADJTYPES[] =
     {
         STR_ItemValTEXTHADJLEFT,
         STR_ItemValTEXTHADJCENTER,
@@ -1183,7 +1183,7 @@ sal_uInt16 SdrTextAniKindItem::GetValueCount() const { return 5; }
 
 OUString SdrTextAniKindItem::GetValueTextByPos(sal_uInt16 nPos)
 {
-    static const char* ITEMVALTEXTANITYPES[] =
+    static TranslateId ITEMVALTEXTANITYPES[] =
     {
         STR_ItemValTEXTANI_NONE,
         STR_ItemValTEXTANI_BLINK,
@@ -1234,7 +1234,7 @@ sal_uInt16 SdrTextAniDirectionItem::GetValueCount() const { return 4; }
 
 OUString SdrTextAniDirectionItem::GetValueTextByPos(sal_uInt16 nPos)
 {
-    static const char* ITEMVALTEXTANITYPES[] =
+    static TranslateId ITEMVALTEXTANITYPES[] =
     {
         STR_ItemValTEXTANI_LEFT,
         STR_ItemValTEXTANI_UP,
@@ -1387,7 +1387,7 @@ sal_uInt16 SdrEdgeKindItem::GetValueCount() const { return 4; }
 
 OUString SdrEdgeKindItem::GetValueTextByPos(sal_uInt16 nPos)
 {
-    static const char* ITEMVALEDGES[] =
+    static TranslateId ITEMVALEDGES[] =
     {
         STR_ItemValEDGE_ORTHOLINES,
         STR_ItemValEDGE_THREELINES,
@@ -1555,7 +1555,7 @@ sal_uInt16 SdrMeasureKindItem::GetValueCount() const { return 2; }
 
 OUString SdrMeasureKindItem::GetValueTextByPos(sal_uInt16 nPos)
 {
-    static const char* ITEMVALMEASURETYPES[] =
+    static TranslateId ITEMVALMEASURETYPES[] =
     {
         STR_ItemValMEASURE_STD,
         STR_ItemValMEASURE_RADIUS
@@ -1603,7 +1603,7 @@ sal_uInt16 SdrMeasureTextHPosItem::GetValueCount() const { return 4; }
 
 OUString SdrMeasureTextHPosItem::GetValueTextByPos(sal_uInt16 nPos)
 {
-    static const char* ITEMVALMEASURETEXTTYPES[] =
+    static TranslateId ITEMVALMEASURETEXTTYPES[] =
     {
         STR_ItemValMEASURE_TEXTHAUTO,
         STR_ItemValMEASURE_TEXTLEFTOUTSIDE,
@@ -1652,7 +1652,7 @@ sal_uInt16 SdrMeasureTextVPosItem::GetValueCount() const { return 5; }
 
 OUString SdrMeasureTextVPosItem::GetValueTextByPos(sal_uInt16 nPos)
 {
-    static const char* ITEMVALMEASURETEXTTYPES[] =
+    static TranslateId ITEMVALMEASURETEXTTYPES[] =
     {
         STR_ItemValMEASURE_TEXTVAUTO,
         STR_ItemValMEASURE_ABOVE,
@@ -1741,7 +1741,7 @@ sal_uInt16 SdrCircKindItem::GetValueCount() const { return 4; }
 
 OUString SdrCircKindItem::GetValueTextByPos(sal_uInt16 nPos)
 {
-    static const char* ITEMVALCIRCTYPES[] =
+    static TranslateId ITEMVALCIRCTYPES[] =
     {
         STR_ItemValCIRC_FULL,
         STR_ItemValCIRC_SECT,

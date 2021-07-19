@@ -63,7 +63,7 @@ const std::pair<sal_uInt16, const char*> aUnlocalized[] =
     { GALLERY_THEME_FONTWORK_VERTICAL, RID_GALLERYSTR_THEME_FONTWORK_VERTICAL }
 };
 
-const std::pair<sal_uInt16, const char*> aLocalized[] =
+const std::pair<sal_uInt16, TranslateId> aLocalized[] =
 {
     { RID_GALLERY_THEME_3D, RID_GALLERYSTR_THEME_3D },
     { RID_GALLERY_THEME_ANIMATIONS, RID_GALLERYSTR_THEME_ANIMATIONS },

@@ -342,7 +342,7 @@ bool SvxSpellWrapper::SpellNext( )
         // a BODY_area done, ask for the other BODY_area
         xWait.reset();
 
-        const char* pResId = bReverse ? RID_SVXSTR_QUERY_BW_CONTINUE : RID_SVXSTR_QUERY_CONTINUE;
+        TranslateId pResId = bReverse ? RID_SVXSTR_QUERY_BW_CONTINUE : RID_SVXSTR_QUERY_CONTINUE;
         std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pWin,
                                                                  VclMessageType::Question, VclButtonsType::YesNo,
                                                                  EditResId(pResId)));

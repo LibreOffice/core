@@ -175,7 +175,7 @@ bool SwRegisterItem::GetPresentation
     const IntlWrapper&  /*rIntl*/
 )   const
 {
-    const char* pId = GetValue() ? STR_REGISTER_ON : STR_REGISTER_OFF;
+    TranslateId pId = GetValue() ? STR_REGISTER_ON : STR_REGISTER_OFF;
     rText = SwResId(pId);
     return true;
 }
@@ -205,7 +205,7 @@ bool SwParaConnectBorderItem::GetPresentation
     const IntlWrapper&  /*rIntl*/
 )   const
 {
-    const char* pId = GetValue() ? STR_CONNECT_BORDER_ON : STR_CONNECT_BORDER_OFF;
+    TranslateId pId = GetValue() ? STR_CONNECT_BORDER_ON : STR_CONNECT_BORDER_OFF;
     rText = SwResId(pId);
     return true;
 }
@@ -234,7 +234,7 @@ bool SwFormatFrameSize::GetPresentation
     }
     if ( SwFrameSize::Variable != GetHeightSizeType() )
     {
-        const char* pId = SwFrameSize::Fixed == m_eFrameHeightType ?
+        TranslateId pId = SwFrameSize::Fixed == m_eFrameHeightType ?
                                 STR_FRM_FIXEDHEIGHT : STR_FRM_MINHEIGHT;
         rText += ", " + SwResId(pId) + " ";
         if ( GetHeightPercent() )
@@ -263,7 +263,7 @@ bool SwFormatHeader::GetPresentation
     const IntlWrapper&  /*rIntl*/
 )   const
 {
-    const char* pId = GetHeaderFormat() ? STR_HEADER : STR_NO_HEADER;
+    TranslateId pId = GetHeaderFormat() ? STR_HEADER : STR_NO_HEADER;
     rText = SwResId(pId);
     return true;
 }
@@ -280,7 +280,7 @@ bool SwFormatFooter::GetPresentation
     const IntlWrapper&  /*rIntl*/
 )   const
 {
-    const char* pId = GetFooterFormat() ? STR_FOOTER : STR_NO_FOOTER;
+    TranslateId pId = GetFooterFormat() ? STR_FOOTER : STR_NO_FOOTER;
     rText = SwResId(pId);
     return true;
 }
@@ -294,7 +294,7 @@ bool SwFormatSurround::GetPresentation
     const IntlWrapper&  /*rIntl*/
 )   const
 {
-    const char* pId = nullptr;
+    TranslateId pId;
     switch ( GetValue() )
     {
         case css::text::WrapTextMode_NONE:
@@ -338,7 +338,7 @@ bool SwFormatVertOrient::GetPresentation
     const IntlWrapper&  rIntl
 )   const
 {
-    const char* pId = nullptr;
+    TranslateId pId;
     switch ( GetVertOrient() )
     {
         case text::VertOrientation::NONE:
@@ -384,7 +384,7 @@ bool SwFormatHoriOrient::GetPresentation
     const IntlWrapper&  rIntl
 )   const
 {
-    const char* pId = nullptr;
+    TranslateId pId;
     switch ( GetHoriOrient() )
     {
         case text::HoriOrientation::NONE:
@@ -430,7 +430,7 @@ bool SwFormatAnchor::GetPresentation
     const IntlWrapper&  /*rIntl*/
 )   const
 {
-    const char* pId = nullptr;
+    TranslateId pId;
     switch ( GetAnchorId() )
     {
         case RndStdIds::FLY_AT_PARA:
@@ -641,7 +641,7 @@ bool SwTextGridItem::GetPresentation
     const IntlWrapper&  /*rIntl*/
 )   const
 {
-    const char* pId = nullptr;
+    TranslateId pId;
 
     switch ( GetGridType() )
     {
@@ -678,14 +678,14 @@ bool SwMirrorGrf::GetPresentation(
     SfxItemPresentation /*ePres*/, MapUnit /*eCoreUnit*/, MapUnit /*ePresUnit*/,
     OUString& rText, const IntlWrapper& /*rIntl*/ ) const
 {
-    const char* pId;
+    TranslateId pId;
     switch( GetValue() )
     {
     case MirrorGraph::Dont:     pId = STR_NO_MIRROR;    break;
     case MirrorGraph::Vertical: pId = STR_VERT_MIRROR;  break;
     case MirrorGraph::Horizontal:  pId = STR_HORI_MIRROR;  break;
     case MirrorGraph::Both:     pId = STR_BOTH_MIRROR;  break;
-    default:                    pId = nullptr;    break;
+    default:                    break;
     }
     if (pId)
     {
@@ -740,13 +740,13 @@ bool SwChannelGrf::GetPresentation(
 {
     if( SfxItemPresentation::Complete == ePres )
     {
-        const char* pId;
+        TranslateId pId;
         switch ( Which() )
         {
         case RES_GRFATR_CHANNELR:   pId = STR_CHANNELR; break;
         case RES_GRFATR_CHANNELG:   pId = STR_CHANNELG; break;
         case RES_GRFATR_CHANNELB:   pId = STR_CHANNELB; break;
-        default:                    pId = nullptr; break;
+        default: break;
         }
         if (pId)
             rText = SwResId(pId);
@@ -780,7 +780,7 @@ bool SwInvertGrf::GetPresentation(
     rText.clear();
     if( SfxItemPresentation::Complete == ePres )
     {
-        const char* pId = GetValue() ? STR_INVERT : STR_INVERT_NOT;
+        TranslateId pId = GetValue() ? STR_INVERT : STR_INVERT_NOT;
         rText = SwResId(pId);
     }
     return true;
@@ -806,7 +806,7 @@ bool SwDrawModeGrf::GetPresentation(
     rText.clear();
     if( SfxItemPresentation::Complete == ePres )
     {
-        const char* pId;
+        TranslateId pId;
         switch ( GetValue() )
         {
 
@@ -829,7 +829,7 @@ bool SwFormatFollowTextFlow::GetPresentation( SfxItemPresentation ePres,
     rText.clear();
     if( SfxItemPresentation::Complete == ePres )
     {
-        const char* pId = GetValue() ? STR_FOLLOW_TEXT_FLOW : STR_DONT_FOLLOW_TEXT_FLOW;
+        TranslateId pId = GetValue() ? STR_FOLLOW_TEXT_FLOW : STR_DONT_FOLLOW_TEXT_FLOW;
         rText = SwResId(pId);
     }
     return true;

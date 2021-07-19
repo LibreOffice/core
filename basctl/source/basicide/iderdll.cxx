@@ -105,7 +105,7 @@ ExtraData* GetExtraData()
     return nullptr;
 }
 
-OUString IDEResId(std::string_view aId)
+OUString IDEResId(TranslateId aId)
 {
     return Translate::get(aId, SfxApplication::GetModule(SfxToolsModule::Basic)->GetResLocale());
 }

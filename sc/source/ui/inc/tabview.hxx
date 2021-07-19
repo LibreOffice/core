@@ -576,7 +576,7 @@ public:
     void            SplitAtPixel( const Point& rPixel );
     void            InvalidateSplit();
 
-    void            ErrorMessage(const char* pGlobStrId);
+    void            ErrorMessage(TranslateId pGlobStrId);
 
     void            EnableRefInput(bool bFlag);
 

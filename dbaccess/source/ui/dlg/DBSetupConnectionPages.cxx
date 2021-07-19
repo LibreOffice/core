@@ -324,7 +324,7 @@ using namespace ::com::sun::star;
     }
 
     // OMySQLJDBCConnectionPageSetup
-    OGeneralSpecialJDBCConnectionPageSetup::OGeneralSpecialJDBCConnectionPageSetup( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& _rCoreAttrs ,sal_uInt16 _nPortId, const char* pDefaultPortResId, const char* pHelpTextResId, const char* pHeaderTextResId, const char* pDriverClassId)
+    OGeneralSpecialJDBCConnectionPageSetup::OGeneralSpecialJDBCConnectionPageSetup( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& _rCoreAttrs ,sal_uInt16 _nPortId, TranslateId pDefaultPortResId, TranslateId pHelpTextResId, TranslateId pHeaderTextResId, TranslateId pDriverClassId)
         : OGenericAdministrationPage(pPage, pController, "dbaccess/ui/specialjdbcconnectionpage.ui", "SpecialJDBCConnectionPage", _rCoreAttrs)
         , m_nPortId(_nPortId)
         , m_xHeaderText(m_xBuilder->weld_label("header"))
@@ -479,7 +479,7 @@ using namespace ::com::sun::star;
         {
         }
 #endif
-        const char *pMessage = bSuccess ? STR_JDBCDRIVER_SUCCESS : STR_JDBCDRIVER_NO_SUCCESS;
+        TranslateId pMessage = bSuccess ? STR_JDBCDRIVER_SUCCESS : STR_JDBCDRIVER_NO_SUCCESS;
         const MessageType mt = bSuccess ? MessageType::Info : MessageType::Error;
         OSQLMessageBox aMsg(GetFrameWeld(), DBA_RES(pMessage), OUString(), MessBoxStyle::Ok | MessBoxStyle::DefaultOk, mt);
         aMsg.run();
@@ -591,7 +591,7 @@ using namespace ::com::sun::star;
         {
         }
 #endif
-        const char* pMessage = bSuccess ? STR_JDBCDRIVER_SUCCESS : STR_JDBCDRIVER_NO_SUCCESS;
+        TranslateId pMessage = bSuccess ? STR_JDBCDRIVER_SUCCESS : STR_JDBCDRIVER_NO_SUCCESS;
         const MessageType mt = bSuccess ? MessageType::Info : MessageType::Error;
         OSQLMessageBox aMsg(GetFrameWeld(), DBA_RES(pMessage), OUString(), MessBoxStyle::Ok | MessBoxStyle::DefaultOk, mt);
         aMsg.run();

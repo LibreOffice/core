@@ -20,6 +20,7 @@
 #pragma once
 
 #include <address.hxx>
+#include <unotools/resmgr.hxx>
 
 class ScDocument;
 class ScViewFunc;
@@ -82,7 +83,7 @@ public:
 
     bool IsEditable() const { return mbIsEditable; }
     bool IsFormatEditable() const { return mbIsEditable || mbOnlyMatrix; }
-    const char* GetMessageId() const;
+    TranslateId GetMessageId() const;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

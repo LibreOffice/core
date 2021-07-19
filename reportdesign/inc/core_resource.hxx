@@ -22,9 +22,9 @@
 #include "dllapi.h"
 
 #include <rtl/ustring.hxx>
-#include <string_view>
+#include <unotools/resmgr.hxx>
 
-OUString REPORTDESIGN_DLLPUBLIC RptResId(std::string_view pId);
+OUString REPORTDESIGN_DLLPUBLIC RptResId(TranslateId pId);
 
 #endif // INCLUDED_REPORTDESIGN_SOURCE_CORE_INC_CORE_RESOURCE_HXX
 

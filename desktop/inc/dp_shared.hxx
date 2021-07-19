@@ -33,7 +33,7 @@ struct DeploymentLocale :
 
 } // namespace dp
 
-inline OUString DpResId(std::string_view aId)
+inline OUString DpResId(TranslateId aId)
 {
     return Translate::get(aId, dp::DeploymentLocale::get());
 }

@@ -209,7 +209,7 @@ OUString SdrRectObj::TakeObjNameSingul() const
     }
 
     bool bRounded = GetEckenradius() != 0; // rounded down
-    const char* pResId = bRounded ? STR_ObjNameSingulRECTRND : STR_ObjNameSingulRECT;
+    TranslateId pResId = bRounded ? STR_ObjNameSingulRECTRND : STR_ObjNameSingulRECT;
     if (maGeo.nShearAngle)
     {
         pResId = bRounded ? STR_ObjNameSingulPARALRND : STR_ObjNameSingulPARAL;  // parallelogram or, maybe, rhombus
@@ -235,7 +235,7 @@ OUString SdrRectObj::TakeObjNamePlural() const
     }
 
     bool bRounded = GetEckenradius() != 0; // rounded down
-    const char* pResId = bRounded ? STR_ObjNamePluralRECTRND : STR_ObjNamePluralRECT;
+    TranslateId pResId = bRounded ? STR_ObjNamePluralRECTRND : STR_ObjNamePluralRECT;
     if (maGeo.nShearAngle)
     {
         pResId = bRounded ? STR_ObjNamePluralPARALRND : STR_ObjNamePluralPARAL;  // parallelogram or rhombus

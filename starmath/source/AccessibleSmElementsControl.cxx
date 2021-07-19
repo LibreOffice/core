@@ -236,7 +236,7 @@ OUString AccessibleSmElementsControl::getAccessibleName()
     SolarMutexGuard aGuard;
     OUString aName;
     if (m_pControl)
-        aName = SmResId(m_pControl->elementSetId().getStr());
+        aName = SmResId(m_pControl->elementSetId());
     return aName;
 }
 

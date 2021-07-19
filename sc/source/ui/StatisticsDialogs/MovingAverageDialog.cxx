@@ -37,7 +37,7 @@ void ScMovingAverageDialog::Close()
     DoClose( ScMovingAverageDialogWrapper::GetChildWindowId() );
 }
 
-const char* ScMovingAverageDialog::GetUndoNameId()
+TranslateId ScMovingAverageDialog::GetUndoNameId()
 {
     return STR_MOVING_AVERAGE_UNDO_NAME;
 }

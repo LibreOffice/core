@@ -1078,7 +1078,7 @@ sal_Int16 SAL_CALL T602ImportFilterDialog::execute()
         return css::ui::dialogs::ExecutableDialogResults::CANCEL;
 }
 
-OUString T602ImportFilterDialog::getResStr(const char* resid)
+OUString T602ImportFilterDialog::getResStr(TranslateId resid)
 {
     return Translate::get(resid, maResLocale);
 }

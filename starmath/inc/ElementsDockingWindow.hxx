@@ -22,6 +22,7 @@
 #include <sfx2/dockwin.hxx>
 #include <vcl/customweld.hxx>
 #include <vcl/weld.hxx>
+#include <unotools/resmgr.hxx>
 
 #include "parse.hxx"
 #include "AccessibleSmElementsControl.hxx"
@@ -56,7 +57,7 @@ public:
     bool isSeparator() const override { return true; }
 };
 
-typedef std::pair<const char*, const char*> SmElementDescr;
+typedef std::pair<const char*, TranslateId> SmElementDescr;
 
 class SmElementsControl : public weld::CustomWidgetController
 {
@@ -74,7 +75,7 @@ class SmElementsControl : public weld::CustomWidgetController
     static const SmElementDescr m_a5FormatsList[];
     static const SmElementDescr m_a5OthersList[];
     static const SmElementDescr m_a5ExamplesList[];
-    static const std::tuple<const char*, const SmElementDescr*, size_t> m_a5Categories[];
+    static const std::tuple<TranslateId, const SmElementDescr*, size_t> m_a5Categories[];
     static const size_t m_a5CategoriesSize;
 
     // SmParser 6 elements
@@ -96,7 +97,7 @@ class SmElementsControl : public weld::CustomWidgetController
 
     SmDocShell*   mpDocShell;
     SmFormat      maFormat;
-    OString       msCurrentSetId;
+    TranslateId   msCurrentSetId;
     sal_uInt16    m_nCurrentElement;
     sal_uInt16    m_nCurrentRolloverElement;
     sal_uInt16    m_nCurrentOffset;
@@ -133,8 +134,8 @@ public:
 
     static const auto& categories() { return m_a5Categories; }
     static size_t categoriesSize() { return m_a5CategoriesSize; }
-    const OString& elementSetId() const { return msCurrentSetId; }
-    void setElementSetId(const char* pSetId);
+    const TranslateId& elementSetId() const { return msCurrentSetId; }
+    void setElementSetId(TranslateId pSetId);
 
     void setVerticalMode(bool bVertical);
 

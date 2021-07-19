@@ -21,6 +21,7 @@
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <vcl/weld.hxx>
+#include <unotools/resmgr.hxx>
 
 namespace com::sun::star {
     namespace security { class XCertificate; }
@@ -71,7 +72,7 @@ private:
     void ImplShowCertificateDetails();
     void ImplInitialize();
 
-    static void HandleOneUsageBit(OUString& string, int& bits, int bit, const char *name);
+    static void HandleOneUsageBit(OUString& string, int& bits, int bit, TranslateId name);
 
 public:
     CertificateChooser(weld::Window* pParent,

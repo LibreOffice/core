@@ -40,7 +40,7 @@ using namespace                 ::com::sun::star;
 using namespace sca::analysis;
 using namespace std;
 
-OUString AnalysisAddIn::GetFuncDescrStr(const char** pResId, sal_uInt16 nStrIndex)
+OUString AnalysisAddIn::GetFuncDescrStr(const TranslateId* pResId, sal_uInt16 nStrIndex)
 {
     return AnalysisResId(pResId[nStrIndex - 1]);
 }
@@ -1045,7 +1045,7 @@ double SAL_CALL AnalysisAddIn::getConvert( double f, const OUString& aFU, const 
     RETURN_FINITE( fRet );
 }
 
-OUString AnalysisAddIn::AnalysisResId(std::string_view aResId)
+OUString AnalysisAddIn::AnalysisResId(TranslateId aResId)
 {
     return Translate::get(aResId, aResLocale);
 }

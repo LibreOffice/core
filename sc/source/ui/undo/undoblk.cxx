@@ -1986,7 +1986,7 @@ ScUndoIndent::~ScUndoIndent()
 
 OUString ScUndoIndent::GetComment() const
 {
-    const char* pId = bIsIncrement ? STR_UNDO_INC_INDENT : STR_UNDO_DEC_INDENT;
+    TranslateId pId = bIsIncrement ? STR_UNDO_INC_INDENT : STR_UNDO_DEC_INDENT;
     return ScResId(pId);
 }
 

@@ -1727,7 +1727,7 @@ IMPL_LINK_NOARG(SwTOXButton, FocusInHdl, weld::Widget&, void)
 
 namespace
 {
-    const char* STR_AUTH_FIELD_ARY[] =
+    const TranslateId STR_AUTH_FIELD_ARY[] =
     {
         STR_AUTH_FIELD_IDENTIFIER,
         STR_AUTH_FIELD_AUTHORITY_TYPE,
@@ -2521,13 +2521,13 @@ void SwTOXEntryTabPage::SetWrtShell(SwWrtShell& rSh)
                                            RES_POOLCHR_IDX_MAIN_ENTRY, OUString()));
 }
 
-static const char* STR_TOKEN_ARY[] =
+ const TranslateId STR_TOKEN_ARY[] =
 {
     STR_TOKEN_ENTRY_NO,
     STR_TOKEN_ENTRY,    //mapped from original STR_TOKEN_ENTRY_TEXT,
     STR_TOKEN_ENTRY,
     STR_TOKEN_TAB_STOP,
-    nullptr,
+    {},
     STR_TOKEN_PAGE_NUMS,
     STR_TOKEN_CHAPTER_INFO,
     STR_TOKEN_LINK_START,
@@ -2535,7 +2535,7 @@ static const char* STR_TOKEN_ARY[] =
     STR_TOKEN_AUTHORITY
 };
 
-static const char* STR_TOKEN_HELP_ARY[] =
+ const TranslateId STR_TOKEN_HELP_ARY[] =
 {
     STR_TOKEN_HELP_ENTRY_NO,
     STR_TOKEN_HELP_ENTRY,   // mapped from original STR_TOKEN_HELP_ENTRY_TEXT,
@@ -2569,11 +2569,11 @@ SwTokenWindow::SwTokenWindow(std::unique_ptr<weld::Container> xParent)
 
     for (sal_uInt32 i = 0; i < TOKEN_END; ++i)
     {
-        const char* pTextId = STR_TOKEN_ARY[i];
+        TranslateId pTextId = STR_TOKEN_ARY[i];
         if (pTextId)
             m_aButtonTexts[i] = SwResId(pTextId);
 
-        const char* pHelpId = STR_TOKEN_HELP_ARY[i];
+        TranslateId pHelpId = STR_TOKEN_HELP_ARY[i];
         m_aButtonHelpTexts[i] = SwResId(pHelpId);
     }
 

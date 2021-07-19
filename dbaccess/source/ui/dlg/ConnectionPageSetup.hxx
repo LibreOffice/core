@@ -18,9 +18,10 @@
  */
 
 #pragma once
-#include "ConnectionHelper.hxx"
 
+#include "ConnectionHelper.hxx"
 #include "adminpages.hxx"
+#include <unotools/resmgr.hxx>
 
 namespace dbaui
 {
@@ -38,7 +39,7 @@ namespace dbaui
         DECL_LINK(OnEditModified, weld::Entry&, void);
 
     public:
-        OConnectionTabPageSetup(weld::Container* pPage, weld::DialogController* pController, const OUString& _rUIXMLDescription, const OString& _rId, const SfxItemSet& _rCoreAttrs, const char* pHelpTextResId, const char* pHeaderResId, const char* pUrlResId);
+        OConnectionTabPageSetup(weld::Container* pPage, weld::DialogController* pController, const OUString& _rUIXMLDescription, const OString& _rId, const SfxItemSet& _rCoreAttrs, TranslateId pHelpTextResId, TranslateId pHeaderResId, TranslateId pUrlResId);
         virtual ~OConnectionTabPageSetup() override;
 
         static std::unique_ptr<OGenericAdministrationPage> CreateDbaseTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& _rAttrSet);

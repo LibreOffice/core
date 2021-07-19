@@ -1639,7 +1639,7 @@ void ScDBDocFunc::RefreshPivotTables(const ScDPObject* pDPObj, bool bApi)
         return;
 
     o3tl::sorted_vector<ScDPObject*> aRefs;
-    const char* pErrId = pDPs->ReloadCache(pDPObj, aRefs);
+    TranslateId pErrId = pDPs->ReloadCache(pDPObj, aRefs);
     if (pErrId)
         return;
 

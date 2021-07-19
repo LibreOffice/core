@@ -972,7 +972,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     uno::Reference < XFilePicker3 > xFP = aDlgHelper.GetFilePicker();
 
                     std::shared_ptr<const SfxFilter> pFlt;
-                    const char* pStrId;
+                    TranslateId pStrId;
 
                     if( bCreateHtml )
                     {

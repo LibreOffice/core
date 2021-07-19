@@ -23,7 +23,7 @@
 namespace compmodule
 {
 
-    OUString ModuleRes(const char* pId)
+    OUString ModuleRes(TranslateId pId)
     {
         return Translate::get(pId, Translate::Create("pcr"));
     }

@@ -55,7 +55,7 @@ namespace rptui
         OSectionUndo(   OReportModel& rMod
                         ,sal_uInt16 _nSlot
                         ,Action _eAction
-                        ,const char* pCommentID);
+                        ,TranslateId pCommentID);
         virtual ~OSectionUndo() override;
 
         virtual void        Undo() override;
@@ -103,7 +103,7 @@ namespace rptui
                             ,::std::function<css::uno::Reference< css::report::XSection >(OGroupHelper *)> _pMemberFunction
                             ,const css::uno::Reference< css::report::XGroup >& _xGroup
                             ,Action _eAction
-                            ,const char* pCommentID);
+                            ,TranslateId pCommentID);
 
         virtual OUString GetComment() const override;
     };
@@ -122,7 +122,7 @@ namespace rptui
         void    implReRemove( );
     public:
         OGroupUndo(OReportModel& rMod
-                    ,const char* pCommentID
+                    ,TranslateId pCommentID
                     ,Action _eAction
                     ,const css::uno::Reference< css::report::XGroup>& _xGroup
                     ,const css::uno::Reference< css::report::XReportDefinition >& _xReportDefinition);

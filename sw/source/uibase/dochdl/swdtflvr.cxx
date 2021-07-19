@@ -2095,7 +2095,7 @@ SotExchangeDest SwTransferable::GetSotDestination( const SwWrtShell& rSh )
 bool SwTransferable::PasteFileContent( TransferableDataHelper& rData,
                                     SwWrtShell& rSh, SotClipboardFormatId nFormat, bool bMsg, bool bIgnoreComments )
 {
-    const char* pResId = STR_CLPBRD_FORMAT_ERROR;
+    TranslateId pResId = STR_CLPBRD_FORMAT_ERROR;
     bool bRet = false;
 
     MSE40HTMLClipFormatObj aMSE40ClpObj;
@@ -2173,7 +2173,7 @@ bool SwTransferable::PasteFileContent( TransferableDataHelper& rData,
             pResId = STR_ERROR_CLPBRD_READ;
         else
         {
-            pResId = nullptr;
+            pResId = TranslateId();
             bRet = true;
         }
 
@@ -3436,19 +3436,17 @@ void SwTransferable::PrePasteSpecial( const SwWrtShell& rSh, TransferableDataHel
     if( pClipboard )
     {
         aDesc = pClipboard->m_aObjDesc;
-        const char* pResId;
+        TranslateId pResId;
         if( pClipboard->m_eBufferType & TransferBufferType::Document )
             pResId = STR_PRIVATETEXT;
         else if( pClipboard->m_eBufferType & TransferBufferType::Graphic )
             pResId = STR_PRIVATEGRAPHIC;
         else if( pClipboard->m_eBufferType == TransferBufferType::Ole )
             pResId = STR_PRIVATEOLE;
-        else
-            pResId = nullptr;
 
         if (pResId)
         {
-            if (strcmp(STR_PRIVATEOLE, pResId) == 0 || strcmp(STR_PRIVATEGRAPHIC, pResId) == 0)
+            if (STR_PRIVATEOLE == pResId || STR_PRIVATEGRAPHIC == pResId)
             {
                 // add SotClipboardFormatId::EMBED_SOURCE to the formats. This
                 // format display then the private format name.
@@ -3492,15 +3490,13 @@ void SwTransferable::FillClipFormatItem( const SwWrtShell& rSh,
     SwTransferable *pClipboard = GetSwTransferable( rData );
     if( pClipboard )
     {
-        const char* pResId;
+        TranslateId pResId;
         if( pClipboard->m_eBufferType & TransferBufferType::Document )
             pResId = STR_PRIVATETEXT;
         else if( pClipboard->m_eBufferType & TransferBufferType::Graphic )
             pResId = STR_PRIVATEGRAPHIC;
         else if( pClipboard->m_eBufferType == TransferBufferType::Ole )
             pResId = STR_PRIVATEOLE;
-        else
-            pResId = nullptr;
 
         if (pResId)
             rToFill.AddClipbrdFormat(SotClipboardFormatId::EMBED_SOURCE,

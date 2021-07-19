@@ -103,7 +103,7 @@ namespace connectivity
                 _rMessage = _rMessage.replaceAt( nIndex, nPlaceholderLen, *rParamValue );
         }
 
-        const char* lcl_getResourceErrorID(const ErrorCondition _eCondition)
+        TranslateId lcl_getResourceErrorID(const ErrorCondition _eCondition)
         {
             switch (_eCondition)
             {
@@ -126,7 +126,7 @@ namespace connectivity
                 case css::sdb::ErrorCondition::DATA_CANNOT_SELECT_UNFILTERED:
                     return STR_DATA_CANNOT_SELECT_UNFILTERED;
             }
-            return nullptr;
+            return {};
         }
 
         OUString lcl_getResourceState(const ErrorCondition _eCondition)

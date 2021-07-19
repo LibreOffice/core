@@ -10,9 +10,6 @@
 
 #include <unotools/resmgr.hxx>
 
-inline OUString FpsResId(std::string_view aId)
-{
-    return Translate::get(aId, Translate::Create("fps"));
-};
+inline OUString FpsResId(TranslateId aId) { return Translate::get(aId, Translate::Create("fps")); };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

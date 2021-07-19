@@ -435,7 +435,7 @@ sal_uInt16 SvxAdjustItem::GetValueCount() const
 
 OUString SvxAdjustItem::GetValueTextByPos( sal_uInt16 nPos )
 {
-    static const char* RID_SVXITEMS_ADJUST[] =
+    static TranslateId RID_SVXITEMS_ADJUST[] =
     {
         RID_SVXITEMS_ADJUST_LEFT,
         RID_SVXITEMS_ADJUST_RIGHT,
@@ -648,7 +648,7 @@ bool SvxHyphenZoneItem::GetPresentation
     {
         case SfxItemPresentation::Nameless:
         {
-            const char* pId = RID_SVXITEMS_HYPHEN_FALSE;
+            TranslateId pId = RID_SVXITEMS_HYPHEN_FALSE;
 
             if ( bHyphen )
                 pId = RID_SVXITEMS_HYPHEN_TRUE;
@@ -665,7 +665,7 @@ bool SvxHyphenZoneItem::GetPresentation
         }
         case SfxItemPresentation::Complete:
         {
-            const char* pId = RID_SVXITEMS_HYPHEN_FALSE;
+            TranslateId pId = RID_SVXITEMS_HYPHEN_FALSE;
 
             if ( bHyphen )
                 pId = RID_SVXITEMS_HYPHEN_TRUE;
@@ -1008,7 +1008,7 @@ bool SvxFormatSplitItem::GetPresentation
     OUString&           rText, const IntlWrapper&
 )   const
 {
-    const char* pId = RID_SVXITEMS_FMTSPLIT_FALSE;
+    TranslateId pId = RID_SVXITEMS_FMTSPLIT_FALSE;
 
     if ( GetValue() )
         pId = RID_SVXITEMS_FMTSPLIT_TRUE;
@@ -1173,7 +1173,7 @@ bool SvxParaVertAlignItem::GetPresentation(
         MapUnit /*eCoreMetric*/, MapUnit /*ePresMetric*/,
         OUString &rText, const IntlWrapper& ) const
 {
-    const char* pTmp;
+    TranslateId pTmp;
     switch( GetValue() )
     {
         case Align::Automatic: pTmp = RID_SVXITEMS_PARAVERTALIGN_AUTO; break;

@@ -131,7 +131,7 @@ namespace pcr
         static struct
         {
             const char* programmaticName;
-            const char* uiNameResId;
+            TranslateId uiNameResId;
             const char* helpId;
         } const aCategories[] = {
             { "General",    RID_STR_PROPPAGE_DEFAULT,   HID_FM_PROPDLG_TAB_GENERAL },

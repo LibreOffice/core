@@ -18,11 +18,10 @@
  */
 
 #include <frm_resource.hxx>
-#include <unotools/resmgr.hxx>
 
 namespace frm::ResourceManager
 {
-        OUString loadString(std::string_view aResId)
+        OUString loadString(TranslateId aResId)
         {
             return Translate::get(aResId, Translate::Create("frm"));
         }

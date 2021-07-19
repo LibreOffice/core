@@ -80,7 +80,7 @@ WriterInspectorTextPanel::~WriterInspectorTextPanel() { m_pShell->SetChgLnk(m_ol
 
 static OUString PropertyNametoRID(const OUString& rName)
 {
-    static const std::map<OUString, const char*> aNameToRID = {
+    static const std::map<OUString, TranslateId> aNameToRID = {
         { "BorderDistance", RID_BORDER_DISTANCE },
         { "BottomBorder", RID_BOTTOM_BORDER },
         { "BottomBorderDistance", RID_BOTTOM_BORDER_DISTANCE },

@@ -319,7 +319,7 @@ void SdrCircObj::RecalcXPoly()
 
 OUString SdrCircObj::TakeObjNameSingul() const
 {
-    const char* pID=STR_ObjNameSingulCIRC;
+    TranslateId pID=STR_ObjNameSingulCIRC;
     if (maRect.GetWidth() == maRect.GetHeight() && maGeo.nShearAngle==0_deg100)
     {
         switch (meCircleKind) {
@@ -348,7 +348,7 @@ OUString SdrCircObj::TakeObjNameSingul() const
 
 OUString SdrCircObj::TakeObjNamePlural() const
 {
-    const char* pID=STR_ObjNamePluralCIRC;
+    TranslateId pID=STR_ObjNamePluralCIRC;
     if (maRect.GetWidth() == maRect.GetHeight() && maGeo.nShearAngle==0_deg100)
     {
         switch (meCircleKind) {

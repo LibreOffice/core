@@ -46,7 +46,7 @@ class SvtSysLocale;
 class VirtualDevice;
 
 
-OUString SmResId(std::string_view aId);
+OUString SmResId(TranslateId aId);
 
 class SmLocalizedSymbolData
 {

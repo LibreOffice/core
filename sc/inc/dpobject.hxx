@@ -29,6 +29,7 @@
 
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 #include <o3tl/sorted_vector.hxx>
+#include <unotools/resmgr.hxx>
 
 #include <memory>
 #include <vector>
@@ -383,7 +384,7 @@ public:
     ScDPCollection(const ScDPCollection& r);
     ~ScDPCollection();
 
-    const char* ReloadCache(const ScDPObject* pDPObj, o3tl::sorted_vector<ScDPObject*>& rRefs);
+    TranslateId ReloadCache(const ScDPObject* pDPObj, o3tl::sorted_vector<ScDPObject*>& rRefs);
     bool ReloadGroupsInCache(const ScDPObject* pDPObj, o3tl::sorted_vector<ScDPObject*>& rRefs);
     SC_DLLPUBLIC bool GetReferenceGroups(const ScDPObject& rDPObj, const ScDPDimensionSaveData** pGroups) const;
 

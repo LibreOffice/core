@@ -20,7 +20,7 @@
 #pragma once
 
 #include <rtl/ustring.hxx>
-#include <string_view>
+#include <unotools/resmgr.hxx>
 
 namespace frm
 {
@@ -32,7 +32,7 @@ namespace frm
     {
         /** loads the string with the specified resource id from the FormLayer mo file
         */
-        OUString loadString(std::string_view aResId);
+        OUString loadString(TranslateId aResId);
     };
 }
 

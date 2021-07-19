@@ -90,7 +90,7 @@ void SvxModifyControl::StateChangedAtStatusBarControl( sal_uInt16, SfxItemState 
 
     _repaint();
 
-    const char* pResId = modified ? RID_SVXSTR_DOC_MODIFIED_YES : RID_SVXSTR_DOC_MODIFIED_NO;
+    TranslateId pResId = modified ? RID_SVXSTR_DOC_MODIFIED_YES : RID_SVXSTR_DOC_MODIFIED_NO;
     GetStatusBar().SetQuickHelpText(GetId(), SvxResId(pResId));
 
     if ( start )

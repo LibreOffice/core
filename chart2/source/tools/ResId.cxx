@@ -18,11 +18,10 @@
  */
 
 #include <ResId.hxx>
-#include <unotools/resmgr.hxx>
 
 namespace chart
 {
-    OUString SchResId(std::string_view aId)
+    OUString SchResId(TranslateId aId)
     {
         return Translate::get(aId, Translate::Create("chart"));
     }

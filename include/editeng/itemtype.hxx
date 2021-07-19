@@ -24,6 +24,7 @@
 #include <tools/long.hxx>
 #include <tools/mapunit.hxx>
 #include <editeng/editengdllapi.h>
+#include <unotools/resmgr.hxx>
 
 class Color;
 class IntlWrapper;
@@ -33,7 +34,7 @@ inline constexpr OUStringLiteral cpDelim = u", ";
 
 EDITENG_DLLPUBLIC OUString GetMetricText( tools::Long nVal, MapUnit eSrcUnit, MapUnit eDestUnit, const IntlWrapper * pIntl );
 OUString GetColorString( const Color& rCol );
-EDITENG_DLLPUBLIC const char* GetMetricId(MapUnit eUnit);
+EDITENG_DLLPUBLIC TranslateId GetMetricId(MapUnit eUnit);
 
 #endif
 

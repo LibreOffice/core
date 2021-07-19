@@ -21,8 +21,9 @@
 
 #include <rtl/ustring.hxx>
 #include "sddllapi.h"
+#include <unotools/resmgr.hxx>
 
-SD_DLLPUBLIC OUString SdResId(std::string_view aId);
-SD_DLLPUBLIC OUString SdResId(std::string_view aId, int nCardinality);
+SD_DLLPUBLIC OUString SdResId(TranslateId aId);
+SD_DLLPUBLIC OUString SdResId(TranslateNId aContextSingularPlural, int nCardinality);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

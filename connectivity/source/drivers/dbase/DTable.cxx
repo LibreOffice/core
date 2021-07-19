@@ -1103,7 +1103,7 @@ bool ODbaseTable::CreateImpl()
     return true;
 }
 
-void ODbaseTable::throwInvalidColumnType(const char* pErrorId, const OUString& _sColumnName)
+void ODbaseTable::throwInvalidColumnType(TranslateId pErrorId, const OUString& _sColumnName)
 {
     try
     {

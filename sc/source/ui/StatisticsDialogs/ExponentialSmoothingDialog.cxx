@@ -36,7 +36,7 @@ void ScExponentialSmoothingDialog::Close()
     DoClose( ScExponentialSmoothingDialogWrapper::GetChildWindowId() );
 }
 
-const char* ScExponentialSmoothingDialog::GetUndoNameId()
+TranslateId ScExponentialSmoothingDialog::GetUndoNameId()
 {
     return STR_EXPONENTIAL_SMOOTHING_UNDO_NAME;
 }

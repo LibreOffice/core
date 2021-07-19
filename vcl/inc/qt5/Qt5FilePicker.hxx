@@ -33,6 +33,7 @@
 
 #include <osl/conditn.hxx>
 #include <osl/mutex.hxx>
+#include <unotools/resmgr.hxx>
 
 #include <QtCore/QObject>
 #include <QtCore/QString>
@@ -158,7 +159,7 @@ private:
     Qt5FilePicker(const Qt5FilePicker&) = delete;
     Qt5FilePicker& operator=(const Qt5FilePicker&) = delete;
 
-    static QString getResString(const char* pRedId);
+    static QString getResString(TranslateId pRedId);
     static css::uno::Any handleGetListValue(const QComboBox* pWidget, sal_Int16 nControlAction);
     static void handleSetListValue(QComboBox* pQComboBox, sal_Int16 nAction,
                                    const css::uno::Any& rValue);

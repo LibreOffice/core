@@ -188,7 +188,7 @@ uno::Reference< linguistic2::XLanguageGuessing > const & GlobalEditData::GetLang
     return xLanguageGuesser;
 }
 
-OUString EditResId(std::string_view aId)
+OUString EditResId(TranslateId aId)
 {
     return Translate::get(aId, Translate::Create("editeng"));
 }

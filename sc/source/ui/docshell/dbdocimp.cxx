@@ -142,7 +142,7 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
 
     bool bSuccess = false;
     bool bTruncated = false;                // for warning
-    const char* pErrStringId = nullptr;
+    TranslateId pErrStringId;
     OUString aErrorMessage;
 
     SCCOL nCol = rParam.nCol1;

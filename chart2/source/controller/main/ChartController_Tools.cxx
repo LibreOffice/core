@@ -725,7 +725,7 @@ bool ChartController::executeDispatch_Delete()
                     ObjectIdentifier::getObjectPropertySet( aCID, getModel() ));
                 if( xErrorBarProp.is())
                 {
-                    const char* pId;
+                    TranslateId pId;
 
                     if ( aObjectType == OBJECTTYPE_DATA_ERRORS_X )
                         pId = STR_OBJECT_ERROR_BARS_X;

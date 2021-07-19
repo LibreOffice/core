@@ -35,6 +35,7 @@
 #include <tools/link.hxx>
 #include <tools/weakbase.h>
 #include <tools/gen.hxx>
+#include <unotools/resmgr.hxx>
 
 #include <unordered_set>
 
@@ -910,7 +911,7 @@ protected:
     tools::Rectangle ImpDragCalcRect(const SdrDragStat& rDrag) const;
 
     // for GetDragComment
-    OUString ImpGetDescriptionStr(const char* pStrCacheID) const;
+    OUString ImpGetDescriptionStr(TranslateId pStrCacheID) const;
 
     void ImpForcePlusData();
 

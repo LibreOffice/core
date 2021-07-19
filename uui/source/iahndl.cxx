@@ -1246,7 +1246,7 @@ UUIInteractionHelper::handleBrokenPackageRequest(
 // ErrorResource Implementation
 bool ErrorResource::getString(ErrCode nErrorCode, OUString &rString) const
 {
-    for (const std::pair<const char*, ErrCode>* pStringArray = m_pStringArray; pStringArray->first != nullptr; ++pStringArray)
+    for (const std::pair<TranslateId, ErrCode>* pStringArray = m_pStringArray; pStringArray->first; ++pStringArray)
     {
         if (nErrorCode.StripWarningAndDynamic() == pStringArray->second.StripWarningAndDynamic())
         {

@@ -280,7 +280,7 @@ namespace
     }
 }
 
-static const char* STR_POOLCOLL_TEXT_ARY[] =
+const TranslateId STR_POOLCOLL_TEXT_ARY[] =
 {
     // Category Text
     STR_POOLCOLL_STANDARD,
@@ -306,7 +306,7 @@ static const char* STR_POOLCOLL_TEXT_ARY[] =
     STR_POOLCOLL_HEADLINE10
 };
 
-static const char* STR_POOLCOLL_LISTS_ARY[]
+const TranslateId STR_POOLCOLL_LISTS_ARY[]
 {
     // Category Lists
     STR_POOLCOLL_NUMBER_BULLET_BASE,
@@ -356,7 +356,7 @@ static const char* STR_POOLCOLL_LISTS_ARY[]
 };
 
 // Special Areas
-static const char* STR_POOLCOLL_EXTRA_ARY[]
+const TranslateId STR_POOLCOLL_EXTRA_ARY[]
 {
     // Subcategory Header
     STR_POOLCOLL_HEADERFOOTER,
@@ -385,7 +385,7 @@ static const char* STR_POOLCOLL_EXTRA_ARY[]
     STR_POOLCOLL_LABEL_DRAWING
 };
 
-static const char* STR_POOLCOLL_REGISTER_ARY[] =
+const TranslateId STR_POOLCOLL_REGISTER_ARY[] =
 {
     // Category Directories
     STR_POOLCOLL_REGISTER_BASE,
@@ -435,7 +435,7 @@ static const char* STR_POOLCOLL_REGISTER_ARY[] =
     STR_POOLCOLL_TOX_USER10
 };
 
-static const char* STR_POOLCOLL_DOC_ARY[] =
+const TranslateId STR_POOLCOLL_DOC_ARY[] =
 {
     // Category Chapter/Document
     STR_POOLCOLL_DOC_TITLE,
@@ -443,7 +443,7 @@ static const char* STR_POOLCOLL_DOC_ARY[] =
     STR_POOLCOLL_DOC_APPENDIX
 };
 
-static const char* STR_POOLCOLL_HTML_ARY[] =
+const TranslateId STR_POOLCOLL_HTML_ARY[] =
 {
     // Category HTML-Templates
     STR_POOLCOLL_HTML_BLOCKQUOTE,
@@ -453,7 +453,7 @@ static const char* STR_POOLCOLL_HTML_ARY[] =
     STR_POOLCOLL_HTML_DT
 };
 
-static const char* STR_POOLCHR_ARY[] =
+const TranslateId STR_POOLCHR_ARY[] =
 {
     STR_POOLCHR_FOOTNOTE,
     STR_POOLCHR_PAGENO,
@@ -474,7 +474,7 @@ static const char* STR_POOLCHR_ARY[] =
     STR_POOLCHR_VERT_NUM
 };
 
-static const char* STR_POOLCHR_HTML_ARY[] =
+const TranslateId STR_POOLCHR_HTML_ARY[] =
 {
     STR_POOLCHR_HTML_EMPHASIS,
     STR_POOLCHR_HTML_CITATION,
@@ -487,7 +487,7 @@ static const char* STR_POOLCHR_HTML_ARY[] =
     STR_POOLCHR_HTML_TELETYPE
 };
 
-static const char* STR_POOLFRM_ARY[] =
+const TranslateId STR_POOLFRM_ARY[] =
 {
     STR_POOLFRM_FRAME,
     STR_POOLFRM_GRAPHIC,
@@ -498,7 +498,7 @@ static const char* STR_POOLFRM_ARY[] =
     STR_POOLFRM_LABEL
 };
 
-static const char* STR_POOLPAGE_ARY[] =
+const TranslateId STR_POOLPAGE_ARY[] =
 {
     // Page styles
     STR_POOLPAGE_STANDARD,
@@ -513,7 +513,7 @@ static const char* STR_POOLPAGE_ARY[] =
     STR_POOLPAGE_LANDSCAPE
 };
 
-static const char* STR_POOLNUMRULE_NUM_ARY[] =
+const TranslateId STR_POOLNUMRULE_NUM_ARY[] =
 {
     // Numbering styles
     STR_POOLNUMRULE_NOLIST,
@@ -532,7 +532,7 @@ static const char* STR_POOLNUMRULE_NUM_ARY[] =
 // XXX MUST match the entries of TableStyleProgNameTable in
 // sw/source/core/doc/SwStyleNameMapper.cxx and MUST match the order of
 // RES_POOL_TABLESTYLE_TYPE in sw/inc/poolfmt.hxx
-static const char* STR_TABSTYLE_ARY[] =
+const TranslateId STR_TABSTYLE_ARY[] =
 {
     // XXX MUST be in order, Writer first, then Svx old, then Svx new
     // 1 Writer resource string
@@ -610,7 +610,7 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
     }
 
     // Didn't find it until here -> create anew
-    const char* pResId = nullptr;
+    TranslateId pResId;
     if (RES_POOLCOLL_TEXT_BEGIN <= nId && nId < RES_POOLCOLL_TEXT_END)
     {
         static_assert(SAL_N_ELEMENTS(STR_POOLCOLL_TEXT_ARY) == RES_POOLCOLL_TEXT_END - RES_POOLCOLL_TEXT_BEGIN, "### unexpected size!");
@@ -1437,7 +1437,7 @@ SwFormat* DocumentStylePoolManager::GetFormatFromPool( sal_uInt16 nId )
 
     SwFormatsBase* pArray[ 2 ];
     sal_uInt16 nArrCnt = 1;
-    const char* pRCId = nullptr;
+    TranslateId pRCId;
     WhichRangesContainer const* pWhichRange;
 
     switch( nId & (COLL_GET_RANGE_BITS + POOLGRP_NOCOLLID) )
@@ -2574,7 +2574,7 @@ DocumentStylePoolManager::~DocumentStylePoolManager()
 }
 
 static std::vector<OUString>
-lcl_NewUINameArray(const char** pIds, const size_t nLen, const size_t nSvxIds = 0)
+lcl_NewUINameArray(const TranslateId* pIds, const size_t nLen, const size_t nSvxIds = 0)
 {
     assert(nSvxIds <= nLen);
     const size_t nWriterIds = nLen - nSvxIds;

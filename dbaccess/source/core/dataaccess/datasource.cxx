@@ -676,7 +676,7 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const OUString
             sPwd = m_pImpl->m_aPassword;
     }
 
-    const char* pExceptionMessageId = RID_STR_COULDNOTCONNECT_UNSPECIFIED;
+    TranslateId pExceptionMessageId = RID_STR_COULDNOTCONNECT_UNSPECIFIED;
     if (xManager.is())
     {
         sal_Int32 nAdditionalArgs(0);

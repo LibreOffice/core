@@ -136,7 +136,7 @@ void ScaDateAddIn::InitData()
     }
 }
 
-OUString ScaDateAddIn::GetFuncDescrStr(const char** pResId, sal_uInt16 nStrIndex)
+OUString ScaDateAddIn::GetFuncDescrStr(const TranslateId* pResId, sal_uInt16 nStrIndex)
 {
     return ScaResId(pResId[nStrIndex - 1]);
 }
@@ -717,7 +717,7 @@ OUString SAL_CALL ScaDateAddIn::getRot13( const OUString& aSrcString )
     return aBuffer.makeStringAndClear();
 }
 
-OUString ScaDateAddIn::ScaResId(std::string_view aId)
+OUString ScaDateAddIn::ScaResId(TranslateId aId)
 {
     return Translate::get(aId, aResLocale);
 }

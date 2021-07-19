@@ -57,7 +57,7 @@
 
 static OUString lcl_GetRedlineHelp( const SwRangeRedline& rRedl, bool bBalloon )
 {
-    const char* pResId = nullptr;
+    TranslateId pResId;
     switch( rRedl.GetType() )
     {
     case RedlineType::Insert:   pResId = STR_REDLINE_INSERT; break;

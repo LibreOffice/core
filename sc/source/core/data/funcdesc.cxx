@@ -49,7 +49,7 @@ struct ScFuncDescCore
     /*
      * Pointer to list of strings
      */
-    const char** pResource;
+    const TranslateId* pResource;
     /*
      * Count of list of strings
      */

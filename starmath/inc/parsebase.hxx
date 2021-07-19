@@ -24,6 +24,7 @@
 #pragma once
 
 #include <unotools/charclass.hxx>
+#include <unotools/resmgr.hxx>
 
 #include "node.hxx"
 
@@ -83,7 +84,7 @@ public:
 namespace starmathdatabase
 {
 // Must be in sync with SmParseError list
-extern const char* SmParseErrorDesc[16];
+extern const TranslateId SmParseErrorDesc[16];
 
 OUString getParseErrorDesc(SmParseError err);
 }

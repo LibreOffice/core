@@ -158,14 +158,14 @@ namespace xforms
 
     sal_Bool OXSDDataType::validate( const OUString& sValue )
     {
-        return ( _validate( sValue ) == nullptr );
+        return bool(_validate( sValue ));
     }
 
 
   OUString OXSDDataType::explainInvalid( const OUString& sValue )
     {
         // get reason
-        const char* pReason = _validate( sValue );
+        TranslateId pReason = _validate( sValue );
 
         // get resource and return localized string
         return (!pReason)
@@ -174,7 +174,7 @@ namespace xforms
                                    _explainInvalid( pReason ) );
     }
 
-    OUString OXSDDataType::_explainInvalid(const OString& rReason)
+    OUString OXSDDataType::_explainInvalid(TranslateId rReason)
     {
         if ( RID_STR_XFORMS_PATTERN_DOESNT_MATCH == rReason )
         {
@@ -212,7 +212,7 @@ namespace xforms
         }
     }
 
-    const char* OXSDDataType::_validate( const OUString& _rValue )
+    TranslateId OXSDDataType::_validate( const OUString& _rValue )
     {
         // care for the regular expression
         if ( !m_sPattern.isEmpty() )
@@ -229,7 +229,7 @@ namespace xforms
                 return RID_STR_XFORMS_PATTERN_DOESNT_MATCH;
         }
 
-        return nullptr;
+        return {};
     }
 
 
@@ -418,9 +418,9 @@ namespace xforms
         return bReturn;
     }
 
-    const char* OValueLimitedType_Base::_validate( const OUString& rValue )
+    TranslateId OValueLimitedType_Base::_validate( const OUString& rValue )
     {
-        const char* pReason = OXSDDataType::_validate( rValue );
+        TranslateId pReason = OXSDDataType::_validate( rValue );
         if (!pReason)
         {
 
@@ -442,7 +442,7 @@ namespace xforms
         return pReason;
     }
 
-    OUString OValueLimitedType_Base::_explainInvalid(const OString& rReason)
+    OUString OValueLimitedType_Base::_explainInvalid(TranslateId rReason)
     {
         OUStringBuffer sInfo;
         if (rReason == RID_STR_XFORMS_VALUE_IS_NOT_A)
@@ -511,10 +511,10 @@ namespace xforms
     }
 
 
-    const char* OStringType::_validate( const OUString& rValue )
+    TranslateId OStringType::_validate( const OUString& rValue )
     {
         // check regexp, whitespace etc. in parent class
-        const char* pReason = OStringType_Base::_validate( rValue );
+        TranslateId pReason = OStringType_Base::_validate( rValue );
 
         if (!pReason)
         {
@@ -537,7 +537,7 @@ namespace xforms
         return pReason;
     }
 
-    OUString OStringType::_explainInvalid(const OString& rReason)
+    OUString OStringType::_explainInvalid(TranslateId rReason)
     {
         sal_Int32 nValue = 0;
         OUStringBuffer sInfo;
@@ -556,7 +556,7 @@ namespace xforms
             if( m_aMinLength >>= nValue )
                 sInfo.append( nValue );
         }
-        else if (!rReason.isEmpty())
+        else if (rReason)
         {
             sInfo.append(OStringType_Base::_explainInvalid(rReason));
         }
@@ -578,19 +578,19 @@ namespace xforms
         OBooleanType_Base::initializeClone( _rCloneSource );
     }
 
-    const char* OBooleanType::_validate( const OUString& sValue )
+    TranslateId OBooleanType::_validate( const OUString& sValue )
     {
-        const char* pInvalidityReason = OBooleanType_Base::_validate( sValue );
+        TranslateId pInvalidityReason = OBooleanType_Base::_validate( sValue );
         if ( pInvalidityReason )
             return pInvalidityReason;
 
         bool bValid = sValue == "0" || sValue == "1" || sValue == "true" || sValue == "false";
-        return bValid ? nullptr : RID_STR_XFORMS_INVALID_VALUE;
+        return bValid ? TranslateId() : RID_STR_XFORMS_INVALID_VALUE;
     }
 
-    OUString OBooleanType::_explainInvalid(const OString& rReason)
+    OUString OBooleanType::_explainInvalid(TranslateId rReason)
     {
-        return rReason.isEmpty() ? OUString() : getName();
+        return !rReason ? OUString() : getName();
     }
 
     ODecimalType::ODecimalType( const OUString& _rName, sal_Int16 _nTypeClass )
@@ -620,9 +620,9 @@ namespace xforms
 
     // validate decimals and return code for which facets failed
     // to be used by: ODecimalType::validate and ODecimalType::explainInvalid
-    const char* ODecimalType::_validate( const OUString& rValue )
+    TranslateId ODecimalType::_validate( const OUString& rValue )
     {
-        const char* pReason = ODecimalType_Base::_validate( rValue );
+        TranslateId pReason = ODecimalType_Base::_validate( rValue );
 
         // check digits (if no other cause is available so far)
         if (!pReason)
@@ -653,7 +653,7 @@ namespace xforms
         return pReason;
     }
 
-    OUString ODecimalType::_explainInvalid(const OString& rReason)
+    OUString ODecimalType::_explainInvalid(TranslateId rReason)
     {
         sal_Int32 nValue = 0;
         OUStringBuffer sInfo;
@@ -712,7 +712,7 @@ namespace xforms
     DEFAULT_IMPLEMNENT_SUBTYPE( ODateType, DATE )
 
 
-    const char* ODateType::_validate( const OUString& _rValue )
+    TranslateId ODateType::_validate( const OUString& _rValue )
     {
         return ODateType_Base::_validate( _rValue );
     }
@@ -754,7 +754,7 @@ namespace xforms
     DEFAULT_IMPLEMNENT_SUBTYPE( OTimeType, TIME )
 
 
-    const char* OTimeType::_validate( const OUString& _rValue )
+    TranslateId OTimeType::_validate( const OUString& _rValue )
     {
         return OTimeType_Base::_validate( _rValue );
     }
@@ -802,7 +802,7 @@ namespace xforms
 
     DEFAULT_IMPLEMNENT_SUBTYPE( ODateTimeType, DATETIME )
 
-    const char* ODateTimeType::_validate( const OUString& _rValue )
+    TranslateId ODateTimeType::_validate( const OUString& _rValue )
     {
         return ODateTimeType_Base::_validate( _rValue );
     }

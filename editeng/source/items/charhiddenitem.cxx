@@ -20,6 +20,7 @@
 #include <editeng/charhiddenitem.hxx>
 #include <editeng/editrids.hrc>
 #include <editeng/eerdll.hxx>
+#include <unotools/resmgr.hxx>
 
 
 SvxCharHiddenItem::SvxCharHiddenItem( const bool bHidden, const sal_uInt16 nId ) :
@@ -41,7 +42,7 @@ bool SvxCharHiddenItem::GetPresentation
     const IntlWrapper & /*rIntl*/
 )   const
 {
-    const char* pId = RID_SVXITEMS_CHARHIDDEN_FALSE;
+    TranslateId pId = RID_SVXITEMS_CHARHIDDEN_FALSE;
 
     if ( GetValue() )
         pId = RID_SVXITEMS_CHARHIDDEN_TRUE;

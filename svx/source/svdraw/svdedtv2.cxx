@@ -2000,7 +2000,7 @@ void SdrEditView::ImpConvertTo(bool bPath, bool bLineToArea)
 
     bool bMrkChg = false;
     const size_t nMarkCount=GetMarkedObjectCount();
-    const char* pDscrID = nullptr;
+    TranslateId pDscrID;
     if(bLineToArea)
     {
         if(nMarkCount == 1)

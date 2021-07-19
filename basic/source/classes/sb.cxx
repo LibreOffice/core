@@ -1543,8 +1543,8 @@ void StarBASIC::MakeErrorText( ErrCode nId, std::u16string_view aMsg )
     SolarMutexGuard aSolarGuard;
     sal_uInt16 nOldID = GetVBErrorCode( nId );
 
-    const char* pErrorMsg = nullptr;
-    for (std::pair<const char *, ErrCode> const *pItem = RID_BASIC_START; pItem->second; ++pItem)
+    TranslateId pErrorMsg;
+    for (std::pair<TranslateId, ErrCode> const *pItem = RID_BASIC_START; pItem->second; ++pItem)
     {
         if (nId == pItem->second)
         {

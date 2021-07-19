@@ -1836,7 +1836,7 @@ OUString SdrPathObj::TakeObjNameSingul() const
 
     if(OBJ_LINE == meKind)
     {
-        const char* pId(STR_ObjNameSingulLINE);
+        TranslateId pId(STR_ObjNameSingulLINE);
 
         if(lcl_ImpIsLine(GetPathPoly()))
         {
@@ -1872,7 +1872,7 @@ OUString SdrPathObj::TakeObjNameSingul() const
     else if(OBJ_PLIN == meKind || OBJ_POLY == meKind)
     {
         const bool bClosed(OBJ_POLY == meKind);
-        const char* pId(nullptr);
+        TranslateId pId;
 
         if(mpDAC && mpDAC->IsCreating())
         {
