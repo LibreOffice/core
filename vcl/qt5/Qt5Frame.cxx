@@ -105,7 +105,6 @@ Qt5Frame::Qt5Frame(Qt5Frame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
     , m_bUseCairo(bUseCairo)
     , m_bNullRegion(true)
     , m_bGraphicsInUse(false)
-    , m_bGraphicsInvalid(false)
     , m_ePointerStyle(PointerStyle::Arrow)
     , m_pDragSource(nullptr)
     , m_pDropTarget(nullptr)
@@ -296,7 +295,7 @@ SalGraphics* Qt5Frame::AcquireGraphics()
 
     if (m_bUseCairo)
     {
-        if (!m_pSvpGraphics || m_bGraphicsInvalid)
+        if (!m_pSvpGraphics)
         {
             QSize aSize = m_pQWidget->size() * devicePixelRatioF();
             m_pSvpGraphics.reset(new Qt5SvpGraphics(this));
@@ -306,20 +305,18 @@ SalGraphics* Qt5Frame::AcquireGraphics()
                                        basegfx::B2IVector(aSize.width(), aSize.height()));
             cairo_surface_set_user_data(m_pSurface.get(), Qt5SvpGraphics::getDamageKey(),
                                         &m_aDamageHandler, nullptr);
-            m_bGraphicsInvalid = false;
         }
         return m_pSvpGraphics.get();
     }
     else
     {
-        if (!m_pQt5Graphics || m_bGraphicsInvalid)
+        if (!m_pQt5Graphics)
         {
             m_pQt5Graphics.reset(new Qt5Graphics(this));
             m_pQImage.reset(
                 new QImage(m_pQWidget->size() * devicePixelRatioF(), Qt5_DefaultFormat32));
             m_pQImage->fill(Qt::transparent);
             m_pQt5Graphics->ChangeQImage(m_pQImage.get());
-            m_bGraphicsInvalid = false;
         }
         return m_pQt5Graphics.get();
     }
@@ -1153,7 +1150,6 @@ void Qt5Frame::UpdateSettings(AllSettings& rSettings)
     style.SetShadowColor(toColor(pal.color(QPalette::Disabled, QPalette::WindowText)));
     style.SetDarkShadowColor(toColor(pal.color(QPalette::Inactive, QPalette::WindowText)));
 
-    m_bGraphicsInvalid = true;
     rSettings.SetStyleSettings(style);
 }
 
