@@ -18,6 +18,7 @@
  */
 
 #include <memory>
+#include <optional>
 #include <string_view>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/xml/AttributeData.hpp>
@@ -158,7 +159,7 @@ class FilterPropertiesInfo_Impl
 {
     FilterPropertyInfoList_Impl             aPropInfos;
 
-    std::unique_ptr<Sequence<OUString>>     pApiNames;
+    std::optional<Sequence<OUString>>     mxApiNames;
 
 public:
     FilterPropertiesInfo_Impl();
@@ -183,13 +184,13 @@ void FilterPropertiesInfo_Impl::AddProperty(
 {
     aPropInfos.emplace_back(rApiName, nIndex);
 
-    OSL_ENSURE( !pApiNames, "performance warning: API names already retrieved" );
-    pApiNames.reset();
+    OSL_ENSURE( !mxApiNames, "performance warning: API names already retrieved" );
+    mxApiNames.reset();
 }
 
 const uno::Sequence<OUString>& FilterPropertiesInfo_Impl::GetApiNames()
 {
-    if( !pApiNames )
+    if( !mxApiNames )
     {
         // we have to do three things:
         // 1) sort API names,
@@ -232,8 +233,8 @@ const uno::Sequence<OUString>& FilterPropertiesInfo_Impl::GetApiNames()
         }
 
         // construct sequence
-        pApiNames.reset( new Sequence < OUString >( aPropInfos.size() ) );
-        OUString *pNames = pApiNames->getArray();
+        mxApiNames.emplace( aPropInfos.size() );
+        OUString *pNames = mxApiNames->getArray();
 
         for (auto const& propInfo : aPropInfos)
         {
@@ -242,7 +243,7 @@ const uno::Sequence<OUString>& FilterPropertiesInfo_Impl::GetApiNames()
         }
     }
 
-    return *pApiNames;
+    return *mxApiNames;
 }
 
 void FilterPropertiesInfo_Impl::FillPropertyStateArray(
