@@ -226,7 +226,7 @@ SwTOXType::SwTOXType(const SwTOXType& rCopy)
         pRegisteredIn->Add(this);
 }
 
-static const char* STR_POOLCOLL_TOX_ARY[] =
+const TranslateId STR_POOLCOLL_TOX_ARY[] =
 {
     // Subcategory Index-Directories
     STR_POOLCOLL_TOX_IDXH,
@@ -236,7 +236,7 @@ static const char* STR_POOLCOLL_TOX_ARY[] =
     STR_POOLCOLL_TOX_IDXBREAK
 };
 
-static const char* STR_POOLCOLL_TOX_CNTNT_ARY[] =
+const TranslateId STR_POOLCOLL_TOX_CNTNT_ARY[] =
 {
     // Subcategory Tables of Contents
     STR_POOLCOLL_TOX_CNTNTH,
@@ -247,7 +247,7 @@ static const char* STR_POOLCOLL_TOX_CNTNT_ARY[] =
     STR_POOLCOLL_TOX_CNTNT5
 };
 
-static const char* STR_POOLCOLL_TOX_CNTNT_EXTRA_ARY[] =
+const TranslateId STR_POOLCOLL_TOX_CNTNT_EXTRA_ARY[] =
 {
     // Subcategory Table of Contents more Levels 5 - 10
     STR_POOLCOLL_TOX_CNTNT6,
@@ -257,7 +257,7 @@ static const char* STR_POOLCOLL_TOX_CNTNT_EXTRA_ARY[] =
     STR_POOLCOLL_TOX_CNTNT10
 };
 
-static const char* STR_POOLCOLL_TOX_USER_ARY[] =
+const TranslateId STR_POOLCOLL_TOX_USER_ARY[] =
 {
     // Subcategory User-Directories:
     STR_POOLCOLL_TOX_USERH,
@@ -268,7 +268,7 @@ static const char* STR_POOLCOLL_TOX_USER_ARY[] =
     STR_POOLCOLL_TOX_USER5
 };
 
-static const char* STR_POOLCOLL_TOX_USER_EXTRA_ARY[] =
+const TranslateId STR_POOLCOLL_TOX_USER_EXTRA_ARY[] =
 {
     // Subcategory User-Directories more Levels 5 - 10
     STR_POOLCOLL_TOX_USER6,
@@ -278,35 +278,35 @@ static const char* STR_POOLCOLL_TOX_USER_EXTRA_ARY[] =
     STR_POOLCOLL_TOX_USER10
 };
 
-static const char* STR_POOLCOLL_TOX_ILLUS_ARY[] =
+const TranslateId STR_POOLCOLL_TOX_ILLUS_ARY[] =
 {
     // Illustrations Index
     STR_POOLCOLL_TOX_ILLUSH,
     STR_POOLCOLL_TOX_ILLUS1
 };
 
-static const char* STR_POOLCOLL_TOX_OBJECT_ARY[] =
+const TranslateId STR_POOLCOLL_TOX_OBJECT_ARY[] =
 {
     //  Object Index
     STR_POOLCOLL_TOX_OBJECTH,
     STR_POOLCOLL_TOX_OBJECT1
 };
 
-static const char* STR_POOLCOLL_TOX_TABLES_ARY[] =
+const TranslateId STR_POOLCOLL_TOX_TABLES_ARY[] =
 {
     //  Tables Index
     STR_POOLCOLL_TOX_TABLESH,
     STR_POOLCOLL_TOX_TABLES1
 };
 
-static const char* STR_POOLCOLL_TOX_AUTHORITIES_ARY[] =
+const TranslateId STR_POOLCOLL_TOX_AUTHORITIES_ARY[] =
 {
     //  Index of Authorities
     STR_POOLCOLL_TOX_AUTHORITIESH,
     STR_POOLCOLL_TOX_AUTHORITIES1
 };
 
-static const char* STR_POOLCOLL_TOX_CITATION_ARY[] =
+const TranslateId STR_POOLCOLL_TOX_CITATION_ARY[] =
 {
     STR_POOLCOLL_TOX_CITATION
 };
@@ -325,7 +325,7 @@ SwForm::SwForm( TOXTypes eTyp ) // #i21237#
     // Keyword has 3 levels + headings+ separator
     // Indexes of tables, object illustrations and authorities consist of a heading and one level
 
-    const char** pPoolId;
+    const TranslateId* pPoolId;
     switch( m_eType )
     {
     case TOX_INDEX:         pPoolId = STR_POOLCOLL_TOX_ARY;    break;

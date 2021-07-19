@@ -44,7 +44,7 @@ namespace connectivity
         static SharedResources_Impl&
                         getInstance();
 
-        OUString getResourceString(const char* pId);
+        OUString getResourceString(TranslateId pId);
 
     private:
         SharedResources_Impl();
@@ -66,7 +66,7 @@ namespace connectivity
     {
     }
 
-    OUString SharedResources_Impl::getResourceString(const char* pId)
+    OUString SharedResources_Impl::getResourceString(TranslateId pId)
     {
         return Translate::get(pId, m_aLocale);
     }
@@ -129,13 +129,13 @@ namespace connectivity
     }
 
 
-    OUString SharedResources::getResourceString(const char* pResId) const
+    OUString SharedResources::getResourceString(TranslateId pResId) const
     {
         return SharedResources_Impl::getInstance().getResourceString(pResId);
     }
 
 
-    OUString SharedResources::getResourceStringWithSubstitution(const char* pResId,
+    OUString SharedResources::getResourceStringWithSubstitution(TranslateId pResId,
                 const char* _pAsciiPatternToReplace, const OUString& _rStringToSubstitute ) const
     {
         OUString sString( SharedResources_Impl::getInstance().getResourceString(pResId) );
@@ -145,7 +145,7 @@ namespace connectivity
     }
 
 
-    OUString SharedResources::getResourceStringWithSubstitution(const char* pResId,
+    OUString SharedResources::getResourceStringWithSubstitution(TranslateId pResId,
                 const char* _pAsciiPatternToReplace1, const OUString& _rStringToSubstitute1,
                 const char* _pAsciiPatternToReplace2, const OUString& _rStringToSubstitute2 ) const
     {
@@ -158,7 +158,7 @@ namespace connectivity
     }
 
 
-    OUString SharedResources::getResourceStringWithSubstitution(const char* pResId,
+    OUString SharedResources::getResourceStringWithSubstitution(TranslateId pResId,
                 const char* _pAsciiPatternToReplace1, const OUString& _rStringToSubstitute1,
                 const char* _pAsciiPatternToReplace2, const OUString& _rStringToSubstitute2,
                 const char* _pAsciiPatternToReplace3, const OUString& _rStringToSubstitute3 ) const
@@ -173,7 +173,7 @@ namespace connectivity
         return sString;
     }
 
-    OUString SharedResources::getResourceStringWithSubstitution(const char* pResId,
+    OUString SharedResources::getResourceStringWithSubstitution(TranslateId pResId,
                     const std::vector< std::pair<const char* , OUString > >& _rStringToSubstitutes) const
     {
         OUString sString( SharedResources_Impl::getInstance().getResourceString(pResId) );

@@ -271,7 +271,7 @@ void SwUndo::RepeatImpl( ::sw::RepeatContext & )
 
 OUString GetUndoComment(SwUndoId eId)
 {
-    const char *pId = nullptr;
+    TranslateId pId;
     switch (eId)
     {
         case SwUndoId::EMPTY:

@@ -28,6 +28,7 @@
 
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
+#include <unotools/resmgr.hxx>
 
 #include "analysishelper.hxx"
 
@@ -73,7 +74,7 @@ public:
     explicit                    AnalysisAddIn(
                                     const css::uno::Reference< css::uno::XComponentContext >& xContext );
 
-    OUString AnalysisResId(std::string_view aId);
+    OUString AnalysisResId(TranslateId aId);
 
     virtual                     ~AnalysisAddIn() override;
 

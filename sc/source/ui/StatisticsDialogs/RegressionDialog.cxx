@@ -103,7 +103,7 @@ namespace
         POWER
     };
 
-    const char* constRegressionModel[] =
+    const TranslateId constRegressionModel[] =
     {
         STR_LABEL_LINEAR,
         STR_LABEL_LOGARITHMIC,
@@ -167,7 +167,7 @@ void ScRegressionDialog::Close()
     DoClose(ScRegressionDialogWrapper::GetChildWindowId());
 }
 
-const char* ScRegressionDialog::GetUndoNameId()
+TranslateId ScRegressionDialog::GetUndoNameId()
 {
     return STR_REGRESSION_UNDO_NAME;
 }
@@ -396,7 +396,7 @@ void ScRegressionDialog::WriteRegressionStatistics(AddressWalkerWriter& rOutput,
     rOutput.writeString(ScResId(STR_LABEL_REGRESSION_STATISTICS));
     rOutput.newLine();
 
-    const char* aMeasureNames[] =
+    const TranslateId aMeasureNames[] =
     {
         STR_LABEL_RSQUARED,
         STRID_CALC_STD_ERROR,

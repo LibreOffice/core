@@ -32,7 +32,7 @@ using namespace ::com::sun::star::ui::dialogs::CommonFilePickerElementIds;
 const struct
 {
     sal_Int32 ctrlId;
-    const char *resId;
+    TranslateId resId;
 } CtrlIdToResIdTable[] = {
     { CHECKBOX_AUTOEXTENSION,                   STR_FPICKER_AUTO_EXTENSION },
     { CHECKBOX_PASSWORD,                        STR_FPICKER_PASSWORD },
@@ -57,21 +57,21 @@ const struct
     { FILE_PICKER_FILE_TYPE,                    STR_FPICKER_TYPE }
 };
 
-static const char* CtrlIdToResId( sal_Int32 aControlId )
+static TranslateId CtrlIdToResId( sal_Int32 aControlId )
 {
     for (auto & i : CtrlIdToResIdTable)
     {
         if ( i.ctrlId == aControlId )
             return i.resId;
     }
-    return nullptr;
+    return {};
 }
 
 OUString SalGtkPicker::getResString( sal_Int32 aId )
 {
     OUString aResString;
     // translate the control id to a resource id
-    const char *pResId = CtrlIdToResId( aId );
+    TranslateId pResId = CtrlIdToResId( aId );
     if (pResId)
         aResString = VclResId(pResId);
     return aResString.replace('~', '_');

@@ -259,7 +259,7 @@ public:
     void            DoAutoStyle( const ScRange& rRange, const OUString& rStyle );
 
     static weld::Window*  GetActiveDialogParent();
-    void            ErrorMessage(const char* pGlobStrId);
+    void            ErrorMessage(TranslateId pGlobStrId);
     bool            IsEditable() const;
 
     bool            AdjustRowHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab );

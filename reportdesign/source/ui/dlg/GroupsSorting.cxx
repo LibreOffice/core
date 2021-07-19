@@ -938,7 +938,7 @@ IMPL_LINK_NOARG(OGroupsSortingDialog, OnControlFocusGot, LinkParamNone*, void )
 
 IMPL_LINK(OGroupsSortingDialog, OnWidgetFocusGot, weld::Widget&, rControl, void )
 {
-    const std::pair<weld::Widget*, const char*> pControls[] = {
+    const std::pair<weld::Widget*, TranslateId> pControls[] = {
         { m_xHeaderLst.get(), STR_RPT_HELP_HEADER },
         { m_xFooterLst.get(), STR_RPT_HELP_FOOTER },
         { m_xGroupOnLst.get(), STR_RPT_HELP_GROUPON },
@@ -1081,7 +1081,7 @@ void OGroupsSortingDialog::displayGroup(const uno::Reference<report::XGroup>& _x
         case sdbc::DataType::TIME:
         case sdbc::DataType::TIMESTAMP:
             {
-                const char* aIds[] = { STR_RPT_YEAR, STR_RPT_QUARTER,STR_RPT_MONTH,STR_RPT_WEEK,STR_RPT_DAY,STR_RPT_HOUR,STR_RPT_MINUTE };
+                const TranslateId aIds[] = { STR_RPT_YEAR, STR_RPT_QUARTER,STR_RPT_MONTH,STR_RPT_WEEK,STR_RPT_DAY,STR_RPT_HOUR,STR_RPT_MINUTE };
                 for (size_t i = 0; i < SAL_N_ELEMENTS(aIds); ++i)
                 {
                     m_xGroupOnLst->append(OUString::number(i+2), RptResId(aIds[i]));

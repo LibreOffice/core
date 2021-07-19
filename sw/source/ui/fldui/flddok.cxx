@@ -426,7 +426,7 @@ IMPL_LINK_NOARG(SwFieldDokPage, SubTypeHdl, weld::TreeView&, void)
     const SwFieldTypesEnum nTypeId = static_cast<SwFieldTypesEnum>(m_xSelectionLB->get_id(nPos).toUInt32());
     FillFormatLB(nTypeId);
 
-    const char* pTextRes = nullptr;
+    TranslateId pTextRes;
     switch (nTypeId)
     {
     case SwFieldTypesEnum::Chapter:

@@ -38,7 +38,7 @@
 
 namespace
 {
-    void INFOBOX(weld::Window* pWindow, const char* id)
+    void INFOBOX(weld::Window* pWindow, TranslateId id)
     {
         std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pWindow,
                                                       VclMessageType::Info, VclButtonsType::Ok,

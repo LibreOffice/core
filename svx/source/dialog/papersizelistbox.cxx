@@ -29,7 +29,7 @@ SvxPaperSizeListBox::SvxPaperSizeListBox(std::unique_ptr<weld::ComboBox> pContro
 
 void SvxPaperSizeListBox::FillPaperSizeEntries( PaperSizeApp eApp )
 {
-    const std::pair<const char*, int>* pPaperAry = eApp == PaperSizeApp::Std ?
+    const std::pair<TranslateId, int>* pPaperAry = eApp == PaperSizeApp::Std ?
         RID_SVXSTRARY_PAPERSIZE_STD : RID_SVXSTRARY_PAPERSIZE_DRAW;
     sal_uInt32 nCnt = eApp == PaperSizeApp::Std ?
         SAL_N_ELEMENTS(RID_SVXSTRARY_PAPERSIZE_STD) : SAL_N_ELEMENTS(RID_SVXSTRARY_PAPERSIZE_DRAW);

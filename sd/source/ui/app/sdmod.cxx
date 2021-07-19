@@ -80,7 +80,7 @@ SdModule::SdModule(SfxObjectFactory* pFact1, SfxObjectFactory* pFact2 )
     mpVirtualRefDevice->SetReferenceDevice ( VirtualDevice::RefDevMode::Dpi600 );
 }
 
-OUString SdResId(std::string_view aId)
+OUString SdResId(TranslateId aId)
 {
     return Translate::get(aId, SD_MOD()->GetResLocale());
 }

@@ -95,7 +95,7 @@ void SwWrtShell::Do( DoType eDoType, sal_uInt16 nCnt )
 OUString SwWrtShell::GetDoString( DoType eDoType ) const
 {
     OUString aUndoStr;
-    const char* pResStr = STR_UNDO;
+    TranslateId pResStr = STR_UNDO;
     switch( eDoType )
     {
     case UNDO:

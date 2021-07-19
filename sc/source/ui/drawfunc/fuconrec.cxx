@@ -56,7 +56,7 @@ FuConstRectangle::~FuConstRectangle()
 
 namespace {
 
-::basegfx::B2DPolyPolygon getPolygon(const char* pResId, const SdrModel& rModel)
+::basegfx::B2DPolyPolygon getPolygon(TranslateId pResId, const SdrModel& rModel)
 {
     ::basegfx::B2DPolyPolygon aRetval;
     XLineEndListRef pLineEndList(rModel.GetLineEndList());

@@ -22,6 +22,7 @@
 
 #include <rtl/ustring.hxx>
 #include "dbadllapi.hxx"
+#include <unotools/resmgr.hxx>
 
 #define DBA_RES( id )                       ::dbaccess::ResourceManager::loadString( id )
 #define DBA_RES_PARAM( id, ascii, replace ) ::dbaccess::ResourceManager::loadString( id, ascii, replace )
@@ -40,7 +41,7 @@ namespace dbaccess
     public:
         /** loads the string with the specified resource id
         */
-        static OUString  loadString(const char* pResId);
+        static OUString  loadString(TranslateId pResId);
 
         /** loads a string from the resource file, substituting a placeholder with a given string
 
@@ -52,7 +53,7 @@ namespace dbaccess
                 the string which should substitute the placeholder
         */
         static OUString  loadString(
-                const char* pResId,
+                TranslateId pResId,
                 const char* _pPlaceholderAscii,
                 std::u16string_view  _rReplace
         );
@@ -71,7 +72,7 @@ namespace dbaccess
                 the string which should substitute the second placeholder
         */
         static OUString  loadString(
-                const char* pResId,
+                TranslateId pResId,
                 const char* _pPlaceholderAscii1,
                 std::u16string_view _rReplace1,
                 const char* _pPlaceholderAscii2,

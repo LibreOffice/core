@@ -71,7 +71,7 @@ void OApplicationIconControl::Fill()
 {
     static const struct CategoryDescriptor
     {
-        const char* pLabelResId;
+        TranslateId pLabelResId;
         ElementType eType;
         const char* aImageResId;
     } aCategories[] = { { RID_STR_TABLES_CONTAINER, E_TABLE, BMP_TABLEFOLDER_TREE_L },

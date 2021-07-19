@@ -74,7 +74,7 @@ struct snewfoil_value_info
 {
     sal_uInt16 mnId;
     const char* msBmpResId;
-    const char* mpStrResId;
+    TranslateId mpStrResId;
     const char* msUnoCommand;
 };
 
@@ -98,7 +98,7 @@ const snewfoil_value_info editmodes[] =
         BMP_DISPLAYMODE_SLIDE_SORTER,
         STR_SLIDE_SORTER_MODE,
         ".uno:DiaMode" },
-    {0, "", nullptr, "" }
+    {0, "", {}, "" }
 };
 
 const snewfoil_value_info mastermodes[] =
@@ -115,7 +115,7 @@ const snewfoil_value_info mastermodes[] =
         BMP_DISPLAYMODE_HANDOUT_MASTER,
         STR_HANDOUT_MASTER_MODE,
         ".uno:HandoutMode" },
-    {0, "", nullptr, "" }
+    {0, "", {}, "" }
 };
 
 

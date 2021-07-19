@@ -149,10 +149,10 @@ void ScEditableTester::TestBlockForAction(
     }
 }
 
-const char* ScEditableTester::GetMessageId() const
+TranslateId ScEditableTester::GetMessageId() const
 {
     if (mbIsEditable)
-        return nullptr;
+        return {};
     else if (mbOnlyMatrix)
         return STR_MATRIXFRAGMENTERR;
     else

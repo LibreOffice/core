@@ -563,7 +563,7 @@ void ScAutoFormatData::GetFromItemSet( sal_uInt16 nIndex, const SfxItemSet& rIte
     rField.SetRotateMode    ( rItemSet.Get( ATTR_ROTATE_MODE ) );
 }
 
-static const char* RID_SVXSTR_TBLAFMT[] =
+const TranslateId RID_SVXSTR_TBLAFMT[] =
 {
     RID_SVXSTR_TBLAFMT_3D,
     RID_SVXSTR_TBLAFMT_BLACK1,

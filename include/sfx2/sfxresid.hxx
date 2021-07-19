@@ -21,9 +21,9 @@
 
 #include <sfx2/dllapi.h>
 #include <rtl/ustring.hxx>
-#include <string_view>
+#include <unotools/resmgr.hxx>
 
-SFX2_DLLPUBLIC OUString SfxResId(std::string_view aId);
+SFX2_DLLPUBLIC OUString SfxResId(TranslateId aId);
 
 #endif
 

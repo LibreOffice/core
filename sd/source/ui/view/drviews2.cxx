@@ -2349,7 +2349,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
         case SID_SHOW_NEXT_LEVEL:
         {
-            const char* const STR_PRESOBJ_MPOUTLINE_ARY[]
+            const TranslateId STR_PRESOBJ_MPOUTLINE_ARY[]
             {
                 STR_PRESOBJ_MPOUTLINE,
                 STR_PRESOBJ_MPOUTLLAYER2,

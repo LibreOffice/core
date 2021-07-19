@@ -21,9 +21,10 @@
 
 #include <svtools/svtdllapi.h>
 #include <rtl/ustring.hxx>
+#include <unotools/resmgr.hxx>
 #include <locale>
 
 SVT_DLLPUBLIC std::locale SvtResLocale();
-SVT_DLLPUBLIC OUString SvtResId(std::string_view aId);
+SVT_DLLPUBLIC OUString SvtResId(TranslateId aId);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -413,7 +413,7 @@ namespace svxform
                 std::unique_ptr<ItemNode> pNode;
                 Reference< css::xml::dom::XNode > xParentNode;
                 Reference< XPropertySet > xNewBinding;
-                const char* pResId = nullptr;
+                TranslateId pResId;
                 bool bIsElement = true;
                 if ( DGTInstance == m_eGroup )
                 {
@@ -583,7 +583,7 @@ namespace svxform
 
                     AddDataItemDialog aDlg(m_pNaviWin->GetFrameWeld(), pNode, m_xUIHelper);
                     DataItemType eType = DITElement;
-                    const char* pResId = RID_STR_DATANAV_EDIT_ELEMENT;
+                    TranslateId pResId = RID_STR_DATANAV_EDIT_ELEMENT;
                     if ( pNode && pNode->m_xNode.is() )
                     {
                         try
@@ -871,7 +871,7 @@ namespace svxform
                     DBG_ASSERT( pNode->m_xNode.is(), "XFormsPage::RemoveEntry(): no XNode" );
                     css::xml::dom::NodeType eChildType = pNode->m_xNode->getNodeType();
                     bool bIsElement = ( eChildType == css::xml::dom::NodeType_ELEMENT_NODE );
-                    const char* pResId = bIsElement ? RID_STR_QRY_REMOVE_ELEMENT : RID_STR_QRY_REMOVE_ATTRIBUTE;
+                    TranslateId pResId = bIsElement ? RID_STR_QRY_REMOVE_ELEMENT : RID_STR_QRY_REMOVE_ATTRIBUTE;
                     OUString sVar = bIsElement ? OUString(ELEMENTNAME) : OUString(ATTRIBUTENAME);
                     std::unique_ptr<weld::MessageDialog> xQBox(Application::CreateMessageDialog(m_pNaviWin->GetFrameWeld(),
                                                                              VclMessageType::Question, VclButtonsType::YesNo,
@@ -906,7 +906,7 @@ namespace svxform
             {
                 DBG_ASSERT( pNode->m_xPropSet.is(), "XFormsPage::RemoveEntry(): no propset" );
                 bool bSubmission = ( DGTSubmission == m_eGroup );
-                const char* pResId = bSubmission ? RID_STR_QRY_REMOVE_SUBMISSION : RID_STR_QRY_REMOVE_BINDING;
+                TranslateId pResId = bSubmission ? RID_STR_QRY_REMOVE_SUBMISSION : RID_STR_QRY_REMOVE_BINDING;
                 OUString sProperty = bSubmission ? OUString(PN_SUBMISSION_ID) : OUString(PN_BINDING_ID);
                 OUString sSearch = bSubmission ? OUString(SUBMISSIONNAME) : OUString(BINDINGNAME);
                 OUString sName;
@@ -1221,8 +1221,8 @@ namespace svxform
         if ( DGTInstance != m_eGroup )
             return;
 
-        const char* pResId1 = RID_STR_DATANAV_EDIT_ELEMENT;
-        const char* pResId2 = RID_STR_DATANAV_REMOVE_ELEMENT;
+        TranslateId pResId1 = RID_STR_DATANAV_EDIT_ELEMENT;
+        TranslateId pResId2 = RID_STR_DATANAV_REMOVE_ELEMENT;
         if (bEntry)
         {
             ItemNode* pNode = reinterpret_cast<ItemNode*>(m_xItemList->get_id(*xEntry).toInt64());

@@ -1395,7 +1395,7 @@ void ScDBFunc::DataPilotInput( const ScAddress& rPos, const OUString& rString )
         return;
     }
 
-    const char* pErrorId = nullptr;
+    TranslateId pErrorId;
 
     pDPObj->BuildAllDimensionMembers();
     ScDPSaveData aData( *pDPObj->GetSaveData() );

@@ -762,7 +762,7 @@ bool ScShrinkToFitCell::GetPresentation(SfxItemPresentation,
                                         OUString& rText,
                                         const IntlWrapper&) const
 {
-    const char* pId = GetValue() ? STR_SHRINKTOFITCELL_ON : STR_SHRINKTOFITCELL_OFF;
+    TranslateId pId = GetValue() ? STR_SHRINKTOFITCELL_ON : STR_SHRINKTOFITCELL_OFF;
     rText = ScResId(pId);
     return true;
 }
@@ -782,7 +782,7 @@ bool ScVerticalStackCell::GetPresentation(SfxItemPresentation,
                                           OUString& rText,
                                           const IntlWrapper&) const
 {
-    const char* pId = GetValue() ? STR_VERTICALSTACKCELL_ON : STR_VERTICALSTACKCELL_OFF;
+    TranslateId pId = GetValue() ? STR_VERTICALSTACKCELL_ON : STR_VERTICALSTACKCELL_OFF;
     rText = ScResId(pId);
     return true;
 }
@@ -802,7 +802,7 @@ bool ScLineBreakCell::GetPresentation(SfxItemPresentation,
                                       OUString& rText,
                                       const IntlWrapper&) const
 {
-    const char* pId = GetValue() ? STR_LINEBREAKCELL_ON : STR_LINEBREAKCELL_OFF;
+    TranslateId pId = GetValue() ? STR_LINEBREAKCELL_ON : STR_LINEBREAKCELL_OFF;
     rText = ScResId(pId);
     return true;
 }
@@ -822,7 +822,7 @@ bool ScHyphenateCell::GetPresentation(SfxItemPresentation,
                                       OUString& rText,
                                       const IntlWrapper&) const
 {
-    const char* pId = GetValue() ? STR_HYPHENATECELL_ON : STR_HYPHENATECELL_OFF;
+    TranslateId pId = GetValue() ? STR_HYPHENATECELL_ON : STR_HYPHENATECELL_OFF;
     rText = ScResId(pId);
     return true;
 }

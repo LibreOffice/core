@@ -99,7 +99,7 @@ const std::u16string_view aDirectionBmps[] =
     u"" RID_SVXBMP_DIRECTION_DIRECTION_SE
 };
 
-static const char* aDirectionStrs[] =
+static TranslateId aDirectionStrs[] =
 {
     RID_SVXSTR_DIRECTION_NW,
     RID_SVXSTR_DIRECTION_N,
@@ -382,7 +382,7 @@ void ExtrusionDepthWindow::implFillStrings( FieldUnit eUnit )
 {
     meUnit = eUnit;
 
-    const char* aDepths[] =
+    const TranslateId aDepths[] =
     {
         RID_SVXSTR_DEPTH_0,
         RID_SVXSTR_DEPTH_1,
@@ -391,7 +391,7 @@ void ExtrusionDepthWindow::implFillStrings( FieldUnit eUnit )
         RID_SVXSTR_DEPTH_4
     };
 
-    const char* aDepthsInch[] =
+    const TranslateId aDepthsInch[] =
     {
         RID_SVXSTR_DEPTH_0_INCH,
         RID_SVXSTR_DEPTH_1_INCH,
@@ -402,7 +402,7 @@ void ExtrusionDepthWindow::implFillStrings( FieldUnit eUnit )
 
     assert(SAL_N_ELEMENTS(aDepths) == SAL_N_ELEMENTS(aDepthsInch));
 
-    const char** pResource = IsMetric(eUnit) ? aDepths : aDepthsInch;
+    const TranslateId* pResource = IsMetric(eUnit) ? aDepths : aDepthsInch;
 
     mxDepth0->set_label(SvxResId(pResource[0]));
     mxDepth1->set_label(SvxResId(pResource[1]));

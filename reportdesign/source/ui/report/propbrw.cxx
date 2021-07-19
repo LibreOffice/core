@@ -327,7 +327,7 @@ OUString PropBrw::GetHeadlineName( const uno::Sequence< Reference<uno::XInterfac
         Reference< lang::XServiceInfo > xServiceInfo( xNameCont->getByName("ReportComponent"), UNO_QUERY );
         if ( xServiceInfo.is() )
         {
-            const char* pResId;
+            TranslateId pResId;
             if ( xServiceInfo->supportsService( SERVICE_FIXEDTEXT ) )
             {
                 pResId = RID_STR_PROPTITLE_FIXEDTEXT;

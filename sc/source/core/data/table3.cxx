@@ -1914,7 +1914,7 @@ struct RowEntry
 
 }
 
-static const char* lcl_GetSubTotalStrId(int id)
+static TranslateId lcl_GetSubTotalStrId(int id)
 {
     switch ( id )
     {
@@ -2072,7 +2072,7 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
                         if (aOutString.isEmpty())
                             aOutString = ScResId( STR_EMPTYDATA );
                         aOutString += " ";
-                        const char* pStrId = STR_TABLE_ERGEBNIS;
+                        TranslateId pStrId = STR_TABLE_ERGEBNIS;
                         if ( nResCount == 1 )
                             pStrId = lcl_GetSubTotalStrId(pResFunc[0]);
                         aOutString += ScResId(pStrId);

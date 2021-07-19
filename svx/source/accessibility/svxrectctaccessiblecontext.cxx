@@ -52,8 +52,8 @@ namespace
 {
     struct ChildIndexToPointData
     {
-        const char* pResIdName;
-        const char* pResIdDescr;
+        TranslateId pResIdName;
+        TranslateId pResIdDescr;
         RectPoint  ePoint;
     };
 }

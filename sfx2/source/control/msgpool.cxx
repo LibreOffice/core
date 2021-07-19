@@ -51,7 +51,7 @@ SfxSlotPool::~SfxSlotPool()
 
 namespace
 {
-    const char* getGidResId(SfxGroupId nId)
+    TranslateId getGidResId(SfxGroupId nId)
     {
         if (nId == SfxGroupId::Intern)
             return STR_GID_INTERN;
@@ -105,7 +105,7 @@ namespace
             return STR_GID_DRAWING;
         else if (nId == SfxGroupId::Controls)
             return STR_GID_CONTROLS;
-        return nullptr;
+        return {};
     }
 }
 
@@ -193,7 +193,7 @@ OUString SfxSlotPool::SeekGroup( sal_uInt16 nNo )
             }
         }
 
-        const char* pResId = getGidResId(_vGroups[_nCurGroup]);
+        TranslateId pResId = getGidResId(_vGroups[_nCurGroup]);
         if (!pResId)
         {
             OSL_FAIL( "GroupId-Name not defined in SFX!" );

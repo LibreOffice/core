@@ -966,7 +966,7 @@ void SwRedlineData::SetExtraData( const SwRedlineExtraData* pData )
         m_pExtraData = nullptr;
 }
 
-static const char* STR_REDLINE_ARY[] =
+const TranslateId STR_REDLINE_ARY[] =
 {
     STR_UNDO_REDLINE_INSERT,
     STR_UNDO_REDLINE_DELETE,

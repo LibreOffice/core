@@ -542,14 +542,14 @@ SwNavigationPI::SwNavigationPI(weld::Widget* pParent,
         m_xContent1ToolBox->set_item_visible("contenttoggle", false);
     }
 
-    const char* REGIONNAME_ARY[] =
+    const TranslateId REGIONNAME_ARY[] =
     {
         STR_HYPERLINK,
         STR_LINK_REGION,
         STR_COPY_REGION
     };
 
-    const char* REGIONMODE_ARY[] =
+    const TranslateId REGIONMODE_ARY[] =
     {
         STR_HIDDEN,
         STR_ACTIVE,

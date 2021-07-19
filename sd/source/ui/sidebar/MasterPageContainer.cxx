@@ -157,7 +157,7 @@ private:
     Size maSmallPreviewSizePixel;
     Size maLargePreviewSizePixel;
 
-    Image GetPreviewSubstitution(const char* pId, PreviewSize ePreviewSize);
+    Image GetPreviewSubstitution(TranslateId pId, PreviewSize ePreviewSize);
 
     void CleanContainer();
 };
@@ -841,14 +841,14 @@ SdDrawDocument* MasterPageContainer::Implementation::GetDocument()
 }
 
 Image MasterPageContainer::Implementation::GetPreviewSubstitution (
-    const char* pId,
+    TranslateId pId,
     PreviewSize ePreviewSize)
 {
     const ::osl::MutexGuard aGuard (maMutex);
 
     Image aPreview;
 
-    if (strcmp(pId, STR_TASKPANEL_PREPARING_PREVIEW_SUBSTITUTION) == 0)
+    if (pId == STR_TASKPANEL_PREPARING_PREVIEW_SUBSTITUTION)
     {
         Image& rPreview (ePreviewSize==SMALL
             ? maSmallPreviewBeingCreated
@@ -861,7 +861,7 @@ Image MasterPageContainer::Implementation::GetPreviewSubstitution (
         }
         aPreview = rPreview;
     }
-    else if (strcmp(pId, STR_TASKPANEL_NOT_AVAILABLE_SUBSTITUTION) == 0)
+    else if (pId == STR_TASKPANEL_NOT_AVAILABLE_SUBSTITUTION)
     {
         Image& rPreview (ePreviewSize==SMALL
             ? maSmallPreviewNotAvailable

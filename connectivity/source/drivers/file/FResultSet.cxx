@@ -57,7 +57,7 @@ using namespace com::sun::star::container;
 
 namespace
 {
-    void lcl_throwError(const char* pErrorId, const css::uno::Reference< css::uno::XInterface>& _xContext)
+    void lcl_throwError(TranslateId pErrorId, const css::uno::Reference< css::uno::XInterface>& _xContext)
     {
         ::connectivity::SharedResources aResources;
         const OUString sMessage = aResources.getResourceString(pErrorId);

@@ -62,11 +62,10 @@ FeatureSetting::FeatureSetting(OString feature)
 FeatureParameter::FeatureParameter(uint32_t nCode, OUString aDescription)
     : m_nCode(nCode)
     , m_sDescription(std::move(aDescription))
-    , m_pDescriptionID(nullptr)
 {
 }
 
-FeatureParameter::FeatureParameter(uint32_t nCode, const char* pDescriptionID)
+FeatureParameter::FeatureParameter(uint32_t nCode, TranslateId pDescriptionID)
     : m_nCode(nCode)
     , m_pDescriptionID(pDescriptionID)
 {
@@ -89,8 +88,7 @@ uint32_t FeatureParameter::getCode() const { return m_nCode; }
 // FeatureDefinition
 
 FeatureDefinition::FeatureDefinition()
-    : m_pDescriptionID(nullptr)
-    , m_nCode(0)
+    : m_nCode(0)
     , m_nDefault(0)
     , m_eType(FeatureParameterType::BOOL)
 {
@@ -101,7 +99,6 @@ FeatureDefinition::FeatureDefinition(uint32_t nCode, OUString const& rDescriptio
                                      std::vector<FeatureParameter> const& rEnumParameters,
                                      uint32_t nDefault)
     : m_sDescription(rDescription)
-    , m_pDescriptionID(nullptr)
     , m_nCode(nCode)
     , m_nDefault(nDefault)
     , m_eType(eType)
@@ -109,7 +106,7 @@ FeatureDefinition::FeatureDefinition(uint32_t nCode, OUString const& rDescriptio
 {
 }
 
-FeatureDefinition::FeatureDefinition(uint32_t nCode, const char* pDescriptionID,
+FeatureDefinition::FeatureDefinition(uint32_t nCode, TranslateId pDescriptionID,
                                      OUString const& rNumericPart)
     : m_pDescriptionID(pDescriptionID)
     , m_sNumericPart(rNumericPart)
@@ -119,7 +116,7 @@ FeatureDefinition::FeatureDefinition(uint32_t nCode, const char* pDescriptionID,
 {
 }
 
-FeatureDefinition::FeatureDefinition(uint32_t nCode, const char* pDescriptionID,
+FeatureDefinition::FeatureDefinition(uint32_t nCode, TranslateId pDescriptionID,
                                      std::vector<FeatureParameter> aEnumParameters)
     : m_pDescriptionID(pDescriptionID)
     , m_nCode(nCode)

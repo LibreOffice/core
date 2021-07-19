@@ -49,7 +49,7 @@ static SwProgress *lcl_SwFindProgress( SwDocShell const *pDocShell )
     return nullptr;
 }
 
-void StartProgress( const char* pMessResId, tools::Long nStartValue, tools::Long nEndValue,
+void StartProgress( TranslateId pMessResId, tools::Long nStartValue, tools::Long nEndValue,
                     SwDocShell *pDocShell )
 {
     if( SW_MOD()->IsEmbeddedLoadSave() )

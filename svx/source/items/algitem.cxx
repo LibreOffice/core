@@ -110,7 +110,8 @@ bool SvxOrientationItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/
 
 OUString SvxOrientationItem::GetValueText( SvxCellOrientation nVal )
 {
-    return SvxResId(RID_SVXITEMS_ORI_STANDARD + static_cast<int>(nVal));
+    OString id = OString::Concat(RID_SVXITEMS_ORI_STANDARD.mpId) + OString::number(static_cast<int>(nVal));
+    return SvxResId(TranslateId(RID_SVXITEMS_ORI_STANDARD.mpContext, id.getStr()));
 }
 
 SvxOrientationItem* SvxOrientationItem::Clone( SfxItemPool* ) const

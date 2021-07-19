@@ -51,7 +51,7 @@ enum {
 
 namespace
 {
-    void ERRORBOX(weld::Window* pParent, const char* rId)
+    void ERRORBOX(weld::Window* pParent, TranslateId rId)
     {
         std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pParent,
                                                   VclMessageType::Warning, VclButtonsType::Ok,

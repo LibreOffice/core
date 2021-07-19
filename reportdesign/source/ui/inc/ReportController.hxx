@@ -194,8 +194,8 @@ namespace rptui
                          ,sal_Int32 _nGroupPos
                          ,bool _bShow);
 
-        void executeMethodWithUndo(const char* pUndoStrId,const ::std::function<void(ODesignView *)>& _pMemfun);
-        void alignControlsWithUndo(const char* pUndoStrId, ControlModification _nControlModification, bool _bAlignAtSection = false);
+        void executeMethodWithUndo(TranslateId pUndoStrId,const ::std::function<void(ODesignView *)>& _pMemfun);
+        void alignControlsWithUndo(TranslateId pUndoStrId, ControlModification _nControlModification, bool _bAlignAtSection = false);
 
         css::uno::Reference< css::frame::XFrame > getXFrame();
 
@@ -207,7 +207,7 @@ namespace rptui
         static void shrinkSectionTop(const css::uno::Reference< css::report::XSection >& _xSection);
 
     public:
-        void shrinkSection(const char* pUndoStrId, const css::uno::Reference< css::report::XSection >& _xSection, sal_Int32 _nShrinkId);
+        void shrinkSection(TranslateId pUndoStrId, const css::uno::Reference< css::report::XSection >& _xSection, sal_Int32 _nShrinkId);
 
         /** opens the file open dialog to allow the user to select an image which will be
         * bound to a newly created image button.
@@ -292,7 +292,7 @@ namespace rptui
         /** set the property at all selected controls.
             @return <TRUE/> when the selection is not empty
         */
-        bool impl_setPropertyAtControls_throw(const char* pUndoResId
+        bool impl_setPropertyAtControls_throw(TranslateId pUndoResId
             ,const OUString& _sProperty
             ,const css::uno::Any& _aValue
             ,const css::uno::Sequence< css::beans::PropertyValue >& _aArgs);

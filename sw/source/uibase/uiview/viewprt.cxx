@@ -189,7 +189,7 @@ void SwView::ExecutePrint(SfxRequest& rReq)
                 std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(GetEditWin().GetFrameWeld(),
                                                               VclMessageType::Info, VclButtonsType::Ok,
                                                               SwResId(STR_ERR_NO_FAX)));
-                const char* pResId = bWeb ? STR_WEBOPTIONS : STR_TEXTOPTIONS;
+                TranslateId pResId = bWeb ? STR_WEBOPTIONS : STR_TEXTOPTIONS;
                 xInfoBox->set_primary_text(xInfoBox->get_primary_text().replaceFirst("%1", SwResId(pResId)));
                 xInfoBox->run();
                 SfxUInt16Item aDefPage(SID_SW_EDITOPTIONS, TP_OPTPRINT_PAGE);

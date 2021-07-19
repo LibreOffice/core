@@ -356,7 +356,7 @@ OUString SvxPostureItem::GetValueTextByPos( sal_uInt16 nPos )
     DBG_ASSERT( nPos <= sal_uInt16(ITALIC_NORMAL), "enum overflow!" );
 
     FontItalic eItalic = static_cast<FontItalic>(nPos);
-    const char* pId = nullptr;
+    TranslateId pId;
 
     switch ( eItalic )
     {
@@ -483,7 +483,7 @@ bool SvxWeightItem::GetPresentation
 
 OUString SvxWeightItem::GetValueTextByPos( sal_uInt16 nPos )
 {
-    static const char* RID_SVXITEMS_WEIGHTS[] =
+    static TranslateId RID_SVXITEMS_WEIGHTS[] =
     {
         RID_SVXITEMS_WEIGHT_DONTKNOW,
         RID_SVXITEMS_WEIGHT_THIN,
@@ -1029,7 +1029,7 @@ SvxUnderlineItem* SvxUnderlineItem::Clone( SfxItemPool * ) const
 
 OUString SvxUnderlineItem::GetValueTextByPos( sal_uInt16 nPos ) const
 {
-    static const char* RID_SVXITEMS_UL[] =
+    static TranslateId RID_SVXITEMS_UL[] =
     {
         RID_SVXITEMS_UL_NONE,
         RID_SVXITEMS_UL_SINGLE,
@@ -1070,7 +1070,7 @@ SvxOverlineItem* SvxOverlineItem::Clone( SfxItemPool * ) const
 
 OUString SvxOverlineItem::GetValueTextByPos( sal_uInt16 nPos ) const
 {
-    static const char* RID_SVXITEMS_OL[] =
+    static TranslateId RID_SVXITEMS_OL[] =
     {
         RID_SVXITEMS_OL_NONE,
         RID_SVXITEMS_OL_SINGLE,
@@ -1147,7 +1147,7 @@ bool SvxCrossedOutItem::GetPresentation
 
 OUString SvxCrossedOutItem::GetValueTextByPos( sal_uInt16 nPos )
 {
-    static const char* RID_SVXITEMS_STRIKEOUT[] =
+    static TranslateId RID_SVXITEMS_STRIKEOUT[] =
     {
         RID_SVXITEMS_STRIKEOUT_NONE,
         RID_SVXITEMS_STRIKEOUT_SINGLE,
@@ -1216,7 +1216,7 @@ bool SvxShadowedItem::GetPresentation
     OUString&           rText, const IntlWrapper& /*rIntl*/
 )   const
 {
-    const char* pId = RID_SVXITEMS_SHADOWED_FALSE;
+    TranslateId pId = RID_SVXITEMS_SHADOWED_FALSE;
 
     if ( GetValue() )
         pId = RID_SVXITEMS_SHADOWED_TRUE;
@@ -1244,7 +1244,7 @@ bool SvxAutoKernItem::GetPresentation
     OUString&           rText, const IntlWrapper& /*rIntl*/
 )   const
 {
-    const char* pId = RID_SVXITEMS_AUTOKERN_FALSE;
+    TranslateId pId = RID_SVXITEMS_AUTOKERN_FALSE;
 
     if ( GetValue() )
         pId = RID_SVXITEMS_AUTOKERN_TRUE;
@@ -1273,7 +1273,7 @@ bool SvxWordLineModeItem::GetPresentation
     OUString&           rText, const IntlWrapper& /*rIntl*/
 )   const
 {
-    const char* pId = RID_SVXITEMS_WORDLINE_FALSE;
+    TranslateId pId = RID_SVXITEMS_WORDLINE_FALSE;
 
     if ( GetValue() )
         pId = RID_SVXITEMS_WORDLINE_TRUE;
@@ -1301,7 +1301,7 @@ bool SvxContourItem::GetPresentation
     OUString&           rText, const IntlWrapper& /*rIntl*/
 )   const
 {
-    const char* pId = RID_SVXITEMS_CONTOUR_FALSE;
+    TranslateId pId = RID_SVXITEMS_CONTOUR_FALSE;
 
     if ( GetValue() )
         pId = RID_SVXITEMS_CONTOUR_TRUE;
@@ -1467,7 +1467,7 @@ bool SvxKerningItem::GetPresentation
         case SfxItemPresentation::Complete:
         {
             rText = EditResId(RID_SVXITEMS_KERNING_COMPLETE);
-            const char* pId = nullptr;
+            TranslateId pId;
 
             if ( GetValue() > 0 )
                 pId = RID_SVXITEMS_KERNING_EXPANDED;
@@ -1536,7 +1536,7 @@ bool SvxCaseMapItem::GetPresentation
 
 OUString SvxCaseMapItem::GetValueTextByPos( sal_uInt16 nPos )
 {
-    static const char* RID_SVXITEMS_CASEMAP[] =
+    static TranslateId RID_SVXITEMS_CASEMAP[] =
     {
         RID_SVXITEMS_CASEMAP_NONE,
         RID_SVXITEMS_CASEMAP_UPPERCASE,
@@ -1658,7 +1658,7 @@ bool SvxEscapementItem::GetPresentation
 
 OUString SvxEscapementItem::GetValueTextByPos( sal_uInt16 nPos )
 {
-    static const char* RID_SVXITEMS_ESCAPEMENT[] =
+    static TranslateId RID_SVXITEMS_ESCAPEMENT[] =
     {
         RID_SVXITEMS_ESCAPEMENT_OFF,
         RID_SVXITEMS_ESCAPEMENT_SUPER,
@@ -1875,7 +1875,7 @@ bool SvxBlinkItem::GetPresentation
     OUString&           rText, const IntlWrapper& /*rIntl*/
 )   const
 {
-    const char* pId = RID_SVXITEMS_BLINK_FALSE;
+    TranslateId pId = RID_SVXITEMS_BLINK_FALSE;
 
     if ( GetValue() )
         pId = RID_SVXITEMS_BLINK_TRUE;
@@ -1905,7 +1905,7 @@ bool SvxEmphasisMarkItem::GetPresentation
     const IntlWrapper& /*rIntl*/
 )   const
 {
-    static const char* RID_SVXITEMS_EMPHASIS[] =
+    static TranslateId RID_SVXITEMS_EMPHASIS[] =
     {
         RID_SVXITEMS_EMPHASIS_NONE_STYLE,
         RID_SVXITEMS_EMPHASIS_DOT_STYLE,
@@ -1917,11 +1917,11 @@ bool SvxEmphasisMarkItem::GetPresentation
     FontEmphasisMark nVal = GetEmphasisMark();
     rText = EditResId(RID_SVXITEMS_EMPHASIS[
                            static_cast<sal_uInt16>(static_cast<FontEmphasisMark>( nVal & FontEmphasisMark::Style ))]);
-    const char* pId = ( FontEmphasisMark::PosAbove & nVal )
+    TranslateId pId = ( FontEmphasisMark::PosAbove & nVal )
                     ? RID_SVXITEMS_EMPHASIS_ABOVE_POS
                     : ( FontEmphasisMark::PosBelow & nVal )
                         ? RID_SVXITEMS_EMPHASIS_BELOW_POS
-                        : nullptr;
+                        : TranslateId();
     if( pId )
         rText += EditResId( pId );
     return true;
@@ -2329,7 +2329,7 @@ SvxCharReliefItem* SvxCharReliefItem::Clone( SfxItemPool * ) const
     return new SvxCharReliefItem( *this );
 }
 
-static const char* RID_SVXITEMS_RELIEF[] =
+static TranslateId RID_SVXITEMS_RELIEF[] =
 {
     RID_SVXITEMS_RELIEF_NONE,
     RID_SVXITEMS_RELIEF_EMBOSSED,

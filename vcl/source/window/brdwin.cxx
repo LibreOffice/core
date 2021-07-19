@@ -288,7 +288,7 @@ OUString ImplBorderWindowView::ImplRequestHelp( ImplBorderFrameData const * pDat
                                               const Point& rPos,
                                               tools::Rectangle& rHelpRect )
 {
-    const char* pHelpId = nullptr;
+    TranslateId pHelpId;
     OUString aHelpStr;
     BorderWindowHitTest nHitTest = ImplHitTest( pData, rPos );
     if ( nHitTest != BorderWindowHitTest::NONE )

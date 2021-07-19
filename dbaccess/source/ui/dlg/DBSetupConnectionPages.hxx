@@ -123,10 +123,10 @@ namespace dbaui
         OGeneralSpecialJDBCConnectionPageSetup(weld::Container* pPage, weld::DialogController* pController
                                         , const SfxItemSet& _rCoreAttrs
                                         , sal_uInt16 _nPortId
-                                        , const char* pDefaultPortResId
-                                        , const char* pHelpTextResId
-                                        , const char* pHeaderTextResId
-                                        , const char* pDriverClassId );
+                                        , TranslateId pDefaultPortResId
+                                        , TranslateId pHelpTextResId
+                                        , TranslateId pHeaderTextResId
+                                        , TranslateId pDriverClassId );
     virtual ~OGeneralSpecialJDBCConnectionPageSetup() override;
     static std::unique_ptr<OGenericAdministrationPage> CreateMySQLJDBCTabPage( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& _rAttrSet );
     static std::unique_ptr<OGenericAdministrationPage> CreateOracleJDBCTabPage( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& _rAttrSet );

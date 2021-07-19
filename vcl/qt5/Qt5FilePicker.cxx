@@ -576,11 +576,11 @@ OUString SAL_CALL Qt5FilePicker::getLabel(sal_Int16 controlId)
     return toOUString(label);
 }
 
-QString Qt5FilePicker::getResString(const char* pResId)
+QString Qt5FilePicker::getResString(TranslateId pResId)
 {
     QString aResString;
 
-    if (pResId == nullptr)
+    if (!pResId)
         return aResString;
 
     aResString = toQString(VclResId(pResId));
@@ -592,7 +592,7 @@ void Qt5FilePicker::addCustomControl(sal_Int16 controlId)
 {
     QWidget* widget = nullptr;
     QLabel* label = nullptr;
-    const char* resId = nullptr;
+    TranslateId resId;
     QCheckBox* pCheckbox = nullptr;
 
     switch (controlId)
@@ -805,7 +805,7 @@ void SAL_CALL Qt5FilePicker::initialize(const uno::Sequence<uno::Any>& args)
                                                  static_cast<XFilePicker2*>(this), 1);
     }
 
-    const char* resId = nullptr;
+    TranslateId resId;
     switch (acceptMode)
     {
         case QFileDialog::AcceptOpen:

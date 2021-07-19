@@ -1144,7 +1144,7 @@ OUString Application::GetAppName()
 
 enum {hwAll=0, hwEnv=1, hwUI=2};
 
-static OUString Localize(std::string_view aId, const bool bLocalize)
+static OUString Localize(TranslateId aId, const bool bLocalize)
 {
     if (bLocalize)
         return VclResId(aId);

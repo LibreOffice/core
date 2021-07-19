@@ -42,7 +42,7 @@
 #include <com/sun/star/beans/XMaterialHolder.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
-static OUString PDFFilterResId(std::string_view aId)
+static OUString PDFFilterResId(TranslateId aId)
 {
     return Translate::get(aId, Translate::Create("flt"));
 }

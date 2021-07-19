@@ -87,7 +87,7 @@ static OUString GetUsageText( const SvxPageUsage eU )
     }
 }
 
-static const char* RID_SVXITEMS_PAGE_NUMS[] =
+const TranslateId RID_SVXITEMS_PAGE_NUMS[] =
 {
     RID_SVXITEMS_PAGE_NUM_CHR_UPPER,
     RID_SVXITEMS_PAGE_NUM_CHR_LOWER,

@@ -22,7 +22,7 @@ namespace
 {
 
 struct StatisticCalculation {
-    const char* aLabelId;
+    TranslateId aLabelId;
     const char* aFormula;
     const char* aResultRangeName;
 };
@@ -34,10 +34,10 @@ StatisticCalculation const lclBasicStatistics[] =
     { STRID_CALC_SUM,         "=SUM(%RANGE%)",     "SUM_RANGE"   },
     { STRID_CALC_MEAN,        "=AVERAGE(%RANGE%)", "MEAN_RANGE"  },
     { STRID_CALC_VARIANCE,    "=VAR(%RANGE%)",     "VAR_RANGE"   },
-    { nullptr,                nullptr,             nullptr       }
+    { {},                     nullptr,             nullptr       }
 };
 
-const char* lclAnovaLabels[] =
+const TranslateId lclAnovaLabels[] =
 {
     STR_ANOVA_LABEL_SOURCE_OF_VARIATION,
     STR_ANOVA_LABEL_SS,
@@ -46,7 +46,7 @@ const char* lclAnovaLabels[] =
     STR_ANOVA_LABEL_F,
     STR_ANOVA_LABEL_P_VALUE,
     STR_ANOVA_LABEL_F_CRITICAL,
-    nullptr
+    {}
 };
 
 constexpr OUStringLiteral strWildcardRange = u"%RANGE%";
@@ -116,7 +116,7 @@ void ScAnalysisOfVarianceDialog::Close()
     DoClose( ScAnalysisOfVarianceDialogWrapper::GetChildWindowId() );
 }
 
-const char* ScAnalysisOfVarianceDialog::GetUndoNameId()
+TranslateId ScAnalysisOfVarianceDialog::GetUndoNameId()
 {
     return STR_ANALYSIS_OF_VARIANCE_UNDO_NAME;
 }
@@ -164,7 +164,7 @@ void ScAnalysisOfVarianceDialog::RowColumn(ScRangeList& rRangeList, AddressWalke
     }
     else
     {
-        const char* pLabelId = (aGroupedBy == BY_COLUMN) ? STR_COLUMN_LABEL_TEMPLATE : STR_ROW_LABEL_TEMPLATE;
+        TranslateId pLabelId = (aGroupedBy == BY_COLUMN) ? STR_COLUMN_LABEL_TEMPLATE : STR_ROW_LABEL_TEMPLATE;
         OUString aLabelTemplate(ScResId(pLabelId));
 
         for (size_t i = 0; i < rRangeList.size(); i++)

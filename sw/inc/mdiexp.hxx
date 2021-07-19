@@ -23,6 +23,7 @@
 #include <tools/long.hxx>
 #include "tblenum.hxx"
 #include "swdllapi.h"
+#include <unotools/resmgr.hxx>
 
 class SwRect;
 class Size;
@@ -39,7 +40,7 @@ extern void PageNumNotify(SwViewShell const * pVwSh);
 enum FlyMode { FLY_DRAG_START, FLY_DRAG, FLY_DRAG_END };
 extern void FrameNotify( SwViewShell* pVwSh, FlyMode eMode = FLY_DRAG );
 
-SW_DLLPUBLIC void StartProgress(const char* pMessId, tools::Long nStartVal, tools::Long nEndVal, SwDocShell *pDocSh = nullptr);
+SW_DLLPUBLIC void StartProgress(TranslateId pMessId, tools::Long nStartVal, tools::Long nEndVal, SwDocShell *pDocSh = nullptr);
 SW_DLLPUBLIC void EndProgress      ( SwDocShell const *pDocSh );
 SW_DLLPUBLIC void SetProgressState  ( tools::Long nPosition, SwDocShell const *pDocShell );
 void RescheduleProgress( SwDocShell const *pDocShell );

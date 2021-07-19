@@ -2438,7 +2438,7 @@ IMPL_LINK_NOARG(ScPosWnd, ModifyHdl, weld::ComboBox&, void)
     // determine the action that would be taken for the current input
 
     ScNameInputType eType = lcl_GetInputType(m_xWidget->get_active_text());      // uses current view
-    const char* pStrId = nullptr;
+    TranslateId pStrId;
     switch ( eType )
     {
         case SC_NAME_INPUT_CELL:
@@ -2523,7 +2523,7 @@ void ScPosWnd::DoEnter()
                 ScNameInputType eType = lcl_GetInputType( aText );
                 if ( eType == SC_NAME_INPUT_BAD_NAME || eType == SC_NAME_INPUT_BAD_SELECTION )
                 {
-                    const char* pId = (eType == SC_NAME_INPUT_BAD_NAME) ? STR_NAME_ERROR_NAME : STR_NAME_ERROR_SELECTION;
+                    TranslateId pId = (eType == SC_NAME_INPUT_BAD_NAME) ? STR_NAME_ERROR_NAME : STR_NAME_ERROR_SELECTION;
                     pViewSh->ErrorMessage(pId);
                 }
                 else if ( eType == SC_NAME_INPUT_DEFINE )

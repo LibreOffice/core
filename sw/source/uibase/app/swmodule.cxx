@@ -162,7 +162,7 @@ SwModule::SwModule( SfxObjectFactory* pWebFact,
     }
 }
 
-OUString SwResId(std::string_view aId)
+OUString SwResId(TranslateId aId)
 {
     return Translate::get(aId, SW_MOD()->GetResLocale());
 }

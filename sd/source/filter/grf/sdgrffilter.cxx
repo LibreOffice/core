@@ -110,7 +110,7 @@ void SdGRFFilter::HandleGraphicFilterError( ErrCode nFilterError, ErrCode nStrea
         return;
     }
 
-    const char* pId;
+    TranslateId pId;
 
     if( nFilterError == ERRCODE_GRFILTER_OPENERROR )
         pId = STR_IMPORT_GRFILTER_OPENERROR;
@@ -123,11 +123,11 @@ void SdGRFFilter::HandleGraphicFilterError( ErrCode nFilterError, ErrCode nStrea
     else if( nFilterError == ERRCODE_GRFILTER_TOOBIG )
         pId = STR_IMPORT_GRFILTER_TOOBIG;
     else if( nFilterError == ERRCODE_NONE )
-        pId = nullptr;
+        ;
     else
         pId = STR_IMPORT_GRFILTER_FILTERERROR;
 
-    if (pId && strcmp(pId, STR_IMPORT_GRFILTER_IOERROR) == 0)
+    if (pId && pId == STR_IMPORT_GRFILTER_IOERROR)
         ErrorHandler::HandleError( ERRCODE_IO_GENERAL );
     else
     {

@@ -23,6 +23,7 @@
 #include "address.hxx"
 #include "scdllapi.h"
 #include "queryparam.hxx"
+#include <unotools/resmgr.hxx>
 
 #include <unordered_set>
 #include <vector>
@@ -70,7 +71,7 @@ public:
      * @return nullptr if the source range is sane, otherwise an error message ID is
      *         returned.
      */
-    const char* CheckSourceRange() const;
+    TranslateId CheckSourceRange() const;
 
 private:
     mutable ScRange maSourceRange;

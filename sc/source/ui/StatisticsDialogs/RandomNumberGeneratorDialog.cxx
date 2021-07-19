@@ -250,7 +250,7 @@ void ScRandomNumberGeneratorDialog::SelectGeneratorAndGenerateNumbers()
 }
 
 template<class RNG>
-void ScRandomNumberGeneratorDialog::GenerateNumbers(RNG& randomGenerator, const char* pDistributionStringId, std::optional<sal_Int8> aDecimalPlaces)
+void ScRandomNumberGeneratorDialog::GenerateNumbers(RNG& randomGenerator, TranslateId pDistributionStringId, std::optional<sal_Int8> aDecimalPlaces)
 {
     OUString aUndo = ScResId(STR_UNDO_DISTRIBUTION_TEMPLATE);
     OUString aDistributionName = ScResId(pDistributionStringId);

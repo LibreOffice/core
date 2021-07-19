@@ -105,7 +105,7 @@ enum GLOBAL_CONTEXT_IDX
 
 }
 
-static const char* GLOBAL_CONTEXT_ARY[] =
+const TranslateId GLOBAL_CONTEXT_ARY[] =
 {
     STR_UPDATE,
     STR_EDIT_CONTENT,

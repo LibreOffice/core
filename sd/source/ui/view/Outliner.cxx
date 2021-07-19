@@ -1439,7 +1439,7 @@ bool SdOutliner::ShowWrapAroundDialog()
     // The question text depends on the search direction.
     bool bImpress = mpDrawDocument && mpDrawDocument->GetDocumentType() == DocumentType::Impress;
 
-    const char* pStringId;
+    TranslateId pStringId;
     if (mbDirectionIsForward)
         pStringId = bImpress ? STR_SAR_WRAP_FORWARD : STR_SAR_WRAP_FORWARD_DRAW;
     else

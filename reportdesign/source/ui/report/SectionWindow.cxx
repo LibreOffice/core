@@ -163,7 +163,7 @@ void OSectionWindow::_propertyChanged(const beans::PropertyChangeEvent& _rEvent)
 }
 
 bool OSectionWindow::setReportSectionTitle(
-    const uno::Reference<report::XReportDefinition>& _xReport, const char* pResId,
+    const uno::Reference<report::XReportDefinition>& _xReport, TranslateId pResId,
     const ::std::function<uno::Reference<report::XSection>(OReportHelper*)>& _pGetSection,
     const ::std::function<bool(OReportHelper*)>& _pIsSectionOn)
 {
@@ -179,7 +179,7 @@ bool OSectionWindow::setReportSectionTitle(
 }
 
 bool OSectionWindow::setGroupSectionTitle(
-    const uno::Reference<report::XGroup>& _xGroup, const char* pResId,
+    const uno::Reference<report::XGroup>& _xGroup, TranslateId pResId,
     const ::std::function<uno::Reference<report::XSection>(OGroupHelper*)>& _pGetSection,
     const ::std::function<bool(OGroupHelper*)>& _pIsSectionOn)
 {

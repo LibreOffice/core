@@ -454,7 +454,7 @@ static void impl_execute( SfxRequest const & rReq, SdrCustomShapeGeometryItem& r
 void ExtrusionBar::execute( SdrView* pSdrView, SfxRequest const & rReq, SfxBindings& rBindings )
 {
     sal_uInt16 nSID = rReq.GetSlot();
-    const char* pStrResId = nullptr;
+    TranslateId pStrResId;
 
     const bool bUndo = pSdrView && pSdrView->IsUndoEnabled();
 

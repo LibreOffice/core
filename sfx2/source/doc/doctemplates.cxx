@@ -2740,7 +2740,7 @@ OUString DocTemplLocaleHelper::GetStandardGroupString()
 std::vector<OUString> DocTemplLocaleHelper::GetBuiltInGroupNames()
 {
     std::vector<OUString> aGroups;
-    for(auto aGroupName : TEMPLATE_LONG_NAMES_ARY)
+    for(auto const & aGroupName : TEMPLATE_LONG_NAMES_ARY)
         aGroups.push_back(SfxResId(aGroupName));
     return aGroups;
 }

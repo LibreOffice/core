@@ -83,7 +83,7 @@ ScUndoModifyStyle::~ScUndoModifyStyle()
 
 OUString ScUndoModifyStyle::GetComment() const
 {
-    const char* pId = (eFamily == SfxStyleFamily::Para) ?
+    TranslateId pId = (eFamily == SfxStyleFamily::Para) ?
                                 STR_UNDO_EDITCELLSTYLE :
                                 STR_UNDO_EDITPAGESTYLE;
     return ScResId(pId);

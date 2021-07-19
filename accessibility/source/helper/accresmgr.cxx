@@ -18,8 +18,7 @@
  */
 
 #include <helper/accresmgr.hxx>
-#include <unotools/resmgr.hxx>
 
-OUString AccResId(std::string_view aId) { return Translate::get(aId, Translate::Create("acc")); }
+OUString AccResId(TranslateId aId) { return Translate::get(aId, Translate::Create("acc")); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

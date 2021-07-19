@@ -160,7 +160,7 @@ namespace rptui
         const struct
         {
             const char* programmaticName;
-            const char* uiNameResId;
+            TranslateId uiNameResId;
             OString    helpId;
         } aCategories[] = {
             { "General",    RID_STR_PROPPAGE_DEFAULT,   HID_RPT_PROPDLG_TAB_GENERAL },

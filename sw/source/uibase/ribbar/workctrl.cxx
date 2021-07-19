@@ -209,7 +209,7 @@ std::u16string_view const aNavigationImgIds[ NAVI_ENTRIES ] =
     u"" RID_BMP_RIBBAR_FIELD_BYTYPE
 };
 
-static const char* aNavigationStrIds[ NAVI_ENTRIES ] =
+const TranslateId aNavigationStrIds[ NAVI_ENTRIES ] =
 {
     ST_TBL,
     ST_FRM,
@@ -235,7 +235,7 @@ static const char* aNavigationStrIds[ NAVI_ENTRIES ] =
 };
 
 // these are global strings
-static const char* STR_IMGBTN_ARY[] =
+const TranslateId STR_IMGBTN_ARY[] =
 {
     STR_IMGBTN_TBL_DOWN,
     STR_IMGBTN_FRM_DOWN,
@@ -362,13 +362,13 @@ SwZoomBox_Impl::SwZoomBox_Impl(vcl::Window* pParent, sal_uInt16 nSlot)
     m_xWidget->connect_entry_activate(LINK(this, SwZoomBox_Impl, ActivateHdl));
     m_xWidget->connect_focus_out(LINK(this, SwZoomBox_Impl, FocusOutHdl));
 
-    const char* const aZoomValues[] =
+    const TranslateId aZoomValues[] =
     { RID_SVXSTR_ZOOM_25 , RID_SVXSTR_ZOOM_50 ,
       RID_SVXSTR_ZOOM_75 , RID_SVXSTR_ZOOM_100 ,
       RID_SVXSTR_ZOOM_150 , RID_SVXSTR_ZOOM_200 ,
       RID_SVXSTR_ZOOM_WHOLE_PAGE, RID_SVXSTR_ZOOM_PAGE_WIDTH ,
       RID_SVXSTR_ZOOM_OPTIMAL_VIEW };
-    for(const char* pZoomValue : aZoomValues)
+    for(const TranslateId& pZoomValue : aZoomValues)
     {
         OUString sEntry = SvxResId(pZoomValue);
         m_xWidget->append_text(sEntry);
@@ -761,7 +761,7 @@ void NavElementBox_Base::UpdateBox()
     {
         if ( nMoveType == aNavigationInsertIds[i] )
         {
-            const char* id = aNavigationStrIds[i];
+            TranslateId id = aNavigationStrIds[i];
             OUString sText = SwResId( id );
             m_xWidget->set_active_text(sText);
             break;

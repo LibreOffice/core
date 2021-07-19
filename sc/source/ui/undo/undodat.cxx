@@ -1419,7 +1419,7 @@ ScUndoDataPilot::ScUndoDataPilot( ScDocShell* pNewDocShell,
 
 OUString ScUndoDataPilot::GetComment() const
 {
-    const char* pResId;
+    TranslateId pResId;
     if (xOldUndoDoc && xNewUndoDoc)
         pResId = STR_UNDO_PIVOT_MODIFY;
     else if (xNewUndoDoc)

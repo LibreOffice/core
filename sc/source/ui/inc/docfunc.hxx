@@ -23,6 +23,7 @@
 #include <global.hxx>
 #include <formula/grammar.hxx>
 #include <tabbgcolor.hxx>
+#include <unotools/resmgr.hxx>
 
 #include <memory>
 #include <vector>
@@ -73,7 +74,7 @@ public:
     void            NotifyDrawUndo(std::unique_ptr<SdrUndoAction>);
 
     // for grouping multiple operations into one with a new name
-    void            EnterListAction(const char* pNameResId);
+    void            EnterListAction(TranslateId pNameResId);
     void            EndListAction();
 
     bool            DetectiveAddPred(const ScAddress& rPos);

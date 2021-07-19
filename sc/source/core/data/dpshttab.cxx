@@ -283,7 +283,7 @@ const ScDPCache* ScSheetSourceDesc::CreateCache(const ScDPDimensionSaveData* pDi
     if (!mpDoc)
         return nullptr;
 
-    const char* pErrId = CheckSourceRange();
+    TranslateId pErrId = CheckSourceRange();
     if (pErrId)
     {
         OSL_FAIL( "Error Create Cache" );
@@ -303,7 +303,7 @@ const ScDPCache* ScSheetSourceDesc::CreateCache(const ScDPDimensionSaveData* pDi
     return rCaches.getCache(GetSourceRange(), pDimData);
 }
 
-const char* ScSheetSourceDesc::CheckSourceRange() const
+TranslateId ScSheetSourceDesc::CheckSourceRange() const
 {
     if (!mpDoc)
         return STR_ERR_DATAPILOTSOURCE;
@@ -316,7 +316,7 @@ const char* ScSheetSourceDesc::CheckSourceRange() const
     if (rSrcRange.aStart.Col() > rSrcRange.aEnd.Col() || rSrcRange.aStart.Row() > rSrcRange.aEnd.Row())
         return STR_ERR_DATAPILOTSOURCE;
 
-    return nullptr;
+    return {};
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

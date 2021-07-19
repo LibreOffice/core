@@ -198,51 +198,19 @@ namespace Translate
         return aRet;
     }
 
-    OUString get(std::string_view sContextAndId, const std::locale &loc)
+    OUString get(TranslateId sContextAndId, const std::locale &loc)
     {
-        constexpr int BUFLEN = 128;
-        // this function is performance-sensitive, so we allocate string data on stack
-        std::array<char, BUFLEN> sStackBuffer;
-        std::unique_ptr<char[]> xHeapBuffer;
-        char* pBuffer;
-        if (sContextAndId.size() < BUFLEN - 1)
-            pBuffer = sStackBuffer.data();
-        else
-        {
-            xHeapBuffer = std::make_unique<char[]>(sContextAndId.size()+1);
-            pBuffer = xHeapBuffer.get();
-        }
-
-        const char* pContext;
-        const char* pId;
-        auto idx = sContextAndId.find('\004');
-        memcpy(pBuffer, sContextAndId.data(), sContextAndId.size());
-        if (idx == std::string_view::npos)
-        {
-            pBuffer[sContextAndId.size()] = 0;
-            // point pContext at the null byte so it is an empty string
-            pContext = pBuffer + sContextAndId.size();
-            pId = pBuffer;
-        }
-        else
-        {
-            // stick a null byte in the middle to split it into two null-terminated strings
-            pBuffer[idx] = 0;
-            pBuffer[sContextAndId.size()] = 0;
-            pContext = pBuffer;
-            pId = pBuffer + idx + 1;
-            assert(!strchr(pId, '\004') && "should be using nget, not get");
-        }
+        assert(!strchr(sContextAndId.mpId, '\004') && "should be using nget, not get");
 
         //if it's a key id locale, generate it here
         if (std::use_facet<boost::locale::info>(loc).language() == "qtz")
         {
-            OString sKeyId(genKeyId(OString(sContextAndId).replace('\004', '|')));
-            return OUString::fromUtf8(sKeyId) + u"\u2016" + createFromUtf8(pId, strlen(pId));
+            OString sKeyId(genKeyId(OString::Concat(sContextAndId.mpContext) + "|" + std::string_view(sContextAndId.mpId)));
+            return OUString::fromUtf8(sKeyId) + u"\u2016" + createFromUtf8(sContextAndId.mpId, strlen(sContextAndId.mpId));
         }
 
         //otherwise translate it
-        const std::string ret = boost::locale::pgettext(pContext, pId, loc);
+        const std::string ret = boost::locale::pgettext(sContextAndId.mpContext, sContextAndId.mpId, loc);
         OUString result(ExpandVariables(createFromUtf8(ret.data(), ret.size())));
 
         if (comphelper::LibreOfficeKit::isActive())
@@ -307,5 +275,11 @@ namespace Translate
         return pImplResHookProc;
     }
 }
+
+bool TranslateId::operator==(const TranslateId& other) const
+{
+    return strcmp(mpContext, other.mpContext) == 0 && strcmp(mpId,other.mpId) == 0;
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

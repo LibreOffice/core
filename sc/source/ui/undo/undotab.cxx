@@ -1138,7 +1138,7 @@ bool ScUndoShowHideTab::CanRepeat(SfxRepeatTarget& rTarget) const
 
 OUString ScUndoShowHideTab::GetComment() const
 {
-    const char* pId;
+    TranslateId pId;
     if (undoTabs.size() > 1)
     {
         pId = bShow ? STR_UNDO_SHOWTABS : STR_UNDO_HIDETABS;
@@ -1214,7 +1214,7 @@ bool ScUndoDocProtect::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 
 OUString ScUndoDocProtect::GetComment() const
 {
-    const char* pId = mpProtectSettings->isProtected() ? STR_UNDO_PROTECT_DOC : STR_UNDO_UNPROTECT_DOC;
+    TranslateId pId = mpProtectSettings->isProtected() ? STR_UNDO_PROTECT_DOC : STR_UNDO_UNPROTECT_DOC;
     return ScResId(pId);
 }
 
@@ -1284,7 +1284,7 @@ bool ScUndoTabProtect::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 
 OUString ScUndoTabProtect::GetComment() const
 {
-    const char* pId = mpProtectSettings->isProtected() ? STR_UNDO_PROTECT_TAB : STR_UNDO_UNPROTECT_TAB;
+    TranslateId pId = mpProtectSettings->isProtected() ? STR_UNDO_PROTECT_TAB : STR_UNDO_UNPROTECT_TAB;
     return ScResId(pId);
 }
 

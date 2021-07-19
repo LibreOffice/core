@@ -86,7 +86,7 @@ bool ScTabViewShell::GetFunction( OUString& rFuncStr, FormulaError nErrCode )
             return true;
         }
 
-        const char* pGlobStrId = nullptr;
+        TranslateId pGlobStrId;
         switch (eFunc)
         {
             case SUBTOTAL_FUNC_AVE:  pGlobStrId = STR_FUN_TEXT_AVG; break;

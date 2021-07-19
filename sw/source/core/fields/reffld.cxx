@@ -1038,7 +1038,7 @@ void SwGetRefField::ConvertProgrammaticToUIName()
         return;
 
     sal_uInt16 nPoolId = SwStyleNameMapper::GetPoolIdFromProgName( rPar1, SwGetPoolIdFromName::TxtColl );
-    const char* pResId = nullptr;
+    TranslateId pResId;
     switch( nPoolId )
     {
         case RES_POOLCOLL_LABEL_ABB:

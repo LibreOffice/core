@@ -301,7 +301,7 @@ void SwCommentRuler::Update()
 
 void SwCommentRuler::UpdateCommentHelpText()
 {
-    const char* pTooltipResId;
+    TranslateId pTooltipResId;
     if (mpViewShell->GetPostItMgr()->ShowNotes())
         pTooltipResId = STR_HIDE_COMMENTS;
     else

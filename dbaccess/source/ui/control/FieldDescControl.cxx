@@ -607,7 +607,7 @@ void OFieldDescControl::InitializeControl(weld::Widget* pControl,const OString& 
     }
 }
 
-std::unique_ptr<OPropNumericEditCtrl> OFieldDescControl::CreateNumericControl(const OString& rId, const char* pHelpId, short _nProperty, const OString& _sHelpId)
+std::unique_ptr<OPropNumericEditCtrl> OFieldDescControl::CreateNumericControl(const OString& rId, TranslateId pHelpId, short _nProperty, const OString& _sHelpId)
 {
     auto xControl = std::make_unique<OPropNumericEditCtrl>(
             m_xBuilder->weld_spin_button(rId), pHelpId, _nProperty);

@@ -1297,10 +1297,10 @@ sal_uInt16 SvxBorderTabPage::GetPresetImageId( sal_uInt16 nValueSetIdx ) const
     return ppnImgIds[ nLine ][ nValueSetIdx - 1 ];
 }
 
-const char* SvxBorderTabPage::GetPresetStringId( sal_uInt16 nValueSetIdx ) const
+TranslateId SvxBorderTabPage::GetPresetStringId( sal_uInt16 nValueSetIdx ) const
 {
     // string resource IDs for each image (in order of the IID_PRE_* image IDs)
-    static const char* pnStrIds[] =
+    static const TranslateId pnStrIds[] =
     {
         RID_SVXSTR_TABLE_PRESET_NONE,
         RID_SVXSTR_PARA_PRESET_ALL,
@@ -1357,7 +1357,7 @@ void SvxBorderTabPage::FillShadowVS()
     m_xWndShadows->SetColCount( SVX_BORDER_SHADOW_COUNT );
 
     // string resource IDs for each image
-    static const char* pnStrIds[ SVX_BORDER_SHADOW_COUNT ] =
+    static const TranslateId pnStrIds[ SVX_BORDER_SHADOW_COUNT ] =
         { RID_SVXSTR_SHADOW_STYLE_NONE, RID_SVXSTR_SHADOW_STYLE_BOTTOMRIGHT, RID_SVXSTR_SHADOW_STYLE_TOPRIGHT, RID_SVXSTR_SHADOW_STYLE_BOTTOMLEFT, RID_SVXSTR_SHADOW_STYLE_TOPLEFT };
 
     // insert images and help texts

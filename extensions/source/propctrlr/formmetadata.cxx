@@ -410,7 +410,7 @@ namespace pcr
         OSL_ENSURE( ( ( getPropertyUIFlags( _nId ) & PROP_FLAG_ENUM ) != 0 ) || ( _nId == PROPERTY_ID_TARGET_FRAME ),
             "OPropertyInfoService::getPropertyEnumRepresentations: this is no enum property!" );
 
-        const char** pStringItemsResId = nullptr;
+        const TranslateId* pStringItemsResId = nullptr;
         int nElements = 0;
         switch ( _nId )
         {

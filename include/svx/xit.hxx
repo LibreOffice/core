@@ -23,6 +23,7 @@
 #include <svl/stritem.hxx>
 #include <svx/xtable.hxx>
 #include <svx/svxdllapi.h>
+#include <unotools/resmgr.hxx>
 
 /************************************************************************/
 
@@ -59,7 +60,7 @@ public:
         Argument pPool2 can be null.
         If returned string equals NameOrIndex->GetName(), the name was already unique.
     */
-    static OUString CheckNamedItem( const NameOrIndex* pCheckItem, const sal_uInt16 nWhich, const SfxItemPool* pPool1, SvxCompareValueFunc pCompareValueFunc, const char* pPrefixResId, const XPropertyListRef &pDefaults );
+    static OUString CheckNamedItem( const NameOrIndex* pCheckItem, const sal_uInt16 nWhich, const SfxItemPool* pPool1, SvxCompareValueFunc pCompareValueFunc, TranslateId pPrefixResId, const XPropertyListRef &pDefaults );
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };

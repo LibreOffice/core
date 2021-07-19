@@ -50,7 +50,7 @@ ScMatrixComparisonGenerator::ScMatrixComparisonGenerator(
 ScMatrixComparisonGenerator::~ScMatrixComparisonGenerator()
 {}
 
-const char* ScMatrixComparisonGenerator::GetUndoNameId()
+TranslateId ScMatrixComparisonGenerator::GetUndoNameId()
 {
     return STR_CORRELATION_UNDO_NAME;
 }

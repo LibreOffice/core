@@ -86,7 +86,7 @@
 #include <filter.hxx>
 #include <scabstdlg.hxx>
 
-OUString ScResId(std::string_view aId)
+OUString ScResId(TranslateId aId)
 {
     return Translate::get(aId, SC_MOD()->GetResLocale());
 }

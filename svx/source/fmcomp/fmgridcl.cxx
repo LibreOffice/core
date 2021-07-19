@@ -410,7 +410,7 @@ IMPL_LINK_NOARG( FmGridHeader, OnAsyncExecuteDrop, void*, void )
         // Create Column based on type, default textfield
         std::vector<OString> aPossibleTypes;
         std::vector<OUString> aImgResId;
-        std::vector<const char*> aStrResId;
+        std::vector<TranslateId> aStrResId;
 
         switch (nDataType)
         {
@@ -512,7 +512,7 @@ IMPL_LINK_NOARG( FmGridHeader, OnAsyncExecuteDrop, void*, void )
 
                 int nMenuPos = 0;
                 std::vector<OString>::const_iterator iter;
-                std::vector<const char*>::const_iterator striter;
+                std::vector<TranslateId>::const_iterator striter;
                 std::vector<OUString>::const_iterator imgiter;
                 for (iter = aPossibleTypes.begin(), imgiter = aImgResId.begin(), striter = aStrResId.begin();
                      iter != aPossibleTypes.end(); ++iter, ++striter, ++imgiter)

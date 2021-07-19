@@ -22,12 +22,12 @@
 
 SfxStyleFamilyItem::SfxStyleFamilyItem(
     SfxStyleFamily nFamily_, const OUString& rName, const OUString& rImage,
-    const std::pair<const char*, SfxStyleSearchBits>* pStringArray, const std::locale& rResLocale)
+    const std::pair<TranslateId, SfxStyleSearchBits>* pStringArray, const std::locale& rResLocale)
     : nFamily(nFamily_)
     , aText(rName)
     , aImage(rImage)
 {
-    for (const std::pair<const char*, SfxStyleSearchBits>* pItem = pStringArray; pItem->first;
+    for (const std::pair<TranslateId, SfxStyleSearchBits>* pItem = pStringArray; pItem->first;
          ++pItem)
         aFilterList.emplace_back(Translate::get(pItem->first, rResLocale), pItem->second);
 }

@@ -3016,7 +3016,7 @@ void RunPivotLayoutDialog(ScModule* pScMod,
 void SetupRangeForPivotTableDialog(const ScRange& rRange,
                                    ScAddress& rDestPos,
                                    ScDocument* pDoc,
-                                   const char* pSrcErrorId,
+                                   TranslateId pSrcErrorId,
                                    std::unique_ptr<ScDPObject>& pNewDPObject)
 {
     ScSheetSourceDesc aShtDesc(pDoc);
@@ -3035,7 +3035,7 @@ void SetupRangeForPivotTableDialog(const ScRange& rRange,
                                 rRange.aStart.Tab() );
 }
 
-void ErrorOrRunPivotLayoutDialog(const char* pSrcErrorId,
+void ErrorOrRunPivotLayoutDialog(TranslateId pSrcErrorId,
                                  ScAddress& rDestPos,
                                  ScModule* pScMod,
                                  ScTabViewShell* pTabViewShell,
@@ -3171,7 +3171,7 @@ void ScCellShell::ExecuteDataPilotDialog()
                 }
                 else
                 {
-                    const char* pSrcErrorId = nullptr;
+                    TranslateId pSrcErrorId;
 
                     if (pTypeDlg->IsNamedRange())
                     {

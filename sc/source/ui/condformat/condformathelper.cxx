@@ -103,7 +103,7 @@ OUString getExpression(sal_Int32 nIndex)
 
 OUString getDateString(sal_Int32 nIndex)
 {
-    const char* aCondStrs[] =
+    const TranslateId aCondStrs[] =
     {
         STR_COND_TODAY,
         STR_COND_YESTERDAY,

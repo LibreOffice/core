@@ -34,7 +34,7 @@ void ScZTestDialog::Close()
     DoClose( ScZTestDialogWrapper::GetChildWindowId() );
 }
 
-const char* ScZTestDialog::GetUndoNameId()
+TranslateId ScZTestDialog::GetUndoNameId()
 {
     return STR_ZTEST_UNDO_NAME;
 }

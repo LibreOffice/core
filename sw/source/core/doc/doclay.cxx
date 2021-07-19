@@ -1326,7 +1326,7 @@ namespace
     }
 }
 
-static OUString lcl_GetUniqueFlyName(const SwDoc& rDoc, const char* pDefStrId, sal_uInt16 eType)
+static OUString lcl_GetUniqueFlyName(const SwDoc& rDoc, TranslateId pDefStrId, sal_uInt16 eType)
 {
     assert(eType >= RES_FMT_BEGIN && eType < RES_FMT_END);
     if (rDoc.IsInMailMerge())
@@ -1388,7 +1388,7 @@ OUString SwDoc::GetUniqueShapeName() const
 
 OUString SwDoc::GetUniqueDrawObjectName() const
 {
-    return lcl_GetUniqueFlyName(*this, "DrawObject", RES_DRAWFRMFMT);
+    return lcl_GetUniqueFlyName(*this, TranslateId(nullptr, "DrawObject"), RES_DRAWFRMFMT);
 }
 
 const SwFlyFrameFormat* SwDoc::FindFlyByName( const OUString& rName, SwNodeType nNdTyp ) const
@@ -1422,7 +1422,7 @@ void SwDoc::SetFlyName( SwFlyFrameFormat& rFormat, const OUString& rName )
     OUString sName( rName );
     if( sName.isEmpty() || FindFlyByName( sName ) )
     {
-        const char* pTyp = STR_FRAME_DEFNAME;
+        TranslateId pTyp = STR_FRAME_DEFNAME;
         const SwNodeIndex* pIdx = rFormat.GetContent().GetContentIdx();
         if( pIdx && pIdx->GetNode().GetNodes().IsDocNodes() )
         {

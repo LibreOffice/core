@@ -246,7 +246,7 @@ void SvxPathTabPage::Reset( const SfxItemSet* )
             && !SvtModuleOptions().IsModuleInstalled( SvtModuleOptions::EModule::WRITER ) )
             continue;
 
-        const char* pId = nullptr;
+        TranslateId pId;
 
         switch (static_cast<SvtPathOptions::Paths>(i))
         {

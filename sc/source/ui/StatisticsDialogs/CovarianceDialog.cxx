@@ -21,7 +21,7 @@ ScCovarianceDialog::ScCovarianceDialog(
             "modules/scalc/ui/covariancedialog.ui", "CovarianceDialog")
 {}
 
-const char* ScCovarianceDialog::GetUndoNameId()
+TranslateId ScCovarianceDialog::GetUndoNameId()
 {
     return STR_COVARIANCE_UNDO_NAME;
 }

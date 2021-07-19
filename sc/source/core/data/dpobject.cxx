@@ -3365,7 +3365,7 @@ public:
 
 }
 
-const char* ScDPCollection::ReloadCache(const ScDPObject* pDPObj, o3tl::sorted_vector<ScDPObject*>& rRefs)
+TranslateId ScDPCollection::ReloadCache(const ScDPObject* pDPObj, o3tl::sorted_vector<ScDPObject*>& rRefs)
 {
     if (!pDPObj)
         return STR_ERR_DATAPILOTSOURCE;
@@ -3377,7 +3377,7 @@ const char* ScDPCollection::ReloadCache(const ScDPObject* pDPObj, o3tl::sorted_v
         if (!pDesc)
             return STR_ERR_DATAPILOTSOURCE;
 
-        const char* pErrId = pDesc->CheckSourceRange();
+        TranslateId pErrId = pDesc->CheckSourceRange();
         if (pErrId)
             return pErrId;
 
@@ -3426,7 +3426,7 @@ const char* ScDPCollection::ReloadCache(const ScDPObject* pDPObj, o3tl::sorted_v
             GetAllTables(pDesc->GetCommandType(), pDesc->aDBName, pDesc->aObject, rRefs);
         }
     }
-    return nullptr;
+    return {};
 }
 
 bool ScDPCollection::ReloadGroupsInCache(const ScDPObject* pDPObj, o3tl::sorted_vector<ScDPObject*>& rRefs)

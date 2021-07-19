@@ -25,6 +25,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <osl/file.hxx>
+#include <unotools/resmgr.hxx>
 
 #include <strings.hrc>
 #include "xmlfiltertabdialog.hxx"
@@ -69,7 +70,7 @@ bool XMLFilterTabDialog::onOk()
     mpBasicPage->FillInfo( mpNewInfo.get() );
 
     OString sErrorPage;
-    const char* pErrorId = nullptr;
+    TranslateId pErrorId;
     weld::Widget* pFocusWindow = nullptr;
     OUString aReplace1;
     OUString aReplace2;
@@ -128,7 +129,7 @@ bool XMLFilterTabDialog::onOk()
                     sal_Int32 nFilter;
 
                     Sequence< PropertyValue > aValues;
-                    for( nFilter = 0; (nFilter < nCount) && (pErrorId == nullptr); nFilter++, pFilterName++ )
+                    for( nFilter = 0; (nFilter < nCount) && !pErrorId; nFilter++, pFilterName++ )
                     {
                         Any aAny( xFilterContainer->getByName( *pFilterName ) );
                         if( !(aAny >>= aValues) )
@@ -138,7 +139,7 @@ bool XMLFilterTabDialog::onOk()
                         PropertyValue* pValues = aValues.getArray();
                         sal_Int32 nValue;
 
-                        for( nValue = 0; (nValue < nValueCount) && (pErrorId == nullptr); nValue++, pValues++ )
+                        for( nValue = 0; (nValue < nValueCount) && !pErrorId; nValue++, pValues++ )
                         {
                             if ( pValues->Name == "UIName" )
                             {

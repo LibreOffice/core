@@ -214,7 +214,7 @@ void ODbTypeWizDialog::clearPassword()
 
 std::unique_ptr<BuilderPage> ODbTypeWizDialog::createPage(WizardState _nState)
 {
-    const char* pStringId = STR_PAGETITLE_ADVANCED;
+    TranslateId pStringId = STR_PAGETITLE_ADVANCED;
     std::unique_ptr<BuilderPage> xPage;
 
     OString sIdent(OString::number(_nState));
