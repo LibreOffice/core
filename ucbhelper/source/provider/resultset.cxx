@@ -90,7 +90,7 @@ class PropertySetInfo :
         public lang::XTypeProvider,
         public beans::XPropertySetInfo
 {
-    std::unique_ptr<uno::Sequence< beans::Property >>  m_pProps;
+    uno::Sequence< beans::Property >  m_aProps;
 
 private:
     bool queryProperty(
@@ -1401,14 +1401,14 @@ namespace ucbhelper_impl {
 PropertySetInfo::PropertySetInfo(
     const PropertyInfo* pProps,
     sal_Int32 nProps )
-    : m_pProps( new uno::Sequence< beans::Property >( nProps ) )
+    : m_aProps( nProps )
 {
 
     if ( !nProps )
         return;
 
     const PropertyInfo* pEntry = pProps;
-    beans::Property* pProperties = m_pProps->getArray();
+    beans::Property* pProperties = m_aProps.getArray();
 
     for ( sal_Int32 n = 0; n < nProps; ++n )
     {
@@ -1462,7 +1462,7 @@ XTYPEPROVIDER_IMPL_2( PropertySetInfo,
 // virtual
 uno::Sequence< beans::Property > SAL_CALL PropertySetInfo::getProperties()
 {
-    return *m_pProps;
+    return m_aProps;
 }
 
 
@@ -1490,8 +1490,8 @@ sal_Bool SAL_CALL PropertySetInfo::hasPropertyByName(
 bool PropertySetInfo::queryProperty(
     std::u16string_view aName, beans::Property& rProp ) const
 {
-    sal_Int32 nCount = m_pProps->getLength();
-    const beans::Property* pProps = m_pProps->getConstArray();
+    sal_Int32 nCount = m_aProps.getLength();
+    const beans::Property* pProps = m_aProps.getConstArray();
     for ( sal_Int32 n = 0; n < nCount; ++n )
     {
         const beans::Property& rCurr = pProps[ n ];
