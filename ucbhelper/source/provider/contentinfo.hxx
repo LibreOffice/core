@@ -21,6 +21,7 @@
 #define UCBHELPER_SOURCE_PROVIDER_CONTENTINFO_HXX
 
 #include <memory>
+#include <optional>
 #include <com/sun/star/ucb/XCommandInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
@@ -48,8 +49,8 @@ class PropertySetInfo :
 {
     css::uno::Reference< css::ucb::XCommandEnvironment >
                                 m_xEnv;
-    std::unique_ptr<css::uno::Sequence< css::beans::Property >>
-                                m_pProps;
+    std::optional<css::uno::Sequence< css::beans::Property >>
+                                m_xProps;
     osl::Mutex                  m_aMutex;
     ContentImplHelper*          m_pContent;
 
