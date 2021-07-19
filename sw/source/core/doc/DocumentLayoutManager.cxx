@@ -42,6 +42,7 @@
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <svx/svdobj.hxx>
 #include <osl/diagnose.h>
+#include <unoprnms.hxx>
 
 using namespace ::com::sun::star;
 
@@ -462,37 +463,54 @@ SwFrameFormat *DocumentLayoutManager::CopyLayoutFormat(
     if( bMakeFrames )
         pDest->MakeFrames();
 
-    // If the draw format has a TextBox, then copy its fly format as well.
-    if (SwFrameFormat* pSourceTextBox = SwTextBoxHelper::getOtherTextBoxFormat(&rSource, RES_DRAWFRMFMT))
-    {
-        SwFormatAnchor boxAnchor(rNewAnchor);
-        if (RndStdIds::FLY_AS_CHAR == boxAnchor.GetAnchorId())
-        {
-            // AS_CHAR *must not* be set on textbox fly-frame
-            boxAnchor.SetType(RndStdIds::FLY_AT_CHAR);
-        }
-        // presumably these anchors are supported though not sure
-        assert(RndStdIds::FLY_AT_CHAR == boxAnchor.GetAnchorId() || RndStdIds::FLY_AT_PARA == boxAnchor.GetAnchorId()
-        || boxAnchor.GetAnchorId() == RndStdIds::FLY_AT_PAGE);
-
-        if (!bMakeFrames && rNewAnchor.GetAnchorId() == RndStdIds::FLY_AS_CHAR)
-        {
-            // If the draw format is as-char, then it will be copied with bMakeFrames=false, but
-            // doing the same for the fly format would result in not making fly frames at all.
-            bMakeFrames = true;
-        }
-
-        SwFrameFormat* pDestTextBox = CopyLayoutFormat(*pSourceTextBox,
-                boxAnchor, bSetTextFlyAtt, bMakeFrames);
-        SwAttrSet aSet(pDest->GetAttrSet());
-        SwFormatContent aContent(pDestTextBox->GetContent().GetContentIdx()->GetNode().GetStartNode());
-        aSet.Put(aContent);
-        pDest->SetFormatAttr(aSet);
-
-        // Link FLY and DRAW formats, so it becomes a text box
-        pDest->SetOtherTextBoxFormat(pDestTextBox);
-        pDestTextBox->SetOtherTextBoxFormat(pDest);
-    }
+    //// If the draw format has a TextBox, then copy its fly format as well.
+    //
+    //const bool bIsInline = rNewAnchor.GetAnchorId() == RndStdIds::FLY_AS_CHAR;
+    //uno::Reference<drawing::XShape> xShape;
+    //if (rSource.Which() == RES_DRAWFRMFMT)
+    //    xShape.set(rSource.FindRealSdrObject()->getWeakUnoShape().get(), uno::UNO_QUERY);
+    //
+    //if (xShape && xShape->getShapeType() == "com.sun.star.drawing.GroupShape")
+    //{
+    //    //
+    //}
+    //else if (SwFrameFormat* pSourceTextBox = SwTextBoxHelper::getOtherTextBoxFormat(&rSource, RES_DRAWFRMFMT))
+    //{
+    //    SwFormatAnchor boxAnchor(rNewAnchor);
+    //    if (RndStdIds::FLY_AS_CHAR == boxAnchor.GetAnchorId())
+    //    {
+    //        // AS_CHAR *must not* be set on textbox fly-frame
+    //        boxAnchor.SetType(RndStdIds::FLY_AT_CHAR);
+    //    }
+    //    // presumably these anchors are supported though not sure
+    //    assert(RndStdIds::FLY_AT_CHAR == boxAnchor.GetAnchorId() || RndStdIds::FLY_AT_PARA == boxAnchor.GetAnchorId()
+    //    || boxAnchor.GetAnchorId() == RndStdIds::FLY_AT_PAGE);
+    //
+    //    if (!bMakeFrames && rNewAnchor.GetAnchorId() == RndStdIds::FLY_AS_CHAR)
+    //    {
+    //        // If the draw format is as-char, then it will be copied with bMakeFrames=false, but
+    //        // doing the same for the fly format would result in not making fly frames at all.
+    //        bMakeFrames = true;
+    //    }
+    //
+    //    //SwFrameFormat* pDestTextBox = CopyLayoutFormat(*pSourceTextBox,
+    //    //        boxAnchor, bSetTextFlyAtt, bMakeFrames);
+    //    ////SwAttrSet aSet(pDest->GetAttrSet());
+    //    //SwFormatContent aContent(pDestTextBox->GetContent().GetContentIdx()->GetNode().GetStartNode());
+    //    //aSet.Put(aContent);
+    //    //pDest->SetFormatAttr(aSet);
+    //
+    //    // Link FLY and DRAW formats, so it becomes a text box
+    //    //pDest->SetOtherTextBoxFormat(pDestTextBox);
+    //    //pDestTextBox->SetOtherTextBoxFormat(pDest);
+    //
+    //    //uno::Reference<text::XTextFrame> xNewFrame(pDestTextBox->GetXObject(), uno::UNO_QUERY);
+    //    //if (xNewFrame && xShape)
+    //    //{
+    //    //    uno::Reference<beans::XPropertySet>(xShape, uno::UNO_QUERY)
+    //    //        ->setPropertyValue(UNO_NAME_TEXT_BOX_CONTENT, uno::makeAny(xNewFrame));
+    //    //}
+    //}
 
     if (pDest->GetName().isEmpty())
     {
@@ -500,6 +518,20 @@ SwFrameFormat *DocumentLayoutManager::CopyLayoutFormat(
         SdrObject *pObj = pDest->FindSdrObject();
         if (pObj)
             pDest->SetName(pObj->GetName());
+    }
+
+    if (bDraw)
+    {
+        auto pMasterObj = rSource.FindRealSdrObject();
+        auto pTargetObj = pDest->FindRealSdrObject();
+
+        try
+        {
+            SwTextBoxHelper::copyTextBox(pMasterObj, pTargetObj);
+        }
+        catch (...)
+        {
+        }
     }
 
     return pDest;
