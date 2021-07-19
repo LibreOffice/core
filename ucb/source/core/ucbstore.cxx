@@ -105,9 +105,6 @@ static OUString makeHierarchalNameSegment( const OUString & rIn  )
 // describe path of cfg entry
 #define CFGPROPERTY_NODEPATH        "nodepath"
 
-// PropertySetMap_Impl.
-typedef std::unordered_map< OUString, PersistentPropertySet*> PropertySetMap_Impl;
-
 namespace {
 
 class PropertySetInfo_Impl : public cppu::WeakImplHelper < XPropertySetInfo >
@@ -202,36 +199,16 @@ void SAL_CALL UcbStore::initialize( const Sequence< Any >& aArguments )
 
 
 
-// PropertySetRegistry_Impl.
-
-
-struct PropertySetRegistry_Impl
-{
-    const Sequence< Any >             m_aInitArgs;
-    PropertySetMap_Impl               m_aPropSets;
-    Reference< XMultiServiceFactory > m_xConfigProvider;
-    Reference< XInterface >           m_xRootReadAccess;
-    Reference< XInterface >           m_xRootWriteAccess;
-    osl::Mutex                        m_aMutex;
-    bool                              m_bTriedToGetRootReadAccess;
-    bool                              m_bTriedToGetRootWriteAccess;
-
-    explicit PropertySetRegistry_Impl(const Sequence<Any> &rInitArgs)
-        : m_aInitArgs(rInitArgs)
-        , m_bTriedToGetRootReadAccess(false)
-        , m_bTriedToGetRootWriteAccess(false)
-    {
-    }
-};
-
 // PropertySetRegistry Implementation.
 
 
 PropertySetRegistry::PropertySetRegistry(
                         const Reference< XComponentContext >& xContext,
                         const Sequence< Any > &rInitArgs )
-: m_xContext( xContext ),
-  m_pImpl( new PropertySetRegistry_Impl( rInitArgs ) )
+: m_xContext( xContext )
+, m_aInitArgs(rInitArgs)
+, m_bTriedToGetRootReadAccess(false)
+, m_bTriedToGetRootWriteAccess(false)
 {
 }
 
@@ -270,9 +247,9 @@ PropertySetRegistry::openPropertySet( const OUString& key, sal_Bool create )
 {
     if ( !key.isEmpty() )
     {
-        osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
+        osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
-        PropertySetMap_Impl& rSets = m_pImpl->m_aPropSets;
+        PropertySetMap_Impl& rSets = m_aPropSets;
 
         PropertySetMap_Impl::const_iterator it = rSets.find( key );
         if ( it != rSets.end() )
@@ -395,7 +372,7 @@ void SAL_CALL PropertySetRegistry::removePropertySet( const OUString& key )
     if ( key.isEmpty() )
         return;
 
-    osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
+    osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
     Reference< XNameAccess > xRootNameAccess(
                                     getRootConfigReadAccess(), UNO_QUERY );
@@ -458,7 +435,7 @@ css::uno::Type SAL_CALL PropertySetRegistry::getElementType()
 // virtual
 sal_Bool SAL_CALL PropertySetRegistry::hasElements()
 {
-    osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
+    osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
     Reference< XElementAccess > xElemAccess(
                                     getRootConfigReadAccess(), UNO_QUERY );
@@ -475,7 +452,7 @@ sal_Bool SAL_CALL PropertySetRegistry::hasElements()
 // virtual
 Any SAL_CALL PropertySetRegistry::getByName( const OUString& aName )
 {
-    osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
+    osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
     Reference< XNameAccess > xNameAccess(
                                     getRootConfigReadAccess(), UNO_QUERY );
@@ -503,7 +480,7 @@ Any SAL_CALL PropertySetRegistry::getByName( const OUString& aName )
 // virtual
 Sequence< OUString > SAL_CALL PropertySetRegistry::getElementNames()
 {
-    osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
+    osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
     Reference< XNameAccess > xNameAccess(
                                     getRootConfigReadAccess(), UNO_QUERY );
@@ -518,7 +495,7 @@ Sequence< OUString > SAL_CALL PropertySetRegistry::getElementNames()
 // virtual
 sal_Bool SAL_CALL PropertySetRegistry::hasByName( const OUString& aName )
 {
-    osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
+    osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
     Reference< XNameAccess > xNameAccess(
                                     getRootConfigReadAccess(), UNO_QUERY );
@@ -537,8 +514,8 @@ void PropertySetRegistry::add( PersistentPropertySet* pSet )
 
     if ( !key.isEmpty() )
     {
-        osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
-        m_pImpl->m_aPropSets[ key ] = pSet;
+        osl::Guard< osl::Mutex > aGuard( m_aMutex );
+        m_aPropSets[ key ] = pSet;
     }
 }
 
@@ -550,9 +527,9 @@ void PropertySetRegistry::remove( PersistentPropertySet* pSet )
     if ( key.isEmpty() )
         return;
 
-    osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
+    osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
-    PropertySetMap_Impl& rSets = m_pImpl->m_aPropSets;
+    PropertySetMap_Impl& rSets = m_aPropSets;
 
     PropertySetMap_Impl::iterator it = rSets.find( key );
     if ( it != rSets.end() )
@@ -866,19 +843,19 @@ void PropertySetRegistry::renamePropertySet( const OUString& rOldKey,
 
 Reference< XMultiServiceFactory > PropertySetRegistry::getConfigProvider()
 {
-    if ( !m_pImpl->m_xConfigProvider.is() )
+    if ( !m_xConfigProvider.is() )
     {
-        osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
-        if ( !m_pImpl->m_xConfigProvider.is() )
+        osl::Guard< osl::Mutex > aGuard( m_aMutex );
+        if ( !m_xConfigProvider.is() )
         {
-            const Sequence< Any >& rInitArgs = m_pImpl->m_aInitArgs;
+            const Sequence< Any >& rInitArgs = m_aInitArgs;
 
             if ( rInitArgs.hasElements() )
             {
                 // Extract config provider from service init args.
-                rInitArgs[ 0 ] >>= m_pImpl->m_xConfigProvider;
+                rInitArgs[ 0 ] >>= m_xConfigProvider;
 
-                OSL_ENSURE( m_pImpl->m_xConfigProvider.is(),
+                OSL_ENSURE( m_xConfigProvider.is(),
                             "PropertySetRegistry::getConfigProvider - "
                             "No config provider!" );
             }
@@ -886,7 +863,7 @@ Reference< XMultiServiceFactory > PropertySetRegistry::getConfigProvider()
             {
                 try
                 {
-                    m_pImpl->m_xConfigProvider = theDefaultProvider::get( m_xContext );
+                    m_xConfigProvider = theDefaultProvider::get( m_xContext );
                 }
                 catch (const Exception&)
                 {
@@ -896,7 +873,7 @@ Reference< XMultiServiceFactory > PropertySetRegistry::getConfigProvider()
         }
     }
 
-    return m_pImpl->m_xConfigProvider;
+    return m_xConfigProvider;
 }
 
 
@@ -904,11 +881,11 @@ Reference< XInterface > PropertySetRegistry::getRootConfigReadAccess()
 {
     try
     {
-        osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
+        osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
-        if ( !m_pImpl->m_xRootReadAccess.is() )
+        if ( !m_xRootReadAccess.is() )
         {
-            if ( m_pImpl->m_bTriedToGetRootReadAccess )
+            if ( m_bTriedToGetRootReadAccess )
             {
                 OSL_FAIL( "PropertySetRegistry::getRootConfigReadAccess - "
                             "Unable to read any config data! -> #82494#" );
@@ -917,26 +894,26 @@ Reference< XInterface > PropertySetRegistry::getRootConfigReadAccess()
 
             getConfigProvider();
 
-            if ( m_pImpl->m_xConfigProvider.is() )
+            if ( m_xConfigProvider.is() )
             {
                 Sequence<Any> aArguments(comphelper::InitAnyPropertySequence(
                 {
                     {CFGPROPERTY_NODEPATH,  Any(OUString( STORE_CONTENTPROPERTIES_KEY ))}
                 }));
 
-                m_pImpl->m_bTriedToGetRootReadAccess = true;
+                m_bTriedToGetRootReadAccess = true;
 
-                m_pImpl->m_xRootReadAccess =
-                    m_pImpl->m_xConfigProvider->createInstanceWithArguments(
+                m_xRootReadAccess =
+                    m_xConfigProvider->createInstanceWithArguments(
                         "com.sun.star.configuration.ConfigurationAccess",
                         aArguments );
 
-                if ( m_pImpl->m_xRootReadAccess.is() )
-                    return m_pImpl->m_xRootReadAccess;
+                if ( m_xRootReadAccess.is() )
+                    return m_xRootReadAccess;
             }
         }
         else
-            return m_pImpl->m_xRootReadAccess;
+            return m_xRootReadAccess;
     }
     catch (const RuntimeException&)
     {
@@ -960,11 +937,11 @@ Reference< XInterface > PropertySetRegistry::getConfigWriteAccess(
 {
     try
     {
-        osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
+        osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
-        if ( !m_pImpl->m_xRootWriteAccess.is() )
+        if ( !m_xRootWriteAccess.is() )
         {
-            if ( m_pImpl->m_bTriedToGetRootWriteAccess )
+            if ( m_bTriedToGetRootWriteAccess )
             {
                 OSL_FAIL( "PropertySetRegistry::getConfigWriteAccess - "
                             "Unable to write any config data! -> #82494#" );
@@ -973,32 +950,32 @@ Reference< XInterface > PropertySetRegistry::getConfigWriteAccess(
 
             getConfigProvider();
 
-            if ( m_pImpl->m_xConfigProvider.is() )
+            if ( m_xConfigProvider.is() )
             {
                 Sequence<Any> aArguments(comphelper::InitAnyPropertySequence(
                 {
                     {CFGPROPERTY_NODEPATH,  Any(OUString( STORE_CONTENTPROPERTIES_KEY ))}
                 }));
 
-                m_pImpl->m_bTriedToGetRootWriteAccess = true;
+                m_bTriedToGetRootWriteAccess = true;
 
-                m_pImpl->m_xRootWriteAccess =
-                    m_pImpl->m_xConfigProvider->createInstanceWithArguments(
+                m_xRootWriteAccess =
+                    m_xConfigProvider->createInstanceWithArguments(
                         "com.sun.star.configuration.ConfigurationUpdateAccess",
                         aArguments );
 
-                OSL_ENSURE( m_pImpl->m_xRootWriteAccess.is(),
+                OSL_ENSURE( m_xRootWriteAccess.is(),
                             "PropertySetRegistry::getConfigWriteAccess - "
                             "No config update access!" );
             }
         }
 
-        if ( m_pImpl->m_xRootWriteAccess.is() )
+        if ( m_xRootWriteAccess.is() )
         {
             if ( !rPath.isEmpty() )
             {
                 Reference< XHierarchicalNameAccess > xNA(
-                                m_pImpl->m_xRootWriteAccess, UNO_QUERY );
+                                m_xRootWriteAccess, UNO_QUERY );
                 if ( xNA.is() )
                 {
                     Reference< XInterface > xInterface;
@@ -1009,7 +986,7 @@ Reference< XInterface > PropertySetRegistry::getConfigWriteAccess(
                 }
             }
             else
-                return m_pImpl->m_xRootWriteAccess;
+                return m_xRootWriteAccess;
         }
     }
     catch (const RuntimeException&)

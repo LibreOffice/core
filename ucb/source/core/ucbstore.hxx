@@ -35,6 +35,7 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
+#include <unordered_map>
 
 
 using UcbStore_Base = cppu::WeakComponentImplHelper <
@@ -67,8 +68,10 @@ public:
 };
 
 
-struct PropertySetRegistry_Impl;
 class PersistentPropertySet;
+
+// PropertySetMap_Impl.
+typedef std::unordered_map< OUString, PersistentPropertySet*> PropertySetMap_Impl;
 
 class PropertySetRegistry : public cppu::WeakImplHelper <
     css::lang::XServiceInfo,
@@ -78,7 +81,14 @@ class PropertySetRegistry : public cppu::WeakImplHelper <
     friend class PersistentPropertySet;
 
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
-    std::unique_ptr<PropertySetRegistry_Impl> m_pImpl;
+    const css::uno::Sequence< css::uno::Any >             m_aInitArgs;
+    PropertySetMap_Impl               m_aPropSets;
+    css::uno::Reference< css::lang::XMultiServiceFactory > m_xConfigProvider;
+    css::uno::Reference< css::uno::XInterface >           m_xRootReadAccess;
+    css::uno::Reference< css::uno::XInterface >           m_xRootWriteAccess;
+    osl::Mutex                        m_aMutex;
+    bool                              m_bTriedToGetRootReadAccess;
+    bool                              m_bTriedToGetRootWriteAccess;
 
 private:
     css::uno::Reference< css::lang::XMultiServiceFactory >
