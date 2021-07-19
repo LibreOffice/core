@@ -62,10 +62,10 @@ PropertySetInfo::~PropertySetInfo()
 // virtual
 uno::Sequence< beans::Property > SAL_CALL PropertySetInfo::getProperties()
 {
-    if ( !m_pProps )
+    if ( !m_xProps )
     {
         osl::MutexGuard aGuard( m_aMutex );
-        if ( !m_pProps )
+        if ( !m_xProps )
         {
 
             // Get info for core ( native) properties.
@@ -73,9 +73,7 @@ uno::Sequence< beans::Property > SAL_CALL PropertySetInfo::getProperties()
 
             try
             {
-                uno::Sequence< beans::Property > aProps
-                    = m_pContent->getProperties( m_xEnv );
-                m_pProps.reset(new uno::Sequence< beans::Property >( aProps ));
+                m_xProps = m_pContent->getProperties( m_xEnv );
             }
             catch ( uno::RuntimeException const & )
             {
@@ -83,7 +81,7 @@ uno::Sequence< beans::Property > SAL_CALL PropertySetInfo::getProperties()
             }
             catch ( uno::Exception const & )
             {
-                m_pProps.reset(new uno::Sequence< beans::Property >( 0 ));
+                m_xProps.emplace();
             }
 
 
@@ -105,17 +103,17 @@ uno::Sequence< beans::Property > SAL_CALL PropertySetInfo::getProperties()
                     sal_Int32 nAddProps = rAddProps.getLength();
                     if ( nAddProps > 0 )
                     {
-                        sal_Int32 nPos = m_pProps->getLength();
-                        m_pProps->realloc( nPos + nAddProps );
+                        sal_Int32 nPos = m_xProps->getLength();
+                        m_xProps->realloc( nPos + nAddProps );
 
                         std::copy(rAddProps.begin(), rAddProps.end(),
-                                  std::next(m_pProps->begin(), nPos));
+                                  std::next(m_xProps->begin(), nPos));
                     }
                 }
             }
         }
     }
-    return *m_pProps;
+    return *m_xProps;
 }
 
 
@@ -146,7 +144,7 @@ sal_Bool SAL_CALL PropertySetInfo::hasPropertyByName(
 void PropertySetInfo::reset()
 {
     osl::MutexGuard aGuard( m_aMutex );
-    m_pProps.reset();
+    m_xProps.reset();
 }
 
 
@@ -157,8 +155,8 @@ bool PropertySetInfo::queryProperty(
 
     getProperties();
 
-    const beans::Property* pProps = m_pProps->getConstArray();
-    sal_Int32 nCount = m_pProps->getLength();
+    const beans::Property* pProps = m_xProps->getConstArray();
+    sal_Int32 nCount = m_xProps->getLength();
     for ( sal_Int32 n = 0; n < nCount; ++n )
     {
         const beans::Property& rCurrProp = pProps[ n ];
