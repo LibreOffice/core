@@ -195,7 +195,8 @@
 #define OWN_ATTR_QRCODE                         (OWN_ATTR_VALUE_START+104)
 #define OWN_ATTR_TEXTFITTOSIZESCALE             (OWN_ATTR_VALUE_START+105)
 #define OWN_ATTR_TEXTCOLUMNS                    (OWN_ATTR_VALUE_START+106)
-// ATTENTION: current maximum is OWN_ATTR_VALUE_START+106 svx; wnen adding values, update
+#define OWN_ATTR_HYPERLINK                      (OWN_ATTR_VALUE_START+107)
+// ATTENTION: current maximum is OWN_ATTR_VALUE_START+107 svx; wnen adding values, update
 // OWN_ATTR_VALUE_END in include/svl/solar.hrc accordingly
 
 // #FontWork#
@@ -358,7 +359,8 @@
     { u"TextFitToSizeScale", OWN_ATTR_TEXTFITTOSIZESCALE, ::cppu::UnoType<sal_Int16>::get(), 0, 0}, \
     /* #i68101# */ \
     { u"" UNO_NAME_MISC_OBJ_TITLE,        OWN_ATTR_MISC_OBJ_TITLE         , ::cppu::UnoType<OUString>::get(),    0,  0}, \
-    { u"" UNO_NAME_MISC_OBJ_DESCRIPTION,  OWN_ATTR_MISC_OBJ_DESCRIPTION   , ::cppu::UnoType<OUString>::get(),    0,  0},
+    { u"" UNO_NAME_MISC_OBJ_DESCRIPTION,  OWN_ATTR_MISC_OBJ_DESCRIPTION   , ::cppu::UnoType<OUString>::get(),    0,  0}, \
+    { u"" UNO_NAME_HYPERLINK, OWN_ATTR_HYPERLINK, ::cppu::UnoType<OUString>::get(), 0,  0},
 
 #define LINKTARGET_PROPERTIES \
     { u"" UNO_NAME_LINKDISPLAYNAME,   OWN_ATTR_LDNAME             , ::cppu::UnoType<OUString>::get(),    css::beans::PropertyAttribute::READONLY, 0}, \
