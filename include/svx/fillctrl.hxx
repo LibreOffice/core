@@ -54,10 +54,11 @@ private:
     weld::Toolbar* mpToolBoxColor;
     weld::ComboBox* mpLbFillAttr;
 
-    css::drawing::FillStyle    meLastXFS;
+    sal_Int32           mnLastXFS;
     sal_Int32           mnLastPosGradient;
     sal_Int32           mnLastPosHatch;
     sal_Int32           mnLastPosBitmap;
+    sal_Int32           mnLastPosPattern;
 
     DECL_LINK(SelectFillTypeHdl, weld::ComboBox&, void);
     DECL_LINK(SelectFillAttrHdl, weld::ComboBox&, void);
