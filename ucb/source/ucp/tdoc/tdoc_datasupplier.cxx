@@ -24,6 +24,7 @@
 
  *************************************************************************/
 
+#include <optional>
 #include <vector>
 
 #include <com/sun/star/ucb/IllegalIdentifierException.hpp>
@@ -66,7 +67,7 @@ struct DataSupplier_Impl
     std::vector< ResultListEntry >               m_aResults;
     rtl::Reference< Content >                    m_xContent;
     uno::Reference< uno::XComponentContext >     m_xContext;
-    std::unique_ptr<uno::Sequence< OUString > >  m_pNamesOfChildren;
+    std::optional<uno::Sequence< OUString > >    m_xNamesOfChildren;
     bool                                         m_bCountFinal;
     bool                                         m_bThrowException;
 
@@ -207,11 +208,11 @@ bool ResultSetDataSupplier::getResult( sal_uInt32 nIndex )
     {
         for ( sal_uInt32 n = nOldCount;
               n < sal::static_int_cast<sal_uInt32>(
-                      m_pImpl->m_pNamesOfChildren->getLength());
+                      m_pImpl->m_xNamesOfChildren->getLength());
               ++n )
         {
             const OUString & rName
-                = m_pImpl->m_pNamesOfChildren->getConstArray()[ n ];
+                = m_pImpl->m_xNamesOfChildren->getConstArray()[ n ];
 
             if ( rName.isEmpty() )
             {
@@ -266,11 +267,11 @@ sal_uInt32 ResultSetDataSupplier::totalCount()
     {
         for ( sal_uInt32 n = nOldCount;
               n < sal::static_int_cast<sal_uInt32>(
-                      m_pImpl->m_pNamesOfChildren->getLength());
+                      m_pImpl->m_xNamesOfChildren->getLength());
               ++n )
         {
             const OUString & rName
-                = m_pImpl->m_pNamesOfChildren->getConstArray()[ n ];
+                = m_pImpl->m_xNamesOfChildren->getConstArray()[ n ];
 
             if ( rName.isEmpty() )
             {
@@ -369,14 +370,13 @@ bool ResultSetDataSupplier::queryNamesOfChildren()
 {
     osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
 
-    if ( m_pImpl->m_pNamesOfChildren == nullptr )
+    if ( !m_pImpl->m_xNamesOfChildren )
     {
-        std::unique_ptr<uno::Sequence< OUString >> pNamesOfChildren(
-            new uno::Sequence< OUString >() );
+        uno::Sequence< OUString > aNamesOfChildren;
 
         if ( !m_pImpl->m_xContent->getContentProvider()->queryNamesOfChildren(
                 m_pImpl->m_xContent->getIdentifier()->getContentIdentifier(),
-                *pNamesOfChildren ) )
+                aNamesOfChildren ) )
         {
             OSL_FAIL( "Got no list of children!" );
             m_pImpl->m_bThrowException = true;
@@ -384,7 +384,7 @@ bool ResultSetDataSupplier::queryNamesOfChildren()
         }
         else
         {
-            m_pImpl->m_pNamesOfChildren = std::move( pNamesOfChildren );
+            m_pImpl->m_xNamesOfChildren = std::move( aNamesOfChildren );
         }
     }
     return true;
