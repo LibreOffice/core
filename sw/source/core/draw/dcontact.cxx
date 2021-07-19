@@ -1086,14 +1086,14 @@ class NestedUserCallHdl
 /// Notify the format's textbox that it should reconsider its position / size.
 static void lcl_textBoxSizeNotify(SwFrameFormat* pFormat)
 {
-    if (SwTextBoxHelper::isTextBox(pFormat, RES_DRAWFRMFMT))
-    {
-        // Just notify the textbox that the size has changed, the actual object size is not interesting.
-        SfxItemSet aResizeSet(pFormat->GetDoc()->GetAttrPool(), svl::Items<RES_FRM_SIZE, RES_FRM_SIZE>);
-        SwFormatFrameSize aSize;
-        aResizeSet.Put(aSize);
-        SwTextBoxHelper::syncFlyFrameAttr(*pFormat, aResizeSet);
-    }
+
+    if (pFormat)
+        if (auto pShapeObj = pFormat->FindRealSdrObject())
+            if (auto xShape = uno::Reference<drawing::XShape>(pShapeObj->getUnoShape(), uno::UNO_QUERY))
+
+                    SwTextBoxHelper::handleTextBox(xShape);
+
+
 }
 
 // !!!ATTENTION!!! The object may commit suicide!!!
@@ -1334,6 +1334,8 @@ void SwDrawContact::Changed_( const SdrObject& rObj,
                     // notify about the size change, as an adjustment change
                     // may affect the size of the underlying textbox.
                     lcl_textBoxSizeNotify(GetFormat());
+
+                lcl_textBoxSizeNotify(GetFormat());
             }
 
             // tdf#135198: keep text box together with its shape
@@ -1361,6 +1363,7 @@ void SwDrawContact::Changed_( const SdrObject& rObj,
 
                 pDoc->getIDocumentState().SetEnableSetModified(bEnableSetModified);
             }
+
         }
         break;
         case SdrUserCallType::ChangeAttr:
