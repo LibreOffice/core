@@ -262,6 +262,8 @@ bool SwUndo::CanRepeat(SfxRepeatTarget & rContext) const
     assert(dynamic_cast< ::sw::RepeatContext * >(& rContext));
     (void)rContext;
     // a MultiSelection action that doesn't do anything must still return true
+    if (SwUndoId::NUMRULE_CREATE == GetId())
+        return true; // SwUndo::Repeat does nothing, but don't block the rest of repeat numbering
     return (SwUndoId::REPEAT_START <= GetId()) && (GetId() < SwUndoId::REPEAT_END);
 }
 
