@@ -49,6 +49,30 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 
+namespace {
+
+enum eFillStyle
+{
+    NONE,
+    SOLID,
+    GRADIENT,
+    HATCH,
+    BITMAP,
+    PATTERN
+};
+
+drawing::FillStyle toCssFillStyle( eFillStyle eXFS )
+{
+    if (eXFS == PATTERN)
+    {
+        return drawing::FillStyle_BITMAP;
+    }
+
+    return static_cast<drawing::FillStyle>(eXFS);
+}
+
+}
+
 SFX_IMPL_TOOLBOX_CONTROL( SvxFillToolBoxControl, XFillStyleItem );
 
 SvxFillToolBoxControl::SvxFillToolBoxControl(
@@ -65,10 +89,11 @@ SvxFillToolBoxControl::SvxFillToolBoxControl(
     , mpLbFillType(nullptr)
     , mpToolBoxColor(nullptr)
     , mpLbFillAttr(nullptr)
-    , meLastXFS(static_cast<drawing::FillStyle>(-1))
+    , mnLastXFS(-1)
     , mnLastPosGradient(0)
     , mnLastPosHatch(0)
     , mnLastPosBitmap(0)
+    , mnLastPosPattern(0)
 {
     addStatusListener( ".uno:FillColor");
     addStatusListener( ".uno:FillGradient");
@@ -103,7 +128,7 @@ void SvxFillToolBoxControl::StateChanged(
                 mpLbFillAttr->set_sensitive(false);
                 mpLbFillAttr->set_active(-1);
                 mpToolBoxColor->hide();
-                meLastXFS = static_cast<drawing::FillStyle>(-1);
+                mnLastXFS = -1;
                 mpStyleItem.reset();
             }
 
@@ -116,8 +141,15 @@ void SvxFillToolBoxControl::StateChanged(
                     mpStyleItem.reset(pItem->Clone());
                     mpLbFillType->set_sensitive(true);
                     drawing::FillStyle eXFS = mpStyleItem->GetValue();
-                    meLastXFS = eXFS;
-                    mpLbFillType->set_active(sal::static_int_cast< sal_Int32 >(eXFS));
+                    mnLastXFS = sal::static_int_cast< sal_Int32 >(eXFS);
+
+                    if (eXFS == drawing::FillStyle_BITMAP &&
+                        mpBitmapItem && mpBitmapItem->isPattern() )
+                    {
+                        mnLastXFS = sal::static_int_cast<sal_Int32>(PATTERN);
+                    }
+
+                    mpLbFillType->set_active(mnLastXFS);
 
                     if(drawing::FillStyle_NONE == eXFS)
                     {
@@ -135,7 +167,7 @@ void SvxFillToolBoxControl::StateChanged(
             mpLbFillAttr->set_sensitive(false);
             mpLbFillAttr->set_active(-1);
             mpToolBoxColor->hide();
-            meLastXFS = static_cast<drawing::FillStyle>(-1);
+            mnLastXFS = -1;
             mpStyleItem.reset();
             mxFillControl->Resize();
             break;
@@ -480,14 +512,15 @@ void SvxFillToolBoxControl::Update()
             mpToolBoxColor->hide();
             mxFillControl->Resize();
 
-            if(pSh && pSh->GetItem(SID_BITMAP_LIST))
+            if(pSh)
             {
                 mpLbFillAttr->set_sensitive(true);
                 mpLbFillAttr->clear();
-                SvxFillAttrBox::Fill(*mpLbFillAttr, pSh->GetItem(SID_BITMAP_LIST)->GetBitmapList());
 
-                if(mpBitmapItem)
+                if(mpBitmapItem && !mpBitmapItem->isPattern() && pSh->GetItem(SID_BITMAP_LIST))
                 {
+                    SvxFillAttrBox::Fill(*mpLbFillAttr, pSh->GetItem(SID_BITMAP_LIST)->GetBitmapList());
+
                     const OUString aString(mpBitmapItem->GetName());
 
                     mpLbFillAttr->set_active_text(aString);
@@ -519,6 +552,13 @@ void SvxFillToolBoxControl::Update()
                         mpLbFillAttr->set_active(mpLbFillAttr->get_count() - 1);
                     }
 
+                }
+                else if (mpBitmapItem && mpBitmapItem->isPattern() && pSh->GetItem(SID_PATTERN_LIST))
+                {
+                    SvxFillAttrBox::Fill(*mpLbFillAttr, pSh->GetItem(SID_PATTERN_LIST)->GetPatternList());
+                    const OUString aString(mpBitmapItem->GetName());
+
+                    mpLbFillAttr->set_active_text(aString);
                 }
                 else
                 {
@@ -665,14 +705,15 @@ void FillControl::dispose()
 
 IMPL_LINK_NOARG(SvxFillToolBoxControl, SelectFillTypeHdl, weld::ComboBox&, void)
 {
-    const drawing::FillStyle eXFS = static_cast<drawing::FillStyle>(mpLbFillType->get_active());
+    sal_Int32 nXFS = mpLbFillType->get_active();
 
-    if(meLastXFS == eXFS)
+    if(mnLastXFS == nXFS)
         return;
 
+    eFillStyle eXFS = static_cast<eFillStyle>(nXFS);
     mpLbFillAttr->clear();
     SfxObjectShell* pSh = SfxObjectShell::Current();
-    const XFillStyleItem aXFillStyleItem(eXFS);
+    const XFillStyleItem aXFillStyleItem(toCssFillStyle(eXFS));
 
     // #i122676# Do no longer trigger two Execute calls, one for SID_ATTR_FILL_STYLE
     // and one for setting the fill attribute itself, but add two SfxPoolItems to the
@@ -681,7 +722,7 @@ IMPL_LINK_NOARG(SvxFillToolBoxControl, SelectFillTypeHdl, weld::ComboBox&, void)
     switch( eXFS )
     {
         default:
-        case drawing::FillStyle_NONE:
+        case NONE:
         {
             mpLbFillAttr->show();
             mpToolBoxColor->hide();
@@ -695,7 +736,7 @@ IMPL_LINK_NOARG(SvxFillToolBoxControl, SelectFillTypeHdl, weld::ComboBox&, void)
             }
             break;
         }
-        case drawing::FillStyle_SOLID:
+        case SOLID:
         {
             mpLbFillAttr->hide();
             mpToolBoxColor->show();
@@ -711,7 +752,7 @@ IMPL_LINK_NOARG(SvxFillToolBoxControl, SelectFillTypeHdl, weld::ComboBox&, void)
             }
             break;
         }
-        case drawing::FillStyle_GRADIENT:
+        case GRADIENT:
         {
             mpLbFillAttr->show();
             mpToolBoxColor->hide();
@@ -748,7 +789,7 @@ IMPL_LINK_NOARG(SvxFillToolBoxControl, SelectFillTypeHdl, weld::ComboBox&, void)
             }
             break;
         }
-        case drawing::FillStyle_HATCH:
+        case HATCH:
         {
             mpLbFillAttr->show();
             mpToolBoxColor->hide();
@@ -785,7 +826,7 @@ IMPL_LINK_NOARG(SvxFillToolBoxControl, SelectFillTypeHdl, weld::ComboBox&, void)
             }
             break;
         }
-        case drawing::FillStyle_BITMAP:
+        case BITMAP:
         {
             mpLbFillAttr->show();
             mpToolBoxColor->hide();
@@ -822,26 +863,66 @@ IMPL_LINK_NOARG(SvxFillToolBoxControl, SelectFillTypeHdl, weld::ComboBox&, void)
             }
             break;
         }
+        case PATTERN:
+        {
+            mpLbFillAttr->show();
+            mpToolBoxColor->hide();
+
+            if(pSh && pSh->GetItem(SID_PATTERN_LIST))
+            {
+                if(!mpLbFillAttr->get_count())
+                {
+                    mpLbFillAttr->set_sensitive(true);
+                    mpLbFillAttr->clear();
+                    SvxFillAttrBox::Fill(*mpLbFillAttr, pSh->GetItem(SID_PATTERN_LIST)->GetPatternList());
+                }
+
+                if (mnLastPosPattern != -1)
+                {
+                    const SvxPatternListItem * pItem = pSh->GetItem(SID_PATTERN_LIST);
+
+                    if(mnLastPosPattern < pItem->GetPatternList()->Count())
+                    {
+                        const XBitmapEntry* pXBitmapEntry = pItem->GetPatternList()->GetBitmap(mnLastPosPattern);
+                        const XFillBitmapItem aXFillBitmapItem(mpLbFillAttr->get_active_text(), pXBitmapEntry->GetGraphicObject());
+
+                        // #i122676# change FillStyle and Bitmap in one call
+                        pSh->GetDispatcher()->ExecuteList(
+                            SID_ATTR_FILL_BITMAP, SfxCallMode::RECORD,
+                            { &aXFillBitmapItem, &aXFillStyleItem });
+                        mpLbFillAttr->set_active(mnLastPosPattern);
+                    }
+                }
+            }
+            else
+            {
+                mpLbFillAttr->set_sensitive(false);
+            }
+            break;
+        }
+
     }
 
-    meLastXFS = eXFS;
+    mnLastXFS = nXFS;
 
     mxFillControl->Resize();
 }
 
 IMPL_LINK_NOARG(SvxFillToolBoxControl, SelectFillAttrHdl, weld::ComboBox&, void)
 {
-    const drawing::FillStyle eXFS = static_cast<drawing::FillStyle>(mpLbFillType->get_active());
-    const XFillStyleItem aXFillStyleItem(eXFS);
+    sal_Int32 nXFS = mpLbFillType->get_active();
+    eFillStyle eXFS = static_cast<eFillStyle>(nXFS);
+
+    const XFillStyleItem aXFillStyleItem(toCssFillStyle(eXFS));
     SfxObjectShell* pSh = SfxObjectShell::Current();
 
     // #i122676# dependent from bFillStyleChange, do execute a single or two
     // changes in one Execute call
-    const bool bFillStyleChange(meLastXFS != eXFS);
+    const bool bFillStyleChange(mnLastXFS != nXFS);
 
-    switch(eXFS)
+    switch (eXFS)
     {
-        case drawing::FillStyle_SOLID:
+        case SOLID:
         {
             if (bFillStyleChange && pSh)
             {
@@ -852,7 +933,7 @@ IMPL_LINK_NOARG(SvxFillToolBoxControl, SelectFillAttrHdl, weld::ComboBox&, void)
             }
             break;
         }
-        case drawing::FillStyle_GRADIENT:
+        case GRADIENT:
         {
             sal_Int32 nPos = mpLbFillAttr->get_active();
 
@@ -885,7 +966,7 @@ IMPL_LINK_NOARG(SvxFillToolBoxControl, SelectFillAttrHdl, weld::ComboBox&, void)
             }
             break;
         }
-        case drawing::FillStyle_HATCH:
+        case HATCH:
         {
             sal_Int32 nPos = mpLbFillAttr->get_active();
 
@@ -918,7 +999,7 @@ IMPL_LINK_NOARG(SvxFillToolBoxControl, SelectFillAttrHdl, weld::ComboBox&, void)
             }
             break;
         }
-        case drawing::FillStyle_BITMAP:
+        case BITMAP:
         {
             sal_Int32 nPos = mpLbFillAttr->get_active();
 
@@ -951,6 +1032,40 @@ IMPL_LINK_NOARG(SvxFillToolBoxControl, SelectFillAttrHdl, weld::ComboBox&, void)
             }
             break;
         }
+        case PATTERN:
+        {
+            sal_Int32 nPos = mpLbFillAttr->get_active();
+
+            if (nPos == -1)
+            {
+                nPos = mnLastPosPattern;
+            }
+
+            if (nPos != -1 && pSh && pSh->GetItem(SID_PATTERN_LIST))
+            {
+                const SvxPatternListItem * pItem = pSh->GetItem(SID_PATTERN_LIST);
+
+                if(nPos < pItem->GetPatternList()->Count())
+                {
+                    const XBitmapEntry* pXBitmapEntry = pItem->GetPatternList()->GetBitmap(nPos);
+                    const XFillBitmapItem aXFillBitmapItem(mpLbFillAttr->get_active_text(), pXBitmapEntry->GetGraphicObject());
+
+                    // #i122676# Change FillStyle and Bitmap in one call
+                    pSh->GetDispatcher()->ExecuteList(
+                        SID_ATTR_FILL_BITMAP, SfxCallMode::RECORD,
+                        bFillStyleChange
+                            ? std::initializer_list<SfxPoolItem const*>{ &aXFillBitmapItem, &aXFillStyleItem }
+                            : std::initializer_list<SfxPoolItem const*>{ &aXFillBitmapItem });
+                }
+            }
+
+            if (nPos != -1)
+            {
+                mnLastPosPattern = nPos;
+            }
+            break;
+        }
+
         default: break;
     }
 }
