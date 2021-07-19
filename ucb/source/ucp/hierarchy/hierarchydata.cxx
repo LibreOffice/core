@@ -46,18 +46,6 @@ namespace hierarchy_ucp
 {
 
 
-struct HierarchyEntry::iterator_Impl
-{
-    HierarchyEntryData                                     entry;
-    uno::Reference< container::XHierarchicalNameAccess >   dir;
-    uno::Reference< util::XOfficeInstallationDirectories > officeDirs;
-    uno::Sequence< OUString>                          names;
-    sal_Int32                                              pos;
-    iterator_Impl()
-    : pos( -1 /* before first */ ) {};
-};
-
-
 static void makeXMLName( const OUString & rIn, OUStringBuffer & rBuffer  )
 {
     sal_Int32 nCount = rIn.getLength();
@@ -854,11 +842,11 @@ bool HierarchyEntry::remove()
 }
 
 
-bool HierarchyEntry::first( iterator const & it )
+bool HierarchyEntry::first( iterator & it )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
-    if ( it.m_pImpl->pos == -1 )
+    if ( it.pos == -1 )
     {
         // Init...
 
@@ -885,7 +873,7 @@ bool HierarchyEntry::first( iterator const & it )
                             "HierarchyEntry::first - No name access!" );
 
                 if ( xNameAccess.is() )
-                    it.m_pImpl->names = xNameAccess->getElementNames();
+                    it.names = xNameAccess->getElementNames();
 
                 uno::Reference< container::XHierarchicalNameAccess >
                     xHierNameAccess( xNameAccess, uno::UNO_QUERY );
@@ -893,9 +881,9 @@ bool HierarchyEntry::first( iterator const & it )
                 OSL_ENSURE( xHierNameAccess.is(),
                             "HierarchyEntry::first - No hier. name access!" );
 
-                it.m_pImpl->dir = xHierNameAccess;
+                it.dir = xHierNameAccess;
 
-                it.m_pImpl->officeDirs = m_xOfficeInstDirs;
+                it.officeDirs = m_xOfficeInstDirs;
             }
         }
         catch ( uno::RuntimeException const & )
@@ -914,24 +902,24 @@ bool HierarchyEntry::first( iterator const & it )
         }
     }
 
-    if ( !it.m_pImpl->names.hasElements() )
+    if ( !it.names.hasElements() )
         return false;
 
-    it.m_pImpl->pos = 0;
+    it.pos = 0;
     return true;
 }
 
 
-bool HierarchyEntry::next( iterator const & it )
+bool HierarchyEntry::next( iterator& it )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
-    if ( it.m_pImpl->pos == -1 )
+    if ( it.pos == -1 )
         return first( it );
 
-    ++(it.m_pImpl->pos);
+    ++it.pos;
 
-    return ( it.m_pImpl->pos < it.m_pImpl->names.getLength() );
+    return ( it.pos < it.names.getLength() );
 }
 
 
@@ -1038,28 +1026,17 @@ HierarchyEntry::getRootReadAccess()
 // HierarchyEntry::iterator Implementation.
 
 
-HierarchyEntry::iterator::iterator()
-    : m_pImpl( new iterator_Impl )
+const HierarchyEntryData& HierarchyEntry::iterator::operator*()
 {
-}
-
-
-HierarchyEntry::iterator::~iterator()
-{
-}
-
-
-const HierarchyEntryData& HierarchyEntry::iterator::operator*() const
-{
-    if ( ( m_pImpl->pos != -1 )
-         && ( m_pImpl->dir.is() )
-         && ( m_pImpl->pos < m_pImpl->names.getLength() ) )
+    if ( ( pos != -1 )
+         && ( dir.is() )
+         && ( pos < names.getLength() ) )
     {
         try
         {
             OUStringBuffer aKey;
             aKey.append( "['" );
-            makeXMLName( m_pImpl->names.getConstArray()[ m_pImpl->pos ], aKey );
+            makeXMLName( names.getConstArray()[ pos ], aKey );
             aKey.append( "']" );
 
             OUString aTitle     = aKey.makeStringAndClear();
@@ -1071,21 +1048,21 @@ const HierarchyEntryData& HierarchyEntry::iterator::operator*() const
             aType      += "/Type";
 
             OUString aValue;
-            m_pImpl->dir->getByHierarchicalName( aTitle ) >>= aValue;
-            m_pImpl->entry.setTitle( aValue );
+            dir->getByHierarchicalName( aTitle ) >>= aValue;
+            entry.setTitle( aValue );
 
-            m_pImpl->dir->getByHierarchicalName( aTargetURL ) >>= aValue;
+            dir->getByHierarchicalName( aTargetURL ) >>= aValue;
 
             // TargetURL property may contain a reference to the Office
             // installation directory. To ensure a reloctable office
             // installation, the path to the office installation directory must
             // never be stored directly. A placeholder is used instead. Replace
             // it by actual installation directory.
-            if ( m_pImpl->officeDirs.is() && !aValue.isEmpty() )
-                aValue = m_pImpl->officeDirs->makeAbsoluteURL( aValue );
-            m_pImpl->entry.setTargetURL( aValue );
+            if ( officeDirs.is() && !aValue.isEmpty() )
+                aValue = officeDirs->makeAbsoluteURL( aValue );
+            entry.setTargetURL( aValue );
 
-            if ( m_pImpl->dir->hasByHierarchicalName( aType ) )
+            if ( dir->hasByHierarchicalName( aType ) )
             {
                 // Might not be present since it was introduced long
                 // after Title and TargetURL (#82433#)... So not getting
@@ -1093,15 +1070,15 @@ const HierarchyEntryData& HierarchyEntry::iterator::operator*() const
 
                 // Get Type value.
                 sal_Int32 nType = 0;
-                if ( m_pImpl->dir->getByHierarchicalName( aType ) >>= nType )
+                if ( dir->getByHierarchicalName( aType ) >>= nType )
                 {
                     if ( nType == 0 )
                     {
-                        m_pImpl->entry.setType( HierarchyEntryData::LINK );
+                        entry.setType( HierarchyEntryData::LINK );
                     }
                     else if ( nType == 1 )
                     {
-                        m_pImpl->entry.setType( HierarchyEntryData::FOLDER );
+                        entry.setType( HierarchyEntryData::FOLDER );
                     }
                     else
                     {
@@ -1111,16 +1088,16 @@ const HierarchyEntryData& HierarchyEntry::iterator::operator*() const
                 }
             }
 
-            m_pImpl->entry.setName(
-                m_pImpl->names.getConstArray()[ m_pImpl->pos ] );
+            entry.setName(
+                names.getConstArray()[ pos ] );
         }
         catch ( container::NoSuchElementException const & )
         {
-            m_pImpl->entry = HierarchyEntryData();
+            entry = HierarchyEntryData();
         }
     }
 
-    return m_pImpl->entry;
+    return entry;
 }
 
 } // namespace hierarchy_ucp
