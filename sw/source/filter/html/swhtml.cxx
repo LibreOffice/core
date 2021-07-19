@@ -1532,6 +1532,12 @@ void SwHTMLParser::NextToken( HtmlTokenId nToken )
                 // The text token is inside an OLE object, which means
                 // alternate text.
                 SwOLENode* pOLENode = m_aEmbeds.top();
+                if (!pOLENode)
+                {
+                    // <object> is mapped to an image -> ignore.
+                    break;
+                }
+
                 if (SwFlyFrameFormat* pFormat
                     = dynamic_cast<SwFlyFrameFormat*>(pOLENode->GetFlyFormat()))
                 {
