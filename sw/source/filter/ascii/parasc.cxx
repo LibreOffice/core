@@ -118,7 +118,7 @@ SwASCIIParser::SwASCIIParser(SwDoc& rD, const SwPaM& rCursor, SvStream& rIn, boo
     m_pItemSet = std::make_unique<SfxItemSet>(
         m_rDoc.GetAttrPool(),
         svl::Items<RES_CHRATR_FONT, RES_CHRATR_LANGUAGE, RES_CHRATR_CJK_FONT,
-                   RES_CHRATR_CJK_LANGUAGE, RES_CHRATR_CTL_FONT, RES_CHRATR_CTL_LANGUAGE>{});
+                   RES_CHRATR_CJK_LANGUAGE, RES_CHRATR_CTL_FONT, RES_CHRATR_CTL_LANGUAGE>);
 
     // set defaults from the options
     if (m_rOpt.GetLanguage())

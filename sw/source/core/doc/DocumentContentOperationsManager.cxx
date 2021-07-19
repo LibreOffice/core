@@ -1272,7 +1272,7 @@ namespace //local functions originally from docfmt.cxx
                     RES_CHRATR_BEGIN, RES_CHRATR_END - 1,
                     RES_TXTATR_AUTOFMT, RES_TXTATR_CHARFMT,
                     RES_TXTATR_UNKNOWN_CONTAINER,
-                        RES_TXTATR_UNKNOWN_CONTAINER>{});
+                        RES_TXTATR_UNKNOWN_CONTAINER>);
 
             SfxItemSet* pTmpOtherItemSet = new SfxItemSet(
                 rDoc.GetAttrPool(),
@@ -1280,7 +1280,7 @@ namespace //local functions originally from docfmt.cxx
                     RES_PARATR_BEGIN, RES_GRFATR_END - 1,
                     RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END - 1,
                     // FillAttribute support:
-                    XATTR_FILL_FIRST, XATTR_FILL_LAST>{});
+                    XATTR_FILL_FIRST, XATTR_FILL_LAST>);
 
             pTmpCharItemSet->Put( rChgSet );
             pTmpOtherItemSet->Put( rChgSet );
@@ -1370,7 +1370,7 @@ namespace //local functions originally from docfmt.cxx
             if ( !bCharAttr && !bOtherAttr )
             {
                 SfxItemSet aTextSet( rDoc.GetAttrPool(),
-                            svl::Items<RES_TXTATR_NOEND_BEGIN, RES_TXTATR_NOEND_END-1>{} );
+                            svl::Items<RES_TXTATR_NOEND_BEGIN, RES_TXTATR_NOEND_END-1> );
                 aTextSet.Put( rChgSet );
                 if( aTextSet.Count() )
                 {
@@ -1405,7 +1405,7 @@ namespace //local functions originally from docfmt.cxx
                     svl::Items<
                         RES_TXTATR_REFMARK, RES_TXTATR_METAFIELD,
                         RES_TXTATR_CJK_RUBY, RES_TXTATR_CJK_RUBY,
-                        RES_TXTATR_INPUTFIELD, RES_TXTATR_INPUTFIELD>{});
+                        RES_TXTATR_INPUTFIELD, RES_TXTATR_INPUTFIELD>);
 
                 aTextSet.Put( rChgSet );
                 if( aTextSet.Count() )
@@ -1539,7 +1539,7 @@ namespace //local functions originally from docfmt.cxx
         }
 
         SfxItemSet firstSet(rDoc.GetAttrPool(),
-                svl::Items<RES_PAGEDESC, RES_BREAK>{});
+                svl::Items<RES_PAGEDESC, RES_BREAK>);
         if (pOtherSet && pOtherSet->Count())
         {   // actually only RES_BREAK is possible here...
             firstSet.Put(*pOtherSet);
@@ -1547,7 +1547,7 @@ namespace //local functions originally from docfmt.cxx
         SfxItemSet propsSet(rDoc.GetAttrPool(),
             svl::Items<RES_PARATR_BEGIN, RES_PAGEDESC,
                        RES_BREAK+1, RES_FRMATR_END,
-                       XATTR_FILL_FIRST, XATTR_FILL_LAST+1>{});
+                       XATTR_FILL_FIRST, XATTR_FILL_LAST+1>);
         if (pOtherSet && pOtherSet->Count())
         {
             propsSet.Put(*pOtherSet);
@@ -4323,7 +4323,7 @@ bool DocumentContentOperationsManager::ReplaceRangeImpl( SwPaM& rPam, const OUSt
                 // Apply the first character's attributes to the ReplaceText
                 SfxItemSet aSet( m_rDoc.GetAttrPool(),
                             svl::Items<RES_CHRATR_BEGIN,     RES_TXTATR_WITHEND_END - 1,
-                            RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1>{} );
+                            RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1> );
                 pTextNd->GetParaAttr( aSet, nStt+1, nStt+1 );
 
                 aSet.ClearItem( RES_TXTATR_REFMARK );

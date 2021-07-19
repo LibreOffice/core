@@ -26,7 +26,7 @@
 #include <osl/diagnose.h>
 
 const WhichRangesContainer ScTabPageProtection::pProtectionRanges(
-    svl::Items<SID_SCATTR_PROTECTION, SID_SCATTR_PROTECTION>::value);
+    svl::Items<SID_SCATTR_PROTECTION, SID_SCATTR_PROTECTION>);
 
 // Zellschutz-Tabpage:
 

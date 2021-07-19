@@ -350,7 +350,7 @@ lcl_setCharFormatSequence(SwPaM & rPam, uno::Any const& rValue)
         aStyle <<= aCharStyles.getConstArray()[nStyle];
         // create a local set and apply each format directly
         SfxItemSet aSet(rPam.GetDoc().GetAttrPool(),
-                svl::Items<RES_TXTATR_CHARFMT, RES_TXTATR_CHARFMT>{});
+                svl::Items<RES_TXTATR_CHARFMT, RES_TXTATR_CHARFMT>);
         lcl_setCharStyle(rPam.GetDoc(), aStyle, aSet);
         // the first style should replace the current attributes,
         // all other have to be added
@@ -522,7 +522,7 @@ SwUnoCursorHelper::SetCursorPropertyValue(
                     SfxItemSet items( rPam.GetDoc().GetAttrPool(),
                         svl::Items<RES_CHRATR_BEGIN, RES_CHRATR_END-1,
                             RES_TXTATR_CHARFMT, RES_TXTATR_CHARFMT,
-                            RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1>{} );
+                            RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1> );
 
                     for (beans::NamedValue const & prop : std::as_const(props))
                     {
@@ -1726,7 +1726,7 @@ uno::Any SwUnoCursorHelper::GetPropertyValue(
             rPaM.GetDoc().GetAttrPool(),
             svl::Items<
                 RES_CHRATR_BEGIN, RES_FRMATR_END - 1,
-                RES_UNKNOWNATR_CONTAINER, RES_UNKNOWNATR_CONTAINER>{});
+                RES_UNKNOWNATR_CONTAINER, RES_UNKNOWNATR_CONTAINER>);
         SwUnoCursorHelper::GetCursorAttr(rPaM, aSet);
 
         rPropSet.getPropertyValue(*pEntry, aSet, aAny);
@@ -1904,7 +1904,7 @@ SwUnoCursorHelper::GetPropertyStates(
                         case SW_PROPERTY_STATE_CALLER_SWX_TEXT_PORTION:
                             pSet.reset(
                                 new SfxItemSet( rPaM.GetDoc().GetAttrPool(),
-                                    svl::Items<RES_CHRATR_BEGIN,   RES_TXTATR_END>{} ));
+                                    svl::Items<RES_CHRATR_BEGIN,   RES_TXTATR_END> ));
                         break;
                         case SW_PROPERTY_STATE_CALLER_SINGLE_VALUE_ONLY:
                             pSet.reset(
@@ -1917,7 +1917,7 @@ SwUnoCursorHelper::GetPropertyStates(
                                 svl::Items<
                                     RES_CHRATR_BEGIN, RES_FRMATR_END - 1,
                                     RES_UNKNOWNATR_CONTAINER,
-                                        RES_UNKNOWNATR_CONTAINER>{}));
+                                        RES_UNKNOWNATR_CONTAINER>));
                     }
                     // #i63870#
                     SwUnoCursorHelper::GetCursorAttr( rPaM, *pSet );

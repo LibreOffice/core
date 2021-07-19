@@ -39,7 +39,7 @@ using namespace css;
 const WhichRangesContainer SvxBkgTabPage::pPageRanges(svl::Items<
     SID_ATTR_BRUSH, SID_ATTR_BRUSH,
     SID_ATTR_BRUSH_CHAR, SID_ATTR_BRUSH_CHAR
->::value);
+>);
 
 static sal_uInt16 lcl_GetTableDestSlot(sal_Int32 nTblDest)
 {

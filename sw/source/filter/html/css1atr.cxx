@@ -1211,7 +1211,7 @@ bool SwHTMLWriter::HasScriptDependentItems( const SfxItemSet& rItemSet,
                     RES_CHRATR_WEIGHT, RES_CHRATR_WEIGHT,
                     RES_CHRATR_CJK_FONT, RES_CHRATR_CJK_FONT,
                     RES_CHRATR_CJK_POSTURE, RES_CHRATR_CTL_FONT,
-                    RES_CHRATR_CTL_POSTURE, RES_CHRATR_CTL_WEIGHT>{});
+                    RES_CHRATR_CTL_POSTURE, RES_CHRATR_CTL_WEIGHT>);
             aTstItemSet.Set( pDCCharFormat->GetAttrSet() );
             return HasScriptDependentItems( aTstItemSet, false );
         }
@@ -1258,7 +1258,7 @@ static bool OutCSS1Rule( SwHTMLWriter& rHTMLWrt, const OUString& rSelector,
                                        svl::Items<RES_CHRATR_FONT, RES_CHRATR_FONTSIZE,
                                        RES_CHRATR_LANGUAGE, RES_CHRATR_POSTURE,
                                        RES_CHRATR_WEIGHT, RES_CHRATR_WEIGHT,
-                                       RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_WEIGHT>{} );
+                                       RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_WEIGHT> );
             aScriptItemSet.Put( rItemSet );
 
             OUString aNewSelector = aSelector + ".western" + aPseudo;
@@ -1358,7 +1358,7 @@ static void OutCSS1DropCapRule(
                                        svl::Items<RES_CHRATR_FONT, RES_CHRATR_FONTSIZE,
                                        RES_CHRATR_LANGUAGE, RES_CHRATR_POSTURE,
                                        RES_CHRATR_WEIGHT, RES_CHRATR_WEIGHT,
-                                       RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_WEIGHT>{} );
+                                       RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_WEIGHT> );
             if( pDCCharFormat )
                 aScriptItemSet.Set( pDCCharFormat->GetAttrSet() );
 
@@ -1668,7 +1668,7 @@ static Writer& OutCSS1_SwPageDesc( Writer& rWrt, const SwPageDesc& rPageDesc,
     // Export the distance-Attributes as normally
     const SwFrameFormat &rMaster = rPageDesc.GetMaster();
     SfxItemSet aItemSet( *rMaster.GetAttrSet().GetPool(),
-                         svl::Items<RES_LR_SPACE, RES_UL_SPACE>{} );
+                         svl::Items<RES_LR_SPACE, RES_UL_SPACE> );
     aItemSet.Set( rMaster.GetAttrSet() );
 
     if( pRefPageDesc )

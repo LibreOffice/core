@@ -556,7 +556,7 @@ SwFrameFormat* SwWW8ImplReader::ImportGraf(SdrTextObj const * pTextObj,
             {
                 // for the frame
                 SfxItemSet aAttrSet( m_rDoc.GetAttrPool(), svl::Items<RES_FRMATR_BEGIN,
-                    RES_FRMATR_END-1>{} );
+                    RES_FRMATR_END-1> );
 
                 SvxMSDffImportRec const*const pRecord = (1 == aData.size())
                     ? aData.begin()->get() : nullptr;
@@ -622,7 +622,7 @@ SwFrameFormat* SwWW8ImplReader::ImportGraf(SdrTextObj const * pTextObj,
 
                 // for the graphic
                 SfxItemSet aGrSet( m_rDoc.GetAttrPool(), svl::Items<RES_GRFATR_BEGIN,
-                    RES_GRFATR_END-1>{} );
+                    RES_GRFATR_END-1> );
 
                 if( aPD.nCL || aPD.nCR || aPD.nCT || aPD.nCB )
                 {

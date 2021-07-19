@@ -444,7 +444,7 @@ SwDocStyleSheet::SwDocStyleSheet(   SwDoc&                rDocument,
             SID_ATTR_AUTO_STYLE_UPDATE, SID_ATTR_AUTO_STYLE_UPDATE,
             FN_PARAM_FTN_INFO, FN_PARAM_FTN_INFO,
             FN_KEEP_ASPECT_RATIO, FN_KEEP_ASPECT_RATIO,
-            FN_COND_COLL, FN_COND_COLL>{}),
+            FN_COND_COLL, FN_COND_COLL>),
     m_bPhysical(false)
 {
     nHelpId = UCHAR_MAX;

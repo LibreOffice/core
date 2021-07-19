@@ -361,7 +361,7 @@ void SwXTextPortion::GetPropertyValue(
                         svl::Items<
                             RES_CHRATR_BEGIN, RES_FRMATR_END - 1,
                             RES_UNKNOWNATR_CONTAINER,
-                                RES_UNKNOWNATR_CONTAINER>{});
+                                RES_UNKNOWNATR_CONTAINER>);
                     SwUnoCursorHelper::GetCursorAttr(*pUnoCursor, *pSet);
                 }
                 m_pPropSet->getPropertyValue(rEntry, *pSet, rVal);

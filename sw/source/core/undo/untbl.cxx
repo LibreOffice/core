@@ -227,7 +227,7 @@ WhichRangesContainer const aSave_BoxContentSet(svl::Items<
     RES_CHRATR_FONT, RES_CHRATR_FONTSIZE,
     RES_CHRATR_POSTURE, RES_CHRATR_POSTURE,
     RES_CHRATR_SHADOWED, RES_CHRATR_WEIGHT,
-    RES_PARATR_ADJUST, RES_PARATR_ADJUST>::value);
+    RES_PARATR_ADJUST, RES_PARATR_ADJUST>);
 
 SwUndoInsTable::SwUndoInsTable( const SwPosition& rPos, sal_uInt16 nCl, sal_uInt16 nRw,
                             sal_uInt16 nAdj, const SwInsertTableOptions& rInsTableOpts,
@@ -2218,7 +2218,7 @@ void SwUndoTableNumFormat::RedoImpl(::sw::UndoRedoContext & rContext)
     if( m_bNewFormat || m_bNewFormula || m_bNewValue )
     {
         SfxItemSet aBoxSet( rDoc.GetAttrPool(),
-                                svl::Items<RES_BOXATR_FORMAT, RES_BOXATR_VALUE>{} );
+                                svl::Items<RES_BOXATR_FORMAT, RES_BOXATR_VALUE> );
 
         // Resetting attributes is not enough. In addition, take care that the
         // text will be also formatted correctly.
@@ -2247,7 +2247,7 @@ void SwUndoTableNumFormat::RedoImpl(::sw::UndoRedoContext & rContext)
     else if( getSwDefaultTextFormat() != m_nFormatIdx )
     {
         SfxItemSet aBoxSet( rDoc.GetAttrPool(),
-                            svl::Items<RES_BOXATR_FORMAT, RES_BOXATR_VALUE>{} );
+                            svl::Items<RES_BOXATR_FORMAT, RES_BOXATR_VALUE> );
 
         aBoxSet.Put( SwTableBoxNumFormat( m_nFormatIdx ));
         aBoxSet.Put( SwTableBoxValue( m_fNum ));
@@ -2467,7 +2467,7 @@ void SwUndoTableCpyTable::UndoImpl(::sw::UndoRedoContext & rContext)
             rDoc.GetAttrPool(),
             svl::Items<
                 RES_VERT_ORIENT, RES_VERT_ORIENT,
-                RES_BOXATR_FORMAT, RES_BOXATR_VALUE>{});
+                RES_BOXATR_FORMAT, RES_BOXATR_VALUE>);
         aTmpSet.Put( rBox.GetFrameFormat()->GetAttrSet() );
         if( aTmpSet.Count() )
         {
@@ -2488,7 +2488,7 @@ void SwUndoTableCpyTable::UndoImpl(::sw::UndoRedoContext & rContext)
                 rDoc.GetAttrPool(),
                 svl::Items<
                     RES_VERT_ORIENT, RES_VERT_ORIENT,
-                    RES_BOXATR_FORMAT, RES_BOXATR_VALUE>{});
+                    RES_BOXATR_FORMAT, RES_BOXATR_VALUE>);
             pEntry->pBoxNumAttr->Put( aTmpSet );
         }
 
@@ -2563,7 +2563,7 @@ void SwUndoTableCpyTable::RedoImpl(::sw::UndoRedoContext & rContext)
             rDoc.GetAttrPool(),
             svl::Items<
                 RES_VERT_ORIENT, RES_VERT_ORIENT,
-                RES_BOXATR_FORMAT, RES_BOXATR_VALUE>{});
+                RES_BOXATR_FORMAT, RES_BOXATR_VALUE>);
         aTmpSet.Put( rBox.GetFrameFormat()->GetAttrSet() );
         if( aTmpSet.Count() )
         {
@@ -2583,7 +2583,7 @@ void SwUndoTableCpyTable::RedoImpl(::sw::UndoRedoContext & rContext)
                 rDoc.GetAttrPool(),
                 svl::Items<
                     RES_VERT_ORIENT, RES_VERT_ORIENT,
-                    RES_BOXATR_FORMAT, RES_BOXATR_VALUE>{});
+                    RES_BOXATR_FORMAT, RES_BOXATR_VALUE>);
             pEntry->pBoxNumAttr->Put( aTmpSet );
         }
 
@@ -2616,7 +2616,7 @@ void SwUndoTableCpyTable::AddBoxBefore( const SwTableBox& rBox, bool bDelContent
         pDoc->GetAttrPool(),
         svl::Items<
             RES_VERT_ORIENT, RES_VERT_ORIENT,
-            RES_BOXATR_FORMAT, RES_BOXATR_VALUE>{});
+            RES_BOXATR_FORMAT, RES_BOXATR_VALUE>);
     pEntry->pBoxNumAttr->Put( rBox.GetFrameFormat()->GetAttrSet() );
     if( !pEntry->pBoxNumAttr->Count() )
     {

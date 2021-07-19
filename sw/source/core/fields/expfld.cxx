@@ -992,7 +992,7 @@ sal_Int32 SwGetExpField::GetReferenceTextPos( const SwFormatField& rFormat, SwDo
             RES_CHRATR_CJK_LANGUAGE, RES_CHRATR_CJK_LANGUAGE,
             RES_CHRATR_CTL_FONT, RES_CHRATR_CTL_FONT,
             RES_CHRATR_CTL_LANGUAGE, RES_CHRATR_CTL_LANGUAGE
-        >::value);
+        >);
         SwAttrSet aSet(rDoc.GetAttrPool(), nIds);
         rTextNode.GetParaAttr(aSet, nRet, nRet+1);
 

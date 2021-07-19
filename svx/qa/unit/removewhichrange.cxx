@@ -34,19 +34,19 @@ class TestRemoveWhichRange : public CppUnit::TestFixture
             CPPUNIT_ASSERT(out.empty());
         }
         {
-            WhichRangesContainer in(svl::Items<10, 20, 30, 40>::value);
+            WhichRangesContainer in(svl::Items<10, 20, 30, 40>);
             auto const out = RemoveWhichRange(in, 0, 20);
             CPPUNIT_ASSERT_EQUAL(sal_uInt16(30), out[0].first);
             CPPUNIT_ASSERT_EQUAL(sal_uInt16(40), out[0].second);
         }
         {
-            WhichRangesContainer in(svl::Items<10, 20, 30, 40>::value);
+            WhichRangesContainer in(svl::Items<10, 20, 30, 40>);
             auto const out = RemoveWhichRange(in, 10, 20);
             CPPUNIT_ASSERT_EQUAL(sal_uInt16(30), out[0].first);
             CPPUNIT_ASSERT_EQUAL(sal_uInt16(40), out[0].second);
         }
         {
-            WhichRangesContainer in(svl::Items<10, 20, 30, 40>::value);
+            WhichRangesContainer in(svl::Items<10, 20, 30, 40>);
             auto const out = RemoveWhichRange(in, 15, 20);
             CPPUNIT_ASSERT_EQUAL(sal_uInt16(10), out[0].first);
             CPPUNIT_ASSERT_EQUAL(sal_uInt16(14), out[0].second);
@@ -54,19 +54,19 @@ class TestRemoveWhichRange : public CppUnit::TestFixture
             CPPUNIT_ASSERT_EQUAL(sal_uInt16(40), out[1].second);
         }
         {
-            WhichRangesContainer in(svl::Items<10, 20, 30, 40>::value);
+            WhichRangesContainer in(svl::Items<10, 20, 30, 40>);
             auto const out = RemoveWhichRange(in, 30, 40);
             CPPUNIT_ASSERT_EQUAL(sal_uInt16(10), out[0].first);
             CPPUNIT_ASSERT_EQUAL(sal_uInt16(20), out[0].second);
         }
         {
-            WhichRangesContainer in(svl::Items<10, 20, 30, 40>::value);
+            WhichRangesContainer in(svl::Items<10, 20, 30, 40>);
             auto const out = RemoveWhichRange(in, 30, 50);
             CPPUNIT_ASSERT_EQUAL(sal_uInt16(10), out[0].first);
             CPPUNIT_ASSERT_EQUAL(sal_uInt16(20), out[0].second);
         }
         {
-            WhichRangesContainer in(svl::Items<10, 20, 30, 40>::value);
+            WhichRangesContainer in(svl::Items<10, 20, 30, 40>);
             auto const out = RemoveWhichRange(in, 30, 35);
             CPPUNIT_ASSERT_EQUAL(sal_uInt16(10), out[0].first);
             CPPUNIT_ASSERT_EQUAL(sal_uInt16(20), out[0].second);
@@ -74,7 +74,7 @@ class TestRemoveWhichRange : public CppUnit::TestFixture
             CPPUNIT_ASSERT_EQUAL(sal_uInt16(40), out[1].second);
         }
         {
-            WhichRangesContainer in(svl::Items<10, 20, 30, 40>::value);
+            WhichRangesContainer in(svl::Items<10, 20, 30, 40>);
             auto const out = RemoveWhichRange(in, 15, 35);
             CPPUNIT_ASSERT_EQUAL(sal_uInt16(10), out[0].first);
             CPPUNIT_ASSERT_EQUAL(sal_uInt16(14), out[0].second);
@@ -82,7 +82,7 @@ class TestRemoveWhichRange : public CppUnit::TestFixture
             CPPUNIT_ASSERT_EQUAL(sal_uInt16(40), out[1].second);
         }
         {
-            WhichRangesContainer in(svl::Items<10, 20, 30, 40>::value);
+            WhichRangesContainer in(svl::Items<10, 20, 30, 40>);
             auto const out = RemoveWhichRange(in, 12, 15);
             CPPUNIT_ASSERT_EQUAL(sal_uInt16(10), out[0].first);
             CPPUNIT_ASSERT_EQUAL(sal_uInt16(11), out[0].second);
@@ -92,12 +92,12 @@ class TestRemoveWhichRange : public CppUnit::TestFixture
             CPPUNIT_ASSERT_EQUAL(sal_uInt16(40), out[2].second);
         }
         {
-            WhichRangesContainer in(svl::Items<10, 20, 30, 40>::value);
+            WhichRangesContainer in(svl::Items<10, 20, 30, 40>);
             auto const out = RemoveWhichRange(in, 0, 100);
             CPPUNIT_ASSERT(out.empty());
         }
         {
-            WhichRangesContainer in(svl::Items<10, 20, 40, 50>::value);
+            WhichRangesContainer in(svl::Items<10, 20, 40, 50>);
             auto const out = RemoveWhichRange(in, 25, 35);
             CPPUNIT_ASSERT_EQUAL(sal_uInt16(10), out[0].first);
             CPPUNIT_ASSERT_EQUAL(sal_uInt16(20), out[0].second);
@@ -105,7 +105,7 @@ class TestRemoveWhichRange : public CppUnit::TestFixture
             CPPUNIT_ASSERT_EQUAL(sal_uInt16(50), out[1].second);
         }
         {
-            WhichRangesContainer in(svl::Items<10, 20, 40, 50>::value);
+            WhichRangesContainer in(svl::Items<10, 20, 40, 50>);
             auto const out = RemoveWhichRange(in, 50, 100);
             CPPUNIT_ASSERT_EQUAL(sal_uInt16(10), out[0].first);
             CPPUNIT_ASSERT_EQUAL(sal_uInt16(20), out[0].second);

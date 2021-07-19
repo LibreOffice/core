@@ -3334,10 +3334,10 @@ void ScViewFunc::SetSelectionFrameLines( const SvxBorderLine* pLine,
     {
         SfxItemSet aOldSet( *rDoc.GetPool(),
                             svl::Items<ATTR_PATTERN_START,
-                                        ATTR_PATTERN_END>{} );
+                                        ATTR_PATTERN_END> );
         SfxItemSet aNewSet(*rDoc.GetPool(),
                             svl::Items<ATTR_PATTERN_START,
-                                        ATTR_PATTERN_END>{} );
+                                        ATTR_PATTERN_END> );
 
         SvxBorderLine           aLine;
 

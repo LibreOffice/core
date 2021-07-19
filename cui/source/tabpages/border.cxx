@@ -75,7 +75,7 @@ const WhichRangesContainer SvxBorderTabPage::pRanges(
         SID_ATTR_ALIGN_MARGIN,      SID_ATTR_ALIGN_MARGIN,
         SID_ATTR_BORDER_CONNECT,    SID_ATTR_BORDER_CONNECT,
         SID_SW_COLLAPSING_BORDERS,  SID_SW_COLLAPSING_BORDERS,
-        SID_ATTR_BORDER_DIAG_TLBR,  SID_ATTR_BORDER_DIAG_BLTR>::value);
+        SID_ATTR_BORDER_DIAG_TLBR,  SID_ATTR_BORDER_DIAG_BLTR>);
 
 static void lcl_SetDecimalDigitsTo1(weld::MetricSpinButton& rField)
 {

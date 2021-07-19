@@ -181,7 +181,7 @@ void FuConstructCustomShape::SetAttributes( SdrObject* pObj )
                                         SDRATTR_GRAF_FIRST,
                                             SDRATTR_CUSTOMSHAPE_LAST,
                                         // Range from SdrTextObj:
-                                        EE_ITEMS_START, EE_ITEMS_END>{});
+                                        EE_ITEMS_START, EE_ITEMS_END>);
                                 aDest.Set( rSource );
                                 pObj->SetMergedItemSet( aDest );
                                 // Enables Word-wrap by default (tdf#134369)

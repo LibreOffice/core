@@ -1162,7 +1162,7 @@ void SwUiWriterTest::testCp1000071()
     // Change the document layout to be 2 columns, and then undo.
     pWrtShell->SelAll();
     SwSectionData section(SectionType::Content, pWrtShell->GetUniqueSectionName());
-    SfxItemSet set( pDoc->GetDocShell()->GetPool(), svl::Items<RES_COL, RES_COL>{} );
+    SfxItemSet set( pDoc->GetDocShell()->GetPool(), svl::Items<RES_COL, RES_COL> );
     SwFormatCol col;
     col.Init( 2, 0, 10000 );
     set.Put( col );
@@ -2562,7 +2562,7 @@ void SwUiWriterTest::testTdf72788()
     //Apply a *Bold* attribute to selection
     SvxWeightItem aWeightItem(WEIGHT_BOLD, RES_CHRATR_WEIGHT);
     rIDCO.InsertPoolItem(*pCursor, aWeightItem);
-    SfxItemSet aSet( pDoc->GetAttrPool(), svl::Items<RES_CHRATR_WEIGHT, RES_CHRATR_WEIGHT>{});
+    SfxItemSet aSet( pDoc->GetAttrPool(), svl::Items<RES_CHRATR_WEIGHT, RES_CHRATR_WEIGHT>);
     //Add selected text's attributes to aSet
     pCursor->GetNode().GetTextNode()->GetParaAttr(aSet, 5, 12);
     SfxPoolItem const * pPoolItem = aSet.GetItem(RES_CHRATR_WEIGHT);
@@ -3737,8 +3737,8 @@ void SwUiWriterTest::testUndoDelAsCharTdf107512()
     sw::UndoManager & rUndoManager(pDoc->GetUndoManager());
     IDocumentContentOperations & rIDCO(pDoc->getIDocumentContentOperations());
     SwCursorShell * pShell(pDoc->GetEditShell());
-    SfxItemSet frameSet(pDoc->GetAttrPool(), svl::Items<RES_FRMATR_BEGIN, RES_FRMATR_END-1>{});
-    SfxItemSet grfSet(pDoc->GetAttrPool(), svl::Items<RES_GRFATR_BEGIN, RES_GRFATR_END-1>{});
+    SfxItemSet frameSet(pDoc->GetAttrPool(), svl::Items<RES_FRMATR_BEGIN, RES_FRMATR_END-1>);
+    SfxItemSet grfSet(pDoc->GetAttrPool(), svl::Items<RES_GRFATR_BEGIN, RES_GRFATR_END-1>);
     rIDCO.InsertString(*pShell->GetCursor(), "foo");
     pShell->ClearMark();
     SwFormatAnchor anchor(RndStdIds::FLY_AS_CHAR);
@@ -3757,7 +3757,7 @@ void SwUiWriterTest::testUndoDelAsCharTdf107512()
     CPPUNIT_ASSERT(pShell->GetCursor()->GetNode().GetTextNode()->GetTextAttrForCharAt(4, RES_TXTATR_FLYCNT));
     CPPUNIT_ASSERT_EQUAL(OUString(OUStringChar(CH_TXTATR_BREAKWORD) + u"foo" + OUStringChar(CH_TXTATR_BREAKWORD)), pShell->GetCursor()->GetNode().GetTextNode()->GetText());
     SfxPoolItem const* pItem;
-    SfxItemSet query(pDoc->GetAttrPool(), svl::Items<RES_CHRATR_HIDDEN, RES_CHRATR_HIDDEN>{});
+    SfxItemSet query(pDoc->GetAttrPool(), svl::Items<RES_CHRATR_HIDDEN, RES_CHRATR_HIDDEN>);
     pShell->GetCursor()->GetNode().GetTextNode()->GetParaAttr(query, 1, 4);
     CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, query.GetItemState(RES_CHRATR_HIDDEN, false, &pItem));
     CPPUNIT_ASSERT(static_cast<SvxCharHiddenItem const*>(pItem)->GetValue());
@@ -3870,7 +3870,7 @@ void SwUiWriterTest::testUndoCharAttribute()
     // Apply a "Bold" attribute to selection
     SvxWeightItem aWeightItem(WEIGHT_BOLD, RES_CHRATR_WEIGHT);
     rIDCO.InsertPoolItem(*pCursor, aWeightItem);
-    SfxItemSet aSet( pDoc->GetAttrPool(), svl::Items<RES_CHRATR_WEIGHT, RES_CHRATR_WEIGHT>{});
+    SfxItemSet aSet( pDoc->GetAttrPool(), svl::Items<RES_CHRATR_WEIGHT, RES_CHRATR_WEIGHT>);
     // Adds selected text's attributes to aSet
     pCursor->GetNode().GetTextNode()->GetParaAttr(aSet, 10, 19);
     SfxPoolItem const * pPoolItem = aSet.GetItem(RES_CHRATR_WEIGHT);
@@ -3891,8 +3891,8 @@ void SwUiWriterTest::testUndoDelAsChar()
     sw::UndoManager & rUndoManager(pDoc->GetUndoManager());
     IDocumentContentOperations & rIDCO(pDoc->getIDocumentContentOperations());
     SwCursorShell * pShell(pDoc->GetEditShell());
-    SfxItemSet frameSet(pDoc->GetAttrPool(), svl::Items<RES_FRMATR_BEGIN, RES_FRMATR_END-1>{});
-    SfxItemSet grfSet(pDoc->GetAttrPool(), svl::Items<RES_GRFATR_BEGIN, RES_GRFATR_END-1>{});
+    SfxItemSet frameSet(pDoc->GetAttrPool(), svl::Items<RES_FRMATR_BEGIN, RES_FRMATR_END-1>);
+    SfxItemSet grfSet(pDoc->GetAttrPool(), svl::Items<RES_GRFATR_BEGIN, RES_GRFATR_END-1>);
     SwFormatAnchor anchor(RndStdIds::FLY_AS_CHAR);
     frameSet.Put(anchor);
     GraphicObject grf;

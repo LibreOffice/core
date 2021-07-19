@@ -39,7 +39,7 @@ const WhichRangesContainer SvxTextAttrPage::pRanges(
     svl::Items<
       SDRATTR_MISC_FIRST ,SDRATTR_TEXT_HORZADJUST,
       SDRATTR_TEXT_WORDWRAP, SDRATTR_TEXT_WORDWRAP
->::value);
+>);
 
 /*************************************************************************
 |*

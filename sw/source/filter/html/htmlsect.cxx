@@ -325,7 +325,7 @@ void SwHTMLParser::NewDivision( HtmlTokenId nToken )
         }
 
         SfxItemSet aFrameItemSet( m_xDoc->GetAttrPool(),
-                                svl::Items<RES_FRMATR_BEGIN, RES_FRMATR_END-1>{} );
+                                svl::Items<RES_FRMATR_BEGIN, RES_FRMATR_END-1> );
         if( !IsNewDoc() )
             Reader::ResetFrameFormatAttrs(aFrameItemSet );
 
@@ -629,7 +629,7 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
     if( bInCntnr || SwCSS1Parser::MayBePositioned( aPropInfo, true ) )
     {
         SfxItemSet aFrameItemSet( m_xDoc->GetAttrPool(),
-                                svl::Items<RES_FRMATR_BEGIN, RES_FRMATR_END-1>{} );
+                                svl::Items<RES_FRMATR_BEGIN, RES_FRMATR_END-1> );
         if( !IsNewDoc() )
             Reader::ResetFrameFormatAttrs(aFrameItemSet );
 
@@ -701,7 +701,7 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
         SwSectionData aSection( SectionType::Content, aName );
 
         SfxItemSet aFrameItemSet( m_xDoc->GetAttrPool(),
-                                svl::Items<RES_FRMATR_BEGIN, RES_FRMATR_END-1>{} );
+                                svl::Items<RES_FRMATR_BEGIN, RES_FRMATR_END-1> );
         if( !IsNewDoc() )
             Reader::ResetFrameFormatAttrs(aFrameItemSet );
 

@@ -1162,7 +1162,7 @@ SdrPageProperties::SdrPageProperties(SdrPage& rSdrPage)
     mpStyleSheet(nullptr),
     maProperties(
         mpSdrPage->getSdrModelFromSdrPage().GetItemPool(),
-        svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{})
+        svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>)
 {
     if(!rSdrPage.IsMasterPage())
     {

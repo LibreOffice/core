@@ -536,7 +536,7 @@ void MSWordExportBase::NumberingLevel(
 
     // cbGrpprlChpx
     SfxItemSet aSet( m_rDoc.GetAttrPool(), svl::Items<RES_CHRATR_BEGIN,
-                                          RES_CHRATR_END>{} );
+                                          RES_CHRATR_END> );
     if (rFormat.GetCharFormat() || bWriteBullet)
     {
         if (bWriteBullet)

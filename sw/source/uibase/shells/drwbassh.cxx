@@ -124,7 +124,7 @@ void SwDrawBaseShell::Execute(SfxRequest const &rReq)
                                 RES_ANCHOR, RES_ANCHOR,
                                 RES_WRAP_INFLUENCE_ON_OBJPOS, RES_WRAP_INFLUENCE_ON_OBJPOS,
                                 SID_HTML_MODE, SID_HTML_MODE,
-                                FN_DRAW_WRAP_DLG, FN_DRAW_WRAP_DLG>{});
+                                FN_DRAW_WRAP_DLG, FN_DRAW_WRAP_DLG>);
 
                         aSet.Put(SfxBoolItem(SID_HTML_MODE,
                             0 != ::GetHtmlMode(pSh->GetView().GetDocShell())));
@@ -258,7 +258,7 @@ void SwDrawBaseShell::Execute(SfxRequest const &rReq)
                                     SfxItemState::SET != pOutSet->GetItemState(
                                         SID_ATTR_TRANSFORM_POS_Y, false );
 
-                                SfxItemSet aFrameAttrSet(GetPool(), svl::Items<RES_FRMATR_BEGIN, RES_FRMATR_END - 1>{});
+                                SfxItemSet aFrameAttrSet(GetPool(), svl::Items<RES_FRMATR_BEGIN, RES_FRMATR_END - 1>);
 
                                 bool bSingleSelection = rMarkList.GetMarkCount() == 1;
 

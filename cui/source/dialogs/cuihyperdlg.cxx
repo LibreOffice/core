@@ -118,7 +118,7 @@ SvxHpLinkDlg::SvxHpLinkDlg(SfxBindings* pBindings, SfxChildWindow* pChild, weld:
 
     // create itemset for tabpages
     mpItemSet = std::make_unique<SfxItemSet>( SfxGetpApp()->GetPool(), svl::Items<SID_HYPERLINK_GETLINK,
-                               SID_HYPERLINK_SETLINK>{} );
+                               SID_HYPERLINK_SETLINK> );
 
     SvxHyperlinkItem aItem(SID_HYPERLINK_GETLINK);
     mpItemSet->Put(aItem);
@@ -185,7 +185,7 @@ void SvxHpLinkDlg::Close()
 void SvxHpLinkDlg::Apply()
 {
     SfxItemSet aItemSet( SfxGetpApp()->GetPool(), svl::Items<SID_HYPERLINK_GETLINK,
-                         SID_HYPERLINK_SETLINK>{} );
+                         SID_HYPERLINK_SETLINK> );
 
     SvxHyperlinkTabPageBase* pCurrentPage = static_cast<SvxHyperlinkTabPageBase*>(
                                                 GetTabPage( GetCurPageId() ) );

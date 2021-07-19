@@ -533,7 +533,7 @@ SvXMLImportContext *SwXMLItemSetStyleContext_Impl::CreateItemSetContext(
         m_pItemSet.reset( new SfxItemSet( rItemPool, aTableSetRange ) );
         break;
     case XmlStyleFamily::TABLE_COLUMN:
-        m_pItemSet.reset( new SfxItemSet( rItemPool, svl::Items<RES_FRM_SIZE, RES_FRM_SIZE>{} ) );
+        m_pItemSet.reset( new SfxItemSet( rItemPool, svl::Items<RES_FRM_SIZE, RES_FRM_SIZE> ) );
         break;
     case XmlStyleFamily::TABLE_ROW:
         m_pItemSet.reset( new SfxItemSet( rItemPool, aTableLineSetRange ) );

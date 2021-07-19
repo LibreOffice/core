@@ -593,7 +593,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                     aDocInfoItem.SetTemplate(false);
 
                 SfxItemSet aSet(GetPool(), svl::Items<SID_DOCINFO, SID_DOCINFO, SID_DOC_READONLY, SID_DOC_READONLY,
-                                SID_EXPLORER_PROPS_START, SID_EXPLORER_PROPS_START, SID_BASEURL, SID_BASEURL>{} );
+                                SID_EXPLORER_PROPS_START, SID_EXPLORER_PROPS_START, SID_BASEURL, SID_BASEURL> );
                 aSet.Put( aDocInfoItem );
                 aSet.Put( SfxBoolItem( SID_DOC_READONLY, bReadOnly ) );
                 aSet.Put( SfxStringItem( SID_EXPLORER_PROPS_START, GetTitle() ) );

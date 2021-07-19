@@ -140,7 +140,7 @@ using namespace ::com::sun::star;
 // AttrSet range for the 2 break attributes
 WhichRangesContainer const aBreakSetRange(svl::Items<
     RES_PAGEDESC, RES_BREAK
->::value);
+>);
 
 // AttrSet range for TextFormatColl
 // list attributes ( RES_PARATR_LIST_BEGIN - RES_PARATR_LIST_END ) are not
@@ -154,14 +154,14 @@ WhichRangesContainer const aTextFormatCollSetRange(svl::Items<
     // FillAttribute support
     XATTR_FILL_FIRST, XATTR_FILL_LAST
 
->::value);
+>);
 
 // AttrSet range for GrfFormatColl
 WhichRangesContainer const aGrfFormatCollSetRange(svl::Items<
     RES_FRMATR_BEGIN, RES_FRMATR_END-1,
     RES_GRFATR_BEGIN, RES_GRFATR_END-1,
     RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1
->::value);
+>);
 
 // AttrSet range for TextNode
 WhichRangesContainer const aTextNodeSetRange(svl::Items<
@@ -174,14 +174,14 @@ WhichRangesContainer const aTextNodeSetRange(svl::Items<
     // FillAttribute support (paragraph FillStyle)
     XATTR_FILL_FIRST, XATTR_FILL_LAST
 
->::value);
+>);
 
 // AttrSet range for NoTextNode
 WhichRangesContainer const aNoTextNodeSetRange(svl::Items<
     RES_FRMATR_BEGIN, RES_FRMATR_END-1,
     RES_GRFATR_BEGIN, RES_GRFATR_END-1,
     RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1
->::value);
+>);
 
 WhichRangesContainer const aTableSetRange(svl::Items<
     RES_FILL_ORDER,     RES_FRM_SIZE,
@@ -196,7 +196,7 @@ WhichRangesContainer const aTableSetRange(svl::Items<
     // <-- collapsing
     RES_FRMATR_GRABBAG, RES_FRMATR_GRABBAG,
     RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1
->::value);
+>);
 
 WhichRangesContainer const aTableLineSetRange(svl::Items<
     RES_FILL_ORDER,     RES_FRM_SIZE,
@@ -209,7 +209,7 @@ WhichRangesContainer const aTableLineSetRange(svl::Items<
     RES_ROW_SPLIT,      RES_ROW_SPLIT,
     RES_FRMATR_GRABBAG, RES_FRMATR_GRABBAG,
     RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1
->::value);
+>);
 
 WhichRangesContainer const aTableBoxSetRange(svl::Items<
     RES_FILL_ORDER,     RES_FRM_SIZE,
@@ -221,7 +221,7 @@ WhichRangesContainer const aTableBoxSetRange(svl::Items<
     RES_FRMATR_GRABBAG, RES_FRMATR_GRABBAG,
     RES_BOXATR_BEGIN,   RES_BOXATR_END-1,
     RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1
->::value);
+>);
 
 // AttrSet range for SwFrameFormat
 WhichRangesContainer const aFrameFormatSetRange(svl::Items<
@@ -231,26 +231,26 @@ WhichRangesContainer const aFrameFormatSetRange(svl::Items<
     // FillAttribute support (TextFrame, OLE, Writer GraphicObject)
     XATTR_FILL_FIRST, XATTR_FILL_LAST
 
->::value);
+>);
 
 // AttrSet range for SwCharFormat
 WhichRangesContainer const aCharFormatSetRange(svl::Items<
     RES_CHRATR_BEGIN, RES_CHRATR_END-1,
     RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1
->::value);
+>);
 
 // AttrSet range for character autostyles
 WhichRangesContainer const aCharAutoFormatSetRange(svl::Items<
     RES_CHRATR_BEGIN, RES_CHRATR_END-1,
     RES_TXTATR_UNKNOWN_CONTAINER, RES_TXTATR_UNKNOWN_CONTAINER,
     RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1
->::value);
+>);
 
 // AttrSet range for SwPageDescFormat
 WhichRangesContainer const aPgFrameFormatSetRange(svl::Items<
     RES_FRMATR_BEGIN, RES_FRMATR_END-1,
     RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1
->::value);
+>);
 
 // create table for accessing default format attributes
 SwDfltAttrTab aAttrTab( POOLATTR_END - POOLATTR_BEGIN, nullptr );

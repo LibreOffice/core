@@ -208,7 +208,7 @@ ScDocumentPool::ScDocumentPool()
                                      ATTR_BORDER,     ATTR_SHADOW,
                                      ATTR_LRSPACE,    ATTR_ULSPACE,
                                      ATTR_PAGE_SIZE,  ATTR_PAGE_SIZE,
-                                     ATTR_PAGE_ON,    ATTR_PAGE_SHARED_FIRST>{} );
+                                     ATTR_PAGE_ON,    ATTR_PAGE_SHARED_FIRST> );
 
     pGlobalBorderInnerAttr->SetLine(nullptr, SvxBoxInfoItemLine::HORI);
     pGlobalBorderInnerAttr->SetLine(nullptr, SvxBoxInfoItemLine::VERT);
@@ -282,11 +282,11 @@ ScDocumentPool::ScDocumentPool()
     if ( ScGlobal::GetEmptyBrushItem() )
 
         mvPoolDefaults[ ATTR_PATTERN     - ATTR_STARTINDEX ] =
-            new ScPatternAttr( SfxItemSet( *this, svl::Items<ATTR_PATTERN_START, ATTR_PATTERN_END>{} ),
+            new ScPatternAttr( SfxItemSet( *this, svl::Items<ATTR_PATTERN_START, ATTR_PATTERN_END> ),
                                ScResId(STR_STYLENAME_STANDARD) );
     else
         mvPoolDefaults[ ATTR_PATTERN     - ATTR_STARTINDEX ] =
-            new ScPatternAttr( SfxItemSet( *this, svl::Items<ATTR_PATTERN_START, ATTR_PATTERN_END>{} ),
+            new ScPatternAttr( SfxItemSet( *this, svl::Items<ATTR_PATTERN_START, ATTR_PATTERN_END> ),
                                STRING_STANDARD ); // FIXME: without name?
 
     mvPoolDefaults[ ATTR_LRSPACE         - ATTR_STARTINDEX ] = new SvxLRSpaceItem( ATTR_LRSPACE );

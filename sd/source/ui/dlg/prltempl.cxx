@@ -51,7 +51,7 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg(SfxObjectShell const * pDocSh,
     : SfxTabDialogController(pParent, "modules/sdraw/ui/drawprtldialog.ui", "DrawPRTLDialog")
     , mpDocShell(pDocSh)
     , ePO(_ePO)
-    , aInputSet(*rStyleBase.GetItemSet().GetPool(), svl::Items<SID_PARAM_NUM_PRESET, SID_PARAM_CUR_NUM_LEVEL>{})
+    , aInputSet(*rStyleBase.GetItemSet().GetPool(), svl::Items<SID_PARAM_NUM_PRESET, SID_PARAM_CUR_NUM_LEVEL>)
 {
     const SfxItemSet* pOrgSet(&rStyleBase.GetItemSet());
 

@@ -71,7 +71,7 @@ namespace sdr::properties
                 SDRATTR_TEXTCOLUMNS_FIRST, SDRATTR_TEXTCOLUMNS_LAST,
 
                 // range from SdrTextObj
-                EE_ITEMS_START, EE_ITEMS_END>{});
+                EE_ITEMS_START, EE_ITEMS_END>);
         }
 
         GraphicProperties::GraphicProperties(SdrObject& rObj)

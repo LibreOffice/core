@@ -662,7 +662,7 @@ void SwGlobalTree::ExecuteContextMenuAction(std::string_view rSelectedPopupEntry
                     RES_BACKGROUND, RES_BACKGROUND,
                     RES_COL, RES_COL,
                     SID_ATTR_PAGE_SIZE, SID_ATTR_PAGE_SIZE,
-                    FN_PARAM_TOX_TYPE, FN_PARAM_TOX_TYPE>{});
+                    FN_PARAM_TOX_TYPE, FN_PARAM_TOX_TYPE>);
 
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             ScopedVclPtr<AbstractMultiTOXTabDialog> pDlg(pFact->CreateMultiTOXTabDialog(

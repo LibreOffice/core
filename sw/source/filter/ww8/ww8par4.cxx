@@ -253,7 +253,7 @@ SwFrameFormat* SwWW8ImplReader::ImportOle(const Graphic* pGrf,
     if( !pFlySet )
     {
         pTempSet.emplace( m_rDoc.GetAttrPool(), svl::Items<RES_FRMATR_BEGIN,
-            RES_FRMATR_END-1>{} );
+            RES_FRMATR_END-1> );
 
         pFlySet = &*pTempSet;
 
