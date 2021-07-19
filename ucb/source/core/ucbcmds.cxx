@@ -18,6 +18,7 @@
  */
 
 #include <memory>
+#include <optional>
 #include <osl/diagnose.h>
 #include <comphelper/propertysequence.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -193,7 +194,7 @@ uno::Reference< io::XInputStream > SAL_CALL ActiveDataSink::getInputStream()
 class CommandProcessorInfo :
     public cppu::WeakImplHelper< ucb::XCommandInfo >
 {
-    std::unique_ptr< uno::Sequence< ucb::CommandInfo > > m_pInfo;
+    std::optional< uno::Sequence< ucb::CommandInfo > > m_xInfo;
 
 public:
     CommandProcessorInfo();
@@ -210,19 +211,19 @@ public:
 
 
 CommandProcessorInfo::CommandProcessorInfo()
-    : m_pInfo( new uno::Sequence< ucb::CommandInfo >( 3 ) )
+    : m_xInfo( 3 )
 {
-    (*m_pInfo)[ 0 ]
+    (*m_xInfo)[ 0 ]
         = ucb::CommandInfo(
             GETCOMMANDINFO_NAME, // Name
             GETCOMMANDINFO_HANDLE, // Handle
             cppu::UnoType<void>::get() ); // ArgType
-    (*m_pInfo)[ 1 ]
+    (*m_xInfo)[ 1 ]
         = ucb::CommandInfo(
             GLOBALTRANSFER_NAME, // Name
             GLOBALTRANSFER_HANDLE, // Handle
             cppu::UnoType<ucb::GlobalTransferCommandArgument>::get() ); // ArgType
-    (*m_pInfo)[ 2 ]
+    (*m_xInfo)[ 2 ]
         = ucb::CommandInfo(
             CHECKIN_NAME, // Name
             CHECKIN_HANDLE, // Handle
@@ -234,7 +235,7 @@ CommandProcessorInfo::CommandProcessorInfo()
 uno::Sequence< ucb::CommandInfo > SAL_CALL
 CommandProcessorInfo::getCommands()
 {
-    return *m_pInfo;
+    return *m_xInfo;
 }
 
 
@@ -242,9 +243,9 @@ CommandProcessorInfo::getCommands()
 ucb::CommandInfo SAL_CALL
 CommandProcessorInfo::getCommandInfoByName( const OUString& Name )
 {
-    auto pInfo = std::find_if(m_pInfo->begin(), m_pInfo->end(),
+    auto pInfo = std::find_if(m_xInfo->begin(), m_xInfo->end(),
         [&Name](const ucb::CommandInfo& rInfo) { return rInfo.Name == Name; });
-    if (pInfo != m_pInfo->end())
+    if (pInfo != m_xInfo->end())
         return *pInfo;
 
     throw ucb::UnsupportedCommandException();
@@ -255,9 +256,9 @@ CommandProcessorInfo::getCommandInfoByName( const OUString& Name )
 ucb::CommandInfo SAL_CALL
 CommandProcessorInfo::getCommandInfoByHandle( sal_Int32 Handle )
 {
-    auto pInfo = std::find_if(m_pInfo->begin(), m_pInfo->end(),
+    auto pInfo = std::find_if(m_xInfo->begin(), m_xInfo->end(),
         [&Handle](const ucb::CommandInfo& rInfo) { return rInfo.Handle == Handle; });
-    if (pInfo != m_pInfo->end())
+    if (pInfo != m_xInfo->end())
         return *pInfo;
 
     throw ucb::UnsupportedCommandException();
@@ -268,7 +269,7 @@ CommandProcessorInfo::getCommandInfoByHandle( sal_Int32 Handle )
 sal_Bool SAL_CALL CommandProcessorInfo::hasCommandByName(
                                                 const OUString& Name )
 {
-    return std::any_of(m_pInfo->begin(), m_pInfo->end(),
+    return std::any_of(m_xInfo->begin(), m_xInfo->end(),
         [&Name](const ucb::CommandInfo& rInfo) { return rInfo.Name == Name; });
 }
 
@@ -276,7 +277,7 @@ sal_Bool SAL_CALL CommandProcessorInfo::hasCommandByName(
 // virtual
 sal_Bool SAL_CALL CommandProcessorInfo::hasCommandByHandle( sal_Int32 Handle )
 {
-    return std::any_of(m_pInfo->begin(), m_pInfo->end(),
+    return std::any_of(m_xInfo->begin(), m_xInfo->end(),
         [&Handle](const ucb::CommandInfo& rInfo) { return rInfo.Handle == Handle; });
 }
 
