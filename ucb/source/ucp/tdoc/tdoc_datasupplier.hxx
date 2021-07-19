@@ -21,7 +21,9 @@
 
 #include <rtl/ref.hxx>
 #include <ucbhelper/resultset.hxx>
+#include <optional>
 #include <memory>
+#include <vector>
 #include <string_view>
 
 namespace tdoc_ucp {
@@ -31,7 +33,23 @@ class Content;
 
 class ResultSetDataSupplier : public ::ucbhelper::ResultSetDataSupplier
 {
-    std::unique_ptr<DataSupplier_Impl>  m_pImpl;
+    struct ResultListEntry
+    {
+        OUString                                  aURL;
+        css::uno::Reference< css::ucb::XContentIdentifier > xId;
+        css::uno::Reference< css::ucb::XContent >           xContent;
+        css::uno::Reference< css::sdbc::XRow >              xRow;
+
+        explicit ResultListEntry( const OUString& rURL ) : aURL( rURL ) {}
+    };
+
+    osl::Mutex                                   m_aMutex;
+    std::vector< ResultListEntry >               m_aResults;
+    rtl::Reference< Content >                    m_xContent;
+    css::uno::Reference< css::uno::XComponentContext >     m_xContext;
+    std::optional<css::uno::Sequence< OUString > >    m_xNamesOfChildren;
+    bool                                         m_bCountFinal;
+    bool                                         m_bThrowException;
 
 private:
     bool queryNamesOfChildren();
