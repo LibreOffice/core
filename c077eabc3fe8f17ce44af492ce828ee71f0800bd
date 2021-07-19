@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9e0a4bca_2c65865b",
+        "filename": "sw/qa/extras/ww8export/ww8export2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 419,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-07-19T10:27:54Z",
+      "side": 1,
+      "message": "Could you please document how the test failed without the fix? See e.g. sw/qa/uibase/frmdlg/frmdlg.cxx:29 as a random example. This has the following benefit: if you assert that the expected value is 100, then it\u0027s interesting to know if the bad value was 99 or e.g. 10 :-)",
+      "revId": "c077eabc3fe8f17ce44af492ce828ee71f0800bd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
