@@ -139,23 +139,6 @@
 
 using namespace com::sun::star;
 
-namespace {
-
-class ScNamedEntry
-{
-    OUString  aName;
-    ScRange   aRange;
-
-public:
-            ScNamedEntry(const OUString& rN, const ScRange& rR) :
-                aName(rN), aRange(rR) {}
-
-    const OUString& GetName() const     { return aName; }
-    const ScRange&  GetRange() const    { return aRange; }
-};
-
-}
-
 //  The names in the maps must be sorted according to strcmp!
 //! Instead of Which-ID 0 use special IDs and do not compare via names!
 
@@ -3993,16 +3976,8 @@ sal_Int32 SAL_CALL ScCellRangesBase::replaceAll( const uno::Reference<util::XSea
 
 UNO3_GETIMPLEMENTATION_IMPL(ScCellRangesBase);
 
-typedef std::vector<ScNamedEntry> ScNamedEntryArr_Impl;
-
-struct ScCellRangesObj::Impl
-{
-    ScNamedEntryArr_Impl m_aNamedEntries;
-};
-
 ScCellRangesObj::ScCellRangesObj(ScDocShell* pDocSh, const ScRangeList& rR)
     : ScCellRangesBase(pDocSh, rR)
-    , m_pImpl(new Impl)
 {
 }
 
@@ -4139,7 +4114,7 @@ void SAL_CALL ScCellRangesObj::addRangeAddress( const table::CellRangeAddress& r
     AddRange(aRange, bMergeRanges);
 }
 
-static void lcl_RemoveNamedEntry( ScNamedEntryArr_Impl& rNamedEntries, const ScRange& rRange )
+static void lcl_RemoveNamedEntry( std::vector<ScCellRangesObj::ScNamedEntry>& rNamedEntries, const ScRange& rRange )
 {
     sal_uInt16 nCount = rNamedEntries.size();
     for ( sal_uInt16 n=nCount; n--; )
@@ -4180,7 +4155,7 @@ void SAL_CALL ScCellRangesObj::removeRangeAddress( const table::CellRangeAddress
             throw container::NoSuchElementException();
 
         aMarkData.SetMultiMarkArea( aRange, false );
-        lcl_RemoveNamedEntry(m_pImpl->m_aNamedEntries, aRange);
+        lcl_RemoveNamedEntry(m_aNamedEntries, aRange);
 
     }
     SetNewRanges(aNotSheetRanges);
@@ -4219,7 +4194,7 @@ void SAL_CALL ScCellRangesObj::removeRangeAddresses( const uno::Sequence<table::
 
 // XNameContainer
 
-static void lcl_RemoveNamedEntry( ScNamedEntryArr_Impl& rNamedEntries, std::u16string_view rName )
+static void lcl_RemoveNamedEntry( std::vector<ScCellRangesObj::ScNamedEntry>& rNamedEntries, std::u16string_view rName )
 {
     sal_uInt16 nCount = rNamedEntries.size();
     for ( sal_uInt16 n=nCount; n--; )
@@ -4245,10 +4220,10 @@ void SAL_CALL ScCellRangesObj::insertByName( const OUString& aName, const uno::A
 
             if ( !aName.isEmpty() )
             {
-                size_t nNamedCount = m_pImpl->m_aNamedEntries.size();
+                size_t nNamedCount = m_aNamedEntries.size();
                 for (size_t n = 0; n < nNamedCount; n++)
                 {
-                    if (m_pImpl->m_aNamedEntries[n].GetName() == aName)
+                    if (m_aNamedEntries[n].GetName() == aName)
                         throw container::ElementExistException();
                 }
             }
@@ -4265,8 +4240,8 @@ void SAL_CALL ScCellRangesObj::insertByName( const OUString& aName, const uno::A
             {
                 //  if a name is given, also insert into list of named entries
                 //  (only possible for a single range)
-                //  name is not in m_pImpl->m_aNamedEntries (tested above)
-                m_pImpl->m_aNamedEntries.emplace_back( aName, rAddRanges[ 0 ] );
+                //  name is not in m_aNamedEntries (tested above)
+                m_aNamedEntries.emplace_back( ScNamedEntry{aName, rAddRanges[ 0 ]} );
             }
         }
     }
@@ -4298,7 +4273,7 @@ static bool lcl_FindRangeByName( const ScRangeList& rRanges, ScDocShell* pDocSh,
     return false;
 }
 
-static bool lcl_FindRangeOrEntry( const ScNamedEntryArr_Impl& rNamedEntries,
+static bool lcl_FindRangeOrEntry( const std::vector<ScCellRangesObj::ScNamedEntry>& rNamedEntries,
                             const ScRangeList& rRanges, ScDocShell* pDocSh,
                             const OUString& rName, ScRange& rFound )
 {
@@ -4374,12 +4349,12 @@ void SAL_CALL ScCellRangesObj::removeByName( const OUString& aName )
                                                                        == ScRefFlags::VALID;
         if (!bValid)
         {
-            sal_uInt16 nCount = m_pImpl->m_aNamedEntries.size();
+            sal_uInt16 nCount = m_aNamedEntries.size();
             for (sal_uInt16 n=0; n<nCount && !bValid; n++)
-                if (m_pImpl->m_aNamedEntries[n].GetName() == aName)
+                if (m_aNamedEntries[n].GetName() == aName)
                 {
                     aDiff.RemoveAll();
-                    aDiff.push_back(m_pImpl->m_aNamedEntries[n].GetRange());
+                    aDiff.push_back(m_aNamedEntries[n].GetRange());
                     bValid = true;
                 }
         }
@@ -4403,8 +4378,8 @@ void SAL_CALL ScCellRangesObj::removeByName( const OUString& aName )
         }
     }
 
-    if (!m_pImpl->m_aNamedEntries.empty())
-        lcl_RemoveNamedEntry(m_pImpl->m_aNamedEntries, aName);
+    if (!m_aNamedEntries.empty())
+        lcl_RemoveNamedEntry(m_aNamedEntries, aName);
 
     if (!bDone)
         throw container::NoSuchElementException();      // not found
@@ -4430,7 +4405,7 @@ uno::Any SAL_CALL ScCellRangesObj::getByName( const OUString& aName )
     ScDocShell* pDocSh = GetDocShell();
     const ScRangeList& rRanges = GetRangeList();
     ScRange aRange;
-    if (!lcl_FindRangeOrEntry(m_pImpl->m_aNamedEntries, rRanges,
+    if (!lcl_FindRangeOrEntry(m_aNamedEntries, rRanges,
                 pDocSh, aName, aRange))
         throw container::NoSuchElementException();
 
@@ -4444,7 +4419,7 @@ uno::Any SAL_CALL ScCellRangesObj::getByName( const OUString& aName )
     return aRet;
 }
 
-static bool lcl_FindEntryName( const ScNamedEntryArr_Impl& rNamedEntries,
+static bool lcl_FindEntryName( const std::vector<ScCellRangesObj::ScNamedEntry>& rNamedEntries,
                         const ScRange& rRange, OUString& rName )
 {
     sal_uInt16 nCount = rNamedEntries.size();
@@ -4475,8 +4450,8 @@ uno::Sequence<OUString> SAL_CALL ScCellRangesObj::getElementNames()
         {
             //  use given name if for exactly this range, otherwise just format
             ScRange const & rRange = rRanges[ i ];
-            if (m_pImpl->m_aNamedEntries.empty() ||
-                !lcl_FindEntryName(m_pImpl->m_aNamedEntries, rRange, aRangeStr))
+            if (m_aNamedEntries.empty() ||
+                !lcl_FindEntryName(m_aNamedEntries, rRange, aRangeStr))
             {
                 aRangeStr = rRange.Format(rDoc, ScRefFlags::VALID | ScRefFlags::TAB_3D);
             }
@@ -4493,7 +4468,7 @@ sal_Bool SAL_CALL ScCellRangesObj::hasByName( const OUString& aName )
     ScDocShell* pDocSh = GetDocShell();
     const ScRangeList& rRanges = GetRangeList();
     ScRange aRange;
-    return lcl_FindRangeOrEntry(m_pImpl->m_aNamedEntries, rRanges, pDocSh,
+    return lcl_FindRangeOrEntry(m_aNamedEntries, rRanges, pDocSh,
                 aName, aRange);
 }
 

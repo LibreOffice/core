@@ -382,9 +382,16 @@ class SC_DLLPUBLIC ScCellRangesObj final : public ScCellRangesBase,
                         public css::container::XNameContainer,
                         public css::container::XEnumerationAccess
 {
+public:
+    struct ScNamedEntry
+    {
+        OUString  aName;
+        ScRange   aRange;
+        const OUString& GetName() const { return aName; }
+        const ScRange& GetRange() const { return aRange; }
+    };
 private:
-    struct Impl;
-    std::unique_ptr<Impl> m_pImpl;
+    std::vector<ScNamedEntry> m_aNamedEntries;
 
     rtl::Reference<ScCellRangeObj> GetObjectByIndex_Impl(sal_Int32 nIndex) const;
 
