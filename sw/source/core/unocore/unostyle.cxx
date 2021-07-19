@@ -3542,7 +3542,7 @@ uno::Reference< style::XAutoStyle > SwXAutoStyleFamily::insertStyle(
         }
         case IStyleAccess::AUTO_STYLE_RUBY:
         {
-            // pRange = aTextNodeSetRange;
+            pRange = WhichRangesContainer(RES_TXTATR_CJK_RUBY, RES_TXTATR_CJK_RUBY);
             pPropSet = aSwMapProvider.GetPropertySet(PROPERTY_MAP_RUBY_AUTO_STYLE);
             break;
         }
