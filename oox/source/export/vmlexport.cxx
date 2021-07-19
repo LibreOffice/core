@@ -1389,6 +1389,10 @@ sal_Int32 VMLExport::StartShape()
             break;
     }
 
+    if (!m_pSdrObject->getHyperlink().isEmpty())
+        m_pShapeAttrList->add(
+            XML_href, OUStringToOString(m_pSdrObject->getHyperlink(), RTL_TEXTENCODING_UTF8));
+
     m_pShapeAttrList->addNS(XML_o, XML_allowincell, m_IsFollowingTextFlow ? "t" : "f");
 
     // add style

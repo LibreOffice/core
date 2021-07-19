@@ -440,6 +440,13 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf142404_tabOverSpacingC15, "tdf142404_
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("8 lines high", 242*8, nHeight, 121);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testShapeHyperlink, "hyperlinkshape.docx")
+{
+    // Test import/export of hyperlink property on shapes
+    auto xShape(getShape(1));
+    CPPUNIT_ASSERT_EQUAL(OUString("https://libreoffice.org/"), getProperty<OUString>(xShape, "Hyperlink"));
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf139580, "tdf139580.odt")
 {
     // Without the fix in place, this test would have crashed at export time

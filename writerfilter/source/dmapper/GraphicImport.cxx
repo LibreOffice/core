@@ -407,9 +407,11 @@ public:
             uno::Reference< container::XNamed > xNamed( xGraphicObjectProperties, uno::UNO_QUERY_THROW );
             xNamed->setName(rDomainMapper.GetGraphicNamingHelper().NameGraphic(sName));
 
-            if ( sHyperlinkURL.getLength() > 0 )
-                xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_HYPER_LINK_U_R_L ),
-                    uno::makeAny ( sHyperlinkURL ));
+            if (!sHyperlinkURL.isEmpty())
+            {
+                xGraphicObjectProperties->setPropertyValue(getPropertyName(PROP_HYPERLINK),
+                                                           uno::makeAny(sHyperlinkURL));
+            }
             xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_DESCRIPTION ),
                 uno::makeAny( sAlternativeText ));
             xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_TITLE ),
