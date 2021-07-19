@@ -1771,7 +1771,7 @@ void SwUnoCursorHelper::SetPropertyValues(
     OUString aUnknownExMsg, aPropertyVetoExMsg;
 
     // Build set of attributes we want to fetch
-    SfxItemSet aItemSet(rDoc.GetAttrPool(), WhichRangesContainer());
+    WhichRangesContainer aRanges;
     std::vector<std::pair<const SfxItemPropertyMapEntry*, const uno::Any&>> aEntries;
     aEntries.reserve(rPropertyValues.getLength());
     for (const auto& rPropVal : rPropertyValues)
@@ -1792,9 +1792,10 @@ void SwUnoCursorHelper::SetPropertyValues(
             aPropertyVetoExMsg += "Property is read-only: '" + rPropertyName + "' ";
             continue;
         }
-        aItemSet.MergeRange(pEntry->nWID, pEntry->nWID);
+        aRanges = aRanges.MergeRange(pEntry->nWID, pEntry->nWID);
         aEntries.emplace_back(pEntry, rPropVal.Value);
     }
+    SfxItemSet aItemSet(rDoc.GetAttrPool(), aRanges);
 
     if (!aEntries.empty())
     {
