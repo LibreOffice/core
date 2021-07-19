@@ -20,7 +20,7 @@
 #ifndef BASCTL_INC_BASIDESH_HRC
 #define BASCTL_INC_BASIDESH_HRC
 
-#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
+#define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
 
 #define RID_STR_FILTER_ALLFILES             NC_("RID_STR_FILTER_ALLFILES", "<All>")
 #define RID_STR_NOMODULE                    NC_("RID_STR_NOMODULE", "< No Module >")

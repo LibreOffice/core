@@ -20,9 +20,9 @@
 #ifndef INCLUDED_SW_INC_FLDREF_HRC
 #define INCLUDED_SW_INC_FLDREF_HRC
 
-#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
+#define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
 
-const char* FLD_REF_PAGE_TYPES[] =
+const TranslateId FLD_REF_PAGE_TYPES[] =
 {
     NC_("fldrefpage|liststore1", "Bookmarks"),
     NC_("fldrefpage|liststore1", "Footnotes"),

@@ -18,8 +18,7 @@
  */
 
 #include <sfx2/sfxresid.hxx>
-#include <unotools/resmgr.hxx>
 
-OUString SfxResId(std::string_view aId) { return Translate::get(aId, Translate::Create("sfx")); }
+OUString SfxResId(TranslateId aId) { return Translate::get(aId, Translate::Create("sfx")); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

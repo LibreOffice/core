@@ -28,25 +28,25 @@
 namespace xforms
 {
 
-OUString getResource(const char* pResourceId)
+OUString getResource(TranslateId pResourceId)
 {
     return getResource(pResourceId, {}, {}, {});
 }
 
-OUString getResource(const char* pResourceId,
+OUString getResource(TranslateId pResourceId,
                      std::u16string_view rInfo1)
 {
     return getResource(pResourceId, rInfo1, {}, {});
 }
 
-OUString getResource(const char* pResourceId,
+OUString getResource(TranslateId pResourceId,
                      std::u16string_view rInfo1,
                      std::u16string_view rInfo2)
 {
     return getResource(pResourceId, rInfo1, rInfo2, {});
 }
 
-OUString getResource(const char* pResourceId,
+OUString getResource(TranslateId pResourceId,
                      std::u16string_view rInfo1,
                      std::u16string_view rInfo2,
                      std::u16string_view rInfo3)

@@ -19,9 +19,9 @@
 #ifndef INCLUDED_VCL_INC_PRINTACCESSORYVIEW_HRC
 #define INCLUDED_VCL_INC_PRINTACCESSORYVIEW_HRC
 
-#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
+#define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
 
-const char* RSC_QUERY_OBJECT_TYPE[] =
+const TranslateId RSC_QUERY_OBJECT_TYPE[] =
 {
     NC_("RSC_QUERY_OBJECT_TYPE", "The table view"),
     NC_("RSC_QUERY_OBJECT_TYPE", "The query"),

@@ -21,6 +21,7 @@
 
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
+#include <unotools/resmgr.hxx>
 
 #include <time.h>
 #include <premac.h>
@@ -131,7 +132,7 @@ namespace connectivity::macab
             return dataType;
         }
 
-        void impl_throwError(const char* pErrorId);
+        void impl_throwError(TranslateId pErrorId);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

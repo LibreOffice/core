@@ -46,7 +46,7 @@ SwAccessibleFootnote::SwAccessibleFootnote(
         bIsEndnote ? AccessibleRole::END_NOTE : AccessibleRole::FOOTNOTE,
         pFootnoteFrame )
 {
-    const char* pResId = bIsEndnote ? STR_ACCESS_ENDNOTE_NAME
+    TranslateId pResId = bIsEndnote ? STR_ACCESS_ENDNOTE_NAME
                                    : STR_ACCESS_FOOTNOTE_NAME;
 
     OUString sArg;
@@ -71,7 +71,7 @@ OUString SAL_CALL SwAccessibleFootnote::getAccessibleDescription()
 
     ThrowIfDisposed();
 
-    const char* pResId = AccessibleRole::END_NOTE == GetRole()
+    TranslateId pResId = AccessibleRole::END_NOTE == GetRole()
         ? STR_ACCESS_ENDNOTE_DESC
         : STR_ACCESS_FOOTNOTE_DESC ;
 

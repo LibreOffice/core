@@ -9,9 +9,9 @@
 
 #pragma once
 
-#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
+#define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
 
-const char* RID_SVXITEMS_HORJUST[] =
+const TranslateId RID_SVXITEMS_HORJUST[] =
 {
     // enum SvxCellHorJustify ----------------------------------------------------
     NC_("RID_SVXITEMS_HORJUST_STANDARD", "Horizontal alignment default"),
@@ -22,7 +22,7 @@ const char* RID_SVXITEMS_HORJUST[] =
     NC_("RID_SVXITEMS_HORJUST_REPEAT", "Repeat alignment")
 };
 
-const char* RID_SVXITEMS_VERJUST[] =
+const TranslateId RID_SVXITEMS_VERJUST[] =
 {
     // enum SvxCellVerJustify ----------------------------------------------------
     NC_("RID_SVXITEMS_VERJUST_STANDARD", "Vertical alignment default"),
@@ -32,7 +32,7 @@ const char* RID_SVXITEMS_VERJUST[] =
     NC_("RID_SVXITEMS_HORJUST_BLOCK", "Justify vertically")
 };
 
-const char* RID_SVXITEMS_JUSTMETHOD[] =
+const TranslateId RID_SVXITEMS_JUSTMETHOD[] =
 {
     // enum SvxCellJustifyMethod ----------------------------------------------------
     NC_("RID_SVXITEMS_JUSTMETHOD_AUTO", "Automatic Justify"),

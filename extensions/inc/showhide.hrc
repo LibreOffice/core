@@ -20,11 +20,11 @@
 #ifndef INCLUDED_EXTENSIONS_INC_SHOWHIDE_HRC
 #define INCLUDED_EXTENSIONS_INC_SHOWHIDE_HRC
 
-#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
+#define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
 
 namespace {
 
-const char* RID_RSC_ENUM_SHOWHIDE[] =
+const TranslateId RID_RSC_ENUM_SHOWHIDE[] =
 {
     NC_("RID_RSC_ENUM_SHOWHIDE", "Hide"),
     NC_("RID_RSC_ENUM_SHOWHIDE", "Show")

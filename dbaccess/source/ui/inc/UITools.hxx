@@ -24,6 +24,7 @@
 #include <editeng/svxenum.hxx>
 #include <vcl/taskpanelist.hxx>
 #include <connectivity/dbtools.hxx>
+#include <unotools/resmgr.hxx>
 
 #include <memory>
 #include <string_view>
@@ -310,7 +311,7 @@ namespace dbaui
         @return
             RET_YES, RET_NO, RET_ALL
     */
-    sal_Int32 askForUserAction(weld::Window* pParent, const char* pTitle, const char* pText, bool bAll, std::u16string_view rName);
+    sal_Int32 askForUserAction(weld::Window* pParent, TranslateId pTitle, TranslateId pText, bool bAll, std::u16string_view rName);
 
     /** creates a new view from a query or table
         @param  _sName

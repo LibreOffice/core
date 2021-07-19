@@ -47,7 +47,7 @@ using namespace com::sun::star::util;
 
 namespace connectivity::macab
 {
-    void impl_throwError(const char* pErrorId)
+    void impl_throwError(TranslateId pErrorId)
     {
         ::connectivity::SharedResources aResources;
         const OUString sError( aResources.getResourceString(pErrorId) );

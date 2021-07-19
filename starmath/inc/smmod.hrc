@@ -9,15 +9,15 @@
 
 #pragma once
 
-#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
+#define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
 
-const char* RID_UI_SYMBOLSET_NAMES[] =
+const TranslateId RID_UI_SYMBOLSET_NAMES[] =
 {
     NC_("RID_UI_SYMBOLSET_NAMES", "Greek"),
     NC_("RID_UI_SYMBOLSET_NAMES", "Special")
 };
 
-const char* RID_UI_SYMBOL_NAMES[] =
+const TranslateId RID_UI_SYMBOL_NAMES[] =
 {
     NC_("RID_UI_SYMBOL_NAMES", "alpha"),
     NC_("RID_UI_SYMBOL_NAMES", "ALPHA"),

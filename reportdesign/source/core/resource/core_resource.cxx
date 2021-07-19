@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include <core_resource.hxx>
-#include <unotools/resmgr.hxx>
 
-OUString RptResId(std::string_view aId) { return Translate::get(aId, Translate::Create("rpt")); }
+OUString RptResId(TranslateId aId) { return Translate::get(aId, Translate::Create("rpt")); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

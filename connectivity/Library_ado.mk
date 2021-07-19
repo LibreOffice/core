@@ -42,6 +42,7 @@ $(eval $(call gb_Library_use_libraries,ado,\
 	cppuhelper \
 	sal \
 	salhelper \
+	utl \
 	dbtools \
 	comphelper \
 ))

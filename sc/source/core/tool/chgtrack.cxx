@@ -671,7 +671,7 @@ void ScChangeActionIns::GetDescription(
 {
     ScChangeAction::GetDescription( rStr, rDoc, bSplitRange, bWarning );
 
-    const char* pWhatId;
+    TranslateId pWhatId;
     switch ( GetType() )
     {
         case SC_CAT_INSERT_COLS :
@@ -905,7 +905,7 @@ void ScChangeActionDel::GetDescription(
 {
     ScChangeAction::GetDescription( rStr, rDoc, bSplitRange, bWarning );
 
-    const char* pWhatId;
+    TranslateId pWhatId;
     switch ( GetType() )
     {
         case SC_CAT_DELETE_COLS :

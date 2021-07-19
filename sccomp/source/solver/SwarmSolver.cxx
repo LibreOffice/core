@@ -130,7 +130,7 @@ private:
     std::vector<sheet::SolverConstraint> maNonBoundedConstraints;
 
 private:
-    static OUString getResourceString(std::string_view aId);
+    static OUString getResourceString(TranslateId aId);
 
     uno::Reference<table::XCell> getCell(const table::CellAddress& rPosition);
     void setValue(const table::CellAddress& rPosition, double fValue);
@@ -233,7 +233,7 @@ public:
 
     virtual OUString SAL_CALL getPropertyDescription(const OUString& rPropertyName) override
     {
-        const char* pResId = "";
+        TranslateId pResId;
         switch (getInfoHelper().getHandleByName(rPropertyName))
         {
             case PROP_NONNEGATIVE:
@@ -283,9 +283,9 @@ public:
 };
 }
 
-OUString SwarmSolver::getResourceString(std::string_view aId)
+OUString SwarmSolver::getResourceString(TranslateId aId)
 {
-    if (aId.empty())
+    if (!aId)
         return OUString();
 
     return Translate::get(aId, Translate::Create("scc"));

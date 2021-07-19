@@ -43,7 +43,7 @@ const sal_Int32 spnDateParts[] =
     css::sheet::DataPilotFieldGroupBy::YEARS
 };
 
-const char* aDatePartResIds[] =
+const TranslateId aDatePartResIds[] =
 {
     STR_DPFIELD_GROUP_BY_SECONDS,
     STR_DPFIELD_GROUP_BY_MINUTES,

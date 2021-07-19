@@ -20,7 +20,7 @@
 #ifndef INCLUDED_REPORTDESIGN_INC_STRINGS_HRC
 #define INCLUDED_REPORTDESIGN_INC_STRINGS_HRC
 
-#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
+#define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
 
 #define RID_STR_PROPPAGE_DEFAULT                NC_("RID_STR_PROPPAGE_DEFAULT", "General")
 #define RID_STR_PROPPAGE_DATA                   NC_("RID_STR_PROPPAGE_DATA", "Data")

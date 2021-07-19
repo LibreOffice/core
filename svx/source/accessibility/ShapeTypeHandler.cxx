@@ -191,7 +191,7 @@ tools::Long ShapeTypeHandler::GetSlotId (const uno::Reference<drawing::XShape>& 
 /// get the accessible base name for an object
 OUString ShapeTypeHandler::CreateAccessibleBaseName (const uno::Reference<drawing::XShape>& rxShape)
 {
-    const char* pResourceId;
+    TranslateId pResourceId;
     OUString sName;
 
     switch (ShapeTypeHandler::Instance().GetTypeId (rxShape))
@@ -276,7 +276,7 @@ OUString ShapeTypeHandler::CreateAccessibleBaseName (const uno::Reference<drawin
                         pResourceId = STR_ObjNameSingulFONTWORK;
                     else
                     {
-                        pResourceId = nullptr;
+                        pResourceId = {};
                         sName = pCustomShape->GetCustomShapeName();
                     }
                 }
@@ -286,7 +286,7 @@ OUString ShapeTypeHandler::CreateAccessibleBaseName (const uno::Reference<drawin
             pResourceId = STR_ObjNameSingulTEXT;
             break;
         default:
-            pResourceId = nullptr;
+            pResourceId = {};
             sName = "UnknownAccessibleShape";
             if (rxShape.is())
                 sName += ": " + rxShape->getShapeType();

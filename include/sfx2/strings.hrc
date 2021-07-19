@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SFX2_INC_STRINGS_HRC
 #define INCLUDED_SFX2_INC_STRINGS_HRC
 
-#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
+#define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
 
 #define STR_TEMPLATE_FILTER                     NC_("STR_TEMPLATE_FILTER", "Templates")
 #define STR_SAVEDOC                             NC_("STR_SAVEDOC", "~Save")

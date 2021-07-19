@@ -30,6 +30,7 @@ $(eval $(call gb_CppunitTest_use_libraries,connectivity_sharedresources, \
 	dbtools \
 	sal \
 	test \
+	utl \
 	unotest \
 ))
 

@@ -21,9 +21,6 @@
 
 #include <unotools/resmgr.hxx>
 
-inline OUString XsResId(std::string_view aId)
-{
-    return Translate::get(aId, Translate::Create("xsc"));
-}
+inline OUString XsResId(TranslateId aId) { return Translate::get(aId, Translate::Create("xsc")); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
