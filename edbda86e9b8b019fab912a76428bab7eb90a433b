@@ -52,6 +52,24 @@
       "revId": "edbda86e9b8b019fab912a76428bab7eb90a433b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dd7183d0_5d2d3d7c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-07-19T07:22:05Z",
+      "side": 1,
+      "message": "I have doubts about calling this only an export problem, because even after the problematic export, MS Word opens the file properly, and the lines are visible.",
+      "parentUuid": "bad13c0d_73fdaf01",
+      "revId": "edbda86e9b8b019fab912a76428bab7eb90a433b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
