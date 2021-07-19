@@ -18,7 +18,7 @@
  */
 
 #include <accelerators/presethandler.hxx>
-#include <uiconfiguration/moduleimagemanager.hxx>
+#include <uiconfiguration/imagemanager.hxx>
 #include <uielement/constitemcontainer.hxx>
 #include <uielement/rootitemcontainer.hxx>
 #include <uielement/uielementtypenames.hxx>
@@ -212,7 +212,7 @@ private:
     css::uno::Reference< css::uno::XComponentContext >        m_xContext;
     osl::Mutex                                                m_mutex;
     ::cppu::OMultiTypeInterfaceContainerHelper                m_aListenerContainer;   /// container for ALL Listener
-    css::uno::Reference< css::lang::XComponent >              m_xModuleImageManager;
+    rtl::Reference< ImageManager >                            m_xModuleImageManager;
     css::uno::Reference< css::ui::XAcceleratorConfiguration > m_xModuleAcceleratorManager;
 };
 
@@ -1394,9 +1394,7 @@ Reference< XInterface > SAL_CALL ModuleUIConfigurationManager::getImageManager()
 
     if ( !m_xModuleImageManager.is() )
     {
-        m_xModuleImageManager.set( static_cast< cppu::OWeakObject *>( new ModuleImageManager( m_xContext )),
-                                   UNO_QUERY );
-        Reference< XInitialization > xInit( m_xModuleImageManager, UNO_QUERY );
+        m_xModuleImageManager = new ImageManager( m_xContext, /*bForModule*/true );
 
         uno::Sequence<uno::Any> aPropSeq(comphelper::InitAnyPropertySequence(
         {
@@ -1404,10 +1402,10 @@ Reference< XInterface > SAL_CALL ModuleUIConfigurationManager::getImageManager()
             {"ModuleIdentifier", uno::Any(m_aModuleIdentifier)},
             {"UserRootCommit", uno::Any(m_xUserRootCommit)},
         }));
-        xInit->initialize( aPropSeq );
+        m_xModuleImageManager->initialize( aPropSeq );
     }
 
-    return Reference< XInterface >( m_xModuleImageManager, UNO_QUERY );
+    return Reference< XInterface >( static_cast<cppu::OWeakObject*>(m_xModuleImageManager.get()), UNO_QUERY );
 }
 
 Reference< ui::XAcceleratorConfiguration > SAL_CALL ModuleUIConfigurationManager::getShortCutManager()

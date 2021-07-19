@@ -168,7 +168,6 @@ $(eval $(call gb_Library_add_exception_objects,fwk,\
     framework/source/uiconfiguration/graphicnameaccess \
     framework/source/uiconfiguration/imagemanager \
     framework/source/uiconfiguration/imagemanagerimpl \
-    framework/source/uiconfiguration/moduleimagemanager \
     framework/source/uiconfiguration/moduleuicfgsupplier \
     framework/source/uiconfiguration/moduleuiconfigurationmanager \
     framework/source/uiconfiguration/uicategorydescription \

@@ -38,8 +38,8 @@ using namespace ::com::sun::star::beans;
 namespace framework
 {
 
-ImageManager::ImageManager( const uno::Reference< uno::XComponentContext >& rxContext ) :
-    m_pImpl( new ImageManagerImpl(rxContext, this, false) )
+ImageManager::ImageManager( const uno::Reference< uno::XComponentContext >& rxContext, bool bForModule ) :
+    m_pImpl( new ImageManagerImpl(rxContext, this, bForModule) )
 {
 }
 
@@ -167,7 +167,7 @@ com_sun_star_comp_framework_ImageManager_get_implementation(
     css::uno::XComponentContext *context,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(new framework::ImageManager(context));
+    return cppu::acquire(new framework::ImageManager(context, /*bForModule*/false));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
