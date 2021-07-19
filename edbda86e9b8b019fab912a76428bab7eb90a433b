@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1bd37c65_26ad8f9e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-07-19T07:03:13Z",
+      "side": 1,
+      "message": "Do I understand correctly that this is a DOC export fix (as seen by a user)? I so, could you change this to something like:\n\n tdf#123321 DOC export: Fix wrong calculation of shape extent",
+      "revId": "edbda86e9b8b019fab912a76428bab7eb90a433b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
