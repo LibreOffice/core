@@ -57,7 +57,6 @@ namespace sfx2
         ::std::vector< OUString > mlLastURLs;
 
         OUString             maPath;
-        OUString             maLastPath;
         OUString             maFileName;
         OUString             maCurFilter;
         OUString             maSelectFilter;
