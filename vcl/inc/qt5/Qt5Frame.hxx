@@ -102,6 +102,7 @@ class VCLPLUG_QT5_PUBLIC Qt5Frame : public QObject, public SalFrame
 
 #if QT5_USING_X11
     ScreenSaverInhibitor m_ScreenSaverInhibitor;
+    ModKeyFlags m_nKeyModifiers;
 #endif
 
     LanguageType m_nInputLanguage;
