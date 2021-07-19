@@ -3464,16 +3464,23 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
         }
         else
         {
-            uno::Reference< text::XTextRange > xShapeText( xShape, uno::UNO_QUERY_THROW);
+            uno::Reference< beans::XPropertySet > xProps( xShape, uno::UNO_QUERY_THROW );
+            uno::Reference< text::XTextRange > xShapeText(xShape, uno::UNO_QUERY_THROW);
             // Add the shape to the text append stack
-            m_aTextAppendStack.push( TextAppendContext(uno::Reference< text::XTextAppend >( xShape, uno::UNO_QUERY_THROW ),
-                        m_bIsNewDoc ? uno::Reference<text::XTextCursor>() : m_xBodyText->createTextCursorByRange(xShapeText->getStart() )));
+            if (xProps->getPropertySetInfo()->hasPropertyByName("TextBox") && xProps->getPropertyValue("TextBox").get<bool>())
+            {
+                uno::Reference< text::XTextFrame > xTextBox = xProps->getPropertyValue("TextBoxContent").get<uno::Reference< text::XTextFrame >>();
 
+                m_aTextAppendStack.push(TextAppendContext(uno::Reference< text::XTextAppend >(xTextBox, uno::UNO_QUERY_THROW),
+                    m_bIsNewDoc ? uno::Reference<text::XTextCursor>() : m_xBodyText->createTextCursorByRange(xTextBox->getText()->getStart())));
+            }
+            else
+                m_aTextAppendStack.push( TextAppendContext(uno::Reference< text::XTextAppend >( xShapeText, uno::UNO_QUERY_THROW ),
+                        m_bIsNewDoc ? uno::Reference<text::XTextCursor>() : m_xBodyText->createTextCursorByRange(xShapeText->getText()->getStart() )));
             // Add the shape to the anchored objects stack
             uno::Reference< text::XTextContent > xTxtContent( xShape, uno::UNO_QUERY_THROW );
             m_aAnchoredStack.push( AnchoredContext(xTxtContent) );
 
-            uno::Reference< beans::XPropertySet > xProps( xShape, uno::UNO_QUERY_THROW );
 #ifdef DBG_UTIL
             TagLogger::getInstance().unoPropertySet(xProps);
 #endif
