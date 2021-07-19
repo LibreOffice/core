@@ -2142,7 +2142,7 @@ void WW8SwFlyPara::BoxUpWidth( tools::Long nInWidth )
 // WW8FlySet-ctor for Apos and graphics Apos
 WW8FlySet::WW8FlySet(SwWW8ImplReader& rReader, const WW8FlyPara* pFW,
     const WW8SwFlyPara* pFS, bool bGraf)
-    : SfxItemSet(rReader.m_rDoc.GetAttrPool(),svl::Items<RES_FRMATR_BEGIN,RES_FRMATR_END-1>{})
+    : SfxItemSet(rReader.m_rDoc.GetAttrPool(),svl::Items<RES_FRMATR_BEGIN,RES_FRMATR_END-1>)
 {
     Reader::ResetFrameFormatAttrs(*this);    // remove distance/border
                                             // position
@@ -2197,7 +2197,7 @@ WW8FlySet::WW8FlySet(SwWW8ImplReader& rReader, const WW8FlyPara* pFW,
 // WW8FlySet-ctor for character bound graphics
 WW8FlySet::WW8FlySet( SwWW8ImplReader& rReader, const SwPaM* pPaM,
     const WW8_PIC& rPic, tools::Long nWidth, tools::Long nHeight )
-    : SfxItemSet(rReader.m_rDoc.GetAttrPool(),svl::Items<RES_FRMATR_BEGIN,RES_FRMATR_END-1>{})
+    : SfxItemSet(rReader.m_rDoc.GetAttrPool(),svl::Items<RES_FRMATR_BEGIN,RES_FRMATR_END-1>)
 {
     Init(rReader, pPaM);
 
@@ -2249,8 +2249,8 @@ void WW8FlySet::Init(const SwWW8ImplReader& rReader, const SwPaM* pPaM)
 
 WW8DupProperties::WW8DupProperties(SwDoc &rDoc, SwWW8FltControlStack *pStack)
     : pCtrlStck(pStack),
-    aChrSet(rDoc.GetAttrPool(), svl::Items<RES_CHRATR_BEGIN, RES_CHRATR_END - 1>{} ),
-    aParSet(rDoc.GetAttrPool(), svl::Items<RES_PARATR_BEGIN, RES_PARATR_END - 1>{} )
+    aChrSet(rDoc.GetAttrPool(), svl::Items<RES_CHRATR_BEGIN, RES_CHRATR_END - 1> ),
+    aParSet(rDoc.GetAttrPool(), svl::Items<RES_PARATR_BEGIN, RES_PARATR_END - 1> )
 {
     //Close any open character properties and duplicate them inside the
     //first table cell
@@ -2449,7 +2449,7 @@ bool SwWW8ImplReader::StartApo(const ApoTestResults &rApo, const WW8_TablePos *p
     if (IsDropCap())
     {
         m_bDropCap = true;
-        m_xCurrentItemSet.reset(new SfxItemSet(m_rDoc.GetAttrPool(), svl::Items<RES_CHRATR_BEGIN, RES_PARATR_END - 1>{}));
+        m_xCurrentItemSet.reset(new SfxItemSet(m_rDoc.GetAttrPool(), svl::Items<RES_CHRATR_BEGIN, RES_PARATR_END - 1>));
         return false;
     }
 

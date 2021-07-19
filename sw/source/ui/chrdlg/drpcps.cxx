@@ -55,7 +55,7 @@ using namespace css;
 using namespace css::uno;
 using namespace css::lang;
 
-const WhichRangesContainer SwDropCapsPage::aPageRg(svl::Items<RES_PARATR_DROP, RES_PARATR_DROP>::value);
+const WhichRangesContainer SwDropCapsPage::aPageRg(svl::Items<RES_PARATR_DROP, RES_PARATR_DROP>);
 
 void SwDropCapsPict::SetText( const OUString& rT )
 {

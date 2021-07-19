@@ -37,7 +37,7 @@
 #include <measure.hxx>
 
 const WhichRangesContainer SvxMeasurePage::pRanges(
-    svl::Items<SDRATTR_MEASURE_FIRST, SDRATTR_MEASURE_LAST>::value);
+    svl::Items<SDRATTR_MEASURE_FIRST, SDRATTR_MEASURE_LAST>);
 
 /*************************************************************************
 |*

@@ -317,7 +317,7 @@ void SwHHCWrapper::ChangeText_impl( const OUString &rNewText, bool bKeepAttribut
         // get item set with all relevant attributes
         static const WhichRangesContainer aRanges(svl::Items<
                 RES_CHRATR_BEGIN, RES_FRMATR_END
-                >::value);
+                >);
         SfxItemSet aItemSet( m_rWrtShell.GetAttrPool(), aRanges );
         // get all attributes spanning the whole selection in order to
         // restore those for the new text
@@ -469,7 +469,7 @@ void SwHHCWrapper::ReplaceUnit(
 
             SfxItemSet aSet( m_rWrtShell.GetAttrPool(), svl::Items<
                     RES_CHRATR_CJK_FONT,     RES_CHRATR_CJK_FONT,
-                    RES_CHRATR_CJK_LANGUAGE, RES_CHRATR_CJK_LANGUAGE>{} );
+                    RES_CHRATR_CJK_LANGUAGE, RES_CHRATR_CJK_LANGUAGE> );
             if (pNewUnitLanguage)
             {
                 aSet.Put( SvxLanguageItem( *pNewUnitLanguage, RES_CHRATR_CJK_LANGUAGE ) );

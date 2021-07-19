@@ -634,7 +634,7 @@ void SwTextShell::StateInsert( SfxItemSet &rSet )
 
             case SID_HYPERLINK_GETLINK:
                 {
-                    SfxItemSet aSet(GetPool(), svl::Items<RES_TXTATR_INETFMT, RES_TXTATR_INETFMT>{});
+                    SfxItemSet aSet(GetPool(), svl::Items<RES_TXTATR_INETFMT, RES_TXTATR_INETFMT>);
                     rSh.GetCurAttr( aSet );
 
                     SvxHyperlinkItem aHLinkItem;
@@ -845,7 +845,7 @@ SfxItemSet SwTextShell::CreateInsertFrameItemSet(SwFlyFrameAttrMgr& rMgr)
         SID_COLOR_TABLE,        SID_PATTERN_LIST,
         SID_HTML_MODE,          SID_HTML_MODE,
         FN_GET_PRINT_AREA,      FN_GET_PRINT_AREA,
-        FN_SET_FRM_NAME,        FN_SET_FRM_NAME>{});
+        FN_SET_FRM_NAME,        FN_SET_FRM_NAME>);
     aSet.Put(SfxUInt16Item(SID_HTML_MODE, ::GetHtmlMode(GetView().GetDocShell())));
 
     // For the Area tab page.
@@ -895,7 +895,7 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
     SwWrtShell &rSh = GetShell();
     SfxItemSet aSet( GetPool(), svl::Items<RES_CHRATR_FONT, RES_CHRATR_FONT,
                                 RES_CHRATR_CJK_FONT, RES_CHRATR_CJK_FONT,
-                                RES_CHRATR_CTL_FONT, RES_CHRATR_CTL_FONT>{} );
+                                RES_CHRATR_CTL_FONT, RES_CHRATR_CTL_FONT> );
     rSh.GetCurAttr( aSet );
     SvtScriptType nScript = rSh.GetScriptType();
 
@@ -987,7 +987,7 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
 
         SfxItemSet aRestoreSet( GetPool(), svl::Items<RES_CHRATR_FONT, RES_CHRATR_FONT,
                                            RES_CHRATR_CJK_FONT, RES_CHRATR_CJK_FONT,
-                                           RES_CHRATR_CTL_FONT, RES_CHRATR_CTL_FONT>{} );
+                                           RES_CHRATR_CTL_FONT, RES_CHRATR_CTL_FONT> );
 
         nScript = g_pBreakIt->GetAllScriptsOfText( aChars );
         if( SvtScriptType::LATIN & nScript )

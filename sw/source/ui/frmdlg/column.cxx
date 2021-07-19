@@ -98,9 +98,9 @@ SwColumnDlg::SwColumnDlg(weld::Window* pParent, SwWrtShell& rSh)
     m_nSelectionWidth = aRect.Width();
 
     SfxItemSet* pColPgSet = nullptr;
-    static svl::Items<RES_FRM_SIZE, RES_FRM_SIZE,
+    static const auto aSectIds = svl::Items<RES_FRM_SIZE, RES_FRM_SIZE,
                       RES_COL, RES_COL,
-                      RES_COLUMNBALANCE, RES_FRAMEDIR> const aSectIds;
+                      RES_COLUMNBALANCE, RES_FRAMEDIR>;
 
     const SwSection* pCurrSection = m_rWrtShell.GetCurrSection();
     const sal_uInt16 nFullSectCnt = m_rWrtShell.GetFullSelectedSectionCount();
@@ -139,7 +139,7 @@ SwColumnDlg::SwColumnDlg(weld::Window* pParent, SwWrtShell& rSh)
             svl::Items<
                 RES_FRM_SIZE, RES_FRM_SIZE,
                 RES_LR_SPACE, RES_LR_SPACE,
-                RES_COL, RES_COL>{}) );
+                RES_COL, RES_COL>) );
 
         const SwFrameFormat &rFormat = pPageDesc->GetMaster();
         m_nPageWidth = rFormat.GetFrameSize().GetSize().Width();
@@ -295,7 +295,7 @@ IMPL_LINK_NOARG(SwColumnDlg, OkHdl, weld::Button&, void)
     }
     if(m_pFrameSet && SfxItemState::SET == m_pFrameSet->GetItemState(RES_COL) && m_bFrameChanged)
     {
-        SfxItemSet aTmp(*m_pFrameSet->GetPool(), svl::Items<RES_COL, RES_COL>{});
+        SfxItemSet aTmp(*m_pFrameSet->GetPool(), svl::Items<RES_COL, RES_COL>);
         aTmp.Put(*m_pFrameSet);
         m_rWrtShell.StartAction();
         m_rWrtShell.Push();
@@ -351,7 +351,7 @@ sal_uInt16 GetMaxWidth( SwColMgr const * pColMgr, sal_uInt16 nCols )
     return nMax;
 }
 
-const WhichRangesContainer SwColumnPage::aPageRg(svl::Items<RES_COL, RES_COL>::value);
+const WhichRangesContainer SwColumnPage::aPageRg(svl::Items<RES_COL, RES_COL>);
 
 void SwColumnPage::ResetColWidth()
 {

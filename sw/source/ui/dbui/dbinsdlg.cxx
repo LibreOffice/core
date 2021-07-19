@@ -997,7 +997,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
             SetTabSet();
 
         SfxItemSet aTableSet( rSh.GetAttrPool(), svl::Items<RES_BOXATR_FORMAT,
-                                                RES_BOXATR_VALUE>{} );
+                                                RES_BOXATR_VALUE> );
         bool bIsAutoUpdateCells = rSh.IsAutoUpdateCells();
         rSh.SetAutoUpdateCells( false );
 

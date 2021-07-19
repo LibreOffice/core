@@ -50,7 +50,7 @@ namespace sdr::properties
                     SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION,
                     SDRATTR_TEXTCOLUMNS_FIRST, SDRATTR_TEXTCOLUMNS_LAST,
                     // Range from SdrTextObj:
-                    EE_ITEMS_START, EE_ITEMS_END>{});
+                    EE_ITEMS_START, EE_ITEMS_END>);
         }
 
         MeasureProperties::MeasureProperties(SdrObject& rObj)

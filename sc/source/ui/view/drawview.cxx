@@ -1136,7 +1136,7 @@ SdrObject* ScDrawView::ApplyGraphicToObject(
     {
         AddUndo(std::make_unique<SdrUndoAttrObj>(rHitObject));
 
-        SfxItemSet aSet(GetModel()->GetItemPool(), svl::Items<XATTR_FILLSTYLE, XATTR_FILLBITMAP>{});
+        SfxItemSet aSet(GetModel()->GetItemPool(), svl::Items<XATTR_FILLSTYLE, XATTR_FILLBITMAP>);
 
         aSet.Put(XFillStyleItem(drawing::FillStyle_BITMAP));
         aSet.Put(XFillBitmapItem(OUString(), rGraphic));

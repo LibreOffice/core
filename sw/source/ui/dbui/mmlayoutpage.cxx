@@ -260,7 +260,7 @@ SwFrameFormat* SwMailMergeLayoutPage::InsertAddressFrame(
         svl::Items<
             RES_FRM_SIZE, RES_FRM_SIZE,
             RES_SURROUND, RES_ANCHOR,
-            RES_BOX, RES_BOX>{} );
+            RES_BOX, RES_BOX> );
     aSet.Put(SwFormatAnchor(RndStdIds::FLY_AT_PAGE, 1));
     if(bAlignLeft)
         aSet.Put(SwFormatHoriOrient( 0, text::HoriOrientation::NONE, text::RelOrientation::PAGE_PRINT_AREA ));
@@ -659,7 +659,7 @@ IMPL_LINK_NOARG(SwMailMergeLayoutPage, ChangeAddressHdl_Impl, weld::MetricSpinBu
 
     SfxItemSet aSet(
         m_pExampleWrtShell->GetAttrPool(),
-        svl::Items<RES_VERT_ORIENT, RES_ANCHOR>{});
+        svl::Items<RES_VERT_ORIENT, RES_ANCHOR>);
     if (m_xAlignToBodyCB->get_active())
         aSet.Put(SwFormatHoriOrient( 0, text::HoriOrientation::NONE, text::RelOrientation::PAGE_PRINT_AREA ));
     else

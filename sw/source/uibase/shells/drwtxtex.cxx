@@ -366,7 +366,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
                 SwView* pView = &GetView();
                 FieldUnit eMetric = ::GetDfltMetric(dynamic_cast<SwWebView*>( pView) !=  nullptr );
                 SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)) );
-                SfxItemSet aDlgAttr(GetPool(), svl::Items<XATTR_FILLSTYLE, XATTR_FILLCOLOR, EE_ITEMS_START, EE_ITEMS_END>{});
+                SfxItemSet aDlgAttr(GetPool(), svl::Items<XATTR_FILLSTYLE, XATTR_FILLCOLOR, EE_ITEMS_START, EE_ITEMS_END>);
 
                 // util::Language does not exists in the EditEngine! That is why not in set.
 
@@ -435,7 +435,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
                     GetPool(),
                     svl::Items<
                         EE_ITEMS_START, EE_ITEMS_END,
-                        SID_ATTR_PARA_HYPHENZONE, SID_ATTR_PARA_WIDOWS>{});
+                        SID_ATTR_PARA_HYPHENZONE, SID_ATTR_PARA_WIDOWS>);
 
                 aDlgAttr.Put(aEditAttr);
 
@@ -557,7 +557,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
 
                 SfxItemSet aAttr( *aNewAttr.GetPool(),
                             svl::Items<SDRATTR_TEXTDIRECTION,
-                            SDRATTR_TEXTDIRECTION>{} );
+                            SDRATTR_TEXTDIRECTION> );
 
                 aAttr.Put( SvxWritingModeItem(
                     nSlot == SID_TEXTDIRECTION_LEFT_TO_RIGHT ?
@@ -590,7 +590,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
                 *aNewAttr.GetPool(),
                 svl::Items<
                     EE_PARA_WRITINGDIR, EE_PARA_WRITINGDIR,
-                    EE_PARA_JUST, EE_PARA_JUST>{});
+                    EE_PARA_JUST, EE_PARA_JUST>);
 
             SvxAdjust nAdjust = SvxAdjust::Left;
             if( SfxItemState::SET == aEditAttr.GetItemState(EE_PARA_JUST, true, &pPoolItem ) )

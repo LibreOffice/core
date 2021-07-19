@@ -70,7 +70,7 @@ std::unique_ptr<SfxTabPage> SdParagraphNumTabPage::Create(weld::Container* pPage
 
 WhichRangesContainer SdParagraphNumTabPage::GetRanges()
 {
-    return WhichRangesContainer(svl::Items<ATTR_PARANUMBERING_START, ATTR_PARANUMBERING_END>::value);
+    return WhichRangesContainer(svl::Items<ATTR_PARANUMBERING_START, ATTR_PARANUMBERING_END>);
 }
 
 bool SdParagraphNumTabPage::FillItemSet( SfxItemSet* rSet )

@@ -197,7 +197,7 @@ uno::Any SvxUnoFontDescriptor::getPropertyDefault( SfxItemPool* pPool )
         svl::Items<
             EE_CHAR_FONTINFO, EE_CHAR_FONTHEIGHT,
             EE_CHAR_WEIGHT, EE_CHAR_ITALIC,
-            EE_CHAR_WLM, EE_CHAR_WLM>{});
+            EE_CHAR_WLM, EE_CHAR_WLM>);
 
     uno::Any aAny;
 

@@ -83,7 +83,7 @@ void SwHTMLParser::InsertDrawObject( SdrObject* pNewDrawObj,
     pNewDrawObj->SetLayer( m_xDoc->getIDocumentDrawModelAccess().GetInvisibleHeavenId() );
 
     SfxItemSet aFrameSet( m_xDoc->GetAttrPool(),
-                        svl::Items<RES_FRMATR_BEGIN, RES_FRMATR_END-1>{} );
+                        svl::Items<RES_FRMATR_BEGIN, RES_FRMATR_END-1> );
     if( !IsNewDoc() )
         Reader::ResetFrameFormatAttrs( aFrameSet );
 
@@ -371,7 +371,7 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
     static WhichRangesContainer const aWhichMap(svl::Items<
             XATTR_FILL_FIRST,   XATTR_FILL_LAST,
             SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST,
-            EE_CHAR_START,      EE_CHAR_END>::value);
+            EE_CHAR_START,      EE_CHAR_END>);
     SfxItemSet aItemSet( pModel->GetItemPool(), aWhichMap );
     aItemSet.Put( makeSdrTextAutoGrowWidthItem( false ) );
     aItemSet.Put( makeSdrTextAutoGrowHeightItem( true ) );

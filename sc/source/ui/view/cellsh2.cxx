@@ -500,7 +500,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                     if( lcl_GetSortParam( rData, aSortParam ) )
                     {
                         ScDocument& rDoc = GetViewData().GetDocument();
-                        SfxItemSet  aArgSet( GetPool(), svl::Items<SCITEM_SORTDATA, SCITEM_SORTDATA>{} );
+                        SfxItemSet  aArgSet( GetPool(), svl::Items<SCITEM_SORTDATA, SCITEM_SORTDATA> );
 
                         pDBData->GetSortParam( aSortParam );
                         bool bHasHeader = rDoc.HasColHeader( aSortParam.nCol1, aSortParam.nRow1, aSortParam.nCol2, aSortParam.nRow2, rData.GetTabNo() );

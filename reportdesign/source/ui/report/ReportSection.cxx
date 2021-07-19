@@ -609,7 +609,7 @@ void OReportSection::createDefault(const OUString& _sType,SdrObject* _pObj)
                                 SDRATTR_GRAF_FIRST,
                                     SDRATTR_CUSTOMSHAPE_LAST,
                                 // Range from SdrTextObj:
-                                EE_ITEMS_START, EE_ITEMS_END>{});
+                                EE_ITEMS_START, EE_ITEMS_END>);
                         aDest.Set( rSource );
                         _pObj->SetMergedItemSet( aDest );
                         Degree100 nAngle = pSourceObj->GetRotateAngle();

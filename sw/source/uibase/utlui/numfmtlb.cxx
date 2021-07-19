@@ -387,7 +387,7 @@ void SwNumFormatBase::CallSelectHdl()
             SID_ATTR_NUMBERFORMAT_NOLANGUAGE,
                 SID_ATTR_NUMBERFORMAT_NOLANGUAGE,
             SID_ATTR_NUMBERFORMAT_ADD_AUTO,
-                SID_ATTR_NUMBERFORMAT_ADD_AUTO>{});
+                SID_ATTR_NUMBERFORMAT_ADD_AUTO>);
 
     double fValue = SwNumFormatBase::GetDefValue(nCurrFormatType);
 

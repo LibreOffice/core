@@ -47,7 +47,7 @@ void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
             RES_COL, RES_COL,
             RES_FTN_AT_TXTEND, RES_FRAMEDIR,
             XATTR_FILL_FIRST, XATTR_FILL_LAST,
-            SID_ATTR_PAGE_SIZE, SID_ATTR_PAGE_SIZE>{});
+            SID_ATTR_PAGE_SIZE, SID_ATTR_PAGE_SIZE>);
 
     if (!pSet || pSet->Count()==0)
     {
@@ -161,7 +161,7 @@ void SwWrtShell::StartInsertRegionDialog(const SwSectionData& rSectionData)
             RES_BACKGROUND, RES_BACKGROUND,
             RES_COL, RES_COL,
             XATTR_FILL_FIRST, XATTR_FILL_LAST,
-            SID_ATTR_PAGE_SIZE, SID_ATTR_PAGE_SIZE>{});
+            SID_ATTR_PAGE_SIZE, SID_ATTR_PAGE_SIZE>);
     SwRect aRect;
     CalcBoundRect(aRect, RndStdIds::FLY_AS_CHAR);
     tools::Long nWidth = aRect.Width();

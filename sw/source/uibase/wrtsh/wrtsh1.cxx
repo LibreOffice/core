@@ -219,10 +219,10 @@ void SwWrtShell::Insert( const OUString &rStr )
          bCallIns = m_bIns /*|| bHasSel*/;
     bool bDeleted = false;
 
-    typedef svl::Items<RES_CHRATR_BEGIN, RES_CHRATR_RSID - 1,
+    const auto CharItems = svl::Items<RES_CHRATR_BEGIN, RES_CHRATR_RSID - 1,
                        RES_CHRATR_RSID + 1, RES_CHRATR_END - 1,
-                       RES_TXTATR_CHARFMT, RES_TXTATR_CHARFMT> CharItems;
-    SfxItemSet aCharAttrSet(GetAttrPool(), CharItems{});
+                       RES_TXTATR_CHARFMT, RES_TXTATR_CHARFMT>;
+    SfxItemSet aCharAttrSet(GetAttrPool(), CharItems);
 
     if( bHasSel || ( !m_bIns && SelectHiddenRange() ) )
     {
@@ -1626,7 +1626,7 @@ void SwWrtShell::AutoUpdatePara(SwTextFormatColl* pColl, const SfxItemSet& rStyl
             SID_ATTR_TABSTOP_DEFAULTS,SID_ATTR_TABSTOP_OFFSET,
             SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER,
             SID_ATTR_PARA_MODEL, SID_ATTR_PARA_KEEP,
-            SID_ATTR_PARA_PAGENUM, SID_ATTR_PARA_PAGENUM>{});
+            SID_ATTR_PARA_PAGENUM, SID_ATTR_PARA_PAGENUM>);
     GetPaMAttr( pCursor, aCoreSet );
     bool bReset = false;
     SfxItemIter aParaIter( aCoreSet );

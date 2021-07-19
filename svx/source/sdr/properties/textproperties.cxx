@@ -57,7 +57,7 @@ namespace sdr::properties
                 SDRATTR_TEXTCOLUMNS_FIRST, SDRATTR_TEXTCOLUMNS_LAST,
 
                 // range from SdrTextObj
-                EE_ITEMS_START, EE_ITEMS_END>{});
+                EE_ITEMS_START, EE_ITEMS_END>);
         }
 
         TextProperties::TextProperties(SdrObject& rObj)
@@ -478,7 +478,7 @@ namespace sdr::properties
 
                                 if(bHasURL)
                                 {
-                                    SfxItemSet aColorSet(*aSet.GetPool(), svl::Items<EE_CHAR_COLOR, EE_CHAR_COLOR>{} );
+                                    SfxItemSet aColorSet(*aSet.GetPool(), svl::Items<EE_CHAR_COLOR, EE_CHAR_COLOR> );
                                     aColorSet.Put(aSet, false);
 
                                     ESelection aSel(nPara, 0);

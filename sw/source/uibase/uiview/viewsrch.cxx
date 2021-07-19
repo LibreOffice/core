@@ -402,7 +402,7 @@ void SwView::ExecSearch(SfxRequest& rReq)
 /*20 */         RES_PARATR_VERTALIGN,   RES_PARATR_VERTALIGN,
 /*22 */         RES_LR_SPACE,           RES_UL_SPACE,
 /*24 */         SID_ATTR_PARA_MODEL,    SID_ATTR_PARA_KEEP
-            >::value);
+            >);
 
             SfxItemSet aSet(m_pWrtShell->GetAttrPool(), aNormalAttr);
 
@@ -743,7 +743,7 @@ sal_uLong SwView::FUNC_Search( const SwSearchOptions& rOptions )
         RES_PARATR_BEGIN, RES_PARATR_END-1,
         RES_FRMATR_BEGIN, RES_FRMATR_END-1,
         SID_ATTR_PARA_MODEL, SID_ATTR_PARA_KEEP
-        >::value);
+        >);
 
     SfxItemSet aSrchSet( m_pWrtShell->GetAttrPool(), aSearchAttrRange);
     if( s_xSearchList && s_xSearchList->Count() )

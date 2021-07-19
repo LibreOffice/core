@@ -757,7 +757,7 @@ void SwStdFontTabPage::Reset( const SfxItemSet* rSet)
     {
         auto pPrinterSet = std::make_unique<SfxItemSet>( *rSet->GetPool(),
                     svl::Items<SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN,
-                    SID_PRINTER_CHANGESTODOC, SID_PRINTER_CHANGESTODOC>{} );
+                    SID_PRINTER_CHANGESTODOC, SID_PRINTER_CHANGESTODOC> );
         m_pPrt = VclPtr<SfxPrinter>::Create(std::move(pPrinterSet));
         m_bDisposePrinter = true;
     }

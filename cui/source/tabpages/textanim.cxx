@@ -30,7 +30,7 @@
 #include <svtools/unitconv.hxx>
 
 const WhichRangesContainer SvxTextAnimationPage::pRanges(
-    svl::Items<SDRATTR_TEXT_ANIKIND, SDRATTR_TEXT_ANIAMOUNT>::value);
+    svl::Items<SDRATTR_TEXT_ANIKIND, SDRATTR_TEXT_ANIAMOUNT>);
 
 /*************************************************************************
 |*

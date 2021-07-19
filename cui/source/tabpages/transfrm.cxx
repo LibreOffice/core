@@ -49,18 +49,18 @@ const WhichRangesContainer SvxPositionSizeTabPage::pPosSizeRanges(svl::Items<
     SID_ATTR_TRANSFORM_PROTECT_POS, SID_ATTR_TRANSFORM_INTERN,
     SID_ATTR_TRANSFORM_AUTOWIDTH, SID_ATTR_TRANSFORM_AUTOHEIGHT,
     SID_ATTR_TRANSFORM_ANCHOR, SID_ATTR_TRANSFORM_VERT_ORIENT
->::value);
+>);
 
 const WhichRangesContainer SvxAngleTabPage::pAngleRanges(svl::Items<
     SID_ATTR_TRANSFORM_ROT_X, SID_ATTR_TRANSFORM_ANGLE,
     SID_ATTR_TRANSFORM_INTERN, SID_ATTR_TRANSFORM_INTERN
->::value);
+>);
 
 const WhichRangesContainer SvxSlantTabPage::pSlantRanges(svl::Items<
     SDRATTR_CORNER_RADIUS, SDRATTR_CORNER_RADIUS,
     SID_ATTR_TRANSFORM_INTERN, SID_ATTR_TRANSFORM_INTERN,
     SID_ATTR_TRANSFORM_SHEAR, SID_ATTR_TRANSFORM_SHEAR_VERTICAL
->::value);
+>);
 
 /*************************************************************************
 |*

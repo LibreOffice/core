@@ -197,7 +197,7 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( weld::Window* pParent, SwDocShell& rDocSh,
             {
                 auto pSet = std::make_unique<SfxItemSet>( rDocSh.GetPool(),
                             svl::Items<SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN,
-                            SID_PRINTER_CHANGESTODOC, SID_PRINTER_CHANGESTODOC>{} );
+                            SID_PRINTER_CHANGESTODOC, SID_PRINTER_CHANGESTODOC> );
                 pPrt = VclPtr<SfxPrinter>::Create( std::move(pSet) );
                 bDelPrinter = true;
             }

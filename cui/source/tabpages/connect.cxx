@@ -34,7 +34,7 @@
 #include <connect.hxx>
 
 const WhichRangesContainer SvxConnectionPage::pRanges(
-    svl::Items<SDRATTR_EDGE_FIRST, SDRATTR_EDGE_LAST>::value);
+    svl::Items<SDRATTR_EDGE_FIRST, SDRATTR_EDGE_LAST>);
 
 /*************************************************************************
 |*

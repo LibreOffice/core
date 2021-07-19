@@ -56,15 +56,15 @@ const WhichRangesContainer SvxStdParagraphTabPage::pStdRanges(
     SID_ATTR_PARA_LINESPACE, SID_ATTR_PARA_LINESPACE, // 10033
     SID_ATTR_LRSPACE, SID_ATTR_ULSPACE,              // 10048 - 10049
     SID_ATTR_PARA_REGISTER, SID_ATTR_PARA_REGISTER  // 10413
-    >::value);
+    >);
 
 const WhichRangesContainer SvxParaAlignTabPage::pAlignRanges(
-    svl::Items<SID_ATTR_PARA_ADJUST, SID_ATTR_PARA_ADJUST>::value);  // 10027
+    svl::Items<SID_ATTR_PARA_ADJUST, SID_ATTR_PARA_ADJUST>);  // 10027
 
 const WhichRangesContainer SvxExtParagraphTabPage::pExtRanges(svl::Items<
     SID_ATTR_PARA_PAGEBREAK, SID_ATTR_PARA_WIDOWS, // 10037 - 10041
     SID_ATTR_PARA_MODEL, SID_ATTR_PARA_KEEP        // 10065 - 10066
->::value);
+>);
 
 #define MAX_DURCH 5670      // 10 cm makes sense as maximum interline lead
                             // according to BP
@@ -2219,7 +2219,7 @@ std::unique_ptr<SfxTabPage> SvxAsianTabPage::Create(weld::Container* pPage, weld
 
 WhichRangesContainer SvxAsianTabPage::GetRanges()
 {
-    return WhichRangesContainer(svl::Items<SID_ATTR_PARA_SCRIPTSPACE, SID_ATTR_PARA_FORBIDDEN_RULES>::value);
+    return WhichRangesContainer(svl::Items<SID_ATTR_PARA_SCRIPTSPACE, SID_ATTR_PARA_FORBIDDEN_RULES>);
 }
 
 bool SvxAsianTabPage::FillItemSet( SfxItemSet* rSet )

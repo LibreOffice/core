@@ -47,7 +47,7 @@ const WhichRangesContainer SvxShadowTabPage::pShadowRanges(svl::Items<
     SID_ATTR_FILL_SHADOW, SID_ATTR_FILL_SHADOW,
     SID_ATTR_SHADOW_BLUR, SID_ATTR_SHADOW_BLUR,
     SID_ATTR_SHADOW_TRANSPARENCE, SID_ATTR_SHADOW_YDISTANCE
->::value);
+>);
 
 SvxShadowTabPage::SvxShadowTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs)
     : SvxTabPage(pPage, pController, "cui/ui/shadowtabpage.ui", "ShadowTabPage", rInAttrs)

@@ -68,7 +68,7 @@ bool ScDrawTextObjectBar::ExecuteParaDlg( const SfxItemSet& rArgs,
         *pArgPool,
         svl::Items<
             EE_ITEMS_START, EE_ITEMS_END,
-            SID_ATTR_PARA_PAGEBREAK, SID_ATTR_PARA_WIDOWS>{});
+            SID_ATTR_PARA_PAGEBREAK, SID_ATTR_PARA_WIDOWS>);
     aNewAttr.Put( rArgs );
 
     // Values have been taken over once to show the dialog.

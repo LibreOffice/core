@@ -37,7 +37,7 @@ const WhichRangesContainer SvxTransparenceTabPage::pTransparenceRanges(svl::Item
     XATTR_FILLTRANSPARENCE, XATTR_FILLTRANSPARENCE,
     XATTR_FILLFLOATTRANSPARENCE, XATTR_FILLFLOATTRANSPARENCE,
     SDRATTR_SHADOWTRANSPARENCE, SDRATTR_SHADOWTRANSPARENCE
->::value);
+>);
 
 /*************************************************************************
 |*

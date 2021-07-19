@@ -631,7 +631,7 @@ void SvxShape::ObtainSettingsFromPropertySet(const SvxItemPropertySet& rPropSet)
     DBG_TESTSOLARMUTEX();
     if(HasSdrObject() && rPropSet.AreThereOwnUsrAnys())
     {
-        SfxItemSet aSet( GetSdrObject()->getSdrModelFromSdrObject().GetItemPool(), svl::Items<SDRATTR_START, SDRATTR_END>{});
+        SfxItemSet aSet( GetSdrObject()->getSdrModelFromSdrObject().GetItemPool(), svl::Items<SDRATTR_START, SDRATTR_END>);
         Reference< beans::XPropertySet > xShape( static_cast<OWeakObject*>(this), UNO_QUERY );
         SvxItemPropertySet_ObtainSettingsFromPropertySet(rPropSet, aSet, xShape, &mpPropSet->getPropertyMap() );
 

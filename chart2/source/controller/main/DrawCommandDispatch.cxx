@@ -139,7 +139,7 @@ void DrawCommandDispatch::setAttributes( SdrObject* pObj )
                                     SDRATTR_GRAF_FIRST,
                                         SDRATTR_CUSTOMSHAPE_LAST,
                                     // Range from SdrTextObj:
-                                    EE_ITEMS_START, EE_ITEMS_END>{});
+                                    EE_ITEMS_START, EE_ITEMS_END>);
                             aDest.Set( rSource );
                             pObj->SetMergedItemSet( aDest );
                             Degree100 nAngle = pSourceObj->GetRotateAngle();

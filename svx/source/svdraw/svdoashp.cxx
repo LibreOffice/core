@@ -1390,7 +1390,7 @@ void SdrObjCustomShape::AdaptTextMinSize()
     SfxItemSet aSet(
         *GetObjectItemSet().GetPool(),
         svl::Items<SDRATTR_TEXT_MINFRAMEHEIGHT, SDRATTR_TEXT_AUTOGROWHEIGHT,
-        SDRATTR_TEXT_MINFRAMEWIDTH, SDRATTR_TEXT_AUTOGROWWIDTH>{}); // contains SDRATTR_TEXT_MAXFRAMEWIDTH
+        SDRATTR_TEXT_MINFRAMEWIDTH, SDRATTR_TEXT_AUTOGROWWIDTH>); // contains SDRATTR_TEXT_MAXFRAMEWIDTH
 
     if(bResizeShapeToFitText)
     {
@@ -2219,7 +2219,7 @@ void SdrObjCustomShape::SetVerticalWriting( bool bVertical )
         svl::Items<SDRATTR_TEXT_AUTOGROWHEIGHT, SDRATTR_TEXT_AUTOGROWHEIGHT,
         // Expanded item ranges to also support horizontal and vertical adjust.
         SDRATTR_TEXT_VERTADJUST, SDRATTR_TEXT_VERTADJUST,
-        SDRATTR_TEXT_AUTOGROWWIDTH, SDRATTR_TEXT_HORZADJUST>{});
+        SDRATTR_TEXT_AUTOGROWWIDTH, SDRATTR_TEXT_HORZADJUST>);
 
     aNewSet.Put(rSet);
 

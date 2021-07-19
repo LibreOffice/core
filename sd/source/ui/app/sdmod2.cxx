@@ -458,7 +458,7 @@ std::unique_ptr<SfxItemSet> SdModule::CreateItemSet( sal_uInt16 nSlot )
             SID_ATTR_GRID_OPTIONS, SID_ATTR_GRID_OPTIONS,
             SID_ATTR_METRIC, SID_ATTR_METRIC,
             SID_ATTR_DEFTABSTOP, SID_ATTR_DEFTABSTOP,
-            ATTR_OPTIONS_LAYOUT, ATTR_OPTIONS_SCALE_END>{});
+            ATTR_OPTIONS_LAYOUT, ATTR_OPTIONS_SCALE_END>);
 
     // TP_OPTIONS_LAYOUT:
     pRet->Put( SdOptionsLayoutItem( pOptions, pFrameView ) );
@@ -629,7 +629,7 @@ void SdModule::ApplyItemSet( sal_uInt16 nSlot, const SfxItemSet& rSet )
     SfxItemSet aPrintSet( GetPool(),
                     svl::Items<SID_PRINTER_NOTFOUND_WARN,  SID_PRINTER_NOTFOUND_WARN,
                     SID_PRINTER_CHANGESTODOC,   SID_PRINTER_CHANGESTODOC,
-                    ATTR_OPTIONS_PRINT,         ATTR_OPTIONS_PRINT>{} );
+                    ATTR_OPTIONS_PRINT,         ATTR_OPTIONS_PRINT> );
 
     // Print
     const SdOptionsPrintItem* pPrintItem = nullptr;

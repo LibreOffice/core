@@ -49,7 +49,7 @@ enum FillType
 const WhichRangesContainer SvxAreaTabPage::pAreaRanges(
     svl::Items<
     XATTR_GRADIENTSTEPCOUNT, XATTR_GRADIENTSTEPCOUNT,
-    SID_ATTR_FILL_STYLE, SID_ATTR_FILL_BITMAP>::value);
+    SID_ATTR_FILL_STYLE, SID_ATTR_FILL_BITMAP>);
 
 namespace
 {
