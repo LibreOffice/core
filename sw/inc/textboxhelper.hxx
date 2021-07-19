@@ -29,6 +29,8 @@ class SwFrameFormat;
 class SwFrameFormats;
 class SwFormatContent;
 class SwDoc;
+class SwRect;
+
 namespace tools
 {
 class Rectangle;
@@ -162,6 +164,29 @@ public:
     /// Undo the effect of saveLinks() + individual resetLink() calls.
     static void restoreLinks(std::set<ZSortFly>& rOld, std::vector<SwFrameFormat*>& rNew,
                              SavedLink& rSavedLinks);
+
+    /// New method to create textbox for a shape, returns true on success.
+    static bool createTextBox(css::uno::Reference<css::drawing::XShape> xShape, SwDoc* pDoc,
+                              bool bCopy = false);
+    /// Returns true if the given shape is a textbox else false.
+    static bool isTextBox(css::uno::Reference<css::drawing::XShape> xShape);
+    /// Maintains the textbox of the given shape automatically.
+    static bool handleTextBox(css::uno::Reference<css::drawing::XShape> xShape);
+    /// Removes the textbox from the shape
+    static bool removeTextBox(css::uno::Reference<css::drawing::XShape> xShape);
+
+private:
+    static bool createTextBox_lcl(css::uno::Reference<css::drawing::XShape> xShape, SwDoc* pDoc,
+                                  bool bCopy = false);
+
+    static bool handleTextBox_lcl(css::uno::Reference<css::drawing::XShape> xShape);
+    static std::vector<std::pair<std::pair<OUString, OUString>, OUString>>
+    setTextBoxProperties_lcl(std::vector<std::pair<OUString, OUString>> vProperties,
+                             css::uno::Reference<css::drawing::XShape> xShape);
+
+    static SdrObject* findSdrObjectOfUNOShape(css::uno::Reference<css::drawing::XShape> xShape);
+    static std::vector<css::uno::Reference<css::drawing::XShape>>
+    getGroupMembers(css::uno::Reference<css::drawing::XShape> xShape);
 };
 
 #endif // INCLUDED_SW_INC_TEXTBOXHELPER_HXX

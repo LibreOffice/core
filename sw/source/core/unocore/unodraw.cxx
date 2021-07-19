@@ -969,6 +969,11 @@ SwXShape::~SwXShape()
     EndListeningAll();
     if(m_pPage)
        const_cast<SwFmDrawPage*>(m_pPage)->RemoveShape(this);
+    if (m_xTextBox)
+    {
+        m_xTextBox->dispose();
+        m_xTextBox = uno::Reference<text::XTextFrame>();
+    }
     m_pPage = nullptr;
 }
 
@@ -1163,13 +1168,27 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
             }
             else if (pEntry->nWID == FN_TEXT_BOX)
             {
-                bool bValue(false);
-                aValue >>= bValue;
-                if (bValue)
-                    SwTextBoxHelper::create(pFormat);
-                else
-                    SwTextBoxHelper::destroy(pFormat);
+                if (pEntry->nMemberId == MID_TEXTBOX)
+                {
+                    bool bValue(false);
+                    aValue >>= bValue;
+                    if (bValue)
+                        SwTextBoxHelper::createTextBox(mxShape, pFormat->GetDoc());
+                    else
+                        SwTextBoxHelper::removeTextBox(mxShape);
+                }
 
+                if (pEntry->nMemberId == MID_TEXTBOX_CONTENT)
+                {
+                    if (aValue.hasValue())
+                        m_xTextBox.set(aValue.get<uno::Reference<css::text::XTextFrame>>());
+                    else
+                        if (m_xTextBox)
+                        {
+                            m_xTextBox->dispose();
+                            m_xTextBox.set(uno::Reference<css::text::XTextFrame>());
+                        }
+                }
             }
             else if (pEntry->nWID == RES_CHAIN)
             {
@@ -1516,8 +1535,15 @@ uno::Any SwXShape::getPropertyValue(const OUString& rPropertyName)
                 }
                 else if (pEntry->nWID == FN_TEXT_BOX)
                 {
-                    bool bValue = SwTextBoxHelper::isTextBox(pFormat, RES_DRAWFRMFMT);
-                    aRet <<= bValue;
+                    if (pEntry->nMemberId == MID_TEXTBOX)
+                    {
+                        bool bValue = SwTextBoxHelper::isTextBox(mxShape);
+                        aRet <<= bValue;
+                    }
+                    else if (pEntry->nMemberId == MID_TEXTBOX_CONTENT)
+                    {
+                        aRet = uno::Any(m_xTextBox);
+                    }
                 }
                 else if (pEntry->nWID == RES_CHAIN)
                 {
@@ -1795,7 +1821,7 @@ uno::Sequence< beans::PropertyState > SwXShape::getPropertyStates(
                      (pEntry->nMemberId == MID_FRMSIZE_REL_HEIGHT_RELATION ||
                       pEntry->nMemberId == MID_FRMSIZE_REL_WIDTH_RELATION))
                 pRet[nProperty] = beans::PropertyState_DIRECT_VALUE;
-            else if (pEntry->nWID == FN_TEXT_BOX)
+            else if (pEntry->nWID == FN_TEXT_BOX && pEntry->nMemberId == MID_TEXTBOX)
             {
                 // The TextBox property is set, if we can find a textbox for this shape.
                 if (pFormat && SwTextBoxHelper::isTextBox(pFormat, RES_DRAWFRMFMT))
