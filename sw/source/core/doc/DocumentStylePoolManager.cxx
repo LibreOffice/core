@@ -1431,7 +1431,7 @@ SwFormat* DocumentStylePoolManager::GetFormatFromPool( sal_uInt16 nId )
     SwFormatsBase* pArray[ 2 ];
     sal_uInt16 nArrCnt = 1;
     const char* pRCId = nullptr;
-    WhichRangesContainer const * pWhichRange = nullptr;
+    WhichRangesContainer const* pWhichRange;
 
     switch( nId & (COLL_GET_RANGE_BITS + POOLGRP_NOCOLLID) )
     {
@@ -1491,7 +1491,7 @@ SwFormat* DocumentStylePoolManager::GetFormatFromPool( sal_uInt16 nId )
         }
 
     OUString aNm(SwResId(pRCId));
-    SwAttrSet aSet( m_rDoc.GetAttrPool(), pWhichRange ? *pWhichRange : WhichRangesContainer() );
+    SwAttrSet aSet(m_rDoc.GetAttrPool(), *pWhichRange);
 
     {
         bool bIsModified = m_rDoc.getIDocumentState().IsModified();
