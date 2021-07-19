@@ -88,6 +88,24 @@
       "revId": "edbda86e9b8b019fab912a76428bab7eb90a433b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1f996517_77b13991",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-07-19T11:12:19Z",
+      "side": 1,
+      "message": "Done. As this only fixes the export, I\u0027ve chosen the appropriate title, and added the needed work on loading in the description.",
+      "parentUuid": "9b7d33e0_31299036",
+      "revId": "edbda86e9b8b019fab912a76428bab7eb90a433b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }

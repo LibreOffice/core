@@ -16,6 +16,24 @@
       "revId": "c077eabc3fe8f17ce44af492ce828ee71f0800bd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ea04884c_f40eded1",
+        "filename": "sw/qa/extras/ww8export/ww8export2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 419,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-07-19T11:12:19Z",
+      "side": 1,
+      "message": "Good point! The tiny value for Height or Width justifies the disappearance of the lines.\nI\u0027ve documented the failure for those checks that fail without the fix, but I have also kept those checks that doesn\u0027t fail without it.",
+      "parentUuid": "9e0a4bca_2c65865b",
+      "revId": "c077eabc3fe8f17ce44af492ce828ee71f0800bd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
