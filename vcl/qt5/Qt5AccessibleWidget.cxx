@@ -654,9 +654,9 @@ QAccessible::State Qt5AccessibleWidget::state() const
 
     Sequence<sal_Int16> aStates = xStateSet->getStates();
 
-    for (sal_Int32 n = 0; n < aStates.getLength(); n++)
+    for (const sal_Int16 nState : aStates)
     {
-        lcl_addState(&state, n);
+        lcl_addState(&state, nState);
     }
 
     return state;
