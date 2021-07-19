@@ -34,6 +34,24 @@
       "revId": "3fec689480644c274501740013ff83388cb24245",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3569276d_7692e386",
+        "filename": "sw/source/core/unocore/unostyle.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 3545,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-19T20:33:30Z",
+      "side": 1,
+      "message": "https://gerrit.libreoffice.org/c/core/+/119182",
+      "parentUuid": "558e7e0a_0043542e",
+      "revId": "3fec689480644c274501740013ff83388cb24245",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
