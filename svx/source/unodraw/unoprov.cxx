@@ -1126,7 +1126,7 @@ static const char* RID_SVXSTR_BMP_DEF[] =
     RID_SVXSTR_BMP92_DEF
 };
 
-static const char* RID_SVXSTR_BMP[] =
+static const TranslateId RID_SVXSTR_BMP[] =
 {
     RID_SVXSTR_BMP0,
     RID_SVXSTR_BMP1,
@@ -1259,7 +1259,7 @@ static const char* RID_SVXSTR_DASH_DEF[] =
 
 };
 
-static const char* RID_SVXSTR_DASH[] =
+static const TranslateId RID_SVXSTR_DASH[] =
 {
     RID_SVXSTR_DASH0,
     RID_SVXSTR_DASH1,
@@ -1330,7 +1330,7 @@ static const char* RID_SVXSTR_LEND_DEF[] =
     RID_SVXSTR_LEND31_DEF
 };
 
-static const char* RID_SVXSTR_LEND[] =
+static const TranslateId RID_SVXSTR_LEND[] =
 {
     RID_SVXSTR_LEND0,
     RID_SVXSTR_LEND1,
@@ -1455,7 +1455,7 @@ static const char* RID_SVXSTR_GRDT_DEF[] =
     RID_SVXSTR_GRDT84_DEF
 };
 
-static const char* RID_SVXSTR_GRDT[] =
+static const TranslateId RID_SVXSTR_GRDT[] =
 {
     RID_SVXSTR_GRDT0,
     RID_SVXSTR_GRDT1,
@@ -1564,7 +1564,7 @@ static const char* RID_SVXSTR_HATCHS_DEF[] =
     RID_SVXSTR_HATCH15_DEF
 };
 
-static const char* RID_SVXSTR_HATCHS[] =
+static const TranslateId RID_SVXSTR_HATCHS[] =
 {
     RID_SVXSTR_HATCH0,
     RID_SVXSTR_HATCH1,
@@ -1589,12 +1589,12 @@ static const char* RID_SVXSTR_TRASNGR_DEF[] =
     RID_SVXSTR_TRASNGR0_DEF
 };
 
-static const char* RID_SVXSTR_TRASNGR[] =
+static const TranslateId RID_SVXSTR_TRASNGR[] =
 {
     RID_SVXSTR_TRASNGR0
 };
 
-static bool SvxUnoGetResourceRanges( const sal_uInt16 nWhich, const char**& pApiResIds, const char**& pIntResIds, int& nCount ) noexcept
+static bool SvxUnoGetResourceRanges( const sal_uInt16 nWhich, const char**& pApiResIds, const TranslateId*& pIntResIds, int& nCount ) noexcept
 {
     switch( nWhich )
     {
@@ -1641,7 +1641,7 @@ static bool SvxUnoGetResourceRanges( const sal_uInt16 nWhich, const char**& pApi
 }
 
 /// @throws std::exception
-static bool SvxUnoConvertResourceString(const char **pSourceResIds, const char** pDestResIds, int nCount, OUString& rString, bool bToApi)
+static bool SvxUnoConvertResourceString(const TranslateId* pSourceResIds, const char** pDestResIds, int nCount, OUString& rString, bool bToApi)
 {
     // first, calculate the search string length without an optional number after the name
     sal_Int32 nLength = rString.getLength();
@@ -1820,7 +1820,7 @@ static const char* SvxUnoColorNameDefResId[] =
     RID_SVXSTR_COLOR_LIBRE_YELLOW_ACCENT_DEF
 };
 
-static const char* SvxUnoColorNameResId[] =
+static const TranslateId SvxUnoColorNameResId[] =
 {
     RID_SVXSTR_COLOR_BLUEGREY,
     RID_SVXSTR_COLOR_BLACK,
@@ -1925,7 +1925,7 @@ static const char* SvxUnoColorNameResId[] =
 };
 
 /// @throws std::exception
-static bool SvxUnoConvertResourceStringBuiltIn(const char** pSourceResIds, const char** pDestResIds, int nCount, OUString& rString, bool bToApi)
+static bool SvxUnoConvertResourceStringBuiltIn(const TranslateId* pSourceResIds, const char** pDestResIds, int nCount, OUString& rString, bool bToApi)
 {
     //We replace e.g. "Gray 10%" with the translation of Gray, but we shouldn't
     //replace "Red Hat 1" with the translation of Red :-)
@@ -1982,7 +1982,7 @@ OUString SvxUnogetApiNameForItem(const sal_uInt16 nWhich, const OUString& rInter
     else
     {
         const char** pApiResIds;
-        const char** pIntResIds;
+        const TranslateId* pIntResIds;
         int nCount;
 
         if( SvxUnoGetResourceRanges(nWhich, pApiResIds, pIntResIds, nCount))
@@ -2015,7 +2015,7 @@ OUString SvxUnogetInternalNameForItem(const sal_uInt16 nWhich, const OUString& r
     else
     {
         const char** pApiResIds;
-        const char** pIntResIds;
+        const TranslateId* pIntResIds;
         int nCount;
 
         if (SvxUnoGetResourceRanges(nWhich, pApiResIds, pIntResIds, nCount))

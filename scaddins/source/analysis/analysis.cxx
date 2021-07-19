@@ -1045,7 +1045,7 @@ double SAL_CALL AnalysisAddIn::getConvert( double f, const OUString& aFU, const 
     RETURN_FINITE( fRet );
 }
 
-OUString AnalysisAddIn::AnalysisResId(std::string_view aResId)
+OUString AnalysisAddIn::AnalysisResId(TranslateId aResId)
 {
     return Translate::get(aResId, aResLocale);
 }

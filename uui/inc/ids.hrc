@@ -25,7 +25,7 @@
 
 #include "ids.hxx"
 
-#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
+#define NC_(Context, String) TranslateId(Context, u8##String)
 
 const std::pair<const char*, ErrCode> RID_UUI_ERRHDL[] =
 {

@@ -409,7 +409,7 @@ static void GetGeometryForCustomShape( SdrCustomShapeGeometryItem& rGeometryItem
 
 void FontworkBar::execute( SdrView& rSdrView, SfxRequest const & rReq, SfxBindings& rBindings )
 {
-    const char* pStrResId = nullptr;
+    TranslateId pStrResId;
 
     sal_uInt16 nSID = rReq.GetSlot();
     switch( nSID )

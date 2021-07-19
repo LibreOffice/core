@@ -2593,7 +2593,7 @@ const tools::Rectangle& SdrMarkView::GetMarkedObjRect() const
 }
 
 
-OUString SdrMarkView::ImpGetDescriptionString(const char* pStrCacheID, ImpGetDescriptionOptions nOpt) const
+OUString SdrMarkView::ImpGetDescriptionString(TranslateId pStrCacheID, ImpGetDescriptionOptions nOpt) const
 {
     OUString sStr = SvxResId(pStrCacheID);
     const sal_Int32 nPos = sStr.indexOf("%1");

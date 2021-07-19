@@ -461,7 +461,7 @@ void ODbaseIndex::DropImpl()
     }
 }
 
-void ODbaseIndex::impl_killFileAndthrowError_throw(const char* pErrorId, const OUString& _sFile)
+void ODbaseIndex::impl_killFileAndthrowError_throw(TranslateId pErrorId, const OUString& _sFile)
 {
     closeImpl();
     if(UCBContentHelper::Exists(_sFile))

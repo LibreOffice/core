@@ -494,7 +494,7 @@ OUString SfxDocumentTemplates::ConvertResourceString(const OUString& rString)
         u"" STR_TEMPLATE_NAME30_DEF
     };
 
-    const char* STR_TEMPLATE_NAME[] =
+    TranslateId STR_TEMPLATE_NAME[] =
     {
         STR_TEMPLATE_NAME1,
         STR_TEMPLATE_NAME2,

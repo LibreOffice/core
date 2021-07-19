@@ -171,7 +171,7 @@ void CreationWizard::setValidPage(BuilderPage* pTabPage)
 
 OUString CreationWizard::getStateDisplayName( WizardState nState ) const
 {
-    const char* pResId = nullptr;
+    TranslateId pResId;
     switch( nState )
     {
     case STATE_CHARTTYPE:

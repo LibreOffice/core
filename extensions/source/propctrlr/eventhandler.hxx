@@ -28,6 +28,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/compbase.hxx>
+#include <unotools/resmgr.hxx>
 
 #include <unordered_map>
 
@@ -58,7 +59,7 @@ namespace pcr
             const char* _pListenerNamespaceAscii,
             const char* _pListenerClassAsciiName,
             const char* _pListenerMethodAsciiName,
-            const char* pDisplayNameResId,
+            TranslateId pDisplayNameResId,
             const OString& _sHelpId,
             const OString& _sUniqueBrowseId );
     };

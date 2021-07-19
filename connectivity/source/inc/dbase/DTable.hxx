@@ -130,7 +130,7 @@ namespace connectivity::dbase
             /// @throws css::container::ElementExistException
             /// @throws css::uno::RuntimeException
             void renameImpl( const OUString& newName );
-            void throwInvalidColumnType(const char* pErrorId, const OUString& _sColumnName);
+            void throwInvalidColumnType(TranslateId pErrorId, const OUString& _sColumnName);
 
         protected:
             virtual void FileClose() override;

@@ -12,9 +12,9 @@
 
 #include <svl/svldllapi.h>
 #include <rtl/ustring.hxx>
-#include <string_view>
+#include <unotools/resmgr.hxx>
 
-SVL_DLLPUBLIC OUString SvlResId(std::string_view aId);
+SVL_DLLPUBLIC OUString SvlResId(TranslateId sContextAndId);
 
 #endif // INCLUDED_SVL_SVTRESID_HXX
 

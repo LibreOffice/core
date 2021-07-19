@@ -302,7 +302,7 @@ bool DialogHelper::IsSharedPkgMgr( const uno::Reference< deployment::XPackage > 
 
 bool DialogHelper::continueOnSharedExtension( const uno::Reference< deployment::XPackage > &xPackage,
                                               weld::Widget* pParent,
-                                              const char* pResID,
+                                              TranslateId pResID,
                                               bool &bHadWarning )
 {
     if ( !bHadWarning && IsSharedPkgMgr( xPackage ) )

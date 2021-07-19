@@ -119,7 +119,7 @@ namespace dbaui
 
     namespace
     {
-        OUString lcl_getObjectResourceString(const char* pResId, sal_Int32 _nCommandType)
+        OUString lcl_getObjectResourceString(TranslateId pResId, sal_Int32 _nCommandType)
         {
             OUString sMessageText = DBA_RES(pResId);
             OUString sObjectType = DBA_RES(RSC_QUERY_OBJECT_TYPE[_nCommandType]);

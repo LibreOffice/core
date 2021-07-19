@@ -54,7 +54,7 @@ void CloseBibModul(HdlBibModul ppBibModul)
     }
 }
 
-OUString BibResId(std::string_view aId)
+OUString BibResId(TranslateId aId)
 {
     return Translate::get(aId, pBibModul->GetResLocale());
 }

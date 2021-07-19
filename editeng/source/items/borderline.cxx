@@ -622,7 +622,7 @@ OUString SvxBorderLine::GetValueString(MapUnit eSrcUnit,
                                        const IntlWrapper* pIntl,
                                        bool bMetricStr) const
 {
-    static const char* aStyleIds[] =
+    static TranslateId aStyleIds[] =
     {
         RID_SOLID,
         RID_DOTTED,
@@ -647,7 +647,7 @@ OUString SvxBorderLine::GetValueString(MapUnit eSrcUnit,
 
     if ( static_cast<int>(m_nStyle) < int(SAL_N_ELEMENTS(aStyleIds)) )
     {
-        const char* pResId = aStyleIds[static_cast<int>(m_nStyle)];
+        TranslateId pResId = aStyleIds[static_cast<int>(m_nStyle)];
         aStr += EditResId(pResId);
     }
     else

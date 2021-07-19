@@ -99,7 +99,7 @@ SvxPopupWindowListBox::SvxPopupWindowListBox(SvxUndoRedoControl* pControl, weld:
 
 void SvxUndoRedoControl::SetInfo( sal_Int32 nCount )
 {
-    const char* pId;
+    TranslateId pId;
     if (nCount == 1)
         pId = getCommandURL() == ".uno:Undo" ? RID_SVXSTR_NUM_UNDO_ACTION : RID_SVXSTR_NUM_REDO_ACTION;
     else

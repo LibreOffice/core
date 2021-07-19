@@ -35,7 +35,7 @@ OQueryTabConnUndoAction::~OQueryTabConnUndoAction()
     }
 }
 
-OQueryTabConnUndoAction::OQueryTabConnUndoAction(OQueryTableView* pOwner, const char* pCommentID)
+OQueryTabConnUndoAction::OQueryTabConnUndoAction(OQueryTableView* pOwner, TranslateId pCommentID)
     : OQueryDesignUndoAction(pOwner, pCommentID)
     , m_pConnection(nullptr)
     , m_bOwnerOfConn(false)

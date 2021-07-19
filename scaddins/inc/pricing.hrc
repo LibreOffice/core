@@ -19,10 +19,10 @@
 
 #pragma once
 
-#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
+#define NC_(Context, String) TranslateId(Context, u8##String)
 
 // function and parameter description
-const char* PRICING_FUNCDESC_OptBarrier[] =
+const TranslateId PRICING_FUNCDESC_OptBarrier[] =
 {
     NC_("PRICING_FUNCDESC_OptBarrier", "Pricing of a barrier option"),
     NC_("PRICING_FUNCDESC_OptBarrier", "Spot"),

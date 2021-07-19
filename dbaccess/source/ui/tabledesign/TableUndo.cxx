@@ -30,7 +30,7 @@ using namespace dbaui;
 using namespace ::svt;
 
 
-OTableDesignUndoAct::OTableDesignUndoAct(OTableRowView* pOwner, const char* pCommentID)
+OTableDesignUndoAct::OTableDesignUndoAct(OTableRowView* pOwner, TranslateId pCommentID)
     : OCommentUndoAction(pCommentID)
     , m_pTabDgnCtrl(pOwner)
 {
@@ -106,7 +106,7 @@ void OTableDesignCellUndoAct::Redo()
     OTableDesignUndoAct::Redo();
 }
 
-OTableEditorUndoAct::OTableEditorUndoAct(OTableEditorCtrl* pOwner, const char* pCommentID)
+OTableEditorUndoAct::OTableEditorUndoAct(OTableEditorCtrl* pOwner, TranslateId pCommentID)
     : OTableDesignUndoAct(pOwner, pCommentID)
     , pTabEdCtrl(pOwner)
 {

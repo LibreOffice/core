@@ -739,7 +739,7 @@ namespace pcr
 
                 // font style
                 ::FontWeight  eWeight = vcl::unohelper::ConvertFontWeight( aFont.Weight );
-                const char* pStyleResID = RID_STR_FONTSTYLE_REGULAR;
+                TranslateId pStyleResID = RID_STR_FONTSTYLE_REGULAR;
                 if ( aFont.Slant == FontSlant_ITALIC )
                 {
                     if ( eWeight > WEIGHT_NORMAL )

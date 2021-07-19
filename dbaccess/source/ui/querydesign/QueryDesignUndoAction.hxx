@@ -32,7 +32,7 @@ namespace dbaui
         VclPtr<OJoinTableView> m_pOwner;       // in this container it all happens
 
     public:
-        OQueryDesignUndoAction(OJoinTableView* pOwner, const char* pCommentID) : OCommentUndoAction(pCommentID), m_pOwner(pOwner) { }
+        OQueryDesignUndoAction(OJoinTableView* pOwner, TranslateId pCommentID) : OCommentUndoAction(pCommentID), m_pOwner(pOwner) { }
     };
 }
 

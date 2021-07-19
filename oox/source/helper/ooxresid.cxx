@@ -11,6 +11,6 @@
 #include <ooxresid.hxx>
 #include <unotools/resmgr.hxx>
 
-OUString OoxResId(std::string_view aId) { return Translate::get(aId, Translate::Create("oox")); }
+OUString OoxResId(TranslateId aId) { return Translate::get(aId, Translate::Create("oox")); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

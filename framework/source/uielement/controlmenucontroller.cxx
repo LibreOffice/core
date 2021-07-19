@@ -64,7 +64,7 @@ static const char* aCommands[] =
     ".uno:ConvertToNavigationBar"
 };
 
-static const char* aLabels[] =
+static TranslateId aLabels[] =
 {
     RID_STR_PROPTITLE_EDIT,
     RID_STR_PROPTITLE_PUSHBUTTON,

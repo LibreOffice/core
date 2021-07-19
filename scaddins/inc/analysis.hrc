@@ -19,9 +19,9 @@
 
 #pragma once
 
-#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
+#define NC_(Context, String) TranslateId(Context, u8##String)
 
-const char* ANALYSIS_Workday[] =
+const TranslateId ANALYSIS_Workday[] =
 {
     NC_("ANALYSIS_Workday", "Returns the serial number of the date before or after a specified number of workdays"),
     NC_("ANALYSIS_Workday", "Start date"),
@@ -32,7 +32,7 @@ const char* ANALYSIS_Workday[] =
     NC_("ANALYSIS_Workday", "List of date values of days off (vacation, holidays, etc.)")
 };
 
-const char* ANALYSIS_Yearfrac[] =
+const TranslateId ANALYSIS_Yearfrac[] =
 {
     NC_("ANALYSIS_Yearfrac", "Returns the number of years (including fractional part) between two dates"),
     NC_("ANALYSIS_Yearfrac", "Start date"),

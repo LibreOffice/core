@@ -84,7 +84,7 @@ void XmlSecStatusBarControl::StateChangedAtStatusBarControl( sal_uInt16, SfxItem
 
     GetStatusBar().SetItemText( GetId(), "" );    // necessary ?
 
-    const char* pResId = RID_SVXSTR_XMLSEC_NO_SIG;
+    TranslateId pResId = RID_SVXSTR_XMLSEC_NO_SIG;
     if ( mpImpl->mnState == SignatureState::OK )
         pResId = RID_SVXSTR_XMLSEC_SIG_OK;
     else if ( mpImpl->mnState == SignatureState::BROKEN )

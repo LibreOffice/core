@@ -17,11 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <unotools/resmgr.hxx>
 #include <svtools/svtresid.hxx>
 
 std::locale SvtResLocale() { return Translate::Create("svt"); }
 
-OUString SvtResId(std::string_view aId) { return Translate::get(aId, SvtResLocale()); }
+OUString SvtResId(TranslateId aId) { return Translate::get(aId, SvtResLocale()); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

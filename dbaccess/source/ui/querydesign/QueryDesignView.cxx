@@ -2361,7 +2361,7 @@ namespace
 
     OUString getParseErrorMessage( SqlParseError _eErrorCode )
     {
-        const char* pResId;
+        TranslateId pResId;
         switch (_eErrorCode)
         {
             case eIllegalJoin:

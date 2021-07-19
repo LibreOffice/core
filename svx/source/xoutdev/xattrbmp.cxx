@@ -35,6 +35,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <vcl/BitmapTools.hxx>
 #include <vcl/GraphicLoader.hxx>
+#include <unotools/resmgr.hxx>
 
 #include <libxml/xmlwriter.h>
 
