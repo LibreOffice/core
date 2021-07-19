@@ -265,7 +265,7 @@ struct OStorage_Impl
 
 };
 
-class OStorage  : public css::lang::XTypeProvider
+class OStorage final : public css::lang::XTypeProvider
                 , public css::embed::XStorage2
                 , public css::embed::XStorageRawAccess
                 , public css::embed::XTransactedObject
@@ -280,8 +280,6 @@ class OStorage  : public css::lang::XTypeProvider
 {
     OStorage_Impl*  m_pImpl;
     std::unique_ptr<StorInternalData_Impl> m_pData;
-
-protected:
 
     SotElement_Impl* OpenStreamElement_Impl( const OUString& aStreamName, sal_Int32 nOpenMode, bool bEncr );
 
