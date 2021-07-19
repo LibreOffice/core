@@ -434,9 +434,17 @@ bool SwHTMLParser::InsertEmbed()
         aCmdLst.Append( rOption.GetTokenString(), rOption.GetString() );
     }
 
-    if (aType == "image/png" && m_aEmbeds.empty())
-        // Toplevel <object> for PNG -> that's an image, not an OLE object.
+    static const std::set<std::u16string_view> vAllowlist = {
+        u"image/png",
+        u"image/gif",
+    };
+
+    if (vAllowlist.find(aType) != vAllowlist.end() && m_aEmbeds.empty())
+    {
+        // Toplevel <object> for an image format -> that's an image, not an OLE object.
+        m_aEmbeds.push(nullptr);
         return false;
+    }
 
     SfxItemSet aItemSet( m_xDoc->GetAttrPool(), m_pCSS1Parser->GetWhichMap() );
     SvxCSS1PropertyInfo aPropInfo;
@@ -488,6 +496,12 @@ bool SwHTMLParser::InsertEmbed()
     {
         // Nested XHTML <object> element: points to replacement graphic.
         SwOLENode* pOLENode = m_aEmbeds.top();
+        if (!pOLENode)
+        {
+            // <object> is mapped to an image -> ignore replacement graphic.
+            return true;
+        }
+
         svt::EmbeddedObjectRef& rObj = pOLENode->GetOLEObj().GetObject();
         Graphic aGraphic;
         if (GraphicFilter::GetGraphicFilter().ImportGraphic(aGraphic, aURLObj) != ERRCODE_NONE)
