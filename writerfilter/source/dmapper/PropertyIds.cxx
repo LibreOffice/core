@@ -128,6 +128,7 @@ OUString getPropertyName( PropertyIds eId )
         case PROP_SUB_TYPE              :    sName = "SubType"; break;
         case PROP_FILE_FORMAT           :    sName = "FileFormat"; break;
         case PROP_HYPER_LINK_U_R_L      :    sName = "HyperLinkURL"; break;
+        case PROP_HYPERLINK             :    sName = "Hyperlink"; break;
         case PROP_NUMBER_FORMAT         :    sName = "NumberFormat"; break;
         case PROP_NAME                  :    sName = "Name"; break;
         case PROP_IS_INPUT              :    sName = "IsInput"; break;

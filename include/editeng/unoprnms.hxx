@@ -160,6 +160,8 @@
 #define UNO_NAME_MISC_OBJ_TITLE                 "Title"
 #define UNO_NAME_MISC_OBJ_DESCRIPTION           "Description"
 
+#define UNO_NAME_HYPERLINK                      "Hyperlink"
+
 #define UNO_NAME_GRAPHOBJ_FILLBITMAP            "GraphicObjectFillBitmap"
 #define UNO_NAME_GRAPHOBJ_REPLACEMENT_GRAPHIC   "ReplacementGraphic"
 #define UNO_NAME_GRAPHOBJ_GRAFSTREAMURL         "GraphicStreamURL"

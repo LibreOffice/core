@@ -71,6 +71,11 @@
   <menu:menuitem menu:id=".uno:EnterGroup"/>
   <menu:menuitem menu:id=".uno:LeaveGroup"/>
   <menu:menuseparator/>
+  <menu:menuitem menu:id=".uno:OpenHyperlinkOnCursor"/>
+  <menu:menuitem menu:id=".uno:EditHyperlink"/>
+  <menu:menuitem menu:id=".uno:CopyHyperlinkLocation"/>
+  <menu:menuitem menu:id=".uno:RemoveHyperlink"/>
+  <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:AddTextBox"/>
   <menu:menuitem menu:id=".uno:RemoveTextBox"/>
   <menu:menuitem menu:id=".uno:EditSignatureLine"/>

@@ -167,6 +167,7 @@ static const OUStringLiteral gsVerb( "Verb" );
 static const OUStringLiteral gsSoundURL( "SoundURL" );
 static const OUStringLiteral gsSpeed( "Speed" );
 static const OUStringLiteral gsStarBasic( "StarBasic" );
+static const OUStringLiteral gsHyperlink( "Hyperlink" );
 
 XMLShapeExport::XMLShapeExport(SvXMLExport& rExp,
                                 SvXMLExportPropertyMapper *pExtMapper )
@@ -588,13 +589,26 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
     }
     sal_Int32 nZIndex = 0;
     uno::Reference< beans::XPropertySet > xSet( xShape, uno::UNO_QUERY );
+    OUString sHyperlink;
+    try
+    {
+        xSet->getPropertyValue(gsHyperlink) >>= sHyperlink;
+    }
+    catch (beans::UnknownPropertyException)
+    {
+    }
 
     std::unique_ptr< SvXMLElementExport >  pHyperlinkElement;
 
-    // export hyperlinks with <a><shape/></a>. Currently only in draw since draw
-    // does not support document events
+    // Need to stash the attributes that are pre-loaded for the shape export
+    // (otherwise they will become attributes of the draw:a element)
+    uno::Reference<xml::sax::XAttributeList> xSaveAttribs(
+        new SvXMLAttributeList(GetExport().GetAttrList()));
+    GetExport().ClearAttrList();
     if( xSet.is() && (GetExport().GetModelType() == SvtModuleOptions::EFactory::DRAW) ) try
     {
+        // export hyperlinks with <a><shape/></a>. Currently only in draw since draw
+        // does not support document events
         presentation::ClickAction eAction = presentation::ClickAction_NONE;
         xSet->getPropertyValue("OnClick") >>= eAction;
 
@@ -617,6 +631,14 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
     {
         TOOLS_WARN_EXCEPTION("xmloff", "XMLShapeExport::exportShape(): exception during hyperlink export");
     }
+    else if (xSet.is() && !sHyperlink.isEmpty())
+    {
+        mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, sHyperlink );
+        mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
+        pHyperlinkElement.reset( new SvXMLElementExport(mrExport, XML_NAMESPACE_DRAW, XML_A, true, true) );
+    }
+    // re-add stashed attributes
+    GetExport().AddAttributeList(xSaveAttribs);
 
     if( xSet.is() )
         xSet->getPropertyValue(gsZIndex) >>= nZIndex;

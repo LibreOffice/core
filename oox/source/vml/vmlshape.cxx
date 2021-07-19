@@ -784,6 +784,10 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
             eTextVerticalAdjust = drawing::TextVerticalAdjust_BOTTOM;
         PropertySet(xShape).setAnyProperty(PROP_TextVerticalAdjust, makeAny(eTextVerticalAdjust));
 
+        // tdf#123626
+        if (!maTypeModel.maHyperlink.isEmpty())
+            PropertySet(xShape).setAnyProperty(PROP_Hyperlink, makeAny(maTypeModel.maHyperlink));
+
         PropertySet(xShape).setAnyProperty(PROP_TextAutoGrowHeight,
                                            makeAny(maTypeModel.mbAutoHeight));
 

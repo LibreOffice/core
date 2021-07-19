@@ -19,6 +19,7 @@
 
 #include <sax/tools/converter.hxx>
 
+#include <xmloff/shapeimport.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlnmspe.hxx>
@@ -26,6 +27,9 @@
 #include "XMLTextFrameContext.hxx"
 #include "XMLTextFrameHyperlinkContext.hxx"
 
+#include <com/sun/star/drawing/XShapes.hpp>
+
+using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::xml::sax;
@@ -115,6 +119,15 @@ SvXMLImportContextRef XMLTextFrameHyperlinkContext::CreateChildContext(
             pTextFrameContext = new XMLTextFrameContext( GetImport(), nPrefix,
                                                 rLocalName, xAttrList,
                                                 eDefaultAnchorType );
+        else if( IsXMLToken( rLocalName, XML_CUSTOM_SHAPE ) )
+        {
+            Reference<XShapes> xShapes;
+            SvXMLShapeContext* pShapeContext
+                = GetImport().GetShapeImport()->CreateGroupChildContext(GetImport(), nPrefix,
+                                                rLocalName, xAttrList, xShapes);
+            pShapeContext->setHyperlink(sHRef);
+            pContext = pShapeContext;
+        }
     }
 
     if( pTextFrameContext )
@@ -123,9 +136,8 @@ SvXMLImportContextRef XMLTextFrameHyperlinkContext::CreateChildContext(
         pContext = pTextFrameContext;
         xFrameContext = pContext;
     }
-    else
+    else if (!pContext)
         pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
-
     return pContext;
 }
 

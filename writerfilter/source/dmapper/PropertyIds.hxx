@@ -185,6 +185,7 @@ enum PropertyIds
         ,PROP_HORI_ORIENT_POSITION
         ,PROP_HORI_ORIENT_RELATION
         ,PROP_HYPER_LINK_U_R_L
+        ,PROP_HYPERLINK
         ,PROP_INDENT_AT
         ,PROP_INPUT_STREAM
         ,PROP_INSERT

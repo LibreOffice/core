@@ -373,9 +373,6 @@ public:
             uno::Reference< container::XNamed > xNamed( xGraphicObjectProperties, uno::UNO_QUERY_THROW );
             xNamed->setName(rDomainMapper.GetGraphicNamingHelper().NameGraphic(sName));
 
-            if ( sHyperlinkURL.getLength() > 0 )
-                xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_HYPER_LINK_U_R_L ),
-                    uno::makeAny ( sHyperlinkURL ));
             xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_DESCRIPTION ),
                 uno::makeAny( sAlternativeText ));
             xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_TITLE ),
@@ -384,6 +381,17 @@ public:
         catch( const uno::Exception& )
         {
             TOOLS_WARN_EXCEPTION("writerfilter", "failed");
+        }
+    }
+
+    void applyHyperlink(uno::Reference<beans::XPropertySet> const & xShapeProps, bool bIsShape)
+    {
+        // Graphic objects have a different hyperlink prop than shapes
+        auto aHyperlinkProp = bIsShape ? PROP_HYPERLINK : PROP_HYPER_LINK_U_R_L;
+        if (!sHyperlinkURL.isEmpty())
+        {
+            xShapeProps->setPropertyValue(
+                getPropertyName(aHyperlinkProp), uno::makeAny(sHyperlinkURL));
         }
     }
 
@@ -886,6 +894,7 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                         xShapeProps->setPropertyValue("Surround", uno::makeAny(static_cast<sal_Int32>(m_pImpl->nWrap)));
                         m_pImpl->applyZOrder(xShapeProps);
                         m_pImpl->applyName(xShapeProps);
+                        m_pImpl->applyHyperlink(xShapeProps, bUseShape);
                         xShapeProps->setPropertyValue("AllowOverlap",
                                                       uno::makeAny(m_pImpl->bAllowOverlap));
 
@@ -1412,6 +1421,7 @@ uno::Reference<text::XTextContent> GraphicImport::createGraphicObject(uno::Refer
                         uno::makeAny( awt::Size( m_pImpl->getXSize(), m_pImpl->getYSize() )));
                 m_pImpl->applyMargins(xGraphicObjectProperties);
                 m_pImpl->applyName(xGraphicObjectProperties);
+                m_pImpl->applyHyperlink(xGraphicObjectProperties, false);
             }
 
             // Handle horizontal flip.

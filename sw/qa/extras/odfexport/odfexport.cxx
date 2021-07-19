@@ -1137,6 +1137,16 @@ DECLARE_ODFEXPORT_TEST(testTextboxRoundedCorners, "textbox-rounded-corners.odt")
         assertXPath(pXmlDoc, "//draw:custom-shape/loext:table", "name", "Table1");
 }
 
+DECLARE_ODFEXPORT_TEST(testShapeWithHyperlink, "shape-with-hyperlink.odt")
+{
+    if (xmlDocPtr pXmlDoc = parseExport("content.xml"))
+    {
+        // Check how conversion from prefix/suffix to list format did work
+        assertXPath(pXmlDoc, "/office:document-content/office:body/office:text/text:p/draw:a",
+                    "href", "http://shape.com/");
+    }
+}
+
 // test that import whitespace collapsing is compatible with old docs
 DECLARE_ODFEXPORT_TEST(testWhitespace, "whitespace.odt")
 {

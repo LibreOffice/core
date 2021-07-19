@@ -3424,40 +3424,8 @@ void ScXMLExport::ExportShape(const uno::Reference < drawing::XShape >& xShape, 
         }
     }
     if (!bIsChart)
-    {
-        OUString sHlink;
-        try
-        {
-            uno::Reference< beans::XPropertySet > xProps( xShape, uno::UNO_QUERY );
-            if ( xProps.is() )
-                xProps->getPropertyValue( SC_UNONAME_HYPERLINK ) >>= sHlink;
-        }
-        catch ( const beans::UnknownPropertyException& )
-        {
-            // no hyperlink property
-        }
-
-        std::unique_ptr< SvXMLElementExport > pDrawA;
-        // enclose shapes with <draw:a> element only if sHlink contains something
-        if ( !sHlink.isEmpty() )
-        {
-            // need to get delete the attributes that are pre-loaded
-            // for the shape export ( otherwise they will become
-            // attributes of the draw:a element ) This *shouldn't*
-            // affect performance adversely as there are only a
-            // couple of attributes involved
-            uno::Reference< xml::sax::XAttributeList > xSaveAttribs( new  SvXMLAttributeList( GetAttrList() ) );
-            ClearAttrList();
-            // Add Hlink
-            AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
-            AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, sHlink);
-            pDrawA.reset( new SvXMLElementExport( *this, XML_NAMESPACE_DRAW, XML_A, false, false ) );
-            // Attribute list has been cleared by previous operation
-            // re-add pre-loaded attributes
-            AddAttributeList( xSaveAttribs );
-        }
         GetShapeExport()->exportShape(xShape, SEF_DEFAULT, pPoint);
-    }
+
     IncrementProgressBar(false);
 }
 

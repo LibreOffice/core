@@ -17,6 +17,7 @@
 #include <editeng/boxitem.hxx>
 #include <svx/svdogrp.hxx>
 #include <oox/token/namespaces.hxx>
+#include <oox/token/relationship.hxx>
 #include <textboxhelper.hxx>
 #include <fmtanchr.hxx>
 #include <fmtsrnd.hxx>
@@ -873,8 +874,21 @@ void DocxSdrExport::writeDMLDrawing(const SdrObject* pSdrObject, const SwFrameFo
         && pFrameFormat->GetAnchor().GetAnchorId() != RndStdIds::FLY_AS_CHAR)
 
         pDocPrAttrList->add(XML_hidden, OString::number(1).getStr());
-    sax_fastparser::XFastAttributeListRef xDocPrAttrListRef(pDocPrAttrList);
-    pFS->singleElementNS(XML_wp, XML_docPr, xDocPrAttrListRef);
+
+    pFS->startElementNS(XML_wp, XML_docPr, pDocPrAttrList);
+    OUString sHyperlink = pSdrObject->getHyperlink();
+    if (!sHyperlink.isEmpty())
+    {
+        OUString sRelId = m_pImpl->getExport().GetFilter().addRelation(
+            pFS->getOutputStream(), oox::getRelationship(Relationship::HYPERLINK),
+            oox::drawingml::URLTransformer().getTransformedString(sHyperlink),
+            oox::drawingml::URLTransformer().isExternalURL(sHyperlink));
+        pFS->singleElementNS(
+            XML_a, XML_hlinkClick, FSNS(XML_r, XML_id), sRelId.toUtf8().getStr(),
+            FSNS(XML_xmlns, XML_a),
+            m_pImpl->getExport().GetFilter().getNamespaceURL(OOX_NS(dml)).toUtf8());
+    }
+    pFS->endElementNS(XML_wp, XML_docPr);
 
     uno::Reference<lang::XServiceInfo> xServiceInfo(xShape, uno::UNO_QUERY_THROW);
     const char* pNamespace = "http://schemas.microsoft.com/office/word/2010/wordprocessingShape";

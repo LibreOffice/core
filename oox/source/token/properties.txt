@@ -245,6 +245,7 @@ HoriOrientPosition
 HoriOrientRelation
 HorizontalSplitMode
 HorizontalSplitPositionTwips
+Hyperlink
 IgnoreBlankCells
 IgnoreCase
 IgnoreLeadingSpaces
