@@ -2646,7 +2646,7 @@ void SAL_CALL SwXStyle::setPropertiesToDefault(const uno::Sequence<OUString>& aP
         {
             //
             SwDoc* pDoc = pTargetFormat->GetDoc();
-            SfxItemSet aSet(pDoc->GetAttrPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{});
+            SfxItemSet aSet(pDoc->GetAttrPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>);
             aSet.SetParent(&pTargetFormat->GetAttrSet());
 
             aSet.ClearItem(XATTR_FILLBMP_STRETCH);
@@ -2917,7 +2917,7 @@ void SwXPageStyle::SetPropertyValues_Impl(const uno::Sequence<OUString>& rProper
                             SID_ATTR_BORDER_INNER,SID_ATTR_BORDER_INNER,    // [10023
                             SID_ATTR_PAGE_SIZE,SID_ATTR_PAGE_SIZE,          // [10051
                             SID_ATTR_PAGE_ON,SID_ATTR_PAGE_SHARED,          // [10060
-                            SID_ATTR_PAGE_SHARED_FIRST,SID_ATTR_PAGE_SHARED_FIRST>{});
+                            SID_ATTR_PAGE_SHARED_FIRST,SID_ATTR_PAGE_SHARED_FIRST>);
 
                         // set correct parent to get the XFILL_NONE FillStyle as needed
                         aTempSet.SetParent(&GetDoc()->GetDfltFrameFormat()->GetAttrSet());
@@ -3788,7 +3788,7 @@ SwAutoStylesEnumImpl::SwAutoStylesEnumImpl( SwDoc& rInitDoc, IStyleAccess::SwAut
             std::pair< sal_uInt16, text::RubyAdjust > aPair( pRubyItem->GetPosition(), pRubyItem->GetAdjustment() );
             if ( aRubyMap.insert( aPair ).second )
             {
-                auto pItemSet = std::make_shared<SfxItemSet>( rAttrPool, svl::Items<RES_TXTATR_CJK_RUBY, RES_TXTATR_CJK_RUBY>{} );
+                auto pItemSet = std::make_shared<SfxItemSet>( rAttrPool, svl::Items<RES_TXTATR_CJK_RUBY, RES_TXTATR_CJK_RUBY> );
                 pItemSet->Put( *pRubyItem );
                 mAutoStyles.push_back( pItemSet );
             }

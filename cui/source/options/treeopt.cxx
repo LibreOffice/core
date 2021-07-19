@@ -1041,9 +1041,9 @@ std::unique_ptr<SfxItemSet> OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId 
                     SID_ATTR_METRIC, SID_ATTR_METRIC,
                     SID_AUTOSPELL_CHECK, SID_AUTOSPELL_CHECK,
                     SID_ATTR_QUICKLAUNCHER, SID_ATTR_QUICKLAUNCHER,
-                    SID_ATTR_YEAR2000, SID_ATTR_YEAR2000>{} );
+                    SID_ATTR_YEAR2000, SID_ATTR_YEAR2000> );
 
-            SfxItemSet aOptSet( SfxGetpApp()->GetPool(), svl::Items<SID_ATTR_QUICKLAUNCHER, SID_ATTR_QUICKLAUNCHER>{} );
+            SfxItemSet aOptSet( SfxGetpApp()->GetPool(), svl::Items<SID_ATTR_QUICKLAUNCHER, SID_ATTR_QUICKLAUNCHER> );
             SfxGetpApp()->GetOptions(aOptSet);
             pRet->Put(aOptSet);
 
@@ -1082,7 +1082,7 @@ std::unique_ptr<SfxItemSet> OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId 
                     SID_SET_DOCUMENT_LANGUAGE, SID_SET_DOCUMENT_LANGUAGE,
                     SID_ATTR_LANGUAGE, SID_ATTR_LANGUAGE,
                     SID_AUTOSPELL_CHECK, SID_AUTOSPELL_CHECK,
-                    SID_OPT_LOCALE_CHANGED, SID_OPT_LOCALE_CHANGED>{});
+                    SID_OPT_LOCALE_CHANGED, SID_OPT_LOCALE_CHANGED>);
 
             // for linguistic
             SfxHyphenRegionItem aHyphen( SID_ATTR_HYPHENREGION );
@@ -1146,7 +1146,7 @@ std::unique_ptr<SfxItemSet> OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId 
                 //SID_OPTIONS_START - ..END
                                 SID_SAVEREL_INET, SID_SAVEREL_FSYS,
                                 SID_INET_NOPROXY, SID_INET_FTP_PROXY_PORT,
-                                SID_SECURE_URL, SID_SECURE_URL>{} );
+                                SID_SECURE_URL, SID_SECURE_URL> );
                 SfxGetpApp()->GetOptions(*pRet);
         break;
         case SID_FILTER_DLG:
@@ -1156,13 +1156,13 @@ std::unique_ptr<SfxItemSet> OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId 
                     SID_ATTR_WARNALIENFORMAT, SID_ATTR_WARNALIENFORMAT,
                     SID_ATTR_DOCINFO, SID_ATTR_AUTOSAVEMINUTE,
                     SID_SAVEREL_INET, SID_SAVEREL_FSYS,
-                    SID_ATTR_PRETTYPRINTING, SID_ATTR_PRETTYPRINTING>{} );
+                    SID_ATTR_PRETTYPRINTING, SID_ATTR_PRETTYPRINTING> );
             SfxGetpApp()->GetOptions(*pRet);
             break;
 
         case SID_SB_STARBASEOPTIONS:
             pRet = std::make_unique<SfxItemSet>( SfxGetpApp()->GetPool(),
-            svl::Items<SID_SB_POOLING_ENABLED, SID_SB_DB_REGISTER>{} );
+            svl::Items<SID_SB_POOLING_ENABLED, SID_SB_DB_REGISTER> );
             ::offapp::ConnectionPoolConfig::GetOptions(*pRet);
             svx::DbRegisteredNamesConfig::GetOptions(*pRet);
             break;
@@ -1170,7 +1170,7 @@ std::unique_ptr<SfxItemSet> OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId 
         case SID_SCH_EDITOPTIONS:
         {
             SvxChartOptions aChartOpt;
-            pRet = std::make_unique<SfxItemSet>( SfxGetpApp()->GetPool(), svl::Items<SID_SCH_EDITOPTIONS, SID_SCH_EDITOPTIONS>{} );
+            pRet = std::make_unique<SfxItemSet>( SfxGetpApp()->GetPool(), svl::Items<SID_SCH_EDITOPTIONS, SID_SCH_EDITOPTIONS> );
             pRet->Put( SvxChartColorTableItem( SID_SCH_EDITOPTIONS, aChartOpt.GetDefaultColors() ) );
             break;
         }
@@ -1187,7 +1187,7 @@ void OfaTreeOptionsDialog::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet 
             std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
 
             const SfxPoolItem* pItem = nullptr;
-            SfxItemSet aOptSet(SfxGetpApp()->GetPool(), svl::Items<SID_ATTR_QUICKLAUNCHER, SID_ATTR_QUICKLAUNCHER>{} );
+            SfxItemSet aOptSet(SfxGetpApp()->GetPool(), svl::Items<SID_ATTR_QUICKLAUNCHER, SID_ATTR_QUICKLAUNCHER> );
             aOptSet.Put(rSet);
             if(aOptSet.Count())
                 SfxGetpApp()->SetOptions( aOptSet );

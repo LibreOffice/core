@@ -703,7 +703,7 @@ void sw_setValue( SwXCell &rCell, double nVal )
     SwDoc* pDoc = rCell.GetDoc();
     UnoActionContext aAction(pDoc);
     SwFrameFormat* pBoxFormat = rCell.m_pBox->ClaimFrameFormat();
-    SfxItemSet aSet(pDoc->GetAttrPool(), svl::Items<RES_BOXATR_FORMAT, RES_BOXATR_VALUE>{});
+    SfxItemSet aSet(pDoc->GetAttrPool(), svl::Items<RES_BOXATR_FORMAT, RES_BOXATR_VALUE>);
     const SfxPoolItem* pItem;
 
     //!! do we need to set a new number format? Yes, if
@@ -866,7 +866,7 @@ void SwXCell::setFormula(const OUString& rFormula)
     SwTableBoxFormula aFormula( sFormula );
     SwDoc* pMyDoc = GetDoc();
     UnoActionContext aAction(pMyDoc);
-    SfxItemSet aSet(pMyDoc->GetAttrPool(), svl::Items<RES_BOXATR_FORMAT, RES_BOXATR_FORMULA>{});
+    SfxItemSet aSet(pMyDoc->GetAttrPool(), svl::Items<RES_BOXATR_FORMAT, RES_BOXATR_FORMULA>);
     const SfxPoolItem* pItem;
     SwFrameFormat* pBoxFormat = m_pBox->GetFrameFormat();
     if(SfxItemState::SET != pBoxFormat->GetAttrSet().GetItemState(RES_BOXATR_FORMAT, true, &pItem)
@@ -1725,7 +1725,7 @@ uno::Any SwXTextTableCursor::getPropertyValue(const OUString& rPropertyName)
         {
             SfxItemSet aSet(rTableCursor.GetDoc().GetAttrPool(),
                 svl::Items<RES_CHRATR_BEGIN, RES_FRMATR_END-1,
-                RES_UNKNOWNATR_CONTAINER, RES_UNKNOWNATR_CONTAINER>{});
+                RES_UNKNOWNATR_CONTAINER, RES_UNKNOWNATR_CONTAINER>);
             SwUnoCursorHelper::GetCursorAttr(rTableCursor.GetSelRing(), aSet);
             m_pPropSet->getPropertyValue(*pEntry, aSet, aResult);
         }
@@ -1815,7 +1815,7 @@ void SwTableProperties_Impl::ApplyTableAttr(const SwTable& rTable, SwDoc& rDoc)
             RES_BACKGROUND, RES_BACKGROUND,
             RES_SHADOW, RES_SHADOW,
             RES_KEEP, RES_KEEP,
-            RES_LAYOUT_SPLIT, RES_LAYOUT_SPLIT>{});
+            RES_LAYOUT_SPLIT, RES_LAYOUT_SPLIT>);
     const uno::Any* pRepHead;
     const SwFrameFormat &rFrameFormat = *rTable.GetFrameFormat();
     if(GetProperty(FN_TABLE_HEADLINE_REPEAT, 0xff, pRepHead ))
@@ -2610,7 +2610,7 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName, const uno::An
 
                     SfxItemSet aSet(pDoc->GetAttrPool(),
                                     svl::Items<RES_BOX, RES_BOX,
-                                    SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER>{});
+                                    SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER>);
 
                     SvxBoxItem aBox( RES_BOX );
                     SvxBoxInfoItem aBoxInfo( SID_ATTR_BORDER_INNER );
@@ -2809,7 +2809,7 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName)
 
                     SfxItemSet aSet(pDoc->GetAttrPool(),
                                     svl::Items<RES_BOX, RES_BOX,
-                                    SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER>{});
+                                    SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER>);
                     aSet.Put(SvxBoxInfoItem( SID_ATTR_BORDER_INNER ));
                     SwDoc::GetTabBorders(rCursor, aSet);
                     const SvxBoxInfoItem& rBoxInfoItem = aSet.Get(SID_ATTR_BORDER_INNER);
@@ -3394,7 +3394,7 @@ SwXCellRange::setPropertyValue(const OUString& rPropertyName, const uno::Any& aV
         {
             SfxItemSet aSet(rDoc.GetAttrPool(),
                             svl::Items<RES_BOX, RES_BOX,
-                            SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER>{});
+                            SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER>);
             SvxBoxInfoItem aBoxInfo( SID_ATTR_BORDER_INNER );
             aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::ALL, false);
             SvxBoxInfoItemValidFlags nValid = SvxBoxInfoItemValidFlags::NONE;
@@ -3502,7 +3502,7 @@ uno::Any SAL_CALL SwXCellRange::getPropertyValue(const OUString& rPropertyName)
                 SwDoc& rDoc = m_pImpl->m_pTableCursor->GetDoc();
                 SfxItemSet aSet(rDoc.GetAttrPool(),
                                 svl::Items<RES_BOX, RES_BOX,
-                                SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER>{});
+                                SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER>);
                 aSet.Put(SvxBoxInfoItem( SID_ATTR_BORDER_INNER ));
                 SwDoc::GetTabBorders(*m_pImpl->m_pTableCursor, aSet);
                 const SvxBoxItem& rBoxItem = aSet.Get(RES_BOX);
@@ -3545,7 +3545,7 @@ uno::Any SAL_CALL SwXCellRange::getPropertyValue(const OUString& rPropertyName)
                     svl::Items<
                         RES_CHRATR_BEGIN, RES_FRMATR_END - 1,
                         RES_UNKNOWNATR_CONTAINER,
-                            RES_UNKNOWNATR_CONTAINER>{});
+                            RES_UNKNOWNATR_CONTAINER>);
                 // first look at the attributes of the cursor
                 SwUnoTableCursor *const pCursor =
                     dynamic_cast<SwUnoTableCursor*>(&(*m_pImpl->m_pTableCursor));

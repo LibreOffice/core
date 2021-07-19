@@ -16,8 +16,8 @@
 
 #include <TextColumnsPage.hxx>
 
-const WhichRangesContainer SvxTextColumnsPage::pRanges(
-    svl::Items<SDRATTR_TEXTCOLUMNS_FIRST, SDRATTR_TEXTCOLUMNS_LAST>::value);
+const WhichRangesContainer
+    SvxTextColumnsPage::pRanges(svl::Items<SDRATTR_TEXTCOLUMNS_FIRST, SDRATTR_TEXTCOLUMNS_LAST>);
 
 SvxTextColumnsPage::SvxTextColumnsPage(weld::Container* pPage, weld::DialogController* pController,
                                        const SfxItemSet& rInAttrs)

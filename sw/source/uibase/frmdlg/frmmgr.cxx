@@ -59,7 +59,7 @@ const WhichRangesContainer aFrameMgrRange(svl::Items<
 
                             SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER,
                             FN_SET_FRM_NAME, FN_SET_FRM_NAME
-                            >::value);
+                            >);
 
 // determine frame attributes via Shell
 SwFlyFrameAttrMgr::SwFlyFrameAttrMgr( bool bNew, SwWrtShell* pSh, Frmmgr_Type nType, const SvGlobalName* pName ) :
@@ -169,7 +169,7 @@ void SwFlyFrameAttrMgr::UpdateFlyFrame()
     const SfxPoolItem *pGItem, *pItem;
     if( SfxItemState::SET == m_aSet.GetItemState( RES_ANCHOR, false, &pItem ))
     {
-        SfxItemSet aGetSet( *m_aSet.GetPool(), svl::Items<RES_ANCHOR, RES_ANCHOR>{} );
+        SfxItemSet aGetSet( *m_aSet.GetPool(), svl::Items<RES_ANCHOR, RES_ANCHOR> );
         if( m_pOwnSh->GetFlyFrameAttr( aGetSet ) && 1 == aGetSet.Count() &&
             SfxItemState::SET == aGetSet.GetItemState( RES_ANCHOR, false, &pGItem )
             && static_cast<const SwFormatAnchor*>(pGItem)->GetAnchorId() ==

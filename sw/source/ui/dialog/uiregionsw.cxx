@@ -1001,7 +1001,7 @@ IMPL_LINK_NOARG(SwEditRegionDlg, OptionsHdl, weld::Button&, void)
             RES_COL, RES_COL,
             RES_FTN_AT_TXTEND, RES_FRAMEDIR,
             XATTR_FILL_FIRST, XATTR_FILL_LAST,
-            SID_ATTR_PAGE_SIZE, SID_ATTR_PAGE_SIZE>{});
+            SID_ATTR_PAGE_SIZE, SID_ATTR_PAGE_SIZE>);
 
     aSet.Put( pSectRepr->GetCol() );
     aSet.Put( *pSectRepr->GetBackground() );

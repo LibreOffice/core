@@ -73,7 +73,7 @@ const WhichRangesContainer SvxCharNamePage::pNameRanges(svl::Items<
     SID_ATTR_CHAR_LANGUAGE, SID_ATTR_CHAR_LANGUAGE,
     SID_ATTR_CHAR_CJK_FONT, SID_ATTR_CHAR_CJK_WEIGHT,
     SID_ATTR_CHAR_CTL_FONT, SID_ATTR_CHAR_CTL_WEIGHT
->::value);
+>);
 
 const WhichRangesContainer SvxCharEffectsPage::pEffectsRanges(svl::Items<
     SID_ATTR_CHAR_SHADOWED, SID_ATTR_CHAR_UNDERLINE,
@@ -84,7 +84,7 @@ const WhichRangesContainer SvxCharEffectsPage::pEffectsRanges(svl::Items<
     SID_ATTR_CHAR_RELIEF, SID_ATTR_CHAR_RELIEF,
     SID_ATTR_CHAR_HIDDEN, SID_ATTR_CHAR_HIDDEN,
     SID_ATTR_CHAR_OVERLINE, SID_ATTR_CHAR_OVERLINE
->::value);
+>);
 
 const WhichRangesContainer SvxCharPositionPage::pPositionRanges(svl::Items<
     SID_ATTR_CHAR_KERNING, SID_ATTR_CHAR_KERNING,
@@ -92,11 +92,11 @@ const WhichRangesContainer SvxCharPositionPage::pPositionRanges(svl::Items<
     SID_ATTR_CHAR_AUTOKERN, SID_ATTR_CHAR_AUTOKERN,
     SID_ATTR_CHAR_ROTATED, SID_ATTR_CHAR_SCALEWIDTH,
     SID_ATTR_CHAR_WIDTH_FIT_TO_LINE, SID_ATTR_CHAR_WIDTH_FIT_TO_LINE
->::value);
+>);
 
 const WhichRangesContainer SvxCharTwoLinesPage::pTwoLinesRanges(svl::Items<
     SID_ATTR_CHAR_TWO_LINES, SID_ATTR_CHAR_TWO_LINES
->::value);
+>);
 
 // C-Function ------------------------------------------------------------
 

@@ -24,6 +24,7 @@
 
 class SfxItemSet;
 class SwWrtShell;
+struct WhichRangesContainer;
 
 SW_DLLPUBLIC void ItemSetToTableParam( const SfxItemSet& rSet, SwWrtShell &rSh );
 

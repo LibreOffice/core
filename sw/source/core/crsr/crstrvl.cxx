@@ -1771,7 +1771,7 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
             {
                 const sal_Int32 n = aPos.nContent.GetIndex();
                 SfxItemSet aSet( GetDoc()->GetAttrPool(), svl::Items<POOLATTR_BEGIN,
-                    POOLATTR_END - 1>{} );
+                    POOLATTR_END - 1> );
                 if( pTextNd->GetpSwpHints() )
                 {
                     for( size_t i = 0; i < pTextNd->GetSwpHints().Count(); ++i )
@@ -2133,7 +2133,7 @@ bool SwCursorShell::SetShadowCursorPos( const Point& rPt, SwFillMode eFillMode )
                         GetDoc()->GetAttrPool(),
                         svl::Items<
                             RES_PARATR_ADJUST, RES_PARATR_ADJUST,
-                            RES_LR_SPACE, RES_LR_SPACE>{});
+                            RES_LR_SPACE, RES_LR_SPACE>);
                     SvxLRSpaceItem aLR(pCNd->GetAttr(RES_LR_SPACE).StaticWhichCast(RES_LR_SPACE));
                     aLR.SetTextLeft( aFPos.nTabCnt );
                     aLR.SetTextFirstLineOffset( 0 );

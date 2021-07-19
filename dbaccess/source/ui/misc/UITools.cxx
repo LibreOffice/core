@@ -772,7 +772,7 @@ bool callColumnFormatDialog(weld::Widget* _pParent,
         SBA_DEF_RANGEFORMAT, SBA_ATTR_ALIGN_HOR_JUSTIFY,
         SID_ATTR_NUMBERFORMAT_INFO, SID_ATTR_NUMBERFORMAT_INFO,
         SID_ATTR_NUMBERFORMAT_ONE_AREA, SID_ATTR_NUMBERFORMAT_ONE_AREA
-    >{};
+    >;
 
     std::vector<SfxPoolItem*> pDefaults
     {

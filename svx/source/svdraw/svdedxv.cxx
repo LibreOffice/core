@@ -2632,11 +2632,11 @@ static WhichRangesContainer GetFormatRangeImpl(bool bTextOnly)
                    SDRATTR_SHADOW_FIRST, SDRATTR_SHADOW_LAST, SDRATTR_MISC_FIRST,
                    SDRATTR_MISC_LAST, // table cell formats
                    SDRATTR_GRAF_FIRST, SDRATTR_GRAF_LAST, SDRATTR_TABLE_FIRST, SDRATTR_TABLE_LAST,
-                   EE_PARA_START, EE_PARA_END, EE_CHAR_START, EE_CHAR_END>::value);
+                   EE_PARA_START, EE_PARA_END, EE_CHAR_START, EE_CHAR_END>);
 
     static const WhichRangesContainer gTextOnly(
         svl::Items<SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST, EE_PARA_START, EE_PARA_END, EE_CHAR_START,
-                   EE_CHAR_END>::value);
+                   EE_CHAR_END>);
 
     return bTextOnly ? gTextOnly : gFull;
 }

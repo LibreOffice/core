@@ -884,7 +884,7 @@ void FlatFndBox::FillFlat(const FndBox_& rBox, bool bLastBox)
                         m_pDoc->GetAttrPool(),
                         svl::Items<
                             RES_VERT_ORIENT, RES_VERT_ORIENT,
-                            RES_BOXATR_FORMAT, RES_BOXATR_VALUE>{});
+                            RES_BOXATR_FORMAT, RES_BOXATR_VALUE>);
                     pSet->Put( pFormat->GetAttrSet() );
                     if( m_ppItemSets.empty() )
                     {

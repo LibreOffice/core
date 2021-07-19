@@ -242,7 +242,7 @@ SwDocShellRef SwGlossaries::EditGroupDoc( const OUString& rGroup, const OUString
                 svl::Items<
                     SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN,
                     SID_PRINTER_CHANGESTODOC, SID_PRINTER_CHANGESTODOC,
-                    FN_PARAM_ADDPRINTER, FN_PARAM_ADDPRINTER>{});
+                    FN_PARAM_ADDPRINTER, FN_PARAM_ADDPRINTER>);
             VclPtr<SfxPrinter> pPrinter = VclPtr<SfxPrinter>::Create( std::move(pSet) );
 
             // and append it to the document.

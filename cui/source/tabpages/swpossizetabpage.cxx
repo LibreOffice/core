@@ -729,7 +729,7 @@ WhichRangesContainer SvxSwPosSizeTabPage::GetRanges()
         SID_HTML_MODE, SID_HTML_MODE,
         SID_SW_FOLLOW_TEXT_FLOW, SID_SW_FOLLOW_TEXT_FLOW,
         SID_ATTR_TRANSFORM_HORI_POSITION, SID_ATTR_TRANSFORM_VERT_POSITION
-    >::value);
+    >);
     return ranges;
 }
 

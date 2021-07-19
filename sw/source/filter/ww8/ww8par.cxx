@@ -2191,7 +2191,7 @@ void SwWW8ImplReader::Read_HdFtTextAsHackedFrame(WW8_CP nStart, WW8_CP nLen,
     m_pPaM->GetPoint()->nContent.Assign(m_pPaM->GetContentNode(), 0);
 
     // tdf#122425: Explicitly remove borders and spacing
-    SfxItemSet aFlySet(m_rDoc.GetAttrPool(), svl::Items<RES_FRMATR_BEGIN, RES_FRMATR_END - 1>{});
+    SfxItemSet aFlySet(m_rDoc.GetAttrPool(), svl::Items<RES_FRMATR_BEGIN, RES_FRMATR_END - 1>);
     Reader::ResetFrameFormatAttrs(aFlySet);
 
     SwFlyFrameFormat* pFrame
@@ -4360,7 +4360,7 @@ void wwSectionManager::SetSegmentToPageDesc(const wwSection &rSection,
             if (aData.begin()->get()->nFlags & ShapeFlag::Background)
             {
                 SfxItemSet aSet(rFormat.GetDoc()->GetAttrPool(),
-                                svl::Items<RES_BACKGROUND, RES_BACKGROUND,XATTR_START, XATTR_END>{});
+                                svl::Items<RES_BACKGROUND, RES_BACKGROUND,XATTR_START, XATTR_END>);
                 mrReader.MatchSdrItemsIntoFlySet(pObject, aSet, mso_lineSimple,
                                                  mso_lineSolid, mso_sptRectangle, aRect);
                 if ( aSet.HasItem(RES_BACKGROUND) )

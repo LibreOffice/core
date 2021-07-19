@@ -1027,7 +1027,7 @@ SwTextAttr* MakeTextAttr(
         // Sorry, this is not allowed any longer.
         // You'll get a brand new autostyle attribute:
         SfxItemSet aItemSet( rDoc.GetAttrPool(),
-                svl::Items<RES_CHRATR_BEGIN, RES_CHRATR_END>{} );
+                svl::Items<RES_CHRATR_BEGIN, RES_CHRATR_END> );
         aItemSet.Put( rAttr );
         return MakeTextAttr( rDoc, aItemSet, nStt, nEnd );
     }
@@ -1835,7 +1835,7 @@ bool SwTextNode::SetAttr(
 
     // split sets (for selection in nodes)
     const SfxItemSet* pSet = &rSet;
-    SfxItemSet aTextSet( *rSet.GetPool(), svl::Items<RES_TXTATR_BEGIN, RES_TXTATR_END-1>{} );
+    SfxItemSet aTextSet( *rSet.GetPool(), svl::Items<RES_TXTATR_BEGIN, RES_TXTATR_END-1> );
 
     // entire paragraph
     if ( !nStt && (nEnd == m_Text.getLength()) &&

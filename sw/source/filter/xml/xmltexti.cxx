@@ -241,7 +241,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
     SwDoc *pDoc = SwImport::GetDocFromXMLImport( rImport );
 
     SfxItemSet aItemSet( pDoc->GetAttrPool(), svl::Items<RES_FRMATR_BEGIN,
-                         RES_FRMATR_END>{} );
+                         RES_FRMATR_END> );
     Size aTwipSize( 0, 0 );
     tools::Rectangle aVisArea( 0, 0, nWidth, nHeight );
     lcl_putHeightAndWidth( aItemSet, nHeight, nWidth,
@@ -553,7 +553,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOOoLink(
     SwDoc *pDoc = SwImport::GetDocFromXMLImport( rImport );
 
     SfxItemSet aItemSet( pDoc->GetAttrPool(), svl::Items<RES_FRMATR_BEGIN,
-                         RES_FRMATR_END>{} );
+                         RES_FRMATR_END> );
     Size aTwipSize( 0, 0 );
     lcl_putHeightAndWidth( aItemSet, nHeight, nWidth,
                            &aTwipSize );
@@ -645,7 +645,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertApplet(
     SwDoc *pDoc = pTextCursor->GetDoc();
 
     SfxItemSet aItemSet( pDoc->GetAttrPool(), svl::Items<RES_FRMATR_BEGIN,
-                         RES_FRMATR_END>{} );
+                         RES_FRMATR_END> );
     lcl_putHeightAndWidth( aItemSet, nHeight, nWidth);
 
     SwApplet_Impl aAppletImpl ( aItemSet );
@@ -691,7 +691,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertPlugin(
     SwDoc *pDoc = pTextCursor->GetDoc();
 
     SfxItemSet aItemSet( pDoc->GetAttrPool(), svl::Items<RES_FRMATR_BEGIN,
-                         RES_FRMATR_END>{} );
+                         RES_FRMATR_END> );
     lcl_putHeightAndWidth( aItemSet, nHeight, nWidth);
 
     // We'll need a (valid) URL, or we need a MIME type. If we don't have
@@ -772,7 +772,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertFloatingFra
     SwDoc *pDoc = pTextCursor->GetDoc();
 
     SfxItemSet aItemSet( pDoc->GetAttrPool(), svl::Items<RES_FRMATR_BEGIN,
-                         RES_FRMATR_END>{} );
+                         RES_FRMATR_END> );
     lcl_putHeightAndWidth( aItemSet, nHeight, nWidth);
 
     ScrollingMode eScrollMode = ScrollingMode::Auto;

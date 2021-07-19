@@ -32,7 +32,7 @@ const WhichRangesContainer nTitleWhichPairs(svl::Items<
     SDRATTR_SHADOW_FIRST, SDRATTR_SHADOW_LAST,      //  1067 -  1078  svx/svddef.hxx
     EE_ITEMS_START, EE_ITEMS_END,                             // Characters
     SID_CHAR_DLG_PREVIEW_STRING, SID_CHAR_DLG_PREVIEW_STRING // Characters
->::value);
+>);
 
 const WhichRangesContainer nAxisWhichPairs(svl::Items<
     SCHATTR_TEXT_START, SCHATTR_TEXT_END,
@@ -42,7 +42,7 @@ const WhichRangesContainer nAxisWhichPairs(svl::Items<
     SID_ATTR_NUMBERFORMAT_VALUE, SID_ATTR_NUMBERFORMAT_VALUE,   // 10585 - 10585  svx/svxids.hrc
     SID_ATTR_NUMBERFORMAT_SOURCE, SID_ATTR_NUMBERFORMAT_SOURCE, // 11432          svx/svxids.hrc
     SID_CHAR_DLG_PREVIEW_STRING, SID_CHAR_DLG_PREVIEW_STRING // Characters
->::value);
+>);
 
 const WhichRangesContainer nAllAxisWhichPairs(svl::Items<
     SCHATTR_TEXT_START, SCHATTR_TEXT_END,
@@ -50,11 +50,11 @@ const WhichRangesContainer nAllAxisWhichPairs(svl::Items<
     XATTR_LINE_FIRST, XATTR_LINE_LAST,
     EE_ITEMS_START, EE_ITEMS_END,                             // Characters
     SID_CHAR_DLG_PREVIEW_STRING, SID_CHAR_DLG_PREVIEW_STRING // Characters
->::value);
+>);
 
 const WhichRangesContainer nGridWhichPairs(svl::Items<
     XATTR_LINE_FIRST, XATTR_LINE_LAST              //  1000 -  1016  svx/xdef.hxx
->::value);
+>);
 
 const WhichRangesContainer nLegendWhichPairs(svl::Items<
     SCHATTR_LEGEND_START, SCHATTR_LEGEND_END,       //     3 -     3  sch/schattr.hxx
@@ -63,7 +63,7 @@ const WhichRangesContainer nLegendWhichPairs(svl::Items<
     SDRATTR_SHADOW_FIRST, SDRATTR_SHADOW_LAST,      //  1067 -  1078  svx/svddef.hxx
     EE_ITEMS_START, EE_ITEMS_END,                             // Characters
     SID_CHAR_DLG_PREVIEW_STRING, SID_CHAR_DLG_PREVIEW_STRING // Characters
->::value);
+>);
 
 const WhichRangesContainer nDataLabelWhichPairs(svl::Items<
     SCHATTR_DATADESCR_START, SCHATTR_DATADESCR_END,
@@ -71,7 +71,7 @@ const WhichRangesContainer nDataLabelWhichPairs(svl::Items<
     EE_PARA_WRITINGDIR,EE_PARA_WRITINGDIR,
     SID_ATTR_NUMBERFORMAT_VALUE, SID_ATTR_NUMBERFORMAT_INFO,    /* 10585 - 10585  svx/svxids.hrc */
     SID_ATTR_NUMBERFORMAT_SOURCE, SID_ATTR_NUMBERFORMAT_SOURCE /* 11432          svx/svxids.hrc */
->::value);
+>);
 
 const WhichRangesContainer nDataPointWhichPairs(svl::Items<
     SCHATTR_DATADESCR_START, SCHATTR_DATADESCR_END, /*     1 -     2  sch/schattr.hxx*/
@@ -87,7 +87,7 @@ const WhichRangesContainer nDataPointWhichPairs(svl::Items<
     SID_ATTR_NUMBERFORMAT_VALUE, SID_ATTR_NUMBERFORMAT_INFO,    /* 10585 - 10585  svx/svxids.hrc */
     SID_ATTR_NUMBERFORMAT_SOURCE, SID_ATTR_NUMBERFORMAT_SOURCE, /* 11432          svx/svxids.hrc */
     SID_CHAR_DLG_PREVIEW_STRING, SID_CHAR_DLG_PREVIEW_STRING
->::value);
+>);
 
 const WhichRangesContainer nTextLabelWhichPairs(svl::Items<
     SCHATTR_DATADESCR_START, SCHATTR_DATADESCR_END,
@@ -101,13 +101,13 @@ const WhichRangesContainer nTextLabelWhichPairs(svl::Items<
     SID_ATTR_NUMBERFORMAT_VALUE, SID_ATTR_NUMBERFORMAT_INFO,
     SID_ATTR_NUMBERFORMAT_SOURCE, SID_ATTR_NUMBERFORMAT_SOURCE,
     SID_CHAR_DLG_PREVIEW_STRING, SID_CHAR_DLG_PREVIEW_STRING
->::value);
+>);
 
 const WhichRangesContainer nSeriesOptionsWhichPairs(svl::Items<
     SCHATTR_AXIS,SCHATTR_AXIS,                      /*    69          sch/schattr.hxx*/
     SCHATTR_BAR_OVERLAP,SCHATTR_BAR_CONNECT,         /*    98 - 100 (incl. SCHATTR_GAPWIDTH) */
     SCHATTR_GROUP_BARS_PER_AXIS,SCHATTR_AXIS_FOR_ALL_SERIES
->::value);
+>);
 
 // nDataPointWhichPairs + nSeriesOptionsWhichPairs
 const WhichRangesContainer nRowWhichPairs(svl::Items<
@@ -127,39 +127,39 @@ const WhichRangesContainer nRowWhichPairs(svl::Items<
     SID_ATTR_NUMBERFORMAT_VALUE, SID_ATTR_NUMBERFORMAT_INFO,    /* 10585 - 10585  svx/svxids.hrc */
     SID_ATTR_NUMBERFORMAT_SOURCE, SID_ATTR_NUMBERFORMAT_SOURCE, /* 11432          svx/svxids.hrc */
     SID_CHAR_DLG_PREVIEW_STRING, SID_CHAR_DLG_PREVIEW_STRING
->::value);
+>);
 
 const WhichRangesContainer nStatWhichPairs(svl::Items<
     SCHATTR_STAT_START, SCHATTR_STAT_END,           //    45 -    52  sch/schattr.hxx
     SCHATTR_REGRESSION_START, SCHATTR_REGRESSION_END // 108 -   109
->::value);
+>);
 
 const WhichRangesContainer nErrorBarWhichPairs(svl::Items<
     SCHATTR_STAT_START, SCHATTR_STAT_END,           //    45 -    52  sch/schattr.hxx
     XATTR_LINE_FIRST, XATTR_LINE_LAST              //  1000 -  1016  svx/xdef.hxx
->::value);
+>);
 
 // for CharacterProperties
 
 const WhichRangesContainer nCharacterPropertyWhichPairs(svl::Items<
     EE_ITEMS_START, EE_ITEMS_END,                             // Characters
     SID_CHAR_DLG_PREVIEW_STRING, SID_CHAR_DLG_PREVIEW_STRING // Characters
->::value);
+>);
 
 const WhichRangesContainer nLinePropertyWhichPairs(svl::Items<
     XATTR_LINE_FIRST, XATTR_LINE_LAST              //  1000 -  1016  svx/xdef.hxx
->::value);
+>);
 
 const WhichRangesContainer nLineAndFillPropertyWhichPairs(svl::Items<
     XATTR_LINE_FIRST, XATTR_LINE_LAST,              //  1000 -  1016  svx/xdef.hxx
     XATTR_FILL_FIRST, XATTR_FILL_LAST,              //  1000 -  1016  svx/xdef.hxx
     SDRATTR_SHADOW_FIRST, SDRATTR_SHADOW_LAST      //  1067 -  1078  svx/svddef.hxx
->::value);
+>);
 
 const WhichRangesContainer nRegressionCurveWhichPairs(svl::Items<
     SCHATTR_REGRESSION_START, SCHATTR_REGRESSION_END, // 108 -   109
     XATTR_LINE_FIRST, XATTR_LINE_LAST              //  1000 -  1016  svx/xdef.hxx
->::value);
+>);
 
 const WhichRangesContainer nRegEquationWhichPairs(svl::Items<
     XATTR_LINE_FIRST, XATTR_LINE_LAST,              //  1000 -  1016  svx/xdef.hxx
@@ -168,6 +168,6 @@ const WhichRangesContainer nRegEquationWhichPairs(svl::Items<
     EE_ITEMS_START, EE_ITEMS_END,                             // Characters
     SID_ATTR_NUMBERFORMAT_VALUE, SID_ATTR_NUMBERFORMAT_VALUE,   // 10585 - 10585  svx/svxids.hrc
     SID_CHAR_DLG_PREVIEW_STRING, SID_CHAR_DLG_PREVIEW_STRING // Characters
->::value);
+>);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

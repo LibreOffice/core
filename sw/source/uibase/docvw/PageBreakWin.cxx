@@ -320,7 +320,7 @@ void SwPageBreakWin::execute(std::string_view rIdent)
 
         SfxItemSet aSet(
             GetEditWin()->GetView().GetWrtShell().GetAttrPool(),
-            svl::Items<RES_PAGEDESC, RES_BREAK>{});
+            svl::Items<RES_PAGEDESC, RES_BREAK>);
 
         aSet.Put( SwFormatPageDesc( nullptr ) );
         // This break could be from the current paragraph, if it has a PageBefore break.

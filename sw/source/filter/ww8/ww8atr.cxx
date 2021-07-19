@@ -893,7 +893,7 @@ void MSWordExportBase::OutputFormat( const SwFormat& rFormat, bool bPapFormat, b
 
                 SfxItemSet aSet(m_rDoc.GetAttrPool(), svl::Items<RES_FRMATR_BEGIN,
                     RES_FRMATR_END-1,
-                    XATTR_FILL_FIRST, XATTR_FILL_LAST>{});
+                    XATTR_FILL_FIRST, XATTR_FILL_LAST>);
                 aSet.Set(rFrameFormat.GetAttrSet());
 
                 // Fly as character becomes a paragraph bound
@@ -3487,7 +3487,7 @@ void WW8Export::WriteFootnoteBegin( const SwFormatFootnote& rFootnote, ww::bytes
             std::unique_ptr<ww::bytes> pOld = std::move(pO);
             pO = std::move(pOwnOutArr);
             SfxItemSet aSet( m_rDoc.GetAttrPool(), svl::Items<RES_CHRATR_FONT,
-                                                  RES_CHRATR_FONT>{} );
+                                                  RES_CHRATR_FONT> );
 
             pCFormat = pInfo->GetCharFormat( m_rDoc );
 

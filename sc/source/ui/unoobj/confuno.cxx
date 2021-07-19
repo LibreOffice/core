@@ -242,7 +242,7 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
                         svl::Items<SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN,
                         SID_PRINTER_CHANGESTODOC,  SID_PRINTER_CHANGESTODOC,
                         SID_PRINT_SELECTEDSHEET,   SID_PRINT_SELECTEDSHEET,
-                        SID_SCPRINTOPTIONS,        SID_SCPRINTOPTIONS>{} );
+                        SID_SCPRINTOPTIONS,        SID_SCPRINTOPTIONS> );
 
                 SfxPrinter* pPrinter = pDocShell->GetPrinter();
                 bool bPreferPrinterPapersize = false;

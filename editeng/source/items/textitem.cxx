@@ -2406,7 +2406,7 @@ bool SvxCharReliefItem::QueryValue( css::uno::Any& rVal,
 
 SvxScriptSetItem::SvxScriptSetItem( sal_uInt16 nSlotId, SfxItemPool& rPool )
     : SfxSetItem( nSlotId, SfxItemSet( rPool,
-                        svl::Items<SID_ATTR_CHAR_FONT, SID_ATTR_CHAR_FONT>{} ))
+                        svl::Items<SID_ATTR_CHAR_FONT, SID_ATTR_CHAR_FONT> ))
 {
     sal_uInt16 nLatin, nAsian, nComplex;
     GetWhichIds( nLatin, nAsian, nComplex );

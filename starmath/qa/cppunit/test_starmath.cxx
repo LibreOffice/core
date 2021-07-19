@@ -486,7 +486,7 @@ void Test::viewZoom()
     }
 
     {
-        SfxItemSet aSet(SmDocShell::GetPool(), svl::Items<SID_ATTR_ZOOM, SID_ATTR_ZOOM>{});
+        SfxItemSet aSet(SmDocShell::GetPool(), svl::Items<SID_ATTR_ZOOM, SID_ATTR_ZOOM>);
         aSet.Put(SvxZoomItem(SvxZoomType::OPTIMAL, 0));
         SfxRequest aZoom(SID_ATTR_ZOOM, SfxCallMode::SYNCHRON, aSet);
         m_pViewShell->Execute(aZoom);
@@ -532,7 +532,7 @@ void Test::viewZoom()
         nFinalZoom = rGraphicWindow.GetZoom();
         CPPUNIT_ASSERT_MESSAGE("Should not be optimal zoom", nFinalZoom != nOptimalZoom);
 
-        SfxItemSet aSet(SmDocShell::GetPool(), svl::Items<SID_ATTR_ZOOM, SID_ATTR_ZOOM>{});
+        SfxItemSet aSet(SmDocShell::GetPool(), svl::Items<SID_ATTR_ZOOM, SID_ATTR_ZOOM>);
         aSet.Put(SvxZoomItem(SvxZoomType::PERCENT, 50));
         SfxRequest aZoom(SID_ATTR_ZOOM, SfxCallMode::SYNCHRON, aSet);
         m_pViewShell->Execute(aZoom);
@@ -541,7 +541,7 @@ void Test::viewZoom()
     }
 
     {
-        SfxItemSet aSet(SmDocShell::GetPool(), svl::Items<SID_ATTR_ZOOM, SID_ATTR_ZOOM>{});
+        SfxItemSet aSet(SmDocShell::GetPool(), svl::Items<SID_ATTR_ZOOM, SID_ATTR_ZOOM>);
         aSet.Put(SvxZoomItem(SvxZoomType::PERCENT, 5));
         SfxRequest aZoom(SID_ATTR_ZOOM, SfxCallMode::SYNCHRON, aSet);
         m_pViewShell->Execute(aZoom);
@@ -550,7 +550,7 @@ void Test::viewZoom()
     }
 
     {
-        SfxItemSet aSet(SmDocShell::GetPool(), svl::Items<SID_ATTR_ZOOM, SID_ATTR_ZOOM>{});
+        SfxItemSet aSet(SmDocShell::GetPool(), svl::Items<SID_ATTR_ZOOM, SID_ATTR_ZOOM>);
         aSet.Put(SvxZoomItem(SvxZoomType::PERCENT, 1000));
         SfxRequest aZoom(SID_ATTR_ZOOM, SfxCallMode::SYNCHRON, aSet);
         m_pViewShell->Execute(aZoom);

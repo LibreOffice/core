@@ -21,11 +21,8 @@
 
 #include <sal/config.h>
 
-#include <array>
 #include <cassert>
 #include <cstddef>
-#include <initializer_list>
-#include <type_traits>
 #include <memory>
 #include <utility>
 
@@ -35,59 +32,6 @@
 #include <svl/whichranges.hxx>
 
 class SfxItemPool;
-
-namespace svl {
-
-namespace detail {
-
-constexpr bool validRange(sal_uInt16 wid1, sal_uInt16 wid2)
-{ return wid1 != 0 && wid1 <= wid2; }
-
-constexpr bool validGap(sal_uInt16 wid1, sal_uInt16 wid2)
-{ return wid2 > wid1; }
-
-template<sal_uInt16 WID1, sal_uInt16 WID2> constexpr bool validRanges()
-{ return validRange(WID1, WID2); }
-
-template<sal_uInt16 WID1, sal_uInt16 WID2, sal_uInt16 WID3, sal_uInt16... WIDs>
-constexpr bool validRanges() {
-    return validRange(WID1, WID2) && validGap(WID2, WID3)
-        && validRanges<WID3, WIDs...>();
-}
-
-// The calculations in rangeSize cannot overflow, assuming
-// std::size_t is no smaller than sal_uInt16:
-constexpr std::size_t rangeSize(sal_uInt16 wid1, sal_uInt16 wid2) {
-    assert(validRange(wid1, wid2));
-    return wid2 - wid1 + 1;
-}
-
-}
-
-template<sal_uInt16... WIDs> struct Items
-{
-    using Array = std::array<WhichPair, sizeof...(WIDs) / 2>;
-    template <sal_uInt16 WID1, sal_uInt16 WID2, sal_uInt16... Rest>
-    static constexpr void fill(typename Array::iterator it)
-    {
-        it->first = WID1;
-        it->second = WID2;
-        if constexpr (sizeof...(Rest) > 0)
-            fill<Rest...>(++it);
-    }
-    static constexpr Array make()
-    {
-        assert(svl::detail::validRanges<WIDs...>());
-        Array a{};
-        fill<WIDs...>(a.begin());
-        return a;
-    }
-    // This is passed to WhichRangesContainer so we can avoid needing to malloc()
-    // for compile-time data.
-    static constexpr Array value = make();
-};
-
-}
 
 class SAL_WARN_UNUSED SVL_DLLPUBLIC SfxItemSet
 {
@@ -138,8 +82,8 @@ public:
         : SfxItemSet(rPool, WhichRangesContainer(nWhichStart, nWhichEnd)) {}
 
     template<sal_uInt16... WIDs>
-    SfxItemSet(SfxItemPool& pool, svl::Items<WIDs...>)
-        : SfxItemSet(pool, WhichRangesContainer(svl::Items<WIDs...>::value)) {}
+    SfxItemSet(SfxItemPool& pool, svl::Items_t<WIDs...> wids)
+        : SfxItemSet(pool, WhichRangesContainer(wids)) {}
 
     virtual ~SfxItemSet();
 
