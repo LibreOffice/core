@@ -579,6 +579,8 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
     }
     sal_Int32 nZIndex = 0;
     uno::Reference< beans::XPropertySet > xSet( xShape, uno::UNO_QUERY );
+    OUString sHyperlink;
+    xSet->getPropertyValue(gsHyperlink) >>= sHyperlink;
 
     std::unique_ptr< SvXMLElementExport >  pHyperlinkElement;
 
@@ -610,6 +612,11 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
         {
             TOOLS_WARN_EXCEPTION("xmloff", "XMLShapeExport::exportShape(): exception during hyperlink export");
         }
+    }
+    else if (xSet.is() && !sHyperlink.isEmpty())
+    {
+        mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, sHyperlink );
+        pHyperlinkElement.reset( new SvXMLElementExport(mrExport, XML_NAMESPACE_DRAW, XML_A, true, true) );
     }
 
     if( xSet.is() )
