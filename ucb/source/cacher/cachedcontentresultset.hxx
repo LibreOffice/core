@@ -34,6 +34,7 @@
 #include <rtl/ref.hxx>
 
 #include <memory>
+#include <optional>
 
 namespace com::sun::star::script {
     class XTypeConverter;
@@ -54,7 +55,7 @@ class CachedContentResultSet
                                          m_pResult;
         css::uno::Reference< css::ucb::XContentIdentifierMapping >
                                          m_xContentIdentifierMapping;
-        std::unique_ptr<css::uno::Sequence< sal_Bool >>  m_pMappedReminder;
+        std::optional<css::uno::Sequence< sal_Bool >>  m_pMappedReminder;
 
     private:
         /// @throws css::sdbc::SQLException
@@ -67,7 +68,7 @@ class CachedContentResultSet
 
         void remindMapped( sal_Int32 nRow );
         bool isRowMapped( sal_Int32 nRow );
-        css::uno::Sequence< sal_Bool >* getMappedReminder();
+        css::uno::Sequence< sal_Bool >& getMappedReminder();
 
     public:
         CCRS_Cache( const css::uno::Reference<

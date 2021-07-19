@@ -224,9 +224,9 @@ void CachedContentResultSet::CCRS_Cache
     sal_Int32 nDiff = nRow - m_pResult->StartIndex;
     if( nDiff < 0 )
         nDiff *= -1;
-    Sequence< sal_Bool >* pMappedReminder = getMappedReminder();
-    if( nDiff < pMappedReminder->getLength() )
-        (*pMappedReminder)[nDiff] = true;
+    Sequence< sal_Bool >& rMappedReminder = getMappedReminder();
+    if( nDiff < rMappedReminder.getLength() )
+        rMappedReminder[nDiff] = true;
 }
 
 bool CachedContentResultSet::CCRS_Cache
@@ -242,16 +242,16 @@ bool CachedContentResultSet::CCRS_Cache
     return false;
 }
 
-Sequence< sal_Bool >* CachedContentResultSet::CCRS_Cache
+Sequence< sal_Bool >& CachedContentResultSet::CCRS_Cache
     ::getMappedReminder()
 {
     if( !m_pMappedReminder )
     {
         sal_Int32 nCount = m_pResult->Rows.getLength();
-        m_pMappedReminder.reset(new Sequence< sal_Bool >( nCount ));
+        m_pMappedReminder.emplace( nCount );
         std::fill(m_pMappedReminder->begin(), m_pMappedReminder->end(), false);
     }
-    return m_pMappedReminder.get();
+    return *m_pMappedReminder;
 }
 
 const Any& CachedContentResultSet::CCRS_Cache
