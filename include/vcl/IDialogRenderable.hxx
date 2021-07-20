@@ -27,7 +27,7 @@ typedef std::pair<const OString, const OString> LOKPayloadItem;
 
 typedef sal_uInt32 LOKWindowId;
 
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) ILibreOfficeKitNotifier
+class VCL_DLLPUBLIC ILibreOfficeKitNotifier
 {
 public:
     virtual ~ILibreOfficeKitNotifier();
