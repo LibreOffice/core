@@ -1862,12 +1862,12 @@ IMPL_LINK_NOARG(ScModule, IdleHandler, Timer *, void)
 /**
  * Virtual methods for the OptionsDialog
  */
-std::unique_ptr<SfxItemSet> ScModule::CreateItemSet( sal_uInt16 nId )
+std::optional<SfxItemSet> ScModule::CreateItemSet( sal_uInt16 nId )
 {
-    std::unique_ptr<SfxItemSet> pRet;
+    std::optional<SfxItemSet> pRet;
     if(SID_SC_EDITOPTIONS == nId)
     {
-        pRet = std::make_unique<SfxItemSet>(
+        pRet.emplace(
             GetPool(),
             svl::Items<
                 // TP_USERLISTS:
