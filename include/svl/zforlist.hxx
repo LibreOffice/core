@@ -302,7 +302,7 @@ typedef ::std::set< LanguageType > NfInstalledLocales;
 
 /** Language/country dependent currency entries
  */
-class UNLESS_MERGELIBS(SVL_DLLPUBLIC) NfCurrencyEntry
+class UNLESS_MERGELIBS(SVL_DLLPUBLIC) NfCurrencyEntry final
 {
     OUString        aSymbol;            /// currency symbol
     OUString        aBankSymbol;        /// currency abbreviation
@@ -311,9 +311,6 @@ class UNLESS_MERGELIBS(SVL_DLLPUBLIC) NfCurrencyEntry
     sal_uInt16      nNegativeFormat;    /// position of symbol and type and position of negative sign
     sal_uInt16      nDigits;            /// count of decimal digits
     sal_Unicode     cZeroChar;          /// which character is used for zeros as last decimal digits
-
-                        NfCurrencyEntry( const NfCurrencyEntry& ) = delete;
-    NfCurrencyEntry&    operator=( const NfCurrencyEntry& ) = delete;
 
 private:
 

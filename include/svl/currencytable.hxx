@@ -18,7 +18,7 @@
 
 class SVL_DLLPUBLIC NfCurrencyTable
 {
-    typedef std::vector<std::unique_ptr<NfCurrencyEntry>> DataType;
+    typedef std::vector<NfCurrencyEntry> DataType;
     DataType maData;
 
     NfCurrencyTable(NfCurrencyTable const&) = delete;
@@ -36,7 +36,7 @@ public:
 
     size_t size() const;
 
-    void insert(const iterator& it, std::unique_ptr<NfCurrencyEntry> p);
+    void insert(const iterator& it, NfCurrencyEntry p);
 };
 
 #endif
