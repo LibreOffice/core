@@ -46,6 +46,7 @@
 #include <com/sun/star/accessibility/XAccessibleTableSelection.hpp>
 #include <com/sun/star/accessibility/XAccessibleText.hpp>
 #include <com/sun/star/accessibility/XAccessibleValue.hpp>
+#include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -845,8 +846,30 @@ OUString lcl_convertFontWeight(double fontWeight)
     // awt::FontWeight::DONTKNOW || fontWeight == awt::FontWeight::NORMAL
     return "normal";
 }
+
+OUString lcl_ConvertFontSlant(awt::FontSlant eFontSlant)
+{
+    switch (eFontSlant)
+    {
+        case awt::FontSlant::FontSlant_NONE:
+            return "normal";
+        case awt::FontSlant::FontSlant_OBLIQUE:
+        case awt::FontSlant::FontSlant_REVERSE_OBLIQUE:
+            return "oblique";
+        case awt::FontSlant::FontSlant_ITALIC:
+        case awt::FontSlant::FontSlant_REVERSE_ITALIC:
+            return "italic";
+        case awt::FontSlant::FontSlant_DONTKNOW:
+        case awt::FontSlant::FontSlant_MAKE_FIXED_SIZE:
+        default:
+            return "";
+    }
+}
 }
 
+// Text attributes are returned in format specified in IAccessible2 spec, since that
+// is what Qt handles:
+// https://wiki.linuxfoundation.org/accessibility/iaccessible2/textattributes
 QString QtAccessibleWidget::attributes(int offset, int* startOffset, int* endOffset) const
 {
     if (startOffset == nullptr || endOffset == nullptr)
@@ -890,6 +913,12 @@ QString QtAccessibleWidget::attributes(int offset, int* startOffset, int* endOff
         {
             sAttribute = "font-size";
             sValue = OUString::number(*o3tl::doAccess<double>(prop.Value)) + "pt";
+        }
+        else if (prop.Name == "CharPosture")
+        {
+            sAttribute = "font-style";
+            const awt::FontSlant eFontSlant = *o3tl::doAccess<awt::FontSlant>(prop.Value);
+            sValue = lcl_ConvertFontSlant(eFontSlant);
         }
         else if (prop.Name == "CharWeight")
         {
