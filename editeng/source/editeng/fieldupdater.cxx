@@ -22,7 +22,7 @@ class FieldUpdaterImpl
 {
     EditTextObjectImpl& mrObj;
 public:
-    explicit FieldUpdaterImpl(EditTextObject const & rObj) : mrObj(*rObj.mpImpl) {}
+    explicit FieldUpdaterImpl(EditTextObject& rObj) : mrObj(static_cast<EditTextObjectImpl&>(rObj)) {}
 
     void updateTableFields(int nTab)
     {
@@ -53,7 +53,7 @@ public:
     }
 };
 
-FieldUpdater::FieldUpdater(EditTextObject const & rObj) : mpImpl(new FieldUpdaterImpl(rObj)) {}
+FieldUpdater::FieldUpdater(EditTextObject& rObj) : mpImpl(new FieldUpdaterImpl(rObj)) {}
 FieldUpdater::FieldUpdater(const FieldUpdater& r) : mpImpl(new FieldUpdaterImpl(*r.mpImpl)) {}
 
 FieldUpdater::~FieldUpdater()

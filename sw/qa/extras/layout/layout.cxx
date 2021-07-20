@@ -3594,7 +3594,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf137185)
     CPPUNIT_ASSERT_EQUAL(OUString("Align me!"), xTextFrame->getText()->getString());
     SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>(pObj);
     CPPUNIT_ASSERT(pTextObj);
-    auto aOutStr = pTextObj->GetOutlinerParaObject()->GetTextObject();
+    const auto& aOutStr = pTextObj->GetOutlinerParaObject()->GetTextObject();
 
     CPPUNIT_ASSERT(aOutStr.GetText(0).isEmpty());
     // Before the patch it failed, because the text appeared 2 times on each other.
