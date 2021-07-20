@@ -41,18 +41,12 @@
  *
  * For Sfx programmers: an SfxItemSet constructed in this way cannot
  * contain any Items with SlotIds as Which values.
+ *
+ * Don't create ItemSets with full range before FreezeIdRanges()!
  */
 SfxItemSet::SfxItemSet(SfxItemPool& rPool)
-    : m_pPool( &rPool )
-    , m_pParent(nullptr)
-    , m_nCount(0)
+    : SfxItemSet(rPool, rPool.GetFrozenIdRanges())
 {
-    m_pWhichRanges = m_pPool->GetFrozenIdRanges();
-    assert( !m_pWhichRanges.empty() && "don't create ItemSets with full range before FreezeIdRanges()" );
-    assert(svl::detail::validRanges2(m_pWhichRanges));
-
-    const sal_uInt16 nSize = TotalCount();
-    m_pItems.reset(new const SfxPoolItem*[nSize]{});
 }
 
 SfxItemSet::SfxItemSet( SfxItemPool& rPool, SfxAllItemSetFlag )
@@ -96,27 +90,14 @@ SfxItemSet::SfxItemSet(
     assert(svl::detail::validRanges2(m_pWhichRanges));
 }
 
-SfxItemSet::SfxItemSet(
-    SfxItemPool & pool, const WhichRangesContainer& wids):
-    m_pPool(&pool), m_pParent(nullptr),
-    m_pWhichRanges(wids),
-    m_nCount(0)
+SfxItemSet::SfxItemSet(SfxItemPool& pool, const WhichRangesContainer& wids)
+    : SfxItemSet(pool, wids, svl::detail::CountRanges(wids))
 {
-    assert(wids.size() != 0);
-    assert(svl::detail::validRanges2(m_pWhichRanges));
-    std::size_t size = svl::detail::CountRanges(wids);
-    m_pItems.reset( new SfxPoolItem const *[size]{} );
 }
 
-SfxItemSet::SfxItemSet(
-    SfxItemPool & pool, WhichRangesContainer&& wids):
-    m_pPool(&pool), m_pParent(nullptr),
-    m_pWhichRanges(std::move(wids)),
-    m_nCount(0)
+SfxItemSet::SfxItemSet(SfxItemPool& pool, WhichRangesContainer&& wids)
+    : SfxItemSet(pool, wids, svl::detail::CountRanges(wids))
 {
-    assert(svl::detail::validRanges2(m_pWhichRanges));
-    std::size_t size = svl::detail::CountRanges(m_pWhichRanges);
-    m_pItems.reset( new SfxPoolItem const *[size]{} );
 }
 
 SfxItemSet::SfxItemSet( const SfxItemSet& rASet )
@@ -800,12 +781,7 @@ void SfxItemSet::Changed( const SfxPoolItem&, const SfxPoolItem& )
 
 sal_uInt16 SfxItemSet::TotalCount() const
 {
-    sal_uInt16 nRet = 0;
-    for (auto const & pPtr : m_pWhichRanges)
-    {
-        nRet += ( pPtr.second - pPtr.first ) + 1;
-    }
-    return nRet;
+    return svl::detail::CountRanges(m_pWhichRanges);
 }
 
 /**
