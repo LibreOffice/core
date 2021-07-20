@@ -101,6 +101,24 @@
     },
     {
       "key": {
+        "uuid": "bdd10321_953231e6",
+        "filename": "sc/source/core/tool/compiler.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 2234,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-07-20T12:44:21Z",
+      "side": 1,
+      "message": "Or actually this is ok because we rely on the string being null-terminated in the while loop anyway. Sorry for fuzz.",
+      "parentUuid": "6630f4c3_875094b2",
+      "revId": "7c2a0531943af001b07b5f058b4f182ddea261f6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0334f731_719d5ef1",
         "filename": "sc/source/core/tool/compiler.cxx",
         "patchSetId": 12
