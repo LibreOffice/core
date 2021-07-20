@@ -40,7 +40,7 @@
         <property name="layout_style">spread</property>
         <child>
           <object class="GtkButton" id="today">
-            <property name="label" context="calendar|STR_SVT_CALENDAR_TODAY">Today</property>
+            <property name="label" translatable="yes" context="calendar|STR_SVT_CALENDAR_TODAY">Today</property>
             <property name="can_focus">True</property>
             <property name="can_default">True</property>
             <property name="receives_default">True</property>
@@ -55,7 +55,7 @@
         </child>
         <child>
           <object class="GtkButton" id="none">
-            <property name="label" context="calendar|STR_SVT_CALENDAR_NONE">None</property>
+            <property name="label" translatable="yes" context="calendar|STR_SVT_CALENDAR_NONE">None</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
             <property name="no_show_all">True</property>
