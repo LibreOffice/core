@@ -989,13 +989,13 @@ std::unique_ptr<EditTextObject> ImpEditEngine::CreateTextObject(const EditSelect
 
 std::unique_ptr<EditTextObject> ImpEditEngine::CreateTextObject( EditSelection aSel, SfxItemPool* pPool, bool bAllowBigObjects, sal_Int32 nBigObjectStart )
 {
-    std::unique_ptr<EditTextObject> pTxtObj(new EditTextObject(pPool));
+    std::unique_ptr<EditTextObjectImpl> pTxtObj(std::make_unique<EditTextObjectImpl>(pPool));
     pTxtObj->SetVertical( GetDirectVertical() );
     pTxtObj->SetRotation( GetRotation() );
     MapUnit eMapUnit = aEditDoc.GetItemPool().GetMetric( DEF_METRIC );
-    pTxtObj->mpImpl->SetMetric( static_cast<sal_uInt16>(eMapUnit) );
-    if ( pTxtObj->mpImpl->IsOwnerOfPool() )
-        pTxtObj->mpImpl->GetPool()->SetDefaultMetric( eMapUnit );
+    pTxtObj->SetMetric( static_cast<sal_uInt16>(eMapUnit) );
+    if ( pTxtObj->IsOwnerOfPool() )
+        pTxtObj->GetPool()->SetDefaultMetric( eMapUnit );
 
     sal_Int32 nStartNode, nEndNode;
     sal_Int32 nTextPortions = 0;
@@ -1009,7 +1009,7 @@ std::unique_ptr<EditTextObject> ImpEditEngine::CreateTextObject( EditSelection a
 
     // Templates are not saved!
     // (Only the name and family, template itself must be in App!)
-    pTxtObj->mpImpl->SetScriptType(GetItemScriptType(aSel));
+    pTxtObj->SetScriptType(GetItemScriptType(aSel));
 
     // iterate over the paragraphs ...
     sal_Int32 nNode;
@@ -1035,7 +1035,7 @@ std::unique_ptr<EditTextObject> ImpEditEngine::CreateTextObject( EditSelection a
             nEndPos = aSel.Max().GetIndex();
 
 
-        ContentInfo *pC = pTxtObj->mpImpl->CreateAndInsertContent();
+        ContentInfo *pC = pTxtObj->CreateAndInsertContent();
 
         // The paragraph attributes ...
         pC->GetParaAttribs().Set( pNode->GetContentAttribs().GetItems() );
@@ -1060,7 +1060,7 @@ std::unique_ptr<EditTextObject> ImpEditEngine::CreateTextObject( EditSelection a
             if ( bEmptyPara ||
                  ( ( pAttr->GetEnd() > nStartPos ) && ( pAttr->GetStart() < nEndPos ) ) )
             {
-                XEditAttribute aX = pTxtObj->mpImpl->CreateAttrib(*pAttr->GetItem(), pAttr->GetStart(), pAttr->GetEnd());
+                XEditAttribute aX = pTxtObj->CreateAttrib(*pAttr->GetItem(), pAttr->GetStart(), pAttr->GetEnd());
                 // Possibly Correct ...
                 if ( ( nNode == nStartNode ) && ( nStartPos != 0 ) )
                 {
@@ -1075,7 +1075,7 @@ std::unique_ptr<EditTextObject> ImpEditEngine::CreateTextObject( EditSelection a
                 }
                 DBG_ASSERT( aX.GetEnd() <= (nEndPos-nStartPos), "CreateBinTextObject: Attribute too long!" );
                 if ( !aX.GetLen() && !bEmptyPara )
-                    pTxtObj->mpImpl->DestroyAttrib(aX);
+                    pTxtObj->DestroyAttrib(aX);
                 else
                     rCAttriblist.push_back(std::move(aX));
             }
@@ -1094,7 +1094,7 @@ std::unique_ptr<EditTextObject> ImpEditEngine::CreateTextObject( EditSelection a
     if ( bAllowBigObjects && bOnlyFullParagraphs && IsFormatted() && GetUpdateMode() && ( nTextPortions >= nBigObjectStart ) )
     {
         XParaPortionList* pXList = new XParaPortionList( GetRefDevice(), GetColumnWidth(aPaperSize), nStretchX, nStretchY );
-        pTxtObj->mpImpl->SetPortionInfo(std::unique_ptr<XParaPortionList>(pXList));
+        pTxtObj->SetPortionInfo(std::unique_ptr<XParaPortionList>(pXList));
         for ( nNode = nStartNode; nNode <= nEndNode; nNode++  )
         {
             const ParaPortion& rParaPortion = GetParaPortions()[nNode];
@@ -1174,7 +1174,8 @@ EditSelection ImpEditEngine::InsertTextObject( const EditTextObject& rTextObject
     DBG_ASSERT( !aSel.DbgIsBuggy( aEditDoc ), "InsertBibTextObject: Selection broken!(1)" );
 
     bool bUsePortionInfo = false;
-    XParaPortionList* pPortionInfo = rTextObject.mpImpl->GetPortionInfo();
+    const EditTextObjectImpl& rTextObjectImpl = static_cast<const EditTextObjectImpl&>(rTextObject);
+    XParaPortionList* pPortionInfo = rTextObjectImpl.GetPortionInfo();
 
     if ( pPortionInfo && ( static_cast<tools::Long>(pPortionInfo->GetPaperWidth()) == GetColumnWidth(aPaperSize) )
             && ( pPortionInfo->GetRefMapMode() == GetRefDevice()->GetMapMode() )
@@ -1188,9 +1189,9 @@ EditSelection ImpEditEngine::InsertTextObject( const EditTextObject& rTextObject
 
     bool bConvertMetricOfItems = false;
     MapUnit eSourceUnit = MapUnit(), eDestUnit = MapUnit();
-    if (rTextObject.mpImpl->HasMetric())
+    if (rTextObjectImpl.HasMetric())
     {
-        eSourceUnit = static_cast<MapUnit>(rTextObject.mpImpl->GetMetric());
+        eSourceUnit = static_cast<MapUnit>(rTextObjectImpl.GetMetric());
         eDestUnit = aEditDoc.GetItemPool().GetMetric( DEF_METRIC );
         if ( eSourceUnit != eDestUnit )
             bConvertMetricOfItems = true;
@@ -1199,13 +1200,13 @@ EditSelection ImpEditEngine::InsertTextObject( const EditTextObject& rTextObject
     // Before, paragraph count was of type sal_uInt16 so if nContents exceeded
     // 0xFFFF this wouldn't have worked anyway, given that nPara is used to
     // number paragraphs and is fearlessly incremented.
-    sal_Int32 nContents = static_cast<sal_Int32>(rTextObject.mpImpl->GetContents().size());
+    sal_Int32 nContents = static_cast<sal_Int32>(rTextObjectImpl.GetContents().size());
     SAL_WARN_IF( nContents < 0, "editeng", "ImpEditEngine::InsertTextObject - contents overflow " << nContents);
     sal_Int32 nPara = aEditDoc.GetPos( aPaM.GetNode() );
 
     for (sal_Int32 n = 0; n < nContents; ++n, ++nPara)
     {
-        const ContentInfo* pC = rTextObject.mpImpl->GetContents()[n].get();
+        const ContentInfo* pC = rTextObjectImpl.GetContents()[n].get();
         bool bNewContent = aPaM.GetNode()->Len() == 0;
         const sal_Int32 nStartPos = aPaM.GetIndex();
 

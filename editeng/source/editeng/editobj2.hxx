@@ -163,15 +163,12 @@ public:
 #endif
 };
 
-class EditTextObjectImpl
+class EditTextObjectImpl final : public EditTextObject
 {
-friend class EditTextObject;
 public:
     typedef std::vector<std::unique_ptr<ContentInfo> > ContentInfosType;
 
 private:
-    EditTextObject* mpFront;
-
     ContentInfosType        aContents;
     rtl::Reference<SfxItemPool>       pPool;
     std::unique_ptr<XParaPortionList> pPortionInfo;
@@ -188,28 +185,29 @@ private:
                                const OUString& rNewName, SfxStyleFamily eNewFamily );
 
 public:
-    EditTextObjectImpl( EditTextObject* pFront, SfxItemPool* pPool );
-    EditTextObjectImpl( EditTextObject* pFront, const EditTextObjectImpl& r );
-    ~EditTextObjectImpl();
+    EditTextObjectImpl( SfxItemPool* pPool );
+    EditTextObjectImpl( const EditTextObjectImpl& r );
+    virtual ~EditTextObjectImpl() override;
 
-    EditTextObjectImpl(const EditTextObjectImpl&) = delete;
     EditTextObjectImpl& operator=(const EditTextObjectImpl&) = delete;
 
-    OutlinerMode GetUserType() const { return nUserType;}
-    void SetUserType( OutlinerMode n );
+    virtual OutlinerMode GetUserType() const override { return nUserType;}
+    virtual void SetUserType( OutlinerMode n ) override;
 
-    void NormalizeString( svl::SharedStringPool& rPool );
-    std::vector<svl::SharedString> GetSharedStrings() const;
+    virtual void NormalizeString( svl::SharedStringPool& rPool ) override;
+    virtual std::vector<svl::SharedString> GetSharedStrings() const override;
 
-    bool                    IsVertical() const;
-    bool                    GetDirectVertical() const;
-    bool                    IsTopToBottom() const;
-    void                    SetVertical( bool bVert);
-    void                    SetRotation(TextRotation nRotation);
-    TextRotation            GetRotation() const;
+    virtual bool                    IsVertical() const override;
+    virtual bool                    GetDirectVertical() const override;
+    virtual bool                    IsTopToBottom() const override;
+    virtual void                    SetVertical( bool bVert) override;
+    virtual void                    SetRotation(TextRotation nRotation) override;
+    virtual TextRotation            GetRotation() const override;
 
-    SvtScriptType           GetScriptType() const { return nScriptType;}
+    virtual SvtScriptType           GetScriptType() const override { return nScriptType;}
     void                    SetScriptType( SvtScriptType nType );
+
+    virtual std::unique_ptr<EditTextObject> Clone() const override;
 
     ContentInfo*            CreateAndInsertContent();
     XEditAttribute CreateAttrib( const SfxPoolItem& rItem, sal_Int32 nStart, sal_Int32 nEnd );
@@ -217,39 +215,40 @@ public:
 
     ContentInfosType&       GetContents() { return aContents;}
     const ContentInfosType& GetContents() const { return aContents;}
-    SfxItemPool*            GetPool() const         { return pPool.get(); }
+    SfxItemPool*            GetPool()         { return pPool.get(); }
+    virtual const SfxItemPool* GetPool() const override { return pPool.get(); }
     XParaPortionList*       GetPortionInfo() const  { return pPortionInfo.get(); }
     void                    SetPortionInfo( std::unique_ptr<XParaPortionList> pP )
                                 { pPortionInfo = std::move(pP); }
 
-    sal_Int32 GetParagraphCount() const;
-    OUString GetText(sal_Int32 nParagraph) const;
+    virtual sal_Int32 GetParagraphCount() const override;
+    virtual OUString GetText(sal_Int32 nParagraph) const override;
 
-    void ClearPortionInfo();
+    virtual void ClearPortionInfo() override;
 
-    bool HasOnlineSpellErrors() const;
+    virtual bool HasOnlineSpellErrors() const override;
 
-    void GetCharAttribs( sal_Int32 nPara, std::vector<EECharAttrib>& rLst ) const;
+    virtual void GetCharAttribs( sal_Int32 nPara, std::vector<EECharAttrib>& rLst ) const override;
 
-    bool RemoveCharAttribs( sal_uInt16 nWhich );
+    virtual bool RemoveCharAttribs( sal_uInt16 nWhich ) override;
 
-    void GetAllSections( std::vector<editeng::Section>& rAttrs ) const;
+    virtual void GetAllSections( std::vector<editeng::Section>& rAttrs ) const override;
 
-    bool IsFieldObject() const;
-    const SvxFieldItem* GetField() const;
-    const SvxFieldData* GetFieldData(sal_Int32 nPara, size_t nPos, sal_Int32 nType) const;
+    virtual bool IsFieldObject() const override;
+    virtual const SvxFieldItem* GetField() const override;
+    virtual const SvxFieldData* GetFieldData(sal_Int32 nPara, size_t nPos, sal_Int32 nType) const override;
 
-    bool HasField( sal_Int32 nType ) const;
+    virtual bool HasField( sal_Int32 nType = css::text::textfield::Type::UNSPECIFIED ) const override;
 
-    const SfxItemSet& GetParaAttribs(sal_Int32 nPara) const;
+    virtual const SfxItemSet& GetParaAttribs(sal_Int32 nPara) const override;
 
-    void GetStyleSheet(sal_Int32 nPara, OUString& rName, SfxStyleFamily& eFamily) const;
-    void SetStyleSheet(sal_Int32 nPara, const OUString& rName, const SfxStyleFamily& eFamily);
-    bool ChangeStyleSheets(
-        std::u16string_view rOldName, SfxStyleFamily eOldFamily, const OUString& rNewName, SfxStyleFamily eNewFamily);
-    void ChangeStyleSheetName(SfxStyleFamily eFamily, std::u16string_view rOldName, const OUString& rNewName);
+    virtual void GetStyleSheet(sal_Int32 nPara, OUString& rName, SfxStyleFamily& eFamily) const override;
+    virtual void SetStyleSheet(sal_Int32 nPara, const OUString& rName, const SfxStyleFamily& eFamily) override;
+    virtual bool ChangeStyleSheets(
+        std::u16string_view rOldName, SfxStyleFamily eOldFamily, const OUString& rNewName, SfxStyleFamily eNewFamily) override;
+    virtual void ChangeStyleSheetName(SfxStyleFamily eFamily, std::u16string_view rOldName, const OUString& rNewName) override;
 
-    editeng::FieldUpdater GetFieldUpdater() const { return editeng::FieldUpdater(*mpFront);}
+    virtual editeng::FieldUpdater GetFieldUpdater() override { return editeng::FieldUpdater(*this); }
 
     bool HasMetric() const { return nMetric != 0xFFFF; }
     sal_uInt16                  GetMetric() const           { return nMetric; }
@@ -257,15 +256,16 @@ public:
 
     bool                    IsOwnerOfPool() const       { return bOwnerOfPool; }
 
-    bool operator==( const EditTextObjectImpl& rCompare ) const;
+    virtual bool operator==( const EditTextObject& rCompare ) const override;
     bool Equals( const EditTextObjectImpl& rCompare, bool bComparePool ) const;
 
     // #i102062#
-    bool isWrongListEqual(const EditTextObjectImpl& rCompare) const;
+    virtual bool isWrongListEqual(const EditTextObject& rCompare) const override;
 
 #if DEBUG_EDIT_ENGINE
-    void Dump() const;
+    virtual void Dump() const override;
 #endif
+    virtual void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
