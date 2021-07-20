@@ -412,7 +412,7 @@ void EditTextObject::dumpAsXml(xmlTextWriterPtr pWriter) const
     sal_Int32 nCount = GetParagraphCount();
     for (sal_Int32 i = 0; i < nCount; ++i)
     {
-        mpImpl->aContents[i]->dumpAsXml(pWriter);
+        mpImpl->GetContents()[i]->dumpAsXml(pWriter);
     }
     (void)xmlTextWriterEndElement(pWriter);
 

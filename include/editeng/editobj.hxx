@@ -58,7 +58,6 @@ class EditTextObjectImpl;
 
 class EDITENG_DLLPUBLIC EditTextObject final
 {
-    friend class EditTextObjectImpl;
     friend class editeng::FieldUpdaterImpl;
     friend class ImpEditEngine;
 

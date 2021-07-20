@@ -165,7 +165,6 @@ public:
 
 class EditTextObjectImpl
 {
-friend class EditTextObject;
 public:
     typedef std::vector<std::unique_ptr<ContentInfo> > ContentInfosType;
 
