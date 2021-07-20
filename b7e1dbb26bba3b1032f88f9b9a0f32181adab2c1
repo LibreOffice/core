@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "439f674f_56627af7",
+        "filename": "sd/qa/unit/export-tests-ooxml1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-07-20T16:39:57Z",
+      "side": 1,
+      "message": "Why do we need this? Yes, we need this for the failing test, but we can use arbitrary strings, here, e.g.\n\nxNamed-\u003esetName(\"foo\"); \n\nThat works well, too. But removing this line, the test never fails (i.e. without the \"fix\").",
+      "range": {
+        "startLine": 221,
+        "startChar": 0,
+        "endLine": 221,
+        "endChar": 32
+      },
+      "revId": "b7e1dbb26bba3b1032f88f9b9a0f32181adab2c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
