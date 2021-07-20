@@ -608,15 +608,17 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
                             else
                             {
                                 sal_Int32 nFilterOptionsIndex = aFilter.indexOf(':');
-                                sal_Int32 nProps = ( 0 < nFilterOptionsIndex ) ? 3 : 2;
+                                sal_Int32 nProps = ( 0 < nFilterOptionsIndex ) ? 4 : 3;
 
                                 if ( !aImgOut.isEmpty() )
                                     nProps +=1;
                                 Sequence<PropertyValue> conversionProperties( nProps );
-                                conversionProperties[0].Name = "Overwrite";
-                                conversionProperties[0].Value <<= true;
+                                conversionProperties[0].Name = "ConversionRequestOrigin";
+                                conversionProperties[0].Value <<= OUString("CommandLine");
+                                conversionProperties[1].Name = "Overwrite";
+                                conversionProperties[1].Value <<= true;
 
-                                conversionProperties[1].Name = "FilterName";
+                                conversionProperties[2].Name = "FilterName";
                                 if( 0 < nFilterOptionsIndex )
                                 {
                                     OUString sFilterName = aFilter.copy(0, nFilterOptionsIndex);
@@ -641,18 +643,19 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
                                         bMultiFileTarget = (!aTok.isEmpty() && aTok.toInt32() != 0);
                                     }
 
-                                    conversionProperties[1].Value <<= sFilterName;
+                                    conversionProperties[2].Value <<= sFilterName;
 
-                                    conversionProperties[2].Name = "FilterOptions";
-                                    conversionProperties[2].Value <<= sFilterOptions;
+                                    conversionProperties[3].Name = "FilterOptions";
+                                    conversionProperties[3].Value <<= sFilterOptions;
                                 }
                                 else
                                 {
-                                    conversionProperties[1].Value <<= aFilter;
+                                    conversionProperties[2].Value <<= aFilter;
                                 }
 
                                 if ( !aImgOut.isEmpty() )
                                 {
+                                    assert(conversionProperties[nProps-1].Name.isEmpty());
                                     conversionProperties[nProps-1].Name = "ImageFilter";
                                     conversionProperties[nProps-1].Value <<= aImgOut;
                                 }
