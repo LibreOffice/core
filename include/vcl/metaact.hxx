@@ -501,7 +501,7 @@ public:
     void            SetLen(sal_Int32 rLen) { mnLen = rLen; }
 };
 
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetaTextArrayAction final : public MetaAction
+class VCL_DLLPUBLIC MetaTextArrayAction final : public MetaAction
 {
 private:
 
@@ -729,7 +729,7 @@ public:
     void                SetSize(const Size& rSz) { maSz = rSz; }
 };
 
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetaBmpScalePartAction final : public MetaAction
+class VCL_DLLPUBLIC MetaBmpScalePartAction final : public MetaAction
 {
 private:
 
@@ -836,7 +836,7 @@ public:
     bool                IsTransparent() const override { return GetBitmapEx().IsAlpha(); }
 };
 
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetaBmpExScalePartAction final : public MetaAction
+class VCL_DLLPUBLIC MetaBmpExScalePartAction final : public MetaAction
 {
 private:
 
@@ -1084,7 +1084,7 @@ public:
     void                SetHatch(const Hatch& rHatch) { maHatch = rHatch; }
 };
 
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetaWallpaperAction final : public MetaAction
+class VCL_DLLPUBLIC MetaWallpaperAction final : public MetaAction
 {
 private:
 
