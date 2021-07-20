@@ -1160,6 +1160,23 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf141548, "tdf141548.docx")
     assertXPathContent(pXml, "/w:endnotes/w:endnote[4]/w:p/w:r[2]/w:t[2]", "new line");
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf143399, "tdf143399.docx")
+{
+    xmlDocUniquePtr pXml = parseExport("word/footnotes.xml");
+    CPPUNIT_ASSERT(pXml);
+    // These were 0 (lost text content of documents both with footnotes and endnotes)
+    assertXPath(pXml, "/w:footnotes/w:footnote[3]/w:p/w:r[3]/w:t", 1);
+    assertXPathContent(pXml, "/w:footnotes/w:footnote[3]/w:p/w:r[3]/w:t", "Footnotes_graphic2");
+    assertXPath(pXml, "/w:footnotes/w:footnote[4]/w:p/w:r[3]/w:t", 1);
+    assertXPathContent(pXml, "/w:footnotes/w:footnote[4]/w:p/w:r[3]/w:t", "Footnotes_grahic");
+
+    xmlDocUniquePtr pXml2 = parseExport("word/endnotes.xml");
+    CPPUNIT_ASSERT(pXml);
+    // This was 0 (lost text content of the run with endnoteRef)
+    assertXPath(pXml2, "/w:endnotes/w:endnote[3]/w:p/w:r[3]/w:t", 1);
+    assertXPathContent(pXml2, "/w:endnotes/w:endnote[3]/w:p/w:r[3]/w:t[1]", "Endnotes");
+}
+
 DECLARE_OOXMLEXPORT_TEST(testContSectBreakHeaderFooter, "cont-sect-break-header-footer.docx")
 {
     // Load a document with a continuous section break on page 2.
