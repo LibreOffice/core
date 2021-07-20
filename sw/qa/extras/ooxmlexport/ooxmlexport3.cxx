@@ -155,8 +155,12 @@ DECLARE_OOXMLEXPORT_TEST(testCharacterBorder, "charborder.odt")
     }
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testStyleInheritance, "style-inheritance.docx")
+CPPUNIT_TEST_FIXTURE(Test, testStyleInheritance)
 {
+    load(mpTestDocumentPath, "style-inheritance.docx");
+    save("Office Open XML Text", maTempFile);
+    mbExported = true;
+
     // Check that now styleId's are more like what MSO produces
     xmlDocUniquePtr pXmlStyles = parseExport("word/styles.xml");
     // the 1st style always must be Normal
