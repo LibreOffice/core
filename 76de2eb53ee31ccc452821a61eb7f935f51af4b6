@@ -16,6 +16,24 @@
       "revId": "76de2eb53ee31ccc452821a61eb7f935f51af4b6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bff0012d_f77df4ae",
+        "filename": "vcl/source/filter/svm/SvmReader.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1322,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-07-20T08:43:08Z",
+      "side": 1,
+      "message": "Probably want to recursively read the inner GDIMetaFile - I guess it is OK.. or better create a new instance of SvmReader to not destroy the current state by accident.\n\nI wonder how good the tests are for this case.",
+      "parentUuid": "53b27794_fdaf5459",
+      "revId": "76de2eb53ee31ccc452821a61eb7f935f51af4b6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
