@@ -29,17 +29,8 @@
 #include <o3tl/typed_flags_set.hxx>
 #include <memory>
 
-namespace sdr
-{
-    namespace properties
-    {
-        class GraphicProperties;
-    } // end of namespace properties
-    namespace contact
-    {
-        class ViewObjectContactOfGraphic;
-    } // end of namespace contact
-} // end of namespace sdr
+namespace sdr::properties { class GraphicProperties; }
+namespace sdr::contact { class ViewObjectContactOfGraphic; }
 
 /**
  * Options for GetTransformedGraphic()

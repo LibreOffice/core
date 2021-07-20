@@ -42,19 +42,15 @@ class SdrView;
 class SdrPageObj;
 class SdrPageView;
 
-namespace sdr
+namespace sdr::contact
 {
-    namespace contact
-    {
-        class ViewObjectContactRedirector;
-        class DisplayInfo;
-        class ViewObjectContactRedirector;
-    } // end of namespace contact
-} // end of namespace sdr
+    class ViewObjectContactRedirector;
+    class DisplayInfo;
+    class ViewObjectContactRedirector;
+}
 
 // typedefs for a list of SdrPageWindow
 class SdrPageWindow;
-
 
 class SVXCORE_DLLPUBLIC SdrPageView
 {
@@ -254,7 +250,5 @@ public:
     void SetApplicationDocumentColor(Color aDocumentColor);
     const Color& GetApplicationDocumentColor() const { return maDocumentColor;}
 };
-
-#pragma once
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
