@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3aadd1b2_38ab914f",
+        "filename": "svl/source/items/itemset.cxx",
+        "patchSetId": 17
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-07-20T07:45:17Z",
+      "side": 1,
+      "message": "what cannot overflow?  (this appears to be a copy/paste error from code introduced with \u003chttps://git.libreoffice.org/core/+/13bb5a4b09f5b2ad19dad1b55f45d0fe2b2fb908%5E!/\u003e \"Make SfxItemSet ranges correct by construction\", where what could not overflow was the\n\n  wids.size() + 1\n\naddition)",
+      "range": {
+        "startLine": 98,
+        "startChar": 11,
+        "endLine": 98,
+        "endChar": 26
+      },
+      "revId": "5d0a231b29dfd4d587c7a4d1bbda6a511f94ec77",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3dc5f3b4_eafde261",
+        "filename": "svl/source/items/itemset.cxx",
+        "patchSetId": 17
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-07-20T07:45:17Z",
+      "side": 1,
+      "message": "same as above",
+      "range": {
+        "startLine": 115,
+        "startChar": 11,
+        "endLine": 115,
+        "endChar": 26
+      },
+      "revId": "5d0a231b29dfd4d587c7a4d1bbda6a511f94ec77",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
