@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "ef859e2b_b2202b7a",
+        "filename": "svl/source/items/itemset.cxx",
+        "patchSetId": 17
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-07-20T08:09:07Z",
+      "side": 1,
+      "message": "(but which is moot now as the code has been removed with \u003chttps://git.libreoffice.org/core/+/476d8b4088b723df883a8d33d018da68c6b03933%5E!/\u003e \"Drop unused ctor\", see the comment at \u003chttps://gerrit.libreoffice.org/c/core/+/38861/4#message-aa4ebee49f4442a5354814dd29fd3ed79430999a\u003e \"Make SfxItemSet ranges correct by construction\")",
+      "parentUuid": "27351ddc_7c2f2c81",
+      "range": {
+        "startLine": 63,
+        "startChar": 11,
+        "endLine": 63,
+        "endChar": 26
+      },
+      "revId": "5d0a231b29dfd4d587c7a4d1bbda6a511f94ec77",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3aadd1b2_38ab914f",
         "filename": "svl/source/items/itemset.cxx",
         "patchSetId": 17
