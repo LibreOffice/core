@@ -421,7 +421,7 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo, void)
 /**
  * virtual methods for option dialog
  */
-std::unique_ptr<SfxItemSet> SdModule::CreateItemSet( sal_uInt16 nSlot )
+std::optional<SfxItemSet> SdModule::CreateItemSet( sal_uInt16 nSlot )
 {
     ::sd::FrameView* pFrameView = nullptr;
     ::sd::DrawDocShell* pDocSh = dynamic_cast< ::sd::DrawDocShell *>( SfxObjectShell::Current() );
@@ -452,7 +452,7 @@ std::unique_ptr<SfxItemSet> SdModule::CreateItemSet( sal_uInt16 nSlot )
     SfxItemPool& rPool = GetPool();
     rPool.SetDefaultMetric( MapUnit::Map100thMM );
 
-    auto pRet = std::make_unique<SfxItemSet>(
+    SfxItemSet aRet(
         rPool,
         svl::Items<
             SID_ATTR_GRID_OPTIONS, SID_ATTR_GRID_OPTIONS,
@@ -461,14 +461,14 @@ std::unique_ptr<SfxItemSet> SdModule::CreateItemSet( sal_uInt16 nSlot )
             ATTR_OPTIONS_LAYOUT, ATTR_OPTIONS_SCALE_END>);
 
     // TP_OPTIONS_LAYOUT:
-    pRet->Put( SdOptionsLayoutItem( pOptions, pFrameView ) );
+    aRet.Put( SdOptionsLayoutItem( pOptions, pFrameView ) );
 
     sal_uInt16 nDefTab = 0;
     if( pFrameView)
         nDefTab = pDoc->GetDefaultTabulator();
     else
         nDefTab = pOptions->GetDefTab();
-    pRet->Put( SfxUInt16Item( SID_ATTR_DEFTABSTOP, nDefTab ) );
+    aRet.Put( SfxUInt16Item( SID_ATTR_DEFTABSTOP, nDefTab ) );
 
     FieldUnit nMetric = FieldUnit(0xffff);
     if( pFrameView)
@@ -479,7 +479,7 @@ std::unique_ptr<SfxItemSet> SdModule::CreateItemSet( sal_uInt16 nSlot )
     if( nMetric == FieldUnit(0xffff) )
         nMetric = GetFieldUnit();
 
-    pRet->Put( SfxUInt16Item( SID_ATTR_METRIC, static_cast<sal_uInt16>(nMetric) ) );
+    aRet.Put( SfxUInt16Item( SID_ATTR_METRIC, static_cast<sal_uInt16>(nMetric) ) );
 
     // TP_OPTIONS_MISC:
     SdOptionsMiscItem aSdOptionsMiscItem( pOptions, pFrameView );
@@ -489,10 +489,10 @@ std::unique_ptr<SfxItemSet> SdModule::CreateItemSet( sal_uInt16 nSlot )
         aSdOptionsMiscItem.GetOptionsMisc().SetPrinterIndependentLayout (
             static_cast<sal_uInt16>(pDoc->GetPrinterIndependentLayout()));
     }
-    pRet->Put( aSdOptionsMiscItem );
+    aRet.Put( aSdOptionsMiscItem );
 
     // TP_OPTIONS_SNAP:
-    pRet->Put( SdOptionsSnapItem( pOptions, pFrameView ) );
+    aRet.Put( SdOptionsSnapItem( pOptions, pFrameView ) );
 
     // TP_SCALE:
     sal_uInt32 nW = 10;
@@ -519,19 +519,20 @@ std::unique_ptr<SfxItemSet> SdModule::CreateItemSet( sal_uInt16 nSlot )
         pOptions->GetScale( nX, nY );
     }
 
-    pRet->Put( SfxInt32Item( ATTR_OPTIONS_SCALE_X, nX ) );
-    pRet->Put( SfxInt32Item( ATTR_OPTIONS_SCALE_Y, nY ) );
-    pRet->Put( SfxUInt32Item( ATTR_OPTIONS_SCALE_WIDTH, nW ) );
-    pRet->Put( SfxUInt32Item( ATTR_OPTIONS_SCALE_HEIGHT, nH ) );
+    aRet.Put( SfxInt32Item( ATTR_OPTIONS_SCALE_X, nX ) );
+    aRet.Put( SfxInt32Item( ATTR_OPTIONS_SCALE_Y, nY ) );
+    aRet.Put( SfxUInt32Item( ATTR_OPTIONS_SCALE_WIDTH, nW ) );
+    aRet.Put( SfxUInt32Item( ATTR_OPTIONS_SCALE_HEIGHT, nH ) );
 
     // TP_OPTIONS_PRINT:
-    pRet->Put( SdOptionsPrintItem( pOptions ) );
+    aRet.Put( SdOptionsPrintItem( pOptions ) );
 
     // RID_SVXPAGE_GRID:
-    pRet->Put( SdOptionsGridItem( pOptions ) );
+    aRet.Put( SdOptionsGridItem( pOptions ) );
 
-    return pRet;
+    return aRet;
 }
+
 void SdModule::ApplyItemSet( sal_uInt16 nSlot, const SfxItemSet& rSet )
 {
     const SfxPoolItem*  pItem = nullptr;

@@ -451,7 +451,7 @@ struct OptionsPageInfo
 
 struct OptionsGroupInfo
 {
-    std::unique_ptr<SfxItemSet> m_pInItemSet;
+    std::optional<SfxItemSet> m_pInItemSet;
     std::unique_ptr<SfxItemSet> m_pOutItemSet;
     SfxShell*           m_pShell;       // used to create the page
     SfxModule*          m_pModule;      // used to create the ItemSet
@@ -626,7 +626,7 @@ void OfaTreeOptionsDialog::ResetCurrentPageFromConfig()
         xTreeLB->iter_parent(*xParent);
         OptionsGroupInfo* pGroupInfo =
             reinterpret_cast<OptionsGroupInfo*>(xTreeLB->get_id(*xParent).toInt64());
-        pPageInfo->m_xPage->Reset( pGroupInfo->m_pInItemSet.get() );
+        pPageInfo->m_xPage->Reset( &*pGroupInfo->m_pInItemSet );
     }
     else if ( pPageInfo->m_xExtPage )
         pPageInfo->m_xExtPage->ResetPage();
@@ -892,9 +892,9 @@ void OfaTreeOptionsDialog::ActivateLastSelection()
 void OfaTreeOptionsDialog::InitItemSets(OptionsGroupInfo& rGroupInfo)
 {
     if (!rGroupInfo.m_pInItemSet)
-        rGroupInfo.m_pInItemSet = rGroupInfo.m_pShell
-            ? rGroupInfo.m_pShell->CreateItemSet( rGroupInfo.m_nDialogId )
-            : CreateItemSet( rGroupInfo.m_nDialogId );
+        rGroupInfo.m_pInItemSet.emplace( rGroupInfo.m_pShell
+            ? *rGroupInfo.m_pShell->CreateItemSet( rGroupInfo.m_nDialogId )
+            : *CreateItemSet( rGroupInfo.m_nDialogId ) );
     if (!rGroupInfo.m_pOutItemSet)
         rGroupInfo.m_pOutItemSet = std::make_unique<SfxItemSet>(
             *rGroupInfo.m_pInItemSet->GetPool(),
@@ -965,7 +965,7 @@ void OfaTreeOptionsDialog::SelectHdl_Impl()
         {
             SvtViewOptions aTabPageOpt( EViewType::TabPage, OUString::number( pPageInfo->m_nPageId) );
             pPageInfo->m_xPage->SetUserData( GetViewOptUserItem( aTabPageOpt ) );
-            pPageInfo->m_xPage->Reset( pGroupInfo->m_pInItemSet.get() );
+            pPageInfo->m_xPage->Reset( &*pGroupInfo->m_pInItemSet );
         }
     }
     else if ( 0 == pPageInfo->m_nPageId && !pPageInfo->m_xExtPage )
@@ -1026,15 +1026,15 @@ void OfaTreeOptionsDialog::SelectHdl_Impl()
     xTreeLB->set_help_id(sHelpId);
 }
 
-std::unique_ptr<SfxItemSet> OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId )
+std::optional<SfxItemSet> OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId )
 {
     Reference< XLinguProperties >  xProp( LinguMgr::GetLinguPropertySet() );
-    std::unique_ptr<SfxItemSet> pRet;
+    std::optional<SfxItemSet> pRet;
     switch(nId)
     {
         case SID_GENERAL_OPTIONS:
         {
-            pRet = std::make_unique<SfxItemSet>(
+            pRet.emplace(
                 SfxGetpApp()->GetPool(),
                 svl::Items<
                     SID_HTML_MODE, SID_HTML_MODE,
@@ -1074,7 +1074,7 @@ std::unique_ptr<SfxItemSet> OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId 
         break;
         case SID_LANGUAGE_OPTIONS :
         {
-            pRet = std::make_unique<SfxItemSet>(
+            pRet.emplace(
                 SfxGetpApp()->GetPool(),
                 svl::Items<
                     SID_ATTR_CHAR_CJK_LANGUAGE, SID_ATTR_CHAR_CJK_LANGUAGE,
@@ -1141,7 +1141,7 @@ std::unique_ptr<SfxItemSet> OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId 
         }
         break;
         case SID_INET_DLG :
-                pRet = std::make_unique<SfxItemSet>( SfxGetpApp()->GetPool(),
+                pRet.emplace( SfxGetpApp()->GetPool(),
                                 svl::Items<
                 //SID_OPTIONS_START - ..END
                                 SID_SAVEREL_INET, SID_SAVEREL_FSYS,
@@ -1150,7 +1150,7 @@ std::unique_ptr<SfxItemSet> OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId 
                 SfxGetpApp()->GetOptions(*pRet);
         break;
         case SID_FILTER_DLG:
-            pRet = std::make_unique<SfxItemSet>(
+            pRet.emplace(
                 SfxGetpApp()->GetPool(),
                 svl::Items<
                     SID_ATTR_WARNALIENFORMAT, SID_ATTR_WARNALIENFORMAT,
@@ -1161,8 +1161,8 @@ std::unique_ptr<SfxItemSet> OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId 
             break;
 
         case SID_SB_STARBASEOPTIONS:
-            pRet = std::make_unique<SfxItemSet>( SfxGetpApp()->GetPool(),
-            svl::Items<SID_SB_POOLING_ENABLED, SID_SB_DB_REGISTER> );
+            pRet.emplace( SfxGetpApp()->GetPool(),
+                    svl::Items<SID_SB_POOLING_ENABLED, SID_SB_DB_REGISTER> );
             ::offapp::ConnectionPoolConfig::GetOptions(*pRet);
             svx::DbRegisteredNamesConfig::GetOptions(*pRet);
             break;
@@ -1170,7 +1170,7 @@ std::unique_ptr<SfxItemSet> OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId 
         case SID_SCH_EDITOPTIONS:
         {
             SvxChartOptions aChartOpt;
-            pRet = std::make_unique<SfxItemSet>( SfxGetpApp()->GetPool(), svl::Items<SID_SCH_EDITOPTIONS, SID_SCH_EDITOPTIONS> );
+            pRet.emplace( SfxGetpApp()->GetPool(), svl::Items<SID_SCH_EDITOPTIONS, SID_SCH_EDITOPTIONS> );
             pRet->Put( SvxChartColorTableItem( SID_SCH_EDITOPTIONS, aChartOpt.GetDefaultColors() ) );
             break;
         }

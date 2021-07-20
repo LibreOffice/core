@@ -201,12 +201,12 @@ void SmModule::GetState(SfxItemSet &rSet)
         }
 }
 
-std::unique_ptr<SfxItemSet> SmModule::CreateItemSet( sal_uInt16 nId )
+std::optional<SfxItemSet> SmModule::CreateItemSet( sal_uInt16 nId )
 {
-    std::unique_ptr<SfxItemSet> pRet;
+    std::optional<SfxItemSet> pRet;
     if(nId == SID_SM_EDITOPTIONS)
     {
-        pRet = std::make_unique<SfxItemSet>(
+        pRet.emplace(
             GetPool(),
             svl::Items< //TP_SMPRINT
                 SID_PRINTTITLE, SID_PRINTZOOM,

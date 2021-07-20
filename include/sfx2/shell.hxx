@@ -28,6 +28,7 @@
 #include <svl/SfxBroadcaster.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/strong_int.hxx>
+#include <optional>
 
 namespace com::sun::star::embed { struct VerbDescriptor; }
 namespace com::sun::star::uno { template <class E> class Sequence; }
@@ -437,7 +438,7 @@ public:
     void                        SetDisableFlags( SfxDisableFlags nFlags );
     SfxDisableFlags             GetDisableFlags() const;
 
-    virtual std::unique_ptr<SfxItemSet> CreateItemSet( sal_uInt16 nId );
+    virtual std::optional<SfxItemSet> CreateItemSet( sal_uInt16 nId );
     virtual void                ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet );
 
     /** Set the name of the sidebar context that is broadcast on calls

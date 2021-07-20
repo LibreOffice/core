@@ -698,9 +698,9 @@ SfxDisableFlags SfxShell::GetDisableFlags() const
     return pImpl->nDisableFlags;
 }
 
-std::unique_ptr<SfxItemSet> SfxShell::CreateItemSet( sal_uInt16 )
+std::optional<SfxItemSet> SfxShell::CreateItemSet( sal_uInt16 )
 {
-    return nullptr;
+    return {};
 }
 
 void SfxShell::ApplyItemSet( sal_uInt16, const SfxItemSet& )
