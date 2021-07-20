@@ -37,6 +37,9 @@ public:
     SvXMLAttrContainerData(const SvXMLAttrContainerData &rCopy);
     ~SvXMLAttrContainerData();
 
+    SvXMLAttrContainerData& operator=( const SvXMLAttrContainerData& rCmp );
+    SvXMLAttrContainerData& operator=( SvXMLAttrContainerData&& rCmp );
+
     bool operator ==( const SvXMLAttrContainerData& rCmp ) const;
 
     bool AddAttr( const OUString& rLName, const OUString& rValue );

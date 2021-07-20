@@ -30,6 +30,18 @@ SvXMLAttrContainerData::SvXMLAttrContainerData(const SvXMLAttrContainerData &rCo
 {
 }
 
+SvXMLAttrContainerData& SvXMLAttrContainerData::operator=(const SvXMLAttrContainerData &rCopy)
+{
+    pimpl.reset( new SvXMLAttrCollection( *rCopy.pimpl ) );
+    return *this;
+}
+
+SvXMLAttrContainerData& SvXMLAttrContainerData::operator=(SvXMLAttrContainerData&& rCopy)
+{
+    pimpl = std::move( rCopy.pimpl );
+    return *this;
+}
+
 // Need destructor defined (despite it being empty) to avoid "checked_delete"
 // compiler errors.
 SvXMLAttrContainerData::~SvXMLAttrContainerData()
