@@ -978,13 +978,9 @@ bool EditTextObjectImpl::Equals( const EditTextObjectImpl& rCompare, bool bCompa
             ( mnRotation != rCompare.mnRotation ) )
         return false;
 
-    for (size_t i = 0, n = aContents.size(); i < n; ++i)
-    {
-        if (!(aContents[i]->Equals( *(rCompare.aContents[i]), bComparePool)))
-            return false;
-    }
-
-    return true;
+    return std::equal(
+        aContents.begin(), aContents.end(), rCompare.aContents.begin(), rCompare.aContents.end(),
+        [bComparePool](const auto& c1, const auto& c2) { return c1->Equals(*c2, bComparePool); });
 }
 
 // #i102062#
@@ -995,18 +991,9 @@ bool EditTextObjectImpl::isWrongListEqual(const EditTextObjectImpl& rCompare) co
         return false;
     }
 
-    for (size_t i = 0, n = aContents.size(); i < n; ++i)
-    {
-        const ContentInfo& rCandA = *aContents[i];
-        const ContentInfo& rCandB = *rCompare.aContents[i];
-
-        if(!rCandA.isWrongListEqual(rCandB))
-        {
-            return false;
-        }
-    }
-
-    return true;
+    return std::equal(
+        aContents.begin(), aContents.end(), rCompare.aContents.begin(), rCompare.aContents.end(),
+        [](const auto& c1, const auto& c2) { return c1->isWrongListEqual(*c2); });
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
