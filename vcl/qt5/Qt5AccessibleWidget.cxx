@@ -873,12 +873,9 @@ QString Qt5AccessibleWidget::attributes(int offset, int* startOffset, int* endOf
             sAttribute = "font-weight";
             sValue = lcl_convertFontWeight(*o3tl::doAccess<double>(prop.Value));
         }
-        else
-        {
-            continue;
-        }
 
-        aRet += sAttribute + ":" + sValue + ";";
+        if (!sAttribute.isEmpty() && !sValue.isEmpty())
+            aRet += sAttribute + ":" + sValue + ";";
     }
     *startOffset = offset;
     *endOffset = offset + 1;
