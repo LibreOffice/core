@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "27351ddc_7c2f2c81",
+        "filename": "svl/source/items/itemset.cxx",
+        "patchSetId": 17
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-07-20T08:01:17Z",
+      "side": 1,
+      "message": "this comment appertained to the preceding\n\n  wids.size() + 1\n\naddition that has been removed, so should have been removed with it",
+      "range": {
+        "startLine": 63,
+        "startChar": 11,
+        "endLine": 63,
+        "endChar": 26
+      },
+      "revId": "5d0a231b29dfd4d587c7a4d1bbda6a511f94ec77",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3aadd1b2_38ab914f",
         "filename": "svl/source/items/itemset.cxx",
         "patchSetId": 17
