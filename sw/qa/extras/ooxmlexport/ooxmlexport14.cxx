@@ -1168,7 +1168,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf143399, "tdf143399.docx")
     assertXPath(pXml, "/w:footnotes/w:footnote[3]/w:p/w:r[3]/w:t", 1);
     assertXPathContent(pXml, "/w:footnotes/w:footnote[3]/w:p/w:r[3]/w:t", "Footnotes_graphic2");
     assertXPath(pXml, "/w:footnotes/w:footnote[4]/w:p/w:r[3]/w:t", 1);
-    assertXPathContent(pXml, "/w:footnotes/w:footnote[4]/w:p/w:r[3]/w:t", "Footnotes_grahic");
+    assertXPathContent(pXml, "/w:footnotes/w:footnote[4]/w:p/w:r[3]/w:t", "Footnotes_graphic");
 
     xmlDocUniquePtr pXml2 = parseExport("word/endnotes.xml");
     CPPUNIT_ASSERT(pXml);
