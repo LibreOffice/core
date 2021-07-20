@@ -856,22 +856,29 @@ QString Qt5AccessibleWidget::attributes(int offset, int* startOffset, int* endOf
     OUString aRet;
     for (PropertyValue const& prop : attribs)
     {
+        OUString sAttribute;
+        OUString sValue;
         if (prop.Name == "CharFontName")
         {
-            aRet += "font-family:" + *o3tl::doAccess<OUString>(prop.Value) + ";";
-            continue;
+            sAttribute = "font-family";
+            sValue = *o3tl::doAccess<OUString>(prop.Value);
         }
-        if (prop.Name == "CharHeight")
+        else if (prop.Name == "CharHeight")
         {
-            aRet += "font-size:" + OUString::number(*o3tl::doAccess<double>(prop.Value)) + "pt;";
-            continue;
+            sAttribute = "font-size";
+            sValue = OUString::number(*o3tl::doAccess<double>(prop.Value)) + "pt";
         }
-        if (prop.Name == "CharWeight")
+        else if (prop.Name == "CharWeight")
         {
-            aRet += "font-weight:" + lcl_convertFontWeight(*o3tl::doAccess<double>(prop.Value))
-                    + ";";
+            sAttribute = "font-weight";
+            sValue = lcl_convertFontWeight(*o3tl::doAccess<double>(prop.Value));
+        }
+        else
+        {
             continue;
         }
+
+        aRet += sAttribute + ":" + sValue + ";";
     }
     *startOffset = offset;
     *endOffset = offset + 1;
