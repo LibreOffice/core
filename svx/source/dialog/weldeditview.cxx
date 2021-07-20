@@ -37,6 +37,7 @@
 #include <editeng/unoedsrc.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <osl/diagnose.h>
+#include <svl/itempool.hxx>
 #include <svl/itemset.hxx>
 #include <sal/log.hxx>
 #include <svx/sdr/overlay/overlayselection.hxx>

@@ -15,6 +15,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/fhgtitem.hxx>
+#include <svl/itempool.hxx>
 #include <svl/itemset.hxx>
 
 SmEditEngine::SmEditEngine(SfxItemPool* pItemPool)

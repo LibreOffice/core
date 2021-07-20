@@ -82,6 +82,7 @@
 #include <editeng/eeitem.hxx>
 #include <editeng/editview.hxx>
 #include <editeng/editeng.hxx>
+#include <svl/itempool.hxx>
 #include <svl/intitem.hxx>
 #include <svl/poolitem.hxx>
 #include <strings.hxx>

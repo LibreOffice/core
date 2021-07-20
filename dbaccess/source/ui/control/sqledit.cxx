@@ -33,6 +33,7 @@
 #include <sqledit.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <i18nlangtag/languagetag.hxx>
+#include <svl/itempool.hxx>
 #include <svl/itemset.hxx>
 #include <vcl/event.hxx>
 #include <vcl/settings.hxx>

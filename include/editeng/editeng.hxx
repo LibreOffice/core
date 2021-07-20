@@ -38,6 +38,7 @@
 
 #include <tools/lineend.hxx>
 #include <tools/degree.hxx>
+#include <tools/long.hxx>
 
 #include <editeng/eedata.hxx>
 #include <o3tl/typed_flags_set.hxx>
