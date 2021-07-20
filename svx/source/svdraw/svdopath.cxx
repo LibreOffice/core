@@ -2065,7 +2065,7 @@ void SdrPathObj::AddToPlusHdlList(SdrHdlList& rHdlList, SdrHdl& rHdl) const
 // SdrObjCustomShape will still use a different version of this method that
 // does not consider the rotation. Otherwise, the rotated SdrObjCustomShape
 // would become mistakenly larger after save and reload (tdf#91687).
-// The invokation of the GetLogicRect() method that caused tdf#123321 was in
+// The invocation of the GetLogicRect() method that caused tdf#123321 was in
 // PlcDrawObj::WritePlc().
 const tools::Rectangle &SdrPathObj::GetLogicRect() const
 {
