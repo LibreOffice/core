@@ -1345,7 +1345,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
     case RES_SHADOW:
     {
         rSh.StartAllAction();
-        // Tabele cell(s) selected?
+        // Table cell(s) selected?
         if ( rSh.IsTableMode() )
         {
             SwFrameFormat *pFormat = rSh.GetTableFormat();
@@ -1377,7 +1377,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
 
     case SID_ATTR_BORDER_OUTER:
     {
-        // Tabele cell(s) selected?
+        // Table cell(s) selected?
         if ( rSh.IsTableMode() )
         {
             // Set border attributes Get/SetTabBorders()
@@ -2545,7 +2545,7 @@ void SwBaseShell::ExecBckCol(SfxRequest& rReq)
 void SwBaseShell::GetBorderState(SfxItemSet &rSet)
 {
     SwWrtShell &rSh = GetShell();
-    // Tabele cell(s) selected?
+    // Table cell(s) selected?
     bool bPrepare = true;
     bool bTableMode = rSh.IsTableMode();
     if ( bTableMode )
