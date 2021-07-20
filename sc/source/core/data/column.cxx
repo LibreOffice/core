@@ -2617,7 +2617,7 @@ public:
         mbModified = true;
     }
 
-    void operator() (size_t nRow, const EditTextObject* pCell)
+    void operator() (size_t nRow, EditTextObject* pCell)
     {
         editeng::FieldUpdater aUpdater = pCell->GetFieldUpdater();
         aUpdater.updateTableFields(mnTab);
@@ -2649,7 +2649,7 @@ public:
         mbModified = true;
     }
 
-    void operator() (size_t nRow, const EditTextObject* pCell)
+    void operator() (size_t nRow, EditTextObject* pCell)
     {
         editeng::FieldUpdater aUpdater = pCell->GetFieldUpdater();
         aUpdater.updateTableFields(mnTab);
@@ -2681,7 +2681,7 @@ public:
         mbModified = true;
     }
 
-    void operator() (size_t nRow, const EditTextObject* pCell)
+    void operator() (size_t nRow, EditTextObject* pCell)
     {
         editeng::FieldUpdater aUpdater = pCell->GetFieldUpdater();
         aUpdater.updateTableFields(mnTab);
@@ -2713,7 +2713,7 @@ public:
         mbModified = true;
     }
 
-    void operator() (size_t nRow, const EditTextObject* pCell)
+    void operator() (size_t nRow, EditTextObject* pCell)
     {
         editeng::FieldUpdater aUpdater = pCell->GetFieldUpdater();
         aUpdater.updateTableFields(mnTab);
