@@ -2417,6 +2417,19 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
             // Only from command line --convert-to
             bRet = true;
 
+            // Verbose only from command line, not UI (in case we actually
+            // implement that) nor macro filter options.
+            bool bVerbose = false;
+            const css::uno::Sequence<css::beans::PropertyValue> & rArgs = rMed.GetArgs();
+            const auto pProp = std::find_if( rArgs.begin(), rArgs.end(),
+                    [](const css::beans::PropertyValue& rProp) { return rProp.Name == "ConversionRequestOrigin"; });
+            if (pProp != rArgs.end())
+            {
+                OUString aOrigin;
+                pProp->Value >>= aOrigin;
+                bVerbose = (aOrigin == "CommandLine");
+            }
+
             SCTAB nStartTab;
             SCTAB nCount = m_aDocument.GetTableCount();
             if (aOptions.nSheetToExport == -1)
@@ -2433,11 +2446,14 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
             else
             {
                 // Usage error, no export but log.
-                if (aOptions.nSheetToExport < 0)
-                    std::cout << "Bad sheet number string given." << std::endl;
-                else
-                    std::cout << "No sheet number " << OString::number(aOptions.nSheetToExport)
-                                                    << ", number of sheets is " << nCount << std::endl;
+                if (bVerbose)
+                {
+                    if (aOptions.nSheetToExport < 0)
+                        std::cout << "Bad sheet number string given." << std::endl;
+                    else
+                        std::cout << "No sheet number " << aOptions.nSheetToExport
+                            << ", number of sheets is " << nCount << std::endl;
+                }
                 nStartTab = 0;
                 nCount = 0;
                 SetError(SCERR_EXPORT_DATA);
@@ -2462,15 +2478,19 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
 
                 // log similar to DispatchWatcher::executeDispatchRequests
                 OUString aOutFile = aSheetURLObject.GetMainURL(INetURLObject::DecodeMechanism::NONE);
-                OUString aDisplayedName;
-                if (osl::FileBase::E_None != osl::FileBase::getSystemPathFromFileURL(aOutFile, aDisplayedName))
-                    aDisplayedName = aOutFile;
-                std::cout << "Writing sheet " << OUStringToOString(sTabName, osl_getThreadTextEncoding()) << " -> "
-                                              << OUStringToOString(aDisplayedName, osl_getThreadTextEncoding())
-                                              << std::endl;
+                if (bVerbose)
+                {
+                    OUString aDisplayedName;
+                    if (osl::FileBase::E_None != osl::FileBase::getSystemPathFromFileURL(aOutFile, aDisplayedName))
+                        aDisplayedName = aOutFile;
+                    std::cout << "Writing sheet " << OUStringToOString(sTabName, osl_getThreadTextEncoding()) << " -> "
+                                                  << OUStringToOString(aDisplayedName, osl_getThreadTextEncoding())
+                                                  << std::endl;
 
-                if (FStatHelper::IsDocument(aOutFile))
-                    std::cout << "Overwriting: " << OUStringToOString(aDisplayedName, osl_getThreadTextEncoding()) << std::endl ;
+                    if (FStatHelper::IsDocument(aOutFile))
+                        std::cout << "Overwriting: " << OUStringToOString(aDisplayedName, osl_getThreadTextEncoding())
+                                                     << std::endl ;
+                }
 
                 std::unique_ptr<SvStream> xStm = ::utl::UcbStreamHelper::CreateStream(aOutFile, StreamMode::TRUNC | StreamMode::WRITE);
                 if (!xStm)
