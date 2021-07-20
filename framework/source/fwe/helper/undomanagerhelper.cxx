@@ -210,6 +210,7 @@ namespace framework
         IUndoManagerImplementation&         m_rUndoManagerImplementation;
         ::std::stack< bool >                m_aContextVisibilities;
 #if OSL_DEBUG_LEVEL > 0
+        bool                                m_bContextAPIFlagsEverPushed = {false};
         ::std::stack< bool >                m_aContextAPIFlags;
 #endif
         ::std::queue< ::rtl::Reference< UndoManagerRequest > >
@@ -797,6 +798,7 @@ namespace framework
     {
 #if OSL_DEBUG_LEVEL > 0
         m_aContextAPIFlags.push( m_bAPIActionRunning );
+        m_bContextAPIFlagsEverPushed = true;
 #endif
 
         if ( m_bAPIActionRunning )
@@ -808,9 +810,18 @@ namespace framework
     void UndoManagerHelper_Impl::listActionLeft( const OUString& i_comment )
     {
 #if OSL_DEBUG_LEVEL > 0
-        const bool bCurrentContextIsAPIContext = m_aContextAPIFlags.top();
-        m_aContextAPIFlags.pop();
-        OSL_ENSURE( bCurrentContextIsAPIContext == m_bAPIActionRunning, "UndoManagerHelper_Impl::listActionLeft: API and non-API contexts interwoven!" );
+        // It may happen that the very first event listener is added during a
+        // list action after listActionEntered() was already called, e.g. Calc
+        // formula calculation event listener during the input of the very
+        // first formula. Instead of checking m_aContextAPIFlags for empty,
+        // still assert (on calling top()) other stack mismatches but ignore
+        // this one case. See tdf#142980
+        if (m_bContextAPIFlagsEverPushed)
+        {
+            const bool bCurrentContextIsAPIContext = m_aContextAPIFlags.top();
+            m_aContextAPIFlags.pop();
+            OSL_ENSURE( bCurrentContextIsAPIContext == m_bAPIActionRunning, "UndoManagerHelper_Impl::listActionLeft: API and non-API contexts interwoven!" );
+        }
 #endif
 
         if ( m_bAPIActionRunning )
