@@ -52,7 +52,8 @@ namespace writerfilter::ooxml
 OOXMLDocumentImpl::OOXMLDocumentImpl(OOXMLStream::Pointer_t const & pStream, const uno::Reference<task::XStatusIndicator>& xStatusIndicator, bool bSkipImages, const uno::Sequence<beans::PropertyValue>& rDescriptor)
     : mpStream(pStream)
     , mxStatusIndicator(xStatusIndicator)
-    , mpXNoteStream()
+    , mpXFootnoteStream()
+    , mpXEndnoteStream()
     , mnXNoteId(0)
     , mbIsSubstream(false)
     , mbSkipImages(bSkipImages)
@@ -270,8 +271,8 @@ void OOXMLDocumentImpl::resolveFootnote(Stream & rStream,
                                         Id aType,
                                         const sal_Int32 nNoteId)
 {
-    if (!mpXNoteStream)
-        mpXNoteStream = getXNoteStream(OOXMLStream::FOOTNOTES, nNoteId);
+    if (!mpXFootnoteStream)
+        mpXFootnoteStream = getXNoteStream(OOXMLStream::FOOTNOTES, nNoteId);
 
     Id nId;
     switch (aType)
@@ -285,15 +286,15 @@ void OOXMLDocumentImpl::resolveFootnote(Stream & rStream,
         break;
     }
 
-    resolveFastSubStreamWithId(rStream, mpXNoteStream, nId);
+    resolveFastSubStreamWithId(rStream, mpXFootnoteStream, nId);
 }
 
 void OOXMLDocumentImpl::resolveEndnote(Stream & rStream,
                                        Id aType,
                                        const sal_Int32 nNoteId)
 {
-    if (!mpXNoteStream)
-        mpXNoteStream = getXNoteStream(OOXMLStream::ENDNOTES, nNoteId);
+    if (!mpXEndnoteStream)
+       mpXEndnoteStream = getXNoteStream(OOXMLStream::ENDNOTES, nNoteId);
 
     Id nId;
     switch (aType)
@@ -307,7 +308,7 @@ void OOXMLDocumentImpl::resolveEndnote(Stream & rStream,
         break;
     }
 
-    resolveFastSubStreamWithId(rStream, mpXNoteStream, nId);
+    resolveFastSubStreamWithId(rStream, mpXEndnoteStream, nId);
 }
 
 void OOXMLDocumentImpl::resolveCommentsExtendedStream(Stream& rStream)
