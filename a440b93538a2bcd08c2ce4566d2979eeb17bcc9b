@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1282fdce_ee593c29",
+        "filename": "sc/source/filter/oox/viewsettings.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 584,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-07-20T13:43:52Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 584,
+        "startChar": 59,
+        "endLine": 584,
+        "endChar": 64
+      },
+      "revId": "a440b93538a2bcd08c2ce4566d2979eeb17bcc9b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
