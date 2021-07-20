@@ -223,11 +223,7 @@ SwPageFrame::SwPageFrame( SwFrameFormat *pFormat, SwFrame* pSib, SwPageDesc *pPg
     SwDoc* pDoc(pFormat->GetDoc());
     m_bEmptyPage = (pFormat == pDoc->GetEmptyPageFormat());
 
-    if(m_bEmptyPage)
-    {
-        return;
-    }
-
+    // tdf#1394526 always create a Lower() in the form of a SwBodyFrame
     Calc(pRenderContext); // so that the PrtArea is correct
     SwBodyFrame *pBodyFrame = new SwBodyFrame( pDoc->GetDfltFrameFormat(), this );
     pBodyFrame->ChgSize( getFramePrintArea().SSize() );
@@ -568,28 +564,6 @@ void SwPageFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
     {
         case RES_FMT_CHG:
         {
-            // state of m_bEmptyPage needs to be determined newly
-            const bool bNewState(GetFormat() == GetFormat()->GetDoc()->GetEmptyPageFormat());
-
-            if(m_bEmptyPage != bNewState)
-            {
-                // copy new state
-                m_bEmptyPage = bNewState;
-
-                if(nullptr == GetLower())
-                {
-                    // if we were an empty page before there is not yet a BodyArea in the
-                    // form of a SwBodyFrame, see constructor
-                    SwViewShell* pSh(getRootFrame()->GetCurrShell());
-                    vcl::RenderContext* pRenderContext(pSh ? pSh->GetOut() : nullptr);
-                    Calc(pRenderContext); // so that the PrtArea is correct
-                    SwBodyFrame* pBodyFrame = new SwBodyFrame(GetFormat(), this);
-                    pBodyFrame->ChgSize(getFramePrintArea().SSize());
-                    pBodyFrame->Paste(this);
-                    pBodyFrame->InvalidatePos();
-                }
-            }
-
             // If the frame format is changed, several things might also change:
             // 1. columns:
             assert(pOld && pNew); //FMT_CHG Missing Format
