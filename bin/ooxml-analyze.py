@@ -80,21 +80,22 @@ def extract_files(inputdir, extracted_files_dir):
         shutil.rmtree(extracted_files_dir)
 
     # unzip files into the extracted files directory
-    for filename in os.listdir(inputdir):
-        if (filename.endswith(".pptx") or       \
-            filename.endswith(".docx") or       \
-            filename.endswith(".xlsx")) and not \
-            filename.startswith("~"):
-            filepath = os.path.join(inputdir, filename)
-            extracted_file_path = os.path.join(extracted_files_dir, filename)
+    for filetype in get_list_of_subdir(inputdir):
+        for filename in os.listdir(filetype):
+            if (filename.endswith(".pptx") or       \
+                filename.endswith(".docx") or       \
+                filename.endswith(".xlsx")) and not \
+                filename.startswith("~"):
+                filepath = os.path.join(filetype, filename)
+                extracted_file_path = os.path.join(extracted_files_dir, filename)
 
-            try:
-                with ZipFile(filepath) as zipObj:
-                    zipObj.extractall(extracted_file_path)
-            except:
-                print("%s is problematic" % filename)
-        else:
-            continue
+                try:
+                    with ZipFile(filepath) as zipObj:
+                        zipObj.extractall(extracted_file_path)
+                except:
+                    print("%s is problematic" % filename)
+            else:
+                continue
 
 # get key of value in dictionary
 def get_key(val, dict):
@@ -116,34 +117,17 @@ def replace_namespace_with_alias(filename, element):
             element = element.replace("{" + element_ns + "}", "")
     return element
 
-# decides which files shouldn't be analyzed.
+# decides which files should/shouldn't be analyzed.
 def is_file_in_accepted_files(filename):
-    if(filename.endswith("[Content_Types].xml") or \
-       filename.endswith("docProps/custom.xml") or \
-       filename.endswith("docProps/app.xml") or    \
-       filename.endswith("presentation.xml") or \
-       filename.endswith("viewProps.xml") or \
-       filename.endswith("tableStyles.xml") or \
-       filename.endswith("presProps.xml") or \
-       "ppt/slideLayouts" in filename or \
-       "ppt/slideMasters" in filename or \
-       "ppt/theme" in filename or \
-       "ppt/notesMasters" in filename or \
-       "ppt/notesSlides" in filename or \
-       "ppt/handoutMasters" in filename or \
-       "ppt/tags" in filename or \
-       "pptx/customXml" in filename or \
-       "ppt/diagrams" in filename or \
-       filename.endswith("docProps/core.xml") or not \
-       filename.endswith(".xml")):
-       return False
+    if(filename.endswith(".xml") and "ppt/slides/" in filename):
+       return True
 
-    return True
+    return False
 
 # counts tags, attribute names and values of xmls
 def count_elements(extracted_files_dir, result_list, concanated_texts_list):
 
-    # make sure if extracted files directory exist
+    # make sure if extracted files directory not exist
     if not (os.path.exists(extracted_files_dir)):
         print("Extracted files directory is not exist")
         return
@@ -160,7 +144,7 @@ def count_elements(extracted_files_dir, result_list, concanated_texts_list):
         try:
             # start to count
             for event, child in etree.iterparse(xmlfile, events=('start', 'end')):
-                tag = replace_namespace_with_alias(xmlfile, child.tag)
+                tag = child.tag #replace_namespace_with_alias(xmlfile, child.tag)
                 tag_idx = get_index_of_tag(tag, result_list)
 
                 if event == "start":
@@ -171,30 +155,29 @@ def count_elements(extracted_files_dir, result_list, concanated_texts_list):
                     else:
                         result_list[tag_idx][0][tag] += 1
 
-                    # count attribute names and values of current tag
-                    for attr_name, attr_value in child.attrib.items():
-                        attr_name = replace_namespace_with_alias(xmlfile, attr_name)
-                        if not attr_name in result_list[tag_idx][1].keys():
-                            result_list[tag_idx][1][attr_name] = 1
-                        else:
-                            result_list[tag_idx][1][attr_name] +=1
+                    #count attribute names and values of current tag
+                    #for attr_name, attr_value in child.attrib.items():
+                    #    attr_name = replace_namespace_with_alias(xmlfile, attr_name)
+                    #    if not attr_name in result_list[tag_idx][1].keys():
+                    #        result_list[tag_idx][1][attr_name] = 1
+                    #    else:
+                    #        result_list[tag_idx][1][attr_name] +=1
 
-                        if not attr_value in result_list[tag_idx][2].keys():
-                            result_list[tag_idx][2][attr_value] = 1
-                        else:
-                            result_list[tag_idx][2][attr_value] +=1
+                    #    if not attr_value in result_list[tag_idx][2].keys():
+                    #        result_list[tag_idx][2][attr_value] = 1
+                    #    else:
+                    #        result_list[tag_idx][2][attr_value] +=1
 
-                    # concanated text will be resetted in every paragraph begining
-                    if tag == "a:p":
+                    # concanated text will be resetted in every paragraph beginning
+                    if tag == "{http://schemas.openxmlformats.org/drawingml/2006/main}p":
                         concatenated_text = ""
-
 
                 if event == "end":
                     # Detect seperate texts in paragraph and concanate them.
-                    if tag == "a:t" and str(child.text) != "None":
+                    if tag == "{http://schemas.openxmlformats.org/drawingml/2006/main}t" and str(child.text) != "None":
                         concatenated_text += str(child.text)
                     # End of the paragraph element, add the text as list item.
-                    if tag == "a:p" and concatenated_text != "":
+                    if tag == "{http://schemas.openxmlformats.org/drawingml/2006/main}p" and concatenated_text != "":
                         concanated_texts_list.append(concatenated_text)
 
                     # count text contents except consisted of whitespaces.
@@ -203,8 +186,9 @@ def count_elements(extracted_files_dir, result_list, concanated_texts_list):
                             result_list[tag_idx][3][child.text] = 1
                         else:
                             result_list[tag_idx][3][child.text] += 1
+
         except Exception as exception:
-            print("%s has %s " % xmlfile, exception)
+            print("%s has %s " % (xmlfile, exception))
 
 # gets the position of "tag" element in result list. If element is not exist,
 # return -1 that points the last index of the list.
