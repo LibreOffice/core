@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "74e4beee_fc3b48d6",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport14.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1171,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-07-20T15:11:22Z",
+      "side": 0,
+      "message": "even if it\u0027s a typo, if the document has the content \u0027Footnotes_grahic\u0027, why would you change it ?",
+      "revId": "6128e2d55f0d0c68d3c7f6fb69539ec800637947",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
