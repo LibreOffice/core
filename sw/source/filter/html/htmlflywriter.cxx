@@ -1962,6 +1962,30 @@ static Writer& OutHTML_FrameFormatGrfNode( Writer& rWrt, const SwFrameFormat& rF
             if (!rGraphic.isAvailable())
                 const_cast<Graphic&>(rGraphic).makeAvailable();
 
+            if (rHTMLWrt.mbReqIF && bWritePNGFallback)
+            {
+                // ReqIF: force native data if possible.
+                const std::shared_ptr<VectorGraphicData>& pVectorGraphicData = rGraphic.getVectorGraphicData();
+                if (pVectorGraphicData && pVectorGraphicData->getType() == VectorGraphicDataType::Svg)
+                {
+                    aFilterName = "svg";
+                }
+                else if (rGraphic.GetGfxLink().IsEMF())
+                {
+                    aFilterName = "emf";
+                    aMimeType = "image/x-emf"; // avoid image/x-wmf
+                }
+                else if (pVectorGraphicData && pVectorGraphicData->getType() == VectorGraphicDataType::Wmf)
+                {
+                    aFilterName = "wmf";
+                }
+                else if (rGraphic.GetGfxLink().GetType() == GfxLinkType::NativeTif)
+                {
+                    aFilterName = "tif";
+                    aMimeType = "image/tiff"; // avoid image/x-vclgraphic
+                }
+            }
+
             ErrCode nErr = XOutBitmap::WriteGraphic( rGraphic, aGraphicURL,
                     aFilterName, nFlags, &aMM100Size );
             if( nErr )
