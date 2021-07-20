@@ -117,7 +117,7 @@ public:
 #define SDRGLUEPOINT_NOTFOUND 0xFFFF
 
 class SVXCORE_DLLPUBLIC SdrGluePointList {
-    std::vector<std::unique_ptr<SdrGluePoint>> aList;
+    std::vector<SdrGluePoint> aList;
 public:
     SdrGluePointList() {};
     SdrGluePointList(const SdrGluePointList& rSrcList) { *this=rSrcList; }
@@ -131,8 +131,8 @@ public:
     {
         aList.erase(aList.begin()+nPos);
     }
-    SdrGluePoint&       operator[](sal_uInt16 nPos)                             { return *aList[nPos]; }
-    const SdrGluePoint& operator[](sal_uInt16 nPos) const                       { return *aList[nPos]; }
+    SdrGluePoint&       operator[](sal_uInt16 nPos)                             { return aList[nPos]; }
+    const SdrGluePoint& operator[](sal_uInt16 nPos) const                       { return aList[nPos]; }
     sal_uInt16          FindGluePoint(sal_uInt16 nId) const;
     sal_uInt16          HitTest(const Point& rPnt, const OutputDevice& rOut, const SdrObject* pObj) const;
     void                Invalidate(vcl::Window& rWin, const SdrObject* pObj) const;
