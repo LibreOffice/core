@@ -97,7 +97,7 @@ public:
     static MetaAction*  ReadMetaAction( SvStream& rIStm, ImplMetaReadData* pData );
 };
 
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetaPixelAction final : public MetaAction
+class VCL_DLLPUBLIC MetaPixelAction final : public MetaAction
 {
 private:
     Point               maPt;
@@ -215,7 +215,7 @@ public:
     const tools::Rectangle&    GetRect() const { return maRect; }
 };
 
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetaRoundRectAction final : public MetaAction
+class VCL_DLLPUBLIC MetaRoundRectAction final : public MetaAction
 {
 private:
 
@@ -248,7 +248,7 @@ public:
     sal_uInt32          GetVertRound() const { return mnVertRound; }
 };
 
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetaEllipseAction final : public MetaAction
+class VCL_DLLPUBLIC MetaEllipseAction final : public MetaAction
 {
 private:
 
@@ -276,7 +276,7 @@ public:
     const tools::Rectangle&    GetRect() const { return maRect; }
 };
 
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetaArcAction final : public MetaAction
+class VCL_DLLPUBLIC MetaArcAction final : public MetaAction
 {
 private:
 
@@ -309,7 +309,7 @@ public:
     const Point&        GetEndPoint() const { return maEndPt; }
 };
 
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetaPieAction final : public MetaAction
+class VCL_DLLPUBLIC MetaPieAction final : public MetaAction
 {
 private:
 
@@ -342,7 +342,7 @@ public:
     const Point&        GetEndPoint() const { return maEndPt; }
 };
 
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetaChordAction final : public MetaAction
+class VCL_DLLPUBLIC MetaChordAction final : public MetaAction
 {
 private:
 
@@ -375,7 +375,7 @@ public:
     const Point&        GetEndPoint() const { return maEndPt; }
 };
 
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetaPolyLineAction final : public MetaAction
+class VCL_DLLPUBLIC MetaPolyLineAction final : public MetaAction
 {
 private:
 
@@ -406,7 +406,7 @@ public:
     const LineInfo&     GetLineInfo() const { return maLineInfo; }
 };
 
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetaPolygonAction final : public MetaAction
+class VCL_DLLPUBLIC MetaPolygonAction final : public MetaAction
 {
 private:
 
@@ -434,7 +434,7 @@ public:
     const tools::Polygon& GetPolygon() const { return maPoly; }
 };
 
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetaPolyPolygonAction final : public MetaAction
+class VCL_DLLPUBLIC MetaPolyPolygonAction final : public MetaAction
 {
 private:
 
@@ -497,7 +497,7 @@ public:
     sal_Int32       GetLen() const { return mnLen; }
 };
 
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetaTextArrayAction final : public MetaAction
+class VCL_DLLPUBLIC MetaTextArrayAction final : public MetaAction
 {
 private:
 
@@ -706,7 +706,7 @@ public:
     const Size&         GetSize() const { return maSz; }
 };
 
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetaBmpScalePartAction final : public MetaAction
+class VCL_DLLPUBLIC MetaBmpScalePartAction final : public MetaAction
 {
 private:
 
@@ -809,7 +809,7 @@ public:
     bool                IsTransparent() const override { return GetBitmapEx().IsTransparent(); }
 };
 
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetaBmpExScalePartAction final : public MetaAction
+class VCL_DLLPUBLIC MetaBmpExScalePartAction final : public MetaAction
 {
 private:
 
@@ -989,7 +989,7 @@ public:
     const Gradient&     GetGradient() const { return maGradient; }
 };
 
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetaGradientExAction final : public MetaAction
+class VCL_DLLPUBLIC MetaGradientExAction final : public MetaAction
 {
 private:
 
@@ -1049,7 +1049,7 @@ public:
     const Hatch&        GetHatch() const { return maHatch; }
 };
 
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetaWallpaperAction final : public MetaAction
+class VCL_DLLPUBLIC MetaWallpaperAction final : public MetaAction
 {
 private:
 
@@ -1080,7 +1080,7 @@ public:
     const Wallpaper&    GetWallpaper() const { return maWallpaper; }
 };
 
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetaClipRegionAction final : public MetaAction
+class VCL_DLLPUBLIC MetaClipRegionAction final : public MetaAction
 {
 private:
 
@@ -1110,7 +1110,7 @@ public:
     bool                IsClipping() const { return mbClip; }
 };
 
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetaISectRectClipRegionAction final : public MetaAction
+class VCL_DLLPUBLIC MetaISectRectClipRegionAction final : public MetaAction
 {
 private:
 
@@ -1138,7 +1138,7 @@ public:
     const tools::Rectangle&    GetRect() const { return maRect; }
 };
 
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetaISectRegionClipRegionAction final : public MetaAction
+class VCL_DLLPUBLIC MetaISectRegionClipRegionAction final : public MetaAction
 {
 private:
 
@@ -1166,7 +1166,7 @@ public:
     const vcl::Region&  GetRegion() const { return maRegion; }
 };
 
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetaMoveClipRegionAction final : public MetaAction
+class VCL_DLLPUBLIC MetaMoveClipRegionAction final : public MetaAction
 {
 private:
 
@@ -1249,7 +1249,7 @@ public:
     bool                IsSetting() const { return mbSet; }
 };
 
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetaTextColorAction final : public MetaAction
+class VCL_DLLPUBLIC MetaTextColorAction final : public MetaAction
 {
 private:
 
@@ -1274,7 +1274,7 @@ public:
     const Color&        GetColor() const { return maColor; }
 };
 
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetaTextFillColorAction final : public MetaAction
+class VCL_DLLPUBLIC MetaTextFillColorAction final : public MetaAction
 {
 private:
 
@@ -1301,7 +1301,7 @@ public:
     bool                IsSetting() const { return mbSet; }
 };
 
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetaTextLineColorAction final : public MetaAction
+class VCL_DLLPUBLIC MetaTextLineColorAction final : public MetaAction
 {
 private:
 
@@ -1328,7 +1328,7 @@ public:
     bool                IsSetting() const { return mbSet; }
 };
 
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetaOverlineColorAction final : public MetaAction
+class VCL_DLLPUBLIC MetaOverlineColorAction final : public MetaAction
 {
 private:
 
@@ -1355,7 +1355,7 @@ public:
     bool                IsSetting() const { return mbSet; }
 };
 
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetaTextAlignAction final : public MetaAction
+class VCL_DLLPUBLIC MetaTextAlignAction final : public MetaAction
 {
 private:
 
@@ -1380,7 +1380,7 @@ public:
     TextAlign           GetTextAlign() const { return maAlign; }
 };
 
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetaMapModeAction final : public MetaAction
+class VCL_DLLPUBLIC MetaMapModeAction final : public MetaAction
 {
 private:
 
@@ -1410,7 +1410,7 @@ public:
 // tdf#127471 decl for friend below
 namespace emfio { class ScaledFontDetectCorrectHelper; }
 
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetaFontAction final : public MetaAction
+class VCL_DLLPUBLIC MetaFontAction final : public MetaAction
 {
 private:
 
@@ -1442,7 +1442,7 @@ public:
     const vcl::Font&    GetFont() const { return maFont; }
 };
 
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetaPushAction final : public MetaAction
+class VCL_DLLPUBLIC MetaPushAction final : public MetaAction
 {
 private:
 
@@ -1467,7 +1467,7 @@ public:
     PushFlags           GetFlags() const { return mnFlags; }
 };
 
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetaPopAction final : public MetaAction
+class VCL_DLLPUBLIC MetaPopAction final : public MetaAction
 {
 public:
 
@@ -1485,7 +1485,7 @@ public:
     virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 };
 
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetaRasterOpAction final : public MetaAction
+class VCL_DLLPUBLIC MetaRasterOpAction final : public MetaAction
 {
 private:
 
@@ -1613,7 +1613,7 @@ public:
     const Size&         GetSize() const { return maSize; }
 };
 
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetaRefPointAction final : public MetaAction
+class VCL_DLLPUBLIC MetaRefPointAction final : public MetaAction
 {
 private:
 
@@ -1674,7 +1674,7 @@ public:
     const sal_uInt8*    GetData() const { return mpData.get(); }
 };
 
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetaLayoutModeAction final : public MetaAction
+class VCL_DLLPUBLIC MetaLayoutModeAction final : public MetaAction
 {
 private:
 
@@ -1699,7 +1699,7 @@ public:
     ComplexTextLayoutFlags  GetLayoutMode() const { return mnLayoutMode; }
 };
 
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetaTextLanguageAction final : public MetaAction
+class VCL_DLLPUBLIC MetaTextLanguageAction final : public MetaAction
 {
 private:
 
