@@ -225,7 +225,7 @@ class SvxRTFItemStackType
     std::optional<EditNodeIdx>  mxStartNodeIdx;
     std::optional<EditNodeIdx>  mxEndNodeIdx;
     sal_Int32    nSttCnt, nEndCnt;
-    std::unique_ptr<SvxRTFItemStackList> m_pChildList;
+    SvxRTFItemStackList maChildList;
     sal_uInt16   nStyleNo;
 
     SvxRTFItemStackType(SvxRTFItemStackType const&) = delete;
