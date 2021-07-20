@@ -18,6 +18,7 @@
  */
 
 #include <comphelper/string.hxx>
+#include <o3tl/sorted_vector.hxx>
 #include <svl/style.hxx>
 #include <svx/svdotext.hxx>
 #include <svx/svdmodel.hxx>

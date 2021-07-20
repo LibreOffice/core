@@ -10,6 +10,7 @@
 
 #include <svx/ClassificationField.hxx>
 
+#include <svl/itempool.hxx>
 #include <svl/itemset.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/eeitem.hxx>

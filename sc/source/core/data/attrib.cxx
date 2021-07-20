@@ -26,6 +26,7 @@
 #include <editeng/eerdll.hxx>
 #include <editeng/borderline.hxx>
 #include <editeng/itemtype.hxx>
+#include <svl/itempool.hxx>
 
 #include <libxml/xmlwriter.h>
 

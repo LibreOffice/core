@@ -15,6 +15,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/objsh.hxx>
+#include <svl/itempool.hxx>
 #include <svtools/unitconv.hxx>
 #include <svx/sdmetitm.hxx>
 #include <svx/svddef.hxx>

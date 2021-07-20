@@ -63,6 +63,7 @@
 #include <sal/log.hxx>
 #include <o3tl/enumarray.hxx>
 #include <o3tl/safeint.hxx>
+#include <o3tl/sorted_vector.hxx>
 #include <xmloff/autolayout.hxx>
 
 #include <Outliner.hxx>

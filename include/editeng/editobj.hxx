@@ -21,7 +21,6 @@
 #define INCLUDED_EDITENG_EDITOBJ_HXX
 
 #include <svl/style.hxx>
-#include <svl/itempool.hxx>
 #include <editeng/editengdllapi.h>
 #include <editeng/macros.hxx>
 #include <svl/languageoptions.hxx>
@@ -31,11 +30,13 @@
 #include <vector>
 #include <memory>
 
+class SfxItemPool;
 class SfxItemSet;
 class SvxFieldItem;
 class SvxFieldData;
 enum class OutlinerMode;
 struct EECharAttrib;
+typedef struct _xmlTextWriter* xmlTextWriterPtr;
 
 namespace editeng {
 
