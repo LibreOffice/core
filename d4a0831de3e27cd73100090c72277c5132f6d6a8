@@ -16,6 +16,24 @@
       "revId": "d4a0831de3e27cd73100090c72277c5132f6d6a8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b55c808a_e4c35850",
+        "filename": "xmloff/source/draw/shapeexport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 618,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2021-07-20T06:03:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a475c4e1_e01ceebe",
+      "revId": "d4a0831de3e27cd73100090c72277c5132f6d6a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
