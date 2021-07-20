@@ -437,6 +437,12 @@ bool SwHTMLParser::InsertEmbed()
     static const std::set<std::u16string_view> vAllowlist = {
         u"image/png",
         u"image/gif",
+        u"image/x-MS-bmp",
+        u"image/jpeg",
+        u"image/x-wmf",
+        u"image/svg+xml",
+        u"image/tiff",
+        u"image/x-emf",
     };
 
     if (vAllowlist.find(aType) != vAllowlist.end() && m_aEmbeds.empty())

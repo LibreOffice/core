@@ -136,7 +136,11 @@ ErrCode XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileName,
         {
             const bool bIsSvg(rFilterName.equalsIgnoreAsciiCase("svg") && VectorGraphicDataType::Svg == rVectorGraphicDataPtr->getVectorGraphicDataType());
             const bool bIsWmf(rFilterName.equalsIgnoreAsciiCase("wmf") && VectorGraphicDataType::Wmf == rVectorGraphicDataPtr->getVectorGraphicDataType());
-            const bool bIsEmf(rFilterName.equalsIgnoreAsciiCase("emf") && VectorGraphicDataType::Emf == rVectorGraphicDataPtr->getVectorGraphicDataType());
+            bool bIsEmf(rFilterName.equalsIgnoreAsciiCase("emf") && VectorGraphicDataType::Emf == rVectorGraphicDataPtr->getVectorGraphicDataType());
+            if (!bIsEmf)
+            {
+                bIsEmf = rGraphic.GetGfxLink().IsEMF();
+            }
             const bool bIsPdf(rFilterName.equalsIgnoreAsciiCase("pdf") && VectorGraphicDataType::Pdf == rVectorGraphicDataPtr->getVectorGraphicDataType());
 
             if (bIsSvg || bIsWmf || bIsEmf || bIsPdf)
