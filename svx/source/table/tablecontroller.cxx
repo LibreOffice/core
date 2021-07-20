@@ -2357,7 +2357,7 @@ void SvxTableController::updateSelectionOverlay()
                 std::unique_ptr<sdr::overlay::OverlayObjectCell> pOverlay(new sdr::overlay::OverlayObjectCell( aHighlight, aRanges ));
 
                 xOverlayManager->add(*pOverlay);
-                mpSelectionOverlay.reset(new sdr::overlay::OverlayObjectList);
+                mpSelectionOverlay.emplace();
                 mpSelectionOverlay->append(std::move(pOverlay));
             }
         }
