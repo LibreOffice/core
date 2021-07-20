@@ -17,12 +17,12 @@ NfCurrencyTable::iterator NfCurrencyTable::begin()
 
 NfCurrencyEntry& NfCurrencyTable::operator[] ( size_t i )
 {
-    return *maData[i];
+    return maData[i];
 }
 
 const NfCurrencyEntry& NfCurrencyTable::operator[] ( size_t i ) const
 {
-    return *maData[i];
+    return maData[i];
 }
 
 size_t NfCurrencyTable::size() const
@@ -30,7 +30,7 @@ size_t NfCurrencyTable::size() const
     return maData.size();
 }
 
-void NfCurrencyTable::insert(const iterator& it, std::unique_ptr<NfCurrencyEntry> p)
+void NfCurrencyTable::insert(const iterator& it, NfCurrencyEntry p)
 {
     maData.insert(it, std::move(p));
 }

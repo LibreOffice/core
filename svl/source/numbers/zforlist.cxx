@@ -4087,7 +4087,7 @@ void SvNumberFormatter::ImpInitCurrencyTable()
     // First entry is SYSTEM:
     theCurrencyTable::get().insert(
         theCurrencyTable::get().begin(),
-        std::make_unique<NfCurrencyEntry>(*pLocaleData, LANGUAGE_SYSTEM));
+        NfCurrencyEntry(*pLocaleData, LANGUAGE_SYSTEM));
     sal_uInt16 nCurrencyPos = 1;
 
     const css::uno::Sequence< css::lang::Locale > xLoc = LocaleDataWrapper::getInstalledLocaleNames();
@@ -4115,14 +4115,14 @@ void SvNumberFormatter::ImpInitCurrencyTable()
             if ( pCurrencies[nDefault].Default )
                 break;
         }
-        std::unique_ptr<NfCurrencyEntry> pEntry;
+        std::optional<NfCurrencyEntry> pEntry;
         if ( nDefault < nCurrencyCount )
         {
-            pEntry.reset(new NfCurrencyEntry(pCurrencies[nDefault], *pLocaleData, eLang));
+            pEntry.emplace(pCurrencies[nDefault], *pLocaleData, eLang);
         }
         else
         {   // first or ShellsAndPebbles
-            pEntry.reset(new NfCurrencyEntry(*pLocaleData, eLang));
+            pEntry.emplace(*pLocaleData, eLang);
         }
         if (LocaleDataWrapper::areChecksEnabled())
         {
@@ -4140,7 +4140,7 @@ void SvNumberFormatter::ImpInitCurrencyTable()
             nMatchingSystemCurrencyPosition = nCurrencyPos;
         }
         rCurrencyTable.insert(
-                rCurrencyTable.begin() + nCurrencyPos++, std::move(pEntry));
+                rCurrencyTable.begin() + nCurrencyPos++, std::move(*pEntry));
         // all remaining currencies for each locale
         if ( nCurrencyCount > 1 )
         {
@@ -4151,12 +4151,12 @@ void SvNumberFormatter::ImpInitCurrencyTable()
                 {
                     rLegacyOnlyCurrencyTable.insert(
                         rLegacyOnlyCurrencyTable.begin() + nLegacyOnlyCurrencyPos++,
-                        std::make_unique<NfCurrencyEntry>(
+                        NfCurrencyEntry(
                             pCurrencies[nCurrency], *pLocaleData, eLang));
                 }
                 else if ( nCurrency != nDefault )
                 {
-                    pEntry.reset(new NfCurrencyEntry(pCurrencies[nCurrency], *pLocaleData, eLang));
+                    pEntry.emplace(pCurrencies[nCurrency], *pLocaleData, eLang);
                     // no dupes
                     bool bInsert = true;
                     sal_uInt16 n = rCurrencyTable.size();
@@ -4188,7 +4188,7 @@ void SvNumberFormatter::ImpInitCurrencyTable()
                             nMatchingSystemCurrencyPosition = nCurrencyPos;
                         }
                         rCurrencyTable.insert(
-                            rCurrencyTable.begin() + nCurrencyPos++, std::move(pEntry));
+                            rCurrencyTable.begin() + nCurrencyPos++, std::move(*pEntry));
                     }
                 }
             }
