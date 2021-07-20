@@ -66,6 +66,30 @@
     },
     {
       "key": {
+        "uuid": "1b90e7a9_fe5c7ea4",
+        "filename": "sc/source/core/tool/compiler.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 2230,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-07-20T16:48:27Z",
+      "side": 1,
+      "message": "Then do it only for isOOXML(). Which in FormulaCompiler (where ScCompiler is derived from) is a shorthand for FormulaGrammar::isOOXML(meGrammar).",
+      "parentUuid": "4352c095_6f4a0c8b",
+      "range": {
+        "startLine": 2230,
+        "startChar": 27,
+        "endLine": 2230,
+        "endChar": 83
+      },
+      "revId": "7c2a0531943af001b07b5f058b4f182ddea261f6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6630f4c3_875094b2",
         "filename": "sc/source/core/tool/compiler.cxx",
         "patchSetId": 12
@@ -182,6 +206,24 @@
       "side": 1,
       "message": "Yes probabaly, maybe in next patch. Just like the formulas which give back a range. By the way do you know any function, which gives back a range from a TokenArray what contains formulas/functions?",
       "parentUuid": "d54e4b7a_ebea4c4a",
+      "revId": "7c2a0531943af001b07b5f058b4f182ddea261f6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "53282a3d_933e71af",
+        "filename": "sc/source/core/tool/reftokenhelper.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-07-20T16:48:27Z",
+      "side": 1,
+      "message": "Any operator or function that returns formula::ParamClass::Reference, last struct value in sc/source/core/tool/parclass.cxx (ScParameterClassification::RawData.CommonData.eReturn); can be obtained with\n\n  ScParameterClassification::GetParameterType( pToken, SAL_MAX_UINT16)\n\nBut of course you can not obtain the resulting range unless the formula expression is calculated in interpreter context.",
+      "parentUuid": "9c7f9494_03006fb0",
       "revId": "7c2a0531943af001b07b5f058b4f182ddea261f6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true

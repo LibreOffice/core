@@ -218,6 +218,24 @@
     },
     {
       "key": {
+        "uuid": "2597e30c_897ebd5f",
+        "filename": "sc/source/core/tool/compiler.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 5287,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-07-20T16:48:27Z",
+      "side": 1,
+      "message": "Then let\u0027s do it *only* for OOXML, not for any Excel syntax also in UI. The condition for that would simply be isOOXML().",
+      "parentUuid": "6fa7ebbd_56cf9f87",
+      "revId": "cb0edf28a0a5d244aa5d39c2156b13ce701efefc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "210d59ba_1dbfbcfe",
         "filename": "sc/source/core/tool/compiler.cxx",
         "patchSetId": 6
@@ -265,6 +283,24 @@
       "side": 1,
       "message": "About this: I didn\u0027t find in the OOXML/ECMA specification that we have to use the \"[0]\" prefix before the local files\u0027s global range names. However we have to use if it is reference to an external file according to:\n\nL.2.13.3.2 Cell C2\nThe formula expressed in cell C2 (cell C2 is the c element whose r is C2) is this:\n[2]!NameInExternalWorkbook\nThe external reference to another workbook in this case is tokenized to [2]. The value inside the\nbrackets is a 1-based index to the externalReferences collection in the workbook part.\n\nAlso I tried what excel does with global named ranges referencing without [0] prefix: the datas on the charts will not be updated if we modify a value in a referenced cell. Also when I tried to write \"\u003dglobalname\" into the chart data range referencing textbox i got a syntax error message. With \"\u003d[0]!globalname\" was good.\n\nAlso, I have not noticed yet, that, this change here will also modify the names on the UI from NameRange to [0]!NameRange. But if its true I will limit this part only for export.",
       "parentUuid": "b773bb0f_d26f9cf8",
+      "revId": "cb0edf28a0a5d244aa5d39c2156b13ce701efefc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a504a555_da59f9d2",
+        "filename": "sc/source/core/tool/compiler.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 5300,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-07-20T16:48:27Z",
+      "side": 1,
+      "message": "This here isn\u0027t at all about external names though, which are a completely different token type StackVar::svExternalName and handled via ScExternalRefManager and do get a \"[n]\" prefix. If Excel needs the \"[0]!\" prefix for global names for some undocumented reasons then again, do it only for isOOXML().",
+      "parentUuid": "0a7ae7e1_390bcfbe",
       "revId": "cb0edf28a0a5d244aa5d39c2156b13ce701efefc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
