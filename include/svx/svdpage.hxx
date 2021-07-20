@@ -64,7 +64,7 @@ private:
     SdrObjList(const SdrObjList& rSrcList) = delete;
     SdrObjList &operator=(const SdrObjList& rSrcList) = delete;
 
-    ::std::vector<SdrObject*>   maList;
+    std::vector<SdrObject*> maList;
 
     tools::Rectangle    maSdrObjListOutRect;
     tools::Rectangle    maSdrObjListSnapRect;
