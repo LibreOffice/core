@@ -42,6 +42,30 @@
     },
     {
       "key": {
+        "uuid": "4352c095_6f4a0c8b",
+        "filename": "sc/source/core/tool/compiler.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 2230,
+      "author": {
+        "id": 1001901
+      },
+      "writtenOn": "2021-07-20T12:43:47Z",
+      "side": 1,
+      "message": "Yes, only in OOXML.",
+      "parentUuid": "49221e0c_a9b01e83",
+      "range": {
+        "startLine": 2230,
+        "startChar": 27,
+        "endLine": 2230,
+        "endChar": 83
+      },
+      "revId": "7c2a0531943af001b07b5f058b4f182ddea261f6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6630f4c3_875094b2",
         "filename": "sc/source/core/tool/compiler.cxx",
         "patchSetId": 12
@@ -53,6 +77,24 @@
       "writtenOn": "2021-07-19T13:21:01Z",
       "side": 1,
       "message": "You have to check if there are actually 2 more characters following, not blindly access memory.",
+      "revId": "7c2a0531943af001b07b5f058b4f182ddea261f6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ba78506f_51b05fc0",
+        "filename": "sc/source/core/tool/compiler.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 2234,
+      "author": {
+        "id": 1001901
+      },
+      "writtenOn": "2021-07-20T12:43:47Z",
+      "side": 1,
+      "message": "May I ask how should it be done here? I saw that in this function neither do others checked there are more characters following, just checked pSrc[0] and pSrc[1] etc.",
+      "parentUuid": "6630f4c3_875094b2",
       "revId": "7c2a0531943af001b07b5f058b4f182ddea261f6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
@@ -104,6 +146,24 @@
       "writtenOn": "2021-07-19T13:21:01Z",
       "side": 1,
       "message": "While at it, shouldn\u0027t also ocDBArea names be handled as a valid range?",
+      "revId": "7c2a0531943af001b07b5f058b4f182ddea261f6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9c7f9494_03006fb0",
+        "filename": "sc/source/core/tool/reftokenhelper.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1001901
+      },
+      "writtenOn": "2021-07-20T12:43:47Z",
+      "side": 1,
+      "message": "Yes probabaly, maybe in next patch. Just like the formulas which give back a range. By the way do you know any function, which gives back a range from a TokenArray what contains formulas/functions?",
+      "parentUuid": "d54e4b7a_ebea4c4a",
       "revId": "7c2a0531943af001b07b5f058b4f182ddea261f6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true

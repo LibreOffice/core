@@ -200,6 +200,24 @@
     },
     {
       "key": {
+        "uuid": "6fa7ebbd_56cf9f87",
+        "filename": "sc/source/core/tool/compiler.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 5287,
+      "author": {
+        "id": 1001901
+      },
+      "writtenOn": "2021-07-20T12:43:47Z",
+      "side": 1,
+      "message": "We need the sheet name before the range name, always, to referencing a cell even if the sheet-local names on the same sheet. I found it in the 18.17.2.3 Cell References part of the ISO/IEC\n29500-1 standard. Also i tried if we open a chart with a local-sheet range name referencing without the local-sheet name we lost the datas.\n\nEike, László: For OOXML files required to be stored the sheet-local names otherwise the referenced local named ranges will not work properly. The problem isn\u0027t related to chart import but to the chart export. Excel always prefix the sheet names for sheet-local names on the same sheet.",
+      "parentUuid": "89f6c963_193942b8",
+      "revId": "cb0edf28a0a5d244aa5d39c2156b13ce701efefc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "210d59ba_1dbfbcfe",
         "filename": "sc/source/core/tool/compiler.cxx",
         "patchSetId": 6
@@ -229,6 +247,24 @@
       "side": 1,
       "message": "Balázs: there are different formula syntaxes of Excel, but this is only for OOXML (or for old MSO XML?), so it\u0027s better to use something\n\n else if (bExcelConvention \u0026\u0026 FormulaGrammar::isOOXML(meGrammar))\n\nFrom the patch, it seems, \"[0]\" is only for the export, and we don\u0027t want to add this to the UI, because this hidden/undocumented/not standardized(?) magic is annoying/frustrating for the users. We need to move or limit this only for the export code.\n\nBy the way, what about the \"[1]\" or the other possible external chart data source. Or does it not exist? More examples, and more information about the standard or about the de facto interoperability requirements will help to choose the best approach.",
       "parentUuid": "210d59ba_1dbfbcfe",
+      "revId": "cb0edf28a0a5d244aa5d39c2156b13ce701efefc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0a7ae7e1_390bcfbe",
+        "filename": "sc/source/core/tool/compiler.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 5300,
+      "author": {
+        "id": 1001901
+      },
+      "writtenOn": "2021-07-20T12:43:47Z",
+      "side": 1,
+      "message": "About this: I didn\u0027t find in the OOXML/ECMA specification that we have to use the \"[0]\" prefix before the local files\u0027s global range names. However we have to use if it is reference to an external file according to:\n\nL.2.13.3.2 Cell C2\nThe formula expressed in cell C2 (cell C2 is the c element whose r is C2) is this:\n[2]!NameInExternalWorkbook\nThe external reference to another workbook in this case is tokenized to [2]. The value inside the\nbrackets is a 1-based index to the externalReferences collection in the workbook part.\n\nAlso I tried what excel does with global named ranges referencing without [0] prefix: the datas on the charts will not be updated if we modify a value in a referenced cell. Also when I tried to write \"\u003dglobalname\" into the chart data range referencing textbox i got a syntax error message. With \"\u003d[0]!globalname\" was good.\n\nAlso, I have not noticed yet, that, this change here will also modify the names on the UI from NameRange to [0]!NameRange. But if its true I will limit this part only for export.",
+      "parentUuid": "b773bb0f_d26f9cf8",
       "revId": "cb0edf28a0a5d244aa5d39c2156b13ce701efefc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true

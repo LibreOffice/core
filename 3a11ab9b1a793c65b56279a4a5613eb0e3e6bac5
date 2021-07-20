@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "a3c40b06_e943d85c",
+        "filename": "include/formula/grammar.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1001901
+      },
+      "writtenOn": "2021-07-20T12:43:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dc8d34de_0ec8d6ee",
+      "revId": "3a11ab9b1a793c65b56279a4a5613eb0e3e6bac5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "49668ba5_488faeca",
         "filename": "sc/source/core/tool/address.cxx",
         "patchSetId": 4
@@ -51,6 +69,24 @@
       "revId": "3a11ab9b1a793c65b56279a4a5613eb0e3e6bac5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ab8c1515_ade89bc5",
+        "filename": "sc/source/core/tool/address.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 459,
+      "author": {
+        "id": 1001901
+      },
+      "writtenOn": "2021-07-20T12:43:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "49668ba5_488faeca",
+      "revId": "3a11ab9b1a793c65b56279a4a5613eb0e3e6bac5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -88,6 +124,24 @@
     },
     {
       "key": {
+        "uuid": "30c10b74_a5928ae6",
+        "filename": "sc/source/core/tool/reftokenhelper.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1001901
+      },
+      "writtenOn": "2021-07-20T12:43:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a93e9b38_efcff0ab",
+      "revId": "3a11ab9b1a793c65b56279a4a5613eb0e3e6bac5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "53b34ab7_c4e4a78b",
         "filename": "sc/source/core/tool/reftokenhelper.cxx",
         "patchSetId": 4
@@ -108,6 +162,30 @@
       "revId": "3a11ab9b1a793c65b56279a4a5613eb0e3e6bac5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9d0c3100_2e935a89",
+        "filename": "sc/source/core/tool/reftokenhelper.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1001901
+      },
+      "writtenOn": "2021-07-20T12:43:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "53b34ab7_c4e4a78b",
+      "range": {
+        "startLine": 158,
+        "startChar": 0,
+        "endLine": 163,
+        "endChar": 1
+      },
+      "revId": "3a11ab9b1a793c65b56279a4a5613eb0e3e6bac5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
