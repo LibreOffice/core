@@ -16,6 +16,24 @@
       "revId": "13bb5a4b09f5b2ad19dad1b55f45d0fe2b2fb908",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b6682b71_8879c85b",
+        "filename": "svl/source/items/itemset.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-07-20T08:05:14Z",
+      "side": 1,
+      "message": "indeed, beats me now what exactly I meant with that (but then again also seems somewhat moot now, given that the comment at \u003chttps://gerrit.libreoffice.org/c/core/+/118703/17#message-f1fbae91cf10d2267b4833f0fd2a29a42a9c280d\u003e \"WhichRangesContainer, reduce malloc in SfxItemSet\" clarifies that this code comment should have been removed in that change, and \u003chttps://git.libreoffice.org/core/+/476d8b4088b723df883a8d33d018da68c6b03933%5E!/\u003e \"Drop unused ctor\" removed the code completely, and given that the comments at \u003chttps://gerrit.libreoffice.org/c/core/+/118703/17#message-f1fbae91cf10d2267b4833f0fd2a29a42a9c280d\u003e \"WhichRangesContainer, reduce malloc in SfxItemSet\" address the two surviving copies of this comment that appear to be copy/paste errors)",
+      "parentUuid": "46dc9f56_630c4c60",
+      "revId": "13bb5a4b09f5b2ad19dad1b55f45d0fe2b2fb908",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
