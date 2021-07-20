@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "46dc9f56_630c4c60",
+        "filename": "svl/source/items/itemset.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-20T07:20:17Z",
+      "side": 1,
+      "message": "Unclear which \"SfxItemSet::create\" is meant - there was no method named \"create\" at the time of the commit, nor now - so the comment seem confusing :)",
+      "revId": "13bb5a4b09f5b2ad19dad1b55f45d0fe2b2fb908",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
