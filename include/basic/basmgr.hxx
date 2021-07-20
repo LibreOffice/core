@@ -94,7 +94,7 @@ struct LibraryContainerInfo
 
 #define LIB_NOTFOUND    0xFFFF
 
-class UNLESS_MERGELIBS(BASIC_DLLPUBLIC) BasicManager final : public SfxBroadcaster
+class BASIC_DLLPUBLIC BasicManager final : public SfxBroadcaster
 {
     friend class LibraryContainer_Impl;
     friend class StarBasicAccess_Impl;

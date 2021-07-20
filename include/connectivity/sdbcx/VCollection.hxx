@@ -58,7 +58,7 @@ namespace connectivity::sdbcx
 
         typedef css::uno::Reference< css::beans::XPropertySet > ObjectType;
 
-        class UNLESS_MERGELIBS(OOO_DLLPUBLIC_DBTOOLS) SAL_NO_VTABLE IObjectCollection
+        class OOO_DLLPUBLIC_DBTOOLS SAL_NO_VTABLE IObjectCollection
         {
         public:
             virtual ~IObjectCollection();
