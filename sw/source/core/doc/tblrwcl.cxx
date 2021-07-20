@@ -607,7 +607,7 @@ bool SwTable::InsertRow_( SwDoc* pDoc, const SwSelBoxes& rBoxes,
         pPCD->AddRowCols( *this, rBoxes, nCnt, bBehind );
     pDoc->UpdateCharts( GetFrameFormat()->GetName() );
 
-    pDoc->GetDocShell()->GetFEShell()->UpdateTableStyleFormatting();
+    pDoc->GetDocShell()->GetFEShell()->UpdateTableStyleFormatting(pTableNd);
 
     return true;
 }
