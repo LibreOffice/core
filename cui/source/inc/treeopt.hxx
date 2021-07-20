@@ -144,7 +144,7 @@ private:
 
     static LastPageSaver*   pLastPageSaver;
 
-    std::unique_ptr<SfxItemSet> CreateItemSet( sal_uInt16 nId );
+    std::optional<SfxItemSet> CreateItemSet( sal_uInt16 nId );
     static void     ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet );
     void            InitTreeAndHandler();
     void            Initialize( const css::uno::Reference< css::frame::XFrame >& _xFrame );

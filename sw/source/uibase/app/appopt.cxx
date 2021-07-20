@@ -61,7 +61,7 @@
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 
-std::unique_ptr<SfxItemSet> SwModule::CreateItemSet( sal_uInt16 nId )
+std::optional<SfxItemSet> SwModule::CreateItemSet( sal_uInt16 nId )
 {
     bool bTextDialog = (nId == SID_SW_EDITOPTIONS);
 
@@ -85,7 +85,7 @@ std::unique_ptr<SfxItemSet> SwModule::CreateItemSet( sal_uInt16 nId )
     }
 
     // Options/Edit
-    auto pRet = std::make_unique<SfxItemSet>(
+    SfxItemSet aRet(
         GetPool(),
         svl::Items<
             RES_BACKGROUND, RES_BACKGROUND,
@@ -106,12 +106,12 @@ std::unique_ptr<SfxItemSet> SwModule::CreateItemSet( sal_uInt16 nId )
             FN_PARAM_SHADOWCURSOR, FN_PARAM_SHADOWCURSOR,
             FN_PARAM_CRSR_IN_PROTECTED, FN_PARAM_CRSR_IN_PROTECTED>);
 
-    pRet->Put( SwDocDisplayItem( aViewOpt ) );
-    pRet->Put( SwElemItem( aViewOpt ) );
+    aRet.Put( SwDocDisplayItem( aViewOpt ) );
+    aRet.Put( SwElemItem( aViewOpt ) );
     if( bTextDialog )
     {
-        pRet->Put( SwShadowCursorItem( aViewOpt ));
-        pRet->Put( SfxBoolItem(FN_PARAM_CRSR_IN_PROTECTED, aViewOpt.IsCursorInProtectedArea()));
+        aRet.Put( SwShadowCursorItem( aViewOpt ));
+        aRet.Put( SfxBoolItem(FN_PARAM_CRSR_IN_PROTECTED, aViewOpt.IsCursorInProtectedArea()));
     }
 
     if( pAppView )
@@ -120,12 +120,12 @@ std::unique_ptr<SfxItemSet> SwModule::CreateItemSet( sal_uInt16 nId )
 
         SfxPrinter* pPrt = rWrtShell.getIDocumentDeviceAccess().getPrinter( false );
         if( pPrt )
-            pRet->Put(SwPtrItem(FN_PARAM_PRINTER, pPrt));
-        pRet->Put(SwPtrItem(FN_PARAM_WRTSHELL, &rWrtShell));
+            aRet.Put(SwPtrItem(FN_PARAM_PRINTER, pPrt));
+        aRet.Put(SwPtrItem(FN_PARAM_WRTSHELL, &rWrtShell));
 
-        pRet->Put(rWrtShell.GetDefault(RES_CHRATR_LANGUAGE).CloneSetWhich(SID_ATTR_LANGUAGE));
-        pRet->Put(rWrtShell.GetDefault(RES_CHRATR_CJK_LANGUAGE).CloneSetWhich(SID_ATTR_CHAR_CJK_LANGUAGE));
-        pRet->Put(rWrtShell.GetDefault(RES_CHRATR_CTL_LANGUAGE).CloneSetWhich(SID_ATTR_CHAR_CTL_LANGUAGE));
+        aRet.Put(rWrtShell.GetDefault(RES_CHRATR_LANGUAGE).CloneSetWhich(SID_ATTR_LANGUAGE));
+        aRet.Put(rWrtShell.GetDefault(RES_CHRATR_CJK_LANGUAGE).CloneSetWhich(SID_ATTR_CHAR_CJK_LANGUAGE));
+        aRet.Put(rWrtShell.GetDefault(RES_CHRATR_CTL_LANGUAGE).CloneSetWhich(SID_ATTR_CHAR_CTL_LANGUAGE));
     }
     else
     {
@@ -138,47 +138,47 @@ std::unique_ptr<SfxItemSet> SwModule::CreateItemSet( sal_uInt16 nId )
         Any aLang = aLinguCfg.GetProperty("DefaultLocale");
         aLang >>= aLocale;
         nLang = MsLangId::resolveSystemLanguageByScriptType(LanguageTag::convertToLanguageType( aLocale, false), LATIN);
-        pRet->Put(SvxLanguageItem(nLang, SID_ATTR_LANGUAGE));
+        aRet.Put(SvxLanguageItem(nLang, SID_ATTR_LANGUAGE));
 
         aLang = aLinguCfg.GetProperty("DefaultLocale_CJK");
         aLang >>= aLocale;
         nLang = MsLangId::resolveSystemLanguageByScriptType(LanguageTag::convertToLanguageType( aLocale, false), ASIAN);
-        pRet->Put(SvxLanguageItem(nLang, SID_ATTR_CHAR_CJK_LANGUAGE));
+        aRet.Put(SvxLanguageItem(nLang, SID_ATTR_CHAR_CJK_LANGUAGE));
 
         aLang = aLinguCfg.GetProperty("DefaultLocale_CTL");
         aLang >>= aLocale;
         nLang = MsLangId::resolveSystemLanguageByScriptType(LanguageTag::convertToLanguageType( aLocale, false), COMPLEX);
-        pRet->Put(SvxLanguageItem(nLang, SID_ATTR_CHAR_CTL_LANGUAGE));
+        aRet.Put(SvxLanguageItem(nLang, SID_ATTR_CHAR_CTL_LANGUAGE));
     }
     if(bTextDialog)
-        pRet->Put(SwPtrItem(FN_PARAM_STDFONTS, GetStdFontConfig()));
+        aRet.Put(SwPtrItem(FN_PARAM_STDFONTS, GetStdFontConfig()));
     if( dynamic_cast<SwPagePreview*>( SfxViewShell::Current())!=nullptr )
     {
         SfxBoolItem aBool(SfxBoolItem(SID_PRINTPREVIEW, true));
-        pRet->Put(aBool);
+        aRet.Put(aBool);
     }
 
     FieldUnit eUnit = pPref->GetHScrollMetric();
     if(pAppView)
         pAppView->GetHRulerMetric(eUnit);
-    pRet->Put(SfxUInt16Item( FN_HSCROLL_METRIC, static_cast< sal_uInt16 >(eUnit)));
+    aRet.Put(SfxUInt16Item( FN_HSCROLL_METRIC, static_cast< sal_uInt16 >(eUnit)));
 
     eUnit = pPref->GetVScrollMetric();
     if(pAppView)
         pAppView->GetVRulerMetric(eUnit);
-    pRet->Put(SfxUInt16Item( FN_VSCROLL_METRIC, static_cast< sal_uInt16 >(eUnit) ));
-    pRet->Put(SfxUInt16Item( SID_ATTR_METRIC, static_cast< sal_uInt16 >(pPref->GetMetric()) ));
-    pRet->Put(SfxBoolItem(SID_ATTR_APPLYCHARUNIT, pPref->IsApplyCharUnit()));
+    aRet.Put(SfxUInt16Item( FN_VSCROLL_METRIC, static_cast< sal_uInt16 >(eUnit) ));
+    aRet.Put(SfxUInt16Item( SID_ATTR_METRIC, static_cast< sal_uInt16 >(pPref->GetMetric()) ));
+    aRet.Put(SfxBoolItem(SID_ATTR_APPLYCHARUNIT, pPref->IsApplyCharUnit()));
     if(bTextDialog)
     {
         if(pAppView)
         {
             const SvxTabStopItem& rDefTabs =
                     pAppView->GetWrtShell().GetDefault(RES_PARATR_TABSTOP);
-            pRet->Put( SfxUInt16Item( SID_ATTR_DEFTABSTOP, o3tl::narrowing<sal_uInt16>(::GetTabDist(rDefTabs))));
+            aRet.Put( SfxUInt16Item( SID_ATTR_DEFTABSTOP, o3tl::narrowing<sal_uInt16>(::GetTabDist(rDefTabs))));
         }
         else
-            pRet->Put(SfxUInt16Item( SID_ATTR_DEFTABSTOP, o3tl::narrowing<sal_uInt16>(convertMm100ToTwip(pPref->GetDefTabInMm100()))));
+            aRet.Put(SfxUInt16Item( SID_ATTR_DEFTABSTOP, o3tl::narrowing<sal_uInt16>(convertMm100ToTwip(pPref->GetDefTabInMm100()))));
     }
 
     // Options for GridTabPage
@@ -195,21 +195,21 @@ std::unique_ptr<SfxItemSet> SwModule::CreateItemSet( sal_uInt16 nId )
     aGridItem.SetFieldDivisionX( aViewOpt.GetDivisionX());
     aGridItem.SetFieldDivisionY( aViewOpt.GetDivisionY());
 
-    pRet->Put(aGridItem);
+    aRet.Put(aGridItem);
 
     // Options for PrintTabPage
     const SwPrintData* pOpt = GetPrtOptions(!bTextDialog);
     SwAddPrinterItem aAddPrinterItem(*pOpt );
-    pRet->Put(aAddPrinterItem);
+    aRet.Put(aAddPrinterItem);
 
     // Options for Web
     if(!bTextDialog)
     {
-        pRet->Put(SvxBrushItem(aViewOpt.GetRetoucheColor(), RES_BACKGROUND));
-        pRet->Put(SfxUInt16Item(SID_HTML_MODE, HTMLMODE_ON));
+        aRet.Put(SvxBrushItem(aViewOpt.GetRetoucheColor(), RES_BACKGROUND));
+        aRet.Put(SfxUInt16Item(SID_HTML_MODE, HTMLMODE_ON));
     }
 
-    return pRet;
+    return aRet;
 }
 
 void SwModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
