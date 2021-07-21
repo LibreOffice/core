@@ -1428,11 +1428,6 @@ void ScInterpreter::ConvertMatrixJumpConditionToMatrix()
         PushIllegalParameter();
 }
 
-std::unique_ptr<ScTokenMatrixMap> ScInterpreter::CreateTokenMatrixMap()
-{
-    return std::make_unique<ScTokenMatrixMap>();
-}
-
 bool ScInterpreter::ConvertMatrixParameters()
 {
     sal_uInt16 nParams = pCur->GetParamCount();
@@ -1580,7 +1575,7 @@ bool ScInterpreter::ConvertMatrixParameters()
         short nStop = nPC + 1;      // stop subroutine before reaching that
         FormulaConstTokenRef xNew;
         ScTokenMatrixMap::const_iterator aMapIter;
-        if (pTokenMatrixMap && ((aMapIter = pTokenMatrixMap->find( pCur)) != pTokenMatrixMap->end()))
+        if ((aMapIter = maTokenMatrixMap.find( pCur)) != maTokenMatrixMap.end())
             xNew = (*aMapIter).second;
         else
         {
@@ -3840,7 +3835,7 @@ void ScInterpreter::Init( ScFormulaCell* pCell, const ScAddress& rPos, ScTokenAr
     pArr = &rTokArray;
     xResult = nullptr;
     pJumpMatrix = nullptr;
-    pTokenMatrixMap.reset();
+    maTokenMatrixMap.clear();
     pMyFormulaCell = pCell;
     pCur = nullptr;
     nGlobalError = FormulaError::NONE;
@@ -3980,10 +3975,9 @@ StackVar ScInterpreter::Interpret()
             PushWithoutError( *pCur );
             nCurFmtType = SvNumFormatType::UNDEFINED;
         }
-        else if (pTokenMatrixMap &&
-                 !FormulaCompiler::IsOpCodeJumpCommand( eOp ) &&
-                ((aTokenMatrixMapIter = pTokenMatrixMap->find( pCur)) !=
-                 pTokenMatrixMap->end()) &&
+        else if (!FormulaCompiler::IsOpCodeJumpCommand( eOp ) &&
+                ((aTokenMatrixMapIter = maTokenMatrixMap.find( pCur)) !=
+                 maTokenMatrixMap.end()) &&
                 (*aTokenMatrixMapIter).second->GetType() != svJumpMatrix)
         {
             // Path already calculated, reuse result.
@@ -4466,8 +4460,8 @@ StackVar ScInterpreter::Interpret()
                 meVolatileType = VOLATILE;
 
             // Remember result matrix in case it could be reused.
-            if (pTokenMatrixMap && sp && GetStackType() == svMatrix)
-                pTokenMatrixMap->emplace(pCur, pStack[sp-1]);
+            if (sp && GetStackType() == svMatrix)
+                maTokenMatrixMap.emplace(pCur, pStack[sp-1]);
 
             // outer function determines format of an expression
             if ( nFuncFmtType != SvNumFormatType::UNDEFINED )

@@ -350,7 +350,7 @@ ScMatrixRef ScInterpreter::CreateMatrixFromDoubleRef( const FormulaToken* pToken
     }
 
     ScTokenMatrixMap::const_iterator aIter;
-    if (pToken && pTokenMatrixMap && ((aIter = pTokenMatrixMap->find( pToken)) != pTokenMatrixMap->end()))
+    if (pToken && ((aIter = maTokenMatrixMap.find( pToken)) != maTokenMatrixMap.end()))
     {
         /* XXX casting const away here is ugly; ScMatrixToken (to which the
          * result of this function usually is assigned) should not be forced to
@@ -468,8 +468,8 @@ ScMatrixRef ScInterpreter::CreateMatrixFromDoubleRef( const FormulaToken* pToken
         }
     }
 
-    if (pToken && pTokenMatrixMap)
-        pTokenMatrixMap->emplace(pToken, new ScMatrixToken( pMat));
+    if (pToken)
+        maTokenMatrixMap.emplace(pToken, new ScMatrixToken( pMat));
 
     return pMat;
 }
