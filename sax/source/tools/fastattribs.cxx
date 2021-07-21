@@ -196,7 +196,11 @@ bool FastAttributeList::getAsInteger( sal_Int32 nToken, sal_Int32 &rInt) const
     for (size_t i = 0; i < maAttributeTokens.size(); ++i)
         if (maAttributeTokens[i] == nToken)
         {
-            rInt = rtl_str_toInt32_WithLength( getFastAttributeValue(i), 10, AttributeValueLength(i) );
+            sal_Int64 n = rtl_str_toInt64_WithLength( getFastAttributeValue(i), 10, AttributeValueLength(i) );
+            if (n < SAL_MIN_INT32 || n > SAL_MAX_INT32) {
+                n = 0;
+            }
+            rInt = n;
             return true;
         }
     return false;
@@ -204,7 +208,11 @@ bool FastAttributeList::getAsInteger( sal_Int32 nToken, sal_Int32 &rInt) const
 
 sal_Int32 FastAttributeList::getAsIntegerByIndex( sal_Int32 nTokenIndex ) const
 {
-    return rtl_str_toInt32_WithLength( getFastAttributeValue(nTokenIndex), 10, AttributeValueLength(nTokenIndex) );
+    sal_Int64 n = rtl_str_toInt64_WithLength( getFastAttributeValue(nTokenIndex), 10, AttributeValueLength(nTokenIndex) );
+    if (n < SAL_MIN_INT32 || n > SAL_MAX_INT32) {
+        n = 0;
+    }
+    return n;
 }
 
 bool FastAttributeList::getAsDouble( sal_Int32 nToken, double &rDouble) const

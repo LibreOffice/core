@@ -567,12 +567,6 @@ sal_Int32 SAL_CALL rtl_str_toInt32(const char* pStr, sal_Int16 nRadix) SAL_THROW
     return rtl::str::toInt32(pStr, nRadix);
 }
 
-sal_Int32 SAL_CALL rtl_str_toInt32_WithLength(const char* pStr, sal_Int16 nRadix,
-                                              sal_Int32 nStrLength) SAL_THROW_EXTERN_C()
-{
-    return rtl::str::toInt32_WithLength(pStr, nRadix, nStrLength);
-}
-
 sal_Int64 SAL_CALL rtl_str_toInt64(const char* pStr, sal_Int16 nRadix) SAL_THROW_EXTERN_C()
 {
     return rtl::str::toInt64(pStr, nRadix);
