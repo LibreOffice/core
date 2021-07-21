@@ -114,7 +114,7 @@
 @@ -4663,6 +4739,7 @@
    }
    if(proxy)
-     infof(conn->data, "Uses proxy env variable %s == '%s'\n", envp, proxy);
+     infof(data, "Uses proxy env variable %s == '%s'", envp, proxy);
 +#endif /* WIN32 */
  
    return proxy;
