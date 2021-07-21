@@ -264,7 +264,7 @@ VDevBuffer& getVDevBuffer()
     // secure global instance with Vcl's safe destroyer of external (seen by
     // library base) stuff, the remembered VDevs need to be deleted before
     // Vcl's deinit
-    static vcl::DeleteOnDeinit<VDevBuffer> aVDevBuffer(new VDevBuffer());
+    static vcl::DeleteOnDeinit<VDevBuffer> aVDevBuffer{};
     return *aVDevBuffer.get();
 }
 

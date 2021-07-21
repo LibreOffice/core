@@ -18,8 +18,7 @@ using namespace css;
 using namespace css::uno;
 
 /* static */ osl::Mutex LOKClipboardFactory::gMutex;
-static vcl::DeleteOnDeinit<std::unordered_map<int, rtl::Reference<LOKClipboard>>>
-gClipboards(new std::unordered_map<int, rtl::Reference<LOKClipboard>>);
+static vcl::DeleteOnDeinit<std::unordered_map<int, rtl::Reference<LOKClipboard>>> gClipboards{};
 
 rtl::Reference<LOKClipboard> LOKClipboardFactory::getClipboardForCurView()
 {

@@ -90,8 +90,8 @@ const std::u16string_view aBigPlaceHolders[] =
 
 static BitmapEx* getButtonImage( int index, bool large )
 {
-    static vcl::DeleteOnDeinit< BitmapEx > gSmallButtonImages[SAL_N_ELEMENTS(aSmallPlaceHolders)] = { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr };
-    static vcl::DeleteOnDeinit< BitmapEx > gLargeButtonImages[SAL_N_ELEMENTS(aBigPlaceHolders)] = { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr };
+    static vcl::DeleteOnDeinit< BitmapEx > gSmallButtonImages[SAL_N_ELEMENTS(aSmallPlaceHolders)] = { vcl::DeleteOnDeinitFlag::Empty, vcl::DeleteOnDeinitFlag::Empty, vcl::DeleteOnDeinitFlag::Empty, vcl::DeleteOnDeinitFlag::Empty, vcl::DeleteOnDeinitFlag::Empty, vcl::DeleteOnDeinitFlag::Empty, vcl::DeleteOnDeinitFlag::Empty, vcl::DeleteOnDeinitFlag::Empty };
+    static vcl::DeleteOnDeinit< BitmapEx > gLargeButtonImages[SAL_N_ELEMENTS(aBigPlaceHolders)] = { vcl::DeleteOnDeinitFlag::Empty, vcl::DeleteOnDeinitFlag::Empty, vcl::DeleteOnDeinitFlag::Empty, vcl::DeleteOnDeinitFlag::Empty, vcl::DeleteOnDeinitFlag::Empty, vcl::DeleteOnDeinitFlag::Empty, vcl::DeleteOnDeinitFlag::Empty, vcl::DeleteOnDeinitFlag::Empty };
 
     assert(SAL_N_ELEMENTS(aSmallPlaceHolders) == SAL_N_ELEMENTS(aBigPlaceHolders));
 
@@ -99,8 +99,8 @@ static BitmapEx* getButtonImage( int index, bool large )
     {
         for (size_t i = 0; i < SAL_N_ELEMENTS(aSmallPlaceHolders); i++ )
         {
-            gSmallButtonImages[i].set(std::make_unique<BitmapEx>(OUString(aSmallPlaceHolders[i])));
-            gLargeButtonImages[i].set(std::make_unique<BitmapEx>(OUString(aBigPlaceHolders[i])));
+            gSmallButtonImages[i].set(OUString(aSmallPlaceHolders[i]));
+            gLargeButtonImages[i].set(OUString(aBigPlaceHolders[i]));
         }
     }
 
