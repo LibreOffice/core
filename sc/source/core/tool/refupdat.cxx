@@ -53,12 +53,7 @@ static bool lcl_MoveEnd( R& rRef, U nStart, S nDelta, U nMask )
         rRef = sal::static_int_cast<R>( rRef + nDelta );
     else if ( nDelta < 0 && rRef >= nStart + nDelta )
         rRef = nStart + nDelta - 1;         //TODO: limit ???
-    if ( rRef < 0 )
-    {
-        rRef = 0;
-        bCut = true;
-    }
-    else if ( rRef > nMask )
+    if ( rRef > nMask )
     {
         rRef = nMask;
         bCut = true;
