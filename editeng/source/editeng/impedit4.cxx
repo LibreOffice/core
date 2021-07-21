@@ -1304,7 +1304,7 @@ EditSelection ImpEditEngine::InsertTextObject( const EditTextObject& rTextObject
                 {
                     const TextPortion& rTextPortion = rXP.aTextPortions[_n];
                     TextPortion* pNew = new TextPortion( rTextPortion );
-                    rParaPortion.GetTextPortions().Insert(_n, pNew);
+                    rParaPortion.GetTextPortions().Append(pNew);
                 }
 
                 // The lines
@@ -1315,7 +1315,7 @@ EditSelection ImpEditEngine::InsertTextObject( const EditTextObject& rTextObject
                     const EditLine& rLine = rXP.aLines[m];
                     EditLine* pNew = rLine.Clone();
                     pNew->SetInvalid(); // Paint again!
-                    rParaPortion.GetLines().Insert(m, pNew);
+                    rParaPortion.GetLines().Append(pNew);
                 }
 #ifdef DBG_UTIL
                 sal_uInt16 nTest;
