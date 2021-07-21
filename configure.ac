@@ -928,6 +928,7 @@ cygwin*|wsl*)
 darwin*|macos*) # macOS
     using_freetype_fontconfig=no
     using_x11=no
+    build_skia=yes
     if test -n "$LODE_HOME" ; then
         mac_sanitize_path
         AC_MSG_NOTICE([sanitized the PATH to $PATH])
@@ -11968,6 +11969,12 @@ if test "$enable_skia" != "no" -a "$build_skia" = "yes" -a -z "$DISABLE_GUI"; th
     ENABLE_SKIA=TRUE
     AC_DEFINE(HAVE_FEATURE_SKIA)
     BUILD_TYPE="$BUILD_TYPE SKIA"
+
+    if test -n "$MAC_OS_X_VERSION_MIN_REQUIRED" -a "$MAC_OS_X_VERSION_MIN_REQUIRED" -lt "101200"; then
+        SKIA_DISABLE_VMA_USE_STL_SHARED_MUTEX=1
+        AC_SUBST(SKIA_DISABLE_VMA_USE_STL_SHARED_MUTEX)
+    fi
+
 else
     AC_MSG_RESULT([no])
 fi
