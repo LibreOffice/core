@@ -66,8 +66,7 @@ ChildAccess::ChildAccess(
     rtl::Reference< Access > const & parent, OUString const & name,
     rtl::Reference< Node > const & node):
     Access(components), root_(root), parent_(parent), name_(name), node_(node),
-    inTransaction_(false),
-    lock_( lock() )
+    inTransaction_(false)
 {
     assert(root.is() && parent.is() && node.is());
 }
@@ -75,8 +74,7 @@ ChildAccess::ChildAccess(
 ChildAccess::ChildAccess(
     Components & components, rtl::Reference< RootAccess > const & root,
     rtl::Reference< Node > const & node):
-    Access(components), root_(root), node_(node), inTransaction_(false),
-    lock_( lock() )
+    Access(components), root_(root), node_(node), inTransaction_(false)
 {
     assert(root.is() && node.is());
 }
@@ -144,7 +142,7 @@ void ChildAccess::release() noexcept {
 css::uno::Reference< css::uno::XInterface > ChildAccess::getParent()
 {
     assert(thisIs(IS_ANY));
-    osl::MutexGuard g(*lock_);
+    osl::MutexGuard g(configmgr::GetLock());
     checkLocalizedPropertyAccess();
     return static_cast< cppu::OWeakObject * >(parent_.get());
 }
@@ -152,7 +150,7 @@ css::uno::Reference< css::uno::XInterface > ChildAccess::getParent()
 void ChildAccess::setParent(css::uno::Reference< css::uno::XInterface > const &)
 {
     assert(thisIs(IS_ANY));
-    osl::MutexGuard g(*lock_);
+    osl::MutexGuard g(configmgr::GetLock());
     checkLocalizedPropertyAccess();
     throw css::lang::NoSupportException(
         "setParent", static_cast< cppu::OWeakObject * >(this));
@@ -162,7 +160,7 @@ sal_Int64 ChildAccess::getSomething(
     css::uno::Sequence< sal_Int8 > const & aIdentifier)
 {
     assert(thisIs(IS_ANY));
-    osl::MutexGuard g(*lock_);
+    osl::MutexGuard g(configmgr::GetLock());
     checkLocalizedPropertyAccess();
     return aIdentifier == getTunnelId()
         ? reinterpret_cast< sal_Int64 >(this) : 0;
@@ -310,7 +308,7 @@ void ChildAccess::commitChanges(bool valid, Modifications * globalModifications)
 }
 
 ChildAccess::~ChildAccess() {
-    osl::MutexGuard g(*lock_);
+    osl::MutexGuard g(configmgr::GetLock());
     if (parent_.is()) {
         parent_->releaseChild(name_);
     }
@@ -335,7 +333,7 @@ void ChildAccess::addSupportedServiceNames(
 css::uno::Any ChildAccess::queryInterface(css::uno::Type const & aType)
 {
     assert(thisIs(IS_ANY));
-    osl::MutexGuard g(*lock_);
+    osl::MutexGuard g(configmgr::GetLock());
     checkLocalizedPropertyAccess();
     css::uno::Any res(Access::queryInterface(aType));
     return res.hasValue()

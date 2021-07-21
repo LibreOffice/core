@@ -434,8 +434,6 @@ private:
     PropertiesChangeListeners propertiesChangeListeners_;
     bool disposed_;
 
-    std::shared_ptr<osl::Mutex> lock_;
-
 #if !defined NDEBUG
 protected:
     enum {

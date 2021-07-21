@@ -25,9 +25,9 @@
 
 namespace configmgr
 {
-std::shared_ptr<osl::Mutex> const& lock()
+osl::Mutex& GetLock()
 {
-    static std::shared_ptr<osl::Mutex> theLock = std::make_shared<osl::Mutex>();
+    static osl::Mutex theLock;
     return theLock;
 }
 }
