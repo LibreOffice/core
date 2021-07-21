@@ -208,10 +208,9 @@ public:
     void        SetModified(bool bMod)      { bModified = bMod; }
 
     void    UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos );
-    void    UpdateReference(const ScDocument* pDoc, UpdateRefMode eUpdateRefMode,
-                        SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
-                        SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
-                        SCCOL nDx, SCROW nDy, SCTAB nDz);
+    bool    UpdateReference(const ScDocument* pDoc, UpdateRefMode eUpdateRefMode, SCCOL nCol1,
+                            SCROW nRow1, SCTAB nTab1, SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
+                            SCCOL nDx, SCROW nDy, SCTAB nDz);
 
     void ExtendDataArea(const ScDocument& rDoc);
     void CalcSaveFilteredCount(SCSIZE nNonFilteredRowCount);
@@ -296,6 +295,7 @@ public:
         void deleteOnTab(SCTAB nTab);
         ScDBData* getByRange(const ScRange& rRange);
         void insert(ScDBData* p);
+        void erase(const iterator& itr);
         bool empty() const;
         bool has( const ScDBData* p ) const;
         bool operator== (const AnonDBs& r) const;

@@ -53,12 +53,12 @@ static bool lcl_MoveEnd( R& rRef, U nStart, S nDelta, U nMask )
         rRef = sal::static_int_cast<R>( rRef + nDelta );
     else if ( nDelta < 0 && rRef >= nStart + nDelta )
         rRef = nStart + nDelta - 1;         //TODO: limit ???
-    if ( rRef < 0 )
+    if (rRef < 0)
     {
         rRef = 0;
         bCut = true;
     }
-    else if ( rRef > nMask )
+    else if(rRef > nMask)
     {
         rRef = nMask;
         bCut = true;
@@ -217,6 +217,8 @@ ScRefUpdateRes ScRefUpdate::Update( const ScDocument* pDoc, UpdateRefMode eUpdat
                 eRet = UR_INVALID;
                 theCol2 = theCol1;
             }
+            else if (bCut2 && theCol2 == 0)
+                eRet = UR_INVALID;
             else if ( bCut1 || bCut2 )
                 eRet = UR_UPDATED;
             if ( bExp )
@@ -251,6 +253,8 @@ ScRefUpdateRes ScRefUpdate::Update( const ScDocument* pDoc, UpdateRefMode eUpdat
                 eRet = UR_INVALID;
                 theRow2 = theRow1;
             }
+            else if (bCut2 && theRow2 == 0)
+                eRet = UR_INVALID;
             else if ( bCut1 || bCut2 )
                 eRet = UR_UPDATED;
             if ( bExp )
@@ -287,6 +291,8 @@ ScRefUpdateRes ScRefUpdate::Update( const ScDocument* pDoc, UpdateRefMode eUpdat
                 eRet = UR_INVALID;
                 theTab2 = theTab1;
             }
+            else if (bCut2 && theTab2 == 0)
+                eRet = UR_INVALID;
             else if ( bCut1 || bCut2 )
                 eRet = UR_UPDATED;
             if ( bExp )

@@ -1675,6 +1675,32 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf126540_GridToggleModifiesTheDocument)
     CPPUNIT_ASSERT(pDocSh->IsModified());
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf126926)
+{
+    mxComponent = loadFromDesktop("private:factory/scalc");
+    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    CPPUNIT_ASSERT(pModelObj);
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    insertStringToCell(*pModelObj, "A1", "1");
+    insertStringToCell(*pModelObj, "A2", "2");
+    insertStringToCell(*pModelObj, "B1", "3");
+    insertStringToCell(*pModelObj, "B2", "4");
+
+    ScDBData* pDBData = new ScDBData("testDB", 0, 0, 0, 1, 1);
+    bool bInserted
+        = pDoc->GetDBCollection()->getNamedDBs().insert(std::unique_ptr<ScDBData>(pDBData));
+    CPPUNIT_ASSERT(bInserted);
+
+    goToCell("A1:B1");
+
+    dispatchCommand(mxComponent, ".uno:DeleteColumns", {});
+
+    ScDBCollection* pDBs = pDoc->GetDBCollection();
+    CPPUNIT_ASSERT(pDBs->empty());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

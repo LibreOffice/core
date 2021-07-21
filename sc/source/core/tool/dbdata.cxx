@@ -586,7 +586,7 @@ void ScDBData::UpdateMoveTab(SCTAB nOldPos, SCTAB nNewPos)
 
 }
 
-void ScDBData::UpdateReference(const ScDocument* pDoc, UpdateRefMode eUpdateRefMode,
+bool ScDBData::UpdateReference(const ScDocument* pDoc, UpdateRefMode eUpdateRefMode,
                                 SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                                 SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
                                 SCCOL nDx, SCROW nDy, SCTAB nDz)
@@ -601,10 +601,13 @@ void ScDBData::UpdateReference(const ScDocument* pDoc, UpdateRefMode eUpdateRefM
     theTab2 = theTab1;
     SCCOL nOldCol1 = theCol1, nOldCol2 = theCol2;
 
-    bool bDoUpdate = ScRefUpdate::Update( pDoc, eUpdateRefMode,
-                                            nCol1,nRow1,nTab1, nCol2,nRow2,nTab2, nDx,nDy,nDz,
-                                            theCol1,theRow1,theTab1, theCol2,theRow2,theTab2 ) != UR_NOTHING;
-    if (bDoUpdate)
+    ScRefUpdateRes eRet
+        = ScRefUpdate::Update(pDoc, eUpdateRefMode, nCol1, nRow1, nTab1, nCol2, nRow2, nTab2, nDx,
+                              nDy, nDz, theCol1, theRow1, theTab1, theCol2, theRow2, theTab2);
+
+    bool bDoUpdate = eRet != UR_NOTHING;
+
+    if (bDoUpdate && eRet != UR_INVALID)
     {
         // MoveTo() invalidates column names via SetArea(); adjust, remember and set new.
         AdjustTableColumnNames( eUpdateRefMode, nDx, nCol1, nOldCol1, nOldCol2, theCol1, theCol2);
@@ -638,6 +641,8 @@ void ScDBData::UpdateReference(const ScDocument* pDoc, UpdateRefMode eUpdateRefM
     }
 
     SetModified(bDoUpdate);
+
+    return eRet == UR_INVALID;
 
     //TODO: check if something was deleted/inserted with-in the range !!!
 }
@@ -978,36 +983,6 @@ public:
     }
 };
 
-class UpdateRefFunc
-{
-    ScDocument* mpDoc;
-    UpdateRefMode meMode;
-    SCCOL mnCol1;
-    SCROW mnRow1;
-    SCTAB mnTab1;
-    SCCOL mnCol2;
-    SCROW mnRow2;
-    SCTAB mnTab2;
-    SCCOL mnDx;
-    SCROW mnDy;
-    SCTAB mnDz;
-
-public:
-    UpdateRefFunc(ScDocument* pDoc, UpdateRefMode eMode,
-                    SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
-                    SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
-                    SCCOL nDx, SCROW nDy, SCTAB nDz) :
-        mpDoc(pDoc), meMode(eMode),
-        mnCol1(nCol1), mnRow1(nRow1), mnTab1(nTab1),
-        mnCol2(nCol2), mnRow2(nRow2), mnTab2(nTab2),
-        mnDx(nDx), mnDy(nDy), mnDz(nDz) {}
-
-    void operator() (std::unique_ptr<ScDBData> const& p)
-    {
-        p->UpdateReference(mpDoc, meMode, mnCol1, mnRow1, mnTab1, mnCol2, mnRow2, mnTab2, mnDx, mnDy, mnDz);
-    }
-};
-
 class UpdateMoveTabFunc
 {
     SCTAB mnOldTab;
@@ -1281,6 +1256,10 @@ void ScDBCollection::AnonDBs::insert(ScDBData* p)
     m_DBs.push_back(std::unique_ptr<ScDBData>(p));
 }
 
+void ScDBCollection::AnonDBs::erase(const iterator& itr) {
+    m_DBs.erase(itr);
+}
+
 bool ScDBCollection::AnonDBs::empty() const
 {
     return m_DBs.empty();
@@ -1466,9 +1445,10 @@ void ScDBCollection::UpdateReference(UpdateRefMode eUpdateRefMode,
     {
         if (nTab1 == nTab2 && nDz == 0)
         {
-            pData->UpdateReference(
-                &rDoc, eUpdateRefMode,
-                nCol1, nRow1, nTab1, nCol2, nRow2, nTab2, nDx, nDy, nDz);
+            // Delete the database range, if some part of the reference became invalid.
+            if (pData->UpdateReference(&rDoc, eUpdateRefMode, nCol1, nRow1, nTab1, nCol2, nRow2,
+                                       nTab2, nDx, nDy, nDz))
+                rDoc.SetAnonymousDBData(nTab1, nullptr);
         }
         else
         {
@@ -1476,9 +1456,24 @@ void ScDBCollection::UpdateReference(UpdateRefMode eUpdateRefMode,
         }
     }
 
-    UpdateRefFunc func(&rDoc, eUpdateRefMode, nCol1, nRow1, nTab1, nCol2, nRow2, nTab2, nDx, nDy, nDz);
-    for_each(maNamedDBs.begin(), maNamedDBs.end(), func);
-    for_each(maAnonDBs.begin(), maAnonDBs.end(), func);
+    for (auto it = maNamedDBs.begin(); it != maNamedDBs.end(); )
+    {
+        // Delete the database range, if some part of the reference became invalid.
+        if (it->get()->UpdateReference(&rDoc, eUpdateRefMode, nCol1, nRow1, nTab1, nCol2, nRow2,
+                                       nTab2, nDx, nDy, nDz))
+            maNamedDBs.erase(it++);
+        else
+            ++it;
+    }
+    for (auto it = maAnonDBs.begin(); it != maAnonDBs.end(); )
+    {
+        // Delete the database range, if some part of the reference became invalid.
+        if (it->get()->UpdateReference(&rDoc, eUpdateRefMode, nCol1, nRow1, nTab1, nCol2, nRow2,
+                                       nTab2, nDx, nDy, nDz))
+            maAnonDBs.erase(it++);
+        else
+            ++it;
+    }
 }
 
 void ScDBCollection::UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos )
