@@ -22,6 +22,7 @@
 // Attention: stl headers must(!) be included at first. Otherwise it can make trouble
 // with solaris headers ...
 #include <vector>
+#include <mutex>
 
 // include files of own module
 #include <helper/wakeupthread.hxx>
@@ -124,7 +125,7 @@ class StatusIndicatorFactory final : public  ::cppu::WeakImplHelper<
 
     // member
     private:
-        osl::Mutex m_mutex;
+        std::mutex m_mutex;
 
         /** stack with all current indicator children. */
         IndicatorStack m_aStack;
