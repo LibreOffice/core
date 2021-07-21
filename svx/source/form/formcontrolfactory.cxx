@@ -90,23 +90,13 @@ namespace svxform
     namespace ColumnValue = ::com::sun::star::sdbc::ColumnValue;
     namespace WritingMode2 = ::com::sun::star::text::WritingMode2;
 
-    struct FormControlFactory_Data
-    {
-        Reference<XComponentContext>  m_xContext;
-
-        explicit FormControlFactory_Data( const Reference<XComponentContext>& _rContext )
-            :m_xContext( _rContext )
-        {
-        }
-    };
-
     FormControlFactory::FormControlFactory( const Reference<XComponentContext>& _rContext )
-        :m_pData( new FormControlFactory_Data( _rContext ) )
+        :m_xContext( _rContext )
     {
     }
 
     FormControlFactory::FormControlFactory( )
-        :m_pData( new FormControlFactory_Data( comphelper::getProcessComponentContext() ) )
+        :m_xContext( comphelper::getProcessComponentContext() )
     {
     }
 
@@ -524,7 +514,7 @@ namespace svxform
             // let's see if the data source which the form belongs to (if any)
             // has a setting for the preferred line end format
             bool bDosLineEnds = false;
-            Sequence< PropertyValue > aInfo = lcl_getDataSourceIndirectProperties( _rxModel, m_pData->m_xContext );
+            Sequence< PropertyValue > aInfo = lcl_getDataSourceIndirectProperties( _rxModel, m_xContext );
             const PropertyValue* pInfo = std::find_if(aInfo.begin(), aInfo.end(),
                 [](const PropertyValue& rInfo) { return rInfo.Name == "PreferDosLikeLineEnds"; });
             if (pInfo != aInfo.end())
