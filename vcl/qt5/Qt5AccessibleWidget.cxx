@@ -32,6 +32,7 @@
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleScrollType.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
+#include <com/sun/star/accessibility/AccessibleTextType.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleAction.hpp>
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>
@@ -114,6 +115,33 @@ int Qt5AccessibleWidget::indexOfChild(const QAccessibleInterface* /* child */) c
 
 namespace
 {
+sal_Int16 lcl_matchQtTextBoundaryType(QAccessible::TextBoundaryType boundaryType)
+{
+    switch (boundaryType)
+    {
+        case QAccessible::CharBoundary:
+            return com::sun::star::accessibility::AccessibleTextType::CHARACTER;
+        case QAccessible::WordBoundary:
+            return com::sun::star::accessibility::AccessibleTextType::WORD;
+        case QAccessible::SentenceBoundary:
+            return com::sun::star::accessibility::AccessibleTextType::SENTENCE;
+        case QAccessible::ParagraphBoundary:
+            return com::sun::star::accessibility::AccessibleTextType::PARAGRAPH;
+        case QAccessible::LineBoundary:
+            return com::sun::star::accessibility::AccessibleTextType::LINE;
+        case QAccessible::NoBoundary:
+            // assert here, better handle it directly at call site
+            assert(false
+                   && "No match for QAccessible::NoBoundary, handle it separately at call site.");
+            break;
+        default:
+            break;
+    }
+
+    SAL_WARN("vcl.qt5", "Unmatched text boundary type: " << boundaryType);
+    return -1;
+}
+
 QAccessible::Relation lcl_matchUnoRelation(short relationType)
 {
     switch (relationType)
@@ -968,13 +996,34 @@ QString Qt5AccessibleWidget::textAfterOffset(int /* offset */,
     SAL_INFO("vcl.qt5", "Unsupported QAccessibleTextInterface::textAfterOffset");
     return QString();
 }
-QString Qt5AccessibleWidget::textAtOffset(int /* offset */,
-                                          QAccessible::TextBoundaryType /* boundaryType */,
-                                          int* /* startOffset */, int* /* endOffset */) const
+
+QString Qt5AccessibleWidget::textAtOffset(int offset, QAccessible::TextBoundaryType boundaryType,
+                                          int* startOffset, int* endOffset) const
 {
-    SAL_INFO("vcl.qt5", "Unsupported QAccessibleTextInterface::textAtOffset");
-    return QString();
+    if (startOffset == nullptr || endOffset == nullptr)
+        return QString();
+
+    if (boundaryType == QAccessible::NoBoundary)
+    {
+        const int nCharCount = characterCount();
+        *startOffset = 0;
+        *endOffset = nCharCount;
+        return text(0, nCharCount);
+    }
+
+    Reference<XAccessibleText> xText(m_xAccessible, UNO_QUERY);
+    if (!xText.is())
+        return QString();
+
+    sal_Int16 nUnoBoundaryType = lcl_matchQtTextBoundaryType(boundaryType);
+    assert(nUnoBoundaryType > 0);
+
+    const TextSegment segment = xText->getTextAtIndex(offset, nUnoBoundaryType);
+    *startOffset = segment.SegmentStart;
+    *endOffset = segment.SegmentEnd;
+    return toQString(segment.SegmentText);
 }
+
 QString Qt5AccessibleWidget::textBeforeOffset(int /* offset */,
                                               QAccessible::TextBoundaryType /* boundaryType */,
                                               int* /* startOffset */, int* /* endOffset */) const
