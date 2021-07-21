@@ -16,6 +16,7 @@
 
 #include <xmloff/namespacemap.hxx>
 
+#include <optional>
 #include <stack>
 
 class XSecController;
@@ -71,7 +72,7 @@ private:
     class DsigSignaturesContext;
 
     std::stack<std::unique_ptr<Context>> m_ContextStack;
-    std::unique_ptr<SvXMLNamespaceMap> m_pNamespaceMap;
+    std::optional<SvXMLNamespaceMap> m_pNamespaceMap;
 
     XSecController* m_pXSecController;
     css::uno::Reference<css::xml::sax::XDocumentHandler> m_xNextHandler;
