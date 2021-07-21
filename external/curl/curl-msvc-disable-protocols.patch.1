@@ -2,18 +2,19 @@ disable protocols nobody needs in MSVC build
 
 --- curl/lib/config-win32.h.orig	2017-08-09 16:43:29.464000000 +0200
 +++ curl/lib/config-win32.h	2017-08-09 16:47:38.549200000 +0200
-@@ -733,4 +733,19 @@
+@@ -733,4 +733,20 @@
  #  define ENABLE_IPV6 1
  #endif
  
 +#define CURL_DISABLE_DICT 1
 +#define CURL_DISABLE_FILE 1
-+//#undef CURL_DISABLE_FTP
++#undef CURL_DISABLE_FTP
 +#define CURL_DISABLE_GOPHER 1
-+//#undef CURL_DISABLE_HTTP
++#undef CURL_DISABLE_HTTP
 +#define CURL_DISABLE_IMAP 1
 +#define CURL_DISABLE_LDAP 1
 +#define CURL_DISABLE_LDAPS 1
++#define CURL_DISABLE_MQTT 1
 +#define CURL_DISABLE_POP3 1
 +#define CURL_DISABLE_RTSP 1
 +#define CURL_DISABLE_SMB 1
