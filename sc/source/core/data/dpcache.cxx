@@ -391,7 +391,7 @@ void initColumnFromDoc( InitDocData& rDocData, InitColumnData &rColData )
     SCROW nEndRow = rDocData.mnEndRow;
     bool bTailEmptyRows = rDocData.mbTailEmptyRows;
 
-    std::unique_ptr<sc::ColumnIterator> pIter =
+    std::optional<sc::ColumnIterator> pIter =
         rDoc.GetColumnIterator(nDocTab, nCol, nStartRow, nEndRow);
     assert(pIter);
     assert(pIter->hasCell());

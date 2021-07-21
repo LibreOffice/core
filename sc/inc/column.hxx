@@ -30,6 +30,7 @@
 #include <svx/svdobj.hxx>
 #include "attarray.hxx"
 
+#include <optional>
 #include <set>
 #include <vector>
 
@@ -704,7 +705,7 @@ public:
     void SwapNonEmpty(
         sc::TableValues& rValues, sc::StartListeningContext& rStartCxt, sc::EndListeningContext& rEndCxt );
 
-    std::unique_ptr<sc::ColumnIterator> GetColumnIterator( SCROW nRow1, SCROW nRow2 ) const;
+    std::optional<sc::ColumnIterator> GetColumnIterator( SCROW nRow1, SCROW nRow2 ) const;
 
     bool EnsureFormulaCellResults( SCROW nRow1, SCROW nRow2, bool bSkipRunning = false );
 

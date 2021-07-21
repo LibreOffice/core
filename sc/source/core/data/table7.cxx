@@ -422,10 +422,10 @@ bool ScTable::IsEditActionAllowed(
     return false;
 }
 
-std::unique_ptr<sc::ColumnIterator> ScTable::GetColumnIterator( SCCOL nCol, SCROW nRow1, SCROW nRow2 ) const
+std::optional<sc::ColumnIterator> ScTable::GetColumnIterator( SCCOL nCol, SCROW nRow1, SCROW nRow2 ) const
 {
     if (!ValidCol(nCol))
-        return std::unique_ptr<sc::ColumnIterator>();
+        return {};
 
     return CreateColumnIfNotExists(nCol).GetColumnIterator(nRow1, nRow2);
 }
