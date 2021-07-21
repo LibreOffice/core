@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1c1954b4_d486c186",
+        "filename": "sfx2/source/inc/StyleList.hxx",
+        "patchSetId": 61
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-21T08:39:05Z",
+      "side": 1,
+      "message": "It is not an entry point of a program (\"program\" may be considered what drives the process, but not a specific control in UI 😊)",
+      "revId": "5bee1df0ab2aadc160ae88695b3f46139ceec35a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "749ae6b8_8f9c19ef",
+        "filename": "sfx2/source/inc/StyleList.hxx",
+        "patchSetId": 61
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-21T08:39:05Z",
+      "side": 1,
+      "message": "Look at this comment. It is formatted *correctly*, so please format *other comments* like this one. Specifically I mean the space after the \u0027//\u0027 before the first character of the comment text - it needs to be present; other lines mostly miss the space, unfortunately.",
+      "revId": "5bee1df0ab2aadc160ae88695b3f46139ceec35a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d9715d2a_32875a00",
+        "filename": "sfx2/source/inc/StyleList.hxx",
+        "patchSetId": 61
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-21T08:39:05Z",
+      "side": 1,
+      "message": "This 1-line comment should be split to two lines:\n\n    // bIsCallBack is true for the selected style. For eg. if \"Addressee\" is selected in paragraph\n    // styles, bIsCallBack will be true for it.\n\nPlease do not use Capitals randomly, other than in the beginning of sentences, or in the CamelCased variable names. Specifically, here you wrote \"in paragraph Styles,\" as if Styles is a proper name of someone. This attracts attention and suggests that there\u0027s something special about this term (is it defined above? is it a name of a variable or a type? what\u0027s wrong with it?). OTOH, \"Addressee\" is OK to start from the capital, because you quote it from UI. You potentially could also quote \"Styles\", and then use capital, which would clearly indicate that you simply refer to specific capitalized string in the UI.",
+      "revId": "5bee1df0ab2aadc160ae88695b3f46139ceec35a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3f2e6746_c5f36493",
+        "filename": "sfx2/source/inc/StyleList.hxx",
+        "patchSetId": 61
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-21T08:39:05Z",
+      "side": 1,
+      "message": "\"Select\" is a verb implying an action. When a programmer sees a method named \"SelectFoo\" in a control, the programmer knows they can use the method to make the control \"select\" something (highlight, make active). Your method does what \"GetFoo\" should do.\n\nThen please think about what it is used for? You have created a public method, that exposes *MANY* internal details of the control: it gives a user a *non-const pointer to unique_ptr to SfxTemplateItem* - that is, an external user can see guts of the implementation, and can do many things they should not do, e.g. reset unique_ptr or modify the object, when the only thing you are interested in is if the *unique_ptr* is set. You even have a bug in the place where you use this method: you replaced the original\n\n    nullptr !\u003d pFamilyState[nActFamily - 1]\n\n, which compared an element of pFamilyState (i.e., a unique_ptr) to nullptr, with the new\n\n    nullptr !\u003d m_aStyleList.SelectStyleByIndex(nActFamily - 1)\n\nand what will you compare to nullptr now?",
+      "revId": "5bee1df0ab2aadc160ae88695b3f46139ceec35a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e14aa540_935142f2",
+        "filename": "sfx2/source/inc/StyleList.hxx",
+        "patchSetId": 61
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-21T08:39:05Z",
+      "side": 1,
+      "message": "Please *no* method bodies in headers that do not fit in a single line with their name.",
+      "revId": "5bee1df0ab2aadc160ae88695b3f46139ceec35a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
