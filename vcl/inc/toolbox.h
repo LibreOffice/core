@@ -23,6 +23,7 @@
 #include <vcl/toolbox.hxx>
 #include <vcl/toolkit/controllayout.hxx>
 
+#include <optional>
 #include <vector>
 
 #define TB_DROPDOWNARROWWIDTH   11
@@ -112,7 +113,7 @@ struct ToolBoxLayoutData : public ControlLayoutData
 
 struct ImplToolBoxPrivateData
 {
-    std::unique_ptr<vcl::ToolBoxLayoutData> m_pLayoutData;
+    std::optional<vcl::ToolBoxLayoutData> m_pLayoutData;
     ToolBox::ImplToolItems          m_aItems;
 
     ImplToolBoxPrivateData();
