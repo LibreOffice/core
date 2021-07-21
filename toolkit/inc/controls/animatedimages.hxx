@@ -31,7 +31,6 @@ namespace toolkit
 {
 
 
-    struct AnimatedImagesControlModel_Data;
     typedef ::cppu::AggImplInheritanceHelper1   <   UnoControlModel
                                                 ,   css::awt::XAnimatedImages
                                                 >   AnimatedImagesControlModel_Base;
@@ -78,7 +77,7 @@ namespace toolkit
         void SAL_CALL                   setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const css::uno::Any& rValue ) override;
 
     private:
-        std::unique_ptr< AnimatedImagesControlModel_Data > m_xData;
+        std::vector< css::uno::Sequence< OUString > >    maImageSets;
     };
 
 

@@ -203,17 +203,12 @@ public:
 
 namespace toolkit {
 
-    struct AnimatedImagesControlModel_Data
-    {
-        ::std::vector< Sequence< OUString > >    aImageSets;
-    };
-
     namespace
     {
-        void lcl_checkIndex( const AnimatedImagesControlModel_Data& i_data, const sal_Int32 i_index, const Reference< XInterface >& i_context,
+        void lcl_checkIndex( std::vector< css::uno::Sequence< OUString > > & rImageSets, const sal_Int32 i_index, const Reference< XInterface >& i_context,
             const bool i_forInsert = false )
         {
-            if ( ( i_index < 0 ) || ( o3tl::make_unsigned( i_index ) > i_data.aImageSets.size() + ( i_forInsert ? 1 : 0 ) ) )
+            if ( ( i_index < 0 ) || ( o3tl::make_unsigned( i_index ) > rImageSets.size() + ( i_forInsert ? 1 : 0 ) ) )
                 throw IndexOutOfBoundsException( OUString(), i_context );
         }
 
@@ -238,7 +233,6 @@ namespace toolkit {
 
     AnimatedImagesControlModel::AnimatedImagesControlModel( Reference< css::uno::XComponentContext > const & i_factory )
         :AnimatedImagesControlModel_Base( i_factory )
-        ,m_xData( new AnimatedImagesControlModel_Data )
     {
         ImplRegisterProperty( BASEPROPERTY_AUTO_REPEAT );
         ImplRegisterProperty( BASEPROPERTY_BORDER );
@@ -255,7 +249,7 @@ namespace toolkit {
 
     AnimatedImagesControlModel::AnimatedImagesControlModel( const AnimatedImagesControlModel& i_copySource )
         :AnimatedImagesControlModel_Base( i_copySource )
-        ,m_xData( new AnimatedImagesControlModel_Data( *i_copySource.m_xData ) )
+        ,maImageSets( i_copySource.maImageSets )
     {
     }
 
@@ -397,7 +391,7 @@ namespace toolkit {
         if ( GetBroadcastHelper().bDisposed || GetBroadcastHelper().bInDispose )
             throw DisposedException();
 
-        return m_xData->aImageSets.size();
+        return maImageSets.size();
     }
 
 
@@ -407,9 +401,9 @@ namespace toolkit {
         if ( GetBroadcastHelper().bDisposed || GetBroadcastHelper().bInDispose )
             throw DisposedException();
 
-        lcl_checkIndex( *m_xData, i_index, *this );
+        lcl_checkIndex( maImageSets, i_index, *this );
 
-        return m_xData->aImageSets[ i_index ];
+        return maImageSets[ i_index ];
     }
 
 
@@ -420,10 +414,10 @@ namespace toolkit {
         if ( GetBroadcastHelper().bDisposed || GetBroadcastHelper().bInDispose )
             throw DisposedException();
 
-        lcl_checkIndex( *m_xData, i_index, *this, true );
+        lcl_checkIndex( maImageSets, i_index, *this, true );
 
         // actual insertion
-        m_xData->aImageSets.insert( m_xData->aImageSets.begin() + i_index, i_imageURLs );
+        maImageSets.insert( maImageSets.begin() + i_index, i_imageURLs );
 
         // listener notification
         lcl_notify( aGuard, BrdcstHelper, &XContainerListener::elementInserted, i_index, i_imageURLs, *this );
@@ -437,10 +431,10 @@ namespace toolkit {
         if ( GetBroadcastHelper().bDisposed || GetBroadcastHelper().bInDispose )
             throw DisposedException();
 
-        lcl_checkIndex( *m_xData, i_index, *this );
+        lcl_checkIndex( maImageSets, i_index, *this );
 
         // actual insertion
-        m_xData->aImageSets[ i_index ] = i_imageURLs;
+        maImageSets[ i_index ] = i_imageURLs;
 
         // listener notification
         lcl_notify( aGuard, BrdcstHelper, &XContainerListener::elementReplaced, i_index, i_imageURLs, *this );
@@ -454,12 +448,12 @@ namespace toolkit {
         if ( GetBroadcastHelper().bDisposed || GetBroadcastHelper().bInDispose )
             throw DisposedException();
 
-        lcl_checkIndex( *m_xData, i_index, *this );
+        lcl_checkIndex( maImageSets, i_index, *this );
 
         // actual removal
-        ::std::vector< Sequence< OUString > >::iterator removalPos = m_xData->aImageSets.begin() + i_index;
+        ::std::vector< Sequence< OUString > >::iterator removalPos = maImageSets.begin() + i_index;
         Sequence< OUString > aRemovedElement( *removalPos );
-        m_xData->aImageSets.erase( removalPos );
+        maImageSets.erase( removalPos );
 
         // listener notification
         lcl_notify( aGuard, BrdcstHelper, &XContainerListener::elementRemoved, i_index, aRemovedElement, *this );
