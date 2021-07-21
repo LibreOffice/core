@@ -354,42 +354,42 @@ void SvXMLImport::InitCtor_()
     if( mnImportFlags != SvXMLImportFlags::NONE )
     {
         // implicit "xml" namespace prefix
-        mpNamespaceMap->Add( GetXMLToken(XML_XML), GetXMLToken(XML_N_XML), XML_NAMESPACE_XML );
-        mpNamespaceMap->Add( "_office", GetXMLToken(XML_N_OFFICE), XML_NAMESPACE_OFFICE );
-        mpNamespaceMap->Add( "_office_ooo", GetXMLToken(XML_N_OFFICE_EXT), XML_NAMESPACE_OFFICE_EXT );
-        mpNamespaceMap->Add( "_ooo", GetXMLToken(XML_N_OOO), XML_NAMESPACE_OOO );
-        mpNamespaceMap->Add( "_style", GetXMLToken(XML_N_STYLE), XML_NAMESPACE_STYLE );
-        mpNamespaceMap->Add( "_text", GetXMLToken(XML_N_TEXT), XML_NAMESPACE_TEXT );
-        mpNamespaceMap->Add( "_table", GetXMLToken(XML_N_TABLE), XML_NAMESPACE_TABLE );
-        mpNamespaceMap->Add( "_table_ooo", GetXMLToken(XML_N_TABLE_EXT), XML_NAMESPACE_TABLE_EXT );
-        mpNamespaceMap->Add( "_draw", GetXMLToken(XML_N_DRAW), XML_NAMESPACE_DRAW );
-        mpNamespaceMap->Add( "_draw_ooo", GetXMLToken(XML_N_DRAW_EXT), XML_NAMESPACE_DRAW_EXT );
-        mpNamespaceMap->Add( "_dr3d", GetXMLToken(XML_N_DR3D), XML_NAMESPACE_DR3D );
-        mpNamespaceMap->Add( "_fo", GetXMLToken(XML_N_FO_COMPAT), XML_NAMESPACE_FO );
-        mpNamespaceMap->Add( "_xlink", GetXMLToken(XML_N_XLINK), XML_NAMESPACE_XLINK );
-        mpNamespaceMap->Add( "_dc", GetXMLToken(XML_N_DC), XML_NAMESPACE_DC );
-        mpNamespaceMap->Add( "_dom", GetXMLToken(XML_N_DOM), XML_NAMESPACE_DOM );
-        mpNamespaceMap->Add( "_meta", GetXMLToken(XML_N_META), XML_NAMESPACE_META );
-        mpNamespaceMap->Add( "_number", GetXMLToken(XML_N_NUMBER), XML_NAMESPACE_NUMBER );
-        mpNamespaceMap->Add( "_svg", GetXMLToken(XML_N_SVG_COMPAT), XML_NAMESPACE_SVG );
-        mpNamespaceMap->Add( "_chart", GetXMLToken(XML_N_CHART), XML_NAMESPACE_CHART );
-        mpNamespaceMap->Add( "_math", GetXMLToken(XML_N_MATH), XML_NAMESPACE_MATH );
-        mpNamespaceMap->Add( "_form", GetXMLToken(XML_N_FORM), XML_NAMESPACE_FORM );
-        mpNamespaceMap->Add( "_script", GetXMLToken(XML_N_SCRIPT), XML_NAMESPACE_SCRIPT );
-        mpNamespaceMap->Add( "_config", GetXMLToken(XML_N_CONFIG), XML_NAMESPACE_CONFIG );
-        mpNamespaceMap->Add( "_xforms", GetXMLToken(XML_N_XFORMS_1_0), XML_NAMESPACE_XFORMS );
-        mpNamespaceMap->Add( "_formx", GetXMLToken( XML_N_FORMX ), XML_NAMESPACE_FORMX );
-        mpNamespaceMap->Add( "_xsd", GetXMLToken(XML_N_XSD), XML_NAMESPACE_XSD );
-        mpNamespaceMap->Add( "_xsi", GetXMLToken(XML_N_XSI), XML_NAMESPACE_XFORMS );
-        mpNamespaceMap->Add( "_ooow", GetXMLToken(XML_N_OOOW), XML_NAMESPACE_OOOW );
-        mpNamespaceMap->Add( "_oooc", GetXMLToken(XML_N_OOOC), XML_NAMESPACE_OOOC );
-        mpNamespaceMap->Add( "_field", GetXMLToken(XML_N_FIELD), XML_NAMESPACE_FIELD );
-        mpNamespaceMap->Add( "_of", GetXMLToken(XML_N_OF), XML_NAMESPACE_OF );
-        mpNamespaceMap->Add( "_xhtml", GetXMLToken(XML_N_XHTML), XML_NAMESPACE_XHTML );
-        mpNamespaceMap->Add( "_css3text", GetXMLToken(XML_N_CSS3TEXT), XML_NAMESPACE_CSS3TEXT );
+        mxNamespaceMap->Add( GetXMLToken(XML_XML), GetXMLToken(XML_N_XML), XML_NAMESPACE_XML );
+        mxNamespaceMap->Add( "_office", GetXMLToken(XML_N_OFFICE), XML_NAMESPACE_OFFICE );
+        mxNamespaceMap->Add( "_office_ooo", GetXMLToken(XML_N_OFFICE_EXT), XML_NAMESPACE_OFFICE_EXT );
+        mxNamespaceMap->Add( "_ooo", GetXMLToken(XML_N_OOO), XML_NAMESPACE_OOO );
+        mxNamespaceMap->Add( "_style", GetXMLToken(XML_N_STYLE), XML_NAMESPACE_STYLE );
+        mxNamespaceMap->Add( "_text", GetXMLToken(XML_N_TEXT), XML_NAMESPACE_TEXT );
+        mxNamespaceMap->Add( "_table", GetXMLToken(XML_N_TABLE), XML_NAMESPACE_TABLE );
+        mxNamespaceMap->Add( "_table_ooo", GetXMLToken(XML_N_TABLE_EXT), XML_NAMESPACE_TABLE_EXT );
+        mxNamespaceMap->Add( "_draw", GetXMLToken(XML_N_DRAW), XML_NAMESPACE_DRAW );
+        mxNamespaceMap->Add( "_draw_ooo", GetXMLToken(XML_N_DRAW_EXT), XML_NAMESPACE_DRAW_EXT );
+        mxNamespaceMap->Add( "_dr3d", GetXMLToken(XML_N_DR3D), XML_NAMESPACE_DR3D );
+        mxNamespaceMap->Add( "_fo", GetXMLToken(XML_N_FO_COMPAT), XML_NAMESPACE_FO );
+        mxNamespaceMap->Add( "_xlink", GetXMLToken(XML_N_XLINK), XML_NAMESPACE_XLINK );
+        mxNamespaceMap->Add( "_dc", GetXMLToken(XML_N_DC), XML_NAMESPACE_DC );
+        mxNamespaceMap->Add( "_dom", GetXMLToken(XML_N_DOM), XML_NAMESPACE_DOM );
+        mxNamespaceMap->Add( "_meta", GetXMLToken(XML_N_META), XML_NAMESPACE_META );
+        mxNamespaceMap->Add( "_number", GetXMLToken(XML_N_NUMBER), XML_NAMESPACE_NUMBER );
+        mxNamespaceMap->Add( "_svg", GetXMLToken(XML_N_SVG_COMPAT), XML_NAMESPACE_SVG );
+        mxNamespaceMap->Add( "_chart", GetXMLToken(XML_N_CHART), XML_NAMESPACE_CHART );
+        mxNamespaceMap->Add( "_math", GetXMLToken(XML_N_MATH), XML_NAMESPACE_MATH );
+        mxNamespaceMap->Add( "_form", GetXMLToken(XML_N_FORM), XML_NAMESPACE_FORM );
+        mxNamespaceMap->Add( "_script", GetXMLToken(XML_N_SCRIPT), XML_NAMESPACE_SCRIPT );
+        mxNamespaceMap->Add( "_config", GetXMLToken(XML_N_CONFIG), XML_NAMESPACE_CONFIG );
+        mxNamespaceMap->Add( "_xforms", GetXMLToken(XML_N_XFORMS_1_0), XML_NAMESPACE_XFORMS );
+        mxNamespaceMap->Add( "_formx", GetXMLToken( XML_N_FORMX ), XML_NAMESPACE_FORMX );
+        mxNamespaceMap->Add( "_xsd", GetXMLToken(XML_N_XSD), XML_NAMESPACE_XSD );
+        mxNamespaceMap->Add( "_xsi", GetXMLToken(XML_N_XSI), XML_NAMESPACE_XFORMS );
+        mxNamespaceMap->Add( "_ooow", GetXMLToken(XML_N_OOOW), XML_NAMESPACE_OOOW );
+        mxNamespaceMap->Add( "_oooc", GetXMLToken(XML_N_OOOC), XML_NAMESPACE_OOOC );
+        mxNamespaceMap->Add( "_field", GetXMLToken(XML_N_FIELD), XML_NAMESPACE_FIELD );
+        mxNamespaceMap->Add( "_of", GetXMLToken(XML_N_OF), XML_NAMESPACE_OF );
+        mxNamespaceMap->Add( "_xhtml", GetXMLToken(XML_N_XHTML), XML_NAMESPACE_XHTML );
+        mxNamespaceMap->Add( "_css3text", GetXMLToken(XML_N_CSS3TEXT), XML_NAMESPACE_CSS3TEXT );
 
-        mpNamespaceMap->Add( "_calc_libo", GetXMLToken(XML_N_CALC_EXT), XML_NAMESPACE_CALC_EXT);
-        mpNamespaceMap->Add( "_office_libo",
+        mxNamespaceMap->Add( "_calc_libo", GetXMLToken(XML_N_CALC_EXT), XML_NAMESPACE_CALC_EXT);
+        mxNamespaceMap->Add( "_office_libo",
                              GetXMLToken(XML_N_LO_EXT), XML_NAMESPACE_LO_EXT);
     }
 
@@ -409,7 +409,7 @@ SvXMLImport::SvXMLImport(
     SvXMLImportFlags nImportFlags,
     const css::uno::Sequence< OUString > & sSupportedServiceNames )
 :   mpImpl( new SvXMLImport_Impl(xContext, implementationName, sSupportedServiceNames) ),
-    mpNamespaceMap( new SvXMLNamespaceMap ),
+    mxNamespaceMap( SvXMLNamespaceMap() ),
 
     mpUnitConv( new SvXMLUnitConverter( xContext,
                 util::MeasureUnit::MM_100TH, util::MeasureUnit::MM_100TH,
@@ -677,12 +677,12 @@ void SAL_CALL SvXMLImport::endDocument()
     }
 }
 
-std::unique_ptr<SvXMLNamespaceMap> SvXMLImport::processNSAttributes(
-        std::unique_ptr<SvXMLNamespaceMap> & rpNamespaceMap,
+std::optional<SvXMLNamespaceMap> SvXMLImport::processNSAttributes(
+        std::optional<SvXMLNamespaceMap> & rpNamespaceMap,
         SvXMLImport *const pImport, // TODO???
         const uno::Reference< xml::sax::XAttributeList >& xAttrList)
 {
-    std::unique_ptr<SvXMLNamespaceMap> pRewindMap;
+    std::optional<SvXMLNamespaceMap> pRewindMap;
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
@@ -708,7 +708,7 @@ std::unique_ptr<SvXMLNamespaceMap> SvXMLImport::processNSAttributes(
             if( !pRewindMap )
             {
                 pRewindMap = std::move(rpNamespaceMap);
-                rpNamespaceMap.reset(new SvXMLNamespaceMap(*pRewindMap));
+                rpNamespaceMap.emplace(*pRewindMap);
             }
             const OUString& rAttrValue = xAttrList->getValueByIndex( i );
 
@@ -778,7 +778,7 @@ void SAL_CALL SvXMLImport::startFastElement (sal_Int32 Element,
     maNamespaceAttrList->Clear();
 
     maNamespaceHandler->addNSDeclAttributes( maNamespaceAttrList );
-    std::unique_ptr<SvXMLNamespaceMap> pRewindMap = processNSAttributes(mpNamespaceMap, this, maNamespaceAttrList);
+    std::optional<SvXMLNamespaceMap> pRewindMap = processNSAttributes(mxNamespaceMap, this, maNamespaceAttrList);
 
     SvXMLImportContextRef xContext;
     const bool bRootContext = maContexts.empty();
@@ -862,12 +862,12 @@ void SAL_CALL SvXMLImport::endFastElement (sal_Int32 Element)
     }
     SvXMLImportContextRef xContext = std::move(maContexts.top());
     // Get a namespace map to rewind.
-    std::unique_ptr<SvXMLNamespaceMap> pRewindMap = xContext->TakeRewindMap();
+    std::optional<SvXMLNamespaceMap> pRewindMap = xContext->TakeRewindMap();
     maContexts.pop();
     xContext->endFastElement( Element );
     // Rewind a namespace map.
     if (pRewindMap)
-        mpNamespaceMap = std::move(pRewindMap);
+        mxNamespaceMap = std::move(pRewindMap);
 }
 
 void SAL_CALL SvXMLImport::endUnknownElement (const OUString & rPrefix, const OUString & rLocalName)
@@ -2158,9 +2158,9 @@ void SAL_CALL SvXMLLegacyToFastDocHandler::startElement( const OUString& rName,
     sal_uInt16 nDefaultNamespace = XML_NAMESPACE_UNKNOWN;
     if (!maDefaultNamespaces.empty())
         nDefaultNamespace = maDefaultNamespaces.top();
-    SvXMLImport::processNSAttributes(mrImport->mpNamespaceMap, mrImport.get(), xAttrList);
+    SvXMLImport::processNSAttributes(mrImport->mxNamespaceMap, mrImport.get(), xAttrList);
     OUString aLocalName;
-    sal_uInt16 nPrefix = mrImport->mpNamespaceMap->GetKeyByAttrName( rName, &aLocalName );
+    sal_uInt16 nPrefix = mrImport->mxNamespaceMap->GetKeyByAttrName( rName, &aLocalName );
     sal_Int32 mnElement = NAMESPACE_TOKEN( nPrefix ) | SvXMLImport::getTokenFromName( aLocalName );
     mxFastAttributes->clear();
 
@@ -2171,7 +2171,7 @@ void SAL_CALL SvXMLLegacyToFastDocHandler::startElement( const OUString& rName,
         const OUString& rAttrValue = xAttrList->getValueByIndex( i );
         if (rAttrName == "xmlns")
         {
-            sal_uInt16 nNamespaceKey = mrImport->mpNamespaceMap->GetKeyByName(rAttrValue);
+            sal_uInt16 nNamespaceKey = mrImport->mxNamespaceMap->GetKeyByName(rAttrValue);
             if (nNamespaceKey != XML_NAMESPACE_UNKNOWN)
             {
                 nDefaultNamespace = nNamespaceKey;
@@ -2184,7 +2184,7 @@ void SAL_CALL SvXMLLegacyToFastDocHandler::startElement( const OUString& rName,
             auto const nToken = SvXMLImport::getTokenFromName(rAttrName);
             if (nToken == xmloff::XML_TOKEN_INVALID)
             {
-                mxFastAttributes->addUnknown(mrImport->mpNamespaceMap->GetNameByKey(nDefaultNamespace),
+                mxFastAttributes->addUnknown(mrImport->mxNamespaceMap->GetNameByKey(nDefaultNamespace),
                     OUStringToOString(rAttrName, RTL_TEXTENCODING_UTF8),
                     OUStringToOString(rAttrValue, RTL_TEXTENCODING_UTF8));
             }
@@ -2199,7 +2199,7 @@ void SAL_CALL SvXMLLegacyToFastDocHandler::startElement( const OUString& rName,
         OUString aLocalAttrName;
         OUString aNamespace;
         // don't add unknown namespaces to the map
-        sal_uInt16 const nAttrPrefix = mrImport->mpNamespaceMap->GetKeyByQName(
+        sal_uInt16 const nAttrPrefix = mrImport->mxNamespaceMap->GetKeyByQName(
                 rAttrName, nullptr, &aLocalAttrName, &aNamespace, SvXMLNamespaceMap::QNameMode::AttrValue);
         if( XML_NAMESPACE_XMLNS == nAttrPrefix )
             continue; // ignore
@@ -2223,7 +2223,7 @@ void SAL_CALL SvXMLLegacyToFastDocHandler::startElement( const OUString& rName,
 void SAL_CALL SvXMLLegacyToFastDocHandler::endElement( const OUString& rName )
 {
     OUString aLocalName;
-    sal_uInt16 nPrefix = mrImport->mpNamespaceMap->GetKeyByAttrName( rName, &aLocalName );
+    sal_uInt16 nPrefix = mrImport->mxNamespaceMap->GetKeyByAttrName( rName, &aLocalName );
     sal_Int32 mnElement = NAMESPACE_TOKEN( nPrefix ) | SvXMLImport::getTokenFromName(aLocalName);
     mrImport->endFastElement( mnElement );
     maDefaultNamespaces.pop();
