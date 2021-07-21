@@ -373,6 +373,48 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf99913)
     CPPUNIT_ASSERT(pDoc->RowFiltered(2, 0));
 }
 
+<<<<<<< HEAD   (3da4f4 tdf#143510 DOCX import: fix tracked table drag & drop)
+=======
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf126540_GridToggleModifiesTheDocument)
+{
+    ScModelObj* pModelObj = createDoc("tdf99913.xlsx");
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    // Toggling the grid of a sheet, must set the document modified state
+    ScDocShell* pDocSh = ScDocShell::GetViewData()->GetDocShell();
+    CPPUNIT_ASSERT(!pDocSh->IsModified());
+    dispatchCommand(mxComponent, ".uno:ToggleSheetGrid", {});
+    CPPUNIT_ASSERT(pDocSh->IsModified());
+}
+
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf126926)
+{
+    mxComponent = loadFromDesktop("private:factory/scalc");
+    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    CPPUNIT_ASSERT(pModelObj);
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    insertStringToCell(*pModelObj, "A1", "1");
+    insertStringToCell(*pModelObj, "A2", "2");
+    insertStringToCell(*pModelObj, "B1", "3");
+    insertStringToCell(*pModelObj, "B2", "4");
+
+    ScDBData* pDBData = new ScDBData("testDB", 0, 0, 0, 1, 1);
+    bool bInserted
+        = pDoc->GetDBCollection()->getNamedDBs().insert(std::unique_ptr<ScDBData>(pDBData));
+    CPPUNIT_ASSERT(bInserted);
+
+    goToCell("A1:B1");
+
+    dispatchCommand(mxComponent, ".uno:DeleteColumns", {});
+
+    ScDBCollection* pDBs = pDoc->GetDBCollection();
+    CPPUNIT_ASSERT(pDBs->empty());
+}
+
+>>>>>>> CHANGE (0c0444 tdf#126926 sc DBData: delete the database range)
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
