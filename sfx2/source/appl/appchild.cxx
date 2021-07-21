@@ -30,11 +30,11 @@
 #include <sfx2/viewfrm.hxx>
 
 
-void SfxApplication::RegisterChildWindow_Impl( SfxModule *pMod, std::unique_ptr<SfxChildWinFactory> pFact )
+void SfxApplication::RegisterChildWindow_Impl( SfxModule *pMod, const SfxChildWinFactory& rFact )
 {
     if ( pMod )
     {
-        pMod->RegisterChildWindow( std::move(pFact) );
+        pMod->RegisterChildWindow( rFact );
         return;
     }
 
@@ -43,13 +43,13 @@ void SfxApplication::RegisterChildWindow_Impl( SfxModule *pMod, std::unique_ptr<
 
     for (size_t nFactory=0; nFactory<pImpl->pFactArr->size(); ++nFactory)
     {
-        if (pFact->nId ==  (*pImpl->pFactArr)[nFactory].nId)
+        if (rFact.nId == (*pImpl->pFactArr)[nFactory].nId)
         {
             pImpl->pFactArr->erase( pImpl->pFactArr->begin() + nFactory );
         }
     }
 
-    pImpl->pFactArr->push_back( std::move(pFact) );
+    pImpl->pFactArr->push_back( rFact );
 }
 
 SfxChildWinFactArr_Impl& SfxApplication::GetChildWinFactories_Impl() const

@@ -107,7 +107,7 @@ SfxSlotPool* SfxModule::GetSlotPool() const
 }
 
 
-void SfxModule::RegisterChildWindow(std::unique_ptr<SfxChildWinFactory> pFact)
+void SfxModule::RegisterChildWindow(const SfxChildWinFactory& rFact)
 {
     DBG_ASSERT( pImpl, "No real Module!" );
 
@@ -116,7 +116,7 @@ void SfxModule::RegisterChildWindow(std::unique_ptr<SfxChildWinFactory> pFact)
 
     for (size_t nFactory=0; nFactory<pImpl->pFactArr->size(); ++nFactory)
     {
-        if (pFact->nId ==  (*pImpl->pFactArr)[nFactory].nId)
+        if (rFact.nId == (*pImpl->pFactArr)[nFactory].nId)
         {
             pImpl->pFactArr->erase( pImpl->pFactArr->begin() + nFactory );
             SAL_WARN("sfx.appl", "ChildWindow registered multiple times!");
@@ -124,7 +124,7 @@ void SfxModule::RegisterChildWindow(std::unique_ptr<SfxChildWinFactory> pFact)
         }
     }
 
-    pImpl->pFactArr->push_back( std::move(pFact) );
+    pImpl->pFactArr->push_back( rFact );
 }
 
 

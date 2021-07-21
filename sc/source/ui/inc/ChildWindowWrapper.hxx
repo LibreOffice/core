@@ -49,10 +49,10 @@ public:
                     SfxModule* pModule  = nullptr,
                     SfxChildWindowFlags nFlags = SfxChildWindowFlags::NONE)
     {
-        auto pFactory = std::make_unique<SfxChildWinFactory>(ChildControllerWrapper::CreateImpl, WindowID, CHILDWIN_NOPOS );
-        pFactory->aInfo.nFlags |= nFlags;
-        pFactory->aInfo.bVisible = bVisible;
-        SfxChildWindow::RegisterChildWindow(pModule, std::move(pFactory));
+        SfxChildWinFactory aFactory(ChildControllerWrapper::CreateImpl, WindowID, CHILDWIN_NOPOS );
+        aFactory.aInfo.nFlags |= nFlags;
+        aFactory.aInfo.bVisible = bVisible;
+        SfxChildWindow::RegisterChildWindow(pModule, aFactory);
     }
 
     static sal_uInt16 GetChildWindowId()
