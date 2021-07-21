@@ -235,7 +235,7 @@ void EditTextObjectImpl::dumpAsXml(xmlTextWriterPtr pWriter) const
     sal_Int32 nCount = GetParagraphCount();
     for (sal_Int32 i = 0; i < nCount; ++i)
     {
-        aContents[i]->dumpAsXml(pWriter);
+        maContents[i]->dumpAsXml(pWriter);
     }
     (void)xmlTextWriterEndElement(pWriter);
 
@@ -249,7 +249,7 @@ void EditTextObjectImpl::dumpAsXml(xmlTextWriterPtr pWriter) const
 #if DEBUG_EDIT_ENGINE
 void EditTextObjectImpl::Dump() const
 {
-    for (auto const& content : aContents)
+    for (auto const& content : maContents)
         content.Dump();
 }
 #endif
@@ -272,11 +272,11 @@ static EditEngineItemPool* getEditEngineItemPool(SfxItemPool* pPool)
 }
 
 EditTextObjectImpl::EditTextObjectImpl( SfxItemPool* pP )
-    : nMetric(0xFFFF)
-    , nUserType(OutlinerMode::DontKnow)
-    , nScriptType(SvtScriptType::NONE)
-    , bVertical(false)
-    , mnRotation(TextRotation::NONE)
+    : meUserType(OutlinerMode::DontKnow)
+    , meScriptType(SvtScriptType::NONE)
+    , meRotation(TextRotation::NONE)
+    , mnMetric(0xFFFF)
+    , mbVertical(false)
 {
     // #i101239# ensure target is an EditEngineItemPool, else
     // fallback to pool ownership. This is needed to ensure that at
@@ -284,49 +284,49 @@ EditTextObjectImpl::EditTextObjectImpl( SfxItemPool* pP )
     // When registering would happen at an alien pool which just uses an
     // EditEngineItemPool as some sub-pool, that pool could already
     // be decoupled and deleted which would lead to crashes.
-    pPool = getEditEngineItemPool(pP);
+    mpPool = getEditEngineItemPool(pP);
 
-    if ( pPool )
+    if ( mpPool )
     {
-        bOwnerOfPool = false;
+        mbOwnerOfPool = false;
     }
     else
     {
-        pPool = EditEngine::CreatePool();
-        bOwnerOfPool =  true;
+        mpPool = EditEngine::CreatePool();
+        mbOwnerOfPool =  true;
     }
 }
 
 EditTextObjectImpl::EditTextObjectImpl( const EditTextObjectImpl& r )
-    : nMetric(r.nMetric)
-    , nUserType(r.nUserType)
-    , nScriptType(r.nScriptType)
-    , bVertical(r.bVertical)
-    , mnRotation(r.mnRotation)
+    : meUserType(r.meUserType)
+    , meScriptType(r.meScriptType)
+    , meRotation(r.meRotation)
+    , mnMetric(r.mnMetric)
+    , mbVertical(r.mbVertical)
 {
     // Do not copy PortionInfo
 
-    if ( !r.bOwnerOfPool )
+    if ( !r.mbOwnerOfPool )
     {
         // reuse alien pool; this must be an EditEngineItemPool
         // since there is no other way to construct a BinTextObject
         // than it's regular constructor where that is ensured
-        pPool = r.pPool;
-        bOwnerOfPool = false;
+        mpPool = r.mpPool;
+        mbOwnerOfPool = false;
     }
     else
     {
-        pPool = EditEngine::CreatePool();
-        bOwnerOfPool = true;
+        mpPool = EditEngine::CreatePool();
+        mbOwnerOfPool = true;
 
     }
 
-    if (bOwnerOfPool && r.pPool)
-        pPool->SetDefaultMetric( r.pPool->GetMetric( DEF_METRIC ) );
+    if (mbOwnerOfPool && r.mpPool)
+        mpPool->SetDefaultMetric( r.mpPool->GetMetric( DEF_METRIC ) );
 
-    aContents.reserve(r.aContents.size());
-    for (auto const& content : r.aContents)
-        aContents.push_back(std::unique_ptr<ContentInfo>(new ContentInfo(*content, *pPool)));
+    maContents.reserve(r.maContents.size());
+    for (auto const& content : r.maContents)
+        maContents.push_back(std::unique_ptr<ContentInfo>(new ContentInfo(*content, *mpPool)));
 }
 
 EditTextObjectImpl::~EditTextObjectImpl()
@@ -335,18 +335,18 @@ EditTextObjectImpl::~EditTextObjectImpl()
 
     // Remove contents before deleting the pool instance since each content
     // has to access the pool instance in its destructor.
-    aContents.clear();
+    maContents.clear();
 }
 
 
 void EditTextObjectImpl::SetUserType( OutlinerMode n )
 {
-    nUserType = n;
+    meUserType = n;
 }
 
 void EditTextObjectImpl::NormalizeString( svl::SharedStringPool& rPool )
 {
-    for (auto const& content : aContents)
+    for (auto const& content : maContents)
     {
         ContentInfo& rInfo = *content;
         rInfo.NormalizeString(rPool);
@@ -356,8 +356,8 @@ void EditTextObjectImpl::NormalizeString( svl::SharedStringPool& rPool )
 std::vector<svl::SharedString> EditTextObjectImpl::GetSharedStrings() const
 {
     std::vector<svl::SharedString> aSSs;
-    aSSs.reserve(aContents.size());
-    for (auto const& content : aContents)
+    aSSs.reserve(maContents.size());
+    for (auto const& content : maContents)
     {
         const ContentInfo& rInfo = *content;
         aSSs.push_back(rInfo.GetSharedString());
@@ -367,70 +367,70 @@ std::vector<svl::SharedString> EditTextObjectImpl::GetSharedStrings() const
 
 bool EditTextObjectImpl::IsVertical() const
 {
-    return (bVertical && mnRotation == TextRotation::NONE) ||
-        (!bVertical && mnRotation != TextRotation::NONE);
+    return (mbVertical && meRotation == TextRotation::NONE) ||
+        (!mbVertical && meRotation != TextRotation::NONE);
 }
 
 bool EditTextObjectImpl::IsTopToBottom() const
 {
-    return (bVertical && mnRotation == TextRotation::NONE) ||
-        (!bVertical && mnRotation == TextRotation::TOPTOBOTTOM);
+    return (mbVertical && meRotation == TextRotation::NONE) ||
+        (!mbVertical && meRotation == TextRotation::TOPTOBOTTOM);
 }
 
 void EditTextObjectImpl::SetVertical( bool bVert)
 {
-    if (bVert != bVertical)
+    if (bVert != mbVertical)
     {
-        bVertical = bVert;
+        mbVertical = bVert;
         ClearPortionInfo();
     }
 }
 
 bool EditTextObjectImpl::GetDirectVertical() const
 {
-    return bVertical;
+    return mbVertical;
 }
 
 void EditTextObjectImpl::SetRotation(TextRotation nRotation)
 {
-    if (mnRotation != nRotation)
+    if (meRotation != nRotation)
     {
-        mnRotation = nRotation;
+        meRotation = nRotation;
         ClearPortionInfo();
     }
 }
 
 TextRotation EditTextObjectImpl::GetRotation() const
 {
-    return mnRotation;
+    return meRotation;
 }
 
 
 void EditTextObjectImpl::SetScriptType( SvtScriptType nType )
 {
-    nScriptType = nType;
+    meScriptType = nType;
 }
 
 XEditAttribute EditTextObjectImpl::CreateAttrib( const SfxPoolItem& rItem, sal_Int32 nStart, sal_Int32 nEnd )
 {
-    return MakeXEditAttribute( *pPool, rItem, nStart, nEnd );
+    return MakeXEditAttribute( *mpPool, rItem, nStart, nEnd );
 }
 
 void EditTextObjectImpl::DestroyAttrib( const XEditAttribute& rAttr )
 {
-    pPool->Remove( *rAttr.GetItem() );
+    mpPool->Remove( *rAttr.GetItem() );
 }
 
 
 ContentInfo* EditTextObjectImpl::CreateAndInsertContent()
 {
-    aContents.push_back(std::unique_ptr<ContentInfo>(new ContentInfo(*pPool)));
-    return aContents.back().get();
+    maContents.push_back(std::unique_ptr<ContentInfo>(new ContentInfo(*mpPool)));
+    return maContents.back().get();
 }
 
 sal_Int32 EditTextObjectImpl::GetParagraphCount() const
 {
-    size_t nSize = aContents.size();
+    size_t nSize = maContents.size();
     if (nSize > EE_PARA_MAX_COUNT)
     {
         SAL_WARN( "editeng", "EditTextObjectImpl::GetParagraphCount - overflow " << nSize);
@@ -441,20 +441,20 @@ sal_Int32 EditTextObjectImpl::GetParagraphCount() const
 
 OUString EditTextObjectImpl::GetText(sal_Int32 nPara) const
 {
-    if (nPara < 0 || o3tl::make_unsigned(nPara) >= aContents.size())
+    if (nPara < 0 || o3tl::make_unsigned(nPara) >= maContents.size())
         return OUString();
 
-    return aContents[nPara]->GetText();
+    return maContents[nPara]->GetText();
 }
 
 void EditTextObjectImpl::ClearPortionInfo()
 {
-    pPortionInfo.reset();
+    mpPortionInfo.reset();
 }
 
 bool EditTextObjectImpl::HasOnlineSpellErrors() const
 {
-    for (auto const& content : aContents)
+    for (auto const& content : maContents)
     {
         if ( content->GetWrongList() && !content->GetWrongList()->empty() )
             return true;
@@ -464,11 +464,11 @@ bool EditTextObjectImpl::HasOnlineSpellErrors() const
 
 void EditTextObjectImpl::GetCharAttribs( sal_Int32 nPara, std::vector<EECharAttrib>& rLst ) const
 {
-    if (nPara < 0 || o3tl::make_unsigned(nPara) >= aContents.size())
+    if (nPara < 0 || o3tl::make_unsigned(nPara) >= maContents.size())
         return;
 
     rLst.clear();
-    const ContentInfo& rC = *aContents[nPara];
+    const ContentInfo& rC = *maContents[nPara];
     for (const XEditAttribute & rAttr : rC.maCharAttribs)
     {
         EECharAttrib aEEAttr(rAttr.GetStart(), rAttr.GetEnd(), rAttr.GetItem());
@@ -483,9 +483,9 @@ bool EditTextObjectImpl::IsFieldObject() const
 
 const SvxFieldItem* EditTextObjectImpl::GetField() const
 {
-    if (aContents.size() == 1)
+    if (maContents.size() == 1)
     {
-        const ContentInfo& rC = *aContents[0];
+        const ContentInfo& rC = *maContents[0];
         if (rC.GetText().getLength() == 1)
         {
             size_t nAttribs = rC.maCharAttribs.size();
@@ -502,10 +502,10 @@ const SvxFieldItem* EditTextObjectImpl::GetField() const
 
 const SvxFieldData* EditTextObjectImpl::GetFieldData(sal_Int32 nPara, size_t nPos, sal_Int32 nType) const
 {
-    if (nPara < 0 || o3tl::make_unsigned(nPara) >= aContents.size())
+    if (nPara < 0 || o3tl::make_unsigned(nPara) >= maContents.size())
         return nullptr;
 
-    const ContentInfo& rC = *aContents[nPara];
+    const ContentInfo& rC = *maContents[nPara];
     if (nPos >= rC.maCharAttribs.size())
         // URL position is out-of-bound.
         return nullptr;
@@ -535,10 +535,10 @@ const SvxFieldData* EditTextObjectImpl::GetFieldData(sal_Int32 nPara, size_t nPo
 
 bool EditTextObjectImpl::HasField( sal_Int32 nType ) const
 {
-    size_t nParagraphs = aContents.size();
+    size_t nParagraphs = maContents.size();
     for (size_t nPara = 0; nPara < nParagraphs; ++nPara)
     {
-        const ContentInfo& rC = *aContents[nPara];
+        const ContentInfo& rC = *maContents[nPara];
         size_t nAttrs = rC.maCharAttribs.size();
         for (size_t nAttr = 0; nAttr < nAttrs; ++nAttr)
         {
@@ -560,7 +560,7 @@ bool EditTextObjectImpl::HasField( sal_Int32 nType ) const
 
 const SfxItemSet& EditTextObjectImpl::GetParaAttribs(sal_Int32 nPara) const
 {
-    const ContentInfo& rC = *aContents[nPara];
+    const ContentInfo& rC = *maContents[nPara];
     return rC.GetParaAttribs();
 }
 
@@ -568,16 +568,16 @@ bool EditTextObjectImpl::RemoveCharAttribs( sal_uInt16 _nWhich )
 {
     bool bChanged = false;
 
-    for ( size_t nPara = aContents.size(); nPara; )
+    for ( size_t nPara = maContents.size(); nPara; )
     {
-        ContentInfo& rC = *aContents[--nPara];
+        ContentInfo& rC = *maContents[--nPara];
 
         for (size_t nAttr = rC.maCharAttribs.size(); nAttr; )
         {
             XEditAttribute& rAttr = rC.maCharAttribs[--nAttr];
             if ( !_nWhich || (rAttr.GetItem()->Which() == _nWhich) )
             {
-                pPool->Remove(*rAttr.GetItem());
+                mpPool->Remove(*rAttr.GetItem());
                 rC.maCharAttribs.erase(rC.maCharAttribs.begin()+nAttr);
                 bChanged = true;
             }
@@ -620,13 +620,13 @@ public:
 void EditTextObjectImpl::GetAllSections( std::vector<editeng::Section>& rAttrs ) const
 {
     std::vector<editeng::Section> aAttrs;
-    aAttrs.reserve(aContents.size());
+    aAttrs.reserve(maContents.size());
     std::vector<size_t> aBorders;
 
-    for (size_t nPara = 0; nPara < aContents.size(); ++nPara)
+    for (size_t nPara = 0; nPara < maContents.size(); ++nPara)
     {
         aBorders.clear();
-        const ContentInfo& rC = *aContents[nPara];
+        const ContentInfo& rC = *maContents[nPara];
         aBorders.push_back(0);
         aBorders.push_back(rC.GetText().getLength());
         for (const XEditAttribute & rAttr : rC.maCharAttribs)
@@ -670,9 +670,9 @@ void EditTextObjectImpl::GetAllSections( std::vector<editeng::Section>& rAttrs )
 
     // Go through all formatted paragraphs, and store format items.
     std::vector<editeng::Section>::iterator itAttr = aAttrs.begin();
-    for (sal_Int32 nPara = 0; nPara < static_cast<sal_Int32>(aContents.size()); ++nPara)
+    for (sal_Int32 nPara = 0; nPara < static_cast<sal_Int32>(maContents.size()); ++nPara)
     {
-        const ContentInfo& rC = *aContents[nPara];
+        const ContentInfo& rC = *maContents[nPara];
 
         itAttr = std::find_if(itAttr, aAttrs.end(), FindByParagraph(nPara));
         if (itAttr == aAttrs.end())
@@ -722,20 +722,20 @@ void EditTextObjectImpl::GetAllSections( std::vector<editeng::Section>& rAttrs )
 
 void EditTextObjectImpl::GetStyleSheet(sal_Int32 nPara, OUString& rName, SfxStyleFamily& rFamily) const
 {
-    if (nPara < 0 || o3tl::make_unsigned(nPara) >= aContents.size())
+    if (nPara < 0 || o3tl::make_unsigned(nPara) >= maContents.size())
         return;
 
-    const ContentInfo& rC = *aContents[nPara];
+    const ContentInfo& rC = *maContents[nPara];
     rName = rC.GetStyle();
     rFamily = rC.GetFamily();
 }
 
 void EditTextObjectImpl::SetStyleSheet(sal_Int32 nPara, const OUString& rName, const SfxStyleFamily& rFamily)
 {
-    if (nPara < 0 || o3tl::make_unsigned(nPara) >= aContents.size())
+    if (nPara < 0 || o3tl::make_unsigned(nPara) >= maContents.size())
         return;
 
-    ContentInfo& rC = *aContents[nPara];
+    ContentInfo& rC = *maContents[nPara];
     rC.SetStyle(rName);
     rC.SetFamily(rFamily);
 }
@@ -744,12 +744,12 @@ bool EditTextObjectImpl::ImpChangeStyleSheets(
                     std::u16string_view rOldName, SfxStyleFamily eOldFamily,
                     const OUString& rNewName, SfxStyleFamily eNewFamily )
 {
-    const size_t nParagraphs = aContents.size();
+    const size_t nParagraphs = maContents.size();
     bool bChanges = false;
 
     for (size_t nPara = 0; nPara < nParagraphs; ++nPara)
     {
-        ContentInfo& rC = *aContents[nPara];
+        ContentInfo& rC = *maContents[nPara];
         if ( rC.GetFamily() == eOldFamily )
         {
             if ( rC.GetStyle() == rOldName )
@@ -790,16 +790,16 @@ bool EditTextObjectImpl::Equals( const EditTextObjectImpl& rCompare, bool bCompa
     if( this == &rCompare )
         return true;
 
-    if(     ( bComparePool && pPool != rCompare.pPool ) ||
-            ( nMetric != rCompare.nMetric ) ||
-            ( nUserType!= rCompare.nUserType ) ||
-            ( nScriptType != rCompare.nScriptType ) ||
-            ( bVertical != rCompare.bVertical ) ||
-            ( mnRotation != rCompare.mnRotation ) )
+    if(     ( bComparePool && mpPool != rCompare.mpPool ) ||
+            ( mnMetric != rCompare.mnMetric ) ||
+            ( meUserType!= rCompare.meUserType ) ||
+            ( meScriptType != rCompare.meScriptType ) ||
+            ( mbVertical != rCompare.mbVertical ) ||
+            ( meRotation != rCompare.meRotation ) )
         return false;
 
     return std::equal(
-        aContents.begin(), aContents.end(), rCompare.aContents.begin(), rCompare.aContents.end(),
+        maContents.begin(), maContents.end(), rCompare.maContents.begin(), rCompare.maContents.end(),
         [bComparePool](const auto& c1, const auto& c2) { return c1->Equals(*c2, bComparePool); });
 }
 
@@ -808,7 +808,7 @@ bool EditTextObjectImpl::isWrongListEqual(const EditTextObject& rComp) const
 {
     const EditTextObjectImpl& rCompare = static_cast<const EditTextObjectImpl&>(rComp);
     return std::equal(
-        aContents.begin(), aContents.end(), rCompare.aContents.begin(), rCompare.aContents.end(),
+        maContents.begin(), maContents.end(), rCompare.maContents.begin(), rCompare.maContents.end(),
         [](const auto& c1, const auto& c2) { return c1->isWrongListEqual(*c2); });
 }
 
