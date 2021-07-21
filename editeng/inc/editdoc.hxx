@@ -756,9 +756,9 @@ public:
     sal_uInt16      GetDefTab() const           { return nDefTab; }
 
     void            SetVertical( bool bVertical )   { bIsVertical = bVertical; }
-    bool            IsVertical() const;
+    bool            IsEffectivelyVertical() const;
     bool            IsTopToBottom() const;
-    bool            GetDirectVertical() const;
+    bool            GetVertical() const;
     void            SetRotation( TextRotation nRotation )   { mnRotation = nRotation; }
     TextRotation    GetRotation() const                     { return mnRotation; }
 

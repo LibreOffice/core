@@ -1586,7 +1586,7 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
     bool bBreak = ( eJust == SvxCellHorJustify::Block ) ||
                     pPattern->GetItem(ATTR_LINEBREAK).GetValue();
 
-    bool bAsianVertical = pNewEngine->IsVertical();     // set by InputHandler
+    bool bAsianVertical = pNewEngine->IsEffectivelyVertical();     // set by InputHandler
 
     tools::Rectangle aPixRect = ScEditUtil(&mrDoc, nNewX, nNewY, nTabNo, GetScrPos(nNewX, nNewY, eWhich),
                                         pWin->GetOutDev(), nPPTX,nPPTY,GetZoomX(),GetZoomY() ).
@@ -1879,7 +1879,7 @@ void ScViewData::EditGrowX()
     tools::Long nTextWidth = pEngine->CalcTextWidth();
 
     bool bChanged = false;
-    bool bAsianVertical = pEngine->IsVertical();
+    bool bAsianVertical = pEngine->IsEffectivelyVertical();
 
     //  get bGrow... variables the same way as in SetEditEngine
     const ScPatternAttr* pPattern = rLocalDoc.GetPattern( nEditCol, nEditRow, nTabNo );

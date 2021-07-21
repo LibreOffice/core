@@ -87,8 +87,8 @@ public:
     void SetOutlinerMode(OutlinerMode nNew);
 
     // vertical access
-    bool IsVertical() const;
-    bool GetDirectVertical() const;
+    bool IsEffectivelyVertical() const;
+    bool GetVertical() const;
     bool IsTopToBottom() const;
     void SetVertical(bool bNew);
     void SetRotation(TextRotation nRotation);

@@ -529,7 +529,7 @@ void Outliner::SetRotation(TextRotation nRotation)
 
 bool Outliner::IsVertical() const
 {
-    return pEditEngine->IsVertical();
+    return pEditEngine->IsEffectivelyVertical();
 }
 
 bool Outliner::IsTopToBottom() const

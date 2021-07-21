@@ -365,7 +365,7 @@ std::vector<svl::SharedString> EditTextObjectImpl::GetSharedStrings() const
     return aSSs;
 }
 
-bool EditTextObjectImpl::IsVertical() const
+bool EditTextObjectImpl::IsEffectivelyVertical() const
 {
     return (mbVertical && meRotation == TextRotation::NONE) ||
         (!mbVertical && meRotation != TextRotation::NONE);
@@ -386,7 +386,7 @@ void EditTextObjectImpl::SetVertical( bool bVert)
     }
 }
 
-bool EditTextObjectImpl::GetDirectVertical() const
+bool EditTextObjectImpl::GetVertical() const
 {
     return mbVertical;
 }

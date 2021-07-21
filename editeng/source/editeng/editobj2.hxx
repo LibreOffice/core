@@ -199,8 +199,8 @@ public:
     virtual void NormalizeString( svl::SharedStringPool& rPool ) override;
     virtual std::vector<svl::SharedString> GetSharedStrings() const override;
 
-    virtual bool                    IsVertical() const override;
-    virtual bool                    GetDirectVertical() const override;
+    virtual bool                    IsEffectivelyVertical() const override;
+    virtual bool                    GetVertical() const override;
     virtual bool                    IsTopToBottom() const override;
     virtual void                    SetVertical( bool bVert) override;
     virtual void                    SetRotation(TextRotation nRotation) override;

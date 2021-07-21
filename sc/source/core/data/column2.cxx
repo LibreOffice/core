@@ -470,7 +470,7 @@ tools::Long ScColumn::GetNeededSize(
                 pEngine->SetDefaults(std::move(pSet));
         }
 
-        bool bEngineVertical = pEngine->IsVertical();
+        bool bEngineVertical = pEngine->IsEffectivelyVertical();
         pEngine->SetVertical( bAsianVertical );
         pEngine->SetUpdateMode( true );
 

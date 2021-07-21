@@ -237,9 +237,9 @@ public:
     const Size&     GetPaperSize() const;
 
     void            SetVertical( bool bVertical );
-    bool            IsVertical() const;
+    bool            IsEffectivelyVertical() const;
     bool            IsTopToBottom() const;
-    bool            GetDirectVertical() const;
+    bool            GetVertical() const;
     void            SetRotation(TextRotation nRotation);
     TextRotation    GetRotation() const;
 

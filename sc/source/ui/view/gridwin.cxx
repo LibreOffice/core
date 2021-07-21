@@ -2574,7 +2574,7 @@ void ScGridWindow::MouseMove( const MouseEvent& rMEvt )
             bool bAlt = rMEvt.IsMod2();
             if ( !bAlt && !nButtonDown && ScGlobal::ShouldOpenURL() && pFld )
                 SetPointer( PointerStyle::RefHand );
-            else if ( pEditView->GetEditEngine()->IsVertical() )
+            else if ( pEditView->GetEditEngine()->IsEffectivelyVertical() )
                 SetPointer( PointerStyle::TextVertical );
             else
                 SetPointer( PointerStyle::Text );
@@ -3172,7 +3172,7 @@ void ScGridWindow::SelectForContextMenu( const Point& rPosPixel, SCCOL nCellX, S
             tools::Rectangle aVisArea = pEditView->GetVisArea();
 
             Point aTextPos = PixelToLogic( rPosPixel );
-            if ( pEditEngine->IsVertical() )            // have to manually transform position
+            if ( pEditEngine->IsEffectivelyVertical() )            // have to manually transform position
             {
                 aTextPos -= aOutputArea.TopRight();
                 tools::Long nTemp = -aTextPos.X();

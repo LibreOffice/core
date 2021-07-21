@@ -515,7 +515,7 @@ include/drawinglayer/primitive3d/baseprimitive3d.hxx:112
 include/drawinglayer/tools/primitive2dxmldump.hxx:45
     void drawinglayer::Primitive2dXmlDump::dump(const class drawinglayer::primitive2d::Primitive2DContainer &,const class rtl::OUString &)
 include/editeng/editeng.hxx:241
-    _Bool EditEngine::GetDirectVertical() const
+    _Bool EditEngine::GetVertical() const
 include/editeng/editeng.hxx:243
     enum TextRotation EditEngine::GetRotation() const
 include/editeng/editeng.hxx:472

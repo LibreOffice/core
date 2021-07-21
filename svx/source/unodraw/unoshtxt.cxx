@@ -565,7 +565,7 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
         }
         else
         {
-            bool bVertical = pOutlinerParaObject && pOutlinerParaObject->IsVertical();
+            bool bVertical = pOutlinerParaObject && pOutlinerParaObject->IsEffectivelyVertical();
 
             // set objects style sheet on empty outliner
             SfxStyleSheetPool* pPool = static_cast<SfxStyleSheetPool*>(mpObject->getSdrModelFromSdrObject().GetStyleSheetPool());
@@ -578,7 +578,7 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
 
             if( bVertical )
             {
-                mpOutliner->SetVertical( pOutlinerParaObject->GetDirectVertical());
+                mpOutliner->SetVertical( pOutlinerParaObject->GetVertical());
                 mpOutliner->SetRotation( pOutlinerParaObject->GetRotation());
             }
         }
