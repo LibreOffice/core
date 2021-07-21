@@ -34,6 +34,24 @@
       "revId": "8b67c91b16d9257ff276624a455cc14bb1f9a7d2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d21de638_e18b210b",
+        "filename": "sw/qa/extras/uiwriter/uiwriter4.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1854,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-07-21T08:54:30Z",
+      "side": 1,
+      "message": "yes, it will increase but that doesn\u0027t mean you can\u0027t use CPPUNIT_ASSERT_EQUAL, isn\u0027t it ?",
+      "parentUuid": "9c08f8c5_e071a1e1",
+      "revId": "8b67c91b16d9257ff276624a455cc14bb1f9a7d2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
