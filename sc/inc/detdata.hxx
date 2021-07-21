@@ -42,9 +42,6 @@ public:
                         ScDetOpData( const ScAddress& rP, ScDetOpType eOp ) :
                             aPos(rP), eOperation(eOp) {}
 
-                        ScDetOpData( const ScDetOpData& rData ) :
-                            aPos(rData.aPos), eOperation(rData.eOperation) {}
-
     const ScAddress&    GetPos() const          { return aPos; }
     ScDetOpType         GetOperation() const    { return eOperation; }
 
@@ -57,7 +54,7 @@ public:
 
 //  list of operators
 
-typedef std::vector<std::unique_ptr<ScDetOpData>> ScDetOpDataVector;
+typedef std::vector<ScDetOpData> ScDetOpDataVector;
 
 class ScDetOpList
 {
@@ -74,7 +71,7 @@ public:
 
     bool        operator==( const ScDetOpList& r ) const;       // for ref-undo
 
-    void        Append( ScDetOpData* pData );
+    void        Append( const ScDetOpData& );
     ScDetOpDataVector&  GetDataVector() { return aDetOpDataVector; }
     const ScDetOpData& GetObject( size_t nPos ) const;
 
