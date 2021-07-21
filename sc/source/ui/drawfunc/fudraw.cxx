@@ -163,7 +163,7 @@ static bool lcl_KeyEditMode( SdrObject* pObj, ScTabViewShell& rViewShell, const 
         // but with bCursorToEnd instead of mouse position
 
         OutlinerParaObject* pOPO = pObj->GetOutlinerParaObject();
-        bool bVertical = ( pOPO && pOPO->IsVertical() );
+        bool bVertical = ( pOPO && pOPO->IsEffectivelyVertical() );
         sal_uInt16 nTextSlotId = bVertical ? SID_DRAW_TEXT_VERTICAL : SID_DRAW_TEXT;
 
         // don't switch shells if text shell is already active

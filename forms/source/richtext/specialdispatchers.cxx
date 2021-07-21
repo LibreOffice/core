@@ -93,7 +93,7 @@ namespace frm
 
         EditEngine* pEngine = getEditView() ? getEditView()->GetEditEngine() : nullptr;
         OSL_ENSURE( pEngine, "OParagraphDirectionDispatcher::dispatch: no edit engine - but not yet disposed?" );
-        if ( pEngine && pEngine->IsVertical() )
+        if ( pEngine && pEngine->IsEffectivelyVertical() )
             aEvent.IsEnabled = false;
 
         return aEvent;
@@ -117,7 +117,7 @@ namespace frm
         if ( !pEngine )
             return;
 
-        pEngine->SetVertical( !pEngine->IsVertical() );
+        pEngine->SetVertical( !pEngine->IsEffectivelyVertical() );
     }
 
 
@@ -129,7 +129,7 @@ namespace frm
         OSL_ENSURE( pEngine, "OTextDirectionDispatcher::dispatch: no edit engine - but not yet disposed?" );
 
         aEvent.IsEnabled = true;
-        aEvent.State <<= pEngine && pEngine->IsVertical();
+        aEvent.State <<= pEngine && pEngine->IsEffectivelyVertical();
 
         return aEvent;
     }

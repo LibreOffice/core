@@ -72,8 +72,8 @@ public:
     virtual OutlinerMode GetUserType() const = 0;    // For OutlinerMode, it can however not save in compatible format
     virtual void SetUserType( OutlinerMode n ) = 0;
 
-    virtual bool IsVertical() const = 0;
-    virtual bool GetDirectVertical() const = 0;
+    virtual bool IsEffectivelyVertical() const = 0;
+    virtual bool GetVertical() const = 0;
     virtual bool IsTopToBottom() const = 0;
     virtual void SetVertical( bool bVertical ) = 0;
     virtual void SetRotation( TextRotation nRotation ) = 0;

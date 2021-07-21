@@ -213,7 +213,7 @@ void EditEngine::Draw( OutputDevice& rOutDev, const Point& rStartPos, Degree10 n
     if( rOutDev.GetConnectMetaFile() )
         rOutDev.Push();
     Point aStartPos( rStartPos );
-    if ( IsVertical() )
+    if ( IsEffectivelyVertical() )
     {
         aStartPos.AdjustX(GetPaperSize().Width() );
         aStartPos = Rotate( aStartPos, nOrientation, rStartPos );
@@ -241,7 +241,7 @@ void EditEngine::Draw( OutputDevice& rOutDev, const tools::Rectangle& rOutRect, 
     aOutRect = rOutDev.PixelToLogic( aOutRect );
 
     Point aStartPos;
-    if ( !IsVertical() )
+    if ( !IsEffectivelyVertical() )
     {
         aStartPos.setX( aOutRect.Left() - rStartDocPos.X() );
         aStartPos.setY( aOutRect.Top() - rStartDocPos.Y() );
@@ -437,9 +437,9 @@ TextRotation EditEngine::GetRotation() const
     return pImpEditEngine->GetRotation();
 }
 
-bool EditEngine::IsVertical() const
+bool EditEngine::IsEffectivelyVertical() const
 {
-    return pImpEditEngine->IsVertical();
+    return pImpEditEngine->IsEffectivelyVertical();
 }
 
 bool EditEngine::IsTopToBottom() const
@@ -447,9 +447,9 @@ bool EditEngine::IsTopToBottom() const
     return pImpEditEngine->IsTopToBottom();
 }
 
-bool EditEngine::GetDirectVertical() const
+bool EditEngine::GetVertical() const
 {
-    return pImpEditEngine->GetDirectVertical();
+    return pImpEditEngine->GetVertical();
 }
 
 void EditEngine::SetTextColumns(sal_Int16 nColumns, sal_Int32 nSpacing)
@@ -633,7 +633,7 @@ tools::Rectangle EditEngine::GetParaBounds( sal_Int32 nPara )
 
     Point aPnt = GetDocPosTopLeft( nPara );
 
-    if( IsVertical() )
+    if( IsEffectivelyVertical() )
     {
         sal_Int32 nTextHeight = pImpEditEngine->GetTextHeight();
         sal_Int32 nParaWidth = pImpEditEngine->CalcParaWidth( nPara, true );
@@ -1399,15 +1399,15 @@ bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, v
     }
     pImpEditEngine->UpdateSelections();
 
-    if ( ( !IsVertical() && ( nCode != KEY_UP ) && ( nCode != KEY_DOWN ) ) ||
-         ( IsVertical() && ( nCode != KEY_LEFT ) && ( nCode != KEY_RIGHT ) ))
+    if ( ( !IsEffectivelyVertical() && ( nCode != KEY_UP ) && ( nCode != KEY_DOWN ) ) ||
+         ( IsEffectivelyVertical() && ( nCode != KEY_LEFT ) && ( nCode != KEY_RIGHT ) ))
     {
         pEditView->pImpEditView->nTravelXPos = TRAVEL_X_DONTKNOW;
     }
 
     if ( /* ( nCode != KEY_HOME ) && ( nCode != KEY_END ) && */
-        ( !IsVertical() && ( nCode != KEY_LEFT ) && ( nCode != KEY_RIGHT ) ) ||
-         ( IsVertical() && ( nCode != KEY_UP ) && ( nCode != KEY_DOWN ) ))
+        ( !IsEffectivelyVertical() && ( nCode != KEY_LEFT ) && ( nCode != KEY_RIGHT ) ) ||
+         ( IsEffectivelyVertical() && ( nCode != KEY_UP ) && ( nCode != KEY_DOWN ) ))
     {
         pEditView->pImpEditView->SetCursorBidiLevel( CURSOR_BIDILEVEL_DONTKNOW );
     }
@@ -1441,7 +1441,7 @@ sal_uInt32 EditEngine::GetTextHeight() const
     if ( !pImpEditEngine->IsFormatted() )
         pImpEditEngine->FormatDoc();
 
-    sal_uInt32 nHeight = !IsVertical() ? pImpEditEngine->GetTextHeight() : pImpEditEngine->CalcTextWidth( true );
+    sal_uInt32 nHeight = !IsEffectivelyVertical() ? pImpEditEngine->GetTextHeight() : pImpEditEngine->CalcTextWidth( true );
     return nHeight;
 }
 
@@ -1451,7 +1451,7 @@ sal_uInt32 EditEngine::GetTextHeightNTP() const
     if ( !pImpEditEngine->IsFormatted() )
         pImpEditEngine->FormatDoc();
 
-    if ( IsVertical() )
+    if ( IsEffectivelyVertical() )
         return pImpEditEngine->CalcTextWidth( true );
 
     return pImpEditEngine->GetTextHeightNTP();
@@ -1463,7 +1463,7 @@ sal_uInt32 EditEngine::CalcTextWidth()
     if ( !pImpEditEngine->IsFormatted() )
         pImpEditEngine->FormatDoc();
 
-    sal_uInt32 nWidth = !IsVertical() ? pImpEditEngine->CalcTextWidth( true ) : pImpEditEngine->GetTextHeight();
+    sal_uInt32 nWidth = !IsEffectivelyVertical() ? pImpEditEngine->CalcTextWidth( true ) : pImpEditEngine->GetTextHeight();
     return nWidth;
 }
 
@@ -1817,7 +1817,7 @@ void EditEngine::StripPortions()
 {
     ScopedVclPtrInstance< VirtualDevice > aTmpDev;
     tools::Rectangle aBigRect( Point( 0, 0 ), Size( 0x7FFFFFFF, 0x7FFFFFFF ) );
-    if ( IsVertical() )
+    if ( IsEffectivelyVertical() )
     {
         if( IsTopToBottom() )
         {
@@ -1958,7 +1958,7 @@ tools::Long EditEngine::GetFirstLineStartX( sal_Int32 nParagraph )
 Point EditEngine::GetDocPos( const Point& rPaperPos ) const
 {
     Point aDocPos( rPaperPos );
-    if ( IsVertical() )
+    if ( IsEffectivelyVertical() )
     {
         if ( IsTopToBottom() )
         {

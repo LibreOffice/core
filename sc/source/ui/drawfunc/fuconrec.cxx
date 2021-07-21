@@ -140,7 +140,7 @@ bool FuConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
                 if ( auto pSdrTextObj = dynamic_cast<SdrTextObj*>( pObj) )
                     pSdrTextObj->ForceOutlinerParaObject();
                 OutlinerParaObject* pOPO = pObj->GetOutlinerParaObject();
-                if( pOPO && !pOPO->IsVertical() )
+                if( pOPO && !pOPO->IsEffectivelyVertical() )
                     pOPO->SetVertical( true );
             }
         }

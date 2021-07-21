@@ -294,7 +294,7 @@ tools::Rectangle SvxEditEngineForwarder::GetCharBounds( sal_Int32 nPara, sal_Int
     tools::Long tmp = aSize.Width();
     aSize.setWidth(aSize.Height());
     aSize.setHeight(tmp);
-    bool bIsVertical( rEditEngine.IsVertical() );
+    bool bIsVertical( rEditEngine.IsEffectivelyVertical() );
 
     // #108900# Handle virtual position one-past-the end of the string
     if( nIndex >= rEditEngine.GetTextLen(nPara) )
@@ -341,7 +341,7 @@ tools::Rectangle SvxEditEngineForwarder::GetParaBounds( sal_Int32 nPara ) const
     sal_uLong nWidth;
     sal_uLong nHeight;
 
-    if( rEditEngine.IsVertical() )
+    if( rEditEngine.IsEffectivelyVertical() )
     {
         // Hargl. EditEngine's 'external' methods return the rotated
         // dimensions, 'internal' methods like GetTextHeight( n )
@@ -380,7 +380,7 @@ bool SvxEditEngineForwarder::GetIndexAtPoint( const Point& rPos, sal_Int32& nPar
     aSize.setHeight(tmp);
     Point aEEPos( SvxEditSourceHelper::UserSpaceToEE( rPos,
                                                       aSize,
-                                                      rEditEngine.IsVertical() ));
+                                                      rEditEngine.IsEffectivelyVertical() ));
 
     EPosition aDocPos = rEditEngine.FindDocPosition( aEEPos );
 

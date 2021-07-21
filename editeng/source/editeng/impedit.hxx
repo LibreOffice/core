@@ -808,9 +808,9 @@ public:
     void                    SetPaperSize( const Size& rSz )         { aPaperSize = rSz; }
 
     void                    SetVertical( bool bVertical);
-    bool                    IsVertical() const                      { return GetEditDoc().IsVertical(); }
+    bool                    IsEffectivelyVertical() const                      { return GetEditDoc().IsEffectivelyVertical(); }
     bool                    IsTopToBottom() const                   { return GetEditDoc().IsTopToBottom(); }
-    bool                    GetDirectVertical() const               { return GetEditDoc().GetDirectVertical(); }
+    bool                    GetVertical() const               { return GetEditDoc().GetVertical(); }
     void                    SetRotation( TextRotation nRotation);
     TextRotation            GetRotation() const                     { return GetEditDoc().GetRotation(); }
 

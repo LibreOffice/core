@@ -140,7 +140,7 @@ bool ConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
             {
                 pCaptObj->ForceOutlinerParaObject();
                 OutlinerParaObject* pOPO = pCaptObj->GetOutlinerParaObject();
-                if( pOPO && !pOPO->IsVertical() )
+                if( pOPO && !pOPO->IsEffectivelyVertical() )
                     pOPO->SetVertical( true );
             }
         }

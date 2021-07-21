@@ -149,7 +149,7 @@ bool FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
                 if ( dynamic_cast<const SdrTextObj*>( pObj) != nullptr && dynamic_cast<const SdrUnoObj*>( pObj) ==  nullptr )
                 {
                     OutlinerParaObject* pOPO = pObj->GetOutlinerParaObject();
-                    bool bVertical = ( pOPO && pOPO->IsVertical() );
+                    bool bVertical = ( pOPO && pOPO->IsEffectivelyVertical() );
                     sal_uInt16 nTextSlotId = bVertical ? SID_DRAW_TEXT_VERTICAL : SID_DRAW_TEXT;
 
                     rViewShell.GetViewData().GetDispatcher().

@@ -65,7 +65,7 @@ basegfx::B2DRange getTextAnchorRange(const attribute::SdrTextAttribute& rText,
     // Take vertical text orientation into account when deciding
     // which dimension is its width, and which is its height
     const OutlinerParaObject& rOutlinerParaObj = rText.getOutlinerParaObject();
-    const bool bVerticalWriting(rOutlinerParaObj.IsVertical());
+    const bool bVerticalWriting(rOutlinerParaObj.IsEffectivelyVertical());
     const double fWidthForText = bVerticalWriting ? rSnapRange.getHeight() : rSnapRange.getWidth();
     // create a range describing the wanted text position and size (aTextAnchorRange). This
     // means to use the text distance values here

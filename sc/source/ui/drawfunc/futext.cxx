@@ -191,7 +191,7 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
                 bool bVertical = ( nSlotID == SID_DRAW_TEXT_VERTICAL );
                 OutlinerParaObject* pOPO = pObj->GetOutlinerParaObject();
                 if ( pOPO )
-                    bVertical = pOPO->IsVertical();     // content wins
+                    bVertical = pOPO->IsEffectivelyVertical();     // content wins
                 pO->SetVertical( bVertical );
 
                 //!?? the default values are not correct when result is without outliner ???!?
@@ -576,7 +576,7 @@ void FuText::SetInEditMode(SdrObject* pObj, const Point* pMousePixel,
     bool bVertical = ( nSlotID == SID_DRAW_TEXT_VERTICAL );
     OutlinerParaObject* pOPO = pObj->GetOutlinerParaObject();
     if ( pOPO )
-        bVertical = pOPO->IsVertical();     // content wins
+        bVertical = pOPO->IsEffectivelyVertical();     // content wins
     pO->SetVertical( bVertical );
 
     //!??  without returned Outliner the defaults are not correct ???!?

@@ -736,7 +736,7 @@ void ImpEditView::ImplDrawHighlightRect( OutputDevice& rTarget, const Point& rDo
 
 bool ImpEditView::IsVertical() const
 {
-    return pEditEngine->pImpEditEngine->IsVertical();
+    return pEditEngine->pImpEditEngine->IsEffectivelyVertical();
 }
 
 bool ImpEditView::IsTopToBottom() const
@@ -754,7 +754,7 @@ Point ImpEditView::GetDocPos( const Point& rWindowPos ) const
     // Window Position => Position Document
     Point aPoint;
 
-    if ( !pEditEngine->pImpEditEngine->IsVertical() )
+    if ( !pEditEngine->pImpEditEngine->IsEffectivelyVertical() )
     {
         aPoint.setX( rWindowPos.X() - aOutArea.Left() + GetVisDocLeft() );
         aPoint.setY( rWindowPos.Y() - aOutArea.Top() + GetVisDocTop() );
@@ -781,7 +781,7 @@ Point ImpEditView::GetWindowPos( const Point& rDocPos ) const
     // Document position => window position
     Point aPoint;
 
-    if ( !pEditEngine->pImpEditEngine->IsVertical() )
+    if ( !pEditEngine->pImpEditEngine->IsEffectivelyVertical() )
     {
         aPoint.setX( rDocPos.X() + aOutArea.Left() - GetVisDocLeft() );
         aPoint.setY( rDocPos.Y() + aOutArea.Top() - GetVisDocTop() );
@@ -809,7 +809,7 @@ tools::Rectangle ImpEditView::GetWindowPos( const tools::Rectangle& rDocRect ) c
     Point aPos( GetWindowPos( rDocRect.TopLeft() ) );
     Size aSz = rDocRect.GetSize();
     tools::Rectangle aRect;
-    if ( !pEditEngine->pImpEditEngine->IsVertical() )
+    if ( !pEditEngine->pImpEditEngine->IsEffectivelyVertical() )
     {
         aRect = tools::Rectangle( aPos, aSz );
     }
@@ -2571,7 +2571,7 @@ void ImpEditView::dragOver(const css::datatransfer::dnd::DropTargetDragEvent& rD
                     Point aEndPos( GetOutputArea().GetWidth(), nDDYPos );
                     aEndPos = GetWindowPos( aEndPos );
                     aEditCursor = rOutDev.LogicToPixel( tools::Rectangle( aStartPos, aEndPos ) );
-                    if ( !pEditEngine->IsVertical() )
+                    if ( !pEditEngine->IsEffectivelyVertical() )
                     {
                         aEditCursor.AdjustTop( -1 );
                         aEditCursor.AdjustBottom( 1 );

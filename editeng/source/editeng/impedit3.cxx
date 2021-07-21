@@ -425,7 +425,7 @@ void ImpEditEngine::FormatDoc()
         tools::Long nNewHeight = CalcTextHeight(&nNewHeightNTP);
         tools::Long nDiff = nNewHeight - nCurTextHeight;
         if ( nDiff )
-            aStatus.GetStatusWord() |= !IsVertical() ? EditStatusFlags::TextHeightChanged : EditStatusFlags::TEXTWIDTHCHANGED;
+            aStatus.GetStatusWord() |= !IsEffectivelyVertical() ? EditStatusFlags::TextHeightChanged : EditStatusFlags::TEXTWIDTHCHANGED;
 
         nCurTextHeight = nNewHeight;
         nCurTextHeightNTP = nNewHeightNTP;
@@ -503,20 +503,20 @@ void ImpEditEngine::CheckAutoPageSize()
 {
     Size aPrevPaperSize( GetPaperSize() );
     if ( GetStatus().AutoPageWidth() )
-        aPaperSize.setWidth( !IsVertical() ? CalcTextWidth( true ) : GetTextHeight() );
+        aPaperSize.setWidth( !IsEffectivelyVertical() ? CalcTextWidth( true ) : GetTextHeight() );
     if ( GetStatus().AutoPageHeight() )
-        aPaperSize.setHeight( !IsVertical() ? GetTextHeight() : CalcTextWidth( true ) );
+        aPaperSize.setHeight( !IsEffectivelyVertical() ? GetTextHeight() : CalcTextWidth( true ) );
 
     SetValidPaperSize( aPaperSize );    // consider Min, Max
 
     if ( aPaperSize == aPrevPaperSize )
         return;
 
-    if ( ( !IsVertical() && ( aPaperSize.Width() != aPrevPaperSize.Width() ) )
-         || ( IsVertical() && ( aPaperSize.Height() != aPrevPaperSize.Height() ) ) )
+    if ( ( !IsEffectivelyVertical() && ( aPaperSize.Width() != aPrevPaperSize.Width() ) )
+         || ( IsEffectivelyVertical() && ( aPaperSize.Height() != aPrevPaperSize.Height() ) ) )
     {
         // If ahead is centered / right or tabs...
-        aStatus.GetStatusWord() |= !IsVertical() ? EditStatusFlags::TEXTWIDTHCHANGED : EditStatusFlags::TextHeightChanged;
+        aStatus.GetStatusWord() |= !IsEffectivelyVertical() ? EditStatusFlags::TEXTWIDTHCHANGED : EditStatusFlags::TextHeightChanged;
         for ( sal_Int32 nPara = 0; nPara < GetParaPortions().Count(); nPara++ )
         {
             // Only paragraphs which are not aligned to the left need to be
@@ -538,7 +538,7 @@ void ImpEditEngine::CheckAutoPageSize()
         aInvSize.setHeight( aPrevPaperSize.Height() );
 
     Size aSz( aInvSize );
-    if ( IsVertical() )
+    if ( IsEffectivelyVertical() )
     {
         aSz.setWidth( aInvSize.Height() );
         aSz.setHeight( aInvSize.Width() );
@@ -591,7 +591,7 @@ static sal_Int32 ImplCalculateFontIndependentLineSpacing( const sal_Int32 nFontH
 tools::Long ImpEditEngine::GetColumnWidth(const Size& rPaperSize) const
 {
     assert(mnColumns >= 1);
-    tools::Long nWidth = IsVertical() ? rPaperSize.Height() : rPaperSize.Width();
+    tools::Long nWidth = IsEffectivelyVertical() ? rPaperSize.Height() : rPaperSize.Width();
     return (nWidth - mnColumnSpacing * (mnColumns - 1)) / mnColumns;
 }
 
@@ -782,7 +782,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
             }
         }
 
-        const bool bAutoSize = IsVertical() ? aStatus.AutoPageHeight() : aStatus.AutoPageWidth();
+        const bool bAutoSize = IsEffectivelyVertical() ? aStatus.AutoPageHeight() : aStatus.AutoPageWidth();
         tools::Long nMaxLineWidth = GetColumnWidth(bAutoSize ? aMaxAutoPaperSize : aPaperSize);
 
         nMaxLineWidth -= GetXValue( rLRItem.GetRight() );
@@ -816,7 +816,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
         tools::Long nTextLineHeight = 0;
         if ( GetTextRanger() )
         {
-            GetTextRanger()->SetVertical( IsVertical() );
+            GetTextRanger()->SetVertical( IsEffectivelyVertical() );
 
             tools::Long nTextY = nStartPosY + GetEditCursor( &rParaPortion, pLine, pLine->GetStart(), GetCursorFlags::NONE ).Top();
             if ( !bSameLineAgain )
@@ -844,7 +844,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
             {
                 tools::Long nYOff = nTextY + nTextExtraYOffset;
                 tools::Long nYDiff = nTextLineHeight;
-                if ( IsVertical() )
+                if ( IsEffectivelyVertical() )
                 {
                     tools::Long nMaxPolygonX = GetTextRanger()->GetBoundRect().Right();
                     nYOff = nMaxPolygonX-nYOff;
@@ -1455,8 +1455,8 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
             }
         }
 
-        if ( ( !IsVertical() && aStatus.AutoPageWidth() ) ||
-             ( IsVertical() && aStatus.AutoPageHeight() ) )
+        if ( ( !IsEffectivelyVertical() && aStatus.AutoPageWidth() ) ||
+             ( IsEffectivelyVertical() && aStatus.AutoPageHeight() ) )
         {
             // If the row fits within the current paper width, then this width
             // has to be used for the Alignment. If it does not fit or if it
@@ -2604,7 +2604,7 @@ void ImpEditEngine::SetTextRanger( std::unique_ptr<TextRanger> pRanger )
 
 void ImpEditEngine::SetVertical( bool bVertical)
 {
-    if ( IsVertical() != bVertical)
+    if ( IsEffectivelyVertical() != bVertical)
     {
         GetEditDoc().SetVertical(bVertical);
         bool bUseCharAttribs = bool(aStatus.GetControlWord() & EEControlBits::USECHARATTRIBS);
@@ -2958,17 +2958,17 @@ void ImpEditEngine::RecalcFormatterFontMetrics( FormatterFontMetric& rCurMetrics
 
 tools::Long ImpEditEngine::getWidthDirectionAware(const Size& sz) const
 {
-    return !IsVertical() ? sz.Width() : sz.Height();
+    return !IsEffectivelyVertical() ? sz.Width() : sz.Height();
 }
 
 tools::Long ImpEditEngine::getHeightDirectionAware(const Size& sz) const
 {
-    return !IsVertical() ? sz.Height() : sz.Width();
+    return !IsEffectivelyVertical() ? sz.Height() : sz.Width();
 }
 
 void ImpEditEngine::adjustXDirectionAware(Point& pt, tools::Long x) const
 {
-    if (!IsVertical())
+    if (!IsEffectivelyVertical())
         pt.AdjustX(x);
     else
         pt.AdjustY(IsTopToBottom() ? x : -x);
@@ -2976,7 +2976,7 @@ void ImpEditEngine::adjustXDirectionAware(Point& pt, tools::Long x) const
 
 void ImpEditEngine::adjustYDirectionAware(Point& pt, tools::Long y) const
 {
-    if (!IsVertical())
+    if (!IsEffectivelyVertical())
         pt.AdjustY(y);
     else
         pt.AdjustX(IsTopToBottom() ? -y : y);
@@ -2984,7 +2984,7 @@ void ImpEditEngine::adjustYDirectionAware(Point& pt, tools::Long y) const
 
 void ImpEditEngine::setXDirectionAwareFrom(Point& ptDest, const Point& ptSrc) const
 {
-    if (!IsVertical())
+    if (!IsEffectivelyVertical())
         ptDest.setX(ptSrc.X());
     else
         ptDest.setY(ptSrc.Y());
@@ -2992,7 +2992,7 @@ void ImpEditEngine::setXDirectionAwareFrom(Point& ptDest, const Point& ptSrc) co
 
 void ImpEditEngine::setYDirectionAwareFrom(Point& ptDest, const Point& ptSrc) const
 {
-    if (!IsVertical())
+    if (!IsEffectivelyVertical())
         ptDest.setY(ptSrc.Y());
     else
         ptDest.setX(ptSrc.Y());
@@ -3002,7 +3002,7 @@ tools::Long ImpEditEngine::getYOverflowDirectionAware(const Point& pt,
                                                       const tools::Rectangle& rectMax) const
 {
     tools::Long nRes;
-    if (!IsVertical())
+    if (!IsEffectivelyVertical())
         nRes = pt.Y() - rectMax.Bottom();
     else if (IsTopToBottom())
         nRes = rectMax.Left() - pt.X();
@@ -3013,7 +3013,7 @@ tools::Long ImpEditEngine::getYOverflowDirectionAware(const Point& pt,
 
 bool ImpEditEngine::isXOverflowDirectionAware(const Point& pt, const tools::Rectangle& rectMax) const
 {
-    if (!IsVertical())
+    if (!IsEffectivelyVertical())
         return pt.X() > rectMax.Right();
 
     if (IsTopToBottom())
@@ -3024,7 +3024,7 @@ bool ImpEditEngine::isXOverflowDirectionAware(const Point& pt, const tools::Rect
 
 tools::Long ImpEditEngine::getBottomDocOffset(const tools::Rectangle& rect) const
 {
-    if (!IsVertical())
+    if (!IsEffectivelyVertical())
         return rect.Bottom();
 
     if (IsTopToBottom())
@@ -3035,7 +3035,7 @@ tools::Long ImpEditEngine::getBottomDocOffset(const tools::Rectangle& rect) cons
 
 Size ImpEditEngine::getTopLeftDocOffset(const tools::Rectangle& rect) const
 {
-    if (!IsVertical())
+    if (!IsEffectivelyVertical())
         return { rect.Left(), rect.Top() };
 
     if (IsTopToBottom())
@@ -3140,9 +3140,9 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
 
         const tools::Long nParaHeight = rPortion.GetHeight();
         if ( rPortion.IsVisible() && (
-                ( !IsVertical() && ( ( aStartPos.Y() + nParaHeight ) > aClipRect.Top() ) ) ||
-                ( IsVertical() && IsTopToBottom() && ( ( aStartPos.X() - nParaHeight ) < aClipRect.Right() ) ) ||
-                ( IsVertical() && !IsTopToBottom() && ( ( aStartPos.X() + nParaHeight ) > aClipRect.Left() ) ) ) )
+                ( !IsEffectivelyVertical() && ( ( aStartPos.Y() + nParaHeight ) > aClipRect.Top() ) ) ||
+                ( IsEffectivelyVertical() && IsTopToBottom() && ( ( aStartPos.X() - nParaHeight ) < aClipRect.Right() ) ) ||
+                ( IsEffectivelyVertical() && !IsTopToBottom() && ( ( aStartPos.X() + nParaHeight ) > aClipRect.Left() ) ) ) )
 
         {
             Point aTmpPos;
@@ -3174,9 +3174,9 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
                 adjustXDirectionAware(aTmpPos, pLine->GetStartPosX());
                 adjustYDirectionAware(aTmpPos, pLine->GetMaxAscent() - nLineHeight);
 
-                if ( ( !IsVertical() && ( aStartPos.Y() > aClipRect.Top() ) )
-                    || ( IsVertical() && IsTopToBottom() && aStartPos.X() < aClipRect.Right() )
-                    || ( IsVertical() && !IsTopToBottom() && aStartPos.X() > aClipRect.Left() ) )
+                if ( ( !IsEffectivelyVertical() && ( aStartPos.Y() > aClipRect.Top() ) )
+                    || ( IsEffectivelyVertical() && IsTopToBottom() && aStartPos.X() < aClipRect.Right() )
+                    || ( IsEffectivelyVertical() && !IsTopToBottom() && aStartPos.X() > aClipRect.Left() ) )
                 {
                     bPaintBullet = false;
 
@@ -3556,8 +3556,8 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
                                     // Take only what begins in the visible range:
                                     // Important, because of a bug in some graphic cards
                                     // when transparent font, output when negative
-                                    if ( nOrientation || ( !IsVertical() && ( ( aTmpPos.X() + nTxtWidth ) >= nFirstVisXPos ) )
-                                            || ( IsVertical() && ( ( aTmpPos.Y() + nTxtWidth ) >= nFirstVisYPos ) ) )
+                                    if ( nOrientation || ( !IsEffectivelyVertical() && ( ( aTmpPos.X() + nTxtWidth ) >= nFirstVisXPos ) )
+                                            || ( IsEffectivelyVertical() && ( ( aTmpPos.Y() + nTxtWidth ) >= nFirstVisYPos ) ) )
                                     {
                                         if ( nEsc && ( aTmpFont.GetUnderline() != LINESTYLE_NONE ) )
                                         {
@@ -3674,7 +3674,7 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
                                         }
                                         Color aOldColor( rOutDev.GetLineColor() );
                                         rOutDev.SetLineColor( GetColorConfig().GetColorValue( svtools::SPELL ).nColor );
-                                        lcl_DrawRedLines( rOutDev, aTmpFont.GetFontSize().Height(), aRedLineTmpPos, static_cast<size_t>(nIndex), static_cast<size_t>(nIndex) + rTextPortion.GetLen(), pDXArray, rPortion.GetNode()->GetWrongList(), nOrientation, aOrigin, IsVertical(), rTextPortion.IsRightToLeft() );
+                                        lcl_DrawRedLines( rOutDev, aTmpFont.GetFontSize().Height(), aRedLineTmpPos, static_cast<size_t>(nIndex), static_cast<size_t>(nIndex) + rTextPortion.GetLen(), pDXArray, rPortion.GetNode()->GetWrongList(), nOrientation, aOrigin, IsEffectivelyVertical(), rTextPortion.IsRightToLeft() );
                                         rOutDev.SetLineColor( aOldColor );
                                     }
                                 }
@@ -3847,7 +3847,7 @@ void ImpEditEngine::Paint( ImpEditView* pView, const tools::Rectangle& rRect, Ou
     OutputDevice& rTarget = pTargetDevice ? *pTargetDevice : *pView->GetWindow()->GetOutDev();
 
     Point aStartPos;
-    if ( !IsVertical() )
+    if ( !IsEffectivelyVertical() )
         aStartPos = pView->GetOutputArea().TopLeft();
     else
     {
@@ -3863,7 +3863,7 @@ void ImpEditEngine::Paint( ImpEditView* pView, const tools::Rectangle& rRect, Ou
     // the fields usually protrude if > line.
     // (Not at the top, since there the Doc-width from formatting is already
     // there)
-    if ( !IsVertical() && ( pView->GetOutputArea().GetWidth() > GetPaperSize().Width() ) )
+    if ( !IsEffectivelyVertical() && ( pView->GetOutputArea().GetWidth() > GetPaperSize().Width() ) )
     {
         tools::Long nMaxX = pView->GetOutputArea().Left() + GetPaperSize().Width();
         if ( aClipRect.Left() > nMaxX )
@@ -4139,7 +4139,7 @@ tools::Long ImpEditEngine::CalcVertLineSpacing(Point& rStartPos) const
         return 0;
 
     // Shift the text to the right for the asian layout mode.
-    if (IsVertical())
+    if (IsEffectivelyVertical())
         adjustYDirectionAware(rStartPos, -nTotalSpace);
 
     return nTotalSpace / (nTotalLineCount-1);
@@ -4218,7 +4218,7 @@ void ImpEditEngine::SetFlatMode( bool bFlat )
 void ImpEditEngine::SetCharStretching( sal_uInt16 nX, sal_uInt16 nY )
 {
     bool bChanged;
-    if ( !IsVertical() )
+    if ( !IsEffectivelyVertical() )
     {
         bChanged = nStretchX!=nX || nStretchY!=nY;
         nStretchX = nX;
