@@ -95,14 +95,14 @@ struct ComboBox::Impl
 };
 
 
-static void lcl_GetSelectedEntries( ::std::set< sal_Int32 >& rSelectedPos, const OUString& rText, sal_Unicode cTokenSep, const ImplEntryList* pEntryList )
+static void lcl_GetSelectedEntries( ::std::set< sal_Int32 >& rSelectedPos, const OUString& rText, sal_Unicode cTokenSep, const ImplEntryList& rEntryList )
 {
     if (rText.isEmpty())
         return;
 
     sal_Int32 nIdx{0};
     do {
-        const sal_Int32 nPos = pEntryList->FindEntry(comphelper::string::strip(rText.getToken(0, cTokenSep, nIdx), ' '));
+        const sal_Int32 nPos = rEntryList.FindEntry(comphelper::string::strip(rText.getToken(0, cTokenSep, nIdx), ' '));
         if ( nPos != LISTBOX_ENTRY_NOTFOUND )
             rSelectedPos.insert( nPos );
     } while (nIdx>=0);
@@ -280,7 +280,7 @@ IMPL_LINK_NOARG(ComboBox::Impl, ImplClickBtnHdl, void*, void)
 {
     m_rThis.CallEventListeners( VclEventId::DropdownPreOpen );
     m_pSubEdit->GrabFocus();
-    if (!m_pImplLB->GetEntryList()->GetMRUCount())
+    if (!m_pImplLB->GetEntryList().GetMRUCount())
         ImplUpdateFloatSelection();
     else
         m_pImplLB->SelectEntry( 0 , true );
@@ -298,7 +298,7 @@ IMPL_LINK_NOARG(ComboBox::Impl, ImplPopupModeEndHdl, FloatingWindow*, void)
 {
     if (m_pFloatWin->IsPopupModeCanceled())
     {
-        if (!m_pImplLB->GetEntryList()->IsEntryPosSelected(
+        if (!m_pImplLB->GetEntryList().IsEntryPosSelected(
                     m_pFloatWin->GetPopupModeStartSaveSelection()))
         {
             m_pImplLB->SelectEntry(m_pFloatWin->GetPopupModeStartSaveSelection(), true);
@@ -333,22 +333,22 @@ IMPL_LINK(ComboBox::Impl, ImplAutocompleteHdl, Edit&, rEdit, void)
         if (!m_isMatchCase)
         {
             // Try match case insensitive from current position
-            nPos = m_pImplLB->GetEntryList()->FindMatchingEntry(aStartText, nStart, true);
+            nPos = m_pImplLB->GetEntryList().FindMatchingEntry(aStartText, nStart, true);
             if ( nPos == LISTBOX_ENTRY_NOTFOUND )
                 // Try match case insensitive, but from start
-                nPos = m_pImplLB->GetEntryList()->FindMatchingEntry(aStartText, 0, true);
+                nPos = m_pImplLB->GetEntryList().FindMatchingEntry(aStartText, 0, true);
         }
 
         if ( nPos == LISTBOX_ENTRY_NOTFOUND )
             // Try match full from current position
-            nPos = m_pImplLB->GetEntryList()->FindMatchingEntry(aStartText, nStart, false);
+            nPos = m_pImplLB->GetEntryList().FindMatchingEntry(aStartText, nStart, false);
         if ( nPos == LISTBOX_ENTRY_NOTFOUND )
             //  Match full, but from start
-            nPos = m_pImplLB->GetEntryList()->FindMatchingEntry(aStartText, 0, false);
+            nPos = m_pImplLB->GetEntryList().FindMatchingEntry(aStartText, 0, false);
 
         if ( nPos != LISTBOX_ENTRY_NOTFOUND )
         {
-            OUString aText = m_pImplLB->GetEntryList()->GetEntryText( nPos );
+            OUString aText = m_pImplLB->GetEntryList().GetEntryText( nPos );
             Selection aSelection( aText.getLength(), aStartText.getLength() );
             rEdit.SetText( aText, aSelection );
         }
@@ -374,8 +374,8 @@ IMPL_LINK_NOARG(ComboBox::Impl, ImplSelectHdl, LinkParamNone*, void)
                 OUString   aToken = aText.getToken( 0, m_cMultiSep, nIndex );
                 sal_Int32  nTokenLen = aToken.getLength();
                 aToken = comphelper::string::strip(aToken, ' ');
-                sal_Int32 nP = m_pImplLB->GetEntryList()->FindEntry( aToken );
-                if ((nP != LISTBOX_ENTRY_NOTFOUND) && (!m_pImplLB->GetEntryList()->IsEntryPosSelected(nP)))
+                sal_Int32 nP = m_pImplLB->GetEntryList().FindEntry( aToken );
+                if ((nP != LISTBOX_ENTRY_NOTFOUND) && (!m_pImplLB->GetEntryList().IsEntryPosSelected(nP)))
                 {
                     aText = aText.replaceAt( nPrevIndex, nTokenLen, "" );
                     nIndex = nIndex - nTokenLen;
@@ -393,17 +393,17 @@ IMPL_LINK_NOARG(ComboBox::Impl, ImplSelectHdl, LinkParamNone*, void)
             // attach missing entries
             ::std::set< sal_Int32 > aSelInText;
             lcl_GetSelectedEntries( aSelInText, aText, m_cMultiSep, m_pImplLB->GetEntryList() );
-            sal_Int32 nSelectedEntries = m_pImplLB->GetEntryList()->GetSelectedEntryCount();
+            sal_Int32 nSelectedEntries = m_pImplLB->GetEntryList().GetSelectedEntryCount();
             for ( sal_Int32 n = 0; n < nSelectedEntries; n++ )
             {
-                sal_Int32 nP = m_pImplLB->GetEntryList()->GetSelectedEntryPos( n );
+                sal_Int32 nP = m_pImplLB->GetEntryList().GetSelectedEntryPos( n );
                 if ( !aSelInText.count( nP ) )
                 {
                     if (!aText.isEmpty() && (aText[aText.getLength()-1] != m_cMultiSep))
                         aText += OUStringChar(m_cMultiSep);
                     if ( !aText.isEmpty() )
                         aText += " ";   // slightly loosen
-                    aText += m_pImplLB->GetEntryList()->GetEntryText( nP ) +
+                    aText += m_pImplLB->GetEntryList().GetEntryText( nP ) +
                         OUStringChar(m_cMultiSep);
                 }
             }
@@ -411,7 +411,7 @@ IMPL_LINK_NOARG(ComboBox::Impl, ImplSelectHdl, LinkParamNone*, void)
         }
         else
         {
-            aText = m_pImplLB->GetEntryList()->GetSelectedEntry( 0 );
+            aText = m_pImplLB->GetEntryList().GetSelectedEntry( 0 );
         }
 
         m_pSubEdit->SetText( aText );
@@ -469,8 +469,8 @@ IMPL_LINK( ComboBox::Impl, ImplSelectionChangedHdl, sal_Int32, nChanged, void )
 {
     if (!m_pImplLB->IsTrackingSelect())
     {
-        if (!m_pSubEdit->IsReadOnly() && m_pImplLB->GetEntryList()->IsEntryPosSelected(nChanged))
-            m_pSubEdit->SetText(m_pImplLB->GetEntryList()->GetEntryText(nChanged));
+        if (!m_pSubEdit->IsReadOnly() && m_pImplLB->GetEntryList().IsEntryPosSelected(nChanged))
+            m_pSubEdit->SetText(m_pImplLB->GetEntryList().GetEntryText(nChanged));
     }
 }
 
@@ -489,7 +489,7 @@ void ComboBox::ToggleDropDown()
     else
     {
         m_pImpl->m_pSubEdit->GrabFocus();
-        if (!m_pImpl->m_pImplLB->GetEntryList()->GetMRUCount())
+        if (!m_pImpl->m_pImplLB->GetEntryList().GetMRUCount())
             m_pImpl->ImplUpdateFloatSelection();
         else
             m_pImpl->m_pImplLB->SelectEntry( 0 , true );
@@ -736,7 +736,7 @@ bool ComboBox::EventNotify( NotifyEvent& rNEvt )
                 {
                     CallEventListeners( VclEventId::DropdownPreOpen );
                     m_pImpl->m_pBtn->SetPressed( true );
-                    if (m_pImpl->m_pImplLB->GetEntryList()->GetMRUCount())
+                    if (m_pImpl->m_pImplLB->GetEntryList().GetMRUCount())
                         m_pImpl->m_pImplLB->SelectEntry( 0 , true );
                     SetSelection( Selection( 0, SELECTION_MAX ) );
                     m_pImpl->m_pFloatWin->StartFloat( false );
@@ -841,17 +841,17 @@ void ComboBox::Impl::ImplUpdateFloatSelection()
 
         if (m_pImplLB->GetCurrentPos() != LISTBOX_ENTRY_NOTFOUND)
         {
-            OUString aCurrent = m_pImplLB->GetEntryList()->GetEntryText(
+            OUString aCurrent = m_pImplLB->GetEntryList().GetEntryText(
                                     m_pImplLB->GetCurrentPos());
             if ( aCurrent == aSearchStr )
                 nSelect = m_pImplLB->GetCurrentPos();
         }
 
         if ( nSelect == LISTBOX_ENTRY_NOTFOUND )
-            nSelect = m_pImplLB->GetEntryList()->FindEntry( aSearchStr );
+            nSelect = m_pImplLB->GetEntryList().FindEntry( aSearchStr );
         if ( nSelect == LISTBOX_ENTRY_NOTFOUND )
         {
-            nSelect = m_pImplLB->GetEntryList()->FindMatchingEntry( aSearchStr, 0, true );
+            nSelect = m_pImplLB->GetEntryList().FindMatchingEntry( aSearchStr, 0, true );
             bSelect = false;
         }
 
@@ -863,7 +863,7 @@ void ComboBox::Impl::ImplUpdateFloatSelection()
         }
         else
         {
-            nSelect = m_pImplLB->GetEntryList()->GetSelectedEntryPos( 0 );
+            nSelect = m_pImplLB->GetEntryList().GetSelectedEntryPos( 0 );
             if( nSelect != LISTBOX_ENTRY_NOTFOUND )
                 m_pImplLB->SelectEntry( nSelect, false );
             m_pImplLB->ResetCurrentPos();
@@ -873,7 +873,7 @@ void ComboBox::Impl::ImplUpdateFloatSelection()
     {
         ::std::set< sal_Int32 > aSelInText;
         lcl_GetSelectedEntries(aSelInText, m_pSubEdit->GetText(), m_cMultiSep, m_pImplLB->GetEntryList());
-        for (sal_Int32 n = 0; n < m_pImplLB->GetEntryList()->GetEntryCount(); n++)
+        for (sal_Int32 n = 0; n < m_pImplLB->GetEntryList().GetEntryCount(); n++)
             m_pImplLB->SelectEntry( n, aSelInText.count( n ) != 0 );
     }
     m_pImplLB->SetCallSelectionChangedHdl( true );
@@ -881,20 +881,20 @@ void ComboBox::Impl::ImplUpdateFloatSelection()
 
 sal_Int32 ComboBox::InsertEntry(const OUString& rStr, sal_Int32 const nPos)
 {
-    assert(nPos >= 0 && COMBOBOX_MAX_ENTRIES > m_pImpl->m_pImplLB->GetEntryList()->GetEntryCount());
+    assert(nPos >= 0 && COMBOBOX_MAX_ENTRIES > m_pImpl->m_pImplLB->GetEntryList().GetEntryCount());
 
     sal_Int32 nRealPos;
     if (nPos == COMBOBOX_APPEND)
         nRealPos = nPos;
     else
     {
-        const sal_Int32 nMRUCount = m_pImpl->m_pImplLB->GetEntryList()->GetMRUCount();
+        const sal_Int32 nMRUCount = m_pImpl->m_pImplLB->GetEntryList().GetMRUCount();
         assert(nPos <= COMBOBOX_MAX_ENTRIES - nMRUCount);
         nRealPos = nPos + nMRUCount;
     }
 
     nRealPos = m_pImpl->m_pImplLB->InsertEntry( nRealPos, rStr );
-    nRealPos -= m_pImpl->m_pImplLB->GetEntryList()->GetMRUCount();
+    nRealPos -= m_pImpl->m_pImplLB->GetEntryList().GetMRUCount();
     CallEventListeners( VclEventId::ComboboxItemAdded, reinterpret_cast<void*>(nRealPos) );
     return nRealPos;
 }
@@ -902,27 +902,27 @@ sal_Int32 ComboBox::InsertEntry(const OUString& rStr, sal_Int32 const nPos)
 sal_Int32 ComboBox::InsertEntryWithImage(
         const OUString& rStr, const Image& rImage, sal_Int32 const nPos)
 {
-    assert(nPos >= 0 && COMBOBOX_MAX_ENTRIES > m_pImpl->m_pImplLB->GetEntryList()->GetEntryCount());
+    assert(nPos >= 0 && COMBOBOX_MAX_ENTRIES > m_pImpl->m_pImplLB->GetEntryList().GetEntryCount());
 
     sal_Int32 nRealPos;
     if (nPos == COMBOBOX_APPEND)
         nRealPos = nPos;
     else
     {
-        const sal_Int32 nMRUCount = m_pImpl->m_pImplLB->GetEntryList()->GetMRUCount();
+        const sal_Int32 nMRUCount = m_pImpl->m_pImplLB->GetEntryList().GetMRUCount();
         assert(nPos <= COMBOBOX_MAX_ENTRIES - nMRUCount);
         nRealPos = nPos + nMRUCount;
     }
 
     nRealPos = m_pImpl->m_pImplLB->InsertEntry( nRealPos, rStr, rImage );
-    nRealPos -= m_pImpl->m_pImplLB->GetEntryList()->GetMRUCount();
+    nRealPos -= m_pImpl->m_pImplLB->GetEntryList().GetMRUCount();
     CallEventListeners( VclEventId::ComboboxItemAdded, reinterpret_cast<void*>(nRealPos) );
     return nRealPos;
 }
 
 void ComboBox::RemoveEntryAt(sal_Int32 const nPos)
 {
-    const sal_Int32 nMRUCount = m_pImpl->m_pImplLB->GetEntryList()->GetMRUCount();
+    const sal_Int32 nMRUCount = m_pImpl->m_pImplLB->GetEntryList().GetMRUCount();
     assert(nPos >= 0 && nPos <= COMBOBOX_MAX_ENTRIES - nMRUCount);
     m_pImpl->m_pImplLB->RemoveEntry( nPos + nMRUCount );
     CallEventListeners( VclEventId::ComboboxItemRemoved, reinterpret_cast<void*>(nPos) );
@@ -938,33 +938,33 @@ void ComboBox::Clear()
 
 Image ComboBox::GetEntryImage( sal_Int32 nPos ) const
 {
-    if (m_pImpl->m_pImplLB->GetEntryList()->HasEntryImage(nPos))
-        return m_pImpl->m_pImplLB->GetEntryList()->GetEntryImage( nPos );
+    if (m_pImpl->m_pImplLB->GetEntryList().HasEntryImage(nPos))
+        return m_pImpl->m_pImplLB->GetEntryList().GetEntryImage( nPos );
     return Image();
 }
 
 sal_Int32 ComboBox::GetEntryPos( std::u16string_view rStr ) const
 {
-    sal_Int32 nPos = m_pImpl->m_pImplLB->GetEntryList()->FindEntry( rStr );
+    sal_Int32 nPos = m_pImpl->m_pImplLB->GetEntryList().FindEntry( rStr );
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
-        nPos -= m_pImpl->m_pImplLB->GetEntryList()->GetMRUCount();
+        nPos -= m_pImpl->m_pImplLB->GetEntryList().GetMRUCount();
     return nPos;
 }
 
 OUString ComboBox::GetEntry( sal_Int32 nPos ) const
 {
-    const sal_Int32 nMRUCount = m_pImpl->m_pImplLB->GetEntryList()->GetMRUCount();
+    const sal_Int32 nMRUCount = m_pImpl->m_pImplLB->GetEntryList().GetMRUCount();
     if (nPos < 0 || nPos > COMBOBOX_MAX_ENTRIES - nMRUCount)
         return OUString();
 
-    return m_pImpl->m_pImplLB->GetEntryList()->GetEntryText( nPos + nMRUCount );
+    return m_pImpl->m_pImplLB->GetEntryList().GetEntryText( nPos + nMRUCount );
 }
 
 sal_Int32 ComboBox::GetEntryCount() const
 {
     if (!m_pImpl->m_pImplLB)
         return 0;
-    return m_pImpl->m_pImplLB->GetEntryList()->GetEntryCount() - m_pImpl->m_pImplLB->GetEntryList()->GetMRUCount();
+    return m_pImpl->m_pImplLB->GetEntryList().GetEntryCount() - m_pImpl->m_pImplLB->GetEntryList().GetMRUCount();
 }
 
 bool ComboBox::IsTravelSelect() const
@@ -1029,7 +1029,7 @@ Size ComboBox::CalcMinimumSize() const
 
     if (!IsDropDownBox())
     {
-        aSz = m_pImpl->m_pImplLB->CalcSize( m_pImpl->m_pImplLB->GetEntryList()->GetEntryCount() );
+        aSz = m_pImpl->m_pImplLB->CalcSize( m_pImpl->m_pImplLB->GetEntryList().GetEntryCount() );
         aSz.AdjustHeight(m_pImpl->m_nDDHeight );
     }
     else
@@ -1237,7 +1237,7 @@ void ComboBox::Draw( OutputDevice* pDev, const Point& rPos, DrawFlags nFlags )
         // the drawing starts here
         for ( sal_Int32 n = 0; n < nLines; ++n )
         {
-            pDev->DrawText( aTextRect, m_pImpl->m_pImplLB->GetEntryList()->GetEntryText( n+nTEntry ), nTextStyle );
+            pDev->DrawText( aTextRect, m_pImpl->m_pImplLB->GetEntryList().GetEntryText( n+nTEntry ), nTextStyle );
             aTextRect.AdjustTop(nTextHeight );
             aTextRect.AdjustBottom(nTextHeight );
         }
@@ -1313,19 +1313,19 @@ sal_uInt16 ComboBox::GetDisplayLineCount() const
 
 void ComboBox::SetEntryData( sal_Int32 nPos, void* pNewData )
 {
-    m_pImpl->m_pImplLB->SetEntryData( nPos + m_pImpl->m_pImplLB->GetEntryList()->GetMRUCount(), pNewData );
+    m_pImpl->m_pImplLB->SetEntryData( nPos + m_pImpl->m_pImplLB->GetEntryList().GetMRUCount(), pNewData );
 }
 
 void* ComboBox::GetEntryData( sal_Int32 nPos ) const
 {
-    return m_pImpl->m_pImplLB->GetEntryList()->GetEntryData(
-            nPos + m_pImpl->m_pImplLB->GetEntryList()->GetMRUCount() );
+    return m_pImpl->m_pImplLB->GetEntryList().GetEntryData(
+            nPos + m_pImpl->m_pImplLB->GetEntryList().GetMRUCount() );
 }
 
 sal_Int32 ComboBox::GetTopEntry() const
 {
     sal_Int32 nPos = GetEntryCount() ? m_pImpl->m_pImplLB->GetTopEntry() : LISTBOX_ENTRY_NOTFOUND;
-    if (nPos < m_pImpl->m_pImplLB->GetEntryList()->GetMRUCount())
+    if (nPos < m_pImpl->m_pImplLB->GetEntryList().GetMRUCount())
         nPos = 0;
     return nPos;
 }
@@ -1353,32 +1353,32 @@ const Wallpaper& ComboBox::GetDisplayBackground() const
 
 sal_Int32 ComboBox::GetSelectedEntryCount() const
 {
-    return m_pImpl->m_pImplLB->GetEntryList()->GetSelectedEntryCount();
+    return m_pImpl->m_pImplLB->GetEntryList().GetSelectedEntryCount();
 }
 
 sal_Int32 ComboBox::GetSelectedEntryPos( sal_Int32 nIndex ) const
 {
-    sal_Int32 nPos = m_pImpl->m_pImplLB->GetEntryList()->GetSelectedEntryPos( nIndex );
+    sal_Int32 nPos = m_pImpl->m_pImplLB->GetEntryList().GetSelectedEntryPos( nIndex );
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
-        if (nPos < m_pImpl->m_pImplLB->GetEntryList()->GetMRUCount())
-            nPos = m_pImpl->m_pImplLB->GetEntryList()->FindEntry(m_pImpl->m_pImplLB->GetEntryList()->GetEntryText(nPos));
-        nPos = sal::static_int_cast<sal_Int32>(nPos - m_pImpl->m_pImplLB->GetEntryList()->GetMRUCount());
+        if (nPos < m_pImpl->m_pImplLB->GetEntryList().GetMRUCount())
+            nPos = m_pImpl->m_pImplLB->GetEntryList().FindEntry(m_pImpl->m_pImplLB->GetEntryList().GetEntryText(nPos));
+        nPos = sal::static_int_cast<sal_Int32>(nPos - m_pImpl->m_pImplLB->GetEntryList().GetMRUCount());
     }
     return nPos;
 }
 
 bool ComboBox::IsEntryPosSelected( sal_Int32 nPos ) const
 {
-    return m_pImpl->m_pImplLB->GetEntryList()->IsEntryPosSelected(
-            nPos + m_pImpl->m_pImplLB->GetEntryList()->GetMRUCount() );
+    return m_pImpl->m_pImplLB->GetEntryList().IsEntryPosSelected(
+            nPos + m_pImpl->m_pImplLB->GetEntryList().GetMRUCount() );
 }
 
 void ComboBox::SelectEntryPos( sal_Int32 nPos, bool bSelect)
 {
-    if (nPos < m_pImpl->m_pImplLB->GetEntryList()->GetEntryCount())
+    if (nPos < m_pImpl->m_pImplLB->GetEntryList().GetEntryCount())
         m_pImpl->m_pImplLB->SelectEntry(
-            nPos + m_pImpl->m_pImplLB->GetEntryList()->GetMRUCount(), bSelect);
+            nPos + m_pImpl->m_pImplLB->GetEntryList().GetMRUCount(), bSelect);
 }
 
 void ComboBox::SetNoSelection()
