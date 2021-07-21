@@ -6553,7 +6553,6 @@ void PDFWriterImpl::drawText( const tools::Rectangle& rRect, const OUString& rOr
     if ( nStyle & DrawTextFlags::MultiLine )
     {
         ImplMultiTextLineInfo   aMultiLineInfo;
-        ImplTextLineInfo*       pLineInfo;
         sal_Int32               i;
         sal_Int32               nFormatLines;
 
@@ -6573,8 +6572,8 @@ void PDFWriterImpl::drawText( const tools::Rectangle& rRect, const OUString& rOr
                     // handle last line
                     nFormatLines = nLines-1;
 
-                    pLineInfo = aMultiLineInfo.GetLine( nFormatLines );
-                    aLastLine = convertLineEnd(aStr.copy(pLineInfo->GetIndex()), LINEEND_LF);
+                    ImplTextLineInfo& rLineInfo = aMultiLineInfo.GetLine( nFormatLines );
+                    aLastLine = convertLineEnd(aStr.copy(rLineInfo.GetIndex()), LINEEND_LF);
                     // replace line feed by space
                     aLastLine = aLastLine.replace('\n', ' ');
                     aLastLine = GetEllipsisString( aLastLine, nWidth, nStyle );
@@ -6592,13 +6591,13 @@ void PDFWriterImpl::drawText( const tools::Rectangle& rRect, const OUString& rOr
             // draw all lines excluding the last
             for ( i = 0; i < nFormatLines; i++ )
             {
-                pLineInfo = aMultiLineInfo.GetLine( i );
+                ImplTextLineInfo& rLineInfo = aMultiLineInfo.GetLine( i );
                 if ( nStyle & DrawTextFlags::Right )
-                    aPos.AdjustX(nWidth-pLineInfo->GetWidth() );
+                    aPos.AdjustX(nWidth-rLineInfo.GetWidth() );
                 else if ( nStyle & DrawTextFlags::Center )
-                    aPos.AdjustX((nWidth-pLineInfo->GetWidth())/2 );
-                sal_Int32 nIndex = pLineInfo->GetIndex();
-                sal_Int32 nLineLen = pLineInfo->GetLen();
+                    aPos.AdjustX((nWidth-rLineInfo.GetWidth())/2 );
+                sal_Int32 nIndex = rLineInfo.GetIndex();
+                sal_Int32 nLineLen = rLineInfo.GetLen();
                 drawText( aPos, aStr, nIndex, nLineLen );
                 // mnemonics should not appear in documents,
                 // if the need arises, put them in here

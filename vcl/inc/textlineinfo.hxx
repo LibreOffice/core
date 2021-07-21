@@ -51,18 +51,20 @@ public:
                 ImplMultiTextLineInfo();
                 ~ImplMultiTextLineInfo();
 
-    void        AddLine( ImplTextLineInfo* pLine );
+    void        AddLine( const ImplTextLineInfo& );
     void        Clear();
 
-    ImplTextLineInfo* GetLine( sal_Int32 nLine ) const
-                            { return mvLines[nLine].get(); }
+    const ImplTextLineInfo& GetLine( sal_Int32 nLine ) const
+                            { return mvLines[nLine]; }
+    ImplTextLineInfo& GetLine( sal_Int32 nLine )
+                            { return mvLines[nLine]; }
     sal_Int32   Count() const { return mvLines.size(); }
 
 private:
     ImplMultiTextLineInfo( const ImplMultiTextLineInfo& ) = delete;
     ImplMultiTextLineInfo& operator=( const ImplMultiTextLineInfo& ) = delete;
 
-    std::vector<std::unique_ptr<ImplTextLineInfo>>  mvLines;
+    std::vector<ImplTextLineInfo>  mvLines;
 
 };
 
