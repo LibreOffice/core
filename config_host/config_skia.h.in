@@ -8,6 +8,9 @@ are the same.
 #ifndef CONFIG_SKIA_H
 #define CONFIG_SKIA_H
 
+// If set by configure to 0, disable std::shared_mutex usage on MacOSX < 10.12.
+#undef VMA_USE_STL_SHARED_MUTEX
+
 // This is a setting that should be set manually and it affects LO
 // code rather than Skia itself. It basically controls setting
 // BackendCapabilities::mbSupportsBitmap32, i.e. whether one LO bitmap
