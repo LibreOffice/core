@@ -195,27 +195,27 @@ void SAL_CALL BaseContainerControl::addControl ( const OUString& rName, const Re
         return;
 
     // take memory for new item
-    IMPL_ControlInfo* pNewControl = new IMPL_ControlInfo;
+    IMPL_ControlInfo aNewControl;
 
     // Ready for multithreading
     MutexGuard aGuard (m_aMutex);
 
     // set control
-    pNewControl->sName      = rName;
-    pNewControl->xControl   = rControl;
+    aNewControl.sName      = rName;
+    aNewControl.xControl   = rControl;
 
     // and insert in list
-    maControlInfoList.emplace_back( pNewControl );
+    maControlInfoList.emplace_back( aNewControl );
 
     // initialize new control
-    pNewControl->xControl->setContext       ( static_cast<OWeakObject*>(this)    );
-    pNewControl->xControl->addEventListener ( static_cast< XEventListener* >( static_cast< XWindowListener* >( this ) ) );
+    aNewControl.xControl->setContext       ( static_cast<OWeakObject*>(this)    );
+    aNewControl.xControl->addEventListener ( static_cast< XEventListener* >( static_cast< XWindowListener* >( this ) ) );
 
     // when container has a peer...
     if (getPeer().is())
     {
         // ... then create a peer on child
-        pNewControl->xControl->createPeer ( getPeer()->getToolkit(), getPeer() );
+        aNewControl.xControl->createPeer ( getPeer()->getToolkit(), getPeer() );
     }
 
     // Send message to all listener
@@ -255,7 +255,7 @@ void SAL_CALL BaseContainerControl::removeControl ( const Reference< XControl > 
     for ( size_t n = 0; n < nControls; n++ )
     {
         // Search for right control
-        IMPL_ControlInfo* pControl = maControlInfoList[ n ].get();
+        IMPL_ControlInfo* pControl = &maControlInfoList[ n ];
         if ( rControl == pControl->xControl )
         {
             //.is it found ... remove listener from control
@@ -308,18 +308,14 @@ Reference< XControl > SAL_CALL BaseContainerControl::getControl ( const OUString
     // Ready for multithreading
     MutexGuard  aGuard ( Mutex::getGlobalMutex() );
 
-    size_t                  nControls   = maControlInfoList.size();
-
     // Search for right control
-    for( size_t nCount = 0; nCount < nControls; ++nCount )
+    for( IMPL_ControlInfo& rSearchControl : maControlInfoList )
     {
-        IMPL_ControlInfo* pSearchControl = maControlInfoList[ nCount ].get();
-
-        if ( pSearchControl->sName == rName )
+        if ( rSearchControl.sName == rName )
         {
             // We have found it ...
             // Break operation and return.
-            return pSearchControl->xControl;
+            return rSearchControl.xControl;
         }
     }
 
@@ -340,10 +336,9 @@ Sequence< Reference< XControl > > SAL_CALL BaseContainerControl::getControls ()
     Reference< XControl > *             pDestination    = aDescriptor.getArray ();
 
     // Copy controls to sequence
-    for( nCount = 0; nCount < nControls; ++nCount )
+    for( IMPL_ControlInfo& rCopyControl : maControlInfoList )
     {
-        IMPL_ControlInfo* pCopyControl = maControlInfoList[ nCount ].get();
-        pDestination [ nCount ] = pCopyControl->xControl;
+        pDestination [ nCount++ ] = rCopyControl.xControl;
     }
 
     // Return sequence
