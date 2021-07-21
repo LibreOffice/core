@@ -275,7 +275,7 @@ EditTextObjectImpl::EditTextObjectImpl( SfxItemPool* pP )
     : meUserType(OutlinerMode::DontKnow)
     , meScriptType(SvtScriptType::NONE)
     , meRotation(TextRotation::NONE)
-    , mnMetric(0xFFFF)
+    , meMetric(MapUnit::LASTENUMDUMMY)
     , mbVertical(false)
 {
     // #i101239# ensure target is an EditEngineItemPool, else
@@ -301,7 +301,7 @@ EditTextObjectImpl::EditTextObjectImpl( const EditTextObjectImpl& r )
     : meUserType(r.meUserType)
     , meScriptType(r.meScriptType)
     , meRotation(r.meRotation)
-    , mnMetric(r.mnMetric)
+    , meMetric(r.meMetric)
     , mbVertical(r.mbVertical)
 {
     // Do not copy PortionInfo
@@ -791,7 +791,7 @@ bool EditTextObjectImpl::Equals( const EditTextObjectImpl& rCompare, bool bCompa
         return true;
 
     if(     ( bComparePool && mpPool != rCompare.mpPool ) ||
-            ( mnMetric != rCompare.mnMetric ) ||
+            ( meMetric != rCompare.meMetric ) ||
             ( meUserType!= rCompare.meUserType ) ||
             ( meScriptType != rCompare.meScriptType ) ||
             ( mbVertical != rCompare.mbVertical ) ||

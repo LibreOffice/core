@@ -993,7 +993,7 @@ std::unique_ptr<EditTextObject> ImpEditEngine::CreateTextObject( EditSelection a
     pTxtObj->SetVertical( GetDirectVertical() );
     pTxtObj->SetRotation( GetRotation() );
     MapUnit eMapUnit = aEditDoc.GetItemPool().GetMetric( DEF_METRIC );
-    pTxtObj->SetMetric( static_cast<sal_uInt16>(eMapUnit) );
+    pTxtObj->SetMetric( eMapUnit );
     if ( pTxtObj->IsOwnerOfPool() )
         pTxtObj->GetPool()->SetDefaultMetric( eMapUnit );
 
@@ -1191,7 +1191,7 @@ EditSelection ImpEditEngine::InsertTextObject( const EditTextObject& rTextObject
     MapUnit eSourceUnit = MapUnit(), eDestUnit = MapUnit();
     if (rTextObjectImpl.HasMetric())
     {
-        eSourceUnit = static_cast<MapUnit>(rTextObjectImpl.GetMetric());
+        eSourceUnit = rTextObjectImpl.GetMetric();
         eDestUnit = aEditDoc.GetItemPool().GetMetric( DEF_METRIC );
         if ( eSourceUnit != eDestUnit )
             bConvertMetricOfItems = true;
