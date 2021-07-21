@@ -27,6 +27,7 @@
 #include <o3tl/typed_flags_set.hxx>
 #include <i18nlangtag/lang.h>
 #include <vcl/outdev.hxx>
+#include <svx/flagsdef.hxx>
 
 namespace com::sun::star {
     namespace linguistic2{
@@ -52,30 +53,28 @@ typedef tools::Long SwTwips;
 #define INVALID_TWIPS   LONG_MAX
 #define TWIPS_MAX       (LONG_MAX - 1)
 
-#define MM50   283  // 1/2 cm in TWIPS.
+constexpr sal_Int32 COMPLETE_STRING = SAL_MAX_INT32;
 
-const sal_Int32 COMPLETE_STRING = SAL_MAX_INT32;
-
-const SwTwips cMinHdFtHeight = 56;
+constexpr SwTwips cMinHdFtHeight = 56;
 
 #define MINFLY 23   // Minimal size for FlyFrames.
 #define MINLAY 23   // Minimal size for other Frames.
 
 // Default column distance of two text columns corresponds to 0.3 cm.
-#define DEF_GUTTER_WIDTH (MM50 / 5 * 3)
+constexpr SwTwips DEF_GUTTER_WIDTH = MM50 / 5 * 3;
 
 // Minimal distance (distance to text) for border attribute
 // in order not to crock up aligned lines.
 // 28 Twips == 0,4mm
-#define MIN_BORDER_DIST 28
+constexpr SwTwips MIN_BORDER_DIST = 28;
 
 // Minimal document border: 20mm.
-const SwTwips lMinBorder = 1134;
+constexpr SwTwips lMinBorder = 1134;
 
 // Margin left and above document.
 // Half of it is gap between the pages.
 //TODO: Replace with SwViewOption::defDocumentBorder
-#define DOCUMENTBORDER  284
+constexpr SwTwips DOCUMENTBORDER = 284;
 
 // For inserting of captions (what and where to insert).
 // It's here because it is not big enough to justify its own hxx
@@ -88,19 +87,19 @@ enum class SwLabelType
     Draw      // Caption for a draw object.
 };
 
-const sal_uInt8 MAXLEVEL = 10;
+constexpr sal_uInt8 MAXLEVEL = 10;
 
-const sal_uInt8 NO_NUMLEVEL  = 0x20;    // "or" with the levels.
+constexpr sal_uInt8 NO_NUMLEVEL = 0x20;    // "or" with the levels.
 
 //  Values for indents at numbering and bullet lists.
 //  (For more levels the values have to be multiplied with the levels+1;
 //  levels 0 ..4!)
 
-const short lBulletIndent = 1440/4;
-const short lBulletFirstLineOffset = -lBulletIndent;
-const sal_uInt16 lNumberIndent = 1440/4;
-const short lNumberFirstLineOffset = -lNumberIndent;
-const short lOutlineMinTextDistance = 216; // 0.15 inch = 0.38 cm
+constexpr short lBulletIndent = 1440 / 4;
+constexpr short lBulletFirstLineOffset = -lBulletIndent;
+constexpr sal_uInt16 lNumberIndent = 1440 / 4;
+constexpr short lNumberFirstLineOffset = -lNumberIndent;
+constexpr short lOutlineMinTextDistance = 216; // 0.15 inch = 0.38 cm
 
 // Count of SystemField-types of SwDoc.
 #define INIT_FLDTYPES   33
