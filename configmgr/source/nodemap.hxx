@@ -20,13 +20,13 @@
 #pragma once
 
 #include <sal/config.h>
-#include "config_map.hxx"
 #include <rtl/ref.hxx>
 #include "node.hxx"
+#include <unordered_map>
 
 namespace configmgr {
 
-typedef config_map< rtl::Reference< Node > > NodeMapImpl;
+typedef std::unordered_map< OUString, rtl::Reference< Node > > NodeMapImpl;
 class NodeMap
 {
     NodeMapImpl maImpl;
