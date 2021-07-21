@@ -3264,7 +3264,7 @@ SwFrameFormat* SwShareBoxFormats::GetFormat( const SwFrameFormat& rFormat, tools
 {
     sal_uInt16 nPos;
     return Seek_Entry( rFormat, &nPos )
-                    ? m_ShareArr[ nPos ]->GetFormat(nWidth)
+                    ? m_ShareArr[ nPos ].GetFormat(nWidth)
                     : nullptr;
 }
 SwFrameFormat* SwShareBoxFormats::GetFormat( const SwFrameFormat& rFormat,
@@ -3272,23 +3272,21 @@ SwFrameFormat* SwShareBoxFormats::GetFormat( const SwFrameFormat& rFormat,
 {
     sal_uInt16 nPos;
     return Seek_Entry( rFormat, &nPos )
-                    ? m_ShareArr[ nPos ]->GetFormat(rItem)
+                    ? m_ShareArr[ nPos ].GetFormat(rItem)
                     : nullptr;
 }
 
 void SwShareBoxFormats::AddFormat( const SwFrameFormat& rOld, SwFrameFormat& rNew )
 {
     sal_uInt16 nPos;
-    SwShareBoxFormat* pEntry;
     if( !Seek_Entry( rOld, &nPos ))
     {
-        pEntry = new SwShareBoxFormat( rOld );
-        m_ShareArr.insert(m_ShareArr.begin() + nPos, std::unique_ptr<SwShareBoxFormat>(pEntry));
+        SwShareBoxFormat aEntry(rOld);
+        aEntry.AddFormat( rNew );
+        m_ShareArr.insert(m_ShareArr.begin() + nPos, aEntry);
     }
     else
-        pEntry = m_ShareArr[ nPos ].get();
-
-    pEntry->AddFormat( rNew );
+        m_ShareArr[ nPos ].AddFormat(rNew);
 }
 
 void SwShareBoxFormats::ChangeFrameFormat( SwTableBox* pBox, SwTableLine* pLn,
@@ -3361,7 +3359,7 @@ void SwShareBoxFormats::RemoveFormat( const SwFrameFormat& rFormat )
 {
     for (auto i = m_ShareArr.size(); i; )
     {
-        if (m_ShareArr[ --i ]->RemoveFormat(rFormat))
+        if (m_ShareArr[ --i ].RemoveFormat(rFormat))
         {
             m_ShareArr.erase( m_ShareArr.begin() + i );
         }
@@ -3379,7 +3377,7 @@ bool SwShareBoxFormats::Seek_Entry( const SwFrameFormat& rFormat, sal_uInt16* pP
         while( nU <= nO )
         {
             const auto nM = nU + ( nO - nU ) / 2;
-            sal_uIntPtr nFormat = reinterpret_cast<sal_uIntPtr>(&m_ShareArr[ nM ]->GetOldFormat());
+            sal_uIntPtr nFormat = reinterpret_cast<sal_uIntPtr>(&m_ShareArr[ nM ].GetOldFormat());
             if( nFormat == nIdx )
             {
                 if( pPos )
