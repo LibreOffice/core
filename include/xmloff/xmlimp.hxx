@@ -48,6 +48,7 @@
 #include <com/sun/star/xml/sax/XFastDocumentHandler.hpp>
 #include <o3tl/typed_flags_set.hxx>
 #include <memory>
+#include <optional>
 
 namespace com::sun::star::beans { class XPropertySet; }
 namespace com::sun::star::beans { struct NamedValue; }
@@ -214,7 +215,7 @@ class XMLOFF_DLLPUBLIC SvXMLImport : public cppu::WeakImplHelper<
 
     std::unique_ptr<SvXMLImport_Impl>  mpImpl;            // dummy
 
-    std::unique_ptr<SvXMLNamespaceMap>    mpNamespaceMap;
+    std::optional<SvXMLNamespaceMap>      mxNamespaceMap;
     std::unique_ptr<SvXMLUnitConverter>   mpUnitConv;
     std::stack<SvXMLImportContextRef, std::vector<SvXMLImportContextRef>>
                                           maContexts;
@@ -240,8 +241,8 @@ class XMLOFF_DLLPUBLIC SvXMLImport : public cppu::WeakImplHelper<
     static void initializeNamespaceMaps();
     void registerNamespaces();
 public:
-    static std::unique_ptr<SvXMLNamespaceMap> processNSAttributes(
-        std::unique_ptr<SvXMLNamespaceMap> & rpNamespaceMap,
+    static std::optional<SvXMLNamespaceMap> processNSAttributes(
+        std::optional<SvXMLNamespaceMap> & rpNamespaceMap,
         SvXMLImport *const pImport,
         const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList);
 private:
@@ -394,8 +395,8 @@ public:
     static OUString getNamespacePrefixFromURI( const OUString& rURI );
     static sal_Int32 getTokenFromName(const OUString& sName);
 
-    SvXMLNamespaceMap& GetNamespaceMap() { return *mpNamespaceMap; }
-    const SvXMLNamespaceMap& GetNamespaceMap() const { return *mpNamespaceMap; }
+    SvXMLNamespaceMap& GetNamespaceMap() { return *mxNamespaceMap; }
+    const SvXMLNamespaceMap& GetNamespaceMap() const { return *mxNamespaceMap; }
     const SvXMLUnitConverter& GetMM100UnitConverter() const { return *mpUnitConv; }
         SvXMLUnitConverter& GetMM100UnitConverter() { return *mpUnitConv; }
     const css::uno::Reference< css::xml::sax::XLocator > & GetLocator() const { return mxLocator; }
