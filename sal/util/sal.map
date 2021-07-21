@@ -757,7 +757,6 @@ PRIVATE_1.7 { # LibreOffice 7.1
 
 PRIVATE_1.8 { # LibreOffice 7.3
     global:
-        rtl_str_toInt32_WithLength;
         rtl_str_toDouble_WithLength;
 } PRIVATE_1.7;
 
