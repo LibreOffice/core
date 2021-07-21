@@ -61,7 +61,7 @@ private:
 
     typedef std::vector<std::unique_ptr<ColumnType>> TableType;
 
-    std::vector<std::unique_ptr<TableType>> maTables;
+    std::vector<TableType> maTables;
 
     ColumnType& getColumn(const ScDocument& rDoc, SCTAB nTab, SCCOL nCol);
 
