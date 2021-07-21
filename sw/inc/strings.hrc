@@ -797,6 +797,7 @@
 #define STR_AUTH_FIELD_CUSTOM4                  NC_("STR_AUTH_FIELD_CUSTOM4", "User-defined4")
 #define STR_AUTH_FIELD_CUSTOM5                  NC_("STR_AUTH_FIELD_CUSTOM5", "User-defined5")
 #define STR_AUTH_FIELD_ISBN                     NC_("STR_AUTH_FIELD_ISBN", "ISBN")
+#define STR_AUTH_FIELD_LOCAL_URL                NC_("STR_AUTH_FIELD_LOCAL_URL", "Local copy")
 
 #define STR_IDXMRK_EDIT                         NC_("STR_IDXMRK_EDIT", "Edit Index Entry")
 #define STR_IDXMRK_INSERT                       NC_("STR_IDXMRK_INSERT", "Insert Index Entry")

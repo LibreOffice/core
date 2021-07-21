@@ -1142,6 +1142,7 @@ const TextInfo aTextInfoArr[] =
     {AUTH_FIELD_ANNOTE,          HID_AUTH_FIELD_ANNOTE          },
     {AUTH_FIELD_NOTE,            HID_AUTH_FIELD_NOTE            },
     {AUTH_FIELD_URL,             HID_AUTH_FIELD_URL             },
+    {AUTH_FIELD_LOCAL_URL,       HID_AUTH_FIELD_LOCAL_URL       },
     {AUTH_FIELD_CUSTOM1,         HID_AUTH_FIELD_CUSTOM1         },
     {AUTH_FIELD_CUSTOM2,         HID_AUTH_FIELD_CUSTOM2         },
     {AUTH_FIELD_CUSTOM3,         HID_AUTH_FIELD_CUSTOM3         },
@@ -1554,7 +1555,8 @@ namespace
         STR_AUTH_FIELD_CUSTOM3,
         STR_AUTH_FIELD_CUSTOM4,
         STR_AUTH_FIELD_CUSTOM5,
-        STR_AUTH_FIELD_ISBN
+        STR_AUTH_FIELD_ISBN,
+        STR_AUTH_FIELD_LOCAL_URL,
     };
 }
 

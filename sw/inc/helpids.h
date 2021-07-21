@@ -97,6 +97,7 @@
 #define HID_AUTH_FIELD_CUSTOM4                                  "SW_HID_AUTH_FIELD_CUSTOM4"
 #define HID_AUTH_FIELD_CUSTOM5                                  "SW_HID_AUTH_FIELD_CUSTOM5"
 #define HID_AUTH_FIELD_ISBN                                     "SW_HID_AUTH_FIELD_ISBN"
+#define HID_AUTH_FIELD_LOCAL_URL                                "SW_HID_AUTH_FIELD_LOCAL_URL"
 
 #define HID_BUSINESS_FMT_PAGE                                   "SW_HID_BUSINESS_FMT_PAGE"
 #define HID_BUSINESS_FMT_PAGE_CONT                              "SW_HID_BUSINESS_FMT_PAGE_CONT"

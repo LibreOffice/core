@@ -678,7 +678,8 @@ const char* const aFieldNames[] =
     "Custom3",
     "Custom4",
     "Custom5",
-    "ISBN"
+    "ISBN",
+    "LocalURL"
 };
 
 void SwAuthEntry::dumpAsXml(xmlTextWriterPtr pWriter) const
@@ -736,7 +737,7 @@ bool    SwAuthorityField::PutValue( const Any& rAny, sal_uInt16 /*nWhichId*/ )
         return false;
 
     OUStringBuffer sBuf;
-    comphelper::string::padToLength(sBuf, AUTH_FIELD_ISBN, TOX_STYLE_DELIMITER);
+    comphelper::string::padToLength(sBuf, AUTH_FIELD_LOCAL_URL, TOX_STYLE_DELIMITER);
     OUString sToSet(sBuf.makeStringAndClear());
     for(const PropertyValue& rParam : std::as_const(aParam))
     {

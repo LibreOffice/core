@@ -9,8 +9,12 @@
 
 #include <swmodeltestbase.hxx>
 
+#include <com/sun/star/text/BibliographyDataType.hpp>
 #include <com/sun/star/text/XTextAppend.hpp>
 #include <com/sun/star/text/XTextFrame.hpp>
+
+#include <comphelper/propertyvalue.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 
 #include <wrtsh.hxx>
 #include <unotextrange.hxx>
@@ -94,6 +98,40 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testRtlGutter)
     xPageStyle->setPropertyValue("RtlGutter", uno::makeAny(true));
     bRtlGutter = getProperty<bool>(xPageStyle, "RtlGutter");
     CPPUNIT_ASSERT(bRtlGutter);
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testBiblioLocalCopy)
+{
+    // Given an empty document:
+    createSwDoc();
+
+    // When setting the LocalURL of a biblio field:
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xField(
+        xFactory->createInstance("com.sun.star.text.TextField.Bibliography"), uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aFields = {
+        comphelper::makePropertyValue("BibiliographicType", text::BibliographyDataType::WWW),
+        comphelper::makePropertyValue("Identifier", OUString("ARJ00")),
+        comphelper::makePropertyValue("Author", OUString("Me")),
+        comphelper::makePropertyValue("Title", OUString("mytitle")),
+        comphelper::makePropertyValue("Year", OUString("2020")),
+        comphelper::makePropertyValue("URL", OUString("http://www.example.com/test.pdf")),
+        comphelper::makePropertyValue("LocalURL", OUString("file:///home/me/test.pdf")),
+    };
+    xField->setPropertyValue("Fields", uno::makeAny(aFields));
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xTextDocument->getText();
+    uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+    uno::Reference<text::XTextContent> xContent(xField, uno::UNO_QUERY);
+    xText->insertTextContent(xCursor, xContent, /*bAbsorb=*/false);
+
+    // Then make sure we get that LocalURL back:
+    comphelper::SequenceAsHashMap aMap(xField->getPropertyValue("Fields"));
+    // Without the accompanying fix in place, this test would have failed, there was no LocalURL key
+    // in the map.
+    CPPUNIT_ASSERT(aMap.find("LocalURL") != aMap.end());
+    auto aActual = aMap["LocalURL"].get<OUString>();
+    CPPUNIT_ASSERT_EQUAL(OUString("file:///home/me/test.pdf"), aActual);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
