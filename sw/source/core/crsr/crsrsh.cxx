@@ -3710,6 +3710,7 @@ static void lcl_FillRecognizerData( std::vector< OUString >& rSmartTagTypes,
             if ( pArea )
             {
                 rSmartTagTypes.push_back( pArea->maType );
+                aStringKeyMaps.push_back( pArea->mxPropertyBag );
             }
         }
     }

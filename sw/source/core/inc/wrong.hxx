@@ -67,6 +67,7 @@ class SwWrongArea
 {
 public:
     OUString maType;
+    css::uno::Reference< css::container::XStringKeyMap > mxPropertyBag;
     sal_Int32 mnPos;
     sal_Int32 mnLen;
     SwWrongList* mpSubList;
