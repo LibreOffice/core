@@ -1018,7 +1018,7 @@ const ScFuncDesc* ScFunctionList::GetFunction( sal_uInt32 nIndex ) const
 
 sal_uInt32 ScFunctionCategory::getCount() const
 {
-    return m_pCategory->size();
+    return m_rCategory.size();
 }
 
 OUString ScFunctionCategory::getName() const
@@ -1031,8 +1031,8 @@ OUString ScFunctionCategory::getName() const
 const formula::IFunctionDescription* ScFunctionCategory::getFunction(sal_uInt32 _nPos) const
 {
     const ScFuncDesc* pDesc = nullptr;
-    if(_nPos < m_pCategory->size())
-        pDesc = m_pCategory->at(_nPos);
+    if(_nPos < m_rCategory.size())
+        pDesc = m_rCategory.at(_nPos);
     return pDesc;
 }
 
@@ -1050,8 +1050,7 @@ ScFunctionMgr::ScFunctionMgr()
     OSL_ENSURE( pFuncList, "Functionlist not found." );
     sal_uInt32 catCount[MAX_FUNCCAT] = {0};
 
-    aCatLists[0].reset( new ::std::vector<const ScFuncDesc*> );
-    aCatLists[0]->reserve(pFuncList->GetCount());
+    aCatLists[0].reserve(pFuncList->GetCount());
 
     // Retrieve all functions, store in cumulative ("All") category, and count
     // number of functions in each category
@@ -1060,29 +1059,28 @@ ScFunctionMgr::ScFunctionMgr()
         OSL_ENSURE((pDesc->nCategory) < MAX_FUNCCAT, "Unknown category");
         if ((pDesc->nCategory) < MAX_FUNCCAT)
             ++catCount[pDesc->nCategory];
-        aCatLists[0]->push_back(pDesc);
+        aCatLists[0].push_back(pDesc);
     }
 
     // Sort functions in cumulative category by name
-    ::std::sort(aCatLists[0]->begin(), aCatLists[0]->end(), ScFuncDesc::compareByName);
+    ::std::sort(aCatLists[0].begin(), aCatLists[0].end(), ScFuncDesc::compareByName);
 
     // Allocate correct amount of space for categories
     for (sal_uInt16 i = 1; i < MAX_FUNCCAT; ++i)
     {
-        aCatLists[i].reset( new ::std::vector<const ScFuncDesc*> );
-        aCatLists[i]->reserve(catCount[i]);
+        aCatLists[i].reserve(catCount[i]);
     }
 
     // Fill categories with the corresponding functions (still sorted by name)
-    for (auto const& elemList : *aCatLists[0])
+    for (auto const& elemList : aCatLists[0])
     {
         if ((elemList->nCategory) < MAX_FUNCCAT)
-            aCatLists[elemList->nCategory]->push_back(elemList);
+            aCatLists[elemList->nCategory].push_back(elemList);
     }
 
     // Initialize iterators
-    pCurCatListIter = aCatLists[0]->end();
-    pCurCatListEnd = aCatLists[0]->end();
+    pCurCatListIter = aCatLists[0].end();
+    pCurCatListEnd = aCatLists[0].end();
 }
 
 ScFunctionMgr::~ScFunctionMgr()
@@ -1105,14 +1103,14 @@ const ScFuncDesc* ScFunctionMgr::First( sal_uInt16 nCategory ) const
     const ScFuncDesc* pDesc = nullptr;
     if ( nCategory < MAX_FUNCCAT )
     {
-        pCurCatListIter = aCatLists[nCategory]->begin();
-        pCurCatListEnd = aCatLists[nCategory]->end();
+        pCurCatListIter = aCatLists[nCategory].begin();
+        pCurCatListEnd = aCatLists[nCategory].end();
         pDesc = *pCurCatListIter;
     }
     else
     {
-        pCurCatListIter = aCatLists[0]->end();
-        pCurCatListEnd = aCatLists[0]->end();
+        pCurCatListIter = aCatLists[0].end();
+        pCurCatListEnd = aCatLists[0].end();
     }
     return pDesc;
 }
@@ -1140,7 +1138,7 @@ const formula::IFunctionCategory* ScFunctionMgr::getCategory(sal_uInt32 nCategor
     if ( nCategory < (MAX_FUNCCAT-1) )
     {
         if (m_aCategories.find(nCategory) == m_aCategories.end())
-            m_aCategories[nCategory] = std::make_shared<ScFunctionCategory>(aCatLists[nCategory+1].get(),nCategory); // aCatLists[0] is "all"
+            m_aCategories[nCategory] = std::make_shared<ScFunctionCategory>(aCatLists[nCategory+1],nCategory); // aCatLists[0] is "all"
         return m_aCategories[nCategory].get();
     }
     return nullptr;
