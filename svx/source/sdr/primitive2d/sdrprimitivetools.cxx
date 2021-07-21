@@ -29,7 +29,7 @@ namespace drawinglayer::primitive2d
 {
         BitmapEx createDefaultCross_3x3(const basegfx::BColor& rBColor)
         {
-            static vcl::DeleteOnDeinit< BitmapEx > aRetVal(nullptr);
+            static vcl::DeleteOnDeinit< BitmapEx > aRetVal(vcl::DeleteOnDeinitFlag::Empty);
             static basegfx::BColor aBColor;
             static ::osl::Mutex aMutex;
 
@@ -54,7 +54,7 @@ namespace drawinglayer::primitive2d
                 BitmapEx aBitmap = vcl::bitmap::CreateFromData(cross, 3, 3, 12, vcl::PixelFormat::N32_BPP);
 
                 // create and exchange at aRetVal
-                aRetVal.set(std::make_unique<BitmapEx>(aBitmap));
+                aRetVal.set(aBitmap);
             }
 
             return aRetVal.get() ? *aRetVal.get() : BitmapEx();
