@@ -30,6 +30,7 @@
 #include <sfx2/docfile.hxx>
 
 #include <swtypes.hxx>
+#include <rootfrm.hxx>
 #include <editsh.hxx>
 #include <doc.hxx>
 #include <IDocumentContentOperations.hxx>
@@ -172,7 +173,10 @@ void SwEditShell::UpdateTableOf(const SwTOXBase& rTOX, const SfxItemSet* pSet)
         rTOXSect.SetPosAtStartEnd(*GetCursor()->GetPoint());
 
     // start formatting
+    // tdf#139426 ..but allow supression of AssertFlyPages
+    GetLayout()->SetTableUpdateInProgress(true);
     CalcLayout();
+    GetLayout()->SetTableUpdateInProgress(false);
 
     // insert page numbering
     rTOXSect.UpdatePageNum();

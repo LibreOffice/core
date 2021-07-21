@@ -410,6 +410,7 @@ SwRootFrame::SwRootFrame( SwFrameFormat *pFormat, SwViewShell * pSh ) :
     mbBrowseWidthValid( false ),
     mbTurboAllowed( true ),
     mbAssertFlyPages( true ),
+    mbTableUpdateInProgress( false ),
     mbIsVirtPageNum( false ),
     mbIsNewLayout( true ),
     mbCallbackActionEnabled ( false ),
