@@ -272,7 +272,7 @@ static EditEngineItemPool* getEditEngineItemPool(SfxItemPool* pPool)
 }
 
 EditTextObjectImpl::EditTextObjectImpl( SfxItemPool* pP )
-    : mnMetric(0xFFFF)
+    : meMetric(MapUnit::LASTENUMDUMMY)
     , meUserType(OutlinerMode::DontKnow)
     , meScriptType(SvtScriptType::NONE)
     , mbVertical(false)
@@ -298,7 +298,7 @@ EditTextObjectImpl::EditTextObjectImpl( SfxItemPool* pP )
 }
 
 EditTextObjectImpl::EditTextObjectImpl( const EditTextObjectImpl& r )
-    : mnMetric(r.mnMetric)
+    : meMetric(r.meMetric)
     , meUserType(r.meUserType)
     , meScriptType(r.meScriptType)
     , mbVertical(r.mbVertical)
@@ -791,7 +791,7 @@ bool EditTextObjectImpl::Equals( const EditTextObjectImpl& rCompare, bool bCompa
         return true;
 
     if(     ( bComparePool && mpPool != rCompare.mpPool ) ||
-            ( mnMetric != rCompare.mnMetric ) ||
+            ( meMetric != rCompare.meMetric ) ||
             ( meUserType!= rCompare.meUserType ) ||
             ( meScriptType != rCompare.meScriptType ) ||
             ( mbVertical != rCompare.mbVertical ) ||
