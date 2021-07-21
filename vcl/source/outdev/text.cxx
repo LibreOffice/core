@@ -58,9 +58,9 @@ ImplMultiTextLineInfo::~ImplMultiTextLineInfo()
 {
 }
 
-void ImplMultiTextLineInfo::AddLine( ImplTextLineInfo* pLine )
+void ImplMultiTextLineInfo::AddLine( const ImplTextLineInfo& rLine )
 {
-    mvLines.push_back(std::unique_ptr<ImplTextLineInfo>(pLine));
+    mvLines.push_back(rLine);
 }
 
 void ImplMultiTextLineInfo::Clear()
@@ -631,7 +631,7 @@ tools::Long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
             if ( nLineWidth > nMaxLineWidth )
                 nMaxLineWidth = nLineWidth;
 
-            rLineInfo.AddLine( new ImplTextLineInfo( nLineWidth, nPos, nBreakPos-nPos ) );
+            rLineInfo.AddLine( ImplTextLineInfo( nLineWidth, nPos, nBreakPos-nPos ) );
 
             if ( nBreakPos == nPos )
                 nBreakPos++;
@@ -649,8 +649,8 @@ tools::Long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
 #ifdef DBG_UTIL
     for ( sal_Int32 nL = 0; nL < rLineInfo.Count(); nL++ )
     {
-        ImplTextLineInfo* pLine = rLineInfo.GetLine( nL );
-        OUString aLine = rStr.copy( pLine->GetIndex(), pLine->GetLen() );
+        ImplTextLineInfo& rLine = rLineInfo.GetLine( nL );
+        OUString aLine = rStr.copy( rLine.GetIndex(), rLine.GetLen() );
         SAL_WARN_IF( aLine.indexOf( '\r' ) != -1, "vcl", "ImplGetTextLines - Found CR!" );
         SAL_WARN_IF( aLine.indexOf( '\n' ) != -1, "vcl", "ImplGetTextLines - Found LF!" );
     }
@@ -1528,7 +1528,6 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Recta
     {
 
         ImplMultiTextLineInfo   aMultiLineInfo;
-        ImplTextLineInfo*       pLineInfo;
         sal_Int32               i;
         sal_Int32               nFormatLines;
 
@@ -1547,8 +1546,8 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Recta
                     // Create last line and shorten it
                     nFormatLines = nLines-1;
 
-                    pLineInfo = aMultiLineInfo.GetLine( nFormatLines );
-                    aLastLine = convertLineEnd(aStr.copy(pLineInfo->GetIndex()), LINEEND_LF);
+                    ImplTextLineInfo& rLineInfo = aMultiLineInfo.GetLine( nFormatLines );
+                    aLastLine = convertLineEnd(aStr.copy(rLineInfo.GetIndex()), LINEEND_LF);
                     // Replace all LineFeeds with Spaces
                     OUStringBuffer aLastLineBuffer(aLastLine);
                     sal_Int32 nLastLineLen = aLastLineBuffer.getLength();
@@ -1595,13 +1594,13 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Recta
             // Output all lines except for the last one
             for ( i = 0; i < nFormatLines; i++ )
             {
-                pLineInfo = aMultiLineInfo.GetLine( i );
+                ImplTextLineInfo& rLineInfo = aMultiLineInfo.GetLine( i );
                 if ( nStyle & DrawTextFlags::Right )
-                    aPos.AdjustX(nWidth-pLineInfo->GetWidth() );
+                    aPos.AdjustX(nWidth-rLineInfo.GetWidth() );
                 else if ( nStyle & DrawTextFlags::Center )
-                    aPos.AdjustX((nWidth-pLineInfo->GetWidth())/2 );
-                sal_Int32 nIndex   = pLineInfo->GetIndex();
-                sal_Int32 nLineLen = pLineInfo->GetLen();
+                    aPos.AdjustX((nWidth-rLineInfo.GetWidth())/2 );
+                sal_Int32 nIndex   = rLineInfo.GetIndex();
+                sal_Int32 nLineLen = rLineInfo.GetLen();
                 _rLayout.DrawText( aPos, aStr, nIndex, nLineLen, pVector, pDisplayText );
                 if ( bDrawMnemonics )
                 {
@@ -1815,7 +1814,6 @@ tools::Rectangle OutputDevice::GetTextRect( const tools::Rectangle& rRect,
     if ( nStyle & DrawTextFlags::MultiLine )
     {
         ImplMultiTextLineInfo   aMultiLineInfo;
-        ImplTextLineInfo*       pLineInfo;
         sal_Int32               nFormatLines;
         sal_Int32               i;
 
@@ -1849,20 +1847,20 @@ tools::Rectangle OutputDevice::GetTextRect( const tools::Rectangle& rRect,
             pInfo->mnMaxWidth = 0;
             for ( i = 0; i < nLines; i++ )
             {
-                pLineInfo = aMultiLineInfo.GetLine( i );
-                if ( bMaxWidth && (pLineInfo->GetWidth() > nMaxWidth) )
-                    nMaxWidth = pLineInfo->GetWidth();
-                if ( pLineInfo->GetWidth() > pInfo->mnMaxWidth )
-                    pInfo->mnMaxWidth = pLineInfo->GetWidth();
+                ImplTextLineInfo& rLineInfo = aMultiLineInfo.GetLine( i );
+                if ( bMaxWidth && (rLineInfo.GetWidth() > nMaxWidth) )
+                    nMaxWidth = rLineInfo.GetWidth();
+                if ( rLineInfo.GetWidth() > pInfo->mnMaxWidth )
+                    pInfo->mnMaxWidth = rLineInfo.GetWidth();
             }
         }
         else if ( !nMaxWidth )
         {
             for ( i = 0; i < nLines; i++ )
             {
-                pLineInfo = aMultiLineInfo.GetLine( i );
-                if ( pLineInfo->GetWidth() > nMaxWidth )
-                    nMaxWidth = pLineInfo->GetWidth();
+                ImplTextLineInfo& rLineInfo = aMultiLineInfo.GetLine( i );
+                if ( rLineInfo.GetWidth() > nMaxWidth )
+                    nMaxWidth = rLineInfo.GetWidth();
             }
         }
     }
