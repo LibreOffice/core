@@ -872,7 +872,7 @@ QString Qt5AccessibleWidget::attributes(int offset, int* startOffset, int* endOf
     // handle special values for offset the same way base class's QAccessibleTextWidget::attributes does
     // (as defined in IAccessible 2: -1 -> length, -2 -> cursor position)
     if (offset == -2)
-        offset = cursorPosition(); // currently always returns 0
+        offset = cursorPosition();
 
     const int nTextLength = characterCount();
     if (offset == -1 || offset == nTextLength)
@@ -927,11 +927,15 @@ QRect Qt5AccessibleWidget::characterRect(int /* offset */) const
     SAL_INFO("vcl.qt5", "Unsupported QAccessibleTextInterface::characterRect");
     return QRect();
 }
+
 int Qt5AccessibleWidget::cursorPosition() const
 {
-    SAL_INFO("vcl.qt5", "Unsupported QAccessibleTextInterface::cursorPosition");
+    Reference<XAccessibleText> xText(m_xAccessible, UNO_QUERY);
+    if (xText.is())
+        return xText->getCaretPosition();
     return 0;
 }
+
 int Qt5AccessibleWidget::offsetAtPoint(const QPoint& /* point */) const
 {
     SAL_INFO("vcl.qt5", "Unsupported QAccessibleTextInterface::offsetAtPoint");
