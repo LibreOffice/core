@@ -42,8 +42,6 @@ namespace comphelper {
 namespace svxform
 {
 
-    struct FormControlFactory_Data;
-
     class FormControlFactory
     {
     public:
@@ -97,7 +95,7 @@ namespace svxform
                 );
 
     private:
-        ::std::unique_ptr< FormControlFactory_Data >  m_pData;
+        css::uno::Reference<css::uno::XComponentContext>  m_xContext;
     };
 
 
