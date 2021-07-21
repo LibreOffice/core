@@ -22,7 +22,9 @@
 #include <toolkit/awt/vclxwindow.hxx>
 #include <com/sun/star/container/XContainerListener.hpp>
 
+#include <com/sun/star/awt/XAnimatedImages.hpp>
 #include <com/sun/star/awt/XAnimation.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
 
 #include <cppuhelper/implbase.hxx>
@@ -74,6 +76,12 @@ namespace toolkit
         // XComponent
         void SAL_CALL dispose(  ) override;
 
+        struct CachedImage
+        {
+            OUString                 sImageURL;
+            mutable css::uno::Reference< css::graphic::XGraphic >   xGraphic;
+        };
+
     private:
         void ProcessWindowEvent( const VclWindowEvent& i_windowEvent ) override;
 
@@ -84,7 +92,10 @@ namespace toolkit
         AnimatedImagesPeer(const AnimatedImagesPeer&) = delete;
         AnimatedImagesPeer& operator=(const AnimatedImagesPeer&) = delete;
 
-        std::unique_ptr< AnimatedImagesPeer_Data >   m_xData;
+        void updateImageList_nothrow();
+        void updateImageList_nothrow( const css::uno::Reference< css::awt::XAnimatedImages >& i_images );
+
+        std::vector< std::vector< CachedImage > >   maCachedImageSets;
     };
 
 

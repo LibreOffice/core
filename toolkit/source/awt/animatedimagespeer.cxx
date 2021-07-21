@@ -21,12 +21,10 @@
 #include <awt/animatedimagespeer.hxx>
 #include <toolkit/helper/property.hxx>
 
-#include <com/sun/star/awt/XAnimatedImages.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/awt/ImageScaleMode.hpp>
 
 #include <comphelper/namedvaluecollection.hxx>
@@ -63,44 +61,6 @@ namespace toolkit
 
     namespace ImageScaleMode = ::com::sun::star::awt::ImageScaleMode;
 
-
-    //= AnimatedImagesPeer_Data
-
-    namespace {
-
-    struct CachedImage
-    {
-        OUString                 sImageURL;
-        mutable Reference< XGraphic >   xGraphic;
-
-        CachedImage()
-            :sImageURL()
-            ,xGraphic()
-        {
-        }
-
-        explicit CachedImage( OUString const& i_imageURL )
-            :sImageURL( i_imageURL )
-            ,xGraphic()
-        {
-        }
-    };
-
-    }
-
-    struct AnimatedImagesPeer_Data
-    {
-        AnimatedImagesPeer&                             rAntiImpl;
-        ::std::vector< ::std::vector< CachedImage > >   aCachedImageSets;
-
-        explicit AnimatedImagesPeer_Data( AnimatedImagesPeer& i_antiImpl )
-            :rAntiImpl( i_antiImpl )
-            ,aCachedImageSets()
-        {
-        }
-    };
-
-
     //= helper
 
     namespace
@@ -125,7 +85,7 @@ namespace toolkit
         }
 
 
-        bool lcl_ensureImage_throw( Reference< XGraphicProvider > const& i_graphicProvider, const bool i_isHighContrast, const CachedImage& i_cachedImage )
+        bool lcl_ensureImage_throw( Reference< XGraphicProvider > const& i_graphicProvider, const bool i_isHighContrast, const AnimatedImagesPeer::CachedImage& i_cachedImage )
         {
             if ( !i_cachedImage.xGraphic.is() )
             {
@@ -165,125 +125,18 @@ namespace toolkit
         }
 
 
-        void lcl_init( Sequence< OUString > const& i_imageURLs, ::std::vector< CachedImage >& o_images )
+        void lcl_init( Sequence< OUString > const& i_imageURLs, ::std::vector< AnimatedImagesPeer::CachedImage >& o_images )
         {
             o_images.resize(0);
             size_t count = size_t( i_imageURLs.getLength() );
             o_images.reserve( count );
             for ( const auto& rImageURL : i_imageURLs )
             {
-                o_images.emplace_back( rImageURL );
+                o_images.emplace_back( AnimatedImagesPeer::CachedImage{ rImageURL, nullptr } );
             }
         }
 
 
-        void lcl_updateImageList_nothrow( AnimatedImagesPeer_Data& i_data )
-        {
-            VclPtr<Throbber> pThrobber = i_data.rAntiImpl.GetAsDynamic<Throbber>();
-            if ( !pThrobber )
-                return;
-
-            try
-            {
-                // collect the image sizes of the different image sets
-                const Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
-                const Reference< XGraphicProvider > xGraphicProvider( css::graphic::GraphicProvider::create(xContext) );
-
-                const bool isHighContrast = pThrobber->GetSettings().GetStyleSettings().GetHighContrastMode();
-
-                sal_Int32 nPreferredSet = -1;
-                const size_t nImageSetCount = i_data.aCachedImageSets.size();
-                if ( nImageSetCount < 2 )
-                {
-                    nPreferredSet = sal_Int32( nImageSetCount ) - 1;
-                }
-                else
-                {
-                    ::std::vector< Size > aImageSizes( nImageSetCount );
-                    for ( size_t nImageSet = 0; nImageSet < nImageSetCount; ++nImageSet )
-                    {
-                        ::std::vector< CachedImage > const& rImageSet( i_data.aCachedImageSets[ nImageSet ] );
-                        if  (   ( rImageSet.empty() )
-                            ||  ( !lcl_ensureImage_throw( xGraphicProvider, isHighContrast, rImageSet[0] ) )
-                            )
-                        {
-                            aImageSizes[ nImageSet ] = Size( SAL_MAX_INT32, SAL_MAX_INT32 );
-                        }
-                        else
-                        {
-                            aImageSizes[ nImageSet ] = lcl_getGraphicSizePixel( rImageSet[0].xGraphic );
-                        }
-                    }
-
-                    // find the set with the smallest difference between window size and image size
-                    const ::Size aWindowSizePixel = pThrobber->GetSizePixel();
-                    tools::Long nMinimalDistance = ::std::numeric_limits< tools::Long >::max();
-                    for (   ::std::vector< Size >::const_iterator check = aImageSizes.begin();
-                            check != aImageSizes.end();
-                            ++check
-                        )
-                    {
-                        if  (   ( check->Width > aWindowSizePixel.Width() )
-                            ||  ( check->Height > aWindowSizePixel.Height() )
-                            )
-                            // do not use an image set which doesn't fit into the window
-                            continue;
-
-                        const sal_Int64 distance =
-                                ( aWindowSizePixel.Width() - check->Width ) * ( aWindowSizePixel.Width() - check->Width )
-                            +   ( aWindowSizePixel.Height() - check->Height ) * ( aWindowSizePixel.Height() - check->Height );
-                        if ( distance < nMinimalDistance )
-                        {
-                            nMinimalDistance = distance;
-                            nPreferredSet = check - aImageSizes.begin();
-                        }
-                    }
-                }
-
-                // found a set?
-                std::vector< Image > aImages;
-                if ( ( nPreferredSet >= 0 ) && ( o3tl::make_unsigned( nPreferredSet ) < nImageSetCount ) )
-                {
-                    // => set the images
-                    ::std::vector< CachedImage > const& rImageSet( i_data.aCachedImageSets[ nPreferredSet ] );
-                    aImages.resize( rImageSet.size() );
-                    sal_Int32 imageIndex = 0;
-                    for ( const auto& rCachedImage : rImageSet )
-                    {
-                        lcl_ensureImage_throw( xGraphicProvider, isHighContrast, rCachedImage );
-                        aImages[ imageIndex++ ] = Image(rCachedImage.xGraphic);
-                    }
-                }
-                pThrobber->setImageList( aImages );
-            }
-            catch( const Exception& )
-            {
-                DBG_UNHANDLED_EXCEPTION("toolkit");
-            }
-        }
-
-
-        void lcl_updateImageList_nothrow( AnimatedImagesPeer_Data& i_data, const Reference< XAnimatedImages >& i_images )
-        {
-            try
-            {
-                const sal_Int32 nImageSetCount = i_images->getImageSetCount();
-                i_data.aCachedImageSets.resize(0);
-                for ( sal_Int32 set = 0;  set < nImageSetCount; ++set )
-                {
-                    const Sequence< OUString > aImageURLs( i_images->getImageSet( set ) );
-                    ::std::vector< CachedImage > aImages;
-                    lcl_init( aImageURLs, aImages );
-                    i_data.aCachedImageSets.push_back( aImages );
-                }
-
-                lcl_updateImageList_nothrow( i_data );
-            }
-            catch( const Exception& )
-            {
-                DBG_UNHANDLED_EXCEPTION("toolkit");
-            }
-        }
     }
 
 
@@ -292,7 +145,6 @@ namespace toolkit
 
     AnimatedImagesPeer::AnimatedImagesPeer()
         :AnimatedImagesPeer_Base()
-        ,m_xData( new AnimatedImagesPeer_Data( *this ) )
     {
     }
 
@@ -413,7 +265,7 @@ namespace toolkit
     {
         if ( i_windowEvent.GetId() == VclEventId::WindowResize )
         {
-            lcl_updateImageList_nothrow( *m_xData );
+            updateImageList_nothrow();
         }
 
         AnimatedImagesPeer_Base::ProcessWindowEvent( i_windowEvent );
@@ -424,7 +276,7 @@ namespace toolkit
     {
         SolarMutexGuard aGuard;
 
-        lcl_updateImageList_nothrow( *m_xData, Reference< XAnimatedImages >( i_animatedImages, UNO_QUERY_THROW ) );
+        updateImageList_nothrow( Reference< XAnimatedImages >( i_animatedImages, UNO_QUERY_THROW ) );
     }
 
 
@@ -436,18 +288,18 @@ namespace toolkit
         sal_Int32 nPosition(0);
         OSL_VERIFY( i_event.Accessor >>= nPosition );
         size_t position = size_t( nPosition );
-        if ( position > m_xData->aCachedImageSets.size() )
+        if ( position > maCachedImageSets.size() )
         {
             OSL_ENSURE( false, "AnimatedImagesPeer::elementInserted: illegal accessor/index!" );
-            lcl_updateImageList_nothrow( *m_xData, xAnimatedImages );
+            updateImageList_nothrow( xAnimatedImages );
         }
 
         Sequence< OUString > aImageURLs;
         OSL_VERIFY( i_event.Element >>= aImageURLs );
         ::std::vector< CachedImage > aImages;
         lcl_init( aImageURLs, aImages );
-        m_xData->aCachedImageSets.insert( m_xData->aCachedImageSets.begin() + position, aImages );
-        lcl_updateImageList_nothrow( *m_xData );
+        maCachedImageSets.insert( maCachedImageSets.begin() + position, aImages );
+        updateImageList_nothrow();
     }
 
 
@@ -459,14 +311,14 @@ namespace toolkit
         sal_Int32 nPosition(0);
         OSL_VERIFY( i_event.Accessor >>= nPosition );
         size_t position = size_t( nPosition );
-        if ( position >= m_xData->aCachedImageSets.size() )
+        if ( position >= maCachedImageSets.size() )
         {
             OSL_ENSURE( false, "AnimatedImagesPeer::elementRemoved: illegal accessor/index!" );
-            lcl_updateImageList_nothrow( *m_xData, xAnimatedImages );
+            updateImageList_nothrow( xAnimatedImages );
         }
 
-        m_xData->aCachedImageSets.erase( m_xData->aCachedImageSets.begin() + position );
-        lcl_updateImageList_nothrow( *m_xData );
+        maCachedImageSets.erase( maCachedImageSets.begin() + position );
+        updateImageList_nothrow();
     }
 
 
@@ -478,18 +330,18 @@ namespace toolkit
         sal_Int32 nPosition(0);
         OSL_VERIFY( i_event.Accessor >>= nPosition );
         size_t position = size_t( nPosition );
-        if ( position >= m_xData->aCachedImageSets.size() )
+        if ( position >= maCachedImageSets.size() )
         {
             OSL_ENSURE( false, "AnimatedImagesPeer::elementReplaced: illegal accessor/index!" );
-            lcl_updateImageList_nothrow( *m_xData, xAnimatedImages );
+            updateImageList_nothrow( xAnimatedImages );
         }
 
         Sequence< OUString > aImageURLs;
         OSL_VERIFY( i_event.Element >>= aImageURLs );
         ::std::vector< CachedImage > aImages;
         lcl_init( aImageURLs, aImages );
-        m_xData->aCachedImageSets[ position ] = aImages;
-        lcl_updateImageList_nothrow( *m_xData );
+        maCachedImageSets[ position ] = aImages;
+        updateImageList_nothrow();
     }
 
 
@@ -509,9 +361,116 @@ namespace toolkit
     {
         AnimatedImagesPeer_Base::dispose();
         SolarMutexGuard aGuard;
-        m_xData->aCachedImageSets.resize(0);
+        maCachedImageSets.resize(0);
     }
 
+        void AnimatedImagesPeer::updateImageList_nothrow()
+        {
+            VclPtr<Throbber> pThrobber = GetAsDynamic<Throbber>();
+            if ( !pThrobber )
+                return;
+
+            try
+            {
+                // collect the image sizes of the different image sets
+                const Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+                const Reference< XGraphicProvider > xGraphicProvider( css::graphic::GraphicProvider::create(xContext) );
+
+                const bool isHighContrast = pThrobber->GetSettings().GetStyleSettings().GetHighContrastMode();
+
+                sal_Int32 nPreferredSet = -1;
+                const size_t nImageSetCount = maCachedImageSets.size();
+                if ( nImageSetCount < 2 )
+                {
+                    nPreferredSet = sal_Int32( nImageSetCount ) - 1;
+                }
+                else
+                {
+                    ::std::vector< Size > aImageSizes( nImageSetCount );
+                    for ( size_t nImageSet = 0; nImageSet < nImageSetCount; ++nImageSet )
+                    {
+                        ::std::vector< CachedImage > const& rImageSet( maCachedImageSets[ nImageSet ] );
+                        if  (   ( rImageSet.empty() )
+                            ||  ( !lcl_ensureImage_throw( xGraphicProvider, isHighContrast, rImageSet[0] ) )
+                            )
+                        {
+                            aImageSizes[ nImageSet ] = Size( SAL_MAX_INT32, SAL_MAX_INT32 );
+                        }
+                        else
+                        {
+                            aImageSizes[ nImageSet ] = lcl_getGraphicSizePixel( rImageSet[0].xGraphic );
+                        }
+                    }
+
+                    // find the set with the smallest difference between window size and image size
+                    const ::Size aWindowSizePixel = pThrobber->GetSizePixel();
+                    tools::Long nMinimalDistance = ::std::numeric_limits< tools::Long >::max();
+                    for (   ::std::vector< Size >::const_iterator check = aImageSizes.begin();
+                            check != aImageSizes.end();
+                            ++check
+                        )
+                    {
+                        if  (   ( check->Width > aWindowSizePixel.Width() )
+                            ||  ( check->Height > aWindowSizePixel.Height() )
+                            )
+                            // do not use an image set which doesn't fit into the window
+                            continue;
+
+                        const sal_Int64 distance =
+                                ( aWindowSizePixel.Width() - check->Width ) * ( aWindowSizePixel.Width() - check->Width )
+                            +   ( aWindowSizePixel.Height() - check->Height ) * ( aWindowSizePixel.Height() - check->Height );
+                        if ( distance < nMinimalDistance )
+                        {
+                            nMinimalDistance = distance;
+                            nPreferredSet = check - aImageSizes.begin();
+                        }
+                    }
+                }
+
+                // found a set?
+                std::vector< Image > aImages;
+                if ( ( nPreferredSet >= 0 ) && ( o3tl::make_unsigned( nPreferredSet ) < nImageSetCount ) )
+                {
+                    // => set the images
+                    ::std::vector< CachedImage > const& rImageSet( maCachedImageSets[ nPreferredSet ] );
+                    aImages.resize( rImageSet.size() );
+                    sal_Int32 imageIndex = 0;
+                    for ( const auto& rCachedImage : rImageSet )
+                    {
+                        lcl_ensureImage_throw( xGraphicProvider, isHighContrast, rCachedImage );
+                        aImages[ imageIndex++ ] = Image(rCachedImage.xGraphic);
+                    }
+                }
+                pThrobber->setImageList( aImages );
+            }
+            catch( const Exception& )
+            {
+                DBG_UNHANDLED_EXCEPTION("toolkit");
+            }
+        }
+
+
+        void AnimatedImagesPeer::updateImageList_nothrow( const Reference< XAnimatedImages >& i_images )
+        {
+            try
+            {
+                const sal_Int32 nImageSetCount = i_images->getImageSetCount();
+                maCachedImageSets.resize(0);
+                for ( sal_Int32 set = 0;  set < nImageSetCount; ++set )
+                {
+                    const Sequence< OUString > aImageURLs( i_images->getImageSet( set ) );
+                    ::std::vector< CachedImage > aImages;
+                    lcl_init( aImageURLs, aImages );
+                    maCachedImageSets.push_back( aImages );
+                }
+
+                updateImageList_nothrow();
+            }
+            catch( const Exception& )
+            {
+                DBG_UNHANDLED_EXCEPTION("toolkit");
+            }
+        }
 
 } // namespace toolkit
 
