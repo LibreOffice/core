@@ -69,10 +69,7 @@ ColumnSpanSet::ColumnType& ColumnSpanSet::getColumn(const ScDocument& rDoc, SCTA
     if (o3tl::make_unsigned(nTab) >= maTables.size())
         maTables.resize(nTab+1);
 
-    if (!maTables[nTab])
-        maTables[nTab].reset(new TableType);
-
-    TableType& rTab = *maTables[nTab];
+    TableType& rTab = maTables[nTab];
     if (o3tl::make_unsigned(nCol) >= rTab.size())
         rTab.resize(nCol+1);
 
@@ -149,10 +146,10 @@ void ColumnSpanSet::executeAction(Action& ac) const
 {
     for (size_t nTab = 0; nTab < maTables.size(); ++nTab)
     {
-        if (!maTables[nTab])
+        if (maTables[nTab].empty())
             continue;
 
-        const TableType& rTab = *maTables[nTab];
+        const TableType& rTab = maTables[nTab];
         for (size_t nCol = 0; nCol < rTab.size(); ++nCol)
         {
             if (!rTab[nCol])
@@ -180,10 +177,10 @@ void ColumnSpanSet::executeColumnAction(ScDocument& rDoc, ColumnAction& ac) cons
 {
     for (size_t nTab = 0; nTab < maTables.size(); ++nTab)
     {
-        if (!maTables[nTab])
+        if (maTables[nTab].empty())
             continue;
 
-        const TableType& rTab = *maTables[nTab];
+        const TableType& rTab = maTables[nTab];
         for (SCCOL nCol = 0; nCol < static_cast<SCCOL>(rTab.size()); ++nCol)
         {
             if (!rTab[nCol])
