@@ -963,11 +963,11 @@ bool ScDocument::IsEditActionAllowed(
         [this, &eAction, &nStart, &nEnd](const SCTAB& rTab) { return IsEditActionAllowed(eAction, rTab, nStart, nEnd); });
 }
 
-std::unique_ptr<sc::ColumnIterator> ScDocument::GetColumnIterator( SCTAB nTab, SCCOL nCol, SCROW nRow1, SCROW nRow2 ) const
+std::optional<sc::ColumnIterator> ScDocument::GetColumnIterator( SCTAB nTab, SCCOL nCol, SCROW nRow1, SCROW nRow2 ) const
 {
     const ScTable* pTab = FetchTable(nTab);
     if (!pTab)
-        return std::unique_ptr<sc::ColumnIterator>();
+        return {};
 
     return pTab->GetColumnIterator(nCol, nRow1, nRow2);
 }
