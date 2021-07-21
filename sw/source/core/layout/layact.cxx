@@ -657,8 +657,11 @@ void SwLayAction::InternalAction(OutputDevice* pRenderContext)
         if ((bTakeShortcut || !pPage) && !IsInterrupt() &&
              (m_pRoot->IsSuperfluous() || m_pRoot->IsAssertFlyPages()) )
         {
-            if ( m_pRoot->IsAssertFlyPages() )
+            // tdf#139426 allow supression of AssertFlyPages
+            if ( m_pRoot->IsAssertFlyPages() && !m_pRoot->IsTableUpdateInProgress())
+            {
                 m_pRoot->AssertFlyPages();
+            }
             if ( m_pRoot->IsSuperfluous() )
             {
                 bool bOld = IsAgain();
