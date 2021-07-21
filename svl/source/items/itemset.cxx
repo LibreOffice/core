@@ -63,10 +63,6 @@ SfxItemSet::SfxItemSet(
     m_pPool(&pool), m_pParent(nullptr),
     m_pItems(new SfxPoolItem const *[items]{}),
     m_pWhichRanges(wids),
-        // cannot overflow, assuming std::size_t is no smaller than sal_uInt16,
-        // as wids.size() must be substantially smaller than
-        // std::numeric_limits<sal_uInt16>::max() by construction in
-        // SfxItemSet::create
     m_nCount(0)
 {
     assert(wids.size() != 0);
@@ -80,10 +76,6 @@ SfxItemSet::SfxItemSet(
     m_pPool(&pool), m_pParent(nullptr),
     m_pItems(new SfxPoolItem const *[items]{}),
     m_pWhichRanges(std::move(wids)),
-        // cannot overflow, assuming std::size_t is no smaller than sal_uInt16,
-        // as wids.size() must be substantially smaller than
-        // std::numeric_limits<sal_uInt16>::max() by construction in
-        // SfxItemSet::create
     m_nCount(0)
 {
     assert(m_pWhichRanges.size() != 0);
