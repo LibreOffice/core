@@ -18,12 +18,11 @@
  */
 
 #include <comphelper/asyncnotification.hxx>
-#include <osl/mutex.hxx>
-#include <osl/conditn.hxx>
+#include <mutex>
+#include <condition_variable>
 #include <rtl/instance.hxx>
 
 #include <cassert>
-#include <deque>
 #include <stdexcept>
 #include <vector>
 #include <algorithm>
@@ -44,21 +43,7 @@ namespace comphelper
     {
         AnyEventRef                         aEvent;
         ::rtl::Reference< IEventProcessor > xProcessor;
-
-        ProcessableEvent()
-        {
-        }
-
-        ProcessableEvent( const AnyEventRef& _rEvent, const ::rtl::Reference< IEventProcessor >& _xProcessor )
-            :aEvent( _rEvent )
-            ,xProcessor( _xProcessor )
-        {
-        }
     };
-
-    }
-
-    typedef std::deque< ProcessableEvent >    EventQueue;
 
     namespace {
 
@@ -77,9 +62,9 @@ namespace comphelper
 
     struct EventNotifierImpl
     {
-        ::osl::Mutex        aMutex;
-        ::osl::Condition    aPendingActions;
-        EventQueue          aEvents;
+        std::mutex        aMutex;
+        std::condition_variable aPendingActions;
+        std::vector< ProcessableEvent > aEvents;
         bool                bTerminate;
         // only used for AsyncEventNotifierAutoJoin
         char const*         name;
@@ -105,7 +90,7 @@ namespace comphelper
 
     void AsyncEventNotifierBase::removeEventsForProcessor( const ::rtl::Reference< IEventProcessor >& _xProcessor )
     {
-        ::osl::MutexGuard aGuard( m_xImpl->aMutex );
+        std::lock_guard aGuard( m_xImpl->aMutex );
 
         // remove all events for this processor
         m_xImpl->aEvents.erase(std::remove_if( m_xImpl->aEvents.begin(), m_xImpl->aEvents.end(), EqualProcessor( _xProcessor ) ), m_xImpl->aEvents.end());
@@ -114,25 +99,25 @@ namespace comphelper
 
     void SAL_CALL AsyncEventNotifierBase::terminate()
     {
-        ::osl::MutexGuard aGuard( m_xImpl->aMutex );
+        std::lock_guard aGuard( m_xImpl->aMutex );
 
         // remember the termination request
         m_xImpl->bTerminate = true;
 
         // awake the thread
-        m_xImpl->aPendingActions.set();
+        m_xImpl->aPendingActions.notify_one();
     }
 
 
     void AsyncEventNotifierBase::addEvent( const AnyEventRef& _rEvent, const ::rtl::Reference< IEventProcessor >& _xProcessor )
     {
-        ::osl::MutexGuard aGuard( m_xImpl->aMutex );
+        std::lock_guard aGuard( m_xImpl->aMutex );
 
         // remember this event
-        m_xImpl->aEvents.emplace_back( _rEvent, _xProcessor );
+        m_xImpl->aEvents.emplace_back( {_rEvent, _xProcessor} );
 
         // awake the thread
-        m_xImpl->aPendingActions.set();
+        m_xImpl->aPendingActions.notify_one();
     }
 
 
@@ -140,28 +125,25 @@ namespace comphelper
     {
         for (;;)
         {
-            m_xImpl->aPendingActions.wait();
-            ProcessableEvent aEvent;
+            std::vector< ProcessableEvent > aEvents;
             {
-                osl::MutexGuard aGuard(m_xImpl->aMutex);
+                std::unique_lock aGuard(m_xImpl->aMutex);
+                m_xImpl->aPendingActions.wait(aGuard);
                 if (m_xImpl->bTerminate)
                 {
                     break;
                 }
                 if (!m_xImpl->aEvents.empty())
                 {
-                    aEvent = m_xImpl->aEvents.front();
-                    m_xImpl->aEvents.pop_front();
-                }
-                if (m_xImpl->aEvents.empty())
-                {
-                    m_xImpl->aPendingActions.reset();
+                    std::swap(aEvents, m_xImpl->aEvents);
                 }
             }
-            if (aEvent.aEvent.is()) {
-                assert(aEvent.xProcessor.is());
-                aEvent.xProcessor->processEvent(*aEvent.aEvent);
+            for (ProcessableEvent& rEvent : aEvents)
+            {
+                assert(rEvent.xProcessor.is());
+                rEvent.xProcessor->processEvent(*rEvent.aEvent);
             }
+            aEvents.clear();
         }
     }
 
