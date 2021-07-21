@@ -110,14 +110,6 @@ double SAL_CALL rtl_str_toDouble(char const * pStr) SAL_THROW_EXTERN_C()
                                    nullptr, nullptr);
 }
 
-double SAL_CALL rtl_str_toDouble_WithLength(const char* pStr,
-                                              sal_Int32 nStrLength) SAL_THROW_EXTERN_C()
-{
-    assert(pStr);
-    return rtl_math_stringToDouble(pStr, pStr + nStrLength, '.', 0,
-                                   nullptr, nullptr);
-}
-
 /* ======================================================================= */
 
 static int rtl_ImplGetFastUTF8ByteLen( const sal_Unicode* pStr, sal_Int32 nLen )

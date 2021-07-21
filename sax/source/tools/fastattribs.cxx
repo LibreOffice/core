@@ -20,6 +20,7 @@
 #include <algorithm>
 
 #include <com/sun/star/xml/sax/SAXException.hpp>
+#include <rtl/math.h>
 #include <sax/fastattribs.hxx>
 
 using namespace ::com::sun::star::uno;
@@ -221,7 +222,8 @@ bool FastAttributeList::getAsDouble( sal_Int32 nToken, double &rDouble) const
     for (size_t i = 0; i < maAttributeTokens.size(); ++i)
         if (maAttributeTokens[i] == nToken)
         {
-            rDouble = rtl_str_toDouble_WithLength( getFastAttributeValue(i),  AttributeValueLength(i) );
+            auto const p = getFastAttributeValue(i);
+            rDouble = rtl_math_stringToDouble( p,  p + AttributeValueLength(i), '.', 0, nullptr, nullptr );
             return true;
         }
     return false;
