@@ -26,6 +26,8 @@
 
 #include <svl/sharedstring.hxx>
 #include <svl/languageoptions.hxx>
+#include <tools/long.hxx>
+#include <tools/mapunit.hxx>
 
 #include <memory>
 #include <vector>
@@ -176,8 +178,7 @@ private:
     OutlinerMode            meUserType;
     SvtScriptType           meScriptType;
     TextRotation            meRotation;
-
-    sal_uInt16              mnMetric;
+    MapUnit                 meMetric;
 
     bool                    mbOwnerOfPool;
     bool                    mbVertical;
@@ -251,9 +252,9 @@ public:
 
     virtual editeng::FieldUpdater GetFieldUpdater() override { return editeng::FieldUpdater(*this); }
 
-    bool HasMetric() const { return mnMetric != 0xFFFF; }
-    sal_uInt16                  GetMetric() const           { return mnMetric; }
-    void                    SetMetric( sal_uInt16 n )       { mnMetric = n; }
+    bool HasMetric() const { return meMetric != MapUnit::LASTENUMDUMMY; }
+    MapUnit                  GetMetric() const           { return meMetric; }
+    void                    SetMetric( MapUnit n )       { meMetric = n; }
 
     bool                    IsOwnerOfPool() const       { return mbOwnerOfPool; }
 
