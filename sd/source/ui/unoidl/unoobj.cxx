@@ -894,7 +894,7 @@ void SdXShape::SetEmptyPresObj(bool bEmpty)
     if(!bEmpty)
     {
         OutlinerParaObject* pOutlinerParaObject = pObj->GetOutlinerParaObject();
-        const bool bVertical = pOutlinerParaObject && pOutlinerParaObject->IsVertical();
+        const bool bVertical = pOutlinerParaObject && pOutlinerParaObject->IsEffectivelyVertical();
 
         // really delete SdrOutlinerObj at pObj
         pObj->NbcSetOutlinerParaObject(nullptr);

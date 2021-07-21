@@ -1354,7 +1354,7 @@ void SdrTextObj::NbcSetOutlinerParaObjectForText( std::unique_ptr<OutlinerParaOb
 
     if (pText && pText->GetOutlinerParaObject())
     {
-        SvxWritingModeItem aWritingMode(pText->GetOutlinerParaObject()->IsVertical() && pText->GetOutlinerParaObject()->IsTopToBottom()
+        SvxWritingModeItem aWritingMode(pText->GetOutlinerParaObject()->IsEffectivelyVertical() && pText->GetOutlinerParaObject()->IsTopToBottom()
             ? css::text::WritingMode_TB_RL
             : css::text::WritingMode_LR_TB,
             SDRATTR_TEXTDIRECTION);
@@ -1474,7 +1474,7 @@ bool SdrTextObj::IsVerticalWriting() const
     OutlinerParaObject* pOutlinerParaObject = GetOutlinerParaObject();
     if(pOutlinerParaObject)
     {
-        return pOutlinerParaObject->IsVertical();
+        return pOutlinerParaObject->IsEffectivelyVertical();
     }
 
     return false;
@@ -1493,7 +1493,7 @@ void SdrTextObj::SetVerticalWriting(bool bVertical)
     }
 
     if (!pOutlinerParaObject ||
-        (pOutlinerParaObject->IsVertical() == bVertical))
+        (pOutlinerParaObject->IsEffectivelyVertical() == bVertical))
         return;
 
     // get item settings

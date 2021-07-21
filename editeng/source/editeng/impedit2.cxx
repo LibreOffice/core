@@ -795,9 +795,9 @@ EditSelection const & ImpEditEngine::MoveCursor( const KeyEvent& rKeyEvent, Edit
     EditPaM aOldPaM( aPaM );
 
     TextDirectionality eTextDirection = TextDirectionality::LeftToRight_TopToBottom;
-    if (IsVertical() && IsTopToBottom())
+    if (IsEffectivelyVertical() && IsTopToBottom())
         eTextDirection = TextDirectionality::TopToBottom_RightToLeft;
-    else if (IsVertical() && !IsTopToBottom())
+    else if (IsEffectivelyVertical() && !IsTopToBottom())
         eTextDirection = TextDirectionality::BottomToTop_LeftToRight;
     else if ( IsRightToLeft( GetEditDoc().GetPos( aPaM.GetNode() ) ) )
         eTextDirection = TextDirectionality::RightToLeft_TopToBottom;
@@ -1980,7 +1980,7 @@ bool ImpEditEngine::IsRightToLeft( sal_Int32 nPara ) const
     bool bR2L = false;
     const SvxFrameDirectionItem* pFrameDirItem = nullptr;
 
-    if ( !IsVertical() )
+    if ( !IsEffectivelyVertical() )
     {
         bR2L = GetDefaultHorizontalTextDirection() == EEHorizontalTextDirection::R2L;
         pFrameDirItem = &GetParaAttrib( nPara, EE_PARA_WRITINGDIR );

@@ -3447,7 +3447,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                 if((nTextPathFlags & 0x4000) != 0)  // Is Font work
                 {
                     OutlinerParaObject* pOutlinerParaObject(rSdrObjCustomShape.GetOutlinerParaObject());
-                    if ( pOutlinerParaObject && pOutlinerParaObject->IsVertical() )
+                    if ( pOutlinerParaObject && pOutlinerParaObject->IsEffectivelyVertical() )
                         nTextPathFlags |= 0x2000;
                 }
 

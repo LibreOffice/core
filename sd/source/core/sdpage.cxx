@@ -2893,7 +2893,7 @@ bool SdPage::RestoreDefaultText( SdrObject* pObj )
                 bool bVertical = false;
                 OutlinerParaObject* pOldPara = pTextObj->GetOutlinerParaObject();
                 if( pOldPara )
-                    bVertical = pOldPara->IsVertical();  // is old para object vertical?
+                    bVertical = pOldPara->IsEffectivelyVertical();  // is old para object vertical?
 
                 SetObjText( pTextObj, nullptr, ePresObjKind, aString );
 
@@ -2904,7 +2904,7 @@ bool SdPage::RestoreDefaultText( SdrObject* pObj )
                     // AutoGrowWidth/Height items still exist in the
                     // not changed object.
                     if(pTextObj->GetOutlinerParaObject()
-                        && pTextObj->GetOutlinerParaObject()->IsVertical() != bVertical)
+                        && pTextObj->GetOutlinerParaObject()->IsEffectivelyVertical() != bVertical)
                     {
                         ::tools::Rectangle aObjectRect = pTextObj->GetSnapRect();
                         pTextObj->GetOutlinerParaObject()->SetVertical(bVertical);

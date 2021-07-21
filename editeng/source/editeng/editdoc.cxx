@@ -2015,8 +2015,8 @@ void EditDoc::CreateDefFont( bool bUseStyles )
 {
     SfxItemSet aTmpSet( GetItemPool(), svl::Items<EE_PARA_START, EE_CHAR_END> );
     CreateFont( aDefFont, aTmpSet );
-    aDefFont.SetVertical( IsVertical() );
-    aDefFont.SetOrientation( Degree10(IsVertical() ? (IsTopToBottom() ? 2700 : 900) : 0) );
+    aDefFont.SetVertical( IsEffectivelyVertical() );
+    aDefFont.SetOrientation( Degree10(IsEffectivelyVertical() ? (IsTopToBottom() ? 2700 : 900) : 0) );
 
     for ( sal_Int32 nNode = 0; nNode < Count(); nNode++ )
     {
@@ -2027,7 +2027,7 @@ void EditDoc::CreateDefFont( bool bUseStyles )
     }
 }
 
-bool EditDoc::IsVertical() const
+bool EditDoc::IsEffectivelyVertical() const
 {
     return (bIsVertical && mnRotation == TextRotation::NONE) ||
         (!bIsVertical && mnRotation != TextRotation::NONE);
@@ -2039,7 +2039,7 @@ bool EditDoc::IsTopToBottom() const
         (!bIsVertical && mnRotation == TextRotation::TOPTOBOTTOM);
 }
 
-bool EditDoc::GetDirectVertical() const
+bool EditDoc::GetVertical() const
 {
     return bIsVertical;
 }

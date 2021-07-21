@@ -1021,7 +1021,7 @@ void OutlineView::FillOutliner()
             OutlinerParaObject* pOPO = pTO->GetOutlinerParaObject();
             if (pOPO)
             {
-                bool bVertical = pOPO->IsVertical();
+                bool bVertical = pOPO->IsEffectivelyVertical();
                 pOPO->SetVertical( false );
                 mrOutliner.AddText(*pOPO);
                 pOPO->SetVertical( bVertical );
@@ -1064,7 +1064,7 @@ void OutlineView::FillOutliner()
             if (pOPO)
             {
                 sal_Int32 nParaCount1 = mrOutliner.GetParagraphCount();
-                bool bVertical = pOPO->IsVertical();
+                bool bVertical = pOPO->IsEffectivelyVertical();
                 pOPO->SetVertical( false );
                 mrOutliner.AddText(*pOPO);
                 pOPO->SetVertical( bVertical );

@@ -709,7 +709,7 @@ bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
             // vertical when there was a vertical one used last time.
             OutlinerParaObject* pOPO = GetTextObj()->GetOutlinerParaObject();
             SdrOutliner& rOutl(mxTextObj->getSdrModelFromSdrObject().GetDrawOutliner(GetTextObj()));
-            bool bVertical((pOPO && pOPO->IsVertical())
+            bool bVertical((pOPO && pOPO->IsEffectivelyVertical())
                 || nSlotId == SID_ATTR_CHAR_VERTICAL
                 || nSlotId == SID_TEXT_FITTOSIZE_VERTICAL);
             rOutl.SetVertical(bVertical);
@@ -726,7 +726,7 @@ bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
                 pPara = GetTextObj()->GetOutlinerParaObject();
             }
 
-            if(pPara && bVertical != pPara->IsVertical())
+            if(pPara && bVertical != pPara->IsEffectivelyVertical())
             {
                 // set ParaObject orientation accordingly
                 pPara->SetVertical(bVertical);
@@ -848,7 +848,7 @@ bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
                         pPara = GetTextObj()->GetOutlinerParaObject();
                     }
 
-                    if(pPara && !pPara->IsVertical())
+                    if(pPara && !pPara->IsEffectivelyVertical())
                     {
                         // set ParaObject orientation accordingly
                         pPara->SetVertical(true);
@@ -1081,9 +1081,9 @@ void FuText::SetInEditMode(const MouseEvent& rMEvt, bool bQuickDrag)
                 if( pTextObj )
                 {
                     OutlinerParaObject* pOPO = pTextObj->GetOutlinerParaObject();
-                    if( pOPO && pOPO->IsVertical() )
+                    if( pOPO && pOPO->IsEffectivelyVertical() )
                     {
-                        pOutl->SetVertical(pOPO->GetDirectVertical());
+                        pOutl->SetVertical(pOPO->GetVertical());
                         pOutl->SetRotation(pOPO->GetRotation());
                     }
                     else if (nSlotId == SID_ATTR_CHAR_VERTICAL || nSlotId == SID_TEXT_FITTOSIZE_VERTICAL)

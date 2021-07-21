@@ -119,14 +119,14 @@ void OutlinerParaObject::SetOutlinerMode(OutlinerMode nNew)
     }
 }
 
-bool OutlinerParaObject::IsVertical() const
+bool OutlinerParaObject::IsEffectivelyVertical() const
 {
-    return mpImpl->mpEditTextObject->IsVertical();
+    return mpImpl->mpEditTextObject->IsEffectivelyVertical();
 }
 
-bool OutlinerParaObject::GetDirectVertical() const
+bool OutlinerParaObject::GetVertical() const
 {
-    return mpImpl->mpEditTextObject->GetDirectVertical();
+    return mpImpl->mpEditTextObject->GetVertical();
 }
 
 bool OutlinerParaObject::IsTopToBottom() const
@@ -137,7 +137,7 @@ bool OutlinerParaObject::IsTopToBottom() const
 void OutlinerParaObject::SetVertical(bool bNew)
 {
     const ::o3tl::cow_wrapper< OutlinerParaObjData >* pImpl = &mpImpl;
-    if ( ( *pImpl )->mpEditTextObject->IsVertical() != bNew)
+    if ( ( *pImpl )->mpEditTextObject->IsEffectivelyVertical() != bNew)
     {
         mpImpl->mpEditTextObject->SetVertical(bNew);
     }

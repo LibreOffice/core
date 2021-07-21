@@ -1038,7 +1038,7 @@ PointerStyle SdrView::GetPreferredPointer(const Point& rMousePos, const OutputDe
             if(pText && pText->HasText())
             {
                 OutlinerParaObject* pParaObj = pText->GetOutlinerParaObject();
-                if(pParaObj && pParaObj->IsVertical())
+                if(pParaObj && pParaObj->IsEffectivelyVertical())
                     return PointerStyle::TextVertical;
             }
             return PointerStyle::Text;

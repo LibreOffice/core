@@ -758,7 +758,7 @@ void SdrTextObj::impDecomposeAutoFitTextPrimitive(
     const sal_uInt32 nAnchorTextHeight(FRound(aAnchorTextRange.getHeight() + 1));
     const OutlinerParaObject* pOutlinerParaObject = rSdrAutofitTextPrimitive.getSdrText()->GetOutlinerParaObject();
     OSL_ENSURE(pOutlinerParaObject, "impDecomposeBlockTextPrimitive used with no OutlinerParaObject (!)");
-    const bool bVerticalWriting(pOutlinerParaObject->IsVertical());
+    const bool bVerticalWriting(pOutlinerParaObject->IsEffectivelyVertical());
     const bool bTopToBottom(pOutlinerParaObject->IsTopToBottom());
     const Size aAnchorTextSize(Size(nAnchorTextWidth, nAnchorTextHeight));
 
@@ -945,7 +945,7 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
     // add one to rage sizes to get back to the old Rectangle and outliner measurements
     const sal_uInt32 nAnchorTextWidth(FRound(aAnchorTextRange.getWidth() + 1));
     const sal_uInt32 nAnchorTextHeight(FRound(aAnchorTextRange.getHeight() + 1));
-    const bool bVerticalWriting(rSdrBlockTextPrimitive.getOutlinerParaObject().IsVertical());
+    const bool bVerticalWriting(rSdrBlockTextPrimitive.getOutlinerParaObject().IsEffectivelyVertical());
     const bool bTopToBottom(rSdrBlockTextPrimitive.getOutlinerParaObject().IsTopToBottom());
     const Size aAnchorTextSize(Size(nAnchorTextWidth, nAnchorTextHeight));
 
@@ -1197,7 +1197,7 @@ void SdrTextObj::impDecomposeStretchTextPrimitive(
     // #i101957# Check for vertical text. If used, aNewTransformA
     // needs to translate the text initially around object width to orient
     // it relative to the topper right instead of the topper left
-    const bool bVertical(rSdrStretchTextPrimitive.getOutlinerParaObject().IsVertical());
+    const bool bVertical(rSdrStretchTextPrimitive.getOutlinerParaObject().IsEffectivelyVertical());
     const bool bTopToBottom(rSdrStretchTextPrimitive.getOutlinerParaObject().IsTopToBottom());
 
     if(bVertical)
@@ -1559,7 +1559,7 @@ void SdrTextObj::impDecomposeChainedTextPrimitive(
     const OutlinerParaObject* pOutlinerParaObject = rSdrChainedTextPrimitive.getSdrText()->GetOutlinerParaObject();
     OSL_ENSURE(pOutlinerParaObject, "impDecomposeBlockTextPrimitive used with no OutlinerParaObject (!)");
 
-    const bool bVerticalWriting(pOutlinerParaObject->IsVertical());
+    const bool bVerticalWriting(pOutlinerParaObject->IsEffectivelyVertical());
     const bool bTopToBottom(pOutlinerParaObject->IsTopToBottom());
     const Size aAnchorTextSize(Size(nAnchorTextWidth, nAnchorTextHeight));
 
