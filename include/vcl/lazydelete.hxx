@@ -24,7 +24,7 @@
 
 #include <com/sun/star/lang/XComponent.hpp>
 
-#include <memory>
+#include <optional>
 
 namespace vcl
 {
@@ -64,20 +64,37 @@ namespace vcl
         virtual void doCleanup() = 0;
     };
 
+    enum class DeleteOnDeinitFlag { Empty };
+
     template < typename T >
     class DeleteOnDeinit final : public DeleteOnDeinitBase
     {
-        std::unique_ptr<T> m_pT;
+        std::optional<T> m_pT;
         virtual void doCleanup() override { m_pT.reset(); }
     public:
-        DeleteOnDeinit( T* i_pT ) : m_pT( i_pT ) { addDeinitContainer( this ); }
+        template <class... Args >
+        DeleteOnDeinit(Args&&... args )
+        {
+            m_pT.emplace(args...);
+            addDeinitContainer( this );
+        }
+        DeleteOnDeinit(DeleteOnDeinitFlag)
+        {
+            addDeinitContainer( this );
+        }
 
         // get contents
-        T* get() { return m_pT.get(); }
+        T* get() { return m_pT ? &*m_pT : nullptr; }
 
         // set contents, returning old contents
         // ownership is transferred !
-        std::unique_ptr<T> set( std::unique_ptr<T> i_pNew ) { auto pOld = std::move(m_pT); m_pT = std::move(i_pNew); return pOld; }
+        template <class... Args >
+        std::optional<T> set(Args&&... args)
+        {
+            auto pOld = std::move(m_pT);
+            m_pT.emplace(args...);
+            return pOld;
+        }
     };
 
     /** Similar to DeleteOnDeinit, the DeleteUnoReferenceOnDeinit

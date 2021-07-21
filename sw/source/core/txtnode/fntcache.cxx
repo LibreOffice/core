@@ -69,7 +69,7 @@ constexpr Color gWaveCol(COL_GRAY);
 
 tools::Long SwFntObj::s_nPixWidth;
 MapMode* SwFntObj::s_pPixMap = nullptr;
-static vcl::DeleteOnDeinit< VclPtr<OutputDevice> > s_pFntObjPixOut( new VclPtr<OutputDevice> );
+static vcl::DeleteOnDeinit< VclPtr<OutputDevice> > s_pFntObjPixOut {};
 
 /**
  * Defines a substring on a given output device, to be used as an std::map<>
