@@ -893,7 +893,7 @@ void ScDocument::AddDetectiveOperation( const ScDetOpData& rData )
     if (!pDetOpList)
         pDetOpList.reset(new ScDetOpList);
 
-    pDetOpList->Append( new ScDetOpData( rData ) );
+    pDetOpList->Append( rData );
 }
 
 void ScDocument::ClearDetectiveOperations()
