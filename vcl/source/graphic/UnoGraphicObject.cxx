@@ -38,7 +38,7 @@ typedef ::cppu::WeakImplHelper<graphic::XGraphicObject, css::lang::XServiceInfo>
 class GraphicObjectImpl : public GraphicObject_BASE
 {
      std::mutex m_aMutex;
-     std::unique_ptr<GraphicObject> mpGraphicObject;
+     std::optional<GraphicObject> mpGraphicObject;
 
 public:
     /// @throws uno::RuntimeException
@@ -66,7 +66,7 @@ public:
 
 GraphicObjectImpl::GraphicObjectImpl(const uno::Sequence<uno::Any>& /*rArgs*/)
 {
-    mpGraphicObject.reset(new GraphicObject());
+    mpGraphicObject.emplace();
 }
 
 uno::Reference<graphic::XGraphic> SAL_CALL GraphicObjectImpl::getGraphic()
