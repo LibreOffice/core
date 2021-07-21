@@ -54,8 +54,8 @@
  clean_LIBS=$LIBS
 -ZLIB_LIBS=""
  AC_ARG_WITH(zlib,
- AC_HELP_STRING([--with-zlib=PATH],[search for zlib in PATH])
- AC_HELP_STRING([--without-zlib],[disable use of zlib]),
+ AS_HELP_STRING([--with-zlib=PATH],[search for zlib in PATH])
+ AS_HELP_STRING([--without-zlib],[disable use of zlib]),
                 [OPT_ZLIB="$withval"])
  
  if test "$OPT_ZLIB" = "no" ; then
