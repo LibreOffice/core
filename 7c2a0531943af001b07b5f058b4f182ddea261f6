@@ -114,6 +114,30 @@
     },
     {
       "key": {
+        "uuid": "6a72f9b5_f9760c81",
+        "filename": "sc/source/core/tool/compiler.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 2230,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-07-21T14:14:02Z",
+      "side": 1,
+      "message": "Now I wonder what scenario you are actually testing, file loading? Of tdf#64086 second attachment, the .xlsx file? If isOOXML() is not returning true there then something is wrong and probably a wrong grammar set, though with one of the Excel address syntax. Or is that *after* the file was already loaded?\n\nWe don\u0027t want to use isExcelSyntax() here because it would silently parse away those \"[0]!\" also in the UI cases (or whenever some Excel syntax was set). I want the scanner to be as strict as possible.",
+      "parentUuid": "faf102d4_4fe85b0b",
+      "range": {
+        "startLine": 2230,
+        "startChar": 27,
+        "endLine": 2230,
+        "endChar": 83
+      },
+      "revId": "7c2a0531943af001b07b5f058b4f182ddea261f6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6630f4c3_875094b2",
         "filename": "sc/source/core/tool/compiler.cxx",
         "patchSetId": 12
