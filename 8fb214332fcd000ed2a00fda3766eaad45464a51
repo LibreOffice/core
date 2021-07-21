@@ -1,0 +1,276 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "63440356_825a9664",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 64
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-21T21:37:09Z",
+      "side": 1,
+      "message": "You had included this in the HXX, so no need to include it here.",
+      "revId": "8fb214332fcd000ed2a00fda3766eaad45464a51",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c74ddba7_85674a70",
+        "filename": "sfx2/source/inc/StyleList.hxx",
+        "patchSetId": 64
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-21T21:37:09Z",
+      "side": 1,
+      "message": "m and m_",
+      "revId": "8fb214332fcd000ed2a00fda3766eaad45464a51",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2ce759f3_daafb249",
+        "filename": "sfx2/source/inc/StyleList.hxx",
+        "patchSetId": 64
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-21T21:37:09Z",
+      "side": 1,
+      "message": "no space after //",
+      "revId": "8fb214332fcd000ed2a00fda3766eaad45464a51",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b6a4250c_d52f252c",
+        "filename": "sfx2/source/inc/StyleList.hxx",
+        "patchSetId": 64
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-21T21:37:09Z",
+      "side": 1,
+      "message": "For setters, a useful approach that allows to avoid a need to invent a name for the argument is to use \"Val\": bVal, nVal, sVal, ... - i.e., set Foo to this *value*.",
+      "revId": "8fb214332fcd000ed2a00fda3766eaad45464a51",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6f0cabfb_eef81845",
+        "filename": "sfx2/source/inc/StyleList.hxx",
+        "patchSetId": 64
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-21T21:37:09Z",
+      "side": 1,
+      "message": "Line too long",
+      "revId": "8fb214332fcd000ed2a00fda3766eaad45464a51",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7f970668_08cf0c2e",
+        "filename": "sfx2/source/inc/StyleList.hxx",
+        "patchSetId": 64
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-21T21:37:09Z",
+      "side": 1,
+      "message": "No space after //",
+      "revId": "8fb214332fcd000ed2a00fda3766eaad45464a51",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4de65b78_d95ad157",
+        "filename": "sfx2/source/inc/StyleList.hxx",
+        "patchSetId": 64
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-21T21:37:09Z",
+      "side": 1,
+      "message": "Is this both for enabling and disabling? Then please do not use positive value for negative efect; instead, use a positive name - like \u0027EnableNewByExample\u0027, and use positive value of its argument to get positive effect (true-\u003egets enabled), and negative value for negative effect (false-\u003egets disabled). This allows to avoid double negation, which is confusing and error-prone.",
+      "revId": "8fb214332fcd000ed2a00fda3766eaad45464a51",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f25b8131_156c920d",
+        "filename": "sfx2/source/inc/StyleList.hxx",
+        "patchSetId": 64
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-21T21:37:09Z",
+      "side": 1,
+      "message": "No space after //",
+      "revId": "8fb214332fcd000ed2a00fda3766eaad45464a51",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "754fa780_145fbe02",
+        "filename": "sfx2/source/inc/StyleList.hxx",
+        "patchSetId": 64
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-21T21:37:09Z",
+      "side": 1,
+      "message": "No space after //",
+      "revId": "8fb214332fcd000ed2a00fda3766eaad45464a51",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e65a9884_90f72cb6",
+        "filename": "sfx2/source/inc/templdgi.hxx",
+        "patchSetId": 64
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-21T21:37:09Z",
+      "side": 1,
+      "message": "You have included StyleList.hxx above, with the full definition of the class - you don\u0027t need to forward-declare it anymore. Forward declarations are only for cases where you do not have full definition.",
+      "revId": "8fb214332fcd000ed2a00fda3766eaad45464a51",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "207019e8_215aa5a3",
+        "filename": "sfx2/source/inc/templdgi.hxx",
+        "patchSetId": 64
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-21T21:37:09Z",
+      "side": 1,
+      "message": "Why whitespace-only changes?",
+      "revId": "8fb214332fcd000ed2a00fda3766eaad45464a51",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c5f27ad4_e28a18de",
+        "filename": "sfx2/source/inc/templdgi.hxx",
+        "patchSetId": 64
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-21T21:37:09Z",
+      "side": 1,
+      "message": "Why whitespace-only changes?",
+      "revId": "8fb214332fcd000ed2a00fda3766eaad45464a51",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "35be7b20_f011138e",
+        "filename": "sfx2/source/inc/templdgi.hxx",
+        "patchSetId": 64
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-21T21:37:09Z",
+      "side": 1,
+      "message": "Why whitespace-only changes?",
+      "revId": "8fb214332fcd000ed2a00fda3766eaad45464a51",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bc2215c1_262c8530",
+        "filename": "sfx2/source/inc/templdgi.hxx",
+        "patchSetId": 64
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-21T21:37:09Z",
+      "side": 1,
+      "message": "Why whitespace-only change?",
+      "revId": "8fb214332fcd000ed2a00fda3766eaad45464a51",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7e867920_9e253bf0",
+        "filename": "sfx2/source/inc/templdgi.hxx",
+        "patchSetId": 64
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-21T21:37:09Z",
+      "side": 1,
+      "message": "Why whitespace-only changes?",
+      "revId": "8fb214332fcd000ed2a00fda3766eaad45464a51",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "da1d1b21_53c49409",
+        "filename": "sfx2/source/inc/templdgi.hxx",
+        "patchSetId": 64
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-21T21:37:09Z",
+      "side": 1,
+      "message": "Here and below:\n\nThis is an old file. In it, it\u0027s possible to use non-standard formatting.\n\nPlease avoid multi-line function bodies in header files (even though in the previous code, there were multi-line function definitions here). So here you have two options:\n1. Move definitions out of the header into CXX.\n2. As an exception to the rule that all new code should be properly formatted, here in these connect_* functions, you may make long lines not fitting into 100 characters.",
+      "revId": "8fb214332fcd000ed2a00fda3766eaad45464a51",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
