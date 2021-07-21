@@ -123,6 +123,11 @@ published constants BibliographyDataField
     /** This field contains the ISBN data of the publishing.
      */
     const short ISBN            = 30;
+    /** This field contains a local copy of the publishing.
+
+        @since LibreOffice 7.3
+     */
+    const short LOCAL_URL       = 31;
 };
 
 }; }; }; };

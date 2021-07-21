@@ -234,7 +234,8 @@ namespace
         STR_AUTH_FIELD_CUSTOM3,
         STR_AUTH_FIELD_CUSTOM4,
         STR_AUTH_FIELD_CUSTOM5,
-        STR_AUTH_FIELD_ISBN
+        STR_AUTH_FIELD_ISBN,
+        STR_AUTH_FIELD_LOCAL_URL,
     };
 }
 

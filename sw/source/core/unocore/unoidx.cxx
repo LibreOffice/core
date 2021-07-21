@@ -2788,7 +2788,7 @@ SwXDocumentIndex::TokenAccess_Impl::replaceByIndex(
             {
                 sal_Int16 nType = 0;
                 pProperties[j].Value >>= nType;
-                if(nType < 0 || nType > text::BibliographyDataField::ISBN)
+                if(nType < 0 || nType > text::BibliographyDataField::LOCAL_URL)
                 {
                     lang::IllegalArgumentException aExcept;
                     aExcept.Message = "BibliographyDataField - wrong value";
