@@ -1975,7 +1975,7 @@ void SdrEditView::UnGroupMarked()
 // ConvertToPoly
 
 
-SdrObjectUniquePtr SdrEditView::ImpConvertOneObj(SdrObject* pObj, bool bPath, bool bLineToArea)
+SdrObject* SdrEditView::ImpConvertOneObj(SdrObject* pObj, bool bPath, bool bLineToArea)
 {
     SdrObjectUniquePtr pNewObj = pObj->ConvertToPolyObj(bPath, bLineToArea);
     if (pNewObj)
@@ -1985,12 +1985,13 @@ SdrObjectUniquePtr SdrEditView::ImpConvertOneObj(SdrObject* pObj, bool bPath, bo
         if( bUndo )
             AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoReplaceObject(*pObj,*pNewObj));
 
+        // ownership passed into here (despite the UniquePtr indicating that we are returning it)
         pOL->ReplaceObject(pNewObj.get(), pObj->GetOrdNum());
 
         if( !bUndo )
             SdrObject::Free(pObj);
     }
-    return pNewObj;
+    return pNewObj.release();
 }
 
 void SdrEditView::ImpConvertTo(bool bPath, bool bLineToArea)
@@ -2034,10 +2035,10 @@ void SdrEditView::ImpConvertTo(bool bPath, bool bLineToArea)
                 ImpConvertOneObj(pObj,bPath,bLineToArea);
             }
         } else {
-            SdrObjectUniquePtr pNewObj=ImpConvertOneObj(pObj,bPath,bLineToArea);
+            SdrObject* pNewObj=ImpConvertOneObj(pObj,bPath,bLineToArea);
             if (pNewObj!=nullptr) {
                 bMrkChg=true;
-                GetMarkedObjectListWriteAccess().ReplaceMark(SdrMark(pNewObj.release(),pPV),nm);
+                GetMarkedObjectListWriteAccess().ReplaceMark(SdrMark(pNewObj,pPV),nm);
             }
         }
     }
