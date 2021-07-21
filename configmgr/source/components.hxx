@@ -23,6 +23,7 @@
 
 #include <set>
 #include <string_view>
+#include <unordered_map>
 
 #include <com/sun/star/beans/Optional.hpp>
 #include <com/sun/star/uno/Reference.hxx>
@@ -139,7 +140,7 @@ private:
     int getExtensionLayer(bool shared) const;
 
     typedef
-        config_map<
+        std::unordered_map< OUString,
             css::uno::Reference<
                 css::beans::XPropertySet > >
         ExternalServices;
