@@ -1026,6 +1026,18 @@ CalendarWrapper*     ScGlobal::GetCalendar()
     }
     return xCalendar.get();
 }
+
+namespace {
+
+struct GetMutex {
+    osl::Mutex * operator ()() {
+        static osl::Mutex m;
+        return &m;
+    }
+};
+
+}
+
 CollatorWrapper*        ScGlobal::GetCollator()
 {
     return comphelper::doubleCheckedInit( pCollator,
@@ -1034,7 +1046,8 @@ CollatorWrapper*        ScGlobal::GetCollator()
             CollatorWrapper* p = new CollatorWrapper( ::comphelper::getProcessComponentContext() );
             p->loadDefaultCollator( *GetLocale(), SC_COLLATOR_IGNORES );
             return p;
-        });
+        },
+        GetMutex());
 }
 CollatorWrapper*        ScGlobal::GetCaseCollator()
 {
@@ -1044,7 +1057,8 @@ CollatorWrapper*        ScGlobal::GetCaseCollator()
             CollatorWrapper* p = new CollatorWrapper( ::comphelper::getProcessComponentContext() );
             p->loadDefaultCollator( *GetLocale(), 0 );
             return p;
-        });
+        },
+        GetMutex());
 }
 css::lang::Locale*     ScGlobal::GetLocale()
 {
