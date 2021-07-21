@@ -1207,6 +1207,7 @@ void const * TYPEREG_CALLTYPE typereg_writer_getBlob(void * handle, sal_uInt32 *
         try {
             writer->createBlop();
         } catch (std::bad_alloc &) {
+            *size = 0;
             return nullptr;
         }
     }
