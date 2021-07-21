@@ -267,8 +267,8 @@ private:
 class ScFunctionCategory final : public formula::IFunctionCategory
 {
 public:
-    ScFunctionCategory(::std::vector<const ScFuncDesc*>* _pCategory,sal_uInt32 _nCategory)
-            : m_pCategory(_pCategory),m_nCategory(_nCategory){}
+    ScFunctionCategory(const ::std::vector<const ScFuncDesc*>& _rCategory,sal_uInt32 _nCategory)
+            : m_rCategory(_rCategory),m_nCategory(_nCategory){}
     virtual ~ScFunctionCategory(){}
 
     /**
@@ -293,7 +293,7 @@ public:
     virtual OUString getName() const override;
 
 private:
-    ::std::vector<const ScFuncDesc*>* m_pCategory; /**< list of functions in this category */
+    const ::std::vector<const ScFuncDesc*>& m_rCategory; /**< list of functions in this category */
     mutable OUString m_sName; /**< name of this category */
     sal_uInt32 m_nCategory; /**< index number of this category */
 };
@@ -394,10 +394,10 @@ public:
     virtual sal_Unicode getSingleToken(const formula::IFunctionManager::EToken _eToken) const override;
 
 private:
-    std::unique_ptr<std::vector<const ScFuncDesc*>> aCatLists[MAX_FUNCCAT]; /**< array of all categories, 0 is the cumulative ('All') category */
+    std::vector<const ScFuncDesc*> aCatLists[MAX_FUNCCAT]; /**< array of all categories, 0 is the cumulative ('All') category */
     mutable std::map< sal_uInt32, std::shared_ptr<ScFunctionCategory> > m_aCategories; /**< map of category pos to IFunctionCategory */
-    mutable std::vector<const ScFuncDesc*>::iterator pCurCatListIter; /**< position in current category */
-    mutable std::vector<const ScFuncDesc*>::iterator pCurCatListEnd; /**< end of current category */
+    mutable std::vector<const ScFuncDesc*>::const_iterator pCurCatListIter; /**< position in current category */
+    mutable std::vector<const ScFuncDesc*>::const_iterator pCurCatListEnd; /**< end of current category */
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
