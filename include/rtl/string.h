@@ -789,11 +789,10 @@ SAL_DLLPUBLIC sal_Int64 SAL_CALL rtl_str_toInt64(
 
 /** Interpret a string as a long integer.
 
-    This function cannot be used for language-specific conversion.  The string
-    must be null-terminated.
+    This function cannot be used for language-specific conversion.
 
     @param str
-    a null-terminated string.
+    a string.
 
     @param radix
     the radix.  Must be between RTL_STR_MIN_RADIX (2) and RTL_STR_MAX_RADIX
