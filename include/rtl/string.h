@@ -863,26 +863,6 @@ SAL_DLLPUBLIC float SAL_CALL rtl_str_toFloat(
 SAL_DLLPUBLIC double SAL_CALL rtl_str_toDouble(
         const char * str ) SAL_THROW_EXTERN_C();
 
-/** Interpret a string as a double.
-
-    This function cannot be used for language-specific conversion.  The string
-    must be null-terminated.
-
-    @param str
-    a null-terminated string.
-
-    @param nStrLength
-    number of chars to process
-
-    @return
-    the double value represented by the string, or 0.0 if the string does not
-    represent a double.
-
-    @since LibreOffice 7.3
- */
-SAL_DLLPUBLIC double SAL_CALL rtl_str_toDouble_WithLength(
-        const char * str, sal_Int32 nStrLength ) SAL_THROW_EXTERN_C();
-
 /* ======================================================================= */
 
 #ifdef _WIN32
