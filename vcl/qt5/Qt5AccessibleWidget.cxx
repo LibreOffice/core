@@ -590,6 +590,9 @@ void lcl_addState(QAccessible::State* state, sal_Int16 nState)
         case AccessibleStateType::MOVEABLE:
             state->movable = true;
             break;
+        case AccessibleStateType::MULTI_LINE:
+            state->multiLine = true;
+            break;
         case AccessibleStateType::OPAQUE:
             // No match
             break;
