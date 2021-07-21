@@ -132,8 +132,6 @@ private:
     OUString name_;
     ChangesListeners changesListeners_;
 
-    std::shared_ptr<osl::Mutex> lock_;
-
     bool update_:1;
     bool finalized_:1;
     bool alive_:1;

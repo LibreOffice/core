@@ -128,7 +128,6 @@ private:
     std::unique_ptr< css::uno::Any > changedValue_;
     bool inTransaction_;
         // to determine if a free node can be inserted underneath some root
-    std::shared_ptr<osl::Mutex> lock_;
 };
 
 }
