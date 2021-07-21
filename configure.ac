@@ -928,6 +928,7 @@ cygwin*|wsl*)
 darwin*|macos*) # macOS
     using_freetype_fontconfig=no
     using_x11=no
+    build_skia=yes
     if test -n "$LODE_HOME" ; then
         mac_sanitize_path
         AC_MSG_NOTICE([sanitized the PATH to $PATH])
