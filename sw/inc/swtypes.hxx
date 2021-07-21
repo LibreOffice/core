@@ -52,10 +52,6 @@ typedef tools::Long SwTwips;
 #define INVALID_TWIPS   LONG_MAX
 #define TWIPS_MAX       (LONG_MAX - 1)
 
-// Converts Millimeters to Twips (1 mm == 56.905479 twips).
-template <typename T = SwTwips>
-constexpr T MmToTwips(const double mm) { return static_cast<T>(mm / 0.017573); }
-
 #define MM50   283  // 1/2 cm in TWIPS.
 
 const sal_Int32 COMPLETE_STRING = SAL_MAX_INT32;
