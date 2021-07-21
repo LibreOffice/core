@@ -464,19 +464,11 @@ sal_Int32 SwFieldDokPage::FillFormatLB(SwFieldTypesEnum nTypeId)
         const sal_uInt16 nFormatId = GetFieldMgr().GetFormatId( nTypeId, i );
         OUString sId(OUString::number(nFormatId));
         m_xFormatLB->append(sId, GetFieldMgr().GetFormatStr(nTypeId, i));
-        if (IsFieldEdit() && nFormatId == (GetCurField()->GetFormat() & ~AF_FIXED))
-            m_xFormatLB->select_id(sId);
     }
 
-    if (nSize && m_xFormatLB->get_selected_index() == -1)
+    if (IsFieldEdit())
     {
-        m_xFormatLB->select_text( SwResId(FMT_NUM_PAGEDESC) );
-        if (m_xFormatLB->get_selected_index() == -1)
-        {
-            m_xFormatLB->select_text( SwResId(FMT_NUM_ARABIC) );
-            if (m_xFormatLB->get_selected_index() == -1)
-                m_xFormatLB->select( 0 );
-        }
+        m_xFormatLB->select_id(OUString::number(GetCurField()->GetFormat() & ~AF_FIXED));
     }
 
     FormatHdl(*m_xFormatLB);
