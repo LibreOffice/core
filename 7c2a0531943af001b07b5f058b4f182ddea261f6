@@ -138,6 +138,30 @@
     },
     {
       "key": {
+        "uuid": "b39e5bc7_ec5e949b",
+        "filename": "sc/source/core/tool/compiler.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 2230,
+      "author": {
+        "id": 1001901
+      },
+      "writtenOn": "2021-07-21T14:37:56Z",
+      "side": 1,
+      "message": "\u003e Now I wonder what scenario you are actually testing, file loading?\n\nI used my own test file to debug, which is simular to the tdf#64086 second attachment file. I tested with both of them and returning a false value there, during the import. Its strange.\nMaybe its another BUG I guess. :(",
+      "parentUuid": "6a72f9b5_f9760c81",
+      "range": {
+        "startLine": 2230,
+        "startChar": 27,
+        "endLine": 2230,
+        "endChar": 83
+      },
+      "revId": "7c2a0531943af001b07b5f058b4f182ddea261f6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6630f4c3_875094b2",
         "filename": "sc/source/core/tool/compiler.cxx",
         "patchSetId": 12
