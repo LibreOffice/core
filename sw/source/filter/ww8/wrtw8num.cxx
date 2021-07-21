@@ -487,7 +487,7 @@ void MSWordExportBase::NumberingLevel(
             sal_uInt8* pLvlPos = aNumLvlPos;
             // the numbering string has to be restrict
             // to the level currently working on.
-            sNumStr = rRule.MakeNumString(aNumVector, false, true, nLvl);
+            sNumStr = rRule.MakeNumString(aNumVector, true, true, nLvl);
 
             // now search the nums in the string
             for (sal_uInt8 i = 0; i <= nLvl; ++i)
