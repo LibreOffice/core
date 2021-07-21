@@ -21,6 +21,8 @@
 
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/enumarray.hxx>
+#include <o3tl/unit_conversion.hxx>
+#include <tools/long.hxx>
 
 // Border-Modes for SvxBorderTabPage
 enum class SwBorderModes
@@ -99,7 +101,7 @@ enum SvxModeType
 
 // 1/2 cm in TWIPS
 // Is also used for minimum size of LayFrms of any kind
-#define MM50   283  //from original svx/inc/paragrph.hxx
+constexpr tools::Long MM50 = o3tl::convert(tools::Long(5), o3tl::Length::mm, o3tl::Length::twip);
 
 enum class TabulatorDisableFlags {
     TypeLeft      = 0x0001,
