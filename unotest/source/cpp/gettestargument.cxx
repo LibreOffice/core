@@ -20,15 +20,14 @@
 #include <sal/config.h>
 
 #include <rtl/ustring.hxx>
+#include <unotest/getargument.hxx>
 #include <unotest/gettestargument.hxx>
-
-#include "getargument.hxx"
 
 namespace test
 {
 bool getTestArgument(std::u16string_view name, OUString* value)
 {
-    return detail::getArgument(OUString(OUString::Concat("testarg.") + name), value);
+    return getArgument(OUString(OUString::Concat("testarg.") + name), value);
 }
 }
 

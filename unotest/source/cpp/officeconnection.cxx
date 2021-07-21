@@ -30,10 +30,9 @@
 #include <osl/test/uniquepipename.hxx>
 #include <osl/time.h>
 #include <sal/macros.h>
+#include <unotest/getargument.hxx>
 #include <unotest/officeconnection.hxx>
 #include <unotest/toabsolutefileurl.hxx>
-
-#include "getargument.hxx"
 
 namespace test {
 
@@ -48,7 +47,7 @@ void OfficeConnection::setUp() {
     OUString desc;
     OUString argSoffice;
     CPPUNIT_ASSERT(
-        detail::getArgument(
+        getArgument(
             u"soffice",
             &argSoffice));
     if (argSoffice.match("path:")) {
@@ -62,7 +61,7 @@ void OfficeConnection::setUp() {
         OUString acceptArg("--accept=" + desc + ";urp");
         OUString argUser;
         CPPUNIT_ASSERT(
-            detail::getArgument(u"user", &argUser));
+            getArgument(u"user", &argUser));
         OUString userArg("-env:UserInstallation=" + toAbsoluteFileUrl(argUser));
         OUString jreArg(
             "-env:UNO_JAVA_JFW_ENV_JREHOME=true");
@@ -72,7 +71,7 @@ void OfficeConnection::setUp() {
             jreArg.pData };
         rtl_uString ** envs = nullptr;
         OUString argEnv;
-        if (detail::getArgument(u"env", &argEnv))
+        if (getArgument(u"env", &argEnv))
         {
             envs = &argEnv.pData;
         }

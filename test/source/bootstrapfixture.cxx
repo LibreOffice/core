@@ -24,6 +24,7 @@
 #include <vcl/graphicfilter.hxx>
 #include <osl/file.hxx>
 #include <osl/process.h>
+#include <unotest/getargument.hxx>
 #include <unotools/tempfile.hxx>
 #include <vcl/salgtype.hxx>
 #include <vcl/scheduler.hxx>
@@ -189,6 +190,21 @@ void test::BootstrapFixture::validate(const OUString& rPath, test::ValidationFor
     aOutput.EnableKillingFile();
     OUString aOutputFile = aOutput.GetFileName();
     OUString aCommand = aValidator + " " + rPath + " > " + aOutputFile;
+
+#if !defined _WIN32
+    // For now, this is only needed by some Linux ASan builds, so keep it simply and disable it on
+    // Windows (which doesn't support the relevant shell syntax for (un-)setting environment
+    // variables).
+    OUString env;
+    if (test::getArgument(u"env", &env)) {
+        auto const n = env.indexOf('=');
+        if (n == -1) {
+            aCommand = "unset -v " + env + " && " + aCommand;
+        } else {
+            aCommand = env + " " + aCommand;
+        }
+    }
+#endif
 
     SAL_INFO("test", "BootstrapFixture::validate: executing '" << aCommand << "'");
     int returnValue = system(OUStringToOString(aCommand, RTL_TEXTENCODING_UTF8).getStr());

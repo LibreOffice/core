@@ -22,10 +22,9 @@
 #include <osl/diagnose.h>
 #include <rtl/bootstrap.hxx>
 #include <rtl/ustring.hxx>
+#include <unotest/getargument.hxx>
 
-#include "getargument.hxx"
-
-namespace test::detail
+namespace test
 {
 bool getArgument(std::u16string_view name, OUString* value)
 {

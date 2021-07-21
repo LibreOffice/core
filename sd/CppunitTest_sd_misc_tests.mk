@@ -128,4 +128,8 @@ $(eval $(call gb_CppunitTest_use_configuration,sd_misc_tests))
 
 $(call gb_CppunitTest_get_target,sd_misc_tests): $(call gb_Package_get_target,postprocess_images)
 
+$(eval $(call gb_CppunitTest_add_arguments,sd_misc_tests, \
+    -env:arg-env=$(gb_Helper_LIBRARY_PATH_VAR)"$$$${$(gb_Helper_LIBRARY_PATH_VAR)+=$$$$$(gb_Helper_LIBRARY_PATH_VAR)}" \
+))
+
 # vim: set noet sw=4 ts=4:

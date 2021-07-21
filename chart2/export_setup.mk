@@ -138,6 +138,10 @@ $(eval $(call gb_CppunitTest_use_configuration,chart2_export$(1)))
 
 $(call gb_CppunitTest_get_target,chart2_export$(1)): $(call gb_Package_get_target,postprocess_images)
 
+$(eval $(call gb_CppunitTest_add_arguments,chart2_export$(1), \
+    -env:arg-env=$(gb_Helper_LIBRARY_PATH_VAR)"$$$${$(gb_Helper_LIBRARY_PATH_VAR)+=$$$$$(gb_Helper_LIBRARY_PATH_VAR)}" \
+))
+
 endef
 
 # vim: set noet sw=4 ts=4:

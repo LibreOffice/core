@@ -90,6 +90,10 @@ $(call gb_CppunitTest_get_target,sw_uiwriter$(1)) : $(call gb_Library_get_target
 
 $(eval $(call gb_CppunitTest_use_more_fonts,sw_uiwriter$(1)))
 
+$(eval $(call gb_CppunitTest_add_arguments,sw_uiwriter$(1), \
+    -env:arg-env=$(gb_Helper_LIBRARY_PATH_VAR)"$$$${$(gb_Helper_LIBRARY_PATH_VAR)+=$$$$$(gb_Helper_LIBRARY_PATH_VAR)}" \
+))
+
 endef
 
 # vim: set noet sw=4 ts=4:
