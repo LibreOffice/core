@@ -92,7 +92,7 @@ void Service::initialize(css::uno::Sequence< css::uno::Any > const & aArguments)
         throw css::uno::RuntimeException(
             "already initialized", static_cast< cppu::OWeakObject * >(this));
     }
-    osl::MutexGuard g2(*lock());
+    osl::MutexGuard g2(configmgr::GetLock());
     Components & components = Components::getSingleton(context_);
     root_ = new RootAccess(components, "/", locale, false);
     components.addRootAccess(root_);

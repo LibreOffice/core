@@ -85,8 +85,7 @@ class Service:
 public:
     explicit Service(
         const css::uno::Reference< css::uno::XComponentContext >& context):
-        ServiceBase(m_aMutex), context_(context), default_(true),
-        lock_( lock() )
+        ServiceBase(m_aMutex), context_(context), default_(true)
     {
         assert(context.is());
     }
@@ -95,8 +94,7 @@ public:
         const css::uno::Reference< css::uno::XComponentContext >& context,
         OUString const & locale):
         ServiceBase(m_aMutex), context_(context), locale_(locale),
-        default_(false),
-        lock_( lock() )
+        default_(false)
     {
         assert(context.is());
     }
@@ -163,7 +161,6 @@ private:
     css::uno::Reference< css::uno::XComponentContext > context_;
     OUString locale_;
     bool default_;
-    std::shared_ptr<osl::Mutex> lock_;
 };
 
 css::uno::Reference< css::uno::XInterface > Service::createInstance(
@@ -249,7 +246,7 @@ Service::createInstanceWithArguments(
              " service " + ServiceSpecifier),
             static_cast< cppu::OWeakObject * >(this));
     }
-    osl::MutexGuard guard(*lock_);
+    osl::MutexGuard guard(configmgr::GetLock());
     Components & components = Components::getSingleton(context_);
     rtl::Reference root(
         new RootAccess(components, nodepath, locale, update));
@@ -317,12 +314,12 @@ void Service::removeFlushListener(
 
 void Service::setLocale(css::lang::Locale const & eLocale)
 {
-    osl::MutexGuard guard(*lock_);
+    osl::MutexGuard guard(configmgr::GetLock());
     locale_ = LanguageTag::convertToBcp47( eLocale, false);
 }
 
 css::lang::Locale Service::getLocale() {
-    osl::MutexGuard guard(*lock_);
+    osl::MutexGuard guard(configmgr::GetLock());
     css::lang::Locale loc;
     if (! locale_.isEmpty()) {
         loc = LanguageTag::convertToLocale( locale_, false);
@@ -333,7 +330,7 @@ css::lang::Locale Service::getLocale() {
 void Service::flushModifications() const {
     Components * components;
     {
-        osl::MutexGuard guard(*lock_);
+        osl::MutexGuard guard(configmgr::GetLock());
         components = &Components::getSingleton(context_);
     }
     components->flushModifications();

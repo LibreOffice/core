@@ -158,7 +158,6 @@ private:
     int userExtensionLayer_;
     ModificationTarget modificationTarget_;
     OUString modificationFileUrl_;
-    std::shared_ptr<osl::Mutex> lock_;
 };
 
 }
