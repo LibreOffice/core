@@ -1,8 +1,21 @@
+diff --git a/tools/sk_app/GLWindowContext.h b/tools/sk_app/GLWindowContext.h
+index c519903006..5dc5bcd180 100644
+--- a/tools/sk_app/GLWindowContext.h
++++ b/tools/sk_app/GLWindowContext.h
+@@ -25,7 +25,7 @@ public:
+     bool isValid() override { return SkToBool(fBackendContext.get()); }
+ 
+     void resize(int w, int h) override;
+-    void swapBuffers() override;
++    void swapBuffers(const SkIRect* rect = nullptr) override;
+ 
+     void setDisplayParams(const DisplayParams& params) override;
+ 
 diff --git a/tools/sk_app/VulkanWindowContext.cpp b/tools/sk_app/VulkanWindowContext.cpp
-index 66670c892e..3a6804166f 100644
+index 2b36d60076..d73978c9e4 100644
 --- a/tools/sk_app/VulkanWindowContext.cpp
 +++ b/tools/sk_app/VulkanWindowContext.cpp
-@@ -553,7 +553,7 @@ sk_sp<SkSurface> VulkanWindowContext::getBackbufferSurface() {
+@@ -572,7 +572,7 @@ sk_sp<SkSurface> VulkanWindowContext::getBackbufferSurface() {
      return sk_ref_sp(surface);
  }
  
@@ -12,7 +25,7 @@ index 66670c892e..3a6804166f 100644
      BackbufferInfo* backbuffer = fBackbuffers + fCurrentBackbufferIndex;
      SkSurface* surface = fSurfaces[backbuffer->fImageIndex].get();
 diff --git a/tools/sk_app/VulkanWindowContext.h b/tools/sk_app/VulkanWindowContext.h
-index 07a18a46a9..aa6f95e2a1 100644
+index 16f6b3fd51..39b035215b 100644
 --- a/tools/sk_app/VulkanWindowContext.h
 +++ b/tools/sk_app/VulkanWindowContext.h
 @@ -48,7 +48,7 @@ public:
@@ -25,7 +38,7 @@ index 07a18a46a9..aa6f95e2a1 100644
      bool isValid() override { return fSurface != VK_NULL_HANDLE; }
  
 diff --git a/tools/sk_app/WindowContext.h b/tools/sk_app/WindowContext.h
-index 6920e5ba89..219330a61b 100644
+index 68bb84b988..e15c1a3cf3 100644
 --- a/tools/sk_app/WindowContext.h
 +++ b/tools/sk_app/WindowContext.h
 @@ -8,6 +8,7 @@
@@ -36,7 +49,7 @@ index 6920e5ba89..219330a61b 100644
  #include "include/core/SkSurfaceProps.h"
  #include "include/gpu/GrTypes.h"
  #include "include/gpu/GrDirectContext.h"
-@@ -29,7 +30,7 @@ public:
+@@ -25,7 +26,7 @@ public:
  
      virtual sk_sp<SkSurface> getBackbufferSurface() = 0;
  
@@ -46,7 +59,7 @@ index 6920e5ba89..219330a61b 100644
      virtual bool isValid() = 0;
  
 diff --git a/tools/sk_app/unix/RasterWindowContext_unix.cpp b/tools/sk_app/unix/RasterWindowContext_unix.cpp
-index e8ae942308..fc06b40069 100644
+index 6ac20962b7..2ea9e07588 100644
 --- a/tools/sk_app/unix/RasterWindowContext_unix.cpp
 +++ b/tools/sk_app/unix/RasterWindowContext_unix.cpp
 @@ -19,7 +19,7 @@ public:
@@ -79,7 +92,7 @@ index e8ae942308..fc06b40069 100644
  
  }  // anonymous namespace
 diff --git a/tools/sk_app/win/RasterWindowContext_win.cpp b/tools/sk_app/win/RasterWindowContext_win.cpp
-index 49f1f9ed17..f0db1f6f06 100644
+index d80c6fbeec..72df8d5170 100644
 --- a/tools/sk_app/win/RasterWindowContext_win.cpp
 +++ b/tools/sk_app/win/RasterWindowContext_win.cpp
 @@ -22,7 +22,7 @@ public:
