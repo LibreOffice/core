@@ -57,6 +57,25 @@ void Test::tearDown()
 
 constexpr OUStringLiteral DATA_DIRECTORY = u"/writerfilter/qa/cppunittests/dmapper/data/";
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf143455SmartArtPosition)
+{
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf143455_SmartArtPosition.docx";
+    getComponent() = loadFromDesktop(aURL);
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
+    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    // Without fix in place the group, which represents the SmartArt, was placed at the initializing
+    // position 0|0.
+    sal_Int32 nHoriPosition = 0;
+    xShape->getPropertyValue("HoriOrientPosition") >>= nHoriPosition;
+    // The test would have failed with Expected: 2858, Actual: 0
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2858), nHoriPosition);
+    sal_Int32 nVertPosition = 0;
+    xShape->getPropertyValue("VertOrientPosition") >>= nVertPosition;
+    // The test would have failed with Expected: 1588, Actual: 0
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1588), nVertPosition);
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf143208wrapTight)
 {
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf143208_wrapTight.docx";
