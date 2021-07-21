@@ -24,6 +24,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <vcl/GraphicObject.hxx>
+#include <mutex>
 
 using namespace css;
 
@@ -36,7 +37,7 @@ typedef ::cppu::WeakImplHelper<graphic::XGraphicObject, css::lang::XServiceInfo>
  // goodies/toolkit/extensions )
 class GraphicObjectImpl : public GraphicObject_BASE
 {
-     osl::Mutex m_aMutex;
+     std::mutex m_aMutex;
      std::unique_ptr<GraphicObject> mpGraphicObject;
 
 public:
@@ -70,7 +71,7 @@ GraphicObjectImpl::GraphicObjectImpl(const uno::Sequence<uno::Any>& /*rArgs*/)
 
 uno::Reference<graphic::XGraphic> SAL_CALL GraphicObjectImpl::getGraphic()
 {
-    osl::MutexGuard aGuard(m_aMutex);
+    std::lock_guard aGuard(m_aMutex);
 
     if (!mpGraphicObject)
         throw uno::RuntimeException();
@@ -79,7 +80,7 @@ uno::Reference<graphic::XGraphic> SAL_CALL GraphicObjectImpl::getGraphic()
 
 void SAL_CALL GraphicObjectImpl::setGraphic(uno::Reference<graphic::XGraphic> const & rxGraphic)
 {
-    osl::MutexGuard aGuard(m_aMutex);
+    std::lock_guard aGuard(m_aMutex);
 
     if (!mpGraphicObject)
         throw uno::RuntimeException();
