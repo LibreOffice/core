@@ -32,6 +32,7 @@ public:
 
 private:
     bool m_bLoop = false;
+    bool m_bTiming = true;
     OUString m_sId;
     OUString m_sSt;
 };
