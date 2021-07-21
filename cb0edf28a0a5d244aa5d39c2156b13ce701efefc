@@ -236,6 +236,24 @@
     },
     {
       "key": {
+        "uuid": "aa0370d4_0ba68d61",
+        "filename": "sc/source/core/tool/compiler.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 5287,
+      "author": {
+        "id": 1001901
+      },
+      "writtenOn": "2021-07-21T09:01:33Z",
+      "side": 1,
+      "message": "0Thank you, it worked well with isOOXML() to, but I checked in another situations, what excel write out to the xml. I tried it with a simple \u003dSUM(GlobalName,LocalSheet_Name) and the excel didn\u0027t write out the [0] or the Sheet name on the same sheet. So I think it should be limited to charts only, where, it is always printed.",
+      "parentUuid": "2597e30c_897ebd5f",
+      "revId": "cb0edf28a0a5d244aa5d39c2156b13ce701efefc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "210d59ba_1dbfbcfe",
         "filename": "sc/source/core/tool/compiler.cxx",
         "patchSetId": 6
