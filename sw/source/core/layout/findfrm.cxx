@@ -642,10 +642,12 @@ bool SwRootFrame::IsBetweenPages(const Point& rPt) const
         const SwViewShell *pSh = GetCurrShell();
         if (pSh && pSh->GetViewOptions()->IsWhitespaceHidden())
         {
+            constexpr SwTwips constMargin = o3tl::convert(tools::Long(2), o3tl::Length::mm, o3tl::Length::twip);
+
             // If we are really close to the bottom or top of a page.
             const auto toEdge = std::min(std::abs(pPage->getFrameArea().Top() - rPt.Y()),
                                          std::abs(pPage->getFrameArea().Bottom() - rPt.Y()));
-            return toEdge <= MmToTwips(2.0);
+            return toEdge <= constMargin;
         }
     }
 
