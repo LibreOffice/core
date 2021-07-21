@@ -35,6 +35,7 @@
 #include "document.hxx"
 #include "drwlayer.hxx"
 
+#include <optional>
 #include <set>
 #include <memory>
 
@@ -1061,7 +1062,7 @@ public:
     void TransferCellValuesTo( const SCCOL nCol, SCROW nRow, size_t nLen, sc::CellValues& rDest );
     void CopyCellValuesFrom( const SCCOL nCol, SCROW nRow, const sc::CellValues& rSrc );
 
-    std::unique_ptr<sc::ColumnIterator> GetColumnIterator( SCCOL nCol, SCROW nRow1, SCROW nRow2 ) const;
+    std::optional<sc::ColumnIterator> GetColumnIterator( SCCOL nCol, SCROW nRow1, SCROW nRow2 ) const;
 
     bool EnsureFormulaCellResults( const SCCOL nCol1, SCROW nRow1, const SCCOL nCol2, SCROW nRow2, bool bSkipRunning = false );
 

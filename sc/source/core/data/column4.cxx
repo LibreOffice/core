@@ -1663,12 +1663,12 @@ void ScColumn::SetNeedsListeningGroup( SCROW nRow )
         (*pp)->SetNeedsListening(true);
 }
 
-std::unique_ptr<sc::ColumnIterator> ScColumn::GetColumnIterator( SCROW nRow1, SCROW nRow2 ) const
+std::optional<sc::ColumnIterator> ScColumn::GetColumnIterator( SCROW nRow1, SCROW nRow2 ) const
 {
     if (!GetDoc().ValidRow(nRow1) || !GetDoc().ValidRow(nRow2) || nRow1 > nRow2)
-        return std::unique_ptr<sc::ColumnIterator>();
+        return {};
 
-    return std::make_unique<sc::ColumnIterator>(maCells, nRow1, nRow2);
+    return sc::ColumnIterator(maCells, nRow1, nRow2);
 }
 
 static bool lcl_InterpretSpan(sc::formula_block::const_iterator& rSpanIter, SCROW nStartOffset, SCROW nEndOffset,
