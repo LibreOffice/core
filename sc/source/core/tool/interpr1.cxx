@@ -106,7 +106,7 @@ void ScInterpreter::ScIfJump()
                     PushIllegalArgument();
                     return;
                 }
-                else if (pTokenMatrixMap && ((aMapIter = pTokenMatrixMap->find( pCur)) != pTokenMatrixMap->end()))
+                else if ((aMapIter = maTokenMatrixMap.find( pCur)) != maTokenMatrixMap.end())
                     xNew = (*aMapIter).second;
                 else
                 {
@@ -335,7 +335,7 @@ void ScInterpreter::ScIfError( bool bNAonly )
 
                 FormulaConstTokenRef xNew;
                 ScTokenMatrixMap::const_iterator aMapIter;
-                if (pTokenMatrixMap && ((aMapIter = pTokenMatrixMap->find( pCur)) != pTokenMatrixMap->end()))
+                if ((aMapIter = maTokenMatrixMap.find( pCur)) != maTokenMatrixMap.end())
                 {
                     xNew = (*aMapIter).second;
                 }
@@ -429,8 +429,8 @@ void ScInterpreter::ScChooseJump()
                 pMat->GetDimensions( nCols, nRows );
                 if ( nCols == 0 || nRows == 0 )
                     PushIllegalParameter();
-                else if (pTokenMatrixMap && ((aMapIter = pTokenMatrixMap->find(
-                                    pCur)) != pTokenMatrixMap->end()))
+                else if ((aMapIter = maTokenMatrixMap.find(
+                                    pCur)) != maTokenMatrixMap.end())
                     xNew = (*aMapIter).second;
                 else
                 {
@@ -854,11 +854,8 @@ bool ScInterpreter::JumpMatrix( short nStackLevel )
             pJumpMatrix = nullptr;
             Pop();
             PushTokenRef( xRef);
-            if (pTokenMatrixMap)
-            {
-                pTokenMatrixMap->erase( pCur);
-                // There's no result matrix to remember in this case.
-            }
+            maTokenMatrixMap.erase( pCur);
+            // There's no result matrix to remember in this case.
         }
         else
         {
@@ -868,11 +865,8 @@ bool ScInterpreter::JumpMatrix( short nStackLevel )
             PushMatrix( pResMat );
             // Remove jump matrix from map and remember result matrix in case it
             // could be reused in another path of the same condition.
-            if (pTokenMatrixMap)
-            {
-                pTokenMatrixMap->erase( pCur);
-                pTokenMatrixMap->emplace(pCur, pStack[sp-1]);
-            }
+            maTokenMatrixMap.erase( pCur);
+            maTokenMatrixMap.emplace(pCur, pStack[sp-1]);
         }
         return true;
     }
