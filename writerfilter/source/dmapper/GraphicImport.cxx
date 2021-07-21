@@ -79,6 +79,7 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <o3tl/unit_conversion.hxx>
+#include <oox/export/drawingml.hxx>
 
 using namespace css;
 
@@ -879,7 +880,12 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                         comphelper::SequenceAsHashMap aInteropGrabBag(xShapeProps->getPropertyValue("InteropGrabBag"));
                         sal_Int32 nOOXAngle(0);
                         aInteropGrabBag.getValue("mso-rotation-angle") >>= nOOXAngle; // 1/60000 deg
-                        const bool bIsGroupOrLine = xServiceInfo->supportsService("com.sun.star.drawing.GroupShape")
+                        // tdf#143455: A diagram is imported as group, but has no valid object list
+                        // and contour wrap is different to Word. As workaround diagramms are excluded
+                        // here in various places.
+                        const bool bIsDiagram = oox::drawingml::DrawingML::IsDiagram(m_xShape);
+                        const bool bIsGroupOrLine = (xServiceInfo->supportsService("com.sun.star.drawing.GroupShape")
+                            && !bIsDiagram)
                             || xServiceInfo->supportsService("com.sun.star.drawing.LineShape");
                         SdrObject* pShape = GetSdrObjectFromXShape(m_xShape);
                         if ((bIsGroupOrLine && !lcl_bHasGroupSlantedChild(pShape) && nOOXAngle == 0)
@@ -1012,7 +1018,7 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                                   || m_pImpl->nWrap == text::WrapTextMode_LEFT
                                   || m_pImpl->nWrap == text::WrapTextMode_RIGHT
                                   || m_pImpl->nWrap == text::WrapTextMode_NONE)
-                                  && !(m_pImpl->mpWrapPolygon))
+                                  && !(m_pImpl->mpWrapPolygon) && !bIsDiagram)
                         {
                             // For wrap "Square" an area is defined around which the text wraps. MSO
                             // describes the area by a base rectangle and effectExtent. LO uses the
@@ -1046,7 +1052,7 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                             m_pImpl->nBottomMargin += aMSOBaseLeftTop.Y + aMSOBaseSize.Height
                                                       - (aLOBoundRect.Y + aLOBoundRect.Height);
                         }
-                        else if (m_pImpl->mpWrapPolygon) // with contour
+                        else if (m_pImpl->mpWrapPolygon && !bIsDiagram)
                         {
                             // Word uses a wrap polygon, LibreOffice has no explicit wrap polygon
                             // but creates the wrap contour based on the shape geometry, without
@@ -1136,7 +1142,7 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                             if (m_pImpl->nRightMargin < 0)
                                 m_pImpl->nRightMargin = 0;
                         }
-                        else // text::WrapTextMode_THROUGH
+                        else if (!bIsDiagram) // text::WrapTextMode_THROUGH
                         {
                             // Word writes and evaluates the effectExtent in case of position
                             // type 'Alignment' (UI). We move these values to margin to approximate
