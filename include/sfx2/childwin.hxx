@@ -90,7 +90,6 @@ struct SFX2_DLLPUBLIC SfxChildWinFactory
     sal_uInt16                  nPos;   // Position in UI
 
     SfxChildWinFactory( SfxChildWinCtor pTheCtor, sal_uInt16 nID, sal_uInt16 n );
-    ~SfxChildWinFactory();
 };
 
 struct SfxChildWindow_Impl;
@@ -135,7 +134,7 @@ public:
     virtual SfxChildWinInfo GetInfo() const;
     void                SaveStatus(const SfxChildWinInfo& rInfo);
 
-    static void         RegisterChildWindow(SfxModule*, std::unique_ptr<SfxChildWinFactory>);
+    static void         RegisterChildWindow(SfxModule*, const SfxChildWinFactory&);
 
     static std::unique_ptr<SfxChildWindow> CreateChildWindow( sal_uInt16, vcl::Window*, SfxBindings*, SfxChildWinInfo const &);
     void                SetHideNotDelete( bool bOn );
@@ -182,11 +181,11 @@ public:
                 } \
         void    Class::RegisterChildWindow (bool bVis, SfxModule *pMod, SfxChildWindowFlags nFlags)   \
                 {   \
-                    auto pFact = std::make_unique<SfxChildWinFactory>( \
+                    SfxChildWinFactory aFact( \
                         Class::CreateImpl, MyID, Pos );   \
-                    pFact->aInfo.nFlags |= nFlags;  \
-                    pFact->aInfo.bVisible = bVis;         \
-                    SfxChildWindow::RegisterChildWindow(pMod, std::move(pFact)); \
+                    aFact.aInfo.nFlags |= nFlags;  \
+                    aFact.aInfo.bVisible = bVis;         \
+                    SfxChildWindow::RegisterChildWindow(pMod, aFact); \
                 }
 
 #define SFX_IMPL_POS_CHILDWINDOW_WITHID(Class, MyID, Pos) \

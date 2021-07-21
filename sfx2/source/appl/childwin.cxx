@@ -48,10 +48,6 @@ SfxChildWinFactory::SfxChildWinFactory( SfxChildWinCtor pTheCtor, sal_uInt16 nID
     , nPos(n)
 {}
 
-SfxChildWinFactory::~SfxChildWinFactory()
-{
-}
-
 struct SfxChildWindow_Impl
 {
     css::uno::Reference< css::frame::XFrame >             xFrame;
@@ -621,9 +617,9 @@ void SfxChildWindow::SetFrame( const css::uno::Reference< css::frame::XFrame > &
         pImpl->xFrame->addEventListener( pImpl->xListener );
 }
 
-void SfxChildWindow::RegisterChildWindow(SfxModule* pMod, std::unique_ptr<SfxChildWinFactory> pFact)
+void SfxChildWindow::RegisterChildWindow(SfxModule* pMod, const SfxChildWinFactory& rFact)
 {
-    SfxGetpApp()->RegisterChildWindow_Impl( pMod, std::move(pFact) );
+    SfxGetpApp()->RegisterChildWindow_Impl( pMod, rFact );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

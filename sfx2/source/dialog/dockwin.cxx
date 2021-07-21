@@ -216,10 +216,10 @@ void SfxDockingWrapper::RegisterChildWindow (bool bVis, SfxModule *pMod, SfxChil
     for (int i=0; i < NUM_OF_DOCKINGWINDOWS; i++ )
     {
         sal_uInt16 nID = sal_uInt16(SID_DOCKWIN_START+i);
-        auto pFact = std::make_unique<SfxChildWinFactory>( SfxDockingWrapper::CreateImpl, nID, 0xffff );
-        pFact->aInfo.nFlags |= nFlags;
-        pFact->aInfo.bVisible = bVis;
-        SfxChildWindow::RegisterChildWindow(pMod, std::move(pFact));
+        SfxChildWinFactory aFact( SfxDockingWrapper::CreateImpl, nID, 0xffff );
+        aFact.aInfo.nFlags |= nFlags;
+        aFact.aInfo.bVisible = bVis;
+        SfxChildWindow::RegisterChildWindow(pMod, aFact);
     }
 }
 

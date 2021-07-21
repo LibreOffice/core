@@ -74,7 +74,7 @@ public:
     SfxSlotPool*                GetSlotPool() const;
 
     void                        RegisterToolBoxControl(const SfxTbxCtrlFactory&);
-    void                        RegisterChildWindow(std::unique_ptr<SfxChildWinFactory>);
+    void                        RegisterChildWindow(const SfxChildWinFactory&);
     void                        RegisterStatusBarControl(const SfxStbCtrlFactory&);
 
     virtual std::unique_ptr<SfxTabPage>  CreateTabPage( sal_uInt16 nId,
