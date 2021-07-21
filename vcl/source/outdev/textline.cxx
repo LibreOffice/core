@@ -1067,7 +1067,7 @@ void OutputDevice::DrawWaveLine(const Point& rStartPos, const Point& rEndPos, to
 
     if ( fOrientation == 0.0 )
     {
-        static vcl::DeleteOnDeinit< WavyLineCache > snLineCache( new WavyLineCache() );
+        static vcl::DeleteOnDeinit< WavyLineCache > snLineCache {};
         if ( !snLineCache.get() )
             return;
         WavyLineCache& rLineCache = *snLineCache.get();
