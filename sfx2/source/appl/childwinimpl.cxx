@@ -27,17 +27,17 @@ size_t SfxChildWinFactArr_Impl::size() const
 
 const SfxChildWinFactory& SfxChildWinFactArr_Impl::operator []( size_t i ) const
 {
-    return *maData[i];
+    return maData[i];
 }
 
 SfxChildWinFactory& SfxChildWinFactArr_Impl::operator []( size_t i )
 {
-    return *maData[i];
+    return maData[i];
 }
 
-void SfxChildWinFactArr_Impl::push_back( std::unique_ptr<SfxChildWinFactory> p )
+void SfxChildWinFactArr_Impl::push_back( const SfxChildWinFactory& p )
 {
-    maData.push_back(std::move(p));
+    maData.push_back(p);
 }
 
 void SfxChildWinFactArr_Impl::erase( const iterator& it )

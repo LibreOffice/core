@@ -171,7 +171,7 @@ public:
     SAL_DLLPRIVATE SfxAppData_Impl* Get_Impl() const { return pImpl.get(); }
 
     // Object-Factories/global arrays
-    SAL_DLLPRIVATE void         RegisterChildWindow_Impl(SfxModule*, std::unique_ptr<SfxChildWinFactory>);
+    SAL_DLLPRIVATE void         RegisterChildWindow_Impl(SfxModule*, const SfxChildWinFactory&);
     SAL_DLLPRIVATE void         RegisterStatusBarControl_Impl(SfxModule*, const SfxStbCtrlFactory&);
     SAL_DLLPRIVATE void         RegisterToolBoxControl_Impl( SfxModule*, const SfxTbxCtrlFactory&);
     SAL_DLLPRIVATE SfxTbxCtrlFactArr_Impl& GetTbxCtrlFactories_Impl() const;
