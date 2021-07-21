@@ -165,7 +165,7 @@ public:
             const OUString& aMediaType,
             const rtl::Reference<comphelper::RefCountedMutex>& aMutexHolder );
 
-    std::unique_ptr<ZipEnumeration> entries();
+    ZipEnumeration entries();
 };
 
 #endif
