@@ -41,6 +41,7 @@ void PresPropsFragmentHandler::finalizeImport()
     css::uno::Reference<css::beans::XPropertySet> xPresentationProps(
         xPresentationSupplier->getPresentation(), css::uno::UNO_QUERY_THROW);
     xPresentationProps->setPropertyValue("IsEndless", css::uno::Any(m_bLoop));
+    xPresentationProps->setPropertyValue("IsAutomatic", css::uno::Any(!m_bTiming));
 
     if (!m_sId.isEmpty())
     {
@@ -73,6 +74,7 @@ core::ContextHandlerRef PresPropsFragmentHandler::onCreateContext(sal_Int32 aEle
             return this;
         case PPT_TOKEN(showPr):
             m_bLoop = rAttribs.getBool(XML_loop, false);
+            m_bTiming = rAttribs.getBool(XML_useTimings, true);
             return this;
         case PPT_TOKEN(custShow):
             m_sId = rAttribs.getString(XML_id).get();
