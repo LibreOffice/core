@@ -660,9 +660,9 @@ uno::Reference< XInputStream > ZipFile::createStreamForZipEntry(
     return xBufStream;
 }
 
-std::unique_ptr<ZipEnumeration> ZipFile::entries()
+ZipEnumeration ZipFile::entries()
 {
-    return std::make_unique<ZipEnumeration>(aEntries);
+    return aEntries;
 }
 
 uno::Reference< XInputStream > ZipFile::getInputStream( ZipEntry& rEntry,

@@ -519,16 +519,16 @@ void ZipPackage::parseContentType()
 
 void ZipPackage::getZipFileContents()
 {
-    std::unique_ptr<ZipEnumeration> xEnum = m_pZipFile->entries();
+    ZipEnumeration aEnum = m_pZipFile->entries();
     OUString sTemp, sDirName;
     sal_Int32 nOldIndex, nStreamIndex;
     FolderHash::iterator aIter;
 
-    while (xEnum->hasMoreElements())
+    while (aEnum.hasMoreElements())
     {
         nOldIndex = 0;
         ZipPackageFolder* pCurrent = m_xRootFolder.get();
-        const ZipEntry & rEntry = *xEnum->nextElement();
+        const ZipEntry & rEntry = *aEnum.nextElement();
         OUString rName = rEntry.sPath;
 
         if ( m_bForceRecovery )
