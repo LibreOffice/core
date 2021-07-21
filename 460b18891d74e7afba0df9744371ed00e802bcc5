@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b1d12a00_c0dbf456",
+        "filename": "sfx2/source/inc/StyleList.hxx",
+        "patchSetId": 62
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-21T14:28:14Z",
+      "side": 1,
+      "message": "This \"Selects\" and \"passed index\" looks like a leftover from the rename of the function. Additionally, it seems to be somewhat confusing: are you checking a \"style\", or a saved state for a family? I\u0027d name it \"CurrentFamilyHasState()\".",
+      "range": {
+        "startLine": 59,
+        "startChar": 7,
+        "endLine": 59,
+        "endChar": 14
+      },
+      "revId": "460b18891d74e7afba0df9744371ed00e802bcc5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b09bb9a3_abaf7ded",
+        "filename": "sfx2/source/inc/StyleList.hxx",
+        "patchSetId": 62
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-21T14:28:14Z",
+      "side": 1,
+      "message": "This description makes no sense. \"This function returns a value of \"parameter\" (why is it called \"parameter\"?) which is an internal detail of the class, and that is not needed for a programmer; and this is obvious from the code right here anyway\".\n\nThe comment should describe to programmer what is it used for: \"This is true when the control does not update itself in response to events X and Y for performance reasons; specifically, this state is set inside functions A and B; when in this state, don\u0027t do M and N\".",
+      "revId": "460b18891d74e7afba0df9744371ed00e802bcc5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e452acb0_8bcefe48",
+        "filename": "sfx2/source/inc/StyleList.hxx",
+        "patchSetId": 62
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-21T14:28:14Z",
+      "side": 1,
+      "message": "m_upDateFamily - such a member does not exist. Additionally, programmer does *not* need to know the internal implementation details. Every piece of the object is needed *for some reason*; we don\u0027t want to know that the control has \"m_bUpdateFamily\", but we might want to know that control might know that it should call some external code (which) - *that* is important here: \"controls whether handler set by \"connect_foo\" will be called when events \"bar\" and \"baz\" happen\".",
+      "revId": "460b18891d74e7afba0df9744371ed00e802bcc5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d3508159_bb5d8fdc",
+        "filename": "sfx2/source/inc/StyleList.hxx",
+        "patchSetId": 62
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-21T14:28:14Z",
+      "side": 1,
+      "message": "Too long comment again - it seems that I need to point to every single piece, and it\u0027s not enough to me to point to one such thing.\n\nSo: Please split this to two lines:\n\n    // When the value of bUpdateFamily is updated there while setting a family, the corresponding\n    // value gets updated here too.",
+      "revId": "460b18891d74e7afba0df9744371ed00e802bcc5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
