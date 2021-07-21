@@ -25,6 +25,7 @@
 #include "AccTextBase.h"
 
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 #include <vcl/svapp.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
 
@@ -38,6 +39,36 @@
 
 using namespace css::accessibility;
 using namespace css::uno;
+
+namespace
+{
+sal_Int16 lcl_matchIA2TextBoundaryType(IA2TextBoundaryType boundaryType)
+{
+    switch (boundaryType)
+    {
+    case IA2_TEXT_BOUNDARY_CHAR:
+        return com::sun::star::accessibility::AccessibleTextType::CHARACTER;
+    case IA2_TEXT_BOUNDARY_WORD:
+       return com::sun::star::accessibility::AccessibleTextType::WORD;
+    case IA2_TEXT_BOUNDARY_SENTENCE:
+        return com::sun::star::accessibility::AccessibleTextType::SENTENCE;
+    case IA2_TEXT_BOUNDARY_PARAGRAPH:
+        return com::sun::star::accessibility::AccessibleTextType::PARAGRAPH;
+    case IA2_TEXT_BOUNDARY_LINE:
+        return com::sun::star::accessibility::AccessibleTextType::LINE;
+    case IA2_TEXT_BOUNDARY_ALL:
+        // assert here, better handle it directly at call site
+        assert(false
+               && "No match for IA2_TEXT_BOUNDARY_ALL, handle at call site.");
+        break;
+    default:
+        break;
+    }
+
+    SAL_WARN("winaccessibility", "Unmatched text boundary type: " << boundaryType);
+    return -1;
+}
+}
 
 
 // Construction/Destruction
@@ -522,61 +553,20 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_textBeforeOffset(long offset
     if(!pRXText.is())
         return E_FAIL;
 
-    // In New UNO IAccessibleText.idl these constant values are defined as follows:
-
-    //  const long TEXT_BOUNDARY_CHAR = -1;
-    //  const long TEXT_BOUNDARY_TO_CURSOR_POS = -2;
-    //  const long TEXT_BOUNDARY_START_OF_WORD = -3;
-    //  const long TEXT_BOUNDARY_END_OF_WORD = -4;
-    //  const long TEXT_BOUNDARY_START_OF_SENTENCE = -5;
-    //  const long TEXT_BOUNDARY_END_OF_SENTENCE = -6;
-    //  const long TEXT_BOUNDARY_START_OF_LINE = -7;
-    //  const long TEXT_BOUNDARY_END_OF_LINE = -8;
-
-    // In UNO, the corresponding values are as follows:
-
-    //  const short CHARACTER = 1;
-    //  const short WORD = 2;
-    //  const short SENTENCE = 3;
-    //  const short PARAGRAPH = 4;
-    //  const short LINE = 5;
-    //  const short GLYPH = 6;
-    //  const short ATTRIBUTE_RUN = 7;
-
-
-    long            lUnoBoundaryType;
-
-    switch(boundaryType)
+    if (boundaryType == IA2_TEXT_BOUNDARY_ALL)
     {
-    case IA2_TEXT_BOUNDARY_CHAR:
-        lUnoBoundaryType = 1; // CHARACTER;
-        break;
-    case IA2_TEXT_BOUNDARY_WORD:
-        lUnoBoundaryType = 2; // WORD;
-        break;
-    case IA2_TEXT_BOUNDARY_SENTENCE:
-        lUnoBoundaryType = 3; // SENTENCE;
-        break;
-    case IA2_TEXT_BOUNDARY_LINE:
-        lUnoBoundaryType = 5; // LINE;
-        break;
-    case IA2_TEXT_BOUNDARY_PARAGRAPH:
-        lUnoBoundaryType = 4;
-        break;
-    case IA2_TEXT_BOUNDARY_ALL:
-        {
-            long nChar;
-            get_nCharacters( &nChar );
-            *startOffset = 0;
-            *endOffset = nChar;
-            return get_text(0, nChar, text);
-        }
-        break;
-    default:
-        return E_FAIL;
+        long nChar;
+        get_nCharacters( &nChar );
+        *startOffset = 0;
+        *endOffset = nChar;
+        return get_text(0, nChar, text);
     }
 
-    TextSegment segment = GetXInterface()->getTextBeforeIndex( offset, sal_Int16(lUnoBoundaryType));
+    const sal_Int16 nUnoBoundaryType = lcl_matchIA2TextBoundaryType(boundaryType);
+    if (nUnoBoundaryType < 0)
+        return E_FAIL;
+
+    TextSegment segment = GetXInterface()->getTextBeforeIndex(offset, nUnoBoundaryType);
     OUString ouStr = segment.SegmentText;
     SysFreeString(*text);
     *text = SysAllocString(o3tl::toW(ouStr.getStr()));
@@ -609,60 +599,20 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_textAfterOffset(long offset,
     if(!pRXText.is())
         return E_FAIL;
 
-    // In New UNO IAccessibleText.idl these constant values are defined as follows:
-
-    //  const long TEXT_BOUNDARY_CHAR = -1;
-    //  const long TEXT_BOUNDARY_TO_CURSOR_POS = -2;
-    //  const long TEXT_BOUNDARY_START_OF_WORD = -3;
-    //  const long TEXT_BOUNDARY_END_OF_WORD = -4;
-    //  const long TEXT_BOUNDARY_START_OF_SENTENCE = -5;
-    //  const long TEXT_BOUNDARY_END_OF_SENTENCE = -6;
-    //  const long TEXT_BOUNDARY_START_OF_LINE = -7;
-    //  const long TEXT_BOUNDARY_END_OF_LINE = -8;
-
-    // In UNO, the corresponding values are as follows:
-
-    //  const short CHARACTER = 1;
-    //  const short WORD = 2;
-    //  const short SENTENCE = 3;
-    //  const short PARAGRAPH = 4;
-    //  const short LINE = 5;
-    //  const short GLYPH = 6;
-    //  const short ATTRIBUTE_RUN = 7;
-
-
-    long            lUnoBoundaryType;
-    switch(boundaryType)
+    if (boundaryType == IA2_TEXT_BOUNDARY_ALL)
     {
-    case IA2_TEXT_BOUNDARY_CHAR:
-        lUnoBoundaryType = 1; // CHARACTER;
-        break;
-    case IA2_TEXT_BOUNDARY_WORD:
-        lUnoBoundaryType = 2; // WORD;
-        break;
-    case IA2_TEXT_BOUNDARY_SENTENCE:
-        lUnoBoundaryType = 3; // SENTENCE;
-        break;
-    case IA2_TEXT_BOUNDARY_LINE:
-        lUnoBoundaryType = 5; // LINE;
-        break;
-    case IA2_TEXT_BOUNDARY_PARAGRAPH:
-        lUnoBoundaryType = 4;
-        break;
-    case IA2_TEXT_BOUNDARY_ALL:
-        {
-            long nChar;
-            get_nCharacters( &nChar );
-            *startOffset = 0;
-            *endOffset = nChar;
-            return get_text(0, nChar, text);
-        }
-        break;
-    default:
-        return E_FAIL;
+        long nChar;
+        get_nCharacters( &nChar );
+        *startOffset = 0;
+        *endOffset = nChar;
+        return get_text(0, nChar, text);
     }
 
-    TextSegment segment = GetXInterface()->getTextBehindIndex( offset, sal_Int16(lUnoBoundaryType));
+    const sal_Int16 nUnoBoundaryType = lcl_matchIA2TextBoundaryType(boundaryType);
+    if (nUnoBoundaryType < 0)
+        return E_FAIL;
+
+    TextSegment segment = GetXInterface()->getTextBehindIndex(offset, nUnoBoundaryType);
     OUString ouStr = segment.SegmentText;
     SysFreeString(*text);
     *text = SysAllocString(o3tl::toW(ouStr.getStr()));
@@ -695,61 +645,20 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_textAtOffset(long offset, IA
     if(!pRXText.is())
         return E_FAIL;
 
-    // In New UNO IAccessibleText.idl these constant values are defined as follows:
-
-    //  const long TEXT_BOUNDARY_CHAR = -1;
-    //  const long TEXT_BOUNDARY_TO_CURSOR_POS = -2;
-    //  const long TEXT_BOUNDARY_START_OF_WORD = -3;
-    //  const long TEXT_BOUNDARY_END_OF_WORD = -4;
-    //  const long TEXT_BOUNDARY_START_OF_SENTENCE = -5;
-    //  const long TEXT_BOUNDARY_END_OF_SENTENCE = -6;
-    //  const long TEXT_BOUNDARY_START_OF_LINE = -7;
-    //  const long TEXT_BOUNDARY_END_OF_LINE = -8;
-
-    // In UNO, the corresponding values are as follows:
-
-    //  const short CHARACTER = 1;
-    //  const short WORD = 2;
-    //  const short SENTENCE = 3;
-    //  const short PARAGRAPH = 4;
-    //  const short LINE = 5;
-    //  const short GLYPH = 6;
-    //  const short ATTRIBUTE_RUN = 7;
-
-
-    long            lUnoBoundaryType;
-
-    switch(boundaryType)
+    if (boundaryType == IA2_TEXT_BOUNDARY_ALL)
     {
-    case IA2_TEXT_BOUNDARY_CHAR:
-        lUnoBoundaryType = 1; // CHARACTER;
-        break;
-    case IA2_TEXT_BOUNDARY_WORD:
-        lUnoBoundaryType = 2; // WORD;
-        break;
-    case IA2_TEXT_BOUNDARY_SENTENCE:
-        lUnoBoundaryType = 3; // SENTENCE;
-        break;
-    case IA2_TEXT_BOUNDARY_LINE:
-        lUnoBoundaryType = 5; // LINE;
-        break;
-    case IA2_TEXT_BOUNDARY_PARAGRAPH:
-        lUnoBoundaryType = 4;
-        break;
-    case IA2_TEXT_BOUNDARY_ALL:
-        {
-            long nChar;
-            get_nCharacters( &nChar );
-            *startOffset = 0;
-            *endOffset = nChar;
-            return get_text(0, nChar, text);
-        }
-        break;
-    default:
-        return E_FAIL;
+        long nChar;
+        get_nCharacters( &nChar );
+        *startOffset = 0;
+        *endOffset = nChar;
+        return get_text(0, nChar, text);
     }
 
-    TextSegment segment = GetXInterface()->getTextAtIndex( offset, sal_Int16(lUnoBoundaryType));
+    const sal_Int16 nUnoBoundaryType = lcl_matchIA2TextBoundaryType(boundaryType);
+    if (nUnoBoundaryType < 0)
+        return E_FAIL;
+
+    TextSegment segment = GetXInterface()->getTextAtIndex(offset, nUnoBoundaryType);
     OUString ouStr = segment.SegmentText;
     SysFreeString(*text);
     *text = SysAllocString(o3tl::toW(ouStr.getStr()));
