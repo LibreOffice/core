@@ -635,9 +635,9 @@ void InitCore()
                 new SvXMLAttrContainerItem( RES_UNKNOWNATR_CONTAINER );
 
     // get the correct fonts:
-    ::GetDefaultFonts( *static_cast<SvxFontItem*>(aAttrTab[ RES_CHRATR_FONT- POOLATTR_BEGIN ]),
-                       *static_cast<SvxFontItem*>(aAttrTab[ RES_CHRATR_CJK_FONT - POOLATTR_BEGIN ]),
-                       *static_cast<SvxFontItem*>(aAttrTab[ RES_CHRATR_CTL_FONT - POOLATTR_BEGIN ]) );
+    ::GetDefaultFonts( (aAttrTab[ RES_CHRATR_FONT- POOLATTR_BEGIN ])->StaticWhichCast(RES_CHRATR_FONT),
+                       (aAttrTab[ RES_CHRATR_CJK_FONT - POOLATTR_BEGIN ])->StaticWhichCast(RES_CHRATR_CJK_FONT),
+                       (aAttrTab[ RES_CHRATR_CTL_FONT - POOLATTR_BEGIN ])->StaticWhichCast(RES_CHRATR_CTL_FONT) );
 
     SwBreakIt::Create_( ::comphelper::getProcessComponentContext() );
     pCheckIt = nullptr;
