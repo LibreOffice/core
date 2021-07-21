@@ -59,7 +59,7 @@ private:
         ColumnType(SCROW nStart, SCROW nEnd, bool bInit);
     };
 
-    typedef std::vector<std::unique_ptr<ColumnType>> TableType;
+    typedef std::vector<std::optional<ColumnType>> TableType;
 
     std::vector<TableType> maTables;
 
