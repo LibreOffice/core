@@ -35,13 +35,13 @@ ifeq ($(SYSTEM_NSS),)
 curl_CPPFLAGS += -I$(call gb_UnpackedTarball_get_dir,nss)/dist/public/nss
 endif
 
-# use --with-darwinssl on macOS >10.5 and iOS to get a native UI for SSL certs for CMIS usage
+# use --with-secure-transport on macOS >10.5 and iOS to get a native UI for SSL certs for CMIS usage
 # use --with-nss only on platforms other than macOS and iOS
 $(call gb_ExternalProject_get_state_target,curl,build):
 	$(call gb_ExternalProject_run,build,\
 		./configure \
 			$(if $(filter iOS MACOSX,$(OS)),\
-				--with-darwinssl,\
+				--with-secure-transport,\
 				$(if $(ENABLE_NSS),--with-nss$(if $(SYSTEM_NSS),,="$(call gb_UnpackedTarball_get_dir,nss)/dist/out"),--without-nss)) \
 			--without-ssl --without-gnutls --without-polarssl --without-cyassl --without-axtls --without-mbedtls \
 			--enable-ftp --enable-http --enable-ipv6 \
@@ -49,7 +49,8 @@ $(call gb_ExternalProject_get_state_target,curl,build):
 			--without-libssh2 --without-metalink --without-nghttp2 \
 			--without-libssh --without-brotli \
 			--without-ngtcp2 --without-quiche \
-			--disable-ares \
+			--without-zstd --without-hyper --without-gsasl --without-gssapi \
+			--disable-mqtt --disable-ares \
 			--disable-dict --disable-file --disable-gopher --disable-imap \
 			--disable-ldap --disable-ldaps --disable-manual --disable-pop3 \
 			--disable-rtsp --disable-smb --disable-smtp --disable-telnet  \
