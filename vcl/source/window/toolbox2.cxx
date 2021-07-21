@@ -1391,7 +1391,7 @@ void ToolBox::ImplUpdateInputEnable()
 
 void ToolBox::ImplFillLayoutData()
 {
-    mpData->m_pLayoutData.reset(new ToolBoxLayoutData);
+    mpData->m_pLayoutData.emplace();
 
     ImplToolItems::size_type nCount = mpData->m_aItems.size();
     for( ImplToolItems::size_type i = 0; i < nCount; i++ )
