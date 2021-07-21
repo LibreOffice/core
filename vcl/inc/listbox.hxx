@@ -113,6 +113,7 @@ public:
     const ImplEntryType*    GetEntryPtr( sal_Int32  nPos ) const { return GetEntry( nPos ); }
     ImplEntryType*          GetMutableEntryPtr( sal_Int32  nPos ) const { return GetEntry( nPos ); }
     void                    Clear();
+    void                    dispose();
 
     sal_Int32           FindMatchingEntry( const OUString& rStr, sal_Int32  nStart, bool bLazy ) const;
     sal_Int32           FindEntry( std::u16string_view rStr, bool bSearchMRUArea = false ) const;
@@ -174,7 +175,7 @@ public:
 class ImplListBoxWindow final : public Control, public vcl::ISearchableStringList
 {
 private:
-    std::unique_ptr<ImplEntryList> mpEntryList;     ///< EntryList
+    ImplEntryList maEntryList;     ///< EntryList
     tools::Rectangle       maFocusRect;
 
     Size            maUserItemSize;
@@ -261,7 +262,8 @@ public:
     virtual         ~ImplListBoxWindow() override;
     virtual void    dispose() override;
 
-    ImplEntryList*  GetEntryList() const { return mpEntryList.get(); }
+    const ImplEntryList& GetEntryList() const { return maEntryList; }
+    ImplEntryList& GetEntryList() { return maEntryList; }
 
     sal_Int32       InsertEntry( sal_Int32  nPos, ImplEntryType* pNewEntry ); // sorts using mbSort
     sal_Int32       InsertEntry( sal_Int32  nPos, ImplEntryType* pNewEntry, bool bSort ); // to insert ignoring mbSort, e.g. mru
@@ -405,7 +407,7 @@ public:
                     virtual ~ImplListBox() override;
     virtual void    dispose() override;
 
-    const ImplEntryList*    GetEntryList() const            { return maLBWindow->GetEntryList(); }
+    const ImplEntryList&    GetEntryList() const            { return maLBWindow->GetEntryList(); }
     ImplListBoxWindow*      GetMainWindow()                 { return maLBWindow.get(); }
 
     virtual void    Resize() override;
@@ -414,7 +416,7 @@ public:
     sal_Int32       InsertEntry( sal_Int32  nPos, const OUString& rStr );
     sal_Int32       InsertEntry( sal_Int32  nPos, const OUString& rStr, const Image& rImage );
     void            RemoveEntry( sal_Int32  nPos );
-    void            SetEntryData( sal_Int32  nPos, void* pNewData ) { maLBWindow->GetEntryList()->SetEntryData( nPos, pNewData ); }
+    void            SetEntryData( sal_Int32  nPos, void* pNewData ) { maLBWindow->GetEntryList().SetEntryData( nPos, pNewData ); }
     void            Clear();
 
     void            SetEntryFlags( sal_Int32  nPos, ListBoxEntryFlags nFlags );
@@ -476,15 +478,15 @@ public:
     void            SetUserDrawHdl( const Link<UserDrawEvent*, void>& rLink ) { maLBWindow->SetUserDrawHdl( rLink ); }
     void            SetFocusHdl( const Link<sal_Int32,void>& rLink )  { maLBWindow->SetFocusHdl( rLink ); }
     void            SetListItemSelectHdl( const Link<LinkParamNone*,void>& rLink ) { maLBWindow->SetListItemSelectHdl( rLink ); }
-    void            SetSelectionChangedHdl( const Link<sal_Int32,void>& rLnk ) { maLBWindow->GetEntryList()->SetSelectionChangedHdl( rLnk ); }
-    void            SetCallSelectionChangedHdl( bool bCall )    { maLBWindow->GetEntryList()->SetCallSelectionChangedHdl( bCall ); }
+    void            SetSelectionChangedHdl( const Link<sal_Int32,void>& rLnk ) { maLBWindow->GetEntryList().SetSelectionChangedHdl( rLnk ); }
+    void            SetCallSelectionChangedHdl( bool bCall )    { maLBWindow->GetEntryList().SetCallSelectionChangedHdl( bCall ); }
     bool            IsSelectionChanged() const                  { return maLBWindow->IsSelectionChanged(); }
     sal_uInt16      GetSelectModifier() const                   { return maLBWindow->GetSelectModifier(); }
 
     void            SetMRUEntries( const OUString& rEntries, sal_Unicode cSep );
     OUString        GetMRUEntries( sal_Unicode cSep ) const;
-    void            SetMaxMRUCount( sal_Int32  n )                  { maLBWindow->GetEntryList()->SetMaxMRUCount( n ); }
-    sal_Int32       GetMaxMRUCount() const                      { return maLBWindow->GetEntryList()->GetMaxMRUCount(); }
+    void            SetMaxMRUCount( sal_Int32  n )                  { maLBWindow->GetEntryList().SetMaxMRUCount( n ); }
+    sal_Int32       GetMaxMRUCount() const                      { return maLBWindow->GetEntryList().GetMaxMRUCount(); }
     sal_uInt16      GetDisplayLineCount() const
     { return maLBWindow->GetDisplayLineCount(); }
 
