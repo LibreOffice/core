@@ -142,7 +142,7 @@ protected:
 
 private:
     // list of pointer of "struct IMPL_ControlInfo" to hold child-controls
-    ::std::vector< std::unique_ptr<IMPL_ControlInfo> > maControlInfoList;
+    ::std::vector< IMPL_ControlInfo > maControlInfoList;
 
     ::cppu::OMultiTypeInterfaceContainerHelper                          m_aListeners;
 
