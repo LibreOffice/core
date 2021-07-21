@@ -71,7 +71,6 @@ class ColumnIterator
 
 public:
     ColumnIterator(const CellStoreType& rCells, SCROW nRow1, SCROW nRow2);
-    ~ColumnIterator();
 
     void next();
 
