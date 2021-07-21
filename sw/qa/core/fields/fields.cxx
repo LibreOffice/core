@@ -10,6 +10,8 @@
 #include <swmodeltestbase.hxx>
 
 #include <com/sun/star/text/XTextDocument.hpp>
+#include <com/sun/star/text/XTextField.hpp>
+#include <com/sun/star/text/XTextFieldsSupplier.hpp>
 
 #include <comphelper/propertyvalue.hxx>
 
@@ -25,6 +27,8 @@ namespace
 class Test : public SwModelTestBase
 {
 };
+
+constexpr OUStringLiteral DATA_DIRECTORY = u"/sw/qa/core/fields/data/";
 
 CPPUNIT_TEST_FIXTURE(Test, testAuthorityTooltip)
 {
@@ -61,6 +65,36 @@ CPPUNIT_TEST_FIXTURE(Test, testAuthorityTooltip)
     // Without the accompanying fix in place, generating this tooltip text was not possible without
     // first inserting an empty bibliography table into the document.
     CPPUNIT_ASSERT_EQUAL(OUString("ARJ00: Ar, J, mytitle, 2020"), aTooltip);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf143424)
+{
+    createSwDoc(DATA_DIRECTORY, "tdf143424.odt");
+
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xFieldsAccess(
+        xTextFieldsSupplier->getTextFields());
+    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+
+    // TODO: I have no idea why fields are enumerated in invalid order, not like in document
+
+    // Field: Chapter Format: Chapter name
+    uno::Reference<text::XTextField> xField(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Another title"), xField->getPresentation(false));
+
+    // Field: Chapter Format: Chapter number and name
+    xField.set(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Chapter 2 -Another title"), xField->getPresentation(false));
+    //                                       ^^ seems here must be a separator
+    // Please modify this testcase once this behavior will be fixed. For now I just fix and check this behavior
+
+    // Field: Chapter Format: Chapter number
+    xField.set(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Chapter 2 -"), xField->getPresentation(false));
+
+    // Field: Chapter Format: Chapter number without separator
+    xField.set(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("2"), xField->getPresentation(false));
 }
 }
 

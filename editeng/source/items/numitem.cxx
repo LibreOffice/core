@@ -608,6 +608,16 @@ void SvxNumberFormat::SetListFormat(std::optional<OUString> oSet)
         sSuffix = sListFormat->copy(nLastReplacement);
 }
 
+OUString SvxNumberFormat::GetListFormat(bool bIncludePrefixSuffix /*= true*/) const
+{
+    assert(sListFormat.has_value());
+
+    if (bIncludePrefixSuffix)
+        return *sListFormat;
+
+    // Strip prefix & suffix from string
+    return sListFormat->copy(sPrefix.getLength(), sListFormat->getLength() - sPrefix.getLength() - sSuffix.getLength());
+}
 
 OUString SvxNumberFormat::GetCharFormatName()const
 {
