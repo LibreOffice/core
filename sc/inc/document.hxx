@@ -47,6 +47,7 @@
 #include <cassert>
 #include <memory>
 #include <map>
+#include <optional>
 #include <set>
 #include <unordered_map>
 #include <vector>
@@ -2512,7 +2513,7 @@ public:
     const SvtBroadcaster*   GetBroadcaster( const ScAddress& rPos ) const;
     void                    DeleteBroadcasters( sc::ColumnBlockPosition& rBlockPos, const ScAddress& rTopPos, SCROW nLength );
 
-    std::unique_ptr<sc::ColumnIterator> GetColumnIterator( SCTAB nTab, SCCOL nCol, SCROW nRow1, SCROW nRow2 ) const;
+    std::optional<sc::ColumnIterator> GetColumnIterator( SCTAB nTab, SCCOL nCol, SCROW nRow1, SCROW nRow2 ) const;
     void CreateColumnIfNotExists( SCTAB nTab, SCCOL nCol );
 
     SC_DLLPUBLIC void StoreTabToCache(SCTAB nTab, SvStream& rStrm) const;

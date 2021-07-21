@@ -667,7 +667,7 @@ void Test::testColumnIterator() // tdf#118620
 
     m_pDoc->SetString(0, 0, 0, "'10.5");
     m_pDoc->SetString(0, MAXROW-5, 0, "42.0");
-    std::unique_ptr<sc::ColumnIterator> it = m_pDoc->GetColumnIterator(0, 0, MAXROW - 10, MAXROW);
+    std::optional<sc::ColumnIterator> it = m_pDoc->GetColumnIterator(0, 0, MAXROW - 10, MAXROW);
     while (it->hasCell())
     {
         it->getCell();

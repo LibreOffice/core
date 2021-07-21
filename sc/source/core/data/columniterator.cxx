@@ -176,8 +176,6 @@ ColumnIterator::ColumnIterator( const CellStoreType& rCells, SCROW nRow1, SCROW 
 {
 }
 
-ColumnIterator::~ColumnIterator() {}
-
 void ColumnIterator::next()
 {
     if ( maPos == maPosEnd)
