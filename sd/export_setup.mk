@@ -79,6 +79,7 @@ $(eval $(call gb_CppunitTest_use_configuration,sd_export_tests$(1)))
 
 $(eval $(call gb_CppunitTest_add_arguments,sd_export_tests$(1),\
     -env:SVG_DISABLE_FONT_EMBEDDING= \
+    -env:arg-env=$(gb_Helper_LIBRARY_PATH_VAR)"$$$${$(gb_Helper_LIBRARY_PATH_VAR)+=$$$$$(gb_Helper_LIBRARY_PATH_VAR)}" \
 ))
 
 endef

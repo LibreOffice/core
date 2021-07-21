@@ -24,17 +24,14 @@
 #include <string_view>
 
 #include <rtl/ustring.hxx>
+#include <unotest/detail/unotestdllapi.hxx>
 
 namespace test {
 
-namespace detail {
-
 // Obtain the value of an argument tunneled in via an "arg-<name>" bootstrap
 // variable:
-bool getArgument(
+OOO_DLLPUBLIC_UNOTEST bool getArgument(
     std::u16string_view name, OUString * value);
-
-}
 
 }
 

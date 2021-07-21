@@ -89,6 +89,11 @@ $(eval $(call gb_CppunitTest_use_packages,sw_ooxmlexport$(1),\
 ))
 endif
 
+
+$(eval $(call gb_CppunitTest_add_arguments,sw_ooxmlexport$(1), \
+    -env:arg-env=$(gb_Helper_LIBRARY_PATH_VAR)"$$$${$(gb_Helper_LIBRARY_PATH_VAR)+=$$$$$(gb_Helper_LIBRARY_PATH_VAR)}" \
+))
+
 endef
 
 # vim: set noet sw=4 ts=4:

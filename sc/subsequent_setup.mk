@@ -134,6 +134,10 @@ $(eval $(call gb_CppunitTest_use_packages,sc_subsequent_$(1), \
 
 $(eval $(call gb_CppunitTest_use_more_fonts,sc_subsequent_$(1)))
 
+$(eval $(call gb_CppunitTest_add_arguments,sc_subsequent_$(1), \
+    -env:arg-env=$(gb_Helper_LIBRARY_PATH_VAR)"$$$${$(gb_Helper_LIBRARY_PATH_VAR)+=$$$$$(gb_Helper_LIBRARY_PATH_VAR)}" \
+))
+
 endef
 
 # vim: set noet sw=4 ts=4:
