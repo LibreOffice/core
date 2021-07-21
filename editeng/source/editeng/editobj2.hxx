@@ -169,17 +169,18 @@ public:
     typedef std::vector<std::unique_ptr<ContentInfo> > ContentInfosType;
 
 private:
-    ContentInfosType        aContents;
-    rtl::Reference<SfxItemPool>       pPool;
-    std::unique_ptr<XParaPortionList> pPortionInfo;
+    ContentInfosType        maContents;
+    rtl::Reference<SfxItemPool>       mpPool;
+    std::unique_ptr<XParaPortionList> mpPortionInfo;
 
-    sal_uInt16              nMetric;
-    OutlinerMode            nUserType;
-    SvtScriptType           nScriptType;
+    OutlinerMode            meUserType;
+    SvtScriptType           meScriptType;
+    TextRotation            meRotation;
 
-    bool                    bOwnerOfPool:1;
-    bool                    bVertical:1;
-    TextRotation            mnRotation;
+    sal_uInt16              mnMetric;
+
+    bool                    mbOwnerOfPool;
+    bool                    mbVertical;
 
     bool ImpChangeStyleSheets( std::u16string_view rOldName, SfxStyleFamily eOldFamily,
                                const OUString& rNewName, SfxStyleFamily eNewFamily );
@@ -191,7 +192,7 @@ public:
 
     EditTextObjectImpl& operator=(const EditTextObjectImpl&) = delete;
 
-    virtual OutlinerMode GetUserType() const override { return nUserType;}
+    virtual OutlinerMode GetUserType() const override { return meUserType;}
     virtual void SetUserType( OutlinerMode n ) override;
 
     virtual void NormalizeString( svl::SharedStringPool& rPool ) override;
@@ -204,7 +205,7 @@ public:
     virtual void                    SetRotation(TextRotation nRotation) override;
     virtual TextRotation            GetRotation() const override;
 
-    virtual SvtScriptType           GetScriptType() const override { return nScriptType;}
+    virtual SvtScriptType           GetScriptType() const override { return meScriptType;}
     void                    SetScriptType( SvtScriptType nType );
 
     virtual std::unique_ptr<EditTextObject> Clone() const override;
@@ -213,13 +214,13 @@ public:
     XEditAttribute CreateAttrib( const SfxPoolItem& rItem, sal_Int32 nStart, sal_Int32 nEnd );
     void                    DestroyAttrib( const XEditAttribute& rAttr );
 
-    ContentInfosType&       GetContents() { return aContents;}
-    const ContentInfosType& GetContents() const { return aContents;}
-    SfxItemPool*            GetPool()         { return pPool.get(); }
-    virtual const SfxItemPool* GetPool() const override { return pPool.get(); }
-    XParaPortionList*       GetPortionInfo() const  { return pPortionInfo.get(); }
+    ContentInfosType&       GetContents() { return maContents;}
+    const ContentInfosType& GetContents() const { return maContents;}
+    SfxItemPool*            GetPool()         { return mpPool.get(); }
+    virtual const SfxItemPool* GetPool() const override { return mpPool.get(); }
+    XParaPortionList*       GetPortionInfo() const  { return mpPortionInfo.get(); }
     void                    SetPortionInfo( std::unique_ptr<XParaPortionList> pP )
-                                { pPortionInfo = std::move(pP); }
+                                { mpPortionInfo = std::move(pP); }
 
     virtual sal_Int32 GetParagraphCount() const override;
     virtual OUString GetText(sal_Int32 nParagraph) const override;
@@ -250,11 +251,11 @@ public:
 
     virtual editeng::FieldUpdater GetFieldUpdater() override { return editeng::FieldUpdater(*this); }
 
-    bool HasMetric() const { return nMetric != 0xFFFF; }
-    sal_uInt16                  GetMetric() const           { return nMetric; }
-    void                    SetMetric( sal_uInt16 n )       { nMetric = n; }
+    bool HasMetric() const { return mnMetric != 0xFFFF; }
+    sal_uInt16                  GetMetric() const           { return mnMetric; }
+    void                    SetMetric( sal_uInt16 n )       { mnMetric = n; }
 
-    bool                    IsOwnerOfPool() const       { return bOwnerOfPool; }
+    bool                    IsOwnerOfPool() const       { return mbOwnerOfPool; }
 
     virtual bool operator==( const EditTextObject& rCompare ) const override;
     bool Equals( const EditTextObjectImpl& rCompare, bool bComparePool ) const;
