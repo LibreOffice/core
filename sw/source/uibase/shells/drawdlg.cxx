@@ -371,14 +371,14 @@ void SwDrawShell::GetDrawAttrState(SfxItemSet& rSet)
             SfxItemSet aSet(rSet);
             aSet.MergeRange(SDRATTR_TEXTCOLUMNS_NUMBER, SDRATTR_TEXTCOLUMNS_SPACING);
             pSdrView->GetAttributes(aSet);
-            if (const SfxPoolItem * pItem;
+            if (const SfxPoolItem* pItem = nullptr;
                 aSet.GetItemState(SDRATTR_TEXTCOLUMNS_NUMBER, false, &pItem)
                     >= SfxItemState::DEFAULT
                 && pItem)
             {
                 aSet.Put(pItem->CloneSetWhich(SID_ATTR_TEXTCOLUMNS_NUMBER));
             }
-            if (const SfxPoolItem * pItem;
+            if (const SfxPoolItem* pItem = nullptr;
                 aSet.GetItemState(SDRATTR_TEXTCOLUMNS_SPACING, false, &pItem)
                     >= SfxItemState::DEFAULT
                 && pItem)
