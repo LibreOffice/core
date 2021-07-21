@@ -59,6 +59,19 @@ $(eval $(call gb_Library_use_system_win32_libs,skia,\
     usp10 \
     gdi32 \
 ))
+else ifeq ($(OS),MACOSX)
+
+$(eval $(call gb_Library_use_system_darwin_frameworks,skia,\
+    Carbon \
+))
+
+ifneq ($(SKIA_DISABLE_VMA_USE_STL_SHARED_MUTEX),)
+# Disable std::shared_mutex usage on MacOSX < 10.12.
+$(eval $(call gb_Library_add_defs,skia,\
+    -DVMA_USE_STL_SHARED_MUTEX=0 \
+))
+endif
+
 else
 $(eval $(call gb_Library_use_externals,skia,\
     freetype \
@@ -876,6 +889,29 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/tools/sk_app/win/RasterWindowContext_win \
     UnpackedTarball/skia/tools/sk_app/win/VulkanWindowContext_win \
 ))
+
+else ifeq ($(OS),MACOSX)
+$(eval $(call gb_Library_add_generated_exception_objects,skia,\
+    UnpackedTarball/skia/src/ports/SkDebug_stdio \
+    UnpackedTarball/skia/src/ports/SkImageEncoder_CG \
+    UnpackedTarball/skia/src/ports/SkImageGeneratorCG \
+    UnpackedTarball/skia/src/ports/SkFontMgr_mac_ct \
+    UnpackedTarball/skia/src/ports/SkFontMgr_mac_ct_factory \
+    UnpackedTarball/skia/src/ports/SkScalerContext_mac_ct \
+    UnpackedTarball/skia/src/ports/SkTypeface_mac_ct \
+    UnpackedTarball/skia/src/ports/SkOSFile_posix \
+    UnpackedTarball/skia/src/ports/SkOSLibrary_posix \
+    UnpackedTarball/skia/src/utils/mac/SkCTFont \
+    UnpackedTarball/skia/src/utils/mac/SkCreateCGImageRef \
+))
+
+$(eval $(call gb_Library_add_generated_objcxxobjects,skia,\
+    UnpackedTarball/skia/tools/sk_app/mac/RasterWindowContext_mac \
+))
+
+#    UnpackedTarball/skia/tools/sk_app/mac/VulkanWindowContext_mac \
+#    UnpackedTarball/skia/tools/sk_app/mac/MetalWindowContext_mac \
+
 else
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/ports/SkDebug_stdio \
