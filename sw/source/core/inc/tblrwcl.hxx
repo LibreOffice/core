@@ -171,7 +171,7 @@ public:
 
 class SwShareBoxFormats
 {
-    std::vector<std::unique_ptr<SwShareBoxFormat>> m_ShareArr;
+    std::vector<SwShareBoxFormat> m_ShareArr;
 
     bool Seek_Entry( const SwFrameFormat& rFormat, sal_uInt16* pPos ) const;
 
