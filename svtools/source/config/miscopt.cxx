@@ -33,6 +33,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
+#include <mutex>
 #include <vector>
 
 using namespace ::utl                   ;
@@ -475,12 +476,18 @@ namespace {
 
 std::weak_ptr<SvtMiscOptions_Impl> g_pMiscOptions;
 
+std::mutex& GetMiscOptionsMutex()
+{
+    static std::mutex gMutex;
+    return gMutex;
+}
+
 }
 
 SvtMiscOptions::SvtMiscOptions()
 {
     // Global access, must be guarded (multithreading!).
-    MutexGuard aGuard( GetInitMutex() );
+    std::lock_guard aGuard( GetMiscOptionsMutex() );
 
     m_pImpl = g_pMiscOptions.lock();
     if( !m_pImpl )
@@ -494,7 +501,7 @@ SvtMiscOptions::SvtMiscOptions()
 SvtMiscOptions::~SvtMiscOptions()
 {
     // Global access, must be guarded (multithreading!)
-    MutexGuard aGuard( GetInitMutex() );
+    std::lock_guard aGuard( GetMiscOptionsMutex() );
 
     m_pImpl.reset();
 }
@@ -568,17 +575,6 @@ void SvtMiscOptions::SetIconTheme(const OUString& iconTheme)
 bool SvtMiscOptions::DisableUICustomization() const
 {
     return m_pImpl->DisableUICustomization();
-}
-
-namespace
-{
-    class theSvtMiscOptionsMutex :
-        public rtl::Static< osl::Mutex, theSvtMiscOptionsMutex > {};
-}
-
-Mutex & SvtMiscOptions::GetInitMutex()
-{
-    return theSvtMiscOptionsMutex::get();
 }
 
 void SvtMiscOptions::AddListenerLink( const Link<LinkParamNone*,void>& rLink )
