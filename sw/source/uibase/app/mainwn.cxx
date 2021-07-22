@@ -37,11 +37,11 @@ struct SwProgress
 
 }
 
-static std::vector<std::unique_ptr<SwProgress>> *pProgressContainer = nullptr;
+static std::vector<std::unique_ptr<SwProgress>> gaProgressContainer;
 
 static SwProgress *lcl_SwFindProgress( SwDocShell const *pDocShell )
 {
-    for (const auto& pTmp : *pProgressContainer)
+    for (const auto& pTmp : gaProgressContainer)
     {
         if ( pTmp->pDocShell == pDocShell )
             return pTmp.get();
@@ -55,18 +55,10 @@ void StartProgress( const char* pMessResId, tools::Long nStartValue, tools::Long
     if( SW_MOD()->IsEmbeddedLoadSave() )
         return;
 
-    SwProgress *pProgress = nullptr;
-
-    if ( !pProgressContainer )
-        pProgressContainer = new std::vector<std::unique_ptr<SwProgress>>;
+    SwProgress *pProgress = lcl_SwFindProgress( pDocShell );
+    if ( pProgress )
+        ++pProgress->nStartCount;
     else
-    {
-        pProgress = lcl_SwFindProgress( pDocShell );
-        if ( pProgress )
-            ++pProgress->nStartCount;
-    }
-
-    if ( !pProgress )
     {
         pProgress = new SwProgress;
         pProgress->pProgress.reset( new SfxProgress( pDocShell,
@@ -74,14 +66,14 @@ void StartProgress( const char* pMessResId, tools::Long nStartValue, tools::Long
                                                 nEndValue - nStartValue ) );
         pProgress->nStartCount = 1;
         pProgress->pDocShell = pDocShell;
-        pProgressContainer->insert( pProgressContainer->begin(), std::unique_ptr<SwProgress>(pProgress) );
+        gaProgressContainer.insert( gaProgressContainer.begin(), std::unique_ptr<SwProgress>(pProgress) );
     }
     pProgress->nStartValue = nStartValue;
 }
 
 void SetProgressState( tools::Long nPosition, SwDocShell const *pDocShell )
 {
-    if( pProgressContainer && !SW_MOD()->IsEmbeddedLoadSave() )
+    if( !SW_MOD()->IsEmbeddedLoadSave() )
     {
         SwProgress *pProgress = lcl_SwFindProgress( pDocShell );
         if ( pProgress )
@@ -91,14 +83,14 @@ void SetProgressState( tools::Long nPosition, SwDocShell const *pDocShell )
 
 void EndProgress( SwDocShell const *pDocShell )
 {
-    if( !pProgressContainer || SW_MOD()->IsEmbeddedLoadSave() )
+    if( SW_MOD()->IsEmbeddedLoadSave() )
         return;
 
     SwProgress *pProgress = nullptr;
     std::vector<SwProgress *>::size_type i;
-    for ( i = 0; i < pProgressContainer->size(); ++i )
+    for ( i = 0; i < gaProgressContainer.size(); ++i )
     {
-        SwProgress *pTmp = (*pProgressContainer)[i].get();
+        SwProgress *pTmp = gaProgressContainer[i].get();
         if ( pTmp->pDocShell == pDocShell )
         {
             pProgress = pTmp;
@@ -109,20 +101,15 @@ void EndProgress( SwDocShell const *pDocShell )
     if ( pProgress && 0 == --pProgress->nStartCount )
     {
         pProgress->pProgress->Stop();
-        pProgressContainer->erase( pProgressContainer->begin() + i );
+        gaProgressContainer.erase( gaProgressContainer.begin() + i );
         //#112337# it may happen that the container has been removed
         //while rescheduling
-        if ( pProgressContainer && pProgressContainer->empty() )
-        {
-            delete pProgressContainer;
-            pProgressContainer = nullptr;
-        }
     }
 }
 
 void RescheduleProgress( SwDocShell const *pDocShell )
 {
-    if( pProgressContainer && !SW_MOD()->IsEmbeddedLoadSave() )
+    if( !SW_MOD()->IsEmbeddedLoadSave() )
     {
         SwProgress *pProgress = lcl_SwFindProgress( pDocShell );
         if ( pProgress )
