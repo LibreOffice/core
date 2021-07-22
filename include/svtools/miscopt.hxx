@@ -70,18 +70,6 @@ class SVT_DLLPUBLIC SvtMiscOptions final : public utl::detail::Options
         bool        IconThemeWasSetAutomatically();
 
     private:
-
-        /*-****************************************************************************************************
-            @short      return a reference to a static mutex
-            @descr      These class is partially threadsafe (for de-/initialization only).
-                        All access methods aren't safe!
-                        We create a static mutex only for one ime and use at different times.
-            @return     A reference to a static mutex member.
-        *//*-*****************************************************************************************************/
-
-        SVT_DLLPRIVATE static ::osl::Mutex& GetInitMutex();
-
-    private:
         std::shared_ptr<SvtMiscOptions_Impl> m_pImpl;
 
 };      // class SvtMiscOptions
