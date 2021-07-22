@@ -39,7 +39,7 @@
 
 using namespace ::osl;
 
-static std::list< OString >* pCreatedDirectories = nullptr;
+static std::list< OString > gaCreatedDirectories;
 
 static bool checkOutputPath(const OString& completeName)
 {
@@ -79,11 +79,10 @@ static bool checkOutputPath(const OString& completeName)
                             idlc()->getOptions()->getProgramName().getStr(), buffer.getStr());
                     return false;
                 }
-            } else
+            }
+            else
             {
-                if ( !pCreatedDirectories )
-                    pCreatedDirectories = new std::list< OString >;
-                pCreatedDirectories->push_front(buffer.getStr());
+                gaCreatedDirectories.push_front(buffer.getStr());
             }
         }
         buffer.append(SEPARATOR);
@@ -93,23 +92,20 @@ static bool checkOutputPath(const OString& completeName)
 
 static bool cleanPath()
 {
-    if ( pCreatedDirectories )
+    for (auto const& createdDirectory : gaCreatedDirectories)
     {
-        for (auto const& createdDirectory : *pCreatedDirectories)
-        {
 //#ifdef SAL_UNX
-//          if (rmdir((char*)createdDirectory.getStr(), 0777) == -1)
+//      if (rmdir((char*)createdDirectory.getStr(), 0777) == -1)
 //#else
-            if (rmdir(createdDirectory.getStr()) == -1)
+        if (rmdir(createdDirectory.getStr()) == -1)
 //#endif
-            {
-                fprintf(stderr, "%s: cannot remove directory '%s'\n",
-                        idlc()->getOptions()->getProgramName().getStr(), createdDirectory.getStr());
-                return false;
-            }
+        {
+            fprintf(stderr, "%s: cannot remove directory '%s'\n",
+                    idlc()->getOptions()->getProgramName().getStr(), createdDirectory.getStr());
+            return false;
         }
-        delete pCreatedDirectories;
     }
+    gaCreatedDirectories.clear();
     return true;
 }
 

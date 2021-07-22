@@ -51,7 +51,7 @@
 
 using namespace com::sun::star;
 
-static std::vector<SfxFrame*>* pFramesArr_Impl=nullptr;
+static std::vector<SfxFrame*> gaFramesArr_Impl;
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
@@ -71,9 +71,7 @@ SfxPoolItem* SfxUnoFrameItem::CreateDefault()
 void SfxFrame::Construct_Impl()
 {
     pImpl.reset(new SfxFrame_Impl);
-    if ( !pFramesArr_Impl )
-        pFramesArr_Impl = new std::vector<SfxFrame*>;
-    pFramesArr_Impl->push_back( this );
+    gaFramesArr_Impl.push_back( this );
 }
 
 
@@ -82,9 +80,9 @@ SfxFrame::~SfxFrame()
     RemoveTopFrame_Impl( this );
     pWindow.disposeAndClear();
 
-    auto it = std::find( pFramesArr_Impl->begin(), pFramesArr_Impl->end(), this );
-    if ( it != pFramesArr_Impl->end() )
-        pFramesArr_Impl->erase( it );
+    auto it = std::find( gaFramesArr_Impl.begin(), gaFramesArr_Impl.end(), this );
+    if ( it != gaFramesArr_Impl.end() )
+        gaFramesArr_Impl.erase( it );
 
     delete pImpl->pDescr;
 }
@@ -717,15 +715,13 @@ void SfxFrame::Resize()
 
 SfxFrame* SfxFrame::GetFirst()
 {
-    if ( !pFramesArr_Impl )
-        return nullptr;
-    return pFramesArr_Impl->empty() ? nullptr : pFramesArr_Impl->front();
+    return gaFramesArr_Impl.empty() ? nullptr : gaFramesArr_Impl.front();
 }
 
 SfxFrame* SfxFrame::GetNext( SfxFrame& rFrame )
 {
-    auto it = std::find( pFramesArr_Impl->begin(), pFramesArr_Impl->end(), &rFrame );
-    if ( it != pFramesArr_Impl->end() && (++it) != pFramesArr_Impl->end() )
+    auto it = std::find( gaFramesArr_Impl.begin(), gaFramesArr_Impl.end(), &rFrame );
+    if ( it != gaFramesArr_Impl.end() && (++it) != gaFramesArr_Impl.end() )
         return *it;
     else
         return nullptr;

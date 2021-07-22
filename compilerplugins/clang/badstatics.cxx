@@ -222,6 +222,8 @@ public:
                    // sfx2/source/doc/docfile.cxx, warning about map's key
                 || name == "g_existingReadOnlyDocs"
                    // sfx2/source/doc/docfile.cxx, warning about map's key
+                || name == "gaFramesArr_Impl"
+                   // sfx2/source/view/frame.cxx, vector of pointer, so not a problem, nothing is going to happen on shutdown
                ) // these variables appear unproblematic
             {
                 return true;
