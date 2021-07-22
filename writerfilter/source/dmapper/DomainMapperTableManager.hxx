@@ -43,6 +43,8 @@ class DomainMapperTableManager : public TableManager
     /// Are we in a shape (text append stack is not empty) or in the body document?
     bool m_bIsInShape;
     std::vector< OUString > m_aTableStyleNames;
+    /// Moved table (in moveRangeFromStart...moveRangeFromEnd or moveRangeToStart...moveRangeToEnd)
+    std::vector< OUString > m_aMoved;
     /// Grab-bag of table look attributes for preserving.
     comphelper::SequenceAsHashMap m_aTableLook;
     std::vector< TablePositionHandlerPtr > m_aTablePositions;
@@ -127,6 +129,41 @@ public:
     using TableManager::isInCell;
 
     void setIsInShape(bool bIsInShape);
+
+    // moveFromRangeStart and moveToRangeStart are there
+    // in the first paragraph in the first cell of the
+    // table moved by drag & drop with track changes, but
+    // moveFromRangeEnd and moveToRangeEnd follow the
+    // table element w:tbl in the same level (not in paragraph).
+    // (Special indexing is related to the load of the tables:
+    // first-level tables handled by two levels during the
+    // import, to support table join etc. In the first cell,
+    // setMoved() writes the first level from these two levels
+    // i.e. second startLevel() hasn't been called, yet.)
+    // TODO: check drag & drop of only a part of the tables.
+    void setMoved(OUString sMoved)
+    {
+        if ( m_aMoved.empty() )
+            return;
+
+        if ( !sMoved.isEmpty() )
+            m_aMoved.end()[-1] = sMoved;
+        else if ( m_aMoved.size() >= 2 )
+            // next table rows weren't moved
+            m_aMoved.end()[-2] = "";
+        else
+            m_aMoved.end()[-1] = "";
+    }
+
+    OUString getMoved() const
+    {
+        if ( m_aMoved.size() >= 2 && !m_aMoved.end()[-2].isEmpty() )
+           return m_aMoved.end()[-2];
+        else if ( !m_aMoved.empty() )
+           return m_aMoved.end()[-1];
+
+        return OUString();
+    }
 
 };
 
