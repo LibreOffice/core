@@ -199,6 +199,12 @@ template <typename N, typename U> constexpr auto convert(N n, U from, U to)
     return convert(n, detail::md(from, to), detail::md(to, from));
 }
 
+// Just for convenience as we do this a lot
+template <typename N, typename U> constexpr auto convertTwip(N number, U from)
+{
+    return convert(number, detail::md(from, Length::twip), detail::md(Length::twip, from));
+}
+
 // Returns nDefault if intermediate multiplication overflows sal_Int64 (only for integral types).
 // On return, bOverflow indicates if overflow happened. nDefault is returned when overflow occurs.
 template <typename N, typename U>

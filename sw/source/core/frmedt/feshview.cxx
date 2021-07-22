@@ -1908,11 +1908,13 @@ bool SwFEShell::ImpEndCreate()
 
             // The crsr should not be too far away
             bCharBound = true;
+            constexpr tools::Long constTwips_1cm = o3tl::convertTwip(tools::Long(1), o3tl::Length::cm);
             tools::Rectangle aRect( aTmp.SVRect() );
-            aRect.AdjustLeft( -(MM50*2) );
-            aRect.AdjustTop( -(MM50*2) );
-            aRect.AdjustRight(MM50*2 );
-            aRect.AdjustBottom(MM50*2 );
+            // Extend by 1 cm in each direction
+            aRect.AdjustLeft(-constTwips_1cm);
+            aRect.AdjustTop(-constTwips_1cm);
+            aRect.AdjustRight(constTwips_1cm);
+            aRect.AdjustBottom(constTwips_1cm);
 
             if( !aRect.IsOver( rBound ) && !::GetHtmlMode( GetDoc()->GetDocShell() ))
                 bCharBound = false;

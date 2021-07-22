@@ -167,8 +167,9 @@ void SwParaDlg::PageCreated(const OString& rId, SfxTabPage& rPage)
         if (!bDrawParaDlg)
         {
             // See SvxStdParagraphTabPage::PageCreated: enable RegisterMode, AutoFirstLine, NegativeMode, ContextualMode
+            constexpr tools::Long constTwips_0_5mm = o3tl::convertTwip(tools::Long(5), o3tl::Length::mm10);
             aSet.Put(SfxUInt32Item(SID_SVXSTDPARAGRAPHTABPAGE_FLAGSET,0x0002|0x0004|0x0008|0x0010));
-            aSet.Put(SfxUInt32Item(SID_SVXSTDPARAGRAPHTABPAGE_ABSLINEDIST, MM50/10));
+            aSet.Put(SfxUInt32Item(SID_SVXSTDPARAGRAPHTABPAGE_ABSLINEDIST, constTwips_0_5mm));
 
         }
         rPage.PageCreated(aSet);

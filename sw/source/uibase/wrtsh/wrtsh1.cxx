@@ -1896,7 +1896,8 @@ void SwWrtShell::ChangeHeaderOrFooter(
                     rMaster.SetFormatAttr( SwFormatFooter( bOn ));
                 if( bOn )
                 {
-                    SvxULSpaceItem aUL(bHeader ? 0 : MM50, bHeader ? MM50 : 0, RES_UL_SPACE );
+                    constexpr tools::Long constTwips_5mm = o3tl::convertTwip(tools::Long(5), o3tl::Length::mm);
+                    SvxULSpaceItem aUL(bHeader ? 0 : constTwips_5mm, bHeader ? constTwips_5mm : 0, RES_UL_SPACE );
                     SwFrameFormat* pFormat = bHeader ?
                         const_cast<SwFrameFormat*>(rMaster.GetHeader().GetHeaderFormat()) :
                         const_cast<SwFrameFormat*>(rMaster.GetFooter().GetFooterFormat());
