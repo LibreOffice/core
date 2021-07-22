@@ -17472,6 +17472,8 @@
     </resource>
     <resource name="CT_MarkupRangeBookmark" resource="Properties">
       <attribute name="id" tokenid="ooxml:CT_MarkupRangeBookmark_id"/>
+      <action name="end" tokenid="ooxml:EG_RangeMarkupElements_moveFromRangeEnd" action="sendPropertiesWithId" sendtokenid="ooxml:EG_RangeMarkupElements_moveFromRangeEnd"/>
+      <action name="end" tokenid="ooxml:EG_RangeMarkupElements_moveToRangeEnd" action="sendPropertiesWithId" sendtokenid="ooxml:EG_RangeMarkupElements_moveToRangeEnd"/>
     </resource>
     <resource name="CT_PermStart" resource="Properties">
       <attribute name="id" tokenid="ooxml:CT_PermStart_id"/>
@@ -17501,6 +17503,8 @@
     <resource name="CT_MoveBookmark" resource="Properties">
       <attribute name="author" tokenid="ooxml:CT_MoveBookmark_author"/>
       <attribute name="date" tokenid="ooxml:CT_MoveBookmark_date"/>
+      <action name="end" tokenid="ooxml:EG_RangeMarkupElements_moveFromRangeStart" action="sendPropertiesWithId" sendtokenid="ooxml:EG_RangeMarkupElements_moveFromRangeStart"/>
+      <action name="end" tokenid="ooxml:EG_RangeMarkupElements_moveToRangeStart" action="sendPropertiesWithId" sendtokenid="ooxml:EG_RangeMarkupElements_moveToRangeStart"/>
     </resource>
     <resource name="CT_Comment" resource="XNote">
       <attribute name="id" action="checkId"/>

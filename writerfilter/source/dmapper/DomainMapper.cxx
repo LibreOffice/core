@@ -2454,6 +2454,19 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
         }
     }
     break;
+    case NS_ooxml::LN_EG_RangeMarkupElements_moveFromRangeStart:
+        if (m_pImpl->hasTableManager())
+            m_pImpl->getTableManager().setMoved( getPropertyName(PROP_TABLE_ROW_DELETE) );
+    break;
+    case NS_ooxml::LN_EG_RangeMarkupElements_moveToRangeStart:
+        if (m_pImpl->hasTableManager())
+            m_pImpl->getTableManager().setMoved( getPropertyName(PROP_TABLE_ROW_INSERT) );
+    break;
+    case NS_ooxml::LN_EG_RangeMarkupElements_moveFromRangeEnd:
+    case NS_ooxml::LN_EG_RangeMarkupElements_moveToRangeEnd:
+         if (m_pImpl->hasTableManager())
+            m_pImpl->getTableManager().setMoved( OUString() );
+    break;
     case NS_ooxml::LN_paratrackchange:
         m_pImpl->StartParaMarkerChange( );
         [[fallthrough]];
