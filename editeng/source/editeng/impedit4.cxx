@@ -1169,7 +1169,7 @@ EditSelection ImpEditEngine::InsertTextObject( const EditTextObject& rTextObject
     DBG_ASSERT( !aSel.DbgIsBuggy( aEditDoc ), "InsertBibTextObject: Selection broken!(1)" );
 
     bool bUsePortionInfo = false;
-    const EditTextObjectImpl& rTextObjectImpl = static_cast<const EditTextObjectImpl&>(rTextObject);
+    const EditTextObjectImpl& rTextObjectImpl = toImpl(rTextObject);
     XParaPortionList* pPortionInfo = rTextObjectImpl.GetPortionInfo();
 
     if ( pPortionInfo && ( static_cast<tools::Long>(pPortionInfo->GetPaperWidth()) == GetColumnWidth(aPaperSize) )
