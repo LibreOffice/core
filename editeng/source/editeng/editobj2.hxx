@@ -266,4 +266,16 @@ public:
     virtual void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 
+inline EditTextObjectImpl& toImpl(EditTextObject& rObj)
+{
+    assert(dynamic_cast<EditTextObjectImpl*>(&rObj));
+    return static_cast<EditTextObjectImpl&>(rObj);
+}
+
+inline const EditTextObjectImpl& toImpl(const EditTextObject& rObj)
+{
+    assert(dynamic_cast<const EditTextObjectImpl*>(&rObj));
+    return static_cast<const EditTextObjectImpl&>(rObj);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
