@@ -84,32 +84,6 @@ VclPtr<InterimItemWindow> ScZoomSliderControl::CreateItemWindow( vcl::Window *pP
     return xSlider;
 }
 
-struct ScZoomSlider::ScZoomSliderWnd_Impl
-{
-    sal_uInt16                   mnCurrentZoom;
-    sal_uInt16                   mnMinZoom;
-    sal_uInt16                   mnMaxZoom;
-    std::vector< tools::Long >      maSnappingPointOffsets;
-    std::vector< sal_uInt16 >    maSnappingPointZooms;
-    Image                    maSliderButton;
-    Image                    maIncreaseButton;
-    Image                    maDecreaseButton;
-    bool                     mbOmitPaint;
-
-    explicit ScZoomSliderWnd_Impl( sal_uInt16 nCurrentZoom ) :
-        mnCurrentZoom( nCurrentZoom ),
-        mnMinZoom( 10 ),
-        mnMaxZoom( 400 ),
-        maSnappingPointOffsets(),
-        maSnappingPointZooms(),
-        maSliderButton(),
-        maIncreaseButton(),
-        maDecreaseButton(),
-        mbOmitPaint( false )
-        {
-        }
-};
-
 constexpr sal_uInt16 gnSliderCenter(100);
 
 const tools::Long nButtonWidth     = 10;
@@ -130,18 +104,18 @@ sal_uInt16 ScZoomSlider::Offset2Zoom( tools::Long nOffset ) const
     sal_uInt16 nRet = 0;
 
     if( nOffset < nSliderXOffset )
-        return mpImpl->mnMinZoom;
+        return mnMinZoom;
     if( nOffset > nControlWidth - nSliderXOffset )
-        return mpImpl->mnMaxZoom;
+        return mnMaxZoom;
 
     // check for snapping points:
-    auto aSnappingPointIter = std::find_if(mpImpl->maSnappingPointOffsets.begin(), mpImpl->maSnappingPointOffsets.end(),
+    auto aSnappingPointIter = std::find_if(maSnappingPointOffsets.begin(), maSnappingPointOffsets.end(),
         [nOffset](const tools::Long nCurrent) { return std::abs(nCurrent - nOffset) < nSnappingEpsilon; });
-    if (aSnappingPointIter != mpImpl->maSnappingPointOffsets.end())
+    if (aSnappingPointIter != maSnappingPointOffsets.end())
     {
         nOffset = *aSnappingPointIter;
-        auto nCount = static_cast<sal_uInt16>(std::distance(mpImpl->maSnappingPointOffsets.begin(), aSnappingPointIter));
-        nRet = mpImpl->maSnappingPointZooms[ nCount ];
+        auto nCount = static_cast<sal_uInt16>(std::distance(maSnappingPointOffsets.begin(), aSnappingPointIter));
+        nRet = maSnappingPointZooms[ nCount ];
     }
 
     if( 0 == nRet )
@@ -149,16 +123,16 @@ sal_uInt16 ScZoomSlider::Offset2Zoom( tools::Long nOffset ) const
         if( nOffset < nControlWidth / 2 )
         {
             // first half of slider
-            const tools::Long nFirstHalfRange      = gnSliderCenter - mpImpl->mnMinZoom;
+            const tools::Long nFirstHalfRange      = gnSliderCenter - mnMinZoom;
             const tools::Long nHalfSliderWidth     = nControlWidth/2 - nSliderXOffset;
             const tools::Long nZoomPerSliderPixel  = (1000 * nFirstHalfRange) / nHalfSliderWidth;
             const tools::Long nOffsetToSliderLeft  = nOffset - nSliderXOffset;
-            nRet = mpImpl->mnMinZoom + sal_uInt16( nOffsetToSliderLeft * nZoomPerSliderPixel / 1000 );
+            nRet = mnMinZoom + sal_uInt16( nOffsetToSliderLeft * nZoomPerSliderPixel / 1000 );
         }
         else
         {
             // second half of slider
-            const tools::Long nSecondHalfRange         = mpImpl->mnMaxZoom - gnSliderCenter;
+            const tools::Long nSecondHalfRange         = mnMaxZoom - gnSliderCenter;
             const tools::Long nHalfSliderWidth         = nControlWidth/2 - nSliderXOffset;
             const tools::Long nZoomPerSliderPixel      = 1000 * nSecondHalfRange / nHalfSliderWidth;
             const tools::Long nOffsetToSliderCenter    = nOffset - nControlWidth/2;
@@ -166,11 +140,11 @@ sal_uInt16 ScZoomSlider::Offset2Zoom( tools::Long nOffset ) const
         }
     }
 
-    if( nRet < mpImpl->mnMinZoom )
-        return mpImpl->mnMinZoom;
+    if( nRet < mnMinZoom )
+        return mnMinZoom;
 
-    else if( nRet > mpImpl->mnMaxZoom )
-        return mpImpl->mnMaxZoom;
+    else if( nRet > mnMaxZoom )
+        return mnMaxZoom;
 
     return nRet;
 }
@@ -184,8 +158,8 @@ tools::Long ScZoomSlider::Zoom2Offset( sal_uInt16 nCurrentZoom ) const
     const tools::Long nHalfSliderWidth = nControlWidth/2 - nSliderXOffset;
     if( nCurrentZoom <= gnSliderCenter )
     {
-        nCurrentZoom = nCurrentZoom - mpImpl->mnMinZoom;
-        const tools::Long nFirstHalfRange = gnSliderCenter - mpImpl->mnMinZoom;
+        nCurrentZoom = nCurrentZoom - mnMinZoom;
+        const tools::Long nFirstHalfRange = gnSliderCenter - mnMinZoom;
         const tools::Long nSliderPixelPerZoomPercent = 1000 * nHalfSliderWidth  / nFirstHalfRange;
         const tools::Long nOffset = (nSliderPixelPerZoomPercent * nCurrentZoom) / 1000;
         nRect += nOffset;
@@ -193,7 +167,7 @@ tools::Long ScZoomSlider::Zoom2Offset( sal_uInt16 nCurrentZoom ) const
     else
     {
         nCurrentZoom = nCurrentZoom - gnSliderCenter;
-        const tools::Long nSecondHalfRange = mpImpl->mnMaxZoom - gnSliderCenter;
+        const tools::Long nSecondHalfRange = mnMaxZoom - gnSliderCenter;
         const tools::Long nSliderPixelPerZoomPercent = 1000 * nHalfSliderWidth  / nSecondHalfRange;
         const tools::Long nOffset = (nSliderPixelPerZoomPercent * nCurrentZoom) / 1000;
         nRect += nHalfSliderWidth + nOffset;
@@ -230,13 +204,22 @@ void ScZoomSliderWnd::dispose()
 
 ScZoomSlider::ScZoomSlider(const css::uno::Reference< css::frame::XDispatchProvider>& rDispatchProvider,
                            sal_uInt16 nCurrentZoom)
-    : mpImpl(new ScZoomSliderWnd_Impl(nCurrentZoom))
-    , m_xDispatchProvider(rDispatchProvider)
+    : mnCurrentZoom( nCurrentZoom ),
+      mnMinZoom( 10 ),
+      mnMaxZoom( 400 ),
+      maSnappingPointOffsets(),
+      maSnappingPointZooms(),
+      maSliderButton(),
+      maIncreaseButton(),
+      maDecreaseButton(),
+      mbOmitPaint( false ),
+      m_xDispatchProvider(rDispatchProvider)
 {
-    mpImpl->maSliderButton      = Image(StockImage::Yes, RID_SVXBMP_SLIDERBUTTON);
-    mpImpl->maIncreaseButton    = Image(StockImage::Yes, RID_SVXBMP_SLIDERINCREASE);
-    mpImpl->maDecreaseButton    = Image(StockImage::Yes, RID_SVXBMP_SLIDERDECREASE);
+    maSliderButton      = Image(StockImage::Yes, RID_SVXBMP_SLIDERBUTTON);
+    maIncreaseButton    = Image(StockImage::Yes, RID_SVXBMP_SLIDERINCREASE);
+    maDecreaseButton    = Image(StockImage::Yes, RID_SVXBMP_SLIDERDECREASE);
 }
+
 
 bool ScZoomSlider::MouseButtonDown( const MouseEvent& rMEvt )
 {
@@ -247,38 +230,38 @@ bool ScZoomSlider::MouseButtonDown( const MouseEvent& rMEvt )
     const tools::Long nButtonLeftOffset    = ( nSliderXOffset - nIncDecWidth )/2;
     const tools::Long nButtonRightOffset   = ( nSliderXOffset + nIncDecWidth )/2;
 
-    const tools::Long nOldZoom = mpImpl->mnCurrentZoom;
+    const tools::Long nOldZoom = mnCurrentZoom;
 
     // click to - button
     if ( aPoint.X() >= nButtonLeftOffset && aPoint.X() <= nButtonRightOffset )
     {
-        mpImpl->mnCurrentZoom = mpImpl->mnCurrentZoom - 5;
+        mnCurrentZoom = mnCurrentZoom - 5;
     }
     // click to + button
     else if ( aPoint.X() >= aSliderWindowSize.Width() - nSliderXOffset + nButtonLeftOffset &&
               aPoint.X() <= aSliderWindowSize.Width() - nSliderXOffset + nButtonRightOffset )
     {
-        mpImpl->mnCurrentZoom = mpImpl->mnCurrentZoom + 5;
+        mnCurrentZoom = mnCurrentZoom + 5;
     }
     else if( aPoint.X() >= nSliderXOffset && aPoint.X() <= aSliderWindowSize.Width() - nSliderXOffset )
     {
-        mpImpl->mnCurrentZoom = Offset2Zoom( aPoint.X() );
+        mnCurrentZoom = Offset2Zoom( aPoint.X() );
     }
 
-    if( mpImpl->mnCurrentZoom < mpImpl->mnMinZoom )
-        mpImpl->mnCurrentZoom = mpImpl->mnMinZoom;
-    else if( mpImpl->mnCurrentZoom > mpImpl->mnMaxZoom )
-        mpImpl->mnCurrentZoom = mpImpl->mnMaxZoom;
+    if( mnCurrentZoom < mnMinZoom )
+        mnCurrentZoom = mnMinZoom;
+    else if( mnCurrentZoom > mnMaxZoom )
+        mnCurrentZoom = mnMaxZoom;
 
-    if( nOldZoom == mpImpl->mnCurrentZoom )
+    if( nOldZoom == mnCurrentZoom )
         return true;
 
     tools::Rectangle aRect( Point( 0, 0 ), aSliderWindowSize );
 
     Invalidate(aRect);
-    mpImpl->mbOmitPaint = true;
+    mbOmitPaint = true;
 
-    SvxZoomSliderItem   aZoomSliderItem( mpImpl->mnCurrentZoom );
+    SvxZoomSliderItem   aZoomSliderItem( mnCurrentZoom );
 
     css::uno::Any  a;
     aZoomSliderItem.QueryValue( a );
@@ -289,7 +272,7 @@ bool ScZoomSlider::MouseButtonDown( const MouseEvent& rMEvt )
 
     SfxToolBoxControl::Dispatch( m_xDispatchProvider, ".uno:ScalingFactor", aArgs );
 
-    mpImpl->mbOmitPaint = false;
+    mbOmitPaint = false;
 
     return true;
 }
@@ -307,15 +290,15 @@ bool ScZoomSlider::MouseMove( const MouseEvent& rMEvt )
 
         if ( aPoint.X() >= nSliderXOffset && aPoint.X() <= nControlWidth - nSliderXOffset )
         {
-            mpImpl->mnCurrentZoom = Offset2Zoom( aPoint.X() );
+            mnCurrentZoom = Offset2Zoom( aPoint.X() );
 
             tools::Rectangle aRect(Point(0, 0), aSliderWindowSize);
             Invalidate(aRect);
 
-            mpImpl->mbOmitPaint = true; // optimization: paint before executing command,
+            mbOmitPaint = true; // optimization: paint before executing command,
 
             // commit state change
-            SvxZoomSliderItem aZoomSliderItem( mpImpl->mnCurrentZoom );
+            SvxZoomSliderItem aZoomSliderItem( mnCurrentZoom );
 
             css::uno::Any a;
             aZoomSliderItem.QueryValue( a );
@@ -326,7 +309,7 @@ bool ScZoomSlider::MouseMove( const MouseEvent& rMEvt )
 
             SfxToolBoxControl::Dispatch( m_xDispatchProvider, ".uno:ScalingFactor", aArgs );
 
-            mpImpl->mbOmitPaint = false;
+            mbOmitPaint = false;
         }
     }
 
@@ -342,18 +325,18 @@ void ScZoomSlider::UpdateFromItem(const SvxZoomSliderItem* pZoomSliderItem)
 {
     if( pZoomSliderItem )
     {
-        mpImpl->mnCurrentZoom = pZoomSliderItem->GetValue();
-        mpImpl->mnMinZoom     = pZoomSliderItem->GetMinZoom();
-        mpImpl->mnMaxZoom     = pZoomSliderItem->GetMaxZoom();
+        mnCurrentZoom = pZoomSliderItem->GetValue();
+        mnMinZoom     = pZoomSliderItem->GetMinZoom();
+        mnMaxZoom     = pZoomSliderItem->GetMaxZoom();
 
-        OSL_ENSURE( mpImpl->mnMinZoom <= mpImpl->mnCurrentZoom &&
-            mpImpl->mnMinZoom <  gnSliderCenter &&
-            mpImpl->mnMaxZoom >= mpImpl->mnCurrentZoom &&
-            mpImpl->mnMaxZoom > gnSliderCenter,
+        OSL_ENSURE( mnMinZoom <= mnCurrentZoom &&
+            mnMinZoom <  gnSliderCenter &&
+            mnMaxZoom >= mnCurrentZoom &&
+            mnMaxZoom > gnSliderCenter,
             "Looks like the zoom slider item is corrupted" );
         const css::uno::Sequence < sal_Int32 >& rSnappingPoints = pZoomSliderItem->GetSnappingPoints();
-        mpImpl->maSnappingPointOffsets.clear();
-        mpImpl->maSnappingPointZooms.clear();
+        maSnappingPointOffsets.clear();
+        maSnappingPointZooms.clear();
 
         // get all snapping points:
         std::set< sal_uInt16 > aTmpSnappingPoints;
@@ -369,8 +352,8 @@ void ScZoomSlider::UpdateFromItem(const SvxZoomSliderItem* pZoomSliderItem)
 
             if ( nCurrentOffset - nLastOffset >= nSnappingPointsMinDist )
             {
-                mpImpl->maSnappingPointOffsets.push_back( nCurrentOffset );
-                mpImpl->maSnappingPointZooms.push_back( nCurrent );
+                maSnappingPointOffsets.push_back( nCurrentOffset );
+                maSnappingPointZooms.push_back( nCurrent );
                 nLastOffset = nCurrentOffset;
             }
         }
@@ -379,7 +362,7 @@ void ScZoomSlider::UpdateFromItem(const SvxZoomSliderItem* pZoomSliderItem)
     Size aSliderWindowSize = GetOutputSizePixel();
     tools::Rectangle aRect(Point(0, 0), aSliderWindowSize);
 
-    if ( !mpImpl->mbOmitPaint )
+    if ( !mbOmitPaint )
        Invalidate(aRect);
 }
 
@@ -390,7 +373,7 @@ void ScZoomSlider::Paint(vcl::RenderContext& rRenderContext, const tools::Rectan
 
 void ScZoomSlider::DoPaint(vcl::RenderContext& rRenderContext)
 {
-    if (mpImpl->mbOmitPaint)
+    if (mbOmitPaint)
         return;
 
     Size aSliderWindowSize(GetOutputSizePixel());
@@ -443,7 +426,7 @@ void ScZoomSlider::DoPaint(vcl::RenderContext& rRenderContext)
     pVDev->DrawRect(aLeft);
 
     // draw snapping points:
-    for (const auto& rSnappingPointOffset : mpImpl->maSnappingPointOffsets)
+    for (const auto& rSnappingPointOffset : maSnappingPointOffsets)
     {
         pVDev->SetLineColor(COL_GRAY);
         tools::Rectangle aSnapping(aRect);
@@ -460,20 +443,20 @@ void ScZoomSlider::DoPaint(vcl::RenderContext& rRenderContext)
 
     // draw slider button
     Point aImagePoint = aRect.TopLeft();
-    aImagePoint.AdjustX(Zoom2Offset(mpImpl->mnCurrentZoom) );
+    aImagePoint.AdjustX(Zoom2Offset(mnCurrentZoom) );
     aImagePoint.AdjustX( -(nButtonWidth / 2) );
     aImagePoint.AdjustY( (aSliderWindowSize.Height() - nButtonHeight) / 2 );
-    pVDev->DrawImage(aImagePoint, mpImpl->maSliderButton);
+    pVDev->DrawImage(aImagePoint, maSliderButton);
 
     // draw decrease button
     aImagePoint = aRect.TopLeft();
     aImagePoint.AdjustX((nSliderXOffset - nIncDecWidth) / 2 );
     aImagePoint.AdjustY((aSliderWindowSize.Height() - nIncDecHeight) / 2 );
-    pVDev->DrawImage(aImagePoint, mpImpl->maDecreaseButton);
+    pVDev->DrawImage(aImagePoint, maDecreaseButton);
 
     // draw increase button
     aImagePoint.setX( aRect.Left() + aSliderWindowSize.Width() - nIncDecWidth - (nSliderXOffset - nIncDecWidth) / 2 );
-    pVDev->DrawImage(aImagePoint, mpImpl->maIncreaseButton);
+    pVDev->DrawImage(aImagePoint, maIncreaseButton);
 
     rRenderContext.DrawOutDev(Point(0, 0), aSliderWindowSize, Point(0, 0), aSliderWindowSize, *pVDev);
 }
