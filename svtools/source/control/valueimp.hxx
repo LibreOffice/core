@@ -32,6 +32,7 @@
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 
+#include <mutex>
 #include <vector>
 
 #define VALUESET_ITEM_NONEITEM      0xFFFE
@@ -199,7 +200,7 @@ private:
 
     ::std::vector< css::uno::Reference<
         css::accessibility::XAccessibleEventListener > >                mxEventListeners;
-    ::osl::Mutex                                                        maMutex;
+    std::mutex                                                          maMutex;
     ValueSetItem*                                                    mpParent;
     bool                                                                mbIsTransientChildrenDisabled;
 
