@@ -22,8 +22,8 @@
 #include <swtypes.hxx>
 #include <string.h>
 
-#define HTML_NUMBER_BULLET_MARGINLEFT  (MM50*2 + MM50/2)
-#define HTML_NUMBER_BULLET_INDENT      (-MM50)
+#define HTML_NUMBER_BULLET_MARGINLEFT  (o3tl::convertTwip(tools::Long(125), o3tl::Length::mm10))
+#define HTML_NUMBER_BULLET_INDENT      (-o3tl::convertTwip(tools::Long(5), o3tl::Length::mm))
 
 class SwTextNode;
 class SwNumRule;
