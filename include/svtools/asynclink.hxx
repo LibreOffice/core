@@ -23,8 +23,7 @@
 #include <svtools/svtdllapi.h>
 #include <tools/link.hxx>
 #include <vcl/idle.hxx>
-#include <osl/mutex.hxx>
-#include <memory>
+#include <mutex>
 
 class Timer;
 struct ImplSVEvent;
@@ -38,7 +37,7 @@ class UNLESS_MERGELIBS(SVT_DLLPUBLIC) AsynchronLink
     bool             _bInCall;
     bool*            _pDeleted;
     void*            _pArg;
-    std::unique_ptr<::osl::Mutex> _pMutex;
+    std::mutex       _aMutex;
 
     DECL_DLLPRIVATE_LINK( HandleCall_Idle, Timer*, void );
     DECL_DLLPRIVATE_LINK( HandleCall_PostUserEvent, void*, void );
@@ -60,7 +59,6 @@ public:
     {}
     ~AsynchronLink();
 
-    void CreateMutex();
     void operator=( const Link<void*,void>& rLink ) { _aLink = rLink; }
     void Call( void* pObj, bool bAllowDoubles = false );
     void ClearPendingCall( );
