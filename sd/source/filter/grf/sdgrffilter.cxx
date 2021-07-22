@@ -149,7 +149,7 @@ bool SdGRFFilter::Import()
     ErrCode         nReturn = pIStm ? rGraphicFilter.ImportGraphic( aGraphic, aFileName, *pIStm, nFilter ) : ErrCode(1);
 
     if( nReturn )
-        HandleGraphicFilterError( nReturn, rGraphicFilter.GetLastError().nStreamError );
+        HandleGraphicFilterError( nReturn, rGraphicFilter.GetLastError() );
     else
     {
         if( mrDocument.GetPageCount() == 0 )
@@ -292,7 +292,7 @@ bool SdGRFFilter::Export()
                     if ( !bRet && xInteractionHandler.is() )
                         SdGRFFilter::HandleGraphicFilterError(
                             static_cast< SdGRFFilter_ImplInteractionHdl* >( xInteractionHandler.get() )->GetErrorCode(),
-                                            rGraphicFilter.GetLastError().nStreamError );
+                                            rGraphicFilter.GetLastError() );
                 }
             }
         }

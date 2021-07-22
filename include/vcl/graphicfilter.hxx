@@ -256,14 +256,6 @@ public:
     static OUString GetImportFormatShortName( GraphicFileFormat nFormat );
 };
 
-/** Information about errors during the GraphicFilter operation. */
-struct FilterErrorEx
-{
-    ErrCode   nStreamError;
-
-    FilterErrorEx() : nStreamError( ERRCODE_NONE ) {}
-};
-
 /** Class to import and export graphic formats. */
 class VCL_DLLPUBLIC GraphicFilter
 {
@@ -341,7 +333,7 @@ public:
     // Setting sizeLimit limits how much will be read from the stream.
     Graphic ImportUnloadedGraphic(SvStream& rIStream, sal_uInt64 sizeLimit = 0, const Size* pSizeHint = nullptr);
 
-    const FilterErrorEx&    GetLastError() const { return *pErrorEx;}
+    const ErrCode&          GetLastError() const { return *mxErrorEx;}
     void                    ResetLastError();
 
     Link<ConvertData&,bool> GetFilterCallback() const;
@@ -393,7 +385,8 @@ private:
 
                     DECL_LINK( FilterCallback, ConvertData&, bool );
 
-    std::unique_ptr<FilterErrorEx> pErrorEx;
+    /** Information about errors during the GraphicFilter operation. */
+    std::optional<ErrCode> mxErrorEx;
     bool                bUseConfig;
 };
 
