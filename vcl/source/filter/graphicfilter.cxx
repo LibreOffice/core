@@ -335,7 +335,7 @@ GraphicFilter::~GraphicFilter()
             delete pConfig;
     }
 
-    pErrorEx.reset();
+    mxErrorEx.reset();
 }
 
 void GraphicFilter::ImplInit()
@@ -358,12 +358,12 @@ void GraphicFilter::ImplInit()
         osl::FileBase::getSystemPathFromFileURL(url, aFilterPath);
     }
 
-    pErrorEx.reset( new FilterErrorEx );
+    mxErrorEx = ERRCODE_NONE;
 }
 
 ErrCode GraphicFilter::ImplSetError( ErrCode nError, const SvStream* pStm )
 {
-    pErrorEx->nStreamError = pStm ? pStm->GetError() : ERRCODE_NONE;
+    mxErrorEx = pStm ? pStm->GetError() : ERRCODE_NONE;
     return nError;
 }
 
@@ -1850,7 +1850,7 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString& r
 
 void GraphicFilter::ResetLastError()
 {
-    pErrorEx->nStreamError = ERRCODE_NONE;
+    mxErrorEx = ERRCODE_NONE;
 }
 
 Link<ConvertData&,bool> GraphicFilter::GetFilterCallback() const

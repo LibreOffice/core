@@ -190,7 +190,7 @@ void FuInsertGraphic::DoExecute( SfxRequest& rReq )
     }
     else
     {
-        SdGRFFilter::HandleGraphicFilterError( nError, GraphicFilter::GetGraphicFilter().GetLastError().nStreamError );
+        SdGRFFilter::HandleGraphicFilterError( nError, GraphicFilter::GetGraphicFilter().GetLastError() );
     }
 }
 
