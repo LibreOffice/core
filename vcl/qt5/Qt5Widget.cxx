@@ -456,7 +456,7 @@ bool Qt5Widget::handleKeyEvent(Qt5Frame& rFrame, const QWidget& rWidget, QKeyEve
         return true;
     }
 
-    if (nCode == 0)
+    if (nCode == 0 && pEvent->text().isEmpty())
     {
         sal_uInt16 nModCode = GetKeyModCode(pEvent->modifiers());
         SalKeyModEvent aModEvt;
