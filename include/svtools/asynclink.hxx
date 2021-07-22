@@ -39,9 +39,7 @@ class UNLESS_MERGELIBS(SVT_DLLPUBLIC) AsynchronLink
     void*            _pArg;
     std::mutex       _aMutex;
 
-    DECL_DLLPRIVATE_LINK( HandleCall_Idle, Timer*, void );
     DECL_DLLPRIVATE_LINK( HandleCall_PostUserEvent, void*, void );
-    SVT_DLLPRIVATE void Call_Impl( void* pArg );
 
 public:
     AsynchronLink( const Link<void*,void>& rLink )
