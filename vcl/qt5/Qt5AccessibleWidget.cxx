@@ -556,8 +556,7 @@ QAccessible::Role Qt5AccessibleWidget::role() const
         }
     }
 
-    SAL_WARN("vcl.qt5",
-             "Unmapped role: " << m_xAccessible->getAccessibleContext()->getAccessibleRole());
+    SAL_WARN("vcl.qt5", "Unmapped role: " << getAccessibleContextImpl()->getAccessibleRole());
     return QAccessible::NoRole;
 }
 
@@ -776,7 +775,7 @@ QAccessibleInterface* Qt5AccessibleWidget::customFactory(const QString& classnam
 QStringList Qt5AccessibleWidget::actionNames() const
 {
     QStringList actionNames;
-    Reference<XAccessibleAction> xAccessibleAction(m_xAccessible, UNO_QUERY);
+    Reference<XAccessibleAction> xAccessibleAction(getAccessibleContextImpl(), UNO_QUERY);
     if (!xAccessibleAction.is())
         return actionNames;
 
@@ -791,7 +790,7 @@ QStringList Qt5AccessibleWidget::actionNames() const
 
 void Qt5AccessibleWidget::doAction(const QString& actionName)
 {
-    Reference<XAccessibleAction> xAccessibleAction(m_xAccessible, UNO_QUERY);
+    Reference<XAccessibleAction> xAccessibleAction(getAccessibleContextImpl(), UNO_QUERY);
     if (!xAccessibleAction.is())
         return;
 
@@ -804,7 +803,7 @@ void Qt5AccessibleWidget::doAction(const QString& actionName)
 QStringList Qt5AccessibleWidget::keyBindingsForAction(const QString& actionName) const
 {
     QStringList keyBindings;
-    Reference<XAccessibleAction> xAccessibleAction(m_xAccessible, UNO_QUERY);
+    Reference<XAccessibleAction> xAccessibleAction(getAccessibleContextImpl(), UNO_QUERY);
     if (!xAccessibleAction.is())
         return keyBindings;
 
@@ -871,7 +870,7 @@ QString Qt5AccessibleWidget::attributes(int offset, int* startOffset, int* endOf
     *startOffset = -1;
     *endOffset = -1;
 
-    Reference<XAccessibleText> xText(m_xAccessible, UNO_QUERY);
+    Reference<XAccessibleText> xText(getAccessibleContextImpl(), UNO_QUERY);
     if (!xText.is())
         return QString();
 
@@ -920,7 +919,7 @@ QString Qt5AccessibleWidget::attributes(int offset, int* startOffset, int* endOf
 
 int Qt5AccessibleWidget::characterCount() const
 {
-    Reference<XAccessibleText> xText(m_xAccessible, UNO_QUERY);
+    Reference<XAccessibleText> xText(getAccessibleContextImpl(), UNO_QUERY);
     if (xText.is())
         return xText->getCharacterCount();
     return 0;
@@ -933,7 +932,7 @@ QRect Qt5AccessibleWidget::characterRect(int /* offset */) const
 
 int Qt5AccessibleWidget::cursorPosition() const
 {
-    Reference<XAccessibleText> xText(m_xAccessible, UNO_QUERY);
+    Reference<XAccessibleText> xText(getAccessibleContextImpl(), UNO_QUERY);
     if (xText.is())
         return xText->getCaretPosition();
     return 0;
@@ -950,7 +949,7 @@ void Qt5AccessibleWidget::removeSelection(int /* selectionIndex */)
 }
 void Qt5AccessibleWidget::scrollToSubstring(int startIndex, int endIndex)
 {
-    Reference<XAccessibleText> xText(m_xAccessible, UNO_QUERY);
+    Reference<XAccessibleText> xText(getAccessibleContextImpl(), UNO_QUERY);
     if (xText.is())
         xText->scrollSubstringTo(startIndex, endIndex, AccessibleScrollType_SCROLL_ANYWHERE);
 }
@@ -962,7 +961,7 @@ void Qt5AccessibleWidget::selection(int selectionIndex, int* startOffset, int* e
 
     Reference<XAccessibleText> xText;
     if (selectionIndex == 0)
-        xText = Reference<XAccessibleText>(m_xAccessible, UNO_QUERY);
+        xText = Reference<XAccessibleText>(getAccessibleContextImpl(), UNO_QUERY);
 
     if (startOffset)
         *startOffset = xText.is() ? xText->getSelectionStart() : 0;
@@ -972,26 +971,26 @@ void Qt5AccessibleWidget::selection(int selectionIndex, int* startOffset, int* e
 
 int Qt5AccessibleWidget::selectionCount() const
 {
-    Reference<XAccessibleText> xText(m_xAccessible, UNO_QUERY);
+    Reference<XAccessibleText> xText(getAccessibleContextImpl(), UNO_QUERY);
     if (xText.is() && !xText->getSelectedText().isEmpty())
         return 1; // Only 1 selection supported atm
     return 0;
 }
 void Qt5AccessibleWidget::setCursorPosition(int position)
 {
-    Reference<XAccessibleText> xText(m_xAccessible, UNO_QUERY);
+    Reference<XAccessibleText> xText(getAccessibleContextImpl(), UNO_QUERY);
     if (xText.is())
         xText->setCaretPosition(position);
 }
 void Qt5AccessibleWidget::setSelection(int /* selectionIndex */, int startOffset, int endOffset)
 {
-    Reference<XAccessibleText> xText(m_xAccessible, UNO_QUERY);
+    Reference<XAccessibleText> xText(getAccessibleContextImpl(), UNO_QUERY);
     if (xText.is())
         xText->setSelection(startOffset, endOffset);
 }
 QString Qt5AccessibleWidget::text(int startOffset, int endOffset) const
 {
-    Reference<XAccessibleText> xText(m_xAccessible, UNO_QUERY);
+    Reference<XAccessibleText> xText(getAccessibleContextImpl(), UNO_QUERY);
     if (xText.is())
         return toQString(xText->getTextRange(startOffset, endOffset));
     return QString();
@@ -1018,7 +1017,7 @@ QString Qt5AccessibleWidget::textAtOffset(int offset, QAccessible::TextBoundaryT
         return text(0, nCharCount);
     }
 
-    Reference<XAccessibleText> xText(m_xAccessible, UNO_QUERY);
+    Reference<XAccessibleText> xText(getAccessibleContextImpl(), UNO_QUERY);
     if (!xText.is())
         return QString();
 
