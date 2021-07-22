@@ -269,6 +269,47 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf124708)
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(16), pActualPage->GetObjCount());
 }
 
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf143412)
+{
+    mxComponent = loadFromDesktop("private:factory/simpress",
+                                  "com.sun.star.presentation.PresentationDocument");
+
+    CPPUNIT_ASSERT(mxComponent.is());
+
+    auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+
+    SdPage* pActualPage = pViewShell->GetActualPage();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), pActualPage->GetObjCount());
+
+    OUString aImageURL = m_directories.getURLFromSrc(u"sd/qa/unit/data/tdf143412.svg");
+    uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
+        { "FileName", uno::makeAny(aImageURL) },
+    }));
+    dispatchCommand(mxComponent, ".uno:InsertGraphic", aArgs);
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), pActualPage->GetObjCount());
+
+    // Without the fix in place, this test would have crashed
+    // Check that converting an image to the different options doesn't crash
+
+    dispatchCommand(mxComponent, ".uno:ChangeBezier", {});
+
+    dispatchCommand(mxComponent, ".uno:ChangePolygon", {});
+
+    dispatchCommand(mxComponent, ".uno:convert_to_contour", {});
+
+    dispatchCommand(mxComponent, ".uno:ConvertInto3D", {});
+
+    dispatchCommand(mxComponent, ".uno:ConvertInto3DLatheFast", {});
+
+    dispatchCommand(mxComponent, ".uno:ConvertIntoBitmap", {});
+
+    dispatchCommand(mxComponent, ".uno:ConvertIntoMetaFile", {});
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), pActualPage->GetObjCount());
+}
+
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf139996)
 {
     mxComponent = loadFromDesktop("private:factory/simpress",
