@@ -52,14 +52,17 @@ public:
     void onTaskPushed();
 };
 
+#if defined DBG_UTIL && (defined LINUX || defined _WIN32)
+static thread_local std::shared_ptr<ThreadTaskTag> gCurrentThreadTaskTag;
+#endif
 
 class ThreadPool::ThreadWorker : public salhelper::Thread
 {
     ThreadPool *mpPool;
 public:
 
-    explicit ThreadWorker( ThreadPool *pPool ) :
-        salhelper::Thread("thread-pool"),
+    explicit ThreadWorker( ThreadPool *pPool, const char * threadName) :
+        salhelper::Thread(threadName),
         mpPool( pPool )
     {
     }
@@ -79,10 +82,12 @@ public:
                 std::shared_ptr<ThreadTaskTag> pTag(pTask->mpTag);
                 mpPool->incBusyWorker();
                 aGuard.unlock();
+                gCurrentThreadTaskTag = pTag;
 
                 pTask->exec();
                 pTask.reset();
 
+                gCurrentThreadTaskTag = nullptr;
                 aGuard.lock();
                 mpPool->decBusyWorker();
                 pTag->onTaskWorkerDone();
@@ -215,7 +220,8 @@ void ThreadPool::pushTask( std::unique_ptr<ThreadTask> pTask )
     // Worked on tasks are already removed from maTasks, so include the count of busy workers.
     if (maWorkers.size() < mnMaxWorkers && maWorkers.size() <= maTasks.size() + mnBusyWorkers)
     {
-        maWorkers.push_back( new ThreadWorker( this ) );
+        char* threadName = strdup(OString(OString::Concat("thread-pool-") + OString::number(maWorkers.size())).getStr());
+        maWorkers.push_back( new ThreadWorker( this, threadName ) );
         maWorkers.back()->launch();
     }
 
@@ -248,6 +254,7 @@ std::unique_ptr<ThreadTask> ThreadPool::popWorkLocked( std::unique_lock< std::mu
 void ThreadPool::incBusyWorker()
 {
     ++mnBusyWorkers;
+    assert(mnBusyWorkers <= mnMaxWorkers);
 }
 
 void ThreadPool::decBusyWorker()
@@ -259,7 +266,8 @@ void ThreadPool::decBusyWorker()
 void ThreadPool::waitUntilDone(const std::shared_ptr<ThreadTaskTag>& rTag, bool bJoin)
 {
 #if defined DBG_UTIL && (defined LINUX || defined _WIN32)
-    assert(!gbIsWorkerThread && "cannot wait for tasks from inside a task");
+    if (gbIsWorkerThread && gCurrentThreadTaskTag == rTag)
+        assert(false && "we are a worker thread, and we are waiting on our own task tag");
 #endif
     {
         std::unique_lock< std::mutex > aGuard( maMutex );

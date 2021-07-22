@@ -16,13 +16,15 @@ using namespace css::uno;
 
 namespace {
 
-class UnzippingThread: public salhelper::Thread
+class UnzippingTask: public comphelper::ThreadTask
 {
-    XBufferedThreadedStream &mxStream;
+   XBufferedThreadedStream &mxStream;
 public:
-    explicit UnzippingThread(XBufferedThreadedStream &xStream): Thread("Unzipping"), mxStream(xStream) {}
+    explicit UnzippingTask(XBufferedThreadedStream &rStream,
+                            const std::shared_ptr<comphelper::ThreadTaskTag>& xTag)
+        : ThreadTask(xTag), mxStream(rStream) {}
 private:
-    virtual void execute() override
+    virtual void doWork() override
     {
         try
         {
@@ -46,16 +48,16 @@ XBufferedThreadedStream::XBufferedThreadedStream(
 , mnPos(0)
 , mnStreamSize( nStreamSize )
 , mnOffset( 0 )
-, mxUnzippingThread( new UnzippingThread(*this) )
+, mxUnzippingTaskTag( comphelper::ThreadPool::createThreadTaskTag() )
 , mbTerminateThread( false )
 {
-    mxUnzippingThread->launch();
+    comphelper::ThreadPool::getSharedOptimalPool().pushTask(std::make_unique<UnzippingTask>(*this, mxUnzippingTaskTag));
 }
 
 XBufferedThreadedStream::~XBufferedThreadedStream()
 {
     setTerminateThread();
-    mxUnzippingThread->join();
+    comphelper::ThreadPool::getSharedOptimalPool().waitUntilDone(mxUnzippingTaskTag);
 }
 
 /**
@@ -83,7 +85,7 @@ void XBufferedThreadedStream::produce()
         maBufferConsumeResume.notify_one();
 
         if (!mbTerminateThread)
-            maBufferProduceResume.wait( aGuard, [&]{return canProduce(); } );
+            maBufferProduceResume.wait( aGuard, [&]{ return mbTerminateThread || canProduce(); } );
 
     } while( !mbTerminateThread && nTotalBytesRead < mnStreamSize );
 }
@@ -184,7 +186,7 @@ sal_Int32 SAL_CALL XBufferedThreadedStream::available()
 void SAL_CALL XBufferedThreadedStream::closeInput()
 {
     setTerminateThread();
-    mxUnzippingThread->join();
+    comphelper::ThreadPool::getSharedOptimalPool().waitUntilDone(mxUnzippingTaskTag, false);
     mxSrcStream->closeInput();
 }
 

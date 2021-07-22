@@ -21,6 +21,7 @@
 
 #include <cppuhelper/bootstrap.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/threadpool.hxx>
 
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -81,6 +82,7 @@ bool Prot::protect(
 Prot::~Prot()
 {
     uno::Reference< lang::XComponent >(m_xContext, uno::UNO_QUERY_THROW)->dispose();
+    comphelper::ThreadPool::getSharedOptimalPool().shutdown();
 }
 
 }

@@ -28,6 +28,7 @@
 #include <com/sun/star/xml/sax/FastToken.hpp>
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
 #include <com/sun/star/xml/sax/XFastContextHandler.hpp>
+#include <comphelper/threadpool.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/exc_hlp.hxx>
@@ -300,13 +301,15 @@ private:
 
 namespace {
 
-class ParserThread: public salhelper::Thread
+class ParserTask: public comphelper::ThreadTask
 {
     FastSaxParserImpl *mpParser;
 public:
-    explicit ParserThread(FastSaxParserImpl *pParser): Thread("Parser"), mpParser(pParser) {}
+    explicit ParserTask(FastSaxParserImpl *pParser,
+                        const std::shared_ptr<comphelper::ThreadTaskTag>& xTag)
+      : comphelper::ThreadTask(xTag), mpParser(pParser) {}
 private:
-    virtual void execute() override
+    virtual void doWork() override
     {
         try
         {
@@ -781,7 +784,7 @@ namespace
     private:
         FastSaxParserImpl& m_rParser;
         Entity& m_rEntity;
-        rtl::Reference<ParserThread> m_xParser;
+        std::shared_ptr<comphelper::ThreadTaskTag> m_xParserTaskTag;
     public:
         ParserCleanup(FastSaxParserImpl& rParser, Entity& rEntity)
             : m_rParser(rParser)
@@ -799,17 +802,16 @@ namespace
             joinThread();
             m_rParser.popEntity();
         }
-        void setThread(const rtl::Reference<ParserThread> &xParser)
+        void setThread(const std::shared_ptr<comphelper::ThreadTaskTag>& rxTag)
         {
-            m_xParser = xParser;
+            m_xParserTaskTag = rxTag;
         }
         void joinThread()
         {
-            if (m_xParser.is())
+            if (m_xParserTaskTag)
             {
-                rtl::Reference<ParserThread> xToJoin = m_xParser;
-                m_xParser.clear();
-                xToJoin->join();
+                auto xToJoin = std::move(m_xParserTaskTag);
+                comphelper::ThreadPool::getSharedOptimalPool().waitUntilDone(xToJoin, false);
             }
         }
     };
@@ -848,9 +850,10 @@ void FastSaxParserImpl::parseStream(const InputSource& rStructSource)
 
     if (rEntity.mbEnableThreads)
     {
-        rtl::Reference<ParserThread> xParser = new ParserThread(this);
-        xParser->launch();
-        aEnsureFree.setThread(xParser);
+        auto xTaskTag = comphelper::ThreadPool::createThreadTaskTag();
+        auto xParser = std::make_unique<ParserTask>(this, xTaskTag);
+        comphelper::ThreadPool::getSharedOptimalPool().pushTask(std::move(xParser));
+        aEnsureFree.setThread(xTaskTag);
         bool done = false;
         do {
             rEntity.maConsumeResume.wait();
