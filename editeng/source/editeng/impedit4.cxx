@@ -989,14 +989,6 @@ std::unique_ptr<EditTextObject> ImpEditEngine::CreateTextObject(const EditSelect
 
 std::unique_ptr<EditTextObject> ImpEditEngine::CreateTextObject( EditSelection aSel, SfxItemPool* pPool, bool bAllowBigObjects, sal_Int32 nBigObjectStart )
 {
-    std::unique_ptr<EditTextObjectImpl> pTxtObj(std::make_unique<EditTextObjectImpl>(pPool));
-    pTxtObj->SetVertical( GetVertical() );
-    pTxtObj->SetRotation( GetRotation() );
-    MapUnit eMapUnit = aEditDoc.GetItemPool().GetMetric( DEF_METRIC );
-    pTxtObj->SetMetric( eMapUnit );
-    if ( pTxtObj->IsOwnerOfPool() )
-        pTxtObj->GetPool()->SetDefaultMetric( eMapUnit );
-
     sal_Int32 nStartNode, nEndNode;
     sal_Int32 nTextPortions = 0;
 
@@ -1009,7 +1001,10 @@ std::unique_ptr<EditTextObject> ImpEditEngine::CreateTextObject( EditSelection a
 
     // Templates are not saved!
     // (Only the name and family, template itself must be in App!)
-    pTxtObj->SetScriptType(GetItemScriptType(aSel));
+
+    const MapUnit eMapUnit = aEditDoc.GetItemPool().GetMetric(DEF_METRIC);
+    auto pTxtObj(std::make_unique<EditTextObjectImpl>(pPool, eMapUnit, GetVertical(), GetRotation(),
+                                                      GetItemScriptType(aSel)));
 
     // iterate over the paragraphs ...
     sal_Int32 nNode;

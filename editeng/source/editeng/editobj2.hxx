@@ -180,14 +180,14 @@ private:
     TextRotation            meRotation;
     MapUnit                 meMetric;
 
-    bool                    mbOwnerOfPool;
     bool                    mbVertical;
 
     bool ImpChangeStyleSheets( std::u16string_view rOldName, SfxStyleFamily eOldFamily,
                                const OUString& rNewName, SfxStyleFamily eNewFamily );
 
 public:
-    EditTextObjectImpl( SfxItemPool* pPool );
+    EditTextObjectImpl(SfxItemPool* pPool, MapUnit eDefaultMetric, bool bVertical,
+                       TextRotation eRotation, SvtScriptType eScriptType);
     EditTextObjectImpl( const EditTextObjectImpl& r );
     virtual ~EditTextObjectImpl() override;
 
@@ -255,8 +255,6 @@ public:
     bool HasMetric() const { return meMetric != MapUnit::LASTENUMDUMMY; }
     MapUnit                  GetMetric() const           { return meMetric; }
     void                    SetMetric( MapUnit n )       { meMetric = n; }
-
-    bool                    IsOwnerOfPool() const       { return mbOwnerOfPool; }
 
     virtual bool operator==( const EditTextObject& rCompare ) const override;
     bool Equals( const EditTextObjectImpl& rCompare, bool bComparePool ) const;
