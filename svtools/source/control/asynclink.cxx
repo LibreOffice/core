@@ -50,18 +50,6 @@ AsynchronLink::~AsynchronLink()
     if( _pDeleted ) *_pDeleted = true;
 }
 
-IMPL_LINK_NOARG( AsynchronLink, HandleCall_Idle, Timer*, void )
-{
-    std::lock_guard aGuard(_aMutex);
-    _nEventId = nullptr;
-    Call_Impl( _pArg );
-}
-
-IMPL_LINK_NOARG( AsynchronLink, HandleCall_PostUserEvent, void*, void )
-{
-    HandleCall_Idle(nullptr);
-}
-
 void AsynchronLink::ClearPendingCall()
 {
     std::lock_guard aGuard(_aMutex);
@@ -72,12 +60,14 @@ void AsynchronLink::ClearPendingCall()
     }
 }
 
-void AsynchronLink::Call_Impl( void* pArg )
+IMPL_LINK_NOARG( AsynchronLink, HandleCall_PostUserEvent, void*, void )
 {
+    std::lock_guard aGuard(_aMutex);
+    _nEventId = nullptr;
     _bInCall = true;
     bool bDeleted = false;
     _pDeleted = &bDeleted;
-    _aLink.Call( pArg );
+    _aLink.Call( _pArg );
     if( !bDeleted )
     {
         _bInCall = false;
