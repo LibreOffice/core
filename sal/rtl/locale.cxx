@@ -43,23 +43,17 @@ struct locale_deleter
 
 using locale_unique_ptr = std::unique_ptr<rtl_Locale, locale_deleter>;
 
-static std::unordered_map<sal_Int32, locale_unique_ptr>* g_pLocaleTable = nullptr;
+static std::unordered_map<sal_Int32, locale_unique_ptr> g_aLocaleTable;
 
 static rtl_Locale* g_pDefaultLocale = nullptr;
 
 void rtl_locale_init()
 {
-    if (!g_pLocaleTable)
-        g_pLocaleTable = new std::unordered_map<sal_Int32, locale_unique_ptr>;
 }
 
 void rtl_locale_fini()
 {
-    if (g_pLocaleTable)
-    {
-        delete g_pLocaleTable;
-        g_pLocaleTable = nullptr;
-    }
+    g_aLocaleTable.clear();
     g_pDefaultLocale = nullptr;
 }
 
@@ -81,8 +75,8 @@ rtl_Locale * SAL_CALL rtl_locale_register(const sal_Unicode * language, const sa
 
     hashCode = rtl_ustr_hashCode(language) ^ rtl_ustr_hashCode(country) ^ rtl_ustr_hashCode(variant);
 
-    auto it = g_pLocaleTable->find(hashCode);
-    if (it != g_pLocaleTable->end())
+    auto it = g_aLocaleTable.find(hashCode);
+    if (it != g_aLocaleTable.end())
         return it->second.get();
 
     rtl_uString_newFromStr(&sLanguage, language);
@@ -97,7 +91,7 @@ rtl_Locale * SAL_CALL rtl_locale_register(const sal_Unicode * language, const sa
     newLocale->HashCode = hashCode;
 
     auto ret = newLocale.get();
-    g_pLocaleTable->insert(it, std::pair<sal_Int32, locale_unique_ptr>( hashCode, std::move(newLocale) ) );
+    g_aLocaleTable.insert(it, std::pair<sal_Int32, locale_unique_ptr>( hashCode, std::move(newLocale) ) );
     return ret;
 }
 

@@ -496,7 +496,7 @@ struct ImageCacheItem
 // LRU cache, last item is the least recently used. Hopefully there won't be that many items
 // to require a hash/map. Using o3tl::lru_cache would be simpler, but it doesn't support
 // calculating cost of each item.
-static std::list<ImageCacheItem>* imageCache = nullptr;
+static std::list<ImageCacheItem> imageCache;
 static tools::Long imageCacheSize = 0; // sum of all ImageCacheItem.size
 
 void addCachedImage(const OString& key, sk_sp<SkImage> image)
@@ -504,38 +504,32 @@ void addCachedImage(const OString& key, sk_sp<SkImage> image)
     static bool disabled = getenv("SAL_DISABLE_SKIA_CACHE") != nullptr;
     if (disabled)
         return;
-    if (imageCache == nullptr)
-        imageCache = new std::list<ImageCacheItem>;
     tools::Long size = static_cast<tools::Long>(image->width()) * image->height()
                        * SkColorTypeBytesPerPixel(image->imageInfo().colorType());
-    imageCache->push_front({ key, image, size });
+    imageCache.push_front({ key, image, size });
     imageCacheSize += size;
     SAL_INFO("vcl.skia.trace", "addcachedimage " << image << " :" << size << "/" << imageCacheSize);
     const tools::Long maxSize = maxImageCacheSize();
     while (imageCacheSize > maxSize)
     {
-        assert(!imageCache->empty());
-        imageCacheSize -= imageCache->back().size;
-        SAL_INFO("vcl.skia.trace", "least used removal " << imageCache->back().image << ":"
-                                                         << imageCache->back().size);
-        imageCache->pop_back();
+        assert(!imageCache.empty());
+        imageCacheSize -= imageCache.back().size;
+        SAL_INFO("vcl.skia.trace",
+                 "least used removal " << imageCache.back().image << ":" << imageCache.back().size);
+        imageCache.pop_back();
     }
 }
 
 sk_sp<SkImage> findCachedImage(const OString& key)
 {
-    if (imageCache != nullptr)
+    for (auto it = imageCache.begin(); it != imageCache.end(); ++it)
     {
-        for (auto it = imageCache->begin(); it != imageCache->end(); ++it)
+        if (it->key == key)
         {
-            if (it->key == key)
-            {
-                sk_sp<SkImage> ret = it->image;
-                SAL_INFO("vcl.skia.trace",
-                         "findcachedimage " << key << " : " << it->image << " found");
-                imageCache->splice(imageCache->begin(), *imageCache, it);
-                return ret;
-            }
+            sk_sp<SkImage> ret = it->image;
+            SAL_INFO("vcl.skia.trace", "findcachedimage " << key << " : " << it->image << " found");
+            imageCache.splice(imageCache.begin(), imageCache, it);
+            return ret;
         }
     }
     SAL_INFO("vcl.skia.trace", "findcachedimage " << key << " not found");
@@ -544,15 +538,13 @@ sk_sp<SkImage> findCachedImage(const OString& key)
 
 void removeCachedImage(sk_sp<SkImage> image)
 {
-    if (imageCache == nullptr)
-        return;
-    for (auto it = imageCache->begin(); it != imageCache->end();)
+    for (auto it = imageCache.begin(); it != imageCache.end();)
     {
         if (it->image == image)
         {
             imageCacheSize -= it->size;
             assert(imageCacheSize >= 0);
-            it = imageCache->erase(it);
+            it = imageCache.erase(it);
         }
         else
             ++it;
@@ -569,8 +561,7 @@ void cleanup()
 {
     delete sharedGrDirectContext;
     sharedGrDirectContext = nullptr;
-    delete imageCache;
-    imageCache = nullptr;
+    imageCache.clear();
     imageCacheSize = 0;
 }
 
