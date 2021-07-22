@@ -20,7 +20,6 @@
 #include <config_folders.h>
 
 #include <sal/log.hxx>
-#include <osl/mutex.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/threadpool.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -80,6 +79,7 @@
 #include <unotools/ucbhelper.hxx>
 #include <vector>
 #include <memory>
+#include <mutex>
 #include <string_view>
 #include <vcl/TypeSerializer.hxx>
 
@@ -89,12 +89,11 @@
 #include <graphic/GraphicFormatDetector.hxx>
 #include <graphic/GraphicReader.hxx>
 
-typedef ::std::vector< GraphicFilter* > FilterList_impl;
-static FilterList_impl* pFilterHdlList = nullptr;
+static std::vector< GraphicFilter* > gaFilterHdlList;
 
-static ::osl::Mutex& getListMutex()
+static std::mutex& getListMutex()
 {
-    static ::osl::Mutex s_aListProtection;
+    static std::mutex s_aListProtection;
     return s_aListProtection;
 }
 
@@ -327,17 +326,13 @@ GraphicFilter::GraphicFilter( bool bConfig )
 GraphicFilter::~GraphicFilter()
 {
     {
-        ::osl::MutexGuard aGuard( getListMutex() );
-        auto it = std::find(pFilterHdlList->begin(), pFilterHdlList->end(), this);
-        if( it != pFilterHdlList->end() )
-            pFilterHdlList->erase( it );
+        std::lock_guard aGuard( getListMutex() );
+        auto it = std::find(gaFilterHdlList.begin(), gaFilterHdlList.end(), this);
+        if( it != gaFilterHdlList.end() )
+            gaFilterHdlList.erase( it );
 
-        if( pFilterHdlList->empty() )
-        {
-            delete pFilterHdlList;
-            pFilterHdlList = nullptr;
+        if( gaFilterHdlList.empty() )
             delete pConfig;
-        }
     }
 
     pErrorEx.reset();
@@ -346,17 +341,14 @@ GraphicFilter::~GraphicFilter()
 void GraphicFilter::ImplInit()
 {
     {
-        ::osl::MutexGuard aGuard( getListMutex() );
+        std::lock_guard aGuard( getListMutex() );
 
-        if ( !pFilterHdlList )
-        {
-            pFilterHdlList = new FilterList_impl;
+        if ( gaFilterHdlList.empty() )
             pConfig = new FilterConfigCache( bUseConfig );
-        }
         else
-            pConfig = pFilterHdlList->front()->pConfig;
+            pConfig = gaFilterHdlList.front()->pConfig;
 
-        pFilterHdlList->push_back( this );
+        gaFilterHdlList.push_back( this );
     }
 
     if( bUseConfig )
