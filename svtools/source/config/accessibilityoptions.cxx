@@ -32,6 +32,7 @@
 #include <vcl/svapp.hxx>
 #include <rtl/instance.hxx>
 #include <tools/diagnose_ex.h>
+#include <mutex>
 
 #include "itemholder2.hxx"
 
@@ -73,7 +74,7 @@ sal_Int32                     SvtAccessibilityOptions::sm_nAccessibilityRefCount
 namespace
 {
     struct SingletonMutex
-        : public rtl::Static< ::osl::Mutex, SingletonMutex > {};
+        : public rtl::Static< std::mutex, SingletonMutex > {};
 }
 
 
@@ -351,7 +352,7 @@ SvtAccessibilityOptions::SvtAccessibilityOptions()
 {
     if (!utl::ConfigManager::IsFuzzing())
     {
-        ::osl::MutexGuard aGuard( SingletonMutex::get() );
+        std::lock_guard aGuard( SingletonMutex::get() );
         if(!sm_pSingleImplConfig)
         {
             sm_pSingleImplConfig = new SvtAccessibilityOptions_Impl;
@@ -365,7 +366,7 @@ SvtAccessibilityOptions::SvtAccessibilityOptions()
 SvtAccessibilityOptions::~SvtAccessibilityOptions()
 {
     //EndListening( *sm_pSingleImplConfig, sal_True );
-    ::osl::MutexGuard aGuard( SingletonMutex::get() );
+    std::lock_guard aGuard( SingletonMutex::get() );
     if( !--sm_nAccessibilityRefCount )
     {
         //if( sm_pSingleImplConfig->IsModified() )
