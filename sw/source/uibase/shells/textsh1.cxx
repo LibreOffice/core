@@ -351,6 +351,30 @@ void InsertBreak(SwWrtShell& rWrtSh,
     }
 }
 
+OUString GetLocalURL(SwWrtShell& rSh)
+{
+    SwField* pField = rSh.GetCurField();
+    if (!pField)
+    {
+        return OUString();
+    }
+
+    if (pField->GetTyp()->Which() != SwFieldIds::TableOfAuthorities)
+    {
+        return OUString();
+    }
+
+    const auto& rAuthorityField = *static_cast<const SwAuthorityField*>(pField);
+    SwAuthEntry* pAuthEntry = rAuthorityField.GetAuthEntry();
+    if (!pAuthEntry)
+    {
+        return OUString();
+    }
+
+    const OUString& rLocalURL = pAuthEntry->GetAuthorField(AUTH_FIELD_LOCAL_URL);
+    return rLocalURL;
+}
+
 }
 
 void SwTextShell::Execute(SfxRequest &rReq)
@@ -1388,6 +1412,15 @@ void SwTextShell::Execute(SfxRequest &rReq)
         }
     }
     break;
+    case FN_OPEN_LOCAL_URL:
+    {
+        OUString aLocalURL = GetLocalURL(rWrtSh);
+        if (!aLocalURL.isEmpty())
+        {
+            ::LoadURL(rWrtSh, aLocalURL, LoadUrlFlags::NewView, /*rTargetFrameName=*/OUString());
+        }
+    }
+    break;
     case SID_OPEN_XML_FILTERSETTINGS:
     {
         HandleOpenXmlFilterSettings(rReq);
@@ -2031,6 +2064,14 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                 if (SfxItemState::SET > aSet.GetItemState(RES_TXTATR_INETFMT, false)
                     && !bAuthorityFieldURL)
                     rSet.DisableItem(nWhich);
+            }
+            break;
+            case FN_OPEN_LOCAL_URL:
+            {
+                if (GetLocalURL(rSh).isEmpty())
+                {
+                    rSet.DisableItem(nWhich);
+                }
             }
             break;
             case  SID_OPEN_SMARTTAGMENU:

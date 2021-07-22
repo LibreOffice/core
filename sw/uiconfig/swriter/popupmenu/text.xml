@@ -84,6 +84,7 @@
   <menu:menuitem menu:id=".uno:EditHyperlink"/>
   <menu:menuitem menu:id=".uno:CopyHyperlinkLocation"/>
   <menu:menuitem menu:id=".uno:RemoveHyperlink"/>
+  <menu:menuitem menu:id=".uno:OpenLocalURL"/>
   <menu:menuitem menu:id=".uno:OpenSmartTagMenuOnCursor"/>
   <menu:menuitem menu:id=".uno:ThesaurusFromContext"/>
   <menu:menuseparator/>

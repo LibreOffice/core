@@ -1656,6 +1656,11 @@ interface BaseText
         ExecMethod = Execute ;
         StateMethod = GetState ;
     ]
+    FN_OPEN_LOCAL_URL
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
     SID_OPEN_SMARTTAGMENU
     [
         ExecMethod = Execute ;
