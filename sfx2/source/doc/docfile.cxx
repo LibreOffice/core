@@ -462,7 +462,6 @@ SfxMedium_Impl::SfxMedium_Impl() :
     nLastStorageError( ERRCODE_NONE ),
     m_nSignatureState( SignatureState::NOSIGNATURES )
 {
-    aDoneLink.CreateMutex();
 }
 
 

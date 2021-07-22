@@ -28,11 +28,6 @@
 
 namespace svtools {
 
-void AsynchronLink::CreateMutex()
-{
-    if( !_pMutex ) _pMutex.reset( new osl::Mutex );
-}
-
 void AsynchronLink::Call( void* pObj, bool bAllowDoubles )
 {
     SAL_INFO_IF( !_bInCall, "svtools", "Recursives Call. Eher ueber Timer. TLX Fragen" ); // Do NOT translate. This is a valuable historical artefact.
@@ -41,9 +36,8 @@ void AsynchronLink::Call( void* pObj, bool bAllowDoubles )
         _pArg = pObj;
         DBG_ASSERT( bAllowDoubles ||  !_nEventId, "Already made a call" );
         ClearPendingCall();
-        if( _pMutex ) _pMutex->acquire();
+        std::lock_guard aGuard(_aMutex);
         _nEventId = Application::PostUserEvent( LINK( this, AsynchronLink, HandleCall_PostUserEvent) );
-        if( _pMutex ) _pMutex->release();
     }
 }
 
@@ -54,14 +48,16 @@ AsynchronLink::~AsynchronLink()
         Application::RemoveUserEvent( _nEventId );
     }
     if( _pDeleted ) *_pDeleted = true;
-    _pMutex.reset();
 }
 
 IMPL_LINK_NOARG( AsynchronLink, HandleCall_Idle, Timer*, void )
 {
-    if( _pMutex ) _pMutex->acquire();
-    _nEventId = nullptr;
-    if( _pMutex ) _pMutex->release();
+    {
+        std::lock_guard aGuard(_aMutex);
+        _nEventId = nullptr;
+        // need to release the lock before calling the client since
+        // the client may call back into us
+    }
     Call_Impl( _pArg );
 }
 
@@ -72,13 +68,12 @@ IMPL_LINK_NOARG( AsynchronLink, HandleCall_PostUserEvent, void*, void )
 
 void AsynchronLink::ClearPendingCall()
 {
-    if( _pMutex ) _pMutex->acquire();
+    std::lock_guard aGuard(_aMutex);
     if( _nEventId )
     {
         Application::RemoveUserEvent( _nEventId );
         _nEventId = nullptr;
     }
-    if( _pMutex ) _pMutex->release();
 }
 
 void AsynchronLink::Call_Impl( void* pArg )

@@ -127,8 +127,6 @@ SvtMatchContext_Impl::SvtMatchContext_Impl(SvtURLBox* pBoxP, const OUString& rTe
     , stopped_(false)
     , commandId_(0)
 {
-    aLink.CreateMutex();
-
     FillPicklist( aPickList );
 }
 
