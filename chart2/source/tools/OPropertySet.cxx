@@ -18,9 +18,12 @@
  */
 
 #include <OPropertySet.hxx>
-#include "ImplOPropertySet.hxx"
+#include <CloneHelper.hxx>
 #include <cppuhelper/queryinterface.hxx>
+#include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/style/XStyle.hpp>
 
+#include <algorithm>
 #include <vector>
 #include <memory>
 
@@ -43,7 +46,6 @@ OPropertySet::OPropertySet( ::osl::Mutex & par_rMutex ) :
         // the following causes a warning; there seems to be no way to avoid it
         OPropertySetHelper( static_cast< OBroadcastHelper & >( *this )),
         m_rMutex( par_rMutex ),
-        m_pImplProperties( new impl::ImplOPropertySet() ),
         m_bSetNewValuesExplicitlyEvenIfTheyEqualDefault(false)
 {
 }
@@ -56,8 +58,22 @@ OPropertySet::OPropertySet( const OPropertySet & rOther, ::osl::Mutex & par_rMut
         m_bSetNewValuesExplicitlyEvenIfTheyEqualDefault(false)
 {
     MutexGuard aGuard( m_rMutex );
-    if (rOther.m_pImplProperties)
-        m_pImplProperties.reset(new impl::ImplOPropertySet(*rOther.m_pImplProperties));
+
+    m_aProperties = rOther.m_aProperties;
+
+    // clone interface properties
+    for(auto& rProp : m_aProperties)
+    {
+        if( rProp.second.hasValue() &&
+            rProp.second.getValueType().getTypeClass() == uno::TypeClass_INTERFACE )
+        {
+            Reference< util::XCloneable > xCloneable;
+            if( rProp.second >>= xCloneable )
+                rProp.second <<= xCloneable->createClone();
+        }
+    }
+
+    m_xStyle.set( ::chart::CloneHelper::CreateRefClone< style::XStyle >()( rOther.m_xStyle ));
 }
 
 void OPropertySet::SetNewValuesExplicitlyEvenIfTheyEqualDefault()
@@ -109,7 +125,7 @@ beans::PropertyState SAL_CALL
 {
     cppu::IPropertyArrayHelper & rPH = getInfoHelper();
 
-    return m_pImplProperties->GetPropertyStateByHandle(
+    return GetPropertyStateByHandle(
         rPH.getHandleByName( PropertyName ));
 }
 
@@ -124,7 +140,7 @@ Sequence< beans::PropertyState > SAL_CALL
     std::vector< sal_Int32 > aHandles( pHandles.get(), pHandles.get() + aPropertyName.getLength());
     pHandles.reset();
 
-    return m_pImplProperties->GetPropertyStatesByHandle( aHandles );
+    return GetPropertyStatesByHandle( aHandles );
 }
 
 void SAL_CALL
@@ -132,7 +148,7 @@ void SAL_CALL
 {
     cppu::IPropertyArrayHelper & rPH = getInfoHelper();
 
-    m_pImplProperties->SetPropertyToDefault( rPH.getHandleByName( PropertyName ));
+    SetPropertyToDefault( rPH.getHandleByName( PropertyName ));
     firePropertyChangeEvent();
 }
 
@@ -152,7 +168,7 @@ Any SAL_CALL
 void SAL_CALL
     OPropertySet::setAllPropertiesToDefault()
 {
-    m_pImplProperties->SetAllPropertiesToDefault();
+    SetAllPropertiesToDefault();
     firePropertyChangeEvent();
 }
 
@@ -167,7 +183,7 @@ void SAL_CALL
     std::vector< sal_Int32 > aHandles( pHandles.get(), pHandles.get() + aPropertyNames.getLength());
     pHandles.reset();
 
-    m_pImplProperties->SetPropertiesToDefault( aHandles );
+    SetPropertiesToDefault( aHandles );
 }
 
 Sequence< Any > SAL_CALL
@@ -246,22 +262,22 @@ void SAL_CALL OPropertySet::setFastPropertyValue_NoBroadcast
     {
         aDefault.clear();
     }
-    m_pImplProperties->SetPropertyValueByHandle( nHandle, rValue );
+    SetPropertyValueByHandle( nHandle, rValue );
     if( !m_bSetNewValuesExplicitlyEvenIfTheyEqualDefault && aDefault.hasValue() && aDefault == rValue ) //#i98893# don't export defaults to file
-        m_pImplProperties->SetPropertyToDefault( nHandle );
+        SetPropertyToDefault( nHandle );
     else
-        m_pImplProperties->SetPropertyValueByHandle( nHandle, rValue );
+        SetPropertyValueByHandle( nHandle, rValue );
 }
 
 void SAL_CALL OPropertySet::getFastPropertyValue
     ( Any& rValue,
       sal_Int32 nHandle ) const
 {
-    if(  m_pImplProperties->GetPropertyValueByHandle( rValue, nHandle ))
+    if(  GetPropertyValueByHandle( rValue, nHandle ))
         return;
 
     // property was not set -> try style
-    uno::Reference< beans::XFastPropertySet > xStylePropSet( m_pImplProperties->GetStyle(), uno::UNO_QUERY );
+    uno::Reference< beans::XFastPropertySet > xStylePropSet( m_xStyle, uno::UNO_QUERY );
     if( xStylePropSet.is() )
     {
 #ifdef DBG_UTIL
@@ -338,12 +354,12 @@ void OPropertySet::firePropertyChangeEvent()
 // ____ XStyleSupplier ____
 Reference< style::XStyle > SAL_CALL OPropertySet::getStyle()
 {
-    return m_pImplProperties->GetStyle();
+    return m_xStyle;
 }
 
 void SAL_CALL OPropertySet::setStyle( const Reference< style::XStyle >& xStyle )
 {
-    if( ! m_pImplProperties->SetStyle( xStyle ))
+    if( ! SetStyle( xStyle ))
         throw lang::IllegalArgumentException(
             "Empty Style",
             static_cast< beans::XPropertySet * >( this ),
@@ -366,6 +382,80 @@ void SAL_CALL OPropertySet::setFastPropertyValue( sal_Int32 nHandle, const Any& 
 
     firePropertyChangeEvent();
 }
+
+beans::PropertyState OPropertySet::GetPropertyStateByHandle( sal_Int32 nHandle ) const
+{
+    if( m_aProperties.end() == m_aProperties.find( nHandle ))
+        return beans::PropertyState_DEFAULT_VALUE;
+    return beans::PropertyState_DIRECT_VALUE;
+}
+
+Sequence< beans::PropertyState > OPropertySet::GetPropertyStatesByHandle(
+    const std::vector< sal_Int32 > & aHandles ) const
+{
+    Sequence< beans::PropertyState > aResult( aHandles.size());
+
+    std::transform( aHandles.begin(), aHandles.end(),
+                      aResult.getArray(),
+                      [this](sal_Int32 nHandle) { return GetPropertyStateByHandle(nHandle); });
+
+    return aResult;
+}
+
+void OPropertySet::SetPropertyToDefault( sal_Int32 nHandle )
+{
+    tPropertyMap::iterator aFoundIter( m_aProperties.find( nHandle ) );
+
+    if( m_aProperties.end() != aFoundIter )
+    {
+        m_aProperties.erase( aFoundIter );
+    }
+}
+
+void OPropertySet::SetPropertiesToDefault(
+    const std::vector< sal_Int32 > & aHandles )
+{
+    for(auto nHandle : aHandles)
+        m_aProperties.erase(nHandle);
+}
+
+void OPropertySet::SetAllPropertiesToDefault()
+{
+    m_aProperties.clear();
+}
+
+bool OPropertySet::GetPropertyValueByHandle(
+    Any & rValue,
+    sal_Int32 nHandle ) const
+{
+    bool bResult = false;
+
+    tPropertyMap::const_iterator aFoundIter( m_aProperties.find( nHandle ) );
+
+    if( m_aProperties.end() != aFoundIter )
+    {
+        rValue = (*aFoundIter).second;
+        bResult = true;
+    }
+
+    return bResult;
+}
+
+void OPropertySet::SetPropertyValueByHandle(
+    sal_Int32 nHandle, const Any & rValue )
+{
+    m_aProperties[ nHandle ] = rValue;
+}
+
+bool OPropertySet::SetStyle( const Reference< style::XStyle > & xStyle )
+{
+    if( ! xStyle.is())
+        return false;
+
+    m_xStyle = xStyle;
+    return true;
+}
+
 
 } //  namespace property
 

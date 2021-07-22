@@ -364,9 +364,6 @@ excludelist:
     - com/sun/star/util/XCloneable.hpp
     - com/sun/star/util/XModifyBroadcaster.hpp
     - com/sun/star/util/XModifyListener.hpp
-    chart2/source/tools/ImplOPropertySet.cxx:
-    # Needed for template
-    - com/sun/star/style/XStyle.hpp
     chart2/source/tools/LegendHelper.cxx:
     # Actually used
     - com/sun/star/uno/XComponentContext.hpp

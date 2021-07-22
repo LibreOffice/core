@@ -1178,8 +1178,6 @@ chart2/source/tools/ExplicitCategoriesProvider.cxx
 chart2/source/tools/ExponentialRegressionCurveCalculator.cxx
 chart2/source/tools/FillProperties.cxx
 chart2/source/tools/FormattedStringHelper.cxx
-chart2/source/tools/ImplOPropertySet.cxx
-chart2/source/tools/ImplOPropertySet.hxx
 chart2/source/tools/InternalData.cxx
 chart2/source/tools/InternalDataProvider.cxx
 chart2/source/tools/LabeledDataSequence.cxx
