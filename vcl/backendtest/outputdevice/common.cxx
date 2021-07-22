@@ -895,14 +895,14 @@ TestResult OutputDeviceTestCommon::checkTextLocation(Bitmap& rBitmap)
     tools::Long textThreshold = 3;
     tools::Long textWidth = 3, textHeight = 8;
     tools::Long deviationX = 0, deviationY = 0;
-    tools::Long verticalStart, verticalEnd;
-    tools::Long horizontalStart, horizontalEnd;
+    tools::Long verticalStart = 0, verticalEnd = 0;
+    tools::Long horizontalStart = 0, horizontalEnd = 0;
     tools::Long midX = pAccess->Width() / 2.0;
     tools::Long midY = pAccess->Height() / 2.0;
     bool insideFlag = false;
 
     //Traversing horizontally
-    for (int x = 0, y = pAccess->Height() / 2.0; x < pAccess->Width(); ++x)
+    for (tools::Long x = 0, y = pAccess->Height() / 2.0; x < pAccess->Width(); ++x)
     {
         if (pAccess->GetPixel(y, x) != constBackgroundColor)
         {
@@ -924,7 +924,7 @@ TestResult OutputDeviceTestCommon::checkTextLocation(Bitmap& rBitmap)
 
     insideFlag = false;
     //Traversing vertically
-    for (int x = 0, y = pAccess->Height() / 2.0; x < pAccess->Height(); ++x)
+    for (tools::Long x = 0, y = pAccess->Height() / 2.0; x < pAccess->Height(); ++x)
     {
         if (pAccess->GetPixel(x, y) != constBackgroundColor)
         {
