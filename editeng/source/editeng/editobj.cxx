@@ -254,75 +254,42 @@ void EditTextObjectImpl::Dump() const
 }
 #endif
 
-static EditEngineItemPool* getEditEngineItemPool(SfxItemPool* pPool)
+static rtl::Reference<SfxItemPool> getEditEngineItemPool(SfxItemPool* pPool, MapUnit eDefaultMetric)
 {
-    EditEngineItemPool* pRetval = dynamic_cast< EditEngineItemPool* >(pPool);
-
-    while(!pRetval && pPool && pPool->GetSecondaryPool())
-    {
-        pPool = pPool->GetSecondaryPool();
-
-        if(pPool)
-        {
-            pRetval = dynamic_cast< EditEngineItemPool* >(pPool);
-        }
-    }
-
-    return pRetval;
-}
-
-EditTextObjectImpl::EditTextObjectImpl( SfxItemPool* pP )
-    : meUserType(OutlinerMode::DontKnow)
-    , meScriptType(SvtScriptType::NONE)
-    , meRotation(TextRotation::NONE)
-    , meMetric(MapUnit::LASTENUMDUMMY)
-    , mbVertical(false)
-{
-    // #i101239# ensure target is an EditEngineItemPool, else
-    // fallback to pool ownership. This is needed to ensure that at
+    // #i101239# ensure target is an EditEngineItemPool, so that at
     // pool destruction time of an alien pool, the pool is still alive.
     // When registering would happen at an alien pool which just uses an
     // EditEngineItemPool as some sub-pool, that pool could already
     // be decoupled and deleted which would lead to crashes.
-    mpPool = getEditEngineItemPool(pP);
+    for (; pPool; pPool = pPool->GetSecondaryPool())
+        if (dynamic_cast<EditEngineItemPool*>(pPool))
+            return pPool;
 
-    if ( mpPool )
-    {
-        mbOwnerOfPool = false;
-    }
-    else
-    {
-        mpPool = EditEngine::CreatePool();
-        mbOwnerOfPool =  true;
-    }
+    auto pRetval = EditEngine::CreatePool();
+    pRetval->SetDefaultMetric(eDefaultMetric);
+    return pRetval;
+}
+
+EditTextObjectImpl::EditTextObjectImpl(SfxItemPool* pP, MapUnit eDefaultMetric, bool bVertical,
+    TextRotation eRotation, SvtScriptType eScriptType)
+    : mpPool(getEditEngineItemPool(pP, eDefaultMetric))
+    , meUserType(OutlinerMode::DontKnow)
+    , meScriptType(eScriptType)
+    , meRotation(eRotation)
+    , meMetric(eDefaultMetric)
+    , mbVertical(bVertical)
+{
 }
 
 EditTextObjectImpl::EditTextObjectImpl( const EditTextObjectImpl& r )
-    : meUserType(r.meUserType)
+    : mpPool(r.mpPool)
+    , meUserType(r.meUserType)
     , meScriptType(r.meScriptType)
     , meRotation(r.meRotation)
     , meMetric(r.meMetric)
     , mbVertical(r.mbVertical)
 {
     // Do not copy PortionInfo
-
-    if ( !r.mbOwnerOfPool )
-    {
-        // reuse alien pool; this must be an EditEngineItemPool
-        // since there is no other way to construct an EditTextObject
-        // than it's regular constructor where that is ensured
-        mpPool = r.mpPool;
-        mbOwnerOfPool = false;
-    }
-    else
-    {
-        mpPool = EditEngine::CreatePool();
-        mbOwnerOfPool = true;
-
-    }
-
-    if (mbOwnerOfPool && r.mpPool)
-        mpPool->SetDefaultMetric( r.mpPool->GetMetric( DEF_METRIC ) );
 
     maContents.reserve(r.maContents.size());
     for (auto const& content : r.maContents)
@@ -403,12 +370,6 @@ void EditTextObjectImpl::SetRotation(TextRotation nRotation)
 TextRotation EditTextObjectImpl::GetRotation() const
 {
     return meRotation;
-}
-
-
-void EditTextObjectImpl::SetScriptType( SvtScriptType nType )
-{
-    meScriptType = nType;
 }
 
 XEditAttribute EditTextObjectImpl::CreateAttrib( const SfxPoolItem& rItem, sal_Int32 nStart, sal_Int32 nEnd )
