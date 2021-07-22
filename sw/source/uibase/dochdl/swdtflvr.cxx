@@ -134,7 +134,10 @@
 
 #include <memory>
 
-#define OLESIZE 11905 - 2 * lMinBorder, 6 * MM50
+constexpr tools::Long constOleWidth = 11905 - 2 * lMinBorder;
+constexpr tools::Long constOleHeight = o3tl::convertTwip(tools::Long(3), o3tl::Length::cm);
+
+#define OLESIZE constOleWidth, constOleHeight
 
 constexpr sal_uInt32 SWTRANSFER_OBJECTTYPE_DRAWMODEL = 0x00000001;
 constexpr sal_uInt32 SWTRANSFER_OBJECTTYPE_HTML      = 0x00000002;
