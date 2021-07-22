@@ -477,35 +477,35 @@ public:
         aRectangle = aRegions[index++];
         {
             vcl::test::OutputDeviceTestBitmap aOutDevTest;
-            Bitmap aBitmap = aOutDevTest.setupDrawBitmap();
+            Bitmap aBitmap = aOutDevTest.setupDrawBitmap(vcl::PixelFormat::N24_BPP);
             assertAndSetBackground(vcl::test::OutputDeviceTestBitmap::checkTransformedBitmap(aBitmap), aRectangle, rRenderContext);
             drawBitmapScaledAndCentered(aRectangle, aBitmap, rRenderContext);
         }
         aRectangle = aRegions[index++];
         {
             vcl::test::OutputDeviceTestBitmap aOutDevTest;
-            Bitmap aBitmap = aOutDevTest.setupDrawTransformedBitmap();
+            Bitmap aBitmap = aOutDevTest.setupDrawTransformedBitmap(vcl::PixelFormat::N24_BPP);
             assertAndSetBackground(vcl::test::OutputDeviceTestBitmap::checkTransformedBitmap(aBitmap), aRectangle, rRenderContext);
             drawBitmapScaledAndCentered(aRectangle, aBitmap, rRenderContext);
         }
         aRectangle = aRegions[index++];
         {
             vcl::test::OutputDeviceTestBitmap aOutDevTest;
-            Bitmap aBitmap = aOutDevTest.setupDrawBitmapExWithAlpha();
+            Bitmap aBitmap = aOutDevTest.setupDrawBitmapExWithAlpha(vcl::PixelFormat::N24_BPP);
             assertAndSetBackground(vcl::test::OutputDeviceTestBitmap::checkBitmapExWithAlpha(aBitmap), aRectangle, rRenderContext);
             drawBitmapScaledAndCentered(aRectangle, aBitmap, rRenderContext);
         }
         aRectangle = aRegions[index++];
         {
             vcl::test::OutputDeviceTestBitmap aOutDevTest;
-            Bitmap aBitmap = aOutDevTest.setupDrawMask();
+            Bitmap aBitmap = aOutDevTest.setupDrawMask(vcl::PixelFormat::N24_BPP);
             assertAndSetBackground(vcl::test::OutputDeviceTestBitmap::checkMask(aBitmap), aRectangle, rRenderContext);
             drawBitmapScaledAndCentered(aRectangle, aBitmap, rRenderContext);
         }
         aRectangle = aRegions[index++];
         {
             vcl::test::OutputDeviceTestBitmap aOutDevTest;
-            BitmapEx aBitmap = aOutDevTest.setupDrawBlend();
+            BitmapEx aBitmap = aOutDevTest.setupDrawBlend(vcl::PixelFormat::N24_BPP);
             assertAndSetBackground(vcl::test::OutputDeviceTestBitmap::checkBlend(aBitmap), aRectangle, rRenderContext);
             drawBitmapScaledAndCentered(aRectangle, aBitmap.GetBitmap(), rRenderContext);
         }
