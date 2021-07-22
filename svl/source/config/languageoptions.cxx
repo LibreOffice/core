@@ -23,12 +23,12 @@
 #include <svl/ctloptions.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <i18nlangtag/languagetag.hxx>
-#include <osl/mutex.hxx>
 #include <rtl/instance.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <unotools/syslocale.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <mutex>
 
 #ifdef _WIN32
 #if !defined WIN32_LEAN_AND_MEAN
@@ -40,12 +40,12 @@
 using namespace ::com::sun::star;
 // global
 
-namespace { struct ALMutex : public rtl::Static< ::osl::Mutex, ALMutex > {}; }
+namespace { struct ALMutex : public rtl::Static< std::mutex, ALMutex > {}; }
 
 SvtLanguageOptions::SvtLanguageOptions( bool _bDontLoad )
 {
     // Global access, must be guarded (multithreading)
-    ::osl::MutexGuard aGuard( ALMutex::get() );
+    std::lock_guard aGuard( ALMutex::get() );
 
     m_pCJKOptions.reset(new SvtCJKOptions( _bDontLoad ));
     m_pCTLOptions.reset(new SvtCTLOptions( _bDontLoad ));
@@ -55,7 +55,7 @@ SvtLanguageOptions::SvtLanguageOptions( bool _bDontLoad )
 SvtLanguageOptions::~SvtLanguageOptions()
 {
     // Global access, must be guarded (multithreading)
-    ::osl::MutexGuard aGuard( ALMutex::get() );
+    std::lock_guard aGuard( ALMutex::get() );
 
     m_pCTLOptions->RemoveListener(this);
     m_pCJKOptions->RemoveListener(this);
