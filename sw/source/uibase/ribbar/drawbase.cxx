@@ -511,12 +511,14 @@ void SwDrawBase::EnterSelectMode(const MouseEvent& rMEvt)
 
 void SwDrawBase::CreateDefaultObject()
 {
+    constexpr tools::Long constTwips_3cm = o3tl::toTwips(3, o3tl::Length::cm);
+
     Point aStartPos = GetDefaultCenterPos();
     Point aEndPos(aStartPos);
-    aStartPos.AdjustX( -(6 * MM50) );
-    aStartPos.AdjustY( -(6 * MM50) );
-    aEndPos.AdjustX(6 * MM50 );
-    aEndPos.AdjustY(6 * MM50 );
+    aStartPos.AdjustX(-constTwips_3cm);
+    aStartPos.AdjustY(-constTwips_3cm);
+    aEndPos.AdjustX(constTwips_3cm);
+    aEndPos.AdjustY(constTwips_3cm);
     tools::Rectangle aRect(aStartPos, aEndPos);
     m_pSh->CreateDefaultShape(m_pWin->GetSdrDrawMode(), aRect, m_nSlotId);
 }

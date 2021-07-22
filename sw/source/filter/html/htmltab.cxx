@@ -3421,7 +3421,9 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                                             true );
                     aFrameSet.Put( SwFormatSurround(eSurround) );
 
-                    SwFormatFrameSize aFrameSize( SwFrameSize::Variable, 20*MM50, MINLAY );
+                    constexpr tools::Long constTwips_100mm = o3tl::convert(tools::Long(100), o3tl::Length::mm, o3tl::Length::twip);
+
+                    SwFormatFrameSize aFrameSize( SwFrameSize::Variable, constTwips_100mm, MINLAY );
                     aFrameSize.SetWidthPercent( 100 );
                     aFrameSet.Put( aFrameSize );
 

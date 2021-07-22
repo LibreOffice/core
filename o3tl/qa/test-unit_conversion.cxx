@@ -869,4 +869,11 @@ static_assert(o3tl::convert(100, o3tl::Length::line, o3tl::Length::line) == 100)
 static_assert(o3tl::convert(49, o3tl::Length::mm100, o3tl::Length::mm) == 0);
 static_assert(o3tl::convert(50, o3tl::Length::mm100, o3tl::Length::mm) == 1);
 
+// Conversions used in the code - to make sure they produce the expected and unchanged result
+
+static_assert(o3tl::toTwips(25, o3tl::Length::in100) == 1440 / 4);
+static_assert(o3tl::toTwips(15, o3tl::Length::in100) == 216);
+// the following twip value used to the constant for 20mm
+static_assert(o3tl::toTwips(20, o3tl::Length::mm) == 1134);
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

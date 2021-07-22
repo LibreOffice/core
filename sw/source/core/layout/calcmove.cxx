@@ -860,7 +860,9 @@ void SwPageFrame::MakeAll(vcl::RenderContext* pRenderContext)
                     if (nWidth < nDefWidth)
                         nWidth = nDefWidth;
                     nWidth += + 2 * aBorder.Width();
-                    nWidth = std::max( nWidth, 2L * aBorder.Width() + 4*MM50 );
+
+                    constexpr tools::Long constTwips_2cm = o3tl::toTwips(2, o3tl::Length::cm);
+                    nWidth = std::max(nWidth, 2L * aBorder.Width() + constTwips_2cm);
 
                     {
                         SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);

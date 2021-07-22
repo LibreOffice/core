@@ -35,8 +35,8 @@ struct  SwPosition;
 class   SwFormatCol;
 class SvGlobalName;
 
-const SwTwips   DFLT_WIDTH      = MM50 * 4;
-const SwTwips   DFLT_HEIGHT     = MM50;
+constexpr SwTwips DFLT_WIDTH = o3tl::toTwips(20, o3tl::Length::mm);
+constexpr SwTwips DFLT_HEIGHT = o3tl::toTwips(5, o3tl::Length::mm);
 
 enum class Frmmgr_Type
 {
