@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1df59f39_53e4e83f",
+        "filename": "sc/source/core/tool/refupdat.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-07-22T10:22:50Z",
+      "side": 0,
+      "message": "This is an unrelated change and unnecessary for the fix. Please omit.\nAlso, this check guards against the passed reference or delta values being out of bounds and thus should not be removed.",
+      "revId": "70b7bbc41299b65560f3339adc6a15fa9152f635",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
