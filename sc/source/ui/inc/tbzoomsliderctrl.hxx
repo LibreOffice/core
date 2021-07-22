@@ -42,8 +42,15 @@ public:
 class ScZoomSlider final : public weld::CustomWidgetController
 {
 private:
-    struct ScZoomSliderWnd_Impl;
-    std::unique_ptr<ScZoomSliderWnd_Impl> mpImpl;
+    sal_uInt16                   mnCurrentZoom;
+    sal_uInt16                   mnMinZoom;
+    sal_uInt16                   mnMaxZoom;
+    std::vector< tools::Long >      maSnappingPointOffsets;
+    std::vector< sal_uInt16 >    maSnappingPointZooms;
+    Image                    maSliderButton;
+    Image                    maIncreaseButton;
+    Image                    maDecreaseButton;
+    bool                     mbOmitPaint;
     css::uno::Reference<css::frame::XDispatchProvider> m_xDispatchProvider;
 
     sal_uInt16 Offset2Zoom(tools::Long nOffset) const;
