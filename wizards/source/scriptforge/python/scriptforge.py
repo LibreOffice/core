@@ -1166,8 +1166,15 @@ class SFScriptForge:
         # Mandatory class properties for service registration
         serviceimplementation = 'basic'
         servicename = 'ScriptForge.L10N'
-        servicesynonyms = ()
+        servicesynonyms = ('l10n', 'scriptforge.l10n')
         serviceproperties = dict(Folder = False, Languages = False, Locale = False)
+
+        @classmethod
+        def ReviewServiceArgs(cls, foldername = '', locale = '', encoding = 'UTF-8'):
+            """
+                Transform positional and keyword arguments into positional only
+                """
+            return foldername, locale, encoding
 
         def AddText(self, context = '', msgid = '', comment = ''):
             return self.ExecMethod(self.vbMethod, 'AddText', context, msgid, comment)
@@ -1429,11 +1436,18 @@ class SFScriptForge:
         # Mandatory class properties for service registration
         serviceimplementation = 'basic'
         servicename = 'ScriptForge.Timer'
-        servicesynonyms = ()
+        servicesynonyms = ('timer', 'scriptforge.timer')
         serviceproperties = dict(Duration = False, IsStarted = False, IsSuspended = False,
                                  SuspendDuration = False, TotalDuration = False)
         # Force for each property to get its value from Basic
         forceGetProperty = True
+
+        @classmethod
+        def ReviewServiceArgs(cls, start = False):
+            """
+                Transform positional and keyword arguments into positional only
+                """
+            return (start,)
 
         def Continue(self):
             return self.ExecMethod(self.vbMethod, 'Continue')
@@ -1661,7 +1675,7 @@ class SFDialogs:
         # Mandatory class properties for service registration
         serviceimplementation = 'basic'
         servicename = 'SFDialogs.DialogControl'
-        servicesynonyms = ('dialogcontrol', 'sfdialogs.dialog')
+        servicesynonyms = ()
         serviceproperties = dict(Cancel = True, Caption = True, ControlType = False, CurrentNode = True,
                                  Default = True, Enabled = True, Format = True, ListCount = False,
                                  ListIndex = True, Locked = True, MultiSelect = True, Name = False,
@@ -1779,7 +1793,7 @@ class SFDocuments:
         # Mandatory class properties for service registration
         serviceimplementation = 'basic'
         servicename = 'SFDocuments.Base'
-        servicesynonyms = ()
+        servicesynonyms = ('base', 'scriptforge.base')
         serviceproperties = dict(DocumentType = False, IsBase = False, IsCalc = False,
                                  IsDraw = False, IsImpress = False, IsMath = False, IsWriter = False,
                                  XComponent = False)

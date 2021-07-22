@@ -535,16 +535,17 @@ Dim sEncoding As String		&apos;	Alias for Encoding
 
 Check:
 	If IsMissing(pvArgs) Then pvArgs = Array()
-	If UBound(pvArgs) &lt; 0 Then
-		sPOFile = &quot;&quot;
-		sEncoding = &quot;&quot;
-	Else
-		If Not SF_Utils._ValidateFile(pvArgs(0), &quot;Folder (Arg0)&quot;) Then GoTo Catch
+	sPOFile = &quot;&quot;
+	sEncoding = &quot;&quot;
+	If UBound(pvArgs) &gt;= 0 Then
+		If Not SF_Utils._ValidateFile(pvArgs(0), &quot;Folder (Arg0)&quot;, , True) Then GoTo Catch
 		sFolderName = pvArgs(0)
+		sLocale = &quot;&quot;
 		If UBound(pvArgs) &gt;= 1 Then
 			If Not SF_Utils._Validate(pvArgs(1), &quot;Locale (Arg1)&quot;, V_STRING) Then GoTo Catch
 			sLocale = pvArgs(1)
-		Else
+		End If
+		If Len(sLocale) = 0 Then	&apos;	Called from Python, the Locale argument may be the zero-length string
 			Set oLocale = SF_Utils._GetUNOService(&quot;Locale&quot;)
 			sLocale = oLocale.Language &amp; &quot;-&quot; &amp; oLocale.Country
 		End If
@@ -554,8 +555,10 @@ Check:
 		Else
 			sEncoding = &quot;UTF-8&quot;
 		End If
-		sPOFile = SF_FileSystem.BuildPath(sFolderName, sLocale &amp; &quot;.po&quot;)
-		If Not SF_FileSystem.FileExists(sPOFile) Then GoTo CatchNotExists
+		If Len(sFolderName) &gt; 0 Then
+			sPOFile = SF_FileSystem.BuildPath(sFolderName, sLocale &amp; &quot;.po&quot;)
+			If Not SF_FileSystem.FileExists(sPOFile) Then GoTo CatchNotExists
+		End If
 	End If
 
 Try:
