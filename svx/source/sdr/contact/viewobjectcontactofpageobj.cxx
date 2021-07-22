@@ -137,8 +137,7 @@ drawinglayer::primitive2d::Primitive2DContainer PagePrimitiveExtractor::createPr
             basegfx::B2DRange(),
 
             GetXDrawPageForSdrPage(pStartPage),
-            0.0, // no time; page previews are not animated
-            rOriginalViewInformation.getExtendedInformationSequence());
+            0.0); // no time; page previews are not animated
         updateViewInformation2D(aNewViewInformation2D);
 
         // create copy of DisplayInfo to set PagePainting

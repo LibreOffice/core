@@ -221,51 +221,25 @@ public:
     ImpViewInformation2D(const basegfx::B2DHomMatrix& rObjectTransformation,
                          const basegfx::B2DHomMatrix& rViewTransformation,
                          const basegfx::B2DRange& rViewport,
-                         const uno::Reference<drawing::XDrawPage>& rxDrawPage, double fViewTime,
-                         const uno::Sequence<beans::PropertyValue>& rExtendedParameters)
+                         const uno::Reference<drawing::XDrawPage>& rxDrawPage, double fViewTime)
         : maObjectTransformation(rObjectTransformation)
         , maViewTransformation(rViewTransformation)
-        , maObjectToViewTransformation()
-        , maInverseObjectToViewTransformation()
         , maViewport(rViewport)
-        , maDiscreteViewport()
         , mxVisualizedPage(rxDrawPage)
         , mfViewTime(fViewTime)
         , mbReducedDisplayQuality(false)
-        , mxViewInformation()
-        , mxExtendedInformation()
     {
-        impInterpretPropertyValues(rExtendedParameters);
     }
 
     explicit ImpViewInformation2D(const uno::Sequence<beans::PropertyValue>& rViewParameters)
-        : maObjectTransformation()
-        , maViewTransformation()
-        , maObjectToViewTransformation()
-        , maInverseObjectToViewTransformation()
-        , maViewport()
-        , maDiscreteViewport()
-        , mxVisualizedPage()
-        , mfViewTime()
-        , mbReducedDisplayQuality(false)
+        : mbReducedDisplayQuality(false)
         , mxViewInformation(rViewParameters)
-        , mxExtendedInformation()
     {
         impInterpretPropertyValues(rViewParameters);
     }
 
     ImpViewInformation2D()
-        : maObjectTransformation()
-        , maViewTransformation()
-        , maObjectToViewTransformation()
-        , maInverseObjectToViewTransformation()
-        , maViewport()
-        , maDiscreteViewport()
-        , mxVisualizedPage()
-        , mfViewTime()
-        , mbReducedDisplayQuality(false)
-        , mxViewInformation()
-        , mxExtendedInformation()
+        : mbReducedDisplayQuality(false)
     {
     }
 
@@ -330,19 +304,13 @@ public:
         return mxViewInformation;
     }
 
-    const uno::Sequence<beans::PropertyValue>& getExtendedInformationSequence() const
-    {
-        return mxExtendedInformation;
-    }
-
     bool operator==(const ImpViewInformation2D& rCandidate) const
     {
         return (maObjectTransformation == rCandidate.maObjectTransformation
                 && maViewTransformation == rCandidate.maViewTransformation
                 && maViewport == rCandidate.maViewport
                 && mxVisualizedPage == rCandidate.mxVisualizedPage
-                && mfViewTime == rCandidate.mfViewTime
-                && mxExtendedInformation == rCandidate.mxExtendedInformation);
+                && mfViewTime == rCandidate.mfViewTime);
     }
 };
 
@@ -357,11 +325,9 @@ ViewInformation2D::ViewInformation2D(const basegfx::B2DHomMatrix& rObjectTransfo
                                      const basegfx::B2DHomMatrix& rViewTransformation,
                                      const basegfx::B2DRange& rViewport,
                                      const uno::Reference<drawing::XDrawPage>& rxDrawPage,
-                                     double fViewTime,
-                                     const uno::Sequence<beans::PropertyValue>& rExtendedParameters)
+                                     double fViewTime)
     : mpViewInformation2D(ImpViewInformation2D(rObjectTransformation, rViewTransformation,
-                                               rViewport, rxDrawPage, fViewTime,
-                                               rExtendedParameters))
+                                               rViewport, rxDrawPage, fViewTime))
 {
 }
 
@@ -435,11 +401,6 @@ bool ViewInformation2D::getReducedDisplayQuality() const
 const uno::Sequence<beans::PropertyValue>& ViewInformation2D::getViewInformationSequence() const
 {
     return mpViewInformation2D->getViewInformationSequence();
-}
-
-const uno::Sequence<beans::PropertyValue>& ViewInformation2D::getExtendedInformationSequence() const
-{
-    return mpViewInformation2D->getExtendedInformationSequence();
 }
 
 } // end of namespace drawinglayer::geometry
