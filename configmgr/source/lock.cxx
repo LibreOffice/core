@@ -25,9 +25,12 @@
 
 namespace configmgr
 {
-osl::Mutex& GetLock()
+std::shared_ptr<osl::Mutex> const& lock()
 {
-    static osl::Mutex theLock;
+    // fdo#31494# get ownership right
+    // Ensure that the mutex lives as long as all its consumers, otherwise
+    // the configmgr DLL exit delete this before unotools releases some configmgr derived reference.
+    static std::shared_ptr<osl::Mutex> theLock = std::make_shared<osl::Mutex>();
     return theLock;
 }
 }
