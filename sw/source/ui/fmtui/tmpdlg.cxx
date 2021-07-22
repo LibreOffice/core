@@ -489,7 +489,8 @@ void SwTemplateDlgController::PageCreated(const OString& rId, SfxTabPage &rPage 
     {
         if( rPage.GetItemSet().GetParent() )
         {
-            aSet.Put(SfxUInt32Item(SID_SVXSTDPARAGRAPHTABPAGE_ABSLINEDIST,MM50/10));
+            constexpr tools::Long constTwips_0_5mm = o3tl::toTwips(5, o3tl::Length::mm10);
+            aSet.Put(SfxUInt32Item(SID_SVXSTDPARAGRAPHTABPAGE_ABSLINEDIST, constTwips_0_5mm));
             aSet.Put(SfxUInt32Item(SID_SVXSTDPARAGRAPHTABPAGE_FLAGSET,0x000F));
             rPage.PageCreated(aSet);
         }

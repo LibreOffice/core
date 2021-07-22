@@ -202,7 +202,8 @@ class SvxCSS1Parser : public CSS1Parser
     std::unique_ptr<SvxCSS1PropertyInfo> m_pSheetPropInfo;
     SvxCSS1PropertyInfo *m_pPropInfo;
 
-    static constexpr sal_uInt16 gnMinFixLineSpace = MM50/2;    // minimum spacing for fixed line spacing
+    // minimum spacing for fixed line spacing
+    static constexpr sal_uInt16 gnMinFixLineSpace = o3tl::toTwips(25, o3tl::Length::mm10);
 
     rtl_TextEncoding    m_eDefaultEnc;
     bool m_bIgnoreFontFamily;

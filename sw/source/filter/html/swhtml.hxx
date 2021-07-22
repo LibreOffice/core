@@ -58,11 +58,11 @@ struct SwPending;
 class SvxCSS1PropertyInfo;
 struct ImplSVEvent;
 
-#define HTML_CJK_PARSPACE (MM50/2)
-#define HTML_CTL_PARSPACE (MM50/2)
+constexpr tools::Long HTML_CJK_PARSPACE = o3tl::toTwips(25, o3tl::Length::mm10); // 2.5mm
+constexpr tools::Long HTML_CTL_PARSPACE = o3tl::toTwips(25, o3tl::Length::mm10); // 2.5mm
 
-#define HTML_DFLT_IMG_WIDTH (MM50*4)
-#define HTML_DFLT_IMG_HEIGHT (MM50*2)
+constexpr tools::Long HTML_DFLT_IMG_WIDTH = o3tl::toTwips(2, o3tl::Length::cm); // 2cm
+constexpr tools::Long HTML_DFLT_IMG_HEIGHT = o3tl::toTwips(1, o3tl::Length::cm); // 1cm
 
 // some things you often need
 extern HTMLOptionEnum<SvxAdjust> const aHTMLPAlignTable[];
