@@ -881,6 +881,18 @@ DECLARE_OOXMLEXPORT_TEST(testTdf104797, "tdf104797.docx")
     CPPUNIT_ASSERT_EQUAL( OUString( " Will this sentence be duplicated ADDED STUFF?" ), getRun( getParagraph( 2 ), 4 )->getString());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf143510, "TC-table-DnD-move.docx")
+{
+    // check moveFromRangeStart/End and moveToRangeStart/End for tracked table move by drag & drop
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    if (mbExported)
+    {
+        // This was 0 (missing tracked table row deletion/insertion)
+        assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[1]/w:tr/w:trPr/w:del", 2);
+        assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[2]/w:tr/w:trPr/w:ins", 2);
+    }
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf113608_runAwayNumbering, "tdf113608_runAwayNumbering.docx")
 {
     // check that an incorrect numbering style is not applied
