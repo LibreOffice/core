@@ -102,8 +102,7 @@ void ObjectContactOfObjListPainter::ProcessDisplay(DisplayInfo& rDisplayInfo)
         pTargetDevice->GetViewTransformation(),
         aViewRange,
         GetXDrawPageForSdrPage(const_cast< SdrPage* >(mpProcessedPage)),
-        0.0,
-        css::uno::Sequence<css::beans::PropertyValue>());
+        0.0);
     updateViewInformation2D(aNewViewInformation2D);
 
     // collect primitive data in a sequence; this will already use the updated ViewInformation2D

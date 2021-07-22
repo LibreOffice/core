@@ -162,8 +162,7 @@ namespace sdr::overlay
                     maViewTransformation,
                     aViewRange,
                     maViewInformation2D.getVisualizedPage(),
-                    maViewInformation2D.getViewTime(),
-                    maViewInformation2D.getExtendedInformationSequence());
+                    maViewInformation2D.getViewTime());
                 pThis->mfDiscreteOne = 0.0;
             }
 

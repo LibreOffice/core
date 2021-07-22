@@ -236,8 +236,7 @@ void WeldEditView::DoPaint(vcl::RenderContext& rRenderContext, const tools::Rect
 
         const drawinglayer::geometry::ViewInformation2D aViewInformation2D(
             basegfx::B2DHomMatrix(), rRenderContext.GetViewTransformation(),
-            vcl::unotools::b2DRectangleFromRectangle(rRect), nullptr, 0.0,
-            css::uno::Sequence<css::beans::PropertyValue>());
+            vcl::unotools::b2DRectangleFromRectangle(rRect), nullptr, 0.0);
 
         std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> xProcessor(
             drawinglayer::processor2d::createProcessor2DFromOutputDevice(rRenderContext,

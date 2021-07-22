@@ -238,8 +238,7 @@ namespace drawinglayer::processor2d
                         getViewInformation2D().getViewTransformation(),
                         getViewInformation2D().getViewport(),
                         getViewInformation2D().getVisualizedPage(),
-                        getViewInformation2D().getViewTime(),
-                        getViewInformation2D().getExtendedInformationSequence());
+                        getViewInformation2D().getViewTime());
                     updateViewInformation(aViewInformation2D);
 
                     // process child content recursively

@@ -105,8 +105,7 @@ public:
                       const basegfx::B2DHomMatrix& rViewTransformation,
                       const basegfx::B2DRange& rViewport,
                       const css::uno::Reference<css::drawing::XDrawPage>& rxDrawPage,
-                      double fViewTime,
-                      const css::uno::Sequence<css::beans::PropertyValue>& rExtendedParameters);
+                      double fViewTime);
 
     /** Constructor: Create a ViewInformation2D
 
@@ -166,16 +165,6 @@ public:
         can be used for complete information transport over UNO API.
     */
     const css::uno::Sequence<css::beans::PropertyValue>& getViewInformationSequence() const;
-
-    /** Get the uno::Sequence< beans::PropertyValue > which contains only ViewInformation
-        not offered directly
-
-        Use this call if You only need ViewInformation which is not offered conveniently,
-        but only exists as PropertyValue. This is e.g. used to create partially updated
-        incarnations of ViewInformation2D without losing the only with PropertyValues
-        defined data. It does not contain a complete description.
-    */
-    const css::uno::Sequence<css::beans::PropertyValue>& getExtendedInformationSequence() const;
 };
 
 } // end of namespace drawinglayer::geometry

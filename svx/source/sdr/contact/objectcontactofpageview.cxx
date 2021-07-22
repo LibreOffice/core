@@ -213,8 +213,7 @@ namespace sdr::contact
                 rTargetOutDev.GetViewTransformation(),
                 aViewRange,
                 GetXDrawPageForSdrPage(GetSdrPage()),
-                fCurrentTime,
-                uno::Sequence<beans::PropertyValue>());
+                fCurrentTime);
             updateViewInformation2D(aNewViewInformation2D);
 
             drawinglayer::primitive2d::Primitive2DContainer xPrimitiveSequence;

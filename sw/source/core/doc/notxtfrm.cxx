@@ -900,8 +900,7 @@ static bool paintUsingPrimitivesHelper(
                 rOutputDevice.GetViewTransformation(),
                 rTargetRange,
                 nullptr,
-                0.0,
-                uno::Sequence< beans::PropertyValue >());
+                0.0);
 
             // get a primitive processor for rendering
             std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor2D(
