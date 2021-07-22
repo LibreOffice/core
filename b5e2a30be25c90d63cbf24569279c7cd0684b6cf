@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b726f3c2_6b10e6a3",
+        "filename": "oox/qa/unit/export.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2021-07-22T21:09:04Z",
+      "side": 1,
+      "message": "I do not like that a method, which tests individual shapes in a specific document, is implemented as general method of the class Test. You can include the method directly into the specific test. See examples in sw/qa/extras/ooxmlexport/ooxmlexport16.cxx.",
+      "revId": "b5e2a30be25c90d63cbf24569279c7cd0684b6cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b3c983f4_f2472773",
+        "filename": "oox/qa/unit/export.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2021-07-22T21:09:04Z",
+      "side": 1,
+      "message": "Why not use CPPUNIT_ASSERT_DOUBLES_EQUAL?",
+      "revId": "b5e2a30be25c90d63cbf24569279c7cd0684b6cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
