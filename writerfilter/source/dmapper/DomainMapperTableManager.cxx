@@ -30,6 +30,8 @@
 #include <rtl/math.hxx>
 #include <sal/log.hxx>
 #include <numeric>
+#include "TrackChangesHandler.hxx"
+#include <oox/token/tokens.hxx>
 
 namespace writerfilter::dmapper {
 
@@ -449,6 +451,7 @@ void DomainMapperTableManager::startLevel( )
     m_aTablePositions.push_back( pNewPositionHandler );
     // empty name will be replaced by the table style name, if it exists
     m_aTableStyleNames.push_back( OUString() );
+    m_aMoved.push_back( OUString() );
 
     TablePositionHandlerPtr pTmpPosition;
     TablePropertyMapPtr pTmpProperties( new TablePropertyMap( ) );
@@ -507,6 +510,7 @@ void DomainMapperTableManager::endLevel( )
     // in the endTable method called in endLevel.
     m_aTablePositions.pop_back();
     m_aTableStyleNames.pop_back();
+    m_aMoved.pop_back( );
     m_aParagraphsToEndTable.pop();
 }
 
@@ -727,6 +731,19 @@ void DomainMapperTableManager::endOfRowAction()
         pPropMap->dumpXml();
         TagLogger::getInstance().endElement();
 #endif
+
+        // set row insertion/deletion at tracked drag & drop of tables
+        OUString aMoved = getMoved();
+        if ( !aMoved.isEmpty() )
+        {
+            auto pTrackChangesHandler = std::make_shared<TrackChangesHandler>(
+                    aMoved == getPropertyName( PROP_TABLE_ROW_DELETE )
+                        ? oox::XML_tableRowDelete
+                        : oox::XML_tableRowInsert );
+            uno::Sequence<beans::PropertyValue> aTableRedlineProperties = pTrackChangesHandler->getRedlineProperties();
+            pPropMap->Insert( PROP_TABLE_REDLINE_PARAMS , uno::makeAny( aTableRedlineProperties ));
+        }
+
         insertRowProps(pPropMap);
     }
     else if (shouldInsertRow(pCellWidths, pTableGrid, nGrids, bIsIncompleteGrid))
