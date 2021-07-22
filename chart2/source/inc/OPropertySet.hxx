@@ -27,13 +27,10 @@
 #include <com/sun/star/beans/XMultiPropertyStates.hpp>
 #include <com/sun/star/style/XStyleSupplier.hpp>
 
-#include <memory>
+#include <map>
 
 namespace property
 {
-
-namespace impl
-{ class ImplOPropertySet; }
 
 class OPropertySet :
     public ::cppu::OBroadcastHelper,
@@ -190,12 +187,42 @@ protected:
     // using setFastPropertyValue
 
 private:
+    /** supports states DIRECT_VALUE and DEFAULT_VALUE
+     */
+    css::beans::PropertyState
+        GetPropertyStateByHandle( sal_Int32 nHandle ) const;
+
+    css::uno::Sequence< css::beans::PropertyState >
+        GetPropertyStatesByHandle( const std::vector< sal_Int32 > & aHandles ) const;
+
+    void SetPropertyToDefault( sal_Int32 nHandle );
+    void SetPropertiesToDefault( const std::vector< sal_Int32 > & aHandles );
+    void SetAllPropertiesToDefault();
+
+    /** @param rValue is set to the value for the property given in nHandle.  If
+               the property is not set, the style chain is searched for any
+               instance set there.  If there was no value found either in the
+               property set itself or any of its styles, rValue remains
+               unchanged and false is returned.
+
+        @return false if the property is default, true otherwise.
+     */
+    bool GetPropertyValueByHandle(
+        css::uno::Any & rValue,
+        sal_Int32 nHandle ) const;
+
+    void SetPropertyValueByHandle( sal_Int32 nHandle,
+                                   const css::uno::Any & rValue );
+
+    bool SetStyle( const css::uno::Reference< css::style::XStyle > & xStyle );
+
     /// reference to mutex of class deriving from here
     ::osl::Mutex &   m_rMutex;
 
-    /// pImpl idiom implementation
-    std::unique_ptr< impl::ImplOPropertySet > m_pImplProperties;
     bool m_bSetNewValuesExplicitlyEvenIfTheyEqualDefault;
+    typedef std::map< sal_Int32, css::uno::Any > tPropertyMap;
+    tPropertyMap    m_aProperties;
+    css::uno::Reference< css::style::XStyle > m_xStyle;
 };
 
 } //  namespace property
