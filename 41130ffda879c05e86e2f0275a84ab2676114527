@@ -16,6 +16,24 @@
       "revId": "41130ffda879c05e86e2f0275a84ab2676114527",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aebb9070_43d585dd",
+        "filename": "solenv/gcc-wrappers/wrapper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2021-07-22T08:51:29Z",
+      "side": 1,
+      "message": "No, there\u0027s the \"using namespace std;\" in this source file. This is mostly a stylistic change about headers, this is a source file and gcc-wrapper is even a separate tool, so I have no intention to prefix everything with std:: .",
+      "parentUuid": "7c3380d4_81ea99b0",
+      "revId": "41130ffda879c05e86e2f0275a84ab2676114527",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
