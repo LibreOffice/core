@@ -21,6 +21,7 @@
 
 #include <vector>
 #include <map>
+#include <optional>
 #include <com/sun/star/task/XPasswordContainer2.hpp>
 #include <com/sun/star/task/PasswordRequestMode.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -210,7 +211,7 @@ class PasswordContainer : public ::cppu::WeakImplHelper<
 {
 private:
     PassMap      m_aContainer;
-    std::unique_ptr<StorageItem> m_pStorageFile;
+    std::optional<StorageItem> m_xStorageFile;
     ::osl::Mutex mMutex;
     OUString m_aMasterPasswd; // master password is set when the string is not empty
     css::uno::Reference< css::lang::XComponent > mComponent;
