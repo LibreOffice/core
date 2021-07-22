@@ -905,8 +905,7 @@ void VclProcessor2D::RenderTransformPrimitive2D(
     const geometry::ViewInformation2D aViewInformation2D(
         getViewInformation2D().getObjectTransformation() * rTransformCandidate.getTransformation(),
         getViewInformation2D().getViewTransformation(), getViewInformation2D().getViewport(),
-        getViewInformation2D().getVisualizedPage(), getViewInformation2D().getViewTime(),
-        getViewInformation2D().getExtendedInformationSequence());
+        getViewInformation2D().getVisualizedPage(), getViewInformation2D().getViewTime());
     updateViewInformation(aViewInformation2D);
 
     // process content
@@ -928,8 +927,7 @@ void VclProcessor2D::RenderPagePreviewPrimitive2D(
     const geometry::ViewInformation2D aViewInformation2D(
         getViewInformation2D().getObjectTransformation(),
         getViewInformation2D().getViewTransformation(), getViewInformation2D().getViewport(),
-        rPagePreviewCandidate.getXDrawPage(), getViewInformation2D().getViewTime(),
-        getViewInformation2D().getExtendedInformationSequence());
+        rPagePreviewCandidate.getXDrawPage(), getViewInformation2D().getViewTime());
     updateViewInformation(aViewInformation2D);
 
     // process decomposed content

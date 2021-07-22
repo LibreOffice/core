@@ -2308,8 +2308,7 @@ void VclMetafileProcessor2D::processTransparencePrimitive2D(
             // except new transformation and range
             const geometry::ViewInformation2D aViewInfo(
                 getViewInformation2D().getObjectTransformation(), aViewTransform, aViewRange,
-                getViewInformation2D().getVisualizedPage(), getViewInformation2D().getViewTime(),
-                getViewInformation2D().getExtendedInformationSequence());
+                getViewInformation2D().getVisualizedPage(), getViewInformation2D().getViewTime());
 
             VclPixelProcessor2D aBufferProcessor(aViewInfo, *aBufferDevice);
 
@@ -2426,8 +2425,7 @@ VclMetafileProcessor2D::CreateBufferDevice(const basegfx::B2DRange& rCandidateRa
         // except new transformation and range
         rViewInfo = geometry::ViewInformation2D(
             getViewInformation2D().getObjectTransformation(), aViewTransform, aViewRange,
-            getViewInformation2D().getVisualizedPage(), getViewInformation2D().getViewTime(),
-            getViewInformation2D().getExtendedInformationSequence());
+            getViewInformation2D().getVisualizedPage(), getViewInformation2D().getViewTime());
     }
     else
         pBufferDevice.disposeAndClear();
