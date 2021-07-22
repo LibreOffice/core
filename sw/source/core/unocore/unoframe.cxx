@@ -879,9 +879,10 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
         {
             rSizeFound = false;
             SwFormatFrameSize aFrameSz;
+            constexpr sal_Int32 constTwips_1cm = o3tl::toTwips(1, o3tl::Length::cm);
             awt::Size aSize;
-            aSize.Width = 2 * MM50;
-            aSize.Height = 2 * MM50;
+            aSize.Width = constTwips_1cm;
+            aSize.Height = constTwips_1cm;
             ::uno::Any aSizeVal;
             aSizeVal <<= aSize;
             static_cast<SfxPoolItem&>(aFrameSz).PutValue(aSizeVal, MID_FRMSIZE_SIZE|CONVERT_TWIPS);

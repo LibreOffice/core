@@ -52,7 +52,7 @@ const SwLineNumberInfo& SwDoc::GetLineNumberInfo() const
 }
 
 SwLineNumberInfo::SwLineNumberInfo() :
-    m_nPosFromLeft( MM50 ),
+    m_nPosFromLeft(o3tl::toTwips(5, o3tl::Length::mm)),
     m_nCountBy( 5 ),
     m_nDividerCountBy( 3 ),
     m_ePos( LINENUMBER_POS_LEFT ),

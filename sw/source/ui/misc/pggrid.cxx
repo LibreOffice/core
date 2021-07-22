@@ -35,11 +35,13 @@
 #include <swmodule.hxx>
 #include <view.hxx>
 
+constexpr tools::Long constTwips_5mm = o3tl::toTwips(5, o3tl::Length::mm);
+
 SwTextGridPage::SwTextGridPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet &rSet)
     : SfxTabPage(pPage, pController, "modules/swriter/ui/textgridpage.ui", "TextGridPage", &rSet)
     , m_nRubyUserValue(0)
     , m_bRubyUserValue(false)
-    , m_aPageSize(MM50, MM50)
+    , m_aPageSize(constTwips_5mm, constTwips_5mm)
     , m_bVertical(false)
     , m_bSquaredMode(false)
     , m_bHRulerChanged(false)

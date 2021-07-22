@@ -1669,9 +1669,9 @@ SwFormat* DocumentStylePoolManager::GetFormatFromPool( sal_uInt16 nId )
             aSet.Put( SwFormatVertOrient( 0, text::VertOrientation::TOP, text::RelOrientation::FRAME ));
             aSet.Put( SwFormatSurround( css::text::WrapTextMode_PARALLEL ));
             // Set the default width to 3.5 cm, use the minimum value for the height
-            aSet.Put( SwFormatFrameSize( SwFrameSize::Minimum,
-                    o3tl::convert(35, o3tl::Length::mm, o3tl::Length::twip),
-                    MM50 ));
+            aSet.Put(SwFormatFrameSize(SwFrameSize::Minimum,
+                                       o3tl::toTwips(35, o3tl::Length::mm),
+                                       o3tl::toTwips(5, o3tl::Length::mm)));
         }
         break;
     case RES_POOLFRM_WATERSIGN:

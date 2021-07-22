@@ -83,11 +83,12 @@
 
 using namespace com::sun::star;
 
-#define HTML_DFLT_EMBED_WIDTH ((MM50*5)/2)
-#define HTML_DFLT_EMBED_HEIGHT ((MM50*5)/2)
 
-#define HTML_DFLT_APPLET_WIDTH ((MM50*5)/2)
-#define HTML_DFLT_APPLET_HEIGHT ((MM50*5)/2)
+#define HTML_DFLT_EMBED_WIDTH (o3tl::toTwips(125, o3tl::Length::mm10))
+#define HTML_DFLT_EMBED_HEIGHT (o3tl::toTwips(125, o3tl::Length::mm10))
+
+#define HTML_DFLT_APPLET_WIDTH (o3tl::toTwips(125, o3tl::Length::mm10))
+#define HTML_DFLT_APPLET_HEIGHT (o3tl::toTwips(125, o3tl::Length::mm10))
 
 
 const HtmlFrmOpts HTML_FRMOPTS_EMBED_ALL      =
