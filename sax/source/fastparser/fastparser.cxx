@@ -37,6 +37,8 @@
 #include <sal/log.hxx>
 #include <salhelper/thread.hxx>
 #include <tools/diagnose_ex.h>
+#include <comphelper/threadpool.hxx>
+#include <boost/optional.hpp>
 
 #include <queue>
 #include <memory>
@@ -184,7 +186,7 @@ struct Entity : public ParserData
     /* Context for main thread consuming events.
      * startElement() stores the data, which characters() and endElement() uses
      */
-    std::stack< SaxContext, std::vector<SaxContext> >  maContextStack;
+    std::vector<SaxContext>                            maContextStack;
     // Determines which elements of maNamespaceDefines are valid in current context
     std::stack< sal_uInt32, std::vector<sal_uInt32> >  maNamespaceCount;
     std::vector< NamespaceDefine >                     maNamespaceDefines;
@@ -421,15 +423,15 @@ void Entity::startElement( Event const *pEvent )
     XFastContextHandler *pParentContext = nullptr;
     if( !maContextStack.empty() )
     {
-        pParentContext = maContextStack.top().mxContext.get();
+        pParentContext = maContextStack.back().mxContext.get();
         if( !pParentContext )
         {
-            maContextStack.push( SaxContext(nElementToken, aNamespace, aElementName) );
+            maContextStack.push_back( SaxContext(nElementToken, aNamespace, aElementName) );
             return;
         }
     }
 
-    maContextStack.push( SaxContext( nElementToken, aNamespace, aElementName ) );
+    maContextStack.push_back( SaxContext( nElementToken, aNamespace, aElementName ) );
 
     try
     {
@@ -468,7 +470,7 @@ void Entity::startElement( Event const *pEvent )
                 xContext->startFastElement( nElementToken, xAttr );
         }
         // swap the reference we own in to avoid referencing thrash.
-        maContextStack.top().mxContext = std::move( xContext );
+        maContextStack.back().mxContext = std::move( xContext );
     }
     catch (...)
     {
@@ -484,7 +486,7 @@ void Entity::characters( const OUString& sChars )
         return;
     }
 
-    XFastContextHandler * pContext( maContextStack.top().mxContext.get() );
+    XFastContextHandler * pContext( maContextStack.back().mxContext.get() );
     if( pContext ) try
     {
         pContext->characters( sChars );
@@ -503,7 +505,7 @@ void Entity::endElement()
         return;
     }
 
-    const SaxContext& aContext = maContextStack.top();
+    const SaxContext& aContext = maContextStack.back();
     XFastContextHandler* pContext( aContext.mxContext.get() );
     if( pContext )
         try
@@ -518,7 +520,34 @@ void Entity::endElement()
         {
             saveException( ::cppu::getCaughtException() );
         }
-    maContextStack.pop();
+    if (maContextStack.size() > 1)
+        maContextStack.pop_back();
+    else
+    {
+        // Improve perceived performance - for large documents,
+        // when we destroy the last context, it can trigger a large
+        // amount of work, unwinding a large object graph. So
+        // check if we are handling the last item here, and push
+        // that work onto the shared thread pool. Which means
+        // the user sees a working document a few 100ms faster.
+        auto xContext = std::move(maContextStack.back());
+        maContextStack.pop_back();
+        struct Executor : public comphelper::ThreadTask
+        {
+            boost::optional<SaxContext> mxContext;
+            Executor(std::shared_ptr<comphelper::ThreadTaskTag> const & rTag,
+                     SaxContext aContext)
+                : comphelper::ThreadTask(rTag),
+                  mxContext(std::move(aContext)) {}
+            virtual void doWork() override
+            {
+                mxContext.reset();
+            }
+        };
+        std::shared_ptr<comphelper::ThreadTaskTag> aTag = comphelper::ThreadPool::createThreadTaskTag();
+        auto pExecutor = std::make_unique<Executor>(aTag, std::move(xContext));
+        comphelper::ThreadPool::getSharedOptimalPool().pushTask(std::move(pExecutor));
+    }
 }
 
 void Entity::processingInstruction( const OUString& rTarget, const OUString& rData )
