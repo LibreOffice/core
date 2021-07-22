@@ -865,6 +865,12 @@ OUString lcl_convertFontWeight(double fontWeight)
 
 QString Qt5AccessibleWidget::attributes(int offset, int* startOffset, int* endOffset) const
 {
+    if (startOffset == nullptr || endOffset == nullptr)
+        return QString();
+
+    *startOffset = -1;
+    *endOffset = -1;
+
     Reference<XAccessibleText> xText(m_xAccessible, UNO_QUERY);
     if (!xText.is())
         return QString();
@@ -879,11 +885,7 @@ QString Qt5AccessibleWidget::attributes(int offset, int* startOffset, int* endOf
         offset = nTextLength - 1;
 
     if (offset < 0 || offset > nTextLength)
-    {
-        *startOffset = -1;
-        *endOffset = -1;
         return QString();
-    }
 
     const Sequence<PropertyValue> attribs
         = xText->getCharacterAttributes(offset, Sequence<OUString>());
@@ -915,6 +917,7 @@ QString Qt5AccessibleWidget::attributes(int offset, int* startOffset, int* endOf
     *endOffset = offset + 1;
     return toQString(aRet);
 }
+
 int Qt5AccessibleWidget::characterCount() const
 {
     Reference<XAccessibleText> xText(m_xAccessible, UNO_QUERY);
