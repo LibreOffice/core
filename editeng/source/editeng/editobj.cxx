@@ -309,7 +309,7 @@ EditTextObjectImpl::EditTextObjectImpl( const EditTextObjectImpl& r )
     if ( !r.mbOwnerOfPool )
     {
         // reuse alien pool; this must be an EditEngineItemPool
-        // since there is no other way to construct a BinTextObject
+        // since there is no other way to construct an EditTextObject
         // than it's regular constructor where that is ensured
         mpPool = r.mpPool;
         mbOwnerOfPool = false;
