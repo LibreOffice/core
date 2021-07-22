@@ -7880,6 +7880,23 @@ SfxVoidItem RemoveTextBox FN_REMOVE_TEXT_BOX
     GroupId = SfxGroupId::Drawing;
 ]
 
+SfxVoidItem OpenLocalURL FN_OPEN_LOCAL_URL
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = TRUE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Navigator;
+]
+
 SfxUInt16Item JumpToSpecificPage SID_JUMP_TO_SPECIFIC_PAGE
 ( SfxUInt16Item JumpToSpecificPage SID_JUMP_TO_SPECIFIC_PAGE )
 [

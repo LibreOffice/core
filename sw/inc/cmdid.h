@@ -495,6 +495,7 @@
 #define FN_CHANGE_PAGENUM           (FN_EXTRA + 34)   /* change page numbers*/
 #define FN_ADD_TEXT_BOX             (FN_EXTRA + 35)   /* add text box to draw shape */
 #define FN_REMOVE_TEXT_BOX          (FN_EXTRA + 36)   /* remove text box of draw shape */
+#define FN_OPEN_LOCAL_URL           (FN_EXTRA + 37)   /* open local copy for bibliography */
 
 //  Region: Glossary
 
