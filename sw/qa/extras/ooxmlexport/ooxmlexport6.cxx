@@ -1047,6 +1047,38 @@ DECLARE_OOXMLEXPORT_TEST(testRelativeAlignmentFromTopMargin,
     assertXPath(pXmlDoc, "//anchored/SwAnchoredDrawObject[3]/bounds", "top", "313");  // top
 }
 
+// Fix is provided by b33634a5c07c8f7032967d8e939100a50e0152ae
+DECLARE_OOXMLEXPORT_TEST(testTdf122966, "mini-map.docx")
+{
+    // One group, two shapes inside it
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+    uno::Reference<drawing::XShape> map = getShape(1);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(7731), map->getSize().Height);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(12300), map->getSize().Width);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2267), map->getPosition().X);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-11), map->getPosition().Y);
+
+    // Group
+    uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
+
+    // Shape 1
+    uno::Reference<drawing::XShape> xShape0(xGroup->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(7731), xShape0->getSize().Height);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(12300), xShape0->getSize().Width);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2267), xShape0->getPosition().X);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-11), xShape0->getPosition().Y);
+
+    // Shape 2, had problems before fix
+    uno::Reference<drawing::XShape> xShape(xGroup->getByIndex(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(7659), xShape->getSize().Height);
+    // Fails without the fix: Expected: 12300, Actual: 10386
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(12300), xShape->getSize().Width);
+    // Fails without the fix: Expected: 2267, Actual: 4181
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2267), xShape->getPosition().X);
+    // Fails without the fix: Expected: 24, Actual: 12
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(24), xShape->getPosition().Y);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
