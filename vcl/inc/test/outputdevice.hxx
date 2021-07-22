@@ -86,7 +86,7 @@ public:
     static TestResult checkLineJoinRound(Bitmap& rBitmap) { return checkLineJoin(rBitmap, basegfx::B2DLineJoin::Round); }
     static TestResult checkLineJoinMiter(Bitmap& rBitmap) { return checkLineJoin(rBitmap, basegfx::B2DLineJoin::Miter); }
     static TestResult checkLineJoinNone(Bitmap& rBitmap) { return checkLineJoin(rBitmap, basegfx::B2DLineJoin::NONE); }
-    static TestResult checkDropShape(Bitmap& rBitmap);
+    static TestResult checkDropShape(Bitmap& rBitmap, bool bEnableAA = false);
     static TestResult checkHalfEllipse(Bitmap& rBitmap);
     static TestResult checkClosedBezier(Bitmap& rBitmap);
     static TestResult checkFilledAsymmetricalDropShape(Bitmap& rBitmap);
@@ -103,16 +103,19 @@ class VCL_DLLPUBLIC OutputDeviceTestBitmap : public OutputDeviceTestCommon
 public:
     OutputDeviceTestBitmap() = default;
 
-    Bitmap setupDrawTransformedBitmap();
-    Bitmap setupDrawBitmap();
-    Bitmap setupDrawBitmapExWithAlpha();
-    Bitmap setupDrawMask();
-    BitmapEx setupDrawBlend();
+    Bitmap setupDrawTransformedBitmap(vcl::PixelFormat aBitmapFormat,
+                                      bool isBitmapGreyScale = false);
+    Bitmap setupDrawBitmap(vcl::PixelFormat aBitmapFormat, bool isBitmapGreyScale = false);
+    Bitmap setupDrawBitmapExWithAlpha(vcl::PixelFormat aBitmapFormat);
+    Bitmap setupDrawMask(vcl::PixelFormat aBitmapFormat);
+    BitmapEx setupDrawBlend(vcl::PixelFormat aBitmapFormat);
 
     static TestResult checkTransformedBitmap(Bitmap& rBitmap);
     static TestResult checkBitmapExWithAlpha(Bitmap& rBitmap);
     static TestResult checkMask(Bitmap& rBitmap);
     static TestResult checkBlend(const BitmapEx& rBitmap);
+
+    static TestResult checkTransformedBitmap8bppGreyScale(Bitmap& rBitmap);
 };
 
 class VCL_DLLPUBLIC OutputDeviceTestAnotherOutDev : public OutputDeviceTestCommon

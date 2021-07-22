@@ -13,6 +13,9 @@
 #include <vcl/test/GraphicsRenderTests.hxx>
 #include <tools/stream.hxx>
 
+#include <svdata.hxx>
+#include <salinst.hxx>
+
 #include <unordered_map>
 
 #define SHOULD_ASSERT                                                                              \
@@ -31,6 +34,11 @@ void exportBitmapExToImage(OUString const& rImageName, BitmapEx& rBitmapEx)
     aBitmapEx.Scale(Size(500, 500), BmpScaleFlag::Fast);
     SvFileStream aStream(rImageName, StreamMode::WRITE | StreamMode::TRUNC);
     GraphicFilter::GetGraphicFilter().compressAsPNG(aBitmapEx, aStream);
+}
+bool is32bppSupported()
+{
+    auto pBackendCapabilities = ImplGetSVData()->mpDefInst->GetBackendCapabilities();
+    return pBackendCapabilities->mbSupportsBitmap32;
 }
 }
 
@@ -668,7 +676,7 @@ void GraphicsRenderTests::testDrawDropShapeAAWithPolyline()
     }
     vcl::test::TestResult eResult
         = vcl::test::OutputDeviceTestCommon::checkDropShape(aBitmap, true);
-    appendTestResult(atestName, returnTestStatus(eResult),
+    appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
     {
@@ -749,7 +757,7 @@ void GraphicsRenderTests::testDrawDropShapeAAWithPolygon()
     }
     vcl::test::TestResult eResult
         = vcl::test::OutputDeviceTestCommon::checkDropShape(aBitmap, true);
-    appendTestResult(atestName, returnTestStatus(eResult),
+    appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
     {
@@ -758,11 +766,11 @@ void GraphicsRenderTests::testDrawDropShapeAAWithPolygon()
     }
 }
 
-void GraphicsRenderTests::testDrawBitmap()
+void GraphicsRenderTests::testDrawBitmap24bpp()
 {
     vcl::test::OutputDeviceTestBitmap aOutDevTest;
-    Bitmap aBitmap = aOutDevTest.setupDrawBitmap();
-    OUString aTestName = "testDrawBitmap";
+    Bitmap aBitmap = aOutDevTest.setupDrawBitmap(vcl::PixelFormat::N24_BPP);
+    OUString aTestName = "testDrawBitmap24bpp";
     if (!SHOULD_ASSERT)
     {
         appendTestResult(aTestName, "SKIPPED");
@@ -779,11 +787,11 @@ void GraphicsRenderTests::testDrawBitmap()
     }
 }
 
-void GraphicsRenderTests::testDrawTransformedBitmap()
+void GraphicsRenderTests::testDrawTransformedBitmap24bpp()
 {
     vcl::test::OutputDeviceTestBitmap aOutDevTest;
-    Bitmap aBitmap = aOutDevTest.setupDrawTransformedBitmap();
-    OUString aTestName = "testDrawTransformedBitmap";
+    Bitmap aBitmap = aOutDevTest.setupDrawTransformedBitmap(vcl::PixelFormat::N24_BPP);
+    OUString aTestName = "testDrawTransformedBitmap24bpp";
     if (!SHOULD_ASSERT)
     {
         appendTestResult(aTestName, "SKIPPED");
@@ -800,11 +808,11 @@ void GraphicsRenderTests::testDrawTransformedBitmap()
     }
 }
 
-void GraphicsRenderTests::testDrawBitmapExWithAlpha()
+void GraphicsRenderTests::testDrawBitmapExWithAlpha24bpp()
 {
     vcl::test::OutputDeviceTestBitmap aOutDevTest;
-    Bitmap aBitmap = aOutDevTest.setupDrawBitmapExWithAlpha();
-    OUString aTestName = "testDrawBitmapExWithAlpha";
+    Bitmap aBitmap = aOutDevTest.setupDrawBitmapExWithAlpha(vcl::PixelFormat::N24_BPP);
+    OUString aTestName = "testDrawBitmapExWithAlpha24bpp";
     if (!SHOULD_ASSERT)
     {
         appendTestResult(aTestName, "SKIPPED");
@@ -821,11 +829,11 @@ void GraphicsRenderTests::testDrawBitmapExWithAlpha()
     }
 }
 
-void GraphicsRenderTests::testDrawMask()
+void GraphicsRenderTests::testDrawMask24bpp()
 {
     vcl::test::OutputDeviceTestBitmap aOutDevTest;
-    Bitmap aBitmap = aOutDevTest.setupDrawMask();
-    OUString aTestName = "testDrawMask";
+    Bitmap aBitmap = aOutDevTest.setupDrawMask(vcl::PixelFormat::N24_BPP);
+    OUString aTestName = "testDrawMask24bpp";
     if (!SHOULD_ASSERT)
     {
         appendTestResult(aTestName, "SKIPPED");
@@ -841,11 +849,11 @@ void GraphicsRenderTests::testDrawMask()
     }
 }
 
-void GraphicsRenderTests::testDrawBlend()
+void GraphicsRenderTests::testDrawBlend24bpp()
 {
     vcl::test::OutputDeviceTestBitmap aOutDevTest;
-    BitmapEx aBitmapEx = aOutDevTest.setupDrawBlend();
-    OUString aTestName = "testDrawBlend";
+    BitmapEx aBitmapEx = aOutDevTest.setupDrawBlend(vcl::PixelFormat::N24_BPP);
+    OUString aTestName = "testDrawBlend24bpp";
     if (!SHOULD_ASSERT)
     {
         appendTestResult(aTestName, "SKIPPED");
@@ -1467,6 +1475,150 @@ void GraphicsRenderTests::testEvenOddRuleInIntersectingRectsWithPolyPolygonB2D()
     }
 }
 
+void GraphicsRenderTests::testDrawBitmap8bppGreyScale()
+{
+    vcl::test::OutputDeviceTestBitmap aOutDevTest;
+    Bitmap aBitmap = aOutDevTest.setupDrawBitmap(vcl::PixelFormat::N8_BPP, true);
+    OUString aTestName = "testDrawBitmap8bppGreyScale";
+    if (!SHOULD_ASSERT)
+    {
+        appendTestResult(aTestName, "SKIPPED");
+        return;
+    }
+    vcl::test::TestResult eResult
+        = vcl::test::OutputDeviceTestBitmap::checkTransformedBitmap8bppGreyScale(aBitmap);
+    appendTestResult(aTestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        BitmapEx aBitmapEx(aBitmap);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
+    }
+}
+
+void GraphicsRenderTests::testDrawTransformedBitmap8bppGreyScale()
+{
+    vcl::test::OutputDeviceTestBitmap aOutDevTest;
+    Bitmap aBitmap = aOutDevTest.setupDrawTransformedBitmap(vcl::PixelFormat::N8_BPP, true);
+    OUString aTestName = "testDrawTransformedBitmap8bppGreyScale";
+    if (!SHOULD_ASSERT)
+    {
+        appendTestResult(aTestName, "SKIPPED");
+        return;
+    }
+    vcl::test::TestResult eResult
+        = vcl::test::OutputDeviceTestBitmap::checkTransformedBitmap8bppGreyScale(aBitmap);
+    appendTestResult(aTestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        BitmapEx aBitmapEx(aBitmap);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
+    }
+}
+
+void GraphicsRenderTests::testDrawBitmap32bpp()
+{
+    vcl::test::OutputDeviceTestBitmap aOutDevTest;
+    Bitmap aBitmap = aOutDevTest.setupDrawBitmap(vcl::PixelFormat::N32_BPP);
+    OUString aTestName = "testDrawBitmap32bpp";
+    if (!SHOULD_ASSERT || !is32bppSupported())
+    {
+        appendTestResult(aTestName, "SKIPPED");
+        return;
+    }
+    vcl::test::TestResult eResult
+        = vcl::test::OutputDeviceTestBitmap::checkTransformedBitmap(aBitmap);
+    appendTestResult(aTestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        BitmapEx aBitmapEx(aBitmap);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
+    }
+}
+
+void GraphicsRenderTests::testDrawTransformedBitmap32bpp()
+{
+    vcl::test::OutputDeviceTestBitmap aOutDevTest;
+    Bitmap aBitmap = aOutDevTest.setupDrawTransformedBitmap(vcl::PixelFormat::N32_BPP);
+    OUString aTestName = "testDrawTransformedBitmap32bpp";
+    if (!SHOULD_ASSERT || !is32bppSupported())
+    {
+        appendTestResult(aTestName, "SKIPPED");
+        return;
+    }
+    vcl::test::TestResult eResult
+        = vcl::test::OutputDeviceTestBitmap::checkTransformedBitmap(aBitmap);
+    appendTestResult(aTestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        BitmapEx aBitmapEx(aBitmap);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
+    }
+}
+
+void GraphicsRenderTests::testDrawBitmapExWithAlpha32bpp()
+{
+    vcl::test::OutputDeviceTestBitmap aOutDevTest;
+    Bitmap aBitmap = aOutDevTest.setupDrawBitmapExWithAlpha(vcl::PixelFormat::N32_BPP);
+    OUString aTestName = "testDrawBitmapExWithAlpha32bpp";
+    if (!SHOULD_ASSERT || !is32bppSupported())
+    {
+        appendTestResult(aTestName, "SKIPPED");
+        return;
+    }
+    vcl::test::TestResult eResult
+        = vcl::test::OutputDeviceTestBitmap::checkBitmapExWithAlpha(aBitmap);
+    appendTestResult(aTestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        BitmapEx aBitmapEx(aBitmap);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
+    }
+}
+
+void GraphicsRenderTests::testDrawMask32bpp()
+{
+    vcl::test::OutputDeviceTestBitmap aOutDevTest;
+    Bitmap aBitmap = aOutDevTest.setupDrawMask(vcl::PixelFormat::N32_BPP);
+    OUString aTestName = "testDrawMask32bpp";
+    if (!SHOULD_ASSERT || !is32bppSupported())
+    {
+        appendTestResult(aTestName, "SKIPPED");
+        return;
+    }
+    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestBitmap::checkMask(aBitmap);
+    appendTestResult(aTestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        BitmapEx aBitmapEx(aBitmap);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
+    }
+}
+
+void GraphicsRenderTests::testDrawBlend32bpp()
+{
+    vcl::test::OutputDeviceTestBitmap aOutDevTest;
+    BitmapEx aBitmapEx = aOutDevTest.setupDrawBlend(vcl::PixelFormat::N32_BPP);
+    OUString aTestName = "testDrawBlend32bpp";
+    if (!SHOULD_ASSERT || !is32bppSupported())
+    {
+        appendTestResult(aTestName, "SKIPPED");
+        return;
+    }
+    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestBitmap::checkBlend(aBitmapEx);
+    appendTestResult(aTestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmapEx.GetBitmap() : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
+    }
+}
+
 void GraphicsRenderTests::runALLTests()
 {
     testDrawRectWithRectangle();
@@ -1498,11 +1650,11 @@ void GraphicsRenderTests::runALLTests()
     testDrawInvertTrackFrameWithRectangle();
     testDrawBezierWithPolylineB2D();
     testDrawBezierAAWithPolylineB2D();
-    testDrawBitmap();
-    testDrawTransformedBitmap();
-    testDrawBitmapExWithAlpha();
-    testDrawMask();
-    testDrawBlend();
+    testDrawBitmap24bpp();
+    testDrawTransformedBitmap24bpp();
+    testDrawBitmapExWithAlpha24bpp();
+    testDrawMask24bpp();
+    testDrawBlend24bpp();
     testDrawXor();
     testClipRectangle();
     testClipPolygon();
@@ -1537,6 +1689,13 @@ void GraphicsRenderTests::runALLTests()
     testTextDrawing();
     testEvenOddRuleInIntersectingRectsWithPolyPolygon();
     testEvenOddRuleInIntersectingRectsWithPolyPolygonB2D();
+    testDrawBitmap8bppGreyScale();
+    testDrawTransformedBitmap8bppGreyScale();
+    testDrawBitmap32bpp();
+    testDrawTransformedBitmap32bpp();
+    testDrawBitmapExWithAlpha32bpp();
+    testDrawMask32bpp();
+    testDrawBlend32bpp();
 }
 
 void GraphicsRenderTests::appendTestResult(OUString aTestName, OUString aTestStatus,
