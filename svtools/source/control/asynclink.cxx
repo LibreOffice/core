@@ -31,14 +31,14 @@ namespace svtools {
 void AsynchronLink::Call( void* pObj, bool bAllowDoubles )
 {
     SAL_INFO_IF( !_bInCall, "svtools", "Recursives Call. Eher ueber Timer. TLX Fragen" ); // Do NOT translate. This is a valuable historical artefact.
-    if( _aLink.IsSet() )
-    {
-        _pArg = pObj;
-        DBG_ASSERT( bAllowDoubles ||  !_nEventId, "Already made a call" );
-        ClearPendingCall();
-        std::lock_guard aGuard(_aMutex);
-        _nEventId = Application::PostUserEvent( LINK( this, AsynchronLink, HandleCall_PostUserEvent) );
-    }
+    if( !_aLink.IsSet() )
+        return;
+
+    _pArg = pObj;
+    DBG_ASSERT( bAllowDoubles ||  !_nEventId, "Already made a call" );
+    ClearPendingCall();
+    std::lock_guard aGuard(_aMutex);
+    _nEventId = Application::PostUserEvent( LINK( this, AsynchronLink, HandleCall_PostUserEvent) );
 }
 
 AsynchronLink::~AsynchronLink()
@@ -47,23 +47,8 @@ AsynchronLink::~AsynchronLink()
     {
         Application::RemoveUserEvent( _nEventId );
     }
-    if( _pDeleted ) *_pDeleted = true;
-}
-
-IMPL_LINK_NOARG( AsynchronLink, HandleCall_Idle, Timer*, void )
-{
-    {
-        std::lock_guard aGuard(_aMutex);
-        _nEventId = nullptr;
-        // need to release the lock before calling the client since
-        // the client may call back into us
-    }
-    Call_Impl( _pArg );
-}
-
-IMPL_LINK_NOARG( AsynchronLink, HandleCall_PostUserEvent, void*, void )
-{
-    HandleCall_Idle(nullptr);
+    if( _pDeleted )
+        *_pDeleted = true;
 }
 
 void AsynchronLink::ClearPendingCall()
@@ -76,12 +61,22 @@ void AsynchronLink::ClearPendingCall()
     }
 }
 
-void AsynchronLink::Call_Impl( void* pArg )
+IMPL_LINK_NOARG( AsynchronLink, HandleCall_PostUserEvent, void*, void )
 {
+    {
+        std::lock_guard aGuard(_aMutex);
+        _nEventId = nullptr;
+        // need to release the lock before calling the client since
+        // the client may call back into us
+    }
     _bInCall = true;
+
+    // some fancy footwork in case we get deleted inside the call
     bool bDeleted = false;
     _pDeleted = &bDeleted;
-    _aLink.Call( pArg );
+
+    _aLink.Call( _pArg );
+
     if( !bDeleted )
     {
         _bInCall = false;
