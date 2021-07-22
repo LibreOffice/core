@@ -10,6 +10,7 @@
 #ifndef INCLUDED_PACKAGE_SOURCE_ZIPAPI_XBUFFEREDTHREADEDSTREAM_HXX
 #define INCLUDED_PACKAGE_SOURCE_ZIPAPI_XBUFFEREDTHREADEDSTREAM_HXX
 
+#include <comphelper/threadpool.hxx>
 #include <salhelper/thread.hxx>
 #include "XUnbufferedStream.hxx"
 #include <queue>
@@ -31,7 +32,7 @@ private:
     std::queue < Buffer > maPendingBuffers;                 /// Buffers that are available for use
     std::queue < Buffer > maUsedBuffers;
 
-    rtl::Reference< salhelper::Thread > mxUnzippingThread;
+    std::shared_ptr< comphelper::ThreadTaskTag > mxUnzippingTaskTag;
     std::mutex maBufferProtector;                           /// mutex protecting Buffer queues.
     std::condition_variable maBufferConsumeResume;
     std::condition_variable maBufferProduceResume;
