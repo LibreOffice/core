@@ -42,64 +42,64 @@
 #define PERSISTENT_RECORD     1
 
 
-class NamePassRecord
+class NamePasswordRecord
 {
-    OUString                                       m_aName;
+    OUString                    m_aName;
 
     // there are two lists of passwords, memory passwords and persistent passwords
-    bool                                                  m_bHasMemPass;
-    ::std::vector< OUString >                      m_aMemPass;
+    bool                        m_bHasMemoryPasswords;
+    ::std::vector< OUString >   m_aMemoryPasswords;
 
     // persistent passwords are encrypted in one string
-    bool                                                  m_bHasPersPass;
-    OUString                                       m_aPersPass;
+    bool                        m_bHasPersistentPassword;
+    OUString                    m_aPersistentPassword;
 
     void InitArrays( bool bHasMemoryList, const ::std::vector< OUString >& aMemoryList,
                      bool bHasPersistentList, const OUString& aPersistentList )
     {
-        m_bHasMemPass = bHasMemoryList;
+        m_bHasMemoryPasswords = bHasMemoryList;
         if ( bHasMemoryList )
-            m_aMemPass = aMemoryList;
+            m_aMemoryPasswords = aMemoryList;
 
-        m_bHasPersPass = bHasPersistentList;
+        m_bHasPersistentPassword = bHasPersistentList;
         if ( bHasPersistentList )
-            m_aPersPass = aPersistentList;
+            m_aPersistentPassword = aPersistentList;
     }
 
 public:
 
-    NamePassRecord( const OUString& aName )
+    NamePasswordRecord( const OUString& aName )
         : m_aName( aName )
-        , m_bHasMemPass( false )
-        , m_bHasPersPass( false )
+        , m_bHasMemoryPasswords( false )
+        , m_bHasPersistentPassword( false )
     {
     }
 
-    NamePassRecord( const OUString& aName, const OUString& aPersistentList )
+    NamePasswordRecord( const OUString& aName, const OUString& aPersistentList )
         : m_aName( aName )
-        , m_bHasMemPass( false )
-        , m_bHasPersPass( true )
-        , m_aPersPass( aPersistentList )
+        , m_bHasMemoryPasswords( false )
+        , m_bHasPersistentPassword( true )
+        , m_aPersistentPassword( aPersistentList )
     {
     }
 
-    NamePassRecord( const NamePassRecord& aRecord )
+    NamePasswordRecord( const NamePasswordRecord& aRecord )
         : m_aName( aRecord.m_aName )
-        , m_bHasMemPass( false )
-        , m_bHasPersPass( false )
+        , m_bHasMemoryPasswords( false )
+        , m_bHasPersistentPassword( false )
     {
-        InitArrays( aRecord.m_bHasMemPass, aRecord.m_aMemPass, aRecord.m_bHasPersPass, aRecord.m_aPersPass );
+        InitArrays( aRecord.m_bHasMemoryPasswords, aRecord.m_aMemoryPasswords, aRecord.m_bHasPersistentPassword, aRecord.m_aPersistentPassword );
     }
 
-    NamePassRecord& operator=( const NamePassRecord& aRecord )
+    NamePasswordRecord& operator=( const NamePasswordRecord& aRecord )
     {
         if (this != &aRecord)
         {
             m_aName = aRecord.m_aName;
 
-            m_aMemPass.clear();
-            m_aPersPass.clear();
-            InitArrays( aRecord.m_bHasMemPass, aRecord.m_aMemPass, aRecord.m_bHasPersPass, aRecord.m_aPersPass );
+            m_aMemoryPasswords.clear();
+            m_aPersistentPassword.clear();
+            InitArrays( aRecord.m_bHasMemoryPasswords, aRecord.m_aMemoryPasswords, aRecord.m_bHasPersistentPassword, aRecord.m_aPersistentPassword );
         }
         return *this;
     }
@@ -112,60 +112,60 @@ public:
     bool HasPasswords( sal_Int8 nStatus ) const
     {
         if ( nStatus == MEMORY_RECORD )
-            return m_bHasMemPass;
+            return m_bHasMemoryPasswords;
         if ( nStatus == PERSISTENT_RECORD )
-            return m_bHasPersPass;
+            return m_bHasPersistentPassword;
 
         return false;
     }
 
-    ::std::vector< OUString > GetMemPasswords() const
+    ::std::vector< OUString > GetMemoryPasswords() const
     {
-        if ( m_bHasMemPass )
-            return m_aMemPass;
+        if ( m_bHasMemoryPasswords )
+            return m_aMemoryPasswords;
 
         return ::std::vector< OUString >();
     }
 
-    OUString GetPersPasswords() const
+    OUString GetPersistentPasswords() const
     {
-        if ( m_bHasPersPass )
-            return m_aPersPass;
+        if ( m_bHasPersistentPassword )
+            return m_aPersistentPassword;
 
         return OUString();
     }
 
-    void SetMemPasswords( const ::std::vector< OUString >& aMemList )
+    void SetMemoryPasswords( const ::std::vector< OUString >& aMemList )
     {
-        m_aMemPass = aMemList;
-        m_bHasMemPass = true;
+        m_aMemoryPasswords = aMemList;
+        m_bHasMemoryPasswords = true;
     }
 
-    void SetPersPasswords( const OUString& aPersList )
+    void SetPersistentPasswords( const OUString& aPersList )
     {
-        m_aPersPass = aPersList;
-        m_bHasPersPass = true;
+        m_aPersistentPassword = aPersList;
+        m_bHasPersistentPassword = true;
     }
 
     void RemovePasswords( sal_Int8 nStatus )
     {
         if ( nStatus == MEMORY_RECORD )
         {
-            m_bHasMemPass = false;
-            m_aMemPass.clear();
+            m_bHasMemoryPasswords = false;
+            m_aMemoryPasswords.clear();
         }
         else if ( nStatus == PERSISTENT_RECORD )
         {
-            m_bHasPersPass = false;
-            m_aPersPass.clear();
+            m_bHasPersistentPassword = false;
+            m_aPersistentPassword.clear();
         }
     }
 
 };
 
 
-typedef ::std::pair< const OUString, ::std::vector< NamePassRecord > > PairUrlRecord;
-typedef ::std::map< OUString, ::std::vector< NamePassRecord > > PassMap;
+typedef ::std::pair< const OUString, ::std::vector< NamePasswordRecord > > PairUrlRecord;
+typedef ::std::map< OUString, ::std::vector< NamePasswordRecord > > PasswordMap;
 
 
 class PasswordContainer;
@@ -176,7 +176,7 @@ class StorageItem
 private:
     PasswordContainer*     mainCont;
     bool                   hasEncoded;
-    OUString        mEncoded;
+    OUString               mEncoded;
 
     virtual void            ImplCommit() override;
 
@@ -190,13 +190,13 @@ public:
         EnableNotification( aNode );
     }
 
-    PassMap getInfo();
-    void update( const OUString& url, const NamePassRecord& rec );
+    PasswordMap getInfo();
+    void update( const OUString& url, const NamePasswordRecord& rec );
     void remove( const OUString& url, const OUString& rec );
     void clear();
 
-    bool getEncodedMP( OUString& aResult );
-    void setEncodedMP( const OUString& aResult, bool bAcceptEmpty = false );
+    bool getEncodedMasterPassword( OUString& aResult );
+    void setEncodedMasterPassword( const OUString& aResult, bool bAcceptEmpty = false );
     void setUseStorage( bool bUse );
     bool useStorage();
 
@@ -210,42 +210,42 @@ class PasswordContainer : public ::cppu::WeakImplHelper<
         css::lang::XEventListener >
 {
 private:
-    PassMap      m_aContainer;
+    PasswordMap      m_aContainer;
     std::optional<StorageItem> m_xStorageFile;
     ::osl::Mutex mMutex;
-    OUString m_aMasterPasswd; // master password is set when the string is not empty
+    OUString m_aMasterPassword; // master password is set when the string is not empty
     css::uno::Reference< css::lang::XComponent > mComponent;
     SysCredentialsConfig mUrlContainer;
 
     /// @throws css::uno::RuntimeException
     css::uno::Sequence< css::task::UserRecord > CopyToUserRecordSequence(
-                                        const ::std::vector< NamePassRecord >& original,
+                                        const ::std::vector< NamePasswordRecord >& original,
                                         const css::uno::Reference< css::task::XInteractionHandler >& Handler );
 
     css::task::UserRecord CopyToUserRecord(
-                                        const NamePassRecord& aRecord,
+                                        const NamePasswordRecord& aRecord,
                                         bool& io_bTryToDecode,
                                         const css::uno::Reference< css::task::XInteractionHandler >& aHandler );
 
     /// @throws css::uno::RuntimeException
     css::uno::Sequence< css::task::UserRecord > FindUsr(
-                                        const ::std::vector< NamePassRecord >& userlist,
+                                        const ::std::vector< NamePasswordRecord >& userlist,
                                         std::u16string_view name,
                                         const css::uno::Reference< css::task::XInteractionHandler >& Handler );
-/// @throws css::uno::RuntimeException
-bool createUrlRecord(
-    const PassMap::iterator & rIter,
-    bool bName,
-    std::u16string_view aName,
-    const css::uno::Reference< css::task::XInteractionHandler >& aHandler,
-    css::task::UrlRecord & rRec  );
+    /// @throws css::uno::RuntimeException
+    bool createUrlRecord(
+        const PasswordMap::iterator & rIter,
+        bool bName,
+        std::u16string_view aName,
+        const css::uno::Reference< css::task::XInteractionHandler >& aHandler,
+        css::task::UrlRecord & rRec  );
 
-/// @throws css::uno::RuntimeException
-css::task::UrlRecord find(
-    const OUString& aURL,
-    std::u16string_view aName,
-    bool bName, // only needed to support empty user names
-    const css::uno::Reference< css::task::XInteractionHandler >& aHandler  );
+    /// @throws css::uno::RuntimeException
+    css::task::UrlRecord find(
+        const OUString& aURL,
+        std::u16string_view aName,
+        bool bName, // only needed to support empty user names
+        const css::uno::Reference< css::task::XInteractionHandler >& aHandler  );
 
     static OUString GetDefaultMasterPassword();
 
@@ -257,7 +257,7 @@ css::task::UrlRecord find(
     OUString const & GetMasterPassword( const css::uno::Reference< css::task::XInteractionHandler >& Handler );
 
     /// @throws css::uno::RuntimeException
-    void UpdateVector( const OUString& url, ::std::vector< NamePassRecord >& toUpdate, NamePassRecord const & rec, bool writeFile );
+    void UpdateVector( const OUString& url, ::std::vector< NamePasswordRecord >& toUpdate, NamePasswordRecord const & rec, bool writeFile );
 
     /// @throws css::uno::RuntimeException
     void PrivateAdd( const OUString& aUrl,

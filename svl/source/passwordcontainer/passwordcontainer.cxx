@@ -178,9 +178,9 @@ static ::rtl::ByteSequence getBufFromAsciiLine( const OUString& line )
 }
 
 
-PassMap StorageItem::getInfo()
+PasswordMap StorageItem::getInfo()
 {
-    PassMap aResult;
+    PasswordMap aResult;
 
     Sequence< OUString > aNodeNames     = ConfigItem::GetNodeNames( "Store" );
     sal_Int32 aNodeCount = aNodeNames.getLength();
@@ -210,13 +210,13 @@ PassMap StorageItem::getInfo()
             OUString aEPasswd;
             aPropertyValues[aNodeInd] >>= aEPasswd;
 
-            PassMap::iterator aIter = aResult.find( aUrl );
+            PasswordMap::iterator aIter = aResult.find( aUrl );
             if( aIter != aResult.end() )
                 aIter->second.emplace_back( aName, aEPasswd );
             else
             {
-                NamePassRecord aNewRecord( aName, aEPasswd );
-                std::vector< NamePassRecord > listToAdd( 1, aNewRecord );
+                NamePasswordRecord aNewRecord( aName, aEPasswd );
+                std::vector< NamePasswordRecord > listToAdd( 1, aNewRecord );
 
                 aResult.insert( PairUrlRecord( aUrl, listToAdd ) );
             }
@@ -255,7 +255,7 @@ bool StorageItem::useStorage()
 }
 
 
-bool StorageItem::getEncodedMP( OUString& aResult )
+bool StorageItem::getEncodedMasterPassword( OUString& aResult )
 {
     if( hasEncoded )
     {
@@ -284,7 +284,7 @@ bool StorageItem::getEncodedMP( OUString& aResult )
 }
 
 
-void StorageItem::setEncodedMP( const OUString& aEncoded, bool bAcceptEmpty )
+void StorageItem::setEncodedMasterPassword( const OUString& aEncoded, bool bAcceptEmpty )
 {
     bool bHasMaster = ( !aEncoded.isEmpty() || bAcceptEmpty );
 
@@ -310,7 +310,7 @@ void StorageItem::clear()
 }
 
 
-void StorageItem::update( const OUString& aURL, const NamePassRecord& aRecord )
+void StorageItem::update( const OUString& aURL, const NamePasswordRecord& aRecord )
 {
     if ( !aRecord.HasPasswords( PERSISTENT_RECORD ) )
     {
@@ -322,7 +322,7 @@ void StorageItem::update( const OUString& aURL, const NamePassRecord& aRecord )
 
     sendSeq[0].Name  = "Store/Passwordstorage['" + createIndex( { aURL, aRecord.GetUserName() } ) + "']/Password";
 
-    sendSeq[0].Value <<= aRecord.GetPersPasswords();
+    sendSeq[0].Value <<= aRecord.GetPersistentPasswords();
 
     ConfigItem::SetModified();
     ConfigItem::SetSetProperties( "Store", sendSeq );
@@ -510,17 +510,17 @@ OUString PasswordContainer::EncodePasswords(const std::vector< OUString >& lines
     throw RuntimeException("Can't encode!" );
 }
 
-void PasswordContainer::UpdateVector( const OUString& aURL, std::vector< NamePassRecord >& toUpdate, NamePassRecord const & aRecord, bool writeFile )
+void PasswordContainer::UpdateVector( const OUString& aURL, std::vector< NamePasswordRecord >& toUpdate, NamePasswordRecord const & aRecord, bool writeFile )
 {
     for (auto & aNPIter : toUpdate)
         if( aNPIter.GetUserName() == aRecord.GetUserName() )
         {
             if( aRecord.HasPasswords( MEMORY_RECORD ) )
-                aNPIter.SetMemPasswords( aRecord.GetMemPasswords() );
+                aNPIter.SetMemoryPasswords( aRecord.GetMemoryPasswords() );
 
             if( aRecord.HasPasswords( PERSISTENT_RECORD ) )
             {
-                aNPIter.SetPersPasswords( aRecord.GetPersPasswords() );
+                aNPIter.SetPersistentPasswords( aRecord.GetPersistentPasswords() );
 
                 if( writeFile )
                 {
@@ -543,17 +543,17 @@ void PasswordContainer::UpdateVector( const OUString& aURL, std::vector< NamePas
 }
 
 
-UserRecord PasswordContainer::CopyToUserRecord( const NamePassRecord& aRecord, bool& io_bTryToDecode, const Reference< XInteractionHandler >& aHandler )
+UserRecord PasswordContainer::CopyToUserRecord( const NamePasswordRecord& aRecord, bool& io_bTryToDecode, const Reference< XInteractionHandler >& aHandler )
 {
     ::std::vector< OUString > aPasswords;
     if( aRecord.HasPasswords( MEMORY_RECORD ) )
-        aPasswords = aRecord.GetMemPasswords();
+        aPasswords = aRecord.GetMemoryPasswords();
 
     if( io_bTryToDecode && aRecord.HasPasswords( PERSISTENT_RECORD ) )
     {
         try
         {
-            ::std::vector< OUString > aDecodedPasswords = DecodePasswords( aRecord.GetPersPasswords(), GetMasterPassword( aHandler ), css::task::PasswordRequestMode_PASSWORD_ENTER );
+            ::std::vector< OUString > aDecodedPasswords = DecodePasswords( aRecord.GetPersistentPasswords(), GetMasterPassword( aHandler ), css::task::PasswordRequestMode_PASSWORD_ENTER );
             aPasswords.insert( aPasswords.end(), aDecodedPasswords.begin(), aDecodedPasswords.end() );
         }
         catch( NoMasterException& )
@@ -567,7 +567,7 @@ UserRecord PasswordContainer::CopyToUserRecord( const NamePassRecord& aRecord, b
 }
 
 
-Sequence< UserRecord > PasswordContainer::CopyToUserRecordSequence( const std::vector< NamePassRecord >& original, const Reference< XInteractionHandler >& aHandler )
+Sequence< UserRecord > PasswordContainer::CopyToUserRecordSequence( const std::vector< NamePasswordRecord >& original, const Reference< XInteractionHandler >& aHandler )
 {
     Sequence< UserRecord >     aResult( original.size() );
     sal_uInt32 nInd = 0;
@@ -601,13 +601,13 @@ void SAL_CALL PasswordContainer::addPersistent( const OUString& Url, const OUStr
 
 void PasswordContainer::PrivateAdd( const OUString& Url, const OUString& UserName, const Sequence< OUString >& Passwords, char Mode, const Reference< XInteractionHandler >& aHandler )
 {
-    NamePassRecord aRecord( UserName );
+    NamePasswordRecord aRecord( UserName );
     ::std::vector< OUString > aStorePass = comphelper::sequenceToContainer< std::vector<OUString> >( Passwords );
 
     if( Mode == PERSISTENT_RECORD )
-        aRecord.SetPersPasswords( EncodePasswords( aStorePass, GetMasterPassword( aHandler ) ) );
+        aRecord.SetPersistentPasswords( EncodePasswords( aStorePass, GetMasterPassword( aHandler ) ) );
     else if( Mode == MEMORY_RECORD )
-        aRecord.SetMemPasswords( aStorePass );
+        aRecord.SetMemoryPasswords( aStorePass );
     else
     {
         OSL_FAIL( "Unexpected persistence status!" );
@@ -616,7 +616,7 @@ void PasswordContainer::PrivateAdd( const OUString& Url, const OUString& UserNam
 
     if( !m_aContainer.empty() )
     {
-        PassMap::iterator aIter = m_aContainer.find( Url );
+        PasswordMap::iterator aIter = m_aContainer.find( Url );
 
         if( aIter != m_aContainer.end() )
         {
@@ -625,7 +625,7 @@ void PasswordContainer::PrivateAdd( const OUString& Url, const OUString& UserNam
         }
     }
 
-    std::vector< NamePassRecord > listToAdd( 1, aRecord );
+    std::vector< NamePasswordRecord > listToAdd( 1, aRecord );
     m_aContainer.insert( PairUrlRecord( Url, listToAdd ) );
 
     if( Mode == PERSISTENT_RECORD && m_xStorageFile && m_xStorageFile->useStorage() )
@@ -646,7 +646,7 @@ UrlRecord SAL_CALL PasswordContainer::findForName( const OUString& aURL, const O
 }
 
 
-Sequence< UserRecord > PasswordContainer::FindUsr( const std::vector< NamePassRecord >& userlist, std::u16string_view aName, const Reference< XInteractionHandler >& aHandler )
+Sequence< UserRecord > PasswordContainer::FindUsr( const std::vector< NamePasswordRecord >& userlist, std::u16string_view aName, const Reference< XInteractionHandler >& aHandler )
 {
     for (auto const& aNPIter : userlist)
     {
@@ -664,7 +664,7 @@ Sequence< UserRecord > PasswordContainer::FindUsr( const std::vector< NamePassRe
 
 
 bool PasswordContainer::createUrlRecord(
-    const PassMap::iterator & rIter,
+    const PasswordMap::iterator & rIter,
     bool bName,
     std::u16string_view aName,
     const Reference< XInteractionHandler >& aHandler,
@@ -708,7 +708,7 @@ UrlRecord PasswordContainer::find(
         do
         {
             // first look for <url>/somename and then look for <url>/somename/...
-            PassMap::iterator aIter = m_aContainer.find( aUrl );
+            PasswordMap::iterator aIter = m_aContainer.find( aUrl );
             if( aIter != m_aContainer.end() )
             {
                 UrlRecord aRec;
@@ -781,16 +781,16 @@ OUString const & PasswordContainer::GetMasterPassword( const Reference< XInterac
     if( !m_xStorageFile || !m_xStorageFile->useStorage() )
         throw NoMasterException("Password storing is not active!", Reference< XInterface >(), aRMode );
 
-    if( m_aMasterPasswd.isEmpty() && aHandler.is() )
+    if( m_aMasterPassword.isEmpty() && aHandler.is() )
     {
         OUString aEncodedMP;
         bool bDefaultPassword = false;
 
-        if( !m_xStorageFile->getEncodedMP( aEncodedMP ) )
+        if( !m_xStorageFile->getEncodedMasterPassword( aEncodedMP ) )
             aRMode = PasswordRequestMode_PASSWORD_CREATE;
         else if ( aEncodedMP.isEmpty() )
         {
-            m_aMasterPasswd = GetDefaultMasterPassword();
+            m_aMasterPassword = GetDefaultMasterPassword();
             bDefaultPassword = true;
         }
 
@@ -805,10 +805,10 @@ OUString const & PasswordContainer::GetMasterPassword( const Reference< XInterac
                 {
                     if( aRMode == PasswordRequestMode_PASSWORD_CREATE )
                     {
-                        m_aMasterPasswd = aPass;
-                        std::vector< OUString > aMaster( 1, m_aMasterPasswd );
+                        m_aMasterPassword = aPass;
+                        std::vector< OUString > aMaster( 1, m_aMasterPassword );
 
-                        m_xStorageFile->setEncodedMP( EncodePasswords( aMaster, m_aMasterPasswd ) );
+                        m_xStorageFile->setEncodedMasterPassword( EncodePasswords( aMaster, m_aMasterPassword ) );
                     }
                     else
                     {
@@ -819,7 +819,7 @@ OUString const & PasswordContainer::GetMasterPassword( const Reference< XInterac
                             aRMode = PasswordRequestMode_PASSWORD_REENTER;
                         }
                         else
-                            m_aMasterPasswd = aPass;
+                            m_aMasterPassword = aPass;
                     }
                 }
 
@@ -827,10 +827,10 @@ OUString const & PasswordContainer::GetMasterPassword( const Reference< XInterac
         }
     }
 
-    if ( m_aMasterPasswd.isEmpty() )
+    if ( m_aMasterPassword.isEmpty() )
         throw NoMasterException("No master password!", Reference< XInterface >(), aRMode );
 
-    return m_aMasterPasswd;
+    return m_aMasterPassword;
 }
 
 
@@ -842,7 +842,7 @@ void SAL_CALL PasswordContainer::remove( const OUString& aURL, const OUString& a
     if( m_aContainer.empty() )
         return;
 
-    PassMap::iterator aIter = m_aContainer.find( aUrl );
+    PasswordMap::iterator aIter = m_aContainer.find( aUrl );
 
     if( aIter == m_aContainer.end() )
     {
@@ -858,7 +858,7 @@ void SAL_CALL PasswordContainer::remove( const OUString& aURL, const OUString& a
         return;
 
     auto aNPIter = std::find_if(aIter->second.begin(), aIter->second.end(),
-        [&aName](const NamePassRecord& rNPRecord) { return rNPRecord.GetUserName() == aName; });
+        [&aName](const NamePasswordRecord& rNPRecord) { return rNPRecord.GetUserName() == aName; });
 
     if (aNPIter != aIter->second.end())
     {
@@ -882,7 +882,7 @@ void SAL_CALL PasswordContainer::removePersistent( const OUString& aURL, const O
     if( m_aContainer.empty() )
         return;
 
-    PassMap::iterator aIter = m_aContainer.find( aUrl );
+    PasswordMap::iterator aIter = m_aContainer.find( aUrl );
 
     if( aIter == m_aContainer.end() )
     {
@@ -898,7 +898,7 @@ void SAL_CALL PasswordContainer::removePersistent( const OUString& aURL, const O
         return;
 
     auto aNPIter = std::find_if(aIter->second.begin(), aIter->second.end(),
-        [&aName](const NamePassRecord& rNPRecord) { return rNPRecord.GetUserName() == aName; });
+        [&aName](const NamePasswordRecord& rNPRecord) { return rNPRecord.GetUserName() == aName; });
 
     if (aNPIter == aIter->second.end())
         return;
@@ -926,9 +926,9 @@ void SAL_CALL PasswordContainer::removeAllPersistent()
     if( m_xStorageFile )
         m_xStorageFile->clear();
 
-    for( PassMap::iterator aIter = m_aContainer.begin(); aIter != m_aContainer.end(); )
+    for( PasswordMap::iterator aIter = m_aContainer.begin(); aIter != m_aContainer.end(); )
     {
-        for( std::vector< NamePassRecord >::iterator aNPIter = aIter->second.begin(); aNPIter != aIter->second.end(); )
+        for( std::vector< NamePasswordRecord >::iterator aNPIter = aIter->second.begin(); aNPIter != aIter->second.end(); )
         {
             if( aNPIter->HasPasswords( PERSISTENT_RECORD ) )
             {
@@ -969,7 +969,7 @@ Sequence< UrlRecord > SAL_CALL PasswordContainer::getAllPersistent( const Refere
             {
                 sal_Int32 oldLen = aUsers.getLength();
                 aUsers.realloc( oldLen + 1 );
-                aUsers[ oldLen ] = UserRecord( aNP.GetUserName(), comphelper::containerToSequence( DecodePasswords( aNP.GetPersPasswords(), GetMasterPassword( xHandler ), css::task::PasswordRequestMode_PASSWORD_ENTER ) ) );
+                aUsers[ oldLen ] = UserRecord( aNP.GetUserName(), comphelper::containerToSequence( DecodePasswords( aNP.GetPersistentPasswords(), GetMasterPassword( xHandler ), css::task::PasswordRequestMode_PASSWORD_ENTER ) ) );
             }
 
         if( aUsers.hasElements() )
@@ -991,7 +991,7 @@ sal_Bool SAL_CALL PasswordContainer::authorizateWithMasterPassword( const uno::R
     ::osl::MutexGuard aGuard( mMutex );
 
     // the method should fail if there is no master password
-    if( m_xStorageFile && m_xStorageFile->useStorage() && m_xStorageFile->getEncodedMP( aEncodedMP ) )
+    if( m_xStorageFile && m_xStorageFile->useStorage() && m_xStorageFile->getEncodedMasterPassword( aEncodedMP ) )
     {
         if ( aEncodedMP.isEmpty() )
         {
@@ -1008,7 +1008,7 @@ sal_Bool SAL_CALL PasswordContainer::authorizateWithMasterPassword( const uno::R
                 xTmpHandler.set( InteractionHandler::createWithParent(xContext, nullptr), uno::UNO_QUERY_THROW );
             }
 
-            if ( !m_aMasterPasswd.isEmpty() )
+            if ( !m_aMasterPassword.isEmpty() )
             {
                 // there is a password, it should be just rechecked
                 PasswordRequestMode aRMode = PasswordRequestMode_PASSWORD_ENTER;
@@ -1016,7 +1016,7 @@ sal_Bool SAL_CALL PasswordContainer::authorizateWithMasterPassword( const uno::R
 
                 do {
                     aPass = RequestPasswordFromUser( aRMode, xTmpHandler );
-                    bResult = ( !aPass.isEmpty() && aPass == m_aMasterPasswd );
+                    bResult = ( !aPass.isEmpty() && aPass == m_aMasterPassword );
                     aRMode = PasswordRequestMode_PASSWORD_REENTER; // further questions with error notification
                 } while( !bResult && !aPass.isEmpty() );
             }
@@ -1054,7 +1054,7 @@ sal_Bool SAL_CALL PasswordContainer::changeMasterPassword( const uno::Reference<
         bool bCanChangePassword = true;
         // if there is already a stored master password it should be entered by the user before the change happen
         OUString aEncodedMP;
-        if( !m_aMasterPasswd.isEmpty() || m_xStorageFile->getEncodedMP( aEncodedMP ) )
+        if( !m_aMasterPassword.isEmpty() || m_xStorageFile->getEncodedMasterPassword( aEncodedMP ) )
             bCanChangePassword = authorizateWithMasterPassword( xTmpHandler );
 
         if ( bCanChangePassword )
@@ -1071,9 +1071,9 @@ sal_Bool SAL_CALL PasswordContainer::changeMasterPassword( const uno::Reference<
                 removeMasterPassword();
 
                 // store the new master password
-                m_aMasterPasswd = aPass;
-                std::vector< OUString > aMaster( 1, m_aMasterPasswd );
-                m_xStorageFile->setEncodedMP( EncodePasswords( aMaster, m_aMasterPasswd ) );
+                m_aMasterPassword = aPass;
+                std::vector< OUString > aMaster( 1, m_aMasterPassword );
+                m_xStorageFile->setEncodedMasterPassword( EncodePasswords( aMaster, m_aMasterPassword ) );
 
                 // store all the entries with the new password
                 for ( const auto& rURL : aPersistent )
@@ -1097,8 +1097,8 @@ void SAL_CALL PasswordContainer::removeMasterPassword()
     ::osl::MutexGuard aGuard( mMutex );
     if ( m_xStorageFile )
     {
-        m_aMasterPasswd.clear();
-        m_xStorageFile->setEncodedMP( OUString() ); // let the master password be removed from configuration
+        m_aMasterPassword.clear();
+        m_xStorageFile->setEncodedMasterPassword( OUString() ); // let the master password be removed from configuration
     }
 }
 
@@ -1110,7 +1110,7 @@ sal_Bool SAL_CALL PasswordContainer::hasMasterPassword(  )
         throw uno::RuntimeException();
 
     OUString aEncodedMP;
-    return ( m_xStorageFile->useStorage() && m_xStorageFile->getEncodedMP( aEncodedMP ) );
+    return ( m_xStorageFile->useStorage() && m_xStorageFile->getEncodedMasterPassword( aEncodedMP ) );
 }
 
 sal_Bool SAL_CALL PasswordContainer::allowPersistentStoring( sal_Bool bAllow )
@@ -1158,7 +1158,7 @@ sal_Bool SAL_CALL PasswordContainer::useDefaultMasterPassword( const uno::Refere
         bool bCanChangePassword = true;
         // if there is already a stored nondefault master password it should be entered by the user before the change happen
         OUString aEncodedMP;
-        if( m_xStorageFile->getEncodedMP( aEncodedMP ) && !aEncodedMP.isEmpty() )
+        if( m_xStorageFile->getEncodedMasterPassword( aEncodedMP ) && !aEncodedMP.isEmpty() )
             bCanChangePassword = authorizateWithMasterPassword( xTmpHandler );
 
         if ( bCanChangePassword )
@@ -1174,8 +1174,8 @@ sal_Bool SAL_CALL PasswordContainer::useDefaultMasterPassword( const uno::Refere
                 removeMasterPassword();
 
                 // store the empty string to flag the default master password
-                m_aMasterPasswd = aPass;
-                m_xStorageFile->setEncodedMP( OUString(), true );
+                m_aMasterPassword = aPass;
+                m_xStorageFile->setEncodedMasterPassword( OUString(), true );
 
                 // store all the entries with the new password
                 for ( const auto& rURL : aPersistent )
@@ -1200,7 +1200,7 @@ sal_Bool SAL_CALL PasswordContainer::isDefaultMasterPasswordUsed()
         throw uno::RuntimeException();
 
     OUString aEncodedMP;
-    return ( m_xStorageFile->useStorage() && m_xStorageFile->getEncodedMP( aEncodedMP ) && aEncodedMP.isEmpty() );
+    return ( m_xStorageFile->useStorage() && m_xStorageFile->getEncodedMasterPassword( aEncodedMP ) && aEncodedMP.isEmpty() );
 }
 
 
@@ -1232,7 +1232,7 @@ void PasswordContainer::Notify()
     // remove the cached persistent values in the memory
     for( auto& rEntry : m_aContainer )
     {
-        for( std::vector< NamePassRecord >::iterator aNPIter = rEntry.second.begin(); aNPIter != rEntry.second.end(); )
+        for( std::vector< NamePasswordRecord >::iterator aNPIter = rEntry.second.begin(); aNPIter != rEntry.second.end(); )
         {
             if( aNPIter->HasPasswords( PERSISTENT_RECORD ) )
             {
@@ -1251,13 +1251,13 @@ void PasswordContainer::Notify()
         }
     }
 
-    PassMap addon;
+    PasswordMap addon;
     if( m_xStorageFile )
         addon = m_xStorageFile->getInfo();
 
     for( const auto& rEntry : addon )
     {
-        PassMap::iterator aSearchIter = m_aContainer.find( rEntry.first );
+        PasswordMap::iterator aSearchIter = m_aContainer.find( rEntry.first );
         if( aSearchIter != m_aContainer.end() )
             for (auto const& aNP : rEntry.second)
                 UpdateVector( aSearchIter->first, aSearchIter->second, aNP, false );
