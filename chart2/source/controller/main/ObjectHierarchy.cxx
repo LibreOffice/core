@@ -121,72 +121,7 @@ void lcl_addAxisTitle( const Reference< XAxis >& xAxis, ::chart::ObjectHierarchy
 namespace chart
 {
 
-namespace impl
-{
-
-class ImplObjectHierarchy
-{
-public:
-    explicit ImplObjectHierarchy(
-        const Reference< XChartDocument >& xChartDocument,
-        ExplicitValueProvider* pExplicitValueProvider,
-        bool bFlattenDiagram, bool bOrderingForElementSelector );
-
-    bool                              hasChildren( const ObjectIdentifier& rParent );
-    ObjectHierarchy::tChildContainer  getChildren( const ObjectIdentifier& rParent );
-    ObjectHierarchy::tChildContainer  getSiblings( const ObjectIdentifier& rNode );
-
-    ObjectIdentifier getParent( const ObjectIdentifier& rOID );
-
-private:
-    void createTree( const Reference< XChartDocument > & xChartDocument );
-    void createAxesTree(
-        ObjectHierarchy::tChildContainer & rContainer,
-        const Reference< XChartDocument > & xChartDoc,
-        const Reference< XDiagram > & xDiagram  );
-    void createDiagramTree(
-        ObjectHierarchy::tChildContainer& rContainer,
-        const Reference< XChartDocument >& xChartDoc,
-        const Reference< XDiagram >& xDiagram );
-    void createDataSeriesTree(
-        ObjectHierarchy::tChildContainer & rOutDiagramSubContainer,
-        const Reference< XDiagram > & xDiagram );
-    static void createWallAndFloor(
-        ObjectHierarchy::tChildContainer & rContainer,
-        const Reference< XDiagram > & xDiagram );
-    void createLegendTree(
-        ObjectHierarchy::tChildContainer & rContainer,
-        const Reference< XChartDocument > & xChartDoc,
-        const Reference< XDiagram > & xDiagram  );
-    void createAdditionalShapesTree( ObjectHierarchy::tChildContainer& rContainer );
-
-    ObjectIdentifier getParentImpl(
-        const ObjectIdentifier& rParentOID,
-        const ObjectIdentifier& rOID );
-
-    typedef std::map< ObjectIdentifier, ObjectHierarchy::tChildContainer >
-        tChildMap;
-    tChildMap m_aChildMap;
-    ExplicitValueProvider* m_pExplicitValueProvider;
-    bool m_bFlattenDiagram;
-    bool m_bOrderingForElementSelector;
-};
-
-ImplObjectHierarchy::ImplObjectHierarchy(
-    const Reference< XChartDocument >& xChartDocument,
-    ExplicitValueProvider* pExplicitValueProvider,
-    bool bFlattenDiagram,
-    bool bOrderingForElementSelector ) :
-        m_pExplicitValueProvider( pExplicitValueProvider ),
-        m_bFlattenDiagram( bFlattenDiagram ),
-        m_bOrderingForElementSelector( bOrderingForElementSelector )
-{
-    createTree( xChartDocument );
-    // don't remember this helper to avoid access after lifetime
-    m_pExplicitValueProvider = nullptr;
-}
-
-void ImplObjectHierarchy::createTree( const Reference< XChartDocument >& xChartDocument )
+void ObjectHierarchy::createTree( const Reference< XChartDocument >& xChartDocument )
 {
     m_aChildMap = tChildMap();//clear tree
 
@@ -274,7 +209,7 @@ void ImplObjectHierarchy::createTree( const Reference< XChartDocument >& xChartD
         m_aChildMap[ ObjectHierarchy::getRootNodeOID() ] = aTopLevelContainer;
 }
 
-void ImplObjectHierarchy::createLegendTree(
+void ObjectHierarchy::createLegendTree(
     ObjectHierarchy::tChildContainer & rContainer,
     const Reference< XChartDocument > & xChartDoc,
     const Reference< XDiagram > & xDiagram  )
@@ -297,7 +232,7 @@ void ImplObjectHierarchy::createLegendTree(
     }
 }
 
-void ImplObjectHierarchy::createAxesTree(
+void ObjectHierarchy::createAxesTree(
     ObjectHierarchy::tChildContainer & rContainer,
     const Reference< XChartDocument > & xChartDoc,
     const Reference< XDiagram > & xDiagram  )
@@ -362,7 +297,7 @@ void ImplObjectHierarchy::createAxesTree(
     }
 }
 
-void ImplObjectHierarchy::createWallAndFloor(
+void ObjectHierarchy::createWallAndFloor(
     ObjectHierarchy::tChildContainer & rContainer,
     const Reference< XDiagram > & xDiagram )
 {
@@ -380,7 +315,7 @@ void ImplObjectHierarchy::createWallAndFloor(
 
 }
 
-void ImplObjectHierarchy::createDiagramTree(
+void ObjectHierarchy::createDiagramTree(
     ObjectHierarchy::tChildContainer & rContainer,
     const Reference< XChartDocument > & xChartDoc,
     const Reference< XDiagram > & xDiagram )
@@ -398,7 +333,7 @@ void ImplObjectHierarchy::createDiagramTree(
     }
 }
 
-void ImplObjectHierarchy::createDataSeriesTree(
+void ObjectHierarchy::createDataSeriesTree(
     ObjectHierarchy::tChildContainer & rOutDiagramSubContainer,
     const Reference< XDiagram > & xDiagram )
 {
@@ -508,7 +443,7 @@ void ImplObjectHierarchy::createDataSeriesTree(
     }
 }
 
-void ImplObjectHierarchy::createAdditionalShapesTree( ObjectHierarchy::tChildContainer& rContainer )
+void ObjectHierarchy::createAdditionalShapesTree( ObjectHierarchy::tChildContainer& rContainer )
 {
     try
     {
@@ -537,7 +472,7 @@ void ImplObjectHierarchy::createAdditionalShapesTree( ObjectHierarchy::tChildCon
     }
 }
 
-bool ImplObjectHierarchy::hasChildren( const ObjectIdentifier& rParent )
+bool ObjectHierarchy::hasChildren( const ObjectIdentifier& rParent ) const
 {
     if ( rParent.isValid() )
     {
@@ -548,7 +483,7 @@ bool ImplObjectHierarchy::hasChildren( const ObjectIdentifier& rParent )
     return false;
 }
 
-ObjectHierarchy::tChildContainer ImplObjectHierarchy::getChildren( const ObjectIdentifier& rParent )
+const ObjectHierarchy::tChildContainer & ObjectHierarchy::getChildren( const ObjectIdentifier& rParent ) const
 {
     if ( rParent.isValid() )
     {
@@ -556,10 +491,11 @@ ObjectHierarchy::tChildContainer ImplObjectHierarchy::getChildren( const ObjectI
         if( aIt != m_aChildMap.end())
             return aIt->second;
     }
-    return ObjectHierarchy::tChildContainer();
+    static const ObjectHierarchy::tChildContainer EMPTY;
+    return EMPTY;
 }
 
-ObjectHierarchy::tChildContainer ImplObjectHierarchy::getSiblings( const ObjectIdentifier& rNode )
+const ObjectHierarchy::tChildContainer & ObjectHierarchy::getSiblings( const ObjectIdentifier& rNode ) const
 {
     if ( rNode.isValid() && !ObjectHierarchy::isRootNode( rNode ) )
     {
@@ -571,12 +507,13 @@ ObjectHierarchy::tChildContainer ImplObjectHierarchy::getSiblings( const ObjectI
                 return child.second;
         }
     }
-    return ObjectHierarchy::tChildContainer();
+    static const ObjectHierarchy::tChildContainer EMPTY;
+    return EMPTY;
 }
 
-ObjectIdentifier ImplObjectHierarchy::getParentImpl(
+ObjectIdentifier ObjectHierarchy::getParentImpl(
     const ObjectIdentifier & rParentOID,
-    const ObjectIdentifier & rOID )
+    const ObjectIdentifier & rOID ) const
 {
     // search children
     ObjectHierarchy::tChildContainer aChildren( getChildren( rParentOID ));
@@ -601,21 +538,25 @@ ObjectIdentifier ImplObjectHierarchy::getParentImpl(
     return ObjectIdentifier();
 }
 
-ObjectIdentifier ImplObjectHierarchy::getParent(
-    const ObjectIdentifier & rOID )
+ObjectIdentifier ObjectHierarchy::getParent(
+    const ObjectIdentifier & rOID ) const
 {
     return getParentImpl( ObjectHierarchy::getRootNodeOID(), rOID );
 }
-
-} // namespace impl
 
 ObjectHierarchy::ObjectHierarchy(
     const Reference< XChartDocument > & xChartDocument,
     ExplicitValueProvider * pExplicitValueProvider /* = 0 */,
     bool bFlattenDiagram /* = false */,
     bool bOrderingForElementSelector /* = false */) :
-        m_apImpl( new impl::ImplObjectHierarchy( xChartDocument, pExplicitValueProvider, bFlattenDiagram, bOrderingForElementSelector ))
-{}
+        m_pExplicitValueProvider( pExplicitValueProvider ),
+        m_bFlattenDiagram( bFlattenDiagram ),
+        m_bOrderingForElementSelector( bOrderingForElementSelector )
+{
+    createTree( xChartDocument );
+    // don't remember this helper to avoid access after lifetime
+    m_pExplicitValueProvider = nullptr;
+}
 
 ObjectHierarchy::~ObjectHierarchy()
 {}
@@ -630,45 +571,16 @@ bool ObjectHierarchy::isRootNode( const ObjectIdentifier& rOID )
     return ( rOID == ObjectHierarchy::getRootNodeOID() );
 }
 
-ObjectHierarchy::tChildContainer ObjectHierarchy::getTopLevelChildren() const
+const ObjectHierarchy::tChildContainer & ObjectHierarchy::getTopLevelChildren() const
 {
-    return m_apImpl->getChildren( ObjectHierarchy::getRootNodeOID());
-}
-
-bool ObjectHierarchy::hasChildren( const ObjectIdentifier& rParent ) const
-{
-    return m_apImpl->hasChildren( rParent );
-}
-
-ObjectHierarchy::tChildContainer ObjectHierarchy::getChildren(
-    const ObjectIdentifier& rParent ) const
-{
-    if ( rParent.isValid() )
-        return m_apImpl->getChildren( rParent );
-
-    return ObjectHierarchy::tChildContainer();
-}
-
-ObjectHierarchy::tChildContainer ObjectHierarchy::getSiblings(
-    const ObjectIdentifier& rNode ) const
-{
-    if ( rNode.isValid() && !isRootNode( rNode ) )
-        return m_apImpl->getSiblings( rNode );
-
-    return ObjectHierarchy::tChildContainer();
-}
-
-ObjectIdentifier ObjectHierarchy::getParent(
-    const ObjectIdentifier& rNode ) const
-{
-    return m_apImpl->getParent( rNode );
+    return getChildren( ObjectHierarchy::getRootNodeOID());
 }
 
 sal_Int32 ObjectHierarchy::getIndexInParent(
     const ObjectIdentifier& rNode ) const
 {
-    ObjectIdentifier aParentOID( m_apImpl->getParent( rNode ));
-    tChildContainer aChildren( m_apImpl->getChildren( aParentOID ) );
+    ObjectIdentifier aParentOID( getParent( rNode ));
+    const tChildContainer & aChildren( getChildren( aParentOID ) );
     sal_Int32 nIndex = 0;
     for (auto const& child : aChildren)
     {
