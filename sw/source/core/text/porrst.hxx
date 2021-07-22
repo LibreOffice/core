@@ -97,6 +97,7 @@ public:
     virtual void Paint( const SwTextPaintInfo &rInf ) const override;
 };
 
+/// Indicator that the content does not fit into a fixed height frame (red triangle on the UI).
 class SwArrowPortion : public SwLinePortion
 {
     Point m_aPos;
