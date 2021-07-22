@@ -215,8 +215,7 @@ std::unique_ptr<EditTextObject> EditTextObjectImpl::Clone() const
 
 bool EditTextObject::Equals( const EditTextObject& rCompare ) const
 {
-    return static_cast<const EditTextObjectImpl*>(this)->Equals(
-        static_cast<const EditTextObjectImpl&>(rCompare), false /*bComparePool*/);
+    return toImpl(*this).Equals(toImpl(rCompare), false /*bComparePool*/);
 }
 
 void EditTextObjectImpl::dumpAsXml(xmlTextWriterPtr pWriter) const
@@ -743,7 +742,7 @@ void EditTextObjectImpl::ChangeStyleSheetName( SfxStyleFamily eFamily,
 
 bool EditTextObjectImpl::operator==( const EditTextObject& rCompare ) const
 {
-    return Equals( static_cast<const EditTextObjectImpl&>(rCompare), true);
+    return Equals(toImpl(rCompare), true);
 }
 
 bool EditTextObjectImpl::Equals( const EditTextObjectImpl& rCompare, bool bComparePool ) const
@@ -767,7 +766,7 @@ bool EditTextObjectImpl::Equals( const EditTextObjectImpl& rCompare, bool bCompa
 // #i102062#
 bool EditTextObjectImpl::isWrongListEqual(const EditTextObject& rComp) const
 {
-    const EditTextObjectImpl& rCompare = static_cast<const EditTextObjectImpl&>(rComp);
+    const EditTextObjectImpl& rCompare = toImpl(rComp);
     return std::equal(
         maContents.begin(), maContents.end(), rCompare.maContents.begin(), rCompare.maContents.end(),
         [](const auto& c1, const auto& c2) { return c1->isWrongListEqual(*c2); });
