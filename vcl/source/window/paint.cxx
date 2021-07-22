@@ -645,6 +645,12 @@ void Window::ImplCallOverlapPaint()
 
 IMPL_LINK_NOARG(Window, ImplHandlePaintHdl, Timer *, void)
 {
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        // Tiled rendering is used, idle paint does not need to do anything.
+        mpWindowImpl->mpFrameData->maPaintIdle.Stop();
+        return;
+    }
 #ifndef IOS
     comphelper::ProfileZone aZone("VCL idle re-paint");
 
@@ -664,9 +670,6 @@ IMPL_LINK_NOARG(Window, ImplHandlePaintHdl, Timer *, void)
     else if ( mpWindowImpl->mbReallyVisible )
     {
         ImplCallOverlapPaint();
-        if (comphelper::LibreOfficeKit::isActive() &&
-            mpWindowImpl->mpFrameData->maPaintIdle.IsActive())
-            mpWindowImpl->mpFrameData->maPaintIdle.Stop();
     }
 #endif
 }
@@ -688,6 +691,12 @@ IMPL_LINK_NOARG(Window, ImplHandleResizeTimerHdl, Timer *, void)
 
 void Window::ImplInvalidateFrameRegion( const vcl::Region* pRegion, InvalidateFlags nFlags )
 {
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        // Tiled rendering is used, so there's no need to invalidate for idle painting.
+        return;
+    }
+
     // set PAINTCHILDREN for all parent windows till the first OverlapWindow
     if ( !ImplIsOverlapWindow() )
     {
@@ -1292,6 +1301,12 @@ void Window::PaintImmediately()
 {
     if (!mpWindowImpl)
         return;
+
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        // Tiled rendering is used, direct paint does not need to do anything.
+        return;
+    }
 
     if ( mpWindowImpl->mpBorderWindow )
     {
