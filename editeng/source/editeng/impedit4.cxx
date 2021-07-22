@@ -1073,7 +1073,7 @@ std::unique_ptr<EditTextObject> ImpEditEngine::CreateTextObject( EditSelection a
                     if ( aX.GetEnd() > (nEndPos-nStartPos) )
                         aX.GetEnd() = nEndPos-nStartPos;
                 }
-                DBG_ASSERT( aX.GetEnd() <= (nEndPos-nStartPos), "CreateBinTextObject: Attribute too long!" );
+                DBG_ASSERT( aX.GetEnd() <= (nEndPos-nStartPos), "CreateTextObject: Attribute too long!" );
                 if ( !aX.GetLen() && !bEmptyPara )
                     pTxtObj->DestroyAttrib(aX);
                 else
@@ -1324,7 +1324,7 @@ EditSelection ImpEditEngine::InsertTextObject( const EditTextObject& rTextObject
                     nTPLen += rParaPortion.GetTextPortions()[--nTest].GetLen();
                 for ( nTest = rParaPortion.GetLines().Count(); nTest; )
                     nTxtLen += rParaPortion.GetLines()[--nTest].GetLen();
-                DBG_ASSERT( ( nTPLen == rParaPortion.GetNode()->Len() ) && ( nTxtLen == rParaPortion.GetNode()->Len() ), "InsertBinTextObject: ParaPortion not completely formatted!" );
+                DBG_ASSERT( ( nTPLen == rParaPortion.GetNode()->Len() ) && ( nTxtLen == rParaPortion.GetNode()->Len() ), "InsertTextObject: ParaPortion not completely formatted!" );
 #endif
             }
         }

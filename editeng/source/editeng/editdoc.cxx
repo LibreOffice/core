@@ -2735,7 +2735,7 @@ void CharAttribList::InsertAttrib( EditCharAttrib* pAttrib )
 
     // Maybe just simply iterate backwards:
     // The most common and critical case: Attributes are already sorted
-    // (InsertBinTextObject!) binary search would not be optimal here.
+    // (InsertTextObject!) binary search would not be optimal here.
     // => Would bring something!
 
     const sal_Int32 nStart = pAttrib->GetStart(); // may be better for Comp.Opt.
