@@ -23,18 +23,13 @@
 namespace com::sun::star::awt { struct KeyEvent; }
 namespace com::sun::star::chart2 { class XChartDocument; }
 
-#include <memory>
+#include <map>
 #include <vector>
 
 namespace chart
 {
 
 class ExplicitValueProvider;
-
-namespace impl
-{
-class ImplObjectHierarchy;
-}
 
 class ObjectHierarchy
 {
@@ -57,11 +52,11 @@ public:
     static bool      isRootNode( const ObjectIdentifier& rOID );
 
     /// equal to getChildren( getRootNodeOID())
-    tChildContainer  getTopLevelChildren() const;
+    const tChildContainer &  getTopLevelChildren() const;
     bool             hasChildren( const ObjectIdentifier& rParent ) const;
-    tChildContainer  getChildren( const ObjectIdentifier& rParent ) const;
+    const tChildContainer &  getChildren( const ObjectIdentifier& rParent ) const;
 
-    tChildContainer  getSiblings( const ObjectIdentifier& rNode ) const;
+    const tChildContainer &  getSiblings( const ObjectIdentifier& rNode ) const;
 
     /// The result is empty, if the node cannot be found in the tree
     ObjectIdentifier             getParent( const ObjectIdentifier& rNode ) const;
@@ -69,8 +64,36 @@ public:
     sal_Int32        getIndexInParent( const ObjectIdentifier& rNode ) const;
 
 private:
+    void createTree( const css::uno::Reference< css::chart2::XChartDocument > & xChartDocument );
+    void createAxesTree(
+        ObjectHierarchy::tChildContainer & rContainer,
+        const css::uno::Reference< css::chart2::XChartDocument > & xChartDoc,
+        const css::uno::Reference< css::chart2::XDiagram > & xDiagram  );
+    void createDiagramTree(
+        ObjectHierarchy::tChildContainer& rContainer,
+        const css::uno::Reference< css::chart2::XChartDocument >& xChartDoc,
+        const css::uno::Reference< css::chart2::XDiagram >& xDiagram );
+    void createDataSeriesTree(
+        ObjectHierarchy::tChildContainer & rOutDiagramSubContainer,
+        const css::uno::Reference< css::chart2::XDiagram > & xDiagram );
+    static void createWallAndFloor(
+        ObjectHierarchy::tChildContainer & rContainer,
+        const css::uno::Reference< css::chart2::XDiagram > & xDiagram );
+    void createLegendTree(
+        ObjectHierarchy::tChildContainer & rContainer,
+        const css::uno::Reference< css::chart2::XChartDocument > & xChartDoc,
+        const css::uno::Reference< css::chart2::XDiagram > & xDiagram  );
+    void createAdditionalShapesTree( ObjectHierarchy::tChildContainer& rContainer );
+    ObjectIdentifier getParentImpl(
+        const ObjectIdentifier& rParentOID,
+        const ObjectIdentifier& rOID ) const;
 
-    std::unique_ptr< impl::ImplObjectHierarchy > m_apImpl;
+    typedef std::map< ObjectIdentifier, ObjectHierarchy::tChildContainer >
+        tChildMap;
+    tChildMap m_aChildMap;
+    ExplicitValueProvider* m_pExplicitValueProvider;
+    bool m_bFlattenDiagram;
+    bool m_bOrderingForElementSelector;
 };
 
 class ObjectKeyNavigation
