@@ -192,6 +192,9 @@ void SAL_CALL ProgressMonitor::addText(
     sal_Bool bbeforeProgress
 )
 {
+    // Ready for multithreading
+    MutexGuard aGuard ( m_aMutex );
+
     // Safe impossible cases
     // Check valid call of this method.
     DBG_ASSERT ( impl_debug_checkParameter ( rTopic, rText ),                 "ProgressMonitor::addText()\nCall without valid parameters!\n");
@@ -209,9 +212,6 @@ void SAL_CALL ProgressMonitor::addText(
     // Set values ...
     aTextItem.sTopic   = rTopic;
     aTextItem.sText    = rText;
-
-    // Ready for multithreading
-    MutexGuard aGuard ( m_aMutex );
 
     // ... and insert it in right list.
     if ( bbeforeProgress )
@@ -235,14 +235,14 @@ void SAL_CALL ProgressMonitor::removeText ( const OUString& rTopic, sal_Bool bbe
     // Check valid call of this method.
     DBG_ASSERT ( impl_debug_checkParameter ( rTopic ), "ProgressMonitor::removeText()\nCall without valid parameters!" );
 
+    // Ready for multithreading
+    MutexGuard aGuard ( m_aMutex );
+
     // Search the topic ...
     IMPL_TextlistItem* pSearchItem = impl_searchTopic ( rTopic, bbeforeProgress );
 
     if ( pSearchItem == nullptr )
         return;
-
-    // Ready for multithreading
-    MutexGuard aGuard ( m_aMutex );
 
     // ... delete item from right list ...
     if ( bbeforeProgress )
@@ -278,14 +278,14 @@ void SAL_CALL ProgressMonitor::updateText (
     // Check valid call of this method.
     DBG_ASSERT ( impl_debug_checkParameter ( rTopic, rText ), "ProgressMonitor::updateText()\nCall without valid parameters!\n" );
 
+    // Ready for multithreading
+    MutexGuard aGuard ( m_aMutex );
+
     // Search topic ...
     IMPL_TextlistItem* pSearchItem = impl_searchTopic ( rTopic, bbeforeProgress );
 
     if ( pSearchItem != nullptr )
     {
-        // Ready for multithreading
-        MutexGuard aGuard ( m_aMutex );
-
         // ... update text ...
         pSearchItem->sText = rText;
 
@@ -791,20 +791,14 @@ IMPL_TextlistItem* ProgressMonitor::impl_searchTopic ( std::u16string_view rTopi
     // Get right textlist for following operations.
     ::std::vector< IMPL_TextlistItem >* pTextList;
 
-    // Ready for multithreading
+    if (bbeforeProgress)
     {
-        MutexGuard aGuard(m_aMutex);
-
-        if (bbeforeProgress)
-        {
-            pTextList = &maTextlist_Top;
-        }
-        else
-        {
-            pTextList = &maTextlist_Bottom;
-        }
+        pTextList = &maTextlist_Top;
     }
-    // Switch off guard.
+    else
+    {
+        pTextList = &maTextlist_Bottom;
+    }
 
     // Search the topic in textlist.
     size_t nPosition    = 0;
