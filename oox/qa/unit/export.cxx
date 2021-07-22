@@ -15,6 +15,8 @@
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 
+#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
+
 #include <unotools/mediadescriptor.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/ucbstreamhelper.hxx>
@@ -36,6 +38,7 @@ public:
     void registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx) override;
     utl::TempFile& getTempFile() { return maTempFile; }
     void loadAndSave(const OUString& rURL, const OUString& rFilterName);
+    void testPolylineConnectorShapes(const OUString& rURL);
 };
 
 void Test::setUp()
@@ -56,6 +59,49 @@ void Test::tearDown()
 void Test::registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx)
 {
     XmlTestTools::registerOOXMLNamespaces(pXmlXpathCtx);
+}
+
+void Test::testPolylineConnectorShapes(const OUString& rURL)
+{
+    mxComponent = loadFromDesktop(rURL);
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xGroup(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xGroupShape(xGroup, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3537), xGroupShape->getSize().Height);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5659), xGroupShape->getSize().Width);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5001), xGroupShape->getPosition().X);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2000), xGroupShape->getPosition().Y);
+
+    // Height and width sometimes differ 1 or 2 pixel, possibly because of
+    // integer calculations and rounding. In such cases CPPUNIT_ASSERT_LESSEQUAL
+    // macro is used
+
+    // Shape 0
+    uno::Reference<drawing::XShape> xShape0(xGroup->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_LESSEQUAL(sal_Int32(2), abs(sal_Int32(2122) - xShape0->getSize().Height));
+    CPPUNIT_ASSERT_LESSEQUAL(sal_Int32(2), abs(sal_Int32(4242) - xShape0->getSize().Width));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5001), xShape0->getPosition().X);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3415), xShape0->getPosition().Y);
+
+    // Shape 1
+    uno::Reference<drawing::XShape> xShape1(xGroup->getByIndex(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xShape1->getSize().Height);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4244), xShape1->getSize().Width);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(6416), xShape1->getPosition().X);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2000), xShape1->getPosition().Y);
+
+    // Shape 2
+    uno::Reference<drawing::XShape> xShape2(xGroup->getByIndex(2), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_LESSEQUAL(sal_Int32(2), abs(sal_Int32(3537) - xShape2->getSize().Height));
+    CPPUNIT_ASSERT_LESSEQUAL(sal_Int32(2), abs(sal_Int32(1416) - xShape2->getSize().Width));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(7121), xShape2->getPosition().X);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2000), xShape2->getPosition().Y);
+
+    mxComponent->dispose();
+    mxComponent.clear();
 }
 
 void Test::loadAndSave(const OUString& rURL, const OUString& rFilterName)
@@ -106,6 +152,16 @@ CPPUNIT_TEST_FIXTURE(Test, testPolylineConnectorPosition)
     // ... failed with expected: 0, actual: 720000
     assertXPath(pXmlDoc, "//wpg:wgp/wps:wsp[3]/wps:spPr/a:xfrm/a:off", "y", "0");
     // Polyline and connector were shifted 1800360EMU right, 720000EMU down.
+
+    // Testing to make sure the actual position and size
+    // of the group and shapes inside it are unchanged
+    // comparing initial load and after save/reload
+
+    // initial load
+    testPolylineConnectorShapes(aURL);
+
+    // after save and reload
+    testPolylineConnectorShapes(getTempFile().GetURL());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testRotatedShapePosition)
