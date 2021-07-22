@@ -40,7 +40,7 @@
 #include <vcl/event.hxx>
 #include <vcl/settings.hxx>
 #include <rtl/instance.hxx>
-
+#include <mutex>
 
 using namespace utl;
 using namespace com::sun::star;
@@ -55,7 +55,7 @@ static sal_Int32            nColorRefCount_Impl = 0;
 namespace
 {
     struct ColorMutex_Impl
-        : public rtl::Static< ::osl::Mutex, ColorMutex_Impl > {};
+        : public rtl::Static< std::mutex, ColorMutex_Impl > {};
 }
 
 ColorConfig_Impl*    ColorConfig::m_pImpl = nullptr;
@@ -376,7 +376,7 @@ ColorConfig::ColorConfig()
 {
     if (utl::ConfigManager::IsFuzzing())
         return;
-    ::osl::MutexGuard aGuard( ColorMutex_Impl::get() );
+    std::lock_guard aGuard( ColorMutex_Impl::get() );
     if ( !m_pImpl )
     {
         m_pImpl = new ColorConfig_Impl;
@@ -390,7 +390,7 @@ ColorConfig::~ColorConfig()
 {
     if (utl::ConfigManager::IsFuzzing())
         return;
-    ::osl::MutexGuard aGuard( ColorMutex_Impl::get() );
+    std::lock_guard aGuard( ColorMutex_Impl::get() );
     m_pImpl->RemoveListener(this);
     if(!--nColorRefCount_Impl)
     {
