@@ -16,6 +16,9 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <bitmap/BitmapWriteAccess.hxx>
 
+#include <svdata.hxx>
+#include <salinst.hxx>
+
 #include <test/outputdevice.hxx>
 
 // Run tests from visualbackendtest ('bin/run visualbackendtest').
@@ -55,6 +58,12 @@ class BackendTest : public test::BootstrapFixture
             SvFileStream aStream(filename, StreamMode::WRITE | StreamMode::TRUNC);
             GraphicFilter::GetGraphicFilter().compressAsPNG(aBitmapEx, aStream);
         }
+    }
+
+    bool is32bppSupported()
+    {
+        auto pBackendCapabilities = ImplGetSVData()->mpDefInst->GetBackendCapabilities();
+        return pBackendCapabilities->mbSupportsBitmap32;
     }
 
 public:
@@ -449,62 +458,148 @@ public:
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
 
-    void testDrawBitmap()
+    void testDrawBitmap24bpp()
     {
         if (getDefaultDeviceBitCount() < 24)
             return;
         vcl::test::OutputDeviceTestBitmap aOutDevTest;
-        Bitmap aBitmap = aOutDevTest.setupDrawBitmap();
-        exportImage("08-01_bitmap_test.png", aBitmap);
+        Bitmap aBitmap = aOutDevTest.setupDrawBitmap(vcl::PixelFormat::N24_BPP);
+        exportImage("08-01_bitmap_test_24bpp.png", aBitmap);
         auto eResult = vcl::test::OutputDeviceTestBitmap::checkTransformedBitmap(aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
 
-    void testDrawTransformedBitmap()
+    void testDrawTransformedBitmap24bpp()
     {
         if (getDefaultDeviceBitCount() < 24)
             return;
         vcl::test::OutputDeviceTestBitmap aOutDevTest;
-        Bitmap aBitmap = aOutDevTest.setupDrawTransformedBitmap();
+        Bitmap aBitmap = aOutDevTest.setupDrawTransformedBitmap(vcl::PixelFormat::N24_BPP);
         auto eResult = vcl::test::OutputDeviceTestBitmap::checkTransformedBitmap(aBitmap);
-        exportImage("08-02_transformed_bitmap_test.png", aBitmap);
+        exportImage("08-02_transformed_bitmap_test_24bpp.png", aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
 
-    void testDrawBitmapExWithAlpha()
+    void testDrawBitmapExWithAlpha24bpp()
     {
         if (getDefaultDeviceBitCount() < 24)
             return;
         vcl::test::OutputDeviceTestBitmap aOutDevTest;
-        Bitmap aBitmap = aOutDevTest.setupDrawBitmapExWithAlpha();
+        Bitmap aBitmap = aOutDevTest.setupDrawBitmapExWithAlpha(vcl::PixelFormat::N24_BPP);
         auto eResult = vcl::test::OutputDeviceTestBitmap::checkBitmapExWithAlpha(aBitmap);
-        exportImage("08-03_bitmapex_with_alpha_test.png", aBitmap);
+        exportImage("08-03_bitmapex_with_alpha_test_24bpp.png", aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
 
-    void testDrawMask()
+    void testDrawMask24bpp()
     {
         if (getDefaultDeviceBitCount() < 24)
             return;
         vcl::test::OutputDeviceTestBitmap aOutDevTest;
-        Bitmap aBitmap = aOutDevTest.setupDrawMask();
+        Bitmap aBitmap = aOutDevTest.setupDrawMask(vcl::PixelFormat::N24_BPP);
         auto eResult = vcl::test::OutputDeviceTestBitmap::checkMask(aBitmap);
-        exportImage("08-04_mask_test.png", aBitmap);
+        exportImage("08-04_mask_test_24bpp.png", aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
 
-    void testDrawBlend()
+    void testDrawBlend24bpp()
     {
         if (getDefaultDeviceBitCount() < 24)
             return;
         vcl::test::OutputDeviceTestBitmap aOutDevTest;
-        BitmapEx aBitmapEx = aOutDevTest.setupDrawBlend();
+        BitmapEx aBitmapEx = aOutDevTest.setupDrawBlend(vcl::PixelFormat::N24_BPP);
         auto eResult = vcl::test::OutputDeviceTestBitmap::checkBlend(aBitmapEx);
-        exportImage("08-05_blend_test.png", aBitmapEx);
+        exportImage("08-05_blend_test_24bpp.png", aBitmapEx);
+        if (SHOULD_ASSERT)
+            CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
+    }
+
+    void testDrawBitmap32bpp()
+    {
+        if (getDefaultDeviceBitCount() < 24)
+            return;
+        vcl::test::OutputDeviceTestBitmap aOutDevTest;
+        Bitmap aBitmap = aOutDevTest.setupDrawBitmap(vcl::PixelFormat::N32_BPP);
+        exportImage("09-01_bitmap_test_32bpp.png", aBitmap);
+        auto eResult = vcl::test::OutputDeviceTestBitmap::checkTransformedBitmap(aBitmap);
+        if (SHOULD_ASSERT && is32bppSupported())
+            CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
+    }
+
+    void testDrawTransformedBitmap32bpp()
+    {
+        if (getDefaultDeviceBitCount() < 24)
+            return;
+        vcl::test::OutputDeviceTestBitmap aOutDevTest;
+        Bitmap aBitmap = aOutDevTest.setupDrawTransformedBitmap(vcl::PixelFormat::N32_BPP);
+        auto eResult = vcl::test::OutputDeviceTestBitmap::checkTransformedBitmap(aBitmap);
+        exportImage("09-02_transformed_bitmap_test_32bpp.png", aBitmap);
+        if (SHOULD_ASSERT && is32bppSupported())
+            CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
+    }
+
+    void testDrawBitmapExWithAlpha32bpp()
+    {
+        if (getDefaultDeviceBitCount() < 24)
+            return;
+        vcl::test::OutputDeviceTestBitmap aOutDevTest;
+        Bitmap aBitmap = aOutDevTest.setupDrawBitmapExWithAlpha(vcl::PixelFormat::N32_BPP);
+        auto eResult = vcl::test::OutputDeviceTestBitmap::checkBitmapExWithAlpha(aBitmap);
+        exportImage("09-03_bitmapex_with_alpha_test_32bpp.png", aBitmap);
+        if (SHOULD_ASSERT && is32bppSupported())
+            CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
+    }
+
+    void testDrawMask32bpp()
+    {
+        if (getDefaultDeviceBitCount() < 24)
+            return;
+        vcl::test::OutputDeviceTestBitmap aOutDevTest;
+        Bitmap aBitmap = aOutDevTest.setupDrawMask(vcl::PixelFormat::N32_BPP);
+        auto eResult = vcl::test::OutputDeviceTestBitmap::checkMask(aBitmap);
+        exportImage("09-04_mask_test_32bpp.png", aBitmap);
+        if (SHOULD_ASSERT && is32bppSupported())
+            CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
+    }
+
+    void testDrawBlend32bpp()
+    {
+        if (getDefaultDeviceBitCount() < 24)
+            return;
+        vcl::test::OutputDeviceTestBitmap aOutDevTest;
+        BitmapEx aBitmapEx = aOutDevTest.setupDrawBlend(vcl::PixelFormat::N32_BPP);
+        auto eResult = vcl::test::OutputDeviceTestBitmap::checkBlend(aBitmapEx);
+        exportImage("09-05_blend_test_32bpp.png", aBitmapEx);
+        if (SHOULD_ASSERT && is32bppSupported())
+            CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
+    }
+
+    void testDrawBitmap8bppGreyScale()
+    {
+        if (getDefaultDeviceBitCount() < 24)
+            return;
+        vcl::test::OutputDeviceTestBitmap aOutDevTest;
+        Bitmap aBitmap = aOutDevTest.setupDrawBitmap(vcl::PixelFormat::N8_BPP, true);
+        exportImage("010-01_bitmap_test_8bpp_greyscale.png", aBitmap);
+        auto eResult
+            = vcl::test::OutputDeviceTestBitmap::checkTransformedBitmap8bppGreyScale(aBitmap);
+        if (SHOULD_ASSERT)
+            CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
+    }
+
+    void testDrawTransformedBitmap8bppGreyScale()
+    {
+        if (getDefaultDeviceBitCount() < 24)
+            return;
+        vcl::test::OutputDeviceTestBitmap aOutDevTest;
+        Bitmap aBitmap = aOutDevTest.setupDrawTransformedBitmap(vcl::PixelFormat::N8_BPP, true);
+        auto eResult
+            = vcl::test::OutputDeviceTestBitmap::checkTransformedBitmap8bppGreyScale(aBitmap);
+        exportImage("010-02_transformed_bitmap_test_8bpp_greyscale.png", aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
@@ -1215,12 +1310,22 @@ public:
     CPPUNIT_TEST(testDrawHaflEllipseWithPolygon);
     CPPUNIT_TEST(testDrawHaflEllipseAAWithPolygon);
 
-    CPPUNIT_TEST(testDrawBitmap);
-    CPPUNIT_TEST(testDrawTransformedBitmap);
-    CPPUNIT_TEST(testDrawBitmapExWithAlpha);
-    CPPUNIT_TEST(testDrawMask);
-    CPPUNIT_TEST(testDrawBlend);
+    CPPUNIT_TEST(testDrawBitmap24bpp);
+    CPPUNIT_TEST(testDrawTransformedBitmap24bpp);
+    CPPUNIT_TEST(testDrawBitmapExWithAlpha24bpp);
+    CPPUNIT_TEST(testDrawMask24bpp);
+    CPPUNIT_TEST(testDrawBlend24bpp);
+
     CPPUNIT_TEST(testDrawXor);
+
+    CPPUNIT_TEST(testDrawBitmap32bpp);
+    CPPUNIT_TEST(testDrawTransformedBitmap32bpp);
+    CPPUNIT_TEST(testDrawBitmapExWithAlpha32bpp);
+    CPPUNIT_TEST(testDrawMask32bpp);
+    CPPUNIT_TEST(testDrawBlend32bpp);
+
+    CPPUNIT_TEST(testDrawTransformedBitmap8bppGreyScale);
+    CPPUNIT_TEST(testDrawBitmap8bppGreyScale);
 
     CPPUNIT_TEST(testDrawTransformedBitmapExAlpha);
 
