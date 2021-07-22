@@ -2923,7 +2923,8 @@ void SwXPageStyle::SetPropertyValues_Impl(const uno::Sequence<OUString>& rProper
                         aTempSet.SetParent(&GetDoc()->GetDfltFrameFormat()->GetAttrSet());
 
                         aTempSet.Put(SfxBoolItem(SID_ATTR_PAGE_ON, true));
-                        aTempSet.Put(SvxSizeItem(SID_ATTR_PAGE_SIZE, Size(MM50, MM50)));
+                        constexpr tools::Long constTwips_5mm = o3tl::convertTwip(tools::Long(5), o3tl::Length::mm);
+                        aTempSet.Put(SvxSizeItem(SID_ATTR_PAGE_SIZE, Size(constTwips_5mm, constTwips_5mm)));
                         aTempSet.Put(SvxLRSpaceItem(RES_LR_SPACE));
                         aTempSet.Put(SvxULSpaceItem(RES_UL_SPACE));
                         aTempSet.Put(SfxBoolItem(SID_ATTR_PAGE_SHARED, true));

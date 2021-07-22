@@ -597,7 +597,8 @@ void SwTiledRenderingTest::testInsertShape()
     IDocumentDrawModelAccess &rDrawModelAccess = pWrtShell->GetDoc()->getIDocumentDrawModelAccess();
     SdrPage* pPage = rDrawModelAccess.GetDrawModel()->GetPage(0);
     SdrObject* pObject = pPage->GetObj(0);
-    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(3302, 302, 6698, 3698), pObject->GetSnapRect());
+
+    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(Point(3299, 299), Size(3403, 3403)), pObject->GetSnapRect());
 
     // check that it is in the foreground layer
     CPPUNIT_ASSERT_EQUAL(rDrawModelAccess.GetHeavenId().get(), pObject->GetLayer().get());
