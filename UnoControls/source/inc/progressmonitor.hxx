@@ -229,11 +229,11 @@ private:
 // private variables
 
 private:
-    ::std::vector < std::unique_ptr<IMPL_TextlistItem> > maTextlist_Top;         // Elements before progress
+    ::std::vector < IMPL_TextlistItem > maTextlist_Top;         // Elements before progress
     css::uno::Reference< css::awt::XFixedText >   m_xTopic_Top;   // (used, if parameter "beforeProgress"=true in "addText, updateText, removeText")
     css::uno::Reference< css::awt::XFixedText >   m_xText_Top;
 
-    ::std::vector < std::unique_ptr<IMPL_TextlistItem> > maTextlist_Bottom;      // Elements below of progress
+    ::std::vector < IMPL_TextlistItem > maTextlist_Bottom;      // Elements below of progress
     css::uno::Reference< css::awt::XFixedText >   m_xTopic_Bottom;   // (used, if parameter "beforeProgress"=false in "addText, updateText, removeText")
     css::uno::Reference< css::awt::XFixedText >   m_xText_Bottom;
 
