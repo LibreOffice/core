@@ -103,16 +103,19 @@ class VCL_DLLPUBLIC OutputDeviceTestBitmap : public OutputDeviceTestCommon
 public:
     OutputDeviceTestBitmap() = default;
 
-    Bitmap setupDrawTransformedBitmap();
-    Bitmap setupDrawBitmap();
-    Bitmap setupDrawBitmapExWithAlpha();
-    Bitmap setupDrawMask();
-    BitmapEx setupDrawBlend();
+    Bitmap setupDrawTransformedBitmap(vcl::PixelFormat aBitmapFormat,
+                                      bool isBitmapGreyScale = false);
+    Bitmap setupDrawBitmap(vcl::PixelFormat aBitmapFormat, bool isBitmapGreyScale = false);
+    Bitmap setupDrawBitmapExWithAlpha(vcl::PixelFormat aBitmapFormat);
+    Bitmap setupDrawMask(vcl::PixelFormat aBitmapFormat);
+    BitmapEx setupDrawBlend(vcl::PixelFormat aBitmapFormat);
 
     static TestResult checkTransformedBitmap(Bitmap& rBitmap);
     static TestResult checkBitmapExWithAlpha(Bitmap& rBitmap);
     static TestResult checkMask(Bitmap& rBitmap);
     static TestResult checkBlend(const BitmapEx& rBitmap);
+
+    static TestResult checkTransformedBitmap8bppGreyScale(Bitmap& rBitmap);
 };
 
 class VCL_DLLPUBLIC OutputDeviceTestAnotherOutDev : public OutputDeviceTestCommon
