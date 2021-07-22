@@ -15,10 +15,10 @@
 
 namespace vcl::test {
 
-Bitmap OutputDeviceTestBitmap::setupDrawTransformedBitmap()
+Bitmap OutputDeviceTestBitmap::setupDrawTransformedBitmap(vcl::PixelFormat aBitmapFormat,bool isBitmapGreyScale)
 {
     Size aBitmapSize(9, 9);
-    Bitmap aBitmap(aBitmapSize, vcl::PixelFormat::N24_BPP);
+    Bitmap aBitmap(aBitmapSize, aBitmapFormat);
     {
         BitmapScopedWriteAccess aWriteAccess(aBitmap);
         aWriteAccess->Erase(constFillColor);
@@ -26,6 +26,9 @@ Bitmap OutputDeviceTestBitmap::setupDrawTransformedBitmap()
         aWriteAccess->DrawRect(tools::Rectangle(0, 0,  8, 8));
         aWriteAccess->DrawRect(tools::Rectangle(2, 2,  6, 6));
     }
+
+    if (isBitmapGreyScale)
+        aBitmap.Convert(BmpConversion::N8BitGreys);
 
     initialSetup(13, 13, constBackgroundColor);
 
@@ -40,10 +43,10 @@ Bitmap OutputDeviceTestBitmap::setupDrawTransformedBitmap()
 }
 
 
-Bitmap OutputDeviceTestBitmap::setupDrawBitmap()
+Bitmap OutputDeviceTestBitmap::setupDrawBitmap(vcl::PixelFormat aBitmapFormat,bool isBitmapGreyScale)
 {
     Size aBitmapSize(9, 9);
-    Bitmap aBitmap(aBitmapSize, vcl::PixelFormat::N24_BPP);
+    Bitmap aBitmap(aBitmapSize, aBitmapFormat);
     {
         BitmapScopedWriteAccess aWriteAccess(aBitmap);
         aWriteAccess->Erase(constFillColor);
@@ -51,6 +54,9 @@ Bitmap OutputDeviceTestBitmap::setupDrawBitmap()
         aWriteAccess->DrawRect(tools::Rectangle(0, 0,  8, 8));
         aWriteAccess->DrawRect(tools::Rectangle(2, 2,  6, 6));
     }
+
+    if (isBitmapGreyScale)
+        aBitmap.Convert(BmpConversion::N8BitGreys);
 
     initialSetup(13, 13, constBackgroundColor);
 
@@ -62,10 +68,10 @@ Bitmap OutputDeviceTestBitmap::setupDrawBitmap()
     return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
 }
 
-Bitmap OutputDeviceTestBitmap::setupDrawBitmapExWithAlpha()
+Bitmap OutputDeviceTestBitmap::setupDrawBitmapExWithAlpha(vcl::PixelFormat aBitmapFormat)
 {
     Size aBitmapSize(9, 9);
-    Bitmap aBitmap(aBitmapSize, vcl::PixelFormat::N24_BPP);
+    Bitmap aBitmap(aBitmapSize, aBitmapFormat);
     {
         BitmapScopedWriteAccess aWriteAccess(aBitmap);
         aWriteAccess->Erase(COL_WHITE);
@@ -92,10 +98,10 @@ Bitmap OutputDeviceTestBitmap::setupDrawBitmapExWithAlpha()
     return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
 }
 
-Bitmap OutputDeviceTestBitmap::setupDrawMask()
+Bitmap OutputDeviceTestBitmap::setupDrawMask(vcl::PixelFormat aBitmapFormat)
 {
     Size aBitmapSize(9, 9);
-    Bitmap aBitmap(aBitmapSize, vcl::PixelFormat::N24_BPP);
+    Bitmap aBitmap(aBitmapSize, aBitmapFormat);
     {
         BitmapScopedWriteAccess aWriteAccess(aBitmap);
         aWriteAccess->Erase(COL_WHITE);
@@ -111,10 +117,10 @@ Bitmap OutputDeviceTestBitmap::setupDrawMask()
     return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
 }
 
-BitmapEx OutputDeviceTestBitmap::setupDrawBlend()
+BitmapEx OutputDeviceTestBitmap::setupDrawBlend(vcl::PixelFormat aBitmapFormat)
 {
     Size aBitmapSize(9, 9);
-    Bitmap aBitmap(aBitmapSize, vcl::PixelFormat::N24_BPP);
+    Bitmap aBitmap(aBitmapSize, aBitmapFormat);
     {
         BitmapScopedWriteAccess aWriteAccess(aBitmap);
         aWriteAccess->Erase(COL_WHITE);
@@ -153,6 +159,16 @@ TestResult OutputDeviceTestBitmap::checkTransformedBitmap(Bitmap& rBitmap)
     {
         constBackgroundColor, constBackgroundColor,
         COL_YELLOW, constFillColor, COL_YELLOW, constFillColor, constFillColor
+    };
+    return checkRectangles(rBitmap, aExpected);
+}
+
+TestResult OutputDeviceTestBitmap::checkTransformedBitmap8bppGreyScale(Bitmap& rBitmap)
+{
+    std::vector<Color> aExpected
+    {
+        Color(0xC0,0xC0,0xC0), Color(0xC0,0xC0,0xC0),
+        Color(0xE2,0xE2,0xE2), Color(0xE,0xE,0xE), Color(0xE2,0xE2,0xE2), Color(0xE,0xE,0xE), Color(0xE,0xE,0xE)
     };
     return checkRectangles(rBitmap, aExpected);
 }
