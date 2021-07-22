@@ -89,12 +89,15 @@ void ConstFormControl::Activate(const sal_uInt16 nSlotId)
 
 void ConstFormControl::CreateDefaultObject()
 {
+    constexpr tools::Long constTwips_5mm = o3tl::convertTwip(tools::Long(5), o3tl::Length::mm);
+    constexpr tools::Long constTwips_10mm = o3tl::convertTwip(tools::Long(10), o3tl::Length::mm);
+
     Point aStartPos(GetDefaultCenterPos());
     Point aEndPos(aStartPos);
-    aStartPos.AdjustX(-(2 * MM50));
-    aStartPos.AdjustY(-MM50);
-    aEndPos.AdjustX(2 * MM50);
-    aEndPos.AdjustY(MM50);
+    aStartPos.AdjustX(-constTwips_10mm);
+    aStartPos.AdjustY(-constTwips_5mm);
+    aEndPos.AdjustX(constTwips_10mm);
+    aEndPos.AdjustY(constTwips_5mm);
 
     if(!m_pSh->HasDrawView())
         m_pSh->MakeDrawView();
