@@ -41,6 +41,7 @@
 #include <com/sun/star/ui/UIElementType.hpp>
 #include <com/sun/star/ui/theWindowStateConfiguration.hpp>
 
+#include <officecfg/Office/Common.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/image.hxx>
@@ -300,7 +301,7 @@ Sequence< Sequence< css::beans::PropertyValue > > ToolbarsMenuController::getLay
 
 void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu > const & rPopupMenu )
 {
-    if( SvtMiscOptions().DisableUICustomization() )
+    if( officecfg::Office::Common::Misc::DisableUICustomization::get() )
         return;
 
     SolarMutexGuard aSolarMutexGuard;

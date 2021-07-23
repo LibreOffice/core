@@ -301,7 +301,7 @@ public:
 
     virtual ToolBoxButtonSize GetDefaultButtonSize() const override
     {
-        return SvtMiscOptions().GetNotebookbarIconSize();
+        return static_cast<ToolBoxButtonSize>(officecfg::Office::Common::Misc::NotebookbarIconSize::get());
     }
 };
 
