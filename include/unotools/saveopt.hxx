@@ -31,7 +31,6 @@ public:
 
     enum class EOption
     {
-        AutoSaveTime,
         UseUserData,
         Backup,
         WarnAlienFormat,
@@ -82,9 +81,6 @@ public:
 
     SvtSaveOptions();
     virtual ~SvtSaveOptions() override;
-
-    void                    SetAutoSaveTime( sal_Int32 n );
-    sal_Int32               GetAutoSaveTime() const;
 
     void                    SetUseUserData( bool b );
     bool                IsUseUserData() const;
