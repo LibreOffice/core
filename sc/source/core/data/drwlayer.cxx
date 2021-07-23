@@ -1545,7 +1545,7 @@ void ScDrawLayer::DeleteObjectsInArea( SCTAB nTab, SCCOL nCol1,SCROW nRow1,
 
     size_t nDelCount = 0;
     tools::Rectangle aDelRect = pDoc->GetMMRect( nCol1, nRow1, nCol2, nRow2, nTab );
-    tools::Rectangle aDelCircle = pDoc->GetMMRect( nCol1, nRow1, nCol2, nRow2, nTab );
+    tools::Rectangle aDelCircle = aDelRect;
     aDelCircle.AdjustLeft(-250);
     aDelCircle.AdjustRight(250);
     aDelCircle.AdjustTop(-70);
