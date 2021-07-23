@@ -257,8 +257,9 @@ void SfxApplication::GetOptions( SfxItemSet& rSet )
                 case SID_SAVEREL_INET :
                     {
                         bRet = true;
-                        if (!aSaveOptions.IsReadOnly(SvtSaveOptions::EOption::SaveRelInet))
-                            if (!rSet.Put( SfxBoolItem ( rPool.GetWhich( SID_SAVEREL_INET ), aSaveOptions.IsSaveRelINet() )))
+                        if (!officecfg::Office::Common::Save::URL::Internet::isReadOnly())
+                            if (!rSet.Put( SfxBoolItem ( rPool.GetWhich( SID_SAVEREL_INET ),
+                                            officecfg::Office::Common::Save::URL::Internet::get() )))
                                 bRet = false;
                     }
                     break;
@@ -527,7 +528,9 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     if ( SfxItemState::SET == rSet.GetItemState(rPool.GetWhich(SID_SAVEREL_INET), true, &pItem))
     {
         DBG_ASSERT(dynamic_cast< const SfxBoolItem *>( pItem ) !=  nullptr, "BoolItem expected");
-        aSaveOptions.SetSaveRelINet(static_cast<const SfxBoolItem *>(pItem)->GetValue());
+        officecfg::Office::Common::Save::URL::Internet::set(
+            static_cast<const SfxBoolItem *>(pItem)->GetValue(),
+            batch);
     }
 
     // SaveRelFSys
