@@ -114,6 +114,16 @@ static sal_uInt8 GetUpperLvlChg( sal_uInt8 nCurLvl, sal_uInt8 nLevel, sal_uInt16
 
 void SwDoc::SetOutlineNumRule( const SwNumRule& rRule )
 {
+    if (GetIDocumentUndoRedo().DoesUndo())
+    {
+        GetIDocumentUndoRedo().StartUndo(SwUndoId::OUTLINE_EDIT, nullptr);
+        if (mpOutlineRule)
+        {
+            GetIDocumentUndoRedo().AppendUndo(
+                std::make_unique<SwUndoOutlineEdit>(*mpOutlineRule, rRule, *this));
+        }
+    }
+
     if( mpOutlineRule )
         (*mpOutlineRule) = rRule;
     else
@@ -157,6 +167,11 @@ void SwDoc::SetOutlineNumRule( const SwNumRule& rRule )
         GetFootnoteIdxs().UpdateAllFootnote();
 
     getIDocumentFieldsAccess().UpdateExpFields(nullptr, true);
+
+    if (GetIDocumentUndoRedo().DoesUndo())
+    {
+        GetIDocumentUndoRedo().EndUndo(SwUndoId::OUTLINE_EDIT, nullptr);
+    }
 
     getIDocumentState().SetModified();
 }

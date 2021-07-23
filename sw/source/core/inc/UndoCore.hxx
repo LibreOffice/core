@@ -25,6 +25,7 @@
 #include <o3tl/deleter.hxx>
 #include <rtl/ustring.hxx>
 #include <redline.hxx>
+#include <numrule.hxx>
 
 #include <memory>
 #include <vector>
@@ -219,6 +220,19 @@ public:
     virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
     virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
     virtual void RepeatImpl( ::sw::RepeatContext & ) override;
+};
+
+class SwUndoOutlineEdit final : public SwUndo, private SwUndRng
+{
+    SwNumRule m_aNewNumRule;
+    SwNumRule m_aOldNumRule;
+
+public:
+    SwUndoOutlineEdit(const SwNumRule& rOldRule, const SwNumRule& rNewRule, const SwDoc& rDoc);
+
+    virtual void UndoImpl(::sw::UndoRedoContext&) override;
+    virtual void RedoImpl(::sw::UndoRedoContext&) override;
+    virtual void RepeatImpl(::sw::RepeatContext&) override;
 };
 
 const int nUndoStringLength = 20;

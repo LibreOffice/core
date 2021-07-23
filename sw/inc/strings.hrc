@@ -453,6 +453,7 @@
 #define STR_TEXT_CORRECTION                     NC_("STR_TEXT_CORRECTION", "Text Correction")
 #define STR_OUTLINE_LR                          NC_("STR_OUTLINE_LR", "Promote/demote outline")
 #define STR_OUTLINE_UD                          NC_("STR_OUTLINE_UD", "Move outline")
+#define STR_OUTLINE_EDIT                        NC_("STR_OUTLINE_EDIT", "Modify outline")
 #define STR_INSNUM                              NC_("STR_INSNUM", "Insert numbering")
 #define STR_NUMUP                               NC_("STR_NUMUP", "Promote level")
 #define STR_NUMDOWN                             NC_("STR_NUMDOWN", "Demote level")
