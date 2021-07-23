@@ -20,6 +20,7 @@
 #include <XMLFilter.hxx>
 #include <MediaDescriptorHelper.hxx>
 
+#include <officecfg/Office/Common.hxx>
 #include <svtools/sfxecode.hxx>
 #include <unotools/saveopt.hxx>
 #include <comphelper/genericpropertyset.hxx>
@@ -590,8 +591,7 @@ ErrCode XMLFilter::impl_Export(
         uno::Reference< beans::XPropertySet > xInfoSet =
             comphelper::GenericPropertySet_CreateInstance( new comphelper::PropertySetInfo( aExportInfoMap ) );
 
-        SvtSaveOptions aSaveOpt;
-        bool bUsePrettyPrinting( aSaveOpt.IsPrettyPrinting() );
+        bool bUsePrettyPrinting( officecfg::Office::Common::Save::Document::PrettyPrinting::get() );
         xInfoSet->setPropertyValue( "UsePrettyPrinting", uno::Any( bUsePrettyPrinting ) );
         if( ! bOasis )
             xInfoSet->setPropertyValue( "ExportTableNumberList", uno::Any( true ));

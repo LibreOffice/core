@@ -181,8 +181,7 @@ ErrCode SwXMLWriter::Write_( const uno::Reference < task::XStatusIndicator >& xS
         xInfoSet->setPropertyValue("ProgressMax", Any(static_cast < sal_Int32 >( -1 )));
     }
 
-    SvtSaveOptions aSaveOpt;
-    xInfoSet->setPropertyValue( "UsePrettyPrinting", makeAny(aSaveOpt.IsPrettyPrinting()) );
+    xInfoSet->setPropertyValue( "UsePrettyPrinting", makeAny(officecfg::Office::Common::Save::Document::PrettyPrinting::get()) );
 
     uno::Reference<lang::XComponent> const xModelComp(m_pDoc->GetDocShell()->GetModel());
     uno::Reference<drawing::XDrawPageSupplier> const xDPS(xModelComp, uno::UNO_QUERY);
