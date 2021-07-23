@@ -164,7 +164,8 @@ enum class SwUndoId
     UI_TABLE_DELETE,                   // 133
     CONFLICT,                          // 134
 
-    INSERT_FORM_FIELD                  // 135
+    INSERT_FORM_FIELD,                 // 135
+    OUTLINE_EDIT,                      // 136
 };
 
 OUString GetUndoComment(SwUndoId eId);
