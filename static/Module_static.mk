@@ -15,6 +15,12 @@ $(eval $(call gb_Module_add_targets,static,\
     Library_components \
 ))
 
+ifeq (EMSCRIPTEN,$(OS))
+$(eval $(call gb_Module_add_targets,static,\
+    CustomTarget_emscripten_fs_image \
+))
+endif
+
 endif
 
 # vim: set noet sw=4 ts=4:
