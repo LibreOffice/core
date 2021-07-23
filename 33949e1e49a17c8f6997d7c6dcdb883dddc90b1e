@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c9101777_650c295a",
+        "filename": "vcl/backendtest/outputdevice/polygon.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-07-23T23:42:58Z",
+      "side": 1,
+      "message": "local variable shouldn\u0027t have m (member) prefix",
+      "range": {
+        "startLine": 313,
+        "startChar": 16,
+        "endLine": 313,
+        "endChar": 20
+      },
+      "revId": "33949e1e49a17c8f6997d7c6dcdb883dddc90b1e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
