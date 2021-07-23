@@ -43,8 +43,6 @@ public:
 
     const OUString& GetHelpStyleSheet()const;
     void            SetHelpStyleSheet(const OUString& rStyleSheet);
-
-    OUString const & GetSystem() const;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
