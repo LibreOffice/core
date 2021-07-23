@@ -300,7 +300,7 @@ Sequence< Sequence< css::beans::PropertyValue > > ToolbarsMenuController::getLay
 
 void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu > const & rPopupMenu )
 {
-    if( SvtMiscOptions().DisableUICustomization() )
+    if( officecfg::Office::Common::Misc::DisableUICustomization::get() )
         return;
 
     SolarMutexGuard aSolarMutexGuard;

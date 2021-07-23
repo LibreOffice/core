@@ -729,7 +729,7 @@ void ToolBarManager::RefreshImages()
 void ToolBarManager::UpdateControllers()
 {
 
-    if( SvtMiscOptions().DisableUICustomization() )
+    if( officecfg::Office::Common::Misc::DisableUICustomization::get() )
     {
         Any a;
         Reference< XLayoutManager > xLayoutManager;
@@ -1947,7 +1947,7 @@ void ToolBarManager::AddCustomizeMenuItems(ToolBox const * pToolBar)
         else
             pMenu->EnableItem(MENUITEM_TOOLBAR_LOCKTOOLBARPOSITION, false);
 
-        if (SvtMiscOptions().DisableUICustomization())
+        if (officecfg::Office::Common::Misc::DisableUICustomization::get())
         {
             pMenu->EnableItem(MENUITEM_TOOLBAR_VISIBLEBUTTON, false);
             pMenu->EnableItem(MENUITEM_TOOLBAR_CUSTOMIZETOOLBAR, false);
