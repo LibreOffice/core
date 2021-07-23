@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e8cbd0a4_290be6f7",
+        "filename": "writerfilter/source/dmapper/TableManager.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-07-23T18:11:10Z",
+      "side": 1,
+      "message": "For 7.1, we can also ensure that this is not .empty() and not nullptr - just to ensure that we get it right away for stable. But it should be completely unnecessary...",
+      "range": {
+        "startLine": 99,
+        "startChar": 30,
+        "endLine": 99,
+        "endChar": 51
+      },
+      "revId": "61d01146e6ccbedc9389ad152153dd254f11cd3a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
