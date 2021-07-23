@@ -775,7 +775,7 @@ void SwEditShell::SetCurNumRule( const SwNumRule& rRule,
 {
     StartAllAction();
 
-    GetDoc()->GetIDocumentUndoRedo().StartUndo( SwUndoId::START, nullptr );
+    GetDoc()->GetIDocumentUndoRedo().StartUndo( SwUndoId::INSATTR, nullptr );
 
     SwPaM* pCursor = GetCursor();
     if( IsMultiSelection() )
@@ -808,7 +808,7 @@ void SwEditShell::SetCurNumRule( const SwNumRule& rRule,
                               true, bResetIndentAttrs );
         GetDoc()->SetCounted( *pCursor, true, GetLayout() );
     }
-    GetDoc()->GetIDocumentUndoRedo().EndUndo( SwUndoId::END, nullptr );
+    GetDoc()->GetIDocumentUndoRedo().EndUndo( SwUndoId::INSATTR, nullptr );
 
     EndAllAction();
 }
