@@ -657,7 +657,7 @@ void SwLayAction::InternalAction(OutputDevice* pRenderContext)
         if ((bTakeShortcut || !pPage) && !IsInterrupt() &&
              (m_pRoot->IsSuperfluous() || m_pRoot->IsAssertFlyPages()) )
         {
-            // tdf#139426 allow supression of AssertFlyPages
+            // tdf#139426 allow suppression of AssertFlyPages
             if ( m_pRoot->IsAssertFlyPages() && !m_pRoot->IsTableUpdateInProgress())
             {
                 m_pRoot->AssertFlyPages();

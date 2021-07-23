@@ -173,7 +173,7 @@ void SwEditShell::UpdateTableOf(const SwTOXBase& rTOX, const SfxItemSet* pSet)
         rTOXSect.SetPosAtStartEnd(*GetCursor()->GetPoint());
 
     // start formatting
-    // tdf#139426 ..but allow supression of AssertFlyPages
+    // tdf#139426 ...but allow suppression of AssertFlyPages
     GetLayout()->SetTableUpdateInProgress(true);
     CalcLayout();
     GetLayout()->SetTableUpdateInProgress(false);
