@@ -231,8 +231,8 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg(weld::Window *pParent)
     fillFolderComboBox();
 
     mxActionBar->set_item_visible(MNI_ACTION_EXTENSIONS, true);
-    mxActionBar->set_item_visible(MNI_ACTION_EXPORT, true);
-    mxActionBar->set_item_visible(MNI_ACTION_MOVE, true);
+    mxActionBar->set_item_visible(MNI_ACTION_IMPORT, true);
+    mxActionBar->set_item_visible(MNI_ACTION_NEW_FOLDER, true);
     mxActionBar->set_item_visible(MNI_ACTION_RENAME_FOLDER, true);
     mxActionBar->set_item_visible(MNI_ACTION_DELETE_FOLDER, true);
 
