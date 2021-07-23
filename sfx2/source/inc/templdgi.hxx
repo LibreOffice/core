@@ -85,6 +85,10 @@ protected:
     std::unique_ptr<weld::CheckButton> mxPreviewCheckbox;
     std::unique_ptr<weld::ComboBox> mxFilterLb;
 
+    StyleList m_aCharStyleList;
+    std::unique_ptr<weld::CheckButton> mxCharPreviewCheckbox;
+    std::unique_ptr<weld::ComboBox> mxCharFilterLb;
+
     sal_uInt16 nActFamily; // Id in the ToolBox = Position - 1
     sal_uInt16 nActFilter; // FilterIdx
     SfxStyleSearchBits nAppFilter; // Filter, which has set the application (for automatic)
@@ -126,7 +130,7 @@ protected:
     virtual void ReplaceUpdateButtonByMenu();
 
     void Initialize();
-    void EnableHierarchical(bool);
+    void EnableHierarchical(bool, StyleList&);
 
     void FilterSelect( sal_uInt16 nFilterIdx, bool bForce );
     void SetFamilyState( sal_uInt16 nSlotId, const SfxTemplateItem* );
@@ -134,23 +138,24 @@ protected:
     bool IsSafeForWaterCan() const;
 
     void SetFamily(SfxStyleFamily nFamily);
-    void ActionSelect(const OString& rId);
+    void ActionSelect(const OString& rId, StyleList& m_atempStyleList);
 
     void SaveFactoryStyleFilter(SfxObjectShell const* i_pObjSh, sal_Int32 i_nFilter);
 
-    DECL_LINK(ReadResource_Hdl, void*, void);
+    DECL_LINK(ReadResource_Hdl, StyleList&, void);
     DECL_LINK(ClearResource_Hdl, void*, void);
     DECL_LINK(SaveSelection_Hdl, void*, SfxObjectShell*);
     DECL_LINK(LoadFactoryStyleFilter_Hdl, SfxObjectShell const*, sal_Int32);
     DECL_LINK(UpdateStyles_Hdl, StyleFlags, void);
-    DECL_LINK(UpdateFamily_Hdl, void*, void);
+    DECL_LINK(UpdateCharStyles_Hdl, StyleFlags, void);
+    DECL_LINK(UpdateFamily_Hdl, StyleList&, void);
     DECL_LINK(UpdateStyleDependents_Hdl, void*, void);
 
 public:
     // Used in StyleList::NewMenuExecuteAction, StyleList::UpdateStyleDependents, StyleList::NewHdl,  EditHdl...
     // It comes into action whenever a an existing style is selected for use, or a new style is created etc..
     bool Execute_Impl(sal_uInt16 nId, const OUString& rStr, const OUString& rRefStr,
-                      sal_uInt16 nFamily, SfxStyleSearchBits nMask = SfxStyleSearchBits::Auto,
+                      sal_uInt16 nFamily, StyleList& m_atempStyleList, SfxStyleSearchBits nMask = SfxStyleSearchBits::Auto,
                       sal_uInt16* pIdx = nullptr, const sal_uInt16* pModifier = nullptr);
 
     // This function handles drop of content into the treeview to create a new style
@@ -197,7 +202,7 @@ public:
     virtual bool IsCheckedItem(const OString& /*rMesId*/) { return true; }
 
     // This is used when a style is selected
-    void SelectStyle(const OUString& rStyle, bool bIsCallback);
+    void SelectStyle(const OUString& rStyle, bool bIsCallback, StyleList& m_atempStyleList);
 
     // Dialog and StyleList have their own copies of variable nAppFilter.
     // When a filter is applied, it comes into action and updates the value of nAppFilter

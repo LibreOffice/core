@@ -79,7 +79,8 @@ using namespace css::uno;
 
 StyleList::StyleList(weld::Builder* pBuilder, std::optional<SfxStyleFamilies> xFamilies,
                      SfxBindings* pBindings, SfxCommonTemplateDialog_Impl* Parent,
-                     SfxModule* Module, weld::Container* pC)
+                     SfxModule* Module, weld::Container* pC, OString treeviewname,
+                     OString flatviewname)
     : m_bHierarchical(false)
     , m_bAllowReParentDrop(false)
     , m_bNewByExampleDisabled(false)
@@ -94,8 +95,8 @@ StyleList::StyleList(weld::Builder* pBuilder, std::optional<SfxStyleFamilies> xF
     , m_bBindingUpdate(true)
     , m_pStyleSheetPool(nullptr)
     , m_nActFilter(0)
-    , m_xFmtLb(pBuilder->weld_tree_view("flatview"))
-    , m_xTreeBox(pBuilder->weld_tree_view("treeview"))
+    , m_xFmtLb(pBuilder->weld_tree_view(flatviewname))
+    , m_xTreeBox(pBuilder->weld_tree_view(treeviewname))
     , m_xStyleFamilies(xFamilies)
     , m_nActFamily(0xffff)
     , m_nAppFilter(SfxStyleSearchBits::Auto)
@@ -528,7 +529,7 @@ IMPL_LINK(StyleList, ExecuteDrop, const ExecuteDropEvent&, rEvt, sal_Int8)
     DropHdl(m_xTreeBox->get_text(*xSource), aTargetStyle);
     m_xTreeBox->unset_drag_dest_row();
     FillTreeBox(GetActualFamily());
-    m_pParentDialog->SelectStyle(aTargetStyle, false);
+    m_pParentDialog->SelectStyle(aTargetStyle, false, *this);
     return DND_ACTION_NONE;
 }
 
@@ -552,8 +553,8 @@ IMPL_LINK_NOARG(StyleList, NewMenuExecuteAction, void*, void)
             const OUString aTemplName(aDlg.GetName());
             m_pParentDialog->Execute_Impl(SID_STYLE_NEW_BY_EXAMPLE, aTemplName, "",
                                           static_cast<sal_uInt16>(GetFamilyItem()->GetFamily()),
-                                          nFilter);
-            m_aUpdateFamily.Call(nullptr);
+                                          *this, nFilter);
+            m_aUpdateFamily.Call(*this);
         }
     }
 }
@@ -813,7 +814,7 @@ IMPL_LINK(StyleList, FamilySelect, sal_uInt16, nEntry, void)
     pDispat->ExecuteList(SID_STYLE_FAMILY, SfxCallMode::SYNCHRON, { &aItem });
     m_pBindings->Invalidate(SID_STYLE_FAMILY);
     m_pBindings->Update(SID_STYLE_FAMILY);
-    m_aUpdateFamily.Call(nullptr);
+    m_aUpdateFamily.Call(*this);
 }
 
 // It selects the style in treeview
@@ -987,7 +988,7 @@ void StyleList::FillTreeBox(SfxStyleFamily eFam)
     OUString aStyle;
     if (pState) // Select current entry
         aStyle = pState->GetStyleName();
-    m_pParentDialog->SelectStyle(aStyle, false);
+    m_pParentDialog->SelectStyle(aStyle, false, *this);
     EnableDelete(nullptr);
 }
 
@@ -1057,9 +1058,9 @@ IMPL_LINK_NOARG(StyleList, UpdateStyleDependents, void*, void)
         nullptr != m_pFamilyState[m_nActFamily - 1]
         && (m_xTreeBox || m_xFmtLb->count_selected_rows() <= 1))
     {
-        m_pParentDialog->Execute_Impl(SID_STYLE_WATERCAN, "", "", 0);
+        m_pParentDialog->Execute_Impl(SID_STYLE_WATERCAN, "", "", 0, *this);
         m_pParentDialog->Execute_Impl(SID_STYLE_WATERCAN, GetSelectedEntry(), "",
-                                      static_cast<sal_uInt16>(GetFamilyItem()->GetFamily()));
+                                      static_cast<sal_uInt16>(GetFamilyItem()->GetFamily()), *this);
     }
 }
 
@@ -1156,7 +1157,7 @@ IMPL_LINK(StyleList, UpdateStyles, StyleFlags, nFlags, void)
     OUString aStyle;
     if (pState)
         aStyle = pState->GetStyleName();
-    m_pParentDialog->SelectStyle(aStyle, false);
+    m_pParentDialog->SelectStyle(aStyle, false, *this);
     EnableDelete(nullptr);
 }
 
@@ -1175,7 +1176,7 @@ void StyleList::SetHierarchical()
     const OUString aSelectEntry(GetSelectedEntry());
     m_xFmtLb->hide();
     FillTreeBox(GetActualFamily());
-    m_pParentDialog->SelectStyle(aSelectEntry, false);
+    m_pParentDialog->SelectStyle(aSelectEntry, false, *this);
     m_xTreeBox->show();
 }
 
@@ -1202,7 +1203,7 @@ void StyleList::NewHdl()
         nMask = m_nAppFilter;
 
     m_pParentDialog->Execute_Impl(SID_STYLE_NEW, "", GetSelectedEntry(),
-                                  static_cast<sal_uInt16>(eFam), nMask);
+                                  static_cast<sal_uInt16>(eFam), *this, nMask);
 }
 
 // Handler for the edit-Buttons
@@ -1214,7 +1215,7 @@ void StyleList::EditHdl()
         OUString aTemplName(GetSelectedEntry());
         GetSelectedStyle(); // -Wall required??
         m_pParentDialog->Execute_Impl(SID_STYLE_EDIT, aTemplName, OUString(),
-                                      static_cast<sal_uInt16>(GetFamilyItem()->GetFamily()),
+                                      static_cast<sal_uInt16>(GetFamilyItem()->GetFamily()), *this,
                                       SfxStyleSearchBits::Auto, &nFilter);
     }
 }
@@ -1272,7 +1273,7 @@ void StyleList::DeleteHdl()
         const OUString aTemplName(pTreeView->get_text(*elem));
         m_bDontUpdate = true; // To prevent the Treelistbox to shut down while deleting
         m_pParentDialog->Execute_Impl(SID_STYLE_DELETE, aTemplName, OUString(),
-                                      static_cast<sal_uInt16>(GetFamilyItem()->GetFamily()));
+                                      static_cast<sal_uInt16>(GetFamilyItem()->GetFamily()), *this);
 
         if (m_xTreeBox->get_visible())
         {
@@ -1294,7 +1295,7 @@ void StyleList::HideHdl()
         OUString aTemplName = pTreeView->get_text(rEntry);
 
         m_pParentDialog->Execute_Impl(SID_STYLE_HIDE, aTemplName, OUString(),
-                                      static_cast<sal_uInt16>(GetFamilyItem()->GetFamily()));
+                                      static_cast<sal_uInt16>(GetFamilyItem()->GetFamily()), *this);
 
         return false;
     });
@@ -1310,7 +1311,7 @@ void StyleList::ShowHdl()
         OUString aTemplName = pTreeView->get_text(rEntry);
 
         m_pParentDialog->Execute_Impl(SID_STYLE_SHOW, aTemplName, OUString(),
-                                      static_cast<sal_uInt16>(GetFamilyItem()->GetFamily()));
+                                      static_cast<sal_uInt16>(GetFamilyItem()->GetFamily()), *this);
 
         return false;
     });
@@ -1407,7 +1408,7 @@ void StyleList::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
             }
             else if (m_bUpdateFamily)
             {
-                m_aUpdateFamily.Call(nullptr);
+                m_aUpdateFamily.Call(*this);
             }
 
             if (m_pStyleSheetPool)
@@ -1489,7 +1490,7 @@ IMPL_LINK_NOARG(StyleList, TimeOut, Timer*, void)
             ;
             if (pState)
             {
-                m_pParentDialog->SelectStyle(pState->GetStyleName(), false);
+                m_pParentDialog->SelectStyle(pState->GetStyleName(), false, *this);
                 EnableDelete(nullptr);
             }
         }
@@ -1622,7 +1623,7 @@ IMPL_LINK(StyleList, FmtSelectHdl, weld::TreeView&, rListBox, void)
     if (rListBox.is_selected(*xHdlEntry))
         m_aUpdateStyleDependents.Call(nullptr);
 
-    m_pParentDialog->SelectStyle(rListBox.get_text(*xHdlEntry), true);
+    m_pParentDialog->SelectStyle(rListBox.get_text(*xHdlEntry), true, *this);
 }
 
 IMPL_LINK_NOARG(StyleList, TreeListApplyHdl, weld::TreeView&, bool)
@@ -1632,7 +1633,7 @@ IMPL_LINK_NOARG(StyleList, TreeListApplyHdl, weld::TreeView&, bool)
         && !GetSelectedEntry().isEmpty())
     {
         m_pParentDialog->Execute_Impl(SID_STYLE_APPLY, GetSelectedEntry(), OUString(),
-                                      static_cast<sal_uInt16>(GetFamilyItem()->GetFamily()),
+                                      static_cast<sal_uInt16>(GetFamilyItem()->GetFamily()), *this,
                                       SfxStyleSearchBits::Auto, nullptr, &m_nModifier);
     }
     // After selecting a focused item if possible again on the app window
@@ -1671,7 +1672,7 @@ void StyleList::Update()
         if (pNewModule && pNewModule != m_Module)
         {
             m_aClearResource.Call(nullptr);
-            m_aReadResource.Call(nullptr);
+            m_aReadResource.Call(*this);
         }
         if (m_pStyleSheetPool)
         {
@@ -1688,7 +1689,7 @@ void StyleList::Update()
     }
 
     if (m_bUpdateFamily)
-        m_aUpdateFamily.Call(nullptr);
+        m_aUpdateFamily.Call(*this);
 
     sal_uInt16 i;
     for (i = 0; i < MAX_FAMILIES; ++i)
@@ -1759,7 +1760,7 @@ void StyleList::Update()
         }
     }
     const OUString aStyle(pItem->GetStyleName());
-    m_pParentDialog->SelectStyle(aStyle, false);
+    m_pParentDialog->SelectStyle(aStyle, false, *this);
     EnableDelete(nullptr);
     m_pParentDialog->EnableNew(m_bCanNew);
 }
