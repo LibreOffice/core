@@ -39,7 +39,6 @@ public:
         DocInfSave,
         SaveWorkingSet,
         SaveRelInet,
-        SaveRelFsys,
         WarnAlienFormat,
         LoadDocPrinter,
         OdfDefaultVersion,
@@ -115,9 +114,6 @@ public:
 
     void                    SetSaveRelINet( bool b );
     bool                IsSaveRelINet() const;
-
-    void                    SetSaveRelFSys( bool b );
-    bool                IsSaveRelFSys() const;
 
     void                    SetLoadUserSettings(bool b);
     bool                IsLoadUserSettings() const;

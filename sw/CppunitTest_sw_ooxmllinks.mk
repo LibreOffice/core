@@ -44,6 +44,10 @@ $(eval $(call gb_CppunitTest_use_vcl,sw_ooxmllinks))
 
 $(eval $(call gb_CppunitTest_use_rdb,sw_ooxmllinks,services))
 
+$(eval $(call gb_CppunitTest_use_custom_headers,sw_ooxmllinks,\
+    officecfg/registry \
+))
+
 $(eval $(call gb_CppunitTest_use_configuration,sw_ooxmllinks))
 
 # vim: set noet sw=4 ts=4:

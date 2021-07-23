@@ -24,6 +24,7 @@
 
 #include "docxexport.hxx"
 
+#include <officecfg/Office/Common.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <hintids.hxx>
 #include <tools/urlobj.hxx>
@@ -1007,7 +1008,7 @@ bool AttributeOutputBase::AnalyzeURL( const OUString& rUrl, const OUString& /*rT
         if ( aProtocol == INetProtocol::File || aProtocol == INetProtocol::NotValid )
         {
             // INetProtocol::NotValid - may be a relative link
-            bool bExportRelative = m_aSaveOpt.IsSaveRelFSys();
+            bool bExportRelative = officecfg::Office::Common::Save::URL::FileSystem::get();
             sURL = ConvertURL( rUrl, !bExportRelative );
         }
     }

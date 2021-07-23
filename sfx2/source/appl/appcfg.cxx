@@ -265,8 +265,9 @@ void SfxApplication::GetOptions( SfxItemSet& rSet )
                 case SID_SAVEREL_FSYS :
                     {
                         bRet = true;
-                        if (!aSaveOptions.IsReadOnly(SvtSaveOptions::EOption::SaveRelFsys))
-                            if (!rSet.Put( SfxBoolItem ( rPool.GetWhich( SID_SAVEREL_FSYS ), aSaveOptions.IsSaveRelFSys() )))
+                        if (!officecfg::Office::Common::Save::URL::FileSystem::isReadOnly())
+                            if (!rSet.Put( SfxBoolItem ( rPool.GetWhich( SID_SAVEREL_FSYS ),
+                                officecfg::Office::Common::Save::URL::FileSystem::get() )))
                                 bRet = false;
                     }
                     break;
@@ -533,7 +534,9 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     if ( SfxItemState::SET == rSet.GetItemState(rPool.GetWhich(SID_SAVEREL_FSYS), true, &pItem))
     {
         DBG_ASSERT(dynamic_cast< const SfxBoolItem *>( pItem ) !=  nullptr, "BoolItem expected");
-        aSaveOptions.SetSaveRelFSys(static_cast<const SfxBoolItem *>(pItem)->GetValue());
+        officecfg::Office::Common::Save::URL::FileSystem::set(
+            static_cast<const SfxBoolItem *>(pItem)->GetValue(),
+            batch);
     }
 
     // Undo-Count
