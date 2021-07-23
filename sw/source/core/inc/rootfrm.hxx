@@ -114,7 +114,7 @@ class SW_DLLPUBLIC SwRootFrame final : public SwLayoutFrame
     bool    mbBrowseWidthValid   :1; // Is mnBrowseWidth valid?
     bool    mbTurboAllowed       :1;
     bool    mbAssertFlyPages     :1; // Insert more Pages for Flys if needed?
-    bool    mbTableUpdateInProgress : 1; // tdf#139426 to allow supression of AssertFlyPages during TableUpdate
+    bool    mbTableUpdateInProgress : 1; // tdf#139426 to allow suppression of AssertFlyPages during TableUpdate
     bool    mbIsVirtPageNum      :1; // Do we have a virtual pagenumber?
     bool    mbIsNewLayout        :1; // Layout loaded or newly created
     bool    mbCallbackActionEnabled:1; // No Action in Notification desired
