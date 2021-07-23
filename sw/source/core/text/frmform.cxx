@@ -323,7 +323,7 @@ bool SwTextFrame::CalcFollow(TextFrameIndex const nTextOfst)
 
         const tools::Long nRemaining =
                  - aRectFnSet.BottomDist( GetUpper()->getFrameArea(), nOldBottom );
-        if (  nRemaining > 0 && !GetUpper()->IsSctFrame() &&
+        if (  nRemaining > 0 &&
               nRemaining != ( aRectFnSet.IsVert() ?
                               nMyPos - getFrameArea().Right() :
                               getFrameArea().Top() - nMyPos ) )
