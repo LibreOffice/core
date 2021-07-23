@@ -40,6 +40,7 @@
 #include <osl/diagnose.h>
 #include <tools/diagnose_ex.h>
 #include <officecfg/Office/Common.hxx>
+#include <officecfg/Office/Recovery.hxx>
 
 #include <sfx2/fcontnr.hxx>
 
@@ -438,8 +439,8 @@ void SvxSaveTabPage::Reset( const SfxItemSet* )
     m_xAutoSaveCB->set_active(officecfg::Office::Common::Save::Document::AutoSave::get());
     m_xAutoSaveCB->set_sensitive(!officecfg::Office::Common::Save::Document::AutoSave::isReadOnly());
 
-    m_xUserAutoSaveCB->set_active(aSaveOpt.IsUserAutoSave());
-    m_xUserAutoSaveCB->set_sensitive(!aSaveOpt.IsReadOnly(SvtSaveOptions::EOption::UserAutoSave));
+    m_xUserAutoSaveCB->set_active(officecfg::Office::Recovery::AutoSave::UserAutoSaveEnabled::get());
+    m_xUserAutoSaveCB->set_sensitive(!officecfg::Office::Recovery::AutoSave::UserAutoSaveEnabled::isReadOnly());
 
     m_xWarnAlienFormatCB->set_active(aSaveOpt.IsWarnAlienFormat());
     m_xWarnAlienFormatCB->set_sensitive(!aSaveOpt.IsReadOnly(SvtSaveOptions::EOption::WarnAlienFormat));

@@ -37,6 +37,7 @@
 
 #include <officecfg/Inet.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <officecfg/Office/Recovery.hxx>
 #include <unotools/saveopt.hxx>
 #include <svtools/helpopt.hxx>
 #include <unotools/securityoptions.hxx>
@@ -186,8 +187,9 @@ void SfxApplication::GetOptions( SfxItemSet& rSet )
                 case SID_ATTR_USERAUTOSAVE :
                     {
                         bRet = true;
-                        if (!aSaveOptions.IsReadOnly(SvtSaveOptions::EOption::UserAutoSave))
-                            if (!rSet.Put( SfxBoolItem( rPool.GetWhich( SID_ATTR_USERAUTOSAVE ), aSaveOptions.IsUserAutoSave())))
+                        if (!officecfg::Office::Recovery::AutoSave::UserAutoSaveEnabled::isReadOnly())
+                            if (!rSet.Put( SfxBoolItem( rPool.GetWhich( SID_ATTR_USERAUTOSAVE ),
+                                    officecfg::Office::Recovery::AutoSave::UserAutoSaveEnabled::get() )))
                                 bRet = false;
                     }
                     break;
@@ -481,7 +483,9 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     if ( SfxItemState::SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_USERAUTOSAVE), true, &pItem))
     {
         DBG_ASSERT(dynamic_cast< const SfxBoolItem *>( pItem ) !=  nullptr, "BoolItem expected");
-        aSaveOptions.SetUserAutoSave( static_cast<const SfxBoolItem*>(pItem)->GetValue() );
+        officecfg::Office::Recovery::AutoSave::UserAutoSaveEnabled::set(
+                static_cast<const SfxBoolItem*>(pItem)->GetValue(),
+                batch);
     }
 
     // DocInfo
