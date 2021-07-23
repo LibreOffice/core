@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4ea4443c_42474a13",
+        "filename": "cui/source/dialogs/GraphicTestsDialog.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-07-23T07:54:28Z",
+      "side": 1,
+      "message": "Not sure this is necessary the best way to do it, but OK. I would directly write PNG streams into a ZIP file and just avoid a temporary directory you need to remove later, but OK. If you have time in the future you can try to fix this in a follow up commit.",
+      "range": {
+        "startLine": 87,
+        "startChar": 7,
+        "endLine": 89,
+        "endChar": 33
+      },
+      "revId": "b5bf23a351270679968b9a683a737311501aaac4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
