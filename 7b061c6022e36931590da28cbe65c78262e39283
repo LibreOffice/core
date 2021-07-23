@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d501b89c_19c3098f",
+        "filename": "cui/source/options/optgdlg.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 604,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-07-23T07:56:30Z",
+      "side": 1,
+      "message": "this became a unique_ptr again ...",
+      "range": {
+        "startLine": 604,
+        "startChar": 9,
+        "endLine": 604,
+        "endChar": 19
+      },
+      "revId": "7b061c6022e36931590da28cbe65c78262e39283",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
