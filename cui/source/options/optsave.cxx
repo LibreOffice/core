@@ -435,8 +435,8 @@ void SvxSaveTabPage::Reset( const SfxItemSet* )
     m_xBackupCB->set_active(aSaveOpt.IsBackup());
     m_xBackupCB->set_sensitive(!aSaveOpt.IsReadOnly(SvtSaveOptions::EOption::Backup));
 
-    m_xAutoSaveCB->set_active(aSaveOpt.IsAutoSave());
-    m_xAutoSaveCB->set_sensitive(!aSaveOpt.IsReadOnly(SvtSaveOptions::EOption::AutoSave));
+    m_xAutoSaveCB->set_active(officecfg::Office::Common::Save::Document::AutoSave::get());
+    m_xAutoSaveCB->set_sensitive(!officecfg::Office::Common::Save::Document::AutoSave::isReadOnly());
 
     m_xUserAutoSaveCB->set_active(aSaveOpt.IsUserAutoSave());
     m_xUserAutoSaveCB->set_sensitive(!aSaveOpt.IsReadOnly(SvtSaveOptions::EOption::UserAutoSave));
