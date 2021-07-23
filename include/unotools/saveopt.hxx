@@ -37,7 +37,6 @@ public:
         AutoSave,
         AutoSavePrompt,
         DocInfSave,
-        SaveWorkingSet,
         WarnAlienFormat,
         LoadDocPrinter,
         OdfDefaultVersion,
@@ -107,9 +106,6 @@ public:
 
     void                    SetDocInfoSave(bool b);
     bool                IsDocInfoSave() const;
-
-    void                    SetSaveWorkingSet( bool b );
-    bool                IsSaveWorkingSet() const;
 
     void                    SetLoadUserSettings(bool b);
     bool                IsLoadUserSettings() const;

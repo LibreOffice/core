@@ -65,7 +65,6 @@ class SvtSaveOptions_Impl : public utl::ConfigItem
                                         bAutoSavePrompt,
                                         bUserAutoSave,
                                         bDocInfSave,
-                                        bSaveWorkingSet,
                                         bWarnAlienFormat,
                                         bLoadDocPrinter;
 
@@ -78,7 +77,6 @@ class SvtSaveOptions_Impl : public utl::ConfigItem
                                         bROAutoSavePrompt,
                                         bROUserAutoSave,
                                         bRODocInfSave,
-                                        bROSaveWorkingSet,
                                         bROWarnAlienFormat,
                                         bROLoadDocPrinter,
                                         bROODFDefaultVersion;
@@ -97,7 +95,6 @@ public:
     bool                    IsAutoSavePrompt() const            { return bAutoSavePrompt; }
     bool                    IsUserAutoSave() const              { return bUserAutoSave; }
     bool                    IsDocInfoSave() const               { return bDocInfSave; }
-    bool                    IsSaveWorkingSet() const            { return bSaveWorkingSet;         }
     bool                IsWarnAlienFormat() const           { return bWarnAlienFormat; }
     bool                IsLoadDocPrinter() const            { return bLoadDocPrinter; }
 
@@ -111,7 +108,6 @@ public:
     void                    SetAutoSavePrompt( bool b );
     void                    SetUserAutoSave( bool b );
     void                    SetDocInfoSave( bool b );
-    void                    SetSaveWorkingSet( bool b );
     void                    SetWarnAlienFormat( bool _bDoPP );
     void                    SetLoadDocPrinter( bool bNew );
     void                    SetODFDefaultVersion( SvtSaveOptions::ODFDefaultVersion eNew );
@@ -187,15 +183,6 @@ void SvtSaveOptions_Impl::SetDocInfoSave(bool b)
     }
 }
 
-void SvtSaveOptions_Impl::SetSaveWorkingSet( bool b )
-{
-    if (!bROSaveWorkingSet && bSaveWorkingSet!=b)
-    {
-        bSaveWorkingSet = b;
-        SetModified();
-    }
-}
-
 void SvtSaveOptions_Impl::SetWarnAlienFormat( bool _bDoPP )
 {
     if (!bROWarnAlienFormat && bWarnAlienFormat!=_bDoPP)
@@ -249,9 +236,6 @@ bool SvtSaveOptions_Impl::IsReadOnly( SvtSaveOptions::EOption eOption ) const
         case SvtSaveOptions::EOption::DocInfSave :
             bReadOnly = bRODocInfSave;
             break;
-        case SvtSaveOptions::EOption::SaveWorkingSet :
-            bReadOnly = bROSaveWorkingSet;
-            break;
         case SvtSaveOptions::EOption::WarnAlienFormat :
             bReadOnly = bROWarnAlienFormat;
             break;
@@ -274,8 +258,7 @@ bool SvtSaveOptions_Impl::IsReadOnly( SvtSaveOptions::EOption eOption ) const
 #define EDITPROPERTY        6
 #define WARNALIENFORMAT     7
 #define LOADDOCPRINTER      8
-#define SAVEWORKINGSET      9
-#define ODFDEFAULTVERSION   10
+#define ODFDEFAULTVERSION   9
 
 static Sequence< OUString > GetPropertyNames()
 {
@@ -290,7 +273,6 @@ static Sequence< OUString > GetPropertyNames()
         "Document/EditProperty",
         "Document/WarnAlienFormat",
         "Document/LoadPrinter",
-        "WorkingSet",
         "ODF/DefaultVersion"
     };
 
@@ -312,7 +294,6 @@ SvtSaveOptions_Impl::SvtSaveOptions_Impl()
     , bAutoSavePrompt( false )
     , bUserAutoSave( false )
     , bDocInfSave( false )
-    , bSaveWorkingSet( false )
     , bWarnAlienFormat( true )
     , bLoadDocPrinter( true )
     , eODFDefaultVersion( SvtSaveOptions::ODFVER_LATEST )
@@ -323,7 +304,6 @@ SvtSaveOptions_Impl::SvtSaveOptions_Impl()
     , bROAutoSavePrompt( CFG_READONLY_DEFAULT )
     , bROUserAutoSave( CFG_READONLY_DEFAULT )
     , bRODocInfSave( CFG_READONLY_DEFAULT )
-    , bROSaveWorkingSet( CFG_READONLY_DEFAULT )
     , bROWarnAlienFormat( CFG_READONLY_DEFAULT )
     , bROLoadDocPrinter( CFG_READONLY_DEFAULT )
     , bROODFDefaultVersion( CFG_READONLY_DEFAULT )
@@ -401,10 +381,6 @@ SvtSaveOptions_Impl::SvtSaveOptions_Impl()
                                 case EDITPROPERTY :
                                     bDocInfSave = bTemp;
                                     bRODocInfSave = pROStates[nProp];
-                                    break;
-                                case SAVEWORKINGSET :
-                                    bSaveWorkingSet = bTemp;
-                                    bROSaveWorkingSet = pROStates[nProp];
                                     break;
 
                                 case WARNALIENFORMAT:
@@ -508,14 +484,6 @@ void SvtSaveOptions_Impl::ImplCommit()
                 if (!bRODocInfSave)
                 {
                     pValues[nRealCount] <<= bDocInfSave;
-                    pNames[nRealCount] = pOrgNames[i];
-                    ++nRealCount;
-                }
-                break;
-            case SAVEWORKINGSET :
-                if (!bROSaveWorkingSet)
-                {
-                    pValues[nRealCount] <<= bSaveWorkingSet;
                     pNames[nRealCount] = pOrgNames[i];
                     ++nRealCount;
                 }
@@ -715,16 +683,6 @@ void SvtSaveOptions::SetDocInfoSave(bool b)
 bool SvtSaveOptions::IsDocInfoSave() const
 {
     return pImp->pSaveOpt->IsDocInfoSave();
-}
-
-void SvtSaveOptions::SetSaveWorkingSet( bool b )
-{
-    pImp->pSaveOpt->SetSaveWorkingSet( b );
-}
-
-bool SvtSaveOptions::IsSaveWorkingSet() const
-{
-    return pImp->pSaveOpt->IsSaveWorkingSet();
 }
 
 void SvtSaveOptions::SetLoadUserSettings(bool b)

@@ -200,8 +200,9 @@ void SfxApplication::GetOptions( SfxItemSet& rSet )
                 case SID_ATTR_WORKINGSET :
                     {
                         bRet = true;
-                        if (!aSaveOptions.IsReadOnly(SvtSaveOptions::EOption::SaveWorkingSet))
-                            if (!rSet.Put( SfxBoolItem( rPool.GetWhich( SID_ATTR_WORKINGSET ), aSaveOptions.IsSaveWorkingSet())))
+                        if (!officecfg::Office::Common::Save::WorkingSet::isReadOnly())
+                            if (!rSet.Put( SfxBoolItem( rPool.GetWhich( SID_ATTR_WORKINGSET ),
+                                    officecfg::Office::Common::Save::WorkingSet::get())))
                                 bRet = false;
                     }
                     break;
@@ -487,7 +488,9 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     if ( SfxItemState::SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_WORKINGSET), true, &pItem))
     {
         DBG_ASSERT(dynamic_cast< const SfxBoolItem *>( pItem ) !=  nullptr, "BoolItem expected");
-        aSaveOptions.SetSaveWorkingSet(static_cast<const SfxBoolItem *>(pItem)->GetValue());
+        officecfg::Office::Common::Save::WorkingSet::set(
+            static_cast<const SfxBoolItem *>(pItem)->GetValue(),
+            batch);
     }
 
     // Save window settings
