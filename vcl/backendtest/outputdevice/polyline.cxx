@@ -203,6 +203,33 @@ Bitmap OutputDeviceTestPolyLine::setupClosedBezier()
 
     return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
 }
+
+Bitmap OutputDeviceTestPolyLine::setupRectangleOnSize1028()
+{
+    initialSetup(1028, 1028, constBackgroundColor);
+
+    mpVirtualDevice->SetLineColor(constLineColor);
+    mpVirtualDevice->SetFillColor();
+
+    drawPolyLineOffset(*mpVirtualDevice, maVDRectangle, 2);
+    drawPolyLineOffset(*mpVirtualDevice, maVDRectangle, 5);
+
+    return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
+}
+
+Bitmap OutputDeviceTestPolyLine::setupRectangleOnSize4096()
+{
+    initialSetup(4096, 4096, constBackgroundColor);
+
+    mpVirtualDevice->SetLineColor(constLineColor);
+    mpVirtualDevice->SetFillColor();
+
+    drawPolyLineOffset(*mpVirtualDevice, maVDRectangle, 2);
+    drawPolyLineOffset(*mpVirtualDevice, maVDRectangle, 5);
+
+    return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
+}
+
 } // end namespace vcl::test
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
