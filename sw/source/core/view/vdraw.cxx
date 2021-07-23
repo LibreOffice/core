@@ -102,7 +102,7 @@ void SwViewShellImp::PaintLayer( const SdrLayerID _nLayerID,
     DrawModeFlags nOldDrawMode = pOutDev->GetDrawMode();
     if( GetShell()->GetWin() &&
         Application::GetSettings().GetStyleSettings().GetHighContrastMode() &&
-        (!GetShell()->IsPreview()||SW_MOD()->GetAccessibilityOptions().GetIsForPagePreviews()))
+        (!GetShell()->IsPreview() || officecfg::Office::Common::Accessibility::IsForPagePreviews::get()))
     {
         pOutDev->SetDrawMode( nOldDrawMode | DrawModeFlags::SettingsLine | DrawModeFlags::SettingsFill |
                             DrawModeFlags::SettingsText | DrawModeFlags::SettingsGradient );

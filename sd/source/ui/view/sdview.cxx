@@ -34,6 +34,7 @@
 
 #include <vcl/settings.hxx>
 
+#include <officecfg/Office/Common.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdoutl.hxx>
@@ -1010,8 +1011,6 @@ void View::onAccessibilityOptionsChanged()
 
     const StyleSettings& rStyleSettings = pWindow->GetSettings().GetStyleSettings();
 
-    SvtAccessibilityOptions& aAccOptions = getAccessibilityOptions();
-
     if( mpViewSh->GetViewFrame() && mpViewSh->GetViewFrame()->GetDispatcher() )
     {
         sal_uInt16 nOutputSlot, nPreviewSlot;
@@ -1025,7 +1024,8 @@ void View::onAccessibilityOptionsChanged()
             nOutputSlot = SID_OUTPUT_QUALITY_COLOR;
         }
 
-        if( rStyleSettings.GetHighContrastMode() && aAccOptions.GetIsForPagePreviews() )
+        if( rStyleSettings.GetHighContrastMode()
+            && officecfg::Office::Common::Accessibility::IsForPagePreviews::get() )
         {
             nPreviewSlot = SID_PREVIEW_QUALITY_CONTRAST;
         }

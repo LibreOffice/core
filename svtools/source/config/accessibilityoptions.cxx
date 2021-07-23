@@ -52,7 +52,6 @@ public:
     SvtAccessibilityOptions_Impl();
 
     void        SetVCLSettings();
-    bool        GetIsForPagePreviews() const;
     bool        GetIsHelpTipsDisappear() const;
     bool        GetIsAllowAnimatedGraphics() const;
     bool        GetIsAllowAnimatedText() const;
@@ -96,22 +95,6 @@ SvtAccessibilityOptions_Impl::SvtAccessibilityOptions_Impl()
         DBG_UNHANDLED_EXCEPTION("svtools.config");
         m_xCfg.clear();
     }
-}
-
-bool SvtAccessibilityOptions_Impl::GetIsForPagePreviews() const
-{
-    bool                                            bRet = true;
-
-    try
-    {
-        if(m_xNode.is())
-            m_xNode->getPropertyValue("IsForPagePreviews") >>= bRet;
-    }
-    catch(const css::uno::Exception&)
-    {
-        DBG_UNHANDLED_EXCEPTION("svtools.config");
-    }
-    return bRet;
 }
 
 bool SvtAccessibilityOptions_Impl::GetIsHelpTipsDisappear() const
@@ -375,10 +358,6 @@ SvtAccessibilityOptions::~SvtAccessibilityOptions()
     }
 }
 
-bool SvtAccessibilityOptions::GetIsForPagePreviews() const
-{
-    return sm_pSingleImplConfig->GetIsForPagePreviews();
-}
 bool SvtAccessibilityOptions::GetIsAllowAnimatedGraphics() const
 {
     return sm_pSingleImplConfig->GetIsAllowAnimatedGraphics();

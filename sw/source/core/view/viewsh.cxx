@@ -2527,7 +2527,7 @@ void SwViewShell::ApplyAccessibilityOptions(SvtAccessibilityOptions const & rAcc
 {
     if (utl::ConfigManager::IsFuzzing())
         return;
-    if (mpOpt->IsPagePreview() && !rAccessibilityOptions.GetIsForPagePreviews())
+    if (mpOpt->IsPagePreview() && !officecfg::Office::Common::Accessibility::IsForPagePreviews::get())
     {
         mpAccOptions->SetAlwaysAutoColor(false);
         mpAccOptions->SetStopAnimatedGraphics(false);
