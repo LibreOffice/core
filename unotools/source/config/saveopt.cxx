@@ -68,7 +68,6 @@ class SvtSaveOptions_Impl : public utl::ConfigItem
                                         bSaveWorkingSet,
                                         bSaveRelINet,
                                         bSaveRelFSys,
-                                        bDoPrettyPrinting,
                                         bWarnAlienFormat,
                                         bLoadDocPrinter;
 
@@ -85,7 +84,6 @@ class SvtSaveOptions_Impl : public utl::ConfigItem
                                         bROSaveRelINet,
                                         bROSaveRelFSys,
                                         bROWarnAlienFormat,
-                                        bRODoPrettyPrinting,
                                         bROLoadDocPrinter,
                                         bROODFDefaultVersion;
 
@@ -106,7 +104,6 @@ public:
     bool                    IsSaveWorkingSet() const            { return bSaveWorkingSet;         }
     bool                    IsSaveRelINet() const               { return bSaveRelINet; }
     bool                    IsSaveRelFSys() const               { return bSaveRelFSys; }
-    bool                IsPrettyPrintingEnabled( ) const    { return bDoPrettyPrinting; }
     bool                IsWarnAlienFormat() const           { return bWarnAlienFormat; }
     bool                IsLoadDocPrinter() const            { return bLoadDocPrinter; }
 
@@ -123,7 +120,6 @@ public:
     void                    SetSaveWorkingSet( bool b );
     void                    SetSaveRelINet( bool b );
     void                    SetSaveRelFSys( bool b );
-    void                    EnablePrettyPrinting( bool _bDoPP );
     void                    SetWarnAlienFormat( bool _bDoPP );
     void                    SetLoadDocPrinter( bool bNew );
     void                    SetODFDefaultVersion( SvtSaveOptions::ODFDefaultVersion eNew );
@@ -226,15 +222,6 @@ void SvtSaveOptions_Impl::SetSaveRelFSys( bool b )
     }
 }
 
-void SvtSaveOptions_Impl::EnablePrettyPrinting( bool _bDoPP )
-{
-    if (!bRODoPrettyPrinting && bDoPrettyPrinting!=_bDoPP)
-    {
-        bDoPrettyPrinting = _bDoPP;
-        SetModified();
-    }
-}
-
 void SvtSaveOptions_Impl::SetWarnAlienFormat( bool _bDoPP )
 {
     if (!bROWarnAlienFormat && bWarnAlienFormat!=_bDoPP)
@@ -297,9 +284,6 @@ bool SvtSaveOptions_Impl::IsReadOnly( SvtSaveOptions::EOption eOption ) const
         case SvtSaveOptions::EOption::SaveRelFsys :
             bReadOnly = bROSaveRelFSys;
             break;
-        case SvtSaveOptions::EOption::DoPrettyPrinting :
-            bReadOnly = bRODoPrettyPrinting;
-            break;
         case SvtSaveOptions::EOption::WarnAlienFormat :
             bReadOnly = bROWarnAlienFormat;
             break;
@@ -320,13 +304,12 @@ bool SvtSaveOptions_Impl::IsReadOnly( SvtSaveOptions::EOption eOption ) const
 #define AUTOSAVE            4
 #define PROMPT              5
 #define EDITPROPERTY        6
-#define PRETTYPRINTING      7
-#define WARNALIENFORMAT     8
-#define LOADDOCPRINTER      9
-#define FILESYSTEM          10
-#define INTERNET            11
-#define SAVEWORKINGSET      12
-#define ODFDEFAULTVERSION   13
+#define WARNALIENFORMAT     7
+#define LOADDOCPRINTER      8
+#define FILESYSTEM          9
+#define INTERNET            10
+#define SAVEWORKINGSET      11
+#define ODFDEFAULTVERSION   12
 
 static Sequence< OUString > GetPropertyNames()
 {
@@ -339,7 +322,6 @@ static Sequence< OUString > GetPropertyNames()
         "Document/AutoSave",
         "Document/AutoSavePrompt",
         "Document/EditProperty",
-        "Document/PrettyPrinting",
         "Document/WarnAlienFormat",
         "Document/LoadPrinter",
         "URL/FileSystem",
@@ -369,7 +351,6 @@ SvtSaveOptions_Impl::SvtSaveOptions_Impl()
     , bSaveWorkingSet( false )
     , bSaveRelINet( false )
     , bSaveRelFSys( false )
-    , bDoPrettyPrinting( false )
     , bWarnAlienFormat( true )
     , bLoadDocPrinter( true )
     , eODFDefaultVersion( SvtSaveOptions::ODFVER_LATEST )
@@ -384,7 +365,6 @@ SvtSaveOptions_Impl::SvtSaveOptions_Impl()
     , bROSaveRelINet( CFG_READONLY_DEFAULT )
     , bROSaveRelFSys( CFG_READONLY_DEFAULT )
     , bROWarnAlienFormat( CFG_READONLY_DEFAULT )
-    , bRODoPrettyPrinting( CFG_READONLY_DEFAULT )
     , bROLoadDocPrinter( CFG_READONLY_DEFAULT )
     , bROODFDefaultVersion( CFG_READONLY_DEFAULT )
 {
@@ -473,11 +453,6 @@ SvtSaveOptions_Impl::SvtSaveOptions_Impl()
                                 case INTERNET :
                                     bSaveRelINet = bTemp;
                                     bROSaveRelINet = pROStates[nProp];
-                                    break;
-
-                                case PRETTYPRINTING:
-                                    bDoPrettyPrinting = bTemp;
-                                    bRODoPrettyPrinting = pROStates[nProp];
                                     break;
 
                                 case WARNALIENFORMAT:
@@ -605,14 +580,6 @@ void SvtSaveOptions_Impl::ImplCommit()
                 if (!bROSaveRelINet)
                 {
                     pValues[nRealCount] <<= bSaveRelINet;
-                    pNames[nRealCount] = pOrgNames[i];
-                    ++nRealCount;
-                }
-                break;
-            case PRETTYPRINTING:
-                if (!bRODoPrettyPrinting)
-                {
-                    pValues[nRealCount] <<= bDoPrettyPrinting;
                     pNames[nRealCount] = pOrgNames[i];
                     ++nRealCount;
                 }
@@ -852,16 +819,6 @@ void SvtSaveOptions::SetLoadUserSettings(bool b)
 bool   SvtSaveOptions::IsLoadUserSettings() const
 {
     return pImp->pLoadOpt->IsLoadUserSettings();
-}
-
-void SvtSaveOptions::SetPrettyPrinting( bool _bEnable )
-{
-    pImp->pSaveOpt->EnablePrettyPrinting( _bEnable );
-}
-
-bool SvtSaveOptions::IsPrettyPrinting() const
-{
-    return pImp->pSaveOpt->IsPrettyPrintingEnabled();
 }
 
 void SvtSaveOptions::SetWarnAlienFormat( bool _bEnable )
