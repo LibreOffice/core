@@ -4499,33 +4499,7 @@ OUString SwTextNode::GetLabelFollowedBy() const
         const SwNumFormat& rFormat = pNumRule->Get( o3tl::narrowing<sal_uInt16>(GetActualListLevel()) );
         if ( rFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
         {
-            switch ( rFormat.GetLabelFollowedBy() )
-            {
-                case SvxNumberFormat::LISTTAB:
-                {
-                    return "\t";
-                }
-                break;
-                case SvxNumberFormat::SPACE:
-                {
-                    return " ";
-                }
-                break;
-                case SvxNumberFormat::NEWLINE:
-                {
-                    return "\n";
-                }
-                break;
-                case SvxNumberFormat::NOTHING:
-                {
-                    // intentionally left blank.
-                }
-                break;
-                default:
-                {
-                    OSL_FAIL( "<SwTextNode::GetLabelFollowedBy()> - unknown SvxNumberFormat::GetLabelFollowedBy() return value" );
-                }
-            }
+            return rFormat.GetLabelFollowedByAsString();
         }
     }
 

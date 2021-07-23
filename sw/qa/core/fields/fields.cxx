@@ -84,9 +84,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf143424)
 
     // Field: Chapter Format: Chapter number and name
     xField.set(xFields->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("Chapter 2 -Another title"), xField->getPresentation(false));
-    //                                       ^^ seems here must be a separator
-    // Please modify this testcase once this behavior will be fixed. For now I just fix and check this behavior
+    CPPUNIT_ASSERT_EQUAL(OUString("Chapter 2 - Another title"), xField->getPresentation(false));
 
     // Field: Chapter Format: Chapter number
     xField.set(xFields->nextElement(), uno::UNO_QUERY);
@@ -95,6 +93,43 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf143424)
     // Field: Chapter Format: Chapter number without separator
     xField.set(xFields->nextElement(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("2"), xField->getPresentation(false));
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testChapterFieldsFollowedBy)
+{
+    createSwDoc(DATA_DIRECTORY, "chapter_field_followedby.odt");
+
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xFieldsAccess(
+        xTextFieldsSupplier->getTextFields());
+    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+
+    // TODO: I have no idea why fields are enumerated in invalid order, not like in document
+    std::vector<OUString> aFieldValues = {
+        "Followed by tab", // #1
+        "I.I.I.I", // #16
+        ">I.I.I.I< Followed by newline", // #15 Linefeed is replaced by space
+        ">I.I.I.I<", // #14
+        "Followed by newline", // #13
+        "I.I.I", // #12
+        ">I.I.I<Followed by nothing", // #11 Nothing between text & outline
+        ">I.I.I<", // #10
+        "Followed by nothing", // #9
+        "I.I", // #8
+        ">I.I< Followed by space", // #7 Space as is
+        ">I.I<", // #6
+        "Followed by space", // #5
+        "I", // #4
+        ">I< Followed by tab", // #3 Here is a tab, but replaced by space in field
+        ">I<", // #2
+    };
+
+    for (const auto& sValue : aFieldValues)
+    {
+        CPPUNIT_ASSERT(xFields->hasMoreElements());
+        uno::Reference<text::XTextField> xField(xFields->nextElement(), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(sValue, xField->getPresentation(false));
+    }
 }
 }
 

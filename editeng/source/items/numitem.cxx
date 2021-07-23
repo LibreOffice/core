@@ -483,6 +483,27 @@ void SvxNumberFormat::SetLabelFollowedBy( const LabelFollowedBy eLabelFollowedBy
 {
     meLabelFollowedBy = eLabelFollowedBy;
 }
+
+OUString SvxNumberFormat::GetLabelFollowedByAsString() const
+{
+    switch (meLabelFollowedBy)
+    {
+        case LISTTAB:
+            return "\t";
+        case SPACE:
+            return " ";
+        case NEWLINE:
+            return "\n";
+        case NOTHING:
+            // intentionally left blank.
+            return OUString();
+        default:
+            SAL_WARN("editeng", "Unknown SvxNumberFormat::GetLabelFollowedBy() return value");
+            assert(false);
+    }
+    return OUString();
+}
+
 void SvxNumberFormat::SetListtabPos( const tools::Long nListtabPos )
 {
     mnListtabPos = nListtabPos;
