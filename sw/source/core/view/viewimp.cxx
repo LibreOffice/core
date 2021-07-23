@@ -29,6 +29,7 @@
 #include <svx/svdpage.hxx>
 #include <accmap.hxx>
 
+#include <officecfg/Office/Common.hxx>
 #include <pagepreviewlayout.hxx>
 #include <comphelper/lok.hxx>
 #include <tools/diagnose_ex.h>
@@ -253,7 +254,7 @@ Color SwViewShellImp::GetRetoucheColor() const
              COL_TRANSPARENT != rSh.GetViewOptions()->GetRetoucheColor() )
             aRet = rSh.GetViewOptions()->GetRetoucheColor();
         else if(rSh.GetViewOptions()->IsPagePreview()  &&
-                    !SW_MOD()->GetAccessibilityOptions().GetIsForPagePreviews())
+                    !officecfg::Office::Common::Accessibility::IsForPagePreviews::get())
             aRet = COL_WHITE;
         else
             aRet = SwViewOption::GetDocColor();
