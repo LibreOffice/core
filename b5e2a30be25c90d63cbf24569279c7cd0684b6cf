@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "63642f90_8a88b756",
+        "filename": "oox/qa/unit/export.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-07-23T05:23:02Z",
+      "side": 1,
+      "message": "Do you think moving the test to ooxmlexport is OK? Something like this test:\nhttps://gerrit.libreoffice.org/c/core/+/119347",
+      "parentUuid": "b726f3c2_6b10e6a3",
+      "revId": "b5e2a30be25c90d63cbf24569279c7cd0684b6cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b3c983f4_f2472773",
         "filename": "oox/qa/unit/export.cxx",
         "patchSetId": 1
