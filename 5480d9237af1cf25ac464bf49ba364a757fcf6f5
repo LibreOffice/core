@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6520e473_949bb309",
+        "filename": "cui/source/dialogs/hlmarkwn.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 354,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-07-23T10:17:01Z",
+      "side": 1,
+      "message": "this causes -Wmaybe-uninitialized with some GCC, question is whether to better replace it with\n\n  sal_Int32 nOutlineLevel \u003d 0;\n  aAny \u003e\u003e\u003d nOutlineLevel;\n\n(which silently uses `0` if `aAny` doesn\u0027t contain something convertible to `sal_Int32`), or with\n\n  sal_Int32 nOutlineLevel \u003d o3tl::doAccess\u003csal_Int32\u003e(aAny);\n\n(which throws a `css::uno::RuntimeException` if `aAny` doesn\u0027t contain a `sal_Int32`); thoughts?",
+      "range": {
+        "startLine": 353,
+        "startChar": 24,
+        "endLine": 354,
+        "endChar": 47
+      },
+      "revId": "5480d9237af1cf25ac464bf49ba364a757fcf6f5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
