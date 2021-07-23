@@ -54,8 +54,6 @@ class SVT_DLLPUBLIC SvtMiscOptions final : public utl::detail::Options
         void        AddListenerLink( const Link<LinkParamNone*,void>& rLink );
         void        RemoveListenerLink( const Link<LinkParamNone*,void>& rLink );
 
-        bool        DisableUICustomization() const;
-
         sal_Int16   GetSymbolsSize() const;
         void        SetSymbolsSize( sal_Int16 eSet );
         ToolBoxButtonSize   GetSidebarIconSize() const;

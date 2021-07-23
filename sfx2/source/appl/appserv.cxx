@@ -1108,7 +1108,7 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
                 case SID_CONFIGACCEL:
                 case SID_CONFIGEVENT:
                 {
-                    if( SvtMiscOptions().DisableUICustomization() )
+                    if( officecfg::Office::Common::Misc::DisableUICustomization::get() )
                         rSet.DisableItem(nWhich);
                     break;
                 }

@@ -84,7 +84,7 @@ ToolbarModeMenuController::~ToolbarModeMenuController()
 
 void ToolbarModeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu > const & rPopupMenu )
 {
-    if ( SvtMiscOptions().DisableUICustomization() )
+    if ( officecfg::Office::Common::Misc::DisableUICustomization::get() )
         return;
 
     SolarMutexGuard aSolarMutexGuard;
