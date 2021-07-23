@@ -1,15 +1,16 @@
 = Status =
 
 $ make
-$ emrun --serve_after_close instdir/program/ui-previewer.html
+$ emrun --serve_after_close instdir/program/qt_vcldemo.html
 
 The ui-previewer "binary" will "crash" with memory alignment problems.
 
 You can run the WASM mandelbrot Qt example:
 
-$ emrun --serve_after_close workdir/LinkTarget/Executable/qt_mandelbrot.html
+$ emrun --serve_after_close workdir/LinkTarget/Executable/qt_wasm-qt5-mandelbrot.html
 
 REMINDER: always start new tabs in the browser, reload might fail / cache!
+INFO: latest browser won't work anymore with 0.0.0.0 and need 127.0.0.1.
 
 
 = Setup for the LO WASM build (with Qt) =
