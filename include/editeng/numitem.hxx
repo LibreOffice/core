@@ -213,6 +213,7 @@ public:
 
     void SetLabelFollowedBy( const LabelFollowedBy eLabelFollowedBy );
     LabelFollowedBy GetLabelFollowedBy() const { return meLabelFollowedBy;}
+    OUString GetLabelFollowedByAsString() const;
     void SetListtabPos( const tools::Long nListtabPos );
     tools::Long GetListtabPos() const { return mnListtabPos;}
     void SetFirstLineIndent( const tools::Long nFirstLineIndent );

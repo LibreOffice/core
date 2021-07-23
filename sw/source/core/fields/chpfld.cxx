@@ -37,7 +37,8 @@ namespace
 
 OUString removeControlChars(const OUString& sIn)
 {
-    OUStringBuffer aBuf(sIn.replace('\n', ' '));
+    OUStringBuffer aBuf(sIn);
+    aBuf = aBuf.replace('\n', ' ').replace('\t', ' ');
     sal_Int32 nLen = aBuf.getLength();
     for (sal_Int32 i = 0; i < nLen; ++i)
     {
@@ -106,9 +107,9 @@ OUString SwChapterField::ExpandImpl(SwRootFrame const*const pLayout) const
         case CF_NUMBER:
             return rState.sPre + rState.sNumber + rState.sPost;
         case CF_NUM_TITLE:
-            return rState.sPre + rState.sNumber + rState.sPost + rState.sTitle;
+            return rState.sPre + rState.sNumber + rState.sPost + rState.sLabelFollowedBy + rState.sTitle;
         case CF_NUM_NOPREPST_TITLE:
-            return rState.sNumber + rState.sTitle;
+            return rState.sNumber + rState.sLabelFollowedBy + rState.sTitle;
     }
     // CF_NUMBER_NOPREPST
     return rState.sNumber;
@@ -149,6 +150,7 @@ void SwChapterField::ChangeExpansion(const SwTextNode &rTextNd, bool bSrchNum,
 {
     State & rState(pLayout && pLayout->IsHideRedlines() ? m_StateRLHidden : m_State);
     rState.sNumber.clear();
+    rState.sLabelFollowedBy.clear();
     rState.sTitle.clear();
     rState.sPost.clear();
     rState.sPre.clear();
@@ -209,6 +211,7 @@ void SwChapterField::ChangeExpansion(const SwTextNode &rTextNd, bool bSrchNum,
             const SwNumFormat& rNFormat = pRule->Get(nListLevel);
             rState.sPost = rNFormat.GetSuffix();
             rState.sPre = rNFormat.GetPrefix();
+            rState.sLabelFollowedBy = removeControlChars(rNFormat.GetLabelFollowedByAsString());
         }
     }
     else
