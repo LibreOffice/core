@@ -20,6 +20,7 @@
 #include <scitems.hxx>
 #include <editeng/eeitem.hxx>
 
+#include <officecfg/Office/Common.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svx/fmview.hxx>
 #include <editeng/sizeitem.hxx>
@@ -392,7 +393,7 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
         pPrintFunc->SetManualZoom(nZoom);
         pPrintFunc->SetDateTime(aDateTime);
         pPrintFunc->SetClearFlag(true);
-        pPrintFunc->SetUseStyleColor( pScMod->GetAccessOptions().GetIsForPagePreviews() );
+        pPrintFunc->SetUseStyleColor( officecfg::Office::Common::Accessibility::IsForPagePreviews::get() );
 
         pPrintFunc->SetDrawView( pDrawView.get() );
 

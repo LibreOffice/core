@@ -2689,7 +2689,7 @@ bool SwDrawTextInfo::ApplyAutoColor( vcl::Font* pFont )
                 // here we determine the preferred window text color for painting
                 const SwViewOption* pViewOption = GetShell()->GetViewOptions();
                 if(pViewOption->IsPagePreview() &&
-                        !SW_MOD()->GetAccessibilityOptions().GetIsForPagePreviews())
+                        !officecfg::Office::Common::Accessibility::IsForPagePreviews::get())
                     nNewColor = COL_BLACK;
                 else
                     // we take the font color from the appearance page
