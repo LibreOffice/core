@@ -40,9 +40,6 @@ public:
     bool            IsHelpTips() const;
     void            SetOfflineHelpPopUp(bool b);
     bool            IsOfflineHelpPopUp() const;
-
-    const OUString& GetHelpStyleSheet()const;
-    void            SetHelpStyleSheet(const OUString& rStyleSheet);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

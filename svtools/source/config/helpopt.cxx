@@ -44,8 +44,7 @@ enum class HelpProperty
     ExtendedHelp    = 0,
     HelpTips        = 1,
     Locale          = 2,
-    StyleSheet      = 3,
-    OfflineHelpPopUp = 4
+    OfflineHelpPopUp = 3
 };
 
 }
@@ -76,9 +75,6 @@ public:
     void            SetOfflineHelpPopUp(bool b) { bOfflineHelpPopUp = b; SetModified();}
     bool            IsOfflineHelpPopUp() const { return bOfflineHelpPopUp;}
 
-    const OUString& GetHelpStyleSheet()const{return sHelpStyleSheet;}
-    void            SetHelpStyleSheet(const OUString& rStyleSheet){sHelpStyleSheet = rStyleSheet; SetModified();}
-
     static ::osl::Mutex & getInitMutex();
 };
 
@@ -90,7 +86,6 @@ Sequence< OUString > const & SvtHelpOptions_Impl::GetPropertyNames()
         "Tip",
         "Locale",
         "System",
-        "HelpStyleSheet",
         "BuiltInHelpNotInstalledPopUp"
     };
 
@@ -165,9 +160,6 @@ void  SvtHelpOptions_Impl::Load(const uno::Sequence< OUString>& rPropertyNames)
                         aLocale = aTmpStr;
                         break;
 
-                    case HelpProperty::StyleSheet:
-                        sHelpStyleSheet = aTmpStr;
-                    break;
                     default:
                         SAL_WARN( "svtools.config", "Wrong Member!" );
                         break;
@@ -210,9 +202,6 @@ void SvtHelpOptions_Impl::ImplCommit()
                 pValues[nProp] <<= aLocale;
                 break;
 
-            case HelpProperty::StyleSheet:
-                pValues[nProp] <<= sHelpStyleSheet;
-            break;
             case HelpProperty::OfflineHelpPopUp:
               pValues[nProp] <<= bOfflineHelpPopUp;
               break;
@@ -276,16 +265,6 @@ void SvtHelpOptions::SetHelpTips( bool b )
 bool SvtHelpOptions::IsHelpTips() const
 {
     return pImpl->IsHelpTips();
-}
-
-const OUString&   SvtHelpOptions::GetHelpStyleSheet()const
-{
-    return pImpl->GetHelpStyleSheet();
-}
-
-void  SvtHelpOptions::SetHelpStyleSheet(const OUString& rStyleSheet)
-{
-    pImpl->SetHelpStyleSheet(rStyleSheet);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
