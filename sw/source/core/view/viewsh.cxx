@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <officecfg/Office/Common.hxx>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/progress.hxx>
@@ -2527,7 +2528,7 @@ void SwViewShell::ApplyAccessibilityOptions(SvtAccessibilityOptions const & rAcc
 {
     if (utl::ConfigManager::IsFuzzing())
         return;
-    if (mpOpt->IsPagePreview() && !rAccessibilityOptions.GetIsForPagePreviews())
+    if (mpOpt->IsPagePreview() && !officecfg::Office::Common::Accessibility::IsForPagePreviews::get())
     {
         mpAccOptions->SetAlwaysAutoColor(false);
         mpAccOptions->SetStopAnimatedGraphics(false);
