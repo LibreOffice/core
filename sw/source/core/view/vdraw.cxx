@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <officecfg/Office/Common.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
 #include <swmodule.hxx>
@@ -102,7 +103,7 @@ void SwViewShellImp::PaintLayer( const SdrLayerID _nLayerID,
     DrawModeFlags nOldDrawMode = pOutDev->GetDrawMode();
     if( GetShell()->GetWin() &&
         Application::GetSettings().GetStyleSettings().GetHighContrastMode() &&
-        (!GetShell()->IsPreview()||SW_MOD()->GetAccessibilityOptions().GetIsForPagePreviews()))
+        (!GetShell()->IsPreview() || officecfg::Office::Common::Accessibility::IsForPagePreviews::get()))
     {
         pOutDev->SetDrawMode( nOldDrawMode | DrawModeFlags::SettingsLine | DrawModeFlags::SettingsFill |
                             DrawModeFlags::SettingsText | DrawModeFlags::SettingsGradient );
