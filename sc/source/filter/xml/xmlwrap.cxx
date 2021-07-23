@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <officecfg/Office/Common.hxx>
 #include <vcl/errinf.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/objsh.hxx>
@@ -810,8 +811,7 @@ bool ScXMLImportWrapper::Export(bool bStylesOnly)
             xStatusIndicator->start(ScResId(STR_SAVE_DOC), nProgressRange);
         xInfoSet->setPropertyValue("ProgressRange", uno::makeAny(nProgressRange));
 
-        SvtSaveOptions aSaveOpt;
-        bool bUsePrettyPrinting(aSaveOpt.IsPrettyPrinting());
+        bool bUsePrettyPrinting = officecfg::Office::Common::Save::Document::PrettyPrinting::get();
         xInfoSet->setPropertyValue("UsePrettyPrinting", uno::makeAny(bUsePrettyPrinting));
 
         xInfoSet->setPropertyValue( "TargetStorage", uno::Any( xStorage ) );
