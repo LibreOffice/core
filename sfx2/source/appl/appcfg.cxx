@@ -226,7 +226,7 @@ void SfxApplication::GetOptions( SfxItemSet& rSet )
                     break;
                 case SID_HELP_STYLESHEET :
                     if(rSet.Put( SfxStringItem ( rPool.GetWhich( SID_HELP_STYLESHEET ),
-                               aHelpOptions.GetHelpStyleSheet() ) ) )
+                               officecfg::Office::Common::Help::HelpStyleSheet::get() ) ) )
                         bRet = true;
                 break;
                 case SID_ATTR_UNDO_COUNT :
@@ -515,7 +515,8 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     if ( SfxItemState::SET == rSet.GetItemState(rPool.GetWhich(SID_HELP_STYLESHEET ), true, &pItem))
     {
         DBG_ASSERT(dynamic_cast< const SfxStringItem *>( pItem ) !=  nullptr, "StringItem expected");
-        aHelpOptions.SetHelpStyleSheet( static_cast<const SfxStringItem *>(pItem)->GetValue() );
+        OUString sStyleSheet = static_cast<const SfxStringItem *>(pItem)->GetValue();
+        officecfg::Office::Common::Help::HelpStyleSheet::set(sStyleSheet, batch);
     }
 
     // SaveRelINet
