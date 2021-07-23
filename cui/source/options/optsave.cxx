@@ -446,8 +446,8 @@ void SvxSaveTabPage::Reset( const SfxItemSet* )
     m_xAutoSaveEdit->set_sensitive(!aSaveOpt.IsReadOnly(SvtSaveOptions::EOption::AutoSaveTime));
 
     // save relatively
-    m_xRelativeFsysCB->set_active(aSaveOpt.IsSaveRelFSys());
-    m_xRelativeFsysCB->set_sensitive(!aSaveOpt.IsReadOnly(SvtSaveOptions::EOption::SaveRelFsys));
+    m_xRelativeFsysCB->set_active(officecfg::Office::Common::Save::URL::FileSystem::get());
+    m_xRelativeFsysCB->set_sensitive(!officecfg::Office::Common::Save::URL::FileSystem::isReadOnly());
 
     m_xRelativeInetCB->set_active(aSaveOpt.IsSaveRelINet());
     m_xRelativeInetCB->set_sensitive(!aSaveOpt.IsReadOnly(SvtSaveOptions::EOption::SaveRelInet));

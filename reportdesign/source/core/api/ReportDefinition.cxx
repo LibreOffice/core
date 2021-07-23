@@ -1318,9 +1318,8 @@ void SAL_CALL OReportDefinition::storeToStorage( const uno::Reference< embed::XS
     };
     uno::Reference< beans::XPropertySet > xInfoSet( comphelper::GenericPropertySet_CreateInstance( new comphelper::PropertySetInfo( aExportInfoMap ) ) );
 
-    SvtSaveOptions aSaveOpt;
     xInfoSet->setPropertyValue("UsePrettyPrinting", uno::makeAny(officecfg::Office::Common::Save::Document::PrettyPrinting::get()));
-    if ( aSaveOpt.IsSaveRelFSys() )
+    if ( officecfg::Office::Common::Save::URL::FileSystem::get() )
     {
         const OUString sVal( aDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_DOCUMENTBASEURL(),OUString()) );
         xInfoSet->setPropertyValue("BaseURI", uno::makeAny(sVal));
