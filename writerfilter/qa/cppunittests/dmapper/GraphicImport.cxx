@@ -66,7 +66,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf143208wrapTight)
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(getComponent(), uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
     uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
-    bool bContourOutside;
+    bool bContourOutside = false;
     xShape->getPropertyValue("ContourOutside") >>= bContourOutside;
     CPPUNIT_ASSERT(bContourOutside);
 }
