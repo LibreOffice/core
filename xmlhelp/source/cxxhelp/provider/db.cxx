@@ -21,11 +21,30 @@
 #include "db.hxx"
 
 #include <cstring>
+#include <utility>
 
 #include <com/sun/star/io/XSeekable.hpp>
+#include <tools/inetmime.hxx>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::io;
+
+namespace {
+
+//TODO: Replace with C++17 std::from_chars once available:
+std::pair<sal_Int32, char const *> readInt32(char const * begin, char const * end) {
+    sal_Int32 n = 0;
+    for (; begin != end; ++begin) {
+        auto const w = INetMIME::getHexWeight(static_cast<unsigned char>(*begin));
+        if (w == -1) {
+            break;
+        }
+        n = 16 * n + w;
+    }
+    return {n, begin};
+}
+
+}
 
 namespace helpdatafileproxy {
 
@@ -40,14 +59,13 @@ void HDFData::copyToBuffer( const char* pSrcData, int nSize )
 
 // Hdf
 
-bool Hdf::implReadLenAndData( const char* pData, int& riPos, HDFData& rValue )
+bool Hdf::implReadLenAndData( const char* pData, char const * end, int& riPos, HDFData& rValue )
 {
     bool bSuccess = false;
 
     // Read key len
     const char* pStartPtr = pData + riPos;
-    char* pEndPtr;
-    sal_Int32 nKeyLen = strtol( pStartPtr, &pEndPtr, 16 );
+    auto [nKeyLen, pEndPtr] = readInt32(pStartPtr, end);
     if( pEndPtr == pStartPtr )
         return bSuccess;
     riPos += (pEndPtr - pStartPtr) + 1;
@@ -85,19 +103,19 @@ void Hdf::createHashMap( bool bOptimizeForPerformance )
     sal_Int32 nRead = xIn->readBytes( aData, nSize );
 
     const char* pData = reinterpret_cast<const char*>(aData.getConstArray());
+    auto const end = pData + nRead;
     int iPos = 0;
     while( iPos < nRead )
     {
         HDFData aDBKey;
-        if( !implReadLenAndData( pData, iPos, aDBKey ) )
+        if( !implReadLenAndData( pData, end, iPos, aDBKey ) )
             break;
 
         OString aOKeyStr = aDBKey.getData();
 
         // Read val len
         const char* pStartPtr = pData + iPos;
-        char* pEndPtr;
-        sal_Int32 nValLen = strtol( pStartPtr, &pEndPtr, 16 );
+        auto [nValLen, pEndPtr] = readInt32(pStartPtr, end);
         if( pEndPtr == pStartPtr )
             break;
 
@@ -211,7 +229,6 @@ bool Hdf::startIteration()
         if( m_nItRead == nSize )
         {
             bSuccess = true;
-            m_pItData = reinterpret_cast<const char*>(m_aItData.getConstArray());
             m_iItPos = 0;
         }
         else
@@ -229,9 +246,10 @@ bool Hdf::getNextKeyAndValue( HDFData& rKey, HDFData& rValue )
 
     if( m_iItPos < m_nItRead )
     {
-        if( implReadLenAndData( m_pItData, m_iItPos, rKey ) )
+        auto const p = reinterpret_cast<const char*>(m_aItData.getConstArray());
+        if( implReadLenAndData( p, p + m_aItData.size(), m_iItPos, rKey ) )
         {
-            if( implReadLenAndData( m_pItData, m_iItPos, rValue ) )
+            if( implReadLenAndData( p, p + m_aItData.size(), m_iItPos, rValue ) )
                 bSuccess = true;
         }
     }
@@ -242,7 +260,6 @@ bool Hdf::getNextKeyAndValue( HDFData& rKey, HDFData& rValue )
 void Hdf::stopIteration()
 {
     m_aItData = Sequence<sal_Int8>();
-    m_pItData = nullptr;
     m_nItRead = -1;
     m_iItPos = -1;
 }
