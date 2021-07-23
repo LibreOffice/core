@@ -107,7 +107,7 @@ void SidebarToolBox::dispose()
 
 ToolBoxButtonSize SidebarToolBox::GetDefaultButtonSize() const
 {
-    return SvtMiscOptions().GetSidebarIconSize();
+    return static_cast<ToolBoxButtonSize>(officecfg::Office::Common::Misc::SidebarIconSize::get());
 }
 
 void SidebarToolBox::InsertItem(const OUString& rCommand,

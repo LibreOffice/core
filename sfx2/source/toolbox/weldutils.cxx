@@ -53,10 +53,10 @@ bool lcl_RTLizeCommandURL(OUString& rCommandURL)
 }
 
 // for now all controllers are in the sidebar
-vcl::ImageType ToolbarUnoDispatcher::GetIconSize() const
+vcl::ImageType ToolbarUnoDispatcher::GetIconSize()
 {
     vcl::ImageType eType = vcl::ImageType::Size16;
-    switch (m_aToolbarOptions.GetSidebarIconSize())
+    switch (static_cast<ToolBoxButtonSize>(officecfg::Office::Common::Misc::SidebarIconSize::get()))
     {
         case ToolBoxButtonSize::Large:
             eType = vcl::ImageType::Size26;

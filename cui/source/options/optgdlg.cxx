@@ -704,7 +704,9 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet* )
             default:
                 OSL_FAIL( "OfaViewTabPage::FillItemSet(): This state of m_xSidebarIconSizeLB should not be possible!" );
         }
-        aMiscOptions.SetSidebarIconSize( eSet );
+        auto xChanges = comphelper::ConfigurationChanges::create();
+        officecfg::Office::Common::Misc::SidebarIconSize::set(static_cast<sal_Int16>(eSet), xChanges);
+        xChanges->commit();
     }
 
     const sal_Int32 nNotebookbarSizeLB_NewSelection = m_xNotebookbarIconSizeLB->get_active();
@@ -885,11 +887,12 @@ void OfaViewTabPage::Reset( const SfxItemSet* )
     m_xIconSizeLB->set_active( nSizeLB_InitialSelection );
     m_xIconSizeLB->save_value();
 
-    if( aMiscOptions.GetSidebarIconSize() == ToolBoxButtonSize::DontCare )
+    ToolBoxButtonSize eSidebarIconSize = static_cast<ToolBoxButtonSize>(officecfg::Office::Common::Misc::SidebarIconSize::get());
+    if( eSidebarIconSize == ToolBoxButtonSize::DontCare )
         ; // do nothing
-    else if( aMiscOptions.GetSidebarIconSize() == ToolBoxButtonSize::Small )
+    else if( eSidebarIconSize == ToolBoxButtonSize::Small )
         nSidebarSizeLB_InitialSelection = 1;
-    else if( aMiscOptions.GetSidebarIconSize() == ToolBoxButtonSize::Large )
+    else if( eSidebarIconSize == ToolBoxButtonSize::Large )
         nSidebarSizeLB_InitialSelection = 2;
     m_xSidebarIconSizeLB->set_active( nSidebarSizeLB_InitialSelection );
     m_xSidebarIconSizeLB->save_value();
