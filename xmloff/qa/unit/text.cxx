@@ -14,8 +14,11 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
+#include <com/sun/star/text/BibliographyDataType.hpp>
 
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/propertyvalue.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <unotools/tempfile.hxx>
 
 using namespace ::com::sun::star;
@@ -97,6 +100,57 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testCommentResolved)
     // Without the accompanying fix in place, this test would have failed, as the resolved state was
     // not saved for non-range comments.
     CPPUNIT_ASSERT(bResolved);
+}
+
+CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testBibliographyLocalUrl)
+{
+    // Given a document with a biblio field, with non-empty LocalURL:
+    getComponent() = loadFromDesktop("private:factory/swriter");
+    uno::Reference<lang::XMultiServiceFactory> xFactory(getComponent(), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xField(
+        xFactory->createInstance("com.sun.star.text.TextField.Bibliography"), uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aFields = {
+        comphelper::makePropertyValue("BibiliographicType", text::BibliographyDataType::WWW),
+        comphelper::makePropertyValue("Identifier", OUString("AT")),
+        comphelper::makePropertyValue("Author", OUString("Author")),
+        comphelper::makePropertyValue("Title", OUString("Title")),
+        comphelper::makePropertyValue("URL", OUString("http://www.example.com/test.pdf#page=1")),
+        comphelper::makePropertyValue("LocalURL", OUString("file:///home/me/test.pdf")),
+    };
+    xField->setPropertyValue("Fields", uno::makeAny(aFields));
+    uno::Reference<text::XTextDocument> xTextDocument(getComponent(), uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xTextDocument->getText();
+    uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+    uno::Reference<text::XTextContent> xContent(xField, uno::UNO_QUERY);
+    xText->insertTextContent(xCursor, xContent, /*bAbsorb=*/false);
+
+    // When invoking ODT export + import on it:
+    uno::Reference<frame::XStorable> xStorable(getComponent(), uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aStoreProps = {
+        comphelper::makePropertyValue("FilterName", OUString("writer8")),
+    };
+    utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
+    // Without the accompanying fix in place, this test would have resulted in an assertion failure,
+    // as LocalURL was mapped to XML_TOKEN_INVALID.
+    xStorable->storeToURL(aTempFile.GetURL(), aStoreProps);
+    getComponent()->dispose();
+    validate(aTempFile.GetFileName(), test::ODF);
+    getComponent() = loadFromDesktop(aTempFile.GetURL());
+
+    // Then make sure that LocalURL is preserved:
+    xTextDocument.set(getComponent(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(),
+                                                                  uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+    uno::Reference<container::XEnumerationAccess> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xPortionEnum = xPara->createEnumeration();
+    uno::Reference<beans::XPropertySet> xPortion(xPortionEnum->nextElement(), uno::UNO_QUERY);
+    xField.set(xPortion->getPropertyValue("TextField"), uno::UNO_QUERY);
+    comphelper::SequenceAsHashMap aMap(xField->getPropertyValue("Fields"));
+    CPPUNIT_ASSERT(aMap.find("LocalURL") != aMap.end());
+    auto aActual = aMap["LocalURL"].get<OUString>();
+    CPPUNIT_ASSERT_EQUAL(OUString("file:///home/me/test.pdf"), aActual);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

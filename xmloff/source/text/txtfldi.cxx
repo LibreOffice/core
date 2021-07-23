@@ -2948,7 +2948,8 @@ void XMLBibliographyFieldImportContext::startFastElement(
     // iterate over attributes
     for( auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ) )
     {
-        if (IsTokenInNamespace(aIter.getToken(), XML_NAMESPACE_TEXT))
+        if (IsTokenInNamespace(aIter.getToken(), XML_NAMESPACE_TEXT)
+            || IsTokenInNamespace(aIter.getToken(), XML_NAMESPACE_LO_EXT))
         {
             auto nToken = aIter.getToken() & TOKEN_MASK;
             PropertyValue aValue;
@@ -2975,7 +2976,7 @@ void XMLBibliographyFieldImportContext::startFastElement(
             else
             {
                 OUString aStringValue = aIter.toString();
-                if (nToken == XML_URL)
+                if (nToken == XML_URL || nToken == XML_LOCAL_URL)
                 {
                     aStringValue = GetImport().GetAbsoluteReference(aStringValue);
                 }
@@ -3114,6 +3115,9 @@ const char* XMLBibliographyFieldImportContext::MapBibliographyFieldName(
             break;
         case XML_ISBN:
             pName = "ISBN";
+            break;
+        case XML_LOCAL_URL:
+            pName = "LocalURL";
             break;
         default:
             assert(false && "Unknown bibliography info data");

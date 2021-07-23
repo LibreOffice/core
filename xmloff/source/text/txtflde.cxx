@@ -2741,13 +2741,16 @@ void XMLTextFieldExport::ProcessBibliographyData(
             if (!sStr.isEmpty())
             {
                 XMLTokenEnum eElement = MapBibliographyFieldName(rProp.Name);
-                if (eElement == XML_URL)
+                if (eElement == XML_URL || eElement == XML_LOCAL_URL)
                 {
                     sStr = GetExport().GetRelativeReference(sStr);
                 }
-                rExport.AddAttribute(XML_NAMESPACE_TEXT,
-                                     eElement,
-                                     sStr);
+                sal_uInt16 nPrefix = XML_NAMESPACE_TEXT;
+                if (eElement == XML_LOCAL_URL)
+                {
+                    nPrefix = XML_NAMESPACE_LO_EXT;
+                }
+                rExport.AddAttribute(nPrefix, eElement, sStr);
             }
         }
     }
@@ -3440,9 +3443,13 @@ enum XMLTokenEnum XMLTextFieldExport::MapBibliographyFieldName(std::u16string_vi
     {
         eName = XML_ISBN;
     }
+    else if (sName == u"LocalURL")
+    {
+        eName = XML_LOCAL_URL;
+    }
     else
     {
-        OSL_FAIL("Unknown bibliography info data");
+        SAL_WARN("xmloff.text", "Unknown bibliography info data");
         eName = XML_TOKEN_INVALID;
     }
 
