@@ -85,7 +85,6 @@ Sequence< OUString > const & SvtHelpOptions_Impl::GetPropertyNames()
         "ExtendedTip",
         "Tip",
         "Locale",
-        "System",
         "BuiltInHelpNotInstalledPopUp"
     };
 
