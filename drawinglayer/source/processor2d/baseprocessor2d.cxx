@@ -71,8 +71,8 @@ namespace drawinglayer::processor2d
                     else
                     {
                         // unknown implementation, use UNO API call instead and process recursively
-                        const uno::Sequence< beans::PropertyValue >& rViewParameters(getViewInformation2D().getViewInformationSequence());
-                        process(comphelper::sequenceToContainer<primitive2d::Primitive2DContainer>(xReference->getDecomposition(rViewParameters)));
+                        auto aViewParameters = geometry::createPropertyValues(getViewInformation2D());
+                        process(comphelper::sequenceToContainer<primitive2d::Primitive2DContainer>(xReference->getDecomposition(aViewParameters)));
                     }
                 }
             }
