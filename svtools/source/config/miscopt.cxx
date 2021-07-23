@@ -47,8 +47,6 @@ using namespace ::com::sun::star;
 #define PROPERTYHANDLE_SYMBOLSET                0
 #define PROPERTYNAME_ICONTHEME              "SymbolStyle"
 #define PROPERTYHANDLE_SYMBOLSTYLE              1
-#define PROPERTYNAME_SIDEBARICONSIZE        "SidebarIconSize"
-#define PROPERTYHANDLE_SIDEBARICONSIZE          2
 
 class SvtMiscOptions_Impl : public ConfigItem
 {
@@ -56,8 +54,6 @@ private:
     ::std::vector<Link<LinkParamNone*,void>> aList;
     sal_Int16   m_nSymbolsSize;
     bool        m_bIsSymbolsSizeRO;
-    ToolBoxButtonSize m_nSidebarIconSize;
-    bool        m_bIsSidebarIconSizeRO;
     bool        m_bIsSymbolsStyleRO;
     bool        m_bIconThemeWasSetAutomatically;
 
@@ -92,12 +88,7 @@ public:
         sal_Int16 GetSymbolsSize() const
         { return m_nSymbolsSize; }
 
-        ToolBoxButtonSize GetSidebarIconSize() const
-        { return m_nSidebarIconSize; }
-
         void SetSymbolsSize( sal_Int16 nSet );
-
-        void SetSidebarIconSize( ToolBoxButtonSize nSet );
 
         static OUString GetIconTheme();
 
@@ -150,8 +141,6 @@ SvtMiscOptions_Impl::SvtMiscOptions_Impl()
 
     , m_nSymbolsSize( 0 )
     , m_bIsSymbolsSizeRO( false )
-    , m_nSidebarIconSize( ToolBoxButtonSize::DontCare )
-    , m_bIsSidebarIconSizeRO( false )
     , m_bIsSymbolsStyleRO( false )
     , m_bIconThemeWasSetAutomatically( false )
 {
@@ -181,18 +170,6 @@ SvtMiscOptions_Impl::SvtMiscOptions_Impl()
                     OSL_FAIL("Wrong type of \"Misc\\SymbolSet\"!" );
                 }
                 m_bIsSymbolsSizeRO = seqRO[nProperty];
-                break;
-            }
-
-            case PROPERTYHANDLE_SIDEBARICONSIZE :
-            {
-                sal_uInt16 nTmp;
-                if( !(seqValues[nProperty] >>= nTmp) )
-                {
-                    OSL_FAIL("Wrong type of \"Misc\\SidebarIconSize\"!" );
-                } else
-                    m_nSidebarIconSize = static_cast<ToolBoxButtonSize>(nTmp);
-                m_bIsSidebarIconSizeRO = seqRO[nProperty];
                 break;
             }
 
@@ -249,15 +226,6 @@ void SvtMiscOptions_Impl::Load( const Sequence< OUString >& rPropertyNames )
                                                             }
                                                         }
                                                     break;
-            case PROPERTYHANDLE_SIDEBARICONSIZE     :   {
-                                                            sal_uInt16 nTmp;
-                                                            if( !(seqValues[nProperty] >>= nTmp) )
-                                                            {
-                                                                OSL_FAIL("Wrong type of \"Misc\\SidebarIconSize\"!" );
-                                                            } else
-                                                                m_nSidebarIconSize = static_cast<ToolBoxButtonSize>(nTmp);
-                                                        }
-                                                    break;
             case PROPERTYHANDLE_SYMBOLSTYLE         :   {
                                                             OUString aIconTheme;
                                                             if (seqValues[nProperty] >>= aIconTheme)
@@ -289,13 +257,6 @@ void SvtMiscOptions_Impl::CallListeners()
 void SvtMiscOptions_Impl::SetSymbolsSize( sal_Int16 nSet )
 {
     m_nSymbolsSize = nSet;
-    SetModified();
-    CallListeners();
-}
-
-void SvtMiscOptions_Impl::SetSidebarIconSize( ToolBoxButtonSize nSet )
-{
-    m_nSidebarIconSize = nSet;
     SetModified();
     CallListeners();
 }
@@ -360,13 +321,6 @@ void SvtMiscOptions_Impl::ImplCommit()
                 break;
             }
 
-            case PROPERTYHANDLE_SIDEBARICONSIZE :
-            {
-                if ( !m_bIsSidebarIconSizeRO )
-                   seqValues[nProperty] <<= static_cast<sal_uInt16>(m_nSidebarIconSize);
-                break;
-            }
-
             case PROPERTYHANDLE_SYMBOLSTYLE :
             {
                 if ( !m_bIsSymbolsStyleRO ) {
@@ -397,7 +351,6 @@ Sequence< OUString > SvtMiscOptions_Impl::GetPropertyNames()
     {
         PROPERTYNAME_SYMBOLSET,
         PROPERTYNAME_ICONTHEME,
-        PROPERTYNAME_SIDEBARICONSIZE
     };
 }
 
@@ -438,16 +391,6 @@ sal_Int16 SvtMiscOptions::GetSymbolsSize() const
 void SvtMiscOptions::SetSymbolsSize( sal_Int16 nSet )
 {
     m_pImpl->SetSymbolsSize( nSet );
-}
-
-ToolBoxButtonSize SvtMiscOptions::GetSidebarIconSize() const
-{
-    return m_pImpl->GetSidebarIconSize();
-}
-
-void SvtMiscOptions::SetSidebarIconSize( ToolBoxButtonSize nSet )
-{
-    m_pImpl->SetSidebarIconSize( nSet );
 }
 
 sal_Int16 SvtMiscOptions::GetCurrentSymbolsSize() const
