@@ -42,6 +42,7 @@
 #include <ViewShellBase.hxx>
 #include <uiobject.hxx>
 
+#include <officecfg/Office/Common.hxx>
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
 #include <vcl/commandevent.hxx>
@@ -781,7 +782,6 @@ void Window::DataChanged( const DataChangedEvent& rDCEvt )
         if( mpViewShell )
         {
             const StyleSettings&    rStyleSettings = GetSettings().GetStyleSettings();
-            SvtAccessibilityOptions aAccOptions;
             DrawModeFlags           nOutputMode;
             sal_uInt16              nPreviewSlot;
 
@@ -790,7 +790,8 @@ void Window::DataChanged( const DataChangedEvent& rDCEvt )
             else
                 nOutputMode = sd::OUTPUT_DRAWMODE_COLOR;
 
-            if( rStyleSettings.GetHighContrastMode() && aAccOptions.GetIsForPagePreviews() )
+            if( rStyleSettings.GetHighContrastMode()
+                && officecfg::Office::Common::Accessibility::IsForPagePreviews::get() )
                 nPreviewSlot = SID_PREVIEW_QUALITY_CONTRAST;
             else
                 nPreviewSlot = SID_PREVIEW_QUALITY_COLOR;
