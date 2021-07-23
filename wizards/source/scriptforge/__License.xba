@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
 <script:module xmlns:script="http://openoffice.org/2000/script" script:name="__License" script:language="StarBasic" script:moduleType="normal">
-&apos;&apos;&apos;      Copyright 2019-2020 Jean-Pierre LEDURE, Jean-François NIFENECKER, Alain ROMEDENNE
+&apos;&apos;&apos;      Copyright 2019-2022 Jean-Pierre LEDURE, Rafael LIMA, Alain ROMEDENNE
 
 REM =======================================================================================================================
 REM ===			The ScriptForge library and its associated libraries are part of the LibreOffice project.				===
