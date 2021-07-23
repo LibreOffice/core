@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d1b10958_ea915648",
+        "filename": "vcl/backendtest/GraphicsRenderTests.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-07-23T07:48:04Z",
+      "side": 1,
+      "message": "Didn\u0027t I in a previous review already said this function isn\u0027t necessary? You changed it but it\u0027s back again....",
+      "revId": "d365d1d79bc71687a11658086a960e82d1dc4d92",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
