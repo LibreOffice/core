@@ -11,6 +11,7 @@
 #include <unotools/tempfile.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/saveopt.hxx>
+#include <officecfg/Office/Common.hxx>
 
 // This file contains tests to check relative/absolute hyperlinks handling
 
@@ -90,17 +91,9 @@
         CPPUNIT_TEST_SUITE_END();                                                                  \
         void Import()                                                                              \
         {                                                                                          \
-            SvtSaveOptions aOpt;                                                                   \
-            if (bAbsolute)                                                                         \
-            {                                                                                      \
-                aOpt.SetSaveRelFSys(false);                                                        \
-                CPPUNIT_ASSERT(!aOpt.IsSaveRelFSys());                                             \
-            }                                                                                      \
-            else                                                                                   \
-            {                                                                                      \
-                aOpt.SetSaveRelFSys(true);                                                         \
-                CPPUNIT_ASSERT(aOpt.IsSaveRelFSys());                                              \
-            }                                                                                      \
+            auto xChanges = comphelper::ConfigurationChanges::create(); \
+            officecfg::Office::Common::Save::URL::FileSystem::set(!bAbsolute, xChanges);           \
+            xChanges->commit(); \
             executeImportTest(FileName);                                                           \
         }                                                                                          \
         void verify() override;                                                                    \
