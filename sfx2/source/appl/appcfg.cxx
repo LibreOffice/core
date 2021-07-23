@@ -160,8 +160,9 @@ void SfxApplication::GetOptions( SfxItemSet& rSet )
                 case SID_ATTR_AUTOSAVE :
                     {
                         bRet = true;
-                        if (!aSaveOptions.IsReadOnly(SvtSaveOptions::EOption::AutoSave))
-                            if (!rSet.Put( SfxBoolItem( rPool.GetWhich( SID_ATTR_AUTOSAVE ), aSaveOptions.IsAutoSave())))
+                        if (!officecfg::Office::Common::Save::Document::AutoSave::isReadOnly())
+                            if (!rSet.Put( SfxBoolItem( rPool.GetWhich( SID_ATTR_AUTOSAVE ),
+                                    officecfg::Office::Common::Save::Document::AutoSave::get() )))
                                 bRet = false;
                     }
                     break;
@@ -455,7 +456,9 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     if ( SfxItemState::SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_AUTOSAVE), true, &pItem))
     {
         DBG_ASSERT(dynamic_cast< const SfxBoolItem *>( pItem ) !=  nullptr, "BoolItem expected");
-        aSaveOptions.SetAutoSave( static_cast<const SfxBoolItem*>(pItem)->GetValue() );
+        officecfg::Office::Common::Save::Document::AutoSave::set(
+            static_cast<const SfxBoolItem*>(pItem)->GetValue(),
+            batch);
     }
 
     // AutoSave-Prompt

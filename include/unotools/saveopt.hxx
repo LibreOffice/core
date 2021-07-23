@@ -34,7 +34,6 @@ public:
         AutoSaveTime,
         UseUserData,
         Backup,
-        AutoSave,
         WarnAlienFormat,
         LoadDocPrinter,
         OdfDefaultVersion,
@@ -92,9 +91,6 @@ public:
 
     void                    SetBackup( bool b );
     bool                IsBackup() const;
-
-    void                    SetAutoSave( bool b );
-    bool                IsAutoSave() const;
 
     void                    SetUserAutoSave( bool b );
     bool                IsUserAutoSave() const;

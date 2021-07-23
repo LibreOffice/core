@@ -71,7 +71,6 @@ class SvtSaveOptions_Impl : public utl::ConfigItem
     bool                            bROAutoSaveTime,
                                         bROUseUserData,
                                         bROBackup,
-                                        bROAutoSave,
                                         bROUserAutoSave,
                                         bROWarnAlienFormat,
                                         bROLoadDocPrinter,
@@ -87,7 +86,6 @@ public:
     sal_Int32               GetAutoSaveTime() const             { return nAutoSaveTime; }
     bool                    IsUseUserData() const               { return bUseUserData; }
     bool                    IsBackup() const                    { return bBackup; }
-    bool                    IsAutoSave() const                  { return bAutoSave; }
     bool                    IsUserAutoSave() const              { return bUserAutoSave; }
     bool                IsWarnAlienFormat() const           { return bWarnAlienFormat; }
     bool                IsLoadDocPrinter() const            { return bLoadDocPrinter; }
@@ -98,7 +96,6 @@ public:
     void                    SetAutoSaveTime( sal_Int32 n );
     void                    SetUseUserData( bool b );
     void                    SetBackup( bool b );
-    void                    SetAutoSave( bool b );
     void                    SetUserAutoSave( bool b );
     void                    SetWarnAlienFormat( bool _bDoPP );
     void                    SetLoadDocPrinter( bool bNew );
@@ -134,16 +131,6 @@ void SvtSaveOptions_Impl::SetBackup( bool b )
     {
         bBackup = b;
         SetModified();
-    }
-}
-
-void SvtSaveOptions_Impl::SetAutoSave( bool b )
-{
-    if (!bROAutoSave && bAutoSave!=b)
-    {
-        bAutoSave = b;
-        SetModified();
-        Commit();
     }
 }
 
@@ -198,9 +185,6 @@ bool SvtSaveOptions_Impl::IsReadOnly( SvtSaveOptions::EOption eOption ) const
         case SvtSaveOptions::EOption::Backup :
             bReadOnly = bROBackup;
             break;
-        case SvtSaveOptions::EOption::AutoSave :
-            bReadOnly = bROAutoSave;
-            break;
         case SvtSaveOptions::EOption::UserAutoSave :
             bReadOnly = bROUserAutoSave;
             break;
@@ -221,10 +205,9 @@ bool SvtSaveOptions_Impl::IsReadOnly( SvtSaveOptions::EOption eOption ) const
 #define TIMEINTERVALL       1
 #define USEUSERDATA         2
 #define CREATEBACKUP        3
-#define AUTOSAVE            4
-#define WARNALIENFORMAT     5
-#define LOADDOCPRINTER      6
-#define ODFDEFAULTVERSION   7
+#define WARNALIENFORMAT     4
+#define LOADDOCPRINTER      5
+#define ODFDEFAULTVERSION   6
 
 static Sequence< OUString > GetPropertyNames()
 {
@@ -234,7 +217,6 @@ static Sequence< OUString > GetPropertyNames()
         "Document/AutoSaveTimeIntervall",
         "Document/UseUserData",
         "Document/CreateBackup",
-        "Document/AutoSave",
         "Document/WarnAlienFormat",
         "Document/LoadPrinter",
         "ODF/DefaultVersion"
@@ -254,7 +236,6 @@ SvtSaveOptions_Impl::SvtSaveOptions_Impl()
     , nAutoSaveTime( 0 )
     , bUseUserData( false )
     , bBackup( false )
-    , bAutoSave( false )
     , bUserAutoSave( false )
     , bWarnAlienFormat( true )
     , bLoadDocPrinter( true )
@@ -262,7 +243,6 @@ SvtSaveOptions_Impl::SvtSaveOptions_Impl()
     , bROAutoSaveTime( CFG_READONLY_DEFAULT )
     , bROUseUserData( CFG_READONLY_DEFAULT )
     , bROBackup( CFG_READONLY_DEFAULT )
-    , bROAutoSave( CFG_READONLY_DEFAULT )
     , bROUserAutoSave( CFG_READONLY_DEFAULT )
     , bROWarnAlienFormat( CFG_READONLY_DEFAULT )
     , bROLoadDocPrinter( CFG_READONLY_DEFAULT )
@@ -329,10 +309,6 @@ SvtSaveOptions_Impl::SvtSaveOptions_Impl()
                                 case CREATEBACKUP :
                                     bBackup = bTemp;
                                     bROBackup = pROStates[nProp];
-                                    break;
-                                case AUTOSAVE :
-                                    bAutoSave = bTemp;
-                                    bROAutoSave = pROStates[nProp];
                                     break;
 
                                 case WARNALIENFORMAT:
@@ -412,14 +388,6 @@ void SvtSaveOptions_Impl::ImplCommit()
                 if (!bROBackup)
                 {
                     pValues[nRealCount] <<= bBackup;
-                    pNames[nRealCount] = pOrgNames[i];
-                    ++nRealCount;
-                }
-                break;
-            case AUTOSAVE :
-                if (!bROAutoSave)
-                {
-                    pValues[nRealCount] <<= bAutoSave;
                     pNames[nRealCount] = pOrgNames[i];
                     ++nRealCount;
                 }
@@ -579,16 +547,6 @@ void SvtSaveOptions::SetBackup( bool b )
 bool SvtSaveOptions::IsBackup() const
 {
     return pImp->pSaveOpt->IsBackup();
-}
-
-void SvtSaveOptions::SetAutoSave( bool b )
-{
-    pImp->pSaveOpt->SetAutoSave( b );
-}
-
-bool SvtSaveOptions::IsAutoSave() const
-{
-    return pImp->pSaveOpt->IsAutoSave();
 }
 
 void SvtSaveOptions::SetUserAutoSave( bool b )
