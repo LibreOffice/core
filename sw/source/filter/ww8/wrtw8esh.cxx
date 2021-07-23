@@ -22,6 +22,7 @@
 
 #include <hintids.hxx>
 
+#include <officecfg/Office/Common.hxx>
 #include <o3tl/any.hxx>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <vcl/svapp.hxx>
@@ -107,7 +108,7 @@ bool SwBasicEscherEx::IsRelUrl() const
     bool bRelUrl = false;
     SfxMedium * pMedium = rWrt.GetWriter().GetMedia();
     if ( pMedium )
-        bRelUrl = pMedium->IsRemote() ? aSaveOpt.IsSaveRelINet() : aSaveOpt.IsSaveRelFSys();
+        bRelUrl = pMedium->IsRemote() ? aSaveOpt.IsSaveRelINet() : officecfg::Office::Common::Save::URL::FileSystem::get();
     return bRelUrl;
 }
 

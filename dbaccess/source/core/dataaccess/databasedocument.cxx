@@ -1618,9 +1618,8 @@ void ODatabaseDocument::impl_writeStorage_throw( const Reference< XStorage >& _r
 
     uno::Reference< beans::XPropertySet > xInfoSet( comphelper::GenericPropertySet_CreateInstance( new comphelper::PropertySetInfo( aExportInfoMap ) ) );
 
-    SvtSaveOptions aSaveOpt;
     xInfoSet->setPropertyValue("UsePrettyPrinting", uno::makeAny(officecfg::Office::Common::Save::Document::PrettyPrinting::get()));
-    if ( aSaveOpt.IsSaveRelFSys() )
+    if ( officecfg::Office::Common::Save::URL::FileSystem::get() )
     {
         OUString sBaseURI = _rMediaDescriptor.getOrDefault("BaseURI", OUString());
         if (sBaseURI.isEmpty())
@@ -1654,7 +1653,7 @@ void ODatabaseDocument::impl_writeStorage_throw( const Reference< XStorage >& _r
 
     OUString aVersion;
     SvtSaveOptions::ODFSaneDefaultVersion const nDefVersion =
-        aSaveOpt.GetODFSaneDefaultVersion();
+        SvtSaveOptions().GetODFSaneDefaultVersion();
     // older versions can not have this property set,
     // it exists only starting from ODF1.2
     if (nDefVersion >= SvtSaveOptions::ODFSVER_013)
