@@ -640,9 +640,8 @@ OUString SfxMedium::GetBaseURL( bool bForSaving )
 
     if ( bForSaving )
     {
-        SvtSaveOptions aOpt;
         bool bIsRemote = IsRemote();
-        if( (bIsRemote && !aOpt.IsSaveRelINet())
+        if( (bIsRemote && !officecfg::Office::Common::Save::URL::Internet::get())
             || (!pImpl->m_bRemote && !officecfg::Office::Common::Save::URL::FileSystem::get()) )
             return OUString();
     }

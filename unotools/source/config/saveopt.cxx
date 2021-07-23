@@ -66,7 +66,6 @@ class SvtSaveOptions_Impl : public utl::ConfigItem
                                         bUserAutoSave,
                                         bDocInfSave,
                                         bSaveWorkingSet,
-                                        bSaveRelINet,
                                         bWarnAlienFormat,
                                         bLoadDocPrinter;
 
@@ -80,7 +79,6 @@ class SvtSaveOptions_Impl : public utl::ConfigItem
                                         bROUserAutoSave,
                                         bRODocInfSave,
                                         bROSaveWorkingSet,
-                                        bROSaveRelINet,
                                         bROWarnAlienFormat,
                                         bROLoadDocPrinter,
                                         bROODFDefaultVersion;
@@ -100,7 +98,6 @@ public:
     bool                    IsUserAutoSave() const              { return bUserAutoSave; }
     bool                    IsDocInfoSave() const               { return bDocInfSave; }
     bool                    IsSaveWorkingSet() const            { return bSaveWorkingSet;         }
-    bool                    IsSaveRelINet() const               { return bSaveRelINet; }
     bool                IsWarnAlienFormat() const           { return bWarnAlienFormat; }
     bool                IsLoadDocPrinter() const            { return bLoadDocPrinter; }
 
@@ -115,7 +112,6 @@ public:
     void                    SetUserAutoSave( bool b );
     void                    SetDocInfoSave( bool b );
     void                    SetSaveWorkingSet( bool b );
-    void                    SetSaveRelINet( bool b );
     void                    SetWarnAlienFormat( bool _bDoPP );
     void                    SetLoadDocPrinter( bool bNew );
     void                    SetODFDefaultVersion( SvtSaveOptions::ODFDefaultVersion eNew );
@@ -200,15 +196,6 @@ void SvtSaveOptions_Impl::SetSaveWorkingSet( bool b )
     }
 }
 
-void SvtSaveOptions_Impl::SetSaveRelINet( bool b )
-{
-    if (!bROSaveRelINet && bSaveRelINet!=b)
-    {
-        bSaveRelINet = b;
-        SetModified();
-    }
-}
-
 void SvtSaveOptions_Impl::SetWarnAlienFormat( bool _bDoPP )
 {
     if (!bROWarnAlienFormat && bWarnAlienFormat!=_bDoPP)
@@ -265,9 +252,6 @@ bool SvtSaveOptions_Impl::IsReadOnly( SvtSaveOptions::EOption eOption ) const
         case SvtSaveOptions::EOption::SaveWorkingSet :
             bReadOnly = bROSaveWorkingSet;
             break;
-        case SvtSaveOptions::EOption::SaveRelInet :
-            bReadOnly = bROSaveRelINet;
-            break;
         case SvtSaveOptions::EOption::WarnAlienFormat :
             bReadOnly = bROWarnAlienFormat;
             break;
@@ -290,9 +274,8 @@ bool SvtSaveOptions_Impl::IsReadOnly( SvtSaveOptions::EOption eOption ) const
 #define EDITPROPERTY        6
 #define WARNALIENFORMAT     7
 #define LOADDOCPRINTER      8
-#define INTERNET            9
-#define SAVEWORKINGSET      10
-#define ODFDEFAULTVERSION   11
+#define SAVEWORKINGSET      9
+#define ODFDEFAULTVERSION   10
 
 static Sequence< OUString > GetPropertyNames()
 {
@@ -307,7 +290,6 @@ static Sequence< OUString > GetPropertyNames()
         "Document/EditProperty",
         "Document/WarnAlienFormat",
         "Document/LoadPrinter",
-        "URL/Internet",
         "WorkingSet",
         "ODF/DefaultVersion"
     };
@@ -331,7 +313,6 @@ SvtSaveOptions_Impl::SvtSaveOptions_Impl()
     , bUserAutoSave( false )
     , bDocInfSave( false )
     , bSaveWorkingSet( false )
-    , bSaveRelINet( false )
     , bWarnAlienFormat( true )
     , bLoadDocPrinter( true )
     , eODFDefaultVersion( SvtSaveOptions::ODFVER_LATEST )
@@ -343,7 +324,6 @@ SvtSaveOptions_Impl::SvtSaveOptions_Impl()
     , bROUserAutoSave( CFG_READONLY_DEFAULT )
     , bRODocInfSave( CFG_READONLY_DEFAULT )
     , bROSaveWorkingSet( CFG_READONLY_DEFAULT )
-    , bROSaveRelINet( CFG_READONLY_DEFAULT )
     , bROWarnAlienFormat( CFG_READONLY_DEFAULT )
     , bROLoadDocPrinter( CFG_READONLY_DEFAULT )
     , bROODFDefaultVersion( CFG_READONLY_DEFAULT )
@@ -425,10 +405,6 @@ SvtSaveOptions_Impl::SvtSaveOptions_Impl()
                                 case SAVEWORKINGSET :
                                     bSaveWorkingSet = bTemp;
                                     bROSaveWorkingSet = pROStates[nProp];
-                                    break;
-                                case INTERNET :
-                                    bSaveRelINet = bTemp;
-                                    bROSaveRelINet = pROStates[nProp];
                                     break;
 
                                 case WARNALIENFORMAT:
@@ -540,14 +516,6 @@ void SvtSaveOptions_Impl::ImplCommit()
                 if (!bROSaveWorkingSet)
                 {
                     pValues[nRealCount] <<= bSaveWorkingSet;
-                    pNames[nRealCount] = pOrgNames[i];
-                    ++nRealCount;
-                }
-                break;
-            case INTERNET :
-                if (!bROSaveRelINet)
-                {
-                    pValues[nRealCount] <<= bSaveRelINet;
                     pNames[nRealCount] = pOrgNames[i];
                     ++nRealCount;
                 }
@@ -757,16 +725,6 @@ void SvtSaveOptions::SetSaveWorkingSet( bool b )
 bool SvtSaveOptions::IsSaveWorkingSet() const
 {
     return pImp->pSaveOpt->IsSaveWorkingSet();
-}
-
-void SvtSaveOptions::SetSaveRelINet( bool b )
-{
-    pImp->pSaveOpt->SetSaveRelINet( b );
-}
-
-bool SvtSaveOptions::IsSaveRelINet() const
-{
-    return pImp->pSaveOpt->IsSaveRelINet();
 }
 
 void SvtSaveOptions::SetLoadUserSettings(bool b)

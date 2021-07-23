@@ -104,11 +104,12 @@ using ::com::sun::star::drawing::XShape;
 
 bool SwBasicEscherEx::IsRelUrl() const
 {
-    SvtSaveOptions aSaveOpt;
     bool bRelUrl = false;
     SfxMedium * pMedium = rWrt.GetWriter().GetMedia();
     if ( pMedium )
-        bRelUrl = pMedium->IsRemote() ? aSaveOpt.IsSaveRelINet() : officecfg::Office::Common::Save::URL::FileSystem::get();
+        bRelUrl = pMedium->IsRemote()
+            ? officecfg::Office::Common::Save::URL::Internet::get()
+            : officecfg::Office::Common::Save::URL::FileSystem::get();
     return bRelUrl;
 }
 
