@@ -197,13 +197,13 @@ SdrModel::~SdrModel()
     if(!maAllIncarnatedObjects.empty())
     {
         SAL_WARN("svx","SdrModel::~SdrModel: Not all incarnations of SdrObjects deleted, possible memory leak (!)");
-        // copy to std::vector - calling SdrObject::Free will change maAllIncarnatedObjects
-        const std::vector< const SdrObject* > maRemainingObjects(maAllIncarnatedObjects.begin(), maAllIncarnatedObjects.end());
-        for(auto pSdrObject : maRemainingObjects)
+        // calling SdrObject::Free will change maAllIncarnatedObjects, and potentially remove more
+        // than one - do not copy to another container, to not try to free already removed object.
+        do
         {
-            SdrObject* pCandidate(const_cast<SdrObject*>(pSdrObject));
+            SdrObject* pCandidate(const_cast<SdrObject*>(*maAllIncarnatedObjects.begin()));
             SdrObject::Free(pCandidate);
-        }
+        } while (!maAllIncarnatedObjects.empty());
     }
 #endif
 
