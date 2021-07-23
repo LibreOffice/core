@@ -50,7 +50,7 @@ ObjectContact::ObjectContact()
 :   maViewObjectContactVector(),
     maPrimitiveAnimator(),
     mpViewObjectContactRedirector(nullptr),
-    maViewInformation2D(uno::Sequence< beans::PropertyValue >()),
+    maViewInformation2D(),
     mbIsPreviewRenderer(false)
 {
 }
