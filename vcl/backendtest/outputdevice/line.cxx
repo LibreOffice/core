@@ -48,6 +48,32 @@ Bitmap OutputDeviceTestLine::setupRectangle(bool bEnableAA)
     return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
 }
 
+Bitmap OutputDeviceTestLine::setupRectangleOnSize1028()
+{
+    initialSetup(1028, 1028, constBackgroundColor);
+
+    mpVirtualDevice->SetLineColor(constLineColor);
+    mpVirtualDevice->SetFillColor();
+
+    drawLineOffset(*mpVirtualDevice, maVDRectangle, 2);
+    drawLineOffset(*mpVirtualDevice, maVDRectangle, 5);
+
+    return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
+}
+
+Bitmap OutputDeviceTestLine::setupRectangleOnSize4096()
+{
+    initialSetup(4096, 4096, constBackgroundColor);
+
+    mpVirtualDevice->SetLineColor(constLineColor);
+    mpVirtualDevice->SetFillColor();
+
+    drawLineOffset(*mpVirtualDevice, maVDRectangle, 2);
+    drawLineOffset(*mpVirtualDevice, maVDRectangle, 5);
+
+    return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
+}
+
 Bitmap OutputDeviceTestLine::setupDiamond()
 {
     initialSetup(11, 11, constBackgroundColor);
