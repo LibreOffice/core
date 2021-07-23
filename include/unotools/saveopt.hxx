@@ -38,7 +38,6 @@ public:
         AutoSavePrompt,
         DocInfSave,
         SaveWorkingSet,
-        SaveDocView,
         SaveRelInet,
         SaveRelFsys,
         DoPrettyPrinting,
@@ -114,9 +113,6 @@ public:
 
     void                    SetSaveWorkingSet( bool b );
     bool                IsSaveWorkingSet() const;
-
-    void                    SetSaveDocView( bool b );
-    bool                IsSaveDocView() const;
 
     void                    SetSaveRelINet( bool b );
     bool                IsSaveRelINet() const;
