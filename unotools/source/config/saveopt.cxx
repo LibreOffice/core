@@ -68,8 +68,7 @@ class SvtSaveOptions_Impl : public utl::ConfigItem
 
     SvtSaveOptions::ODFDefaultVersion   eODFDefaultVersion;
 
-    bool                            bROAutoSaveTime,
-                                        bROUseUserData,
+    bool                            bROUseUserData,
                                         bROBackup,
                                         bROUserAutoSave,
                                         bROWarnAlienFormat,
@@ -83,7 +82,6 @@ public:
 
     virtual void            Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
 
-    sal_Int32               GetAutoSaveTime() const             { return nAutoSaveTime; }
     bool                    IsUseUserData() const               { return bUseUserData; }
     bool                    IsBackup() const                    { return bBackup; }
     bool                    IsUserAutoSave() const              { return bUserAutoSave; }
@@ -93,7 +91,6 @@ public:
     SvtSaveOptions::ODFDefaultVersion
                             GetODFDefaultVersion() const        { return eODFDefaultVersion; }
 
-    void                    SetAutoSaveTime( sal_Int32 n );
     void                    SetUseUserData( bool b );
     void                    SetBackup( bool b );
     void                    SetUserAutoSave( bool b );
@@ -104,16 +101,6 @@ public:
     bool                IsReadOnly( SvtSaveOptions::EOption eOption ) const;
 };
 
-}
-
-void SvtSaveOptions_Impl::SetAutoSaveTime( sal_Int32 n )
-{
-    if (!bROAutoSaveTime && nAutoSaveTime!=n)
-    {
-        nAutoSaveTime = n;
-        SetModified();
-        Commit();
-    }
 }
 
 void SvtSaveOptions_Impl::SetUseUserData( bool b )
@@ -176,9 +163,6 @@ bool SvtSaveOptions_Impl::IsReadOnly( SvtSaveOptions::EOption eOption ) const
     bool bReadOnly = CFG_READONLY_DEFAULT;
     switch(eOption)
     {
-        case SvtSaveOptions::EOption::AutoSaveTime :
-            bReadOnly = bROAutoSaveTime;
-            break;
         case SvtSaveOptions::EOption::UseUserData :
             bReadOnly = bROUseUserData;
             break;
@@ -202,19 +186,17 @@ bool SvtSaveOptions_Impl::IsReadOnly( SvtSaveOptions::EOption eOption ) const
 }
 
 #define FORMAT              0
-#define TIMEINTERVALL       1
-#define USEUSERDATA         2
-#define CREATEBACKUP        3
-#define WARNALIENFORMAT     4
-#define LOADDOCPRINTER      5
-#define ODFDEFAULTVERSION   6
+#define USEUSERDATA         1
+#define CREATEBACKUP        2
+#define WARNALIENFORMAT     3
+#define LOADDOCPRINTER      4
+#define ODFDEFAULTVERSION   5
 
 static Sequence< OUString > GetPropertyNames()
 {
     static const char* aPropNames[] =
     {
         "Graphic/Format",
-        "Document/AutoSaveTimeIntervall",
         "Document/UseUserData",
         "Document/CreateBackup",
         "Document/WarnAlienFormat",
@@ -240,7 +222,6 @@ SvtSaveOptions_Impl::SvtSaveOptions_Impl()
     , bWarnAlienFormat( true )
     , bLoadDocPrinter( true )
     , eODFDefaultVersion( SvtSaveOptions::ODFVER_LATEST )
-    , bROAutoSaveTime( CFG_READONLY_DEFAULT )
     , bROUseUserData( CFG_READONLY_DEFAULT )
     , bROBackup( CFG_READONLY_DEFAULT )
     , bROUserAutoSave( CFG_READONLY_DEFAULT )
@@ -262,20 +243,10 @@ SvtSaveOptions_Impl::SvtSaveOptions_Impl()
         {
             if ( pValues[nProp].hasValue() )
             {
-                sal_Int32 nTemp = 0;
                 switch ( nProp )
                 {
                     case FORMAT:
                         // not supported anymore
-                        break;
-
-                    case TIMEINTERVALL :
-                        if ( pValues[nProp] >>= nTemp )
-                            nAutoSaveTime = nTemp;
-                        else {
-                            OSL_FAIL( "Wrong Type!" );
-                        };
-                        bROAutoSaveTime = pROStates[nProp];
                         break;
 
                     case ODFDEFAULTVERSION :
@@ -367,14 +338,6 @@ void SvtSaveOptions_Impl::ImplCommit()
         {
             case FORMAT:
                 // not supported anymore
-                break;
-            case TIMEINTERVALL :
-                if (!bROAutoSaveTime)
-                {
-                    pValues[nRealCount] <<= nAutoSaveTime;
-                    pNames[nRealCount] = pOrgNames[i];
-                    ++nRealCount;
-                }
                 break;
             case USEUSERDATA :
                 if (!bROUseUserData)
@@ -517,16 +480,6 @@ SvtSaveOptions::~SvtSaveOptions()
 
         pOptions.reset();
     }
-}
-
-void SvtSaveOptions::SetAutoSaveTime( sal_Int32 n )
-{
-    pImp->pSaveOpt->SetAutoSaveTime( n );
-}
-
-sal_Int32 SvtSaveOptions::GetAutoSaveTime() const
-{
-    return pImp->pSaveOpt->GetAutoSaveTime();
 }
 
 void SvtSaveOptions::SetUseUserData( bool b )
