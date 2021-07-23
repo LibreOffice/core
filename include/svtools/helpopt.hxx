@@ -38,8 +38,6 @@ public:
     bool            IsExtendedHelp() const;
     void            SetHelpTips( bool b );
     bool            IsHelpTips() const;
-    void            SetOfflineHelpPopUp(bool b);
-    bool            IsOfflineHelpPopUp() const;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
