@@ -1136,8 +1136,7 @@ bool SfxHelp::Start_Impl(const OUString& rURL, const vcl::Window* pWindow)
 
         if ( !impl_hasHelpInstalled() )
         {
-            SvtHelpOptions aHelpOptions;
-            bool bShowOfflineHelpPopUp = aHelpOptions.IsOfflineHelpPopUp();
+            bool bShowOfflineHelpPopUp = officecfg::Office::Common::Help::BuiltInHelpNotInstalledPopUp::get();
 
             pWindow = GetBestParent(pWindow);
 
@@ -1150,7 +1149,9 @@ bool SfxHelp::Start_Impl(const OUString& rURL, const vcl::Window* pWindow)
                 HelpManualMessage aQueryBox(pWeldWindow);
                 short OnlineHelpBox = aQueryBox.run();
                 bShowOfflineHelpPopUp = OnlineHelpBox != RET_OK;
-                aHelpOptions.SetOfflineHelpPopUp(aQueryBox.GetOfflineHelpPopUp());
+                auto xChanges = comphelper::ConfigurationChanges::create();
+                officecfg::Office::Common::Help::BuiltInHelpNotInstalledPopUp::set(aQueryBox.GetOfflineHelpPopUp(), xChanges);
+                xChanges->commit();
                 aBusy.decBusy();
             }
             if(!bShowOfflineHelpPopUp)
@@ -1292,8 +1293,7 @@ bool SfxHelp::Start_Impl(const OUString& rURL, weld::Widget* pWidget, const OUSt
 
         if ( !impl_hasHelpInstalled() )
         {
-            SvtHelpOptions aHelpOptions;
-            bool bShowOfflineHelpPopUp = aHelpOptions.IsOfflineHelpPopUp();
+            bool bShowOfflineHelpPopUp = officecfg::Office::Common::Help::BuiltInHelpNotInstalledPopUp::get();
 
             TopLevelWindowLocker aBusy;
 
@@ -1303,7 +1303,9 @@ bool SfxHelp::Start_Impl(const OUString& rURL, weld::Widget* pWidget, const OUSt
                 HelpManualMessage aQueryBox(pWidget);
                 short OnlineHelpBox = aQueryBox.run();
                 bShowOfflineHelpPopUp = OnlineHelpBox != RET_OK;
-                aHelpOptions.SetOfflineHelpPopUp(aQueryBox.GetOfflineHelpPopUp());
+                auto xChanges = comphelper::ConfigurationChanges::create();
+                officecfg::Office::Common::Help::BuiltInHelpNotInstalledPopUp::set(aQueryBox.GetOfflineHelpPopUp(), xChanges);
+                xChanges->commit();
                 aBusy.decBusy();
             }
             if(!bShowOfflineHelpPopUp)

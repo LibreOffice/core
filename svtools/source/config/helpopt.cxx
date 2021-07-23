@@ -43,8 +43,7 @@ enum class HelpProperty
 {
     ExtendedHelp    = 0,
     HelpTips        = 1,
-    Locale          = 2,
-    OfflineHelpPopUp = 3
+    Locale          = 2
 };
 
 }
@@ -53,7 +52,6 @@ class SvtHelpOptions_Impl : public utl::ConfigItem
 {
     bool            bExtendedHelp;
     bool            bHelpTips;
-    bool            bOfflineHelpPopUp;
     OUString        aLocale;
     OUString        sHelpStyleSheet;
 
@@ -72,8 +70,6 @@ public:
     bool            IsExtendedHelp() const                  { return bExtendedHelp; }
     void            SetHelpTips( bool b )               { bHelpTips = b; SetModified(); }
     bool            IsHelpTips() const                      { return bHelpTips; }
-    void            SetOfflineHelpPopUp(bool b) { bOfflineHelpPopUp = b; SetModified();}
-    bool            IsOfflineHelpPopUp() const { return bOfflineHelpPopUp;}
 
     static ::osl::Mutex & getInitMutex();
 };
@@ -84,8 +80,7 @@ Sequence< OUString > const & SvtHelpOptions_Impl::GetPropertyNames()
     {
         "ExtendedTip",
         "Tip",
-        "Locale",
-        "BuiltInHelpNotInstalledPopUp"
+        "Locale"
     };
 
     return aNames;
@@ -102,7 +97,6 @@ SvtHelpOptions_Impl::SvtHelpOptions_Impl()
     : ConfigItem( "Office.Common/Help" )
     , bExtendedHelp( false )
     , bHelpTips( true )
-    , bOfflineHelpPopUp( true)
 {
     Sequence< OUString > aNames = GetPropertyNames();
     Load( aNames );
@@ -142,9 +136,6 @@ void  SvtHelpOptions_Impl::Load(const uno::Sequence< OUString>& rPropertyNames)
                         break;
                     case HelpProperty::HelpTips:
                         bHelpTips = bTmp;
-                        break;
-                    case HelpProperty::OfflineHelpPopUp:
-                        bOfflineHelpPopUp = bTmp;
                         break;
                     default:
                         SAL_WARN( "svtools.config", "Wrong Member!" );
@@ -201,10 +192,6 @@ void SvtHelpOptions_Impl::ImplCommit()
                 pValues[nProp] <<= aLocale;
                 break;
 
-            case HelpProperty::OfflineHelpPopUp:
-              pValues[nProp] <<= bOfflineHelpPopUp;
-              break;
-
         }
     }
 
@@ -247,15 +234,7 @@ bool SvtHelpOptions::IsExtendedHelp() const
 {
     return pImpl->IsExtendedHelp();
 }
-void SvtHelpOptions::SetOfflineHelpPopUp (bool b )
-{
-    pImpl->SetOfflineHelpPopUp( b );
-}
 
-bool SvtHelpOptions::IsOfflineHelpPopUp() const
-{
-    return pImpl->IsOfflineHelpPopUp();
-}
 void SvtHelpOptions::SetHelpTips( bool b )
 {
     pImpl->SetHelpTips( b );

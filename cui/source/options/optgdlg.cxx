@@ -219,7 +219,11 @@ bool OfaMiscTabPage::FillItemSet( SfxItemSet* rSet )
 
     SvtHelpOptions aHelpOptions;
     if ( m_xPopUpNoHelpCB->get_state_changed_from_saved() )
-        aHelpOptions.SetOfflineHelpPopUp( m_xPopUpNoHelpCB->get_active() );
+    {
+        auto xChanges = comphelper::ConfigurationChanges::create();
+        officecfg::Office::Common::Help::BuiltInHelpNotInstalledPopUp::set(m_xPopUpNoHelpCB->get_active(), xChanges);
+        xChanges->commit();
+    }
 
     if ( m_xExtHelpCB->get_state_changed_from_saved() )
         aHelpOptions.SetExtendedHelp( m_xExtHelpCB->get_active() );
@@ -286,7 +290,7 @@ void OfaMiscTabPage::Reset( const SfxItemSet* rSet )
     SvtHelpOptions aHelpOptions;
     m_xExtHelpCB->set_active( aHelpOptions.IsHelpTips() && aHelpOptions.IsExtendedHelp() );
     m_xExtHelpCB->save_state();
-    m_xPopUpNoHelpCB->set_active( aHelpOptions.IsOfflineHelpPopUp() );
+    m_xPopUpNoHelpCB->set_active( officecfg::Office::Common::Help::BuiltInHelpNotInstalledPopUp::get() );
     m_xPopUpNoHelpCB->save_state();
     m_xShowTipOfTheDay->set_active( officecfg::Office::Common::Misc::ShowTipOfTheDay::get() );
     m_xShowTipOfTheDay->save_state();
