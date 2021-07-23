@@ -18,6 +18,7 @@
  */
 
 #include "xmlExportDocumentHandler.hxx"
+#include <officecfg/Office/Common.hxx>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/chart2/data/XDatabaseDataProvider.hpp>
 #include <com/sun/star/chart/XComplexDescriptionAccess.hpp>
@@ -40,8 +41,7 @@ using namespace ::xmloff::token;
 
 static void lcl_exportPrettyPrinting(const uno::Reference< xml::sax::XDocumentHandler >& _xDelegatee)
 {
-    SvtSaveOptions aSaveOpt;
-    if ( aSaveOpt.IsPrettyPrinting() )
+    if ( officecfg::Office::Common::Save::Document::PrettyPrinting::get() )
     {
         _xDelegatee->ignorableWhitespace(" ");
     }

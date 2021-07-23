@@ -40,7 +40,6 @@ public:
         SaveWorkingSet,
         SaveRelInet,
         SaveRelFsys,
-        DoPrettyPrinting,
         WarnAlienFormat,
         LoadDocPrinter,
         OdfDefaultVersion,
@@ -122,9 +121,6 @@ public:
 
     void                    SetLoadUserSettings(bool b);
     bool                IsLoadUserSettings() const;
-
-    void                    SetPrettyPrinting( bool _bEnable );
-    bool                IsPrettyPrinting( ) const;
 
     void                    SetWarnAlienFormat( bool _bEnable );
     bool                IsWarnAlienFormat( ) const;
