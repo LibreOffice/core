@@ -179,8 +179,9 @@ void SfxApplication::GetOptions( SfxItemSet& rSet )
                 case SID_ATTR_AUTOSAVEMINUTE :
                     {
                         bRet = true;
-                        if (!aSaveOptions.IsReadOnly(SvtSaveOptions::EOption::AutoSaveTime))
-                            if (!rSet.Put( SfxUInt16Item( rPool.GetWhich( SID_ATTR_AUTOSAVEMINUTE ), static_cast<sal_uInt16>(aSaveOptions.GetAutoSaveTime()))))
+                        if (!officecfg::Office::Common::Save::Document::AutoSaveTimeIntervall::isReadOnly())
+                            if (!rSet.Put( SfxUInt16Item( rPool.GetWhich( SID_ATTR_AUTOSAVEMINUTE ),
+                                    officecfg::Office::Common::Save::Document::AutoSaveTimeIntervall::get() )))
                                 bRet = false;
                     }
                     break;
@@ -476,7 +477,9 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     if ( SfxItemState::SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_AUTOSAVEMINUTE), true, &pItem))
     {
         DBG_ASSERT(dynamic_cast< const SfxUInt16Item *>( pItem ) !=  nullptr, "UInt16Item expected");
-        aSaveOptions.SetAutoSaveTime(static_cast<const SfxUInt16Item *>(pItem)->GetValue());
+        officecfg::Office::Common::Save::Document::AutoSaveTimeIntervall::set(
+                static_cast<const SfxUInt16Item *>(pItem)->GetValue(),
+                batch);
     }
 
     // UserAutoSave
