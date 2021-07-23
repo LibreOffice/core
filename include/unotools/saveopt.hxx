@@ -35,8 +35,7 @@ public:
         Backup,
         WarnAlienFormat,
         LoadDocPrinter,
-        OdfDefaultVersion,
-        UserAutoSave,
+        OdfDefaultVersion
     };
 
     /** Keep enum values sorted that a less or greater compare maps to older
@@ -87,9 +86,6 @@ public:
 
     void                    SetBackup( bool b );
     bool                IsBackup() const;
-
-    void                    SetUserAutoSave( bool b );
-    bool                IsUserAutoSave() const;
 
     void                    SetLoadUserSettings(bool b);
     bool                IsLoadUserSettings() const;

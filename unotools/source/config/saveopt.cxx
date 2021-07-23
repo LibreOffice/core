@@ -62,7 +62,6 @@ class SvtSaveOptions_Impl : public utl::ConfigItem
     bool                            bUseUserData,
                                         bBackup,
                                         bAutoSave,
-                                        bUserAutoSave,
                                         bWarnAlienFormat,
                                         bLoadDocPrinter;
 
@@ -70,7 +69,6 @@ class SvtSaveOptions_Impl : public utl::ConfigItem
 
     bool                            bROUseUserData,
                                         bROBackup,
-                                        bROUserAutoSave,
                                         bROWarnAlienFormat,
                                         bROLoadDocPrinter,
                                         bROODFDefaultVersion;
@@ -84,7 +82,6 @@ public:
 
     bool                    IsUseUserData() const               { return bUseUserData; }
     bool                    IsBackup() const                    { return bBackup; }
-    bool                    IsUserAutoSave() const              { return bUserAutoSave; }
     bool                IsWarnAlienFormat() const           { return bWarnAlienFormat; }
     bool                IsLoadDocPrinter() const            { return bLoadDocPrinter; }
 
@@ -93,7 +90,6 @@ public:
 
     void                    SetUseUserData( bool b );
     void                    SetBackup( bool b );
-    void                    SetUserAutoSave( bool b );
     void                    SetWarnAlienFormat( bool _bDoPP );
     void                    SetLoadDocPrinter( bool bNew );
     void                    SetODFDefaultVersion( SvtSaveOptions::ODFDefaultVersion eNew );
@@ -118,16 +114,6 @@ void SvtSaveOptions_Impl::SetBackup( bool b )
     {
         bBackup = b;
         SetModified();
-    }
-}
-
-void SvtSaveOptions_Impl::SetUserAutoSave( bool b )
-{
-    if (!bROUserAutoSave && bUserAutoSave!=b)
-    {
-        bUserAutoSave = b;
-        SetModified();
-        Commit();
     }
 }
 
@@ -168,9 +154,6 @@ bool SvtSaveOptions_Impl::IsReadOnly( SvtSaveOptions::EOption eOption ) const
             break;
         case SvtSaveOptions::EOption::Backup :
             bReadOnly = bROBackup;
-            break;
-        case SvtSaveOptions::EOption::UserAutoSave :
-            bReadOnly = bROUserAutoSave;
             break;
         case SvtSaveOptions::EOption::WarnAlienFormat :
             bReadOnly = bROWarnAlienFormat;
@@ -218,13 +201,11 @@ SvtSaveOptions_Impl::SvtSaveOptions_Impl()
     , nAutoSaveTime( 0 )
     , bUseUserData( false )
     , bBackup( false )
-    , bUserAutoSave( false )
     , bWarnAlienFormat( true )
     , bLoadDocPrinter( true )
     , eODFDefaultVersion( SvtSaveOptions::ODFVER_LATEST )
     , bROUseUserData( CFG_READONLY_DEFAULT )
     , bROBackup( CFG_READONLY_DEFAULT )
-    , bROUserAutoSave( CFG_READONLY_DEFAULT )
     , bROWarnAlienFormat( CFG_READONLY_DEFAULT )
     , bROLoadDocPrinter( CFG_READONLY_DEFAULT )
     , bROODFDefaultVersion( CFG_READONLY_DEFAULT )
@@ -310,13 +291,11 @@ SvtSaveOptions_Impl::SvtSaveOptions_Impl()
     {
         bAutoSave = officecfg::Office::Recovery::AutoSave::Enabled::get();
         nAutoSaveTime = officecfg::Office::Recovery::AutoSave::TimeIntervall::get();
-        bUserAutoSave = officecfg::Office::Recovery::AutoSave::UserAutoSaveEnabled::get();
     }
     else
     {
         bAutoSave = false;
         nAutoSaveTime = 0;
-        bUserAutoSave = false;
     }
 }
 
@@ -393,7 +372,6 @@ void SvtSaveOptions_Impl::ImplCommit()
     comphelper::ConfigurationChanges::create());
     officecfg::Office::Recovery::AutoSave::TimeIntervall::set(nAutoSaveTime, batch);
     officecfg::Office::Recovery::AutoSave::Enabled::set(bAutoSave, batch);
-    officecfg::Office::Recovery::AutoSave::UserAutoSaveEnabled::set(bUserAutoSave, batch);
     batch->commit();
 }
 
@@ -500,16 +478,6 @@ void SvtSaveOptions::SetBackup( bool b )
 bool SvtSaveOptions::IsBackup() const
 {
     return pImp->pSaveOpt->IsBackup();
-}
-
-void SvtSaveOptions::SetUserAutoSave( bool b )
-{
-    pImp->pSaveOpt->SetUserAutoSave( b );
-}
-
-bool SvtSaveOptions::IsUserAutoSave() const
-{
-    return pImp->pSaveOpt->IsUserAutoSave();
 }
 
 void SvtSaveOptions::SetLoadUserSettings(bool b)
