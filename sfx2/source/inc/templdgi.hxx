@@ -63,7 +63,7 @@ private:
     friend class DeletionWatcher;
 
     DeletionWatcher* impl_setDeletionWatcher(DeletionWatcher* pNewWatcher);
-    OUString getDefaultStyleName( const SfxStyleFamily eFam );
+    OUString getDefaultStyleName( const SfxStyleFamily eFam, StyleList& m_atempStyleList );
 
 protected:
 #define MAX_FAMILIES            6
@@ -77,7 +77,6 @@ protected:
     SfxModule* pModule;
 
     std::optional<SfxStyleFamilies> mxStyleFamilies;
-    SfxObjectShell* pCurObjShell;
     css::uno::Reference<css::frame::XModuleManager2> xModuleManager;
     DeletionWatcher* m_pDeletionWatcher;
 
@@ -85,13 +84,18 @@ protected:
     std::unique_ptr<weld::CheckButton> mxPreviewCheckbox;
     std::unique_ptr<weld::ComboBox> mxFilterLb;
 
+    StyleList m_aCharStyleList;
+    std::unique_ptr<weld::CheckButton> mxCharPreviewCheckbox;
+    std::unique_ptr<weld::ComboBox> mxCharFilterLb;
+
     sal_uInt16 nActFamily; // Id in the ToolBox = Position - 1
-    sal_uInt16 nActFilter; // FilterIdx
-    SfxStyleSearchBits nAppFilter; // Filter, which has set the application (for automatic)
+    sal_uInt16 nActParaFilter; // FilterIdx
+    sal_uInt16 nActCharFilter;
+    //SfxStyleSearchBits nAppFilter; // Filter, which has set the application (for automatic)
 
     bool bIsWater :1;
     bool bUpdate :1;
-    bool bUpdateFamily :1;
+   // bool bUpdateFamily :1;
     bool bWaterDisabled :1;
     bool bNewByExampleDisabled :1;
     bool bUpdateByExampleDisabled :1;
@@ -108,7 +112,6 @@ protected:
     Link<void*, bool> m_aStyleListHasSelectedStyle;
     Link<StyleFlags, void> m_aStyleListUpdateStyles;
     Link<void*, void> m_aStyleListUpdateFamily;
-    Link<SfxHintId, void> m_aStyleListNotify;
     Link<void*, void> m_aStyleListUpdateStyleDependents;
     Link<bool, void> m_aStyleListEnableTreeDrag;
     Link<sal_uInt16, void> m_aStyleListFilterSelect;
@@ -126,31 +129,33 @@ protected:
     virtual void ReplaceUpdateButtonByMenu();
 
     void Initialize();
-    void EnableHierarchical(bool);
+    void EnableHierarchical(bool, StyleList&, sal_uInt16);
 
-    void FilterSelect( sal_uInt16 nFilterIdx, bool bForce );
+    void ParaFilterSelect( sal_uInt16 nFilterIdx, bool bForce );
+    void CharFilterSelect(sal_uInt16 nFilterIdx, bool bForce);
     void SetFamilyState( sal_uInt16 nSlotId, const SfxTemplateItem* );
     void SetWaterCanState( const SfxBoolItem* pItem );
     bool IsSafeForWaterCan() const;
 
     void SetFamily(SfxStyleFamily nFamily);
-    void ActionSelect(const OString& rId);
+    void ActionSelect(const OString& rId, StyleList& m_atempStyleList);
 
     void SaveFactoryStyleFilter(SfxObjectShell const* i_pObjSh, sal_Int32 i_nFilter);
 
-    DECL_LINK(ReadResource_Hdl, void*, void);
+    DECL_LINK(ReadResource_Hdl, StyleList&, void);
     DECL_LINK(ClearResource_Hdl, void*, void);
-    DECL_LINK(SaveSelection_Hdl, void*, SfxObjectShell*);
+    DECL_LINK(SaveSelection_Hdl, sal_uInt16, SfxObjectShell*);
     DECL_LINK(LoadFactoryStyleFilter_Hdl, SfxObjectShell const*, sal_Int32);
     DECL_LINK(UpdateStyles_Hdl, StyleFlags, void);
-    DECL_LINK(UpdateFamily_Hdl, void*, void);
+    DECL_LINK(UpdateCharStyles_Hdl, StyleFlags, void);
+    DECL_LINK(UpdateFamily_Hdl, StyleList&, void);
     DECL_LINK(UpdateStyleDependents_Hdl, void*, void);
 
 public:
     // Used in StyleList::NewMenuExecuteAction, StyleList::UpdateStyleDependents, StyleList::NewHdl,  EditHdl...
     // It comes into action whenever a an existing style is selected for use, or a new style is created etc..
     bool Execute_Impl(sal_uInt16 nId, const OUString& rStr, const OUString& rRefStr,
-                      sal_uInt16 nFamily, SfxStyleSearchBits nMask = SfxStyleSearchBits::Auto,
+                      sal_uInt16 nFamily, StyleList& m_atempStyleList, SfxStyleSearchBits nMask = SfxStyleSearchBits::Auto,
                       sal_uInt16* pIdx = nullptr, const sal_uInt16* pModifier = nullptr);
 
     // This function handles drop of content into the treeview to create a new style
@@ -160,7 +165,7 @@ public:
 
     // Used in StyleList::UpdateStyles, StyleList::Update
     // Whenever a new family(Eg. Character, List etc.) is selected it comes into action
-    void FamilySelect(sal_uInt16 nId, bool bPreviewRefresh = false);
+    void FamilySelect(sal_uInt16 nId, StyleList&, bool bPreviewRefresh = false);
 
     // Constructor
     SfxCommonTemplateDialog_Impl(SfxBindings* pB, weld::Container*, weld::Builder* pBuilder);
@@ -170,11 +175,30 @@ public:
 
     // Used in StyleList::SelectStyle, StyleList::Notify, IMPL_LINK(PopupFlatMenuHdl)
     // These functions are used when a style is edited, deleted, created etc..
-    virtual void EnableEdit(bool b) { m_aStyleList.Enableedit(b); }
-    void EnableDel(bool b) { m_aStyleList.Enabledel(b); }
-    void EnableNew(bool b) { m_aStyleList.Enablenew(b); }
-    void EnableHide(bool b) { m_aStyleList.Enablehide(b); }
-    void EnableShow(bool b) { m_aStyleList.Enableshow(b); }
+    virtual void EnableEdit(bool b)
+    {
+        m_aStyleList.Enableedit(b);
+        m_aCharStyleList.Enableedit(b);
+    }
+    void EnableDel(bool b) {
+        m_aStyleList.Enabledel(b);
+        m_aCharStyleList.Enabledel(b);
+    }
+    void EnableNew(bool b)
+    {
+        m_aStyleList.Enablenew(b);
+        m_aCharStyleList.Enablenew(b);
+    }
+    void EnableHide(bool b)
+    {
+        m_aStyleList.Enablehide(b);
+        m_aCharStyleList.Enablehide(b);
+    }
+    void EnableShow(bool b)
+    {
+        m_aStyleList.Enableshow(b);
+        m_aCharStyleList.Enableshow(b);
+    }
 
     // Used in TreeDrag
     void EnableTreeDrag(bool b);
@@ -185,10 +209,6 @@ public:
     // It comes into action when a style is created or updated or newmenu is created
     void EnableExample_Impl(sal_uInt16 nId, bool bEnable);
 
-    // Dialog and StyleList have their own copies of variable pCurObjShell.
-    // When the values of m_pCurObjShell is read in StyleList, the value pCurObjShell is updated here too.
-    void SetObjectShell(SfxObjectShell* shell) { pCurObjShell = shell; }
-
     // This comes into action when a family is selected or a style is applied for use
     virtual void CheckItem(const OString& /*rMesId*/, bool /*bCheck*/ = true) {}
     // This is used for watercan or when new/newmenu is enabled or updated
@@ -197,14 +217,17 @@ public:
     virtual bool IsCheckedItem(const OString& /*rMesId*/) { return true; }
 
     // This is used when a style is selected
-    void SelectStyle(const OUString& rStyle, bool bIsCallback);
+    void SelectStyle(const OUString& rStyle, bool bIsCallback, StyleList& m_atempStyleList);
 
-    // Dialog and StyleList have their own copies of variable nAppFilter.
-    // When a filter is applied, it comes into action and updates the value of nAppFilter
-    void SetApplicationFilter(SfxStyleSearchBits filter) { nAppFilter = filter; }
     // Dialog and StyleList have their own copies of variable nActFilter.
     // When a filter is applied, it comes into action and updates the value of nActFilter
-    void SetFilterByIndex(sal_uInt16 filter) { nActFilter = filter; }
+    void SetFilterByIndex(sal_uInt16 filter, StyleList& m_ptempStyleList)
+    {
+        if (m_ptempStyleList.get_treeview_buildable_name() == "treeview")
+            nActParaFilter = filter;
+        else
+            nActCharFilter = filter;
+    }
 
     // This function return the value of bUpdate in Stylelist
     // This value is used in StyleList's Notify
@@ -224,7 +247,6 @@ public:
     void connect_stylelist_update_family(const Link<void*, void> rLink) { m_aStyleListUpdateFamily = rLink; }
     void connect_stylelist_update_style_dependents(const Link<void*, void>& rLink);
     void connect_stylelist_enable_tree_drag(const Link<bool, void> rLink);
-    void connect_stylelist_notify(const Link<SfxHintId, void> rLink) { m_aStyleListNotify = rLink; }
     void connect_stylelist_filter_select(Link<sal_uInt16, void> rLink);
     void connect_stylelist_enable_delete(const Link<void*, void> rLink);
     void connect_stylelist_set_water_can_state(const Link<const SfxBoolItem*, void> rLink);
