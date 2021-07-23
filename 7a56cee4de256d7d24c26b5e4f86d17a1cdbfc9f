@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e7ee86d3_ada60b23",
+        "filename": "solenv/gbuild/LinkTarget.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 651,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-07-23T09:18:05Z",
+      "side": 1,
+      "message": "copypasta error",
+      "range": {
+        "startLine": 651,
+        "startChar": 47,
+        "endLine": 651,
+        "endChar": 57
+      },
+      "revId": "7a56cee4de256d7d24c26b5e4f86d17a1cdbfc9f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
