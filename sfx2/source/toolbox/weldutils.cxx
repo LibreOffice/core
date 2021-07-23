@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <officecfg/Office/Common.hxx>
 #include <com/sun/star/frame/XSubToolbarController.hpp>
 #include <sidebar/ControllerFactory.hxx>
 #include <sfx2/weldutils.hxx>
@@ -53,10 +54,10 @@ bool lcl_RTLizeCommandURL(OUString& rCommandURL)
 }
 
 // for now all controllers are in the sidebar
-vcl::ImageType ToolbarUnoDispatcher::GetIconSize() const
+vcl::ImageType ToolbarUnoDispatcher::GetIconSize()
 {
     vcl::ImageType eType = vcl::ImageType::Size16;
-    switch (m_aToolbarOptions.GetSidebarIconSize())
+    switch (static_cast<ToolBoxButtonSize>(officecfg::Office::Common::Misc::SidebarIconSize::get()))
     {
         case ToolBoxButtonSize::Large:
             eType = vcl::ImageType::Size26;

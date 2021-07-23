@@ -41,7 +41,7 @@ private:
     DECL_LINK(ChangedIconSizeHandler, LinkParamNone*, void);
 
     void CreateController(const OUString& rCommand);
-    vcl::ImageType GetIconSize() const;
+    static vcl::ImageType GetIconSize();
 
     typedef std::map<OUString, css::uno::Reference<css::frame::XToolbarController>>
         ControllerContainer;

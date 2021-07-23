@@ -56,8 +56,6 @@ class SVT_DLLPUBLIC SvtMiscOptions final : public utl::detail::Options
 
         sal_Int16   GetSymbolsSize() const;
         void        SetSymbolsSize( sal_Int16 eSet );
-        ToolBoxButtonSize   GetSidebarIconSize() const;
-        void        SetSidebarIconSize( ToolBoxButtonSize eSet );
         sal_Int16   GetCurrentSymbolsSize() const;
         bool        AreCurrentSymbolsLarge() const;
 
