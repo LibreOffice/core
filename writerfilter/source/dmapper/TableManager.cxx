@@ -93,6 +93,9 @@ void TableManager::setCurrentGridSpan(sal_uInt32 nGridSpan, bool bFirstCell)
 
 sal_uInt32 TableManager::findColumn(const sal_uInt32 nRow, const sal_uInt32 nCell)
 {
+    if (nRow >= mTableDataStack.top()->getRowCount())
+        return SAL_MAX_UINT32;
+
     RowData::Pointer_t pRow = mTableDataStack.top()->getRow(nRow);
     if (!pRow || nCell < pRow->getGridBefore()
         || nCell >= pRow->getCellCount() - pRow->getGridAfter())
@@ -110,6 +113,9 @@ sal_uInt32 TableManager::findColumn(const sal_uInt32 nRow, const sal_uInt32 nCel
 
 sal_uInt32 TableManager::findColumnCell(const sal_uInt32 nRow, const sal_uInt32 nCol)
 {
+    if (nRow >= mTableDataStack.top()->getRowCount())
+        return SAL_MAX_UINT32;
+
     RowData::Pointer_t pRow = mTableDataStack.top()->getRow(nRow);
     if (!pRow || nCol < pRow->getGridBefore())
         return SAL_MAX_UINT32;
