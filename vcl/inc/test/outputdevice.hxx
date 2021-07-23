@@ -138,6 +138,8 @@ public:
     OutputDeviceTestPixel() = default;
 
     Bitmap setupRectangle(bool bEnableAA);
+    Bitmap setupRectangleOnSize32();
+    Bitmap setupRectangleOnSize64();
 };
 
 class VCL_DLLPUBLIC OutputDeviceTestLine : public OutputDeviceTestCommon
@@ -146,6 +148,8 @@ public:
     OutputDeviceTestLine() = default;
 
     Bitmap setupRectangle(bool bEnableAA);
+    Bitmap setupRectangleOnSize32();
+    Bitmap setupRectangleOnSize64();
     Bitmap setupDiamond();
     Bitmap setupLines();
     Bitmap setupAALines();
@@ -179,6 +183,8 @@ public:
     Bitmap setupAABezier();
     Bitmap setupEllipse();
     Bitmap setupClosedBezier();
+    Bitmap setupRectangleOnSize32();
+    Bitmap setupRectangleOnSize64();
 };
 
 class VCL_DLLPUBLIC OutputDeviceTestPolyLineB2D : public OutputDeviceTestCommon
@@ -190,6 +196,8 @@ public:
     Bitmap setupDiamond();
     Bitmap setupBezier();
     Bitmap setupAABezier();
+    Bitmap setupRectangleOnSize32();
+    Bitmap setupRectangleOnSize64();
 };
 
 class VCL_DLLPUBLIC OutputDeviceTestRect : public OutputDeviceTestCommon
@@ -199,6 +207,8 @@ public:
 
     Bitmap setupRectangle(bool bEnableAA);
     Bitmap setupFilledRectangle(bool useLineColor);
+    Bitmap setupRectangleOnSize32();
+    Bitmap setupRectangleOnSize64();
     Bitmap setupInvert_NONE();
     Bitmap setupInvert_N50();
     Bitmap setupInvert_TrackFrame();
@@ -219,6 +229,8 @@ public:
     Bitmap setupEllipse();
     Bitmap setupClosedBezier();
     Bitmap setupFilledAsymmetricalCircle();
+    Bitmap setupRectangleOnSize32();
+    Bitmap setupRectangleOnSize64();
 };
 
 class VCL_DLLPUBLIC OutputDeviceTestPolyPolygon : public OutputDeviceTestCommon
@@ -229,6 +241,8 @@ public:
     Bitmap setupRectangle(bool bEnableAA);
     Bitmap setupFilledRectangle(bool useLineColor);
     Bitmap setupIntersectingRectangles();
+    Bitmap setupRectangleOnSize32();
+    Bitmap setupRectangleOnSize64();
 };
 
 class VCL_DLLPUBLIC OutputDeviceTestPolyPolygonB2D : public OutputDeviceTestCommon
@@ -238,6 +252,8 @@ public:
 
     Bitmap setupRectangle(bool bEnableAA);
     Bitmap setupFilledRectangle(bool useLineColor);
+    Bitmap setupRectangleOnSize32();
+    Bitmap setupRectangleOnSize64();
 };
 
 class VCL_DLLPUBLIC OutputDeviceTestGradient : public OutputDeviceTestCommon

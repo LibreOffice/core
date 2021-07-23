@@ -141,6 +141,38 @@ Bitmap OutputDeviceTestPolyPolygon::setupIntersectingRectangles()
     return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
 }
 
+Bitmap OutputDeviceTestPolyPolygon::setupRectangleOnSize32()
+{
+    initialSetup(32, 32, constBackgroundColor);
+
+    mpVirtualDevice->SetLineColor(constLineColor);
+    mpVirtualDevice->SetFillColor();
+
+    tools::PolyPolygon aPolyPolygon(2);
+    aPolyPolygon.Insert(createPolygonOffset(maVDRectangle, 2));
+    aPolyPolygon.Insert(createPolygonOffset(maVDRectangle, 5));
+
+    mpVirtualDevice->DrawPolyPolygon(aPolyPolygon);
+
+    return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
+}
+
+Bitmap OutputDeviceTestPolyPolygon::setupRectangleOnSize64()
+{
+    initialSetup(64, 64, constBackgroundColor);
+
+    mpVirtualDevice->SetLineColor(constLineColor);
+    mpVirtualDevice->SetFillColor();
+
+    tools::PolyPolygon aPolyPolygon(2);
+    aPolyPolygon.Insert(createPolygonOffset(maVDRectangle, 2));
+    aPolyPolygon.Insert(createPolygonOffset(maVDRectangle, 5));
+
+    mpVirtualDevice->DrawPolyPolygon(aPolyPolygon);
+
+    return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
+}
+
 } // end namespace vcl::test
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

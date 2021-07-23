@@ -1588,6 +1588,328 @@ void GraphicsRenderTests::testDrawBlend32bpp()
     }
 }
 
+void GraphicsRenderTests::testDrawRectangleOnSize32WithRect()
+{
+    vcl::test::OutputDeviceTestRect aOutDevTest;
+    Bitmap aBitmap = aOutDevTest.setupRectangleOnSize32();
+    m_aCurGraphicsBackend = aOutDevTest.getRenderBackendName();
+    OUString aTestName = "testDrawRectangleOnSize32WithRect";
+    if (!SHOULD_ASSERT)
+    {
+        appendTestResult(aTestName, "SKIPPED");
+        return;
+    }
+    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap);
+    appendTestResult(aTestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        BitmapEx aBitmapEx(aBitmap);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
+    }
+}
+
+void GraphicsRenderTests::testDrawRectangleOnSize64WithRect()
+{
+    vcl::test::OutputDeviceTestRect aOutDevTest;
+    Bitmap aBitmap = aOutDevTest.setupRectangleOnSize64();
+    m_aCurGraphicsBackend = aOutDevTest.getRenderBackendName();
+    OUString aTestName = "testDrawRectangleOnSize64WithRect";
+    if (!SHOULD_ASSERT)
+    {
+        appendTestResult(aTestName, "SKIPPED");
+        return;
+    }
+    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap);
+    appendTestResult(aTestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        BitmapEx aBitmapEx(aBitmap);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
+    }
+}
+
+void GraphicsRenderTests::testDrawRectangleOnSize32WithPixel()
+{
+    vcl::test::OutputDeviceTestPixel aOutDevTest;
+    Bitmap aBitmap = aOutDevTest.setupRectangleOnSize32();
+    OUString aTestName = "testDrawRectangleOnSize32WithPixel";
+    if (!SHOULD_ASSERT)
+    {
+        appendTestResult(aTestName, "SKIPPED");
+        return;
+    }
+    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap);
+    appendTestResult(aTestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        BitmapEx aBitmapEx(aBitmap);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
+    }
+}
+
+void GraphicsRenderTests::testDrawRectangleOnSize64WithPixel()
+{
+    vcl::test::OutputDeviceTestPixel aOutDevTest;
+    Bitmap aBitmap = aOutDevTest.setupRectangleOnSize64();
+    OUString aTestName = "testDrawRectangleOnSize64WithPixel";
+    if (!SHOULD_ASSERT)
+    {
+        appendTestResult(aTestName, "SKIPPED");
+        return;
+    }
+    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap);
+    appendTestResult(aTestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        BitmapEx aBitmapEx(aBitmap);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
+    }
+}
+
+void GraphicsRenderTests::testDrawRectangleOnSize32WithLine()
+{
+    vcl::test::OutputDeviceTestLine aOutDevTest;
+    Bitmap aBitmap = aOutDevTest.setupRectangleOnSize32();
+    OUString aTestName = "testDrawRectangleOnSize32WithLine";
+    if (!SHOULD_ASSERT)
+    {
+        appendTestResult(aTestName, "SKIPPED");
+        return;
+    }
+    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap);
+    appendTestResult(aTestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        BitmapEx aBitmapEx(aBitmap);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
+    }
+}
+
+void GraphicsRenderTests::testDrawRectangleOnSize64WithLine()
+{
+    vcl::test::OutputDeviceTestLine aOutDevTest;
+    Bitmap aBitmap = aOutDevTest.setupRectangleOnSize64();
+    OUString aTestName = "testDrawRectangleOnSize64WithLine";
+    if (!SHOULD_ASSERT)
+    {
+        appendTestResult(aTestName, "SKIPPED");
+        return;
+    }
+    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap);
+    appendTestResult(aTestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        BitmapEx aBitmapEx(aBitmap);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
+    }
+}
+
+void GraphicsRenderTests::testDrawRectangleOnSize32WithPolyLine()
+{
+    vcl::test::OutputDeviceTestPolyLine aOutDevTest;
+    Bitmap aBitmap = aOutDevTest.setupRectangleOnSize32();
+    OUString aTestName = "testDrawRectangleOnSize32WithPolyLine";
+    if (!SHOULD_ASSERT)
+    {
+        appendTestResult(aTestName, "SKIPPED");
+        return;
+    }
+    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap);
+    appendTestResult(aTestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        BitmapEx aBitmapEx(aBitmap);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
+    }
+}
+
+void GraphicsRenderTests::testDrawRectangleOnSize64WithPolyLine()
+{
+    vcl::test::OutputDeviceTestPolyLine aOutDevTest;
+    Bitmap aBitmap = aOutDevTest.setupRectangleOnSize64();
+    OUString aTestName = "testDrawRectangleOnSize64WithPolyLine";
+    if (!SHOULD_ASSERT)
+    {
+        appendTestResult(aTestName, "SKIPPED");
+        return;
+    }
+    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap);
+    appendTestResult(aTestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        BitmapEx aBitmapEx(aBitmap);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
+    }
+}
+
+void GraphicsRenderTests::testDrawRectangleOnSize32WithPolygon()
+{
+    vcl::test::OutputDeviceTestPolygon aOutDevTest;
+    Bitmap aBitmap = aOutDevTest.setupRectangleOnSize32();
+    OUString aTestName = "testDrawRectangleOnSize32WithPolygon";
+    if (!SHOULD_ASSERT)
+    {
+        appendTestResult(aTestName, "SKIPPED");
+        return;
+    }
+    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap);
+    appendTestResult(aTestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        BitmapEx aBitmapEx(aBitmap);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
+    }
+}
+
+void GraphicsRenderTests::testDrawRectangleOnSize64WithPolygon()
+{
+    vcl::test::OutputDeviceTestPolygon aOutDevTest;
+    Bitmap aBitmap = aOutDevTest.setupRectangleOnSize64();
+    OUString aTestName = "testDrawRectangleOnSize64WithPolygon";
+    if (!SHOULD_ASSERT)
+    {
+        appendTestResult(aTestName, "SKIPPED");
+        return;
+    }
+    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap);
+    appendTestResult(aTestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        BitmapEx aBitmapEx(aBitmap);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
+    }
+}
+
+void GraphicsRenderTests::testDrawRectangleOnSize32WithPolyLineB2D()
+{
+    vcl::test::OutputDeviceTestPolyLineB2D aOutDevTest;
+    Bitmap aBitmap = aOutDevTest.setupRectangleOnSize32();
+    OUString aTestName = "testDrawRectangleOnSize32WithPolyLineB2D";
+    if (!SHOULD_ASSERT)
+    {
+        appendTestResult(aTestName, "SKIPPED");
+        return;
+    }
+    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap);
+    appendTestResult(aTestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        BitmapEx aBitmapEx(aBitmap);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
+    }
+}
+
+void GraphicsRenderTests::testDrawRectangleOnSize64WithPolyLineB2D()
+{
+    vcl::test::OutputDeviceTestPolyLineB2D aOutDevTest;
+    Bitmap aBitmap = aOutDevTest.setupRectangleOnSize64();
+    OUString aTestName = "testDrawRectangleOnSize64WithPolyLineB2D";
+    if (!SHOULD_ASSERT)
+    {
+        appendTestResult(aTestName, "SKIPPED");
+        return;
+    }
+    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap);
+    appendTestResult(aTestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        BitmapEx aBitmapEx(aBitmap);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
+    }
+}
+
+void GraphicsRenderTests::testDrawRectangleOnSize32WithPolyPolygon()
+{
+    vcl::test::OutputDeviceTestPolyPolygon aOutDevTest;
+    Bitmap aBitmap = aOutDevTest.setupRectangleOnSize32();
+    OUString aTestName = "testDrawRectangleOnSize32WithPolyPolygon";
+    if (!SHOULD_ASSERT)
+    {
+        appendTestResult(aTestName, "SKIPPED");
+        return;
+    }
+    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap);
+    appendTestResult(aTestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        BitmapEx aBitmapEx(aBitmap);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
+    }
+}
+
+void GraphicsRenderTests::testDrawRectangleOnSize64WithPolyPolygon()
+{
+    vcl::test::OutputDeviceTestPolyPolygon aOutDevTest;
+    Bitmap aBitmap = aOutDevTest.setupRectangleOnSize64();
+    OUString aTestName = "testDrawRectangleOnSize64WithPolyPolygon";
+    if (!SHOULD_ASSERT)
+    {
+        appendTestResult(aTestName, "SKIPPED");
+        return;
+    }
+    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap);
+    appendTestResult(aTestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        BitmapEx aBitmapEx(aBitmap);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
+    }
+}
+
+void GraphicsRenderTests::testDrawRectangleOnSize32WithPolyPolygonB2D()
+{
+    vcl::test::OutputDeviceTestPolyPolygonB2D aOutDevTest;
+    Bitmap aBitmap = aOutDevTest.setupRectangleOnSize32();
+    OUString aTestName = "testDrawRectangleOnSize32WithPolyPolygonB2D";
+    if (!SHOULD_ASSERT)
+    {
+        appendTestResult(aTestName, "SKIPPED");
+        return;
+    }
+    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap);
+    appendTestResult(aTestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        BitmapEx aBitmapEx(aBitmap);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
+    }
+}
+
+void GraphicsRenderTests::testDrawRectangleOnSize64WithPolygonPolygonB2D()
+{
+    vcl::test::OutputDeviceTestPolyPolygonB2D aOutDevTest;
+    Bitmap aBitmap = aOutDevTest.setupRectangleOnSize64();
+    OUString aTestName = "testDrawRectangleOnSize64WithPolygonPolygonB2D";
+    if (!SHOULD_ASSERT)
+    {
+        appendTestResult(aTestName, "SKIPPED");
+        return;
+    }
+    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap);
+    appendTestResult(aTestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        BitmapEx aBitmapEx(aBitmap);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
+    }
+}
+
 void GraphicsRenderTests::runALLTests()
 {
     testDrawRectWithRectangle();
@@ -1660,6 +1982,22 @@ void GraphicsRenderTests::runALLTests()
     testDrawBitmapExWithAlpha32bpp();
     testDrawMask32bpp();
     testDrawBlend32bpp();
+    testDrawRectangleOnSize32WithRect();
+    testDrawRectangleOnSize64WithRect();
+    testDrawRectangleOnSize32WithPixel();
+    testDrawRectangleOnSize64WithPixel();
+    testDrawRectangleOnSize32WithLine();
+    testDrawRectangleOnSize64WithLine();
+    testDrawRectangleOnSize32WithPolyLine();
+    testDrawRectangleOnSize64WithPolyLine();
+    testDrawRectangleOnSize32WithPolygon();
+    testDrawRectangleOnSize64WithPolygon();
+    testDrawRectangleOnSize32WithPolyLineB2D();
+    testDrawRectangleOnSize64WithPolyLineB2D();
+    testDrawRectangleOnSize32WithPolyPolygon();
+    testDrawRectangleOnSize64WithPolyPolygon();
+    testDrawRectangleOnSize32WithPolyPolygonB2D();
+    testDrawRectangleOnSize64WithPolygonPolygonB2D();
 }
 
 void GraphicsRenderTests::appendTestResult(OUString aTestName, OUString aTestStatus,

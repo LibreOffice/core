@@ -437,6 +437,33 @@ Bitmap OutputDeviceTestPolygon::setupFilledAsymmetricalCircle()
 
     return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
 }
+
+Bitmap OutputDeviceTestPolygon::setupRectangleOnSize32()
+{
+    initialSetup(32, 32, constBackgroundColor);
+
+    mpVirtualDevice->SetLineColor(constLineColor);
+    mpVirtualDevice->SetFillColor();
+
+    drawPolygonOffset(*mpVirtualDevice, maVDRectangle, 2);
+    drawPolygonOffset(*mpVirtualDevice, maVDRectangle, 5);
+
+    return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
+}
+
+Bitmap OutputDeviceTestPolygon::setupRectangleOnSize64()
+{
+    initialSetup(64, 64, constBackgroundColor);
+
+    mpVirtualDevice->SetLineColor(constLineColor);
+    mpVirtualDevice->SetFillColor();
+
+    drawPolygonOffset(*mpVirtualDevice, maVDRectangle, 2);
+    drawPolygonOffset(*mpVirtualDevice, maVDRectangle, 5);
+
+    return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
+}
+
 } // end namespace vcl::test
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -65,6 +65,39 @@ Bitmap OutputDeviceTestPolyPolygonB2D::setupFilledRectangle(bool useLineColor)
 
     return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
 }
+
+Bitmap OutputDeviceTestPolyPolygonB2D::setupRectangleOnSize32()
+{
+    initialSetup(32, 32, constBackgroundColor);
+
+    mpVirtualDevice->SetLineColor(constLineColor);
+    mpVirtualDevice->SetFillColor();
+
+    basegfx::B2DPolyPolygon aPolyPolygon;
+    aPolyPolygon.append(createPolygonOffset(maVDRectangle, 2));
+    aPolyPolygon.append(createPolygonOffset(maVDRectangle, 5));
+
+    mpVirtualDevice->DrawPolyPolygon(aPolyPolygon);
+
+    return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
+}
+
+Bitmap OutputDeviceTestPolyPolygonB2D::setupRectangleOnSize64()
+{
+    initialSetup(64, 64, constBackgroundColor);
+
+    mpVirtualDevice->SetLineColor(constLineColor);
+    mpVirtualDevice->SetFillColor();
+
+    basegfx::B2DPolyPolygon aPolyPolygon;
+    aPolyPolygon.append(createPolygonOffset(maVDRectangle, 2));
+    aPolyPolygon.append(createPolygonOffset(maVDRectangle, 5));
+
+    mpVirtualDevice->DrawPolyPolygon(aPolyPolygon);
+
+    return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
+}
+
 } // end namespace vcl::test
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

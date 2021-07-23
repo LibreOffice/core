@@ -50,6 +50,32 @@ Bitmap OutputDeviceTestPixel::setupRectangle(bool bEnableAA)
     return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
 }
 
+Bitmap OutputDeviceTestPixel::setupRectangleOnSize32()
+{
+    initialSetup(32, 32, constBackgroundColor);
+
+    mpVirtualDevice->SetLineColor(constLineColor);
+    mpVirtualDevice->SetFillColor();
+
+    drawPixelOffset(*mpVirtualDevice, maVDRectangle, 2);
+    drawPixelOffset(*mpVirtualDevice, maVDRectangle, 5);
+
+    return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
+}
+
+Bitmap OutputDeviceTestPixel::setupRectangleOnSize64()
+{
+    initialSetup(64, 64, constBackgroundColor);
+
+    mpVirtualDevice->SetLineColor(constLineColor);
+    mpVirtualDevice->SetFillColor();
+
+    drawPixelOffset(*mpVirtualDevice, maVDRectangle, 2);
+    drawPixelOffset(*mpVirtualDevice, maVDRectangle, 5);
+
+    return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
+}
+
 } // end namespace vcl::test
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
