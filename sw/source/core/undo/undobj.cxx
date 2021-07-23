@@ -337,6 +337,9 @@ OUString GetUndoComment(SwUndoId eId)
         case SwUndoId::OUTLINE_UD:
             pId = STR_OUTLINE_UD;
             break;
+        case SwUndoId::OUTLINE_EDIT:
+            pId = STR_OUTLINE_EDIT;
+            break;
         case SwUndoId::INSNUM:
             pId = STR_INSNUM;
             break;

@@ -46,4 +46,28 @@ void SwUndoOutlineLeftRight::RepeatImpl(::sw::RepeatContext & rContext)
     rContext.GetDoc().OutlineUpDown(rContext.GetRepeatPaM(), m_nOffset);
 }
 
+
+SwUndoOutlineEdit::SwUndoOutlineEdit(const SwNumRule& rOldRule, const SwNumRule& rNewRule,
+                                     const SwDoc& rDoc)
+    : SwUndo(SwUndoId::OUTLINE_EDIT, &rDoc)
+    , m_aNewNumRule(rNewRule)
+    , m_aOldNumRule(rOldRule)
+{
+}
+
+void SwUndoOutlineEdit::UndoImpl(::sw::UndoRedoContext& rContext)
+{
+    rContext.GetDoc().SetOutlineNumRule(m_aOldNumRule);
+}
+
+void SwUndoOutlineEdit::RedoImpl(::sw::UndoRedoContext& rContext)
+{
+    rContext.GetDoc().SetOutlineNumRule(m_aNewNumRule);
+}
+
+void SwUndoOutlineEdit::RepeatImpl(::sw::RepeatContext& rContext)
+{
+    rContext.GetDoc().SetOutlineNumRule(m_aNewNumRule);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
