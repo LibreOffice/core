@@ -1591,7 +1591,7 @@ void ScDrawLayer::DeleteObjectsInArea( SCTAB nTab, SCCOL nCol1,SCROW nRow1,
 
     if (bRecording)
         for (auto p : ppObj)
-            AddCalcUndo(std::make_unique<SdrUndoRemoveObj>(*p));
+            AddCalcUndo(std::make_unique<SdrUndoDelObj>(*p));
 
     for (auto p : ppObj)
         pPage->RemoveObject(p->GetOrdNum());
