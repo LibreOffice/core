@@ -429,8 +429,8 @@ void SvxSaveTabPage::Reset( const SfxItemSet* )
         pImpl->bInitialized = true;
     }
 
-    m_xDocInfoCB->set_active(aSaveOpt.IsDocInfoSave());
-    m_xDocInfoCB->set_sensitive(!aSaveOpt.IsReadOnly(SvtSaveOptions::EOption::DocInfSave));
+    m_xDocInfoCB->set_active(officecfg::Office::Common::Save::Document::EditProperty::get());
+    m_xDocInfoCB->set_sensitive(!officecfg::Office::Common::Save::Document::EditProperty::isReadOnly());
 
     m_xBackupCB->set_active(aSaveOpt.IsBackup());
     m_xBackupCB->set_sensitive(!aSaveOpt.IsReadOnly(SvtSaveOptions::EOption::Backup));

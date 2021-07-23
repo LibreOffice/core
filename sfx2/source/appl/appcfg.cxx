@@ -192,8 +192,9 @@ void SfxApplication::GetOptions( SfxItemSet& rSet )
                 case SID_ATTR_DOCINFO :
                     {
                         bRet = true;
-                        if (!aSaveOptions.IsReadOnly(SvtSaveOptions::EOption::DocInfSave))
-                            if (!rSet.Put( SfxBoolItem( rPool.GetWhich( SID_ATTR_DOCINFO ), aSaveOptions.IsDocInfoSave())))
+                        if (!officecfg::Office::Common::Save::Document::EditProperty::isReadOnly())
+                            if (!rSet.Put( SfxBoolItem( rPool.GetWhich( SID_ATTR_DOCINFO ),
+                                    officecfg::Office::Common::Save::Document::EditProperty::get())))
                                 bRet = false;
                     }
                     break;
@@ -481,7 +482,9 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     if ( SfxItemState::SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_DOCINFO), true, &pItem))
     {
         DBG_ASSERT(dynamic_cast< const SfxBoolItem *>( pItem ) !=  nullptr, "BoolItem expected");
-        aSaveOptions.SetDocInfoSave(static_cast<const SfxBoolItem *>(pItem)->GetValue());
+        officecfg::Office::Common::Save::Document::EditProperty::set(
+            static_cast<const SfxBoolItem *>(pItem)->GetValue(),
+            batch);
     }
 
     // Mark open Documents
