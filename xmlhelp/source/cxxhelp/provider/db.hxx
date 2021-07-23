@@ -58,11 +58,11 @@ namespace helpdatafileproxy {
 
         css::uno::Sequence< sal_Int8 >
                             m_aItData;
-        const char*         m_pItData;
         int                 m_nItRead;
         int                 m_iItPos;
 
-        static bool implReadLenAndData( const char* pData, int& riPos, HDFData& rValue );
+        static bool implReadLenAndData(
+            const char* pData, char const * end, int& riPos, HDFData& rValue );
 
     public:
         //HDFHelp must get a fileURL which can then directly be used by simple file access.
@@ -72,7 +72,6 @@ namespace helpdatafileproxy {
             css::uno::Reference< css::ucb::XSimpleFileAccess3 > const & xSFA )
                 : m_aFileURL( rFileURL )
                 , m_xSFA( xSFA )
-                , m_pItData( nullptr )
                 , m_nItRead( -1 )
                 , m_iItPos( -1 )
         {
