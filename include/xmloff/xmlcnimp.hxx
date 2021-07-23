@@ -38,7 +38,7 @@ public:
     ~SvXMLAttrContainerData();
 
     SvXMLAttrContainerData& operator=( const SvXMLAttrContainerData& rCmp );
-    SvXMLAttrContainerData& operator=( SvXMLAttrContainerData&& rCmp );
+    SvXMLAttrContainerData& operator=( SvXMLAttrContainerData&& rCmp ) noexcept;
 
     bool operator ==( const SvXMLAttrContainerData& rCmp ) const;
 

@@ -36,7 +36,7 @@ SvXMLAttrContainerData& SvXMLAttrContainerData::operator=(const SvXMLAttrContain
     return *this;
 }
 
-SvXMLAttrContainerData& SvXMLAttrContainerData::operator=(SvXMLAttrContainerData&& rCopy)
+SvXMLAttrContainerData& SvXMLAttrContainerData::operator=(SvXMLAttrContainerData&& rCopy) noexcept
 {
     pimpl = std::move( rCopy.pimpl );
     return *this;
