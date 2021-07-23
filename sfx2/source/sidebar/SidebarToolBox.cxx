@@ -21,6 +21,7 @@
 #include <sidebar/ControllerFactory.hxx>
 #include <sfx2/viewfrm.hxx>
 
+#include <officecfg/Office/Common.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/event.hxx>
 #include <vcl/settings.hxx>
@@ -301,7 +302,7 @@ public:
 
     virtual ToolBoxButtonSize GetDefaultButtonSize() const override
     {
-        return SvtMiscOptions().GetNotebookbarIconSize();
+        return static_cast<ToolBoxButtonSize>(officecfg::Office::Common::Misc::NotebookbarIconSize::get());
     }
 };
 

@@ -47,12 +47,10 @@ using namespace ::com::sun::star;
 #define PROPERTYHANDLE_SYMBOLSET                0
 #define PROPERTYNAME_ICONTHEME              "SymbolStyle"
 #define PROPERTYHANDLE_SYMBOLSTYLE              1
-#define PROPERTYNAME_DISABLEUICUSTOMIZATION "DisableUICustomization"
-#define PROPERTYHANDLE_DISABLEUICUSTOMIZATION   2
 #define PROPERTYNAME_SIDEBARICONSIZE        "SidebarIconSize"
-#define PROPERTYHANDLE_SIDEBARICONSIZE          3
+#define PROPERTYHANDLE_SIDEBARICONSIZE          2
 #define PROPERTYNAME_NOTEBOOKBARICONSIZE    "NotebookbarIconSize"
-#define PROPERTYHANDLE_NOTEBOOKBARICONSIZE      4
+#define PROPERTYHANDLE_NOTEBOOKBARICONSIZE      3
 
 class SvtMiscOptions_Impl : public ConfigItem
 {
@@ -65,7 +63,6 @@ private:
     ToolBoxButtonSize m_nNotebookbarIconSize;
     bool        m_bIsNotebookbarIconSizeRO;
     bool        m_bIsSymbolsStyleRO;
-    bool        m_bDisableUICustomization;
     bool        m_bIconThemeWasSetAutomatically;
 
         virtual void ImplCommit() override;
@@ -95,9 +92,6 @@ public:
         void Load( const Sequence< OUString >& rPropertyNames );
 
         //  public interface
-
-        bool DisableUICustomization() const
-        { return m_bDisableUICustomization; }
 
         sal_Int16 GetSymbolsSize() const
         { return m_nSymbolsSize; }
@@ -237,12 +231,6 @@ SvtMiscOptions_Impl::SvtMiscOptions_Impl()
                 break;
             }
 
-            case PROPERTYHANDLE_DISABLEUICUSTOMIZATION :
-            {
-                if( !(seqValues[nProperty] >>= m_bDisableUICustomization) )
-                    OSL_FAIL("Wrong type of \"Misc\\DisableUICustomization\"!" );
-                break;
-            }
         }
     }
 
@@ -308,11 +296,6 @@ void SvtMiscOptions_Impl::Load( const Sequence< OUString >& rPropertyNames )
                                                                 SetIconTheme(aIconTheme, SetModifiedFlag::DONT_SET);
                                                             else
                                                                 OSL_FAIL("Wrong type of \"Misc\\SymbolStyle\"!" );
-                                                        }
-                                                    break;
-            case PROPERTYHANDLE_DISABLEUICUSTOMIZATION      :   {
-                                                            if( !(seqValues[nProperty] >>= m_bDisableUICustomization) )
-                                                                OSL_FAIL("Wrong type of \"Misc\\DisableUICustomization\"!" );
                                                         }
                                                     break;
         }
@@ -445,11 +428,6 @@ void SvtMiscOptions_Impl::ImplCommit()
                 break;
             }
 
-            case PROPERTYHANDLE_DISABLEUICUSTOMIZATION :
-            {
-                seqValues[nProperty] <<= m_bDisableUICustomization;
-                break;
-            }
         }
     }
     // Set properties in configuration.
@@ -465,7 +443,6 @@ Sequence< OUString > SvtMiscOptions_Impl::GetPropertyNames()
     {
         PROPERTYNAME_SYMBOLSET,
         PROPERTYNAME_ICONTHEME,
-        PROPERTYNAME_DISABLEUICUSTOMIZATION,
         PROPERTYNAME_SIDEBARICONSIZE,
         PROPERTYNAME_NOTEBOOKBARICONSIZE
     };
@@ -563,11 +540,6 @@ OUString SvtMiscOptions::GetIconTheme() const
 void SvtMiscOptions::SetIconTheme(const OUString& iconTheme)
 {
     m_pImpl->SetIconTheme(iconTheme, SvtMiscOptions_Impl::SetModifiedFlag::SET);
-}
-
-bool SvtMiscOptions::DisableUICustomization() const
-{
-    return m_pImpl->DisableUICustomization();
 }
 
 namespace
