@@ -3419,6 +3419,8 @@ namespace xmloff::token {
         XML_PAGE_CONTENT_BOTTOM,
         XML_MARGIN_GUTTER,
 
+        XML_LOCAL_URL,
+
         XML_TOKEN_END
     };
 

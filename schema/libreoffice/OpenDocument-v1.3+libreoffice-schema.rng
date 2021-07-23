@@ -2669,4 +2669,54 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
     </rng:optional>
   </rng:define>
 
+  <!-- TODO no proposal -->
+  <rng:define name="paragraph-content" combine="choice"
+   xmlns:field="urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0">
+    <rng:element name="text:bibliography-mark">
+      <rng:attribute name="text:bibliography-type">
+        <rng:ref name="text-bibliography-types"/>
+      </rng:attribute>
+      <rng:zeroOrMore>
+        <rng:attribute>
+          <rng:choice>
+            <rng:name>text:identifier</rng:name>
+            <rng:name>text:address</rng:name>
+            <rng:name>text:annote</rng:name>
+            <rng:name>text:author</rng:name>
+            <rng:name>text:booktitle</rng:name>
+            <rng:name>text:chapter</rng:name>
+            <rng:name>text:edition</rng:name>
+            <rng:name>text:editor</rng:name>
+            <rng:name>text:howpublished</rng:name>
+            <rng:name>text:institution</rng:name>
+            <rng:name>text:journal</rng:name>
+            <rng:name>text:month</rng:name>
+            <rng:name>text:note</rng:name>
+            <rng:name>text:number</rng:name>
+            <rng:name>text:organizations</rng:name>
+            <rng:name>text:pages</rng:name>
+            <rng:name>text:publisher</rng:name>
+            <rng:name>text:school</rng:name>
+            <rng:name>text:series</rng:name>
+            <rng:name>text:title</rng:name>
+            <rng:name>text:report-type</rng:name>
+            <rng:name>text:volume</rng:name>
+            <rng:name>text:year</rng:name>
+            <rng:name>text:url</rng:name>
+            <rng:name>text:custom1</rng:name>
+            <rng:name>text:custom2</rng:name>
+            <rng:name>text:custom3</rng:name>
+            <rng:name>text:custom4</rng:name>
+            <rng:name>text:custom5</rng:name>
+            <rng:name>text:isbn</rng:name>
+            <rng:name>text:issn</rng:name>
+            <rng:name>loext:local-url</rng:name>
+          </rng:choice>
+          <rng:ref name="string"/>
+        </rng:attribute>
+      </rng:zeroOrMore>
+      <rng:text/>
+    </rng:element>
+  </rng:define>
+
 </rng:grammar>

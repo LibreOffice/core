@@ -3416,6 +3416,8 @@ namespace xmloff::token {
         TOKEN( "page-content-bottom",             XML_PAGE_CONTENT_BOTTOM ),
         TOKEN("margin-gutter", XML_MARGIN_GUTTER),
 
+        TOKEN("local-url", XML_LOCAL_URL),
+
 #if OSL_DEBUG_LEVEL > 0
         { 0, nullptr, std::nullopt,               XML_TOKEN_END }
 #else
