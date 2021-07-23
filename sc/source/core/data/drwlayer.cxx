@@ -1543,7 +1543,6 @@ void ScDrawLayer::DeleteObjectsInArea( SCTAB nTab, SCCOL nCol1,SCROW nRow1,
     if (!nObjCount)
         return;
 
-    size_t nDelCount = 0;
     tools::Rectangle aDelRect = pDoc->GetMMRect( nCol1, nRow1, nCol2, nRow2, nTab );
     tools::Rectangle aDelCircle = aDelRect;
     aDelCircle.AdjustLeft(-250);
@@ -1551,7 +1550,8 @@ void ScDrawLayer::DeleteObjectsInArea( SCTAB nTab, SCCOL nCol1,SCROW nRow1,
     aDelCircle.AdjustTop(-70);
     aDelCircle.AdjustBottom(70);
 
-    std::unique_ptr<SdrObject*[]> ppObj(new SdrObject*[nObjCount]);
+    std::vector<SdrObject*> ppObj;
+    ppObj.reserve(nObjCount);
 
     SdrObjListIter aIter( pPage, SdrIterMode::Flat );
     SdrObject* pObject = aIter.Next();
@@ -1567,7 +1567,7 @@ void ScDrawLayer::DeleteObjectsInArea( SCTAB nTab, SCCOL nCol1,SCROW nRow1,
             {
                 aObjRect = pObject->GetLogicRect();
                 if(aDelCircle.IsInside(aObjRect))
-                   ppObj[nDelCount++] = pObject;
+                   ppObj.push_back(pObject);
             }
             else
             {
@@ -1578,10 +1578,10 @@ void ScDrawLayer::DeleteObjectsInArea( SCTAB nTab, SCCOL nCol1,SCROW nRow1,
                     {
                         ScAnchorType aAnchorType = ScDrawLayer::GetAnchorType(*pObject);
                         if (aAnchorType == SCA_CELL || aAnchorType == SCA_CELL_RESIZE)
-                            ppObj[nDelCount++] = pObject;
+                            ppObj.push_back(pObject);
                     }
                     else
-                        ppObj[nDelCount++] = pObject;
+                        ppObj.push_back(pObject);
                 }
             }
         }
@@ -1590,11 +1590,11 @@ void ScDrawLayer::DeleteObjectsInArea( SCTAB nTab, SCCOL nCol1,SCROW nRow1,
     }
 
     if (bRecording)
-        for (size_t i=1; i<=nDelCount; ++i)
-            AddCalcUndo( std::make_unique<SdrUndoRemoveObj>( *ppObj[nDelCount-i] ) );
+        for (auto p : ppObj)
+            AddCalcUndo(std::make_unique<SdrUndoRemoveObj>(*p));
 
-    for (size_t i=1; i<=nDelCount; ++i)
-        pPage->RemoveObject( ppObj[nDelCount-i]->GetOrdNum() );
+    for (auto p : ppObj)
+        pPage->RemoveObject(p->GetOrdNum());
 }
 
 void ScDrawLayer::DeleteObjectsInSelection( const ScMarkData& rMark )
@@ -1622,13 +1622,13 @@ void ScDrawLayer::DeleteObjectsInSelection( const ScMarkData& rMark )
             const size_t nObjCount = pPage->GetObjCount();
             if (nObjCount)
             {
-                size_t nDelCount = 0;
                 //  Rectangle around the whole selection
                 tools::Rectangle aMarkBound = pDoc->GetMMRect(
                             aMarkRange.aStart.Col(), aMarkRange.aStart.Row(),
                             aMarkRange.aEnd.Col(), aMarkRange.aEnd.Row(), nTab );
 
-                std::unique_ptr<SdrObject*[]> ppObj(new SdrObject*[nObjCount]);
+                std::vector<SdrObject*> ppObj;
+                ppObj.reserve(nObjCount);
 
                 SdrObjListIter aIter( pPage, SdrIterMode::Flat );
                 SdrObject* pObject = aIter.Next();
@@ -1650,7 +1650,7 @@ void ScDrawLayer::DeleteObjectsInSelection( const ScMarkData& rMark )
                                                                  pObjData->maStart.Row()));
                         if (bObjectInMarkArea || bObjectAnchoredToMarkedCell)
                         {
-                            ppObj[nDelCount++] = pObject;
+                            ppObj.push_back(pObject);
                         }
                     }
 
@@ -1660,11 +1660,11 @@ void ScDrawLayer::DeleteObjectsInSelection( const ScMarkData& rMark )
                 //  Delete objects (backwards)
 
                 if (bRecording)
-                    for (size_t i=1; i<=nDelCount; ++i)
-                        AddCalcUndo( std::make_unique<SdrUndoRemoveObj>( *ppObj[nDelCount-i] ) );
+                    for (auto p : ppObj)
+                        AddCalcUndo(std::make_unique<SdrUndoRemoveObj>(*p));
 
-                for (size_t i=1; i<=nDelCount; ++i)
-                    pPage->RemoveObject( ppObj[nDelCount-i]->GetOrdNum() );
+                for (auto p : ppObj)
+                    pPage->RemoveObject(p->GetOrdNum());
             }
         }
         else
