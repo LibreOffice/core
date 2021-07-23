@@ -221,6 +221,19 @@ public:
     virtual void RepeatImpl( ::sw::RepeatContext & ) override;
 };
 
+class SwUndoOutlineEdit final : public SwUndo, private SwUndRng
+{
+    SwNumRule m_aNumRule;
+    std::unique_ptr<SwNumRule> m_pOldNumRule;
+
+public:
+    SwUndoOutlineEdit(const SwNumRule& rOldRule, const SwNumRule& rNewRule, const SwDoc& rDoc);
+
+    virtual void UndoImpl(::sw::UndoRedoContext&) override;
+    virtual void RedoImpl(::sw::UndoRedoContext&) override;
+    virtual void RepeatImpl(::sw::RepeatContext&) override;
+};
+
 const int nUndoStringLength = 20;
 
 /**
