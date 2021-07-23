@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "28d480c0_70e352f5",
+        "filename": "oox/qa/unit/export.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2021-07-23T12:14:52Z",
+      "side": 1,
+      "message": "Having a closer look to your test, I would say, the test is not necessary at all. Problem was export of polylines and that is already covered with the test document tdf141786_PolylineConnectorInGroup.odt.\n\nI have put the test to oox, because the fix is in oox. In general I think, import/export problems in Writer can be tested in sw/qa.",
+      "parentUuid": "63642f90_8a88b756",
+      "revId": "b5e2a30be25c90d63cbf24569279c7cd0684b6cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b3c983f4_f2472773",
         "filename": "oox/qa/unit/export.cxx",
         "patchSetId": 1
