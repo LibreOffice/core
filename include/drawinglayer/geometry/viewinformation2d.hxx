@@ -57,11 +57,8 @@ namespace drawinglayer::geometry
 {
 /** ViewInformation2D class
 
-    This class holds all view-relevant information for a 2d geometry. It works
-    together with UNO API definitions and supports holding a sequence of PropertyValues.
+    This class holds all view-relevant information for a 2d geometry.
     The most used data is for convenience offered directly using basegfx tooling classes.
-    It is an implementation to support the sequence of PropertyValues used in a
-    css::graphic::XPrimitive2D for C++ implementations working with those
 */
 class DRAWINGLAYER_DLLPUBLIC ViewInformation2D
 {
@@ -94,28 +91,13 @@ public:
         The time the view is defined for. Default is 0.0. This parameter is used e.g. for
         animated objects
 
-        @param rExtendedParameters
-        A sequence of property values which allows holding various other parameters besides
-        the obvious and needed ones above. For this constructor none of the other parameters
-        should be added as data. The constructor will parse the given parameters and if
-        data for the other parameters is given, the value in rExtendedParameters will
-        be preferred and overwrite the given parameter
+        @param rReducedDisplayQuality
     */
     ViewInformation2D(const basegfx::B2DHomMatrix& rObjectTransformation,
                       const basegfx::B2DHomMatrix& rViewTransformation,
                       const basegfx::B2DRange& rViewport,
                       const css::uno::Reference<css::drawing::XDrawPage>& rxDrawPage,
-                      double fViewTime);
-
-    /** Constructor: Create a ViewInformation2D
-
-        @param rViewParameters
-        A sequence of property values which allows holding any combination of local and various
-        other parameters. This constructor is fed completely with a sequence of PropertyValues
-        which will be parsed to be able to offer the most used ones in a convenient way.
-    */
-    explicit ViewInformation2D(
-        const css::uno::Sequence<css::beans::PropertyValue>& rViewParameters);
+                      double fViewTime, bool bReducedDisplayQuality = false);
 
     /// default (empty) constructor
     ViewInformation2D();
@@ -156,16 +138,12 @@ public:
         implementations of the primitives
      */
     bool getReducedDisplayQuality() const;
-
-    /** Get the uno::Sequence< beans::PropertyValue > which contains all ViewInformation
-
-        Use this call if You need to extract all contained ViewInformation. The ones
-        directly supported for convenience will be added to the ones only available
-        as PropertyValues. This set completely describes this ViewInformation2D and
-        can be used for complete information transport over UNO API.
-    */
-    const css::uno::Sequence<css::beans::PropertyValue>& getViewInformationSequence() const;
 };
+
+DRAWINGLAYER_DLLPUBLIC ViewInformation2D
+createViewInformation2D(const css::uno::Sequence<css::beans::PropertyValue>& rViewParameters);
+DRAWINGLAYER_DLLPUBLIC css::uno::Sequence<css::beans::PropertyValue>
+createPropertyValues(const ViewInformation2D& rViewInformation2D);
 
 } // end of namespace drawinglayer::geometry
 
