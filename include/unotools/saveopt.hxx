@@ -38,7 +38,6 @@ public:
         AutoSavePrompt,
         DocInfSave,
         SaveWorkingSet,
-        SaveRelInet,
         WarnAlienFormat,
         LoadDocPrinter,
         OdfDefaultVersion,
@@ -111,9 +110,6 @@ public:
 
     void                    SetSaveWorkingSet( bool b );
     bool                IsSaveWorkingSet() const;
-
-    void                    SetSaveRelINet( bool b );
-    bool                IsSaveRelINet() const;
 
     void                    SetLoadUserSettings(bool b);
     bool                IsLoadUserSettings() const;

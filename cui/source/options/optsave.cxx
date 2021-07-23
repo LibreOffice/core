@@ -451,8 +451,8 @@ void SvxSaveTabPage::Reset( const SfxItemSet* )
     m_xRelativeFsysCB->set_active(officecfg::Office::Common::Save::URL::FileSystem::get());
     m_xRelativeFsysCB->set_sensitive(!officecfg::Office::Common::Save::URL::FileSystem::isReadOnly());
 
-    m_xRelativeInetCB->set_active(aSaveOpt.IsSaveRelINet());
-    m_xRelativeInetCB->set_sensitive(!aSaveOpt.IsReadOnly(SvtSaveOptions::EOption::SaveRelInet));
+    m_xRelativeInetCB->set_active(officecfg::Office::Common::Save::URL::Internet::get());
+    m_xRelativeInetCB->set_sensitive(!officecfg::Office::Common::Save::URL::Internet::isReadOnly());
 
     sal_Int32 nDefaultVersion = aSaveOpt.GetODFDefaultVersion();
     m_xODFVersionLB->set_active_id(OUString::number(nDefaultVersion));
