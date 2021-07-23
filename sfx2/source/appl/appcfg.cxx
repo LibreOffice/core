@@ -207,8 +207,8 @@ void SfxApplication::GetOptions( SfxItemSet& rSet )
                 case SID_ATTR_SAVEDOCVIEW :
                     {
                         bRet = true;
-                        if (!aSaveOptions.IsReadOnly(SvtSaveOptions::EOption::SaveDocView))
-                            if (!rSet.Put( SfxBoolItem( rPool.GetWhich( SID_ATTR_SAVEDOCVIEW ), aSaveOptions.IsSaveDocView())))
+                        if (!officecfg::Office::Common::Save::Document::ViewInfo::isReadOnly())
+                            if (!rSet.Put( SfxBoolItem( rPool.GetWhich( SID_ATTR_SAVEDOCVIEW ), officecfg::Office::Common::Save::Document::ViewInfo::get())))
                                 bRet = false;
                     }
                     break;
@@ -489,7 +489,7 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     if ( SfxItemState::SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_SAVEDOCVIEW), true, &pItem))
     {
         DBG_ASSERT(dynamic_cast< const SfxBoolItem *>( pItem ) !=  nullptr, "BoolItem expected");
-        aSaveOptions.SetSaveDocView(static_cast<const SfxBoolItem *>(pItem)->GetValue());
+        officecfg::Office::Common::Save::Document::ViewInfo::set(static_cast<const SfxBoolItem *>(pItem)->GetValue(), batch);
     }
 
     // Metric

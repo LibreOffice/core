@@ -66,7 +66,6 @@ class SvtSaveOptions_Impl : public utl::ConfigItem
                                         bUserAutoSave,
                                         bDocInfSave,
                                         bSaveWorkingSet,
-                                        bSaveDocView,
                                         bSaveRelINet,
                                         bSaveRelFSys,
                                         bDoPrettyPrinting,
@@ -83,7 +82,6 @@ class SvtSaveOptions_Impl : public utl::ConfigItem
                                         bROUserAutoSave,
                                         bRODocInfSave,
                                         bROSaveWorkingSet,
-                                        bROSaveDocView,
                                         bROSaveRelINet,
                                         bROSaveRelFSys,
                                         bROWarnAlienFormat,
@@ -106,7 +104,6 @@ public:
     bool                    IsUserAutoSave() const              { return bUserAutoSave; }
     bool                    IsDocInfoSave() const               { return bDocInfSave; }
     bool                    IsSaveWorkingSet() const            { return bSaveWorkingSet;         }
-    bool                    IsSaveDocView() const               { return bSaveDocView; }
     bool                    IsSaveRelINet() const               { return bSaveRelINet; }
     bool                    IsSaveRelFSys() const               { return bSaveRelFSys; }
     bool                IsPrettyPrintingEnabled( ) const    { return bDoPrettyPrinting; }
@@ -124,7 +121,6 @@ public:
     void                    SetUserAutoSave( bool b );
     void                    SetDocInfoSave( bool b );
     void                    SetSaveWorkingSet( bool b );
-    void                    SetSaveDocView( bool b );
     void                    SetSaveRelINet( bool b );
     void                    SetSaveRelFSys( bool b );
     void                    EnablePrettyPrinting( bool _bDoPP );
@@ -212,15 +208,6 @@ void SvtSaveOptions_Impl::SetSaveWorkingSet( bool b )
     }
 }
 
-void SvtSaveOptions_Impl::SetSaveDocView( bool b )
-{
-    if (!bROSaveDocView && bSaveDocView!=b)
-    {
-        bSaveDocView = b;
-        SetModified();
-    }
-}
-
 void SvtSaveOptions_Impl::SetSaveRelINet( bool b )
 {
     if (!bROSaveRelINet && bSaveRelINet!=b)
@@ -304,9 +291,6 @@ bool SvtSaveOptions_Impl::IsReadOnly( SvtSaveOptions::EOption eOption ) const
         case SvtSaveOptions::EOption::SaveWorkingSet :
             bReadOnly = bROSaveWorkingSet;
             break;
-        case SvtSaveOptions::EOption::SaveDocView :
-            bReadOnly = bROSaveDocView;
-            break;
         case SvtSaveOptions::EOption::SaveRelInet :
             bReadOnly = bROSaveRelINet;
             break;
@@ -336,14 +320,13 @@ bool SvtSaveOptions_Impl::IsReadOnly( SvtSaveOptions::EOption eOption ) const
 #define AUTOSAVE            4
 #define PROMPT              5
 #define EDITPROPERTY        6
-#define SAVEVIEWINFO        7
-#define PRETTYPRINTING      8
-#define WARNALIENFORMAT     9
-#define LOADDOCPRINTER      10
-#define FILESYSTEM          11
-#define INTERNET            12
-#define SAVEWORKINGSET      13
-#define ODFDEFAULTVERSION   14
+#define PRETTYPRINTING      7
+#define WARNALIENFORMAT     8
+#define LOADDOCPRINTER      9
+#define FILESYSTEM          10
+#define INTERNET            11
+#define SAVEWORKINGSET      12
+#define ODFDEFAULTVERSION   13
 
 static Sequence< OUString > GetPropertyNames()
 {
@@ -356,7 +339,6 @@ static Sequence< OUString > GetPropertyNames()
         "Document/AutoSave",
         "Document/AutoSavePrompt",
         "Document/EditProperty",
-        "Document/ViewInfo",
         "Document/PrettyPrinting",
         "Document/WarnAlienFormat",
         "Document/LoadPrinter",
@@ -385,7 +367,6 @@ SvtSaveOptions_Impl::SvtSaveOptions_Impl()
     , bUserAutoSave( false )
     , bDocInfSave( false )
     , bSaveWorkingSet( false )
-    , bSaveDocView( false )
     , bSaveRelINet( false )
     , bSaveRelFSys( false )
     , bDoPrettyPrinting( false )
@@ -400,7 +381,6 @@ SvtSaveOptions_Impl::SvtSaveOptions_Impl()
     , bROUserAutoSave( CFG_READONLY_DEFAULT )
     , bRODocInfSave( CFG_READONLY_DEFAULT )
     , bROSaveWorkingSet( CFG_READONLY_DEFAULT )
-    , bROSaveDocView( CFG_READONLY_DEFAULT )
     , bROSaveRelINet( CFG_READONLY_DEFAULT )
     , bROSaveRelFSys( CFG_READONLY_DEFAULT )
     , bROWarnAlienFormat( CFG_READONLY_DEFAULT )
@@ -485,10 +465,6 @@ SvtSaveOptions_Impl::SvtSaveOptions_Impl()
                                 case SAVEWORKINGSET :
                                     bSaveWorkingSet = bTemp;
                                     bROSaveWorkingSet = pROStates[nProp];
-                                    break;
-                                case SAVEVIEWINFO :
-                                    bSaveDocView = bTemp;
-                                    bROSaveDocView = pROStates[nProp];
                                     break;
                                 case FILESYSTEM :
                                     bSaveRelFSys = bTemp;
@@ -613,14 +589,6 @@ void SvtSaveOptions_Impl::ImplCommit()
                 if (!bROSaveWorkingSet)
                 {
                     pValues[nRealCount] <<= bSaveWorkingSet;
-                    pNames[nRealCount] = pOrgNames[i];
-                    ++nRealCount;
-                }
-                break;
-            case SAVEVIEWINFO :
-                if (!bROSaveDocView)
-                {
-                    pValues[nRealCount] <<= bSaveDocView;
                     pNames[nRealCount] = pOrgNames[i];
                     ++nRealCount;
                 }
@@ -854,16 +822,6 @@ void SvtSaveOptions::SetSaveWorkingSet( bool b )
 bool SvtSaveOptions::IsSaveWorkingSet() const
 {
     return pImp->pSaveOpt->IsSaveWorkingSet();
-}
-
-void SvtSaveOptions::SetSaveDocView( bool b )
-{
-    pImp->pSaveOpt->SetSaveDocView( b );
-}
-
-bool SvtSaveOptions::IsSaveDocView() const
-{
-    return pImp->pSaveOpt->IsSaveDocView();
 }
 
 void SvtSaveOptions::SetSaveRelINet( bool b )
