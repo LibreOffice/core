@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright 2019-2020 Jean-Pierre LEDURE, Jean-François NIFENECKER, Alain ROMEDENNE
+# Copyright 2019-2022 Jean-Pierre LEDURE, Rafael LIMA, Alain ROMEDENNE
 
 # ======================================================================================================================
 # ===           The ScriptForge library and its associated libraries are part of the LibreOffice project.            ===
