@@ -38,6 +38,8 @@ class tdf143244(UITestCase):
                     if i == 0:
                         self.assertEqual(get_state_as_dict(hex_custom)["Text"], "bee3d3")
                     if i == 1:
+                        # Without the fix in place, this test would have failed with
+                        # AssertionError: 'bee3d3' != 'ffffff'
                         self.assertEqual(get_state_as_dict(hex_custom)["Text"], "ffffff")
                     if i == 2:
                         self.assertEqual(get_state_as_dict(hex_custom)["Text"], "dddddd")
