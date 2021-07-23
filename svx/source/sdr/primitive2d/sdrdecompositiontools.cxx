@@ -446,8 +446,7 @@ basegfx::B2DRange getTextAnchorRange(const attribute::SdrTextAttribute& rText,
 
                     // create neutral geometry::ViewInformation2D for local range and decompose calls. This is okay
                     // since the decompose is view-independent
-                    const uno::Sequence< beans::PropertyValue > xViewParameters;
-                    geometry::ViewInformation2D aViewInformation2D(xViewParameters);
+                    geometry::ViewInformation2D aViewInformation2D;
 
                     // get range
                     const basegfx::B2DRange aScaledRange(pNew->getB2DRange(aViewInformation2D));

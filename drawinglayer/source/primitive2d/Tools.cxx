@@ -47,10 +47,10 @@ getB2DRangeFromPrimitive2DReference(const Primitive2DReference& rCandidate,
         else
         {
             // use UNO API call instead
-            const uno::Sequence<beans::PropertyValue>& rViewParameters(
-                aViewInformation.getViewInformationSequence());
+            auto aViewParameters = geometry::createPropertyValues(aViewInformation);
+
             aRetval.expand(basegfx::unotools::b2DRectangleFromRealRectangle2D(
-                rCandidate->getRange(rViewParameters)));
+                rCandidate->getRange(aViewParameters)));
         }
     }
 
