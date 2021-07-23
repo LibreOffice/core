@@ -26,6 +26,7 @@
 #include <sdbcoretools.hxx>
 #include <recovery/dbdocrecovery.hxx>
 
+#include <officecfg/Office/Common.hxx>
 #include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XImporter.hpp>
@@ -1618,7 +1619,7 @@ void ODatabaseDocument::impl_writeStorage_throw( const Reference< XStorage >& _r
     uno::Reference< beans::XPropertySet > xInfoSet( comphelper::GenericPropertySet_CreateInstance( new comphelper::PropertySetInfo( aExportInfoMap ) ) );
 
     SvtSaveOptions aSaveOpt;
-    xInfoSet->setPropertyValue("UsePrettyPrinting", uno::makeAny(aSaveOpt.IsPrettyPrinting()));
+    xInfoSet->setPropertyValue("UsePrettyPrinting", uno::makeAny(officecfg::Office::Common::Save::Document::PrettyPrinting::get()));
     if ( aSaveOpt.IsSaveRelFSys() )
     {
         OUString sBaseURI = _rMediaDescriptor.getOrDefault("BaseURI", OUString());

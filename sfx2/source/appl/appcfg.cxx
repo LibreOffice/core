@@ -143,8 +143,9 @@ void SfxApplication::GetOptions( SfxItemSet& rSet )
                 case SID_ATTR_PRETTYPRINTING:
                     {
                         bRet = true;
-                        if (!aSaveOptions.IsReadOnly(SvtSaveOptions::EOption::DoPrettyPrinting))
-                            if (!rSet.Put( SfxBoolItem( rPool.GetWhich( SID_ATTR_PRETTYPRINTING ), aSaveOptions.IsPrettyPrinting())))
+                        if (!officecfg::Office::Common::Save::Document::PrettyPrinting::isReadOnly())
+                            if (!rSet.Put( SfxBoolItem( rPool.GetWhich( SID_ATTR_PRETTYPRINTING ),
+                                    officecfg::Office::Common::Save::Document::PrettyPrinting::get())))
                                 bRet = false;
                     }
                     break;
@@ -433,7 +434,9 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     if ( SfxItemState::SET == rSet.GetItemState( rPool.GetWhich( SID_ATTR_PRETTYPRINTING ), true, &pItem ) )
     {
         DBG_ASSERT( dynamic_cast< const SfxBoolItem *>( pItem ) !=  nullptr, "BoolItem expected" );
-        aSaveOptions.SetPrettyPrinting( static_cast< const SfxBoolItem*> ( pItem )->GetValue() );
+        officecfg::Office::Common::Save::Document::PrettyPrinting::set(
+            static_cast< const SfxBoolItem*> ( pItem )->GetValue(),
+            batch );
     }
 
     // WarnAlienFormat

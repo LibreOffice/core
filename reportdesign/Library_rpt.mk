@@ -26,6 +26,10 @@ $(eval $(call gb_Library_set_precompiled_header,rpt,reportdesign/inc/pch/precomp
 
 $(eval $(call gb_Library_use_sdk_api,rpt))
 
+$(eval $(call gb_Library_use_custom_headers,rpt,\
+    officecfg/registry \
+))
+
 $(eval $(call gb_Library_use_libraries,rpt,\
     comphelper \
     cppu \

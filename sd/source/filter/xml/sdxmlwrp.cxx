@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <officecfg/Office/Common.hxx>
 #include <vcl/errinf.hxx>
 #include <sal/log.hxx>
 #include <com/sun/star/container/XChild.hpp>
@@ -785,8 +786,7 @@ bool SdXMLFilter::Export()
 
         uno::Reference< beans::XPropertySet > xInfoSet( GenericPropertySet_CreateInstance( new PropertySetInfo( aExportInfoMap ) ) );
 
-        SvtSaveOptions aSaveOpt;
-        bool bUsePrettyPrinting( aSaveOpt.IsPrettyPrinting() );
+        bool bUsePrettyPrinting = officecfg::Office::Common::Save::Document::PrettyPrinting::get();
         xInfoSet->setPropertyValue( "UsePrettyPrinting", makeAny( bUsePrettyPrinting ) );
 
         const uno::Reference < embed::XStorage >& xStorage = mrMedium.GetOutputStorage();

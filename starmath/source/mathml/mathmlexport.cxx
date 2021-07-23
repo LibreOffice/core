@@ -31,6 +31,7 @@
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/uno/Any.h>
 
+#include <officecfg/Office/Common.hxx>
 #include <rtl/math.hxx>
 #include <sfx2/frame.hxx>
 #include <sfx2/docfile.hxx>
@@ -143,8 +144,8 @@ bool SmXMLExportWrapper::Export(SfxMedium& rMedium)
     uno::Reference<beans::XPropertySet> xInfoSet(
         comphelper::GenericPropertySet_CreateInstance(new comphelper::PropertySetInfo(aInfoMap)));
 
-    SvtSaveOptions aSaveOpt;
-    bool bUsePrettyPrinting(bFlat || aSaveOpt.IsPrettyPrinting());
+    bool bUsePrettyPrinting
+        = bFlat || officecfg::Office::Common::Save::Document::PrettyPrinting::get();
     xInfoSet->setPropertyValue("UsePrettyPrinting", Any(bUsePrettyPrinting));
 
     // Set base URI
