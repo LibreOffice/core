@@ -44,7 +44,7 @@ public:
     // Constructor
     StyleList(weld::Builder* pBuilder, std::optional<SfxStyleFamilies> xFamilies,
               SfxBindings* pBindings, SfxCommonTemplateDialog_Impl* Parent, SfxModule* Module,
-              weld::Container* pC);
+              weld::Container* pC, OString treeviewname, OString flatviewname);
 
     // Destructor
     ~StyleList();
@@ -105,12 +105,16 @@ public:
     bool EnableExecute();
 
     void connect_UpdateStyles(const Link<StyleFlags, void>& rLink) { m_aUpdateStyles = rLink; }
-    void connect_ReadResource(const Link<void*, void>& rLink) { m_aReadResource = rLink; }
+    void connect_ReadResource(const Link<StyleList&, void>& rLink) { m_aReadResource = rLink; }
     void connect_ClearResource(const Link<void*, void>& rLink) { m_aClearResource = rLink; }
     void connect_LoadFactoryStyleFilter(const Link<SfxObjectShell const*, sal_Int32>& rLink);
-    void connect_SaveSelection(const Link<void*, SfxObjectShell*> rLink);
+    void connect_SaveSelection(const Link<sal_uInt16, SfxObjectShell*> rLink);
     void connect_UpdateStyleDependents(const Link<void*, void> rLink);
-    void connect_UpdateFamily(const Link<void*, void> rLink) { m_aUpdateFamily = rLink; }
+    void connect_UpdateFamily(const Link<StyleList&, void> rLink) { m_aUpdateFamily = rLink; }
+    OString get_treeview_buildable_name() { return m_xTreeBox->get_buildable_name(); }
+
+    SfxStyleSearchBits m_nAppFilter;
+    SfxObjectShell* m_pCurObjShell;
 
 private:
     void FillTreeBox(SfxStyleFamily eFam);
@@ -155,12 +159,12 @@ private:
 
     void Update();
     Link<StyleFlags, void> m_aUpdateStyles;
-    Link<void*, void> m_aReadResource;
+    Link<StyleList&, void> m_aReadResource;
     Link<void*, void> m_aClearResource;
     Link<SfxObjectShell const*, sal_Int32> m_aLoadFactoryStyleFilter;
-    Link<void*, SfxObjectShell*> m_aSaveSelection;
+    Link<sal_uInt16, SfxObjectShell*> m_aSaveSelection;
     Link<void*, void> m_aUpdateStyleDependents;
-    Link<void*, void> m_aUpdateFamily;
+    Link<StyleList&, void> m_aUpdateFamily;
 
     void NewHdl();
     void EditHdl();
@@ -203,9 +207,7 @@ private:
 
     std::optional<SfxStyleFamilies> m_xStyleFamilies;
     std::array<std::unique_ptr<SfxTemplateItem>, MAX_FAMILIES> m_pFamilyState;
-    SfxObjectShell* m_pCurObjShell;
     sal_uInt16 m_nActFamily;
-    SfxStyleSearchBits m_nAppFilter;
 
     std::unique_ptr<TreeViewDropTarget> m_xTreeView1DropTargetHelper;
     std::unique_ptr<TreeViewDropTarget> m_xTreeView2DropTargetHelper;
