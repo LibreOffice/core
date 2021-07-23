@@ -44,9 +44,8 @@ enum class HelpProperty
     ExtendedHelp    = 0,
     HelpTips        = 1,
     Locale          = 2,
-    System          = 3,
-    StyleSheet      = 4,
-    OfflineHelpPopUp = 5
+    StyleSheet      = 3,
+    OfflineHelpPopUp = 4
 };
 
 }
@@ -57,7 +56,6 @@ class SvtHelpOptions_Impl : public utl::ConfigItem
     bool            bHelpTips;
     bool            bOfflineHelpPopUp;
     OUString        aLocale;
-    OUString        aSystem;
     OUString        sHelpStyleSheet;
 
     static Sequence< OUString > const & GetPropertyNames();
@@ -77,7 +75,6 @@ public:
     bool            IsHelpTips() const                      { return bHelpTips; }
     void            SetOfflineHelpPopUp(bool b) { bOfflineHelpPopUp = b; SetModified();}
     bool            IsOfflineHelpPopUp() const { return bOfflineHelpPopUp;}
-    const OUString& GetSystem() const                       { return aSystem; }
 
     const OUString& GetHelpStyleSheet()const{return sHelpStyleSheet;}
     void            SetHelpStyleSheet(const OUString& rStyleSheet){sHelpStyleSheet = rStyleSheet; SetModified();}
@@ -168,9 +165,6 @@ void  SvtHelpOptions_Impl::Load(const uno::Sequence< OUString>& rPropertyNames)
                         aLocale = aTmpStr;
                         break;
 
-                    case HelpProperty::System:
-                        aSystem = aTmpStr;
-                        break;
                     case HelpProperty::StyleSheet:
                         sHelpStyleSheet = aTmpStr;
                     break;
@@ -216,9 +210,6 @@ void SvtHelpOptions_Impl::ImplCommit()
                 pValues[nProp] <<= aLocale;
                 break;
 
-            case HelpProperty::System:
-                pValues[nProp] <<= aSystem;
-                break;
             case HelpProperty::StyleSheet:
                 pValues[nProp] <<= sHelpStyleSheet;
             break;
@@ -285,11 +276,6 @@ void SvtHelpOptions::SetHelpTips( bool b )
 bool SvtHelpOptions::IsHelpTips() const
 {
     return pImpl->IsHelpTips();
-}
-
-OUString const & SvtHelpOptions::GetSystem() const
-{
-    return pImpl->GetSystem();
 }
 
 const OUString&   SvtHelpOptions::GetHelpStyleSheet()const

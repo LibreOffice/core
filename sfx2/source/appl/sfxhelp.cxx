@@ -279,7 +279,7 @@ void AppendConfigToken( OUStringBuffer& rURL, bool bQuestionMark )
     rURL.append("Language=");
     rURL.append(aLocaleStr);
     rURL.append("&System=");
-    rURL.append(SvtHelpOptions().GetSystem());
+    rURL.append(officecfg::Office::Common::Help::System::get());
     rURL.append("&Version=");
     rURL.append(utl::ConfigManager::getProductVersion());
 }
