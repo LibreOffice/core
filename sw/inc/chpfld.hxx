@@ -55,6 +55,7 @@ class SW_DLLPUBLIC SwChapterField final : public SwField
         sal_uInt8 nLevel;
         OUString sTitle;
         OUString sNumber;
+        OUString sLabelFollowedBy;
         OUString sPre;
         OUString sPost;
         State() : nLevel(0) {}
