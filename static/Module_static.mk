@@ -12,7 +12,9 @@ ifeq ($(DISABLE_DYNLOADING),TRUE)
 
 $(eval $(call gb_Module_add_targets,static,\
     CustomTarget_components \
+    CustomTarget_wasm_fs_image \
     Library_components \
+    Package_wasm_fs_image \
 ))
 
 endif
