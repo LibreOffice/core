@@ -8,7 +8,6 @@
  */
 #pragma once
 
-// SERVER
 #include <memory>
 #include <vector>
 
