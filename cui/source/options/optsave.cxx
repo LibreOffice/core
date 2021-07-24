@@ -225,19 +225,14 @@ void SvxSaveTabPage::DetectHiddenControls()
 
 bool SvxSaveTabPage::FillItemSet( SfxItemSet* rSet )
 {
+    auto xChanges = comphelper::ConfigurationChanges::create();
     bool bModified = false;
     SvtSaveOptions aSaveOpt;
     if(m_xLoadUserSettingsCB->get_state_changed_from_saved())
-    {
-        aSaveOpt.SetLoadUserSettings(m_xLoadUserSettingsCB->get_active());
-    }
+        officecfg::Office::Common::Load::UserDefinedSettings::set(m_xLoadUserSettingsCB->get_active(), xChanges);
 
     if ( m_xLoadDocPrinterCB->get_state_changed_from_saved() )
-    {
-        auto xChanges = comphelper::ConfigurationChanges::create();
         officecfg::Office::Common::Save::Document::LoadPrinter::set(m_xLoadDocPrinterCB->get_active(), xChanges);
-        xChanges->commit();
-    }
 
     if ( m_xODFVersionLB->get_value_changed_from_saved() )
     {
@@ -329,6 +324,7 @@ bool SvxSaveTabPage::FillItemSet( SfxItemSet* rSet )
             pImpl->aDefaultArr[APP_WRITER_GLOBAL] != aModuleOpt.GetFactoryDefaultFilter(SvtModuleOptions::EFactory::WRITERGLOBAL))
         aModuleOpt.SetFactoryDefaultFilter(SvtModuleOptions::EFactory::WRITERGLOBAL, pImpl->aDefaultArr[APP_WRITER_GLOBAL]);
 
+    xChanges->commit();
     return bModified;
 }
 
@@ -369,7 +365,7 @@ static bool isODFFormat( const OUString& sFilter )
 void SvxSaveTabPage::Reset( const SfxItemSet* )
 {
     SvtSaveOptions aSaveOpt;
-    m_xLoadUserSettingsCB->set_active(aSaveOpt.IsLoadUserSettings());
+    m_xLoadUserSettingsCB->set_active(officecfg::Office::Common::Load::UserDefinedSettings::get());
     m_xLoadUserSettingsCB->save_state();
     m_xLoadUserSettingsCB->set_sensitive(!officecfg::Office::Common::Load::UserDefinedSettings::isReadOnly());
     m_xLoadDocPrinterCB->set_active( officecfg::Office::Common::Save::Document::LoadPrinter::get() );

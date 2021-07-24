@@ -48,7 +48,6 @@ class SvtLoadOptions_Impl;
 struct SvtLoadSaveOptions_Impl
 {
     std::unique_ptr<SvtSaveOptions_Impl> pSaveOpt;
-    std::unique_ptr<SvtLoadOptions_Impl> pLoadOpt;
 };
 
 static std::unique_ptr<SvtLoadSaveOptions_Impl> pOptions;
@@ -233,51 +232,6 @@ void SvtSaveOptions_Impl::Notify( const Sequence<OUString>& )
 {
 }
 
-namespace {
-
-class SvtLoadOptions_Impl : public utl::ConfigItem
-{
-private:
-    bool                            bLoadUserDefinedSettings;
-
-    virtual void            ImplCommit() override;
-
-public:
-                            SvtLoadOptions_Impl();
-
-    virtual void            Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
-
-    void                    SetLoadUserSettings(bool b){bLoadUserDefinedSettings = b; SetModified();}
-    bool                IsLoadUserSettings() const {return bLoadUserDefinedSettings;}
-};
-
-}
-
-constexpr OUStringLiteral cUserDefinedSettings = u"UserDefinedSettings";
-
-SvtLoadOptions_Impl::SvtLoadOptions_Impl()
-    : ConfigItem( "Office.Common/Load" )
-    , bLoadUserDefinedSettings( false )
-{
-    Sequence< OUString > aNames { cUserDefinedSettings };
-    Sequence< Any > aValues = GetProperties( aNames );
-    EnableNotification( aNames );
-    const Any* pValues = aValues.getConstArray();
-    DBG_ASSERT( aValues.getLength() == aNames.getLength(), "GetProperties failed" );
-    pValues[0] >>= bLoadUserDefinedSettings;
-}
-
-void SvtLoadOptions_Impl::ImplCommit()
-{
-    PutProperties(
-        {cUserDefinedSettings}, {css::uno::Any(bLoadUserDefinedSettings)});
-}
-
-void SvtLoadOptions_Impl::Notify( const Sequence<OUString>& )
-{
-    SAL_WARN( "unotools.config", "properties have been changed" );
-}
-
 namespace
 {
     class LocalSingleton : public rtl::Static< osl::Mutex, LocalSingleton >
@@ -293,7 +247,6 @@ SvtSaveOptions::SvtSaveOptions()
     {
         pOptions.reset(new SvtLoadSaveOptions_Impl);
         pOptions->pSaveOpt.reset(new SvtSaveOptions_Impl);
-        pOptions->pLoadOpt.reset( new SvtLoadOptions_Impl);
     }
     ++nRefCount;
     pImp = pOptions.get();
@@ -307,21 +260,9 @@ SvtSaveOptions::~SvtSaveOptions()
     {
         if ( pOptions->pSaveOpt->IsModified() )
             pOptions->pSaveOpt->Commit();
-        if ( pOptions->pLoadOpt->IsModified() )
-            pOptions->pLoadOpt->Commit();
 
         pOptions.reset();
     }
-}
-
-void SvtSaveOptions::SetLoadUserSettings(bool b)
-{
-    pImp->pLoadOpt->SetLoadUserSettings(b);
-}
-
-bool   SvtSaveOptions::IsLoadUserSettings() const
-{
-    return pImp->pLoadOpt->IsLoadUserSettings();
 }
 
 void SvtSaveOptions::SetODFDefaultVersion( SvtSaveOptions::ODFDefaultVersion eVersion )
