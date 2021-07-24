@@ -1228,7 +1228,7 @@ bool SfxObjectShell::SaveTo_Impl
 
         // before we overwrite the original file, we will make a backup if there is a demand for that
         // if the backup is not created here it will be created internally and will be removed in case of successful saving
-        const bool bDoBackup = SvtSaveOptions().IsBackup();
+        const bool bDoBackup = officecfg::Office::Common::Save::Document::CreateBackup::get();
         if ( bDoBackup )
         {
             rMedium.DoBackup_Impl();

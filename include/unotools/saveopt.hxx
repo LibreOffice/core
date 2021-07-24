@@ -32,7 +32,6 @@ public:
     enum class EOption
     {
         UseUserData,
-        Backup,
         OdfDefaultVersion
     };
 
@@ -81,9 +80,6 @@ public:
 
     void                    SetUseUserData( bool b );
     bool                IsUseUserData() const;
-
-    void                    SetBackup( bool b );
-    bool                IsBackup() const;
 
     void                    SetLoadUserSettings(bool b);
     bool                IsLoadUserSettings() const;
