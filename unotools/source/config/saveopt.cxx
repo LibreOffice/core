@@ -60,13 +60,11 @@ class SvtSaveOptions_Impl : public utl::ConfigItem
 {
     sal_Int32                           nAutoSaveTime;
     bool                            bUseUserData,
-                                        bBackup,
                                         bAutoSave;
 
     SvtSaveOptions::ODFDefaultVersion   eODFDefaultVersion;
 
     bool                            bROUseUserData,
-                                        bROBackup,
                                         bROODFDefaultVersion;
 
     virtual void            ImplCommit() override;
@@ -77,13 +75,11 @@ public:
     virtual void            Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
 
     bool                    IsUseUserData() const               { return bUseUserData; }
-    bool                    IsBackup() const                    { return bBackup; }
 
     SvtSaveOptions::ODFDefaultVersion
                             GetODFDefaultVersion() const        { return eODFDefaultVersion; }
 
     void                    SetUseUserData( bool b );
-    void                    SetBackup( bool b );
     void                    SetODFDefaultVersion( SvtSaveOptions::ODFDefaultVersion eNew );
 
     bool                IsReadOnly( SvtSaveOptions::EOption eOption ) const;
@@ -96,15 +92,6 @@ void SvtSaveOptions_Impl::SetUseUserData( bool b )
     if (!bROUseUserData && bUseUserData!=b)
     {
         bUseUserData = b;
-        SetModified();
-    }
-}
-
-void SvtSaveOptions_Impl::SetBackup( bool b )
-{
-    if (!bROBackup && bBackup!=b)
-    {
-        bBackup = b;
         SetModified();
     }
 }
@@ -126,9 +113,6 @@ bool SvtSaveOptions_Impl::IsReadOnly( SvtSaveOptions::EOption eOption ) const
         case SvtSaveOptions::EOption::UseUserData :
             bReadOnly = bROUseUserData;
             break;
-        case SvtSaveOptions::EOption::Backup :
-            bReadOnly = bROBackup;
-            break;
         case SvtSaveOptions::EOption::OdfDefaultVersion :
             bReadOnly = bROODFDefaultVersion;
             break;
@@ -138,8 +122,7 @@ bool SvtSaveOptions_Impl::IsReadOnly( SvtSaveOptions::EOption eOption ) const
 
 #define FORMAT              0
 #define USEUSERDATA         1
-#define CREATEBACKUP        2
-#define ODFDEFAULTVERSION   3
+#define ODFDEFAULTVERSION   2
 
 static Sequence< OUString > GetPropertyNames()
 {
@@ -147,7 +130,6 @@ static Sequence< OUString > GetPropertyNames()
     {
         "Graphic/Format",
         "Document/UseUserData",
-        "Document/CreateBackup",
         "ODF/DefaultVersion"
     };
 
@@ -164,10 +146,8 @@ SvtSaveOptions_Impl::SvtSaveOptions_Impl()
     : ConfigItem( "Office.Common/Save" )
     , nAutoSaveTime( 0 )
     , bUseUserData( false )
-    , bBackup( false )
     , eODFDefaultVersion( SvtSaveOptions::ODFVER_LATEST )
     , bROUseUserData( CFG_READONLY_DEFAULT )
-    , bROBackup( CFG_READONLY_DEFAULT )
     , bROODFDefaultVersion( CFG_READONLY_DEFAULT )
 {
     Sequence< OUString > aNames = GetPropertyNames();
@@ -217,10 +197,6 @@ SvtSaveOptions_Impl::SvtSaveOptions_Impl()
                                 case USEUSERDATA :
                                     bUseUserData = bTemp;
                                     bROUseUserData = pROStates[nProp];
-                                    break;
-                                case CREATEBACKUP :
-                                    bBackup = bTemp;
-                                    bROBackup = pROStates[nProp];
                                     break;
 
                                 default :
@@ -272,14 +248,6 @@ void SvtSaveOptions_Impl::ImplCommit()
                 if (!bROUseUserData)
                 {
                     pValues[nRealCount] <<= bUseUserData;
-                    pNames[nRealCount] = pOrgNames[i];
-                    ++nRealCount;
-                }
-                break;
-            case CREATEBACKUP :
-                if (!bROBackup)
-                {
-                    pValues[nRealCount] <<= bBackup;
                     pNames[nRealCount] = pOrgNames[i];
                     ++nRealCount;
                 }
@@ -402,16 +370,6 @@ void SvtSaveOptions::SetUseUserData( bool b )
 bool SvtSaveOptions::IsUseUserData() const
 {
     return pImp->pSaveOpt->IsUseUserData();
-}
-
-void SvtSaveOptions::SetBackup( bool b )
-{
-    pImp->pSaveOpt->SetBackup( b );
-}
-
-bool SvtSaveOptions::IsBackup() const
-{
-    return pImp->pSaveOpt->IsBackup();
 }
 
 void SvtSaveOptions::SetLoadUserSettings(bool b)
