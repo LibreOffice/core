@@ -31,7 +31,6 @@
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <swtypes.hxx>
 #include <fldbas.hxx>
-#include <unotools/saveopt.hxx>
 
 class Point;
 class SvxCaseMapItem;
@@ -143,7 +142,6 @@ enum StyleType
 class AttributeOutputBase
 {
 private:
-    SvtSaveOptions m_aSaveOpt;
     OUString m_sBaseURL; // To be used in ConvertURL
 
     OUString ConvertURL( const OUString& rUrl, bool bAbsoluteOut );
