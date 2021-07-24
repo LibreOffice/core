@@ -64,7 +64,6 @@ SfxAlienWarningDialog::~SfxAlienWarningDialog()
     try
     {
         // save value of "warning off" checkbox, if necessary
-        SvtSaveOptions aSaveOpt;
         bool bChecked = m_xWarningOnBox->get_active();
         if (officecfg::Office::Common::Save::Document::WarnAlienFormat::get() != bChecked)
         {

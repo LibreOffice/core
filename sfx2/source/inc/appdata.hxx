@@ -45,7 +45,6 @@ class SfxStatusDispatcher;
 class SfxDdeTriggerTopic_Impl;
 class SfxDocumentTemplates;
 class SfxFrame;
-class SvtSaveOptions;
 class SfxViewFrame;
 class SfxSlotPool;
 class SfxDispatcher;
