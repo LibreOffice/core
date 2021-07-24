@@ -19,11 +19,8 @@
 #pragma once
 
 #include <svtools/svtdllapi.h>
-#include <unotools/configitem.hxx>
-#include <memory>
-
-struct SvtFontSubstConfig_Impl;
-
+#include <rtl/ustring.hxx>
+#include <vector>
 
 struct SubstitutionStruct
 {
@@ -33,28 +30,12 @@ struct SubstitutionStruct
     bool        bReplaceOnScreenOnly;
 };
 
-class SVT_DLLPUBLIC SvtFontSubstConfig final : public utl::ConfigItem
+namespace svtools
 {
-private:
-    bool                        bIsEnabled;
-    std::unique_ptr<SvtFontSubstConfig_Impl> pImpl;
-
-    virtual void                ImplCommit() override;
-
-public:
-    SvtFontSubstConfig();
-    virtual ~SvtFontSubstConfig() override;
-
-    virtual void                Notify( const css::uno::Sequence< OUString >& _rPropertyNames) override;
-
-    bool                        IsEnabled() const {return bIsEnabled;}
-    void                        Enable(bool bSet)  {bIsEnabled = bSet; SetModified();}
-
-    sal_Int32                   SubstitutionCount() const;
-    void                        ClearSubstitutions();
-    const SubstitutionStruct*   GetSubstitution(sal_Int32 nPos);
-    void                        AddSubstitution(const SubstitutionStruct&   rToAdd);
-    void                        Apply();
+    SVT_DLLPUBLIC bool                        IsFontSubstitutionsEnabled();
+    SVT_DLLPUBLIC std::vector<SubstitutionStruct> GetFontSubstitutions();
+    SVT_DLLPUBLIC void                        SetFontSubstitutions(bool bIsEnabled, std::vector<SubstitutionStruct> const &);
+    SVT_DLLPUBLIC void                        ApplyFontSubstitutionsToVcl();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

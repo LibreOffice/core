@@ -62,6 +62,9 @@ public:
     SAL_DLLPRIVATE static css::uno::Reference< css::container::XHierarchicalNameAccess>
     acquireTree(utl::ConfigItem const & item);
 
+    static css::uno::Reference< css::container::XHierarchicalNameAccess>
+    acquireTree(OUString const & rSubTreeName);
+
     SAL_DLLPRIVATE ConfigManager();
 
     SAL_DLLPRIVATE ~ConfigManager();
