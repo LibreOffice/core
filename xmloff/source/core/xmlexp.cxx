@@ -261,7 +261,6 @@ public:
 
     uno::Reference< embed::XStorage >                   mxTargetStorage;
 
-    SvtSaveOptions                                      maSaveOptions;
     std::optional<SvtSaveOptions::ODFSaneDefaultVersion> m_oOverrideODFVersion;
 
     /// name of stream in package, e.g., "content.xml"
@@ -430,7 +429,7 @@ void SvXMLExport::DetermineModelType_()
                 xModule->getIdentifier() == "com.sun.star.sdb.FormDesign");
             if (isBaseForm)
             {
-                switch (mpImpl->maSaveOptions.GetODFSaneDefaultVersion())
+                switch (GetODFSaneDefaultVersion())
                 {
                     case SvtSaveOptions::ODFSVER_013_EXTENDED:
                         SAL_INFO("xmloff.core", "tdf#138209 force form export to ODF 1.2");
@@ -2327,7 +2326,7 @@ SvtSaveOptions::ODFSaneDefaultVersion SvXMLExport::getSaneDefaultVersion() const
     {
         return *mpImpl->m_oOverrideODFVersion;
     }
-    return mpImpl->maSaveOptions.GetODFSaneDefaultVersion();
+    return GetODFSaneDefaultVersion();
 }
 
 void

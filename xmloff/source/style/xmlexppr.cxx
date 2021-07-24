@@ -548,7 +548,7 @@ vector<XMLPropertyState> SvXMLExportPropertyMapper::Filter_(
     bool bDelInfo = false;
     if( !pFilterInfo )
     {
-        assert(SvtSaveOptions().GetODFDefaultVersion() != SvtSaveOptions::ODFVER_UNKNOWN);
+        assert(GetODFDefaultVersion() != SvtSaveOptions::ODFVER_UNKNOWN);
         const SvtSaveOptions::ODFSaneDefaultVersion nCurrentVersion(rExport.getSaneDefaultVersion());
         pFilterInfo = new FilterPropertiesInfo_Impl;
         for( sal_Int32 i=0; i < nProps; i++ )

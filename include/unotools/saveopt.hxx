@@ -20,20 +20,12 @@
 #define INCLUDED_UNOTOOLS_SAVEOPT_HXX
 
 #include <unotools/unotoolsdllapi.h>
-#include <unotools/options.hxx>
+#include <memory>
 
-struct SvtLoadSaveOptions_Impl;
-class UNOTOOLS_DLLPUBLIC SvtSaveOptions final : public utl::detail::Options
+namespace comphelper { class ConfigurationChanges; }
+
+namespace SvtSaveOptions
 {
-    SvtLoadSaveOptions_Impl*    pImp;
-
-public:
-
-    enum class EOption
-    {
-        OdfDefaultVersion
-    };
-
     /** Keep enum values sorted that a less or greater compare maps to older
         and newer versions.
         Do not change values, they are stored in the configuration.
@@ -74,21 +66,16 @@ public:
         ODFSVER_LATEST_EXTENDED = ODFSVER_013_EXTENDED  ///< @internal DO NOT USE in comparisons
     };
 
-    SvtSaveOptions();
-    virtual ~SvtSaveOptions() override;
-
-    void                    SetODFDefaultVersion( ODFDefaultVersion eVersion );
-    ODFDefaultVersion       GetODFDefaultVersion() const;
-    ODFSaneDefaultVersion   GetODFSaneDefaultVersion() const;
-
-    bool                IsReadOnly( EOption eOption ) const;
-
-    /** gets a sane default from the currently configured default */
-    static ODFSaneDefaultVersion  GetODFSaneDefaultVersion(ODFDefaultVersion eDefaultVersion);
 };
 
-/** lighter-weight version of the same method in SvtSaveOptions */
-UNOTOOLS_DLLPUBLIC SvtSaveOptions::ODFSaneDefaultVersion GetODFSaneDefaultVersion();
+UNOTOOLS_DLLPUBLIC void SetODFDefaultVersion( SvtSaveOptions::ODFDefaultVersion eVersion );
+UNOTOOLS_DLLPUBLIC void SetODFDefaultVersion( SvtSaveOptions::ODFDefaultVersion eVersion, const std::shared_ptr<comphelper::ConfigurationChanges>& );
+
+UNOTOOLS_DLLPUBLIC SvtSaveOptions::ODFDefaultVersion       GetODFDefaultVersion();
+UNOTOOLS_DLLPUBLIC SvtSaveOptions::ODFSaneDefaultVersion   GetODFSaneDefaultVersion();
+
+/** gets a sane default from the currently configured default */
+UNOTOOLS_DLLPUBLIC SvtSaveOptions::ODFSaneDefaultVersion  GetODFSaneDefaultVersion(SvtSaveOptions::ODFDefaultVersion eDefaultVersion);
 
 #endif
 

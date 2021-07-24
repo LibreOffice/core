@@ -1653,7 +1653,7 @@ void ODatabaseDocument::impl_writeStorage_throw( const Reference< XStorage >& _r
 
     OUString aVersion;
     SvtSaveOptions::ODFSaneDefaultVersion const nDefVersion =
-        SvtSaveOptions().GetODFSaneDefaultVersion();
+        GetODFSaneDefaultVersion();
     // older versions can not have this property set,
     // it exists only starting from ODF1.2
     if (nDefVersion >= SvtSaveOptions::ODFSVER_013)
