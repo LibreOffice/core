@@ -33,7 +33,6 @@ public:
     {
         UseUserData,
         Backup,
-        WarnAlienFormat,
         LoadDocPrinter,
         OdfDefaultVersion
     };
@@ -89,9 +88,6 @@ public:
 
     void                    SetLoadUserSettings(bool b);
     bool                IsLoadUserSettings() const;
-
-    void                    SetWarnAlienFormat( bool _bEnable );
-    bool                IsWarnAlienFormat( ) const;
 
     void                    SetLoadDocumentPrinter( bool _bEnable );
     bool                IsLoadDocumentPrinter( ) const;
