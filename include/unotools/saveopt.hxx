@@ -77,9 +77,6 @@ public:
     SvtSaveOptions();
     virtual ~SvtSaveOptions() override;
 
-    void                    SetLoadUserSettings(bool b);
-    bool                IsLoadUserSettings() const;
-
     void                    SetODFDefaultVersion( ODFDefaultVersion eVersion );
     ODFDefaultVersion       GetODFDefaultVersion() const;
     ODFSaneDefaultVersion   GetODFSaneDefaultVersion() const;
