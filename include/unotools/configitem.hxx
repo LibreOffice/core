@@ -93,13 +93,14 @@ namespace utl
             //                      LOCALE      VALUE
             //                      "de"        "Mein Name"
             //                      "en-US"     "my name"
-            void impl_packLocalizedProperties   (   const   css::uno::Sequence< OUString >&                  lInNames    ,
+            static void impl_packLocalizedProperties   (   const   css::uno::Sequence< OUString >&                  lInNames    ,
                                                     const   css::uno::Sequence< css::uno::Any >&  lInValues   ,
                                                             css::uno::Sequence< css::uno::Any >&  lOutValues  );
-            void impl_unpackLocalizedProperties (   const   css::uno::Sequence< OUString >&                  lInNames    ,
-                                                    const   css::uno::Sequence< css::uno::Any >&  lInValues   ,
-                                                            css::uno::Sequence< OUString >&                  lOutNames   ,
-                                                            css::uno::Sequence< css::uno::Any >&  lOutValues  );
+            static void impl_unpackLocalizedProperties (
+                        const   css::uno::Sequence< OUString >&                  lInNames    ,
+                        const   css::uno::Sequence< css::uno::Any >&  lInValues   ,
+                                css::uno::Sequence< OUString >&                  lOutNames   ,
+                                css::uno::Sequence< css::uno::Any >&  lOutValues);
 
             css::uno::Reference< css::container::XHierarchicalNameAccess>
                                         GetTree();
@@ -178,6 +179,30 @@ namespace utl
             void                    Commit();
 
             ConfigItemMode GetMode() const { return m_nMode;}
+
+            //returns all members of a node in a specific format
+            static css::uno::Sequence< OUString > GetNodeNames(
+                    css::uno::Reference<css::container::XHierarchicalNameAccess> const & xHierarchyAccess,
+                    const OUString& rNode, ConfigNameFormat eFormat);
+            static css::uno::Sequence< css::uno::Any> GetProperties(
+                    css::uno::Reference<css::container::XHierarchicalNameAccess> const & xHierarchyAccess,
+                    const css::uno::Sequence< OUString >& rNames,
+                    bool bAllLocales);
+            static bool PutProperties(
+                    css::uno::Reference<css::container::XHierarchicalNameAccess> const & xHierarchyAccess,
+                    const css::uno::Sequence< OUString >& rNames,
+                    const css::uno::Sequence< css::uno::Any>& rValues,
+                    bool bAllLocales);
+            // remove all members of a set
+            static bool ClearNodeSet(
+                    css::uno::Reference<css::container::XHierarchicalNameAccess> const & xHierarchyAccess,
+                    const OUString& rNode);
+            // remove, change or add members of a set
+            static bool ReplaceSetProperties(
+                    css::uno::Reference<css::container::XHierarchicalNameAccess> const & xHierarchyAccess,
+                    const OUString& rNode,
+                    const css::uno::Sequence< css::beans::PropertyValue >& rValues,
+                    bool bAllLocales);
     };
 }//namespace utl
 #endif // INCLUDED_UNOTOOLS_CONFIGITEM_HXX
