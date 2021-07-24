@@ -31,7 +31,6 @@ public:
 
     enum class EOption
     {
-        UseUserData,
         OdfDefaultVersion
     };
 
@@ -77,9 +76,6 @@ public:
 
     SvtSaveOptions();
     virtual ~SvtSaveOptions() override;
-
-    void                    SetUseUserData( bool b );
-    bool                IsUseUserData() const;
 
     void                    SetLoadUserSettings(bool b);
     bool                IsLoadUserSettings() const;
