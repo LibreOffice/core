@@ -38,6 +38,7 @@
 #include <unotools/optionsdlg.hxx>
 #include <osl/diagnose.h>
 #include <tools/diagnose_ex.h>
+#include <officecfg/Office/Common.hxx>
 
 #include <sfx2/fcontnr.hxx>
 
@@ -363,7 +364,7 @@ void SvxSaveTabPage::Reset( const SfxItemSet* )
     SvtSaveOptions aSaveOpt;
     m_xLoadUserSettingsCB->set_active(aSaveOpt.IsLoadUserSettings());
     m_xLoadUserSettingsCB->save_state();
-    m_xLoadUserSettingsCB->set_sensitive(!aSaveOpt.IsReadOnly(SvtSaveOptions::EOption::UseUserData));
+    m_xLoadUserSettingsCB->set_sensitive(!officecfg::Office::Common::Load::UserDefinedSettings::isReadOnly());
     m_xLoadDocPrinterCB->set_active( aSaveOpt.IsLoadDocumentPrinter() );
     m_xLoadDocPrinterCB->save_state();
     m_xLoadDocPrinterCB->set_sensitive(!aSaveOpt.IsReadOnly(SvtSaveOptions::EOption::LoadDocPrinter));
