@@ -442,8 +442,8 @@ void SvxSaveTabPage::Reset( const SfxItemSet* )
     m_xUserAutoSaveCB->set_active(officecfg::Office::Recovery::AutoSave::UserAutoSaveEnabled::get());
     m_xUserAutoSaveCB->set_sensitive(!officecfg::Office::Recovery::AutoSave::UserAutoSaveEnabled::isReadOnly());
 
-    m_xWarnAlienFormatCB->set_active(aSaveOpt.IsWarnAlienFormat());
-    m_xWarnAlienFormatCB->set_sensitive(!aSaveOpt.IsReadOnly(SvtSaveOptions::EOption::WarnAlienFormat));
+    m_xWarnAlienFormatCB->set_active(officecfg::Office::Common::Save::Document::WarnAlienFormat::get());
+    m_xWarnAlienFormatCB->set_sensitive(!officecfg::Office::Common::Save::Document::WarnAlienFormat::isReadOnly());
 
     m_xAutoSaveEdit->set_value(officecfg::Office::Common::Save::Document::AutoSaveTimeIntervall::get());
     m_xAutoSaveEdit->set_sensitive(!officecfg::Office::Common::Save::Document::AutoSaveTimeIntervall::isReadOnly());

@@ -55,7 +55,7 @@ SfxAlienWarningDialog::SfxAlienWarningDialog(weld::Window* pParent,
     m_xUseDefaultFormatBtn->set_label(sInfoText);
 
     // load value of "warning on" checkbox from save options
-    m_xWarningOnBox->set_active(SvtSaveOptions().IsWarnAlienFormat());
+    m_xWarningOnBox->set_active(officecfg::Office::Common::Save::Document::WarnAlienFormat::get());
 }
 
 SfxAlienWarningDialog::~SfxAlienWarningDialog()
@@ -65,8 +65,12 @@ SfxAlienWarningDialog::~SfxAlienWarningDialog()
         // save value of "warning off" checkbox, if necessary
         SvtSaveOptions aSaveOpt;
         bool bChecked = m_xWarningOnBox->get_active();
-        if (aSaveOpt.IsWarnAlienFormat() != bChecked)
-            aSaveOpt.SetWarnAlienFormat(bChecked);
+        if (officecfg::Office::Common::Save::Document::WarnAlienFormat::get() != bChecked)
+        {
+            auto xChanges = comphelper::ConfigurationChanges::create();
+            officecfg::Office::Common::Save::Document::WarnAlienFormat::set(bChecked, xChanges);
+            xChanges->commit();
+        }
     }
     catch (...)
     {

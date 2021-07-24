@@ -31,6 +31,7 @@
 
 #include <com/sun/star/embed/Aspects.hpp>
 
+#include <officecfg/Office/Common.hxx>
 #include <comphelper/lok.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
@@ -2470,7 +2471,9 @@ void SdXImpressDocument::initializeForTiledRendering(const css::uno::Sequence<cs
     // be saved..." dialog appears, it is auto-cancelled with tiled rendering,
     // causing 'Save' being disabled; so let's always save to the original
     // format
-    SvtSaveOptions().SetWarnAlienFormat(false);
+    auto xChanges = comphelper::ConfigurationChanges::create();
+    officecfg::Office::Common::Save::Document::WarnAlienFormat::set(false, xChanges);
+    xChanges->commit();
 
     if (!getenv("LO_TESTNAME"))
         SvtSlideSorterBarOptions().SetVisibleImpressView(true);

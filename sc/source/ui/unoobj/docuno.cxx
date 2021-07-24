@@ -1200,7 +1200,9 @@ void ScModelObj::initializeForTiledRendering(const css::uno::Sequence<css::beans
     // be saved..." dialog appears, it is auto-cancelled with tiled rendering,
     // causing 'Save' being disabled; so let's always save to the original
     // format
-    SvtSaveOptions().SetWarnAlienFormat(false);
+    auto xChanges = comphelper::ConfigurationChanges::create();
+    officecfg::Office::Common::Save::Document::WarnAlienFormat::set(false, xChanges);
+    xChanges->commit();
 }
 
 uno::Any SAL_CALL ScModelObj::queryInterface( const uno::Type& rType )
