@@ -26,7 +26,6 @@ class SvtFontSubstConfig;
 class SvxFontSubstTabPage : public SfxTabPage
 {
     OUString                    m_sAutomatic;
-    std::unique_ptr<SvtFontSubstConfig> m_xConfig;
 
     std::unique_ptr<weld::CheckButton> m_xUseTableCB;
     std::unique_ptr<weld::ComboBox> m_xFont1CB;

@@ -34,7 +34,6 @@
 
 SvxFontSubstTabPage::SvxFontSubstTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
     : SfxTabPage(pPage, pController, "cui/ui/optfontspage.ui", "OptFontsPage", &rSet)
-    , m_xConfig(new SvtFontSubstConfig)
     , m_xUseTableCB(m_xBuilder->weld_check_button("usetable"))
     , m_xFont1CB(m_xBuilder->weld_combo_box("font1"))
     , m_xFont2CB(m_xBuilder->weld_combo_box("font2"))
@@ -146,23 +145,21 @@ std::unique_ptr<SfxTabPage> SvxFontSubstTabPage::Create( weld::Container* pPage,
 
 bool  SvxFontSubstTabPage::FillItemSet( SfxItemSet* )
 {
-    m_xConfig->ClearSubstitutions();// remove all entries
+    std::vector<SubstitutionStruct> aNewFontSubs;
 
-    m_xConfig->Enable(m_xUseTableCB->get_active());
-
-    m_xCheckLB->all_foreach([this](weld::TreeIter& rIter) {
+    m_xCheckLB->all_foreach([this, &aNewFontSubs](weld::TreeIter& rIter) {
         SubstitutionStruct aAdd;
         aAdd.sFont = m_xCheckLB->get_text(rIter, 2);
         aAdd.sReplaceBy = m_xCheckLB->get_text(rIter, 3);
         aAdd.bReplaceAlways = m_xCheckLB->get_toggle(rIter, 0);
         aAdd.bReplaceOnScreenOnly = m_xCheckLB->get_toggle(rIter, 1);
-        m_xConfig->AddSubstitution(aAdd);
+        aNewFontSubs.push_back(aAdd);
         return false;
     });
 
-    if(m_xConfig->IsModified())
-        m_xConfig->Commit();
-    m_xConfig->Apply();
+    svtools::SetFontSubstitutions(m_xUseTableCB->get_active(), aNewFontSubs);
+    svtools::ApplyFontSubstitutionsToVcl();
+
     std::shared_ptr< comphelper::ConfigurationChanges > batch(
         comphelper::ConfigurationChanges::create());
     if (m_xFontHeightLB->get_value_changed_from_saved())
@@ -206,15 +203,14 @@ void  SvxFontSubstTabPage::Reset( const SfxItemSet* )
     m_xFont2CB->thaw();
     m_xFont1CB->thaw();
 
-    sal_Int32 nCount = m_xConfig->SubstitutionCount();
-    if (nCount)
-        m_xUseTableCB->set_active(m_xConfig->IsEnabled());
+    m_xUseTableCB->set_active(svtools::IsFontSubstitutionsEnabled());
 
+    std::vector<SubstitutionStruct> aFontSubs = svtools::GetFontSubstitutions();
     std::unique_ptr<weld::TreeIter> xIter(m_xCheckLB->make_iterator());
-    for (sal_Int32  i = 0; i < nCount; ++i)
+    for (sal_Int32  i = 0; i < static_cast<sal_Int32>(aFontSubs.size()); ++i)
     {
         m_xCheckLB->append(xIter.get());
-        const SubstitutionStruct* pSubs = m_xConfig->GetSubstitution(i);
+        const SubstitutionStruct* pSubs = &aFontSubs[i];
         m_xCheckLB->set_toggle(*xIter, pSubs->bReplaceAlways ? TRISTATE_TRUE : TRISTATE_FALSE, 0);
         m_xCheckLB->set_toggle(*xIter, pSubs->bReplaceOnScreenOnly ? TRISTATE_TRUE : TRISTATE_FALSE, 1);
         m_xCheckLB->set_text(*xIter, pSubs->sFont, 2);
