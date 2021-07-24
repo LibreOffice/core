@@ -134,6 +134,19 @@ utl::ConfigManager::acquireTree(utl::ConfigItem const & item) {
         css::uno::UNO_QUERY_THROW);
 }
 
+css::uno::Reference< css::container::XHierarchicalNameAccess >
+utl::ConfigManager::acquireTree(std::u16string_view rSubTreeName) {
+    css::uno::Sequence< css::uno::Any > args(1);
+    args[0] <<= css::beans::NamedValue(
+        "nodepath",
+        css::uno::makeAny(OUString::Concat(u"/org.openoffice.") + rSubTreeName));
+    return css::uno::Reference< css::container::XHierarchicalNameAccess >(
+        getConfigurationProvider()->createInstanceWithArguments(
+            "com.sun.star.configuration.ConfigurationUpdateAccess",
+            args),
+        css::uno::UNO_QUERY_THROW);
+}
+
 utl::ConfigManager::ConfigManager() {}
 
 utl::ConfigManager::~ConfigManager() {
