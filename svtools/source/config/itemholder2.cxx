@@ -132,14 +132,6 @@ void ItemHolder2::impl_newItem(TItemInfo& rItem)
             rItem.pItem.reset( new SvtMenuOptions() );
             break;
 
-        case EItem::PrintOptions :
-            rItem.pItem.reset( new SvtPrinterOptions() );
-            break;
-
-        case EItem::PrintFileOptions :
-            rItem.pItem.reset( new SvtPrintFileOptions() );
-            break;
-
         case EItem::MiscOptions :
             rItem.pItem.reset( new SvtMiscOptions() );
             break;
