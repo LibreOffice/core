@@ -76,6 +76,7 @@
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <officecfg/Office/Common.hxx>
 
 #include <unordered_set>
 
@@ -1283,8 +1284,7 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
         "EmptyDbFieldHidesPara"
     };
 
-    SvtSaveOptions aSaveOpt;
-    bool bAreUserSettingsFromDocument = aSaveOpt.IsLoadUserSettings();
+    bool bAreUserSettingsFromDocument = officecfg::Office::Common::Load::UserDefinedSettings::get();
 
     // for some properties we don't want to use the application
     // default if they're missing. So we watch for them in the loop
