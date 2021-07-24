@@ -227,7 +227,6 @@ bool SvxSaveTabPage::FillItemSet( SfxItemSet* rSet )
 {
     auto xChanges = comphelper::ConfigurationChanges::create();
     bool bModified = false;
-    SvtSaveOptions aSaveOpt;
     if(m_xLoadUserSettingsCB->get_state_changed_from_saved())
         officecfg::Office::Common::Load::UserDefinedSettings::set(m_xLoadUserSettingsCB->get_active(), xChanges);
 
@@ -237,7 +236,7 @@ bool SvxSaveTabPage::FillItemSet( SfxItemSet* rSet )
     if ( m_xODFVersionLB->get_value_changed_from_saved() )
     {
         sal_Int32 nVersion = m_xODFVersionLB->get_active_id().toInt32();
-        aSaveOpt.SetODFDefaultVersion( SvtSaveOptions::ODFDefaultVersion( nVersion ) );
+        SetODFDefaultVersion( SvtSaveOptions::ODFDefaultVersion( nVersion ), xChanges );
     }
 
     if ( m_xDocInfoCB->get_state_changed_from_saved() )
@@ -364,7 +363,6 @@ static bool isODFFormat( const OUString& sFilter )
 
 void SvxSaveTabPage::Reset( const SfxItemSet* )
 {
-    SvtSaveOptions aSaveOpt;
     m_xLoadUserSettingsCB->set_active(officecfg::Office::Common::Load::UserDefinedSettings::get());
     m_xLoadUserSettingsCB->save_state();
     m_xLoadUserSettingsCB->set_sensitive(!officecfg::Office::Common::Load::UserDefinedSettings::isReadOnly());
@@ -456,9 +454,9 @@ void SvxSaveTabPage::Reset( const SfxItemSet* )
     m_xRelativeInetCB->set_active(officecfg::Office::Common::Save::URL::Internet::get());
     m_xRelativeInetCB->set_sensitive(!officecfg::Office::Common::Save::URL::Internet::isReadOnly());
 
-    sal_Int32 nDefaultVersion = aSaveOpt.GetODFDefaultVersion();
+    sal_Int32 nDefaultVersion = GetODFDefaultVersion();
     m_xODFVersionLB->set_active_id(OUString::number(nDefaultVersion));
-    m_xODFVersionLB->set_sensitive(!aSaveOpt.IsReadOnly(SvtSaveOptions::EOption::OdfDefaultVersion));
+    m_xODFVersionLB->set_sensitive(!officecfg::Office::Common::Save::ODF::DefaultVersion::isReadOnly());
 
     AutoClickHdl_Impl(*m_xAutoSaveCB);
     ODFVersionHdl_Impl(*m_xODFVersionLB);

@@ -116,7 +116,6 @@ void SfxApplication::GetOptions( SfxItemSet& rSet )
     SfxItemPool &rPool = GetPool();
 
     const WhichRangesContainer& pRanges = rSet.GetRanges();
-    SvtSaveOptions aSaveOptions;
     SvtHelpOptions aHelpOptions;
     SvtSecurityOptions  aSecurityOptions;
     SvtMiscOptions aMiscOptions;
@@ -411,7 +410,6 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     const SfxPoolItem *pItem = nullptr;
     SfxItemPool &rPool = GetPool();
 
-    SvtSaveOptions aSaveOptions;
     SvtHelpOptions aHelpOptions;
     SvtSecurityOptions aSecurityOptions;
     SvtMiscOptions aMiscOptions;

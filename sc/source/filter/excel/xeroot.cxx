@@ -58,7 +58,6 @@ XclExpRootData::XclExpRootData( XclBiff eBiff, SfxMedium& rMedium,
         const tools::SvRef<SotStorage>& xRootStrg, ScDocument& rDoc, rtl_TextEncoding eTextEnc ) :
     XclRootData( eBiff, rMedium, xRootStrg, rDoc, eTextEnc, true )
 {
-    SvtSaveOptions aSaveOpt;
     mbRelUrl = mrMedium.IsRemote()
         ? officecfg::Office::Common::Save::URL::Internet::get()
         : officecfg::Office::Common::Save::URL::FileSystem::get();
