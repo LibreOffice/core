@@ -33,7 +33,6 @@ public:
     {
         UseUserData,
         Backup,
-        LoadDocPrinter,
         OdfDefaultVersion
     };
 
@@ -88,9 +87,6 @@ public:
 
     void                    SetLoadUserSettings(bool b);
     bool                IsLoadUserSettings() const;
-
-    void                    SetLoadDocumentPrinter( bool _bEnable );
-    bool                IsLoadDocumentPrinter( ) const;
 
     void                    SetODFDefaultVersion( ODFDefaultVersion eVersion );
     ODFDefaultVersion       GetODFDefaultVersion() const;
