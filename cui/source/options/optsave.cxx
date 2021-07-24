@@ -41,6 +41,7 @@
 #include <tools/diagnose_ex.h>
 #include <officecfg/Office/Common.hxx>
 #include <officecfg/Office/Recovery.hxx>
+#include <officecfg/Office/Common.hxx>
 
 #include <sfx2/fcontnr.hxx>
 

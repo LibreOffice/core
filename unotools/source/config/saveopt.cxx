@@ -59,13 +59,11 @@ namespace {
 class SvtSaveOptions_Impl : public utl::ConfigItem
 {
     sal_Int32                           nAutoSaveTime;
-    bool                            bUseUserData,
-                                        bAutoSave;
+    bool                            bAutoSave;
 
     SvtSaveOptions::ODFDefaultVersion   eODFDefaultVersion;
 
-    bool                            bROUseUserData,
-                                        bROODFDefaultVersion;
+    bool                            bROODFDefaultVersion;
 
     virtual void            ImplCommit() override;
 
@@ -74,26 +72,14 @@ public:
 
     virtual void            Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
 
-    bool                    IsUseUserData() const               { return bUseUserData; }
-
     SvtSaveOptions::ODFDefaultVersion
                             GetODFDefaultVersion() const        { return eODFDefaultVersion; }
 
-    void                    SetUseUserData( bool b );
     void                    SetODFDefaultVersion( SvtSaveOptions::ODFDefaultVersion eNew );
 
     bool                IsReadOnly( SvtSaveOptions::EOption eOption ) const;
 };
 
-}
-
-void SvtSaveOptions_Impl::SetUseUserData( bool b )
-{
-    if (!bROUseUserData && bUseUserData!=b)
-    {
-        bUseUserData = b;
-        SetModified();
-    }
 }
 
 void SvtSaveOptions_Impl::SetODFDefaultVersion( SvtSaveOptions::ODFDefaultVersion eNew )
@@ -110,9 +96,6 @@ bool SvtSaveOptions_Impl::IsReadOnly( SvtSaveOptions::EOption eOption ) const
     bool bReadOnly = CFG_READONLY_DEFAULT;
     switch(eOption)
     {
-        case SvtSaveOptions::EOption::UseUserData :
-            bReadOnly = bROUseUserData;
-            break;
         case SvtSaveOptions::EOption::OdfDefaultVersion :
             bReadOnly = bROODFDefaultVersion;
             break;
@@ -121,15 +104,13 @@ bool SvtSaveOptions_Impl::IsReadOnly( SvtSaveOptions::EOption eOption ) const
 }
 
 #define FORMAT              0
-#define USEUSERDATA         1
-#define ODFDEFAULTVERSION   2
+#define ODFDEFAULTVERSION   1
 
 static Sequence< OUString > GetPropertyNames()
 {
     static const char* aPropNames[] =
     {
         "Graphic/Format",
-        "Document/UseUserData",
         "ODF/DefaultVersion"
     };
 
@@ -145,9 +126,7 @@ static Sequence< OUString > GetPropertyNames()
 SvtSaveOptions_Impl::SvtSaveOptions_Impl()
     : ConfigItem( "Office.Common/Save" )
     , nAutoSaveTime( 0 )
-    , bUseUserData( false )
     , eODFDefaultVersion( SvtSaveOptions::ODFVER_LATEST )
-    , bROUseUserData( CFG_READONLY_DEFAULT )
     , bROODFDefaultVersion( CFG_READONLY_DEFAULT )
 {
     Sequence< OUString > aNames = GetPropertyNames();
@@ -188,26 +167,7 @@ SvtSaveOptions_Impl::SvtSaveOptions_Impl()
                     }
 
                     default:
-                    {
-                        bool bTemp = bool();
-                        if ( pValues[nProp] >>= bTemp )
-                        {
-                            switch ( nProp )
-                            {
-                                case USEUSERDATA :
-                                    bUseUserData = bTemp;
-                                    bROUseUserData = pROStates[nProp];
-                                    break;
-
-                                default :
-                                    SAL_WARN( "unotools.config", "invalid index to load a path" );
-                            }
-                        }
-                        else
-                        {
-                            OSL_FAIL( "Wrong Type!" );
-                        }
-                    }
+                        OSL_FAIL( "Wrong Type!" );
                 }
             }
         }
@@ -243,14 +203,6 @@ void SvtSaveOptions_Impl::ImplCommit()
         {
             case FORMAT:
                 // not supported anymore
-                break;
-            case USEUSERDATA :
-                if (!bROUseUserData)
-                {
-                    pValues[nRealCount] <<= bUseUserData;
-                    pNames[nRealCount] = pOrgNames[i];
-                    ++nRealCount;
-                }
                 break;
             case ODFDEFAULTVERSION:
                 if (!bROODFDefaultVersion)
@@ -360,16 +312,6 @@ SvtSaveOptions::~SvtSaveOptions()
 
         pOptions.reset();
     }
-}
-
-void SvtSaveOptions::SetUseUserData( bool b )
-{
-    pImp->pSaveOpt->SetUseUserData( b );
-}
-
-bool SvtSaveOptions::IsUseUserData() const
-{
-    return pImp->pSaveOpt->IsUseUserData();
 }
 
 void SvtSaveOptions::SetLoadUserSettings(bool b)
