@@ -25,7 +25,7 @@ example of drawingml preset:
          </a:prstGeom>
 
 example of drawingml custom shape (equal to star5 preset):
-
+```xml
    <avLst xmlns="http://schemas.openxmlformats.org/drawingml/2006/main">
      <gd name="adj" fmla="val 19098" />
      <gd name="hf" fmla="val 105146" />
@@ -119,6 +119,7 @@ example of drawingml custom shape (equal to star5 preset):
        <close />
      </path>
    </pathLst>
+```
 
 we needed to extend our custom shapes for missing features and so 5
 new segment commands were added. `G` command for arcto drawingml record
