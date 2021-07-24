@@ -881,7 +881,7 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                         sal_Int32 nOOXAngle(0);
                         aInteropGrabBag.getValue("mso-rotation-angle") >>= nOOXAngle; // 1/60000 deg
                         // tdf#143455: A diagram is imported as group, but has no valid object list
-                        // and contour wrap is different to Word. As workaround diagramms are excluded
+                        // and contour wrap is different to Word. As workaround diagrams are excluded
                         // here in various places.
                         const bool bIsDiagram = oox::drawingml::DrawingML::IsDiagram(m_xShape);
                         const bool bIsGroupOrLine = (xServiceInfo->supportsService("com.sun.star.drawing.GroupShape")
