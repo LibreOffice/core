@@ -28,7 +28,6 @@
 #include <svtools/accessibilityoptions.hxx>
 #include <svtools/menuoptions.hxx>
 #include <svtools/colorcfg.hxx>
-#include <svtools/helpopt.hxx>
 #include <svtools/printoptions.hxx>
 #include <unotools/options.hxx>
 #include <svtools/miscopt.hxx>
@@ -127,10 +126,6 @@ void ItemHolder2::impl_newItem(TItemInfo& rItem)
 
         case EItem::ColorConfig :
             rItem.pItem.reset( new ::svtools::ColorConfig() );
-            break;
-
-        case EItem::HelpOptions :
-            rItem.pItem.reset( new SvtHelpOptions() );
             break;
 
         case EItem::MenuOptions :

@@ -335,7 +335,6 @@
 #include <svl/visitem.hxx>
 #include <svl/whiter.hxx>
 #include <svtools/ehdl.hxx>
-#include <svtools/helpopt.hxx>
 #include <svtools/imagemgr.hxx>
 #include <svtools/miscopt.hxx>
 #include <svtools/sfxecode.hxx>

@@ -44,7 +44,6 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <unotools/configmgr.hxx>
-#include <svtools/helpopt.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <tools/urlobj.hxx>
 #include <ucbhelper/content.hxx>

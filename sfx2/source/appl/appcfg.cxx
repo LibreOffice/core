@@ -39,7 +39,6 @@
 #include <officecfg/Office/Common.hxx>
 #include <officecfg/Office/Recovery.hxx>
 #include <unotools/saveopt.hxx>
-#include <svtools/helpopt.hxx>
 #include <unotools/securityoptions.hxx>
 #include <unotools/pathoptions.hxx>
 #include <svtools/miscopt.hxx>
@@ -117,7 +116,6 @@ void SfxApplication::GetOptions( SfxItemSet& rSet )
 
     const WhichRangesContainer& pRanges = rSet.GetRanges();
     SvtSaveOptions aSaveOptions;
-    SvtHelpOptions aHelpOptions;
     SvtSecurityOptions  aSecurityOptions;
     SvtMiscOptions aMiscOptions;
 
@@ -224,12 +222,12 @@ void SfxApplication::GetOptions( SfxItemSet& rSet )
                     break;
                 case SID_HELPBALLOONS :
                     if(rSet.Put( SfxBoolItem ( rPool.GetWhich( SID_HELPBALLOONS ),
-                               aHelpOptions.IsExtendedHelp() ) ) )
+                            officecfg::Office::Common::Help::ExtendedTip::get() ) ) )
                         bRet = true;
                     break;
                 case SID_HELPTIPS :
                     if(rSet.Put( SfxBoolItem ( rPool.GetWhich( SID_HELPTIPS ),
-                               aHelpOptions.IsHelpTips() ) ) )
+                            officecfg::Office::Common::Help::Tip::get() ) ) )
                         bRet = true;
                     break;
                 case SID_HELP_STYLESHEET :
@@ -410,7 +408,6 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     SfxItemPool &rPool = GetPool();
 
     SvtSaveOptions aSaveOptions;
-    SvtHelpOptions aHelpOptions;
     SvtSecurityOptions aSecurityOptions;
     SvtMiscOptions aMiscOptions;
     std::shared_ptr< comphelper::ConfigurationChanges > batch(
@@ -526,14 +523,18 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     if ( SfxItemState::SET == rSet.GetItemState(rPool.GetWhich(SID_HELPBALLOONS), true, &pItem))
     {
         DBG_ASSERT(dynamic_cast< const SfxBoolItem *>( pItem ) !=  nullptr, "BoolItem expected");
-        aHelpOptions.SetExtendedHelp(static_cast<const SfxBoolItem *>(pItem)->GetValue());
+        officecfg::Office::Common::Help::ExtendedTip::set(
+                static_cast<const SfxBoolItem *>(pItem)->GetValue(),
+                batch);
     }
 
     // HelpTips
     if ( SfxItemState::SET == rSet.GetItemState(rPool.GetWhich(SID_HELPTIPS), true, &pItem))
     {
         DBG_ASSERT(dynamic_cast< const SfxBoolItem *>( pItem ) !=  nullptr, "BoolItem expected");
-        aHelpOptions.SetHelpTips( static_cast<const SfxBoolItem *>(pItem)->GetValue());
+        officecfg::Office::Common::Help::Tip::set(
+                static_cast<const SfxBoolItem *>(pItem)->GetValue(),
+                batch);
     }
 
     if ( SfxItemState::SET == rSet.GetItemState(rPool.GetWhich(SID_HELP_STYLESHEET ), true, &pItem))
