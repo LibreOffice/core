@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "951372e1_d510a8b2",
+        "filename": "sw/inc/swtypes.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-24T08:35:39Z",
+      "side": 1,
+      "message": "Possibly it could even make sense to use convert here (and elsewhere) directly, instead of expressing 3 mm through part of 5 mm, which may give wrong result and be not that expressive.\n\nFTR, MM50 / 5 * 3 is 168, while o3tl::convert(3, o3tl::Length::mm, o3tl::Length::twip) is 170.",
+      "revId": "77a192aa016279acc0b0f9df584d1ce31bde41a4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
