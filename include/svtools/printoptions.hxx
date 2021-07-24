@@ -22,88 +22,15 @@
 #include <config_options.h>
 #include <svtools/svtdllapi.h>
 #include <sal/types.h>
-#include <unotools/options.hxx>
 
-namespace osl { class Mutex; }
-
-class SvtPrintOptions_Impl;
 class PrinterOptions;
 
-
-class UNLESS_MERGELIBS(SVT_DLLPUBLIC) SvtBasePrintOptions: public utl::detail::Options
+namespace svtools
 {
-
-    SvtPrintOptions_Impl* m_pDataContainer;
-
-protected:
-
-    void        SetDataContainer( SvtPrintOptions_Impl* pDataContainer ) { m_pDataContainer = pDataContainer; }
-
-public:
-
-    static ::osl::Mutex& GetOwnStaticMutex();
-
-public:
-
-                SvtBasePrintOptions();
-                virtual ~SvtBasePrintOptions() override;
-
-    static bool        IsReduceTransparency();
-    static sal_Int16   GetReducedTransparencyMode();
-    static bool        IsReduceGradients();
-    static sal_Int16   GetReducedGradientMode();
-    static sal_Int16   GetReducedGradientStepCount();
-    static bool        IsReduceBitmaps();
-    static sal_Int16   GetReducedBitmapMode();
-    static sal_Int16   GetReducedBitmapResolution();
-    static bool        IsReducedBitmapIncludesTransparency();
-    static bool        IsConvertToGreyscales();
-    static bool        IsPDFAsStandardPrintJobFormat();
-
-    void        SetReduceTransparency( bool bState );
-    void        SetReducedTransparencyMode( sal_Int16 nMode );
-    void        SetReduceGradients( bool bState );
-    void        SetReducedGradientMode( sal_Int16 nMode );
-    void        SetReducedGradientStepCount( sal_Int16 nStepCount );
-    void        SetReduceBitmaps( bool bState );
-    void        SetReducedBitmapMode( sal_Int16   bState );
-    void        SetReducedBitmapResolution( sal_Int16 nResolution );
-    void        SetReducedBitmapIncludesTransparency( bool bState );
-    void        SetConvertToGreyscales( bool bState );
-    void        SetPDFAsStandardPrintJobFormat( bool bState );
-
-public:
-
-    static void        GetPrinterOptions( PrinterOptions& rOptions );
-    void               SetPrinterOptions( const PrinterOptions& rOptions );
+    SVT_DLLPUBLIC void GetPrinterOptions( PrinterOptions& rOptions, bool bFile );
+    SVT_DLLPUBLIC void SetPrinterOptions( const PrinterOptions& rOptions, bool bFile );
 };
 
 
-class UNLESS_MERGELIBS(SVT_DLLPUBLIC) SvtPrinterOptions final : public SvtBasePrintOptions
-{
-private:
-
-    static SvtPrintOptions_Impl*    m_pStaticDataContainer;
-    static sal_Int32                m_nRefCount;
-
-public:
-
-    SvtPrinterOptions();
-    virtual ~SvtPrinterOptions() override;
-};
-
-
-class UNLESS_MERGELIBS(SVT_DLLPUBLIC) SvtPrintFileOptions final : public SvtBasePrintOptions
-{
-private:
-
-    static SvtPrintOptions_Impl*    m_pStaticDataContainer;
-    static sal_Int32                m_nRefCount;
-
-public:
-
-    SvtPrintFileOptions();
-    virtual ~SvtPrintFileOptions() override;
-};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

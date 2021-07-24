@@ -55,8 +55,6 @@ enum class EItem
     OptionsDialogOptions          ,
 
     PathOptions                   ,
-    PrintOptions                  ,   // 2
-    PrintFileOptions              ,   // 2
 
     SecurityOptions               ,
     SysLocaleOptions              ,   // 2

@@ -91,9 +91,6 @@ std::unique_ptr<SfxTabPage> SfxCommonPrintOptionsTabPage::Create(weld::Container
 
 bool SfxCommonPrintOptionsTabPage::FillItemSet( SfxItemSet* /*rSet*/ )
 {
-    SvtPrinterOptions       aPrinterOptions;
-    SvtPrintFileOptions     aPrintFileOptions;
-
     std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
 
     if( m_xPaperSizeCB->get_state_changed_from_saved())
@@ -107,8 +104,8 @@ bool SfxCommonPrintOptionsTabPage::FillItemSet( SfxItemSet* /*rSet*/ )
 
     ImplSaveControls( m_xPrinterOutputRB->get_active() ? &maPrinterOptions : &maPrintFileOptions );
 
-    aPrinterOptions.SetPrinterOptions( maPrinterOptions );
-    aPrintFileOptions.SetPrinterOptions( maPrintFileOptions );
+    svtools::SetPrinterOptions(maPrinterOptions, /*bFile*/false);
+    svtools::SetPrinterOptions(maPrintFileOptions, /*bFile*/true);
 
     return false;
 }
@@ -123,8 +120,8 @@ void SfxCommonPrintOptionsTabPage::Reset( const SfxItemSet* /*rSet*/ )
     m_xPaperOrientationCB->save_state();
     m_xTransparencyCB->save_state();
 
-    SvtBasePrintOptions::GetPrinterOptions( maPrinterOptions );
-    SvtBasePrintOptions::GetPrinterOptions( maPrintFileOptions );
+    svtools::GetPrinterOptions( maPrinterOptions, /*bFile*/false );
+    svtools::GetPrinterOptions( maPrintFileOptions, /*bFile*/true );
     if(m_xPrintFileOutputRB->get_active()){
        m_xPrinterOutputRB->set_active(true);
     }
