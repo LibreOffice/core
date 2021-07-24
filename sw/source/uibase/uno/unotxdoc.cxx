@@ -3492,7 +3492,9 @@ void SwXTextDocument::initializeForTiledRendering(const css::uno::Sequence<css::
     // be saved..." dialog appears, it is auto-cancelled with tiled rendering,
     // causing 'Save' being disabled; so let's always save to the original
     // format
-    SvtSaveOptions().SetWarnAlienFormat(false);
+    auto xChanges = comphelper::ConfigurationChanges::create();
+    officecfg::Office::Common::Save::Document::WarnAlienFormat::set(false, xChanges);
+    xChanges->commit();
 
     // disable word auto-completion suggestions, the tooltips are not visible,
     // and the editeng-like auto-completion is annoying

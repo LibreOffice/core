@@ -1818,7 +1818,7 @@ bool SfxStoringHelper::WarnUnacceptableFormat( const uno::Reference< frame::XMod
                                                     const OUString& aDefExtension,
                                                     bool bDefIsAlien )
 {
-    if ( !SvtSaveOptions().IsWarnAlienFormat() )
+    if ( !officecfg::Office::Common::Save::Document::WarnAlienFormat::get() )
         return true;
 
     weld::Window* pWin = SfxStoringHelper::GetModelWindow(xModel);

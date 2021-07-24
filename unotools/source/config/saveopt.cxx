@@ -62,14 +62,12 @@ class SvtSaveOptions_Impl : public utl::ConfigItem
     bool                            bUseUserData,
                                         bBackup,
                                         bAutoSave,
-                                        bWarnAlienFormat,
                                         bLoadDocPrinter;
 
     SvtSaveOptions::ODFDefaultVersion   eODFDefaultVersion;
 
     bool                            bROUseUserData,
                                         bROBackup,
-                                        bROWarnAlienFormat,
                                         bROLoadDocPrinter,
                                         bROODFDefaultVersion;
 
@@ -82,7 +80,6 @@ public:
 
     bool                    IsUseUserData() const               { return bUseUserData; }
     bool                    IsBackup() const                    { return bBackup; }
-    bool                IsWarnAlienFormat() const           { return bWarnAlienFormat; }
     bool                IsLoadDocPrinter() const            { return bLoadDocPrinter; }
 
     SvtSaveOptions::ODFDefaultVersion
@@ -90,7 +87,6 @@ public:
 
     void                    SetUseUserData( bool b );
     void                    SetBackup( bool b );
-    void                    SetWarnAlienFormat( bool _bDoPP );
     void                    SetLoadDocPrinter( bool bNew );
     void                    SetODFDefaultVersion( SvtSaveOptions::ODFDefaultVersion eNew );
 
@@ -113,15 +109,6 @@ void SvtSaveOptions_Impl::SetBackup( bool b )
     if (!bROBackup && bBackup!=b)
     {
         bBackup = b;
-        SetModified();
-    }
-}
-
-void SvtSaveOptions_Impl::SetWarnAlienFormat( bool _bDoPP )
-{
-    if (!bROWarnAlienFormat && bWarnAlienFormat!=_bDoPP)
-    {
-        bWarnAlienFormat = _bDoPP;
         SetModified();
     }
 }
@@ -155,9 +142,6 @@ bool SvtSaveOptions_Impl::IsReadOnly( SvtSaveOptions::EOption eOption ) const
         case SvtSaveOptions::EOption::Backup :
             bReadOnly = bROBackup;
             break;
-        case SvtSaveOptions::EOption::WarnAlienFormat :
-            bReadOnly = bROWarnAlienFormat;
-            break;
         case SvtSaveOptions::EOption::LoadDocPrinter :
             bReadOnly = bROLoadDocPrinter;
             break;
@@ -171,9 +155,8 @@ bool SvtSaveOptions_Impl::IsReadOnly( SvtSaveOptions::EOption eOption ) const
 #define FORMAT              0
 #define USEUSERDATA         1
 #define CREATEBACKUP        2
-#define WARNALIENFORMAT     3
-#define LOADDOCPRINTER      4
-#define ODFDEFAULTVERSION   5
+#define LOADDOCPRINTER      3
+#define ODFDEFAULTVERSION   4
 
 static Sequence< OUString > GetPropertyNames()
 {
@@ -182,7 +165,6 @@ static Sequence< OUString > GetPropertyNames()
         "Graphic/Format",
         "Document/UseUserData",
         "Document/CreateBackup",
-        "Document/WarnAlienFormat",
         "Document/LoadPrinter",
         "ODF/DefaultVersion"
     };
@@ -201,12 +183,10 @@ SvtSaveOptions_Impl::SvtSaveOptions_Impl()
     , nAutoSaveTime( 0 )
     , bUseUserData( false )
     , bBackup( false )
-    , bWarnAlienFormat( true )
     , bLoadDocPrinter( true )
     , eODFDefaultVersion( SvtSaveOptions::ODFVER_LATEST )
     , bROUseUserData( CFG_READONLY_DEFAULT )
     , bROBackup( CFG_READONLY_DEFAULT )
-    , bROWarnAlienFormat( CFG_READONLY_DEFAULT )
     , bROLoadDocPrinter( CFG_READONLY_DEFAULT )
     , bROODFDefaultVersion( CFG_READONLY_DEFAULT )
 {
@@ -261,11 +241,6 @@ SvtSaveOptions_Impl::SvtSaveOptions_Impl()
                                 case CREATEBACKUP :
                                     bBackup = bTemp;
                                     bROBackup = pROStates[nProp];
-                                    break;
-
-                                case WARNALIENFORMAT:
-                                    bWarnAlienFormat = bTemp;
-                                    bROWarnAlienFormat = pROStates[nProp];
                                     break;
 
                                 case LOADDOCPRINTER:
@@ -330,14 +305,6 @@ void SvtSaveOptions_Impl::ImplCommit()
                 if (!bROBackup)
                 {
                     pValues[nRealCount] <<= bBackup;
-                    pNames[nRealCount] = pOrgNames[i];
-                    ++nRealCount;
-                }
-                break;
-            case WARNALIENFORMAT:
-                if (!bROWarnAlienFormat)
-                {
-                    pValues[nRealCount] <<= bWarnAlienFormat;
                     pNames[nRealCount] = pOrgNames[i];
                     ++nRealCount;
                 }
@@ -488,16 +455,6 @@ void SvtSaveOptions::SetLoadUserSettings(bool b)
 bool   SvtSaveOptions::IsLoadUserSettings() const
 {
     return pImp->pLoadOpt->IsLoadUserSettings();
-}
-
-void SvtSaveOptions::SetWarnAlienFormat( bool _bEnable )
-{
-    pImp->pSaveOpt->SetWarnAlienFormat( _bEnable );
-}
-
-bool SvtSaveOptions::IsWarnAlienFormat() const
-{
-    return pImp->pSaveOpt->IsWarnAlienFormat();
 }
 
 void SvtSaveOptions::SetLoadDocumentPrinter( bool _bEnable )
