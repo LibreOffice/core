@@ -45,7 +45,6 @@
 #include <editeng/editids.hrc>
 #include <svx/svxids.hrc>
 #include <svl/intitem.hxx>
-#include <svtools/helpopt.hxx>
 #include <unotools/searchopt.hxx>
 #include <sal/log.hxx>
 #include <officecfg/Office/Common.hxx>
@@ -217,16 +216,11 @@ bool OfaMiscTabPage::FillItemSet( SfxItemSet* rSet )
     bool bModified = false;
     std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
 
-    SvtHelpOptions aHelpOptions;
     if ( m_xPopUpNoHelpCB->get_state_changed_from_saved() )
-    {
-        auto xChanges = comphelper::ConfigurationChanges::create();
-        officecfg::Office::Common::Help::BuiltInHelpNotInstalledPopUp::set(m_xPopUpNoHelpCB->get_active(), xChanges);
-        xChanges->commit();
-    }
+        officecfg::Office::Common::Help::BuiltInHelpNotInstalledPopUp::set(m_xPopUpNoHelpCB->get_active(), batch);
 
     if ( m_xExtHelpCB->get_state_changed_from_saved() )
-        aHelpOptions.SetExtendedHelp( m_xExtHelpCB->get_active() );
+        officecfg::Office::Common::Help::ExtendedTip::set(m_xExtHelpCB->get_active(), batch);
 
     if ( m_xShowTipOfTheDay->get_state_changed_from_saved() )
     {
@@ -236,10 +230,7 @@ bool OfaMiscTabPage::FillItemSet( SfxItemSet* rSet )
 
     if ( m_xFileDlgCB->get_state_changed_from_saved() )
     {
-        std::shared_ptr< comphelper::ConfigurationChanges > xChanges(
-                comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::Misc::UseSystemFileDialog::set( !m_xFileDlgCB->get_active(), xChanges );
-        xChanges->commit();
+        officecfg::Office::Common::Misc::UseSystemFileDialog::set( !m_xFileDlgCB->get_active(), batch );
         bModified = true;
     }
 
@@ -287,8 +278,8 @@ bool OfaMiscTabPage::FillItemSet( SfxItemSet* rSet )
 
 void OfaMiscTabPage::Reset( const SfxItemSet* rSet )
 {
-    SvtHelpOptions aHelpOptions;
-    m_xExtHelpCB->set_active( aHelpOptions.IsHelpTips() && aHelpOptions.IsExtendedHelp() );
+    m_xExtHelpCB->set_active( officecfg::Office::Common::Help::Tip::get() &&
+            officecfg::Office::Common::Help::ExtendedTip::get() );
     m_xExtHelpCB->save_state();
     m_xPopUpNoHelpCB->set_active( officecfg::Office::Common::Help::BuiltInHelpNotInstalledPopUp::get() );
     m_xPopUpNoHelpCB->save_state();

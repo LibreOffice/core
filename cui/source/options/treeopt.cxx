@@ -90,7 +90,6 @@
 #include <svl/flagitem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/languageoptions.hxx>
-#include <svtools/helpopt.hxx>
 #include <svx/databaseregistrationui.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/urlobj.hxx>
@@ -1223,10 +1222,12 @@ void OfaTreeOptionsDialog::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet 
             }
 
 //          evaluate help options
-            if ( SvtHelpOptions().IsHelpTips() != Help::IsQuickHelpEnabled() )
-                SvtHelpOptions().IsHelpTips() ? Help::EnableQuickHelp() : Help::DisableQuickHelp();
-            if ( SvtHelpOptions().IsExtendedHelp() != Help::IsBalloonHelpEnabled() )
-                SvtHelpOptions().IsExtendedHelp() ? Help::EnableBalloonHelp() : Help::DisableBalloonHelp();
+            bool bHelpTips = officecfg::Office::Common::Help::Tip::get();
+            if ( bHelpTips != Help::IsQuickHelpEnabled() )
+                bHelpTips ? Help::EnableQuickHelp() : Help::DisableQuickHelp();
+            bool bExtendedHelp = officecfg::Office::Common::Help::ExtendedTip::get();
+            if ( bExtendedHelp != Help::IsBalloonHelpEnabled() )
+                bExtendedHelp ? Help::EnableBalloonHelp() : Help::DisableBalloonHelp();
 
             batch->commit();
         }
