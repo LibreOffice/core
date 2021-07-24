@@ -232,7 +232,11 @@ bool SvxSaveTabPage::FillItemSet( SfxItemSet* rSet )
     }
 
     if ( m_xLoadDocPrinterCB->get_state_changed_from_saved() )
-        aSaveOpt.SetLoadDocumentPrinter( m_xLoadDocPrinterCB->get_active() );
+    {
+        auto xChanges = comphelper::ConfigurationChanges::create();
+        officecfg::Office::Common::Save::Document::LoadPrinter::set(m_xLoadDocPrinterCB->get_active(), xChanges);
+        xChanges->commit();
+    }
 
     if ( m_xODFVersionLB->get_value_changed_from_saved() )
     {
@@ -367,9 +371,9 @@ void SvxSaveTabPage::Reset( const SfxItemSet* )
     m_xLoadUserSettingsCB->set_active(aSaveOpt.IsLoadUserSettings());
     m_xLoadUserSettingsCB->save_state();
     m_xLoadUserSettingsCB->set_sensitive(!officecfg::Office::Common::Load::UserDefinedSettings::isReadOnly());
-    m_xLoadDocPrinterCB->set_active( aSaveOpt.IsLoadDocumentPrinter() );
+    m_xLoadDocPrinterCB->set_active( officecfg::Office::Common::Save::Document::LoadPrinter::get() );
     m_xLoadDocPrinterCB->save_state();
-    m_xLoadDocPrinterCB->set_sensitive(!aSaveOpt.IsReadOnly(SvtSaveOptions::EOption::LoadDocPrinter));
+    m_xLoadDocPrinterCB->set_sensitive(!officecfg::Office::Common::Save::Document::LoadPrinter::isReadOnly());
 
     if ( !pImpl->bInitialized )
     {
