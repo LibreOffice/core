@@ -34,6 +34,7 @@
 #include <svl/intitem.hxx>
 #include <vcl/settings.hxx>
 
+#include <officecfg/Office/Common.hxx>
 #include <unotools/useroptions.hxx>
 #include <cuioptgenrl.hxx>
 #include <svx/svxids.hrc>
@@ -349,10 +350,11 @@ bool SvxGeneralTabPage::FillItemSet( SfxItemSet* )
 
     bool bModified = false;
     bModified |= GetData_Impl();
-    SvtSaveOptions aSaveOpt;
-    if (m_xUseDataCB->get_active() != aSaveOpt.IsUseUserData())
+    if (m_xUseDataCB->get_active() != officecfg::Office::Common::Save::Document::UseUserData::get())
     {
-        aSaveOpt.SetUseUserData(m_xUseDataCB->get_active());
+        auto xChanges = comphelper::ConfigurationChanges::create();
+        officecfg::Office::Common::Save::Document::UseUserData::set(m_xUseDataCB->get_active(), xChanges);
+        xChanges->commit();
         bModified = true;
     }
     return bModified;
@@ -377,7 +379,7 @@ void SvxGeneralTabPage::Reset( const SfxItemSet* rSet )
             vFields.front()->xEdit->grab_focus();
     }
 
-    m_xUseDataCB->set_active(SvtSaveOptions().IsUseUserData());
+    m_xUseDataCB->set_active(officecfg::Office::Common::Save::Document::UseUserData::get());
 }
 
 
