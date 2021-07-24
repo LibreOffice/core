@@ -67,7 +67,6 @@
 #include <vcl/toolbox.hxx>
 
 #include <unotools/moduleoptions.hxx>
-#include <svtools/helpopt.hxx>
 #include <rtl/bootstrap.hxx>
 
 #include <com/sun/star/frame/ModuleManager.hpp>
@@ -578,7 +577,9 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                 Help::EnableQuickHelp();
             else
                 Help::DisableQuickHelp();
-            SvtHelpOptions().SetHelpTips( bOn );
+            auto xChanges = comphelper::ConfigurationChanges::create();
+            officecfg::Office::Common::Help::Tip::set(bOn, xChanges);
+            xChanges->commit();
             Invalidate(SID_HELPTIPS);
             bDone = true;
 
@@ -605,7 +606,9 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                 Help::EnableBalloonHelp();
             else
                 Help::DisableBalloonHelp();
-            SvtHelpOptions().SetExtendedHelp( bOn );
+            auto xChanges = comphelper::ConfigurationChanges::create();
+            officecfg::Office::Common::Help::ExtendedTip::set(bOn, xChanges);
+            xChanges->commit();
             Invalidate(SID_HELPBALLOONS);
             bDone = true;
 

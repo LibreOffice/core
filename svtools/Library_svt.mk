@@ -80,7 +80,6 @@ $(eval $(call gb_Library_add_exception_objects,svt,\
     svtools/source/config/colorcfg \
     svtools/source/config/extcolorcfg \
     svtools/source/config/fontsubstconfig \
-    svtools/source/config/helpopt \
     svtools/source/config/htmlcfg \
     svtools/source/config/itemholder2 \
     svtools/source/config/menuoptions \
