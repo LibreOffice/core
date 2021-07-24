@@ -19,14 +19,16 @@
 
 #include <svtools/fontsubstconfig.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <o3tl/any.hxx>
 #include <tools/debug.hxx>
 #include <vcl/outdev.hxx>
+#include <unotools/configmgr.hxx>
+#include <unotools/configitem.hxx>
 
 #include <vector>
 
-using namespace utl;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
@@ -40,41 +42,41 @@ constexpr OUStringLiteral cSubstituteFont= u"SubstituteFont";
 constexpr OUStringLiteral cOnScreenOnly = u"OnScreenOnly";
 constexpr OUStringLiteral cAlways = u"Always";
 
-typedef std::vector<SubstitutionStruct> SubstitutionStructArr;
-
-struct SvtFontSubstConfig_Impl
+namespace svtools
 {
-    SubstitutionStructArr   aSubstArr;
-};
 
-SvtFontSubstConfig::SvtFontSubstConfig() :
-    ConfigItem("Office.Common/Font/Substitution"),
-    bIsEnabled(false),
-    pImpl(new SvtFontSubstConfig_Impl)
+bool IsFontSubstitutionsEnabled()
 {
-    Sequence<OUString> aNames { cReplacement };
-    Sequence<Any> aValues = GetProperties(aNames);
-    DBG_ASSERT(aValues.getConstArray()[0].hasValue(), "no value available");
-    if(aValues.getConstArray()[0].hasValue())
-        bIsEnabled = *o3tl::doAccess<bool>(aValues.getConstArray()[0]);
+    bool bIsEnabled = false;
+    Reference<css::container::XHierarchicalNameAccess> xHierarchyAccess = utl::ConfigManager::acquireTree(u"Office.Common/Font/Substitution");
+    Any aVal = xHierarchyAccess->getByHierarchicalName(cReplacement);
 
-    OUString sPropPrefix(cFontPairs);
-    const Sequence<OUString> aNodeNames = GetNodeNames(sPropPrefix, ConfigNameFormat::LocalPath);
+    DBG_ASSERT(aVal.hasValue(), "no value available");
+    if(aVal.hasValue())
+        bIsEnabled = *o3tl::doAccess<bool>(aVal);
+    return bIsEnabled;
+}
+
+std::vector<SubstitutionStruct> GetFontSubstitutions()
+{
+    Reference<css::container::XHierarchicalNameAccess> xHierarchyAccess = utl::ConfigManager::acquireTree(u"Office.Common/Font/Substitution");
+
+    const Sequence<OUString> aNodeNames = utl::ConfigItem::GetNodeNames(xHierarchyAccess, cFontPairs, utl::ConfigNameFormat::LocalPath);
     Sequence<OUString> aPropNames(aNodeNames.getLength() * 4);
     OUString* pNames = aPropNames.getArray();
     sal_Int32 nName = 0;
-    sPropPrefix += "/";
     for(const OUString& rNodeName : aNodeNames)
     {
-        OUString sStart = sPropPrefix + rNodeName + "/";
+        OUString sStart = cFontPairs + "/" + rNodeName + "/";
         pNames[nName++] = sStart + cReplaceFont;
         pNames[nName++] = sStart + cSubstituteFont;
         pNames[nName++] = sStart + cAlways;
         pNames[nName++] = sStart + cOnScreenOnly;
     }
-    Sequence<Any> aNodeValues = GetProperties(aPropNames);
+    Sequence<Any> aNodeValues = utl::ConfigItem::GetProperties(xHierarchyAccess, aPropNames, /*bAllLocales*/false);
     const Any* pNodeValues = aNodeValues.getConstArray();
     nName = 0;
+    std::vector<SubstitutionStruct> aSubstArr;
     for(sal_Int32 nNode = 0; nNode < aNodeNames.getLength(); nNode++)
     {
         SubstitutionStruct aInsert;
@@ -82,100 +84,74 @@ SvtFontSubstConfig::SvtFontSubstConfig() :
         pNodeValues[nName++] >>= aInsert.sReplaceBy;
         aInsert.bReplaceAlways = *o3tl::doAccess<bool>(pNodeValues[nName++]);
         aInsert.bReplaceOnScreenOnly = *o3tl::doAccess<bool>(pNodeValues[nName++]);
-        pImpl->aSubstArr.push_back(aInsert);
+        aSubstArr.push_back(aInsert);
     }
+    return aSubstArr;
 }
 
-SvtFontSubstConfig::~SvtFontSubstConfig()
+void SetFontSubstitutions(bool bIsEnabled, std::vector<SubstitutionStruct> const & aSubstArr)
 {
-}
-
-void SvtFontSubstConfig::Notify( const css::uno::Sequence< OUString >& )
-{
-}
-
-void SvtFontSubstConfig::ImplCommit()
-{
-    PutProperties({cReplacement}, {css::uno::Any(bIsEnabled)});
+    Reference<css::container::XHierarchicalNameAccess> xHierarchyAccess = utl::ConfigManager::acquireTree(u"Office.Common/Font/Substitution");
+    utl::ConfigItem::PutProperties(xHierarchyAccess, {cReplacement}, {css::uno::Any(bIsEnabled)}, /*bAllLocales*/false);
 
     OUString sNode(cFontPairs);
-    if(pImpl->aSubstArr.empty())
-        ClearNodeSet(sNode);
-    else
+    if(aSubstArr.empty())
     {
-        Sequence<PropertyValue> aSetValues(4 * pImpl->aSubstArr.size());
-        PropertyValue* pSetValues = aSetValues.getArray();
-        sal_Int32 nSetValue = 0;
-
-        const OUString sReplaceFont(cReplaceFont);
-        const OUString sSubstituteFont(cSubstituteFont);
-        const OUString sAlways(cAlways);
-        const OUString sOnScreenOnly(cOnScreenOnly);
-
-        for(size_t i = 0; i < pImpl->aSubstArr.size(); i++)
-        {
-            OUString sPrefix = sNode + "/_" + OUString::number(i) + "/";
-
-            SubstitutionStruct& rSubst = pImpl->aSubstArr[i];
-            pSetValues[nSetValue].Name = sPrefix; pSetValues[nSetValue].Name += sReplaceFont;
-            pSetValues[nSetValue++].Value <<= rSubst.sFont;
-            pSetValues[nSetValue].Name = sPrefix; pSetValues[nSetValue].Name += sSubstituteFont;
-            pSetValues[nSetValue++].Value <<= rSubst.sReplaceBy;
-            pSetValues[nSetValue].Name = sPrefix; pSetValues[nSetValue].Name += sAlways;
-            pSetValues[nSetValue++].Value <<= rSubst.bReplaceAlways;
-            pSetValues[nSetValue].Name = sPrefix; pSetValues[nSetValue].Name += sOnScreenOnly;
-            pSetValues[nSetValue++].Value <<= rSubst.bReplaceOnScreenOnly;
-        }
-        ReplaceSetProperties(sNode, aSetValues);
+        utl::ConfigItem::ClearNodeSet(xHierarchyAccess, sNode);
+        return;
     }
+
+    Sequence<PropertyValue> aSetValues(4 * aSubstArr.size());
+    PropertyValue* pSetValues = aSetValues.getArray();
+    sal_Int32 nSetValue = 0;
+
+    const OUString sReplaceFont(cReplaceFont);
+    const OUString sSubstituteFont(cSubstituteFont);
+    const OUString sAlways(cAlways);
+    const OUString sOnScreenOnly(cOnScreenOnly);
+
+    for(size_t i = 0; i < aSubstArr.size(); i++)
+    {
+        OUString sPrefix = sNode + "/_" + OUString::number(i) + "/";
+
+        const SubstitutionStruct& rSubst = aSubstArr[i];
+        pSetValues[nSetValue].Name = sPrefix; pSetValues[nSetValue].Name += sReplaceFont;
+        pSetValues[nSetValue++].Value <<= rSubst.sFont;
+        pSetValues[nSetValue].Name = sPrefix; pSetValues[nSetValue].Name += sSubstituteFont;
+        pSetValues[nSetValue++].Value <<= rSubst.sReplaceBy;
+        pSetValues[nSetValue].Name = sPrefix; pSetValues[nSetValue].Name += sAlways;
+        pSetValues[nSetValue++].Value <<= rSubst.bReplaceAlways;
+        pSetValues[nSetValue].Name = sPrefix; pSetValues[nSetValue].Name += sOnScreenOnly;
+        pSetValues[nSetValue++].Value <<= rSubst.bReplaceOnScreenOnly;
+    }
+    utl::ConfigItem::ReplaceSetProperties(xHierarchyAccess, sNode, aSetValues, /*bAllLocales*/false);
 }
 
-sal_Int32 SvtFontSubstConfig::SubstitutionCount() const
-{
-    return pImpl->aSubstArr.size();
-}
-
-void SvtFontSubstConfig::ClearSubstitutions()
-{
-    pImpl->aSubstArr.clear();
-}
-
-const SubstitutionStruct* SvtFontSubstConfig::GetSubstitution(sal_Int32 nPos)
-{
-    sal_Int32 nCount = static_cast<sal_Int32>(pImpl->aSubstArr.size());
-    DBG_ASSERT(nPos >= 0 && nPos < nCount, "illegal array index");
-    if(nPos >= 0 && nPos < nCount)
-        return &pImpl->aSubstArr[nPos];
-    return nullptr;
-}
-
-void SvtFontSubstConfig::AddSubstitution(const SubstitutionStruct& rToAdd)
-{
-    pImpl->aSubstArr.push_back(rToAdd);
-}
-
-void SvtFontSubstConfig::Apply()
+void ApplyFontSubstitutionsToVcl()
 {
     OutputDevice::BeginFontSubstitution();
 
     // remove old substitutions
     OutputDevice::RemoveFontsSubstitute();
 
-    // read new substitutions
-    sal_Int32 nCount = IsEnabled() ? SubstitutionCount() : 0;
+    const bool bIsEnabled = IsFontSubstitutionsEnabled();
+    std::vector<SubstitutionStruct> aSubst = GetFontSubstitutions();
 
-    for (sal_Int32  i = 0; i < nCount; i++)
-    {
-        AddFontSubstituteFlags nFlags = AddFontSubstituteFlags::NONE;
-        const SubstitutionStruct* pSubs = GetSubstitution(i);
-        if(pSubs->bReplaceAlways)
-            nFlags |= AddFontSubstituteFlags::ALWAYS;
-        if(pSubs->bReplaceOnScreenOnly)
-            nFlags |= AddFontSubstituteFlags::ScreenOnly;
-        OutputDevice::AddFontSubstitute( pSubs->sFont, pSubs->sReplaceBy, nFlags );
-    }
+    // read new substitutions
+    if (bIsEnabled)
+        for (const SubstitutionStruct & rSub : aSubst)
+        {
+            AddFontSubstituteFlags nFlags = AddFontSubstituteFlags::NONE;
+            if(rSub.bReplaceAlways)
+                nFlags |= AddFontSubstituteFlags::ALWAYS;
+            if(rSub.bReplaceOnScreenOnly)
+                nFlags |= AddFontSubstituteFlags::ScreenOnly;
+            OutputDevice::AddFontSubstitute( rSub.sFont, rSub.sReplaceBy, nFlags );
+        }
 
     OutputDevice::EndFontSubstitution();
 }
+
+} // namespace svtools
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

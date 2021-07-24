@@ -1528,7 +1528,7 @@ int Desktop::Main()
 
     SetSplashScreenProgress(55);
 
-    SvtFontSubstConfig().Apply();
+    svtools::ApplyFontSubstitutionsToVcl();
 
     SvtTabAppearanceCfg aAppearanceCfg;
     SvtTabAppearanceCfg::SetInitialized();

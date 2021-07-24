@@ -172,9 +172,7 @@ void ConfigItem::impl_packLocalizedProperties(  const   Sequence< OUString >&   
                                                 const   Sequence< Any >&        lInValues   ,
                                                         Sequence< Any >&        lOutValues  )
 {
-    // Safe impossible cases.
-    // This method should be called for special ConfigItem-mode only!
-    OSL_ENSURE( ((m_nMode & ConfigItemMode::AllLocales ) == ConfigItemMode::AllLocales), "ConfigItem::impl_packLocalizedProperties() Wrong call of this method detected!" );
+    // This method should be called for special AllLocales ConfigItem-mode only!
 
     sal_Int32                   nSourceCounter;      // used to step during input lists
     sal_Int32                   nSourceSize;         // marks end of loop over input lists
@@ -238,11 +236,9 @@ void ConfigItem::impl_packLocalizedProperties(  const   Sequence< OUString >&   
 void ConfigItem::impl_unpackLocalizedProperties(    const   Sequence< OUString >&   lInNames    ,
                                                     const   Sequence< Any >&        lInValues   ,
                                                             Sequence< OUString >&   lOutNames   ,
-                                                            Sequence< Any >&        lOutValues  )
+                                                            Sequence< Any >&        lOutValues)
 {
-    // Safe impossible cases.
-    // This method should be called for special ConfigItem-mode only!
-    OSL_ENSURE( ((m_nMode & ConfigItemMode::AllLocales ) == ConfigItemMode::AllLocales), "ConfigItem::impl_unpackLocalizedProperties() Wrong call of this method detected!" );
+    // This method should be called for special AllLocales ConfigItem-mode only!
 
     sal_Int32                   nSourceSize;         // marks end of loop over input lists
     sal_Int32                   nDestinationCounter; // actual position in output lists
@@ -389,34 +385,41 @@ Sequence< sal_Bool > ConfigItem::GetReadOnlyStates(const css::uno::Sequence< OUS
 
 Sequence< Any > ConfigItem::GetProperties(const Sequence< OUString >& rNames)
 {
+    Reference<XHierarchicalNameAccess> xHierarchyAccess = GetTree();
+    if(xHierarchyAccess.is())
+        return GetProperties(xHierarchyAccess, rNames,
+                    (m_nMode & ConfigItemMode::AllLocales ) == ConfigItemMode::AllLocales);
+    return Sequence< Any >(rNames.getLength());
+}
+
+Sequence< Any > ConfigItem::GetProperties(
+        css::uno::Reference<css::container::XHierarchicalNameAccess> const & xHierarchyAccess,
+        const Sequence< OUString >& rNames,
+        bool bAllLocales)
+{
     Sequence< Any > aRet(rNames.getLength());
     const OUString* pNames = rNames.getConstArray();
     Any* pRet = aRet.getArray();
-    Reference<XHierarchicalNameAccess> xHierarchyAccess = GetTree();
-    if(xHierarchyAccess.is())
+    for(int i = 0; i < rNames.getLength(); i++)
     {
-        for(int i = 0; i < rNames.getLength(); i++)
+        try
         {
-            try
-            {
-                pRet[i] = xHierarchyAccess->getByHierarchicalName(pNames[i]);
-            }
-            catch (const Exception&)
-            {
-                TOOLS_WARN_EXCEPTION(
-                    "unotools.config",
-                    "ignoring XHierarchicalNameAccess to /org.openoffice."
-                        << sSubTree << "/" << pNames[i]);
-            }
+            pRet[i] = xHierarchyAccess->getByHierarchicalName(pNames[i]);
         }
+        catch (const Exception&)
+        {
+            TOOLS_WARN_EXCEPTION(
+                "unotools.config",
+                "ignoring XHierarchicalNameAccess " << pNames[i]);
+        }
+    }
 
-        // In special mode "ALL_LOCALES" we must convert localized values to Sequence< PropertyValue >.
-        if((m_nMode & ConfigItemMode::AllLocales ) == ConfigItemMode::AllLocales)
-        {
-            Sequence< Any > lValues;
-            impl_packLocalizedProperties( rNames, aRet, lValues );
-            aRet = lValues;
-        }
+    // In special mode "ALL_LOCALES" we must convert localized values to Sequence< PropertyValue >.
+    if(bAllLocales)
+    {
+        Sequence< Any > lValues;
+        impl_packLocalizedProperties( rNames, aRet, lValues );
+        aRet = lValues;
     }
     return aRet;
 }
@@ -436,6 +439,87 @@ bool ConfigItem::PutProperties( const Sequence< OUString >& rNames,
         const Any*              pValues = nullptr;
         sal_Int32               nNameCount;
         if(( m_nMode & ConfigItemMode::AllLocales ) == ConfigItemMode::AllLocales )
+        {
+            // If ConfigItem works in "ALL_LOCALES"-mode ... we must support a Sequence< PropertyValue >
+            // as value of a localized configuration entry!
+            // How we can do that?
+            // We must split all PropertyValues to "Sequence< OUString >" AND "Sequence< Any >"!
+            impl_unpackLocalizedProperties( rNames, rValues, lNames, lValues );
+            pNames      = lNames.getConstArray  ();
+            pValues     = lValues.getConstArray ();
+            nNameCount  = lNames.getLength      ();
+        }
+        else
+        {
+            // This is the normal mode ...
+            // Use given input lists directly.
+            pNames      = rNames.getConstArray  ();
+            pValues     = rValues.getConstArray ();
+            nNameCount  = rNames.getLength      ();
+        }
+        for(int i = 0; i < nNameCount; i++)
+        {
+            try
+            {
+                OUString sNode, sProperty;
+                if (splitLastFromConfigurationPath(pNames[i],sNode, sProperty))
+                {
+                    Any aNode = xHierarchyAccess->getByHierarchicalName(sNode);
+
+                    Reference<XNameAccess> xNodeAcc;
+                    aNode >>= xNodeAcc;
+                    Reference<XNameReplace>   xNodeReplace(xNodeAcc, UNO_QUERY);
+                    Reference<XNameContainer> xNodeCont   (xNodeAcc, UNO_QUERY);
+
+                    bool bExist = (xNodeAcc.is() && xNodeAcc->hasByName(sProperty));
+                    if (bExist && xNodeReplace.is())
+                        xNodeReplace->replaceByName(sProperty, pValues[i]);
+                    else
+                        if (!bExist && xNodeCont.is())
+                            xNodeCont->insertByName(sProperty, pValues[i]);
+                        else
+                            bRet = false;
+                }
+                else //direct value
+                {
+                    xTopNodeReplace->replaceByName(sProperty, pValues[i]);
+                }
+            }
+            catch (css::uno::Exception &)
+            {
+                TOOLS_WARN_EXCEPTION("unotools.config", "Exception from PutProperties");
+            }
+        }
+        try
+        {
+            Reference<XChangesBatch> xBatch(xHierarchyAccess, UNO_QUERY);
+            xBatch->commitChanges();
+        }
+        catch (css::uno::Exception &)
+        {
+            TOOLS_WARN_EXCEPTION("unotools.config", "Exception from commitChanges");
+        }
+    }
+
+    return bRet;
+}
+
+bool ConfigItem::PutProperties(
+        css::uno::Reference<css::container::XHierarchicalNameAccess> const & xHierarchyAccess,
+        const Sequence< OUString >& rNames,
+        const Sequence< Any>& rValues,
+        bool bAllLocales)
+{
+    Reference<XNameReplace> xTopNodeReplace(xHierarchyAccess, UNO_QUERY);
+    bool bRet = xTopNodeReplace.is();
+    if(bRet)
+    {
+        Sequence< OUString >    lNames;
+        Sequence< Any >         lValues;
+        const OUString*         pNames  = nullptr;
+        const Any*              pValues = nullptr;
+        sal_Int32               nNameCount;
+        if(bAllLocales)
         {
             // If ConfigItem works in "ALL_LOCALES"-mode ... we must support a Sequence< PropertyValue >
             // as value of a localized configuration entry!
@@ -597,31 +681,38 @@ Sequence< OUString > ConfigItem::GetNodeNames(const OUString& rNode)
 
 Sequence< OUString > ConfigItem::GetNodeNames(const OUString& rNode, ConfigNameFormat eFormat)
 {
-    Sequence< OUString > aRet;
     Reference<XHierarchicalNameAccess> xHierarchyAccess = GetTree();
     if(xHierarchyAccess.is())
-    {
-        try
-        {
-            Reference<XNameAccess> xCont;
-            if(!rNode.isEmpty())
-            {
-                Any aNode = xHierarchyAccess->getByHierarchicalName(rNode);
-                aNode >>= xCont;
-            }
-            else
-                xCont.set(xHierarchyAccess, UNO_QUERY);
-            if(xCont.is())
-            {
-                aRet = xCont->getElementNames();
-                lcl_normalizeLocalNames(aRet,eFormat,xCont);
-            }
+        return GetNodeNames(xHierarchyAccess, rNode, eFormat);
+    return Sequence< OUString >();
+}
 
-        }
-        catch (css::uno::Exception &)
+Sequence< OUString > ConfigItem::GetNodeNames(
+    css::uno::Reference<css::container::XHierarchicalNameAccess> const & xHierarchyAccess,
+    const OUString& rNode,
+    ConfigNameFormat eFormat)
+{
+    Sequence< OUString > aRet;
+    try
+    {
+        Reference<XNameAccess> xCont;
+        if(!rNode.isEmpty())
         {
-            TOOLS_WARN_EXCEPTION("unotools.config", "Exception from GetNodeNames");
+            Any aNode = xHierarchyAccess->getByHierarchicalName(rNode);
+            aNode >>= xCont;
         }
+        else
+            xCont.set(xHierarchyAccess, UNO_QUERY);
+        if(xCont.is())
+        {
+            aRet = xCont->getElementNames();
+            lcl_normalizeLocalNames(aRet,eFormat,xCont);
+        }
+
+    }
+    catch (css::uno::Exception &)
+    {
+        TOOLS_WARN_EXCEPTION("unotools.config", "Exception from GetNodeNames");
     }
     return aRet;
 }
@@ -632,39 +723,46 @@ bool ConfigItem::ClearNodeSet(const OUString& rNode)
     bool bRet = false;
     Reference<XHierarchicalNameAccess> xHierarchyAccess = GetTree();
     if(xHierarchyAccess.is())
+        bRet = ClearNodeSet(xHierarchyAccess, rNode);
+    return bRet;
+}
+
+bool ConfigItem::ClearNodeSet(
+    css::uno::Reference<css::container::XHierarchicalNameAccess> const & xHierarchyAccess,
+    const OUString& rNode)
+{
+    bool bRet = false;
+    try
     {
-        try
+        Reference<XNameContainer> xCont;
+        if(!rNode.isEmpty())
         {
-            Reference<XNameContainer> xCont;
-            if(!rNode.isEmpty())
-            {
-                Any aNode = xHierarchyAccess->getByHierarchicalName(rNode);
-                aNode >>= xCont;
-            }
-            else
-                xCont.set(xHierarchyAccess, UNO_QUERY);
-            if(!xCont.is())
-                return false;
-            const Sequence< OUString > aNames = xCont->getElementNames();
-            Reference<XChangesBatch> xBatch(xHierarchyAccess, UNO_QUERY);
-            for(const OUString& rName : aNames)
-            {
-                try
-                {
-                    xCont->removeByName(rName);
-                }
-                catch (css::uno::Exception &)
-                {
-                    TOOLS_WARN_EXCEPTION("unotools.config", "Exception from removeByName");
-                }
-            }
-            xBatch->commitChanges();
-            bRet = true;
+            Any aNode = xHierarchyAccess->getByHierarchicalName(rNode);
+            aNode >>= xCont;
         }
-        catch (css::uno::Exception &)
+        else
+            xCont.set(xHierarchyAccess, UNO_QUERY);
+        if(!xCont.is())
+            return false;
+        const Sequence< OUString > aNames = xCont->getElementNames();
+        Reference<XChangesBatch> xBatch(xHierarchyAccess, UNO_QUERY);
+        for(const OUString& rName : aNames)
         {
-            TOOLS_WARN_EXCEPTION("unotools.config", "Exception from ClearNodeSet");
+            try
+            {
+                xCont->removeByName(rName);
+            }
+            catch (css::uno::Exception &)
+            {
+                TOOLS_WARN_EXCEPTION("unotools.config", "Exception from removeByName");
+            }
         }
+        xBatch->commitChanges();
+        bRet = true;
+    }
+    catch (css::uno::Exception &)
+    {
+        TOOLS_WARN_EXCEPTION("unotools.config", "Exception from ClearNodeSet");
     }
     return bRet;
 }
@@ -848,124 +946,134 @@ bool ConfigItem::ReplaceSetProperties(
     bool bRet = true;
     Reference<XHierarchicalNameAccess> xHierarchyAccess = GetTree();
     if(xHierarchyAccess.is())
+        bRet = ReplaceSetProperties(xHierarchyAccess, rNode, rValues,
+                    ( m_nMode & ConfigItemMode::AllLocales ) == ConfigItemMode::AllLocales);
+    return bRet;
+}
+
+bool ConfigItem::ReplaceSetProperties(
+    css::uno::Reference<css::container::XHierarchicalNameAccess> const & xHierarchyAccess,
+    const OUString& rNode,
+    const Sequence< PropertyValue >& rValues,
+    bool bAllLocales)
+{
+    bool bRet = true;
+    Reference<XChangesBatch> xBatch(xHierarchyAccess, UNO_QUERY);
+    try
     {
-        Reference<XChangesBatch> xBatch(xHierarchyAccess, UNO_QUERY);
-        try
+        Reference<XNameContainer> xCont;
+        if(!rNode.isEmpty())
         {
-            Reference<XNameContainer> xCont;
-            if(!rNode.isEmpty())
+            Any aNode = xHierarchyAccess->getByHierarchicalName(rNode);
+            aNode >>= xCont;
+        }
+        else
+            xCont.set(xHierarchyAccess, UNO_QUERY);
+        if(!xCont.is())
+            return false;
+
+        // JB: Change: now the same name handling for sets of simple values
+        const Sequence< OUString > aSubNodeNames = lcl_extractSetPropertyNames(rValues, rNode);
+
+        Reference<XSingleServiceFactory> xFac(xCont, UNO_QUERY);
+        const bool isSimpleValueSet = !xFac.is();
+
+        //remove unknown members first
+        {
+            const Sequence<OUString> aContainerSubNodes = xCont->getElementNames();
+
+            for(const OUString& rContainerSubNode : aContainerSubNodes)
             {
-                Any aNode = xHierarchyAccess->getByHierarchicalName(rNode);
-                aNode >>= xCont;
-            }
-            else
-                xCont.set(xHierarchyAccess, UNO_QUERY);
-            if(!xCont.is())
-                return false;
-
-            // JB: Change: now the same name handling for sets of simple values
-            const Sequence< OUString > aSubNodeNames = lcl_extractSetPropertyNames(rValues, rNode);
-
-            Reference<XSingleServiceFactory> xFac(xCont, UNO_QUERY);
-            const bool isSimpleValueSet = !xFac.is();
-
-            //remove unknown members first
-            {
-                const Sequence<OUString> aContainerSubNodes = xCont->getElementNames();
-
-                for(const OUString& rContainerSubNode : aContainerSubNodes)
-                {
-                    bool bFound = comphelper::findValue(aSubNodeNames, rContainerSubNode) != -1;
-                    if(!bFound)
-                        try
-                        {
-                            xCont->removeByName(rContainerSubNode);
-                        }
-                        catch (const Exception&)
-                        {
-                            if (isSimpleValueSet)
-                            {
-                                try
-                                {
-                                    // #i37322#: fallback action: replace with <void/>
-                                    xCont->replaceByName(rContainerSubNode, Any());
-                                    // fallback successful: continue looping
-                                    continue;
-                                }
-                                catch (Exception &)
-                                {} // propagate original exception, if fallback fails
-                            }
-                            throw;
-                        }
-                }
-                try { xBatch->commitChanges(); }
-                catch (css::uno::Exception &)
-                {
-                    TOOLS_WARN_EXCEPTION("unotools.config", "Exception from commitChanges");
-                }
-            }
-
-            if(xFac.is()) // !isSimpleValueSet
-            {
-                for(const OUString& rSubNodeName : aSubNodeNames)
-                {
-                    if(!xCont->hasByName(rSubNodeName))
-                    {
-                        //create if not available
-                        Reference<XInterface> xInst = xFac->createInstance();
-                        Any aVal; aVal <<= xInst;
-                        xCont->insertByName(rSubNodeName, aVal);
-                    }
-                }
-                try { xBatch->commitChanges(); }
-                catch (css::uno::Exception &)
-                {
-                    TOOLS_WARN_EXCEPTION("unotools.config", "Exception from commitChanges");
-                }
-
-                const PropertyValue* pProperties = rValues.getConstArray();
-
-                Sequence< OUString > aSetNames(rValues.getLength());
-                OUString* pSetNames = aSetNames.getArray();
-
-                Sequence< Any> aSetValues(rValues.getLength());
-                Any* pSetValues = aSetValues.getArray();
-
-                bool bEmptyNode = rNode.isEmpty();
-                for(sal_Int32 k = 0; k < rValues.getLength(); k++)
-                {
-                    pSetNames[k] =  pProperties[k].Name.copy( bEmptyNode ? 1 : 0);
-                    pSetValues[k] = pProperties[k].Value;
-                }
-                bRet = PutProperties(aSetNames, aSetValues);
-            }
-            else
-            {
-                //if no factory is available then the node contains basic data elements
-                for(const PropertyValue& rValue : rValues)
-                {
+                bool bFound = comphelper::findValue(aSubNodeNames, rContainerSubNode) != -1;
+                if(!bFound)
                     try
                     {
-                        OUString sSubNode = lcl_extractSetPropertyName( rValue.Name, rNode );
-
-                        if(xCont->hasByName(sSubNode))
-                            xCont->replaceByName(sSubNode, rValue.Value);
-                        else
-                            xCont->insertByName(sSubNode, rValue.Value);
+                        xCont->removeByName(rContainerSubNode);
                     }
-                    catch (css::uno::Exception &)
+                    catch (const Exception&)
                     {
-                        TOOLS_WARN_EXCEPTION("unotools.config", "Exception from insert/replaceByName");
+                        if (isSimpleValueSet)
+                        {
+                            try
+                            {
+                                // #i37322#: fallback action: replace with <void/>
+                                xCont->replaceByName(rContainerSubNode, Any());
+                                // fallback successful: continue looping
+                                continue;
+                            }
+                            catch (Exception &)
+                            {} // propagate original exception, if fallback fails
+                        }
+                        throw;
                     }
-                }
-                xBatch->commitChanges();
+            }
+            try { xBatch->commitChanges(); }
+            catch (css::uno::Exception &)
+            {
+                TOOLS_WARN_EXCEPTION("unotools.config", "Exception from commitChanges");
             }
         }
-        catch (const Exception& )
+
+        if(xFac.is()) // !isSimpleValueSet
         {
-            TOOLS_WARN_EXCEPTION("unotools.config", "Exception from ReplaceSetProperties");
-            bRet = false;
+            for(const OUString& rSubNodeName : aSubNodeNames)
+            {
+                if(!xCont->hasByName(rSubNodeName))
+                {
+                    //create if not available
+                    Reference<XInterface> xInst = xFac->createInstance();
+                    Any aVal; aVal <<= xInst;
+                    xCont->insertByName(rSubNodeName, aVal);
+                }
+            }
+            try { xBatch->commitChanges(); }
+            catch (css::uno::Exception &)
+            {
+                TOOLS_WARN_EXCEPTION("unotools.config", "Exception from commitChanges");
+            }
+
+            const PropertyValue* pProperties = rValues.getConstArray();
+
+            Sequence< OUString > aSetNames(rValues.getLength());
+            OUString* pSetNames = aSetNames.getArray();
+
+            Sequence< Any> aSetValues(rValues.getLength());
+            Any* pSetValues = aSetValues.getArray();
+
+            bool bEmptyNode = rNode.isEmpty();
+            for(sal_Int32 k = 0; k < rValues.getLength(); k++)
+            {
+                pSetNames[k] =  pProperties[k].Name.copy( bEmptyNode ? 1 : 0);
+                pSetValues[k] = pProperties[k].Value;
+            }
+            bRet = PutProperties(xHierarchyAccess, aSetNames, aSetValues, bAllLocales);
         }
+        else
+        {
+            //if no factory is available then the node contains basic data elements
+            for(const PropertyValue& rValue : rValues)
+            {
+                try
+                {
+                    OUString sSubNode = lcl_extractSetPropertyName( rValue.Name, rNode );
+
+                    if(xCont->hasByName(sSubNode))
+                        xCont->replaceByName(sSubNode, rValue.Value);
+                    else
+                        xCont->insertByName(sSubNode, rValue.Value);
+                }
+                catch (css::uno::Exception &)
+                {
+                    TOOLS_WARN_EXCEPTION("unotools.config", "Exception from insert/replaceByName");
+                }
+            }
+            xBatch->commitChanges();
+        }
+    }
+    catch (const Exception& )
+    {
+        TOOLS_WARN_EXCEPTION("unotools.config", "Exception from ReplaceSetProperties");
+        bRet = false;
     }
     return bRet;
 }

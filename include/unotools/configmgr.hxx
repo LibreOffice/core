@@ -22,6 +22,7 @@
 
 #include <sal/config.h>
 
+#include <string_view>
 #include <vector>
 
 #include <com/sun/star/uno/Reference.hxx>
@@ -61,6 +62,9 @@ public:
 
     SAL_DLLPRIVATE static css::uno::Reference< css::container::XHierarchicalNameAccess>
     acquireTree(utl::ConfigItem const & item);
+
+    static css::uno::Reference< css::container::XHierarchicalNameAccess>
+    acquireTree(std::u16string_view rSubTreeName);
 
     SAL_DLLPRIVATE ConfigManager();
 
