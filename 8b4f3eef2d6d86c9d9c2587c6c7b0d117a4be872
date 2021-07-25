@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "490f5c15_2b7f91b0",
+        "filename": "sfx2/source/dialog/StyleList.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1058,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-07-25T16:05:33Z",
+      "side": 1,
+      "message": "This is the callback UpdateStyleDependents which we call from Dialog. Here how will we use m_atempStyleList ?\n\nEven if we try to use it, how will we access the \"private\" members of passed m_atempStyleList?",
+      "range": {
+        "startLine": 1058,
+        "startChar": 27,
+        "endLine": 1058,
+        "endChar": 48
+      },
+      "revId": "8b4f3eef2d6d86c9d9c2587c6c7b0d117a4be872",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a76f5d1a_fbe59ac0",
         "filename": "sfx2/source/dialog/templdlg.cxx",
         "patchSetId": 3
