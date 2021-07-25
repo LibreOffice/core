@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-04-11 19:48:12 using:
+ Generated on 2021-07-25 09:30:13 using:
  ./bin/update_pch sc sc --cutoff=12 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -23,6 +23,7 @@
 #include <sal/config.h>
 #if PCH_LEVEL >= 1
 #include <algorithm>
+#include <array>
 #include <atomic>
 #include <cassert>
 #include <chrono>
@@ -73,7 +74,7 @@
 #include <osl/module.hxx>
 #include <osl/mutex.h>
 #include <osl/mutex.hxx>
-#include <osl/security.h>
+#include <osl/process.h>
 #include <osl/security.hxx>
 #include <osl/thread.h>
 #include <osl/time.h>
@@ -83,7 +84,6 @@
 #include <rtl/crc.h>
 #include <rtl/digest.h>
 #include <rtl/instance.hxx>
-#include <rtl/locale.h>
 #include <rtl/math.h>
 #include <rtl/math.hxx>
 #include <rtl/ref.hxx>
@@ -167,6 +167,8 @@
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/range/basicrange.hxx>
+#include <basegfx/tuple/Tuple2D.hxx>
+#include <basegfx/tuple/Tuple3D.hxx>
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/tuple/b2ituple.hxx>
 #include <basegfx/tuple/b3dtuple.hxx>
@@ -211,6 +213,9 @@
 #include <com/sun/star/datatransfer/dnd/XDragGestureListener.hpp>
 #include <com/sun/star/datatransfer/dnd/XDragSourceListener.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTargetListener.hpp>
+#include <com/sun/star/document/XExporter.hpp>
+#include <com/sun/star/document/XFilter.hpp>
+#include <com/sun/star/document/XImporter.hpp>
 #include <com/sun/star/drawing/DashStyle.hpp>
 #include <com/sun/star/drawing/HatchStyle.hpp>
 #include <com/sun/star/drawing/TextFitToSizeType.hpp>
@@ -334,6 +339,14 @@
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
 #include <o3tl/unit_conversion.hxx>
+#include <officecfg/Office/Common.hxx>
+#include <oox/core/filterbase.hxx>
+#include <oox/core/relations.hxx>
+#include <oox/core/xmlfilterbase.hxx>
+#include <oox/dllapi.h>
+#include <oox/helper/binarystreambase.hxx>
+#include <oox/helper/refmap.hxx>
+#include <oox/helper/storagebase.hxx>
 #include <salhelper/salhelperdllapi.h>
 #include <salhelper/simplereferenceobject.hxx>
 #include <salhelper/thread.hxx>
@@ -362,6 +375,7 @@
 #include <svl/eitem.hxx>
 #include <svl/hint.hxx>
 #include <svl/intitem.hxx>
+#include <svl/itempool.hxx>
 #include <svl/itemprop.hxx>
 #include <svl/itemset.hxx>
 #include <svl/languageoptions.hxx>
@@ -374,6 +388,7 @@
 #include <svl/svldllapi.h>
 #include <svl/typedwhich.hxx>
 #include <svl/undo.hxx>
+#include <svl/whichranges.hxx>
 #include <svl/whiter.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
@@ -549,12 +564,10 @@
 #include <rangelst.hxx>
 #include <rangenam.hxx>
 #include <rangeutl.hxx>
-#include <refdata.hxx>
 #include <reffact.hxx>
 #include <refundo.hxx>
 #include <refupdat.hxx>
 #include <refupdatecontext.hxx>
-#include <root.hxx>
 #include <rowheightcontext.hxx>
 #include <scabstdlg.hxx>
 #include <scdllapi.h>

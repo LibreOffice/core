@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-04-08 13:55:35 using:
+ Generated on 2021-07-25 09:29:47 using:
  ./bin/update_pch comphelper comphelper --cutoff=4 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -23,6 +23,7 @@
 #include <sal/config.h>
 #if PCH_LEVEL >= 1
 #include <algorithm>
+#include <array>
 #include <cassert>
 #include <chrono>
 #include <cmath>
@@ -39,7 +40,9 @@
 #include <map>
 #include <math.h>
 #include <memory>
+#include <mutex>
 #include <new>
+#include <numeric>
 #include <optional>
 #include <ostream>
 #include <stddef.h>
@@ -52,12 +55,14 @@
 #include <vector>
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
-#include <osl/conditn.hxx>
 #include <osl/diagnose.h>
 #include <osl/endian.h>
+#include <osl/file.h>
 #include <osl/file.hxx>
 #include <osl/interlck.h>
 #include <osl/mutex.hxx>
+#include <osl/process.h>
+#include <osl/security.h>
 #include <osl/thread.h>
 #include <osl/time.h>
 #include <rtl/alloc.h>
@@ -116,6 +121,8 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/range/basicrange.hxx>
+#include <basegfx/tuple/Tuple2D.hxx>
+#include <basegfx/tuple/Tuple3D.hxx>
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/tuple/b2ituple.hxx>
 #include <basegfx/tuple/b3dtuple.hxx>
@@ -189,9 +196,11 @@
 #include <cppuhelper/weakagg.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <o3tl/cow_wrapper.hxx>
+#include <o3tl/safeint.hxx>
 #include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
+#include <o3tl/unit_conversion.hxx>
 #include <salhelper/salhelperdllapi.h>
 #include <salhelper/simplereferenceobject.hxx>
 #include <salhelper/thread.hxx>

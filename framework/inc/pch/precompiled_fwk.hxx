@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-05-14 22:15:48 using:
+ Generated on 2021-07-25 09:29:57 using:
  ./bin/update_pch framework fwk --cutoff=7 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -137,6 +137,8 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/range/basicrange.hxx>
+#include <basegfx/tuple/Tuple2D.hxx>
+#include <basegfx/tuple/Tuple3D.hxx>
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/tuple/b2i64tuple.hxx>
 #include <basegfx/tuple/b2ituple.hxx>
@@ -189,7 +191,6 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/ui/ItemStyle.hpp>
 #include <com/sun/star/ui/UIElementType.hpp>
-#include <com/sun/star/ui/XImageManager.hpp>
 #include <com/sun/star/ui/XUIConfigurationListener.hpp>
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>

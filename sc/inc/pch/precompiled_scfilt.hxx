@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-03-08 13:15:21 using:
+ Generated on 2021-07-25 09:30:02 using:
  ./bin/update_pch sc scfilt --cutoff=4 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -226,6 +226,7 @@
 #include <svl/eitem.hxx>
 #include <svl/hint.hxx>
 #include <svl/intitem.hxx>
+#include <svl/itempool.hxx>
 #include <svl/itemset.hxx>
 #include <svl/listener.hxx>
 #include <svl/lstner.hxx>
@@ -236,6 +237,7 @@
 #include <svl/style.hxx>
 #include <svl/svldllapi.h>
 #include <svl/typedwhich.hxx>
+#include <svl/whichranges.hxx>
 #include <svl/zforlist.hxx>
 #include <svtools/svtdllapi.h>
 #include <svx/itextprovider.hxx>

@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-05-14 22:14:43 using:
+ Generated on 2021-07-25 09:29:44 using:
  ./bin/update_pch basctl basctl --cutoff=3 --exclude:system --include:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -58,7 +58,6 @@
 #include <unordered_set>
 #include <utility>
 #include <vector>
-#include <boost/functional/hash.hpp>
 #include <boost/property_tree/ptree_fwd.hpp>
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
@@ -185,8 +184,9 @@
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/range/b2irange.hxx>
-#include <basegfx/range/b2irectangle.hxx>
 #include <basegfx/range/basicrange.hxx>
+#include <basegfx/tuple/Tuple2D.hxx>
+#include <basegfx/tuple/Tuple3D.hxx>
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/tuple/b2i64tuple.hxx>
 #include <basegfx/tuple/b2ituple.hxx>
@@ -396,6 +396,7 @@
 #include <sfx2/childwin.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/dllapi.h>
+#include <sfx2/filedlghelper.hxx>
 #include <sfx2/frame.hxx>
 #include <sfx2/groupid.hxx>
 #include <sfx2/minfitem.hxx>
@@ -418,6 +419,7 @@
 #include <svl/nfkeytab.hxx>
 #include <svl/ondemand.hxx>
 #include <svl/poolitem.hxx>
+#include <svl/setitem.hxx>
 #include <svl/srchdefs.hxx>
 #include <svl/stritem.hxx>
 #include <svl/style.hxx>
@@ -426,6 +428,7 @@
 #include <svl/typedwhich.hxx>
 #include <svl/undo.hxx>
 #include <svl/visitem.hxx>
+#include <svl/whichranges.hxx>
 #include <svl/whiter.hxx>
 #include <svtools/borderline.hxx>
 #include <svtools/colorcfg.hxx>

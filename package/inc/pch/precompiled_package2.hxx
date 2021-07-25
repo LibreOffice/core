@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-04-08 13:55:58 using:
+ Generated on 2021-07-25 09:29:57 using:
  ./bin/update_pch package package2 --cutoff=3 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -89,7 +89,9 @@
 #include <basegfx/basegfxdllapi.h>
 #include <basegfx/color/bcolor.hxx>
 #include <basegfx/numeric/ftools.hxx>
+#include <basegfx/tuple/Tuple3D.hxx>
 #include <basegfx/tuple/b3dtuple.hxx>
+#include <basegfx/utils/common.hxx>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

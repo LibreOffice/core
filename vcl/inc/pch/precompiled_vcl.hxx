@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-04-08 13:57:45 using:
+ Generated on 2021-07-25 09:30:51 using:
  ./bin/update_pch vcl vcl --cutoff=6 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -35,11 +35,11 @@
 #include <functional>
 #include <initializer_list>
 #include <iomanip>
-#include <limits.h>
 #include <limits>
 #include <map>
 #include <math.h>
 #include <memory>
+#include <mutex>
 #include <new>
 #include <optional>
 #include <ostream>
@@ -63,6 +63,7 @@
 #include <osl/conditn.hxx>
 #include <osl/diagnose.h>
 #include <osl/endian.h>
+#include <osl/file.h>
 #include <osl/file.hxx>
 #include <osl/interlck.h>
 #include <osl/module.hxx>
@@ -116,6 +117,8 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/range/basicrange.hxx>
+#include <basegfx/tuple/Tuple2D.hxx>
+#include <basegfx/tuple/Tuple3D.hxx>
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/tuple/b2ituple.hxx>
 #include <basegfx/tuple/b3dtuple.hxx>
@@ -180,9 +183,6 @@
 #include <cppu/unotype.hxx>
 #include <cppuhelper/cppuhelperdllapi.h>
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/implbase_ex.hxx>
-#include <cppuhelper/implbase_ex_post.hxx>
-#include <cppuhelper/implbase_ex_pre.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
@@ -259,6 +259,7 @@
 #include <impglyphitem.hxx>
 #include <outdev.h>
 #include <salbmp.hxx>
+#include <saldatabasic.hxx>
 #include <salframe.hxx>
 #include <salgdi.hxx>
 #include <salgdiimpl.hxx>
@@ -303,6 +304,7 @@
 #include <vcl/event.hxx>
 #include <vcl/fntstyle.hxx>
 #include <vcl/font.hxx>
+#include <vcl/formatter.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/glyphitem.hxx>
 #include <vcl/gradient.hxx>

@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-05-14 22:17:26 using:
+ Generated on 2021-07-25 09:30:44 using:
  ./bin/update_pch sw swui --cutoff=3 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -176,6 +176,8 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/range/basicrange.hxx>
+#include <basegfx/tuple/Tuple2D.hxx>
+#include <basegfx/tuple/Tuple3D.hxx>
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/tuple/b2ituple.hxx>
 #include <basegfx/tuple/b3dtuple.hxx>
@@ -272,9 +274,7 @@
 #include <com/sun/star/script/XStarBasicAccess.hpp>
 #include <com/sun/star/script/provider/XScriptProviderSupplier.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
-#include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
-#include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/table/BorderLineStyle.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/PositionLayoutDir.hpp>
@@ -286,6 +286,7 @@
 #include <com/sun/star/text/XRelativeTextContentRemove.hpp>
 #include <com/sun/star/text/XTextAppendAndConvert.hpp>
 #include <com/sun/star/text/XTextCopy.hpp>
+#include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/text/XTextRangeCompare.hpp>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
@@ -394,7 +395,8 @@
 #include <o3tl/unit_conversion.hxx>
 #include <officecfg/Office/Writer.hxx>
 #include <ooo/vba/XHelperInterface.hpp>
-#include <ooo/vba/word/XParagraphFormat.hpp>
+#include <ooo/vba/word/XListFormat.hpp>
+#include <ooo/vba/word/XListTemplate.hpp>
 #include <ooo/vba/word/XSection.hpp>
 #include <salhelper/salhelperdllapi.h>
 #include <salhelper/simplereferenceobject.hxx>
@@ -443,6 +445,7 @@
 #include <svl/typedwhich.hxx>
 #include <svl/undo.hxx>
 #include <svl/urihelper.hxx>
+#include <svl/whichranges.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
 #include <svtools/borderline.hxx>

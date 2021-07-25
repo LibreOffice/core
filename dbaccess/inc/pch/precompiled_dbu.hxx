@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-05-14 22:15:31 using:
+ Generated on 2021-07-25 09:29:54 using:
  ./bin/update_pch dbaccess dbu --cutoff=12 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -224,7 +224,6 @@
 #include <unotools/unotoolsdllapi.h>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
-#include <ConnectionLineData.hxx>
 #include <FieldDescriptions.hxx>
 #include <IClipBoardTest.hxx>
 #include <QEnumTypes.hxx>

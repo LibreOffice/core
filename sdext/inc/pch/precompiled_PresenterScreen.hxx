@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-04-08 13:56:34 using:
+ Generated on 2021-07-25 09:30:15 using:
  ./bin/update_pch sdext PresenterScreen --cutoff=2 --exclude:system --include:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -23,6 +23,7 @@
 #include <sal/config.h>
 #if PCH_LEVEL >= 1
 #include <algorithm>
+#include <array>
 #include <assert.h>
 #include <atomic>
 #include <cassert>
@@ -143,6 +144,7 @@
 #include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
+#include <o3tl/unit_conversion.hxx>
 #include <tools/degree.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/gen.hxx>

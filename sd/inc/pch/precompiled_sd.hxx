@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-04-08 13:51:32 using:
+ Generated on 2021-07-25 09:30:17 using:
  ./bin/update_pch sd sd --cutoff=4 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -25,7 +25,6 @@
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
-#include <cstdlib>
 #include <functional>
 #include <initializer_list>
 #include <iomanip>
@@ -112,7 +111,6 @@
 #include <vcl/wrkwin.hxx>
 #endif // PCH_LEVEL >= 2
 #if PCH_LEVEL >= 3
-#include <avmedia/avmediadllapi.h>
 #include <avmedia/mediaplayer.hxx>
 #include <avmedia/mediawindow.hxx>
 #include <basegfx/basegfxdllapi.h>
@@ -213,7 +211,6 @@
 #include <com/sun/star/text/XTextRangeCompare.hpp>
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Any.hxx>
-#include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
@@ -315,7 +312,7 @@
 #include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
-#include <officecfg/Office/Impress.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <salhelper/simplereferenceobject.hxx>
 #include <salhelper/thread.hxx>
 #include <sfx2/app.hxx>
@@ -402,6 +399,7 @@
 #include <svx/rulritem.hxx>
 #include <svx/scene3d.hxx>
 #include <svx/sdmetitm.hxx>
+#include <svx/sdooitm.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <svx/sdr/overlay/overlayobject.hxx>

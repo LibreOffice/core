@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-05-14 22:16:08 using:
+ Generated on 2021-07-25 09:29:58 using:
  ./bin/update_pch reportdesign rpt --cutoff=9 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -25,6 +25,7 @@
 #include <algorithm>
 #include <array>
 #include <cassert>
+#include <chrono>
 #include <cmath>
 #include <cstddef>
 #include <cstdlib>
@@ -64,6 +65,7 @@
 #include <osl/mutex.h>
 #include <osl/mutex.hxx>
 #include <osl/thread.h>
+#include <osl/time.h>
 #include <rtl/alloc.h>
 #include <rtl/instance.hxx>
 #include <rtl/locale.h>
@@ -76,6 +78,7 @@
 #include <rtl/stringutils.hxx>
 #include <rtl/textcvt.h>
 #include <rtl/textenc.h>
+#include <rtl/unload.h>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
@@ -140,6 +143,8 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/range/basicrange.hxx>
+#include <basegfx/tuple/Tuple2D.hxx>
+#include <basegfx/tuple/Tuple3D.hxx>
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/tuple/b2ituple.hxx>
 #include <basegfx/tuple/b3dtuple.hxx>
@@ -213,7 +218,6 @@
 #include <i18nlangtag/lang.h>
 #include <o3tl/cow_wrapper.hxx>
 #include <o3tl/safeint.hxx>
-#include <o3tl/sorted_vector.hxx>
 #include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
@@ -231,6 +235,7 @@
 #include <svl/stylesheetuser.hxx>
 #include <svl/svldllapi.h>
 #include <svl/typedwhich.hxx>
+#include <svl/whichranges.hxx>
 #include <svx/DiagramDataInterface.hxx>
 #include <svx/itextprovider.hxx>
 #include <svx/sdr/properties/defaultproperties.hxx>

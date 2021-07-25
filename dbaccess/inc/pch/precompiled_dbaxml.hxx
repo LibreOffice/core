@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-03-08 13:13:03 using:
+ Generated on 2021-07-25 09:29:53 using:
  ./bin/update_pch dbaccess dbaxml --cutoff=2 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -29,6 +29,7 @@
 #include <limits>
 #include <memory>
 #include <new>
+#include <optional>
 #include <string_view>
 #include <type_traits>
 #include <utility>

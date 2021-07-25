@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-03-08 13:14:16 using:
+ Generated on 2021-07-25 09:29:59 using:
  ./bin/update_pch sal sal --cutoff=2 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -31,10 +31,12 @@
 #include <algorithm>
 #include <assert.h>
 #include <cassert>
+#include <cmath>
 #include <cstddef>
 #include <cstdlib>
 #include <cstring>
 #include <limits>
+#include <list>
 #include <math.h>
 #include <memory>
 #include <stdio.h>
@@ -86,7 +88,6 @@
 #include <rtl/math.hxx>
 #include <rtl/process.h>
 #include <rtl/random.h>
-#include <rtl/strbuf.h>
 #include <rtl/strbuf.hxx>
 #include <rtl/string.h>
 #include <rtl/string.hxx>
@@ -106,7 +107,6 @@
 #include <sal/detail/log.h>
 #include <sal/log.hxx>
 #include <sal/macros.h>
-#include <sal/mathconf.h>
 #include <sal/saldllapi.h>
 #include <sal/types.h>
 #include <salusesyslog.hxx>

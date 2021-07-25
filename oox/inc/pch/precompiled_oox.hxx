@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-05-14 22:15:59 using:
+ Generated on 2021-07-25 09:29:57 using:
  ./bin/update_pch oox oox --cutoff=6 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -36,7 +36,6 @@
 #include <math.h>
 #include <memory>
 #include <new>
-#include <numeric>
 #include <optional>
 #include <ostream>
 #include <set>
@@ -78,7 +77,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
-#include <sal/macros.h>
 #include <sal/saldllapi.h>
 #include <sal/types.h>
 #include <vcl/bitmap.hxx>
@@ -122,9 +120,11 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
+#include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/drawing/Hatch.hpp>
 #include <com/sun/star/drawing/LineCap.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
@@ -198,6 +198,7 @@
 #include <o3tl/safeint.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/unit_conversion.hxx>
+#include <sax/fastattribs.hxx>
 #include <sax/fshelper.hxx>
 #include <sax/saxdllapi.h>
 #include <svl/poolitem.hxx>
@@ -246,6 +247,7 @@
 #include <oox/drawingml/shapecontext.hxx>
 #include <oox/drawingml/shapepropertymap.hxx>
 #include <oox/drawingml/theme.hxx>
+#include <oox/export/utils.hxx>
 #include <oox/helper/attributelist.hxx>
 #include <oox/helper/binaryinputstream.hxx>
 #include <oox/helper/binaryoutputstream.hxx>
@@ -263,7 +265,6 @@
 #include <oox/ole/olestorage.hxx>
 #include <oox/ppt/comments.hxx>
 #include <oox/ppt/headerfooter.hxx>
-#include <oox/ppt/pptimport.hxx>
 #include <oox/ppt/pptshape.hxx>
 #include <oox/ppt/slidepersist.hxx>
 #include <oox/token/namespaces.hxx>

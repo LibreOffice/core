@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-05-14 22:17:12 using:
+ Generated on 2021-07-25 09:30:30 using:
  ./bin/update_pch sw msword --cutoff=4 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -178,6 +178,8 @@
 #include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/range/b2irange.hxx>
 #include <basegfx/range/basicrange.hxx>
+#include <basegfx/tuple/Tuple2D.hxx>
+#include <basegfx/tuple/Tuple3D.hxx>
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/tuple/b2i64tuple.hxx>
 #include <basegfx/tuple/b2ituple.hxx>
@@ -255,13 +257,13 @@
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/rdf/XDocumentMetadataAccess.hpp>
-#include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/style/TabAlign.hpp>
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/text/RubyAdjust.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
+#include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/text/textfield/Type.hpp>
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Any.hxx>
@@ -370,7 +372,8 @@
 #include <o3tl/underlyingenumvalue.hxx>
 #include <o3tl/unit_conversion.hxx>
 #include <ooo/vba/XHelperInterface.hpp>
-#include <ooo/vba/word/XParagraphFormat.hpp>
+#include <ooo/vba/word/XListFormat.hpp>
+#include <ooo/vba/word/XListTemplate.hpp>
 #include <oox/dllapi.h>
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <oox/export/utils.hxx>
@@ -411,12 +414,14 @@
 #include <svl/typedwhich.hxx>
 #include <svl/undo.hxx>
 #include <svl/urihelper.hxx>
+#include <svl/whichranges.hxx>
 #include <svl/whiter.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svtools/optionsdrawinglayer.hxx>
 #include <svtools/svtdllapi.h>
 #include <svx/DiagramDataInterface.hxx>
 #include <svx/XPropertyEntry.hxx>
+#include <svx/flagsdef.hxx>
 #include <svx/ipolypolygoneditorcontroller.hxx>
 #include <svx/itextprovider.hxx>
 #include <svx/msdffdef.hxx>

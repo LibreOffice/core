@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-04-08 13:56:42 using:
+ Generated on 2021-07-25 09:30:20 using:
  ./bin/update_pch sfx2 sfx --cutoff=3 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -298,9 +298,9 @@
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <drawinglayer/drawinglayerdllapi.h>
+#include <drawinglayer/primitive2d/BufferedDecompositionPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonColorPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonSelectionPrimitive2D.hxx>
-#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <framework/fwkdllapi.h>
@@ -425,7 +425,6 @@
 #include <sfx2/inputdlg.hxx>
 #include <sfx2/ipclient.hxx>
 #include <sfx2/linkmgr.hxx>
-#include <sfx2/listview.hxx>
 #include <sfx2/lnkbase.hxx>
 #include <sfx2/lokhelper.hxx>
 #include <sfx2/module.hxx>

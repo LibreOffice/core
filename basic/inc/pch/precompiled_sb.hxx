@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-05-14 22:14:54 using:
+ Generated on 2021-07-25 09:29:45 using:
  ./bin/update_pch basic sb --cutoff=2 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -40,10 +40,12 @@
 #include <osl/thread.h>
 #include <osl/time.h>
 #include <rtl/character.hxx>
+#include <rtl/math.h>
 #include <rtl/math.hxx>
 #include <rtl/string.hxx>
 #include <rtl/textenc.h>
 #include <rtl/ustrbuf.hxx>
+#include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 #include <sal/saldllapi.h>
@@ -84,6 +86,7 @@
 #include <basegfx/vector/b2enums.hxx>
 #include <com/sun/star/awt/DeviceInfo.hpp>
 #include <com/sun/star/drawing/LineCap.hpp>
+#include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Reference.hxx>

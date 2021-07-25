@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-05-14 22:16:42 using:
+ Generated on 2021-07-25 09:30:20 using:
  ./bin/update_pch slideshow slideshow --cutoff=4 --exclude:system --include:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -43,7 +43,6 @@
 #include <numeric>
 #include <optional>
 #include <ostream>
-#include <set>
 #include <stddef.h>
 #include <string.h>
 #include <string>
@@ -151,20 +150,20 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/range/b2drange.hxx>
-#include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/range/basicrange.hxx>
+#include <basegfx/tuple/Tuple2D.hxx>
+#include <basegfx/tuple/Tuple3D.hxx>
 #include <basegfx/tuple/b2i64tuple.hxx>
 #include <basegfx/tuple/b2ituple.hxx>
 #include <basegfx/tuple/b3dtuple.hxx>
 #include <basegfx/utils/canvastools.hxx>
+#include <basegfx/utils/common.hxx>
 #include <basegfx/vector/b2dsize.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/vector/b2enums.hxx>
 #include <basegfx/vector/b2isize.hxx>
 #include <basegfx/vector/b2ivector.hxx>
 #include <canvas/canvastools.hxx>
-#include <canvas/canvastoolsdllapi.h>
-#include <canvas/elapsedtime.hxx>
 #include <com/sun/star/animations/TransitionSubType.hpp>
 #include <com/sun/star/animations/TransitionType.hpp>
 #include <com/sun/star/animations/XAnimationNode.hpp>
@@ -184,7 +183,6 @@
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/form/FormComponentType.hpp>
-#include <com/sun/star/geometry/IntegerSize2D.hpp>
 #include <com/sun/star/graphic/XPrimitive2D.hpp>
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
@@ -258,13 +256,11 @@
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
 #include <o3tl/unit_conversion.hxx>
-#include <salhelper/salhelperdllapi.h>
 #include <salhelper/simplereferenceobject.hxx>
 #include <svl/SfxBroadcaster.hxx>
 #include <svl/cenumitm.hxx>
 #include <svl/eitem.hxx>
 #include <svl/hint.hxx>
-#include <svl/itempool.hxx>
 #include <svl/itemset.hxx>
 #include <svl/languageoptions.hxx>
 #include <svl/lstner.hxx>
@@ -274,6 +270,7 @@
 #include <svl/stylesheetuser.hxx>
 #include <svl/svldllapi.h>
 #include <svl/typedwhich.hxx>
+#include <svl/whichranges.hxx>
 #include <svx/DiagramDataInterface.hxx>
 #include <svx/itextprovider.hxx>
 #include <svx/sdr/animation/scheduler.hxx>
@@ -337,6 +334,7 @@
 #include <delayevent.hxx>
 #include <disposable.hxx>
 #include <doctreenode.hxx>
+#include <doctreenodesupplier.hxx>
 #include <event.hxx>
 #include <eventmultiplexer.hxx>
 #include <eventqueue.hxx>
@@ -352,7 +350,6 @@
 #include <unoview.hxx>
 #include <unoviewcontainer.hxx>
 #include <usereventqueue.hxx>
-#include <viewlayer.hxx>
 #endif // PCH_LEVEL >= 4
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

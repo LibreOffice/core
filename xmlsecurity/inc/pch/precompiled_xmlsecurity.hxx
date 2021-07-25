@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-04-11 19:48:55 using:
+ Generated on 2021-07-25 09:30:53 using:
  ./bin/update_pch xmlsecurity xmlsecurity --cutoff=6 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -23,6 +23,7 @@
 #include <sal/config.h>
 #if PCH_LEVEL >= 1
 #include <algorithm>
+#include <array>
 #include <assert.h>
 #include <cassert>
 #include <chrono>
@@ -39,6 +40,8 @@
 #include <math.h>
 #include <memory>
 #include <new>
+#include <numeric>
+#include <optional>
 #include <ostream>
 #include <set>
 #include <stddef.h>
@@ -113,6 +116,8 @@
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/range/b2irange.hxx>
 #include <basegfx/range/basicrange.hxx>
+#include <basegfx/tuple/Tuple2D.hxx>
+#include <basegfx/tuple/Tuple3D.hxx>
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/tuple/b2i64tuple.hxx>
 #include <basegfx/tuple/b2ituple.hxx>
@@ -163,9 +168,11 @@
 #include <cppuhelper/weak.hxx>
 #include <i18nlangtag/lang.h>
 #include <o3tl/cow_wrapper.hxx>
+#include <o3tl/safeint.hxx>
 #include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
+#include <o3tl/unit_conversion.hxx>
 #include <salhelper/salhelperdllapi.h>
 #include <salhelper/simplereferenceobject.hxx>
 #include <sax/saxdllapi.h>

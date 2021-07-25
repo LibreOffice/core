@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-04-08 13:52:12 using:
+ Generated on 2021-07-25 09:30:38 using:
  ./bin/update_pch sw sw --cutoff=7 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -36,6 +36,7 @@
 #include <map>
 #include <memory>
 #include <new>
+#include <numeric>
 #include <optional>
 #include <ostream>
 #include <set>
@@ -50,6 +51,12 @@
 #include <utility>
 #include <vector>
 #include <boost/circular_buffer.hpp>
+#include <boost/multi_index/composite_key.hpp>
+#include <boost/multi_index/identity.hpp>
+#include <boost/multi_index/mem_fun.hpp>
+#include <boost/multi_index/ordered_index.hpp>
+#include <boost/multi_index/random_access_index.hpp>
+#include <boost/multi_index_container.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/property_tree/ptree_fwd.hpp>
 #endif // PCH_LEVEL >= 1
@@ -192,7 +199,6 @@
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Any.hxx>
-#include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
@@ -204,7 +210,6 @@
 #include <com/sun/star/uno/XWeak.hpp>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/Time.hpp>
-#include <com/sun/star/util/XAccounting.hpp>
 #include <com/sun/star/xml/sax/XFastContextHandler.hpp>
 #include <comphelper/classids.hxx>
 #include <comphelper/comphelperdllapi.h>
@@ -221,7 +226,6 @@
 #include <comphelper/weak.hxx>
 #include <cppu/cppudllapi.h>
 #include <cppu/unotype.hxx>
-#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/compbase_ex.hxx>
 #include <cppuhelper/cppuhelperdllapi.h>
@@ -231,7 +235,7 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/weak.hxx>
 #include <drawinglayer/drawinglayerdllapi.h>
-#include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
+#include <drawinglayer/primitive2d/BufferedDecompositionPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <editeng/acorrcfg.hxx>
@@ -266,6 +270,7 @@
 #include <editeng/paperinf.hxx>
 #include <editeng/pbinitem.hxx>
 #include <editeng/postitem.hxx>
+#include <editeng/prntitem.hxx>
 #include <editeng/protitem.hxx>
 #include <editeng/shaditem.hxx>
 #include <editeng/sizeitem.hxx>
@@ -291,6 +296,7 @@
 #include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
+#include <o3tl/unit_conversion.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <salhelper/salhelperdllapi.h>
 #include <salhelper/simplereferenceobject.hxx>
@@ -341,6 +347,7 @@
 #include <svl/metitem.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/ptitem.hxx>
+#include <svl/setitem.hxx>
 #include <svl/slstitm.hxx>
 #include <svl/srchitem.hxx>
 #include <svl/stritem.hxx>
@@ -425,6 +432,7 @@
 #include <unotools/syslocale.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/transliterationwrapper.hxx>
+#include <unotools/ucbstreamhelper.hxx>
 #include <unotools/unotoolsdllapi.h>
 #include <unotools/useroptions.hxx>
 #include <xmloff/dllapi.h>

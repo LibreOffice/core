@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-04-11 19:47:47 using:
+ Generated on 2021-07-25 09:29:51 using:
  ./bin/update_pch cppcanvas cppcanvas --cutoff=11 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -23,18 +23,21 @@
 #include <sal/config.h>
 #if PCH_LEVEL >= 1
 #include <algorithm>
+#include <array>
 #include <cassert>
 #include <cmath>
 #include <cstddef>
 #include <cstdlib>
 #include <float.h>
 #include <functional>
+#include <initializer_list>
 #include <iomanip>
 #include <limits.h>
 #include <limits>
 #include <math.h>
 #include <memory>
 #include <new>
+#include <numeric>
 #include <optional>
 #include <ostream>
 #include <stddef.h>
@@ -63,7 +66,6 @@
 #include <rtl/stringutils.hxx>
 #include <rtl/textcvt.h>
 #include <rtl/textenc.h>
-#include <rtl/ustrbuf.h>
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
@@ -71,8 +73,11 @@
 #include <sal/saldllapi.h>
 #include <sal/types.h>
 #include <sal/typesizes.h>
+#include <vcl/Scanline.hxx>
+#include <vcl/alpha.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmap/BitmapTypes.hxx>
+#include <vcl/bitmapex.hxx>
 #include <vcl/checksum.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/mapmod.hxx>
@@ -90,6 +95,8 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/range/basicrange.hxx>
+#include <basegfx/tuple/Tuple2D.hxx>
+#include <basegfx/tuple/Tuple3D.hxx>
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/tuple/b2ituple.hxx>
 #include <basegfx/tuple/b3dtuple.hxx>
@@ -115,9 +122,11 @@
 #include <cppu/unotype.hxx>
 #include <i18nlangtag/lang.h>
 #include <o3tl/cow_wrapper.hxx>
+#include <o3tl/safeint.hxx>
 #include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
+#include <o3tl/unit_conversion.hxx>
 #include <salhelper/simplereferenceobject.hxx>
 #include <tools/color.hxx>
 #include <tools/degree.hxx>
@@ -134,7 +143,6 @@
 #include <uno/sequence2.h>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
-#include <cppcanvas/canvas.hxx>
 #endif // PCH_LEVEL >= 4
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-05-14 22:17:35 using:
+ Generated on 2021-07-25 09:30:48 using:
  ./bin/update_pch sw vbaswobj --cutoff=4 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -39,6 +39,7 @@
 #include <initializer_list>
 #include <iomanip>
 #include <iostream>
+#include <iterator>
 #include <limits.h>
 #include <limits>
 #include <list>
@@ -152,6 +153,8 @@
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/range/b2irange.hxx>
 #include <basegfx/range/basicrange.hxx>
+#include <basegfx/tuple/Tuple2D.hxx>
+#include <basegfx/tuple/Tuple3D.hxx>
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/tuple/b2i64tuple.hxx>
 #include <basegfx/tuple/b2ituple.hxx>
@@ -191,9 +194,7 @@
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/security/DocumentSignatureInformation.hpp>
-#include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
-#include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
@@ -202,6 +203,7 @@
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/XPageCursor.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
+#include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/text/XTextRangeCompare.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/uno/Any.h>
@@ -259,6 +261,7 @@
 #include <editeng/widwitem.hxx>
 #include <i18nlangtag/lang.h>
 #include <o3tl/cow_wrapper.hxx>
+#include <o3tl/enumarray.hxx>
 #include <o3tl/safeint.hxx>
 #include <o3tl/sorted_vector.hxx>
 #include <o3tl/strong_int.hxx>
@@ -267,7 +270,8 @@
 #include <o3tl/unit_conversion.hxx>
 #include <ooo/vba/XCollection.hpp>
 #include <ooo/vba/XHelperInterface.hpp>
-#include <ooo/vba/word/XParagraphFormat.hpp>
+#include <ooo/vba/word/XListFormat.hpp>
+#include <ooo/vba/word/XListTemplate.hpp>
 #include <ooo/vba/word/XSection.hpp>
 #include <salhelper/salhelperdllapi.h>
 #include <salhelper/simplereferenceobject.hxx>
@@ -293,6 +297,8 @@
 #include <svl/svldllapi.h>
 #include <svl/typedwhich.hxx>
 #include <svl/undo.hxx>
+#include <svl/whichranges.hxx>
+#include <svx/flagsdef.hxx>
 #include <svx/svxdllapi.h>
 #include <svx/xdef.hxx>
 #include <tools/color.hxx>

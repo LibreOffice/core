@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-04-11 19:48:23 using:
+ Generated on 2021-07-25 09:30:24 using:
  ./bin/update_pch svx svx --cutoff=3 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -28,11 +28,13 @@
 #include <climits>
 #include <cstddef>
 #include <cstdlib>
+#include <deque>
 #include <functional>
 #include <iomanip>
 #include <limits.h>
 #include <map>
 #include <memory>
+#include <numeric>
 #include <optional>
 #include <ostream>
 #include <set>
@@ -79,6 +81,7 @@
 #include <vcl/Scanline.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/bitmapex.hxx>
+#include <vcl/canvastools.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/customweld.hxx>
@@ -121,7 +124,6 @@
 #include <basegfx/point/b3dpoint.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
-#include <basegfx/range/b2irectangle.hxx>
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/vector/b2enums.hxx>
 #include <basegfx/vector/b3dvector.hxx>
@@ -242,8 +244,9 @@
 #include <cppuhelper/weakagg.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <drawinglayer/drawinglayerdllapi.h>
-#include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
+#include <drawinglayer/processor2d/baseprocessor2d.hxx>
+#include <drawinglayer/processor2d/processor2dtools.hxx>
 #include <editeng/borderline.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/colritem.hxx>
@@ -293,6 +296,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/dllapi.h>
 #include <sfx2/dockwin.hxx>
+#include <sfx2/filedlghelper.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/request.hxx>
@@ -327,9 +331,11 @@
 #include <svl/svldllapi.h>
 #include <svl/typedwhich.hxx>
 #include <svl/undo.hxx>
+#include <svl/whiter.hxx>
 #include <svl/zforlist.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svtools/ehdl.hxx>
+#include <svtools/optionsdrawinglayer.hxx>
 #include <svtools/popupwindowcontroller.hxx>
 #include <svtools/svtdllapi.h>
 #include <svtools/svtresid.hxx>
@@ -433,6 +439,7 @@
 #include <svx/svdpagv.hxx>
 #include <svx/svdtext.hxx>
 #include <svx/svdtrans.hxx>
+#include <svx/svdtypes.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svx3ditems.hxx>
 #include <svx/svxdlg.hxx>

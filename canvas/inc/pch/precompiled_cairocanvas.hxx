@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-03-08 13:11:37 using:
+ Generated on 2021-07-25 09:29:45 using:
  ./bin/update_pch canvas cairocanvas --cutoff=1 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -26,6 +26,7 @@
 #include <cairo.h>
 #include <math.h>
 #include <memory>
+#include <pixman.h>
 #include <tuple>
 #include <boost/cast.hpp>
 #endif // PCH_LEVEL >= 1
@@ -43,6 +44,7 @@
 #include <vcl/skia/SkiaHelper.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/window.hxx>
 #endif // PCH_LEVEL >= 2
 #if PCH_LEVEL >= 3
 #include <basegfx/matrix/b2dhommatrix.hxx>

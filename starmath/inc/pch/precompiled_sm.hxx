@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-05-14 22:16:51 using:
+ Generated on 2021-07-25 09:30:20 using:
  ./bin/update_pch starmath sm --cutoff=5 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -101,7 +101,9 @@
 #include <basegfx/vector/b2enums.hxx>
 #include <com/sun/star/awt/DeviceInfo.hpp>
 #include <com/sun/star/drawing/LineCap.hpp>
+#include <com/sun/star/i18n/WordType.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
+#include <com/sun/star/text/textfield/Type.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Reference.hxx>
@@ -112,10 +114,12 @@
 #include <cppuhelper/weakref.hxx>
 #include <editeng/editdata.hxx>
 #include <editeng/editengdllapi.h>
+#include <editeng/editobj.hxx>
 #include <editeng/editstat.hxx>
+#include <editeng/eedata.hxx>
+#include <editeng/macros.hxx>
 #include <i18nlangtag/lang.h>
 #include <o3tl/cow_wrapper.hxx>
-#include <o3tl/sorted_vector.hxx>
 #include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/unit_conversion.hxx>
@@ -130,6 +134,7 @@
 #include <svl/languageoptions.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/stritem.hxx>
+#include <svl/style.hxx>
 #include <svl/svldllapi.h>
 #include <svl/typedwhich.hxx>
 #include <svx/svxdllapi.h>
