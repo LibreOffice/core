@@ -61,6 +61,7 @@
 #include <com/sun/star/awt/XWindow2.hpp>
 #include <com/sun/star/awt/XControl.hpp>
 
+#include <svtools/optionsdrawinglayer.hxx>
 #include <vcl/gradient.hxx>
 
 using namespace com::sun::star;
@@ -91,7 +92,7 @@ VclPixelProcessor2D::VclPixelProcessor2D(const geometry::ViewInformation2D& rVie
     mpOutputDevice->SetMapMode();
 
     // react on AntiAliasing settings
-    if (getOptionsDrawinglayer().IsAntiAliasing())
+    if (SvtOptionsDrawinglayer::IsAntiAliasing())
     {
         mpOutputDevice->SetAntialiasing(m_pImpl->m_nOrigAntiAliasing | AntialiasingFlags::Enable);
     }
@@ -455,7 +456,7 @@ void VclPixelProcessor2D::processTextSimplePortionPrimitive2D(
     const DrawModeFlags nOriginalDrawMode(mpOutputDevice->GetDrawMode());
     adaptTextToFillDrawMode();
 
-    if (getOptionsDrawinglayer().IsRenderSimpleTextDirect())
+    if (SvtOptionsDrawinglayer::IsRenderSimpleTextDirect())
     {
         RenderTextSimpleOrDecoratedPortionPrimitive2D(rCandidate);
     }
@@ -475,7 +476,7 @@ void VclPixelProcessor2D::processTextDecoratedPortionPrimitive2D(
     const DrawModeFlags nOriginalDrawMode(mpOutputDevice->GetDrawMode());
     adaptTextToFillDrawMode();
 
-    if (getOptionsDrawinglayer().IsRenderDecoratedTextDirect())
+    if (SvtOptionsDrawinglayer::IsRenderDecoratedTextDirect())
     {
         RenderTextSimpleOrDecoratedPortionPrimitive2D(rCandidate);
     }
@@ -563,7 +564,7 @@ void VclPixelProcessor2D::processPolyPolygonColorPrimitive2D(
     // when AA is on and this filled polygons are the result of stroked line geometry,
     // draw the geometry once extra as lines to avoid AA 'gaps' between partial polygons
     // Caution: This is needed in both cases (!)
-    if (!(mnPolygonStrokePrimitive2D && getOptionsDrawinglayer().IsAntiAliasing()
+    if (!(mnPolygonStrokePrimitive2D && SvtOptionsDrawinglayer::IsAntiAliasing()
           && (mpOutputDevice->GetAntialiasing() & AntialiasingFlags::Enable)))
         return;
 
@@ -784,7 +785,7 @@ void VclPixelProcessor2D::processPolygonStrokePrimitive2D(
 void VclPixelProcessor2D::processFillHatchPrimitive2D(
     const primitive2d::FillHatchPrimitive2D& rFillHatchPrimitive)
 {
-    if (getOptionsDrawinglayer().IsAntiAliasing())
+    if (SvtOptionsDrawinglayer::IsAntiAliasing())
     {
         // if AA is used (or ignore smoothing is on), there is no need to smooth
         // hatch painting, use decomposition
@@ -951,8 +952,8 @@ void VclPixelProcessor2D::processInvertPrimitive2D(const primitive2d::BasePrimit
 void VclPixelProcessor2D::processMetaFilePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate)
 {
     // #i98289#
-    const bool bForceLineSnap(getOptionsDrawinglayer().IsAntiAliasing()
-                              && getOptionsDrawinglayer().IsSnapHorVerLinesToDiscrete());
+    const bool bForceLineSnap(SvtOptionsDrawinglayer::IsAntiAliasing()
+                              && SvtOptionsDrawinglayer::IsSnapHorVerLinesToDiscrete());
     const AntialiasingFlags nOldAntiAliase(mpOutputDevice->GetAntialiasing());
 
     if (bForceLineSnap)

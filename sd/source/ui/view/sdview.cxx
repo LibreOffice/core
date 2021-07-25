@@ -80,6 +80,7 @@
 #include <sfx2/lokhelper.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <DrawController.hxx>
+#include <svtools/optionsdrawinglayer.hxx>
 
 #include <memory>
 #include <numeric>
@@ -108,10 +109,10 @@ View::View(
     mpClipboard (new ViewClipboard (*this))
 {
     // #i73602# Use default from the configuration
-    SetBufferedOverlayAllowed(getOptionsDrawinglayer().IsOverlayBuffer_DrawImpress());
+    SetBufferedOverlayAllowed(SvtOptionsDrawinglayer::IsOverlayBuffer_DrawImpress());
 
     // #i74769#, #i75172# Use default from the configuration
-    SetBufferedOutputAllowed(getOptionsDrawinglayer().IsPaintBuffer_DrawImpress());
+    SetBufferedOutputAllowed(SvtOptionsDrawinglayer::IsPaintBuffer_DrawImpress());
 
     EnableExtendedKeyInputDispatcher(false);
     EnableExtendedMouseEventDispatcher(false);

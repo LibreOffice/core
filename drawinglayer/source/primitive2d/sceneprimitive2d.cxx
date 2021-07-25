@@ -243,8 +243,7 @@ namespace drawinglayer::primitive2d
             double fViewSizeX(aVisibleDiscreteRange.getWidth());
             double fViewSizeY(aVisibleDiscreteRange.getHeight());
             const double fViewVisibleArea(fViewSizeX * fViewSizeY);
-            const SvtOptionsDrawinglayer aDrawinglayerOpt;
-            const double fMaximumVisibleArea(aDrawinglayerOpt.GetQuadratic3DRenderLimit());
+            const double fMaximumVisibleArea(SvtOptionsDrawinglayer::GetQuadratic3DRenderLimit());
             double fReduceFactor(1.0);
 
             if(fViewVisibleArea > fMaximumVisibleArea)
@@ -282,7 +281,7 @@ namespace drawinglayer::primitive2d
 
             // determine the oversample value
             static const sal_uInt16 nDefaultOversampleValue(3);
-            const sal_uInt16 nOversampleValue(aDrawinglayerOpt.IsAntiAliasing() ? nDefaultOversampleValue : 0);
+            const sal_uInt16 nOversampleValue(SvtOptionsDrawinglayer::IsAntiAliasing() ? nDefaultOversampleValue : 0);
 
             geometry::ViewInformation3D aViewInformation3D(getViewInformation3D());
             {

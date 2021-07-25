@@ -110,7 +110,7 @@ public:
     void ValidateMarkList() { FlushComeBackTimer(); }
 
     // #i99665#
-    bool IsAntiAliasing() const;
+    static bool IsAntiAliasing();
 
     // method to replace marked/selected <SwDrawVirtObj>
     // by its reference object for delete of selection and group selection

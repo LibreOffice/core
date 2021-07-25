@@ -62,6 +62,7 @@
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
 #include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
+#include <svtools/optionsdrawinglayer.hxx>
 #include <memory>
 #include <bitmaps.hlst>
 
@@ -1820,9 +1821,8 @@ void ImpTextframeHdl::CreateB2dIAObject()
             {
                 const basegfx::B2DPoint aTopLeft(maRect.Left(), maRect.Top());
                 const basegfx::B2DPoint aBottomRight(maRect.Right(), maRect.Bottom());
-                const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
-                const Color aHilightColor(aSvtOptionsDrawinglayer.getHilightColor());
-                const double fTransparence(aSvtOptionsDrawinglayer.GetTransparentSelectionPercent() * 0.01);
+                const Color aHilightColor(SvtOptionsDrawinglayer::getHilightColor());
+                const double fTransparence(SvtOptionsDrawinglayer::GetTransparentSelectionPercent() * 0.01);
 
                 std::unique_ptr<sdr::overlay::OverlayRectangle> pNewOverlayObject(new sdr::overlay::OverlayRectangle(
                     aTopLeft,
@@ -2621,8 +2621,7 @@ void SdrCropViewHdl::CreateB2dIAObject()
             maGraphic));
 
     // prepare outline polygon for whole graphic
-    const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
-    const basegfx::BColor aHilightColor(aSvtOptionsDrawinglayer.getHilightColor().getBColor());
+    const basegfx::BColor aHilightColor(SvtOptionsDrawinglayer::getHilightColor().getBColor());
     const drawinglayer::primitive2d::Primitive2DReference aGraphicOutline(
         new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(
         aGraphicOutlinePolygon,

@@ -56,7 +56,7 @@
 #include <PostItMgr.hxx>
 #include <SwGrammarMarkUp.hxx>
 #include <docsh.hxx>
-
+#include <svtools/optionsdrawinglayer.hxx>
 #include <cellfrm.hxx>
 #include <wrtsh.hxx>
 
@@ -429,8 +429,7 @@ void SwSelPaintRects::Show(std::vector<OString>* pSelectionRectangles)
         if (xTargetOverlay.is())
         {
             // get the system's highlight color
-            const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
-            const Color aHighlight(aSvtOptionsDrawinglayer.getHilightColor());
+            const Color aHighlight(SvtOptionsDrawinglayer::getHilightColor());
 
             // create correct selection
             m_pCursorOverlay.reset( new sdr::overlay::OverlaySelection(
@@ -539,8 +538,7 @@ void SwSelPaintRects::HighlightInputField()
             if (xTargetOverlay.is())
             {
                 // use system's highlight color with decreased luminance as highlight color
-                const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
-                Color aHighlight(aSvtOptionsDrawinglayer.getHilightColor());
+                Color aHighlight(SvtOptionsDrawinglayer::getHilightColor());
                 aHighlight.DecreaseLuminance( 128 );
 
                 m_pTextInputFieldOverlay.reset( new sw::overlay::OverlayRangesOutline(

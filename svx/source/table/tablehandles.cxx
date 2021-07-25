@@ -33,6 +33,7 @@
 #include <drawinglayer/primitive2d/PolyPolygonHairlinePrimitive2D.hxx>
 #include <sdr/overlay/overlayrectangle.hxx>
 #include <drawinglayer/primitive2d/hiddengeometryprimitive2d.hxx>
+#include <svtools/optionsdrawinglayer.hxx>
 
 namespace sdr::table {
 
@@ -279,9 +280,8 @@ void TableBorderHdl::CreateB2dIAObject()
             if (xManager.is())
             {
                 const basegfx::B2DRange aRange = vcl::unotools::b2DRectangleFromRectangle(maRectangle);
-                const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
-                const Color aHilightColor(aSvtOptionsDrawinglayer.getHilightColor());
-                const double fTransparence(aSvtOptionsDrawinglayer.GetTransparentSelectionPercent() * 0.01);
+                const Color aHilightColor(SvtOptionsDrawinglayer::getHilightColor());
+                const double fTransparence(SvtOptionsDrawinglayer::GetTransparentSelectionPercent() * 0.01);
                 // make animation dependent from text edit active, because for tables
                 // this handle is also used when text edit *is* active for it. This
                 // interferes too much concerning repaint stuff (at least as long as
