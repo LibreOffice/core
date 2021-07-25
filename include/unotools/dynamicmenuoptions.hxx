@@ -21,12 +21,8 @@
 
 #include <unotools/unotoolsdllapi.h>
 #include <sal/types.h>
-#include <unotools/options.hxx>
 #include <rtl/ustring.hxx>
-#include <memory>
-
-namespace com::sun::star::beans { struct PropertyValue; }
-namespace osl { class Mutex; }
+#include <vector>
 
 /*-****************************************************************************************************************
     @descr  struct to hold information about one menu entry.
@@ -48,14 +44,6 @@ enum class EDynamicMenuType
     WizardMenu    =   1
 };
 
-/*-************************************************************************************************************
-    @short          forward declaration to our private date container implementation
-    @descr          We use these class as internal member to support small memory requirements.
-                    You can create the container if it is necessary. The class which use these mechanism
-                    is faster and smaller then a complete implementation!
-*//*-*************************************************************************************************************/
-
-class SvtDynamicMenuOptions_Impl;
 
 /*-************************************************************************************************************
     @short          collect information about dynamic menus
@@ -63,39 +51,23 @@ class SvtDynamicMenuOptions_Impl;
     @devstatus      ready to use
 *//*-*************************************************************************************************************/
 
-class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtDynamicMenuOptions final : public utl::detail::Options
+namespace SvtDynamicMenuOptions
 {
-    public:
-         SvtDynamicMenuOptions();
-        virtual ~SvtDynamicMenuOptions() override;
 
-        /*-****************************************************************************************************
-            @short      return complete specified list
-            @descr      Call it to get all entries of an dynamic menu.
-                        We return a list of all nodes with its names and properties.
-            @param      "eMenu" select right menu.
-            @return     A list of menu items is returned.
+    /*-****************************************************************************************************
+        @short      return complete specified list
+        @descr      Call it to get all entries of an dynamic menu.
+                    We return a list of all nodes with its names and properties.
+        @param      "eMenu" select right menu.
+        @return     A list of menu items is returned.
 
-            @onerror    We return an empty list.
-        *//*-*****************************************************************************************************/
+        @onerror    We return an empty list.
+    *//*-*****************************************************************************************************/
 
-        std::vector< SvtDynMenuEntry > GetMenu( EDynamicMenuType eMenu ) const;
-    private:
+    UNOTOOLS_DLLPUBLIC std::vector< SvtDynMenuEntry > GetMenu( EDynamicMenuType eMenu );
 
-        /*-****************************************************************************************************
-            @short      return a reference to a static mutex
-            @descr      These class is partially threadsafe (for de-/initialization only).
-                        All access methods aren't safe!
-                        We create a static mutex only for one ime and use at different times.
-            @return     A reference to a static mutex member.
-        *//*-*****************************************************************************************************/
 
-        UNOTOOLS_DLLPRIVATE static ::osl::Mutex& GetOwnStaticMutex();
-
-    private:
-        std::shared_ptr<SvtDynamicMenuOptions_Impl> m_pImpl;
-
-};      // class SvtDynamicMenuOptions
+};      // namespace SvtDynamicMenuOptions
 
 #endif // INCLUDED_UNOTOOLS_DYNAMICMENUOPTIONS_HXX
 
