@@ -64,6 +64,7 @@
 #include <drawinglayer/attribute/sdrlineattribute.hxx>
 #include <drawinglayer/attribute/sdrlinestartendattribute.hxx>
 #include <svl/itempool.hxx>
+#include <svtools/optionsdrawinglayer.hxx>
 #include <comphelper/lok.hxx>
 #include <map>
 #include <vector>
@@ -96,12 +97,11 @@ drawinglayer::primitive2d::Primitive2DContainer SdrDragEntryPolyPolygon::createP
     if(maOriginalPolyPolygon.count())
     {
         basegfx::B2DPolyPolygon aCopy(maOriginalPolyPolygon);
-        const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
 
         rDragMethod.applyCurrentTransformationToPolyPolygon(aCopy);
-        basegfx::BColor aColA(aSvtOptionsDrawinglayer.GetStripeColorA().getBColor());
-        basegfx::BColor aColB(aSvtOptionsDrawinglayer.GetStripeColorB().getBColor());
-        const double fStripeLength(aSvtOptionsDrawinglayer.GetStripeLength());
+        basegfx::BColor aColA(SvtOptionsDrawinglayer::GetStripeColorA().getBColor());
+        basegfx::BColor aColB(SvtOptionsDrawinglayer::GetStripeColorB().getBColor());
+        const double fStripeLength(SvtOptionsDrawinglayer::GetStripeLength());
 
         if(Application::GetSettings().GetStyleSettings().GetHighContrastMode())
         {
@@ -116,8 +116,8 @@ drawinglayer::primitive2d::Primitive2DContainer SdrDragEntryPolyPolygon::createP
             aColB,
             fStripeLength);
 
-        const basegfx::BColor aHilightColor(aSvtOptionsDrawinglayer.getHilightColor().getBColor());
-        const double fTransparence(aSvtOptionsDrawinglayer.GetTransparentSelectionPercent() * 0.01);
+        const basegfx::BColor aHilightColor(SvtOptionsDrawinglayer::getHilightColor().getBColor());
+        const double fTransparence(SvtOptionsDrawinglayer::GetTransparentSelectionPercent() * 0.01);
 
         aRetval[1] = new drawinglayer::primitive2d::PolyPolygonSelectionPrimitive2D(
             aCopy,
@@ -244,8 +244,7 @@ drawinglayer::primitive2d::Primitive2DContainer SdrDragEntryPointGlueDrag::creat
 
         if(mbIsPointDrag)
         {
-            const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
-            basegfx::BColor aColor(aSvtOptionsDrawinglayer.GetStripeColorA().getBColor());
+            basegfx::BColor aColor(SvtOptionsDrawinglayer::GetStripeColorA().getBColor());
 
             if(Application::GetSettings().GetStyleSettings().GetHighContrastMode())
             {
@@ -921,10 +920,9 @@ drawinglayer::primitive2d::Primitive2DContainer SdrDragMethod::AddConnectorOverl
                     }
                     else
                     {
-                        const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
-                        basegfx::BColor aColA(aSvtOptionsDrawinglayer.GetStripeColorA().getBColor());
-                        basegfx::BColor aColB(aSvtOptionsDrawinglayer.GetStripeColorB().getBColor());
-                        const double fStripeLength(aSvtOptionsDrawinglayer.GetStripeLength());
+                        basegfx::BColor aColA(SvtOptionsDrawinglayer::GetStripeColorA().getBColor());
+                        basegfx::BColor aColB(SvtOptionsDrawinglayer::GetStripeColorB().getBColor());
+                        const double fStripeLength(SvtOptionsDrawinglayer::GetStripeLength());
 
                         if(Application::GetSettings().GetStyleSettings().GetHighContrastMode())
                         {

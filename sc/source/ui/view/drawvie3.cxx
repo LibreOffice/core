@@ -25,6 +25,7 @@
 #include <svx/svdoole2.hxx>
 #include <svx/ImageMapInfo.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <svtools/optionsdrawinglayer.hxx>
 
 #include <strings.hrc>
 #include <scresid.hxx>
@@ -49,10 +50,10 @@ ScDrawView::ScDrawView(
     bInConstruct( true )
 {
     // #i73602# Use default from the configuration
-    SetBufferedOverlayAllowed(getOptionsDrawinglayer().IsOverlayBuffer_Calc());
+    SetBufferedOverlayAllowed(SvtOptionsDrawinglayer::IsOverlayBuffer_Calc());
 
     // #i74769#, #i75172# Use default from the configuration
-    SetBufferedOutputAllowed(getOptionsDrawinglayer().IsPaintBuffer_Calc());
+    SetBufferedOutputAllowed(SvtOptionsDrawinglayer::IsPaintBuffer_Calc());
 
     Construct();
 }

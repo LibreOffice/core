@@ -63,6 +63,7 @@
 #include <svx/svdoutl.hxx>
 #include <svx/xlineit0.hxx>
 #include <editeng/flditem.hxx>
+#include <svtools/optionsdrawinglayer.hxx>
 #include "UnoGraphicExporter.hxx"
 #include <memory>
 
@@ -1010,15 +1011,14 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
     ErrCode nStatus = ERRCODE_NONE;
     if (maGraphic.IsNone())
     {
-        SvtOptionsDrawinglayer aOptions;
-        bool bAntiAliasing = aOptions.IsAntiAliasing();
+        bool bAntiAliasing = SvtOptionsDrawinglayer::IsAntiAliasing();
         AllSettings aAllSettings = Application::GetSettings();
         StyleSettings aStyleSettings = aAllSettings.GetStyleSettings();
         bool bUseFontAAFromSystem = aStyleSettings.GetUseFontAAFromSystem();
         if (aSettings.meAntiAliasing != TRISTATE_INDET)
         {
             // This is safe to do globally as we own the solar mutex.
-            aOptions.SetAntiAliasing(aSettings.meAntiAliasing == TRISTATE_TRUE);
+            SvtOptionsDrawinglayer::SetAntiAliasing(aSettings.meAntiAliasing == TRISTATE_TRUE, /*bTemporary*/true);
             // Opt in to have AA affect font rendering as well.
             aStyleSettings.SetUseFontAAFromSystem(false);
             aAllSettings.SetStyleSettings(aStyleSettings);
@@ -1027,7 +1027,7 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
         nStatus = GetGraphic( aSettings, aGraphic, bVectorType ) ? ERRCODE_NONE : ERRCODE_GRFILTER_FILTERERROR;
         if (aSettings.meAntiAliasing != TRISTATE_INDET)
         {
-            aOptions.SetAntiAliasing(bAntiAliasing);
+            SvtOptionsDrawinglayer::SetAntiAliasing(bAntiAliasing, /*bTemporary*/true);
             aStyleSettings.SetUseFontAAFromSystem(bUseFontAAFromSystem);
             aAllSettings.SetStyleSettings(aStyleSettings);
             Application::SetSettings(aAllSettings);

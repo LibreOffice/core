@@ -229,8 +229,7 @@ void WeldEditView::DoPaint(vcl::RenderContext& rRenderContext, const tools::Rect
         }
 
         // get the system's highlight color
-        const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
-        const Color aHighlight(aSvtOptionsDrawinglayer.getHilightColor());
+        const Color aHighlight(SvtOptionsDrawinglayer::getHilightColor());
 
         sdr::overlay::OverlaySelection aCursorOverlay(sdr::overlay::OverlayType::Transparent,
                                                       aHighlight, aLogicRanges, true);

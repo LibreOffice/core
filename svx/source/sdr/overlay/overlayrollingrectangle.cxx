@@ -24,6 +24,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonMarkerPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonSelectionPrimitive2D.hxx>
+#include <svtools/optionsdrawinglayer.hxx>
 
 namespace sdr::overlay
 {
@@ -50,9 +51,8 @@ namespace sdr::overlay
                         aRGBColorB,
                         fStripeLengthPixel);
 
-                    const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
-                    const basegfx::BColor aHilightColor(aSvtOptionsDrawinglayer.getHilightColor().getBColor());
-                    const double fTransparence(aSvtOptionsDrawinglayer.GetTransparentSelectionPercent() * 0.01);
+                    const basegfx::BColor aHilightColor(SvtOptionsDrawinglayer::getHilightColor().getBColor());
+                    const double fTransparence(SvtOptionsDrawinglayer::GetTransparentSelectionPercent() * 0.01);
 
                     aRetval[1] = new drawinglayer::primitive2d::PolyPolygonSelectionPrimitive2D(
                         basegfx::B2DPolyPolygon(aPolygon),
