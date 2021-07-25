@@ -46,6 +46,8 @@ public:
 private:
     MarkedTabsType  maTabMarked;
 
+    std::vector<std::vector<std::pair<SCTAB, ScRange>>>  maSheetsMark;
+
     ScRange         aMarkRange;             // area
     ScRange         aMultiRange;            // maximum area altogether
     ScMultiSel      aMultiSel;              // multi selection
@@ -127,6 +129,8 @@ public:
 
     std::vector<sc::ColRowSpan> GetMarkedRowSpans() const;
     std::vector<sc::ColRowSpan> GetMarkedColSpans() const;
+
+    std::vector<std::vector<std::pair<SCTAB, ScRange>>>& GetSheetsMark() { return maSheetsMark; }
 
     bool        IsColumnMarked( SCCOL nCol ) const;
     bool        IsRowMarked( SCROW nRow ) const;
