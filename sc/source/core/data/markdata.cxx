@@ -28,6 +28,7 @@
 #include <columnspanset.hxx>
 #include <fstalgorithm.hxx>
 #include <unordered_map>
+#include <tabview.hxx>
 
 #include <osl/diagnose.h>
 
@@ -171,13 +172,27 @@ void ScMarkData::SetAreaTab( SCTAB nTab )
 
 void ScMarkData::SelectTable( SCTAB nTab, bool bNew )
 {
+    std::vector<std::vector<std::pair<SCTAB, ScRange>>>& vMark(GetSheetsMark());
+
     if ( bNew )
     {
         maTabMarked.insert( nTab );
+
+        if(vMark.size()>1)
+        {
+            if (vMark[nTab][0].first == nTab)
+            {
+                ResetMark();
+                SetMarkArea(vMark[nTab][0].second);
+            }
+        }
     }
     else
     {
         maTabMarked.erase( nTab );
+
+        if (IsMarked())
+            ResetMark();
     }
 }
 
@@ -624,6 +639,9 @@ bool ScMarkData::HasAnyMultiMarks() const
 
 void ScMarkData::InsertTab( SCTAB nTab )
 {
+    std::vector<std::vector<std::pair<SCTAB, ScRange>>>& vMark(GetSheetsMark());
+    std::vector<std::pair<SCTAB, ScRange>> tempVect;
+
     std::set<SCTAB> tabMarked;
     for (const auto& rTab : maTabMarked)
     {
@@ -633,10 +651,28 @@ void ScMarkData::InsertTab( SCTAB nTab )
             tabMarked.insert(rTab + 1);
     }
     maTabMarked.swap(tabMarked);
+
+    // update sheets mark after insert
+    for (size_t i=0; i<vMark.size(); i++)
+    {
+        if (vMark[i][0].first == nTab)
+        {
+            for (size_t k=nTab; k<vMark.size(); k++)
+                vMark[k][0].first++;
+
+            tempVect.emplace_back(i, ScRange(0,0,0));
+            vMark.emplace(vMark.begin()+i, tempVect);
+            break;
+        }
+    }
+    ResetMark();
 }
 
 void ScMarkData::DeleteTab( SCTAB nTab )
 {
+    std::vector<std::vector<std::pair<SCTAB, ScRange>>>& vMark(GetSheetsMark());
+    std::vector<std::pair<SCTAB, ScRange>> tempVect;
+
     std::set<SCTAB> tabMarked;
     for (const auto& rTab : maTabMarked)
     {
@@ -646,6 +682,36 @@ void ScMarkData::DeleteTab( SCTAB nTab )
             tabMarked.insert(rTab - 1);
     }
     maTabMarked.swap(tabMarked);
+
+    for (size_t i=0; i<vMark.size(); i++)
+    {
+        if (vMark[i][0].first == nTab)
+        {
+            for (size_t k=nTab; k<vMark.size(); k++)
+                vMark[k][0].first--;
+
+            vMark.erase(vMark.begin()+i);
+            break;
+        }
+    }
+
+    // Sorting sheets
+    if (vMark.size() > 2)
+    {
+        for (size_t k=0; k<vMark.size()-1; k++)
+        {
+            auto rFirst = vMark[k];
+            for (size_t j=k; j<vMark.size(); j++)
+            {
+                auto rSecond = vMark[j];
+                if (rSecond[0].first < rFirst[0].first)
+                {
+                    vMark[k] = rSecond;
+                    vMark[j] = rFirst;
+                }
+            }
+        }
+    }
 }
 
 void ScMarkData::ShiftCols(const ScDocument& rDoc, SCCOL nStartCol, sal_Int32 nColOffset)
