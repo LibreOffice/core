@@ -436,8 +436,7 @@ OUString XMLRedlineExport::GetRedlineID(
 void XMLRedlineExport::ExportChangeInfo(
     const Reference<XPropertySet> & rPropSet)
 {
-    SvtSecurityOptions aSecOpt;
-    bool bRemovePersonalInfo = aSecOpt.IsOptionSet(
+    bool bRemovePersonalInfo = SvtSecurityOptions::IsOptionSet(
             SvtSecurityOptions::EOption::DocWarnRemovePersonalInfo );
 
     SvXMLElementExport aChangeInfo(rExport, XML_NAMESPACE_OFFICE,
@@ -480,8 +479,7 @@ void XMLRedlineExport::ExportChangeInfo(
     const Sequence<PropertyValue> & rPropertyValues)
 {
     OUString sComment;
-    SvtSecurityOptions aSecOpt;
-    bool bRemovePersonalInfo = aSecOpt.IsOptionSet(
+    bool bRemovePersonalInfo = SvtSecurityOptions::IsOptionSet(
             SvtSecurityOptions::EOption::DocWarnRemovePersonalInfo );
 
     for(const PropertyValue& rVal : rPropertyValues)

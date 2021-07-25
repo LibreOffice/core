@@ -126,8 +126,8 @@ MacroSecurityLevelTP::MacroSecurityLevelTP(weld::Container* pParent, MacroSecuri
         m_xVeryHighRB->set_size_request(nMaxWidth, -1);
     }
 
-    mnCurLevel = static_cast<sal_uInt16>(m_pDlg->m_aSecOptions.GetMacroSecurityLevel());
-    bool bReadonly = m_pDlg->m_aSecOptions.IsReadOnly( SvtSecurityOptions::EOption::MacroSecLevel );
+    mnCurLevel = static_cast<sal_uInt16>(SvtSecurityOptions::GetMacroSecurityLevel());
+    bool bReadonly = SvtSecurityOptions::IsReadOnly( SvtSecurityOptions::EOption::MacroSecLevel );
 
     weld::RadioButton* pCheck = nullptr;
     weld::Widget* pImage = nullptr;
@@ -185,7 +185,7 @@ IMPL_LINK_NOARG(MacroSecurityLevelTP, RadioButtonHdl, weld::Toggleable&, void)
 
 void MacroSecurityLevelTP::ClosePage()
 {
-    m_pDlg->m_aSecOptions.SetMacroSecurityLevel( mnCurLevel );
+    SvtSecurityOptions::SetMacroSecurityLevel( mnCurLevel );
 }
 
 void MacroSecurityTrustedSourcesTP::ImplCheckButtons()
@@ -392,14 +392,14 @@ MacroSecurityTrustedSourcesTP::MacroSecurityTrustedSourcesTP(weld::Container* pP
     m_xRemoveLocPB->connect_clicked( LINK( this, MacroSecurityTrustedSourcesTP, RemoveLocPBHdl ) );
     m_xRemoveLocPB->set_sensitive(false);
 
-    m_aTrustedAuthors = m_pDlg->m_aSecOptions.GetTrustedAuthors();
-    mbAuthorsReadonly = m_pDlg->m_aSecOptions.IsReadOnly( SvtSecurityOptions::EOption::MacroTrustedAuthors );
+    m_aTrustedAuthors = SvtSecurityOptions::GetTrustedAuthors();
+    mbAuthorsReadonly = SvtSecurityOptions::IsReadOnly( SvtSecurityOptions::EOption::MacroTrustedAuthors );
     m_xTrustCertROFI->set_visible(mbAuthorsReadonly);
 
     FillCertLB(true);
 
-    const css::uno::Sequence< OUString > aSecureURLs = m_pDlg->m_aSecOptions.GetSecureURLs();
-    mbURLsReadonly = m_pDlg->m_aSecOptions.IsReadOnly( SvtSecurityOptions::EOption::SecureUrls );
+    std::vector< OUString > aSecureURLs = SvtSecurityOptions::GetSecureURLs();
+    mbURLsReadonly = SvtSecurityOptions::IsReadOnly( SvtSecurityOptions::EOption::SecureUrls );
     m_xTrustFileROFI->set_visible(mbURLsReadonly);
     m_xAddLocPB->set_sensitive(!mbURLsReadonly);
 
@@ -422,22 +422,22 @@ void MacroSecurityTrustedSourcesTP::ClosePage()
     sal_Int32 nEntryCnt = m_xTrustFileLocLB->n_children();
     if( nEntryCnt )
     {
-        css::uno::Sequence< OUString > aSecureURLs( nEntryCnt );
+        std::vector< OUString > aSecureURLs;
         for (sal_Int32 i = 0; i < nEntryCnt; ++i)
         {
             OUString aURL(m_xTrustFileLocLB->get_text(i));
             osl::FileBase::getFileURLFromSystemPath( aURL, aURL );
-            aSecureURLs[ i ] = aURL;
+            aSecureURLs.push_back(aURL);
         }
 
-        m_pDlg->m_aSecOptions.SetSecureURLs( aSecureURLs );
+        SvtSecurityOptions::SetSecureURLs( aSecureURLs );
     }
     // Trusted Path could not be removed (#i33584#)
     // don't forget to remove the old saved SecureURLs
     else
-        m_pDlg->m_aSecOptions.SetSecureURLs( css::uno::Sequence< OUString >() );
+        SvtSecurityOptions::SetSecureURLs( std::vector< OUString >() );
 
-    m_pDlg->m_aSecOptions.SetTrustedAuthors( m_aTrustedAuthors );
+    SvtSecurityOptions::SetTrustedAuthors( m_aTrustedAuthors );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

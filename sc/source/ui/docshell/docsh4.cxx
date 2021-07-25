@@ -168,10 +168,10 @@ ScLkUpdMode ScDocShell::GetLinkUpdateModeState() const
         nSet = LM_ALWAYS;
 
     if (nSet == LM_ALWAYS
-            && !(SvtSecurityOptions().isTrustedLocationUriForUpdatingLinks(
+            && !(SvtSecurityOptions::isTrustedLocationUriForUpdatingLinks(
                     GetMedium() == nullptr ? OUString() : GetMedium()->GetName())
                 || (IsDocShared()
-                    && SvtSecurityOptions().isTrustedLocationUriForUpdatingLinks(
+                    && SvtSecurityOptions::isTrustedLocationUriForUpdatingLinks(
                         GetSharedFileURL()))))
     {
         nSet = LM_ON_DEMAND;

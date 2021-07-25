@@ -846,95 +846,102 @@ bool ConfigItem::SetSetProperties(
     const OUString& rNode, const Sequence< PropertyValue >& rValues)
 {
     ValueCounter_Impl aCounter(m_nInValueChange);
-    bool bRet = true;
     Reference<XHierarchicalNameAccess> xHierarchyAccess = GetTree();
-    if(xHierarchyAccess.is())
+    if(!xHierarchyAccess.is())
+        return true;
+    return SetSetProperties(xHierarchyAccess, rNode, rValues);
+}
+
+// Add or change properties
+bool ConfigItem::SetSetProperties(
+    css::uno::Reference<css::container::XHierarchicalNameAccess> const & xHierarchyAccess,
+    const OUString& rNode, const Sequence< PropertyValue >& rValues)
+{
+    bool bRet = true;
+    Reference<XChangesBatch> xBatch(xHierarchyAccess, UNO_QUERY);
+    try
     {
-        Reference<XChangesBatch> xBatch(xHierarchyAccess, UNO_QUERY);
-        try
+        Reference<XNameContainer> xCont;
+        if(!rNode.isEmpty())
         {
-            Reference<XNameContainer> xCont;
-            if(!rNode.isEmpty())
+            Any aNode = xHierarchyAccess->getByHierarchicalName(rNode);
+            aNode >>= xCont;
+        }
+        else
+            xCont.set(xHierarchyAccess, UNO_QUERY);
+        if(!xCont.is())
+            return false;
+
+        Reference<XSingleServiceFactory> xFac(xCont, UNO_QUERY);
+
+        if(xFac.is())
+        {
+            const Sequence< OUString > aSubNodeNames = lcl_extractSetPropertyNames(rValues, rNode);
+
+            for(const auto& rSubNodeName : aSubNodeNames)
             {
-                Any aNode = xHierarchyAccess->getByHierarchicalName(rNode);
-                aNode >>= xCont;
-            }
-            else
-                xCont.set(xHierarchyAccess, UNO_QUERY);
-            if(!xCont.is())
-                return false;
-
-            Reference<XSingleServiceFactory> xFac(xCont, UNO_QUERY);
-
-            if(xFac.is())
-            {
-                const Sequence< OUString > aSubNodeNames = lcl_extractSetPropertyNames(rValues, rNode);
-
-                for(const auto& rSubNodeName : aSubNodeNames)
+                if(!xCont->hasByName(rSubNodeName))
                 {
-                    if(!xCont->hasByName(rSubNodeName))
-                    {
-                        Reference<XInterface> xInst = xFac->createInstance();
-                        Any aVal; aVal <<= xInst;
-                        xCont->insertByName(rSubNodeName, aVal);
-                    }
-                    //set values
+                    Reference<XInterface> xInst = xFac->createInstance();
+                    Any aVal; aVal <<= xInst;
+                    xCont->insertByName(rSubNodeName, aVal);
                 }
+                //set values
+            }
+            try
+            {
+                xBatch->commitChanges();
+            }
+            catch (css::uno::Exception &)
+            {
+                TOOLS_WARN_EXCEPTION("unotools.config", "Exception from commitChanges()");
+            }
+
+            const PropertyValue* pProperties = rValues.getConstArray();
+
+            Sequence< OUString > aSetNames(rValues.getLength());
+            OUString* pSetNames = aSetNames.getArray();
+
+            Sequence< Any> aSetValues(rValues.getLength());
+            Any* pSetValues = aSetValues.getArray();
+
+            bool bEmptyNode = rNode.isEmpty();
+            for(sal_Int32 k = 0; k < rValues.getLength(); k++)
+            {
+                pSetNames[k] =  pProperties[k].Name.copy( bEmptyNode ? 1 : 0);
+                pSetValues[k] = pProperties[k].Value;
+            }
+            bRet = PutProperties(xHierarchyAccess, aSetNames, aSetValues, /*bAllLocales*/false);
+        }
+        else
+        {
+            //if no factory is available then the node contains basic data elements
+            for(const PropertyValue& rValue : rValues)
+            {
                 try
                 {
-                    xBatch->commitChanges();
+                    OUString sSubNode = lcl_extractSetPropertyName( rValue.Name, rNode );
+
+                    if(xCont->hasByName(sSubNode))
+                        xCont->replaceByName(sSubNode, rValue.Value);
+                    else
+                        xCont->insertByName(sSubNode, rValue.Value);
+
+                    OSL_ENSURE( xHierarchyAccess->hasByHierarchicalName(rValue.Name),
+                        "Invalid config path" );
                 }
                 catch (css::uno::Exception &)
                 {
-                    TOOLS_WARN_EXCEPTION("unotools.config", "Exception from commitChanges()");
+                    TOOLS_WARN_EXCEPTION("unotools.config", "Exception from insert/replaceByName()");
                 }
-
-                const PropertyValue* pProperties = rValues.getConstArray();
-
-                Sequence< OUString > aSetNames(rValues.getLength());
-                OUString* pSetNames = aSetNames.getArray();
-
-                Sequence< Any> aSetValues(rValues.getLength());
-                Any* pSetValues = aSetValues.getArray();
-
-                bool bEmptyNode = rNode.isEmpty();
-                for(sal_Int32 k = 0; k < rValues.getLength(); k++)
-                {
-                    pSetNames[k] =  pProperties[k].Name.copy( bEmptyNode ? 1 : 0);
-                    pSetValues[k] = pProperties[k].Value;
-                }
-                bRet = PutProperties(aSetNames, aSetValues);
             }
-            else
-            {
-                //if no factory is available then the node contains basic data elements
-                for(const PropertyValue& rValue : rValues)
-                {
-                    try
-                    {
-                        OUString sSubNode = lcl_extractSetPropertyName( rValue.Name, rNode );
-
-                        if(xCont->hasByName(sSubNode))
-                            xCont->replaceByName(sSubNode, rValue.Value);
-                        else
-                            xCont->insertByName(sSubNode, rValue.Value);
-
-                        OSL_ENSURE( xHierarchyAccess->hasByHierarchicalName(rValue.Name),
-                            "Invalid config path" );
-                    }
-                    catch (css::uno::Exception &)
-                    {
-                        TOOLS_WARN_EXCEPTION("unotools.config", "Exception from insert/replaceByName()");
-                    }
-                }
-                xBatch->commitChanges();
-            }
+            xBatch->commitChanges();
         }
-        catch (const Exception&)
-        {
-            TOOLS_WARN_EXCEPTION("unotools.config", "Exception from SetSetProperties");
-            bRet = false;
-        }
+    }
+    catch (const Exception&)
+    {
+        TOOLS_WARN_EXCEPTION("unotools.config", "Exception from SetSetProperties");
+        bRet = false;
     }
     return bRet;
 }

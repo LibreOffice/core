@@ -32,7 +32,6 @@ private:
     friend class MacroSecurityTrustedSourcesTP;
 
     css::uno::Reference<css::xml::crypto::XSecurityEnvironment> m_xSecurityEnvironment;
-    SvtSecurityOptions m_aSecOptions;
 
     std::unique_ptr<weld::Notebook> m_xTabCtrl;
     std::unique_ptr<weld::Button> m_xOkBtn;

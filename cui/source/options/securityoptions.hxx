@@ -20,8 +20,6 @@
 
 #include <vcl/weld.hxx>
 
-class SvtSecurityOptions;
-
 namespace svx
 {
 
@@ -47,7 +45,7 @@ namespace svx
         std::unique_ptr<weld::Widget> m_xBlockUntrustedRefererLinksImg;
 
     public:
-        SecurityOptionsDialog(weld::Window* pParent, SvtSecurityOptions const * pOptions);
+        SecurityOptionsDialog(weld::Window* pParent);
 
         bool IsSaveOrSendDocsChecked() const { return m_xSaveOrSendDocsCB->get_active(); }
         bool IsSignDocsChecked() const { return m_xSignDocsCB->get_active(); }
