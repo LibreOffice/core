@@ -28,6 +28,7 @@
 #include <columnspanset.hxx>
 #include <fstalgorithm.hxx>
 #include <unordered_map>
+#include <tabview.hxx>
 
 #include <osl/diagnose.h>
 
@@ -171,13 +172,28 @@ void ScMarkData::SetAreaTab( SCTAB nTab )
 
 void ScMarkData::SelectTable( SCTAB nTab, bool bNew )
 {
+    std::vector<std::vector<std::pair<SCTAB, ScRange>>>& vMark(GetSheetsMark());
+
     if ( bNew )
     {
         maTabMarked.insert( nTab );
+
+        ResetMark();
+        for (auto a: vMark)
+        {
+            if (a[0].first == nTab)
+            {
+                SetMarkArea(a[0].second);
+                break;
+            }
+        }
     }
     else
     {
         maTabMarked.erase( nTab );
+
+        if (!IsMarked())
+            ResetMark();
     }
 }
 

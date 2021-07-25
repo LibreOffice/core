@@ -465,6 +465,10 @@ void ScTabView::MarkCursor( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
         nCurX = rDocument.MaxCol();
 
     ScMarkData& rMark = aViewData.GetMarkData();
+
+    std::vector<std::vector<std::pair<SCTAB, ScRange>>>& vMark(rMark.GetSheetsMark());
+    std::vector<std::pair<SCTAB, ScRange>> tempVect;
+
     OSL_ENSURE(rMark.IsMarked() || rMark.IsMultiMarked(), "MarkCursor, !IsMarked()");
     ScRange aMarkRange;
     rMark.GetMarkArea(aMarkRange);
@@ -574,6 +578,21 @@ void ScTabView::MarkCursor( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
             nBlockStartY = nBlockStartY + nBlockStartYOffset >= 0 ? nBlockStartY + nBlockStartYOffset : 0;
             nBlockEndX = std::min<SCCOL>(nCurX + nCurXOffset, rDocument.MaxCol());
             nBlockEndY = std::min(nCurY + nCurYOffset, rDocument.MaxRow());
+
+            int i=0;
+
+            for (auto a: vMark)
+            {
+                if (a[0].first == nTab)
+                {
+                    tempVect.clear();
+                    vMark.erase(vMark.begin()+i);
+                    rMark.ResetMark();
+
+                    break;
+                }
+                i++;
+            }
         }
         else
         {
@@ -583,6 +602,27 @@ void ScTabView::MarkCursor( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
 
         // Set new selection area
         rMark.SetMarkArea( ScRange( nBlockStartX, nBlockStartY, nTab, nBlockEndX, nBlockEndY, nTab ) );
+
+        bool bFound = false;
+        int i=0;
+
+        for (auto a: vMark)
+        {
+            if (a[0].first == nTab)
+            {
+                tempVect.emplace_back(std::pair(nTab, aMarkRange));
+                vMark.emplace(vMark.begin()+i, tempVect);
+                bFound = true;
+                rMark.ResetMark();
+                break;
+            }
+            i++;
+        }
+        if(!bFound)
+        {
+            tempVect.emplace_back(std::pair(nTab, aMarkRange));
+            vMark.emplace_back(tempVect);
+        }
 
         UpdateSelectionOverlay();
         SelectionChanged();
