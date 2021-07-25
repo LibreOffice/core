@@ -68,6 +68,30 @@
       "revId": "8b4f3eef2d6d86c9d9c2587c6c7b0d117a4be872",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dea2a64f_affb46ef",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 483,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-25T15:48:18Z",
+      "side": 1,
+      "message": "Change UpdateStyleDependents_Hdl to take the control instead of nullptr",
+      "parentUuid": "8db73a0b_5a70b61e",
+      "range": {
+        "startLine": 483,
+        "startChar": 8,
+        "endLine": 483,
+        "endChar": 42
+      },
+      "revId": "8b4f3eef2d6d86c9d9c2587c6c7b0d117a4be872",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
