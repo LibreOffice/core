@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dca85db9_624917fd",
+        "filename": "include/o3tl/unit_conversion.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-25T04:16:37Z",
+      "side": 1,
+      "message": "Here the U is known, because it is Length - so only N is needed to be templated.\n\nI suggest to rename it to \"toTwip\", as it\u0027s shorter, and additionally tells the conversion direction. I thought initially that \"convertTwip\" meant \"convert twips to X\"",
+      "revId": "9b49712149936dd7ed9d1290b9b8871bfb817a66",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8ab8be24_eb85c977",
+        "filename": "include/o3tl/unit_conversion.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-25T04:16:37Z",
+      "side": 1,
+      "message": "... and it may rely on convert defined at line 197, so simplified to\n\n    return convert(number, from, Length::twip);",
+      "revId": "9b49712149936dd7ed9d1290b9b8871bfb817a66",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "182c7963_65bc7c5e",
+        "filename": "sw/inc/swtypes.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-25T04:16:37Z",
+      "side": 1,
+      "message": "Possibly it makes sense to unify constants using\n\n  constexpr SwTwips cMinHdFtHeight \u003d o3tl::convertTwip(1, o3tl::Length::mm);\n\nwhich would document itself - but it would make it 57... no idea if that matters, just a thought.\n\nI see that you keep the old values and assert on those; but still no idea if we need to keep DOCUMENTBORDER, etc. being 1 off 😊",
+      "revId": "9b49712149936dd7ed9d1290b9b8871bfb817a66",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "573fc6f1_35a059cb",
+        "filename": "sw/inc/swtypes.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-25T04:16:37Z",
+      "side": 1,
+      "message": "tools::Long(3) may be simply written as 3, the o3tl::convert machinery converts all integral input to sal_Int64, and all FP input to double.",
+      "revId": "9b49712149936dd7ed9d1290b9b8871bfb817a66",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2904ff51_8059605b",
+        "filename": "sw/inc/swtypes.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-25T04:16:37Z",
+      "side": 1,
+      "message": "It may also be\n\n  constexpr SwTwips MIN_BORDER_DIST \u003d o3tl::convertTwip(5, o3tl::Length::mm10);\n\nwhich gives 28, too.",
+      "revId": "9b49712149936dd7ed9d1290b9b8871bfb817a66",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
