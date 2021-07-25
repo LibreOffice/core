@@ -350,8 +350,7 @@ bool SidebarTextControl::MouseButtonDown(const MouseEvent& rMEvt)
 {
     if (EditView* pEditView = GetEditView())
     {
-        SvtSecurityOptions aSecOpts;
-        bool bExecuteMod = aSecOpts.IsOptionSet( SvtSecurityOptions::EOption::CtrlClickHyperlink);
+        bool bExecuteMod = SvtSecurityOptions::IsOptionSet( SvtSecurityOptions::EOption::CtrlClickHyperlink);
 
         if ( !bExecuteMod || (rMEvt.GetModifier() == KEY_MOD1))
         {

@@ -410,8 +410,7 @@ void SwEditWin::UpdatePointer(const Point &rLPt, sal_uInt16 nModifier )
     bool bExecHyperlinks = m_rView.GetDocShell()->IsReadOnly();
     if ( !bExecHyperlinks )
     {
-        SvtSecurityOptions aSecOpts;
-        const bool bSecureOption = aSecOpts.IsOptionSet( SvtSecurityOptions::EOption::CtrlClickHyperlink );
+        const bool bSecureOption = SvtSecurityOptions::IsOptionSet( SvtSecurityOptions::EOption::CtrlClickHyperlink );
         if ( (  bSecureOption && nModifier == KEY_MOD1 ) ||
              ( !bSecureOption && nModifier != KEY_MOD1 ) )
             bExecHyperlinks = true;
@@ -3127,8 +3126,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
         bool bExecHyperlinks = m_rView.GetDocShell()->IsReadOnly();
         if ( !bExecHyperlinks )
         {
-            SvtSecurityOptions aSecOpts;
-            const bool bSecureOption = aSecOpts.IsOptionSet( SvtSecurityOptions::EOption::CtrlClickHyperlink );
+            const bool bSecureOption = SvtSecurityOptions::IsOptionSet( SvtSecurityOptions::EOption::CtrlClickHyperlink );
             if ((bSecureOption && aMEvt.GetModifier() == KEY_MOD1)
                 || (!bSecureOption && aMEvt.GetModifier() != KEY_MOD1))
                 bExecHyperlinks = true;
@@ -4692,8 +4690,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                         bool bExecHyperlinks = m_rView.GetDocShell()->IsReadOnly();
                         if ( !bExecHyperlinks )
                         {
-                            SvtSecurityOptions aSecOpts;
-                            const bool bSecureOption = aSecOpts.IsOptionSet( SvtSecurityOptions::EOption::CtrlClickHyperlink );
+                            const bool bSecureOption = SvtSecurityOptions::IsOptionSet( SvtSecurityOptions::EOption::CtrlClickHyperlink );
                             if ( (  bSecureOption && rMEvt.GetModifier() == KEY_MOD1 ) ||
                                  ( !bSecureOption && rMEvt.GetModifier() != KEY_MOD1 ) )
                                 bExecHyperlinks = true;

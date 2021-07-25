@@ -23,14 +23,13 @@
 
 namespace
 {
-    bool enableAndSet(const SvtSecurityOptions& rOptions,
-                      SvtSecurityOptions::EOption eOption,
+    bool enableAndSet(SvtSecurityOptions::EOption eOption,
                       weld::CheckButton& rCheckBox, weld::Widget& rFixedImage)
     {
-        bool bEnable = rOptions.IsOptionEnabled(eOption);
+        bool bEnable = !SvtSecurityOptions::IsReadOnly(eOption);
         rCheckBox.set_sensitive(bEnable);
         rFixedImage.set_visible(!bEnable);
-        rCheckBox.set_active(rOptions.IsOptionSet(eOption));
+        rCheckBox.set_active(SvtSecurityOptions::IsOptionSet(eOption));
         return bEnable;
     }
 }
@@ -38,7 +37,7 @@ namespace
 namespace svx
 {
 
-SecurityOptionsDialog::SecurityOptionsDialog(weld::Window* pParent, SvtSecurityOptions const * pOptions)
+SecurityOptionsDialog::SecurityOptionsDialog(weld::Window* pParent)
     : GenericDialogController(pParent, "cui/ui/securityoptionsdialog.ui", "SecurityOptionsDialog")
     , m_xSaveOrSendDocsCB(m_xBuilder->weld_check_button("savesenddocs"))
     , m_xSaveOrSendDocsImg(m_xBuilder->weld_widget("locksavesenddocs"))
@@ -57,22 +56,21 @@ SecurityOptionsDialog::SecurityOptionsDialog(weld::Window* pParent, SvtSecurityO
     , m_xBlockUntrustedRefererLinksCB(m_xBuilder->weld_check_button("blockuntrusted"))
     , m_xBlockUntrustedRefererLinksImg(m_xBuilder->weld_widget("lockblockuntrusted"))
 {
-    DBG_ASSERT( pOptions, "SecurityOptionsDialog::SecurityOptionsDialog(): invalid SvtSecurityOptions" );
-    enableAndSet(*pOptions, SvtSecurityOptions::EOption::DocWarnSaveOrSend, *m_xSaveOrSendDocsCB,
+    enableAndSet(SvtSecurityOptions::EOption::DocWarnSaveOrSend, *m_xSaveOrSendDocsCB,
         *m_xSaveOrSendDocsImg);
-    enableAndSet(*pOptions, SvtSecurityOptions::EOption::DocWarnSigning, *m_xSignDocsCB,
+    enableAndSet(SvtSecurityOptions::EOption::DocWarnSigning, *m_xSignDocsCB,
         *m_xSignDocsImg);
-    enableAndSet(*pOptions, SvtSecurityOptions::EOption::DocWarnPrint, *m_xPrintDocsCB,
+    enableAndSet(SvtSecurityOptions::EOption::DocWarnPrint, *m_xPrintDocsCB,
         *m_xPrintDocsImg);
-    enableAndSet(*pOptions, SvtSecurityOptions::EOption::DocWarnCreatePdf, *m_xCreatePdfCB,
+    enableAndSet(SvtSecurityOptions::EOption::DocWarnCreatePdf, *m_xCreatePdfCB,
         *m_xCreatePdfImg);
-    enableAndSet(*pOptions, SvtSecurityOptions::EOption::DocWarnRemovePersonalInfo, *m_xRemovePersInfoCB,
+    enableAndSet(SvtSecurityOptions::EOption::DocWarnRemovePersonalInfo, *m_xRemovePersInfoCB,
         *m_xRemovePersInfoImg);
-    enableAndSet(*pOptions, SvtSecurityOptions::EOption::DocWarnRecommendPassword, *m_xRecommPasswdCB,
+    enableAndSet(SvtSecurityOptions::EOption::DocWarnRecommendPassword, *m_xRecommPasswdCB,
         *m_xRecommPasswdImg);
-    enableAndSet(*pOptions, SvtSecurityOptions::EOption::CtrlClickHyperlink, *m_xCtrlHyperlinkCB,
+    enableAndSet(SvtSecurityOptions::EOption::CtrlClickHyperlink, *m_xCtrlHyperlinkCB,
         *m_xCtrlHyperlinkImg);
-    enableAndSet(*pOptions, SvtSecurityOptions::EOption::BlockUntrustedRefererLinks, *m_xBlockUntrustedRefererLinksCB,
+    enableAndSet(SvtSecurityOptions::EOption::BlockUntrustedRefererLinks, *m_xBlockUntrustedRefererLinksCB,
         *m_xBlockUntrustedRefererLinksImg);
 }
 

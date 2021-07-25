@@ -113,10 +113,9 @@ FuSelection::~FuSelection()
 
 namespace {
     bool lcl_followHyperlinkAllowed(const MouseEvent& rMEvt) {
-        SvtSecurityOptions aSecOpt;
-        if (!rMEvt.IsMod1() && aSecOpt.IsOptionSet(SvtSecurityOptions::EOption::CtrlClickHyperlink))
+        if (!rMEvt.IsMod1() && SvtSecurityOptions::IsOptionSet(SvtSecurityOptions::EOption::CtrlClickHyperlink))
             return false;
-        if (rMEvt.IsMod1() && !aSecOpt.IsOptionSet(SvtSecurityOptions::EOption::CtrlClickHyperlink))
+        if (rMEvt.IsMod1() && !SvtSecurityOptions::IsOptionSet(SvtSecurityOptions::EOption::CtrlClickHyperlink))
             return false;
         return true;
     }

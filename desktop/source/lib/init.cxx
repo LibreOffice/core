@@ -2314,7 +2314,7 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
             if (aFormatter.IsNumberFormat(aMacroSecurityLevel, nFormat, nNumber))
                 nMacroSecurityLevel = static_cast<int>(nNumber);
         }
-        SvtSecurityOptions().SetMacroSecurityLevel(nMacroSecurityLevel);
+        SvtSecurityOptions::SetMacroSecurityLevel(nMacroSecurityLevel);
 
 #if defined(ANDROID) && HAVE_FEATURE_ANDROID_LOK
         sal_Int16 nMacroExecMode = document::MacroExecMode::USE_CONFIG;

@@ -475,7 +475,6 @@ IMPL_STATIC_LINK(SvxProxyTabPage, LoseFocusHdl_Impl, weld::Widget&, rControl, vo
 /********************************************************************/
 SvxSecurityTabPage::SvxSecurityTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
     : SfxTabPage(pPage, pController, "cui/ui/optsecuritypage.ui", "OptSecurityPage", &rSet)
-    , mpSecOptions(new SvtSecurityOptions)
     , m_xSecurityOptionsPB(m_xBuilder->weld_button("options"))
     , m_xSavePasswordsCB(m_xBuilder->weld_check_button("savepassword"))
     , m_xShowConnectionsPB(m_xBuilder->weld_button("connections"))
@@ -523,7 +522,7 @@ SvxSecurityTabPage::~SvxSecurityTabPage()
 IMPL_LINK_NOARG(SvxSecurityTabPage, SecurityOptionsHdl, weld::Button&, void)
 {
     if (!m_xSecOptDlg)
-        m_xSecOptDlg.reset(new svx::SecurityOptionsDialog(GetFrameWeld(), mpSecOptions.get()));
+        m_xSecOptDlg.reset(new svx::SecurityOptionsDialog(GetFrameWeld()));
     m_xSecOptDlg->run();
 }
 
@@ -766,15 +765,15 @@ DeactivateRC SvxSecurityTabPage::DeactivatePage( SfxItemSet* _pSet )
 
 namespace
 {
-    bool CheckAndSave( SvtSecurityOptions& _rOpt, SvtSecurityOptions::EOption _eOpt, const bool _bIsChecked, bool& _rModified )
+    bool CheckAndSave( SvtSecurityOptions::EOption _eOpt, const bool _bIsChecked, bool& _rModified )
     {
         bool bModified = false;
-        if ( _rOpt.IsOptionEnabled( _eOpt ) )
+        if ( !SvtSecurityOptions::IsReadOnly( _eOpt ) )
         {
-            bModified = _rOpt.IsOptionSet( _eOpt ) != _bIsChecked;
+            bModified = SvtSecurityOptions::IsOptionSet( _eOpt ) != _bIsChecked;
             if ( bModified )
             {
-                _rOpt.SetOption( _eOpt, _bIsChecked );
+                SvtSecurityOptions::SetOption( _eOpt, _bIsChecked );
                 _rModified = true;
             }
         }
@@ -789,14 +788,14 @@ bool SvxSecurityTabPage::FillItemSet( SfxItemSet* )
 
     if (m_xSecOptDlg)
     {
-        CheckAndSave( *mpSecOptions, SvtSecurityOptions::EOption::DocWarnSaveOrSend, m_xSecOptDlg->IsSaveOrSendDocsChecked(), bModified );
-        CheckAndSave( *mpSecOptions, SvtSecurityOptions::EOption::DocWarnSigning, m_xSecOptDlg->IsSignDocsChecked(), bModified );
-        CheckAndSave( *mpSecOptions, SvtSecurityOptions::EOption::DocWarnPrint, m_xSecOptDlg->IsPrintDocsChecked(), bModified );
-        CheckAndSave( *mpSecOptions, SvtSecurityOptions::EOption::DocWarnCreatePdf, m_xSecOptDlg->IsCreatePdfChecked(), bModified );
-        CheckAndSave( *mpSecOptions, SvtSecurityOptions::EOption::DocWarnRemovePersonalInfo, m_xSecOptDlg->IsRemovePersInfoChecked(), bModified );
-        CheckAndSave( *mpSecOptions, SvtSecurityOptions::EOption::DocWarnRecommendPassword, m_xSecOptDlg->IsRecommPasswdChecked(), bModified );
-        CheckAndSave( *mpSecOptions, SvtSecurityOptions::EOption::CtrlClickHyperlink, m_xSecOptDlg->IsCtrlHyperlinkChecked(), bModified );
-        CheckAndSave( *mpSecOptions, SvtSecurityOptions::EOption::BlockUntrustedRefererLinks, m_xSecOptDlg->IsBlockUntrustedRefererLinksChecked(), bModified );
+        CheckAndSave( SvtSecurityOptions::EOption::DocWarnSaveOrSend, m_xSecOptDlg->IsSaveOrSendDocsChecked(), bModified );
+        CheckAndSave( SvtSecurityOptions::EOption::DocWarnSigning, m_xSecOptDlg->IsSignDocsChecked(), bModified );
+        CheckAndSave( SvtSecurityOptions::EOption::DocWarnPrint, m_xSecOptDlg->IsPrintDocsChecked(), bModified );
+        CheckAndSave( SvtSecurityOptions::EOption::DocWarnCreatePdf, m_xSecOptDlg->IsCreatePdfChecked(), bModified );
+        CheckAndSave( SvtSecurityOptions::EOption::DocWarnRemovePersonalInfo, m_xSecOptDlg->IsRemovePersInfoChecked(), bModified );
+        CheckAndSave( SvtSecurityOptions::EOption::DocWarnRecommendPassword, m_xSecOptDlg->IsRecommPasswdChecked(), bModified );
+        CheckAndSave( SvtSecurityOptions::EOption::CtrlClickHyperlink, m_xSecOptDlg->IsCtrlHyperlinkChecked(), bModified );
+        CheckAndSave( SvtSecurityOptions::EOption::BlockUntrustedRefererLinks, m_xSecOptDlg->IsBlockUntrustedRefererLinksChecked(), bModified );
     }
 
     return bModified;

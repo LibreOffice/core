@@ -3147,8 +3147,7 @@ void DocxAttributeOutput::Redline( const SwRedlineData* pRedlineData)
     if ( !pRedlineData )
         return;
 
-    SvtSecurityOptions aSecOpt;
-    bool bRemovePersonalInfo = aSecOpt.IsOptionSet(
+    bool bRemovePersonalInfo = SvtSecurityOptions::IsOptionSet(
         SvtSecurityOptions::EOption::DocWarnRemovePersonalInfo );
 
     OString aId( OString::number( pRedlineData->GetSeqNo() ) );
@@ -3255,8 +3254,7 @@ void DocxAttributeOutput::StartRedline( const SwRedlineData * pRedlineData )
 
     OString aId( OString::number( m_nRedlineId++ ) );
 
-    SvtSecurityOptions aSecOpt;
-    bool bRemovePersonalInfo = aSecOpt.IsOptionSet(
+    bool bRemovePersonalInfo = SvtSecurityOptions::IsOptionSet(
         SvtSecurityOptions::EOption::DocWarnRemovePersonalInfo );
 
     const OUString &rAuthor( SW_MOD()->GetRedlineAuthor( pRedlineData->GetAuthor() ) );
@@ -4378,8 +4376,7 @@ void DocxAttributeOutput::TableRowRedline( ww8::WW8TableNodeInfoInner::Pointer_t
     const SvxPrintItem *pHasTextChangesOnlyProp =
             pTabLine->GetFrameFormat()->GetAttrSet().GetItem<SvxPrintItem>(RES_PRINT);
 
-    SvtSecurityOptions aSecOpt;
-    bool bRemovePersonalInfo = aSecOpt.IsOptionSet(
+    bool bRemovePersonalInfo = SvtSecurityOptions::IsOptionSet(
         SvtSecurityOptions::EOption::DocWarnRemovePersonalInfo );
 
     if ( !aRedlineTable.empty() && pHasTextChangesOnlyProp && !pHasTextChangesOnlyProp->GetValue() )
@@ -4486,8 +4483,7 @@ void DocxAttributeOutput::TableCellRedline( ww8::WW8TableNodeInfoInner::Pointer_
 {
     const SwTableBox * pTabBox = pTableTextNodeInfoInner->getTableBox();
 
-    SvtSecurityOptions aSecOpt;
-    bool bRemovePersonalInfo = aSecOpt.IsOptionSet(
+    bool bRemovePersonalInfo = SvtSecurityOptions::IsOptionSet(
         SvtSecurityOptions::EOption::DocWarnRemovePersonalInfo );
 
     // search next Redline
@@ -8179,8 +8175,7 @@ void DocxAttributeOutput::WritePostitFieldReference()
 
 DocxAttributeOutput::hasResolved DocxAttributeOutput::WritePostitFields()
 {
-    SvtSecurityOptions aSecOpt;
-    bool bRemovePersonalInfo = aSecOpt.IsOptionSet(
+    bool bRemovePersonalInfo = SvtSecurityOptions::IsOptionSet(
         SvtSecurityOptions::EOption::DocWarnRemovePersonalInfo );
 
     hasResolved eResult = hasResolved::no;

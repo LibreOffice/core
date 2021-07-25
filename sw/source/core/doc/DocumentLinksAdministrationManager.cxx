@@ -225,7 +225,7 @@ void DocumentLinksAdministrationManager::UpdateLinks()
     if (nLinkMode == AUTOMATIC && !bAskUpdate)
     {
         SfxMedium * medium = m_rDoc.GetDocShell()->GetMedium();
-        if (!SvtSecurityOptions().isTrustedLocationUriForUpdatingLinks(
+        if (!SvtSecurityOptions::isTrustedLocationUriForUpdatingLinks(
                 medium == nullptr ? OUString() : medium->GetName()))
         {
             bAskUpdate = true;

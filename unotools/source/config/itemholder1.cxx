@@ -149,10 +149,6 @@ void ItemHolder1::impl_newItem(TItemInfo& rItem)
             rItem.pItem.reset( new SvtPathOptions() );
             break;
 
-        case EItem::SecurityOptions :
-            rItem.pItem.reset( new SvtSecurityOptions() );
-            break;
-
         case EItem::ViewOptionsDialog :
             rItem.pItem.reset( new SvtViewOptions(EViewType::Dialog, OUString()) );
             break;

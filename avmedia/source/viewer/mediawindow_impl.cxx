@@ -175,7 +175,7 @@ uno::Reference<media::XPlayer> MediaWindowImpl::createPlayer(const OUString& rUR
     if( rURL.isEmpty() )
         return xPlayer;
 
-    if (SvtSecurityOptions().isUntrustedReferer(rReferer))
+    if (SvtSecurityOptions::isUntrustedReferer(rReferer))
     {
         return xPlayer;
     }

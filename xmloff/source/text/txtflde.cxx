@@ -1746,8 +1746,7 @@ void XMLTextFieldExport::ExportFieldHelper(
         DBG_ASSERT(sPresentation.isEmpty(),
                    "Unexpected presentation for annotation field");
 
-        SvtSecurityOptions aSecOpt;
-        bool bRemovePersonalInfo = aSecOpt.IsOptionSet(
+        bool bRemovePersonalInfo = SvtSecurityOptions::IsOptionSet(
             SvtSecurityOptions::EOption::DocWarnRemovePersonalInfo );
 
         // annotation element + content
