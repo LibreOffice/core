@@ -16,29 +16,15 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_UNOTOOLS_DEFAULTOPTIONS_HXX
-#define INCLUDED_UNOTOOLS_DEFAULTOPTIONS_HXX
+#pragma once
 
 #include <unotools/unotoolsdllapi.h>
 #include <rtl/ustring.hxx>
-#include <unotools/options.hxx>
 #include <unotools/pathoptions.hxx>
-#include <memory>
 
-class SvtDefaultOptions_Impl;
-
-class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtDefaultOptions final : public utl::detail::Options
+namespace SvtDefaultOptions
 {
-private:
-    std::shared_ptr<SvtDefaultOptions_Impl> pImpl;
-
-public:
-    SvtDefaultOptions();
-    virtual ~SvtDefaultOptions() override;
-
-    OUString GetDefaultPath(SvtPathOptions::Paths nId) const;
+UNOTOOLS_DLLPUBLIC OUString GetDefaultPath(SvtPathOptions::Paths nId);
 };
-
-#endif // INCLUDED_UNOTOOLS_DEFAULTOPTIONS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

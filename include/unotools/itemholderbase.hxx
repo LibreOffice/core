@@ -39,8 +39,6 @@ enum class EItem
     Compatibility                 ,
     CTLOptions                    ,   // 2
 
-    DefaultOptions                ,
-
     EventConfig                   ,
 
     HistoryOptions                ,
