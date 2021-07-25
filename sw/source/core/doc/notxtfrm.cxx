@@ -1149,7 +1149,7 @@ void SwNoTextFrame::PaintPicture( vcl::RenderContext* pOut, const SwRect &rGrfAr
     {
         // Fix for bug fdo#33781
         const AntialiasingFlags nFormerAntialiasingAtOutput( pOut->GetAntialiasing() );
-        if (pShell->Imp()->GetDrawView()->IsAntiAliasing())
+        if (SwDrawView::IsAntiAliasing())
         {
             pOut->SetAntialiasing( nFormerAntialiasingAtOutput | AntialiasingFlags::Enable );
         }
@@ -1328,14 +1328,14 @@ void SwNoTextFrame::PaintPicture( vcl::RenderContext* pOut, const SwRect &rGrfAr
             }
         }
 
-        if ( pShell->Imp()->GetDrawView()->IsAntiAliasing() )
+        if ( SwDrawView::IsAntiAliasing() )
             pOut->SetAntialiasing( nFormerAntialiasingAtOutput );
     }
     else // bIsChart || pOLENd
     {
         // Fix for bug fdo#33781
         const AntialiasingFlags nFormerAntialiasingAtOutput( pOut->GetAntialiasing() );
-        if (pShell->Imp()->GetDrawView()->IsAntiAliasing())
+        if (SwDrawView::IsAntiAliasing())
         {
             AntialiasingFlags nNewAntialiasingAtOutput = nFormerAntialiasingAtOutput | AntialiasingFlags::Enable;
 
@@ -1414,7 +1414,7 @@ void SwNoTextFrame::PaintPicture( vcl::RenderContext* pOut, const SwRect &rGrfAr
         }
 
         // see #i99665#
-        if (pShell->Imp()->GetDrawView()->IsAntiAliasing())
+        if (SwDrawView::IsAntiAliasing())
         {
             pOut->SetAntialiasing( nFormerAntialiasingAtOutput );
         }

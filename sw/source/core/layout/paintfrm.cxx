@@ -115,6 +115,7 @@
 
 #include <vcl/BitmapTools.hxx>
 #include <comphelper/lok.hxx>
+#include <svtools/optionsdrawinglayer.hxx>
 
 #define COL_NOTES_SIDEPANE                  Color(230,230,230)
 #define COL_NOTES_SIDEPANE_BORDER           Color(200,200,200)
@@ -1735,13 +1736,11 @@ bool DrawFillAttributes(
             !basegfx::fTools::equalZero(aPaintRange.getWidth()) &&
             !basegfx::fTools::equalZero(aPaintRange.getHeight()))
         {
-            const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
-
             // need to expand for correct AAed and non-AAed visualization as primitive.
             // This must probably be removed again when we will be able to get all Writer visualization
             // as primitives and Writer prepares all it's stuff in high precision coordinates (also
             // needs to avoid moving boundaries around to better show overlapping stuff...)
-            if(aSvtOptionsDrawinglayer.IsAntiAliasing())
+            if(SvtOptionsDrawinglayer::IsAntiAliasing())
             {
                 // if AAed in principle expand by 0.5 in all directions. Since painting edges of
                 // AAed regions does not add to no transparence (0.5 opacity covered by 0.5 opacity

@@ -522,7 +522,6 @@ OfaViewTabPage::OfaViewTabPage(weld::Container* pPage, weld::DialogController* p
     , nStyleLB_InitialSelection(0)
     , pAppearanceCfg(new SvtTabAppearanceCfg)
     , pCanvasSettings(new CanvasSettings)
-    , mpDrawinglayerOpt(new SvtOptionsDrawinglayer)
     , m_xIconSizeLB(m_xBuilder->weld_combo_box("iconsize"))
     , m_xSidebarIconSizeLB(m_xBuilder->weld_combo_box("sidebariconsize"))
     , m_xNotebookbarIconSizeLB(m_xBuilder->weld_combo_box("notebookbariconsize"))
@@ -808,9 +807,9 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet* )
     // #i95644#  if disabled, do not use value, see in ::Reset()
     if (m_xUseAntiAliase->get_sensitive())
     {
-        if (m_xUseAntiAliase->get_active() != mpDrawinglayerOpt->IsAntiAliasing())
+        if (m_xUseAntiAliase->get_active() != SvtOptionsDrawinglayer::IsAntiAliasing())
         {
-            mpDrawinglayerOpt->SetAntiAliasing(m_xUseAntiAliase->get_active());
+            SvtOptionsDrawinglayer::SetAntiAliasing(m_xUseAntiAliase->get_active(), /*bTemporary*/false);
             bModified = true;
             bRepaintWindows = true;
         }
@@ -940,9 +939,9 @@ void OfaViewTabPage::Reset( const SfxItemSet* )
     m_xUseHardwareAccell->save_state();
 
     { // #i95644# AntiAliasing
-        if(mpDrawinglayerOpt->IsAAPossibleOnThisSystem())
+        if(SvtOptionsDrawinglayer::IsAAPossibleOnThisSystem())
         {
-            m_xUseAntiAliase->set_active(mpDrawinglayerOpt->IsAntiAliasing());
+            m_xUseAntiAliase->set_active(SvtOptionsDrawinglayer::IsAntiAliasing());
         }
         else
         {

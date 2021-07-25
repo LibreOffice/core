@@ -440,10 +440,9 @@ void ScreenshotAnnotationDlg_Impl::RepaintToBuffer(
         bUseDimmed ? maDimmedDialogBitmap : maParentDialogBitmap);
 
     // get various options
-    const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
-    const Color aHilightColor(aSvtOptionsDrawinglayer.getHilightColor());
-    const double fTransparence(aSvtOptionsDrawinglayer.GetTransparentSelectionPercent() * 0.01);
-    const bool bIsAntiAliasing(aSvtOptionsDrawinglayer.IsAntiAliasing());
+    const Color aHilightColor(SvtOptionsDrawinglayer::getHilightColor());
+    const double fTransparence(SvtOptionsDrawinglayer::GetTransparentSelectionPercent() * 0.01);
+    const bool bIsAntiAliasing(SvtOptionsDrawinglayer::IsAntiAliasing());
     const AntialiasingFlags nOldAA(mxVirtualBufferDevice->GetAntialiasing());
 
     if (bIsAntiAliasing)

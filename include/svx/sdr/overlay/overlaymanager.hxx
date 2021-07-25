@@ -26,7 +26,6 @@
 #include <tools/color.hxx>
 #include <tools/gen.hxx>
 #include <svx/svxdllapi.h>
-#include <svtools/optionsdrawinglayer.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <salhelper/simplereferenceobject.hxx>
@@ -65,9 +64,6 @@ namespace sdr::overlay
             Color                                       maStripeColorA; // defaults to COL_BLACK
             Color                                       maStripeColorB; // defaults to COL_WHITE
             sal_uInt32                                  mnStripeLengthPixel; // defaults to 4L
-
-            // hold an incarnation of Drawinglayer configuration options
-            SvtOptionsDrawinglayer                      maDrawinglayerOpt;
 
             // hold buffered the logic length of discrete vector (1.0, 0.0) and the
             // view transformation belonging to it. Update happens in getDiscreteOne()
@@ -123,9 +119,6 @@ namespace sdr::overlay
             // stripe support StripeLengthPixel
             sal_uInt32 getStripeLengthPixel() const { return mnStripeLengthPixel; }
             void setStripeLengthPixel(sal_uInt32 nNew);
-
-            // access to maDrawinglayerOpt
-            const SvtOptionsDrawinglayer& getDrawinglayerOpt() const { return maDrawinglayerOpt; }
 
             void InsertEvent(sdr::animation::Event& rNew) { Scheduler::InsertEvent(rNew); }
         };

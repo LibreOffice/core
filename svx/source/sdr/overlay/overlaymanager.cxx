@@ -27,6 +27,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <drawinglayer/processor2d/processor2dtools.hxx>
+#include <svtools/optionsdrawinglayer.hxx>
 #include <memory>
 
 
@@ -43,7 +44,7 @@ namespace sdr::overlay
                 return;
 
             const AntialiasingFlags nOriginalAA(rDestinationDevice.GetAntialiasing());
-            const bool bIsAntiAliasing(getDrawinglayerOpt().IsAntiAliasing());
+            const bool bIsAntiAliasing(SvtOptionsDrawinglayer::IsAntiAliasing());
 
             // create processor
             std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor(drawinglayer::processor2d::createProcessor2DFromOutputDevice(
@@ -117,7 +118,6 @@ namespace sdr::overlay
             maStripeColorA(COL_BLACK),
             maStripeColorB(COL_WHITE),
             mnStripeLengthPixel(5),
-            maDrawinglayerOpt(),
             maViewTransformation(),
             maViewInformation2D(),
             mfDiscreteOne(0.0)
@@ -282,7 +282,7 @@ namespace sdr::overlay
             if (rRange.isEmpty()) {
                 return {};
             }
-            if (getDrawinglayerOpt().IsAntiAliasing())
+            if (SvtOptionsDrawinglayer::IsAntiAliasing())
             {
                 // assume AA needs one pixel more and invalidate one pixel more
                 const double fDiscreteOne(getDiscreteOne());

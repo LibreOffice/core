@@ -22,7 +22,6 @@
 #include <svx/langbox.hxx>
 
 class CanvasSettings;
-class SvtOptionsDrawinglayer;
 
 namespace vcl {
     class IconThemeInfo;
@@ -83,7 +82,6 @@ private:
 
     std::unique_ptr<SvtTabAppearanceCfg>    pAppearanceCfg;
     std::unique_ptr<CanvasSettings>         pCanvasSettings;
-    std::unique_ptr<SvtOptionsDrawinglayer> mpDrawinglayerOpt;
 
     std::vector<vcl::IconThemeInfo> mInstalledIconThemes;
 

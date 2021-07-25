@@ -44,6 +44,7 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <comphelper/lok.hxx>
 #include <svx/svdviter.hxx>
+#include <svtools/optionsdrawinglayer.hxx>
 
 using namespace ::com::sun::star;
 
@@ -1146,7 +1147,7 @@ void SdrPaintView::SetApplicationDocumentColor(Color aDocumentColor)
 
 bool SdrPaintView::IsBufferedOutputAllowed() const
 {
-    return (mbBufferedOutputAllowed && maDrawinglayerOpt.IsPaintBuffer());
+    return (mbBufferedOutputAllowed && SvtOptionsDrawinglayer::IsPaintBuffer());
 }
 
 void SdrPaintView::SetBufferedOutputAllowed(bool bNew)
@@ -1159,7 +1160,7 @@ void SdrPaintView::SetBufferedOutputAllowed(bool bNew)
 
 bool SdrPaintView::IsBufferedOverlayAllowed() const
 {
-    return (mbBufferedOverlayAllowed && maDrawinglayerOpt.IsOverlayBuffer());
+    return (mbBufferedOverlayAllowed && SvtOptionsDrawinglayer::IsOverlayBuffer());
 }
 
 void SdrPaintView::SetBufferedOverlayAllowed(bool bNew)
