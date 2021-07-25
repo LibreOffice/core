@@ -134,10 +134,12 @@
 
 #include <memory>
 
-constexpr tools::Long constOleWidth = 11905 - 2 * lMinBorder;
-constexpr tools::Long constOleHeight = o3tl::convertTwip(tools::Long(3), o3tl::Length::cm);
+/* default (A4 format) width of 210mm - 2 * border size (border on both sides) */
+constexpr tools::Long constOleWidthInMm = 210 - 2 * lMinBorderInMm;
 
-#define OLESIZE constOleWidth, constOleHeight
+constexpr Size constOleSizeTwip(
+    o3tl::convertTwip(constOleWidthInMm, o3tl::Length::cm),
+    o3tl::convertTwip(tools::Long(3), o3tl::Length::cm));
 
 constexpr sal_uInt32 SWTRANSFER_OBJECTTYPE_DRAWMODEL = 0x00000001;
 constexpr sal_uInt32 SWTRANSFER_OBJECTTYPE_HTML      = 0x00000002;
@@ -343,7 +345,7 @@ void SwTransferable::InitOle( SfxObjectShell* pDoc )
 {
     //set OleVisArea. Upper left corner of the page and size of
     //RealSize in Twips.
-    const Size aSz( OLESIZE );
+    const Size aSz(constOleSizeTwip);
     SwRect aVis( Point( DOCUMENTBORDER, DOCUMENTBORDER ), aSz );
     pDoc->SetVisArea( aVis.SVRect() );
 }
@@ -1157,7 +1159,7 @@ int SwTransferable::PrepareForCopy( bool bIsCut )
         //ObjectDescriptor was already filly from the old DocShell.
         //Now adjust it. Thus in GetData the first query can still
         //be answered with delayed rendering.
-        Size aSz( OLESIZE );
+        Size aSz(constOleSizeTwip);
         m_aObjDesc.maSize = OutputDevice::LogicToLogic(aSz, MapMode(MapUnit::MapTwip), MapMode(MapUnit::Map100thMM));
 
         PrepareOLE( m_aObjDesc );
@@ -1260,7 +1262,7 @@ bool SwTransferable::CopyGlossary( SwTextBlocks& rGlossary, const OUString& rStr
     //ObjectDescriptor was already filled from the old DocShell.
     //Now adjust it. Thus in GetData the first query can still
     //be answered with delayed rendering.
-    Size aSz( OLESIZE );
+    Size aSz(constOleSizeTwip);
     m_aObjDesc.maSize = OutputDevice::LogicToLogic(aSz, MapMode(MapUnit::MapTwip), MapMode(MapUnit::Map100thMM));
 
     PrepareOLE( m_aObjDesc );
@@ -3627,7 +3629,7 @@ void SwTransferable::SetDataForDragAndDrop( const Point& rSttPos )
         //Now adjust it. Thus in GetData the first query can still
         //be answered with delayed rendering.
         m_aObjDesc.maDragStartPos = rSttPos;
-        m_aObjDesc.maSize = OutputDevice::LogicToLogic( Size( OLESIZE ),
+        m_aObjDesc.maSize = OutputDevice::LogicToLogic(constOleSizeTwip,
                     MapMode(MapUnit::MapTwip), MapMode(MapUnit::Map100thMM));
         PrepareOLE( m_aObjDesc );
         AddFormat( SotClipboardFormatId::OBJECTDESCRIPTOR );
