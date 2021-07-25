@@ -63,9 +63,7 @@ namespace sdr::overlay
         {
             if(OverlayType::Invert != aOverlayType)
             {
-                const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
-
-                if(!aSvtOptionsDrawinglayer.IsTransparentSelection())
+                if(!SvtOptionsDrawinglayer::IsTransparentSelection())
                 {
                     // not possible when switched off by user
                     return OverlayType::Invert;
@@ -186,8 +184,7 @@ namespace sdr::overlay
         {
             // get current values
             const OverlayType aNewOverlayType(impCheckPossibleOverlayType(meOverlayType));
-            const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
-            const sal_uInt16 nNewTransparence(aSvtOptionsDrawinglayer.GetTransparentSelectionPercent());
+            const sal_uInt16 nNewTransparence(SvtOptionsDrawinglayer::GetTransparentSelectionPercent());
 
             if(!getPrimitive2DSequence().empty())
             {

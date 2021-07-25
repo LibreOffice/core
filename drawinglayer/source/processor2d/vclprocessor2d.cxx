@@ -23,6 +23,7 @@
 #include "vclhelperbufferdevice.hxx"
 #include <cmath>
 #include <comphelper/string.hxx>
+#include <svtools/optionsdrawinglayer.hxx>
 #include <tools/debug.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/outdev.hxx>
@@ -346,8 +347,8 @@ void VclProcessor2D::RenderPolygonHairlinePrimitive2D(
     basegfx::B2DPolygon aLocalPolygon(rPolygonCandidate.getB2DPolygon());
     aLocalPolygon.transform(maCurrentTransformation);
 
-    if (bPixelBased && getOptionsDrawinglayer().IsAntiAliasing()
-        && getOptionsDrawinglayer().IsSnapHorVerLinesToDiscrete())
+    if (bPixelBased && SvtOptionsDrawinglayer::IsAntiAliasing()
+        && SvtOptionsDrawinglayer::IsSnapHorVerLinesToDiscrete())
     {
         // #i98289#
         // when a Hairline is painted and AntiAliasing is on the option SnapHorVerLinesToDiscrete
@@ -765,7 +766,7 @@ void VclProcessor2D::RenderMaskPrimitive2DPixel(const primitive2d::MaskPrimitive
     aMask.transform(maCurrentTransformation);
 
     // Unless smooth edges are needed, simply use clipping.
-    if (basegfx::utils::isRectangle(aMask) || !getOptionsDrawinglayer().IsAntiAliasing())
+    if (basegfx::utils::isRectangle(aMask) || !SvtOptionsDrawinglayer::IsAntiAliasing())
     {
         mpOutputDevice->Push(PushFlags::CLIPREGION);
         mpOutputDevice->IntersectClipRegion(vcl::Region(aMask));
@@ -1042,7 +1043,7 @@ void VclProcessor2D::RenderPolygonStrokePrimitive2D(
 
         if (nCount)
         {
-            const bool bAntiAliased(getOptionsDrawinglayer().IsAntiAliasing());
+            const bool bAntiAliased(SvtOptionsDrawinglayer::IsAntiAliasing());
             aHairlinePolyPolygon.transform(maCurrentTransformation);
 
             if (bAntiAliased)
@@ -1475,7 +1476,6 @@ VclProcessor2D::VclProcessor2D(const geometry::ViewInformation2D& rViewInformati
     , mpOutputDevice(&rOutDev)
     , maBColorModifierStack(rInitStack)
     , maCurrentTransformation()
-    , maDrawinglayerOpt()
     , mnPolygonStrokePrimitive2D(0)
     , mpObjectInfoPrimitive2D(nullptr)
 {

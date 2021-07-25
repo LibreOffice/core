@@ -27,6 +27,7 @@
 #include <basegfx/polygon/b3dpolygontools.hxx>
 #include <basegfx/polygon/b3dpolypolygontools.hxx>
 #include <drawinglayer/attribute/sdrlightingattribute3d.hxx>
+#include <svtools/optionsdrawinglayer.hxx>
 
 using namespace com::sun::star;
 
@@ -440,7 +441,7 @@ namespace drawinglayer::processor3d
 
                 if(mnAntiAlialize > 1)
                 {
-                    const bool bForceLineSnap(getOptionsDrawinglayer().IsAntiAliasing() && getOptionsDrawinglayer().IsSnapHorVerLinesToDiscrete());
+                    const bool bForceLineSnap(SvtOptionsDrawinglayer::IsAntiAliasing() && SvtOptionsDrawinglayer::IsSnapHorVerLinesToDiscrete());
 
                     if(bForceLineSnap)
                     {

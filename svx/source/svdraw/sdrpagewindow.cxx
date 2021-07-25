@@ -31,6 +31,7 @@
 #include <svx/sdr/contact/displayinfo.hxx>
 #include <svx/fmview.hxx>
 #include <sfx2/lokhelper.hxx>
+#include <svtools/optionsdrawinglayer.hxx>
 #include <tools/debug.hxx>
 #include <vcl/window.hxx>
 
@@ -428,12 +429,11 @@ void SdrPageWindow::InvalidatePageWindow(const basegfx::B2DRange& rRange)
 {
     if (GetPageView().IsVisible() && GetPaintWindow().OutputToWindow())
     {
-        const SvtOptionsDrawinglayer aDrawinglayerOpt;
         OutputDevice& rWindow(GetPaintWindow().GetOutputDevice());
         basegfx::B2DRange aDiscreteRange(rRange);
         aDiscreteRange.transform(rWindow.GetViewTransformation());
 
-        if (aDrawinglayerOpt.IsAntiAliasing())
+        if (SvtOptionsDrawinglayer::IsAntiAliasing())
         {
             // invalidate one discrete unit more under the assumption that AA
             // needs one pixel more

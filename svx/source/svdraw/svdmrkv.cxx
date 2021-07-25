@@ -57,6 +57,7 @@
 #include <sfx2/lokhelper.hxx>
 #include <sfx2/lokcharthelper.hxx>
 #include <sfx2/viewsh.hxx>
+#include <svtools/optionsdrawinglayer.hxx>
 
 #include <array>
 
@@ -148,8 +149,7 @@ public:
 
             if (xTargetOverlay.is())
             {
-                const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
-                const Color aHighlightColor = aSvtOptionsDrawinglayer.getHilightColor();
+                const Color aHighlightColor = SvtOptionsDrawinglayer::getHilightColor();
 
                 std::unique_ptr<sdr::overlay::OverlaySelection> pNew =
                     std::make_unique<sdr::overlay::OverlaySelection>(

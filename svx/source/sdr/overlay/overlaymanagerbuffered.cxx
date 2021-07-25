@@ -24,6 +24,7 @@
 #include <vcl/window.hxx>
 #include <tools/fract.hxx>
 #include <vcl/cursor.hxx>
+#include <svtools/optionsdrawinglayer.hxx>
 
 
 namespace sdr::overlay
@@ -412,7 +413,7 @@ namespace sdr::overlay
             basegfx::B2DRange aDiscreteRange(rRange);
             aDiscreteRange.transform(getOutputDevice().GetViewTransformation());
 
-            if(maDrawinglayerOpt.IsAntiAliasing())
+            if(SvtOptionsDrawinglayer::IsAntiAliasing())
             {
                 // assume AA needs one pixel more and invalidate one pixel more
                 const double fDiscreteOne(getDiscreteOne());

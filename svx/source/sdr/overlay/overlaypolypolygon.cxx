@@ -24,6 +24,7 @@
 #include <drawinglayer/primitive2d/PolyPolygonStrokePrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonColorPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
+#include <svtools/optionsdrawinglayer.hxx>
 
 
 namespace sdr::overlay
@@ -88,9 +89,8 @@ namespace sdr::overlay
 
                 aRetval = drawinglayer::primitive2d::Primitive2DContainer { aStriped };
 
-                const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
-                const basegfx::BColor aHilightColor(aSvtOptionsDrawinglayer.getHilightColor().getBColor());
-                const double fTransparence(aSvtOptionsDrawinglayer.GetTransparentSelectionPercent() * 0.01);
+                const basegfx::BColor aHilightColor(SvtOptionsDrawinglayer::getHilightColor().getBColor());
+                const double fTransparence(SvtOptionsDrawinglayer::GetTransparentSelectionPercent() * 0.01);
 
                 const drawinglayer::primitive2d::Primitive2DReference aFilled(
                     new drawinglayer::primitive2d::PolyPolygonSelectionPrimitive2D(
