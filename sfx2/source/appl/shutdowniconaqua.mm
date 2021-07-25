@@ -402,7 +402,7 @@ void aqua_init_systray()
             // collect the URLs of the entries in the File/New menu
             SvtModuleOptions    aModuleOptions;
             std::set< OUString > aFileNewAppsAvailable;
-            std::vector < SvtDynMenuEntry > const aNewMenu = SvtDynamicMenuOptions().GetMenu( EDynamicMenuType::NewMenu );
+            std::vector < SvtDynMenuEntry > const aNewMenu = SvtDynamicMenuOptions::GetMenu( EDynamicMenuType::NewMenu );
 
             for ( SvtDynMenuEntry const & newMenuProp : aNewMenu )
             {
