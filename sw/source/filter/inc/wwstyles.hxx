@@ -24,7 +24,7 @@
 
 namespace ww
 {
-    enum sti
+    enum sti : sal_uInt16
     {
         stiNormal = 0,                  // 0x0000
         stiLev1 = 1,                    // 0x0001
