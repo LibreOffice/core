@@ -370,9 +370,12 @@ bool ImplReadRegion( basegfx::B2DPolyPolygon& rPolyPoly, SvStream& rStream, sal_
         rPolyPoly.append( basegfx::utils::createPolygonFromRect( ::basegfx::B2DRectangle( nLeft, nTop, nRight, nBottom ) ) );
         SAL_INFO("emfio", "\t\t" << i << " Left: " << nLeft << ", top: " << nTop << ", right: " << nRight << ", bottom: " << nBottom);
     }
-    rPolyPoly = basegfx::utils::solveCrossovers(rPolyPoly);
-    rPolyPoly = basegfx::utils::stripNeutralPolygons(rPolyPoly);
-    rPolyPoly = basegfx::utils::stripDispensablePolygons(rPolyPoly);
+    if (!utl::ConfigManager::IsFuzzing())
+    {
+        rPolyPoly = basegfx::utils::solveCrossovers(rPolyPoly);
+        rPolyPoly = basegfx::utils::stripNeutralPolygons(rPolyPoly);
+        rPolyPoly = basegfx::utils::stripDispensablePolygons(rPolyPoly);
+    }
     return true;
 }
 
