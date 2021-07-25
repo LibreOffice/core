@@ -115,7 +115,6 @@ void SfxApplication::GetOptions( SfxItemSet& rSet )
     SfxItemPool &rPool = GetPool();
 
     const WhichRangesContainer& pRanges = rSet.GetRanges();
-    SvtSecurityOptions  aSecurityOptions;
     SvtMiscOptions aMiscOptions;
 
     for (auto const & pRange : pRanges)
@@ -281,12 +280,11 @@ void SfxApplication::GetOptions( SfxItemSet& rSet )
                 case SID_SECURE_URL :
                     {
                         bRet = true;
-                        if (!aSecurityOptions.IsReadOnly(SvtSecurityOptions::EOption::SecureUrls))
+                        if (!SvtSecurityOptions::IsReadOnly(SvtSecurityOptions::EOption::SecureUrls))
                         {
-                            css::uno::Sequence< OUString > seqURLs = aSecurityOptions.GetSecureURLs();
-                            auto aList = comphelper::sequenceToContainer<std::vector<OUString>>(seqURLs);
+                            std::vector< OUString > seqURLs = SvtSecurityOptions::GetSecureURLs();
 
-                            if( !rSet.Put( SfxStringListItem( rPool.GetWhich(SID_SECURE_URL), &aList ) ) )
+                            if( !rSet.Put( SfxStringListItem( rPool.GetWhich(SID_SECURE_URL), &seqURLs ) ) )
                                 bRet = false;
                         }
                     }
@@ -408,7 +406,6 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     const SfxPoolItem *pItem = nullptr;
     SfxItemPool &rPool = GetPool();
 
-    SvtSecurityOptions aSecurityOptions;
     SvtMiscOptions aMiscOptions;
     std::shared_ptr< comphelper::ConfigurationChanges > batch(
         comphelper::ConfigurationChanges::create());
@@ -644,9 +641,7 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     if ( SfxItemState::SET == rSet.GetItemState(SID_SECURE_URL, true, &pItem))
     {
         DBG_ASSERT(dynamic_cast< const SfxStringListItem *>( pItem ) !=  nullptr, "StringListItem expected");
-        css::uno::Sequence< OUString > seqURLs;
-        static_cast<const SfxStringListItem*>(pItem)->GetStringList(seqURLs);
-        aSecurityOptions.SetSecureURLs( seqURLs );
+        SvtSecurityOptions::SetSecureURLs( static_cast<const SfxStringListItem*>(pItem)->GetList() );
     }
 
     // Store changed data

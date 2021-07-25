@@ -663,7 +663,7 @@ sal_Bool DocumentDigitalSignatures::isAuthorTrusted(
     }
     OUString sSerialNum = xmlsecurity::bigIntegerToNumericString(xAuthor->getSerialNumber());
 
-    std::vector< SvtSecurityOptions::Certificate > aTrustedAuthors = SvtSecurityOptions().GetTrustedAuthors();
+    std::vector< SvtSecurityOptions::Certificate > aTrustedAuthors = SvtSecurityOptions::GetTrustedAuthors();
 
     return std::any_of(aTrustedAuthors.begin(), aTrustedAuthors.end(),
         [&xAuthor, &sSerialNum](const SvtSecurityOptions::Certificate& rAuthor) {
@@ -764,14 +764,12 @@ css::uno::Reference< css::security::XCertificate > DocumentDigitalSignatures::ch
 
 sal_Bool DocumentDigitalSignatures::isLocationTrusted( const OUString& Location )
 {
-    return SvtSecurityOptions().isTrustedLocationUri(Location);
+    return SvtSecurityOptions::isTrustedLocationUri(Location);
 }
 
 void DocumentDigitalSignatures::addAuthorToTrustedSources(
     const Reference< css::security::XCertificate >& Author )
 {
-    SvtSecurityOptions aSecOpts;
-
     SvtSecurityOptions::Certificate aNewCert;
     aNewCert.SubjectName = Author->getIssuerName();
     aNewCert.SerialNumber = xmlsecurity::bigIntegerToNumericString( Author->getSerialNumber() );
@@ -780,21 +778,17 @@ void DocumentDigitalSignatures::addAuthorToTrustedSources(
     ::comphelper::Base64::encode(aStrBuffer, Author->getEncoded());
     aNewCert.RawData = aStrBuffer.makeStringAndClear();
 
-    std::vector< SvtSecurityOptions::Certificate > aTrustedAuthors = aSecOpts.GetTrustedAuthors();
+    std::vector< SvtSecurityOptions::Certificate > aTrustedAuthors = SvtSecurityOptions::GetTrustedAuthors();
     aTrustedAuthors.push_back( aNewCert );
-    aSecOpts.SetTrustedAuthors( aTrustedAuthors );
+    SvtSecurityOptions::SetTrustedAuthors( aTrustedAuthors );
 }
 
 void DocumentDigitalSignatures::addLocationToTrustedSources( const OUString& Location )
 {
-    SvtSecurityOptions aSecOpt;
+    std::vector< OUString > aSecURLs = SvtSecurityOptions::GetSecureURLs();
+    aSecURLs.push_back(Location);
 
-    Sequence< OUString > aSecURLs = aSecOpt.GetSecureURLs();
-    sal_Int32 nCnt = aSecURLs.getLength();
-    aSecURLs.realloc( nCnt + 1 );
-    aSecURLs[ nCnt ] = Location;
-
-    aSecOpt.SetSecureURLs( aSecURLs );
+    SvtSecurityOptions::SetSecureURLs( aSecURLs );
 }
 
 sal_Bool DocumentDigitalSignatures::signDocumentWithCertificate(

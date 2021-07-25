@@ -615,10 +615,9 @@ bool ImpEditEngine::MouseButtonUp( const MouseEvent& rMEvt, EditView* pView )
                 // tdf#121039 When in edit mode, editeng is responsible for opening the URL on mouse click
                 if (auto pUrlField = dynamic_cast<const SvxURLField*>(pFld->GetField()))
                 {
-                    SvtSecurityOptions aSecOpt;
                     bool bCtrlClickHappened = rMEvt.IsMod1();
                     bool bCtrlClickSecOption
-                        = aSecOpt.IsOptionSet(SvtSecurityOptions::EOption::CtrlClickHyperlink);
+                        = SvtSecurityOptions::IsOptionSet(SvtSecurityOptions::EOption::CtrlClickHyperlink);
                     if ((bCtrlClickHappened && bCtrlClickSecOption)
                         || (!bCtrlClickHappened && !bCtrlClickSecOption))
                     {

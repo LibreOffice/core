@@ -927,7 +927,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
         }
     }
 
-    if (!SvtSecurityOptions().isSecureMacroUri(aFileName, aReferer))
+    if (!SvtSecurityOptions::isSecureMacroUri(aFileName, aReferer))
     {
         SfxErrorContext aCtx( ERRCTX_SFX_OPENDOC, aFileName );
         ErrorHandler::HandleError( ERRCODE_IO_ACCESSDENIED );

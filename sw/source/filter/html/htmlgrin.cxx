@@ -68,6 +68,7 @@
 
 #include <vcl/graphicfilter.hxx>
 #include <tools/urlobj.hxx>
+#include <unotools/securityoptions.hxx>
 
 using namespace ::com::sun::star;
 
@@ -307,7 +308,7 @@ namespace
         {
             sReferer = sh->GetMedium()->GetName();
         }
-        return !SvtSecurityOptions().isUntrustedReferer(sReferer);
+        return !SvtSecurityOptions::isUntrustedReferer(sReferer);
     }
 }
 

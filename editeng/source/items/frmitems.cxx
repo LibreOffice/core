@@ -72,6 +72,7 @@
 #include <o3tl/enumrange.hxx>
 #include <o3tl/safeint.hxx>
 #include <vcl/GraphicLoader.hxx>
+#include <unotools/securityoptions.hxx>
 
 #include <boost/property_tree/ptree.hpp>
 
@@ -3174,7 +3175,7 @@ const GraphicObject* SvxBrushItem::GetGraphicObject(OUString const & referer) co
     if (bLoadAgain && !maStrLink.isEmpty() && !xGraphicObject)
     // when graphics already loaded, use as a cache
     {
-        if (maSecOptions.isUntrustedReferer(referer)) {
+        if (SvtSecurityOptions::isUntrustedReferer(referer)) {
             return nullptr;
         }
 

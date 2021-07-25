@@ -203,6 +203,11 @@ namespace utl
                     const OUString& rNode,
                     const css::uno::Sequence< css::beans::PropertyValue >& rValues,
                     bool bAllLocales);
+            // change or add members to a set
+            static bool SetSetProperties(
+                    css::uno::Reference<css::container::XHierarchicalNameAccess> const & xHierarchyAccess,
+                    const OUString& rNode,
+                    const css::uno::Sequence< css::beans::PropertyValue >& rValues);
     };
 }//namespace utl
 #endif // INCLUDED_UNOTOOLS_CONFIGITEM_HXX

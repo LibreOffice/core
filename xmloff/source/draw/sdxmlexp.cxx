@@ -2516,8 +2516,7 @@ void SdXMLExport::exportAnnotations( const Reference<XDrawPage>& xDrawPage )
         Reference< XAnnotationEnumeration > xAnnotationEnumeration( xAnnotationAccess->createAnnotationEnumeration() );
         if( xAnnotationEnumeration.is() && xAnnotationEnumeration->hasMoreElements() )
         {
-            SvtSecurityOptions aSecOpt;
-            bool bRemovePersonalInfo = aSecOpt.IsOptionSet(
+            bool bRemovePersonalInfo = SvtSecurityOptions::IsOptionSet(
                 SvtSecurityOptions::EOption::DocWarnRemovePersonalInfo );
 
             OUStringBuffer sStringBuffer;

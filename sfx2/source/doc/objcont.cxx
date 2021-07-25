@@ -209,7 +209,7 @@ void SfxObjectShell::UpdateDocInfoForSave()
     uno::Reference<document::XDocumentProperties> xDocProps(getDocProperties());
 
     // clear user data if recommend (see 'Tools - Options - LibreOffice - Security')
-    if ( SvtSecurityOptions().IsOptionSet(
+    if ( SvtSecurityOptions::IsOptionSet(
             SvtSecurityOptions::EOption::DocWarnRemovePersonalInfo ) )
     {
         xDocProps->resetUserData( OUString() );
