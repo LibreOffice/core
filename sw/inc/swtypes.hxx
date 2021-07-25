@@ -69,7 +69,8 @@ constexpr SwTwips DEF_GUTTER_WIDTH = o3tl::convertTwip(tools::Long(3), o3tl::Len
 constexpr SwTwips MIN_BORDER_DIST = 28; // ~0.5mm
 
 // Minimal document border: 20mm.
-constexpr SwTwips lMinBorder = o3tl::convertTwip(tools::Long(20), o3tl::Length::mm); // ~20mm
+constexpr tools::Long lMinBorderInMm = tools::Long(20);
+constexpr SwTwips lMinBorder = o3tl::convertTwip(lMinBorderInMm, o3tl::Length::mm);
 static_assert(lMinBorder == 1134); // this was the old constant for 20mm, making sure o3tl::convert returns the same value
 
 // Margin left and above document.
