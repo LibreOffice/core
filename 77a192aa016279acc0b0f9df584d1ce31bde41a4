@@ -16,6 +16,24 @@
       "revId": "77a192aa016279acc0b0f9df584d1ce31bde41a4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4d606bad_88cd0177",
+        "filename": "sw/inc/swtypes.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-07-25T00:02:04Z",
+      "side": 1,
+      "message": "Did you see the follow up patch? 😊",
+      "parentUuid": "951372e1_d510a8b2",
+      "revId": "77a192aa016279acc0b0f9df584d1ce31bde41a4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
