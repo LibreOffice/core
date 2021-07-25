@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "8a03f8aa_ac50b466",
+        "filename": "include/o3tl/unit_conversion.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-07-25T22:43:36Z",
+      "side": 1,
+      "message": "Good point.. toTwip sounds fine. I first had convertToTwip but I found it too long so I tried to shorten it more. I didn\u0027t like toTwip for some reason - not sure why anymore :)",
+      "parentUuid": "dca85db9_624917fd",
+      "revId": "9b49712149936dd7ed9d1290b9b8871bfb817a66",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8ab8be24_eb85c977",
         "filename": "include/o3tl/unit_conversion.hxx",
         "patchSetId": 5
@@ -30,6 +48,24 @@
       "writtenOn": "2021-07-25T04:16:37Z",
       "side": 1,
       "message": "... and it may rely on convert defined at line 197, so simplified to\n\n    return convert(number, from, Length::twip);",
+      "revId": "9b49712149936dd7ed9d1290b9b8871bfb817a66",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "50049a53_0638fc4c",
+        "filename": "include/o3tl/unit_conversion.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-07-25T22:43:36Z",
+      "side": 1,
+      "message": "Yes, I was thinking why I didn\u0027t just call this when I was reviewing it in gerrit :)",
+      "parentUuid": "8ab8be24_eb85c977",
       "revId": "9b49712149936dd7ed9d1290b9b8871bfb817a66",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "0c5ee8bf_ef39e812",
+        "filename": "sw/inc/swtypes.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-07-25T22:43:36Z",
+      "side": 1,
+      "message": "I want to convert all those, but first need to review the code that it uses it to see if it is safe to convert. This is why I haven\u0027t done it in this patch - I concentrate on MM50 mainly here.",
+      "parentUuid": "182c7963_65bc7c5e",
+      "revId": "9b49712149936dd7ed9d1290b9b8871bfb817a66",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "573fc6f1_35a059cb",
         "filename": "sw/inc/swtypes.hxx",
         "patchSetId": 5
@@ -70,6 +124,24 @@
     },
     {
       "key": {
+        "uuid": "d16b5996_b2ebf433",
+        "filename": "sw/inc/swtypes.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-07-25T22:43:36Z",
+      "side": 1,
+      "message": "Oh, I thought to explicitly state the type to avoid implicitly casting it to a inferior type. I\u0027m too paranoid sometimes.. :)",
+      "parentUuid": "573fc6f1_35a059cb",
+      "revId": "9b49712149936dd7ed9d1290b9b8871bfb817a66",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2904ff51_8059605b",
         "filename": "sw/inc/swtypes.hxx",
         "patchSetId": 5
@@ -81,6 +153,24 @@
       "writtenOn": "2021-07-25T04:16:37Z",
       "side": 1,
       "message": "It may also be\n\n  constexpr SwTwips MIN_BORDER_DIST \u003d o3tl::convertTwip(5, o3tl::Length::mm10);\n\nwhich gives 28, too.",
+      "revId": "9b49712149936dd7ed9d1290b9b8871bfb817a66",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e1e131da_cdde7171",
+        "filename": "sw/inc/swtypes.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-07-25T22:43:36Z",
+      "side": 1,
+      "message": "Right, will do in a follow up.",
+      "parentUuid": "2904ff51_8059605b",
       "revId": "9b49712149936dd7ed9d1290b9b8871bfb817a66",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
