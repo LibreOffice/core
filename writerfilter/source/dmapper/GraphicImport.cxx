@@ -552,6 +552,26 @@ static bool lcl_bHasGroupSlantedChild(const SdrObject* pObj)
     return false;
 }
 
+void GraphicImport::lcl_correctWord2007EffectExtent(const sal_Int32 nMSOAngle)
+{
+    // Word versions older than 14 do not swap width and height (see lcl_doMSOWidthHeightSwap)
+    // and therefore generate different effectExtent. We correct them here.
+    sal_Int16 nAngleDeg = (nMSOAngle / 60000) % 180;
+    if (nAngleDeg >= 45 && nAngleDeg < 135)
+    {
+        sal_Int32 nDiff = o3tl::convert((m_pImpl->getXSize() - m_pImpl->getYSize()) / 2.0,
+                                     o3tl::Length::mm100, o3tl::Length::emu);
+        if (m_pImpl->m_oEffectExtentLeft)
+            *m_pImpl->m_oEffectExtentLeft += nDiff;
+        if (m_pImpl->m_oEffectExtentRight)
+            *m_pImpl->m_oEffectExtentRight += nDiff;
+        if (m_pImpl->m_oEffectExtentTop)
+            *m_pImpl->m_oEffectExtentTop -= nDiff;
+        if (m_pImpl->m_oEffectExtentBottom)
+            *m_pImpl->m_oEffectExtentBottom -= nDiff;
+    }
+}
+
 static void lcl_doMSOWidthHeightSwap(awt::Point& rLeftTop, awt::Size& rSize,
                                        const sal_Int32 nMSOAngle)
 {
@@ -965,6 +985,17 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                         // snap rectangle.
 
                         // Margin correction
+
+                        // tdf#143475: Word 2007 (vers 12) calculates effectExtent for rotated images
+                        // based on the unrotated image without width-height-swap. We correct this to
+                        // those values, which would be calculated if width-height-swap was used.
+                        if (m_pImpl->rDomainMapper.GetSettingsTable()->GetWordCompatibilityMode() < 14
+                            && xServiceInfo->supportsService("com.sun.star.drawing.GraphicObjectShape")
+                            && nOOXAngle != 0)
+                        {
+                            lcl_correctWord2007EffectExtent(nOOXAngle);
+                        }
+
                         if (m_pImpl->eGraphicImportType == IMPORT_AS_DETECTED_INLINE)
                         {
                             if (nOOXAngle == 0)

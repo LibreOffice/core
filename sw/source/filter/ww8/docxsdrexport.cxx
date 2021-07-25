@@ -13,6 +13,7 @@
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
+#include <editeng/unoprnms.hxx>
 #include <editeng/shaditem.hxx>
 #include <editeng/opaqitem.hxx>
 #include <editeng/boxitem.hxx>
@@ -141,6 +142,7 @@ bool lcl_IsRotateAngleValid(const SdrObject& rObj)
     {
         case OBJ_GRUP:
         case OBJ_LINE:
+        case OBJ_PLIN:
         case OBJ_PATHLINE:
         case OBJ_PATHFILL:
             return false;
@@ -150,7 +152,8 @@ bool lcl_IsRotateAngleValid(const SdrObject& rObj)
 }
 
 void lcl_calculateMSOBaseRectangle(const SdrObject& rObj, double& rfMSOLeft, double& rfMSORight,
-                                   double& rfMSOTop, double& rfMSOBottom)
+                                   double& rfMSOTop, double& rfMSOBottom,
+                                   const bool bIsWord2007Image)
 {
     // Word rotates around shape center, LO around left/top. Thus logic rectangle of LO is not
     // directly usable as 'base rectangle'.
@@ -159,10 +162,12 @@ void lcl_calculateMSOBaseRectangle(const SdrObject& rObj, double& rfMSOLeft, dou
     double fHalfWidth = rObj.GetLogicRect().getWidth() / 2.0;
     double fHalfHeight = rObj.GetLogicRect().getHeight() / 2.0;
 
-    // MSO swaps width and height depending on rotation angle.
+    // MSO swaps width and height depending on rotation angle; exception: Word 2007 (vers 12) never
+    // swaps width and height for images.
     double fRotation
         = lcl_IsRotateAngleValid(rObj) ? toDegrees(NormAngle36000(rObj.GetRotateAngle())) : 0.0;
-    if ((fRotation > 45.0 && fRotation <= 135.0) || (fRotation > 225.0 && fRotation <= 315.0))
+    if (((fRotation > 45.0 && fRotation <= 135.0) || (fRotation > 225.0 && fRotation <= 315.0))
+        && !bIsWord2007Image)
     {
         rfMSOLeft = fCenterX - fHalfHeight;
         rfMSORight = fCenterX + fHalfHeight;
@@ -180,16 +185,16 @@ void lcl_calculateMSOBaseRectangle(const SdrObject& rObj, double& rfMSOLeft, dou
 
 void lcl_calculateRawEffectExtent(sal_Int32& rLeft, sal_Int32& rTop, sal_Int32& rRight,
                                   sal_Int32& rBottom, const SdrObject& rObj,
-                                  const bool bUseBoundRect)
+                                  const bool bUseBoundRect, const bool bIsWord2007Image)
 {
     // This method calculates the extent needed, to let Word use the same outer area for the object
     // as LO. Word uses as 'base rectangle' the unrotated shape rectangle, maybe having swapped width
-    // and height depending on rotation angle.
+    // and height depending on rotation angle and version of Word.
     double fMSOLeft;
     double fMSORight;
     double fMSOTop;
     double fMSOBottom;
-    lcl_calculateMSOBaseRectangle(rObj, fMSOLeft, fMSORight, fMSOTop, fMSOBottom);
+    lcl_calculateMSOBaseRectangle(rObj, fMSOLeft, fMSORight, fMSOTop, fMSOBottom, bIsWord2007Image);
 
     tools::Rectangle aLORect = bUseBoundRect ? rObj.GetCurrentBoundRect() : rObj.GetSnapRect();
     rLeft = fMSOLeft - aLORect.Left();
@@ -618,11 +623,16 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
     }
     else // other objects than frames. pObj exists.
     {
+        // Word 2007 makes no width-hight-swap for images. Detect this situation.
+        sal_Int32 nMode = m_pImpl->getExport().getWordCompatibilityModeFromGrabBag();
+        bool bIsWord2007Image(nMode > 0 && nMode < 14 && pObj->GetObjIdentifier() == OBJ_GRAF);
+
         // Word cannot handle negative EffectExtent although allowed in OOXML, the 'dist' attributes
         // may not be negative. Take care of that.
         if (isAnchor)
         {
-            lcl_calculateRawEffectExtent(nLeftExt, nTopExt, nRightExt, nBottomExt, *pObj, true);
+            lcl_calculateRawEffectExtent(nLeftExt, nTopExt, nRightExt, nBottomExt, *pObj, true,
+                                         bIsWord2007Image);
             // We have calculated the effectExtent from boundRect, therefore half stroke width is
             // already contained.
             // ToDo: The other half of the stroke width needs to be subtracted from padding.
@@ -656,7 +666,8 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
         }
         else
         {
-            lcl_calculateRawEffectExtent(nLeftExt, nTopExt, nRightExt, nBottomExt, *pObj, false);
+            lcl_calculateRawEffectExtent(nLeftExt, nTopExt, nRightExt, nBottomExt, *pObj, false,
+                                         bIsWord2007Image);
             // nDistT,... contain the needed distances from import or set by user. But Word
             // ignores Dist attributes of inline shapes. So we move all needed distances to
             // effectExtent and force effectExtent to non-negative.
