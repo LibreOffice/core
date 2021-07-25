@@ -92,6 +92,30 @@
       "revId": "8b4f3eef2d6d86c9d9c2587c6c7b0d117a4be872",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e3a6573d_8210132b",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 483,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-07-25T15:55:12Z",
+      "side": 1,
+      "message": "We may pass m_atempStyleList here instead of nullptr. But the StyleList callback UpdateStyleDependents_Hdl does not use m_atempStyleList for any of its operation.\n\nI mean to say that how will we use m_atempStyleList in the callback? There are various private members of StyleList altered inside UpdateStyleDependents_Hdl. We cannot access m_atempStyleList\u0027s private members.",
+      "parentUuid": "dea2a64f_affb46ef",
+      "range": {
+        "startLine": 483,
+        "startChar": 8,
+        "endLine": 483,
+        "endChar": 42
+      },
+      "revId": "8b4f3eef2d6d86c9d9c2587c6c7b0d117a4be872",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
