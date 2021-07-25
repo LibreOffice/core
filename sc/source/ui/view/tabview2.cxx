@@ -595,6 +595,44 @@ void ScTabView::MarkCursor( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
 
     if ( !bCols && !bRows )
         aHdrFunc.SetAnchorFlag( false );
+
+    std::vector<std::vector<std::pair<SCTAB, ScRange>>>& vMark(rMark.GetSheetsMark());
+    std::vector<std::pair<SCTAB, ScRange>> tempVect;
+
+    bool bFound = false;
+    for (size_t i=0; i<vMark.size(); i++)
+    {
+        if (vMark[i][0].first == nCurZ)
+        {
+            vMark[i][0].second = aMarkRange;
+            bFound = true;
+            break;
+        }
+    }
+
+    if (!bFound)
+    {
+        tempVect.emplace_back(nCurZ, aMarkRange);
+        vMark.emplace_back(tempVect);
+    }
+
+    // Sorting sheets
+    if (vMark.size() > 2)
+    {
+        for (size_t k=0; k<vMark.size()-1; k++)
+        {
+            auto rFirst = vMark[k];
+            for (size_t j=k; j<vMark.size(); j++)
+            {
+                auto rSecond = vMark[j];
+                if (rSecond[0].first < rFirst[0].first)
+                {
+                    vMark[k] = rSecond;
+                    vMark[j] = rFirst;
+                }
+            }
+        }
+    }
 }
 
 void ScTabView::GetPageMoveEndPosition(SCCOL nMovX, SCROW nMovY, SCCOL& rPageX, SCROW& rPageY)
