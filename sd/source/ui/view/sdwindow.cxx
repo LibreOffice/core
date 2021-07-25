@@ -630,7 +630,7 @@ void Window::UpdateMapMode()
  */
 double Window::GetVisibleX() const
 {
-    return (static_cast<double>(maWinPos.X()) / maViewSize.Width());
+    return maViewSize.Width() == 0 ? 0 : (static_cast<double>(maWinPos.X()) / maViewSize.Width());
 }
 
 /**
@@ -639,7 +639,7 @@ double Window::GetVisibleX() const
  */
 double Window::GetVisibleY() const
 {
-    return (static_cast<double>(maWinPos.Y()) / maViewSize.Height());
+    return maViewSize.Height() == 0 ? 0 : (static_cast<double>(maWinPos.Y()) / maViewSize.Height());
 }
 
 /**
@@ -669,7 +669,8 @@ double Window::GetVisibleWidth() const
     Size aWinSize = PixelToLogic(GetOutputSizePixel());
     if ( aWinSize.Width() > maViewSize.Width() )
         aWinSize.setWidth( maViewSize.Width() );
-    return (static_cast<double>(aWinSize.Width()) / maViewSize.Width());
+    return
+        maViewSize.Width() == 0 ? 0 : (static_cast<double>(aWinSize.Width()) / maViewSize.Width());
 }
 
 /**
@@ -681,7 +682,8 @@ double Window::GetVisibleHeight() const
     Size aWinSize = PixelToLogic(GetOutputSizePixel());
     if ( aWinSize.Height() > maViewSize.Height() )
         aWinSize.setHeight( maViewSize.Height() );
-    return (static_cast<double>(aWinSize.Height()) / maViewSize.Height());
+    return maViewSize.Height() == 0
+        ? 0 : (static_cast<double>(aWinSize.Height()) / maViewSize.Height());
 }
 
 Point Window::GetVisibleCenter()
