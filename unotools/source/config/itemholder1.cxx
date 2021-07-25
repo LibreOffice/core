@@ -129,10 +129,6 @@ void ItemHolder1::impl_newItem(TItemInfo& rItem)
             rItem.pItem.reset( new SvtDefaultOptions() );
             break;
 
-        case EItem::DynamicMenuOptions :
-            rItem.pItem.reset( new SvtDynamicMenuOptions() );
-            break;
-
         case EItem::EventConfig :
             //rItem.pItem.reset( new GlobalEventConfig() );
             break;
