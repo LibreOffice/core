@@ -43,7 +43,6 @@
 
 #include <comphelper/propertysequence.hxx>
 #include <officecfg/Office/Common.hxx>
-#include <svtools/menuoptions.hxx>
 #include <svtools/javainteractionhandler.hxx>
 #include <uno/current_context.hxx>
 #include <unotools/cmdoptions.hxx>
@@ -571,7 +570,7 @@ IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu, bool )
                 css::uno::getCurrentContext()));
 
         // set/unset hiding disabled menu entries
-        bool bDontHide           = SvtMenuOptions().IsEntryHidingEnabled();
+        bool bDontHide           = officecfg::Office::Common::View::Menu::DontHideDisabledEntry::get();
         const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
         bool bShowMenuImages     = rSettings.GetUseImagesInMenus();
         bool bShowShortcuts      = m_bHasMenuBar || rSettings.GetContextMenuShortcuts();

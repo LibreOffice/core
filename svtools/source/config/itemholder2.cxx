@@ -26,7 +26,6 @@
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 
 #include <svtools/accessibilityoptions.hxx>
-#include <svtools/menuoptions.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svtools/printoptions.hxx>
 #include <unotools/options.hxx>
@@ -126,10 +125,6 @@ void ItemHolder2::impl_newItem(TItemInfo& rItem)
 
         case EItem::ColorConfig :
             rItem.pItem.reset( new ::svtools::ColorConfig() );
-            break;
-
-        case EItem::MenuOptions :
-            rItem.pItem.reset( new SvtMenuOptions() );
             break;
 
         case EItem::MiscOptions :
