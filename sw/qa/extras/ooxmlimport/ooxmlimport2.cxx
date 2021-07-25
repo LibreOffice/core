@@ -48,6 +48,55 @@ public:
     }
 };
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf143475rotatedWord2007imageInline)
+{
+    // Given a docx document with compatibility to Word version 12 (2007), which has a shape
+    // rotated by 75deg. Similar to testTdf143475rotatedWord2007image but with inline anchored
+    // shape, as in bug report.
+    load(mpTestDocumentPath, "tdf143475_rotatedWord2007imageInline.docx");
+
+    // Word 2007 does not swap width and height for rotated images as done in later versions.
+    // This was not considered and lead to wrong distance to text on import and wrong effectExtent
+    // on export.
+    // Import fails without fix with left: expected 1258 actual -743 ; right expected 1256 actual -743;
+    // top: expected 14 actual 2013; bottom: expected 0 actual 1960;
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(1258), getProperty<sal_Int32>(getShape(1), "LeftMargin"),
+                                 1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(1256),
+                                 getProperty<sal_Int32>(getShape(1), "RightMargin"), 1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(14), getProperty<sal_Int32>(getShape(1), "TopMargin"),
+                                 1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getShape(1), "BottomMargin"),
+                                 1);
+
+    // Because LO made the same error on export, which inverts the import error, import-export-cycle
+    // does not fail without the patch. Therefore no export test.
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf143475rotatedWord2007image)
+{
+    // Given a docx document with compatibility to Word version 12 (2007), which has a shape
+    // rotated by 75deg.
+    load(mpTestDocumentPath, "tdf143475_rotatedWord2007image.docx");
+
+    // Word 2007 does not swap width and height for rotated images as done in later versions.
+    // This was not considered and lead to wrong distance to text on import and wrong effectExtent
+    // on export.
+    // Import fails without fix with left: expected 1252 actual -746 ; right expected 1256 actual -743;
+    // top: expected 12 actual 2013; bottom: expected 0 actual 1960;
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(1252), getProperty<sal_Int32>(getShape(1), "LeftMargin"),
+                                 1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(1256),
+                                 getProperty<sal_Int32>(getShape(1), "RightMargin"), 1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(12), getProperty<sal_Int32>(getShape(1), "TopMargin"),
+                                 1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getShape(1), "BottomMargin"),
+                                 1);
+
+    // Because LO made the same error on export, which inverts the import error, import-export-cycle
+    // does not fail without the patch. Therefore no export test.
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf143219ContourWrapRotate)
 {
     load(mpTestDocumentPath, "tdf143219_ContourWrap_rotate.docx");
