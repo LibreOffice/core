@@ -18,6 +18,7 @@
  */
 
 #include <hintids.hxx>
+#include <svtools/optionsdrawinglayer.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/fmmodel.hxx>
@@ -118,16 +119,16 @@ SwDrawView::SwDrawView(
     SetPrintPreview( rI.GetShell()->IsPreview() );
 
     // #i73602# Use default from the configuration
-    SetBufferedOverlayAllowed(getOptionsDrawinglayer().IsOverlayBuffer_Writer());
+    SetBufferedOverlayAllowed(SvtOptionsDrawinglayer::IsOverlayBuffer_Writer());
 
     // #i74769#, #i75172# Use default from the configuration
-    SetBufferedOutputAllowed(getOptionsDrawinglayer().IsPaintBuffer_Writer());
+    SetBufferedOutputAllowed(SvtOptionsDrawinglayer::IsPaintBuffer_Writer());
 }
 
 // #i99665#
-bool SwDrawView::IsAntiAliasing() const
+bool SwDrawView::IsAntiAliasing()
 {
-    return getOptionsDrawinglayer().IsAntiAliasing();
+    return SvtOptionsDrawinglayer::IsAntiAliasing();
 }
 
 static SdrObject* impLocalHitCorrection(SdrObject* pRetval, const Point& rPnt, sal_uInt16 nTol, const SdrMarkList &rMrkList)

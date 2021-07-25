@@ -51,6 +51,7 @@
 #include <editeng/outliner.hxx>
 #include <svx/svdocapt.hxx>
 #include <svx/svdpagv.hxx>
+#include <svtools/optionsdrawinglayer.hxx>
 
 #include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
@@ -6349,8 +6350,7 @@ void ScGridWindow::UpdateSelectionOverlay()
             }
 
             // get the system's highlight color
-            const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
-            const Color aHighlight(aSvtOptionsDrawinglayer.getHilightColor());
+            const Color aHighlight(SvtOptionsDrawinglayer::getHilightColor());
 
             std::unique_ptr<sdr::overlay::OverlayObject> pOverlay(new sdr::overlay::OverlaySelection(
                 sdr::overlay::OverlayType::Transparent,

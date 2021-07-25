@@ -258,8 +258,7 @@ void ThumbnailView::ImplInit()
     maSelectHighlightColor = rSettings.GetActiveColor();
     maSelectHighlightTextColor = rSettings.GetActiveTextColor();
 
-    const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
-    mfHighlightTransparence = aSvtOptionsDrawinglayer.GetTransparentSelectionPercent() * 0.01;
+    mfHighlightTransparence = SvtOptionsDrawinglayer::GetTransparentSelectionPercent() * 0.01;
 
     mpStartSelRange = mFilteredItemList.end();
 

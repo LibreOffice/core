@@ -22,7 +22,6 @@
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/color/bcolormodifier.hxx>
-#include <svtools/optionsdrawinglayer.hxx>
 #include <vcl/vclptr.hxx>
 
 class OutputDevice;
@@ -73,9 +72,6 @@ protected:
     // ViewInformation2D cannot directly be used, but needs to be kept up to date
     basegfx::B2DHomMatrix maCurrentTransformation;
 
-    // SvtOptionsDrawinglayer incarnation to react on diverse settings
-    const SvtOptionsDrawinglayer maDrawinglayerOpt;
-
     // stack value (increment and decrement) to count how deep we are in
     // PolygonStrokePrimitive2D's decompositions (normally only one)
     sal_uInt32 mnPolygonStrokePrimitive2D;
@@ -123,9 +119,6 @@ public:
     VclProcessor2D(const geometry::ViewInformation2D& rViewInformation, OutputDevice& rOutDev,
                    const basegfx::BColorModifierStack& rInitStack = basegfx::BColorModifierStack());
     virtual ~VclProcessor2D() override;
-
-    // access to Drawinglayer configuration options
-    const SvtOptionsDrawinglayer& getOptionsDrawinglayer() const { return maDrawinglayerOpt; }
 
     // access to currently used ObjectInfoPrimitive2D
     const primitive2d::ObjectInfoPrimitive2D* getObjectInfoPrimitive2D() const

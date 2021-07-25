@@ -59,6 +59,7 @@
 #include <svx/sdrundomanager.hxx>
 #include <svx/strings.hrc>
 #include <svx/svdviter.hxx>
+#include <svtools/optionsdrawinglayer.hxx>
 #include <textchain.hxx>
 #include <textchaincursor.hxx>
 #include <tools/debug.hxx>
@@ -450,8 +451,7 @@ TextEditOverlayObject::createOverlayObjectPrimitive2DSequence()
     /// outer frame visualization
     if (mbVisualizeSurroundingFrame)
     {
-        const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
-        const double fTransparence(aSvtOptionsDrawinglayer.GetTransparentSelectionPercent() * 0.01);
+        const double fTransparence(SvtOptionsDrawinglayer::GetTransparentSelectionPercent() * 0.01);
         const sal_uInt16 nPixSiz(getOutlinerView().GetInvalidateMore() - 1);
 
         aRetval.push_back(new drawinglayer::primitive2d::OverlayRectanglePrimitive(
@@ -777,9 +777,8 @@ void SdrObjEditView::ImpPaintOutlinerView(OutlinerView& rOutlView, const tools::
 
         const bool bMapModeEnabled(rTargetDevice.IsMapModeEnabled());
         const basegfx::B2DRange aRange = vcl::unotools::b2DRectangleFromRectangle(aPixRect);
-        const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
-        const Color aHilightColor(aSvtOptionsDrawinglayer.getHilightColor());
-        const double fTransparence(aSvtOptionsDrawinglayer.GetTransparentSelectionPercent() * 0.01);
+        const Color aHilightColor(SvtOptionsDrawinglayer::getHilightColor());
+        const double fTransparence(SvtOptionsDrawinglayer::GetTransparentSelectionPercent() * 0.01);
         const sal_uInt16 nPixSiz(rOutlView.GetInvalidateMore() - 1);
         const drawinglayer::primitive2d::Primitive2DReference xReference(
             new drawinglayer::primitive2d::OverlayRectanglePrimitive(
@@ -1232,8 +1231,7 @@ bool SdrObjEditView::SdrBeginTextEdit(SdrObject* pObj_, SdrPageView* pPV, vcl::W
                 // LibreOfficeKit is active
                 pTextEditOutlinerView->GetEditView().setEditViewCallbacks(this);
 
-                const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
-                const Color aHilightColor(aSvtOptionsDrawinglayer.getHilightColor());
+                const Color aHilightColor(SvtOptionsDrawinglayer::getHilightColor());
                 const SdrTextObj* pText = GetTextEditObject();
                 const bool bTextFrame(pText && pText->IsTextFrame());
                 const bool bFitToSize(pTextEditOutliner->GetControlWord()

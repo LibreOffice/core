@@ -33,6 +33,7 @@
 #include <svx/svdoashp.hxx>
 #include <svx/sdrpaintwindow.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <svtools/optionsdrawinglayer.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #include <svx/sdrpagewindow.hxx>
 #include <osl/diagnose.h>
@@ -50,7 +51,7 @@ SdrDragView::SdrDragView(SdrModel& rSdrModel, OutputDevice* pOut)
     , mbDragLimit(false)
     , mbDragHdl(false)
     , mbDragStripes(false)
-    , mbSolidDragging(getOptionsDrawinglayer().IsSolidDragCreate())
+    , mbSolidDragging(SvtOptionsDrawinglayer::IsSolidDragCreate())
     , mbResizeAtCenter(false)
     , mbCrookAtCenter(false)
     , mbDragWithCopy(false)
@@ -911,7 +912,7 @@ bool SdrDragView::IsSolidDragging() const
 {
     // allow each user to disable by having a local setting, but using AND for
     // checking allowance
-    return mbSolidDragging && getOptionsDrawinglayer().IsSolidDragCreate();
+    return mbSolidDragging && SvtOptionsDrawinglayer::IsSolidDragCreate();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

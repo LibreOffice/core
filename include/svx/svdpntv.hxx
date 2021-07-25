@@ -27,7 +27,6 @@
 #include <svtools/colorcfg.hxx>
 #include <svl/itemset.hxx>
 #include <svx/svxdllapi.h>
-#include <svtools/optionsdrawinglayer.hxx>
 #include <unotools/options.hxx>
 #include <vcl/event.hxx>
 #include <vcl/idle.hxx>
@@ -150,9 +149,6 @@ protected:
     sal_uInt16                  mnHitTolLog;
     sal_uInt16                  mnMinMovLog;
 
-    // Hold an incarnation of Drawinglayer configuration options
-    SvtOptionsDrawinglayer      maDrawinglayerOpt;
-
     bool                        mbPageVisible : 1;
     bool                        mbPageShadowVisible : 1;
     bool                        mbPageBorderVisible : 1;
@@ -216,7 +212,7 @@ protected:
     // Interface to SdrPaintWindow
     void DeletePaintWindow(SdrPaintWindow& rOld);
     void ConfigurationChanged( ::utl::ConfigurationBroadcaster*, ConfigurationHints ) override;
-    void InitOverlayManager(rtl::Reference<sdr::overlay::OverlayManager> xOverlayManager) const;
+    static void InitOverlayManager(rtl::Reference<sdr::overlay::OverlayManager> xOverlayManager);
 
 public:
     sal_uInt32 PaintWindowCount() const { return maPaintWindows.size(); }
@@ -503,9 +499,6 @@ public:
     // #i38135#
     // Sets the timer for Object animations and restarts.
     void SetAnimationTimer(sal_uInt32 nTime);
-
-    // Access to Drawinglayer configuration options
-    const SvtOptionsDrawinglayer& getOptionsDrawinglayer() const { return maDrawinglayerOpt; }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
