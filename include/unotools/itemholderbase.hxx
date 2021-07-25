@@ -40,7 +40,6 @@ enum class EItem
     CTLOptions                    ,   // 2
 
     DefaultOptions                ,
-    DynamicMenuOptions            ,
 
     EventConfig                   ,
 

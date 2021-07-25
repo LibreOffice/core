@@ -326,7 +326,7 @@ void NewMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu > const &
         return;
 
     const std::vector< SvtDynMenuEntry > aDynamicMenuEntries =
-        SvtDynamicMenuOptions().GetMenu( m_bNewMenu ? EDynamicMenuType::NewMenu : EDynamicMenuType::WizardMenu );
+        SvtDynamicMenuOptions::GetMenu( m_bNewMenu ? EDynamicMenuType::NewMenu : EDynamicMenuType::WizardMenu );
 
     sal_uInt16 nItemId = 1;
 
