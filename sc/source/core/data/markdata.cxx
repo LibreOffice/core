@@ -28,6 +28,7 @@
 #include <columnspanset.hxx>
 #include <fstalgorithm.hxx>
 #include <unordered_map>
+#include <tabview.hxx>
 
 #include <osl/diagnose.h>
 
@@ -171,13 +172,22 @@ void ScMarkData::SetAreaTab( SCTAB nTab )
 
 void ScMarkData::SelectTable( SCTAB nTab, bool bNew )
 {
+    std::vector<std::vector<std::pair<SCTAB, ScRange>>>& vMark(GetSheetsMark());
+
     if ( bNew )
     {
         maTabMarked.insert( nTab );
+
+        for(auto &a : vMark)
+            if (a[0].first == nTab)
+                SetMarkArea(a[0].second);
     }
     else
     {
         maTabMarked.erase( nTab );
+
+        if (IsMarked())
+            ResetMark();
     }
 }
 
@@ -624,6 +634,9 @@ bool ScMarkData::HasAnyMultiMarks() const
 
 void ScMarkData::InsertTab( SCTAB nTab )
 {
+    std::vector<std::vector<std::pair<SCTAB, ScRange>>>& vMark(GetSheetsMark());
+    std::vector<std::pair<SCTAB, ScRange>> tempVect;
+
     std::set<SCTAB> tabMarked;
     for (const auto& rTab : maTabMarked)
     {
@@ -633,10 +646,28 @@ void ScMarkData::InsertTab( SCTAB nTab )
             tabMarked.insert(rTab + 1);
     }
     maTabMarked.swap(tabMarked);
+
+    ScRange emptScRange;
+    // update sheets mark after insert
+    for (size_t i=0; i<vMark.size(); i++)
+    {
+        if (vMark[i][0].first == nTab)
+        {
+            for (size_t k=nTab; k<vMark.size(); k++)
+                vMark[k][0].first++;
+
+            tempVect.emplace_back(i, emptScRange);
+            vMark.emplace(vMark.begin()+i, tempVect);
+            break;
+        }
+    }
+    ResetMark();
 }
 
 void ScMarkData::DeleteTab( SCTAB nTab )
 {
+    std::vector<std::vector<std::pair<SCTAB, ScRange>>>& vMark(GetSheetsMark());
+
     std::set<SCTAB> tabMarked;
     for (const auto& rTab : maTabMarked)
     {
@@ -646,6 +677,8 @@ void ScMarkData::DeleteTab( SCTAB nTab )
             tabMarked.insert(rTab - 1);
     }
     maTabMarked.swap(tabMarked);
+
+    vMark.clear();
 }
 
 void ScMarkData::ShiftCols(const ScDocument& rDoc, SCCOL nStartCol, sal_Int32 nColOffset)
