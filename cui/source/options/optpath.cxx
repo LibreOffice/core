@@ -62,7 +62,6 @@ using namespace svx;
 
 struct OptPath_Impl
 {
-    SvtDefaultOptions           m_aDefOpt;
     OUString                    m_sMultiPathDlg;
     Reference< css::util::XPathSettings >   m_xPathSettings;
 
@@ -351,7 +350,7 @@ IMPL_LINK_NOARG(SvxPathTabPage, StandardHdl_Impl, weld::Button&, void)
 {
     m_xPathBox->selected_foreach([this](weld::TreeIter& rEntry){
         PathUserData_Impl* pPathImpl = reinterpret_cast<PathUserData_Impl*>(m_xPathBox->get_id(rEntry).toInt64());
-        OUString aOldPath = pImpl->m_aDefOpt.GetDefaultPath( pPathImpl->nRealId );
+        OUString aOldPath = SvtDefaultOptions::GetDefaultPath( pPathImpl->nRealId );
 
         if ( !aOldPath.isEmpty() )
         {
