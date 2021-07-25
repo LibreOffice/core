@@ -158,7 +158,7 @@ void SvxHyperlinkNewDocTp::FillDocumentList()
 {
     weld::WaitObject aWaitObj(mpDialog->getDialog());
 
-    std::vector<SvtDynMenuEntry> aDynamicMenuEntries( SvtDynamicMenuOptions().GetMenu( EDynamicMenuType::NewMenu ) );
+    std::vector<SvtDynMenuEntry> aDynamicMenuEntries( SvtDynamicMenuOptions::GetMenu( EDynamicMenuType::NewMenu ) );
 
     for ( const SvtDynMenuEntry & rDynamicMenuEntry : aDynamicMenuEntries )
     {
