@@ -1782,6 +1782,58 @@ sal_Int32 DocxExport::WriteOutliner(const OutlinerParaObject& rParaObj, sal_uInt
     return nParaId;
 }
 
+//Keep this function in-sync with the one in writerfilter/.../SettingsTable.cxx
+//Since this is not import code, "-1" needs to be handled as the mode that LO will save as.
+//To identify how your code should handle a "-1", look in DocxExport::WriteSettings().
+sal_Int32 DocxExport::getWordCompatibilityModeFromGrabBag() const
+{
+    sal_Int32 nWordCompatibilityMode = -1;
+    uno::Reference< beans::XPropertySet > xPropSet(m_rDoc.GetDocShell()->GetBaseModel(), uno::UNO_QUERY_THROW);
+    uno::Reference< beans::XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
+    if (xPropSetInfo->hasPropertyByName(UNO_NAME_MISC_OBJ_INTEROPGRABBAG))
+    {
+        uno::Sequence< beans::PropertyValue > propList;
+        xPropSet->getPropertyValue( UNO_NAME_MISC_OBJ_INTEROPGRABBAG ) >>= propList;
+
+        for (const auto& rProp : std::as_const(propList))
+        {
+            if (rProp.Name == "CompatSettings")
+            {
+                css::uno::Sequence< css::beans::PropertyValue > aCurrentCompatSettings;
+                rProp.Value >>= aCurrentCompatSettings;
+
+                for (const auto& rCurrentCompatSetting : std::as_const(aCurrentCompatSettings))
+                {
+                    uno::Sequence< beans::PropertyValue > aCompatSetting;
+                    rCurrentCompatSetting.Value >>= aCompatSetting;
+
+                    OUString sName;
+                    OUString sUri;
+                    OUString sVal;
+
+                    for (const auto& rPropVal : std::as_const(aCompatSetting))
+                    {
+                        if ( rPropVal.Name == "name" ) rPropVal.Value >>= sName;
+                        if ( rPropVal.Name == "uri" )  rPropVal.Value >>= sUri;
+                        if ( rPropVal.Name == "val" )  rPropVal.Value >>= sVal;
+                    }
+
+                    if (sName == "compatibilityMode" && sUri == "http://schemas.microsoft.com/office/word")
+                    {
+                        const sal_Int32 nValidMode = sVal.toInt32();
+                        // if repeated, highest mode wins in MS Word. 11 is the first valid mode.
+                        if (nValidMode > 10 && nValidMode > nWordCompatibilityMode)
+                            nWordCompatibilityMode = nValidMode;
+
+                    }
+                }
+            }
+        }
+    }
+
+    return nWordCompatibilityMode;
+}
+
 void DocxExport::SetFS( ::sax_fastparser::FSHelperPtr const & pFS )
 {
     mpFS = pFS;
