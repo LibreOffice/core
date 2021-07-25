@@ -71,7 +71,8 @@ constexpr SwTwips DEF_GUTTER_WIDTH = o3tl::toTwips(3, o3tl::Length::mm);
 constexpr SwTwips MIN_BORDER_DIST = 28; // ~0.5mm
 
 // Minimal document border: 20mm.
-constexpr SwTwips lMinBorder = o3tl::toTwips(20, o3tl::Length::mm); // ~20mm
+constexpr tools::Long lMinBorderInMm(20);
+constexpr SwTwips lMinBorder = o3tl::toTwips(lMinBorderInMm, o3tl::Length::mm);
 
 // Margin left and above document.
 // Half of it is gap between the pages.
