@@ -34,6 +34,24 @@
       "revId": "77a192aa016279acc0b0f9df584d1ce31bde41a4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b8e8cbf5_90d4d733",
+        "filename": "sw/inc/swtypes.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-25T03:53:19Z",
+      "side": 1,
+      "message": "No, sorry - excuse me for the noise. Just wanted to share my thought when saw it merged, and obviously was blind. Thank you!",
+      "parentUuid": "4d606bad_88cd0177",
+      "revId": "77a192aa016279acc0b0f9df584d1ce31bde41a4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
