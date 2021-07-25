@@ -16,6 +16,24 @@
       "revId": "6128e2d55f0d0c68d3c7f6fb69539ec800637947",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8fa9bb60_4648e656",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport14.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1171,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-07-25T08:56:58Z",
+      "side": 0,
+      "message": "I know it doesn\u0027t fix a real pb but I understand Andrea, it\u0027s just for the sake of the right spelling.",
+      "parentUuid": "74e4beee_fc3b48d6",
+      "revId": "6128e2d55f0d0c68d3c7f6fb69539ec800637947",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
