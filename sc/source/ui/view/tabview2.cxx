@@ -465,6 +465,10 @@ void ScTabView::MarkCursor( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
         nCurX = rDocument.MaxCol();
 
     ScMarkData& rMark = aViewData.GetMarkData();
+
+    std::vector<std::vector<std::pair<SCTAB, ScRange>>>& vMark(rMark.GetSheetsMark());
+    std::vector<std::pair<SCTAB, ScRange>> tempVect;
+
     OSL_ENSURE(rMark.IsMarked() || rMark.IsMultiMarked(), "MarkCursor, !IsMarked()");
     ScRange aMarkRange;
     rMark.GetMarkArea(aMarkRange);
@@ -595,6 +599,45 @@ void ScTabView::MarkCursor( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
 
     if ( !bCols && !bRows )
         aHdrFunc.SetAnchorFlag( false );
+
+    int i=0;
+    bool bFound = false;
+    for (auto& a: vMark)
+    {
+        if (a[0].first == nCurZ)
+        {
+            tempVect.clear();
+            vMark.erase(vMark.begin()+i);
+
+            tempVect.emplace_back(std::pair(nCurZ, aMarkRange));
+            vMark.emplace(vMark.begin()+i, tempVect);
+
+            bFound = true;
+            break;
+        }
+        i++;
+    }
+
+    if(!bFound)
+    {
+        tempVect.emplace_back(std::pair(nCurZ, aMarkRange));
+        vMark.emplace_back(tempVect);
+    }
+
+    // Sorting sheets
+    for (int k=0; k!=static_cast<int>(vMark.size())-1; k++)
+    {
+        auto rFirst = vMark.at(k);
+        for (int j=k; j!=static_cast<int>(vMark.size()); j++)
+        {
+            auto rSecond = vMark.at(j);
+            if( rSecond[0].first < rFirst[0].first)
+            {
+                vMark[k] = rSecond;
+                vMark[j] = rFirst;
+            }
+        }
+    }
 }
 
 void ScTabView::GetPageMoveEndPosition(SCCOL nMovX, SCROW nMovY, SCCOL& rPageX, SCROW& rPageY)

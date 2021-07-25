@@ -934,6 +934,9 @@ void ScViewData::DeleteTabs( SCTAB nTab, SCTAB nSheets )
 
 void ScViewData::CopyTab( SCTAB nSrcTab, SCTAB nDestTab )
 {
+    std::vector<std::vector<std::pair<SCTAB, ScRange>>>& vMark(maMarkData.GetSheetsMark());
+    std::vector<std::pair<SCTAB, ScRange>> tempVect;
+
     if (nDestTab==SC_TAB_APPEND)
         nDestTab = mrDoc.GetTableCount() - 1;   // something had to have been copied
 
@@ -955,10 +958,28 @@ void ScViewData::CopyTab( SCTAB nSrcTab, SCTAB nDestTab )
 
     UpdateCurrentTab();
     maMarkData.InsertTab(nDestTab);
+
+    // sheets mark update
+    auto rFirst = vMark.at(nSrcTab);
+
+    if (rFirst.at(0).first == nSrcTab)
+    {
+        // copy sheet mark
+        tempVect.emplace_back(std::pair(nDestTab, rFirst.at(0).second));
+        vMark.emplace(vMark.begin()+nDestTab, tempVect);
+
+        // shift sheets
+        for (int k=nDestTab+1; k!=static_cast<int>(vMark.size()); k++)
+            vMark.at(k).at(0).first++;
+    }
+
 }
 
 void ScViewData::MoveTab( SCTAB nSrcTab, SCTAB nDestTab )
 {
+    std::vector<std::vector<std::pair<SCTAB, ScRange>>>& vMark(maMarkData.GetSheetsMark());
+    std::vector<std::pair<SCTAB, ScRange>> tempVect;
+
     if (nDestTab==SC_TAB_APPEND)
         nDestTab = mrDoc.GetTableCount() - 1;
     std::unique_ptr<ScViewDataTable> pTab;
@@ -976,9 +997,23 @@ void ScViewData::MoveTab( SCTAB nSrcTab, SCTAB nDestTab )
         maTabData[nDestTab] = std::move(pTab);
     }
 
+    auto rFirst = vMark.at(nSrcTab);
+
     UpdateCurrentTab();
     maMarkData.DeleteTab(nSrcTab);
     maMarkData.InsertTab(nDestTab); // adapted if needed
+
+    if (rFirst.at(0).first == nSrcTab)
+    {
+        if (nDestTab < nSrcTab)
+        {
+            tempVect.emplace_back(std::pair(nDestTab, rFirst.at(0).second));
+            vMark.emplace(vMark.begin()+nDestTab, tempVect);
+
+            for (int k=nDestTab+1; k!=nSrcTab; k++)
+                vMark.at(k).at(0).first++;
+        }
+    }
 }
 
 void ScViewData::CreateTabData( std::vector< SCTAB >& rvTabs )
