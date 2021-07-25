@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a76f5d1a_fbe59ac0",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 474,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-07-25T15:45:21Z",
+      "side": 1,
+      "message": "We pass this an argument here, so that Dialog knows which StyleList it has to operate on.",
+      "range": {
+        "startLine": 474,
+        "startChar": 58,
+        "endLine": 474,
+        "endChar": 74
+      },
+      "revId": "8b4f3eef2d6d86c9d9c2587c6c7b0d117a4be872",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "51b6911e_60ea5f0a",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 476,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-07-25T15:45:21Z",
+      "side": 1,
+      "message": "Here we call m_atempStyleList.SelectStyle()",
+      "range": {
+        "startLine": 476,
+        "startChar": 21,
+        "endLine": 476,
+        "endChar": 32
+      },
+      "revId": "8b4f3eef2d6d86c9d9c2587c6c7b0d117a4be872",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8db73a0b_5a70b61e",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 483,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-07-25T15:45:21Z",
+      "side": 1,
+      "message": "How will this callback know which treeview it has to opearte on?",
+      "range": {
+        "startLine": 483,
+        "startChar": 8,
+        "endLine": 483,
+        "endChar": 42
+      },
+      "revId": "8b4f3eef2d6d86c9d9c2587c6c7b0d117a4be872",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
