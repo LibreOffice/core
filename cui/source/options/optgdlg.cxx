@@ -30,7 +30,6 @@
 #include <i18nlangtag/mslangid.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <unotools/compatibility.hxx>
-#include <svtools/menuoptions.hxx>
 #include <svl/languageoptions.hxx>
 #include <svtools/miscopt.hxx>
 #include <unotools/syslocaleoptions.hxx>
@@ -661,11 +660,10 @@ std::unique_ptr<SfxTabPage> OfaViewTabPage::Create( weld::Container* pPage, weld
 
 bool OfaViewTabPage::FillItemSet( SfxItemSet* )
 {
-    SvtMenuOptions aMenuOpt;
-
     bool bModified = false;
     bool bMenuOptModified = false;
     bool bRepaintWindows(false);
+    std::shared_ptr<comphelper::ConfigurationChanges> xChanges(comphelper::ConfigurationChanges::create());
 
     SvtMiscOptions aMiscOptions;
     const sal_Int32 nSizeLB_NewSelection = m_xIconSizeLB->get_active();
@@ -698,9 +696,7 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet* )
             default:
                 OSL_FAIL( "OfaViewTabPage::FillItemSet(): This state of m_xSidebarIconSizeLB should not be possible!" );
         }
-        auto xChanges = comphelper::ConfigurationChanges::create();
         officecfg::Office::Common::Misc::SidebarIconSize::set(static_cast<sal_Int16>(eSet), xChanges);
-        xChanges->commit();
     }
 
     const sal_Int32 nNotebookbarSizeLB_NewSelection = m_xNotebookbarIconSizeLB->get_active();
@@ -716,9 +712,7 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet* )
             default:
                 OSL_FAIL( "OfaViewTabPage::FillItemSet(): This state of m_xNotebookbarIconSizeLB should not be possible!" );
         }
-        auto xChanges = comphelper::ConfigurationChanges::create();
         officecfg::Office::Common::Misc::NotebookbarIconSize::set(static_cast<sal_Int16>(eSet), xChanges);
-        xChanges->commit();
     }
 
     const sal_Int32 nStyleLB_NewSelection = m_xIconStyleLB->get_active();
@@ -768,17 +762,19 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet* )
 
     if (m_xFontShowCB->get_state_changed_from_saved())
     {
-        std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::Font::View::ShowFontBoxWYSIWYG::set(m_xFontShowCB->get_active(), batch);
-        batch->commit();
+        officecfg::Office::Common::Font::View::ShowFontBoxWYSIWYG::set(m_xFontShowCB->get_active(), xChanges);
         bModified = true;
     }
 
     if (m_xMenuIconsLB->get_value_changed_from_saved())
     {
-        aMenuOpt.SetMenuIconsState(m_xMenuIconsLB->get_active() == 0 ?
+        TriState eMenuIcons = m_xMenuIconsLB->get_active() == 0 ?
             TRISTATE_INDET :
-            static_cast<TriState>(m_xMenuIconsLB->get_active() - 1));
+            static_cast<TriState>(m_xMenuIconsLB->get_active() - 1);
+        // Output cache of current setting as possibly modified by System Theme for older version
+        bool bMenuIcons = Application::GetSettings().GetStyleSettings().GetUseImagesInMenus();
+        officecfg::Office::Common::View::Menu::IsSystemIconsInMenus::set(eMenuIcons == TRISTATE_INDET, xChanges);
+        officecfg::Office::Common::View::Menu::ShowIconsInMenues::set(bMenuIcons, xChanges);
         bModified = true;
         bMenuOptModified = true;
         bAppearanceChanged = true;
@@ -786,9 +782,11 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet* )
 
     if (m_xContextMenuShortcutsLB->get_value_changed_from_saved())
     {
-        aMenuOpt.SetContextMenuShortcuts(m_xContextMenuShortcutsLB->get_active() == 0 ?
+        officecfg::Office::Common::View::Menu::ShortcutsInContextMenus::set(
+            m_xContextMenuShortcutsLB->get_active() == 0 ?
             TRISTATE_INDET :
-            static_cast<TriState>(m_xContextMenuShortcutsLB->get_active() - 1));
+            static_cast<TriState>(m_xContextMenuShortcutsLB->get_active() - 1),
+            xChanges);
         bModified = true;
         bMenuOptModified = true;
         bAppearanceChanged = true;
@@ -818,12 +816,12 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet* )
     if (m_xUseSkia->get_state_changed_from_saved() ||
         m_xForceSkiaRaster->get_state_changed_from_saved())
     {
-        std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::VCL::UseSkia::set(m_xUseSkia->get_active(), batch);
-        officecfg::Office::Common::VCL::ForceSkiaRaster::set(m_xForceSkiaRaster->get_active(), batch);
-        batch->commit();
+        officecfg::Office::Common::VCL::UseSkia::set(m_xUseSkia->get_active(), xChanges);
+        officecfg::Office::Common::VCL::ForceSkiaRaster::set(m_xForceSkiaRaster->get_active(), xChanges);
         bModified = true;
     }
+
+    xChanges->commit();
 
     if( bMenuOptModified )
     {
@@ -926,11 +924,13 @@ void OfaViewTabPage::Reset( const SfxItemSet* )
 
     // WorkingSet
     m_xFontShowCB->set_active(officecfg::Office::Common::Font::View::ShowFontBoxWYSIWYG::get());
-    SvtMenuOptions aMenuOpt;
-    m_xMenuIconsLB->set_active(aMenuOpt.GetMenuIconsState() == 2 ? 0 : aMenuOpt.GetMenuIconsState() + 1);
+    bool bMenuIcons = officecfg::Office::Common::View::Menu::ShowIconsInMenues::get();
+    bool bSystemMenuIcons = officecfg::Office::Common::View::Menu::IsSystemIconsInMenus::get();
+    TriState eMenuIcons = bSystemMenuIcons ? TRISTATE_INDET : static_cast<TriState>(bMenuIcons);
+    m_xMenuIconsLB->set_active(eMenuIcons == 2 ? 0 : eMenuIcons + 1);
     m_xMenuIconsLB->save_value();
 
-    TriState eContextMenuShortcuts = aMenuOpt.GetContextMenuShortcuts();
+    TriState eContextMenuShortcuts = static_cast<TriState>(officecfg::Office::Common::View::Menu::ShortcutsInContextMenus::get());
     bool bContextMenuShortcutsNonDefault = eContextMenuShortcuts == TRISTATE_FALSE || eContextMenuShortcuts == TRISTATE_TRUE;
     m_xContextMenuShortcutsLB->set_active(bContextMenuShortcutsNonDefault ? eContextMenuShortcuts + 1 : 0);
     m_xContextMenuShortcutsLB->save_value();

@@ -82,7 +82,6 @@ $(eval $(call gb_Library_add_exception_objects,svt,\
     svtools/source/config/fontsubstconfig \
     svtools/source/config/htmlcfg \
     svtools/source/config/itemholder2 \
-    svtools/source/config/menuoptions \
     svtools/source/config/miscopt \
     svtools/source/config/slidesorterbaropt \
     svtools/source/config/optionsdrawinglayer \

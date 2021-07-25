@@ -100,7 +100,6 @@
 #include <rtl/byteseq.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/VersionConfig.hxx>
-#include <svtools/menuoptions.hxx>
 #include <rtl/bootstrap.hxx>
 #include <vcl/test/GraphicsRenderTests.hxx>
 #include <vcl/glxtestprocess.hxx>
@@ -1863,9 +1862,11 @@ void Desktop::OverrideSystemSettings( AllSettings& rSettings )
     hMouseSettings.SetFollow( aAppearanceCfg.IsMenuMouseFollow() ? (nFollow|MouseFollowFlags::Menu) : (nFollow&~MouseFollowFlags::Menu));
     rSettings.SetMouseSettings(hMouseSettings);
 
-    SvtMenuOptions aMenuOpt;
-    hStyleSettings.SetUseImagesInMenus(aMenuOpt.GetMenuIconsState());
-    hStyleSettings.SetContextMenuShortcuts(aMenuOpt.GetContextMenuShortcuts());
+    bool bMenuIcons = officecfg::Office::Common::View::Menu::ShowIconsInMenues::get();
+    bool bSystemMenuIcons = officecfg::Office::Common::View::Menu::IsSystemIconsInMenus::get();
+    TriState eMenuIcons = bSystemMenuIcons ? TRISTATE_INDET : static_cast<TriState>(bMenuIcons);
+    hStyleSettings.SetUseImagesInMenus(eMenuIcons);
+    hStyleSettings.SetContextMenuShortcuts(static_cast<TriState>(officecfg::Office::Common::View::Menu::ShortcutsInContextMenus::get()));
     hStyleSettings.SetDragFullOptions( nDragFullOptions );
     rSettings.SetStyleSettings ( hStyleSettings );
 }

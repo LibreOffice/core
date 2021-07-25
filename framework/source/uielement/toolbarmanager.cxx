@@ -73,8 +73,6 @@
 #include <vcl/weldutils.hxx>
 #include <tools/debug.hxx>
 
-#include <svtools/menuoptions.hxx>
-
 //  namespaces
 
 using namespace ::com::sun::star::awt;
@@ -1887,7 +1885,7 @@ void ToolBarManager::AddCustomizeMenuItems(ToolBox const * pToolBar)
     }
 
     // popup menu for quick customization
-    bool bHideDisabledEntries = !SvtMenuOptions().IsEntryHidingEnabled();
+    bool bHideDisabledEntries = !officecfg::Office::Common::View::Menu::DontHideDisabledEntry::get();
 
     ::PopupMenu *pMenu = pToolBar->GetMenu();
 

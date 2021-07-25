@@ -48,7 +48,6 @@ enum class EItem
 
     LinguConfig                   ,
 
-    MenuOptions                   ,
     MiscOptions                   ,
     ModuleOptions                 ,
 
