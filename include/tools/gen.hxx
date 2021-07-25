@@ -813,7 +813,7 @@ inline std::basic_ostream<charT, traits> & operator <<(
     if (rectangle.IsEmpty())
         return stream << "EMPTY";
     else
-        return stream << rectangle.getWidth() << 'x' << rectangle.getHeight()
+        return stream << rectangle.GetWidth() << 'x' << rectangle.GetHeight()
                       << "@(" << rectangle.getX() << ',' << rectangle.getY() << ")";
 }
 }
