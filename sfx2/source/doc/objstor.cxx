@@ -3059,7 +3059,7 @@ sal_Int16 SfxObjectShell::QueryHiddenInformation(HiddenWarningFact eFact, weld::
             assert(false); // this cannot happen
     }
 
-    if ( SvtSecurityOptions().IsOptionSet( eOption ) )
+    if ( SvtSecurityOptions::IsOptionSet( eOption ) )
     {
         OUString sMessage( SfxResId(STR_HIDDENINFO_CONTAINS) );
         HiddenInformation nWantedStates = HiddenInformation::RECORDEDCHANGES | HiddenInformation::NOTES;
@@ -3718,7 +3718,7 @@ bool SfxObjectShell::QuerySaveSizeExceededModules_Impl( const uno::Reference< ta
 
 bool SfxObjectShell::QueryAllowExoticFormat_Impl( const uno::Reference< task::XInteractionHandler >& xHandler, const OUString& rURL, const OUString& rFilterUIName )
 {
-    if ( SvtSecurityOptions().isTrustedLocationUri( rURL ) )
+    if ( SvtSecurityOptions::isTrustedLocationUri( rURL ) )
     {
         // Always load from trusted location
         return true;

@@ -147,7 +147,7 @@ namespace sfx2
     {
         sal_uInt16 nMacroExecutionMode = m_xData->m_rDocumentAccess.getCurrentMacroExecMode();
 
-        if ( SvtSecurityOptions().IsMacroDisabled() )
+        if ( SvtSecurityOptions::IsMacroDisabled() )
         {
             // no macro should be executed at all
             lcl_showMacrosDisabledError( rxInteraction, m_xData->m_bMacroDisabledMessageShown );
@@ -174,8 +174,7 @@ namespace sfx2
             else if (nMacroExecutionMode == MacroExecMode::USE_CONFIG_APPROVE_CONFIRMATION)
                 eAutoConfirm = eAutoConfirmApprove;
 
-            SvtSecurityOptions aOpt;
-            switch ( aOpt.GetMacroSecurityLevel() )
+            switch ( SvtSecurityOptions::GetMacroSecurityLevel() )
             {
                 case 3:
                     nMacroExecutionMode = MacroExecMode::FROM_LIST_NO_WARN;
@@ -228,10 +227,9 @@ namespace sfx2
             if ( nMacroExecutionMode != MacroExecMode::FROM_LIST )
             {
                 // the trusted macro check will also retrieve the signature state ( small optimization )
-                const SvtSecurityOptions aSecOption;
                 const bool bAllowUIToAddAuthor = nMacroExecutionMode != MacroExecMode::FROM_LIST_AND_SIGNED_NO_WARN
                                                  && (nMacroExecutionMode == MacroExecMode::ALWAYS_EXECUTE
-                                                     || !aSecOption.IsReadOnly(SvtSecurityOptions::EOption::MacroTrustedAuthors));
+                                                     || !SvtSecurityOptions::IsReadOnly(SvtSecurityOptions::EOption::MacroTrustedAuthors));
                 const bool bHasTrustedMacroSignature = m_xData->m_rDocumentAccess.hasTrustedScriptingSignature(bAllowUIToAddAuthor);
 
                 SignatureState nSignatureState = m_xData->m_rDocumentAccess.getScriptingSignatureState();
@@ -406,7 +404,7 @@ namespace sfx2
     bool DocumentMacroMode::checkMacrosOnLoading( const Reference< XInteractionHandler >& rxInteraction, bool bHasValidContentSignature )
     {
         bool bAllow = false;
-        if ( SvtSecurityOptions().IsMacroDisabled() )
+        if ( SvtSecurityOptions::IsMacroDisabled() )
         {
             // no macro should be executed at all
             bAllow = disallowMacroExecution();

@@ -16,27 +16,14 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_UNOTOOLS_SECURITYOPTIONS_HXX
-#define INCLUDED_UNOTOOLS_SECURITYOPTIONS_HXX
+#pragma once
 
 #include <unotools/unotoolsdllapi.h>
 #include <sal/types.h>
-#include <com/sun/star/uno/Sequence.h>
 #include <rtl/ustring.hxx>
-#include <unotools/options.hxx>
 #include <memory>
+#include <vector>
 #include <unordered_map>
-
-namespace osl { class Mutex; }
-
-/*-************************************************************************************************************
-    @short          forward declaration to our private date container implementation
-    @descr          We use these class as internal member to support small memory requirements.
-                    You can create the container if it is necessary. The class which use these mechanism
-                    is faster and smaller then a complete implementation!
-*//*-*************************************************************************************************************/
-
-class SvtSecurityOptions_Impl;
 
 /*-************************************************************************************************************
     @short          collect information about security features
@@ -45,72 +32,67 @@ class SvtSecurityOptions_Impl;
     @devstatus      ready to use
 *//*-*************************************************************************************************************/
 
-class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtSecurityOptions final : public utl::detail::Options
+namespace SvtSecurityOptions
 {
-    public:
+    enum class EOption
+    {
+        SecureUrls,
+        DocWarnSaveOrSend,
+        DocWarnSigning,
+        DocWarnPrint,
+        DocWarnCreatePdf,
+        DocWarnRemovePersonalInfo,
+        DocWarnRecommendPassword,
+        MacroSecLevel,
+        MacroTrustedAuthors,
+        CtrlClickHyperlink,
+        BlockUntrustedRefererLinks
+    };
 
-        enum class EOption
+    struct Certificate
+    {
+        OUString SubjectName;
+        OUString SerialNumber;
+        OUString RawData;
+
+        bool operator==(const Certificate& other) const
         {
-            SecureUrls,
-            DocWarnSaveOrSend,
-            DocWarnSigning,
-            DocWarnPrint,
-            DocWarnCreatePdf,
-            DocWarnRemovePersonalInfo,
-            DocWarnRecommendPassword,
-            MacroSecLevel,
-            MacroTrustedAuthors,
-            CtrlClickHyperlink,
-            BlockUntrustedRefererLinks
-        };
+            return SubjectName == other.SubjectName && SerialNumber == other.SerialNumber && RawData == other.RawData;
+        }
+    };
 
-        struct Certificate
-        {
-            OUString SubjectName;
-            OUString SerialNumber;
-            OUString RawData;
 
-            bool operator==(const Certificate& other) const
-            {
-                return SubjectName == other.SubjectName && SerialNumber == other.SerialNumber && RawData == other.RawData;
-            }
-        };
+    /*-****************************************************************************************************
+        @short      returns readonly state
+        @descr      It can be called to get information about the readonly state of a provided item.
+        @param      "eOption", specify, which item is queried
+        @return     <TRUE/> if item is readonly; <FALSE/> otherwise
 
-    public:
-         SvtSecurityOptions();
-        virtual ~SvtSecurityOptions() override;
+        @onerror    No error should occur!
+    *//*-*****************************************************************************************************/
 
-        /*-****************************************************************************************************
-            @short      returns readonly state
-            @descr      It can be called to get information about the readonly state of a provided item.
-            @param      "eOption", specify, which item is queried
-            @return     <TRUE/> if item is readonly; <FALSE/> otherwise
+    UNOTOOLS_DLLPUBLIC bool IsReadOnly( EOption eOption );
 
-            @onerror    No error should occur!
-        *//*-*****************************************************************************************************/
+    /*-****************************************************************************************************
+        @short      interface methods to get and set value of config key "org.openoffice.Office.Common/Security/Scripting/SecureURL"
+        @descr      These value displays the list of all trustworthy URLs.
+                    zB.:    file:/                  => All scripts from the local file system including a LAN;
+                            private:explorer        => Scripts from the Explorer;
+                            private:help            => Scripts in the help system;
+                            private:newmenu         => Scripts that are executed by the commands File-New and AutoPilot;
+                            private:schedule        => Scripts of  the scheduler;
+                            private:searchfolder    => Scripts of the searchfolder;
+                            private:user            => Scripts that are entered in the URL field.
+        @param      "seqURLList", new values to set it in configuration.
+        @return     The values which represent current state of internal variable.
 
-        bool IsReadOnly( EOption eOption ) const;
+        @onerror    No error should occur!
+    *//*-*****************************************************************************************************/
 
-        /*-****************************************************************************************************
-            @short      interface methods to get and set value of config key "org.openoffice.Office.Common/Security/Scripting/SecureURL"
-            @descr      These value displays the list of all trustworthy URLs.
-                        zB.:    file:/                  => All scripts from the local file system including a LAN;
-                                private:explorer        => Scripts from the Explorer;
-                                private:help            => Scripts in the help system;
-                                private:newmenu         => Scripts that are executed by the commands File-New and AutoPilot;
-                                private:schedule        => Scripts of  the scheduler;
-                                private:searchfolder    => Scripts of the searchfolder;
-                                private:user            => Scripts that are entered in the URL field.
-            @param      "seqURLList", new values to set it in configuration.
-            @return     The values which represent current state of internal variable.
+    UNOTOOLS_DLLPUBLIC std::vector< OUString >  GetSecureURLs();
+    UNOTOOLS_DLLPUBLIC void SetSecureURLs( const std::vector< OUString >& seqURLList );
 
-            @onerror    No error should occur!
-        *//*-*****************************************************************************************************/
-
-        css::uno::Sequence< OUString >  GetSecureURLs(                                                                      ) const;
-        void                                                SetSecureURLs( const css::uno::Sequence< OUString >& seqURLList );
-
-        /*-****************************************************************************************************
+    /*-****************************************************************************************************
             @short      interface methods to get and set value of config key "org.openoffice.Office.Common/Security/Scripting/StarOfficeBasic"
             @descr      These value determines how StarOffice Basic scripts should be handled.
                         It exist 3 different modes:
@@ -131,71 +113,46 @@ class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtSecurityOptions final : public utl::
             @onerror    No error should occur!
         *//*-*****************************************************************************************************/
 
-        sal_Int32           GetMacroSecurityLevel       (                   ) const;
-        void                SetMacroSecurityLevel       ( sal_Int32 _nLevel );
+    UNOTOOLS_DLLPUBLIC sal_Int32 GetMacroSecurityLevel();
+    UNOTOOLS_DLLPUBLIC void SetMacroSecurityLevel( sal_Int32 _nLevel );
 
-        bool            IsMacroDisabled             (                   ) const;
+    UNOTOOLS_DLLPUBLIC bool IsMacroDisabled();
 
-        /**
-           Check whether the given uri is either no dangerous macro-execution
-           URI at all or else the given referer is a trusted source.
-        */
-        bool isSecureMacroUri(OUString const & uri, OUString const & referer)
-            const;
+    /**
+       Check whether the given uri is either no dangerous macro-execution
+       URI at all or else the given referer is a trusted source.
+    */
+    UNOTOOLS_DLLPUBLIC bool isSecureMacroUri(OUString const & uri, OUString const & referer);
 
-        /**
-           Check whether the given referer URI is untrusted, and links
-           originating from it should not be accessed.
-         */
-        bool isUntrustedReferer(OUString const & referer) const;
+    /**
+       Check whether the given referer URI is untrusted, and links
+       originating from it should not be accessed.
+     */
+    UNOTOOLS_DLLPUBLIC bool isUntrustedReferer(OUString const & referer);
 
-        /**
-           Check whether the given uri is a trusted location.
-        */
-        bool isTrustedLocationUri(OUString const & uri) const;
+    /**
+       Check whether the given uri is a trusted location.
+    */
+    UNOTOOLS_DLLPUBLIC bool isTrustedLocationUri(OUString const & uri);
 
-        bool isTrustedLocationUriForUpdatingLinks(OUString const & uri) const;
+    UNOTOOLS_DLLPUBLIC bool isTrustedLocationUriForUpdatingLinks(OUString const & uri);
 
-        std::vector< Certificate >   GetTrustedAuthors() const;
-        void                         SetTrustedAuthors( const std::vector< Certificate >& rAuthors );
+    UNOTOOLS_DLLPUBLIC std::vector< Certificate > GetTrustedAuthors();
+    UNOTOOLS_DLLPUBLIC void SetTrustedAuthors( const std::vector< Certificate >& rAuthors );
 
-        // for bool options only!
-        bool        IsOptionSet     ( EOption eOption                   ) const;
-        void        SetOption       ( EOption eOption, bool bValue      );
-        bool        IsOptionEnabled ( EOption eOption                   ) const;
+    // for bool options only!
+    UNOTOOLS_DLLPUBLIC bool        IsOptionSet     ( EOption eOption                   );
+    UNOTOOLS_DLLPUBLIC void        SetOption       ( EOption eOption, bool bValue      );
 
-    //  private methods
-
-    private:
-
-        /*-****************************************************************************************************
-            @short      return a reference to a static mutex
-            @descr      These class is partially threadsafe (for de-/initialization only).
-                        All access methods aren't safe!
-                        We create a static mutex only for one ime and use at different times.
-            @return     A reference to a static mutex member.
-        *//*-*****************************************************************************************************/
-
-        UNOTOOLS_DLLPRIVATE static ::osl::Mutex& GetInitMutex();
-
-    //  private member
-
-    private:
-        std::shared_ptr<SvtSecurityOptions_Impl> m_pImpl;
-
-};      // class SvtSecurityOptions
+} // namespace SvtSecurityOptions
 
 // map personal info strings, e.g. authors to 1, 2, 3... for removing personal info
-typedef ::std::unordered_map< OUString, size_t > SvtSecurityMapPersonalInfoType;
 
-class UNOTOOLS_DLLPUBLIC SvtSecurityMapPersonalInfo final
+class UNOTOOLS_DLLPUBLIC SvtSecurityMapPersonalInfo
 {
-    SvtSecurityMapPersonalInfoType aInfoIDs;
-
+    std::unordered_map< OUString, size_t > aInfoIDs;
 public:
     size_t GetInfoID( const OUString sPersonalInfo );
 };
-
-#endif // INCLUDED_UNOTOOLS_SECURITYOPTIONS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

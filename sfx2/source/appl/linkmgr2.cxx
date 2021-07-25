@@ -525,7 +525,7 @@ bool LinkManager::GetGraphicFromAny(const OUString& rMimeType,
             sReferer = sh->GetMedium()->GetName();
 
         OUString sURL = rValue.get<OUString>();
-        if (!SvtSecurityOptions().isUntrustedReferer(sReferer))
+        if (!SvtSecurityOptions::isUntrustedReferer(sReferer))
             rGraphic = vcl::graphic::loadFromURL(sURL, pParentWin);
         if (rGraphic.IsNone())
             rGraphic.SetDefaultType();

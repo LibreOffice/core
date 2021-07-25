@@ -667,8 +667,7 @@ OUString SfxHelp::GetHelpText(const OUString& aCommandURL, const weld::Widget* p
 
 OUString SfxHelp::GetURLHelpText(std::u16string_view aURL)
 {
-    SvtSecurityOptions aSecOpt;
-    bool bCtrlClickHlink = aSecOpt.IsOptionSet(SvtSecurityOptions::EOption::CtrlClickHyperlink);
+    bool bCtrlClickHlink = SvtSecurityOptions::IsOptionSet(SvtSecurityOptions::EOption::CtrlClickHyperlink);
 
     // "ctrl-click to follow link:" for not MacOS
     // "⌘-click to follow link:" for MacOs

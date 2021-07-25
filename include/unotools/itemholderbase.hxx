@@ -52,7 +52,6 @@ enum class EItem
 
     PathOptions                   ,
 
-    SecurityOptions               ,
     SysLocaleOptions              ,   // 2
 
     UserOptions                   ,   // 2

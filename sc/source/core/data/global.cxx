@@ -824,9 +824,8 @@ void ScGlobal::OpenURL(const OUString& rURL, const OUString& rTarget, bool bIgno
 
 bool ScGlobal::ShouldOpenURL()
 {
-    SvtSecurityOptions aSecOpt;
     bool bCtrlClickHappened = (nScClickMouseModifier & KEY_MOD1);
-    bool bCtrlClickSecOption = aSecOpt.IsOptionSet( SvtSecurityOptions::EOption::CtrlClickHyperlink );
+    bool bCtrlClickSecOption = SvtSecurityOptions::IsOptionSet( SvtSecurityOptions::EOption::CtrlClickHyperlink );
     if( bCtrlClickHappened && ! bCtrlClickSecOption )
     {
         // return since ctrl+click happened when the

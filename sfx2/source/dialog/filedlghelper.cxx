@@ -1446,9 +1446,8 @@ ErrCode FileDialogHelper_Impl::execute( std::vector<OUString>& rpURLList,
 
     if ( mbHasPassword && !mbPwdCheckBoxState )
     {
-        SvtSecurityOptions aSecOpt;
         mbPwdCheckBoxState = (
-            aSecOpt.IsOptionSet( SvtSecurityOptions::EOption::DocWarnRecommendPassword ) );
+            SvtSecurityOptions::IsOptionSet( SvtSecurityOptions::EOption::DocWarnRecommendPassword ) );
     }
 
     rpURLList.clear();

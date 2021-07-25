@@ -74,12 +74,10 @@ public:
 
 // class SvxSecurityTabPage ---------------------------------------------
 
-class SvtSecurityOptions;
 class CertPathDialog;
 class SvxSecurityTabPage : public SfxTabPage
 {
 private:
-    std::unique_ptr<SvtSecurityOptions>         mpSecOptions;
     std::unique_ptr<svx::SecurityOptionsDialog> m_xSecOptDlg;
 
     std::unique_ptr<CertPathDialog> mpCertPathDlg;
