@@ -16,26 +16,22 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_UNOTOOLS_OPTIONSDLG_HXX
-#define INCLUDED_UNOTOOLS_OPTIONSDLG_HXX
+#pragma once
 
 #include <sal/config.h>
-
+#include <unotools/unotoolsdllapi.h>
+#include <rtl/ustring.hxx>
+#include <unordered_map>
 #include <string_view>
 
-#include <unotools/unotoolsdllapi.h>
-#include <unotools/options.hxx>
-
-class SvtOptionsDlgOptions_Impl;
-
-class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtOptionsDialogOptions final : public utl::detail::Options
+// Loads the dialog options from config
+class UNOTOOLS_DLLPUBLIC SvtOptionsDialogOptions
 {
-private:
-    SvtOptionsDlgOptions_Impl* m_pImp;
-
 public:
-                    SvtOptionsDialogOptions();
-                    virtual ~SvtOptionsDialogOptions() override;
+
+    typedef std::unordered_map< OUString, bool > OptionNodeList;
+
+    SvtOptionsDialogOptions();
 
     bool        IsGroupHidden   (   std::u16string_view _rGroup ) const;
     bool        IsPageHidden    (   std::u16string_view _rPage,
@@ -43,8 +39,10 @@ public:
     bool        IsOptionHidden  (   std::u16string_view _rOption,
                                         std::u16string_view _rPage,
                                         std::u16string_view _rGroup ) const;
-};
+private:
+    bool IsHidden( const OUString& _rPath ) const;
 
-#endif
+    OptionNodeList m_aOptionNodeList;
+};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -45,8 +45,6 @@ enum class EItem
     MiscOptions                   ,
     ModuleOptions                 ,
 
-    OptionsDialogOptions          ,
-
     PathOptions                   ,
 
     SysLocaleOptions              ,   // 2
