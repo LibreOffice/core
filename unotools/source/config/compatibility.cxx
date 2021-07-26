@@ -125,7 +125,7 @@ class SvtCompatibilityOptions_Impl : public ConfigItem
         void SetDefault( SvtCompatibilityEntry::Index rIdx, bool rValue );
         bool GetDefault( SvtCompatibilityEntry::Index rIdx ) const;
 
-        Sequence< Sequence< PropertyValue > > GetList() const;
+        const std::vector< SvtCompatibilityEntry > & GetOptions() const { return m_aOptions; }
 
         /*-****************************************************************************************************
             @short      called for notify of configmanager
@@ -238,25 +238,6 @@ bool SvtCompatibilityOptions_Impl::GetDefault( SvtCompatibilityEntry::Index rIdx
     return m_aDefOptions.getValue<bool>( rIdx );
 }
 
-Sequence< Sequence< PropertyValue > > SvtCompatibilityOptions_Impl::GetList() const
-{
-    Sequence< PropertyValue >             lProperties( SvtCompatibilityEntry::getElementCount() );
-    Sequence< Sequence< PropertyValue > > lResult( m_aOptions.size() );
-
-    for ( int i = static_cast<int>(SvtCompatibilityEntry::Index::Name); i < static_cast<int>(SvtCompatibilityEntry::Index::INVALID); ++i )
-        lProperties[i].Name = SvtCompatibilityEntry::getName( SvtCompatibilityEntry::Index(i) );
-
-    sal_Int32 j = 0;
-    for ( const auto& rItem : m_aOptions )
-    {
-        for ( int i = static_cast<int>(SvtCompatibilityEntry::Index::Name); i < static_cast<int>(SvtCompatibilityEntry::Index::INVALID); ++i )
-            lProperties[i].Value = rItem.getValue( SvtCompatibilityEntry::Index(i) );
-        lResult[ j++ ] = lProperties;
-    }
-
-    return lResult;
-}
-
 void SvtCompatibilityOptions_Impl::Notify( const Sequence< OUString >& )
 {
     SAL_WARN( "unotools.config", "SvtCompatibilityOptions_Impl::Notify() Not implemented yet! I don't know how I can handle a dynamical list of unknown properties ..." );
@@ -359,10 +340,11 @@ bool SvtCompatibilityOptions::GetDefault( SvtCompatibilityEntry::Index rIdx ) co
     return m_pImpl->GetDefault( rIdx );
 }
 
-Sequence< Sequence< PropertyValue > > SvtCompatibilityOptions::GetList() const
+std::vector< SvtCompatibilityEntry > SvtCompatibilityOptions::GetList() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pImpl->GetList();
+
+    return m_pImpl->GetOptions();
 }
 
 namespace

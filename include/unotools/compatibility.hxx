@@ -25,6 +25,7 @@
 #include <unotools/unotoolsdllapi.h>
 #include <rtl/ustring.hxx>
 #include <memory>
+#include <vector>
 
 namespace com::sun::star::beans { struct PropertyValue; }
 namespace osl { class Mutex; }
@@ -211,7 +212,7 @@ class UNOTOOLS_DLLPUBLIC SvtCompatibilityOptions final : public utl::detail::Opt
 
             @onerror    We return an empty list.
         *//*-*****************************************************************************************************/
-        css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > > GetList() const;
+        std::vector< SvtCompatibilityEntry > GetList() const;
 
     private:
         std::shared_ptr<SvtCompatibilityOptions_Impl> m_pImpl;
