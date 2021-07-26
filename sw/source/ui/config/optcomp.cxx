@@ -206,27 +206,16 @@ void SwCompatibilityOptPage::InitControls( const SfxItemSet& rSet )
     m_xMain->set_label(rText.replaceAll("%DOCNAME", sDocTitle));
 
     // loading file formats
-    const Sequence< Sequence< PropertyValue > > aList = m_aConfigItem.GetList();
+    const std::vector< SvtCompatibilityEntry > aList = m_aConfigItem.GetList();
 
-    SvtCompatibilityEntry aEntry;
-
-    for ( const Sequence< PropertyValue >& rEntry : aList )
+    for ( const SvtCompatibilityEntry& rEntry : aList )
     {
-        for ( const PropertyValue& aValue : rEntry )
-        {
-            aEntry.setValue( SvtCompatibilityEntry::getIndex(aValue.Name), aValue.Value );
-        }
-
-        const OUString sEntryName = aEntry.getValue<OUString>( SvtCompatibilityEntry::Index::Name );
-
+        const OUString sEntryName = rEntry.getValue<OUString>( SvtCompatibilityEntry::Index::Name );
         const bool bIsUserEntry    = ( sEntryName == SvtCompatibilityEntry::USER_ENTRY_NAME );
-        const bool bIsDefaultEntry = ( sEntryName == SvtCompatibilityEntry::DEFAULT_ENTRY_NAME );
 
-        aEntry.setDefaultEntry( bIsDefaultEntry );
+        m_pImpl->m_aList.push_back( rEntry );
 
-        m_pImpl->m_aList.push_back( aEntry );
-
-        if ( aEntry.isDefaultEntry() )
+        if ( rEntry.isDefaultEntry() )
             continue;
 
         OUString sNewEntry;
@@ -245,22 +234,22 @@ void SwCompatibilityOptPage::InitControls( const SfxItemSet& rSet )
             sNewEntry = sEntryName;
 
         sal_uInt32 nOptions = convertBools2Ulong_Impl(
-            aEntry.getValue<bool>( SvtCompatibilityEntry::Index::UsePrtMetrics ),
-            aEntry.getValue<bool>( SvtCompatibilityEntry::Index::AddSpacing ),
-            aEntry.getValue<bool>( SvtCompatibilityEntry::Index::AddSpacingAtPages ),
-            aEntry.getValue<bool>( SvtCompatibilityEntry::Index::UseOurTabStops ),
-            aEntry.getValue<bool>( SvtCompatibilityEntry::Index::NoExtLeading ),
-            aEntry.getValue<bool>( SvtCompatibilityEntry::Index::UseLineSpacing ),
-            aEntry.getValue<bool>( SvtCompatibilityEntry::Index::AddTableSpacing ),
-            aEntry.getValue<bool>(SvtCompatibilityEntry::Index::AddTableLineSpacing),
-            aEntry.getValue<bool>( SvtCompatibilityEntry::Index::UseObjectPositioning ),
-            aEntry.getValue<bool>( SvtCompatibilityEntry::Index::UseOurTextWrapping ),
-            aEntry.getValue<bool>( SvtCompatibilityEntry::Index::ConsiderWrappingStyle ),
-            aEntry.getValue<bool>( SvtCompatibilityEntry::Index::ExpandWordSpace ),
-            aEntry.getValue<bool>( SvtCompatibilityEntry::Index::ProtectForm ),
-            aEntry.getValue<bool>( SvtCompatibilityEntry::Index::MsWordTrailingBlanks ),
-            aEntry.getValue<bool>( SvtCompatibilityEntry::Index::SubtractFlysAnchoredAtFlys ),
-            aEntry.getValue<bool>( SvtCompatibilityEntry::Index::EmptyDbFieldHidesPara ) );
+            rEntry.getValue<bool>( SvtCompatibilityEntry::Index::UsePrtMetrics ),
+            rEntry.getValue<bool>( SvtCompatibilityEntry::Index::AddSpacing ),
+            rEntry.getValue<bool>( SvtCompatibilityEntry::Index::AddSpacingAtPages ),
+            rEntry.getValue<bool>( SvtCompatibilityEntry::Index::UseOurTabStops ),
+            rEntry.getValue<bool>( SvtCompatibilityEntry::Index::NoExtLeading ),
+            rEntry.getValue<bool>( SvtCompatibilityEntry::Index::UseLineSpacing ),
+            rEntry.getValue<bool>( SvtCompatibilityEntry::Index::AddTableSpacing ),
+            rEntry.getValue<bool>(SvtCompatibilityEntry::Index::AddTableLineSpacing),
+            rEntry.getValue<bool>( SvtCompatibilityEntry::Index::UseObjectPositioning ),
+            rEntry.getValue<bool>( SvtCompatibilityEntry::Index::UseOurTextWrapping ),
+            rEntry.getValue<bool>( SvtCompatibilityEntry::Index::ConsiderWrappingStyle ),
+            rEntry.getValue<bool>( SvtCompatibilityEntry::Index::ExpandWordSpace ),
+            rEntry.getValue<bool>( SvtCompatibilityEntry::Index::ProtectForm ),
+            rEntry.getValue<bool>( SvtCompatibilityEntry::Index::MsWordTrailingBlanks ),
+            rEntry.getValue<bool>( SvtCompatibilityEntry::Index::SubtractFlysAnchoredAtFlys ),
+            rEntry.getValue<bool>( SvtCompatibilityEntry::Index::EmptyDbFieldHidesPara ) );
         m_xFormattingLB->append(OUString::number(nOptions), sNewEntry);
     }
 }
