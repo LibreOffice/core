@@ -17,7 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
 
+#include <algorithm>
+
+#include <sal/types.h>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 #include <controls/dialogcontrol.hxx>
@@ -507,8 +511,10 @@ void SAL_CALL UnoDialogControl::windowResized( const css::awt::WindowEvent& e )
     // Properties in a sequence must be sorted!
     aProps[0] = "Height";
     aProps[1] = "Width";
-    aValues[0] <<= aAppFontSize.Height();
-    aValues[1] <<= aAppFontSize.Width();
+    aValues[0] <<= sal_Int32(
+        std::clamp(aAppFontSize.Height(), tools::Long(SAL_MIN_INT32), tools::Long(SAL_MAX_INT32)));
+    aValues[1] <<= sal_Int32(
+        std::clamp(aAppFontSize.Width(), tools::Long(SAL_MIN_INT32), tools::Long(SAL_MAX_INT32)));
 
     ImplSetPropertyValues( aProps, aValues, true );
     mbSizeModified = false;
@@ -533,8 +539,10 @@ void SAL_CALL UnoDialogControl::windowMoved( const css::awt::WindowEvent& e )
     Sequence< Any > aValues( 2 );
     aProps[0] = "PositionX";
     aProps[1] = "PositionY";
-    aValues[0] <<= aTmp.Width();
-    aValues[1] <<= aTmp.Height();
+    aValues[0] <<= sal_Int32(
+        std::clamp(aTmp.Width(), tools::Long(SAL_MIN_INT32), tools::Long(SAL_MAX_INT32)));
+    aValues[1] <<= sal_Int32(
+        std::clamp(aTmp.Height(), tools::Long(SAL_MIN_INT32), tools::Long(SAL_MAX_INT32)));
 
     ImplSetPropertyValues( aProps, aValues, true );
     mbPosModified = false;
