@@ -129,10 +129,6 @@ void ItemHolder1::impl_newItem(TItemInfo& rItem)
             //rItem.pItem.reset( new GlobalEventConfig() );
             break;
 
-        case EItem::HistoryOptions :
-            rItem.pItem.reset( new SvtHistoryOptions() );
-            break;
-
         case EItem::LinguConfig :
             rItem.pItem.reset( new SvtLinguConfig() );
             break;

@@ -138,24 +138,14 @@ SvtMatchContext_Impl::~SvtMatchContext_Impl()
 void SvtMatchContext_Impl::FillPicklist(std::vector<OUString>& rPickList)
 {
     // Read the history of picks
-    Sequence< Sequence< PropertyValue > > seqPicklist = SvtHistoryOptions().GetList( EHistoryType::PickList );
-    sal_uInt32 nCount = seqPicklist.getLength();
+    std::vector< SvtHistoryOptions::HistoryItem > seqPicklist = SvtHistoryOptions::GetList( EHistoryType::PickList );
+    sal_uInt32 nCount = seqPicklist.size();
 
     for( sal_uInt32 nItem=0; nItem < nCount; nItem++ )
     {
-        Sequence< PropertyValue > seqPropertySet = seqPicklist[ nItem ];
-
-        auto pProperty = std::find_if(seqPropertySet.begin(), seqPropertySet.end(),
-            [](const PropertyValue& rProperty) { return rProperty.Name == HISTORY_PROPERTYNAME_TITLE; });
-        if (pProperty != seqPropertySet.end())
-        {
-            OUString sTitle;
-            INetURLObject aURL;
-
-            pProperty->Value >>= sTitle;
-            aURL.SetURL( sTitle );
-            rPickList.insert(rPickList.begin() + nItem, aURL.GetMainURL(INetURLObject::DecodeMechanism::WithCharset));
-        }
+        INetURLObject aURL;
+        aURL.SetURL( seqPicklist[nItem].sTitle );
+        rPickList.insert(rPickList.begin() + nItem, aURL.GetMainURL(INetURLObject::DecodeMechanism::WithCharset));
     }
 }
 
@@ -915,47 +905,39 @@ void SvtURLBox::UpdatePicklistForSmartProtocol_Impl()
         return;
 
     // read history pick list
-    const Sequence< Sequence< PropertyValue > > seqPicklist = SvtHistoryOptions().GetList( EHistoryType::PickList );
+    const std::vector< SvtHistoryOptions::HistoryItem > seqPicklist = SvtHistoryOptions::GetList( EHistoryType::PickList );
     INetURLObject aCurObj;
 
-    for( const Sequence< PropertyValue >& rPropertySet : seqPicklist )
+    for( const SvtHistoryOptions::HistoryItem& rPropertySet : seqPicklist )
     {
-        auto pProperty = std::find_if(rPropertySet.begin(), rPropertySet.end(),
-            [](const PropertyValue& rProperty) { return rProperty.Name == HISTORY_PROPERTYNAME_URL; });
-        if (pProperty != rPropertySet.end())
+        aCurObj.SetURL( rPropertySet.sURL );
+
+        if ( !rPropertySet.sURL.isEmpty() && ( eSmartProtocol != INetProtocol::NotValid ) )
         {
-            OUString sURL;
+            if( aCurObj.GetProtocol() != eSmartProtocol )
+                continue;
+        }
 
-            pProperty->Value >>= sURL;
-            aCurObj.SetURL( sURL );
+        OUString aURL( aCurObj.GetMainURL( INetURLObject::DecodeMechanism::WithCharset ) );
 
-            if ( !sURL.isEmpty() && ( eSmartProtocol != INetProtocol::NotValid ) )
+        if ( !aURL.isEmpty() )
+        {
+            bool bFound = aURL.endsWith("/");
+            if ( !bFound )
             {
-                if( aCurObj.GetProtocol() != eSmartProtocol )
-                    continue;
+                OUString aUpperURL = aURL.toAsciiUpperCase();
+
+                bFound = ::std::any_of(pImpl->m_aFilters.begin(),
+                                       pImpl->m_aFilters.end(),
+                                       FilterMatch( aUpperURL ) );
             }
-
-            OUString aURL( aCurObj.GetMainURL( INetURLObject::DecodeMechanism::WithCharset ) );
-
-            if ( !aURL.isEmpty() )
+            if ( bFound )
             {
-                bool bFound = aURL.endsWith("/");
-                if ( !bFound )
-                {
-                    OUString aUpperURL = aURL.toAsciiUpperCase();
-
-                    bFound = ::std::any_of(pImpl->m_aFilters.begin(),
-                                           pImpl->m_aFilters.end(),
-                                           FilterMatch( aUpperURL ) );
-                }
-                if ( bFound )
-                {
-                    OUString aFile;
-                    if (osl::FileBase::getSystemPathFromFileURL(aURL, aFile) == osl::FileBase::E_None)
-                        m_xWidget->append_text(aFile);
-                    else
-                        m_xWidget->append_text(aURL);
-                }
+                OUString aFile;
+                if (osl::FileBase::getSystemPathFromFileURL(aURL, aFile) == osl::FileBase::E_None)
+                    m_xWidget->append_text(aFile);
+                else
+                    m_xWidget->append_text(aURL);
             }
         }
     }

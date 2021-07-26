@@ -130,22 +130,20 @@ namespace dbaui
     {
         OSL_ENSURE( _pAsciiModuleName, "OpenDocumentListBox::impl_init: invalid module name!" );
 
-        Sequence< Sequence< PropertyValue> > aHistory = SvtHistoryOptions().GetList( EHistoryType::PickList );
+        std::vector< SvtHistoryOptions::HistoryItem > aHistory = SvtHistoryOptions::GetList( EHistoryType::PickList );
         Reference< XNameAccess > xFilterFactory;
         xFilterFactory.set(::comphelper::getProcessServiceFactory()->createInstance(
             "com.sun.star.document.FilterFactory" ), css::uno::UNO_QUERY);
 
-        sal_uInt32 nCount = aHistory.getLength();
-        for ( sal_uInt32 nItem = 0; nItem < nCount; ++nItem )
+        for ( const SvtHistoryOptions::HistoryItem& rHistoryItem : aHistory )
         {
             try
             {
                 //  Get the current history item's properties.
-                ::comphelper::SequenceAsHashMap aItemProperties( aHistory[ nItem ] );
-                OUString sURL = aItemProperties.getUnpackedValueOrDefault( HISTORY_PROPERTYNAME_URL, OUString() );
-                OUString sFilter = aItemProperties.getUnpackedValueOrDefault( HISTORY_PROPERTYNAME_FILTER, OUString() );
-                OUString sTitle = aItemProperties.getUnpackedValueOrDefault( HISTORY_PROPERTYNAME_TITLE, OUString() );
-                OUString sPassword = aItemProperties.getUnpackedValueOrDefault( HISTORY_PROPERTYNAME_PASSWORD, OUString() );
+                OUString sURL = rHistoryItem.sURL;
+                OUString sFilter = rHistoryItem.sFilter;
+                OUString sTitle = rHistoryItem.sTitle;
+                OUString sPassword = rHistoryItem.sPassword;
 
                 //  If the entry is an impress file then insert it into the
                 //  history list and the list box.

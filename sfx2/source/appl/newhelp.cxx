@@ -1079,21 +1079,6 @@ bool SearchTabPage_Impl::OpenKeyword( const OUString& rKeyword )
 }
 
 // class BookmarksTabPage_Impl -------------------------------------------
-static void GetBookmarkEntry_Impl
-(
-    const Sequence< PropertyValue >& aBookmarkEntry,
-    OUString& rTitle,
-    OUString& rURL
-)
-{
-    for ( const PropertyValue& aValue : aBookmarkEntry )
-    {
-        if ( aValue.Name == HISTORY_PROPERTYNAME_URL )
-            aValue.Value >>= rURL;
-        else if ( aValue.Name == HISTORY_PROPERTYNAME_TITLE )
-            aValue.Value >>= rTitle;
-    }
-}
 
 void BookmarksTabPage_Impl::DoAction(std::string_view rAction)
 {
@@ -1174,26 +1159,20 @@ BookmarksTabPage_Impl::BookmarksTabPage_Impl(weld::Widget* pParent, SfxHelpIndex
     m_xBookmarksBox->connect_key_press(LINK(this, BookmarksTabPage_Impl, KeyInputHdl));
 
     // load bookmarks from configuration
-    const Sequence< Sequence< PropertyValue > > aBookmarkSeq = SvtHistoryOptions().GetList( EHistoryType::HelpBookmarks );
-
-    OUString aTitle;
-    OUString aURL;
-
+    const std::vector< SvtHistoryOptions::HistoryItem > aBookmarkSeq = SvtHistoryOptions::GetList( EHistoryType::HelpBookmarks );
     for ( const auto& rBookmark : aBookmarkSeq )
     {
-        GetBookmarkEntry_Impl( rBookmark, aTitle, aURL );
-        AddBookmarks( aTitle, aURL );
+        AddBookmarks( rBookmark.sTitle, rBookmark.sURL );
     }
 }
 
 BookmarksTabPage_Impl::~BookmarksTabPage_Impl()
 {
     // save bookmarks to configuration
-    SvtHistoryOptions aHistOpt;
-    aHistOpt.Clear( EHistoryType::HelpBookmarks );
+    SvtHistoryOptions::Clear( EHistoryType::HelpBookmarks );
     const sal_Int32 nCount = m_xBookmarksBox->n_children();
     for (sal_Int32 i = 0; i < nCount; ++i)
-        aHistOpt.AppendItem(EHistoryType::HelpBookmarks, m_xBookmarksBox->get_id(i), "", m_xBookmarksBox->get_text(i), std::nullopt);
+        SvtHistoryOptions::AppendItem(EHistoryType::HelpBookmarks, m_xBookmarksBox->get_id(i), "", m_xBookmarksBox->get_text(i), std::nullopt);
 
     m_xBookmarksBox.reset();
     m_xBookmarksPB.reset();
