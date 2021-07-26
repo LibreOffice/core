@@ -117,6 +117,7 @@
 #include <officecfg/Office/Writer.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/sequence.hxx>
+#include <officecfg/Office/Common.hxx>
 
 #include <swerror.h>
 #include <ndole.hxx>
@@ -327,16 +328,15 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, SwPaM& rCursor, SvStream& rIn,
     memset(m_xAttrTab.get(), 0, sizeof(HTMLAttrTable));
 
     // Read the font sizes 1-7 from the INI file
-    SvxHtmlOptions& rHtmlOptions = SvxHtmlOptions::Get();
-    m_aFontHeights[0] = rHtmlOptions.GetFontSize( 0 ) * 20;
-    m_aFontHeights[1] = rHtmlOptions.GetFontSize( 1 ) * 20;
-    m_aFontHeights[2] = rHtmlOptions.GetFontSize( 2 ) * 20;
-    m_aFontHeights[3] = rHtmlOptions.GetFontSize( 3 ) * 20;
-    m_aFontHeights[4] = rHtmlOptions.GetFontSize( 4 ) * 20;
-    m_aFontHeights[5] = rHtmlOptions.GetFontSize( 5 ) * 20;
-    m_aFontHeights[6] = rHtmlOptions.GetFontSize( 6 ) * 20;
+    m_aFontHeights[0] = officecfg::Office::Common::Filter::HTML::Import::FontSize::Size_1::get() * 20;
+    m_aFontHeights[1] = officecfg::Office::Common::Filter::HTML::Import::FontSize::Size_2::get() * 20;
+    m_aFontHeights[2] = officecfg::Office::Common::Filter::HTML::Import::FontSize::Size_3::get() * 20;
+    m_aFontHeights[3] = officecfg::Office::Common::Filter::HTML::Import::FontSize::Size_4::get() * 20;
+    m_aFontHeights[4] = officecfg::Office::Common::Filter::HTML::Import::FontSize::Size_5::get() * 20;
+    m_aFontHeights[5] = officecfg::Office::Common::Filter::HTML::Import::FontSize::Size_6::get() * 20;
+    m_aFontHeights[6] = officecfg::Office::Common::Filter::HTML::Import::FontSize::Size_7::get() * 20;
 
-    m_bKeepUnknown = rHtmlOptions.IsImportUnknown();
+    m_bKeepUnknown = officecfg::Office::Common::Filter::HTML::Import::UnknownTag::get();
 
     if(bReadNewDoc)
     {
@@ -359,7 +359,7 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, SwPaM& rCursor, SvStream& rIn,
     m_xDoc->getIDocumentSettingAccess().set(DocumentSettingId::HTML_MODE, true);
 
     m_pCSS1Parser.reset(new SwCSS1Parser(m_xDoc.get(), *this, m_aFontHeights, m_sBaseURL, IsNewDoc()));
-    m_pCSS1Parser->SetIgnoreFontFamily( rHtmlOptions.IsIgnoreFontFamily() );
+    m_pCSS1Parser->SetIgnoreFontFamily( officecfg::Office::Common::Filter::HTML::Import::FontSetting::get() );
 
     if( bReadUTF8 )
     {

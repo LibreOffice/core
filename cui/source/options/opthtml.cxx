@@ -19,6 +19,8 @@
 
 #include <svtools/langtab.hxx>
 #include <svtools/htmlcfg.hxx>
+#include <comphelper/configuration.hxx>
+#include <officecfg/Office/Common.hxx>
 #include "opthtml.hxx"
 
 
@@ -72,68 +74,83 @@ std::unique_ptr<SfxTabPage> OfaHtmlTabPage::Create( weld::Container* pPage, weld
 
 bool OfaHtmlTabPage::FillItemSet( SfxItemSet* )
 {
-    SvxHtmlOptions& rHtmlOpt = SvxHtmlOptions::Get();
+    std::shared_ptr<comphelper::ConfigurationChanges> xChanges = comphelper::ConfigurationChanges::create();
     if(m_xSize1NF->get_value_changed_from_saved())
-        rHtmlOpt.SetFontSize(0, static_cast<sal_uInt16>(m_xSize1NF->get_value()));
+        officecfg::Office::Common::Filter::HTML::Import::FontSize::Size_1::set(
+            static_cast<sal_uInt16>(m_xSize1NF->get_value()), xChanges);
     if(m_xSize2NF->get_value_changed_from_saved())
-        rHtmlOpt.SetFontSize(1, static_cast<sal_uInt16>(m_xSize2NF->get_value()));
+        officecfg::Office::Common::Filter::HTML::Import::FontSize::Size_2::set(
+            static_cast<sal_uInt16>(m_xSize2NF->get_value()), xChanges);
     if(m_xSize3NF->get_value_changed_from_saved())
-        rHtmlOpt.SetFontSize(2, static_cast<sal_uInt16>(m_xSize3NF->get_value()));
+        officecfg::Office::Common::Filter::HTML::Import::FontSize::Size_3::set(
+            static_cast<sal_uInt16>(m_xSize3NF->get_value()), xChanges);
     if(m_xSize4NF->get_value_changed_from_saved())
-        rHtmlOpt.SetFontSize(3, static_cast<sal_uInt16>(m_xSize4NF->get_value()));
+        officecfg::Office::Common::Filter::HTML::Import::FontSize::Size_4::set(
+            static_cast<sal_uInt16>(m_xSize4NF->get_value()), xChanges);
     if(m_xSize5NF->get_value_changed_from_saved())
-        rHtmlOpt.SetFontSize(4, static_cast<sal_uInt16>(m_xSize5NF->get_value()));
+        officecfg::Office::Common::Filter::HTML::Import::FontSize::Size_5::set(
+            static_cast<sal_uInt16>(m_xSize5NF->get_value()), xChanges);
     if(m_xSize6NF->get_value_changed_from_saved())
-        rHtmlOpt.SetFontSize(5, static_cast<sal_uInt16>(m_xSize6NF->get_value()));
+        officecfg::Office::Common::Filter::HTML::Import::FontSize::Size_6::set(
+            static_cast<sal_uInt16>(m_xSize6NF->get_value()), xChanges);
     if(m_xSize7NF->get_value_changed_from_saved())
-        rHtmlOpt.SetFontSize(6, static_cast<sal_uInt16>(m_xSize7NF->get_value()));
+        officecfg::Office::Common::Filter::HTML::Import::FontSize::Size_7::set(
+            static_cast<sal_uInt16>(m_xSize7NF->get_value()), xChanges);
 
     if(m_xNumbersEnglishUSCB->get_state_changed_from_saved())
-        rHtmlOpt.SetNumbersEnglishUS(m_xNumbersEnglishUSCB->get_active());
+        officecfg::Office::Common::Filter::HTML::Import::NumbersEnglishUS::set(
+            m_xNumbersEnglishUSCB->get_active(), xChanges);
 
     if(m_xUnknownTagCB->get_state_changed_from_saved())
-        rHtmlOpt.SetImportUnknown(m_xUnknownTagCB->get_active());
+        officecfg::Office::Common::Filter::HTML::Import::UnknownTag::set(
+            m_xUnknownTagCB->get_active(), xChanges);
 
     if(m_xIgnoreFontNamesCB->get_state_changed_from_saved())
-        rHtmlOpt.SetIgnoreFontFamily(m_xIgnoreFontNamesCB->get_active());
+        officecfg::Office::Common::Filter::HTML::Import::FontSetting::set(
+            m_xIgnoreFontNamesCB->get_active(), xChanges);
 
     if(m_xStarBasicCB->get_state_changed_from_saved())
-        rHtmlOpt.SetStarBasic(m_xStarBasicCB->get_active());
+        officecfg::Office::Common::Filter::HTML::Export::Basic::set(
+            m_xStarBasicCB->get_active(), xChanges);
 
     if(m_xStarBasicWarningCB->get_state_changed_from_saved())
-        rHtmlOpt.SetStarBasicWarning(m_xStarBasicWarningCB->get_active());
+        officecfg::Office::Common::Filter::HTML::Export::Warning::set(
+            m_xStarBasicWarningCB->get_active(), xChanges);
 
     if(m_xSaveGrfLocalCB->get_state_changed_from_saved())
-        rHtmlOpt.SetSaveGraphicsLocal(m_xSaveGrfLocalCB->get_active());
+        officecfg::Office::Common::Filter::HTML::Export::LocalGraphic::set(
+            m_xSaveGrfLocalCB->get_active(), xChanges);
 
     if(m_xPrintExtensionCB->get_state_changed_from_saved())
-        rHtmlOpt.SetPrintLayoutExtension(m_xPrintExtensionCB->get_active());
+        officecfg::Office::Common::Filter::HTML::Export::PrintLayout::set(
+            m_xPrintExtensionCB->get_active(), xChanges);
 
-    if( m_xCharSetLB->GetSelectTextEncoding() != rHtmlOpt.GetTextEncoding() )
-        rHtmlOpt.SetTextEncoding( m_xCharSetLB->GetSelectTextEncoding() );
+    if( m_xCharSetLB->GetSelectTextEncoding() != SvxHtmlOptions::GetTextEncoding() )
+        officecfg::Office::Common::Filter::HTML::Export::Encoding::set(
+            m_xCharSetLB->GetSelectTextEncoding(), xChanges );
 
+    xChanges->commit();
     return false;
 }
 
 void OfaHtmlTabPage::Reset( const SfxItemSet* )
 {
-    SvxHtmlOptions& rHtmlOpt = SvxHtmlOptions::Get();
-    m_xSize1NF->set_value(rHtmlOpt.GetFontSize(0));
-    m_xSize2NF->set_value(rHtmlOpt.GetFontSize(1));
-    m_xSize3NF->set_value(rHtmlOpt.GetFontSize(2));
-    m_xSize4NF->set_value(rHtmlOpt.GetFontSize(3));
-    m_xSize5NF->set_value(rHtmlOpt.GetFontSize(4));
-    m_xSize6NF->set_value(rHtmlOpt.GetFontSize(5));
-    m_xSize7NF->set_value(rHtmlOpt.GetFontSize(6));
-    m_xNumbersEnglishUSCB->set_active(rHtmlOpt.IsNumbersEnglishUS());
-    m_xUnknownTagCB->set_active(rHtmlOpt.IsImportUnknown());
-    m_xIgnoreFontNamesCB->set_active(rHtmlOpt.IsIgnoreFontFamily());
+    m_xSize1NF->set_value(officecfg::Office::Common::Filter::HTML::Import::FontSize::Size_1::get());
+    m_xSize2NF->set_value(officecfg::Office::Common::Filter::HTML::Import::FontSize::Size_2::get());
+    m_xSize3NF->set_value(officecfg::Office::Common::Filter::HTML::Import::FontSize::Size_3::get());
+    m_xSize4NF->set_value(officecfg::Office::Common::Filter::HTML::Import::FontSize::Size_4::get());
+    m_xSize5NF->set_value(officecfg::Office::Common::Filter::HTML::Import::FontSize::Size_5::get());
+    m_xSize6NF->set_value(officecfg::Office::Common::Filter::HTML::Import::FontSize::Size_6::get());
+    m_xSize7NF->set_value(officecfg::Office::Common::Filter::HTML::Import::FontSize::Size_7::get());
+    m_xNumbersEnglishUSCB->set_active(officecfg::Office::Common::Filter::HTML::Import::NumbersEnglishUS::get());
+    m_xUnknownTagCB->set_active(officecfg::Office::Common::Filter::HTML::Import::UnknownTag::get());
+    m_xIgnoreFontNamesCB->set_active(officecfg::Office::Common::Filter::HTML::Import::FontSetting::get());
 
-    m_xStarBasicCB->set_active(rHtmlOpt.IsStarBasic());
-    m_xStarBasicWarningCB->set_active(rHtmlOpt.IsStarBasicWarning());
+    m_xStarBasicCB->set_active(officecfg::Office::Common::Filter::HTML::Export::Basic::get());
+    m_xStarBasicWarningCB->set_active(officecfg::Office::Common::Filter::HTML::Export::Warning::get());
     m_xStarBasicWarningCB->set_sensitive(!m_xStarBasicCB->get_active());
-    m_xSaveGrfLocalCB->set_active(rHtmlOpt.IsSaveGraphicsLocal());
-    m_xPrintExtensionCB->set_active(rHtmlOpt.IsPrintLayoutExtension());
+    m_xSaveGrfLocalCB->set_active(officecfg::Office::Common::Filter::HTML::Export::LocalGraphic::get());
+    m_xPrintExtensionCB->set_active(SvxHtmlOptions::IsPrintLayoutExtension());
 
     m_xPrintExtensionCB->save_state();
     m_xStarBasicCB->save_state();
@@ -150,9 +167,9 @@ void OfaHtmlTabPage::Reset( const SfxItemSet* )
     m_xUnknownTagCB->save_state();
     m_xIgnoreFontNamesCB->save_state();
 
-    if( !rHtmlOpt.IsDefaultTextEncoding() &&
-        m_xCharSetLB->GetSelectTextEncoding() != rHtmlOpt.GetTextEncoding() )
-        m_xCharSetLB->SelectTextEncoding( rHtmlOpt.GetTextEncoding() );
+    if( !SvxHtmlOptions::IsDefaultTextEncoding() &&
+        m_xCharSetLB->GetSelectTextEncoding() != SvxHtmlOptions::GetTextEncoding() )
+        m_xCharSetLB->SelectTextEncoding( SvxHtmlOptions::GetTextEncoding() );
 }
 
 IMPL_LINK(OfaHtmlTabPage, CheckBoxHdl_Impl, weld::Toggleable&, rBox, void)

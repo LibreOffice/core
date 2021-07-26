@@ -1099,9 +1099,8 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testChinese)
     mxComponent = loadFromDesktop(aURL, "com.sun.star.text.TextDocument", {});
 
     // Prevent parseXmlStream guess incompatible encoding and complaint.
-    SvxHtmlOptions& rOptions = SvxHtmlOptions::Get();
-    rtl_TextEncoding eOldEncoding = rOptions.GetTextEncoding();
-    rOptions.SetTextEncoding(RTL_TEXTENCODING_UTF8);
+    rtl_TextEncoding eOldEncoding = SvxHtmlOptions::GetTextEncoding();
+    SvxHtmlOptions::SetTextEncoding(RTL_TEXTENCODING_UTF8);
 
     // Export it.
     ExportToReqif();
@@ -1112,7 +1111,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testChinese)
     // Without the accompanying fix in place, this test would have failed as the output was not
     // well-formed.
     CPPUNIT_ASSERT(pDoc);
-    rOptions.SetTextEncoding(eOldEncoding);
+    SvxHtmlOptions::SetTextEncoding(eOldEncoding);
 }
 
 CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifComment)

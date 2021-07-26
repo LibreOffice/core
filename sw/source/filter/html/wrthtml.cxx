@@ -82,6 +82,7 @@
 #include <comphelper/scopeguard.hxx>
 #include <unotools/tempfile.hxx>
 #include <comphelper/sequenceashashmap.hxx>
+#include <officecfg/Office/Common.hxx>
 
 #define MAX_INDENT_LEVEL 20
 
@@ -273,20 +274,18 @@ ErrCode SwHTMLWriter::WriteStream()
     }
     comphelper::ScopeGuard g([this, pOldPasteStream] { this->SetStream(pOldPasteStream); });
 
-    SvxHtmlOptions& rHtmlOptions = SvxHtmlOptions::Get();
-
     // font heights 1-7
-    m_aFontHeights[0] = rHtmlOptions.GetFontSize( 0 ) * 20;
-    m_aFontHeights[1] = rHtmlOptions.GetFontSize( 1 ) * 20;
-    m_aFontHeights[2] = rHtmlOptions.GetFontSize( 2 ) * 20;
-    m_aFontHeights[3] = rHtmlOptions.GetFontSize( 3 ) * 20;
-    m_aFontHeights[4] = rHtmlOptions.GetFontSize( 4 ) * 20;
-    m_aFontHeights[5] = rHtmlOptions.GetFontSize( 5 ) * 20;
-    m_aFontHeights[6] = rHtmlOptions.GetFontSize( 6 ) * 20;
+    m_aFontHeights[0] = officecfg::Office::Common::Filter::HTML::Import::FontSize::Size_1::get() * 20;
+    m_aFontHeights[1] = officecfg::Office::Common::Filter::HTML::Import::FontSize::Size_2::get() * 20;
+    m_aFontHeights[2] = officecfg::Office::Common::Filter::HTML::Import::FontSize::Size_3::get() * 20;
+    m_aFontHeights[3] = officecfg::Office::Common::Filter::HTML::Import::FontSize::Size_4::get() * 20;
+    m_aFontHeights[4] = officecfg::Office::Common::Filter::HTML::Import::FontSize::Size_5::get() * 20;
+    m_aFontHeights[5] = officecfg::Office::Common::Filter::HTML::Import::FontSize::Size_6::get() * 20;
+    m_aFontHeights[6] = officecfg::Office::Common::Filter::HTML::Import::FontSize::Size_7::get() * 20;
 
     // output styles anyway
     // (then also top and bottom paragraph spacing)
-    m_nExportMode = rHtmlOptions.GetExportMode();
+    m_nExportMode = SvxHtmlOptions::GetExportMode();
     m_nHTMLMode = GetHtmlMode(nullptr);
 
     if( HTML_CFG_WRITER == m_nExportMode || HTML_CFG_NS40 == m_nExportMode )
@@ -321,19 +320,19 @@ ErrCode SwHTMLWriter::WriteStream()
     m_eCSS1Unit = SW_MOD()->GetMetric( m_pDoc->getIDocumentSettingAccess().get(DocumentSettingId::HTML_MODE) );
 
     bool bWriteUTF8 = m_bWriteClipboardDoc;
-    m_eDestEnc = bWriteUTF8 ? RTL_TEXTENCODING_UTF8 : rHtmlOptions.GetTextEncoding();
+    m_eDestEnc = bWriteUTF8 ? RTL_TEXTENCODING_UTF8 : SvxHtmlOptions::GetTextEncoding();
     const char *pCharSet = rtl_getBestMimeCharsetFromTextEncoding( m_eDestEnc );
     m_eDestEnc = rtl_getTextEncodingFromMimeCharset( pCharSet );
 
     // Only for the MS-IE we favour the export of styles.
     m_bCfgPreferStyles = HTML_CFG_MSIE == m_nExportMode;
 
-    m_bCfgStarBasic = rHtmlOptions.IsStarBasic();
+    m_bCfgStarBasic = officecfg::Office::Common::Filter::HTML::Export::Basic::get();
 
     m_bCfgFormFeed = !IsHTMLMode(HTMLMODE_PRINT_EXT);
-    m_bCfgCpyLinkedGrfs = rHtmlOptions.IsSaveGraphicsLocal();
+    m_bCfgCpyLinkedGrfs = officecfg::Office::Common::Filter::HTML::Export::LocalGraphic::get();
 
-    m_bCfgPrintLayout = rHtmlOptions.IsPrintLayoutExtension();
+    m_bCfgPrintLayout = SvxHtmlOptions::IsPrintLayoutExtension();
 
     // get HTML template
     bool bOldHTMLMode = false;

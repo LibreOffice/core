@@ -63,6 +63,7 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <numeric>
 #include <utility>
+#include <officecfg/Office/Common.hxx>
 
 using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
@@ -186,9 +187,13 @@ ScHTMLParser::ScHTMLParser( EditEngine* pEditEngine, ScDocument* pDoc ) :
     ScEEParser( pEditEngine ),
     mpDoc( pDoc )
 {
-    SvxHtmlOptions& rHtmlOptions = SvxHtmlOptions::Get();
-    for( sal_uInt16 nIndex = 0; nIndex < SC_HTML_FONTSIZES; ++nIndex )
-        maFontHeights[ nIndex ] = rHtmlOptions.GetFontSize( nIndex ) * 20;
+    maFontHeights[0] = officecfg::Office::Common::Filter::HTML::Import::FontSize::Size_1::get();
+    maFontHeights[1] = officecfg::Office::Common::Filter::HTML::Import::FontSize::Size_2::get();
+    maFontHeights[2] = officecfg::Office::Common::Filter::HTML::Import::FontSize::Size_3::get();
+    maFontHeights[3] = officecfg::Office::Common::Filter::HTML::Import::FontSize::Size_4::get();
+    maFontHeights[4] = officecfg::Office::Common::Filter::HTML::Import::FontSize::Size_5::get();
+    maFontHeights[5] = officecfg::Office::Common::Filter::HTML::Import::FontSize::Size_6::get();
+    maFontHeights[6] = officecfg::Office::Common::Filter::HTML::Import::FontSize::Size_7::get();
 }
 
 ScHTMLParser::~ScHTMLParser()
