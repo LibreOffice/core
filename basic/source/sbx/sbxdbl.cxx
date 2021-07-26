@@ -198,7 +198,8 @@ start:
         case SbxLPSTR:
             if( !p->pOUString )
                 p->pOUString = new OUString;
-            ImpCvtNum( n, 14, *p->pOUString, bCoreString );
+            // tdf#107953 - show 17 significant digits
+            ImpCvtNum( n, 17, *p->pOUString, bCoreString );
             break;
         case SbxOBJECT:
         {
