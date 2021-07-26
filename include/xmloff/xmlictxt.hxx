@@ -52,7 +52,7 @@ class XMLOFF_DLLPUBLIC SvXMLImportContext : public css::xml::sax::XFastContextHa
     std::optional<SvXMLNamespaceMap>  m_xRewindMap;
 
     SAL_DLLPRIVATE std::optional<SvXMLNamespaceMap> TakeRewindMap() { return std::move(m_xRewindMap); }
-    SAL_DLLPRIVATE void PutRewindMap(std::optional<SvXMLNamespaceMap> p) { m_xRewindMap = std::move(p); }
+    SAL_DLLPRIVATE void PutRewindMap(std::optional<SvXMLNamespaceMap>&& p) { m_xRewindMap = std::move(p); }
 
 protected:
 
