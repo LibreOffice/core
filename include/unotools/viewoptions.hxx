@@ -26,9 +26,7 @@
 #include <unotools/options.hxx>
 
 namespace com::sun::star::beans { struct NamedValue; }
-namespace osl { class Mutex; }
-
-class SvtViewOptionsBase_Impl;
+namespace com::sun::star::container { class XNameAccess; }
 
 /*-************************************************************************************************************
     @descr          Use these enum values to specify right list in configuration in which your view data are saved.
@@ -94,7 +92,7 @@ enum class EViewType
     @devstatus      ready to use
 *//*-*************************************************************************************************************/
 
-class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtViewOptions final : public utl::detail::Options
+class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtViewOptions final
 {
 
     //  public methods
@@ -118,15 +116,6 @@ class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtViewOptions final : public utl::deta
 
          SvtViewOptions(       EViewType        eType     ,
                          const OUString& sViewName );
-        virtual ~SvtViewOptions() override;
-
-        /*-****************************************************************************************************
-            @short      support preload of these config item
-            @descr      Sometimes we need preloading of these configuration data without real using of it.
-        *//*-*****************************************************************************************************/
-
-        static void AcquireOptions();
-        static void ReleaseOptions();
 
         //  interface
 
@@ -174,7 +163,7 @@ class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtViewOptions final : public utl::deta
         *//*-*****************************************************************************************************/
 
         OString GetPageID() const;
-        void      SetPageID(const OString& rID);
+        void      SetPageID(std::string_view rID);
 
         /*-****************************************************************************************************
             @short      use it to set/get the visual state of a window
@@ -214,46 +203,21 @@ class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtViewOptions final : public utl::deta
         void          SetUserItem( const OUString&            sName  ,
                                    const css::uno::Any& aValue );
 
-    //  private methods
-
     private:
+        enum State { STATE_NONE, STATE_FALSE, STATE_TRUE };
 
-        /*-****************************************************************************************************
-            @short      return a reference to a static mutex
-            @descr      These class is threadsafe.
-                        We create a static mutex only for one time and use it to protect our refcount and container
-                        member!
-            @return     A reference to a static mutex member.
-        *//*-*****************************************************************************************************/
-
-        UNOTOOLS_DLLPRIVATE static ::osl::Mutex& GetOwnStaticMutex();
-
-    //  private member
-
-    private:
+        css::uno::Reference< css::uno::XInterface > impl_getSetNode( const OUString& sNode           ,
+                                                                           bool         bCreateIfMissing) const;
+        State GetVisible() const;
 
         /// specify which list of views in configuration is used! This can't be a static value!!!
         /// ... because we need this value to work with right static data container.
         EViewType           m_eViewType;
         OUString     m_sViewName;
 
-        /*Attention
-
-            Don't initialize these static members in these headers!
-            a) Double defined symbols will be detected ...
-            b) and unresolved externals exist at linking time.
-            Do it in your source only.
-         */
-
-        static SvtViewOptionsBase_Impl*    m_pDataContainer_Dialogs;   /// hold data for all dialogs
-        static sal_Int32                   m_nRefCount_Dialogs;
-        static SvtViewOptionsBase_Impl*    m_pDataContainer_TabDialogs;   /// hold data for all tab-dialogs
-        static sal_Int32                   m_nRefCount_TabDialogs;
-        static SvtViewOptionsBase_Impl*    m_pDataContainer_TabPages;   /// hold data for all tab-pages
-        static sal_Int32                   m_nRefCount_TabPages;
-        static SvtViewOptionsBase_Impl*    m_pDataContainer_Windows;   /// hold data for all windows
-        static sal_Int32                   m_nRefCount_Windows;
-
+        OUString                                           m_sListName;
+        css::uno::Reference< css::container::XNameAccess > m_xRoot;
+        css::uno::Reference< css::container::XNameAccess > m_xSet;
 };      // class SvtViewOptions
 
 #endif // INCLUDED_UNOTOOLS_VIEWOPTIONS_HXX

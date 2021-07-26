@@ -53,11 +53,6 @@ enum class EItem
     SysLocaleOptions              ,   // 2
 
     UserOptions                   ,   // 2
-
-    ViewOptionsDialog             ,
-    ViewOptionsTabDialog          ,
-    ViewOptionsTabPage            ,
-    ViewOptionsWindow
 };
 
 struct TItemInfo
