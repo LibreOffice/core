@@ -145,22 +145,6 @@ void ItemHolder1::impl_newItem(TItemInfo& rItem)
             rItem.pItem.reset( new SvtPathOptions() );
             break;
 
-        case EItem::ViewOptionsDialog :
-            rItem.pItem.reset( new SvtViewOptions(EViewType::Dialog, OUString()) );
-            break;
-
-        case EItem::ViewOptionsTabDialog :
-            rItem.pItem.reset( new SvtViewOptions(EViewType::TabDialog, OUString()) );
-            break;
-
-        case EItem::ViewOptionsTabPage :
-            rItem.pItem.reset( new SvtViewOptions(EViewType::TabPage, OUString()) );
-            break;
-
-        case EItem::ViewOptionsWindow :
-            rItem.pItem.reset( new SvtViewOptions(EViewType::Window, OUString()) );
-            break;
-
         case EItem::UserOptions :
             rItem.pItem.reset( new SvtUserOptions() );
             break;
