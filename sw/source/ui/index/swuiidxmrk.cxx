@@ -1086,7 +1086,9 @@ class SwCreateAuthEntryDlg_Impl : public weld::GenericDialogController
     std::unique_ptr<weld::Button> m_xBrowseButton;
     std::unique_ptr<weld::Button> m_xLocalBrowseButton;
     std::unique_ptr<weld::CheckButton> m_xPageCB;
+    std::unique_ptr<weld::CheckButton> m_xLocalPageCB;
     std::unique_ptr<weld::SpinButton> m_xPageSB;
+    std::unique_ptr<weld::SpinButton> m_xLocalPageSB;
 
     DECL_LINK(IdentifierHdl, weld::ComboBox&, void);
     DECL_LINK(ShortNameHdl, weld::Entry&, void);
@@ -1672,29 +1674,43 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(weld::Window* pParent,
                 m_xLocalBrowseButton = m_aBuilders.back()->weld_button("browse");
                 m_xLocalBrowseButton->connect_clicked(
                     LINK(this, SwCreateAuthEntryDlg_Impl, BrowseHdl));
+                m_xLocalPageCB = m_aBuilders.back()->weld_check_button("pagecb");
+                // Distinguish different instances of this for ui-testing.
+                m_xLocalPageCB->set_buildable_name(m_xLocalPageCB->get_buildable_name()
+                                                   + "-local-visible");
+                m_xLocalPageSB = m_aBuilders.back()->weld_spin_button("pagesb");
             }
 
             // Now that both pEdits[nIndex] and m_xPageSB is initialized, set their values.
             OUString aText = pFields[aCurInfo.nToxField];
-            if (aCurInfo.nToxField != AUTH_FIELD_URL)
-            {
-                pEdits[nIndex]->set_text(aText);
-            }
-            else
+            if (aCurInfo.nToxField == AUTH_FIELD_URL || aCurInfo.nToxField == AUTH_FIELD_LOCAL_URL)
             {
                 OUString aUrl;
                 int nPageNumber;
                 if (SplitUrlAndPage(aText, aUrl, nPageNumber))
                 {
                     pEdits[nIndex]->set_text(aUrl);
-                    m_xPageCB->set_active(true);
-                    m_xPageSB->set_sensitive(true);
-                    m_xPageSB->set_value(nPageNumber);
+                    if (aCurInfo.nToxField == AUTH_FIELD_URL)
+                    {
+                        m_xPageCB->set_active(true);
+                        m_xPageSB->set_sensitive(true);
+                        m_xPageSB->set_value(nPageNumber);
+                    }
+                    else
+                    {
+                        m_xLocalPageCB->set_active(true);
+                        m_xLocalPageSB->set_sensitive(true);
+                        m_xLocalPageSB->set_value(nPageNumber);
+                    }
                 }
                 else
                 {
                     pEdits[nIndex]->set_text(aText);
                 }
+            }
+            else
+            {
+                pEdits[nIndex]->set_text(aText);
             }
             pEdits[nIndex]->show();
             pEdits[nIndex]->set_help_id(aCurInfo.pHelpId);
@@ -1711,13 +1727,15 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(weld::Window* pParent,
             }
             else if (aCurInfo.nToxField == AUTH_FIELD_URL)
             {
-                if (comphelper::isFileUrl(pFields[aCurInfo.nToxField]))
-                {
-                    m_xBrowseButton->show();
-                }
                 m_xPageCB->show();
                 m_xPageCB->connect_toggled(LINK(this, SwCreateAuthEntryDlg_Impl, PageNumHdl));
                 m_xPageSB->show();
+            }
+            else if (aCurInfo.nToxField == AUTH_FIELD_LOCAL_URL)
+            {
+                m_xLocalPageCB->show();
+                m_xLocalPageCB->connect_toggled(LINK(this, SwCreateAuthEntryDlg_Impl, PageNumHdl));
+                m_xLocalPageSB->show();
             }
 
             m_aFixedTexts.back()->set_mnemonic_widget(pEdits[nIndex].get());
@@ -1750,13 +1768,17 @@ OUString  SwCreateAuthEntryDlg_Impl::GetEntryText(ToxAuthorityField eField) cons
         const TextInfo aCurInfo = aTextInfoArr[nIndex];
         if(aCurInfo.nToxField == eField)
         {
-            if (aCurInfo.nToxField != AUTH_FIELD_URL)
+            if (aCurInfo.nToxField == AUTH_FIELD_URL)
             {
-                return pEdits[nIndex]->get_text();
+                return MergeUrlAndPage(pEdits[nIndex]->get_text(), m_xPageSB);
+            }
+            else if (aCurInfo.nToxField == AUTH_FIELD_LOCAL_URL)
+            {
+                return MergeUrlAndPage(pEdits[nIndex]->get_text(), m_xLocalPageSB);
             }
             else
             {
-                return MergeUrlAndPage(pEdits[nIndex]->get_text(), m_xPageSB);
+                return pEdits[nIndex]->get_text();
             }
         }
     }
@@ -1845,16 +1867,17 @@ IMPL_LINK(SwCreateAuthEntryDlg_Impl, BrowseHdl, weld::Button&, rButton, void)
     }
 };
 
-IMPL_LINK_NOARG(SwCreateAuthEntryDlg_Impl, PageNumHdl, weld::Toggleable&, void)
+IMPL_LINK(SwCreateAuthEntryDlg_Impl, PageNumHdl, weld::Toggleable&, rPageCB, void)
 {
-    if (m_xPageCB->get_active())
+    weld::SpinButton& rPageSB = (&rPageCB == m_xPageCB.get()) ? *m_xPageSB : *m_xLocalPageSB;
+    if (rPageCB.get_active())
     {
-        m_xPageSB->set_sensitive(true);
-        m_xPageSB->set_value(1);
+        rPageSB.set_sensitive(true);
+        rPageSB.set_value(1);
     }
     else
     {
-        m_xPageSB->set_sensitive(false);
+        rPageSB.set_sensitive(false);
     }
 }
 
