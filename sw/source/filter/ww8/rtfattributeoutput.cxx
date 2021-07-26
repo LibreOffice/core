@@ -1561,10 +1561,16 @@ void RtfAttributeOutput::NumberingLevel(sal_uInt8 nLevel, sal_uInt16 nStart,
             nVal = 25;
             break;
         case style::NumberingType::NUMBER_HANGUL_KO:
-            nVal = 41;
+            nVal = 42;
+            break; // koreanCounting
+        case style::NumberingType::NUMBER_DIGITAL_KO:
+            nVal = 41; // koreanDigital
             break;
-        case style::NumberingType::NUMBER_UPPER_KO:
-            nVal = 44;
+        case style::NumberingType::NUMBER_DIGITAL2_KO:
+            nVal = 44; // koreanDigital2
+            break;
+        case style::NumberingType::NUMBER_LEGAL_KO:
+            nVal = 43; // koreanLegal
             break;
 
         case SVX_NUM_BITMAP:
