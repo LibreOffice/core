@@ -357,7 +357,7 @@ void SAL_CALL OApplicationController::disposing()
                         aFilter = pFilter->GetFilterName();
 
                     // add to svtool history options
-                    SvtHistoryOptions().AppendItem( EHistoryType::PickList,
+                    SvtHistoryOptions::AppendItem( EHistoryType::PickList,
                             aURL.GetURLNoPass( INetURLObject::DecodeMechanism::NONE ),
                             aFilter,
                             getStrippedDatabaseName(),

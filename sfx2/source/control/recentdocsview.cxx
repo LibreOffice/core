@@ -240,42 +240,34 @@ void RecentDocsView::Reload()
 {
     Clear();
 
-    Sequence< Sequence< PropertyValue > > aHistoryList = SvtHistoryOptions().GetList( EHistoryType::PickList );
-    for ( int i = 0; i < aHistoryList.getLength(); i++ )
+    std::vector< SvtHistoryOptions::HistoryItem > aHistoryList = SvtHistoryOptions::GetList( EHistoryType::PickList );
+    for ( size_t i = 0; i < aHistoryList.size(); i++ )
     {
-        const Sequence< PropertyValue >& rRecentEntry = aHistoryList[i];
+        const SvtHistoryOptions::HistoryItem& rRecentEntry = aHistoryList[i];
 
-        OUString aURL;
+        OUString aURL = rRecentEntry.sURL;
         OUString aTitle;
         BitmapEx aThumbnail;
         BitmapEx aModule;
 
-        for ( const auto& rProp : rRecentEntry )
+        //fdo#74834: only load thumbnail if the corresponding option is not disabled in the configuration
+        if (officecfg::Office::Common::History::RecentDocsThumbnail::get())
         {
-            Any a = rProp.Value;
-
-            if (rProp.Name == "URL")
-                a >>= aURL;
-            //fdo#74834: only load thumbnail if the corresponding option is not disabled in the configuration
-            else if (rProp.Name == "Thumbnail" && officecfg::Office::Common::History::RecentDocsThumbnail::get())
+            OUString aBase64 = rRecentEntry.sThumbnail;
+            if (!aBase64.isEmpty())
             {
-                OUString aBase64;
-                a >>= aBase64;
-                if (!aBase64.isEmpty())
-                {
-                    Sequence<sal_Int8> aDecoded;
-                    comphelper::Base64::decode(aDecoded, aBase64);
+                Sequence<sal_Int8> aDecoded;
+                comphelper::Base64::decode(aDecoded, aBase64);
 
-                    SvMemoryStream aStream(aDecoded.getArray(), aDecoded.getLength(), StreamMode::READ);
-                    vcl::PngImageReader aReader(aStream);
-                    aThumbnail = aReader.read();
-                } else
+                SvMemoryStream aStream(aDecoded.getArray(), aDecoded.getLength(), StreamMode::READ);
+                vcl::PngImageReader aReader(aStream);
+                aThumbnail = aReader.read();
+            } else
+            {
+                INetURLObject aUrl(aURL);
+                if (mnFileTypes & ApplicationType::TYPE_DATABASE && typeMatchesExtension(ApplicationType::TYPE_DATABASE, aUrl.getExtension()))
                 {
-                    INetURLObject aUrl(aURL);
-                    if (mnFileTypes & ApplicationType::TYPE_DATABASE && typeMatchesExtension(ApplicationType::TYPE_DATABASE, aUrl.getExtension()))
-                    {
-                        aThumbnail = BitmapEx(ThumbnailView::ItemHeight() > 192 ? SFX_THUMBNAIL_BASE_256 : SFX_THUMBNAIL_BASE_192);
-                    }
+                    aThumbnail = BitmapEx(ThumbnailView::ItemHeight() > 192 ? SFX_THUMBNAIL_BASE_256 : SFX_THUMBNAIL_BASE_192);
                 }
             }
         }
