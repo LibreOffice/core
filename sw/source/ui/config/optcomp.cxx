@@ -219,8 +219,8 @@ void SwCompatibilityOptPage::InitControls( const SfxItemSet& rSet )
 
         const OUString sEntryName = aEntry.getValue<OUString>( SvtCompatibilityEntry::Index::Name );
 
-        const bool bIsUserEntry    = ( sEntryName == SvtCompatibilityEntry::getUserEntryName() );
-        const bool bIsDefaultEntry = ( sEntryName == SvtCompatibilityEntry::getDefaultEntryName() );
+        const bool bIsUserEntry    = ( sEntryName == SvtCompatibilityEntry::USER_ENTRY_NAME );
+        const bool bIsDefaultEntry = ( sEntryName == SvtCompatibilityEntry::DEFAULT_ENTRY_NAME );
 
         aEntry.setDefaultEntry( bIsDefaultEntry );
 
