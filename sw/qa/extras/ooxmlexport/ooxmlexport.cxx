@@ -696,7 +696,7 @@ DECLARE_OOXMLEXPORT_TEST(testOoxmlCjklist35, "cjklist35.docx")
 DECLARE_OOXMLEXPORT_TEST(testOoxmlCjklist44, "cjklist44.docx")
 {
     sal_Int16   numFormat = getNumberingTypeOfParagraph(1);
-    CPPUNIT_ASSERT_EQUAL(style::NumberingType::NUMBER_HANGUL_KO, numFormat);
+    CPPUNIT_ASSERT_EQUAL(style::NumberingType::NUMBER_DIGITAL2_KO, numFormat);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testOoxmlTextNumberList, "text_number_list.docx")

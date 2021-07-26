@@ -756,8 +756,10 @@ sal_uInt8 WW8Export::GetNumId( sal_uInt16 eNumType )
     case style::NumberingType::DI_ZI_ZH: nRet = 31; break;
     case style::NumberingType::NUMBER_UPPER_ZH_TW: nRet = 34;break;
     case style::NumberingType::NUMBER_UPPER_ZH: nRet = 38; break;
-    case style::NumberingType::NUMBER_HANGUL_KO: nRet = 41; break;
-    case style::NumberingType::NUMBER_UPPER_KO: nRet = 44; break;
+    case style::NumberingType::NUMBER_DIGITAL_KO: nRet = 41; break;
+    case style::NumberingType::NUMBER_HANGUL_KO: nRet = 42; break;
+    case style::NumberingType::NUMBER_LEGAL_KO: nRet = 43; break;
+    case style::NumberingType::NUMBER_DIGITAL2_KO: nRet = 44; break;
     case style::NumberingType::NUMBER_HEBREW: nRet = 45; break;
     case style::NumberingType::CHARS_ARABIC: nRet = 46; break;
     case style::NumberingType::CHARS_HEBREW: nRet = 47; break;
