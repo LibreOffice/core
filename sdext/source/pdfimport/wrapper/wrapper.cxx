@@ -556,11 +556,11 @@ void LineParser::readFont()
     /* The above font attributes (fontName, bold, italic) are based on
        xpdf line output and may not be reliable. To get correct attributes,
        we do the following:
-    1. Read the embeded font file and determine the attributes based on the
+    1. Read the embedded font file and determine the attributes based on the
        font file.
     2. If we failed to read the font file, or empty result is returned, then
        determine the font attributes from the font name.
-    3. If all these attemps have failed, then use a fallback font.
+    3. If all these attempts have failed, then use a fallback font.
     */
     if (nFileLen > 0)
     {
