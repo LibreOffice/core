@@ -90,6 +90,8 @@
 #include <svl/flagitem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/languageoptions.hxx>
+#include <svl/cjkoptions.hxx>
+#include <svl/ctloptions.hxx>
 #include <svx/databaseregistrationui.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/urlobj.hxx>
@@ -1416,7 +1418,8 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
     }
 
     // Language options
-    SvtLanguageOptions aLanguageOptions;
+    SvtCJKOptions aCJKLanguageOptions;
+    SvtCTLOptions aCTLLanguageOptions;
     if ( !lcl_isOptionHidden( SID_LANGUAGE_OPTIONS, aOptionsDlgOpt ) )
     {
         setGroupName(u"LanguageSettings", CuiResId(SID_LANGUAGE_OPTIONS_RES[0].first));
@@ -1426,9 +1429,9 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
             nPageId = static_cast<sal_uInt16>(SID_LANGUAGE_OPTIONS_RES[i].second);
             if ( lcl_isOptionHidden( nPageId, aOptionsDlgOpt ) )
                 continue;
-            if ( ( RID_SVXPAGE_JSEARCH_OPTIONS != nPageId || aLanguageOptions.IsJapaneseFindEnabled() ) &&
-                 ( RID_SVXPAGE_ASIAN_LAYOUT != nPageId    || aLanguageOptions.IsAsianTypographyEnabled() ) &&
-                 ( RID_SVXPAGE_OPTIONS_CTL != nPageId     || aLanguageOptions.IsCTLFontEnabled() ) )
+            if ( ( RID_SVXPAGE_JSEARCH_OPTIONS != nPageId || aCJKLanguageOptions.IsJapaneseFindEnabled() ) &&
+                 ( RID_SVXPAGE_ASIAN_LAYOUT != nPageId    || aCJKLanguageOptions.IsAsianTypographyEnabled() ) &&
+                 ( RID_SVXPAGE_OPTIONS_CTL != nPageId     || aCTLLanguageOptions.IsCTLFontEnabled() ) )
                 AddTabPage(nPageId, CuiResId(SID_LANGUAGE_OPTIONS_RES[i].first), nGroup);
         }
     }
@@ -1458,8 +1461,8 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
                     nPageId = static_cast<sal_uInt16>(SID_SW_EDITOPTIONS_RES[i].second);
                     if ( lcl_isOptionHidden( nPageId, aOptionsDlgOpt ) )
                         continue;
-                    if ( ( RID_SW_TP_STD_FONT_CJK != nPageId || aLanguageOptions.IsCJKFontEnabled() ) &&
-                         ( RID_SW_TP_STD_FONT_CTL != nPageId || aLanguageOptions.IsCTLFontEnabled() ) &&
+                    if ( ( RID_SW_TP_STD_FONT_CJK != nPageId || aCJKLanguageOptions.IsCJKFontEnabled() ) &&
+                         ( RID_SW_TP_STD_FONT_CTL != nPageId || aCTLLanguageOptions.IsCTLFontEnabled() ) &&
                          ( RID_SW_TP_MAILCONFIG != nPageId || MailMergeCfg_Impl().IsEmailSupported() ) )
                         AddTabPage( nPageId, CuiResId(SID_SW_EDITOPTIONS_RES[i].first), nGroup );
                 }

@@ -24,6 +24,8 @@
 #include <svx/svxids.hrc>
 #include <svtools/unitconv.hxx>
 #include <svl/languageoptions.hxx>
+#include <svl/cjkoptions.hxx>
+#include <svl/ctloptions.hxx>
 #include <chardlg.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/postitem.hxx>
@@ -218,9 +220,10 @@ SvxCharNamePage::SvxCharNamePage(weld::Container* pPage, weld::DialogController*
 #endif
     m_pImpl->m_aNoStyleText = CuiResId( RID_SVXSTR_CHARNAME_NOSTYLE );
 
-    SvtLanguageOptions aLanguageOptions;
-    bool bShowCJK = aLanguageOptions.IsCJKFontEnabled();
-    bool bShowCTL = aLanguageOptions.IsCTLFontEnabled();
+    SvtCJKOptions aCJKLanguageOptions;
+    SvtCTLOptions aCTLLanguageOptions;
+    bool bShowCJK = aCJKLanguageOptions.IsCJKFontEnabled();
+    bool bShowCTL = aCTLLanguageOptions.IsCTLFontEnabled();
     bool bShowNonWestern = bShowCJK || bShowCTL;
 
     if (bShowNonWestern)
@@ -1415,7 +1418,7 @@ void SvxCharEffectsPage::Initialize()
     m_xOutlineBtn->connect_toggled(LINK(this, SvxCharEffectsPage, OutlineBtnClickHdl));
     m_xShadowBtn->connect_toggled(LINK(this, SvxCharEffectsPage, ShadowBtnClickHdl));
 
-    if ( !SvtLanguageOptions().IsAsianTypographyEnabled() )
+    if ( !SvtCJKOptions().IsAsianTypographyEnabled() )
     {
         m_xEmphasisFT->hide();
         m_xEmphasisLB->hide();

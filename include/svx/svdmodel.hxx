@@ -88,6 +88,9 @@ namespace sfx2
 {
     class LinkManager;
 }
+namespace com::sun::star::beans {
+    struct PropertyValue;
+}
 
 
 enum class SdrHintKind

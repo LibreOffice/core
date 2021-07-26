@@ -93,6 +93,7 @@
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <svl/itempool.hxx>
 #include <svl/languageoptions.hxx>
+#include <svl/ctloptions.hxx>
 #include <comphelper/classids.hxx>
 #include <servicenames_charttypes.hxx>
 
@@ -1258,7 +1259,7 @@ bool lcl_IsPieOrDonut( const uno::Reference< XDiagram >& xDiagram )
 void lcl_setDefaultWritingMode( const std::shared_ptr< DrawModelWrapper >& pDrawModelWrapper, ChartModel& rModel)
 {
     //get writing mode from parent document:
-    if( !SvtLanguageOptions().IsCTLFontEnabled() )
+    if( !SvtCTLOptions().IsCTLFontEnabled() )
         return;
 
     try

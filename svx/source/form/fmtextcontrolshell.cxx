@@ -50,6 +50,7 @@
 #include <svl/eitem.hxx>
 #include <svl/itempool.hxx>
 #include <svl/languageoptions.hxx>
+#include <svl/ctloptions.hxx>
 #include <svtools/stringtransfer.hxx>
 #include <svl/whiter.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -899,7 +900,7 @@ namespace svx
                 ||  ( nSlot == SID_ATTR_PARA_RIGHT_TO_LEFT )
                 )
             {
-                if ( !SvtLanguageOptions().IsCTLFontEnabled() )
+                if ( !SvtCTLOptions().IsCTLFontEnabled() )
                 {
                     _rSet.DisableItem( nSlot );
                     nSlot = aIter.NextWhich();

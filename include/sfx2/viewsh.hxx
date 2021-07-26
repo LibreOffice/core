@@ -57,6 +57,7 @@ class NotifyEvent;
 class SfxInPlaceClient;
 namespace vcl { class PrinterController; }
 
+namespace com::sun::star::beans { struct PropertyValue; }
 namespace com::sun::star::datatransfer::clipboard { class XClipboardListener; }
 namespace com::sun::star::datatransfer::clipboard { class XClipboardNotifier; }
 namespace com::sun::star::embed { class XEmbeddedObject; }

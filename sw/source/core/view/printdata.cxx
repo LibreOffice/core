@@ -28,6 +28,8 @@
 #include <docfld.hxx>
 
 #include <svl/languageoptions.hxx>
+#include <svl/cjkoptions.hxx>
+#include <svl/ctloptions.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <vcl/outdev.hxx>
@@ -169,8 +171,7 @@ SwPrintUIOptions::SwPrintUIOptions(
     }
 
     // check if either CJK or CTL is enabled
-    SvtLanguageOptions aLangOpt;
-    bool bRTL = aLangOpt.IsCJKFontEnabled() || aLangOpt.IsCTLFontEnabled();
+    bool bRTL = SvtCJKOptions().IsCJKFontEnabled() || SvtCTLOptions().IsCTLFontEnabled();
 
     // create sequence of print UI options
     // (5 options are not available for Writer-Web)

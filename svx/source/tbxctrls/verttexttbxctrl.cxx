@@ -20,6 +20,8 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <verttexttbxctrl.hxx>
 #include <svl/languageoptions.hxx>
+#include <svl/cjkoptions.hxx>
+#include <svl/ctloptions.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/weld.hxx>
 #include <rtl/ustring.hxx>
@@ -98,12 +100,12 @@ void SAL_CALL SvxVertCTLTextTbxCtrl::statusChanged(const css::frame::FeatureStat
     bool bEnabled = false;
     if (rEvent.FeatureURL.Complete == ".uno:VerticalTextState")
     {
-        SvtLanguageOptions aLangOptions;
+        SvtCJKOptions aLangOptions;
         bEnabled = m_bVisible && aLangOptions.IsVerticalTextEnabled();
     }
     else if (rEvent.FeatureURL.Complete == ".uno:CTLFontState")
     {
-        SvtLanguageOptions aLangOptions;
+        SvtCTLOptions aLangOptions;
         bEnabled = m_bVisible && aLangOptions.IsCTLFontEnabled();
     }
     else
