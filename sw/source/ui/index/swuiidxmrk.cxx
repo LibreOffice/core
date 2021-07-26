@@ -1084,6 +1084,7 @@ class SwCreateAuthEntryDlg_Impl : public weld::GenericDialogController
     std::unique_ptr<weld::ComboBox> m_xTypeListBox;
     std::unique_ptr<weld::ComboBox> m_xIdentifierBox;
     std::unique_ptr<weld::Button> m_xBrowseButton;
+    std::unique_ptr<weld::Button> m_xLocalBrowseButton;
     std::unique_ptr<weld::CheckButton> m_xPageCB;
     std::unique_ptr<weld::SpinButton> m_xPageSB;
 
@@ -1666,6 +1667,12 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(weld::Window* pParent,
                 m_xPageCB->set_buildable_name(m_xPageCB->get_buildable_name() + "-visible");
                 m_xPageSB = m_aBuilders.back()->weld_spin_button("pagesb");
             }
+            else if (aCurInfo.nToxField == AUTH_FIELD_LOCAL_URL)
+            {
+                m_xLocalBrowseButton = m_aBuilders.back()->weld_button("browse");
+                m_xLocalBrowseButton->connect_clicked(
+                    LINK(this, SwCreateAuthEntryDlg_Impl, BrowseHdl));
+            }
 
             // Now that both pEdits[nIndex] and m_xPageSB is initialized, set their values.
             OUString aText = pFields[aCurInfo.nToxField];
@@ -1797,13 +1804,22 @@ IMPL_LINK(SwCreateAuthEntryDlg_Impl, EnableHdl, weld::ComboBox&, rBox, void)
 {
     m_xOKBT->set_sensitive(m_bNameAllowed && rBox.get_active() != -1);
     m_xBrowseButton->show();
+    m_xLocalBrowseButton->show();
 };
 
-IMPL_LINK_NOARG(SwCreateAuthEntryDlg_Impl, BrowseHdl, weld::Button&, void)
+IMPL_LINK(SwCreateAuthEntryDlg_Impl, BrowseHdl, weld::Button&, rButton, void)
 {
     sfx2::FileDialogHelper aFileDlg(ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
                                     FileDialogFlags::NONE, getDialog());
-    OUString aPath = GetEntryText(AUTH_FIELD_URL);
+    OUString aPath;
+    if (&rButton == m_xBrowseButton.get())
+    {
+        aPath = GetEntryText(AUTH_FIELD_URL);
+    }
+    else if (&rButton == m_xLocalBrowseButton.get())
+    {
+        aPath = GetEntryText(AUTH_FIELD_LOCAL_URL);
+    }
     if (!aPath.isEmpty())
     {
         aFileDlg.SetDisplayDirectory(aPath);
@@ -1819,7 +1835,9 @@ IMPL_LINK_NOARG(SwCreateAuthEntryDlg_Impl, BrowseHdl, weld::Button&, void)
     for (int nIndex = 0; nIndex < AUTH_FIELD_END; nIndex++)
     {
         const TextInfo& rCurInfo = aTextInfoArr[nIndex];
-        if (rCurInfo.nToxField == AUTH_FIELD_URL)
+        if ((rCurInfo.nToxField == AUTH_FIELD_URL && &rButton == m_xBrowseButton.get())
+            || (rCurInfo.nToxField == AUTH_FIELD_LOCAL_URL
+                && &rButton == m_xLocalBrowseButton.get()))
         {
             pEdits[nIndex]->set_text(aPath);
             break;
