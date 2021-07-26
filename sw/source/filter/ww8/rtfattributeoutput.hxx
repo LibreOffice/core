@@ -104,7 +104,8 @@ public:
     /// Output URL end.
     bool EndURL(bool isAtEndOfParagraph) override;
 
-    void FieldVanish(const OUString& rText, ww::eField eType, OUString const*) override;
+    void FieldVanish(const OUString& rText, ww::eField eType,
+                     OUString const* pBookmarkName) override;
 
     /// Output redlining.
     ///

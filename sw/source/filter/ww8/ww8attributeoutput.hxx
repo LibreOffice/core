@@ -84,7 +84,7 @@ public:
     /// Output URL end.
     virtual bool EndURL(bool) override;
 
-    virtual void FieldVanish(const OUString& rText, ww::eField eType, OUString const*) override;
+    virtual void FieldVanish(const OUString& rText, ww::eField eType, OUString const* pBookmarkName) override;
 
     /// Output redlining.
     virtual void Redline( const SwRedlineData* pRedline ) override;
