@@ -3826,6 +3826,12 @@ static sal_Int16 lcl_ParseNumberingType( const OUString& rCommand )
 //            ,{"CHINESENUM3", style::NumberingType::}
             ,{"ArabicAlpha", style::NumberingType::CHARS_ARABIC}
             ,{"ArabicAbjad", style::NumberingType::FULLWIDTH_ARABIC}
+            ,{"Ganada", style::NumberingType::HANGUL_JAMO_KO}
+            ,{"Chosung", style::NumberingType::HANGUL_SYLLABLE_KO}
+            ,{"KoreanCounting", style::NumberingType::NUMBER_HANGUL_KO}
+            ,{"KoreanLegal", style::NumberingType::NUMBER_KO_LEGAL}
+            ,{"KoreanDigital", style::NumberingType::NUMBER_KO_DIGITAL}
+            ,{"KoreanDigital2", style::NumberingType::NUMBER_KO_DIGITAL2}
 /* possible values:
 style::NumberingType::
 
