@@ -38,107 +38,13 @@
 #endif
 
 using namespace ::com::sun::star;
-// global
 
-namespace { struct ALMutex : public rtl::Static< std::mutex, ALMutex > {}; }
 
-SvtLanguageOptions::SvtLanguageOptions( bool _bDontLoad )
+namespace SvtLanguageOptions
 {
-    // Global access, must be guarded (multithreading)
-    std::lock_guard aGuard( ALMutex::get() );
-
-    m_pCJKOptions.reset(new SvtCJKOptions( _bDontLoad ));
-    m_pCTLOptions.reset(new SvtCTLOptions( _bDontLoad ));
-    m_pCTLOptions->AddListener(this);
-    m_pCJKOptions->AddListener(this);
-}
-SvtLanguageOptions::~SvtLanguageOptions()
-{
-    // Global access, must be guarded (multithreading)
-    std::lock_guard aGuard( ALMutex::get() );
-
-    m_pCTLOptions->RemoveListener(this);
-    m_pCJKOptions->RemoveListener(this);
-
-    m_pCJKOptions.reset();
-    m_pCTLOptions.reset();
-}
-// CJK options
-bool SvtLanguageOptions::IsCJKFontEnabled() const
-{
-    return m_pCJKOptions->IsCJKFontEnabled();
-}
-bool SvtLanguageOptions::IsVerticalTextEnabled() const
-{
-    return m_pCJKOptions->IsVerticalTextEnabled();
-}
-bool SvtLanguageOptions::IsAsianTypographyEnabled() const
-{
-    return m_pCJKOptions->IsAsianTypographyEnabled();
-}
-bool SvtLanguageOptions::IsJapaneseFindEnabled() const
-{
-    return m_pCJKOptions->IsJapaneseFindEnabled();
-}
-void SvtLanguageOptions::SetAll( bool _bSet )
-{
-    m_pCJKOptions->SetAll( _bSet );
-}
-bool SvtLanguageOptions::IsAnyEnabled() const
-{
-    return m_pCJKOptions->IsAnyEnabled();
-}
-// CTL options
-void SvtLanguageOptions::SetCTLFontEnabled( bool _bEnabled )
-{
-    m_pCTLOptions->SetCTLFontEnabled( _bEnabled );
-}
-bool SvtLanguageOptions::IsCTLFontEnabled() const
-{
-    return m_pCTLOptions->IsCTLFontEnabled();
-}
-void SvtLanguageOptions::SetCTLSequenceChecking( bool _bEnabled )
-{
-    m_pCTLOptions->SetCTLSequenceChecking( _bEnabled );
-}
-
-void SvtLanguageOptions::SetCTLSequenceCheckingRestricted( bool _bEnable )
-{
-    m_pCTLOptions->SetCTLSequenceCheckingRestricted( _bEnable );
-}
-
-void SvtLanguageOptions::SetCTLSequenceCheckingTypeAndReplace( bool _bEnable )
-{
-    m_pCTLOptions->SetCTLSequenceCheckingTypeAndReplace( _bEnable );
-}
-
-bool SvtLanguageOptions::IsReadOnly(SvtLanguageOptions::EOption eOption) const
-{
-    bool bReadOnly = false;
-    switch(eOption)
-    {
-        // cjk options
-        case SvtLanguageOptions::E_CJKFONT          : bReadOnly = m_pCJKOptions->IsReadOnly(SvtCJKOptions::E_CJKFONT        ); break;
-        case SvtLanguageOptions::E_VERTICALTEXT     : bReadOnly = m_pCJKOptions->IsReadOnly(SvtCJKOptions::E_VERTICALTEXT   ); break;
-        case SvtLanguageOptions::E_ASIANTYPOGRAPHY  : bReadOnly = m_pCJKOptions->IsReadOnly(SvtCJKOptions::E_ASIANTYPOGRAPHY); break;
-        case SvtLanguageOptions::E_JAPANESEFIND     : bReadOnly = m_pCJKOptions->IsReadOnly(SvtCJKOptions::E_JAPANESEFIND   ); break;
-        case SvtLanguageOptions::E_RUBY             : bReadOnly = m_pCJKOptions->IsReadOnly(SvtCJKOptions::E_RUBY           ); break;
-        case SvtLanguageOptions::E_CHANGECASEMAP    : bReadOnly = m_pCJKOptions->IsReadOnly(SvtCJKOptions::E_CHANGECASEMAP  ); break;
-        case SvtLanguageOptions::E_DOUBLELINES      : bReadOnly = m_pCJKOptions->IsReadOnly(SvtCJKOptions::E_DOUBLELINES    ); break;
-        case SvtLanguageOptions::E_EMPHASISMARKS    : bReadOnly = m_pCJKOptions->IsReadOnly(SvtCJKOptions::E_EMPHASISMARKS  ); break;
-        case SvtLanguageOptions::E_VERTICALCALLOUT  : bReadOnly = m_pCJKOptions->IsReadOnly(SvtCJKOptions::E_VERTICALCALLOUT); break;
-        case SvtLanguageOptions::E_ALLCJK           : bReadOnly = m_pCJKOptions->IsReadOnly(SvtCJKOptions::E_ALL            ); break;
-        // ctl options
-        case SvtLanguageOptions::E_CTLFONT              : bReadOnly = m_pCTLOptions->IsReadOnly(SvtCTLOptions::E_CTLFONT            ); break;
-        case SvtLanguageOptions::E_CTLSEQUENCECHECKING  : bReadOnly = m_pCTLOptions->IsReadOnly(SvtCTLOptions::E_CTLSEQUENCECHECKING); break;
-        case SvtLanguageOptions::E_CTLCURSORMOVEMENT    : bReadOnly = m_pCTLOptions->IsReadOnly(SvtCTLOptions::E_CTLCURSORMOVEMENT  ); break;
-        case SvtLanguageOptions::E_CTLTEXTNUMERALS      : bReadOnly = m_pCTLOptions->IsReadOnly(SvtCTLOptions::E_CTLTEXTNUMERALS    ); break;
-    }
-    return bReadOnly;
-}
 
 // returns for a language the scripttype
-SvtScriptType SvtLanguageOptions::GetScriptTypeOfLanguage( LanguageType nLang )
+SvtScriptType GetScriptTypeOfLanguage( LanguageType nLang )
 {
     if( LANGUAGE_DONTKNOW == nLang )
         nLang = LANGUAGE_ENGLISH_US;
@@ -161,7 +67,7 @@ SvtScriptType SvtLanguageOptions::GetScriptTypeOfLanguage( LanguageType nLang )
     return nScript;
 }
 
-SvtScriptType SvtLanguageOptions::FromI18NToSvtScriptType( sal_Int16 nI18NType )
+SvtScriptType FromI18NToSvtScriptType( sal_Int16 nI18NType )
 {
     switch ( nI18NType )
     {
@@ -174,7 +80,7 @@ SvtScriptType SvtLanguageOptions::FromI18NToSvtScriptType( sal_Int16 nI18NType )
     return SvtScriptType::NONE;
 }
 
-sal_Int16 SvtLanguageOptions::FromSvtScriptTypeToI18N( SvtScriptType nItemType )
+sal_Int16 FromSvtScriptTypeToI18N( SvtScriptType nItemType )
 {
     switch ( nItemType )
     {
@@ -188,12 +94,12 @@ sal_Int16 SvtLanguageOptions::FromSvtScriptTypeToI18N( SvtScriptType nItemType )
     return 0;
 }
 
-sal_Int16 SvtLanguageOptions::GetI18NScriptTypeOfLanguage( LanguageType nLang )
+sal_Int16 GetI18NScriptTypeOfLanguage( LanguageType nLang )
 {
     return FromSvtScriptTypeToI18N( GetScriptTypeOfLanguage( nLang ) );
 }
 
-
+} // namespace SvtLanguageOptions
 
 static bool isKeyboardLayoutTypeInstalled(sal_Int16 scriptType)
 {

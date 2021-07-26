@@ -55,6 +55,8 @@
 #include <svl/stritem.hxx>
 #include <svl/whiter.hxx>
 #include <svl/languageoptions.hxx>
+#include <svl/cjkoptions.hxx>
+#include <svl/ctloptions.hxx>
 
 #include <svx/svxdlg.hxx>
 #include <vcl/EnumContext.hxx>
@@ -962,9 +964,8 @@ void ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
         // issue 21255 - Notes now support rich text formatting.
     }
 
-    SvtLanguageOptions  aLangOpt;
-    bool bDisableCTLFont = !aLangOpt.IsCTLFontEnabled();
-    bool bDisableVerticalText = !aLangOpt.IsVerticalTextEnabled();
+    bool bDisableCTLFont = !SvtCTLOptions().IsCTLFontEnabled();
+    bool bDisableVerticalText = !SvtCJKOptions().IsVerticalTextEnabled();
 
     SdrView* pView = mrViewData.GetScDrawView();
     SfxItemSet aAttrSet(pView->GetModel()->GetItemPool());

@@ -47,6 +47,8 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
 #include <svl/languageoptions.hxx>
+#include <svl/cjkoptions.hxx>
+#include <svl/ctloptions.hxx>
 #include <svtools/javacontext.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/theAutoRecovery.hpp>
@@ -1219,7 +1221,8 @@ struct ExecuteGlobals
     Reference < css::document::XDocumentEventListener > xGlobalBroadcaster;
     bool bRestartRequested;
     bool bUseSystemFileDialog;
-    std::unique_ptr<SvtLanguageOptions> pLanguageOptions;
+    std::unique_ptr<SvtCJKOptions> pCJKLanguageOptions;
+    std::unique_ptr<SvtCTLOptions> pCTLLanguageOptions;
     std::unique_ptr<SvtPathOptions> pPathOptions;
     rtl::Reference< JVMloadThread > xJVMloadThread;
 
@@ -1453,7 +1456,8 @@ int Desktop::Main()
 #endif
 
     // keep a language options instance...
-    pExecGlobals->pLanguageOptions.reset( new SvtLanguageOptions(true));
+    pExecGlobals->pCJKLanguageOptions.reset( new SvtCJKOptions(true));
+    pExecGlobals->pCTLLanguageOptions.reset( new SvtCTLOptions(true));
 
     css::document::DocumentEvent aEvent;
     aEvent.EventName = "OnStartApp";
@@ -1699,7 +1703,8 @@ int Desktop::doShutdown()
 
     // be sure that path/language options gets destroyed before
     // UCB is deinitialized
-    pExecGlobals->pLanguageOptions.reset();
+    pExecGlobals->pCJKLanguageOptions.reset();
+    pExecGlobals->pCTLLanguageOptions.reset();
     pExecGlobals->pPathOptions.reset();
 
     comphelper::ThreadPool::getSharedOptimalPool().shutdown();

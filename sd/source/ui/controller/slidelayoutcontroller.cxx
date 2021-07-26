@@ -26,6 +26,7 @@
 #include <vcl/toolbox.hxx>
 
 #include <svl/languageoptions.hxx>
+#include <svl/cjkoptions.hxx>
 
 #include <svtools/toolbarmenu.hxx>
 #include <svtools/valueset.hxx>
@@ -180,8 +181,7 @@ LayoutToolbarMenu::LayoutToolbarMenu(SlideLayoutController* pControl, weld::Widg
         OSL_ASSERT(false);
     }
 
-    SvtLanguageOptions aLanguageOptions;
-    const bool bVerticalEnabled = aLanguageOptions.IsVerticalTextEnabled();
+    const bool bVerticalEnabled = SvtCJKOptions().IsVerticalTextEnabled();
 
     mxLayoutSet1->SetSelectHdl( LINK( this, LayoutToolbarMenu, SelectValueSetHdl ) );
 

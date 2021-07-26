@@ -782,7 +782,7 @@ void SwAnnotationShell::GetState(SfxItemSet& rSet)
             case SID_ATTR_PARA_LEFT_TO_RIGHT:
             case SID_ATTR_PARA_RIGHT_TO_LEFT:
             {
-                if ( !SvtLanguageOptions().IsCTLFontEnabled() )
+                if ( !SvtCTLOptions().IsCTLFontEnabled() )
                     rSet.DisableItem( nWhich );
                 else
                 {

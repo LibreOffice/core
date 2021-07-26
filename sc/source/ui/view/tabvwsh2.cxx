@@ -23,6 +23,8 @@
 #include <svl/whiter.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <svl/languageoptions.hxx>
+#include <svl/cjkoptions.hxx>
+#include <svl/ctloptions.hxx>
 #include <sfx2/dispatch.hxx>
 #include <tools/UnitConversion.hxx>
 
@@ -426,7 +428,7 @@ void ScTabViewShell::GetDrawState(SfxItemSet &rSet)
 
             case SID_DRAW_TEXT_VERTICAL:
             case SID_DRAW_CAPTION_VERTICAL:
-                if ( !SvtLanguageOptions().IsVerticalTextEnabled() )
+                if ( !SvtCJKOptions().IsVerticalTextEnabled() )
                     rSet.DisableItem( nWhich );
                 else
                     rSet.Put( SfxBoolItem( nWhich, nDrawSfxId == nWhich ) );
