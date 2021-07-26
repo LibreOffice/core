@@ -955,6 +955,9 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                     // Sidebar
                     pViewFrame->ShowChildWindow( SID_SIDEBAR );
 
+                    if (comphelper::LibreOfficeKit::isActive())
+                        aSidebarMode = "Opened";
+
                     sfx2::sidebar::SidebarController* pSidebar =
                             sfx2::sidebar::SidebarController::GetSidebarControllerForFrame( xFrame );
                     if ( pSidebar )
