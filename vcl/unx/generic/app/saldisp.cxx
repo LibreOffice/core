@@ -1895,7 +1895,7 @@ void SalX11Display::Yield()
 
     XNextEvent( pDisp_, &aEvent );
 
-    // FIXME: under-convinced by Dispatch boolean return value vs. salframe.
+    // coverity[overrun-buffer-val : FALSE] - coverity has problems with uno::Sequence
     Dispatch( &aEvent );
 
 #ifdef DBG_UTIL
