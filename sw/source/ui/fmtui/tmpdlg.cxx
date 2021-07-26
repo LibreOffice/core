@@ -148,8 +148,7 @@ SwTemplateDlgController::SwTemplateDlgController(weld::Window* pParent,
             SvtCJKOptions aCJKOptions;
             if(nHtmlMode & HTMLMODE_ON)
             {
-                SvxHtmlOptions& rHtmlOpt = SvxHtmlOptions::Get();
-                if (!rHtmlOpt.IsPrintLayoutExtension())
+                if (!SvxHtmlOptions::IsPrintLayoutExtension())
                     RemoveTabPage("textflow");
                 RemoveTabPage("asiantypo");
                 RemoveTabPage("tabs");
