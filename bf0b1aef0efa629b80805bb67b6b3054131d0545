@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "39e743e5_d5520c7b",
+        "filename": "sw/source/core/txtnode/txtedt.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1041,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-07-26T16:46:47Z",
+      "side": 1,
+      "message": "That was the direction I was initially going to go. However, I don\u0027t know ALL of the situations where an _INWORD is used, so I erred on the side of caution and verified that it meant a comment.\n\nHowever, a comment anywhere in the paragraph doesn\u0027t rule out these other \"unknown\" situations, so effectively I have already increased the scope of when that \"unknown\" situation is going to be triggered.\n\nI\u0027m just afraid to jump with both feet into something that I know nothing about... But really we wouldn\u0027t be introducing anything new - we would only be ensuring that we always hit any possible snags. Perhaps better to do that and find the problems right away instead of waiting and finding them slowly...",
+      "parentUuid": "39b4d0cd_fb2b7ce9",
+      "range": {
+        "startLine": 1041,
+        "startChar": 26,
+        "endLine": 1041,
+        "endChar": 63
+      },
+      "revId": "bf0b1aef0efa629b80805bb67b6b3054131d0545",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a2f67e5f_bfdb1cc5",
         "filename": "sw/source/core/txtnode/txtedt.cxx",
         "patchSetId": 3
