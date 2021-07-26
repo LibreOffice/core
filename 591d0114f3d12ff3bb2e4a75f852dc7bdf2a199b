@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "225225a3_247ae715",
+        "filename": "sc/source/core/tool/compiler.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 2234,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-07-26T19:52:31Z",
+      "side": 1,
+      "message": "This uses commit 3c766512984feff739377d0f0af46558ee7139fd from\nhttps://gerrit.libreoffice.org/c/core/+/119517",
+      "range": {
+        "startLine": 2234,
+        "startChar": 44,
+        "endLine": 2234,
+        "endChar": 64
+      },
+      "revId": "591d0114f3d12ff3bb2e4a75f852dc7bdf2a199b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
