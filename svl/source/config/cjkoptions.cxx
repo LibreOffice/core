@@ -27,6 +27,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <osl/mutex.hxx>
 #include <rtl/instance.hxx>
+#include <officecfg/System.hxx>
 
 #include "itemholder2.hxx"
 
@@ -199,10 +200,11 @@ void SvtCJKOptions_Impl::Load()
 
         if (!bAutoEnableCJK)
         {
-            SvtSystemLanguageOptions aSystemLocaleSettings;
-
             //windows secondary system locale is CJK
-            LanguageType eSystemLanguage = aSystemLocaleSettings.GetWin16SystemLanguage();
+            OUString sWin16SystemLocale = officecfg::System::L10N::SystemLocale::get();
+            LanguageType eSystemLanguage = LANGUAGE_NONE;
+            if( !sWin16SystemLocale.isEmpty() )
+                eSystemLanguage = LanguageTag::convertToLanguageTypeWithFallback( sWin16SystemLocale );
             if (eSystemLanguage != LANGUAGE_SYSTEM)
             {
                 SvtScriptType nWinScript = SvtLanguageOptions::GetScriptTypeOfLanguage( eSystemLanguage );
@@ -211,7 +213,7 @@ void SvtCJKOptions_Impl::Load()
 
             //CJK keyboard is installed
             if (!bAutoEnableCJK)
-                bAutoEnableCJK = aSystemLocaleSettings.isCJKKeyboardLayoutInstalled();
+                bAutoEnableCJK = SvtSystemLanguageOptions::isCJKKeyboardLayoutInstalled();
         }
 
         if (bAutoEnableCJK)
