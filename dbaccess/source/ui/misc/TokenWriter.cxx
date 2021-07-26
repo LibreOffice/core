@@ -585,8 +585,7 @@ OHTMLImportExport::OHTMLImportExport(const svx::ODataAccessDescriptor& _aDataDes
 #endif
 {
     // set HTML configuration
-    SvxHtmlOptions& rHtmlOptions = SvxHtmlOptions::Get();
-    m_eDestEnc = rHtmlOptions.GetTextEncoding();
+    m_eDestEnc = SvxHtmlOptions::GetTextEncoding();
     strncpy( sIndent, sIndentSource ,std::min(sizeof(sIndent),sizeof(sIndentSource)));
     sIndent[0] = 0;
 }

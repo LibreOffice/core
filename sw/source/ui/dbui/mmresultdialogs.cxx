@@ -969,8 +969,7 @@ IMPL_LINK_NOARG(SwMMResultEmailDialog, SendDocumentsHdl_Impl, weld::Button&, voi
         case MM_DOCTYPE_HTML:
         {
             bAsBody = true;
-            SvxHtmlOptions& rHtmlOptions = SvxHtmlOptions::Get();
-            eEncoding = rHtmlOptions.GetTextEncoding();
+            eEncoding = SvxHtmlOptions::GetTextEncoding();
         }
         break;
         case MM_DOCTYPE_TEXT:
