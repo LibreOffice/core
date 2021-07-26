@@ -18,66 +18,30 @@
  */
 #pragma once
 
-#include <unotools/configitem.hxx>
 #include <svtools/svtdllapi.h>
-#include <memory>
+#include <rtl/textenc.h>
 
 #define HTML_FONT_COUNT 7
 
 // !!!be aware!!!: the following defines are _not_ used as values in the configuration file
 //                  this is because of compatibility reasons
-#define HTML_CFG_MSIE       1   // Internet Explorer
-#define HTML_CFG_WRITER     2   // Writer
-#define HTML_CFG_NS40       3   // Netscape 4.0
+#define HTML_CFG_MSIE 1 // Internet Explorer
+#define HTML_CFG_WRITER 2 // Writer
+#define HTML_CFG_NS40 3 // Netscape 4.0
 
 #define HTML_CFG_MAX HTML_CFG_NS40
 
-struct HtmlOptions_Impl;
-
-class SVT_DLLPUBLIC SvxHtmlOptions final : public utl::ConfigItem
+namespace SvxHtmlOptions
 {
-    std::unique_ptr<HtmlOptions_Impl>   pImpl;
-    static const css::uno::Sequence<OUString>& GetPropertyNames();
-    void Load( const css::uno::Sequence< OUString >& rPropertyNames );
+SVT_DLLPUBLIC sal_uInt16 GetFontSize(sal_uInt16 nPos);
 
-    virtual void    ImplCommit() override;
+SVT_DLLPUBLIC sal_uInt16 GetExportMode();
 
-public:
-    SvxHtmlOptions();
-    virtual ~SvxHtmlOptions() override;
+SVT_DLLPUBLIC bool IsPrintLayoutExtension();
 
-    virtual void Notify( const css::uno::Sequence< OUString >& _rPropertyNames) override;
-
-    sal_uInt16      GetFontSize(sal_uInt16 nPos) const;
-    void        SetFontSize(sal_uInt16 nPos, sal_uInt16 nSize);
-
-    bool        IsImportUnknown() const;
-    void        SetImportUnknown(bool bSet);
-
-    sal_uInt16  GetExportMode() const;
-
-    bool        IsStarBasic() const;
-    void        SetStarBasic(bool bSet);
-
-    bool        IsStarBasicWarning() const;
-    void        SetStarBasicWarning(bool bSet);
-
-    bool        IsSaveGraphicsLocal() const;
-    void        SetSaveGraphicsLocal(bool bSet);
-
-    bool        IsPrintLayoutExtension() const;
-    void        SetPrintLayoutExtension(bool bSet);
-
-    bool        IsIgnoreFontFamily() const;
-    void        SetIgnoreFontFamily(bool bSet);
-
-    bool        IsDefaultTextEncoding() const;
-    rtl_TextEncoding GetTextEncoding() const;
-    void        SetTextEncoding( rtl_TextEncoding );
-    static SvxHtmlOptions& Get();
-
-    bool        IsNumbersEnglishUS() const;
-    void        SetNumbersEnglishUS(bool bSet);
+SVT_DLLPUBLIC bool IsDefaultTextEncoding();
+SVT_DLLPUBLIC rtl_TextEncoding GetTextEncoding();
+SVT_DLLPUBLIC void SetTextEncoding(rtl_TextEncoding);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

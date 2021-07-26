@@ -1361,8 +1361,7 @@ SwInsertSectionTabDialog::SwInsertSectionTabDialog(
     AddTabPage("notes", SwSectionFootnoteEndTabPage::Create, nullptr);
     AddTabPage("indents", SwSectionIndentTabPage::Create, nullptr);
 
-    SvxHtmlOptions& rHtmlOpt = SvxHtmlOptions::Get();
-    tools::Long nHtmlMode = rHtmlOpt.GetExportMode();
+    tools::Long nHtmlMode = SvxHtmlOptions::GetExportMode();
 
     bool bWeb = dynamic_cast<SwWebDocShell*>( rSh.GetView().GetDocShell()  ) != nullptr ;
     if(bWeb)
@@ -1997,8 +1996,7 @@ SwSectionPropertyTabDialog::SwSectionPropertyTabDialog(
     AddTabPage("notes", SwSectionFootnoteEndTabPage::Create, nullptr);
     AddTabPage("indents", SwSectionIndentTabPage::Create, nullptr);
 
-    SvxHtmlOptions& rHtmlOpt = SvxHtmlOptions::Get();
-    tools::Long nHtmlMode = rHtmlOpt.GetExportMode();
+    tools::Long nHtmlMode = SvxHtmlOptions::GetExportMode();
     bool bWeb = dynamic_cast<SwWebDocShell*>( rSh.GetView().GetDocShell()  ) != nullptr ;
     if(bWeb)
     {

@@ -1122,8 +1122,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
             {
                 sMailBodyMimeType = "text/html; charset=" + OUString::createFromAscii(
                                     rtl_getBestMimeCharsetFromTextEncoding( sMailEncoding ));
-                SvxHtmlOptions& rHtmlOptions = SvxHtmlOptions::Get();
-                sMailEncoding = rHtmlOptions.GetTextEncoding();
+                sMailEncoding = SvxHtmlOptions::GetTextEncoding();
             }
             else
                 sMailBodyMimeType = "text/plain; charset=UTF-8; format=flowed";
