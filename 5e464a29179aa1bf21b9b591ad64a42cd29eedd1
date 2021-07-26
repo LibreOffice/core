@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7d68934c_a6fc0451",
+        "filename": "sw/source/core/doc/docnum.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-07-26T18:27:44Z",
+      "side": 1,
+      "message": "i doubt that using SwUndoInsNum here will work well for outline numbering; it will call SwDoc::ChgNumRuleFormats and this doesn\u0027t do a lot of what SetOutlineNumRule does\n\nperhaps it would be better to have a new undo subclass that calls SetOutlineNumRule?",
+      "revId": "5e464a29179aa1bf21b9b591ad64a42cd29eedd1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f9593707_98fc7156",
+        "filename": "sw/source/core/doc/docnum.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-07-26T18:27:44Z",
+      "side": 1,
+      "message": "like for example updating footnotes, which doesn\u0027t create its own undo object",
+      "revId": "5e464a29179aa1bf21b9b591ad64a42cd29eedd1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eba6e74d_2218cd0f",
+        "filename": "sw/source/core/doc/docnum.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-07-26T18:27:44Z",
+      "side": 1,
+      "message": "or fields that refer to chapter numbering, which doesn\u0027t create its own undo object",
+      "revId": "5e464a29179aa1bf21b9b591ad64a42cd29eedd1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
