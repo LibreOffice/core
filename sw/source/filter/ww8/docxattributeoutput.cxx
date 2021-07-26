@@ -6992,8 +6992,10 @@ static OString lcl_ConvertNumberingType(sal_Int16 nNumberingType, const SfxItemS
         case style::NumberingType::IROHA_HALFWIDTH_JA: aType="irohaFullWidth";break;
         case style::NumberingType::HANGUL_SYLLABLE_KO: aType="ganada";break;
         case style::NumberingType::HANGUL_JAMO_KO: aType="chosung";break;
-        case style::NumberingType::NUMBER_HANGUL_KO: aType="koreanDigital";break;
-        case style::NumberingType::NUMBER_UPPER_KO: aType="koreanLegal"; break;
+        case style::NumberingType::NUMBER_HANGUL_KO: aType="koreanCounting"; break;
+        case style::NumberingType::NUMBER_LEGAL_KO: aType = "koreanLegal"; break;
+        case style::NumberingType::NUMBER_DIGITAL_KO: aType = "koreanDigital"; break;
+        case style::NumberingType::NUMBER_DIGITAL2_KO: aType = "koreanDigital2"; break;
         case style::NumberingType::CIRCLE_NUMBER: aType="decimalEnclosedCircle"; break;
         case style::NumberingType::CHARS_ARABIC: aType="arabicAlpha"; break;
         case style::NumberingType::CHARS_ARABIC_ABJAD: aType="arabicAbjad"; break;
