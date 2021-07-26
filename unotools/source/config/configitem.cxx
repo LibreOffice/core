@@ -34,6 +34,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
+#include <o3tl/deleter.hxx>
 #include <osl/diagnose.h>
 #include <comphelper/sequence.hxx>
 #include <comphelper/solarmutex.hxx>
@@ -155,7 +156,7 @@ ConfigItem::ConfigItem(const OUString &rSubTree, ConfigItemMode nSetMode ) :
 
 ConfigItem::~ConfigItem()
 {
-    RemoveChangesListener();
+    suppress_fun_call_w_exception(RemoveChangesListener());
     ConfigManager::getConfigManager().removeConfigItem(*this);
 }
 
