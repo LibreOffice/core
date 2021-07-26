@@ -222,7 +222,8 @@ start:
         {
             if( !p->pOUString )
                 p->pOUString = new OUString;
-            ImpCvtNum( static_cast<double>(n), 6, *p->pOUString );
+            // tdf#107953 - show 9 significant digits
+            ImpCvtNum( static_cast<double>(n), 9, *p->pOUString );
             break;
         }
         case SbxOBJECT:
