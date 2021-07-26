@@ -31,6 +31,8 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <unotools/compatibility.hxx>
 #include <svl/languageoptions.hxx>
+#include <svl/cjkoptions.hxx>
+#include <svl/ctloptions.hxx>
 #include <svtools/miscopt.hxx>
 #include <unotools/syslocaleoptions.hxx>
 #include <sfx2/objsh.hxx>
@@ -985,7 +987,8 @@ void OfaViewTabPage::UpdateHardwareAccelStatus()
 
 struct LanguageConfig_Impl
 {
-    SvtLanguageOptions aLanguageOptions;
+    SvtCJKOptions aCJKLanguageOptions;
+    SvtCTLOptions aCTLLanguageOptions;
     SvtSysLocaleOptions aSysLocaleOptions;
     SvtLinguConfig aLinguConfig;
 };
@@ -1183,17 +1186,17 @@ OfaLanguagesTabPage::OfaLanguagesTabPage(weld::Container* pPage, weld::DialogCon
     m_xAsianSupportCB->connect_toggled( aLink );
     m_xCTLSupportCB->connect_toggled( aLink );
 
-    m_bOldAsian = pLangConfig->aLanguageOptions.IsAnyEnabled();
+    m_bOldAsian = pLangConfig->aCJKLanguageOptions.IsAnyEnabled();
     m_xAsianSupportCB->set_active(m_bOldAsian);
     m_xAsianSupportCB->save_state();
-    bool bReadonly = pLangConfig->aLanguageOptions.IsReadOnly(SvtLanguageOptions::E_ALLCJK);
+    bool bReadonly = pLangConfig->aCJKLanguageOptions.IsReadOnly(SvtCJKOptions::E_ALL);
     m_xAsianSupportCB->set_sensitive(!bReadonly);
     SupportHdl(*m_xAsianSupportCB);
 
-    m_bOldCtl = pLangConfig->aLanguageOptions.IsCTLFontEnabled();
+    m_bOldCtl = pLangConfig->aCTLLanguageOptions.IsCTLFontEnabled();
     m_xCTLSupportCB->set_active(m_bOldCtl);
     m_xCTLSupportCB->save_state();
-    bReadonly = pLangConfig->aLanguageOptions.IsReadOnly(SvtLanguageOptions::E_CTLFONT);
+    bReadonly = pLangConfig->aCTLLanguageOptions.IsReadOnly(SvtCTLOptions::E_CTLFONT);
     m_xCTLSupportCB->set_sensitive(!bReadonly);
     SupportHdl(*m_xCTLSupportCB);
 
@@ -1231,7 +1234,8 @@ bool OfaLanguagesTabPage::FillItemSet( SfxItemSet* rSet )
 {
     // lock configuration broadcasters so that we can coordinate the notifications
     pLangConfig->aSysLocaleOptions.BlockBroadcasts( true );
-    pLangConfig->aLanguageOptions.BlockBroadcasts( true );
+    pLangConfig->aCTLLanguageOptions.BlockBroadcasts( true );
+    pLangConfig->aCJKLanguageOptions.BlockBroadcasts( true );
     pLangConfig->aLinguConfig.BlockBroadcasts( true );
 
     /*
@@ -1250,9 +1254,9 @@ bool OfaLanguagesTabPage::FillItemSet( SfxItemSet* rSet )
         //sequence checking has to be switched on depending on the selected CTL language
         LanguageType eCTLLang = m_xComplexLanguageLB->get_active_id();
         bool bOn = MsLangId::needsSequenceChecking( eCTLLang);
-        pLangConfig->aLanguageOptions.SetCTLSequenceCheckingRestricted(bOn);
-        pLangConfig->aLanguageOptions.SetCTLSequenceChecking(bOn);
-        pLangConfig->aLanguageOptions.SetCTLSequenceCheckingTypeAndReplace(bOn);
+        pLangConfig->aCTLLanguageOptions.SetCTLSequenceCheckingRestricted(bOn);
+        pLangConfig->aCTLLanguageOptions.SetCTLSequenceChecking(bOn);
+        pLangConfig->aCTLLanguageOptions.SetCTLSequenceCheckingTypeAndReplace(bOn);
     }
     try
     {
@@ -1421,7 +1425,7 @@ bool OfaLanguagesTabPage::FillItemSet( SfxItemSet* rSet )
     if(m_xAsianSupportCB->get_state_changed_from_saved() )
     {
         bool bChecked = m_xAsianSupportCB->get_active();
-        pLangConfig->aLanguageOptions.SetAll(bChecked);
+        pLangConfig->aCJKLanguageOptions.SetAll(bChecked);
 
         //iterate over all bindings to invalidate vertical text direction
         const sal_uInt16 STATE_COUNT = 2;
@@ -1443,7 +1447,7 @@ bool OfaLanguagesTabPage::FillItemSet( SfxItemSet* rSet )
         aOpt.SetIgnoreDiacritics_CTL(true);
         aOpt.SetIgnoreKashida_CTL(true);
         aOpt.Commit();
-        pLangConfig->aLanguageOptions.SetCTLFontEnabled( m_xCTLSupportCB->get_active() );
+        pLangConfig->aCTLLanguageOptions.SetCTLFontEnabled( m_xCTLSupportCB->get_active() );
 
         const sal_uInt16 STATE_COUNT = 1;
         std::unique_ptr<SfxBoolItem> pBoolItems[STATE_COUNT];
@@ -1460,7 +1464,8 @@ bool OfaLanguagesTabPage::FillItemSet( SfxItemSet* rSet )
     // it seems that our code relies on the fact that before other changes like e.g. currency
     // are broadcasted locale changes have been done
     pLangConfig->aSysLocaleOptions.BlockBroadcasts( false );
-    pLangConfig->aLanguageOptions.BlockBroadcasts( false );
+    pLangConfig->aCJKLanguageOptions.BlockBroadcasts( false );
+    pLangConfig->aCTLLanguageOptions.BlockBroadcasts( false );
     pLangConfig->aLinguConfig.BlockBroadcasts( false );
 
     return false;
@@ -1659,7 +1664,7 @@ IMPL_LINK_NOARG(OfaLanguagesTabPage, LocaleSettingHdl, weld::ComboBox&, void)
     SvtScriptType nType = SvtLanguageOptions::GetScriptTypeOfLanguage(eLang);
     // first check if CTL must be enabled
     // #103299# - if CTL font setting is not readonly
-    if(!pLangConfig->aLanguageOptions.IsReadOnly(SvtLanguageOptions::E_CTLFONT))
+    if(!pLangConfig->aCTLLanguageOptions.IsReadOnly(SvtCTLOptions::E_CTLFONT))
     {
         bool bIsCTLFixed = bool(nType & SvtScriptType::COMPLEX);
         lcl_checkLanguageCheckBox(*m_xCTLSupportCB, bIsCTLFixed, m_bOldCtl);
@@ -1667,7 +1672,7 @@ IMPL_LINK_NOARG(OfaLanguagesTabPage, LocaleSettingHdl, weld::ComboBox&, void)
     }
     // second check if CJK must be enabled
     // #103299# - if CJK support is not readonly
-    if(!pLangConfig->aLanguageOptions.IsReadOnly(SvtLanguageOptions::E_ALLCJK))
+    if(!pLangConfig->aCJKLanguageOptions.IsReadOnly(SvtCJKOptions::E_ALL))
     {
         bool bIsCJKFixed = bool(nType & SvtScriptType::ASIAN);
         lcl_checkLanguageCheckBox(*m_xAsianSupportCB, bIsCJKFixed, m_bOldAsian);

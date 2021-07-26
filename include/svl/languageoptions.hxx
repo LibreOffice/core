@@ -22,7 +22,6 @@
 #include <svl/svldllapi.h>
 #include <sal/types.h>
 #include <o3tl/typed_flags_set.hxx>
-#include <unotools/configitem.hxx>
 #include <unotools/options.hxx>
 #include <i18nlangtag/lang.h>
 #include <memory>
@@ -44,69 +43,35 @@ namespace o3tl
     template<> struct typed_flags<SvtScriptType> : is_typed_flags<SvtScriptType, 0x0f> {};
 }
 
-class SvtCJKOptions;
-class SvtCTLOptions;
-
-class SVL_DLLPUBLIC SvtLanguageOptions final : public ::utl::detail::Options
+namespace SvtLanguageOptions
 {
-private:
-    std::unique_ptr<SvtCJKOptions>  m_pCJKOptions;
-    std::unique_ptr<SvtCTLOptions>  m_pCTLOptions;
-
-public:
-    enum EOption
-    {
-        // cjk options
-        E_CJKFONT,
-        E_VERTICALTEXT,
-        E_ASIANTYPOGRAPHY,
-        E_JAPANESEFIND,
-        E_RUBY,
-        E_CHANGECASEMAP,
-        E_DOUBLELINES,
-        E_EMPHASISMARKS,
-        E_VERTICALCALLOUT,
-        E_ALLCJK,
-        // ctl options
-        E_CTLFONT,
-        E_CTLSEQUENCECHECKING,
-        E_CTLCURSORMOVEMENT,
-        E_CTLTEXTNUMERALS
-    };
-
-    // bDontLoad is for referencing purposes only
-    SvtLanguageOptions( bool _bDontLoad = false );
-    virtual ~SvtLanguageOptions() override;
-
     // CJK options
-    bool    IsCJKFontEnabled() const;
-    bool    IsVerticalTextEnabled() const;
-    bool    IsAsianTypographyEnabled() const;
-    bool    IsJapaneseFindEnabled() const;
-    void    SetAll( bool _bSet );
-    bool    IsAnyEnabled() const;
+//    SVL_DLLPUBLIC bool    IsCJKFontEnabled() { m_pCJKOptions->IsCJKFontEnabled(); }
+//    SVL_DLLPUBLIC bool    IsVerticalTextEnabled() m_pCJKOptions->IsVerticalTextEnabled();
+//    SVL_DLLPUBLIC bool    IsAsianTypographyEnabled() m_pCJKOptions->IsAsianTypographyEnabled();
+//    SVL_DLLPUBLIC bool    IsJapaneseFindEnabled() m_pCJKOptions->IsJapaneseFindEnabled();
+//    SVL_DLLPUBLIC void    SetAll( bool _bSet ) m_pCJKOptions->SetAll( _bSet );
+//    SVL_DLLPUBLIC bool    IsAnyEnabled() m_pCJKOptions->IsAnyEnabled();
 
     // CTL options
-    void    SetCTLFontEnabled( bool _bEnabled );
-    bool    IsCTLFontEnabled() const;
+    //SVL_DLLPUBLIC void    SetCTLFontEnabled( bool _bEnabled ) m_pCTLOptions->SetCTLFontEnabled( _bEnabled );
+//    SVL_DLLPUBLIC bool    IsCTLFontEnabled() m_pCTLOptions->IsCTLFontEnabled();
 
-    void    SetCTLSequenceChecking( bool _bEnabled );
+//    SVL_DLLPUBLIC void    SetCTLSequenceChecking( bool _bEnabled ) m_pCTLOptions->SetCTLSequenceChecking( _bEnabled );
 
-    void    SetCTLSequenceCheckingRestricted( bool _bEnable );
+    //SVL_DLLPUBLIC void    SetCTLSequenceCheckingRestricted( bool _bEnable ) m_pCTLOptions->SetCTLSequenceCheckingRestricted( _bEnable );
 
-    void    SetCTLSequenceCheckingTypeAndReplace( bool _bEnable );
-
-    bool    IsReadOnly(EOption eOption) const;
+//    SVL_DLLPUBLIC void    SetCTLSequenceCheckingTypeAndReplace( bool _bEnable ) m_pCTLOptions->SetCTLSequenceCheckingTypeAndReplace( _bEnable );
 
     // returns for a language the scripttype
-    static  SvtScriptType GetScriptTypeOfLanguage( LanguageType nLang );
+    SVL_DLLPUBLIC SvtScriptType GetScriptTypeOfLanguage( LanguageType nLang );
 
     // convert from css::i18n::ScriptType constants to SvtScriptType
-    static SvtScriptType FromI18NToSvtScriptType( sal_Int16 nI18NType );
+    SVL_DLLPUBLIC SvtScriptType FromI18NToSvtScriptType( sal_Int16 nI18NType );
 
-    static sal_Int16 FromSvtScriptTypeToI18N( SvtScriptType nI18NType );
+    SVL_DLLPUBLIC sal_Int16 FromSvtScriptTypeToI18N( SvtScriptType nI18NType );
 
-    static sal_Int16 GetI18NScriptTypeOfLanguage( LanguageType nLang );
+    SVL_DLLPUBLIC sal_Int16 GetI18NScriptTypeOfLanguage( LanguageType nLang );
 
 };
 

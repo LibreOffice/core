@@ -37,6 +37,8 @@
 #include <svl/stritem.hxx>
 #include <svl/style.hxx>
 #include <svl/languageoptions.hxx>
+#include <svl/cjkoptions.hxx>
+#include <svl/ctloptions.hxx>
 #include <sfx2/tplpitem.hxx>
 #include <editeng/escapementitem.hxx>
 #include <svx/svdoutl.hxx>
@@ -142,9 +144,8 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
     SfxWhichIter        aIter( rSet );
     sal_uInt16              nWhich = aIter.FirstWhich();
     SfxItemSet          aAttrSet( mpView->GetDoc().GetPool() );
-    SvtLanguageOptions  aLangOpt;
-    bool            bDisableParagraphTextDirection = !aLangOpt.IsCTLFontEnabled();
-    bool            bDisableVerticalText = !aLangOpt.IsVerticalTextEnabled();
+    bool            bDisableParagraphTextDirection = !SvtCTLOptions().IsCTLFontEnabled();
+    bool            bDisableVerticalText = !SvtCJKOptions().IsVerticalTextEnabled();
 
     mpView->GetAttributes( aAttrSet );
 

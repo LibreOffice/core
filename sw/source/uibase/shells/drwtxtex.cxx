@@ -861,7 +861,7 @@ void SwDrawTextShell::GetState(SfxItemSet& rSet)
 
             case SID_TEXTDIRECTION_LEFT_TO_RIGHT:
             case SID_TEXTDIRECTION_TOP_TO_BOTTOM:
-                if (!SvtLanguageOptions().IsVerticalTextEnabled())
+                if (!SvtCJKOptions().IsVerticalTextEnabled())
                 {
                     rSet.DisableItem(nSlotId);
                     nSlotId = 0;
@@ -890,7 +890,7 @@ void SwDrawTextShell::GetState(SfxItemSet& rSet)
             case SID_ATTR_PARA_LEFT_TO_RIGHT:
             case SID_ATTR_PARA_RIGHT_TO_LEFT:
             {
-                if (!SvtLanguageOptions().IsCTLFontEnabled())
+                if (!SvtCTLOptions().IsCTLFontEnabled())
                 {
                     rSet.DisableItem(nWhich);
                     nSlotId = 0;

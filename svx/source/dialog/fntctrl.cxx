@@ -44,6 +44,8 @@
 #include <svl/itempool.hxx>
 #include <svl/stritem.hxx>
 #include <svl/languageoptions.hxx>
+#include <svl/cjkoptions.hxx>
+#include <svl/ctloptions.hxx>
 
 #include <editeng/colritem.hxx>
 #include <editeng/fontitem.hxx>
@@ -188,9 +190,8 @@ public:
         mbUseFontNameAsText(false),
         mbTextInited(false)
     {
-        SvtLanguageOptions aLanguageOptions;
-        m_bCJKEnabled = aLanguageOptions.IsAnyEnabled();
-        m_bCTLEnabled = aLanguageOptions.IsCTLFontEnabled();
+        m_bCJKEnabled = SvtCJKOptions().IsAnyEnabled();
+        m_bCTLEnabled = SvtCTLOptions().IsCTLFontEnabled();
         mxBackColor = svtools::ColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
         Invalidate100PercentFontWidth();
     }
