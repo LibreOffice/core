@@ -75,15 +75,8 @@ class UNOTOOLS_DLLPUBLIC SvtCompatibilityEntry
 
         static OUString getName( const Index rIdx );
 
-        static OUString getUserEntryName()
-        {
-            return "_user";
-        }
-
-        static OUString getDefaultEntryName()
-        {
-            return "_default";
-        }
+        static constexpr OUStringLiteral USER_ENTRY_NAME = u"_user";
+        static constexpr OUStringLiteral DEFAULT_ENTRY_NAME = u"_default";
 
         static Index getIndex( std::u16string_view rName )
         {
