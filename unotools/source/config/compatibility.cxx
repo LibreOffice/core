@@ -186,7 +186,7 @@ SvtCompatibilityOptions_Impl::SvtCompatibilityOptions_Impl() : ConfigItem( ROOTN
 
         m_aOptions.push_back( aItem );
 
-        if ( !bDefaultFound && aItem.getValue<OUString>( SvtCompatibilityEntry::Index::Name ) == SvtCompatibilityEntry::getDefaultEntryName() )
+        if ( !bDefaultFound && aItem.getValue<OUString>( SvtCompatibilityEntry::Index::Name ) == SvtCompatibilityEntry::DEFAULT_ENTRY_NAME )
         {
             SvtSysLocale aSysLocale;
             css::lang::Locale aLocale = aSysLocale.GetLanguageTag().getLocale();
@@ -209,7 +209,7 @@ void SvtCompatibilityOptions_Impl::AppendItem( const SvtCompatibilityEntry& aIte
     m_aOptions.push_back( aItem );
 
     // default item reset?
-    if ( aItem.getValue<OUString>( SvtCompatibilityEntry::Index::Name ) == SvtCompatibilityEntry::getDefaultEntryName() )
+    if ( aItem.getValue<OUString>( SvtCompatibilityEntry::Index::Name ) == SvtCompatibilityEntry::DEFAULT_ENTRY_NAME )
         m_aDefOptions = aItem;
 
     SetModified();
