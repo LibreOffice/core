@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "39b4d0cd_fb2b7ce9",
+        "filename": "sw/source/core/txtnode/txtedt.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1041,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-07-26T14:13:13Z",
+      "side": 1,
+      "message": "What about to replace these and lcl_HasComments() simply with rWord.indexOf(OUStringChar(CH_TXTATR_INWORD)) \u003e -1?",
+      "range": {
+        "startLine": 1041,
+        "startChar": 26,
+        "endLine": 1041,
+        "endChar": 63
+      },
+      "revId": "bf0b1aef0efa629b80805bb67b6b3054131d0545",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a2f67e5f_bfdb1cc5",
+        "filename": "sw/source/core/txtnode/txtedt.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1344,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-07-26T14:13:13Z",
+      "side": 1,
+      "message": "What about to replace these and lcl_HasComments() simply with rWord.indexOf(OUStringChar(CH_TXTATR_INWORD)) \u003d\u003d -1?",
+      "range": {
+        "startLine": 1344,
+        "startChar": 21,
+        "endLine": 1344,
+        "endChar": 60
+      },
+      "revId": "bf0b1aef0efa629b80805bb67b6b3054131d0545",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
