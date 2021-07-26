@@ -16,54 +16,36 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVL_CJKOPTIONS_HXX
-#define INCLUDED_SVL_CJKOPTIONS_HXX
+#pragma once
 
 #include <svl/svldllapi.h>
 #include <unotools/options.hxx>
-#include <memory>
 
-class SvtCJKOptions_Impl;
-
-// class SvtCJKOptions --------------------------------------------------
-
-class SVL_DLLPUBLIC SvtCJKOptions final : public utl::detail::Options
+namespace SvtCJKOptions
 {
-private:
-    std::shared_ptr<SvtCJKOptions_Impl> pImpl;
-
-public:
-    enum EOption
-    {
-        E_CJKFONT,
-        E_VERTICALTEXT,
-        E_ASIANTYPOGRAPHY,
-        E_JAPANESEFIND,
-        E_RUBY,
-        E_CHANGECASEMAP,
-        E_DOUBLELINES,
-        E_EMPHASISMARKS,
-        E_VERTICALCALLOUT,
-        E_ALL // special one for IsAnyEnabled()/SetAll() functionality
-    };
-
-    // bDontLoad is for referencing purposes only
-    SvtCJKOptions(bool bDontLoad = false);
-    virtual ~SvtCJKOptions() override;
-
-    bool IsCJKFontEnabled() const;
-    bool IsVerticalTextEnabled() const;
-    bool IsAsianTypographyEnabled() const;
-    bool IsJapaneseFindEnabled() const;
-    bool IsRubyEnabled() const;
-    bool IsChangeCaseMapEnabled() const;
-    bool IsDoubleLinesEnabled() const;
-
-    void SetAll(bool bSet);
-    bool IsAnyEnabled() const;
-    bool IsReadOnly(EOption eOption) const;
+enum EOption
+{
+    E_CJKFONT,
+    E_VERTICALTEXT,
+    E_ASIANTYPOGRAPHY,
+    E_JAPANESEFIND,
+    E_RUBY,
+    E_CHANGECASEMAP,
+    E_DOUBLELINES,
+    E_ALL // special one for IsAnyEnabled()/SetAll() functionality
 };
 
-#endif // INCLUDED_SVL_CJKOPTIONS_HXX
+SVL_DLLPUBLIC bool IsCJKFontEnabled();
+SVL_DLLPUBLIC bool IsVerticalTextEnabled();
+SVL_DLLPUBLIC bool IsAsianTypographyEnabled();
+SVL_DLLPUBLIC bool IsJapaneseFindEnabled();
+SVL_DLLPUBLIC bool IsRubyEnabled();
+SVL_DLLPUBLIC bool IsChangeCaseMapEnabled();
+SVL_DLLPUBLIC bool IsDoubleLinesEnabled();
+
+SVL_DLLPUBLIC void SetAll(bool bSet);
+SVL_DLLPUBLIC bool IsAnyEnabled();
+SVL_DLLPUBLIC bool IsReadOnly(EOption eOption);
+};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

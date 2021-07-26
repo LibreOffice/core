@@ -141,8 +141,7 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg(SfxObjectShell const * pDocSh,
     AddTabPage( "RID_SVXPAGE_ALIGN_PARAGRAPH", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_ALIGN_PARAGRAPH ), nullptr );
     AddTabPage( "RID_SVXPAGE_BKG", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BKG ), nullptr);
 
-    SvtCJKOptions aCJKOptions;
-    if( !aCJKOptions.IsAsianTypographyEnabled() )
+    if( !SvtCJKOptions::IsAsianTypographyEnabled() )
         RemoveTabPage( "RID_SVXPAGE_PARA_ASIAN" );
 
     if (bBackground)

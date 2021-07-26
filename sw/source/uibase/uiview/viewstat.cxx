@@ -458,7 +458,7 @@ void SwView::GetState(SfxItemSet &rSet)
             case SID_HANGUL_HANJA_CONVERSION:
             case SID_CHINESE_CONVERSION:
             {
-                if (!SvtCJKOptions().IsAnyEnabled())
+                if (!SvtCJKOptions::IsAnyEnabled())
                 {
                     GetViewFrame()->GetBindings().SetVisibleState( nWhich, false );
                     rSet.DisableItem(nWhich);
@@ -608,7 +608,7 @@ void SwView::GetDrawState(SfxItemSet &rSet)
 
         case SID_DRAW_TEXT_VERTICAL:
         case SID_DRAW_CAPTION_VERTICAL:
-            if ( bWeb || !SvtCJKOptions().IsVerticalTextEnabled() )
+            if ( bWeb || !SvtCJKOptions::IsVerticalTextEnabled() )
                 rSet.DisableItem( nWhich );
             else
                 if (nWhich != SID_DRAW_TEXT_VERTICAL) //tdf#113171

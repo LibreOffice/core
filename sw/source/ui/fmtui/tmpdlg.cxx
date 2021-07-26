@@ -102,8 +102,7 @@ SwTemplateDlgController::SwTemplateDlgController(weld::Window* pParent,
             AddTabPage("asianlayout", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_TWOLINES ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_CHAR_TWOLINES ));
             AddTabPage("background", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BKG ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BKG ));
             AddTabPage("borders", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BORDER ));
-            SvtCJKOptions aCJKOptions;
-            if(nHtmlMode & HTMLMODE_ON || !aCJKOptions.IsDoubleLinesEnabled())
+            if(nHtmlMode & HTMLMODE_ON || !SvtCJKOptions::IsDoubleLinesEnabled())
                 RemoveTabPage("asianlayout");
         }
         break;
@@ -145,7 +144,6 @@ SwTemplateDlgController::SwTemplateDlgController(weld::Window* pParent,
             || nHtmlMode & HTMLMODE_ON )
                 RemoveTabPage("condition");
 
-            SvtCJKOptions aCJKOptions;
             if(nHtmlMode & HTMLMODE_ON)
             {
                 if (!SvxHtmlOptions::IsPrintLayoutExtension())
@@ -162,9 +160,9 @@ SwTemplateDlgController::SwTemplateDlgController(weld::Window* pParent,
             }
             else
             {
-                if(!aCJKOptions.IsAsianTypographyEnabled())
+                if(!SvtCJKOptions::IsAsianTypographyEnabled())
                     RemoveTabPage("asiantypo");
-                if(!aCJKOptions.IsDoubleLinesEnabled())
+                if(!SvtCJKOptions::IsDoubleLinesEnabled())
                     RemoveTabPage("asianlayout");
             }
         }
@@ -184,8 +182,7 @@ SwTemplateDlgController::SwTemplateDlgController(weld::Window* pParent,
                 AddTabPage("columns", SwColumnPage::Create, SwColumnPage::GetRanges );
                 AddTabPage("footnotes", SwFootNotePage::Create, SwFootNotePage::GetRanges );
                 AddTabPage("textgrid", SwTextGridPage::Create, SwTextGridPage::GetRanges );
-                SvtCJKOptions aCJKOptions;
-                if(!aCJKOptions.IsAsianTypographyEnabled())
+                if(!SvtCJKOptions::IsAsianTypographyEnabled())
                     RemoveTabPage("textgrid");
             }
             else

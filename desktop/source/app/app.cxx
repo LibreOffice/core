@@ -1221,7 +1221,6 @@ struct ExecuteGlobals
     Reference < css::document::XDocumentEventListener > xGlobalBroadcaster;
     bool bRestartRequested;
     bool bUseSystemFileDialog;
-    std::unique_ptr<SvtCJKOptions> pCJKLanguageOptions;
     std::unique_ptr<SvtCTLOptions> pCTLLanguageOptions;
     std::unique_ptr<SvtPathOptions> pPathOptions;
     rtl::Reference< JVMloadThread > xJVMloadThread;
@@ -1456,7 +1455,6 @@ int Desktop::Main()
 #endif
 
     // keep a language options instance...
-    pExecGlobals->pCJKLanguageOptions.reset( new SvtCJKOptions(true));
     pExecGlobals->pCTLLanguageOptions.reset( new SvtCTLOptions(true));
 
     css::document::DocumentEvent aEvent;
@@ -1703,7 +1701,6 @@ int Desktop::doShutdown()
 
     // be sure that path/language options gets destroyed before
     // UCB is deinitialized
-    pExecGlobals->pCJKLanguageOptions.reset();
     pExecGlobals->pCTLLanguageOptions.reset();
     pExecGlobals->pPathOptions.reset();
 

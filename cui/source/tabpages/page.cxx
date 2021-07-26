@@ -193,8 +193,7 @@ SvxPageDescPage::SvxPageDescPage(weld::Container* pPage, weld::DialogController*
     SetExchangeSupport();
 
     SvtCTLOptions aCTLLanguageOptions;
-    SvtCJKOptions aCJKLanguageOptions;
-    bool bCJK = aCJKLanguageOptions.IsAsianTypographyEnabled();
+    bool bCJK = SvtCJKOptions::IsAsianTypographyEnabled();
     bool bCTL = aCTLLanguageOptions.IsCTLFontEnabled();
     bool bWeb = false;
     const SfxPoolItem* pItem;

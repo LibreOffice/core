@@ -987,7 +987,6 @@ void OfaViewTabPage::UpdateHardwareAccelStatus()
 
 struct LanguageConfig_Impl
 {
-    SvtCJKOptions aCJKLanguageOptions;
     SvtCTLOptions aCTLLanguageOptions;
     SvtSysLocaleOptions aSysLocaleOptions;
     SvtLinguConfig aLinguConfig;
@@ -1186,10 +1185,10 @@ OfaLanguagesTabPage::OfaLanguagesTabPage(weld::Container* pPage, weld::DialogCon
     m_xAsianSupportCB->connect_toggled( aLink );
     m_xCTLSupportCB->connect_toggled( aLink );
 
-    m_bOldAsian = pLangConfig->aCJKLanguageOptions.IsAnyEnabled();
+    m_bOldAsian = SvtCJKOptions::IsAnyEnabled();
     m_xAsianSupportCB->set_active(m_bOldAsian);
     m_xAsianSupportCB->save_state();
-    bool bReadonly = pLangConfig->aCJKLanguageOptions.IsReadOnly(SvtCJKOptions::E_ALL);
+    bool bReadonly = SvtCJKOptions::IsReadOnly(SvtCJKOptions::E_ALL);
     m_xAsianSupportCB->set_sensitive(!bReadonly);
     SupportHdl(*m_xAsianSupportCB);
 
@@ -1235,7 +1234,6 @@ bool OfaLanguagesTabPage::FillItemSet( SfxItemSet* rSet )
     // lock configuration broadcasters so that we can coordinate the notifications
     pLangConfig->aSysLocaleOptions.BlockBroadcasts( true );
     pLangConfig->aCTLLanguageOptions.BlockBroadcasts( true );
-    pLangConfig->aCJKLanguageOptions.BlockBroadcasts( true );
     pLangConfig->aLinguConfig.BlockBroadcasts( true );
 
     /*
@@ -1425,7 +1423,7 @@ bool OfaLanguagesTabPage::FillItemSet( SfxItemSet* rSet )
     if(m_xAsianSupportCB->get_state_changed_from_saved() )
     {
         bool bChecked = m_xAsianSupportCB->get_active();
-        pLangConfig->aCJKLanguageOptions.SetAll(bChecked);
+        SvtCJKOptions::SetAll(bChecked);
 
         //iterate over all bindings to invalidate vertical text direction
         const sal_uInt16 STATE_COUNT = 2;
@@ -1464,7 +1462,6 @@ bool OfaLanguagesTabPage::FillItemSet( SfxItemSet* rSet )
     // it seems that our code relies on the fact that before other changes like e.g. currency
     // are broadcasted locale changes have been done
     pLangConfig->aSysLocaleOptions.BlockBroadcasts( false );
-    pLangConfig->aCJKLanguageOptions.BlockBroadcasts( false );
     pLangConfig->aCTLLanguageOptions.BlockBroadcasts( false );
     pLangConfig->aLinguConfig.BlockBroadcasts( false );
 
@@ -1672,7 +1669,7 @@ IMPL_LINK_NOARG(OfaLanguagesTabPage, LocaleSettingHdl, weld::ComboBox&, void)
     }
     // second check if CJK must be enabled
     // #103299# - if CJK support is not readonly
-    if(!pLangConfig->aCJKLanguageOptions.IsReadOnly(SvtCJKOptions::E_ALL))
+    if(!SvtCJKOptions::IsReadOnly(SvtCJKOptions::E_ALL))
     {
         bool bIsCJKFixed = bool(nType & SvtScriptType::ASIAN);
         lcl_checkLanguageCheckBox(*m_xAsianSupportCB, bIsCJKFixed, m_bOldAsian);

@@ -206,8 +206,7 @@ void DrawViewShell::GetCtrlState(SfxItemSet &rSet)
 
     if ( !GetView()->GetTextEditOutliner() )
     {
-        SvtCJKOptions aCJKOptions;
-        if( !aCJKOptions.IsChangeCaseMapEnabled() )
+        if( !SvtCJKOptions::IsChangeCaseMapEnabled() )
         {
             GetViewFrame()->GetBindings().SetVisibleState( SID_TRANSLITERATE_HALFWIDTH, false );
             GetViewFrame()->GetBindings().SetVisibleState( SID_TRANSLITERATE_FULLWIDTH, false );
@@ -234,8 +233,7 @@ void DrawViewShell::GetCtrlState(SfxItemSet &rSet)
     }
     else
     {
-        SvtCJKOptions aCJKOptions;
-        if( !aCJKOptions.IsChangeCaseMapEnabled() )
+        if( !SvtCJKOptions::IsChangeCaseMapEnabled() )
         {
             GetViewFrame()->GetBindings().SetVisibleState( SID_TRANSLITERATE_HALFWIDTH, false );
             GetViewFrame()->GetBindings().SetVisibleState( SID_TRANSLITERATE_FULLWIDTH, false );

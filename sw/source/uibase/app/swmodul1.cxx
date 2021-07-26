@@ -309,12 +309,11 @@ void SwModule::ApplyUserCharUnit(bool bApplyChar, bool bWeb)
     }
     else
     {
-        SvtCJKOptions aCJKOptions;
-        if ( !aCJKOptions.IsAsianTypographyEnabled() && ( eHScrollMetric == FieldUnit::CHAR ))
+        if ( !SvtCJKOptions::IsAsianTypographyEnabled() && ( eHScrollMetric == FieldUnit::CHAR ))
             eHScrollMetric = FieldUnit::INCH;
         else if ( eHScrollMetric == FieldUnit::CHAR )
             eHScrollMetric = FieldUnit::CM;
-        if ( !aCJKOptions.IsAsianTypographyEnabled() && ( eVScrollMetric == FieldUnit::LINE ))
+        if ( !SvtCJKOptions::IsAsianTypographyEnabled() && ( eVScrollMetric == FieldUnit::LINE ))
             eVScrollMetric = FieldUnit::INCH;
         else if ( eVScrollMetric == FieldUnit::LINE )
             eVScrollMetric = FieldUnit::CM;

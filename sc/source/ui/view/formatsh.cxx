@@ -2749,7 +2749,7 @@ void ScFormatShell::GetTextDirectionState( SfxItemSet& rSet )
     }
 
     bool bDisableCTLFont = !SvtCTLOptions().IsCTLFontEnabled();
-    bool bDisableVerticalText = !SvtCJKOptions().IsVerticalTextEnabled();
+    bool bDisableVerticalText = !SvtCJKOptions::IsVerticalTextEnabled();
 
     SfxWhichIter aIter( rSet );
     sal_uInt16 nWhich = aIter.FirstWhich();

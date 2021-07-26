@@ -84,8 +84,7 @@ SwParaDlg::SwParaDlg(weld::Window *pParent,
     else
         RemoveTabPage("textflow");
 
-    SvtCJKOptions aCJKOptions;
-    if(!bHtmlMode && aCJKOptions.IsAsianTypographyEnabled())
+    if(!bHtmlMode && SvtCJKOptions::IsAsianTypographyEnabled())
     {
         OSL_ENSURE(pFact->GetTabPageCreatorFunc(RID_SVXPAGE_PARA_ASIAN), "GetTabPageCreatorFunc fail!");
         OSL_ENSURE(pFact->GetTabPageRangesFunc(RID_SVXPAGE_PARA_ASIAN), "GetTabPageRangesFunc fail!");

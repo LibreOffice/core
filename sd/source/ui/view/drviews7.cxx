@@ -332,7 +332,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     }
 
     ViewShell::GetMenuState(rSet);
-    bool bDisableVerticalText = !SvtCJKOptions().IsVerticalTextEnabled();
+    bool bDisableVerticalText = !SvtCJKOptions::IsVerticalTextEnabled();
 
     if ( bDisableVerticalText )
     {

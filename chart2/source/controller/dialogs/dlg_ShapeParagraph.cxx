@@ -34,11 +34,9 @@ ShapeParagraphDialog::ShapeParagraphDialog(weld::Window* pParent,
     const SfxItemSet* pAttr)
     : SfxTabDialogController(pParent, "modules/schart/ui/paradialog.ui", "ParagraphDialog", pAttr)
 {
-    SvtCJKOptions aCJKOptions;
-
     AddTabPage("labelTP_PARA_STD",  RID_SVXPAGE_STD_PARAGRAPH);
     AddTabPage("labelTP_PARA_ALIGN", RID_SVXPAGE_ALIGN_PARAGRAPH );
-    if (aCJKOptions.IsAsianTypographyEnabled())
+    if (SvtCJKOptions::IsAsianTypographyEnabled())
     {
         AddTabPage("labelTP_PARA_ASIAN", RID_SVXPAGE_PARA_ASIAN);
     }

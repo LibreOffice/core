@@ -220,9 +220,8 @@ SvxCharNamePage::SvxCharNamePage(weld::Container* pPage, weld::DialogController*
 #endif
     m_pImpl->m_aNoStyleText = CuiResId( RID_SVXSTR_CHARNAME_NOSTYLE );
 
-    SvtCJKOptions aCJKLanguageOptions;
     SvtCTLOptions aCTLLanguageOptions;
-    bool bShowCJK = aCJKLanguageOptions.IsCJKFontEnabled();
+    bool bShowCJK = SvtCJKOptions::IsCJKFontEnabled();
     bool bShowCTL = aCTLLanguageOptions.IsCTLFontEnabled();
     bool bShowNonWestern = bShowCJK || bShowCTL;
 
@@ -1418,7 +1417,7 @@ void SvxCharEffectsPage::Initialize()
     m_xOutlineBtn->connect_toggled(LINK(this, SvxCharEffectsPage, OutlineBtnClickHdl));
     m_xShadowBtn->connect_toggled(LINK(this, SvxCharEffectsPage, ShadowBtnClickHdl));
 
-    if ( !SvtCJKOptions().IsAsianTypographyEnabled() )
+    if ( !SvtCJKOptions::IsAsianTypographyEnabled() )
     {
         m_xEmphasisFT->hide();
         m_xEmphasisLB->hide();
