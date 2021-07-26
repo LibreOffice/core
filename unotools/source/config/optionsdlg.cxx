@@ -19,91 +19,44 @@
 
 #include <unotools/optionsdlg.hxx>
 #include <unotools/configitem.hxx>
+#include <unotools/configmgr.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <osl/mutex.hxx>
 
-#include "itemholder1.hxx"
-
-#include <string_view>
-#include <unordered_map>
-
-using namespace utl;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::uno;
 
-#define CFG_FILENAME            "Office.OptionsDialog"
-#define ROOT_NODE               "OptionsDialogGroups"
-#define PAGES_NODE              "Pages"
-#define OPTIONS_NODE            "Options"
+constexpr OUStringLiteral ROOT_NODE = u"OptionsDialogGroups";
+constexpr OUStringLiteral PAGES_NODE = u"Pages";
+constexpr OUStringLiteral OPTIONS_NODE = u"Options";
 
-static SvtOptionsDlgOptions_Impl*   pOptions = nullptr;
-static sal_Int32                    nRefCount = 0;
-
-class SvtOptionsDlgOptions_Impl : public utl::ConfigItem
-{
-private:
-    typedef std::unordered_map< OUString, bool > OptionNodeList;
-
-    static constexpr OUStringLiteral g_sPathDelimiter = u"/";
-    OptionNodeList  m_aOptionNodeList;
-
+namespace {
     enum NodeType{ NT_Group, NT_Page, NT_Option };
-    void            ReadNode( std::u16string_view _rNode, NodeType _eType );
-    bool        IsHidden( const OUString& _rPath ) const;
-
-    virtual void    ImplCommit() override;
-
-public:
-                    SvtOptionsDlgOptions_Impl();
-
-    virtual void    Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
-
-    static ::osl::Mutex & getInitMutex();
-
-    bool        IsGroupHidden   (   std::u16string_view _rGroup ) const;
-    bool        IsPageHidden    (   std::u16string_view _rPage,
-                                        std::u16string_view _rGroup ) const;
-    bool        IsOptionHidden  (   std::u16string_view _rOption,
-                                        std::u16string_view _rPage,
-                                        std::u16string_view _rGroup ) const;
-};
-
-namespace
-{
-    class theOptionsDlgOptions_ImplMutex : public rtl::Static<osl::Mutex, theOptionsDlgOptions_ImplMutex>{};
 }
+constexpr OUStringLiteral g_sPathDelimiter = u"/";
+static void ReadNode(
+        const Reference<css::container::XHierarchicalNameAccess>& xHierarchyAccess,
+        SvtOptionsDialogOptions::OptionNodeList & aOptionNodeList,
+        std::u16string_view _rNode, NodeType _eType );
 
-::osl::Mutex & SvtOptionsDlgOptions_Impl::getInitMutex()
-{
-    return theOptionsDlgOptions_ImplMutex::get();
-}
 
-SvtOptionsDlgOptions_Impl::SvtOptionsDlgOptions_Impl()
-    : ConfigItem( CFG_FILENAME ),
-    m_aOptionNodeList( OptionNodeList() )
+SvtOptionsDialogOptions::SvtOptionsDialogOptions()
 {
-    OUString sRootNode( ROOT_NODE );
-    const Sequence< OUString > aNodeSeq = GetNodeNames( sRootNode );
-    OUString sNode( sRootNode + g_sPathDelimiter );
+    Reference<css::container::XHierarchicalNameAccess> xHierarchyAccess = utl::ConfigManager::acquireTree(u"Office.OptionsDialog");
+    const Sequence< OUString > aNodeSeq = utl::ConfigItem::GetNodeNames( xHierarchyAccess, ROOT_NODE, utl::ConfigNameFormat::LocalPath);
+    OUString sNode( ROOT_NODE + g_sPathDelimiter );
     for ( const auto& rNode : aNodeSeq )
     {
         OUString sSubNode( sNode + rNode );
-        ReadNode( sSubNode, NT_Group );
+        ReadNode( xHierarchyAccess, m_aOptionNodeList, sSubNode, NT_Group );
     }
 }
 
-void SvtOptionsDlgOptions_Impl::ImplCommit()
-{
-    // nothing to commit
-}
 
-void SvtOptionsDlgOptions_Impl::Notify( const Sequence< OUString >& )
-{
-    // nothing to notify
-}
-
-void SvtOptionsDlgOptions_Impl::ReadNode( std::u16string_view _rNode, NodeType _eType )
+static void ReadNode(
+        const Reference<css::container::XHierarchicalNameAccess>& xHierarchyAccess,
+        SvtOptionsDialogOptions::OptionNodeList & aOptionNodeList,
+        std::u16string_view _rNode, NodeType _eType )
 {
     OUString sNode( _rNode + g_sPathDelimiter );
     OUString sSet;
@@ -136,37 +89,37 @@ void SvtOptionsDlgOptions_Impl::ReadNode( std::u16string_view _rNode, NodeType _
     if ( _eType != NT_Option )
         lResult[1] = sNode + sSet;
 
-    Sequence< Any > aValues = GetProperties( lResult );
+    Sequence< Any > aValues = utl::ConfigItem::GetProperties( xHierarchyAccess, lResult, /*bAllLocales*/false );
     bool bHide = false;
     if ( aValues[0] >>= bHide )
-        m_aOptionNodeList.emplace( sNode, bHide );
+        aOptionNodeList.emplace( sNode, bHide );
 
     if ( _eType != NT_Option )
     {
         OUString sNodes( sNode + sSet );
-        const Sequence< OUString > aNodes = GetNodeNames( sNodes );
+        const Sequence< OUString > aNodes = utl::ConfigItem::GetNodeNames( xHierarchyAccess, sNodes, utl::ConfigNameFormat::LocalPath );
         for ( const auto& rNode : aNodes )
         {
             OUString sSubNodeName( sNodes + g_sPathDelimiter + rNode );
-            ReadNode( sSubNodeName, _eType == NT_Group ? NT_Page : NT_Option );
+            ReadNode( xHierarchyAccess, aOptionNodeList, sSubNodeName, _eType == NT_Group ? NT_Page : NT_Option );
         }
     }
 }
 
 static OUString getGroupPath( std::u16string_view _rGroup )
 {
-    return OUString( OUString::Concat(ROOT_NODE "/") + _rGroup + "/" );
+    return OUString( OUString::Concat(ROOT_NODE) + "/" + _rGroup + "/" );
 }
 static OUString getPagePath( std::u16string_view _rPage )
 {
-    return OUString( OUString::Concat(PAGES_NODE "/") + _rPage + "/" );
+    return OUString( OUString::Concat(PAGES_NODE) + "/" + _rPage + "/" );
 }
 static OUString getOptionPath( std::u16string_view _rOption )
 {
-    return OUString( OUString::Concat(OPTIONS_NODE "/") + _rOption + "/" );
+    return OUString( OUString::Concat(OPTIONS_NODE) + "/" + _rOption + "/" );
 }
 
-bool SvtOptionsDlgOptions_Impl::IsHidden( const OUString& _rPath ) const
+bool SvtOptionsDialogOptions::IsHidden( const OUString& _rPath ) const
 {
     bool bRet = false;
     OptionNodeList::const_iterator pIter = m_aOptionNodeList.find( _rPath );
@@ -175,64 +128,20 @@ bool SvtOptionsDlgOptions_Impl::IsHidden( const OUString& _rPath ) const
     return bRet;
 }
 
-bool SvtOptionsDlgOptions_Impl::IsGroupHidden( std::u16string_view _rGroup ) const
+bool SvtOptionsDialogOptions::IsGroupHidden( std::u16string_view _rGroup ) const
 {
     return IsHidden( getGroupPath( _rGroup ) );
 }
 
-bool SvtOptionsDlgOptions_Impl::IsPageHidden( std::u16string_view _rPage, std::u16string_view _rGroup ) const
+bool SvtOptionsDialogOptions::IsPageHidden( std::u16string_view _rPage, std::u16string_view _rGroup ) const
 {
     return IsHidden( getGroupPath( _rGroup  ) + getPagePath( _rPage ) );
-}
-
-bool SvtOptionsDlgOptions_Impl::IsOptionHidden(
-    std::u16string_view _rOption, std::u16string_view _rPage, std::u16string_view _rGroup ) const
-{
-    return IsHidden( getGroupPath( _rGroup  ) + getPagePath( _rPage ) + getOptionPath( _rOption ) );
-}
-
-SvtOptionsDialogOptions::SvtOptionsDialogOptions()
-{
-    // Global access, must be guarded (multithreading)
-    ::osl::MutexGuard aGuard( SvtOptionsDlgOptions_Impl::getInitMutex() );
-    ++nRefCount;
-    if ( !pOptions )
-    {
-        pOptions = new SvtOptionsDlgOptions_Impl;
-
-        ItemHolder1::holdConfigItem( EItem::OptionsDialogOptions );
-    }
-    m_pImp = pOptions;
-}
-
-SvtOptionsDialogOptions::~SvtOptionsDialogOptions()
-{
-    // Global access, must be guarded (multithreading)
-    ::osl::MutexGuard aGuard( SvtOptionsDlgOptions_Impl::getInitMutex() );
-    if ( !--nRefCount )
-    {
-        if ( pOptions->IsModified() )
-            pOptions->Commit();
-        delete pOptions;
-        pOptions = nullptr;
-    }
-}
-
-bool SvtOptionsDialogOptions::IsGroupHidden( std::u16string_view _rGroup ) const
-{
-    return m_pImp->IsGroupHidden( _rGroup );
-}
-
-bool SvtOptionsDialogOptions::IsPageHidden(
-    std::u16string_view _rPage, std::u16string_view _rGroup ) const
-{
-    return m_pImp->IsPageHidden( _rPage, _rGroup );
 }
 
 bool SvtOptionsDialogOptions::IsOptionHidden(
     std::u16string_view _rOption, std::u16string_view _rPage, std::u16string_view _rGroup ) const
 {
-    return m_pImp->IsOptionHidden( _rOption, _rPage, _rGroup );
+    return IsHidden( getGroupPath( _rGroup  ) + getPagePath( _rPage ) + getOptionPath( _rOption ) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

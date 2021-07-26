@@ -137,10 +137,6 @@ void ItemHolder1::impl_newItem(TItemInfo& rItem)
             rItem.pItem.reset( new SvtModuleOptions() );
             break;
 
-        case EItem::OptionsDialogOptions :
-            rItem.pItem.reset( new SvtOptionsDialogOptions() );
-            break;
-
         case EItem::PathOptions :
             rItem.pItem.reset( new SvtPathOptions() );
             break;
