@@ -57,6 +57,7 @@
 #include <svtools/insdlg.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <svl/languageoptions.hxx>
+#include <svl/cjkoptions.hxx>
 #include <comphelper/processfactory.hxx>
 #include <sfx2/request.hxx>
 
@@ -331,7 +332,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     }
 
     ViewShell::GetMenuState(rSet);
-    bool bDisableVerticalText = !SvtLanguageOptions().IsVerticalTextEnabled();
+    bool bDisableVerticalText = !SvtCJKOptions().IsVerticalTextEnabled();
 
     if ( bDisableVerticalText )
     {

@@ -33,6 +33,8 @@
 #include <sfx2/module.hxx>
 #include <svl/eitem.hxx>
 #include <svl/languageoptions.hxx>
+#include <svl/cjkoptions.hxx>
+#include <svl/ctloptions.hxx>
 #include <svx/SmartTagMgr.hxx>
 #include <com/sun/star/smarttags/XSmartTagRecognizer.hpp>
 #include <rtl/strbuf.hxx>
@@ -103,9 +105,9 @@ OfaAutoCorrDlg::OfaAutoCorrDlg(weld::Window* pParent, const SfxItemSet* _pSet )
     //! will be set to LANGUAGE_UNDETERMINED
     SvxLanguageListFlags nLangList = SvxLanguageListFlags::WESTERN;
 
-    if( SvtLanguageOptions().IsCTLFontEnabled() )
+    if( SvtCTLOptions().IsCTLFontEnabled() )
         nLangList |= SvxLanguageListFlags::CTL;
-    if( SvtLanguageOptions().IsCJKFontEnabled() )
+    if( SvtCJKOptions().IsCJKFontEnabled() )
         nLangList |= SvxLanguageListFlags::CJK;
     m_xLanguageLB->SetLanguageList( nLangList, true, true );
     m_xLanguageLB->set_active_id( LANGUAGE_NONE );

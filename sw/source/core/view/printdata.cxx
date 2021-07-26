@@ -169,8 +169,7 @@ SwPrintUIOptions::SwPrintUIOptions(
     }
 
     // check if either CJK or CTL is enabled
-    SvtLanguageOptions aLangOpt;
-    bool bRTL = aLangOpt.IsCJKFontEnabled() || aLangOpt.IsCTLFontEnabled();
+    bool bRTL = SvtCJKOptions().IsCJKFontEnabled() || SvtCTLOptions().IsCTLFontEnabled();
 
     // create sequence of print UI options
     // (5 options are not available for Writer-Web)
