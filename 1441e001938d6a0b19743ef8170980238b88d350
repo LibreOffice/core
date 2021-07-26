@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8048521f_8a1a215b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-07-26T17:59:26Z",
+      "side": 1,
+      "message": "Not quite true that all unit tests pass. I didn\u0027t eliminate completely in my first test - and RTF has some way to work around GetCurrentNumberingRules returning nothing. So RTF tests do fail. But RTF is also really lousy import, so probably it is only a hack that works in certain conditions, and would fail in other example documents.",
+      "range": {
+        "startLine": 21,
+        "startChar": 1,
+        "endLine": 21,
+        "endChar": 38
+      },
+      "revId": "1441e001938d6a0b19743ef8170980238b88d350",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
