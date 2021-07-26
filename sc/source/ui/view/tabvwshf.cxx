@@ -27,6 +27,7 @@
 #include <basic/sbstar.hxx>
 #include <basic/sberrors.hxx>
 #include <svl/languageoptions.hxx>
+#include <svl/ctloptions.hxx>
 #include <svl/stritem.hxx>
 #include <svl/whiter.hxx>
 #include <vcl/svapp.hxx>
@@ -972,8 +973,7 @@ void ScTabViewShell::GetStateTable( SfxItemSet& rSet )
 
             case FID_TAB_RTL:
                 {
-                    SvtLanguageOptions aLangOpt;
-                    if ( !aLangOpt.IsCTLFontEnabled() )
+                    if ( !SvtCTLOptions().IsCTLFontEnabled() )
                         rSet.DisableItem( nWhich );
                     else
                         rSet.Put( SfxBoolItem( nWhich, rDoc.IsLayoutRTL( nTab ) ) );

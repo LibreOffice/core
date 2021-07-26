@@ -35,6 +35,8 @@
 #include <svl/stritem.hxx>
 #include <svl/zformat.hxx>
 #include <svl/languageoptions.hxx>
+#include <svl/cjkoptions.hxx>
+#include <svl/ctloptions.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/langitem.hxx>
 #include <svx/numinf.hxx>
@@ -2746,9 +2748,8 @@ void ScFormatShell::GetTextDirectionState( SfxItemSet& rSet )
             eBidiDir = EEHorizontalTextDirection::L2R;
     }
 
-    SvtLanguageOptions  aLangOpt;
-    bool bDisableCTLFont = !aLangOpt.IsCTLFontEnabled();
-    bool bDisableVerticalText = !aLangOpt.IsVerticalTextEnabled();
+    bool bDisableCTLFont = !SvtCTLOptions().IsCTLFontEnabled();
+    bool bDisableVerticalText = !SvtCJKOptions().IsVerticalTextEnabled();
 
     SfxWhichIter aIter( rSet );
     sal_uInt16 nWhich = aIter.FirstWhich();

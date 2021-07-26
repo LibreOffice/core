@@ -38,6 +38,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <svl/stritem.hxx>
 #include <svl/languageoptions.hxx>
+#include <svl/ctloptions.hxx>
 #include <sfx2/htmlmode.hxx>
 #include <swmodule.hxx>
 #include <fchrfmt.hxx>
@@ -612,7 +613,7 @@ IMPL_LINK_NOARG(ApplyStyle, ApplyHdl, LinkParamNone*, void)
 
         m_xTmp->SetItemSet( aTmpSet );
 
-        if( SfxStyleFamily::Page == m_nFamily && SvtLanguageOptions().IsCTLFontEnabled() )
+        if( SfxStyleFamily::Page == m_nFamily && SvtCTLOptions().IsCTLFontEnabled() )
         {
             const SfxPoolItem *pItem = nullptr;
             if( aTmpSet.GetItemState( m_rDocSh.GetPool().GetTrueWhich( SID_ATTR_FRAMEDIRECTION, false ) , true, &pItem ) == SfxItemState::SET )

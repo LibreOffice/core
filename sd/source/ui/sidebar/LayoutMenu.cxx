@@ -47,6 +47,7 @@
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svl/languageoptions.hxx>
+#include <svl/cjkoptions.hxx>
 #include <svl/stritem.hxx>
 #include <svl/intitem.hxx>
 #include <vcl/commandevent.hxx>
@@ -496,8 +497,7 @@ SfxRequest LayoutMenu::CreateRequest (
 
 void LayoutMenu::Fill()
 {
-    SvtLanguageOptions aLanguageOptions;
-    bool bVertical = aLanguageOptions.IsVerticalTextEnabled();
+    bool bVertical = SvtCJKOptions().IsVerticalTextEnabled();
     SdDrawDocument* pDocument = mrBase.GetDocument();
     bool bRightToLeft = (pDocument!=nullptr
         && pDocument->GetDefaultWritingMode() == WritingMode_RL_TB);

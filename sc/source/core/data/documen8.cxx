@@ -35,6 +35,7 @@
 #include <svl/intitem.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
+#include <svl/ctloptions.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
@@ -224,7 +225,7 @@ void ScDocument::ModifyStyleSheet( SfxStyleSheetBase& rStyleSheet,
                 if ( (nOldScale != nNewScale) || (nOldScaleToPages != nNewScaleToPages) )
                     InvalidateTextWidth( rStyleSheet.GetName() );
 
-                if( SvtLanguageOptions().IsCTLFontEnabled() )
+                if( SvtCTLOptions().IsCTLFontEnabled() )
                 {
                     const SfxPoolItem *pItem = nullptr;
                     if( rChanges.GetItemState(ATTR_WRITINGDIR, true, &pItem ) == SfxItemState::SET )

@@ -48,6 +48,7 @@
 #include <com/sun/star/chart2/XAxis.hpp>
 #include <svl/intitem.hxx>
 #include <svl/languageoptions.hxx>
+#include <svl/ctloptions.hxx>
 
 #include <svx/svxids.hrc>
 
@@ -462,7 +463,7 @@ SchAttribTabDlg::SchAttribTabDlg(weld::Window* pParent,
             AddTabPage("fontname", SchResId(STR_PAGE_FONT), RID_SVXPAGE_CHAR_NAME);
             AddTabPage("effects", SchResId(STR_PAGE_FONT_EFFECTS), RID_SVXPAGE_CHAR_EFFECTS);
             AddTabPage("numberformat", SchResId(STR_PAGE_NUMBERS), RID_SVXPAGE_NUMBERFORMAT);
-            if (SvtLanguageOptions().IsCTLFontEnabled())
+            if (SvtCTLOptions().IsCTLFontEnabled())
             {
                 /*  When rotation is supported for equation text boxes, use
                     SchAlignmentTabPage::Create here. The special
