@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7be5bcd9_a75a125e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-07-26T10:21:48Z",
+      "side": 1,
+      "message": "If this change is in response to the comment at \u003chttps://gerrit.libreoffice.org/c/core/+/119481/5#message-747bde6ad4bdcf90d2ff51e8daa03cb0189e6355\u003e \"use officecfg for drawing options\", then it is about a UBSan, not an ASan failure.  (And I would expect the commit message to at last briefly mention the actual issue that was observed and which gets fixed.)",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 4
+      },
+      "revId": "042cddda0ed2de7c10ec4b1455733a90b5b42231",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
