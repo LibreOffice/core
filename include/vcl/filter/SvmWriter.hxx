@@ -37,8 +37,8 @@ public:
     SvmWriter(SvStream& rIStm);
 
     SvStream& Write(GDIMetaFile& rMetaFile);
-    void MetaActionHandler(MetaAction* pAct, ImplMetaWriteData* pData);
-    void ActionHandler(MetaActionType nType);
-    void PixelHandler(MetaPixelAction* pAct);
-    void PointHandler(MetaPointAction* pAct);
+    void MetaActionHandler(MetaAction* pAction, ImplMetaWriteData* pData);
+    void ActionHandler(MetaAction* pAction);
+    void PixelHandler(MetaPixelAction* pAction);
+    void PointHandler(MetaPointAction* pAction);
 };

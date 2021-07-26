@@ -68,51 +68,52 @@ SvStream& SvmWriter::Write(GDIMetaFile& rMetaFile)
     return mrStream;
 }
 
-void SvmWriter::MetaActionHandler(MetaAction* pAct, ImplMetaWriteData* pData)
+void SvmWriter::MetaActionHandler(MetaAction* pAction, ImplMetaWriteData* pData)
 {
-    MetaActionType nType = static_cast<MetaActionType>(pAct->GetType());
+    MetaActionType nType = static_cast<MetaActionType>(pAction->GetType());
 
     switch (nType)
     {
         case MetaActionType::NONE:
         {
-            ActionHandler(pAct->GetType());
+            auto* pMetaAction = static_cast<MetaAction*>(pAction);
+            ActionHandler(pMetaAction);
         }
         break;
         case MetaActionType::PIXEL:
         {
-            auto* pMetaAction = static_cast<MetaPixelAction*>(pAct);
+            auto* pMetaAction = static_cast<MetaPixelAction*>(pAction);
             PixelHandler(pMetaAction);
         }
         break;
         case MetaActionType::POINT:
         {
-            auto pMetaAction = static_cast<MetaPointAction*>(pAct);
+            auto pMetaAction = static_cast<MetaPointAction*>(pAction);
             PointHandler(pMetaAction);
         }
         break;
         default:
-            pAct->Write(mrStream, pData);
+            pAction->Write(mrStream, pData);
     }
 }
 
-void SvmWriter::ActionHandler(MetaActionType nType)
+void SvmWriter::ActionHandler(MetaAction* pAction)
 {
-    mrStream.WriteUInt16(static_cast<sal_uInt16>(nType));
+    mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
 }
 
-void SvmWriter::PixelHandler(MetaPixelAction* pAct)
+void SvmWriter::PixelHandler(MetaPixelAction* pAction)
 {
-    ActionHandler(pAct->GetType());
+    mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
     VersionCompatWrite aCompat(mrStream, 1);
     TypeSerializer aSerializer(mrStream);
-    aSerializer.writePoint(pAct->GetPoint());
-    WriteColor(pAct->GetColor());
+    aSerializer.writePoint(pAction->GetPoint());
+    WriteColor(pAction->GetColor());
 }
 
 void SvmWriter::PointHandler(MetaPointAction* pAct)
 {
-    ActionHandler(pAct->GetType());
+    mrStream.WriteUInt16(static_cast<sal_uInt16>(pAct->GetType()));
     VersionCompatWrite aCompat(mrStream, 1);
     TypeSerializer aSerializer(mrStream);
     aSerializer.writePoint(pAct->GetPoint());
