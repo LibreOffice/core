@@ -7657,7 +7657,7 @@ uno::Reference<container::XIndexAccess> DomainMapper_Impl::GetCurrentNumberingRu
         if (nListId < 0)
             return xRet;
         if (pListLevel)
-            *pListLevel = GetListLevel(pEntry, GetTopContextOfType(CONTEXT_PARAGRAPH));
+            *pListLevel = pStyleSheetProperties->GetListLevel();
 
         // So we are in a paragraph style and it has numbering. Look up the relevant numbering rules.
         auto const pList(GetListTable()->GetList(nListId));
