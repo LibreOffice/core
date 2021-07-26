@@ -180,32 +180,21 @@ class RecentFilesStringLength : public ::cppu::WeakImplHelper< css::util::XStrin
         [menu removeItemAtIndex: 0];
 
     // update recent item list
-    css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > > aHistoryList( SvtHistoryOptions().GetList( EHistoryType::PickList ) );
+    std::vector< SvtHistoryOptions::HistoryItem > aHistoryList( SvtHistoryOptions::GetList( EHistoryType::PickList ) );
 
-    int nPickListMenuItems = ( aHistoryList.getLength() > 99 ) ? 99 : aHistoryList.getLength();
+    int nPickListMenuItems = ( aHistoryList.size() > 99 ) ? 99 : aHistoryList.size();
 
     m_pRecentFilesItems->clear();
     if( nPickListMenuItems > 0 )
     {
         for ( int i = 0; i < nPickListMenuItems; i++ )
         {
-            css::uno::Sequence< css::beans::PropertyValue > const & rPickListEntry = aHistoryList[i];
+            const SvtHistoryOptions::HistoryItem & rPickListEntry = aHistoryList[i];
             RecentMenuEntry aRecentFile;
-
-            for ( const css::beans::PropertyValue& rProp : rPickListEntry )
-            {
-                const css::uno::Any& a = rProp.Value;
-
-                if ( rProp.Name == HISTORY_PROPERTYNAME_URL )
-                    a >>= aRecentFile.aURL;
-                else if ( rProp.Name == HISTORY_PROPERTYNAME_FILTER )
-                    a >>= aRecentFile.aFilter;
-                else if ( rProp.Name == HISTORY_PROPERTYNAME_TITLE )
-                    a >>= aRecentFile.aTitle;
-                else if ( rProp.Name == HISTORY_PROPERTYNAME_PASSWORD )
-                    a >>= aRecentFile.aPassword;
-            }
-
+            aRecentFile.aURL = rPickListEntry.sURL;
+            aRecentFile.aFilter = rPickListEntry.sFilter;
+            aRecentFile.aTitle = rPickListEntry.sTitle;
+            aRecentFile.aPassword = rPickListEntry.sPassword;
             m_pRecentFilesItems->push_back( aRecentFile );
         }
     }

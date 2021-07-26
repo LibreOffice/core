@@ -130,28 +130,17 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
     if ( !pVCLPopupMenu )
         return;
 
-    Sequence< Sequence< PropertyValue > > aHistoryList = SvtHistoryOptions().GetList( EHistoryType::PickList );
+    std::vector< SvtHistoryOptions::HistoryItem > aHistoryList = SvtHistoryOptions::GetList( EHistoryType::PickList );
 
-    int nPickListMenuItems = std::min<sal_Int32>( aHistoryList.getLength(), MAX_MENU_ITEMS );
+    int nPickListMenuItems = std::min<sal_Int32>( aHistoryList.size(), MAX_MENU_ITEMS );
     m_aRecentFilesItems.clear();
 
     if (( nPickListMenuItems > 0 ) && !m_bDisabled )
     {
         for ( int i = 0; i < nPickListMenuItems; i++ )
         {
-            const Sequence< PropertyValue >& rPickListEntry = aHistoryList[i];
-            OUString aURL;
-
-            for ( PropertyValue const & prop : rPickListEntry )
-            {
-                if ( prop.Name == HISTORY_PROPERTYNAME_URL )
-                {
-                    prop.Value >>= aURL;
-                    break;
-                }
-            }
-
-            m_aRecentFilesItems.push_back( aURL );
+            const SvtHistoryOptions::HistoryItem& rPickListEntry = aHistoryList[i];
+            m_aRecentFilesItems.push_back( rPickListEntry.sURL );
         }
     }
 
@@ -308,7 +297,7 @@ void SAL_CALL RecentFilesMenuController::itemSelected( const css::awt::MenuEvent
 
     if ( aCommand == CMD_CLEAR_LIST )
     {
-        SvtHistoryOptions().Clear( EHistoryType::PickList );
+        SvtHistoryOptions::Clear( EHistoryType::PickList );
         dispatchCommand(
             "vnd.org.libreoffice.recentdocs:ClearRecentFileList",
             css::uno::Sequence< css::beans::PropertyValue >() );

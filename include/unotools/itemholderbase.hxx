@@ -41,8 +41,6 @@ enum class EItem
 
     EventConfig                   ,
 
-    HistoryOptions                ,
-
     LinguConfig                   ,
 
     MiscOptions                   ,

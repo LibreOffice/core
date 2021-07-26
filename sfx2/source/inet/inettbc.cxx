@@ -243,19 +243,12 @@ void SfxURLToolBoxControl_Impl::StateChangedAtToolBoxControl
         SvtURLBox* pURLBox = GetURLBox();
         pURLBox->clear();
 
-        const css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > > lList = SvtHistoryOptions().GetList(EHistoryType::PickList);
-        for (const css::uno::Sequence< css::beans::PropertyValue >& lProps : lList)
+        const std::vector< SvtHistoryOptions::HistoryItem > lList = SvtHistoryOptions::GetList(EHistoryType::PickList);
+        for (const SvtHistoryOptions::HistoryItem& lProps : lList)
         {
-            for (const auto& rProp : lProps)
+            if (!lProps.sURL.isEmpty())
             {
-                if (rProp.Name != HISTORY_PROPERTYNAME_URL)
-                    continue;
-
-                OUString sURL;
-                if (!(rProp.Value>>=sURL) || sURL.isEmpty())
-                    continue;
-
-                INetURLObject aURL    ( sURL );
+                INetURLObject aURL    ( lProps.sURL );
                 OUString      sMainURL( aURL.GetMainURL( INetURLObject::DecodeMechanism::WithCharset ) );
                 OUString      sFile;
 
