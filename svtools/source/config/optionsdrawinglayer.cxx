@@ -32,12 +32,6 @@
 namespace SvtOptionsDrawinglayer
 {
 
-// helper
-bool IsAAPossibleOnThisSystem()
-{
-    return !Application::GetDefaultDevice()->SupportsOperation( OutDevSupportType::TransparentRect );
-}
-
 bool IsOverlayBuffer()
 {
     return officecfg::Office::Common::Drawinglayer::OverlayBuffer::get();
@@ -126,19 +120,36 @@ sal_uInt32 GetMaximumPaperBottomMargin()
 }
 
 static std::mutex gaAntiAliasMutex;
-static bool bAntiAliasingInit = false;
-static bool bAntiAliasing = false;
+static bool gbAntiAliasingInit = false;
+static bool gbAntiAliasing = false;
+static bool gbAllowAAInit = false;
+static bool gbAllowAA = false;
+
+bool IsAAPossibleOnThisSystem()
+{
+    std::lock_guard aGuard(gaAntiAliasMutex);
+    if (!gbAllowAAInit)
+    {
+        gbAllowAAInit = true;
+        gbAllowAA = Application::GetDefaultDevice()->SupportsOperation( OutDevSupportType::TransparentRect );
+    }
+    return gbAllowAA;
+}
+
 
 bool IsAntiAliasing()
 {
-    std::lock_guard aGuard(gaAntiAliasMutex);
-    if (!bAntiAliasingInit)
+    bool bAntiAliasing;
     {
-        bAntiAliasingInit = true;
-        bAntiAliasing = officecfg::Office::Common::Drawinglayer::AntiAliasing::get()
-            && IsAAPossibleOnThisSystem();
+        std::lock_guard aGuard(gaAntiAliasMutex);
+        if (!gbAntiAliasingInit)
+        {
+            gbAntiAliasingInit = true;
+            gbAntiAliasing = officecfg::Office::Common::Drawinglayer::AntiAliasing::get();
+        }
+        bAntiAliasing = gbAntiAliasing;
     }
-    return bAntiAliasing;
+    return bAntiAliasing && IsAAPossibleOnThisSystem();
 }
 
 /**
@@ -156,7 +167,7 @@ void SetAntiAliasing( bool bOn, bool bTemporary )
         officecfg::Office::Common::Drawinglayer::AntiAliasing::set(bOn, batch);
         batch->commit();
     }
-    bAntiAliasing = bOn;
+    gbAntiAliasing = bOn;
 }
 
 
