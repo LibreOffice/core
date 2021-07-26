@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "94323d61_eaf4e903",
+        "filename": "sd/source/filter/eppt/pptx-epptooxml.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1123,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-07-26T16:40:19Z",
+      "side": 1,
+      "message": "1, because there is no slide0 (but slide1 can exists)\n\nIt seems, this fixes the following problem: removing the first two slides of the unit test, Impress doesn\u0027t remove the \"Start from\" setting, and the export results \n\nthe invalid(?) zero slide\n\n\u003cp:sldRg st\u003d\"0\" end\u003d\"1\"/\u003e\n\nCould you check this st\u003d\"0\" in MSO, please?\n\nIt\u0027s important: there is a problem on the Impress UI: removing the first two slides, Slide Show Settings... always shows the name of the active slide, but it stores the removed original value \"2\".",
+      "range": {
+        "startLine": 1123,
+        "startChar": 36,
+        "endLine": 1123,
+        "endChar": 37
+      },
+      "revId": "78f0d8f202287bc526a9663976e3416344684267",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "99bcbbed_2b217b14",
+        "filename": "sd/source/filter/eppt/pptx-epptooxml.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1124,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-07-26T16:40:19Z",
+      "side": 1,
+      "message": "never used value",
+      "range": {
+        "startLine": 1124,
+        "startChar": 31,
+        "endLine": 1124,
+        "endChar": 35
+      },
+      "revId": "78f0d8f202287bc526a9663976e3416344684267",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "73385138_177170c5",
+        "filename": "sd/source/filter/eppt/pptx-epptooxml.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1138,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-07-26T16:40:19Z",
+      "side": 1,
+      "message": "if st\u003d\"0\" is a problem for MSO, Instead this and the previous,  I suggest the following (setting the start value for the first slide).\n\n        Reference\u003cdrawing::XDrawPagesSupplier\u003e xDPS(mXModel, uno::UNO_QUERY_THROW);\n        Reference\u003cdrawing::XDrawPages\u003e xDrawPages(xDPS-\u003egetDrawPages(), uno::UNO_SET_THROW);\n        if (sal_Int32 nEndSlide \u003d xDrawPages-\u003egetCount() \u0026\u0026 !sFirstPage.isEmpty())\n        {\n            sal_Int32 nStartSlide \u003d 1;\n            for (sal_Int32 i \u003d 0; i \u003c nEndSlide; i++)\n            {\n                Reference\u003cdrawing::XDrawPage\u003e xDrawPage;\n                xDrawPages-\u003egetByIndex(i) \u003e\u003e\u003d xDrawPage;\n                Reference\u003ccontainer::XNamed\u003e xNamed(xDrawPage, uno::UNO_QUERY_THROW);\n                if (xNamed-\u003egetName() \u003d\u003d sFirstPage)\n                {\n                    nStartSlide \u003d i + 1;\n                    break;\n                }\n            }",
+      "range": {
+        "startLine": 1138,
+        "startChar": 0,
+        "endLine": 1138,
+        "endChar": 47
+      },
+      "revId": "78f0d8f202287bc526a9663976e3416344684267",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
