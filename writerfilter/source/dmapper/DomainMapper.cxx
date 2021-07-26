@@ -370,13 +370,6 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             if (m_pImpl->GetTopContext())
             {
                 m_pImpl->GetTopContext()->Insert(PROP_CHAR_FONT_NAME, uno::makeAny( sStringValue ));
-                if (m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH) && m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH)->isSet(PROP_NUMBERING_RULES))
-                {
-                    // Font of the paragraph mark should be used for the numbering as well.
-                    uno::Reference<beans::XPropertySet> xCharStyle(m_pImpl->GetCurrentNumberingCharStyle());
-                    if (xCharStyle.is())
-                        xCharStyle->setPropertyValue("CharFontName", uno::makeAny(sStringValue));
-                }
             }
             break;
         case NS_ooxml::LN_CT_Fonts_asciiTheme:
@@ -1721,9 +1714,6 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
                         if( nSprmId != NS_ooxml::LN_EG_RPrBase_bCs )
                             rContext->Insert(PROP_CHAR_WEIGHT_ASIAN, aBold );
 
-                        uno::Reference<beans::XPropertySet> xCharStyle(m_pImpl->GetCurrentNumberingCharStyle());
-                        if (xCharStyle.is())
-                            xCharStyle->setPropertyValue(getPropertyName(PROP_CHAR_WEIGHT), aBold);
                         if (nSprmId == NS_ooxml::LN_EG_RPrBase_b)
                             m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "b", OUString::number(nIntValue));
                         else if (nSprmId == NS_ooxml::LN_EG_RPrBase_bCs)
@@ -1801,10 +1791,6 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
                 //Asian get the same value as Western
                 rContext->Insert( PROP_CHAR_HEIGHT, aVal );
                 rContext->Insert( PROP_CHAR_HEIGHT_ASIAN, aVal );
-
-                uno::Reference<beans::XPropertySet> xCharStyle(m_pImpl->GetCurrentNumberingCharStyle());
-                if (xCharStyle.is())
-                    xCharStyle->setPropertyValue(getPropertyName(PROP_CHAR_HEIGHT), aVal);
             }
             m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, (nSprmId == NS_ooxml::LN_EG_RPrBase_sz ? OUString("sz") : OUString("szCs")), OUString::number(nIntValue));
         }
