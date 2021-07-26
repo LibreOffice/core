@@ -47,7 +47,7 @@ SwDoc* SearchResultLocatorTest::createDoc(const char* pName)
 
 void SearchResultLocatorTest::testSearchResultLocator()
 {
-#ifndef MACOSX
+#if !defined(MACOSX) && !defined(_WIN32)
     SwDoc* pDoc = createDoc("IndexingExport_VariousParagraphs.odt");
     CPPUNIT_ASSERT(pDoc);
 
