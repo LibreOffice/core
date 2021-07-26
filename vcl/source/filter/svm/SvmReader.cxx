@@ -738,6 +738,7 @@ rtl::Reference<MetaAction> SvmReader::TextArrayHandler(ImplMetaReadData* pData)
     if (aCompat.GetVersion() >= 2) // Version 2
     {
         aStr = read_uInt16_lenPrefixed_uInt16s_ToOUString(mrStream);
+        pAction->SetText(aStr);
 
         if (nTmpIndex + nTmpLen > aStr.getLength())
         {
