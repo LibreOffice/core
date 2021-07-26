@@ -156,6 +156,7 @@ void CustomAnimationEffect::setNode( const css::uno::Reference< css::animations:
 {
     mxNode = xNode;
     mxAudio.clear();
+    mnCommand = 0;
 
     const Sequence< NamedValue > aUserData( mxNode->getUserData() );
 
