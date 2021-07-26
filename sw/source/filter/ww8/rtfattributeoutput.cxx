@@ -598,7 +598,7 @@ bool RtfAttributeOutput::EndURL(bool const isAtEndOfParagraph)
 }
 
 void RtfAttributeOutput::FieldVanish(const OUString& /*rText*/, ww::eField /*eType*/,
-                                     OUString const*)
+                                     OUString const* /*pBookmarkName*/)
 {
     SAL_INFO("sw.rtf", "TODO: " << __func__);
 }

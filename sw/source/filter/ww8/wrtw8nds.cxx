@@ -1250,7 +1250,7 @@ void SwWW8AttrIter::SplitRun( sal_Int32 nSplitEndPos )
     nCurrentSwPos = SearchNext(1);
 }
 
-void WW8AttributeOutput::FieldVanish(const OUString& rText, ww::eField /*eType*/, OUString const*const)
+void WW8AttributeOutput::FieldVanish(const OUString& rText, ww::eField /*eType*/, OUString const*const /*pBookmarkName*/)
 {
     ww::bytes aItems;
     m_rWW8Export.GetCurrentItems( aItems );
