@@ -34,7 +34,7 @@
                 <property name="draw-indicator">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="export-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="pdflinkspage|extended_tip|export">Exports the current file in PDF format.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="pdflinkspage|extended_tip|export">Enable the checkbox to export the names of objects in your document as valid bookmark targets. This allows you to link to those objects by name from other documents.</property>
                   </object>
                 </child>
               </object>
