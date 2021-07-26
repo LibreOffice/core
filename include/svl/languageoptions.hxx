@@ -112,24 +112,9 @@ public:
 
 /** #i42730# Gives access to the Windows 16bit system locale
  */
-class SvtSystemLanguageOptions final : public utl::ConfigItem
+namespace SvtSystemLanguageOptions
 {
-private:
-    OUString m_sWin16SystemLocale;
-
-    bool            isKeyboardLayoutTypeInstalled(sal_Int16 scriptType) const;
-
-    virtual void    ImplCommit() override;
-
-public:
-    SvtSystemLanguageOptions();
-    virtual ~SvtSystemLanguageOptions() override;
-
-    virtual void    Notify( const css::uno::Sequence< OUString >& rPropertyNames ) override;
-
-    LanguageType    GetWin16SystemLanguage() const;
-
-    bool            isCJKKeyboardLayoutInstalled() const;
+    bool            isCJKKeyboardLayoutInstalled();
 };
 
 #endif // INCLUDED_SVL_LANGUAGEOPTIONS_HXX
