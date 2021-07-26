@@ -157,10 +157,10 @@ SwXMLTextImportHelper::SwXMLTextImportHelper(
         bool bBlockM, bool bOrganizerM ) :
     XMLTextImportHelper( rModel, rImport, bInsertM, bStylesOnlyM, true/*bProgress*/,
                          bBlockM, bOrganizerM ),
-    pRedlineHelper( nullptr )
+    m_pRedlineHelper( nullptr )
 {
     uno::Reference<XPropertySet> xDocPropSet( rModel, UNO_QUERY );
-    pRedlineHelper = new XMLRedlineImportHelper(rImport,
+    m_pRedlineHelper = new XMLRedlineImportHelper(rImport,
         bInsertM || bBlockM, xDocPropSet, rInfoSet );
 }
 
@@ -170,7 +170,7 @@ SwXMLTextImportHelper::~SwXMLTextImportHelper()
     // and may throw an exception while doing so... catch this
     try
     {
-        delete pRedlineHelper;
+        delete m_pRedlineHelper;
     }
     catch ( const RuntimeException& )
     {
@@ -976,9 +976,9 @@ void SwXMLTextImportHelper::RedlineAdd(
     bool bMergeLastPara)
 {
     // create redline helper on demand
-    OSL_ENSURE(nullptr != pRedlineHelper, "helper should have been created in constructor");
-    if (nullptr != pRedlineHelper)
-        pRedlineHelper->Add(rType, rId, rAuthor, rComment, rDateTime,
+    OSL_ENSURE(nullptr != m_pRedlineHelper, "helper should have been created in constructor");
+    if (nullptr != m_pRedlineHelper)
+        m_pRedlineHelper->Add(rType, rId, rAuthor, rComment, rDateTime,
                             bMergeLastPara);
 }
 
@@ -988,9 +988,9 @@ uno::Reference<XTextCursor> SwXMLTextImportHelper::RedlineCreateText(
 {
     uno::Reference<XTextCursor> xRet;
 
-    if (nullptr != pRedlineHelper)
+    if (nullptr != m_pRedlineHelper)
     {
-        xRet = pRedlineHelper->CreateRedlineTextSection(rOldCursor, rId);
+        xRet = m_pRedlineHelper->CreateRedlineTextSection(rOldCursor, rId);
     }
 
     return xRet;
@@ -1001,9 +1001,9 @@ void SwXMLTextImportHelper::RedlineSetCursor(
     bool bStart,
     bool bIsOutsideOfParagraph)
 {
-    if (nullptr != pRedlineHelper) {
+    if (nullptr != m_pRedlineHelper) {
         uno::Reference<XTextRange> xTextRange( GetCursor()->getStart() );
-        pRedlineHelper->SetCursor(rId, bStart, xTextRange,
+        m_pRedlineHelper->SetCursor(rId, bStart, xTextRange,
                                   bIsOutsideOfParagraph);
     }
     // else: ignore redline (wasn't added before, else we'd have a helper)
@@ -1012,9 +1012,9 @@ void SwXMLTextImportHelper::RedlineSetCursor(
 void SwXMLTextImportHelper::RedlineAdjustStartNodeCursor()
 {
     OUString rId = GetOpenRedlineId();
-    if ((nullptr != pRedlineHelper) && !rId.isEmpty())
+    if ((nullptr != m_pRedlineHelper) && !rId.isEmpty())
     {
-        pRedlineHelper->AdjustStartNodeCursor(rId);
+        m_pRedlineHelper->AdjustStartNodeCursor(rId);
         ResetOpenRedlineId();
     }
     // else: ignore redline (wasn't added before, or no open redline ID
@@ -1022,21 +1022,21 @@ void SwXMLTextImportHelper::RedlineAdjustStartNodeCursor()
 
 void SwXMLTextImportHelper::SetShowChanges( bool bShowChanges )
 {
-    if ( nullptr != pRedlineHelper )
-        pRedlineHelper->SetShowChanges( bShowChanges );
+    if ( nullptr != m_pRedlineHelper )
+        m_pRedlineHelper->SetShowChanges( bShowChanges );
 }
 
 void SwXMLTextImportHelper::SetRecordChanges( bool bRecordChanges )
 {
-    if ( nullptr != pRedlineHelper )
-        pRedlineHelper->SetRecordChanges( bRecordChanges );
+    if ( nullptr != m_pRedlineHelper )
+        m_pRedlineHelper->SetRecordChanges( bRecordChanges );
 }
 
 void SwXMLTextImportHelper::SetChangesProtectionKey(
     const Sequence<sal_Int8> & rKey )
 {
-    if ( nullptr != pRedlineHelper )
-        pRedlineHelper->SetProtectionKey( rKey );
+    if ( nullptr != m_pRedlineHelper )
+        m_pRedlineHelper->SetProtectionKey( rKey );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

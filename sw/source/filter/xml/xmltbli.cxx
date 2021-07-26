@@ -639,9 +639,9 @@ namespace {
 
 class SwXMLTableColContext_Impl : public SvXMLImportContext
 {
-    SvXMLImportContextRef   xMyTable;
+    SvXMLImportContextRef   m_xMyTable;
 
-    SwXMLTableContext *GetTable() { return static_cast<SwXMLTableContext *>(xMyTable.get()); }
+    SwXMLTableContext *GetTable() { return static_cast<SwXMLTableContext *>(m_xMyTable.get()); }
 
 public:
 
@@ -660,7 +660,7 @@ SwXMLTableColContext_Impl::SwXMLTableColContext_Impl(
         const Reference< xml::sax::XFastAttributeList > & xAttrList,
         SwXMLTableContext *pTable ) :
     SvXMLImportContext( rImport ),
-    xMyTable( pTable )
+    m_xMyTable( pTable )
 {
     sal_uInt32 nColRep = 1;
     OUString aStyleName, aDfltCellStyleName;

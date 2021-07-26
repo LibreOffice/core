@@ -44,11 +44,11 @@ namespace {
 
 class SwXMLTableItemMapper_Impl: public SvXMLExportItemMapper
 {
-    SwXMLBrushItemExport aBrushItemExport;
+    SwXMLBrushItemExport m_aBrushItemExport;
 
 protected:
 
-    sal_uInt32 nAbsWidth;
+    sal_uInt32 m_nAbsWidth;
 
     static void AddAttribute( sal_uInt16 nPrefix, enum XMLTokenEnum eLName,
                        const OUString& rValue,
@@ -81,8 +81,8 @@ SwXMLTableItemMapper_Impl::SwXMLTableItemMapper_Impl(
         SvXMLItemMapEntriesRef rMapEntries,
         SwXMLExport& rExp ) :
     SvXMLExportItemMapper( std::move(rMapEntries) ),
-    aBrushItemExport( rExp ),
-    nAbsWidth( USHRT_MAX )
+    m_aBrushItemExport( rExp ),
+    m_nAbsWidth( USHRT_MAX )
 {
 }
 
@@ -174,10 +174,10 @@ void SwXMLTableItemMapper_Impl::handleSpecialItem(
             switch( nMemberId )
             {
             case MID_FRMSIZE_WIDTH:
-                if( nAbsWidth )
+                if( m_nAbsWidth )
                 {
                     OUStringBuffer sBuffer;
-                    rUnitConverter.convertMeasureToXML( sBuffer, nAbsWidth );
+                    rUnitConverter.convertMeasureToXML( sBuffer, m_nAbsWidth );
                     AddAttribute( rEntry.nNameSpace, rEntry.eLocalName,
                                   sBuffer.makeStringAndClear(),
                                   rNamespaceMap, rAttrList );
@@ -210,7 +210,7 @@ void SwXMLTableItemMapper_Impl::handleElementItem(
     {
     case RES_BACKGROUND:
         {
-            const_cast<SwXMLTableItemMapper_Impl *>(this)->aBrushItemExport.exportXML(
+            const_cast<SwXMLTableItemMapper_Impl *>(this)->m_aBrushItemExport.exportXML(
                                                 static_cast<const SvxBrushItem&>(rItem) );
         }
         break;
@@ -219,7 +219,7 @@ void SwXMLTableItemMapper_Impl::handleElementItem(
 
 inline void SwXMLTableItemMapper_Impl::SetAbsWidth( sal_uInt32 nAbs )
 {
-    nAbsWidth = nAbs;
+    m_nAbsWidth = nAbs;
 }
 
 void SwXMLExport::InitItemExport()
