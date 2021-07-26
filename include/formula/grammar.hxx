@@ -209,6 +209,19 @@ public:
             css::sheet::FormulaLanguage::OOXML;
     }
 
+    /** If reference convention is OOXML.
+
+        Note this is not equivalent to isOOXML() as it does not have to be
+        FormulaLanguage::OOXML but can be Grammar::GRAM_EXTERNAL merged with
+        AddressConvention::CONV_XL_OOX, which is used by various parts of OOXML
+        import through the API FormulaParser.
+     */
+    static bool isRefConventionOOXML( const Grammar eGrammar )
+    {
+        return extractRefConvention( eGrammar) ==
+            FormulaGrammar::AddressConvention::CONV_XL_OOX;
+    }
+
     /// If grammar has an Excel syntax, determined by address convention.
     static bool isExcelSyntax( const Grammar eGrammar )
     {
