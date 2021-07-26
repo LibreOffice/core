@@ -26,15 +26,15 @@ Sub verify_testOptionalsBasic()
     TestUtil.AssertEqual(TestOptVariantByRefByVal(123, 456), 579, "TestOptVariantByRefByVal(123, 456)")
 
     ' optionals with double datatypes
-    TestUtil.AssertEqual(TestOptDouble(), 0, "TestOptDouble()")
-    TestUtil.AssertEqual(TestOptDouble(123.4), 123.4, "TestOptDouble(123.4)")
-    TestUtil.AssertEqual(TestOptDouble(, 567.8), 567.8, "TestOptDouble(, 567.8)")
+    TestUtil.AssertEqual(CDbl(Format(TestOptDouble(), "0.0")), 0, "TestOptDouble()")
+    TestUtil.AssertEqual(CDbl(Format(TestOptDouble(123.4), "0.0")), 123.4, "TestOptDouble(123.4)")
+    TestUtil.AssertEqual(CDbl(Format(TestOptDouble(, 567.8), "0.0")), 567.8, "TestOptDouble(, 567.8)")
     TestUtil.AssertEqual(CDbl(Format(TestOptDouble(123.4, 567.8), "0.0")), 691.2, "TestOptDouble(123.4, 567.8)")
 
     ' optionals with double datatypes (ByRef and ByVal)
-    TestUtil.AssertEqual(TestOptDoubleByRefByVal(), 0, "TestOptDouble()")
-    TestUtil.AssertEqual(TestOptDoubleByRefByVal(123.4), 123.4, "TestOptDouble(123.4)")
-    TestUtil.AssertEqual(TestOptDoubleByRefByVal(, 567.8), 567.8, "TestOptDoubleByRefByVal(, 567.8)")
+    TestUtil.AssertEqual(CDbl(Format(TestOptDoubleByRefByVal(), "0.0")), 0, "TestOptDoubleByRefByVal()")
+    TestUtil.AssertEqual(CDbl(Format(TestOptDoubleByRefByVal(123.4), "0.0")), 123.4, "TestOptDoubleByRefByVal(123.4)")
+    TestUtil.AssertEqual(CDbl(Format(TestOptDoubleByRefByVal(, 567.8), "0.0")), 567.8, "TestOptDoubleByRefByVal(, 567.8)")
     TestUtil.AssertEqual(CDbl(Format(TestOptDoubleByRefByVal(123.4, 567.8), "0.0")), 691.2, "TestOptDoubleByRefByVal(123.4, 567.8)")
 
     ' optionals with integer datatypes
