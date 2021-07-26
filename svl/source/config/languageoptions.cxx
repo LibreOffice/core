@@ -193,40 +193,9 @@ sal_Int16 SvtLanguageOptions::GetI18NScriptTypeOfLanguage( LanguageType nLang )
     return FromSvtScriptTypeToI18N( GetScriptTypeOfLanguage( nLang ) );
 }
 
-SvtSystemLanguageOptions::SvtSystemLanguageOptions() :
-    utl::ConfigItem( "System/L10N")
-{
-    uno::Sequence< OUString > aPropertyNames { "SystemLocale" };
-    uno::Sequence< uno::Any > aValues = GetProperties( aPropertyNames );
 
-    if ( aValues.hasElements() )
-    {
-        aValues[0]>>= m_sWin16SystemLocale;
-    }
-}
 
-SvtSystemLanguageOptions::~SvtSystemLanguageOptions()
-{
-}
-
-void    SvtSystemLanguageOptions::ImplCommit()
-{
-    //does nothing
-}
-
-void    SvtSystemLanguageOptions::Notify( const css::uno::Sequence< OUString >& )
-{
-    // no listeners supported yet
-}
-
-LanguageType SvtSystemLanguageOptions::GetWin16SystemLanguage() const
-{
-    if( m_sWin16SystemLocale.isEmpty() )
-        return LANGUAGE_NONE;
-    return LanguageTag::convertToLanguageTypeWithFallback( m_sWin16SystemLocale );
-}
-
-bool SvtSystemLanguageOptions::isKeyboardLayoutTypeInstalled(sal_Int16 scriptType) const
+static bool isKeyboardLayoutTypeInstalled(sal_Int16 scriptType)
 {
     bool isInstalled = false;
 #ifdef _WIN32
@@ -257,9 +226,12 @@ bool SvtSystemLanguageOptions::isKeyboardLayoutTypeInstalled(sal_Int16 scriptTyp
     return isInstalled;
 }
 
-bool SvtSystemLanguageOptions::isCJKKeyboardLayoutInstalled() const
+namespace SvtSystemLanguageOptions
 {
-    return isKeyboardLayoutTypeInstalled(css::i18n::ScriptType::ASIAN);
+    bool isCJKKeyboardLayoutInstalled()
+    {
+        return isKeyboardLayoutTypeInstalled(css::i18n::ScriptType::ASIAN);
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
