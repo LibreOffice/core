@@ -526,6 +526,28 @@ published constants NumberingType
         @since LibreOffice 7.1
      */
     const short SZEKELY_ROVAS = 68;
+
+    /** Numbering is in Korean Digital number as
+        "일,이,삼,...,일영,일영영, ..."
+
+        @since LibreOffice 7.3
+     */
+    const short NUMBER_DIGITAL_KO = 69;
+
+    /** Numbering is in Korean Digital Number, reserved "koreanDigital2", as
+        "一,二,三,...,一零,一零零, ..."
+
+        @since LibreOffice 7.3
+     */
+    const short NUMBER_DIGITAL2_KO = 70;
+
+    /** Numbering is in Korean Legal Number, reserved "koreanLegal", as
+        "하나,둘,셋,..."
+
+        @since LibreOffice 7.3
+     */
+    const short NUMBER_LEGAL_KO = 71;
+
 };
 
 

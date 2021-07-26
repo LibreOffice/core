@@ -288,6 +288,29 @@ const sal_Unicode table_PersianWord_decadeX[][8]={
     {0x0645, 0x06cc, 0x0644, 0x06cc, 0x0627, 0x0631, 0x062f, 0} // 1000000000
 };
 
+const sal_Unicode table_KoreanLegalWord_decade1[][3] = {
+    {0xd558, 0xb098, 0}, // 1
+    {0xb458, 0},         // 2
+    {0xc14b, 0},         // 3
+    {0xb137, 0},         // 4
+    {0xb2e4, 0xc12f, 0}, // 5
+    {0xc5ec, 0xc12f, 0}, // 6
+    {0xc77c, 0xacf1, 0}, // 7
+    {0xc5ec, 0xb35f, 0}, // 8
+    {0xc544, 0xd649, 0}  // 9
+};
+
+const sal_Unicode table_KoreanLegalWord_decade2[][3] = {
+    {0xc5f4, 0},          // 10
+    {0xc2a4, 0xbb3c, 0},  // 20
+    {0xc11c, 0xb978, 0},  // 30
+    {0xb9c8, 0xd754, 0},  // 40
+    {0xc270, 0},          // 50
+    {0xc608, 0xc21c, 0},  // 60
+    {0xc77c, 0xd754, 0},  // 70
+    {0xc5ec, 0xb4e0, 0},  // 80
+    {0xc544, 0xd754, 0}   // 90
+};
 
 DefaultNumberingProvider::DefaultNumberingProvider( const Reference < XComponentContext >& rxContext ) : m_xContext(rxContext)
 {
@@ -468,6 +491,16 @@ void lcl_formatPersianWord( sal_Int32 nNumber, OUString& rsResult )
     rsResult += aTemp;
 }
 
+static void lcl_formatKoreanLegalWord(sal_Int32 nNumber, OUString& rsResult) {
+    OUStringBuffer aTemp(64);
+    int digit1 = nNumber % 10;
+    int digit2 = nNumber / 10;
+    if (digit1 > 0)
+        aTemp.insert(0, (table_KoreanLegalWord_decade1[digit1 - 1]));
+    if (digit2 > 0)
+        aTemp.insert(0, (table_KoreanLegalWord_decade2[digit2 - 1]));
+    rsResult += aTemp.makeStringAndClear();
+}
 
 // Greek Letter Numbering
 
@@ -743,6 +776,25 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
                 natNum = NativeNumberMode::NATNUM11;
                 locale.Language = "ko";
                 break;
+          case NUMBER_DIGITAL_KO:
+              natNum = NativeNumberMode::NATNUM9;
+              locale.Language = "ko";
+              break;
+          case NUMBER_DIGITAL2_KO:
+              natNum = NativeNumberMode::NATNUM1;
+              locale.Language = "ko";
+              break;
+          case NUMBER_LEGAL_KO:
+              if (number < 1 || number >= 100)
+              {
+                  natNum = NativeNumberMode::NATNUM11;
+                  locale.Language = "ko";
+              }
+              else
+              {
+                  lcl_formatKoreanLegalWord(number, result);
+              }
+              break;
 
           case CIRCLE_NUMBER:
               table = table_CircledNumber;
@@ -1016,6 +1068,9 @@ const Supported_NumberingType aSupportedTypes[] =
         {style::NumberingType::HANGUL_SYLLABLE_KO,      nullptr, LANG_CJK},
         {style::NumberingType::HANGUL_CIRCLED_JAMO_KO,  nullptr, LANG_CJK},
         {style::NumberingType::HANGUL_CIRCLED_SYLLABLE_KO,      nullptr, LANG_CJK},
+        {style::NumberingType::NUMBER_LEGAL_KO,         nullptr, LANG_CJK},
+        {style::NumberingType::NUMBER_DIGITAL_KO,       nullptr, LANG_CJK},
+        {style::NumberingType::NUMBER_DIGITAL2_KO,      nullptr, LANG_CJK},
         {style::NumberingType::CHARS_ARABIC,    nullptr, LANG_CTL},
         {style::NumberingType::CHARS_ARABIC_ABJAD,   nullptr, LANG_CTL},
         {style::NumberingType::NUMBER_ARABIC_INDIC,    S_AR_ONE ", " S_AR_TWO ", " S_AR_THREE ", ...", LANG_CTL},

@@ -562,10 +562,16 @@ sal_Int16 ConvertNumberingType(const sal_Int32 nFmt, const sal_Int16 nDefault)
             nRet = style::NumberingType::HANGUL_JAMO_KO;
             break;
         case NS_ooxml::LN_Value_ST_NumberFormat_koreanLegal:
+            nRet = style::NumberingType::NUMBER_LEGAL_KO;
+            break;
         case NS_ooxml::LN_Value_ST_NumberFormat_koreanDigital:
+            nRet = style::NumberingType::NUMBER_DIGITAL_KO;
+            break;
         case NS_ooxml::LN_Value_ST_NumberFormat_koreanCounting:
-        case NS_ooxml::LN_Value_ST_NumberFormat_koreanDigital2:
             nRet = style::NumberingType::NUMBER_HANGUL_KO;
+            break;
+        case NS_ooxml::LN_Value_ST_NumberFormat_koreanDigital2:
+            nRet = style::NumberingType::NUMBER_DIGITAL2_KO;
             break;
         case NS_ooxml::LN_Value_ST_NumberFormat_ideographLegalTraditional:
             nRet = style::NumberingType::NUMBER_UPPER_ZH_TW;
