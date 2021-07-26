@@ -48,6 +48,9 @@ SwDoc* SearchResultLocatorTest::createDoc(const char* pName)
 void SearchResultLocatorTest::testSearchResultLocator()
 {
 #ifndef MACOSX
+    if (!IsDefaultDPI())
+        return;
+
     SwDoc* pDoc = createDoc("IndexingExport_VariousParagraphs.odt");
     CPPUNIT_ASSERT(pDoc);
 
