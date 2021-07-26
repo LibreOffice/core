@@ -357,8 +357,7 @@ sal_uInt16      GetHtmlMode(const SwDocShell* pShell)
     if(!pShell || dynamic_cast<const SwWebDocShell*>( pShell) )
     {
         nRet = HTMLMODE_ON | HTMLMODE_SOME_STYLES;
-        SvxHtmlOptions& rHtmlOpt = SvxHtmlOptions::Get();
-        switch ( rHtmlOpt.GetExportMode() )
+        switch ( SvxHtmlOptions::GetExportMode() )
         {
             case HTML_CFG_MSIE:
                 nRet |= HTMLMODE_FULL_STYLES;

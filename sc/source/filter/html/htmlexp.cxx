@@ -82,6 +82,7 @@
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <rtl/strbuf.hxx>
+#include <officecfg/Office/Common.hxx>
 
 using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
@@ -213,9 +214,8 @@ ScHTMLExport::ScHTMLExport( SvStream& rStrmP, const OUString& rBaseURL, ScDocume
     sIndent[0] = 0;
 
     // set HTML configuration
-    SvxHtmlOptions& rHtmlOptions = SvxHtmlOptions::Get();
-    eDestEnc = (pDoc->IsClipOrUndo() ? RTL_TEXTENCODING_UTF8 : rHtmlOptions.GetTextEncoding());
-    bCopyLocalFileToINet = rHtmlOptions.IsSaveGraphicsLocal();
+    eDestEnc = (pDoc->IsClipOrUndo() ? RTL_TEXTENCODING_UTF8 : SvxHtmlOptions::GetTextEncoding());
+    bCopyLocalFileToINet = officecfg::Office::Common::Filter::HTML::Export::LocalGraphic::get();
 
     if (rFilterOptions == u"SkipImages")
     {
@@ -228,7 +228,7 @@ ScHTMLExport::ScHTMLExport( SvStream& rStrmP, const OUString& rBaseURL, ScDocume
 
     for ( sal_uInt16 j=0; j < SC_HTML_FONTSIZES; j++ )
     {
-        sal_uInt16 nSize = rHtmlOptions.GetFontSize( j );
+        sal_uInt16 nSize = SvxHtmlOptions::GetFontSize( j );
         // remember in Twips, like our SvxFontHeightItem
         if ( nSize )
             nFontSize[j] = nSize * 20;

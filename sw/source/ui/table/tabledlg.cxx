@@ -1428,8 +1428,7 @@ bool  SwTextFlowPage::FillItemSet( SfxItemSet* rSet )
 void   SwTextFlowPage::Reset( const SfxItemSet* rSet )
 {
     const SfxPoolItem* pItem;
-    SvxHtmlOptions& rHtmlOpt = SvxHtmlOptions::Get();
-    bool bFlowAllowed = !bHtmlMode || rHtmlOpt.IsPrintLayoutExtension();
+    bool bFlowAllowed = !bHtmlMode || SvxHtmlOptions::IsPrintLayoutExtension();
     if(bFlowAllowed)
     {
         //Inserting of the existing page templates in the list box
