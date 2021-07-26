@@ -427,8 +427,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
         bool bSingleCol = false;
         if( nullptr!= dynamic_cast< SwWebDocShell*>( GetView().GetDocShell()) )
         {
-            SvxHtmlOptions& rHtmlOpt = SvxHtmlOptions::Get();
-            if( HTML_CFG_MSIE == rHtmlOpt.GetExportMode() )
+            if( HTML_CFG_MSIE == SvxHtmlOptions::GetExportMode() )
             {
                 bSingleCol = true;
             }
@@ -613,8 +612,7 @@ void SwTextShell::StateInsert( SfxItemSet &rSet )
                     }
                     else if(SID_INSERT_FLOATINGFRAME == nWhich && bHtmlModeOn)
                     {
-                        SvxHtmlOptions& rHtmlOpt = SvxHtmlOptions::Get();
-                        const sal_uInt16 nExport = rHtmlOpt.GetExportMode();
+                        const sal_uInt16 nExport = SvxHtmlOptions::GetExportMode();
                         if(HTML_CFG_MSIE != nExport && HTML_CFG_WRITER != nExport )
                             rSet.DisableItem(nWhich);
                     }

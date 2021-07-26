@@ -633,8 +633,9 @@ bool SwDocShell::ConvertTo( SfxMedium& rMedium )
     if( pFlt->GetUserData() == "HTML" )
     {
 #if HAVE_FEATURE_SCRIPTING
-        SvxHtmlOptions& rHtmlOpt = SvxHtmlOptions::Get();
-        if( !rHtmlOpt.IsStarBasic() && rHtmlOpt.IsStarBasicWarning() && HasBasic() )
+        if( !officecfg::Office::Common::Filter::HTML::Export::Basic::get()
+            && officecfg::Office::Common::Filter::HTML::Export::Warning::get()
+            && HasBasic() )
         {
             uno::Reference< XLibraryContainer > xLibCont = GetBasicContainer();
             uno::Reference< XNameAccess > xLib;

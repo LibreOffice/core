@@ -203,8 +203,7 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
 
             case SID_STYLE_FAMILY4:
             {
-                SvxHtmlOptions& rHtmlOpt = SvxHtmlOptions::Get();
-                if (m_xDoc->getIDocumentSettingAccess().get(DocumentSettingId::HTML_MODE) && !rHtmlOpt.IsPrintLayoutExtension())
+                if (m_xDoc->getIDocumentSettingAccess().get(DocumentSettingId::HTML_MODE) && !SvxHtmlOptions::IsPrintLayoutExtension())
                     rSet.DisableItem( nWhich );
                 else
                 {
