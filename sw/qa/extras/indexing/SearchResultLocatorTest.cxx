@@ -17,13 +17,17 @@
 
 namespace
 {
+#if !defined MACOSX
 constexpr OUStringLiteral DATA_DIRECTORY = u"sw/qa/extras/indexing/data/";
+#endif
 }
 
 class SearchResultLocatorTest : public SwModelTestBase
 {
 private:
+#if !defined MACOSX
     SwDoc* createDoc(const char* pName = nullptr);
+#endif
 
 public:
     void testSearchResultLocator();
@@ -33,6 +37,7 @@ public:
     CPPUNIT_TEST_SUITE_END();
 };
 
+#if !defined MACOSX
 SwDoc* SearchResultLocatorTest::createDoc(const char* pName)
 {
     if (!pName)
@@ -44,6 +49,7 @@ SwDoc* SearchResultLocatorTest::createDoc(const char* pName)
     CPPUNIT_ASSERT(pTextDoc);
     return pTextDoc->GetDocShell()->GetDoc();
 }
+#endif
 
 void SearchResultLocatorTest::testSearchResultLocator()
 {
