@@ -148,8 +148,6 @@ SfxApplication::SfxApplication()
     : pImpl( new SfxAppData_Impl )
 {
     SetName( "StarOffice" );
-    if (!utl::ConfigManager::IsFuzzing())
-        SvtViewOptions::AcquireOptions();
 
     SAL_INFO( "sfx.appl", "{ initialize DDE" );
 
@@ -193,10 +191,6 @@ SfxApplication::~SfxApplication()
     delete pSfxHelp;
     Application::SetHelp();
 #endif
-
-    // delete global options
-    if (!utl::ConfigManager::IsFuzzing())
-        SvtViewOptions::ReleaseOptions();
 
     if ( !pImpl->bDowning )
         Deinitialize();
