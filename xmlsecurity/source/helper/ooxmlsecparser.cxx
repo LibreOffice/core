@@ -31,8 +31,8 @@ class OOXMLSecParser::Context
         std::optional<SvXMLNamespaceMap> m_pOldNamespaceMap;
 
     public:
-        Context(OOXMLSecParser & rParser,
-                std::optional<SvXMLNamespaceMap> pOldNamespaceMap)
+        Context(OOXMLSecParser& rParser,
+                std::optional<SvXMLNamespaceMap>&& pOldNamespaceMap)
             : m_rParser(rParser)
             , m_pOldNamespaceMap(std::move(pOldNamespaceMap))
         {
@@ -66,8 +66,8 @@ class OOXMLSecParser::UnknownContext
     : public OOXMLSecParser::Context
 {
     public:
-        UnknownContext(OOXMLSecParser & rParser,
-                std::optional<SvXMLNamespaceMap> pOldNamespaceMap)
+        UnknownContext(OOXMLSecParser& rParser,
+                std::optional<SvXMLNamespaceMap>&& pOldNamespaceMap)
             : OOXMLSecParser::Context(rParser, std::move(pOldNamespaceMap))
         {
         }
@@ -105,8 +105,8 @@ class OOXMLSecParser::ReferencedContextImpl
         bool m_isReferenced;
 
     public:
-        ReferencedContextImpl(OOXMLSecParser & rParser,
-                std::optional<SvXMLNamespaceMap> pOldNamespaceMap,
+        ReferencedContextImpl(OOXMLSecParser& rParser,
+                std::optional<SvXMLNamespaceMap>&& pOldNamespaceMap,
                 bool const isReferenced)
             : OOXMLSecParser::Context(rParser, std::move(pOldNamespaceMap))
             , m_isReferenced(isReferenced)
@@ -131,9 +131,9 @@ class OOXMLSecParser::DsX509CertificateContext
         OUString & m_rValue;
 
     public:
-        DsX509CertificateContext(OOXMLSecParser & rParser,
-                std::optional<SvXMLNamespaceMap> pOldNamespaceMap,
-                OUString & rValue)
+        DsX509CertificateContext(OOXMLSecParser& rParser,
+                std::optional<SvXMLNamespaceMap>&& pOldNamespaceMap,
+                OUString& rValue)
             : OOXMLSecParser::Context(rParser, std::move(pOldNamespaceMap))
             , m_rValue(rValue)
         {
@@ -152,9 +152,9 @@ class OOXMLSecParser::DsX509SerialNumberContext
         OUString & m_rValue;
 
     public:
-        DsX509SerialNumberContext(OOXMLSecParser & rParser,
-                std::optional<SvXMLNamespaceMap> pOldNamespaceMap,
-                OUString & rValue)
+        DsX509SerialNumberContext(OOXMLSecParser& rParser,
+                std::optional<SvXMLNamespaceMap>&& pOldNamespaceMap,
+                OUString& rValue)
             : OOXMLSecParser::Context(rParser, std::move(pOldNamespaceMap))
             , m_rValue(rValue)
         {
@@ -173,9 +173,9 @@ class OOXMLSecParser::DsX509IssuerNameContext
         OUString & m_rValue;
 
     public:
-        DsX509IssuerNameContext(OOXMLSecParser & rParser,
-                std::optional<SvXMLNamespaceMap> pOldNamespaceMap,
-                OUString & rValue)
+        DsX509IssuerNameContext(OOXMLSecParser& rParser,
+                std::optional<SvXMLNamespaceMap>&& pOldNamespaceMap,
+                OUString& rValue)
             : OOXMLSecParser::Context(rParser, std::move(pOldNamespaceMap))
             , m_rValue(rValue)
         {
@@ -195,9 +195,9 @@ class OOXMLSecParser::DsX509IssuerSerialContext
         OUString & m_rX509SerialNumber;
 
     public:
-        DsX509IssuerSerialContext(OOXMLSecParser & rParser,
-                std::optional<SvXMLNamespaceMap> pOldNamespaceMap,
-                OUString & rIssuerName, OUString & rSerialNumber)
+        DsX509IssuerSerialContext(OOXMLSecParser& rParser,
+                std::optional<SvXMLNamespaceMap>&& pOldNamespaceMap,
+                OUString& rIssuerName, OUString& rSerialNumber)
             : OOXMLSecParser::Context(rParser, std::move(pOldNamespaceMap))
             , m_rX509IssuerName(rIssuerName)
             , m_rX509SerialNumber(rSerialNumber)
@@ -232,8 +232,8 @@ class OOXMLSecParser::DsX509DataContext
         std::vector<OUString> m_X509Certificates;
 
     public:
-        DsX509DataContext(OOXMLSecParser & rParser,
-                std::optional<SvXMLNamespaceMap> pOldNamespaceMap)
+        DsX509DataContext(OOXMLSecParser& rParser,
+                std::optional<SvXMLNamespaceMap>&& pOldNamespaceMap)
             : OOXMLSecParser::Context(rParser, std::move(pOldNamespaceMap))
         {
         }
@@ -266,8 +266,8 @@ class OOXMLSecParser::DsKeyInfoContext
     : public OOXMLSecParser::Context
 {
     public:
-        DsKeyInfoContext(OOXMLSecParser & rParser,
-                std::optional<SvXMLNamespaceMap> pOldNamespaceMap)
+        DsKeyInfoContext(OOXMLSecParser& rParser,
+                std::optional<SvXMLNamespaceMap>&& pOldNamespaceMap)
             : OOXMLSecParser::Context(rParser, std::move(pOldNamespaceMap))
         {
         }
@@ -302,8 +302,8 @@ class OOXMLSecParser::DsSignatureValueContext
         OUString m_Value;
 
     public:
-        DsSignatureValueContext(OOXMLSecParser & rParser,
-                std::optional<SvXMLNamespaceMap> pOldNamespaceMap)
+        DsSignatureValueContext(OOXMLSecParser& rParser,
+                std::optional<SvXMLNamespaceMap>&& pOldNamespaceMap)
             : OOXMLSecParser::Context(rParser, std::move(pOldNamespaceMap))
         {
         }
@@ -359,9 +359,9 @@ class OOXMLSecParser::DsDigestMethodContext
         sal_Int32 & m_rReferenceDigestID;
 
     public:
-        DsDigestMethodContext(OOXMLSecParser & rParser,
-                std::optional<SvXMLNamespaceMap> pOldNamespaceMap,
-                sal_Int32 & rReferenceDigestID)
+        DsDigestMethodContext(OOXMLSecParser& rParser,
+                std::optional<SvXMLNamespaceMap>&& pOldNamespaceMap,
+                sal_Int32& rReferenceDigestID)
             : OOXMLSecParser::Context(rParser, std::move(pOldNamespaceMap))
             , m_rReferenceDigestID(rReferenceDigestID)
         {
@@ -398,9 +398,9 @@ class OOXMLSecParser::DsTransformContext
         bool & m_rIsC14N;
 
     public:
-        DsTransformContext(OOXMLSecParser & rParser,
-                std::optional<SvXMLNamespaceMap> pOldNamespaceMap,
-                bool & rIsC14N)
+        DsTransformContext(OOXMLSecParser& rParser,
+                std::optional<SvXMLNamespaceMap>&& pOldNamespaceMap,
+                bool& rIsC14N)
             : OOXMLSecParser::Context(rParser, std::move(pOldNamespaceMap))
             , m_rIsC14N(rIsC14N)
         {
@@ -425,9 +425,9 @@ class OOXMLSecParser::DsTransformsContext
         bool & m_rIsC14N;
 
     public:
-        DsTransformsContext(OOXMLSecParser & rParser,
-                std::optional<SvXMLNamespaceMap> pOldNamespaceMap,
-                bool & rIsC14N)
+        DsTransformsContext(OOXMLSecParser& rParser,
+                std::optional<SvXMLNamespaceMap>&& pOldNamespaceMap,
+                bool& rIsC14N)
             : OOXMLSecParser::Context(rParser, std::move(pOldNamespaceMap))
             , m_rIsC14N(rIsC14N)
         {
@@ -458,8 +458,8 @@ class OOXMLSecParser::DsReferenceContext
         sal_Int32 m_nReferenceDigestID = css::xml::crypto::DigestID::SHA256;
 
     public:
-        DsReferenceContext(OOXMLSecParser & rParser,
-                std::optional<SvXMLNamespaceMap> pOldNamespaceMap)
+        DsReferenceContext(OOXMLSecParser& rParser,
+                std::optional<SvXMLNamespaceMap>&& pOldNamespaceMap)
             : OOXMLSecParser::Context(rParser, std::move(pOldNamespaceMap))
         {
         }
@@ -526,8 +526,8 @@ class OOXMLSecParser::DsSignatureMethodContext
     : public OOXMLSecParser::Context
 {
     public:
-        DsSignatureMethodContext(OOXMLSecParser & rParser,
-                std::optional<SvXMLNamespaceMap> pOldNamespaceMap)
+        DsSignatureMethodContext(OOXMLSecParser& rParser,
+                std::optional<SvXMLNamespaceMap>&& pOldNamespaceMap)
             : OOXMLSecParser::Context(rParser, std::move(pOldNamespaceMap))
         {
         }
@@ -548,8 +548,8 @@ class OOXMLSecParser::DsSignedInfoContext
     : public OOXMLSecParser::Context
 {
     public:
-        DsSignedInfoContext(OOXMLSecParser & rParser,
-                std::optional<SvXMLNamespaceMap> pOldNamespaceMap)
+        DsSignedInfoContext(OOXMLSecParser& rParser,
+                std::optional<SvXMLNamespaceMap>&& pOldNamespaceMap)
             : OOXMLSecParser::Context(rParser, std::move(pOldNamespaceMap))
         {
         }
@@ -590,9 +590,9 @@ class OOXMLSecParser::XadesCertDigestContext
         sal_Int32 & m_rReferenceDigestID;
 
     public:
-        XadesCertDigestContext(OOXMLSecParser & rParser,
-                std::optional<SvXMLNamespaceMap> pOldNamespaceMap,
-                OUString & rDigestValue, sal_Int32 & rReferenceDigestID)
+        XadesCertDigestContext(OOXMLSecParser& rParser,
+                std::optional<SvXMLNamespaceMap>&& pOldNamespaceMap,
+                OUString& rDigestValue, sal_Int32& rReferenceDigestID)
             : OOXMLSecParser::Context(rParser, std::move(pOldNamespaceMap))
             , m_rDigestValue(rDigestValue)
             , m_rReferenceDigestID(rReferenceDigestID)
@@ -625,8 +625,8 @@ class OOXMLSecParser::XadesCertContext
         OUString m_X509SerialNumber;
 
     public:
-        XadesCertContext(OOXMLSecParser & rParser,
-                std::optional<SvXMLNamespaceMap> pOldNamespaceMap,
+        XadesCertContext(OOXMLSecParser& rParser,
+                std::optional<SvXMLNamespaceMap>&& pOldNamespaceMap,
                 bool const isReferenced)
             : ReferencedContextImpl(rParser, std::move(pOldNamespaceMap), isReferenced)
         {
@@ -664,8 +664,8 @@ class OOXMLSecParser::XadesSigningCertificateContext
     : public OOXMLSecParser::ReferencedContextImpl
 {
     public:
-        XadesSigningCertificateContext(OOXMLSecParser & rParser,
-                std::optional<SvXMLNamespaceMap> pOldNamespaceMap,
+        XadesSigningCertificateContext(OOXMLSecParser& rParser,
+                std::optional<SvXMLNamespaceMap>&& pOldNamespaceMap,
                 bool const isReferenced)
             : ReferencedContextImpl(rParser, std::move(pOldNamespaceMap), isReferenced)
         {
@@ -690,8 +690,8 @@ class OOXMLSecParser::XadesSigningTimeContext
         OUString m_Value;
 
     public:
-        XadesSigningTimeContext(OOXMLSecParser & rParser,
-                std::optional<SvXMLNamespaceMap> pOldNamespaceMap,
+        XadesSigningTimeContext(OOXMLSecParser& rParser,
+                std::optional<SvXMLNamespaceMap>&& pOldNamespaceMap,
                 bool const isReferenced)
             : ReferencedContextImpl(rParser, std::move(pOldNamespaceMap), isReferenced)
         {
@@ -719,8 +719,8 @@ class OOXMLSecParser::XadesSignedSignaturePropertiesContext
     : public OOXMLSecParser::ReferencedContextImpl
 {
     public:
-        XadesSignedSignaturePropertiesContext(OOXMLSecParser & rParser,
-                std::optional<SvXMLNamespaceMap> pOldNamespaceMap,
+        XadesSignedSignaturePropertiesContext(OOXMLSecParser& rParser,
+                std::optional<SvXMLNamespaceMap>&& pOldNamespaceMap,
                 bool const isReferenced)
             : ReferencedContextImpl(rParser, std::move(pOldNamespaceMap), isReferenced)
         {
@@ -753,8 +753,8 @@ class OOXMLSecParser::XadesSignedPropertiesContext
     : public OOXMLSecParser::ReferencedContextImpl
 {
     public:
-        XadesSignedPropertiesContext(OOXMLSecParser & rParser,
-                std::optional<SvXMLNamespaceMap> pOldNamespaceMap,
+        XadesSignedPropertiesContext(OOXMLSecParser& rParser,
+                std::optional<SvXMLNamespaceMap>&& pOldNamespaceMap,
                 bool const isReferenced)
             : ReferencedContextImpl(rParser, std::move(pOldNamespaceMap), isReferenced)
         {
@@ -783,8 +783,8 @@ class OOXMLSecParser::XadesQualifyingPropertiesContext
     : public OOXMLSecParser::ReferencedContextImpl
 {
     public:
-        XadesQualifyingPropertiesContext(OOXMLSecParser & rParser,
-                std::optional<SvXMLNamespaceMap> pOldNamespaceMap,
+        XadesQualifyingPropertiesContext(OOXMLSecParser& rParser,
+                std::optional<SvXMLNamespaceMap>&& pOldNamespaceMap,
                 bool const isReferenced)
             : ReferencedContextImpl(rParser, std::move(pOldNamespaceMap), isReferenced)
         {
@@ -816,9 +816,9 @@ class OOXMLSecParser::MsodigsigSetupIDContext
         OUString & m_rValue;
 
     public:
-        MsodigsigSetupIDContext(OOXMLSecParser & rParser,
-                std::optional<SvXMLNamespaceMap> pOldNamespaceMap,
-                OUString & rValue)
+        MsodigsigSetupIDContext(OOXMLSecParser& rParser,
+                std::optional<SvXMLNamespaceMap>&& pOldNamespaceMap,
+                OUString& rValue)
             : OOXMLSecParser::Context(rParser, std::move(pOldNamespaceMap))
             , m_rValue(rValue)
         {
@@ -837,9 +837,9 @@ class OOXMLSecParser::MsodigsigSignatureCommentsContext
         OUString & m_rValue;
 
     public:
-        MsodigsigSignatureCommentsContext(OOXMLSecParser & rParser,
-                std::optional<SvXMLNamespaceMap> pOldNamespaceMap,
-                OUString & rValue)
+        MsodigsigSignatureCommentsContext(OOXMLSecParser& rParser,
+                std::optional<SvXMLNamespaceMap>&& pOldNamespaceMap,
+                OUString& rValue)
             : OOXMLSecParser::Context(rParser, std::move(pOldNamespaceMap))
             , m_rValue(rValue)
         {
@@ -859,8 +859,8 @@ class OOXMLSecParser::MsodigsigSignatureInfoV1Context
         OUString m_SignatureComments;
 
     public:
-        MsodigsigSignatureInfoV1Context(OOXMLSecParser & rParser,
-                std::optional<SvXMLNamespaceMap> pOldNamespaceMap,
+        MsodigsigSignatureInfoV1Context(OOXMLSecParser& rParser,
+                std::optional<SvXMLNamespaceMap>&& pOldNamespaceMap,
                 bool const isReferenced)
             : ReferencedContextImpl(rParser, std::move(pOldNamespaceMap), isReferenced)
         {
@@ -915,9 +915,9 @@ class OOXMLSecParser::MdssiValueContext
         OUString & m_rValue;
 
     public:
-        MdssiValueContext(OOXMLSecParser & rParser,
-                std::optional<SvXMLNamespaceMap> pOldNamespaceMap,
-                OUString & rValue)
+        MdssiValueContext(OOXMLSecParser& rParser,
+                std::optional<SvXMLNamespaceMap>&& pOldNamespaceMap,
+                OUString& rValue)
             : OOXMLSecParser::Context(rParser, std::move(pOldNamespaceMap))
             , m_rValue(rValue)
         {
@@ -936,9 +936,9 @@ class OOXMLSecParser::MdssiSignatureTimeContext
         OUString & m_rValue;
 
     public:
-        MdssiSignatureTimeContext(OOXMLSecParser & rParser,
-                std::optional<SvXMLNamespaceMap> pOldNamespaceMap,
-                OUString & rValue)
+        MdssiSignatureTimeContext(OOXMLSecParser& rParser,
+                std::optional<SvXMLNamespaceMap>&& pOldNamespaceMap,
+                OUString& rValue)
             : OOXMLSecParser::Context(rParser, std::move(pOldNamespaceMap))
             , m_rValue(rValue)
         {
@@ -967,8 +967,8 @@ class OOXMLSecParser::DsSignaturePropertyContext
         OUString m_Value;
 
     public:
-        DsSignaturePropertyContext(OOXMLSecParser & rParser,
-                std::optional<SvXMLNamespaceMap> pOldNamespaceMap,
+        DsSignaturePropertyContext(OOXMLSecParser& rParser,
+                std::optional<SvXMLNamespaceMap>&& pOldNamespaceMap,
                 bool const isReferenced)
             : ReferencedContextImpl(rParser, std::move(pOldNamespaceMap), isReferenced)
         {
@@ -1023,8 +1023,8 @@ class OOXMLSecParser::DsSignaturePropertiesContext
     : public OOXMLSecParser::ReferencedContextImpl
 {
     public:
-        DsSignaturePropertiesContext(OOXMLSecParser & rParser,
-                std::optional<SvXMLNamespaceMap> pOldNamespaceMap,
+        DsSignaturePropertiesContext(OOXMLSecParser& rParser,
+                std::optional<SvXMLNamespaceMap>&& pOldNamespaceMap,
                 bool const isReferenced)
             : ReferencedContextImpl(rParser, std::move(pOldNamespaceMap), isReferenced)
         {
@@ -1052,8 +1052,8 @@ class OOXMLSecParser::DsManifestContext
     : public OOXMLSecParser::ReferencedContextImpl
 {
     public:
-        DsManifestContext(OOXMLSecParser & rParser,
-                std::optional<SvXMLNamespaceMap> pOldNamespaceMap,
+        DsManifestContext(OOXMLSecParser& rParser,
+                std::optional<SvXMLNamespaceMap>&& pOldNamespaceMap,
                 bool const isReferenced)
             : ReferencedContextImpl(rParser, std::move(pOldNamespaceMap), isReferenced)
         {
@@ -1094,8 +1094,8 @@ class OOXMLSecParser::DsObjectContext
         OUString m_Value;
 
     public:
-        DsObjectContext(OOXMLSecParser & rParser,
-                std::optional<SvXMLNamespaceMap> pOldNamespaceMap)
+        DsObjectContext(OOXMLSecParser& rParser,
+                std::optional<SvXMLNamespaceMap>&& pOldNamespaceMap)
             // init with "false" here - the Signature element can't be referenced by its child
             : OOXMLSecParser::ReferencedContextImpl(rParser, std::move(pOldNamespaceMap), false)
         {
@@ -1173,8 +1173,8 @@ class OOXMLSecParser::DsSignatureContext
     : public OOXMLSecParser::Context
 {
     public:
-        DsSignatureContext(OOXMLSecParser & rParser,
-                std::optional<SvXMLNamespaceMap> pOldNamespaceMap)
+        DsSignatureContext(OOXMLSecParser& rParser,
+                std::optional<SvXMLNamespaceMap>&& pOldNamespaceMap)
             : OOXMLSecParser::Context(rParser, std::move(pOldNamespaceMap))
         {
         }
