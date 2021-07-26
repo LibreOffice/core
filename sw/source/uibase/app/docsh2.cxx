@@ -1452,11 +1452,10 @@ void SwDocShell::ReloadFromHtml( const OUString& rStreamName, SwSrcView* pSrcVie
     // A EnterBasicCall is not needed here, because nothing is called and
     // there can't be any Dok-Basic, that has not yet been loaded inside
     // of an HTML document.
-    SvxHtmlOptions& rHtmlOptions = SvxHtmlOptions::Get();
     //#59620# HasBasic() shows, that there already is a BasicManager at the DocShell.
     //          That was always generated in HTML-Import, when there are
     //          Macros in the source code.
-    if( rHtmlOptions.IsStarBasic() && HasBasic())
+    if( officecfg::Office::Common::Filter::HTML::Export::Basic::get() && HasBasic())
     {
         BasicManager *pBasicMan = GetBasicManager();
         if( pBasicMan && (pBasicMan != SfxApplication::GetBasicManager()) )
