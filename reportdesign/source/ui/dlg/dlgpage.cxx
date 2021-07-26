@@ -59,8 +59,7 @@ ORptPageDialog::ORptPageDialog(weld::Window* pParent, const SfxItemSet* pAttr, c
     else
         OSL_FAIL("Unknown page id");
 
-    SvtCJKOptions aCJKOptions;
-    if ( !aCJKOptions.IsDoubleLinesEnabled() )
+    if ( !SvtCJKOptions::IsDoubleLinesEnabled() )
         RemoveTabPage("asianlayout");
 }
 

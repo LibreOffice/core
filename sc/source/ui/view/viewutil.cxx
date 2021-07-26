@@ -284,7 +284,6 @@ bool ScViewUtil::HasFiltered( const ScRange& rRange, const ScDocument& rDoc )
 
 void ScViewUtil::HideDisabledSlot( SfxItemSet& rSet, SfxBindings& rBindings, sal_uInt16 nSlotId )
 {
-    SvtCJKOptions aCJKOptions;
     SvtCTLOptions aCTLOptions;
     bool bEnabled = true;
 
@@ -292,14 +291,14 @@ void ScViewUtil::HideDisabledSlot( SfxItemSet& rSet, SfxBindings& rBindings, sal
     {
         case SID_CHINESE_CONVERSION:
         case SID_HANGUL_HANJA_CONVERSION:
-            bEnabled = aCJKOptions.IsAnyEnabled();
+            bEnabled = SvtCJKOptions::IsAnyEnabled();
         break;
 
         case SID_TRANSLITERATE_HALFWIDTH:
         case SID_TRANSLITERATE_FULLWIDTH:
         case SID_TRANSLITERATE_HIRAGANA:
         case SID_TRANSLITERATE_KATAKANA:
-            bEnabled = aCJKOptions.IsChangeCaseMapEnabled();
+            bEnabled = SvtCJKOptions::IsChangeCaseMapEnabled();
         break;
 
         case SID_INSERT_RLM:

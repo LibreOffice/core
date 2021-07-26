@@ -256,7 +256,7 @@ void DrawDocShell::GetState(SfxItemSet &rSet)
             case SID_CHINESE_CONVERSION:
             case SID_HANGUL_HANJA_CONVERSION:
             {
-                rSet.Put(SfxVisibilityItem(nWhich, SvtCJKOptions().IsAnyEnabled()));
+                rSet.Put(SfxVisibilityItem(nWhich, SvtCJKOptions::IsAnyEnabled()));
             }
             break;
             case SID_LANGUAGE_STATUS:

@@ -835,7 +835,6 @@ OUString  SwDocStyleSheet::GetDescription(MapUnit eUnit)
         bool bHasWesternFontPrefix = false;
         bool bHasCJKFontPrefix = false;
         bool bHasCTLFontPrefix = false;
-        SvtCJKOptions aCJKOptions;
         SvtCTLOptions aCTLOptions;
 
         // Get currently used FillStyle and remember, also need the XFillFloatTransparenceItem
@@ -913,7 +912,7 @@ OUString  SwDocStyleSheet::GetDescription(MapUnit eUnit)
                                 case RES_CHRATR_CJK_LANGUAGE:
                                 case RES_CHRATR_CJK_POSTURE:
                                 case RES_CHRATR_CJK_WEIGHT:
-                                if(aCJKOptions.IsCJKFontEnabled())
+                                if(SvtCJKOptions::IsCJKFontEnabled())
                                     bIsDefault = true;
                                 if(!bHasCJKFontPrefix)
                                 {

@@ -47,15 +47,14 @@ void FmSearchDialog::initCommon( const Reference< XResultSet >& _rxCursor )
     m_pSearchEngine->SetProgressHandler(LINK(this, FmSearchDialog, OnSearchProgress));
 
     // some layout changes according to available CJK options
-    SvtCJKOptions aCJKOptions;
-    if (!aCJKOptions.IsJapaneseFindEnabled())
+    if (!SvtCJKOptions::IsJapaneseFindEnabled())
     {
         // hide the options for the japanese search
         m_pSoundsLikeCJK->hide();
         m_pSoundsLikeCJKSettings->hide();
     }
 
-    if (!aCJKOptions.IsCJKFontEnabled())
+    if (!SvtCJKOptions::IsCJKFontEnabled())
     {
         m_pHalfFullFormsCJK->hide();
 
@@ -442,7 +441,7 @@ IMPL_LINK(FmSearchDialog, OnCheckBoxToggled, weld::Toggleable&, rBox, void)
         bool bEnable =  (   m_prbSearchForText->get_active()
                             &&  !m_pSoundsLikeCJK->get_active()
                             )
-                         || !SvtCJKOptions().IsJapaneseFindEnabled();
+                         || !SvtCJKOptions::IsJapaneseFindEnabled();
         m_pcbCase->set_sensitive(bEnable);
         m_pHalfFullFormsCJK->set_sensitive(bEnable);
 
@@ -536,7 +535,7 @@ void FmSearchDialog::EnableSearchForDependees(bool bEnable)
 
     bEnable = bEnable && bSearchingForText;
 
-    bool bEnableRedundants = !m_pSoundsLikeCJK->get_active() || !SvtCJKOptions().IsJapaneseFindEnabled();
+    bool bEnableRedundants = !m_pSoundsLikeCJK->get_active() || !SvtCJKOptions::IsJapaneseFindEnabled();
 
     m_pcmbSearchText->set_sensitive(bEnable);
     m_pftPosition->set_sensitive(bEnable && !m_pcbWildCard->get_active());

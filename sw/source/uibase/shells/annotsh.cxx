@@ -1400,7 +1400,7 @@ void SwAnnotationShell::GetLinguState(SfxItemSet &rSet)
             case SID_HANGUL_HANJA_CONVERSION:
             case SID_CHINESE_CONVERSION:
             {
-                if (!SvtCJKOptions().IsAnyEnabled())
+                if (!SvtCJKOptions::IsAnyEnabled())
                 {
                     rView.GetViewFrame()->GetBindings().SetVisibleState( nWhich, false );
                     rSet.DisableItem(nWhich);

@@ -107,7 +107,7 @@ OfaAutoCorrDlg::OfaAutoCorrDlg(weld::Window* pParent, const SfxItemSet* _pSet )
 
     if( SvtCTLOptions().IsCTLFontEnabled() )
         nLangList |= SvxLanguageListFlags::CTL;
-    if( SvtCJKOptions().IsCJKFontEnabled() )
+    if( SvtCJKOptions::IsCJKFontEnabled() )
         nLangList |= SvxLanguageListFlags::CJK;
     m_xLanguageLB->SetLanguageList( nLangList, true, true );
     m_xLanguageLB->set_active_id( LANGUAGE_NONE );

@@ -60,7 +60,7 @@ InspectorTextPanel::InspectorTextPanel(weld::Widget* pParent)
 static bool GetPropertyValues(const OUString& rPropName, const uno::Any& rAny, OUString& rString)
 {
     // Hide Asian and Complex properties
-    if (!SvtCJKOptions().IsCJKFontEnabled() && rPropName.indexOf("Asian") != -1)
+    if (!SvtCJKOptions::IsCJKFontEnabled() && rPropName.indexOf("Asian") != -1)
         return false;
     if (!SvtCTLOptions().IsCTLFontEnabled() && rPropName.indexOf("Complex") != -1)
         return false;

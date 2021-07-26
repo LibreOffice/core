@@ -170,7 +170,7 @@ SwIndexMarkPane::SwIndexMarkPane(const std::shared_ptr<weld::Dialog>& rDialog, w
 {
     m_xSyncED->show();
 
-    if (SvtCJKOptions().IsCJKFontEnabled())
+    if (SvtCJKOptions::IsCJKFontEnabled())
     {
         uno::Reference< uno::XComponentContext > xContext = getProcessComponentContext();
 

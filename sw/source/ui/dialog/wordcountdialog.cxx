@@ -74,7 +74,7 @@ void SwWordCountFloatDlg::SetValues(const SwDocStat& rCurrent, const SwDocStat& 
             static_cast<double>(rDoc.nChar) / nCharsPerStandardizedPage);
     }
 
-    bool bShowCJK = (SvtCJKOptions().IsAnyEnabled() || rDoc.nAsianWord);
+    bool bShowCJK = (SvtCJKOptions::IsAnyEnabled() || rDoc.nAsianWord);
     bool bToggleCJK = m_xCurrentCjkcharsFT->get_visible() != bShowCJK;
     if (bToggleCJK)
     {
@@ -121,7 +121,7 @@ SwWordCountFloatDlg::SwWordCountFloatDlg(SfxBindings* _pBindings,
     , m_xStandardizedPagesLabelFT(m_xBuilder->weld_label("standardizedpages"))
     , m_xStandardizedPagesLabelFT2(m_xBuilder->weld_label("standardizedpages2"))
 {
-    showCJK(SvtCJKOptions().IsAnyEnabled());
+    showCJK(SvtCJKOptions::IsAnyEnabled());
     showStandardizedPages(officecfg::Office::Writer::WordCount::ShowStandardizedPageCount::get());
 
     Initialize(pInfo);

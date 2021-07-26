@@ -1964,8 +1964,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
 
             case SID_RUBY_DIALOG:
                 {
-                    SvtCJKOptions aCJKOptions;
-                    if( !aCJKOptions.IsRubyEnabled()
+                    if( !SvtCJKOptions::IsRubyEnabled()
                         || rSh.CursorInsideInputField() )
                     {
                         GetView().GetViewFrame()->GetBindings().SetVisibleState( nWhich, false );
@@ -2024,8 +2023,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
             case SID_TRANSLITERATE_HIRAGANA:
             case SID_TRANSLITERATE_KATAKANA:
             {
-                SvtCJKOptions aCJKOptions;
-                if(!aCJKOptions.IsChangeCaseMapEnabled())
+                if(!SvtCJKOptions::IsChangeCaseMapEnabled())
                 {
                     GetView().GetViewFrame()->GetBindings().SetVisibleState( nWhich, false );
                     rSet.DisableItem(nWhich);
