@@ -21,21 +21,21 @@ Sub verify_testOptionalsBasic()
 
     ' optionals with variant datatypes (ByRef and ByVal)
     TestUtil.AssertEqual(TestOptVariantByRefByVal(), 0, "TestOptVariantByRefByVal()")
-    TestUtil.AssertEqual(TestOptVariantByRefByVal(123), 123, "TestOptVariantByRefByVal(123)")
-    TestUtil.AssertEqual(TestOptVariantByRefByVal(, 456), 456, "TestOptVariantByRefByVal(, 456)")
-    TestUtil.AssertEqual(TestOptVariantByRefByVal(123, 456), 579, "TestOptVariantByRefByVal(123, 456)")
+    TestUtil.AssertEqualApprox(TestOptVariantByRefByVal(123), 123, "TestOptVariantByRefByVal(123)")
+    TestUtil.AssertEqualApprox(TestOptVariantByRefByVal(, 456), 456, "TestOptVariantByRefByVal(, 456)")
+    TestUtil.AssertEqualApprox(TestOptVariantByRefByVal(123, 456), 579, "TestOptVariantByRefByVal(123, 456)")
 
     ' optionals with double datatypes
     TestUtil.AssertEqual(TestOptDouble(), 0, "TestOptDouble()")
-    TestUtil.AssertEqual(TestOptDouble(123.4), 123.4, "TestOptDouble(123.4)")
-    TestUtil.AssertEqual(TestOptDouble(, 567.8), 567.8, "TestOptDouble(, 567.8)")
-    TestUtil.AssertEqual(CDbl(Format(TestOptDouble(123.4, 567.8), "0.0")), 691.2, "TestOptDouble(123.4, 567.8)")
+    TestUtil.AssertEqualApprox(TestOptDouble(123.4), 123.4, 1E-5, "TestOptDouble(123.4)")
+    TestUtil.AssertEqualApprox(TestOptDouble(, 567.8), 567.8, 1E-5, "TestOptDouble(, 567.8)")
+    TestUtil.AssertEqualApprox(TestOptDouble(123.4, 567.8), 691.2, 1E-5, "TestOptDouble(123.4, 567.8)")
 
     ' optionals with double datatypes (ByRef and ByVal)
-    TestUtil.AssertEqual(TestOptDoubleByRefByVal(), 0, "TestOptDouble()")
-    TestUtil.AssertEqual(TestOptDoubleByRefByVal(123.4), 123.4, "TestOptDouble(123.4)")
-    TestUtil.AssertEqual(TestOptDoubleByRefByVal(, 567.8), 567.8, "TestOptDoubleByRefByVal(, 567.8)")
-    TestUtil.AssertEqual(CDbl(Format(TestOptDoubleByRefByVal(123.4, 567.8), "0.0")), 691.2, "TestOptDoubleByRefByVal(123.4, 567.8)")
+    TestUtil.AssertEqual(TestOptDoubleByRefByVal(), 0, "TestOptDoubleByRefByVal()")
+    TestUtil.AssertEqualApprox(TestOptDoubleByRefByVal(123.4), 123.4, 1E-5, "TestOptDoubleByRefByVal(123.4)")
+    TestUtil.AssertEqualApprox(TestOptDoubleByRefByVal(, 567.8), 567.8, 1E-5, "TestOptDoubleByRefByVal(, 567.8)")
+    TestUtil.AssertEqualApprox(TestOptDoubleByRefByVal(123.4, 567.8), 691.2, 1E-5, "TestOptDoubleByRefByVal(123.4, 567.8)")
 
     ' optionals with integer datatypes
     TestUtil.AssertEqual(TestOptInteger(), 0, "TestOptInteger()")
@@ -70,14 +70,14 @@ Sub verify_testOptionalsBasic()
     cB.Add (567.8)
     TestUtil.AssertEqual(TestOptObject(), 0, "TestOptObject()")
     TestUtil.AssertEqual(TestOptObject(cA), 579, "TestOptObject(A)")
-    TestUtil.AssertEqual(CDbl(Format(TestOptObject(, cB), "0.0")), 691.2, "TestOptObject(, B)")
-    TestUtil.AssertEqual(CDbl(Format(TestOptObject(cA, cB), "0.0")), 1270.2, "TestOptObject(A, B)")
+    TestUtil.AssertEqualApprox(TestOptObject(, cB), 691.2, 1E-5, "TestOptObject(, B)")
+    TestUtil.AssertEqualApprox(TestOptObject(cA, cB), 1270.2, 1E-5, "TestOptObject(A, B)")
 
     ' optionals with object datatypes (ByRef and ByVal)
     TestUtil.AssertEqual(TestOptObjectByRefByVal(), 0, "TestOptObjectByRefByVal()")
     TestUtil.AssertEqual(TestOptObjectByRefByVal(cA), 579, "TestOptObjectByRefByVal(A)")
-    TestUtil.AssertEqual(CDbl(Format(TestOptObjectByRefByVal(, cB), "0.0")), 691.2, "TestOptObjectByRefByVal(, B)")
-    TestUtil.AssertEqual(CDbl(Format(TestOptObjectByRefByVal(cA, cB), "0.0")), 1270.2, "TestOptObjectByRefByVal(A, B)")
+    TestUtil.AssertEqualApprox(TestOptObjectByRefByVal(, cB), 691.2, 1E-5, "TestOptObjectByRefByVal(, B)")
+    TestUtil.AssertEqualApprox(TestOptObjectByRefByVal(cA, cB), 1270.2, 1E-5, "TestOptObjectByRefByVal(A, B)")
 
     ' optionals with array datatypes
     Dim aA(0 To 1) As Integer
@@ -88,14 +88,14 @@ Sub verify_testOptionalsBasic()
     aB(1) = 567.8
     TestUtil.AssertEqual(TestOptArray(), 0, "TestOptArray()")
     TestUtil.AssertEqual(TestOptArray(aA), 579, "TestOptArray(A)")
-    TestUtil.AssertEqual(CDbl(Format(TestOptArray(, aB), "0.0")), 691.2, "TestOptArray(, B)")
-    TestUtil.AssertEqual(CDbl(Format(TestOptArray(aA, aB), "0.0")), 1270.2, "TestOptArray(A, B)")
+    TestUtil.AssertEqualApprox(TestOptArray(, aB), 691.2, 1E-5, "TestOptArray(, B)")
+    TestUtil.AssertEqualApprox(TestOptArray(aA, aB), 1270.2, 1E-5, "TestOptArray(A, B)")
 
     ' optionals with array datatypes (ByRef and ByVal)
     TestUtil.AssertEqual(TestOptArrayByRefByVal(), 0, "TestOptArrayByRefByVal()")
     TestUtil.AssertEqual(TestOptArrayByRefByVal(aA), 579, "TestOptArrayByRefByVal(A)")
-    TestUtil.AssertEqual(CDbl(Format(TestOptArrayByRefByVal(, aB), "0.0")), 691.2, "TestOptArrayByRefByVal(, B)")
-    TestUtil.AssertEqual(CDbl(Format(TestOptArrayByRefByVal(aA, aB), "0.0")), 1270.2, "TestOptArrayByRefByVal(A, B)")
+    TestUtil.AssertEqualApprox(TestOptArrayByRefByVal(, aB), 691.2, 1E-5, "TestOptArrayByRefByVal(, B)")
+    TestUtil.AssertEqualApprox(TestOptArrayByRefByVal(aA, aB), 1270.2, 1E-5, "TestOptArrayByRefByVal(A, B)")
 
     Exit Sub
 errorHandler:

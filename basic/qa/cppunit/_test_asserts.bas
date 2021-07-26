@@ -52,6 +52,15 @@ Sub AssertEqual(actual As Variant, expected As Variant, testName As String)
     End If
 End Sub
 
+Sub AssertEqualApprox(actual, expected, epsilon, testName As String)
+    If Abs(expected - actual) <= epsilon Then
+        passCount = passCount + 1
+    Else
+        result = result & Chr$(10) & " Failed: " & testName & " returned " & actual & ", expected " & expected & ", epsilon " & epsilon
+        failCount = failCount + 1
+    End If
+End Sub
+
 Sub ReportErrorHandler(testName As String, aErr, sError, nErl)
     Assert False, testName, "hit error handler - " & aErr & ": " & sError & " line : " & nErl
 End Sub
