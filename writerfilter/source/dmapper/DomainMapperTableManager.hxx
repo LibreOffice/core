@@ -147,20 +147,20 @@ public:
             return;
 
         if ( !sMoved.isEmpty() )
-            m_aMoved.end()[-1] = sMoved;
+            m_aMoved[m_aMoved.size() - 1] = sMoved;
         else if ( m_aMoved.size() >= 2 )
             // next table rows weren't moved
-            m_aMoved.end()[-2] = "";
+            m_aMoved[m_aMoved.size() - 2] = "";
         else
-            m_aMoved.end()[-1] = "";
+            m_aMoved[m_aMoved.size() - 1] = "";
     }
 
     OUString getMoved() const
     {
-        if ( m_aMoved.size() >= 2 && !m_aMoved.end()[-2].isEmpty() )
-           return m_aMoved.end()[-2];
+        if ( m_aMoved.size() >= 2 && !m_aMoved[m_aMoved.size() - 2].isEmpty() )
+           return m_aMoved[m_aMoved.size() - 2];
         else if ( !m_aMoved.empty() )
-           return m_aMoved.end()[-1];
+           return m_aMoved[m_aMoved.size() -1 ];
 
         return OUString();
     }
