@@ -58,7 +58,7 @@ class XSecParser::Context
         }
 
         virtual std::unique_ptr<Context> CreateChildContext(
-            std::optional<SvXMLNamespaceMap> pOldNamespaceMap,
+            std::optional<SvXMLNamespaceMap>&& pOldNamespaceMap,
             sal_uInt16 const /*nNamespace*/, OUString const& /*rName*/);
 
         virtual void Characters(OUString const& /*rChars*/)
@@ -88,7 +88,7 @@ class XSecParser::UnknownContext
 };
 
 auto XSecParser::Context::CreateChildContext(
-    std::optional<SvXMLNamespaceMap> pOldNamespaceMap,
+    std::optional<SvXMLNamespaceMap>&& pOldNamespaceMap,
     sal_uInt16 const /*nNamespace*/, OUString const& /*rName*/)
 -> std::unique_ptr<Context>
 {
@@ -221,7 +221,7 @@ class XSecParser::DsPGPDataContext
         }
 
         virtual std::unique_ptr<Context> CreateChildContext(
-            std::optional<SvXMLNamespaceMap> pOldNamespaceMap,
+            std::optional<SvXMLNamespaceMap>&& pOldNamespaceMap,
             sal_uInt16 const nNamespace, OUString const& rName) override
         {
             if (nNamespace == XML_NAMESPACE_DS && rName == "PGPKeyID")
@@ -321,7 +321,7 @@ class XSecParser::DsX509IssuerSerialContext
         }
 
         virtual std::unique_ptr<Context> CreateChildContext(
-            std::optional<SvXMLNamespaceMap> pOldNamespaceMap,
+            std::optional<SvXMLNamespaceMap>&& pOldNamespaceMap,
             sal_uInt16 const nNamespace, OUString const& rName) override
         {
             if (nNamespace == XML_NAMESPACE_DS && rName == "X509IssuerName")
@@ -360,7 +360,7 @@ class XSecParser::DsX509DataContext
         }
 
         virtual std::unique_ptr<Context> CreateChildContext(
-            std::optional<SvXMLNamespaceMap> pOldNamespaceMap,
+            std::optional<SvXMLNamespaceMap>&& pOldNamespaceMap,
             sal_uInt16 const nNamespace, OUString const& rName) override
         {
             if (nNamespace == XML_NAMESPACE_DS && rName == "X509IssuerSerial")
@@ -395,7 +395,7 @@ class XSecParser::DsKeyInfoContext
         }
 
         virtual std::unique_ptr<Context> CreateChildContext(
-            std::optional<SvXMLNamespaceMap> pOldNamespaceMap,
+            std::optional<SvXMLNamespaceMap>&& pOldNamespaceMap,
             sal_uInt16 const nNamespace, OUString const& rName) override
         {
             if (nNamespace == XML_NAMESPACE_DS && rName == "X509Data")
@@ -556,7 +556,7 @@ class XSecParser::DsTransformsContext
         }
 
         virtual std::unique_ptr<Context> CreateChildContext(
-            std::optional<SvXMLNamespaceMap> pOldNamespaceMap,
+            std::optional<SvXMLNamespaceMap>&& pOldNamespaceMap,
             sal_uInt16 const nNamespace, OUString const& rName) override
         {
             if (nNamespace == XML_NAMESPACE_DS && rName == "Transform")
@@ -625,7 +625,7 @@ class XSecParser::DsReferenceContext
         }
 
         virtual std::unique_ptr<Context> CreateChildContext(
-            std::optional<SvXMLNamespaceMap> pOldNamespaceMap,
+            std::optional<SvXMLNamespaceMap>&& pOldNamespaceMap,
             sal_uInt16 const nNamespace, OUString const& rName) override
         {
             if (nNamespace == XML_NAMESPACE_DS && rName == "Transforms")
@@ -688,7 +688,7 @@ class XSecParser::DsSignedInfoContext
         }
 
         virtual std::unique_ptr<Context> CreateChildContext(
-            std::optional<SvXMLNamespaceMap> pOldNamespaceMap,
+            std::optional<SvXMLNamespaceMap>&& pOldNamespaceMap,
             sal_uInt16 const nNamespace, OUString const& rName) override
         {
             if (nNamespace == XML_NAMESPACE_DS && rName == "SignatureMethod")
@@ -751,7 +751,7 @@ class XSecParser::XadesCertificateValuesContext
         }
 
         virtual std::unique_ptr<Context> CreateChildContext(
-            std::optional<SvXMLNamespaceMap> pOldNamespaceMap,
+            std::optional<SvXMLNamespaceMap>&& pOldNamespaceMap,
             sal_uInt16 const nNamespace, OUString const& rName) override
         {
             if (nNamespace == XML_NAMESPACE_XADES132 && rName == "EncapsulatedX509Certificate")
@@ -780,7 +780,7 @@ class XSecParser::XadesUnsignedSignaturePropertiesContext
         }
 
         virtual std::unique_ptr<Context> CreateChildContext(
-            std::optional<SvXMLNamespaceMap> pOldNamespaceMap,
+            std::optional<SvXMLNamespaceMap>&& pOldNamespaceMap,
             sal_uInt16 const nNamespace, OUString const& rName) override
         {
             if (nNamespace == XML_NAMESPACE_XADES132 && rName == "CertificateValues")
@@ -823,7 +823,7 @@ class XSecParser::XadesUnsignedPropertiesContext
         }
 
         virtual std::unique_ptr<Context> CreateChildContext(
-            std::optional<SvXMLNamespaceMap> pOldNamespaceMap,
+            std::optional<SvXMLNamespaceMap>&& pOldNamespaceMap,
             sal_uInt16 const nNamespace, OUString const& rName) override
         {
             if (nNamespace == XML_NAMESPACE_XADES132 && rName == "UnsignedSignatureProperties")
@@ -943,7 +943,7 @@ class XSecParser::LoSignatureLineContext
         }
 
         virtual std::unique_ptr<Context> CreateChildContext(
-            std::optional<SvXMLNamespaceMap> pOldNamespaceMap,
+            std::optional<SvXMLNamespaceMap>&& pOldNamespaceMap,
             sal_uInt16 const nNamespace, OUString const& rName) override
         {
             if (nNamespace == XML_NAMESPACE_LO_EXT && rName == "SignatureLineId")
@@ -980,7 +980,7 @@ class XSecParser::XadesCertDigestContext
         }
 
         virtual std::unique_ptr<Context> CreateChildContext(
-            std::optional<SvXMLNamespaceMap> pOldNamespaceMap,
+            std::optional<SvXMLNamespaceMap>&& pOldNamespaceMap,
             sal_uInt16 const nNamespace, OUString const& rName) override
         {
             if (nNamespace == XML_NAMESPACE_DS && rName == "DigestMethod")
@@ -1025,7 +1025,7 @@ class XSecParser::XadesCertContext
         }
 
         virtual std::unique_ptr<Context> CreateChildContext(
-            std::optional<SvXMLNamespaceMap> pOldNamespaceMap,
+            std::optional<SvXMLNamespaceMap>&& pOldNamespaceMap,
             sal_uInt16 const nNamespace, OUString const& rName) override
         {
             if (nNamespace == XML_NAMESPACE_XADES132 && rName == "CertDigest")
@@ -1052,7 +1052,7 @@ class XSecParser::XadesSigningCertificateContext
         }
 
         virtual std::unique_ptr<Context> CreateChildContext(
-            std::optional<SvXMLNamespaceMap> pOldNamespaceMap,
+            std::optional<SvXMLNamespaceMap>&& pOldNamespaceMap,
             sal_uInt16 const nNamespace, OUString const& rName) override
         {
             if (nNamespace == XML_NAMESPACE_XADES132 && rName == "Cert")
@@ -1113,7 +1113,7 @@ class XSecParser::XadesSignedSignaturePropertiesContext
         }
 
         virtual std::unique_ptr<Context> CreateChildContext(
-            std::optional<SvXMLNamespaceMap> pOldNamespaceMap,
+            std::optional<SvXMLNamespaceMap>&& pOldNamespaceMap,
             sal_uInt16 const nNamespace, OUString const& rName) override
         {
             if (nNamespace == XML_NAMESPACE_XADES132 && rName == "SigningTime")
@@ -1151,7 +1151,7 @@ class XSecParser::XadesSignedPropertiesContext
         }
 
         virtual std::unique_ptr<Context> CreateChildContext(
-            std::optional<SvXMLNamespaceMap> pOldNamespaceMap,
+            std::optional<SvXMLNamespaceMap>&& pOldNamespaceMap,
             sal_uInt16 const nNamespace, OUString const& rName) override
         {
             if (nNamespace == XML_NAMESPACE_XADES132 && rName == "SignedSignatureProperties")
@@ -1181,7 +1181,7 @@ class XSecParser::XadesQualifyingPropertiesContext
         }
 
         virtual std::unique_ptr<Context> CreateChildContext(
-            std::optional<SvXMLNamespaceMap> pOldNamespaceMap,
+            std::optional<SvXMLNamespaceMap>&& pOldNamespaceMap,
             sal_uInt16 const nNamespace, OUString const& rName) override
         {
             if (nNamespace == XML_NAMESPACE_XADES132 && rName == "SignedProperties")
@@ -1285,7 +1285,7 @@ class XSecParser::DsSignaturePropertyContext
         }
 
         virtual std::unique_ptr<Context> CreateChildContext(
-            std::optional<SvXMLNamespaceMap> pOldNamespaceMap,
+            std::optional<SvXMLNamespaceMap>&& pOldNamespaceMap,
             sal_uInt16 const nNamespace, OUString const& rName) override
         {
             if (nNamespace == XML_NAMESPACE_DC && rName == "date")
@@ -1320,7 +1320,7 @@ class XSecParser::DsSignaturePropertiesContext
         }
 
         virtual std::unique_ptr<Context> CreateChildContext(
-            std::optional<SvXMLNamespaceMap> pOldNamespaceMap,
+            std::optional<SvXMLNamespaceMap>&& pOldNamespaceMap,
             sal_uInt16 const nNamespace, OUString const& rName) override
         {
             if (nNamespace == XML_NAMESPACE_DS && rName == "SignatureProperty")
@@ -1349,7 +1349,7 @@ class XSecParser::DsObjectContext
         }
 
         virtual std::unique_ptr<Context> CreateChildContext(
-            std::optional<SvXMLNamespaceMap> pOldNamespaceMap,
+            std::optional<SvXMLNamespaceMap>&& pOldNamespaceMap,
             sal_uInt16 const nNamespace, OUString const& rName) override
         {
             if (nNamespace == XML_NAMESPACE_DS && rName == "SignatureProperties")
@@ -1388,7 +1388,7 @@ class XSecParser::DsSignatureContext
         }
 
         virtual std::unique_ptr<Context> CreateChildContext(
-            std::optional<SvXMLNamespaceMap> pOldNamespaceMap,
+            std::optional<SvXMLNamespaceMap>&& pOldNamespaceMap,
             sal_uInt16 const nNamespace, OUString const& rName) override
         {
             if (nNamespace == XML_NAMESPACE_DS && rName == "SignedInfo")
@@ -1422,7 +1422,7 @@ class XSecParser::DsigSignaturesContext
         }
 
         virtual std::unique_ptr<Context> CreateChildContext(
-            std::optional<SvXMLNamespaceMap> pOldNamespaceMap,
+            std::optional<SvXMLNamespaceMap>&& pOldNamespaceMap,
             sal_uInt16 const nNamespace, OUString const& rName) override
         {
             if (nNamespace == XML_NAMESPACE_DS && rName == "Signature")
