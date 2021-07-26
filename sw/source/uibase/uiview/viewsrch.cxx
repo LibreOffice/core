@@ -410,8 +410,7 @@ void SwView::ExecSearch(SfxRequest& rReq)
             {
                 aSet.MergeRange(RES_CHRATR_CTL_FONT, RES_CHRATR_CTL_WEIGHT);
             }
-            SvtCJKOptions aCJKOpt;
-            if( aCJKOpt.IsAnyEnabled() )
+            if( SvtCJKOptions::IsAnyEnabled() )
             {
                 aSet.MergeRange(RES_CHRATR_CJK_FONT, RES_CHRATR_CJK_WEIGHT);
                 aSet.MergeRange(RES_CHRATR_EMPHASIS_MARK, RES_CHRATR_TWO_LINES);

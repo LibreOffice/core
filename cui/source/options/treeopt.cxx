@@ -1418,7 +1418,6 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
     }
 
     // Language options
-    SvtCJKOptions aCJKLanguageOptions;
     SvtCTLOptions aCTLLanguageOptions;
     if ( !lcl_isOptionHidden( SID_LANGUAGE_OPTIONS, aOptionsDlgOpt ) )
     {
@@ -1429,8 +1428,8 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
             nPageId = static_cast<sal_uInt16>(SID_LANGUAGE_OPTIONS_RES[i].second);
             if ( lcl_isOptionHidden( nPageId, aOptionsDlgOpt ) )
                 continue;
-            if ( ( RID_SVXPAGE_JSEARCH_OPTIONS != nPageId || aCJKLanguageOptions.IsJapaneseFindEnabled() ) &&
-                 ( RID_SVXPAGE_ASIAN_LAYOUT != nPageId    || aCJKLanguageOptions.IsAsianTypographyEnabled() ) &&
+            if ( ( RID_SVXPAGE_JSEARCH_OPTIONS != nPageId || SvtCJKOptions::IsJapaneseFindEnabled() ) &&
+                 ( RID_SVXPAGE_ASIAN_LAYOUT != nPageId    || SvtCJKOptions::IsAsianTypographyEnabled() ) &&
                  ( RID_SVXPAGE_OPTIONS_CTL != nPageId     || aCTLLanguageOptions.IsCTLFontEnabled() ) )
                 AddTabPage(nPageId, CuiResId(SID_LANGUAGE_OPTIONS_RES[i].first), nGroup);
         }
@@ -1461,7 +1460,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
                     nPageId = static_cast<sal_uInt16>(SID_SW_EDITOPTIONS_RES[i].second);
                     if ( lcl_isOptionHidden( nPageId, aOptionsDlgOpt ) )
                         continue;
-                    if ( ( RID_SW_TP_STD_FONT_CJK != nPageId || aCJKLanguageOptions.IsCJKFontEnabled() ) &&
+                    if ( ( RID_SW_TP_STD_FONT_CJK != nPageId || SvtCJKOptions::IsCJKFontEnabled() ) &&
                          ( RID_SW_TP_STD_FONT_CTL != nPageId || aCTLLanguageOptions.IsCTLFontEnabled() ) &&
                          ( RID_SW_TP_MAILCONFIG != nPageId || MailMergeCfg_Impl().IsEmailSupported() ) )
                         AddTabPage( nPageId, CuiResId(SID_SW_EDITOPTIONS_RES[i].first), nGroup );

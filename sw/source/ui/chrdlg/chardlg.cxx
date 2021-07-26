@@ -84,8 +84,7 @@ SwCharDlg::SwCharDlg(weld::Window* pParent, SwView& rVw, const SfxItemSet& rCore
     }
     else
     {
-        SvtCJKOptions aCJKOptions;
-        if (!aCJKOptions.IsDoubleLinesEnabled())
+        if (!SvtCJKOptions::IsDoubleLinesEnabled())
             RemoveTabPage("asianlayout");
     }
 

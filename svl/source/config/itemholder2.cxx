@@ -106,10 +106,6 @@ void ItemHolder2::impl_newItem(TItemInfo& rItem)
 {
     switch(rItem.eItem)
     {
-        case EItem::CJKOptions :
-            rItem.pItem.reset( new SvtCJKOptions() );
-            break;
-
         case EItem::CTLOptions :
             rItem.pItem.reset( new SvtCTLOptions() );
             break;

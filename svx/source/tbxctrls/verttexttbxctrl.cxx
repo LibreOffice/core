@@ -100,8 +100,7 @@ void SAL_CALL SvxVertCTLTextTbxCtrl::statusChanged(const css::frame::FeatureStat
     bool bEnabled = false;
     if (rEvent.FeatureURL.Complete == ".uno:VerticalTextState")
     {
-        SvtCJKOptions aLangOptions;
-        bEnabled = m_bVisible && aLangOptions.IsVerticalTextEnabled();
+        bEnabled = m_bVisible && SvtCJKOptions::IsVerticalTextEnabled();
     }
     else if (rEvent.FeatureURL.Complete == ".uno:CTLFontState")
     {

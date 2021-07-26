@@ -124,8 +124,7 @@ SwLoadOptPage::SwLoadOptPage(weld::Container* pPage, weld::DialogController* pCo
         m_xTabMF->hide();
     }
 
-    SvtCJKOptions aCJKOptions;
-    if(!aCJKOptions.IsAsianTypographyEnabled())
+    if(!SvtCJKOptions::IsAsianTypographyEnabled())
     {
         m_xUseSquaredPageMode->hide();
         m_xUseCharUnit->hide();
@@ -203,8 +202,7 @@ bool SwLoadOptPage::FillItemSet( SfxItemSet* rSet )
     }
 
     bool bIsUseCharUnitFlag = m_xUseCharUnit->get_active();
-    SvtCJKOptions aCJKOptions;
-    bIsUseCharUnitFlag = bIsUseCharUnitFlag && aCJKOptions.IsAsianTypographyEnabled();
+    bIsUseCharUnitFlag = bIsUseCharUnitFlag && SvtCJKOptions::IsAsianTypographyEnabled();
     if( (bIsUseCharUnitFlag ? 1 : 0) != m_xUseCharUnit->get_saved_state())
     {
         rSet->Put(SfxBoolItem(SID_ATTR_APPLYCHARUNIT, bIsUseCharUnitFlag ));

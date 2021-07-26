@@ -497,7 +497,7 @@ SfxRequest LayoutMenu::CreateRequest (
 
 void LayoutMenu::Fill()
 {
-    bool bVertical = SvtCJKOptions().IsVerticalTextEnabled();
+    bool bVertical = SvtCJKOptions::IsVerticalTextEnabled();
     SdDrawDocument* pDocument = mrBase.GetDocument();
     bool bRightToLeft = (pDocument!=nullptr
         && pDocument->GetDefaultWritingMode() == WritingMode_RL_TB);

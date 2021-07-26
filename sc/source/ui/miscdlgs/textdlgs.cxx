@@ -72,8 +72,7 @@ ScParagraphDlg::ScParagraphDlg(weld::Window* pParent, const SfxItemSet* pAttr)
 {
     AddTabPage("labelTP_PARA_STD", RID_SVXPAGE_STD_PARAGRAPH);
     AddTabPage("labelTP_PARA_ALIGN", RID_SVXPAGE_ALIGN_PARAGRAPH);
-    SvtCJKOptions aCJKOptions;
-    if (aCJKOptions.IsAsianTypographyEnabled() )
+    if (SvtCJKOptions::IsAsianTypographyEnabled() )
         AddTabPage("labelTP_PARA_ASIAN", RID_SVXPAGE_PARA_ASIAN);
     else
         RemoveTabPage("labelTP_PARA_ASIAN");

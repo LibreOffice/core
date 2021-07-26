@@ -849,7 +849,7 @@ void SwDrawTextShell::GetState(SfxItemSet& rSet)
             case SID_HANGUL_HANJA_CONVERSION:
             case SID_CHINESE_CONVERSION:
             {
-                if (!SvtCJKOptions().IsAnyEnabled())
+                if (!SvtCJKOptions::IsAnyEnabled())
                 {
                     GetView().GetViewFrame()->GetBindings().SetVisibleState(nWhich, false);
                     rSet.DisableItem(nWhich);
@@ -861,7 +861,7 @@ void SwDrawTextShell::GetState(SfxItemSet& rSet)
 
             case SID_TEXTDIRECTION_LEFT_TO_RIGHT:
             case SID_TEXTDIRECTION_TOP_TO_BOTTOM:
-                if (!SvtCJKOptions().IsVerticalTextEnabled())
+                if (!SvtCJKOptions::IsVerticalTextEnabled())
                 {
                     rSet.DisableItem(nSlotId);
                     nSlotId = 0;
@@ -926,8 +926,7 @@ void SwDrawTextShell::GetState(SfxItemSet& rSet)
             case SID_TRANSLITERATE_HIRAGANA:
             case SID_TRANSLITERATE_KATAKANA:
             {
-                SvtCJKOptions aCJKOptions;
-                if (!aCJKOptions.IsChangeCaseMapEnabled())
+                if (!SvtCJKOptions::IsChangeCaseMapEnabled())
                 {
                     rSet.DisableItem(nWhich);
                     GetView().GetViewFrame()->GetBindings().SetVisibleState(nWhich, false);

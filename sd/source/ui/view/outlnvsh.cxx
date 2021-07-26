@@ -381,8 +381,7 @@ void OutlineViewShell::GetCtrlState(SfxItemSet &rSet)
          SfxItemState::DEFAULT == rSet.GetItemState(SID_TRANSLITERATE_KATAKANA)) )
         return;
 
-    SvtCJKOptions aCJKOptions;
-    if( !aCJKOptions.IsChangeCaseMapEnabled() )
+    if( !SvtCJKOptions::IsChangeCaseMapEnabled() )
     {
         GetViewFrame()->GetBindings().SetVisibleState( SID_TRANSLITERATE_HALFWIDTH, false );
         GetViewFrame()->GetBindings().SetVisibleState( SID_TRANSLITERATE_FULLWIDTH, false );

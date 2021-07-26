@@ -129,8 +129,7 @@ SwContentOptPage::SwContentOptPage(weld::Container* pPage, weld::DialogControlle
         m_xMetricLB->hide();
     }
 
-    SvtCJKOptions aCJKOptions;
-    if(!aCJKOptions.IsVerticalTextEnabled() )
+    if(!SvtCJKOptions::IsVerticalTextEnabled() )
         m_xVRulerRightCBox->hide();
     m_xVRulerCBox->connect_toggled(LINK(this, SwContentOptPage, VertRulerHdl ));
 

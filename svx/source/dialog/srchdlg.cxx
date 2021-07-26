@@ -427,14 +427,13 @@ void SvxSearchDialog::Construct_Impl()
     pImpl->aSelectionTimer.Start();
 
 
-    SvtCJKOptions aCJKOptions;
-    if(!aCJKOptions.IsJapaneseFindEnabled())
+    if(!SvtCJKOptions::IsJapaneseFindEnabled())
     {
         m_xJapOptionsCB->set_active( false );
         m_xJapOptionsCB->hide();
         m_xJapOptionsBtn->hide();
     }
-    if(!aCJKOptions.IsCJKFontEnabled())
+    if(!SvtCJKOptions::IsCJKFontEnabled())
     {
         m_xJapMatchFullHalfWidthCB->hide();
     }
@@ -693,7 +692,6 @@ void SvxSearchDialog::ShowOptionalControls_Impl()
 {
     DBG_ASSERT( pSearchItem, "no search item" );
 
-    SvtCJKOptions aCJKOptions;
     SvtCTLOptions aCTLOptions;
     SvtModuleOptions::EFactory eFactory = getModule(rBindings);
     bool bDrawApp = eFactory == SvtModuleOptions::EFactory::DRAW;
@@ -713,9 +711,9 @@ void SvxSearchDialog::ShowOptionalControls_Impl()
     m_xSelectionBtn->show();
     m_xIncludeDiacritics->show();
     m_xIncludeKashida->set_visible(aCTLOptions.IsCTLFontEnabled());
-    m_xJapMatchFullHalfWidthCB->set_visible(aCJKOptions.IsCJKFontEnabled());
-    m_xJapOptionsCB->set_visible(aCJKOptions.IsJapaneseFindEnabled());
-    m_xJapOptionsBtn->set_visible(aCJKOptions.IsJapaneseFindEnabled());
+    m_xJapMatchFullHalfWidthCB->set_visible(SvtCJKOptions::IsCJKFontEnabled());
+    m_xJapOptionsCB->set_visible(SvtCJKOptions::IsJapaneseFindEnabled());
+    m_xJapOptionsBtn->set_visible(SvtCJKOptions::IsJapaneseFindEnabled());
 
     if (bWriter)
     {

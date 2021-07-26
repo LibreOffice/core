@@ -150,7 +150,7 @@ AlignmentTabPage::AlignmentTabPage(weld::Container* pPage, weld::DialogControlle
     m_xBtnShrink->connect_toggled(LINK(this, AlignmentTabPage, ShrinkClickHdl));
 
     // Asian vertical mode
-    m_xCbAsianMode->set_visible(SvtCJKOptions().IsVerticalTextEnabled());
+    m_xCbAsianMode->set_visible(SvtCJKOptions::IsVerticalTextEnabled());
 
     m_xLbFrameDir->append(SvxFrameDirection::Horizontal_LR_TB, SvxResId(RID_SVXSTR_FRAMEDIR_LTR));
     m_xLbFrameDir->append(SvxFrameDirection::Horizontal_RL_TB, SvxResId(RID_SVXSTR_FRAMEDIR_RTL));

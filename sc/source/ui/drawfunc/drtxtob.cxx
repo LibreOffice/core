@@ -965,7 +965,7 @@ void ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
     }
 
     bool bDisableCTLFont = !SvtCTLOptions().IsCTLFontEnabled();
-    bool bDisableVerticalText = !SvtCJKOptions().IsVerticalTextEnabled();
+    bool bDisableVerticalText = !SvtCJKOptions::IsVerticalTextEnabled();
 
     SdrView* pView = mrViewData.GetScDrawView();
     SfxItemSet aAttrSet(pView->GetModel()->GetItemPool());

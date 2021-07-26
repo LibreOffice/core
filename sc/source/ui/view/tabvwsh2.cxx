@@ -428,7 +428,7 @@ void ScTabViewShell::GetDrawState(SfxItemSet &rSet)
 
             case SID_DRAW_TEXT_VERTICAL:
             case SID_DRAW_CAPTION_VERTICAL:
-                if ( !SvtCJKOptions().IsVerticalTextEnabled() )
+                if ( !SvtCJKOptions::IsVerticalTextEnabled() )
                     rSet.DisableItem( nWhich );
                 else
                     rSet.Put( SfxBoolItem( nWhich, nDrawSfxId == nWhich ) );

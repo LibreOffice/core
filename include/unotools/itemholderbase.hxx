@@ -33,7 +33,6 @@ enum class EItem
 {
     AccessibilityOptions          ,   // 2
 
-    CJKOptions                    ,   // 2
     CmdOptions                    ,
     ColorConfig                   ,   // 2
     Compatibility                 ,

@@ -49,10 +49,9 @@ SvxSearchFormatDialog::SvxSearchFormatDialog(weld::Window* pParent, const SfxIte
     AddTabPage("background", SvxBkgTabPage::Create, nullptr);
 
     // remove asian tabpages if necessary
-    SvtCJKOptions aCJKOptions;
-    if ( !aCJKOptions.IsDoubleLinesEnabled() )
+    if ( !SvtCJKOptions::IsDoubleLinesEnabled() )
         RemoveTabPage("asianlayout");
-    if ( !aCJKOptions.IsAsianTypographyEnabled() )
+    if ( !SvtCJKOptions::IsAsianTypographyEnabled() )
         RemoveTabPage("labelTP_PARA_ASIAN");
 }
 
