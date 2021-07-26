@@ -994,10 +994,10 @@ SvxParaAlignTabPage::SvxParaAlignTabPage(weld::Container* pPage, weld::DialogCon
 {
     SetExchangeSupport();
 
-    SvtLanguageOptions aLangOptions;
+    SvtCJKOptions aCJKLanguageOptions;
     sal_uInt16 nLastLinePos = LASTLINEPOS_DEFAULT;
 
-    if ( aLangOptions.IsAsianTypographyEnabled() )
+    if ( aCJKLanguageOptions.IsAsianTypographyEnabled() )
     {
         m_xLeft->set_label(m_xLeftBottom->get_label());
         m_xRight->set_label(m_xRightTop->get_label());
@@ -1326,7 +1326,7 @@ void SvxParaAlignTabPage::EnableJustifyExt()
     m_xLastLineFT->show();
     m_xLastLineLB->show();
     m_xExpandCB->show();
-    SvtLanguageOptions aCJKOptions;
+    SvtCJKOptions aCJKOptions;
     if (aCJKOptions.IsAsianTypographyEnabled())
         m_xSnapToGridCB->show();
 

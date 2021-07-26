@@ -608,7 +608,7 @@ void SwView::GetDrawState(SfxItemSet &rSet)
 
         case SID_DRAW_TEXT_VERTICAL:
         case SID_DRAW_CAPTION_VERTICAL:
-            if ( bWeb || !SvtLanguageOptions().IsVerticalTextEnabled() )
+            if ( bWeb || !SvtCJKOptions().IsVerticalTextEnabled() )
                 rSet.DisableItem( nWhich );
             else
                 if (nWhich != SID_DRAW_TEXT_VERTICAL) //tdf#113171

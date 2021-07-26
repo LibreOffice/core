@@ -22,6 +22,8 @@
 #include <sfx2/printer.hxx>
 #include <sfx2/viewsh.hxx>
 #include <svl/languageoptions.hxx>
+#include <svl/cjkoptions.hxx>
+#include <svl/ctloptions.hxx>
 #include <svtools/unitconv.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
@@ -190,9 +192,10 @@ SvxPageDescPage::SvxPageDescPage(weld::Container* pPage, weld::DialogController*
     // this page needs ExchangeSupport
     SetExchangeSupport();
 
-    SvtLanguageOptions aLangOptions;
-    bool bCJK = aLangOptions.IsAsianTypographyEnabled();
-    bool bCTL = aLangOptions.IsCTLFontEnabled();
+    SvtCTLOptions aCTLLanguageOptions;
+    SvtCJKOptions aCJKLanguageOptions;
+    bool bCJK = aCJKLanguageOptions.IsAsianTypographyEnabled();
+    bool bCTL = aCTLLanguageOptions.IsCTLFontEnabled();
     bool bWeb = false;
     const SfxPoolItem* pItem;
 
