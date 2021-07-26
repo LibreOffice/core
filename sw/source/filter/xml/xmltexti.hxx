@@ -26,7 +26,7 @@ class SvXMLImport;
 
 class SwXMLTextImportHelper : public XMLTextImportHelper
 {
-    XMLRedlineImportHelper *pRedlineHelper;
+    XMLRedlineImportHelper *m_pRedlineHelper;
 
 protected:
     virtual SvXMLImportContext *CreateTableChildContext(

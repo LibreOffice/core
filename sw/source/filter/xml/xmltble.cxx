@@ -69,21 +69,21 @@ using std::advance;
 
 class SwXMLTableColumn_Impl : public SwWriteTableCol
 {
-    OUString    sStyleName;
-    sal_uInt32  nRelWidth;
+    OUString    m_sStyleName;
+    sal_uInt32  m_nRelWidth;
 
 public:
 
     explicit SwXMLTableColumn_Impl(sal_uInt32 nPosition)
         : SwWriteTableCol(nPosition)
-        , nRelWidth(0)
+        , m_nRelWidth(0)
     {};
 
-    void SetStyleName( const OUString& rName ) { sStyleName = rName; }
-    const OUString& GetStyleName() const { return sStyleName; }
+    void SetStyleName( const OUString& rName ) { m_sStyleName = rName; }
+    const OUString& GetStyleName() const { return m_sStyleName; }
 
-    void SetRelWidth( sal_uInt32 nSet ) { nRelWidth = nSet; }
-    sal_uInt32 GetRelWidth() const { return nRelWidth; }
+    void SetRelWidth( sal_uInt32 nSet ) { m_nRelWidth = nSet; }
+    sal_uInt32 GetRelWidth() const { return m_nRelWidth; }
 };
 
 namespace {
