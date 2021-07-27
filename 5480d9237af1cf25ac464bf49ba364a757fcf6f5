@@ -46,6 +46,30 @@
       "revId": "5480d9237af1cf25ac464bf49ba364a757fcf6f5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0a3749c6_ff51132d",
+        "filename": "cui/source/dialogs/hlmarkwn.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 354,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-07-27T09:39:09Z",
+      "side": 1,
+      "message": "\u003chttps://gerrit.libreoffice.org/c/core/+/119547\u003e \"-Werror\u003dmaybe-uninitialized\"",
+      "parentUuid": "947068e3_656a66be",
+      "range": {
+        "startLine": 353,
+        "startChar": 24,
+        "endLine": 354,
+        "endChar": 47
+      },
+      "revId": "5480d9237af1cf25ac464bf49ba364a757fcf6f5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
