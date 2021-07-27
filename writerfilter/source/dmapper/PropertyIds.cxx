@@ -364,6 +364,7 @@ OUString getPropertyName( PropertyIds eId )
         case PROP_RTL_GUTTER:
             sName = "RtlGutter";
             break;
+        case PROP_CURSOR_NOT_IGNORE_TABLES_IN_HF: sName = "CursorNotIgnoreTables"; break;
     }
     assert(sName.getLength()>0);
     return sName;

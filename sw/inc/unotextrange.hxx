@@ -64,7 +64,8 @@ namespace sw {
 
     SW_DLLPUBLIC bool XTextRangeToSwPaM(SwUnoInternalPaM& rToFill,
             const css::uno::Reference<css::text::XTextRange> & xTextRange,
-            TextRangeMode eMode = TextRangeMode::RequireTextNode);
+            TextRangeMode eMode = TextRangeMode::RequireTextNode,
+            bool bCursorNotIgnoreTables = false);
 
     css::uno::Reference< css::text::XText >
         CreateParentXText(SwDoc & rDoc, const SwPosition& rPos);
