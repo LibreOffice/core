@@ -72,31 +72,22 @@ public class DEPSAgent {
 
   private double switchP = 0.5;
 
-  public DEPSAgent(ProblemEncoder encoder, DEGTBehavior deGTBehavior, PSGTBehavior psGTBehavior, double switchP, IGoodnessCompareEngine comparer, Library lib) {
-      setProblemEncoder(encoder);
-
+  public DEPSAgent(ProblemEncoder encoder, DEGTBehavior deGTBehavior, PSGTBehavior psGTBehavior, double switchP, IGoodnessCompareEngine comparer) {
       this.switchP = switchP;
 
-      deGTBehavior.setLibrary(lib);
-      psGTBehavior.setLibrary(lib);
-      setGTBehavior(deGTBehavior);
-      setGTBehavior(psGTBehavior);
-      this.deGTBehavior = deGTBehavior;
-      this.psGTBehavior = psGTBehavior;
+      problemEncoder = encoder;
 
       qualityComparator = comparer;
-  }
 
-  public void setLibrary(Library lib) {
-    deGTBehavior.setLibrary(lib);
-    psGTBehavior.setLibrary(lib);
-  }
+      trailPoint = problemEncoder.getFreshSearchPoint();
+      pold_t = problemEncoder.getFreshSearchPoint();
+      pcurrent_t = problemEncoder.getFreshSearchPoint();
 
-  public void setProblemEncoder(ProblemEncoder encoder) {
-    problemEncoder = encoder;
-    trailPoint = problemEncoder.getFreshSearchPoint();
-    pold_t = problemEncoder.getFreshSearchPoint();
-    pcurrent_t = problemEncoder.getFreshSearchPoint();
+      deGTBehavior.setMemPoints(pbest_t, pcurrent_t, pold_t);
+      this.deGTBehavior = deGTBehavior;
+
+      psGTBehavior.setMemPoints(pbest_t, pcurrent_t, pold_t);
+      this.psGTBehavior = psGTBehavior;
   }
 
   public void setSpecComparator(IGoodnessCompareEngine comparer) {
@@ -122,7 +113,7 @@ public class DEPSAgent {
   public void generatePoint() {
     // generates a new point in the search space (S) based on
     // its memory and the library
-    selectGTBehavior = this.getGTBehavior();
+    selectGTBehavior = getGTBehavior();
     selectGTBehavior.generateBehavior(trailPoint, problemEncoder);
 
     // evaluate into goodness information
