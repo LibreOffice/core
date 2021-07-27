@@ -72,6 +72,7 @@
 #include <o3tl/enumrange.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/UnitConversion.hxx>
+#include <svx/ColorSets.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -83,6 +84,7 @@ struct SdrModelImpl
     SfxUndoManager* mpUndoManager;
     SdrUndoFactory* mpUndoFactory;
     bool mbAnchoredTextOverflowLegacy; // tdf#99729 compatibility flag
+    std::unique_ptr<svx::Theme> mpTheme;
 
     SdrModelImpl()
         : mpUndoManager(nullptr)
@@ -1571,6 +1573,10 @@ void SdrModel::SetStarDrawPreviewMode(bool bPreview)
     }
 }
 
+void SdrModel::SetTheme(std::unique_ptr<svx::Theme> pTheme) { mpImpl->mpTheme = std::move(pTheme); }
+
+svx::Theme* SdrModel::GetTheme() { return mpImpl->mpTheme.get(); }
+
 uno::Reference< uno::XInterface > const & SdrModel::getUnoModel()
 {
     if( !mxUnoModel.is() )
@@ -1873,6 +1879,11 @@ void SdrModel::dumpAsXml(xmlTextWriterPtr pWriter) const
     {
         if (const SdrPage* pPage = GetPage(i))
             pPage->dumpAsXml(pWriter);
+    }
+
+    if (mpImpl->mpTheme)
+    {
+        mpImpl->mpTheme->dumpAsXml(pWriter);
     }
 
     (void)xmlTextWriterEndElement(pWriter);
