@@ -28,7 +28,7 @@ struct Mapping;
 typedef std::vector<std::unique_ptr<Mapping> > MappingArray;
 
 
-#define COLUMN_COUNT                31
+#define COLUMN_COUNT                32
 #define IDENTIFIER_POS              0
 #define AUTHORITYTYPE_POS           1
 #define AUTHOR_POS                  2
@@ -60,6 +60,7 @@ typedef std::vector<std::unique_ptr<Mapping> > MappingArray;
 #define CUSTOM3_POS                 28
 #define CUSTOM4_POS                 29
 #define CUSTOM5_POS                 30
+#define LOCAL_URL_POS               31
 
 struct StringPair
 {
