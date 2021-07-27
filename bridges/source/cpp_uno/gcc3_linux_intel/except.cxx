@@ -23,12 +23,12 @@
 
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <osl/mutex.hxx>
 #include <sal/log.hxx>
 
 #include <com/sun/star/uno/genfunc.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <typelib/typedescription.hxx>
-#include <mutex>
 #include <unordered_map>
 #include "share.hxx"
 
@@ -86,7 +86,7 @@ class RTTI
 {
     typedef std::unordered_map< OUString, type_info * > t_rtti_map;
 
-    std::mutex m_mutex;
+    Mutex m_mutex;
     t_rtti_map m_rttis;
     t_rtti_map m_generatedRttis;
 
@@ -122,7 +122,7 @@ type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr )
 
     OUString const & unoName = OUString::unacquired(&pTypeDescr->aBase.pTypeName);
 
-    std::lock_guard guard( m_mutex );
+    MutexGuard guard( m_mutex );
     t_rtti_map::const_iterator iRttiFind( m_rttis.find( unoName ) );
     if (iRttiFind == m_rttis.end())
     {
