@@ -34,12 +34,9 @@ namespace basegfx
             {
                 fLen = sqrt(fLen);
 
-                if(!::basegfx::fTools::equalZero(fLen))
-                {
-                    mfX /= fLen;
-                    mfY /= fLen;
-                    mfZ /= fLen;
-                }
+                mfX /= fLen;
+                mfY /= fLen;
+                mfZ /= fLen;
             }
         }
 
