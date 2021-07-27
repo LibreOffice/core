@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "12cacf5d_e535816c",
+        "filename": "vcl/source/filter/svm/SvmWriter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1003158
+      },
+      "writtenOn": "2021-07-27T07:44:18Z",
+      "side": 1,
+      "message": "This prevents test failure and will be removed once all the handlers are added",
+      "revId": "7d6e716c65c1c06f20514f7a530e1c69f738a874",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
