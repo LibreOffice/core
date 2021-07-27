@@ -21,7 +21,6 @@
 
 #include <cassert>
 #include <memory>
-#include <mutex>
 #include <typeinfo>
 #include <unordered_map>
 #include <utility>
@@ -76,7 +75,7 @@ class RTTI
 {
     typedef std::unordered_map< OUString, std::type_info * > t_rtti_map;
 
-    std::mutex m_mutex;
+    osl::Mutex m_mutex;
     t_rtti_map m_rttis;
     std::vector<OString> m_rttiNames;
     std::unordered_map<OUString, std::unique_ptr<Generated>> m_generatedRttis;
@@ -90,9 +89,6 @@ public:
     ~RTTI();
 
     std::type_info * getRTTI(typelib_TypeDescription const &);
-
-private:
-    std::type_info * getRTTI_NoLock(typelib_TypeDescription const &);
 };
 
 RTTI::RTTI()
@@ -111,14 +107,9 @@ RTTI::~RTTI()
 
 std::type_info * RTTI::getRTTI(typelib_TypeDescription const & pTypeDescr)
 {
-    std::lock_guard guard( m_mutex );
-    return getRTTI_NoLock(pTypeDescr);
-}
-
-std::type_info * RTTI::getRTTI_NoLock(typelib_TypeDescription const & pTypeDescr)
-{
     OUString const & unoName = OUString::unacquired(&pTypeDescr.pTypeName);
 
+    osl::MutexGuard guard( m_mutex );
     t_rtti_map::const_iterator iFind( m_rttis.find( unoName ) );
     if (iFind != m_rttis.end())
         return iFind->second;
@@ -181,7 +172,7 @@ std::type_info * RTTI::getRTTI_NoLock(typelib_TypeDescription const & pTypeDescr
             if (ctd.pBaseTypeDescription)
             {
                 // ensure availability of base
-                std::type_info * base_rtti = getRTTI_NoLock(
+                std::type_info * base_rtti = getRTTI(
                     ctd.pBaseTypeDescription->aBase);
                 m_rttiNames.emplace_back(OString(rttiName));
                 std::unique_ptr<std::type_info> info(
@@ -207,7 +198,7 @@ std::type_info * RTTI::getRTTI_NoLock(typelib_TypeDescription const & pTypeDescr
                         pTypeDescr);
             std::vector<std::type_info *> bases;
             for (sal_Int32 i = 0; i != itd.nBaseTypes; ++i) {
-                bases.push_back(getRTTI_NoLock(itd.ppBaseTypes[i]->aBase));
+                bases.push_back(getRTTI(itd.ppBaseTypes[i]->aBase));
             }
             switch (itd.nBaseTypes) {
             case 0:
