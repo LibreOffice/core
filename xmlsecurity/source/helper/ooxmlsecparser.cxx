@@ -332,8 +332,8 @@ class OOXMLSecParser::DsDigestValueContext
         OUString & m_rValue;
 
     public:
-        DsDigestValueContext(OOXMLSecParser & rParser,
-                std::optional<SvXMLNamespaceMap> pOldNamespaceMap,
+        DsDigestValueContext(OOXMLSecParser& rParser,
+                std::optional<SvXMLNamespaceMap>&& pOldNamespaceMap,
                 OUString & rValue)
             : OOXMLSecParser::Context(rParser, std::move(pOldNamespaceMap))
             , m_rValue(rValue)
