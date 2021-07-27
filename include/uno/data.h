@@ -42,7 +42,7 @@ struct _uno_Mapping;
     @return interface pointer
 */
 typedef void * (SAL_CALL * uno_QueryInterfaceFunc)(
-    void * pInterface, struct _typelib_TypeDescriptionReference * pType );
+    void * pInterface, struct _typelib_TypeDescriptionReference * pTypedemanded );
 /** Generic function pointer declaration to acquire an interface.
 
     @param pInterface interface to be acquired
