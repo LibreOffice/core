@@ -454,6 +454,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/filter/jpeg/JpegWriter \
     vcl/source/filter/jpeg/JpegTransform \
     vcl/source/filter/svm/SvmReader \
+    vcl/source/filter/svm/SvmWriter \
     vcl/source/filter/wmf/emfwr \
     vcl/source/filter/wmf/wmf \
     vcl/source/filter/wmf/wmfexternal \
