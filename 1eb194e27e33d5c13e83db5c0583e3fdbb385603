@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1eab061c_827dd625",
+        "filename": "vcl/backendtest/outputdevice/polyline.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-07-27T12:47:44Z",
+      "side": 1,
+      "message": "Would probably be better to setup the points without using \"diamond\" as the base... just set the coordinates manually.",
+      "range": {
+        "startLine": 157,
+        "startChar": 4,
+        "endLine": 206,
+        "endChar": 44
+      },
+      "revId": "1eb194e27e33d5c13e83db5c0583e3fdbb385603",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aa9ab4dc_322fd078",
+        "filename": "vcl/backendtest/outputdevice/polyline.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-07-27T12:47:44Z",
+      "side": 1,
+      "message": "Isn\u0027t this just code duplication?",
+      "range": {
+        "startLine": 232,
+        "startChar": 2,
+        "endLine": 281,
+        "endChar": 44
+      },
+      "revId": "1eb194e27e33d5c13e83db5c0583e3fdbb385603",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
