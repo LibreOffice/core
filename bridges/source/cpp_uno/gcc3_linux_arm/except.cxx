@@ -23,13 +23,13 @@
 #include <cxxabi.h>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <osl/mutex.hxx>
 #include <sal/log.hxx>
 
 #include <com/sun/star/uno/genfunc.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <typelib/typedescription.hxx>
 #include <uno/any2.h>
-#include <mutex>
 #include <unordered_map>
 #include "share.hxx"
 
@@ -90,7 +90,7 @@ namespace {
     {
         typedef std::unordered_map< OUString, type_info * > t_rtti_map;
 
-        std::mutex m_mutex;
+        Mutex m_mutex;
         t_rtti_map m_rttis;
         t_rtti_map m_generatedRttis;
 
@@ -127,7 +127,7 @@ namespace {
 
         OUString const & unoName = *reinterpret_cast<OUString const *>(&pTypeDescr->aBase.pTypeName);
 
-        std::lock_guard guard( m_mutex );
+        MutexGuard guard( m_mutex );
         t_rtti_map::const_iterator iFind( m_rttis.find( unoName ) );
         if (iFind == m_rttis.end())
         {
