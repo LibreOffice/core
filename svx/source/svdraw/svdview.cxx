@@ -501,6 +501,13 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
                 }
             }
         }
+        if (eHit==SdrHitKind::UnmarkedObject && !pHitObj->getHyperlink().isEmpty())
+        {
+            static SvxURLField aSvxURLField;
+            aSvxURLField.SetURL(pHitObj->getHyperlink());
+            rVEvt.mpURLField = &aSvxURLField;
+            eHit = SdrHitKind::UrlField;
+        }
     }
 
     if (bHitPassDirect &&
