@@ -23,6 +23,9 @@
 #endif
 #include <windows.h>
 #endif
+#if defined(_WIN32) && defined(_DEBUG)
+#include "dbghelp.h"
+#endif
 
 #ifdef UNX
 #include <sys/time.h>
@@ -378,109 +381,232 @@ void reportResourceUsage([[maybe_unused]] const OUString& /*rPath*/)
 
 }
 
-SAL_IMPLEMENT_MAIN()
+static bool main2()
 {
     bool ok = false;
     OUString path;
-    try
-    {
+
 #ifdef _WIN32
-        //Disable Dr-Watson in order to crash simply without popup dialogs under
-        //windows
-        DWORD dwMode = SetErrorMode(SEM_NOGPFAULTERRORBOX);
-        SetErrorMode(SEM_NOGPFAULTERRORBOX|dwMode);
+    //Disable Dr-Watson in order to crash simply without popup dialogs under
+    //windows
+    DWORD dwMode = SetErrorMode(SEM_NOGPFAULTERRORBOX);
+    SetErrorMode(SEM_NOGPFAULTERRORBOX|dwMode);
 #ifdef _DEBUG // These functions are present only in the debugging runtime
-        _CrtSetReportMode(_CRT_WARN, _CRTDBG_MODE_DEBUG|_CRTDBG_MODE_FILE);
-        _CrtSetReportFile(_CRT_WARN, _CRTDBG_FILE_STDERR);
-        _CrtSetReportMode(_CRT_ERROR, _CRTDBG_MODE_DEBUG|_CRTDBG_MODE_FILE);
-        _CrtSetReportFile(_CRT_ERROR, _CRTDBG_FILE_STDERR);
-        _CrtSetReportMode(_CRT_ASSERT, _CRTDBG_MODE_DEBUG|_CRTDBG_MODE_FILE);
-        _CrtSetReportFile(_CRT_ASSERT, _CRTDBG_FILE_STDERR);
+    _CrtSetReportMode(_CRT_WARN, _CRTDBG_MODE_DEBUG|_CRTDBG_MODE_FILE);
+    _CrtSetReportFile(_CRT_WARN, _CRTDBG_FILE_STDERR);
+    _CrtSetReportMode(_CRT_ERROR, _CRTDBG_MODE_DEBUG|_CRTDBG_MODE_FILE);
+    _CrtSetReportFile(_CRT_ERROR, _CRTDBG_FILE_STDERR);
+    _CrtSetReportMode(_CRT_ASSERT, _CRTDBG_MODE_DEBUG|_CRTDBG_MODE_FILE);
+    _CrtSetReportFile(_CRT_ASSERT, _CRTDBG_FILE_STDERR);
 #endif
 #endif
 
-        std::vector<CppUnit::Protector *> protectors;
-        CppUnit::TestResult result;
-        std::string args;
-        std::string testlib;
-        sal_uInt32 index = 0;
-        while (index < osl_getCommandArgCount())
+    std::vector<CppUnit::Protector *> protectors;
+    CppUnit::TestResult result;
+    std::string args;
+    std::string testlib;
+    sal_uInt32 index = 0;
+    while (index < osl_getCommandArgCount())
+    {
+        OUString arg = getArgument(index);
+        if (arg.startsWith("-env:CPPUNITTESTTARGET=", &path))
         {
-            OUString arg = getArgument(index);
-            if (arg.startsWith("-env:CPPUNITTESTTARGET=", &path))
+            ++index;
+            continue;
+        }
+        if (arg.startsWith("-env:"))
+        {
+            ++index;
+            continue; // ignore it here - will be read later
+        }
+        if ( arg != "--protector" )
+        {
+            if (testlib.empty())
             {
-                ++index;
-                continue;
+                testlib = OUStringToOString(arg, osl_getThreadTextEncoding()).getStr();
+                args += testlib;
             }
-            if (arg.startsWith("-env:"))
-            {
-                ++index;
-                continue; // ignore it here - will be read later
-            }
-            if ( arg != "--protector" )
-            {
-                if (testlib.empty())
-                {
-                    testlib = OUStringToOString(arg, osl_getThreadTextEncoding()).getStr();
-                    args += testlib;
-                }
-                else
-                {
-                    args += ' ';
-                    args += OUStringToOString(arg, osl_getThreadTextEncoding()).getStr();
-                }
-                ++index;
-                continue;
-            }
-            if (osl_getCommandArgCount() - index < 3) {
-                usageFailure();
-            }
-            OUString lib(getArgument(index + 1));
-            OUString sym(getArgument(index + 2));
-#ifndef DISABLE_DYNLOADING
-            osl::Module mod(lib, SAL_LOADMODULE_GLOBAL);
-            oslGenericFunction fn = mod.getFunctionSymbol(sym);
-            mod.release();
-#else
-            oslGenericFunction fn = 0;
-            if (sym == "unoexceptionprotector")
-                fn = (oslGenericFunction) unoexceptionprotector;
-            else if (sym == "unobootstrapprotector")
-                fn = (oslGenericFunction) unobootstrapprotector;
-            else if (sym == "vclbootstrapprotector")
-                fn = (oslGenericFunction) vclbootstrapprotector;
             else
             {
-                std::cerr
-                    << "Only unoexceptionprotector or unobootstrapprotector protectors allowed"
-                    << std::endl;
-                std::exit(EXIT_FAILURE);
+                args += ' ';
+                args += OUStringToOString(arg, osl_getThreadTextEncoding()).getStr();
             }
-#endif
-            CppUnit::Protector *protector = fn == nullptr
-                ? nullptr
-                : (*reinterpret_cast< cppunittester::ProtectorFactory * >(fn))();
-            if (protector == nullptr) {
-                std::cerr
-                    << "Failure instantiating protector \"" << convertLazy(lib)
-                    << "\", \"" << convertLazy(sym) << '"' << std::endl;
-                std::exit(EXIT_FAILURE);
-            }
-            protectors.push_back(protector);
-            index+=3;
+            ++index;
+            continue;
         }
+        if (osl_getCommandArgCount() - index < 3) {
+            usageFailure();
+        }
+        OUString lib(getArgument(index + 1));
+        OUString sym(getArgument(index + 2));
+#ifndef DISABLE_DYNLOADING
+        osl::Module mod(lib, SAL_LOADMODULE_GLOBAL);
+        oslGenericFunction fn = mod.getFunctionSymbol(sym);
+        mod.release();
+#else
+        oslGenericFunction fn = 0;
+        if (sym == "unoexceptionprotector")
+            fn = (oslGenericFunction) unoexceptionprotector;
+        else if (sym == "unobootstrapprotector")
+            fn = (oslGenericFunction) unobootstrapprotector;
+        else if (sym == "vclbootstrapprotector")
+            fn = (oslGenericFunction) vclbootstrapprotector;
+        else
+        {
+            std::cerr
+                << "Only unoexceptionprotector or unobootstrapprotector protectors allowed"
+                << std::endl;
+            std::exit(EXIT_FAILURE);
+        }
+#endif
+        CppUnit::Protector *protector = fn == nullptr
+            ? nullptr
+            : (*reinterpret_cast< cppunittester::ProtectorFactory * >(fn))();
+        if (protector == nullptr) {
+            std::cerr
+                << "Failure instantiating protector \"" << convertLazy(lib)
+                << "\", \"" << convertLazy(sym) << '"' << std::endl;
+            std::exit(EXIT_FAILURE);
+        }
+        protectors.push_back(protector);
+        index+=3;
+    }
 
-        ProtectedFixtureFunctor tests(testlib, args, protectors, result);
-        ok = tests.run();
+    ProtectedFixtureFunctor tests(testlib, args, protectors, result);
+    ok = tests.run();
+
+    reportResourceUsage(path);
+
+    return ok;
+}
+
+#if defined(_WIN32) && defined(_DEBUG)
+
+//Prints stack trace based on exception context record
+void printStack( CONTEXT* ctx )
+{
+    constexpr int MaxNameLen = 256;
+    BOOL    result;
+    HANDLE  process;
+    HANDLE  thread;
+    HMODULE hModule;
+    STACKFRAME64        stack;
+    ULONG               frame;
+    DWORD64             displacement;
+    DWORD disp;
+    char buffer[sizeof(SYMBOL_INFO) + MAX_SYM_NAME * sizeof(TCHAR)];
+    char module[MaxNameLen];
+    PSYMBOL_INFO pSymbol = (PSYMBOL_INFO)buffer;
+
+    memset( &stack, 0, sizeof( STACKFRAME64 ) );
+
+    process                = GetCurrentProcess();
+    thread                 = GetCurrentThread();
+    displacement           = 0;
+#if !defined(_M_AMD64)
+    stack.AddrPC.Offset    = (*ctx).Eip;
+    stack.AddrPC.Mode      = AddrModeFlat;
+    stack.AddrStack.Offset = (*ctx).Esp;
+    stack.AddrStack.Mode   = AddrModeFlat;
+    stack.AddrFrame.Offset = (*ctx).Ebp;
+    stack.AddrFrame.Mode   = AddrModeFlat;
+#endif
+
+    SymInitialize( process, NULL, TRUE ); //load symbols
+
+    std::unique_ptr<IMAGEHLP_LINE64> line(new IMAGEHLP_LINE64);
+    line->SizeOfStruct = sizeof(IMAGEHLP_LINE64);
+
+    for( frame = 0; ; frame++ )
+    {
+        //get next call from stack
+        result = StackWalk64
+        (
+#if defined(_M_AMD64)
+            IMAGE_FILE_MACHINE_AMD64,
+#else
+            IMAGE_FILE_MACHINE_I386,
+#endif
+            process,
+            thread,
+            &stack,
+            ctx,
+            NULL,
+            SymFunctionTableAccess64,
+            SymGetModuleBase64,
+            NULL
+        );
+
+        if( !result )
+            break;
+
+        //get symbol name for address
+        pSymbol->SizeOfStruct = sizeof(SYMBOL_INFO);
+        pSymbol->MaxNameLen = MAX_SYM_NAME;
+        SymFromAddr(process, ( ULONG64 )stack.AddrPC.Offset, &displacement, pSymbol);
+
+        //try to get line
+        if (SymGetLineFromAddr64(process, stack.AddrPC.Offset, &disp, line.get()))
+        {
+            printf("\tat %s in %s: line: %lu: address: 0x%0X\n", pSymbol->Name, line->FileName, line->LineNumber, pSymbol->Address);
+        }
+        else
+        {
+            //failed to get line
+            printf("\tat %s, address 0x%0X.\n", pSymbol->Name, pSymbol->Address);
+            hModule = NULL;
+            lstrcpyA(module,"");
+            GetModuleHandleEx(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS | GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
+                (LPCTSTR)(stack.AddrPC.Offset), &hModule);
+
+            //at least print module name
+            if(hModule != NULL)GetModuleFileNameA(hModule,module,MaxNameLen);
+
+            printf ("in %s\n",module);
+        }
+    }
+}
+
+// The exception filter function:
+LONG WINAPI ExpFilter(EXCEPTION_POINTERS* ex)
+{
+    // we only want this active on the Jenkins tinderboxen
+    printf("*** Exception 0x%x occured ***\n\n",ex->ExceptionRecord->ExceptionCode);
+    printStack(ex->ContextRecord);
+    return EXCEPTION_EXECUTE_HANDLER;
+}
+
+SAL_IMPLEMENT_MAIN()
+{
+    bool ok = false;
+    // This magic kind of Windows-specific exception handling has to be in it's own function
+    // because it cannot be in a function that has objects with destructors.
+    __try
+    {
+        ok = main2();
+    }
+    __except (ExpFilter(GetExceptionInformation()))
+    {
+    }
+    return ok ? EXIT_SUCCESS : EXIT_FAILURE;
+}
+
+#else
+
+SAL_IMPLEMENT_MAIN()
+{
+    bool ok = false;
+    try
+    {
+        ok = main2();
     }
     catch (const std::exception& e)
     {
         SAL_WARN("vcl.app", "Fatal exception: " << e.what());
     }
-
-    reportResourceUsage(path);
-
     return ok ? EXIT_SUCCESS : EXIT_FAILURE;
 }
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

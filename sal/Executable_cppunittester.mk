@@ -28,6 +28,12 @@ $(eval $(call gb_Executable_add_exception_objects,cppunittester,\
 	sal/cppunittester/cppunittester \
 ))
 
+ifneq ($(strip $(debug)$(DEBUG)),)
+$(eval $(call gb_Executable_use_system_win32_libs,cppunittester,\
+	dbghelp \
+))
+endif
+
 ifeq ($(COM),MSC)
 
 $(eval $(call gb_Executable_add_ldflags,cppunittester,\
