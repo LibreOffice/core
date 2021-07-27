@@ -44,7 +44,9 @@
 #include <rtl/string.hxx>
 #include <rtl/textcvt.h>
 #include <rtl/ustring.hxx>
+#include <sal/backtrace.hxx>
 #include <sal/main.h>
+#include <osl/signal.h>
 
 #include <cppunit/CompilerOutputter.h>
 #include <cppunit/Exception.h>
@@ -378,6 +380,23 @@ void reportResourceUsage([[maybe_unused]] const OUString& /*rPath*/)
 
 }
 
+#ifdef _WIN32
+/** When running Windows unit tests on jenkins, we have no good way of getting
+  * information when a test crashes. The linux builds use gdb to do that, but
+  * we don't have a good command-line tool for that. So try to catch the access
+  * violation signal and dump a stack trace.
+  */
+oslSignalAction CppunitTesterSignalHandler(SAL_UNUSED_PARAMETER void* /*pData*/, oslSignalInfo* pInfo)
+{
+    if( pInfo->Signal == osl_Signal_AccessViolation )
+    {
+        auto xTrace = sal::backtrace_get(50);
+        std::wcout << sal::backtrace_to_string(xTrace.get()).getStr() << std::endl;
+    }
+    return osl_Signal_ActCallNextHdl;
+}
+#endif
+
 SAL_IMPLEMENT_MAIN()
 {
     bool ok = false;
@@ -397,6 +416,9 @@ SAL_IMPLEMENT_MAIN()
         _CrtSetReportMode(_CRT_ASSERT, _CRTDBG_MODE_DEBUG|_CRTDBG_MODE_FILE);
         _CrtSetReportFile(_CRT_ASSERT, _CRTDBG_FILE_STDERR);
 #endif
+        // we only want this active on the Jenkins tinderboxen
+        if (getenv("GERRIT_CHANGE_ID"))
+            osl_addSignalHandler(CppunitTesterSignalHandler, nullptr);
 #endif
 
         std::vector<CppUnit::Protector *> protectors;
