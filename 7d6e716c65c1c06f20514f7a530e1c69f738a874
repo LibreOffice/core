@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "3061096b_80b561d6",
+        "filename": "vcl/source/filter/svm/SvmWriter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-07-27T08:39:10Z",
+      "side": 1,
+      "message": "is this still needed?",
+      "revId": "7d6e716c65c1c06f20514f7a530e1c69f738a874",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "12cacf5d_e535816c",
         "filename": "vcl/source/filter/svm/SvmWriter.cxx",
         "patchSetId": 1
@@ -13,6 +30,24 @@
       "writtenOn": "2021-07-27T07:44:18Z",
       "side": 1,
       "message": "This prevents test failure and will be removed once all the handlers are added",
+      "revId": "7d6e716c65c1c06f20514f7a530e1c69f738a874",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4ed1af70_3bf2dbe8",
+        "filename": "vcl/source/filter/svm/SvmWriter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-07-27T08:39:10Z",
+      "side": 1,
+      "message": "You can write something like that in a comment in the code...",
+      "parentUuid": "12cacf5d_e535816c",
       "revId": "7d6e716c65c1c06f20514f7a530e1c69f738a874",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
