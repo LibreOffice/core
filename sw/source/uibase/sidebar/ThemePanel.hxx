@@ -13,7 +13,7 @@
 #include <sfx2/sidebar/PanelLayout.hxx>
 #include <sfx2/sidebar/ControllerItem.hxx>
 #include <svtools/valueset.hxx>
-#include <svx/ColorSets.hxx>
+#include <sfx2/ColorSets.hxx>
 
 namespace sw::sidebar {
 
@@ -40,7 +40,7 @@ private:
     std::unique_ptr<weld::CustomWeld> mxValueSetColorsWin;
     std::unique_ptr<weld::Button> mxApplyButton;
 
-    svx::ColorSets maColorSets;
+    std::shared_ptr<ColorSets> maColorSets;
 
     DECL_LINK(ClickHdl, weld::Button&, void);
     DECL_LINK(DoubleClickHdl, weld::TreeView&, bool);

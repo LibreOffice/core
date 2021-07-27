@@ -19,20 +19,64 @@
 #ifndef INCLUDED_EDITENG_COLRITEM_HXX
 #define INCLUDED_EDITENG_COLRITEM_HXX
 
+#include <sfx2/objsh.hxx>
+#include <sfx2/ColorSets.hxx>
 #include <svl/poolitem.hxx>
 #include <tools/color.hxx>
 #include <editeng/editengdllapi.h>
 
+#include <sal/log.hxx>
+
 #define VERSION_USEAUTOCOLOR    1
+
+/** ThemeColorData holds theme color related
+    data of a color item eg. SvxColorItem
+*/
+struct ThemeColorData
+{
+    ThemeColorData();
+
+    /** Calculates and returns the theme color from current ThemeColorData
+
+        @returns std::nullopt if color item that owns the ThemeColorData
+                 doesn't need a color update, returns calculated color otherwise.
+
+    */
+    std::optional<Color> getThemeColorIfNeedsUpdate();
+
+    /** Specifies which color of the current theme color set
+        is the base color for this item.
+
+        If it is -1, this item isn't a theme color.
+     */
+    sal_Int16 mnThemeIndex;
+    /** Tint or Shade value that will be applied on top
+        of to the base color
+    */
+    sal_Int16 mnTintShade;
+    /** Cached tint or shade value used to determine whether
+        a recalculation of theme color is required.
+    */
+    sal_Int16 mnCalculatedTintShade;
+    /** Cached base color value used to determine whether
+        a recalculation of theme color is required.
+    */
+    Color maCachedBaseColor;
+    /** Pointer to the ColorSets of the document.
+     */
+    const ColorSets* mpColorSets;
+};
 
 /** SvxColorItem item describes a color.
 */
 class EDITENG_DLLPUBLIC SvxColorItem final : public SfxPoolItem
 {
 private:
-    Color mColor;
-    sal_Int16 maThemeIndex;
-    sal_Int16 maTintShade;
+    mutable Color mColor;
+    /** ThemeColorData that is used to calculate and update mColor
+        if color item is a theme color.
+    */
+    mutable ThemeColorData maThemeColorData;
 
 public:
     static SfxPoolItem* CreateDefault();
@@ -53,31 +97,20 @@ public:
     virtual SvxColorItem* Clone(SfxItemPool* pPool = nullptr) const override;
     SvxColorItem(SvxColorItem const &) = default; // SfxPoolItem copy function dichotomy
 
-    const Color& GetValue() const
-    {
-        return mColor;
-    }
+    const Color& GetValue() const;
+
     void SetValue(const Color& rNewColor);
 
     sal_Int16 GetThemeIndex() const
     {
-        return maThemeIndex;
+        return maThemeColorData.mnThemeIndex;
     }
 
-    void SetThemeIndex(sal_Int16 nIndex)
-    {
-        maThemeIndex = nIndex;
-    }
+    void SetThemeIndex(sal_Int16 nIndex) { maThemeColorData.mnThemeIndex = nIndex; }
 
-    sal_Int16 GetTintOrShade() const
-    {
-        return maTintShade;
-    }
+    sal_Int16 GetTintOrShade() const { return maThemeColorData.mnTintShade; }
 
-    void SetTintOrShade(sal_Int16 nTintOrShade)
-    {
-        maTintShade = nTintOrShade;
-    }
+    void SetTintOrShade(sal_Int16 nTintOrShade) { maThemeColorData.mnTintShade = nTintOrShade; }
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };

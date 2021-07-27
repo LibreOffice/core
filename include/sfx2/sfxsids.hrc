@@ -28,6 +28,7 @@ class SfxUInt16Item;
 class SvxHyperlinkItem;
 class SfxDocumentInfoItem;
 class SvxSearchItem;
+class SfxColorSetListItem;
 
 // Please be careful:
 // Changing just one part here doesn't add new
@@ -362,6 +363,7 @@ class SvxSearchItem;
 #define SID_STYLE_UPD_BY_EX_NAME            (SID_SFX_START + 1585)
 #define SID_STYLE_REFERENCE                 TypedWhichId<SfxStringItem>(SID_SFX_START + 1602)
 
+#define SID_COLOR_SETS                      TypedWhichId<SfxColorSetListItem>(SID_SFX_START + 1605)
 #define SID_TEMPLATE_NAME                   (SID_SFX_START + 660)
 #define SID_TEMPLATE_REGIONNAME             (SID_SFX_START + 662)
 #define SID_TEMPLATE_LOAD                   (SID_SFX_START + 663)

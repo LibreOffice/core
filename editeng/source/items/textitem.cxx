@@ -21,6 +21,7 @@
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/frame/status/FontHeight.hpp>
 #include <math.h>
+#include <optional>
 #include <sal/log.hxx>
 #include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
@@ -77,6 +78,9 @@
 #include <editeng/itemtype.hxx>
 #include <editeng/eerdll.hxx>
 #include <libxml/xmlwriter.h>
+
+#include <sfx2/sfxsids.hrc>
+#include <sfx2/objsh.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;
@@ -1303,20 +1307,62 @@ bool SvxContourItem::GetPresentation
     return true;
 }
 
+// struct ThemeColorData
+ThemeColorData::ThemeColorData() :
+        mnThemeIndex(-1),
+        mnTintShade(0),
+        maCachedBaseColor(),
+        mpColorSets(nullptr)
+{
+}
+
+std::optional<Color> ThemeColorData::getThemeColorIfNeedsUpdate()
+{
+    if (mnThemeIndex > -1)
+    {
+        // try to get the pointer for ColorSets if it's not there...
+        if (!mpColorSets)
+        {
+            if (SfxObjectShell* pObjShell = SfxObjectShell::Current())
+            {
+                if (const SfxColorSetListItem* pColorSetItem = pObjShell->GetItem(SID_COLOR_SETS))
+                {
+                    mpColorSets = &pColorSetItem->GetSfxColorSetList();
+                }
+            }
+        }
+
+        if (mpColorSets)
+        {
+            Color aColor = mpColorSets->getThemeColorSet().getColor(mnThemeIndex);
+
+            // only calculate tint or shade applied color when necessary
+            if(aColor != maCachedBaseColor || mnTintShade != mnCalculatedTintShade)
+            {
+                maCachedBaseColor = aColor;
+                aColor.ApplyTintOrShade(mnTintShade);
+                mnCalculatedTintShade = mnTintShade;
+                return aColor;
+            }
+        }
+    }
+
+    // if there's no update needed or the color isn't a theme color return nullopt
+    return std::nullopt;
+}
+
 // class SvxColorItem ----------------------------------------------------
 SvxColorItem::SvxColorItem( const sal_uInt16 nId ) :
     SfxPoolItem(nId),
     mColor( COL_BLACK ),
-    maThemeIndex(-1),
-    maTintShade(0)
+    maThemeColorData()
 {
 }
 
 SvxColorItem::SvxColorItem( const Color& rCol, const sal_uInt16 nId ) :
     SfxPoolItem( nId ),
     mColor( rCol ),
-    maThemeIndex(-1),
-    maTintShade(0)
+    maThemeColorData()
 {
 }
 
@@ -1329,9 +1375,9 @@ bool SvxColorItem::operator==( const SfxPoolItem& rAttr ) const
     assert(SfxPoolItem::operator==(rAttr));
     const SvxColorItem& rColorItem = static_cast<const SvxColorItem&>(rAttr);
 
-    return mColor == rColorItem.mColor &&
-           maThemeIndex == rColorItem.maThemeIndex &&
-           maTintShade == rColorItem.maTintShade;
+    return mColor == rColorItem.mColor
+           && maThemeColorData.mnThemeIndex == rColorItem.maThemeColorData.mnThemeIndex
+           && maThemeColorData.mnTintShade == rColorItem.maThemeColorData.mnTintShade;
 }
 
 bool SvxColorItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
@@ -1352,12 +1398,12 @@ bool SvxColorItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         }
         case MID_COLOR_THEME_INDEX:
         {
-            rVal <<= maThemeIndex;
+            rVal <<= maThemeColorData.mnThemeIndex;
             break;
         }
         case MID_COLOR_TINT_OR_SHADE:
         {
-            rVal <<= maTintShade;
+            rVal <<= maThemeColorData.mnTintShade;
             break;
         }
         default:
@@ -1395,7 +1441,7 @@ bool SvxColorItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             sal_Int16 nIndex = -1;
             if (!(rVal >>= nIndex))
                 return false;
-            maThemeIndex = nIndex;
+            maThemeColorData.mnThemeIndex = nIndex;
         }
         break;
         case MID_COLOR_TINT_OR_SHADE:
@@ -1403,7 +1449,7 @@ bool SvxColorItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             sal_Int16 nTintShade = -1;
             if (!(rVal >>= nTintShade))
                 return false;
-            maTintShade = nTintShade;
+            maThemeColorData.mnTintShade = nTintShade;
         }
         break;
         default:
@@ -1448,7 +1494,13 @@ void SvxColorItem::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterEndElement(pWriter);
 }
 
+const Color& SvxColorItem::GetValue() const
+{
+    if(auto aOptionalColor = maThemeColorData.getThemeColorIfNeedsUpdate())
+        mColor = aOptionalColor.value();
 
+    return mColor;
+}
 
 void SvxColorItem::SetValue( const Color& rNewCol )
 {
