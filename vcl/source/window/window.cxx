@@ -178,6 +178,7 @@ void Window::dispose()
 
     if( mpWindowImpl->mbFrame && mpWindowImpl->mpFrameData )
     {
+        mpWindowImpl.reset();
         try
         {
             // deregister drop target listener
