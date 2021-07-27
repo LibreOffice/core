@@ -25,6 +25,10 @@ SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL osl_acquireSemaphore(void *) {
     for (;;) { std::abort(); } // avoid "must return a value" warnings
 }
 
+SAL_DLLPUBLIC void SAL_CALL osl_addToSocketSet(void *, oslSocket) {
+    std::abort();
+}
+
 SAL_DLLPUBLIC_EXPORT int SAL_CALL osl_areCommandArgsSet() {
     for (;;) { std::abort(); } // avoid "must return a value" warnings
 }
@@ -39,7 +43,21 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL osl_breakDebug() {
     std::abort();
 }
 
+SAL_DLLPUBLIC void SAL_CALL osl_clearSocketSet(void *) {
+    std::abort();
+}
+
 SAL_DLLPUBLIC_EXPORT void * SAL_CALL osl_createSemaphore(sal_uInt32) {
+    for (;;) { std::abort(); } // avoid "must return a value" warnings
+}
+
+SAL_DLLPUBLIC void * SAL_CALL osl_createSocketSet() {
+    for (;;) { std::abort(); } // avoid "must return a value" warnings
+}
+
+SAL_DLLPUBLIC sal_Int32 SAL_CALL osl_demultiplexSocketEvents(
+    void *, void *, void *, TimeValue const *)
+{
     for (;;) { std::abort(); } // avoid "must return a value" warnings
 }
 
@@ -47,7 +65,15 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL osl_destroySemaphore(void *) {
     std::abort();
 }
 
+SAL_DLLPUBLIC void SAL_CALL osl_destroySocketSet(void *) {
+    std::abort();
+}
+
 SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL osl_getEthernetAddress(sal_uInt8 *) {
+    for (;;) { std::abort(); } // avoid "must return a value" warnings
+}
+
+SAL_DLLPUBLIC sal_Bool SAL_CALL osl_isInSocketSet(void *, oslSocket) {
     for (;;) { std::abort(); } // avoid "must return a value" warnings
 }
 
@@ -63,6 +89,10 @@ SAL_DLLPUBLIC_EXPORT sal_Int32 SAL_CALL osl_reportError(
     sal_uInt32, char const *)
 {
     for (;;) { std::abort(); } // avoid "must return a value" warnings
+}
+
+SAL_DLLPUBLIC void SAL_CALL osl_removeFromSocketSet(void *, oslSocket) {
+    std::abort();
 }
 
 SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL osl_sendResourcePipe(oslPipe, oslSocket)
