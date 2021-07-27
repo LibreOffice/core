@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e61e79fd_f4f761b8",
+        "filename": "toolkit/source/controls/dialogcontrol.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 515,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-27T05:44:30Z",
+      "side": 1,
+      "message": "Looks like we need a saturating_narrowing in \u003co3tl/safeint.hxx\u003e?",
+      "revId": "0ea2f9a1b33b446069935913c2b3c846d79b52de",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
