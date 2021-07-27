@@ -437,6 +437,14 @@
               <value>Custom5</value>
             </prop>
           </node>
+          <node oor:name="LocalURL" oor:op="replace">
+            <prop oor:name="ProgrammaticFieldName">
+              <value>LocalURL</value>
+            </prop>
+            <prop oor:name="AssignedFieldName">
+              <value>LocalURL</value>
+            </prop>
+          </node>
         </node>
       </node>
     </node>

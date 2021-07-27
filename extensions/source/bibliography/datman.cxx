@@ -219,6 +219,7 @@ class MappingDialog_Impl : public weld::GenericDialogController
     std::unique_ptr<weld::ComboBox> m_xCustom3LB;
     std::unique_ptr<weld::ComboBox> m_xCustom4LB;
     std::unique_ptr<weld::ComboBox> m_xCustom5LB;
+    std::unique_ptr<weld::ComboBox> m_xLocalURLLB;
     weld::ComboBox* aListBoxes[COLUMN_COUNT];
 
     DECL_LINK(OkHdl, weld::Button&, void);
@@ -278,6 +279,7 @@ MappingDialog_Impl::MappingDialog_Impl(weld::Window* pParent, BibDataManager* pM
     , m_xCustom3LB(m_xBuilder->weld_combo_box("custom3Combobox"))
     , m_xCustom4LB(m_xBuilder->weld_combo_box("custom4Combobox"))
     , m_xCustom5LB(m_xBuilder->weld_combo_box("custom5Combobox"))
+    , m_xLocalURLLB(m_xBuilder->weld_combo_box("LocalURLCombobox"))
 {
     m_xOKBT->connect_clicked(LINK(this, MappingDialog_Impl, OkHdl));
     OUString sTitle = m_xDialog->get_title();
@@ -315,6 +317,7 @@ MappingDialog_Impl::MappingDialog_Impl(weld::Window* pParent, BibDataManager* pM
     aListBoxes[28] = m_xCustom3LB.get();
     aListBoxes[29] = m_xCustom4LB.get();
     aListBoxes[30] = m_xCustom5LB.get();
+    aListBoxes[31] = m_xLocalURLLB.get();
 
     aListBoxes[0]->append_text(sNone);
     Reference< XNameAccess >  xFields = getColumns( pDatMan->getForm() );

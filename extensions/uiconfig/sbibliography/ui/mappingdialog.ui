@@ -948,10 +948,30 @@
                   </packing>
                 </child>
                 <child>
-                  <placeholder/>
+                  <object class="GtkLabel" id="label33">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">end</property>
+                    <property name="label" translatable="yes" context="mappingdialog|label33">Local copy</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">LocalURLCombobox</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">4</property>
+                    <property name="top_attach">14</property>
+                  </packing>
                 </child>
                 <child>
-                  <placeholder/>
+                  <object class="GtkComboBoxText" id="LocalURLCombobox">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="valign">center</property>
+                    <property name="hexpand">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">5</property>
+                    <property name="top_attach">14</property>
+                  </packing>
                 </child>
                 <child>
                   <placeholder/>
