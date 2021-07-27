@@ -23,7 +23,7 @@
 
 #include <sal/types.h>
 
-extern "C" typelib_TypeClass cpp_vtable_call(
+extern "C" int cpp_vtable_call(
     sal_Int32 nFunctionIndex, sal_Int32 nVtableOffset,
     void ** gpreg, void ** fpreg, void ** ovrflw,
     sal_uInt64 * pRegisterReturn /* space for register return */ );

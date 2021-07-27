@@ -55,18 +55,17 @@ privateSnippetExecutor:
 	
 	call	cpp_vtable_call
 
-	cmp	$10, %rax					# typelib_TypeClass_FLOAT
-	je	.Lfloat
-	cmp	$11, %rax					# typelib_TypeClass_DOUBLE
-	je	.Lfloat
+	cmp	$1, %rax
+	je	.Lspecial
 
-	movq	-144(%rbp), %rax		# Return value (int case)
-	movq	-136(%rbp), %rdx		# Return value (int case)
-	movq	-144(%rbp), %xmm0		# Return value (int case)
-	movq	-136(%rbp), %xmm1		# Return value (int case)
+	movq	-144(%rbp), %rax		# Potential return value (general case)
+	movq	-136(%rbp), %rdx		# Potential return value (general case)
+	movq	-144(%rbp), %xmm0		# Potential return value (general case)
+	movq	-136(%rbp), %xmm1		# Potential return value (general case)
 	jmp	.Lfinish
-.Lfloat:
-	movlpd	-144(%rbp), %xmm0		# Return value (float/double case)
+.Lspecial:
+	movq	-144(%rbp), %xmm0		# Return value (special fp and integer case)
+	movq	-136(%rbp), %rax		# Return value (special fp and integer case)
 
 .Lfinish:
 	leave
