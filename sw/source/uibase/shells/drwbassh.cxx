@@ -611,6 +611,15 @@ void SwDrawBaseShell::Execute(SfxRequest const &rReq)
             break;
         }
 
+        case SID_OPEN_HYPERLINK:
+        {
+            const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
+            SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
+            LoadURL(GetShell(), pObj->getHyperlink(), LoadUrlFlags::NewView,
+                    /*rTargetFrameName=*/OUString());
+            break;
+        }
+
         case SID_EDIT_HYPERLINK:
         case SID_HYPERLINK_DIALOG:
         {
@@ -782,6 +791,7 @@ void SwDrawBaseShell::GetState(SfxItemSet& rSet)
                 }
                 break;
 
+            case SID_OPEN_HYPERLINK:
             case SID_EDIT_HYPERLINK:
             case SID_HYPERLINK_DIALOG:
             case SID_REMOVE_HYPERLINK:
@@ -789,8 +799,8 @@ void SwDrawBaseShell::GetState(SfxItemSet& rSet)
             {
                 if (pSdrView->GetMarkedObjectCount() != 1)
                     rSet.DisableItem(nWhich);
-                else if (nWhich == SID_REMOVE_HYPERLINK || nWhich == SID_EDIT_HYPERLINK
-                         || nWhich == SID_COPY_HYPERLINK_LOCATION)
+                else if (nWhich == SID_OPEN_HYPERLINK || nWhich == SID_REMOVE_HYPERLINK
+                         || nWhich == SID_EDIT_HYPERLINK || nWhich == SID_COPY_HYPERLINK_LOCATION)
                 {
                     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
                     SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();

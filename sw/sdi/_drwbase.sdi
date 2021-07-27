@@ -117,6 +117,12 @@ interface BaseTextDrawBase
         StateMethod = GetState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
+    SID_OPEN_HYPERLINK
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
     SID_EDIT_HYPERLINK
     [
         ExecMethod = Execute ;
