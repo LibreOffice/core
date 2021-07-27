@@ -485,6 +485,20 @@ static bool performTest(
             bRet = check( memcmp(&aIn, &aOut, sizeof(MixedFloatAndInteger)) == 0, "mixed float and integer struct test" ) && bRet;
         }
         {
+            DoubleHyper in(10.0, 11);
+            DoubleHyper out = xLBT->echoDoubleHyper(in);
+            bRet &= check(out.a == in.a, "double and hyper struct test: double")
+                && check(out.b == in.b, "double and hyper struct test: hyper");
+        }
+        {
+            FloatFloatLongByte in(20.0f, 21.0f, 22, '3');
+            FloatFloatLongByte out = xLBT->echoFloatFloatLongByte(in);
+            bRet &= check(out.a == in.a, "double and hyper struct test: first float")
+                && check(out.b == in.b, "double and hyper struct test: second float")
+                && check(out.c == in.c, "double and hyper struct test: long")
+                && check(out.d == in.d, "double and hyper struct test: byte");
+        }
+        {
             ThreeByteStruct aIn(9, 10, 11);
             ThreeByteStruct aOut = xLBT->echoThreeByteStruct(aIn);
             bRet = check( memcmp(&aIn, &aOut, sizeof(ThreeByteStruct)) == 0, "three byte struct test" ) && bRet;

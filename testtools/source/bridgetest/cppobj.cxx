@@ -245,6 +245,10 @@ public:
         { return rStruct; }
     virtual MixedFloatAndInteger SAL_CALL echoMixedFloatAndInteger(const MixedFloatAndInteger& rStruct) override
         { return rStruct; }
+    virtual DoubleHyper SAL_CALL echoDoubleHyper(DoubleHyper const & s) override { return s; }
+    virtual FloatFloatLongByte SAL_CALL echoFloatFloatLongByte(FloatFloatLongByte const & s)
+        override
+    { return s; }
     virtual ThreeByteStruct SAL_CALL echoThreeByteStruct(const ThreeByteStruct& rStruct) override
         { return rStruct; }
     virtual sal_Int32 SAL_CALL testPPCAlignment( sal_Int64, sal_Int64, sal_Int32, sal_Int64, sal_Int32 i2 ) override

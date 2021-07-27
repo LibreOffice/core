@@ -51,6 +51,14 @@ bool examine_argument( typelib_TypeDescriptionReference *pTypeRef, int &nUsedGPR
 */
 bool return_in_hidden_param( typelib_TypeDescriptionReference *pTypeRef ) noexcept;
 
+enum class ReturnKind {
+    Memory,
+    RegistersGeneral,
+    RegistersSpecial
+};
+
+ReturnKind getReturnKind(typelib_TypeDescriptionReference * type) noexcept;
+
 void fill_struct( typelib_TypeDescriptionReference *pTypeRef, const sal_uInt64* pGPR, const double* pSSE, void *pStruct ) noexcept;
 
 } // namespace x86_64

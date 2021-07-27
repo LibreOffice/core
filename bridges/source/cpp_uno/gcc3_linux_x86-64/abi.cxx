@@ -259,6 +259,20 @@ bool x86_64::return_in_hidden_param( typelib_TypeDescriptionReference *pTypeRef 
     return classify_argument(pTypeRef, classes, 0) == 0;
 }
 
+x86_64::ReturnKind x86_64::getReturnKind(typelib_TypeDescriptionReference * type) noexcept {
+    x86_64_reg_class classes[MAX_CLASSES];
+    auto const n = classify_argument(type, classes, 0);
+    if (n == 0) {
+        return ReturnKind::Memory;
+    }
+    if (n == 2 && (classes[0] == X86_64_SSE_CLASS || classes[0] == X86_64_SSESF_CLASS)
+        && (classes[1] == X86_64_INTEGER_CLASS || classes[1] == X86_64_INTEGERSI_CLASS))
+    {
+        return ReturnKind::RegistersSpecial;
+    }
+    return ReturnKind::RegistersGeneral;
+}
+
 void x86_64::fill_struct( typelib_TypeDescriptionReference *pTypeRef, const sal_uInt64 *pGPR, const double *pSSE, void *pStruct ) noexcept
 {
     enum x86_64_reg_class classes[MAX_CLASSES];
@@ -267,8 +281,8 @@ void x86_64::fill_struct( typelib_TypeDescriptionReference *pTypeRef, const sal_
     n = classify_argument( pTypeRef, classes, 0 );
 
     sal_uInt64 *pStructAlign = static_cast<sal_uInt64 *>( pStruct );
-    for ( n--; n >= 0; n-- )
-        switch ( classes[n] )
+    for ( int i = 0; i != n; ++i )
+        switch ( classes[i] )
         {
             case X86_64_INTEGER_CLASS:
             case X86_64_INTEGERSI_CLASS:
