@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sfx2/ColorSets.hxx>
+
 #include <config_feature_desktop.h>
 #include <osl/file.hxx>
 #include <sfx2/docfilt.hxx>

@@ -13,6 +13,7 @@
 #include "ThemePanel.hxx"
 
 #include <sfx2/objsh.hxx>
+#include <sfx2/sfxsids.hrc>
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
@@ -75,7 +76,7 @@ public:
         maVariable = aVariable;
     }
 
-    Color getColor(svx::ColorSet const & rColorSet)
+    Color getColor(ColorSet const & rColorSet)
     {
         Color aColor;
         if (maVariable.mnIndex > -1)
@@ -229,7 +230,7 @@ void changeFont(SwFormat* pFormat, SwDocStyleSheet const * pStyle, FontSet const
     }
 }*/
 
-void changeColor(SwTextFormatColl* pCollection, svx::ColorSet const& rColorSet, StyleRedefinition* /*pRedefinition*/)
+void changeColor(SwTextFormatColl* pCollection, ColorSet const& rColorSet, StyleRedefinition* /*pRedefinition*/)
 {
     SvxColorItem aColorItem(pCollection->GetColor());
     sal_Int16 nIndex = aColorItem.GetThemeIndex();
@@ -331,16 +332,19 @@ FontSet getFontSet(std::u16string_view rFontVariant, std::vector<FontSet>& aFont
 }
 
 void applyTheme(SfxStyleSheetBasePool* pPool, std::u16string_view sFontSetName, std::u16string_view sColorSetName,
-                StyleSet& rStyleSet, svx::ColorSets& rColorSets)
+                StyleSet& rStyleSet, ColorSets& rColorSets)
 {
     SwDocStyleSheet* pStyle;
 
     std::vector<FontSet> aFontSets = initFontSets();
     FontSet aFontSet = getFontSet(sFontSetName, aFontSets);
 
-    svx::ColorSet aColorSet = rColorSets.getColorSet(sColorSetName);
+    ColorSet aColorSet = rColorSets.getColorSet(sColorSetName);
 
     pStyle = static_cast<SwDocStyleSheet*>(pPool->First(SfxStyleFamily::Para));
+
+    rColorSets.setThemeColorSet(sColorSetName);
+
     while (pStyle)
     {
         SwTextFormatColl* pCollection = pStyle->GetCollection();
@@ -368,7 +372,7 @@ void applyTheme(SfxStyleSheetBasePool* pPool, std::u16string_view sFontSetName, 
     }
 }
 
-BitmapEx GenerateColorPreview(const svx::ColorSet& rColorSet)
+BitmapEx GenerateColorPreview(const ColorSet& rColorSet)
 {
     ScopedVclPtrInstance<VirtualDevice> pVirtualDev(*Application::GetDefaultDevice());
     float fScaleFactor = pVirtualDev->GetDPIScaleFactor();
@@ -440,7 +444,7 @@ ThemePanel::ThemePanel(weld::Widget* pParent)
     , mxValueSetColors(new ValueSet(nullptr))
     , mxValueSetColorsWin(new weld::CustomWeld(*m_xBuilder, "valueset_colors", *mxValueSetColors))
     , mxApplyButton(m_xBuilder->weld_button("apply"))
-    , maColorSets()
+    , maColorSets(nullptr)
 {
     mxValueSetColors->SetColCount(2);
     mxValueSetColors->SetLineCount(3);
@@ -454,26 +458,32 @@ ThemePanel::ThemePanel(weld::Widget* pParent)
     for (const FontSet & rFontSet : aFontSets)
         mxListBoxFonts->append_text(rFontSet.maName);
     mxListBoxFonts->set_size_request(-1, mxListBoxFonts->get_height_rows(aFontSets.size()));
-
-    maColorSets.init();
-
-    const std::vector<svx::ColorSet>& aColorSets = maColorSets.getColorSets();
-    for (size_t i = 0; i < aColorSets.size(); ++i)
+    if (SfxObjectShell* pObjShell = SfxObjectShell::Current())
     {
-        const svx::ColorSet& rColorSet = aColorSets[i];
-
-        const OUString& aName = rColorSet.getName();
-        BitmapEx aPreview = GenerateColorPreview(rColorSet);
-
-        sal_uInt16 nId = i + 1;
-        mxValueSetColors->InsertItem(nId, Image(aPreview), aName);
+        if (const SfxColorSetListItem* pColorSetItem = pObjShell->GetItem(SID_COLOR_SETS))
+        {
+            maColorSets = pColorSetItem->GetSfxColorSetListPtr();
+        }
     }
 
-    mxValueSetColors->SetOptimalSize();
 
-    if (!aColorSets.empty())
-        mxValueSetColors->SelectItem(1); // ItemId 1, position 0
-}
+    const std::vector<ColorSet>& aColorSets = maColorSets->getColorSets();
+        for (size_t i = 0; i < aColorSets.size(); ++i)
+        {
+            const ColorSet& rColorSet = aColorSets[i];
+
+            const OUString& aName = rColorSet.getName();
+            BitmapEx aPreview = GenerateColorPreview(rColorSet);
+
+            sal_uInt16 nId = i + 1;
+            mxValueSetColors->InsertItem(nId, Image(aPreview), aName);
+        }
+
+        mxValueSetColors->SetOptimalSize();
+
+        if (!aColorSets.empty())
+            mxValueSetColors->SelectItem(1); // ItemId 1, position 0
+    }
 
 ThemePanel::~ThemePanel()
 {
@@ -510,11 +520,11 @@ void ThemePanel::DoubleClickHdl()
         return;
     OUString sEntryFonts = mxListBoxFonts->get_selected_text();
     sal_uInt32 nIndex = nItemId - 1;
-    OUString sEntryColors = maColorSets.getColorSet(nIndex).getName();
+    OUString sEntryColors = maColorSets->getColorSet(nIndex).getName();
 
     StyleSet aStyleSet = setupThemes();
 
-    applyTheme(pDocSh->GetStyleSheetPool(), sEntryFonts, sEntryColors, aStyleSet, maColorSets);
+    applyTheme(pDocSh->GetStyleSheetPool(), sEntryFonts, sEntryColors, aStyleSet, *maColorSets);
 }
 
 void ThemePanel::NotifyItemUpdate(const sal_uInt16 /*nSId*/,
