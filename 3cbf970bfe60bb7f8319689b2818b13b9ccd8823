@@ -16,6 +16,24 @@
       "revId": "3cbf970bfe60bb7f8319689b2818b13b9ccd8823",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "64dd1e8c_01a02d14",
+        "filename": "include/uno/data.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-07-27T19:50:00Z",
+      "side": 1,
+      "message": "Indeed! :-)",
+      "parentUuid": "4a93a733_983f3f81",
+      "revId": "3cbf970bfe60bb7f8319689b2818b13b9ccd8823",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
