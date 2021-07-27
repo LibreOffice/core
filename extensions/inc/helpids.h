@@ -58,6 +58,7 @@
 #define HID_BIB_CUSTOM3_POS                             "EXTENSIONS_HID_BIB_CUSTOM3_POS"
 #define HID_BIB_CUSTOM4_POS                             "EXTENSIONS_HID_BIB_CUSTOM4_POS"
 #define HID_BIB_CUSTOM5_POS                             "EXTENSIONS_HID_BIB_CUSTOM5_POS"
+#define HID_BIB_LOCAL_URL_POS                           "EXTENSIONS_HID_BIB_LOCAL_URL_POS"
 #define HID_BIB_DB_GRIDCTRL                             "EXTENSIONS_HID_BIB_DB_GRIDCTRL"
 
 #define HID_GROUPWIZARD_PREVIOUS                        "EXTENSIONS_HID_GROUPWIZARD_PREVIOUS"

@@ -197,6 +197,11 @@ BibGeneralPage::BibGeneralPage(vcl::Window* pParent, BibDataManager* pMan)
     , xCustom4ED(m_xBuilder->weld_entry("custom4control"))
     , xCustom5FT(m_xBuilder->weld_label("custom5"))
     , xCustom5ED(m_xBuilder->weld_entry("custom5control"))
+    , m_xLocalURLFT(m_xBuilder->weld_label("localurl"))
+    , m_xLocalURLED(m_xBuilder->weld_entry("localurlcontrol"))
+    , m_xLocalBrowseButton(m_xBuilder->weld_button("localbrowse"))
+    , m_xLocalPageCB(m_xBuilder->weld_check_button("localpagecb"))
+    , m_xLocalPageSB(m_xBuilder->weld_spin_button("localpagesb"))
     , pDatMan(pMan)
 {
     SetStyle(GetStyle() | WB_DIALOGCONTROL);
@@ -315,6 +320,7 @@ BibGeneralPage::BibGeneralPage(vcl::Window* pParent, BibDataManager* pMan)
         sTableErrorString, HID_BIB_URL_POS);
 
     m_xBrowseButton->connect_clicked(LINK(this, BibGeneralPage, BrowseHdl));
+    m_xPageCB->connect_toggled(LINK(this, BibGeneralPage, PageNumHdl));
 
     AddControlWithError(lcl_GetColumnName(pMapping, CUSTOM1_POS),
         xCustom1FT->get_label(), *xCustom1ED,
@@ -336,7 +342,14 @@ BibGeneralPage::BibGeneralPage(vcl::Window* pParent, BibDataManager* pMan)
         xCustom5FT->get_label(), *xCustom5ED,
         sTableErrorString, HID_BIB_CUSTOM5_POS);
 
-    xCustom5ED->connect_key_press(LINK(this, BibGeneralPage, LastElementKeyInputHdl));
+    AddControlWithError(lcl_GetColumnName(pMapping, LOCAL_URL_POS),
+        m_xLocalURLFT->get_label(), *m_xLocalURLED,
+        sTableErrorString, HID_BIB_LOCAL_URL_POS);
+
+    m_xLocalBrowseButton->connect_clicked(LINK(this, BibGeneralPage, BrowseHdl));
+    m_xLocalPageCB->connect_toggled(LINK(this, BibGeneralPage, PageNumHdl));
+
+    m_xLocalURLED->connect_key_press(LINK(this, BibGeneralPage, LastElementKeyInputHdl));
 
     if(!sTableErrorString.isEmpty())
         sTableErrorString = BibResId(ST_ERROR_PREFIX) + sTableErrorString;
@@ -347,11 +360,11 @@ BibGeneralPage::BibGeneralPage(vcl::Window* pParent, BibDataManager* pMan)
     set_height_request(aSize.Height());
 }
 
-IMPL_LINK_NOARG(BibGeneralPage, BrowseHdl, weld::Button&, void)
+IMPL_LINK(BibGeneralPage, BrowseHdl, weld::Button&, rButton, void)
 {
     sfx2::FileDialogHelper aFileDlg(ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
                                     FileDialogFlags::NONE, GetFrameWeld());
-    OUString aPath = xURLED->get_text();
+    OUString aPath = (&rButton == m_xBrowseButton.get()) ? xURLED->get_text() : m_xLocalURLED->get_text();
     if (!aPath.isEmpty())
     {
         aFileDlg.SetDisplayDirectory(aPath);
@@ -362,8 +375,23 @@ IMPL_LINK_NOARG(BibGeneralPage, BrowseHdl, weld::Button&, void)
         return;
     }
 
-    xURLED->set_text(aFileDlg.GetPath());
+    weld::Entry& rEntry = (&rButton == m_xBrowseButton.get()) ? *xURLED : *m_xLocalURLED;
+    rEntry.set_text(aFileDlg.GetPath());
 };
+
+IMPL_LINK(BibGeneralPage, PageNumHdl, weld::Toggleable&, rPageCB, void)
+{
+    weld::SpinButton& rPageSB = (&rPageCB == m_xPageCB.get()) ? *m_xPageSB : *m_xLocalPageSB;
+    if (rPageCB.get_active())
+    {
+        rPageSB.set_sensitive(true);
+        rPageSB.set_value(1);
+    }
+    else
+    {
+        rPageSB.set_sensitive(false);
+    }
+}
 
 IMPL_LINK(BibGeneralPage, FirstElementKeyInputHdl, const KeyEvent&, rKeyEvent, bool)
 {
@@ -377,9 +405,9 @@ IMPL_LINK(BibGeneralPage, FirstElementKeyInputHdl, const KeyEvent&, rKeyEvent, b
         uno::Reference<sdbc::XRowSet> xRowSet(pDatMan->getForm(), UNO_QUERY);
         if (xRowSet.is() && !xRowSet->isFirst())
             xRowSet->previous();
-        xCustom5ED->grab_focus();
-        xCustom5ED->select_region(0, -1);
-        GainFocusHdl(*xCustom5ED);
+        m_xLocalURLED->grab_focus();
+        m_xLocalURLED->select_region(0, -1);
+        GainFocusHdl(*m_xLocalURLED);
         return true;
     }
     return false;
@@ -515,11 +543,7 @@ namespace
         {
             OUString sNewName;
             rValue >>= sNewName;
-            if (&m_rEntry != &m_rPage.GetURLED())
-            {
-                m_rEntry.set_text(sNewName);
-            }
-            else
+            if (&m_rEntry == &m_rPage.GetURLED())
             {
                 OUString aUrl;
                 int nPageNumber;
@@ -538,32 +562,65 @@ namespace
                     m_rPage.GetPageSB().set_value(0);
                 }
             }
+            else if (&m_rEntry == &m_rPage.GetLocalURLED())
+            {
+                OUString aUrl;
+                int nPageNumber;
+                if (SplitUrlAndPage(sNewName, aUrl, nPageNumber))
+                {
+                    m_rEntry.set_text(aUrl);
+                    m_rPage.GetLocalPageCB().set_active(true);
+                    m_rPage.GetLocalPageSB().set_sensitive(true);
+                    m_rPage.GetLocalPageSB().set_value(nPageNumber);
+                }
+                else
+                {
+                    m_rEntry.set_text(sNewName);
+                    m_rPage.GetLocalPageCB().set_active(false);
+                    m_rPage.GetLocalPageSB().set_sensitive(false);
+                    m_rPage.GetLocalPageSB().set_value(0);
+                }
+            }
+            else
+            {
+                m_rEntry.set_text(sNewName);
+            }
 
             m_rEntry.save_value();
             if (&m_rEntry == &m_rPage.GetURLED())
             {
                 m_rPage.GetPageSB().save_value();
             }
+            else if (&m_rEntry == &m_rPage.GetLocalURLED())
+            {
+                m_rPage.GetLocalPageSB().save_value();
+            }
         }
 
         /// Updates m_xPropSet based on the UI widget(s).
         virtual void WriteBack() override
         {
-            if (!m_rEntry.get_value_changed_from_saved()
-                && !(&m_rEntry == &m_rPage.GetURLED()
-                     && m_rPage.GetPageSB().get_value_changed_from_saved()))
+            bool bURL = &m_rEntry == &m_rPage.GetURLED()
+                        && m_rPage.GetPageSB().get_value_changed_from_saved();
+            bool bLocalURL = &m_rEntry == &m_rPage.GetLocalURLED()
+                        && m_rPage.GetLocalPageSB().get_value_changed_from_saved();
+            if (!m_rEntry.get_value_changed_from_saved() && !(bURL || bLocalURL))
                 return;
 
             m_bSelfChanging = true;
 
             OUString aText;
-            if (&m_rEntry != &m_rPage.GetURLED())
+            if (&m_rEntry == &m_rPage.GetURLED())
             {
-                aText = m_rEntry.get_text();
+                aText = MergeUrlAndPage(m_rEntry.get_text(), m_rPage.GetPageSB());
+            }
+            else if (&m_rEntry == &m_rPage.GetLocalURLED())
+            {
+                aText = MergeUrlAndPage(m_rEntry.get_text(), m_rPage.GetLocalPageSB());
             }
             else
             {
-                aText = MergeUrlAndPage(m_rEntry.get_text(), m_rPage.GetPageSB());
+                aText = m_rEntry.get_text();
             }
             m_xPropSet->setPropertyValue("Text", makeAny(aText));
 
@@ -576,6 +633,10 @@ namespace
             if (&m_rEntry == &m_rPage.GetURLED())
             {
                 m_rPage.GetPageSB().save_value();
+            }
+            else if (&m_rEntry == &m_rPage.GetLocalURLED())
+            {
+                m_rPage.GetLocalPageSB().save_value();
             }
         }
 
@@ -732,6 +793,11 @@ void BibGeneralPage::dispose()
     xCustom4ED.reset();
     xCustom5FT.reset();
     xCustom5ED.reset();
+    m_xLocalURLFT.reset();
+    m_xLocalURLED.reset();
+    m_xLocalBrowseButton.reset();
+    m_xLocalPageCB.reset();
+    m_xLocalPageSB.reset();
     InterimItemWindow::dispose();
 }
 
@@ -740,6 +806,12 @@ weld::Entry& BibGeneralPage::GetURLED() { return *xURLED; }
 weld::CheckButton& BibGeneralPage::GetPageCB() { return *m_xPageCB; }
 
 weld::SpinButton& BibGeneralPage::GetPageSB() { return *m_xPageSB; }
+
+weld::Entry& BibGeneralPage::GetLocalURLED() { return *m_xLocalURLED; }
+
+weld::CheckButton& BibGeneralPage::GetLocalPageCB() { return *m_xLocalPageCB; }
+
+weld::SpinButton& BibGeneralPage::GetLocalPageSB() { return *m_xLocalPageSB; }
 
 bool BibGeneralPage::AddXControl(const OUString& rName, weld::Entry& rEntry)
 {

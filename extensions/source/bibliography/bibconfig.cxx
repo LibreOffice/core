@@ -90,6 +90,7 @@ BibConfig::BibConfig()
     aColumnDefaults[28] = "Custom3";
     aColumnDefaults[29] = "Custom4";
     aColumnDefaults[30] = "Custom5";
+    aColumnDefaults[31] = "LocalURL";
 
 
     const Sequence< OUString > aPropertyNames = GetPropertyNames();
