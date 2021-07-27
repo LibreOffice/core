@@ -1105,6 +1105,7 @@ void PowerPointExport::WritePresentationProps()
                                                           uno::UNO_QUERY);
         bool bEndlessVal = xPresentationProps->getPropertyValue("IsEndless").get<bool>();
         OUString sFirstPage = xPresentationProps->getPropertyValue("FirstPage").get<OUString>();
+        OUString sCustomShow = xPresentationProps->getPropertyValue("CustomShow").get<OUString>();
 
         FSHelperPtr pFS = openFragmentStreamWithSerializer(
             "ppt/presProps.xml",
@@ -1138,6 +1139,27 @@ void PowerPointExport::WritePresentationProps()
 
             pFS->singleElementNS(XML_p, XML_sldRg, XML_st, OUString::number(nStartSlide), XML_end,
                                  OUString::number(nEndSlide));
+        }
+
+        if (!sCustomShow.isEmpty())
+        {
+            css::uno::Reference<css::presentation::XCustomPresentationSupplier>
+                XCustPresentationSupplier(mXModel, css::uno::UNO_QUERY_THROW);
+            css::uno::Reference<css::container::XNameContainer> mxCustShows;
+            mxCustShows = XCustPresentationSupplier->getCustomPresentations();
+            const css::uno::Sequence<OUString> aNameSeq(mxCustShows->getElementNames());
+
+            sal_Int32 nCustShowIndex = 0;
+            for (sal_Int32 i = 0; i < aNameSeq.getLength(); i++)
+            {
+                if (aNameSeq[i] == sCustomShow)
+                {
+                    nCustShowIndex = i;
+                    break;
+                }
+            }
+
+            pFS->singleElementNS(XML_p, XML_custShow, XML_id, OUString::number(nCustShowIndex));
         }
 
         pFS->endElementNS(XML_p, XML_showPr);
