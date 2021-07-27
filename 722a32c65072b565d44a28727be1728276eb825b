@@ -76,6 +76,24 @@
     },
     {
       "key": {
+        "uuid": "83bef6cf_f03bd6c9",
+        "filename": "offapi/com/sun/star/style/NumberingType.idl",
+        "patchSetId": 2
+      },
+      "lineNbr": 532,
+      "author": {
+        "id": 1001877
+      },
+      "writtenOn": "2021-07-27T16:48:43Z",
+      "side": 1,
+      "message": "So, I committed new source code with your recommendation",
+      "parentUuid": "de12aa4c_08a646ee",
+      "revId": "722a32c65072b565d44a28727be1728276eb825b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3decf1d5_dde2bac9",
         "filename": "offapi/com/sun/star/style/NumberingType.idl",
         "patchSetId": 2
@@ -107,6 +125,24 @@
       "revId": "722a32c65072b565d44a28727be1728276eb825b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "92ac57c9_81a40649",
+        "filename": "offapi/com/sun/star/style/NumberingType.idl",
+        "patchSetId": 2
+      },
+      "lineNbr": 534,
+      "author": {
+        "id": 1001877
+      },
+      "writtenOn": "2021-07-27T16:48:43Z",
+      "side": 1,
+      "message": "So, I committed new source code with your recommendation",
+      "parentUuid": "78b24ce5_5ef59be0",
+      "revId": "722a32c65072b565d44a28727be1728276eb825b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
