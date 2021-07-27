@@ -41,6 +41,7 @@
 #include <unotools/configmgr.hxx>
 #include <unotools/eventcfg.hxx>
 
+#include <sfx2/ColorSets.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/signaturestate.hxx>
 #include <sfx2/sfxmodelfactory.hxx>
@@ -260,6 +261,8 @@ SfxObjectShell::SfxObjectShell( const SfxModelFlags i_nCreationFlags )
     const bool bDocRecovery = ( i_nCreationFlags & SfxModelFlags::DISABLE_DOCUMENT_RECOVERY ) == SfxModelFlags::NONE;
     if ( !bDocRecovery )
         pImpl->m_bDocRecoverySupport = false;
+
+    PutItem(SfxColorSetListItem(ColorSets(), SID_COLOR_SETS));
 }
 
 /** Constructor of the class SfxObjectShell.
@@ -277,6 +280,7 @@ SfxObjectShell::SfxObjectShell(SfxObjectCreateMode eMode)
     , bIsInGenerateThumbnail(false)
     , mbAvoidRecentDocs(false)
 {
+    PutItem(SfxColorSetListItem(ColorSets(), SID_COLOR_SETS));
 }
 
 SfxObjectShell::~SfxObjectShell()

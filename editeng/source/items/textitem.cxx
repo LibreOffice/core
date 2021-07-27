@@ -21,6 +21,7 @@
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/frame/status/FontHeight.hpp>
 #include <math.h>
+#include <optional>
 #include <sal/log.hxx>
 #include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
@@ -77,6 +78,9 @@
 #include <editeng/itemtype.hxx>
 #include <editeng/eerdll.hxx>
 #include <libxml/xmlwriter.h>
+
+#include <sfx2/sfxsids.hrc>
+#include <sfx2/objsh.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;
@@ -1309,20 +1313,103 @@ bool SvxContourItem::GetPresentation
     return true;
 }
 
+// class ThemeColorData
+bool ThemeColorData::operator==(const ThemeColorData &rOther) const
+{
+    // Comparing individual data doesn't make sense if both are not theme colors
+    if(mnThemeColorIndex <= -1 && rOther.mnThemeColorIndex <= -1)
+        return true;
+    else
+        return mnThemeColorIndex == rOther.mnThemeColorIndex
+               && mnTintShade == rOther.mnTintShade;
+}
+
+std::optional<Color> ThemeColorData::getThemeColorIfNeedsUpdate() const
+{
+    if (mnThemeColorIndex > -1)
+    {
+        // try to get the pointer for ColorSets if it's not there...
+        if (!mpColorSets)
+        {
+            if (SfxObjectShell* pObjShell = SfxObjectShell::Current())
+            {
+                if (const SfxColorSetListItem* pColorSetItem = pObjShell->GetItem(SID_COLOR_SETS))
+                {
+                    mpColorSets = &pColorSetItem->GetSfxColorSetList();
+                }
+            }
+        }
+
+        if (mpColorSets)
+        {
+            Color aColor = mpColorSets->getThemeColorSet().getColor(mnThemeColorIndex);
+
+            // only calculate transformations applied color when necessary
+            if(aColor != maCachedBaseColor || mbRecalculateColor)
+            {
+                maCachedBaseColor = aColor;
+                mbRecalculateColor = false;
+                aColor.ApplyTintOrShade(mnTintShade);
+                return aColor;
+            }
+        }
+    }
+
+    // if there's no update needed or the color isn't a theme color return nullopt
+    return std::nullopt;
+}
+
+void ThemeColorData::setTintOrShade(sal_Int16 nTintShade)
+{
+    RecalculateOnNextGet();
+    mnTintShade = nTintShade;
+}
+
+sal_Int16 ThemeColorData::getTintOrShade() const
+{
+    return mnTintShade;
+}
+
+sal_Int16 ThemeColorData::getThemeColorIndex() const
+{
+    return mnThemeColorIndex;
+}
+
+void ThemeColorData::setThemeColorIndex(sal_Int16 nThemeColorIndex)
+{
+    mnThemeColorIndex = nThemeColorIndex;
+}
+
+void ThemeColorData::RecalculateOnNextGet()
+{
+    // There are a few problems with triggerring a recalculate
+    // If we're doing a calculation outside of getThemeColorIfNeedsUpdate()
+    // we have to store the calculated color as a member.
+    // CalculateAndStore()
+
+    // If instead we store a flag that we can check to whether or not recalculate
+    // this will work for every kind of transformation so this might make the most sense.
+    mbRecalculateColor = true;
+
+    // Most memory efficient way of doing this is playing with CachedBaseColor.
+    // which will be wrong if the base color is the same as whatever constant we
+    // set here...
+    // Also pretty unmaintainable in my opinion.
+    // maCachedBaseColor = 0xDEADBEEF;
+}
+
 // class SvxColorItem ----------------------------------------------------
 SvxColorItem::SvxColorItem( const sal_uInt16 nId ) :
     SfxPoolItem(nId),
     mColor( COL_BLACK ),
-    maThemeIndex(-1),
-    maTintShade(0)
+    maThemeColorData()
 {
 }
 
 SvxColorItem::SvxColorItem( const Color& rCol, const sal_uInt16 nId ) :
     SfxPoolItem( nId ),
     mColor( rCol ),
-    maThemeIndex(-1),
-    maTintShade(0)
+    maThemeColorData()
 {
 }
 
@@ -1330,14 +1417,33 @@ SvxColorItem::~SvxColorItem()
 {
 }
 
+sal_Int16 SvxColorItem::GetThemeIndex() const
+{
+    return maThemeColorData.getThemeColorIndex();
+}
+
+void SvxColorItem::SetThemeIndex(sal_Int16 nIndex)
+{
+    maThemeColorData.setThemeColorIndex(nIndex);
+}
+
+sal_Int16 SvxColorItem::GetTintOrShade() const
+{
+    return maThemeColorData.getTintOrShade();
+}
+
+void SvxColorItem::SetTintOrShade(sal_Int16 nTintOrShade)
+{
+    maThemeColorData.setTintOrShade(nTintOrShade);
+}
+
 bool SvxColorItem::operator==( const SfxPoolItem& rAttr ) const
 {
     assert(SfxPoolItem::operator==(rAttr));
     const SvxColorItem& rColorItem = static_cast<const SvxColorItem&>(rAttr);
 
-    return mColor == rColorItem.mColor &&
-           maThemeIndex == rColorItem.maThemeIndex &&
-           maTintShade == rColorItem.maTintShade;
+    return mColor == rColorItem.mColor
+           && maThemeColorData == rColorItem.maThemeColorData;
 }
 
 bool SvxColorItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
@@ -1358,12 +1464,12 @@ bool SvxColorItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         }
         case MID_COLOR_THEME_INDEX:
         {
-            rVal <<= maThemeIndex;
+            rVal <<= maThemeColorData.getThemeColorIndex();
             break;
         }
         case MID_COLOR_TINT_OR_SHADE:
         {
-            rVal <<= maTintShade;
+            rVal <<= maThemeColorData.getTintOrShade();
             break;
         }
         default:
@@ -1401,7 +1507,7 @@ bool SvxColorItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             sal_Int16 nIndex = -1;
             if (!(rVal >>= nIndex))
                 return false;
-            maThemeIndex = nIndex;
+            maThemeColorData.setThemeColorIndex(nIndex);
         }
         break;
         case MID_COLOR_TINT_OR_SHADE:
@@ -1409,7 +1515,7 @@ bool SvxColorItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             sal_Int16 nTintShade = -1;
             if (!(rVal >>= nTintShade))
                 return false;
-            maTintShade = nTintShade;
+            maThemeColorData.setTintOrShade(nTintShade);
         }
         break;
         default:
@@ -1454,7 +1560,13 @@ void SvxColorItem::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterEndElement(pWriter);
 }
 
+const Color& SvxColorItem::GetValue() const
+{
+    if(auto aOptionalColor = maThemeColorData.getThemeColorIfNeedsUpdate())
+        mColor = aOptionalColor.value();
 
+    return mColor;
+}
 
 void SvxColorItem::SetValue( const Color& rNewCol )
 {
