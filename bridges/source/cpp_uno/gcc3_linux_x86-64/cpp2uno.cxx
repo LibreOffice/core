@@ -54,7 +54,9 @@ using namespace ::com::sun::star::uno;
 // [ret *] is present when we are returning a structure bigger than 16 bytes
 // Simple types are returned in rax, rdx (int), or xmm0, xmm1 (fp).
 // Similarly structures <= 16 bytes are in rax, rdx, xmm0, xmm1 as necessary.
-static typelib_TypeClass cpp2uno_call(
+//
+// The return value is the same as for cpp_vtable_call.
+static int cpp2uno_call(
     bridges::cpp_uno::shared::CppInterfaceProxy * pThis,
     const typelib_TypeDescription * pMemberTypeDescr,
     typelib_TypeDescriptionReference * pReturnTypeRef, // 0 indicates void return
@@ -69,13 +71,16 @@ static typelib_TypeClass cpp2uno_call(
     typelib_TypeDescription * pReturnTypeDescr = nullptr;
     if (pReturnTypeRef)
         TYPELIB_DANGER_GET( &pReturnTypeDescr, pReturnTypeRef );
+    x86_64::ReturnKind returnKind
+        = (pReturnTypeRef == nullptr || pReturnTypeRef->eTypeClass == typelib_TypeClass_VOID)
+        ? x86_64::ReturnKind::RegistersGeneral : x86_64::getReturnKind(pReturnTypeRef);
 
     void * pUnoReturn = nullptr;
     void * pCppReturn = nullptr; // complex return ptr: if != 0 && != pUnoReturn, reconversion need
 
     if ( pReturnTypeDescr )
     {
-        if ( x86_64::return_in_hidden_param( pReturnTypeRef ) )
+        if ( returnKind == x86_64::ReturnKind::Memory )
         {
             pCppReturn = *gpreg++;
             nr_gpr++;
@@ -202,7 +207,7 @@ static typelib_TypeClass cpp2uno_call(
 
         CPPU_CURRENT_NAMESPACE::raiseException( &aUnoExc, pThis->getBridge()->getUno2Cpp() ); // has to destruct the any
         // is here for dummy
-        return typelib_TypeClass_VOID;
+        return 0;
     }
     else // else no exception occurred...
     {
@@ -239,17 +244,19 @@ static typelib_TypeClass cpp2uno_call(
         }
         if ( pReturnTypeDescr )
         {
-            typelib_TypeClass eRet = pReturnTypeDescr->eTypeClass;
             TYPELIB_DANGER_RELEASE( pReturnTypeDescr );
-            return eRet;
         }
-        else
-            return typelib_TypeClass_VOID;
+        return returnKind == x86_64::ReturnKind::RegistersSpecial ? 1 : 0;
     }
 }
 
-
-typelib_TypeClass cpp_vtable_call(
+// Returns 0 for the general case where potential return values from privateSnippetExecutor can be
+// copied from pRegisterReturn to both %rax and %rdx (in that order) and to %xmm0 and %xmm1 (in that
+// order)---each specific return type will only require a subset of that copy operations, but the
+// other copies to those non--callee-saved registers will be redundant and harmless.  And returns 1
+// for the special case where return values from privateSnippetExecutor must be copied from
+// pRegisterReturn to %xmm0 and %rax (in that order).
+int cpp_vtable_call(
     sal_Int32 nFunctionIndex, sal_Int32 nVtableOffset,
     void ** gpreg, void ** fpreg, void ** ovrflw,
     sal_uInt64 * pRegisterReturn /* space for register return */ )
@@ -294,7 +301,7 @@ typelib_TypeClass cpp_vtable_call(
 
     TypeDescription aMemberDescr( pTypeDescr->ppAllMembers[nMemberPos] );
 
-    typelib_TypeClass eRet;
+    int eRet;
     switch ( aMemberDescr.get()->eTypeClass )
     {
         case typelib_TypeClass_INTERFACE_ATTRIBUTE:
@@ -331,11 +338,11 @@ typelib_TypeClass cpp_vtable_call(
             {
                 case 1: // acquire()
                     pCppI->acquireProxy(); // non virtual call!
-                    eRet = typelib_TypeClass_VOID;
+                    eRet = 0;
                     break;
                 case 2: // release()
                     pCppI->releaseProxy(); // non virtual call!
-                    eRet = typelib_TypeClass_VOID;
+                    eRet = 0;
                     break;
                 case 0: // queryInterface() opt
                 {
@@ -359,7 +366,7 @@ typelib_TypeClass cpp_vtable_call(
                             TYPELIB_DANGER_RELEASE( pTD );
 
                             reinterpret_cast<void **>( pRegisterReturn )[0] = gpreg[0];
-                            eRet = typelib_TypeClass_ANY;
+                            eRet = 0;
                             break;
                         }
                         TYPELIB_DANGER_RELEASE( pTD );

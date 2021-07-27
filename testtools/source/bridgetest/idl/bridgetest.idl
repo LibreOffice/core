@@ -122,6 +122,16 @@ struct MixedFloatAndInteger
     float                      a;
     long                       b;
 };
+struct DoubleHyper {
+    double a;
+    hyper b;
+};
+struct FloatFloatLongByte {
+    float a;
+    float b;
+    long c;
+    byte d;
+};
 /**
  * Small struct with three bytes.  Should *not* return in registers on
  * BSDs/MACOSx
@@ -327,6 +337,10 @@ interface XBridgeTestBase : com::sun::star::uno::XInterface
      * register return test 6
      */
     MixedFloatAndInteger echoMixedFloatAndInteger( [in] MixedFloatAndInteger aStruct );
+
+    DoubleHyper echoDoubleHyper([in] DoubleHyper s);
+
+    FloatFloatLongByte echoFloatFloatLongByte([in] FloatFloatLongByte s);
 
     /**
      * register return test 7
