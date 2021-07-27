@@ -157,9 +157,7 @@ DECLARE_OOXMLEXPORT_TEST(testCharacterBorder, "charborder.odt")
 
 CPPUNIT_TEST_FIXTURE(Test, testStyleInheritance)
 {
-    load(mpTestDocumentPath, "style-inheritance.docx");
-    save("Office Open XML Text", maTempFile);
-    mbExported = true;
+    loadAndSave("style-inheritance.docx");
 
     // Check that now styleId's are more like what MSO produces
     xmlDocUniquePtr pXmlStyles = parseExport("word/styles.xml");
@@ -257,8 +255,9 @@ CPPUNIT_TEST_FIXTURE(Test, testStyleInheritance)
     assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Normal']/w:pPr/w:suppressAutoHyphens", 0);
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testCalendar1, "calendar1.docx")
+CPPUNIT_TEST_FIXTURE(Test, testCalendar1)
 {
+    loadAndSave("calendar1.docx");
     // Document has a non-trivial table style, test the roundtrip of it.
     xmlDocUniquePtr pXmlStyles = parseExport("word/styles.xml");
     assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Calendar1']/w:basedOn", "val", "TableNormal");

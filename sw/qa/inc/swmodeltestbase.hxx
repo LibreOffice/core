@@ -337,6 +337,9 @@ protected:
     /// Save the loaded document to a tempfile. Can be used to check the resulting docx/odt directly as a ZIP file.
     void save(const OUString& aFilterName, utl::TempFile& rTempFile);
 
+    /// Combines load() and save().
+    void loadAndSave(const char* pName);
+
     void finish();
 
     /// Get page count.
