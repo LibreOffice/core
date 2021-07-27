@@ -18,6 +18,7 @@
  */
 
 
+#include <osl/diagnose.h>
 #include <tools/debug.hxx>
 #include <svx/svddrgv.hxx>
 #include <svx/svdview.hxx>
@@ -36,7 +37,7 @@
 #include <svtools/optionsdrawinglayer.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #include <svx/sdrpagewindow.hxx>
-#include <osl/diagnose.h>
+#include <unotools/configmgr.hxx>
 #include <comphelper/lok.hxx>
 
 using namespace sdr;
@@ -51,7 +52,7 @@ SdrDragView::SdrDragView(SdrModel& rSdrModel, OutputDevice* pOut)
     , mbDragLimit(false)
     , mbDragHdl(false)
     , mbDragStripes(false)
-    , mbSolidDragging(SvtOptionsDrawinglayer::IsSolidDragCreate())
+    , mbSolidDragging(utl::ConfigManager::IsFuzzing() || SvtOptionsDrawinglayer::IsSolidDragCreate())
     , mbResizeAtCenter(false)
     , mbCrookAtCenter(false)
     , mbDragWithCopy(false)
