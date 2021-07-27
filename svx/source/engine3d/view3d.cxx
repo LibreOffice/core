@@ -133,10 +133,7 @@ Impl3DMirrorConstructOverlay::~Impl3DMirrorConstructOverlay()
     // The OverlayObjects are cleared using the destructor of OverlayObjectList.
     // That destructor calls clear() at the list which removes all objects from the
     // OverlayManager and deletes them.
-    if(!mrView.IsSolidDragging())
-    {
-        delete[] mpPolygons;
-    }
+    delete[] mpPolygons;
 }
 
 void Impl3DMirrorConstructOverlay::SetMirrorAxis(Point aMirrorAxisA, Point aMirrorAxisB)
