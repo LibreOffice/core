@@ -16,6 +16,24 @@
       "revId": "0ea2f9a1b33b446069935913c2b3c846d79b52de",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ca69cc65_507b7e0f",
+        "filename": "toolkit/source/controls/dialogcontrol.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 515,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-07-27T06:32:02Z",
+      "side": 1,
+      "message": "for excessive nitpicking, note how I use SAL_MIN/MAX_INT32 rather than std::numeric_limits\u003csal_Int32\u003e::min/max (as would arguably be used by such a o3tl::saturating_narrowing), for the utterly unlikely case that sal_Int32 is larger than UNO LONG\u0027s 32 bits",
+      "parentUuid": "e61e79fd_f4f761b8",
+      "revId": "0ea2f9a1b33b446069935913c2b3c846d79b52de",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
