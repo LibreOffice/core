@@ -57,7 +57,8 @@ namespace sw {
 
     enum class TextRangeMode {
         RequireTextNode,
-        AllowNonTextNode
+        AllowNonTextNode,
+        AllowTableNode
     };
 
     void DeepCopyPaM(SwPaM const & rSource, SwPaM & rTarget);
