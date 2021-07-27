@@ -82,9 +82,6 @@ public class PSGTBehavior extends AbsGTBehavior {
   // the own memory: store the point that generated in last learning cycle
   private BasicPoint pcurrent_t;
 
-  // the own memory: store the personal best point
-  private SearchPoint pbest_t;
-
   @Override
   public void setMemPoints(SearchPoint pbest, BasicPoint pcurrent, BasicPoint pold) {
     pcurrent_t = pcurrent;
