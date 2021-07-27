@@ -28,8 +28,15 @@ abstract public class AbsGTBehavior implements ILibEngine {
   // The referred social library
   protected Library socialLib;
 
+  // the own memory: store the personal best point
+  protected SearchPoint pbest_t;
+
   public void setLibrary(Library lib) {
     socialLib = lib;
+  }
+
+  public void setPbest(SearchPoint pbest) {
+    pbest_t = pbest;
   }
 
   abstract public void setMemPoints(SearchPoint pbest, BasicPoint pcurrent, BasicPoint pold);

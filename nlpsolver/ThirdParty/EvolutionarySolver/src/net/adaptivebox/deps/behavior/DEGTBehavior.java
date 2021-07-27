@@ -48,9 +48,6 @@ public class DEGTBehavior extends AbsGTBehavior {
   //crossover constant: [0, 1], normally be 0.1 or 0.9
   public double CR = 0.9;
 
-  // the own memory: store the point that generated in last learning cycle
-  private SearchPoint pbest_t;
-
   @Override
   public void setMemPoints(SearchPoint pbest, BasicPoint pcurrent, BasicPoint pold) {
     pbest_t = pbest;
