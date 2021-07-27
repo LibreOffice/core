@@ -2742,6 +2742,12 @@ void DomainMapper_Impl::ConvertHeaderFooterToTextFrame(bool bDynamicHeightTop, b
             aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_OPAQUE), false));
             aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_WIDTH_TYPE), text::SizeType::MIN));
             aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_SIZE_TYPE), text::SizeType::MIN));
+            // tdf#143384 If the header/footer started with a table, convertToTextFrame could not
+            // convert the table, because it used createTextCursor() -which ignore tables-
+            // to set the conversion range.
+            // This dummy property is set to make convertToTextFrame to use an other CreateTextCursor
+            // method that can be parameterized to not ignore tables.
+            aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_CURSOR_NOT_IGNORE_TABLES_IN_HF), true));
 
             fillEmptyFrameProperties(aFrameProperties, false);
 
@@ -2751,7 +2757,7 @@ void DomainMapper_Impl::ConvertHeaderFooterToTextFrame(bool bDynamicHeightTop, b
 
             uno::Reference<text::XTextAppendAndConvert> xBodyText(
                 xRangeStart->getText(), uno::UNO_QUERY);
-            xBodyText->convertToTextFrame(xRangeStart, xRangeEnd,
+            xBodyText->convertToTextFrame(xTextAppend, xRangeEnd,
                 comphelper::containerToSequence(aFrameProperties));
         }
         m_aHeaderFooterTextAppendStack.pop();

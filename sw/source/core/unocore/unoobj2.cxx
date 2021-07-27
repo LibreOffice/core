@@ -1116,6 +1116,7 @@ bool XTextRangeToSwPaM( SwUnoInternalPaM & rToFill,
     SwXTextPortion* pPortion = nullptr;
     SwXText* pText = nullptr;
     SwXParagraph* pPara = nullptr;
+    SwXHeadFootText* pHeadText = nullptr;
     if(xRangeTunnel.is())
     {
         pRange  = ::sw::UnoTunnelGetImplementation<SwXTextRange>(xRangeTunnel);
@@ -1125,12 +1126,26 @@ bool XTextRangeToSwPaM( SwUnoInternalPaM & rToFill,
             ::sw::UnoTunnelGetImplementation<SwXTextPortion>(xRangeTunnel);
         pText   = ::sw::UnoTunnelGetImplementation<SwXText>(xRangeTunnel);
         pPara   = ::sw::UnoTunnelGetImplementation<SwXParagraph>(xRangeTunnel);
+        if (eMode == TextRangeMode::AllowTableNode)
+            pHeadText = dynamic_cast<SwXHeadFootText*>(pText);
     }
 
     // if it's a text then create a temporary cursor there and re-use
     // the pCursor variable
     // #i108489#: Reference in outside scope to keep cursor alive
     uno::Reference< text::XTextCursor > xTextCursor;
+    if (pHeadText)
+    {
+        // if it is a header / footer text, and eMode == TextRangeMode::AllowTableNode
+        // then set the cursor to the beginning of the text
+        // if it is started with a table then set into the table
+        xTextCursor.set(pHeadText->CreateTextCursor(true));
+        xTextCursor->gotoEnd(true);
+        pCursor =
+            comphelper::getUnoTunnelImplementation<OTextCursorHelper>(xTextCursor);
+        pCursor->GetPaM()->Normalize();
+    }
+    else
     if (pText)
     {
         xTextCursor.set( pText->CreateCursor() );
