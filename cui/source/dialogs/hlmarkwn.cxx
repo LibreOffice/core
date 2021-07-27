@@ -18,6 +18,7 @@
  */
 
 #include <dialmgr.hxx>
+#include <o3tl/any.hxx>
 #include <unotools/viewoptions.hxx>
 #include <vcl/graph.hxx>
 
@@ -352,8 +353,7 @@ int SvxHlinkDlgMarkWnd::FillTree( const uno::Reference< container::XNameAccess >
 
                         // get the headings outline level
                         aAny = xTarget->getPropertyValue("OutlineLevel");
-                        sal_Int32 nOutlineLevel;
-                        aAny >>= nOutlineLevel;
+                        sal_Int32 nOutlineLevel = *o3tl::doAccess<sal_Int32>(aAny);
 
                         // pop until the top of stack entry has an outline level less than
                         // the to be inserted heading outline level
