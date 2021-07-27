@@ -19,6 +19,7 @@
 #ifndef INCLUDED_EDITENG_COLRITEM_HXX
 #define INCLUDED_EDITENG_COLRITEM_HXX
 
+#include <editeng/ColorSets.hxx>
 #include <svl/poolitem.hxx>
 #include <tools/color.hxx>
 #include <editeng/editengdllapi.h>
@@ -55,6 +56,14 @@ public:
 
     const Color& GetValue() const
     {
+        if( maThemeIndex > 0 )
+        {
+            Color aColor = ColorSets::get().getThemeColorSet().getColor(maThemeIndex);
+            aColor.ApplyTintOrShade(GetTintOrShade());
+
+            // experimental beware
+            const_cast<SvxColorItem*>(this)->mColor = aColor;
+        }
         return mColor;
     }
     void SetValue(const Color& rNewColor);

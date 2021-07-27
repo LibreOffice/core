@@ -109,6 +109,7 @@ $(eval $(call gb_Library_add_exception_objects,editeng,\
     editeng/source/outliner/paralist \
     editeng/source/rtf/rtfitem \
     editeng/source/rtf/svxrtf \
+    editeng/source/styles/ColorSets \
     editeng/source/uno/unoedhlp \
     editeng/source/uno/unoedprx \
     editeng/source/uno/unoedsrc \

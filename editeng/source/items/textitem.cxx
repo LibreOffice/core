@@ -1313,7 +1313,7 @@ bool SvxContourItem::GetPresentation
 SvxColorItem::SvxColorItem( const sal_uInt16 nId ) :
     SfxPoolItem(nId),
     mColor( COL_BLACK ),
-    maThemeIndex(-1),
+    maThemeIndex(4),
     maTintShade(0)
 {
 }
@@ -1321,7 +1321,7 @@ SvxColorItem::SvxColorItem( const sal_uInt16 nId ) :
 SvxColorItem::SvxColorItem( const Color& rCol, const sal_uInt16 nId ) :
     SfxPoolItem( nId ),
     mColor( rCol ),
-    maThemeIndex(-1),
+    maThemeIndex(4),
     maTintShade(0)
 {
 }

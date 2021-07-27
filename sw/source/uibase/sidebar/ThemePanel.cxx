@@ -75,7 +75,7 @@ public:
         maVariable = aVariable;
     }
 
-    Color getColor(svx::ColorSet const & rColorSet)
+    Color getColor(ColorSet const & rColorSet)
     {
         Color aColor;
         if (maVariable.mnIndex > -1)
@@ -229,7 +229,7 @@ void changeFont(SwFormat* pFormat, SwDocStyleSheet const * pStyle, FontSet const
     }
 }*/
 
-void changeColor(SwTextFormatColl* pCollection, svx::ColorSet const& rColorSet, StyleRedefinition* /*pRedefinition*/)
+void changeColor(SwTextFormatColl* pCollection, ColorSet const& rColorSet, StyleRedefinition* /*pRedefinition*/)
 {
     SvxColorItem aColorItem(pCollection->GetColor());
     sal_Int16 nIndex = aColorItem.GetThemeIndex();
@@ -331,16 +331,19 @@ FontSet getFontSet(std::u16string_view rFontVariant, std::vector<FontSet>& aFont
 }
 
 void applyTheme(SfxStyleSheetBasePool* pPool, std::u16string_view sFontSetName, std::u16string_view sColorSetName,
-                StyleSet& rStyleSet, svx::ColorSets& rColorSets)
+                StyleSet& rStyleSet, ColorSets& rColorSets)
 {
     SwDocStyleSheet* pStyle;
 
     std::vector<FontSet> aFontSets = initFontSets();
     FontSet aFontSet = getFontSet(sFontSetName, aFontSets);
 
-    svx::ColorSet aColorSet = rColorSets.getColorSet(sColorSetName);
+    ColorSet aColorSet = rColorSets.getColorSet(sColorSetName);
 
     pStyle = static_cast<SwDocStyleSheet*>(pPool->First(SfxStyleFamily::Para));
+
+    rColorSets.setThemeColorSet(sColorSetName);
+
     while (pStyle)
     {
         SwTextFormatColl* pCollection = pStyle->GetCollection();
@@ -368,7 +371,7 @@ void applyTheme(SfxStyleSheetBasePool* pPool, std::u16string_view sFontSetName, 
     }
 }
 
-BitmapEx GenerateColorPreview(const svx::ColorSet& rColorSet)
+BitmapEx GenerateColorPreview(const ColorSet& rColorSet)
 {
     ScopedVclPtrInstance<VirtualDevice> pVirtualDev(*Application::GetDefaultDevice());
     float fScaleFactor = pVirtualDev->GetDPIScaleFactor();
@@ -440,7 +443,7 @@ ThemePanel::ThemePanel(weld::Widget* pParent)
     , mxValueSetColors(new ValueSet(nullptr))
     , mxValueSetColorsWin(new weld::CustomWeld(*m_xBuilder, "valueset_colors", *mxValueSetColors))
     , mxApplyButton(m_xBuilder->weld_button("apply"))
-    , maColorSets()
+    , maColorSets(ColorSets::get())
 {
     mxValueSetColors->SetColCount(2);
     mxValueSetColors->SetLineCount(3);
@@ -455,12 +458,10 @@ ThemePanel::ThemePanel(weld::Widget* pParent)
         mxListBoxFonts->append_text(rFontSet.maName);
     mxListBoxFonts->set_size_request(-1, mxListBoxFonts->get_height_rows(aFontSets.size()));
 
-    maColorSets.init();
-
-    const std::vector<svx::ColorSet>& aColorSets = maColorSets.getColorSets();
+    const std::vector<ColorSet>& aColorSets = maColorSets.getColorSets();
     for (size_t i = 0; i < aColorSets.size(); ++i)
     {
-        const svx::ColorSet& rColorSet = aColorSets[i];
+        const ColorSet& rColorSet = aColorSets[i];
 
         const OUString& aName = rColorSet.getName();
         BitmapEx aPreview = GenerateColorPreview(rColorSet);
