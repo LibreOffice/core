@@ -398,6 +398,9 @@ void CGM::ImplDoClass4()
                 }
 
                 if (!bUseless)
+                    bUseless = useless(aStartingPoint.X) || useless(aStartingPoint.Y);
+
+                if (!bUseless)
                 {
                     double fStartAngle = ImplGetOrientation( aCenterPoint, aStartingPoint );
                     double fInterAngle = ImplGetOrientation( aCenterPoint, aIntermediatePoint );
