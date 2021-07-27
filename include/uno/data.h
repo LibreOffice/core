@@ -38,7 +38,7 @@ struct _uno_Mapping;
 /** Generic function pointer declaration to query for an interface.
 
     @param pInterface interface
-    @param pTypedemanded interface type
+    @param pType demanded interface type
     @return interface pointer
 */
 typedef void * (SAL_CALL * uno_QueryInterfaceFunc)(
