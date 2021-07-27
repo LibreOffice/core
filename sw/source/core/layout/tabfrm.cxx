@@ -1943,7 +1943,9 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
     bool bLastRowMoveNoMoreTries = false;
 
     const bool bLargeTable = GetTable()->GetTabLines().size() > 64;  //arbitrary value, virtually guaranteed to be larger than one page.
-    const bool bEmulateTableKeep = !bLargeTable && bTableRowKeep && AreAllRowsKeepWithNext( GetFirstNonHeadlineRow(), /*bCheckParents=*/false );
+    const bool bEmulateTableKeep = !bLargeTable && bTableRowKeep
+        && !pAttrs->GetAttrSet().GetKeep().GetValue()
+        && AreAllRowsKeepWithNext(GetFirstNonHeadlineRow(), /*bCheckParents=*/false);
     // The beloved keep attribute
     const bool bKeep = IsKeep(pAttrs->GetAttrSet().GetKeep(), GetBreakItem(), bEmulateTableKeep);
 
