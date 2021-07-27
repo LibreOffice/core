@@ -107,11 +107,12 @@ static typelib_TypeClass cpp2uno_call(
     {
         const typelib_MethodParameter & rParam = pParams[nPos];
 
-        int nUsedGPR = 0;
-        int nUsedSSE = 0;
-        bool bFitsRegisters = x86_64::examine_argument( rParam.pTypeRef, false, nUsedGPR, nUsedSSE );
         if ( !rParam.bOut && bridges::cpp_uno::shared::isSimpleType( rParam.pTypeRef ) ) // value
         {
+            int nUsedGPR = 0;
+            int nUsedSSE = 0;
+            bool bFitsRegisters = x86_64::examine_argument( rParam.pTypeRef, nUsedGPR, nUsedSSE );
+
             // Simple types must fit exactly one register on x86_64
             assert( bFitsRegisters && ( ( nUsedSSE == 1 && nUsedGPR == 0 ) || ( nUsedSSE == 0 && nUsedGPR == 1 ) ) ); (void)bFitsRegisters;
 
@@ -136,7 +137,7 @@ static typelib_TypeClass cpp2uno_call(
                     pCppArgs[nPos] = pUnoArgs[nPos] = ovrflw++;
             }
         }
-        else // struct <= 16 bytes || ptr to complex value || ref
+        else // ref
         {
             typelib_TypeDescription * pParamTypeDescr = nullptr;
             TYPELIB_DANGER_GET( &pParamTypeDescr, rParam.pTypeRef );
