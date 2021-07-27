@@ -630,6 +630,13 @@ void SwModelTestBase::save(const OUString& aFilterName, utl::TempFile& rTempFile
     }
 }
 
+void SwModelTestBase::loadAndSave(const char* pName)
+{
+    load(mpTestDocumentPath, pName);
+    save(OUString::createFromAscii(mpFilter), maTempFile);
+    mbExported = true;
+}
+
 void SwModelTestBase::finish()
 {
     sal_uInt32 nEndTime = osl_getGlobalTimer();
