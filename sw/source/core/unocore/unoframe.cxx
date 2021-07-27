@@ -1418,7 +1418,13 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
     const ::SfxItemPropertyMapEntry* pEntry = m_pPropSet->getPropertyMap().getByName(rPropertyName);
 
     if (!pEntry)
-        throw beans::UnknownPropertyException( "Unknown property: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+    {
+        // Hack to skip the dummy CursorNotIgnoreTables property
+        if (rPropertyName == "CursorNotIgnoreTables")
+            return;
+        else
+            throw beans::UnknownPropertyException("Unknown property: " + rPropertyName, static_cast <cppu::OWeakObject*> (this));
+    }
 
     const sal_uInt8 nMemberId(pEntry->nMemberId);
     uno::Any aValue(_rValue);

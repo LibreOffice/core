@@ -115,6 +115,8 @@ public:
     static css::uno::Reference< css::text::XText >
         CreateXHeadFootText(SwFrameFormat & rHeadFootFormat, const bool bIsHeader);
 
+    css::uno::Reference<css::text::XTextCursor> CreateTextCursor(const bool bIgnoreTables = false);
+
     // XInterface
     virtual css::uno::Any SAL_CALL queryInterface(
             const css::uno::Type& rType) override;

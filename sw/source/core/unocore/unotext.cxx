@@ -1537,14 +1537,31 @@ SwXText::convertToTextFrame(
     {
         throw  uno::RuntimeException();
     }
+    // tdf#143384 recognize dummy property, that was set to make createTextCursor
+    // to not ignore tables.
+    // It is enough to use this hack only for the range start,
+    // because as far as I know, the range cannot end with table when this property is set.
+    ::sw::TextRangeMode eMode = ::sw::TextRangeMode::RequireTextNode;
+    for (const auto& rCellProperty : rFrameProperties)
+    {
+        if (rCellProperty.Name == "CursorNotIgnoreTables")
+        {
+            bool bAllowNonTextNode = false;
+            rCellProperty.Value >>= bAllowNonTextNode;
+            if (bAllowNonTextNode)
+                eMode = ::sw::TextRangeMode::AllowTableNode;
+            break;
+        }
+    }
     uno::Reference< text::XTextContent > xRet;
     std::optional<SwUnoInternalPaM> pTempStartPam(*GetDoc());
     std::optional<SwUnoInternalPaM> pEndPam(*GetDoc());
-    if (!::sw::XTextRangeToSwPaM(*pTempStartPam, xStart) ||
-        !::sw::XTextRangeToSwPaM(*pEndPam, xEnd))
+    if (!::sw::XTextRangeToSwPaM(*pTempStartPam, xStart, eMode)
+        || !::sw::XTextRangeToSwPaM(*pEndPam, xEnd))
     {
         throw lang::IllegalArgumentException();
     }
+
     auto pStartPam(GetDoc()->CreateUnoCursor(*pTempStartPam->GetPoint()));
     if (pTempStartPam->HasMark())
     {
@@ -2613,8 +2630,7 @@ uno::Any SAL_CALL SwXHeadFootText::queryInterface(const uno::Type& rType)
         : ret;
 }
 
-uno::Reference<text::XTextCursor> SAL_CALL
-SwXHeadFootText::createTextCursor()
+uno::Reference<text::XTextCursor> SwXHeadFootText::CreateTextCursor(const bool bIgnoreTables)
 {
     SolarMutexGuard aGuard;
 
@@ -2632,18 +2648,22 @@ SwXHeadFootText::createTextCursor()
     // after the table - otherwise the cursor would be in the body text!
     SwStartNode const*const pOwnStartNode = rNode.FindSttNodeByType(
             (m_pImpl->m_bIsHeader) ? SwHeaderStartNode : SwFooterStartNode);
-    // is there a table here?
-    SwTableNode* pTableNode = rUnoCursor.GetNode().FindTableNode();
-    SwContentNode* pCont = nullptr;
-    while (pTableNode)
+
+    if (!bIgnoreTables)
     {
-        rUnoCursor.GetPoint()->nNode = *pTableNode->EndOfSectionNode();
-        pCont = GetDoc()->GetNodes().GoNext(&rUnoCursor.GetPoint()->nNode);
-        pTableNode = pCont->FindTableNode();
-    }
-    if (pCont)
-    {
-        rUnoCursor.GetPoint()->nContent.Assign(pCont, 0);
+        // is there a table here?
+        SwTableNode* pTableNode = rUnoCursor.GetNode().FindTableNode();
+        SwContentNode* pCont = nullptr;
+        while (pTableNode)
+        {
+            rUnoCursor.GetPoint()->nNode = *pTableNode->EndOfSectionNode();
+            pCont = GetDoc()->GetNodes().GoNext(&rUnoCursor.GetPoint()->nNode);
+            pTableNode = pCont->FindTableNode();
+        }
+        if (pCont)
+        {
+            rUnoCursor.GetPoint()->nContent.Assign(pCont, 0);
+        }
     }
     SwStartNode const*const pNewStartNode = rUnoCursor.GetNode().FindSttNodeByType(
             (m_pImpl->m_bIsHeader) ? SwHeaderStartNode : SwFooterStartNode);
@@ -2654,6 +2674,12 @@ SwXHeadFootText::createTextCursor()
         throw aExcept;
     }
     return static_cast<text::XWordCursor*>(pXCursor.get());
+}
+
+uno::Reference<text::XTextCursor> SAL_CALL
+SwXHeadFootText::createTextCursor()
+{
+    return CreateTextCursor(false);
 }
 
 uno::Reference<text::XTextCursor> SAL_CALL SwXHeadFootText::createTextCursorByRange(

@@ -1618,6 +1618,13 @@ DECLARE_OOXMLEXPORT_TEST(testTdf119952_negativeMargins, "tdf119952_negativeMargi
     CPPUNIT_ASSERT_EQUAL(OUString("  aaaa   bbbb    cccc     dddd      eeee"), parseDump("/root/page[3]/header/txt/anchored/fly"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf143384_tableInFoot_negativeMargins, "tdf143384_tableInFoot_negativeMargins.docx")
+{
+    // There should be no crash during loading of the document
+    // so, let's check just how much pages we have
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
