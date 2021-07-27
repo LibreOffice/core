@@ -18,6 +18,8 @@
 #include <svx/svxdllapi.h>
 #include <tools/color.hxx>
 
+typedef struct _xmlTextWriter* xmlTextWriterPtr;
+
 namespace svx
 {
 
@@ -41,6 +43,8 @@ public:
     {
         return maColors[nIndex];
     }
+
+    void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };
 
 class SVXCORE_DLLPUBLIC ColorSets
@@ -62,6 +66,8 @@ public:
     }
 
     const ColorSet& getColorSet(std::u16string_view rName);
+
+    void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };
 
 } // end of namespace svx

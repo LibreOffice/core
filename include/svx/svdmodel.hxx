@@ -89,6 +89,10 @@ namespace sfx2
 namespace com::sun::star::beans {
     struct PropertyValue;
 }
+namespace svx
+{
+class ColorSets;
+}
 
 
 constexpr const sal_Unicode DEGREE_CHAR = u'\x00B0'; /* U+00B0 DEGREE SIGN */
@@ -535,6 +539,8 @@ public:
     // made it needs to delete it.
     SfxStyleSheetBasePool* GetStyleSheetPool() const         { return mxStyleSheetPool.get(); }
     void SetStyleSheetPool(SfxStyleSheetBasePool* pPool)     { mxStyleSheetPool=pPool; }
+
+    svx::ColorSets& GetThemeColorSets() const;
 
     void    SetStarDrawPreviewMode(bool bPreview);
     bool    IsStarDrawPreviewMode() const { return m_bStarDrawPreviewMode; }

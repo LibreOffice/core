@@ -10,6 +10,8 @@
 
 #include <svx/ColorSets.hxx>
 
+#include <libxml/xmlwriter.h>
+
 namespace svx
 {
 
@@ -20,6 +22,25 @@ ColorSet::ColorSet(OUString const & aColorSetName)
 
 ColorSets::ColorSets()
 {}
+
+void ColorSet::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("ColorSet"));
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("maColorSetName"),
+                                      BAD_CAST(maColorSetName.toUtf8().getStr()));
+
+    for (const auto& rColor : maColors)
+    {
+        (void)xmlTextWriterStartElement(pWriter, BAD_CAST("Color"));
+        std::stringstream ss;
+        ss << rColor;
+        (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(ss.str().c_str()));
+        (void)xmlTextWriterEndElement(pWriter);
+    }
+
+    (void)xmlTextWriterEndElement(pWriter);
+}
 
 ColorSets::~ColorSets()
 {}
@@ -100,6 +121,19 @@ const ColorSet& ColorSets::getColorSet(std::u16string_view rName)
             return rColorSet;
     }
     return maColorSets[0];
+}
+
+void ColorSets::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("ColorSets"));
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+
+    for (const auto& rColorSet : maColorSets)
+    {
+        rColorSet.dumpAsXml(pWriter);
+    }
+
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 } // end of namespace svx
