@@ -10,6 +10,10 @@
 
 #include <svx/ColorSets.hxx>
 
+#include <sstream>
+
+#include <libxml/xmlwriter.h>
+
 namespace svx
 {
 
@@ -20,6 +24,25 @@ ColorSet::ColorSet(OUString const & aColorSetName)
 
 ColorSets::ColorSets()
 {}
+
+void ColorSet::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("ColorSet"));
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("maColorSetName"),
+                                      BAD_CAST(maColorSetName.toUtf8().getStr()));
+
+    for (const auto& rColor : maColors)
+    {
+        (void)xmlTextWriterStartElement(pWriter, BAD_CAST("Color"));
+        std::stringstream ss;
+        ss << rColor;
+        (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(ss.str().c_str()));
+        (void)xmlTextWriterEndElement(pWriter);
+    }
+
+    (void)xmlTextWriterEndElement(pWriter);
+}
 
 ColorSets::~ColorSets()
 {}
@@ -100,6 +123,36 @@ const ColorSet& ColorSets::getColorSet(std::u16string_view rName)
             return rColorSet;
     }
     return maColorSets[0];
+}
+
+Theme::Theme(const OUString& rName)
+    : maName(rName)
+{
+}
+
+Theme::~Theme() {}
+
+void Theme::SetColorSet(std::unique_ptr<ColorSet> pColorSet) { mpColorSet = std::move(pColorSet); }
+
+ColorSet* Theme::GetColorSet() { return mpColorSet.get(); }
+
+void Theme::SetName(const OUString& rName) { maName = rName; }
+
+const OUString& Theme::GetName() const { return maName; }
+
+void Theme::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("Theme"));
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("maName"),
+                                      BAD_CAST(maName.toUtf8().getStr()));
+
+    if (mpColorSet)
+    {
+        mpColorSet->dumpAsXml(pWriter);
+    }
+
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 } // end of namespace svx

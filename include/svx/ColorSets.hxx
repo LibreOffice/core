@@ -18,6 +18,8 @@
 #include <svx/svxdllapi.h>
 #include <tools/color.hxx>
 
+typedef struct _xmlTextWriter* xmlTextWriterPtr;
+
 namespace svx
 {
 
@@ -41,6 +43,8 @@ public:
     {
         return maColors[nIndex];
     }
+
+    void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };
 
 class SVXCORE_DLLPUBLIC ColorSets
@@ -62,6 +66,25 @@ public:
     }
 
     const ColorSet& getColorSet(std::u16string_view rName);
+};
+
+/// A named theme has a named color set.
+class SVXCORE_DLLPUBLIC Theme
+{
+    OUString maName;
+    std::unique_ptr<ColorSet> mpColorSet;
+
+public:
+    Theme(OUString const& rName);
+    ~Theme();
+
+    void SetColorSet(std::unique_ptr<ColorSet> pColorSet);
+    ColorSet* GetColorSet();
+
+    void SetName(const OUString& rName);
+    const OUString& GetName() const;
+
+    void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };
 
 } // end of namespace svx

@@ -90,6 +90,10 @@ namespace com::sun::star::beans {
     struct PropertyValue;
 }
 
+namespace svx
+{
+class Theme;
+}
 
 constexpr const sal_Unicode DEGREE_CHAR = u'\x00B0'; /* U+00B0 DEGREE SIGN */
 
@@ -535,6 +539,9 @@ public:
     // made it needs to delete it.
     SfxStyleSheetBasePool* GetStyleSheetPool() const         { return mxStyleSheetPool.get(); }
     void SetStyleSheetPool(SfxStyleSheetBasePool* pPool)     { mxStyleSheetPool=pPool; }
+
+    void SetTheme(std::unique_ptr<svx::Theme> pTheme);
+    svx::Theme* GetTheme();
 
     void    SetStarDrawPreviewMode(bool bPreview);
     bool    IsStarDrawPreviewMode() const { return m_bStarDrawPreviewMode; }
