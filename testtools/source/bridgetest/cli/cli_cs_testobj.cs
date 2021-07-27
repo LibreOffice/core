@@ -259,6 +259,10 @@ public class BridgeTestObject : WeakBase, XRecursiveCall, XBridgeTest2
         return arg;
     }
 
+    public DoubleHyper echoDoubleHyper(Mix s) { return s; }
+
+    public FloatFloatLongByte echoFloatFloatLongByte(Mix s) { return s; }
+
     public ThreeByteStruct echoThreeByteStruct(/*[in]*/ThreeByteStruct arg)
     {
         return arg;

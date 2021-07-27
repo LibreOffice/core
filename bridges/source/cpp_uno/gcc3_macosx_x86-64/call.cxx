@@ -55,19 +55,18 @@ void privateSnippetExecutor()
 
          "    call  _cpp_vtable_call\n"
 
-         "    cmp   $10, %rax               # typelib_TypeClass_FLOAT\n"
-         "    je    .Lfloat\n"
-         "    cmp   $11, %rax               # typelib_TypeClass_DOUBLE\n"
-         "    je    .Lfloat\n"
+         "    cmp   $1, %rax\n"
+         "    je    .Lspecial\n"
 
-         "    movq  -144(%rbp), %rax        # Return value (int case)\n"
-         "    movq  -136(%rbp), %rdx        # Return value (int case)\n"
-         "    movq  -144(%rbp), %xmm0       # Return value (int case)\n"
-         "    movq  -136(%rbp), %xmm1       # Return value (int case)\n"
+         "    movq  -144(%rbp), %rax        # Potential return value (general case)\n"
+         "    movq  -136(%rbp), %rdx        # Potential return value (general case)\n"
+         "    movq  -144(%rbp), %xmm0       # Potential return value (general case)\n"
+         "    movq  -136(%rbp), %xmm1       # Potential return value (general case)\n"
          "    jmp   .Lfinish\n"
 
-         ".Lfloat:\n"
-         "    movlpd    -144(%rbp), %xmm0   # Return value (float/double case)\n"
+         ".Lspecial:\n"
+         "    movq  -144(%rbp), %xmm0       # Return value (special fp and integer case)\n"
+         "    movq  -136(%rbp), %rax        # Return value (special fp and integer case)\n"
 
          ".Lfinish:\n"
          "    addq  $160, %rsp\n"

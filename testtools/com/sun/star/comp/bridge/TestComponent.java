@@ -41,6 +41,8 @@ import test.testtools.bridgetest.BigStruct;
 import test.testtools.bridgetest.TwoFloats;
 import test.testtools.bridgetest.FourFloats;
 import test.testtools.bridgetest.MixedFloatAndInteger;
+import test.testtools.bridgetest.DoubleHyper;
+import test.testtools.bridgetest.FloatFloatLongByte;
 import test.testtools.bridgetest.ThreeByteStruct;
 import test.testtools.bridgetest.XBridgeTest;
 import test.testtools.bridgetest.XBridgeTest2;
@@ -502,6 +504,16 @@ public class TestComponent {
 
         public MixedFloatAndInteger echoMixedFloatAndInteger( MixedFloatAndInteger i_Struct) throws com.sun.star.uno.RuntimeException {
             return i_Struct;
+        }
+
+        public DoubleHyper echoDoubleHyper(DoubleHyper s) throws com.sun.star.uno.RuntimeException {
+            return s;
+        }
+
+        public FloatFloatLongByte echoFloatFloatLongByte(FloatFloatLongByte s)
+            throws com.sun.star.uno.RuntimeException
+        {
+            return s;
         }
 
         public ThreeByteStruct echoThreeByteStruct( ThreeByteStruct i_Struct) throws com.sun.star.uno.RuntimeException {
