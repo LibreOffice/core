@@ -1108,9 +1108,13 @@ void SvTreeListBox::SetupDragOrigin()
 
 void SvTreeListBox::StartDrag( sal_Int8, const Point& rPosPixel )
 {
-    Point aEventPos( rPosPixel );
-    MouseEvent aMouseEvt( aEventPos, 1, MouseEventModifiers::SELECT, MOUSE_LEFT );
-    MouseButtonUp( aMouseEvt );
+    if(nullptr != pImpl)
+    {
+        // tdf#143114 do not start drag when a Button/Checkbox is in
+        // drag-before-ButtonUp mode (CaptureMouse() active)
+        if(pImpl->IsCaptureOnButtonActive())
+            return;
+    }
 
     nOldDragMode = GetDragDropMode();
     if ( nOldDragMode == DragDropMode::NONE )
