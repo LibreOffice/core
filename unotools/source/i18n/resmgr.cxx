@@ -255,6 +255,31 @@ namespace Translate
         return result;
     }
 
+    OUString get(TranslateId sContextAndId, const std::locale &loc)
+    {
+        assert(!strchr(sContextAndId.mpId, '\004') && "should be using nget, not get");
+
+        //if it's a key id locale, generate it here
+        if (std::use_facet<boost::locale::info>(loc).language() == "qtz")
+        {
+            OString sKeyId(genKeyId(OString::Concat(sContextAndId.mpContext) + "|" + std::string_view(sContextAndId.mpId)));
+            return OUString::fromUtf8(sKeyId) + u"\u2016" + createFromUtf8(sContextAndId.mpId, strlen(sContextAndId.mpId));
+        }
+
+        //otherwise translate it
+        const std::string ret = boost::locale::pgettext(sContextAndId.mpContext, sContextAndId.mpId, loc);
+        OUString result(ExpandVariables(createFromUtf8(ret.data(), ret.size())));
+
+        if (comphelper::LibreOfficeKit::isActive())
+        {
+            // If it is de-CH, change sharp s to double s.
+            if (std::use_facet<boost::locale::info>(loc).country() == "CH" &&
+                std::use_facet<boost::locale::info>(loc).language() == "de")
+                result = result.replaceAll(OUString::fromUtf8("\xC3\x9F"), "ss");
+        }
+        return result;
+    }
+
     OUString nget(std::string_view aContextAndIds, int n, const std::locale &loc)
     {
         OString sContextIdId(aContextAndIds);
@@ -307,5 +332,11 @@ namespace Translate
         return pImplResHookProc;
     }
 }
+
+bool TranslateId::operator==(const TranslateId& other) const
+{
+    return strcmp(mpContext, other.mpContext) == 0 && strcmp(mpId,other.mpId) == 0;
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

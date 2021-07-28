@@ -28,11 +28,27 @@ class LanguageTag;
 
 typedef OUString (*ResHookProc)(const OUString& rStr);
 
+struct UNOTOOLS_DLLPUBLIC TranslateId
+{
+    const char* mpContext;
+    const char* mpId;
+
+    TranslateId() {}
+    TranslateId(const char* pContext, const char* pId)
+        : mpContext(pContext), mpId(pId) {}
+
+    operator bool() const { return mpId != nullptr; }
+
+    bool operator==(const TranslateId& other) const;
+    bool operator!=(const TranslateId& other) const { return !operator==(other); }
+};
+
 namespace Translate
 {
     UNOTOOLS_DLLPUBLIC std::locale Create(std::string_view aPrefixName, const LanguageTag& rLocale = SvtSysLocale().GetUILanguageTag());
     UNOTOOLS_DLLPUBLIC OUString get(std::string_view aId, const std::locale &loc);
     UNOTOOLS_DLLPUBLIC OUString nget(std::string_view aId, int n, const std::locale &loc);
+    UNOTOOLS_DLLPUBLIC OUString get(TranslateId sContextAndId, const std::locale &loc);
     UNOTOOLS_DLLPUBLIC void SetReadStringHook( ResHookProc pProc );
     UNOTOOLS_DLLPUBLIC ResHookProc GetReadStringHook();
     UNOTOOLS_DLLPUBLIC OUString ExpandVariables(const OUString& rString);
