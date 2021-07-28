@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7079334a_2f89b995",
+        "filename": "sfx2/source/inc/StyleList.hxx",
+        "patchSetId": 71
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-28T03:35:02Z",
+      "side": 1,
+      "message": "Should be const",
+      "revId": "9c92db89e1d04233daf05a9084dae18c0530a1ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e0d82588_a922e808",
+        "filename": "sfx2/source/inc/StyleList.hxx",
+        "patchSetId": 71
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-28T03:35:02Z",
+      "side": 1,
+      "message": "This and two below should be const",
+      "revId": "9c92db89e1d04233daf05a9084dae18c0530a1ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3ab35693_85f50834",
+        "filename": "sfx2/source/inc/StyleList.hxx",
+        "patchSetId": 71
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-28T03:35:02Z",
+      "side": 1,
+      "message": "\"Enable\" is an action, so \"EnableFoo\" is used to name functions that do some action on object (modify it to be unable to Foo); you use it yourself below in lines 101-107. Here \"IsHierarchical\" fits better.",
+      "revId": "9c92db89e1d04233daf05a9084dae18c0530a1ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
