@@ -32,6 +32,7 @@
 
 #include <svl/itemprop.hxx>
 #include <vcl/svapp.hxx>
+#include <comphelper/string.hxx>
 
 #include <miscuno.hxx>
 #include <convuno.hxx>
@@ -388,6 +389,18 @@ void ScTokenConversion::ConvertToTokenSequence( const ScDocument& rDoc,
                     // Only the count of spaces is stored as "long". Parameter count is ignored.
                     if ( eOpCode == ocSpaces )
                         rAPI.Data <<= static_cast<sal_Int32>(rToken.GetByte());
+                    else if (eOpCode == ocWhitespace)
+                    {
+                        // Convention is one character repeated.
+                        if (rToken.GetByte() == 1)
+                            rAPI.Data <<= OUString( rToken.GetChar());
+                        else
+                        {
+                            OUStringBuffer aBuf( rToken.GetByte());
+                            comphelper::string::padToLength( aBuf, rToken.GetByte(), rToken.GetChar());
+                            rAPI.Data <<= aBuf.makeStringAndClear();
+                        }
+                    }
                     else
                         rAPI.Data.clear();      // no data
                     break;

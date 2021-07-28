@@ -336,11 +336,8 @@ ScCompiler::Convention::Convention( FormulaGrammar::AddressConvention eConv )
     for (i = 0; i < 128; i++)
         t[i] = ScCharFlags::Illegal;
 
-// tdf#56036: Allow tabs/newlines in imported formulas (for now simply treat them as (and convert to) space)
-// TODO: tdf#76310: allow saving newlines as is (as per OpenFormula specification v.1.2, clause 5.14 "Whitespace")
-// This is compliant with the OASIS decision (see https://issues.oasis-open.org/browse/OFFICE-701)
-// Also, this would enable correct roundtrip from/to OOXML without losing tabs/newlines
-// This requires saving actual space characters in ocSpaces token, using them in UI and saving
+// Allow tabs/newlines.
+// Allow saving whitespace as is (as per OpenFormula specification v.1.2, clause 5.14 "Whitespace").
 /* tab */   t[ 9] = ScCharFlags::CharDontCare | ScCharFlags::WordSep | ScCharFlags::ValueSep;
 /* lf  */   t[10] = ScCharFlags::CharDontCare | ScCharFlags::WordSep | ScCharFlags::ValueSep;
 /* cr  */   t[13] = ScCharFlags::CharDontCare | ScCharFlags::WordSep | ScCharFlags::ValueSep;
@@ -2067,6 +2064,19 @@ static bool lcl_isUnicodeIgnoreAscii( const sal_Unicode* p1, const char* p2, siz
     return true;
 }
 
+// static
+void ScCompiler::addWhitespace( std::vector<ScCompiler::Whitespace> & rvSpaces,
+        ScCompiler::Whitespace & rSpace, sal_Unicode c, sal_Int32 n )
+{
+    if (rSpace.cChar != c)
+    {
+        if (rSpace.cChar && rSpace.nCount > 0)
+            rvSpaces.emplace_back(rSpace);
+        rSpace.reset(c);
+    }
+    rSpace.nCount += n;
+}
+
 // NextSymbol
 
 // Parses the formula into separate symbols for further processing.
@@ -2104,8 +2114,9 @@ static bool lcl_isUnicodeIgnoreAscii( const sal_Unicode* p1, const char* p2, siz
 //               | other             | Symbol=Symbol+char    | GetString
 //---------------+-------------------+-----------------------+---------------
 
-sal_Int32 ScCompiler::NextSymbol(bool bInArray)
+std::vector<ScCompiler::Whitespace> ScCompiler::NextSymbol(bool bInArray)
 {
+    std::vector<Whitespace> vSpaces;
     cSymbol[MAXSTRLEN] = 0;       // end
     sal_Unicode* pSym = cSymbol;
     const sal_Unicode* const pStart = aFormula.getStr();
@@ -2116,7 +2127,7 @@ sal_Int32 ScCompiler::NextSymbol(bool bInArray)
     bool bQuote = false;
     mnRangeOpPosInSymbol = -1;
     ScanState eState = ssGetChar;
-    sal_Int32 nSpaces = 0;
+    Whitespace aSpace;
     sal_Unicode cSep = mxSymbols->getSymbolChar( ocSep);
     sal_Unicode cArrayColSep = mxSymbols->getSymbolChar( ocArrayColSep);
     sal_Unicode cArrayRowSep = mxSymbols->getSymbolChar( ocArrayRowSep);
@@ -2129,6 +2140,7 @@ sal_Int32 ScCompiler::NextSymbol(bool bInArray)
 
     int nDecSeps = 0;
     bool bAutoIntersection = false;
+    size_t nAutoIntersectionSpacesPos = 0;
     int nRefInName = 0;
     bool bErrorConstantHadSlash = false;
     mnPredetectedReference = 0;
@@ -2187,7 +2199,12 @@ Label_MaskStateMachine:
                         if (!bAutoIntersection)
                         {
                             ++pSrc;
-                            nSpaces += 2;   // must match the character count
+                            // Add 2 because it must match the character count
+                            // for bi18n.
+                            addWhitespace( vSpaces, aSpace, 0x20, 2);
+                            // Position of Whitespace where it will be added to
+                            // vector.
+                            nAutoIntersectionSpacesPos = vSpaces.size();
                             bAutoIntersection = true;
                         }
                         else
@@ -2267,7 +2284,7 @@ Label_MaskStateMachine:
                 }
                 else if( nMask & ScCharFlags::CharDontCare )
                 {
-                    nSpaces++;
+                    addWhitespace( vSpaces, aSpace, c);
                 }
                 else if( nMask & ScCharFlags::CharIdent )
                 {   // try to get a simple ASCII identifier before calling
@@ -2731,10 +2748,15 @@ Label_MaskStateMachine:
         cLast = c;
         c = *pSrc;
     }
+
+    if (aSpace.nCount && aSpace.cChar)
+        vSpaces.emplace_back(aSpace);
+
     if ( bi18n )
     {
         const sal_Int32 nOldSrcPos = nSrcPos;
-        nSrcPos = nSrcPos + nSpaces;
+        for (const auto& r : vSpaces)
+            nSrcPos += r.nCount;
         // If group separator is not a possible operator and not one of any
         // separators then it may be parsed away in numbers. This is
         // specifically the case with NO-BREAK SPACE, which actually triggers
@@ -2835,9 +2857,9 @@ Label_MaskStateMachine:
     }
     if ( bAutoCorrect )
         aCorrectedSymbol = OUString(cSymbol, pSym - cSymbol);
-    if (bAutoIntersection && nSpaces > 1)
-        --nSpaces;  // replace '!!' with only one space
-    return nSpaces;
+    if (bAutoIntersection && vSpaces[nAutoIntersectionSpacesPos].nCount > 1)
+        --vSpaces[nAutoIntersectionSpacesPos].nCount;   // replace '!!' with only one space
+    return vSpaces;
 }
 
 // Convert symbol to token
@@ -4246,7 +4268,7 @@ bool ScCompiler::NextNewToken( bool bInArray )
     }
 
     bool bAllowBooleans = bInArray;
-    sal_Int32 nSpaces = NextSymbol(bInArray);
+    const std::vector<Whitespace> & vSpaces = NextSymbol(bInArray);
 
     if (!cSymbol[0])
     {
@@ -4266,15 +4288,31 @@ bool ScCompiler::NextNewToken( bool bInArray )
         return false;
     }
 
-    if( nSpaces )
+    if (!vSpaces.empty())
     {
         ScRawToken aToken;
-        aToken.SetOpCode( ocSpaces );
-        aToken.sbyte.cByte = static_cast<sal_uInt8>( std::min<sal_Int32>(nSpaces, 255) );
-        if( !static_cast<ScTokenArray*>(pArr)->AddRawToken( aToken ) )
+        for (const auto& rSpace : vSpaces)
         {
-            SetError(FormulaError::CodeOverflow);
-            return false;
+            if (rSpace.cChar == 0x20)
+            {
+                // For now keep this a FormulaByteToken for the nasty
+                // significant whitespace intersection. This probably can be
+                // changed to a FormulaSpaceToken but then other places may
+                // need to be adapted.
+                aToken.SetOpCode( ocSpaces );
+                aToken.sbyte.cByte = static_cast<sal_uInt8>( std::min<sal_Int32>(rSpace.nCount, 255) );
+            }
+            else
+            {
+                aToken.SetOpCode( ocWhitespace );
+                aToken.whitespace.nCount = static_cast<sal_uInt8>( std::min<sal_Int32>(rSpace.nCount, 255) );
+                aToken.whitespace.cChar = rSpace.cChar;
+            }
+            if (!static_cast<ScTokenArray*>(pArr)->AddRawToken( aToken ))
+            {
+                SetError(FormulaError::CodeOverflow);
+                return false;
+            }
         }
     }
 

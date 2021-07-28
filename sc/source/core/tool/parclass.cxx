@@ -74,6 +74,7 @@ const ScParameterClassification::RawData ScParameterClassification::pRawData[] =
     { ocSep,             {{ Bounds                                               }, 0, Bounds }},
     { ocSkip,            {{ Bounds                                               }, 0, Bounds }},
     { ocSpaces,          {{ Bounds                                               }, 0, Bounds }},
+    { ocWhitespace,      {{ Bounds                                               }, 0, Bounds }},
     { ocStop,            {{ Bounds                                               }, 0, Bounds }},
     { ocStringXML,       {{ Bounds                                               }, 0, Bounds }},
     { ocTableRef,        {{ Bounds                                               }, 0, Value }},    // or Reference?

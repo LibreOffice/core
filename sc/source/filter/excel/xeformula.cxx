@@ -826,9 +826,13 @@ const FormulaToken* XclExpFmlaCompImpl::PeekNextRawToken() const
 bool XclExpFmlaCompImpl::GetNextToken( XclExpScToken& rTokData )
 {
     rTokData.mpScToken = GetNextRawToken();
-    rTokData.mnSpaces = (rTokData.GetOpCode() == ocSpaces) ? rTokData.mpScToken->GetByte() : 0;
-    while( rTokData.GetOpCode() == ocSpaces )
+    rTokData.mnSpaces = 0;
+    /* TODO: handle ocWhitespace characters? */
+    while (rTokData.GetOpCode() == ocSpaces || rTokData.GetOpCode() == ocWhitespace)
+    {
+        rTokData.mnSpaces += rTokData.mpScToken->GetByte();
         rTokData.mpScToken = GetNextRawToken();
+    }
     return rTokData.Is();
 }
 

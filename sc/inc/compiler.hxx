@@ -108,6 +108,10 @@ public:
     union {
         double       nValue;
         struct {
+            sal_uInt8           nCount;
+            sal_Unicode         cChar;
+        } whitespace;
+        struct {
             sal_uInt8           cByte;
             formula::ParamClass eInForceArray;
         } sbyte;
@@ -326,7 +330,21 @@ private:
     bool ToUpperAsciiOrI18nIsAscii( OUString& rUpper, const OUString& rOrg ) const;
 
     virtual void SetError(FormulaError nError) override;
-    sal_Int32 NextSymbol(bool bInArray);
+
+    struct Whitespace final
+    {
+        sal_Int32   nCount;
+        sal_Unicode cChar;
+
+        Whitespace() : nCount(0), cChar(0x20) {}
+        void reset( sal_Unicode c ) { nCount = 0; cChar = c; }
+    };
+
+    static void addWhitespace( std::vector<ScCompiler::Whitespace> & rvSpaces,
+            ScCompiler::Whitespace & rSpace, sal_Unicode c, sal_Int32 n = 1 );
+
+    std::vector<Whitespace> NextSymbol(bool bInArray);
+
     bool IsValue( const OUString& );
     bool IsOpCode( const OUString&, bool bInArray );
     bool IsOpCode2( const OUString& );

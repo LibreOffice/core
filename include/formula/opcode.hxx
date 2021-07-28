@@ -53,6 +53,7 @@ enum OpCode : sal_uInt16
         ocBad               = SC_OPCODE_BAD,
         ocStringXML         = SC_OPCODE_STRINGXML,
         ocSpaces            = SC_OPCODE_SPACES,
+        ocWhitespace        = SC_OPCODE_WHITESPACE,
         ocMatRef            = SC_OPCODE_MAT_REF,
         ocTableRefItemAll     = SC_OPCODE_TABLE_REF_ITEM_ALL,
         ocTableRefItemHeaders = SC_OPCODE_TABLE_REF_ITEM_HEADERS,
@@ -545,6 +546,7 @@ inline std::string OpCodeEnumToString(OpCode eCode)
     case ocBad: return "Bad";
     case ocStringXML: return "StringXML";
     case ocSpaces: return "Spaces";
+    case ocWhitespace: return "Whitespace";
     case ocMatRef: return "MatRef";
     case ocTableRefItemAll: return "TableRefItemAll";
     case ocTableRefItemHeaders: return "TableRefItemHeaders";
