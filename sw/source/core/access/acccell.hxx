@@ -101,21 +101,19 @@ public:
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
     virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
 
-    // XAccessibleValue
-
     // XAccessibleExtendedAttributes
     css::uno::Any SAL_CALL getExtendedAttributes() override ;
 private:
     SwFrameFormat* GetTableBoxFormat() const;
 
 public:
+    // XAccessibleValue
     virtual css::uno::Any SAL_CALL getCurrentValue( ) override;
-
     virtual sal_Bool SAL_CALL setCurrentValue( const css::uno::Any& aNumber ) override;
-
     virtual css::uno::Any SAL_CALL getMaximumValue(  ) override;
-
     virtual css::uno::Any SAL_CALL getMinimumValue(  ) override;
+    virtual css::uno::Any SAL_CALL getMinimumIncrement(  ) override;
+
     // XAccessibleComponent
     sal_Int32 SAL_CALL getBackground() override;
 

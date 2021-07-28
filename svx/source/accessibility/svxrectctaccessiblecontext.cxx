@@ -548,6 +548,13 @@ Any SAL_CALL SvxRectCtlChildAccessibleContext::getMinimumValue()
     return aRet;
 }
 
+Any SAL_CALL SvxRectCtlChildAccessibleContext::getMinimumIncrement()
+{
+    Any aRet;
+    aRet <<= 1.0;
+    return aRet;
+}
+
 
 // XAccessibleAction
 

@@ -108,6 +108,8 @@ public:
     virtual css::uno::Any SAL_CALL getMaximumValue(  ) override;
 
     virtual css::uno::Any SAL_CALL getMinimumValue(  ) override;
+
+    virtual css::uno::Any SAL_CALL getMinimumIncrement(  ) override;
 protected:
     /** Specifies whether the box is a combo box or a list box.  List boxes
         have multi selection.

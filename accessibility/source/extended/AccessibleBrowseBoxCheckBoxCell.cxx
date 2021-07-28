@@ -115,6 +115,14 @@ namespace accessibility
         return aValue;
     }
 
+    Any SAL_CALL AccessibleCheckBoxCell::getMinimumIncrement(  )
+    {
+        Any aValue;
+        aValue <<= sal_Int32(1);
+
+        return aValue;
+    }
+
     // XAccessibleContext
     sal_Int32 SAL_CALL AccessibleCheckBoxCell::getAccessibleChildCount(  )
     {

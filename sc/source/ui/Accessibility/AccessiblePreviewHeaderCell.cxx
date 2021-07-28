@@ -167,6 +167,12 @@ uno::Any SAL_CALL ScAccessiblePreviewHeaderCell::getMinimumValue()
     return uno::Any(0.0);
 }
 
+uno::Any SAL_CALL ScAccessiblePreviewHeaderCell::getMinimumIncrement()
+{
+    // value can't be changed, s. 'setCurrentValue'
+    return uno::Any();
+}
+
 //=====  XAccessibleComponent  ============================================
 
 uno::Reference< XAccessible > SAL_CALL ScAccessiblePreviewHeaderCell::getAccessibleAtPoint( const awt::Point& rPoint )

@@ -90,4 +90,16 @@ css::uno::Any SAL_CALL SVTXAccessibleNumericField::getMinimumValue()
     return css::uno::Any(dValue);
 }
 
+css::uno::Any SAL_CALL SVTXAccessibleNumericField::getMinimumIncrement()
+{
+    OExternalLockGuard aGuard(this);
+
+    double dValue = 0;
+    SVTXNumericField* pField = static_cast<SVTXNumericField*>(GetVCLXWindow());
+    if (pField)
+        dValue = pField->getSpinSize();
+
+    return css::uno::Any(dValue);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

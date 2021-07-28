@@ -365,6 +365,11 @@ uno::Any SwAccessibleCell::getMinimumValue(  )
     return uno::Any(-DBL_MAX);
 }
 
+uno::Any SwAccessibleCell::getMinimumIncrement(  )
+{
+    return uno::Any();
+}
+
 static OUString ReplaceOneChar(const OUString& oldOUString, std::u16string_view replacedChar, const OUString& replaceStr)
 {
     int iReplace = oldOUString.lastIndexOf(replacedChar);

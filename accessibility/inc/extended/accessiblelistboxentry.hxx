@@ -202,10 +202,13 @@ namespace accessibility
         sal_Int32 SAL_CALL getSelectedAccessibleChildCount(  ) override;
         css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex ) override;
         void SAL_CALL deselectAccessibleChild( sal_Int32 nSelectedChildIndex ) override;
+
+        // XAccessibleValue
         virtual css::uno::Any SAL_CALL getCurrentValue(  ) override;
         virtual sal_Bool SAL_CALL setCurrentValue( const css::uno::Any& aNumber ) override;
         virtual css::uno::Any SAL_CALL getMaximumValue(  ) override;
         virtual css::uno::Any SAL_CALL getMinimumValue(  ) override;
+        virtual css::uno::Any SAL_CALL getMinimumIncrement(  ) override;
 
         css::uno::Reference< css::accessibility::XAccessible > implGetParentAccessible( ) const;
         SvTreeListEntry* GetRealChild(sal_Int32 nIndex);
