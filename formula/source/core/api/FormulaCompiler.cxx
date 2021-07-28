@@ -475,7 +475,8 @@ uno::Sequence< sheet::FormulaOpCodeMapEntry > FormulaCompiler::OpCodeMap::create
             { FormulaMapGroupSpecialOffset::DB_AREA           , ocDBArea }         ,
             /* TODO: { FormulaMapGroupSpecialOffset::TABLE_REF         , ocTableRef }       , */
             { FormulaMapGroupSpecialOffset::MACRO             , ocMacro }          ,
-            { FormulaMapGroupSpecialOffset::COL_ROW_NAME      , ocColRowName }
+            { FormulaMapGroupSpecialOffset::COL_ROW_NAME      , ocColRowName }     ,
+            { FormulaMapGroupSpecialOffset::WHITESPACE        , ocWhitespace }
         };
         const size_t nCount = SAL_N_ELEMENTS(aMap);
         // Preallocate vector elements.
@@ -1267,14 +1268,18 @@ bool FormulaCompiler::GetToken()
              nWasColRowName = 1;
         else
              nWasColRowName = 0;
+        OpCode eTmpOp;
         mpToken = maArrIterator.Next();
-        while( mpToken && mpToken->GetOpCode() == ocSpaces )
+        while (mpToken && ((eTmpOp = mpToken->GetOpCode()) == ocSpaces || eTmpOp == ocWhitespace))
         {
-            // For significant whitespace remember last ocSpaces token. Usually
-            // there's only one even for multiple spaces.
-            pSpacesToken = mpToken;
-            if ( nWasColRowName )
-                nWasColRowName++;
+            if (eTmpOp == ocSpaces)
+            {
+                // For significant whitespace remember last ocSpaces token.
+                // Usually there's only one even for multiple spaces.
+                pSpacesToken = mpToken;
+                if ( nWasColRowName )
+                    nWasColRowName++;
+            }
             if ( bAutoCorrect && !pStack )
                 CreateStringFromToken( aCorrectedFormula, mpToken.get() );
             mpToken = maArrIterator.Next();
@@ -2272,10 +2277,10 @@ const FormulaToken* FormulaCompiler::CreateStringFromToken( OUStringBuffer& rBuf
     if( bSpaces )
         rBuffer.append( ' ');
 
-    if( eOp == ocSpaces )
+    if (eOp == ocSpaces || eOp == ocWhitespace)
     {
         bool bWriteSpaces = true;
-        if (mxSymbols->isODFF())
+        if (eOp == ocSpaces && mxSymbols->isODFF())
         {
             const FormulaToken* p = maArrIterator.PeekPrevNoSpaces();
             bool bIntersectionOp = (p && p->GetOpCode() == ocColRowName);
@@ -2316,7 +2321,10 @@ const FormulaToken* FormulaCompiler::CreateStringFromToken( OUStringBuffer& rBuf
             sal_uInt8 n = t->GetByte();
             for ( sal_uInt8 j=0; j<n; ++j )
             {
-                rBuffer.append( ' ');
+                if (eOp == ocWhitespace)
+                    rBuffer.append( t->GetChar());
+                else
+                    rBuffer.append( ' ');
             }
         }
     }
@@ -2403,6 +2411,7 @@ const FormulaToken* FormulaCompiler::CreateStringFromToken( OUStringBuffer& rBuf
                                 case ocPush:
                                 case ocRange:
                                 case ocSpaces:
+                                case ocWhitespace:
                                     break;
                                 default:
                                     nLevel = 0;

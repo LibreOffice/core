@@ -867,8 +867,11 @@ void XclTokenArrayIterator::NextRawToken()
 void XclTokenArrayIterator::SkipSpaces()
 {
     if( mbSkipSpaces )
-        while( Is() && ((*this)->GetOpCode() == ocSpaces) )
+    {
+        OpCode eOp;
+        while( Is() && (((eOp = (*this)->GetOpCode()) == ocSpaces) || eOp == ocWhitespace) )
             NextRawToken();
+    }
 }
 
 // strings and string lists ---------------------------------------------------

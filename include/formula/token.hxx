@@ -187,6 +187,7 @@ public:
     virtual void                SetIndex( sal_uInt16 n );
     virtual sal_Int16           GetSheet() const;
     virtual void                SetSheet( sal_Int16 n );
+    virtual sal_Unicode         GetChar() const;
     virtual short*              GetJump() const;
     virtual const OUString&     GetExternal() const;
     virtual FormulaToken*       GetFAPOrigToken() const;
@@ -224,6 +225,25 @@ inline void intrusive_ptr_release(const FormulaToken* p)
 {
     p->DecRef();
 }
+
+class FORMULA_DLLPUBLIC FormulaSpaceToken : public FormulaToken
+{
+private:
+            sal_uInt8           nByte;
+            sal_Unicode         cChar;
+public:
+                                FormulaSpaceToken( sal_uInt8 n, sal_Unicode c ) :
+                                    FormulaToken( svByte, ocWhitespace ),
+                                    nByte( n ), cChar( c ) {}
+                                FormulaSpaceToken( const FormulaSpaceToken& r ) :
+                                    FormulaToken( r ),
+                                    nByte( r.nByte ), cChar( r.cChar ) {}
+
+    virtual FormulaToken*       Clone() const override { return new FormulaSpaceToken(*this); }
+    virtual sal_uInt8           GetByte() const override;
+    virtual sal_Unicode         GetChar() const override;
+    virtual bool                operator==( const FormulaToken& rToken ) const override;
+};
 
 class FORMULA_DLLPUBLIC FormulaByteToken : public FormulaToken
 {

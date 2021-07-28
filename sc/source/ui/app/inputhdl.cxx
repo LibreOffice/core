@@ -654,7 +654,7 @@ void ScInputHandler::DeleteRangeFinder()
 
 static OUString GetEditText(const EditEngine* pEng)
 {
-    return ScEditUtil::GetSpaceDelimitedString(*pEng);
+    return ScEditUtil::GetMultilineString(*pEng);
 }
 
 static void lcl_RemoveTabs(OUString& rStr)

@@ -389,6 +389,9 @@ sal_Int32 FormulaDlg_Impl::GetFunctionPos(sal_Int32 nPos)
         sal_Int32 nOldTokPos = 1;
         sal_Int32 nPrevFuncPos = 1;
         short nBracketCount = 0;
+        const sal_Int32 nOpPush = m_aSpecialOpCodes[sheet::FormulaMapGroupSpecialOffset::PUSH].Token.OpCode;
+        const sal_Int32 nOpSpaces = m_aSpecialOpCodes[sheet::FormulaMapGroupSpecialOffset::SPACES].Token.OpCode;
+        const sal_Int32 nOpWhitespace = m_aSpecialOpCodes[sheet::FormulaMapGroupSpecialOffset::WHITESPACE].Token.OpCode;
         while ( pIter != pEnd )
         {
             const sal_Int32 eOp = pIter->OpCode;
@@ -401,8 +404,7 @@ sal_Int32 FormulaDlg_Impl::GetFunctionPos(sal_Int32 nPos)
                 m_xBtnMatrix->set_active(true);
             }
 
-            if (eOp == m_aSpecialOpCodes[sheet::FormulaMapGroupSpecialOffset::PUSH].Token.OpCode ||
-                eOp == m_aSpecialOpCodes[sheet::FormulaMapGroupSpecialOffset::SPACES].Token.OpCode)
+            if (eOp == nOpPush || eOp == nOpSpaces || eOp == nOpWhitespace)
             {
                 const sal_Int32 n1 = nTokPos < 0 ? -1 : aFormString.indexOf( sep, nTokPos);
                 const sal_Int32 n2 = nTokPos < 0 ? -1 : aFormString.indexOf( ')', nTokPos);
@@ -444,7 +446,7 @@ sal_Int32 FormulaDlg_Impl::GetFunctionPos(sal_Int32 nPos)
                     m_pFunctionOpCodesEnd,
                     [&eOp](const sheet::FormulaOpCodeMapEntry& aEntry) { return aEntry.Token.OpCode == eOp; });
 
-            if ( bIsFunction && m_aSpecialOpCodes[sheet::FormulaMapGroupSpecialOffset::SPACES].Token.OpCode != eOp )
+            if ( bIsFunction && nOpSpaces != eOp && nOpWhitespace != eOp )
             {
                 nPrevFuncPos = nFuncPos;
                 nFuncPos = nOldTokPos;

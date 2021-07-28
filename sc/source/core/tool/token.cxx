@@ -235,6 +235,11 @@ void ScRawToken::SetOpCode( OpCode e )
         case ocTableRefClose:
             eType = svSep;
             break;
+        case ocWhitespace:
+            eType = svByte;
+            whitespace.nCount = 1;
+            whitespace.cChar = 0x20;
+            break;
         default:
             eType = svByte;
             sbyte.cByte = 0;
@@ -349,7 +354,10 @@ FormulaToken* ScRawToken::CreateToken(ScSheetLimits& rLimits) const
     switch ( GetType() )
     {
         case svByte :
-            return new FormulaByteToken( eOp, sbyte.cByte, sbyte.eInForceArray );
+            if (eOp == ocWhitespace)
+                return new FormulaSpaceToken( whitespace.nCount, whitespace.cChar );
+            else
+                return new FormulaByteToken( eOp, sbyte.cByte, sbyte.eInForceArray );
         case svDouble :
             IF_NOT_OPCODE_ERROR( ocPush, FormulaDoubleToken);
             return new FormulaDoubleToken( nValue );
@@ -1652,6 +1660,7 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
             case ocMissing:
             case ocBad:
             case ocSpaces:
+            case ocWhitespace:
             case ocSkip:
             case ocPercentSign:
             case ocErrNull:
@@ -2089,6 +2098,7 @@ FormulaToken* ScTokenArray::MergeArray( )
             break;
 
             case ocSpaces :
+            case ocWhitespace :
                 // ignore spaces
                 --nPrevRowSep;      // shorten this row by 1
             break;
@@ -5136,10 +5146,16 @@ OUString ScTokenArray::CreateString( sc::TokenStringContext& rCxt, const ScAddre
     {
         const FormulaToken* pToken = *p;
         OpCode eOp = pToken->GetOpCode();
+        /* FIXME: why does this ignore the count of spaces? */
         if (eOp == ocSpaces)
         {
             // TODO : Handle intersection operator '!!'.
             aBuf.append(' ');
+            continue;
+        }
+        else if (eOp == ocWhitespace)
+        {
+            aBuf.append( pToken->GetChar());
             continue;
         }
 

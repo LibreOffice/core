@@ -244,6 +244,13 @@ void FormulaToken::SetSheet( sal_Int16 )
     assert( !"virtual dummy called" );
 }
 
+sal_Unicode FormulaToken::GetChar() const
+{
+    // This Get is worth an assert.
+    assert( !"virtual dummy called" );
+    return 0;
+}
+
 short* FormulaToken::GetJump() const
 {
     SAL_WARN( "formula.core", "FormulaToken::GetJump: virtual dummy called" );
@@ -348,6 +355,15 @@ bool FormulaToken::TextEqual( const FormulaToken& rToken ) const
 // real implementations of virtual functions
 
 
+sal_uInt8   FormulaSpaceToken::GetByte() const  { return nByte; }
+sal_Unicode FormulaSpaceToken::GetChar() const  { return cChar; }
+bool FormulaSpaceToken::operator==( const FormulaToken& r ) const
+{
+    return FormulaToken::operator==( r ) && nByte == r.GetByte() &&
+        cChar == r.GetChar();
+}
+
+
 sal_uInt8   FormulaByteToken::GetByte() const           { return nByte; }
 void        FormulaByteToken::SetByte( sal_uInt8 n )    { nByte = n; }
 ParamClass  FormulaByteToken::GetInForceArray() const    { return eInForceArray; }
@@ -425,6 +441,13 @@ bool FormulaTokenArray::AddFormulaToken(
                     AddStringXML( aStrVal );
                 else if ( eOpCode == ocExternal || eOpCode == ocMacro )
                     Add( new formula::FormulaExternalToken( eOpCode, aStrVal ) );
+                else if ( eOpCode == ocWhitespace )
+                {
+                    // Simply ignore empty string.
+                    // Convention is one character repeated.
+                    if (!aStrVal.isEmpty())
+                        Add( new formula::FormulaSpaceToken( static_cast<sal_uInt8>(aStrVal.getLength()), aStrVal[0]));
+                }
                 else
                     bError = true;      // unexpected string: don't know what to do with it
             }
@@ -1472,17 +1495,21 @@ FormulaTokenArray * FormulaTokenArray::RewriteMissing( const MissingConvention &
     return pNewArr;
 }
 
+namespace {
+inline bool isWhitespace( OpCode eOp ) { return eOp == ocSpaces || eOp == ocWhitespace; }
+}
+
 bool FormulaTokenArray::MayReferenceFollow()
 {
     if ( pCode && nLen > 0 )
     {
         // ignore trailing spaces
         sal_uInt16 i = nLen - 1;
-        while ( i > 0 && pCode[i]->GetOpCode() == SC_OPCODE_SPACES )
+        while (i > 0 && isWhitespace( pCode[i]->GetOpCode()))
         {
             --i;
         }
-        if ( i > 0 || pCode[i]->GetOpCode() != SC_OPCODE_SPACES )
+        if (i > 0 || !isWhitespace( pCode[i]->GetOpCode()))
         {
             OpCode eOp = pCode[i]->GetOpCode();
             if ( (SC_OPCODE_START_BIN_OP <= eOp && eOp < SC_OPCODE_STOP_BIN_OP ) ||
@@ -1756,7 +1783,7 @@ FormulaToken* FormulaTokenArrayPlainIterator::NextNoSpaces()
 {
     if( mpFTA->GetArray() )
     {
-        while( (mnIndex < mpFTA->GetLen()) && (mpFTA->GetArray()[ mnIndex ]->GetOpCode() == ocSpaces) )
+        while ((mnIndex < mpFTA->GetLen()) && isWhitespace( mpFTA->GetArray()[ mnIndex ]->GetOpCode()))
             ++mnIndex;
         if( mnIndex < mpFTA->GetLen() )
             return mpFTA->GetArray()[ mnIndex++ ];
@@ -1793,7 +1820,7 @@ FormulaToken* FormulaTokenArrayPlainIterator::PeekNextNoSpaces() const
     if( mpFTA->GetArray() && mnIndex < mpFTA->GetLen() )
     {
         sal_uInt16 j = mnIndex;
-        while ( j < mpFTA->GetLen() && mpFTA->GetArray()[j]->GetOpCode() == ocSpaces )
+        while (j < mpFTA->GetLen() && isWhitespace( mpFTA->GetArray()[j]->GetOpCode()))
             j++;
         if ( j < mpFTA->GetLen() )
             return mpFTA->GetArray()[ j ];
@@ -1809,9 +1836,9 @@ FormulaToken* FormulaTokenArrayPlainIterator::PeekPrevNoSpaces() const
     if( mpFTA->GetArray() && mnIndex > 1 )
     {
         sal_uInt16 j = mnIndex - 2;
-        while ( mpFTA->GetArray()[j]->GetOpCode() == ocSpaces && j > 0 )
+        while (isWhitespace( mpFTA->GetArray()[j]->GetOpCode()) && j > 0 )
             j--;
-        if ( j > 0 || mpFTA->GetArray()[j]->GetOpCode() != ocSpaces )
+        if (j > 0 || !isWhitespace( mpFTA->GetArray()[j]->GetOpCode()))
             return mpFTA->GetArray()[ j ];
         else
             return nullptr;

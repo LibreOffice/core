@@ -40,26 +40,27 @@
 #define SC_OPCODE_BAD                14
 #define SC_OPCODE_STRINGXML          15
 #define SC_OPCODE_SPACES             16
-#define SC_OPCODE_MAT_REF            17
-#define SC_OPCODE_DB_AREA            18     /* additional access operators */
-#define SC_OPCODE_TABLE_REF          19
-#define SC_OPCODE_MACRO              20
-#define SC_OPCODE_COL_ROW_NAME       21
-#define SC_OPCODE_COL_ROW_NAME_AUTO  22
-#define SC_OPCODE_PERCENT_SIGN       23     /* operator _follows_ value */
-#define SC_OPCODE_ARRAY_OPEN         24
-#define SC_OPCODE_ARRAY_CLOSE        25
-#define SC_OPCODE_ARRAY_ROW_SEP      26
-#define SC_OPCODE_ARRAY_COL_SEP      27     /* some convs use sep != col_sep */
-#define SC_OPCODE_TABLE_REF_OPEN     28
-#define SC_OPCODE_TABLE_REF_CLOSE    29
-#define SC_OPCODE_TABLE_REF_ITEM_ALL      30
-#define SC_OPCODE_TABLE_REF_ITEM_HEADERS  31
-#define SC_OPCODE_TABLE_REF_ITEM_DATA     32
-#define SC_OPCODE_TABLE_REF_ITEM_TOTALS   33
-#define SC_OPCODE_TABLE_REF_ITEM_THIS_ROW 34
-#define SC_OPCODE_STOP_DIV           35
-#define SC_OPCODE_SKIP               36     /* used to skip raw tokens during string compilation */
+#define SC_OPCODE_WHITESPACE         17
+#define SC_OPCODE_MAT_REF            18
+#define SC_OPCODE_DB_AREA            19     /* additional access operators */
+#define SC_OPCODE_TABLE_REF          20
+#define SC_OPCODE_MACRO              21
+#define SC_OPCODE_COL_ROW_NAME       22
+#define SC_OPCODE_COL_ROW_NAME_AUTO  23
+#define SC_OPCODE_PERCENT_SIGN       24     /* operator _follows_ value */
+#define SC_OPCODE_ARRAY_OPEN         25
+#define SC_OPCODE_ARRAY_CLOSE        26
+#define SC_OPCODE_ARRAY_ROW_SEP      27
+#define SC_OPCODE_ARRAY_COL_SEP      28     /* some convs use sep != col_sep */
+#define SC_OPCODE_TABLE_REF_OPEN     29
+#define SC_OPCODE_TABLE_REF_CLOSE    30
+#define SC_OPCODE_TABLE_REF_ITEM_ALL      31
+#define SC_OPCODE_TABLE_REF_ITEM_HEADERS  32
+#define SC_OPCODE_TABLE_REF_ITEM_DATA     33
+#define SC_OPCODE_TABLE_REF_ITEM_TOTALS   34
+#define SC_OPCODE_TABLE_REF_ITEM_THIS_ROW 35
+#define SC_OPCODE_STOP_DIV           36
+#define SC_OPCODE_SKIP               37     /* used to skip raw tokens during string compilation */
 
 /*** error constants #... ***/
 #define SC_OPCODE_START_ERRORS       40

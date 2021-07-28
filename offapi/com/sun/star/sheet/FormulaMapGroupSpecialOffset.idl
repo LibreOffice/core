@@ -140,10 +140,6 @@ constants FormulaMapGroupSpecialOffset
         <p>The FormulaToken::Data member shall contain a
         positive integer value of type `long` specifying the number
         of space characters.</p>
-
-        <p>Attention: This may change in next versions to support other
-        characters than simple space characters (e.g. line feeds, horizontal
-        tabulators, non-breakable spaces).</p>
      */
     const long SPACES = 8;
 
@@ -174,6 +170,26 @@ constants FormulaMapGroupSpecialOffset
 
 
     const long COL_ROW_NAME       = 12;
+
+
+    /** Formula tokens containing the op-code obtained from this offset
+        describe whitespace characters within the string representation of a
+        formula.
+
+        <p>Whitespace characters in formulas are used for readability and do
+        not affect the result of the formula.</p>
+
+        <p>The FormulaToken::Data member shall contain a
+        `string` of one (repeated) whitespace character. The length of
+        the string determines the number of repetitions.</p>
+
+        <p>Allowed whitespace characters are SPACE (U+0020), CHARACTER
+        TABULATION (U+0009), LINE FEED (U+000A), and CARRIAGE RETURN
+        (U+000D). See also ODF v1.3 OpenFormula 5.14 Whitespace.</p>
+
+        @since LibreOffice 7.3
+     */
+    const long WHITESPACE = 13;
 
 
 };
