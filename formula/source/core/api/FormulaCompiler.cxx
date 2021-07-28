@@ -2290,11 +2290,18 @@ const FormulaToken* FormulaCompiler::CreateStringFromToken( OUStringBuffer& rBuf
                 bWriteSpaces = false;
             }
         }
-        else if (mxSymbols->isOOXML())
+        if (bWriteSpaces)
         {
+            // ODF v1.3 OpenFormula 5.14 Whitespace states "whitespace shall
+            // not separate a function name from its initial opening
+            // parenthesis".
+            //
             // ECMA-376-1:2016 18.17.2 Syntax states "that no space characters
             // shall separate a function-name from the left parenthesis (()
             // that follows it." and Excel even chokes on it.
+            //
+            // Suppress/remove it in any case also in UI, it will not be
+            // preserved.
             const FormulaToken* p = maArrIterator.PeekPrevNoSpaces();
             if (p && p->IsFunction())
             {
