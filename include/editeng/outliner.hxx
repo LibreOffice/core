@@ -624,7 +624,6 @@ private:
     bool        ImpCanDeleteSelectedPages( OutlinerView* pCurView );
     bool        ImpCanDeleteSelectedPages( OutlinerView* pCurView, sal_Int32 nFirstPage, sal_Int32 nPages );
 
-    OutlinerMode ImplGetOutlinerMode() const { return nOutlinerMode; }
     void        ImplCheckDepth( sal_Int16& rnDepth ) const;
 
 protected:
@@ -645,13 +644,12 @@ protected:
 
 public:
 
-                    Outliner( SfxItemPool* pPool, OutlinerMode nOutlinerMode );
+                    Outliner( SfxItemPool* pPool, OutlinerMode nMode );
     virtual         ~Outliner() override;
 
     void            dumpAsXml(xmlTextWriterPtr pWriter) const;
 
-    void            Init( OutlinerMode nOutlinerMode );
-    OutlinerMode    GetMode() const { return nOutlinerMode; }
+    void            Init( OutlinerMode nMode );
 
     void            SetVertical( bool bVertical);
     void            SetRotation(TextRotation nRotation);
