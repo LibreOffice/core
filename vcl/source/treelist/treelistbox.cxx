@@ -1108,9 +1108,13 @@ void SvTreeListBox::SetupDragOrigin()
 
 void SvTreeListBox::StartDrag( sal_Int8, const Point& rPosPixel )
 {
-    Point aEventPos( rPosPixel );
-    MouseEvent aMouseEvt( aEventPos, 1, MouseEventModifiers::SELECT, MOUSE_LEFT );
-    MouseButtonUp( aMouseEvt );
+    if(nullptr != pImpl)
+    {
+        // tdf#143114 do not start drag when a Button/Checkbox is in
+        // drag-before-ButtonUp mode (CaptureMouse() active)
+        if(pImpl->IsCaptureOnButtonActive())
+            return;
+    }
 
     nOldDragMode = GetDragDropMode();
     if ( nOldDragMode == DragDropMode::NONE )
@@ -2282,18 +2286,26 @@ void SvTreeListBox::Paint(vcl::RenderContext& rRenderContext, const tools::Recta
 
 void SvTreeListBox::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    pImpl->m_pCursorOld = pImpl->m_pCursor;
     pImpl->MouseButtonDown( rMEvt );
+
+    // tdf#143114 remember the *correct* starting entry
+    pImpl->m_pCursorOld = (rMEvt.IsLeft() && (nTreeFlags & SvTreeFlags::CHKBTN) && mnClicksToToggle > 0)
+        ? GetEntry(rMEvt.GetPosPixel())
+        : nullptr;
 }
 
 void SvTreeListBox::MouseButtonUp( const MouseEvent& rMEvt )
 {
     // tdf#116675 clicking on an entry should toggle its checkbox
-    if (rMEvt.IsLeft() && (nTreeFlags & SvTreeFlags::CHKBTN) && mnClicksToToggle > 0)
+    // tdf#143114 use the already created starting entry and if it exists
+    if (nullptr != pImpl->m_pCursorOld)
     {
         const Point aPnt = rMEvt.GetPosPixel();
         SvTreeListEntry* pEntry = GetEntry(aPnt);
-        if (pEntry && pEntry->m_Items.size() > 0 && (mnClicksToToggle == 1 || pEntry == pImpl->m_pCursorOld))
+
+        // compare if MouseButtonUp *is* on the same entry, regardless of scrolling
+        // or other things
+        if (pEntry && pEntry->m_Items.size() > 0 && 1 == mnClicksToToggle && pEntry == pImpl->m_pCursorOld)
         {
             SvLBoxItem* pItem = GetItem(pEntry, aPnt.X());
             // if the checkbox button was clicked, that will be toggled later, do not toggle here
