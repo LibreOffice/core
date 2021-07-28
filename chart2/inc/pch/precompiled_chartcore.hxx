@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-04-11 19:47:44 using:
+ Generated on 2021-07-28 20:46:13 using:
  ./bin/update_pch chart2 chartcore --cutoff=3 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -24,6 +24,7 @@
 #if PCH_LEVEL >= 1
 #include <algorithm>
 #include <cassert>
+#include <cmath>
 #include <cstddef>
 #include <cstdlib>
 #include <functional>
@@ -32,10 +33,13 @@
 #include <map>
 #include <memory>
 #include <new>
+#include <optional>
 #include <ostream>
 #include <set>
 #include <string_view>
 #include <type_traits>
+#include <unordered_map>
+#include <unordered_set>
 #include <utility>
 #include <vector>
 #include <boost/property_tree/ptree_fwd.hpp>
@@ -65,10 +69,32 @@
 #include <sal/log.hxx>
 #include <sal/macros.h>
 #include <sal/types.h>
+#include <vcl/bitmap.hxx>
+#include <vcl/cairo.hxx>
+#include <vcl/devicecoordinate.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/errcode.hxx>
+#include <vcl/font.hxx>
+#include <vcl/mapmod.hxx>
+#include <vcl/metaactiontypes.hxx>
+#include <vcl/outdev.hxx>
+#include <vcl/outdevstate.hxx>
+#include <vcl/region.hxx>
+#include <vcl/rendercontext/AddFontSubstituteFlags.hxx>
+#include <vcl/rendercontext/AntialiasingFlags.hxx>
+#include <vcl/rendercontext/DrawGridFlags.hxx>
+#include <vcl/rendercontext/DrawImageFlags.hxx>
+#include <vcl/rendercontext/DrawModeFlags.hxx>
+#include <vcl/rendercontext/DrawTextFlags.hxx>
+#include <vcl/rendercontext/GetDefaultFontFlags.hxx>
+#include <vcl/rendercontext/ImplMapRes.hxx>
+#include <vcl/rendercontext/InvertFlags.hxx>
+#include <vcl/rendercontext/SalLayoutFlags.hxx>
+#include <vcl/salnativewidgets.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/vclreferencebase.hxx>
+#include <vcl/wall.hxx>
 #endif // PCH_LEVEL >= 2
 #if PCH_LEVEL >= 3
 #include <basegfx/basegfxdllapi.h>
@@ -82,12 +108,16 @@
 #include <basegfx/vector/b2enums.hxx>
 #include <basegfx/vector/b2ivector.hxx>
 #include <chartview/DrawModelWrapper.hxx>
+#include <com/sun/star/awt/DeviceInfo.hpp>
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/PropertyState.hpp>
+#include <com/sun/star/beans/XFastPropertySet.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
+#include <com/sun/star/beans/XMultiPropertyStates.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/beans/XPropertySetOption.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/chart/ChartAxisPosition.hpp>
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
@@ -155,6 +185,7 @@
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
+#include <com/sun/star/style/XStyleSupplier.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Any.hxx>
@@ -181,8 +212,11 @@
 #include <cppu/cppudllapi.h>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/compbase_ex.hxx>
+#include <cppuhelper/cppuhelperdllapi.h>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implbase_ex.hxx>
+#include <cppuhelper/interfacecontainer.h>
+#include <cppuhelper/propshlp.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakref.hxx>
@@ -194,27 +228,40 @@
 #include <o3tl/cow_wrapper.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <officecfg/Office/Compatibility.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 #include <svl/cenumitm.hxx>
 #include <svl/cintitem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/itemset.hxx>
+#include <svl/lstner.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/svldllapi.h>
 #include <svl/typedwhich.hxx>
 #include <svl/zforlist.hxx>
+#include <svx/DiagramDataInterface.hxx>
+#include <svx/shapeproperty.hxx>
+#include <svx/svdobj.hxx>
+#include <svx/svdobjkind.hxx>
+#include <svx/svdtypes.hxx>
 #include <svx/svxdllapi.h>
 #include <svx/unoshape.hxx>
 #include <tools/UnitConversion.hxx>
 #include <tools/color.hxx>
 #include <tools/date.hxx>
+#include <tools/degree.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/gen.hxx>
 #include <tools/helpers.hxx>
+#include <tools/lineend.hxx>
 #include <tools/link.hxx>
 #include <tools/long.hxx>
+#include <tools/poly.hxx>
 #include <tools/ref.hxx>
+#include <tools/solar.h>
 #include <tools/toolsdllapi.h>
+#include <tools/weakbase.h>
+#include <unotools/fontdefs.hxx>
 #include <unotools/options.hxx>
 #include <unotools/saveopt.hxx>
 #include <unotools/unotoolsdllapi.h>

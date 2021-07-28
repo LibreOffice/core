@@ -24,7 +24,6 @@
 #include <svx/ShapeTypeHandler.hxx>
 #include <svx/AccessibleShape.hxx>
 #include <svx/AccessibleShapeInfo.hxx>
-#include <vcl/window.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
