@@ -2725,7 +2725,7 @@ int MenuBar::GetMenuBarHeight() const
     else
     {
         vcl::Window* pMenubarWin = GetWindow();
-        nMenubarHeight = pMenubarWin ? pMenubarWin->GetOutDev()->GetOutputHeightPixel() : 0;
+        nMenubarHeight = pMenubarWin ? pMenubarWin->GetOutputSizePixel().Height() : 0;
     }
     return nMenubarHeight;
 }
