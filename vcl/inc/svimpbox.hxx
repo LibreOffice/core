@@ -210,6 +210,7 @@ protected:
     VclPtr<SvTreeListBox>   m_pView;
     VclPtr<ScrollBar>       m_aVerSBar;
     SvTreeListEntry*        m_pCursor;
+    SvTreeListEntry*        m_pCursorOld;
     SvTreeListEntry*        m_pStartEntry;
     ImplSVEvent*            m_nCurUserEvent;
     Size                    m_aOutputSize;
@@ -343,7 +344,16 @@ public:
 
     bool                IsSelectable( const SvTreeListEntry* pEntry );
     void                SetForceMakeVisible(bool bEnable) { mbForceMakeVisible = bEnable; }
+
+    // tdf#143114 allow to ask if CaptureOnButton is active
+    // (MouseButtonDown hit on SvLBoxButton, CaptureMouse() active)
+    bool                IsCaptureOnButtonActive() const;
 };
+
+inline bool SvImpLBox::IsCaptureOnButtonActive() const
+{
+    return nullptr != m_pActiveButton && nullptr != m_pActiveEntry;
+}
 
 inline Image& SvImpLBox::implGetImageLocation( const ImageType _eType )
 {

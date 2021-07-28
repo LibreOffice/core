@@ -81,6 +81,7 @@ SvImpLBox::SvImpLBox( SvTreeListBox* pLBView, SvTreeList* pLBTree, WinBits nWinS
 
     m_pStartEntry = nullptr;
     m_pCursor             = nullptr;
+    m_pCursorOld          = nullptr;
     m_pAnchor             = nullptr;
     m_nVisibleCount       = 0;    // number of rows of data in control
     m_nNodeBmpTabDistance = NODE_BMP_TABDIST_NOTVALID;
@@ -265,6 +266,7 @@ void SvImpLBox::Clear()
             m_pView->HideFocus();
         m_pCursor = nullptr;
     }
+    m_pCursorOld = nullptr;
     m_aVerSBar->Hide();
     m_aVerSBar->SetThumbPos( 0 );
     Range aRange( 0, 0 );
@@ -1858,7 +1860,6 @@ void SvImpLBox::EntryInserted( SvTreeListEntry* pEntry )
 
 
 // ****** Control the control animation
-
 bool SvImpLBox::ButtonDownCheckCtrl(const MouseEvent& rMEvt, SvTreeListEntry* pEntry)
 {
     SvLBoxItem* pItem = m_pView->GetItem(pEntry,rMEvt.GetPosPixel().X(),&m_pActiveTab);
