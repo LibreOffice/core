@@ -27,6 +27,11 @@ SvmWriter::SvmWriter(SvStream& rIStm)
 {
 }
 
+void SvmWriter::WriteColor(::Color aColor)
+{
+    mrStream.WriteUInt32(static_cast<sal_uInt32>(aColor));
+}
+
 SvStream& SvmWriter::Write(GDIMetaFile& rMetaFile)
 {
     const SvStreamCompressFlags nStmCompressMode = mrStream.GetCompressMode();
@@ -73,6 +78,13 @@ void SvmWriter::MetaActionHandler(MetaAction* pAction, ImplMetaWriteData* pData)
         }
         break;
 
+        case MetaActionType::PIXEL:
+        {
+            auto* pMetaAction = static_cast<MetaPixelAction*>(pAction);
+            PixelHandler(pMetaAction);
+        }
+        break;
+
         /* default case prevents test failure and will be
         removed once all the handlers are completed */
         default:
@@ -83,5 +95,14 @@ void SvmWriter::MetaActionHandler(MetaAction* pAction, ImplMetaWriteData* pData)
 void SvmWriter::ActionHandler(MetaAction* pAction)
 {
     mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
+}
+
+void SvmWriter::PixelHandler(MetaPixelAction* pAction)
+{
+    mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
+    VersionCompatWrite aCompat(mrStream, 1);
+    TypeSerializer aSerializer(mrStream);
+    aSerializer.writePoint(pAction->GetPoint());
+    WriteColor(pAction->GetColor());
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
