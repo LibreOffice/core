@@ -122,6 +122,7 @@ namespace editeng
         // converts the whole document
         void    ConvertDocument();
 
+        weld::Widget*   GetUIParent() const; // the parent window for any UI we raise
         LanguageType    GetSourceLanguage() const;
         LanguageType    GetTargetLanguage() const;
         const vcl::Font* GetTargetFont() const;

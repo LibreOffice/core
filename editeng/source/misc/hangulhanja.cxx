@@ -131,6 +131,7 @@ namespace editeng
 
         bool        IsValid() const { return m_xConverter.is(); }
 
+        weld::Widget* GetUIParent() const { return m_pUIParent; }
         LanguageType GetSourceLang() const   { return m_nSourceLang; }
         LanguageType GetTargetLang() const   { return m_nTargetLang; }
         const vcl::Font * GetTargetFont() const   { return m_pTargetFont; }
@@ -958,6 +959,11 @@ namespace editeng
     bool HangulHanjaConversion::IsUseSavedConversionDirectionState()
     {
         return m_bUseSavedValues;
+    }
+
+    weld::Widget* HangulHanjaConversion::GetUIParent() const
+    {
+        return m_pImpl->GetUIParent();
     }
 
     LanguageType HangulHanjaConversion::GetSourceLanguage( ) const

@@ -21,8 +21,6 @@
 
 #include <editeng/hangulhanja.hxx>
 #include <editeng/svxenum.hxx>
-#include <vcl/vclptr.hxx>
-#include <vcl/window.hxx>
 #include "swdllapi.h"
 
 class SwView;
@@ -33,7 +31,6 @@ class SwPaM;
 class SW_DLLPUBLIC SwHHCWrapper final : public editeng::HangulHanjaConversion
 {
     SwView *    m_pView;
-    VclPtr<vcl::Window>     m_pWin;
     SwWrtShell &m_rWrtShell;
 
     std::unique_ptr<SwConversionArgs> m_pConvArgs;    /**< object for arguments (and results) needed
