@@ -93,7 +93,6 @@ SwHHCWrapper::SwHHCWrapper(
                                 nConvOptions,
                                 bIsInteractive )
     , m_pView( pSwView )
-    , m_pWin( &pSwView->GetEditWin() )
     , m_rWrtShell( pSwView->GetWrtShell() )
     , m_nLastPos( 0 )
     , m_nUnitOffset( 0 )
@@ -648,7 +647,7 @@ void SwHHCWrapper::FindConvText_impl()
 
     bool bFound = false;
 
-    m_pWin->EnterWait();
+    weld::WaitObject aWait(GetUIParent());
     bool bConv = true;
 
     while ( bConv )
@@ -664,7 +663,6 @@ void SwHHCWrapper::FindConvText_impl()
             bConv = ConvNext_impl();
         }
     }
-    m_pWin->LeaveWait();
 }
 
 void SwHHCWrapper::ConvStart_impl( SwConversionArgs /* [out] */ *pConversionArgs, SvxSpellArea eArea )
