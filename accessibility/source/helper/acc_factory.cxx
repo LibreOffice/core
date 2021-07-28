@@ -22,6 +22,7 @@
 #include <toolkit/awt/vclxwindows.hxx>
 #include <toolkit/helper/accessiblefactory.hxx>
 #include <vcl/accessiblefactory.hxx>
+#include <standard/svtaccessiblenumericfield.hxx>
 #include <standard/vclxaccessiblebutton.hxx>
 #include <standard/vclxaccessiblecheckbox.hxx>
 #include <standard/vclxaccessibledropdowncombobox.hxx>
@@ -105,6 +106,8 @@ public:
         createAccessibleContext( VCLXToolBox* _pXWindow ) override;
     virtual css::uno::Reference< css::accessibility::XAccessibleContext >
         createAccessibleContext( VCLXHeaderBar* _pXWindow ) override;
+    virtual css::uno::Reference< css::accessibility::XAccessibleContext >
+        createAccessibleContext( SVTXNumericField* _pXWindow ) override;
     virtual css::uno::Reference< css::accessibility::XAccessibleContext >
         createAccessibleContext( VCLXWindow* _pXWindow ) override;
     virtual css::uno::Reference< css::accessibility::XAccessible >
@@ -350,6 +353,11 @@ Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext( VCLX
 Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext( VCLXHeaderBar* _pXWindow )
 {
     return new VCLXAccessibleHeaderBar(_pXWindow);
+}
+
+Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext( SVTXNumericField* _pXWindow )
+{
+    return new SVTXAccessibleNumericField( _pXWindow );
 }
 
 vcl::IAccessibleTabListBox* AccessibleFactory::createAccessibleTabListBox(

@@ -33,14 +33,15 @@ typedef ::cppu::ImplHelper2<
     css::accessibility::XAccessibleAction,
     css::accessibility::XAccessibleEditableText > VCLXAccessibleEdit_BASE;
 
-class VCLXAccessibleEdit final : public VCLXAccessibleTextComponent,
-                                 public VCLXAccessibleEdit_BASE
+class VCLXAccessibleEdit : public VCLXAccessibleTextComponent,
+                           public VCLXAccessibleEdit_BASE
 {
     friend class VCLXAccessibleBox;
 
 private:
     sal_Int32   m_nCaretPosition;
 
+protected:
     virtual ~VCLXAccessibleEdit() override = default;
 
     virtual void                ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent ) override;

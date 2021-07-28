@@ -78,6 +78,7 @@ $(eval $(call gb_Library_add_exception_objects,acc,\
     accessibility/source/standard/accessiblemenucomponent \
     accessibility/source/standard/accessiblemenuitemcomponent \
     accessibility/source/standard/floatingwindowaccessible \
+    accessibility/source/standard/svtaccessiblenumericfield \
     accessibility/source/standard/vclxaccessiblebox \
     accessibility/source/standard/vclxaccessiblebutton \
     accessibility/source/standard/vclxaccessiblecheckbox \

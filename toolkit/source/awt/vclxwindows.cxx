@@ -7665,6 +7665,13 @@ css::uno::Sequence< css::uno::Type > SVTXNumericField::getTypes()
     return aTypeList.getTypes();
 }
 
+
+css::uno::Reference<accessibility::XAccessibleContext> SVTXNumericField::CreateAccessibleContext()
+{
+    return getAccessibleFactory().createAccessibleContext(this);
+}
+
+
 void SVTXNumericField::setValue( double Value )
 {
     SolarMutexGuard aGuard;
