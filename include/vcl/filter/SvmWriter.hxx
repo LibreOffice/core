@@ -40,4 +40,5 @@ public:
     void MetaActionHandler(MetaAction* pAction, ImplMetaWriteData* pData);
     void ActionHandler(MetaAction* pAction);
     void PixelHandler(MetaPixelAction* pAction);
+    void PointHandler(MetaPointAction* pAction);
 };
