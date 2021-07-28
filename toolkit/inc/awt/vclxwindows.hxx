@@ -337,40 +337,6 @@ public:
     virtual void    GetPropertyIds( std::vector< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
 };
 
-//  class VCLXSpinField
-class VCLXSpinField : public css::awt::XSpinField, public VCLXEdit
-{
-private:
-    SpinListenerMultiplexer maSpinListeners;
-
-protected:
-    void            ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent ) override;
-
-public:
-                    VCLXSpinField();
-
-    // css::uno::XInterface
-    css::uno::Any                  SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-    void                                        SAL_CALL acquire() noexcept override  { OWeakObject::acquire(); }
-    void                                        SAL_CALL release() noexcept override  { OWeakObject::release(); }
-
-    // css::lang::XTypeProvider
-    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() override;
-    css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() override;
-
-
-    // css::awt::XSpinField
-    void SAL_CALL addSpinListener( const css::uno::Reference< css::awt::XSpinListener >& l ) override;
-    void SAL_CALL removeSpinListener( const css::uno::Reference< css::awt::XSpinListener >& l ) override;
-    void SAL_CALL up(  ) override;
-    void SAL_CALL down(  ) override;
-    void SAL_CALL first(  ) override;
-    void SAL_CALL last(  ) override;
-    void SAL_CALL enableRepeat( sal_Bool bRepeat ) override;
-
-    static void     ImplGetPropertyIds( std::vector< sal_uInt16 > &aIds );
-    virtual void    GetPropertyIds( std::vector< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
-};
 
 //  class VCLXFormattedSpinField
 class VCLXFormattedSpinField : public VCLXSpinField
@@ -674,51 +640,6 @@ public:
     virtual void    GetPropertyIds( std::vector< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
 };
 
-class SVTXFormattedField : public VCLXSpinField
-{
-protected:
-    rtl::Reference<SvNumberFormatsSupplierObj> m_xCurrentSupplier;
-    bool                    bIsStandardSupplier;
-
-    sal_Int32                   nKeyToSetDelayed;
-
-public:
-    SVTXFormattedField();
-    virtual ~SVTXFormattedField() override;
-
-    // css::awt::XVclWindowPeer
-    void SAL_CALL setProperty( const OUString& PropertyName, const css::uno::Any& Value ) override;
-    css::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) override;
-
-protected:
-    void    setFormatsSupplier(const css::uno::Reference< css::util::XNumberFormatsSupplier > & xSupplier);
-    sal_Int32   getFormatKey() const;
-    void    setFormatKey(sal_Int32 nKey);
-
-    void    SetValue(const css::uno::Any& rValue);
-    css::uno::Any  GetValue() const;
-
-    void    SetTreatAsNumber(bool bSet);
-    bool    GetTreatAsNumber() const;
-
-    void    SetDefaultValue(const css::uno::Any& rValue);
-    css::uno::Any  GetDefaultValue() const;
-
-    void    SetMinValue(const css::uno::Any& rValue);
-    css::uno::Any  GetMinValue() const;
-
-    void    SetMaxValue(const css::uno::Any& rValue);
-    css::uno::Any  GetMaxValue() const;
-
-    void    NotifyTextListeners();
-    css::uno::Any  convertEffectiveValue(const css::uno::Any& rValue);
-
-    virtual void    SetWindow( const VclPtr< vcl::Window > &_pWindow) override;
-
-    static void     ImplGetPropertyIds( std::vector< sal_uInt16 > &aIds );
-    virtual void    GetPropertyIds( std::vector< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
-};
-
 class SVTXCurrencyField final : public css::awt::XCurrencyField, public SVTXFormattedField
 {
 public:
@@ -760,43 +681,6 @@ public:
     virtual void    GetPropertyIds( std::vector< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
 };
 
-
-
-class SVTXNumericField final : public css::awt::XNumericField, public SVTXFormattedField
-{
-public:
-                    SVTXNumericField();
-                    virtual ~SVTXNumericField() override;
-
-    // css::uno::XInterface
-    css::uno::Any                  SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-    void                           SAL_CALL acquire() noexcept override  { SVTXFormattedField::acquire(); }
-    void                           SAL_CALL release() noexcept override  { SVTXFormattedField::release(); }
-
-    // css::lang::XTypeProvider
-    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() override;
-    css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() override;
-
-    // css::awt::XNumericField
-    void SAL_CALL setValue( double Value ) override;
-    double SAL_CALL getValue(  ) override;
-    void SAL_CALL setMin( double Value ) override;
-    double SAL_CALL getMin(  ) override;
-    void SAL_CALL setMax( double Value ) override;
-    double SAL_CALL getMax(  ) override;
-    void SAL_CALL setFirst( double Value ) override;
-    double SAL_CALL getFirst(  ) override;
-    void SAL_CALL setLast( double Value ) override;
-    double SAL_CALL getLast(  ) override;
-    void SAL_CALL setSpinSize( double Value ) override;
-    double SAL_CALL getSpinSize(  ) override;
-    void SAL_CALL setDecimalDigits( sal_Int16 nDigits ) override;
-    sal_Int16 SAL_CALL getDecimalDigits(  ) override;
-    void SAL_CALL setStrictFormat( sal_Bool bStrict ) override;
-    sal_Bool SAL_CALL isStrictFormat(  ) override;
-
-    virtual void    GetPropertyIds( std::vector< sal_uInt16 > &aIds ) override;
-};
 
 class SVTXDateField final : public VCLXDateField
 {
