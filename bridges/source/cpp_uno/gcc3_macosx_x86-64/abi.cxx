@@ -54,6 +54,7 @@
 
 #include "abi.hxx"
 
+#include <o3tl/unreachable.hxx>
 #include <sal/log.hxx>
 
 using namespace x86_64;
@@ -75,10 +76,6 @@ enum x86_64_reg_class
     X86_64_INTEGERSI_CLASS,
     X86_64_SSE_CLASS,
     X86_64_SSESF_CLASS,
-    X86_64_SSEDF_CLASS,
-    X86_64_SSEUP_CLASS,
-    X86_64_X87_CLASS,
-    X86_64_X87UP_CLASS,
     X86_64_MEMORY_CLASS
 };
 
@@ -120,20 +117,14 @@ merge_classes (enum x86_64_reg_class class1, enum x86_64_reg_class class2)
             || class2 == X86_64_INTEGER_CLASS || class2 == X86_64_INTEGERSI_CLASS)
         return X86_64_INTEGER_CLASS;
 
-    /* Rule #5: If one of the classes is X87 or X87UP class, MEMORY is used.  */
-    if (class1 == X86_64_X87_CLASS || class1 == X86_64_X87UP_CLASS
-            || class2 == X86_64_X87_CLASS || class2 == X86_64_X87UP_CLASS)
-        return X86_64_MEMORY_CLASS;
-
     /* Rule #6: Otherwise class SSE is used.  */
     return X86_64_SSE_CLASS;
 }
 
-/* Classify the argument of type TYPE and mode MODE.
+/* Classify a parameter/return type.
    CLASSES will be filled by the register class used to pass each word
-   of the operand.  The number of words is returned.  In case the parameter
-   should be passed in memory, 0 is returned. As a special case for zero
-   sized containers, classes[0] will be NO_CLASS and 1 is returned.
+   of the operand.  The number of words is returned.  In case the operand
+   should be passed in memory, 0 is returned.
 
    See the x86-64 PS ABI for details.
 */
@@ -142,9 +133,6 @@ classify_argument( typelib_TypeDescriptionReference *pTypeRef, enum x86_64_reg_c
 {
     switch ( pTypeRef->eTypeClass )
     {
-        case typelib_TypeClass_VOID:
-            classes[0] = X86_64_NO_CLASS;
-            return 1;
         case typelib_TypeClass_CHAR:
         case typelib_TypeClass_BOOLEAN:
         case typelib_TypeClass_BYTE:
@@ -167,21 +155,15 @@ classify_argument( typelib_TypeDescriptionReference *pTypeRef, enum x86_64_reg_c
                 classes[0] = X86_64_SSE_CLASS;
             return 1;
         case typelib_TypeClass_DOUBLE:
-            classes[0] = X86_64_SSEDF_CLASS;
+            classes[0] = X86_64_SSE_CLASS;
             return 1;
-        /*case LONGDOUBLE:
-            classes[0] = X86_64_X87_CLASS;
-            classes[1] = X86_64_X87UP_CLASS;
-            return 2;*/
         case typelib_TypeClass_STRING:
         case typelib_TypeClass_TYPE:
         case typelib_TypeClass_ANY:
-        case typelib_TypeClass_TYPEDEF:
         case typelib_TypeClass_SEQUENCE:
         case typelib_TypeClass_INTERFACE:
             return 0;
         case typelib_TypeClass_STRUCT:
-        case typelib_TypeClass_EXCEPTION:
             {
                 typelib_TypeDescription * pTypeDescr = nullptr;
                 TYPELIB_DANGER_GET( &pTypeDescr, pTypeRef );
@@ -220,44 +202,26 @@ classify_argument( typelib_TypeDescriptionReference *pTypeRef, enum x86_64_reg_c
                     {
                         int pos = offset / 8;
                         classes[i + pos] = merge_classes( subclasses[i], classes[i + pos] );
+                        if (classes[i + pos] == X86_64_MEMORY_CLASS) {
+                            TYPELIB_DANGER_RELEASE( pTypeDescr );
+                            return 0;
+                        }
                     }
                 }
 
                 TYPELIB_DANGER_RELEASE( pTypeDescr );
 
-                /* Final merger cleanup.  */
-                for ( int i = 0; i < words; i++ )
-                {
-                    /* If one class is MEMORY, everything should be passed in
-                       memory.  */
-                    if ( classes[i] == X86_64_MEMORY_CLASS )
-                        return 0;
-
-                    /* The X86_64_SSEUP_CLASS should be always preceded by
-                       X86_64_SSE_CLASS.  */
-                    if ( classes[i] == X86_64_SSEUP_CLASS
-                            && ( i == 0 || classes[i - 1] != X86_64_SSE_CLASS ) )
-                        classes[i] = X86_64_SSE_CLASS;
-
-                    /*  X86_64_X87UP_CLASS should be preceded by X86_64_X87_CLASS.  */
-                    if ( classes[i] == X86_64_X87UP_CLASS
-                            && ( i == 0 || classes[i - 1] != X86_64_X87_CLASS ) )
-                        classes[i] = X86_64_SSE_CLASS;
-                }
                 return words;
             }
 
         default:
-            SAL_WARN("bridges", "Unhandled case: pType->eTypeClass == "
-                    << pTypeRef->eTypeClass);
-            assert(false);
+            O3TL_UNREACHABLE;
     }
-    return 0; /* Never reached.  */
 }
 
 /* Examine the argument and return set number of register required in each
    class.  Return 0 iff parameter should be passed in memory.  */
-bool x86_64::examine_argument( typelib_TypeDescriptionReference *pTypeRef, bool bInReturn, int &nUsedGPR, int &nUsedSSE ) noexcept
+bool x86_64::examine_argument( typelib_TypeDescriptionReference *pTypeRef, int &nUsedGPR, int &nUsedSSE ) noexcept
 {
     enum x86_64_reg_class classes[MAX_CLASSES];
     int n;
@@ -278,29 +242,21 @@ bool x86_64::examine_argument( typelib_TypeDescriptionReference *pTypeRef, bool 
                 break;
             case X86_64_SSE_CLASS:
             case X86_64_SSESF_CLASS:
-            case X86_64_SSEDF_CLASS:
                 nUsedSSE++;
                 break;
-            case X86_64_NO_CLASS:
-            case X86_64_SSEUP_CLASS:
-                break;
-            case X86_64_X87_CLASS:
-            case X86_64_X87UP_CLASS:
-                if ( !bInReturn )
-                    return false;
-                break;
             default:
-            SAL_WARN("bridges", "Unhandled case: classes[n] == " << classes[n]);
-            assert(false);
+                O3TL_UNREACHABLE;
         }
     return true;
 }
 
 bool x86_64::return_in_hidden_param( typelib_TypeDescriptionReference *pTypeRef ) noexcept
 {
-    int g, s;
-
-    return !examine_argument( pTypeRef, true, g, s );
+    if (pTypeRef->eTypeClass == typelib_TypeClass_VOID) {
+        return false;
+    }
+    x86_64_reg_class classes[MAX_CLASSES];
+    return classify_argument(pTypeRef, classes, 0) == 0;
 }
 
 void x86_64::fill_struct( typelib_TypeDescriptionReference *pTypeRef, const sal_uInt64 *pGPR, const double *pSSE, void *pStruct ) noexcept
@@ -320,11 +276,10 @@ void x86_64::fill_struct( typelib_TypeDescriptionReference *pTypeRef, const sal_
                 break;
             case X86_64_SSE_CLASS:
             case X86_64_SSESF_CLASS:
-            case X86_64_SSEDF_CLASS:
                 *pStructAlign++ = *reinterpret_cast<const sal_uInt64 *>( pSSE++ );
                 break;
             default:
-                break;
+                O3TL_UNREACHABLE;
         }
 }
 
