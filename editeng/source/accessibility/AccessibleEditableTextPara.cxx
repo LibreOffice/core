@@ -22,7 +22,6 @@
 
 
 #include <algorithm>
-#include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>

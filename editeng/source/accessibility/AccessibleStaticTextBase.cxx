@@ -27,7 +27,6 @@
 #include <algorithm>
 #include <rtl/ustrbuf.hxx>
 #include <tools/debug.hxx>
-#include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/sequence.hxx>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>

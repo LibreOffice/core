@@ -40,7 +40,6 @@
 #include <vcl/metric.hxx>
 #include <editeng/numitem.hxx>
 #include <editeng/adjustitem.hxx>
-#include <vcl/window.hxx>
 #include <vcl/GraphicObject.hxx>
 #include <editeng/svxfont.hxx>
 #include <editeng/brushitem.hxx>
