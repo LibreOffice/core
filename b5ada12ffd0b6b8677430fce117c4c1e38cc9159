@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a0ef3aa5_5ad023a4",
+        "filename": "offapi/com/sun/star/accessibility/XAccessibleValue.idl",
+        "patchSetId": 4
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-07-28T13:51:35Z",
+      "side": 1,
+      "message": "please add\n\n  @since LibreOffice 7.3",
+      "revId": "b5ada12ffd0b6b8677430fce117c4c1e38cc9159",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
