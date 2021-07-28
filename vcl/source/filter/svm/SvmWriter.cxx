@@ -99,6 +99,13 @@ void SvmWriter::MetaActionHandler(MetaAction* pAction, ImplMetaWriteData* pData)
         }
         break;
 
+        case MetaActionType::RECT:
+        {
+            auto* pMetaAction = static_cast<MetaRectAction*>(pAction);
+            RectHandler(pMetaAction);
+        }
+        break;
+
         /* default case prevents test failure and will be
         removed once all the handlers are completed */
         default:
@@ -140,5 +147,14 @@ void SvmWriter::LineHandler(MetaLineAction* pAction)
     aSerializer.writePoint(pAction->GetEndPoint());
     // Version 2
     WriteLineInfo(mrStream, pAction->GetLineInfo());
+}
+
+void SvmWriter::RectHandler(MetaRectAction* pAction)
+{
+    mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
+
+    VersionCompatWrite aCompat(mrStream, 1);
+    TypeSerializer aSerializer(mrStream);
+    aSerializer.writeRectangle(pAction->GetRect());
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
