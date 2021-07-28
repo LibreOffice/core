@@ -77,39 +77,41 @@ privateSnippetExecutor:
 	# and http://mentorembedded.github.io/cxx-abi/exceptions.pdf for more info
 	.section	.eh_frame,"a",@unwind
 .Lframe1:
-	.long	.LECIE1-.LSCIE1
+	.long	.LECIE1-.LSCIE1         # CIE Length
 .LSCIE1:
-	.long	0x0
-	.byte	0x1
-	.string	"zR"
-	.uleb128 0x1
-	.sleb128 -8
-	.byte	0x10
-	.uleb128 0x1
-	.byte	0x1b
-	.byte	0xc
+	.long	0x0                     # CIE ID
+	.byte	0x1                     # CIE Version
+	.string	"zR"                    # CIE Augmentation String
+	.uleb128 0x1                    # CIE Code Alignment Factor
+	.sleb128 -8                     # CIE Data Alignment Factor
+	.byte	0x10                    # CIE Return Address Register: pseudo "Return Address RA"
+	.uleb128 0x1                    # CIE Augmentation Data Length
+	.byte	0x1b                    # CIE Augmentation Data
+	                                # CIE Initial Instructions:
+	.byte	0xc                     #  DW_CFA_def_cfa %rsp +8
 	.uleb128 0x7
 	.uleb128 0x8
-	.byte	0x90
+	.byte	0x90                    #  DW_CFA_offset (pseudo "Return Address RA") +1 (i.e., -8)
 	.uleb128 0x1
 	.align 8
 .LECIE1:
 .LSFDE1:
-	.long	.LEFDE1-.LASFDE1
+	.long	.LEFDE1-.LASFDE1        # FDE Length
 .LASFDE1:
-	.long	.LASFDE1-.Lframe1
-	.long	.LFB3-.
-	.long	.LFE3-.LFB3
-	.uleb128 0x0
-	.byte	0x4
+	.long	.LASFDE1-.Lframe1       # FDE CIE Pointer
+	.long	.LFB3-.                 # FDE PC Begin
+	.long	.LFE3-.LFB3             # FDE PC Range
+	.uleb128 0x0                    # FDE Augmentation Data Length
+	                                # FDE Call Frame Instructions:
+	.byte	0x4                     #  DW_CFA_advance_loc4 .LCFI0
 	.long	.LCFI0-.LFB3
-	.byte	0xe
+	.byte	0xe                     #  DW_CFA_def_cfa_offset +16
 	.uleb128 0x10
-	.byte	0x86
+	.byte	0x86                    #  DW_CFA_offset %rbp +2 (i.e., -16)
 	.uleb128 0x2
-	.byte	0x4
+	.byte	0x4                     #  DW_CFA_advance_loc4 .LCFI1
 	.long	.LCFI1-.LCFI0
-	.byte	0xd
+	.byte	0xd                     #  DW_CFA_def_cfa_register %rbp
 	.uleb128 0x6
 	.align 8
 .LEFDE1:
