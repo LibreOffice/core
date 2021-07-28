@@ -182,6 +182,9 @@ public:
     virtual css::uno::Any SAL_CALL
         getMinimumValue() override;
 
+    virtual css::uno::Any SAL_CALL
+        getMinimumIncrement() override;
+
     // XAccessibleAction
     virtual sal_Int32 SAL_CALL getAccessibleActionCount( ) override;
     virtual sal_Bool SAL_CALL doAccessibleAction ( sal_Int32 nIndex ) override;

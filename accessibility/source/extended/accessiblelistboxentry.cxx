@@ -1177,6 +1177,23 @@ namespace accessibility
         return aValue;
     }
 
+    Any AccessibleListBoxEntry::getMinimumIncrement(  )
+    {
+        ::osl::MutexGuard aGuard( m_aMutex );
+
+        Any aValue;
+        switch(getAccessibleRole())
+        {
+            case AccessibleRole::CHECK_BOX:
+                aValue <<= sal_Int32(1);
+                break;
+            case AccessibleRole::LABEL:
+            default:
+                break;
+        }
+
+        return aValue;
+    }
 
     SvTreeListEntry* AccessibleListBoxEntry::GetRealChild(sal_Int32 nIndex)
     {

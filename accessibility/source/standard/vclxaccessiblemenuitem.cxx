@@ -554,5 +554,13 @@ Any VCLXAccessibleMenuItem::getMinimumValue(  )
     return aValue;
 }
 
+Any VCLXAccessibleMenuItem::getMinimumIncrement( )
+{
+    Any aValue;
+    aValue <<= sal_Int32(1);
+
+    return aValue;
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
