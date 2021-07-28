@@ -101,6 +101,8 @@ interface XAccessibleValue : ::com::sun::star::uno::XInterface
             Returns the minimal increment value in an implementation dependent type.
             If this object has no minimum increment value, then an empty object is
             returned.
+
+        @since LibreOffice 7.3
     */
     any getMinimumIncrement ();
 };
