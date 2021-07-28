@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ad655eba_ac34be3a",
+        "filename": "cui/source/tabpages/paragrph.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 412,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-28T07:03:28Z",
+      "side": 1,
+      "message": "Interesting, is there a way to safely clang-plugin-warn about cases where a simple existing boolean check is executed after potentially longer call without side effects on the boolean?\n\n(of course, depending on cost of GetApplyCharUnit, it might be useful to make *that* conditional instead; and anyway, this might be just picking hairs - but I\u0027m just thinking aloud :D)",
+      "revId": "d8fec570c21c5e45ba593ee96cc1ba5d45d77fc8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
