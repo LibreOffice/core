@@ -30,7 +30,7 @@ namespace com::sun::star::uno { class XComponentContext; }
 
 namespace utl {
 
-class UNLESS_MERGELIBS(UNOTOOLS_DLLPUBLIC) ZipPackageHelper
+class UNOTOOLS_DLLPUBLIC ZipPackageHelper
 {
 public:
     ZipPackageHelper( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
