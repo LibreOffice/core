@@ -50,6 +50,29 @@
       "revId": "9c92db89e1d04233daf05a9084dae18c0530a1ab",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "063934fc_500f75ee",
+        "filename": "sfx2/source/inc/StyleList.hxx",
+        "patchSetId": 71
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-07-28T10:36:34Z",
+      "side": 1,
+      "message": "These two links are declared as public. I want to make them private. Earlier, they were private and a callback was used in Dialog. But when two controls are introduced, Dialog needs to know whether it is calling m_aStyleList\u0027s Family Select or m_aCharStyleList\u0027s Family Select. Hence, I had to make it public so that I can use it as m_aStyleList.FamilySelect(nullptr) or m_aCharStyleList.FamilySelect(nullptr). Is there an other alternative to it?",
+      "range": {
+        "startLine": 98,
+        "startChar": 0,
+        "endLine": 99,
+        "endChar": 41
+      },
+      "revId": "9c92db89e1d04233daf05a9084dae18c0530a1ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
