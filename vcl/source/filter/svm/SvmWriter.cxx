@@ -106,6 +106,13 @@ void SvmWriter::MetaActionHandler(MetaAction* pAction, ImplMetaWriteData* pData)
         }
         break;
 
+        case MetaActionType::ROUNDRECT:
+        {
+            auto* pMetaAction = static_cast<MetaRoundRectAction*>(pAction);
+            RoundRectHandler(pMetaAction);
+        }
+        break;
+
         /* default case prevents test failure and will be
         removed once all the handlers are completed */
         default:
@@ -156,5 +163,15 @@ void SvmWriter::RectHandler(MetaRectAction* pAction)
     VersionCompatWrite aCompat(mrStream, 1);
     TypeSerializer aSerializer(mrStream);
     aSerializer.writeRectangle(pAction->GetRect());
+}
+
+void SvmWriter::RoundRectHandler(MetaRoundRectAction* pAction)
+{
+    mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
+
+    VersionCompatWrite aCompat(mrStream, 1);
+    TypeSerializer aSerializer(mrStream);
+    aSerializer.writeRectangle(pAction->GetRect());
+    mrStream.WriteUInt32(pAction->GetHorzRound()).WriteUInt32(pAction->GetVertRound());
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
