@@ -194,7 +194,7 @@ void Outliner::Init( OutlinerMode nMode )
 
     SetMaxDepth( 9 );
 
-    switch ( ImplGetOutlinerMode() )
+    switch ( GetOutlinerMode() )
     {
         case OutlinerMode::TextObject:
         case OutlinerMode::TitleObject:
@@ -249,7 +249,7 @@ void Outliner::SetDepth( Paragraph* pPara, sal_Int16 nNewDepth )
     ImplInitDepth( nPara, nNewDepth, true );
     ImplCalcBulletText( nPara, false, false );
 
-    if ( ImplGetOutlinerMode() == OutlinerMode::OutlineObject )
+    if ( GetOutlinerMode() == OutlinerMode::OutlineObject )
         ImplSetLevelDependentStyleSheet( nPara );
 
     DepthChangedHdl(pPara, nPrevFlags);
@@ -374,7 +374,7 @@ std::unique_ptr<OutlinerParaObject> Outliner::CreateParaObject( sal_Int32 nStart
         return nullptr;
 
     std::unique_ptr<EditTextObject> xText = pEditEngine->CreateTextObject( nStartPara, nCount );
-    const bool bIsEditDoc(OutlinerMode::TextObject == ImplGetOutlinerMode());
+    const bool bIsEditDoc(OutlinerMode::TextObject == GetOutlinerMode());
     ParagraphDataVector aParagraphDataVector(nCount);
     const sal_Int32 nLastPara(nStartPara + nCount - 1);
 
@@ -384,7 +384,7 @@ std::unique_ptr<OutlinerParaObject> Outliner::CreateParaObject( sal_Int32 nStart
     }
 
     std::unique_ptr<OutlinerParaObject> pPObj(new OutlinerParaObject(std::move(xText), aParagraphDataVector, bIsEditDoc));
-    pPObj->SetOutlinerMode(GetMode());
+    pPObj->SetOutlinerMode(GetOutlinerMode());
 
     return pPObj;
 }
@@ -443,8 +443,8 @@ void Outliner::SetText( const OUString& rText, Paragraph* pPara )
 
             // In the outliner mode, filter the tabs and set the indentation
             // about a LRSpaceItem. In EditEngine mode intend over old tabs
-            if( ( ImplGetOutlinerMode() == OutlinerMode::OutlineObject ) ||
-                ( ImplGetOutlinerMode() == OutlinerMode::OutlineView ) )
+            if( ( GetOutlinerMode() == OutlinerMode::OutlineObject ) ||
+                ( GetOutlinerMode() == OutlinerMode::OutlineView ) )
             {
                 // Extract Tabs
                 sal_Int32 nTabs = 0;
@@ -686,7 +686,7 @@ void Outliner::ImplCheckNumBulletItem( sal_Int32 nPara )
 void Outliner::ImplSetLevelDependentStyleSheet( sal_Int32 nPara )
 {
 
-    DBG_ASSERT( ( ImplGetOutlinerMode() == OutlinerMode::OutlineObject ) || ( ImplGetOutlinerMode() == OutlinerMode::OutlineView ), "SetLevelDependentStyleSheet: Wrong Mode!" );
+    DBG_ASSERT( ( GetOutlinerMode() == OutlinerMode::OutlineObject ) || ( GetOutlinerMode() == OutlinerMode::OutlineView ), "SetLevelDependentStyleSheet: Wrong Mode!" );
 
     SfxStyleSheet* pStyle = GetStyleSheet( nPara );
 
@@ -1189,7 +1189,7 @@ void Outliner::ImpTextPasted( sal_Int32 nStartPara, sal_Int32 nCount )
 
     while( nCount && pPara )
     {
-        if( ImplGetOutlinerMode() != OutlinerMode::TextObject )
+        if( GetOutlinerMode() != OutlinerMode::TextObject )
         {
             nDepthChangedHdlPrevDepth = pPara->GetDepth();
             ParaFlag nPrevFlags = pPara->nFlags;
@@ -1240,7 +1240,7 @@ bool Outliner::ImpCanIndentSelectedPages( OutlinerView* pCurView )
 
     // If the first paragraph is on level 0 it can not indented in any case,
     // possible there might be indentations in the following on the 0 level.
-    if ( ( mnFirstSelPage == 0 ) && ( ImplGetOutlinerMode() != OutlinerMode::TextObject ) )
+    if ( ( mnFirstSelPage == 0 ) && ( GetOutlinerMode() != OutlinerMode::TextObject ) )
     {
         if ( nDepthChangedHdlPrevDepth == 1 )   // is the only page
             return false;
@@ -2123,7 +2123,7 @@ std::unique_ptr<OutlinerParaObject> Outliner::GetEmptyParaObject() const
 {
     std::unique_ptr<EditTextObject> pEmptyText = pEditEngine->GetEmptyTextObject();
     std::unique_ptr<OutlinerParaObject> pPObj( new OutlinerParaObject( std::move(pEmptyText) ));
-    pPObj->SetOutlinerMode(GetMode());
+    pPObj->SetOutlinerMode(GetOutlinerMode());
     return pPObj;
 }
 

@@ -266,7 +266,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                         Paragraph* pPara = aSelList.empty() ? nullptr : *(aSelList.begin());
 
                         // find out if we are an OutlineView
-                        bool bIsOutlineView(OutlinerMode::OutlineView == pOLV->GetOutliner()->GetMode());
+                        bool bIsOutlineView(OutlinerMode::OutlineView == pOLV->GetOutliner()->GetOutlinerMode());
 
                         // This is ONLY for OutlineViews
                         if(bIsOutlineView)

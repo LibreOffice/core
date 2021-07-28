@@ -496,7 +496,7 @@ public:
 
         // Create the outliner from the
         Outliner* pOutliner = m_rDrawViewShell.GetDoc()->GetInternalOutliner();
-        OutlinerMode eOutlinerMode = pOutliner->GetMode();
+        OutlinerMode eOutlinerMode = pOutliner->GetOutlinerMode();
 
         comphelper::ScopeGuard const aOutlinerGuard([pOutliner, eOutlinerMode] () {
             pOutliner->Init(eOutlinerMode);
@@ -2487,7 +2487,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             {
                 Outliner* pOutl = GetDoc()->GetInternalOutliner();
                 pOutl->Init( OutlinerMode::TextObject );
-                OutlinerMode nOutlMode = pOutl->GetMode();
+                OutlinerMode nOutlMode = pOutl->GetOutlinerMode();
                 pOutl->SetStyleSheet( 0, nullptr );
                 pOutl->QuickInsertField( *pFieldItem, ESelection() );
                 std::unique_ptr<OutlinerParaObject> pOutlParaObject = pOutl->CreateParaObject();

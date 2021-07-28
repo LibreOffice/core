@@ -491,7 +491,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const ::t
             {
                 SdrOutliner* pOutliner = static_cast< SdDrawDocument& >(getSdrModelFromSdrPage()).GetInternalOutliner();
 
-                OutlinerMode nOutlMode = pOutliner->GetMode();
+                OutlinerMode nOutlMode = pOutliner->GetOutlinerMode();
                 pOutliner->Init( OutlinerMode::TextObject );
                 pOutliner->SetStyleSheet( 0, nullptr );
                 pOutliner->SetVertical( bVertical );
@@ -2379,7 +2379,7 @@ void SdPage::SetObjText(SdrTextObj* pObj, SdrOutliner* pOutliner, PresObjKind eO
         pOutl->SetUpdateMode( false );
     }
 
-    OutlinerMode nOutlMode = pOutl->GetMode();
+    OutlinerMode nOutlMode = pOutl->GetOutlinerMode();
     Size aPaperSize = pOutl->GetPaperSize();
     bool bUpdateMode = pOutl->GetUpdateMode();
     pOutl->SetUpdateMode(false);

@@ -121,7 +121,7 @@ bool OutlinerView::PostKeyEvent( const KeyEvent& rKEvt, vcl::Window const * pFra
             break;
             case KeyFuncType::DELETE:
             {
-                if( !bReadOnly && !bSelection && ( pOwner->ImplGetOutlinerMode() != OutlinerMode::TextObject ) )
+                if( !bReadOnly && !bSelection && ( pOwner->GetOutlinerMode() != OutlinerMode::TextObject ) )
                 {
                     if( aSel.nEndPos == pOwner->pEditEngine->GetTextLen( aSel.nEndPara ) )
                     {
@@ -147,14 +147,14 @@ bool OutlinerView::PostKeyEvent( const KeyEvent& rKEvt, vcl::Window const * pFra
             {
                 if ( !bReadOnly && !aKeyCode.IsMod1() && !aKeyCode.IsMod2() )
                 {
-                    if ( ( pOwner->ImplGetOutlinerMode() != OutlinerMode::TextObject ) &&
-                         ( pOwner->ImplGetOutlinerMode() != OutlinerMode::TitleObject ) &&
+                    if ( ( pOwner->GetOutlinerMode() != OutlinerMode::TextObject ) &&
+                         ( pOwner->GetOutlinerMode() != OutlinerMode::TitleObject ) &&
                          ( bSelection || !aSel.nStartPos ) )
                     {
                         Indent( aKeyCode.IsShift() ? -1 : +1 );
                         bKeyProcessed = true;
                     }
-                    else if ( ( pOwner->ImplGetOutlinerMode() == OutlinerMode::TextObject ) &&
+                    else if ( ( pOwner->GetOutlinerMode() == OutlinerMode::TextObject ) &&
                               !bSelection && !aSel.nEndPos && pOwner->ImplHasNumberFormat( aSel.nEndPara ) )
                     {
                         Indent( aKeyCode.IsShift() ? -1 : +1 );
@@ -284,7 +284,7 @@ sal_Int32 OutlinerView::ImpCheckMousePos(const Point& rPosPix, MouseTarget& reTa
 
 bool OutlinerView::MouseMove( const MouseEvent& rMEvt )
 {
-    if( ( pOwner->ImplGetOutlinerMode() == OutlinerMode::TextObject ) || pEditView->GetEditEngine()->IsInSelectionMode())
+    if( ( pOwner->GetOutlinerMode() == OutlinerMode::TextObject ) || pEditView->GetEditEngine()->IsInSelectionMode())
         return pEditView->MouseMove( rMEvt );
 
     Point aMousePosWin( pEditView->GetOutputDevice().PixelToLogic( rMEvt.GetPosPixel() ) );
@@ -299,7 +299,7 @@ bool OutlinerView::MouseMove( const MouseEvent& rMEvt )
 
 bool OutlinerView::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    if ( ( pOwner->ImplGetOutlinerMode() == OutlinerMode::TextObject ) || pEditView->GetEditEngine()->IsInSelectionMode() )
+    if ( ( pOwner->GetOutlinerMode() == OutlinerMode::TextObject ) || pEditView->GetEditEngine()->IsInSelectionMode() )
         return pEditView->MouseButtonDown( rMEvt );
 
     Point aMousePosWin( pEditView->GetOutputDevice().PixelToLogic( rMEvt.GetPosPixel() ) );
@@ -331,7 +331,7 @@ bool OutlinerView::MouseButtonDown( const MouseEvent& rMEvt )
     }
 
     // special case for outliner view in impress, check if double click hits the page icon for toggle
-    if( (nPara == EE_PARA_NOT_FOUND) && (pOwner->ImplGetOutlinerMode() == OutlinerMode::OutlineView) && (eTarget == MouseTarget::Text) && (rMEvt.GetClicks() == 2) )
+    if( (nPara == EE_PARA_NOT_FOUND) && (pOwner->GetOutlinerMode() == OutlinerMode::OutlineView) && (eTarget == MouseTarget::Text) && (rMEvt.GetClicks() == 2) )
     {
         ESelection aSel( pEditView->GetSelection() );
         nPara = aSel.nStartPara;
@@ -347,7 +347,7 @@ bool OutlinerView::MouseButtonDown( const MouseEvent& rMEvt )
 
 bool OutlinerView::MouseButtonUp( const MouseEvent& rMEvt )
 {
-    if ( ( pOwner->ImplGetOutlinerMode() == OutlinerMode::TextObject ) || pEditView->GetEditEngine()->IsInSelectionMode() )
+    if ( ( pOwner->GetOutlinerMode() == OutlinerMode::TextObject ) || pEditView->GetEditEngine()->IsInSelectionMode() )
         return pEditView->MouseButtonUp( rMEvt );
 
     Point aMousePosWin( pEditView->GetOutputDevice().PixelToLogic( rMEvt.GetPosPixel() ) );
@@ -503,7 +503,7 @@ void OutlinerView::Indent( short nDiff )
 
         if( nOldDepth != nNewDepth )
         {
-            if ( ( nPara == aSel.nStartPara ) && aSel.nStartPara && ( pOwner->ImplGetOutlinerMode() != OutlinerMode::TextObject ))
+            if ( ( nPara == aSel.nStartPara ) && aSel.nStartPara && ( pOwner->GetOutlinerMode() != OutlinerMode::TextObject ))
             {
                 // Special case: the predecessor of an indented paragraph is
                 // invisible and is now on the same level as the visible
@@ -534,7 +534,7 @@ void OutlinerView::Indent( short nDiff )
             pOwner->ImplInitDepth( nPara, nNewDepth, true );
             pOwner->ImplCalcBulletText( nPara, false, false );
 
-            if ( pOwner->ImplGetOutlinerMode() == OutlinerMode::OutlineObject )
+            if ( pOwner->GetOutlinerMode() == OutlinerMode::OutlineObject )
                 pOwner->ImplSetLevelDependentStyleSheet( nPara );
 
             // Notify App
@@ -690,7 +690,7 @@ void OutlinerView::Paste( bool bUseSpecial )
     else
         pEditView->Paste();
 
-    if ( pOwner->ImplGetOutlinerMode() == OutlinerMode::OutlineObject )
+    if ( pOwner->GetOutlinerMode() == OutlinerMode::OutlineObject )
     {
         const sal_Int32 nParaCount = pOwner->pEditEngine->GetParagraphCount();
 
@@ -1365,7 +1365,7 @@ void OutlinerView::Read( SvStream& rInput, EETextFormat eFormat, SvKeyValueItera
 
     for ( sal_Int32 n = nChangesStart; n <= nChangesEnd; n++ )
     {
-        if ( pOwner->ImplGetOutlinerMode() == OutlinerMode::OutlineObject )
+        if ( pOwner->GetOutlinerMode() == OutlinerMode::OutlineObject )
             pOwner->ImplSetLevelDependentStyleSheet( n );
     }
 

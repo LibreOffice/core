@@ -1483,7 +1483,7 @@ void DrawViewShell::InsertURLField(const OUString& rURL, const OUString& rText,
     {
         Outliner* pOutl = GetDoc()->GetInternalOutliner();
         pOutl->Init( OutlinerMode::TextObject );
-        OutlinerMode nOutlMode = pOutl->GetMode();
+        OutlinerMode nOutlMode = pOutl->GetOutlinerMode();
 
         SvxURLField aURLField(rURL, rText, SvxURLFormat::Repr);
         aURLField.SetTargetFrame(rTarget);

@@ -967,7 +967,7 @@ void SdDrawDocument::SpellObject(SdrTextObj* pObj)
     Link<EditStatus&,void> aEvtHdl = pOutl->GetStatusEventHdl();
     pOutl->SetStatusEventHdl(LINK(this, SdDrawDocument, OnlineSpellEventHdl));
 
-    OutlinerMode nOldOutlMode = pOutl->GetMode();
+    OutlinerMode nOldOutlMode = pOutl->GetOutlinerMode();
     OutlinerMode nOutlMode = OutlinerMode::TextObject;
     if (pObj->GetObjInventor() == SdrInventor::Default &&
         pObj->GetObjIdentifier() == OBJ_OUTLINETEXT)
