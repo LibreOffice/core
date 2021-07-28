@@ -570,8 +570,8 @@ void printStack( CONTEXT* ctx )
 // The exception filter function:
 LONG WINAPI ExpFilter(EXCEPTION_POINTERS* ex)
 {
-    // we only want this active on the Jenkins tinderboxen
-    printf("*** Exception 0x%x occured ***\n\n",ex->ExceptionRecord->ExceptionCode);
+    // we only want this active on the Jenkins tinderboxes
+    printf("*** Exception 0x%x occurred ***\n\n",ex->ExceptionRecord->ExceptionCode);
     printStack(ex->ContextRecord);
     return EXCEPTION_EXECUTE_HANDLER;
 }
@@ -579,7 +579,7 @@ LONG WINAPI ExpFilter(EXCEPTION_POINTERS* ex)
 SAL_IMPLEMENT_MAIN()
 {
     bool ok = false;
-    // This magic kind of Windows-specific exception handling has to be in it's own function
+    // This magic kind of Windows-specific exception handling has to be in its own function
     // because it cannot be in a function that has objects with destructors.
     __try
     {
