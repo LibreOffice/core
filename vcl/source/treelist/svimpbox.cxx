@@ -1794,7 +1794,6 @@ void SvImpLBox::EntryInserted( SvTreeListEntry* pEntry )
 
 
 // ****** Control the control animation
-
 bool SvImpLBox::ButtonDownCheckCtrl(const MouseEvent& rMEvt, SvTreeListEntry* pEntry)
 {
     SvLBoxItem* pItem = m_pView->GetItem(pEntry,rMEvt.GetPosPixel().X(),&m_pActiveTab);
