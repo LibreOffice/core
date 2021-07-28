@@ -26,7 +26,6 @@
 
 #include <o3tl/safeint.hxx>
 
-#include <math.h>
 #include <memory>
 
 using namespace ::com::sun::star;
@@ -105,16 +104,6 @@ bool CGM::ImplGetEllipse( FloatPoint& rCenter, FloatPoint& rRadius, double& rAng
             return false;
     }
     return true;
-}
-
-static bool useless(double value)
-{
-    if (!std::isfinite(value))
-        return true;
-    int exp;
-    std::frexp(value, &exp);
-    const int maxbits = sizeof(tools::Long) * 8;
-    return exp > maxbits;
 }
 
 void CGM::ImplDoClass4()

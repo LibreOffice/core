@@ -18,6 +18,7 @@
  */
 
 #include <sal/config.h>
+#include <sal/log.hxx>
 
 #include <o3tl/any.hxx>
 #include <o3tl/safeint.hxx>
@@ -451,16 +452,35 @@ void CGMImpressOutAct::EndGrouping()
 
 void CGMImpressOutAct::DrawRectangle( FloatRect const & rFloatRect )
 {
-    if ( mnGroupActCount != ( mpCGM->mnActCount - 1 ) )         // POWERPOINT HACK !!!
+    if (mnGroupActCount == (mpCGM->mnActCount - 1))         // POWERPOINT HACK !!!
+        return;
+    if (useless(rFloatRect.Left))
     {
-        if ( ImplCreateShape( "com.sun.star.drawing.RectangleShape" ) )
-        {
-            awt::Size aSize( static_cast<tools::Long>(rFloatRect.Right - rFloatRect.Left ), static_cast<tools::Long>(rFloatRect.Bottom-rFloatRect.Top ) );
-            maXShape->setSize( aSize );
-            maXShape->setPosition( awt::Point( static_cast<tools::Long>(rFloatRect.Left), static_cast<tools::Long>(rFloatRect.Top) ) );
-            ImplSetFillBundle();
-        }
+        SAL_WARN("filter.icgm", "bad left: " << rFloatRect.Left);
+        return;
     }
+    if (useless(rFloatRect.Top))
+    {
+        SAL_WARN("filter.icgm", "bad top: " << rFloatRect.Top);
+        return;
+    }
+    double fWidth = rFloatRect.Right - rFloatRect.Left;
+    if (useless(fWidth))
+    {
+        SAL_WARN("filter.icgm", "bad width: " << fWidth);
+        return;
+    }
+    double fHeight = rFloatRect.Bottom - rFloatRect.Top;
+    if (useless(fHeight))
+    {
+        SAL_WARN("filter.icgm", "bad height: " << fHeight);
+        return;
+    }
+    if (!ImplCreateShape( "com.sun.star.drawing.RectangleShape"))
+        return;
+    maXShape->setSize(awt::Size(fWidth, fHeight));
+    maXShape->setPosition(awt::Point(rFloatRect.Left, rFloatRect.Top));
+    ImplSetFillBundle();
 }
 
 void CGMImpressOutAct::DrawEllipse( FloatPoint const & rCenter, FloatPoint const & rSize, double& rOrientation )

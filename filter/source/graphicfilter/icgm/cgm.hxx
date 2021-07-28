@@ -21,8 +21,9 @@
 
 #include <com/sun/star/frame/XModel.hpp>
 
-#include <vector>
+#include <cmath>
 #include <memory>
+#include <vector>
 #include "cgmtypes.hxx"
 
 class   Graphic;
@@ -136,5 +137,15 @@ class CGM
         bool                Write( SvStream& rIStm );
 
 };
+
+inline bool useless(double value)
+{
+    if (!std::isfinite(value))
+        return true;
+    int exp;
+    std::frexp(value, &exp);
+    const int maxbits = sizeof(tools::Long) * 8;
+    return exp > maxbits;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
