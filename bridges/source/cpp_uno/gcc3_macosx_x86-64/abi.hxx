@@ -41,7 +41,7 @@ const sal_uInt32 MAX_SSE_REGS = 8;
 
  Return false iff parameter should be passed in memory.
 */
-bool examine_argument( typelib_TypeDescriptionReference *pTypeRef, bool bInReturn, int &nUsedGPR, int &nUsedSSE ) noexcept;
+bool examine_argument( typelib_TypeDescriptionReference *pTypeRef, int &nUsedGPR, int &nUsedSSE ) noexcept;
 
 /** Does function that returns this type use a hidden parameter, or registers?
 
