@@ -1638,7 +1638,7 @@ static void KillOwnPopups( vcl::Window const * pWindow )
 
 void ImplHandleResize( vcl::Window* pWindow, tools::Long nNewWidth, tools::Long nNewHeight )
 {
-    const bool bChanged = (nNewWidth != pWindow->GetOutDev()->GetOutputWidthPixel()) || (nNewHeight != pWindow->GetOutDev()->GetOutputHeightPixel());
+    const bool bChanged = (nNewWidth != pWindow->GetOutputSizePixel().Width()) || (nNewHeight != pWindow->GetOutDev()->GetOutputHeightPixel());
     if (bChanged && pWindow->GetStyle() & (WB_MOVEABLE|WB_SIZEABLE))
     {
         KillOwnPopups( pWindow );
