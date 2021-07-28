@@ -41,4 +41,5 @@ public:
     void ActionHandler(MetaAction* pAction);
     void PixelHandler(MetaPixelAction* pAction);
     void PointHandler(MetaPointAction* pAction);
+    void LineHandler(MetaLineAction* pAction);
 };
