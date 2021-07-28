@@ -92,6 +92,13 @@ void SvmWriter::MetaActionHandler(MetaAction* pAction, ImplMetaWriteData* pData)
         }
         break;
 
+        case MetaActionType::LINE:
+        {
+            auto* pMetaAction = static_cast<MetaLineAction*>(pAction);
+            LineHandler(pMetaAction);
+        }
+        break;
+
         /* default case prevents test failure and will be
         removed once all the handlers are completed */
         default:
@@ -119,5 +126,19 @@ void SvmWriter::PointHandler(MetaPointAction* pAction)
     VersionCompatWrite aCompat(mrStream, 1);
     TypeSerializer aSerializer(mrStream);
     aSerializer.writePoint(pAction->GetPoint());
+}
+
+void SvmWriter::LineHandler(MetaLineAction* pAction)
+{
+    mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
+
+    VersionCompatWrite aCompat(mrStream, 2);
+
+    // Version 1
+    TypeSerializer aSerializer(mrStream);
+    aSerializer.writePoint(pAction->GetStartPoint());
+    aSerializer.writePoint(pAction->GetEndPoint());
+    // Version 2
+    WriteLineInfo(mrStream, pAction->GetLineInfo());
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
