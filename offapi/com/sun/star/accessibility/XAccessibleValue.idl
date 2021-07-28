@@ -85,7 +85,7 @@ interface XAccessibleValue : ::com::sun::star::uno::XInterface
 
         @return
             Returns the minimal value in an implementation dependent type.
-            If this object has no upper bound then an empty object is
+            If this object has no lower bound then an empty object is
             returned.
     */
     any getMinimumValue ();
