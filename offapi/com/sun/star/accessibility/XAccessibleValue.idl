@@ -89,6 +89,20 @@ interface XAccessibleValue : ::com::sun::star::uno::XInterface
             returned.
     */
     any getMinimumValue ();
+
+    /** Returns the minimal increment by which the value represented by this
+        object can be adjusted.
+
+        <p>The type of the returned value is implementation dependent. It
+        does not have to be the same type as that returned by
+        getCurrentAccessibleValue().</p>
+
+        @return
+            Returns the minimal increment value in an implementation dependent type.
+            If this object has no minimum increment value, then an empty object is
+            returned.
+    */
+    any getMinimumIncrement ();
 };
 
 }; }; }; };

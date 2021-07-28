@@ -89,6 +89,9 @@ public:
     virtual css::uno::Any SAL_CALL
         getMinimumValue(  ) override;
 
+    virtual css::uno::Any SAL_CALL
+        getMinimumIncrement(  ) override;
+
     ///=====  XServiceInfo  ====================================================
 
     /** Returns an identifier for the implementation of this object.
