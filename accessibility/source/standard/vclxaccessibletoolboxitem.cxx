@@ -725,5 +725,10 @@ Any VCLXAccessibleToolBoxItem::getMinimumValue(  )
     return Any(sal_Int32(0));
 }
 
+Any VCLXAccessibleToolBoxItem::getMinimumIncrement(  )
+{
+    return Any(sal_Int32(1));
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

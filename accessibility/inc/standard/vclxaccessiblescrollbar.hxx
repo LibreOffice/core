@@ -65,6 +65,7 @@ public:
     virtual sal_Bool SAL_CALL setCurrentValue( const css::uno::Any& aNumber ) override;
     virtual css::uno::Any SAL_CALL getMaximumValue(  ) override;
     virtual css::uno::Any SAL_CALL getMinimumValue(  ) override;
+    virtual css::uno::Any SAL_CALL getMinimumIncrement(  ) override;
 
     // XAccessibleContext
     OUString SAL_CALL getAccessibleName(  ) override;

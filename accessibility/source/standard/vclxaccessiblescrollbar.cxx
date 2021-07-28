@@ -244,6 +244,13 @@ Any VCLXAccessibleScrollBar::getMinimumValue(  )
     return aValue;
 }
 
+Any VCLXAccessibleScrollBar::getMinimumIncrement(  )
+{
+    OExternalLockGuard aGuard( this );
+
+    return Any();
+}
+
 
 OUString VCLXAccessibleScrollBar::getAccessibleName(  )
 {

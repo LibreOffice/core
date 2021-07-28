@@ -259,6 +259,12 @@ uno::Any SAL_CALL
     return uno::Any(-DBL_MAX);
 }
 
+uno::Any SAL_CALL
+    ScAccessibleCellBase::getMinimumIncrement(  )
+{
+    return uno::Any();
+}
+
     //=====  XServiceInfo  ====================================================
 
 OUString SAL_CALL ScAccessibleCellBase::getImplementationName()

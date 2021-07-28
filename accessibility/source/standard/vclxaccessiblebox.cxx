@@ -486,6 +486,11 @@ Any VCLXAccessibleBox::getMinimumValue(  )
     return aAny;
 }
 
+Any VCLXAccessibleBox::getMinimumIncrement(  )
+{
+    return Any();
+}
+
 // Set the INDETERMINATE state when there is no selected item for combobox
 void VCLXAccessibleBox::FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet )
 {

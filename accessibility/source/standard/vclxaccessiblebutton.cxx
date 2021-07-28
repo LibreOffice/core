@@ -296,5 +296,15 @@ Any VCLXAccessibleButton::getMinimumValue(  )
     return aValue;
 }
 
+Any VCLXAccessibleButton::getMinimumIncrement(  )
+{
+    OExternalLockGuard aGuard( this );
+
+    Any aValue;
+    aValue <<= sal_Int32(1);
+
+    return aValue;
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
