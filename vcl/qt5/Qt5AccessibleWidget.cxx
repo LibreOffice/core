@@ -1090,6 +1090,7 @@ QVariant Qt5AccessibleWidget::currentValue() const
     xValue->getCurrentValue() >>= aDouble;
     return QVariant(aDouble);
 }
+
 QVariant Qt5AccessibleWidget::maximumValue() const
 {
     Reference<XAccessibleContext> xAc = getAccessibleContextImpl();
@@ -1103,7 +1104,21 @@ QVariant Qt5AccessibleWidget::maximumValue() const
     xValue->getMaximumValue() >>= aDouble;
     return QVariant(aDouble);
 }
-QVariant Qt5AccessibleWidget::minimumStepSize() const { return QVariant(); }
+
+QVariant Qt5AccessibleWidget::minimumStepSize() const
+{
+    Reference<XAccessibleContext> xAc = getAccessibleContextImpl();
+    if (!xAc.is())
+        return QVariant();
+
+    Reference<XAccessibleValue> xValue(xAc, UNO_QUERY);
+    if (!xValue.is())
+        return QVariant();
+    double dMinStep = 0;
+    xValue->getMinimumIncrement() >>= dMinStep;
+    return QVariant(dMinStep);
+}
+
 QVariant Qt5AccessibleWidget::minimumValue() const
 {
     Reference<XAccessibleContext> xAc = getAccessibleContextImpl();
@@ -1117,6 +1132,7 @@ QVariant Qt5AccessibleWidget::minimumValue() const
     xValue->getMinimumValue() >>= aDouble;
     return QVariant(aDouble);
 }
+
 void Qt5AccessibleWidget::setCurrentValue(const QVariant& value)
 {
     Reference<XAccessibleContext> xAc = getAccessibleContextImpl();
