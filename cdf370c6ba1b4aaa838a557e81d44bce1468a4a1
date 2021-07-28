@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "28094e43_7adf170c",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 712,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-28T10:44:29Z",
+      "side": 1,
+      "message": "If this is the case in question, then you don\u0027t need StyleList::FamilySelect public. You have m_aStyleListFamilySelect, and you have m_atempStyleList (why m_?? We discussed that \"m_\" prefix stands for \"member\" - but I digress). So you always can check \u0027if (\u0026m_aStyleListFamilySelect \u003d\u003d \u0026m_aStyleListChar) CharFamilySelect(); else ParaFamilySelect()\u0027",
+      "revId": "cdf370c6ba1b4aaa838a557e81d44bce1468a4a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
