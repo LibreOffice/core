@@ -542,7 +542,7 @@ protected:
     virtual void    GetPropertyIds( std::vector< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
 };
 
-class SVTXNumericField final : public css::awt::XNumericField, public SVTXFormattedField
+class TOOLKIT_DLLPUBLIC SVTXNumericField final : public css::awt::XNumericField, public SVTXFormattedField
 {
 public:
                     SVTXNumericField();
@@ -576,6 +576,8 @@ public:
     sal_Bool SAL_CALL isStrictFormat(  ) override;
 
     virtual void    GetPropertyIds( std::vector< sal_uInt16 > &aIds ) override;
+
+    virtual css::uno::Reference< css::accessibility::XAccessibleContext > CreateAccessibleContext() override;
 };
 
 //  class VCLXListBox

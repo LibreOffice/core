@@ -27,6 +27,7 @@ namespace com::sun::star::accessibility {
     class XAccessible;
     class XAccessibleContext;
 }
+class SVTXNumericField;
 class VCLXButton;
 class VCLXCheckBox;
 class VCLXRadioButton;
@@ -115,6 +116,11 @@ namespace toolkit
         */
         virtual css::uno::Reference< css::accessibility::XAccessibleContext >
             createAccessibleContext( VCLXHeaderBar* _pXWindow ) = 0;
+
+        /** creates an accessible context for a numeric field
+        */
+        virtual css::uno::Reference< css::accessibility::XAccessibleContext >
+            createAccessibleContext( SVTXNumericField* _pXWindow ) = 0;
 
         /** creates an accessible context for a generic window
         */
