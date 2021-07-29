@@ -19,12 +19,12 @@
 #ifndef INCLUDED_COMPHELPER_SEEKABLEINPUT_HXX
 #define INCLUDED_COMPHELPER_SEEKABLEINPUT_HXX
 
-#include <osl/mutex.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/comphelperdllapi.h>
+#include <mutex>
 
 namespace com::sun::star::uno { class XComponentContext; }
 
@@ -39,7 +39,7 @@ class SAL_DLLPUBLIC_TEMPLATE OSeekableInputWrapper_BASE
 class COMPHELPER_DLLPUBLIC OSeekableInputWrapper final
     : public OSeekableInputWrapper_BASE
 {
-    ::osl::Mutex    m_aMutex;
+    std::mutex    m_aMutex;
 
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
