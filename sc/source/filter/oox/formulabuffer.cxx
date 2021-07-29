@@ -398,7 +398,7 @@ void FormulaBuffer::finalizeImport()
 
 FormulaBuffer::SheetItem FormulaBuffer::getSheetItem( SCTAB nTab )
 {
-    osl::MutexGuard aGuard(&maMtxData);
+    std::lock_guard aGuard(maMtxData);
 
     SheetItem aItem;
 
