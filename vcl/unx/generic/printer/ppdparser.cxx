@@ -41,7 +41,6 @@
 #include <osl/thread.h>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <rtl/instance.hxx>
 #include <sal/log.hxx>
 #include <salhelper/linkhelper.hxx>
 
@@ -253,7 +252,11 @@ using namespace psp;
 
 namespace
 {
-    struct thePPDCache : public rtl::Static<PPDCache, thePPDCache> {};
+    PPDCache& getPPDCache()
+    {
+        static PPDCache thePPDCache;
+        return thePPDCache;
+    }
 
 class PPDDecompressStream
 {
@@ -385,7 +388,7 @@ void PPDParser::scanPPDDir( const OUString& rDir )
     } const pSuffixes[] =
     { { ".PS", 3 },  { ".PPD", 4 }, { ".PS.GZ", 6 }, { ".PPD.GZ", 7 } };
 
-    PPDCache &rPPDCache = thePPDCache::get();
+    PPDCache &rPPDCache = getPPDCache();
 
     osl::Directory aDir( rDir );
     if ( aDir.open() != osl::FileBase::E_None )
@@ -474,7 +477,7 @@ OUString PPDParser::getPPDFile( const OUString& rFile )
     if( ! aStream.IsOpen() )
     {
         std::unordered_map< OUString, OUString >::const_iterator it;
-        PPDCache &rPPDCache = thePPDCache::get();
+        PPDCache &rPPDCache = getPPDCache();
 
         bool bRetry = true;
         do
@@ -548,7 +551,7 @@ const PPDParser* PPDParser::getParser( const OUString& rFile )
                  << rFile << "\" !");
 
 
-    PPDCache &rPPDCache = thePPDCache::get();
+    PPDCache &rPPDCache = getPPDCache();
     for( auto const & i : rPPDCache.aAllParsers )
         if( i->m_aFile == aFile )
             return i.get();

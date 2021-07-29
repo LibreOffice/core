@@ -41,8 +41,7 @@ using namespace osl;
 
 namespace
 {
-    struct TempNameBase_Impl
-        : public rtl::Static< OUString, TempNameBase_Impl > {};
+    OUString gTempNameBase_Impl;
 }
 
 namespace utl
@@ -143,7 +142,7 @@ static OUString ConstructTempDir_Impl( const OUString* pParent, bool bCreatePare
 
     if ( aName.isEmpty() )
     {
-        OUString &rTempNameBase_Impl = TempNameBase_Impl::get();
+        OUString &rTempNameBase_Impl = gTempNameBase_Impl;
         if (rTempNameBase_Impl.isEmpty())
         {
             OUString ustrTempDirURL;
@@ -463,7 +462,7 @@ OUString TempFile::SetTempNameBaseDirectory( const OUString &rBaseName )
     if ( bRet )
     {
         // append own internal directory
-        OUString &rTempNameBase_Impl = TempNameBase_Impl::get();
+        OUString &rTempNameBase_Impl = gTempNameBase_Impl;
         rTempNameBase_Impl = rBaseName + "/";
 
         TempFile aBase( nullptr, true );

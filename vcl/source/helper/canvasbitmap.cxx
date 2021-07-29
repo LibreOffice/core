@@ -25,8 +25,6 @@
 #include <com/sun/star/rendering/ColorSpaceType.hpp>
 #include <com/sun/star/rendering/RenderingIntent.hpp>
 
-#include <rtl/instance.hxx>
-
 #include <tools/diagnose_ex.h>
 #include <canvasbitmap.hxx>
 #include <vcl/canvastools.hxx>
@@ -612,23 +610,12 @@ sal_Bool SAL_CALL VclCanvasBitmap::setIndex( const uno::Sequence< double >&, sal
     return false; // read-only implementation
 }
 
-namespace
-{
-    struct PaletteColorSpaceHolder: public rtl::StaticWithInit<uno::Reference<rendering::XColorSpace>,
-                                                               PaletteColorSpaceHolder>
-    {
-        uno::Reference<rendering::XColorSpace> operator()()
-        {
-            return vcl::unotools::createStandardColorSpace();
-        }
-    };
-}
-
 uno::Reference< rendering::XColorSpace > SAL_CALL VclCanvasBitmap::getColorSpace(  )
 {
     // this is the method from XBitmapPalette. Return palette color
     // space here
-    return PaletteColorSpaceHolder::get();
+    static uno::Reference<rendering::XColorSpace> gColorSpace = vcl::unotools::createStandardColorSpace();
+    return gColorSpace;
 }
 
 sal_Int8 SAL_CALL VclCanvasBitmap::getType(  )

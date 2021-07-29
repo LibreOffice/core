@@ -18,7 +18,6 @@
  */
 
 #include <osl/diagnose.h>
-#include <rtl/instance.hxx>
 #include <sal/log.hxx>
 
 #include <tools/debug.hxx>
@@ -31,13 +30,17 @@ class ErrorHandler;
 
 namespace {
 
-class TheErrorRegistry: public rtl::Static<ErrorRegistry, TheErrorRegistry> {};
+    ErrorRegistry& GetErrorRegistry()
+    {
+        static ErrorRegistry gErrorRegistry;
+        return gErrorRegistry;
+    }
 
 }
 
 bool ErrorStringFactory::CreateString(const ErrorInfo* pInfo, OUString& rStr)
 {
-    for(const ErrorHandler *pHdlr : TheErrorRegistry::get().errorHandlers)
+    for(const ErrorHandler *pHdlr : GetErrorRegistry().errorHandlers)
     {
         if(pHdlr->CreateString(pInfo, rStr))
             return true;
@@ -56,21 +59,21 @@ ErrorRegistry::ErrorRegistry()
 
 void ErrorRegistry::RegisterDisplay(BasicDisplayErrorFunc *aDsp)
 {
-    ErrorRegistry &rData = TheErrorRegistry::get();
+    ErrorRegistry &rData = GetErrorRegistry();
     rData.bIsWindowDsp = false;
     rData.pDsp = reinterpret_cast< DisplayFnPtr >(aDsp);
 }
 
 void ErrorRegistry::RegisterDisplay(WindowDisplayErrorFunc *aDsp)
 {
-    ErrorRegistry &rData = TheErrorRegistry::get();
+    ErrorRegistry &rData = GetErrorRegistry();
     rData.bIsWindowDsp = true;
     rData.pDsp = reinterpret_cast< DisplayFnPtr >(aDsp);
 }
 
 void ErrorRegistry::Reset()
 {
-    ErrorRegistry &rData = TheErrorRegistry::get();
+    ErrorRegistry &rData = GetErrorRegistry();
     rData = ErrorRegistry();
 }
 
@@ -81,7 +84,7 @@ static void aDspFunc(const OUString &rErr, const OUString &rAction)
 
 ErrorHandler::ErrorHandler()
 {
-    ErrorRegistry &rData = TheErrorRegistry::get();
+    ErrorRegistry &rData = GetErrorRegistry();
     rData.errorHandlers.insert(rData.errorHandlers.begin(), this);
 
     if(!rData.pDsp)
@@ -90,7 +93,7 @@ ErrorHandler::ErrorHandler()
 
 ErrorHandler::~ErrorHandler()
 {
-    auto &rErrorHandlers = TheErrorRegistry::get().errorHandlers;
+    auto &rErrorHandlers = GetErrorRegistry().errorHandlers;
     rErrorHandlers.erase( ::std::remove(rErrorHandlers.begin(), rErrorHandlers.end(), this),
                           rErrorHandlers.end());
 }
@@ -118,7 +121,7 @@ DialogMask ErrorHandler::HandleError(ErrCode nErrCodeId, weld::Window *pParent, 
     if (nErrCodeId == ERRCODE_NONE || nErrCodeId == ERRCODE_ABORT)
         return DialogMask::NONE;
 
-    ErrorRegistry &rData = TheErrorRegistry::get();
+    ErrorRegistry &rData = GetErrorRegistry();
     std::unique_ptr<ErrorInfo> pInfo = ErrorInfo::GetErrorInfo(nErrCodeId);
     OUString aAction;
 
@@ -195,18 +198,18 @@ ErrorContext::ErrorContext(weld::Window *pWinP)
     : pImpl( new ImplErrorContext )
 {
     pImpl->pWin = pWinP;
-    TheErrorRegistry::get().contexts.insert(TheErrorRegistry::get().contexts.begin(), this);
+    GetErrorRegistry().contexts.insert(GetErrorRegistry().contexts.begin(), this);
 }
 
 ErrorContext::~ErrorContext()
 {
-    auto &rContexts = TheErrorRegistry::get().contexts;
+    auto &rContexts = GetErrorRegistry().contexts;
     rContexts.erase( ::std::remove(rContexts.begin(), rContexts.end(), this), rContexts.end());
 }
 
 ErrorContext *ErrorContext::GetContext()
 {
-    return TheErrorRegistry::get().contexts.empty() ? nullptr : TheErrorRegistry::get().contexts.front();
+    return GetErrorRegistry().contexts.empty() ? nullptr : GetErrorRegistry().contexts.front();
 }
 
 weld::Window* ErrorContext::GetParent()
@@ -236,7 +239,7 @@ private:
 void ImplDynamicErrorInfo::RegisterError(DynamicErrorInfo *pDynErrInfo)
 {
     // Register dynamic identifier
-    ErrorRegistry& rData = TheErrorRegistry::get();
+    ErrorRegistry& rData = GetErrorRegistry();
     nErrId = ErrCode(((sal_uInt32(rData.nNextError) + 1) << ERRCODE_DYNAMIC_SHIFT) +
                      sal_uInt32(pDynErrInfo->GetErrorCode()));
 
@@ -251,7 +254,7 @@ void ImplDynamicErrorInfo::RegisterError(DynamicErrorInfo *pDynErrInfo)
 
 void ImplDynamicErrorInfo::UnRegisterError(DynamicErrorInfo const *pDynErrInfo)
 {
-    DynamicErrorInfo **ppDynErrInfo = TheErrorRegistry::get().ppDynErrInfo;
+    DynamicErrorInfo **ppDynErrInfo = GetErrorRegistry().ppDynErrInfo;
     sal_uInt32 nIdx = ErrCode(*pDynErrInfo).GetDynamic() - 1;
     DBG_ASSERT(ppDynErrInfo[nIdx] == pDynErrInfo, "ErrHdl: Error not found");
 
@@ -262,7 +265,7 @@ void ImplDynamicErrorInfo::UnRegisterError(DynamicErrorInfo const *pDynErrInfo)
 std::unique_ptr<ErrorInfo> ImplDynamicErrorInfo::GetDynamicErrorInfo(ErrCode nId)
 {
     sal_uInt32 nIdx = nId.GetDynamic() - 1;
-    DynamicErrorInfo* pDynErrInfo = TheErrorRegistry::get().ppDynErrInfo[nIdx];
+    DynamicErrorInfo* pDynErrInfo = GetErrorRegistry().ppDynErrInfo[nIdx];
 
     if(pDynErrInfo && ErrCode(*pDynErrInfo)==nId)
         return std::unique_ptr<ErrorInfo>(pDynErrInfo);

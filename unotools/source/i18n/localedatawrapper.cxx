@@ -38,7 +38,6 @@
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
-#include <rtl/instance.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/math.hxx>
 
@@ -50,15 +49,8 @@ using namespace ::com::sun::star::uno;
 
 namespace
 {
-    struct InstalledLocales
-        : public rtl::Static<
-            uno::Sequence< lang::Locale >, InstalledLocales >
-    {};
-
-    struct InstalledLanguageTypes
-        : public rtl::Static<
-            std::vector< LanguageType >, InstalledLanguageTypes >
-    {};
+    uno::Sequence< lang::Locale > gInstalledLocales;
+    std::vector< LanguageType > gInstalledLanguageTypes;
 }
 
 sal_uInt8 LocaleDataWrapper::nLocaleDataChecking = 0;
@@ -279,7 +271,7 @@ css::i18n::ForbiddenCharacters LocaleDataWrapper::getForbiddenCharacters() const
 
 css::uno::Sequence< css::lang::Locale > LocaleDataWrapper::getAllInstalledLocaleNames() const
 {
-    uno::Sequence< lang::Locale > &rInstalledLocales = InstalledLocales::get();
+    uno::Sequence< lang::Locale > &rInstalledLocales = gInstalledLocales;
 
     if ( rInstalledLocales.hasElements() )
         return rInstalledLocales;
@@ -300,8 +292,7 @@ css::uno::Sequence< css::lang::Locale > LocaleDataWrapper::getAllInstalledLocale
 // static
 css::uno::Sequence< css::lang::Locale > LocaleDataWrapper::getInstalledLocaleNames()
 {
-    const uno::Sequence< lang::Locale > &rInstalledLocales =
-        InstalledLocales::get();
+    const uno::Sequence< lang::Locale > &rInstalledLocales = gInstalledLocales;
 
     if ( !rInstalledLocales.hasElements() )
     {
@@ -314,8 +305,7 @@ css::uno::Sequence< css::lang::Locale > LocaleDataWrapper::getInstalledLocaleNam
 // static
 std::vector< LanguageType > LocaleDataWrapper::getInstalledLanguageTypes()
 {
-    std::vector< LanguageType > &rInstalledLanguageTypes =
-        InstalledLanguageTypes::get();
+    std::vector< LanguageType > &rInstalledLanguageTypes = gInstalledLanguageTypes;
 
     if ( !rInstalledLanguageTypes.empty() )
         return rInstalledLanguageTypes;

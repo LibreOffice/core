@@ -141,30 +141,12 @@ CertificateContainer::getSupportedServiceNames(  )
     return { "com.sun.star.security.CertificateContainer" };
 }
 
-namespace
-{
-struct Instance
-{
-    explicit Instance(css::uno::Reference<css::uno::XComponentContext> const& context)
-        : instance(new CertificateContainer(context))
-    {
-    }
-
-    rtl::Reference<CertificateContainer> instance;
-};
-
-struct Singleton
-    : public rtl::StaticWithArg<Instance, css::uno::Reference<css::uno::XComponentContext>,
-                                Singleton>
-{
-};
-}
-
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_security_CertificateContainer_get_implementation(
     css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
 {
-    return cppu::acquire(Singleton::get(context).instance.get());
+    static rtl::Reference<CertificateContainer> gContainer = new CertificateContainer(context);
+    return cppu::acquire(gContainer.get());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -24,7 +24,6 @@
 #include <vcl/jobset.hxx>
 #include <jobset.h>
 #include <memory>
-#include <rtl/instance.hxx>
 
 #define JOBSET_FILE364_SYSTEM   (sal_uInt16(0xFFFF))
 #define JOBSET_FILE605_SYSTEM   (sal_uInt16(0xFFFE))
@@ -190,11 +189,14 @@ bool ImplJobSetup::operator==( const ImplJobSetup& rImplJobSetup ) const
 
 namespace
 {
-    struct theGlobalDefault :
-        public rtl::Static< JobSetup::ImplType, theGlobalDefault > {};
+    JobSetup::ImplType& GetGlobalDefault()
+    {
+        static JobSetup::ImplType gDefault;
+        return gDefault;
+    }
 }
 
-JobSetup::JobSetup() : mpData(theGlobalDefault::get())
+JobSetup::JobSetup() : mpData(GetGlobalDefault())
 {
 }
 
@@ -224,7 +226,7 @@ OUString const & JobSetup::GetPrinterName() const
 
 bool JobSetup::IsDefault() const
 {
-    return mpData.same_object(theGlobalDefault::get());
+    return mpData.same_object(GetGlobalDefault());
 }
 
 SvStream& ReadJobSetup( SvStream& rIStream, JobSetup& rJobSetup )
