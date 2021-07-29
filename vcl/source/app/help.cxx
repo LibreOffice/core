@@ -289,7 +289,7 @@ void HelpTextWindow::ApplySettings(vcl::RenderContext& rRenderContext)
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
     SetPointFont(rRenderContext, rStyleSettings.GetHelpFont());
     rRenderContext.SetTextColor(rStyleSettings.GetHelpTextColor());
-    rRenderContext.SetTextAlign(ALIGN_TOP);
+    rRenderContext.SetTextAlign(TextAlign::Top);
 
     if (rRenderContext.IsNativeControlSupported(ControlType::Tooltip, ControlPart::Entire))
     {

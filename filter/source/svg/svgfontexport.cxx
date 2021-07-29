@@ -189,7 +189,7 @@ void SVGFontExport::implEmbedFont( const vcl::Font& rFont )
         vcl::Font           aFont( rFont );
 
         aFont.SetFontSize( Size( 0, nFontEM ) );
-        aFont.SetAlignment( ALIGN_BASELINE );
+        aFont.SetAlignment( TextAlign::Baseline );
 
         pVDev->SetMapMode(MapMode(MapUnit::Map100thMM));
         pVDev->SetFont( aFont );

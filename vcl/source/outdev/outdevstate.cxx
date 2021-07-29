@@ -32,7 +32,7 @@
 
 OutDevState::OutDevState()
     : mbMapActive(false)
-    , meTextAlign(ALIGN_TOP)
+    , meTextAlign(TextAlign::Top)
     , meRasterOp(RasterOp::OverPaint)
     , mnTextLayoutMode(ComplexTextLayoutFlags::Default)
     , meTextLanguage(0)

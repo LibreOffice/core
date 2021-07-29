@@ -799,9 +799,9 @@ void ImpSdrPdfImport::InsertTextObject(const Point& rPos, const Size& rSize, con
                     FRound(rPos.Y() * mfScaleY + maOfs.Y()));
     Size aSize(FRound(rSize.Width() * mfScaleX), FRound(rSize.Height() * mfScaleY));
 
-    if (eAlignment == ALIGN_BASELINE)
+    if (eAlignment == TextAlign::Baseline)
         aPosition.AdjustY(-FRound(aFontMetric.GetAscent() * mfScaleY));
-    else if (eAlignment == ALIGN_BOTTOM)
+    else if (eAlignment == TextAlign::Bottom)
         aPosition.AdjustY(-nTextHeight);
 
     tools::Rectangle aTextRect(aPosition, aSize);
