@@ -790,7 +790,7 @@ void ImpSdrPdfImport::InsertTextObject(const Point& rPos, const Size& rSize, con
 
     FontMetric aFontMetric(mpVD->GetFontMetric());
     vcl::Font aFont(mpVD->GetFont());
-    FontAlign eAlignment(aFont.GetAlignment());
+    TextAlign eAlignment(aFont.GetAlignment());
 
     // sal_Int32 nTextWidth = static_cast<sal_Int32>(mpVD->GetTextWidth(rStr) * mfScaleX);
     sal_Int32 nTextHeight = static_cast<sal_Int32>(mpVD->GetTextHeight() * mfScaleY);

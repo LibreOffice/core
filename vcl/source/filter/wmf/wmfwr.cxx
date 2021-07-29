@@ -735,7 +735,7 @@ void WMFWriter::WMFRecord_SetROP2(RasterOp eROP)
     pWMF->WriteUInt16( nROP2 );
 }
 
-void WMFWriter::WMFRecord_SetTextAlign(FontAlign eFontAlign, sal_uInt16 eHorTextAlign)
+void WMFWriter::WMFRecord_SetTextAlign(TextAlign eFontAlign, sal_uInt16 eHorTextAlign)
 {
     sal_uInt16 nAlign;
 

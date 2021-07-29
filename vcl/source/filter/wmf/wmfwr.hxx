@@ -73,7 +73,7 @@ private:
     Color     aSrcTextColor;
     LineInfo  aSrcLineInfo;
     RasterOp  eSrcRasterOp;
-    FontAlign eSrcTextAlign;
+    TextAlign eSrcTextAlign;
     vcl::Font aSrcFont;
     MapMode   aSrcMapMode;
     vcl::Region    aSrcClipRegion;
@@ -87,7 +87,7 @@ private:
     Color     aDstTextColor;
     LineInfo  aDstLineInfo;
     RasterOp  eDstROP2;
-    FontAlign eDstTextAlign;
+    TextAlign eDstTextAlign;
     vcl::Font aDstFont;
 
     sal_uInt16    eDstHorTextAlign;
@@ -163,7 +163,7 @@ private:
     void WMFRecord_SetStretchBltMode();
     void WMFRecord_SetPixel(const Point & rPoint, const Color & rColor);
     void WMFRecord_SetROP2(RasterOp eROP);
-    void WMFRecord_SetTextAlign(FontAlign eFontAlign, sal_uInt16 eHorTextAlign);
+    void WMFRecord_SetTextAlign(TextAlign eFontAlign, sal_uInt16 eHorTextAlign);
     void WMFRecord_SetTextColor(const Color & rColor);
     void WMFRecord_SetWindowExt(const Size & rSize);
     void WMFRecord_SetWindowOrg(const Point & rPoint);

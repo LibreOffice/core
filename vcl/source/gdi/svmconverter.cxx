@@ -649,7 +649,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                 aFont.SetCharSet( static_cast<rtl_TextEncoding>(nCharSet) );
                 aFont.SetFamily( static_cast<FontFamily>(nFamily) );
                 aFont.SetPitch( static_cast<FontPitch>(nPitch) );
-                aFont.SetAlignment( static_cast<FontAlign>(nAlign) );
+                aFont.SetAlignment( static_cast<TextAlign>(nAlign) );
                 aFont.SetWeight( ( nWeight == 1 ) ? WEIGHT_LIGHT : ( nWeight == 2 ) ? WEIGHT_NORMAL :
                                  ( nWeight == 3 ) ? WEIGHT_BOLD : WEIGHT_DONTKNOW );
                 aFont.SetUnderline( static_cast<FontLineStyle>(nUnderline) );
