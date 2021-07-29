@@ -55,7 +55,7 @@ ColumnBlockPositionSet::ColumnBlockPositionSet(ScDocument& rDoc) : mrDoc(rDoc) {
 
 ColumnBlockPosition* ColumnBlockPositionSet::getBlockPosition(SCTAB nTab, SCCOL nCol)
 {
-    osl::MutexGuard aGuard(&maMtxTables);
+    std::lock_guard aGuard(maMtxTables);
 
     TablesType::iterator itTab = maTables.find(nTab);
     if (itTab == maTables.end())
@@ -93,7 +93,7 @@ ColumnBlockPosition* ColumnBlockPositionSet::getBlockPosition(SCTAB nTab, SCCOL 
 
 void ColumnBlockPositionSet::clear()
 {
-    osl::MutexGuard aGuard(&maMtxTables);
+    std::lock_guard aGuard(maMtxTables);
     maTables.clear();
 }
 
