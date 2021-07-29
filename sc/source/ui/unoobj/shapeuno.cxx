@@ -1311,9 +1311,9 @@ SdrObject* ScShapeObj::GetSdrObject() const noexcept
     return nullptr;
 }
 
-#define SC_EVENTACC_ONCLICK     "OnClick"
-#define SC_EVENTACC_SCRIPT      "Script"
-#define SC_EVENTACC_EVENTTYPE   "EventType"
+constexpr OUStringLiteral SC_EVENTACC_ONCLICK = u"OnClick";
+constexpr OUStringLiteral SC_EVENTACC_SCRIPT = u"Script";
+constexpr OUStringLiteral SC_EVENTACC_EVENTTYPE = u"EventType";
 
 class ShapeUnoEventAccessImpl : public ::cppu::WeakImplHelper< container::XNameReplace >
 {

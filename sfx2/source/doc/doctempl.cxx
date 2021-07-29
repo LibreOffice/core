@@ -80,10 +80,10 @@ using namespace ::ucbhelper;
 #include <vector>
 
 
-#define TITLE                   "Title"
-#define TARGET_URL              "TargetURL"
+constexpr OUStringLiteral TITLE = u"Title";
+constexpr OUStringLiteral TARGET_URL = u"TargetURL";
 
-#define COMMAND_TRANSFER        "transfer"
+constexpr OUStringLiteral COMMAND_TRANSFER = u"transfer";
 
 namespace {
 

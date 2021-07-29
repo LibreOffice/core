@@ -78,12 +78,12 @@ using namespace ::xmloff::token;
 
 #define NSPREFIX "ooo:"
 
-#define SVG_PROP_TINYPROFILE                "TinyMode"
-#define SVG_PROP_DTDSTRING                  "DTDString"
-#define SVG_PROP_EMBEDFONTS                 "EmbedFonts"
-#define SVG_PROP_NATIVEDECORATION           "UseNativeTextDecoration"
-#define SVG_PROP_OPACITY                    "Opacity"
-#define SVG_PROP_POSITIONED_CHARACTERS      "UsePositionedCharacters"
+constexpr OUStringLiteral SVG_PROP_TINYPROFILE = u"TinyMode";
+constexpr OUStringLiteral SVG_PROP_DTDSTRING = u"DTDString";
+constexpr OUStringLiteral SVG_PROP_EMBEDFONTS = u"EmbedFonts";
+constexpr OUStringLiteral SVG_PROP_NATIVEDECORATION = u"UseNativeTextDecoration";
+constexpr OUStringLiteral SVG_PROP_OPACITY = u"Opacity";
+constexpr OUStringLiteral SVG_PROP_POSITIONED_CHARACTERS = u"UsePositionedCharacters";
 
 // ooo xml elements
 constexpr OUStringLiteral aOOOElemTextField = u"" NSPREFIX "text_field";

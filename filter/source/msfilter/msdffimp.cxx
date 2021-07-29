@@ -167,7 +167,7 @@ using namespace container           ;
 
 // static counter for OLE-Objects
 static sal_uInt32 nMSOleObjCntr = 0;
-#define MSO_OLE_Obj "MSO_OLE_Obj"
+constexpr OUStringLiteral MSO_OLE_Obj = u"MSO_OLE_Obj";
 
 namespace {
 
