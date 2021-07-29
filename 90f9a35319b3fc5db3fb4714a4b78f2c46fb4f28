@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ede1ae00_b223a335",
+        "filename": "vcl/source/treelist/treelistbox.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1113,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-07-29T07:40:52Z",
+      "side": 0,
+      "message": "Are you sure you want to remove this whole block and not just start the function with something like:\n\n\u003e if (pImpl \u0026\u0026 pImpl-\u003eIsCaptureOnButtonActive())\n\u003e     return;\n\nThat would keep the change very specific. And you might want to convert the *CheckCtrl functions to IsCaptureOnButtonActive()?",
+      "revId": "90f9a35319b3fc5db3fb4714a4b78f2c46fb4f28",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}

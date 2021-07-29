@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "20b2b4af_28482b5f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2021-07-29T07:40:52Z",
+      "side": 1,
+      "message": "I would understand, if gtk3 + gtk3_kde5 behaved different from the rest, as they use weld (AKA native widgets). Everything else I would consider most times some VCL plugin bug.\n\nFYI: kf5 just prefers the KF5 file picker over the qt5 one. Just looking at KF5SalFrame again, it currently doesn\u0027t even read any KConfig values (that code is commented). The little rest is basically converting some Qt font settings to LO; most look dubious at best...\n\nAnd it actually just \"converts\" QApplication::font() and QToolTip::font() and QMenuBar (no idea why QMenuBar::font() isn\u0027t used, but a real widget)...",
+      "range": {
+        "startLine": 19,
+        "startChar": 0,
+        "endLine": 22,
+        "endChar": 30
+      },
+      "revId": "e9b5ce45f731367433e5b468505c38d3c330545d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
