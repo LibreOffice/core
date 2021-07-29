@@ -34,6 +34,24 @@
       "revId": "43e58bb838d708070f7962f40e7150937c66fa13",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "818d0ac9_b062ff65",
+        "filename": "vcl/backendtest/GraphicsRenderTests.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1556,
+      "author": {
+        "id": 1002896
+      },
+      "writtenOn": "2021-07-29T14:47:27Z",
+      "side": 1,
+      "message": "How should I access the BackendCapability class variable of a specific backend to check for support of 32bpp? I looked through both outdev.hxx and virdev.hxx but couldn\u0027t find a way to do so.",
+      "parentUuid": "bbabd8b9_528d9dd2",
+      "revId": "43e58bb838d708070f7962f40e7150937c66fa13",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
