@@ -144,11 +144,11 @@ WMFWriter::WMFWriter()
     , nMaxRecordSize(0)
     , nActRecordPos(0)
     , eSrcRasterOp(RasterOp::OverPaint)
-    , eSrcTextAlign(ALIGN_BASELINE)
+    , eSrcTextAlign(TextAlign::Baseline)
     , pAttrStack(nullptr)
     , eSrcHorTextAlign(W_TA_LEFT)
     , eDstROP2(RasterOp::OverPaint)
-    , eDstTextAlign(ALIGN_BASELINE)
+    , eDstTextAlign(TextAlign::Baseline)
     , eDstHorTextAlign(W_TA_LEFT)
     , bHandleAllocated{}
     , nDstPenHandle(0)
@@ -740,9 +740,15 @@ void WMFWriter::WMFRecord_SetTextAlign(TextAlign eFontAlign, sal_uInt16 eHorText
     sal_uInt16 nAlign;
 
     switch (eFontAlign) {
-        case ALIGN_TOP:    nAlign=W_TA_TOP; break;
-        case ALIGN_BOTTOM: nAlign=W_TA_BOTTOM; break;
-        default:           nAlign=W_TA_BASELINE;
+        case TextAlign::Top:
+            nAlign=W_TA_TOP;
+            break;
+        case TextAlign::Bottom:
+            nAlign=W_TA_BOTTOM;
+            break;
+        case TextAlign::Baseline:
+            nAlign=W_TA_BASELINE;
+            break;
     }
     nAlign|=eHorTextAlign;
     nAlign|=W_TA_NOUPDATECP;
@@ -1453,7 +1459,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                 }
                 eSrcTextAlign = aSrcFont.GetAlignment();
                 aSrcTextColor = aSrcFont.GetColor();
-                aSrcFont.SetAlignment( ALIGN_BASELINE );
+                aSrcFont.SetAlignment( TextAlign::Baseline );
                 aSrcFont.SetColor( COL_WHITE );
             }
             break;
@@ -1770,11 +1776,11 @@ bool WMFWriter::WriteWMF( const GDIMetaFile& rMTF, SvStream& rTargetStream,
     vcl::Font aFont;
     aFont.SetCharSet( GetExtendedTextEncoding( RTL_TEXTENCODING_MS_1252 ) );
     aFont.SetColor( COL_WHITE );
-    aFont.SetAlignment( ALIGN_BASELINE );
+    aFont.SetAlignment( TextAlign::Baseline );
     aDstFont = aSrcFont = aFont;
     CreateSelectDeleteFont(aDstFont);
 
-    eDstTextAlign = eSrcTextAlign = ALIGN_BASELINE;
+    eDstTextAlign = eSrcTextAlign = TextAlign::Baseline;
     eDstHorTextAlign = eSrcHorTextAlign = W_TA_LEFT;
     WMFRecord_SetTextAlign( eDstTextAlign, eDstHorTextAlign );
 

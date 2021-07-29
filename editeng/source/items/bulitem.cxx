@@ -30,7 +30,7 @@ SvxBulletItem::SvxBulletItem( sal_uInt16 _nWhich )
     , nScale(75)
     , cSymbol(' ')
 {
-    aFont.SetAlignment(ALIGN_BOTTOM);
+    aFont.SetAlignment(TextAlign::Bottom);
     aFont.SetTransparent( true );
 }
 

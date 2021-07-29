@@ -562,9 +562,15 @@ void EMFWriter::ImplCheckTextAttr()
 
     switch( rFont.GetAlignment() )
     {
-        case ALIGN_TOP:    nTextAlign = TA_TOP; break;
-        case ALIGN_BOTTOM: nTextAlign = TA_BOTTOM; break;
-        default:           nTextAlign = TA_BASELINE; break;
+        case TextAlign::Top:
+            nTextAlign = TA_TOP;
+            break;
+        case TextAlign::Bottom:
+            nTextAlign = TA_BOTTOM;
+            break;
+        case TextAlign::Baseline:
+            nTextAlign = TA_BASELINE;
+            break;
     }
     nTextAlign |= mnHorTextAlign;
 

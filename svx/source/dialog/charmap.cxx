@@ -624,7 +624,7 @@ void SvxShowCharSet::InitSettings(vcl::RenderContext& rRenderContext)
 
     vcl::Font aFont(maFont);
     aFont.SetWeight(WEIGHT_LIGHT);
-    aFont.SetAlignment(ALIGN_TOP);
+    aFont.SetAlignment(TextAlign::Top);
     aFont.SetFontSize(maFontSize);
     aFont.SetTransparent(true);
     rRenderContext.SetFont(aFont);
@@ -651,7 +651,7 @@ void SvxShowCharSet::RecalculateFont(vcl::RenderContext& rRenderContext)
 
     vcl::Font aFont = maFont;
     aFont.SetWeight(WEIGHT_LIGHT);
-    aFont.SetAlignment(ALIGN_TOP);
+    aFont.SetAlignment(TextAlign::Top);
     int nFontHeight = (aSize.Height() - 5) * 2 / (3 * ROW_COUNT);
     maFontSize = rRenderContext.PixelToLogic(Size(0, nFontHeight));
     aFont.SetFontSize(maFontSize);

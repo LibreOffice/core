@@ -1014,9 +1014,9 @@ void ImpSdrGDIMetaFileImport::ImportText( const Point& rPos, const OUString& rSt
     Point aPos( FRound(rPos.X() * mfScaleX + maOfs.X()), FRound(rPos.Y() * mfScaleY + maOfs.Y()) );
     Size aSize( nTextWidth, nTextHeight );
 
-    if ( eAlg == ALIGN_BASELINE )
+    if ( eAlg == TextAlign::Baseline )
         aPos.AdjustY( -(FRound(aFontMetric.GetAscent() * mfScaleY)) );
-    else if ( eAlg == ALIGN_BOTTOM )
+    else if ( eAlg == TextAlign::Bottom )
         aPos.AdjustY( -nTextHeight );
 
     tools::Rectangle aTextRect( aPos, aSize );
