@@ -58,7 +58,7 @@ using namespace css::java;
 using namespace css::task;
 
 
-#define INTERACTION_HANDLER_NAME "java-vm.interaction-handler"
+constexpr OUStringLiteral INTERACTION_HANDLER_NAME = u"java-vm.interaction-handler";
 
 class Context: public WeakImplHelper<XCurrentContext>
 {

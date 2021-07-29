@@ -53,7 +53,7 @@ using namespace ::com::sun::star;
 #if defined(_WIN32)
 OString Win_AddLongPathPrefix( const OString &rPathName )
 {
-#define WIN32_LONG_PATH_PREFIX "\\\\?\\"
+constexpr OUStringLiteral WIN32_LONG_PATH_PREFIX = u"\\\\?\\";
   if (!rPathName.match(WIN32_LONG_PATH_PREFIX)) return WIN32_LONG_PATH_PREFIX + rPathName;
   return rPathName;
 }

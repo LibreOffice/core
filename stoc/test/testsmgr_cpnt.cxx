@@ -50,8 +50,8 @@
 #endif
 
 
-#define IMPLEMENTATION_NAME "com.sun.star.DummyService.V10"
-#define SERVICE_NAME "com.sun.star.ts.TestManagerImpl"
+constexpr OUStringLiteral IMPLEMENTATION_NAME = u"com.sun.star.DummyService.V10";
+constexpr OUStringLiteral SERVICE_NAME = u"com.sun.star.ts.TestManagerImpl";
 
 
 using namespace css::uno;
@@ -164,7 +164,7 @@ Sequence< OUString > Test_Manager_Impl::getSupportedServiceNames_Static() throw 
 extern "C" void SAL_CALL test_ServiceManager()
 {
 #if ! defined SAL_DLLPREFIX
-#define SAL_DLLPREFIX ""
+constexpr OUStringLiteral SAL_DLLPREFIX = u"";
 #endif
      OUString atUModule2 = SAL_DLLPREFIX "testsmgr_component" SAL_DLLEXTENSION ;
 

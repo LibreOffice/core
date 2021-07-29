@@ -29,7 +29,7 @@
 
 namespace framework{
 
-#define PROTOCOL_VALUE      "service:"
+constexpr OUStringLiteral PROTOCOL_VALUE = u"service:";
 #define PROTOCOL_LENGTH     8
 
 // XInterface, XTypeProvider, XServiceInfo

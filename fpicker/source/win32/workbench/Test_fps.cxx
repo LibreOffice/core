@@ -70,7 +70,7 @@ using namespace std                     ;
 void TestFilterManager( Reference< XFilePicker > xFilePicker );
 
 
-#define RDB_SYSPATH "D:\\Projects\\gsl\\sysui\\wntmsci7\\bin\\applicat.rdb"
+constexpr OUStringLiteral RDB_SYSPATH = u"D:\\Projects\\gsl\\sysui\\wntmsci7\\bin\\applicat.rdb";
 
 
 //  global variables
