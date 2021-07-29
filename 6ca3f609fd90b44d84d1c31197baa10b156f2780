@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ef1e11d_f4dd92f3",
+        "filename": "editeng/source/items/frmitems.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2164,
+      "author": {
+        "id": 1002869
+      },
+      "writtenOn": "2021-07-29T23:23:53Z",
+      "side": 1,
+      "message": "IDE gives warn if we didn\u0027t set these lines.",
+      "range": {
+        "startLine": 2157,
+        "startChar": 1,
+        "endLine": 2164,
+        "endChar": 5
+      },
+      "revId": "6ca3f609fd90b44d84d1c31197baa10b156f2780",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1557c4d2_dd7c52b8",
+        "filename": "include/editeng/boxitem.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1002869
+      },
+      "writtenOn": "2021-07-29T23:23:53Z",
+      "side": 1,
+      "message": "I think these are in the right place?",
+      "range": {
+        "startLine": 167,
+        "startChar": 44,
+        "endLine": 167,
+        "endChar": 51
+      },
+      "revId": "6ca3f609fd90b44d84d1c31197baa10b156f2780",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "04a921ce_acc9b4c7",
+        "filename": "svx/source/tbxctrls/tbcontrl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2252,
+      "author": {
+        "id": 1002869
+      },
+      "writtenOn": "2021-07-29T23:23:53Z",
+      "side": 1,
+      "message": "Should we need pDLeft variable?",
+      "range": {
+        "startLine": 2252,
+        "startChar": 16,
+        "endLine": 2252,
+        "endChar": 22
+      },
+      "revId": "6ca3f609fd90b44d84d1c31197baa10b156f2780",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "25f34023_3231f5ee",
+        "filename": "svx/source/tbxctrls/tbcontrl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2269,
+      "author": {
+        "id": 1002869
+      },
+      "writtenOn": "2021-07-29T23:23:53Z",
+      "side": 1,
+      "message": "also, should we need pDRight variable? I don\u0027t know how to use pDLeft and pDRight variables for the following lines.",
+      "range": {
+        "startLine": 2269,
+        "startChar": 16,
+        "endLine": 2269,
+        "endChar": 23
+      },
+      "revId": "6ca3f609fd90b44d84d1c31197baa10b156f2780",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6fe4790a_79bc46ae",
+        "filename": "svx/source/tbxctrls/tbcontrl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2308,
+      "author": {
+        "id": 1002869
+      },
+      "writtenOn": "2021-07-29T23:23:53Z",
+      "side": 1,
+      "message": "I think we should consider diagonal borders as aBorderInner?.",
+      "range": {
+        "startLine": 2308,
+        "startChar": 6,
+        "endLine": 2308,
+        "endChar": 18
+      },
+      "revId": "6ca3f609fd90b44d84d1c31197baa10b156f2780",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
