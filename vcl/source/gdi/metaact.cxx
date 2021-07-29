@@ -2670,7 +2670,7 @@ void MetaOverlineColorAction::Read( SvStream& rIStm, ImplMetaReadData* )
 
 MetaTextAlignAction::MetaTextAlignAction() :
     MetaAction  ( MetaActionType::TEXTALIGN ),
-    maAlign     ( ALIGN_TOP )
+    maAlign     ( TextAlign::Top )
 {}
 
 MetaTextAlignAction::~MetaTextAlignAction()
@@ -2695,7 +2695,7 @@ void MetaTextAlignAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
     VersionCompatWrite aCompat(rOStm, 1);
-    rOStm.WriteUInt16( maAlign );
+    rOStm.WriteUInt16(static_cast<sal_uInt16>(maAlign));
 }
 
 void MetaTextAlignAction::Read( SvStream& rIStm, ImplMetaReadData* )

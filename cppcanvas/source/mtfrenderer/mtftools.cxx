@@ -57,21 +57,12 @@ namespace cppcanvas::tools
             // baseline offset.
             switch( outdevState.textReferencePoint )
             {
-                case ALIGN_TOP:
-                    return ::Size( 0,
-                                   aMetric.GetInternalLeading() + aMetric.GetAscent() );
-
-                default:
-                    ENSURE_OR_THROW( false,
-                                      "tools::getBaselineOffset(): Unexpected TextAlign value" );
-                    // FALLTHROUGH intended (to calm compiler warning - case won't happen)
-                case ALIGN_BASELINE:
-                    return ::Size( 0, 0 );
-
-                case ALIGN_BOTTOM:
-                    return ::Size( 0,
-                                   -aMetric.GetDescent() );
-
+                case TextAlign::Top:
+                    return ::Size(0, aMetric.GetInternalLeading() + aMetric.GetAscent());
+                case TextAlign::Baseline:
+                    return ::Size(0, 0);
+                case TextAlign::Bottom:
+                    return ::Size(0, -aMetric.GetDescent());
             }
         }
 

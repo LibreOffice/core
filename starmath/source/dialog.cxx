@@ -244,7 +244,7 @@ void SmShowFont::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangl
 
     vcl::Font aFont(maFont);
     aFont.SetFontSize(Size(0, 24 * rRenderContext.GetDPIScaleFactor()));
-    aFont.SetAlignment(ALIGN_TOP);
+    aFont.SetAlignment(TextAlign::Top);
     rRenderContext.SetFont(aFont);
     rRenderContext.SetTextColor(aTextColor);
 
@@ -987,7 +987,7 @@ void SmShowSymbolSet::Paint(vcl::RenderContext& rRenderContext, const tools::Rec
     {
         SmSym aSymbol(*aSymbolSet[i]);
         vcl::Font aFont(aSymbol.GetFace());
-        aFont.SetAlignment(ALIGN_TOP);
+        aFont.SetAlignment(TextAlign::Top);
 
         // taking a FontSize which is a bit smaller (compared to nLen) in order to have a buffer
         // (hopefully enough for left and right, too)
@@ -1192,7 +1192,7 @@ void SmShowSymbol::SetSymbol(const SmSym *pSymbol)
     if (pSymbol)
     {
         vcl::Font aFont(pSymbol->GetFace());
-        aFont.SetAlignment(ALIGN_BASELINE);
+        aFont.SetAlignment(TextAlign::Baseline);
         SetFont(aFont);
 
         sal_UCS4 cChar = pSymbol->GetCharacter();
@@ -1406,7 +1406,7 @@ void SmShowChar::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangl
     if (!aText.isEmpty())
     {
         vcl::Font aFont(m_aFont);
-        aFont.SetAlignment(ALIGN_TOP);
+        aFont.SetAlignment(TextAlign::Top);
         rRenderContext.SetFont(aFont);
 
         Size aTextSize(rRenderContext.GetTextWidth(aText), rRenderContext.GetTextHeight());
@@ -1431,7 +1431,7 @@ void SmShowChar::SetSymbol( sal_UCS4 cChar, const vcl::Font &rFont )
     vcl::Font aFont( rFont );
     Size aSize(GetOutputSizePixel());
     aFont.SetFontSize(Size(0, aSize.Height() - aSize.Height() / 3));
-    aFont.SetAlignment(ALIGN_BASELINE);
+    aFont.SetAlignment(TextAlign::Baseline);
     SetFont(aFont);
 
     OUString aText(&cChar, 1);

@@ -180,7 +180,7 @@ static void CalculateHorizontalScalingFactor(
     else
         aFont.SetFontHeight( rSdrObjCustomShape.GetLogicRect().GetHeight() / rFWData.nMaxParagraphsPerTextArea );
 
-    aFont.SetAlignment( ALIGN_TOP );
+    aFont.SetAlignment( TextAlign::Top );
     aFont.SetFamilyName( rFontItem.GetFamilyName() );
     aFont.SetFamily( rFontItem.GetFamily() );
     aFont.SetStyleName( rFontItem.GetStyleName() );
@@ -289,7 +289,7 @@ static void GetTextAreaOutline(
 
             aFont.SetFontHeight( rFWData.nSingleLineHeight );
 
-            aFont.SetAlignment( ALIGN_TOP );
+            aFont.SetAlignment( TextAlign::Top );
 
             aFont.SetFamilyName( rFontItem.GetFamilyName() );
             aFont.SetFamily( rFontItem.GetFamily() );
