@@ -136,31 +136,35 @@ inline void SvxBoxItem::SetAllDistances(sal_uInt16 const nNew)
 
 enum class SvxBoxInfoItemLine
 {
-    HORI, VERT, LAST = VERT
+    DLEFT, DRIGHT, HORI, VERT, LAST = VERT
 };
 
 enum class SvxBoxInfoItemValidFlags
 {
-    NONE          = 0x00,
-    TOP           = 0x01,
-    BOTTOM        = 0x02,
-    LEFT          = 0x04,
-    RIGHT         = 0x08,
-    HORI          = 0x10,
-    VERT          = 0x20,
-    DISTANCE      = 0x40,
-    DISABLE       = 0x80,
-    ALL           = 0xff
+    NONE          = 0x000,
+    TOP           = 0x001,
+    BOTTOM        = 0x002,
+    LEFT          = 0x004,
+    RIGHT         = 0x008,
+    DLEFT         = 0x010,
+    DRIGHT        = 0x020,
+    HORI          = 0x040,
+    VERT          = 0x080,
+    DISTANCE      = 0x100,
+    DISABLE       = 0x200,
+    ALL           = 0x3ff
 };
 namespace o3tl
 {
-    template<> struct typed_flags<SvxBoxInfoItemValidFlags> : is_typed_flags<SvxBoxInfoItemValidFlags, 0xff> {};
+    template<> struct typed_flags<SvxBoxInfoItemValidFlags> : is_typed_flags<SvxBoxInfoItemValidFlags, 0x3ff> {};
 }
 
 class EDITENG_DLLPUBLIC SvxBoxInfoItem final : public SfxPoolItem
 {
     std::unique_ptr<editeng::SvxBorderLine> pHori;   //inner horizontal Line
     std::unique_ptr<editeng::SvxBorderLine> pVert;   //inner vertical Line
+    std::unique_ptr<editeng::SvxBorderLine> pDLeft;  //inner DiagonalLeft Line
+    std::unique_ptr<editeng::SvxBorderLine> pDRight; //inner DiagonalRight Line
 
     bool                mbEnableHor;   /// true = Enable inner horizontal line.
     bool                mbEnableVer;   /// true = Enable inner vertical line.

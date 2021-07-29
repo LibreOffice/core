@@ -2154,6 +2154,14 @@ void SvxBoxInfoItem::SetLine( const SvxBorderLine* pNew, SvxBoxInfoItemLine nLin
     {
         pVert = std::move(pTmp);
     }
+    else if ( SvxBoxInfoItemLine::DLEFT == nLine )
+    {
+        pDLeft = std::move(pTmp);
+    }
+    else if ( SvxBoxInfoItemLine::DRIGHT == nLine )
+    {
+        pDRight = std::move(pTmp);
+    }
     else
     {
         OSL_FAIL( "wrong line" );
@@ -2194,7 +2202,7 @@ bool SvxBoxInfoItem::HasMetrics() const
 
 void SvxBoxInfoItem::ResetFlags()
 {
-    nValidFlags = static_cast<SvxBoxInfoItemValidFlags>(0x7F); // all valid except Disable
+    nValidFlags = static_cast<SvxBoxInfoItemValidFlags>(0x1FF); // all valid except Disable
 }
 
 bool SvxBoxInfoItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
