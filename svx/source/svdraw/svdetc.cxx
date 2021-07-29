@@ -81,14 +81,9 @@ const LocaleDataWrapper*    SdrGlobalData::GetLocaleData()
     return &GetSysLocale()->GetLocaleData();
 }
 
-namespace {
-
-struct TheSdrGlobalData: public rtl::Static<SdrGlobalData, TheSdrGlobalData> {};
-
-}
-
 SdrGlobalData & GetSdrGlobalData() {
-    return TheSdrGlobalData::get();
+    static SdrGlobalData TheSdrGlobalData;
+    return TheSdrGlobalData;
 }
 
 OLEObjCache::OLEObjCache()
