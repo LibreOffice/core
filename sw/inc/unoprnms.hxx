@@ -351,6 +351,7 @@
 #define UNO_NAME_ENDNOTE "Endnote"
 #define UNO_NAME_CHART_ROW_AS_LABEL "ChartRowAsLabel"
 #define UNO_NAME_CHART_COLUMN_AS_LABEL "ChartColumnAsLabel"
+#define UNO_NAME_DIAGONAL_TLBR "DiagonalTLBR"
 #define UNO_NAME_LEFT_BORDER "LeftBorder"
 #define UNO_NAME_RIGHT_BORDER "RightBorder"
 #define UNO_NAME_TOP_BORDER "TopBorder"

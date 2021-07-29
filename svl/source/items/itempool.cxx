@@ -576,6 +576,10 @@ const SfxPoolItem& SfxItemPool::PutImpl( const SfxPoolItem& rItem, sal_uInt16 nW
         return *pPoolItem;
     }
 
+    // typeid(rItem) == typeid(GetDefaultItem(nWhich)) gives false
+    // and LO stop working when nWhich and rItem.Which() becomes 106 or 107
+    // 106 -> RES_BOX(106);  (./sw/inc/hintids.hxx:341)
+    // 107 -> RES_SHADOW(107);
     assert(!pImpl->mpStaticDefaults ||
             typeid(rItem) == typeid(GetDefaultItem(nWhich)));
 

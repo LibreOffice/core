@@ -167,6 +167,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { u"" UNO_NAME_BACK_GRAPHIC_LOCATION, RES_BACKGROUND,         cppu::UnoType<css::style::GraphicLocation>::get(), PROPERTY_NONE ,MID_GRAPHIC_POSITION},
                     { u"" UNO_NAME_BACK_TRANSPARENT, RES_BACKGROUND,  cppu::UnoType<bool>::get(),         PROPERTY_NONE , MID_GRAPHIC_TRANSPARENT      },
                     { u"" UNO_NAME_NUMBER_FORMAT, RES_BOXATR_FORMAT,  cppu::UnoType<sal_Int32>::get(),           PropertyAttribute::MAYBEVOID ,0             },
+                    { u"" UNO_NAME_DIAGONAL_TLBR, RES_BORDER_TLBR, ::cppu::UnoType<table::BorderLine>::get(), 0, 0 | CONVERT_TWIPS },
                     { u"" UNO_NAME_LEFT_BORDER, RES_BOX,    cppu::UnoType<css::table::BorderLine>::get(),    0, LEFT_BORDER  |CONVERT_TWIPS },
                     { u"" UNO_NAME_RIGHT_BORDER, RES_BOX,    cppu::UnoType<css::table::BorderLine>::get(),   0, RIGHT_BORDER |CONVERT_TWIPS },
                     { u"" UNO_NAME_TOP_BORDER, RES_BOX,    cppu::UnoType<css::table::BorderLine>::get(), 0, TOP_BORDER   |CONVERT_TWIPS },

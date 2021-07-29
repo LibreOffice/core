@@ -245,7 +245,7 @@ SwBoxAutoFormat::SwBoxAutoFormat()
     m_aShadowed = std::make_unique<SvxShadowedItem>(false, RES_CHRATR_SHADOWED );
     m_aColor = std::make_unique<SvxColorItem>(RES_CHRATR_COLOR );
     m_aBox = std::make_unique<SvxBoxItem>(RES_BOX );
-    m_aTLBR = std::make_unique<SvxLineItem>(0 );
+    m_aTLBR = std::make_unique<SvxLineItem>(RES_BORDER_TLBR );
     m_aBLTR = std::make_unique<SvxLineItem>(0 );
     m_aBackground = std::make_unique<SvxBrushItem>(RES_BACKGROUND );
     m_aAdjust = std::make_unique<SvxAdjustItem>(SvxAdjust::Left, RES_PARATR_ADJUST );
@@ -529,7 +529,7 @@ void SwTableAutoFormat::UpdateFromSet( sal_uInt8 nPos,
 
     pFormat->SetBox( rSet.Get( RES_BOX ) );
 // FIXME - add attribute IDs for the diagonal line items
-//        pFormat->SetTLBR( (SvxLineItem&)rSet.Get( RES_... ) );
+        pFormat->SetTLBR( (SvxLineItem&)rSet.Get( RES_BORDER_TLBR ) );
 //        pFormat->SetBLTR( (SvxLineItem&)rSet.Get( RES_... ) );
     pFormat->SetBackground( rSet.Get( RES_BACKGROUND ) );
     pFormat->SetTextOrientation(rSet.Get(RES_FRAMEDIR));
@@ -633,7 +633,7 @@ void SwTableAutoFormat::UpdateToSet(const sal_uInt8 nPos, const bool bSingleRowT
 
         rSet.Put( aAutoFormatBox );
 // FIXME - uncomment the lines to put the diagonal line items
-//            rSet.Put( rChg.GetTLBR() );
+            rSet.Put( rChg.GetTLBR() );
 //            rSet.Put( rChg.GetBLTR() );
     }
     if( IsBackground() )

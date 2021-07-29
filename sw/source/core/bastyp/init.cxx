@@ -50,6 +50,7 @@
 #include <editeng/keepitem.hxx>
 #include <editeng/kernitem.hxx>
 #include <editeng/langitem.hxx>
+#include <editeng/lineitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/lspcitem.hxx>
 #include <editeng/nhypitem.hxx>
@@ -368,6 +369,7 @@ SfxItemInfo aSlotTab[] =
     { FN_HORI_ORIENT, true },              // RES_HORI_ORIENT
     { 0, false },                               // RES_ANCHOR
     { SID_ATTR_BRUSH, true },              // RES_BACKGROUND
+    { SID_ATTR_BORDER_DIAG_TLBR, true },   // RES_BORDER_TLBR
     { SID_ATTR_BORDER_OUTER, true },       // RES_BOX
     { SID_ATTR_BORDER_SHADOW, true },      // RES_SHADOW
     { SID_ATTR_MACROITEM, true },          // RES_FRMMACRO
@@ -574,6 +576,7 @@ void InitCore()
     aAttrTab[ RES_ANCHOR- POOLATTR_BEGIN ] =                new SwFormatAnchor;
     aAttrTab[ RES_BACKGROUND- POOLATTR_BEGIN ] =            new SvxBrushItem( RES_BACKGROUND );
     aAttrTab[ RES_BOX- POOLATTR_BEGIN ] =                   new SvxBoxItem( RES_BOX );
+    aAttrTab[ RES_BORDER_TLBR- POOLATTR_BEGIN ] =           new SvxLineItem( RES_BORDER_TLBR );
     aAttrTab[ RES_SHADOW- POOLATTR_BEGIN ] =                new SvxShadowItem( RES_SHADOW );
     aAttrTab[ RES_FRMMACRO- POOLATTR_BEGIN ] =              new SvxMacroItem( RES_FRMMACRO );
     aAttrTab[ RES_COL- POOLATTR_BEGIN ] =                   new SwFormatCol;

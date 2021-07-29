@@ -327,6 +327,14 @@ interface BaseTextTable
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
+    SID_ATTR_BORDER_DIAG_TLBR // diagonal left border
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetFrameBorderState ;
+        GroupId = SfxGroupId::Table;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
     SID_FRAME_LINESTYLE // status()
     [
         ExecMethod = ExecTableStyle ;
