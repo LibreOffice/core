@@ -55,7 +55,7 @@ namespace comphelper
 
     void OAccessibleKeyBindingHelper::AddKeyBinding( const Sequence< awt::KeyStroke >& rKeyBinding )
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::lock_guard aGuard( m_aMutex );
 
         m_aKeyBindings.push_back( rKeyBinding );
     }
@@ -63,7 +63,7 @@ namespace comphelper
 
     void OAccessibleKeyBindingHelper::AddKeyBinding( const awt::KeyStroke& rKeyStroke )
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::lock_guard aGuard( m_aMutex );
         m_aKeyBindings.push_back( { rKeyStroke } );
     }
 
@@ -73,7 +73,7 @@ namespace comphelper
 
     sal_Int32 OAccessibleKeyBindingHelper::getAccessibleKeyBindingCount()
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::lock_guard aGuard( m_aMutex );
 
         return m_aKeyBindings.size();
     }
@@ -81,7 +81,7 @@ namespace comphelper
 
     Sequence< awt::KeyStroke > OAccessibleKeyBindingHelper::getAccessibleKeyBinding( sal_Int32 nIndex )
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::lock_guard aGuard( m_aMutex );
 
         if ( nIndex < 0 || nIndex >= static_cast<sal_Int32>(m_aKeyBindings.size()) )
             throw IndexOutOfBoundsException();

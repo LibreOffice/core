@@ -21,13 +21,10 @@
 #define INCLUDED_COMPHELPER_ACCESSIBLEKEYBINDINGHELPER_HXX
 
 #include <com/sun/star/accessibility/XAccessibleKeyBinding.hpp>
-#include <cppuhelper/implbase.hxx>
-#include <osl/mutex.hxx>
-
-#include <vector>
-
 #include <comphelper/comphelperdllapi.h>
-
+#include <cppuhelper/implbase.hxx>
+#include <mutex>
+#include <vector>
 
 namespace comphelper
 {
@@ -46,7 +43,7 @@ namespace comphelper
     private:
         typedef ::std::vector< css::uno::Sequence< css::awt::KeyStroke > > KeyBindings;
         KeyBindings     m_aKeyBindings;
-        ::osl::Mutex    m_aMutex;
+        std::mutex      m_aMutex;
 
         virtual ~OAccessibleKeyBindingHelper() override;
 
