@@ -44,8 +44,8 @@
 #include <vcl/weldutils.hxx>
 #include <algorithm>
 
-#define USER_PACKAGE_MANAGER    "user"
-#define SHARED_PACKAGE_MANAGER  "shared"
+constexpr OUStringLiteral USER_PACKAGE_MANAGER = u"user";
+constexpr OUStringLiteral SHARED_PACKAGE_MANAGER = u"shared";
 
 using namespace ::com::sun::star;
 

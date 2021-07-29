@@ -164,7 +164,7 @@ namespace com::sun::star::uno { class XComponentContext; }
 
 
 //! not found in unonames.hxx
-#define SC_LAYERID "LayerID"
+constexpr OUStringLiteral SC_LAYERID = u"LayerID";
 
 #define SC_VIEWCHANGES_COUNT                        13
 #define SC_SHOW_CHANGES                             0
@@ -338,8 +338,6 @@ sal_Int16 ScXMLExport::GetMeasureUnit()
     const FieldUnit eFieldUnit = static_cast<FieldUnit>(xProperties->getMetric());
     return SvXMLUnitConverter::GetMeasureUnit(eFieldUnit);
 }
-
-constexpr OUStringLiteral gsLayerID( u"" SC_LAYERID );
 
 ScXMLExport::ScXMLExport(
     const css::uno::Reference< css::uno::XComponentContext >& rContext,
@@ -524,7 +522,7 @@ void ScXMLExport::CollectSharedData(SCTAB& nTableCount, sal_Int32& nShapesCount)
                 continue;
 
             sal_Int16 nLayerID = 0;
-            bool bExtracted = xShapeProp->getPropertyValue(gsLayerID) >>= nLayerID;
+            bool bExtracted = xShapeProp->getPropertyValue(SC_LAYERID) >>= nLayerID;
             if (!bExtracted)
                 continue;
 

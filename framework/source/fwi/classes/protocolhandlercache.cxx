@@ -31,7 +31,7 @@
 #include <sal/log.hxx>
 #include <vcl/svapp.hxx>
 
-#define SETNAME_HANDLER "HandlerSet" // name of configuration set inside package
+constexpr OUStringLiteral SETNAME_HANDLER = u"HandlerSet"; // name of configuration set inside package
 
 namespace framework{
 
@@ -200,7 +200,7 @@ void HandlerCFGAccess::read( HandlerHash& rHandlerHash, PatternHash& rPatternHas
     for( nSource=0; nSource<nSourceCount; ++nSource )
     {
         lFullNames[nTarget] =
-            SETNAME_HANDLER
+            SETNAME_HANDLER +
             CFG_PATH_SEPARATOR +
             lNames[nSource] +
             CFG_PATH_SEPARATOR

@@ -111,14 +111,14 @@ public:
             const LanguageTag&  GetRealUILocale() const { return m_aRealUILocale; }
 };
 
-#define ROOTNODE_SYSLOCALE              "Setup/L10N"
+constexpr OUStringLiteral ROOTNODE_SYSLOCALE = u"Setup/L10N";
 
-#define PROPERTYNAME_LOCALE             "ooSetupSystemLocale"
-#define PROPERTYNAME_UILOCALE           "ooLocale"
-#define PROPERTYNAME_CURRENCY           "ooSetupCurrency"
-#define PROPERTYNAME_DECIMALSEPARATOR   "DecimalSeparatorAsLocale"
-#define PROPERTYNAME_DATEPATTERNS       "DateAcceptancePatterns"
-#define PROPERTYNAME_IGNORELANGCHANGE   "IgnoreLanguageChange"
+constexpr OUStringLiteral PROPERTYNAME_LOCALE = u"ooSetupSystemLocale";
+constexpr OUStringLiteral PROPERTYNAME_UILOCALE = u"ooLocale";
+constexpr OUStringLiteral PROPERTYNAME_CURRENCY = u"ooSetupCurrency";
+constexpr OUStringLiteral PROPERTYNAME_DECIMALSEPARATOR = u"DecimalSeparatorAsLocale";
+constexpr OUStringLiteral PROPERTYNAME_DATEPATTERNS = u"DateAcceptancePatterns";
+constexpr OUStringLiteral PROPERTYNAME_IGNORELANGCHANGE = u"IgnoreLanguageChange";
 
 #define PROPERTYHANDLE_LOCALE           0
 #define PROPERTYHANDLE_UILOCALE         1
