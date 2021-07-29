@@ -40,9 +40,9 @@
 
 #include "path_helper.hxx"
 
-#define WSTR_SYSTEM_ROOT_PATH               u"\\\\.\\"
-#define WSTR_LONG_PATH_PREFIX               u"\\\\?\\"
-#define WSTR_LONG_PATH_PREFIX_UNC           u"\\\\?\\UNC\\"
+constexpr OUStringLiteral WSTR_SYSTEM_ROOT_PATH = u"\\\\.\\";
+constexpr OUStringLiteral WSTR_LONG_PATH_PREFIX = u"\\\\?\\";
+constexpr OUStringLiteral WSTR_LONG_PATH_PREFIX_UNC = u"\\\\?\\UNC\\";
 
 // FileURL functions
 

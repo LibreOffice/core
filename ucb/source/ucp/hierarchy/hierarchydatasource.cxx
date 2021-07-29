@@ -46,13 +46,12 @@ using namespace hierarchy_ucp;
 
 
 // describe path of cfg entry
-#define CFGPROPERTY_NODEPATH    "nodepath"
+constexpr OUStringLiteral CFGPROPERTY_NODEPATH = u"nodepath";
 
-#define READ_SERVICE_NAME      u"com.sun.star.ucb.HierarchyDataReadAccess"
-#define READWRITE_SERVICE_NAME u"com.sun.star.ucb.HierarchyDataReadWriteAccess"
+constexpr OUStringLiteral READ_SERVICE_NAME = u"com.sun.star.ucb.HierarchyDataReadAccess";
+constexpr OUStringLiteral READWRITE_SERVICE_NAME = u"com.sun.star.ucb.HierarchyDataReadWriteAccess";
 
-#define CONFIG_DATA_ROOT_KEY          \
-                        "/org.openoffice.ucb.Hierarchy/Root"
+constexpr OUStringLiteral CONFIG_DATA_ROOT_KEY =  u"/org.openoffice.ucb.Hierarchy/Root";
 
 
 namespace hcp_impl
@@ -461,7 +460,7 @@ bool HierarchyDataSource::createConfigPath(
             return false;
         }
 
-        rOutPath = CONFIG_DATA_ROOT_KEY "/" + rInPath;
+        rOutPath = CONFIG_DATA_ROOT_KEY + "/" + rInPath;
     }
     else
     {

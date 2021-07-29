@@ -853,15 +853,15 @@ static const SvxItemPropertySet* lcl_GetEditPropertySet()
     return &aEditPropertySet;
 }
 
-#define SCCHARPROPERTIES_SERVICE    "com.sun.star.style.CharacterProperties"
-#define SCPARAPROPERTIES_SERVICE    "com.sun.star.style.ParagraphProperties"
-#define SCCELLPROPERTIES_SERVICE    "com.sun.star.table.CellProperties"
-#define SCCELLRANGE_SERVICE         "com.sun.star.table.CellRange"
-#define SCCELL_SERVICE              "com.sun.star.table.Cell"
-#define SCSHEETCELLRANGES_SERVICE   "com.sun.star.sheet.SheetCellRanges"
-#define SCSHEETCELLRANGE_SERVICE    "com.sun.star.sheet.SheetCellRange"
-#define SCSPREADSHEET_SERVICE       "com.sun.star.sheet.Spreadsheet"
-#define SCSHEETCELL_SERVICE         "com.sun.star.sheet.SheetCell"
+constexpr OUStringLiteral SCCHARPROPERTIES_SERVICE = u"com.sun.star.style.CharacterProperties";
+constexpr OUStringLiteral SCPARAPROPERTIES_SERVICE = u"com.sun.star.style.ParagraphProperties";
+constexpr OUStringLiteral SCCELLPROPERTIES_SERVICE = u"com.sun.star.table.CellProperties";
+constexpr OUStringLiteral SCCELLRANGE_SERVICE = u"com.sun.star.table.CellRange";
+constexpr OUStringLiteral SCCELL_SERVICE = u"com.sun.star.table.Cell";
+constexpr OUStringLiteral SCSHEETCELLRANGES_SERVICE = u"com.sun.star.sheet.SheetCellRanges";
+constexpr OUStringLiteral SCSHEETCELLRANGE_SERVICE = u"com.sun.star.sheet.SheetCellRange";
+constexpr OUStringLiteral SCSPREADSHEET_SERVICE = u"com.sun.star.sheet.Spreadsheet";
+constexpr OUStringLiteral SCSHEETCELL_SERVICE = u"com.sun.star.sheet.SheetCell";
 
 SC_SIMPLE_SERVICE_INFO( ScCellFormatsEnumeration, "ScCellFormatsEnumeration", "com.sun.star.sheet.CellFormatRangesEnumeration" )
 SC_SIMPLE_SERVICE_INFO( ScCellFormatsObj, "ScCellFormatsObj", "com.sun.star.sheet.CellFormatRanges" )

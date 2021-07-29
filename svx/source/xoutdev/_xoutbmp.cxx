@@ -30,10 +30,10 @@
 #include <vcl/cvtgrf.hxx>
 #include <memory>
 
-#define FORMAT_BMP  u"bmp"
-#define FORMAT_GIF  u"gif"
-#define FORMAT_JPG  u"jpg"
-#define FORMAT_PNG  u"png"
+constexpr OUStringLiteral FORMAT_BMP = u"bmp";
+constexpr OUStringLiteral FORMAT_GIF = u"gif";
+constexpr OUStringLiteral FORMAT_JPG = u"jpg";
+constexpr OUStringLiteral FORMAT_PNG = u"png";
 
 using namespace com::sun::star;
 

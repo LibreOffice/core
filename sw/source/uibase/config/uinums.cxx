@@ -32,7 +32,7 @@
 
 using namespace ::com::sun::star;
 
-#define CHAPTER_FILENAME "chapter.cfg"
+constexpr OUStringLiteral CHAPTER_FILENAME = u"chapter.cfg";
 
 /*
  Description:   Saving a rule
@@ -52,7 +52,7 @@ void SwChapterNumRules::Save()
     SvtPathOptions aPathOpt;
     aURL.SetSmartURL( aPathOpt.GetUserConfigPath() );
     aURL.setFinalSlash();
-    aURL.Append(u"" CHAPTER_FILENAME);
+    aURL.Append(CHAPTER_FILENAME);
 
     SfxMedium aMedium( aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE), StreamMode::WRITE );
     SvStream* pStream = aMedium.GetOutStream();

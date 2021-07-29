@@ -49,7 +49,7 @@
 #include <libxml/xmlwriter.h>
 #include <comphelper/lok.hxx>
 
-#define S_ANNOTATION_BOOKMARK u"____"
+constexpr OUStringLiteral S_ANNOTATION_BOOKMARK = u"____";
 
 using namespace ::sw::mark;
 
