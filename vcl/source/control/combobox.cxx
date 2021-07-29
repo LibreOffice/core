@@ -22,6 +22,7 @@
 #include <set>
 
 #include <comphelper/string.hxx>
+#include <vcl/toolkit/controllayout.hxx>
 #include <vcl/toolkit/lstbox.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/commandevent.hxx>
@@ -32,7 +33,6 @@
 #include <sal/log.hxx>
 
 #include <listbox.hxx>
-#include <controldata.hxx>
 #include <comphelper/lok.hxx>
 #include <tools/json_writer.hxx>
 
@@ -607,7 +607,7 @@ bool ComboBox::IsDropDownBox() const { return m_pImpl->m_pFloatWin != nullptr; }
 
 void ComboBox::FillLayoutData() const
 {
-    mpControlData->mpLayoutData.reset( new vcl::ControlLayoutData );
+    mpLayoutData.reset( new vcl::ControlLayoutData );
     AppendLayoutData( *m_pImpl->m_pSubEdit );
     m_pImpl->m_pSubEdit->SetLayoutDataParent( this );
     ImplListBoxWindow* rMainWindow = GetMainWindow();

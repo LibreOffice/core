@@ -20,12 +20,12 @@
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
 #include <vcl/decoview.hxx>
+#include <vcl/toolkit/controllayout.hxx>
 #include <vcl/toolkit/spinfld.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/uitest/uiobject.hxx>
 #include <sal/log.hxx>
 
-#include <controldata.hxx>
 #include <spin.hxx>
 #include <svdata.hxx>
 
@@ -571,7 +571,7 @@ void SpinField::FillLayoutData() const
 {
     if (mbSpin)
     {
-        mpControlData->mpLayoutData.reset( new vcl::ControlLayoutData );
+        mpLayoutData.reset( new vcl::ControlLayoutData );
         AppendLayoutData(*GetSubEdit());
         GetSubEdit()->SetLayoutDataParent(this);
     }
