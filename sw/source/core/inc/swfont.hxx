@@ -86,7 +86,7 @@ class SwSubFont final : public SvxFont
     inline void SetFillColor( const Color& rColor );
     inline void SetCharSet( const rtl_TextEncoding eCharSet );
     inline void SetPitch( const FontPitch ePitch );
-    inline void SetAlign( const FontAlign eAlign );
+    inline void SetAlign( const TextAlign eAlign );
     inline void SetUnderline( const FontLineStyle eUnderline );
     inline void SetOverline( const FontLineStyle eOverline );
     inline void SetStrikeout( const FontStrikeout eStrikeout );
@@ -209,7 +209,7 @@ public:
     // the encapsulated SV-Font-methods (set bFntChg to true)
     inline void SetColor( const Color& rColor );
     inline void SetFillColor( const Color& rColor );
-    inline void SetAlign( const FontAlign eAlign );
+    inline void SetAlign( const TextAlign eAlign );
     inline void SetUnderline( const FontLineStyle eUnderline );
     void SetUnderColor( const Color &rColor ) { m_aUnderColor = rColor; }
     inline void SetOverline( const FontLineStyle eOverline );
@@ -505,13 +505,13 @@ inline void SwFont::SetPitch( const FontPitch ePitch, const SwFontScript nWhich 
 }
 
 // encapsulated SV-Font-method
-inline void SwSubFont::SetAlign( const FontAlign eAlign )
+inline void SwSubFont::SetAlign( const TextAlign eAlign )
 {
     m_nFontCacheId = nullptr;
     Font::SetAlignment( eAlign );
 }
 
-inline void SwFont::SetAlign( const FontAlign eAlign )
+inline void SwFont::SetAlign( const TextAlign eAlign )
 {
     m_bFontChg = true;
     m_aSub[SwFontScript::Latin].SetAlign( eAlign );

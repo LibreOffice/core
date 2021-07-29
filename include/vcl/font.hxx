@@ -34,7 +34,6 @@
 class Size;
 class LanguageTag;
 class SvStream;
-#define FontAlign TextAlign
 
 class ImplFont;
 class FontAttributes;
@@ -69,7 +68,7 @@ public:
     FontPitch           GetPitch() const;
     FontWidth           GetWidthType();
     FontWidth           GetWidthType() const;
-    FontAlign           GetAlignment() const;
+    TextAlign           GetAlignment() const;
     rtl_TextEncoding    GetCharSet() const;
 
     bool                IsSymbolFont() const;
@@ -82,7 +81,7 @@ public:
     void                SetItalic( FontItalic );
     void                SetWeight( FontWeight );
     void                SetWidthType( FontWidth );
-    void                SetAlignment( FontAlign );
+    void                SetAlignment( TextAlign );
     void                SetCharSet( rtl_TextEncoding );
 
     void                SetSymbolFlag( bool );
