@@ -212,15 +212,14 @@ struct DataFlavorRepresentation
         : public rtl::StaticAggregate<
             const DataFlavorRepresentation, ImplFormatArray_Impl > {};
 
-
     typedef std::vector<css::datatransfer::DataFlavor> tDataFlavorList;
-
-    struct ImplData : public rtl::Static<tDataFlavorList, ImplData> {};
 }
 
 static tDataFlavorList& InitFormats_Impl()
 {
-    return ImplData::get();
+    static tDataFlavorList gImplData;
+
+    return gImplData;
 }
 
 /*************************************************************************

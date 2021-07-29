@@ -107,15 +107,15 @@ OUString ColorNameMap::lookUp(tools::Long color) const
     // Did not find the given color; return its RGB tuple representation:
     return "#" + OUString::number(color, 16);
 }
-
-struct theColorNameMap : public rtl::Static<ColorNameMap, theColorNameMap>
-{
-};
 }
 
 namespace accessibility
 {
-OUString lookUpColorName(tools::Long color) { return theColorNameMap::get().lookUp(color); }
+OUString lookUpColorName(tools::Long color)
+{
+    static ColorNameMap theColorNameMap;
+    return theColorNameMap.lookUp(color);
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -39,15 +39,10 @@ SwThreadManager::~SwThreadManager()
 {
 }
 
-namespace {
-
-struct InitInstance : public rtl::Static<SwThreadManager, InitInstance> {};
-
-}
-
 SwThreadManager& SwThreadManager::GetThreadManager()
 {
-    return InitInstance::get();
+    static SwThreadManager gThreadManager;
+    return gThreadManager;
 }
 
 bool SwThreadManager::ExistsThreadManager()

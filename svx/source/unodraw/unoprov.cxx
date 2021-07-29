@@ -877,18 +877,10 @@ sal_uInt32 UHashMap::getId( const OUString& rCompareString )
         return it->second;
 }
 
-namespace {
-
-struct theSvxMapProvider :
-    public rtl::Static<SvxUnoPropertyMapProvider, theSvxMapProvider>
-{
-};
-
-}
-
 SvxUnoPropertyMapProvider& getSvxMapProvider()
 {
-    return theSvxMapProvider::get();
+    static SvxUnoPropertyMapProvider theSvxMapProvider;
+    return theSvxMapProvider;
 }
 
 
