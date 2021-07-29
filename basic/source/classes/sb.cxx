@@ -52,7 +52,7 @@
 
 using namespace ::com::sun::star::script;
 
-#define SB_RTLNAME "@SBRTL"
+constexpr OUStringLiteral SB_RTLNAME = u"@SBRTL";
 //  i#i68894#
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

@@ -25,8 +25,8 @@
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 
-#define CUIFM_PROP_HIDDEN "Hidden"
-#define CUIFM_PROP_LABEL "Label"
+constexpr OUStringLiteral CUIFM_PROP_HIDDEN = u"Hidden";
+constexpr OUStringLiteral CUIFM_PROP_LABEL = u"Label";
 
 FmShowColsDialog::FmShowColsDialog(weld::Window* pParent)
     : GenericDialogController(pParent, "cui/ui/showcoldialog.ui", "ShowColDialog")

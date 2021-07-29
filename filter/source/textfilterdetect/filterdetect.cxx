@@ -23,15 +23,15 @@
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/docfilt.hxx>
 
-#define WRITER_TEXT_FILTER "Text"
-#define CALC_TEXT_FILTER   "Text - txt - csv (StarCalc)"
+constexpr OUStringLiteral WRITER_TEXT_FILTER = u"Text";
+constexpr OUStringLiteral CALC_TEXT_FILTER = u"Text - txt - csv (StarCalc)";
 
-#define WEB_HTML_FILTER    "HTML"
-#define WRITER_HTML_FILTER "HTML (StarWriter)"
-#define CALC_HTML_FILTER   "calc_HTML_WebQuery"
+constexpr OUStringLiteral WEB_HTML_FILTER = u"HTML";
+constexpr OUStringLiteral WRITER_HTML_FILTER = u"HTML (StarWriter)";
+constexpr OUStringLiteral CALC_HTML_FILTER = u"calc_HTML_WebQuery";
 
-#define WRITER_DOCSERVICE  "com.sun.star.text.TextDocument"
-#define CALC_DOCSERVICE    "com.sun.star.sheet.SpreadsheetDocument"
+constexpr OUStringLiteral WRITER_DOCSERVICE = u"com.sun.star.text.TextDocument";
+constexpr OUStringLiteral CALC_DOCSERVICE = u"com.sun.star.sheet.SpreadsheetDocument";
 
 using namespace ::com::sun::star;
 using utl::MediaDescriptor;
