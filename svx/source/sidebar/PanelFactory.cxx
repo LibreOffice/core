@@ -57,8 +57,8 @@ using namespace svx::sidebar;
 namespace {
 
 /* Why this is not used ? Doesn't it need to inherit from XServiceInfo ?
-#define IMPLEMENTATION_NAME "org.apache.openoffice.comp.svx.sidebar.PanelFactory"
-#define SERVICE_NAME "com.sun.star.ui.UIElementFactory"
+constexpr OUStringLiteral IMPLEMENTATION_NAME = u"org.apache.openoffice.comp.svx.sidebar.PanelFactory";
+constexpr OUStringLiteral SERVICE_NAME = u"com.sun.star.ui.UIElementFactory";
 */
 
 typedef ::cppu::WeakComponentImplHelper< css::ui::XUIElementFactory, css::lang::XServiceInfo >

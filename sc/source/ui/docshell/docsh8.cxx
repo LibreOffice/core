@@ -82,21 +82,21 @@ using ::std::vector;
 
 #if HAVE_FEATURE_DBCONNECTIVITY
 
-#define SC_SERVICE_ROWSET           "com.sun.star.sdb.RowSet"
+constexpr OUStringLiteral SC_SERVICE_ROWSET = u"com.sun.star.sdb.RowSet";
 
 //! move to a header file?
-#define SC_DBPROP_ACTIVECONNECTION  "ActiveConnection"
-#define SC_DBPROP_COMMAND           "Command"
-#define SC_DBPROP_COMMANDTYPE       "CommandType"
-#define SC_DBPROP_PROPCHANGE_NOTIFY "PropertyChangeNotificationEnabled"
+constexpr OUStringLiteral SC_DBPROP_ACTIVECONNECTION = u"ActiveConnection";
+constexpr OUStringLiteral SC_DBPROP_COMMAND = u"Command";
+constexpr OUStringLiteral SC_DBPROP_COMMANDTYPE = u"CommandType";
+constexpr OUStringLiteral SC_DBPROP_PROPCHANGE_NOTIFY = u"PropertyChangeNotificationEnabled";
 
-#define SC_DBPROP_NAME              "Name"
-#define SC_DBPROP_TYPE              "Type"
-#define SC_DBPROP_PRECISION         "Precision"
-#define SC_DBPROP_SCALE             "Scale"
+constexpr OUStringLiteral SC_DBPROP_NAME = u"Name";
+constexpr OUStringLiteral SC_DBPROP_TYPE = u"Type";
+constexpr OUStringLiteral SC_DBPROP_PRECISION = u"Precision";
+constexpr OUStringLiteral SC_DBPROP_SCALE = u"Scale";
 
-#define SC_DBPROP_EXTENSION         "Extension"
-#define SC_DBPROP_CHARSET           "CharSet"
+constexpr OUStringLiteral SC_DBPROP_EXTENSION = u"Extension";
+constexpr OUStringLiteral SC_DBPROP_CHARSET = u"CharSet";
 
 namespace
 {

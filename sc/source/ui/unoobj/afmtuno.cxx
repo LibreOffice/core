@@ -122,7 +122,7 @@ static const SfxItemPropertyMapEntry* lcl_GetAutoFieldMap()
     return aAutoFieldMap_Impl;
 }
 
-#define SCAUTOFORMATSOBJ_SERVICE    "com.sun.star.sheet.TableAutoFormats"
+constexpr OUStringLiteral SCAUTOFORMATSOBJ_SERVICE = u"com.sun.star.sheet.TableAutoFormats";
 
 SC_SIMPLE_SERVICE_INFO( ScAutoFormatFieldObj, "ScAutoFormatFieldObj", "com.sun.star.sheet.TableAutoFormatField" )
 SC_SIMPLE_SERVICE_INFO( ScAutoFormatObj, "ScAutoFormatObj", "com.sun.star.sheet.TableAutoFormat" )

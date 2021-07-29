@@ -61,11 +61,11 @@ namespace c3s = com::sun::star::system ;
 namespace task = com::sun::star::task ;
 namespace uno = com::sun::star::uno ;
 
-#define PROPERTY_TITLE          "BubbleHeading"
-#define PROPERTY_TEXT           "BubbleText"
-#define PROPERTY_SHOW_BUBBLE    "BubbleVisible"
-#define PROPERTY_CLICK_HDL      "MenuClickHDL"
-#define PROPERTY_SHOW_MENUICON  "MenuIconVisible"
+constexpr OUStringLiteral PROPERTY_TITLE = u"BubbleHeading";
+constexpr OUStringLiteral PROPERTY_TEXT = u"BubbleText";
+constexpr OUStringLiteral PROPERTY_SHOW_BUBBLE = u"BubbleVisible";
+constexpr OUStringLiteral PROPERTY_CLICK_HDL = u"MenuClickHDL";
+constexpr OUStringLiteral PROPERTY_SHOW_MENUICON = u"MenuIconVisible";
 
 // Returns the URL of the release note for the given position
 OUString getReleaseNote(const UpdateInfo& rInfo, sal_uInt8 pos, bool autoDownloadEnabled)

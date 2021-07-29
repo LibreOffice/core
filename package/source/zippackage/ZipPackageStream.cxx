@@ -72,7 +72,7 @@ using namespace cppu;
 #if OSL_DEBUG_LEVEL > 0
 #define THROW_WHERE SAL_WHERE
 #else
-#define THROW_WHERE ""
+constexpr OUStringLiteral THROW_WHERE = u"";
 #endif
 
 namespace { struct lcl_CachedImplId : public rtl::Static< cppu::OImplementationId, lcl_CachedImplId > {}; }

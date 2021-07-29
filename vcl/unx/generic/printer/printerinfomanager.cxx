@@ -35,9 +35,9 @@
 #include <osl/mutex.hxx>
 
 // filename of configuration files
-#define PRINT_FILENAME  "psprint.conf"
+constexpr OUStringLiteral PRINT_FILENAME = u"psprint.conf";
 // the group of the global defaults
-#define GLOBAL_DEFAULTS_GROUP "__Global_Printer_Defaults__"
+constexpr OStringLiteral GLOBAL_DEFAULTS_GROUP = "__Global_Printer_Defaults__";
 
 #include <cstddef>
 #include <unordered_set>
@@ -212,7 +212,7 @@ void PrinterInfoManager::initialize()
     for (auto const& printDir : aDirList)
     {
         INetURLObject aFile( printDir, INetProtocol::File, INetURLObject::EncodeMechanism::All );
-        aFile.Append( u"" PRINT_FILENAME );
+        aFile.Append( PRINT_FILENAME );
         Config aConfig( aFile.PathToFileName() );
         if( aConfig.HasGroup( GLOBAL_DEFAULTS_GROUP ) )
         {
@@ -282,7 +282,7 @@ void PrinterInfoManager::initialize()
     {
         INetURLObject aDir( printDir, INetProtocol::File, INetURLObject::EncodeMechanism::All );
         INetURLObject aFile( aDir );
-        aFile.Append( u"" PRINT_FILENAME );
+        aFile.Append( PRINT_FILENAME );
 
         // check directory validity
         OUString aUniPath;
