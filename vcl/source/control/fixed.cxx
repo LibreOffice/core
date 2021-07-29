@@ -19,12 +19,12 @@
 
 #include <vcl/decoview.hxx>
 #include <vcl/event.hxx>
+#include <vcl/toolkit/controllayout.hxx>
 #include <vcl/toolkit/fixed.hxx>
 #include <vcl/settings.hxx>
 
 #include <comphelper/string.hxx>
 #include <sal/log.hxx>
-#include <controldata.hxx>
 #include <tools/json_writer.hxx>
 
 #define FIXEDLINE_TEXT_BORDER    4
@@ -153,12 +153,12 @@ void FixedText::ImplDraw(OutputDevice* pDev, DrawFlags nDrawFlags,
         nTextStyle |= DrawTextFlags::Mono;
 
     if( bFillLayout )
-        mpControlData->mpLayoutData->m_aDisplayText.clear();
+        mpLayoutData->m_aDisplayText.clear();
 
     const tools::Rectangle aRect(aPos, rSize);
     DrawControlText(*pDev, aRect, aText, nTextStyle,
-        bFillLayout ? &mpControlData->mpLayoutData->m_aUnicodeBoundRects : nullptr,
-        bFillLayout ? &mpControlData->mpLayoutData->m_aDisplayText : nullptr);
+        bFillLayout ? &mpLayoutData->m_aUnicodeBoundRects : nullptr,
+        bFillLayout ? &mpLayoutData->m_aDisplayText : nullptr);
 }
 
 void FixedText::ApplySettings(vcl::RenderContext& rRenderContext)
@@ -348,7 +348,7 @@ Size FixedText::GetOptimalSize() const
 
 void FixedText::FillLayoutData() const
 {
-    mpControlData->mpLayoutData.reset( new vcl::ControlLayoutData );
+    mpLayoutData.reset( new vcl::ControlLayoutData );
     ImplDraw(const_cast<FixedText*>(this)->GetOutDev(), DrawFlags::NONE, Point(), GetOutputSizePixel(), true);
     //const_cast<FixedText*>(this)->Invalidate();
 }
@@ -553,7 +553,7 @@ FixedLine::FixedLine( vcl::Window* pParent, WinBits nStyle ) :
 
 void FixedLine::FillLayoutData() const
 {
-    mpControlData->mpLayoutData.reset( new vcl::ControlLayoutData );
+    mpLayoutData.reset( new vcl::ControlLayoutData );
     const_cast<FixedLine*>(this)->Invalidate();
 }
 

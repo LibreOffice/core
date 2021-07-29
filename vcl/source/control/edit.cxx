@@ -21,6 +21,7 @@
 #include <vcl/event.hxx>
 #include <vcl/cursor.hxx>
 #include <vcl/menu.hxx>
+#include <vcl/toolkit/controllayout.hxx>
 #include <vcl/toolkit/edit.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/specialchars.hxx>
@@ -33,7 +34,6 @@
 #include <window.h>
 #include <svdata.hxx>
 #include <strings.hrc>
-#include <controldata.hxx>
 
 #include <com/sun/star/i18n/BreakIterator.hpp>
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
@@ -1716,7 +1716,7 @@ void Edit::KeyInput( const KeyEvent& rKEvt )
 
 void Edit::FillLayoutData() const
 {
-    mpControlData->mpLayoutData.reset( new vcl::ControlLayoutData );
+    mpLayoutData.reset( new vcl::ControlLayoutData );
     const_cast<Edit*>(this)->Invalidate();
 }
 

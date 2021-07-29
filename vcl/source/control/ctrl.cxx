@@ -23,11 +23,11 @@
 #include <vcl/decoview.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/uitest/logger.hxx>
+#include <vcl/toolkit/controllayout.hxx>
 #include <sal/log.hxx>
 
 #include <textlayout.hxx>
 #include <svdata.hxx>
-#include <controldata.hxx>
 
 using namespace vcl;
 
@@ -35,7 +35,6 @@ void Control::ImplInitControlData()
 {
     mbHasControlFocus       = false;
     mbShowAccelerator       = false;
-    mpControlData.reset(new ImplControlData);
 }
 
 Control::Control( WindowType nType ) :
@@ -58,7 +57,8 @@ Control::~Control()
 
 void Control::dispose()
 {
-    mpControlData.reset();
+    mpLayoutData.reset();
+    mpReferenceDevice.clear();
     Window::dispose();
 }
 
@@ -83,13 +83,13 @@ void Control::FillLayoutData() const
 
 void Control::CreateLayoutData() const
 {
-    SAL_WARN_IF( mpControlData->mpLayoutData, "vcl", "Control::CreateLayoutData: should be called with non-existent layout data only!" );
-    mpControlData->mpLayoutData.reset( new vcl::ControlLayoutData );
+    SAL_WARN_IF( mpLayoutData, "vcl", "Control::CreateLayoutData: should be called with non-existent layout data only!" );
+    mpLayoutData.reset( new vcl::ControlLayoutData );
 }
 
 bool Control::HasLayoutData() const
 {
-    return mpControlData && mpControlData->mpLayoutData != nullptr;
+    return mpLayoutData != nullptr;
 }
 
 void Control::SetText( const OUString& rStr )
@@ -111,7 +111,7 @@ tools::Rectangle Control::GetCharacterBounds( tools::Long nIndex ) const
 {
     if( !HasLayoutData() )
         FillLayoutData();
-    return mpControlData->mpLayoutData ? mpControlData->mpLayoutData->GetCharacterBounds( nIndex ) : tools::Rectangle();
+    return mpLayoutData ? mpLayoutData->GetCharacterBounds( nIndex ) : tools::Rectangle();
 }
 
 tools::Long ControlLayoutData::GetIndexForPoint( const Point& rPoint ) const
@@ -135,7 +135,7 @@ tools::Long Control::GetIndexForPoint( const Point& rPoint ) const
 {
     if( ! HasLayoutData() )
         FillLayoutData();
-    return mpControlData->mpLayoutData ? mpControlData->mpLayoutData->GetIndexForPoint( rPoint ) : -1;
+    return mpLayoutData ? mpLayoutData->GetIndexForPoint( rPoint ) : -1;
 }
 
 tools::Long ControlLayoutData::GetLineCount() const
@@ -173,7 +173,7 @@ Pair Control::GetLineStartEnd( tools::Long nLine ) const
 {
     if( !HasLayoutData() )
         FillLayoutData();
-    return mpControlData->mpLayoutData ? mpControlData->mpLayoutData->GetLineStartEnd( nLine ) : Pair( -1, -1 );
+    return mpLayoutData ? mpLayoutData->GetLineStartEnd( nLine ) : Pair( -1, -1 );
 }
 
 tools::Long ControlLayoutData::ToRelativeLineIndex( tools::Long nIndex ) const
@@ -212,45 +212,41 @@ tools::Long Control::ToRelativeLineIndex( tools::Long nIndex ) const
 {
     if( !HasLayoutData() )
         FillLayoutData();
-    return mpControlData->mpLayoutData ? mpControlData->mpLayoutData->ToRelativeLineIndex( nIndex ) : -1;
+    return mpLayoutData ? mpLayoutData->ToRelativeLineIndex( nIndex ) : -1;
 }
 
 OUString Control::GetDisplayText() const
 {
     if( !HasLayoutData() )
         FillLayoutData();
-    return mpControlData->mpLayoutData ? mpControlData->mpLayoutData->m_aDisplayText : GetText();
+    return mpLayoutData ? mpLayoutData->m_aDisplayText : GetText();
 }
 
 bool Control::EventNotify( NotifyEvent& rNEvt )
 {
-    // tdf#91081 if control is not valid, skip the emission - chaining to the parent
-    if (mpControlData)
+    if ( rNEvt.GetType() == MouseNotifyEvent::GETFOCUS )
     {
-        if ( rNEvt.GetType() == MouseNotifyEvent::GETFOCUS )
+        if ( !mbHasControlFocus )
         {
-            if ( !mbHasControlFocus )
+            mbHasControlFocus = true;
+            CompatStateChanged( StateChangedType::ControlFocus );
+            if ( ImplCallEventListenersAndHandler( VclEventId::ControlGetFocus, {} ) )
+                // been destroyed within the handler
+                return true;
+        }
+    }
+    else
+    {
+        if ( rNEvt.GetType() == MouseNotifyEvent::LOSEFOCUS )
+        {
+            vcl::Window* pFocusWin = Application::GetFocusWindow();
+            if ( !pFocusWin || !ImplIsWindowOrChild( pFocusWin ) )
             {
-                mbHasControlFocus = true;
+                mbHasControlFocus = false;
                 CompatStateChanged( StateChangedType::ControlFocus );
-                if ( ImplCallEventListenersAndHandler( VclEventId::ControlGetFocus, {} ) )
+                if ( ImplCallEventListenersAndHandler( VclEventId::ControlLoseFocus, [this] () { maLoseFocusHdl.Call(*this); } ) )
                     // been destroyed within the handler
                     return true;
-            }
-        }
-        else
-        {
-            if ( rNEvt.GetType() == MouseNotifyEvent::LOSEFOCUS )
-            {
-                vcl::Window* pFocusWin = Application::GetFocusWindow();
-                if ( !pFocusWin || !ImplIsWindowOrChild( pFocusWin ) )
-                {
-                    mbHasControlFocus = false;
-                    CompatStateChanged( StateChangedType::ControlFocus );
-                    if ( ImplCallEventListenersAndHandler( VclEventId::ControlLoseFocus, [this] () { maLoseFocusHdl.Call(*this); } ) )
-                        // been destroyed within the handler
-                        return true;
-                }
             }
         }
     }
@@ -274,23 +270,23 @@ void Control::AppendLayoutData( const Control& rSubControl ) const
 {
     if( !rSubControl.HasLayoutData() )
         rSubControl.FillLayoutData();
-    if( !rSubControl.HasLayoutData() || rSubControl.mpControlData->mpLayoutData->m_aDisplayText.isEmpty() )
+    if( !rSubControl.HasLayoutData() || rSubControl.mpLayoutData->m_aDisplayText.isEmpty() )
         return;
 
-    tools::Long nCurrentIndex = mpControlData->mpLayoutData->m_aDisplayText.getLength();
-    mpControlData->mpLayoutData->m_aDisplayText += rSubControl.mpControlData->mpLayoutData->m_aDisplayText;
-    int nLines = rSubControl.mpControlData->mpLayoutData->m_aLineIndices.size();
+    tools::Long nCurrentIndex = mpLayoutData->m_aDisplayText.getLength();
+    mpLayoutData->m_aDisplayText += rSubControl.mpLayoutData->m_aDisplayText;
+    int nLines = rSubControl.mpLayoutData->m_aLineIndices.size();
     int n;
-    mpControlData->mpLayoutData->m_aLineIndices.push_back( nCurrentIndex );
+    mpLayoutData->m_aLineIndices.push_back( nCurrentIndex );
     for( n = 1; n < nLines; n++ )
-        mpControlData->mpLayoutData->m_aLineIndices.push_back( rSubControl.mpControlData->mpLayoutData->m_aLineIndices[n] + nCurrentIndex );
-    int nRectangles = rSubControl.mpControlData->mpLayoutData->m_aUnicodeBoundRects.size();
+        mpLayoutData->m_aLineIndices.push_back( rSubControl.mpLayoutData->m_aLineIndices[n] + nCurrentIndex );
+    int nRectangles = rSubControl.mpLayoutData->m_aUnicodeBoundRects.size();
     tools::Rectangle aRel = rSubControl.GetWindowExtentsRelative(this);
     for( n = 0; n < nRectangles; n++ )
     {
-        tools::Rectangle aRect = rSubControl.mpControlData->mpLayoutData->m_aUnicodeBoundRects[n];
+        tools::Rectangle aRect = rSubControl.mpLayoutData->m_aUnicodeBoundRects[n];
         aRect.Move( aRel.Left(), aRel.Top() );
-        mpControlData->mpLayoutData->m_aUnicodeBoundRects.push_back( aRect );
+        mpLayoutData->m_aUnicodeBoundRects.push_back( aRect );
     }
 }
 
@@ -324,13 +320,12 @@ bool Control::ImplCallEventListenersAndHandler( VclEventId nEvent, std::function
 void Control::SetLayoutDataParent( const Control* pParent ) const
 {
     if( HasLayoutData() )
-        mpControlData->mpLayoutData->m_pParent = pParent;
+        mpLayoutData->m_pParent = pParent;
 }
 
 void Control::ImplClearLayoutData() const
 {
-    if (mpControlData)
-        mpControlData->mpLayoutData.reset();
+    mpLayoutData.reset();
 }
 
 void Control::ImplDrawFrame( OutputDevice* pDev, tools::Rectangle& rRect )
@@ -379,10 +374,10 @@ Size Control::GetOptimalSize() const
 
 void Control::SetReferenceDevice( OutputDevice* _referenceDevice )
 {
-    if ( mpControlData->mpReferenceDevice == _referenceDevice )
+    if ( mpReferenceDevice == _referenceDevice )
         return;
 
-    mpControlData->mpReferenceDevice = _referenceDevice;
+    mpReferenceDevice = _referenceDevice;
     Invalidate();
 }
 
@@ -397,12 +392,12 @@ OutputDevice* Control::GetReferenceDevice() const
     // inside Control::SetReferenceDevice and Control::GetReferenceDevice().
     // Control::GetReferenceDevice() will now reset mpReferenceDevice if it is already
     // disposed. This way all usages will do a kind of 'test-and-get' call.
-    if(nullptr != mpControlData->mpReferenceDevice && mpControlData->mpReferenceDevice->isDisposed())
+    if(nullptr != mpReferenceDevice && mpReferenceDevice->isDisposed())
     {
         const_cast<Control*>(this)->SetReferenceDevice(nullptr);
     }
 
-    return mpControlData->mpReferenceDevice;
+    return mpReferenceDevice;
 }
 
 const vcl::Font& Control::GetCanonicalFont( const StyleSettings& _rStyle ) const
