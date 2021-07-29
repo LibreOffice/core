@@ -29,7 +29,8 @@ std::size_t TraceEvent::s_nBufferSize = 0;
 void (*TraceEvent::s_pBufferFullCallback)() = nullptr;
 
 int AsyncEvent::s_nIdCounter = 0;
-int ProfileZone::s_nNesting = 0;
+
+static thread_local int nProfileZoneNesting = 0; // Level of Nested Profile Zones
 
 namespace
 {
@@ -140,6 +141,10 @@ void ProfileZone::stopConsole()
     std::cerr << "comphelper::ProfileZone: " << m_sName << " finished in "
               << nEndTime - m_nCreateTime << " ms" << std::endl;
 }
+
+int ProfileZone::getNestingLevel() { return nProfileZoneNesting; }
+
+void ProfileZone::setNestingLevel(int nNestingLevel) { nProfileZoneNesting = nNestingLevel; }
 
 } // namespace comphelper
 
