@@ -97,7 +97,7 @@ const sal_uInt16 AUTOFORMAT_FILE_VERSION= SOFFICE_FILEFORMAT_50;
 
 SwBoxAutoFormat* SwTableAutoFormat::s_pDefaultBoxAutoFormat = nullptr;
 
-#define AUTOTABLE_FORMAT_NAME "autotbl.fmt"
+constexpr OUStringLiteral AUTOTABLE_FORMAT_NAME = u"autotbl.fmt";
 
 namespace
 {
@@ -1044,7 +1044,7 @@ bool SwTableAutoFormatTable::Save() const
     if (utl::ConfigManager::IsFuzzing())
         return false;
     SvtPathOptions aPathOpt;
-    const OUString sNm( aPathOpt.GetUserConfigPath() + "/" AUTOTABLE_FORMAT_NAME );
+    const OUString sNm( aPathOpt.GetUserConfigPath() + "/" + AUTOTABLE_FORMAT_NAME );
     SfxMedium aStream(sNm, StreamMode::STD_WRITE );
     return Save( *aStream.GetOutStream() ) && aStream.Commit();
 }

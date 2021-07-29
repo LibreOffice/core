@@ -68,10 +68,10 @@ using namespace com::sun::star::container;
 using namespace com::sun::star::beans;
 using namespace framework;
 
-#define RESOURCETYPE_MENUBAR   "menubar"
-#define RESOURCETYPE_TOOLBAR   "toolbar"
-#define RESOURCETYPE_STATUSBAR "statusbar"
-#define RESOURCETYPE_POPUPMENU "popupmenu"
+constexpr OUStringLiteral RESOURCETYPE_MENUBAR = u"menubar";
+constexpr OUStringLiteral RESOURCETYPE_TOOLBAR = u"toolbar";
+constexpr OUStringLiteral RESOURCETYPE_STATUSBAR = u"statusbar";
+constexpr OUStringLiteral RESOURCETYPE_POPUPMENU = u"popupmenu";
 
 namespace {
 
