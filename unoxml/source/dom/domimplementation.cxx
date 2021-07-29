@@ -19,7 +19,6 @@
 
 #include "domimplementation.hxx"
 
-#include <rtl/instance.hxx>
 #include <osl/diagnose.h>
 
 using namespace css::uno;
@@ -30,14 +29,11 @@ namespace DOM
     // why the heck is this thing static?
     // perhaps it would be helpful to know what the implementation should
     // do to answer this question...
-    namespace {
-        struct DOMImplementation
-            : public ::rtl::Static<CDOMImplementation, DOMImplementation> {};
-    }
 
     CDOMImplementation* CDOMImplementation::get()
     {
-        return & DOMImplementation::get();
+        static CDOMImplementation gImplementation;
+        return &gImplementation;
     }
 
     // there is just 1 static instance, so these must not delete it!

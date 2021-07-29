@@ -35,7 +35,6 @@
 #include <algorithm>
 #include <string_view>
 
-#include <rtl/instance.hxx>
 #include <vcl/TypeSerializer.hxx>
 
 #ifdef _WIN32
@@ -46,11 +45,14 @@ using namespace vcl;
 
 namespace
 {
-    struct theGlobalDefault :
-        public rtl::Static< Font::ImplType, theGlobalDefault > {};
+    Font::ImplType& GetGlobalDefault()
+    {
+        static Font::ImplType gDefault;
+        return gDefault;
+    }
 }
 
-Font::Font() : mpImplFont(theGlobalDefault::get())
+Font::Font() : mpImplFont(GetGlobalDefault())
 {
 }
 

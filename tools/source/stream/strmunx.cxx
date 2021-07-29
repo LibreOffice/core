@@ -40,7 +40,7 @@ namespace {
 
 struct LockMutex : public rtl::Static< osl::Mutex, LockMutex > {};
 
-struct Locks : public rtl::Static< std::map<SvFileStream const *, osl::DirectoryItem>, Locks > {};
+std::map<SvFileStream const *, osl::DirectoryItem> gLocks;
 
 bool lockFile( const SvFileStream* pStream )
 {
@@ -61,8 +61,7 @@ bool lockFile( const SvFileStream* pStream )
         return true;
 
     osl::MutexGuard aGuard( LockMutex::get() );
-    auto &rLocks = Locks::get();
-    for( const auto& [rLockStream, rLockItem] : rLocks )
+    for( const auto& [rLockStream, rLockItem] : gLocks )
     {
         if( aItem.isIdenticalTo( rLockItem ) )
         {
@@ -78,15 +77,14 @@ bool lockFile( const SvFileStream* pStream )
             }
         }
     }
-    rLocks[pStream] = aItem;
+    gLocks[pStream] = aItem;
     return true;
 }
 
 void unlockFile( SvFileStream const * pStream )
 {
     osl::MutexGuard aGuard( LockMutex::get() );
-    auto &rLocks = Locks::get();
-    rLocks.erase(pStream);
+    gLocks.erase(pStream);
 }
 
 }
