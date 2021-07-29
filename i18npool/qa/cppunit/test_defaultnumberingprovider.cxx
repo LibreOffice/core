@@ -57,10 +57,6 @@ CPPUNIT_TEST_FIXTURE(I18npoolDefaultnumberingproviderTest, testNumberingIdentifi
                 // FIXME: duplicate of NUMBER_UPPER_ZH_TW
             case css::style::NumberingType::NUMBER_INDIC_DEVANAGARI:
                 // FIXME: duplicate of NUMBER_EAST_ARABIC_INDIC
-            case css::style::NumberingType::NUMBER_DIGITAL_KO:
-                // FIXME: duplicate of NUMBER_HANGUL_KO
-            case css::style::NumberingType::NUMBER_DIGITAL2_KO:
-                // FIXME: duplicate of NUMBER_LOWER_ZH
                 break;
             default:
                 if (aID.isEmpty() || !aMap.insert(std::pair(aID, i)).second)

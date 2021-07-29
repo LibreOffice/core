@@ -1128,6 +1128,23 @@ OUString DefaultNumberingProvider::makeNumberingIdentifier(sal_Int16 index)
             result.append(", ");
         }
         result.append("...");
+        // Make known duplicate generated identifiers unique.
+        // Note this alone works only for newly added numberings, if duplicates
+        // are in the wild further handling is needed when loading documents
+        // and asking for numberings.
+        switch (aSupportedTypes[index].nType)
+        {
+            case css::style::NumberingType::NUMBER_DIGITAL_KO:
+                // Duplicate of NUMBER_HANGUL_KO.
+                result.append(" (ko-x-digital)");
+            break;
+            case css::style::NumberingType::NUMBER_DIGITAL2_KO:
+                // Duplicate of NUMBER_LOWER_ZH.
+                result.append(" (ko)");
+            break;
+            default:
+                ; // nothing
+        }
         return result.makeStringAndClear();
     }
 }
