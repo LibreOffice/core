@@ -327,37 +327,34 @@
   <Type Name="SfxPoolItem">
     <DisplayString>{{which={m_nWhich,x}}}</DisplayString>
   </Type>
+  <Type Name="WhichRangesContainer">
+    <DisplayString>{{size={m_size,d}}}</DisplayString>
+    <Expand>
+      <ArrayItems>
+        <Size>m_size</Size>
+        <ValuePointer>m_pairs</ValuePointer>
+      </ArrayItems>
+    </Expand>
+  </Type>
   <Type Name="SfxItemSet">
     <DisplayString>{{size={m_nCount,d}}}</DisplayString>
     <Expand>
       <CustomListItems>
         <Variable Name='pCurItem' InitialValue='m_pItems._Mypair._Myval2'/>
-        <Variable Name='pCurRange' InitialValue='m_pWhichRanges'/>
+        <Variable Name='nRanges' InitialValue='m_pWhichRanges.m_size'/>
+        <Variable Name='nCurRange' InitialValue='0'/>
         <Variable Name='nCurWhich' InitialValue='0'/>
-        <Loop Condition='*pCurRange'>
-          <Exec>nCurWhich = *pCurRange</Exec>
-          <Loop Condition='nCurWhich&lt;=*(pCurRange+1)'>
+        <Loop Condition='nCurRange &lt; nRanges'>
+          <Exec>nCurWhich = m_pWhichRanges.m_pairs[nCurRange].first</Exec>
+          <Loop Condition='nCurWhich &lt;= m_pWhichRanges.m_pairs[nCurRange].second'>
             <Item Condition='*pCurItem'>**pCurItem</Item>
             <Exec>++pCurItem</Exec>
             <Exec>++nCurWhich</Exec>
           </Loop>
-          <Exec>pCurRange+=2</Exec>
+          <Exec>++nCurRange</Exec>
         </Loop>
       </CustomListItems>
-      <Synthetic Name="Which Ranges">
-        <Expand>
-          <CustomListItems>
-            <Variable Name='pCurRange' InitialValue='m_pWhichRanges'/>
-            <Variable Name='i' InitialValue='0'/>
-            <Loop Condition='*pCurRange'>
-              <Item Name='[{i,d}] begin'>*pCurRange</Item>
-              <Item Name='[{i,d}] end'>*(pCurRange+1)</Item>
-              <Exec>pCurRange+=2</Exec>
-              <Exec>++i</Exec>
-            </Loop>
-          </CustomListItems>
-        </Expand>
-      </Synthetic>
+      <Item Name="Which Ranges">m_pWhichRanges</Item>
       <Item Condition="m_pParent != nullptr" Name="Parent">*m_pParent</Item>
     </Expand>
   </Type>
