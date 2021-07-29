@@ -433,7 +433,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	ucpexpand1 \
 	ucpext \
 	ucpimage \
-	ucpcmis1 \
+	$(if $(ENABLE_LIBCMIS),ucpcmis1) \
 	ucptdoc1 \
 	unordf \
 	unoxml \
