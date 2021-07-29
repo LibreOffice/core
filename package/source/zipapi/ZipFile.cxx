@@ -66,7 +66,7 @@ using ZipUtils::Inflater;
 #if OSL_DEBUG_LEVEL > 0
 #define THROW_WHERE SAL_WHERE
 #else
-#define THROW_WHERE ""
+constexpr OUStringLiteral THROW_WHERE = u"";
 #endif
 
 /** This class is used to read entries from a zip file

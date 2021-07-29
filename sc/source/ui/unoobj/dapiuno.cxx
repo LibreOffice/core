@@ -189,7 +189,7 @@ SC_SIMPLE_SERVICE_INFO( ScDataPilotFieldGroupObj, "ScDataPilotFieldGroupObj", "c
 SC_SIMPLE_SERVICE_INFO( ScDataPilotFieldGroupItemObj, "ScDataPilotFieldGroupItemObj", "com.sun.star.sheet.DataPilotFieldGroupItem" )
 
 // name that is used in the API for the data layout field
-#define SC_DATALAYOUT_NAME  "Data"
+constexpr OUStringLiteral SC_DATALAYOUT_NAME = u"Data";
 
 ScGeneralFunction ScDataPilotConversion::FirstFunc( PivotFunc nBits )
 {

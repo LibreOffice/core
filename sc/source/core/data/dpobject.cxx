@@ -94,13 +94,13 @@ using ::com::sun::star::sheet::DataPilotTablePositionData;
 using ::com::sun::star::sheet::XDimensionsSupplier;
 using ::com::sun::star::beans::XPropertySet;
 
-#define SC_SERVICE_ROWSET           "com.sun.star.sdb.RowSet"
+constexpr OUStringLiteral SC_SERVICE_ROWSET = u"com.sun.star.sdb.RowSet";
 
-#define SC_DBPROP_DATASOURCENAME    "DataSourceName"
-#define SC_DBPROP_COMMAND           "Command"
-#define SC_DBPROP_COMMANDTYPE       "CommandType"
+constexpr OUStringLiteral SC_DBPROP_DATASOURCENAME = u"DataSourceName";
+constexpr OUStringLiteral SC_DBPROP_COMMAND = u"Command";
+constexpr OUStringLiteral SC_DBPROP_COMMANDTYPE = u"CommandType";
 
-#define SCDPSOURCE_SERVICE  "com.sun.star.sheet.DataPilotSource"
+constexpr OUStringLiteral SCDPSOURCE_SERVICE = u"com.sun.star.sheet.DataPilotSource";
 
 namespace {
 

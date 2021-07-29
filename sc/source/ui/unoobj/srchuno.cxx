@@ -54,8 +54,8 @@ static const SfxItemPropertyMapEntry* lcl_GetSearchPropertyMap()
     return aSearchPropertyMap_Impl;
 }
 
-#define SCSEARCHDESCRIPTOR_SERVICE      "com.sun.star.util.SearchDescriptor"
-#define SCREPLACEDESCRIPTOR_SERVICE     "com.sun.star.util.ReplaceDescriptor"
+constexpr OUStringLiteral SCSEARCHDESCRIPTOR_SERVICE = u"com.sun.star.util.SearchDescriptor";
+constexpr OUStringLiteral SCREPLACEDESCRIPTOR_SERVICE = u"com.sun.star.util.ReplaceDescriptor";
 
 ScCellSearchObj::ScCellSearchObj() :
     aPropSet(lcl_GetSearchPropertyMap()),

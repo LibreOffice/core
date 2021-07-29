@@ -30,7 +30,7 @@ using namespace ::com::sun::star;
 #if OSL_DEBUG_LEVEL > 0
 #define THROW_WHERE SAL_WHERE
 #else
-#define THROW_WHERE ""
+constexpr OUStringLiteral THROW_WHERE = u"";
 #endif
 
 WrapStreamForShare::WrapStreamForShare( const uno::Reference< io::XInputStream >& xInStream,

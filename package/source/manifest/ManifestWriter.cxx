@@ -45,7 +45,7 @@ using namespace ::com::sun::star::xml::sax;
 #if OSL_DEBUG_LEVEL > 0
 #define THROW_WHERE SAL_WHERE
 #else
-#define THROW_WHERE ""
+constexpr OUStringLiteral THROW_WHERE = u"";
 #endif
 
 ManifestWriter::ManifestWriter( const Reference < XComponentContext > & xContext )

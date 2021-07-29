@@ -40,7 +40,7 @@
 #define WRITE_CB
 #define EVT_MANUAL_RESET     TRUE
 #define EVT_INIT_NONSIGNALED FALSE
-#define EVT_NONAME           ""
+constexpr OUStringLiteral EVT_NONAME = u"";
 #define WAIT_MSGLOOP
 #define RAW_MARSHALING
 

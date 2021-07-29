@@ -36,7 +36,7 @@ using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::lang;
 
-#define FILTER_OPTIONS_NAME             "FilterOptions"
+constexpr OUStringLiteral FILTER_OPTIONS_NAME = u"FilterOptions";
 
 SwXFilterOptions::SwXFilterOptions()
 {
