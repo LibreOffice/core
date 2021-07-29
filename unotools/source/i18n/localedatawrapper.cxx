@@ -269,7 +269,7 @@ css::i18n::ForbiddenCharacters LocaleDataWrapper::getForbiddenCharacters() const
     return css::i18n::ForbiddenCharacters();
 }
 
-css::uno::Sequence< css::lang::Locale > LocaleDataWrapper::getAllInstalledLocaleNames() const
+const css::uno::Sequence< css::lang::Locale > & LocaleDataWrapper::getAllInstalledLocaleNames() const
 {
     uno::Sequence< lang::Locale > &rInstalledLocales = gInstalledLocales;
 
@@ -290,7 +290,7 @@ css::uno::Sequence< css::lang::Locale > LocaleDataWrapper::getAllInstalledLocale
 // --- Impl and helpers ----------------------------------------------------
 
 // static
-css::uno::Sequence< css::lang::Locale > LocaleDataWrapper::getInstalledLocaleNames()
+const css::uno::Sequence< css::lang::Locale >& LocaleDataWrapper::getInstalledLocaleNames()
 {
     const uno::Sequence< lang::Locale > &rInstalledLocales = gInstalledLocales;
 
@@ -303,7 +303,7 @@ css::uno::Sequence< css::lang::Locale > LocaleDataWrapper::getInstalledLocaleNam
 }
 
 // static
-std::vector< LanguageType > LocaleDataWrapper::getInstalledLanguageTypes()
+const std::vector< LanguageType >& LocaleDataWrapper::getInstalledLanguageTypes()
 {
     std::vector< LanguageType > &rInstalledLanguageTypes = gInstalledLanguageTypes;
 

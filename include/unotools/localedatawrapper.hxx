@@ -157,12 +157,12 @@ public:
     css::uno::Sequence< css::i18n::Currency2 > getAllCurrencies() const;
     css::uno::Sequence< css::i18n::FormatElement > getAllFormats() const;
     css::i18n::ForbiddenCharacters getForbiddenCharacters() const;
-    css::uno::Sequence< css::lang::Locale > getAllInstalledLocaleNames() const;
+    const css::uno::Sequence< css::lang::Locale > & getAllInstalledLocaleNames() const;
     css::uno::Sequence< OUString > getDateAcceptancePatterns() const;
 
 
     /// same as the wrapper implementation but static
-    static css::uno::Sequence< css::lang::Locale > getInstalledLocaleNames();
+    static const css::uno::Sequence< css::lang::Locale > & getInstalledLocaleNames();
 
     /** Get LanguageTypes for all installed locales which are unambiguous
         convertible back and forth between locale ISO strings and MS-LCID
@@ -171,7 +171,7 @@ public:
         matching, excluding already known problems.
         (e.g. used in number formatter dialog init)
      */
-    static std::vector< LanguageType > getInstalledLanguageTypes();
+    static const std::vector< LanguageType > & getInstalledLanguageTypes();
 
     /// maps the LocaleData string to the International enum
     MeasurementSystem   mapMeasurementStringToEnum( const OUString& rMS ) const;
