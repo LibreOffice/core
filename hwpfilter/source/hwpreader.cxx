@@ -53,7 +53,7 @@
 #define PI 3.14159265358979323846
 
 // xmloff/xmlkyd.hxx
-#define sXML_CDATA "CDATA"
+constexpr OUStringLiteral sXML_CDATA = u"CDATA";
 
 #define STARTP  padd( "text:style-name", "CDATA", ascii(getPStyleName((para->GetParaShape()).index,buf))); \
     rstartEl( "text:p",mxList ); \

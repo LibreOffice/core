@@ -100,10 +100,10 @@ static OUString makeHierarchalNameSegment( const OUString & rIn  )
     return aBuffer.makeStringAndClear();
 }
 
-#define STORE_CONTENTPROPERTIES_KEY "/org.openoffice.ucb.Store/ContentProperties"
+constexpr OUStringLiteral STORE_CONTENTPROPERTIES_KEY = u"/org.openoffice.ucb.Store/ContentProperties";
 
 // describe path of cfg entry
-#define CFGPROPERTY_NODEPATH        "nodepath"
+constexpr OUStringLiteral CFGPROPERTY_NODEPATH = u"nodepath";
 
 class PropertySetInfo_Impl : public cppu::WeakImplHelper < XPropertySetInfo >
 {

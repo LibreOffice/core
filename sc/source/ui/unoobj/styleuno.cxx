@@ -387,19 +387,19 @@ static const SfxItemPropertyMap* lcl_GetFooterStyleMap()
 
 #define SC_STYLE_FAMILY_COUNT 2
 
-#define SC_FAMILYNAME_CELL  u"CellStyles"
-#define SC_FAMILYNAME_PAGE  u"PageStyles"
+constexpr OUStringLiteral SC_FAMILYNAME_CELL = u"CellStyles";
+constexpr OUStringLiteral SC_FAMILYNAME_PAGE = u"PageStyles";
 
 const SfxStyleFamily aStyleFamilyTypes[SC_STYLE_FAMILY_COUNT] = { SfxStyleFamily::Para, SfxStyleFamily::Page };
 
-#define SCSTYLE_SERVICE         "com.sun.star.style.Style"
-#define SCCELLSTYLE_SERVICE     "com.sun.star.style.CellStyle"
-#define SCPAGESTYLE_SERVICE     "com.sun.star.style.PageStyle"
+constexpr OUStringLiteral SCSTYLE_SERVICE = u"com.sun.star.style.Style";
+constexpr OUStringLiteral SCCELLSTYLE_SERVICE = u"com.sun.star.style.CellStyle";
+constexpr OUStringLiteral SCPAGESTYLE_SERVICE = u"com.sun.star.style.PageStyle";
 
 SC_SIMPLE_SERVICE_INFO( ScStyleFamiliesObj, "ScStyleFamiliesObj", "com.sun.star.style.StyleFamilies" )
 SC_SIMPLE_SERVICE_INFO( ScStyleFamilyObj, "ScStyleFamilyObj", "com.sun.star.style.StyleFamily" )
 
-#define SC_PAPERBIN_DEFAULTNAME     "[From printer settings]"
+constexpr OUStringLiteral SC_PAPERBIN_DEFAULTNAME = u"[From printer settings]";
 
 static bool lcl_AnyTabProtected( const ScDocument& rDoc )
 {

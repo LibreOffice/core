@@ -39,9 +39,9 @@ using namespace ::com::sun::star;
 using namespace sca::pricing;
 
 
-#define ADDIN_SERVICE           "com.sun.star.sheet.AddIn"
-#define MY_SERVICE              "com.sun.star.sheet.addin.PricingFunctions"
-#define MY_IMPLNAME             "com.sun.star.sheet.addin.PricingFunctionsImpl"
+constexpr OUStringLiteral ADDIN_SERVICE = u"com.sun.star.sheet.AddIn";
+constexpr OUStringLiteral MY_SERVICE = u"com.sun.star.sheet.addin.PricingFunctions";
+constexpr OUStringLiteral MY_IMPLNAME = u"com.sun.star.sheet.addin.PricingFunctionsImpl";
 
 #define UNIQUE              false   // function name does not exist in Calc
 

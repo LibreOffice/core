@@ -3143,8 +3143,8 @@ void SAL_CALL SfxLibrary::removeChangesListener( const Reference< XChangesListen
 
 // Implementation class ScriptExtensionIterator
 
-#define sBasicLibMediaType "application/vnd.sun.star.basic-library"
-#define sDialogLibMediaType "application/vnd.sun.star.dialog-library"
+constexpr OUStringLiteral sBasicLibMediaType = u"application/vnd.sun.star.basic-library";
+constexpr OUStringLiteral sDialogLibMediaType = u"application/vnd.sun.star.dialog-library";
 
 ScriptExtensionIterator::ScriptExtensionIterator()
     : m_xContext( comphelper::getProcessComponentContext() )

@@ -52,11 +52,11 @@ using namespace svx;
 
 // define ----------------------------------------------------------------
 
-#define POSTFIX_INTERNAL    "_internal"
-#define POSTFIX_USER        "_user"
-#define POSTFIX_WRITABLE    "_writable"
-#define VAR_ONE             "%1"
-#define IODLG_CONFIGNAME    "FilePicker_Save"
+constexpr OUStringLiteral POSTFIX_INTERNAL = u"_internal";
+constexpr OUStringLiteral POSTFIX_USER = u"_user";
+constexpr OUStringLiteral POSTFIX_WRITABLE = u"_writable";
+constexpr OUStringLiteral VAR_ONE = u"%1";
+constexpr OUStringLiteral IODLG_CONFIGNAME = u"FilePicker_Save";
 
 // struct OptPath_Impl ---------------------------------------------------
 

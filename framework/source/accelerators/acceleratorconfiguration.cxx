@@ -52,8 +52,8 @@
 #include <sal/log.hxx>
 #include <rtl/ustrbuf.hxx>
 
-#define PRESET_DEFAULT u"default"
-#define TARGET_CURRENT "current"
+constexpr OUStringLiteral PRESET_DEFAULT = u"default";
+constexpr OUStringLiteral TARGET_CURRENT = u"current";
 
 namespace framework
 {
@@ -217,7 +217,7 @@ void SAL_CALL XMLBasedAcceleratorConfiguration::reload()
     css::uno::Reference< css::io::XStream > xStreamNoLang;
     {
         SolarMutexGuard g;
-        xStream = m_aPresetHandler.openTarget(u"" TARGET_CURRENT,
+        xStream = m_aPresetHandler.openTarget(TARGET_CURRENT,
                 css::embed::ElementModes::READ);
         try
         {
@@ -257,7 +257,7 @@ void SAL_CALL XMLBasedAcceleratorConfiguration::store()
     css::uno::Reference< css::io::XStream > xStream;
     {
         SolarMutexGuard g;
-        xStream = m_aPresetHandler.openTarget(u"" TARGET_CURRENT,
+        xStream = m_aPresetHandler.openTarget(TARGET_CURRENT,
                css::embed::ElementModes::READWRITE); // open or create!
     }
 
@@ -308,7 +308,7 @@ sal_Bool SAL_CALL XMLBasedAcceleratorConfiguration::isReadOnly()
     css::uno::Reference< css::io::XStream > xStream;
     {
         SolarMutexGuard g;
-        xStream = m_aPresetHandler.openTarget(u"" TARGET_CURRENT,
+        xStream = m_aPresetHandler.openTarget(TARGET_CURRENT,
                 css::embed::ElementModes::READWRITE); // open or create!
     }
 
@@ -343,7 +343,7 @@ void SAL_CALL XMLBasedAcceleratorConfiguration::reset()
 {
     {
         SolarMutexGuard g;
-        m_aPresetHandler.copyPresetToTarget(PRESET_DEFAULT, u"" TARGET_CURRENT);
+        m_aPresetHandler.copyPresetToTarget(PRESET_DEFAULT, TARGET_CURRENT);
     }
 
     reload();

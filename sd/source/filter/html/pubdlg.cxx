@@ -56,7 +56,7 @@ using namespace com::sun::star::beans;
 const sal_uInt16 nMagic = sal_uInt16(0x1977);
 
 // Key for the soffice.ini
-#define KEY_QUALITY     "JPG-EXPORT-QUALITY"
+constexpr OUStringLiteral KEY_QUALITY = u"JPG-EXPORT-QUALITY";
 
 // The Help-IDs of the pages
 const char* const aPageHelpIds[NOOFPAGES] =

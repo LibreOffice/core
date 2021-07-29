@@ -47,19 +47,19 @@ using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace connectivity::dbase;
 
-#define SCFILTEROPTIONSOBJ_SERVICE      "com.sun.star.ui.dialogs.FilterOptionsDialog"
-#define SCFILTEROPTIONSOBJ_IMPLNAME     "com.sun.star.comp.Calc.FilterOptionsDialog"
+constexpr OUStringLiteral SCFILTEROPTIONSOBJ_SERVICE = u"com.sun.star.ui.dialogs.FilterOptionsDialog";
+constexpr OUStringLiteral SCFILTEROPTIONSOBJ_IMPLNAME = u"com.sun.star.comp.Calc.FilterOptionsDialog";
 
 SC_SIMPLE_SERVICE_INFO( ScFilterOptionsObj, SCFILTEROPTIONSOBJ_IMPLNAME, SCFILTEROPTIONSOBJ_SERVICE )
 
-#define SC_UNONAME_FILENAME         "URL"
-#define SC_UNONAME_FILTERNAME       "FilterName"
-#define SC_UNONAME_FILTEROPTIONS    "FilterOptions"
-#define SC_UNONAME_INPUTSTREAM      "InputStream"
+constexpr OUStringLiteral SC_UNONAME_FILENAME = u"URL";
+constexpr OUStringLiteral SC_UNONAME_FILTERNAME = u"FilterName";
+constexpr OUStringLiteral SC_UNONAME_FILTEROPTIONS = u"FilterOptions";
+constexpr OUStringLiteral SC_UNONAME_INPUTSTREAM = u"InputStream";
 
-#define DBF_CHAR_SET                "CharSet"
-#define DBF_SEP_PATH_IMPORT         "Office.Calc/Dialogs/DBFImport"
-#define DBF_SEP_PATH_EXPORT         "Office.Calc/Dialogs/DBFExport"
+constexpr OUStringLiteral DBF_CHAR_SET = u"CharSet";
+constexpr OUStringLiteral DBF_SEP_PATH_IMPORT = u"Office.Calc/Dialogs/DBFImport";
+constexpr OUStringLiteral DBF_SEP_PATH_EXPORT = u"Office.Calc/Dialogs/DBFExport";
 
 namespace
 {
@@ -81,8 +81,7 @@ namespace
         Sequence<Any> aValues;
         const Any *pProperties;
         Sequence<OUString> aNames { DBF_CHAR_SET };
-        ScLinkConfigItem aItem( OUString::createFromAscii(
-                                    bExport?DBF_SEP_PATH_EXPORT:DBF_SEP_PATH_IMPORT ) );
+        ScLinkConfigItem aItem( bExport ? DBF_SEP_PATH_EXPORT : DBF_SEP_PATH_IMPORT );
 
         aValues = aItem.GetProperties( aNames );
         pProperties = aValues.getConstArray();
@@ -108,8 +107,7 @@ namespace
         Sequence<Any> aValues;
         Any *pProperties;
         Sequence<OUString> aNames { DBF_CHAR_SET };
-        ScLinkConfigItem aItem( OUString::createFromAscii(
-                                    bExport?DBF_SEP_PATH_EXPORT:DBF_SEP_PATH_IMPORT ) );
+        ScLinkConfigItem aItem( bExport ? DBF_SEP_PATH_EXPORT : DBF_SEP_PATH_IMPORT );
 
         aValues = aItem.GetProperties( aNames );
         pProperties = aValues.getArray();

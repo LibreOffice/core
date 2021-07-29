@@ -32,11 +32,11 @@
 using namespace com::sun::star;
 
 
-#define STR_NONNEGATIVE   "NonNegative"
-#define STR_INTEGER       "Integer"
-#define STR_TIMEOUT       "Timeout"
-#define STR_EPSILONLEVEL  "EpsilonLevel"
-#define STR_LIMITBBDEPTH  "LimitBBDepth"
+constexpr OUStringLiteral STR_NONNEGATIVE = u"NonNegative";
+constexpr OUStringLiteral STR_INTEGER = u"Integer";
+constexpr OUStringLiteral STR_TIMEOUT = u"Timeout";
+constexpr OUStringLiteral STR_EPSILONLEVEL = u"EpsilonLevel";
+constexpr OUStringLiteral STR_LIMITBBDEPTH = u"LimitBBDepth";
 
 
 //  Resources from tools are used for translated strings

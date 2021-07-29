@@ -68,7 +68,7 @@ using namespace linguistic;
 
 // XML-header of SPELLML queries
 #if !defined SPELL_XML
-#define SPELL_XML "<?xml?>"
+constexpr OUStringLiteral SPELL_XML = u"<?xml?>";
 #endif
 
 // only available in hunspell >= 1.5
