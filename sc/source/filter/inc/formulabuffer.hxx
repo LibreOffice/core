@@ -9,8 +9,8 @@
 
 #pragma once
 
-#include <osl/mutex.hxx>
 #include "workbookhelper.hxx"
+#include <mutex>
 #include <vector>
 
 namespace oox::xls {
@@ -81,7 +81,7 @@ public:
 
 private:
 
-    osl::Mutex maMtxData;
+    std::mutex maMtxData;
     // Vectors indexed by SCTAB - cf. SetSheetCount
     std::vector< std::vector<TokenAddressItem> >         maCellFormulas;
     std::vector< std::vector<TokenRangeAddressItem> >    maCellArrayFormulas;
