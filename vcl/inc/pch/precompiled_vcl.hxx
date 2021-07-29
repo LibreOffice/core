@@ -254,7 +254,6 @@
 #include <PhysicalFontFace.hxx>
 #include <brdwin.hxx>
 #include <configsettings.hxx>
-#include <controldata.hxx>
 #include <fontattributes.hxx>
 #include <impglyphitem.hxx>
 #include <outdev.h>

@@ -36,7 +36,6 @@
 #include <bitmaps.hlst>
 #include <tools/json_writer.hxx>
 
-#include <controldata.hxx>
 #include <svdata.hxx>
 #include <window.h>
 
@@ -2022,9 +2021,9 @@ tools::Rectangle TabControl::GetCharacterBounds( sal_uInt16 nPageId, tools::Long
         std::unordered_map< int, int >::const_iterator it = mpTabCtrlData->maLayoutPageIdToLine.find( static_cast<int>(nPageId) );
         if( it != mpTabCtrlData->maLayoutPageIdToLine.end() )
         {
-            Pair aPair = mpControlData->mpLayoutData->GetLineStartEnd( it->second );
+            Pair aPair = mpLayoutData->GetLineStartEnd( it->second );
             if( (aPair.B() - aPair.A()) >= nIndex )
-                aRet = mpControlData->mpLayoutData->GetCharacterBounds( aPair.A() + nIndex );
+                aRet = mpLayoutData->GetCharacterBounds( aPair.A() + nIndex );
         }
     }
 
@@ -2040,15 +2039,15 @@ tools::Long TabControl::GetIndexForPoint( const Point& rPoint, sal_uInt16& rPage
 
     if( HasLayoutData() )
     {
-        int nIndex = mpControlData->mpLayoutData->GetIndexForPoint( rPoint );
+        int nIndex = mpLayoutData->GetIndexForPoint( rPoint );
         if( nIndex != -1 )
         {
             // what line (->pageid) is this index in ?
-            int nLines = mpControlData->mpLayoutData->GetLineCount();
+            int nLines = mpLayoutData->GetLineCount();
             int nLine = -1;
             while( ++nLine < nLines )
             {
-                Pair aPair = mpControlData->mpLayoutData->GetLineStartEnd( nLine );
+                Pair aPair = mpLayoutData->GetLineStartEnd( nLine );
                 if( aPair.A() <= nIndex && aPair.B() >= nIndex )
                 {
                     nRet = nIndex - aPair.A();

@@ -27,6 +27,7 @@
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/toolkit/controllayout.hxx>
 #include <vcl/toolkit/dialog.hxx>
 #include <vcl/toolkit/fixed.hxx>
 #include <vcl/toolkit/button.hxx>
@@ -39,7 +40,6 @@
 #include <bitmaps.hlst>
 #include <svdata.hxx>
 #include <window.h>
-#include <controldata.hxx>
 #include <vclstatuslistener.hxx>
 #include <osl/diagnose.h>
 
@@ -1340,7 +1340,7 @@ void PushButton::KeyUp( const KeyEvent& rKEvt )
 
 void PushButton::FillLayoutData() const
 {
-    mpControlData->mpLayoutData.reset( new vcl::ControlLayoutData );
+    mpLayoutData.reset( new vcl::ControlLayoutData );
     const_cast<PushButton*>(this)->Invalidate();
 }
 
@@ -2435,7 +2435,7 @@ void RadioButton::KeyUp( const KeyEvent& rKEvt )
 
 void RadioButton::FillLayoutData() const
 {
-    mpControlData->mpLayoutData.reset( new vcl::ControlLayoutData );
+    mpLayoutData.reset( new vcl::ControlLayoutData );
     const_cast<RadioButton*>(this)->Invalidate();
 }
 
@@ -3249,7 +3249,7 @@ void CheckBox::KeyUp( const KeyEvent& rKEvt )
 
 void CheckBox::FillLayoutData() const
 {
-    mpControlData->mpLayoutData.reset( new vcl::ControlLayoutData );
+    mpLayoutData.reset( new vcl::ControlLayoutData );
     const_cast<CheckBox*>(this)->Invalidate();
 }
 

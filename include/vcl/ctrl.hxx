@@ -26,14 +26,14 @@
 #include <memory>
 
 // forward
-namespace vcl { struct ImplControlData; }
 class StyleSettings;
-
+namespace vcl { struct ControlLayoutData; }
 
 class VCL_DLLPUBLIC Control : public vcl::Window
 {
 protected:
-    std::unique_ptr<vcl::ImplControlData> mpControlData;
+    mutable std::unique_ptr<vcl::ControlLayoutData>  mpLayoutData;
+    VclPtr<OutputDevice>        mpReferenceDevice;
 
 private:
     bool                    mbHasControlFocus;
