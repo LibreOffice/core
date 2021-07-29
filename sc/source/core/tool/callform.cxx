@@ -65,13 +65,13 @@ typedef void (CALLTYPE* Unadvice)( double&      nHandle );
 }
 
 #ifndef DISABLE_DYNLOADING
-#define GETFUNCTIONCOUNT        "GetFunctionCount"
-#define GETFUNCTIONDATA         "GetFunctionData"
-#define SETLANGUAGE             "SetLanguage"
-#define GETPARAMDESC            "GetParameterDescription"
-#define ISASYNC                 "IsAsync"
-#define ADVICE                  "Advice"
-#define UNADVICE                "Unadvice"
+constexpr OUStringLiteral GETFUNCTIONCOUNT = u"GetFunctionCount";
+constexpr OUStringLiteral GETFUNCTIONDATA = u"GetFunctionData";
+constexpr OUStringLiteral SETLANGUAGE = u"SetLanguage";
+constexpr OUStringLiteral GETPARAMDESC = u"GetParameterDescription";
+constexpr OUStringLiteral ISASYNC = u"IsAsync";
+constexpr OUStringLiteral ADVICE = u"Advice";
+constexpr OUStringLiteral UNADVICE = u"Unadvice";
 #endif
 
 class ModuleData

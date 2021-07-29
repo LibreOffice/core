@@ -29,8 +29,8 @@
 #include <svx/svxids.hrc>
 #include <tools/json_writer.hxx>
 
-#define TMP_STR_BEGIN   "["
-#define TMP_STR_END     "]"
+constexpr OUStringLiteral TMP_STR_BEGIN = u"[";
+constexpr OUStringLiteral TMP_STR_END = u"]";
 
 #include <svx/drawitem.hxx>
 #include <svx/xfillit0.hxx>

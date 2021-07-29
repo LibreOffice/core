@@ -77,18 +77,18 @@ namespace dbaccess {
 namespace BooleanComparisonMode = ::com::sun::star::sdb::BooleanComparisonMode;
 }
 
-#define STR_SELECT      "SELECT "
-#define STR_FROM        " FROM "
-#define STR_WHERE       " WHERE "
-#define STR_GROUP_BY    " GROUP BY "
-#define STR_HAVING      " HAVING "
-#define STR_ORDER_BY    " ORDER BY "
-#define STR_AND         " AND "
-#define STR_OR          " OR "
+constexpr OUStringLiteral STR_SELECT = u"SELECT ";
+constexpr OUStringLiteral STR_FROM = u" FROM ";
+constexpr OUStringLiteral STR_WHERE = u" WHERE ";
+constexpr OUStringLiteral STR_GROUP_BY = u" GROUP BY ";
+constexpr OUStringLiteral STR_HAVING = u" HAVING ";
+constexpr OUStringLiteral STR_ORDER_BY = u" ORDER BY ";
+constexpr OUStringLiteral STR_AND = u" AND ";
+constexpr OUStringLiteral STR_OR = u" OR ";
 constexpr OUStringLiteral STR_LIKE = u" LIKE ";
-#define L_BRACKET       "("
-#define R_BRACKET       ")"
-#define COMMA           ","
+constexpr OUStringLiteral L_BRACKET = u"(";
+constexpr OUStringLiteral R_BRACKET = u")";
+constexpr OUStringLiteral COMMA = u",";
 
 namespace
 {
@@ -752,7 +752,7 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  )
         bCase = m_xMetaData->supportsMixedCaseQuotedIdentifiers();
         aSelectColumns = m_aSqlIterator.getSelectColumns();
 
-        OUStringBuffer aSQL( m_aPureSelectSQL + STR_WHERE " ( 0 = 1 )");
+        OUStringBuffer aSQL( m_aPureSelectSQL + STR_WHERE + " ( 0 = 1 )");
 
         // preserve the original WHERE clause
         // #i102234#
@@ -1726,7 +1726,7 @@ void OSingleSelectQueryComposer::setConditionByColumn( const Reference< XPropert
         if ( !sFilter.isEmpty() && !aSQL.isEmpty() )
         {
             sFilter = L_BRACKET + sFilter + R_BRACKET +
-                (andCriteria ? std::u16string_view(u"" STR_AND) : std::u16string_view(u"" STR_OR));
+                (andCriteria ? std::u16string_view(STR_AND) : std::u16string_view(STR_OR));
         }
         sFilter += aSQL;
 
