@@ -38,15 +38,15 @@
 #define GCM_PROPERTY_ID_TAG                 8
 #define GCM_PROPERTY_ID_RESOURCERESOLVER    9
 
-#define GCM_PROPERTY_POS_X              "PositionX"
-#define GCM_PROPERTY_POS_Y              "PositionY"
-#define GCM_PROPERTY_WIDTH              "Width"
-#define GCM_PROPERTY_HEIGHT             "Height"
-#define GCM_PROPERTY_NAME               "Name"
-#define GCM_PROPERTY_TABINDEX           "TabIndex"
-#define GCM_PROPERTY_STEP               "Step"
-#define GCM_PROPERTY_TAG                "Tag"
-#define GCM_PROPERTY_RESOURCERESOLVER   "ResourceResolver"
+constexpr OUStringLiteral GCM_PROPERTY_POS_X = u"PositionX";
+constexpr OUStringLiteral GCM_PROPERTY_POS_Y = u"PositionY";
+constexpr OUStringLiteral GCM_PROPERTY_WIDTH = u"Width";
+constexpr OUStringLiteral GCM_PROPERTY_HEIGHT = u"Height";
+constexpr OUStringLiteral GCM_PROPERTY_NAME = u"Name";
+constexpr OUStringLiteral GCM_PROPERTY_TABINDEX = u"TabIndex";
+constexpr OUStringLiteral GCM_PROPERTY_STEP = u"Step";
+constexpr OUStringLiteral GCM_PROPERTY_TAG = u"Tag";
+constexpr OUStringLiteral GCM_PROPERTY_RESOURCERESOLVER = u"ResourceResolver";
 
 #define DEFAULT_ATTRIBS()       PropertyAttribute::BOUND | PropertyAttribute::TRANSIENT
 

@@ -35,7 +35,7 @@
 // my defines
 
 #define TEST_CLIPBOARD
-#define RDB_SYSPATH  "d:\\projects\\src621\\dtrans\\wntmsci7\\bin\\applicat.rdb"
+constexpr OUStringLiteral RDB_SYSPATH = u"d:\\projects\\src621\\dtrans\\wntmsci7\\bin\\applicat.rdb";
 
 //  namespaces
 

@@ -38,7 +38,7 @@
 // of GCC RTTI symbols needed for exception handling would not be guaranteed.
 
 #if ! defined SAL_DLLPREFIX
-#define SAL_DLLPREFIX ""
+constexpr OUStringLiteral SAL_DLLPREFIX = u"";
 #endif
 
 

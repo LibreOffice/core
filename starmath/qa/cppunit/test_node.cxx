@@ -65,7 +65,7 @@ void NodeTest::tearDown()
 void NodeTest::testTdf47813()
 {
     SmParser5 aParser;
-#define MATRIX "matrix {-2#33##4#-5##6,0#7}"
+constexpr OUStringLiteral MATRIX = u"matrix {-2#33##4#-5##6,0#7}";
     auto pNodeA = aParser.Parse(MATRIX);
     auto pNodeC = aParser.Parse("alignc " MATRIX);
     auto pNodeL = aParser.Parse("alignl " MATRIX);

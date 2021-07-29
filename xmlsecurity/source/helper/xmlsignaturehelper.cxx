@@ -48,10 +48,10 @@
 
 #include <optional>
 
-#define NS_DOCUMENTSIGNATURES   "http://openoffice.org/2004/documentsignatures"
-#define NS_DOCUMENTSIGNATURES_ODF_1_2 "urn:oasis:names:tc:opendocument:xmlns:digitalsignature:1.0"
-#define OOXML_SIGNATURE_ORIGIN "http://schemas.openxmlformats.org/package/2006/relationships/digital-signature/origin"
-#define OOXML_SIGNATURE_SIGNATURE "http://schemas.openxmlformats.org/package/2006/relationships/digital-signature/signature"
+constexpr OUStringLiteral NS_DOCUMENTSIGNATURES = u"http://openoffice.org/2004/documentsignatures";
+constexpr OUStringLiteral NS_DOCUMENTSIGNATURES_ODF_1_2 = u"urn:oasis:names:tc:opendocument:xmlns:digitalsignature:1.0";
+constexpr OUStringLiteral OOXML_SIGNATURE_ORIGIN = u"http://schemas.openxmlformats.org/package/2006/relationships/digital-signature/origin";
+constexpr OUStringLiteral OOXML_SIGNATURE_SIGNATURE = u"http://schemas.openxmlformats.org/package/2006/relationships/digital-signature/signature";
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::graphic;

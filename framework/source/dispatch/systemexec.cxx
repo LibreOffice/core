@@ -29,7 +29,7 @@
 
 namespace framework{
 
-#define PROTOCOL_VALUE      "systemexecute:"
+constexpr OUStringLiteral PROTOCOL_VALUE = u"systemexecute:";
 #define PROTOCOL_LENGTH     14
 
 // XInterface, XTypeProvider, XServiceInfo

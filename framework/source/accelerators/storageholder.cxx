@@ -29,7 +29,7 @@
 
 #include <algorithm>
 
-#define PATH_SEPARATOR "/"
+constexpr OUStringLiteral PATH_SEPARATOR = u"/";
 #define PATH_SEPARATOR_UNICODE      u'/'
 
 namespace framework
