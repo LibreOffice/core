@@ -30,22 +30,6 @@
 
 namespace svl::detail
 {
-inline std::pair<sal_uInt16, sal_uInt16> CountRangesOld(const sal_uInt16* pRanges)
-{
-    sal_uInt16 nCount = 0;
-    sal_uInt16 nCapacity = 0;
-    if (pRanges)
-    {
-        nCount = 1;
-        while (*pRanges)
-        {
-            nCount += 2;
-            nCapacity += rangeSize(pRanges[0], pRanges[1]);
-            pRanges += 2;
-        }
-    }
-    return { nCount, nCapacity };
-}
 /**
  * Determines the number of sal_uInt16s in a container of pairs of
  * sal_uInt16s, each representing a range of sal_uInt16s, and total capacity of the ranges.
