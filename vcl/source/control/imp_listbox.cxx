@@ -34,7 +34,6 @@
 
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 
-#include <rtl/instance.hxx>
 #include <sal/log.hxx>
 #include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
@@ -105,15 +104,12 @@ void ImplEntryList::SelectEntry( sal_Int32 nPos, bool bSelect )
 
 namespace
 {
-    struct theSorter
-        : public rtl::StaticWithInit< comphelper::string::NaturalStringSorter, theSorter >
+    comphelper::string::NaturalStringSorter& GetSorter()
     {
-        comphelper::string::NaturalStringSorter operator () ()
-        {
-            return comphelper::string::NaturalStringSorter(
-                ::comphelper::getProcessComponentContext(),
-                Application::GetSettings().GetLanguageTag().getLocale());
-        }
+        static comphelper::string::NaturalStringSorter gSorter(
+                    ::comphelper::getProcessComponentContext(),
+                    Application::GetSettings().GetLanguageTag().getLocale());
+        return gSorter;
     };
 }
 
@@ -121,7 +117,7 @@ namespace vcl
 {
     sal_Int32 NaturalSortCompare(const OUString &rA, const OUString &rB)
     {
-        const comphelper::string::NaturalStringSorter &rSorter = theSorter::get();
+        const comphelper::string::NaturalStringSorter &rSorter = GetSorter();
         return rSorter.compare(rA, rB);
     }
 }
@@ -152,7 +148,7 @@ sal_Int32 ImplEntryList::InsertEntry( sal_Int32 nPos, ImplEntryType* pNewEntry, 
     }
     else
     {
-        const comphelper::string::NaturalStringSorter &rSorter = theSorter::get();
+        const comphelper::string::NaturalStringSorter &rSorter = GetSorter();
 
         const OUString& rStr = pNewEntry->maStr;
 
