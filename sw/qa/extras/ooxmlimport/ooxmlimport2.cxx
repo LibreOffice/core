@@ -48,6 +48,44 @@ public:
     }
 };
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf143476LockedCanvas_twoShapes)
+{
+    // Given a lockedCanvas in a docx document with compatibility to Word version 12 (2007).
+    // It contains two shapes. Error was, that the lockedCanvas was not imported as group at all,
+    // and only one shape was imported and that one was scaled to lockedCanvas area.
+    load(mpTestDocumentPath, "tdf143476_lockedCanvas_twoShapes.docx");
+    // The group shape corresponds to the lockedCanvas.
+    uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xGroup.is());
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), xGroup->getCount());
+    uno::Reference<drawing::XShape> xShape(xGroup->getByIndex(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(14200), xShape->getPosition().X);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1120), xShape->getPosition().Y);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1928), xShape->getSize().Width);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1593), xShape->getSize().Height);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf143476LockedCanvas_position)
+{
+    // Given a lockedCanvas in a docx document with compatibility to Word version 12 (2007).
+    // Tests fix for regression introduced by 3262fc5ef3bde5b158909d11ccb008161ea95519
+    // Error was, that the imported shape had wrong position.
+    load(mpTestDocumentPath, "tdf143476_lockedCanvas_position.docx");
+    // The group shape corresponds to the lockedCanvas.
+    uno::Reference<drawing::XShape> xGroupShape(getShape(1), uno::UNO_QUERY);
+    // Without fix in place the test failed with position 185|947.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2351), xGroupShape->getPosition().X);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(26), xGroupShape->getPosition().Y);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf143476LockedCanvas_image_line)
+{
+    // Given a lockedCanvas in a docx document with compatibility to Word version 12 (2007).
+    // It contains an image and a line. Error was, that both were not imported.
+    load(mpTestDocumentPath, "tdf143476_lockedCanvas_image_line.docx");
+    CPPUNIT_ASSERT_MESSAGE("No shapes imported", getShapes() > 0);
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf143475rotatedWord2007imageInline)
 {
     // Given a docx document with compatibility to Word version 12 (2007), which has a shape
