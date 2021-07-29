@@ -25,17 +25,10 @@
 
 SwRetrievedInputStreamDataManager::tDataKey SwRetrievedInputStreamDataManager::snNextKeyValue = 1;
 
-namespace
-{
-    class theSwRetrievedInputStreamDataManager :
-        public rtl::Static< SwRetrievedInputStreamDataManager, theSwRetrievedInputStreamDataManager>
-    {
-    };
-}
-
 SwRetrievedInputStreamDataManager& SwRetrievedInputStreamDataManager::GetManager()
 {
-    return theSwRetrievedInputStreamDataManager::get();
+    static SwRetrievedInputStreamDataManager theSwRetrievedInputStreamDataManager;
+    return theSwRetrievedInputStreamDataManager;
 }
 
 SwRetrievedInputStreamDataManager::tDataKey SwRetrievedInputStreamDataManager::ReserveData(

@@ -248,15 +248,10 @@ BulletsTypeMgr::BulletsTypeMgr()
     Init();
 }
 
-namespace {
-
-class theBulletsTypeMgr : public rtl::Static<BulletsTypeMgr, theBulletsTypeMgr> {};
-
-}
-
 BulletsTypeMgr& BulletsTypeMgr::GetInstance()
 {
-    return theBulletsTypeMgr::get();
+    static BulletsTypeMgr theBulletsTypeMgr;
+    return theBulletsTypeMgr;
 }
 
 void BulletsTypeMgr::Init()
@@ -397,15 +392,10 @@ static const char* RID_SVXSTR_SINGLENUM_DESCRIPTIONS[] =
     RID_SVXSTR_SINGLENUM_DESCRIPTION_7
 };
 
-namespace {
-
-class theNumberingTypeMgr : public rtl::Static<NumberingTypeMgr, theNumberingTypeMgr> {};
-
-}
-
 NumberingTypeMgr& NumberingTypeMgr::GetInstance()
 {
-    return theNumberingTypeMgr::get();
+    static NumberingTypeMgr theNumberingTypeMgr;
+    return theNumberingTypeMgr;
 }
 
 void NumberingTypeMgr::Init()
@@ -572,15 +562,10 @@ OutlineTypeMgr::OutlineTypeMgr()
     ImplLoad(u"standard.syc");
 }
 
-namespace {
-
-class theOutlineTypeMgr : public rtl::Static<OutlineTypeMgr, theOutlineTypeMgr> {};
-
-}
-
 OutlineTypeMgr& OutlineTypeMgr::GetInstance()
 {
-    return theOutlineTypeMgr::get();
+    static OutlineTypeMgr theOutlineTypeMgr;
+    return theOutlineTypeMgr;
 }
 
 void OutlineTypeMgr::Init()
