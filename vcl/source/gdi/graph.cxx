@@ -400,8 +400,10 @@ basegfx::B2DSize Graphic::GetPPI() const
     {
         const Size aGrf1000thInchSize = OutputDevice::LogicToLogic(
                 aGrfPrefMapModeSize, aGrfMap, MapMode(MapUnit::Map1000thInch));
-        nGrfDPIx = 1000.0 * aGrfPixelSize.Width() / aGrf1000thInchSize.Width();
-        nGrfDPIy = 1000.0 * aGrfPixelSize.Height() / aGrf1000thInchSize.Height();
+        nGrfDPIx = aGrf1000thInchSize.Width() == 0
+            ? 0.0 : 1000.0 * aGrfPixelSize.Width() / aGrf1000thInchSize.Width();
+        nGrfDPIy = aGrf1000thInchSize.Height() == 0
+            ? 0.0 : 1000.0 * aGrfPixelSize.Height() / aGrf1000thInchSize.Height();
     }
 
     return basegfx::B2DSize(nGrfDPIx, nGrfDPIy);
