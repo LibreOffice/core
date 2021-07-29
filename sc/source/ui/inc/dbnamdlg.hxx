@@ -42,6 +42,7 @@ public:
 
 private:
     bool            bSaved;
+    bool            bInvalid;
 
     OUString        aStrAdd;
     OUString        aStrModify;
