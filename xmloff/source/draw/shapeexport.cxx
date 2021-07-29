@@ -124,7 +124,7 @@ using namespace ::com::sun::star;
 using namespace ::xmloff::EnhancedCustomShapeToken;
 using namespace ::xmloff::token;
 
-#define XML_EMBEDDEDOBJECTGRAPHIC_URL_BASE "vnd.sun.star.GraphicObject:"
+constexpr OUStringLiteral XML_EMBEDDEDOBJECTGRAPHIC_URL_BASE = u"vnd.sun.star.GraphicObject:";
 
 namespace {
 

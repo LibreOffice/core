@@ -39,8 +39,8 @@
 #include <vcl/dibtools.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
 
-#define AVMEDIA_WIN_FRAMEGRABBER_IMPLEMENTATIONNAME "com.sun.star.comp.avmedia.FrameGrabber_DirectX"
-#define AVMEDIA_WIN_FRAMEGRABBER_SERVICENAME "com.sun.star.media.FrameGrabber_DirectX"
+constexpr OUStringLiteral AVMEDIA_WIN_FRAMEGRABBER_IMPLEMENTATIONNAME = u"com.sun.star.comp.avmedia.FrameGrabber_DirectX";
+constexpr OUStringLiteral AVMEDIA_WIN_FRAMEGRABBER_SERVICENAME = u"com.sun.star.media.FrameGrabber_DirectX";
 
 using namespace ::com::sun::star;
 

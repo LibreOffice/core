@@ -80,8 +80,8 @@ SerfPropFindReqProcImpl::~SerfPropFindReqProcImpl()
 {
 }
 
-#define PROPFIND_HEADER "<?xml version=\"1.0\" encoding=\"utf-8\"?><propfind xmlns=\"DAV:\">"
-#define PROPFIND_TRAILER "</propfind>"
+constexpr OUStringLiteral PROPFIND_HEADER = u"<?xml version=\"1.0\" encoding=\"utf-8\"?><propfind xmlns=\"DAV:\">";
+constexpr OUStringLiteral PROPFIND_TRAILER = u"</propfind>";
 
 serf_bucket_t * SerfPropFindReqProcImpl::createSerfRequestBucket( serf_request_t * inSerfRequest )
 {

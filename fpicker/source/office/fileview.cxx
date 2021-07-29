@@ -73,7 +73,7 @@ using namespace ::comphelper;
 using ::svt::SortingData_Impl;
 using ::svt::FolderDescriptor;
 
-#define ALL_FILES_FILTER    "*.*"
+constexpr OUStringLiteral ALL_FILES_FILTER = u"*.*";
 
 #define COLUMN_TITLE        1
 #define COLUMN_TYPE         2

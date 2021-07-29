@@ -647,14 +647,14 @@ const VbaFormatInfo* getFormatInfo( const OUString& rFmt )
 } // namespace
 
 #if HAVE_FEATURE_SCRIPTING
-#define VBAFORMAT_GENERALDATE       "General Date"
-#define VBAFORMAT_C                 "c"
-#define VBAFORMAT_N                 "n"
-#define VBAFORMAT_NN                "nn"
-#define VBAFORMAT_W                 "w"
-#define VBAFORMAT_Y                 "y"
-#define VBAFORMAT_LOWERCASE         "<"
-#define VBAFORMAT_UPPERCASE         ">"
+constexpr OUStringLiteral VBAFORMAT_GENERALDATE = u"General Date";
+constexpr OUStringLiteral VBAFORMAT_C = u"c";
+constexpr OUStringLiteral VBAFORMAT_N = u"n";
+constexpr OUStringLiteral VBAFORMAT_NN = u"nn";
+constexpr OUStringLiteral VBAFORMAT_W = u"w";
+constexpr OUStringLiteral VBAFORMAT_Y = u"y";
+constexpr OUStringLiteral VBAFORMAT_LOWERCASE = u"<";
+constexpr OUStringLiteral VBAFORMAT_UPPERCASE = u">";
 #endif
 
 void SbxValue::Format( OUString& rRes, const OUString* pFmt ) const

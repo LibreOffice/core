@@ -44,9 +44,9 @@
 
 #include <memory>
 
-#define SMGR_SINGLETON "/singletons/com.sun.star.lang.theServiceManager"
-#define TDMGR_SINGLETON "/singletons/com.sun.star.reflection.theTypeDescriptionManager"
-#define AC_SINGLETON "/singletons/com.sun.star.security.theAccessController"
+constexpr OUStringLiteral SMGR_SINGLETON = u"/singletons/com.sun.star.lang.theServiceManager";
+constexpr OUStringLiteral TDMGR_SINGLETON = u"/singletons/com.sun.star.reflection.theTypeDescriptionManager";
+constexpr OUStringLiteral AC_SINGLETON = u"/singletons/com.sun.star.security.theAccessController";
 
 using namespace ::osl;
 using namespace ::com::sun::star::uno;

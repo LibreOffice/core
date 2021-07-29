@@ -37,7 +37,7 @@ using namespace com::sun::star::linguistic2;
 using namespace linguistic;
 
 
-#define SN_HH_CONV_DICTIONARY   "com.sun.star.linguistic2.HangulHanjaConversionDictionary"
+constexpr OUStringLiteral SN_HH_CONV_DICTIONARY = u"com.sun.star.linguistic2.HangulHanjaConversionDictionary";
 
 
 #include <com/sun/star/i18n/UnicodeScript.hpp>

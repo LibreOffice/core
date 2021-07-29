@@ -34,10 +34,10 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::task;
 
-#define FIXEDTEXT_SERVICENAME                   "com.sun.star.awt.UnoControlFixedText"
-#define FIXEDTEXT_MODELNAME                     "com.sun.star.awt.UnoControlFixedTextModel"
-#define CONTROLNAME_TEXT                        "Text" // identifier the control in container
-#define CONTROLNAME_PROGRESSBAR                 "ProgressBar" //              -||-
+constexpr OUStringLiteral FIXEDTEXT_SERVICENAME = u"com.sun.star.awt.UnoControlFixedText";
+constexpr OUStringLiteral FIXEDTEXT_MODELNAME = u"com.sun.star.awt.UnoControlFixedTextModel";
+constexpr OUStringLiteral CONTROLNAME_TEXT = u"Text"; // identifier the control in container
+constexpr OUStringLiteral CONTROLNAME_PROGRESSBAR = u"ProgressBar"; //              -||-
 
 namespace unocontrols {
 

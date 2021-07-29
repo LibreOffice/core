@@ -85,11 +85,11 @@ static void makeXMLName( const OUString & rIn, OUStringBuffer & rBuffer  )
 // HierarchyEntry Implementation.
 
 
-#define READ_SERVICE_NAME      "com.sun.star.ucb.HierarchyDataReadAccess"
-#define READWRITE_SERVICE_NAME "com.sun.star.ucb.HierarchyDataReadWriteAccess"
+constexpr OUStringLiteral READ_SERVICE_NAME = u"com.sun.star.ucb.HierarchyDataReadAccess";
+constexpr OUStringLiteral READWRITE_SERVICE_NAME = u"com.sun.star.ucb.HierarchyDataReadWriteAccess";
 
 // describe path of cfg entry
-#define CFGPROPERTY_NODEPATH    "nodepath"
+constexpr OUStringLiteral CFGPROPERTY_NODEPATH = u"nodepath";
 
 
 HierarchyEntry::HierarchyEntry(

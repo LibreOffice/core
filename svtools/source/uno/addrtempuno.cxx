@@ -32,7 +32,7 @@ using namespace svt;
 namespace {
 
 #define UNODIALOG_PROPERTY_ID_ALIASES       100
-#define UNODIALOG_PROPERTY_ALIASES          "FieldMapping"
+constexpr OUStringLiteral UNODIALOG_PROPERTY_ALIASES = u"FieldMapping";
 
     using namespace css::uno;
     using namespace css::lang;

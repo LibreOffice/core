@@ -41,23 +41,23 @@ namespace lang = com::sun::star::lang ;
 namespace util = com::sun::star::util ;
 namespace uno = com::sun::star::uno ;
 
-#define LAST_CHECK              "LastCheck"
-#define UPDATE_VERSION          "UpdateVersion"
-#define UPDATE_BUILDID          "UpdateBuildId"
-#define UPDATE_DESCRIPTION      "UpdateDescription"
-#define DOWNLOAD_URL            "DownloadURL"
-#define IS_DIRECT_DOWNLOAD      "IsDirectDownload"
-#define OLD_VERSION             "UpdateFoundFor"
-#define AUTOCHECK_ENABLED       "AutoCheckEnabled"
-#define AUTODOWNLOAD_ENABLED    "AutoDownloadEnabled"
-#define CHECK_INTERVAL          "CheckInterval"
-#define LOCAL_FILE              "LocalFile"
-#define DOWNLOAD_SIZE           "DownloadSize"
-#define DOWNLOAD_PAUSED         "DownloadPaused"
-#define DOWNLOAD_DESTINATION    "DownloadDestination"
-#define RELEASE_NOTE            "ReleaseNote"
+constexpr OUStringLiteral LAST_CHECK = u"LastCheck";
+constexpr OUStringLiteral UPDATE_VERSION = u"UpdateVersion";
+constexpr OUStringLiteral UPDATE_BUILDID = u"UpdateBuildId";
+constexpr OUStringLiteral UPDATE_DESCRIPTION = u"UpdateDescription";
+constexpr OUStringLiteral DOWNLOAD_URL = u"DownloadURL";
+constexpr OUStringLiteral IS_DIRECT_DOWNLOAD = u"IsDirectDownload";
+constexpr OUStringLiteral OLD_VERSION = u"UpdateFoundFor";
+constexpr OUStringLiteral AUTOCHECK_ENABLED = u"AutoCheckEnabled";
+constexpr OUStringLiteral AUTODOWNLOAD_ENABLED = u"AutoDownloadEnabled";
+constexpr OUStringLiteral CHECK_INTERVAL = u"CheckInterval";
+constexpr OUStringLiteral LOCAL_FILE = u"LocalFile";
+constexpr OUStringLiteral DOWNLOAD_SIZE = u"DownloadSize";
+constexpr OUStringLiteral DOWNLOAD_PAUSED = u"DownloadPaused";
+constexpr OUStringLiteral DOWNLOAD_DESTINATION = u"DownloadDestination";
+constexpr OUStringLiteral RELEASE_NOTE = u"ReleaseNote";
 
-#define PROPERTY_VERSION        "Version"
+constexpr OUStringLiteral PROPERTY_VERSION = u"Version";
 
 const char * const aUpdateEntryProperties[] = {
     UPDATE_VERSION,
