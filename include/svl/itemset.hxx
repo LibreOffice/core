@@ -51,7 +51,6 @@ private:
     SVL_DLLPRIVATE void       RecreateRanges_Impl(const WhichRangesContainer& pNewRanges);
 
     SfxItemSet( SfxItemPool & pool, const WhichRangesContainer& wids, std::size_t items );
-    SfxItemSet( SfxItemPool & pool, WhichRangesContainer&& wids, std::size_t items );
 
 public:
     SfxPoolItem const**         GetItems_Impl() const { return m_pItems.get(); }
