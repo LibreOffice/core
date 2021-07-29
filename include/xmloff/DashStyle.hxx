@@ -33,7 +33,7 @@ namespace com::sun::star {
 }
 
 
-class UNLESS_MERGELIBS(XMLOFF_DLLPUBLIC) XMLDashStyleImport
+class XMLOFF_DLLPUBLIC XMLDashStyleImport
 {
     SvXMLImport& rImport;
 
@@ -48,7 +48,7 @@ public:
 };
 
 
-class UNLESS_MERGELIBS(XMLOFF_DLLPUBLIC) XMLDashStyleExport
+class XMLOFF_DLLPUBLIC XMLDashStyleExport
 {
     SvXMLExport& rExport;
 

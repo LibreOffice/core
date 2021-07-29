@@ -107,7 +107,7 @@ namespace svt
 
     //= IEditImplementation
 
-    class UNLESS_MERGELIBS(SVT_DLLPUBLIC) IEditImplementation
+    class SVT_DLLPUBLIC IEditImplementation
     {
     public:
         virtual ~IEditImplementation() = 0;
@@ -350,7 +350,7 @@ namespace svt
 
     /** a multi line edit which can be used in a cell of an EditBrowseBox
     */
-    class UNLESS_MERGELIBS(SVT_DLLPUBLIC) MultiLineTextCell final : public ControlBase
+    class SVT_DLLPUBLIC MultiLineTextCell final : public ControlBase
     {
     public:
         MultiLineTextCell(BrowserDataWin* pParent);

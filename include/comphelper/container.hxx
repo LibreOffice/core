@@ -34,7 +34,7 @@ namespace comphelper
 
 /** an iterator that iterates through all elements, starting from an XIndexAccess (pre-order)
 */
-class UNLESS_MERGELIBS(COMPHELPER_DLLPUBLIC) IndexAccessIterator
+class COMPHELPER_DLLPUBLIC IndexAccessIterator
 {
 protected:
     css::uno::Reference< css::uno::XInterface>    m_xStartingPoint;

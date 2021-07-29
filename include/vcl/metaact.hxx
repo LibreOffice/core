@@ -1071,7 +1071,7 @@ public:
     void                SetRect(tools::Rectangle& rRect) { maRect = rRect; }
 };
 
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetaGradientExAction final : public MetaAction
+class VCL_DLLPUBLIC MetaGradientExAction final : public MetaAction
 {
 private:
 
@@ -1167,7 +1167,7 @@ public:
     void                SetWallpaper(Wallpaper& rWallpaper) { maWallpaper = rWallpaper; }
 };
 
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetaClipRegionAction final : public MetaAction
+class VCL_DLLPUBLIC MetaClipRegionAction final : public MetaAction
 {
 private:
 
@@ -1199,7 +1199,7 @@ public:
     void                SetClipping(bool bClip) { mbClip = bClip; }
 };
 
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetaISectRectClipRegionAction final : public MetaAction
+class VCL_DLLPUBLIC MetaISectRectClipRegionAction final : public MetaAction
 {
 private:
 
@@ -1228,7 +1228,7 @@ public:
     void                SetRect(tools::Rectangle& rRect) { maRect = rRect; }
 };
 
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetaISectRegionClipRegionAction final : public MetaAction
+class VCL_DLLPUBLIC MetaISectRegionClipRegionAction final : public MetaAction
 {
 private:
 
@@ -1257,7 +1257,7 @@ public:
     void                SetRegion(vcl::Region& rRegion) { maRegion = rRegion; }
 };
 
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetaMoveClipRegionAction final : public MetaAction
+class VCL_DLLPUBLIC MetaMoveClipRegionAction final : public MetaAction
 {
 private:
 
@@ -1347,7 +1347,7 @@ public:
 
 };
 
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetaTextColorAction final : public MetaAction
+class VCL_DLLPUBLIC MetaTextColorAction final : public MetaAction
 {
 private:
 
@@ -1373,7 +1373,7 @@ public:
     void                SetColor(Color& rColor) { maColor = rColor; }
 };
 
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetaTextFillColorAction final : public MetaAction
+class VCL_DLLPUBLIC MetaTextFillColorAction final : public MetaAction
 {
 private:
 
@@ -1403,7 +1403,7 @@ public:
 
 };
 
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetaTextLineColorAction final : public MetaAction
+class VCL_DLLPUBLIC MetaTextLineColorAction final : public MetaAction
 {
 private:
 
@@ -1432,7 +1432,7 @@ public:
     bool                IsSetting() const { return mbSet; }
 };
 
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetaOverlineColorAction final : public MetaAction
+class VCL_DLLPUBLIC MetaOverlineColorAction final : public MetaAction
 {
 private:
 
@@ -1461,7 +1461,7 @@ public:
     bool                IsSetting() const { return mbSet; }
 };
 
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetaTextAlignAction final : public MetaAction
+class VCL_DLLPUBLIC MetaTextAlignAction final : public MetaAction
 {
 private:
 
@@ -1487,7 +1487,7 @@ public:
     void                SetTextAlign(TextAlign eAlign) { maAlign = eAlign; }
 };
 
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetaMapModeAction final : public MetaAction
+class VCL_DLLPUBLIC MetaMapModeAction final : public MetaAction
 {
 private:
 
@@ -1518,7 +1518,7 @@ public:
 // tdf#127471 decl for friend below
 namespace emfio { class ScaledFontDetectCorrectHelper; }
 
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetaFontAction final : public MetaAction
+class VCL_DLLPUBLIC MetaFontAction final : public MetaAction
 {
 private:
 
@@ -1552,7 +1552,7 @@ public:
 
 };
 
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetaPushAction final : public MetaAction
+class VCL_DLLPUBLIC MetaPushAction final : public MetaAction
 {
 private:
 
@@ -1578,7 +1578,7 @@ public:
     void                SetPushFlags(const PushFlags nFlags) { mnFlags = nFlags; }
 };
 
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetaPopAction final : public MetaAction
+class VCL_DLLPUBLIC MetaPopAction final : public MetaAction
 {
 public:
 
@@ -1596,7 +1596,7 @@ public:
     virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 };
 
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetaRasterOpAction final : public MetaAction
+class VCL_DLLPUBLIC MetaRasterOpAction final : public MetaAction
 {
 private:
 
@@ -1735,7 +1735,7 @@ public:
     void                SetSize(const Size& rSize) { maSize = rSize; }
 };
 
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetaRefPointAction final : public MetaAction
+class VCL_DLLPUBLIC MetaRefPointAction final : public MetaAction
 {
 private:
 
@@ -1802,7 +1802,7 @@ public:
     void                SetData(const sal_uInt8* pData, const sal_uInt32 nDataSize) { ImplInitDynamicData(pData, nDataSize); }
 };
 
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetaLayoutModeAction final : public MetaAction
+class VCL_DLLPUBLIC MetaLayoutModeAction final : public MetaAction
 {
 private:
 
@@ -1828,7 +1828,7 @@ public:
     void                SetLayoutMode(const ComplexTextLayoutFlags nLayoutMode) { mnLayoutMode = nLayoutMode; }
 };
 
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetaTextLanguageAction final : public MetaAction
+class VCL_DLLPUBLIC MetaTextLanguageAction final : public MetaAction
 {
 private:
 

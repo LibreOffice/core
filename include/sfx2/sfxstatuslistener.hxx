@@ -33,7 +33,7 @@ namespace com::sun::star::frame { class XDispatch; }
 namespace com::sun::star::frame { class XDispatchProvider; }
 namespace com::sun::star::frame { struct FeatureStateEvent; }
 
-class UNLESS_MERGELIBS(SFX2_DLLPUBLIC) SfxStatusListener : public cppu::WeakImplHelper<
+class SFX2_DLLPUBLIC SfxStatusListener : public cppu::WeakImplHelper<
                           css::frame::XStatusListener,
                           css::lang::XComponent>
 {

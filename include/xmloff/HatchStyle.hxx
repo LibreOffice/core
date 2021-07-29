@@ -34,7 +34,7 @@ namespace com::sun::star {
 }
 
 
-class UNLESS_MERGELIBS(XMLOFF_DLLPUBLIC) XMLHatchStyleImport
+class XMLOFF_DLLPUBLIC XMLHatchStyleImport
 {
     SvXMLImport& rImport;
 
@@ -48,7 +48,7 @@ public:
         OUString& rStrName );
 };
 
-class UNLESS_MERGELIBS(XMLOFF_DLLPUBLIC) XMLHatchStyleExport
+class XMLOFF_DLLPUBLIC XMLHatchStyleExport
 {
     SvXMLExport& rExport;
 

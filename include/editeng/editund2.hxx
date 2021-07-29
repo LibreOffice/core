@@ -26,7 +26,7 @@
 
 class EditEngine;
 
-class UNLESS_MERGELIBS(EDITENG_DLLPUBLIC) EditUndoManager : public SfxUndoManager
+class EDITENG_DLLPUBLIC EditUndoManager : public SfxUndoManager
 {
     using SfxUndoManager::Undo;
     using SfxUndoManager::Redo;

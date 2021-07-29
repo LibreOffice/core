@@ -37,7 +37,7 @@ namespace basegfx
         @derive Use this class to implement Points or Vectors
         which are based on three double values
     */
-    class SAL_WARN_UNUSED UNLESS_MERGELIBS(BASEGFX_DLLPUBLIC) B3DTuple : public Tuple3D<double>
+    class SAL_WARN_UNUSED BASEGFX_DLLPUBLIC B3DTuple : public Tuple3D<double>
     {
     public:
         /** Create a 3D Tuple

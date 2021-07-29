@@ -30,7 +30,7 @@ inline sal_uInt32 COMPAT_FORMAT(char char1, char char2, char char3, char char4)
 
 class SvStream;
 
-class UNLESS_MERGELIBS(TOOLS_DLLPUBLIC) VersionCompatRead
+class TOOLS_DLLPUBLIC VersionCompatRead
 {
     SvStream& mrRStm;
     sal_uInt32 mnCompatPos;
@@ -47,7 +47,7 @@ public:
     sal_uInt16 GetVersion() const { return mnVersion; }
 };
 
-class UNLESS_MERGELIBS(TOOLS_DLLPUBLIC) VersionCompatWrite
+class TOOLS_DLLPUBLIC VersionCompatWrite
 {
     SvStream& mrWStm;
     sal_uInt32 mnCompatPos;
