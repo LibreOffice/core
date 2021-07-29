@@ -6235,9 +6235,9 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
     }
 
     Point aAlignOffset;
-    if ( eAlign == ALIGN_BOTTOM )
+    if ( eAlign == TextAlign::Bottom )
         aAlignOffset.AdjustY( -(aRefDevFontMetric.GetDescent()) );
-    else if ( eAlign == ALIGN_TOP )
+    else if ( eAlign == TextAlign::Top )
         aAlignOffset.AdjustY(aRefDevFontMetric.GetAscent() );
     if( aAlignOffset.X() || aAlignOffset.Y() )
         aAlignOffset = aRotScale.transform( aAlignOffset );
@@ -6406,9 +6406,9 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
     tools::Long nEmphHeight2    = nEmphHeight / 2;
     aOffset += Point( nEmphWidth2, nEmphHeight2 );
 
-    if ( eAlign == ALIGN_BOTTOM )
+    if ( eAlign == TextAlign::Bottom )
         aOffset.AdjustY( -(GetFontInstance()->mxFontMetric->GetDescent()) );
-    else if ( eAlign == ALIGN_TOP )
+    else if ( eAlign == TextAlign::Top )
         aOffset.AdjustY(GetFontInstance()->mxFontMetric->GetAscent() );
 
     nIndex = 0;
@@ -7117,9 +7117,9 @@ void PDFWriterImpl::drawTextLine( const Point& rPos, tools::Long nWidth, FontStr
 
     Point aPos( rPos );
     TextAlign eAlign = m_aCurrentPDFState.m_aFont.GetAlignment();
-    if( eAlign == ALIGN_TOP )
+    if( eAlign == TextAlign::Top )
         aPos.AdjustY(HCONV( pFontInstance->mxFontMetric->GetAscent() ));
-    else if( eAlign == ALIGN_BOTTOM )
+    else if( eAlign == TextAlign::Bottom )
         aPos.AdjustY( -HCONV( pFontInstance->mxFontMetric->GetDescent() ) );
 
     OStringBuffer aLine( 512 );
