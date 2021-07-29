@@ -33,7 +33,6 @@
 
 #include <map>
 #include <memory>
-#include <set>
 
 namespace com::sun::star::i18n { class XNumberFormatCode; }
 namespace com::sun::star::i18n { struct Currency; }
@@ -296,8 +295,6 @@ typedef std::map<sal_uInt32, SvNumberformat*> SvNumberFormatTable;
 typedef std::map<sal_uInt16, sal_uInt32> SvNumberFormatterIndexTable;
 
 typedef ::std::map< sal_uInt32, sal_uInt32> SvNumberFormatterMergeMap;
-
-typedef ::std::set< LanguageType > NfInstalledLocales;
 
 
 /** Language/country dependent currency entries

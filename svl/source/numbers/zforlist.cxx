@@ -55,6 +55,7 @@
 #include <math.h>
 #include <limits>
 #include <memory>
+#include <set>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -253,8 +254,7 @@ namespace
         public rtl::Static< NfCurrencyTable, theLegacyOnlyCurrencyTable > {};
 
     /** THE set of installed locales. */
-    struct theInstalledLocales :
-        public rtl::Static< NfInstalledLocales, theInstalledLocales> {};
+    std::set< LanguageType > theInstalledLocales;
 
 }
 sal_uInt16 SvNumberFormatter::nSystemCurrencyPosition = 0;
@@ -4054,8 +4054,7 @@ bool SvNumberFormatter::IsLocaleInstalled( LanguageType eLang )
     // created, make sure that exists, which usually is the case unless a
     // SvNumberFormatter was never instantiated.
     GetTheCurrencyTable();
-    const NfInstalledLocales &rInstalledLocales = theInstalledLocales::get();
-    return rInstalledLocales.find( eLang) != rInstalledLocales.end();
+    return theInstalledLocales.find( eLang) != theInstalledLocales.end();
 }
 
 // static
@@ -4095,12 +4094,11 @@ void SvNumberFormatter::ImpInitCurrencyTable()
     SAL_INFO( "svl.numbers", "number of locales: \"" << nLocaleCount << "\"" );
     NfCurrencyTable &rCurrencyTable = theCurrencyTable::get();
     NfCurrencyTable &rLegacyOnlyCurrencyTable = theLegacyOnlyCurrencyTable::get();
-    NfInstalledLocales &rInstalledLocales = theInstalledLocales::get();
     sal_uInt16 nLegacyOnlyCurrencyPos = 0;
     for ( css::lang::Locale const & rLocale : xLoc )
     {
         LanguageType eLang = LanguageTag::convertToLanguageType( rLocale, false);
-        rInstalledLocales.insert( eLang);
+        theInstalledLocales.insert( eLang);
         pLocaleData.emplace(
             ::comphelper::getProcessComponentContext(),
             LanguageTag(rLocale) );

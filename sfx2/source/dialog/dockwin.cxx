@@ -27,7 +27,6 @@
 #include <vcl/idle.hxx>
 #include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
-#include <rtl/instance.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/debug.hxx>
 #include <comphelper/processfactory.hxx>
@@ -286,11 +285,6 @@ void SfxTitleDockingWindow::Resizing( Size &rSize )
     SfxDockingWindow::Resizing( rSize );
     if (m_pWrappedWindow)
         m_pWrappedWindow->SetSizePixel( GetOutputSizePixel() );
-}
-
-namespace
-{
-    struct ChildrenRegisteredMap : public rtl::Static< bool, ChildrenRegisteredMap > {};
 }
 
 static bool lcl_checkDockingWindowID( sal_uInt16 nID )

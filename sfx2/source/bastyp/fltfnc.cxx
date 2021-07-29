@@ -75,17 +75,6 @@ using namespace com::sun::star;
 namespace
 {
     class theSfxFilterListener : public rtl::Static<SfxFilterListener, theSfxFilterListener> {};
-    class SfxFilterArray
-    {
-        SfxFilterList_Impl aList;
-    public:
-
-        SfxFilterList_Impl& getList()
-        {
-            return aList;
-        }
-    };
-    class theSfxFilterArray : public rtl::Static<SfxFilterArray, theSfxFilterArray > {};
 }
 
 static SfxFilterList_Impl* pFilterArr = nullptr;
@@ -93,7 +82,8 @@ static bool bFirstRead = true;
 
 static void CreateFilterArr()
 {
-    pFilterArr = &theSfxFilterArray::get().getList();
+    static SfxFilterList_Impl theSfxFilterArray;
+    pFilterArr = &theSfxFilterArray;
     theSfxFilterListener::get();
 }
 

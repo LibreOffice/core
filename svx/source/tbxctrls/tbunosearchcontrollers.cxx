@@ -55,7 +55,6 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/svapp.hxx>
-#include <rtl/instance.hxx>
 #include <svx/labelitemwindow.hxx>
 #include <svx/srchdlg.hxx>
 #include <vcl/event.hxx>
@@ -437,15 +436,10 @@ SearchToolbarControllersManager::SearchToolbarControllersManager()
 {
 }
 
-class theSearchToolbarControllersManager
-    : public rtl::Static<SearchToolbarControllersManager,
-        theSearchToolbarControllersManager>
-{
-};
-
 SearchToolbarControllersManager& SearchToolbarControllersManager::createControllersManager()
 {
-    return theSearchToolbarControllersManager::get();
+    static SearchToolbarControllersManager theSearchToolbarControllersManager;
+    return theSearchToolbarControllersManager;
 }
 
 void SearchToolbarControllersManager::saveSearchHistory(const FindTextFieldControl* pFindTextFieldControl)

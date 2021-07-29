@@ -107,16 +107,16 @@ OUString URIHelper::SmartRel2Abs(INetURLObject const & rTheBaseURIRef,
     return aAbsURIRef.GetMainURL(eDecodeMechanism, eCharset);
 }
 
-namespace { struct MaybeFileHdl : public rtl::Static< Link<OUString *, bool>, MaybeFileHdl > {}; }
+namespace { Link<OUString *, bool> gMaybeFileHdl; }
 
 void URIHelper::SetMaybeFileHdl(Link<OUString *, bool> const & rTheMaybeFileHdl)
 {
-    MaybeFileHdl::get() = rTheMaybeFileHdl;
+    gMaybeFileHdl = rTheMaybeFileHdl;
 }
 
 Link<OUString *, bool> const & URIHelper::GetMaybeFileHdl()
 {
-    return MaybeFileHdl::get();
+    return gMaybeFileHdl;
 }
 
 namespace {
