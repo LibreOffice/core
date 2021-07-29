@@ -43,7 +43,7 @@ using namespace com::sun::star::linguistic2;
 using namespace linguistic;
 
 
-#define XML_NAMESPACE_TCD_STRING        "http://openoffice.org/2003/text-conversion-dictionary"
+constexpr OUStringLiteral XML_NAMESPACE_TCD_STRING = u"http://openoffice.org/2003/text-conversion-dictionary";
 #define CONV_TYPE_HANGUL_HANJA          u"Hangul / Hanja"
 #define CONV_TYPE_SCHINESE_TCHINESE     u"Chinese simplified / Chinese traditional"
 

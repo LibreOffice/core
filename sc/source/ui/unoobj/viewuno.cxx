@@ -112,8 +112,8 @@ static const SfxItemPropertyMapEntry* lcl_GetViewOptPropertyMap()
     return aViewOptPropertyMap_Impl;
 }
 
-#define SCTABVIEWOBJ_SERVICE        "com.sun.star.sheet.SpreadsheetView"
-#define SCVIEWSETTINGS_SERVICE      "com.sun.star.sheet.SpreadsheetViewSettings"
+constexpr OUStringLiteral SCTABVIEWOBJ_SERVICE = u"com.sun.star.sheet.SpreadsheetView";
+constexpr OUStringLiteral SCVIEWSETTINGS_SERVICE = u"com.sun.star.sheet.SpreadsheetViewSettings";
 
 SC_SIMPLE_SERVICE_INFO( ScViewPaneBase, "ScViewPaneObj", "com.sun.star.sheet.SpreadsheetViewPane" )
 

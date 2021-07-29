@@ -28,7 +28,7 @@
 
 using namespace hierarchy_ucp;
 
-#define HIERARCHY_URL_SCHEME          "vnd.sun.star.hier"
+constexpr OUStringLiteral HIERARCHY_URL_SCHEME = u"vnd.sun.star.hier";
 #define HIERARCHY_URL_SCHEME_LENGTH   17
 #define DEFAULT_DATA_SOURCE_SERVICE \
                     "com.sun.star.ucb.DefaultHierarchyDataSource"

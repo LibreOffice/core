@@ -48,8 +48,8 @@ namespace dbaui
 #define PROPERTY_ID_QUERYCOMPOSER       100
 #define PROPERTY_ID_ROWSET              101
 
-#define  PROPERTY_QUERYCOMPOSER   "QueryComposer"
-#define  PROPERTY_ROWSET          "RowSet"
+constexpr OUStringLiteral PROPERTY_QUERYCOMPOSER = u"QueryComposer";
+constexpr OUStringLiteral PROPERTY_ROWSET = u"RowSet";
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;

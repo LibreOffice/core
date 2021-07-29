@@ -59,9 +59,9 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::util;
 
-#define PROPERTY_DIALOGSOURCEURL "DialogSourceURL"
-#define PROPERTY_IMAGEURL "ImageURL"
-#define PROPERTY_GRAPHIC "Graphic"
+constexpr OUStringLiteral PROPERTY_DIALOGSOURCEURL = u"DialogSourceURL";
+constexpr OUStringLiteral PROPERTY_IMAGEURL = u"ImageURL";
+constexpr OUStringLiteral PROPERTY_GRAPHIC = u"Graphic";
 
 
 // we probably will need both a hash of control models and hash of controls

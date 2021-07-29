@@ -47,7 +47,7 @@
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
 
-#define OFFICEVERSION "11.0"
+constexpr OUStringLiteral OFFICEVERSION = u"11.0";
 
 typedef ::std::pair< OUString, ::std::pair< double, double > > VbaTimerInfo;
 

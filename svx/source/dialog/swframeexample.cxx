@@ -31,7 +31,7 @@
 using namespace ::com::sun::star::text;
 
 #define FLYINFLY_BORDER 3
-#define DEMOTEXT        "Ij"
+constexpr OUStringLiteral DEMOTEXT = u"Ij";
 
 namespace {
 

@@ -31,8 +31,8 @@
 #include <osl/file.hxx>
 #include <rtl/ref.hxx>
 
-#define AVMEDIA_WIN_PLAYER_IMPLEMENTATIONNAME "com.sun.star.comp.avmedia.Player_DirectX"
-#define AVMEDIA_WIN_PLAYER_SERVICENAME "com.sun.star.media.Player_DirectX"
+constexpr OUStringLiteral AVMEDIA_WIN_PLAYER_IMPLEMENTATIONNAME = u"com.sun.star.comp.avmedia.Player_DirectX";
+constexpr OUStringLiteral AVMEDIA_WIN_PLAYER_SERVICENAME = u"com.sun.star.media.Player_DirectX";
 
 using namespace ::com::sun::star;
 
