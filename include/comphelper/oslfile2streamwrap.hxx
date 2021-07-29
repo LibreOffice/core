@@ -19,11 +19,11 @@
 #ifndef INCLUDED_COMPHELPER_OSLFILE2STREAMWRAP_HXX
 #define INCLUDED_COMPHELPER_OSLFILE2STREAMWRAP_HXX
 
-#include <osl/mutex.hxx>
 #include <com/sun/star/io/XOutputStream.hpp>
- #include <com/sun/star/io/XInputStream.hpp>
+#include <com/sun/star/io/XInputStream.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/comphelperdllapi.h>
+#include <mutex>
 
 namespace osl { class File; }
 
