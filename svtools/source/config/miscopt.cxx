@@ -40,12 +40,12 @@ using namespace ::osl                   ;
 using namespace ::com::sun::star::uno   ;
 using namespace ::com::sun::star;
 
-#define ROOTNODE_MISC                       "Office.Common/Misc"
+constexpr OUStringLiteral ROOTNODE_MISC = u"Office.Common/Misc";
 
 // PROPERTYHANDLE defines must be sequential from zero for Commit/Load
-#define PROPERTYNAME_SYMBOLSET              "SymbolSet"
+constexpr OUStringLiteral PROPERTYNAME_SYMBOLSET = u"SymbolSet";
 #define PROPERTYHANDLE_SYMBOLSET                0
-#define PROPERTYNAME_ICONTHEME              "SymbolStyle"
+constexpr OUStringLiteral PROPERTYNAME_ICONTHEME = u"SymbolStyle";
 #define PROPERTYHANDLE_SYMBOLSTYLE              1
 
 class SvtMiscOptions_Impl : public ConfigItem

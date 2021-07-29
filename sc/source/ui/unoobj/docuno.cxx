@@ -131,7 +131,7 @@
 using namespace com::sun::star;
 
 // #i111553# provides the name of the VBA constant for this document type (e.g. 'ThisExcelDoc' for Calc)
-#define SC_UNO_VBAGLOBNAME "VBAGlobalConstantName"
+constexpr OUStringLiteral SC_UNO_VBAGLOBNAME = u"VBAGlobalConstantName";
 
 //  no Which-ID here, map only for PropertySetInfo
 
@@ -145,7 +145,7 @@ static const SfxItemPropertyMapEntry* lcl_GetDocOptPropertyMap()
         {u"" SC_UNO_AUTOCONTFOC,             0, cppu::UnoType<bool>::get(),                                             0, 0},
         {u"" SC_UNO_BASICLIBRARIES,          0, cppu::UnoType<script::XLibraryContainer>::get(),     beans::PropertyAttribute::READONLY, 0},
         {u"" SC_UNO_DIALOGLIBRARIES,         0, cppu::UnoType<script::XLibraryContainer>::get(),     beans::PropertyAttribute::READONLY, 0},
-        {u"" SC_UNO_VBAGLOBNAME,             0, cppu::UnoType<OUString>::get(),                  beans::PropertyAttribute::READONLY, 0},
+        {    SC_UNO_VBAGLOBNAME,             0, cppu::UnoType<OUString>::get(),                  beans::PropertyAttribute::READONLY, 0},
         {u"" SC_UNO_CALCASSHOWN,             PROP_UNO_CALCASSHOWN, cppu::UnoType<bool>::get(),                          0, 0},
         {u"" SC_UNONAME_CLOCAL,              0, cppu::UnoType<lang::Locale>::get(),                                    0, 0},
         {u"" SC_UNO_CJK_CLOCAL,              0, cppu::UnoType<lang::Locale>::get(),                                    0, 0},
@@ -223,9 +223,9 @@ static const SfxItemPropertyMapEntry* lcl_GetRowsPropertyMap()
     return aRowsPropertyMap_Impl;
 }
 
-#define SCMODELOBJ_SERVICE          "com.sun.star.sheet.SpreadsheetDocument"
-#define SCDOCSETTINGS_SERVICE       "com.sun.star.sheet.SpreadsheetDocumentSettings"
-#define SCDOC_SERVICE               "com.sun.star.document.OfficeDocument"
+constexpr OUStringLiteral SCMODELOBJ_SERVICE = u"com.sun.star.sheet.SpreadsheetDocument";
+constexpr OUStringLiteral SCDOCSETTINGS_SERVICE = u"com.sun.star.sheet.SpreadsheetDocumentSettings";
+constexpr OUStringLiteral SCDOC_SERVICE = u"com.sun.star.document.OfficeDocument";
 
 SC_SIMPLE_SERVICE_INFO( ScAnnotationsObj, "ScAnnotationsObj", "com.sun.star.sheet.CellAnnotations" )
 SC_SIMPLE_SERVICE_INFO( ScDrawPagesObj, "ScDrawPagesObj", "com.sun.star.drawing.DrawPages" )

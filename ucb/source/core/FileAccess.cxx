@@ -53,7 +53,7 @@
 
 #include <vector>
 
-#define SERVICE_NAME "com.sun.star.ucb.SimpleFileAccess"
+constexpr OUStringLiteral SERVICE_NAME = u"com.sun.star.ucb.SimpleFileAccess";
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;

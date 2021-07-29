@@ -41,10 +41,10 @@ OUString ScUnitConverterData::BuildIndexString(
 }
 
 // ScUnitConverter
-#define CFGPATH_UNIT        "Office.Calc/UnitConversion"
-#define CFGSTR_UNIT_FROM    "FromUnit"
-#define CFGSTR_UNIT_TO      "ToUnit"
-#define CFGSTR_UNIT_FACTOR  "Factor"
+constexpr OUStringLiteral CFGPATH_UNIT = u"Office.Calc/UnitConversion";
+constexpr OUStringLiteral CFGSTR_UNIT_FROM = u"FromUnit";
+constexpr OUStringLiteral CFGSTR_UNIT_TO = u"ToUnit";
+constexpr OUStringLiteral CFGSTR_UNIT_FACTOR = u"Factor";
 
 ScUnitConverter::ScUnitConverter()
 {
