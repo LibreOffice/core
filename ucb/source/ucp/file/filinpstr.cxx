@@ -31,7 +31,7 @@ using namespace com::sun::star;
 #if OSL_DEBUG_LEVEL > 0
 #define THROW_WHERE SAL_WHERE
 #else
-#define THROW_WHERE ""
+constexpr OUStringLiteral THROW_WHERE = u"";
 #endif
 
 XInputStream_impl::XInputStream_impl( const OUString& aUncPath, bool bLock )

@@ -45,7 +45,7 @@
 
 using namespace com::sun::star;
 
-#define SCSAVEVERSION                           "SaveVersionOnClose"
+constexpr OUStringLiteral SCSAVEVERSION = u"SaveVersionOnClose";
 
 static const SfxItemPropertyMapEntry* lcl_GetConfigPropertyMap()
 {
@@ -76,7 +76,7 @@ static const SfxItemPropertyMapEntry* lcl_GetConfigPropertyMap()
         {u"" SC_UNO_FORBIDDEN,    0,  cppu::UnoType<i18n::XForbiddenCharacters>::get(), beans::PropertyAttribute::READONLY, 0},
         {u"" SC_UNO_CHARCOMP,     0,  cppu::UnoType<sal_Int16>::get(),        0, 0},
         {u"" SC_UNO_ASIANKERN,    0,  cppu::UnoType<bool>::get(),              0, 0},
-        {u"" SCSAVEVERSION,       0,  cppu::UnoType<bool>::get(),              0, 0},
+        {    SCSAVEVERSION,       0,  cppu::UnoType<bool>::get(),              0, 0},
         {u"" SC_UNO_UPDTEMPL,     0,  cppu::UnoType<bool>::get(),              0, 0},
         /*Stampit enable/disable print cancel */
         {u"" SC_UNO_ALLOWPRINTJOBCANCEL, 0, cppu::UnoType<bool>::get(),        0, 0},

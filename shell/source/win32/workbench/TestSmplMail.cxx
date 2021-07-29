@@ -41,7 +41,7 @@ using namespace ::com::sun::star::lang  ;
 using namespace std                     ;
 using namespace com::sun::star::system;
 
-#define RDB_SYSPATH "D:\\Projects\\gsl\\shell\\wntmsci7\\bin\\applicat.rdb"
+constexpr OUStringLiteral RDB_SYSPATH = u"D:\\Projects\\gsl\\shell\\wntmsci7\\bin\\applicat.rdb";
 
 
 //  global variables

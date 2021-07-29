@@ -54,7 +54,7 @@ void ScInputOptions::SetDefaults()
 
 //  Config Item containing input options
 
-#define CFGPATH_INPUT           "Office.Calc/Input"
+constexpr OUStringLiteral CFGPATH_INPUT = u"Office.Calc/Input";
 
 #define SCINPUTOPT_MOVEDIR                 0
 #define SCINPUTOPT_MOVESEL                 1

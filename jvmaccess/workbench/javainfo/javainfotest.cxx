@@ -32,7 +32,7 @@ using namespace osl;
 using jvmaccess::JavaInfo;
 
 
-#define JAVA_VERSION "1.4.1_01"
+constexpr OUStringLiteral JAVA_VERSION = u"1.4.1_01";
 
 bool test_constructor1();
 bool test_constructor2();
