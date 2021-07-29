@@ -43,7 +43,7 @@
 
 using namespace com::sun::star;
 
-#define FILE_PROTOCOL       "file:///"
+constexpr OUStringLiteral FILE_PROTOCOL = u"file:///";
 
 namespace
 {

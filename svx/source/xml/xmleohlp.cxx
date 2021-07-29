@@ -56,10 +56,10 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 
-#define XML_CONTAINERSTORAGE_NAME_60        "Pictures"
-#define XML_CONTAINERSTORAGE_NAME       "ObjectReplacements"
-#define XML_EMBEDDEDOBJECT_URL_BASE     "vnd.sun.star.EmbeddedObject:"
-#define XML_EMBEDDEDOBJECTGRAPHIC_URL_BASE "vnd.sun.star.GraphicObject:"
+constexpr OUStringLiteral XML_CONTAINERSTORAGE_NAME_60 = u"Pictures";
+constexpr OUStringLiteral XML_CONTAINERSTORAGE_NAME = u"ObjectReplacements";
+constexpr OUStringLiteral XML_EMBEDDEDOBJECT_URL_BASE = u"vnd.sun.star.EmbeddedObject:";
+constexpr OUStringLiteral XML_EMBEDDEDOBJECTGRAPHIC_URL_BASE = u"vnd.sun.star.GraphicObject:";
 
 
 class OutputStorageWrapper_Impl : public ::cppu::WeakImplHelper<XOutputStream>
@@ -116,9 +116,6 @@ void SAL_CALL OutputStorageWrapper_Impl::closeOutput()
     xOut->closeOutput();
     bStreamClosed = true;
 }
-
-const std::u16string_view gaReplacementGraphicsContainerStorageName( u"" XML_CONTAINERSTORAGE_NAME );
-const std::u16string_view gaReplacementGraphicsContainerStorageName60( u"" XML_CONTAINERSTORAGE_NAME_60 );
 
 SvXMLEmbeddedObjectHelper::SvXMLEmbeddedObjectHelper() :
     WeakComponentImplHelper< XEmbeddedObjectResolver, XNameAccess >( maMutex ),
@@ -274,9 +271,10 @@ bool SvXMLEmbeddedObjectHelper::ImplGetStorageNames(
         {
             bool bOASIS = mxRootStorage.is() &&
                 ( SotStorage::GetVersion( mxRootStorage ) > SOFFICE_FILEFORMAT_60 );
-            rContainerStorageName = bOASIS
-                    ? gaReplacementGraphicsContainerStorageName
-                    : gaReplacementGraphicsContainerStorageName60;
+            if (bOASIS)
+                rContainerStorageName = XML_CONTAINERSTORAGE_NAME;
+            else
+                rContainerStorageName = XML_CONTAINERSTORAGE_NAME_60;
 
             if( pGraphicRepl )
                 *pGraphicRepl = true;

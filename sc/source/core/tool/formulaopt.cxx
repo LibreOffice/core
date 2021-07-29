@@ -146,7 +146,7 @@ ScTpFormulaItem* ScTpFormulaItem::Clone( SfxItemPool * ) const
     return new ScTpFormulaItem( *this );
 }
 
-#define CFGPATH_FORMULA           "Office.Calc/Formula"
+constexpr OUStringLiteral CFGPATH_FORMULA = u"Office.Calc/Formula";
 
 #define SCFORMULAOPT_GRAMMAR              0
 #define SCFORMULAOPT_ENGLISH_FUNCNAME     1

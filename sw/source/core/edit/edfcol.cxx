@@ -98,7 +98,7 @@
 #include <SwStyleNameMapper.hxx>
 #include <comphelper/lok.hxx>
 
-#define WATERMARK_NAME "PowerPlusWaterMarkObject"
+constexpr OUStringLiteral WATERMARK_NAME = u"PowerPlusWaterMarkObject";
 #define WATERMARK_AUTO_SIZE sal_uInt32(1)
 
 namespace

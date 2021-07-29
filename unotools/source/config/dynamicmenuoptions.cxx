@@ -34,15 +34,15 @@
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 
-#define DYNAMICMENU_PROPERTYNAME_URL                    "URL"
-#define DYNAMICMENU_PROPERTYNAME_TITLE                  "Title"
-#define DYNAMICMENU_PROPERTYNAME_IMAGEIDENTIFIER        "ImageIdentifier"
-#define DYNAMICMENU_PROPERTYNAME_TARGETNAME             "TargetName"
+constexpr OUStringLiteral DYNAMICMENU_PROPERTYNAME_URL = u"URL";
+constexpr OUStringLiteral DYNAMICMENU_PROPERTYNAME_TITLE = u"Title";
+constexpr OUStringLiteral DYNAMICMENU_PROPERTYNAME_IMAGEIDENTIFIER = u"ImageIdentifier";
+constexpr OUStringLiteral DYNAMICMENU_PROPERTYNAME_TARGETNAME = u"TargetName";
 
-#define PATHDELIMITER                                   "/"
+constexpr OUStringLiteral PATHDELIMITER = u"/";
 
-#define SETNODE_NEWMENU                                 "New"
-#define SETNODE_WIZARDMENU                              "Wizard"
+constexpr OUStringLiteral SETNODE_NEWMENU = u"New";
+constexpr OUStringLiteral SETNODE_WIZARDMENU = u"Wizard";
 
 #define PROPERTYNAME_URL                                DYNAMICMENU_PROPERTYNAME_URL
 #define PROPERTYNAME_TITLE                              DYNAMICMENU_PROPERTYNAME_TITLE
@@ -51,7 +51,7 @@ using namespace ::com::sun::star::beans;
 
 #define PROPERTYCOUNT                                   4
 
-#define PATHPREFIX_SETUP                                "m"
+constexpr OUStringLiteral PATHPREFIX_SETUP = u"m";
 
 namespace
 {
@@ -235,8 +235,8 @@ static Sequence< OUString > lcl_GetPropertyNames(
 
     // Sort and expand all three list to result list ...
     Sequence< OUString > lProperties;
-    lcl_SortAndExpandPropertyNames( lNewItems          , lProperties, u"" SETNODE_NEWMENU   );
-    lcl_SortAndExpandPropertyNames( lWizardItems       , lProperties, u"" SETNODE_WIZARDMENU );
+    lcl_SortAndExpandPropertyNames( lNewItems          , lProperties, SETNODE_NEWMENU   );
+    lcl_SortAndExpandPropertyNames( lWizardItems       , lProperties, SETNODE_WIZARDMENU );
 
     // Return result.
     return lProperties;
