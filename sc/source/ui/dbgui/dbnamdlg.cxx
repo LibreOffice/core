@@ -249,6 +249,7 @@ void ScDbNameDlg::Init()
     bSaved = true;
     xSaveObj->Save();
     NameModifyHdl( *m_xEdName );
+    bInvalid = false;
 }
 
 void ScDbNameDlg::SetInfoStrings( const ScDBData* pDBData )
@@ -376,17 +377,18 @@ bool ScDbNameDlg::IsRefInputMode() const
 
 IMPL_LINK_NOARG(ScDbNameDlg, OkBtnHdl, weld::Button&, void)
 {
+    bInvalid = false;
     AddBtnHdl(*m_xBtnAdd);
 
     // Pass the changes and the remove list to the view: both are
     // transferred as a reference only, so that no dead memory can
     // be created at this point:
+    if (!bInvalid)
     {
         ScDBDocFunc aFunc(*m_rViewData.GetDocShell());
         aFunc.ModifyAllDBData(aLocalDbCol, aRemoveList);
+        response(RET_OK);
     }
-
-    response(RET_OK);
 }
 
 IMPL_LINK_NOARG(ScDbNameDlg, CancelBtnHdl, weld::Button&, void)
@@ -468,6 +470,7 @@ IMPL_LINK_NOARG(ScDbNameDlg, AddBtnHdl, weld::Button&, void)
             ERRORBOX(m_xDialog.get(), aStrInvalid);
             m_xEdAssign->SelectAll();
             m_xEdAssign->GrabFocus();
+            bInvalid = true;
         }
     }
     else
@@ -475,6 +478,7 @@ IMPL_LINK_NOARG(ScDbNameDlg, AddBtnHdl, weld::Button&, void)
         ERRORBOX(m_xDialog.get(), ScResId(STR_INVALIDNAME));
         m_xEdName->select_entry_region(0, -1);
         m_xEdName->grab_focus();
+        bInvalid = true;
     }
 }
 
