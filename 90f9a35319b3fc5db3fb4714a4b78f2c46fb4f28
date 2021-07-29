@@ -16,6 +16,24 @@
       "revId": "90f9a35319b3fc5db3fb4714a4b78f2c46fb4f28",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a805d768_2ab9d873",
+        "filename": "vcl/source/treelist/treelistbox.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1113,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2021-07-29T14:00:57Z",
+      "side": 0,
+      "message": "I removed that block by purpose, that\u0027s why I checked for it\u0027s roots before (see https://bugs.documentfoundation.org/show_bug.cgi?id\u003d143114#c10 part 1). If problems arise, we could easily add it again.\n\nI personaly would comment it out, adding a tdf#143114 and why it\u0027s commented out explanation and may need reactivation, but I learned that some people just remove things like that and argue that it\u0027s in the git history if needed, so I no longer do that...\n\nI do not understand your 2nd comment - you talk about renaming the *CheckCtrl methods? I see no need there..?",
+      "parentUuid": "ede1ae00_b223a335",
+      "revId": "90f9a35319b3fc5db3fb4714a4b78f2c46fb4f28",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }

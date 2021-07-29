@@ -22,6 +22,30 @@
       "revId": "e9b5ce45f731367433e5b468505c38d3c330545d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0dd71664_56b4d0ce",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2021-07-29T14:00:57Z",
+      "side": 1,
+      "message": "It\u0027s not too different, with your hint (thanks!) it may cristallize more like building two groups. With this change applied still some UI backends DO immediately switch the CheckBox on MouseDown - that\u0027s what I need to look into now.",
+      "parentUuid": "20b2b4af_28482b5f",
+      "range": {
+        "startLine": 19,
+        "startChar": 0,
+        "endLine": 22,
+        "endChar": 30
+      },
+      "revId": "e9b5ce45f731367433e5b468505c38d3c330545d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
