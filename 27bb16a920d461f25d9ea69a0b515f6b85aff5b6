@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "06d3b028_a32323fb",
+        "filename": "sfx2/source/inc/templdgi.hxx",
+        "patchSetId": 75
+      },
+      "lineNbr": 301,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-29T04:44:44Z",
+      "side": 0,
+      "message": "Please restore this empty line that you removed.",
+      "revId": "27bb16a920d461f25d9ea69a0b515f6b85aff5b6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}

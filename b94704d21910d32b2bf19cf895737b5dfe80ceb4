@@ -1,0 +1,271 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b233f03e_e2ef2a20",
+        "filename": "sfx2/source/dialog/StyleList.cxx",
+        "patchSetId": 75
+      },
+      "lineNbr": 932,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-29T04:44:44Z",
+      "side": 1,
+      "message": "No space between // and text",
+      "revId": "b94704d21910d32b2bf19cf895737b5dfe80ceb4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4d2fdae3_2a89b9a9",
+        "filename": "sfx2/source/dialog/StyleList.cxx",
+        "patchSetId": 75
+      },
+      "lineNbr": 1443,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-29T04:44:44Z",
+      "side": 1,
+      "message": "This comment block is mis-indented",
+      "revId": "b94704d21910d32b2bf19cf895737b5dfe80ceb4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "edea6732_ba7f24e5",
+        "filename": "sfx2/source/dialog/StyleList.cxx",
+        "patchSetId": 75
+      },
+      "lineNbr": 1488,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-29T04:44:44Z",
+      "side": 1,
+      "message": "A standalone semicolon - why?",
+      "revId": "b94704d21910d32b2bf19cf895737b5dfe80ceb4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8074e03c_f0faa92b",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 75
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-29T04:44:44Z",
+      "side": 1,
+      "message": "Why is is called \"tempStyleList\"? It is not a temporary object (the one that is destroyed after the use), but it is a reference to some existing StyleList. We use prefix \"r\" for references. Simple \"rStyleList\" would be correct.",
+      "revId": "b94704d21910d32b2bf19cf895737b5dfe80ceb4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "24e37b84_e6404f6e",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 75
+      },
+      "lineNbr": 402,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-29T04:44:44Z",
+      "side": 1,
+      "message": "And here",
+      "revId": "b94704d21910d32b2bf19cf895737b5dfe80ceb4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "48075f7c_aa69abf1",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 75
+      },
+      "lineNbr": 470,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-29T04:44:44Z",
+      "side": 1,
+      "message": "And here",
+      "revId": "b94704d21910d32b2bf19cf895737b5dfe80ceb4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e2bad1bb_f6962eeb",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 75
+      },
+      "lineNbr": 534,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-29T04:44:44Z",
+      "side": 1,
+      "message": "Here",
+      "revId": "b94704d21910d32b2bf19cf895737b5dfe80ceb4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "445a58e2_60f122ac",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 75
+      },
+      "lineNbr": 561,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-29T04:44:44Z",
+      "side": 1,
+      "message": "This comment line is mis-indented. But since it is short, and just continues a short line above, it\u0027s best to just join them, and have a single bit longer comment on line 560.",
+      "revId": "b94704d21910d32b2bf19cf895737b5dfe80ceb4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bce6c995_d88443fc",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 75
+      },
+      "lineNbr": 596,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-29T04:44:44Z",
+      "side": 1,
+      "message": "temp-\u003er",
+      "revId": "b94704d21910d32b2bf19cf895737b5dfe80ceb4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a9e265e7_75b05016",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 75
+      },
+      "lineNbr": 904,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-29T04:44:44Z",
+      "side": 1,
+      "message": "These braces around the line 905 are unnecessary in this change - please remove",
+      "revId": "b94704d21910d32b2bf19cf895737b5dfe80ceb4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "66c9e44b_23cd6f15",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 75
+      },
+      "lineNbr": 910,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-29T04:44:44Z",
+      "side": 1,
+      "message": "temp-\u003er",
+      "revId": "b94704d21910d32b2bf19cf895737b5dfe80ceb4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a8e85a60_0f9e29d3",
+        "filename": "sfx2/source/inc/StyleList.hxx",
+        "patchSetId": 75
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-29T04:44:44Z",
+      "side": 1,
+      "message": "Please use the longer license header here, with reference to Apache license from older code, as you use in corresponding CXX. Even though we create a new file, it is still largely based on the pre-existing code, and so must retain its license notice.",
+      "revId": "b94704d21910d32b2bf19cf895737b5dfe80ceb4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c7a72923_0cc4983c",
+        "filename": "sfx2/source/inc/templdgi.hxx",
+        "patchSetId": 75
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-29T04:44:44Z",
+      "side": 1,
+      "message": "A typo - please remove the first \"a\"",
+      "range": {
+        "startLine": 149,
+        "startChar": 37,
+        "endLine": 149,
+        "endChar": 41
+      },
+      "revId": "b94704d21910d32b2bf19cf895737b5dfe80ceb4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2417659d_e8ed969d",
+        "filename": "sfx2/source/inc/templdgi.hxx",
+        "patchSetId": 75
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-29T04:44:44Z",
+      "side": 1,
+      "message": "What is \"new/newmenu\"?",
+      "range": {
+        "startLine": 156,
+        "startChar": 36,
+        "endLine": 156,
+        "endChar": 47
+      },
+      "revId": "b94704d21910d32b2bf19cf895737b5dfe80ceb4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "865ba619_274742dd",
+        "filename": "sfx2/source/inc/templdgi.hxx",
+        "patchSetId": 75
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-29T04:44:44Z",
+      "side": 1,
+      "message": "Why do we need to move these to the public section?",
+      "revId": "b94704d21910d32b2bf19cf895737b5dfe80ceb4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
