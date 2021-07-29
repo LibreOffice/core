@@ -23,7 +23,7 @@
 
 #include <boost/property_tree/json_parser.hpp>
 
-#define FILEDIALOG_FILTER_JSON "*.json"
+constexpr OUStringLiteral FILEDIALOG_FILTER_JSON = u"*.json";
 
 int TargetsTable::GetRowByTargetName(std::u16string_view sName)
 {

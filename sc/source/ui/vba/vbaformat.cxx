@@ -53,8 +53,8 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-#define FORMATSTRING "FormatString"
-#define LOCALE "Locale"
+constexpr OUStringLiteral FORMATSTRING = u"FormatString";
+constexpr OUStringLiteral LOCALE = u"Locale";
 
 template< typename... Ifc >
 ScVbaFormat< Ifc... >::ScVbaFormat( const uno::Reference< XHelperInterface >& xParent,

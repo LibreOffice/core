@@ -48,12 +48,12 @@
 // my defines
 
 #define TEST_CLIPBOARD
-#define RDB_SYSPATH  "d:\\projects\\src623\\dtrans\\wntmsci7\\bin\\applicat.rdb"
+constexpr OUStringLiteral RDB_SYSPATH = u"d:\\projects\\src623\\dtrans\\wntmsci7\\bin\\applicat.rdb";
 #define WINCLIPBOARD_SERVICE_NAME L"com.sun.star.datatransfer.clipboard.SystemClipboard"
 #define  WRITE_CB
 #define EVT_MANUAL_RESET     TRUE
 #define EVT_INIT_NONSIGNALED FALSE
-#define EVT_NONAME           ""
+constexpr OUStringLiteral EVT_NONAME = u"";
 
 //  namespaces
 

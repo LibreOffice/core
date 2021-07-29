@@ -116,10 +116,10 @@ using namespace ::xmloff::token;
 #define XML_MODEL_SERVICE_MATH      "com.sun.star.formula.FormulaProperties"
 #define XML_MODEL_SERVICE_CHART     "com.sun.star.chart.ChartDocument"
 
-#define XML_USEPRETTYPRINTING       "UsePrettyPrinting"
+constexpr OUStringLiteral XML_USEPRETTYPRINTING = u"UsePrettyPrinting";
 
-#define XML_EMBEDDEDOBJECTGRAPHIC_URL_BASE "vnd.sun.star.GraphicObject:"
-#define XML_EMBEDDEDOBJECT_URL_BASE     "vnd.sun.star.EmbeddedObject:"
+constexpr OUStringLiteral XML_EMBEDDEDOBJECTGRAPHIC_URL_BASE = u"vnd.sun.star.GraphicObject:";
+constexpr OUStringLiteral XML_EMBEDDEDOBJECT_URL_BASE = u"vnd.sun.star.EmbeddedObject:";
 
 namespace {
 
