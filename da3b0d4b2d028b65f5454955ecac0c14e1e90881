@@ -16,6 +16,24 @@
       "revId": "da3b0d4b2d028b65f5454955ecac0c14e1e90881",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "489569c8_0439f64b",
+        "filename": "sfx2/source/inc/templdgi.hxx",
+        "patchSetId": 77
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-07-29T09:28:18Z",
+      "side": 1,
+      "message": "Addressed",
+      "parentUuid": "1841b70e_8b302e26",
+      "revId": "da3b0d4b2d028b65f5454955ecac0c14e1e90881",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }

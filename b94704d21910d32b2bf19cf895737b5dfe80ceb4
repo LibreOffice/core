@@ -156,6 +156,24 @@
     },
     {
       "key": {
+        "uuid": "2893e41c_0785691e",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 75
+      },
+      "lineNbr": 561,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-07-29T09:28:18Z",
+      "side": 1,
+      "message": "Addressed",
+      "parentUuid": "1af950e8_2f37765a",
+      "revId": "b94704d21910d32b2bf19cf895737b5dfe80ceb4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "bce6c995_d88443fc",
         "filename": "sfx2/source/dialog/templdlg.cxx",
         "patchSetId": 75
@@ -202,6 +220,24 @@
       "side": 1,
       "message": "Not addressed",
       "parentUuid": "a9e265e7_75b05016",
+      "revId": "b94704d21910d32b2bf19cf895737b5dfe80ceb4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "32815f62_e9b9802a",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 75
+      },
+      "lineNbr": 904,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-07-29T09:28:18Z",
+      "side": 1,
+      "message": "Addressed",
+      "parentUuid": "e93c1358_73a77d30",
       "revId": "b94704d21910d32b2bf19cf895737b5dfe80ceb4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
@@ -277,6 +313,30 @@
       "side": 1,
       "message": "Not addressed",
       "parentUuid": "c7a72923_0cc4983c",
+      "range": {
+        "startLine": 149,
+        "startChar": 37,
+        "endLine": 149,
+        "endChar": 41
+      },
+      "revId": "b94704d21910d32b2bf19cf895737b5dfe80ceb4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7edc6676_85aae003",
+        "filename": "sfx2/source/inc/templdgi.hxx",
+        "patchSetId": 75
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-07-29T09:28:18Z",
+      "side": 1,
+      "message": "Addressed",
+      "parentUuid": "7e1c997d_ccc1a6d7",
       "range": {
         "startLine": 149,
         "startChar": 37,
