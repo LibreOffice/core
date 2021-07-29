@@ -720,7 +720,8 @@ CPPUNIT_TEST_FIXTURE(Test, testN820504)
 CPPUNIT_TEST_FIXTURE(Test, testFdo43641)
 {
     load(mpTestDocumentPath, "fdo43641.docx");
-    uno::Reference<container::XIndexAccess> xGroupShape(getShape(1), uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xGroupLockedCanvas(getShape(1), uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xGroupShape(xGroupLockedCanvas->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xLine(xGroupShape->getByIndex(1), uno::UNO_QUERY);
     // This was 2200, not 2579 in mm100, i.e. the size of the line shape was incorrect.
     // File cx=928694EMU = 2579.7Hmm, round up 2580Hmm. Currently off by 1.

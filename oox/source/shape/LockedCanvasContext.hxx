@@ -25,10 +25,10 @@ public:
     oox::core::ContextHandlerRef onCreateContext(sal_Int32 nElementToken,
                                                  const ::oox::AttributeList& rAttribs) override;
 
-    const oox::drawingml::ShapePtr& getShape() const { return mpShape; }
+    const oox::drawingml::ShapePtr& getShape() const { return mpShapePtr; }
 
 private:
-    oox::drawingml::ShapePtr mpShape;
+    oox::drawingml::ShapePtr mpShapePtr;
 };
 }
 

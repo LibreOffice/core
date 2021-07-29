@@ -913,8 +913,12 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                         // and contour wrap is different to Word. As workaround diagrams are excluded
                         // here in various places.
                         const bool bIsDiagram = oox::drawingml::DrawingML::IsDiagram(m_xShape);
+                        // tdf#143476: A lockedCanvas (Word2007) is imported as group, but has not
+                        // got size and position. Values from m_Impl has to be used.
+                        bool bIsLockedCanvas(false);
+                        aInteropGrabBag.getValue("LockedCanvas") >>= bIsLockedCanvas;
                         const bool bIsGroupOrLine = (xServiceInfo->supportsService("com.sun.star.drawing.GroupShape")
-                            && !bIsDiagram)
+                            && !bIsDiagram && !bIsLockedCanvas)
                             || xServiceInfo->supportsService("com.sun.star.drawing.LineShape");
                         SdrObject* pShape = GetSdrObjectFromXShape(m_xShape);
                         if ((bIsGroupOrLine && !lcl_bHasGroupSlantedChild(pShape) && nOOXAngle == 0)
