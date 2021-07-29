@@ -141,13 +141,30 @@ void InsTableBox( SwDoc& rDoc, SwTableNode* pTableNd,
 
     if( pCNd->IsTextNode() )
     {
-        if( pBox->GetSaveNumFormatColor() && pCNd->GetpSwAttrSet() )
+        if( pCNd->GetpSwAttrSet() )
         {
             SwAttrSet aAttrSet( *pCNd->GetpSwAttrSet() );
-            if( pBox->GetSaveUserColor() )
-                aAttrSet.Put( SvxColorItem( *pBox->GetSaveUserColor(), RES_CHRATR_COLOR ));
-            else
-                aAttrSet.ClearItem( RES_CHRATR_COLOR );
+            SwTextNode* pTNd = static_cast<SwTextNode*>(pCNd);
+            SwpHints * pSwpHints = pTNd->GetpSwpHints();
+            // tdf#90069 tdf#131546 fix character style of new table rows after DOCX import
+            // FIXME: limit this for DOCX import, e.g. paragraph mark with direct formatting
+            if( pSwpHints && pSwpHints->Count() != 0 )
+            {
+                SwTextAttr* textAttr = pSwpHints->Get(pSwpHints->Count() - 1);
+                if( textAttr->Which() == RES_TXTATR_AUTOFMT )
+                {
+                    SwFormatAutoFormat& format = static_cast<SwFormatAutoFormat&>(textAttr->GetAttr());
+                    const std::shared_ptr<SfxItemSet>& handle = format.GetStyleHandle();
+                    aAttrSet.Put(*handle);
+                }
+            }
+            if( pBox->GetSaveNumFormatColor() )
+            {
+                if( pBox->GetSaveUserColor() )
+                    aAttrSet.Put( SvxColorItem( *pBox->GetSaveUserColor(), RES_CHRATR_COLOR ));
+                else
+                    aAttrSet.ClearItem( RES_CHRATR_COLOR );
+            }
             rDoc.GetNodes().InsBoxen( pTableNd, pLine, pBoxFrameFormat,
                                     static_cast<SwTextNode*>(pCNd)->GetTextColl(),
                                     &aAttrSet, nInsPos, nCnt );
@@ -155,8 +172,7 @@ void InsTableBox( SwDoc& rDoc, SwTableNode* pTableNd,
         else
             rDoc.GetNodes().InsBoxen( pTableNd, pLine, pBoxFrameFormat,
                                     static_cast<SwTextNode*>(pCNd)->GetTextColl(),
-                                    pCNd->GetpSwAttrSet(),
-                                    nInsPos, nCnt );
+                                    pCNd->GetpSwAttrSet(), nInsPos, nCnt );
     }
     else
         rDoc.GetNodes().InsBoxen( pTableNd, pLine, pBoxFrameFormat,
