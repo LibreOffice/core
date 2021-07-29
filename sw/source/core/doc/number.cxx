@@ -1185,13 +1185,12 @@ namespace numfunc
             std::unique_ptr<vcl::Font> mpFont;
     };
 
-        class theSwDefBulletConfig
-            : public rtl::Static<SwDefBulletConfig, theSwDefBulletConfig>{};
     }
 
     SwDefBulletConfig& SwDefBulletConfig::getInstance()
     {
-        return theSwDefBulletConfig::get();
+        static SwDefBulletConfig theSwDefBulletConfig;
+        return theSwDefBulletConfig;
     }
 
     SwDefBulletConfig::SwDefBulletConfig()
@@ -1384,12 +1383,12 @@ namespace numfunc
             bool mbChangeIndentOnTabAtFirstPosOfFirstListItem;
     };
 
-        class theSwNumberingUIBehaviorConfig : public rtl::Static<SwNumberingUIBehaviorConfig, theSwNumberingUIBehaviorConfig>{};
     }
 
     SwNumberingUIBehaviorConfig& SwNumberingUIBehaviorConfig::getInstance()
     {
-        return theSwNumberingUIBehaviorConfig::get();
+        static SwNumberingUIBehaviorConfig theSwNumberingUIBehaviorConfig;
+        return theSwNumberingUIBehaviorConfig;
     }
 
     SwNumberingUIBehaviorConfig::SwNumberingUIBehaviorConfig()

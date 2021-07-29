@@ -326,17 +326,12 @@ namespace
             return OUString();
         }
     };
-
-    class theFilledToolBarResIdToResourceURLMap
-        : public rtl::Static<FilledToolBarResIdToResourceURLMap,
-                             theFilledToolBarResIdToResourceURLMap>
-    {
-    };
 }
 
 static OUString GetResourceURLFromToolbarId(ToolbarId eId)
 {
-    return theFilledToolBarResIdToResourceURLMap::get().findURL(eId);
+    static FilledToolBarResIdToResourceURLMap theFilledToolBarResIdToResourceURLMap;
+    return theFilledToolBarResIdToResourceURLMap.findURL(eId);
 }
 
 static sal_uInt16 TbxMatch( sal_uInt16 nPos )
