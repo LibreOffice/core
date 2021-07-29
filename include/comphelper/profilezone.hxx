@@ -22,8 +22,6 @@ namespace comphelper
 {
 class COMPHELPER_DLLPUBLIC ProfileZone : public NamedEvent
 {
-    static int s_nNesting; // level of nested zones.
-
     long long m_nCreateTime;
     bool m_bConsole;
     void stopConsole();
@@ -31,7 +29,14 @@ class COMPHELPER_DLLPUBLIC ProfileZone : public NamedEvent
 
     void addRecording();
 
+<<<<<<< HEAD   (cefb71 editengine-columns: number of columns is sal_Int16)
  ProfileZone(const char* sName, const OUString &sArgs, bool bConsole)
+=======
+    static void setNestingLevel(int nNestingLevel);
+    static int getNestingLevel();
+
+    ProfileZone(const char* sName, const OUString& sArgs)
+>>>>>>> CHANGE (74f4a1 Fix Nesting Level Bug in ProfileZone)
         : NamedEvent(sName, sArgs)
         , m_bConsole(bConsole)
         , m_nNesting(-1)
@@ -40,7 +45,8 @@ class COMPHELPER_DLLPUBLIC ProfileZone : public NamedEvent
         {
             m_nCreateTime = getNow();
 
-            m_nNesting = s_nNesting++;
+            m_nNesting = getNestingLevel();
+            setNestingLevel(getNestingLevel() + 1);
         }
         else
             m_nCreateTime = 0;
@@ -77,9 +83,9 @@ class COMPHELPER_DLLPUBLIC ProfileZone : public NamedEvent
     {
         if (m_nCreateTime > 0)
         {
-            s_nNesting--;
+            setNestingLevel(getNestingLevel() - 1);
 
-            if (m_nNesting != s_nNesting)
+            if (m_nNesting != getNestingLevel())
             {
                 SAL_WARN("comphelper.traceevent", "Incorrect ProfileZone nesting for " << m_sName);
             }
