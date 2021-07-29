@@ -2169,11 +2169,11 @@ SvxFrameWindow_Impl::SvxFrameWindow_Impl(SvxFrameToolBoxControl* pControl, weld:
     InitImageList();
 
     /*
-     *  1       2        3         4
-     *  -------------------------------------
-     *  NONE    LEFT     RIGHT     LEFTRIGHT
-     *  TOP     BOTTOM   TOPBOTTOM OUTER
-     *  -------------------------------------
+     *  1       2        3         4            5
+     *  ------------------------------------------------------
+     *  NONE    LEFT     RIGHT     LEFTRIGHT    DIAGONALLEFT
+     *  TOP     BOTTOM   TOPBOTTOM OUTER        DIAGONALRIGHT
+     *  ------------------------------------------------------
      *  HOR     HORINNER VERINNER   ALL         <- can be switched of via bParagraphMode
      */
 
@@ -2222,6 +2222,15 @@ IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl, ValueSet*, void)
     SvxBoxItem          aBorderOuter( SID_ATTR_BORDER_OUTER );
     SvxBoxInfoItem      aBorderInner( SID_ATTR_BORDER_INNER );
     SvxBorderLine       theDefLine;
+
+    // diagonal left border
+    SvxBorderLine       dLeftBorderLine( nullptr, 1 );
+    SvxLineItem         dLeftLineItem( SID_ATTR_BORDER_DIAG_TLBR );
+
+    // diagonal right border
+    SvxBorderLine       dRightBorderLine( nullptr, 1 );
+    SvxLineItem         dRightLineItem( SID_ATTR_BORDER_DIAG_BLTR );
+
     SvxBorderLine       *pLeft = nullptr,
                         *pRight = nullptr,
                         *pTop = nullptr,
@@ -2245,7 +2254,8 @@ IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl, ValueSet*, void)
         case 4: pLeft = pRight = &theDefLine;
                 nValidFlags |=  FrmValidFlags::Right|FrmValidFlags::Left;
         break;  // LEFTRIGHT
-        case 5: break;  // DIAGONAL LEFT
+        case 5: dLeftLineItem.SetLine(&dLeftBorderLine);
+        break;  // DIAGONAL LEFT
         case 6: pTop = &theDefLine;
                 nValidFlags |= FrmValidFlags::Top;
         break;  // TOP
@@ -2258,7 +2268,9 @@ IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl, ValueSet*, void)
         case 9: pLeft = pRight = pTop = pBottom = &theDefLine;
                 nValidFlags |= FrmValidFlags::Left | FrmValidFlags::Right | FrmValidFlags::Top | FrmValidFlags::Bottom;
         break;  // OUTER
-        case 10: break;  // DIAGONAL RIGHT
+        case 10:
+                dRightLineItem.SetLine(&dRightBorderLine);
+        break;  // DIAGONAL RIGHT
 
         // Inner Table:
         case 11: // HOR
@@ -2292,30 +2304,57 @@ IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl, ValueSet*, void)
         default:
         break;
     }
-    aBorderOuter.SetLine( pLeft, SvxBoxItemLine::LEFT );
-    aBorderOuter.SetLine( pRight, SvxBoxItemLine::RIGHT );
-    aBorderOuter.SetLine( pTop, SvxBoxItemLine::TOP );
-    aBorderOuter.SetLine( pBottom, SvxBoxItemLine::BOTTOM );
 
-    if(nModifier == KEY_SHIFT)
-        nValidFlags |= FrmValidFlags::AllMask;
-    aBorderInner.SetValid( SvxBoxInfoItemValidFlags::TOP,       bool(nValidFlags&FrmValidFlags::Top ));
-    aBorderInner.SetValid( SvxBoxInfoItemValidFlags::BOTTOM,    bool(nValidFlags&FrmValidFlags::Bottom ));
-    aBorderInner.SetValid( SvxBoxInfoItemValidFlags::LEFT,      bool(nValidFlags&FrmValidFlags::Left));
-    aBorderInner.SetValid( SvxBoxInfoItemValidFlags::RIGHT,     bool(nValidFlags&FrmValidFlags::Right ));
-    aBorderInner.SetValid( SvxBoxInfoItemValidFlags::HORI,      bool(nValidFlags&FrmValidFlags::HInner ));
-    aBorderInner.SetValid( SvxBoxInfoItemValidFlags::VERT,      bool(nValidFlags&FrmValidFlags::VInner));
-    aBorderInner.SetValid( SvxBoxInfoItemValidFlags::DISTANCE );
-    aBorderInner.SetValid( SvxBoxInfoItemValidFlags::DISABLE,   false );
+    if (nSel == 5)
+    {
+        Any a;
+        Sequence< PropertyValue > aArgs( 1 );
+        aArgs[0].Name = "BorderTLBR";
+        dLeftLineItem.QueryValue( a );
+        aArgs[0].Value = a;
 
-    Any a;
-    Sequence< PropertyValue > aArgs( 2 );
-    aArgs[0].Name = "OuterBorder";
-    aBorderOuter.QueryValue( a );
-    aArgs[0].Value = a;
-    aArgs[1].Name = "InnerBorder";
-    aBorderInner.QueryValue( a );
-    aArgs[1].Value = a;
+        mxControl->dispatchCommand( ".uno:BorderTLBR", aArgs );
+    }
+    else if (nSel == 10)
+    {
+        Any a;
+        Sequence< PropertyValue > aArgs( 1 );
+        aArgs[0].Name = "BorderBLTR";
+        dLeftLineItem.QueryValue( a );
+        aArgs[0].Value = a;
+
+        mxControl->dispatchCommand( ".uno:BorderBLTR", aArgs );
+    }
+    else
+    {
+        aBorderOuter.SetLine( pLeft, SvxBoxItemLine::LEFT );
+        aBorderOuter.SetLine( pRight, SvxBoxItemLine::RIGHT );
+        aBorderOuter.SetLine( pTop, SvxBoxItemLine::TOP );
+        aBorderOuter.SetLine( pBottom, SvxBoxItemLine::BOTTOM );
+
+        if(nModifier == KEY_SHIFT)
+            nValidFlags |= FrmValidFlags::AllMask;
+        aBorderInner.SetValid( SvxBoxInfoItemValidFlags::TOP,       bool(nValidFlags&FrmValidFlags::Top ));
+        aBorderInner.SetValid( SvxBoxInfoItemValidFlags::BOTTOM,    bool(nValidFlags&FrmValidFlags::Bottom ));
+        aBorderInner.SetValid( SvxBoxInfoItemValidFlags::LEFT,      bool(nValidFlags&FrmValidFlags::Left));
+        aBorderInner.SetValid( SvxBoxInfoItemValidFlags::RIGHT,     bool(nValidFlags&FrmValidFlags::Right ));
+        aBorderInner.SetValid( SvxBoxInfoItemValidFlags::HORI,      bool(nValidFlags&FrmValidFlags::HInner ));
+        aBorderInner.SetValid( SvxBoxInfoItemValidFlags::VERT,      bool(nValidFlags&FrmValidFlags::VInner));
+        aBorderInner.SetValid( SvxBoxInfoItemValidFlags::DISTANCE );
+        aBorderInner.SetValid( SvxBoxInfoItemValidFlags::DISABLE,   false );
+
+        Any a;
+        Sequence< PropertyValue > aArgs( 2 );
+        aArgs[0].Name = "OuterBorder";
+        aBorderOuter.QueryValue( a );
+        aArgs[0].Value = a;
+        aArgs[1].Name = "InnerBorder";
+        aBorderInner.QueryValue( a );
+        aArgs[1].Value = a;
+
+        mxControl->dispatchCommand( ".uno:SetBorderStyle", aArgs );
+
+    }
 
     if (mxFrameSet)
     {
@@ -2324,8 +2363,6 @@ IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl, ValueSet*, void)
            while in Dispatch()), accessing members will crash in this case. */
         mxFrameSet->SetNoSelection();
     }
-
-    mxControl->dispatchCommand( ".uno:SetBorderStyle", aArgs );
 
     mxControl->EndPopupMode();
 }
