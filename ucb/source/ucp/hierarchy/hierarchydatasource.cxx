@@ -46,7 +46,7 @@ using namespace hierarchy_ucp;
 
 
 // describe path of cfg entry
-#define CFGPROPERTY_NODEPATH    "nodepath"
+constexpr OUStringLiteral CFGPROPERTY_NODEPATH = u"nodepath";
 
 #define READ_SERVICE_NAME      u"com.sun.star.ucb.HierarchyDataReadAccess"
 #define READWRITE_SERVICE_NAME u"com.sun.star.ucb.HierarchyDataReadWriteAccess"

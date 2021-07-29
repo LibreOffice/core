@@ -62,7 +62,7 @@
 #define GAPTOEXTRAPREVIEW 10
 #define MINGAPWIDTH 2
 
-#define FONTNAMEBOXMRUENTRIESFILE "/user/config/fontnameboxmruentries"
+constexpr OUStringLiteral FONTNAMEBOXMRUENTRIESFILE = u"/user/config/fontnameboxmruentries";
 
 
 BorderWidthImpl::BorderWidthImpl( BorderWidthImplFlags nFlags, double nRate1, double nRate2, double nRateGap ):

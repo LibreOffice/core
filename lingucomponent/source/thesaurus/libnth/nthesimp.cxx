@@ -55,7 +55,7 @@
 #include <string.h>
 
 // XML-header to query SPELLML support
-#define SPELLML_SUPPORT "<?xml?>"
+constexpr OUStringLiteral SPELLML_SUPPORT = u"<?xml?>";
 
 using namespace osl;
 using namespace com::sun::star;

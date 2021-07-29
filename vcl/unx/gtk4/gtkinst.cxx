@@ -8,7 +8,7 @@
  */
 
 // make gtk4 plug advertise correctly as gtk4
-#define GTK_TOOLKIT_NAME "gtk4"
+constexpr OUStringLiteral GTK_TOOLKIT_NAME = u"gtk4";
 
 #include "convert3to4.hxx"
 #include "notifyinglayout.hxx"

@@ -34,7 +34,7 @@
 
 using namespace com::sun::star;
 
-#define SCSOLVER_SERVICE "com.sun.star.sheet.Solver"
+constexpr OUStringLiteral SCSOLVER_SERVICE = u"com.sun.star.sheet.Solver";
 
 void ScSolverUtil::GetImplementations( uno::Sequence<OUString>& rImplNames,
                                        uno::Sequence<OUString>& rDescriptions )

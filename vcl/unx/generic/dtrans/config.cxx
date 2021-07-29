@@ -23,8 +23,8 @@
 
 #include "X11_selection.hxx"
 
-#define SETTINGS_CONFIGNODE "VCL/Settings/Transfer"
-#define SELECTION_PROPERTY "SelectionTimeout"
+constexpr OUStringLiteral SETTINGS_CONFIGNODE = u"VCL/Settings/Transfer";
+constexpr OUStringLiteral SELECTION_PROPERTY = u"SelectionTimeout";
 
 namespace x11
 {

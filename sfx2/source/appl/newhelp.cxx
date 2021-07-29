@@ -109,24 +109,24 @@ using namespace ::comphelper;
 
 // defines ---------------------------------------------------------------
 
-#define CONFIGNAME_HELPWIN      "OfficeHelp"
-#define CONFIGNAME_INDEXWIN     "OfficeHelpIndex"
-#define CONFIGNAME_SEARCHPAGE   "OfficeHelpSearch"
-#define IMAGE_URL               "private:factory/"
+constexpr OUStringLiteral CONFIGNAME_HELPWIN = u"OfficeHelp";
+constexpr OUStringLiteral CONFIGNAME_INDEXWIN = u"OfficeHelpIndex";
+constexpr OUStringLiteral CONFIGNAME_SEARCHPAGE = u"OfficeHelpSearch";
+constexpr OUStringLiteral IMAGE_URL = u"private:factory/";
 
-#define PROPERTY_KEYWORDLIST    "KeywordList"
-#define PROPERTY_KEYWORDREF     "KeywordRef"
-#define PROPERTY_ANCHORREF      "KeywordAnchorForRef"
-#define PROPERTY_TITLEREF       "KeywordTitleForRef"
-#define PROPERTY_TITLE          "Title"
-#define HELP_URL                "vnd.sun.star.help://"
-#define HELP_SEARCH_TAG         "/?Query="
-#define USERITEM_NAME           "UserItem"
+constexpr OUStringLiteral PROPERTY_KEYWORDLIST = u"KeywordList";
+constexpr OUStringLiteral PROPERTY_KEYWORDREF = u"KeywordRef";
+constexpr OUStringLiteral PROPERTY_ANCHORREF = u"KeywordAnchorForRef";
+constexpr OUStringLiteral PROPERTY_TITLEREF = u"KeywordTitleForRef";
+constexpr OUStringLiteral PROPERTY_TITLE = u"Title";
+constexpr OUStringLiteral HELP_URL = u"vnd.sun.star.help://";
+constexpr OUStringLiteral HELP_SEARCH_TAG = u"/?Query=";
+constexpr OUStringLiteral USERITEM_NAME = u"UserItem";
 
-#define PACKAGE_SETUP           "/org.openoffice.Setup"
-#define PATH_OFFICE_FACTORIES   "Office/Factories/"
-#define KEY_HELP_ON_OPEN        "ooSetupFactoryHelpOnOpen"
-#define KEY_UI_NAME             "ooSetupFactoryUIName"
+constexpr OUStringLiteral PACKAGE_SETUP = u"/org.openoffice.Setup";
+constexpr OUStringLiteral PATH_OFFICE_FACTORIES = u"Office/Factories/";
+constexpr OUStringLiteral KEY_HELP_ON_OPEN = u"ooSetupFactoryHelpOnOpen";
+constexpr OUStringLiteral KEY_UI_NAME = u"ooSetupFactoryUIName";
 
 namespace sfx2
 {
