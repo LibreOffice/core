@@ -557,14 +557,9 @@ OString Graphic::getUniqueID() const
     return aUniqueString;
 }
 
-namespace {
-
-struct Id: public rtl::Static<cppu::OImplementationId, Id> {};
-
-}
-
 css::uno::Sequence<sal_Int8> Graphic::getUnoTunnelId() {
-    return Id::get().getImplementationId();
+    static cppu::OImplementationId gId;
+    return gId.getImplementationId();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -73,7 +73,6 @@
 #include <com/sun/star/xml/sax/Writer.hpp>
 #include <unotools/ucbstreamhelper.hxx>
 #include <rtl/bootstrap.hxx>
-#include <rtl/instance.hxx>
 #include <tools/svlibrary.h>
 #include <comphelper/string.hxx>
 #include <unotools/ucbhelper.hxx>
@@ -1919,13 +1918,12 @@ namespace
         }
         GraphicFilter m_aFilter;
     };
-
-    class theGraphicFilter : public rtl::Static<StandardGraphicFilter, theGraphicFilter> {};
 }
 
 GraphicFilter& GraphicFilter::GetGraphicFilter()
 {
-    return theGraphicFilter::get().m_aFilter;
+    static StandardGraphicFilter gStandardFilter;
+    return gStandardFilter.m_aFilter;
 }
 
 ErrCode GraphicFilter::LoadGraphic( const OUString &rPath, const OUString &rFilterName,

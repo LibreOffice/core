@@ -23,7 +23,6 @@
 #include <unotools/syslocale.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <osl/mutex.hxx>
-#include <rtl/instance.hxx>
 #include "itemholder1.hxx"
 
 #include <cppuhelper/implbase.hxx>
@@ -282,14 +281,10 @@ SvtUserOptions::~SvtUserOptions()
     xImpl->RemoveListener(this);
 }
 
-namespace
-{
-    class theUserOptionsMutex : public rtl::Static<osl::Mutex, theUserOptionsMutex>{};
-}
-
 osl::Mutex& SvtUserOptions::GetInitMutex()
 {
-    return theUserOptionsMutex::get();
+    static osl::Mutex gMutex;
+    return gMutex;
 }
 
 OUString SvtUserOptions::GetCompany        () const { return GetToken(UserOptToken::Company); }

@@ -23,7 +23,6 @@
 #include <tools/fract.hxx>
 #include <tools/stream.hxx>
 #include <tools/vcompat.hxx>
-#include <rtl/instance.hxx>
 #include <vcl/TypeSerializer.hxx>
 
 struct MapMode::ImplMapMode
@@ -65,11 +64,14 @@ bool MapMode::ImplMapMode::operator==( const ImplMapMode& rImpMapMode ) const
 
 namespace
 {
-    struct theGlobalDefault :
-        public rtl::Static< MapMode::ImplType, theGlobalDefault > {};
+    MapMode::ImplType& GetGlobalDefault()
+    {
+        static MapMode::ImplType gDefault;
+        return gDefault;
+    }
 }
 
-MapMode::MapMode() : mpImplMapMode(theGlobalDefault::get())
+MapMode::MapMode() : mpImplMapMode(GetGlobalDefault())
 {
 }
 
@@ -130,7 +132,7 @@ bool MapMode::operator==( const MapMode& rMapMode ) const
 
 bool MapMode::IsDefault() const
 {
-    return mpImplMapMode.same_object(theGlobalDefault::get());
+    return mpImplMapMode.same_object(GetGlobalDefault());
 }
 
 MapUnit MapMode::GetMapUnit() const { return mpImplMapMode->meUnit; }

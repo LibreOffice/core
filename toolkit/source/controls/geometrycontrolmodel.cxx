@@ -21,7 +21,6 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/resource/XStringResourceResolver.hpp>
 #include <osl/diagnose.h>
-#include <rtl/instance.hxx>
 #include <comphelper/sequence.hxx>
 #include <controls/eventcontainer.hxx>
 #include <toolkit/helper/property.hxx>
@@ -438,15 +437,15 @@
     typedef std::vector< ::std::vector< sal_Int32 > > IntArrayArray;
 
     // for creating class-unique PropertySetInfo's, we need some info:
-    namespace { struct ServiceSpecifierMap : public rtl::Static< HashMapString2Int, ServiceSpecifierMap > {}; }
+    namespace { HashMapString2Int gServiceSpecifierMap; }
     // this one maps from a String, which is the service specifier for our
     // aggregate, to a unique id
 
-    namespace { struct AggregateProperties : public rtl::Static< PropSeqArray, AggregateProperties > {}; }
+    namespace { PropSeqArray gAggregateProperties; }
     // this one contains the properties which belong to all the unique ids
     // in ServiceSpecifierMap
 
-    namespace { struct AmbiguousPropertyIds : public rtl::Static< IntArrayArray, AmbiguousPropertyIds > {}; }
+    namespace { IntArrayArray gAmbiguousPropertyIds; }
     // the ids of the properties which we as well as our aggregate supply
     // For such props, we let our base class handle them, and whenever such
     // a prop is set, we forward this to our aggregate.
@@ -470,16 +469,14 @@
             throw IllegalArgumentException();
         }
 
-        HashMapString2Int &rMap = ServiceSpecifierMap::get();
-        HashMapString2Int::iterator aPropMapIdPos = rMap.find( m_sServiceSpecifier );
-        if ( rMap.end() == aPropMapIdPos )
+        HashMapString2Int::iterator aPropMapIdPos = gServiceSpecifierMap.find( m_sServiceSpecifier );
+        if ( gServiceSpecifierMap.end() == aPropMapIdPos )
         {
-            PropSeqArray &rAggProperties = AggregateProperties::get();
-            m_nPropertyMapId = rAggProperties.size();
-            rAggProperties.push_back( xPI->getProperties() );
-            AmbiguousPropertyIds::get().emplace_back( );
+            m_nPropertyMapId = gAggregateProperties.size();
+            gAggregateProperties.push_back( xPI->getProperties() );
+            gAmbiguousPropertyIds.emplace_back( );
 
-            rMap[ m_sServiceSpecifier ] = m_nPropertyMapId;
+            gServiceSpecifierMap[ m_sServiceSpecifier ] = m_nPropertyMapId;
         }
         else
             m_nPropertyMapId = aPropMapIdPos->second;
@@ -512,18 +509,18 @@
     ::cppu::IPropertyArrayHelper* OCommonGeometryControlModel::createArrayHelper( sal_Int32 _nId ) const
     {
         OSL_ENSURE( _nId == m_nPropertyMapId, "OCommonGeometryControlModel::createArrayHelper: invalid argument!" );
-        OSL_ENSURE( _nId < static_cast<sal_Int32>(AggregateProperties::get().size()), "OCommonGeometryControlModel::createArrayHelper: invalid status info (1)!" );
-        OSL_ENSURE( _nId < static_cast<sal_Int32>(AmbiguousPropertyIds::get().size()), "OCommonGeometryControlModel::createArrayHelper: invalid status info (2)!" );
+        OSL_ENSURE( _nId < static_cast<sal_Int32>(gAggregateProperties.size()), "OCommonGeometryControlModel::createArrayHelper: invalid status info (1)!" );
+        OSL_ENSURE( _nId < static_cast<sal_Int32>(gAmbiguousPropertyIds.size()), "OCommonGeometryControlModel::createArrayHelper: invalid status info (2)!" );
 
         // our own properties
         Sequence< Property > aProps;
         OPropertyContainer::describeProperties( aProps );
 
         // the aggregate properties
-        Sequence< Property > aAggregateProps = AggregateProperties::get()[ _nId ];
+        Sequence< Property > aAggregateProps = gAggregateProperties[ _nId ];
 
         // look for duplicates, and remember them
-        IntArrayArray::value_type& rDuplicateIds = AmbiguousPropertyIds::get()[ _nId ];
+        IntArrayArray::value_type& rDuplicateIds = gAmbiguousPropertyIds[ _nId ];
         // for this, sort the aggregate properties
         ::std::sort(
             aAggregateProps.begin(),
@@ -589,7 +586,7 @@
         OGeometryControlModel_Base::setFastPropertyValue_NoBroadcast( _nHandle, _rValue );
 
         // look if this id is one we recognized as duplicate
-        IntArrayArray::value_type& rDuplicateIds = AmbiguousPropertyIds::get()[ m_nPropertyMapId ];
+        IntArrayArray::value_type& rDuplicateIds = gAmbiguousPropertyIds[ m_nPropertyMapId ];
 
         if ( std::any_of(rDuplicateIds.begin(), rDuplicateIds.end(), Int32Equal( _nHandle )) )
         {
