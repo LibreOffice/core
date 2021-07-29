@@ -35,8 +35,8 @@ class SvXMLImport;
 namespace XMLImageStyle
 {
 
-UNLESS_MERGELIBS(XMLOFF_DLLPUBLIC) void exportXML(OUString const & rStrName, css::uno::Any const & rValue, SvXMLExport& rExport);
-UNLESS_MERGELIBS(XMLOFF_DLLPUBLIC) bool importXML(css::uno::Reference<css::xml::sax::XFastAttributeList> const & xAttrList,
+XMLOFF_DLLPUBLIC void exportXML(OUString const & rStrName, css::uno::Any const & rValue, SvXMLExport& rExport);
+XMLOFF_DLLPUBLIC bool importXML(css::uno::Reference<css::xml::sax::XFastAttributeList> const & xAttrList,
                                 css::uno::Any& rValue, OUString& rStrName, SvXMLImport& rImport);
 
 }

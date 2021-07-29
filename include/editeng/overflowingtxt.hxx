@@ -98,7 +98,7 @@ private:
  * (respectively after Overflow and Underflow).
  *
  */
-class UNLESS_MERGELIBS(EDITENG_DLLPUBLIC) OFlowChainedText
+class EDITENG_DLLPUBLIC OFlowChainedText
 {
 public:
     OFlowChainedText(Outliner const *, bool );
@@ -119,7 +119,7 @@ private:
 };
 
 // UFlowChainedText is a simpler class than OFlowChainedText: it almost only joins para-objects
-class UNLESS_MERGELIBS(EDITENG_DLLPUBLIC) UFlowChainedText
+class EDITENG_DLLPUBLIC UFlowChainedText
 {
 public:
     UFlowChainedText(Outliner const *, bool);

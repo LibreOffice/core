@@ -25,7 +25,7 @@ class Timer;
     Instances of this class setup a vcl timer to occasionally wake up
     check whether file modification time has changed.
  */
-class UNLESS_MERGELIBS(SVT_DLLPUBLIC) FileChangedChecker
+class SVT_DLLPUBLIC FileChangedChecker
 {
 private:
     Timer                    mTimer;

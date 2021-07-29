@@ -34,7 +34,7 @@ namespace com::sun::star {
 }
 
 
-class UNLESS_MERGELIBS(XMLOFF_DLLPUBLIC) XMLMarkerStyleImport
+class XMLOFF_DLLPUBLIC XMLMarkerStyleImport
 {
     SvXMLImport& rImport;
 
@@ -48,7 +48,7 @@ public:
         OUString& rStrName );
 };
 
-class UNLESS_MERGELIBS(XMLOFF_DLLPUBLIC) XMLMarkerStyleExport
+class XMLOFF_DLLPUBLIC XMLMarkerStyleExport
 {
     SvXMLExport& rExport;
 

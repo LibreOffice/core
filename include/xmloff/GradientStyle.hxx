@@ -34,7 +34,7 @@ namespace com::sun::star {
 }
 
 
-class UNLESS_MERGELIBS(XMLOFF_DLLPUBLIC) XMLGradientStyleImport
+class XMLOFF_DLLPUBLIC XMLGradientStyleImport
 {
     SvXMLImport& rImport;
 
@@ -49,7 +49,7 @@ public:
 };
 
 
-class UNLESS_MERGELIBS(XMLOFF_DLLPUBLIC) XMLGradientStyleExport
+class XMLOFF_DLLPUBLIC XMLGradientStyleExport
 {
     SvXMLExport& rExport;
 

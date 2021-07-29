@@ -93,7 +93,7 @@ enum class ScrollRangeCheck
 // react itself as needed.
 // Also Selection visualization is suppressed and EditViewSelectionChange
 // is triggered when Selection changes and needs reaction.
-class UNLESS_MERGELIBS(EDITENG_DLLPUBLIC) EditViewCallbacks
+class EDITENG_DLLPUBLIC EditViewCallbacks
 {
 public:
     EditViewCallbacks() {}

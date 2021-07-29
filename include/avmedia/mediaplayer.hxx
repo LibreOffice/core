@@ -40,7 +40,7 @@ public:
 
 class MediaWindow;
 
-class UNLESS_MERGELIBS(AVMEDIA_DLLPUBLIC) MediaFloater final : public SfxDockingWindow
+class AVMEDIA_DLLPUBLIC MediaFloater final : public SfxDockingWindow
 {
 public:
 
