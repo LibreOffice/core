@@ -16,7 +16,6 @@
 #include "calcmacros.hxx"
 #include "postit.hxx"
 #include "celltextattr.hxx"
-#include <osl/mutex.hxx>
 
 #if DEBUG_COLUMN_STORAGE
 #ifdef NDEBUG
@@ -32,6 +31,7 @@
 
 #include <unordered_map>
 #include <memory>
+#include <mutex>
 
 class ScDocument;
 class ScColumn;
@@ -142,7 +142,7 @@ class ColumnBlockPositionSet
 
     ScDocument& mrDoc;
     TablesType maTables;
-    osl::Mutex maMtxTables;
+    std::mutex maMtxTables;
 
 public:
     ColumnBlockPositionSet(ScDocument& rDoc);
