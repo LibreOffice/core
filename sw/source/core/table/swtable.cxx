@@ -141,9 +141,21 @@ void InsTableBox( SwDoc& rDoc, SwTableNode* pTableNd,
 
     if( pCNd->IsTextNode() )
     {
+        SwAttrSet aAttrSet( *pCNd->GetpSwAttrSet() );
+        SwTextNode* pTNd = static_cast<SwTextNode*>(pCNd);
+        SwpHints * pSwpHints = pTNd->GetpSwpHints();
+        if(pSwpHints)
+        {
+            SwTextAttr* textAttr = pSwpHints->Get(pSwpHints->Count()-1);
+            if(textAttr->Which() == RES_TXTATR_AUTOFMT )
+            {
+                SwFormatAutoFormat& format = dynamic_cast<SwFormatAutoFormat&>(textAttr->GetAttr());
+                const std::shared_ptr<SfxItemSet> handle = format.GetStyleHandle();
+                aAttrSet.Put(*handle);
+            }
+        }
         if( pBox->GetSaveNumFormatColor() && pCNd->GetpSwAttrSet() )
         {
-            SwAttrSet aAttrSet( *pCNd->GetpSwAttrSet() );
             if( pBox->GetSaveUserColor() )
                 aAttrSet.Put( SvxColorItem( *pBox->GetSaveUserColor(), RES_CHRATR_COLOR ));
             else
@@ -155,7 +167,7 @@ void InsTableBox( SwDoc& rDoc, SwTableNode* pTableNd,
         else
             rDoc.GetNodes().InsBoxen( pTableNd, pLine, pBoxFrameFormat,
                                     static_cast<SwTextNode*>(pCNd)->GetTextColl(),
-                                    pCNd->GetpSwAttrSet(),
+                                    &aAttrSet,
                                     nInsPos, nCnt );
     }
     else

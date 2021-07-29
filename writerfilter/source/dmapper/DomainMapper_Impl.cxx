@@ -2201,24 +2201,6 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                 // fix table paragraph properties
                 if ( xTextRange.is() && xParaProps && m_nTableDepth > 0 )
                 {
-                    uno::Sequence< beans::PropertyValue > aParaProps = pParaContext->GetPropertyValues(false);
-                    uno::Reference<text::XTextCursor> xCur =  xTextRange->getText()->createTextCursorByRange(xTextRange);
-                    uno::Reference< beans::XPropertyState > xRunProperties( xCur, uno::UNO_QUERY_THROW );
-                    // tdf#90069 in tables, apply paragraph level character style also on
-                    // paragraph level to support its copy during insertion of new table rows
-                    for( const auto& rParaProp : std::as_const(aParaProps) )
-                    {
-                        if ( rParaProp.Name.startsWith("Char") && rParaProp.Name != "CharStyleName" && rParaProp.Name != "CharInteropGrabBag" &&
-                            // all text portions contain the same value, so next setPropertyValue() won't overwrite part of them
-                            xRunProperties->getPropertyState(rParaProp.Name) == css::beans::PropertyState_DIRECT_VALUE )
-                        {
-                            uno::Reference<beans::XPropertySet> xRunPropertySet(xCur, uno::UNO_QUERY);
-                            xParaProps->setPropertyValue( rParaProp.Name, xRunPropertySet->getPropertyValue(rParaProp.Name) );
-                            // remember this for table style handling
-                            getTableManager().getCurrentParagraphs()->back().m_aParaOverrideApplied.insert(rParaProp.Name);
-                        }
-                    }
-
                     // tdf#128959 table paragraphs haven't got window and orphan controls
                     uno::Any aAny = uno::makeAny(static_cast<sal_Int8>(0));
                     xParaProps->setPropertyValue("ParaOrphans", aAny);
