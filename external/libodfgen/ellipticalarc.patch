@@ -1,0 +1,13 @@
+--- src/GraphicFunctions.cxx
++++ src/GraphicFunctions.cxx
+@@ -59,6 +59,10 @@
+                           double rx, double ry, double phi, bool largeArc, bool sweep, double x, double y,
+                           double &xmin, double &ymin, double &xmax, double &ymax)
+ {
++	if (x0 == x && y0 == y) {
++		return;
++	}
++
+ 	phi *= M_PI/180;
+ 	if (rx < 0.0)
+ 		rx *= -1.0;

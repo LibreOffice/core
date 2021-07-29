@@ -15,6 +15,10 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,libodfgen,0))
 
 $(eval $(call gb_UnpackedTarball_update_autoconf_configs,libodfgen))
 
+$(eval $(call gb_UnpackedTarball_add_patches,libodfgen, \
+    external/libodfgen/ellipticalarc.patch \
+))
+
 ifeq ($(SYSTEM_REVENGE),)
 $(eval $(call gb_UnpackedTarball_add_patches,libodfgen, \
     external/libodfgen/rpath.patch \
