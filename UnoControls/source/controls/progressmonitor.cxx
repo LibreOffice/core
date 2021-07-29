@@ -39,14 +39,14 @@ using namespace ::com::sun::star::awt;
 
 using ::std::vector;
 
-#define FIXEDTEXT_SERVICENAME                   "com.sun.star.awt.UnoControlFixedText"
-#define FIXEDTEXT_MODELNAME                     "com.sun.star.awt.UnoControlFixedTextModel"
-#define CONTROLNAME_TEXT                        "Text"   // identifier the control in container
-#define CONTROLNAME_PROGRESSBAR                 "ProgressBar"
-#define BUTTON_SERVICENAME                      "com.sun.star.awt.UnoControlButton"
-#define CONTROLNAME_BUTTON                      "Button"
-#define BUTTON_MODELNAME                        "com.sun.star.awt.UnoControlButtonModel"
-#define DEFAULT_BUTTONLABEL                     "Abbrechen"
+constexpr OUStringLiteral FIXEDTEXT_SERVICENAME = u"com.sun.star.awt.UnoControlFixedText";
+constexpr OUStringLiteral FIXEDTEXT_MODELNAME = u"com.sun.star.awt.UnoControlFixedTextModel";
+constexpr OUStringLiteral CONTROLNAME_TEXT = u"Text";   // identifier the control in container
+constexpr OUStringLiteral CONTROLNAME_PROGRESSBAR = u"ProgressBar";
+constexpr OUStringLiteral BUTTON_SERVICENAME = u"com.sun.star.awt.UnoControlButton";
+constexpr OUStringLiteral CONTROLNAME_BUTTON = u"Button";
+constexpr OUStringLiteral BUTTON_MODELNAME = u"com.sun.star.awt.UnoControlButtonModel";
+constexpr OUStringLiteral DEFAULT_BUTTONLABEL = u"Abbrechen";
 
 namespace unocontrols {
 

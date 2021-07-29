@@ -286,7 +286,7 @@ namespace cairocanvas
         cairo_restore( mpCairo.get() );
     }
 
-#define PARAMETRICPOLYPOLYGON_IMPLEMENTATION_NAME "Canvas::ParametricPolyPolygon"
+constexpr OUStringLiteral PARAMETRICPOLYPOLYGON_IMPLEMENTATION_NAME = u"Canvas::ParametricPolyPolygon";
 
     /** surfaceFromXBitmap Create a surface from XBitmap
      * @param xBitmap bitmap image that will be used for the surface

@@ -113,67 +113,67 @@
 #include <vcl/svapp.hxx>
 
 //  page styles
-#define SC_UNO_PAGE_LEFTBORDER      "LeftBorder"
-#define SC_UNO_PAGE_RIGHTBORDER     "RightBorder"
-#define SC_UNO_PAGE_BOTTBORDER      "BottomBorder"
-#define SC_UNO_PAGE_TOPBORDER       "TopBorder"
-#define SC_UNO_PAGE_LEFTBRDDIST     "LeftBorderDistance"
-#define SC_UNO_PAGE_RIGHTBRDDIST    "RightBorderDistance"
-#define SC_UNO_PAGE_BOTTBRDDIST     "BottomBorderDistance"
-#define SC_UNO_PAGE_TOPBRDDIST      "TopBorderDistance"
-#define SC_UNO_PAGE_BORDERDIST      "BorderDistance"
-#define SC_UNO_PAGE_SHADOWFORM      "ShadowFormat"
-#define SC_UNO_PAGE_PAPERTRAY       "PrinterPaperTray"
-#define SC_UNO_PAGE_SCALEVAL        "PageScale"
-#define SC_UNO_PAGE_SCALETOPAG      "ScaleToPages"
-#define SC_UNO_PAGE_SCALETOX        "ScaleToPagesX"
-#define SC_UNO_PAGE_SCALETOY        "ScaleToPagesY"
-#define SC_UNO_PAGE_HDRBACKCOL      "HeaderBackColor"
-#define SC_UNO_PAGE_HDRBACKTRAN     "HeaderBackTransparent"
-#define SC_UNO_PAGE_HDRGRFFILT      "HeaderBackGraphicFilter"
-#define SC_UNO_PAGE_HDRGRFLOC       "HeaderBackGraphicLocation"
-#define SC_UNO_PAGE_HDRGRF          "HeaderBackGraphic"
-#define SC_UNO_PAGE_HDRLEFTBOR      "HeaderLeftBorder"
-#define SC_UNO_PAGE_HDRRIGHTBOR     "HeaderRightBorder"
-#define SC_UNO_PAGE_HDRBOTTBOR      "HeaderBottomBorder"
-#define SC_UNO_PAGE_HDRTOPBOR       "HeaderTopBorder"
-#define SC_UNO_PAGE_HDRLEFTBDIS     "HeaderLeftBorderDistance"
-#define SC_UNO_PAGE_HDRRIGHTBDIS    "HeaderRightBorderDistance"
-#define SC_UNO_PAGE_HDRBOTTBDIS     "HeaderBottomBorderDistance"
-#define SC_UNO_PAGE_HDRTOPBDIS      "HeaderTopBorderDistance"
-#define SC_UNO_PAGE_HDRBRDDIST      "HeaderBorderDistance"
-#define SC_UNO_PAGE_HDRSHADOW       "HeaderShadowFormat"
-#define SC_UNO_PAGE_HDRLEFTMAR      "HeaderLeftMargin"
-#define SC_UNO_PAGE_HDRRIGHTMAR     "HeaderRightMargin"
-#define SC_UNO_PAGE_HDRBODYDIST     "HeaderBodyDistance"
-#define SC_UNO_PAGE_HDRHEIGHT       "HeaderHeight"
-#define SC_UNO_PAGE_HDRON           "HeaderIsOn"
-#define SC_UNO_PAGE_HDRDYNAMIC      "HeaderIsDynamicHeight"
-#define SC_UNO_PAGE_HDRSHARED       "HeaderIsShared"
-#define SC_UNO_PAGE_FIRSTHDRSHARED  "FirstPageHeaderIsShared"
-#define SC_UNO_PAGE_FTRBACKCOL      "FooterBackColor"
-#define SC_UNO_PAGE_FTRBACKTRAN     "FooterBackTransparent"
-#define SC_UNO_PAGE_FTRGRFFILT      "FooterBackGraphicFilter"
-#define SC_UNO_PAGE_FTRGRFLOC       "FooterBackGraphicLocation"
-#define SC_UNO_PAGE_FTRGRF          "FooterBackGraphic"
-#define SC_UNO_PAGE_FTRLEFTBOR      "FooterLeftBorder"
-#define SC_UNO_PAGE_FTRRIGHTBOR     "FooterRightBorder"
-#define SC_UNO_PAGE_FTRBOTTBOR      "FooterBottomBorder"
-#define SC_UNO_PAGE_FTRTOPBOR       "FooterTopBorder"
-#define SC_UNO_PAGE_FTRLEFTBDIS     "FooterLeftBorderDistance"
-#define SC_UNO_PAGE_FTRRIGHTBDIS    "FooterRightBorderDistance"
-#define SC_UNO_PAGE_FTRBOTTBDIS     "FooterBottomBorderDistance"
-#define SC_UNO_PAGE_FTRTOPBDIS      "FooterTopBorderDistance"
-#define SC_UNO_PAGE_FTRBRDDIST      "FooterBorderDistance"
-#define SC_UNO_PAGE_FTRSHADOW       "FooterShadowFormat"
-#define SC_UNO_PAGE_FTRLEFTMAR      "FooterLeftMargin"
-#define SC_UNO_PAGE_FTRRIGHTMAR     "FooterRightMargin"
-#define SC_UNO_PAGE_FTRBODYDIST     "FooterBodyDistance"
-#define SC_UNO_PAGE_FTRHEIGHT       "FooterHeight"
-#define SC_UNO_PAGE_FTRON           "FooterIsOn"
-#define SC_UNO_PAGE_FTRDYNAMIC      "FooterIsDynamicHeight"
-#define SC_UNO_PAGE_FTRSHARED       "FooterIsShared"
-#define SC_UNO_PAGE_FIRSTFTRSHARED  "FirstPageFooterIsShared"
+constexpr OUStringLiteral SC_UNO_PAGE_LEFTBORDER = u"LeftBorder";
+constexpr OUStringLiteral SC_UNO_PAGE_RIGHTBORDER = u"RightBorder";
+constexpr OUStringLiteral SC_UNO_PAGE_BOTTBORDER = u"BottomBorder";
+constexpr OUStringLiteral SC_UNO_PAGE_TOPBORDER = u"TopBorder";
+constexpr OUStringLiteral SC_UNO_PAGE_LEFTBRDDIST = u"LeftBorderDistance";
+constexpr OUStringLiteral SC_UNO_PAGE_RIGHTBRDDIST = u"RightBorderDistance";
+constexpr OUStringLiteral SC_UNO_PAGE_BOTTBRDDIST = u"BottomBorderDistance";
+constexpr OUStringLiteral SC_UNO_PAGE_TOPBRDDIST = u"TopBorderDistance";
+constexpr OUStringLiteral SC_UNO_PAGE_BORDERDIST = u"BorderDistance";
+constexpr OUStringLiteral SC_UNO_PAGE_SHADOWFORM = u"ShadowFormat";
+constexpr OUStringLiteral SC_UNO_PAGE_PAPERTRAY = u"PrinterPaperTray";
+constexpr OUStringLiteral SC_UNO_PAGE_SCALEVAL = u"PageScale";
+constexpr OUStringLiteral SC_UNO_PAGE_SCALETOPAG = u"ScaleToPages";
+constexpr OUStringLiteral SC_UNO_PAGE_SCALETOX = u"ScaleToPagesX";
+constexpr OUStringLiteral SC_UNO_PAGE_SCALETOY = u"ScaleToPagesY";
+constexpr OUStringLiteral SC_UNO_PAGE_HDRBACKCOL = u"HeaderBackColor";
+constexpr OUStringLiteral SC_UNO_PAGE_HDRBACKTRAN = u"HeaderBackTransparent";
+constexpr OUStringLiteral SC_UNO_PAGE_HDRGRFFILT = u"HeaderBackGraphicFilter";
+constexpr OUStringLiteral SC_UNO_PAGE_HDRGRFLOC = u"HeaderBackGraphicLocation";
+constexpr OUStringLiteral SC_UNO_PAGE_HDRGRF = u"HeaderBackGraphic";
+constexpr OUStringLiteral SC_UNO_PAGE_HDRLEFTBOR = u"HeaderLeftBorder";
+constexpr OUStringLiteral SC_UNO_PAGE_HDRRIGHTBOR = u"HeaderRightBorder";
+constexpr OUStringLiteral SC_UNO_PAGE_HDRBOTTBOR = u"HeaderBottomBorder";
+constexpr OUStringLiteral SC_UNO_PAGE_HDRTOPBOR = u"HeaderTopBorder";
+constexpr OUStringLiteral SC_UNO_PAGE_HDRLEFTBDIS = u"HeaderLeftBorderDistance";
+constexpr OUStringLiteral SC_UNO_PAGE_HDRRIGHTBDIS = u"HeaderRightBorderDistance";
+constexpr OUStringLiteral SC_UNO_PAGE_HDRBOTTBDIS = u"HeaderBottomBorderDistance";
+constexpr OUStringLiteral SC_UNO_PAGE_HDRTOPBDIS = u"HeaderTopBorderDistance";
+constexpr OUStringLiteral SC_UNO_PAGE_HDRBRDDIST = u"HeaderBorderDistance";
+constexpr OUStringLiteral SC_UNO_PAGE_HDRSHADOW = u"HeaderShadowFormat";
+constexpr OUStringLiteral SC_UNO_PAGE_HDRLEFTMAR = u"HeaderLeftMargin";
+constexpr OUStringLiteral SC_UNO_PAGE_HDRRIGHTMAR = u"HeaderRightMargin";
+constexpr OUStringLiteral SC_UNO_PAGE_HDRBODYDIST = u"HeaderBodyDistance";
+constexpr OUStringLiteral SC_UNO_PAGE_HDRHEIGHT = u"HeaderHeight";
+constexpr OUStringLiteral SC_UNO_PAGE_HDRON = u"HeaderIsOn";
+constexpr OUStringLiteral SC_UNO_PAGE_HDRDYNAMIC = u"HeaderIsDynamicHeight";
+constexpr OUStringLiteral SC_UNO_PAGE_HDRSHARED = u"HeaderIsShared";
+constexpr OUStringLiteral SC_UNO_PAGE_FIRSTHDRSHARED = u"FirstPageHeaderIsShared";
+constexpr OUStringLiteral SC_UNO_PAGE_FTRBACKCOL = u"FooterBackColor";
+constexpr OUStringLiteral SC_UNO_PAGE_FTRBACKTRAN = u"FooterBackTransparent";
+constexpr OUStringLiteral SC_UNO_PAGE_FTRGRFFILT = u"FooterBackGraphicFilter";
+constexpr OUStringLiteral SC_UNO_PAGE_FTRGRFLOC = u"FooterBackGraphicLocation";
+constexpr OUStringLiteral SC_UNO_PAGE_FTRGRF = u"FooterBackGraphic";
+constexpr OUStringLiteral SC_UNO_PAGE_FTRLEFTBOR = u"FooterLeftBorder";
+constexpr OUStringLiteral SC_UNO_PAGE_FTRRIGHTBOR = u"FooterRightBorder";
+constexpr OUStringLiteral SC_UNO_PAGE_FTRBOTTBOR = u"FooterBottomBorder";
+constexpr OUStringLiteral SC_UNO_PAGE_FTRTOPBOR = u"FooterTopBorder";
+constexpr OUStringLiteral SC_UNO_PAGE_FTRLEFTBDIS = u"FooterLeftBorderDistance";
+constexpr OUStringLiteral SC_UNO_PAGE_FTRRIGHTBDIS = u"FooterRightBorderDistance";
+constexpr OUStringLiteral SC_UNO_PAGE_FTRBOTTBDIS = u"FooterBottomBorderDistance";
+constexpr OUStringLiteral SC_UNO_PAGE_FTRTOPBDIS = u"FooterTopBorderDistance";
+constexpr OUStringLiteral SC_UNO_PAGE_FTRBRDDIST = u"FooterBorderDistance";
+constexpr OUStringLiteral SC_UNO_PAGE_FTRSHADOW = u"FooterShadowFormat";
+constexpr OUStringLiteral SC_UNO_PAGE_FTRLEFTMAR = u"FooterLeftMargin";
+constexpr OUStringLiteral SC_UNO_PAGE_FTRRIGHTMAR = u"FooterRightMargin";
+constexpr OUStringLiteral SC_UNO_PAGE_FTRBODYDIST = u"FooterBodyDistance";
+constexpr OUStringLiteral SC_UNO_PAGE_FTRHEIGHT = u"FooterHeight";
+constexpr OUStringLiteral SC_UNO_PAGE_FTRON = u"FooterIsOn";
+constexpr OUStringLiteral SC_UNO_PAGE_FTRDYNAMIC = u"FooterIsDynamicHeight";
+constexpr OUStringLiteral SC_UNO_PAGE_FTRSHARED = u"FooterIsShared";
+constexpr OUStringLiteral SC_UNO_PAGE_FIRSTFTRSHARED = u"FirstPageFooterIsShared";
 
 namespace reportdesign
 {

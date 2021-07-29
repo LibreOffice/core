@@ -38,18 +38,18 @@
 // #define this to true, if remembering defaults is not supported properly
 #define RTL_BOOTSTRAP_DEFAULTS_BROKEN true
 
-#define BOOTSTRAP_ITEM_PRODUCT_KEY          "ProductKey"
-#define BOOTSTRAP_ITEM_VERSIONFILE          "Location"
-#define BOOTSTRAP_ITEM_BUILDID              "buildid"
+constexpr OUStringLiteral BOOTSTRAP_ITEM_PRODUCT_KEY = u"ProductKey";
+constexpr OUStringLiteral BOOTSTRAP_ITEM_VERSIONFILE = u"Location";
+constexpr OUStringLiteral BOOTSTRAP_ITEM_BUILDID = u"buildid";
 
-#define BOOTSTRAP_ITEM_BASEINSTALLATION     "BRAND_BASE_DIR"
-#define BOOTSTRAP_ITEM_USERINSTALLATION     "UserInstallation"
+constexpr OUStringLiteral BOOTSTRAP_ITEM_BASEINSTALLATION = u"BRAND_BASE_DIR";
+constexpr OUStringLiteral BOOTSTRAP_ITEM_USERINSTALLATION = u"UserInstallation";
 
-#define BOOTSTRAP_ITEM_USERDIR              "UserDataDir"
+constexpr OUStringLiteral BOOTSTRAP_ITEM_USERDIR = u"UserDataDir";
 
-#define BOOTSTRAP_DEFAULT_BASEINSTALL       "$SYSBINDIR/.."
+constexpr OUStringLiteral BOOTSTRAP_DEFAULT_BASEINSTALL = u"$SYSBINDIR/..";
 
-#define BOOTSTRAP_DIRNAME_USERDIR           u"user"
+constexpr OUStringLiteral BOOTSTRAP_DIRNAME_USERDIR = u"user";
 
 typedef char const * AsciiString;
 

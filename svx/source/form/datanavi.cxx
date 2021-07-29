@@ -57,15 +57,15 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::dom::events;
 using namespace ::svx;
 
-#define CFGNAME_DATANAVIGATOR       "DataNavigator"
-#define CFGNAME_SHOWDETAILS         "ShowDetails"
-#define MSG_VARIABLE                "%1"
-#define MODELNAME                   "$MODELNAME"
-#define INSTANCENAME                "$INSTANCENAME"
-#define ELEMENTNAME                 "$ELEMENTNAME"
-#define ATTRIBUTENAME               "$ATTRIBUTENAME"
-#define SUBMISSIONNAME              "$SUBMISSIONNAME"
-#define BINDINGNAME                 "$BINDINGNAME"
+constexpr OUStringLiteral CFGNAME_DATANAVIGATOR = u"DataNavigator";
+constexpr OUStringLiteral CFGNAME_SHOWDETAILS = u"ShowDetails";
+constexpr OUStringLiteral MSG_VARIABLE = u"%1";
+constexpr OUStringLiteral MODELNAME = u"$MODELNAME";
+constexpr OUStringLiteral INSTANCENAME = u"$INSTANCENAME";
+constexpr OUStringLiteral ELEMENTNAME = u"$ELEMENTNAME";
+constexpr OUStringLiteral ATTRIBUTENAME = u"$ATTRIBUTENAME";
+constexpr OUStringLiteral SUBMISSIONNAME = u"$SUBMISSIONNAME";
+constexpr OUStringLiteral BINDINGNAME = u"$BINDINGNAME";
 
 
 namespace svxform

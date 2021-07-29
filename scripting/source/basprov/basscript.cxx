@@ -44,7 +44,7 @@ namespace basprov
 {
 
 #define BASSCRIPT_PROPERTY_ID_CALLER         1
-#define BASSCRIPT_PROPERTY_CALLER            "Caller"
+constexpr OUStringLiteral BASSCRIPT_PROPERTY_CALLER = u"Caller";
 
 #define BASSCRIPT_DEFAULT_ATTRIBS()       PropertyAttribute::BOUND | PropertyAttribute::TRANSIENT
 

@@ -534,7 +534,7 @@ private:
 typedef ::cppu::WeakImplHelper< XScriptListener, util::XCloseListener, lang::XInitialization, css::lang::XServiceInfo > EventListener_BASE;
 
 #define EVENTLSTNR_PROPERTY_ID_MODEL         1
-#define EVENTLSTNR_PROPERTY_MODEL            "Model"
+constexpr OUStringLiteral EVENTLSTNR_PROPERTY_MODEL = u"Model";
 
 namespace {
 

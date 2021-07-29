@@ -47,15 +47,15 @@
 using namespace com::sun::star;
 using namespace ucbhelper;
 
-#define CONFIG_ROOT_KEY      "org.openoffice.Inet/Settings"
-#define PROXY_TYPE_KEY       "ooInetProxyType"
-#define NO_PROXY_LIST_KEY    "ooInetNoProxy"
-#define HTTP_PROXY_NAME_KEY  "ooInetHTTPProxyName"
-#define HTTP_PROXY_PORT_KEY  "ooInetHTTPProxyPort"
-#define HTTPS_PROXY_NAME_KEY "ooInetHTTPSProxyName"
-#define HTTPS_PROXY_PORT_KEY "ooInetHTTPSProxyPort"
-#define FTP_PROXY_NAME_KEY   "ooInetFTPProxyName"
-#define FTP_PROXY_PORT_KEY   "ooInetFTPProxyPort"
+constexpr OUStringLiteral CONFIG_ROOT_KEY = u"org.openoffice.Inet/Settings";
+constexpr OUStringLiteral PROXY_TYPE_KEY = u"ooInetProxyType";
+constexpr OUStringLiteral NO_PROXY_LIST_KEY = u"ooInetNoProxy";
+constexpr OUStringLiteral HTTP_PROXY_NAME_KEY = u"ooInetHTTPProxyName";
+constexpr OUStringLiteral HTTP_PROXY_PORT_KEY = u"ooInetHTTPProxyPort";
+constexpr OUStringLiteral HTTPS_PROXY_NAME_KEY = u"ooInetHTTPSProxyName";
+constexpr OUStringLiteral HTTPS_PROXY_PORT_KEY = u"ooInetHTTPSProxyPort";
+constexpr OUStringLiteral FTP_PROXY_NAME_KEY = u"ooInetFTPProxyName";
+constexpr OUStringLiteral FTP_PROXY_PORT_KEY = u"ooInetFTPProxyPort";
 
 
 namespace ucbhelper
@@ -233,13 +233,12 @@ bool WildCard::Matches( std::u16string_view rString ) const
 
 static bool getConfigStringValue(
     const uno::Reference< container::XNameAccess > & xNameAccess,
-    const char * key,
+    const OUString& key,
     OUString & value )
 {
     try
     {
-        if ( !( xNameAccess->getByName( OUString::createFromAscii( key ) )
-                >>= value ) )
+        if ( !( xNameAccess->getByName( key ) >>= value ) )
         {
             OSL_FAIL( "InternetProxyDecider - "
                         "Error getting config item value!" );
@@ -260,13 +259,12 @@ static bool getConfigStringValue(
 
 static bool getConfigInt32Value(
     const uno::Reference< container::XNameAccess > & xNameAccess,
-    const char * key,
+    const OUString& key,
     sal_Int32 & value )
 {
     try
     {
-        uno::Any aValue = xNameAccess->getByName(
-            OUString::createFromAscii( key ) );
+        uno::Any aValue = xNameAccess->getByName( key );
         if ( aValue.hasValue() && !( aValue >>= value ) )
         {
             OSL_FAIL( "InternetProxyDecider - "

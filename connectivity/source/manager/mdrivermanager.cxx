@@ -47,7 +47,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::logging;
 using namespace ::osl;
 
-#define SERVICE_SDBC_DRIVER     "com.sun.star.sdbc.Driver"
+constexpr OUStringLiteral SERVICE_SDBC_DRIVER = u"com.sun.star.sdbc.Driver";
 
 /// @throws NoSuchElementException
 static void throwNoSuchElementException()

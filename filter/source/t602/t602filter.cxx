@@ -922,13 +922,13 @@ bool T602ImportFilterDialog::OptionsDlg()
     propInt_(xPSetDialog,"Height",90);
     propStringFromResId_(xPSetDialog,"Title", T602FILTER_STR_IMPORT_DIALOG_TITLE);
 
-#define T602DLG_OK_BUTTON    "ok_button"
-#define T602DLG_CANCEL_BUTTON    "cancel_button"
-#define T602DLG_CODE_LB        "code_lb"
-#define T602DLG_AZBUKA_CB    "azbuka_cb"
-#define T602DLG_COMMENT_CB    "comment_cb"
-#define T602DLG_REFORMAT_CB    "reformat_cb"
-#define T602DLG_CODE_TXT    "code_txt"
+    static constexpr OUStringLiteral T602DLG_OK_BUTTON = u"ok_button";
+    static constexpr OUStringLiteral T602DLG_CANCEL_BUTTON = u"cancel_button";
+    static constexpr OUStringLiteral T602DLG_CODE_LB = u"code_lb";
+    static constexpr OUStringLiteral T602DLG_AZBUKA_CB = u"azbuka_cb";
+    static constexpr OUStringLiteral T602DLG_COMMENT_CB = u"comment_cb";
+    static constexpr OUStringLiteral T602DLG_REFORMAT_CB = u"reformat_cb";
+    static constexpr OUStringLiteral T602DLG_CODE_TXT = u"code_txt";
 
     Reference < XInterface > TextModel = Inst_("com.sun.star.awt.UnoControlFixedTextModel");
     Reference < XPropertySet > xPSetText( TextModel, UNO_QUERY );

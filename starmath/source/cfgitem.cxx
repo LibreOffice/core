@@ -43,8 +43,8 @@
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
 
-#define SYMBOL_LIST         "SymbolList"
-#define FONT_FORMAT_LIST    "FontFormatList"
+constexpr OUStringLiteral SYMBOL_LIST = u"SymbolList";
+constexpr OUStringLiteral FONT_FORMAT_LIST = u"FontFormatList";
 
 static Sequence< OUString > lcl_GetFontPropertyNames()
 {
@@ -483,7 +483,7 @@ void SmMathConfig::GetSymbols( std::vector< SmSym > &rSymbols ) const
     rSymbols.resize( nNodes );
     for (auto& rSymbol : rSymbols)
     {
-        ReadSymbol( rSymbol, *pNode++, u"" SYMBOL_LIST );
+        ReadSymbol( rSymbol, *pNode++, SYMBOL_LIST );
     }
 }
 
@@ -567,7 +567,7 @@ void SmMathConfig::LoadFontFormatList()
     for (const OUString& rNode : aNodes)
     {
         SmFontFormat aFntFmt;
-        ReadFontFormat( aFntFmt, rNode, u"" FONT_FORMAT_LIST );
+        ReadFontFormat( aFntFmt, rNode, FONT_FORMAT_LIST );
         if (!pFontFormatList->GetFontFormat( rNode ))
             pFontFormatList->AddFontFormat( rNode, aFntFmt );
     }

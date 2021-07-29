@@ -158,9 +158,9 @@ namespace
     }
 }
 
-#define TG_SETTING_MANAGER  "TargetInDocument"
-#define TG_SETTING_LASTMARK "LastSelectedMark"
-#define TG_SETTING_LASTPATH "LastSelectedPath"
+constexpr OUStringLiteral TG_SETTING_MANAGER = u"TargetInDocument";
+constexpr OUStringLiteral TG_SETTING_LASTMARK = u"LastSelectedMark";
+constexpr OUStringLiteral TG_SETTING_LASTPATH = u"LastSelectedPath";
 
 void SvxHlinkDlgMarkWnd::RestoreLastSelection()
 {

@@ -58,24 +58,24 @@ COMMENT: Visual-Basic treats the following (invalid) format-strings
 #define FORMAT_SEPARATOR            ';'
 
 // predefined formats for the Format$()-command:
-#define BASICFORMAT_GENERALNUMBER   "General Number"
-#define BASICFORMAT_CURRENCY        "Currency"
-#define BASICFORMAT_FIXED           "Fixed"
-#define BASICFORMAT_STANDARD        "Standard"
-#define BASICFORMAT_PERCENT         "Percent"
-#define BASICFORMAT_SCIENTIFIC      "Scientific"
-#define BASICFORMAT_YESNO           "Yes/No"
-#define BASICFORMAT_TRUEFALSE       "True/False"
-#define BASICFORMAT_ONOFF           "On/Off"
+constexpr OUStringLiteral BASICFORMAT_GENERALNUMBER = u"General Number";
+constexpr OUStringLiteral BASICFORMAT_CURRENCY = u"Currency";
+constexpr OUStringLiteral BASICFORMAT_FIXED = u"Fixed";
+constexpr OUStringLiteral BASICFORMAT_STANDARD = u"Standard";
+constexpr OUStringLiteral BASICFORMAT_PERCENT = u"Percent";
+constexpr OUStringLiteral BASICFORMAT_SCIENTIFIC = u"Scientific";
+constexpr OUStringLiteral BASICFORMAT_YESNO = u"Yes/No";
+constexpr OUStringLiteral BASICFORMAT_TRUEFALSE = u"True/False";
+constexpr OUStringLiteral BASICFORMAT_ONOFF = u"On/Off";
 
 // Comment: Visual-Basic has a maximum of 12 positions after the
 //          decimal point for floating-point-numbers.
 // all format-strings are compatible to Visual-Basic:
-#define GENERALNUMBER_FORMAT        "0.############"
-#define FIXED_FORMAT                "0.00"
-#define STANDARD_FORMAT             "@0.00"
-#define PERCENT_FORMAT              "0.00%"
-#define SCIENTIFIC_FORMAT           "#.00E+00"
+constexpr OUStringLiteral GENERALNUMBER_FORMAT = u"0.############";
+constexpr OUStringLiteral FIXED_FORMAT = u"0.00";
+constexpr OUStringLiteral STANDARD_FORMAT = u"@0.00";
+constexpr OUStringLiteral PERCENT_FORMAT = u"0.00%";
+constexpr OUStringLiteral SCIENTIFIC_FORMAT = u"#.00E+00";
 // Comment: the character @ means that thousand-separators shall
 //          be generated. That's a StarBasic 'extension'.
 

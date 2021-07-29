@@ -31,8 +31,8 @@
 
 #include <string>
 
-#define AVMEDIA_GST_FRAMEGRABBER_IMPLEMENTATIONNAME "com.sun.star.comp.avmedia.FrameGrabber_GStreamer"
-#define AVMEDIA_GST_FRAMEGRABBER_SERVICENAME "com.sun.star.media.FrameGrabber_GStreamer"
+constexpr OUStringLiteral AVMEDIA_GST_FRAMEGRABBER_IMPLEMENTATIONNAME = u"com.sun.star.comp.avmedia.FrameGrabber_GStreamer";
+constexpr OUStringLiteral AVMEDIA_GST_FRAMEGRABBER_SERVICENAME = u"com.sun.star.media.FrameGrabber_GStreamer";
 
 using namespace ::com::sun::star;
 

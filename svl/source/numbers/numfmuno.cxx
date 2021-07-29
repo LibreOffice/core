@@ -38,24 +38,24 @@
 
 using namespace com::sun::star;
 
-#define PROPERTYNAME_FMTSTR     "FormatString"
-#define PROPERTYNAME_LOCALE     "Locale"
-#define PROPERTYNAME_TYPE       "Type"
-#define PROPERTYNAME_COMMENT    "Comment"
-#define PROPERTYNAME_CURREXT    "CurrencyExtension"
-#define PROPERTYNAME_CURRSYM    "CurrencySymbol"
-#define PROPERTYNAME_CURRABB    "CurrencyAbbreviation"
-#define PROPERTYNAME_DECIMALS   "Decimals"
-#define PROPERTYNAME_LEADING    "LeadingZeros"
-#define PROPERTYNAME_NEGRED     "NegativeRed"
-#define PROPERTYNAME_STDFORM    "StandardFormat"
-#define PROPERTYNAME_THOUS      "ThousandsSeparator"
-#define PROPERTYNAME_USERDEF    "UserDefined"
+constexpr OUStringLiteral PROPERTYNAME_FMTSTR = u"FormatString";
+constexpr OUStringLiteral PROPERTYNAME_LOCALE = u"Locale";
+constexpr OUStringLiteral PROPERTYNAME_TYPE = u"Type";
+constexpr OUStringLiteral PROPERTYNAME_COMMENT = u"Comment";
+constexpr OUStringLiteral PROPERTYNAME_CURREXT = u"CurrencyExtension";
+constexpr OUStringLiteral PROPERTYNAME_CURRSYM = u"CurrencySymbol";
+constexpr OUStringLiteral PROPERTYNAME_CURRABB = u"CurrencyAbbreviation";
+constexpr OUStringLiteral PROPERTYNAME_DECIMALS = u"Decimals";
+constexpr OUStringLiteral PROPERTYNAME_LEADING = u"LeadingZeros";
+constexpr OUStringLiteral PROPERTYNAME_NEGRED = u"NegativeRed";
+constexpr OUStringLiteral PROPERTYNAME_STDFORM = u"StandardFormat";
+constexpr OUStringLiteral PROPERTYNAME_THOUS = u"ThousandsSeparator";
+constexpr OUStringLiteral PROPERTYNAME_USERDEF = u"UserDefined";
 
-#define PROPERTYNAME_NOZERO     "NoZero"
-#define PROPERTYNAME_NULLDATE   "NullDate"
-#define PROPERTYNAME_STDDEC     "StandardDecimals"
-#define PROPERTYNAME_TWODIGIT   "TwoDigitDateStart"
+constexpr OUStringLiteral PROPERTYNAME_NOZERO = u"NoZero";
+constexpr OUStringLiteral PROPERTYNAME_NULLDATE = u"NullDate";
+constexpr OUStringLiteral PROPERTYNAME_STDDEC = u"StandardDecimals";
+constexpr OUStringLiteral PROPERTYNAME_TWODIGIT = u"TwoDigitDateStart";
 
 // All without a Which-ID, Map only for PropertySetInfo
 
@@ -63,19 +63,19 @@ static const SfxItemPropertyMapEntry* lcl_GetNumberFormatPropertyMap()
 {
     static const SfxItemPropertyMapEntry aNumberFormatPropertyMap_Impl[] =
     {
-        {u"" PROPERTYNAME_FMTSTR,   0, cppu::UnoType<OUString>::get(),    beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
-        {u"" PROPERTYNAME_LOCALE,   0, cppu::UnoType<lang::Locale>::get(),beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
-        {u"" PROPERTYNAME_TYPE,     0, cppu::UnoType<sal_Int16>::get(),   beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
-        {u"" PROPERTYNAME_COMMENT,  0, cppu::UnoType<OUString>::get(),    beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
-        {u"" PROPERTYNAME_CURREXT,  0, cppu::UnoType<OUString>::get(),    beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
-        {u"" PROPERTYNAME_CURRSYM,  0, cppu::UnoType<OUString>::get(),    beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
-        {u"" PROPERTYNAME_DECIMALS, 0, cppu::UnoType<sal_Int16>::get(),   beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
-        {u"" PROPERTYNAME_LEADING,  0, cppu::UnoType<sal_Int16>::get(),   beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
-        {u"" PROPERTYNAME_NEGRED,   0, cppu::UnoType<bool>::get(),         beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
-        {u"" PROPERTYNAME_STDFORM,  0, cppu::UnoType<bool>::get(),         beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
-        {u"" PROPERTYNAME_THOUS,    0, cppu::UnoType<bool>::get(),         beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
-        {u"" PROPERTYNAME_USERDEF,  0, cppu::UnoType<bool>::get(),         beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
-        {u"" PROPERTYNAME_CURRABB,  0, cppu::UnoType<OUString>::get(),    beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
+        {PROPERTYNAME_FMTSTR,   0, cppu::UnoType<OUString>::get(),    beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
+        {PROPERTYNAME_LOCALE,   0, cppu::UnoType<lang::Locale>::get(),beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
+        {PROPERTYNAME_TYPE,     0, cppu::UnoType<sal_Int16>::get(),   beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
+        {PROPERTYNAME_COMMENT,  0, cppu::UnoType<OUString>::get(),    beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
+        {PROPERTYNAME_CURREXT,  0, cppu::UnoType<OUString>::get(),    beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
+        {PROPERTYNAME_CURRSYM,  0, cppu::UnoType<OUString>::get(),    beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
+        {PROPERTYNAME_DECIMALS, 0, cppu::UnoType<sal_Int16>::get(),   beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
+        {PROPERTYNAME_LEADING,  0, cppu::UnoType<sal_Int16>::get(),   beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
+        {PROPERTYNAME_NEGRED,   0, cppu::UnoType<bool>::get(),         beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
+        {PROPERTYNAME_STDFORM,  0, cppu::UnoType<bool>::get(),         beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
+        {PROPERTYNAME_THOUS,    0, cppu::UnoType<bool>::get(),         beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
+        {PROPERTYNAME_USERDEF,  0, cppu::UnoType<bool>::get(),         beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
+        {PROPERTYNAME_CURRABB,  0, cppu::UnoType<OUString>::get(),    beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
         { u"", 0, css::uno::Type(), 0, 0 }
     };
     return aNumberFormatPropertyMap_Impl;
@@ -85,10 +85,10 @@ static const SfxItemPropertyMapEntry* lcl_GetNumberSettingsPropertyMap()
 {
     static const SfxItemPropertyMapEntry aNumberSettingsPropertyMap_Impl[] =
     {
-        {u"" PROPERTYNAME_NOZERO,   0, cppu::UnoType<bool>::get(),         beans::PropertyAttribute::BOUND, 0},
-        {u"" PROPERTYNAME_NULLDATE, 0, cppu::UnoType<util::Date>::get(),  beans::PropertyAttribute::BOUND, 0},
-        {u"" PROPERTYNAME_STDDEC,   0, cppu::UnoType<sal_Int16>::get(),   beans::PropertyAttribute::BOUND, 0},
-        {u"" PROPERTYNAME_TWODIGIT, 0, cppu::UnoType<sal_Int16>::get(),   beans::PropertyAttribute::BOUND, 0},
+        {PROPERTYNAME_NOZERO,   0, cppu::UnoType<bool>::get(),         beans::PropertyAttribute::BOUND, 0},
+        {PROPERTYNAME_NULLDATE, 0, cppu::UnoType<util::Date>::get(),  beans::PropertyAttribute::BOUND, 0},
+        {PROPERTYNAME_STDDEC,   0, cppu::UnoType<sal_Int16>::get(),   beans::PropertyAttribute::BOUND, 0},
+        {PROPERTYNAME_TWODIGIT, 0, cppu::UnoType<sal_Int16>::get(),   beans::PropertyAttribute::BOUND, 0},
         { u"", 0, css::uno::Type(), 0, 0 }
     };
     return aNumberSettingsPropertyMap_Impl;

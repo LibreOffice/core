@@ -28,8 +28,8 @@
 #include "window.hxx"
 #include "player.hxx"
 
-#define AVMEDIA_WIN_WINDOW_IMPLEMENTATIONNAME "com.sun.star.comp.avmedia.Window_DirectX"
-#define AVMEDIA_WIN_WINDOW_SERVICENAME "com.sun.star.media.Window_DirectX"
+constexpr OUStringLiteral AVMEDIA_WIN_WINDOW_IMPLEMENTATIONNAME = u"com.sun.star.comp.avmedia.Window_DirectX";
+constexpr OUStringLiteral AVMEDIA_WIN_WINDOW_SERVICENAME = u"com.sun.star.media.Window_DirectX";
 
 using namespace ::com::sun::star;
 

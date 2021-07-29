@@ -39,8 +39,8 @@ SerfPropPatchReqProcImpl::~SerfPropPatchReqProcImpl()
 {
 }
 
-#define PROPPATCH_HEADER "<?xml version=\"1.0\" encoding=\"utf-8\"?><propertyupdate xmlns=\"DAV:\">"
-#define PROPPATCH_TRAILER "</propertyupdate>"
+constexpr OUStringLiteral PROPPATCH_HEADER = u"<?xml version=\"1.0\" encoding=\"utf-8\"?><propertyupdate xmlns=\"DAV:\">";
+constexpr OUStringLiteral PROPPATCH_TRAILER = u"</propertyupdate>";
 
 serf_bucket_t * SerfPropPatchReqProcImpl::createSerfRequestBucket( serf_request_t * inSerfRequest )
 {

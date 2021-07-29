@@ -61,7 +61,7 @@ using namespace linguistic;
 
 // XML-header to query SPELLML support
 // to handle user words with "Grammar By" model words
-#define SPELLML_SUPPORT "<?xml?>"
+constexpr OUStringLiteral SPELLML_SUPPORT = u"<?xml?>";
 
 // User dictionaries can contain optional "title:" tags
 // to support custom titles with space and other characters.
@@ -72,7 +72,7 @@ using namespace linguistic;
 // The following fake file name extension will be
 // added to the text of the title: field for correct
 // text stripping and dictionary saving.
-#define EXTENSION_FOR_TITLE_TEXT "."
+constexpr OUStringLiteral EXTENSION_FOR_TITLE_TEXT = u".";
 
 const char* const pVerStr2    = "WBSWG2";
 const char* const pVerStr5    = "WBSWG5";

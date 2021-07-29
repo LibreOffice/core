@@ -40,12 +40,12 @@
 
 #include <bitmaps.hlst>
 
-#define PROPERTY_TITLE          "BubbleHeading"
-#define PROPERTY_TEXT           "BubbleText"
-#define PROPERTY_IMAGE          "BubbleImageURL"
-#define PROPERTY_SHOW_BUBBLE    "BubbleVisible"
-#define PROPERTY_CLICK_HDL      "MenuClickHDL"
-#define PROPERTY_SHOW_MENUICON  "MenuIconVisible"
+constexpr OUStringLiteral PROPERTY_TITLE = u"BubbleHeading";
+constexpr OUStringLiteral PROPERTY_TEXT = u"BubbleText";
+constexpr OUStringLiteral PROPERTY_IMAGE = u"BubbleImageURL";
+constexpr OUStringLiteral PROPERTY_SHOW_BUBBLE = u"BubbleVisible";
+constexpr OUStringLiteral PROPERTY_CLICK_HDL = u"MenuClickHDL";
+constexpr OUStringLiteral PROPERTY_SHOW_MENUICON = u"MenuIconVisible";
 
 using namespace ::com::sun::star;
 

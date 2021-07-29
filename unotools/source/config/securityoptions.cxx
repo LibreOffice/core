@@ -36,10 +36,10 @@
 
 using namespace ::com::sun::star::uno;
 
-#define PROPERTYNAME_MACRO_TRUSTEDAUTHORS       u"TrustedAuthors"
-#define PROPERTYNAME_TRUSTEDAUTHOR_SUBJECTNAME  u"SubjectName"
-#define PROPERTYNAME_TRUSTEDAUTHOR_SERIALNUMBER u"SerialNumber"
-#define PROPERTYNAME_TRUSTEDAUTHOR_RAWDATA      u"RawData"
+constexpr OUStringLiteral PROPERTYNAME_MACRO_TRUSTEDAUTHORS = u"TrustedAuthors";
+constexpr OUStringLiteral PROPERTYNAME_TRUSTEDAUTHOR_SUBJECTNAME = u"SubjectName";
+constexpr OUStringLiteral PROPERTYNAME_TRUSTEDAUTHOR_SERIALNUMBER = u"SerialNumber";
+constexpr OUStringLiteral PROPERTYNAME_TRUSTEDAUTHOR_RAWDATA = u"RawData";
 
 
 namespace SvtSecurityOptions
@@ -247,7 +247,7 @@ void SetTrustedAuthors( const std::vector< Certificate >& rAuthors )
     for( sal_Int32 i = 0; i < nCnt; ++i )
     {
         OUString aPrefix(
-            PROPERTYNAME_MACRO_TRUSTEDAUTHORS "/a"
+            PROPERTYNAME_MACRO_TRUSTEDAUTHORS + "/a"
             + OUString::number(i) + "/");
         Sequence< css::beans::PropertyValue >    lPropertyValues( 3 );
         lPropertyValues[ 0 ].Name = aPrefix + PROPERTYNAME_TRUSTEDAUTHOR_SUBJECTNAME;
