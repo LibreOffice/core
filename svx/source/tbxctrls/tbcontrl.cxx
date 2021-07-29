@@ -2169,11 +2169,11 @@ SvxFrameWindow_Impl::SvxFrameWindow_Impl(SvxFrameToolBoxControl* pControl, weld:
     InitImageList();
 
     /*
-     *  1       2        3         4
-     *  -------------------------------------
-     *  NONE    LEFT     RIGHT     LEFTRIGHT
-     *  TOP     BOTTOM   TOPBOTTOM OUTER
-     *  -------------------------------------
+     *  1       2        3         4            5
+     *  ------------------------------------------------------
+     *  NONE    LEFT     RIGHT     LEFTRIGHT    DIAGONALLEFT
+     *  TOP     BOTTOM   TOPBOTTOM OUTER        DIAGONALRIGHT
+     *  ------------------------------------------------------
      *  HOR     HORINNER VERINNER   ALL         <- can be switched of via bParagraphMode
      */
 
@@ -2222,6 +2222,15 @@ IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl, ValueSet*, void)
     SvxBoxItem          aBorderOuter( SID_ATTR_BORDER_OUTER );
     SvxBoxInfoItem      aBorderInner( SID_ATTR_BORDER_INNER );
     SvxBorderLine       theDefLine;
+
+    // diagonal left border
+    SvxBorderLine       dLeftBorderLine( nullptr, 1 );
+    SvxLineItem         dLeftLineItem( SID_ATTR_BORDER_DIAG_TLBR );
+
+    // diagonal right border
+    SvxBorderLine       dRightBorderLine( nullptr, 1 );
+    SvxLineItem         dRightLineItem( SID_ATTR_BORDER_DIAG_BLTR );
+
     SvxBorderLine       *pLeft = nullptr,
                         *pRight = nullptr,
                         *pTop = nullptr,
@@ -2235,6 +2244,9 @@ IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl, ValueSet*, void)
     switch ( nSel )
     {
         case 1: nValidFlags |= FrmValidFlags::AllMask;
+                // set nullptr to remove diagonal lines
+                dLeftLineItem.SetLine(nullptr);
+                dRightLineItem.SetLine(nullptr);
         break;  // NONE
         case 2: pLeft = &theDefLine;
                 nValidFlags |= FrmValidFlags::Left;
@@ -2245,42 +2257,47 @@ IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl, ValueSet*, void)
         case 4: pLeft = pRight = &theDefLine;
                 nValidFlags |=  FrmValidFlags::Right|FrmValidFlags::Left;
         break;  // LEFTRIGHT
-        case 5: pTop = &theDefLine;
+        case 5: dLeftLineItem.SetLine(&dLeftBorderLine);
+        break;  // DIAGONAL LEFT
+        case 6: pTop = &theDefLine;
                 nValidFlags |= FrmValidFlags::Top;
         break;  // TOP
-        case 6: pBottom = &theDefLine;
+        case 7: pBottom = &theDefLine;
                 nValidFlags |= FrmValidFlags::Bottom;
         break;  // BOTTOM
-        case 7: pTop =  pBottom = &theDefLine;
+        case 8: pTop =  pBottom = &theDefLine;
                 nValidFlags |= FrmValidFlags::Bottom|FrmValidFlags::Top;
         break;  // TOPBOTTOM
-        case 8: pLeft = pRight = pTop = pBottom = &theDefLine;
+        case 9: pLeft = pRight = pTop = pBottom = &theDefLine;
                 nValidFlags |= FrmValidFlags::Left | FrmValidFlags::Right | FrmValidFlags::Top | FrmValidFlags::Bottom;
         break;  // OUTER
+        case 10:
+                dRightLineItem.SetLine(&dRightBorderLine);
+        break;  // DIAGONAL RIGHT
 
         // Inner Table:
-        case 9: // HOR
+        case 11: // HOR
             pTop = pBottom = &theDefLine;
             aBorderInner.SetLine( &theDefLine, SvxBoxInfoItemLine::HORI );
             aBorderInner.SetLine( nullptr, SvxBoxInfoItemLine::VERT );
             nValidFlags |= FrmValidFlags::HInner|FrmValidFlags::Top|FrmValidFlags::Bottom;
             break;
 
-        case 10: // HORINNER
+        case 12: // HORINNER
             pLeft = pRight = pTop = pBottom = &theDefLine;
             aBorderInner.SetLine( &theDefLine, SvxBoxInfoItemLine::HORI );
             aBorderInner.SetLine( nullptr, SvxBoxInfoItemLine::VERT );
             nValidFlags |= FrmValidFlags::Right|FrmValidFlags::Left|FrmValidFlags::HInner|FrmValidFlags::Top|FrmValidFlags::Bottom;
             break;
 
-        case 11: // VERINNER
+        case 13: // VERINNER
             pLeft = pRight = pTop = pBottom = &theDefLine;
             aBorderInner.SetLine( nullptr, SvxBoxInfoItemLine::HORI );
             aBorderInner.SetLine( &theDefLine, SvxBoxInfoItemLine::VERT );
             nValidFlags |= FrmValidFlags::Right|FrmValidFlags::Left|FrmValidFlags::VInner|FrmValidFlags::Top|FrmValidFlags::Bottom;
         break;
 
-        case 12: // ALL
+        case 14: // ALL
             pLeft = pRight = pTop = pBottom = &theDefLine;
             aBorderInner.SetLine( &theDefLine, SvxBoxInfoItemLine::HORI );
             aBorderInner.SetLine( &theDefLine, SvxBoxInfoItemLine::VERT );
@@ -2290,30 +2307,85 @@ IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl, ValueSet*, void)
         default:
         break;
     }
-    aBorderOuter.SetLine( pLeft, SvxBoxItemLine::LEFT );
-    aBorderOuter.SetLine( pRight, SvxBoxItemLine::RIGHT );
-    aBorderOuter.SetLine( pTop, SvxBoxItemLine::TOP );
-    aBorderOuter.SetLine( pBottom, SvxBoxItemLine::BOTTOM );
 
-    if(nModifier == KEY_SHIFT)
-        nValidFlags |= FrmValidFlags::AllMask;
-    aBorderInner.SetValid( SvxBoxInfoItemValidFlags::TOP,       bool(nValidFlags&FrmValidFlags::Top ));
-    aBorderInner.SetValid( SvxBoxInfoItemValidFlags::BOTTOM,    bool(nValidFlags&FrmValidFlags::Bottom ));
-    aBorderInner.SetValid( SvxBoxInfoItemValidFlags::LEFT,      bool(nValidFlags&FrmValidFlags::Left));
-    aBorderInner.SetValid( SvxBoxInfoItemValidFlags::RIGHT,     bool(nValidFlags&FrmValidFlags::Right ));
-    aBorderInner.SetValid( SvxBoxInfoItemValidFlags::HORI,      bool(nValidFlags&FrmValidFlags::HInner ));
-    aBorderInner.SetValid( SvxBoxInfoItemValidFlags::VERT,      bool(nValidFlags&FrmValidFlags::VInner));
-    aBorderInner.SetValid( SvxBoxInfoItemValidFlags::DISTANCE );
-    aBorderInner.SetValid( SvxBoxInfoItemValidFlags::DISABLE,   false );
+    if (nSel == 5)
+    {
+        Any a;
+        Sequence< PropertyValue > aArgs( 1 );
+        aArgs[0].Name = "BorderTLBR";
+        dLeftLineItem.QueryValue( a );
+        aArgs[0].Value = a;
 
-    Any a;
-    Sequence< PropertyValue > aArgs( 2 );
-    aArgs[0].Name = "OuterBorder";
-    aBorderOuter.QueryValue( a );
-    aArgs[0].Value = a;
-    aArgs[1].Name = "InnerBorder";
-    aBorderInner.QueryValue( a );
-    aArgs[1].Value = a;
+        mxControl->dispatchCommand( ".uno:BorderTLBR", aArgs );
+    }
+    else if (nSel == 10)
+    {
+        Any a;
+        Sequence< PropertyValue > aArgs( 1 );
+        aArgs[0].Name = "BorderBLTR";
+        dRightLineItem.QueryValue( a );
+        aArgs[0].Value = a;
+
+        mxControl->dispatchCommand( ".uno:BorderBLTR", aArgs );
+    }
+    else
+    {
+        aBorderOuter.SetLine( pLeft, SvxBoxItemLine::LEFT );
+        aBorderOuter.SetLine( pRight, SvxBoxItemLine::RIGHT );
+        aBorderOuter.SetLine( pTop, SvxBoxItemLine::TOP );
+        aBorderOuter.SetLine( pBottom, SvxBoxItemLine::BOTTOM );
+
+        if(nModifier == KEY_SHIFT)
+            nValidFlags |= FrmValidFlags::AllMask;
+        aBorderInner.SetValid( SvxBoxInfoItemValidFlags::TOP,       bool(nValidFlags&FrmValidFlags::Top ));
+        aBorderInner.SetValid( SvxBoxInfoItemValidFlags::BOTTOM,    bool(nValidFlags&FrmValidFlags::Bottom ));
+        aBorderInner.SetValid( SvxBoxInfoItemValidFlags::LEFT,      bool(nValidFlags&FrmValidFlags::Left));
+        aBorderInner.SetValid( SvxBoxInfoItemValidFlags::RIGHT,     bool(nValidFlags&FrmValidFlags::Right ));
+        aBorderInner.SetValid( SvxBoxInfoItemValidFlags::HORI,      bool(nValidFlags&FrmValidFlags::HInner ));
+        aBorderInner.SetValid( SvxBoxInfoItemValidFlags::VERT,      bool(nValidFlags&FrmValidFlags::VInner));
+        aBorderInner.SetValid( SvxBoxInfoItemValidFlags::DISTANCE );
+        aBorderInner.SetValid( SvxBoxInfoItemValidFlags::DISABLE,   false );
+
+        // if nSel == 1, we should remove all lines from the cell.
+        // additionally, we should remove diagonal borders here,
+        // because diagonal left and diagonal right borders are NOT
+        // the member of aBorderOuter and aBorderInner.
+        if (nSel == 1)
+        {
+            // remove left diagonal line
+            {
+                Any a;
+                Sequence< PropertyValue > aArgs( 1 );
+                aArgs[0].Name = "BorderTLBR";
+                dLeftLineItem.QueryValue( a );
+                aArgs[0].Value = a;
+
+                mxControl->dispatchCommand( ".uno:BorderTLBR", aArgs );
+            }
+
+            // remove right diagonal line
+            {
+                Any a;
+                Sequence< PropertyValue > aArgs( 1 );
+                aArgs[0].Name = "BorderBLTR";
+                dRightLineItem.QueryValue( a );
+                aArgs[0].Value = a;
+
+                mxControl->dispatchCommand( ".uno:BorderBLTR", aArgs );
+            }
+        }
+
+        Any a;
+        Sequence< PropertyValue > aArgs( 2 );
+        aArgs[0].Name = "OuterBorder";
+        aBorderOuter.QueryValue( a );
+        aArgs[0].Value = a;
+        aArgs[1].Name = "InnerBorder";
+        aBorderInner.QueryValue( a );
+        aArgs[1].Value = a;
+
+        mxControl->dispatchCommand( ".uno:SetBorderStyle", aArgs );
+    }
 
     if (mxFrameSet)
     {
@@ -2322,8 +2394,6 @@ IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl, ValueSet*, void)
            while in Dispatch()), accessing members will crash in this case. */
         mxFrameSet->SetNoSelection();
     }
-
-    mxControl->dispatchCommand( ".uno:SetBorderStyle", aArgs );
 
     mxControl->EndPopupMode();
 }
