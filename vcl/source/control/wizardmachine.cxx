@@ -1038,9 +1038,11 @@ namespace vcl
         return _nCurrentState + 1;
     }
 
-    bool WizardMachine::prepareLeaveCurrentState(WizardTypes::CommitPageReason)
+    bool WizardMachine::prepareLeaveCurrentState( WizardTypes::CommitPageReason _eReason )
     {
-        return true;
+        IWizardPageController* pController = getPageController( GetPage( getCurrentState() ) );
+        ENSURE_OR_RETURN( pController != nullptr, "WizardMachine::prepareLeaveCurrentState: no controller for the current page!", true );
+        return pController->commitPage( _eReason );
     }
 
     bool WizardMachine::skipBackwardUntil(WizardTypes::WizardState _nTargetState)
