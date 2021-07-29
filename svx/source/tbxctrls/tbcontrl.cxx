@@ -2223,6 +2223,15 @@ IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl, ValueSet*, void)
     SvxBoxItem          aBorderOuter( SID_ATTR_BORDER_OUTER );
     SvxBoxInfoItem      aBorderInner( SID_ATTR_BORDER_INNER );
     SvxBorderLine       theDefLine;
+
+    // diagonal left border
+    SvxBorderLine       dLeftBorderLine( nullptr, 1 );
+    SvxLineItem         dLeftLineItem( SID_ATTR_BORDER_DIAG_TLBR );
+
+    // diagonal right border
+    SvxBorderLine       dRightBorderLine( nullptr, 1 );
+    SvxLineItem         dRightLineItem( SID_ATTR_BORDER_DIAG_BLTR );
+
     SvxBorderLine       *pLeft = nullptr,
                         *pRight = nullptr,
                         *pTop = nullptr,
@@ -2236,6 +2245,9 @@ IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl, ValueSet*, void)
     switch ( nSel )
     {
         case 1: nValidFlags |= FrmValidFlags::AllMask;
+                // set nullptr to remove diagonal lines
+                dLeftLineItem.SetLine(nullptr);
+                dRightLineItem.SetLine(nullptr);
         break;  // NONE
         case 2: pLeft = &theDefLine;
                 nValidFlags |= FrmValidFlags::Left;
@@ -2246,7 +2258,8 @@ IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl, ValueSet*, void)
         case 4: pLeft = pRight = &theDefLine;
                 nValidFlags |=  FrmValidFlags::Right|FrmValidFlags::Left;
         break;  // LEFTRIGHT
-        case 5: break;  // DIAGONAL LEFT
+        case 5: dLeftLineItem.SetLine(&dLeftBorderLine);
+        break;  // DIAGONAL LEFT
         case 6: pTop = &theDefLine;
                 nValidFlags |= FrmValidFlags::Top;
         break;  // TOP
@@ -2259,7 +2272,9 @@ IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl, ValueSet*, void)
         case 9: pLeft = pRight = pTop = pBottom = &theDefLine;
                 nValidFlags |= FrmValidFlags::Left | FrmValidFlags::Right | FrmValidFlags::Top | FrmValidFlags::Bottom;
         break;  // OUTER
-        case 10: break;  // DIAGONAL RIGHT
+        case 10:
+                dRightLineItem.SetLine(&dRightBorderLine);
+        break;  // DIAGONAL RIGHT
 
         // Inner Table:
         case 11: // HOR
@@ -2290,35 +2305,120 @@ IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl, ValueSet*, void)
             nValidFlags |= FrmValidFlags::AllMask;
             break;
 
-        case 15: break;  // CRISSCROSS
+        case 15:
+            // set both diagonal lines to draw criss-cross line
+            dLeftLineItem.SetLine(&dLeftBorderLine);
+            dRightLineItem.SetLine(&dRightBorderLine);
+            break;  // CRISS-CROSS
 
         default:
         break;
     }
-    aBorderOuter.SetLine( pLeft, SvxBoxItemLine::LEFT );
-    aBorderOuter.SetLine( pRight, SvxBoxItemLine::RIGHT );
-    aBorderOuter.SetLine( pTop, SvxBoxItemLine::TOP );
-    aBorderOuter.SetLine( pBottom, SvxBoxItemLine::BOTTOM );
 
-    if(nModifier == KEY_SHIFT)
-        nValidFlags |= FrmValidFlags::AllMask;
-    aBorderInner.SetValid( SvxBoxInfoItemValidFlags::TOP,       bool(nValidFlags&FrmValidFlags::Top ));
-    aBorderInner.SetValid( SvxBoxInfoItemValidFlags::BOTTOM,    bool(nValidFlags&FrmValidFlags::Bottom ));
-    aBorderInner.SetValid( SvxBoxInfoItemValidFlags::LEFT,      bool(nValidFlags&FrmValidFlags::Left));
-    aBorderInner.SetValid( SvxBoxInfoItemValidFlags::RIGHT,     bool(nValidFlags&FrmValidFlags::Right ));
-    aBorderInner.SetValid( SvxBoxInfoItemValidFlags::HORI,      bool(nValidFlags&FrmValidFlags::HInner ));
-    aBorderInner.SetValid( SvxBoxInfoItemValidFlags::VERT,      bool(nValidFlags&FrmValidFlags::VInner));
-    aBorderInner.SetValid( SvxBoxInfoItemValidFlags::DISTANCE );
-    aBorderInner.SetValid( SvxBoxInfoItemValidFlags::DISABLE,   false );
+    if (nSel == 5)
+    {
+        // apply diagonal left border
+        Any a;
+        Sequence< PropertyValue > aArgs( 1 );
+        aArgs[0].Name = "BorderTLBR";
+        dLeftLineItem.QueryValue( a );
+        aArgs[0].Value = a;
 
-    Any a;
-    Sequence< PropertyValue > aArgs( 2 );
-    aArgs[0].Name = "OuterBorder";
-    aBorderOuter.QueryValue( a );
-    aArgs[0].Value = a;
-    aArgs[1].Name = "InnerBorder";
-    aBorderInner.QueryValue( a );
-    aArgs[1].Value = a;
+        mxControl->dispatchCommand( ".uno:BorderTLBR", aArgs );
+    }
+    else if (nSel == 10)
+    {
+        // apply diagonal right border
+        Any a;
+        Sequence< PropertyValue > aArgs( 1 );
+        aArgs[0].Name = "BorderBLTR";
+        dRightLineItem.QueryValue( a );
+        aArgs[0].Value = a;
+
+        mxControl->dispatchCommand( ".uno:BorderBLTR", aArgs );
+    }
+    else if (nSel == 15)
+    {
+        // to draw criss-cross line
+        // we need to set diagonal left and
+        // diagonal right border together
+
+        // apply diagonal left border (TLBR)
+        Any aLeft;
+        Sequence< PropertyValue > aArgsTLBR( 1 );
+        aArgsTLBR[0].Name = "BorderTLBR";
+        dLeftLineItem.QueryValue( aLeft );
+        aArgsTLBR[0].Value = aLeft;
+
+        // apply diagonal right border (BLTR)
+        Any aRight;
+        Sequence< PropertyValue > aArgsBLTR( 1 );
+        aArgsBLTR[0].Name = "BorderBLTR";
+        dRightLineItem.QueryValue( aRight );
+        aArgsBLTR[0].Value = aRight;
+
+        // execute dispatchCommand for both of them
+        mxControl->dispatchCommand( ".uno:BorderTLBR", aArgsTLBR );
+        mxControl->dispatchCommand( ".uno:BorderBLTR", aArgsBLTR );
+    }
+    else
+    {
+        aBorderOuter.SetLine( pLeft, SvxBoxItemLine::LEFT );
+        aBorderOuter.SetLine( pRight, SvxBoxItemLine::RIGHT );
+        aBorderOuter.SetLine( pTop, SvxBoxItemLine::TOP );
+        aBorderOuter.SetLine( pBottom, SvxBoxItemLine::BOTTOM );
+
+        if(nModifier == KEY_SHIFT)
+            nValidFlags |= FrmValidFlags::AllMask;
+        aBorderInner.SetValid( SvxBoxInfoItemValidFlags::TOP,       bool(nValidFlags&FrmValidFlags::Top ));
+        aBorderInner.SetValid( SvxBoxInfoItemValidFlags::BOTTOM,    bool(nValidFlags&FrmValidFlags::Bottom ));
+        aBorderInner.SetValid( SvxBoxInfoItemValidFlags::LEFT,      bool(nValidFlags&FrmValidFlags::Left));
+        aBorderInner.SetValid( SvxBoxInfoItemValidFlags::RIGHT,     bool(nValidFlags&FrmValidFlags::Right ));
+        aBorderInner.SetValid( SvxBoxInfoItemValidFlags::HORI,      bool(nValidFlags&FrmValidFlags::HInner ));
+        aBorderInner.SetValid( SvxBoxInfoItemValidFlags::VERT,      bool(nValidFlags&FrmValidFlags::VInner));
+        aBorderInner.SetValid( SvxBoxInfoItemValidFlags::DISTANCE );
+        aBorderInner.SetValid( SvxBoxInfoItemValidFlags::DISABLE,   false );
+
+        // if nSel == 1, we should remove all lines from the cell.
+        // additionally, we should remove diagonal borders here,
+        // because diagonal left and right borders are NOT
+        // the member of aBorderOuter and aBorderInner.
+        if (nSel == 1)
+        {
+            // remove left diagonal line
+            {
+                Any a;
+                Sequence< PropertyValue > aArgs( 1 );
+                aArgs[0].Name = "BorderTLBR";
+                dLeftLineItem.QueryValue( a );
+                aArgs[0].Value = a;
+
+                mxControl->dispatchCommand( ".uno:BorderTLBR", aArgs );
+            }
+
+            // remove right diagonal line
+            {
+                Any a;
+                Sequence< PropertyValue > aArgs( 1 );
+                aArgs[0].Name = "BorderBLTR";
+                dRightLineItem.QueryValue( a );
+                aArgs[0].Value = a;
+
+                mxControl->dispatchCommand( ".uno:BorderBLTR", aArgs );
+            }
+        }
+
+        Any a;
+        Sequence< PropertyValue > aArgs( 2 );
+        aArgs[0].Name = "OuterBorder";
+        aBorderOuter.QueryValue( a );
+        aArgs[0].Value = a;
+        aArgs[1].Name = "InnerBorder";
+        aBorderInner.QueryValue( a );
+        aArgs[1].Value = a;
+
+        mxControl->dispatchCommand( ".uno:SetBorderStyle", aArgs );
+    }
 
     if (mxFrameSet)
     {
@@ -2327,8 +2427,6 @@ IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl, ValueSet*, void)
            while in Dispatch()), accessing members will crash in this case. */
         mxFrameSet->SetNoSelection();
     }
-
-    mxControl->dispatchCommand( ".uno:SetBorderStyle", aArgs );
 
     mxControl->EndPopupMode();
 }
