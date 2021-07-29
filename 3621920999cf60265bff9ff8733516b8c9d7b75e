@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "55b0224a_a19ef5a4",
+        "filename": "include/formula/grammar.hxx",
+        "patchSetId": 17
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-07-29T17:15:59Z",
+      "side": 1,
+      "message": "According with isRefConventionOOXML() I\u0027d prefer to name this isRefConventionChartOOXML()",
+      "range": {
+        "startLine": 248,
+        "startChar": 16,
+        "endLine": 248,
+        "endChar": 34
+      },
+      "revId": "3621920999cf60265bff9ff8733516b8c9d7b75e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "234120c5_5d69d512",
+        "filename": "sc/source/ui/unoobj/tokenuno.cxx",
+        "patchSetId": 17
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-07-29T17:15:59Z",
+      "side": 1,
+      "message": "AddressConvention::XL_OOX_CHART",
+      "range": {
+        "startLine": 68,
+        "startChar": 52,
+        "endLine": 68,
+        "endChar": 79
+      },
+      "revId": "3621920999cf60265bff9ff8733516b8c9d7b75e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
