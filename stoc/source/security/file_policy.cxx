@@ -351,16 +351,16 @@ PolicyReader::~PolicyReader()
     }
 }
 
-#define s_grant "grant"
-#define s_user "user"
-#define s_permission "permission"
-#define s_openBrace "{"
-#define s_closingBrace "}"
+constexpr OUStringLiteral s_grant = u"grant";
+constexpr OUStringLiteral s_user = u"user";
+constexpr OUStringLiteral s_permission = u"permission";
+constexpr OUStringLiteral s_openBrace = u"{";
+constexpr OUStringLiteral s_closingBrace = u"}";
 
-#define s_filePermission "com.sun.star.io.FilePermission"
-#define s_socketPermission "com.sun.star.connection.SocketPermission"
-#define s_runtimePermission "com.sun.star.security.RuntimePermission"
-#define s_allPermission "com.sun.star.security.AllPermission"
+constexpr OUStringLiteral s_filePermission = u"com.sun.star.io.FilePermission";
+constexpr OUStringLiteral s_socketPermission = u"com.sun.star.connection.SocketPermission";
+constexpr OUStringLiteral s_runtimePermission = u"com.sun.star.security.RuntimePermission";
+constexpr OUStringLiteral s_allPermission = u"com.sun.star.security.AllPermission";
 
 
 void FilePolicy::refresh()

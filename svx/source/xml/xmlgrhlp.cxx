@@ -60,8 +60,8 @@ using namespace com::sun::star::io;
 
 namespace com::sun::star::uno { class XComponentContext; }
 
-#define XML_GRAPHICSTORAGE_NAME     "Pictures"
-#define XML_GRAPHICOBJECT_URL_BASE  "vnd.sun.star.GraphicObject:"
+constexpr OUStringLiteral XML_GRAPHICSTORAGE_NAME = u"Pictures";
+constexpr OUStringLiteral XML_GRAPHICOBJECT_URL_BASE = u"vnd.sun.star.GraphicObject:";
 
 namespace {
 

@@ -40,7 +40,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::view;
 using ::com::sun::star::awt::tab::XTabPageModel;
 
-#define WRONG_TYPE_EXCEPTION "Type must be css::awt::tab::XTabPageModel!"
+constexpr OUStringLiteral WRONG_TYPE_EXCEPTION = u"Type must be css::awt::tab::XTabPageModel!";
 
 
 UnoControlTabPageContainerModel::UnoControlTabPageContainerModel( const Reference< XComponentContext >& i_factory )

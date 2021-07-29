@@ -29,7 +29,7 @@
 
 using namespace com::sun::star;
 
-#define CFGPATH_ADDINS "Office.CalcAddIns/AddInInfo"
+constexpr OUStringLiteral CFGPATH_ADDINS = u"Office.CalcAddIns/AddInInfo";
 
 ScAddInCfg::ScAddInCfg()
     : ConfigItem(CFGPATH_ADDINS)

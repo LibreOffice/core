@@ -38,7 +38,7 @@
 
 using namespace ::com::sun::star::uno;
 
-#define USERITEM_NAME           "UserItem"
+constexpr OUStringLiteral USERITEM_NAME = u"UserItem";
 
 
 struct TabPageImpl
