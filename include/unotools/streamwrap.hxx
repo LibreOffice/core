@@ -21,7 +21,6 @@
 #define INCLUDED_UNOTOOLS_STREAMWRAP_HXX
 
 #include <unotools/unotoolsdllapi.h>
-#include <osl/mutex.hxx>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
@@ -30,6 +29,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <memory>
+#include <mutex>
 
 class SvStream;
 
@@ -43,7 +43,7 @@ class SAL_DLLPUBLIC_TEMPLATE OInputStreamWrapper_Base : public cppu::WeakImplHel
 class UNOTOOLS_DLLPUBLIC OInputStreamWrapper : public OInputStreamWrapper_Base
 {
 protected:
-    ::osl::Mutex    m_aMutex;
+    std::mutex      m_aMutex;
     SvStream*       m_pSvStream;
     bool        m_bSvStreamOwner : 1;
     OInputStreamWrapper()
