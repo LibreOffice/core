@@ -66,7 +66,7 @@ AccessibleRelationSetHelper::~AccessibleRelationSetHelper()
 sal_Int32 SAL_CALL
     AccessibleRelationSetHelper::getRelationCount(  )
 {
-    osl::MutexGuard aGuard (maMutex);
+    std::lock_guard aGuard (maMutex);
 
     return maRelations.size();
 }
@@ -87,7 +87,7 @@ sal_Int32 SAL_CALL
  AccessibleRelation SAL_CALL
         AccessibleRelationSetHelper::getRelation( sal_Int32 nIndex )
 {
-    osl::MutexGuard aGuard (maMutex);
+    std::lock_guard aGuard (maMutex);
 
     if ((nIndex < 0) || (o3tl::make_unsigned(nIndex) >= maRelations.size()))
         throw lang::IndexOutOfBoundsException();
@@ -110,7 +110,7 @@ sal_Int32 SAL_CALL
 sal_Bool SAL_CALL
     AccessibleRelationSetHelper::containsRelation( sal_Int16 aRelationType )
 {
-    osl::MutexGuard aGuard (maMutex);
+    std::lock_guard aGuard (maMutex);
 
     AccessibleRelation defaultRelation; // default is INVALID
     AccessibleRelation relationByType = lcl_getRelationByType(maRelations, aRelationType);
@@ -131,14 +131,14 @@ sal_Bool SAL_CALL
 AccessibleRelation SAL_CALL
         AccessibleRelationSetHelper::getRelationByType( sal_Int16 aRelationType )
 {
-    osl::MutexGuard aGuard (maMutex);
+    std::lock_guard aGuard (maMutex);
 
     return lcl_getRelationByType(maRelations, aRelationType);
 }
 
 void AccessibleRelationSetHelper::AddRelation(const AccessibleRelation& rRelation)
 {
-    osl::MutexGuard aGuard (maMutex);
+    std::lock_guard aGuard (maMutex);
 
     for (auto& aRelation: maRelations)
     {

@@ -23,8 +23,8 @@
 #include <unotools/unotoolsdllapi.h>
 
 #include <com/sun/star/accessibility/XAccessibleRelationSet.hpp>
-#include <osl/mutex.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <mutex>
 #include <vector>
 
 //= XAccessibleRelationSet helper classes
@@ -115,7 +115,7 @@ public:
 
 private:
     /// Mutex guarding this object.
-    ::osl::Mutex maMutex;
+    std::mutex maMutex;
     /// The implementation of this helper interface.
     std::vector<css::accessibility::AccessibleRelation> maRelations;
 };
