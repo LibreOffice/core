@@ -16,6 +16,7 @@
 #include <osl/thread.hxx>
 
 #include <stdlib.h>
+#include <atomic>
 #include <thread>
 #include <mutex>
 
@@ -74,7 +75,7 @@ public:
         mutex.lock();
         mutex.unlock();
     }
-    static inline int count = 0;
+    static inline std::atomic<int> count = 0;
     static inline std::mutex mutex;
 };
 } // namespace
