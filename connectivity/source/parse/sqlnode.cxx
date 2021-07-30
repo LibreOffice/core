@@ -2748,13 +2748,13 @@ OSQLParseNodesContainer::~OSQLParseNodesContainer()
 
 void OSQLParseNodesContainer::push_back(OSQLParseNode* _pNode)
 {
-    ::osl::MutexGuard aGuard(m_aMutex);
+    std::lock_guard aGuard(m_aMutex);
     m_aNodes.push_back(_pNode);
 }
 
 void OSQLParseNodesContainer::erase(OSQLParseNode* _pNode)
 {
-    ::osl::MutexGuard aGuard(m_aMutex);
+    std::lock_guard aGuard(m_aMutex);
     if ( !m_aNodes.empty() )
     {
         std::vector< OSQLParseNode* >::iterator aFind = std::find(m_aNodes.begin(), m_aNodes.end(),_pNode);
@@ -2765,17 +2765,21 @@ void OSQLParseNodesContainer::erase(OSQLParseNode* _pNode)
 
 void OSQLParseNodesContainer::clear()
 {
-    ::osl::MutexGuard aGuard(m_aMutex);
+    std::lock_guard aGuard(m_aMutex);
     m_aNodes.clear();
 }
 
 void OSQLParseNodesContainer::clearAndDelete()
 {
-    ::osl::MutexGuard aGuard(m_aMutex);
-    // clear the garbage collector
-    while ( !m_aNodes.empty() )
+    ::std::vector< OSQLParseNode* > tmpVec;
     {
-        OSQLParseNode* pNode = m_aNodes[0];
+        std::lock_guard aGuard(m_aMutex);
+        tmpVec.swap(m_aNodes);
+    }
+    // clear the garbage collector
+    while ( !tmpVec.empty() )
+    {
+        OSQLParseNode* pNode = tmpVec.front();
         while ( pNode->getParent() )
         {
             pNode = pNode->getParent();
