@@ -108,6 +108,12 @@ CPPUNIT_TEST_FIXTURE(Test, testDontAddNewStyles)
     assertXPath(pXmlDoc, "/w:styles/w:style[@w:styleId='Caption']", 0);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf126287, "tdf126287.docx")
+{
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+}
+
+
 DECLARE_OOXMLEXPORT_TEST(testTdf123642_BookmarkAtDocEnd, "tdf123642.docx")
 {
     // get bookmark interface
