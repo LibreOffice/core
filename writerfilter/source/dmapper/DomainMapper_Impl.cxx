@@ -286,6 +286,7 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bIsFirstSection( true ),
         m_bIsColumnBreakDeferred( false ),
         m_bIsPageBreakDeferred( false ),
+        m_nLineBreaksDeferred( 0 ),
         m_bSdtEndDeferred(false),
         m_bParaSdtEndDeferred(false),
         m_bStartTOC(false),
@@ -1113,9 +1114,12 @@ void DomainMapper_Impl::deferBreak( BreakType deferredBreakType)
 {
     switch (deferredBreakType)
     {
-    case COLUMN_BREAK:
-            m_bIsColumnBreakDeferred = true;
+    case LINE_BREAK:
+        m_nLineBreaksDeferred++;
         break;
+    case COLUMN_BREAK:
+        m_bIsColumnBreakDeferred = true;
+    break;
     case PAGE_BREAK:
             // See SwWW8ImplReader::HandlePageBreakChar(), page break should be
             // ignored inside tables.
@@ -1133,6 +1137,8 @@ bool DomainMapper_Impl::isBreakDeferred( BreakType deferredBreakType )
 {
     switch (deferredBreakType)
     {
+    case LINE_BREAK:
+        return m_nLineBreaksDeferred > 0;
     case COLUMN_BREAK:
         return m_bIsColumnBreakDeferred;
     case PAGE_BREAK:
@@ -1146,6 +1152,10 @@ void DomainMapper_Impl::clearDeferredBreak(BreakType deferredBreakType)
 {
     switch (deferredBreakType)
     {
+    case LINE_BREAK:
+        assert(m_nLineBreaksDeferred > 0);
+        m_nLineBreaksDeferred--;
+        break;
     case COLUMN_BREAK:
         m_bIsColumnBreakDeferred = false;
         break;
@@ -1159,6 +1169,7 @@ void DomainMapper_Impl::clearDeferredBreak(BreakType deferredBreakType)
 
 void DomainMapper_Impl::clearDeferredBreaks()
 {
+    m_nLineBreaksDeferred = 0;
     m_bIsColumnBreakDeferred = false;
     m_bIsPageBreakDeferred = false;
 }
