@@ -31,6 +31,7 @@
 #include <salhelper/singletonref.hxx>
 
 #include <map>
+#include <mutex>
 
 namespace com::sun::star::i18n { class XCharacterClassification; }
 namespace com::sun::star::i18n { class XLocaleData4; }
@@ -82,7 +83,7 @@ namespace connectivity
 
     class OSQLParseNodesContainer
     {
-        ::osl::Mutex m_aMutex;
+        std::mutex m_aMutex;
         ::std::vector< OSQLParseNode* > m_aNodes;
     public:
         OSQLParseNodesContainer();
