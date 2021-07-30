@@ -26,11 +26,11 @@
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 
 #include <cppuhelper/implbase.hxx>
-#include <osl/mutex.hxx>
 #include <unotools/charclass.hxx>
 #include <unotools/collatorwrapper.hxx>
 #include <tools/link.hxx>
 
+#include <atomic>
 #include <deque>
 #include <memory>
 #include <string_view>
@@ -193,12 +193,10 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC FmSearchEngine final
 
     // The link we broadcast the progress and the result to
     Link<const FmSearchProgress*,void>  m_aProgressHandler;
-    bool                m_bSearchingCurrently : 1;      // is an (asynchronous) search running?
-    bool                m_bCancelAsynchRequest : 1;     // should be cancelled?
-    ::osl::Mutex        m_aCancelAsynchAccess;          // access to_bCancelAsynchRequest (technically only
-                                                        // relevant for m_eMode == SM_USETHREAD)
+    std::atomic<bool>   m_bCancelAsynchRequest;     // should be cancelled?
 
     // parameters for the search
+    bool        m_bSearchingCurrently : 1;      // is an (asynchronous) search running?
     bool        m_bFormatter : 1;       // use field formatting
     bool        m_bForward : 1;         // direction
     bool        m_bWildcard : 1;        // wildcard search

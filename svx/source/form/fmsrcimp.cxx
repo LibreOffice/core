@@ -547,8 +547,8 @@ FmSearchEngine::FmSearchEngine(const Reference< XComponentContext >& _rxContext,
     ,m_xClonedIterator(m_xOriginalIterator, true)
     ,m_eSearchForType(SearchFor::String)
     ,m_srResult(SearchResult::Found)
-    ,m_bSearchingCurrently(false)
     ,m_bCancelAsynchRequest(false)
+    ,m_bSearchingCurrently(false)
     ,m_bFormatter(true)     // this must be consistent with m_xSearchCursor, which is generally == m_xOriginalIterator
     ,m_bForward(false)
     ,m_bWildcard(false)
@@ -915,18 +915,14 @@ IMPL_LINK(FmSearchEngine, OnNewRecordCount, sal_Int32, theCounter, void)
 
 bool FmSearchEngine::CancelRequested()
 {
-    m_aCancelAsynchAccess.acquire();
     bool bReturn = m_bCancelAsynchRequest;
-    m_aCancelAsynchAccess.release();
     return bReturn;
 }
 
 
 void FmSearchEngine::CancelSearch()
 {
-    m_aCancelAsynchAccess.acquire();
     m_bCancelAsynchRequest = true;
-    m_aCancelAsynchAccess.release();
 }
 
 
