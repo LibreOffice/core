@@ -22,8 +22,8 @@
 #include <unotools/unotoolsdllapi.h>
 
 #include <com/sun/star/accessibility/XAccessibleStateSet.hpp>
-#include <osl/mutex.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <mutex>
 
 //= XAccessibleStateSet helper classes
 
@@ -126,7 +126,7 @@ public:
 
 private:
     /// Mutex guarding this object.
-    ::osl::Mutex maMutex;
+    std::mutex maMutex;
     /// The implementation of this helper interface.
     sal_uInt64 maStates;
 };
