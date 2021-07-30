@@ -3225,6 +3225,18 @@ void DomainMapper::lcl_startParagraphGroup()
 
 void DomainMapper::lcl_endParagraphGroup()
 {
+    if (m_pImpl->isBreakDeferred(LINE_BREAK))
+    {
+        if (m_pImpl->GetIsLastParagraphInSection())
+            m_pImpl->clearDeferredBreak(LINE_BREAK);
+
+        while (m_pImpl->isBreakDeferred(LINE_BREAK))
+        {
+            m_pImpl->clearDeferredBreak(LINE_BREAK);
+            m_pImpl->appendTextPortion("\n", m_pImpl->GetTopContext());
+        }
+    }
+
     m_pImpl->PopProperties(CONTEXT_PARAGRAPH);
     if (m_pImpl->hasTableManager())
        m_pImpl->getTableManager().endParagraphGroup();
@@ -3374,6 +3386,13 @@ void DomainMapper::lcl_text(const sal_uInt8 * data_, size_t len)
                 case 0x0e: //column break
                     m_pImpl->deferBreak(COLUMN_BREAK);
                     return;
+                case 0x0a: //line break
+                    if (m_pImpl->GetIsLastParagraphInSection())
+                    {
+                        m_pImpl->deferBreak(LINE_BREAK);
+                        return;
+                    }
+                    break;
                 case 0x07:
                     m_pImpl->getTableManager().text(data_, len);
                     return;
@@ -3406,6 +3425,13 @@ void DomainMapper::lcl_text(const sal_uInt8 * data_, size_t len)
 
         // GetTopContext() is changed by inserted breaks, but we want to keep the current context
         PropertyMapPtr pContext = m_pImpl->GetTopContext();
+
+        while (m_pImpl->isBreakDeferred(LINE_BREAK))
+        {
+            m_pImpl->clearDeferredBreak(LINE_BREAK);
+            m_pImpl->appendTextPortion("\n", pContext);
+        }
+
         if (!m_pImpl->GetFootnoteContext())
         {
             if (m_pImpl->isBreakDeferred(PAGE_BREAK))
@@ -3629,6 +3655,18 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
         m_pImpl->m_bHasFtnSep = true;
         return;
     }
+    else if (len == 1 && sText[0] == '\r')
+    {
+        // Clear "last" one linebreak at end of section
+        if (m_pImpl->GetIsLastParagraphInSection() && m_pImpl->isBreakDeferred(LINE_BREAK))
+            m_pImpl->clearDeferredBreak(LINE_BREAK);
+        // And emit all other linebreaks
+        while (m_pImpl->isBreakDeferred(LINE_BREAK))
+        {
+            m_pImpl->clearDeferredBreak(LINE_BREAK);
+            m_pImpl->appendTextPortion("\n", m_pImpl->GetTopContext());
+        }
+    }
     else if (len == 1 && sText[0] == '\t' )
     {
         if ( m_pImpl->m_bCheckFirstFootnoteTab && m_pImpl->IsInFootOrEndnote() )
@@ -3659,6 +3697,12 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
 
     try
     {
+        while (m_pImpl->isBreakDeferred(LINE_BREAK))
+        {
+            m_pImpl->clearDeferredBreak(LINE_BREAK);
+            m_pImpl->appendTextPortion("\n", m_pImpl->GetTopContext());
+        }
+
         m_pImpl->getTableManager().utext(data_, len);
 
         if (bNewLine)
