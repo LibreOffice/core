@@ -18,6 +18,7 @@
  */
 
 #include <iostream>
+#include <mutex>
 #include <string_view>
 
 #include <osl/file.hxx>
@@ -54,9 +55,9 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::linguistic2;
 
-static osl::Mutex &  GetLangGuessMutex()
+static std::mutex & GetLangGuessMutex()
 {
-    static osl::Mutex aMutex;
+    static std::mutex aMutex;
     return aMutex;
 }
 
@@ -160,7 +161,7 @@ Locale SAL_CALL LangGuess_Impl::guessPrimaryLanguage(
         ::sal_Int32 nStartPos,
         ::sal_Int32 nLen )
 {
-    osl::MutexGuard aGuard( GetLangGuessMutex() );
+    std::lock_guard aGuard( GetLangGuessMutex() );
 
     EnsureInitialized();
 
@@ -189,7 +190,7 @@ void LangGuess_Impl::SetFingerPrintsDB(
 
 uno::Sequence< Locale > SAL_CALL LangGuess_Impl::getAvailableLanguages(  )
 {
-    osl::MutexGuard aGuard( GetLangGuessMutex() );
+    std::lock_guard aGuard( GetLangGuessMutex() );
 
     EnsureInitialized();
 
@@ -211,7 +212,7 @@ uno::Sequence< Locale > SAL_CALL LangGuess_Impl::getAvailableLanguages(  )
 
 uno::Sequence< Locale > SAL_CALL LangGuess_Impl::getEnabledLanguages(  )
 {
-    osl::MutexGuard aGuard( GetLangGuessMutex() );
+    std::lock_guard aGuard( GetLangGuessMutex() );
 
     EnsureInitialized();
 
@@ -233,7 +234,7 @@ uno::Sequence< Locale > SAL_CALL LangGuess_Impl::getEnabledLanguages(  )
 
 uno::Sequence< Locale > SAL_CALL LangGuess_Impl::getDisabledLanguages(  )
 {
-    osl::MutexGuard aGuard( GetLangGuessMutex() );
+    std::lock_guard aGuard( GetLangGuessMutex() );
 
     EnsureInitialized();
 
@@ -256,7 +257,7 @@ uno::Sequence< Locale > SAL_CALL LangGuess_Impl::getDisabledLanguages(  )
 void SAL_CALL LangGuess_Impl::disableLanguages(
         const uno::Sequence< Locale >& rLanguages )
 {
-    osl::MutexGuard aGuard( GetLangGuessMutex() );
+    std::lock_guard aGuard( GetLangGuessMutex() );
 
     EnsureInitialized();
 
@@ -277,7 +278,7 @@ void SAL_CALL LangGuess_Impl::disableLanguages(
 void SAL_CALL LangGuess_Impl::enableLanguages(
         const uno::Sequence< Locale >& rLanguages )
 {
-    osl::MutexGuard aGuard( GetLangGuessMutex() );
+    std::lock_guard aGuard( GetLangGuessMutex() );
 
     EnsureInitialized();
 
