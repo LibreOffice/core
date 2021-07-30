@@ -210,12 +210,19 @@ public:
     inline bool CallCallback(SalEvent nEvent, const void* pEvent) const;
 
     void setInputLanguage(LanguageType);
+    inline bool isPopup() const;
 };
 
 inline bool Qt5Frame::CallCallback(SalEvent nEvent, const void* pEvent) const
 {
     SolarMutexGuard aGuard;
     return SalFrame::CallCallback(nEvent, pEvent);
+}
+
+inline bool Qt5Frame::isPopup() const
+{
+    return ((m_nStyle & SalFrameStyleFlags::FLOAT)
+            && !(m_nStyle & SalFrameStyleFlags::OWNERDRAWDECORATION));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

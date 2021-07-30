@@ -75,6 +75,7 @@ class Qt5Widget : public QWidget
 
     void inputMethodEvent(QInputMethodEvent*) override;
     QVariant inputMethodQuery(Qt::InputMethodQuery) const override;
+    static void closePopup();
 
 public:
     Qt5Widget(Qt5Frame& rFrame, Qt::WindowFlags f = Qt::WindowFlags());
