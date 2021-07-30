@@ -1049,6 +1049,7 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData& rData, bool bNegati
         // Validation circle for detective.
         rData.setShapeRect(GetDocument(), pObj->GetLogicRect());
 
+        // rData.maStart should contain the address of the be validated cell.
         tools::Rectangle aRect = GetCellRect(*GetDocument(), rData.maStart, true);
         aRect.AdjustLeft( -250 );
         aRect.AdjustRight(250 );
@@ -1062,7 +1063,13 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData& rData, bool bNegati
             if (bRecording)
                 AddCalcUndo( std::make_unique<SdrUndoGeoObj>( *pObj ) );
             rData.setShapeRect(GetDocument(), lcl_makeSafeRectangle(aRect));
+            // maStart has the meaning of "to be validated cell" in a validation circle. For usual
+            // drawing objects it has the meaning "left/top of logic/snap rect". Because the rectangle
+            // is expanded above, SetLogicRect() will set maStart to one cell left and one cell above
+            // of the to be validated cell. We need to backup the old value and restore it.
+            ScAddress aBackup(rData.maStart);
             pObj->SetLogicRect(rData.getShapeRect());
+            rData.maStart = aBackup;
         }
     }
     else if (rData.meType == ScDrawObjData::DetectiveArrow)
