@@ -43,7 +43,6 @@
 #include <tools/diagnose_ex.h>
 
 ItemHolder1::ItemHolder1()
-    : ItemHolderMutexBase()
 {
     try
     {
@@ -87,7 +86,7 @@ void SAL_CALL ItemHolder1::disposing(const css::lang::EventObject&)
 
 void ItemHolder1::impl_addItem(EItem eItem)
 {
-    osl::MutexGuard aLock(m_aLock);
+    std::lock_guard aLock(m_aLock);
 
     for ( auto const & rInfo : m_lItems )
     {
@@ -106,7 +105,7 @@ void ItemHolder1::impl_releaseAllItems()
 {
     std::vector< TItemInfo > items;
     {
-        ::osl::MutexGuard aLock(m_aLock);
+        std::lock_guard aLock(m_aLock);
         items.swap(m_lItems);
     }
 
