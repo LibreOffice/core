@@ -53,6 +53,7 @@ css::uno::Sequence<OUString> SAL_CALL DispatchHelper::getSupportedServiceNames()
 */
 DispatchHelper::DispatchHelper(const css::uno::Reference<css::uno::XComponentContext>& xContext)
     : m_xContext(xContext)
+    , m_aBlockFlag(false)
 {
 }
 
@@ -91,11 +92,12 @@ css::uno::Any SAL_CALL DispatchHelper::executeDispatch(
     }
 
     // parse given URL
+    css::uno::Reference<css::util::XURLTransformer> xParser;
     /* SAFE { */
-    osl::ClearableMutexGuard aReadLock(m_mutex);
-    css::uno::Reference<css::util::XURLTransformer> xParser
-        = css::util::URLTransformer::create(m_xContext);
-    aReadLock.clear();
+    {
+        std::lock_guard aReadLock(m_mutex);
+        xParser = css::util::URLTransformer::create(m_xContext);
+    }
     /* } SAFE */
 
     css::util::URL aURL;
@@ -148,16 +150,18 @@ DispatchHelper::executeDispatch(const css::uno::Reference<css::frame::XDispatch>
                                                                                css::uno::UNO_QUERY);
             /* SAFE { */
             {
-                osl::MutexGuard aWriteLock(m_mutex);
+                std::lock_guard aWriteLock(m_mutex);
                 m_xBroadcaster = xNotifyDispatch;
-                m_aBlock.reset();
+                m_aBlockFlag = false;
             }
             /* } SAFE */
 
             // dispatch it and wait for a notification
             // TODO/MBA: waiting in main thread?!
             xNotifyDispatch->dispatchWithNotification(aURL, aArguments, xListener);
-            m_aBlock.wait(); // wait for result
+
+            std::unique_lock aWriteLock(m_mutex);
+            m_aBlock.wait(aWriteLock, [this] { return m_aBlockFlag; }); // wait for result
         }
         else
         {
@@ -180,9 +184,10 @@ DispatchHelper::executeDispatch(const css::uno::Reference<css::frame::XDispatch>
  */
 void SAL_CALL DispatchHelper::dispatchFinished(const css::frame::DispatchResultEvent& aResult)
 {
-    osl::MutexGuard g(m_mutex);
+    std::lock_guard g(m_mutex);
     m_aResult <<= aResult;
-    m_aBlock.set();
+    m_aBlockFlag = true;
+    m_aBlock.notify_one();
     m_xBroadcaster.clear();
 }
 
@@ -193,9 +198,10 @@ void SAL_CALL DispatchHelper::dispatchFinished(const css::frame::DispatchResultE
  */
 void SAL_CALL DispatchHelper::disposing(const css::lang::EventObject&)
 {
-    osl::MutexGuard g(m_mutex);
+    std::lock_guard g(m_mutex);
     m_aResult.clear();
-    m_aBlock.set();
+    m_aBlockFlag = true;
+    m_aBlock.notify_one();
     m_xBroadcaster.clear();
 }
 }
