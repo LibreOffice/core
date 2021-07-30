@@ -711,6 +711,7 @@ void SdrTextObj::TakeTextRect( SdrOutliner& rOutliner, tools::Rectangle& rTextRe
         rOutliner.SetMaxAutoPaperSize(Size(1000000,1000000));
     }
 
+    tools::Long nTextHeight = 0;
     if (!bFitToSize && !bContourFrame)
     {
         tools::Long nAnkWdt=aAnkRect.GetWidth();
@@ -760,9 +761,12 @@ void SdrTextObj::TakeTextRect( SdrOutliner& rOutliner, tools::Rectangle& rTextRe
             rOutliner.SetMinAutoPaperSize(Size(0, nAnkHgt));
             rOutliner.SetMinColumnWrapHeight(nAnkWdt);
         }
+
+        nTextHeight = IsVerticalWriting() ? nAnkWdt : nAnkHgt;
     }
 
     rOutliner.SetPaperSize(aNullSize);
+    rOutliner.SetInitialTextHeight(IsAutoGrowHeight() ? nTextHeight : 0);
     if (bContourFrame)
         ImpSetContourPolygon( rOutliner, aAnkRect, bLineWidth );
 
@@ -789,7 +793,6 @@ void SdrTextObj::TakeTextRect( SdrOutliner& rOutliner, tools::Rectangle& rTextRe
                 rOutliner.SetFixedCellHeight(GetMergedItem(SDRATTR_TEXT_USEFIXEDCELLHEIGHT).GetValue());
             }
 
-            rOutliner.SetUpdateLayout(true);
             rOutliner.SetText(*pPara);
         }
     }

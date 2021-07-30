@@ -780,8 +780,11 @@ void SdrTextObj::impDecomposeAutoFitTextPrimitive(
     }
 
     rOutliner.SetPaperSize(aNullSize);
-    rOutliner.SetUpdateLayout(true);
+    rOutliner.SetInitialTextHeight(
+        IsAutoGrowHeight() ? (bVerticalWriting ? nAnchorTextWidth : nAnchorTextHeight) : 0);
     rOutliner.SetText(*pOutlinerParaObject);
+    rOutliner.SetUpdateLayout(true);
+
     ImpAutoFitText(rOutliner,aAnchorTextSize,bVerticalWriting);
 
     // set visualizing page at Outliner; needed e.g. for PageNumberField decomposition
@@ -972,7 +975,6 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
         }
 
         rOutliner.SetPaperSize(aAnchorTextSize);
-        rOutliner.SetUpdateLayout(true);
         rOutliner.SetText(rSdrBlockTextPrimitive.getOutlinerParaObject());
     }
     else
@@ -1029,10 +1031,12 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
         }
 
         rOutliner.SetPaperSize(aNullSize);
-        rOutliner.SetUpdateLayout(true);
+        rOutliner.SetInitialTextHeight(
+            IsAutoGrowHeight() ? (bVerticalWriting ? nAnchorTextWidth : nAnchorTextHeight) : 0);
         rOutliner.SetText(rSdrBlockTextPrimitive.getOutlinerParaObject());
     }
 
+    rOutliner.SetUpdateLayout(true); // No updates until ready
     rOutliner.SetControlWord(nOriginalControlWord);
 
     // now get back the layouted text size from outliner

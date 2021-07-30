@@ -228,6 +228,11 @@ void Outliner::SetMinColumnWrapHeight(tools::Long nVal)
     pEditEngine->SetMinColumnWrapHeight(nVal);
 }
 
+void Outliner::SetInitialTextHeight(tools::Long nVal)
+{
+    pEditEngine->SetInitialTextHeight(nVal);
+}
+
 bool Outliner::IsExpanded( Paragraph const * pPara ) const
 {
     return pParaList->HasVisibleChildren( pPara );

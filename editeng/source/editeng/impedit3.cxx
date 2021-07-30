@@ -422,13 +422,16 @@ void ImpEditEngine::FormatDoc()
     // enable optimization first after Vobis delivery...
     {
         tools::Long nNewHeightNTP;
-        tools::Long nNewHeight = CalcTextHeight(&nNewHeightNTP);
+        tools::Long nNewHeight = CalcTextHeight(&nNewHeightNTP, &mnCurColumns);
         tools::Long nDiff = nNewHeight - nCurTextHeight;
         if ( nDiff )
             aStatus.GetStatusWord() |= !IsEffectivelyVertical() ? EditStatusFlags::TextHeightChanged : EditStatusFlags::TEXTWIDTHCHANGED;
 
         nCurTextHeight = nNewHeight;
         nCurTextHeightNTP = nNewHeightNTP;
+
+        if (mnInitialTextHeight != 0)
+            mnInitialTextHeight = nCurTextHeight;
 
         if ( aStatus.AutoPageSize() )
             CheckAutoPageSize();
@@ -559,7 +562,7 @@ void ImpEditEngine::CheckPageOverflow()
     tools::Long nBoxHeight = GetMaxAutoPaperSize().Height();
     SAL_INFO("editeng.chaining", "[OVERFLOW-CHECK] Current MaxAutoPaperHeight is " << nBoxHeight);
 
-    tools::Long nTxtHeight = CalcTextHeight(nullptr);
+    tools::Long nTxtHeight = CalcTextHeight(nullptr, nullptr);
     SAL_INFO("editeng.chaining", "[OVERFLOW-CHECK] Current Text Height is " << nTxtHeight);
 
     sal_uInt32 nParaCount = GetParaPortions().Count();
@@ -2636,6 +2639,23 @@ void ImpEditEngine::SetTextColumns(sal_Int16 nColumns, sal_Int32 nSpacing)
         mnColumns = nColumns;
         mnColumnSpacing = nSpacing;
         if (IsFormatted())
+        {
+            FormatFullDoc();
+            UpdateViews(GetActiveView());
+        }
+    }
+}
+
+void ImpEditEngine::SetInitialTextHeight(tools::Long nVal)
+{
+    mnInitialTextHeight = nVal;
+    // Never decrease initial height: it's only used to allow heights larger than minimal
+    if (nCurTextHeight < nVal && IsFormatted() && mnCurColumns > 1)
+    {
+        // Only re-format when needed: when we increase height for an object that has
+        // all its text already put in one column, this will not change text formatting
+        const auto nUpdatedHeight = CalcTextHeight(nullptr, nullptr);
+        if (nUpdatedHeight != nCurTextHeight)
         {
             FormatFullDoc();
             UpdateViews(GetActiveView());
