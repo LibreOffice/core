@@ -55,7 +55,8 @@ bool SdrTextObj::AdjustTextFrameWidthAndHeight( tools::Rectangle& rR, bool bHgt,
         return false;
 
     bool bWdtGrow = bWdt && IsAutoGrowWidth();
-    bool bHgtGrow = bHgt && IsAutoGrowHeight();
+    const bool bAutoGrowHeight = IsAutoGrowHeight();
+    bool bHgtGrow = bHgt && bAutoGrowHeight;
     if (!bWdtGrow && !bHgtGrow)
         // Not supposed to auto-adjust width or height.
         return false;
@@ -143,7 +144,7 @@ bool SdrTextObj::AdjustTextFrameWidthAndHeight( tools::Rectangle& rR, bool bHgt,
     {
         Outliner& rOutliner = ImpGetDrawOutliner();
         rOutliner.SetPaperSize(aNewSize);
-        rOutliner.SetUpdateMode(true);
+        rOutliner.SetInitialTextHeight(bAutoGrowHeight ? aOldRect.getHeight() : 0);
         // TODO: add the optimization with bPortionInfoChecked etc. here
         OutlinerParaObject* pOutlinerParaObject = GetOutlinerParaObject();
         if (pOutlinerParaObject)
@@ -151,6 +152,7 @@ bool SdrTextObj::AdjustTextFrameWidthAndHeight( tools::Rectangle& rR, bool bHgt,
             rOutliner.SetText(*pOutlinerParaObject);
             rOutliner.SetFixedCellHeight(GetMergedItem(SDRATTR_TEXT_USEFIXEDCELLHEIGHT).GetValue());
         }
+        rOutliner.SetUpdateMode(true); // No updates until ready
 
         if (bWdtGrow)
         {
