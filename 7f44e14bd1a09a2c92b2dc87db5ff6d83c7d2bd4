@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8a2f02f4_6760b6a0",
+        "filename": "sc/source/ui/inc/dbnamdlg.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-07-30T16:43:00Z",
+      "side": 1,
+      "message": "This should be initialized in Init(), same place like bSaved.\nEven if the call chain looks like it is currently not accessed uninitialized, it is better practice (in case someone modifies the code) and analysers like CoverityScan may trip over it because they don\u0027t know about our link handlers.",
+      "revId": "7f44e14bd1a09a2c92b2dc87db5ff6d83c7d2bd4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
