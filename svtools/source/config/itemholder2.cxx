@@ -36,7 +36,6 @@
 namespace svtools {
 
 ItemHolder2::ItemHolder2()
-    : ItemHolderMutexBase()
 {
     try
     {
@@ -87,7 +86,7 @@ void SAL_CALL ItemHolder2::disposing(const css::lang::EventObject&)
 
 void ItemHolder2::impl_addItem(EItem eItem)
 {
-    osl::MutexGuard aLock(m_aLock);
+    std::lock_guard aLock(m_aLock);
 
     for ( auto const & rInfo : m_lItems )
     {
@@ -107,7 +106,7 @@ void ItemHolder2::impl_releaseAllItems()
 {
     std::vector<TItemInfo> items;
     {
-        osl::MutexGuard aLock(m_aLock);
+        std::lock_guard aLock(m_aLock);
         items.swap(m_lItems);
     }
 

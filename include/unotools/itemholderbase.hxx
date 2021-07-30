@@ -21,13 +21,7 @@
 #define INCLUDED_UNOTOOLS_ITEMHOLDERBASE_HXX
 
 #include <memory>
-#include <osl/mutex.hxx>
 #include <unotools/options.hxx>
-
-struct ItemHolderMutexBase
-{
-    ::osl::Mutex m_aLock;
-};
 
 enum class EItem
 {

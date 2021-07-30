@@ -23,13 +23,14 @@
 #include <unotools/itemholderbase.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/XEventListener.hpp>
+#include <mutex>
 
-class ItemHolder2 : private ItemHolderMutexBase
-                  , public  ::cppu::WeakImplHelper< css::lang::XEventListener >
+class ItemHolder2 : public  ::cppu::WeakImplHelper< css::lang::XEventListener >
 {
     // member
-    private:
+private:
 
+        std::mutex m_aLock;
         std::vector<TItemInfo> m_lItems;
 
     // c++ interface
