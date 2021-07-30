@@ -402,42 +402,42 @@ the test, and re-running; it should break.
 */
 void SdImportTest::testDocumentLayout()
 {
-    static const struct { const char *pInput, *pDump; sal_Int32 nFormat; sal_Int32 nExportType; } aFilesToCompare[] =
+    static const struct { std::u16string_view sInput, sDump; sal_Int32 nFormat; sal_Int32 nExportType; } aFilesToCompare[] =
     {
-        { "odp/shapes-test.odp", "xml/shapes-test_page", ODP, -1 },
-        { "fdo47434.pptx", "xml/fdo47434_", PPTX, -1 },
-        { "n758621.ppt", "xml/n758621_", PPT, -1 },
-        { "fdo64586.ppt", "xml/fdo64586_", PPT, -1 },
-        { "n819614.pptx", "xml/n819614_", PPTX, -1 },
-        { "n820786.pptx", "xml/n820786_", PPTX, -1 },
-        { "n762695.pptx", "xml/n762695_", PPTX, -1 },
-        { "n593612.pptx", "xml/n593612_", PPTX, -1 },
-        { "fdo71434.pptx", "xml/fdo71434_", PPTX, -1 },
-        { "n902652.pptx", "xml/n902652_", PPTX, -1 },
-        { "tdf90403.pptx", "xml/tdf90403_", PPTX, -1 },
-        { "tdf90338.odp", "xml/tdf90338_", ODP, PPTX },
-        { "tdf92001.odp", "xml/tdf92001_", ODP, PPTX },
+        { u"odp/shapes-test.odp", u"xml/shapes-test_page", ODP, -1 },
+        { u"fdo47434.pptx", u"xml/fdo47434_", PPTX, -1 },
+        { u"n758621.ppt", u"xml/n758621_", PPT, -1 },
+        { u"fdo64586.ppt", u"xml/fdo64586_", PPT, -1 },
+        { u"n819614.pptx", u"xml/n819614_", PPTX, -1 },
+        { u"n820786.pptx", u"xml/n820786_", PPTX, -1 },
+        { u"n762695.pptx", u"xml/n762695_", PPTX, -1 },
+        { u"n593612.pptx", u"xml/n593612_", PPTX, -1 },
+        { u"fdo71434.pptx", u"xml/fdo71434_", PPTX, -1 },
+        { u"n902652.pptx", u"xml/n902652_", PPTX, -1 },
+        { u"tdf90403.pptx", u"xml/tdf90403_", PPTX, -1 },
+        { u"tdf90338.odp", u"xml/tdf90338_", ODP, PPTX },
+        { u"tdf92001.odp", u"xml/tdf92001_", ODP, PPTX },
 // GCC -mfpmath=387 rounding issues in lclPushMarkerProperties
 // (oox/source/drawingml/lineproperties.cxx); see mail sub-thread starting at
 // <https://lists.freedesktop.org/archives/libreoffice/2016-September/
 // 075211.html> "Re: Test File: sc/qa/unit/data/functions/fods/chiinv.fods:
 // fails with Assertion" for how "-mfpmath=sse -msse2" would fix that:
 #if !(defined LINUX && defined X86)
-        { "tdf100491.pptx", "xml/tdf100491_", PPTX, -1 },
+        { u"tdf100491.pptx", u"xml/tdf100491_", PPTX, -1 },
 #endif
-        { "tdf109317.pptx", "xml/tdf109317_", PPTX, ODP},
-        // { "pptx/n828390.pptx", "pptx/xml/n828390_", PPTX, PPTX }, // Example
+        { u"tdf109317.pptx", u"xml/tdf109317_", PPTX, ODP},
+        // { u"pptx/n828390.pptx", u"pptx/xml/n828390_", PPTX, PPTX }, // Example
     };
 
     for ( int i = 0; i < static_cast< int >( SAL_N_ELEMENTS( aFilesToCompare ) ); ++i )
     {
         int const nUpdateMe = -1; // index of test we want to update; supposedly only when the test is created
 
-        sd::DrawDocShellRef xDocShRef = loadURL( m_directories.getURLFromSrc( u"/sd/qa/unit/data/" ) + OUString::createFromAscii( aFilesToCompare[i].pInput ), aFilesToCompare[i].nFormat );
+        sd::DrawDocShellRef xDocShRef = loadURL( m_directories.getURLFromSrc( u"/sd/qa/unit/data/" ) + aFilesToCompare[i].sInput, aFilesToCompare[i].nFormat );
         if( aFilesToCompare[i].nExportType >= 0 )
             xDocShRef = saveAndReload( xDocShRef.get(), aFilesToCompare[i].nExportType );
         compareWithShapesDump( xDocShRef,
-                OUString(m_directories.getPathFromSrc( u"/sd/qa/unit/data/" ) + OUString::createFromAscii( aFilesToCompare[i].pDump )),
+                OUString(m_directories.getPathFromSrc( u"/sd/qa/unit/data/" ) + aFilesToCompare[i].sDump),
                 i == nUpdateMe );
     }
 }
