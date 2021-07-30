@@ -244,9 +244,8 @@ void DropTargetHelper::dispose()
 {
     Reference< XDropTarget >  xTmp;
     {
-        osl::MutexGuard aGuard( maMutex );
-        xTmp = mxDropTarget;
-        mxDropTarget.clear();
+        std::lock_guard aGuard( maMutex );
+        xTmp = std::move(mxDropTarget);
     }
     if( xTmp.is() )
         xTmp->removeDropTargetListener( mxDropTargetListener );

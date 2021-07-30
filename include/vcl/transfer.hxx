@@ -449,7 +449,7 @@ private:
     friend class DropTargetHelper::DropTargetListener;
 
 private:
-    osl::Mutex                                                            maMutex;
+    std::mutex                                                            maMutex;
     css::uno::Reference< css::datatransfer::dnd::XDropTarget >            mxDropTarget;
 
     css::uno::Reference< css::datatransfer::dnd::XDropTargetListener >    mxDropTargetListener;
