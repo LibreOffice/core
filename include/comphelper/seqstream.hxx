@@ -24,7 +24,6 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
-#include <osl/mutex.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/comphelperdllapi.h>
 #include <mutex>
@@ -74,7 +73,6 @@ class SAL_DLLPUBLIC_TEMPLATE OSequenceOutputStream_Base
 class UNLESS_MERGELIBS(COMPHELPER_DLLPUBLIC) OSequenceOutputStream final : public OSequenceOutputStream_Base
 {
 private:
-    void finalizeOutput();
     css::uno::Sequence< sal_Int8 >&                 m_rSequence;
     double                                          m_nResizeFactor;
     sal_Int32 const                                 m_nMinimumResize;
@@ -85,8 +83,9 @@ private:
     bool                                            m_bConnected;
         // closeOutput has been called ?
 
-    ::osl::Mutex                                    m_aMutex;
+    std::mutex                                      m_aMutex;
 
+    void finalizeOutput();
     virtual ~OSequenceOutputStream() override { if (m_bConnected) finalizeOutput(); }
 
 public:
