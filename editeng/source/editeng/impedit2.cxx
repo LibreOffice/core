@@ -663,6 +663,7 @@ void ImpEditEngine::Clear()
 
     nCurTextHeight = 0;
     nCurTextHeightNTP = 0;
+    mnCurColumns = 1;
 
     ResetUndoManager();
 
@@ -717,6 +718,7 @@ void ImpEditEngine::SetText(const OUString& rText)
     if (rText.isEmpty()) {    // otherwise it must be invalidated later, !bFormatted is enough.
         nCurTextHeight = 0;
         nCurTextHeightNTP = 0;
+        mnCurColumns = 1;
     }
     EnableUndo( bUndoCurrentlyEnabled );
     OSL_ENSURE( !HasUndoManager() || !GetUndoManager().GetUndoActionCount(), "Undo after SetText?" );
@@ -3112,7 +3114,7 @@ void ImpEditEngine::IterateLineAreas(const IterateLinesAreasFunc& f, IterFlag eO
     Point aLineStart(aOrigin);
     const tools::Long nVertLineSpacing = CalcVertLineSpacing(aLineStart);
     const tools::Long nColumnWidth = GetColumnWidth(aPaperSize);
-    sal_Int32 nColumn = 0;
+    sal_Int16 nColumn = 0;
     for (sal_Int32 n = 0, nPortions = GetParaPortions().Count(); n < nPortions; ++n)
     {
         ParaPortion& rPortion = GetParaPortions()[n];
@@ -3430,17 +3432,21 @@ tools::Long ImpEditEngine::Calc1ColumnTextHeight(tools::Long* pHeightNTP)
     return nHeight;
 }
 
-tools::Long ImpEditEngine::CalcTextHeight(tools::Long* pHeightNTP)
+tools::Long ImpEditEngine::CalcTextHeight(tools::Long* pHeightNTP, sal_Int16* pnCurColumns)
 {
     OSL_ENSURE( GetUpdateMode(), "Should not be used when Update=FALSE: CalcTextHeight" );
 
     if (mnColumns <= 1)
+    {
+        if (pnCurColumns)
+            *pnCurColumns = 1;
         return Calc1ColumnTextHeight(pHeightNTP); // All text fits into a single column - done!
+    }
 
     // The final column height can be smaller than total height divided by number of columns (taking
     // into account first line offset and interline spacing, that aren't considered in positioning
     // after the wrap). The wrap should only happen after the minimal height is exceeded.
-    tools::Long nTentativeColHeight = mnMinColumnWrapHeight;
+    tools::Long nTentativeColHeight = nCurTextHeight/*mnMinColumnWrapHeight*/;
     tools::Long nWantedIncrease = 0;
     tools::Long nCurrentTextHeight;
 
@@ -3486,6 +3492,7 @@ tools::Long ImpEditEngine::CalcTextHeight(tools::Long* pHeightNTP)
     // * Line 4 is attempted to go to column 2 after Line 3; no overflow.
     // * Final iteration columns are: {Line 1}, {Line 2}, {Line 3, Line 4}
     // * Total text height is max({10, 12, 20}) == 20 == Tentative column height 20 => END.
+    sal_Int16 nLastCol;
     do
     {
         nTentativeColHeight += nWantedIncrease;
@@ -3493,16 +3500,17 @@ tools::Long ImpEditEngine::CalcTextHeight(tools::Long* pHeightNTP)
         nCurrentTextHeight = 0;
         if (pHeightNTP)
             *pHeightNTP = 0;
-        auto GetHeightAndWantedIncrease = [&, minHeight = tools::Long(0), lastCol = sal_Int32(0)](
+        nLastCol = 0;
+        auto GetHeightAndWantedIncrease = [&, minHeight = tools::Long(0)](
                                               const LineAreaInfo& rInfo) mutable {
             if (rInfo.pLine)
             {
-                if (lastCol != rInfo.nColumn)
+                if (nLastCol != rInfo.nColumn)
                 {
                     minHeight = std::max(nCurrentTextHeight,
                                     minHeight); // total height can't be less than previous columns
                     nWantedIncrease = std::min(rInfo.nHeightNeededToNotWrap, nWantedIncrease);
-                    lastCol = rInfo.nColumn;
+                    nLastCol = rInfo.nColumn;
                 }
                 // bottom coordinate does not belong to area, so no need to do +1
                 nCurrentTextHeight = std::max(getBottomDocOffset(rInfo.aArea), minHeight);
@@ -3520,6 +3528,8 @@ tools::Long ImpEditEngine::CalcTextHeight(tools::Long* pHeightNTP)
         IterateLineAreas(GetHeightAndWantedIncrease, IterFlag::none);
     } while (nCurrentTextHeight > nTentativeColHeight && nWantedIncrease > 0
              && nWantedIncrease != std::numeric_limits<tools::Long>::max());
+    if (pnCurColumns)
+        *pnCurColumns = nLastCol;
     return nCurrentTextHeight;
 }
 

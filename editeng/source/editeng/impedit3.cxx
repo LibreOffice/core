@@ -422,7 +422,7 @@ void ImpEditEngine::FormatDoc()
     // enable optimization first after Vobis delivery...
     {
         tools::Long nNewHeightNTP;
-        tools::Long nNewHeight = CalcTextHeight(&nNewHeightNTP);
+        tools::Long nNewHeight = CalcTextHeight(&nNewHeightNTP, &mnCurColumns);
         tools::Long nDiff = nNewHeight - nCurTextHeight;
         if ( nDiff )
             aStatus.GetStatusWord() |= !IsEffectivelyVertical() ? EditStatusFlags::TextHeightChanged : EditStatusFlags::TEXTWIDTHCHANGED;
@@ -559,7 +559,7 @@ void ImpEditEngine::CheckPageOverflow()
     tools::Long nBoxHeight = GetMaxAutoPaperSize().Height();
     SAL_INFO("editeng.chaining", "[OVERFLOW-CHECK] Current MaxAutoPaperHeight is " << nBoxHeight);
 
-    tools::Long nTxtHeight = CalcTextHeight(nullptr);
+    tools::Long nTxtHeight = CalcTextHeight(nullptr, nullptr);
     SAL_INFO("editeng.chaining", "[OVERFLOW-CHECK] Current Text Height is " << nTxtHeight);
 
     sal_uInt32 nParaCount = GetParaPortions().Count();
@@ -2643,6 +2643,31 @@ void ImpEditEngine::SetTextColumns(sal_Int16 nColumns, sal_Int32 nSpacing)
     }
 }
 
+void ImpEditEngine::SetInitialTextHeight(tools::Long nVal)
+{
+    // Never decrease initial height: it's only used to allow heights larger than minimal
+    if (nCurTextHeight < nVal)
+    {
+        const auto nOldHeight = nCurTextHeight;
+        nCurTextHeight = nVal;
+        // Only re-format when needed: when we increase height for an object that has
+        // all its text already put in one column, this will not change text formatting
+        if (IsFormatted() && mnCurColumns > 1)
+        {
+            const auto nUpdatedHeight = CalcTextHeight(nullptr, nullptr);
+            if (nUpdatedHeight != nOldHeight)
+            {
+                FormatFullDoc();
+                UpdateViews(GetActiveView());
+                // nCurTextHeight may have changed in FormatFullDoc - re-set it back
+                if (nCurTextHeight < nVal)
+                    nCurTextHeight = nVal;
+            }
+        }
+        bFormatted = false;
+    }
+}
+
 void ImpEditEngine::SetFixedCellHeight( bool bUseFixedCellHeight )
 {
     if ( IsFixedCellHeight() != bUseFixedCellHeight )
@@ -3048,7 +3073,7 @@ Size ImpEditEngine::getTopLeftDocOffset(const tools::Rectangle& rect) const
 Point ImpEditEngine::MoveToNextLine(
     Point& rMovePos, // [in, out] Point that will move to the next line
     tools::Long nLineHeight, // [in] Y-direction move distance (direction-aware)
-    sal_Int32& rColumn, // [in, out] current column number
+    sal_Int16& rColumn, // [in, out] current column number
     Point aOrigin, // [in] Origin point to calculate limits and initial Y position in a new column
     tools::Long* pnHeightNeededToNotWrap // On column wrap, returns how much more height is needed
 ) const
@@ -3123,7 +3148,7 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
 
     const tools::Long nVertLineSpacing = CalcVertLineSpacing(aStartPos);
 
-    sal_Int32 nColumn = 0;
+    sal_Int16 nColumn = 0;
 
     // Over all the paragraphs...
 
