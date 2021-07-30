@@ -23,9 +23,9 @@
 #include <unotools/unotoolsdllapi.h>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
-#include <osl/mutex.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <tools/stream.hxx>
+#include <mutex>
 
 namespace utl
 {
@@ -35,7 +35,7 @@ namespace utl
  */
 class UNOTOOLS_DLLPUBLIC OInputStreamHelper final : public cppu::WeakImplHelper<css::io::XInputStream, css::io::XSeekable>
 {
-    ::osl::Mutex    m_aMutex;
+    std::mutex      m_aMutex;
     SvLockBytesRef  m_xLockBytes;
     sal_uInt64      m_nActPos;
     sal_Int32       m_nAvailable;   // this is typically the chunk(buffer) size
