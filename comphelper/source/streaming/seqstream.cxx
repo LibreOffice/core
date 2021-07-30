@@ -153,7 +153,7 @@ OSequenceOutputStream::OSequenceOutputStream(Sequence< sal_Int8 >& _rSeq, double
 
 void SAL_CALL OSequenceOutputStream::writeBytes( const Sequence< sal_Int8 >& _rData )
 {
-    MutexGuard aGuard(m_aMutex);
+    std::lock_guard aGuard(m_aMutex);
     if (!m_bConnected)
         throw NotConnectedException();
 
@@ -193,7 +193,7 @@ void SAL_CALL OSequenceOutputStream::writeBytes( const Sequence< sal_Int8 >& _rD
 
 void SAL_CALL OSequenceOutputStream::flush(  )
 {
-    MutexGuard aGuard(m_aMutex);
+    std::lock_guard aGuard(m_aMutex);
     if (!m_bConnected)
         throw NotConnectedException();
 
@@ -203,8 +203,6 @@ void SAL_CALL OSequenceOutputStream::flush(  )
 
 void OSequenceOutputStream::finalizeOutput()
 {
-    MutexGuard aGuard(m_aMutex);
-
     // cut the sequence to the real size
     m_rSequence.realloc(m_nSize);
     // and don't allow any further accesses
@@ -213,7 +211,7 @@ void OSequenceOutputStream::finalizeOutput()
 
 void SAL_CALL OSequenceOutputStream::closeOutput()
 {
-    MutexGuard aGuard(m_aMutex);
+    std::lock_guard aGuard(m_aMutex);
     if (!m_bConnected)
         throw NotConnectedException();
 
