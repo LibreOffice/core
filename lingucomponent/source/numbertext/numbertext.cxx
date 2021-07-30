@@ -18,6 +18,7 @@
  */
 
 #include <iostream>
+#include <mutex>
 
 #include <osl/file.hxx>
 #include <tools/debug.hxx>
@@ -47,9 +48,9 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::linguistic2;
 
-static osl::Mutex& GetNumberTextMutex()
+static std::mutex& GetNumberTextMutex()
 {
-    static osl::Mutex aMutex;
+    static std::mutex aMutex;
     return aMutex;
 }
 
@@ -111,7 +112,7 @@ void NumberText_Impl::EnsureInitialized()
 
 OUString SAL_CALL NumberText_Impl::getNumberText(const OUString& rText, const Locale& rLocale)
 {
-    osl::MutexGuard aGuard(GetNumberTextMutex());
+    std::lock_guard aGuard(GetNumberTextMutex());
     EnsureInitialized();
     // libnumbertext supports Language + Country tags (separated by "_" or "-")
     LanguageTag aLanguageTag(rLocale);
@@ -141,7 +142,7 @@ OUString SAL_CALL NumberText_Impl::getNumberText(const OUString& rText, const Lo
 
 uno::Sequence<Locale> SAL_CALL NumberText_Impl::getAvailableLanguages()
 {
-    osl::MutexGuard aGuard(GetNumberTextMutex());
+    std::lock_guard aGuard(GetNumberTextMutex());
     // TODO
     Sequence<css::lang::Locale> aRes;
     return aRes;
