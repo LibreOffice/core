@@ -569,6 +569,16 @@ void EditEngine::SetMinColumnWrapHeight(tools::Long nVal)
     pImpEditEngine->SetMinColumnWrapHeight(nVal);
 }
 
+void EditEngine::SetInitialTextHeight(tools::Long nVal)
+{
+    pImpEditEngine->SetInitialTextHeight(nVal);
+}
+
+void EditEngine::ResetInitialTextHeight()
+{
+    pImpEditEngine->ResetInitialTextHeight();
+}
+
 OUString EditEngine::GetText( LineEnd eEnd ) const
 {
     return pImpEditEngine->GetEditDoc().GetText( eEnd );

@@ -553,7 +553,14 @@ private:
     tools::Rectangle           aInvalidRect;
     tools::Long         nCurTextHeight;
     tools::Long         nCurTextHeightNTP;  // without trailing empty paragraphs
+    // Used for fit-height-to-text objects
+    bool mbDoNotShrinkMultiColumnHeight = false;
+
     sal_uInt16          nOnePixelInRef;
+
+    sal_Int16 mnColumns = 1;
+    sal_Int16 mnCurColumns = 1; // For caching the layout result when calculating current height
+    sal_Int32 mnColumnSpacing = 0;
 
     IdleFormattter      aIdleFormatter;
 
@@ -563,9 +570,6 @@ private:
     sal_Int32 mnOverflowingPara = -1;
     sal_Int32 mnOverflowingLine = -1;
     bool mbNeedsChainingHandling = false;
-
-    sal_Int16 mnColumns = 1;
-    sal_Int32 mnColumnSpacing = 0;
 
     // If it is detected at one point that the StatusHdl has to be called, but
     // this should not happen immediately (critical section):
@@ -840,6 +844,12 @@ public:
     void                    SetMaxAutoPaperSize( const Size& rSz )  { aMaxAutoPaperSize = rSz; }
 
     void SetMinColumnWrapHeight(tools::Long nVal) { mnMinColumnWrapHeight = nVal; }
+    // In multi-column mode for "fit height to text" objects, EditEngine grows as its content gets
+    // added (and so grows the parent object), but does not shrink until there's not enough text
+    // in the first column. SetInitialTextHeight is used to define the initial height of the text,
+    // independent of the fixed mnMinColumnWrapHeight.
+    void SetInitialTextHeight(tools::Long nVal);
+    void ResetInitialTextHeight() { mbDoNotShrinkMultiColumnHeight = false; }
 
     void                    FormatDoc();
     void                    FormatFullDoc();
@@ -895,7 +905,7 @@ public:
 
     EditSelection   MoveParagraphs( Range aParagraphs, sal_Int32 nNewPos, EditView* pCurView );
 
-    tools::Long     CalcTextHeight( tools::Long* pHeightNTP );
+    tools::Long     CalcTextHeight( tools::Long* pHeightNTP, sal_Int16* pnCurColumns );
     sal_uInt32      GetTextHeight() const;
     sal_uInt32      GetTextHeightNTP() const;
     sal_uInt32      CalcTextWidth( bool bIgnoreExtraSpace);
@@ -1137,7 +1147,7 @@ public:
     };
     struct LineAreaInfo
     {
-        sal_Int32 nColumn; // Column number; when overflowing, equal to total number of columns
+        sal_Int16 nColumn; // Column number; when overflowing, equal to total number of columns
         ParaPortion& rPortion; // Current ParaPortion
         sal_Int32 nPortion;
         EditLine* pLine; // Current line, or nullptr for paragraph start
@@ -1156,7 +1166,7 @@ public:
     void IterateLineAreas(const IterateLinesAreasFunc& f, IterFlag eOptions);
 
     tools::Long GetColumnWidth(const Size& rPaperSize) const;
-    Point MoveToNextLine(Point& rMovePos, tools::Long nLineHeight, sal_Int32& nColumn,
+    Point MoveToNextLine(Point& rMovePos, tools::Long nLineHeight, sal_Int16& nColumn,
                          Point aOrigin, tools::Long* pnHeightNeededToNotWrap = nullptr) const;
 
     tools::Long getWidthDirectionAware(const Size& sz) const;

@@ -715,6 +715,7 @@ void SdrTextObj::TakeTextRect( SdrOutliner& rOutliner, tools::Rectangle& rTextRe
         rOutliner.SetMaxAutoPaperSize(Size(1000000,1000000));
     }
 
+    tools::Long nTextHeight = 0;
     if (!bFitToSize && !bContourFrame)
     {
         tools::Long nAnkWdt=aAnkRect.GetWidth();
@@ -764,6 +765,8 @@ void SdrTextObj::TakeTextRect( SdrOutliner& rOutliner, tools::Rectangle& rTextRe
             rOutliner.SetMinAutoPaperSize(Size(0, nAnkHgt));
             rOutliner.SetMinColumnWrapHeight(nAnkWdt);
         }
+
+        nTextHeight = IsVerticalWriting() ? nAnkWdt : nAnkHgt;
     }
 
     rOutliner.SetPaperSize(aNullSize);
@@ -791,6 +794,11 @@ void SdrTextObj::TakeTextRect( SdrOutliner& rOutliner, tools::Rectangle& rTextRe
 
             rOutliner.SetUpdateMode(true);
             rOutliner.SetText(*pPara);
+
+            if (IsAutoGrowHeight())
+                rOutliner.SetInitialTextHeight(nTextHeight);
+            else
+                rOutliner.ResetInitialTextHeight();
         }
     }
     else

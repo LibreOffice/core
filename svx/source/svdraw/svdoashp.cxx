@@ -2260,10 +2260,11 @@ bool SdrObjCustomShape::AdjustTextFrameWidthAndHeight(tools::Rectangle& rR, bool
     if ( bHasText && !rR.IsEmpty() )
     {
         bool bWdtGrow=bWdt && IsAutoGrowWidth();
-        bool bHgtGrow=bHgt && IsAutoGrowHeight();
+        const bool bAutoGrowHeight = IsAutoGrowHeight();
+        bool bHgtGrow = bHgt && bAutoGrowHeight;
         if ( bWdtGrow || bHgtGrow )
         {
-            tools::Rectangle aR0(rR);
+            const tools::Rectangle aR0(rR);
             tools::Long nHgt=0,nMinHgt=0,nMaxHgt=0;
             tools::Long nWdt=0,nMinWdt=0,nMaxWdt=0;
             Size aSiz(rR.GetSize()); aSiz.AdjustWidth( -1 ); aSiz.AdjustHeight( -1 );
@@ -2323,6 +2324,10 @@ bool SdrObjCustomShape::AdjustTextFrameWidthAndHeight(tools::Rectangle& rR, bool
                         rOutliner.SetText(*pOutlinerParaObject);
                         rOutliner.SetFixedCellHeight(GetMergedItem(SDRATTR_TEXT_USEFIXEDCELLHEIGHT).GetValue());
                     }
+                    if (bAutoGrowHeight)
+                        rOutliner.SetInitialTextHeight(aR0.getHeight());
+                    else
+                        rOutliner.ResetInitialTextHeight();
                     if ( bWdtGrow )
                     {
                         Size aSiz2(rOutliner.CalcTextSize());
@@ -2680,6 +2685,11 @@ void SdrObjCustomShape::TakeTextRect( SdrOutliner& rOutliner, tools::Rectangle& 
 
             rOutliner.SetUpdateMode(true);
             rOutliner.SetText(*pPara);
+
+            if (IsAutoGrowHeight())
+                rOutliner.SetInitialTextHeight(IsVerticalWriting() ? nAnkWdt : nAnkHgt);
+            else
+                rOutliner.ResetInitialTextHeight();
         }
     }
     else
