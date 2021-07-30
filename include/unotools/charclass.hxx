@@ -26,8 +26,8 @@
 #include <com/sun/star/i18n/KCharacterType.hpp>
 #include <com/sun/star/i18n/ParseResult.hpp>
 #include <com/sun/star/i18n/UnicodeScript.hpp>
-#include <osl/mutex.hxx>
 #include <com/sun/star/uno/Reference.hxx>
+#include <mutex>
 
 namespace com::sun::star::uno { class XComponentContext; }
 namespace com::sun::star::i18n { class XCharacterClassification; }
@@ -62,7 +62,7 @@ class UNOTOOLS_DLLPUBLIC CharClass
 {
     LanguageTag                 maLanguageTag;
     css::uno::Reference< css::i18n::XCharacterClassification >    xCC;
-    mutable ::osl::Mutex        aMutex;
+    mutable std::mutex        aMutex;
 
     CharClass(const CharClass&) = delete;
     CharClass& operator=(const CharClass&) = delete;
