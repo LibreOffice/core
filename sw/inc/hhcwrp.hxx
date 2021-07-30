@@ -91,7 +91,7 @@ public:
         sal_Int32 nConvOptions, bool bIsInteractive,
         bool bStart, bool bOther, bool bSelection );
 
-    virtual ~SwHHCWrapper() override;
+    virtual ~SwHHCWrapper() COVERITY_NOEXCEPT_FALSE override;
 
     void    Convert();
 };
