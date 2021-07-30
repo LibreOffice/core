@@ -3281,6 +3281,13 @@ void DomainMapper::lcl_text(const sal_uInt8 * data_, size_t len)
                 case 0x0e: //column break
                     m_pImpl->deferBreak(COLUMN_BREAK);
                     return;
+                case 0x0a: //line break
+                    if (!m_pImpl->isBreakDeferred(LINE_BREAK))
+                    {
+                        m_pImpl->deferBreak(LINE_BREAK);
+                        return;
+                    }
+                    break;
                 case 0x07:
                     m_pImpl->getTableManager().text(data_, len);
                     return;
@@ -3313,6 +3320,10 @@ void DomainMapper::lcl_text(const sal_uInt8 * data_, size_t len)
 
         // GetTopContext() is changed by inserted breaks, but we want to keep the current context
         PropertyMapPtr pContext = m_pImpl->GetTopContext();
+
+        if (m_pImpl->isBreakDeferred(LINE_BREAK))
+            m_pImpl->appendTextPortion("\r", pContext);
+
         if (!m_pImpl->GetFootnoteContext())
         {
             if (m_pImpl->isBreakDeferred(PAGE_BREAK))
