@@ -46,6 +46,7 @@ public:
     ScShapeTest();
     void saveAndReload(css::uno::Reference<css::lang::XComponent>& xComponent,
                        const OUString& rFilter);
+    void testTdf143619_validation_circle_pos();
     void testTdf140252_DragCreateFormControl();
     void testTdf134355_DragCreateCustomShape();
     void testTdf140252_LayerOfControl();
@@ -72,6 +73,7 @@ public:
     void testCustomShapeCellAnchoredRotatedShape();
 
     CPPUNIT_TEST_SUITE(ScShapeTest);
+    CPPUNIT_TEST(testTdf143619_validation_circle_pos);
     CPPUNIT_TEST(testTdf140252_DragCreateFormControl);
     CPPUNIT_TEST(testTdf134355_DragCreateCustomShape);
     CPPUNIT_TEST(testTdf140252_LayerOfControl);
@@ -202,6 +204,38 @@ static SdrObject* lcl_getSdrObjectWithAssert(ScDocument& rDoc, sal_uInt16 nObjNu
     OString sMsg = "no Object " + OString::number(nObjNumber);
     CPPUNIT_ASSERT_MESSAGE(sMsg.getStr(), pObj);
     return pObj;
+}
+
+void ScShapeTest::testTdf143619_validation_circle_pos()
+{
+    // Load a document, which has validation circle around cell E6.
+
+    OUString aFileURL;
+    createFileURL(u"tdf143619_validationCirclePos.ods", aFileURL);
+    uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileURL);
+
+    // Get document
+    ScDocShell* pDocSh = lcl_getScDocShellWithAssert(xComponent);
+    ScDocument& rDoc = pDocSh->GetDocument();
+
+    // Get shape. That is the validation circle.
+    SdrObject* pObj = lcl_getSdrObjectWithAssert(rDoc, 0);
+
+    // Error was, that deleting row and col before E6 does not move circle to D5, but to B3.
+    // Delete first row and first column.
+    uno::Sequence<beans::PropertyValue> aPropertyValues = {
+        comphelper::makePropertyValue("ToPoint", OUString("$A$1")),
+    };
+    dispatchCommand(xComponent, ".uno:GoToCell", aPropertyValues);
+    dispatchCommand(xComponent, ".uno:DeleteRows", {});
+    dispatchCommand(xComponent, ".uno:GoToCell", aPropertyValues);
+    dispatchCommand(xComponent, ".uno:DeleteColumns", {});
+
+    // Without fix in place the position was (2007, 833)
+    Point aPos = pObj->GetSnapRect().TopLeft();
+    lcl_AssertPointEqualWithTolerance("after row and col delete", Point(6523, 1736), aPos, 1);
+
+    pDocSh->DoClose();
 }
 
 void ScShapeTest::testTdf140252_DragCreateFormControl()
