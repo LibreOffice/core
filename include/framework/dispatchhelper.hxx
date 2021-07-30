@@ -28,7 +28,8 @@
 
 #include <cppuhelper/implbase.hxx>
 #include <framework/fwkdllapi.h>
-#include <osl/conditn.hxx>
+#include <condition_variable>
+#include <mutex>
 
 namespace com::sun::star::lang
 {
@@ -57,17 +58,15 @@ class UNLESS_MERGELIBS(FWK_DLLPUBLIC) DispatchHelper final
     : public ::cppu::WeakImplHelper<css::lang::XServiceInfo, css::frame::XDispatchHelper,
                                     css::frame::XDispatchResultListener>
 {
-    // member
-
-private:
-    osl::Mutex m_mutex;
+    std::mutex m_mutex;
 
     /** global uno service manager.
             Can be used to create own needed services. */
     css::uno::Reference<css::uno::XComponentContext> m_xContext;
 
     /** used to wait for asynchronous listener callbacks. */
-    ::osl::Condition m_aBlock;
+    std::condition_variable m_aBlock;
+    bool m_aBlockFlag;
 
     css::uno::Any m_aResult;
 
