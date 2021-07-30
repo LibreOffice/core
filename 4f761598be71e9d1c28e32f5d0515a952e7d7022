@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e07162ed_333bc2a8",
+        "filename": "sc/source/core/tool/refupdat.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-07-30T15:54:10Z",
+      "side": 1,
+      "message": "Nitpick: parentheses following keywords without space look odd (like a function call), we avoid that in new code and this (and above) is an unnecessary cosmetic change, but I don\u0027t want to put this patch set on hold further..",
+      "revId": "4f761598be71e9d1c28e32f5d0515a952e7d7022",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
