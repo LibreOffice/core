@@ -31,6 +31,7 @@
 #include <rtl/ref.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <o3tl/sorted_vector.hxx>
+#include <mutex>
 
 namespace com::sun::star::awt { class XWindow; }
 namespace com::sun::star::beans { class XPropertySet; }
@@ -132,7 +133,7 @@ class SAL_WARN_UNUSED FmXDisposeListener
     friend class FmXDisposeMultiplexer;
 
     rtl::Reference<FmXDisposeMultiplexer> m_pAdapter;
-    osl::Mutex   m_aMutex;
+    std::mutex   m_aMutex;
 
 public:
     virtual ~FmXDisposeListener();
