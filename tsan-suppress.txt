@@ -1,0 +1,37 @@
+#
+# This file is part of the LibreOffice project.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+
+# Use via environment variable TSAN_OPTIONS=suppressions=.../tsan-suppress.txt
+
+# There looks to be a lock ordering problem here, but I can't see how it could
+# actually be hit in practice.
+deadlock:cppuhelper::ServiceManager::disposing()
+deadlock:cppuhelper::ServiceManager::loadImplementation
+
+# Ignore stuff in external DBUS library
+# Some kind of dbus lock issue when we call it from psp::CUPSManager
+deadlock:_dbus_lock
+
+# inside an assert so I don't care
+race:cppu::OWeakConnectionPoint::acquire
+race:AffineBridge::v_enter
+race:__vsnprintf_chk
+
+# right now, I'm not interested in deadlocks at all, too many false+
+deadlock:
+
+# This is checking  SAL_STRING_IS_STATIC, which is safe because that is written at compile time
+race:rtl::str::acquire<_rtl_uString>
+race:rtl::str::release<_rtl_uString>
+
+# I've convinced myself this is a false+, caused by ping-ponging the buffer between two
+# threads, but I might be wrong
+race:XBufferedThreadedStream::getNextBlock
+
+# not introduced in stuff the embedded JVM does
+race:libjvm.so
