@@ -27,6 +27,7 @@
 #include <osl/mutex.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/comphelperdllapi.h>
+#include <mutex>
 
 namespace comphelper
 {
@@ -39,7 +40,7 @@ namespace comphelper
 class COMPHELPER_DLLPUBLIC SequenceInputStream final
     : public ::cppu::WeakImplHelper< css::io::XInputStream, css::io::XSeekable >
 {
-    ::osl::Mutex    m_aMutex;
+    std::mutex    m_aMutex;
     css::uno::Sequence<sal_Int8> const m_aData;
     sal_Int32       m_nPos;
 
@@ -62,7 +63,7 @@ public:
     virtual sal_Int64 SAL_CALL getLength(  ) override;
 
 private:
-    inline sal_Int32 avail();
+    sal_Int32 avail();
 };
 
 // don't export to avoid duplicate WeakImplHelper definitions with MSVC

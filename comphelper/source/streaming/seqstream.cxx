@@ -57,12 +57,12 @@ inline sal_Int32 SequenceInputStream::avail()
 
 sal_Int32 SAL_CALL SequenceInputStream::readBytes( Sequence<sal_Int8>& aData, sal_Int32 nBytesToRead )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-
-    sal_Int32 nAvail = avail();
-
     if (nBytesToRead < 0)
         throw BufferSizeExceededException(OUString(),*this);
+
+    std::lock_guard aGuard( m_aMutex );
+
+    sal_Int32 nAvail = avail();
 
     if (nAvail < nBytesToRead)
         nBytesToRead = nAvail;
@@ -84,12 +84,12 @@ sal_Int32 SAL_CALL SequenceInputStream::readSomeBytes( Sequence<sal_Int8>& aData
 
 void SAL_CALL SequenceInputStream::skipBytes( sal_Int32 nBytesToSkip )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-
-    sal_Int32 nAvail = avail();
-
     if (nBytesToSkip < 0)
         throw BufferSizeExceededException(OUString(),*this);
+
+    std::lock_guard aGuard( m_aMutex );
+
+    sal_Int32 nAvail = avail();
 
     if (nAvail < nBytesToSkip)
         nBytesToSkip = nAvail;
@@ -100,7 +100,7 @@ void SAL_CALL SequenceInputStream::skipBytes( sal_Int32 nBytesToSkip )
 
 sal_Int32 SAL_CALL SequenceInputStream::available(  )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::lock_guard aGuard( m_aMutex );
 
     return avail();
 }
@@ -108,6 +108,8 @@ sal_Int32 SAL_CALL SequenceInputStream::available(  )
 
 void SAL_CALL SequenceInputStream::closeInput(  )
 {
+    std::lock_guard aGuard( m_aMutex );
+
     if (m_nPos == -1)
         throw NotConnectedException(OUString(), *this);
 
@@ -118,16 +120,19 @@ void SAL_CALL SequenceInputStream::seek( sal_Int64 location )
 {
     if ( location > m_aData.getLength() || location < 0 || location > SAL_MAX_INT32 )
         throw IllegalArgumentException("bad location", static_cast<cppu::OWeakObject*>(this), 1);
+    std::lock_guard aGuard( m_aMutex );
     m_nPos = static_cast<sal_Int32>(location);
 }
 
 sal_Int64 SAL_CALL SequenceInputStream::getPosition()
 {
+    std::lock_guard aGuard( m_aMutex );
     return m_nPos;
 }
 
 sal_Int64 SAL_CALL SequenceInputStream::getLength(  )
 {
+    std::lock_guard aGuard( m_aMutex );
     return m_aData.getLength();
 }
 
