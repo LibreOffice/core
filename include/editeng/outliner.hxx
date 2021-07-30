@@ -788,6 +788,7 @@ public:
     void            SetMaxAutoPaperSize( const Size& rSz );
 
     void SetMinColumnWrapHeight(tools::Long nVal);
+    void SetInitialTextHeight(tools::Long nVal);
 
     void            SetDefTab( sal_uInt16 nTab );
 

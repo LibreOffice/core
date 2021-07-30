@@ -1053,7 +1053,7 @@ void SdStyleSheet::setPropertyValue_Impl(const OUString& aPropertyName, const cs
 }
 
 // Must be guarded by solar mutex; must not be disposed
-css::uno::Any SAL_CALL SdStyleSheet::getPropertyValue_Impl(const OUString& PropertyName)
+css::uno::Any SdStyleSheet::getPropertyValue_Impl(const OUString& PropertyName)
 {
     const SfxItemPropertyMapEntry* pEntry = getPropertyMapEntry( PropertyName );
     if( pEntry == nullptr )
@@ -1201,7 +1201,16 @@ void SAL_CALL SdStyleSheet::setPropertyValues(const css::uno::Sequence<OUString>
     throwIfDisposed();
 
     for (sal_Int32 i = 0; i < nCount; ++i)
-        setPropertyValue_Impl(aPropertyNames[i], aValues[i]);
+    {
+        try
+        {
+            setPropertyValue_Impl(aPropertyNames[i], aValues[i]);
+        }
+        catch (const css::beans::UnknownPropertyException&)
+        {
+            DBG_UNHANDLED_EXCEPTION("sd");
+        }
+    }
 
     Broadcast(SfxHint(SfxHintId::DataChanged));
 }
