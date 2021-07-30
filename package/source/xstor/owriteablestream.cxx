@@ -48,7 +48,6 @@
 #include <comphelper/sequence.hxx>
 
 #include <rtl/digest.h>
-#include <rtl/instance.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <PackageConstants.hxx>
@@ -1930,11 +1929,10 @@ uno::Sequence< uno::Type > SAL_CALL OWriteStream::getTypes()
     return m_pData->m_pTypeCollection->getTypes() ;
 }
 
-namespace { struct lcl_ImplId : public rtl::Static< ::cppu::OImplementationId, lcl_ImplId > {}; }
-
 uno::Sequence< sal_Int8 > SAL_CALL OWriteStream::getImplementationId()
 {
-    return css::uno::Sequence<sal_Int8>();
+    static ::cppu::OImplementationId lcl_ImplId;
+    return lcl_ImplId.getImplementationId();
 }
 
 sal_Int32 SAL_CALL OWriteStream::readBytes( uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )

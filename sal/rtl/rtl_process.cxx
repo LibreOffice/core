@@ -21,7 +21,6 @@
 
 #include <cstring>
 
-#include <rtl/instance.hxx>
 #include <rtl/process.h>
 #include <rtl/uuid.h>
 #include <sal/types.h>
@@ -46,13 +45,12 @@ private:
     sal_uInt8 uuid_[UUID_SIZE];
 };
 
-struct theId: public rtl::Static< Id, theId > {};
-
 } // end namespace
 
 void rtl_getGlobalProcessId(sal_uInt8 * pTargetUUID)
 {
-    theId::get().copy(pTargetUUID);
+    static Id theId;
+    theId.copy(pTargetUUID);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

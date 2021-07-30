@@ -52,7 +52,6 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 
-#include <rtl/instance.hxx>
 #include <rtl/random.h>
 #include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
@@ -75,11 +74,10 @@ using namespace cppu;
 #define THROW_WHERE ""
 #endif
 
-namespace { struct lcl_CachedImplId : public rtl::Static< cppu::OImplementationId, lcl_CachedImplId > {}; }
-
 css::uno::Sequence < sal_Int8 > ZipPackageStream::getUnoTunnelId()
 {
-    return lcl_CachedImplId::get().getImplementationId();
+    static cppu::OImplementationId lcl_CachedImplId;
+    return lcl_CachedImplId.getImplementationId();
 }
 
 ZipPackageStream::ZipPackageStream ( ZipPackage & rNewPackage,
