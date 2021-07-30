@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9b61fe1a_f2f15748",
+        "filename": "sc/source/ui/view/printfun.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3202,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-07-30T16:32:55Z",
+      "side": 1,
+      "message": "If nNextPageBreak\u003dScRowBreakIterator::NOT_FOUND nRow will be invalid (-2 here).\nThis needs to be fixed in master as well.",
+      "revId": "0355bb98ea85f86a5bdbbf519b056f2f0f8508ff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
