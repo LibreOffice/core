@@ -93,10 +93,10 @@ void XBufferedThreadedStream::produce()
  */
 const Buffer& XBufferedThreadedStream::getNextBlock()
 {
+    std::unique_lock<std::mutex> aGuard( maBufferProtector );
     const sal_Int32 nBufSize = maInUseBuffer.getLength();
     if( nBufSize <= 0 || mnOffset >= nBufSize )
     {
-        std::unique_lock<std::mutex> aGuard( maBufferProtector );
         if( mnOffset >= nBufSize )
             maUsedBuffers.push( maInUseBuffer );
 
