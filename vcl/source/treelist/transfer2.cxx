@@ -83,9 +83,8 @@ void DragSourceHelper::dispose()
 {
     Reference<XDragGestureRecognizer> xTmp;
     {
-        osl::MutexGuard aGuard( maMutex );
-        xTmp = mxDragGestureRecognizer;
-        mxDragGestureRecognizer.clear();
+        std::lock_guard aGuard( maMutex );
+        xTmp = std::move(mxDragGestureRecognizer);
     }
     if( xTmp.is()  )
         xTmp->removeDragGestureListener( mxDragGestureListener );

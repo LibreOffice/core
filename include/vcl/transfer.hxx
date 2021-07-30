@@ -41,6 +41,7 @@
 #include <com/sun/star/datatransfer/dnd/XDropTargetListener.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
 #include <memory>
+#include <mutex>
 
 namespace com::sun::star::datatransfer::dnd { class XDragGestureRecognizer; }
 namespace com::sun::star::io { class XInputStream; }
@@ -399,7 +400,7 @@ private:
     friend class DragSourceHelper::DragGestureListener;
 
 private:
-    osl::Mutex                                                            maMutex;
+    std::mutex                                                            maMutex;
     css::uno::Reference< css::datatransfer::dnd::XDragGestureRecognizer > mxDragGestureRecognizer;
 
     css::uno::Reference< css::datatransfer::dnd::XDragGestureListener >   mxDragGestureListener;
