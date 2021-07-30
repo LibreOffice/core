@@ -23,7 +23,6 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <com/sun/star/sheet/XFilterFormulaParser.hpp>
-#include <rtl/instance.hxx>
 #include <comphelper/processfactory.hxx>
 #include <sfx2/objsh.hxx>
 #include <document.hxx>
@@ -101,8 +100,6 @@ Reference< XFormulaParser > ScParserFactoryMap::createFormulaParser(
     return xParser;
 }
 
-struct ScParserFactorySingleton : public ::rtl::Static< ScParserFactoryMap, ScParserFactorySingleton > {};
-
 } // namespace
 
 ScFormulaParserPool::ScFormulaParserPool( const ScDocument& rDoc ) :
@@ -132,9 +129,10 @@ Reference< XFormulaParser > ScFormulaParserPool::getFormulaParser( const OUStrin
     // try to create a new parser object
     if( SfxObjectShell* pDocShell = mrDoc.GetDocumentShell() ) try
     {
+        static ScParserFactoryMap theScParserFactoryMap;
+
         Reference< XComponent > xComponent( pDocShell->GetModel(), UNO_QUERY_THROW );
-        ScParserFactoryMap& rFactoryMap = ScParserFactorySingleton::get();
-        rxParser = rFactoryMap.createFormulaParser( xComponent, rNamespace );
+        rxParser = theScParserFactoryMap.createFormulaParser( xComponent, rNamespace );
     }
     catch( Exception& )
     {

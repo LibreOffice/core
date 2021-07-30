@@ -27,7 +27,6 @@
 #include <cstdlib>
 
 #include <osl/module.hxx>
-#include <rtl/instance.hxx>
 #include <rtl/textenc.h>
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
@@ -409,10 +408,6 @@ private:
 
 #endif
 
-struct FullTextEncodingDataSingleton:
-    public rtl::Static< FullTextEncodingData, FullTextEncodingDataSingleton >
-{};
-
 }
 
 ImplTextEncodingData const *
@@ -431,7 +426,10 @@ Impl_getTextEncodingData(rtl_TextEncoding nEncoding)
         case RTL_TEXTENCODING_ISO_8859_1:
             return &aImplISO88591TextEncodingData; break;
         default:
-            return FullTextEncodingDataSingleton::get().get(nEncoding);
+        {
+            static FullTextEncodingData gFullTextEncodingData;
+            return gFullTextEncodingData.get(nEncoding);
+        }
     }
 }
 

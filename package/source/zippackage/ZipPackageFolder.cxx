@@ -36,7 +36,6 @@
 #include <rtl/digest.h>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <EncryptedDataHeader.hxx>
-#include <rtl/instance.hxx>
 
 using namespace com::sun::star;
 using namespace com::sun::star::packages::zip::ZipConstants;
@@ -53,8 +52,6 @@ using namespace cppu;
 #else
 #define THROW_WHERE ""
 #endif
-
-namespace { struct lcl_CachedImplId : public rtl::Static< cppu::OImplementationId, lcl_CachedImplId > {}; }
 
 ZipPackageFolder::ZipPackageFolder( const css::uno::Reference < css::uno::XComponentContext >& xContext,
                                     sal_Int32 nFormat,
@@ -153,7 +150,8 @@ void ZipPackageFolder::setChildStreamsTypeByExtension( const beans::StringPair& 
 
 css::uno::Sequence < sal_Int8 > ZipPackageFolder::getUnoTunnelId()
 {
-    return lcl_CachedImplId::get().getImplementationId();
+    static cppu::OImplementationId lcl_CachedImplId;
+    return lcl_CachedImplId.getImplementationId();
 }
 
     // XNameContainer

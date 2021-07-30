@@ -156,7 +156,7 @@ struct NamespaceIds: public rtl::StaticWithInit<
 
 void registerNamespaces( FastParser& rParser )
 {
-    const Sequence< beans::Pair<OUString, sal_Int32> > ids = NamespaceIds::get();
+    const Sequence< beans::Pair<OUString, sal_Int32> >& ids = NamespaceIds::get();
 
     // Filter out duplicates: a namespace can have multiple URLs, think of
     // strict vs transitional.

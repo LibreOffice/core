@@ -146,8 +146,7 @@ static bool find(
 
 namespace
 {
-    struct rtl_bootstrap_set_vector :
-        public rtl::Static< NameValueVector, rtl_bootstrap_set_vector > {};
+    NameValueVector rtl_bootstrap_set_vector;
 }
 
 static bool getFromCommandLineArgs(
@@ -551,7 +550,7 @@ bool Bootstrap_Impl::getAmbienceValue(
 
     {
         osl::MutexGuard g(osl::Mutex::getGlobalMutex());
-        f = find(rtl_bootstrap_set_vector::get(), key, &v);
+        f = find(rtl_bootstrap_set_vector, key, &v);
     }
 
     if (f || getFromCommandLineArgs(key, &v) ||
@@ -744,8 +743,7 @@ void SAL_CALL rtl_bootstrap_set (
 
     osl::MutexGuard guard(osl::Mutex::getGlobalMutex());
 
-    NameValueVector& r_rtl_bootstrap_set_vector= rtl_bootstrap_set_vector::get();
-    for (auto & item : r_rtl_bootstrap_set_vector)
+    for (auto & item : rtl_bootstrap_set_vector)
     {
         if (item.sName == name)
         {
@@ -756,7 +754,7 @@ void SAL_CALL rtl_bootstrap_set (
 
     SAL_INFO("sal.bootstrap", "explicitly getting: name=" << name << " value=" <<value);
 
-    r_rtl_bootstrap_set_vector.emplace_back(name, value);
+    rtl_bootstrap_set_vector.emplace_back(name, value);
 }
 
 void SAL_CALL rtl_bootstrap_expandMacros_from_handle(

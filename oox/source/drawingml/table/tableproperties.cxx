@@ -24,7 +24,6 @@
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <com/sun/star/table/XTable.hpp>
 #include <com/sun/star/table/XMergeableCellRange.hpp>
-#include <rtl/instance.hxx>
 #include <oox/core/xmlfilterbase.hxx>
 #include "predefined-table-styles.cxx"
 
@@ -89,11 +88,6 @@ static void MergeCells( const uno::Reference< XTable >& xTable, sal_Int32 nCol, 
    }
 }
 
-namespace
-{
-    struct theDefaultTableStyle : public ::rtl::Static< TableStyle, theDefaultTableStyle > {};
-}
-
 const TableStyle& TableProperties::getUsedTableStyle( const ::oox::core::XmlFilterBase& rFilterBase, std::unique_ptr<TableStyle>& rTableStyleToDelete )
 {
     ::oox::core::XmlFilterBase& rBase( const_cast< ::oox::core::XmlFilterBase& >( rFilterBase ) );
@@ -123,7 +117,10 @@ const TableStyle& TableProperties::getUsedTableStyle( const ::oox::core::XmlFilt
     }
 
     if ( !pTableStyle )
-        return theDefaultTableStyle::get();
+    {
+        static TableStyle theDefaultTableStyle;
+        return theDefaultTableStyle;
+    }
 
     return *pTableStyle;
 }

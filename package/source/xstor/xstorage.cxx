@@ -53,7 +53,6 @@
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/exc_hlp.hxx>
-#include <rtl/instance.hxx>
 
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/ofopxmlhelper.hxx>
@@ -2174,11 +2173,10 @@ uno::Sequence< uno::Type > SAL_CALL OStorage::getTypes()
     return m_pData->m_pTypeCollection->getTypes() ;
 }
 
-namespace { struct lcl_ImplId : public rtl::Static< ::cppu::OImplementationId, lcl_ImplId > {}; }
-
 uno::Sequence< sal_Int8 > SAL_CALL OStorage::getImplementationId()
 {
-    return css::uno::Sequence<sal_Int8>();
+    static ::cppu::OImplementationId lcl_ImplId;
+    return lcl_ImplId.getImplementationId();
 }
 
 //  XStorage
