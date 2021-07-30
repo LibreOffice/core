@@ -107,7 +107,7 @@ SwHHCWrapper::SwHHCWrapper(
 {
 }
 
-SwHHCWrapper::~SwHHCWrapper()
+SwHHCWrapper::~SwHHCWrapper() COVERITY_NOEXCEPT_FALSE
 {
     m_pConvArgs.reset();
 
