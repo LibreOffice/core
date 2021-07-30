@@ -149,6 +149,11 @@ DECLARE_OOXMLEXPORT_TEST(testTdf81507, "tdf81507.docx")
     xmlXPathFreeObject(pXmlObj);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf126287, "tdf126287.docx")
+{
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf137466, "tdf137466.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");

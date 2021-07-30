@@ -118,7 +118,8 @@ enum { NUMBER_OF_CONTEXTS = CONTEXT_LIST + 1 };
 enum BreakType
 {
     PAGE_BREAK,
-    COLUMN_BREAK
+    COLUMN_BREAK,
+    LINE_BREAK
 };
 
 enum SkipFootnoteSeparator
@@ -458,6 +459,7 @@ private:
     bool                                                                            m_bIsFirstSection;
     bool                                                                            m_bIsColumnBreakDeferred;
     bool                                                                            m_bIsPageBreakDeferred;
+    sal_Int32                                                                       m_nLineBreaksDeferred;
     /// If we want to set "sdt end" on the next character context.
     bool                                                                            m_bSdtEndDeferred;
     /// If we want to set "paragraph sdt end" on the next paragraph context.
