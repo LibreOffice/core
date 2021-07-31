@@ -1,21 +1,11 @@
 #!/bin/bash
 
-# The Perl code here is used to generate the custom shape presets
-# source code.
-
-# This file is both a README and also, if run as a shell script, does what
-# it describes.
-# It should be invoked from the libreoffice core top-level source folder:
-#   ./oox/source/drawingml/customshapes/generate.sh
-# The logs will be created in the file:
-#   ./oox/source/drawingml/customshapes/custom-shapes.log
+# This script is used to generate the custom shape presets
 
 # We want to exit on errors...
 
 set -o errexit
 
-# To re-generate the code, you need to be on Linux (I think).
-# It is not necessary to do a make test-install, just run from instdir.
 # oox needs to be build with dbglevel=2 so that DEBUG is defined.
 
 make oox.clean && make oox dbglevel=2
