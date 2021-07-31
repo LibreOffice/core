@@ -19,10 +19,11 @@ preset type and the adjustment values, the reset can
 be taken from the shape definition.
 
 example of drawingml preset:
-
+```xml
          <a:prstGeom prst="star5">
            <a:avLst/>
          </a:prstGeom>
+```
 
 example of drawingml custom shape (equal to star5 preset):
 ```xml
@@ -134,11 +135,11 @@ needed.
 In order to convert preset shapes to LO's enhanced custom shape,
 we need to load shape definition of preset shapes. The procedure
 to convert the definition from OOXML spec for LO is documented
-(also a script) in `oox/source/drawingml/customshapes/README.md`.
-The scripts in `oox/source/drawingml/customshapes/` also generate pptx
+in `oox/source/drawingml/customshapes/README.md`.
+The `oox/source/drawingml/customshapes/generate.sh` script generate pptx
 files for single presets and also for all presets
-`cshape-all.pptx`. The cshape-all.pptx file is then loaded into Impress
-build with debug enabled in oox and the command line output contains
+`cshape-all.pptx`. The `cshape-all.pptx` file is then loaded into Impress
+build with debug enabled in `oox` and the command line output contains
 information. The generated definition is `oox-drawingml-cs-presets`.
 
 Check `CustomShapeProperties::initializePresetDataMap()` to see how
@@ -152,9 +153,14 @@ the cshape-all.pptx can be used to test the round trips. there's small
 problem with these pptx as they cannot be imported into powerpoint,
 but that can be fixed quickly. when fixed, we can use it to
 test powerpoint odp export and see how complete it is regarding
-custom shapes. OpenXML SDK tools might help when fixing
-`cshape-all.pptx`
-<http://www.microsoft.com/en-us/download/details.aspx?id=30425>
+custom shapes. OpenXML SDK might help when fixing `cshape-all.pptx`
+
+<https://github.com/OfficeDev/Open-XML-SDK>
+
+Also, "OOXML Viewer VSCode Extension" is a useful tool for debugging
+OOXML documents.
+
+<https://github.com/yuenm18/ooxml-viewer-vscode>
 
 ## Export
 Here is how LO's enhanced custom shapes are exported:
