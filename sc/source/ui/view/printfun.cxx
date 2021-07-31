@@ -3199,7 +3199,8 @@ void PrintPageRanges::calculate(ScDocument& rDoc,
         else
         {
             // Skip all hidden rows until next pagebreak.
-            nRow = std::min(nLastRow, nNextPageBreak - 1);
+            nRow = ((nNextPageBreak == ScRowBreakIterator::NOT_FOUND) ? nLastRow :
+                    std::min(nLastRow, nNextPageBreak - 1));
         }
     }
 
