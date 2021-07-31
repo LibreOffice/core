@@ -286,11 +286,6 @@ void SfxCommonTemplateDialog_Impl::Initialize()
 IMPL_LINK(SfxCommonTemplateDialog_Impl, UpdateStyles_Hdl, StyleFlags, nFlags, void)
 {
     const SfxStyleFamilyItem* pItem = m_aStyleList.GetFamilyItem();
-    SfxStyleSearchBits nFilter(nActFilter < pItem->GetFilterList().size()
-                                   ? pItem->GetFilterList()[nActFilter].nFlags
-                                   : SfxStyleSearchBits::Auto);
-    if (nFilter == SfxStyleSearchBits::Auto) // automatic
-        nFilter = nAppFilter;
 
     if (nFlags & StyleFlags::UpdateFamily) // Update view type list (Hierarchical, All, etc.
     {
@@ -314,8 +309,6 @@ IMPL_LINK(SfxCommonTemplateDialog_Impl, UpdateStyles_Hdl, StyleFlags, nFlags, vo
             nActFilter = 0;
             m_aStyleList.SetFilterIdx(nActFilter);
             mxFilterLb->set_active(1);
-            nFilter = (nActFilter < rFilter.size()) ? rFilter[nActFilter].nFlags
-                                                    : SfxStyleSearchBits::Auto;
         }
 
         // if the tree view again, select family hierarchy
