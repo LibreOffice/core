@@ -72,7 +72,7 @@ namespace XPath
             const OUString& aPrefix,
             const OUString& aURI)
     {
-        ::osl::MutexGuard const g(m_Mutex);
+        std::lock_guard const g(m_Mutex);
 
         m_nsmap.emplace(aPrefix, aURI);
     }
@@ -81,7 +81,7 @@ namespace XPath
             const OUString& aPrefix,
             const OUString& aURI)
     {
-        ::osl::MutexGuard const g(m_Mutex);
+        std::lock_guard const g(m_Mutex);
 
         if ((m_nsmap.find(aPrefix))->second == aURI) {
             m_nsmap.erase(aPrefix);
@@ -284,7 +284,7 @@ namespace XPath
         extensions_t extensions;
 
         {
-            ::osl::MutexGuard const g(m_Mutex);
+            std::lock_guard const g(m_Mutex);
             nsmap = m_nsmap;
             extensions = m_extensions;
         }
@@ -365,7 +365,7 @@ namespace XPath
     void SAL_CALL CXPathAPI::registerExtension(
             const OUString& aName)
     {
-        ::osl::MutexGuard const g(m_Mutex);
+        std::lock_guard const g(m_Mutex);
 
         // get extension from service manager
         Reference< XXPathExtension > const xExtension(
@@ -383,7 +383,7 @@ namespace XPath
         if (!xExtension.is()) {
             throw RuntimeException();
         }
-        ::osl::MutexGuard const g(m_Mutex);
+        std::lock_guard const g(m_Mutex);
         m_extensions.push_back( xExtension );
     }
 }
