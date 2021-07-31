@@ -134,6 +134,13 @@ void SvmWriter::MetaActionHandler(MetaAction* pAction, ImplMetaWriteData* pData)
         }
         break;
 
+        case MetaActionType::CHORD:
+        {
+            auto* pMetaAction = static_cast<MetaChordAction*>(pAction);
+            ChordHandler(pMetaAction);
+        }
+        break;
+
         /* default case prevents test failure and will be
         removed once all the handlers are completed */
         default:
@@ -217,6 +224,17 @@ void SvmWriter::ArcHandler(MetaArcAction* pAction)
 }
 
 void SvmWriter::PieHandler(MetaPieAction* pAction)
+{
+    mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
+
+    VersionCompatWrite aCompat(mrStream, 1);
+    TypeSerializer aSerializer(mrStream);
+    aSerializer.writeRectangle(pAction->GetRect());
+    aSerializer.writePoint(pAction->GetStartPoint());
+    aSerializer.writePoint(pAction->GetEndPoint());
+}
+
+void SvmWriter::ChordHandler(MetaChordAction* pAction)
 {
     mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
 
