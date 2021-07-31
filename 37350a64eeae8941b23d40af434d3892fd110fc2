@@ -33,6 +33,24 @@
       "revId": "37350a64eeae8941b23d40af434d3892fd110fc2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "42a0b6d5_07e4c452",
+        "filename": "i18npool/source/localedata/data/ko_KR.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-07-31T14:59:38Z",
+      "side": 1,
+      "message": "Sorry for fuzz, somehow I read the format 20 above 21, which correctly is YYYY/M/D",
+      "parentUuid": "be7745bc_0a84effe",
+      "revId": "37350a64eeae8941b23d40af434d3892fd110fc2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
