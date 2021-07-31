@@ -20,6 +20,7 @@
 #pragma once
 
 #include <map>
+#include <mutex>
 #include <vector>
 
 #include <sal/types.h>
@@ -53,7 +54,7 @@ namespace XPath
     {
 
     private:
-        ::osl::Mutex m_Mutex;
+        std::mutex m_Mutex;
         nsmap_t m_nsmap;
         const css::uno::Reference< css::uno::XComponentContext > m_xContext;
         extensions_t m_extensions;
