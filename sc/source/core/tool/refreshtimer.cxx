@@ -36,7 +36,7 @@ ScRefreshTimerProtector::ScRefreshTimerProtector( std::unique_ptr<ScRefreshTimer
     {
         m_rpControl->SetAllowRefresh( false );
         // wait for any running refresh in another thread to finish
-        ::osl::MutexGuard aGuard( m_rpControl->GetMutex() );
+        std::lock_guard aGuard( m_rpControl->GetMutex() );
     }
 }
 
@@ -122,7 +122,7 @@ void ScRefreshTimer::Invoke()
     if ( ppControl && *ppControl && (*ppControl)->IsRefreshAllowed() )
     {
         // now we COULD make the call in another thread ...
-        ::osl::MutexGuard aGuard( (*ppControl)->GetMutex() );
+        std::lock_guard aGuard( (*ppControl)->GetMutex() );
         Timer::Invoke();
         // restart from now on, don't execute immediately again if timed out
         // a second time during refresh

@@ -23,20 +23,20 @@
 
 #include <tools/solar.h>
 #include <vcl/timer.hxx>
-#include <osl/mutex.hxx>
 #include "scdllapi.h"
 #include <memory>
+#include <mutex>
 
 class ScRefreshTimerControl
 {
-    ::osl::Mutex    aMutex;
+    std::mutex      aMutex;
     sal_uInt16      nBlockRefresh;
 
 public:
     ScRefreshTimerControl() : nBlockRefresh(0) {}
     void SetAllowRefresh( bool b );
     bool IsRefreshAllowed() const { return !nBlockRefresh; }
-    ::osl::Mutex& GetMutex() { return aMutex; }
+    std::mutex& GetMutex() { return aMutex; }
 };
 
 class ScRefreshTimer : public AutoTimer
