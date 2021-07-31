@@ -21,6 +21,7 @@
 
 #include <map>
 #include <memory>
+#include <mutex>
 #include <set>
 #include <string_view>
 #include <iterator>
@@ -399,7 +400,7 @@ private:
     /// refcount
     static sal_uInt32 m_NumInstances;
     /// mutex for m_pWorld - redland is not as threadsafe as is often claimed
-    static osl::Mutex m_aMutex;
+    static std::mutex m_aMutex;
 
     // NB: sequence of the shared pointers is important!
     /// librdf repository storage
@@ -428,7 +429,7 @@ class librdf_GraphResult:
 public:
 
     librdf_GraphResult(librdf_Repository *i_pRepository,
-            ::osl::Mutex & i_rMutex,
+            std::mutex & i_rMutex,
             std::shared_ptr<librdf_stream> const& i_pStream,
             std::shared_ptr<librdf_node> const& i_pContext,
             std::shared_ptr<librdf_query>  const& i_pQuery =
@@ -442,7 +443,7 @@ public:
 
     virtual ~librdf_GraphResult() override
     {
-        ::osl::MutexGuard g(m_rMutex); // lock mutex when destroying members
+        std::lock_guard g(m_rMutex); // lock mutex when destroying members
         const_cast<std::shared_ptr<librdf_stream>& >(m_pStream).reset();
         const_cast<std::shared_ptr<librdf_node>& >(m_pContext).reset();
         const_cast<std::shared_ptr<librdf_query>& >(m_pQuery).reset();
@@ -462,7 +463,7 @@ private:
     // also, sequence is important: the stream must be destroyed first.
     ::rtl::Reference< librdf_Repository > m_xRep;
     // needed for synchronizing access to librdf (it doesn't do win32 threading)
-    ::osl::Mutex & m_rMutex;
+    std::mutex & m_rMutex;
     // the query (in case this is a result of a graph query)
     // not that the redland documentation spells this out explicitly, but
     // queries must be freed only after all the results are completely read
@@ -478,7 +479,7 @@ private:
 sal_Bool SAL_CALL
 librdf_GraphResult::hasMoreElements()
 {
-    ::osl::MutexGuard g(m_rMutex);
+    std::lock_guard g(m_rMutex);
     return m_pStream && !librdf_stream_end(m_pStream.get());
 }
 
@@ -500,7 +501,7 @@ librdf_node* librdf_GraphResult::getContext_Lock() const
 css::uno::Any SAL_CALL
 librdf_GraphResult::nextElement()
 {
-    ::osl::MutexGuard g(m_rMutex);
+    std::lock_guard g(m_rMutex);
     if (m_pStream && librdf_stream_end(m_pStream.get())) {
         throw container::NoSuchElementException();
     }
@@ -580,7 +581,7 @@ class librdf_QuerySelectResult:
 public:
 
     librdf_QuerySelectResult(librdf_Repository *i_pRepository,
-            ::osl::Mutex & i_rMutex,
+            std::mutex & i_rMutex,
             std::shared_ptr<librdf_query>  const& i_pQuery,
             std::shared_ptr<librdf_query_results> const& i_pQueryResult,
             uno::Sequence< OUString > const& i_rBindingNames )
@@ -593,7 +594,7 @@ public:
 
     virtual ~librdf_QuerySelectResult() override
     {
-        ::osl::MutexGuard g(m_rMutex); // lock mutex when destroying members
+        std::lock_guard g(m_rMutex); // lock mutex when destroying members
         const_cast<std::shared_ptr<librdf_query_results>& >(m_pQueryResult)
             .reset();
         const_cast<std::shared_ptr<librdf_query>& >(m_pQuery).reset();
@@ -616,7 +617,7 @@ private:
     // also, sequence is important: the stream must be destroyed first.
     ::rtl::Reference< librdf_Repository > m_xRep;
     // needed for synchronizing access to librdf (it doesn't do win32 threading)
-    ::osl::Mutex & m_rMutex;
+    std::mutex & m_rMutex;
     // not that the redland documentation spells this out explicitly, but
     // queries must be freed only after all the results are completely read
     std::shared_ptr<librdf_query> const m_pQuery;
@@ -629,7 +630,7 @@ private:
 sal_Bool SAL_CALL
 librdf_QuerySelectResult::hasMoreElements()
 {
-    ::osl::MutexGuard g(m_rMutex);
+    std::lock_guard g(m_rMutex);
     return !librdf_query_results_finished(m_pQueryResult.get());
 }
 
@@ -650,7 +651,7 @@ public:
 css::uno::Any SAL_CALL
 librdf_QuerySelectResult::nextElement()
 {
-    ::osl::MutexGuard g(m_rMutex);
+    std::lock_guard g(m_rMutex);
     if (librdf_query_results_finished(m_pQueryResult.get())) {
         throw container::NoSuchElementException();
     }
@@ -869,7 +870,7 @@ librdf_NamedGraph::getStatements(
 
 std::shared_ptr<librdf_world> librdf_Repository::m_pWorld;
 sal_uInt32 librdf_Repository::m_NumInstances = 0;
-osl::Mutex librdf_Repository::m_aMutex;
+std::mutex librdf_Repository::m_aMutex;
 
 librdf_Repository::librdf_Repository(
         uno::Reference< uno::XComponentContext > const & i_xContext)
@@ -882,7 +883,7 @@ librdf_Repository::librdf_Repository(
 {
     OSL_ENSURE(i_xContext.is(), "librdf_Repository: null context");
 
-    ::osl::MutexGuard g(m_aMutex);
+    std::lock_guard g(m_aMutex);
     if (!m_NumInstances++) {
         m_pWorld.reset(m_TypeConverter.createWorld_Lock(),
                 safe_librdf_free_world);
@@ -891,7 +892,7 @@ librdf_Repository::librdf_Repository(
 
 librdf_Repository::~librdf_Repository()
 {
-    ::osl::MutexGuard g(m_aMutex);
+    std::lock_guard g(m_aMutex);
 
     // must destroy these before world!
     m_pModel.reset();
@@ -928,7 +929,7 @@ librdf_Repository::getSupportedServiceNames()
 // css::rdf::XRepository:
 uno::Reference< rdf::XBlankNode > SAL_CALL librdf_Repository::createBlankNode()
 {
-    ::osl::MutexGuard g(m_aMutex);
+    std::lock_guard g(m_aMutex);
     const std::shared_ptr<librdf_node> pNode(
         librdf_new_node_from_blank_identifier(m_pWorld.get(), nullptr),
         safe_librdf_free_node);
@@ -1000,7 +1001,7 @@ librdf_Repository::importGraph(::sal_Int16 i_Format,
     // exceptions are propagated
     i_xInStream->readBytes( buf, static_cast<sal_Int32>( sz ) );
 
-    ::osl::MutexGuard g(m_aMutex); // don't call i_x* with mutex locked
+    std::lock_guard g(m_aMutex); // don't call i_x* with mutex locked
 
     if (m_NamedGraphs.find(contextU) != m_NamedGraphs.end()) {
         throw container::ElementExistException(
@@ -1143,7 +1144,7 @@ librdf_Repository::exportGraph(::sal_Int16 i_Format,
 
     const OUString contextU( i_xGraphName->getStringValue() );
 
-    ::osl::ClearableMutexGuard g(m_aMutex); // don't call i_x* with mutex locked
+    std::unique_lock g(m_aMutex); // don't call i_x* with mutex locked
 
     if (m_NamedGraphs.find(contextU) == m_NamedGraphs.end()) {
         throw container::NoSuchElementException(
@@ -1244,7 +1245,7 @@ librdf_Repository::exportGraph(::sal_Int16 i_Format,
             *this);
     }
 
-    g.clear(); // release Mutex before calling i_xOutStream methods
+    g.unlock(); // release Mutex before calling i_xOutStream methods
 
     addChaffWhenEncryptedStorage(i_xOutStream, pBuf.get(), length);
 }
@@ -1252,7 +1253,7 @@ librdf_Repository::exportGraph(::sal_Int16 i_Format,
 uno::Sequence< uno::Reference< rdf::XURI > > SAL_CALL
 librdf_Repository::getGraphNames()
 {
-    ::osl::MutexGuard g(m_aMutex);
+    std::lock_guard g(m_aMutex);
     ::std::vector< uno::Reference<rdf::XURI> > ret;
     std::transform(m_NamedGraphs.begin(), m_NamedGraphs.end(),
         std::back_inserter(ret),
@@ -1270,7 +1271,7 @@ librdf_Repository::getGraph(const uno::Reference< rdf::XURI > & i_xGraphName)
     }
     const OUString contextU( i_xGraphName->getStringValue() );
 
-    ::osl::MutexGuard g(m_aMutex);
+    std::lock_guard g(m_aMutex);
     const NamedGraphMap_t::iterator iter( m_NamedGraphs.find(contextU) );
     if (iter != m_NamedGraphs.end()) {
         return iter->second;
@@ -1294,7 +1295,7 @@ librdf_Repository::createGraph(const uno::Reference< rdf::XURI > & i_xGraphName)
                 "librdf_Repository::createGraph: URI is reserved", *this, 0);
     }
 
-    ::osl::MutexGuard g(m_aMutex); // don't call i_x* with mutex locked
+    std::lock_guard g(m_aMutex); // don't call i_x* with mutex locked
 
     // NB: librdf does not have a concept of graphs as such;
     //     a librdf named graph exists iff the model contains a statement with
@@ -1319,7 +1320,7 @@ librdf_Repository::destroyGraph(
     }
     const OUString contextU( i_xGraphName->getStringValue() );
 
-    ::osl::MutexGuard g(m_aMutex); // don't call i_x* with mutex locked
+    std::lock_guard g(m_aMutex); // don't call i_x* with mutex locked
 
     const NamedGraphMap_t::iterator iter( clearGraph_Lock(contextU, false) );
     m_NamedGraphs.erase(iter);
@@ -1351,7 +1352,7 @@ librdf_Repository::getStatements(
         librdf_TypeConverter::extractStatement_NoLock(
             i_xSubject, i_xPredicate, i_xObject));
 
-    ::osl::MutexGuard g(m_aMutex); // don't call i_x* with mutex locked
+    std::lock_guard g(m_aMutex); // don't call i_x* with mutex locked
 
     const std::shared_ptr<librdf_statement> pStatement(
         librdf_TypeConverter::mkStatement_Lock(m_pWorld.get(), stmt),
@@ -1375,7 +1376,7 @@ librdf_Repository::getStatements(
 uno::Reference< rdf::XQuerySelectResult > SAL_CALL
 librdf_Repository::querySelect(const OUString & i_rQuery)
 {
-    ::osl::MutexGuard g(m_aMutex);
+    std::lock_guard g(m_aMutex);
     const OString query(
         OUStringToOString(i_rQuery, RTL_TEXTENCODING_UTF8) );
     const std::shared_ptr<librdf_query> pQuery(
@@ -1421,7 +1422,7 @@ librdf_Repository::querySelect(const OUString & i_rQuery)
 uno::Reference< container::XEnumeration > SAL_CALL
 librdf_Repository::queryConstruct(const OUString & i_rQuery)
 {
-    ::osl::MutexGuard g(m_aMutex);
+    std::lock_guard g(m_aMutex);
     const OString query(
         OUStringToOString(i_rQuery, RTL_TEXTENCODING_UTF8) );
     const std::shared_ptr<librdf_query> pQuery(
@@ -1457,7 +1458,7 @@ librdf_Repository::queryConstruct(const OUString & i_rQuery)
 sal_Bool SAL_CALL
 librdf_Repository::queryAsk(const OUString & i_rQuery)
 {
-    ::osl::MutexGuard g(m_aMutex);
+    std::lock_guard g(m_aMutex);
 
     const OString query(
         OUStringToOString(i_rQuery, RTL_TEXTENCODING_UTF8) );
@@ -1571,7 +1572,7 @@ void SAL_CALL librdf_Repository::setStatementRDFa(
 
     removeStatementRDFa(i_xObject); // not atomic with insertion?
 
-    ::osl::MutexGuard g(m_aMutex); // don't call i_x* with mutex locked
+    std::lock_guard g(m_aMutex); // don't call i_x* with mutex locked
 
     if (i_rRDFaContent.isEmpty()) {
         m_RDFaXHTMLContentSet.erase(sXmlId);
@@ -1654,7 +1655,7 @@ librdf_Repository::getStatementRDFa(
                 "cannot getStatementsGraph", *this, anyEx);
     }
 
-    ::osl::MutexGuard g(m_aMutex); // don't call i_x* with mutex locked
+    std::lock_guard g(m_aMutex); // don't call i_x* with mutex locked
 
     return beans::Pair< uno::Sequence<rdf::Statement>, sal_Bool >(
             comphelper::containerToSequence(ret), 0 != m_RDFaXHTMLContentSet.count(sXmlId));
@@ -1699,7 +1700,7 @@ librdf_Repository::getStatementsRDFa(
         librdf_TypeConverter::extractStatement_NoLock(
             i_xSubject, i_xPredicate, i_xObject));
 
-    ::osl::MutexGuard g(m_aMutex); // don't call i_x* with mutex locked
+    std::lock_guard g(m_aMutex); // don't call i_x* with mutex locked
 
     const std::shared_ptr<librdf_statement> pStatement(
         librdf_TypeConverter::mkStatement_Lock(m_pWorld.get(), stmt),
@@ -1730,7 +1731,7 @@ librdf_Repository::getStatementsRDFa(
 void SAL_CALL librdf_Repository::initialize(
     const uno::Sequence< css::uno::Any > &)
 {
-    ::osl::MutexGuard g(m_aMutex);
+    std::lock_guard g(m_aMutex);
 
 //    m_pWorld.reset(m_TypeConverter.createWorld(), safe_librdf_free_world);
     m_pStorage.reset(m_TypeConverter.createStorage_Lock(m_pWorld.get()),
@@ -1744,7 +1745,7 @@ NamedGraphMap_t::iterator librdf_Repository::clearGraph_NoLock(
 //    throw (uno::RuntimeException, container::NoSuchElementException,
 //        rdf::RepositoryException)
 {
-    ::osl::MutexGuard g(m_aMutex);
+    std::lock_guard g(m_aMutex);
 
     return clearGraph_Lock(i_rGraphName, i_Internal);
 }
@@ -1808,7 +1809,7 @@ void librdf_Repository::addStatementGraph_NoLock(
 
     const OUString contextU( i_xGraphName->getStringValue() );
 
-    ::osl::MutexGuard g(m_aMutex); // don't call i_x* with mutex locked
+    std::lock_guard g(m_aMutex); // don't call i_x* with mutex locked
 
     addStatementGraph_Lock(stmt, contextU, false/*i_Internal*/);
 }
@@ -1882,7 +1883,7 @@ void librdf_Repository::removeStatementsGraph_NoLock(
             i_xSubject, i_xPredicate, i_xObject));
     const OUString contextU( i_xGraphName->getStringValue() );
 
-    ::osl::MutexGuard g(m_aMutex); // don't call i_x* with mutex locked
+    std::lock_guard g(m_aMutex); // don't call i_x* with mutex locked
 
     if (m_NamedGraphs.find(contextU) == m_NamedGraphs.end()) {
         throw container::NoSuchElementException(
@@ -1963,7 +1964,7 @@ librdf_Repository::getStatementsGraph_NoLock(
             i_xSubject, i_xPredicate, i_xObject));
     const OUString contextU( i_xGraphName->getStringValue() );
 
-    ::osl::MutexGuard g(m_aMutex); // don't call i_x* with mutex locked
+    std::lock_guard g(m_aMutex); // don't call i_x* with mutex locked
 
     if (!i_Internal && (m_NamedGraphs.find(contextU) == m_NamedGraphs.end())) {
         throw container::NoSuchElementException(
