@@ -40,6 +40,7 @@
 
 #include <queue>
 #include <memory>
+#include <mutex>
 #include <stack>
 #include <string_view>
 #include <unordered_map>
@@ -173,7 +174,7 @@ struct Entity : public ParserData
     // resource leaks), therefore any exception thrown by a UNO callback
     // must be saved somewhere until the C-XmlParser is stopped.
     css::uno::Any                           maSavedException;
-    osl::Mutex maSavedExceptionMutex;
+    std::mutex                              maSavedExceptionMutex;
     void saveException( const Any & e );
     // Thread-safe check if maSavedException has value
     bool hasException();
@@ -600,7 +601,7 @@ void Entity::throwException( const ::rtl::Reference< FastLocatorImpl > &xDocumen
     // Error during parsing !
     Any savedException;
     {
-        osl::MutexGuard g(maSavedExceptionMutex);
+        std::lock_guard g(maSavedExceptionMutex);
         if (maSavedException.hasValue())
         {
             savedException.setValue(&maSavedException, cppu::UnoType<decltype(maSavedException)>::get());
@@ -642,7 +643,7 @@ void Entity::saveException( const Any & e )
     // unexpectedly some 'startElements' produce a UNO_QUERY_THROW
     // for XComponent; and yet expect to continue parsing.
     SAL_WARN("sax", "Unexpected exception from XML parser " << exceptionToString(e));
-    osl::MutexGuard g(maSavedExceptionMutex);
+    std::lock_guard g(maSavedExceptionMutex);
     if (maSavedException.hasValue())
     {
         SAL_INFO("sax.fastparser", "discarding exception, already have one");
@@ -655,7 +656,7 @@ void Entity::saveException( const Any & e )
 
 bool Entity::hasException()
 {
-    osl::MutexGuard g(maSavedExceptionMutex);
+    std::lock_guard g(maSavedExceptionMutex);
     return maSavedException.hasValue();
 }
 
