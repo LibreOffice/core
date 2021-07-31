@@ -73,6 +73,24 @@
     },
     {
       "key": {
+        "uuid": "635f458c_dda28d4a",
+        "filename": "oox/qa/unit/export.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2021-07-31T16:59:44Z",
+      "side": 1,
+      "message": "tdf#141786 describes an export error and the fix touches only export code. Therefore I think an import test would be misplaced.\nBeside that, this is a suite of export tests.",
+      "parentUuid": "70e90cbf_68c7446d",
+      "revId": "b5e2a30be25c90d63cbf24569279c7cd0684b6cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b3c983f4_f2472773",
         "filename": "oox/qa/unit/export.cxx",
         "patchSetId": 1
