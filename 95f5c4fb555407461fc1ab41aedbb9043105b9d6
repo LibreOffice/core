@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2caad1aa_2e658111",
+        "filename": "package/source/zipapi/Deflater.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-31T17:06:49Z",
+      "side": 1,
+      "message": "It seems like we need to use ZLIB_CONST when compiling, so that we don\u0027t need the const_cast here [1]. The const_cast always looks hackish 😊\n\n[1] https://stackoverflow.com/questions/44958875/c-using-zlib-with-const-data",
+      "revId": "95f5c4fb555407461fc1ab41aedbb9043105b9d6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
