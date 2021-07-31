@@ -16,6 +16,24 @@
       "revId": "95f5c4fb555407461fc1ab41aedbb9043105b9d6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c0046e76_0e78553e",
+        "filename": "package/source/zipapi/Deflater.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-07-31T18:36:04Z",
+      "side": 1,
+      "message": "https://gerrit.libreoffice.org/c/core/+/119627",
+      "parentUuid": "2caad1aa_2e658111",
+      "revId": "95f5c4fb555407461fc1ab41aedbb9043105b9d6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
