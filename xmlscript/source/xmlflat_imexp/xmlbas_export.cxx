@@ -60,7 +60,7 @@ namespace xmlscript
 
     void XMLBasicExporterBase::initialize( const Sequence< Any >& aArguments )
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::lock_guard aGuard( m_aMutex );
 
         if ( aArguments.getLength() != 1 )
         {
@@ -79,7 +79,7 @@ namespace xmlscript
 
     void XMLBasicExporterBase::setSourceDocument( const Reference< XComponent >& rxDoc )
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::lock_guard aGuard( m_aMutex );
 
         m_xModel.set( rxDoc, UNO_QUERY );
 
@@ -93,7 +93,7 @@ namespace xmlscript
 
 sal_Bool XMLBasicExporterBase::filter( const Sequence< beans::PropertyValue >& /*aDescriptor*/ )
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::lock_guard aGuard( m_aMutex );
 
         bool bReturn = true;
 
@@ -306,7 +306,7 @@ sal_Bool XMLBasicExporterBase::filter( const Sequence< beans::PropertyValue >& /
 
     void XMLBasicExporterBase::cancel()
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::lock_guard aGuard( m_aMutex );
 
         // cancel export
     }
