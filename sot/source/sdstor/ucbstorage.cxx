@@ -759,7 +759,7 @@ void UCBStorageStream_Impl::ReadSourceWriteTemporary()
             do
             {
                 aReaded = m_rSource->readBytes( aData, 32000 );
-                m_pStream->WriteBytes(aData.getArray(), aReaded);
+                m_pStream->WriteBytes(aData.getConstArray(), aReaded);
             } while( aReaded == 32000 );
         }
         catch (const Exception &)
@@ -791,7 +791,7 @@ sal_uInt64 UCBStorageStream_Impl::ReadSourceWriteTemporary(sal_uInt64 aLength)
             {
                 sal_Int32 aToCopy = std::min<sal_Int32>( aLength - nInd, 32000 );
                 aReaded = m_rSource->readBytes( aData, aToCopy );
-                aResult += m_pStream->WriteBytes(aData.getArray(), aReaded);
+                aResult += m_pStream->WriteBytes(aData.getConstArray(), aReaded);
             }
 
             if( aResult < aLength )
@@ -842,7 +842,7 @@ std::size_t UCBStorageStream_Impl::GetData(void* pData, std::size_t const nSize)
         {
             Sequence<sal_Int8> aData( aToRead );
             std::size_t aReaded = m_rSource->readBytes( aData, aToRead );
-            aResult += m_pStream->WriteBytes(static_cast<void*>(aData.getArray()), aReaded);
+            aResult += m_pStream->WriteBytes(static_cast<const void*>(aData.getConstArray()), aReaded);
             memcpy( pData, aData.getArray(), aReaded );
         }
         catch (const Exception &)

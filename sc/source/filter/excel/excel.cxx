@@ -379,7 +379,7 @@ static ErrCode lcl_ExportExcelBiff( SfxMedium& rMedium, ScDocument *pDocument,
             }
             uno::Sequence<sal_Int8> aStreamContent;
             aStreamData.Value >>= aStreamContent;
-            size_t nBytesWritten = pStream->WriteBytes(aStreamContent.getArray(), aStreamContent.getLength());
+            size_t nBytesWritten = pStream->WriteBytes(aStreamContent.getConstArray(), aStreamContent.getLength());
             if (nBytesWritten != static_cast<size_t>(aStreamContent.getLength()))
             {
                 eRet = ERRCODE_IO_CANTWRITE;

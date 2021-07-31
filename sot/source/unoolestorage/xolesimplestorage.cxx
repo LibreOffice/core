@@ -203,7 +203,7 @@ void OLESimpleStorage::InsertInputStreamToStorage_Impl( BaseStorage* pStorage, c
         {
             nRead = xInputStream->readBytes( aData, nBytesCount );
 
-            sal_Int32 nWritten = pNewStream->Write( aData.getArray(), nRead );
+            sal_Int32 nWritten = pNewStream->Write( aData.getConstArray(), nRead );
             if ( nWritten < nRead )
                 throw io::IOException();
         } while( nRead == nBytesCount );
