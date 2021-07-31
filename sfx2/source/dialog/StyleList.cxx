@@ -98,6 +98,7 @@ StyleList::StyleList(weld::Builder* pBuilder, std::optional<SfxStyleFamilies> xF
     , m_xFmtLb(pBuilder->weld_tree_view(flatviewname))
     , m_xTreeBox(pBuilder->weld_tree_view(treeviewname))
     , m_xStyleFamilies(xFamilies)
+    , m_pCurObjShell(nullptr)
     , m_nActFamily(0xffff)
     , m_nAppFilter(SfxStyleSearchBits::Auto)
     , m_pParentDialog(Parent)
