@@ -22,8 +22,8 @@
 #include <rtl/ref.hxx>
 #include <salhelper/simplereferenceobject.hxx>
 #include <docoptio.hxx>
-#include <osl/mutex.hxx>
 #include <svl/itempool.hxx>
+#include <mutex>
 
 class ScDocument;
 class ScDocumentPool;
@@ -34,7 +34,7 @@ class SfxItemPool;
 class ScPoolHelper final : public salhelper::SimpleReferenceObject
 {
 private:
-    mutable osl::Mutex maMtxCreateNumFormatter;
+    mutable std::mutex maMtxCreateNumFormatter;
     ScDocOptions        aOpt;
     rtl::Reference<ScDocumentPool> pDocPool;
     rtl::Reference< ScStyleSheetPool > mxStylePool;
