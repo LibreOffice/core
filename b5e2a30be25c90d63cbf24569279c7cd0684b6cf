@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "70e90cbf_68c7446d",
+        "filename": "oox/qa/unit/export.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-07-31T15:59:45Z",
+      "side": 1,
+      "message": "As I\u0027ve written in the other test that lead to creation of this one, I think this test can provide additional value, because testPolylineConnectorPosition is concerned with parsing and checking the XML values, but this one tests the actual position / size of the group and the shapes inside it.\nThere is no guarantee that the correctly read XML values will be the values of the size and the position of the shape. So, checking the actual position / size of the shape can reveal inconsistencies. Even now, there are 1-2 pixel difference between the first load, and the load-save-reload scenario.",
+      "parentUuid": "28d480c0_70e352f5",
+      "revId": "b5e2a30be25c90d63cbf24569279c7cd0684b6cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b3c983f4_f2472773",
         "filename": "oox/qa/unit/export.cxx",
         "patchSetId": 1
