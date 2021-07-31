@@ -198,7 +198,7 @@ sal_Int32 SAL_CALL XUnbufferedStream::readBytes( Sequence< sal_Int8 >& aData, sa
 
                     aData.realloc( nHeadRead + nRead );
 
-                    sal_Int8* pPureBuffer = aPureData.getArray();
+                    const sal_Int8* pPureBuffer = aPureData.getConstArray();
                     sal_Int8* pBuffer = aData.getArray();
                     for ( sal_Int32 nInd = 0; nInd < nRead; nInd++ )
                         pBuffer[ nHeadRead + nInd ] = pPureBuffer[ nInd ];

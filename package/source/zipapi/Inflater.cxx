@@ -98,7 +98,7 @@ sal_Int32 Inflater::doInflateBytes (Sequence < sal_Int8 >  &rBuffer, sal_Int32 n
 
     nLastInflateError = 0;
 
-    pStream->next_in   = reinterpret_cast<unsigned char*>( sInBuffer.getArray() + nOffset );
+    pStream->next_in   = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>( sInBuffer.getConstArray() + nOffset ));
     pStream->avail_in  = nLength;
     pStream->next_out  = reinterpret_cast < unsigned char* > ( rBuffer.getArray() + nNewOffset );
     pStream->avail_out = nNewLength;

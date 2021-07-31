@@ -470,7 +470,7 @@ bool ZipFile::StaticHasValidPassword( const uno::Reference< uno::XComponentConte
     {
         sal_Int32 nOldLen = aDecryptBuffer.getLength();
         aDecryptBuffer.realloc( nOldLen + aDecryptBuffer2.getLength() );
-        memcpy( aDecryptBuffer.getArray() + nOldLen, aDecryptBuffer2.getArray(), aDecryptBuffer2.getLength() );
+        memcpy( aDecryptBuffer.getArray() + nOldLen, aDecryptBuffer2.getConstArray(), aDecryptBuffer2.getLength() );
     }
 
     if ( aDecryptBuffer.getLength() > n_ConstDigestLength )
@@ -552,7 +552,7 @@ public:
         auto readAndCopy = [&]( sal_Int32 nReadSize ) -> sal_Int32
         {
             sal_Int32 nBytes = xSrcStream->readBytes(aBuf, nReadSize);
-            const sal_Int8* p = aBuf.getArray();
+            const sal_Int8* p = aBuf.getConstArray();
             const sal_Int8* pEnd = p + nBytes;
             maBytes.insert( maBytes.end(), p, pEnd );
             return nBytes;
@@ -805,7 +805,7 @@ void ZipFile::readLOC( ZipEntry &rEntry )
         if (nRead < aNameBuffer.getLength())
             aNameBuffer.realloc(nRead);
 
-        OUString sLOCPath( reinterpret_cast<char *>(aNameBuffer.getArray()),
+        OUString sLOCPath( reinterpret_cast<const char *>(aNameBuffer.getConstArray()),
                            aNameBuffer.getLength(),
                            RTL_TEXTENCODING_UTF8 );
 
@@ -1066,7 +1066,7 @@ void ZipFile::recover()
                                     Sequence < sal_Int8 > aFileName;
                                     aGrabber.seek( nGenPos + nPos + 30 );
                                     aGrabber.readBytes( aFileName, aEntry.nPathLen );
-                                    aEntry.sPath = OUString ( reinterpret_cast<char *>(aFileName.getArray()),
+                                    aEntry.sPath = OUString ( reinterpret_cast<const char *>(aFileName.getConstArray()),
                                                               aFileName.getLength(),
                                                               RTL_TEXTENCODING_UTF8 );
                                     aEntry.nPathLen = static_cast< sal_Int16 >(aFileName.getLength());
