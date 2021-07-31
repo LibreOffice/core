@@ -55,14 +55,14 @@ namespace DOM
 
     SAXDocumentBuilderState SAL_CALL CSAXDocumentBuilder::getState()
     {
-        ::osl::MutexGuard g(m_Mutex);
+        std::lock_guard g(m_Mutex);
 
         return m_aState;
     }
 
     void SAL_CALL CSAXDocumentBuilder::reset()
     {
-        ::osl::MutexGuard g(m_Mutex);
+        std::lock_guard g(m_Mutex);
 
         m_aDocument.clear();
         m_aFragment.clear();
@@ -72,7 +72,7 @@ namespace DOM
 
     Reference< XDocument > SAL_CALL CSAXDocumentBuilder::getDocument()
     {
-        ::osl::MutexGuard g(m_Mutex);
+        std::lock_guard g(m_Mutex);
 
         if (m_aState != SAXDocumentBuilderState_DOCUMENT_FINISHED)
             throw RuntimeException();
@@ -82,7 +82,7 @@ namespace DOM
 
     Reference< XDocumentFragment > SAL_CALL CSAXDocumentBuilder::getDocumentFragment()
     {
-        ::osl::MutexGuard g(m_Mutex);
+        std::lock_guard g(m_Mutex);
 
         if (m_aState != SAXDocumentBuilderState_FRAGMENT_FINISHED)
             throw RuntimeException();
@@ -91,7 +91,7 @@ namespace DOM
 
     void SAL_CALL CSAXDocumentBuilder::startDocumentFragment(const Reference< XDocument >& ownerDoc)
     {
-        ::osl::MutexGuard g(m_Mutex);
+        std::lock_guard g(m_Mutex);
 
         // start a new document fragment and push it onto the stack
         // we have to be in a clean state to do this
@@ -107,7 +107,7 @@ namespace DOM
 
     void SAL_CALL CSAXDocumentBuilder::endDocumentFragment()
     {
-        ::osl::MutexGuard g(m_Mutex);
+        std::lock_guard g(m_Mutex);
 
         // there should only be the document left on the node stack
         if (m_aState != SAXDocumentBuilderState_BUILDING_FRAGMENT)
@@ -123,7 +123,7 @@ namespace DOM
     //XFastDocumentHandler
     void SAL_CALL CSAXDocumentBuilder::startDocument()
     {
-        ::osl::MutexGuard g(m_Mutex);
+        std::lock_guard g(m_Mutex);
 
         // start a new document and push it onto the stack
         // we have to be in a clean state to do this
@@ -139,7 +139,7 @@ namespace DOM
 
     void SAL_CALL CSAXDocumentBuilder::endDocument()
     {
-        ::osl::MutexGuard g(m_Mutex);
+        std::lock_guard g(m_Mutex);
 
         // there should only be the document left on the node stack
         if (m_aState != SAXDocumentBuilderState_BUILDING_DOCUMENT)
@@ -154,7 +154,7 @@ namespace DOM
 
     void SAL_CALL CSAXDocumentBuilder::processingInstruction( const OUString& rTarget, const OUString& rData )
     {
-        ::osl::MutexGuard g(m_Mutex);
+        std::lock_guard g(m_Mutex);
 
         //  append PI node to the current top
         if ( m_aState != SAXDocumentBuilderState_BUILDING_DOCUMENT &&
@@ -172,7 +172,7 @@ namespace DOM
 
     void SAL_CALL CSAXDocumentBuilder::startFastElement( sal_Int32 nElement , const Reference< XFastAttributeList >& xAttribs  )
     {
-        ::osl::MutexGuard g(m_Mutex);
+        std::lock_guard g(m_Mutex);
 
         if ( m_aState != SAXDocumentBuilderState_BUILDING_DOCUMENT &&
              m_aState != SAXDocumentBuilderState_BUILDING_FRAGMENT)
@@ -208,7 +208,7 @@ namespace DOM
     // For arbitrary meta elements
     void SAL_CALL CSAXDocumentBuilder::startUnknownElement( const OUString& rNamespace, const OUString& rName, const Reference< XFastAttributeList >& xAttribs )
     {
-        ::osl::MutexGuard g(m_Mutex);
+        std::lock_guard g(m_Mutex);
 
         if ( m_aState != SAXDocumentBuilderState_BUILDING_DOCUMENT &&
              m_aState != SAXDocumentBuilderState_BUILDING_FRAGMENT)
@@ -262,7 +262,7 @@ namespace DOM
 
     void SAL_CALL CSAXDocumentBuilder::endFastElement( sal_Int32 nElement )
     {
-        ::osl::MutexGuard g(m_Mutex);
+        std::lock_guard g(m_Mutex);
 
         // pop the current element from the stack
         if ( m_aState != SAXDocumentBuilderState_BUILDING_DOCUMENT &&
@@ -285,7 +285,7 @@ namespace DOM
 
     void SAL_CALL CSAXDocumentBuilder::endUnknownElement( const OUString& /*rNamespace*/, const OUString& rName )
     {
-        ::osl::MutexGuard g(m_Mutex);
+        std::lock_guard g(m_Mutex);
 
         // pop the current element from the stack
         if ( m_aState != SAXDocumentBuilderState_BUILDING_DOCUMENT &&
@@ -323,7 +323,7 @@ namespace DOM
 
     void SAL_CALL CSAXDocumentBuilder::characters( const OUString& rChars )
     {
-        ::osl::MutexGuard g(m_Mutex);
+        std::lock_guard g(m_Mutex);
 
         //  append text node to the current top element
         if (m_aState != SAXDocumentBuilderState_BUILDING_DOCUMENT &&
