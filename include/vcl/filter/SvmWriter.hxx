@@ -44,4 +44,5 @@ public:
     void LineHandler(MetaLineAction* pAction);
     void RectHandler(MetaRectAction* pAction);
     void RoundRectHandler(MetaRoundRectAction* pAction);
+    void EllipseHandler(MetaEllipseAction* pAction);
 };

@@ -113,6 +113,13 @@ void SvmWriter::MetaActionHandler(MetaAction* pAction, ImplMetaWriteData* pData)
         }
         break;
 
+        case MetaActionType::ELLIPSE:
+        {
+            auto* pMetaAction = static_cast<MetaEllipseAction*>(pAction);
+            EllipseHandler(pMetaAction);
+        }
+        break;
+
         /* default case prevents test failure and will be
         removed once all the handlers are completed */
         default:
@@ -173,5 +180,14 @@ void SvmWriter::RoundRectHandler(MetaRoundRectAction* pAction)
     TypeSerializer aSerializer(mrStream);
     aSerializer.writeRectangle(pAction->GetRect());
     mrStream.WriteUInt32(pAction->GetHorzRound()).WriteUInt32(pAction->GetVertRound());
+}
+
+void SvmWriter::EllipseHandler(MetaEllipseAction* pAction)
+{
+    mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
+
+    VersionCompatWrite aCompat(mrStream, 1);
+    TypeSerializer aSerializer(mrStream);
+    aSerializer.writeRectangle(pAction->GetRect());
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
