@@ -127,6 +127,13 @@ void SvmWriter::MetaActionHandler(MetaAction* pAction, ImplMetaWriteData* pData)
         }
         break;
 
+        case MetaActionType::PIE:
+        {
+            auto* pMetaAction = static_cast<MetaPieAction*>(pAction);
+            PieHandler(pMetaAction);
+        }
+        break;
+
         /* default case prevents test failure and will be
         removed once all the handlers are completed */
         default:
@@ -199,6 +206,17 @@ void SvmWriter::EllipseHandler(MetaEllipseAction* pAction)
 }
 
 void SvmWriter::ArcHandler(MetaArcAction* pAction)
+{
+    mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
+
+    VersionCompatWrite aCompat(mrStream, 1);
+    TypeSerializer aSerializer(mrStream);
+    aSerializer.writeRectangle(pAction->GetRect());
+    aSerializer.writePoint(pAction->GetStartPoint());
+    aSerializer.writePoint(pAction->GetEndPoint());
+}
+
+void SvmWriter::PieHandler(MetaPieAction* pAction)
 {
     mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
 
