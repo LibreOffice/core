@@ -3048,7 +3048,7 @@ Size ImpEditEngine::getTopLeftDocOffset(const tools::Rectangle& rect) const
 Point ImpEditEngine::MoveToNextLine(
     Point& rMovePos, // [in, out] Point that will move to the next line
     tools::Long nLineHeight, // [in] Y-direction move distance (direction-aware)
-    sal_Int32& rColumn, // [in, out] current column number
+    sal_Int16& rColumn, // [in, out] current column number
     Point aOrigin, // [in] Origin point to calculate limits and initial Y position in a new column
     tools::Long* pnHeightNeededToNotWrap // On column wrap, returns how much more height is needed
 ) const
@@ -3123,7 +3123,7 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
 
     const tools::Long nVertLineSpacing = CalcVertLineSpacing(aStartPos);
 
-    sal_Int32 nColumn = 0;
+    sal_Int16 nColumn = 0;
 
     // Over all the paragraphs...
 
