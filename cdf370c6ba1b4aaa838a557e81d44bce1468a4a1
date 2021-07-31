@@ -16,6 +16,24 @@
       "revId": "cdf370c6ba1b4aaa838a557e81d44bce1468a4a1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7830f1a3_5db648bc",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 712,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-07-31T14:59:25Z",
+      "side": 1,
+      "message": "How are we comparing a LINK with StyleList object?",
+      "parentUuid": "28094e43_7adf170c",
+      "revId": "cdf370c6ba1b4aaa838a557e81d44bce1468a4a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
