@@ -49,4 +49,5 @@ public:
     void PieHandler(MetaPieAction* pAction);
     void ChordHandler(MetaChordAction* pAction);
     void PolyLineHandler(MetaPolyLineAction* pAction);
+    void PolygonHandler(MetaPolygonAction* pAction);
 };
