@@ -3139,7 +3139,7 @@ void ImpEditEngine::IterateLineAreas(const IterateLinesAreasFunc& f, IterFlag eO
     Point aLineStart(aOrigin);
     const tools::Long nVertLineSpacing = CalcVertLineSpacing(aLineStart);
     const tools::Long nColumnWidth = GetColumnWidth(aPaperSize);
-    sal_Int32 nColumn = 0;
+    sal_Int16 nColumn = 0;
     for (sal_Int32 n = 0, nPortions = GetParaPortions().Count(); n < nPortions; ++n)
     {
         ParaPortion& rPortion = *GetParaPortions()[n];
@@ -3521,7 +3521,7 @@ tools::Long ImpEditEngine::CalcTextHeight(tools::Long* pHeightNTP)
         nCurrentTextHeight = 0;
         if (pHeightNTP)
             *pHeightNTP = 0;
-        auto GetHeightAndWantedIncrease = [&, minHeight = tools::Long(0), lastCol = sal_Int32(0)](
+        auto GetHeightAndWantedIncrease = [&, minHeight = tools::Long(0), lastCol = sal_Int16(0)](
                                               const LineAreaInfo& rInfo) mutable {
             if (rInfo.pLine)
             {
