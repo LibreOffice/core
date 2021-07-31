@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <mutex>
 #include <vector>
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
@@ -258,7 +259,7 @@ namespace treeview {
         void implGetLanguageVectorFromPackage( ::std::vector< OUString > &rv,
             const css::uno::Reference< css::deployment::XPackage >& xPackage );
 
-        osl::Mutex                                                                  m_aMutex;
+        std::mutex                                                                  m_aMutex;
         css::uno::Reference< css::uno::XComponentContext >    m_xContext;
         css::uno::Reference< css::ucb::XSimpleFileAccess3 >   m_xSFA;
 
