@@ -31,7 +31,7 @@
 #include <com/sun/star/xml/crypto/XCertificateCreator.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 
-#include <osl/mutex.hxx>
+#include <mutex>
 
 #include <keythi.h>
 #include <certt.h>
@@ -56,7 +56,7 @@ private:
     /// The last used certificate which has the private key for signing.
     css::uno::Reference<css::security::XCertificate> m_xSigningCertificate;
 
-    osl::Mutex m_mutex;
+    std::mutex m_mutex;
 
         CERTCertDBHandle*                   m_pHandler ;
         std::vector< PK11SymKey* >          m_tSymKeyList ;
