@@ -141,6 +141,13 @@ void SvmWriter::MetaActionHandler(MetaAction* pAction, ImplMetaWriteData* pData)
         }
         break;
 
+        case MetaActionType::POLYLINE:
+        {
+            auto* pMetaAction = static_cast<MetaPolyLineAction*>(pAction);
+            PolyLineHandler(pMetaAction);
+        }
+        break;
+
         /* default case prevents test failure and will be
         removed once all the handlers are completed */
         default:
@@ -243,5 +250,23 @@ void SvmWriter::ChordHandler(MetaChordAction* pAction)
     aSerializer.writeRectangle(pAction->GetRect());
     aSerializer.writePoint(pAction->GetStartPoint());
     aSerializer.writePoint(pAction->GetEndPoint());
+}
+
+void SvmWriter::PolyLineHandler(MetaPolyLineAction* pAction)
+{
+    mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
+
+    VersionCompatWrite aCompat(mrStream, 3);
+
+    tools::Polygon aSimplePoly;
+    pAction->GetPolygon().AdaptiveSubdivide(aSimplePoly);
+
+    WritePolygon(mrStream, aSimplePoly); // Version 1
+    WriteLineInfo(mrStream, pAction->GetLineInfo()); // Version 2
+
+    bool bHasPolyFlags = pAction->GetPolygon().HasFlags(); // Version 3
+    mrStream.WriteBool(bHasPolyFlags);
+    if (bHasPolyFlags)
+        pAction->GetPolygon().Write(mrStream);
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

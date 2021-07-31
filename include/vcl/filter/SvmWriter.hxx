@@ -48,4 +48,5 @@ public:
     void ArcHandler(MetaArcAction* pAction);
     void PieHandler(MetaPieAction* pAction);
     void ChordHandler(MetaChordAction* pAction);
+    void PolyLineHandler(MetaPolyLineAction* pAction);
 };
