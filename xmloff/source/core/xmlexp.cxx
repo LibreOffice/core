@@ -21,11 +21,11 @@
 #include <sal/config.h>
 #include <sal/log.hxx>
 
+#include <mutex>
 #include <stack>
 #include <optional>
 
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
-#include <osl/mutex.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/graph.hxx>
 #include <comphelper/genericpropertyset.hxx>
@@ -2269,8 +2269,8 @@ void SvXMLExport::SetError(
     const Reference<XLocator>& rLocator )
 {
     // allow multi-threaded access to the cancel() method
-    static osl::Mutex aMutex;
-    osl::MutexGuard aGuard(aMutex);
+    static std::mutex aMutex;
+    std::lock_guard aGuard(aMutex);
 
     // maintain error flags
     if ( ( nId & XMLERROR_FLAG_ERROR ) != 0 )
