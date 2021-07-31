@@ -25,7 +25,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <cppuhelper/implbase.hxx>
-#include <osl/mutex.hxx>
+#include <mutex>
 
 namespace xmlscript
 {
@@ -39,7 +39,7 @@ namespace xmlscript
     class XMLBasicExporterBase : public XMLBasicExporterBase_BASE
     {
     private:
-        ::osl::Mutex                                              m_aMutex;
+        std::mutex                                                m_aMutex;
         css::uno::Reference< css::xml::sax::XDocumentHandler >    m_xHandler;
         css::uno::Reference< css::frame::XModel >                 m_xModel;
         bool const                                                m_bOasis;
