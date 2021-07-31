@@ -16,6 +16,24 @@
       "revId": "8b2a2de2481843502f0566e773ed11532520bc70",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "adb052fd_c5f30deb",
+        "filename": "sc/source/ui/view/printfun.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 3202,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-07-31T12:03:35Z",
+      "side": 1,
+      "message": "Done with https://gerrit.libreoffice.org/c/core/+/119732",
+      "parentUuid": "e7b6fb02_2ed33b15",
+      "revId": "8b2a2de2481843502f0566e773ed11532520bc70",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
