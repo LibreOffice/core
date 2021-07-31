@@ -22,13 +22,13 @@
 #include <com/sun/star/xml/crypto/XDigestContext.hpp>
 
 #include <cppuhelper/implbase.hxx>
-#include <osl/mutex.hxx>
+#include <mutex>
 #include <secmodt.h>
 
 class ODigestContext : public cppu::WeakImplHelper< css::xml::crypto::XDigestContext >
 {
 private:
-    ::osl::Mutex m_aMutex;
+    std::mutex m_aMutex;
 
     PK11Context* m_pContext;
     sal_Int32 const m_nDigestLength;
