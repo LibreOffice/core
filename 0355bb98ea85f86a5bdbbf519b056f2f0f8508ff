@@ -16,6 +16,24 @@
       "revId": "0355bb98ea85f86a5bdbbf519b056f2f0f8508ff",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4b005b04_b1705647",
+        "filename": "sc/source/ui/view/printfun.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3202,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-07-31T12:05:06Z",
+      "side": 1,
+      "message": "https://gerrit.libreoffice.org/c/core/+/119732 fixes that.\nPlease cherry-pick and squash into this change.",
+      "parentUuid": "9b61fe1a_f2f15748",
+      "revId": "0355bb98ea85f86a5bdbbf519b056f2f0f8508ff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
