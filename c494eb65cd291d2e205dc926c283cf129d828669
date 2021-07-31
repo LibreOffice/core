@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "38c1234a_98d94516",
+        "filename": "bin/screenshots-upload/Mapping.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2021-07-31T22:14:20Z",
+      "side": 1,
+      "message": "This is wrong. The ui filename is not the last element of the path, it is the directoryname with .ui added.\n\nworkdir/screenshots/writerperfect/ui/exportepub/EpubDialog.png\n → exportepub.ui",
+      "revId": "c494eb65cd291d2e205dc926c283cf129d828669",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
