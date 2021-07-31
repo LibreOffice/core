@@ -45,6 +45,7 @@
 #include <scmod.hxx>
 #include <inputopt.hxx>
 #include <compiler.hxx>
+#include <mutex>
 
 using namespace com::sun::star;
 
@@ -113,8 +114,8 @@ OUString ScEditUtil::GetString( const EditTextObject& rEditText, const ScDocumen
     if( !rEditText.HasField())
         return GetMultilineString( rEditText );
 
-    static osl::Mutex aMutex;
-    osl::MutexGuard aGuard( aMutex);
+    static std::mutex aMutex;
+    std::lock_guard aGuard( aMutex);
     // ScFieldEditEngine is needed to resolve field contents.
     if (pDoc)
     {
