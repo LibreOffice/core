@@ -18,20 +18,12 @@
  */
 
 #include <EnhancedCustomShapeToken.hxx>
-#include <osl/mutex.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <unordered_map>
 #include <memory>
 
 namespace xmloff::EnhancedCustomShapeToken {
 
-typedef std::unordered_map< const char*, EnhancedCustomShapeTokenEnum, rtl::CStringHash, rtl::CStringEqual> TypeNameHashMap;
-static TypeNameHashMap* pHashMap = nullptr;
-static ::osl::Mutex& getHashMapMutex()
-{
-    static osl::Mutex s_aHashMapProtection;
-    return s_aHashMapProtection;
-}
 
 namespace {
 
@@ -172,27 +164,31 @@ const TokenTable pTokenTableArray[] =
     { "NotFound",                           EAS_NotFound }
 };
 
+typedef std::unordered_map< const char*, EnhancedCustomShapeTokenEnum, rtl::CStringHash, rtl::CStringEqual> TypeNameHashMap;
+static const TypeNameHashMap& GetNameHashMap()
+{
+    static TypeNameHashMap aHashMap = []()
+        {   // init hash map
+            TypeNameHashMap res;
+            for (auto const & pair : pTokenTableArray)
+                res[pair.pS] = pair.pE;
+            return res;
+        }();
+
+    return aHashMap;
+}
+
 EnhancedCustomShapeTokenEnum EASGet( const OUString& rShapeType )
 {
-    if ( !pHashMap )
-    {   // init hash map
-        ::osl::MutexGuard aGuard( getHashMapMutex() );
-        if ( !pHashMap )
-        {
-            TypeNameHashMap* pH = new TypeNameHashMap;
-            for (auto const & pair : pTokenTableArray)
-                (*pH)[pair.pS] = pair.pE;
-            pHashMap = pH;
-        }
-    }
     EnhancedCustomShapeTokenEnum eRetValue = EAS_NotFound;
     int i, nLen = rShapeType.getLength();
     std::unique_ptr<char[]> pBuf(new char[ nLen + 1 ]);
     for ( i = 0; i < nLen; i++ )
         pBuf[ i ] = static_cast<char>(rShapeType[ i ]);
     pBuf[ i ] = 0;
-    TypeNameHashMap::iterator aHashIter( pHashMap->find( pBuf.get() ) );
-    if ( aHashIter != pHashMap->end() )
+    auto& rHashMap = GetNameHashMap();
+    TypeNameHashMap::const_iterator aHashIter( rHashMap.find( pBuf.get() ) );
+    if ( aHashIter != rHashMap.end() )
         eRetValue = (*aHashIter).second;
     return eRetValue;
 }
