@@ -19,10 +19,10 @@
 
 #pragma once
 
+#include <mutex>
 #include <stack>
 
 #include <sal/types.h>
-#include <osl/mutex.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.h>
@@ -43,7 +43,7 @@ namespace DOM
     {
 
     private:
-        ::osl::Mutex m_Mutex;
+        std::mutex m_Mutex;
         const css::uno::Reference< css::uno::XComponentContext> m_xContext;
 
         css::xml::dom::SAXDocumentBuilderState m_aState;
