@@ -1344,7 +1344,7 @@ bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, v
                                 const ::utl::TransliterationWrapper* pTransliteration = pImpEditEngine->xTransliterationWrapper.get();
                                 Sequence< i18n::CalendarItem2 > xItem = pImpEditEngine->xLocaleDataWrapper->getDefaultCalendarDays();
                                 sal_Int32 nCount = xItem.getLength();
-                                const i18n::CalendarItem2* pArr = xItem.getArray();
+                                const i18n::CalendarItem2* pArr = xItem.getConstArray();
                                 for( sal_Int32 n = 0; n <= nCount; ++n )
                                 {
                                     const OUString& rDay = pArr[n].FullName;
@@ -1359,7 +1359,7 @@ bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, v
                                 {
                                     xItem = pImpEditEngine->xLocaleDataWrapper->getDefaultCalendarMonths();
                                     sal_Int32 nMonthCount = xItem.getLength();
-                                    const i18n::CalendarItem2* pMonthArr = xItem.getArray();
+                                    const i18n::CalendarItem2* pMonthArr = xItem.getConstArray();
                                     for( sal_Int32 n = 0; n <= nMonthCount; ++n )
                                     {
                                         const OUString& rMon = pMonthArr[n].FullName;

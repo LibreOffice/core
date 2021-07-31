@@ -3305,7 +3305,7 @@ namespace basegfx::utils
                 // copy first point if closed
                 if(bIsClosed)
                 {
-                    *pSequence = *rPointSequenceRetval.getArray();
+                    *pSequence = *rPointSequenceRetval.getConstArray();
                 }
             }
             else

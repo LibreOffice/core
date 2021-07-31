@@ -1111,7 +1111,7 @@ void SfxDocTplService_Impl::doUpdate()
 
     // get the entries from the template directories
     sal_Int32   nCountDir = maTemplateDirs.getLength();
-    OUString*   pDirs = maTemplateDirs.getArray();
+    const OUString* pDirs = maTemplateDirs.getConstArray();
     Content     aDirContent;
 
     // the last directory in the list must be writable

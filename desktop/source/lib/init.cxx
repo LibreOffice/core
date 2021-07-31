@@ -4315,7 +4315,7 @@ static bool getFromTransferrable(
     {
         uno::Sequence<sal_Int8> aSequence;
         aAny >>= aSequence;
-        aRet = OString(reinterpret_cast<char*>(aSequence.getArray()), aSequence.getLength());
+        aRet = OString(reinterpret_cast<const char*>(aSequence.getConstArray()), aSequence.getLength());
     }
 
     return true;

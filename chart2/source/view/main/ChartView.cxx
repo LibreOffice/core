@@ -2714,7 +2714,7 @@ void SAL_CALL ChartView::setPropertyValue( const OUString& rPropertyName
             throw lang::IllegalArgumentException( "Property 'ZoomFactors' requires value of type Sequence< PropertyValue >", nullptr, 0 );
 
         sal_Int32 nFilterArgs = aZoomFactors.getLength();
-        beans::PropertyValue* pDataValues = aZoomFactors.getArray();
+        const beans::PropertyValue* pDataValues = aZoomFactors.getConstArray();
         while( nFilterArgs-- )
         {
             if ( pDataValues->Name == "ScaleXNumerator" )

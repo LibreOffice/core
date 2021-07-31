@@ -339,7 +339,7 @@ bool SdPPTFilter::Export()
                         }
                         Sequence<sal_Int8> aStreamContent;
                         aStreamData.Value >>= aStreamContent;
-                        size_t nBytesWritten = pStream->WriteBytes(aStreamContent.getArray(), aStreamContent.getLength());
+                        size_t nBytesWritten = pStream->WriteBytes(aStreamContent.getConstArray(), aStreamContent.getLength());
                         if (nBytesWritten != static_cast<size_t>(aStreamContent.getLength()))
                         {
                             bRet = false;
