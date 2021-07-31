@@ -35,6 +35,7 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <mutex>
 
 namespace DOM
 {
@@ -47,7 +48,7 @@ namespace DOM
         : public CDocumentBuilder_Base
     {
     private:
-        ::osl::Mutex m_Mutex;
+        std::mutex m_Mutex;
         css::uno::Reference< css::xml::sax::XEntityResolver > m_xEntityResolver;
         css::uno::Reference< css::xml::sax::XErrorHandler > m_xErrorHandler;
 

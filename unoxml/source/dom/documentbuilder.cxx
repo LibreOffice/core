@@ -129,7 +129,7 @@ namespace DOM
 
     Reference< XDocument > SAL_CALL CDocumentBuilder::newDocument()
     {
-        ::osl::MutexGuard const g(m_Mutex);
+        std::lock_guard const g(m_Mutex);
 
         // create a new document
         xmlDocPtr pDocument = xmlNewDoc(reinterpret_cast<const xmlChar*>("1.0"));
@@ -333,7 +333,7 @@ namespace DOM
             throw RuntimeException();
         }
 
-        ::osl::MutexGuard const g(m_Mutex);
+        std::lock_guard const g(m_Mutex);
 
         // IO context struct.  Must outlive pContext, as destroying that via
         // xmlFreeParserCtxt may still access this context_t
@@ -364,7 +364,7 @@ namespace DOM
 
     Reference< XDocument > SAL_CALL CDocumentBuilder::parseURI(const OUString& sUri)
     {
-        ::osl::MutexGuard const g(m_Mutex);
+        std::lock_guard const g(m_Mutex);
 
         std::unique_ptr<xmlParserCtxt, XmlFreeParserCtxt> const pContext(
                 xmlNewParserCtxt());
@@ -403,14 +403,14 @@ namespace DOM
     void SAL_CALL
     CDocumentBuilder::setEntityResolver(Reference< XEntityResolver > const& xER)
     {
-        ::osl::MutexGuard const g(m_Mutex);
+        std::lock_guard const g(m_Mutex);
 
         m_xEntityResolver = xER;
     }
 
     Reference< XEntityResolver > CDocumentBuilder::getEntityResolver()
     {
-        ::osl::MutexGuard const g(m_Mutex);
+        std::lock_guard const g(m_Mutex);
 
         return m_xEntityResolver;
     }
@@ -418,7 +418,7 @@ namespace DOM
     void SAL_CALL
     CDocumentBuilder::setErrorHandler(Reference< XErrorHandler > const& xEH)
     {
-        ::osl::MutexGuard const g(m_Mutex);
+        std::lock_guard const g(m_Mutex);
 
         m_xErrorHandler = xEH;
     }
