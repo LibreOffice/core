@@ -1140,7 +1140,7 @@ public:
     };
     struct LineAreaInfo
     {
-        sal_Int32 nColumn; // Column number; when overflowing, equal to total number of columns
+        sal_Int16 nColumn; // Column number; when overflowing, equal to total number of columns
         ParaPortion& rPortion; // Current ParaPortion
         sal_Int32 nPortion;
         EditLine* pLine; // Current line, or nullptr for paragraph start
@@ -1159,7 +1159,7 @@ public:
     void IterateLineAreas(const IterateLinesAreasFunc& f, IterFlag eOptions);
 
     tools::Long GetColumnWidth(const Size& rPaperSize) const;
-    Point MoveToNextLine(Point& rMovePos, tools::Long nLineHeight, sal_Int32& nColumn,
+    Point MoveToNextLine(Point& rMovePos, tools::Long nLineHeight, sal_Int16& nColumn,
                          Point aOrigin, tools::Long* pnHeightNeededToNotWrap = nullptr) const;
 
     tools::Long getWidthDirectionAware(const Size& sz) const;
