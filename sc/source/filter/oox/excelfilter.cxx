@@ -109,14 +109,18 @@ bool ExcelFilter::importDocument()
         if (xBookGlob)
         {
             rtl::Reference<FragmentHandler> xWorkbookFragment( new WorkbookFragment(*xBookGlob, aWorkbookPath));
+
+            const WorkbookFragment* pWF = static_cast<const WorkbookFragment*>(xWorkbookFragment.get());
+            const ScDocument& rDoc = pWF->getScDocument();
+            if (ScDocShell* pDocSh = static_cast<ScDocShell*>(rDoc.GetDocumentShell()))
+                pDocSh->SetInitialLinkUpdate( pDocSh->GetMedium());
+
             bool bRet = importFragment( xWorkbookFragment);
             if (bRet)
             {
-                const WorkbookFragment* pWF = static_cast<const WorkbookFragment*>(xWorkbookFragment.get());
                 const AddressConverter& rAC = pWF->getAddressConverter();
                 if (rAC.isTabOverflow() || rAC.isColOverflow() || rAC.isRowOverflow())
                 {
-                    const ScDocument& rDoc = pWF->getScDocument();
                     if (rDoc.IsUserInteractionEnabled())
                     {
                         // Show data loss warning.
