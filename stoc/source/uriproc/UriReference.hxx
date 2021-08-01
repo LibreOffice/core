@@ -20,7 +20,7 @@
 #ifndef INCLUDED_STOC_SOURCE_URIPROC_URIREFERENCE_HXX
 #define INCLUDED_STOC_SOURCE_URIPROC_URIREFERENCE_HXX
 
-#include <osl/mutex.hxx>
+#include <mutex>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <rtl/ustrbuf.hxx>
@@ -87,7 +87,7 @@ public:
     /// @throws css::uno::RuntimeException
     void clearFragment();
 
-    osl::Mutex m_mutex;
+    std::mutex m_mutex;
     OUString m_scheme;
     OUString m_authority;
     OUString m_path;
