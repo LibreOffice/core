@@ -802,6 +802,12 @@ DECLARE_WW8EXPORT_TEST(testTdf94326_notOutlineNumbering, "tdf94326_notOutlineNum
     CPPUNIT_ASSERT_EQUAL(OUString("1."), getProperty<OUString>(xPara, "ListLabelString"));
 }
 
+DECLARE_WW8EXPORT_TEST(testTdf41554, "test-41554.doc")
+{
+    // In libreoffice 3.3.0, file could not be imported, altough it was read perfectly fine in word 2003.
+    CPPUNIT_ASSERT_EQUAL(getPages(), 1); //here to just check if the document loaded.
+}
+
 DECLARE_WW8EXPORT_TEST(testTdf106541_cancelOutline, "tdf106541_cancelOutline.doc")
 {
     // The ability to cancel numbering must not be lost.
