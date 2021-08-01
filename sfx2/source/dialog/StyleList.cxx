@@ -549,6 +549,7 @@ IMPL_LINK_NOARG(StyleList, NewMenuExecuteAction, void*, void)
             m_pParentDialog->Execute_Impl(SID_STYLE_NEW_BY_EXAMPLE, aTemplName, "",
                                           static_cast<sal_uInt16>(GetFamilyItem()->GetFamily()),
                                           *this, nFilter);
+
             UpdateFamily();
             m_aUpdateFamily.Call(*this);
         }
@@ -1418,7 +1419,7 @@ void StyleList::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
                     SfxStyleSheetBase* pStyle = m_pStyleSheetPool->Find(aStr, eFam);
                     if (pStyle)
                     {
-                        bool bReadWrite = !(pStyle->GetMask() & SfxStyleSearchBits::ReadOnly, this);
+                        bool bReadWrite = !(pStyle->GetMask() & SfxStyleSearchBits::ReadOnly);
                         m_pParentDialog->EnableEdit(bReadWrite, this);
                         m_pParentDialog->EnableHide(
                             bReadWrite && !pStyle->IsUsed() && !pStyle->IsHidden(), this);
@@ -1805,6 +1806,7 @@ IMPL_LINK(StyleList, PopupTreeMenuHdl, const CommandEvent&, rCEvt, bool)
 
     return true;
 }
+
 void StyleList::setVisible(bool b)
 {
     m_xTreeBox->set_visible(b && m_bHierarchical);
