@@ -178,17 +178,36 @@ IMPL_LINK_NOARG(StyleList, ReadResource, void*, size_t)
         m_xStyleFamilies.emplace();
 
     m_nActFilter = 0xffff;
-    // Assigning value to Dialog's nActFilter so that both nActFilters are in sync
-    m_pParentDialog->SetFilterByIndex(m_nActFilter);
-    if (m_pCurObjShell)
+    if (m_xTreeBox->get_buildable_name() == "treeview")
     {
-        m_nActFilter = static_cast<sal_uInt16>(m_aLoadFactoryStyleFilter.Call(m_pCurObjShell));
         // Assigning value to Dialog's nActFilter so that both nActFilters are in sync
-        m_pParentDialog->SetFilterByIndex(m_nActFilter);
-        if (0xffff == m_nActFilter)
+        m_pParentDialog->SetParaFilterByIndex(m_nActFilter);
+        if (m_pCurObjShell)
         {
-            m_nActFilter = m_pCurObjShell->GetAutoStyleFilterIndex();
-            m_pParentDialog->SetFilterByIndex(m_nActFilter);
+            m_nActFilter = static_cast<sal_uInt16>(m_aLoadFactoryStyleFilter.Call(m_pCurObjShell));
+            // Assigning value to Dialog's nActFilter so that both nActFilters are in sync
+            m_pParentDialog->SetParaFilterByIndex(m_nActFilter);
+            if (0xffff == m_nActFilter)
+            {
+                m_nActFilter = m_pCurObjShell->GetAutoStyleFilterIndex();
+                m_pParentDialog->SetParaFilterByIndex(m_nActFilter);
+            }
+        }
+    }
+    else if (m_xTreeBox->get_buildable_name() == "chartreeview")
+    {
+        // Assigning value to Dialog's nActFilter so that both nActFilters are in sync
+        m_pParentDialog->SetCharFilterByIndex(m_nActFilter);
+        if (m_pCurObjShell)
+        {
+            m_nActFilter = static_cast<sal_uInt16>(m_aLoadFactoryStyleFilter.Call(m_pCurObjShell));
+            // Assigning value to Dialog's nActFilter so that both nActFilters are in sync
+            m_pParentDialog->SetCharFilterByIndex(m_nActFilter);
+            if (0xffff == m_nActFilter)
+            {
+                m_nActFilter = m_pCurObjShell->GetAutoStyleFilterIndex();
+                m_pParentDialog->SetCharFilterByIndex(m_nActFilter);
+            }
         }
     }
     size_t nCount = m_xStyleFamilies->size();
@@ -284,7 +303,7 @@ public:
 IMPL_LINK(StyleList, FilterSelect, sal_uInt16, mActFilter, void)
 {
     m_nActFilter = mActFilter;
-    SfxObjectShell* const pDocShell = m_aSaveSelection.Call(nullptr);
+    SfxObjectShell* const pDocShell = m_aSaveSelection.Call(*this);
     SfxStyleSheetBasePool* pOldStyleSheetPool = m_pStyleSheetPool;
     m_pStyleSheetPool = pDocShell ? pDocShell->GetStyleSheetPool() : nullptr;
     if (pOldStyleSheetPool != m_pStyleSheetPool)
@@ -381,6 +400,8 @@ void StyleList::Initialize()
 
 IMPL_LINK_NOARG(StyleList, UpdateFamily, void*, void)
 {
+    OString o = m_xTreeBox->get_buildable_name();
+    printf("%s", o);
     m_bUpdateFamily = false;
 
     SfxDispatcher* pDispat = m_pBindings->GetDispatcher_Impl();
@@ -425,7 +446,7 @@ void StyleList::connect_LoadFactoryStyleFilter(const Link<SfxObjectShell const*,
     m_aLoadFactoryStyleFilter = rLink;
 }
 
-void StyleList::connect_SaveSelection(const Link<void*, SfxObjectShell*> rLink)
+void StyleList::connect_SaveSelection(const Link<StyleList&, SfxObjectShell*> rLink)
 {
     m_aSaveSelection = rLink;
 }
@@ -1081,8 +1102,7 @@ IMPL_LINK(StyleList, UpdateStyles, StyleFlags, nFlags, void)
             // It happens sometimes, God knows why
             return;
         m_nAppFilter = m_pFamilyState[StyleNrToInfoOffset(n)]->GetValue();
-        m_pParentDialog->SetApplicationFilter(m_nAppFilter);
-        m_pParentDialog->FamilySelect(StyleNrToInfoOffset(n) + 1);
+        m_pParentDialog->FamilySelect(StyleNrToInfoOffset(n) + 1, *this);
         pItem = GetFamilyItem();
     }
 
@@ -1710,8 +1730,7 @@ void StyleList::Update()
 
         std::unique_ptr<SfxTemplateItem>& pNewItem = m_pFamilyState[StyleNrToInfoOffset(n)];
         m_nAppFilter = pNewItem->GetValue();
-        m_pParentDialog->SetApplicationFilter(m_nAppFilter);
-        m_pParentDialog->FamilySelect(StyleNrToInfoOffset(n) + 1);
+        m_pParentDialog->FamilySelect(StyleNrToInfoOffset(n) + 1, *this);
         pItem = pNewItem.get();
     }
     else if (bDocChanged)
@@ -1719,15 +1738,25 @@ void StyleList::Update()
         // other DocShell -> all new
         m_pParentDialog->CheckItem(OString::number(m_nActFamily));
         m_nActFilter = static_cast<sal_uInt16>(m_aLoadFactoryStyleFilter.Call(pDocShell));
-        m_pParentDialog->SetFilterByIndex(m_nActFilter);
-        if (0xffff == m_nActFilter)
+        if (m_xTreeBox->get_buildable_name() == "treeview")
         {
-            m_nActFilter = pDocShell->GetAutoStyleFilterIndex();
-            m_pParentDialog->SetFilterByIndex(m_nActFilter);
+            m_pParentDialog->SetParaFilterByIndex(m_nActFilter);
+            if (0xffff == m_nActFilter)
+            {
+                m_nActFilter = pDocShell->GetAutoStyleFilterIndex();
+                m_pParentDialog->SetParaFilterByIndex(m_nActFilter);
+            }
         }
-
+        else if (m_xTreeBox->get_buildable_name() == "chartreeview")
+        {
+            m_pParentDialog->SetCharFilterByIndex(m_nActFilter);
+            if (0xffff == m_nActFilter)
+            {
+                m_nActFilter = pDocShell->GetAutoStyleFilterIndex();
+                m_pParentDialog->SetCharFilterByIndex(m_nActFilter);
+            }
+        }
         m_nAppFilter = pItem->GetValue();
-        m_pParentDialog->SetApplicationFilter(m_nAppFilter);
         if (!m_xTreeBox->get_visible())
         {
             UpdateStyles(StyleFlags::UpdateFamilyList);
@@ -1745,7 +1774,6 @@ void StyleList::Update()
             && m_nAppFilter != pItem->GetValue())
         {
             m_nAppFilter = pItem->GetValue();
-            m_pParentDialog->SetApplicationFilter(m_nAppFilter);
             if (!m_xTreeBox->get_visible())
                 UpdateStyles(StyleFlags::UpdateFamilyList);
             else
@@ -1754,7 +1782,6 @@ void StyleList::Update()
         else
         {
             m_nAppFilter = pItem->GetValue();
-            m_pParentDialog->SetApplicationFilter(m_nAppFilter);
         }
     }
     const OUString aStyle(pItem->GetStyleName());
@@ -1810,6 +1837,12 @@ IMPL_LINK(StyleList, PopupTreeMenuHdl, const CommandEvent&, rCEvt, bool)
     ShowMenu(rCEvt);
 
     return true;
+}
+
+void StyleList::setVisible(bool b)
+{
+    m_xTreeBox->set_visible(b);
+    m_xFmtLb->set_visible(b);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
