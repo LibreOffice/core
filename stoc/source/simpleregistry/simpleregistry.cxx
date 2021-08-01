@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <cstdlib>
+#include <mutex>
 #include <vector>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -37,7 +38,6 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
-#include <osl/mutex.hxx>
 #include <registry/registry.hxx>
 #include <registry/regtype.h>
 #include <rtl/ref.hxx>
@@ -60,7 +60,7 @@ class SimpleRegistry:
 public:
     SimpleRegistry() {}
 
-    osl::Mutex mutex_;
+    std::mutex mutex_;
 
 private:
     virtual OUString SAL_CALL getURL() override;
@@ -179,18 +179,18 @@ private:
 };
 
 OUString Key::getKeyName() {
-    osl::MutexGuard guard(registry_->mutex_);
+    std::lock_guard guard(registry_->mutex_);
     return key_.getName();
 }
 
 sal_Bool Key::isReadOnly()
 {
-    osl::MutexGuard guard(registry_->mutex_);
+    std::lock_guard guard(registry_->mutex_);
     return key_.isReadOnly();
 }
 
 sal_Bool Key::isValid() {
-    osl::MutexGuard guard(registry_->mutex_);
+    std::lock_guard guard(registry_->mutex_);
     return key_.isValid();
 }
 
@@ -201,7 +201,7 @@ css::registry::RegistryKeyType Key::getKeyType(OUString const & )
 
 css::registry::RegistryValueType Key::getValueType()
 {
-    osl::MutexGuard guard(registry_->mutex_);
+    std::lock_guard guard(registry_->mutex_);
     RegValueType type;
     sal_uInt32 size;
     RegError err = key_.getValueInfo(OUString(), &type, &size);
@@ -242,7 +242,7 @@ css::registry::RegistryValueType Key::getValueType()
 
 sal_Int32 Key::getLongValue()
 {
-    osl::MutexGuard guard(registry_->mutex_);
+    std::lock_guard guard(registry_->mutex_);
     sal_Int32 value;
     RegError err = key_.getValue(OUString(), &value);
     switch (err) {
@@ -264,7 +264,7 @@ sal_Int32 Key::getLongValue()
 
 void Key::setLongValue(sal_Int32 value)
 {
-    osl::MutexGuard guard(registry_->mutex_);
+    std::lock_guard guard(registry_->mutex_);
     RegError err = key_.setValue(
         OUString(), RegValueType::LONG, &value, sizeof (sal_Int32));
     if (err != RegError::NO_ERROR) {
@@ -277,7 +277,7 @@ void Key::setLongValue(sal_Int32 value)
 
 css::uno::Sequence< sal_Int32 > Key::getLongListValue()
 {
-    osl::MutexGuard guard(registry_->mutex_);
+    std::lock_guard guard(registry_->mutex_);
     RegistryValueList< sal_Int32 > list;
     RegError err = key_.getLongListValue(OUString(), list);
     switch (err) {
@@ -313,7 +313,7 @@ css::uno::Sequence< sal_Int32 > Key::getLongListValue()
 
 void Key::setLongListValue(css::uno::Sequence< sal_Int32 > const & seqValue)
 {
-    osl::MutexGuard guard(registry_->mutex_);
+    std::lock_guard guard(registry_->mutex_);
     auto list = comphelper::sequenceToContainer<std::vector<sal_Int32>>(seqValue);
     RegError err = key_.setLongListValue(
         OUString(), list.data(), static_cast< sal_uInt32 >(list.size()));
@@ -327,7 +327,7 @@ void Key::setLongListValue(css::uno::Sequence< sal_Int32 > const & seqValue)
 
 OUString Key::getAsciiValue()
 {
-    osl::MutexGuard guard(registry_->mutex_);
+    std::lock_guard guard(registry_->mutex_);
     RegValueType type;
     sal_uInt32 size;
     RegError err = key_.getValueInfo(OUString(), &type, &size);
@@ -390,7 +390,7 @@ OUString Key::getAsciiValue()
 
 void Key::setAsciiValue(OUString const & value)
 {
-    osl::MutexGuard guard(registry_->mutex_);
+    std::lock_guard guard(registry_->mutex_);
     OString utf8;
     if (!value.convertToString(
             &utf8, RTL_TEXTENCODING_UTF8,
@@ -416,7 +416,7 @@ void Key::setAsciiValue(OUString const & value)
 
 css::uno::Sequence< OUString > Key::getAsciiListValue()
 {
-    osl::MutexGuard guard(registry_->mutex_);
+    std::lock_guard guard(registry_->mutex_);
     RegistryValueList< char * > list;
     RegError err = key_.getStringListValue(OUString(), list);
     switch (err) {
@@ -469,7 +469,7 @@ css::uno::Sequence< OUString > Key::getAsciiListValue()
 void Key::setAsciiListValue(
     css::uno::Sequence< OUString > const & seqValue)
 {
-    osl::MutexGuard guard(registry_->mutex_);
+    std::lock_guard guard(registry_->mutex_);
     std::vector< OString > list;
     for (const auto& rValue : seqValue) {
         OString utf8;
@@ -503,7 +503,7 @@ void Key::setAsciiListValue(
 
 OUString Key::getStringValue()
 {
-    osl::MutexGuard guard(registry_->mutex_);
+    std::lock_guard guard(registry_->mutex_);
     RegValueType type;
     sal_uInt32 size;
     RegError err = key_.getValueInfo(OUString(), &type, &size);
@@ -554,7 +554,7 @@ OUString Key::getStringValue()
 
 void Key::setStringValue(OUString const & value)
 {
-    osl::MutexGuard guard(registry_->mutex_);
+    std::lock_guard guard(registry_->mutex_);
     RegError err = key_.setValue(
         OUString(), RegValueType::UNICODE,
         const_cast< sal_Unicode * >(value.getStr()),
@@ -570,7 +570,7 @@ void Key::setStringValue(OUString const & value)
 
 css::uno::Sequence< OUString > Key::getStringListValue()
 {
-    osl::MutexGuard guard(registry_->mutex_);
+    std::lock_guard guard(registry_->mutex_);
     RegistryValueList< sal_Unicode * > list;
     RegError err = key_.getUnicodeListValue(OUString(), list);
     switch (err) {
@@ -609,7 +609,7 @@ css::uno::Sequence< OUString > Key::getStringListValue()
 void Key::setStringListValue(
     css::uno::Sequence< OUString > const & seqValue)
 {
-    osl::MutexGuard guard(registry_->mutex_);
+    std::lock_guard guard(registry_->mutex_);
     std::vector< sal_Unicode * > list;
     list.reserve(seqValue.getLength());
     std::transform(seqValue.begin(), seqValue.end(), std::back_inserter(list),
@@ -627,7 +627,7 @@ void Key::setStringListValue(
 
 css::uno::Sequence< sal_Int8 > Key::getBinaryValue()
 {
-    osl::MutexGuard guard(registry_->mutex_);
+    std::lock_guard guard(registry_->mutex_);
     RegValueType type;
     sal_uInt32 size;
     RegError err = key_.getValueInfo(OUString(), &type, &size);
@@ -662,7 +662,7 @@ css::uno::Sequence< sal_Int8 > Key::getBinaryValue()
 
 void Key::setBinaryValue(css::uno::Sequence< sal_Int8 > const & value)
 {
-    osl::MutexGuard guard(registry_->mutex_);
+    std::lock_guard guard(registry_->mutex_);
     RegError err = key_.setValue(
         OUString(), RegValueType::BINARY,
         const_cast< sal_Int8 * >(value.getConstArray()),
@@ -678,7 +678,7 @@ void Key::setBinaryValue(css::uno::Sequence< sal_Int8 > const & value)
 css::uno::Reference< css::registry::XRegistryKey > Key::openKey(
     OUString const & aKeyName)
 {
-    osl::MutexGuard guard(registry_->mutex_);
+    std::lock_guard guard(registry_->mutex_);
     RegistryKey key;
     RegError err = key_.openKey(aKeyName, key);
     switch (err) {
@@ -697,7 +697,7 @@ css::uno::Reference< css::registry::XRegistryKey > Key::openKey(
 css::uno::Reference< css::registry::XRegistryKey > Key::createKey(
     OUString const & aKeyName)
 {
-    osl::MutexGuard guard(registry_->mutex_);
+    std::lock_guard guard(registry_->mutex_);
     RegistryKey key;
     RegError err = key_.createKey(aKeyName, key);
     switch (err) {
@@ -715,7 +715,7 @@ css::uno::Reference< css::registry::XRegistryKey > Key::createKey(
 
 void Key::closeKey()
 {
-    osl::MutexGuard guard(registry_->mutex_);
+    std::lock_guard guard(registry_->mutex_);
     RegError err = key_.closeKey();
     if (err != RegError::NO_ERROR) {
         throw css::registry::InvalidRegistryException(
@@ -727,7 +727,7 @@ void Key::closeKey()
 
 void Key::deleteKey(OUString const & rKeyName)
 {
-    osl::MutexGuard guard(registry_->mutex_);
+    std::lock_guard guard(registry_->mutex_);
     RegError err = key_.deleteKey(rKeyName);
     if (err != RegError::NO_ERROR) {
         throw css::registry::InvalidRegistryException(
@@ -740,7 +740,7 @@ void Key::deleteKey(OUString const & rKeyName)
 css::uno::Sequence< css::uno::Reference< css::registry::XRegistryKey > >
 Key::openKeys()
 {
-    osl::MutexGuard guard(registry_->mutex_);
+    std::lock_guard guard(registry_->mutex_);
     RegistryKeyArray list;
     RegError err = key_.openSubKeys(OUString(), list);
     if (err != RegError::NO_ERROR) {
@@ -767,7 +767,7 @@ Key::openKeys()
 
 css::uno::Sequence< OUString > Key::getKeyNames()
 {
-    osl::MutexGuard guard(registry_->mutex_);
+    std::lock_guard guard(registry_->mutex_);
     RegistryKeyNames list;
     RegError err = key_.getKeyNames(OUString(), list);
     if (err != RegError::NO_ERROR) {
@@ -814,7 +814,7 @@ OUString Key::getLinkTarget(OUString const & /*rLinkName*/)
 
 OUString Key::getResolvedName(OUString const & aKeyName)
 {
-    osl::MutexGuard guard(registry_->mutex_);
+    std::lock_guard guard(registry_->mutex_);
     OUString resolved;
     RegError err = key_.getResolvedKeyName(aKeyName, resolved);
     if (err != RegError::NO_ERROR) {
@@ -827,14 +827,14 @@ OUString Key::getResolvedName(OUString const & aKeyName)
 }
 
 OUString SimpleRegistry::getURL() {
-    osl::MutexGuard guard(mutex_);
+    std::lock_guard guard(mutex_);
     return registry_.getName();
 }
 
 void SimpleRegistry::open(
     OUString const & rURL, sal_Bool bReadOnly, sal_Bool bCreate)
 {
-    osl::MutexGuard guard(mutex_);
+    std::lock_guard guard(mutex_);
     RegError err = (rURL.isEmpty() && bCreate)
         ? RegError::REGISTRY_NOT_EXISTS
         : registry_.open(rURL, bReadOnly ? RegAccessMode::READONLY : RegAccessMode::READWRITE);
@@ -850,13 +850,13 @@ void SimpleRegistry::open(
 }
 
 sal_Bool SimpleRegistry::isValid() {
-    osl::MutexGuard guard(mutex_);
+    std::lock_guard guard(mutex_);
     return registry_.isValid();
 }
 
 void SimpleRegistry::close()
 {
-    osl::MutexGuard guard(mutex_);
+    std::lock_guard guard(mutex_);
     RegError err = registry_.close();
     if (err != RegError::NO_ERROR) {
         throw css::registry::InvalidRegistryException(
@@ -868,7 +868,7 @@ void SimpleRegistry::close()
 
 void SimpleRegistry::destroy()
 {
-    osl::MutexGuard guard(mutex_);
+    std::lock_guard guard(mutex_);
     RegError err = registry_.destroy(OUString());
     if (err != RegError::NO_ERROR) {
         throw css::registry::InvalidRegistryException(
@@ -880,7 +880,7 @@ void SimpleRegistry::destroy()
 
 css::uno::Reference< css::registry::XRegistryKey > SimpleRegistry::getRootKey()
 {
-    osl::MutexGuard guard(mutex_);
+    std::lock_guard guard(mutex_);
     RegistryKey root;
     RegError err = registry_.openRootKey(root);
     if (err != RegError::NO_ERROR) {
@@ -894,14 +894,14 @@ css::uno::Reference< css::registry::XRegistryKey > SimpleRegistry::getRootKey()
 
 sal_Bool SimpleRegistry::isReadOnly()
 {
-    osl::MutexGuard guard(mutex_);
+    std::lock_guard guard(mutex_);
     return registry_.isReadOnly();
 }
 
 void SimpleRegistry::mergeKey(
     OUString const & aKeyName, OUString const & aUrl)
 {
-    osl::MutexGuard guard(mutex_);
+    std::lock_guard guard(mutex_);
     RegistryKey root;
     RegError err = registry_.openRootKey(root);
     if (err == RegError::NO_ERROR) {
