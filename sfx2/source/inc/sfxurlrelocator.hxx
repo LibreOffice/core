@@ -25,11 +25,11 @@
 #include <com/sun/star/util/XMacroExpander.hpp>
 
 #include <rtl/ustring.hxx>
-#include <osl/mutex.hxx>
+#include <mutex>
 
 class SfxURLRelocator_Impl
 {
-    ::osl::Mutex maMutex;
+    std::mutex maMutex;
     css::uno::Reference< css::uno::XComponentContext >               mxContext;
     css::uno::Reference< css::util::XOfficeInstallationDirectories > mxOfficeInstDirs;
     css::uno::Reference< css::util::XMacroExpander >                 mxMacroExpander;
