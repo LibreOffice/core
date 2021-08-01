@@ -62,7 +62,7 @@ ProviderCache::~ProviderCache()
 Reference< provider::XScriptProvider >
 ProviderCache::getProvider( const OUString& providerName )
 {
-    ::osl::Guard< osl::Mutex > aGuard( m_mutex );
+    std::lock_guard aGuard( m_mutex );
     Reference< provider::XScriptProvider > provider;
     ProviderDetails_hash::iterator h_it = m_hProviderDetailsCache.find( providerName );
     if ( h_it != m_hProviderDetailsCache.end() )
@@ -86,7 +86,7 @@ ProviderCache::getAllProviders()
     // need to create providers that haven't been created already
     // so check what providers exist and what ones don't
 
-    ::osl::Guard< osl::Mutex > aGuard( m_mutex );
+    std::lock_guard aGuard( m_mutex );
     Sequence < Reference< provider::XScriptProvider > > providers (  m_hProviderDetailsCache.size() );
     // should assert if size !>  0
     if (  !m_hProviderDetailsCache.empty() )
@@ -132,7 +132,7 @@ ProviderCache::populateCache()
 {
     // wrong name in services.rdb
     OUString serviceName;
-    ::osl::Guard< osl::Mutex > aGuard( m_mutex );
+    std::lock_guard aGuard( m_mutex );
     try
     {
         Reference< container::XContentEnumerationAccess > xEnumAccess( m_xMgr, UNO_QUERY_THROW );
