@@ -23,7 +23,7 @@
 #include <com/sun/star/task/XInteractionAbort.hpp>
 #include <com/sun/star/task/XInteractionRetry.hpp>
 #include <cppuhelper/implbase.hxx>
-#include <osl/mutex.hxx>
+#include <mutex>
 
 namespace com::sun::star::task { class XInteractionContinuation; }
 
@@ -62,19 +62,19 @@ public:
 private:
     virtual ~RetryContinuation() override {}
 
-    mutable osl::Mutex m_aMutex;
+    mutable std::mutex m_aMutex;
     bool m_bSelected;
 };
 
 void SAL_CALL InteractionRequest::RetryContinuation::select()
 {
-    osl::MutexGuard aGuard(m_aMutex);
+    std::lock_guard aGuard(m_aMutex);
     m_bSelected = true;
 }
 
 bool InteractionRequest::RetryContinuation::isSelected() const
 {
-    osl::MutexGuard aGuard(m_aMutex);
+    std::lock_guard aGuard(m_aMutex);
     return m_bSelected;
 }
 
