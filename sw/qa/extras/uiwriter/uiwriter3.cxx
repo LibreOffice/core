@@ -1961,6 +1961,23 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf139566)
     CPPUNIT_ASSERT(xSelections.is());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf128375)
+{
+    // Load the sample doc
+    createSwDoc(DATA_DIRECTORY, "tdf128375.docx");
+
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    Scheduler::ProcessEventsToIdle();
+
+    dispatchCommand(mxComponent, ".uno:Cut", {});
+    Scheduler::ProcessEventsToIdle();
+
+    // Close the doc without saving
+    // The doc should crash here without the fix
+    css::uno::Reference<css::util::XCloseable> xCloseable(xComponent, css::uno::UNO_QUERY_THROW);
+    xCloseable->close(true);
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf96067)
 {
     createSwDoc();
