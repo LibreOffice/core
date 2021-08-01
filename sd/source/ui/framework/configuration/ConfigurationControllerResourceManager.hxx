@@ -19,12 +19,11 @@
 
 #pragma once
 
-#include <osl/mutex.hxx>
-
 #include <com/sun/star/uno/Reference.hxx>
 
 #include <map>
 #include <memory>
+#include <mutex>
 #include <vector>
 
 namespace com::sun::star::drawing::framework { class XConfiguration; }
@@ -97,7 +96,7 @@ public:
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxResourceId);
 
 private:
-    osl::Mutex maMutex;
+    std::mutex maMutex;
 
     class ResourceComparator
     {
