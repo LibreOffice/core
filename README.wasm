@@ -1,7 +1,12 @@
 = Status =
 
 $ make
-$ emrun --serve_after_close instdir/program/qt_vcldemo.html
+$ emrun --serve_after_close workdir/LinkTarget/Executable/qt_vcldemo.html
+
+or
+
+$ make
+$ emrun --serve_after_close instdir/program/qt_soffice.html
 
 The ui-previewer "binary" will "crash" with memory alignment problems.
 
