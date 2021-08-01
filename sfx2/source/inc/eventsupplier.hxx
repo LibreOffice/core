@@ -30,6 +30,7 @@
 #include <com/sun/star/uno/Type.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <mutex>
+#include <vector>
 
 namespace comphelper
 {
@@ -43,7 +44,7 @@ class SvxMacro;
 class SfxEvents_Impl final : public ::cppu::WeakImplHelper< css::container::XNameReplace, css::document::XEventListener  >
 {
     css::uno::Sequence< OUString >     maEventNames;
-    css::uno::Sequence< css::uno::Any >                 maEventData;
+    std::vector< css::uno::Any >       maEventData;
     css::uno::Reference< css::document::XEventBroadcaster >  mxBroadcaster;
     std::mutex                    maMutex;
     SfxObjectShell                 *mpObjShell;
