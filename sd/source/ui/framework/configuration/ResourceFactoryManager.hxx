@@ -87,7 +87,7 @@ public:
         const OUString& rsURL);
 
 private:
-    ::osl::Mutex maMutex;
+    std::mutex maMutex;
     typedef std::unordered_map<
         OUString,
         css::uno::Reference<css::drawing::framework::XResourceFactory> > FactoryMap;
