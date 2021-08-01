@@ -84,7 +84,18 @@ static int getNumberFormat(int nParam)
             NS_ooxml::LN_Value_ST_NumberFormat_hebrew1,
             NS_ooxml::LN_Value_ST_NumberFormat_arabicAlpha,
             NS_ooxml::LN_Value_ST_NumberFormat_hebrew2,
-            NS_ooxml::LN_Value_ST_NumberFormat_arabicAbjad };
+            NS_ooxml::LN_Value_ST_NumberFormat_arabicAbjad,
+            NS_ooxml::LN_Value_ST_NumberFormat_hindiVowels,
+            NS_ooxml::LN_Value_ST_NumberFormat_hindiConsonants,
+            NS_ooxml::LN_Value_ST_NumberFormat_hindiNumbers,
+            NS_ooxml::LN_Value_ST_NumberFormat_hindiCounting,
+            NS_ooxml::LN_Value_ST_NumberFormat_thaiLetters,
+            NS_ooxml::LN_Value_ST_NumberFormat_thaiNumbers,
+            NS_ooxml::LN_Value_ST_NumberFormat_thaiCounting,
+            NS_ooxml::LN_Value_ST_NumberFormat_vietnameseCounting,
+            NS_ooxml::LN_Value_ST_NumberFormat_numberInDash,
+            NS_ooxml::LN_Value_ST_NumberFormat_russianLower,
+            NS_ooxml::LN_Value_ST_NumberFormat_russianUpper };
     const int nLen = SAL_N_ELEMENTS(aMap);
     int nValue = 0;
     if (nParam >= 0 && nParam < nLen)
