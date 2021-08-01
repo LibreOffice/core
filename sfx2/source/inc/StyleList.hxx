@@ -52,7 +52,8 @@ class StyleList : public SfxListener
 
 public:
     // Constructor
-    StyleList(weld::Builder* pBuilder, SfxBindings* pBindings, SfxCommonTemplateDialog_Impl* Parent,
+    StyleList(weld::Builder* pBuilder, std::optional<SfxStyleFamilies> xFamilies,
+              SfxBindings* pBindings, SfxCommonTemplateDialog_Impl* Parent, SfxModule* Module,
               weld::Container* pC, OString treeviewname, OString flatviewname);
 
     // Destructor
@@ -85,7 +86,7 @@ public:
     // Return whether treeview is visible
     // It is used in StyleList's UpdateStyles_Hdl
     // It is used to defaultly set the hierarchical view
-    bool IsTreeView() const { return m_xTreeBox->get_visible(); }
+    bool IsTreeView() { return m_xTreeBox->get_visible(); }
 
     // Helper function: Access to the current family item
     // Used in Dialog's updateStyleHandler, Execute_Impl etc...
@@ -121,6 +122,10 @@ public:
     void FamilySelect(sal_uInt16 nEntry);
     void FilterSelect(sal_uInt16 nActFilter, bool bsetFilter);
 
+    void setVisible(bool b);
+
+    DECL_LINK(NewMenuExecuteAction, void*, void);
+
 private:
     void FillTreeBox(SfxStyleFamily eFam);
 
@@ -149,7 +154,6 @@ private:
     DECL_LINK(Clear, void*, void);
     DECL_LINK(Cleanup, void*, void);
     DECL_LINK(ExecuteDrop, const ExecuteDropEvent&, sal_Int8);
-    DECL_LINK(NewMenuExecuteAction, void*, void);
     DECL_LINK(IsSafeForWaterCan, void*, bool);
     DECL_LINK(HasSelectedStyle, void*, bool);
     DECL_LINK(UpdateStyleDependents, void*, void);
