@@ -62,6 +62,7 @@
 #include <sot/formats.hxx>
 #include <comphelper/classids.hxx>
 
+#include <mutex>
 #include <vector>
 
 namespace com::sun::star::ucb { class XCommandEnvironment; }
@@ -86,7 +87,7 @@ namespace {
 class FileStreamWrapper_Impl : public FileInputStreamWrapper_Base
 {
 protected:
-    ::osl::Mutex    m_aMutex;
+    std::mutex    m_aMutex;
     OUString        m_aURL;
     std::unique_ptr<SvStream> m_pSvStream;
 
@@ -145,7 +146,7 @@ sal_Int32 SAL_CALL FileStreamWrapper_Impl::readBytes(Sequence< sal_Int8 >& aData
     if (nBytesToRead < 0)
         throw BufferSizeExceededException(OUString(),static_cast<XWeak*>(this));
 
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::lock_guard aGuard( m_aMutex );
 
     if (aData.getLength() < nBytesToRead)
         aData.realloc(nBytesToRead);
@@ -189,7 +190,7 @@ void SAL_CALL FileStreamWrapper_Impl::skipBytes(sal_Int32 nBytesToSkip)
     if ( m_aURL.isEmpty() )
         return;
 
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::lock_guard aGuard( m_aMutex );
     checkError();
 
     m_pSvStream->SeekRel(nBytesToSkip);
@@ -202,7 +203,7 @@ sal_Int32 SAL_CALL FileStreamWrapper_Impl::available()
     if ( m_aURL.isEmpty() )
         return 0;
 
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::lock_guard aGuard( m_aMutex );
     checkConnected();
 
     sal_Int64 nAvailable = m_pSvStream->remainingSize();
@@ -217,7 +218,7 @@ void SAL_CALL FileStreamWrapper_Impl::closeInput()
     if ( m_aURL.isEmpty() )
         return;
 
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::lock_guard aGuard( m_aMutex );
     checkConnected();
     m_pSvStream.reset();
 #if OSL_DEBUG_LEVEL > 0
@@ -233,7 +234,7 @@ void SAL_CALL FileStreamWrapper_Impl::seek( sal_Int64 _nLocation )
     if ( m_aURL.isEmpty() )
         return;
 
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::lock_guard aGuard( m_aMutex );
     checkConnected();
 
     m_pSvStream->Seek(static_cast<sal_uInt32>(_nLocation));
@@ -246,7 +247,7 @@ sal_Int64 SAL_CALL FileStreamWrapper_Impl::getPosition(  )
     if ( m_aURL.isEmpty() )
         return 0;
 
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::lock_guard aGuard( m_aMutex );
     checkConnected();
 
     sal_uInt32 nPos = m_pSvStream->Tell();
@@ -260,7 +261,7 @@ sal_Int64 SAL_CALL FileStreamWrapper_Impl::getLength(  )
     if ( m_aURL.isEmpty() )
         return 0;
 
-    ::osl::MutexGuard aGuard( m_aMutex );
+    std::lock_guard aGuard( m_aMutex );
     checkConnected();
 
     checkError();
