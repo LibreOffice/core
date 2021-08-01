@@ -26,7 +26,7 @@
 
 #include <osx/a11yfocustracker.hxx>
 
-#include <set>
+#include <o3tl/sorted_vector.hxx>
 
 
 class DocumentFocusListener :
@@ -90,7 +90,7 @@ public:
     virtual void SAL_CALL notifyEvent( const css::accessibility::AccessibleEventObject& aEvent ) override;
 
 private:
-    std::set< css::uno::Reference< css::uno::XInterface > > m_aRefList;
+    o3tl::sorted_vector< css::uno::Reference< css::uno::XInterface > > m_aRefList;
 
     AquaA11yFocusTracker& m_aFocusTracker;
 };
