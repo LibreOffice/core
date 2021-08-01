@@ -586,21 +586,7 @@ bool ScDocShell::Load( SfxMedium& rMedium )
     bool bRet = SfxObjectShell::Load(rMedium);
     if (bRet)
     {
-        if (GetMedium())
-        {
-            const SfxUInt16Item* pUpdateDocItem = SfxItemSet::GetItem<SfxUInt16Item>(rMedium.GetItemSet(), SID_UPDATEDOCMODE, false);
-            m_nCanUpdate = pUpdateDocItem ? pUpdateDocItem->GetValue() : css::document::UpdateDocMode::NO_UPDATE;
-        }
-
-        // GetLinkUpdateModeState() evaluates m_nCanUpdate so that must have
-        // been set first. Do not override an already forbidden LinkUpdate (the
-        // default is allow).
-        comphelper::EmbeddedObjectContainer& rEmbeddedObjectContainer = getEmbeddedObjectContainer();
-        if (rEmbeddedObjectContainer.getUserAllowsLinkUpdate())
-        {
-            // For anything else than LM_ALWAYS we need user confirmation.
-            rEmbeddedObjectContainer.setUserAllowsLinkUpdate( GetLinkUpdateModeState() == LM_ALWAYS);
-        }
+        SetInitialLinkUpdate(&rMedium);
 
         {
             //  prepare a valid document for XML filter
@@ -1090,11 +1076,7 @@ bool ScDocShell::LoadFrom( SfxMedium& rMedium )
 
     bool bRet = false;
 
-    if (GetMedium())
-    {
-        const SfxUInt16Item* pUpdateDocItem = SfxItemSet::GetItem<SfxUInt16Item>(rMedium.GetItemSet(), SID_UPDATEDOCMODE, false);
-        m_nCanUpdate = pUpdateDocItem ? pUpdateDocItem->GetValue() : css::document::UpdateDocMode::NO_UPDATE;
-    }
+    SetInitialLinkUpdate(&rMedium);
 
     //  until loading/saving only the styles in XML is implemented,
     //  load the whole file
@@ -1161,8 +1143,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
     //  So make sure that we transfer the whole file with CreateFileStream
     rMedium.GetPhysicalName();  //! Call CreateFileStream directly, if available
 
-    const SfxUInt16Item* pUpdateDocItem = SfxItemSet::GetItem<SfxUInt16Item>(rMedium.GetItemSet(), SID_UPDATEDOCMODE, false);
-    m_nCanUpdate = pUpdateDocItem ? pUpdateDocItem->GetValue() : css::document::UpdateDocMode::NO_UPDATE;
+    SetInitialLinkUpdate(&rMedium);
 
     std::shared_ptr<const SfxFilter> pFilter = rMedium.GetFilter();
     if (pFilter)

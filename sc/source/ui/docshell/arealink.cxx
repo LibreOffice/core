@@ -226,6 +226,9 @@ bool ScAreaLink::Refresh( const OUString& rNewFile, const OUString& rNewFilter,
     if (rNewFile.isEmpty() || rNewFilter.isEmpty())
         return false;
 
+    if (!m_pDocSh->GetEmbeddedObjectContainer().getUserAllowsLinkUpdate())
+        return false;
+
     OUString aNewUrl( ScGlobal::GetAbsDocName( rNewFile, m_pDocSh ) );
     bool bNewUrlName = (aNewUrl != aFileName);
 
