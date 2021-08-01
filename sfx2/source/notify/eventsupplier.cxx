@@ -56,7 +56,7 @@ using namespace ::com::sun::star;
 
 void SAL_CALL SfxEvents_Impl::replaceByName( const OUString & aName, const uno::Any & rElement )
 {
-    ::osl::MutexGuard aGuard( maMutex );
+    std::lock_guard aGuard( maMutex );
 
     // find the event in the list and replace the data
     auto nIndex = comphelper::findValue(maEventNames, aName);
@@ -109,7 +109,7 @@ void SAL_CALL SfxEvents_Impl::replaceByName( const OUString & aName, const uno::
 
 uno::Any SAL_CALL SfxEvents_Impl::getByName( const OUString& aName )
 {
-    ::osl::MutexGuard aGuard( maMutex );
+    std::lock_guard aGuard( maMutex );
 
     // find the event in the list and return the data
 
@@ -129,7 +129,7 @@ uno::Sequence< OUString > SAL_CALL SfxEvents_Impl::getElementNames()
 
 sal_Bool SAL_CALL SfxEvents_Impl::hasByName( const OUString& aName )
 {
-    ::osl::MutexGuard aGuard( maMutex );
+    std::lock_guard aGuard( maMutex );
 
     // find the event in the list and return the data
 
@@ -148,7 +148,7 @@ uno::Type SAL_CALL SfxEvents_Impl::getElementType()
 
 sal_Bool SAL_CALL SfxEvents_Impl::hasElements()
 {
-    ::osl::MutexGuard aGuard( maMutex );
+    std::lock_guard aGuard( maMutex );
 
     return maEventNames.hasElements();
 }
@@ -282,7 +282,7 @@ void SfxEvents_Impl::Execute( uno::Any const & aEventData, const document::Docum
 
 void SAL_CALL SfxEvents_Impl::notifyEvent( const document::EventObject& aEvent )
 {
-    ::osl::ClearableMutexGuard aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
 
     // get the event name, find the corresponding data, execute the data
 
@@ -291,7 +291,7 @@ void SAL_CALL SfxEvents_Impl::notifyEvent( const document::EventObject& aEvent )
         return;
 
     uno::Any aEventData = maEventData[ nIndex ];
-    aGuard.clear();
+    aGuard.unlock();
     Execute( aEventData, document::DocumentEvent(aEvent.Source, aEvent.EventName, nullptr, uno::Any()), mpObjShell );
 }
 
@@ -300,7 +300,7 @@ void SAL_CALL SfxEvents_Impl::notifyEvent( const document::EventObject& aEvent )
 
 void SAL_CALL SfxEvents_Impl::disposing( const lang::EventObject& /*Source*/ )
 {
-    ::osl::MutexGuard aGuard( maMutex );
+    std::lock_guard aGuard( maMutex );
 
     if ( mxBroadcaster.is() )
     {

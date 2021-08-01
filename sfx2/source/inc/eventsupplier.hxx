@@ -29,6 +29,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Type.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <mutex>
 
 namespace comphelper
 {
@@ -44,7 +45,7 @@ class SfxEvents_Impl final : public ::cppu::WeakImplHelper< css::container::XNam
     css::uno::Sequence< OUString >     maEventNames;
     css::uno::Sequence< css::uno::Any >                 maEventData;
     css::uno::Reference< css::document::XEventBroadcaster >  mxBroadcaster;
-    ::osl::Mutex                    maMutex;
+    std::mutex                    maMutex;
     SfxObjectShell                 *mpObjShell;
 
 public:
