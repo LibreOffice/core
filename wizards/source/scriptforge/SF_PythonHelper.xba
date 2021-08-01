@@ -773,6 +773,7 @@ Try:
 						End Select
 					Case &quot;SFDocuments.Calc&quot;
 						Select Case Script
+							Case &quot;Charts&quot;			:	vReturn = vBasicObject.Charts(vArgs(0), vArgs(1))
 							Case &quot;Forms&quot;			:	vReturn = vBasicObject.Forms(vArgs(0), vArgs(1))
 							Case &quot;GetFormula&quot;		:	vReturn = vBasicObject.GetFormula(vArgs(0))
 							Case &quot;GetValue&quot;			:	vReturn = vBasicObject.GetValue(vArgs(0))

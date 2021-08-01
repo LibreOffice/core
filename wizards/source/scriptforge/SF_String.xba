@@ -2712,7 +2712,7 @@ Dim i As Long
 			sChar = Mid(sString, lPos, 1)
 			If Not SF_String.IsPrintable(sChar) Then
 				lAsc = Asc(sChar)
-				sChar = &quot;\x&quot; &amp; Iif(lAsc &lt; 255, Right(&quot;00&quot; &amp; Hex(lAsc, 2)), Right(&quot;0000&quot; &amp; Hex(lAsc, 4)))
+				sChar = &quot;\x&quot; &amp; Iif(lAsc &lt; 255, Right(&quot;00&quot; &amp; Hex(lAsc), 2), Right(&quot;0000&quot; &amp; Hex(lAsc), 4))
 				If lPos &lt; Len(sString) Then
 					sString = Left(sString, lPos - 1) &amp; sChar &amp; Mid(sString, lPos + 1)
 				Else

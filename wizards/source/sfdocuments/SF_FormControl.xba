@@ -960,7 +960,7 @@ Const cstSubArgs = &quot;PropertyName, Value&quot;
 
 Check:
 	If SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
-		If Not SF_Utils._Validate(PropertyName, &quot;PropertyName&quot;, V_STRING, Properties()) Then GoTo Catch
+		If Not ScriptForge.SF_Utils._Validate(PropertyName, &quot;PropertyName&quot;, V_STRING, Properties()) Then GoTo Catch
 	End If
 
 Try:
@@ -1866,6 +1866,7 @@ Finally:
 	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
 	Exit Function
 Catch:
+	bSet = False
 	GoTo Finally
 CatchType:
 	If Len(_ParentForm._FormDocumentName) &gt; 0 Then sFormName = _ParentForm._FormDocumentName &amp; &quot;.&quot; Else sFormName = &quot;&quot;

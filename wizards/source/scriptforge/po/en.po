@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: https://bugs.libreoffice.org/enter_bug.cgi?product=LibreOffice&bug_status=UNCONFIRMED&component=UI\n"
-"POT-Creation-Date: 2021-06-19 16:57:15\n"
+"POT-Creation-Date: 2021-07-30 13:10:57\n"
 "PO-Revision-Date: YYYY-MM-DD HH:MM:SS\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -735,6 +735,41 @@ msgid  ""
 "« %7 » = %8\n"
 "« %9 » = %10\n"
 "« %11 » = %12"
+msgstr ""
+
+#. SF_Calc CreateChart
+#. %1: An identifier
+#. %2: A string
+#. %3: An identifier
+#. %4: A string
+#. %5: An identifier
+#. %6: A file name
+#, kde-format
+msgctxt "DUPLICATECHART"
+msgid  ""
+"A chart with the same name exists already in the sheet.\n"
+"\n"
+"« %1 » = %2\n"
+"« %3 » = %4\n"
+"« %5 » = %6\n"
+""
+msgstr ""
+
+#. SF_Chart.ExportToFile error message
+#. %1: An identifier
+#. %2: A file name
+#. %3: An identifier
+#. %4: True or False
+#. 
+#, kde-format
+msgctxt "CHARTEXPORT"
+msgid  ""
+"The chart could not be exported.\n"
+"Either the destination file must not be overwritten, or it has a "
+"read-only attribute set.\n"
+"\n"
+"%1 = '%2'\n"
+"%3 = %4"
 msgstr ""
 
 #. SF_Dialog._IsStillAlive error message
