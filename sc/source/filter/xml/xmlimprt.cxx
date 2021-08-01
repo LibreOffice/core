@@ -1138,6 +1138,9 @@ void SAL_CALL ScXMLImport::setTargetDocument( const css::uno::Reference< css::la
     if (!pDoc)
         throw lang::IllegalArgumentException();
 
+    if (ScDocShell* pDocSh = static_cast<ScDocShell*>(pDoc->GetDocumentShell()))
+        pDocSh->SetInitialLinkUpdate( pDocSh->GetMedium());
+
     mpDocImport.reset(new ScDocumentImport(*pDoc));
     mpComp.reset(new ScCompiler(*pDoc, ScAddress(), formula::FormulaGrammar::GRAM_ODFF));
 
