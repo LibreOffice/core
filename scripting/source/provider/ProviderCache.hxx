@@ -19,13 +19,13 @@
 
 #pragma once
 
-#include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 
 #include <com/sun/star/script/provider/XScriptProvider.hpp>
 
+#include <mutex>
 #include <unordered_map>
 
 namespace func_provider
@@ -68,7 +68,7 @@ private:
     bool isInDenyList( const OUString& serviceName );
     css::uno::Sequence< OUString >  m_sDenyList;
     ProviderDetails_hash  m_hProviderDetailsCache;
-    osl::Mutex m_mutex;
+    std::mutex m_mutex;
     css::uno::Sequence< css::uno::Any >  m_Sctx;
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
     css::uno::Reference< css::lang::XMultiComponentFactory > m_xMgr;
