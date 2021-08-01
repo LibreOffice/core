@@ -22,10 +22,10 @@
 // __CACHE_DIAGNOSE forces cache size to 4 and works only for OUString keys
 //  #define __CACHE_DIAGNOSE 1
 
-#include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>
 
 #include <memory>
+#include <mutex>
 #include <unordered_map>
 
 namespace com::sun::star::uno { class Any; }
@@ -45,7 +45,7 @@ class LRU_Cache
     };
     typedef std::unordered_map< t_Key, CacheEntry *, t_KeyHash > t_Key2Element;
 
-    mutable ::osl::Mutex        _aCacheMutex;
+    mutable std::mutex        _aCacheMutex;
     sal_Int32                   _nCachedElements;
     t_Key2Element               _aKey2Element;
 
@@ -126,7 +126,7 @@ inline void LRU_Cache< t_Key, t_Val, t_KeyHash >::toFront( CacheEntry * pEntry )
 template< class t_Key, class t_Val, class t_KeyHash >
 inline t_Val LRU_Cache< t_Key, t_Val, t_KeyHash >::getValue( const t_Key & rKey ) const
 {
-    ::osl::MutexGuard aGuard( _aCacheMutex );
+    std::lock_guard aGuard( _aCacheMutex );
     const typename t_Key2Element::const_iterator iFind( _aKey2Element.find( rKey ) );
     if (iFind != _aKey2Element.end())
     {
@@ -146,7 +146,7 @@ template< class t_Key, class t_Val, class t_KeyHash >
 inline void LRU_Cache< t_Key, t_Val, t_KeyHash >::setValue(
     const t_Key & rKey, const t_Val & rValue )
 {
-    ::osl::MutexGuard aGuard( _aCacheMutex );
+    std::lock_guard aGuard( _aCacheMutex );
     if (_nCachedElements > 0)
     {
         const typename t_Key2Element::const_iterator iFind( _aKey2Element.find( rKey ) );
@@ -184,7 +184,7 @@ inline void LRU_Cache< t_Key, t_Val, t_KeyHash >::setValue(
 template< class t_Key, class t_Val, class t_KeyHash >
 inline void LRU_Cache< t_Key, t_Val, t_KeyHash >::clear()
 {
-    ::osl::MutexGuard aGuard( _aCacheMutex );
+    std::lock_guard aGuard( _aCacheMutex );
     _aKey2Element.clear();
     for ( sal_Int32 nPos = _nCachedElements; nPos--; )
     {
