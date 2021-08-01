@@ -19,7 +19,6 @@
 
 #pragma once
 
-#include <set>
 #include <memory>
 #include <unordered_map>
 
@@ -46,6 +45,7 @@
 #include <com/sun/star/io/XActiveDataControl.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XStreamListener.hpp>
+#include <o3tl/sorted_vector.hxx>
 
 #include <node.hxx>
 
@@ -76,7 +76,7 @@ namespace DOM
         xmlDocPtr const m_aDocPtr;
 
         // datacontrol/source state
-        typedef std::set< css::uno::Reference< css::io::XStreamListener > > listenerlist_t;
+        typedef o3tl::sorted_vector< css::uno::Reference< css::io::XStreamListener > > listenerlist_t;
         listenerlist_t m_streamListeners;
         css::uno::Reference< css::io::XOutputStream > m_rOutputStream;
 
