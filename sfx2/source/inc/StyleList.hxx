@@ -81,11 +81,11 @@ public:
 
     // This function is used to set a hierarchical view.
     void SetHierarchical();
-    // This function handles the controls while setting a filter except heirarchical
+    // This function handles the controls while setting a filter except hierarchical
     void SetFilterControlsHandle();
     // Return whether treeview is visible
     // It is used in StyleList's UpdateStyles_Hdl
-    // It is used to defaultly set the heirarchical view
+    // It is used to defaultly set the hierarchical view
     bool IsTreeView() { return m_xTreeBox->get_visible(); }
 
     // Dialog and StyleList have their own copies of m_nActFilter

@@ -147,7 +147,7 @@ Qt5Frame::Qt5Frame(Qt5Frame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
         else if (nStyle & SalFrameStyleFlags::TOOLTIP)
             aWinFlags |= Qt::ToolTip;
         // Can't use Qt::Popup, because it grabs the input focus and generates
-        // a focus-out event, reaking the compbo box. This used to map to
+        // a focus-out event, reaching the combo box. This used to map to
         // Qt::ToolTip, which doesn't feel that correct...
         else if (isPopup())
             aWinFlags = Qt::Widget | Qt::FramelessWindowHint | Qt::BypassWindowManagerHint;
