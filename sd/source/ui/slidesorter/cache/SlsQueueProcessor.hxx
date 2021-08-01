@@ -24,6 +24,7 @@
 #include "SlsBitmapFactory.hxx"
 
 #include <vcl/timer.hxx>
+#include <mutex>
 
 namespace sd::slidesorter::cache {
 
@@ -74,7 +75,7 @@ private:
     /** This mutex is used to guard the queue processor.  Be careful not to
         mix its use with that of the solar mutex.
     */
-    ::osl::Mutex maMutex;
+    std::mutex maMutex;
 
     Timer  maTimer;
     DECL_LINK(ProcessRequestHdl, Timer *, void);
