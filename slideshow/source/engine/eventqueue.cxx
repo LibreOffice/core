@@ -77,7 +77,7 @@ namespace slideshow::internal
 
         bool EventQueue::addEvent( const EventSharedPtr& rEvent )
         {
-            ::osl::MutexGuard aGuard( maMutex );
+            std::lock_guard aGuard( maMutex );
 
             SAL_INFO("slideshow.eventqueue", "adding event \"" << rEvent->GetDescription()
                 << "\" [" << rEvent.get()
@@ -103,7 +103,7 @@ namespace slideshow::internal
 
         bool EventQueue::addEventForNextRound( EventSharedPtr const& rEvent )
         {
-            ::osl::MutexGuard aGuard( maMutex );
+            std::lock_guard aGuard( maMutex );
 
             SAL_INFO("slideshow.eventqueue", "adding event \"" << rEvent->GetDescription()
                 << "\" [" << rEvent.get()
@@ -120,7 +120,7 @@ namespace slideshow::internal
 
         bool EventQueue::addEventWhenQueueIsEmpty (const EventSharedPtr& rpEvent)
         {
-            ::osl::MutexGuard aGuard( maMutex );
+            std::lock_guard aGuard( maMutex );
 
             SAL_INFO("slideshow.eventqueue", "adding event \"" << rpEvent->GetDescription()
                 << "\" [" << rpEvent.get()
@@ -140,14 +140,14 @@ namespace slideshow::internal
 
         void EventQueue::forceEmpty()
         {
-            ::osl::MutexGuard aGuard( maMutex );
+            std::lock_guard aGuard( maMutex );
 
             process_(true);
         }
 
         void EventQueue::process()
         {
-            ::osl::MutexGuard aGuard( maMutex );
+            std::lock_guard aGuard( maMutex );
 
             process_(false);
         }
@@ -257,14 +257,14 @@ namespace slideshow::internal
 
         bool EventQueue::isEmpty() const
         {
-            ::osl::MutexGuard aGuard( maMutex );
+            std::lock_guard aGuard( maMutex );
 
             return maEvents.empty() && maNextEvents.empty() && maNextNextEvents.empty();
         }
 
         double EventQueue::nextTimeout() const
         {
-            ::osl::MutexGuard aGuard( maMutex );
+            std::lock_guard aGuard( maMutex );
 
             // return time for next entry (if any)
             double nTimeout (::std::numeric_limits<double>::max());
@@ -281,7 +281,7 @@ namespace slideshow::internal
 
         void EventQueue::clear()
         {
-            ::osl::MutexGuard aGuard( maMutex );
+            std::lock_guard aGuard( maMutex );
 
             // TODO(P1): Maybe a plain vector and vector.swap will
             // be faster here. Profile.
