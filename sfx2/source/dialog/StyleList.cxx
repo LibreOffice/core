@@ -178,17 +178,36 @@ IMPL_LINK_NOARG(StyleList, ReadResource, void*, size_t)
         m_xStyleFamilies.emplace();
 
     m_nActFilter = 0xffff;
-    // Assigning value to Dialog's nActFilter so that both nActFilters are in sync
-    m_pParentDialog->SetFilterByIndex(m_nActFilter);
-    if (m_pCurObjShell)
+    if (m_xTreeBox->get_buildable_name() == "treeview")
     {
-        m_nActFilter = static_cast<sal_uInt16>(m_aLoadFactoryStyleFilter.Call(m_pCurObjShell));
         // Assigning value to Dialog's nActFilter so that both nActFilters are in sync
-        m_pParentDialog->SetFilterByIndex(m_nActFilter);
-        if (0xffff == m_nActFilter)
+        m_pParentDialog->SetParaFilterByIndex(m_nActFilter);
+        if (m_pCurObjShell)
         {
-            m_nActFilter = m_pCurObjShell->GetAutoStyleFilterIndex();
-            m_pParentDialog->SetFilterByIndex(m_nActFilter);
+            m_nActFilter = static_cast<sal_uInt16>(m_aLoadFactoryStyleFilter.Call(m_pCurObjShell));
+            // Assigning value to Dialog's nActFilter so that both nActFilters are in sync
+            m_pParentDialog->SetParaFilterByIndex(m_nActFilter);
+            if (0xffff == m_nActFilter)
+            {
+                m_nActFilter = m_pCurObjShell->GetAutoStyleFilterIndex();
+                m_pParentDialog->SetParaFilterByIndex(m_nActFilter);
+            }
+        }
+    }
+    else if (m_xTreeBox->get_buildable_name() == "chartreeview")
+    {
+        // Assigning value to Dialog's nActFilter so that both nActFilters are in sync
+        m_pParentDialog->SetCharFilterByIndex(m_nActFilter);
+        if (m_pCurObjShell)
+        {
+            m_nActFilter = static_cast<sal_uInt16>(m_aLoadFactoryStyleFilter.Call(m_pCurObjShell));
+            // Assigning value to Dialog's nActFilter so that both nActFilters are in sync
+            m_pParentDialog->SetCharFilterByIndex(m_nActFilter);
+            if (0xffff == m_nActFilter)
+            {
+                m_nActFilter = m_pCurObjShell->GetAutoStyleFilterIndex();
+                m_pParentDialog->SetCharFilterByIndex(m_nActFilter);
+            }
         }
     }
     size_t nCount = m_xStyleFamilies->size();
@@ -281,18 +300,22 @@ public:
     }
 };
 
-IMPL_LINK(StyleList, FilterSelect, sal_uInt16, mActFilter, void)
+void StyleList::FilterSelect(sal_uInt16 mActFilter, bool setFilter)
 {
     m_nActFilter = mActFilter;
-    SfxObjectShell* const pDocShell = m_aSaveSelection.Call(nullptr);
-    SfxStyleSheetBasePool* pOldStyleSheetPool = m_pStyleSheetPool;
-    m_pStyleSheetPool = pDocShell ? pDocShell->GetStyleSheetPool() : nullptr;
-    if (pOldStyleSheetPool != m_pStyleSheetPool)
+    if (setFilter)
     {
-        if (pOldStyleSheetPool)
-            EndListening(*pOldStyleSheetPool);
-        if (m_pStyleSheetPool)
-            StartListening(*m_pStyleSheetPool);
+        SfxObjectShell* const pDocShell = m_aSaveSelection.Call(*this);
+        SfxStyleSheetBasePool* pOldStyleSheetPool = m_pStyleSheetPool;
+        m_pStyleSheetPool = pDocShell ? pDocShell->GetStyleSheetPool() : nullptr;
+        if (pOldStyleSheetPool != m_pStyleSheetPool)
+        {
+            if (pOldStyleSheetPool)
+                EndListening(*pOldStyleSheetPool);
+            if (m_pStyleSheetPool)
+                StartListening(*m_pStyleSheetPool);
+        }
+        UpdateStyles(StyleFlags::UpdateFamilyList);
     }
 }
 
@@ -351,15 +374,11 @@ void StyleList::Initialize()
         LINK(this, StyleList, NewMenuExecuteAction));
     m_pParentDialog->connect_stylelist_for_watercan(LINK(this, StyleList, IsSafeForWaterCan));
     m_pParentDialog->connect_stylelist_has_selected_style(LINK(this, StyleList, HasSelectedStyle));
-    m_pParentDialog->connect_stylelist_update_styles(LINK(this, StyleList, UpdateStyles));
-    m_pParentDialog->connect_stylelist_update_family(LINK(this, StyleList, UpdateFamily));
     m_pParentDialog->connect_stylelist_update_style_dependents(
         LINK(this, StyleList, UpdateStyleDependents));
     m_pParentDialog->connect_stylelist_enable_tree_drag(LINK(this, StyleList, EnableTreeDrag));
-    m_pParentDialog->connect_stylelist_filter_select(LINK(this, StyleList, FilterSelect));
     m_pParentDialog->connect_stylelist_enable_delete(LINK(this, StyleList, EnableDelete));
     m_pParentDialog->connect_stylelist_set_water_can_state(LINK(this, StyleList, SetWaterCanState));
-    m_pParentDialog->connect_family_select(LINK(this, StyleList, FamilySelect));
     m_pParentDialog->connect_set_family(LINK(this, StyleList, SetFamily));
 
     int nTreeHeight = m_xFmtLb->get_height_rows(8);
@@ -379,7 +398,7 @@ void StyleList::Initialize()
     Update();
 }
 
-IMPL_LINK_NOARG(StyleList, UpdateFamily, void*, void)
+void StyleList::UpdateFamily()
 {
     m_bUpdateFamily = false;
 
@@ -408,7 +427,10 @@ IMPL_LINK_NOARG(StyleList, UpdateFamily, void*, void)
         else
         {
             UpdateStyles(StyleFlags::UpdateFamily);
-            FillTreeBox(GetActualFamily());
+            if (m_xTreeBox->get_buildable_name() == "treeview")
+                FillTreeBox(GetActualFamily());
+            else
+                FillTreeBox(SfxStyleFamily::Char);
         }
     }
 
@@ -425,7 +447,7 @@ void StyleList::connect_LoadFactoryStyleFilter(const Link<SfxObjectShell const*,
     m_aLoadFactoryStyleFilter = rLink;
 }
 
-void StyleList::connect_SaveSelection(const Link<void*, SfxObjectShell*> rLink)
+void StyleList::connect_SaveSelection(const Link<StyleList&, SfxObjectShell*> rLink)
 {
     m_aSaveSelection = rLink;
 }
@@ -528,7 +550,10 @@ IMPL_LINK(StyleList, ExecuteDrop, const ExecuteDropEvent&, rEvt, sal_Int8)
     OUString aTargetStyle = m_xTreeBox->get_text(*xTarget);
     DropHdl(m_xTreeBox->get_text(*xSource), aTargetStyle);
     m_xTreeBox->unset_drag_dest_row();
-    FillTreeBox(GetActualFamily());
+    if (m_xTreeBox->get_buildable_name() == "treeview")
+        FillTreeBox(GetActualFamily());
+    else
+        FillTreeBox(SfxStyleFamily::Char);
     m_pParentDialog->SelectStyle(aTargetStyle, false, *this);
     return DND_ACTION_NONE;
 }
@@ -554,6 +579,7 @@ IMPL_LINK_NOARG(StyleList, NewMenuExecuteAction, void*, void)
             m_pParentDialog->Execute_Impl(SID_STYLE_NEW_BY_EXAMPLE, aTemplName, "",
                                           static_cast<sal_uInt16>(GetFamilyItem()->GetFamily()),
                                           *this, nFilter);
+            UpdateFamily();
             m_aUpdateFamily.Call(*this);
         }
     }
@@ -736,8 +762,16 @@ static SfxStyleFamily NIdToSfxFamilyId(sal_uInt16 nId)
 
 sal_uInt16 StyleList::StyleNrToInfoOffset(sal_uInt16 nId)
 {
-    const SfxStyleFamilyItem& rItem = m_xStyleFamilies->at(nId);
-    return SfxTemplate::SfxFamilyIdToNId(rItem.GetFamily()) - 1;
+    if (m_xTreeBox->get_buildable_name() == "treeview")
+    {
+        const SfxStyleFamilyItem& rItem = m_xStyleFamilies->at(nId);
+        return SfxTemplate::SfxFamilyIdToNId(rItem.GetFamily()) - 1;
+    }
+    else
+    {
+        const SfxStyleFamilyItem& rItem = m_xStyleFamilies->at(1);
+        return SfxTemplate::SfxFamilyIdToNId(rItem.GetFamily()) - 1;
+    }
 }
 
 // Helper function: Access to the current family item
@@ -805,7 +839,7 @@ IMPL_LINK(StyleList, SetWaterCanState, const SfxBoolItem*, pItem, void)
     m_pBindings->LeaveRegistrations();
 }
 
-IMPL_LINK(StyleList, FamilySelect, sal_uInt16, nEntry, void)
+void StyleList::FamilySelect(sal_uInt16 nEntry)
 {
     m_nActFamily = nEntry;
     SfxDispatcher* pDispat = m_pBindings->GetDispatcher_Impl();
@@ -814,6 +848,7 @@ IMPL_LINK(StyleList, FamilySelect, sal_uInt16, nEntry, void)
     pDispat->ExecuteList(SID_STYLE_FAMILY, SfxCallMode::SYNCHRON, { &aItem });
     m_pBindings->Invalidate(SID_STYLE_FAMILY);
     m_pBindings->Update(SID_STYLE_FAMILY);
+    UpdateFamily();
     m_aUpdateFamily.Call(*this);
 }
 
@@ -1065,7 +1100,7 @@ IMPL_LINK_NOARG(StyleList, UpdateStyleDependents, void*, void)
 }
 
 // Comes into action when the current style is changed
-IMPL_LINK(StyleList, UpdateStyles, StyleFlags, nFlags, void)
+void StyleList::UpdateStyles(StyleFlags nFlags)
 {
     OSL_ENSURE(nFlags != StyleFlags::NONE, "nothing to do");
     const SfxStyleFamilyItem* pItem = GetFamilyItem();
@@ -1081,8 +1116,7 @@ IMPL_LINK(StyleList, UpdateStyles, StyleFlags, nFlags, void)
             // It happens sometimes, God knows why
             return;
         m_nAppFilter = m_pFamilyState[StyleNrToInfoOffset(n)]->GetValue();
-        m_pParentDialog->SetApplicationFilter(m_nAppFilter);
-        m_pParentDialog->FamilySelect(StyleNrToInfoOffset(n) + 1);
+        m_pParentDialog->FamilySelect(StyleNrToInfoOffset(n) + 1, *this);
         pItem = GetFamilyItem();
     }
 
@@ -1175,7 +1209,11 @@ void StyleList::SetHierarchical()
     m_bHierarchical = true;
     const OUString aSelectEntry(GetSelectedEntry());
     m_xFmtLb->hide();
-    FillTreeBox(GetActualFamily());
+    if (m_xTreeBox->get_buildable_name() == "treeview")
+        FillTreeBox(GetActualFamily());
+    else
+        FillTreeBox(SfxStyleFamily::Char);
+    //FillTreeBox(GetActualFamily());
     m_pParentDialog->SelectStyle(aSelectEntry, false, *this);
     m_xTreeBox->show();
 }
@@ -1407,6 +1445,7 @@ void StyleList::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
             }
             else if (m_bUpdateFamily)
             {
+                UpdateFamily();
                 m_aUpdateFamily.Call(*this);
             }
 
@@ -1484,7 +1523,11 @@ IMPL_LINK_NOARG(StyleList, TimeOut, Timer*, void)
             UpdateStyles(StyleFlags::UpdateFamilyList);
         else
         {
-            FillTreeBox(GetActualFamily());
+            //FillTreeBox(GetActualFamily());
+            if (m_xTreeBox->get_buildable_name() == "treeview")
+                FillTreeBox(GetActualFamily());
+            else
+                FillTreeBox(SfxStyleFamily::Char);
             SfxTemplateItem* pState = m_pFamilyState[m_nActFamily - 1].get();
             if (pState)
             {
@@ -1687,7 +1730,10 @@ void StyleList::Update()
     }
 
     if (m_bUpdateFamily)
+    {
+        UpdateFamily();
         m_aUpdateFamily.Call(*this);
+    }
 
     sal_uInt16 i;
     for (i = 0; i < MAX_FAMILIES; ++i)
@@ -1710,8 +1756,7 @@ void StyleList::Update()
 
         std::unique_ptr<SfxTemplateItem>& pNewItem = m_pFamilyState[StyleNrToInfoOffset(n)];
         m_nAppFilter = pNewItem->GetValue();
-        m_pParentDialog->SetApplicationFilter(m_nAppFilter);
-        m_pParentDialog->FamilySelect(StyleNrToInfoOffset(n) + 1);
+        m_pParentDialog->FamilySelect(StyleNrToInfoOffset(n) + 1, *this);
         pItem = pNewItem.get();
     }
     else if (bDocChanged)
@@ -1719,21 +1764,36 @@ void StyleList::Update()
         // other DocShell -> all new
         m_pParentDialog->CheckItem(OString::number(m_nActFamily));
         m_nActFilter = static_cast<sal_uInt16>(m_aLoadFactoryStyleFilter.Call(pDocShell));
-        m_pParentDialog->SetFilterByIndex(m_nActFilter);
-        if (0xffff == m_nActFilter)
+        if (m_xTreeBox->get_buildable_name() == "treeview")
         {
-            m_nActFilter = pDocShell->GetAutoStyleFilterIndex();
-            m_pParentDialog->SetFilterByIndex(m_nActFilter);
+            m_pParentDialog->SetParaFilterByIndex(m_nActFilter);
+            if (0xffff == m_nActFilter)
+            {
+                m_nActFilter = pDocShell->GetAutoStyleFilterIndex();
+                m_pParentDialog->SetParaFilterByIndex(m_nActFilter);
+            }
         }
-
+        else if (m_xTreeBox->get_buildable_name() == "chartreeview")
+        {
+            m_pParentDialog->SetCharFilterByIndex(m_nActFilter);
+            if (0xffff == m_nActFilter)
+            {
+                m_nActFilter = pDocShell->GetAutoStyleFilterIndex();
+                m_pParentDialog->SetCharFilterByIndex(m_nActFilter);
+            }
+        }
         m_nAppFilter = pItem->GetValue();
-        m_pParentDialog->SetApplicationFilter(m_nAppFilter);
         if (!m_xTreeBox->get_visible())
         {
             UpdateStyles(StyleFlags::UpdateFamilyList);
         }
         else
-            FillTreeBox(GetActualFamily());
+        {
+            if (m_xTreeBox->get_buildable_name() == "treeview")
+                FillTreeBox(GetActualFamily());
+            else
+                FillTreeBox(SfxStyleFamily::Char);
+        }
     }
     else
     {
@@ -1745,16 +1805,19 @@ void StyleList::Update()
             && m_nAppFilter != pItem->GetValue())
         {
             m_nAppFilter = pItem->GetValue();
-            m_pParentDialog->SetApplicationFilter(m_nAppFilter);
             if (!m_xTreeBox->get_visible())
                 UpdateStyles(StyleFlags::UpdateFamilyList);
             else
-                FillTreeBox(GetActualFamily());
+            {
+                if (m_xTreeBox->get_buildable_name() == "treeview")
+                    FillTreeBox(GetActualFamily());
+                else
+                    FillTreeBox(SfxStyleFamily::Char);
+            }
         }
         else
         {
             m_nAppFilter = pItem->GetValue();
-            m_pParentDialog->SetApplicationFilter(m_nAppFilter);
         }
     }
     const OUString aStyle(pItem->GetStyleName());
@@ -1810,6 +1873,12 @@ IMPL_LINK(StyleList, PopupTreeMenuHdl, const CommandEvent&, rCEvt, bool)
     ShowMenu(rCEvt);
 
     return true;
+}
+
+void StyleList::setVisible(bool b)
+{
+    m_xTreeBox->set_visible(b);
+    m_xFmtLb->set_visible(false);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
