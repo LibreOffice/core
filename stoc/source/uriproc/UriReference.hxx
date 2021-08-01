@@ -87,7 +87,7 @@ public:
     /// @throws css::uno::RuntimeException
     void clearFragment();
 
-    osl::Mutex m_mutex;
+    std::mutex m_mutex;
     OUString m_scheme;
     OUString m_authority;
     OUString m_path;
