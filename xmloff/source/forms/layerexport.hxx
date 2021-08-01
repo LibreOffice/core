@@ -22,7 +22,6 @@
 #include <sal/config.h>
 
 #include <map>
-#include <set>
 
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
@@ -31,6 +30,7 @@
 #include <com/sun/star/awt/XControlModel.hpp>
 #include "callbacks.hxx"
 #include <rtl/ref.hxx>
+#include <o3tl/sorted_vector.hxx>
 
 class SvXMLExport;
 class SvXMLNumFmtExport;
@@ -40,8 +40,7 @@ class SvXMLExportPropertyMapper;
 namespace xmloff
 {
 
-    typedef ::std::set  <   css::uno::Reference< css::beans::XPropertySet >
-                        >   PropertySetBag;
+    typedef o3tl::sorted_vector< css::uno::Reference< css::beans::XPropertySet > > PropertySetBag;
 
     // maps objects (property sets) to strings, e.g. control ids.
     typedef ::std::map  <   css::uno::Reference< css::beans::XPropertySet >
