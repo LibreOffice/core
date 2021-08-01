@@ -53,7 +53,7 @@ ConfigurationControllerResourceManager::ResourceDescriptor
     ConfigurationControllerResourceManager::GetResource (
         const Reference<XResourceId>& rxResourceId)
 {
-    ::osl::MutexGuard aGuard (maMutex);
+    std::lock_guard aGuard (maMutex);
     ResourceMap::const_iterator iResource (maResourceMap.find(rxResourceId));
     if (iResource != maResourceMap.end())
         return iResource->second;
@@ -65,7 +65,7 @@ void ConfigurationControllerResourceManager::ActivateResources (
     const ::std::vector<Reference<XResourceId> >& rResources,
     const Reference<XConfiguration>& rxConfiguration)
 {
-    ::osl::MutexGuard aGuard (maMutex);
+    std::lock_guard aGuard (maMutex);
     // Iterate in normal order over the resources that are to be
     // activated so that resources on which others depend are activated
     // before the depending resources are activated.
@@ -77,7 +77,7 @@ void ConfigurationControllerResourceManager::DeactivateResources (
     const ::std::vector<Reference<XResourceId> >& rResources,
     const Reference<XConfiguration>& rxConfiguration)
 {
-    ::osl::MutexGuard aGuard (maMutex);
+    std::lock_guard aGuard (maMutex);
     // Iterate in reverse order over the resources that are to be
     // deactivated so that resources on which others depend are deactivated
     // only when the depending resources have already been deactivated.
