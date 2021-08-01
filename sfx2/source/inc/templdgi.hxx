@@ -84,9 +84,13 @@ protected:
     std::unique_ptr<weld::CheckButton> mxPreviewCheckbox;
     std::unique_ptr<weld::ComboBox> mxFilterLb;
 
+    StyleList m_aCharStyleList;
+    std::unique_ptr<weld::CheckButton> mxCharPreviewCheckbox;
+    std::unique_ptr<weld::ComboBox> mxCharFilterLb;
+
     sal_uInt16 nActFamily; // Id in the ToolBox = Position - 1
-    sal_uInt16 nActFilter; // FilterIdx
-    SfxStyleSearchBits nAppFilter; // Filter, which has set the application (for automatic)
+    sal_uInt16 nActParaFilter; // FilterIdx
+    sal_uInt16 nActCharFilter; // FilterIdx
 
     bool bIsWater :1;
     bool bUpdate :1;
@@ -96,6 +100,7 @@ protected:
     bool bUpdateByExampleDisabled :1;
     bool bTreeDrag :1;
     bool m_bWantHierarchical :1;
+    bool m_bWantCharHierarchical : 1;
 
     Link<void*, size_t> m_aStyleListReadResource;
     Link<void*, void> m_aStyleListClear;
@@ -126,7 +131,8 @@ protected:
     void Initialize();
     void EnableHierarchical(bool, StyleList& rStyleList);
 
-    void FilterSelect( sal_uInt16 nFilterIdx, bool bForce );
+    void ParaFilterSelect( sal_uInt16 nFilterIdx, bool bForce );
+    void CharFilterSelect(sal_uInt16 nFilterIdx, bool bForce);
     void SetFamilyState( sal_uInt16 nSlotId, const SfxTemplateItem* );
     void SetWaterCanState( const SfxBoolItem* pItem );
     bool IsSafeForWaterCan() const;
@@ -138,9 +144,10 @@ protected:
 
     DECL_LINK(ReadResource_Hdl, StyleList&, void);
     DECL_LINK(ClearResource_Hdl, void*, void);
-    DECL_LINK(SaveSelection_Hdl, void*, SfxObjectShell*);
+    DECL_LINK(SaveSelection_Hdl, StyleList&, SfxObjectShell*);
     DECL_LINK(LoadFactoryStyleFilter_Hdl, SfxObjectShell const*, sal_Int32);
-    DECL_LINK(UpdateStyles_Hdl, StyleFlags, void);
+    DECL_LINK(UpdateParaStyles_Hdl, StyleFlags, void);
+    DECL_LINK(UpdateCharStyles_Hdl, StyleFlags, void);
     DECL_LINK(UpdateFamily_Hdl, StyleList&, void);
     DECL_LINK(UpdateStyleDependents_Hdl, void*, void);
 
@@ -158,7 +165,7 @@ public:
 
     // Used in StyleList::UpdateStyles, StyleList::Update
     // Whenever a new family(Eg. Character, List etc.) is selected it comes into action
-    void FamilySelect(sal_uInt16 nId, bool bPreviewRefresh = false);
+    void FamilySelect(sal_uInt16 nId, StyleList& rStyleList, bool bPreviewRefresh = false);
 
     // Constructor
     SfxCommonTemplateDialog_Impl(SfxBindings* pB, weld::Container*, weld::Builder* pBuilder);
@@ -168,11 +175,11 @@ public:
 
     // Used in StyleList::SelectStyle, StyleList::Notify, IMPL_LINK(PopupFlatMenuHdl)
     // These functions are used when a style is edited, deleted, created etc..
-    virtual void EnableEdit(bool b) { m_aStyleList.Enableedit(b); }
-    void EnableDel(bool b) { m_aStyleList.Enabledel(b); }
-    void EnableNew(bool b) { m_aStyleList.Enablenew(b); }
-    void EnableHide(bool b) { m_aStyleList.Enablehide(b); }
-    void EnableShow(bool b) { m_aStyleList.Enableshow(b); }
+    virtual void EnableEdit(bool b);
+    void EnableDel(bool b);
+    void EnableNew(bool b);
+    void EnableHide(bool b);
+    void EnableShow(bool b);
 
     // Used in TreeDrag
     void EnableTreeDrag(bool b);
@@ -193,12 +200,13 @@ public:
     // This is used when a style is selected
     void SelectStyle(const OUString& rStyle, bool bIsCallback, StyleList& rStyleList);
 
-    // Dialog and StyleList have their own copies of variable nAppFilter.
-    // When a filter is applied, it comes into action and updates the value of nAppFilter
-    void SetApplicationFilter(SfxStyleSearchBits filter) { nAppFilter = filter; }
     // Dialog and StyleList have their own copies of variable nActFilter.
     // When a filter is applied, it comes into action and updates the value of nActFilter
-    void SetFilterByIndex(sal_uInt16 filter) { nActFilter = filter; }
+    void SetParaFilterByIndex(sal_uInt16 filter) { nActParaFilter = filter; }
+    // Dialog and StyleList have their own copies of variable nActFilter.
+    // When a filter is applied, it comes into action and updates the value of nActFilter
+    void SetCharFilterByIndex(sal_uInt16 filter) { nActCharFilter = filter; }
+
 
     // This function return the value of bUpdate in Stylelist
     // This value is used in StyleList's Notify
