@@ -204,7 +204,7 @@
 0x0439 hi-IN
 0x043A mt-MT
 0x043B se-NO
-0x043D yi-Hebr, reserved
+0x043D yi-001
 0x043E ms-MY
 0x043F kk-KZ
 0x0440 ky-KG
@@ -238,7 +238,7 @@
 0x045C chr-Cher-US
 0x045D iu-Cans-CA
 0x045E am-ET
-0x045F tzm-Arab-MA, reserved
+0x045F tzm-Arab-MA
 0x0460 ks-Arab
 0x0461 ne-NP
 0x0462 fy-NL
@@ -246,7 +246,7 @@
 0x0464 fil-PH
 0x0465 dv-MV
 0x0466 bin-NG, reserved
-0x0467 fuv-NG, reserved
+0x0467 ff-NG, ff-Latn-NG
 0x0468 ha-Latn-NG
 0x0469 ibb-NG, reserved
 0x046A yo-NG
@@ -256,12 +256,12 @@
 0x046E lb-LU
 0x046F kl-GL
 0x0470 ig-NG
-0x0471 kr-NG, reserved
+0x0471 kr-Latn-NG
 0x0472 om-ET
 0x0473 ti-ET
 0x0474 gn-PY
 0x0475 haw-US
-0x0476 la-Latn, reserved
+0x0476 la-VA
 0x0477 so-SO
 0x0478 ii-CN
 0x0479 pap-029, reserved
@@ -274,7 +274,7 @@
 0x0483 co-FR
 0x0484 gsw-FR
 0x0485 sah-RU
-0x0486 qut-GT
+0x0486 qut-GT, reserved
 0x0487 rw-RW
 0x0488 wo-SN
 0x048C prs-AF
@@ -305,28 +305,29 @@
 0x081D sv-FI
 0x0820 ur-IN
 0x0827 Neither defined nor reserved
-0x082C az-Cyrl-AZ
+0x082C az-Cyrl-AZ, reserved
 0x082E dsb-DE
 0x0832 tn-BW
 0x083B se-SE
 0x083C ga-IE
 0x083E ms-BN
 0x083F kk-Latn-KZ, reserved
-0x0843 uz-Cyrl-UZ
+0x0843 uz-Cyrl-UZ, reserved
 0x0845 bn-BD
 0x0846 pa-Arab-PK
 0x0849 ta-LK
-0x0850 mn-Mong-CN
+0x0850 mn-Mong-CN, reserved
 0x0851 bo-BT, reserved
 0x0859 sd-Arab-PK
 0x085D iu-Latn-CA
 0x085F tzm-Latn-DZ
-0x0860 ks-Deva, reserved
+0x0860 ks-Deva-IN
 0x0861 ne-IN
 0x0867 ff-Latn-SN
 0x086B quz-EC
 0x0873 ti-ER
 0x09FF qps-plocm
+0x0C00 Locale without assigned LCID if the current user default locale. See section 2.2.1.
 0x0C01 ar-EG
 0x0C04 zh-HK
 0x0C07 de-AT
@@ -339,6 +340,7 @@
 0x0C51 dz-BT
 0x0C5F tmz-MA, reserved
 0x0C6B quz-PE
+0x1000 Locale without assigned LCID if the current user default locale. See section 2.2.1.
 0x1001 ar-LY
 0x1004 zh-SG
 0x1007 de-LU
@@ -365,7 +367,7 @@
 0x1C01 ar-TN
 0x1C09 en-ZA
 0x1C0A es-DO
-0x1C0C Neither defined nor reserved
+0x1C0C fr-029
 0x1C1A sr-Cyrl-BA
 0x1C3B sma-SE
 0x2001 ar-OM
@@ -376,7 +378,7 @@
 0x201A bs-Cyrl-BA
 0x203B sms-FI
 0x2401 ar-YE
-0x2409 en-029
+0x2409 en-029, reserved
 0x240A es-CO
 0x240C fr-CD
 0x241A sr-Latn-RS
@@ -391,32 +393,40 @@
 0x2C0A es-AR
 0x2C0C fr-CM
 0x2C1A sr-Latn-ME
+0x3000 Unassigned LCID locale temporarily assigned to LCID 0x3000. See section 2.2.1.
 0x3001 ar-LB
 0x3009 en-ZW
 0x300A es-EC
 0x300C fr-CI
 0x301A sr-Cyrl-ME
+0x3400 Unassigned LCID locale temporarily assigned to LCID 0x3400. See section 2.2.1.
 0x3401 ar-KW
 0x3409 en-PH
 0x340A es-CL
 0x340C fr-ML
+0x3800 Unassigned LCID locale temporarily assigned to LCID 0x3800. See section 2.2.1.
 0x3801 ar-AE
 0x3809 en-ID, reserved
 0x380A es-UY
 0x380C fr-MA
+0x3C00 Unassigned LCID locale temporarily assigned to LCID 0x3C00. See section 2.2.1.
 0x3C01 ar-BH
 0x3C09 en-HK
 0x3C0A es-PY
 0x3C0C fr-HT
+0x4000 Unassigned LCID locale temporarily assigned to LCID 0x4000. See section 2.2.1.
 0x4001 ar-QA
 0x4009 en-IN
 0x400A es-BO
+0x4400 Unassigned LCID locale temporarily assigned to LCID 0x4400. See section 2.2.1.
 0x4401 ar-Ploc-SA, reserved
 0x4409 en-MY
 0x440A es-SV
+0x4800 Unassigned LCID locale temporarily assigned to LCID 0x4800. See section 2.2.1.
 0x4801 ar-145, reserved
 0x4809 en-SG
 0x480A es-HN
+0x4C00 Unassigned LCID locale temporarily assigned to LCID 0x4C00. See section 2.2.1.
 0x4C09 en-AE
 0x4C0A es-NI
 0x5009 en-BH, reserved
@@ -424,7 +434,7 @@
 0x5409 en-EG, reserved
 0x540A es-US
 0x5809 en-JO, reserved
-0x580A es-419
+0x580A es-419, reserved
 0x5C09 en-KW, reserved
 0x5C0A es-CU
 0x6009 en-TR, reserved
