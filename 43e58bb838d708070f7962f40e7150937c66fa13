@@ -70,6 +70,24 @@
       "revId": "43e58bb838d708070f7962f40e7150937c66fa13",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9fb76393_49082b4d",
+        "filename": "vcl/backendtest/GraphicsRenderTests.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1556,
+      "author": {
+        "id": 1002896
+      },
+      "writtenOn": "2021-08-01T14:10:52Z",
+      "side": 1,
+      "message": "Yes, I found out the method ImplGetSVData()-\u003empDefInst-\u003eGetBackendCapabilities()-\u003embSupports32bpp but the catch was that I was stuck with an error which I fortunately fixed by adding a header now. Thanks a lot!",
+      "parentUuid": "93382a5c_683e2494",
+      "revId": "43e58bb838d708070f7962f40e7150937c66fa13",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
