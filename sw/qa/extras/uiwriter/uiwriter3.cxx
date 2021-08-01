@@ -2073,6 +2073,18 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132603)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf119228)
+{
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf119228.docx");
+
+    // uno::Sequence<beans::PropertyValue> aPropertyValues
+    // = comphelper::InitPropertySequence({ { "Text", uno::makeAny(OUString("Comment")) } });
+
+    // dispatchCommand(mxComponent, ".uno:InsertAnnotation", aPropertyValues);
+    // Scheduler::ProcessEventsToIdle();
+
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf117601)
 {
     createSwDoc();
