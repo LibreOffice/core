@@ -81,8 +81,13 @@ protected:
     std::unique_ptr<weld::CheckButton> mxPreviewCheckbox;
     std::unique_ptr<weld::ComboBox> mxFilterLb;
 
+    StyleList m_aCharStyleList;
+    std::unique_ptr<weld::CheckButton> mxCharPreviewCheckbox;
+    std::unique_ptr<weld::ComboBox> mxCharFilterLb;
+
     sal_uInt16 nActFamily; // Id in the ToolBox = Position - 1
-    sal_uInt16 nActFilter; // FilterIdx
+    sal_uInt16 nActParaFilter; // FilterIdx
+    sal_uInt16 nActCharFilter; // FilterIdx
 
     bool bIsWater :1;
     bool bUpdate :1;
@@ -90,6 +95,7 @@ protected:
     bool bNewByExampleDisabled :1;
     bool bUpdateByExampleDisabled :1;
     bool m_bWantHierarchical :1;
+    bool m_bWantCharHierarchical : 1;
 
     Link<void*, size_t> m_aStyleListReadResource;
     Link<void*, void> m_aStyleListClear;
@@ -116,9 +122,11 @@ protected:
     void Initialize();
     void EnableHierarchical(bool, StyleList& rStyleList);
 
-    void FilterSelect( sal_uInt16 nFilterIdx, bool bForce );
-    void SetFamilyState( sal_uInt16 nSlotId, const SfxTemplateItem* );
-    void SetWaterCanState( const SfxBoolItem* pItem );
+    void ParaFilterSelect(sal_uInt16 nFilterIdx, bool bForce);
+    void CharFilterSelect(sal_uInt16 nFilterIdx, bool bForce);
+
+    void SetFamilyState(sal_uInt16 nSlotId, const SfxTemplateItem*);
+    void SetWaterCanState(const SfxBoolItem* pItem);
     bool IsSafeForWaterCan() const;
 
     void SetFamily(SfxStyleFamily nFamily);
@@ -130,7 +138,8 @@ protected:
     DECL_LINK(ClearResource_Hdl, void*, void);
     DECL_LINK(SaveSelection_Hdl, StyleList&, SfxObjectShell*);
     DECL_LINK(LoadFactoryStyleFilter_Hdl, SfxObjectShell const*, sal_Int32);
-    DECL_LINK(UpdateStyles_Hdl, StyleFlags, void);
+    DECL_LINK(UpdateParaStyles_Hdl, StyleFlags, void);
+    DECL_LINK(UpdateCharStyles_Hdl, StyleFlags, void);
     DECL_LINK(UpdateFamily_Hdl, StyleList&, void);
     DECL_LINK(UpdateStyleDependents_Hdl, void*, void);
 
@@ -158,11 +167,11 @@ public:
 
     // Used in StyleList::SelectStyle, StyleList::Notify, IMPL_LINK(PopupFlatMenuHdl)
     // These functions are used when a style is edited, deleted, created etc..
-    virtual void EnableEdit(bool b) { m_aStyleList.Enableedit(b); }
-    void EnableDel(bool b) { m_aStyleList.Enabledel(b); }
-    void EnableNew(bool b) { m_aStyleList.Enablenew(b); }
-    void EnableHide(bool b) { m_aStyleList.Enablehide(b); }
-    void EnableShow(bool b) { m_aStyleList.Enableshow(b); }
+    virtual void EnableEdit(bool b, StyleList* rStyleList = nullptr);
+    void EnableDel(bool b, StyleList* rStyleList = nullptr);
+    void EnableNew(bool b, StyleList* rStyleList = nullptr);
+    void EnableHide(bool b, StyleList* rStyleList = nullptr);
+    void EnableShow(bool b, StyleList* rStyleList = nullptr);
 
     // Used in TreeDrag
     void EnableTreeDrag(bool b);
@@ -224,7 +233,7 @@ private:
     DECL_LINK(ToolBoxRSelect, const OString&, void);
     DECL_LINK(ToolMenuSelectHdl, const OString&, void);
 
-    virtual void EnableEdit( bool ) override;
+    virtual void EnableEditing(bool);
     virtual void EnableItem(const OString& rMesId, bool bCheck = true) override;
     virtual void CheckItem(const OString& rMesId, bool bCheck = true) override;
     virtual bool IsCheckedItem(const OString& rMesId) override;
@@ -245,6 +254,5 @@ public:
 };
 
 #endif // INCLUDED_SFX2_SOURCE_INC_TEMPLDGI_HXX
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
