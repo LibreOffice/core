@@ -21,6 +21,7 @@
 
 #define HID_TEMPLATE_FMT                                      "SFX2_HID_TEMPLATE_FMT"
 #define HID_TEMPLATE_FILTER                                   "SFX2_HID_TEMPLATE_FILTER"
+#define HID_CHAR_TEMPLATE_FILTER                              "SFX2_HID_CHAR_TEMPLATE_FILTER"
 #define HID_TEMPLDLG_NEWBYEXAMPLE                             "SFX2_HID_TEMPLDLG_NEWBYEXAMPLE"
 #define HID_TEMPLDLG_UPDATEBYEXAMPLE                          "SFX2_HID_TEMPLDLG_UPDATEBYEXAMPLE"
 #define HID_TEMPLDLG_WATERCAN                                 "SFX2_HID_TEMPLDLG_WATERCAN"
