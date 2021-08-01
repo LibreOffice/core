@@ -319,7 +319,7 @@ SfxEvents_Impl::SfxEvents_Impl( SfxObjectShell* pShell,
     else
         maEventNames = rtl::Reference<GlobalEventConfig>(new GlobalEventConfig)->getElementNames();
 
-    maEventData = uno::Sequence < uno::Any > ( maEventNames.getLength() );
+    maEventData.resize( maEventNames.getLength() );
 
     mpObjShell      = pShell;
     mxBroadcaster   = xBroadcaster;
