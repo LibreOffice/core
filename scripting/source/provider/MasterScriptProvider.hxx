@@ -35,6 +35,7 @@
 
 #include "ProviderCache.hxx"
 #include <memory>
+#include <mutex>
 
 namespace func_provider
 {
@@ -121,7 +122,7 @@ private:
     bool m_bIsPkgMSP;
     css::uno::Reference< css::script::provider::XScriptProvider > m_xMSPPkg;
     std::unique_ptr<ProviderCache> m_pPCache;
-    osl::Mutex m_mutex;
+    std::mutex m_mutex;
     OUString m_sCtxString;
 };
 
