@@ -21,7 +21,7 @@
 
 #include <sal/config.h>
 
-#include <map>
+#include <unordered_map>
 
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
@@ -43,12 +43,12 @@ namespace xmloff
     typedef o3tl::sorted_vector< css::uno::Reference< css::beans::XPropertySet > > PropertySetBag;
 
     // maps objects (property sets) to strings, e.g. control ids.
-    typedef ::std::map  <   css::uno::Reference< css::beans::XPropertySet >
+    typedef ::std::unordered_map  <   css::uno::Reference< css::beans::XPropertySet >
                         ,   OUString
                         >   MapPropertySet2String;
 
     // map pages to maps (of property sets to strings)
-    typedef ::std::map  <   css::uno::Reference< css::drawing::XDrawPage >
+    typedef ::std::unordered_map  <   css::uno::Reference< css::drawing::XDrawPage >
                         ,   MapPropertySet2String
                         >   MapPropertySet2Map;
 
@@ -106,7 +106,7 @@ namespace xmloff
         // TODO: To avoid this construct above, and to have a cleaner implementation, a class encapsulating the
         // export of a single page should be introduced.
 
-        typedef std::map<css::uno::Reference<css::beans::XPropertySet>, sal_Int32> MapPropertySet2Int;
+        typedef std::unordered_map<css::uno::Reference<css::beans::XPropertySet>, sal_Int32> MapPropertySet2Int;
         MapPropertySet2Int  m_aControlNumberFormats;
             // maps controls to format keys, which are relative to our own formats supplier
 
