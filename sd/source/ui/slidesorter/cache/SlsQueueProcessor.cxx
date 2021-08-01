@@ -145,7 +145,7 @@ void QueueProcessor::ProcessOneRequest (
 {
     try
     {
-        ::osl::MutexGuard aGuard (maMutex);
+        std::lock_guard aGuard (maMutex);
 
         // Create a new preview bitmap and store it in the cache.
         if (mpCache != nullptr && mpCacheContext)
