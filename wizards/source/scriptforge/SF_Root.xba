@@ -73,6 +73,7 @@ Private ConfigurationProvider _
 							As Object	&apos; com.sun.star.configuration.ConfigurationProvider
 Private MailService			As Object	&apos; com.sun.star.system.SimpleCommandMail or com.sun.star.system.SimpleSystemMail
 Private TreeDataModel		As Object	&apos; com.sun.star.awt.tree.MutableTreeDataModel
+Private GraphicExportFilter	As Object	&apos; com.sun.star.drawing.GraphicExportFilter
 
 &apos;	Specific persistent services objects or properties
 Private FileSystemNaming	As String	&apos; If &quot;SYS&quot;, file and folder naming is based on operating system notation
@@ -135,6 +136,7 @@ Private Sub Class_Initialize()
 	Set ConfigurationProvider = Nothing
 	Set MailService = Nothing
 	Set TreeDataModel = Nothing
+	Set GraphicExportFilter = Nothing
 	OSName = &quot;&quot;
 	SFDialogs = Empty
 	SFForms = Empty
@@ -821,6 +823,32 @@ Try:
 									&amp;	&quot;%10: A number\n&quot; _
 									&amp;	&quot;%11: An identifier\n&quot; _
 									&amp;	&quot;%12: A file name&quot; _
+					)
+	&apos;	SF_Calc.CreateChart
+			.AddText(	Context := &quot;DUPLICATECHART&quot; _
+						, MsgId := &quot;A chart with the same name exists already in the sheet.\n\n&quot; _
+									&amp; &quot;« %1 » = %2\n&quot; _
+									&amp; &quot;« %3 » = %4\n&quot; _
+									&amp; &quot;« %5 » = %6\n&quot; _
+						, Comment :=	&quot;SF_Calc CreateChart\n&quot; _
+									&amp;	&quot;%1: An identifier\n&quot; _
+									&amp;	&quot;%2: A string\n&quot; _
+									&amp;	&quot;%3: An identifier\n&quot; _
+									&amp;	&quot;%4: A string\n&quot; _
+									&amp;	&quot;%5: An identifier\n&quot; _
+									&amp;	&quot;%6: A file name&quot; _
+					)
+	&apos;	SF_Chart.ExportToFile
+			.AddText(	Context := &quot;CHARTEXPORT&quot; _
+						, MsgId := &quot;The chart could not be exported.\n&quot; _
+									&amp; &quot;Either the destination file must not be overwritten, or it has a read-only attribute set.\n\n&quot; _
+									&amp; &quot;%1 = &apos;%2&apos;\n&quot; _
+									&amp; &quot;%3 = %4&quot; _
+						, Comment :=	&quot;SF_Chart.ExportToFile error message\n&quot; _
+									&amp;	&quot;%1: An identifier\n&quot; _
+									&amp;	&quot;%2: A file name\n&quot; _
+									&amp;	&quot;%3: An identifier\n&quot; _
+									&amp;	&quot;%4: True or False\n&quot; _
 					)
 	&apos;	SF_Form._IsStillAlive
 			.AddText(	Context := &quot;FORMDEAD&quot; _

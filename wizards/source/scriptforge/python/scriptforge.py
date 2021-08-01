@@ -1892,6 +1892,9 @@ class SFDocuments:
         def Activate(self, sheetname = ''):
             return self.ExecMethod(self.vbMethod, 'Activate', sheetname)
 
+        def Charts(self, sheetname, chartname = ''):
+            return self.ExecMethod(self.vbMethod + self.flgArrayRet, 'Charts', sheetname, chartname)
+
         def ClearAll(self, range):
             return self.ExecMethod(self.vbMethod, 'ClearAll', range)
 
@@ -1919,6 +1922,9 @@ class SFDocuments:
             range = (sourcerange.objectreference if isinstance(sourcerange, SFDocuments.SF_CalcReference)
                      else sourcerange)
             return self.ExecMethod(self.vbMethod + self.flgObject, 'CopyToRange', range, destinationrange)
+
+        def CreateChart(self, chartname, sheetname, range, columnheader = False, rowheader = False):
+            return self.ExecMethod(self.vbMethod, 'CreateChart', chartname, sheetname, range, columnheader, rowheader)
 
         def DAvg(self, range):
             return self.ExecMethod(self.vbMethod, 'DAvg', range)
@@ -2007,6 +2013,31 @@ class SFDocuments:
         servicename = 'SFDocuments.CalcReference'
         servicesynonyms = ()
         serviceproperties = dict()
+
+    # #########################################################################
+    # SF_Chart CLASS
+    # #########################################################################
+    class SF_Chart(SFServices):
+        """
+            The SF_Chart module is focused on the description of chart documents
+            stored in Calc sheets.
+            With this service, many chart types and chart characteristics available
+            in the user interface can be read or modified.
+            """
+        # Mandatory class properties for service registration
+        serviceimplementation = 'basic'
+        servicename = 'SFDocuments.Chart'
+        servicesynonyms = ()
+        serviceproperties = dict(ChartType = True, Deep = True, Dim3D = True, Exploded = True, Filled = True,
+                                 Legend = True, Percent = True, Stacked = True, Title = True,
+                                 XChartObj = False, XDiagram = False, XShape = False, XTableChart = False,
+                                 XTitle = True, YTitle = True)
+
+        def Resize(self, xpos = -1, ypos = -1, width = -1, height = -1):
+            return self.ExecMethod(self.vbMethod, 'Resize', xpos, ypos, width, height)
+
+        def ExportToFile(self, filename, imagetype = 'png', overwrite = False):
+            return self.ExecMethod(self.vbMethod, 'ExportToFile', filename, imagetype, overwrite)
 
     # #########################################################################
     # SF_Form CLASS

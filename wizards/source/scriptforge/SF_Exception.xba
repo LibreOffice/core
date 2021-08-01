@@ -106,6 +106,10 @@ Const DBCONNECTERROR			=	&quot;DBCONNECTERROR&quot;
 Const CALCADDRESSERROR			=	&quot;CALCADDRESSERROR&quot;
 Const DUPLICATESHEETERROR		=	&quot;DUPLICATESHEETERROR&quot;
 Const OFFSETADDRESSERROR		=	&quot;OFFSETADDRESSERROR&quot;
+Const DUPLICATECHARTERROR		=	&quot;DUPLICATECHARTERROR&quot;
+
+&apos;	SF_Chart
+Const CHARTEXPORTERROR			=	&quot;CHARTEXPORTERROR&quot;
 
 &apos;	SF_Form
 Const FORMDEADERROR				=	&quot;FORMDEADERROR&quot;
@@ -950,7 +954,7 @@ Try:
 					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;VALIDATEERROR&quot;, pvArgs(0)) _
 					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;CALCADDRESS&quot; &amp; Iif(pvArgs(0) = &quot;Sheet&quot;, &quot;1&quot;, &quot;2&quot;), pvArgs(0), pvArgs(1), pvArgs(2), pvArgs(3))
 			Case DUPLICATESHEETERROR	&apos;	SF_Calc.InsertSheet(arg, SheetName, Document)
-				pvArgs(0) = _RightCase(pvArgs(2))	:	pvArgs(0) = _RightCase(pvArgs(2))
+				pvArgs(0) = _RightCase(pvArgs(0))
 				sMessage = sLocation _
 					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;VALIDATEERROR&quot;, pvArgs(0)) _
 					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;DUPLICATESHEET&quot;, pvArgs(0), pvArgs(1), pvArgs(2), pvArgs(3))
@@ -960,6 +964,15 @@ Try:
 				sMessage = sLocation _
 					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;OFFSETADDRESS&quot;, pvArgs(0), pvArgs(1), pvArgs(2), pvArgs(3), pvArgs(4) _
 									, pvArgs(5), pvArgs(6), pvArgs(7), pvArgs(8), pvArgs(9), pvArgs(10), pvArgs(11))
+			Case DUPLICATECHARTERROR	&apos;	SF_Calc.CreateChart(chart, ChartName, sheet, SheetName, Document, file)
+				pvArgs(0) = _RightCase(pvArgs(0))	:	pvArgs(2) = _RightCase(pvArgs(2))
+				sMessage = sLocation _
+					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;VALIDATEERROR&quot;, pvArgs(0)) _
+					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;DUPLICATECHART&quot;, pvArgs(0), pvArgs(1), pvArgs(2), pvArgs(3), pvArgs(4), pvArgs(5))
+			Case CHARTEXPORTERROR	&apos;	SF_Chart.ExportToFile(Arg1Name, FileName, Arg2, Overwrite)
+				pvArgs(0) = _RightCase(pvArgs(0))	:	pvArgs(2) = _RightCase(pvArgs(2))
+				sMessage = sLocation _
+					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;CHARTEXPORT&quot;, pvArgs(0), pvArgs(1), pvArgs(2), pvArgs(3))
 			Case FORMDEADERROR		&apos;	SF_Form._IsStillAlive(FormName, DocumentName)
 				sMessage = sLocation _
 					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;FORMDEAD&quot;, pvArgs(0), pvArgs(1))

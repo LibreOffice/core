@@ -84,6 +84,7 @@ Private Const CALCADDRESSERROR		=	&quot;CALCADDRESSERROR&quot;
 Private Const DUPLICATESHEETERROR	=	&quot;DUPLICATESHEETERROR&quot;
 Private Const OFFSETADDRESSERROR	=	&quot;OFFSETADDRESSERROR&quot;
 Private Const CALCFORMNOTFOUNDERROR	=	&quot;CALCFORMNOTFOUNDERROR&quot;
+Private Const DUPLICATECHARTERROR	=	&quot;DUPLICATECHARTERROR&quot;
 
 REM ============================================================= PRIVATE MEMBERS
 
@@ -306,6 +307,101 @@ Finally:
 Catch:
 	GoTo Finally
 End Function    &apos;   SFDocuments.SF_Calc.Activate
+
+REM -----------------------------------------------------------------------------
+Public Function Charts(Optional ByVal SheetName As Variant _
+							, Optional ByVal ChartName As Variant _
+							) As Variant
+&apos;&apos;&apos; Return either the list of charts present in the given sheet or a chart object
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		SheetName: The name of an existing sheet
+&apos;&apos;&apos;		ChartName: The user-defined name of the targeted chart or the zero-length string
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		When ChartName = &quot;&quot;, return the list of the charts present in the sheet,
+&apos;&apos;&apos;		otherwise, return a new chart service instance
+&apos;&apos;&apos;	Examples:
+&apos;&apos;&apos;		Dim oChart As Object
+&apos;&apos;&apos;		Set oChart = oDoc.Charts(&quot;SheetX&quot;, &quot;myChart&quot;)
+
+Dim vCharts As Variant				&apos;	Return value when array of chart names
+Dim oChart As Object				&apos;	Return value when new chart instance
+Dim oSheet As Object				&apos;	Alias of SheetName as reference
+Dim oDrawPage As Object				&apos;	com.sun.star.drawing.XDrawPage
+Dim oNextShape As Object			&apos;	com.sun.star.drawing.XShape
+Dim sChartName As String			&apos;	Some chart name
+Dim lCount As Long					&apos;	Counter for charts among all drawing objects
+Dim i As Long
+Const cstChartShape = &quot;com.sun.star.drawing.OLE2Shape&quot;
+
+Const cstThisSub = &quot;SFDocuments.Calc.Charts&quot;
+Const cstSubArgs = &quot;SheetName, [ChartName=&quot;&quot;&quot;&quot;]&quot;
+
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	vCharts = Array()
+
+Check:
+	If IsMissing(ChartName) Or IsEmpty(ChartName) Then ChartName = &quot;&quot;
+	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not _IsStillAlive(True) Then GoTo Finally
+		If Not _ValidateSheet(SheetName, &quot;SheetName&quot;, , True) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(ChartName, &quot;ChartName&quot;, V_STRING) Then GoTo Finally
+	End If
+
+Try:
+	&apos;	Because the user can change it constantly, the list of valid charts has to be rebuilt at each time
+	&apos;	Explore charts starting from the draw page
+	Set oSheet = _Component.getSheets.getByName(SheetName)
+	Set oDrawPage = oSheet.getDrawPage()
+	vCharts = Array()
+	Set oChart = Nothing
+	lCount = -1
+	For i = 0 To oDrawPage.Count - 1
+		Set oNextShape = oDrawPage.getByIndex(i)
+		if oNextShape.supportsService(cstChartShape) Then		&apos;	Ignore other shapes
+			sChartName = oNextShape.Name										&apos;	User-defined name
+			If Len(sChartName) = 0 Then sChartName = oNextShape.PersistName		&apos;	Internal name
+			&apos;	Is chart found ?
+			If Len(ChartName) &gt; 0 Then
+				If ChartName = sChartName Then
+					Set oChart = New SF_Chart
+					With oChart
+						Set .[Me] = oChart
+						Set .[_Parent] = [Me]
+						._SheetName = SheetName
+						._DrawIndex = i
+						._ChartName = ChartName
+						._PersistentName = oNextShape.PersistName
+						Set ._Shape = oNextShape
+						Set ._Chart = oSheet.getCharts().getByName(._PersistentName)
+						Set ._ChartObject = ._Chart.EmbeddedObject
+						Set ._Diagram = ._ChartObject.Diagram
+					End With
+					Exit For
+				End If
+			End If
+			&apos;	Build stack of chart names
+			lCount = lCount + 1
+			If UBound(vCharts) &lt; 0 Then
+				vCharts = Array(sChartName)
+			Else
+				ReDim Preserve vCharts(0 To UBound(vCharts) + 1)
+				vCharts(lCount) = sChartName
+			End If
+		End If
+	Next i
+
+	&apos;	Raise error when chart not found
+	If Len(ChartName) &gt; 0 And IsNull(oChart) Then
+		If Not ScriptForge.SF_Utils._Validate(ChartName, &quot;ChartName&quot;, V_STRING, vCharts) Then GoTo Finally
+	End If
+	
+Finally:
+	If Len(ChartName) = 0 Then Charts = vCharts Else Set Charts = oChart
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function    &apos;   SFDocuments.SF_Calc.Charts
 
 REM -----------------------------------------------------------------------------
 Public Sub ClearAll(Optional ByVal Range As Variant) As String
@@ -771,6 +867,83 @@ Finally:
 Catch:
 	GoTo Finally
 End Function    &apos;   SFDocuments.SF_Calc.CopyToRange
+
+REM -----------------------------------------------------------------------------
+Public Function CreateChart(Optional ByVal ChartName As Variant _
+							, Optional ByVal SheetName As Variant _
+							, Optional ByVal Range As Variant _
+							, Optional ColumnHeader As Variant _
+							, Optional RowHeader As Variant _
+							) As Variant
+&apos;&apos;&apos; Return a new chart instance initialized with default values
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		ChartName: The user-defined name of the new chart
+&apos;&apos;&apos;		SheetName: The name of an existing sheet
+&apos;&apos;&apos;		Range: the cell or the range as a string that should be drawn
+&apos;&apos;&apos;		ColumnHeader: when True, the topmost row of the range will be used to set labels for the category axis or the legend.
+&apos;&apos;&apos;			Default = False
+&apos;&apos;&apos;		RowHeader: when True, the leftmost column of the range will be used to set labels for the category axis or the legend.
+&apos;&apos;&apos;			Default = False
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		A new chart service instance
+&apos;&apos;&apos;	Exceptions:
+&apos;&apos;&apos;		DUPLICATECHARTERROR		A chart with the same name exists already in the given sheet
+&apos;&apos;&apos;	Examples:
+&apos;&apos;&apos;		Dim oChart As Object
+&apos;&apos;&apos;		Set oChart = oDoc.CreateChart(&quot;myChart&quot;, &quot;SheetX&quot;, &quot;A1:C8&quot;, ColumnHeader := True)
+
+Dim oChart As Object				&apos;	Return value
+Dim vCharts As Variant				&apos;	List of pre-existing charts
+Dim oSheet As Object				&apos;	Alias of SheetName as reference
+Dim oRange As Object				&apos;	Alias of Range
+Dim oRectangle as new com.sun.star.awt.Rectangle	&apos;	Simple shape
+
+Const cstThisSub = &quot;SFDocuments.Calc.CreateChart&quot;
+Const cstSubArgs = &quot;ChartName, SheetName, Range, [ColumnHeader=False], [RowHeader=False]&quot;
+
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	Set oChart = Nothing
+
+Check:
+	If IsMissing(RowHeader) Or IsEmpty(RowHeader) Then Rowheader = False
+	If IsMissing(ColumnHeader) Or IsEmpty(ColumnHeader) Then ColumnHeader = False
+	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not _IsStillAlive(True) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(ChartName, &quot;ChartName&quot;, V_STRING) Then GoTo Finally
+		If Not _ValidateSheet(SheetName, &quot;SheetName&quot;, , True) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(Range, &quot;Range&quot;, V_STRING) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(ColumnHeader, &quot;ColumnHeader&quot;, ScriptForge.V_BOOLEAN) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(RowHeader, &quot;RowHeader&quot;, ScriptForge.V_BOOLEAN) Then GoTo Finally
+	End If
+
+	vCharts = Charts(SheetName)
+	If ScriptForge.SF_Array.Contains(vCharts, ChartName, CaseSensitive := True) Then GoTo CatchDuplicate
+
+Try:
+	&apos;	The rectangular shape receives arbitrary values. User can Resize() it later
+	With oRectangle
+		.X = 0			:	.Y = 0
+		.Width = 8000	:	.Height = 6000
+	End With
+	&apos;	Initialize sheet and range
+	Set oSheet = _Component.getSheets.getByName(SheetName)
+	Set oRange = _ParseAddress(Range)
+	&apos;	Create the chart and get ihe corresponding chart instance
+	oSheet.getCharts.addNewByName(ChartName, oRectangle, Array(oRange.XCellRange.RangeAddress), ColumnHeader, RowHeader)
+	Set oChart = Charts(SheetName, ChartName)
+	oChart._Shape.Name = ChartName		&apos;	Both used-defined and internal names match ChartName
+	oChart._Diagram.Wall.FillColor = RGB(255, 255, 255)		&apos;	Align on background color set by the user interface by default
+	
+Finally:
+	Set CreateChart = oChart
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+CatchDuplicate:
+	ScriptForge.SF_Exception.RaiseFatal(DUPLICATECHARTERROR, &quot;ChartName&quot;, ChartName, &quot;SheetName&quot;, SheetName, &quot;Document&quot;, [_Super]._FileIdent())
+	GoTo Finally
+End Function    &apos;   SFDocuments.SF_Calc.CreateChart
 
 REM -----------------------------------------------------------------------------
 Public Function DAvg(Optional ByVal Range As Variant) As Double
@@ -1671,7 +1844,7 @@ Check:
 	End If
 
 Try:
-	 _Component.getSheets.RemoveByName(SheetName)
+	_Component.getSheets.RemoveByName(SheetName)
 	bRemove = True
 
 Finally:

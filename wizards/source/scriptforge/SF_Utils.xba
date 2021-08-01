@@ -358,6 +358,11 @@ Dim vNodePath As Variant
 					Set .FunctionAccess = CreateUnoService(&quot;com.sun.star.sheet.FunctionAccess&quot;)
 				End If
 				Set _GetUNOService = .FunctionAccess
+			Case &quot;GraphicExportFilter&quot;
+				If IsEmpty(.GraphicExportFilter) Or IsNull(.GraphicExportFilter) Then
+					Set .GraphicExportFilter = CreateUnoService(&quot;com.sun.star.drawing.GraphicExportFilter&quot;)
+				End If
+				Set _GetUNOService = .GraphicExportFilter
 			Case &quot;Introspection&quot;
 				If IsEmpty(.Introspection) Or IsNull(.Introspection) Then
 					Set .Introspection = CreateUnoService(&quot;com.sun.star.beans.Introspection&quot;)
