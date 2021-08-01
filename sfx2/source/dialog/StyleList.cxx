@@ -395,7 +395,7 @@ void StyleList::UpdateFamily()
 
     m_bTreeDrag = true;
     m_bCanNew = m_xTreeBox->get_visible() || m_xFmtLb->count_selected_rows() <= 1;
-    m_pParentDialog->EnableNew(m_bCanNew);
+    m_pParentDialog->EnableNew(m_bCanNew, this);
     m_bTreeDrag = true;
     if (m_pStyleSheetPool)
     {
@@ -550,6 +550,7 @@ IMPL_LINK_NOARG(StyleList, NewMenuExecuteAction, void*, void)
             m_pParentDialog->Execute_Impl(SID_STYLE_NEW_BY_EXAMPLE, aTemplName, "",
                                           static_cast<sal_uInt16>(GetFamilyItem()->GetFamily()),
                                           *this, nFilter);
+
             UpdateFamily();
             m_aUpdateFamily.Call(*this);
         }
@@ -828,15 +829,15 @@ void StyleList::SelectStyle(const OUString& rStr, bool bIsCallback)
     if (pStyle)
     {
         bool bReadWrite = !(pStyle->GetMask() & SfxStyleSearchBits::ReadOnly);
-        m_pParentDialog->EnableEdit(bReadWrite);
-        m_pParentDialog->EnableHide(bReadWrite && !pStyle->IsHidden() && !pStyle->IsUsed());
-        m_pParentDialog->EnableShow(bReadWrite && pStyle->IsHidden());
+        m_pParentDialog->EnableEdit(bReadWrite, this);
+        m_pParentDialog->EnableHide(bReadWrite && !pStyle->IsHidden() && !pStyle->IsUsed(), this);
+        m_pParentDialog->EnableShow(bReadWrite && pStyle->IsHidden(), this);
     }
     else
     {
-        m_pParentDialog->EnableEdit(false);
-        m_pParentDialog->EnableHide(false);
-        m_pParentDialog->EnableShow(false);
+        m_pParentDialog->EnableEdit(false, this);
+        m_pParentDialog->EnableHide(false, this);
+        m_pParentDialog->EnableShow(false, this);
     }
 
     if (!bIsCallback)
@@ -895,9 +896,9 @@ void StyleList::SelectStyle(const OUString& rStr, bool bIsCallback)
             if (!bSelect)
             {
                 m_xFmtLb->unselect_all();
-                m_pParentDialog->EnableEdit(false);
-                m_pParentDialog->EnableHide(false);
-                m_pParentDialog->EnableShow(false);
+                m_pParentDialog->EnableEdit(false, this);
+                m_pParentDialog->EnableHide(false, this);
+                m_pParentDialog->EnableShow(false, this);
             }
         }
     }
@@ -1355,7 +1356,7 @@ IMPL_LINK_NOARG(StyleList, EnableDelete, void*, void)
             }
         }
     }
-    m_pParentDialog->EnableDel(bEnableDelete);
+    m_pParentDialog->EnableDel(bEnableDelete, this);
 }
 
 IMPL_LINK_NOARG(StyleList, Clear, void*, void)
@@ -1421,16 +1422,16 @@ void StyleList::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
                     if (pStyle)
                     {
                         bool bReadWrite = !(pStyle->GetMask() & SfxStyleSearchBits::ReadOnly);
-                        m_pParentDialog->EnableEdit(bReadWrite);
-                        m_pParentDialog->EnableHide(bReadWrite && !pStyle->IsUsed()
-                                                    && !pStyle->IsHidden());
-                        m_pParentDialog->EnableShow(bReadWrite && pStyle->IsHidden());
+                        m_pParentDialog->EnableEdit(bReadWrite, this);
+                        m_pParentDialog->EnableHide(
+                            bReadWrite && !pStyle->IsUsed() && !pStyle->IsHidden(), this);
+                        m_pParentDialog->EnableShow(bReadWrite && pStyle->IsHidden(), this);
                     }
                     else
                     {
-                        m_pParentDialog->EnableEdit(false);
-                        m_pParentDialog->EnableHide(false);
-                        m_pParentDialog->EnableShow(false);
+                        m_pParentDialog->EnableEdit(false, this);
+                        m_pParentDialog->EnableHide(false, this);
+                        m_pParentDialog->EnableShow(false, this);
                     }
                 }
             }
@@ -1756,7 +1757,7 @@ void StyleList::Update()
     const OUString aStyle(pItem->GetStyleName());
     m_pParentDialog->SelectStyle(aStyle, false, *this);
     EnableDelete(nullptr);
-    m_pParentDialog->EnableNew(m_bCanNew);
+    m_pParentDialog->EnableNew(m_bCanNew, this);
 }
 
 void StyleList::EnablePreview(bool bCustomPreview)
@@ -1787,8 +1788,8 @@ IMPL_LINK(StyleList, PopupFlatMenuHdl, const CommandEvent&, rCEvt, bool)
 
     if (m_xFmtLb->count_selected_rows() <= 0)
     {
-        m_pParentDialog->EnableEdit(false);
-        m_pParentDialog->EnableDel(false);
+        m_pParentDialog->EnableEdit(false, this);
+        m_pParentDialog->EnableDel(false, this);
     }
 
     ShowMenu(rCEvt);
