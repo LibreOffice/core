@@ -104,6 +104,7 @@ public:
     const SfxStyleFamilyItem& GetFamilyItemByIndex(size_t i) const;
     const SfxObjectShell* GetObjectShell() const { return m_pCurObjShell; }
     bool IsHierarchical() const { return m_bHierarchical; }
+    const SfxStyleSearchBits Filter() const { return m_nAppFilter; }
 
     void Enabledel(bool candel) { m_bCanDel = candel; }
     void Enablehide(bool canhide) { m_bCanHide = canhide; }
@@ -120,9 +121,14 @@ public:
     void connect_ReadResource(const Link<StyleList&, void>& rLink) { m_aReadResource = rLink; }
     void connect_ClearResource(const Link<void*, void>& rLink) { m_aClearResource = rLink; }
     void connect_LoadFactoryStyleFilter(const Link<SfxObjectShell const*, sal_Int32>& rLink);
-    void connect_SaveSelection(const Link<void*, SfxObjectShell*> rLink);
+    void connect_SaveSelection(const Link<StyleList&, SfxObjectShell*> rLink);
     void connect_UpdateStyleDependents(const Link<void*, void> rLink);
     void connect_UpdateFamily(const Link<StyleList&, void> rLink) { m_aUpdateFamily = rLink; }
+
+    DECL_LINK(FamilySelect, sal_uInt16, void);
+    DECL_LINK(UpdateFamily, void*, void);
+
+    void setVisible(bool b);
 
 private:
     void FillTreeBox(SfxStyleFamily eFam);
@@ -152,7 +158,7 @@ private:
     DECL_LINK(NewMenuExecuteAction, void*, void);
     DECL_LINK(IsSafeForWaterCan, void*, bool);
     DECL_LINK(HasSelectedStyle, void*, bool);
-    DECL_LINK(UpdateFamily, void*, void);
+    //DECL_LINK(UpdateFamily, void*, void);
     DECL_LINK(UpdateStyles, StyleFlags, void);
     DECL_LINK(UpdateStyleDependents, void*, void);
     DECL_LINK(TimeOut, Timer*, void);
@@ -161,7 +167,6 @@ private:
     DECL_LINK(FilterSelect, sal_uInt16, void);
     DECL_LINK(SetWaterCanState, const SfxBoolItem*, void);
     DECL_LINK(SetFamily, sal_uInt16, void);
-    DECL_LINK(FamilySelect, sal_uInt16, void);
 
     void InvalidateBindings();
 
@@ -170,7 +175,7 @@ private:
     Link<StyleList&, void> m_aReadResource;
     Link<void*, void> m_aClearResource;
     Link<SfxObjectShell const*, sal_Int32> m_aLoadFactoryStyleFilter;
-    Link<void*, SfxObjectShell*> m_aSaveSelection;
+    Link<StyleList&, SfxObjectShell*> m_aSaveSelection;
     Link<void*, void> m_aUpdateStyleDependents;
     Link<StyleList&, void> m_aUpdateFamily;
 
