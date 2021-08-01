@@ -45,7 +45,7 @@
 #include "ximpgrp.hxx"
 #include "ximplink.hxx"
 
-#include <map>
+#include <unordered_map>
 #include <string_view>
 #include <vector>
 
@@ -69,21 +69,12 @@ struct ConnectionHint
     sal_Int32 nDestGlueId;
 };
 
-struct XShapeCompareHelper
-{
-  bool operator()(const css::uno::Reference < css::drawing::XShape >& x1,
-                  const css::uno::Reference < css::drawing::XShape >& x2 ) const
-  {
-    return x1.get() < x2.get();
-  }
-};
-
 }
 
 /** this map store all glue point id mappings for shapes that had user defined glue points. This
     is needed because on insertion the glue points will get a new and unique id */
 typedef std::map<sal_Int32,sal_Int32> GluePointIdMap;
-typedef std::map< css::uno::Reference < css::drawing::XShape >, GluePointIdMap, XShapeCompareHelper > ShapeGluePointsMap;
+typedef std::unordered_map< css::uno::Reference < css::drawing::XShape >, GluePointIdMap > ShapeGluePointsMap;
 
 /** this struct is created for each startPage() call and stores information that is needed during
     import of shapes for one page. Since pages could be nested ( notes pages inside impress ) there
