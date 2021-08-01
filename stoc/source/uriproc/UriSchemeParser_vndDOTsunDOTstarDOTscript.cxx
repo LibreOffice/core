@@ -267,7 +267,7 @@ private:
 };
 
 OUString UrlReference::getName() {
-    osl::MutexGuard g(m_base.m_mutex);
+    std::lock_guard g(m_base.m_mutex);
     sal_Int32 i = 0;
     return parsePart(m_base.m_path, true, &i);
 }
@@ -278,7 +278,7 @@ void SAL_CALL UrlReference::setName(OUString const & name)
         throw css::lang::IllegalArgumentException(
             OUString(), *this, 1);
 
-    osl::MutexGuard g(m_base.m_mutex);
+    std::lock_guard g(m_base.m_mutex);
     sal_Int32 i = 0;
     parsePart(m_base.m_path, true, &i);
 
@@ -287,13 +287,13 @@ void SAL_CALL UrlReference::setName(OUString const & name)
 
 sal_Bool UrlReference::hasParameter(OUString const & key)
 {
-    osl::MutexGuard g(m_base.m_mutex);
+    std::lock_guard g(m_base.m_mutex);
     return findParameter(key) >= 0;
 }
 
 OUString UrlReference::getParameter(OUString const & key)
 {
-    osl::MutexGuard g(m_base.m_mutex);
+    std::lock_guard g(m_base.m_mutex);
     sal_Int32 i = findParameter(key);
     return i >= 0 ? parsePart(m_base.m_path, false, &i) : OUString();
 }
@@ -304,7 +304,7 @@ void UrlReference::setParameter(OUString const & key, OUString const & value)
         throw css::lang::IllegalArgumentException(
             OUString(), *this, 1);
 
-    osl::MutexGuard g(m_base.m_mutex);
+    std::lock_guard g(m_base.m_mutex);
     sal_Int32 i = findParameter(key);
     bool bExistent = ( i>=0 );
     if (!bExistent) {

@@ -50,7 +50,7 @@ UriReference::~UriReference() {}
 
 OUString UriReference::getUriReference()
 {
-    osl::MutexGuard g(m_mutex);
+    std::lock_guard g(m_mutex);
     OUStringBuffer buf(128);
     if (!m_scheme.isEmpty()) {
         buf.append(m_scheme);
@@ -71,41 +71,41 @@ bool UriReference::isAbsolute() const {
 
 OUString UriReference::getSchemeSpecificPart()
 {
-    osl::MutexGuard g(m_mutex);
+    std::lock_guard g(m_mutex);
     OUStringBuffer buf;
     appendSchemeSpecificPart(buf);
     return buf.makeStringAndClear();
 }
 
 bool UriReference::isHierarchical() {
-    osl::MutexGuard g(m_mutex);
+    std::lock_guard g(m_mutex);
     return m_scheme.isEmpty() || m_hasAuthority || m_path.startsWith("/");
 }
 
 bool UriReference::hasAuthority() {
-    osl::MutexGuard g(m_mutex);
+    std::lock_guard g(m_mutex);
     return m_hasAuthority;
 }
 
 OUString UriReference::getAuthority() {
-    osl::MutexGuard g(m_mutex);
+    std::lock_guard g(m_mutex);
     return m_authority;
 }
 
 OUString UriReference::getPath() {
-    osl::MutexGuard g(m_mutex);
+    std::lock_guard g(m_mutex);
     return m_path;
 }
 
 bool UriReference::hasRelativePath() {
-    osl::MutexGuard g(m_mutex);
+    std::lock_guard g(m_mutex);
     return !m_hasAuthority
         && (m_path.isEmpty() || m_path[0] != '/');
 }
 
 sal_Int32 UriReference::getPathSegmentCount()
 {
-    osl::MutexGuard g(m_mutex);
+    std::lock_guard g(m_mutex);
     if (m_path.isEmpty()) {
         return 0;
     } else {
@@ -123,7 +123,7 @@ sal_Int32 UriReference::getPathSegmentCount()
 
 OUString UriReference::getPathSegment(sal_Int32 index)
 {
-    osl::MutexGuard g(m_mutex);
+    std::lock_guard g(m_mutex);
     if (!m_path.isEmpty() && index >= 0) {
         for (sal_Int32 i = m_path[0] == '/' ? 1 : 0;; ++i) {
             if (index-- == 0) {
@@ -140,34 +140,34 @@ OUString UriReference::getPathSegment(sal_Int32 index)
 }
 
 bool UriReference::hasQuery() {
-    osl::MutexGuard g(m_mutex);
+    std::lock_guard g(m_mutex);
     return m_hasQuery;
 }
 
 OUString UriReference::getQuery() {
-    osl::MutexGuard g(m_mutex);
+    std::lock_guard g(m_mutex);
     return m_query;
 }
 
 bool UriReference::hasFragment() {
-    osl::MutexGuard g(m_mutex);
+    std::lock_guard g(m_mutex);
     return m_hasFragment;
 }
 
 OUString UriReference::getFragment() {
-    osl::MutexGuard g(m_mutex);
+    std::lock_guard g(m_mutex);
     return m_fragment;
 }
 
 void UriReference::setFragment(OUString const & fragment)
 {
-    osl::MutexGuard g(m_mutex);
+    std::lock_guard g(m_mutex);
     m_hasFragment = true;
     m_fragment = fragment;
 }
 
 void UriReference::clearFragment() {
-    osl::MutexGuard g(m_mutex);
+    std::lock_guard g(m_mutex);
     m_hasFragment = false;
     m_fragment.clear();
 }
