@@ -22,6 +22,7 @@
 #include <sal/config.h>
 
 #include <map>
+#include <unordered_map>
 
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
@@ -58,7 +59,7 @@ namespace xmloff
         rtl::Reference<SvXMLStylesContext>  m_xAutoStyles;
 
         typedef std::map< OUString, css::uno::Reference< css::beans::XPropertySet > > MapString2PropertySet;
-        typedef std::map<css::uno::Reference<css::drawing::XDrawPage>, MapString2PropertySet> MapDrawPage2Map;
+        typedef std::unordered_map<css::uno::Reference<css::drawing::XDrawPage>, MapString2PropertySet> MapDrawPage2Map;
 
         MapDrawPage2Map         m_aControlIds;          // ids of the controls on all known page
         MapDrawPage2Map::iterator m_aCurrentPageIds;      // ifs of the controls on the current page
