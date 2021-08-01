@@ -81,8 +81,13 @@ protected:
     std::unique_ptr<weld::CheckButton> mxPreviewCheckbox;
     std::unique_ptr<weld::ComboBox> mxFilterLb;
 
+    StyleList m_aCharStyleList;
+    std::unique_ptr<weld::CheckButton> mxCharPreviewCheckbox;
+    std::unique_ptr<weld::ComboBox> mxCharFilterLb;
+
     sal_uInt16 nActFamily; // Id in the ToolBox = Position - 1
     sal_uInt16 nActFilter; // FilterIdx
+    sal_uInt16 nActCharFilter; // FilterIdx
 
     bool bIsWater :1;
     bool bUpdate :1;
@@ -90,6 +95,7 @@ protected:
     bool bNewByExampleDisabled :1;
     bool bUpdateByExampleDisabled :1;
     bool m_bWantHierarchical :1;
+    bool m_bWantCharHierarchical : 1;
 
     Link<void*, size_t> m_aStyleListReadResource;
     Link<void*, void> m_aStyleListClear;
@@ -117,6 +123,8 @@ protected:
     void EnableHierarchical(bool, StyleList& rStyleList);
 
     void FilterSelect( sal_uInt16 nFilterIdx, bool bForce );
+    void CharFilterSelect(sal_uInt16 nFilterIdx, bool bForce);
+
     void SetFamilyState( sal_uInt16 nSlotId, const SfxTemplateItem* );
     void SetWaterCanState( const SfxBoolItem* pItem );
     bool IsSafeForWaterCan() const;
@@ -131,6 +139,7 @@ protected:
     DECL_LINK(SaveSelection_Hdl, StyleList&, SfxObjectShell*);
     DECL_LINK(LoadFactoryStyleFilter_Hdl, SfxObjectShell const*, sal_Int32);
     DECL_LINK(UpdateStyles_Hdl, StyleFlags, void);
+    DECL_LINK(UpdateCharStyles_Hdl, StyleFlags, void);
     DECL_LINK(UpdateFamily_Hdl, StyleList&, void);
     DECL_LINK(UpdateStyleDependents_Hdl, void*, void);
 
