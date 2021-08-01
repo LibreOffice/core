@@ -717,7 +717,7 @@ namespace xmloff
     {
         Reference< XPropertySet > xProps( _rxControl, UNO_QUERY );
         OSL_ENSURE( xProps.is(), "OFormLayerXMLExport_Impl::excludeFromExport: invalid control model!" );
-        ::std::pair< PropertySetBag::iterator, bool > aPos =
+        ::std::pair< PropertySetBag::const_iterator, bool > aPos =
               m_aIgnoreList.insert( xProps );
         OSL_ENSURE( aPos.second, "OFormLayerXMLExport_Impl::excludeFromExport: element already exists in the ignore list!" );
     }
