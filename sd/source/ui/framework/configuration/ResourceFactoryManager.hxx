@@ -21,13 +21,13 @@
 
 #include <sal/config.h>
 
+#include <mutex>
 #include <unordered_map>
 #include <utility>
 #include <vector>
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <rtl/ustring.hxx>
-#include <osl/mutex.hxx>
 
 namespace com::sun::star::drawing::framework { class XControllerManager; }
 namespace com::sun::star::drawing::framework { class XResourceFactory; }
@@ -87,7 +87,7 @@ public:
         const OUString& rsURL);
 
 private:
-    ::osl::Mutex maMutex;
+    std::mutex maMutex;
     typedef std::unordered_map<
         OUString,
         css::uno::Reference<css::drawing::framework::XResourceFactory> > FactoryMap;

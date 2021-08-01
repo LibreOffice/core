@@ -73,7 +73,7 @@ void ResourceFactoryManager::AddFactory (
     if (rsURL.isEmpty())
         throw lang::IllegalArgumentException();
 
-    ::osl::MutexGuard aGuard (maMutex);
+    std::lock_guard aGuard (maMutex);
 
     if (rsURL.indexOf('*') >= 0 || rsURL.indexOf('?') >= 0)
     {
@@ -100,7 +100,7 @@ void ResourceFactoryManager::RemoveFactoryForURL (
     if (rsURL.isEmpty())
         throw lang::IllegalArgumentException();
 
-    ::osl::MutexGuard aGuard (maMutex);
+    std::lock_guard aGuard (maMutex);
 
     FactoryMap::iterator iFactory (maFactoryMap.find(rsURL));
     if (iFactory != maFactoryMap.end())
@@ -123,7 +123,7 @@ void ResourceFactoryManager::RemoveFactoryForURL (
 void ResourceFactoryManager::RemoveFactoryForReference(
     const Reference<XResourceFactory>& rxFactory)
 {
-    ::osl::MutexGuard aGuard (maMutex);
+    std::lock_guard aGuard (maMutex);
 
     // Collect a list with all keys that map to the given factory.
     ::std::vector<OUString> aKeys;
@@ -178,7 +178,7 @@ Reference<XResourceFactory> ResourceFactoryManager::GetFactory (
 
 Reference<XResourceFactory> ResourceFactoryManager::FindFactory (const OUString& rsURLBase)
 {
-    ::osl::MutexGuard aGuard (maMutex);
+    std::lock_guard aGuard (maMutex);
     FactoryMap::const_iterator iFactory (maFactoryMap.find(rsURLBase));
     if (iFactory != maFactoryMap.end())
         return iFactory->second;
