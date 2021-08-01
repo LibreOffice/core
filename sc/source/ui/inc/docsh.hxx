@@ -294,6 +294,7 @@ public:
 
     virtual void    ReconnectDdeLink(SfxObjectShell& rServer) override;
     void            UpdateLinks() override;
+    void            SetInitialLinkUpdate( SfxMedium* pMedium );
     void            AllowLinkUpdate();
     void            ReloadAllLinks();
     void            ReloadTabLinks();
