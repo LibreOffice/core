@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SFX2_SOURCE_CONTROL_THUMBNAILVIEWACC_HXX
 #define INCLUDED_SFX2_SOURCE_CONTROL_THUMBNAILVIEWACC_HXX
 
-#include <osl/mutex.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
@@ -32,6 +31,7 @@
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 
+#include <mutex>
 #include <vcl/vclptr.hxx>
 #include <vector>
 
@@ -164,7 +164,7 @@ private:
 
     ::std::vector< css::uno::Reference< css::accessibility::XAccessibleEventListener > >
                                                                         mxEventListeners;
-    ::osl::Mutex                                                        maMutex;
+    std::mutex                                                          maMutex;
     ThumbnailViewItem*                                                  mpParent;
     bool                                                                mbIsTransientChildrenDisabled;
 
