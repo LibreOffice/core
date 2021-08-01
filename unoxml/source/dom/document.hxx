@@ -21,7 +21,7 @@
 
 #include <set>
 #include <memory>
-#include <map>
+#include <unordered_map>
 
 #include <libxml/tree.h>
 
@@ -80,7 +80,7 @@ namespace DOM
         listenerlist_t m_streamListeners;
         css::uno::Reference< css::io::XOutputStream > m_rOutputStream;
 
-        typedef std::map< const xmlNodePtr,
+        typedef std::unordered_map< xmlNodePtr,
                     ::std::pair< css::uno::WeakReference<css::xml::dom::XNode>, CNode* > > nodemap_t;
         nodemap_t m_NodeMap;
 
