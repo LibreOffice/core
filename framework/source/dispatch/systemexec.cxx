@@ -29,8 +29,7 @@
 
 namespace framework{
 
-#define PROTOCOL_VALUE      "systemexecute:"
-#define PROTOCOL_LENGTH     14
+constexpr OUStringLiteral PROTOCOL_VALUE = u"systemexecute:";
 
 // XInterface, XTypeProvider, XServiceInfo
 
@@ -93,13 +92,13 @@ void SAL_CALL SystemExec::dispatchWithNotification( const css::util::URL&       
                                                     const css::uno::Reference< css::frame::XDispatchResultListener >& xListener )
 {
     // convert "systemexec:file:///c:/temp/test.html" => "file:///c:/temp/test.html"
-    sal_Int32 c = aURL.Complete.getLength()-PROTOCOL_LENGTH;
+    sal_Int32 c = aURL.Complete.getLength()-PROTOCOL_VALUE.getLength();
     if (c<1) // we don't check for valid URLs here! The system will show an error message ...
     {
         impl_notifyResultListener(xListener, css::frame::DispatchResultState::FAILURE);
         return;
     }
-    OUString sSystemURLWithVariables = aURL.Complete.copy(PROTOCOL_LENGTH, c);
+    OUString sSystemURLWithVariables = aURL.Complete.copy(PROTOCOL_VALUE.getLength(), c);
 
     // TODO check security settings ...
 

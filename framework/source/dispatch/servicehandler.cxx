@@ -29,8 +29,7 @@
 
 namespace framework{
 
-#define PROTOCOL_VALUE      "service:"
-#define PROTOCOL_LENGTH     8
+constexpr OUStringLiteral PROTOCOL_VALUE = u"service:";
 
 // XInterface, XTypeProvider, XServiceInfo
 
@@ -178,7 +177,7 @@ css::uno::Reference< css::uno::XInterface > ServiceHandler::implts_dispatch( con
 {
     // extract service name and may optional given parameters from given URL
     // and use it to create and start the component
-    OUString sServiceAndArguments = aURL.Complete.copy(PROTOCOL_LENGTH);
+    OUString sServiceAndArguments = aURL.Complete.copy(PROTOCOL_VALUE.getLength());
     OUString sServiceName;
     OUString sArguments;
 

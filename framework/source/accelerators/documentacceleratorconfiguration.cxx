@@ -30,7 +30,7 @@
 
 using namespace framework;
 
-#define RESOURCETYPE_ACCELERATOR u"accelerator"
+constexpr OUStringLiteral RESOURCETYPE_ACCELERATOR = u"accelerator";
 
 namespace {
 
