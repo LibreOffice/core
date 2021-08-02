@@ -28,6 +28,7 @@
 #include <cppuhelper/implbase.hxx>
 
 #include <memory>
+#include <mutex>
 
 namespace vcl { class Window; }
 class SwCursorShell;
@@ -62,7 +63,7 @@ class SwAccessibleContext :
 #endif
 
 protected:
-    mutable ::osl::Mutex m_Mutex;
+    mutable std::mutex m_Mutex;
 
 private:
     OUString m_sName;  // immutable outside constructor

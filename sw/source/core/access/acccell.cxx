@@ -127,7 +127,7 @@ bool SwAccessibleCell::InvalidateMyCursorPos()
     bool bNew = IsSelected();
     bool bOld;
     {
-        osl::MutexGuard aGuard( m_Mutex );
+        std::lock_guard aGuard( m_Mutex );
         bOld = m_bIsSelected;
         m_bIsSelected = bNew;
     }
@@ -227,7 +227,7 @@ void SwAccessibleCell::InvalidateCursorPos_()
 
 bool SwAccessibleCell::HasCursor()
 {
-    osl::MutexGuard aGuard( m_Mutex );
+    std::lock_guard aGuard( m_Mutex );
     return m_bIsSelected;
 }
 
