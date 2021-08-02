@@ -73,8 +73,8 @@ to lingering pointers to freed objects.
 	VclPtr<PushButton> pButton;
 	...
 	assert (pButton == nullptr || !pButton);    // null
-	assert (pButton && !pButton->IsDisposed()); // alive
-	assert (pButton &&  pButton->IsDisposed()); // disposed
+	assert (pButton && !pButton->isDisposed()); // alive
+	assert (pButton &&  pButton->isDisposed()); // disposed
 
 ** ScopedVclPtr - making disposes easier
 
@@ -189,8 +189,6 @@ ways and often both.
 
 ---------- What remains to be done ? ----------
 
-	* Cleanup DogTags
-
 	* Expand the VclPtr pattern to many other less
 	  than safe VCL types.
 
@@ -213,12 +211,6 @@ ways and often both.
 		+ ideally should keep a reference to pointers assigned
 		  in 'get()' calls - to avoid needing explicit 'clear'
 		  code in destructors.
-
-	* VclBuilder 'makeFoo' methods
-		+ these should return VclPtr<> types and have their
-		  signatures adjusted en-masse.
-		+ currently we use a VclPtr<> constructor with
-		  SAL_NO_ACQUIRE inside the builder.
 
 ---------- FAQ / debugging hints ----------
 
