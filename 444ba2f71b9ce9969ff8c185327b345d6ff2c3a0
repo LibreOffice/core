@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ac7d2456_3027767c",
+        "filename": "sc/source/core/data/markdata.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-02T11:47:12Z",
+      "side": 1,
+      "message": "So here you check that vMark.size()\u003e1, and then try to access vMark[nTab]. Is nTab guaranteed to be 0 or 1 here?",
+      "revId": "444ba2f71b9ce9969ff8c185327b345d6ff2c3a0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d2e41b45_e41ced06",
+        "filename": "sc/source/ui/view/tabview2.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 470,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-02T11:47:12Z",
+      "side": 1,
+      "message": "Please do not introduce objects before they are used. This is not C; the scope of any name should be minimal. The two objects are only needed at line 604 - so just declare them at line 603. (This also applies to other places as well, of course - but here it\u0027s most visible.)",
+      "revId": "444ba2f71b9ce9969ff8c185327b345d6ff2c3a0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
