@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SOURCE_INC_FMSLOTINVALIDATOR_HXX
-#define INCLUDED_SVX_SOURCE_INC_FMSLOTINVALIDATOR_HXX
+#pragma once
 
 #include <sal/types.h>
 
@@ -27,6 +26,5 @@ namespace svx
 typedef sal_uInt16 SfxSlotId;
 }
 
-#endif // INCLUDED_SVX_SOURCE_INC_FMSLOTINVALIDATOR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

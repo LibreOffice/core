@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SOURCE_INC_CELL_HXX
-#define INCLUDED_SVX_SOURCE_INC_CELL_HXX
+#pragma once
 
 #include <config_options.h>
 #include <com/sun/star/table/XMergeableCell.hpp>
@@ -215,6 +214,5 @@ private:
 
 }
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
