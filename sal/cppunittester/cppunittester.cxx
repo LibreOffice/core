@@ -25,6 +25,8 @@
 #endif
 #if defined(_WIN32) && defined(_DEBUG)
 #include "dbghelp.h"
+#include <sal/backtrace.hxx>
+#include <signal.h>
 #endif
 
 #ifdef UNX
@@ -576,8 +578,19 @@ LONG WINAPI ExpFilter(EXCEPTION_POINTERS* ex)
     return EXCEPTION_EXECUTE_HANDLER;
 }
 
+void AbortSignalHandler(int signal)
+{
+    if (signal == SIGABRT) {
+        std::unique_ptr<sal::BacktraceState> bs = sal::backtrace_get(50);
+        SAL_WARN("sal", "CAUGHT SIGABRT:\n" << sal::backtrace_to_string(bs.get()));
+    }
+}
+
 SAL_IMPLEMENT_MAIN()
 {
+    // catch the kind of signal that is thrown when an assert fails, and log a stacktrace
+    signal(SIGABRT, AbortSignalHandler);
+
     bool ok = false;
     // This magic kind of Windows-specific exception handling has to be in its own function
     // because it cannot be in a function that has objects with destructors.
