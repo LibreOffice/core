@@ -1197,6 +1197,11 @@ GetFocusFlags Window::GetGetFocusFlags() const
 
 bool Window::IsCompoundControl() const
 {
+    if (!mpWindowImpl)
+    {
+        return false;
+    }
+
     return mpWindowImpl->mbCompoundControl;
 }
 
