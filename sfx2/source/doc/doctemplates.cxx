@@ -85,28 +85,28 @@
 #include <memory>
 #include <vector>
 
-#define SERVICENAME_TYPEDETECTION "com.sun.star.document.TypeDetection"
+constexpr OUStringLiteral SERVICENAME_TYPEDETECTION = u"com.sun.star.document.TypeDetection";
 
-#define TEMPLATE_ROOT_URL       "vnd.sun.star.hier:/templates"
-#define TITLE                   "Title"
-#define IS_FOLDER               "IsFolder"
-#define IS_DOCUMENT             "IsDocument"
-#define TARGET_URL              "TargetURL"
-#define TEMPLATE_VERSION        "TemplateComponentVersion"
-#define TEMPLATE_VERSION_VALUE  "2"
-#define TYPE_FOLDER             "application/vnd.sun.star.hier-folder"
-#define TYPE_LINK               "application/vnd.sun.star.hier-link"
-#define TYPE_FSYS_FOLDER        "application/vnd.sun.staroffice.fsys-folder"
-#define TYPE_FSYS_FILE          "application/vnd.sun.staroffice.fsys-file"
+constexpr OUStringLiteral TEMPLATE_ROOT_URL = u"vnd.sun.star.hier:/templates";
+constexpr OUStringLiteral TITLE = u"Title";
+constexpr OUStringLiteral IS_FOLDER = u"IsFolder";
+constexpr OUStringLiteral IS_DOCUMENT = u"IsDocument";
+constexpr OUStringLiteral TARGET_URL = u"TargetURL";
+constexpr OUStringLiteral TEMPLATE_VERSION = u"TemplateComponentVersion";
+constexpr OUStringLiteral TEMPLATE_VERSION_VALUE = u"2";
+constexpr OUStringLiteral TYPE_FOLDER = u"application/vnd.sun.star.hier-folder";
+constexpr OUStringLiteral TYPE_LINK = u"application/vnd.sun.star.hier-link";
+constexpr OUStringLiteral TYPE_FSYS_FOLDER = u"application/vnd.sun.staroffice.fsys-folder";
+constexpr OUStringLiteral TYPE_FSYS_FILE = u"application/vnd.sun.staroffice.fsys-file";
 
-#define PROPERTY_DIRLIST        u"DirectoryList"
-#define PROPERTY_NEEDSUPDATE    "NeedsUpdate"
-#define PROPERTY_TYPE           "TypeDescription"
+constexpr OUStringLiteral PROPERTY_DIRLIST = u"DirectoryList";
+constexpr OUStringLiteral PROPERTY_NEEDSUPDATE = u"NeedsUpdate";
+constexpr OUStringLiteral PROPERTY_TYPE = u"TypeDescription";
 
-#define TARGET_DIR_URL          u"TargetDirURL"
-#define COMMAND_DELETE          "delete"
+constexpr OUStringLiteral TARGET_DIR_URL = u"TargetDirURL";
+constexpr OUStringLiteral COMMAND_DELETE = u"delete";
 
-#define STANDARD_FOLDER         "standard"
+constexpr OUStringLiteral STANDARD_FOLDER = u"standard";
 
 #define C_DELIM                 ';'
 
@@ -395,7 +395,7 @@ void SfxDocTplService_Impl::init_Impl()
     // set maRootContent to the root of the templates hierarchy. Create the
     // entry if necessary
 
-    maRootURL = ( TEMPLATE_ROOT_URL "/" ) + LanguageTag::convertToBcp47(maLocale);
+    maRootURL = TEMPLATE_ROOT_URL + "/" + LanguageTag::convertToBcp47(maLocale);
 
     const OUString aTemplVersPropName( TEMPLATE_VERSION  );
     const OUString aTemplVers( TEMPLATE_VERSION_VALUE  );

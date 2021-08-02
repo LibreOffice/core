@@ -43,7 +43,7 @@ using namespace ::com::sun::star::uno;
 
 #define VERSION 1
 #define nPixel  30L
-#define USERITEM_NAME           "UserItem"
+constexpr OUStringLiteral USERITEM_NAME = u"UserItem";
 
 namespace {
     // helper class to deactivate UpdateMode, if needed, for the life time of an instance

@@ -142,7 +142,7 @@ using ::com::sun::star::container::XIndexContainer;
 #include <sfxslots.hxx>
 
 #include <sfx2/sidebar/SidebarController.hxx>
-#define CHANGES_STR "private:resource/toolbar/changes"
+constexpr OUStringLiteral CHANGES_STR = u"private:resource/toolbar/changes";
 
 SFX_IMPL_SUPERCLASS_INTERFACE(SfxViewFrame,SfxShell)
 
