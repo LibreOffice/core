@@ -74,6 +74,7 @@ void IndexingExportTest::testIndexingExport_Paragraphs()
 
     assertXPath(pXmlDoc, "/indexing");
     assertXPathContent(pXmlDoc, "/indexing/paragraph[1]", "Title");
+    assertXPath(pXmlDoc, "/indexing/paragraph[1]", "type", "1");
     assertXPathContent(pXmlDoc, "/indexing/paragraph[2]", "Heading 1");
     assertXPathContent(pXmlDoc, "/indexing/paragraph[3]", "Heading 2");
     assertXPathContent(pXmlDoc, "/indexing/paragraph[4]", "Paragraph 1");
