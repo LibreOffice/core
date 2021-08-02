@@ -33,6 +33,7 @@
 #endif
 
 #include "osl/interlck.h"
+#include "osl/doublecheckedlocking.h"
 #include "com/sun/star/uno/Sequence.h"
 #include "typelib/typedescription.h"
 #include "uno/data.h"
@@ -295,6 +296,8 @@ getTypeFavourUnsigned(
                     0)).
              getTypeLibType()));
     }
+    else
+        OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
     return detail::getTypeFromTypeDescriptionReference(
         &::com::sun::star::uno::Sequence< T >::s_pType);
 }

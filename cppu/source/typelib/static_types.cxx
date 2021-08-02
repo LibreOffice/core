@@ -307,8 +307,8 @@ void SAL_CALL typelib_static_sequence_type_init(
     OUString aTypeName = "[]" + OUString::unacquired(&pElementType->pTypeName);
 
     static_assert( ! TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK(typelib_TypeClass_SEQUENCE) );
-    *ppRef = igetTypeByName( aTypeName.pData );
-    if (!*ppRef)
+    typelib_TypeDescriptionReference* pTmpRef = igetTypeByName( aTypeName.pData );
+    if (!pTmpRef)
     {
         typelib_TypeDescription * pReg = nullptr;
         ::typelib_typedescription_new(
@@ -316,11 +316,13 @@ void SAL_CALL typelib_static_sequence_type_init(
             aTypeName.pData, pElementType, 0, nullptr );
 
         ::typelib_typedescription_register( &pReg );
-        *ppRef = reinterpret_cast<typelib_TypeDescriptionReference *>(pReg);
-        assert( *ppRef == pReg->pWeakRef );
+        pTmpRef = reinterpret_cast<typelib_TypeDescriptionReference *>(pReg);
+        assert( pTmpRef == pReg->pWeakRef );
     }
     // another static ref:
-    ++((*ppRef)->nStaticRefCount);
+    ++(pTmpRef->nStaticRefCount);
+    OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
+    *ppRef = pTmpRef;
 }
 
 
