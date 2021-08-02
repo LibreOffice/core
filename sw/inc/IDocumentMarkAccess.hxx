@@ -369,6 +369,6 @@ class IDocumentMarkAccess
         virtual ~IDocumentMarkAccess() {};
 };
 
-#endif // IDOCUMENTBOOKMARKACCESS_HXX_INCLUDED
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

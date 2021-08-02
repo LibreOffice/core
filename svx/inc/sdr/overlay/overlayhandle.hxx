@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_SVX_SDR_OVERLAY_OVERLAYHANDLE_HXX
-#define INCLUDED_SVX_SDR_OVERLAY_OVERLAYHANDLE_HXX
+#pragma once
 
 #include <svx/sdr/overlay/overlayobject.hxx>
 #include <basegfx/vector/b2dsize.hxx>
@@ -35,7 +34,5 @@ public:
 };
 
 } // end of namespace sdr::overlay
-
-#endif // INCLUDED_SVX_SDR_OVERLAY_OVERLAYHANDLE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_INC_SDR_OVERLAY_OVERLAYTOOLS_HXX
-#define INCLUDED_SVX_INC_SDR_OVERLAY_OVERLAYTOOLS_HXX
+#pragma once
 
 #include <drawinglayer/primitive2d/primitivetools2d.hxx>
 #include <vcl/bitmapex.hxx>
@@ -282,8 +281,5 @@ namespace drawinglayer::primitive2d
             virtual sal_uInt32 getPrimitive2DID() const override;
         };
 } // end of namespace drawinglayer::primitive2d
-
-
-#endif // INCLUDED_SVX_INC_SDR_OVERLAY_OVERLAYTOOLS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

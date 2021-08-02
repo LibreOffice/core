@@ -44,6 +44,6 @@ class IDocumentListsAccess
         virtual ~IDocumentListsAccess() {};
 };
 
-#endif // INCLUDED_SW_INC_IDOCUMENTLISTSACCESS_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

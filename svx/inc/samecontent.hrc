@@ -6,8 +6,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#ifndef INCLUDED_SVX_INC_SPACING_HRC
-#define INCLUDED_SVX_INC_SPACING_HRC
+#pragma once
 
 #include <utility>
 
@@ -20,7 +19,5 @@ const std::pair<const char*, int> RID_SVXSTRARY_SAMECONTENT[] =
     { NC_("RID_SVXSTRARY_SAMECONTENT", "Left and Right Pages"),          2 },
     { NC_("RID_SVXSTRARY_SAMECONTENT", "First, Left and Right Pages"),   3 }
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

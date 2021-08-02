@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_INC_SDR_OVERLAY_OVERLAYCROSSHAIR_HXX
-#define INCLUDED_SVX_INC_SDR_OVERLAY_OVERLAYCROSSHAIR_HXX
+#pragma once
 
 #include <svx/sdr/overlay/overlayobject.hxx>
 
@@ -38,8 +37,5 @@ namespace sdr::overlay
             virtual void stripeDefinitionHasChanged() override;
         };
 } // end of namespace sdr::overlay
-
-
-#endif // INCLUDED_SVX_INC_SDR_OVERLAY_OVERLAYCROSSHAIR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

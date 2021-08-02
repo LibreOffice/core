@@ -61,4 +61,5 @@ class ItemHolder2 : private ItemHolderMutexBase
 } // namespace svtools
 
 
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

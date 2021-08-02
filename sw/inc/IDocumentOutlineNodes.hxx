@@ -52,6 +52,6 @@ protected:
     virtual ~IDocumentOutlineNodes() {};
 };
 
- #endif // INCLUDED_SW_INC_IDOCUMENTOUTLINENODES_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

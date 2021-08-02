@@ -52,6 +52,6 @@ protected:
     virtual ~IDocumentState(){};
 };
 
-#endif // INCLUDED_SW_INC_IDOCUMENTSTATE_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -68,6 +68,6 @@ protected:
     virtual ~IDocumentLinksAdministration() {};
  };
 
- #endif // INCLUDED_SW_INC_IDOCUMENTLINKSADMINISTRATION_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

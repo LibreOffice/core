@@ -129,6 +129,6 @@ protected:
     virtual ~IDocumentDeviceAccess(){};
 };
 
-#endif // INCLUDED_SW_INC_IDOCUMENTDEVICEACCESS_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

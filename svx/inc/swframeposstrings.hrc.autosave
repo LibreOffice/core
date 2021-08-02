@@ -1,0 +1,73 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#pragma once
+
+#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
+
+//the following string have to match the (enum values) positions in svx/swframeposstrings.hxx!
+const char* RID_SVXSW_FRAMEPOSITIONS[] =
+{
+    NC_("RID_SVXSW_FRAMEPOSITIONS", "Left"),
+    NC_("RID_SVXSW_FRAMEPOSITIONS", "Right"),
+    NC_("RID_SVXSW_FRAMEPOSITIONS", "From left"),
+    NC_("RID_SVXSW_FRAMEPOSITIONS", "Inside"),
+    NC_("RID_SVXSW_FRAMEPOSITIONS", "Outside"),
+    NC_("RID_SVXSW_FRAMEPOSITIONS", "From inside"),
+    NC_("RID_SVXSW_FRAMEPOSITIONS", "Paragraph area"),
+    NC_("RID_SVXSW_FRAMEPOSITIONS", "Paragraph text area"),
+    NC_("RID_SVXSW_FRAMEPOSITIONS", "Left page border"),
+    NC_("RID_SVXSW_FRAMEPOSITIONS", "Right page border"),
+    NC_("RID_SVXSW_FRAMEPOSITIONS", "Left paragraph border"),
+    NC_("RID_SVXSW_FRAMEPOSITIONS", "Right paragraph border"),
+    NC_("RID_SVXSW_FRAMEPOSITIONS", "Inner page border"),
+    NC_("RID_SVXSW_FRAMEPOSITIONS", "Outer page border"),
+    NC_("RID_SVXSW_FRAMEPOSITIONS", "Inner paragraph border"),
+    NC_("RID_SVXSW_FRAMEPOSITIONS", "Outer paragraph border"),
+    NC_("RID_SVXSW_FRAMEPOSITIONS", "Entire page"),
+    NC_("RID_SVXSW_FRAMEPOSITIONS", "Page text area"),
+    NC_("RID_SVXSW_FRAMEPOSITIONS", "Page text area top"),
+    NC_("RID_SVXSW_FRAMEPOSITIONS", "Page text area bottom"),
+    NC_("RID_SVXSW_FRAMEPOSITIONS", "Base line"),
+    NC_("RID_SVXSW_FRAMEPOSITIONS", "Character"),
+    NC_("RID_SVXSW_FRAMEPOSITIONS", "Row"),
+    NC_("RID_SVXSW_FRAMEPOSITIONS", "Margin"),
+    NC_("RID_SVXSW_FRAMEPOSITIONS", "Paragraph text area"),
+    NC_("RID_SVXSW_FRAMEPOSITIONS", "Left frame border"),
+    NC_("RID_SVXSW_FRAMEPOSITIONS", "Right frame border"),
+    NC_("RID_SVXSW_FRAMEPOSITIONS", "Entire frame"),
+    NC_("RID_SVXSW_FRAMEPOSITIONS", "Frame text area"),
+    NC_("RID_SVXSW_FRAMEPOSITIONS", "Inner frame border"),
+    NC_("RID_SVXSW_FRAMEPOSITIONS", "Outer frame border"),
+    NC_("RID_SVXSW_FRAMEPOSITIONS", "Top"),
+    NC_("RID_SVXSW_FRAMEPOSITIONS", "Bottom"),
+    NC_("RID_SVXSW_FRAMEPOSITIONS", "Center"),
+    NC_("RID_SVXSW_FRAMEPOSITIONS", "Center"),
+    NC_("RID_SVXSW_FRAMEPOSITIONS", "From top"),
+    NC_("RID_SVXSW_FRAMEPOSITIONS", "From bottom"),
+    NC_("RID_SVXSW_FRAMEPOSITIONS", "Below"),
+    NC_("RID_SVXSW_FRAMEPOSITIONS", "From right"),
+    NC_("RID_SVXSW_FRAMEPOSITIONS", "Top page border"),
+    NC_("RID_SVXSW_FRAMEPOSITIONS", "Bottom page border"),
+    NC_("RID_SVXSW_FRAMEPOSITIONS", "Top paragraph border"),
+    NC_("RID_SVXSW_FRAMEPOSITIONS", "Bottom paragraph border"),
+    NC_("RID_SVXSW_FRAMEPOSITIONS", "Line of text")
+};
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

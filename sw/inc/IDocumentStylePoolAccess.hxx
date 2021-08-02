@@ -67,6 +67,6 @@ protected:
     virtual ~IDocumentStylePoolAccess(){};
 };
 
-#endif // INCLUDED_SW_INC_IDOCUMENTSTYLEPOOLACCESS_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

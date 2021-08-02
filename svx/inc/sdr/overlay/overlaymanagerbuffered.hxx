@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_INC_SDR_OVERLAY_OVERLAYMANAGERBUFFERED_HXX
-#define INCLUDED_SVX_INC_SDR_OVERLAY_OVERLAYMANAGERBUFFERED_HXX
+#pragma once
 
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #include <basegfx/range/b2irange.hxx>
@@ -69,8 +68,5 @@ namespace sdr::overlay
             virtual void invalidateRange(const basegfx::B2DRange& rRange) override;
         };
 } // end of namespace sdr::overlay
-
-
-#endif // INCLUDED_SVX_INC_SDR_OVERLAY_OVERLAYMANAGERBUFFERED_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
