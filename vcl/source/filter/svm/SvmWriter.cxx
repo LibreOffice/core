@@ -183,6 +183,13 @@ void SvmWriter::MetaActionHandler(MetaAction* pAction, ImplMetaWriteData* pData)
         }
         break;
 
+        case MetaActionType::TEXTRECT:
+        {
+            auto* pMetaAction = static_cast<MetaTextRectAction*>(pAction);
+            TextRectHandler(pMetaAction, pData);
+        }
+        break;
+
         /* default case prevents test failure and will be
         removed once all the handlers are completed */
         default:
@@ -402,6 +409,19 @@ void SvmWriter::StretchTextHandler(MetaStretchTextAction* pAction, ImplMetaWrite
     mrStream.WriteUInt32(pAction->GetWidth());
     mrStream.WriteUInt16(pAction->GetIndex());
     mrStream.WriteUInt16(pAction->GetLen());
+
+    write_uInt16_lenPrefixed_uInt16s_FromOUString(mrStream, pAction->GetText()); // version 2
+}
+
+void SvmWriter::TextRectHandler(MetaTextRectAction* pAction, ImplMetaWriteData* pData)
+{
+    mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
+
+    VersionCompatWrite aCompat(mrStream, 2);
+    TypeSerializer aSerializer(mrStream);
+    aSerializer.writeRectangle(pAction->GetRect());
+    mrStream.WriteUniOrByteString(pAction->GetText(), pData->meActualCharSet);
+    mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetStyle()));
 
     write_uInt16_lenPrefixed_uInt16s_FromOUString(mrStream, pAction->GetText()); // version 2
 }
