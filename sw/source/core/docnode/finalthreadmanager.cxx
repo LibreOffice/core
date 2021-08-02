@@ -28,6 +28,7 @@
 #include <com/sun/star/frame/TerminationVetoException.hpp>
 #include <rtl/ustring.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <mutex>
 
 /** thread to cancel a give list of cancellable jobs
 
@@ -56,7 +57,7 @@ class CancelJobsThread : public osl::Thread
 
         bool stopped() const;
         virtual void SAL_CALL run() override;
-        mutable osl::Mutex maMutex;
+        mutable std::mutex maMutex;
 
         std::list< css::uno::Reference< css::util::XCancellable > > maJobs;
 
@@ -66,7 +67,7 @@ class CancelJobsThread : public osl::Thread
 
 void CancelJobsThread::addJobs( std::list< css::uno::Reference< css::util::XCancellable > >& rJobs )
 {
-    osl::MutexGuard aGuard(maMutex);
+    std::lock_guard aGuard(maMutex);
 
     maJobs.insert( maJobs.end(), rJobs.begin(), rJobs.end() );
     mbAllJobsCancelled = !maJobs.empty();
@@ -74,21 +75,21 @@ void CancelJobsThread::addJobs( std::list< css::uno::Reference< css::util::XCanc
 
 bool CancelJobsThread::existJobs() const
 {
-    osl::MutexGuard aGuard(maMutex);
+    std::lock_guard aGuard(maMutex);
 
     return !maJobs.empty();
 }
 
 bool CancelJobsThread::allJobsCancelled() const
 {
-    osl::MutexGuard aGuard(maMutex);
+    std::lock_guard aGuard(maMutex);
 
     return maJobs.empty() && mbAllJobsCancelled;
 }
 
 void CancelJobsThread::stopWhenAllJobsCancelled()
 {
-    osl::MutexGuard aGuard(maMutex);
+    std::lock_guard aGuard(maMutex);
 
     mbStopped = true;
 }
@@ -98,7 +99,7 @@ css::uno::Reference< css::util::XCancellable > CancelJobsThread::getNextJob()
     css::uno::Reference< css::util::XCancellable > xRet;
 
     {
-        osl::MutexGuard aGuard(maMutex);
+        std::lock_guard aGuard(maMutex);
 
         if ( !maJobs.empty() )
         {
@@ -112,7 +113,7 @@ css::uno::Reference< css::util::XCancellable > CancelJobsThread::getNextJob()
 
 bool CancelJobsThread::stopped() const
 {
-    osl::MutexGuard aGuard(maMutex);
+    std::lock_guard aGuard(maMutex);
 
     return mbStopped;
 }
