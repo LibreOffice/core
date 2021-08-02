@@ -29,8 +29,8 @@
 
 using namespace com::sun::star;
 
-#define SCSHEETCELLCURSOR_SERVICE   "com.sun.star.sheet.SheetCellCursor"
-#define SCCELLCURSOR_SERVICE        "com.sun.star.table.CellCursor"
+constexpr OUStringLiteral SCSHEETCELLCURSOR_SERVICE = u"com.sun.star.sheet.SheetCellCursor";
+constexpr OUStringLiteral SCCELLCURSOR_SERVICE = u"com.sun.star.table.CellCursor";
 
 ScCellCursorObj::ScCellCursorObj(ScDocShell* pDocSh, const ScRange& rR) :
     ScCellRangeObj( pDocSh, rR )

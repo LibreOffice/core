@@ -186,7 +186,7 @@ ScTpViewItem* ScTpViewItem::Clone( SfxItemPool * ) const
 
 //  Config Item containing view options
 
-#define CFGPATH_LAYOUT      "Office.Calc/Layout"
+constexpr OUStringLiteral CFGPATH_LAYOUT = u"Office.Calc/Layout";
 
 #define SCLAYOUTOPT_GRIDLINES       0
 #define SCLAYOUTOPT_GRIDCOLOR       1
@@ -201,7 +201,7 @@ ScTpViewItem* ScTpViewItem::Clone( SfxItemPool * ) const
 #define SCLAYOUTOPT_SUMMARY         10
 #define SCLAYOUTOPT_THEMEDCURSOR    11
 
-#define CFGPATH_DISPLAY     "Office.Calc/Content/Display"
+constexpr OUStringLiteral CFGPATH_DISPLAY = u"Office.Calc/Content/Display";
 
 #define SCDISPLAYOPT_FORMULA        0
 #define SCDISPLAYOPT_ZEROVALUE      1
@@ -213,7 +213,7 @@ ScTpViewItem* ScTpViewItem::Clone( SfxItemPool * ) const
 #define SCDISPLAYOPT_CHART          7
 #define SCDISPLAYOPT_DRAWING        8
 
-#define CFGPATH_GRID        "Office.Calc/Grid"
+constexpr OUStringLiteral CFGPATH_GRID = u"Office.Calc/Grid";
 
 #define SCGRIDOPT_RESOLU_X          0
 #define SCGRIDOPT_RESOLU_Y          1

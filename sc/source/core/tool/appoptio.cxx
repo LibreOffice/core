@@ -199,7 +199,7 @@ static void lcl_GetSortList( Any& rDest )
         rDest <<= Sequence<OUString>(0);    // empty
 }
 
-#define CFGPATH_LAYOUT      "Office.Calc/Layout"
+constexpr OUStringLiteral CFGPATH_LAYOUT = u"Office.Calc/Layout";
 
 #define SCLAYOUTOPT_MEASURE         0
 #define SCLAYOUTOPT_STATUSBAR       1
@@ -208,34 +208,34 @@ static void lcl_GetSortList( Any& rDest )
 #define SCLAYOUTOPT_SYNCZOOM        4
 #define SCLAYOUTOPT_STATUSBARMULTI  5
 
-#define CFGPATH_INPUT       "Office.Calc/Input"
+constexpr OUStringLiteral CFGPATH_INPUT = u"Office.Calc/Input";
 
 #define SCINPUTOPT_LASTFUNCS        0
 #define SCINPUTOPT_AUTOINPUT        1
 #define SCINPUTOPT_DET_AUTO         2
 
-#define CFGPATH_REVISION    "Office.Calc/Revision/Color"
+constexpr OUStringLiteral CFGPATH_REVISION = u"Office.Calc/Revision/Color";
 
 #define SCREVISOPT_CHANGE           0
 #define SCREVISOPT_INSERTION        1
 #define SCREVISOPT_DELETION         2
 #define SCREVISOPT_MOVEDENTRY       3
 
-#define CFGPATH_CONTENT     "Office.Calc/Content/Update"
+constexpr OUStringLiteral CFGPATH_CONTENT = u"Office.Calc/Content/Update";
 
 #define SCCONTENTOPT_LINK           0
 
-#define CFGPATH_SORTLIST    "Office.Calc/SortList"
+constexpr OUStringLiteral CFGPATH_SORTLIST = u"Office.Calc/SortList";
 
 #define SCSORTLISTOPT_LIST          0
 
-#define CFGPATH_MISC        "Office.Calc/Misc"
+constexpr OUStringLiteral CFGPATH_MISC = u"Office.Calc/Misc";
 
 #define SCMISCOPT_DEFOBJWIDTH       0
 #define SCMISCOPT_DEFOBJHEIGHT      1
 #define SCMISCOPT_SHOWSHAREDDOCWARN 2
 
-#define CFGPATH_COMPAT      "Office.Calc/Compatibility"
+constexpr OUStringLiteral CFGPATH_COMPAT = u"Office.Calc/Compatibility";
 
 #define SCCOMPATOPT_KEY_BINDING     0
 

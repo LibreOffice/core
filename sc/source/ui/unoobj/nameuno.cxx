@@ -69,7 +69,7 @@ static const SfxItemPropertyMapEntry* lcl_GetNamedRangesMap()
     return aNamedRangesMap_Impl;
 }
 
-#define SCNAMEDRANGEOBJ_SERVICE     "com.sun.star.sheet.NamedRange"
+constexpr OUStringLiteral SCNAMEDRANGEOBJ_SERVICE = u"com.sun.star.sheet.NamedRange";
 
 SC_SIMPLE_SERVICE_INFO( ScLabelRangeObj, "ScLabelRangeObj", "com.sun.star.sheet.LabelRange" )
 SC_SIMPLE_SERVICE_INFO( ScLabelRangesObj, "ScLabelRangesObj", "com.sun.star.sheet.LabelRanges" )

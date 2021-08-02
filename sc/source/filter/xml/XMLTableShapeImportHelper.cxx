@@ -33,7 +33,7 @@
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 
-#define SC_LAYERID "LayerID"
+constexpr OUStringLiteral SC_LAYERID = u"LayerID";
 
 using namespace ::com::sun::star;
 using namespace xmloff::token;

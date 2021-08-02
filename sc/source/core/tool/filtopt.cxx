@@ -27,7 +27,7 @@
 using namespace utl;
 using namespace css::uno;
 
-#define CFGPATH_FILTER          "Office.Calc/Filter/Import"
+constexpr OUStringLiteral CFGPATH_FILTER = u"Office.Calc/Filter/Import";
 
 #define SCFILTOPT_WK3           2
 

@@ -78,9 +78,9 @@ static const SfxItemPropertyMapEntry* lcl_GetSettingsPropertyMap()
     return aSettingsPropertyMap_Impl;
 }
 
-#define SCFUNCTIONLISTOBJ_SERVICE       "com.sun.star.sheet.FunctionDescriptions"
-#define SCRECENTFUNCTIONSOBJ_SERVICE    "com.sun.star.sheet.RecentFunctions"
-#define SCSPREADSHEETSETTINGS_SERVICE   "com.sun.star.sheet.GlobalSheetSettings"
+constexpr OUStringLiteral SCFUNCTIONLISTOBJ_SERVICE = u"com.sun.star.sheet.FunctionDescriptions";
+constexpr OUStringLiteral SCRECENTFUNCTIONSOBJ_SERVICE = u"com.sun.star.sheet.RecentFunctions";
+constexpr OUStringLiteral SCSPREADSHEETSETTINGS_SERVICE = u"com.sun.star.sheet.GlobalSheetSettings";
 
 SC_SIMPLE_SERVICE_INFO( ScFunctionListObj, "stardiv.StarCalc.ScFunctionListObj", SCFUNCTIONLISTOBJ_SERVICE )
 SC_SIMPLE_SERVICE_INFO( ScRecentFunctionsObj, "stardiv.StarCalc.ScRecentFunctionsObj", SCRECENTFUNCTIONSOBJ_SERVICE )

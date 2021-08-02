@@ -39,7 +39,7 @@
 #include <comphelper/servicehelper.hxx>
 #include <osl/diagnose.h>
 
-#define SC_ISFILTERED "IsFiltered"
+constexpr OUStringLiteral SC_ISFILTERED = u"IsFiltered";
 
 using namespace com::sun::star;
 using namespace xmloff::token;

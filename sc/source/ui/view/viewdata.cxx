@@ -74,7 +74,7 @@ using namespace com::sun::star;
 #define SC_GROWY_SMALL_EXTRA    100
 #define SC_GROWY_BIG_EXTRA      200
 
-#define TAG_TABBARWIDTH "tw:"
+constexpr OUStringLiteral TAG_TABBARWIDTH = u"tw:";
 
 namespace {
 
@@ -3241,7 +3241,7 @@ void ScViewData::WriteUserData(OUString& rData)
     else
         rData += "0";
 
-    rData += ";" + OUString::number( nTabNo ) + ";" TAG_TABBARWIDTH +
+    rData += ";" + OUString::number( nTabNo ) + ";" + TAG_TABBARWIDTH +
              OUString::number( pView->GetTabBarWidth() );
 
     SCTAB nTabCount = mrDoc.GetTableCount();
