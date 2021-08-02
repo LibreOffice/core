@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_INC_SDR_ATTRIBUTE_SDRFILLTEXTATTRIBUTE_HXX
-#define INCLUDED_SVX_INC_SDR_ATTRIBUTE_SDRFILLTEXTATTRIBUTE_HXX
+#pragma once
 
 #include <drawinglayer/attribute/sdrfillattribute.hxx>
 #include <drawinglayer/attribute/fillgradientattribute.hxx>
@@ -53,8 +52,5 @@ namespace drawinglayer::attribute
         };
 
 } // end of namespace drawinglayer::attribute
-
-
-#endif // INCLUDED_SVX_INC_SDR_ATTRIBUTE_SDRFILLTEXTATTRIBUTE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

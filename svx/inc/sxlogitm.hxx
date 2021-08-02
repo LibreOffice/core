@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVX_INC_SXLOGITM_HXX
-#define INCLUDED_SVX_INC_SXLOGITM_HXX
+#pragma once
 
 #include <svx/svddef.hxx>
 #include <svx/sdmetitm.hxx>
@@ -39,7 +38,5 @@ public:
         return new SdrLogicSizeHeightItem(*this);
     }
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

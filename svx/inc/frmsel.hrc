@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_INC_FRMSEL_HRC
-#define INCLUDED_SVX_INC_FRMSEL_HRC
+#pragma once
 
 #include <utility>
 #include <sal/types.h>
@@ -50,7 +49,5 @@ std::pair<const char*, sal_uInt16> RID_SVXSTR_FRMSEL_DESCRIPTIONS[] =
     { NC_("RID_SVXSTR_FRMSEL_DESCRIPTIONS", "Diagonal border line from top left to bottom right") , 7 },
     { NC_("RID_SVXSTR_FRMSEL_DESCRIPTIONS", "Diagonal border line from bottom left to top right") , 8 },
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

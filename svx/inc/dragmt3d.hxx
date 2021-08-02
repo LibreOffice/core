@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_INC_DRAGMT3D_HXX
-#define INCLUDED_SVX_INC_DRAGMT3D_HXX
+#pragma once
 
 #include <svx/def3d.hxx>
 #include <svx/svddrgmt.hxx>
@@ -115,8 +114,5 @@ public:
     virtual void MoveSdrDrag(const Point& rPnt) override;
     virtual PointerStyle GetSdrDragPointer() const override;
 };
-
-
-#endif // INCLUDED_SVX_INC_DRAGMT3D_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

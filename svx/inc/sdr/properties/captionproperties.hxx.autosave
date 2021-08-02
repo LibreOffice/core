@@ -19,40 +19,28 @@
 
 #pragma once
 
-#include <svx/itextprovider.hxx>
-#include <sdr/properties/attributeproperties.hxx>
+#include <sdr/properties/rectangleproperties.hxx>
 
 
 namespace sdr::properties
     {
-        class TextProperties : public AttributeProperties
+        class CaptionProperties final : public RectangleProperties
         {
-        private:
-            // #i101556# versioning support
-            sal_uInt32                  maVersion;
-
-        protected:
             // create a new itemset
             virtual SfxItemSet CreateObjectSpecificItemSet(SfxItemPool& rPool) override;
-
-            // Do the ItemChange, may do special handling
-            virtual void ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem = nullptr) override;
 
             // react on ItemSet changes
             virtual void ItemSetChanged(const SfxItemSet& rSet) override;
 
-            /// Get the TextProvider related to our SdrObject
-            virtual const svx::ITextProvider& getTextProvider() const;
-
         public:
             // basic constructor
-            explicit TextProperties(SdrObject& rObj);
+            explicit CaptionProperties(SdrObject& rObj);
 
             // constructor for copying, but using new object
-            TextProperties(const TextProperties& rProps, SdrObject& rObj);
+            CaptionProperties(const CaptionProperties& rProps, SdrObject& rObj);
 
             // destructor
-            virtual ~TextProperties() override;
+            virtual ~CaptionProperties() override;
 
             // Clone() operator, normally just calls the local copy constructor
             virtual std::unique_ptr<BaseProperties> Clone(SdrObject& rObj) const override;
@@ -63,20 +51,6 @@ namespace sdr::properties
             // force default attributes for a specific object type, called from
             // DefaultProperties::GetObjectItemSet() if a new ItemSet is created
             virtual void ForceDefaultAttributes() override;
-
-            // force all attributes which come from styles to hard attributes
-            // to be able to live without the style.
-            virtual void ForceStyleToHardAttributes() override;
-
-            // This is the notifier from SfxListener
-            virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
-
-            // Set single item at the local ItemSet. *Does not use* AllowItemChange(),
-            // ItemChange(), PostItemChange() and ItemSetChanged() calls.
-            void SetObjectItemNoBroadcast(const SfxPoolItem& rItem);
-
-            // #i101556# versioning support
-            virtual sal_uInt32 getVersion() const override;
         };
 } // end of namespace sdr::properties
 

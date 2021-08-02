@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_INC_IDOCUMENTMARKACCESS_HXX
-#define INCLUDED_SW_INC_IDOCUMENTMARKACCESS_HXX
+#pragma once
 
 #include <sal/types.h>
 #include "IMark.hxx"
@@ -368,7 +367,5 @@ class IDocumentMarkAccess
     protected:
         virtual ~IDocumentMarkAccess() {};
 };
-
-#endif // IDOCUMENTBOOKMARKACCESS_HXX_INCLUDED
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
