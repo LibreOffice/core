@@ -44,6 +44,7 @@
 #include <svx/xmleohlp.hxx>
 #include <map>
 #include <memory>
+#include <mutex>
 #include <string_view>
 
 using namespace ::osl;
@@ -64,7 +65,7 @@ constexpr OUStringLiteral XML_EMBEDDEDOBJECTGRAPHIC_URL_BASE = u"vnd.sun.star.Gr
 
 class OutputStorageWrapper_Impl : public ::cppu::WeakImplHelper<XOutputStream>
 {
-    ::osl::Mutex    maMutex;
+    std::mutex    maMutex;
     Reference < XOutputStream > xOut;
     TempFile aTempFile;
     bool bStreamClosed : 1;
@@ -100,19 +101,19 @@ SvStream *OutputStorageWrapper_Impl::GetStream()
 void SAL_CALL OutputStorageWrapper_Impl::writeBytes(
         const Sequence< sal_Int8 >& aData)
 {
-    MutexGuard          aGuard( maMutex );
+    std::lock_guard          aGuard( maMutex );
     xOut->writeBytes( aData );
 }
 
 void SAL_CALL OutputStorageWrapper_Impl::flush()
 {
-    MutexGuard          aGuard( maMutex );
+    std::lock_guard          aGuard( maMutex );
     xOut->flush();
 }
 
 void SAL_CALL OutputStorageWrapper_Impl::closeOutput()
 {
-    MutexGuard          aGuard( maMutex );
+    std::lock_guard          aGuard( maMutex );
     xOut->closeOutput();
     bStreamClosed = true;
 }
