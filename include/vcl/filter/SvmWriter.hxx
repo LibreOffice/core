@@ -50,4 +50,5 @@ public:
     void ChordHandler(MetaChordAction* pAction);
     void PolyLineHandler(MetaPolyLineAction* pAction);
     void PolygonHandler(MetaPolygonAction* pAction);
+    void PolyPolygonHandler(MetaPolyPolygonAction* pAction);
 };

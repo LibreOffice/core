@@ -155,6 +155,13 @@ void SvmWriter::MetaActionHandler(MetaAction* pAction, ImplMetaWriteData* pData)
         }
         break;
 
+        case MetaActionType::POLYPOLYGON:
+        {
+            auto* pMetaAction = static_cast<MetaPolyPolygonAction*>(pAction);
+            PolyPolygonHandler(pMetaAction);
+        }
+        break;
+
         /* default case prevents test failure and will be
         removed once all the handlers are completed */
         default:
@@ -291,5 +298,39 @@ void SvmWriter::PolygonHandler(MetaPolygonAction* pAction)
     mrStream.WriteBool(bHasPolyFlags);
     if (bHasPolyFlags)
         pAction->GetPolygon().Write(mrStream);
+}
+
+void SvmWriter::PolyPolygonHandler(MetaPolyPolygonAction* pAction)
+{
+    mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
+
+    VersionCompatWrite aCompat(mrStream, 2);
+
+    sal_uInt16 nNumberOfComplexPolygons = 0;
+    sal_uInt16 i, nPolyCount = pAction->GetPolyPolygon().Count();
+
+    tools::Polygon aSimplePoly; // Version 1
+    mrStream.WriteUInt16(nPolyCount);
+    for (i = 0; i < nPolyCount; i++)
+    {
+        const tools::Polygon& rPoly = pAction->GetPolyPolygon().GetObject(i);
+        if (rPoly.HasFlags())
+            nNumberOfComplexPolygons++;
+        rPoly.AdaptiveSubdivide(aSimplePoly);
+        WritePolygon(mrStream, aSimplePoly);
+    }
+
+    mrStream.WriteUInt16(nNumberOfComplexPolygons); // Version 2
+    for (i = 0; nNumberOfComplexPolygons && (i < nPolyCount); i++)
+    {
+        const tools::Polygon& rPoly = pAction->GetPolyPolygon().GetObject(i);
+        if (rPoly.HasFlags())
+        {
+            mrStream.WriteUInt16(i);
+            rPoly.Write(mrStream);
+
+            nNumberOfComplexPolygons--;
+        }
+    }
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
