@@ -162,6 +162,13 @@ void SvmWriter::MetaActionHandler(MetaAction* pAction, ImplMetaWriteData* pData)
         }
         break;
 
+        case MetaActionType::TEXT:
+        {
+            auto* pMetaAction = static_cast<MetaTextAction*>(pAction);
+            TextHandler(pMetaAction, pData);
+        }
+        break;
+
         /* default case prevents test failure and will be
         removed once all the handlers are completed */
         default:
@@ -332,5 +339,19 @@ void SvmWriter::PolyPolygonHandler(MetaPolyPolygonAction* pAction)
             nNumberOfComplexPolygons--;
         }
     }
+}
+
+void SvmWriter::TextHandler(MetaTextAction* pAction, ImplMetaWriteData* pData)
+{
+    mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
+
+    VersionCompatWrite aCompat(mrStream, 2);
+    TypeSerializer aSerializer(mrStream);
+    aSerializer.writePoint(pAction->GetPoint());
+    mrStream.WriteUniOrByteString(pAction->GetText(), pData->meActualCharSet);
+    mrStream.WriteUInt16(pAction->GetIndex());
+    mrStream.WriteUInt16(pAction->GetLen());
+
+    write_uInt16_lenPrefixed_uInt16s_FromOUString(mrStream, pAction->GetText()); // version 2
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
