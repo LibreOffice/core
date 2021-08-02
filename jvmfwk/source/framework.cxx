@@ -26,6 +26,8 @@
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 #include <osl/diagnose.h>
+#include <osl/file.hxx>
+#include <osl/process.h>
 #include <osl/thread.hxx>
 #include <jvmfwk/framework.hxx>
 #include <vendorbase.hxx>
@@ -197,6 +199,22 @@ javaFrameworkError jfw_startVM(
             pInfo = aInfo.get();
         }
         assert(pInfo != nullptr);
+
+#ifdef _WIN32
+        // Alternative JREs (AdoptOpenJDK, Azul Zulu) are missing the bin/ folder in
+        // java.library.path. Somehow setting java.library.path accordingly doesn't work,
+        // but the PATH gets picked up, so add it there.
+        // Without this hack, some features don't work in alternative JREs.
+        OUString sPATH;
+        osl_getEnvironment(OUString("PATH").pData, &sPATH.pData);
+        OUString sJRELocation;
+        osl::FileBase::getSystemPathFromFileURL(aInfo->sLocation + "/bin", sJRELocation);
+        if (!sPATH.startsWith(sJRELocation))
+        {
+            sPATH = sJRELocation + SAL_PATHSEPARATOR + sPATH;
+            osl_setEnvironment(OUString("PATH").pData, sPATH.pData);
+        }
+#endif // _WIN32
 
         // create JavaVMOptions array that is passed to the plugin
         // it contains the classpath and all options set in the
