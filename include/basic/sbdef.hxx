@@ -24,6 +24,7 @@
 #include <rtl/ustring.hxx>
 #include <basic/basicdllapi.h>
 #include <o3tl/typed_flags_set.hxx>
+#include <unotools/resmgr.hxx>
 
 class ErrCode;
 
@@ -69,9 +70,9 @@ enum class PropertyMode
     Set
 };
 
-BASIC_DLLPUBLIC extern std::pair<const char*, ErrCode> const RID_BASIC_START[];
+BASIC_DLLPUBLIC extern std::pair<TranslateId, ErrCode> const RID_BASIC_START[];
 BASIC_DLLPUBLIC std::locale BasResLocale();
-OUString BasResId(std::string_view pId);
+OUString BasResId(TranslateId pId);
 
 #endif
 
