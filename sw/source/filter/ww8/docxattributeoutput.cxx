@@ -7838,9 +7838,9 @@ void DocxAttributeOutput::CharAnimatedText( const SvxBlinkItem& rBlink )
         m_pSerializer->singleElementNS(XML_w, XML_effect, FSNS(XML_w, XML_val), "none");
 }
 
-#define MSWORD_CH_SHADING_FILL "FFFFFF" // The attribute w:fill of w:shd, for MS-Word's character shading,
-#define MSWORD_CH_SHADING_COLOR "auto" // The attribute w:color of w:shd, for MS-Word's character shading,
-#define MSWORD_CH_SHADING_VAL "pct15" // The attribute w:value of w:shd, for MS-Word's character shading,
+constexpr OUStringLiteral MSWORD_CH_SHADING_FILL = u"FFFFFF"; // The attribute w:fill of w:shd, for MS-Word's character shading,
+constexpr OUStringLiteral MSWORD_CH_SHADING_COLOR = u"auto"; // The attribute w:color of w:shd, for MS-Word's character shading,
+constexpr OUStringLiteral MSWORD_CH_SHADING_VAL = u"pct15"; // The attribute w:value of w:shd, for MS-Word's character shading,
 
 void DocxAttributeOutput::CharBackground( const SvxBrushItem& rBrush )
 {

@@ -43,11 +43,11 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 
-#define SWPAGE_LEFT_GVALUE      "Sw_Page_Left"
-#define SWPAGE_RIGHT_GVALUE     "Sw_Page_Right"
-#define SWPAGE_TOP_GVALUE       "Sw_Page_Top"
-#define SWPAGE_DOWN_GVALUE      "Sw_Page_Down"
-#define SWPAGE_MIRROR_GVALUE    "Sw_Page_Mirrored"
+constexpr OUStringLiteral SWPAGE_LEFT_GVALUE = u"Sw_Page_Left";
+constexpr OUStringLiteral SWPAGE_RIGHT_GVALUE = u"Sw_Page_Right";
+constexpr OUStringLiteral SWPAGE_TOP_GVALUE = u"Sw_Page_Top";
+constexpr OUStringLiteral SWPAGE_DOWN_GVALUE = u"Sw_Page_Down";
+constexpr OUStringLiteral SWPAGE_MIRROR_GVALUE = u"Sw_Page_Mirrored";
 
 namespace
 {

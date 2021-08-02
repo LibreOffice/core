@@ -36,7 +36,7 @@
 #include <sfx2/docfile.hxx>
 #include <tools/diagnose_ex.h>
 
-#define AUTOTEXT_GALLERY "autoTxt"
+constexpr OUStringLiteral AUTOTEXT_GALLERY = u"autoTxt";
 
 using namespace css;
 
@@ -173,7 +173,7 @@ bool SwDOCXReader::MakeEntries( SwDoc *pD, SwTextBlocks &rBlocks )
 
                 // is AutoText?
                 bIsAutoText = aLNm.startsWith(AUTOTEXT_GALLERY);
-                aLNm = aLNm.copy(strlen(AUTOTEXT_GALLERY) + 1);
+                aLNm = aLNm.copy(AUTOTEXT_GALLERY.getLength() + 1);
             }
 
             // Do not copy name
