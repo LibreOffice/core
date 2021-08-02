@@ -52,6 +52,7 @@
 #include <svtools/asynclink.hxx>
 #include <svtools/urlfilter.hxx>
 
+#include <mutex>
 #include <vector>
 #include <algorithm>
 
@@ -91,7 +92,7 @@ class SvtMatchContext_Impl: public salhelper::Thread
     bool                            bOnlyDirectories;
     bool                            bNoSelection;
 
-    osl::Mutex mutex_;
+    std::mutex mutex_;
     bool stopped_;
     css::uno::Reference< css::ucb::XCommandProcessor > processor_;
     sal_Int32 commandId_;
@@ -154,7 +155,7 @@ void SvtMatchContext_Impl::Stop()
     css::uno::Reference< css::ucb::XCommandProcessor > proc;
     sal_Int32 id(0);
     {
-        osl::MutexGuard g(mutex_);
+        std::lock_guard g(mutex_);
         if (!stopped_) {
             stopped_ = true;
             proc = processor_;
@@ -184,7 +185,7 @@ IMPL_LINK_NOARG( SvtMatchContext_Impl, Select_Impl, void*, void )
 {
     // avoid recursion through cancel button
     {
-        osl::MutexGuard g(mutex_);
+        std::lock_guard g(mutex_);
         if (stopped_) {
             // Completion was stopped, no display:
             return;
@@ -402,7 +403,7 @@ void SvtMatchContext_Impl::doExecute()
     ::osl::MutexGuard aGuard( theSvtMatchContextMutex::get() );
     {
         // have we been stopped while we were waiting for the mutex?
-        osl::MutexGuard g(mutex_);
+        std::lock_guard g(mutex_);
         if (stopped_) {
             return;
         }
@@ -477,7 +478,7 @@ void SvtMatchContext_Impl::doExecute()
                             sal_Int32 id = proc->createCommandIdentifier();
                             try {
                                 {
-                                    osl::MutexGuard g(mutex_);
+                                    std::lock_guard g(mutex_);
                                     processor_ = proc;
                                     commandId_ = id;
                                 }
@@ -502,7 +503,7 @@ void SvtMatchContext_Impl::doExecute()
                                 proc2->releaseCommandIdentifier(id);
                             }
                             {
-                                osl::MutexGuard g(mutex_);
+                                std::lock_guard g(mutex_);
                                 processor_.clear();
                                 // At least the neon-based WebDAV UCP does not
                                 // properly support aborting commands, so return
