@@ -87,7 +87,7 @@ sal_Unicode const LF = 0x000A;
 sal_Unicode const CR = 0x000D;
 
 constexpr OUStringLiteral IGNORED_UPDATES = u"/org.openoffice.Office.ExtensionManager/ExtensionUpdateData/IgnoredUpdates";
-#define PROPERTY_VERSION    "Version"
+constexpr OUStringLiteral PROPERTY_VERSION = u"Version";
 
 enum Kind { ENABLED_UPDATE, DISABLED_UPDATE, SPECIFIC_ERROR };
 

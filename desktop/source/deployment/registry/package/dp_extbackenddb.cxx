@@ -27,10 +27,10 @@
 
 using namespace ::com::sun::star::uno;
 
-#define EXTENSION_REG_NS "http://openoffice.org/extensionmanager/extension-registry/2010"
-#define NS_PREFIX "ext"
-#define ROOT_ELEMENT_NAME "extension-backend-db"
-#define KEY_ELEMENT_NAME "extension"
+constexpr OUStringLiteral EXTENSION_REG_NS = u"http://openoffice.org/extensionmanager/extension-registry/2010";
+constexpr OUStringLiteral NS_PREFIX = u"ext";
+constexpr OUStringLiteral ROOT_ELEMENT_NAME = u"extension-backend-db";
+constexpr OUStringLiteral KEY_ELEMENT_NAME = u"extension";
 
 namespace dp_registry::backend::bundle {
 

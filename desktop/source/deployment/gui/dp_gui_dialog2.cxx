@@ -75,9 +75,9 @@ using namespace ::com::sun::star::system;
 
 namespace dp_gui {
 
-#define USER_PACKAGE_MANAGER    "user"
-#define SHARED_PACKAGE_MANAGER  "shared"
-#define BUNDLED_PACKAGE_MANAGER "bundled"
+constexpr OUStringLiteral USER_PACKAGE_MANAGER = u"user";
+constexpr OUStringLiteral SHARED_PACKAGE_MANAGER = u"shared";
+constexpr OUStringLiteral BUNDLED_PACKAGE_MANAGER = u"bundled";
 
 // ExtBoxWithBtns_Impl
 class ExtBoxWithBtns_Impl : public ExtensionBox_Impl

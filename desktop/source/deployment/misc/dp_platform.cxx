@@ -25,7 +25,7 @@
 #include <rtl/bootstrap.hxx>
 #include <osl/diagnose.h>
 
-#define PLATFORM_ALL                u"all"
+constexpr OUStringLiteral PLATFORM_ALL = u"all";
 
 
 namespace dp_misc
