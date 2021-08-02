@@ -24,8 +24,8 @@
 #include "gstwindow.hxx"
 #include "gstplayer.hxx"
 
-#define AVMEDIA_GST_WINDOW_IMPLEMENTATIONNAME "com.sun.star.comp.avmedia.Window_GStreamer"
-#define AVMEDIA_GST_WINDOW_SERVICENAME "com.sun.star.media.Window_GStreamer"
+constexpr OUStringLiteral AVMEDIA_GST_WINDOW_IMPLEMENTATIONNAME = u"com.sun.star.comp.avmedia.Window_GStreamer";
+constexpr OUStringLiteral AVMEDIA_GST_WINDOW_SERVICENAME = u"com.sun.star.media.Window_GStreamer";
 
 using namespace ::com::sun::star;
 
