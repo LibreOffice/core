@@ -725,9 +725,9 @@ namespace {
 
 class SwXMLTableColsContext_Impl : public SvXMLImportContext
 {
-    SvXMLImportContextRef   xMyTable;
+    SvXMLImportContextRef   m_xMyTable;
 
-    SwXMLTableContext *GetTable() { return static_cast<SwXMLTableContext *>(xMyTable.get()); }
+    SwXMLTableContext *GetTable() { return static_cast<SwXMLTableContext *>(m_xMyTable.get()); }
 
 public:
 
@@ -747,7 +747,7 @@ SwXMLTableColsContext_Impl::SwXMLTableColsContext_Impl(
         SwXMLImport& rImport,
         SwXMLTableContext *pTable ) :
     SvXMLImportContext( rImport ),
-    xMyTable( pTable )
+    m_xMyTable( pTable )
 {
 }
 
@@ -769,11 +769,11 @@ namespace {
 
 class SwXMLTableRowContext_Impl : public SvXMLImportContext
 {
-    SvXMLImportContextRef   xMyTable;
+    SvXMLImportContextRef   m_xMyTable;
 
-    sal_uInt32                  nRowRepeat;
+    sal_uInt32                  m_nRowRepeat;
 
-    SwXMLTableContext *GetTable() { return static_cast<SwXMLTableContext *>(xMyTable.get()); }
+    SwXMLTableContext *GetTable() { return static_cast<SwXMLTableContext *>(m_xMyTable.get()); }
 
 public:
 
@@ -798,8 +798,8 @@ SwXMLTableRowContext_Impl::SwXMLTableRowContext_Impl( SwXMLImport& rImport,
         SwXMLTableContext *pTable,
         bool bInHead ) :
     SvXMLImportContext( rImport ),
-    xMyTable( pTable ),
-    nRowRepeat( 1 )
+    m_xMyTable( pTable ),
+    m_nRowRepeat( 1 )
 {
     OUString aStyleName, aDfltCellStyleName;
 
@@ -812,11 +812,11 @@ SwXMLTableRowContext_Impl::SwXMLTableRowContext_Impl( SwXMLImport& rImport,
                 break;
             case XML_ELEMENT(STYLE,  XML_NUMBER_ROWS_REPEATED):
             {
-                nRowRepeat = static_cast<sal_uInt32>(std::max<sal_Int32>(1, aIter.toInt32()));
-                if (nRowRepeat > 8192 || (nRowRepeat > 256 && utl::ConfigManager::IsFuzzing()))
+                m_nRowRepeat = static_cast<sal_uInt32>(std::max<sal_Int32>(1, aIter.toInt32()));
+                if (m_nRowRepeat > 8192 || (m_nRowRepeat > 256 && utl::ConfigManager::IsFuzzing()))
                 {
-                    SAL_INFO("sw.xml", "ignoring huge table:number-rows-repeated " << nRowRepeat);
-                    nRowRepeat = 1;
+                    SAL_INFO("sw.xml", "ignoring huge table:number-rows-repeated " << m_nRowRepeat);
+                    m_nRowRepeat = 1;
                 }
                 break;
             }
@@ -839,8 +839,8 @@ void SwXMLTableRowContext_Impl::endFastElement(sal_Int32 )
     {
         GetTable()->FinishRow();
 
-        if( nRowRepeat > 1 )
-            GetTable()->InsertRepRows( nRowRepeat );
+        if( m_nRowRepeat > 1 )
+            GetTable()->InsertRepRows( m_nRowRepeat );
     }
 }
 

@@ -108,23 +108,23 @@ class SwXMLTableColumnsSortByWidth_Impl : public o3tl::sorted_vector<SwXMLTableC
 
 class SwXMLTableLines_Impl
 {
-    SwXMLTableColumns_Impl  aCols;
-    const SwTableLines      *pLines;
-    sal_uInt32              nWidth;
+    SwXMLTableColumns_Impl  m_aCols;
+    const SwTableLines      *m_pLines;
+    sal_uInt32              m_nWidth;
 
 public:
 
     explicit SwXMLTableLines_Impl( const SwTableLines& rLines );
 
-    sal_uInt32 GetWidth() const { return nWidth; }
-    const SwTableLines *GetLines() const { return pLines; }
+    sal_uInt32 GetWidth() const { return m_nWidth; }
+    const SwTableLines *GetLines() const { return m_pLines; }
 
-    const SwXMLTableColumns_Impl& GetColumns() const { return aCols; }
+    const SwXMLTableColumns_Impl& GetColumns() const { return m_aCols; }
 };
 
 SwXMLTableLines_Impl::SwXMLTableLines_Impl( const SwTableLines& rLines ) :
-    pLines( &rLines ),
-    nWidth( 0 )
+    m_pLines( &rLines ),
+    m_nWidth( 0 )
 {
 #if OSL_DEBUG_LEVEL > 0
     sal_uInt32 nEndCPos = 0U;
@@ -141,19 +141,19 @@ SwXMLTableLines_Impl::SwXMLTableLines_Impl( const SwTableLines& rLines ) :
         {
             const SwTableBox *pBox = rBoxes[nBox];
 
-            if( nBox < nBoxes-1U || nWidth==0 )
+            if( nBox < nBoxes-1U || m_nWidth==0 )
             {
                 nCPos = nCPos + SwWriteTable::GetBoxWidth( pBox );
                 std::unique_ptr<SwXMLTableColumn_Impl> pCol(
                     new SwXMLTableColumn_Impl( nCPos ));
 
-                aCols.insert( std::move(pCol) );
+                m_aCols.insert( std::move(pCol) );
 
                 if( nBox==nBoxes-1U )
                 {
-                    OSL_ENSURE( nLine==0U && nWidth==0,
+                    OSL_ENSURE( nLine==0U && m_nWidth==0,
                             "parent width will be lost" );
-                    nWidth = nCPos;
+                    m_nWidth = nCPos;
                 }
             }
             else
@@ -166,10 +166,10 @@ SwXMLTableLines_Impl::SwXMLTableLines_Impl( const SwTableLines& rLines ) :
                     nEndCPos = nCheckPos;
                 }
 #endif
-                nCPos = nWidth;
+                nCPos = m_nWidth;
 #if OSL_DEBUG_LEVEL > 0
-                SwXMLTableColumn_Impl aCol( nWidth );
-                OSL_ENSURE( aCols.find(&aCol) != aCols.end(), "couldn't find last column" );
+                SwXMLTableColumn_Impl aCol( m_nWidth );
+                OSL_ENSURE( m_aCols.find(&aCol) != m_aCols.end(), "couldn't find last column" );
                 OSL_ENSURE( SwXMLTableColumn_Impl(nCheckPos) ==
                                             SwXMLTableColumn_Impl(nCPos),
                         "rows have different total widths" );
@@ -184,7 +184,7 @@ typedef vector< SwFrameFormat* > SwXMLFrameFormats_Impl;
 class SwXMLTableFrameFormatsSort_Impl
 {
 private:
-    SwXMLFrameFormats_Impl aFormatList;
+    SwXMLFrameFormats_Impl m_aFormatList;
 public:
     bool AddRow( SwFrameFormat& rFrameFormat, std::u16string_view rNamePrefix, sal_uInt32 nLine );
     bool AddCell( SwFrameFormat& rFrameFormat, std::u16string_view rNamePrefix,
@@ -221,7 +221,7 @@ bool SwXMLTableFrameFormatsSort_Impl::AddRow( SwFrameFormat& rFrameFormat,
     // order is: -/brush, size/-, size/brush
     bool bInsert = true;
     SwXMLFrameFormats_Impl::iterator i;
-    for( i = aFormatList.begin(); i < aFormatList.end(); ++i )
+    for( i = m_aFormatList.begin(); i < m_aFormatList.end(); ++i )
     {
         const SwFormatFrameSize *pTestFrameSize = nullptr;
         const SwFormatRowSplit* pTestRowSplit = nullptr;
@@ -308,8 +308,8 @@ bool SwXMLTableFrameFormatsSort_Impl::AddRow( SwFrameFormat& rFrameFormat,
     if( bInsert )
     {
         rFrameFormat.SetName( OUString::Concat(rNamePrefix) + "." + OUString::number(nLine+1) );
-        if ( i != aFormatList.end() ) ++i;
-        aFormatList.insert( i, &rFrameFormat );
+        if ( i != m_aFormatList.end() ) ++i;
+        m_aFormatList.insert( i, &rFrameFormat );
     }
 
     return bInsert;
@@ -374,7 +374,7 @@ bool SwXMLTableFrameFormatsSort_Impl::AddCell( SwFrameFormat& rFrameFormat,
     //           vert/brush/box/num
     bool bInsert = true;
     SwXMLFrameFormats_Impl::iterator i;
-    for( i = aFormatList.begin(); i < aFormatList.end(); ++i )
+    for( i = m_aFormatList.begin(); i < m_aFormatList.end(); ++i )
     {
         const SwFormatVertOrient *pTestVertOrient = nullptr;
         const SvxBrushItem *pTestBrush = nullptr;
@@ -498,8 +498,8 @@ bool SwXMLTableFrameFormatsSort_Impl::AddCell( SwFrameFormat& rFrameFormat,
     if( bInsert )
     {
         rFrameFormat.SetName( lcl_xmltble_appendBoxPrefix( rNamePrefix, nCol, nRow, bTop ) );
-        if ( i != aFormatList.end() ) ++i;
-        aFormatList.insert( i, &rFrameFormat );
+        if ( i != m_aFormatList.end() ) ++i;
+        m_aFormatList.insert( i, &rFrameFormat );
     }
 
     return bInsert;
