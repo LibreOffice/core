@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "33b0bd87_8f793bf7",
+        "filename": "jvmfwk/source/framework.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-08-02T12:57:38Z",
+      "side": 1,
+      "message": "Should this block be Windows-only?  (The use of \";\" as a separator in PATH makes it look like it should?)",
+      "revId": "6bc7158ea63f785ee8ef596c882627e8b48120fc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c8c326bd_decf116b",
         "filename": "jvmfwk/source/framework.cxx",
         "patchSetId": 1
@@ -31,6 +48,40 @@
       "side": 1,
       "message": "Right, will do. I should probably ifdef the whole block, it\u0027s windows specific after all I can tell.",
       "parentUuid": "c8c326bd_decf116b",
+      "revId": "6bc7158ea63f785ee8ef596c882627e8b48120fc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "82c17179_162024b4",
+        "filename": "jvmfwk/source/framework.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-08-02T12:57:38Z",
+      "side": 1,
+      "message": "* Add sJRELocation to the front or to the back (which may or may not give more reliable results)?\n* What should the concatenated new value be if PATH was either unset or set but null (in case Windows even supports that POSIX distinction between unset and set-but-null)?",
+      "revId": "6bc7158ea63f785ee8ef596c882627e8b48120fc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3fdcc500_55df4227",
+        "filename": "jvmfwk/source/framework.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-08-02T12:57:38Z",
+      "side": 1,
+      "message": "osl_setEnvironment is not thread safe and should only be used as a very last resort.  (For Linux, we have javaldx run before soffice.bin, but we have nothing similar for Windows.)  Do this anyway, with fingers firmly crossed?",
       "revId": "6bc7158ea63f785ee8ef596c882627e8b48120fc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
