@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_QUARTZ_UTILS_H
-#define INCLUDED_VCL_INC_QUARTZ_UTILS_H
+#pragma once
 
 #include <iostream>
 
@@ -29,7 +28,6 @@
 #include <ApplicationServices/ApplicationServices.h>
 #else
 #include <CoreGraphics/CoreGraphics.h>
-#endif
 #include <postmac.h>
 
 #include <rtl/ustring.hxx>
