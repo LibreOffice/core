@@ -1081,7 +1081,6 @@ IMPL_LINK(StyleList, UpdateStyles, StyleFlags, nFlags, void)
             // It happens sometimes, God knows why
             return;
         m_nAppFilter = m_pFamilyState[StyleNrToInfoOffset(n)]->GetValue();
-        m_pParentDialog->SetApplicationFilter(m_nAppFilter);
         m_pParentDialog->FamilySelect(StyleNrToInfoOffset(n) + 1);
         pItem = GetFamilyItem();
     }
@@ -1710,7 +1709,6 @@ void StyleList::Update()
 
         std::unique_ptr<SfxTemplateItem>& pNewItem = m_pFamilyState[StyleNrToInfoOffset(n)];
         m_nAppFilter = pNewItem->GetValue();
-        m_pParentDialog->SetApplicationFilter(m_nAppFilter);
         m_pParentDialog->FamilySelect(StyleNrToInfoOffset(n) + 1);
         pItem = pNewItem.get();
     }
@@ -1727,7 +1725,6 @@ void StyleList::Update()
         }
 
         m_nAppFilter = pItem->GetValue();
-        m_pParentDialog->SetApplicationFilter(m_nAppFilter);
         if (!m_xTreeBox->get_visible())
         {
             UpdateStyles(StyleFlags::UpdateFamilyList);
@@ -1745,7 +1742,6 @@ void StyleList::Update()
             && m_nAppFilter != pItem->GetValue())
         {
             m_nAppFilter = pItem->GetValue();
-            m_pParentDialog->SetApplicationFilter(m_nAppFilter);
             if (!m_xTreeBox->get_visible())
                 UpdateStyles(StyleFlags::UpdateFamilyList);
             else
@@ -1754,7 +1750,6 @@ void StyleList::Update()
         else
         {
             m_nAppFilter = pItem->GetValue();
-            m_pParentDialog->SetApplicationFilter(m_nAppFilter);
         }
     }
     const OUString aStyle(pItem->GetStyleName());
