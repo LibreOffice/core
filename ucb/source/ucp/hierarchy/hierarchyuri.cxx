@@ -28,10 +28,9 @@
 
 using namespace hierarchy_ucp;
 
-#define HIERARCHY_URL_SCHEME          "vnd.sun.star.hier"
-#define HIERARCHY_URL_SCHEME_LENGTH   17
-#define DEFAULT_DATA_SOURCE_SERVICE \
-                    "com.sun.star.ucb.DefaultHierarchyDataSource"
+constexpr OUStringLiteral HIERARCHY_URL_SCHEME = u"vnd.sun.star.hier";
+constexpr OUStringLiteral DEFAULT_DATA_SOURCE_SERVICE =
+                    u"com.sun.star.ucb.DefaultHierarchyDataSource";
 
 
 // HierarchyUri Implementation.
@@ -48,7 +47,7 @@ void HierarchyUri::init() const
     m_aParentUri.clear();
 
     // URI must match at least: <scheme>:
-    if ( m_aUri.getLength() < HIERARCHY_URL_SCHEME_LENGTH + 1 )
+    if ( m_aUri.getLength() < HIERARCHY_URL_SCHEME.getLength() + 1 )
     {
         // error, but remember that we did an init().
         m_aPath = "/";
@@ -57,7 +56,7 @@ void HierarchyUri::init() const
 
     // Scheme is case insensitive.
     OUString aScheme
-        = m_aUri.copy( 0, HIERARCHY_URL_SCHEME_LENGTH ).toAsciiLowerCase();
+        = m_aUri.copy( 0, HIERARCHY_URL_SCHEME.getLength() ).toAsciiLowerCase();
     if ( aScheme == HIERARCHY_URL_SCHEME )
     {
         m_aUri = m_aUri.replaceAt( 0, aScheme.getLength(), aScheme );
@@ -67,42 +66,42 @@ void HierarchyUri::init() const
         // If the URI has no service specifier, insert default service.
         // This is for backward compatibility and for convenience.
 
-        if ( m_aUri.getLength() == HIERARCHY_URL_SCHEME_LENGTH + 1 )
+        if ( m_aUri.getLength() == HIERARCHY_URL_SCHEME.getLength() + 1 )
         {
             // root folder URI without path and service specifier.
-            m_aUri += "//" DEFAULT_DATA_SOURCE_SERVICE "/";
+            m_aUri += "//" + DEFAULT_DATA_SOURCE_SERVICE + "/";
             m_aService = DEFAULT_DATA_SOURCE_SERVICE ;
 
             nPos = m_aUri.getLength() - 1;
         }
-        else if ( ( m_aUri.getLength() == HIERARCHY_URL_SCHEME_LENGTH + 2 )
+        else if ( ( m_aUri.getLength() == HIERARCHY_URL_SCHEME.getLength() + 2 )
                   &&
-                  ( m_aUri[ HIERARCHY_URL_SCHEME_LENGTH + 1 ] == '/' ) )
+                  ( m_aUri[ HIERARCHY_URL_SCHEME.getLength() + 1 ] == '/' ) )
         {
             // root folder URI without service specifier.
-            m_aUri += "/" DEFAULT_DATA_SOURCE_SERVICE "/";
+            m_aUri += "/" + DEFAULT_DATA_SOURCE_SERVICE + "/";
             m_aService = DEFAULT_DATA_SOURCE_SERVICE;
 
             nPos = m_aUri.getLength() - 1;
         }
-        else if ( ( m_aUri.getLength() > HIERARCHY_URL_SCHEME_LENGTH + 2 )
+        else if ( ( m_aUri.getLength() > HIERARCHY_URL_SCHEME.getLength() + 2 )
                   &&
-                  ( m_aUri[ HIERARCHY_URL_SCHEME_LENGTH + 2 ] != '/' ) )
+                  ( m_aUri[ HIERARCHY_URL_SCHEME.getLength() + 2 ] != '/' ) )
         {
             // other (no root folder) URI without service specifier.
             m_aUri = m_aUri.replaceAt(
-                        HIERARCHY_URL_SCHEME_LENGTH + 2,
+                        HIERARCHY_URL_SCHEME.getLength() + 2,
                         0,
-                        "/" DEFAULT_DATA_SOURCE_SERVICE "/" );
+                        "/" + DEFAULT_DATA_SOURCE_SERVICE + "/" );
             m_aService = DEFAULT_DATA_SOURCE_SERVICE;
 
             nPos
-                = HIERARCHY_URL_SCHEME_LENGTH + 3 + m_aService.getLength();
+                = HIERARCHY_URL_SCHEME.getLength() + 3 + m_aService.getLength();
         }
         else
         {
             // URI with service specifier.
-            sal_Int32 nStart = HIERARCHY_URL_SCHEME_LENGTH + 3;
+            sal_Int32 nStart = HIERARCHY_URL_SCHEME.getLength() + 3;
 
             // Here: - m_aUri has at least the form "<scheme>://"
             //       - nStart points to char after <scheme>:

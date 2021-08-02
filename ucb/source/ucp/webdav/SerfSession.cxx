@@ -46,7 +46,7 @@
 #include <com/sun/star/io/NotConnectedException.hpp>
 #include <com/sun/star/io/BufferSizeExceededException.hpp>
 #include <com/sun/star/io/IOException.hpp>
-#define OID_SUBJECT_ALTERNATIVE_NAME "2.5.29.17"
+constexpr OUStringLiteral OID_SUBJECT_ALTERNATIVE_NAME = u"2.5.29.17";
 
 #include <com/sun/star/ucb/Lock.hpp>
 #include <com/sun/star/xml/crypto/XSEInitializer.hpp>
