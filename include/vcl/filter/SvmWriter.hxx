@@ -52,4 +52,5 @@ public:
     void PolygonHandler(MetaPolygonAction* pAction);
     void PolyPolygonHandler(MetaPolyPolygonAction* pAction);
     void TextHandler(MetaTextAction* pAction, ImplMetaWriteData* pData);
+    void TextArrayHandler(MetaTextArrayAction* pAction, ImplMetaWriteData* pData);
 };
