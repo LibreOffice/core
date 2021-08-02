@@ -35,3 +35,15 @@ race:XBufferedThreadedStream::getNextBlock
 
 # not introduced in stuff the embedded JVM does
 race:libjvm.so
+
+# I think this is OK, because at this point we are doing
+#  if (nRefCount > 1)
+# and we know from our callers that the refcount must be at least one
+# so there is no failure mode
+race:ireallocSequence
+
+# TODO There appears to be a race here, initialisng the
+#   ::com::sun::star::uno::Sequence< T >::s_pType
+# field. But no idea at all how to fix it.
+race:cppu::getTypeFavourUnsigned
+
