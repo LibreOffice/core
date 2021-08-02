@@ -2239,7 +2239,8 @@ void Window::Show(bool bVisible, ShowFlags nFlags)
         // inherit native widget flag for form controls
         // required here, because frames never show up in the child hierarchy - which should be fixed...
         // eg, the drop down of a combobox which is a system floating window
-        if( mpWindowImpl->mbFrame && GetParent() && GetParent()->IsCompoundControl() &&
+        if( mpWindowImpl->mbFrame && GetParent() && !GetParent()->IsDisposed() &&
+            GetParent()->IsCompoundControl() &&
             GetParent()->IsNativeWidgetEnabled() != IsNativeWidgetEnabled() &&
             !(GetStyle() & WB_TOOLTIPWIN) )
         {
@@ -3706,7 +3707,7 @@ void Window::EnableNativeWidget( bool bEnable )
 
 bool Window::IsNativeWidgetEnabled() const
 {
-    return ImplGetWinData()->mbEnableNativeWidget;
+    return mpWindowImpl ? ImplGetWinData()->mbEnableNativeWidget : false;
 }
 
 Reference< css::rendering::XCanvas > Window::ImplGetCanvas( bool bSpriteCanvas ) const
