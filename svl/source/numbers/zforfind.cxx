@@ -649,9 +649,25 @@ short ImpSvNumberInputScan::GetMonth( const OUString& rString, sal_Int32& nPos )
                 res = sal::static_int_cast< short >(-(i+1)); // negative
                 break;  // for
             }
+            else if (i == 2 && pFormatter->GetLanguageTag().getLanguage() == "de")
+            {
+                if (pUpperAbbrevMonthText[i] == u"M\u00C4R" && StringContainsWord( "MRZ", rString, nPos))
+                {   // Accept MRZ for MÄR
+                    nPos = nPos + 3;
+                    res = sal::static_int_cast< short >(-(i+1)); // negative
+                    break;  // for
+                }
+                else if (pUpperAbbrevMonthText[i] == "MRZ" && StringContainsWord( u"M\u00C4R", rString, nPos))
+                {   // And vice versa, accept MÄR for MRZ
+                    nPos = nPos + 3;
+                    res = sal::static_int_cast< short >(-(i+1)); // negative
+                    break;  // for
+                }
+            }
             else if (i == 8)
             {
                 // This assumes the weirdness is applicable to all locales.
+                // It is the case for at least en-* and de-* locales.
                 if (pUpperAbbrevMonthText[i] == "SEPT" && StringContainsWord( "SEP", rString, nPos))
                 {   // #102136# The correct English form of month September abbreviated is
                     // SEPT, but almost every data contains SEP instead.
