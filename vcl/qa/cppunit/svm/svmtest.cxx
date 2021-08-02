@@ -300,7 +300,8 @@ static GDIMetaFile readMetafile(const OUString& rUrl)
     GDIMetaFile aResultMetafile;
     SvFileStream aFileStream(rUrl, StreamMode::READ);
     aFileStream.Seek(STREAM_SEEK_TO_BEGIN);
-    aResultMetafile.Read(aFileStream);
+    SvmReader aReader(aFileStream);
+    aReader.Read(aResultMetafile);
     return aResultMetafile;
 }
 
