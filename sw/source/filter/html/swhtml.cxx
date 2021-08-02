@@ -314,8 +314,9 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, SwPaM& rCursor, SvStream& rIn,
     m_nTableDepth( 0 ),
     m_pTempViewFrame(nullptr)
 {
+    const bool bFuzzing = utl::ConfigManager::IsFuzzing();
     // If requested explicitly, then force ignoring of comments (don't create postits for them).
-    if (!utl::ConfigManager::IsFuzzing() && officecfg::Office::Writer::Filter::Import::HTML::IgnoreComments::get())
+    if (!bFuzzing && officecfg::Office::Writer::Filter::Import::HTML::IgnoreComments::get())
         m_bIgnoreHTMLComments = true;
 
     m_nEventId = nullptr;
@@ -328,13 +329,21 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, SwPaM& rCursor, SvStream& rIn,
     memset(m_xAttrTab.get(), 0, sizeof(HTMLAttrTable));
 
     // Read the font sizes 1-7 from the INI file
-    m_aFontHeights[0] = officecfg::Office::Common::Filter::HTML::Import::FontSize::Size_1::get() * 20;
-    m_aFontHeights[1] = officecfg::Office::Common::Filter::HTML::Import::FontSize::Size_2::get() * 20;
-    m_aFontHeights[2] = officecfg::Office::Common::Filter::HTML::Import::FontSize::Size_3::get() * 20;
-    m_aFontHeights[3] = officecfg::Office::Common::Filter::HTML::Import::FontSize::Size_4::get() * 20;
-    m_aFontHeights[4] = officecfg::Office::Common::Filter::HTML::Import::FontSize::Size_5::get() * 20;
-    m_aFontHeights[5] = officecfg::Office::Common::Filter::HTML::Import::FontSize::Size_6::get() * 20;
-    m_aFontHeights[6] = officecfg::Office::Common::Filter::HTML::Import::FontSize::Size_7::get() * 20;
+    if (!bFuzzing)
+    {
+        m_aFontHeights[0] = officecfg::Office::Common::Filter::HTML::Import::FontSize::Size_1::get() * 20;
+        m_aFontHeights[1] = officecfg::Office::Common::Filter::HTML::Import::FontSize::Size_2::get() * 20;
+        m_aFontHeights[2] = officecfg::Office::Common::Filter::HTML::Import::FontSize::Size_3::get() * 20;
+        m_aFontHeights[3] = officecfg::Office::Common::Filter::HTML::Import::FontSize::Size_4::get() * 20;
+        m_aFontHeights[4] = officecfg::Office::Common::Filter::HTML::Import::FontSize::Size_5::get() * 20;
+        m_aFontHeights[5] = officecfg::Office::Common::Filter::HTML::Import::FontSize::Size_6::get() * 20;
+        m_aFontHeights[6] = officecfg::Office::Common::Filter::HTML::Import::FontSize::Size_7::get() * 20;
+    }
+    else
+    {
+        m_aFontHeights[0] = m_aFontHeights[1] = m_aFontHeights[2] = m_aFontHeights[3] =
+        m_aFontHeights[4] = m_aFontHeights[5] = m_aFontHeights[6] = 12 * 20;
+    }
 
     m_bKeepUnknown = officecfg::Office::Common::Filter::HTML::Import::UnknownTag::get();
 
