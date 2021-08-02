@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "76fb71a7_aa613367",
+        "filename": "jvmfwk/source/framework.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-08-02T13:19:14Z",
+      "side": 1,
+      "message": "What shall that check be good for?  (Depending on what exactly it is supposed to be good for, the check could fail because PATH already happens to contain a pathname for which sJRELocation happens to be a prefix, or because PATH contains sJRELocation somewhere else than at the front.)",
+      "revId": "61568ab504d77ec9fdebc076de4f839e8a88266d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
