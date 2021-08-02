@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "378ce7a6_87d9f708",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-02T08:46:03Z",
+      "side": 1,
+      "message": "Please use the full sha of related change. This allows the linkifier to link it to the relevant commit. Compare e.g. this one [1], where the \"2ab481b038b\" is not linkified, with [2], where \"1d3da3486d827dd5e7a3bf1c7a533f5aa9860e42\" got a link.\n\n[1] https://git.libreoffice.org/core/+/3d5beef63527284dfa05ee30c589f4797c9e8533%5E%21\n[2] https://git.libreoffice.org/core/+/1c6382b2564fbf19f8ee99e11021dff2ce19ed6f",
+      "revId": "3d5beef63527284dfa05ee30c589f4797c9e8533",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
