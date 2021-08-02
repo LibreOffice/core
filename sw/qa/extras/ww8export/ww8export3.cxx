@@ -291,20 +291,6 @@ DECLARE_WW8EXPORT_TEST(testTdf122460_header, "tdf122460_header.odt")
     CPPUNIT_ASSERT(headerIsOn);
 }
 
-DECLARE_WW8EXPORT_TEST(testTdf96840, "tdf96840.doc")
-{
-    // Without the fix in place, this test would have hung at import time
-    CPPUNIT_ASSERT_EQUAL(3, getPages());
-    CPPUNIT_ASSERT_EQUAL(4, getShapes());
-}
-
-DECLARE_WW8EXPORT_TEST(testTdf64997, "tdf64997.doc")
-{
-    // Without the fix in place, this test would have hung at import time
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
-    CPPUNIT_ASSERT_EQUAL(4, getShapes());
-}
-
 DECLARE_WW8EXPORT_TEST(testTdf139495_tinyHeader, "tdf139495_tinyHeader.doc")
 {
     // In Word 2003, this is one page, but definitely not six pages.
