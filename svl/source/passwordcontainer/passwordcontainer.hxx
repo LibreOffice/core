@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVL_SOURCE_PASSWORDCONTAINER_PASSWORDCONTAINER_HXX
-#define INCLUDED_SVL_SOURCE_PASSWORDCONTAINER_PASSWORDCONTAINER_HXX
+#pragma once
 
 #include <vector>
 #include <map>
@@ -349,8 +348,5 @@ public:
     getAuthenticationSupplier() const { return m_xAuthSupplier; }
 
 };
-
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

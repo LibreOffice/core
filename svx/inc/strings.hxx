@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SVX_INC_STRINGS_HXX
-#define INCLUDED_SVX_INC_STRINGS_HXX
+#pragma once
 
 #define RID_GALLERYSTR_THEME_HTMLBUTTONS            "private://gallery/hidden/HtmlExportButtons"
 #define RID_GALLERYSTR_THEME_POWERPOINT             "private://gallery/hidden/imgppt"
@@ -390,7 +389,5 @@
 #define RID_SVXSTR_COLOR_LIBRE_PURPLE_DEF           "Purple"
 #define RID_SVXSTR_COLOR_LIBRE_PURPLE_ACCENT_DEF    "Purple Accent"
 #define RID_SVXSTR_COLOR_LIBRE_YELLOW_ACCENT_DEF    "Yellow Accent"
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

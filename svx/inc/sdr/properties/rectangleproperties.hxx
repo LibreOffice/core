@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SDR_PROPERTIES_RECTANGLEPROPERTIES_HXX
-#define INCLUDED_SVX_SDR_PROPERTIES_RECTANGLEPROPERTIES_HXX
+#pragma once
 
 #include <sdr/properties/textproperties.hxx>
 
@@ -48,8 +47,5 @@ namespace sdr::properties
             virtual void SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr) override;
         };
 } // end of namespace sdr::properties
-
-
-#endif // INCLUDED_SVX_SDR_PROPERTIES_RECTANGLEPROPERTIES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

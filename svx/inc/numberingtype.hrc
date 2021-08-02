@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_INC_NUMBERINGTYPE_HRC
-#define INCLUDED_SVX_INC_NUMBERINGTYPE_HRC
+#pragma once
 
 #include <utility>
 
@@ -62,7 +61,5 @@ const std::pair<const char*, int> RID_SVXSTRARY_NUMBERINGTYPE[] =
     { /* NUMBER_EAST_ARABIC_INDIC         */ NC_("RID_SVXSTRARY_NUMBERINGTYPE", "۱, ۲, ۳, ۴, ... (Farsi)"),              58 },
     { /* NUMBER_INDIC_DEVANAGARI          */ NC_("RID_SVXSTRARY_NUMBERINGTYPE", "१, २, ३, ..."),                         59 },
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
