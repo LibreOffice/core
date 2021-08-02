@@ -22,15 +22,6 @@
 #include <unordered_map>
 #include <memory>
 
-typedef std::unordered_map< const char*, MSO_SPT, rtl::CStringHash, rtl::CStringEqual> TypeNameHashMap;
-
-static TypeNameHashMap* pHashMap = nullptr;
-static ::osl::Mutex& getHashMapMutex()
-{
-    static osl::Mutex s_aHashMapProtection;
-    return s_aHashMapProtection;
-}
-
 namespace {
 
 struct NameTypeTable
@@ -277,29 +268,28 @@ const NameTypeTable pNameTypeTableArray[] =
     // gallery: fontwork-arch-left-pour
     // gallery: fontwork-arch-right-pour
 
+
+typedef std::unordered_map< OUString, MSO_SPT> TypeNameHashMap;
+
+static const TypeNameHashMap& GetTypeNameHashMap()
+{
+    static TypeNameHashMap aMap = []()
+    {
+        TypeNameHashMap map;
+        for (auto const & i : pNameTypeTableArray)
+            map[OUString::createFromAscii(i.pS)] = i.pE;
+        return map;
+    }();
+    return aMap;
+}
+
+
 MSO_SPT EnhancedCustomShapeTypeNames::Get( const OUString& rShapeType )
 {
-    if ( !pHashMap )
-    {   // init hash map
-        ::osl::MutexGuard aGuard( getHashMapMutex() );
-        if ( !pHashMap )
-        {
-            TypeNameHashMap* pH = new TypeNameHashMap;
-            const NameTypeTable* pPtr = pNameTypeTableArray;
-            const NameTypeTable* pEnd = pPtr + SAL_N_ELEMENTS( pNameTypeTableArray );
-            for ( ; pPtr < pEnd; pPtr++ )
-                (*pH)[ pPtr->pS ] = pPtr->pE;
-            pHashMap = pH;
-        }
-    }
+    const TypeNameHashMap & rTypeMap = GetTypeNameHashMap();
     MSO_SPT eRetValue = mso_sptNil;
-    int i, nLen = rShapeType.getLength();
-    std::unique_ptr<char[]> pBuf(new char[ nLen + 1 ]);
-    for ( i = 0; i < nLen; i++ )
-        pBuf[ i ] = static_cast<char>(rShapeType[ i ]);
-    pBuf[ i ] = 0;
-    TypeNameHashMap::const_iterator aHashIter( pHashMap->find( pBuf.get() ) );
-    if ( aHashIter != pHashMap->end() )
+    auto aHashIter = rTypeMap.find( rShapeType );
+    if ( aHashIter != rTypeMap.end() )
         eRetValue = (*aHashIter).second;
     return eRetValue;
 }
@@ -310,10 +300,6 @@ OUString EnhancedCustomShapeTypeNames::Get( const MSO_SPT eShapeType )
         ? OUString::createFromAscii( pNameTypeTableArray[ eShapeType ].pS )
         : OUString();
 }
-
-typedef std::unordered_map< const char*, const char*, rtl::CStringHash, rtl::CStringEqual> TypeACCNameHashMap;
-
-static TypeACCNameHashMap* pACCHashMap = nullptr;
 
 namespace {
 
@@ -537,31 +523,28 @@ const ACCNameTypeTable pACCNameTypeTableArray[] =
     { "col-502ad400", "Diamond Bevel" }
 };
 
-OUString EnhancedCustomShapeTypeNames::GetAccName( const OUString& rShapeType )
+typedef std::unordered_map<OUString, OUString> TypeACCNameHashMap;
+
+static const TypeACCNameHashMap& GetACCHashMap()
 {
-    if ( !pACCHashMap )
-    {   // init hash map
-        ::osl::MutexGuard aGuard( getHashMapMutex() );
-        if ( !pACCHashMap )
-        {
-            TypeACCNameHashMap* pH = new TypeACCNameHashMap;
-            const ACCNameTypeTable* pPtr = pACCNameTypeTableArray;
-            const ACCNameTypeTable* pEnd = pPtr + SAL_N_ELEMENTS( pACCNameTypeTableArray );
-            for ( ; pPtr < pEnd; pPtr++ )
-                (*pH)[ pPtr->pS ] = pPtr->pE;
-            pACCHashMap = pH;
-        }
-    }
-    OUString sRetValue;
-    int i, nLen = rShapeType.getLength();
-    std::unique_ptr<char[]> pBuf(new char[ nLen + 1 ]);
-    for ( i = 0; i < nLen; i++ )
-        pBuf[ i ] = static_cast<char>(rShapeType[ i ]);
-    pBuf[ i ] = 0;
-    TypeACCNameHashMap::const_iterator aHashIter( pACCHashMap->find( pBuf.get() ) );
-    if ( aHashIter != pACCHashMap->end() )
-        sRetValue = OUString::createFromAscii( (*aHashIter).second );
-    return sRetValue;
+    static TypeACCNameHashMap aMap = []()
+    {
+        TypeACCNameHashMap map;
+        for (auto const & i : pACCNameTypeTableArray)
+            map[OUString::createFromAscii(i.pS)] = OUString::createFromAscii(i.pE);
+        return map;
+    }();
+    return aMap;
+}
+
+const OUString & EnhancedCustomShapeTypeNames::GetAccName( const OUString& rShapeType )
+{
+    static const OUString EMPTY;
+    const TypeACCNameHashMap& rACCMap = GetACCHashMap();
+    auto aHashIter = rACCMap.find( rShapeType );
+    if ( aHashIter != rACCMap.end() )
+        return aHashIter->second;
+    return EMPTY;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
