@@ -28,8 +28,8 @@
 #include <unotools/syslocale.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/diagnose.h>
-#include <osl/mutex.hxx>
 #include <fmstring.hrc>
+#include <mutex>
 
 using namespace svxform;
 using namespace ::connectivity;
@@ -144,17 +144,13 @@ IParseContext::InternationalKeyCode OSystemParseContext::getIntlKeyCode(const OS
 namespace
 {
 
-    ::osl::Mutex& getSafetyMutex()
+    std::mutex& getSafetyMutex()
     {
-        static ::osl::Mutex s_aSafety;
+        static ::std::mutex s_aSafety;
         return s_aSafety;
     }
 
-    oslInterlockedCount& getCounter()
-    {
-        static oslInterlockedCount s_nCounter;
-        return s_nCounter;
-    }
+    int s_nCounter;
 
     OSystemParseContext* getSharedContext(OSystemParseContext* _pContext, bool _bSet)
     {
@@ -177,8 +173,9 @@ namespace
 
 OParseContextClient::OParseContextClient()
 {
-    ::osl::MutexGuard aGuard( getSafetyMutex() );
-    if ( 1 == osl_atomic_increment( &getCounter() ) )
+    std::lock_guard aGuard( getSafetyMutex() );
+    ++s_nCounter;
+    if ( 1 == s_nCounter )
     {   // first instance
         getSharedContext( new OSystemParseContext, false );
     }
@@ -187,8 +184,9 @@ OParseContextClient::OParseContextClient()
 
 OParseContextClient::~OParseContextClient()
 {
-    ::osl::MutexGuard aGuard( getSafetyMutex() );
-    if ( 0 == osl_atomic_decrement( &getCounter() ) )
+    std::lock_guard aGuard( getSafetyMutex() );
+    --s_nCounter;
+    if ( 0 == s_nCounter )
         delete getSharedContext(nullptr,true);
 }
 
