@@ -101,7 +101,7 @@ OUString extractActionType(const ActionDataMap& rData)
 void JSDialogNotifyIdle::sendMessage(jsdialog::MessageType eType, VclPtr<vcl::Window> pWindow,
                                      std::unique_ptr<ActionDataMap> pData)
 {
-    m_aQueueMutex.acquire();
+    std::lock_guard aGuard(m_aQueueMutex);
 
     // we want only the latest update of same type
     // TODO: also if we met full update - previous updates are not valid
@@ -125,8 +125,6 @@ void JSDialogNotifyIdle::sendMessage(jsdialog::MessageType eType, VclPtr<vcl::Wi
 
     JSDialogMessageInfo aMessage(eType, pWindow, std::move(pData));
     m_aMessageQueue.push_back(aMessage);
-
-    m_aQueueMutex.release();
 }
 
 std::unique_ptr<tools::JsonWriter> JSDialogNotifyIdle::generateFullUpdate() const
@@ -261,16 +259,12 @@ JSDialogNotifyIdle::generateClosePopupMessage(OUString sWindowId) const
 
 void JSDialogNotifyIdle::Invoke()
 {
-    bool bAcquired = m_aQueueMutex.acquire();
+    std::deque<JSDialogMessageInfo> aMessageQueue;
+    {
+        std::lock_guard aGuard(m_aQueueMutex);
 
-    if (!bAcquired)
-        SAL_WARN("vcl", "JSDialogNotifyIdle::Invoke : mutex cannot be acquired");
-
-    std::deque<JSDialogMessageInfo> aMessageQueue(std::move(m_aMessageQueue));
-    m_aMessageQueue = std::deque<JSDialogMessageInfo>();
-    clearQueue();
-
-    m_aQueueMutex.release();
+        std::swap(aMessageQueue, m_aMessageQueue);
+    }
 
     for (auto& rMessage : aMessageQueue)
     {
