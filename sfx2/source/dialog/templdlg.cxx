@@ -172,11 +172,6 @@ void SfxCommonTemplateDialog_Impl::connect_stylelist_enable_tree_drag(const Link
     m_aStyleListEnableTreeDrag = rLink;
 }
 
-void SfxCommonTemplateDialog_Impl::connect_stylelist_filter_select(Link<sal_uInt16, void> rLink)
-{
-    m_aStyleListFilterSelect = rLink;
-}
-
 void SfxCommonTemplateDialog_Impl::connect_stylelist_enable_delete(const Link<void*, void> rLink)
 {
     m_aStyleListEnableDelete = rLink;
@@ -186,11 +181,6 @@ void SfxCommonTemplateDialog_Impl::connect_stylelist_set_water_can_state(
     const Link<const SfxBoolItem*, void> rLink)
 {
     m_aStyleListSetWaterCanState = rLink;
-}
-
-void SfxCommonTemplateDialog_Impl::connect_family_select(const Link<sal_uInt16, void> rLink)
-{
-    m_aStyleListFamilySelect = rLink;
 }
 
 // Constructor
@@ -206,7 +196,6 @@ SfxCommonTemplateDialog_Impl::SfxCommonTemplateDialog_Impl(SfxBindings* pB, weld
     , mxFilterLb(pBuilder->weld_combo_box("filter"))
     , nActFamily(0xffff)
     , nActFilter(0)
-    , nAppFilter(SfxStyleSearchBits::Auto)
     , bIsWater(false)
     , bUpdate(false)
     , bUpdateFamily(false)
@@ -307,7 +296,7 @@ IMPL_LINK(SfxCommonTemplateDialog_Impl, UpdateStyles_Hdl, StyleFlags, nFlags, vo
         else
         {
             nActFilter = 0;
-            m_aStyleList.SetFilterIdx(nActFilter);
+            m_aStyleList.FilterSelect(nActFilter, false);
             mxFilterLb->set_active(1);
         }
 
@@ -325,7 +314,7 @@ IMPL_LINK(SfxCommonTemplateDialog_Impl, UpdateStyles_Hdl, StyleFlags, nFlags, vo
         else
         {
             nActFilter = 0;
-            m_aStyleList.SetFilterIdx(nActFilter);
+            m_aStyleList.FilterSelect(nActFilter, false);
             mxFilterLb->set_active(1);
         }
     }
@@ -532,7 +521,7 @@ void SfxCommonTemplateDialog_Impl::EnableHierarchical(bool const bEnable, StyleL
         {
             // Turn on treeView
             m_bWantHierarchical = true;
-            SaveSelection_Hdl(nullptr); // fdo#61429 store "hierarchical"
+            SaveSelection_Hdl(rStyleList); // fdo#61429 store "hierarchical"
             m_aStyleList.SetHierarchical();
         }
     }
@@ -556,9 +545,12 @@ void SfxCommonTemplateDialog_Impl::FilterSelect(
         return;
 
     nActFilter = nEntry;
-    m_aStyleListFilterSelect.Call(nActFilter);
+    m_aStyleList.FilterSelect(nActFilter, true);
+}
 
-    m_aStyleListUpdateStyles.Call(StyleFlags::UpdateFamilyList);
+void SfxCommonTemplateDialog_Impl::SetFilterByIndex(sal_uInt16 filter, StyleList&)
+{
+    nActFilter = filter;
 }
 
 IMPL_LINK(SfxCommonTemplateDialog_Impl, FilterSelectHdl, weld::ComboBox&, rBox, void)
@@ -574,14 +566,14 @@ IMPL_LINK(SfxCommonTemplateDialog_Impl, FilterSelectHdl, weld::ComboBox&, rBox, 
 }
 
 // Select-Handler for the Toolbox
-void SfxCommonTemplateDialog_Impl::FamilySelect(sal_uInt16 nEntry, bool bPreviewRefresh)
+void SfxCommonTemplateDialog_Impl::FamilySelect(sal_uInt16 nEntry, StyleList&, bool bPreviewRefresh)
 {
     assert((0 < nEntry && nEntry <= MAX_FAMILIES) || 0xffff == nEntry);
     if( nEntry != nActFamily || bPreviewRefresh )
     {
         CheckItem(OString::number(nActFamily), false);
         nActFamily = nEntry;
-        m_aStyleListFamilySelect.Call(nEntry);
+        m_aStyleList.FamilySelect(nEntry);
     }
 }
 
@@ -671,7 +663,7 @@ void SfxCommonTemplateDialog_Impl::SaveFactoryStyleFilter( SfxObjectShell const 
     xModuleManager->replaceByName( getModuleIdentifier( xModuleManager, i_pObjSh ), makeAny( lProps ) );
 }
 
-IMPL_LINK_NOARG(SfxCommonTemplateDialog_Impl, SaveSelection_Hdl, void*, SfxObjectShell*)
+IMPL_LINK_NOARG(SfxCommonTemplateDialog_Impl, SaveSelection_Hdl, StyleList&, SfxObjectShell*)
 {
     SfxViewFrame *const pViewFrame(pBindings->GetDispatcher_Impl()->GetFrame());
     SfxObjectShell *const pDocShell(pViewFrame->GetObjectShell());
@@ -692,7 +684,7 @@ IMPL_LINK_NOARG(SfxCommonTemplateDialog_Impl, PreviewHdl, weld::Toggleable&, voi
 
     m_aStyleList.EnablePreview(bCustomPreview);
 
-    FamilySelect(nActFamily, true);
+    FamilySelect(nActFamily, m_aStyleList, true);
 }
 
 IMPL_LINK_NOARG(SfxCommonTemplateDialog_Impl, UpdateStyleDependents_Hdl, void*, void)
@@ -848,7 +840,7 @@ bool SfxTemplateDialog_Impl::IsCheckedItem(const OString& rMesId)
 
 IMPL_LINK( SfxTemplateDialog_Impl, ToolBoxLSelect, const OString&, rEntry, void)
 {
-    FamilySelect(rEntry.toUInt32());
+    FamilySelect(rEntry.toUInt32(), m_aStyleList);
 }
 
 IMPL_LINK(SfxTemplateDialog_Impl, ToolBoxRSelect, const OString&, rEntry, void)
@@ -903,8 +895,6 @@ IMPL_LINK(SfxCommonTemplateDialog_Impl, UpdateFamily_Hdl, StyleList&, rStyleList
     bWaterDisabled = false;
     bTreeDrag = true;
     bUpdateByExampleDisabled = false;
-
-    m_aStyleListUpdateFamily.Call(nullptr);
 
     if (IsCheckedItem("watercan") &&
         // only if that area is allowed
