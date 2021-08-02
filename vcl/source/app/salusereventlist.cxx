@@ -62,7 +62,7 @@ bool SalUserEventList::DispatchUserEvents( bool bHandleAllCurrentEvents )
     oslThreadIdentifier aCurId = osl::Thread::getCurrentIdentifier();
 
     DBG_TESTSOLARMUTEX();
-    osl::ResettableMutexGuard aResettableListGuard(m_aUserEventsMutex);
+    std::unique_lock aResettableListGuard(m_aUserEventsMutex);
 
     if (!m_aUserEvents.empty())
     {
@@ -93,13 +93,13 @@ bool SalUserEventList::DispatchUserEvents( bool bHandleAllCurrentEvents )
             m_aProcessingUserEvents.pop_front();
 
             // remember to reset the guard before break or continue the loop
-            aResettableListGuard.clear();
+            aResettableListGuard.unlock();
 
             if ( !isFrameAlive( aEvent.m_pFrame ) )
             {
                 if ( aEvent.m_nEvent == SalEvent::UserEvent )
                     delete static_cast< ImplSVEvent* >( aEvent.m_pData );
-                aResettableListGuard.reset();
+                aResettableListGuard.lock();
                 continue;
             }
 
@@ -119,7 +119,7 @@ bool SalUserEventList::DispatchUserEvents( bool bHandleAllCurrentEvents )
             auto process = [&aEvent, this] () noexcept { ProcessEvent(aEvent); };
             process();
 #endif
-            aResettableListGuard.reset();
+            aResettableListGuard.lock();
             if (!bHandleAllCurrentEvents)
                 break;
         }
@@ -139,7 +139,7 @@ void SalUserEventList::RemoveEvent( SalFrame* pFrame, void* pData, SalEvent nEve
 {
     SalUserEvent aEvent( pFrame, pData, nEvent );
 
-    osl::MutexGuard aGuard( m_aUserEventsMutex );
+    std::lock_guard aGuard( m_aUserEventsMutex );
     auto it = std::find( m_aUserEvents.begin(), m_aUserEvents.end(), aEvent );
     if ( it != m_aUserEvents.end() )
     {

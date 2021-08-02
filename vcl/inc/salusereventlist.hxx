@@ -22,10 +22,10 @@
 
 #include <sal/config.h>
 #include <vcl/dllapi.h>
-#include <osl/mutex.hxx>
 #include <osl/thread.hxx>
 
 #include <list>
+#include <mutex>
 #include <o3tl/sorted_vector.hxx>
 
 class SalFrame;
@@ -57,7 +57,7 @@ public:
     };
 
 protected:
-    mutable osl::Mutex         m_aUserEventsMutex;
+    mutable std::mutex         m_aUserEventsMutex;
     std::list< SalUserEvent >  m_aUserEvents;
     std::list< SalUserEvent >  m_aProcessingUserEvents;
     bool                       m_bAllUserEventProcessedSignaled;
@@ -100,13 +100,13 @@ inline bool SalUserEventList::isFrameAlive( const SalFrame* pFrame ) const
 
 inline bool SalUserEventList::HasUserEvents() const
 {
-    osl::MutexGuard aGuard( m_aUserEventsMutex );
+    std::lock_guard aGuard( m_aUserEventsMutex );
     return !(m_aUserEvents.empty() && m_aProcessingUserEvents.empty());
 }
 
 inline void SalUserEventList::PostEvent( SalFrame* pFrame, void* pData, SalEvent nEvent )
 {
-    osl::MutexGuard aGuard( m_aUserEventsMutex );
+    std::lock_guard aGuard( m_aUserEventsMutex );
     m_aUserEvents.push_back( SalUserEvent( pFrame, pData, nEvent ) );
     m_bAllUserEventProcessedSignaled = false;
     TriggerUserEventProcessing();
