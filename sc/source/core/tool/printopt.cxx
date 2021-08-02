@@ -71,7 +71,7 @@ ScTpPrintItem* ScTpPrintItem::Clone( SfxItemPool * ) const
     return new ScTpPrintItem( *this );
 }
 
-#define CFGPATH_PRINT           "Office.Calc/Print"
+constexpr OUStringLiteral CFGPATH_PRINT = u"Office.Calc/Print";
 
 #define SCPRINTOPT_EMPTYPAGES       0
 #define SCPRINTOPT_ALLSHEETS        1

@@ -2170,7 +2170,7 @@ std::shared_ptr<SfxDialogController> ScModule::Find1RefWindow(sal_uInt16 nSlotId
 
 using namespace com::sun::star;
 
-#define LINGUPROP_AUTOSPELL "IsSpellAuto"
+constexpr OUStringLiteral LINGUPROP_AUTOSPELL = u"IsSpellAuto";
 
 void ScModule::GetSpellSettings( LanguageType& rDefLang, LanguageType& rCjkLang, LanguageType& rCtlLang,
         bool& rAutoSpell )

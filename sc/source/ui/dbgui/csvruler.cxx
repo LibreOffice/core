@@ -31,8 +31,8 @@
 
 using namespace com::sun::star::uno;
 
-#define SEP_PATH            "Office.Calc/Dialogs/CSVImport"
-#define FIXED_WIDTH_LIST    "FixedWidthList"
+constexpr OUStringLiteral SEP_PATH = u"Office.Calc/Dialogs/CSVImport";
+constexpr OUStringLiteral FIXED_WIDTH_LIST = u"FixedWidthList";
 
 static void load_FixedWidthList(ScCsvSplits &rSplits)
 {

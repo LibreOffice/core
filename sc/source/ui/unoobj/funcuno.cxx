@@ -52,8 +52,8 @@ using namespace com::sun::star;
 //  registered as implementation for service FunctionAccess,
 //  also supports service SpreadsheetDocumentSettings (to set null date etc.)
 
-#define SCFUNCTIONACCESS_SERVICE    "com.sun.star.sheet.FunctionAccess"
-#define SCDOCSETTINGS_SERVICE       "com.sun.star.sheet.SpreadsheetDocumentSettings"
+constexpr OUStringLiteral SCFUNCTIONACCESS_SERVICE = u"com.sun.star.sheet.FunctionAccess";
+constexpr OUStringLiteral SCDOCSETTINGS_SERVICE = u"com.sun.star.sheet.SpreadsheetDocumentSettings";
 
 // helper to use cached document if not in use, temporary document otherwise
 

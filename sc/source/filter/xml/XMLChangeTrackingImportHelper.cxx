@@ -26,7 +26,7 @@
 #include <svl/zforlist.hxx>
 #include <sax/tools/converter.hxx>
 
-#define SC_CHANGE_ID_PREFIX "ct"
+constexpr OStringLiteral SC_CHANGE_ID_PREFIX = "ct";
 
 ScMyCellInfo::ScMyCellInfo(
     const ScCellValue& rCell, const OUString& rFormulaAddress, const OUString& rFormula,
@@ -198,10 +198,10 @@ sal_uInt32 ScXMLChangeTrackingImportHelper::GetIDFromString(std::string_view sID
     sal_uInt32 nResult(0);
     if (!sID.empty())
     {
-        if (sID.substr(0, strlen(SC_CHANGE_ID_PREFIX)) == SC_CHANGE_ID_PREFIX)
+        if (sID.substr(0, SC_CHANGE_ID_PREFIX.getLength()) == SC_CHANGE_ID_PREFIX)
         {
             sal_Int32 nValue;
-            ::sax::Converter::convertNumber(nValue, sID.substr(strlen(SC_CHANGE_ID_PREFIX)));
+            ::sax::Converter::convertNumber(nValue, sID.substr(SC_CHANGE_ID_PREFIX.getLength()));
             OSL_ENSURE(nValue > 0, "wrong change action ID");
             nResult = nValue;
         }

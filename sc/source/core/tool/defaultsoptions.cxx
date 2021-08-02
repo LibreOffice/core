@@ -61,7 +61,7 @@ ScTpDefaultsItem* ScTpDefaultsItem::Clone( SfxItemPool * ) const
     return new ScTpDefaultsItem( *this );
 }
 
-#define CFGPATH_FORMULA          "Office.Calc/Defaults"
+constexpr OUStringLiteral CFGPATH_FORMULA = u"Office.Calc/Defaults";
 
 #define SCDEFAULTSOPT_TAB_COUNT  0
 #define SCDEFAULTSOPT_TAB_PREFIX 1

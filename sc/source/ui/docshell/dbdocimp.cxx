@@ -62,12 +62,12 @@
 
 using namespace com::sun::star;
 
-#define SC_SERVICE_ROWSET           "com.sun.star.sdb.RowSet"
+constexpr OUStringLiteral SC_SERVICE_ROWSET = u"com.sun.star.sdb.RowSet";
 
 //! move to a header file?
-#define SC_DBPROP_DATASOURCENAME    "DataSourceName"
-#define SC_DBPROP_COMMAND           "Command"
-#define SC_DBPROP_COMMANDTYPE       "CommandType"
+constexpr OUStringLiteral SC_DBPROP_DATASOURCENAME = u"DataSourceName";
+constexpr OUStringLiteral SC_DBPROP_COMMAND = u"Command";
+constexpr OUStringLiteral SC_DBPROP_COMMANDTYPE = u"CommandType";
 
 void ScDBDocFunc::ShowInBeamer( const ScImportParam& rParam, const SfxViewFrame* pFrame )
 {

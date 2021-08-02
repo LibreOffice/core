@@ -319,20 +319,20 @@ static sal_uInt16 lcl_GetCategory( const OUString& rName )
     return ID_FUNCTION_GRP_ADDINS;  // if not found, use Add-In group
 }
 
-#define CFGPATH_ADDINS              "Office.CalcAddIns/AddInInfo"
-#define CFGSTR_ADDINFUNCTIONS       "AddInFunctions"
+constexpr OUStringLiteral CFGPATH_ADDINS = u"Office.CalcAddIns/AddInInfo";
+constexpr OUStringLiteral CFGSTR_ADDINFUNCTIONS = u"AddInFunctions";
 
 #define CFG_FUNCPROP_DISPLAYNAME    0
 #define CFG_FUNCPROP_DESCRIPTION    1
 #define CFG_FUNCPROP_CATEGORY       2
 #define CFG_FUNCPROP_COUNT          3
-#define CFGSTR_DISPLAYNAME          "DisplayName"
-#define CFGSTR_DESCRIPTION          "Description"
-#define CFGSTR_CATEGORY             "Category"
+constexpr OUStringLiteral CFGSTR_DISPLAYNAME = u"DisplayName";
+constexpr OUStringLiteral CFGSTR_DESCRIPTION = u"Description";
+constexpr OUStringLiteral CFGSTR_CATEGORY = u"Category";
 // CategoryDisplayName is ignored for now
 
-#define CFGSTR_COMPATIBILITYNAME    "CompatibilityName"
-#define CFGSTR_PARAMETERS           "Parameters"
+constexpr OUStringLiteral CFGSTR_COMPATIBILITYNAME = u"CompatibilityName";
+constexpr OUStringLiteral CFGSTR_PARAMETERS = u"Parameters";
 
 void ScUnoAddInCollection::ReadConfiguration()
 {

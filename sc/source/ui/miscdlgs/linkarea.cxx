@@ -61,8 +61,8 @@ ScLinkedAreaDlg::~ScLinkedAreaDlg()
 {
 }
 
-#define FILTERNAME_HTML  "HTML (StarCalc)"
-#define FILTERNAME_QUERY "calc_HTML_WebQuery"
+constexpr OUStringLiteral FILTERNAME_HTML = u"HTML (StarCalc)";
+constexpr OUStringLiteral FILTERNAME_QUERY = u"calc_HTML_WebQuery";
 
 IMPL_LINK_NOARG(ScLinkedAreaDlg, BrowseHdl, weld::Button&, void)
 {

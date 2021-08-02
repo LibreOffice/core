@@ -29,19 +29,19 @@
 //  the api is required to use programmatic names for default styles
 //  these programmatic names must never change!
 
-#define SC_STYLE_PROG_STANDARD      "Default"
-#define SC_STYLE_PROG_RESULT        "Result"
-#define SC_STYLE_PROG_RESULT1       "Result2"
-#define SC_STYLE_PROG_HEADING       "Heading"
-#define SC_STYLE_PROG_HEADING1      "Heading1"
-#define SC_STYLE_PROG_REPORT        "Report"
+constexpr OUStringLiteral SC_STYLE_PROG_STANDARD = u"Default";
+constexpr OUStringLiteral SC_STYLE_PROG_RESULT = u"Result";
+constexpr OUStringLiteral SC_STYLE_PROG_RESULT1 = u"Result2";
+constexpr OUStringLiteral SC_STYLE_PROG_HEADING = u"Heading";
+constexpr OUStringLiteral SC_STYLE_PROG_HEADING1 = u"Heading1";
+constexpr OUStringLiteral SC_STYLE_PROG_REPORT = u"Report";
 
-#define SC_PIVOT_STYLE_PROG_INNER                  "Pivot Table Value"
-#define SC_PIVOT_STYLE_PROG_RESULT                 "Pivot Table Result"
-#define SC_PIVOT_STYLE_PROG_CATEGORY               "Pivot Table Category"
-#define SC_PIVOT_STYLE_PROG_TITLE                  "Pivot Table Title"
-#define SC_PIVOT_STYLE_PROG_FIELDNAME              "Pivot Table Field"
-#define SC_PIVOT_STYLE_PROG_TOP                    "Pivot Table Corner"
+constexpr OUStringLiteral SC_PIVOT_STYLE_PROG_INNER = u"Pivot Table Value";
+constexpr OUStringLiteral SC_PIVOT_STYLE_PROG_RESULT = u"Pivot Table Result";
+constexpr OUStringLiteral SC_PIVOT_STYLE_PROG_CATEGORY = u"Pivot Table Category";
+constexpr OUStringLiteral SC_PIVOT_STYLE_PROG_TITLE = u"Pivot Table Title";
+constexpr OUStringLiteral SC_PIVOT_STYLE_PROG_FIELDNAME = u"Pivot Table Field";
+constexpr OUStringLiteral SC_PIVOT_STYLE_PROG_TOP = u"Pivot Table Corner";
 
 namespace {
 
@@ -118,8 +118,7 @@ static const ScDisplayNameMap* lcl_GetStyleNameMap( SfxStyleFamily nType )
 //  programmatic name suffix for display names that match other programmatic names
 //  is " (user)" including a space
 
-#define SC_SUFFIX_USER      " (user)"
-#define SC_SUFFIX_USER_LEN  7
+constexpr OUStringLiteral SC_SUFFIX_USER = u" (user)";
 
 static bool lcl_EndsWithUser( const OUString& rString )
 {
@@ -158,7 +157,7 @@ OUString ScStyleNameConversion::ProgrammaticToDisplayName( const OUString& rProg
     if ( lcl_EndsWithUser( rProgName ) )
     {
         //  remove the (user) suffix, don't compare to map entries
-        return rProgName.copy( 0, rProgName.getLength() - SC_SUFFIX_USER_LEN );
+        return rProgName.copy( 0, rProgName.getLength() - SC_SUFFIX_USER.getLength() );
     }
 
     const ScDisplayNameMap* pNames = lcl_GetStyleNameMap( nType );

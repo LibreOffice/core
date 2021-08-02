@@ -133,7 +133,7 @@ ScTpCalcItem* ScTpCalcItem::Clone( SfxItemPool * ) const
 
 //  Config Item containing document options
 
-#define CFGPATH_CALC        "Office.Calc/Calculate"
+constexpr OUStringLiteral CFGPATH_CALC = u"Office.Calc/Calculate";
 
 #define SCCALCOPT_ITER_ITER         0
 #define SCCALCOPT_ITER_STEPS        1
@@ -149,7 +149,7 @@ ScTpCalcItem* ScTpCalcItem::Clone( SfxItemPool * ) const
 #define SCCALCOPT_REGEX             11
 #define SCCALCOPT_WILDCARDS         12
 
-#define CFGPATH_DOCLAYOUT   "Office.Calc/Layout/Other"
+constexpr OUStringLiteral CFGPATH_DOCLAYOUT = u"Office.Calc/Layout/Other";
 
 #define SCDOCLAYOUTOPT_TABSTOP      0
 
