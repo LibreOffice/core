@@ -122,7 +122,6 @@
 #include <swruler.hxx>
 #include <docufld.hxx>
 
-
 #include <EnhancedPDFExportHelper.hxx>
 #include <numrule.hxx>
 
@@ -164,7 +163,7 @@
 
 #include <IDocumentOutlineNodes.hxx>
 #include <SearchResultLocator.hxx>
-#include <boost/property_tree/json_parser.hpp>
+#include <tools/XmlWalker.hxx>
 
 #define TWIPS_PER_PIXEL 15
 
@@ -3397,23 +3396,45 @@ SwXTextDocument::getSearchResultRectangles(const char* pPayload)
 {
     std::vector<basegfx::B2DRange> aRectangles;
 
-    boost::property_tree::ptree aTree;
-    std::stringstream aStream(pPayload);
-    boost::property_tree::read_json(aStream, aTree);
+    const OString aPayloadString(pPayload);
 
-    sw::search::SearchIndexData aData;
+    SvMemoryStream aStream(const_cast<char *>(aPayloadString.getStr()), aPayloadString.getLength(), StreamMode::READ);
+    tools::XmlWalker aWalker;
+    if (!aWalker.open(&aStream))
+        return aRectangles;
 
-    int nType = aTree.get<int>("type");
+    if (aWalker.name() == "indexing")
+    {
+        SwDoc* pDoc = m_pDocShell->GetDoc();
 
-    aData.nNodeIndex = sal_uInt32(aTree.get<int>("node_index"));
-    aData.eType = sw::search::NodeType(nType);
+        sw::search::SearchIndexData aData;
 
-    SwDoc* pDoc = m_pDocShell->GetDoc();
+        aWalker.children();
+        while (aWalker.isValid())
+        {
+            if (aWalker.name() == "paragraph")
+            {
+                OString sType = aWalker.attribute("type");
+                OString sIndex = aWalker.attribute("index");
 
-    sw::search::SearchResultLocator aLocator(pDoc);
-    sw::search::LocationResult aResult = aLocator.find(aData);
-    if (aResult.mbFound)
-        aRectangles = aResult.maRectangles;
+                if (!sType.isEmpty() && !sIndex.isEmpty())
+                {
+                    aData.nNodeIndex = sIndex.toInt32();
+                    aData.eType = sw::search::NodeType(sType.toInt32());
+
+                    sw::search::SearchResultLocator aLocator(pDoc);
+                    sw::search::LocationResult aResult = aLocator.find(aData);
+                    if (aResult.mbFound)
+                    {
+                        for (auto const & rRect : aResult.maRectangles)
+                            aRectangles.push_back(rRect);
+                    }
+                }
+            }
+            aWalker.next();
+        }
+        aWalker.parent();
+    }
 
     return aRectangles;
 }
