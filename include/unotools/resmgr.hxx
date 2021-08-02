@@ -43,12 +43,29 @@ struct UNOTOOLS_DLLPUBLIC TranslateId
     bool operator!=(const TranslateId& other) const { return !operator==(other); }
 };
 
+struct UNOTOOLS_DLLPUBLIC TranslateNId
+{
+    const char* mpContext;
+    const char* mpSingular;
+    const char* mpPlural;
+
+    TranslateNId() {}
+    TranslateNId(const char* pContext, const char* pSingular, const char* pPlural)
+        : mpContext(pContext), mpSingular(pSingular), mpPlural(pPlural) {}
+
+    operator bool() const { return mpContext != nullptr; }
+
+    bool operator==(const TranslateNId& other) const;
+    bool operator!=(const TranslateNId& other) const { return !operator==(other); }
+};
+
 namespace Translate
 {
     UNOTOOLS_DLLPUBLIC std::locale Create(std::string_view aPrefixName, const LanguageTag& rLocale = SvtSysLocale().GetUILanguageTag());
     UNOTOOLS_DLLPUBLIC OUString get(std::string_view aId, const std::locale &loc);
     UNOTOOLS_DLLPUBLIC OUString nget(std::string_view aId, int n, const std::locale &loc);
     UNOTOOLS_DLLPUBLIC OUString get(TranslateId sContextAndId, const std::locale &loc);
+    UNOTOOLS_DLLPUBLIC OUString nget(TranslateNId aContextSingularPlural, int n, const std::locale &loc);
     UNOTOOLS_DLLPUBLIC void SetReadStringHook( ResHookProc pProc );
     UNOTOOLS_DLLPUBLIC ResHookProc GetReadStringHook();
     UNOTOOLS_DLLPUBLIC OUString ExpandVariables(const OUString& rString);

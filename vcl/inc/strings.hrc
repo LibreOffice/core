@@ -20,7 +20,7 @@
 #ifndef INCLUDED_VCL_INC_STRINGS_HRC
 #define INCLUDED_VCL_INC_STRINGS_HRC
 
-#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
+#define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
 
 #define SV_RESID_STRING_NOSELECTIONPOSSIBLE          NC_("SV_RESID_STRING_NOSELECTIONPOSSIBLE", "[No selection possible]")
 
