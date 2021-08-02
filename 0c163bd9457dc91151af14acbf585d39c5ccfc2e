@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "67679c0b_e5682198",
+        "filename": "sc/source/core/data/markdata.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 658,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-02T07:43:16Z",
+      "side": 1,
+      "message": "Why do you use int for index, and do a static_cast, when you know that the container you are working with uses another type for its indexes (size_t)?",
+      "revId": "0c163bd9457dc91151af14acbf585d39c5ccfc2e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ee044d0d_72170eb5",
+        "filename": "sc/source/core/data/markdata.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 661,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-02T07:43:16Z",
+      "side": 1,
+      "message": "Why use at() here, instead of normal operator[]?",
+      "revId": "0c163bd9457dc91151af14acbf585d39c5ccfc2e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ffb9f7ef_1eacafbb",
+        "filename": "sc/source/core/data/markdata.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 666,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-02T07:43:16Z",
+      "side": 1,
+      "message": "When you use emplace_back, it takes exactly the same arguments as the element type\u0027s constructors (in this case, std::pair\u0027s). The very idea behind emplace_back is to create elements in-place, and *avoid* construction of the element outside of the container and them copy it, which helps efficiency. Here you explicitly create the pair outside of the container, and pass it (already constructed) to emplace_back, which would succeed (calling a copy ctor), but completely misses the point.\n\nUse emplace_back(i, ScRange(0,0,0)) instead.",
+      "revId": "0c163bd9457dc91151af14acbf585d39c5ccfc2e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "569526c8_f998613d",
+        "filename": "sc/source/core/data/markdata.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 694,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-02T07:43:16Z",
+      "side": 1,
+      "message": "Maybe I\u0027m wrong, but it looks dangerous: is there a guarantee that nTab is not greater than vMark.size(), which then would satisfy the strange \"!\u003d\" condition (usual is to check that index is \"\u003c\" than size)?",
+      "revId": "0c163bd9457dc91151af14acbf585d39c5ccfc2e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "40154095_81e07745",
+        "filename": "sc/source/core/data/markdata.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 703,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-02T07:43:16Z",
+      "side": 1,
+      "message": "So if vMark.size() \u003d\u003d 0, this would try to access non-existing element 0?",
+      "revId": "0c163bd9457dc91151af14acbf585d39c5ccfc2e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4e76b39f_f07629a5",
+        "filename": "sc/source/ui/view/tabview2.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 605,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-02T07:43:16Z",
+      "side": 1,
+      "message": "You are manipulating vMark (using erase and emplace), which invalidates iterators in and after the place. Range-based for must not be used in that case.",
+      "revId": "0c163bd9457dc91151af14acbf585d39c5ccfc2e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
