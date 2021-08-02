@@ -313,6 +313,29 @@ namespace Translate
         return result;
     }
 
+    OUString nget(TranslateNId aContextSingularPlural, int n, const std::locale &loc)
+    {
+        //if it's a key id locale, generate it here
+        if (std::use_facet<boost::locale::info>(loc).language() == "qtz")
+        {
+            OString sKeyId(genKeyId(OString::Concat(aContextSingularPlural.mpContext) + "|" + aContextSingularPlural.mpSingular));
+            const char* pForm = n == 0 ? aContextSingularPlural.mpSingular : aContextSingularPlural.mpPlural;
+            return OUString::fromUtf8(sKeyId) + u"\u2016" + createFromUtf8(pForm, strlen(pForm));
+        }
+
+        //otherwise translate it
+        const std::string ret = boost::locale::npgettext(aContextSingularPlural.mpContext, aContextSingularPlural.mpSingular, aContextSingularPlural.mpPlural, n, loc);
+        OUString result(ExpandVariables(createFromUtf8(ret.data(), ret.size())));
+
+        if (comphelper::LibreOfficeKit::isActive())
+        {
+            if (std::use_facet<boost::locale::info>(loc).country() == "CH" &&
+                std::use_facet<boost::locale::info>(loc).language() == "de")
+                result = result.replaceAll(OUString::fromUtf8("\xC3\x9F"), "ss");
+        }
+        return result;
+    }
+
     static ResHookProc pImplResHookProc = nullptr;
 
     OUString ExpandVariables(const OUString& rString)
@@ -338,5 +361,11 @@ bool TranslateId::operator==(const TranslateId& other) const
     return strcmp(mpContext, other.mpContext) == 0 && strcmp(mpId,other.mpId) == 0;
 }
 
+bool TranslateNId::operator==(const TranslateNId& other) const
+{
+    return strcmp(mpContext, other.mpContext) == 0
+        && strcmp(mpSingular, other.mpSingular) == 0
+        && strcmp(mpPlural, other.mpPlural) == 0;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
