@@ -20,9 +20,9 @@
 #ifndef INCLUDED_VCL_INC_PRINTACCESSORYVIEW_HRC
 #define INCLUDED_VCL_INC_PRINTACCESSORYVIEW_HRC
 
-#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
+#define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
 
-const char* SV_PRINT_NATIVE_STRINGS[] =
+const TranslateId SV_PRINT_NATIVE_STRINGS[] =
 {
     NC_("SV_PRINT_NATIVE_STRINGS", "Preview"),
     NC_("SV_PRINT_NATIVE_STRINGS", "Page number"),
