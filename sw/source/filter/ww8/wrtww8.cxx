@@ -446,7 +446,7 @@ void WW8_WrtFactoids::Write(WW8Export& rExport)
 
 // Names of the storage streams
 constexpr OUStringLiteral sMainStream  = u"WordDocument";
-#define sCompObj "\1CompObj"
+constexpr OUStringLiteral sCompObj = u"\1CompObj";
 
 static void WriteDop( WW8Export& rWrt )
 {

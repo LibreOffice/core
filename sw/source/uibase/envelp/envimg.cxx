@@ -34,9 +34,9 @@
 #include <unomid.h>
 
 #ifdef _WIN32
-#define NEXTLINE  "\r\n"
+constexpr OUStringLiteral NEXTLINE = u"\r\n";
 #else
-#define NEXTLINE  "\n"
+constexpr OUStringLiteral NEXTLINE = u"\n";
 #endif
 
 using namespace utl;
