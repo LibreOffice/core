@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef SC_INC_FILTERENTRIES_HXX
-#define SC_INC_FILTERENTRIES_HXX
+#pragma once
 
 #include <sal/config.h>
 #include "typedstrdata.hxx"
@@ -44,6 +43,5 @@ struct ScFilterEntries
     }
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
