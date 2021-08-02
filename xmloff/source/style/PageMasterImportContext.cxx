@@ -28,7 +28,9 @@
 #include <PageMasterStyleMap.hxx>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/drawing/FillStyle.hpp>
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 
 //
 #include <com/sun/star/beans/XPropertySet.hpp>
