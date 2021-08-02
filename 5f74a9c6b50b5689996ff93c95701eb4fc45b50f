@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d0f616aa_d8464083",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-02T08:32:08Z",
+      "side": 1,
+      "message": "We also have some #defines not in the beginning of lines.",
+      "revId": "5f74a9c6b50b5689996ff93c95701eb4fc45b50f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
