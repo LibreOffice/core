@@ -55,17 +55,22 @@ privateSnippetExecutor:
 	
 	call	cpp_vtable_call
 
-	cmp	$1, %rax
-	je	.Lspecial
+	testl	%eax, %eax
+	je	.Lfpint
+	jg	.Lintfp
 
 	movq	-144(%rbp), %rax		# Potential return value (general case)
 	movq	-136(%rbp), %rdx		# Potential return value (general case)
 	movq	-144(%rbp), %xmm0		# Potential return value (general case)
 	movq	-136(%rbp), %xmm1		# Potential return value (general case)
 	jmp	.Lfinish
-.Lspecial:
+.Lfpint:
 	movq	-144(%rbp), %xmm0		# Return value (special fp and integer case)
 	movq	-136(%rbp), %rax		# Return value (special fp and integer case)
+	jmp	.Lfinish
+.Lintfp:
+	movq	-144(%rbp), %rax		# Return value (special integer and fp case)
+	movq	-136(%rbp), %xmm0		# Return value (special integer and fp case)
 
 .Lfinish:
 	leave

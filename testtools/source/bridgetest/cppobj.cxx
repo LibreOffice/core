@@ -246,6 +246,7 @@ public:
     virtual MixedFloatAndInteger SAL_CALL echoMixedFloatAndInteger(const MixedFloatAndInteger& rStruct) override
         { return rStruct; }
     virtual DoubleHyper SAL_CALL echoDoubleHyper(DoubleHyper const & s) override { return s; }
+    virtual HyperDouble SAL_CALL echoHyperDouble(HyperDouble const & s) override { return s; }
     virtual FloatFloatLongByte SAL_CALL echoFloatFloatLongByte(FloatFloatLongByte const & s)
         override
     { return s; }

@@ -42,6 +42,7 @@ import test.testtools.bridgetest.TwoFloats;
 import test.testtools.bridgetest.FourFloats;
 import test.testtools.bridgetest.MixedFloatAndInteger;
 import test.testtools.bridgetest.DoubleHyper;
+import test.testtools.bridgetest.HyperDouble;
 import test.testtools.bridgetest.FloatFloatLongByte;
 import test.testtools.bridgetest.ThreeByteStruct;
 import test.testtools.bridgetest.XBridgeTest;
@@ -507,6 +508,10 @@ public class TestComponent {
         }
 
         public DoubleHyper echoDoubleHyper(DoubleHyper s) throws com.sun.star.uno.RuntimeException {
+            return s;
+        }
+
+        public HyperDouble echoHyperDouble(HyperDouble s) throws com.sun.star.uno.RuntimeException {
             return s;
         }
 

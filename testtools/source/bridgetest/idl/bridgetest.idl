@@ -126,6 +126,10 @@ struct DoubleHyper {
     double a;
     hyper b;
 };
+struct HyperDouble {
+    hyper a;
+    double b;
+};
 struct FloatFloatLongByte {
     float a;
     float b;
@@ -339,6 +343,8 @@ interface XBridgeTestBase : com::sun::star::uno::XInterface
     MixedFloatAndInteger echoMixedFloatAndInteger( [in] MixedFloatAndInteger aStruct );
 
     DoubleHyper echoDoubleHyper([in] DoubleHyper s);
+
+    HyperDouble echoHyperDouble([in] HyperDouble s);
 
     FloatFloatLongByte echoFloatFloatLongByte([in] FloatFloatLongByte s);
 

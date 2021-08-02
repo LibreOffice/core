@@ -54,7 +54,8 @@ bool return_in_hidden_param( typelib_TypeDescriptionReference *pTypeRef ) noexce
 enum class ReturnKind {
     Memory,
     RegistersGeneral,
-    RegistersSpecial
+    RegistersFpInt,
+    RegistersIntFp
 };
 
 ReturnKind getReturnKind(typelib_TypeDescriptionReference * type) noexcept;

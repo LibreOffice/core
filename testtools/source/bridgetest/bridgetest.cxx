@@ -491,6 +491,12 @@ static bool performTest(
                 && check(out.b == in.b, "double and hyper struct test: hyper");
         }
         {
+            HyperDouble in(12, 13.0);
+            HyperDouble out = xLBT->echoHyperDouble(in);
+            bRet &= check(out.a == in.a, "hyper and double struct test: hyper")
+                && check(out.b == in.b, "hyper and double struct test: double");
+        }
+        {
             FloatFloatLongByte in(20.0f, 21.0f, 22, '3');
             FloatFloatLongByte out = xLBT->echoFloatFloatLongByte(in);
             bRet &= check(out.a == in.a, "double and hyper struct test: first float")
