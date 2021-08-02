@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "4cfb2b5d_cb9450e5",
+        "filename": "jvmfwk/source/framework.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2021-08-02T13:20:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "33b0bd87_8f793bf7",
+      "revId": "6bc7158ea63f785ee8ef596c882627e8b48120fc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c8c326bd_decf116b",
         "filename": "jvmfwk/source/framework.cxx",
         "patchSetId": 1
@@ -71,6 +89,42 @@
     },
     {
       "key": {
+        "uuid": "6b9d18ae_a1e9b6c7",
+        "filename": "jvmfwk/source/framework.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2021-08-02T13:20:26Z",
+      "side": 1,
+      "message": "* I added it to the front, since when using Oracle JRE, the bin/ directory is at the front of java.library.path\n* If osl_getEnvironment failed, sPATH will be empty. So the new path will only contain sJRELocation.",
+      "parentUuid": "82c17179_162024b4",
+      "revId": "6bc7158ea63f785ee8ef596c882627e8b48120fc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4c9ecc6e_1ecd2663",
+        "filename": "jvmfwk/source/framework.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2021-08-02T13:20:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6fd3e44a_3ed6ef05",
+      "revId": "6bc7158ea63f785ee8ef596c882627e8b48120fc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3fdcc500_55df4227",
         "filename": "jvmfwk/source/framework.cxx",
         "patchSetId": 1
@@ -82,6 +136,24 @@
       "writtenOn": "2021-08-02T12:57:38Z",
       "side": 1,
       "message": "osl_setEnvironment is not thread safe and should only be used as a very last resort.  (For Linux, we have javaldx run before soffice.bin, but we have nothing similar for Windows.)  Do this anyway, with fingers firmly crossed?",
+      "revId": "6bc7158ea63f785ee8ef596c882627e8b48120fc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0c375737_f01c1696",
+        "filename": "jvmfwk/source/framework.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2021-08-02T13:20:26Z",
+      "side": 1,
+      "message": "Not sure if/how this can be a problem. Is there an alternative? \nGetEnvironmentVariableW docs don\u0027t mention anything about thread safety.\nhttps://docs.microsoft.com/en-us/windows/win32/api/processenv/nf-processenv-getenvironmentvariablew",
+      "parentUuid": "3fdcc500_55df4227",
       "revId": "6bc7158ea63f785ee8ef596c882627e8b48120fc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
