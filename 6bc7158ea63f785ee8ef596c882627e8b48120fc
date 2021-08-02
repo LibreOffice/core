@@ -125,6 +125,24 @@
     },
     {
       "key": {
+        "uuid": "60c9cfcc_5b7e6c23",
+        "filename": "jvmfwk/source/framework.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-08-02T13:29:16Z",
+      "side": 1,
+      "message": "\u003e * If osl_getEnvironment failed, sPATH will be empty. So the new path will only contain sJRELocation.\n\nIt will contain sJRELocation followed by \";\".  At least for POSIX, such an empty pathname in PATH has specific semantics; no idea about Windows, though.",
+      "parentUuid": "6b9d18ae_a1e9b6c7",
+      "revId": "6bc7158ea63f785ee8ef596c882627e8b48120fc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3fdcc500_55df4227",
         "filename": "jvmfwk/source/framework.cxx",
         "patchSetId": 1
@@ -154,6 +172,24 @@
       "side": 1,
       "message": "Not sure if/how this can be a problem. Is there an alternative? \nGetEnvironmentVariableW docs don\u0027t mention anything about thread safety.\nhttps://docs.microsoft.com/en-us/windows/win32/api/processenv/nf-processenv-getenvironmentvariablew",
       "parentUuid": "3fdcc500_55df4227",
+      "revId": "6bc7158ea63f785ee8ef596c882627e8b48120fc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "174d9b9b_12163497",
+        "filename": "jvmfwk/source/framework.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-08-02T13:29:16Z",
+      "side": 1,
+      "message": "One alternative is to set up the environment before soffice.bin starts, as is done with javaldx on Linux.  That might be overkill here, though (for Linux we need it as LD_LIBRARY_PATH, which is set up by javaldx, is only read once at process start), hence my \"Do this anyway, with fingers firmly crossed?\"",
+      "parentUuid": "0c375737_f01c1696",
       "revId": "6bc7158ea63f785ee8ef596c882627e8b48120fc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
