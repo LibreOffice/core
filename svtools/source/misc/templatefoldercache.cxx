@@ -41,6 +41,7 @@
 
 #include <comphelper/processfactory.hxx>
 
+#include <mutex>
 #include <vector>
 #include <algorithm>
 
@@ -384,7 +385,7 @@ namespace svt
         TemplateFolderContent           m_aPreviousState;   // the current state of the template dirs (as found on the HD)
         TemplateFolderContent           m_aCurrentState;    // the previous state of the template dirs (as found in the cache file)
 
-        osl::Mutex                      m_aMutex;
+        std::mutex                      m_aMutex;
         // will be lazy inited; never access directly; use getOfficeInstDirs().
         uno::Reference< util::XOfficeInstallationDirectories > m_xOfficeInstDirs;
 
@@ -757,7 +758,7 @@ namespace svt
     {
         if ( !m_xOfficeInstDirs.is() )
         {
-            osl::MutexGuard aGuard( m_aMutex );
+            std::lock_guard aGuard( m_aMutex );
             if ( !m_xOfficeInstDirs.is() )
             {
                 uno::Reference< uno::XComponentContext > xCtx(
