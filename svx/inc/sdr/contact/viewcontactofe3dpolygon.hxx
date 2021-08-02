@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_INC_SDR_CONTACT_VIEWCONTACTOFE3DPOLYGON_HXX
-#define INCLUDED_SVX_INC_SDR_CONTACT_VIEWCONTACTOFE3DPOLYGON_HXX
+#pragma once
 
 #include <sdr/contact/viewcontactofe3d.hxx>
 #include <polygn3d.hxx>
@@ -44,8 +43,5 @@ namespace sdr::contact
         };
 
 } // end of namespace sdr::contact
-
-
-#endif // INCLUDED_SVX_INC_SDR_CONTACT_VIEWCONTACTOFE3DPOLYGON_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_INC_SDR_CONTACT_VIEWOBJECTCONTACTOFSDROLE2OBJ_HXX
-#define INCLUDED_SVX_INC_SDR_CONTACT_VIEWOBJECTCONTACTOFSDROLE2OBJ_HXX
+#pragma once
 
 #include <svx/sdr/contact/viewobjectcontactofsdrobj.hxx>
 
@@ -37,7 +36,5 @@ public:
     virtual ~ViewObjectContactOfSdrOle2Obj() override;
 };
 }
-
-#endif // INCLUDED_SVX_INC_SDR_CONTACT_VIEWOBJECTCONTACTOFSDROLE2OBJ_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

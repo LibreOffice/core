@@ -16,9 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
-#ifndef INCLUDED_SVX_INC_SDR_PRIMITIVE2D_SDRPRIMITIVETOOLS_HXX
-#define INCLUDED_SVX_INC_SDR_PRIMITIVE2D_SDRPRIMITIVETOOLS_HXX
+#pragma once
 
 #include <vcl/bitmapex.hxx>
 
@@ -36,7 +34,5 @@ namespace drawinglayer::primitive2d
 // create a 3x3 cross in given color as BitmapEx
 BitmapEx createDefaultCross_3x3(const basegfx::BColor& rBColor);
 } // end of namespace drawinglayer::primitive2d
-
-#endif // INCLUDED_SVX_INC_SDR_PRIMITIVE2D_SDRPRIMITIVETOOLS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
