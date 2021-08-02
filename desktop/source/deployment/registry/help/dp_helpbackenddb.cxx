@@ -27,10 +27,10 @@
 
 using namespace ::com::sun::star::uno;
 
-#define EXTENSION_REG_NS "http://openoffice.org/extensionmanager/help-registry/2010"
-#define NS_PREFIX "help"
-#define ROOT_ELEMENT_NAME "help-backend-db"
-#define KEY_ELEMENT_NAME "help"
+constexpr OUStringLiteral EXTENSION_REG_NS = u"http://openoffice.org/extensionmanager/help-registry/2010";
+constexpr OUStringLiteral NS_PREFIX = u"help";
+constexpr OUStringLiteral ROOT_ELEMENT_NAME = u"help-backend-db";
+constexpr OUStringLiteral KEY_ELEMENT_NAME = u"help";
 
 namespace dp_registry::backend::help {
 
