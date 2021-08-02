@@ -18,9 +18,9 @@
  */
 
 #include <sdr/primitive2d/sdrprimitivetools.hxx>
-#include <osl/mutex.hxx>
 #include <vcl/lazydelete.hxx>
 #include <vcl/BitmapTools.hxx>
+#include <mutex>
 
 
 // helper methods
@@ -31,9 +31,9 @@ namespace drawinglayer::primitive2d
         {
             static vcl::DeleteOnDeinit< BitmapEx > aRetVal(vcl::DeleteOnDeinitFlag::Empty);
             static basegfx::BColor aBColor;
-            static ::osl::Mutex aMutex;
+            static std::mutex aMutex;
 
-            ::osl::MutexGuard aGuard(aMutex);
+            std::lock_guard aGuard(aMutex);
 
             if(!aRetVal.get() || rBColor != aBColor)
             {
