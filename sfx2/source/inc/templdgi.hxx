@@ -86,7 +86,6 @@ protected:
 
     sal_uInt16 nActFamily; // Id in the ToolBox = Position - 1
     sal_uInt16 nActFilter; // FilterIdx
-    SfxStyleSearchBits nAppFilter; // Filter, which has set the application (for automatic)
 
     bool bIsWater :1;
     bool bUpdate :1;
@@ -104,15 +103,12 @@ protected:
     Link<void*, void> m_aStyleListNewMenu;
     Link<void*, bool> m_aStyleListWaterCan;
     Link<void*, bool> m_aStyleListHasSelectedStyle;
-    Link<StyleFlags, void> m_aStyleListUpdateStyles;
     Link<void*, void> m_aStyleListUpdateFamily;
     Link<SfxHintId, void> m_aStyleListNotify;
     Link<void*, void> m_aStyleListUpdateStyleDependents;
     Link<bool, void> m_aStyleListEnableTreeDrag;
-    Link<sal_uInt16, void> m_aStyleListFilterSelect;
     Link<void*, void> m_aStyleListEnableDelete;
     Link<const SfxBoolItem*, void> m_aStyleListSetWaterCanState;
-    Link<sal_uInt16, void> m_aStyleListFamilySelect;
     Link<sal_uInt16, void> m_aStyleListSetFamily;
 
     DECL_LINK(FilterSelectHdl, weld::ComboBox&, void );
@@ -138,7 +134,7 @@ protected:
 
     DECL_LINK(ReadResource_Hdl, StyleList&, void);
     DECL_LINK(ClearResource_Hdl, void*, void);
-    DECL_LINK(SaveSelection_Hdl, void*, SfxObjectShell*);
+    DECL_LINK(SaveSelection_Hdl, StyleList&, SfxObjectShell*);
     DECL_LINK(LoadFactoryStyleFilter_Hdl, SfxObjectShell const*, sal_Int32);
     DECL_LINK(UpdateStyles_Hdl, StyleFlags, void);
     DECL_LINK(UpdateFamily_Hdl, StyleList&, void);
@@ -158,7 +154,7 @@ public:
 
     // Used in StyleList::UpdateStyles, StyleList::Update
     // Whenever a new family(Eg. Character, List etc.) is selected it comes into action
-    void FamilySelect(sal_uInt16 nId, bool bPreviewRefresh = false);
+    void FamilySelect(sal_uInt16 nId, StyleList& rStyleList, bool bPreviewRefresh = false);
 
     // Constructor
     SfxCommonTemplateDialog_Impl(SfxBindings* pB, weld::Container*, weld::Builder* pBuilder);
@@ -193,12 +189,8 @@ public:
     // This is used when a style is selected
     void SelectStyle(const OUString& rStyle, bool bIsCallback, StyleList& rStyleList);
 
-    // Dialog and StyleList have their own copies of variable nAppFilter.
-    // When a filter is applied, it comes into action and updates the value of nAppFilter
-    void SetApplicationFilter(SfxStyleSearchBits filter) { nAppFilter = filter; }
-    // Dialog and StyleList have their own copies of variable nActFilter.
-    // When a filter is applied, it comes into action and updates the value of nActFilter
-    void SetFilterByIndex(sal_uInt16 filter) { nActFilter = filter; }
+    //When a new document is created, it comes into action
+    void IsUpdate(bool bDoUpdate, StyleList&);
 
     // This function return the value of bUpdate in Stylelist
     // This value is used in StyleList's Notify
@@ -214,15 +206,11 @@ public:
     void connect_stylelist_execute_new_menu(const Link<void*, void>& rLink) { m_aStyleListNewMenu = rLink; }
     void connect_stylelist_for_watercan(const Link<void*, bool>& rLink) { m_aStyleListWaterCan = rLink; }
     void connect_stylelist_has_selected_style(const Link<void*, bool>& rLink);
-    void connect_stylelist_update_styles(const Link<StyleFlags, void> rLink) { m_aStyleListUpdateStyles = rLink; }
-    void connect_stylelist_update_family(const Link<void*, void> rLink) { m_aStyleListUpdateFamily = rLink; }
     void connect_stylelist_update_style_dependents(const Link<void*, void>& rLink);
     void connect_stylelist_enable_tree_drag(const Link<bool, void> rLink);
     void connect_stylelist_notify(const Link<SfxHintId, void> rLink) { m_aStyleListNotify = rLink; }
-    void connect_stylelist_filter_select(Link<sal_uInt16, void> rLink);
     void connect_stylelist_enable_delete(const Link<void*, void> rLink);
     void connect_stylelist_set_water_can_state(const Link<const SfxBoolItem*, void> rLink);
-    void connect_family_select(const Link<sal_uInt16, void> rLink);
     void connect_set_family(const Link<sal_uInt16, void> rLink) { m_aStyleListSetFamily = rLink; }
 };
 
