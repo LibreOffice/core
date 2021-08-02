@@ -46,7 +46,6 @@ namespace sdr::properties
 
 } // end of namespace sdr::properties
 
-
 #endif // INCLUDED_SVX_INC_SDR_PROPERTIES_E3DEXTRUDEPROPERTIES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

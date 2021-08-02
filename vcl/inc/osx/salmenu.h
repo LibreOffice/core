@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_OSX_SALMENU_H
-#define INCLUDED_VCL_INC_OSX_SALMENU_H
+#pragma once
 
 #include <premac.h>
 #include <Cocoa/Cocoa.h>
@@ -107,6 +106,5 @@ public:
     NSMenuItem*         mpMenuItem;           // The NSMenuItem
 };
 
-#endif // INCLUDED_VCL_INC_OSX_SALMENU_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

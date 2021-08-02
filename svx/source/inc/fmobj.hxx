@@ -110,7 +110,6 @@ private:
     SAL_DLLPRIVATE void    impl_checkRefDevice_nothrow( bool _force = false );
 };
 
-
 #endif // _FM_FMOBJ_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

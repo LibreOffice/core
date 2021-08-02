@@ -193,7 +193,6 @@ private:
     css::uno::Reference< css::script::XScriptListener > m_vbaListener;
 };
 
-
 #endif // INCLUDED_SVX_SOURCE_INC_FMUNDO_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

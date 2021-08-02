@@ -101,7 +101,6 @@ namespace svxform
 
 }
 
-
 #endif // INCLUDED_SVX_SOURCE_INC_FORMCONTROLFACTORY_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
