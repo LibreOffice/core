@@ -54,4 +54,5 @@ public:
     void TextHandler(MetaTextAction* pAction, ImplMetaWriteData* pData);
     void TextArrayHandler(MetaTextArrayAction* pAction, ImplMetaWriteData* pData);
     void StretchTextHandler(MetaStretchTextAction* pAction, ImplMetaWriteData* pData);
+    void TextRectHandler(MetaTextRectAction* pAction, ImplMetaWriteData* pData);
 };
