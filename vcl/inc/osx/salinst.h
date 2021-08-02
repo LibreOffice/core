@@ -18,8 +18,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_OSX_SALINST_H
-#define INCLUDED_VCL_INC_OSX_SALINST_H
+#pragma once
 
 #include <sal/config.h>
 
@@ -34,7 +33,6 @@
 
 #ifdef MACOSX
 #include <osx/osxvcltypes.h>
-#endif
 #include <salinst.hxx>
 
 #include <osx/runinmain.hxx>
