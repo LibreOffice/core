@@ -3117,13 +3117,16 @@ void DesktopLOKTest::testRenderSearchResult()
     Scheduler::ProcessEventsToIdle();
 
     unsigned char* pBuffer = nullptr;
-    OString aJSON = "{ \"type\" : 1, \"node_index\" : 19 }";
+    OString aPayload =
+    "<indexing>"
+        "<paragraph type=\"1\" index=\"19\">ABC</paragraph>"
+    "</indexing>";
 
     int nWidth = 0;
     int nHeight = 0;
     size_t nByteSize = 0;
 
-    bool bResult = pDocument->m_pDocumentClass->renderSearchResult(pDocument, aJSON.getStr(), &pBuffer, &nWidth, &nHeight, &nByteSize);
+    bool bResult = pDocument->m_pDocumentClass->renderSearchResult(pDocument, aPayload.getStr(), &pBuffer, &nWidth, &nHeight, &nByteSize);
 
     CPPUNIT_ASSERT(bResult);
     CPPUNIT_ASSERT(pBuffer);
