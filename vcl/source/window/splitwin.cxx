@@ -2083,7 +2083,7 @@ void SplitWindow::RequestHelp( const HelpEvent& rHEvt )
     {
         Point       aMousePosPixel = ScreenToOutputPixel( rHEvt.GetMousePosPixel() );
         tools::Rectangle   aHelpRect;
-        const char* pHelpResId = nullptr;
+        TranslateId pHelpResId;
 
         ImplGetFadeInRect( aHelpRect, true );
         if ( aHelpRect.IsInside( aMousePosPixel ) )

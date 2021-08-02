@@ -2963,9 +2963,7 @@ void VclBuilder::handleRow(xmlreader::XmlReader &reader, const OString &rID)
                 OUString sFinalValue;
                 if (bTranslated)
                 {
-                    if (!sContext.isEmpty())
-                        sValue = sContext + "\004" + sValue;
-                    sFinalValue = Translate::get(sValue.getStr(), m_pParserState->m_aResLocale);
+                    sFinalValue = Translate::get({sContext.getStr(), sValue.getStr()}, m_pParserState->m_aResLocale);
                 }
                 else
                     sFinalValue = OUString::fromUtf8(sValue);
@@ -3128,9 +3126,7 @@ std::vector<ComboBoxTextItem> VclBuilder::handleItems(xmlreader::XmlReader &read
                 OUString sFinalValue;
                 if (bTranslated)
                 {
-                    if (!sContext.isEmpty())
-                        sValue = sContext + "\004" + sValue;
-                    sFinalValue = Translate::get(sValue.getStr(), m_pParserState->m_aResLocale);
+                    sFinalValue = Translate::get({sContext.getStr(), sValue.getStr()}, m_pParserState->m_aResLocale);
                 }
                 else
                     sFinalValue = OUString::fromUtf8(sValue);
@@ -3943,9 +3939,7 @@ void VclBuilder::collectProperty(xmlreader::XmlReader &reader, stringmap &rMap) 
     OUString sFinalValue;
     if (bTranslated)
     {
-        if (!sContext.isEmpty())
-            sValue = sContext + "\004" + sValue;
-        sFinalValue = Translate::get(sValue.getStr(), m_pParserState->m_aResLocale);
+        sFinalValue = Translate::get({sContext.getStr(), sValue.getStr()}, m_pParserState->m_aResLocale);
     }
     else
         sFinalValue = OUString::fromUtf8(sValue);

@@ -31,6 +31,7 @@
 #include <vcl/window.hxx>
 #include <vcl/task.hxx>
 #include <LibreOfficeKit/LibreOfficeKitTypes.h>
+#include <unotools/resmgr.hxx>
 
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
@@ -429,7 +430,7 @@ VCL_PLUGIN_PUBLIC basegfx::SystemDependentDataManager& ImplGetSystemDependentDat
 VCL_PLUGIN_PUBLIC vcl::Window* ImplGetDefaultWindow();
 vcl::Window* ImplGetDefaultContextWindow();
 const std::locale& ImplGetResLocale();
-VCL_PLUGIN_PUBLIC OUString VclResId(std::string_view aId);
+VCL_PLUGIN_PUBLIC OUString VclResId(TranslateId sContextAndId);
 DockingManager*     ImplGetDockingManager();
 BlendFrameCache*    ImplGetBlendFrameCache();
 
