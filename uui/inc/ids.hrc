@@ -25,9 +25,9 @@
 
 #include "ids.hxx"
 
-#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
+#define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
 
-const std::pair<const char*, ErrCode> RID_UUI_ERRHDL[] =
+const std::pair<TranslateId, ErrCode> RID_UUI_ERRHDL[] =
 {
     { NC_("RID_UUI_ERRHDL", "The operation executed on $(ARG1) was aborted."),
       ERRCODE_UUI_IO_ABORT },
@@ -159,7 +159,7 @@ const std::pair<const char*, ErrCode> RID_UUI_ERRHDL[] =
       ERRCODE_UUI_LOCKING_LOCK_EXPIRED },
     { NC_("RID_UUI_ERRHDL", "Component cannot be loaded, possibly broken or incomplete installation.\nFull error message:\n\n $(ARG1)."),
       ERRCODE_UUI_CANNOT_ACTIVATE_FACTORY },
-    { nullptr, ERRCODE_NONE }
+    { {}, ERRCODE_NONE }
 };
 
 #define STR_UUI_UNKNOWNAUTH_UNTRUSTED        NC_("STR_UUI_UNKNOWNAUTH_UNTRUSTED", "Unable to verify the identity of $(ARG1) site.\n\nBefore accepting this certificate, you should examine this site's certificate carefully. Are you willing to accept this certificate for the purpose of identifying the Web site $(ARG1)?")
