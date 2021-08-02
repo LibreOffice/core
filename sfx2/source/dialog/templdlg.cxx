@@ -206,7 +206,6 @@ SfxCommonTemplateDialog_Impl::SfxCommonTemplateDialog_Impl(SfxBindings* pB, weld
     , mxFilterLb(pBuilder->weld_combo_box("filter"))
     , nActFamily(0xffff)
     , nActFilter(0)
-    , nAppFilter(SfxStyleSearchBits::Auto)
     , bIsWater(false)
     , bUpdate(false)
     , bUpdateFamily(false)

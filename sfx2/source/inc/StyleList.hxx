@@ -217,7 +217,7 @@ private:
     std::array<std::unique_ptr<SfxTemplateItem>, MAX_FAMILIES> m_pFamilyState;
     SfxObjectShell* m_pCurObjShell;
     sal_uInt16 m_nActFamily;
-    SfxStyleSearchBits m_nAppFilter;
+    SfxStyleSearchBits m_nAppFilter; // Filter, which has set the application (for automatic)
 
     std::unique_ptr<TreeViewDropTarget> m_xTreeView1DropTargetHelper;
     std::unique_ptr<TreeViewDropTarget> m_xTreeView2DropTargetHelper;
