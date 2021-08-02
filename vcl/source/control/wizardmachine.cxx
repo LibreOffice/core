@@ -28,8 +28,8 @@
 #include <stack>
 #include "wizimpldata.hxx"
 
-#define HID_WIZARD_NEXT                                        "SVT_HID_WIZARD_NEXT"
-#define HID_WIZARD_PREVIOUS                                    "SVT_HID_WIZARD_PREVIOUS"
+constexpr OStringLiteral HID_WIZARD_NEXT = "SVT_HID_WIZARD_NEXT";
+constexpr OStringLiteral HID_WIZARD_PREVIOUS = "SVT_HID_WIZARD_PREVIOUS";
 
 #define WIZARDDIALOG_BUTTON_OFFSET_Y        6
 #define WIZARDDIALOG_BUTTON_DLGOFFSET_X     6

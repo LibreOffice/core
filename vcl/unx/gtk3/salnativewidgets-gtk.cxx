@@ -1490,10 +1490,10 @@ GtkStyleContext* GtkSalGraphics::createStyleContext(GtkControlPart ePart)
 }
 
 #ifndef GTK_STYLE_CLASS_POPUP
-#define GTK_STYLE_CLASS_POPUP "popup"
+constexpr OUStringLiteral GTK_STYLE_CLASS_POPUP = u"popup";
 #endif
 #ifndef GTK_STYLE_CLASS_LABEL
-#define GTK_STYLE_CLASS_LABEL "label"
+constexpr OUStringLiteral GTK_STYLE_CLASS_LABEL = u"label";
 #endif
 
 void GtkSalGraphics::PaintCheckOrRadio(cairo_t *cr, GtkStyleContext *context,
