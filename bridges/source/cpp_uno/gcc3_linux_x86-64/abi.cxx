@@ -269,7 +269,12 @@ x86_64::ReturnKind x86_64::getReturnKind(typelib_TypeDescriptionReference * type
     if (n == 2 && (classes[0] == X86_64_SSE_CLASS || classes[0] == X86_64_SSESF_CLASS)
         && (classes[1] == X86_64_INTEGER_CLASS || classes[1] == X86_64_INTEGERSI_CLASS))
     {
-        return ReturnKind::RegistersSpecial;
+        return ReturnKind::RegistersFpInt;
+    }
+    if (n == 2 && (classes[0] == X86_64_INTEGER_CLASS || classes[0] == X86_64_INTEGERSI_CLASS)
+        && (classes[1] == X86_64_SSE_CLASS || classes[1] == X86_64_SSESF_CLASS))
+    {
+        return ReturnKind::RegistersIntFp;
     }
     return ReturnKind::RegistersGeneral;
 }

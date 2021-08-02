@@ -248,16 +248,24 @@ static int cpp2uno_call(
         {
             TYPELIB_DANGER_RELEASE( pReturnTypeDescr );
         }
-        return returnKind == x86_64::ReturnKind::RegistersSpecial ? 1 : 0;
+        switch (returnKind) {
+        case x86_64::ReturnKind::RegistersFpInt:
+            return 0;
+        case x86_64::ReturnKind::RegistersIntFp:
+            return 1;
+        default:
+            return -1;
+        }
     }
 }
 
-// Returns 0 for the general case where potential return values from privateSnippetExecutor can be
+// Returns -1 for the general case where potential return values from privateSnippetExecutor can be
 // copied from pRegisterReturn to both %rax and %rdx (in that order) and to %xmm0 and %xmm1 (in that
 // order)---each specific return type will only require a subset of that copy operations, but the
-// other copies to those non--callee-saved registers will be redundant and harmless.  And returns 1
-// for the special case where return values from privateSnippetExecutor must be copied from
-// pRegisterReturn to %xmm0 and %rax (in that order).
+// other copies to those non--callee-saved registers will be redundant and harmless.  Returns 0 for
+// the special case where return values from privateSnippetExecutor must be copied from
+// pRegisterReturn to %xmm0 and %rax (in that order).  Returns 1 for the special case where return
+// privateSnippetExecutor must be copied from pRegisterReturn to %rax and %xmm0 (in that order).
 int cpp_vtable_call(
     sal_Int32 nFunctionIndex, sal_Int32 nVtableOffset,
     void ** gpreg, void ** fpreg, void ** ovrflw,
