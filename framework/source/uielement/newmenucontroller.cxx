@@ -43,8 +43,8 @@
 #include <cppuhelper/supportsservice.hxx>
 
 //  Defines
-#define aSlotNewDocDirect ".uno:AddDirect"
-#define aSlotAutoPilot ".uno:AutoPilotMenu"
+constexpr OUStringLiteral aSlotNewDocDirect = u".uno:AddDirect";
+constexpr OUStringLiteral aSlotAutoPilot = u".uno:AutoPilotMenu";
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -319,7 +319,7 @@ void NewMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu > const &
 
     Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
     URL aTargetURL;
-    aTargetURL.Complete = OUString::createFromAscii(m_bNewMenu ? aSlotNewDocDirect : aSlotAutoPilot);
+    aTargetURL.Complete = m_bNewMenu ? OUString(aSlotNewDocDirect) : OUString(aSlotAutoPilot);
     m_xURLTransformer->parseStrict( aTargetURL );
     Reference< XDispatch > xMenuItemDispatch = xDispatchProvider->queryDispatch( aTargetURL, OUString(), 0 );
     if(xMenuItemDispatch == nullptr)

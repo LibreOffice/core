@@ -36,9 +36,9 @@ using namespace ::com::sun::star::xml::sax;
 #define ELEMENT_EXTERNALIMAGES      "externalimages"
 #define ELEMENT_EXTERNALENTRY       "externalentry"
 
-#define ELEMENT_NS_IMAGESCONTAINER  "image:imagescontainer"
-#define ELEMENT_NS_IMAGES           "image:images"
-#define ELEMENT_NS_ENTRY            "image:entry"
+constexpr OUStringLiteral ELEMENT_NS_IMAGESCONTAINER = u"image:imagescontainer";
+constexpr OUStringLiteral ELEMENT_NS_IMAGES = u"image:images";
+constexpr OUStringLiteral ELEMENT_NS_ENTRY = u"image:entry";
 
 #define ATTRIBUTE_HREF                  "href"
 #define ATTRIBUTE_MASKCOLOR             "maskcolor"
@@ -50,19 +50,19 @@ using namespace ::com::sun::star::xml::sax;
 #define ATTRIBUTE_HIGHCONTRASTMASKURL   "highcontrastmaskurl"
 #define ATTRIBUTE_TYPE_CDATA            "CDATA"
 
-#define ATTRIBUTE_XMLNS_IMAGE       "xmlns:image"
-#define ATTRIBUTE_XMLNS_XLINK       "xmlns:xlink"
+constexpr OUStringLiteral ATTRIBUTE_XMLNS_IMAGE = u"xmlns:image";
+constexpr OUStringLiteral ATTRIBUTE_XMLNS_XLINK = u"xmlns:xlink";
 
-#define ATTRIBUTE_XLINK_TYPE        "xlink:type"
-#define ATTRIBUTE_XLINK_TYPE_VALUE  "simple"
+constexpr OUStringLiteral ATTRIBUTE_XLINK_TYPE = u"xlink:type";
+constexpr OUStringLiteral ATTRIBUTE_XLINK_TYPE_VALUE = u"simple";
 
-#define XMLNS_IMAGE                 "http://openoffice.org/2001/image"
-#define XMLNS_XLINK                 "http://www.w3.org/1999/xlink"
-#define XMLNS_IMAGE_PREFIX          "image:"
+constexpr OUStringLiteral XMLNS_IMAGE = u"http://openoffice.org/2001/image";
+constexpr OUStringLiteral XMLNS_XLINK = u"http://www.w3.org/1999/xlink";
+constexpr OUStringLiteral XMLNS_IMAGE_PREFIX = u"image:";
 
-#define XMLNS_FILTER_SEPARATOR      "^"
+constexpr OUStringLiteral XMLNS_FILTER_SEPARATOR = u"^";
 
-#define IMAGES_DOCTYPE  "<!DOCTYPE image:imagecontainer PUBLIC \"-//OpenOffice.org//DTD OfficeDocument 1.0//EN\" \"image.dtd\">"
+constexpr OUStringLiteral IMAGES_DOCTYPE = u"<!DOCTYPE image:imagecontainer PUBLIC \"-//OpenOffice.org//DTD OfficeDocument 1.0//EN\" \"image.dtd\">";
 
 namespace framework
 {

@@ -38,12 +38,12 @@ using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::ui;
 using namespace ::com::sun::star::container;
 
-#define XMLNS_STATUSBAR             "http://openoffice.org/2001/statusbar"
-#define XMLNS_XLINK                 "http://www.w3.org/1999/xlink"
-#define XMLNS_STATUSBAR_PREFIX      "statusbar:"
-#define XMLNS_XLINK_PREFIX          "xlink:"
+constexpr OUStringLiteral XMLNS_STATUSBAR = u"http://openoffice.org/2001/statusbar";
+constexpr OUStringLiteral XMLNS_XLINK = u"http://www.w3.org/1999/xlink";
+constexpr OUStringLiteral XMLNS_STATUSBAR_PREFIX = u"statusbar:";
+constexpr OUStringLiteral XMLNS_XLINK_PREFIX = u"xlink:";
 
-#define XMLNS_FILTER_SEPARATOR      "^"
+constexpr OUStringLiteral XMLNS_FILTER_SEPARATOR = u"^";
 
 #define ELEMENT_STATUSBAR           "statusbar"
 #define ELEMENT_STATUSBARITEM       "statusbaritem"
@@ -58,26 +58,26 @@ using namespace ::com::sun::star::container;
 #define ATTRIBUTE_HELPURL           "helpid"
 #define ATTRIBUTE_MANDATORY         "mandatory"
 
-#define ELEMENT_NS_STATUSBAR        "statusbar:statusbar"
-#define ELEMENT_NS_STATUSBARITEM    "statusbar:statusbaritem"
+constexpr OUStringLiteral ELEMENT_NS_STATUSBAR = u"statusbar:statusbar";
+constexpr OUStringLiteral ELEMENT_NS_STATUSBARITEM = u"statusbar:statusbaritem";
 
-#define ATTRIBUTE_XMLNS_STATUSBAR   "xmlns:statusbar"
-#define ATTRIBUTE_XMLNS_XLINK       "xmlns:xlink"
+constexpr OUStringLiteral ATTRIBUTE_XMLNS_STATUSBAR = u"xmlns:statusbar";
+constexpr OUStringLiteral ATTRIBUTE_XMLNS_XLINK = u"xmlns:xlink";
 
-#define ATTRIBUTE_TYPE_CDATA        "CDATA"
+constexpr OUStringLiteral ATTRIBUTE_TYPE_CDATA = u"CDATA";
 
-#define ATTRIBUTE_BOOLEAN_TRUE      "true"
-#define ATTRIBUTE_BOOLEAN_FALSE     "false"
+constexpr OUStringLiteral ATTRIBUTE_BOOLEAN_TRUE = u"true";
+constexpr OUStringLiteral ATTRIBUTE_BOOLEAN_FALSE = u"false";
 
-#define ATTRIBUTE_ALIGN_LEFT        "left"
-#define ATTRIBUTE_ALIGN_RIGHT       "right"
-#define ATTRIBUTE_ALIGN_CENTER      "center"
+constexpr OUStringLiteral ATTRIBUTE_ALIGN_LEFT = u"left";
+constexpr OUStringLiteral ATTRIBUTE_ALIGN_RIGHT = u"right";
+constexpr OUStringLiteral ATTRIBUTE_ALIGN_CENTER = u"center";
 
-#define ATTRIBUTE_STYLE_IN          "in"
-#define ATTRIBUTE_STYLE_OUT         "out"
-#define ATTRIBUTE_STYLE_FLAT        "flat"
+constexpr OUStringLiteral ATTRIBUTE_STYLE_IN = u"in";
+constexpr OUStringLiteral ATTRIBUTE_STYLE_OUT = u"out";
+constexpr OUStringLiteral ATTRIBUTE_STYLE_FLAT = u"flat";
 
-#define STATUSBAR_DOCTYPE           "<!DOCTYPE statusbar:statusbar PUBLIC \"-//OpenOffice.org//DTD OfficeDocument 1.0//EN\" \"statusbar.dtd\">"
+constexpr OUStringLiteral STATUSBAR_DOCTYPE = u"<!DOCTYPE statusbar:statusbar PUBLIC \"-//OpenOffice.org//DTD OfficeDocument 1.0//EN\" \"statusbar.dtd\">";
 
 namespace framework
 {
@@ -158,13 +158,13 @@ OReadStatusBarDocumentHandler::OReadStatusBarDocumentHandler(
     {
         if ( StatusBarEntries[i].nNamespace == SB_NS_STATUSBAR )
         {
-            OUString temp = XMLNS_STATUSBAR XMLNS_FILTER_SEPARATOR +
+            OUString temp = XMLNS_STATUSBAR + XMLNS_FILTER_SEPARATOR +
                 OUString::createFromAscii( StatusBarEntries[i].aEntryName );
             m_aStatusBarMap.emplace( temp, static_cast<StatusBar_XML_Entry>(i) );
         }
         else
         {
-            OUString temp = XMLNS_XLINK XMLNS_FILTER_SEPARATOR +
+            OUString temp = XMLNS_XLINK + XMLNS_FILTER_SEPARATOR +
                 OUString::createFromAscii( StatusBarEntries[i].aEntryName );
             m_aStatusBarMap.emplace( temp, static_cast<StatusBar_XML_Entry>(i) );
         }

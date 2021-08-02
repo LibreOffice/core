@@ -53,8 +53,8 @@
 
 using namespace framework;
 
-#define CFGPROP_USERPATHS "UserPaths"
-#define CFGPROP_WRITEPATH "WritePath"
+constexpr OUStringLiteral CFGPROP_USERPATHS = u"UserPaths";
+constexpr OUStringLiteral CFGPROP_WRITEPATH = u"WritePath";
 
 /*
     0 : old style              "Template"              string using ";" as separator
@@ -63,9 +63,9 @@ using namespace framework;
     3 : write path             "Template_write"        string
  */
 
-#define POSTFIX_INTERNAL_PATHS "_internal"
-#define POSTFIX_USER_PATHS "_user"
-#define POSTFIX_WRITE_PATH "_writable"
+constexpr OUStringLiteral POSTFIX_INTERNAL_PATHS = u"_internal";
+constexpr OUStringLiteral POSTFIX_USER_PATHS = u"_user";
+constexpr OUStringLiteral POSTFIX_WRITE_PATH = u"_writable";
 
 namespace {
 

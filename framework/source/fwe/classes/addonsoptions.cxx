@@ -51,9 +51,9 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star;
 
-#define ROOTNODE_ADDONMENU                              "Office.Addons"
+constexpr OUStringLiteral ROOTNODE_ADDONMENU = u"Office.Addons";
 constexpr OUStringLiteral PATHDELIMITER = u"/";
-#define SEPARATOR_URL                                   "private:separator"
+constexpr OUStringLiteral SEPARATOR_URL = u"private:separator";
 
 #define PROPERTYNAME_URL                                ADDONSMENUITEM_STRING_URL
 #define PROPERTYNAME_TITLE                              ADDONSMENUITEM_STRING_TITLE
@@ -62,7 +62,7 @@ constexpr OUStringLiteral PATHDELIMITER = u"/";
 #define PROPERTYNAME_CONTEXT                            ADDONSMENUITEM_STRING_CONTEXT
 #define PROPERTYNAME_SUBMENU                            ADDONSMENUITEM_STRING_SUBMENU
 
-#define IMAGES_NODENAME                                 "UserDefinedImages"
+constexpr OUStringLiteral IMAGES_NODENAME = u"UserDefinedImages";
 
 // The following order is mandatory. Please add properties at the end!
 #define INDEX_URL               0

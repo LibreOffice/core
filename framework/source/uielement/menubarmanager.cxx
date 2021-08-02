@@ -74,10 +74,10 @@ const sal_uInt16 ITEMID_ADDONLIST             = 6678; // used to be a SID in sfx
 namespace framework
 {
 
-#define aCmdHelpIndex ".uno:HelpIndex"
-#define aCmdToolsMenu ".uno:ToolsMenu"
-#define aCmdHelpMenu ".uno:HelpMenu"
-#define aSpecialWindowCommand ".uno:WindowList"
+constexpr OUStringLiteral aCmdHelpIndex = u".uno:HelpIndex";
+constexpr OUStringLiteral aCmdToolsMenu = u".uno:ToolsMenu";
+constexpr OUStringLiteral aCmdHelpMenu = u".uno:HelpMenu";
+constexpr OUStringLiteral aSpecialWindowCommand = u".uno:WindowList";
 
 MenuBarManager::MenuBarManager(
     const Reference< XComponentContext >& rxContext,
