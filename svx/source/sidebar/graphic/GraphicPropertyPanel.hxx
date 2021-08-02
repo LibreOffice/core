@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVX_SOURCE_SIDEBAR_GRAPHIC_GRAPHICPROPERTYPANEL_HXX
-#define INCLUDED_SVX_SOURCE_SIDEBAR_GRAPHIC_GRAPHICPROPERTYPANEL_HXX
+#pragma once
 
 #include <sfx2/sidebar/ControllerItem.hxx>
 #include <sfx2/sidebar/PanelLayout.hxx>
@@ -84,6 +83,5 @@ private:
 
 } // end of namespace svx::sidebar
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
