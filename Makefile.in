@@ -358,6 +358,7 @@ ifeq ($(OS_FOR_BUILD),WNT)
 	cd $(SRCDIR)/instsetoo_native && $(MAKE) LIBO_TEST_INSTALL=TRUE $(GMAKE_OPTIONS)
 else
 	@$(SRCDIR)/solenv/bin/ooinstall $(TESTINSTALLDIR)
+ifeq ($(OS),MACOSX)
 #
 # Create Resources/*.lproj directories for languages supported by macOS
 	set -x; for lang in ca cs da de el en es fi fr hr hu id it ja ko ms nl no pl pt pt_PT ro ru sk sv th tr uk vi zh_CN zh_TW; do \
@@ -389,6 +390,7 @@ endif
 ifneq ($(MACOSX_CODESIGNING_IDENTITY),)
 # Then use the macosx-codesign-app-bundle script
 	@$(SRCDIR)/solenv/bin/macosx-codesign-app-bundle $(TESTINSTALLDIR)/$(PRODUCTNAME_WITHOUT_SPACES).app
+endif
 endif
 endif
 	@$(call gb_Top_InstallFinished,Test Installation,$(TESTINSTALLDIR))
