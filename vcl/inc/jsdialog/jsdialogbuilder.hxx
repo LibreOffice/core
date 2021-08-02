@@ -27,6 +27,7 @@
 
 #include <deque>
 #include <list>
+#include <mutex>
 #include <unordered_map>
 
 #define ACTION_TYPE "action_type"
@@ -107,7 +108,7 @@ class JSDialogNotifyIdle final : public Idle
     bool m_bForce;
 
     std::deque<JSDialogMessageInfo> m_aMessageQueue;
-    osl::Mutex m_aQueueMutex;
+    std::mutex m_aQueueMutex;
 
 public:
     JSDialogNotifyIdle(VclPtr<vcl::Window> aNotifierWindow, VclPtr<vcl::Window> aContentWindow,
