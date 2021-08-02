@@ -88,11 +88,6 @@ public:
     // It is used to defaultly set the hierarchical view
     bool IsTreeView() { return m_xTreeBox->get_visible(); }
 
-    // Dialog and StyleList have their own copies of m_nActFilter
-    // When this value gets updated in Dialog's UpdateStyles_Hdl while setting a filter,
-    // the corresponding value gets updated here too.
-    void SetFilterIdx(sal_uInt16 filter) { m_nActFilter = filter; }
-
     // Helper function: Access to the current family item
     // Used in Dialog's updateStyleHandler, Execute_Impl etc...
     const SfxStyleFamilyItem* GetFamilyItem() const;
@@ -120,12 +115,20 @@ public:
     void connect_ReadResource(const Link<StyleList&, void>& rLink) { m_aReadResource = rLink; }
     void connect_ClearResource(const Link<void*, void>& rLink) { m_aClearResource = rLink; }
     void connect_LoadFactoryStyleFilter(const Link<SfxObjectShell const*, sal_Int32>& rLink);
-    void connect_SaveSelection(const Link<void*, SfxObjectShell*> rLink);
+    void connect_SaveSelection(const Link<StyleList&, SfxObjectShell*> rLink);
     void connect_UpdateStyleDependents(const Link<void*, void> rLink);
     void connect_UpdateFamily(const Link<StyleList&, void> rLink) { m_aUpdateFamily = rLink; }
 
+    void FamilySelect(sal_uInt16 nEntry);
+    void FilterSelect(sal_uInt16 nActFilter, bool bsetFilter);
+
+    void setVisible(bool b);
+
 private:
     void FillTreeBox(SfxStyleFamily eFam);
+
+    void UpdateFamily();
+    void UpdateStyles(StyleFlags nFlags);
 
     OUString getDefaultStyleName(const SfxStyleFamily eFam);
     SfxStyleFamily GetActualFamily() const;
@@ -152,16 +155,12 @@ private:
     DECL_LINK(NewMenuExecuteAction, void*, void);
     DECL_LINK(IsSafeForWaterCan, void*, bool);
     DECL_LINK(HasSelectedStyle, void*, bool);
-    DECL_LINK(UpdateFamily, void*, void);
-    DECL_LINK(UpdateStyles, StyleFlags, void);
     DECL_LINK(UpdateStyleDependents, void*, void);
     DECL_LINK(TimeOut, Timer*, void);
     DECL_LINK(EnableTreeDrag, bool, void);
     DECL_LINK(EnableDelete, void*, void);
-    DECL_LINK(FilterSelect, sal_uInt16, void);
     DECL_LINK(SetWaterCanState, const SfxBoolItem*, void);
     DECL_LINK(SetFamily, sal_uInt16, void);
-    DECL_LINK(FamilySelect, sal_uInt16, void);
 
     void InvalidateBindings();
 
@@ -170,7 +169,7 @@ private:
     Link<StyleList&, void> m_aReadResource;
     Link<void*, void> m_aClearResource;
     Link<SfxObjectShell const*, sal_Int32> m_aLoadFactoryStyleFilter;
-    Link<void*, SfxObjectShell*> m_aSaveSelection;
+    Link<StyleList&, SfxObjectShell*> m_aSaveSelection;
     Link<void*, void> m_aUpdateStyleDependents;
     Link<StyleList&, void> m_aUpdateFamily;
 
@@ -217,7 +216,7 @@ private:
     std::array<std::unique_ptr<SfxTemplateItem>, MAX_FAMILIES> m_pFamilyState;
     SfxObjectShell* m_pCurObjShell;
     sal_uInt16 m_nActFamily;
-    SfxStyleSearchBits m_nAppFilter;
+    SfxStyleSearchBits m_nAppFilter; // Filter, which has set the application (for automatic)
 
     std::unique_ptr<TreeViewDropTarget> m_xTreeView1DropTargetHelper;
     std::unique_ptr<TreeViewDropTarget> m_xTreeView2DropTargetHelper;
