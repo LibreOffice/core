@@ -34,6 +34,24 @@
       "revId": "0355bb98ea85f86a5bdbbf519b056f2f0f8508ff",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6ad40497_0865fe59",
+        "filename": "sc/source/ui/view/printfun.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3202,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-08-02T08:10:41Z",
+      "side": 1,
+      "message": "@Eike: Many thanks for the quick fix! We will do that soon.",
+      "parentUuid": "4b005b04_b1705647",
+      "revId": "0355bb98ea85f86a5bdbbf519b056f2f0f8508ff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
