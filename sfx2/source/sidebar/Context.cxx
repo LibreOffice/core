@@ -19,8 +19,8 @@
 #include <sfx2/sidebar/Context.hxx>
 
 
-#define AnyApplicationName "any"
-#define AnyContextName "any"
+constexpr OUStringLiteral AnyApplicationName = u"any";
+constexpr OUStringLiteral AnyContextName = u"any";
 
 namespace sfx2::sidebar {
 

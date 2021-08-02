@@ -929,11 +929,11 @@ bool rewriteFlatpakHelpRootUrl(OUString * helpRootUrl) {
 
 // add <noscript> meta for browsers without javascript
 
-#define SHTML1 "<!DOCTYPE HTML><html lang=\"en-US\"><head><meta charset=\"UTF-8\">"
-#define SHTML2 "<noscript><meta http-equiv=\"refresh\" content=\"0; url='"
-#define SHTML3 "/noscript.html'\"></noscript><meta http-equiv=\"refresh\" content=\"1; url='"
-#define SHTML4 "'\"><script type=\"text/javascript\"> window.location.href = \""
-#define SHTML5 "\";</script><title>Help Page Redirection</title></head><body></body></html>"
+constexpr OUStringLiteral SHTML1 = u"<!DOCTYPE HTML><html lang=\"en-US\"><head><meta charset=\"UTF-8\">";
+constexpr OUStringLiteral SHTML2 = u"<noscript><meta http-equiv=\"refresh\" content=\"0; url='";
+constexpr OUStringLiteral SHTML3 = u"/noscript.html'\"></noscript><meta http-equiv=\"refresh\" content=\"1; url='";
+constexpr OUStringLiteral SHTML4 = u"'\"><script type=\"text/javascript\"> window.location.href = \"";
+constexpr OUStringLiteral SHTML5 = u"\";</script><title>Help Page Redirection</title></head><body></body></html>";
 
 // use a tempfile since e.g. xdg-open doesn't support URL-parameters with file:// URLs
 static bool impl_showOfflineHelp( const OUString& rURL )
@@ -962,7 +962,7 @@ static bool impl_showOfflineHelp( const OUString& rURL )
     SvStream* pStream = aTempFile.GetStream(StreamMode::WRITE);
     pStream->SetStreamCharSet(RTL_TEXTENCODING_UTF8);
 
-    OUString aTempStr = SHTML1 SHTML2 +
+    OUString aTempStr = SHTML1 + SHTML2 +
         aBaseInstallPath + "/" + HelpLocaleString() + SHTML3 +
         aHelpLink + SHTML4 +
         aHelpLink + SHTML5;
