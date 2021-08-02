@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "b1cedea0_fe1c1151",
+        "filename": "sc/source/core/data/markdata.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 658,
+      "author": {
+        "id": 1003120
+      },
+      "writtenOn": "2021-08-02T11:42:05Z",
+      "side": 1,
+      "message": "I thought of that too. My fault. I will fix it.",
+      "parentUuid": "67679c0b_e5682198",
+      "revId": "0c163bd9457dc91151af14acbf585d39c5ccfc2e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ee044d0d_72170eb5",
         "filename": "sc/source/core/data/markdata.cxx",
         "patchSetId": 3
@@ -33,6 +51,24 @@
       "revId": "0c163bd9457dc91151af14acbf585d39c5ccfc2e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5205fb9f_a6b1cdf8",
+        "filename": "sc/source/core/data/markdata.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 661,
+      "author": {
+        "id": 1003120
+      },
+      "writtenOn": "2021-08-02T11:42:05Z",
+      "side": 1,
+      "message": "I also used the [] operator. I read an article on the internet that the error might be caused by the [] operator, so I thought it would be better to use .at().",
+      "parentUuid": "ee044d0d_72170eb5",
+      "revId": "0c163bd9457dc91151af14acbf585d39c5ccfc2e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "e06eef42_ccb9325b",
+        "filename": "sc/source/core/data/markdata.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 666,
+      "author": {
+        "id": 1003120
+      },
+      "writtenOn": "2021-08-02T11:42:05Z",
+      "side": 1,
+      "message": "I understand. I will fix it.",
+      "parentUuid": "ffb9f7ef_1eacafbb",
+      "revId": "0c163bd9457dc91151af14acbf585d39c5ccfc2e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "569526c8_f998613d",
         "filename": "sc/source/core/data/markdata.cxx",
         "patchSetId": 3
@@ -70,6 +124,24 @@
     },
     {
       "key": {
+        "uuid": "97ba637a_ba4e3cac",
+        "filename": "sc/source/core/data/markdata.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 694,
+      "author": {
+        "id": 1003120
+      },
+      "writtenOn": "2021-08-02T11:42:05Z",
+      "side": 1,
+      "message": "Yes, this can be a bit of a problem. I will fix it.",
+      "parentUuid": "569526c8_f998613d",
+      "revId": "0c163bd9457dc91151af14acbf585d39c5ccfc2e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "40154095_81e07745",
         "filename": "sc/source/core/data/markdata.cxx",
         "patchSetId": 3
@@ -84,6 +156,24 @@
       "revId": "0c163bd9457dc91151af14acbf585d39c5ccfc2e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ae5d9cd0_03b123bf",
+        "filename": "sc/source/core/data/markdata.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 703,
+      "author": {
+        "id": 1003120
+      },
+      "writtenOn": "2021-08-02T11:42:05Z",
+      "side": 1,
+      "message": "Yes it tried. I will fix it.",
+      "parentUuid": "40154095_81e07745",
+      "revId": "0c163bd9457dc91151af14acbf585d39c5ccfc2e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
