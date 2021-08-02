@@ -190,6 +190,13 @@ void SvmWriter::MetaActionHandler(MetaAction* pAction, ImplMetaWriteData* pData)
         }
         break;
 
+        case MetaActionType::TEXTLINE:
+        {
+            auto* pMetaAction = static_cast<MetaTextLineAction*>(pAction);
+            TextLineHandler(pMetaAction);
+        }
+        break;
+
         /* default case prevents test failure and will be
         removed once all the handlers are completed */
         default:
@@ -424,5 +431,21 @@ void SvmWriter::TextRectHandler(MetaTextRectAction* pAction, ImplMetaWriteData* 
     mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetStyle()));
 
     write_uInt16_lenPrefixed_uInt16s_FromOUString(mrStream, pAction->GetText()); // version 2
+}
+
+void SvmWriter::TextLineHandler(MetaTextLineAction* pAction)
+{
+    mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
+
+    VersionCompatWrite aCompat(mrStream, 2);
+
+    TypeSerializer aSerializer(mrStream);
+    aSerializer.writePoint(pAction->GetStartPoint());
+
+    mrStream.WriteInt32(pAction->GetWidth());
+    mrStream.WriteUInt32(pAction->GetStrikeout());
+    mrStream.WriteUInt32(pAction->GetUnderline());
+    // new in version 2
+    mrStream.WriteUInt32(pAction->GetOverline());
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
