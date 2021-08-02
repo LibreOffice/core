@@ -86,7 +86,7 @@ void DNDEventDispatcher::designate_currentwindow(vcl::Window *pWindow)
 
 void SAL_CALL DNDEventDispatcher::drop( const DropTargetDropEvent& dtde )
 {
-    osl::MutexGuard aImplGuard( m_aMutex );
+    std::lock_guard aImplGuard( m_aMutex );
 
     Point location( dtde.LocationX, dtde.LocationY );
 
@@ -119,7 +119,7 @@ void SAL_CALL DNDEventDispatcher::drop( const DropTargetDropEvent& dtde )
 
 void SAL_CALL DNDEventDispatcher::dragEnter( const DropTargetDragEnterEvent& dtdee )
 {
-    osl::MutexGuard aImplGuard( m_aMutex );
+    std::lock_guard aImplGuard( m_aMutex );
     Point location( dtdee.LocationX, dtdee.LocationY );
 
     vcl::Window * pChildWindow = findTopLevelWindow(location);
@@ -142,7 +142,7 @@ void SAL_CALL DNDEventDispatcher::dragEnter( const DropTargetDragEnterEvent& dtd
 
 void SAL_CALL DNDEventDispatcher::dragExit( const DropTargetEvent& /*dte*/ )
 {
-    osl::MutexGuard aImplGuard( m_aMutex );
+    std::lock_guard aImplGuard( m_aMutex );
 
     fireDragExitEvent( m_pCurrentWindow );
 
@@ -153,7 +153,7 @@ void SAL_CALL DNDEventDispatcher::dragExit( const DropTargetEvent& /*dte*/ )
 
 void SAL_CALL DNDEventDispatcher::dragOver( const DropTargetDragEvent& dtde )
 {
-    osl::MutexGuard aImplGuard( m_aMutex );
+    std::lock_guard aImplGuard( m_aMutex );
 
     Point location( dtde.LocationX, dtde.LocationY );
     sal_Int32 nListeners;
@@ -189,7 +189,7 @@ void SAL_CALL DNDEventDispatcher::dragOver( const DropTargetDragEvent& dtde )
 
 void SAL_CALL DNDEventDispatcher::dropActionChanged( const DropTargetDragEvent& dtde )
 {
-    osl::MutexGuard aImplGuard( m_aMutex );
+    std::lock_guard aImplGuard( m_aMutex );
 
     Point location( dtde.LocationX, dtde.LocationY );
     sal_Int32 nListeners;
@@ -225,7 +225,7 @@ void SAL_CALL DNDEventDispatcher::dropActionChanged( const DropTargetDragEvent& 
 
 void SAL_CALL DNDEventDispatcher::dragGestureRecognized( const DragGestureEvent& dge )
 {
-    osl::MutexGuard aImplGuard( m_aMutex );
+    std::lock_guard aImplGuard( m_aMutex );
 
     Point origin( dge.DragOriginX, dge.DragOriginY );
 

@@ -26,6 +26,7 @@
 #include <com/sun/star/datatransfer/dnd/XDragGestureListener.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <vcl/window.hxx>
+#include <mutex>
 
 class DNDEventDispatcher final : public ::cppu::WeakImplHelper<
     css::datatransfer::dnd::XDropTargetListener,
@@ -38,7 +39,7 @@ class DNDEventDispatcher final : public ::cppu::WeakImplHelper<
     void designate_currentwindow(vcl::Window *pWindow);
     DECL_LINK(WindowEventListener, VclWindowEvent&, void);
 
-    ::osl::Mutex m_aMutex;
+    std::mutex m_aMutex;
     css::uno::Sequence< css::datatransfer::DataFlavor > m_aDataFlavorList;
 
     vcl::Window* findTopLevelWindow(Point location);
