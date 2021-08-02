@@ -95,6 +95,7 @@ public:
             = pTextNode->GetText().replaceAll(OUStringChar(CH_TXTATR_BREAKWORD), "");
         m_rXmlWriter.startElement("paragraph");
         m_rXmlWriter.attribute("index", pTextNode->GetIndex());
+        m_rXmlWriter.attribute("type", "1");
         if (nParentIndex >= 0)
             m_rXmlWriter.attribute("parent", nParentIndex);
         m_rXmlWriter.content(rString);
@@ -121,6 +122,7 @@ public:
 
                 m_rXmlWriter.startElement("paragraph");
                 m_rXmlWriter.attribute("index", nParagraph);
+                m_rXmlWriter.attribute("type", "2");
                 m_rXmlWriter.content(sText);
                 m_rXmlWriter.endElement();
             }
@@ -136,6 +138,7 @@ public:
 
         m_rXmlWriter.startElement("table");
         m_rXmlWriter.attribute("index", pTableNode->GetIndex());
+        m_rXmlWriter.attribute("type", "1");
         m_rXmlWriter.attribute("name", sName);
 
         maNodeStack.push_back(pTableNode);
@@ -145,6 +148,7 @@ public:
     {
         m_rXmlWriter.startElement("section");
         m_rXmlWriter.attribute("index", pSectionNode->GetIndex());
+        m_rXmlWriter.attribute("type", "1");
         m_rXmlWriter.attribute("name", pSectionNode->GetSection().GetSectionName());
 
         maNodeStack.push_back(pSectionNode);
