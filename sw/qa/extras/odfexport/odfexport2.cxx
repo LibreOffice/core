@@ -39,6 +39,16 @@ DECLARE_ODFEXPORT_TEST(testTdf52065_centerTabs, "testTdf52065_centerTabs.odt")
     CPPUNIT_ASSERT_EQUAL(OUString(u"Pečiatka zamestnávateľa"), parseDump("//body/txt[4]/Text[4]", "Portion"));
 }
 
+DECLARE_ODFEXPORT_TEST(testTdf104254_noHeaderWrapping, "tdf104254_noHeaderWrapping.odt")
+{
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    sal_Int32 nParaHeight = getXPath(pXmlDoc, "//header/txt[1]/infos/bounds", "height").toInt32();
+    // The wrapping on header images is supposed to be ignored (since OOo for MS compat reasons),
+    // thus making the text run underneath the image. Before, height was 1104. Now it is 552.
+    CPPUNIT_ASSERT_MESSAGE("Paragraph should fit on a single line", nParaHeight < 600);
+}
+
 DECLARE_ODFEXPORT_TEST(testTdf137199, "tdf137199.docx")
 {
     CPPUNIT_ASSERT_EQUAL(OUString(">1<"), getProperty<OUString>(getParagraph(1), "ListLabelString"));
