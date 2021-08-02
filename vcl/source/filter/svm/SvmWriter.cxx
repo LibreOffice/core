@@ -169,6 +169,13 @@ void SvmWriter::MetaActionHandler(MetaAction* pAction, ImplMetaWriteData* pData)
         }
         break;
 
+        case MetaActionType::TEXTARRAY:
+        {
+            auto* pMetaAction = static_cast<MetaTextArrayAction*>(pAction);
+            TextArrayHandler(pMetaAction, pData);
+        }
+        break;
+
         /* default case prevents test failure and will be
         removed once all the handlers are completed */
         default:
@@ -351,6 +358,28 @@ void SvmWriter::TextHandler(MetaTextAction* pAction, ImplMetaWriteData* pData)
     mrStream.WriteUniOrByteString(pAction->GetText(), pData->meActualCharSet);
     mrStream.WriteUInt16(pAction->GetIndex());
     mrStream.WriteUInt16(pAction->GetLen());
+
+    write_uInt16_lenPrefixed_uInt16s_FromOUString(mrStream, pAction->GetText()); // version 2
+}
+
+void SvmWriter::TextArrayHandler(MetaTextArrayAction* pAction, ImplMetaWriteData* pData)
+{
+    mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
+
+    tools::Long* aArray = pAction->GetDXArray();
+
+    const sal_Int32 nAryLen = aArray ? pAction->GetLen() : 0;
+
+    VersionCompatWrite aCompat(mrStream, 2);
+    TypeSerializer aSerializer(mrStream);
+    aSerializer.writePoint(pAction->GetPoint());
+    mrStream.WriteUniOrByteString(pAction->GetText(), pData->meActualCharSet);
+    mrStream.WriteUInt16(pAction->GetIndex());
+    mrStream.WriteUInt16(pAction->GetLen());
+    mrStream.WriteInt32(nAryLen);
+
+    for (sal_Int32 i = 0; i < nAryLen; ++i)
+        mrStream.WriteInt32(aArray[i]);
 
     write_uInt16_lenPrefixed_uInt16s_FromOUString(mrStream, pAction->GetText()); // version 2
 }
