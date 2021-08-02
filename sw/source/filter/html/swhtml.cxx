@@ -291,6 +291,7 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, SwPaM& rCursor, SvStream& rIn,
     m_bSetModEnabled( false ),
     m_bInFloatingFrame( false ),
     m_bInField( false ),
+    m_bKeepUnknown( false ),
     m_bCallNextToken( false ),
     m_bIgnoreRawData( false ),
     m_bLBEntrySelected ( false ),
@@ -316,8 +317,12 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, SwPaM& rCursor, SvStream& rIn,
 {
     const bool bFuzzing = utl::ConfigManager::IsFuzzing();
     // If requested explicitly, then force ignoring of comments (don't create postits for them).
-    if (!bFuzzing && officecfg::Office::Writer::Filter::Import::HTML::IgnoreComments::get())
-        m_bIgnoreHTMLComments = true;
+    if (!bFuzzing)
+    {
+        if (officecfg::Office::Writer::Filter::Import::HTML::IgnoreComments::get())
+            m_bIgnoreHTMLComments = true;
+        m_bKeepUnknown = officecfg::Office::Common::Filter::HTML::Import::UnknownTag::get();
+    }
 
     m_nEventId = nullptr;
     m_bUpperSpace = m_bViewCreated = m_bChkJumpMark = false;
@@ -345,8 +350,6 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, SwPaM& rCursor, SvStream& rIn,
         m_aFontHeights[4] = m_aFontHeights[5] = m_aFontHeights[6] = 12 * 20;
     }
 
-    m_bKeepUnknown = officecfg::Office::Common::Filter::HTML::Import::UnknownTag::get();
-
     if(bReadNewDoc)
     {
         //CJK has different defaults, so a different object should be used for this
@@ -368,7 +371,8 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, SwPaM& rCursor, SvStream& rIn,
     m_xDoc->getIDocumentSettingAccess().set(DocumentSettingId::HTML_MODE, true);
 
     m_pCSS1Parser.reset(new SwCSS1Parser(m_xDoc.get(), *this, m_aFontHeights, m_sBaseURL, IsNewDoc()));
-    m_pCSS1Parser->SetIgnoreFontFamily( officecfg::Office::Common::Filter::HTML::Import::FontSetting::get() );
+    if (!bFuzzing)
+        m_pCSS1Parser->SetIgnoreFontFamily( officecfg::Office::Common::Filter::HTML::Import::FontSetting::get() );
 
     if( bReadUTF8 )
     {
