@@ -66,7 +66,7 @@ void SwAccessibleContext::InitStates()
 
 void SwAccessibleContext::SetParent( SwAccessibleContext *pParent )
 {
-    osl::MutexGuard aGuard( m_Mutex );
+    std::lock_guard aGuard( m_Mutex );
 
     uno::Reference < XAccessible > xParent( pParent );
     m_xWeakParent = xParent;
@@ -74,7 +74,7 @@ void SwAccessibleContext::SetParent( SwAccessibleContext *pParent )
 
 uno::Reference< XAccessible > SwAccessibleContext::GetWeakParent() const
 {
-    osl::MutexGuard aGuard( m_Mutex );
+    std::lock_guard aGuard( m_Mutex );
 
     uno::Reference< XAccessible > xParent( m_xWeakParent );
     return xParent;
@@ -270,7 +270,7 @@ void SwAccessibleContext::Scrolled( const SwRect& rOldVisArea )
     bool bIsOldShowingState;
     bool bIsNewShowingState = IsShowing( *(GetMap()) );
     {
-        osl::MutexGuard aGuard( m_Mutex );
+        std::lock_guard aGuard( m_Mutex );
         bIsOldShowingState = m_isShowingState;
         m_isShowingState = bIsNewShowingState;
     }
@@ -513,7 +513,7 @@ bool SwAccessibleContext::IsEditableState()
 {
     bool bRet;
     {
-        osl::MutexGuard aGuard( m_Mutex );
+        std::lock_guard aGuard( m_Mutex );
         bRet = m_isEditableState;
     }
 
@@ -676,7 +676,7 @@ uno::Reference< XAccessible> SwAccessibleContext::getAccessibleParentImpl()
 
     // Remember the parent as weak ref.
     {
-        osl::MutexGuard aWeakParentGuard( m_Mutex );
+        std::lock_guard aWeakParentGuard( m_Mutex );
         m_xWeakParent = xAcc;
     }
 
@@ -1089,7 +1089,7 @@ void SwAccessibleContext::Dispose(bool bRecursive, bool bCanSkipInvisible)
     // set defunc state (it's not required to broadcast a state changed
     // event if the object is disposed afterwards)
     {
-        osl::MutexGuard aDefuncStateGuard( m_Mutex );
+        std::lock_guard aDefuncStateGuard( m_Mutex );
         m_isDefuncState = true;
     }
 
@@ -1160,7 +1160,7 @@ void SwAccessibleContext::InvalidatePosOrSize( const SwRect& )
     bool bIsOldShowingState;
     bool bIsNewShowingState = IsShowing( *(GetMap()) );
     {
-        osl::MutexGuard aShowingStateGuard( m_Mutex );
+        std::lock_guard aShowingStateGuard( m_Mutex );
         bIsOldShowingState = m_isShowingState;
         m_isShowingState = bIsNewShowingState;
     }
@@ -1319,7 +1319,7 @@ void SwAccessibleContext::InvalidateStates( AccessibleStates _nStates )
             bool bIsOldEditableState;
             bool bIsNewEditableState = IsEditable( pVSh );
             {
-                osl::MutexGuard aGuard( m_Mutex );
+                std::lock_guard aGuard( m_Mutex );
                 bIsOldEditableState = m_isEditableState;
                 m_isEditableState = bIsNewEditableState;
             }
@@ -1333,7 +1333,7 @@ void SwAccessibleContext::InvalidateStates( AccessibleStates _nStates )
             bool bIsOldOpaqueState;
             bool bIsNewOpaqueState = IsOpaque( pVSh );
             {
-                osl::MutexGuard aGuard( m_Mutex );
+                std::lock_guard aGuard( m_Mutex );
                 bIsOldOpaqueState = m_isOpaqueState;
                 m_isOpaqueState = bIsNewOpaqueState;
             }
