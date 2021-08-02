@@ -206,7 +206,6 @@ SfxCommonTemplateDialog_Impl::SfxCommonTemplateDialog_Impl(SfxBindings* pB, weld
     , mxFilterLb(pBuilder->weld_combo_box("filter"))
     , nActFamily(0xffff)
     , nActFilter(0)
-    , nAppFilter(SfxStyleSearchBits::Auto)
     , bIsWater(false)
     , bUpdate(false)
     , bUpdateFamily(false)
@@ -286,6 +285,12 @@ void SfxCommonTemplateDialog_Impl::Initialize()
 IMPL_LINK(SfxCommonTemplateDialog_Impl, UpdateStyles_Hdl, StyleFlags, nFlags, void)
 {
     const SfxStyleFamilyItem* pItem = m_aStyleList.GetFamilyItem();
+
+    SfxStyleSearchBits nFilter(nActFilter < pItem->GetFilterList().size()
+                                   ? pItem->GetFilterList()[nActFilter].nFlags
+                                   : SfxStyleSearchBits::Auto);
+    if (nFilter == SfxStyleSearchBits::Auto) // automatic
+        nFilter = m_aStyleList.Filter();
 
     if (nFlags & StyleFlags::UpdateFamily) // Update view type list (Hierarchical, All, etc.
     {

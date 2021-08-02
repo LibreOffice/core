@@ -86,7 +86,6 @@ protected:
 
     sal_uInt16 nActFamily; // Id in the ToolBox = Position - 1
     sal_uInt16 nActFilter; // FilterIdx
-    SfxStyleSearchBits nAppFilter; // Filter, which has set the application (for automatic)
 
     bool bIsWater :1;
     bool bUpdate :1;
@@ -193,9 +192,6 @@ public:
     // This is used when a style is selected
     void SelectStyle(const OUString& rStyle, bool bIsCallback, StyleList& rStyleList);
 
-    // Dialog and StyleList have their own copies of variable nAppFilter.
-    // When a filter is applied, it comes into action and updates the value of nAppFilter
-    void SetApplicationFilter(SfxStyleSearchBits filter) { nAppFilter = filter; }
     // Dialog and StyleList have their own copies of variable nActFilter.
     // When a filter is applied, it comes into action and updates the value of nActFilter
     void SetFilterByIndex(sal_uInt16 filter) { nActFilter = filter; }
