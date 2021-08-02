@@ -244,6 +244,8 @@ namespace basprov
             if ( m_documentBasicManager && m_xDocumentScriptContext.is() )
                 aOldThisComponent = m_documentBasicManager->SetGlobalUNOConstant( "ThisComponent", makeAny( m_xDocumentScriptContext ) );
 
+            // tdf#143582 - clear return value of the method before calling it
+            m_xMethod->Clear();
             if ( m_caller.hasElements() && m_caller[ 0 ].hasValue()  )
             {
                 SbxVariableRef xCallerVar = new SbxVariable( SbxVARIANT );
