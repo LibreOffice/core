@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SVX_INC_ROTATIONSTRINGS_HRC
-#define INCLUDED_SVX_INC_ROTATIONSTRINGS_HRC
+#pragma once
 
 #define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
 
@@ -20,7 +19,5 @@ const char* RID_SVXITEMS_ROTATE_MODE[] =
     NC_("RID_SVXITEMS_ROTATE_MODE_CENTER", "From vertical middle cell"),
     NC_("RID_SVXITEMS_ROTATE_MODE_BOTTOM", "From lower cell edge"),
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

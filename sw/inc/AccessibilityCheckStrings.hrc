@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_SW_INC_ACCESSIBILITY_CHECK_STRINGS_HRC
-#define INCLUDED_SW_INC_ACCESSIBILITY_CHECK_STRINGS_HRC
+#pragma once
 
 #define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
 
@@ -33,6 +32,5 @@
 #define STR_STYLE_NO_LANGUAGE           NC_("STR_STYLE_NO_LANGUAGE", "Style '%STYLE_NAME%' has no language set")
 #define STR_DOCUMENT_TITLE              NC_("STR_DOCUMENT_TITLE", "Document title is not set")
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

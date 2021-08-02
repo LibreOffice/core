@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVX_INC_HELPIDS_H
-#define INCLUDED_SVX_INC_HELPIDS_H
+#pragma once
 
 #define HID_BMPMASK_CTL_QCOL_1                                "SVX_HID_BMPMASK_CTL_QCOL_1"
 #define HID_COLOR_CTL_COLORS                                  "SVX_HID_COLOR_CTL_COLORS"
@@ -54,7 +53,5 @@
 #define HID_GRID_TRAVEL_NEW                                   "SVX_HID_GRID_TRAVEL_NEW"
 #define HID_GRID_TRAVEL_ABSOLUTE                              "SVX_HID_GRID_TRAVEL_ABSOLUTE"
 #define HID_GRID_NUMBEROFRECORDS                              "SVX_HID_GRID_NUMBEROFRECORDS"
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

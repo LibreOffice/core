@@ -18,21 +18,25 @@
  */
 #pragma once
 
-#include <vcl/bitmapex.hxx>
+#include <svx/svddef.hxx>
+#include <svx/sdmetitm.hxx>
 
-// predefines
+class SdrMoveXItem final : public SdrMetricItem {
+public:
+    SdrMoveXItem(): SdrMetricItem(SDRATTR_MOVEX,0)        {}
+    SdrMoveXItem* Clone(SfxItemPool*) const override
+    {
+        return new SdrMoveXItem(*this);
+    }
+};
 
-namespace basegfx
-{
-class BColor;
-}
-
-// helper methods
-
-namespace drawinglayer::primitive2d
-{
-// create a 3x3 cross in given color as BitmapEx
-BitmapEx createDefaultCross_3x3(const basegfx::BColor& rBColor);
-} // end of namespace drawinglayer::primitive2d
+class SdrMoveYItem final : public SdrMetricItem {
+public:
+    SdrMoveYItem(): SdrMetricItem(SDRATTR_MOVEY,0)        {}
+    SdrMoveYItem* Clone(SfxItemPool*) const override
+    {
+        return new SdrMoveYItem(*this);
+    }
+};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

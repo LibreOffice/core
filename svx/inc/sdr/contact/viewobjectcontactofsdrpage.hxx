@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_INC_SDR_CONTACT_VIEWOBJECTCONTACTOFSDRPAGE_HXX
-#define INCLUDED_SVX_INC_SDR_CONTACT_VIEWOBJECTCONTACTOFSDRPAGE_HXX
+#pragma once
 
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 
@@ -170,7 +169,5 @@ namespace sdr::contact
             virtual drawinglayer::primitive2d::Primitive2DContainer getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInfo) const override;
         };
 } // end of namespace sdr::contact
-
-#endif // INCLUDED_SVX_INC_SDR_CONTACT_VIEWOBJECTCONTACTOFSDRPAGE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
