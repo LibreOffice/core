@@ -16,6 +16,24 @@
       "revId": "7f44e14bd1a09a2c92b2dc87db5ff6d83c7d2bd4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f3c20ece_53bbd5a6",
+        "filename": "sc/source/ui/inc/dbnamdlg.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-08-02T19:19:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8a2f02f4_6760b6a0",
+      "revId": "7f44e14bd1a09a2c92b2dc87db5ff6d83c7d2bd4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
