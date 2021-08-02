@@ -64,6 +64,7 @@ public:
     void testTdf138646();
     void testTdf105558();
     void testTdf90278();
+    void testTdf143582();
     void testMacroButtonFormControlXlsxExport();
 
     CPPUNIT_TEST_SUITE(ScMacrosTest);
@@ -90,6 +91,7 @@ public:
     CPPUNIT_TEST(testTdf138646);
     CPPUNIT_TEST(testTdf105558);
     CPPUNIT_TEST(testTdf90278);
+    CPPUNIT_TEST(testTdf143582);
     CPPUNIT_TEST(testMacroButtonFormControlXlsxExport);
 
     CPPUNIT_TEST_SUITE_END();
@@ -989,6 +991,34 @@ void ScMacrosTest::testTdf133889()
     // - Actual  : 0
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(100000), aReturnValue);
+
+    css::uno::Reference<css::util::XCloseable> xCloseable(xComponent, css::uno::UNO_QUERY_THROW);
+    xCloseable->close(true);
+}
+
+void ScMacrosTest::testTdf143582()
+{
+    OUString aFileName;
+    createFileURL(u"tdf143582.ods", aFileName);
+    auto xComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+
+    css::uno::Any aRet;
+    css::uno::Sequence<css::uno::Any> aParams;
+    css::uno::Sequence<css::uno::Any> aOutParam;
+    css::uno::Sequence<sal_Int16> aOutParamIndex;
+
+    SfxObjectShell::CallXScript(
+        xComponent,
+        "vnd.sun.Star.script:Standard.Module1.TestScriptInvoke?language=Basic&location=document",
+        aParams, aRet, aOutParamIndex, aOutParam);
+
+    OUString aReturnValue;
+    aRet >>= aReturnValue;
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: Test
+    // - Actual  : TeTest
+    CPPUNIT_ASSERT_EQUAL(OUString("Test"), aReturnValue);
 
     css::uno::Reference<css::util::XCloseable> xCloseable(xComponent, css::uno::UNO_QUERY_THROW);
     xCloseable->close(true);
