@@ -46,8 +46,8 @@ PasswordDialog::PasswordDialog(weld::Window* pParent,
 
     if( nDialogMode == task::PasswordRequestMode_PASSWORD_REENTER )
     {
-        const char* pOpenToModifyErrStrId = bOpenToModify ? STR_ERROR_PASSWORD_TO_MODIFY_WRONG : STR_ERROR_PASSWORD_TO_OPEN_WRONG;
-        const char* pErrStrId = bIsSimplePasswordRequest ? STR_ERROR_SIMPLE_PASSWORD_WRONG : pOpenToModifyErrStrId;
+        TranslateId pOpenToModifyErrStrId = bOpenToModify ? STR_ERROR_PASSWORD_TO_MODIFY_WRONG : STR_ERROR_PASSWORD_TO_OPEN_WRONG;
+        TranslateId pErrStrId = bIsSimplePasswordRequest ? STR_ERROR_SIMPLE_PASSWORD_WRONG : pOpenToModifyErrStrId;
         OUString aErrorMsg(Translate::get(pErrStrId, rResLocale));
         std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pParent,
                                                   VclMessageType::Warning, VclButtonsType::Ok, aErrorMsg));
@@ -76,7 +76,7 @@ PasswordDialog::PasswordDialog(weld::Window* pParent,
 
     m_xDialog->set_title(aTitle);
 
-    const char* pStrId = bOpenToModify ? STR_ENTER_PASSWORD_TO_MODIFY : STR_ENTER_PASSWORD_TO_OPEN;
+    TranslateId pStrId = bOpenToModify ? STR_ENTER_PASSWORD_TO_MODIFY : STR_ENTER_PASSWORD_TO_OPEN;
     OUString aMessage(Translate::get(pStrId, rResLocale));
     INetURLObject url(aDocURL);
 

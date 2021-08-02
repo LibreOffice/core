@@ -19,7 +19,7 @@
 
 #pragma once
 
-#define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
+#define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
 
 #define STR_ENTER_PASSWORD_TO_OPEN              NC_("STR_ENTER_PASSWORD_TO_OPEN", "Enter password to open file: \n")
 #define STR_ENTER_PASSWORD_TO_MODIFY            NC_("STR_ENTER_PASSWORD_TO_MODIFY", "Enter password to modify file: \n")
