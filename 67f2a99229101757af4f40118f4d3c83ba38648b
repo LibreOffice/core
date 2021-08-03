@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b43c565f_55b06bd1",
+        "filename": "writerfilter/source/dmapper/GraphicImport.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 563,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-03T09:59:27Z",
+      "side": 1,
+      "message": "This use of o3tl::convert seems suspicious: is passes a double as the value, hence it picks a floating-point variant of o3tl::convert, which also returns a double. That variant does not do any rounding, and since the whole idea behind the o3tl::convert machinery is to produce the nearest possible result from conversion, when you assign the double to an integer, you likely need to round the resulting double. Otherwise you truncate, which is not necessary the nearest result.",
+      "revId": "67f2a99229101757af4f40118f4d3c83ba38648b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
