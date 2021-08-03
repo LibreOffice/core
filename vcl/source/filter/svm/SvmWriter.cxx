@@ -211,6 +211,13 @@ void SvmWriter::MetaActionHandler(MetaAction* pAction, ImplMetaWriteData* pData)
         }
         break;
 
+        case MetaActionType::MAPMODE:
+        {
+            auto* pMetaAction = static_cast<MetaMapModeAction*>(pAction);
+            MapModeHandler(pMetaAction);
+        }
+        break;
+
         /* default case prevents test failure and will be
         removed once all the handlers are completed */
         default:
@@ -476,5 +483,13 @@ void SvmWriter::TextAlignHandler(MetaTextAlignAction* pAction)
     mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
     VersionCompatWrite aCompat(mrStream, 1);
     mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetTextAlign()));
+}
+
+void SvmWriter::MapModeHandler(MetaMapModeAction* pAction)
+{
+    mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
+    VersionCompatWrite aCompat(mrStream, 1);
+    TypeSerializer aSerializer(mrStream);
+    aSerializer.writeMapMode(pAction->GetMapMode());
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
