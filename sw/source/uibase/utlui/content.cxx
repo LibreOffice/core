@@ -143,6 +143,13 @@ namespace
         return reinterpret_cast<const SwTypeNumber*>(rTreeView.get_id(rEntry).toInt64())->GetTypeId() == CTYPE_CTT;
     }
 
+    bool lcl_IsEqGtrOutlineContent(const weld::TreeIter& rEntry, const weld::TreeView& rTreeView, sal_uInt8 nLevel)
+    {
+        sal_Int64 nId = rTreeView.get_id(rEntry).toInt64();
+        return reinterpret_cast<const SwTypeNumber*>(nId)->GetTypeId() == CTYPE_CNT &&
+               reinterpret_cast<const SwOutlineContent*>(nId)->GetOutlineLevel() >= nLevel;
+    }
+
     bool lcl_FindShell(SwWrtShell const * pShell)
     {
         bool bFound = false;
@@ -1838,10 +1845,7 @@ bool SwContentTree::RequestingChildren(const weld::TreeIter& rParent)
                         {
                             bChild = m_xTreeView->iter_previous(*xChild);
                             assert(!bChild || lcl_IsContentType(*xChild, *m_xTreeView) || dynamic_cast<SwOutlineContent*>(reinterpret_cast<SwTypeNumber*>(m_xTreeView->get_id(*xChild).toInt64())));
-                            while (bChild &&
-                                    lcl_IsContent(*xChild, *m_xTreeView) &&
-                                    (reinterpret_cast<SwOutlineContent*>(m_xTreeView->get_id(*xChild).toInt64())->GetOutlineLevel() >= nLevel)
-                                )
+                            while (bChild && lcl_IsEqGtrOutlineContent(*xChild, *m_xTreeView, nLevel))
                             {
                                 bChild = m_xTreeView->iter_previous(*xChild);
                             }
