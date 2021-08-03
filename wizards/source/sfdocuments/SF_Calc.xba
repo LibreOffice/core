@@ -928,7 +928,7 @@ Try:
 	&apos;	Initialize sheet and range
 	Set oSheet = _Component.getSheets.getByName(SheetName)
 	Set oRange = _ParseAddress(Range)
-	&apos;	Create the chart and get ihe corresponding chart instance
+	&apos;	Create the chart and get the corresponding chart instance
 	oSheet.getCharts.addNewByName(ChartName, oRectangle, Array(oRange.XCellRange.RangeAddress), ColumnHeader, RowHeader)
 	Set oChart = Charts(SheetName, ChartName)
 	oChart._Shape.Name = ChartName		&apos;	Both used-defined and internal names match ChartName

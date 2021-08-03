@@ -133,7 +133,7 @@ protected:
 public:
     /**
      * @descr   create a completed XF-draw object(read data, register styles and create XF-draw object)
-     * @return  pointer of the created competed XF-draw object.
+     * @return  pointer of the created completed XF-draw object.
      */
     XFFrame* CreateXFDrawObject();
 
