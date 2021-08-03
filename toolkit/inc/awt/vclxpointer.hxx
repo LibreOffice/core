@@ -25,7 +25,7 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <osl/mutex.hxx>
+#include <mutex>
 
 #include <vcl/ptrstyle.hxx>
 
@@ -35,10 +35,8 @@
 class VCLXPointer final : public cppu::WeakImplHelper<
     css::awt::XPointer, css::lang::XUnoTunnel, css::lang::XServiceInfo>
 {
-    ::osl::Mutex    maMutex;
+    std::mutex    maMutex;
     PointerStyle    maPointer;
-
-    ::osl::Mutex&   GetMutex() { return maMutex; }
 
 public:
     VCLXPointer();
