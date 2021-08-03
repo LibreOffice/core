@@ -2817,8 +2817,10 @@ void SbiRuntime::StepERROR()
 
 void SbiRuntime::StepLOADNC( sal_uInt32 nOp1 )
 {
+    // ADD COMMENT
+    SbxDataType eTypeStr;
     // #57844 use localized function
-    OUString aStr = pImg->GetString( static_cast<short>( nOp1 ) );
+    OUString aStr = pImg->GetString(static_cast<short>(nOp1), &eTypeStr);
     // also allow , !!!
     sal_Int32 iComma = aStr.indexOf(',');
     if( iComma >= 0 )
@@ -2833,6 +2835,7 @@ void SbiRuntime::StepLOADNC( sal_uInt32 nOp1 )
     SbxDataType eType = SbxDOUBLE;
     if ( nParseEnd < aStr.getLength() )
     {
+        // ADD COMMENT - For compatibility reasons
         switch ( aStr[nParseEnd] )
         {
             // See GetSuffixType in basic/source/comp/scanner.cxx for type characters
@@ -2843,6 +2846,11 @@ void SbiRuntime::StepLOADNC( sal_uInt32 nOp1 )
             // tdf#142460 - properly handle boolean values in string pool
             case 'b': eType = SbxBOOL; break;
         }
+    }
+    // ADD COMMENT
+    else if (eTypeStr != SbxSTRING)
+    {
+        eType = eTypeStr;
     }
     SbxVariable* p = new SbxVariable( eType );
     p->PutDouble( n );
@@ -4179,8 +4187,9 @@ void SbiRuntime::StepPARAM( sal_uInt32 nOp1, sal_uInt32 nOp2 )
                     sal_uInt16 nDefaultId = static_cast<sal_uInt16>(pParam->nUserData & 0x0ffff);
                     if( nDefaultId > 0 )
                     {
-                        OUString aDefaultStr = pImg->GetString( nDefaultId );
-                        pVar = new SbxVariable(pParam-> eType);
+                        SbxDataType eType;
+                        OUString aDefaultStr = pImg->GetString( nDefaultId, &eType );
+                        pVar = new SbxVariable(eType);
                         pVar->PutString( aDefaultStr );
                         refParams->Put(pVar, nIdx);
                     }

@@ -646,7 +646,7 @@ void SbiImage::AddEnum(SbxObject* pObject) // Register enum type
 }
 
 // Note: IDs start with 1
-OUString SbiImage::GetString( short nId ) const
+OUString SbiImage::GetString( short nId, SbxDataType *eType ) const
 {
     if( nId && nId <= short(mvStringOffsets.size()) )
     {
@@ -665,7 +665,25 @@ OUString SbiImage::GetString( short nId ) const
         }
         else
         {
-            return OUString(pStr);
+            OUString aOUStr(pStr);
+            if (eType != nullptr && nId < short(mvStringOffsets.size())
+                && size_t(aOUStr.getLength()) < (mvStringOffsets[nId] - nOff - 1))
+            {
+                sal_Unicode pStr = *(pStrings.get() + nOff + aOUStr.getLength() + 1);
+                switch (pStr)
+                {
+                    // See GetSuffixType in basic/source/comp/scanner.cxx for type characters
+                    case '%': *eType = SbxINTEGER; break;
+                    case '&': *eType = SbxLONG; break;
+                    case '!': *eType = SbxSINGLE; break;
+                    case '#': *eType = SbxDOUBLE; break;
+                    case '@': *eType = SbxCURRENCY; break;
+                    // tdf#142460 - properly handle boolean values in string pool
+                    case 'b': *eType = SbxBOOL; break;
+                    default:  *eType = SbxSTRING;
+                }
+            }
+            return aOUStr;
         }
     }
     return OUString();
