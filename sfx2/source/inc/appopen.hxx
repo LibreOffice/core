@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SFX2_SOURCE_INC_APPOPEN_HXX
-#define INCLUDED_SFX2_SOURCE_INC_APPOPEN_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <vcl/errcode.hxx>
@@ -31,6 +30,5 @@ ErrCode CheckPasswd_Impl(SfxObjectShell* pDoc, SfxMedium* pFile);
 
 void SetTemplate_Impl(const OUString&, const OUString&, SfxObjectShell*);
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

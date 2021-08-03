@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SFX2_INC_BITMAPS_HRC
-#define INCLUDED_SFX2_INC_BITMAPS_HRC
+#pragma once
 
 #define BMP_HELP_TOOLBOX_INDEX_ON           "sfx2/res/indexon_small.png"
 #define BMP_HELP_TOOLBOX_INDEX_OFF          "sfx2/res/indexoff_small.png"
@@ -109,6 +108,5 @@
 #define BMP_MENU_RENAME                     "cmd/sc_editdoc.png"
 #define BMP_MENU_DELETE                     "cmd/sc_delete.png"
 #define BMP_MENU_EXPORT                     "cmd/sc_exportto.png"
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

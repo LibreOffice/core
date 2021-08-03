@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SFX2_SOURCE_INC_OPENFLAG_HXX
-#define INCLUDED_SFX2_SOURCE_INC_OPENFLAG_HXX
+#pragma once
 
 // Open file for editing, then only the third option (reading a copy) works
 #define SFX_STREAM_READWRITE (StreamMode::READWRITE | StreamMode::SHARE_DENYWRITE)
@@ -28,6 +27,6 @@
 // -> the file can then be opened for editing
 #define SFX_STREAM_READONLY_MAKECOPY (StreamMode::READ | StreamMode::SHARE_DENYNONE)
 
-#endif
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

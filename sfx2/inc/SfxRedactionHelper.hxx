@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_CUI_SOURCE_INC_SFXREDACTIONHELPER_HXX
-#define INCLUDED_CUI_SOURCE_INC_SFXREDACTIONHELPER_HXX
+#pragma once
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -141,6 +140,5 @@ private:
     };
 };
 
-#endif // INCLUDED_CUI_SOURCE_INC_SFXREDACTIONHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
