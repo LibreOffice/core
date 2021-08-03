@@ -203,6 +203,8 @@ void CustomAnimationPane::initialize()
         TOOLS_WARN_EXCEPTION( "sd", "sd::CustomAnimationPane::CustomAnimationPane()" );
     }
 
+    // tdf#137637 keep user selection during initialization
+    ScopeLockGuard aGuard(maSelectionLock);
     // get current page and update custom animation list
     onChangeCurrentPage();
 
