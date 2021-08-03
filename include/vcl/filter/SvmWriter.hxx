@@ -56,4 +56,5 @@ public:
     void StretchTextHandler(MetaStretchTextAction* pAction, ImplMetaWriteData* pData);
     void TextRectHandler(MetaTextRectAction* pAction, ImplMetaWriteData* pData);
     void TextLineHandler(MetaTextLineAction* pAction);
+    void OverlineColorHandler(MetaOverlineColorAction* pAction);
 };
