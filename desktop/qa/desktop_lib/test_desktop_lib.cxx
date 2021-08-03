@@ -2014,7 +2014,7 @@ public:
         break;
         case LOK_CALLBACK_TABLE_SELECTED:
         {
-            m_bEmptyTableSelection = (std::string(pPayload).compare("{\n}\n") == 0);
+            m_bEmptyTableSelection = (std::string(pPayload).compare("{ }") == 0);
             ++m_nTableSelectionCount;
         }
         break;
