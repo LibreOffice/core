@@ -577,15 +577,15 @@ RectangleAndPart RectangleAndPart::Create(const std::string& rPayload)
 
 RectangleAndPart& CallbackFlushHandler::CallbackData::setRectangleAndPart(const std::string& payload)
 {
-    setRectangleAndPart(RectangleAndPart::Create(payload));
+    setRectangleAndPart(RectangleAndPart::Create(payload), payload);
 
     // Return reference to the cached object.
     return boost::get<RectangleAndPart>(PayloadObject);
 }
 
-void CallbackFlushHandler::CallbackData::setRectangleAndPart(const RectangleAndPart& rRectAndPart)
+void CallbackFlushHandler::CallbackData::setRectangleAndPart(const RectangleAndPart& rRectAndPart, const std::string& payload)
 {
-    PayloadString = rRectAndPart.toString().getStr();
+    PayloadString = payload;
     PayloadObject = rRectAndPart;
 }
 
@@ -1827,7 +1827,7 @@ bool CallbackFlushHandler::processInvalidateTilesEvent(CallbackData& aCallbackDa
         }
     }
 
-    aCallbackData.setRectangleAndPart(rcNew);
+    aCallbackData.setRectangleAndPart(rcNew, payload);
     // Queue this one.
     return false;
 }

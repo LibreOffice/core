@@ -102,7 +102,7 @@ namespace desktop {
             /// Parse and set the RectangleAndPart object and return it. Clobbers PayloadString.
             RectangleAndPart& setRectangleAndPart(const std::string& payload);
             /// Set a RectangleAndPart object and update PayloadString.
-            void setRectangleAndPart(const RectangleAndPart& rRectAndPart);
+            void setRectangleAndPart(const RectangleAndPart& rRectAndPart, const std::string& payload);
             /// Return the parsed RectangleAndPart instance.
             const RectangleAndPart& getRectangleAndPart() const;
             /// Parse and set the JSON object and return it. Clobbers PayloadString.
