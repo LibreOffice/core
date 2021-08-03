@@ -234,6 +234,13 @@ void SvmWriter::MetaActionHandler(MetaAction* pAction, ImplMetaWriteData* pData)
         }
         break;
 
+        case MetaActionType::POP:
+        {
+            auto* pMetaAction = static_cast<MetaPopAction*>(pAction);
+            PopHandler(pMetaAction);
+        }
+        break;
+
         /* default case prevents test failure and will be
         removed once all the handlers are completed */
         default:
@@ -524,5 +531,11 @@ void SvmWriter::PushHandler(MetaPushAction* pAction)
     mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
     VersionCompatWrite aCompat(mrStream, 1);
     mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetFlags()));
+}
+
+void SvmWriter::PopHandler(MetaPopAction* pAction)
+{
+    mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
+    VersionCompatWrite aCompat(mrStream, 1);
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -61,4 +61,5 @@ public:
     void MapModeHandler(MetaMapModeAction* pAction);
     void FontHandler(MetaFontAction* pAction, ImplMetaWriteData* pData);
     void PushHandler(MetaPushAction* pAction);
+    void PopHandler(MetaPopAction* pAction);
 };
