@@ -25,7 +25,7 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <osl/mutex.hxx>
+#include <mutex>
 
 #include <vcl/region.hxx>
 
@@ -36,10 +36,8 @@ class VCLXRegion final : public cppu::WeakImplHelper<
                             css::awt::XRegion,
                             css::lang::XUnoTunnel>
 {
-    ::osl::Mutex    maMutex;
+    std::mutex    maMutex;
     vcl::Region          maRegion;
-
-    ::osl::Mutex&   GetMutex() { return maMutex; }
 
 public:
                     VCLXRegion();
