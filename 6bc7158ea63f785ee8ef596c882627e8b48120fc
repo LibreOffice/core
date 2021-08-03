@@ -143,6 +143,24 @@
     },
     {
       "key": {
+        "uuid": "ca19abf6_3eeb5376",
+        "filename": "jvmfwk/source/framework.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2021-08-03T07:07:54Z",
+      "side": 1,
+      "message": "Ok, I added two branches to prevent adding a trailing semicolon. Couldn\u0027t really find any specification though.",
+      "parentUuid": "60c9cfcc_5b7e6c23",
+      "revId": "6bc7158ea63f785ee8ef596c882627e8b48120fc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3fdcc500_55df4227",
         "filename": "jvmfwk/source/framework.cxx",
         "patchSetId": 1
@@ -193,6 +211,24 @@
       "revId": "6bc7158ea63f785ee8ef596c882627e8b48120fc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e83e969b_05eb02f9",
+        "filename": "jvmfwk/source/framework.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2021-08-03T07:07:54Z",
+      "side": 1,
+      "message": "Yeah would think this is a bit overkill for this case, would try this way.",
+      "parentUuid": "174d9b9b_12163497",
+      "revId": "6bc7158ea63f785ee8ef596c882627e8b48120fc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
