@@ -60,4 +60,5 @@ public:
     void TextAlignHandler(MetaTextAlignAction* pAction);
     void MapModeHandler(MetaMapModeAction* pAction);
     void FontHandler(MetaFontAction* pAction, ImplMetaWriteData* pData);
+    void PushHandler(MetaPushAction* pAction);
 };
