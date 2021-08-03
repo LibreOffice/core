@@ -994,7 +994,10 @@ SbiProcDef* SbiParser::ProcDecl( bool bDecl )
                         }
                         else
                         {
-                            nStringId = aGblStrings.Add( pDefaultExpr->GetValue(), eType2 );
+                            // tdf#143707 - don't add a suffix type character, if an optional
+                            // parameter is of type Variant, because it won't be removed during
+                            // the type conversion to the requested type in SbiRuntime::StepPARAM.
+                            nStringId = aGblStrings.Add(pDefaultExpr->GetValue(), eType2);
                         }
                         pPar->SetDefaultId( nStringId );
                         pDefaultExpr.reset();

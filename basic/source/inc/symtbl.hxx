@@ -41,7 +41,7 @@ public:
    ~SbiStringPool();
     sal_uInt32 GetSize() const { return aData.size(); }
     short Add( const OUString& );
-    short Add( double, SbxDataType );
+    short Add(double, SbxDataType);
     OUString Find( sal_uInt32 ) const;
 };
 
