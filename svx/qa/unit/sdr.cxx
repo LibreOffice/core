@@ -118,6 +118,30 @@ CPPUNIT_TEST_FIXTURE(SdrTest, testZeroWidthTextWrap)
     // i.e. the text on the only shape on the slide had 12 lines, not a single one.
     assertXPath(pDocument, "//textsimpleportion", 1);
 }
+
+CPPUNIT_TEST_FIXTURE(SdrTest, testSlideBackground)
+{
+    // Given a document with a slide what has a linked background image:
+    test::Directories aDirectories;
+    OUString aURL = aDirectories.getURLFromSrc(u"svx/qa/unit/data/slide-background.odp");
+    getComponent() = loadFromDesktop(aURL);
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+
+    // When rendering that document:
+    drawinglayer::primitive2d::Primitive2DContainer xPrimitiveSequence
+        = renderPageToPrimitives(xDrawPage);
+
+    // Then make sure that the background has a bitmap:
+    drawinglayer::Primitive2dXmlDump aDumper;
+    xmlDocUniquePtr pDocument = aDumper.dumpAndParse(xPrimitiveSequence);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 0
+    // i.e. the rendering did not find the bitmap.
+    assertXPath(pDocument, "//bitmap", 1);
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
