@@ -2817,8 +2817,10 @@ void SbiRuntime::StepERROR()
 
 void SbiRuntime::StepLOADNC( sal_uInt32 nOp1 )
 {
+    // tdf#143707 - check if the data type character was added after the string termination symbol
+    SbxDataType eTypeStr;
     // #57844 use localized function
-    OUString aStr = pImg->GetString( static_cast<short>( nOp1 ) );
+    OUString aStr = pImg->GetString(static_cast<short>(nOp1), &eTypeStr);
     // also allow , !!!
     sal_Int32 iComma = aStr.indexOf(',');
     if( iComma >= 0 )
@@ -2833,6 +2835,8 @@ void SbiRuntime::StepLOADNC( sal_uInt32 nOp1 )
     SbxDataType eType = SbxDOUBLE;
     if ( nParseEnd < aStr.getLength() )
     {
+        // tdf#143707 - Check if there was a data type character after the numeric constant,
+        // added by older versions of the fix of the default values for strings.
         switch ( aStr[nParseEnd] )
         {
             // See GetSuffixType in basic/source/comp/scanner.cxx for type characters
@@ -2843,6 +2847,12 @@ void SbiRuntime::StepLOADNC( sal_uInt32 nOp1 )
             // tdf#142460 - properly handle boolean values in string pool
             case 'b': eType = SbxBOOL; break;
         }
+    }
+    // tdf#143707 - if the data type character is different from the default value, it was added
+    // in basic/source/comp/symtbl.cxx. Hence, change the type of the numeric constant to be loaded.
+    else if (eTypeStr != SbxSTRING)
+    {
+        eType = eTypeStr;
     }
     SbxVariable* p = new SbxVariable( eType );
     p->PutDouble( n );
@@ -4179,9 +4189,15 @@ void SbiRuntime::StepPARAM( sal_uInt32 nOp1, sal_uInt32 nOp2 )
                     sal_uInt16 nDefaultId = static_cast<sal_uInt16>(pParam->nUserData & 0x0ffff);
                     if( nDefaultId > 0 )
                     {
-                        OUString aDefaultStr = pImg->GetString( nDefaultId );
+                        // tdf#143707 - check if the data type character was added after the string
+                        // termination  symbol, and convert the variable if it was present. The
+                        // data type character was It was added in basic/source/comp/symtbl.cxx.
+                        SbxDataType eTypeStr;
+                        OUString aDefaultStr = pImg->GetString( nDefaultId, &eTypeStr );
                         pVar = new SbxVariable(pParam-> eType);
                         pVar->PutString( aDefaultStr );
+                        if (eTypeStr != SbxSTRING)
+                            pVar->Convert(eTypeStr);
                         refParams->Put(pVar, nIdx);
                     }
                     else if ( SbiRuntime::isVBAEnabled() && eType != SbxVARIANT )

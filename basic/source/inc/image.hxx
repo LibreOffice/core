@@ -84,7 +84,7 @@ public:
     const sal_uInt8* GetCode() const { return aCode.data(); }
     sal_uInt32 GetCodeSize() const { return aCode.size(); }
     sal_uInt16  GetBase() const     { return nDimBase;  }
-    OUString    GetString( short nId ) const;
+    OUString    GetString( short nId, SbxDataType *eType = nullptr ) const;
     const SbxObject* FindType (const OUString& aTypeName) const;
 
     const SbxArrayRef& GetEnums() const { return rEnums; }
