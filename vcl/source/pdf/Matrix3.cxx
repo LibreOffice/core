@@ -27,8 +27,7 @@ Matrix3::Matrix3()
 Point Matrix3::transform(const Point& rOrig) const
 {
     double x = static_cast<double>(rOrig.X()), y = static_cast<double>(rOrig.Y());
-    return Point(static_cast<int>(x * f[0] + y * f[2] + f[4]),
-                 static_cast<int>(x * f[1] + y * f[3] + f[5]));
+    return Point(x * f[0] + y * f[2] + f[4], x * f[1] + y * f[3] + f[5]);
 }
 
 void Matrix3::skew(double alpha, double beta)
