@@ -126,7 +126,7 @@ void SQLEditView::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     rEditEngine.SetDefaultHorizontalTextDirection(EEHorizontalTextDirection::L2R);
     rEditEngine.SetModifyHdl(LINK(this, SQLEditView, ModifyHdl));
 
-    m_aUpdateDataTimer.SetTimeout(300);
+    m_aUpdateDataTimer.SetTimeout(150);
     m_aUpdateDataTimer.SetInvokeHandler(LINK(this, SQLEditView, ImplUpdateDataHdl));
 
     ImplSetFont();
@@ -170,8 +170,6 @@ IMPL_LINK_NOARG(SQLEditView, ModifyHdl, LinkParamNone*, void)
 {
     if (m_bInUpdate)
         return;
-
-    m_aModifyLink.Call(nullptr);
     m_aUpdateDataTimer.Start();
 }
 
@@ -194,7 +192,6 @@ void SQLEditView::UpdateData()
     rEditEngine.EnableUndo(false);
 
     // syntax highlighting
-    bool bOrigModified = rEditEngine.IsModified();
     for (sal_Int32 nLine=0; nLine < rEditEngine.GetParagraphCount(); ++nLine)
     {
         OUString aLine( rEditEngine.GetText( nLine ) );
@@ -214,11 +211,14 @@ void SQLEditView::UpdateData()
             rEditEngine.QuickSetAttribs(aSet, ESelection(nLine, portion.nBegin, nLine, portion.nEnd));
         }
     }
-    if (!bOrigModified)
-        rEditEngine.ClearModifyFlag();
+
+    rEditEngine.ClearModifyFlag();
+
     m_bInUpdate = false;
 
     rEditEngine.EnableUndo(bUndoEnabled);
+
+    m_aModifyLink.Call(nullptr);
 
     Invalidate();
 }
