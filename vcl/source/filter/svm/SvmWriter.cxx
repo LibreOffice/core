@@ -22,6 +22,8 @@
 
 #include <tools/vcompat.hxx>
 
+#include <osl/thread.h>
+
 SvmWriter::SvmWriter(SvStream& rIStm)
     : mrStream(rIStm)
 {
@@ -215,6 +217,13 @@ void SvmWriter::MetaActionHandler(MetaAction* pAction, ImplMetaWriteData* pData)
         {
             auto* pMetaAction = static_cast<MetaMapModeAction*>(pAction);
             MapModeHandler(pMetaAction);
+        }
+        break;
+
+        case MetaActionType::FONT:
+        {
+            auto* pMetaAction = static_cast<MetaFontAction*>(pAction);
+            FontHandler(pMetaAction, pData);
         }
         break;
 
@@ -491,5 +500,15 @@ void SvmWriter::MapModeHandler(MetaMapModeAction* pAction)
     VersionCompatWrite aCompat(mrStream, 1);
     TypeSerializer aSerializer(mrStream);
     aSerializer.writeMapMode(pAction->GetMapMode());
+}
+
+void SvmWriter::FontHandler(MetaFontAction* pAction, ImplMetaWriteData* pData)
+{
+    mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
+    VersionCompatWrite aCompat(mrStream, 1);
+    WriteFont(mrStream, pAction->GetFont());
+    pData->meActualCharSet = pAction->GetFont().GetCharSet();
+    if (pData->meActualCharSet == RTL_TEXTENCODING_DONTKNOW)
+        pData->meActualCharSet = osl_getThreadTextEncoding();
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
