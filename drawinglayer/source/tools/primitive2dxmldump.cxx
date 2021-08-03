@@ -396,7 +396,9 @@ void Primitive2dXmlDump::decomposeAndWrite(
                 }
                 rWriter.attribute("x", aTranslate.getX());
                 rWriter.attribute("y", aTranslate.getY());
-                rWriter.attribute("text", rTextSimplePortionPrimitive2D.getText());
+                OUString aText = rTextSimplePortionPrimitive2D.getText();
+                // TODO share code with sax_fastparser::FastSaxSerializer::write().
+                rWriter.attribute("text", aText.replaceAll("", "&#9;"));
                 rWriter.attribute("fontcolor", convertColorToString(rTextSimplePortionPrimitive2D.getFontColor()));
 
                 const drawinglayer::attribute::FontAttribute& aFontAttribute = rTextSimplePortionPrimitive2D.getFontAttribute();

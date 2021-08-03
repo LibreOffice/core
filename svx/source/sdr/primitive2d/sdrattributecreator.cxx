@@ -58,6 +58,7 @@
 #include <svx/xbtmpit.hxx>
 #include <svl/itempool.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/GraphicLoader.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <svx/svx3ditems.hxx>
 #include <com/sun/star/drawing/ProjectionMode.hpp>
@@ -655,6 +656,13 @@ namespace drawinglayer::primitive2d
         attribute::SdrFillGraphicAttribute createNewSdrFillGraphicAttribute(const SfxItemSet& rSet)
         {
             Graphic aGraphic(rSet.Get(XATTR_FILLBITMAP).GetGraphicObject().GetGraphic());
+
+            OUString aOriginURL = aGraphic.getOriginURL();
+            if (aGraphic.GetType() == GraphicType::Default && !aOriginURL.isEmpty())
+            {
+                aGraphic = vcl::graphic::loadFromURL(aGraphic.getOriginURL());
+                aGraphic.setOriginURL(aOriginURL);
+            }
 
             if(GraphicType::Bitmap != aGraphic.GetType() && GraphicType::GdiMetafile != aGraphic.GetType())
             {
