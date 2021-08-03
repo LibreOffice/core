@@ -19,8 +19,7 @@
 
 /*|     Author: Alexander Gelfenbain                    |*/
 
-#ifndef INCLUDED_VCL_SOURCE_FONTSUBSET_XLAT_HXX
-#define INCLUDED_VCL_SOURCE_FONTSUBSET_XLAT_HXX
+#pragma once
 
 #include <sal/types.h>
 
@@ -35,6 +34,5 @@ sal_uInt16 TranslateChar15(sal_uInt16);
 sal_uInt16 TranslateChar16(sal_uInt16);
 }
 
-#endif // INCLUDED_VCL_SOURCE_FONTSUBSET_XLAT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
