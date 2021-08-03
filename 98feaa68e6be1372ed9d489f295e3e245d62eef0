@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "48bb4adc_deb017ba",
+        "filename": "cppu/source/typelib/static_types.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 301,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-08-03T06:22:43Z",
+      "side": 1,
+      "message": "this branch needs the same releasing OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER() as the else branch in getTypeFavourUnsigned in include/com/sun/star/uno/Sequence.hxx",
+      "revId": "98feaa68e6be1372ed9d489f295e3e245d62eef0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
