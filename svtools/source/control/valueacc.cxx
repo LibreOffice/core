@@ -73,7 +73,7 @@ ValueItemAcc::~ValueItemAcc()
 
 void ValueItemAcc::ParentDestroyed()
 {
-    std::lock_guard aGuard( maMutex );
+    std::scoped_lock aGuard( maMutex );
     mpParent = nullptr;
 }
 
@@ -261,7 +261,7 @@ lang::Locale SAL_CALL ValueItemAcc::getLocale()
 
 void SAL_CALL ValueItemAcc::addAccessibleEventListener( const uno::Reference< accessibility::XAccessibleEventListener >& rxListener )
 {
-    std::lock_guard aGuard( maMutex );
+    std::scoped_lock aGuard( maMutex );
 
     if( !rxListener.is() )
            return;
@@ -284,7 +284,7 @@ void SAL_CALL ValueItemAcc::addAccessibleEventListener( const uno::Reference< ac
 
 void SAL_CALL ValueItemAcc::removeAccessibleEventListener( const uno::Reference< accessibility::XAccessibleEventListener >& rxListener )
 {
-    std::lock_guard aGuard( maMutex );
+    std::scoped_lock aGuard( maMutex );
 
     if( rxListener.is() )
     {

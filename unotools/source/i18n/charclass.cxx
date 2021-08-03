@@ -53,13 +53,13 @@ CharClass::~CharClass()
 
 void CharClass::setLanguageTag( const LanguageTag& rLanguageTag )
 {
-    std::lock_guard aGuard( aMutex );
+    std::scoped_lock aGuard( aMutex );
     maLanguageTag = rLanguageTag;
 }
 
 const LanguageTag& CharClass::getLanguageTag() const
 {
-    std::lock_guard aGuard( aMutex );
+    std::scoped_lock aGuard( aMutex );
     return maLanguageTag;
 }
 
@@ -115,7 +115,7 @@ bool CharClass::isAlpha( const OUString& rStr, sal_Int32 nPos ) const
     {
         if ( xCC.is() )
         {
-            std::lock_guard aGuard( aMutex );
+            std::scoped_lock aGuard( aMutex );
             return  (xCC->getCharacterType( rStr, nPos, getMyLocale() ) &
                      nCharClassAlphaType) != 0;
         }
@@ -137,7 +137,7 @@ bool CharClass::isLetter( const OUString& rStr, sal_Int32 nPos ) const
     {
         if ( xCC.is() )
         {
-            std::lock_guard aGuard( aMutex );
+            std::scoped_lock aGuard( aMutex );
             return  (xCC->getCharacterType( rStr, nPos, getMyLocale() ) &
                      nCharClassLetterType) != 0;
         }
@@ -155,7 +155,7 @@ bool CharClass::isLetter( const OUString& rStr ) const
     {
         if ( xCC.is() )
         {
-            std::lock_guard aGuard( aMutex );
+            std::scoped_lock aGuard( aMutex );
             return isLetterType( xCC->getStringType( rStr, 0, rStr.getLength(), getMyLocale() ) );
         }
     }
@@ -176,7 +176,7 @@ bool CharClass::isDigit( const OUString& rStr, sal_Int32 nPos ) const
     {
         if ( xCC.is() )
         {
-            std::lock_guard aGuard( aMutex );
+            std::scoped_lock aGuard( aMutex );
             return  (xCC->getCharacterType( rStr, nPos, getMyLocale() ) &
                      KCharacterType::DIGIT) != 0;
         }
@@ -194,7 +194,7 @@ bool CharClass::isNumeric( const OUString& rStr ) const
     {
         if ( xCC.is() )
         {
-            std::lock_guard aGuard( aMutex );
+            std::scoped_lock aGuard( aMutex );
             return isNumericType( xCC->getStringType( rStr, 0, rStr.getLength(), getMyLocale() ) );
         }
     }
@@ -215,7 +215,7 @@ bool CharClass::isAlphaNumeric( const OUString& rStr, sal_Int32 nPos ) const
     {
         if ( xCC.is() )
         {
-            std::lock_guard aGuard( aMutex );
+            std::scoped_lock aGuard( aMutex );
             return  (xCC->getCharacterType( rStr, nPos, getMyLocale() ) &
                 (nCharClassAlphaType | KCharacterType::DIGIT)) != 0;
         }
@@ -237,7 +237,7 @@ bool CharClass::isLetterNumeric( const OUString& rStr, sal_Int32 nPos ) const
     {
         if ( xCC.is() )
         {
-            std::lock_guard aGuard( aMutex );
+            std::scoped_lock aGuard( aMutex );
             return  (xCC->getCharacterType( rStr, nPos, getMyLocale() ) &
                      (nCharClassLetterType | KCharacterType::DIGIT)) != 0;
         }
@@ -255,7 +255,7 @@ bool CharClass::isLetterNumeric( const OUString& rStr ) const
     {
         if ( xCC.is() )
         {
-            std::lock_guard aGuard( aMutex );
+            std::scoped_lock aGuard( aMutex );
             return isLetterNumericType( xCC->getStringType( rStr, 0, rStr.getLength(), getMyLocale() ) );
         }
     }
@@ -272,7 +272,7 @@ OUString CharClass::titlecase(const OUString& rStr, sal_Int32 nPos, sal_Int32 nC
     {
         if ( xCC.is() )
         {
-            std::lock_guard aGuard( aMutex );
+            std::scoped_lock aGuard( aMutex );
             return xCC->toTitle( rStr, nPos, nCount, getMyLocale() );
         }
     }
@@ -289,7 +289,7 @@ OUString CharClass::uppercase( const OUString& rStr, sal_Int32 nPos, sal_Int32 n
     {
         if ( xCC.is() )
         {
-            std::lock_guard aGuard( aMutex );
+            std::scoped_lock aGuard( aMutex );
             return xCC->toUpper( rStr, nPos, nCount, getMyLocale() );
         }
     }
@@ -306,7 +306,7 @@ OUString CharClass::lowercase( const OUString& rStr, sal_Int32 nPos, sal_Int32 n
     {
         if ( xCC.is() )
         {
-            std::lock_guard aGuard( aMutex );
+            std::scoped_lock aGuard( aMutex );
             return xCC->toLower( rStr, nPos, nCount, getMyLocale() );
         }
     }
@@ -323,7 +323,7 @@ sal_Int16 CharClass::getType( const OUString& rStr, sal_Int32 nPos ) const
     {
         if ( xCC.is() )
         {
-            std::lock_guard aGuard( aMutex );
+            std::scoped_lock aGuard( aMutex );
             return xCC->getType( rStr, nPos );
         }
     }
@@ -340,7 +340,7 @@ css::i18n::DirectionProperty CharClass::getCharacterDirection( const OUString& r
     {
         if ( xCC.is() )
         {
-            std::lock_guard aGuard( aMutex );
+            std::scoped_lock aGuard( aMutex );
             return static_cast<css::i18n::DirectionProperty>(xCC->getCharacterDirection( rStr, nPos ));
         }
     }
@@ -357,7 +357,7 @@ css::i18n::UnicodeScript CharClass::getScript( const OUString& rStr, sal_Int32 n
     {
         if ( xCC.is() )
         {
-            std::lock_guard aGuard( aMutex );
+            std::scoped_lock aGuard( aMutex );
             return static_cast<css::i18n::UnicodeScript>(xCC->getScript( rStr, nPos ));
         }
     }
@@ -374,7 +374,7 @@ sal_Int32 CharClass::getCharacterType( const OUString& rStr, sal_Int32 nPos ) co
     {
         if ( xCC.is() )
         {
-            std::lock_guard aGuard( aMutex );
+            std::scoped_lock aGuard( aMutex );
             return xCC->getCharacterType( rStr, nPos, getMyLocale() );
         }
     }
@@ -391,7 +391,7 @@ sal_Int32 CharClass::getStringType( const OUString& rStr, sal_Int32 nPos, sal_In
     {
         if ( xCC.is() )
         {
-            std::lock_guard aGuard( aMutex );
+            std::scoped_lock aGuard( aMutex );
             return xCC->getStringType( rStr, nPos, nCount, getMyLocale() );
         }
     }
@@ -414,7 +414,7 @@ css::i18n::ParseResult CharClass::parseAnyToken(
     {
         if ( xCC.is() )
         {
-            std::lock_guard aGuard( aMutex );
+            std::scoped_lock aGuard( aMutex );
             return xCC->parseAnyToken( rStr, nPos, getMyLocale(),
                 nStartCharFlags, userDefinedCharactersStart,
                 nContCharFlags, userDefinedCharactersCont );
@@ -440,7 +440,7 @@ css::i18n::ParseResult CharClass::parsePredefinedToken(
     {
         if ( xCC.is() )
         {
-            std::lock_guard aGuard( aMutex );
+            std::scoped_lock aGuard( aMutex );
             return xCC->parsePredefinedToken( nTokenType, rStr, nPos, getMyLocale(),
                 nStartCharFlags, userDefinedCharactersStart,
                 nContCharFlags, userDefinedCharactersCont );

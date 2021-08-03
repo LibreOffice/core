@@ -103,7 +103,7 @@ uno::Sequence< OUString > SAL_CALL SequenceInputStreamService::getSupportedServi
 // css::io::XInputStream:
 ::sal_Int32 SAL_CALL SequenceInputStreamService::readBytes( uno::Sequence< ::sal_Int8 > & aData, ::sal_Int32 nBytesToRead )
 {
-    std::lock_guard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
     if ( !m_xInputStream.is() )
         throw io::NotConnectedException();
 
@@ -112,7 +112,7 @@ uno::Sequence< OUString > SAL_CALL SequenceInputStreamService::getSupportedServi
 
 ::sal_Int32 SAL_CALL SequenceInputStreamService::readSomeBytes( uno::Sequence< ::sal_Int8 > & aData, ::sal_Int32 nMaxBytesToRead )
 {
-    std::lock_guard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
     if ( !m_xInputStream.is() )
         throw io::NotConnectedException();
 
@@ -121,7 +121,7 @@ uno::Sequence< OUString > SAL_CALL SequenceInputStreamService::getSupportedServi
 
 void SAL_CALL SequenceInputStreamService::skipBytes( ::sal_Int32 nBytesToSkip )
 {
-    std::lock_guard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
     if ( !m_xInputStream.is() )
         throw io::NotConnectedException();
 
@@ -130,7 +130,7 @@ void SAL_CALL SequenceInputStreamService::skipBytes( ::sal_Int32 nBytesToSkip )
 
 ::sal_Int32 SAL_CALL SequenceInputStreamService::available()
 {
-    std::lock_guard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
     if ( !m_xInputStream.is() )
         throw io::NotConnectedException();
 
@@ -139,7 +139,7 @@ void SAL_CALL SequenceInputStreamService::skipBytes( ::sal_Int32 nBytesToSkip )
 
 void SAL_CALL SequenceInputStreamService::closeInput()
 {
-    std::lock_guard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
     if ( !m_xInputStream.is() )
         throw io::NotConnectedException();
 
@@ -151,7 +151,7 @@ void SAL_CALL SequenceInputStreamService::closeInput()
 // css::io::XSeekable:
 void SAL_CALL SequenceInputStreamService::seek( ::sal_Int64 location )
 {
-    std::lock_guard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
     if ( !m_xSeekable.is() )
         throw io::NotConnectedException();
 
@@ -160,7 +160,7 @@ void SAL_CALL SequenceInputStreamService::seek( ::sal_Int64 location )
 
 ::sal_Int64 SAL_CALL SequenceInputStreamService::getPosition()
 {
-    std::lock_guard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
     if ( !m_xSeekable.is() )
         throw io::NotConnectedException();
 
@@ -169,7 +169,7 @@ void SAL_CALL SequenceInputStreamService::seek( ::sal_Int64 location )
 
 ::sal_Int64 SAL_CALL SequenceInputStreamService::getLength()
 {
-    std::lock_guard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
     if ( !m_xSeekable.is() )
         throw io::NotConnectedException();
 
@@ -179,7 +179,7 @@ void SAL_CALL SequenceInputStreamService::seek( ::sal_Int64 location )
 // css::lang::XInitialization:
 void SAL_CALL SequenceInputStreamService::initialize( const uno::Sequence< css::uno::Any > & aArguments )
 {
-    std::lock_guard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
     if ( m_bInitialized )
         throw frame::DoubleInitializationException();
 

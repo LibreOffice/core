@@ -853,7 +853,7 @@ void PropertySetMixinImpl::prepareSet(
     Impl::VetoListenerBag specificVeto;
     Impl::VetoListenerBag unspecificVeto;
     {
-        std::lock_guard g(m_impl->mutex);
+        std::scoped_lock g(m_impl->mutex);
         if (m_impl->disposed) {
             throw css::lang::DisposedException(
                 "disposed", static_cast< css::beans::XPropertySet * >(this));
@@ -922,7 +922,7 @@ void PropertySetMixinImpl::dispose() {
     Impl::BoundListenerMap boundListeners;
     Impl::VetoListenerMap vetoListeners;
     {
-        std::lock_guard g(m_impl->mutex);
+        std::scoped_lock g(m_impl->mutex);
         boundListeners.swap(m_impl->boundListeners);
         vetoListeners.swap(m_impl->vetoListeners);
         m_impl->disposed = true;
@@ -1001,7 +1001,7 @@ void PropertySetMixinImpl::addPropertyChangeListener(
     checkUnknown(propertyName);
     bool disposed;
     {
-        std::lock_guard g(m_impl->mutex);
+        std::scoped_lock g(m_impl->mutex);
         disposed = m_impl->disposed;
         if (!disposed) {
             m_impl->boundListeners[propertyName].insert(listener);
@@ -1020,7 +1020,7 @@ void PropertySetMixinImpl::removePropertyChangeListener(
 {
     assert(listener.is());
     checkUnknown(propertyName);
-    std::lock_guard g(m_impl->mutex);
+    std::scoped_lock g(m_impl->mutex);
     Impl::BoundListenerMap::iterator i(
         m_impl->boundListeners.find(propertyName));
     if (i != m_impl->boundListeners.end()) {
@@ -1040,7 +1040,7 @@ void PropertySetMixinImpl::addVetoableChangeListener(
     checkUnknown(propertyName);
     bool disposed;
     {
-        std::lock_guard g(m_impl->mutex);
+        std::scoped_lock g(m_impl->mutex);
         disposed = m_impl->disposed;
         if (!disposed) {
             m_impl->vetoListeners[propertyName].insert(listener);
@@ -1059,7 +1059,7 @@ void PropertySetMixinImpl::removeVetoableChangeListener(
 {
     assert(listener.is());
     checkUnknown(propertyName);
-    std::lock_guard g(m_impl->mutex);
+    std::scoped_lock g(m_impl->mutex);
     Impl::VetoListenerMap::iterator i(m_impl->vetoListeners.find(propertyName));
     if (i != m_impl->vetoListeners.end()) {
         Impl::VetoListenerBag::iterator j(i->second.find(listener));

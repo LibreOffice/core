@@ -141,7 +141,7 @@ void SwAccessibleFrameBase::InvalidateCursorPos_()
     bool bOldSelected;
 
     {
-        std::lock_guard aGuard( m_Mutex );
+        std::scoped_lock aGuard( m_Mutex );
         bOldSelected = m_bIsSelected;
         m_bIsSelected = bNewSelected;
     }
@@ -188,7 +188,7 @@ void SwAccessibleFrameBase::InvalidateFocus_()
     bool bSelected;
 
     {
-        std::lock_guard aGuard( m_Mutex );
+        std::scoped_lock aGuard( m_Mutex );
         bSelected = m_bIsSelected;
     }
     assert(bSelected && "focus object should be selected");
@@ -199,7 +199,7 @@ void SwAccessibleFrameBase::InvalidateFocus_()
 
 bool SwAccessibleFrameBase::HasCursor()
 {
-    std::lock_guard aGuard( m_Mutex );
+    std::scoped_lock aGuard( m_Mutex );
     return m_bIsSelected;
 }
 

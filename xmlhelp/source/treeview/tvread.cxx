@@ -1081,7 +1081,7 @@ OUString TreeFileIterator::expandURL( const OUString& aURL )
     static Reference< util::XMacroExpander > xMacroExpander;
     static Reference< uri::XUriReferenceFactory > xFac;
 
-    std::lock_guard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
 
     if( !xMacroExpander.is() || !xFac.is() )
     {

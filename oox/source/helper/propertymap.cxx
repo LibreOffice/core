@@ -125,7 +125,7 @@ Reference< XPropertySetInfo > SAL_CALL GenericPropertySet::getPropertySetInfo()
 
 void SAL_CALL GenericPropertySet::setPropertyValue( const OUString& rPropertyName, const Any& rValue )
 {
-    std::lock_guard aGuard( mMutex );
+    std::scoped_lock aGuard( mMutex );
     maPropMap[ rPropertyName ] = rValue;
 }
 

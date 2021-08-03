@@ -90,7 +90,7 @@ uno::Sequence< OUString > SAL_CALL SequenceOutputStreamService::getSupportedServ
 // css::io::XOutputStream:
 void SAL_CALL SequenceOutputStreamService::writeBytes( const uno::Sequence< ::sal_Int8 > & aData )
 {
-    std::lock_guard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
     if ( !m_xOutputStream.is() )
         throw io::NotConnectedException();
 
@@ -99,7 +99,7 @@ void SAL_CALL SequenceOutputStreamService::writeBytes( const uno::Sequence< ::sa
 
 void SAL_CALL SequenceOutputStreamService::flush()
 {
-    std::lock_guard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
     if ( !m_xOutputStream.is() )
         throw io::NotConnectedException();
 
@@ -108,7 +108,7 @@ void SAL_CALL SequenceOutputStreamService::flush()
 
 void SAL_CALL SequenceOutputStreamService::closeOutput()
 {
-    std::lock_guard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
     if ( !m_xOutputStream.is() )
         throw io::NotConnectedException();
 
@@ -119,7 +119,7 @@ void SAL_CALL SequenceOutputStreamService::closeOutput()
 // css::io::XSequenceOutputStream:
 uno::Sequence< ::sal_Int8 > SAL_CALL SequenceOutputStreamService::getWrittenBytes()
 {
-    std::lock_guard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
     if ( !m_xOutputStream.is() )
         throw io::NotConnectedException();
 

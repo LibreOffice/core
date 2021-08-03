@@ -60,7 +60,7 @@ sal_Int32 SAL_CALL SequenceInputStream::readBytes( Sequence<sal_Int8>& aData, sa
     if (nBytesToRead < 0)
         throw BufferSizeExceededException(OUString(),*this);
 
-    std::lock_guard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
 
     sal_Int32 nAvail = avail();
 
@@ -87,7 +87,7 @@ void SAL_CALL SequenceInputStream::skipBytes( sal_Int32 nBytesToSkip )
     if (nBytesToSkip < 0)
         throw BufferSizeExceededException(OUString(),*this);
 
-    std::lock_guard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
 
     sal_Int32 nAvail = avail();
 
@@ -100,7 +100,7 @@ void SAL_CALL SequenceInputStream::skipBytes( sal_Int32 nBytesToSkip )
 
 sal_Int32 SAL_CALL SequenceInputStream::available(  )
 {
-    std::lock_guard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
 
     return avail();
 }
@@ -108,7 +108,7 @@ sal_Int32 SAL_CALL SequenceInputStream::available(  )
 
 void SAL_CALL SequenceInputStream::closeInput(  )
 {
-    std::lock_guard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
 
     if (m_nPos == -1)
         throw NotConnectedException(OUString(), *this);
@@ -120,19 +120,19 @@ void SAL_CALL SequenceInputStream::seek( sal_Int64 location )
 {
     if ( location > m_aData.getLength() || location < 0 || location > SAL_MAX_INT32 )
         throw IllegalArgumentException("bad location", static_cast<cppu::OWeakObject*>(this), 1);
-    std::lock_guard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
     m_nPos = static_cast<sal_Int32>(location);
 }
 
 sal_Int64 SAL_CALL SequenceInputStream::getPosition()
 {
-    std::lock_guard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
     return m_nPos;
 }
 
 sal_Int64 SAL_CALL SequenceInputStream::getLength(  )
 {
-    std::lock_guard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
     return m_aData.getLength();
 }
 
@@ -153,7 +153,7 @@ OSequenceOutputStream::OSequenceOutputStream(Sequence< sal_Int8 >& _rSeq, double
 
 void SAL_CALL OSequenceOutputStream::writeBytes( const Sequence< sal_Int8 >& _rData )
 {
-    std::lock_guard aGuard(m_aMutex);
+    std::scoped_lock aGuard(m_aMutex);
     if (!m_bConnected)
         throw NotConnectedException();
 
@@ -193,7 +193,7 @@ void SAL_CALL OSequenceOutputStream::writeBytes( const Sequence< sal_Int8 >& _rD
 
 void SAL_CALL OSequenceOutputStream::flush(  )
 {
-    std::lock_guard aGuard(m_aMutex);
+    std::scoped_lock aGuard(m_aMutex);
     if (!m_bConnected)
         throw NotConnectedException();
 
@@ -211,7 +211,7 @@ void OSequenceOutputStream::finalizeOutput()
 
 void SAL_CALL OSequenceOutputStream::closeOutput()
 {
-    std::lock_guard aGuard(m_aMutex);
+    std::scoped_lock aGuard(m_aMutex);
     if (!m_bConnected)
         throw NotConnectedException();
 

@@ -903,7 +903,7 @@ void SAL_CALL InputStreamTransformer::release() noexcept
 
 sal_Int32 SAL_CALL InputStreamTransformer::readBytes( Sequence< sal_Int8 >& aData,sal_Int32 nBytesToRead )
 {
-    std::lock_guard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
 
     int curr,available_ = buffer.getLength() - pos;
     if( nBytesToRead <= available_ )
@@ -929,14 +929,14 @@ sal_Int32 SAL_CALL InputStreamTransformer::readSomeBytes( Sequence< sal_Int8 >& 
 
 void SAL_CALL InputStreamTransformer::skipBytes( sal_Int32 nBytesToSkip )
 {
-    std::lock_guard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
     while( nBytesToSkip-- ) ++pos;
 }
 
 
 sal_Int32 SAL_CALL InputStreamTransformer::available()
 {
-    std::lock_guard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
     return std::min<sal_Int64>(SAL_MAX_INT32, buffer.getLength() - pos);
 }
 
@@ -948,7 +948,7 @@ void SAL_CALL InputStreamTransformer::closeInput()
 
 void SAL_CALL InputStreamTransformer::seek( sal_Int64 location )
 {
-    std::lock_guard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
     if( location < 0 )
         throw IllegalArgumentException();
 
@@ -961,14 +961,14 @@ void SAL_CALL InputStreamTransformer::seek( sal_Int64 location )
 
 sal_Int64 SAL_CALL InputStreamTransformer::getPosition()
 {
-    std::lock_guard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
     return sal_Int64( pos );
 }
 
 
 sal_Int64 SAL_CALL InputStreamTransformer::getLength()
 {
-    std::lock_guard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
 
     return buffer.getLength();
 }
@@ -976,7 +976,7 @@ sal_Int64 SAL_CALL InputStreamTransformer::getLength()
 
 void InputStreamTransformer::addToBuffer( const char* buffer_,int len_ )
 {
-    std::lock_guard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
 
     buffer.append( buffer_, len_ );
 }

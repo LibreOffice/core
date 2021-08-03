@@ -67,7 +67,7 @@ class CancelJobsThread : public osl::Thread
 
 void CancelJobsThread::addJobs( std::list< css::uno::Reference< css::util::XCancellable > >& rJobs )
 {
-    std::lock_guard aGuard(maMutex);
+    std::scoped_lock aGuard(maMutex);
 
     maJobs.insert( maJobs.end(), rJobs.begin(), rJobs.end() );
     mbAllJobsCancelled = !maJobs.empty();
@@ -75,21 +75,21 @@ void CancelJobsThread::addJobs( std::list< css::uno::Reference< css::util::XCanc
 
 bool CancelJobsThread::existJobs() const
 {
-    std::lock_guard aGuard(maMutex);
+    std::scoped_lock aGuard(maMutex);
 
     return !maJobs.empty();
 }
 
 bool CancelJobsThread::allJobsCancelled() const
 {
-    std::lock_guard aGuard(maMutex);
+    std::scoped_lock aGuard(maMutex);
 
     return maJobs.empty() && mbAllJobsCancelled;
 }
 
 void CancelJobsThread::stopWhenAllJobsCancelled()
 {
-    std::lock_guard aGuard(maMutex);
+    std::scoped_lock aGuard(maMutex);
 
     mbStopped = true;
 }
@@ -99,7 +99,7 @@ css::uno::Reference< css::util::XCancellable > CancelJobsThread::getNextJob()
     css::uno::Reference< css::util::XCancellable > xRet;
 
     {
-        std::lock_guard aGuard(maMutex);
+        std::scoped_lock aGuard(maMutex);
 
         if ( !maJobs.empty() )
         {
@@ -113,7 +113,7 @@ css::uno::Reference< css::util::XCancellable > CancelJobsThread::getNextJob()
 
 bool CancelJobsThread::stopped() const
 {
-    std::lock_guard aGuard(maMutex);
+    std::scoped_lock aGuard(maMutex);
 
     return mbStopped;
 }

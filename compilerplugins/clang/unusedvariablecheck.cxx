@@ -27,7 +27,7 @@ Check for unused classes where the compiler cannot decide (e.g. because of
 non-trivial or extern ctors) if a variable is unused if only its ctor/dtor
 are called and nothing else. For example std::vector is a class where
 the ctor may call further functions, but an unused std::string variable
-does nothing. On the other hand, std::lock_guard instances are used
+does nothing. On the other hand, std::scoped_lock instances are used
 for their dtors and so are not unused even if not otherwise accessed.
 
 Classes which are safe to be warned about need to be marked using

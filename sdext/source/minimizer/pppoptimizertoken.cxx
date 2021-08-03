@@ -167,7 +167,7 @@ PPPOptimizerTokenEnum TKGet( const OUString& rToken )
 {
     if ( !pHashMap )
     {   // init hash map
-        std::lock_guard aGuard( getHashMapMutex() );
+        std::scoped_lock aGuard( getHashMapMutex() );
         if ( !pHashMap )
         {
             TypeNameHashMap* pH = new TypeNameHashMap;

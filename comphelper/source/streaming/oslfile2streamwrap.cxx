@@ -53,7 +53,7 @@ sal_Int32 SAL_CALL OSLInputStreamWrapper::readBytes(css::uno::Sequence< sal_Int8
 
     aData.realloc(nBytesToRead);
 
-    std::lock_guard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
 
     sal_uInt64 nRead = 0;
     FileBase::RC eError = m_pFile->read(static_cast<void*>(aData.getArray()), nBytesToRead, nRead);
@@ -80,7 +80,7 @@ sal_Int32 SAL_CALL OSLInputStreamWrapper::readSomeBytes(css::uno::Sequence< sal_
 
 void SAL_CALL OSLInputStreamWrapper::skipBytes(sal_Int32 nBytesToSkip)
 {
-    std::lock_guard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
     if (!m_pFile)
         throw css::io::NotConnectedException(OUString(), static_cast<css::uno::XWeak*>(this));
 
@@ -97,7 +97,7 @@ void SAL_CALL OSLInputStreamWrapper::skipBytes(sal_Int32 nBytesToSkip)
 
 sal_Int32 SAL_CALL OSLInputStreamWrapper::available()
 {
-    std::lock_guard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
     if (!m_pFile)
         throw css::io::NotConnectedException(OUString(), static_cast<css::uno::XWeak*>(this));
 

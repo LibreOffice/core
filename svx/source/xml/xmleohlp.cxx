@@ -101,19 +101,19 @@ SvStream *OutputStorageWrapper_Impl::GetStream()
 void SAL_CALL OutputStorageWrapper_Impl::writeBytes(
         const Sequence< sal_Int8 >& aData)
 {
-    std::lock_guard          aGuard( maMutex );
+    std::scoped_lock          aGuard( maMutex );
     xOut->writeBytes( aData );
 }
 
 void SAL_CALL OutputStorageWrapper_Impl::flush()
 {
-    std::lock_guard          aGuard( maMutex );
+    std::scoped_lock          aGuard( maMutex );
     xOut->flush();
 }
 
 void SAL_CALL OutputStorageWrapper_Impl::closeOutput()
 {
-    std::lock_guard          aGuard( maMutex );
+    std::scoped_lock          aGuard( maMutex );
     xOut->closeOutput();
     bStreamClosed = true;
 }

@@ -161,7 +161,7 @@ Locale SAL_CALL LangGuess_Impl::guessPrimaryLanguage(
         ::sal_Int32 nStartPos,
         ::sal_Int32 nLen )
 {
-    std::lock_guard aGuard( GetLangGuessMutex() );
+    std::scoped_lock aGuard( GetLangGuessMutex() );
 
     EnsureInitialized();
 
@@ -190,7 +190,7 @@ void LangGuess_Impl::SetFingerPrintsDB(
 
 uno::Sequence< Locale > SAL_CALL LangGuess_Impl::getAvailableLanguages(  )
 {
-    std::lock_guard aGuard( GetLangGuessMutex() );
+    std::scoped_lock aGuard( GetLangGuessMutex() );
 
     EnsureInitialized();
 
@@ -212,7 +212,7 @@ uno::Sequence< Locale > SAL_CALL LangGuess_Impl::getAvailableLanguages(  )
 
 uno::Sequence< Locale > SAL_CALL LangGuess_Impl::getEnabledLanguages(  )
 {
-    std::lock_guard aGuard( GetLangGuessMutex() );
+    std::scoped_lock aGuard( GetLangGuessMutex() );
 
     EnsureInitialized();
 
@@ -234,7 +234,7 @@ uno::Sequence< Locale > SAL_CALL LangGuess_Impl::getEnabledLanguages(  )
 
 uno::Sequence< Locale > SAL_CALL LangGuess_Impl::getDisabledLanguages(  )
 {
-    std::lock_guard aGuard( GetLangGuessMutex() );
+    std::scoped_lock aGuard( GetLangGuessMutex() );
 
     EnsureInitialized();
 
@@ -257,7 +257,7 @@ uno::Sequence< Locale > SAL_CALL LangGuess_Impl::getDisabledLanguages(  )
 void SAL_CALL LangGuess_Impl::disableLanguages(
         const uno::Sequence< Locale >& rLanguages )
 {
-    std::lock_guard aGuard( GetLangGuessMutex() );
+    std::scoped_lock aGuard( GetLangGuessMutex() );
 
     EnsureInitialized();
 
@@ -278,7 +278,7 @@ void SAL_CALL LangGuess_Impl::disableLanguages(
 void SAL_CALL LangGuess_Impl::enableLanguages(
         const uno::Sequence< Locale >& rLanguages )
 {
-    std::lock_guard aGuard( GetLangGuessMutex() );
+    std::scoped_lock aGuard( GetLangGuessMutex() );
 
     EnsureInitialized();
 

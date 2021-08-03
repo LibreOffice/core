@@ -95,7 +95,7 @@ css::uno::Any SAL_CALL DispatchHelper::executeDispatch(
     css::uno::Reference<css::util::XURLTransformer> xParser;
     /* SAFE { */
     {
-        std::lock_guard aReadLock(m_mutex);
+        std::scoped_lock aReadLock(m_mutex);
         xParser = css::util::URLTransformer::create(m_xContext);
     }
     /* } SAFE */
@@ -150,7 +150,7 @@ DispatchHelper::executeDispatch(const css::uno::Reference<css::frame::XDispatch>
                                                                                css::uno::UNO_QUERY);
             /* SAFE { */
             {
-                std::lock_guard aWriteLock(m_mutex);
+                std::scoped_lock aWriteLock(m_mutex);
                 m_xBroadcaster = xNotifyDispatch;
                 m_aBlockFlag = false;
             }
@@ -184,7 +184,7 @@ DispatchHelper::executeDispatch(const css::uno::Reference<css::frame::XDispatch>
  */
 void SAL_CALL DispatchHelper::dispatchFinished(const css::frame::DispatchResultEvent& aResult)
 {
-    std::lock_guard g(m_mutex);
+    std::scoped_lock g(m_mutex);
     m_aResult <<= aResult;
     m_aBlockFlag = true;
     m_aBlock.notify_one();
@@ -198,7 +198,7 @@ void SAL_CALL DispatchHelper::dispatchFinished(const css::frame::DispatchResultE
  */
 void SAL_CALL DispatchHelper::disposing(const css::lang::EventObject&)
 {
-    std::lock_guard g(m_mutex);
+    std::scoped_lock g(m_mutex);
     m_aResult.clear();
     m_aBlockFlag = true;
     m_aBlock.notify_one();

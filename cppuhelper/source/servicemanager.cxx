@@ -470,13 +470,13 @@ private:
 
 sal_Bool ContentEnumeration::hasMoreElements()
 {
-    std::lock_guard g(mutex_);
+    std::scoped_lock g(mutex_);
     return iterator_ != factories_.end();
 }
 
 css::uno::Any ContentEnumeration::nextElement()
 {
-    std::lock_guard g(mutex_);
+    std::scoped_lock g(mutex_);
     if (iterator_ == factories_.end()) {
         throw css::container::NoSuchElementException(
             "Bootstrap service manager service enumerator has no more elements",

@@ -115,7 +115,7 @@ OUString ScEditUtil::GetString( const EditTextObject& rEditText, const ScDocumen
         return GetMultilineString( rEditText );
 
     static std::mutex aMutex;
-    std::lock_guard aGuard( aMutex);
+    std::scoped_lock aGuard( aMutex);
     // ScFieldEditEngine is needed to resolve field contents.
     if (pDoc)
     {

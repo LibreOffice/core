@@ -56,7 +56,7 @@ void DisplayConnectionDispatch::terminate()
 
     SolarMutexReleaser aRel;
 
-    std::lock_guard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
     Any aEvent;
     std::vector< css::uno::Reference< XEventHandler > > aLocalList( m_aHandlers );
     for (auto const& elem : aLocalList)
@@ -65,14 +65,14 @@ void DisplayConnectionDispatch::terminate()
 
 void SAL_CALL DisplayConnectionDispatch::addEventHandler( const Any& /*window*/, const css::uno::Reference< XEventHandler >& handler, sal_Int32 /*eventMask*/ )
 {
-    std::lock_guard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
 
     m_aHandlers.push_back( handler );
 }
 
 void SAL_CALL DisplayConnectionDispatch::removeEventHandler( const Any& /*window*/, const css::uno::Reference< XEventHandler >& handler )
 {
-    std::lock_guard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
 
     m_aHandlers.erase( std::remove(m_aHandlers.begin(), m_aHandlers.end(), handler), m_aHandlers.end() );
 }
@@ -99,7 +99,7 @@ bool DisplayConnectionDispatch::dispatchEvent( void const * pData, int nBytes )
     aEvent <<= aSeq;
     ::std::vector< css::uno::Reference< XEventHandler > > handlers;
     {
-        std::lock_guard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
         handlers = m_aHandlers;
     }
     for (auto const& handle : handlers)

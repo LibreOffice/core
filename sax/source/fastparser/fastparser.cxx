@@ -601,7 +601,7 @@ void Entity::throwException( const ::rtl::Reference< FastLocatorImpl > &xDocumen
     // Error during parsing !
     Any savedException;
     {
-        std::lock_guard g(maSavedExceptionMutex);
+        std::scoped_lock g(maSavedExceptionMutex);
         if (maSavedException.hasValue())
         {
             savedException.setValue(&maSavedException, cppu::UnoType<decltype(maSavedException)>::get());
@@ -643,7 +643,7 @@ void Entity::saveException( const Any & e )
     // unexpectedly some 'startElements' produce a UNO_QUERY_THROW
     // for XComponent; and yet expect to continue parsing.
     SAL_WARN("sax", "Unexpected exception from XML parser " << exceptionToString(e));
-    std::lock_guard g(maSavedExceptionMutex);
+    std::scoped_lock g(maSavedExceptionMutex);
     if (maSavedException.hasValue())
     {
         SAL_INFO("sax.fastparser", "discarding exception, already have one");
@@ -656,7 +656,7 @@ void Entity::saveException( const Any & e )
 
 bool Entity::hasException()
 {
-    std::lock_guard g(maSavedExceptionMutex);
+    std::scoped_lock g(maSavedExceptionMutex);
     return maSavedException.hasValue();
 }
 

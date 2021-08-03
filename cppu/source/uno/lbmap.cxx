@@ -319,7 +319,7 @@ static OUString getBridgeName(
 static void setNegativeBridge( const OUString & rBridgeName )
 {
     MappingsData & rData = getMappingsData();
-    std::lock_guard aGuard( rData.aNegativeLibsMutex );
+    std::scoped_lock aGuard( rData.aNegativeLibsMutex );
     rData.aNegativeLibs.insert( rBridgeName );
 }
 
@@ -356,7 +356,7 @@ static bool loadModule(osl::Module & rModule, const OUString & rBridgeName)
     bool bNeg;
     {
     MappingsData & rData = getMappingsData();
-    std::lock_guard aGuard( rData.aNegativeLibsMutex );
+    std::scoped_lock aGuard( rData.aNegativeLibsMutex );
     const auto iFind( rData.aNegativeLibs.find( rBridgeName ) );
     bNeg = (iFind != rData.aNegativeLibs.end());
     }

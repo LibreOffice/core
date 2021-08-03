@@ -80,7 +80,7 @@ NameContainer::NameContainer( const css::uno::Type& aType )
 // XNameContainer
 void SAL_CALL NameContainer::insertByName( const OUString& aName, const Any& aElement )
 {
-    std::lock_guard aGuard( maMutex );
+    std::scoped_lock aGuard( maMutex );
 
     if( maProperties.find( aName ) != maProperties.end() )
         throw ElementExistException();
@@ -93,7 +93,7 @@ void SAL_CALL NameContainer::insertByName( const OUString& aName, const Any& aEl
 
 void SAL_CALL NameContainer::removeByName( const OUString& Name )
 {
-    std::lock_guard aGuard( maMutex );
+    std::scoped_lock aGuard( maMutex );
 
     SvGenericNameContainerMapImpl::iterator aIter = maProperties.find( Name );
     if( aIter == maProperties.end() )
@@ -106,7 +106,7 @@ void SAL_CALL NameContainer::removeByName( const OUString& Name )
 
 void SAL_CALL NameContainer::replaceByName( const OUString& aName, const Any& aElement )
 {
-    std::lock_guard aGuard( maMutex );
+    std::scoped_lock aGuard( maMutex );
 
     SvGenericNameContainerMapImpl::iterator aIter( maProperties.find( aName ) );
     if( aIter == maProperties.end() )
@@ -122,7 +122,7 @@ void SAL_CALL NameContainer::replaceByName( const OUString& aName, const Any& aE
 
 Any SAL_CALL NameContainer::getByName( const OUString& aName )
 {
-    std::lock_guard aGuard( maMutex );
+    std::scoped_lock aGuard( maMutex );
 
     SvGenericNameContainerMapImpl::iterator aIter = maProperties.find( aName );
     if( aIter == maProperties.end() )
@@ -133,14 +133,14 @@ Any SAL_CALL NameContainer::getByName( const OUString& aName )
 
 Sequence< OUString > SAL_CALL NameContainer::getElementNames(  )
 {
-    std::lock_guard aGuard( maMutex );
+    std::scoped_lock aGuard( maMutex );
 
     return comphelper::mapKeysToSequence(maProperties);
 }
 
 sal_Bool SAL_CALL NameContainer::hasByName( const OUString& aName )
 {
-    std::lock_guard aGuard( maMutex );
+    std::scoped_lock aGuard( maMutex );
 
     SvGenericNameContainerMapImpl::iterator aIter = maProperties.find( aName );
     return aIter != maProperties.end();
@@ -148,7 +148,7 @@ sal_Bool SAL_CALL NameContainer::hasByName( const OUString& aName )
 
 sal_Bool SAL_CALL NameContainer::hasElements(  )
 {
-    std::lock_guard aGuard( maMutex );
+    std::scoped_lock aGuard( maMutex );
 
     return !maProperties.empty();
 }

@@ -89,7 +89,7 @@ Sequence< OUString > NamingService_Impl::getSupportedServiceNames()
 // XServiceInfo
 Reference< XInterface > NamingService_Impl::getRegisteredObject( const OUString& Name )
 {
-    std::lock_guard aGuard( aMutex );
+    std::scoped_lock aGuard( aMutex );
     Reference< XInterface > xRet;
     HashMap_OWString_Interface::iterator aIt = aMap.find( Name );
     if( aIt != aMap.end() )
@@ -100,14 +100,14 @@ Reference< XInterface > NamingService_Impl::getRegisteredObject( const OUString&
 // XServiceInfo
 void NamingService_Impl::registerObject( const OUString& Name, const Reference< XInterface >& Object )
 {
-    std::lock_guard aGuard( aMutex );
+    std::scoped_lock aGuard( aMutex );
     aMap[ Name ] = Object;
 }
 
 // XServiceInfo
 void NamingService_Impl::revokeObject( const OUString& Name )
 {
-    std::lock_guard aGuard( aMutex );
+    std::scoped_lock aGuard( aMutex );
     aMap.erase( Name );
 }
 

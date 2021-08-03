@@ -70,7 +70,7 @@ AccessibleStateSetHelper::~AccessibleStateSetHelper()
     */
 sal_Bool SAL_CALL AccessibleStateSetHelper::isEmpty ()
 {
-    std::lock_guard aGuard (maMutex);
+    std::scoped_lock aGuard (maMutex);
     return maStates == 0;
 }
 
@@ -87,7 +87,7 @@ sal_Bool SAL_CALL AccessibleStateSetHelper::isEmpty ()
     */
 sal_Bool SAL_CALL AccessibleStateSetHelper::contains (sal_Int16 aState)
 {
-    std::lock_guard aGuard (maMutex);
+    std::scoped_lock aGuard (maMutex);
 
     return lcl_contains(maStates, aState);
 }
@@ -110,14 +110,14 @@ sal_Bool SAL_CALL AccessibleStateSetHelper::contains (sal_Int16 aState)
 sal_Bool SAL_CALL AccessibleStateSetHelper::containsAll
     (const uno::Sequence<sal_Int16>& rStateSet)
 {
-    std::lock_guard aGuard (maMutex);
+    std::scoped_lock aGuard (maMutex);
     return std::all_of(rStateSet.begin(), rStateSet.end(),
         [this](const sal_Int16 nState) { return lcl_contains(maStates, nState); });
 }
 
 uno::Sequence<sal_Int16> SAL_CALL AccessibleStateSetHelper::getStates()
 {
-    std::lock_guard aGuard(maMutex);
+    std::scoped_lock aGuard(maMutex);
     uno::Sequence<sal_Int16> aRet(BITFIELDSIZE);
     sal_Int16* pSeq = aRet.getArray();
     sal_Int16 nStateCount(0);
@@ -134,7 +134,7 @@ uno::Sequence<sal_Int16> SAL_CALL AccessibleStateSetHelper::getStates()
 
 void AccessibleStateSetHelper::AddState(sal_Int16 aState)
 {
-    std::lock_guard aGuard (maMutex);
+    std::scoped_lock aGuard (maMutex);
     DBG_ASSERT(aState < BITFIELDSIZE, "the statesset is too small");
     sal_uInt64 aTempBitSet(1);
     aTempBitSet <<= aState;
@@ -143,7 +143,7 @@ void AccessibleStateSetHelper::AddState(sal_Int16 aState)
 
 void AccessibleStateSetHelper::RemoveState(sal_Int16 aState)
 {
-    std::lock_guard aGuard (maMutex);
+    std::scoped_lock aGuard (maMutex);
     DBG_ASSERT(aState < BITFIELDSIZE, "the statesset is too small");
     sal_uInt64 aTempBitSet(1);
     aTempBitSet <<= aState;

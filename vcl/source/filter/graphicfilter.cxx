@@ -325,7 +325,7 @@ GraphicFilter::GraphicFilter( bool bConfig )
 GraphicFilter::~GraphicFilter()
 {
     {
-        std::lock_guard aGuard( getListMutex() );
+        std::scoped_lock aGuard( getListMutex() );
         auto it = std::find(gaFilterHdlList.begin(), gaFilterHdlList.end(), this);
         if( it != gaFilterHdlList.end() )
             gaFilterHdlList.erase( it );
@@ -340,7 +340,7 @@ GraphicFilter::~GraphicFilter()
 void GraphicFilter::ImplInit()
 {
     {
-        std::lock_guard aGuard( getListMutex() );
+        std::scoped_lock aGuard( getListMutex() );
 
         if ( gaFilterHdlList.empty() )
             pConfig = new FilterConfigCache( bUseConfig );

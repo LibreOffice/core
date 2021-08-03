@@ -37,7 +37,7 @@ void AsynchronLink::Call( void* pObj, bool bAllowDoubles )
     _pArg = pObj;
     DBG_ASSERT( bAllowDoubles ||  !_nEventId, "Already made a call" );
     ClearPendingCall();
-    std::lock_guard aGuard(_aMutex);
+    std::scoped_lock aGuard(_aMutex);
     _nEventId = Application::PostUserEvent( LINK( this, AsynchronLink, HandleCall_PostUserEvent) );
 }
 
@@ -53,7 +53,7 @@ AsynchronLink::~AsynchronLink()
 
 void AsynchronLink::ClearPendingCall()
 {
-    std::lock_guard aGuard(_aMutex);
+    std::scoped_lock aGuard(_aMutex);
     if( _nEventId )
     {
         Application::RemoveUserEvent( _nEventId );
@@ -64,7 +64,7 @@ void AsynchronLink::ClearPendingCall()
 IMPL_LINK_NOARG( AsynchronLink, HandleCall_PostUserEvent, void*, void )
 {
     {
-        std::lock_guard aGuard(_aMutex);
+        std::scoped_lock aGuard(_aMutex);
         _nEventId = nullptr;
         // need to release the lock before calling the client since
         // the client may call back into us

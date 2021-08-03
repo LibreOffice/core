@@ -305,7 +305,7 @@ void SAL_CALL EventAttacherImpl::initialize(const Sequence< Any >& Arguments)
         arg >>= xALAS;
         if( xALAS.is() )
         {
-            std::lock_guard aGuard( m_aMutex );
+            std::scoped_lock aGuard( m_aMutex );
             m_xInvocationAdapterFactory = xALAS;
         }
         // Introspection service ?
@@ -313,7 +313,7 @@ void SAL_CALL EventAttacherImpl::initialize(const Sequence< Any >& Arguments)
         arg >>= xI;
         if( xI.is() )
         {
-            std::lock_guard aGuard( m_aMutex );
+            std::scoped_lock aGuard( m_aMutex );
             m_xIntrospection = xI;
         }
         // Reflection service ?
@@ -321,7 +321,7 @@ void SAL_CALL EventAttacherImpl::initialize(const Sequence< Any >& Arguments)
         arg >>= xIdlR;
         if( xIdlR.is() )
         {
-            std::lock_guard aGuard( m_aMutex );
+            std::scoped_lock aGuard( m_aMutex );
             m_xReflection = xIdlR;
         }
         // Converter Service ?
@@ -329,7 +329,7 @@ void SAL_CALL EventAttacherImpl::initialize(const Sequence< Any >& Arguments)
         arg >>= xC;
         if( xC.is() )
         {
-            std::lock_guard aGuard( m_aMutex );
+            std::scoped_lock aGuard( m_aMutex );
             m_xConverter = xC;
         }
 
@@ -343,7 +343,7 @@ void SAL_CALL EventAttacherImpl::initialize(const Sequence< Any >& Arguments)
 //*** Private helper methods ***
 Reference< XIntrospection > EventAttacherImpl::getIntrospection()
 {
-    std::lock_guard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
     if( !m_xIntrospection.is() )
     {
         m_xIntrospection = theIntrospection::get( m_xContext );
@@ -355,7 +355,7 @@ Reference< XIntrospection > EventAttacherImpl::getIntrospection()
 //*** Private helper methods ***
 Reference< XIdlReflection > EventAttacherImpl::getReflection()
 {
-    std::lock_guard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
     if( !m_xReflection.is() )
     {
         m_xReflection = theCoreReflection::get(m_xContext);
@@ -367,7 +367,7 @@ Reference< XIdlReflection > EventAttacherImpl::getReflection()
 //*** Private helper methods ***
 Reference< XInvocationAdapterFactory2 > EventAttacherImpl::getInvocationAdapterService()
 {
-    std::lock_guard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
     if( !m_xInvocationAdapterFactory.is() )
     {
         m_xInvocationAdapterFactory = InvocationAdapterFactory::create(m_xContext);
@@ -379,7 +379,7 @@ Reference< XInvocationAdapterFactory2 > EventAttacherImpl::getInvocationAdapterS
 //*** Private helper methods ***
 Reference< XTypeConverter > EventAttacherImpl::getConverter()
 {
-    std::lock_guard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
     if( !m_xConverter.is() )
     {
         m_xConverter = Converter::create(m_xContext);

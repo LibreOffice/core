@@ -288,7 +288,7 @@ Reference<XInterface> CanvasFactory::lookupAndUse(
     OUString const & serviceName, Sequence<Any> const & args,
     Reference<XComponentContext> const & xContext ) const
 {
-    std::lock_guard guard(m_mutex);
+    std::scoped_lock guard(m_mutex);
 
     // forcing last entry from impl list, if config flag set
     bool bForceLastEntry(false);

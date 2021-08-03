@@ -104,7 +104,7 @@ Reference<XTextSearch2> TextSearch::getXTextSearch( const i18nutil::SearchOption
 {
     static CachedTextSearch theCachedTextSearch;
 
-    std::lock_guard aGuard(theCachedTextSearch.mutex);
+    std::scoped_lock aGuard(theCachedTextSearch.mutex);
 
     if ( lcl_Equals(theCachedTextSearch.Options, rPara) )
         return theCachedTextSearch.xTextSearch;

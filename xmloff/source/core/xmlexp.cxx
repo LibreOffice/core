@@ -2270,7 +2270,7 @@ void SvXMLExport::SetError(
 {
     // allow multi-threaded access to the cancel() method
     static std::mutex aMutex;
-    std::lock_guard aGuard(aMutex);
+    std::scoped_lock aGuard(aMutex);
 
     // maintain error flags
     if ( ( nId & XMLERROR_FLAG_ERROR ) != 0 )

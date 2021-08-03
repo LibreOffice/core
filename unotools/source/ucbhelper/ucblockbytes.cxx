@@ -308,7 +308,7 @@ public:
 
     virtual Reference<XStream> SAL_CALL getStream () override
     {
-        std::lock_guard aGuard(m_aMutex);
+        std::scoped_lock aGuard(m_aMutex);
         return m_xStream;
     }
 
@@ -334,7 +334,7 @@ public:
 
     virtual Reference<XInputStream> SAL_CALL getInputStream() override
     {
-        std::lock_guard aGuard(m_aMutex);
+        std::scoped_lock aGuard(m_aMutex);
         return m_xStream;
     }
 
@@ -358,7 +358,7 @@ ModeratorsActiveDataSink::setInputStream (
 )
 {
     m_aModerator.setInputStream(rxInputStream);
-    std::lock_guard aGuard(m_aMutex);
+    std::scoped_lock aGuard(m_aMutex);
     m_xStream = rxInputStream;
 }
 
@@ -376,7 +376,7 @@ ModeratorsActiveDataStreamer::setStream (
 )
 {
     m_aModerator.setStream(rxStream);
-    std::lock_guard aGuard(m_aMutex);
+    std::scoped_lock aGuard(m_aMutex);
     m_xStream = rxStream;
 }
 

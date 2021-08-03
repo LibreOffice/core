@@ -117,7 +117,7 @@ void OSeekableInputWrapper::PrepareCopy_Impl()
 
 sal_Int32 SAL_CALL OSeekableInputWrapper::readBytes( uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
 {
-    std::lock_guard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
 
     if ( !m_xOriginalStream.is() )
         throw io::NotConnectedException();
@@ -130,7 +130,7 @@ sal_Int32 SAL_CALL OSeekableInputWrapper::readBytes( uno::Sequence< sal_Int8 >& 
 
 sal_Int32 SAL_CALL OSeekableInputWrapper::readSomeBytes( uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead )
 {
-    std::lock_guard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
 
     if ( !m_xOriginalStream.is() )
         throw io::NotConnectedException();
@@ -143,7 +143,7 @@ sal_Int32 SAL_CALL OSeekableInputWrapper::readSomeBytes( uno::Sequence< sal_Int8
 
 void SAL_CALL OSeekableInputWrapper::skipBytes( sal_Int32 nBytesToSkip )
 {
-    std::lock_guard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
 
     if ( !m_xOriginalStream.is() )
         throw io::NotConnectedException();
@@ -156,7 +156,7 @@ void SAL_CALL OSeekableInputWrapper::skipBytes( sal_Int32 nBytesToSkip )
 
 sal_Int32 SAL_CALL OSeekableInputWrapper::available()
 {
-    std::lock_guard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
 
     if ( !m_xOriginalStream.is() )
         throw io::NotConnectedException();
@@ -169,7 +169,7 @@ sal_Int32 SAL_CALL OSeekableInputWrapper::available()
 
 void SAL_CALL OSeekableInputWrapper::closeInput()
 {
-    std::lock_guard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
 
     if ( !m_xOriginalStream.is() )
         throw io::NotConnectedException();
@@ -191,7 +191,7 @@ void SAL_CALL OSeekableInputWrapper::closeInput()
 
 void SAL_CALL OSeekableInputWrapper::seek( sal_Int64 location )
 {
-    std::lock_guard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
 
     if ( !m_xOriginalStream.is() )
         throw io::NotConnectedException();
@@ -204,7 +204,7 @@ void SAL_CALL OSeekableInputWrapper::seek( sal_Int64 location )
 
 sal_Int64 SAL_CALL OSeekableInputWrapper::getPosition()
 {
-    std::lock_guard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
 
     if ( !m_xOriginalStream.is() )
         throw io::NotConnectedException();
@@ -217,7 +217,7 @@ sal_Int64 SAL_CALL OSeekableInputWrapper::getPosition()
 
 sal_Int64 SAL_CALL OSeekableInputWrapper::getLength()
 {
-    std::lock_guard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
 
     if ( !m_xOriginalStream.is() )
         throw io::NotConnectedException();
