@@ -952,7 +952,6 @@ IMPL_LINK(SwEditRegionDlg, UseFileHdl, weld::ToggleButton&, rButton, void)
         if( bFile )
         {
             m_xProtectCB->set_state(TRISTATE_TRUE);
-            ChangeProtectHdl(*m_xProtectCB);
             m_xFileNameED->grab_focus();
 
         }
