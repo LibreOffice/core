@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SFX2_INC_DINFDLG_HRC
-#define INCLUDED_SFX2_INC_DINFDLG_HRC
+#pragma once
 
 #define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
 
@@ -74,6 +73,6 @@ const std::pair<const char*, int> SFX_LB_PROPERTY_STRINGARRAY[] =
     { NC_("SFX_CB_PROPERTY_STRINGARRAY", "Yes or no")   , CUSTOM_TYPE_BOOLEAN }
 };
 
-#endif
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

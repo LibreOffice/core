@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SFX2_SOURCE_DOC_SYSPATH_HXX
-#define INCLUDED_SFX2_SOURCE_DOC_SYSPATH_HXX
+#pragma once
 
 #include <sal/types.h>
 
@@ -27,6 +26,6 @@ namespace SystemPath
 bool GetUserTemplateLocation(sal_Unicode*, int nSize);
 };
 
-#endif
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

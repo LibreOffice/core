@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SFX2_INC_STRINGS_HXX
-#define INCLUDED_SFX2_INC_STRINGS_HXX
+#pragma once
 
 #define STR_HTML_GENERATOR "%PRODUCTNAME %PRODUCTVERSION%PRODUCTEXTENSION (%1)"
 
@@ -53,6 +52,5 @@
 #define CMIS_TYPE_DATETIME "Datetime"
 #define CMIS_TYPE_BOOL "Bool"
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

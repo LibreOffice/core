@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SFX2_SOURCE_INC_HELPIDS_H
-#define INCLUDED_SFX2_SOURCE_INC_HELPIDS_H
+#pragma once
 
 #define HID_TEMPLATE_FMT                                      "SFX2_HID_TEMPLATE_FMT"
 #define HID_TEMPLATE_FILTER                                   "SFX2_HID_TEMPLATE_FILTER"
@@ -43,6 +42,6 @@
 
 #define HID_SIDEBAR_WINDOW                                     "SFX2_HID_SIDEBAR_WINDOW"
 
-#endif
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
