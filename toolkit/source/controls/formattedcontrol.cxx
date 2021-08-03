@@ -31,6 +31,7 @@
 #include <osl/diagnose.h>
 
 #include <helper/unopropertyarrayhelper.hxx>
+#include <mutex>
 
 namespace toolkit
 {
@@ -46,61 +47,48 @@ namespace toolkit
     namespace
     {
 
-        ::osl::Mutex& getDefaultFormatsMutex()
+        std::mutex& getDefaultFormatsMutex()
         {
-            static ::osl::Mutex s_aDefaultFormatsMutex;
+            static std::mutex s_aDefaultFormatsMutex;
             return s_aDefaultFormatsMutex;
         }
 
-
-        Reference< XNumberFormatsSupplier >& lcl_getDefaultFormatsAccess_nothrow()
-        {
-            static Reference< XNumberFormatsSupplier > s_xDefaultFormats;
-            return s_xDefaultFormats;
-        }
-
-
+        Reference< XNumberFormatsSupplier > s_xDefaultFormats;
         bool s_bTriedCreation = false;
+        oslInterlockedCount  s_refCount(0);
 
         const Reference< XNumberFormatsSupplier >& lcl_getDefaultFormats_throw()
         {
-            ::osl::MutexGuard aGuard( getDefaultFormatsMutex() );
+            std::scoped_lock aGuard( getDefaultFormatsMutex() );
 
-            Reference< XNumberFormatsSupplier >& rDefaultFormats( lcl_getDefaultFormatsAccess_nothrow() );
-            if ( !rDefaultFormats.is() && !s_bTriedCreation )
+            if ( !s_xDefaultFormats.is() && !s_bTriedCreation )
             {
                 s_bTriedCreation = true;
-                rDefaultFormats = NumberFormatsSupplier::createWithDefaultLocale( ::comphelper::getProcessComponentContext() );
+                s_xDefaultFormats = NumberFormatsSupplier::createWithDefaultLocale( ::comphelper::getProcessComponentContext() );
             }
-            if ( !rDefaultFormats.is() )
+            if ( !s_xDefaultFormats.is() )
                 throw RuntimeException();
 
-            return rDefaultFormats;
+            return s_xDefaultFormats;
         }
-
-
-        oslInterlockedCount  s_refCount(0);
-
 
         void    lcl_registerDefaultFormatsClient()
         {
             osl_atomic_increment( &s_refCount );
         }
 
-
         void    lcl_revokeDefaultFormatsClient()
         {
-            ::osl::ClearableMutexGuard aGuard( getDefaultFormatsMutex() );
-            if ( 0 == osl_atomic_decrement( &s_refCount ) )
+            Reference< XNumberFormatsSupplier > xReleasePotentialLastReference;
             {
-                Reference< XNumberFormatsSupplier >& rDefaultFormats( lcl_getDefaultFormatsAccess_nothrow() );
-                Reference< XNumberFormatsSupplier > xReleasePotentialLastReference( rDefaultFormats );
-                rDefaultFormats.clear();
-                s_bTriedCreation = false;
+                std::scoped_lock aGuard( getDefaultFormatsMutex() );
+                if ( 0 != osl_atomic_decrement( &s_refCount ) )
+                    return;
 
-                aGuard.clear();
-                xReleasePotentialLastReference.clear();
+                xReleasePotentialLastReference = std::move(s_xDefaultFormats);
+                s_bTriedCreation = false;
             }
+            xReleasePotentialLastReference.clear();
         }
     }
 
