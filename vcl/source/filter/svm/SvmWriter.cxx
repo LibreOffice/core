@@ -227,6 +227,13 @@ void SvmWriter::MetaActionHandler(MetaAction* pAction, ImplMetaWriteData* pData)
         }
         break;
 
+        case MetaActionType::PUSH:
+        {
+            auto* pMetaAction = static_cast<MetaPushAction*>(pAction);
+            PushHandler(pMetaAction);
+        }
+        break;
+
         /* default case prevents test failure and will be
         removed once all the handlers are completed */
         default:
@@ -510,5 +517,12 @@ void SvmWriter::FontHandler(MetaFontAction* pAction, ImplMetaWriteData* pData)
     pData->meActualCharSet = pAction->GetFont().GetCharSet();
     if (pData->meActualCharSet == RTL_TEXTENCODING_DONTKNOW)
         pData->meActualCharSet = osl_getThreadTextEncoding();
+}
+
+void SvmWriter::PushHandler(MetaPushAction* pAction)
+{
+    mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
+    VersionCompatWrite aCompat(mrStream, 1);
+    mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetFlags()));
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
