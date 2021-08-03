@@ -5919,7 +5919,6 @@ else
 fi
 rm -rf $TESTGMAKEFILEFUNC
 AC_SUBST(HAVE_GNUMAKE_FILE_FUNC)
-AC_SUBST(GNUMAKE_WIN_NATIVE)
 
 _make_ver_check=`$GNUMAKE --version | grep "Built for Windows"`
 STALE_MAKE=
