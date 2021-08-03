@@ -235,7 +235,7 @@ FmXDisposeListener::~FmXDisposeListener()
 
 void FmXDisposeListener::setAdapter(FmXDisposeMultiplexer* pAdapter)
 {
-    std::lock_guard aGuard(m_aMutex);
+    std::scoped_lock aGuard(m_aMutex);
     m_pAdapter = pAdapter;
 }
 

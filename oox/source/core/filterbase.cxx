@@ -93,7 +93,7 @@ private:
 DocumentOpenedGuard::DocumentOpenedGuard( const OUString& rUrl )
 {
     UrlPool& rUrlPool = StaticUrlPool::get();
-    std::lock_guard aGuard( rUrlPool.maMutex );
+    std::scoped_lock aGuard( rUrlPool.maMutex );
     mbValid = rUrl.isEmpty() || (rUrlPool.maUrls.count( rUrl ) == 0);
     if( mbValid && !rUrl.isEmpty() )
     {
@@ -105,7 +105,7 @@ DocumentOpenedGuard::DocumentOpenedGuard( const OUString& rUrl )
 DocumentOpenedGuard::~DocumentOpenedGuard()
 {
     UrlPool& rUrlPool = StaticUrlPool::get();
-    std::lock_guard aGuard( rUrlPool.maMutex );
+    std::scoped_lock aGuard( rUrlPool.maMutex );
     if( !maUrl.isEmpty() )
         rUrlPool.maUrls.erase( maUrl );
 }

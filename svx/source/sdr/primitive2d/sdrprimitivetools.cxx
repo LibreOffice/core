@@ -33,7 +33,7 @@ namespace drawinglayer::primitive2d
             static basegfx::BColor aBColor;
             static std::mutex aMutex;
 
-            std::lock_guard aGuard(aMutex);
+            std::scoped_lock aGuard(aMutex);
 
             if(!aRetVal.get() || rBColor != aBColor)
             {

@@ -101,7 +101,7 @@ OUString extractActionType(const ActionDataMap& rData)
 void JSDialogNotifyIdle::sendMessage(jsdialog::MessageType eType, VclPtr<vcl::Window> pWindow,
                                      std::unique_ptr<ActionDataMap> pData)
 {
-    std::lock_guard aGuard(m_aQueueMutex);
+    std::scoped_lock aGuard(m_aQueueMutex);
 
     // we want only the latest update of same type
     // TODO: also if we met full update - previous updates are not valid
@@ -261,7 +261,7 @@ void JSDialogNotifyIdle::Invoke()
 {
     std::deque<JSDialogMessageInfo> aMessageQueue;
     {
-        std::lock_guard aGuard(m_aQueueMutex);
+        std::scoped_lock aGuard(m_aQueueMutex);
 
         std::swap(aMessageQueue, m_aMessageQueue);
     }

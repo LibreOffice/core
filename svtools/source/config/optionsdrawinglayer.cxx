@@ -127,7 +127,7 @@ static bool gbAllowAA = false;
 
 bool IsAAPossibleOnThisSystem()
 {
-    std::lock_guard aGuard(gaAntiAliasMutex);
+    std::scoped_lock aGuard(gaAntiAliasMutex);
     if (!gbAllowAAInit)
     {
         gbAllowAAInit = true;
@@ -141,7 +141,7 @@ bool IsAntiAliasing()
 {
     bool bAntiAliasing;
     {
-        std::lock_guard aGuard(gaAntiAliasMutex);
+        std::scoped_lock aGuard(gaAntiAliasMutex);
         if (!gbAntiAliasingInit)
         {
             gbAntiAliasingInit = true;
@@ -159,7 +159,7 @@ bool IsAntiAliasing()
   */
 void SetAntiAliasing( bool bOn, bool bTemporary )
 {
-    std::lock_guard aGuard(gaAntiAliasMutex);
+    std::scoped_lock aGuard(gaAntiAliasMutex);
     if (!bTemporary)
     {
         std::shared_ptr<comphelper::ConfigurationChanges> batch =

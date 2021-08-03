@@ -1679,7 +1679,7 @@ Enumeration::nextTypeDescription()
 {
     OUString name;
     {
-        std::lock_guard g(mutex_);
+        std::scoped_lock g(mutex_);
         if (positions_.empty()) {
             throw css::container::NoSuchElementException(
                 "exhausted XTypeDescriptionEnumeration",

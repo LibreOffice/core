@@ -71,7 +71,7 @@ GraphicObjectImpl::GraphicObjectImpl(const uno::Sequence<uno::Any>& /*rArgs*/)
 
 uno::Reference<graphic::XGraphic> SAL_CALL GraphicObjectImpl::getGraphic()
 {
-    std::lock_guard aGuard(m_aMutex);
+    std::scoped_lock aGuard(m_aMutex);
 
     if (!mpGraphicObject)
         throw uno::RuntimeException();
@@ -80,7 +80,7 @@ uno::Reference<graphic::XGraphic> SAL_CALL GraphicObjectImpl::getGraphic()
 
 void SAL_CALL GraphicObjectImpl::setGraphic(uno::Reference<graphic::XGraphic> const & rxGraphic)
 {
-    std::lock_guard aGuard(m_aMutex);
+    std::scoped_lock aGuard(m_aMutex);
 
     if (!mpGraphicObject)
         throw uno::RuntimeException();

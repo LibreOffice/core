@@ -36,7 +36,7 @@ sal_Int32 SAL_CALL OInputStreamHelper::readBytes(css::uno::Sequence< sal_Int8 >&
     if (nBytesToRead < 0)
         throw css::io::BufferSizeExceededException(OUString(), static_cast<css::uno::XWeak*>(this));
 
-    std::lock_guard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
     if (aData.getLength() < nBytesToRead)
         aData.realloc(nBytesToRead);
 
@@ -56,7 +56,7 @@ sal_Int32 SAL_CALL OInputStreamHelper::readBytes(css::uno::Sequence< sal_Int8 >&
 
 void SAL_CALL OInputStreamHelper::seek( sal_Int64 location )
 {
-    std::lock_guard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
     m_nActPos = location;
 }
 
@@ -70,7 +70,7 @@ sal_Int64 SAL_CALL OInputStreamHelper::getLength(  )
     if (!m_xLockBytes.is())
         return 0;
 
-    std::lock_guard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
     SvLockBytesStat aStat;
     m_xLockBytes->Stat( &aStat );
     return aStat.nSize;
@@ -85,7 +85,7 @@ sal_Int32 SAL_CALL OInputStreamHelper::readSomeBytes(css::uno::Sequence< sal_Int
 
 void SAL_CALL OInputStreamHelper::skipBytes(sal_Int32 nBytesToSkip)
 {
-    std::lock_guard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
     if (!m_xLockBytes.is())
         throw css::io::NotConnectedException(OUString(), static_cast<css::uno::XWeak*>(this));
 
@@ -97,7 +97,7 @@ void SAL_CALL OInputStreamHelper::skipBytes(sal_Int32 nBytesToSkip)
 
 sal_Int32 SAL_CALL OInputStreamHelper::available()
 {
-    std::lock_guard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
     if (!m_xLockBytes.is())
         throw css::io::NotConnectedException(OUString(), static_cast<css::uno::XWeak*>(this));
 
@@ -106,7 +106,7 @@ sal_Int32 SAL_CALL OInputStreamHelper::available()
 
 void SAL_CALL OInputStreamHelper::closeInput()
 {
-    std::lock_guard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
     if (!m_xLockBytes.is())
         throw css::io::NotConnectedException(OUString(), static_cast<css::uno::XWeak*>(this));
 

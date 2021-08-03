@@ -211,7 +211,7 @@ void SecurityEnvironment_NssImpl::adoptSymKey( PK11SymKey* aSymKey ) {
 void SecurityEnvironment_NssImpl::updateSlots()
 {
     //In case new tokens are present then we can obtain the corresponding slot
-    std::lock_guard guard(m_mutex);
+    std::scoped_lock guard(m_mutex);
 
     m_Slots.clear();
     m_tSymKeyList.clear();

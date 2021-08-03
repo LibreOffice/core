@@ -86,7 +86,7 @@ void SAL_CALL ItemHolder1::disposing(const css::lang::EventObject&)
 
 void ItemHolder1::impl_addItem(EItem eItem)
 {
-    std::lock_guard aLock(m_aLock);
+    std::scoped_lock aLock(m_aLock);
 
     for ( auto const & rInfo : m_lItems )
     {
@@ -105,7 +105,7 @@ void ItemHolder1::impl_releaseAllItems()
 {
     std::vector< TItemInfo > items;
     {
-        std::lock_guard aLock(m_aLock);
+        std::scoped_lock aLock(m_aLock);
         items.swap(m_lItems);
     }
 

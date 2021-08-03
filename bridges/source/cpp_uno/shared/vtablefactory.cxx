@@ -214,7 +214,7 @@ VtableFactory::VtableFactory(): m_arena(
 
 VtableFactory::~VtableFactory() {
     {
-        std::lock_guard guard(m_mutex);
+        std::scoped_lock guard(m_mutex);
         for (const auto& rEntry : m_map) {
             for (sal_Int32 j = 0; j < rEntry.second.count; ++j) {
                 freeBlock(rEntry.second.blocks[j]);
@@ -228,7 +228,7 @@ const VtableFactory::Vtables& VtableFactory::getVtables(
     typelib_InterfaceTypeDescription * type)
 {
     OUString name(type->aBase.pTypeName);
-    std::lock_guard guard(m_mutex);
+    std::scoped_lock guard(m_mutex);
     Map::iterator i(m_map.find(name));
     if (i == m_map.end()) {
         GuardedBlocks blocks(*this);

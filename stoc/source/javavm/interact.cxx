@@ -68,13 +68,13 @@ private:
 
 void SAL_CALL InteractionRequest::RetryContinuation::select()
 {
-    std::lock_guard aGuard(m_aMutex);
+    std::scoped_lock aGuard(m_aMutex);
     m_bSelected = true;
 }
 
 bool InteractionRequest::RetryContinuation::isSelected() const
 {
-    std::lock_guard aGuard(m_aMutex);
+    std::scoped_lock aGuard(m_aMutex);
     return m_bSelected;
 }
 

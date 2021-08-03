@@ -66,7 +66,7 @@ void SwAccessiblePage::InvalidateCursorPos_()
     bool bOldSelected;
 
     {
-        std::lock_guard aGuard( m_Mutex );
+        std::scoped_lock aGuard( m_Mutex );
         bOldSelected = m_bIsSelected;
         m_bIsSelected = bNewSelected;
     }
@@ -96,7 +96,7 @@ void SwAccessiblePage::InvalidateFocus_()
     bool bSelected;
 
     {
-        std::lock_guard aGuard( m_Mutex );
+        std::scoped_lock aGuard( m_Mutex );
         bSelected = m_bIsSelected;
     }
     OSL_ENSURE( bSelected, "focus object should be selected" );
@@ -125,7 +125,7 @@ SwAccessiblePage::~SwAccessiblePage()
 
 bool SwAccessiblePage::HasCursor()
 {
-    std::lock_guard aGuard( m_Mutex );
+    std::scoped_lock aGuard( m_Mutex );
     return m_bIsSelected;
 }
 

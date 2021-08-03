@@ -68,7 +68,7 @@ static type_entry * getTypeEntries( class_data * cd )
     if (! cd->m_storedTypeRefs) // not inited?
     {
         static std::mutex aMutex;
-        std::lock_guard guard( aMutex );
+        std::scoped_lock guard( aMutex );
         if (! cd->m_storedTypeRefs) // not inited?
         {
             // get all types

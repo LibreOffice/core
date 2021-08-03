@@ -91,7 +91,7 @@ std::unique_ptr<SvNumberFormatter> ScPoolHelper::CreateNumberFormatter() const
 {
     std::unique_ptr<SvNumberFormatter> p;
     {
-        std::lock_guard aGuard(maMtxCreateNumFormatter);
+        std::scoped_lock aGuard(maMtxCreateNumFormatter);
         p.reset(new SvNumberFormatter(comphelper::getProcessComponentContext(), LANGUAGE_SYSTEM));
     }
     p->SetColorLink( LINK(&m_rSourceDoc, ScDocument, GetUserDefinedColor) );

@@ -126,7 +126,7 @@ inline void LRU_Cache< t_Key, t_Val, t_KeyHash >::toFront( CacheEntry * pEntry )
 template< class t_Key, class t_Val, class t_KeyHash >
 inline t_Val LRU_Cache< t_Key, t_Val, t_KeyHash >::getValue( const t_Key & rKey ) const
 {
-    std::lock_guard aGuard( _aCacheMutex );
+    std::scoped_lock aGuard( _aCacheMutex );
     const typename t_Key2Element::const_iterator iFind( _aKey2Element.find( rKey ) );
     if (iFind != _aKey2Element.end())
     {
@@ -146,7 +146,7 @@ template< class t_Key, class t_Val, class t_KeyHash >
 inline void LRU_Cache< t_Key, t_Val, t_KeyHash >::setValue(
     const t_Key & rKey, const t_Val & rValue )
 {
-    std::lock_guard aGuard( _aCacheMutex );
+    std::scoped_lock aGuard( _aCacheMutex );
     if (_nCachedElements > 0)
     {
         const typename t_Key2Element::const_iterator iFind( _aKey2Element.find( rKey ) );
@@ -184,7 +184,7 @@ inline void LRU_Cache< t_Key, t_Val, t_KeyHash >::setValue(
 template< class t_Key, class t_Val, class t_KeyHash >
 inline void LRU_Cache< t_Key, t_Val, t_KeyHash >::clear()
 {
-    std::lock_guard aGuard( _aCacheMutex );
+    std::scoped_lock aGuard( _aCacheMutex );
     _aKey2Element.clear();
     for ( sal_Int32 nPos = _nCachedElements; nPos--; )
     {

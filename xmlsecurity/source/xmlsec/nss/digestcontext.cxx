@@ -37,7 +37,7 @@ ODigestContext::~ODigestContext()
 
 void SAL_CALL ODigestContext::updateDigest( const uno::Sequence< ::sal_Int8 >& aData )
 {
-    std::lock_guard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
 
     if ( m_bBroken )
         throw uno::RuntimeException();
@@ -65,7 +65,7 @@ void SAL_CALL ODigestContext::updateDigest( const uno::Sequence< ::sal_Int8 >& a
 
 uno::Sequence< ::sal_Int8 > SAL_CALL ODigestContext::finalizeDigestAndDispose()
 {
-    std::lock_guard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
 
     if ( m_bBroken )
         throw uno::RuntimeException();

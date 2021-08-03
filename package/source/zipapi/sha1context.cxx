@@ -49,7 +49,7 @@ StarOfficeSHA1DigestContext::~StarOfficeSHA1DigestContext()
 
 void SAL_CALL StarOfficeSHA1DigestContext::updateDigest(const uno::Sequence<::sal_Int8>& aData)
 {
-    std::lock_guard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
     if ( !m_pDigest )
         throw lang::DisposedException();
 
@@ -64,7 +64,7 @@ void SAL_CALL StarOfficeSHA1DigestContext::updateDigest(const uno::Sequence<::sa
 
 uno::Sequence<::sal_Int8> SAL_CALL StarOfficeSHA1DigestContext::finalizeDigestAndDispose()
 {
-    std::lock_guard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
     if ( !m_pDigest )
         throw lang::DisposedException();
 
@@ -98,7 +98,7 @@ CorrectSHA1DigestContext::~CorrectSHA1DigestContext()
 
 void SAL_CALL CorrectSHA1DigestContext::updateDigest(const uno::Sequence<::sal_Int8>& rData)
 {
-    std::lock_guard aGuard(m_Mutex);
+    std::scoped_lock aGuard(m_Mutex);
     if (m_bDisposed)
         throw lang::DisposedException();
 
@@ -107,7 +107,7 @@ void SAL_CALL CorrectSHA1DigestContext::updateDigest(const uno::Sequence<::sal_I
 
 uno::Sequence<::sal_Int8> SAL_CALL CorrectSHA1DigestContext::finalizeDigestAndDispose()
 {
-    std::lock_guard aGuard(m_Mutex);
+    std::scoped_lock aGuard(m_Mutex);
     if (m_bDisposed)
         throw lang::DisposedException();
 

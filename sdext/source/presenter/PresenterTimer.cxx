@@ -184,7 +184,7 @@ sal_Int32 TimerScheduler::mnTaskId = PresenterTimer::NotAValidTaskId;
 std::shared_ptr<TimerScheduler> TimerScheduler::Instance(
     uno::Reference<uno::XComponentContext> const& xContext)
 {
-    std::lock_guard aGuard (maInstanceMutex);
+    std::scoped_lock aGuard (maInstanceMutex);
     if (mpInstance == nullptr)
     {
         if (!xContext.is())
@@ -226,7 +226,7 @@ void TimerScheduler::ScheduleTask (const SharedTimerTask& rpTask)
         return;
 
     {
-        std::lock_guard aTaskGuard (maTaskContainerMutex);
+        std::scoped_lock aTaskGuard (maTaskContainerMutex);
         maScheduledTasks.insert(rpTask);
     }
 }
@@ -237,7 +237,7 @@ void TimerScheduler::CancelTask (const sal_Int32 nTaskId)
     // task ids.  Therefore we have to do a linear search for the task to
     // cancel.
     {
-        std::lock_guard aGuard (maTaskContainerMutex);
+        std::scoped_lock aGuard (maTaskContainerMutex);
         auto iTask = std::find_if(maScheduledTasks.begin(), maScheduledTasks.end(),
             [nTaskId](const SharedTimerTask& rxTask) { return rxTask->mnTaskId == nTaskId; });
         if (iTask != maScheduledTasks.end())
@@ -248,7 +248,7 @@ void TimerScheduler::CancelTask (const sal_Int32 nTaskId)
     // processed.  Mark it with a flag that a) prevents a repeating task
     // from being scheduled again and b) tries to prevent its execution.
     {
-        std::lock_guard aGuard (maCurrentTaskMutex);
+        std::scoped_lock aGuard (maCurrentTaskMutex);
         if (mpCurrentTask
             && mpCurrentTask->mnTaskId == nTaskId)
             mpCurrentTask->mbIsCanceled = true;
@@ -266,12 +266,12 @@ void TimerScheduler::NotifyTermination()
     }
 
     {
-        std::lock_guard aGuard(pInstance->maTaskContainerMutex);
+        std::scoped_lock aGuard(pInstance->maTaskContainerMutex);
         pInstance->maScheduledTasks.clear();
     }
 
     {
-        std::lock_guard aGuard(pInstance->maCurrentTaskMutex);
+        std::scoped_lock aGuard(pInstance->maCurrentTaskMutex);
         if (pInstance->mpCurrentTask)
         {
             pInstance->mpCurrentTask->mbIsCanceled = true;
@@ -303,7 +303,7 @@ void SAL_CALL TimerScheduler::run()
         SharedTimerTask pTask;
         sal_Int64 nDifference = 0;
         {
-            std::lock_guard aGuard (maTaskContainerMutex);
+            std::scoped_lock aGuard (maTaskContainerMutex);
 
             // There are no more scheduled task.  Leave this loop, function and
             // live of the TimerScheduler.
@@ -322,7 +322,7 @@ void SAL_CALL TimerScheduler::run()
 
         // Acquire a reference to the current task.
         {
-            std::lock_guard aGuard (maCurrentTaskMutex);
+            std::scoped_lock aGuard (maCurrentTaskMutex);
             mpCurrentTask = pTask;
         }
 
@@ -356,13 +356,13 @@ void SAL_CALL TimerScheduler::run()
 
         // Release reference to the current task.
         {
-            std::lock_guard aGuard (maCurrentTaskMutex);
+            std::scoped_lock aGuard (maCurrentTaskMutex);
             mpCurrentTask.reset();
         }
     }
 
     // While holding maInstanceMutex
-    std::lock_guard aInstance( maInstanceMutex );
+    std::scoped_lock aInstance( maInstanceMutex );
     mpLateDestroy = mpInstance;
     mpInstance.reset();
 }

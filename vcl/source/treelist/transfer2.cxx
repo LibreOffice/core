@@ -83,7 +83,7 @@ void DragSourceHelper::dispose()
 {
     Reference<XDragGestureRecognizer> xTmp;
     {
-        std::lock_guard aGuard( maMutex );
+        std::scoped_lock aGuard( maMutex );
         xTmp = std::move(mxDragGestureRecognizer);
     }
     if( xTmp.is()  )
@@ -244,7 +244,7 @@ void DropTargetHelper::dispose()
 {
     Reference< XDropTarget >  xTmp;
     {
-        std::lock_guard aGuard( maMutex );
+        std::scoped_lock aGuard( maMutex );
         xTmp = std::move(mxDropTarget);
     }
     if( xTmp.is() )

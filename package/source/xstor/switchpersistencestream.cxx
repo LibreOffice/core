@@ -200,7 +200,7 @@ void SwitchablePersistenceStream::CloseAll_Impl()
 // css::io::XStream
 uno::Reference< io::XInputStream > SAL_CALL SwitchablePersistenceStream::getInputStream(  )
 {
-    std::lock_guard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
 
     if ( m_pStreamData )
         m_pStreamData->m_bInOpen = true;
@@ -209,7 +209,7 @@ uno::Reference< io::XInputStream > SAL_CALL SwitchablePersistenceStream::getInpu
 
 uno::Reference< io::XOutputStream > SAL_CALL SwitchablePersistenceStream::getOutputStream(  )
 {
-    std::lock_guard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
 
     if ( m_pStreamData )
         m_pStreamData->m_bOutOpen = true;
@@ -219,7 +219,7 @@ uno::Reference< io::XOutputStream > SAL_CALL SwitchablePersistenceStream::getOut
 // css::io::XInputStream
 ::sal_Int32 SAL_CALL SwitchablePersistenceStream::readBytes( uno::Sequence< ::sal_Int8 >& aData, ::sal_Int32 nBytesToRead )
 {
-    std::lock_guard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
 
     if ( !m_pStreamData )
         throw io::NotConnectedException();
@@ -233,7 +233,7 @@ uno::Reference< io::XOutputStream > SAL_CALL SwitchablePersistenceStream::getOut
 
 ::sal_Int32 SAL_CALL SwitchablePersistenceStream::readSomeBytes( uno::Sequence< ::sal_Int8 >& aData, ::sal_Int32 nMaxBytesToRead )
 {
-    std::lock_guard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
 
     if ( !m_pStreamData )
         throw io::NotConnectedException();
@@ -247,7 +247,7 @@ uno::Reference< io::XOutputStream > SAL_CALL SwitchablePersistenceStream::getOut
 
 void SAL_CALL SwitchablePersistenceStream::skipBytes( ::sal_Int32 nBytesToSkip )
 {
-    std::lock_guard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
 
     if ( !m_pStreamData )
         throw io::NotConnectedException();
@@ -261,7 +261,7 @@ void SAL_CALL SwitchablePersistenceStream::skipBytes( ::sal_Int32 nBytesToSkip )
 
 ::sal_Int32 SAL_CALL SwitchablePersistenceStream::available(  )
 {
-    std::lock_guard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
 
     if ( !m_pStreamData )
         throw io::NotConnectedException();
@@ -275,7 +275,7 @@ void SAL_CALL SwitchablePersistenceStream::skipBytes( ::sal_Int32 nBytesToSkip )
 
 void SAL_CALL SwitchablePersistenceStream::closeInput()
 {
-    std::lock_guard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
 
     if ( !m_pStreamData )
         throw io::NotConnectedException();
@@ -288,7 +288,7 @@ void SAL_CALL SwitchablePersistenceStream::closeInput()
 // css::io::XOutputStream
 void SAL_CALL SwitchablePersistenceStream::writeBytes( const uno::Sequence< ::sal_Int8 >& aData )
 {
-    std::lock_guard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
 
     if ( !m_pStreamData )
         throw io::NotConnectedException();
@@ -305,7 +305,7 @@ void SAL_CALL SwitchablePersistenceStream::writeBytes( const uno::Sequence< ::sa
 
 void SAL_CALL SwitchablePersistenceStream::flush(  )
 {
-    std::lock_guard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
 
     if ( !m_pStreamData || m_pStreamData->m_bInStreamBased )
     {
@@ -325,7 +325,7 @@ void SAL_CALL SwitchablePersistenceStream::flush(  )
 
 void SAL_CALL SwitchablePersistenceStream::closeOutput(  )
 {
-    std::lock_guard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
 
     if ( !m_pStreamData )
         throw io::NotConnectedException();
@@ -338,7 +338,7 @@ void SAL_CALL SwitchablePersistenceStream::closeOutput(  )
 // css::io::XTruncate
 void SAL_CALL SwitchablePersistenceStream::truncate(  )
 {
-    std::lock_guard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
 
     if ( !m_pStreamData )
         throw io::NotConnectedException();
@@ -356,7 +356,7 @@ void SAL_CALL SwitchablePersistenceStream::truncate(  )
 // css::io::XSeekable
 void SAL_CALL SwitchablePersistenceStream::seek( ::sal_Int64 location )
 {
-    std::lock_guard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
 
     if ( !m_pStreamData )
         throw io::NotConnectedException();
@@ -370,7 +370,7 @@ void SAL_CALL SwitchablePersistenceStream::seek( ::sal_Int64 location )
 
 ::sal_Int64 SAL_CALL SwitchablePersistenceStream::getPosition(  )
 {
-    std::lock_guard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
 
     if ( !m_pStreamData )
         throw io::NotConnectedException();
@@ -384,7 +384,7 @@ void SAL_CALL SwitchablePersistenceStream::seek( ::sal_Int64 location )
 
 ::sal_Int64 SAL_CALL SwitchablePersistenceStream::getLength(  )
 {
-    std::lock_guard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
 
     if ( !m_pStreamData )
         throw io::NotConnectedException();

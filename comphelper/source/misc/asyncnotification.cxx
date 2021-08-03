@@ -88,7 +88,7 @@ namespace comphelper
 
     void AsyncEventNotifierBase::removeEventsForProcessor( const ::rtl::Reference< IEventProcessor >& _xProcessor )
     {
-        std::lock_guard aGuard( m_xImpl->aMutex );
+        std::scoped_lock aGuard( m_xImpl->aMutex );
 
         // remove all events for this processor
         m_xImpl->aEvents.erase(std::remove_if( m_xImpl->aEvents.begin(), m_xImpl->aEvents.end(), EqualProcessor( _xProcessor ) ), m_xImpl->aEvents.end());
@@ -97,7 +97,7 @@ namespace comphelper
 
     void SAL_CALL AsyncEventNotifierBase::terminate()
     {
-        std::lock_guard aGuard( m_xImpl->aMutex );
+        std::scoped_lock aGuard( m_xImpl->aMutex );
 
         // remember the termination request
         m_xImpl->bTerminate = true;
@@ -109,7 +109,7 @@ namespace comphelper
 
     void AsyncEventNotifierBase::addEvent( const AnyEventRef& _rEvent, const ::rtl::Reference< IEventProcessor >& _xProcessor )
     {
-        std::lock_guard aGuard( m_xImpl->aMutex );
+        std::scoped_lock aGuard( m_xImpl->aMutex );
 
         // remember this event
         m_xImpl->aEvents.emplace_back( ProcessableEvent {_rEvent, _xProcessor} );

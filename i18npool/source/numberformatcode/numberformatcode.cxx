@@ -43,7 +43,7 @@ NumberFormatCodeMapper::getDefault( sal_Int16 formatType, sal_Int16 formatUsage,
     OUString elementType = mapElementTypeShortToString(formatType);
     OUString elementUsage = mapElementUsageShortToString(formatUsage);
 
-    std::lock_guard g(maMutex);
+    std::scoped_lock g(maMutex);
     const css::uno::Sequence< css::i18n::FormatElement > &aFormatSeq = getFormats( rLocale );
 
     auto pFormat = std::find_if(aFormatSeq.begin(), aFormatSeq.end(),
@@ -67,7 +67,7 @@ NumberFormatCodeMapper::getDefault( sal_Int16 formatType, sal_Int16 formatUsage,
 css::i18n::NumberFormatCode SAL_CALL
 NumberFormatCodeMapper::getFormatCode( sal_Int16 formatIndex, const css::lang::Locale& rLocale )
 {
-    std::lock_guard g(maMutex);
+    std::scoped_lock g(maMutex);
     const css::uno::Sequence< css::i18n::FormatElement > &aFormatSeq = getFormats( rLocale );
 
     auto pFormat = std::find_if(aFormatSeq.begin(), aFormatSeq.end(),
@@ -88,7 +88,7 @@ NumberFormatCodeMapper::getFormatCode( sal_Int16 formatIndex, const css::lang::L
 css::uno::Sequence< css::i18n::NumberFormatCode > SAL_CALL
 NumberFormatCodeMapper::getAllFormatCode( sal_Int16 formatUsage, const css::lang::Locale& rLocale )
 {
-    std::lock_guard g(maMutex);
+    std::scoped_lock g(maMutex);
     const css::uno::Sequence< css::i18n::FormatElement > &aFormatSeq = getFormats( rLocale );
 
     std::vector<css::i18n::NumberFormatCode> aVec;
@@ -113,7 +113,7 @@ NumberFormatCodeMapper::getAllFormatCode( sal_Int16 formatUsage, const css::lang
 css::uno::Sequence< css::i18n::NumberFormatCode > SAL_CALL
 NumberFormatCodeMapper::getAllFormatCodes( const css::lang::Locale& rLocale )
 {
-    std::lock_guard g(maMutex);
+    std::scoped_lock g(maMutex);
     const css::uno::Sequence< css::i18n::FormatElement > &aFormatSeq = getFormats( rLocale );
 
     std::vector<css::i18n::NumberFormatCode> aVec;

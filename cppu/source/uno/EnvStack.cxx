@@ -76,7 +76,7 @@ static void s_setCurrent(uno_Environment * pEnv)
 {
     oslThreadIdentifier threadId = osl::Thread::getCurrentIdentifier();
 
-    std::lock_guard guard(s_threadMap_mutex);
+    std::scoped_lock guard(s_threadMap_mutex);
     if (pEnv)
     {
         s_threadMap[threadId] = pEnv;
@@ -95,7 +95,7 @@ static uno_Environment * s_getCurrent()
 
     oslThreadIdentifier threadId = osl::Thread::getCurrentIdentifier();
 
-    std::lock_guard guard(s_threadMap_mutex);
+    std::scoped_lock guard(s_threadMap_mutex);
     ThreadMap::iterator iEnv = s_threadMap.find(threadId);
     if(iEnv != s_threadMap.end())
         pEnv = iEnv->second;

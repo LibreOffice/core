@@ -517,7 +517,7 @@ ThumbnailViewItemAcc::~ThumbnailViewItemAcc()
 
 void ThumbnailViewItemAcc::ParentDestroyed()
 {
-    std::lock_guard aGuard( maMutex );
+    std::scoped_lock aGuard( maMutex );
     mpParent = nullptr;
 }
 
@@ -731,7 +731,7 @@ lang::Locale SAL_CALL ThumbnailViewItemAcc::getLocale()
 
 void SAL_CALL ThumbnailViewItemAcc::addAccessibleEventListener( const uno::Reference< accessibility::XAccessibleEventListener >& rxListener )
 {
-    std::lock_guard aGuard( maMutex );
+    std::scoped_lock aGuard( maMutex );
 
     if( !rxListener.is() )
         return;
@@ -753,7 +753,7 @@ void SAL_CALL ThumbnailViewItemAcc::addAccessibleEventListener( const uno::Refer
 
 void SAL_CALL ThumbnailViewItemAcc::removeAccessibleEventListener( const uno::Reference< accessibility::XAccessibleEventListener >& rxListener )
 {
-    std::lock_guard aGuard( maMutex );
+    std::scoped_lock aGuard( maMutex );
 
     if( rxListener.is() )
     {

@@ -554,7 +554,7 @@ struct Separators
 Separators getLocaleSeparators(const Locale& rLocale, const OUString& rLocStr)
 {
     // Guard the static variable below.
-    std::lock_guard aGuard(theNatNumMutex);
+    std::scoped_lock aGuard(theNatNumMutex);
     // Maximum a couple hundred of pairs with 4-byte structs - so no need for smart managing
     static std::unordered_map<OUString, Separators> aLocaleSeparatorsBuf;
     auto it = aLocaleSeparatorsBuf.find(rLocStr);
@@ -603,7 +603,7 @@ OUString getNumberText(const Locale& rLocale, const OUString& rNumberString,
         = css::linguistic2::NumberText::create(comphelper::getProcessComponentContext());
 
     // Guard the static variables below.
-    std::lock_guard aGuard( theNatNumMutex );
+    std::scoped_lock aGuard( theNatNumMutex );
 
     OUString numbertext_prefix;
     // default "cardinal" gets empty prefix

@@ -77,7 +77,7 @@ SharedStringPool::~SharedStringPool() {}
 SharedString SharedStringPool::intern(const OUString& rStr)
 {
     StringWithHash aStrWithHash(rStr);
-    std::lock_guard<std::mutex> aGuard(mpImpl->maMutex);
+    std::scoped_lock<std::mutex> aGuard(mpImpl->maMutex);
 
     auto[mapIt, bInserted] = mpImpl->maStrMap.emplace(aStrWithHash, rStr);
     if (!bInserted)
@@ -112,7 +112,7 @@ SharedString SharedStringPool::intern(const OUString& rStr)
 
 void SharedStringPool::purge()
 {
-    std::lock_guard<std::mutex> aGuard(mpImpl->maMutex);
+    std::scoped_lock<std::mutex> aGuard(mpImpl->maMutex);
 
     // Because we can have an uppercase entry mapped to itself,
     // and then a bunch of lowercase entries mapped to that same
@@ -163,13 +163,13 @@ void SharedStringPool::purge()
 
 size_t SharedStringPool::getCount() const
 {
-    std::lock_guard<std::mutex> aGuard(mpImpl->maMutex);
+    std::scoped_lock<std::mutex> aGuard(mpImpl->maMutex);
     return mpImpl->maStrMap.size();
 }
 
 size_t SharedStringPool::getCountIgnoreCase() const
 {
-    std::lock_guard<std::mutex> aGuard(mpImpl->maMutex);
+    std::scoped_lock<std::mutex> aGuard(mpImpl->maMutex);
     // this is only called from unit tests, so no need to be efficient
     std::unordered_set<OUString> aUpperSet;
     for (auto const& pair : mpImpl->maStrMap)

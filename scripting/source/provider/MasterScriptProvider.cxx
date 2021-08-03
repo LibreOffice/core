@@ -335,7 +335,7 @@ MasterScriptProvider::providerCache()
 {
     if ( !m_pPCache )
     {
-        std::lock_guard aGuard( m_mutex );
+        std::scoped_lock aGuard( m_mutex );
         if ( !m_pPCache )
         {
             Sequence<OUString> denylist { "com.sun.star.script.provider.ScriptProviderForBasic" };

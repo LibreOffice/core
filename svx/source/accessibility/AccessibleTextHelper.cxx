@@ -109,7 +109,7 @@ namespace accessibility
         void SetOffset( const Point& );
         Point GetOffset() const
         {
-            std::lock_guard aGuard( maMutex ); Point aPoint( maOffset );
+            std::scoped_lock aGuard( maMutex ); Point aPoint( maOffset );
             return aPoint;
         }
 
@@ -732,7 +732,7 @@ namespace accessibility
     {
         // guard against non-atomic access to maOffset data structure
         {
-            std::lock_guard aGuard( maMutex );
+            std::scoped_lock aGuard( maMutex );
             maOffset = rPoint;
         }
 
@@ -1383,7 +1383,7 @@ namespace accessibility
         // -- object locked --
         AccessibleEventObject aEvent;
         {
-            std::lock_guard aGuard(maMutex);
+            std::scoped_lock aGuard(maMutex);
 
             DBG_ASSERT(mxFrontEnd.is(), "AccessibleTextHelper::FireEvent: no event source set");
 

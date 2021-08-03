@@ -173,7 +173,7 @@ namespace
 
 OParseContextClient::OParseContextClient()
 {
-    std::lock_guard aGuard( getSafetyMutex() );
+    std::scoped_lock aGuard( getSafetyMutex() );
     ++s_nCounter;
     if ( 1 == s_nCounter )
     {   // first instance
@@ -184,7 +184,7 @@ OParseContextClient::OParseContextClient()
 
 OParseContextClient::~OParseContextClient()
 {
-    std::lock_guard aGuard( getSafetyMutex() );
+    std::scoped_lock aGuard( getSafetyMutex() );
     --s_nCounter;
     if ( 0 == s_nCounter )
         delete getSharedContext(nullptr,true);

@@ -112,7 +112,7 @@ void NumberText_Impl::EnsureInitialized()
 
 OUString SAL_CALL NumberText_Impl::getNumberText(const OUString& rText, const Locale& rLocale)
 {
-    std::lock_guard aGuard(GetNumberTextMutex());
+    std::scoped_lock aGuard(GetNumberTextMutex());
     EnsureInitialized();
     // libnumbertext supports Language + Country tags (separated by "_" or "-")
     LanguageTag aLanguageTag(rLocale);
@@ -142,7 +142,7 @@ OUString SAL_CALL NumberText_Impl::getNumberText(const OUString& rText, const Lo
 
 uno::Sequence<Locale> SAL_CALL NumberText_Impl::getAvailableLanguages()
 {
-    std::lock_guard aGuard(GetNumberTextMutex());
+    std::scoped_lock aGuard(GetNumberTextMutex());
     // TODO
     Sequence<css::lang::Locale> aRes;
     return aRes;

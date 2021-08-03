@@ -2670,7 +2670,7 @@ void SfxURLRelocator_Impl::initOfficeInstDirs()
 {
     if ( !mxOfficeInstDirs.is() )
     {
-        std::lock_guard aGuard( maMutex );
+        std::scoped_lock aGuard( maMutex );
         if ( !mxOfficeInstDirs.is() )
         {
             OSL_ENSURE( mxContext.is(), "No service manager!" );

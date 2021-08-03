@@ -146,14 +146,14 @@ private:
 // XEnumeration
 sal_Bool ServiceEnumeration_Impl::hasMoreElements()
 {
-    std::lock_guard aGuard( aMutex );
+    std::scoped_lock aGuard( aMutex );
     return nIt != aFactories.getLength();
 }
 
 // XEnumeration
 Any ServiceEnumeration_Impl::nextElement()
 {
-    std::lock_guard aGuard( aMutex );
+    std::scoped_lock aGuard( aMutex );
     if( nIt == aFactories.getLength() )
         throw NoSuchElementException("no more elements");
 
@@ -224,14 +224,14 @@ private:
 // XEnumeration
 sal_Bool ImplementationEnumeration_Impl::hasMoreElements()
 {
-    std::lock_guard aGuard( aMutex );
+    std::scoped_lock aGuard( aMutex );
     return aIt != aImplementationMap.end();
 }
 
 // XEnumeration
 Any ImplementationEnumeration_Impl::nextElement()
 {
-    std::lock_guard aGuard( aMutex );
+    std::scoped_lock aGuard( aMutex );
     if( aIt == aImplementationMap.end() )
         throw NoSuchElementException("no more elements");
 

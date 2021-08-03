@@ -63,7 +63,7 @@ sal_Int32 SAL_CALL OInputStreamWrapper::readBytes(css::uno::Sequence< sal_Int8 >
     if (nBytesToRead < 0)
         throw css::io::BufferSizeExceededException(OUString(),static_cast<css::uno::XWeak*>(this));
 
-    std::lock_guard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
 
     if (aData.getLength() < nBytesToRead)
         aData.realloc(nBytesToRead);
@@ -96,7 +96,7 @@ sal_Int32 SAL_CALL OInputStreamWrapper::readSomeBytes(css::uno::Sequence< sal_In
 
 void SAL_CALL OInputStreamWrapper::skipBytes(sal_Int32 nBytesToSkip)
 {
-    std::lock_guard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
     checkError();
 
     m_pSvStream->SeekRel(nBytesToSkip);
@@ -105,7 +105,7 @@ void SAL_CALL OInputStreamWrapper::skipBytes(sal_Int32 nBytesToSkip)
 
 sal_Int32 SAL_CALL OInputStreamWrapper::available()
 {
-    std::lock_guard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
     checkConnected();
 
     sal_Int64 nAvailable = m_pSvStream->remainingSize();
@@ -116,7 +116,7 @@ sal_Int32 SAL_CALL OInputStreamWrapper::available()
 
 void SAL_CALL OInputStreamWrapper::closeInput()
 {
-    std::lock_guard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
     checkConnected();
 
     if (m_bSvStreamOwner)
@@ -157,7 +157,7 @@ OSeekableInputStreamWrapper::OSeekableInputStreamWrapper(SvStream* _pStream, boo
 
 void SAL_CALL OSeekableInputStreamWrapper::seek( sal_Int64 _nLocation )
 {
-    std::lock_guard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
     checkConnected();
 
     m_pSvStream->Seek(static_cast<sal_uInt32>(_nLocation));
@@ -166,7 +166,7 @@ void SAL_CALL OSeekableInputStreamWrapper::seek( sal_Int64 _nLocation )
 
 sal_Int64 SAL_CALL OSeekableInputStreamWrapper::getPosition(  )
 {
-    std::lock_guard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
     checkConnected();
 
     sal_uInt32 nPos = m_pSvStream->Tell();
@@ -176,7 +176,7 @@ sal_Int64 SAL_CALL OSeekableInputStreamWrapper::getPosition(  )
 
 sal_Int64 SAL_CALL OSeekableInputStreamWrapper::getLength(  )
 {
-    std::lock_guard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
     checkConnected();
 
     checkError();

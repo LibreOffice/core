@@ -535,7 +535,7 @@ OUString PPDParser::getPPDFile( const OUString& rFile )
 const PPDParser* PPDParser::getParser( const OUString& rFile )
 {
     static std::recursive_mutex aMutex;
-    std::lock_guard aGuard( aMutex );
+    std::scoped_lock aGuard( aMutex );
 
     OUString aFile = rFile;
     if( !rFile.startsWith( "CUPS:" ) && !rFile.startsWith( "CPD:" ) )

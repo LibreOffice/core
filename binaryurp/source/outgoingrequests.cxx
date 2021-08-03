@@ -37,12 +37,12 @@ OutgoingRequests::~OutgoingRequests() {}
 void OutgoingRequests::push(
     rtl::ByteSequence const & tid, OutgoingRequest const & request)
 {
-    std::lock_guard g(mutex_);
+    std::scoped_lock g(mutex_);
     map_[tid].push_back(request);
 }
 
 OutgoingRequest OutgoingRequests::top(rtl::ByteSequence const & tid) {
-    std::lock_guard g(mutex_);
+    std::scoped_lock g(mutex_);
     Map::iterator i(map_.find(tid));
     if (i == map_.end()) {
         throw css::uno::RuntimeException(
@@ -53,7 +53,7 @@ OutgoingRequest OutgoingRequests::top(rtl::ByteSequence const & tid) {
 }
 
 void OutgoingRequests::pop(rtl::ByteSequence const & tid) noexcept {
-    std::lock_guard  g(mutex_);
+    std::scoped_lock  g(mutex_);
     Map::iterator i(map_.find(tid));
     assert(i != map_.end());
     i->second.pop_back();
