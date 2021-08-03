@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ac5e65e1_47969a10",
+        "filename": "sc/qa/extras/macros-test.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1006,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-03T06:44:37Z",
+      "side": 1,
+      "message": "Note that Sequence is also subject to \u0027using namespace\u0027 - try removing those from the beginning of the CXX.",
+      "range": {
+        "startLine": 1006,
+        "startChar": 4,
+        "endLine": 1006,
+        "endChar": 12
+      },
+      "revId": "54be46c521a1983f56e3f45af1d831d3583c4321",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
