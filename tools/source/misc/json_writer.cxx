@@ -325,6 +325,7 @@ void JsonWriter::put(const char* pPropName, sal_Int64 nPropVal)
     memcpy(mPos, "\": ", 3);
     mPos += 3;
 
+<<<<<<< HEAD   (282ddc extensions bibliography: sync the bibliography database wind)
     mPos += sprintf(mPos, "%" SAL_PRIdINT64, nPropVal);
 }
 
@@ -384,6 +385,9 @@ void JsonWriter::putSimpleValue(const OUString& rPropVal)
 
     *mPos = '"';
     ++mPos;
+=======
+    mPos += sprintf(mPos, "\"%d\"", nPropVal);
+>>>>>>> CHANGE (d46c7b use tools::Json for cursor messages)
 }
 
 void JsonWriter::putRaw(const rtl::OStringBuffer& rRawBuf)

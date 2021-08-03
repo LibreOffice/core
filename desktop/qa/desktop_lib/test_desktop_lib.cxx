@@ -2027,6 +2027,15 @@ public:
             m_aCellFormula = aPayload;
         }
         break;
+<<<<<<< HEAD   (282ddc extensions bibliography: sync the bibliography database wind)
+=======
+        case LOK_CALLBACK_TABLE_SELECTED:
+        {
+            m_bEmptyTableSelection = (std::string(pPayload).compare("{ }") == 0);
+            ++m_nTableSelectionCount;
+        }
+        break;
+>>>>>>> CHANGE (d46c7b use tools::Json for cursor messages)
         }
     }
 };

@@ -54,7 +54,7 @@ void JsonWriterTest::test1()
     std::unique_ptr<char, o3tl::free_delete> result(aJson.extractData());
 
     CPPUNIT_ASSERT_EQUAL(std::string("{ \"node\": { \"oustring\": \"val1\", \"ostring\": \"val2\", "
-                                     "\"charptr\": \"val3\", \"int\": 12}}"),
+                                     "\"charptr\": \"val3\", \"int\": \"12\"}}"),
                          std::string(result.get()));
 }
 
