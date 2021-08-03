@@ -26,7 +26,7 @@
 #include <com/sun/star/util/XAccounting.hpp>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <osl/mutex.hxx>
+#include <mutex>
 #include <vcl/bitmapex.hxx>
 
 
@@ -38,10 +38,10 @@ class VCLXBitmap final : public cppu::WeakImplHelper<
                             css::lang::XUnoTunnel,
                             css::util::XAccounting>
 {
-    ::osl::Mutex    maMutex;
+    std::mutex    maMutex;
     BitmapEx        maBitmap;
 
-    ::osl::Mutex&   GetMutex() { return maMutex; }
+    std::mutex&   GetMutex() { return maMutex; }
 
 
 public:
