@@ -53,6 +53,7 @@
 #include <unotools/streamwrap.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/ucbstreamhelper.hxx>
+#include <vcl/filter/SvmReader.hxx>
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 #include <xmloff/namespacemap.hxx>
 #include <xmloff/xmlnamespace.hxx>
@@ -2466,7 +2467,8 @@ void SVGFilter::implCreateObjectsFromBackground( const Reference< css::drawing::
 
     xExporter->setSourceDocument( Reference< XComponent >( rxDrawPage, UNO_QUERY ) );
     xExporter->filter( aDescriptor );
-    aMtf.Read( *aFile.GetStream( StreamMode::READ ) );
+    SvmReader aReader( *aFile.GetStream( StreamMode::READ ) );
+    aReader.Read( aMtf );
 
     bool bIsBitmap = false;
     bool bIsTiled = false;
