@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SFX2_SOURCE_DOC_DOCTEMPLATESLOCAL_HXX
-#define INCLUDED_SFX2_SOURCE_DOC_DOCTEMPLATESLOCAL_HXX
+#pragma once
 
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/beans/StringPair.hpp>
@@ -73,6 +72,6 @@ public:
     virtual void SAL_CALL setDocumentLocator( const css::uno::Reference< css::xml::sax::XLocator >& xLocator ) override;
 };
 
-#endif
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

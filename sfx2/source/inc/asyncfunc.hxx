@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SFX2_ASYNCFUNC_HXX
-#define INCLUDED_SFX2_ASYNCFUNC_HXX
+#pragma once
 
 #include <functional>
 
@@ -31,6 +30,6 @@ public:
     UNO3_GETIMPLEMENTATION_DECL(AsyncFunc)
 };
 
-#endif
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

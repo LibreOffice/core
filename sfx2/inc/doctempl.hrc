@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SFX2_INC_DOCTEMPL_HRC
-#define INCLUDED_SFX2_INC_DOCTEMPL_HRC
+#pragma once
 
 #define NC_(Context, String) reinterpret_cast<char const *>(Context "\004" u8##String)
 
@@ -38,6 +37,6 @@ const char* TEMPLATE_LONG_NAMES_ARY[] =
     NC_("TEMPLATE_LONG_NAMES_ARY", "Labels")
 };
 
-#endif
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

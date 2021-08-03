@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SFX2_INC_ARRDECL_HXX
-#define INCLUDED_SFX2_INC_ARRDECL_HXX
+#pragma once
 
 #include <vector>
 #include <memory>
@@ -25,6 +24,6 @@
 class SfxFilter;
 typedef ::std::vector<std::shared_ptr<const SfxFilter>> SfxFilterList_Impl;
 
-#endif
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SFX2_SOURCE_CONTROL_THUMBNAILVIEWACC_HXX
-#define INCLUDED_SFX2_SOURCE_CONTROL_THUMBNAILVIEWACC_HXX
+#pragma once
 
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/compbase.hxx>
@@ -214,6 +213,5 @@ public:
     virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& rId ) override;
 };
 
-#endif // INCLUDED_SFX2_SOURCE_CONTROL_THUMBNAILVIEWACC_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

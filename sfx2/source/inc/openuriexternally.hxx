@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SFX2_SOURCE_INC_OPENURIEXTERNALLY_HXX
-#define INCLUDED_SFX2_SOURCE_INC_OPENURIEXTERNALLY_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -29,6 +28,6 @@ namespace sfx2
 void openUriExternally(const OUString& sURI, bool bHandleSystemShellExecuteException);
 };
 
-#endif
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

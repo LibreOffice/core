@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SFX2_HINTPOST_HXX
-#define INCLUDED_SFX2_HINTPOST_HXX
+#pragma once
 
 #include <tools/link.hxx>
 #include <tools/ref.hxx>
@@ -54,6 +53,6 @@ public:
     void            SetEventHdl(const std::function<void (std::unique_ptr<SfxRequest>)>& rLink);
 };
 
-#endif
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SFX2_SOURCE_INC_SLOTSERV_HXX
-#define INCLUDED_SFX2_SOURCE_INC_SLOTSERV_HXX
+#pragma once
 
 #include <sal/types.h>
 
@@ -54,6 +53,6 @@ inline const SfxSlot* SfxSlotServer::GetSlot() const
     return _pSlot;
 }
 
-#endif
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

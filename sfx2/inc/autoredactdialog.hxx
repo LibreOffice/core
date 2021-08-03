@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SFX2_INC_AUTOREDACTDIALOG_HXX
-#define INCLUDED_SFX2_INC_AUTOREDACTDIALOG_HXX
+#pragma once
 
 #include <memory>
 #include <sal/config.h>
@@ -165,6 +164,6 @@ public:
     bool isWholeWords() const { return m_xWholeWords->get_state() == TriState::TRISTATE_TRUE; }
 };
 
-#endif
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

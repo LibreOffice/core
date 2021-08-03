@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SFX2_SOURCE_INC_MACROLOADER_HXX
-#define INCLUDED_SFX2_SOURCE_INC_MACROLOADER_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -81,6 +80,6 @@ public:
     virtual void SAL_CALL removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >& xControl, const css::util::URL& aURL ) override;
 };
 
-#endif
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
