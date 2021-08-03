@@ -204,6 +204,13 @@ void SvmWriter::MetaActionHandler(MetaAction* pAction, ImplMetaWriteData* pData)
         }
         break;
 
+        case MetaActionType::TEXTALIGN:
+        {
+            auto* pMetaAction = static_cast<MetaTextAlignAction*>(pAction);
+            TextAlignHandler(pMetaAction);
+        }
+        break;
+
         /* default case prevents test failure and will be
         removed once all the handlers are completed */
         default:
@@ -462,5 +469,12 @@ void SvmWriter::OverlineColorHandler(MetaOverlineColorAction* pAction)
     VersionCompatWrite aCompat(mrStream, 1);
     WriteColor(pAction->GetColor());
     mrStream.WriteBool(pAction->IsSetting());
+}
+
+void SvmWriter::TextAlignHandler(MetaTextAlignAction* pAction)
+{
+    mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
+    VersionCompatWrite aCompat(mrStream, 1);
+    mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetTextAlign()));
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
