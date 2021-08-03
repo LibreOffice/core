@@ -646,26 +646,43 @@ void SbiImage::AddEnum(SbxObject* pObject) // Register enum type
 }
 
 // Note: IDs start with 1
-OUString SbiImage::GetString( short nId ) const
+OUString SbiImage::GetString( short nId, SbxDataType *eType ) const
 {
     if( nId && nId <= short(mvStringOffsets.size()) )
     {
         sal_uInt32 nOff = mvStringOffsets[ nId - 1 ];
         sal_Unicode* pStr = pStrings.get() + nOff;
 
+        // ADD AND CHANGE COMMENT
+        // TODO - Change initialization order
         // #i42467: Special treatment for vbNullChar
-        if( *pStr == 0 )
+        sal_uInt32 nNextOff
+            = (nId < short(mvStringOffsets.size())) ? mvStringOffsets[nId] : nStringOff;
+        sal_uInt32 nLen = nNextOff - nOff - 1;
+        if (*pStr == 0 && nLen == 1)
         {
-            sal_uInt32 nNextOff = (nId < short(mvStringOffsets.size())) ? mvStringOffsets[ nId ] : nStringOff;
-            sal_uInt32 nLen = nNextOff - nOff - 1;
-            if( nLen == 1 )
-            {
-                return OUString( u'\0');
-            }
+            return OUString(u'\0');
         }
         else
         {
-            return OUString(pStr);
+            OUString aOUStr(pStr);
+            if (eType != nullptr && size_t(aOUStr.getLength()) < nLen)
+            {
+                sal_Unicode pStr = *(pStrings.get() + nOff + aOUStr.getLength() + 1);
+                switch (pStr)
+                {
+                    // See GetSuffixType in basic/source/comp/scanner.cxx for type characters
+                    case '%': *eType = SbxINTEGER; break;
+                    case '&': *eType = SbxLONG; break;
+                    case '!': *eType = SbxSINGLE; break;
+                    case '#': *eType = SbxDOUBLE; break;
+                    case '@': *eType = SbxCURRENCY; break;
+                    // tdf#142460 - properly handle boolean values in string pool
+                    case 'b': *eType = SbxBOOL; break;
+                    default:  *eType = SbxSTRING;
+                }
+            }
+            return aOUStr;
         }
     }
     return OUString();
