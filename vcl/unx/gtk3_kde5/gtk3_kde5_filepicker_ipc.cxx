@@ -97,9 +97,9 @@ void sendIpcArg(std::ostream& stream, const OUString& string)
     sendIpcStringArg(stream, utf8.getLength(), utf8.getStr());
 }
 
-OUString getResString(const char* pResId)
+OUString getResString(TranslateId pResId)
 {
-    if (pResId == nullptr)
+    if (!pResId)
         return {};
 
     return VclResId(pResId);
