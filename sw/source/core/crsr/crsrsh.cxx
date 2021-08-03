@@ -73,7 +73,7 @@
 #include <wrtsh.hxx>
 #include <undobj.hxx>
 #include <view.hxx>
-#include <boost/property_tree/json_parser.hpp>
+#include <tools/json_writer.hxx>
 
 using namespace com::sun::star;
 using namespace util;
@@ -2044,69 +2044,66 @@ void SwCursorShell::sendLOKCursorUpdates()
     SwFrame* pCurrentFrame = GetCurrFrame();
     SelectionType eType = pShell->GetSelectionType();
 
-    boost::property_tree::ptree aRootTree;
+    tools::JsonWriter aJsonWriter;
 
     if (pCurrentFrame && (eType & SelectionType::Table) && pCurrentFrame->IsInTab())
     {
         const SwRect& rPageRect = pShell->GetAnyCurRect(CurRectType::Page, nullptr);
 
-        boost::property_tree::ptree aTableColumns;
         {
+            auto columnsNode = aJsonWriter.startNode("columns");
             SwTabCols aTabCols;
             pShell->GetTabCols(aTabCols);
 
             const int nColumnOffset = aTabCols.GetLeftMin() + rPageRect.Left();
 
-            aTableColumns.put("left", aTabCols.GetLeft());
-            aTableColumns.put("right", aTabCols.GetRight());
-            aTableColumns.put("tableOffset", nColumnOffset);
+            aJsonWriter.put("left", aTabCols.GetLeft());
+            aJsonWriter.put("right", aTabCols.GetRight());
+            aJsonWriter.put("tableOffset", nColumnOffset);
 
-            boost::property_tree::ptree aEntries;
-            for (size_t i = 0; i < aTabCols.Count(); ++i)
             {
-                auto const & rEntry = aTabCols.GetEntry(i);
-                boost::property_tree::ptree aTableColumnEntry;
-                aTableColumnEntry.put("position", rEntry.nPos);
-                aTableColumnEntry.put("min", rEntry.nMin);
-                aTableColumnEntry.put("max", rEntry.nMax);
-                aTableColumnEntry.put("hidden", rEntry.bHidden);
-                aEntries.push_back(std::make_pair("", aTableColumnEntry));
+                auto entriesNode = aJsonWriter.startArray("entries");
+                for (size_t i = 0; i < aTabCols.Count(); ++i)
+                {
+                    auto entryNode = aJsonWriter.startStruct();
+                    auto const & rEntry = aTabCols.GetEntry(i);
+                    aJsonWriter.put("position", rEntry.nPos);
+                    aJsonWriter.put("min", rEntry.nMin);
+                    aJsonWriter.put("max", rEntry.nMax);
+                    aJsonWriter.put("hidden", rEntry.bHidden);
+                }
             }
-            aTableColumns.push_back(std::make_pair("entries", aEntries));
         }
 
-        boost::property_tree::ptree aTableRows;
         {
+            auto rowsNode = aJsonWriter.startNode("rows");
             SwTabCols aTabRows;
             pShell->GetTabRows(aTabRows);
 
             const int nRowOffset = aTabRows.GetLeftMin() + rPageRect.Top();
 
-            aTableRows.put("left", aTabRows.GetLeft());
-            aTableRows.put("right", aTabRows.GetRight());
-            aTableRows.put("tableOffset", nRowOffset);
+            aJsonWriter.put("left", aTabRows.GetLeft());
+            aJsonWriter.put("right", aTabRows.GetRight());
+            aJsonWriter.put("tableOffset", nRowOffset);
 
-            boost::property_tree::ptree aEntries;
-            for (size_t i = 0; i < aTabRows.Count(); ++i)
             {
-                auto const & rEntry = aTabRows.GetEntry(i);
-                boost::property_tree::ptree aTableRowEntry;
-                aTableRowEntry.put("position", rEntry.nPos);
-                aTableRowEntry.put("min", rEntry.nMin);
-                aTableRowEntry.put("max", rEntry.nMax);
-                aTableRowEntry.put("hidden", rEntry.bHidden);
-                aEntries.push_back(std::make_pair("", aTableRowEntry));
+                auto entriesNode = aJsonWriter.startArray("entries");
+                for (size_t i = 0; i < aTabRows.Count(); ++i)
+                {
+                    auto entryNode = aJsonWriter.startStruct();
+                    auto const & rEntry = aTabRows.GetEntry(i);
+                    aJsonWriter.put("position", rEntry.nPos);
+                    aJsonWriter.put("min", rEntry.nMin);
+                    aJsonWriter.put("max", rEntry.nMax);
+                    aJsonWriter.put("hidden", rEntry.bHidden);
+                }
             }
-            aTableRows.push_back(std::make_pair("entries", aEntries));
         }
-
-        aRootTree.add_child("columns", aTableColumns);
-        aRootTree.add_child("rows", aTableRows);
     }
 
-    std::stringstream aStream;
-    boost::property_tree::write_json(aStream, aRootTree);
-    GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_TABLE_SELECTED, aStream.str().c_str());
+    char* pChar = aJsonWriter.extractData();
+    GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_TABLE_SELECTED, pChar);
+    free(pChar);
 }
 
 void SwCursorShell::RefreshBlockCursor()
