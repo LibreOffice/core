@@ -61,21 +61,33 @@ short SbiStringPool::Add( const OUString& rVal )
     return static_cast<short>(++n);
 }
 
-short SbiStringPool::Add( double n, SbxDataType t )
+short SbiStringPool::Add( double n, SbxDataType t, bool bAddSuffixType )
 {
     char buf[40]{};
     switch( t )
     {
         // tdf#142460 - properly handle boolean values in string pool
-        case SbxBOOL: snprintf( buf, sizeof(buf), "%db", static_cast<short>(n) ); break;
+        case SbxBOOL:
+            snprintf(buf, sizeof(buf), "%d%s", static_cast<short>(n), bAddSuffixType ? "b" : "");
+            break;
         // tdf#131296 - store numeric value including its type character
         // See GetSuffixType in basic/source/comp/scanner.cxx for type characters
-        case SbxINTEGER: snprintf( buf, sizeof(buf), "%d%%", static_cast<short>(n) ); break;
+        case SbxINTEGER:
+            snprintf(buf, sizeof(buf), "%d%s", static_cast<short>(n), bAddSuffixType ? "%" : "");
+            break;
         case SbxLONG:
-            snprintf( buf, sizeof(buf), "%" SAL_PRIdINT32 "&", static_cast<sal_Int32>(n) ); break;
-        case SbxSINGLE:  snprintf( buf, sizeof(buf), "%.6g!", static_cast<float>(n) ); break;
-        case SbxDOUBLE:  snprintf( buf, sizeof(buf), "%.16g", n ); break; // default processing in SbiRuntime::StepLOADNC - no type character
-        case SbxCURRENCY: snprintf(buf, sizeof(buf), "%.16g@", n); break;
+            snprintf(buf, sizeof(buf), "%" SAL_PRIdINT32 "%s", static_cast<sal_Int32>(n),
+                     bAddSuffixType ? "&" : "");
+            break;
+        case SbxSINGLE:
+            snprintf(buf, sizeof(buf), "%.6g%s", static_cast<float>(n), bAddSuffixType ? "!" : "");
+            break;
+        case SbxDOUBLE:
+            snprintf(buf, sizeof(buf), "%.16g", n); // default processing in SbiRuntime::StepLOADNC - no type character
+            break;
+        case SbxCURRENCY:
+            snprintf(buf, sizeof(buf), "%.16g%s", n, bAddSuffixType ? "@" : "");
+            break;
         default: assert(false); break; // should not happen
     }
     return Add( OUString::createFromAscii( buf ) );
