@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b4156dfc_7c659d34",
+        "filename": "vcl/backendtest/outputdevice/polygon.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-08-03T22:55:18Z",
+      "side": 1,
+      "message": "that\u0027s the width, isn\u0027t it - there is GetWidth for this...",
+      "range": {
+        "startLine": 187,
+        "startChar": 47,
+        "endLine": 187,
+        "endChar": 92
+      },
+      "revId": "13b8951c0b05eb4deae0d94a20936ac955f95ae0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a0c31752_dd171637",
+        "filename": "vcl/backendtest/outputdevice/polygon.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-08-03T22:55:18Z",
+      "side": 1,
+      "message": "that\u0027s the height",
+      "range": {
+        "startLine": 188,
+        "startChar": 46,
+        "endLine": 188,
+        "endChar": 89
+      },
+      "revId": "13b8951c0b05eb4deae0d94a20936ac955f95ae0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
