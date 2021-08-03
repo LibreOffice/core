@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_INC_ANNOTATIONWIN_HXX
-#define INCLUDED_SW_INC_ANNOTATIONWIN_HXX
+#pragma once
 
 #include <basegfx/range/b2drange.hxx>
 #include <tools/date.hxx>
@@ -278,6 +277,5 @@ class SAL_DLLPUBLIC_RTTI SwAnnotationWin final : public InterimItemWindow
 
 } // end of namespace sw::annotation
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
