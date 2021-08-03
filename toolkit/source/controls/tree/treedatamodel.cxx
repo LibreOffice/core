@@ -41,9 +41,7 @@ namespace {
 class MutableTreeNode;
 class MutableTreeDataModel;
 
-typedef rtl::Reference< MutableTreeNode > MutableTreeNodeRef;
-typedef std::vector< MutableTreeNodeRef > TreeNodeVector;
-typedef rtl::Reference< MutableTreeDataModel > MutableTreeDataModelRef;
+typedef std::vector< rtl::Reference< MutableTreeNode > > TreeNodeVector;
 
 class MutableTreeDataModel : public ::cppu::WeakAggImplHelper2< XMutableTreeDataModel, XServiceInfo >,
                              public MutexAndBroadcastHelper
@@ -82,7 +80,7 @@ class MutableTreeNode: public ::cppu::WeakAggImplHelper2< XMutableTreeNode, XSer
     friend class MutableTreeDataModel;
 
 public:
-    MutableTreeNode( const MutableTreeDataModelRef& xModel, const Any& rValue, bool bChildrenOnDemand );
+    MutableTreeNode( const rtl::Reference< MutableTreeDataModel >& xModel, const Any& rValue, bool bChildrenOnDemand );
     virtual ~MutableTreeNode() override;
 
     void setParent( MutableTreeNode* pParent );
@@ -124,7 +122,7 @@ private:
     bool mbHasChildrenOnDemand;
     std::mutex maMutex;
     MutableTreeNode* mpParent;
-    MutableTreeDataModelRef mxModel;
+    rtl::Reference< MutableTreeDataModel > mxModel;
     OUString maNodeGraphicURL;
     OUString maExpandedGraphicURL;
     OUString maCollapsedGraphicURL;
@@ -176,12 +174,12 @@ void SAL_CALL MutableTreeDataModel::setRoot( const Reference< XMutableTreeNode >
 
     if( mxRootNode.is() )
     {
-        MutableTreeNodeRef xOldImpl( dynamic_cast< MutableTreeNode* >( mxRootNode.get() ) );
+        rtl::Reference< MutableTreeNode > xOldImpl( dynamic_cast< MutableTreeNode* >( mxRootNode.get() ) );
         if( xOldImpl.is() )
             xOldImpl->mbIsInserted = false;
     }
 
-    MutableTreeNodeRef xImpl( dynamic_cast< MutableTreeNode* >( xNode.get() ) );
+    rtl::Reference< MutableTreeNode > xImpl( dynamic_cast< MutableTreeNode* >( xNode.get() ) );
     if( !xImpl.is() || xImpl->mbIsInserted )
         throw IllegalArgumentException();
 
@@ -247,7 +245,7 @@ Sequence< OUString > SAL_CALL MutableTreeDataModel::getSupportedServiceNames(  )
     return aSeq;
 }
 
-MutableTreeNode::MutableTreeNode( const MutableTreeDataModelRef& xModel, const Any& rValue, bool bChildrenOnDemand )
+MutableTreeNode::MutableTreeNode( const rtl::Reference< MutableTreeDataModel >& xModel, const Any& rValue, bool bChildrenOnDemand )
 : maDisplayValue( rValue )
 , mbHasChildrenOnDemand( bChildrenOnDemand )
 , mpParent( nullptr )
@@ -298,7 +296,7 @@ void SAL_CALL MutableTreeNode::setDataValue( const Any& _datavalue )
 void SAL_CALL MutableTreeNode::appendChild( const Reference< XMutableTreeNode >& xChildNode )
 {
     std::scoped_lock aGuard( maMutex );
-    MutableTreeNodeRef xImpl( dynamic_cast< MutableTreeNode* >( xChildNode.get() ) );
+    rtl::Reference< MutableTreeNode > xImpl( dynamic_cast< MutableTreeNode* >( xChildNode.get() ) );
 
     if( !xImpl.is() || xImpl->mbIsInserted || (this == xImpl.get()) )
         throw IllegalArgumentException();
@@ -317,7 +315,7 @@ void SAL_CALL MutableTreeNode::insertChildByIndex( sal_Int32 nChildIndex, const 
     if( (nChildIndex < 0) || (nChildIndex > static_cast<sal_Int32>(maChildren.size())) )
         throw IndexOutOfBoundsException();
 
-    MutableTreeNodeRef xImpl( dynamic_cast< MutableTreeNode* >( xChildNode.get() ) );
+    rtl::Reference< MutableTreeNode > xImpl( dynamic_cast< MutableTreeNode* >( xChildNode.get() ) );
     if( !xImpl.is() || xImpl->mbIsInserted || (this == xImpl.get()) )
         throw IllegalArgumentException();
 
@@ -339,7 +337,7 @@ void SAL_CALL MutableTreeNode::removeChildByIndex( sal_Int32 nChildIndex )
     if( (nChildIndex < 0) || (nChildIndex >= static_cast<sal_Int32>(maChildren.size())) )
         throw IndexOutOfBoundsException();
 
-    MutableTreeNodeRef xImpl;
+    rtl::Reference< MutableTreeNode > xImpl;
 
     TreeNodeVector::iterator aIter( maChildren.begin() );
     std::advance(aIter, nChildIndex);
@@ -447,7 +445,7 @@ sal_Int32 SAL_CALL MutableTreeNode::getIndex( const Reference< XTreeNode >& xNod
 {
     std::scoped_lock aGuard( maMutex );
 
-    MutableTreeNodeRef xImpl( dynamic_cast< MutableTreeNode* >( xNode.get() ) );
+    rtl::Reference< MutableTreeNode > xImpl( dynamic_cast< MutableTreeNode* >( xNode.get() ) );
     if( xImpl.is() )
     {
         sal_Int32 nChildCount = maChildren.size();
