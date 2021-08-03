@@ -12,6 +12,8 @@
 #include <rtl/string.hxx>
 #include <tools/stream.hxx>
 #include <tools/XmlWriter.hxx>
+#include <vcl/bitmapex.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 
 #include <memory>
 #include <sal/log.hxx>
@@ -30,6 +32,7 @@
 #include <drawinglayer/primitive2d/objectinfoprimitive2d.hxx>
 #include <drawinglayer/primitive2d/svggradientprimitive2d.hxx>
 #include <drawinglayer/primitive2d/metafileprimitive2d.hxx>
+#include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <drawinglayer/attribute/lineattribute.hxx>
 #include <drawinglayer/attribute/fontattribute.hxx>
@@ -164,6 +167,35 @@ void Primitive2dXmlDump::decomposeAndWrite(
 
         switch (nId)
         {
+            case PRIMITIVE2D_ID_BITMAPPRIMITIVE2D:
+            {
+                const BitmapPrimitive2D& rBitmapPrimitive2D
+                    = dynamic_cast<const BitmapPrimitive2D&>(*pBasePrimitive);
+                rWriter.startElement("bitmap");
+
+                const BitmapEx aBitmapEx(VCLUnoHelper::GetBitmap(rBitmapPrimitive2D.getXBitmap()));
+                const Size& rSizePixel(aBitmapEx.GetSizePixel());
+
+                rWriter.attribute("height", rSizePixel.getHeight());
+                rWriter.attribute("width", rSizePixel.getWidth());
+                rWriter.attribute("checksum", OString(std::to_string(aBitmapEx.GetChecksum())));
+
+                for (tools::Long y = 0; y < rSizePixel.getHeight(); y++)
+                {
+                    rWriter.startElement("data");
+                    OUString aBitmapData = "";
+                    for (tools::Long x = 0; x < rSizePixel.getHeight(); x++)
+                    {
+                        if (x != 0)
+                            aBitmapData = aBitmapData + ",";
+                        aBitmapData = aBitmapData + aBitmapEx.GetPixelColor(x, y).AsRGBHexString();
+                    }
+                    rWriter.attribute("row", aBitmapData);
+                    rWriter.endElement();
+                }
+                rWriter.endElement();
+            }
+            break;
             case PRIMITIVE2D_ID_HIDDENGEOMETRYPRIMITIVE2D:
             {
                 const HiddenGeometryPrimitive2D& rHiddenGeometryPrimitive2D = dynamic_cast<const HiddenGeometryPrimitive2D&>(*pBasePrimitive);
@@ -302,7 +334,9 @@ void Primitive2dXmlDump::decomposeAndWrite(
                 }
                 rWriter.attribute("x", aTranslate.getX());
                 rWriter.attribute("y", aTranslate.getY());
-                rWriter.attribute("text", rTextSimplePortionPrimitive2D.getText());
+                OUString aText = rTextSimplePortionPrimitive2D.getText();
+                // TODO share code with sax_fastparser::FastSaxSerializer::write().
+                rWriter.attribute("text", aText.replaceAll("", "&#9;"));
                 rWriter.attribute("fontcolor", convertColorToString(rTextSimplePortionPrimitive2D.getFontColor()));
 
                 const drawinglayer::attribute::FontAttribute& aFontAttribute = rTextSimplePortionPrimitive2D.getFontAttribute();
