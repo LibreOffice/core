@@ -1,0 +1,211 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f628aa65_f578b7bb",
+        "filename": "sw/inc/unotextrange.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-08-03T11:39:36Z",
+      "side": 1,
+      "message": "I suggest to create TextRangeMode::AllowTableNode instead of this (likely AllowNonTextNode would be fine, too), because this is the opposite of the TextRangeMode::RequireTextNode.",
+      "range": {
+        "startLine": 67,
+        "startChar": 64,
+        "endLine": 68,
+        "endChar": 47
+      },
+      "revId": "117faf687e657300409d5f161cff11c5c1238eb4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fe060d70_4eaf07b5",
+        "filename": "sw/source/core/unocore/unoobj2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1130,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-08-03T11:39:36Z",
+      "side": 1,
+      "message": "// handle AllowTableNode only for header/footer, yet\nif (eMode \u003d\u003d TextRangeMode::AllowTableNode)\n    pHeadText \u003d dynamic_cast\u003cSwXHeadFootText*\u003e(pText);",
+      "range": {
+        "startLine": 1130,
+        "startChar": 8,
+        "endLine": 1130,
+        "endChar": 58
+      },
+      "revId": "117faf687e657300409d5f161cff11c5c1238eb4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "87508a42_14323ced",
+        "filename": "sw/source/core/unocore/unoobj2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1139,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-08-03T11:39:36Z",
+      "side": 1,
+      "message": "eMode \u003d\u003d TextRangeMode::AllowTableNode",
+      "range": {
+        "startLine": 1139,
+        "startChar": 48,
+        "endLine": 1139,
+        "endChar": 84
+      },
+      "revId": "117faf687e657300409d5f161cff11c5c1238eb4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fba6a8f4_ce0c2a0a",
+        "filename": "sw/source/core/unocore/unoobj2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1142,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-08-03T11:39:36Z",
+      "side": 1,
+      "message": "What would be the result of using this, as in the case of RequireTextNode?\n\nxTextCursor-\u003egotoEnd(true);\n\nMaybe it\u0027s worth to synchronize the PaM conversion with that mode.\n\n(In writerfilter, likely there are bigger hacks to handle nested tables or gridBefore/gridAfter, which could be simplified later with AllowTextNode.)",
+      "range": {
+        "startLine": 1142,
+        "startChar": 8,
+        "endLine": 1142,
+        "endChar": 59
+      },
+      "revId": "117faf687e657300409d5f161cff11c5c1238eb4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8dbb3add_89de861c",
+        "filename": "sw/source/core/unocore/unotext.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1542,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-08-03T11:39:36Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 1542,
+        "startChar": 13,
+        "endLine": 1542,
+        "endChar": 20
+      },
+      "revId": "117faf687e657300409d5f161cff11c5c1238eb4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "85afc75b_69f7b0a9",
+        "filename": "sw/source/core/unocore/unotext.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1543,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-08-03T11:39:36Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 1543,
+        "startChar": 25,
+        "endLine": 1543,
+        "endChar": 26
+      },
+      "revId": "117faf687e657300409d5f161cff11c5c1238eb4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "541fcba0_2b6f8e2e",
+        "filename": "sw/source/core/unocore/unotext.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1543,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-08-03T11:39:36Z",
+      "side": 1,
+      "message": "is set",
+      "range": {
+        "startLine": 1543,
+        "startChar": 83,
+        "endLine": 1543,
+        "endChar": 87
+      },
+      "revId": "117faf687e657300409d5f161cff11c5c1238eb4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d05333f4_5e000976",
+        "filename": "sw/source/core/unocore/unotext.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1552,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-08-03T11:39:36Z",
+      "side": 1,
+      "message": "::sw::TextRangeMode eMode \u003d ::sw::TextRangeMode::RequireTextNode;\n    for (const auto\u0026 rCellProperty : rFrameProperties)\n    {\n        if (rCellProperty.Name \u003d\u003d \"CursorNotIgnoreTables\")\n        {\n            bool bAllowNonTextNode \u003d false;\n            rCellProperty.Value \u003e\u003e\u003d bAllowNonTextNode;\n            if (bAllowNonTextNode)\n                eMode \u003d ::sw::TextRangeMode::AllowTableNode;\n            break;\n        }\n    }",
+      "range": {
+        "startLine": 1544,
+        "startChar": 0,
+        "endLine": 1552,
+        "endChar": 5
+      },
+      "revId": "117faf687e657300409d5f161cff11c5c1238eb4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e3e25d4b_62b9e7dd",
+        "filename": "sw/source/core/unocore/unotext.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1557,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-08-03T11:39:36Z",
+      "side": 1,
+      "message": "!::sw::XTextRangeToSwPaM(*pTempStartPam, xStart, eMode)",
+      "range": {
+        "startLine": 1556,
+        "startChar": 8,
+        "endLine": 1557,
+        "endChar": 56
+      },
+      "revId": "117faf687e657300409d5f161cff11c5c1238eb4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
