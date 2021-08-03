@@ -20,6 +20,7 @@
 #pragma once
 
 #include <osl/process.h>
+#include <unotools/resmgr.hxx>
 
 #include "filepicker_ipc_commands.hxx"
 
@@ -28,7 +29,7 @@
 #include <thread>
 #include <sstream>
 
-OUString getResString(const char* pResId);
+OUString getResString(TranslateId pResId);
 
 class Gtk3KDE5FilePickerIpc
 {

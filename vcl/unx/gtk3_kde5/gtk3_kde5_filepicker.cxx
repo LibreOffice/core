@@ -216,7 +216,7 @@ OUString SAL_CALL Gtk3KDE5FilePicker::getLabel(sal_Int16 controlId)
 
 void Gtk3KDE5FilePicker::addCustomControl(sal_Int16 controlId)
 {
-    const char* resId = nullptr;
+    TranslateId resId;
 
     switch (controlId)
     {
