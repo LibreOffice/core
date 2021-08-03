@@ -610,7 +610,7 @@ Const cstSubArgs = &quot;&quot;
 				If _Diagram.HasYAxisTitle Then _PropertyGet = _Diagram.YAxisTitle.String Else _PropertyGet = &quot;&quot;
 			End If
 		Case UCase(&quot;XChartObj&quot;)
-			Set _PropertGet = _ChartObject
+			Set _PropertyGet = _ChartObject
 		Case UCase(&quot;XDiagram&quot;)
 			Set _PropertyGet = _Diagram
 		Case UCase(&quot;XShape&quot;)
