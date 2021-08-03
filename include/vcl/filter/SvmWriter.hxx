@@ -57,4 +57,5 @@ public:
     void TextRectHandler(MetaTextRectAction* pAction, ImplMetaWriteData* pData);
     void TextLineHandler(MetaTextLineAction* pAction);
     void OverlineColorHandler(MetaOverlineColorAction* pAction);
+    void TextAlignHandler(MetaTextAlignAction* pAction);
 };
