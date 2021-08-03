@@ -16,6 +16,24 @@
       "revId": "67f2a99229101757af4f40118f4d3c83ba38648b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7c80fbf3_70c2cb65",
+        "filename": "writerfilter/source/dmapper/GraphicImport.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 563,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2021-08-03T20:29:55Z",
+      "side": 1,
+      "message": "I see no accuracy problem here. Both m_pImpl-\u003egetXSize() and m_pImpl-\u003egetYSize() are integral and exactly represented in double. Then /2.0 gives somedigits.0 or somedigits.5, which are still exactly represented in double. convert() makes multiply by 360. So the result is integral represented as double. There is nothing to be rounded at all.",
+      "parentUuid": "b43c565f_55b06bd1",
+      "revId": "67f2a99229101757af4f40118f4d3c83ba38648b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
