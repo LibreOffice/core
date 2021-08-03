@@ -42,7 +42,7 @@ race:libjvm.so
 # so there is no failure mode
 race:ireallocSequence
 
-# TODO There appears to be a race here, initialisng the
+# TODO There appears to be a race here, initialising the
 #   ::com::sun::star::uno::Sequence< T >::s_pType
 # field. But no idea at all how to fix it.
 race:cppu::getTypeFavourUnsigned
