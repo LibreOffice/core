@@ -22,6 +22,12 @@ End Function
 Sub verify_testOptionalsVba()
     On Error GoTo errorHandler
 
+    ' tdf#143707 - check correct initialization of default value for optionals
+    ' Without the fix in place, this test would have failed with
+    ' - Expected: 123
+    ' - Actual  : 123%
+    TestUtil.AssertEqual(TestOptVariantInit(), 123, "TestOptVariantInit()")
+
     ' optionals with variant datatypes
     TestUtil.AssertEqual(TestOptVariant(), 123, "TestOptVariant()")
     TestUtil.AssertEqual(TestOptVariant(123), 246, "TestOptVariant(123)")
@@ -112,6 +118,10 @@ Sub verify_testOptionalsVba()
 errorHandler:
     TestUtil.ReportErrorHandler("verify_testOptionalsVba", Err, Error$, Erl)
 End Sub
+
+Function TestOptVariantInit(Optional A As Variant = 123)
+    TestOptVariantInit = A
+End Function
 
 Function TestOptVariant(Optional A, Optional B As Variant = 123)
     TestOptVariant = OptNumberSum(IsMissing(A), A, IsMissing(B), B)

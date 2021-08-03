@@ -53,7 +53,17 @@ Sub verify_testTypeName()
     TestUtil.AssertEqual(TypeName(TestCurrSign),   "Currency", "TypeName(TestCurrSign)")
     TestUtil.AssertEqual(TypeName(TestStrSign),    "String",   "TypeName(TestStrSign)")
 
+    ' tdf#143707 - check correct initialization of default value for optionals
+    ' Without the fix in place, this test would have failed with
+    ' - Expected: Integer
+    ' - Actual  : String
+    TestUtil.AssertEqual(TestOptVariantInit(), "Integer", "TestOptVariantInit()")
+
     Exit Sub
 errorHandler:
     TestUtil.ReportErrorHandler("verify_testTypeName", Err, Error$, Erl)
 End Sub
+
+Function TestOptVariantInit(Optional A As Variant = 123)
+    TestOptVariantInit = TypeName(A)
+End Function
