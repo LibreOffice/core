@@ -33,7 +33,7 @@ UNO3_GETIMPLEMENTATION_IMPL( VCLXBitmap );
 // css::awt::XBitmap
 css::awt::Size VCLXBitmap::getSize()
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    std::scoped_lock aGuard( GetMutex() );
 
     css::awt::Size aSize( maBitmap.GetSizePixel().Width(), maBitmap.GetSizePixel().Height() );
     return aSize;
@@ -41,7 +41,7 @@ css::awt::Size VCLXBitmap::getSize()
 
 css::uno::Sequence< sal_Int8 > VCLXBitmap::getDIB()
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    std::scoped_lock aGuard( GetMutex() );
 
     SvMemoryStream aMem;
     WriteDIB(maBitmap.GetBitmap(), aMem, false, true);
@@ -50,14 +50,14 @@ css::uno::Sequence< sal_Int8 > VCLXBitmap::getDIB()
 
 css::uno::Sequence< sal_Int8 > VCLXBitmap::getMaskDIB()
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    std::scoped_lock aGuard( GetMutex() );
 
     return vcl::bitmap::GetMaskDIB(maBitmap);
 }
 
 sal_Int64 SAL_CALL VCLXBitmap::estimateUsage()
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    std::scoped_lock aGuard( GetMutex() );
 
     return maBitmap.GetSizeBytes();
 }
