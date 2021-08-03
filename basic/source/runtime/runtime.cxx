@@ -4182,6 +4182,7 @@ void SbiRuntime::StepPARAM( sal_uInt32 nOp1, sal_uInt32 nOp2 )
                         OUString aDefaultStr = pImg->GetString( nDefaultId );
                         pVar = new SbxVariable(pParam-> eType);
                         pVar->PutString( aDefaultStr );
+                        // TODO - check if there is a type character and convert the variable to it
                         refParams->Put(pVar, nIdx);
                     }
                     else if ( SbiRuntime::isVBAEnabled() && eType != SbxVARIANT )

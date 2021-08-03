@@ -332,6 +332,8 @@ void SbiCodeGen::Save()
                         {
                             nUserData |= nDefaultId;
                         }
+                        // TODO - Add the flag SetDefaultTypeId. Don't know with a new flag like the following ones,
+                        // or just add the same number as the nDefaultId, because it is in the string pool
                         if( pPar->IsParamArray() )
                         {
                             nUserData |= PARAM_INFO_PARAMARRAY;

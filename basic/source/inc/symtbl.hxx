@@ -135,6 +135,7 @@ public:
     void       SetNew()         { bNew = true;      }
     void       SetDefinedAs()   { bAs = true;       }
     void       SetGlobal(bool b){ bGlobal = b;  }
+    // TODO - Create a new getter and setter for SetDefaultTypeId
     void       SetDefaultId( sal_uInt16 n ) { nDefaultId = n; }
     sal_uInt16 GetDefaultId() const { return nDefaultId; }
     bool       IsOptional() const{ return bOpt;     }
