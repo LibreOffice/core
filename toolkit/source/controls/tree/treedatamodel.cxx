@@ -117,11 +117,6 @@ public:
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
-    static Reference< XTreeNode > getReference( MutableTreeNode* pNode )
-    {
-        return Reference< XTreeNode >( pNode );
-    }
-
 private:
     TreeNodeVector  maChildren;
     Any maDisplayValue;
@@ -276,9 +271,7 @@ void MutableTreeNode::broadcast_changes()
 {
     if( mxModel.is() )
     {
-        Reference< XTreeNode > xParent( getReference( mpParent ) );
-        Reference< XTreeNode > xNode( getReference( this ) );
-        mxModel->broadcast( nodes_changed, xParent, xNode );
+        mxModel->broadcast( nodes_changed, mpParent, this );
     }
 }
 
@@ -286,8 +279,7 @@ void MutableTreeNode::broadcast_changes(const Reference< XTreeNode >& xNode, boo
 {
     if( mxModel.is() )
     {
-        Reference< XTreeNode > xParent( getReference( this ) );
-        mxModel->broadcast( bNew ? nodes_inserted : nodes_removed, xParent, xNode );
+        mxModel->broadcast( bNew ? nodes_inserted : nodes_removed, this, xNode );
     }
 }
 
@@ -361,7 +353,7 @@ void SAL_CALL MutableTreeNode::removeChildByIndex( sal_Int32 nChildIndex )
     xImpl->setParent(nullptr);
     xImpl->mbIsInserted = false;
 
-    broadcast_changes( getReference( xImpl.get() ), false );
+    broadcast_changes( xImpl, false );
 }
 
 void SAL_CALL MutableTreeNode::setHasChildrenOnDemand( sal_Bool bChildrenOnDemand )
@@ -436,7 +428,7 @@ Reference< XTreeNode > SAL_CALL MutableTreeNode::getChildAt( sal_Int32 nChildInd
 
     if( (nChildIndex < 0) || (nChildIndex >= static_cast<sal_Int32>(maChildren.size())) )
         throw IndexOutOfBoundsException();
-    return getReference( maChildren[nChildIndex].get() );
+    return maChildren[nChildIndex];
 }
 
 sal_Int32 SAL_CALL MutableTreeNode::getChildCount(  )
@@ -448,7 +440,7 @@ sal_Int32 SAL_CALL MutableTreeNode::getChildCount(  )
 Reference< XTreeNode > SAL_CALL MutableTreeNode::getParent(  )
 {
     std::scoped_lock aGuard( maMutex );
-    return getReference( mpParent );
+    return mpParent;
 }
 
 sal_Int32 SAL_CALL MutableTreeNode::getIndex( const Reference< XTreeNode >& xNode )
