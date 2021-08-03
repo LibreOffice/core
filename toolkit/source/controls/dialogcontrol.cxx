@@ -23,7 +23,6 @@
 
 #include <sal/types.h>
 #include <vcl/svapp.hxx>
-#include <osl/mutex.hxx>
 #include <controls/dialogcontrol.hxx>
 #include <controls/geometrycontrolmodel.hxx>
 #include <toolkit/helper/property.hxx>
@@ -50,6 +49,7 @@
 #include <awt/vclxwindows.hxx>
 #include <helper/unopropertyarrayhelper.hxx>
 #include "controlmodelcontainerbase_internal.hxx"
+#include <mutex>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -73,40 +73,43 @@ template< typename T >
 class SimpleNamedThingContainer : public ::cppu::WeakImplHelper< container::XNameContainer >
 {
     std::unordered_map< OUString, Reference< T > > things;
-    ::osl::Mutex m_aMutex;
+    std::mutex m_aMutex;
 public:
     // css::container::XNameContainer, XNameReplace, XNameAccess
     virtual void SAL_CALL replaceByName( const OUString& aName, const Any& aElement ) override
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
-        if ( !hasByName( aName ) )
+        std::scoped_lock aGuard( m_aMutex );
+        auto it = things.find( aName );
+        if ( it == things.end() )
             throw NoSuchElementException();
         Reference< T > xElement;
         if ( ! ( aElement >>= xElement ) )
             throw IllegalArgumentException();
-        things[ aName ] = xElement;
+        it->second = xElement;
     }
     virtual Any SAL_CALL getByName( const OUString& aName ) override
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
-        if ( !hasByName( aName ) )
+        std::scoped_lock aGuard( m_aMutex );
+        auto it = things.find( aName );
+        if ( it == things.end() )
             throw NoSuchElementException();
-        return uno::makeAny( things[ aName ] );
+        return uno::makeAny( it->second );
     }
     virtual Sequence< OUString > SAL_CALL getElementNames(  ) override
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
         return comphelper::mapKeysToSequence( things );
     }
     virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) override
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
         return ( things.find( aName ) != things.end() );
     }
     virtual void SAL_CALL insertByName( const OUString& aName, const Any& aElement ) override
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
-        if ( hasByName( aName ) )
+        std::scoped_lock aGuard( m_aMutex );
+        auto it = things.find( aName );
+        if ( it != things.end() )
             throw ElementExistException();
         Reference< T > xElement;
         if ( ! ( aElement >>= xElement ) )
@@ -115,7 +118,7 @@ public:
     }
     virtual void SAL_CALL removeByName( const OUString& aName ) override
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
         if ( things.erase( aName ) == 0 )
             throw NoSuchElementException();
     }
@@ -125,8 +128,8 @@ public:
     }
     virtual sal_Bool SAL_CALL hasElements(  ) override
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
-        return ( !things.empty() );
+        std::scoped_lock aGuard( m_aMutex );
+        return !things.empty();
     }
 };
 
