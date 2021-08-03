@@ -415,7 +415,7 @@
                             <child>
                               <object class="GtkTreeViewColumn" id="properties_treeviewcolumn1">
                                 <property name="resizable">True</property>
-                                <property name="title" translatable="yes" context="developmenttool|object">Object</property>
+                                <property name="title" translatable="yes" context="developmenttool|name">Name</property>
                                 <property name="clickable">True</property>
                                 <property name="sort-indicator">True</property>
                                 <child>
