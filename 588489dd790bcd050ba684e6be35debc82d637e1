@@ -16,6 +16,24 @@
       "revId": "588489dd790bcd050ba684e6be35debc82d637e1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2a7e6dd6_7a4d3343",
+        "filename": "writerfilter/source/dmapper/GraphicImport.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2021-08-03T20:21:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "78dfccd6_83e24510",
+      "revId": "588489dd790bcd050ba684e6be35debc82d637e1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
