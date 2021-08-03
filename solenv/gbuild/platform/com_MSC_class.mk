@@ -470,11 +470,7 @@ endef
 gb_CppunitTest_UNITTESTFAILED := $(GBUILDDIR)/platform/unittest-failed-WNT.sh
 gb_CppunitTest_PYTHONDEPS := $(call gb_Package_get_target,python3)
 gb_CppunitTest_DEFS := -D_DLL
-ifeq ($(GNUMAKE_WIN_NATIVE),TRUE)
-gb_CppunitTest_CPPTESTPRECOMMAND := $(call gb_Helper_prepend_ld_path,$(shell cygpath -w $(gb_Library_DLLDIR));$(shell cygpath -w $(WORKDIR)/UnpackedTarball/cppunit/src/cppunit/$(if $(MSVC_USE_DEBUG_RUNTIME),DebugDll,ReleaseDll)))
-else
 gb_CppunitTest_CPPTESTPRECOMMAND := $(call gb_Helper_prepend_ld_path,$(shell cygpath -u $(gb_Library_DLLDIR)):$(shell cygpath -u $(WORKDIR)/UnpackedTarball/cppunit/src/cppunit/$(if $(MSVC_USE_DEBUG_RUNTIME),DebugDll,ReleaseDll)))
-endif
 gb_CppunitTest_get_filename = test_$(1).dll
 gb_CppunitTest_get_ilibfilename = itest_$(1).lib
 
