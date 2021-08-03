@@ -198,6 +198,8 @@ void CustomAnimationPane::initialize()
         OSL_FAIL( "sd::CustomAnimationPane::CustomAnimationPane(), Exception caught!" );
     }
 
+    // tdf#137637 keep user selection during initialization
+    ScopeLockGuard aGuard(maSelectionLock);
     // get current page and update custom animation list
     onChangeCurrentPage();
 
