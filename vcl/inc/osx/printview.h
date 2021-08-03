@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_OSX_PRINTVIEW_H
-#define INCLUDED_VCL_INC_OSX_PRINTVIEW_H
+#pragma once
 
 #include <premac.h>
 #include <Cocoa/Cocoa.h>
@@ -58,6 +57,6 @@ struct PrintAccessoryViewState
                     withState: (PrintAccessoryViewState*)pState;
 @end
 
-#endif // INCLUDED_VCL_INC_OSX_PRINTVIEW_H
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
