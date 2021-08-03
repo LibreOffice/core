@@ -318,7 +318,7 @@ void JsonWriter::put(const char* pPropName, int nPropVal)
     memcpy(mPos, "\": ", 3);
     mPos += 3;
 
-    mPos += sprintf(mPos, "%d", nPropVal);
+    mPos += sprintf(mPos, "\"%d\"", nPropVal);
 }
 
 void JsonWriter::putRaw(const rtl::OStringBuffer& rRawBuf)
