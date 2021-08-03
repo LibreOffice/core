@@ -34,6 +34,24 @@
       "revId": "67f2a99229101757af4f40118f4d3c83ba38648b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9d109aaf_17883957",
+        "filename": "writerfilter/source/dmapper/GraphicImport.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 563,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-03T20:31:42Z",
+      "side": 1,
+      "message": "You are absolutely right! Thanks for the explanation!",
+      "parentUuid": "7c80fbf3_70c2cb65",
+      "revId": "67f2a99229101757af4f40118f4d3c83ba38648b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
