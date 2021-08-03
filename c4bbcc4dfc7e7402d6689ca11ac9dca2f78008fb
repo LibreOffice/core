@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7e46daa9_318b2ccf",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-03T17:20:45Z",
+      "side": 1,
+      "message": "What is special with \"D:\\FOO\"? Asking because I use SRCDIR \u003d C:\\lo\\src\\core, BUILDDIR \u003d C:\\lo\\src\\build, and this seems to be OK, so not a corner case.",
+      "range": {
+        "startLine": 17,
+        "startChar": 36,
+        "endLine": 17,
+        "endChar": 42
+      },
+      "revId": "c4bbcc4dfc7e7402d6689ca11ac9dca2f78008fb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
