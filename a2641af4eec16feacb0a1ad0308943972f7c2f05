@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d40f364c_2ed9406b",
+        "filename": "jvmfwk/source/framework.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-08-03T07:43:56Z",
+      "side": 1,
+      "message": "commit message says \"missing lib/ directory\" while code says \"/bin\"?",
+      "range": {
+        "startLine": 211,
+        "startChar": 68,
+        "endLine": 211,
+        "endChar": 72
+      },
+      "revId": "a2641af4eec16feacb0a1ad0308943972f7c2f05",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
