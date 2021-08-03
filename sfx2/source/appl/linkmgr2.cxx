@@ -28,6 +28,7 @@
 #include <tools/urlobj.hxx>
 #include <sot/exchange.hxx>
 #include <tools/debug.hxx>
+#include <vcl/filter/SvmReader.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/gdimtf.hxx>
@@ -552,7 +553,8 @@ bool LinkManager::GetGraphicFromAny(const OUString& rMimeType,
         case SotClipboardFormatId::GDIMETAFILE:
             {
                 GDIMetaFile aMtf;
-                aMtf.Read( aMemStm );
+                SvmReader aReader( aMemStm );
+                aReader.Read( aMtf );
                 rGraphic = aMtf;
                 bRet = true;
             }
