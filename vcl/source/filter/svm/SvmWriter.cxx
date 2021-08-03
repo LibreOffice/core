@@ -197,6 +197,13 @@ void SvmWriter::MetaActionHandler(MetaAction* pAction, ImplMetaWriteData* pData)
         }
         break;
 
+        case MetaActionType::OVERLINECOLOR:
+        {
+            auto* pMetaAction = static_cast<MetaOverlineColorAction*>(pAction);
+            OverlineColorHandler(pMetaAction);
+        }
+        break;
+
         /* default case prevents test failure and will be
         removed once all the handlers are completed */
         default:
@@ -447,5 +454,13 @@ void SvmWriter::TextLineHandler(MetaTextLineAction* pAction)
     mrStream.WriteUInt32(pAction->GetUnderline());
     // new in version 2
     mrStream.WriteUInt32(pAction->GetOverline());
+}
+
+void SvmWriter::OverlineColorHandler(MetaOverlineColorAction* pAction)
+{
+    mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
+    VersionCompatWrite aCompat(mrStream, 1);
+    WriteColor(pAction->GetColor());
+    mrStream.WriteBool(pAction->IsSetting());
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
