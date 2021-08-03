@@ -26,6 +26,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/ref.hxx>
 #include <toolkit/helper/mutexandbroadcasthelper.hxx>
+#include <mutex>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -126,7 +127,7 @@ private:
     Any maDisplayValue;
     Any maDataValue;
     bool mbHasChildrenOnDemand;
-    ::osl::Mutex maMutex;
+    std::mutex maMutex;
     MutableTreeNode* mpParent;
     MutableTreeDataModelRef mxModel;
     OUString maNodeGraphicURL;
@@ -292,19 +293,19 @@ void MutableTreeNode::broadcast_changes(const Reference< XTreeNode >& xNode, boo
 
 Any SAL_CALL MutableTreeNode::getDataValue()
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( maMutex );
+    std::scoped_lock aGuard( maMutex );
     return maDataValue;
 }
 
 void SAL_CALL MutableTreeNode::setDataValue( const Any& _datavalue )
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( maMutex );
+    std::scoped_lock aGuard( maMutex );
     maDataValue = _datavalue;
 }
 
 void SAL_CALL MutableTreeNode::appendChild( const Reference< XMutableTreeNode >& xChildNode )
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( maMutex );
+    std::scoped_lock aGuard( maMutex );
     MutableTreeNodeRef xImpl( dynamic_cast< MutableTreeNode* >( xChildNode.get() ) );
 
     if( !xImpl.is() || xImpl->mbIsInserted || (this == xImpl.get()) )
@@ -319,7 +320,7 @@ void SAL_CALL MutableTreeNode::appendChild( const Reference< XMutableTreeNode >&
 
 void SAL_CALL MutableTreeNode::insertChildByIndex( sal_Int32 nChildIndex, const Reference< XMutableTreeNode >& xChildNode )
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( maMutex );
+    std::scoped_lock aGuard( maMutex );
 
     if( (nChildIndex < 0) || (nChildIndex > static_cast<sal_Int32>(maChildren.size())) )
         throw IndexOutOfBoundsException();
@@ -341,7 +342,7 @@ void SAL_CALL MutableTreeNode::insertChildByIndex( sal_Int32 nChildIndex, const 
 
 void SAL_CALL MutableTreeNode::removeChildByIndex( sal_Int32 nChildIndex )
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( maMutex );
+    std::scoped_lock aGuard( maMutex );
 
     if( (nChildIndex < 0) || (nChildIndex >= static_cast<sal_Int32>(maChildren.size())) )
         throw IndexOutOfBoundsException();
@@ -368,7 +369,7 @@ void SAL_CALL MutableTreeNode::setHasChildrenOnDemand( sal_Bool bChildrenOnDeman
     bool bChanged;
 
     {
-        ::osl::Guard< ::osl::Mutex > aGuard( maMutex );
+        std::scoped_lock aGuard( maMutex );
         bChanged = mbHasChildrenOnDemand != bool(bChildrenOnDemand);
         mbHasChildrenOnDemand = bChildrenOnDemand;
     }
@@ -380,7 +381,7 @@ void SAL_CALL MutableTreeNode::setHasChildrenOnDemand( sal_Bool bChildrenOnDeman
 void SAL_CALL MutableTreeNode::setDisplayValue( const Any& aValue )
 {
     {
-        ::osl::Guard< ::osl::Mutex > aGuard( maMutex );
+        std::scoped_lock aGuard( maMutex );
         maDisplayValue = aValue;
     }
 
@@ -392,7 +393,7 @@ void SAL_CALL MutableTreeNode::setNodeGraphicURL( const OUString& rURL )
     bool bChanged;
 
     {
-        ::osl::Guard< ::osl::Mutex > aGuard( maMutex );
+        std::scoped_lock aGuard( maMutex );
         bChanged = maNodeGraphicURL != rURL;
         maNodeGraphicURL = rURL;
     }
@@ -406,7 +407,7 @@ void SAL_CALL MutableTreeNode::setExpandedGraphicURL( const OUString& rURL )
     bool bChanged;
 
     {
-        ::osl::Guard< ::osl::Mutex > aGuard( maMutex );
+        std::scoped_lock aGuard( maMutex );
         bChanged = maExpandedGraphicURL != rURL;
         maExpandedGraphicURL = rURL;
     }
@@ -420,7 +421,7 @@ void SAL_CALL MutableTreeNode::setCollapsedGraphicURL( const OUString& rURL )
     bool bChanged;
 
     {
-        ::osl::Guard< ::osl::Mutex > aGuard( maMutex );
+        std::scoped_lock aGuard( maMutex );
         bChanged = maCollapsedGraphicURL != rURL;
         maCollapsedGraphicURL = rURL;
     }
@@ -431,7 +432,7 @@ void SAL_CALL MutableTreeNode::setCollapsedGraphicURL( const OUString& rURL )
 
 Reference< XTreeNode > SAL_CALL MutableTreeNode::getChildAt( sal_Int32 nChildIndex )
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( maMutex );
+    std::scoped_lock aGuard( maMutex );
 
     if( (nChildIndex < 0) || (nChildIndex >= static_cast<sal_Int32>(maChildren.size())) )
         throw IndexOutOfBoundsException();
@@ -440,19 +441,19 @@ Reference< XTreeNode > SAL_CALL MutableTreeNode::getChildAt( sal_Int32 nChildInd
 
 sal_Int32 SAL_CALL MutableTreeNode::getChildCount(  )
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( maMutex );
+    std::scoped_lock aGuard( maMutex );
     return static_cast<sal_Int32>(maChildren.size());
 }
 
 Reference< XTreeNode > SAL_CALL MutableTreeNode::getParent(  )
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( maMutex );
+    std::scoped_lock aGuard( maMutex );
     return getReference( mpParent );
 }
 
 sal_Int32 SAL_CALL MutableTreeNode::getIndex( const Reference< XTreeNode >& xNode )
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( maMutex );
+    std::scoped_lock aGuard( maMutex );
 
     MutableTreeNodeRef xImpl( dynamic_cast< MutableTreeNode* >( xNode.get() ) );
     if( xImpl.is() )
@@ -470,31 +471,31 @@ sal_Int32 SAL_CALL MutableTreeNode::getIndex( const Reference< XTreeNode >& xNod
 
 sal_Bool SAL_CALL MutableTreeNode::hasChildrenOnDemand(  )
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( maMutex );
+    std::scoped_lock aGuard( maMutex );
     return mbHasChildrenOnDemand;
 }
 
 Any SAL_CALL MutableTreeNode::getDisplayValue(  )
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( maMutex );
+    std::scoped_lock aGuard( maMutex );
     return maDisplayValue;
 }
 
 OUString SAL_CALL MutableTreeNode::getNodeGraphicURL(  )
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( maMutex );
+    std::scoped_lock aGuard( maMutex );
     return maNodeGraphicURL;
 }
 
 OUString SAL_CALL MutableTreeNode::getExpandedGraphicURL(  )
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( maMutex );
+    std::scoped_lock aGuard( maMutex );
     return maExpandedGraphicURL;
 }
 
 OUString SAL_CALL MutableTreeNode::getCollapsedGraphicURL(  )
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( maMutex );
+    std::scoped_lock aGuard( maMutex );
     return maCollapsedGraphicURL;
 }
 
