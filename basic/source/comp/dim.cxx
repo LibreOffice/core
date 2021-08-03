@@ -994,7 +994,7 @@ SbiProcDef* SbiParser::ProcDecl( bool bDecl )
                         }
                         else
                         {
-                            nStringId = aGblStrings.Add( pDefaultExpr->GetValue(), eType2 );
+                            nStringId = aGblStrings.Add(pDefaultExpr->GetValue(), eType2);
                         }
                         pPar->SetDefaultId( nStringId );
                         pDefaultExpr.reset();
