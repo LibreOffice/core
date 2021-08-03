@@ -304,19 +304,6 @@ endif
 
 # Helper class
 
-ifeq ($(GNUMAKE_WIN_NATIVE),TRUE)
-gb_Helper_set_ld_path := PATH="$(shell cygpath -w $(INSTDIR)/$(LIBO_URE_LIB_FOLDER));$(shell cygpath -w $(INSTDIR)/$(LIBO_BIN_FOLDER));$$PATH"
-
-define gb_Helper_prepend_ld_path
-PATH="$(shell cygpath -w $(INSTDIR)/$(LIBO_URE_LIB_FOLDER));$(shell cygpath -w $(INSTDIR)/$(LIBO_BIN_FOLDER));$(1);$$PATH"
-endef
-
-# $(1): one directory pathname to append to the ld path
-define gb_Helper_extend_ld_path
-$(gb_Helper_set_ld_path)';$(shell cygpath -w $(1))'
-endef
-
-else
 gb_Helper_set_ld_path := PATH="$(shell cygpath -u $(INSTDIR)/$(LIBO_URE_LIB_FOLDER)):$(shell cygpath -u $(INSTDIR)/$(LIBO_BIN_FOLDER)):$$PATH"
 
 define gb_Helper_prepend_ld_path
@@ -325,9 +312,7 @@ endef
 
 # $(1): one directory pathname to append to the ld path
 define gb_Helper_extend_ld_path
-$(gb_Helper_set_ld_path):$(shell cygpath -u $(1))
+$(gb_Helper_set_ld_path)':$(shell cygpath -u $(1))'
 endef
-
-endif
 
 # vim: set noet sw=4:
