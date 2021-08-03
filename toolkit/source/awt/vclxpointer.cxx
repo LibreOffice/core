@@ -34,14 +34,14 @@ UNO3_GETIMPLEMENTATION_IMPL( VCLXPointer );
 
 void VCLXPointer::setType( sal_Int32 nType )
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    std::scoped_lock aGuard( maMutex );
 
     maPointer = static_cast<PointerStyle>(nType);
 }
 
 sal_Int32 VCLXPointer::getType()
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    std::scoped_lock aGuard( maMutex );
 
     return static_cast<sal_Int32>(maPointer);
 }
