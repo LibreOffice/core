@@ -1814,6 +1814,7 @@ bool SwContentTree::RequestingChildren(const weld::TreeIter& rParent)
         // Add for outline plus/minus
         if (pCntType->GetType() == ContentTypeId::OUTLINE)
         {
+            std::vector<std::unique_ptr<weld::TreeIter>> aInsertionPoints;
             for(size_t i = 0; i < nCount; ++i)
             {
                 const SwContent* pCnt = pCntType->GetMember(i);
@@ -1824,39 +1825,23 @@ bool SwContentTree::RequestingChildren(const weld::TreeIter& rParent)
                     if(sEntry.isEmpty())
                         sEntry = m_sSpace;
                     OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pCnt)));
-                    if (!bChild || (nLevel == 0))
+
+                    auto lamba = [nLevel, this](const std::unique_ptr<weld::TreeIter>& entry)
                     {
-                        insert(&rParent, sEntry, sId, false, xChild.get());
-                        m_xTreeView->set_sensitive(*xChild, !pCnt->IsInvisible());
-                        m_xTreeView->set_extra_row_indent(*xChild, nLevel + 1 - m_xTreeView->get_iter_depth(*xChild));
-                        bChild = true;
-                    }
+                        return lcl_IsEqGtrOutlineContent(*entry, *m_xTreeView, nLevel);
+                    };
+
+                    auto aFind = std::find_if_not(aInsertionPoints.rbegin(), aInsertionPoints.rend(), lamba);
+                    if (aFind != aInsertionPoints.rend())
+                        insert(aFind->get(), sEntry, sId, false, xChild.get());
                     else
-                    {
-                        //back search parent.
-                        if(static_cast<const SwOutlineContent*>(pCntType->GetMember(i-1))->GetOutlineLevel() < nLevel)
-                        {
-                            insert(xChild.get(), sEntry, sId, false, xChild.get());
-                            m_xTreeView->set_sensitive(*xChild, !pCnt->IsInvisible());
-                            m_xTreeView->set_extra_row_indent(*xChild, nLevel + 1 - m_xTreeView->get_iter_depth(*xChild));
-                            bChild = true;
-                        }
-                        else
-                        {
-                            bChild = m_xTreeView->iter_previous(*xChild);
-                            assert(!bChild || lcl_IsContentType(*xChild, *m_xTreeView) || dynamic_cast<SwOutlineContent*>(reinterpret_cast<SwTypeNumber*>(m_xTreeView->get_id(*xChild).toInt64())));
-                            while (bChild && lcl_IsEqGtrOutlineContent(*xChild, *m_xTreeView, nLevel))
-                            {
-                                bChild = m_xTreeView->iter_previous(*xChild);
-                            }
-                            if (bChild)
-                            {
-                                insert(xChild.get(), sEntry, sId, false, xChild.get());
-                                m_xTreeView->set_sensitive(*xChild, !pCnt->IsInvisible());
-                                m_xTreeView->set_extra_row_indent(*xChild, nLevel + 1 - m_xTreeView->get_iter_depth(*xChild));
-                            }
-                        }
-                    }
+                        insert(&rParent, sEntry, sId, false, xChild.get());
+                    m_xTreeView->set_sensitive(*xChild, !pCnt->IsInvisible());
+                    m_xTreeView->set_extra_row_indent(*xChild, nLevel + 1 - m_xTreeView->get_iter_depth(*xChild));
+
+                    aInsertionPoints.erase(std::remove_if(aInsertionPoints.begin(), aInsertionPoints.end(),
+                                                          lamba), aInsertionPoints.end());
+                    aInsertionPoints.emplace_back(m_xTreeView->make_iterator(xChild.get()));
                 }
             }
         }
