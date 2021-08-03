@@ -27,8 +27,9 @@
 #include <mutex>
 #include <thread>
 #include <sstream>
+#include <unotools/resmgr.hxx>
 
-OUString getResString(const char* pResId);
+OUString getResString(TranslateId pResId);
 
 class Gtk3KDE5FilePickerIpc
 {
