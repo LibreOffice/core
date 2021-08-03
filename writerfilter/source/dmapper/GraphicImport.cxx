@@ -559,8 +559,9 @@ void GraphicImport::lcl_correctWord2007EffectExtent(const sal_Int32 nMSOAngle)
     sal_Int16 nAngleDeg = (nMSOAngle / 60000) % 180;
     if (nAngleDeg >= 45 && nAngleDeg < 135)
     {
-        sal_Int32 nDiff = o3tl::convert((m_pImpl->getXSize() - m_pImpl->getYSize()) / 2.0,
-                                     o3tl::Length::mm100, o3tl::Length::emu);
+        sal_Int32 nDiff = o3tl::convert(
+            (double(m_pImpl->getXSize()) - double(m_pImpl->getYSize())) / 2.0,
+            o3tl::Length::mm100, o3tl::Length::emu);
         if (m_pImpl->m_oEffectExtentLeft)
             *m_pImpl->m_oEffectExtentLeft += nDiff;
         if (m_pImpl->m_oEffectExtentRight)
