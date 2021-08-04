@@ -506,14 +506,20 @@ void SfxLokHelper::notifyWindow(const SfxViewShell* pThisView,
     pThisView->libreOfficeKitViewCallback(LOK_CALLBACK_WINDOW, s.getStr());
 }
 
+<<<<<<< HEAD   (d65e17 calc: get rects faster for simple selection)
 void SfxLokHelper::notifyInvalidation(SfxViewShell const* pThisView, const OString& rPayload)
+=======
+void SfxLokHelper::notifyInvalidation(SfxViewShell const* pThisView, tools::Rectangle const* pRect)
+>>>>>>> CHANGE (417f88 improve LOK notifyInvalidation)
 {
-    OStringBuffer aBuf(32);
-
     if (DisableCallbacks::disabled())
         return;
 
-    aBuf.append(rPayload);
+    OStringBuffer aBuf(64);
+    if (pRect)
+        aBuf.append(pRect->toString());
+    else
+        aBuf.append("EMPTY");
     if (comphelper::LibreOfficeKit::isPartInInvalidation())
     {
         aBuf.append(", ");
