@@ -23,6 +23,9 @@
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 
+#include <functional>
+#include <unordered_set>
+
 struct CurrentEntry final
 {
     OUString m_aCommandURL;
@@ -56,6 +59,7 @@ private:
     MenuContent m_aMenuContent;
     OUString m_sModuleLongName;
     OUString toLower(OUString const& rString);
+    std::unordered_set<OUString> m_aAdded;
 
 public:
     MenuContentHandler(css::uno::Reference<css::frame::XFrame> const& xFrame);
@@ -67,9 +71,14 @@ public:
                     std::vector<CurrentEntry>& rCommandList);
 
 private:
-    void findInMenuRecursive(MenuContent const& rMenuContent, OUString const& rText,
-                             std::unique_ptr<weld::TreeView>& rpCommandTreeView,
-                             std::vector<CurrentEntry>& rCommandList);
+    void findInMenuRecursive(
+        MenuContent const& rMenuContent, OUString const& rText,
+        std::unique_ptr<weld::TreeView>& rpCommandTreeView, std::vector<CurrentEntry>& rCommandList,
+        std::function<bool(MenuContent const&, OUString const&)> const& rSearchCriterium);
+
+    void addCommandIfPossible(MenuContent const& rMenuContent,
+                              std::unique_ptr<weld::TreeView>& rpCommandTreeView,
+                              std::vector<CurrentEntry>& rCommandList);
 };
 
 class CommandListBox final
