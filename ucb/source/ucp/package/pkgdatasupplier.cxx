@@ -24,9 +24,7 @@
 
  *************************************************************************/
 
-#include <vector>
 #include <osl/diagnose.h>
-#include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/ucb/IllegalIdentifierException.hpp>
 #include <com/sun/star/ucb/ResultSetException.hpp>
@@ -41,59 +39,15 @@
 using namespace com::sun::star;
 using namespace package_ucp;
 
-namespace package_ucp
-{
-
-
-// struct ResultListEntry.
-
-namespace {
-
-struct ResultListEntry
-{
-    OUString                                  aURL;
-    uno::Reference< ucb::XContentIdentifier > xId;
-    uno::Reference< ucb::XContent >           xContent;
-    uno::Reference< sdbc::XRow >              xRow;
-
-    explicit ResultListEntry( const OUString& rURL ) : aURL( rURL ) {}
-};
-
-}
-
-// struct DataSupplier_Impl.
-
-
-struct DataSupplier_Impl
-{
-    osl::Mutex                                   m_aMutex;
-    std::vector< ResultListEntry >               m_aResults;
-    rtl::Reference< Content >                    m_xContent;
-    uno::Reference< uno::XComponentContext >     m_xContext;
-    uno::Reference< container::XEnumeration >    m_xFolderEnum;
-    bool                                     m_bCountFinal;
-    bool                                     m_bThrowException;
-
-    DataSupplier_Impl(
-            const uno::Reference< uno::XComponentContext >& rxContext,
-            const rtl::Reference< Content >& rContent )
-    : m_xContent( rContent ), m_xContext( rxContext ),
-      m_xFolderEnum( rContent->getIterator() ),
-      m_bCountFinal( !m_xFolderEnum.is() ), m_bThrowException( m_bCountFinal )
-    {}
-};
-
-
-}
-
-
 // DataSupplier Implementation.
 
 
 DataSupplier::DataSupplier(
                 const uno::Reference< uno::XComponentContext >& rxContext,
                 const rtl::Reference< Content >& rContent )
-: m_pImpl( new DataSupplier_Impl( rxContext, rContent ) )
+: m_xContent( rContent ), m_xContext( rxContext ),
+  m_xFolderEnum( rContent->getIterator() ),
+  m_bCountFinal( !m_xFolderEnum.is() ), m_bThrowException( m_bCountFinal )
 {
 }
 
@@ -107,11 +61,11 @@ DataSupplier::~DataSupplier()
 // virtual
 OUString DataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )
 {
-    osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
+    osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
-    if ( nIndex < m_pImpl->m_aResults.size() )
+    if ( nIndex < m_aResults.size() )
     {
-        OUString aId = m_pImpl->m_aResults[ nIndex ].aURL;
+        OUString aId = m_aResults[ nIndex ].aURL;
         if ( !aId.isEmpty() )
         {
             // Already cached.
@@ -121,8 +75,8 @@ OUString DataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )
 
     if ( getResult( nIndex ) )
     {
-        // Note: getResult fills m_pImpl->m_aResults[ nIndex ].aURL.
-        return m_pImpl->m_aResults[ nIndex ].aURL;
+        // Note: getResult fills m_aResults[ nIndex ].aURL.
+        return m_aResults[ nIndex ].aURL;
     }
     return OUString();
 }
@@ -132,12 +86,12 @@ OUString DataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )
 uno::Reference< ucb::XContentIdentifier >
 DataSupplier::queryContentIdentifier( sal_uInt32 nIndex )
 {
-    osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
+    osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
-    if ( nIndex < m_pImpl->m_aResults.size() )
+    if ( nIndex < m_aResults.size() )
     {
         uno::Reference< ucb::XContentIdentifier >& xId
-                                = m_pImpl->m_aResults[ nIndex ].xId;
+                                = m_aResults[ nIndex ].xId;
         if ( xId.is() )
         {
             // Already cached.
@@ -150,7 +104,7 @@ DataSupplier::queryContentIdentifier( sal_uInt32 nIndex )
     {
         uno::Reference< ucb::XContentIdentifier > xId
             = new ::ucbhelper::ContentIdentifier( aId );
-        m_pImpl->m_aResults[ nIndex ].xId = xId;
+        m_aResults[ nIndex ].xId = xId;
         return xId;
     }
     return uno::Reference< ucb::XContentIdentifier >();
@@ -161,12 +115,12 @@ DataSupplier::queryContentIdentifier( sal_uInt32 nIndex )
 uno::Reference< ucb::XContent > DataSupplier::queryContent(
                                                         sal_uInt32 nIndex )
 {
-    osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
+    osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
-    if ( nIndex < m_pImpl->m_aResults.size() )
+    if ( nIndex < m_aResults.size() )
     {
         uno::Reference< ucb::XContent >& xContent
-                                = m_pImpl->m_aResults[ nIndex ].xContent;
+                                = m_aResults[ nIndex ].xContent;
         if ( xContent.is() )
         {
             // Already cached.
@@ -181,8 +135,8 @@ uno::Reference< ucb::XContent > DataSupplier::queryContent(
         try
         {
             uno::Reference< ucb::XContent > xContent
-                = m_pImpl->m_xContent->getProvider()->queryContent( xId );
-            m_pImpl->m_aResults[ nIndex ].xContent = xContent;
+                = m_xContent->getProvider()->queryContent( xId );
+            m_aResults[ nIndex ].xContent = xContent;
             return xContent;
 
         }
@@ -197,9 +151,9 @@ uno::Reference< ucb::XContent > DataSupplier::queryContent(
 // virtual
 bool DataSupplier::getResult( sal_uInt32 nIndex )
 {
-    osl::ClearableGuard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
+    osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
 
-    if ( m_pImpl->m_aResults.size() > nIndex )
+    if ( m_aResults.size() > nIndex )
     {
         // Result already present.
         return true;
@@ -207,21 +161,21 @@ bool DataSupplier::getResult( sal_uInt32 nIndex )
 
     // Result not (yet) present.
 
-    if ( m_pImpl->m_bCountFinal )
+    if ( m_bCountFinal )
         return false;
 
     // Try to obtain result...
 
-    sal_uInt32 nOldCount = m_pImpl->m_aResults.size();
+    sal_uInt32 nOldCount = m_aResults.size();
     bool bFound = false;
     sal_uInt32 nPos = nOldCount;
 
-    while ( m_pImpl->m_xFolderEnum->hasMoreElements() )
+    while ( m_xFolderEnum->hasMoreElements() )
     {
         try
         {
             uno::Reference< container::XNamed > xNamed;
-            m_pImpl->m_xFolderEnum->nextElement() >>= xNamed;
+            m_xFolderEnum->nextElement() >>= xNamed;
 
             if ( !xNamed.is() )
             {
@@ -240,7 +194,7 @@ bool DataSupplier::getResult( sal_uInt32 nIndex )
             // Assemble URL for child.
             OUString aURL = assembleChildURL( aName );
 
-            m_pImpl->m_aResults.push_back( ResultListEntry( aURL ) );
+            m_aResults.push_back( ResultListEntry( aURL ) );
 
             if ( nPos == nIndex )
             {
@@ -253,18 +207,18 @@ bool DataSupplier::getResult( sal_uInt32 nIndex )
         }
         catch ( container::NoSuchElementException const & )
         {
-            m_pImpl->m_bThrowException = true;
+            m_bThrowException = true;
             break;
         }
         catch ( lang::WrappedTargetException const & )
         {
-            m_pImpl->m_bThrowException = true;
+            m_bThrowException = true;
             break;
         }
     }
 
     if ( !bFound )
-        m_pImpl->m_bCountFinal = true;
+        m_bCountFinal = true;
 
     rtl::Reference< ::ucbhelper::ResultSet > xResultSet = getResultSet();
     if ( xResultSet.is() )
@@ -272,11 +226,11 @@ bool DataSupplier::getResult( sal_uInt32 nIndex )
         // Callbacks follow!
         aGuard.clear();
 
-        if ( nOldCount < m_pImpl->m_aResults.size() )
+        if ( nOldCount < m_aResults.size() )
             xResultSet->rowCountChanged(
-                                    nOldCount, m_pImpl->m_aResults.size() );
+                                    nOldCount, m_aResults.size() );
 
-        if ( m_pImpl->m_bCountFinal )
+        if ( m_bCountFinal )
             xResultSet->rowCountFinal();
     }
 
@@ -287,19 +241,19 @@ bool DataSupplier::getResult( sal_uInt32 nIndex )
 // virtual
 sal_uInt32 DataSupplier::totalCount()
 {
-    osl::ClearableGuard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
+    osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
 
-    if ( m_pImpl->m_bCountFinal )
-        return m_pImpl->m_aResults.size();
+    if ( m_bCountFinal )
+        return m_aResults.size();
 
-    sal_uInt32 nOldCount = m_pImpl->m_aResults.size();
+    sal_uInt32 nOldCount = m_aResults.size();
 
-    while ( m_pImpl->m_xFolderEnum->hasMoreElements() )
+    while ( m_xFolderEnum->hasMoreElements() )
     {
         try
         {
             uno::Reference< container::XNamed > xNamed;
-            m_pImpl->m_xFolderEnum->nextElement() >>= xNamed;
+            m_xFolderEnum->nextElement() >>= xNamed;
 
             if ( !xNamed.is() )
             {
@@ -318,21 +272,21 @@ sal_uInt32 DataSupplier::totalCount()
             // Assemble URL for child.
             OUString aURL = assembleChildURL( aName );
 
-            m_pImpl->m_aResults.push_back( ResultListEntry( aURL ) );
+            m_aResults.push_back( ResultListEntry( aURL ) );
         }
         catch ( container::NoSuchElementException const & )
         {
-            m_pImpl->m_bThrowException = true;
+            m_bThrowException = true;
             break;
         }
         catch ( lang::WrappedTargetException const & )
         {
-            m_pImpl->m_bThrowException = true;
+            m_bThrowException = true;
             break;
         }
     }
 
-    m_pImpl->m_bCountFinal = true;
+    m_bCountFinal = true;
 
     rtl::Reference< ::ucbhelper::ResultSet > xResultSet = getResultSet();
     if ( xResultSet.is() )
@@ -340,28 +294,28 @@ sal_uInt32 DataSupplier::totalCount()
         // Callbacks follow!
         aGuard.clear();
 
-        if ( nOldCount < m_pImpl->m_aResults.size() )
+        if ( nOldCount < m_aResults.size() )
             xResultSet->rowCountChanged(
-                                    nOldCount, m_pImpl->m_aResults.size() );
+                                    nOldCount, m_aResults.size() );
 
         xResultSet->rowCountFinal();
     }
 
-    return m_pImpl->m_aResults.size();
+    return m_aResults.size();
 }
 
 
 // virtual
 sal_uInt32 DataSupplier::currentCount()
 {
-    return m_pImpl->m_aResults.size();
+    return m_aResults.size();
 }
 
 
 // virtual
 bool DataSupplier::isCountFinal()
 {
-    return m_pImpl->m_bCountFinal;
+    return m_bCountFinal;
 }
 
 
@@ -369,11 +323,11 @@ bool DataSupplier::isCountFinal()
 uno::Reference< sdbc::XRow > DataSupplier::queryPropertyValues(
                                                         sal_uInt32 nIndex  )
 {
-    osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
+    osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
-    if ( nIndex < m_pImpl->m_aResults.size() )
+    if ( nIndex < m_aResults.size() )
     {
-        uno::Reference< sdbc::XRow >& xRow = m_pImpl->m_aResults[ nIndex ].xRow;
+        uno::Reference< sdbc::XRow >& xRow = m_aResults[ nIndex ].xRow;
         if ( xRow.is() )
         {
             // Already cached.
@@ -384,12 +338,12 @@ uno::Reference< sdbc::XRow > DataSupplier::queryPropertyValues(
     if ( getResult( nIndex ) )
     {
         uno::Reference< sdbc::XRow > xRow = Content::getPropertyValues(
-                        m_pImpl->m_xContext,
+                        m_xContext,
                         getResultSet()->getProperties(),
                         static_cast< ContentProvider * >(
-                            m_pImpl->m_xContent->getProvider().get() ),
+                            m_xContent->getProvider().get() ),
                         queryContentIdentifierString( nIndex ) );
-        m_pImpl->m_aResults[ nIndex ].xRow = xRow;
+        m_aResults[ nIndex ].xRow = xRow;
         return xRow;
     }
 
@@ -400,10 +354,10 @@ uno::Reference< sdbc::XRow > DataSupplier::queryPropertyValues(
 // virtual
 void DataSupplier::releasePropertyValues( sal_uInt32 nIndex )
 {
-    osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
+    osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
-    if ( nIndex < m_pImpl->m_aResults.size() )
-        m_pImpl->m_aResults[ nIndex ].xRow.clear();
+    if ( nIndex < m_aResults.size() )
+        m_aResults[ nIndex ].xRow.clear();
 }
 
 
@@ -416,7 +370,7 @@ void DataSupplier::close()
 // virtual
 void DataSupplier::validate()
 {
-    if ( m_pImpl->m_bThrowException )
+    if ( m_bThrowException )
         throw ucb::ResultSetException();
 }
 
@@ -425,7 +379,7 @@ OUString DataSupplier::assembleChildURL( const OUString& aName )
 {
     OUString aURL;
     OUString aContURL
-        = m_pImpl->m_xContent->getIdentifier()->getContentIdentifier();
+        = m_xContent->getIdentifier()->getContentIdentifier();
     sal_Int32 nParam = aContURL.indexOf( '?' );
     if ( nParam >= 0 )
     {

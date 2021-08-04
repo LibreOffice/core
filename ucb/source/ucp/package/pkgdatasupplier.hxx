@@ -21,17 +21,15 @@
 
 #include <rtl/ref.hxx>
 #include <ucbhelper/resultset.hxx>
-#include <memory>
+#include <com/sun/star/container/XEnumeration.hpp>
+#include <vector>
 
 namespace package_ucp {
 
-struct DataSupplier_Impl;
 class Content;
 
 class DataSupplier : public ::ucbhelper::ResultSetDataSupplier
 {
-    std::unique_ptr<DataSupplier_Impl> m_pImpl;
-
 public:
     DataSupplier( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                   const rtl::Reference< Content >& rContent );
@@ -58,6 +56,24 @@ public:
     virtual void validate() override;
 
     OUString assembleChildURL( const OUString& aName );
+
+private:
+    struct ResultListEntry
+    {
+        OUString                                  aURL;
+        css::uno::Reference< css::ucb::XContentIdentifier > xId;
+        css::uno::Reference< css::ucb::XContent >           xContent;
+        css::uno::Reference< css::sdbc::XRow >              xRow;
+
+        explicit ResultListEntry( const OUString& rURL ) : aURL( rURL ) {}
+    };
+    osl::Mutex                                   m_aMutex;
+    std::vector< ResultListEntry >               m_aResults;
+    rtl::Reference< Content >                    m_xContent;
+    css::uno::Reference< css::uno::XComponentContext >     m_xContext;
+    css::uno::Reference< css::container::XEnumeration >    m_xFolderEnum;
+    bool                                     m_bCountFinal;
+    bool                                     m_bThrowException;
 };
 
 }
