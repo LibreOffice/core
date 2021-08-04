@@ -951,20 +951,12 @@ void SAL_CALL SdStyleSheet::setParentStyle( const OUString& rParentName  )
     }
 }
 
-// XPropertySet
+// XPropertySet/XMultiPropertySet utility functions
 
-Reference< XPropertySetInfo > SdStyleSheet::getPropertySetInfo()
+// Does not broadcast
+// Must be guarded by solar mutex; must not be disposed
+void SdStyleSheet::setPropertyValue_Impl(const OUString& aPropertyName, const css::uno::Any& aValue)
 {
-    throwIfDisposed();
-    static Reference< XPropertySetInfo > xInfo = GetStylePropertySet().getPropertySetInfo();
-    return xInfo;
-}
-
-void SAL_CALL SdStyleSheet::setPropertyValue( const OUString& aPropertyName, const Any& aValue )
-{
-    SolarMutexGuard aGuard;
-    throwIfDisposed();
-
     const SfxItemPropertyMapEntry* pEntry = getPropertyMapEntry( aPropertyName );
     if( pEntry == nullptr )
     {
@@ -1058,16 +1050,11 @@ void SAL_CALL SdStyleSheet::setPropertyValue( const OUString& aPropertyName, con
     }
 
     rStyleSet.Put( aSet );
-    Broadcast(SfxHint(SfxHintId::DataChanged));
-
 }
 
-Any SAL_CALL SdStyleSheet::getPropertyValue( const OUString& PropertyName )
+// Must be guarded by solar mutex; must not be disposed
+css::uno::Any SAL_CALL SdStyleSheet::getPropertyValue_Impl(const OUString& PropertyName)
 {
-    SolarMutexGuard aGuard;
-
-    throwIfDisposed();
-
     const SfxItemPropertyMapEntry* pEntry = getPropertyMapEntry( PropertyName );
     if( pEntry == nullptr )
     {
@@ -1164,13 +1151,80 @@ Any SAL_CALL SdStyleSheet::getPropertyValue( const OUString& PropertyName )
     }
 
     return aAny;
+}
 
+// XPropertySet
+
+Reference< XPropertySetInfo > SdStyleSheet::getPropertySetInfo()
+{
+    throwIfDisposed();
+    static Reference< XPropertySetInfo > xInfo = GetStylePropertySet().getPropertySetInfo();
+    return xInfo;
+}
+
+void SAL_CALL SdStyleSheet::setPropertyValue( const OUString& aPropertyName, const Any& aValue )
+{
+    SolarMutexGuard aGuard;
+    throwIfDisposed();
+
+    setPropertyValue_Impl(aPropertyName, aValue);
+    Broadcast(SfxHint(SfxHintId::DataChanged));
+}
+
+Any SAL_CALL SdStyleSheet::getPropertyValue( const OUString& PropertyName )
+{
+    SolarMutexGuard aGuard;
+    throwIfDisposed();
+
+    return getPropertyValue_Impl(PropertyName);
 }
 
 void SAL_CALL SdStyleSheet::addPropertyChangeListener( const OUString& , const Reference< XPropertyChangeListener >&  ) {}
 void SAL_CALL SdStyleSheet::removePropertyChangeListener( const OUString& , const Reference< XPropertyChangeListener >&  ) {}
 void SAL_CALL SdStyleSheet::addVetoableChangeListener( const OUString& , const Reference< XVetoableChangeListener >&  ) {}
 void SAL_CALL SdStyleSheet::removeVetoableChangeListener( const OUString& , const Reference< XVetoableChangeListener >&  ) {}
+
+// XMultiPropertySet
+
+void SAL_CALL SdStyleSheet::setPropertyValues(const css::uno::Sequence<OUString>& aPropertyNames,
+                                              const css::uno::Sequence<css::uno::Any>& aValues)
+{
+    const sal_Int32 nCount = aPropertyNames.getLength();
+
+    if (nCount != aValues.getLength())
+        throw css::lang::IllegalArgumentException();
+
+    if (!nCount)
+        return;
+
+    SolarMutexGuard aGuard;
+    throwIfDisposed();
+
+    for (sal_Int32 i = 0; i < nCount; ++i)
+        setPropertyValue_Impl(aPropertyNames[i], aValues[i]);
+
+    Broadcast(SfxHint(SfxHintId::DataChanged));
+}
+
+css::uno::Sequence<css::uno::Any>
+SAL_CALL SdStyleSheet::getPropertyValues(const css::uno::Sequence<OUString>& aPropertyNames)
+{
+    SolarMutexGuard aGuard;
+    throwIfDisposed();
+
+    const sal_Int32 nCount = aPropertyNames.getLength();
+    css::uno::Sequence<css::uno::Any> aValues(nCount);
+    Any* pAny = aValues.getArray();
+
+    for (sal_Int32 i = 0; i < nCount; ++i)
+        pAny[i] = getPropertyValue_Impl(aPropertyNames[i]);
+
+    return aValues;
+}
+
+void SAL_CALL SdStyleSheet::addPropertiesChangeListener(const css::uno::Sequence<OUString>&, const css::uno::Reference<css::beans::XPropertiesChangeListener>&) {}
+void SAL_CALL SdStyleSheet::removePropertiesChangeListener(const css::uno::Reference<css::beans::XPropertiesChangeListener>&) {}
+void SAL_CALL SdStyleSheet::firePropertiesChangeEvent(const css::uno::Sequence<OUString>&, const css::uno::Reference<css::beans::XPropertiesChangeListener>&) {}
 
 // XPropertyState
 
