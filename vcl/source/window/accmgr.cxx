@@ -19,7 +19,7 @@
 
 
 #include <accel.h>
-#include <vcl/accel.hxx>
+#include <accel.hxx>
 #include <accmgr.hxx>
 
 #include <algorithm>

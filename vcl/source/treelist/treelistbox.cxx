@@ -27,7 +27,6 @@
 #include <vcl/accessiblefactory.hxx>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <vcl/svapp.hxx>
-#include <vcl/accel.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/toolkit/edit.hxx>
 #include <vcl/settings.hxx>
@@ -43,6 +42,7 @@
 #include <vcl/toolkit/svlbitm.hxx>
 #include <vcl/toolkit/treelistentry.hxx>
 #include <vcl/toolkit/viewdataentry.hxx>
+#include <accel.hxx>
 #include <svimpbox.hxx>
 
 #include <set>

@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-04-08 13:57:45 using:
+ Generated on 2021-08-04 20:14:15 using:
  ./bin/update_pch vcl vcl --cutoff=6 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -35,11 +35,11 @@
 #include <functional>
 #include <initializer_list>
 #include <iomanip>
-#include <limits.h>
 #include <limits>
 #include <map>
 #include <math.h>
 #include <memory>
+#include <mutex>
 #include <new>
 #include <optional>
 #include <ostream>
@@ -62,8 +62,11 @@
 #if PCH_LEVEL >= 2
 #include <osl/conditn.hxx>
 #include <osl/diagnose.h>
+#include <osl/doublecheckedlocking.h>
 #include <osl/endian.h>
+#include <osl/file.h>
 #include <osl/file.hxx>
+#include <osl/getglobalmutex.hxx>
 #include <osl/interlck.h>
 #include <osl/module.hxx>
 #include <osl/mutex.h>
@@ -116,6 +119,8 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/range/basicrange.hxx>
+#include <basegfx/tuple/Tuple2D.hxx>
+#include <basegfx/tuple/Tuple3D.hxx>
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/tuple/b2ituple.hxx>
 #include <basegfx/tuple/b3dtuple.hxx>
@@ -180,9 +185,6 @@
 #include <cppu/unotype.hxx>
 #include <cppuhelper/cppuhelperdllapi.h>
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/implbase_ex.hxx>
-#include <cppuhelper/implbase_ex_post.hxx>
-#include <cppuhelper/implbase_ex_pre.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
@@ -246,18 +248,21 @@
 #include <uno/sequence2.h>
 #include <unotools/configmgr.hxx>
 #include <unotools/localedatawrapper.hxx>
+#include <unotools/syslocale.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/unotoolsdllapi.h>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
 #include <PhysicalFontCollection.hxx>
 #include <PhysicalFontFace.hxx>
+#include <accel.hxx>
 #include <brdwin.hxx>
 #include <configsettings.hxx>
 #include <fontattributes.hxx>
 #include <impglyphitem.hxx>
 #include <outdev.h>
 #include <salbmp.hxx>
+#include <saldatabasic.hxx>
 #include <salframe.hxx>
 #include <salgdi.hxx>
 #include <salgdiimpl.hxx>
@@ -282,7 +287,6 @@
 #include <vcl/FilterConfigItem.hxx>
 #include <vcl/QueueInfo.hxx>
 #include <vcl/TypeSerializer.hxx>
-#include <vcl/accel.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
@@ -302,6 +306,7 @@
 #include <vcl/event.hxx>
 #include <vcl/fntstyle.hxx>
 #include <vcl/font.hxx>
+#include <vcl/formatter.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/glyphitem.hxx>
 #include <vcl/gradient.hxx>
@@ -330,6 +335,7 @@
 #include <vcl/toolbox.hxx>
 #include <vcl/toolkit/button.hxx>
 #include <vcl/toolkit/combobox.hxx>
+#include <vcl/toolkit/controllayout.hxx>
 #include <vcl/toolkit/dialog.hxx>
 #include <vcl/toolkit/edit.hxx>
 #include <vcl/toolkit/fixed.hxx>

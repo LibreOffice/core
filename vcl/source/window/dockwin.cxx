@@ -19,7 +19,6 @@
 
 #include <tools/time.hxx>
 #include <sal/log.hxx>
-#include <vcl/accel.hxx>
 #include <vcl/event.hxx>
 #include <vcl/toolkit/floatwin.hxx>
 #include <vcl/layout.hxx>
@@ -29,6 +28,7 @@
 #include <vcl/idle.hxx>
 #include <vcl/settings.hxx>
 
+#include <accel.hxx>
 #include <svdata.hxx>
 #include <window.h>
 #include <brdwin.hxx>
