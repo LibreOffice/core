@@ -214,6 +214,13 @@ void SvmWriter::MetaActionHandler(MetaAction* pAction, ImplMetaWriteData* pData)
         }
         break;
 
+        case MetaActionType::BMPSCALEPART:
+        {
+            auto* pMetaAction = static_cast<MetaBmpScalePartAction*>(pAction);
+            BmpScalePartHandler(pMetaAction);
+        }
+        break;
+
         case MetaActionType::OVERLINECOLOR:
         {
             auto* pMetaAction = static_cast<MetaOverlineColorAction*>(pAction);
@@ -586,6 +593,21 @@ void SvmWriter::BmpScaleHandler(MetaBmpScaleAction* pAction)
         TypeSerializer aSerializer(mrStream);
         aSerializer.writePoint(pAction->GetPoint());
         aSerializer.writeSize(pAction->GetSize());
+    }
+}
+
+void SvmWriter::BmpScalePartHandler(MetaBmpScalePartAction* pAction)
+{
+    if (!pAction->GetBitmap().IsEmpty())
+    {
+        mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
+        VersionCompatWrite aCompat(mrStream, 1);
+        WriteDIB(pAction->GetBitmap(), mrStream, false, true);
+        TypeSerializer aSerializer(mrStream);
+        aSerializer.writePoint(pAction->GetDestPoint());
+        aSerializer.writeSize(pAction->GetDestSize());
+        aSerializer.writePoint(pAction->GetSrcPoint());
+        aSerializer.writeSize(pAction->GetSrcSize());
     }
 }
 
