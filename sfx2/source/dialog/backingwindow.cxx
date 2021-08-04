@@ -18,7 +18,6 @@
  */
 
 #include "backingwindow.hxx"
-#include <vcl/accel.hxx>
 #include <vcl/event.hxx>
 #include <vcl/help.hxx>
 #include <vcl/ptrstyle.hxx>
@@ -458,10 +457,6 @@ bool BackingWindow::PreNotify(NotifyEvent& rNEvt)
         const OUString aCommand = mpAccExec->findCommand(svt::AcceleratorExecute::st_VCLKey2AWTKey(rKeyCode));
         if ((aCommand != "vnd.sun.star.findbar:FocusToFindbar") && pEvt && mpAccExec->execute(rKeyCode))
             return true;
-    }
-    else if (rNEvt.GetType() == MouseNotifyEvent::COMMAND)
-    {
-        Accelerator::ToggleMnemonicsOnHierarchy(*rNEvt.GetCommandEvent(), this);
     }
     return InterimItemWindow::PreNotify( rNEvt );
 }
