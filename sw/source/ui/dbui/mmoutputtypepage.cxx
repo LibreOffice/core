@@ -34,6 +34,7 @@
 #include <mmresultdialogs.hxx>
 #include <maildispatcher.hxx>
 #include <imaildsplistener.hxx>
+#include <mutex>
 
 using namespace ::com::sun::star;
 
@@ -73,7 +74,7 @@ IMPL_LINK_NOARG(SwMailMergeOutputTypePage, TypeHdl_Impl, weld::Toggleable&, void
 struct SwSendMailDialog_Impl
 {
     friend class SwSendMailDialog;
-    ::osl::Mutex                                aDescriptorMutex;
+    std::mutex                                  aDescriptorMutex;
 
     std::vector< SwMailDescriptor >             aDescriptors;
     sal_uInt32                                  nCurrentDescriptor;
@@ -103,7 +104,7 @@ struct SwSendMailDialog_Impl
 
 const SwMailDescriptor* SwSendMailDialog_Impl::GetNextDescriptor()
 {
-    ::osl::MutexGuard aGuard(aDescriptorMutex);
+    std::scoped_lock aGuard(aDescriptorMutex);
     if(nCurrentDescriptor < aDescriptors.size())
     {
         ++nCurrentDescriptor;
@@ -267,7 +268,7 @@ SwSendMailDialog::~SwSendMailDialog()
 
 void SwSendMailDialog::AddDocument( SwMailDescriptor const & rDesc )
 {
-    ::osl::MutexGuard aGuard(m_pImpl->aDescriptorMutex);
+    std::scoped_lock aGuard(m_pImpl->aDescriptorMutex);
     m_pImpl->aDescriptors.push_back(rDesc);
     // if the dialog is already running then continue sending of documents
     if(m_pImpl->xMailDispatcher.is())
