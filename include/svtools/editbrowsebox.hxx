@@ -178,12 +178,19 @@ namespace svt
             m_aFocusInHdl = rHdl;
         }
 
+        // chain after the FocusOutHdl
+        void SetFocusOutHdl(const Link<LinkParamNone*,void>& rHdl)
+        {
+            m_aFocusOutHdl = rHdl;
+        }
+
     protected:
         DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
         DECL_LINK(FocusInHdl, weld::Widget&, void);
         DECL_LINK(FocusOutHdl, weld::Widget&, void);
     private:
         Link<LinkParamNone*,void> m_aFocusInHdl;
+        Link<LinkParamNone*,void> m_aFocusOutHdl;
     };
 
     class SVT_DLLPUBLIC EditControlBase : public ControlBase
