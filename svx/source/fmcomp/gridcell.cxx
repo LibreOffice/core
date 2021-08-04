@@ -801,16 +801,12 @@ void DbCellControl::implAdjustReadOnly( const Reference< XPropertySet >& _rxMode
     if ( !(m_pWindow && _rxModel.is()) )
         return;
 
-    ControlBase* pEditWindow = dynamic_cast<ControlBase*>(m_pWindow.get());
-    if ( pEditWindow )
+    bool bReadOnly = m_rColumn.IsReadOnly();
+    if ( !bReadOnly )
     {
-        bool bReadOnly = m_rColumn.IsReadOnly();
-        if ( !bReadOnly )
-        {
-            _rxModel->getPropertyValue( i_bReadOnly ? OUString(FM_PROP_READONLY) : OUString(FM_PROP_ISREADONLY)) >>= bReadOnly;
-        }
-        pEditWindow->SetEditableReadOnly(bReadOnly);
+        _rxModel->getPropertyValue( i_bReadOnly ? OUString(FM_PROP_READONLY) : OUString(FM_PROP_ISREADONLY)) >>= bReadOnly;
     }
+    m_pWindow->SetEditableReadOnly(bReadOnly);
 }
 
 void DbCellControl::implAdjustEnabled( const Reference< XPropertySet >& _rxModel )
@@ -1920,7 +1916,7 @@ void DbNumericField::implAdjustGenericFieldSetting( const Reference< XPropertySe
     rPaintFormatter.SetFormat( sFormatString, aAppLanguage );
 }
 
-VclPtr<Control> DbNumericField::createField(BrowserDataWin* pParent, bool bSpinButton, const Reference<XPropertySet>& /*rxModel*/)
+VclPtr<svt::ControlBase> DbNumericField::createField(BrowserDataWin* pParent, bool bSpinButton, const Reference<XPropertySet>& /*rxModel*/)
 {
     return VclPtr<DoubleNumericControl>::Create(pParent, bSpinButton);
 }
@@ -2040,7 +2036,7 @@ void DbCurrencyField::implAdjustGenericFieldSetting( const Reference< XPropertyS
     rPaintCurrencyFormatter.SetCurrencySymbol(aStr);
 }
 
-VclPtr<Control> DbCurrencyField::createField(BrowserDataWin* pParent, bool bSpinButton, const Reference< XPropertySet >& /*rxModel*/)
+VclPtr<svt::ControlBase> DbCurrencyField::createField(BrowserDataWin* pParent, bool bSpinButton, const Reference< XPropertySet >& /*rxModel*/)
 {
     return VclPtr<LongCurrencyControl>::Create(pParent, bSpinButton);
 }
@@ -2123,7 +2119,7 @@ DbDateField::DbDateField( DbGridColumn& _rColumn )
     doPropertyListening( FM_PROP_DATE_SHOW_CENTURY );
 }
 
-VclPtr<Control> DbDateField::createField(BrowserDataWin* pParent, bool bSpinButton, const Reference< XPropertySet >& rxModel)
+VclPtr<svt::ControlBase> DbDateField::createField(BrowserDataWin* pParent, bool bSpinButton, const Reference< XPropertySet >& rxModel)
 {
     // check if there is a DropDown property set to TRUE
     bool bDropDown =    !hasProperty( FM_PROP_DROPDOWN, rxModel )
@@ -2249,7 +2245,7 @@ DbTimeField::DbTimeField( DbGridColumn& _rColumn )
     doPropertyListening( FM_PROP_STRICTFORMAT );
 }
 
-VclPtr<Control> DbTimeField::createField(BrowserDataWin* pParent, bool bSpinButton, const Reference< XPropertySet >& /*rxModel*/ )
+VclPtr<svt::ControlBase> DbTimeField::createField(BrowserDataWin* pParent, bool bSpinButton, const Reference< XPropertySet >& /*rxModel*/ )
 {
     return VclPtr<TimeControl>::Create(pParent, bSpinButton);
 }
@@ -2762,9 +2758,8 @@ void DbFilterField::Init(BrowserDataWin& rParent, const Reference< XRowSet >& xC
     DbCellControl::Init( rParent, xCursor );
 
     // filter cells are never readonly
-    ControlBase* pAsEdit = dynamic_cast<ControlBase*>(m_pWindow.get());
-    if (pAsEdit)
-        pAsEdit->SetEditableReadOnly(false);
+    if (m_pWindow)
+        m_pWindow->SetEditableReadOnly(false);
 }
 
 CellControllerRef DbFilterField::CreateController() const
@@ -3088,7 +3083,6 @@ IMPL_LINK_NOARG(DbFilterField, OnToggle, weld::CheckButton&, void)
     }
 }
 
-
 FmXGridCell::FmXGridCell( DbGridColumn* pColumn, std::unique_ptr<DbCellControl> _pControl )
             :OComponentHelper(m_aMutex)
             ,m_pColumn(pColumn)
@@ -3101,22 +3095,23 @@ FmXGridCell::FmXGridCell( DbGridColumn* pColumn, std::unique_ptr<DbCellControl> 
 {
 }
 
-
 void FmXGridCell::init()
 {
-    vcl::Window* pEventWindow( getEventWindow() );
+    svt::ControlBase* pEventWindow( getEventWindow() );
     if ( pEventWindow )
+    {
         pEventWindow->AddEventListener( LINK( this, FmXGridCell, OnWindowEvent ) );
+        pEventWindow->SetFocusInHdl(LINK( this, FmXGridCell, OnFocusGained));
+        pEventWindow->SetFocusOutHdl(LINK( this, FmXGridCell, OnFocusLost));
+    }
 }
 
-
-vcl::Window* FmXGridCell::getEventWindow() const
+svt::ControlBase* FmXGridCell::getEventWindow() const
 {
     if ( m_pCellControl )
         return &m_pCellControl->GetWindow();
     return nullptr;
 }
-
 
 FmXGridCell::~FmXGridCell()
 {
@@ -3128,13 +3123,11 @@ FmXGridCell::~FmXGridCell()
 
 }
 
-
 void FmXGridCell::SetTextLineColor()
 {
     if (m_pCellControl)
         m_pCellControl->SetTextLineColor();
 }
-
 
 void FmXGridCell::SetTextLineColor(const Color& _rColor)
 {
@@ -3331,25 +3324,21 @@ void SAL_CALL FmXGridCell::removeMouseMotionListener( const Reference< awt::XMou
     m_aMouseMotionListeners.removeInterface( _rxListener );
 }
 
-
 void SAL_CALL FmXGridCell::addPaintListener( const Reference< awt::XPaintListener >& )
 {
     OSL_FAIL( "FmXGridCell::addPaintListener: not implemented" );
 }
-
 
 void SAL_CALL FmXGridCell::removePaintListener( const Reference< awt::XPaintListener >& )
 {
     OSL_FAIL( "FmXGridCell::removePaintListener: not implemented" );
 }
 
-
 IMPL_LINK( FmXGridCell, OnWindowEvent, VclWindowEvent&, _rEvent, void )
 {
     ENSURE_OR_THROW( _rEvent.GetWindow(), "illegal window" );
-    onWindowEvent( _rEvent.GetId(), *_rEvent.GetWindow(), _rEvent.GetData() );
+    onWindowEvent(_rEvent.GetId(), _rEvent.GetData());
 }
-
 
 void FmXGridCell::onFocusGained( const awt::FocusEvent& _rEvent )
 {
@@ -3357,52 +3346,40 @@ void FmXGridCell::onFocusGained( const awt::FocusEvent& _rEvent )
     m_aFocusListeners.notifyEach( &awt::XFocusListener::focusGained, _rEvent );
 }
 
-
 void FmXGridCell::onFocusLost( const awt::FocusEvent& _rEvent )
 {
     checkDisposed(OComponentHelper::rBHelper.bDisposed);
     m_aFocusListeners.notifyEach( &awt::XFocusListener::focusLost, _rEvent );
 }
 
+IMPL_LINK_NOARG(FmXGridCell, OnFocusGained, LinkParamNone*, void)
+{
+    if (!m_aFocusListeners.getLength())
+        return;
 
-void FmXGridCell::onWindowEvent( const VclEventId _nEventId, const vcl::Window& _rWindow, const void* _pEventData )
+    awt::FocusEvent aEvent;
+    aEvent.Source = *this;
+    aEvent.Temporary = false;
+
+    onFocusGained(aEvent);
+}
+
+IMPL_LINK_NOARG(FmXGridCell, OnFocusLost, LinkParamNone*, void)
+{
+    if (!m_aFocusListeners.getLength())
+        return;
+
+    awt::FocusEvent aEvent;
+    aEvent.Source = *this;
+    aEvent.Temporary = false;
+
+    onFocusLost(aEvent);
+}
+
+void FmXGridCell::onWindowEvent(const VclEventId _nEventId, const void* _pEventData)
 {
     switch ( _nEventId )
     {
-    case VclEventId::ControlGetFocus:
-    case VclEventId::WindowGetFocus:
-    case VclEventId::ControlLoseFocus:
-    case VclEventId::WindowLoseFocus:
-    {
-        if  (   (   _rWindow.IsCompoundControl()
-                &&  (   _nEventId == VclEventId::ControlGetFocus
-                    ||  _nEventId == VclEventId::ControlLoseFocus
-                    )
-                )
-            ||  (   !_rWindow.IsCompoundControl()
-                &&  (   _nEventId == VclEventId::WindowGetFocus
-                    ||  _nEventId == VclEventId::WindowLoseFocus
-                    )
-                )
-            )
-        {
-            if ( !m_aFocusListeners.getLength() )
-                break;
-
-            bool bFocusGained = ( _nEventId == VclEventId::ControlGetFocus ) || ( _nEventId == VclEventId::WindowGetFocus );
-
-            awt::FocusEvent aEvent;
-            aEvent.Source = *this;
-            aEvent.FocusFlags = static_cast<sal_Int16>(_rWindow.GetGetFocusFlags());
-            aEvent.Temporary = false;
-
-            if ( bFocusGained )
-                onFocusGained( aEvent );
-            else
-                onFocusLost( aEvent );
-        }
-    }
-    break;
     case VclEventId::WindowMouseButtonDown:
     case VclEventId::WindowMouseButtonUp:
     {
