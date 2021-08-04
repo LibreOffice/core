@@ -29,7 +29,6 @@
 #include <com/sun/star/uno/Reference.h>
 
 class SfxItemSet;
-namespace vcl { class Window; }
 class SfxItemPool;
 class SvObjectServerList;
 class TransferableDataHelper;

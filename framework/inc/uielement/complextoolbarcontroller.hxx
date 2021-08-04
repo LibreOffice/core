@@ -30,7 +30,6 @@
 #include <vcl/vclptr.hxx>
 
 class ToolBox;
-namespace vcl { class Window; }
 
 namespace framework
 {

@@ -30,7 +30,6 @@
 #include <viewlayer.hxx>
 
 class SystemChildWindow;
-namespace vcl { class Window; }
 
 namespace com::sun::star {
     namespace drawing {

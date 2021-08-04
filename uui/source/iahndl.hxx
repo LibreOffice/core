@@ -57,8 +57,6 @@ namespace com::sun::star {
     }
 }
 
-namespace vcl { class Window; }
-
 struct InteractionHandlerData
 {
     /** The UNO service name to use to instantiate the content provider.

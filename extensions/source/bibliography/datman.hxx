@@ -34,7 +34,6 @@
 #include <cppuhelper/implbase.hxx>
 #include <vcl/vclptr.hxx>
 
-namespace vcl { class Window; }
 namespace weld { class Window; }
 
 namespace bib

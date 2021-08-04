@@ -21,7 +21,6 @@
 #include <vcl/weld.hxx>
 #include <svtools/inettbc.hxx>
 
-namespace vcl { class Window; }
 class filter_info_impl;
 
 class XMLFilterTabPageXSLT
