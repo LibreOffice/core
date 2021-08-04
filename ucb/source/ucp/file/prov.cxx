@@ -307,7 +307,7 @@ XPropertySetInfoImpl2::hasPropertyByName(
 
 void FileProvider::initProperties()
 {
-    osl::MutexGuard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
     if(  m_xPropertySetInfo.is() )
         return;
 
