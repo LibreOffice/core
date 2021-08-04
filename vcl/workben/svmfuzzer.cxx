@@ -9,6 +9,7 @@
 
 #include <tools/stream.hxx>
 #include <vcl/gdimtf.hxx>
+#include <vcl/filter/SvmReader.hxx>
 #include "commonfuzzer.hxx"
 
 #include <config_features.h>
@@ -49,7 +50,8 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size)
 {
     SvMemoryStream aStream(const_cast<uint8_t*>(data), size, StreamMode::READ);
     GDIMetaFile aGDIMetaFile;
-    ReadGDIMetaFile(aStream, aGDIMetaFile);
+    SvmReader aReader(aStream);
+    aReader.Read(aGDIMetaFile);
     return 0;
 }
 
