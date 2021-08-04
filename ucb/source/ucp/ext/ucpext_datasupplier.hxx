@@ -22,14 +22,13 @@
 #include <rtl/ref.hxx>
 #include <ucbhelper/resultset.hxx>
 
-#include <memory>
+#include <vector>
 
 
 namespace ucb::ucp::ext
 {
 
 
-    struct DataSupplier_Impl;
     class Content;
 
 
@@ -66,7 +65,18 @@ namespace ucb::ucp::ext
         virtual void validate() override;
 
     private:
-        std::unique_ptr< DataSupplier_Impl >    m_pImpl;
+        struct ResultListEntry
+        {
+            OUString sId;
+            css::uno::Reference< css::ucb::XContentIdentifier > xId;
+            ::rtl::Reference< Content > pContent;
+            css::uno::Reference< css::sdbc::XRow >  xRow;
+        };
+        typedef ::std::vector< ResultListEntry >    ResultList;
+        ::osl::Mutex                                m_aMutex;
+        ResultList                                  m_aResults;
+        ::rtl::Reference< Content >                 m_xContent;
+        css::uno::Reference< css::uno::XComponentContext > m_xContext;
     };
 
 
