@@ -157,7 +157,7 @@ public:
     virtual css::uno::Reference< css::linguistic2::XDictionary >  GetNewDictionary() = 0;
 };
 
-class AbstractSvxNameDialog :public VclAbstractDialog
+class AbstractSvxNameDialog : public VclAbstractDialog
 {
 protected:
     virtual ~AbstractSvxNameDialog() override = default;
@@ -166,7 +166,6 @@ public:
     virtual void    SetCheckNameHdl( const Link<AbstractSvxNameDialog&,bool>& rLink, bool bCheckImmediately = false ) = 0;
     virtual void    SetCheckNameTooltipHdl( const Link<AbstractSvxNameDialog&,OUString>& rLink ) = 0;
     virtual void    SetEditHelpId(const OString&) = 0;
-    //from class Window
     virtual void    SetHelpId( const OString& ) = 0;
     virtual void    SetText( const OUString& rStr ) = 0;
 };
@@ -266,7 +265,7 @@ class AbstractSvxPostItDialog : public VclAbstractDialog
 protected:
     virtual ~AbstractSvxPostItDialog() override = default;
 public:
-    virtual void                SetText( const OUString& rStr ) = 0;  //From class Window
+    virtual void                SetText( const OUString& rStr ) = 0;
     virtual const SfxItemSet*   GetOutputItemSet() const = 0;
     virtual void                SetPrevHdl( const Link<AbstractSvxPostItDialog&,void>& rLink ) = 0;
     virtual void                SetNextHdl( const Link<AbstractSvxPostItDialog&,void>& rLink ) = 0;
