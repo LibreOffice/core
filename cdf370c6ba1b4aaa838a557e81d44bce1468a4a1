@@ -34,6 +34,24 @@
       "revId": "cdf370c6ba1b4aaa838a557e81d44bce1468a4a1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4c45b90d_83efe6d0",
+        "filename": "sfx2/source/dialog/templdlg.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 712,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-04T10:55:35Z",
+      "side": 1,
+      "message": "Sigh, I made a typo, struggling through the \"m_\" things.\n\n  if (\u0026m_atempStyleList \u003d\u003d \u0026m_aStyleListChar)\n    CharFamilySelect();\n  else\n    ParaFamilySelect()",
+      "parentUuid": "7830f1a3_5db648bc",
+      "revId": "cdf370c6ba1b4aaa838a557e81d44bce1468a4a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
