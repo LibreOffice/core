@@ -3104,7 +3104,7 @@ void FmXGridCell::init()
 }
 
 
-vcl::Window* FmXGridCell::getEventWindow() const
+svt::ControlBase* FmXGridCell::getEventWindow() const
 {
     if ( m_pCellControl )
         return &m_pCellControl->GetWindow();

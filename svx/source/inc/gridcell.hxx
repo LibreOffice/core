@@ -262,8 +262,7 @@ public:
     DbCellControl(DbGridColumn& _rColumn);
     virtual ~DbCellControl() override;
 
-
-    vcl::Window& GetWindow() const
+    svt::ControlBase& GetWindow() const
     {
         ENSURE_OR_THROW( m_pWindow, "no window" );
         return *m_pWindow;
@@ -780,7 +779,7 @@ protected:
     virtual void onFocusLost( const css::awt::FocusEvent& _rEvent );
 
 private:
-    vcl::Window* getEventWindow() const;
+    svt::ControlBase* getEventWindow() const;
     DECL_LINK( OnWindowEvent, VclWindowEvent&, void );
 };
 
