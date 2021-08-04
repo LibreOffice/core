@@ -312,7 +312,6 @@ ShapeTypeContext::ShapeTypeContext(ContextHandler2Helper const & rParent,
     mrTypeModel.moCoordPos = lclDecodeInt32Pair( rAttribs, XML_coordorigin );
     mrTypeModel.moCoordSize = lclDecodeInt32Pair( rAttribs, XML_coordsize );
     setStyle( rAttribs.getString( XML_style, OUString() ) );
-    setHyperlink( rAttribs.getString( XML_href, OUString() ) );
     if( lclDecodeBool( rAttribs, O_TOKEN( hr )).get( false ))
     {   // MSO's handling of o:hr width is nowhere near what the spec says:
         // - o:hrpct is not in % but in 0.1%
@@ -470,11 +469,6 @@ void ShapeTypeContext::setStyle( const OUString& rStyle )
     }
 }
 
-void ShapeTypeContext::setHyperlink( const OUString& rHyperlink )
-{
-    mrTypeModel.maHyperlink = rHyperlink;
-}
-
 ShapeContext::ShapeContext(ContextHandler2Helper const& rParent,
                            const std::shared_ptr<ShapeBase>& pShape, const AttributeList& rAttribs)
     : ShapeTypeContext(rParent, pShape, rAttribs)
@@ -491,6 +485,7 @@ ShapeContext::ShapeContext(ContextHandler2Helper const& rParent,
     setControl1(rAttribs.getString(XML_control1, OUString()));
     setControl2(rAttribs.getString(XML_control2, OUString()));
     setVmlPath(rAttribs.getString(XML_path, OUString()));
+    setHyperlink(rAttribs.getString(XML_href, OUString()));
 }
 
 ContextHandlerRef ShapeContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
@@ -607,6 +602,12 @@ void ShapeContext::setVmlPath( const OUString& rPath )
 {
     if (!rPath.isEmpty())
         mrShapeModel.maVmlPath = rPath;
+}
+
+void ShapeContext::setHyperlink( const OUString& rHyperlink )
+{
+    if (!rHyperlink.isEmpty())
+        mrShapeModel.maHyperlink = rHyperlink;
 }
 
 GroupShapeContext::GroupShapeContext(ContextHandler2Helper const& rParent,
