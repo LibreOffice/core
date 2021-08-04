@@ -158,9 +158,7 @@ void Qt5Menu::InsertMenuItem(Qt5MenuItem* pSalMenuItem, unsigned nPos)
 
                 UpdateActionGroupItem(pSalMenuItem);
 
-                const Qt5Frame* pFrame = GetFrame();
-                if (pFrame)
-                    pAction->setShortcut(toQString(nAccelKey.GetName(pFrame->GetWindow())));
+                pAction->setShortcut(toQString(nAccelKey.GetName()));
 
                 connect(pAction, &QAction::triggered, this,
                         [pSalMenuItem] { slotMenuTriggered(pSalMenuItem); });

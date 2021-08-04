@@ -300,7 +300,7 @@ void GtkSalMenu::ImplUpdate(bool bRecurse, bool bRemoveDisabledEntries)
         // Force updating of native menu labels.
         NativeSetItemText( nSection, nItemPos, aText );
         NativeSetItemIcon( nSection, nItemPos, aImage );
-        NativeSetAccelerator( nSection, nItemPos, nAccelKey, nAccelKey.GetName( GetFrame()->GetWindow() ) );
+        NativeSetAccelerator(nSection, nItemPos, nAccelKey, nAccelKey.GetName());
 
         if ( g_strcmp0( aNativeCommand, "" ) != 0 && pSalMenuItem->mpSubMenu == nullptr )
         {
