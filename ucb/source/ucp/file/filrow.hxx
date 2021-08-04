@@ -21,6 +21,7 @@
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/script/XTypeConverter.hpp>
 #include <cppuhelper/implbase.hxx>
+#include <mutex>
 
 namespace fileaccess {
 
@@ -97,7 +98,7 @@ namespace fileaccess {
         getArray( sal_Int32 columnIndex ) override;
 
     private:
-        osl::Mutex                                         m_aMutex;
+        std::mutex                                         m_aMutex;
         css::uno::Sequence< css::uno::Any >                m_aValueMap;
         bool                                               m_nWasNull;
         TaskManager*                                       m_pMyShell;
