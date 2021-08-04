@@ -88,7 +88,7 @@ uno::Reference< io::XInputStream > SAL_CALL
 XStream_impl::getInputStream(  )
 {
     {
-        osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
         m_bInputStreamCalled = true;
     }
     return uno::Reference< io::XInputStream >( this );
@@ -99,7 +99,7 @@ uno::Reference< io::XOutputStream > SAL_CALL
 XStream_impl::getOutputStream(  )
 {
     {
-        osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
         m_bOutputStreamCalled = true;
     }
     return uno::Reference< io::XOutputStream >( this );
@@ -208,7 +208,7 @@ XStream_impl::closeStream()
 void SAL_CALL
 XStream_impl::closeInput()
 {
-    osl::MutexGuard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
     m_bInputStreamCalled = false;
 
     if( ! m_bOutputStreamCalled )
@@ -219,7 +219,7 @@ XStream_impl::closeInput()
 void SAL_CALL
 XStream_impl::closeOutput()
 {
-    osl::MutexGuard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
     m_bOutputStreamCalled = false;
 
     if( ! m_bInputStreamCalled )
