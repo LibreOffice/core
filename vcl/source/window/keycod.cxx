@@ -63,10 +63,9 @@ vcl::KeyCode::KeyCode( KeyFuncType eFunction )
     eFunc = eFunction;
 }
 
-OUString vcl::KeyCode::GetName( vcl::Window* pWindow ) const
+OUString vcl::KeyCode::GetName() const
 {
-    if ( !pWindow )
-        pWindow = ImplGetDefaultWindow();
+    vcl::Window* pWindow = ImplGetDefaultWindow();
     return pWindow ? pWindow->ImplGetFrame()->GetKeyName( GetFullCode() ) : "";
 }
 

@@ -24,8 +24,6 @@
 #include <vcl/dllapi.h>
 #include <vcl/keycodes.hxx>
 
-namespace vcl { class Window; }
-
 enum class KeyFuncType : sal_Int32 { DONTKNOW,
                    CUT, COPY, PASTE, UNDO,
                    REDO, DELETE };
@@ -64,7 +62,7 @@ public:
     sal_uInt16      GetGroup() const
                     { return (nKeyCodeAndModifiers & KEYGROUP_TYPE); }
 
-    OUString        GetName( vcl::Window* pWindow = nullptr ) const;
+    OUString        GetName() const;
 
     bool            IsFunction() const
                     { return (eFunc != KeyFuncType::DONTKNOW); }
