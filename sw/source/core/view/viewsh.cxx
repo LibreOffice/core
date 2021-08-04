@@ -411,7 +411,10 @@ void SwViewShell::ImplEndAction( const bool bIdleEnd )
                             // seems to work (and does technically) but fails with transparent objects. Since the
                             // region given to BeginDrawLayers() defines the clip region for DrawingLayer paint,
                             // transparent objects in the single rectangles will indeed be painted multiple times.
-                            DLPrePaint2(vcl::Region(aRect.SVRect()));
+                            if (!comphelper::LibreOfficeKit::isActive())
+                            {
+                                DLPrePaint2(vcl::Region(aRect.SVRect()));
+                            }
 
                             if ( bPaintsFromSystem )
                                 PaintDesktop(*GetOut(), aRect);
@@ -421,7 +424,10 @@ void SwViewShell::ImplEndAction( const bool bIdleEnd )
                                 pCurrentLayout->GetCurrShell()->InvalidateWindows(aRect);
 
                             // #i75172# end DrawingLayer paint
-                            DLPostPaint2(true);
+                            if (!comphelper::LibreOfficeKit::isActive())
+                            {
+                                DLPostPaint2(true);
+                            }
                         }
                     }
 
