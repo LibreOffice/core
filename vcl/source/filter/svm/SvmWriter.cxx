@@ -283,6 +283,13 @@ void SvmWriter::MetaActionHandler(MetaAction* pAction, ImplMetaWriteData* pData)
         }
         break;
 
+        case MetaActionType::LAYOUTMODE:
+        {
+            auto* pMetaAction = static_cast<MetaLayoutModeAction*>(pAction);
+            LayoutModeHandler(pMetaAction);
+        }
+        break;
+
         /* default case prevents test failure and will be
         removed once all the handlers are completed */
         default:
@@ -657,5 +664,12 @@ void SvmWriter::CommentHandler(MetaCommentAction* pAction)
 
     if (pAction->GetDataSize())
         mrStream.WriteBytes(pAction->GetData(), pAction->GetDataSize());
+}
+
+void SvmWriter::LayoutModeHandler(MetaLayoutModeAction* pAction)
+{
+    mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
+    VersionCompatWrite aCompat(mrStream, 1);
+    mrStream.WriteUInt32(static_cast<sal_uInt32>(pAction->GetLayoutMode()));
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
