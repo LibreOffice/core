@@ -447,6 +447,40 @@ DECLARE_OOXMLEXPORT_TEST(testShapeHyperlink, "hyperlinkshape.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("https://libreoffice.org/"), getProperty<OUString>(xShape, "Hyperlink"));
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTextframeHyperlink)
+{
+    // Make sure hyperlink is imported correctly
+    load(mpTestDocumentPath, "docxopenhyperlinkbox.docx");
+    uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
+
+    uno::Reference<beans::XPropertySet> xFrame(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("https://libreoffice.org/"), getProperty<OUString>(xFrame, "HyperLinkURL"));
+
+    // FIXME: After save&reload, the text frame should still be a text frame, and the above test should still work.
+    // (Currently the Writer text frame becomes a text box (shape based))
+    reload(mpFilter, "docxopenhyperlinkbox.docx");
+
+    xmlDocUniquePtr pXmlDoc = parseExport();
+    // DML
+    assertXPath(pXmlDoc, "//w:drawing/wp:anchor/wp:docPr/a:hlinkClick", 1);
+    // VML
+    assertXPath(pXmlDoc, "//w:pict/v:rect", "href", "https://libreoffice.org/");
+}
+
+/* DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTextframeHyperlink, "docxopenhyperlinkbox.docx")
+{
+    // Test import/export of hyperlink property on text frames
+
+    uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
+
+    uno::Reference<beans::XPropertySet> xFrame(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("https://libreoffice.org/"), getProperty<OUString>(xFrame, "HyperLinkURL"));
+} */
+
 DECLARE_OOXMLEXPORT_TEST(testTdf139580, "tdf139580.odt")
 {
     // Without the fix in place, this test would have crashed at export time
