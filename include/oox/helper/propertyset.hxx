@@ -106,8 +106,6 @@ public:
     /** Puts the passed value into the property set. */
     template< typename Type >
     bool         setProperty( sal_Int32 nPropId, const Type& rValue )
-                            { return setAnyProperty( nPropId, css::uno::Any( rValue ) ); }
-    bool         setProperty( sal_Int32 nPropId, ::Color rValue )
                             { return setAnyProperty( nPropId, css::uno::makeAny( rValue ) ); }
 
     /** Puts the passed properties into the property set. Tries to use the XMultiPropertySet interface.
