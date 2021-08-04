@@ -107,8 +107,6 @@ public:
 private:
     /** Processes the 'style' attribute. */
     void                setStyle( const OUString& rStyle );
-    /** Processes the 'href' attribute. */
-    void                setHyperlink( const OUString& rHyperlink );
 
     /** Resolve a relation identifier to a fragment path. */
     OptValue< OUString > decodeFragmentPath( const AttributeList& rAttribs, sal_Int32 nToken ) const;
@@ -141,6 +139,8 @@ private:
     void                setControl2( const OUString& rPoints );
     /** Processes the 'path' attribute. */
     void                setVmlPath( const OUString& rPath );
+    /** Processes the 'href' attribute. */
+    void                setHyperlink( const OUString& rHyperlink );
 
 private:
     ShapeBase&          mrShape;
