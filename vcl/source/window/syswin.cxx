@@ -23,7 +23,6 @@
 #include <sal/config.h>
 #include <sal/log.hxx>
 
-#include <vcl/accel.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/settings.hxx>
@@ -38,6 +37,7 @@
 
 #include <rtl/strbuf.hxx>
 
+#include <accel.hxx>
 #include <salframe.hxx>
 #include <svdata.hxx>
 #include <brdwin.hxx>

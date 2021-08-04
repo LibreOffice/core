@@ -6351,7 +6351,6 @@ include/vcl/ITiledRenderable.hxx
 include/vcl/ImageTree.hxx
 include/vcl/Scanline.hxx
 include/vcl/abstdlg.hxx
-include/vcl/accel.hxx
 include/vcl/accessiblefactory.hxx
 include/vcl/accessibletable.hxx
 include/vcl/accessibletableprovider.hxx
@@ -14433,6 +14432,7 @@ vcl/inc/ResampleKernel.hxx
 vcl/inc/WidgetThemeLibraryTypes.hxx
 vcl/inc/bitmap/bmpfast.hxx
 vcl/inc/accel.h
+vcl/inc/accel.hxx
 vcl/inc/accmgr.hxx
 vcl/inc/brdwin.hxx
 vcl/inc/bubblewindow.hxx

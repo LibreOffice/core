@@ -21,7 +21,7 @@
 #include <osl/diagnose.h>
 #include <tools/solar.h>
 #include <accel.h>
-#include <vcl/accel.hxx>
+#include <accel.hxx>
 #include <map>
 #include <vector>
 
