@@ -21,11 +21,11 @@
 
 #include <tools/link.hxx>
 #include <sal/types.h>
-#include <osl/mutex.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 
 #include <map>
 #include <memory>
+#include <mutex>
 
 namespace com::sun::star::io { class XInputStream; }
 
@@ -80,7 +80,7 @@ class SwRetrievedInputStreamDataManager
 
         static tDataKey snNextKeyValue;
 
-        osl::Mutex maMutex;
+        std::mutex maMutex;
 
         std::map< tDataKey, tData > maInputStreamData;
 };
