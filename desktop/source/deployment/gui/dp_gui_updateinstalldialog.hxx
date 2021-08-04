@@ -34,8 +34,6 @@ namespace com::sun::star::uno {
     class XComponentContext;
 }
 
-namespace vcl { class Window; }
-
 namespace dp_gui {
 
     struct UpdateData;

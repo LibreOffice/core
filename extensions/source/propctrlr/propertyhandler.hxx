@@ -49,7 +49,6 @@ namespace com::sun::star {
     }
 }
 
-namespace vcl { class Window; }
 namespace weld { class Window; }
 
 namespace pcr

@@ -123,7 +123,6 @@ namespace sfx2 {
     class LinkManager;
     }
 class SvxSearchItem;
-namespace vcl { class Window; }
 class XColorList;
 
 class ScAutoFormatData;

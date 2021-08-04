@@ -28,8 +28,6 @@
 #include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 
-namespace vcl { class Window; }
-
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::lang;

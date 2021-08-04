@@ -35,7 +35,6 @@ class EditView;
 class EditTextObject;
 class SvxFieldItem;
 class ScAccessibleEditObject;
-namespace vcl { class Window; }
 
 enum ScEditWindowLocation
 {

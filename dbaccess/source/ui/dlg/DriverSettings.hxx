@@ -21,7 +21,6 @@
 #include <sfx2/tabdlg.hxx>
 
 class SfxTabPage;
-namespace vcl { class Window; }
 namespace dbaui
 {
     /// a collection class for all details a driver needs

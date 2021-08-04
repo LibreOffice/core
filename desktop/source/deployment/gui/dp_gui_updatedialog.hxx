@@ -37,7 +37,6 @@ class Image;
 class KeyEvent;
 class MouseEvent;
 class ResId;
-namespace vcl { class Window; }
 
 namespace com::sun::star {
     namespace deployment { class XExtensionManager;

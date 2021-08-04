@@ -51,7 +51,6 @@ Not considered are:
 */
 
 class OutputDevice;
-namespace vcl { class Window; }
 class SdrView;
 class SdrPageView;
 class SdrModel;

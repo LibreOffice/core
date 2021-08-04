@@ -33,14 +33,11 @@ namespace com::sun::star::linguistic2
 
 template <typename Arg, typename Ret> class Link;
 
-namespace vcl { class Window; }
 class SvxSpellWrapper;
 class LinkParamNone;
 
 namespace weld { class Button; }
 namespace weld { class Toggleable; }
-namespace weld { class Window; }
-
 
 class AbstractThesaurusDialog : public VclAbstractDialog
 {

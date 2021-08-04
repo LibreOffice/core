@@ -81,8 +81,6 @@ struct FmXTextComponentLess
 typedef ::std::map< css::uno::Reference< css::awt::XTextComponent >, OUString, FmXTextComponentLess> FmFilterRow;
 typedef ::std::vector< FmFilterRow > FmFilterRows;
 
-namespace vcl { class Window; }
-
 namespace svxform
 {
     typedef ::std::vector< css::uno::Reference< css::awt::XTextComponent > >    FilterComponents;
