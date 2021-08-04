@@ -290,6 +290,13 @@ void SvmWriter::MetaActionHandler(MetaAction* pAction, ImplMetaWriteData* pData)
         }
         break;
 
+        case MetaActionType::TEXTLANGUAGE:
+        {
+            auto* pMetaAction = static_cast<MetaTextLanguageAction*>(pAction);
+            TextLanguageHandler(pMetaAction);
+        }
+        break;
+
         /* default case prevents test failure and will be
         removed once all the handlers are completed */
         default:
@@ -671,5 +678,12 @@ void SvmWriter::LayoutModeHandler(MetaLayoutModeAction* pAction)
     mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
     VersionCompatWrite aCompat(mrStream, 1);
     mrStream.WriteUInt32(static_cast<sal_uInt32>(pAction->GetLayoutMode()));
+}
+
+void SvmWriter::TextLanguageHandler(MetaTextLanguageAction* pAction)
+{
+    mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
+    VersionCompatWrite aCompat(mrStream, 1);
+    mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetTextLanguage()));
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
