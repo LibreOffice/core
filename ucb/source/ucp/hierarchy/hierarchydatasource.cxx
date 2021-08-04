@@ -40,6 +40,7 @@
 #include <com/sun/star/util/XChangesNotifier.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <ucbhelper/macros.hxx>
+#include <mutex>
 
 using namespace com::sun::star;
 using namespace hierarchy_ucp;
@@ -72,7 +73,7 @@ class HierarchyDataAccess : public cppu::OWeakObject,
                             public util::XChangesNotifier,
                             public util::XChangesBatch
 {
-    osl::Mutex m_aMutex;
+    std::mutex m_aMutex;
     uno::Reference< uno::XInterface > m_xConfigAccess;
     uno::Reference< lang::XComponent >                   m_xCfgC;
     uno::Reference< lang::XSingleServiceFactory >        m_xCfgSSF;
@@ -478,7 +479,7 @@ css::uno::Reference<T> HierarchyDataAccess::ensureOrigInterface(css::uno::Refere
 {
     if ( x.is() )
         return x;
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
     if ( !x.is() )
        x.set( m_xConfigAccess, uno::UNO_QUERY );
     return x;
