@@ -113,7 +113,6 @@ struct OOX_DLLPUBLIC ShapeTypeModel
     OptValue<OUString> moCropRight; ///< Specifies how much to crop the image from the right in as a fraction of picture size.
     OptValue<OUString> moCropTop; ///< Specifies how much to crop the image from the top down as a fraction of picture size.
     OUString maLayoutFlowAlt; ///< Specifies the alternate layout flow for text in textboxes.
-    OUString maHyperlink; ///< The hyperlink assigned to the shape
 
     explicit            ShapeTypeModel();
 
@@ -218,6 +217,7 @@ struct ShapeModel
     OUString     maSignatureLineSigningInstructions;
     bool         mbSignatureLineShowSignDate;
     bool         mbSignatureLineCanAddComment;
+    OUString     maHyperlink; ///< The hyperlink assigned to the shape
 
     explicit            ShapeModel();
                         ~ShapeModel();

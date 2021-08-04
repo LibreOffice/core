@@ -246,6 +246,7 @@ HoriOrientRelation
 HorizontalSplitMode
 HorizontalSplitPositionTwips
 Hyperlink
+HyperLinkURL
 IgnoreBlankCells
 IgnoreCase
 IgnoreLeadingSpaces

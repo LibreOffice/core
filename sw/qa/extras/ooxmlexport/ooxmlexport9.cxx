@@ -1340,6 +1340,29 @@ DECLARE_OOXMLEXPORT_TEST(testTdf115557, "tdf115557.docx")
     assertXPath(pXmlDoc, "//w:footnote/w:p/w:r/w:drawing", 1);
 }
 
+
+CPPUNIT_TEST_FIXTURE(Test, testTextframeHyperlink)
+{
+    // Make sure hyperlink is imported correctly
+    load(mpTestDocumentPath, "docxopenhyperlinkbox.docx");
+    uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
+
+    uno::Reference<beans::XPropertySet> xFrame(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("https://libreoffice.org/"), getProperty<OUString>(xFrame, "HyperLinkURL"));
+
+    // FIXME: After save&reload, the text frame should still be a text frame, and the above test should still work.
+    // (Currently the Writer text frame becomes a text box (shape based)). See tdf#140961
+    reload(mpFilter, "docxopenhyperlinkbox.docx");
+
+    xmlDocPtr pXmlDoc = parseExport();
+    // DML
+    assertXPath(pXmlDoc, "//w:drawing/wp:anchor/wp:docPr/a:hlinkClick", 1);
+    // VML
+    assertXPath(pXmlDoc, "//w:pict/v:rect", "href", "https://libreoffice.org/");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
