@@ -172,7 +172,7 @@ namespace svt
 
         virtual bool ProcessKey(const KeyEvent& rKEvt);
 
-        // chain after the FocusOutHdl
+        // chain after the FocusInHdl
         void SetFocusInHdl(const Link<LinkParamNone*,void>& rHdl)
         {
             m_aFocusInHdl = rHdl;
