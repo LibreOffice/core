@@ -248,6 +248,13 @@ void SvmWriter::MetaActionHandler(MetaAction* pAction, ImplMetaWriteData* pData)
         }
         break;
 
+        case MetaActionType::Transparent:
+        {
+            auto* pMetaAction = static_cast<MetaTransparentAction*>(pAction);
+            TransparentHandler(pMetaAction);
+        }
+        break;
+
         /* default case prevents test failure and will be
         removed once all the handlers are completed */
         default:
@@ -551,5 +558,26 @@ void SvmWriter::RasterOpHandler(MetaRasterOpAction* pAction)
     mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
     VersionCompatWrite aCompat(mrStream, 1);
     mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetRasterOp()));
+}
+
+void SvmWriter::TransparentHandler(MetaTransparentAction* pAction)
+{
+    mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
+    VersionCompatWrite aCompat(mrStream, 1);
+
+    // #i105373# The tools::PolyPolygon in this action may be a curve; this
+    // was ignored until now what is an error. To make older office
+    // versions work with MetaFiles, i opt for applying AdaptiveSubdivide
+    // to the PolyPolygon.
+    // The alternative would be to really write the curve information
+    // like in MetaPolyPolygonAction::Write (where someone extended it
+    // correctly, but not here :-( ).
+    // The golden solution would be to combine both, but i think it's
+    // not necessary; a good subdivision will be sufficient.
+    tools::PolyPolygon aNoCurvePolyPolygon;
+    pAction->GetPolyPolygon().AdaptiveSubdivide(aNoCurvePolyPolygon);
+
+    WritePolyPolygon(mrStream, aNoCurvePolyPolygon);
+    mrStream.WriteUInt16(pAction->GetTransparence());
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
