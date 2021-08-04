@@ -92,9 +92,8 @@ namespace desktop {
 
         struct CallbackData
         {
-            CallbackData(int type, const std::string& payload)
-                : Type(type)
-                , PayloadString(payload)
+            CallbackData(const std::string& payload)
+                : PayloadString(payload)
             {
             }
 
@@ -117,7 +116,6 @@ namespace desktop {
             /// Returns true iff there is cached data.
             bool isCached() const { return PayloadObject.which() != 0; }
 
-            int Type;
             std::string PayloadString;
 
         private:
@@ -125,14 +123,19 @@ namespace desktop {
             boost::variant<boost::blank, RectangleAndPart, boost::property_tree::ptree> PayloadObject;
         };
 
-        typedef std::vector<CallbackData> queue_type;
+        typedef std::vector<int> queue_type1;
+        typedef std::vector<CallbackData> queue_type2;
 
     private:
-        bool removeAll(const std::function<bool (const queue_type::value_type&)>& rTestFunc);
-        bool processInvalidateTilesEvent(CallbackData& aCallbackData);
-        bool processWindowEvent(CallbackData& aCallbackData);
+        bool removeAll(const std::function<bool (int, const CallbackData&)>& rTestFunc);
+        bool processInvalidateTilesEvent(int type, CallbackData& aCallbackData);
+        bool processWindowEvent(int type, CallbackData& aCallbackData);
+        queue_type2::reverse_iterator toQueue2(queue_type1::reverse_iterator);
 
-        queue_type m_queue;
+        /** we frequently want to scan the queue, and mostly when we do so, we only care about the element type
+            so we split the queue in 2 to make the scanning cache friendly. */
+        queue_type1 m_queue1;
+        queue_type2 m_queue2;
         std::map<int, std::string> m_states;
         std::unordered_map<int, std::unordered_map<int, std::string>> m_viewStates;
         LibreOfficeKitDocument* m_pDocument;
