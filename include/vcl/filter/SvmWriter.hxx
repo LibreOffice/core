@@ -63,4 +63,5 @@ public:
     void PushHandler(MetaPushAction* pAction);
     void PopHandler(MetaPopAction* pAction);
     void RasterOpHandler(MetaRasterOpAction* pAction);
+    void TransparentHandler(MetaTransparentAction* pAction);
 };
