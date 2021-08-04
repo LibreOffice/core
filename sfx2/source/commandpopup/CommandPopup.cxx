@@ -107,47 +107,75 @@ void MenuContentHandler::findInMenu(OUString const& rText,
                                     std::unique_ptr<weld::TreeView>& rpCommandTreeView,
                                     std::vector<CurrentEntry>& rCommandList)
 {
-    findInMenuRecursive(m_aMenuContent, toLower(rText), rpCommandTreeView, rCommandList);
+    m_aAdded.clear();
+
+    OUString aLowerCaseText = toLower(rText);
+
+    auto aTextStartCriterium = [](MenuContent const& rMenuContent, OUString const& rSearchText) {
+        return rMenuContent.m_aSearchableMenuLabel.startsWith(rSearchText);
+    };
+
+    findInMenuRecursive(m_aMenuContent, aLowerCaseText, rpCommandTreeView, rCommandList,
+                        aTextStartCriterium);
+
+    auto aTextAllCriterium = [](MenuContent const& rMenuContent, OUString const& rSearchText) {
+        return rMenuContent.m_aSearchableMenuLabel.indexOf(rSearchText) > 0;
+    };
+
+    findInMenuRecursive(m_aMenuContent, aLowerCaseText, rpCommandTreeView, rCommandList,
+                        aTextAllCriterium);
 }
 
-void MenuContentHandler::findInMenuRecursive(MenuContent const& rMenuContent, OUString const& rText,
-                                             std::unique_ptr<weld::TreeView>& rpCommandTreeView,
-                                             std::vector<CurrentEntry>& rCommandList)
+void MenuContentHandler::findInMenuRecursive(
+    MenuContent const& rMenuContent, OUString const& rText,
+    std::unique_ptr<weld::TreeView>& rpCommandTreeView, std::vector<CurrentEntry>& rCommandList,
+    std::function<bool(MenuContent const&, OUString const&)> const& rSearchCriterium)
 {
     for (MenuContent const& aSubContent : rMenuContent.m_aSubMenuContent)
     {
-        if (aSubContent.m_aSearchableMenuLabel.startsWith(rText))
+        if (rSearchCriterium(aSubContent, rText))
         {
-            OUString sCommandURL = aSubContent.m_aCommandURL;
-            util::URL aCommandURL;
-            aCommandURL.Complete = sCommandURL;
+            addCommandIfPossible(aSubContent, rpCommandTreeView, rCommandList);
+        }
+        findInMenuRecursive(aSubContent, rText, rpCommandTreeView, rCommandList, rSearchCriterium);
+    }
+}
 
-            m_xURLTransformer->parseStrict(aCommandURL);
+void MenuContentHandler::addCommandIfPossible(MenuContent const& rMenuContent,
+                                              std::unique_ptr<weld::TreeView>& rpCommandTreeView,
+                                              std::vector<CurrentEntry>& rCommandList)
+{
+    if (m_aAdded.find(rMenuContent.m_aFullLabelWithPath) != m_aAdded.end())
+        return;
 
-            auto* pViewFrame = SfxViewFrame::Current();
+    OUString sCommandURL = rMenuContent.m_aCommandURL;
+    util::URL aCommandURL;
+    aCommandURL.Complete = sCommandURL;
 
-            SfxSlotPool& rSlotPool = SfxSlotPool::GetSlotPool(pViewFrame);
-            const SfxSlot* pSlot = rSlotPool.GetUnoSlot(aCommandURL.Path);
-            if (pSlot)
+    if (m_xURLTransformer->parseStrict(aCommandURL))
+    {
+        auto* pViewFrame = SfxViewFrame::Current();
+
+        SfxSlotPool& rSlotPool = SfxSlotPool::GetSlotPool(pViewFrame);
+        const SfxSlot* pSlot = rSlotPool.GetUnoSlot(aCommandURL.Path);
+        if (pSlot)
+        {
+            std::unique_ptr<SfxPoolItem> pState;
+            SfxItemState eState = pViewFrame->GetBindings().QueryState(pSlot->GetSlotId(), pState);
+
+            if (eState != SfxItemState::DISABLED)
             {
-                std::unique_ptr<SfxPoolItem> pState;
-                SfxItemState eState
-                    = pViewFrame->GetBindings().QueryState(pSlot->GetSlotId(), pState);
+                auto xGraphic
+                    = vcl::CommandInfoProvider::GetXGraphicForCommand(sCommandURL, m_xFrame);
+                rCommandList.emplace_back(sCommandURL, rMenuContent.m_aTooltip);
 
-                if (eState != SfxItemState::DISABLED)
-                {
-                    auto xGraphic
-                        = vcl::CommandInfoProvider::GetXGraphicForCommand(sCommandURL, m_xFrame);
-                    rCommandList.emplace_back(sCommandURL, aSubContent.m_aTooltip);
-
-                    auto pIter = rpCommandTreeView->make_iterator();
-                    rpCommandTreeView->insert(nullptr, -1, &aSubContent.m_aFullLabelWithPath,
-                                              nullptr, nullptr, nullptr, false, pIter.get());
-                    rpCommandTreeView->set_image(*pIter, xGraphic);
-                }
+                auto pIter = rpCommandTreeView->make_iterator();
+                rpCommandTreeView->insert(nullptr, -1, &rMenuContent.m_aFullLabelWithPath, nullptr,
+                                          nullptr, nullptr, false, pIter.get());
+                rpCommandTreeView->set_image(*pIter, xGraphic);
+                m_aAdded.insert(rMenuContent.m_aFullLabelWithPath);
             }
         }
-        findInMenuRecursive(aSubContent, rText, rpCommandTreeView, rCommandList);
     }
 }
 
