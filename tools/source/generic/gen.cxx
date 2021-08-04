@@ -29,12 +29,10 @@
 
 OString Pair::toString() const
 {
-    std::stringstream ss;
     // Note that this is not just used for debugging output but the
     // format is parsed by external code (passed in callbacks to
     // LibreOfficeKit clients). So don't change.
-    ss << A() << ", " << B();
-    return ss.str().c_str();
+    return OString::number(A()) + ", " + OString::number(B());
 }
 
 tools::Rectangle tools::Rectangle::Justify( const Point& rLT, const Point& rRB )
@@ -192,12 +190,10 @@ bool tools::Rectangle::IsOver( const tools::Rectangle& rRect ) const
 
 OString tools::Rectangle::toString() const
 {
-    std::stringstream ss;
     // Note that this is not just used for debugging output but the
     // format is parsed by external code (passed in callbacks to
     // LibreOfficeKit clients). So don't change.
-    ss << getX() << ", " << getY() << ", " << getWidth() << ", " << getHeight();
-    return ss.str().c_str();
+    return OString::number(getX()) + ", " + OString::number(getY()) + ", " + OString::number(getWidth()) + ", " + OString::number(getHeight());
 }
 
 void tools::Rectangle::expand(tools::Long nExpandBy)

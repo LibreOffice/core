@@ -6496,13 +6496,7 @@ bool SwEditWin::DeleteSurroundingText(const Selection& rSelection)
 
 void SwEditWin::LogicInvalidate(const tools::Rectangle* pRectangle)
 {
-    OString sRectangle;
-    if (!pRectangle)
-        sRectangle = "EMPTY";
-    else
-        sRectangle = pRectangle->toString();
-
-    SfxLokHelper::notifyInvalidation(&m_rView, sRectangle);
+    SfxLokHelper::notifyInvalidation(&m_rView, pRectangle);
 }
 
 void SwEditWin::LogicMouseButtonDown(const MouseEvent& rMouseEvent)

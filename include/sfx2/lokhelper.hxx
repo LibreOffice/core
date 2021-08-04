@@ -15,6 +15,7 @@
 #include <vcl/event.hxx>
 #include <sfx2/dllapi.h>
 #include <sfx2/viewsh.hxx>
+#include <tools/gen.hxx>
 #include <cstddef>
 #include <rtl/string.hxx>
 #include <optional>
@@ -105,7 +106,7 @@ public:
     /// Emits a LOK_CALLBACK_DOCUMENT_SIZE_CHANGED for all views of the same document - if @bInvalidateAll - first invalidates all parts
     static void notifyDocumentSizeChangedAllViews(vcl::ITiledRenderable* pDoc, bool bInvalidateAll = true);
     /// Emits a LOK_CALLBACK_INVALIDATE_TILES, but tweaks it according to setOptionalFeatures() if needed.
-    static void notifyInvalidation(SfxViewShell const* pThisView, std::string_view rPayload);
+    static void notifyInvalidation(SfxViewShell const* pThisView, tools::Rectangle const *);
     /// Emits a LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, but tweaks it according to setOptionalFeatures() if needed.
     static void notifyVisCursorInvalidation(OutlinerViewShell const* pThisView, const OString& rRectangle, bool bMispelledWord = false, const OString& rHyperlink = "");
     /// Notifies all views with the given type and payload.

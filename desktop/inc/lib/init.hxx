@@ -47,11 +47,10 @@ namespace desktop {
 
         OString toString() const
         {
-            std::stringstream ss;
-            ss << m_aRectangle.toString();
             if (m_nPart >= -1)
-                ss << ", " << m_nPart;
-            return ss.str().c_str();
+                return m_aRectangle.toString() + ", " + OString::number(m_nPart);
+            else
+                return m_aRectangle.toString();
         }
 
         /// Infinite Rectangle is both sides are
