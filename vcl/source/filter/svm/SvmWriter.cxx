@@ -269,6 +269,13 @@ void SvmWriter::MetaActionHandler(MetaAction* pAction, ImplMetaWriteData* pData)
         }
         break;
 
+        case MetaActionType::REFPOINT:
+        {
+            auto* pMetaAction = static_cast<MetaRefPointAction*>(pAction);
+            RefPointHandler(pMetaAction);
+        }
+        break;
+
         /* default case prevents test failure and will be
         removed once all the handlers are completed */
         default:
@@ -622,5 +629,15 @@ void SvmWriter::EPSHandler(MetaEPSAction* pAction)
     SvmWriter aWriter(mrStream);
     GDIMetaFile aMtf = pAction->GetSubstitute();
     aWriter.Write(aMtf);
+}
+
+void SvmWriter::RefPointHandler(MetaRefPointAction* pAction)
+{
+    mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
+    VersionCompatWrite aCompat(mrStream, 1);
+
+    TypeSerializer aSerializer(mrStream);
+    aSerializer.writePoint(pAction->GetRefPoint());
+    mrStream.WriteBool(pAction->IsSetting());
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
