@@ -18,7 +18,6 @@
  */
 #pragma once
 
-#include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/io/XTruncate.hpp>
@@ -27,6 +26,7 @@
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/io/XAsyncOutputMonitor.hpp>
 #include <cppuhelper/implbase.hxx>
+#include <mutex>
 
 #include "filrec.hxx"
 
@@ -122,7 +122,7 @@ class XStream_impl :  public cppu::WeakImplHelper<
 
     private:
 
-        osl::Mutex   m_aMutex;
+        std::mutex   m_aMutex;
         bool         m_bInputStreamCalled,m_bOutputStreamCalled;
         bool         m_nIsOpen;
 
