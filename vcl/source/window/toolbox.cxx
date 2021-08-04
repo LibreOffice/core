@@ -22,7 +22,6 @@
 #include <vcl/event.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/toolkit/floatwin.hxx>
-#include <vcl/accel.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/help.hxx>
 #include <vcl/mnemonic.hxx>
@@ -39,6 +38,7 @@
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 
+#include <accel.hxx>
 #include <svdata.hxx>
 #include <window.h>
 #include <toolbox.h>

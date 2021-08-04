@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_ACCEL_HXX
-#define INCLUDED_VCL_ACCEL_HXX
+#pragma once
 
 #include <config_options.h>
 #include <tools/link.hxx>
@@ -29,9 +28,8 @@
 class ImplAccelData;
 class ImplAccelEntry;
 class CommandEvent;
-namespace vcl { class Window; }
 
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) Accelerator
+class Accelerator
 {
     friend class ImplAccelManager;
 
@@ -44,17 +42,13 @@ private:
     sal_uInt16              mnCurId;
     bool*                   mpDel;
 
-    SAL_DLLPRIVATE  void    ImplInit();
-    SAL_DLLPRIVATE  void    ImplCopyData( ImplAccelData& rAccelData );
-    SAL_DLLPRIVATE  void    ImplDeleteData();
-    SAL_DLLPRIVATE  void    ImplInsertAccel(
-                                sal_uInt16 nItemId,
-                                const vcl::KeyCode& rKeyCode,
-                                bool bEnable,
-                                Accelerator* pAutoAccel );
+    void    ImplInit();
+    void    ImplCopyData( ImplAccelData& rAccelData );
+    void    ImplDeleteData();
+    void    ImplInsertAccel(sal_uInt16 nItemId, const vcl::KeyCode& rKeyCode,
+                            bool bEnable, Accelerator* pAutoAccel);
 
-    SAL_DLLPRIVATE  ImplAccelEntry*
-                            ImplGetAccelData( const vcl::KeyCode& rKeyCode ) const;
+    ImplAccelEntry*         ImplGetAccelData( const vcl::KeyCode& rKeyCode ) const;
 
 public:
                             Accelerator();
@@ -78,7 +72,5 @@ public:
 
     Accelerator&            operator=( const Accelerator& rAccel );
 };
-
-#endif // INCLUDED_VCL_ACCEL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

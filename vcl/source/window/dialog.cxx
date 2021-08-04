@@ -34,6 +34,7 @@
 
 #include <svdata.hxx>
 #include <window.h>
+#include <accel.hxx>
 #include <brdwin.hxx>
 
 #include <rtl/bootstrap.hxx>
@@ -41,7 +42,6 @@
 #include <sal/log.hxx>
 
 #include <vcl/abstdlg.hxx>
-#include <vcl/accel.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/toolkit/floatwin.hxx>
 #include <vcl/layout.hxx>
