@@ -12,7 +12,7 @@
 #include <boost/shared_ptr.hpp>
 #include <ostream>
 
-#include <osl/mutex.hxx>
+#include <mutex>
 #include <cppuhelper/weak.hxx>
 #include <com/sun/star/io/XOutputStream.hpp>
 
@@ -45,7 +45,7 @@ namespace cmis
 
         private:
 
-            osl::Mutex m_aMutex;
+            std::mutex m_aMutex;
             boost::shared_ptr< std::ostream > m_pStream;
     };
 }
