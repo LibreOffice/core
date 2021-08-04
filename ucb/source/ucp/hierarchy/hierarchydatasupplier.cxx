@@ -36,71 +36,18 @@
 using namespace com::sun::star;
 using namespace hierarchy_ucp;
 
-namespace hierarchy_ucp
-{
-
-
-// struct ResultListEntry.
-
-namespace {
-
-struct ResultListEntry
-{
-    OUString                             aId;
-    uno::Reference< ucb::XContentIdentifier > xId;
-    uno::Reference< ucb::XContent >           xContent;
-    uno::Reference< sdbc::XRow >              xRow;
-    HierarchyEntryData                        aData;
-
-    explicit ResultListEntry( const HierarchyEntryData& rEntry ) : aData( rEntry ) {}
-};
-
-}
-
-// ResultList.
-
-
-typedef std::vector< std::unique_ptr<ResultListEntry> > ResultList;
-
-
-// struct DataSupplier_Impl.
-
-
-struct DataSupplier_Impl
-{
-    osl::Mutex                                      m_aMutex;
-    ResultList                                      m_aResults;
-    rtl::Reference< HierarchyContent >              m_xContent;
-    uno::Reference< uno::XComponentContext >        m_xContext;
-    HierarchyEntry                                  m_aFolder;
-    HierarchyEntry::iterator                        m_aIterator;
-    sal_Int32                                       m_nOpenMode;
-    bool                                        m_bCountFinal;
-
-    DataSupplier_Impl(
-        const uno::Reference< uno::XComponentContext >& rxContext,
-        const rtl::Reference< HierarchyContent >& rContent,
-        sal_Int32 nOpenMode )
-    : m_xContent( rContent ), m_xContext( rxContext ),
-      m_aFolder( rxContext,
-                 static_cast< HierarchyContentProvider * >(
-                     rContent->getProvider().get() ),
-                 rContent->getIdentifier()->getContentIdentifier() ),
-      m_nOpenMode( nOpenMode ), m_bCountFinal( false ) {}
-};
-
-
-}
-
-
-// HierarchyResultSetDataSupplier Implementation.
 
 
 HierarchyResultSetDataSupplier::HierarchyResultSetDataSupplier(
                 const uno::Reference< uno::XComponentContext >& rxContext,
                 const rtl::Reference< HierarchyContent >& rContent,
                 sal_Int32 nOpenMode )
-: m_pImpl( new DataSupplier_Impl( rxContext, rContent, nOpenMode ) )
+: m_xContent( rContent ), m_xContext( rxContext ),
+  m_aFolder( rxContext,
+             static_cast< HierarchyContentProvider * >(
+                 rContent->getProvider().get() ),
+             rContent->getIdentifier()->getContentIdentifier() ),
+  m_nOpenMode( nOpenMode ), m_bCountFinal( false )
 {
 }
 
@@ -115,11 +62,11 @@ HierarchyResultSetDataSupplier::~HierarchyResultSetDataSupplier()
 OUString HierarchyResultSetDataSupplier::queryContentIdentifierString(
                                                         sal_uInt32 nIndex )
 {
-    osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
+    osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
-    if ( nIndex < m_pImpl->m_aResults.size() )
+    if ( nIndex < m_aResults.size() )
     {
-        OUString aId = m_pImpl->m_aResults[ nIndex ]->aId;
+        OUString aId = m_aResults[ nIndex ]->aId;
         if ( !aId.isEmpty() )
         {
             // Already cached.
@@ -130,14 +77,14 @@ OUString HierarchyResultSetDataSupplier::queryContentIdentifierString(
     if ( getResult( nIndex ) )
     {
         OUString aId
-            = m_pImpl->m_xContent->getIdentifier()->getContentIdentifier();
+            = m_xContent->getIdentifier()->getContentIdentifier();
 
         if ( ( aId.lastIndexOf( '/' ) + 1 ) != aId.getLength() )
             aId += "/";
 
-        aId += m_pImpl->m_aResults[ nIndex ]->aData.getName();
+        aId += m_aResults[ nIndex ]->aData.getName();
 
-        m_pImpl->m_aResults[ nIndex ]->aId = aId;
+        m_aResults[ nIndex ]->aId = aId;
         return aId;
     }
     return OUString();
@@ -148,12 +95,12 @@ OUString HierarchyResultSetDataSupplier::queryContentIdentifierString(
 uno::Reference< ucb::XContentIdentifier >
 HierarchyResultSetDataSupplier::queryContentIdentifier( sal_uInt32 nIndex )
 {
-    osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
+    osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
-    if ( nIndex < m_pImpl->m_aResults.size() )
+    if ( nIndex < m_aResults.size() )
     {
         uno::Reference< ucb::XContentIdentifier > xId
-                                = m_pImpl->m_aResults[ nIndex ]->xId;
+                                = m_aResults[ nIndex ]->xId;
         if ( xId.is() )
         {
             // Already cached.
@@ -166,7 +113,7 @@ HierarchyResultSetDataSupplier::queryContentIdentifier( sal_uInt32 nIndex )
     {
         uno::Reference< ucb::XContentIdentifier > xId
             = new ::ucbhelper::ContentIdentifier( aId );
-        m_pImpl->m_aResults[ nIndex ]->xId = xId;
+        m_aResults[ nIndex ]->xId = xId;
         return xId;
     }
     return uno::Reference< ucb::XContentIdentifier >();
@@ -177,12 +124,12 @@ HierarchyResultSetDataSupplier::queryContentIdentifier( sal_uInt32 nIndex )
 uno::Reference< ucb::XContent >
 HierarchyResultSetDataSupplier::queryContent( sal_uInt32 nIndex )
 {
-    osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
+    osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
-    if ( nIndex < m_pImpl->m_aResults.size() )
+    if ( nIndex < m_aResults.size() )
     {
         uno::Reference< ucb::XContent > xContent
-                                = m_pImpl->m_aResults[ nIndex ]->xContent;
+                                = m_aResults[ nIndex ]->xContent;
         if ( xContent.is() )
         {
             // Already cached.
@@ -197,8 +144,8 @@ HierarchyResultSetDataSupplier::queryContent( sal_uInt32 nIndex )
         try
         {
             uno::Reference< ucb::XContent > xContent
-                = m_pImpl->m_xContent->getProvider()->queryContent( xId );
-            m_pImpl->m_aResults[ nIndex ]->xContent = xContent;
+                = m_xContent->getProvider()->queryContent( xId );
+            m_aResults[ nIndex ]->xContent = xContent;
             return xContent;
 
         }
@@ -213,9 +160,9 @@ HierarchyResultSetDataSupplier::queryContent( sal_uInt32 nIndex )
 // virtual
 bool HierarchyResultSetDataSupplier::getResult( sal_uInt32 nIndex )
 {
-    osl::ClearableGuard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
+    osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
 
-    if ( m_pImpl->m_aResults.size() > nIndex )
+    if ( m_aResults.size() > nIndex )
     {
         // Result already present.
         return true;
@@ -223,21 +170,21 @@ bool HierarchyResultSetDataSupplier::getResult( sal_uInt32 nIndex )
 
     // Result not (yet) present.
 
-    if ( m_pImpl->m_bCountFinal )
+    if ( m_bCountFinal )
         return false;
 
     // Try to obtain result...
 
-    sal_uInt32 nOldCount = m_pImpl->m_aResults.size();
+    sal_uInt32 nOldCount = m_aResults.size();
     bool bFound = false;
     sal_uInt32 nPos = nOldCount;
 
-    while ( m_pImpl->m_aFolder.next( m_pImpl->m_aIterator ) )
+    while ( m_aFolder.next( m_aIterator ) )
     {
-        const HierarchyEntryData& rResult = *m_pImpl->m_aIterator;
+        const HierarchyEntryData& rResult = *m_aIterator;
         if ( checkResult( rResult ) )
         {
-            m_pImpl->m_aResults.emplace_back( new ResultListEntry( rResult ) );
+            m_aResults.emplace_back( new ResultListEntry( rResult ) );
 
             if ( nPos == nIndex )
             {
@@ -250,7 +197,7 @@ bool HierarchyResultSetDataSupplier::getResult( sal_uInt32 nIndex )
     }
 
     if ( !bFound )
-        m_pImpl->m_bCountFinal = true;
+        m_bCountFinal = true;
 
     rtl::Reference< ::ucbhelper::ResultSet > xResultSet = getResultSet();
     if ( xResultSet.is() )
@@ -258,11 +205,11 @@ bool HierarchyResultSetDataSupplier::getResult( sal_uInt32 nIndex )
         // Callbacks follow!
         aGuard.clear();
 
-        if ( nOldCount < m_pImpl->m_aResults.size() )
+        if ( nOldCount < m_aResults.size() )
             xResultSet->rowCountChanged(
-                                    nOldCount, m_pImpl->m_aResults.size() );
+                                    nOldCount, m_aResults.size() );
 
-        if ( m_pImpl->m_bCountFinal )
+        if ( m_bCountFinal )
             xResultSet->rowCountFinal();
     }
 
@@ -273,21 +220,21 @@ bool HierarchyResultSetDataSupplier::getResult( sal_uInt32 nIndex )
 // virtual
 sal_uInt32 HierarchyResultSetDataSupplier::totalCount()
 {
-    osl::ClearableGuard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
+    osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
 
-    if ( m_pImpl->m_bCountFinal )
-        return m_pImpl->m_aResults.size();
+    if ( m_bCountFinal )
+        return m_aResults.size();
 
-    sal_uInt32 nOldCount = m_pImpl->m_aResults.size();
+    sal_uInt32 nOldCount = m_aResults.size();
 
-    while ( m_pImpl->m_aFolder.next( m_pImpl->m_aIterator ) )
+    while ( m_aFolder.next( m_aIterator ) )
     {
-        const HierarchyEntryData& rResult = *m_pImpl->m_aIterator;
+        const HierarchyEntryData& rResult = *m_aIterator;
         if ( checkResult( rResult ) )
-            m_pImpl->m_aResults.emplace_back( new ResultListEntry( rResult ) );
+            m_aResults.emplace_back( new ResultListEntry( rResult ) );
     }
 
-    m_pImpl->m_bCountFinal = true;
+    m_bCountFinal = true;
 
     rtl::Reference< ::ucbhelper::ResultSet > xResultSet = getResultSet();
     if ( xResultSet.is() )
@@ -295,28 +242,28 @@ sal_uInt32 HierarchyResultSetDataSupplier::totalCount()
         // Callbacks follow!
         aGuard.clear();
 
-        if ( nOldCount < m_pImpl->m_aResults.size() )
+        if ( nOldCount < m_aResults.size() )
             xResultSet->rowCountChanged(
-                                    nOldCount, m_pImpl->m_aResults.size() );
+                                    nOldCount, m_aResults.size() );
 
         xResultSet->rowCountFinal();
     }
 
-    return m_pImpl->m_aResults.size();
+    return m_aResults.size();
 }
 
 
 // virtual
 sal_uInt32 HierarchyResultSetDataSupplier::currentCount()
 {
-    return m_pImpl->m_aResults.size();
+    return m_aResults.size();
 }
 
 
 // virtual
 bool HierarchyResultSetDataSupplier::isCountFinal()
 {
-    return m_pImpl->m_bCountFinal;
+    return m_bCountFinal;
 }
 
 
@@ -324,12 +271,12 @@ bool HierarchyResultSetDataSupplier::isCountFinal()
 uno::Reference< sdbc::XRow >
 HierarchyResultSetDataSupplier::queryPropertyValues( sal_uInt32 nIndex  )
 {
-    osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
+    osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
-    if ( nIndex < m_pImpl->m_aResults.size() )
+    if ( nIndex < m_aResults.size() )
     {
         uno::Reference< sdbc::XRow > xRow
-            = m_pImpl->m_aResults[ nIndex ]->xRow;
+            = m_aResults[ nIndex ]->xRow;
         if ( xRow.is() )
         {
             // Already cached.
@@ -340,17 +287,17 @@ HierarchyResultSetDataSupplier::queryPropertyValues( sal_uInt32 nIndex  )
     if ( getResult( nIndex ) )
     {
         HierarchyContentProperties aData(
-            m_pImpl->m_aResults[ nIndex ]->aData );
+            m_aResults[ nIndex ]->aData );
 
         uno::Reference< sdbc::XRow > xRow
             = HierarchyContent::getPropertyValues(
-                m_pImpl->m_xContext,
+                m_xContext,
                 getResultSet()->getProperties(),
                 aData,
                 static_cast< HierarchyContentProvider * >(
-                    m_pImpl->m_xContent->getProvider().get() ),
+                    m_xContent->getProvider().get() ),
                 queryContentIdentifierString( nIndex ) );
-        m_pImpl->m_aResults[ nIndex ]->xRow = xRow;
+        m_aResults[ nIndex ]->xRow = xRow;
         return xRow;
     }
 
@@ -361,10 +308,10 @@ HierarchyResultSetDataSupplier::queryPropertyValues( sal_uInt32 nIndex  )
 // virtual
 void HierarchyResultSetDataSupplier::releasePropertyValues( sal_uInt32 nIndex )
 {
-    osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
+    osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
-    if ( nIndex < m_pImpl->m_aResults.size() )
-        m_pImpl->m_aResults[ nIndex ]->xRow.clear();
+    if ( nIndex < m_aResults.size() )
+        m_aResults[ nIndex ]->xRow.clear();
 }
 
 
@@ -383,7 +330,7 @@ void HierarchyResultSetDataSupplier::validate()
 bool HierarchyResultSetDataSupplier::checkResult(
                                     const HierarchyEntryData& rResult )
 {
-    switch ( m_pImpl->m_nOpenMode )
+    switch ( m_nOpenMode )
     {
         case ucb::OpenMode::FOLDERS:
             if ( rResult.getType() == HierarchyEntryData::LINK )

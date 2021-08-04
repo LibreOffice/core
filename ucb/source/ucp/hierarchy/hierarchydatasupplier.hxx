@@ -21,19 +21,17 @@
 
 #include <rtl/ref.hxx>
 #include <ucbhelper/resultset.hxx>
-#include <memory>
+#include <vector>
+#include "hierarchydata.hxx"
 
 namespace hierarchy_ucp {
 
 class HierarchyEntryData;
-struct DataSupplier_Impl;
 class HierarchyContent;
 
 class HierarchyResultSetDataSupplier :
         public ::ucbhelper::ResultSetDataSupplier
 {
-    std::unique_ptr<DataSupplier_Impl>  m_pImpl;
-
 private:
     bool checkResult( const HierarchyEntryData& rResult );
 
@@ -63,6 +61,26 @@ public:
     virtual void close() override;
 
     virtual void validate() override;
+private:
+    struct ResultListEntry
+    {
+        OUString                             aId;
+        css::uno::Reference< css::ucb::XContentIdentifier > xId;
+        css::uno::Reference< css::ucb::XContent >           xContent;
+        css::uno::Reference< css::sdbc::XRow >              xRow;
+        HierarchyEntryData                        aData;
+
+        explicit ResultListEntry( const HierarchyEntryData& rEntry ) : aData( rEntry ) {}
+    };
+    typedef std::vector< std::unique_ptr<ResultListEntry> > ResultList;
+    osl::Mutex                                      m_aMutex;
+    ResultList                                      m_aResults;
+    rtl::Reference< HierarchyContent >              m_xContent;
+    css::uno::Reference< css::uno::XComponentContext > m_xContext;
+    HierarchyEntry                                  m_aFolder;
+    HierarchyEntry::iterator                        m_aIterator;
+    sal_Int32                                       m_nOpenMode;
+    bool                                            m_bCountFinal;
 };
 
 } // namespace hierarchy_ucp
