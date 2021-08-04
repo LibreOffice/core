@@ -232,7 +232,7 @@ XRow_impl::getObject(
 {
     if( isIndexOutOfBounds( columnIndex ) )
         throw sdbc::SQLException( THROW_WHERE, uno::Reference< uno::XInterface >(), OUString(), 0, uno::Any() );
-    osl::MutexGuard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
     uno::Any Value = m_aValueMap[columnIndex - 1];
     m_nWasNull = !Value.hasValue();
     return Value;
@@ -285,7 +285,7 @@ template<typename T>
 T XRow_impl::getValue(sal_Int32 columnIndex)
 {
     T aValue{};
-    osl::MutexGuard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
     m_nWasNull = ::convert<T>( m_pMyShell, m_xTypeConverter, m_aValueMap[ --columnIndex ], aValue );
     return aValue;
 }
