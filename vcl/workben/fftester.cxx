@@ -46,6 +46,7 @@
 #include <vcl/event.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/filter/PngImageReader.hxx>
+#include <vcl/filter/SvmReader.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wmf.hxx>
 #include <vcl/wrkwin.hxx>
@@ -183,7 +184,8 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         {
             GDIMetaFile aGDIMetaFile;
             SvFileStream aFileStream(out, StreamMode::READ);
-            ReadGDIMetaFile(aFileStream, aGDIMetaFile);
+            SvmReader aReader(aFileStream);
+            aReader.Read(aGDIMetaFile);
         }
         else if (strcmp(argv[2], "pcd") == 0)
         {
