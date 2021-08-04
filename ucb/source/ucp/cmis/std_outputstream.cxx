@@ -50,7 +50,7 @@ namespace cmis
 
     void SAL_CALL StdOutputStream::writeBytes ( const uno::Sequence< sal_Int8 >& aData )
     {
-        osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
 
         if (!m_pStream)
             throw io::IOException( );
@@ -68,7 +68,7 @@ namespace cmis
 
     void SAL_CALL StdOutputStream::flush ( )
     {
-        osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
 
         if (!m_pStream)
             throw io::IOException( );
@@ -86,7 +86,7 @@ namespace cmis
 
     void SAL_CALL StdOutputStream::closeOutput ( )
     {
-        osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
 
         if (!m_pStream)
             throw io::IOException( );
