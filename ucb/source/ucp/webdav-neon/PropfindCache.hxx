@@ -11,7 +11,7 @@
 
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
-#include <osl/mutex.hxx>
+#include <mutex>
 #include <map>
 #include <vector>
 
@@ -61,7 +61,7 @@ namespace webdav_ucp
     class PropertyNamesCache final
     {
         PropNameCache       m_aTheCache;
-        osl::Mutex          m_aMutex;
+        std::mutex          m_aMutex;
 
     public:
         PropertyNamesCache();

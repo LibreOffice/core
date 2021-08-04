@@ -42,7 +42,7 @@ namespace webdav_ucp
     bool PropertyNamesCache::getCachedPropertyNames( const OUString& rURL, PropertyNames& rCacheElement )
     {
         // search the URL in the static map
-        osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
         PropNameCache::const_iterator it = m_aTheCache.find( rURL );
         if ( it == m_aTheCache.end() )
             return false;
@@ -65,7 +65,7 @@ namespace webdav_ucp
 
     void PropertyNamesCache::removeCachedPropertyNames( const OUString& rURL )
     {
-        osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
         PropNameCache::const_iterator it = m_aTheCache.find( rURL );
         if ( it != m_aTheCache.end() )
         {
@@ -75,7 +75,7 @@ namespace webdav_ucp
 
     void PropertyNamesCache::addCachePropertyNames( PropertyNames& rCacheElement )
     {
-        osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
         OUString aURL( rCacheElement.getURL() );
         TimeValue t1;
         osl_getSystemTime( &t1 );
