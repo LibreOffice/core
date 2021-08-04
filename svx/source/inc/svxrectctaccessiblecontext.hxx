@@ -42,7 +42,6 @@ namespace com::sun::star::awt {
 namespace tools { class Rectangle; }
 class SvxRectCtl;
 class SvxRectCtlChildAccessibleContext;
-namespace vcl { class Window; }
 
 typedef ::cppu::ImplHelper1<css::accessibility::XAccessible> OAccessibleHelper_Base;
 

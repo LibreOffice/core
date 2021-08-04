@@ -51,7 +51,6 @@ class SfxStyleSheetBase;
 class SdrModel;
 class SdrView;
 class Bitmap;
-namespace vcl { class Window; }
 class SdPage;
 class SdCustomShowList;
 class SfxAbstractDialog;
