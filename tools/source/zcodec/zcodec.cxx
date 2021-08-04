@@ -122,7 +122,7 @@ void ZCodec::Compress( SvStream& rIStm, SvStream& rOStm )
     for (;;)
     {
         pStream->next_in = mpInBuf.get();
-        pStream->avail_in = rIStm.ReadBytes( pStream->next_in, mnInBufSize );
+        pStream->avail_in = rIStm.ReadBytes( mpInBuf.get(), mnInBufSize );
         if (pStream->avail_in == 0)
             break;
         if ( pStream->avail_out == 0 )
