@@ -61,7 +61,7 @@ void DynamicResultSetWrapper::impl_init()
 
     Reference< XDynamicResultSet > xSource;
     {
-        osl::Guard< osl::Mutex > aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
         xSource = m_xSource;
         m_xSource = nullptr;
     }
@@ -83,7 +83,7 @@ void DynamicResultSetWrapper::impl_deinit()
 
 void DynamicResultSetWrapper::impl_EnsureNotDisposed()
 {
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
     if( m_bDisposed )
         throw DisposedException();
 }
@@ -91,7 +91,7 @@ void DynamicResultSetWrapper::impl_EnsureNotDisposed()
 //virtual
 void DynamicResultSetWrapper::impl_InitResultSetOne( const Reference< XResultSet >& xResultSet )
 {
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
     OSL_ENSURE( !m_xSourceResultOne.is(), "Source ResultSet One is set already" );
     m_xSourceResultOne = xResultSet;
     m_xMyResultOne = xResultSet;
@@ -100,7 +100,7 @@ void DynamicResultSetWrapper::impl_InitResultSetOne( const Reference< XResultSet
 //virtual
 void DynamicResultSetWrapper::impl_InitResultSetTwo( const Reference< XResultSet >& xResultSet )
 {
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
     OSL_ENSURE( !m_xSourceResultTwo.is(), "Source ResultSet Two is set already" );
     m_xSourceResultTwo = xResultSet;
     m_xMyResultTwo = xResultSet;
@@ -127,7 +127,7 @@ void SAL_CALL DynamicResultSetWrapper::dispose()
 
     Reference< XComponent > xSourceComponent;
     {
-        osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
+        std::unique_lock aGuard( m_aMutex );
         if( m_bInDispose || m_bDisposed )
             return;
         m_bInDispose = true;
@@ -139,8 +139,7 @@ void SAL_CALL DynamicResultSetWrapper::dispose()
             EventObject aEvt;
             aEvt.Source = static_cast< XComponent * >( this );
 
-            aGuard.clear();
-            m_pDisposeEventListeners->disposeAndClear( aEvt );
+            m_pDisposeEventListeners->disposeAndClear( aGuard, aEvt );
         }
     }
 
@@ -149,7 +148,7 @@ void SAL_CALL DynamicResultSetWrapper::dispose()
         xSourceComponent->dispose();
     */
 
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
     m_bDisposed = true;
     m_bInDispose = false;
 }
@@ -159,11 +158,11 @@ void SAL_CALL DynamicResultSetWrapper::dispose()
 void SAL_CALL DynamicResultSetWrapper::addEventListener( const Reference< XEventListener >& Listener )
 {
     impl_EnsureNotDisposed();
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
 
     if ( !m_pDisposeEventListeners )
         m_pDisposeEventListeners.reset(
-                    new OInterfaceContainerHelper2( m_aContainerMutex ) );
+                    new OInterfaceContainerHelper4<XEventListener>() );
 
     m_pDisposeEventListeners->addInterface( Listener );
 }
@@ -173,7 +172,7 @@ void SAL_CALL DynamicResultSetWrapper::addEventListener( const Reference< XEvent
 void SAL_CALL DynamicResultSetWrapper::removeEventListener( const Reference< XEventListener >& Listener )
 {
     impl_EnsureNotDisposed();
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
 
     if ( m_pDisposeEventListeners )
         m_pDisposeEventListeners->removeInterface( Listener );
@@ -188,7 +187,7 @@ void DynamicResultSetWrapper::impl_disposing( const EventObject& )
 {
     impl_EnsureNotDisposed();
 
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
 
     if( !m_xSource.is() )
         return;
@@ -219,7 +218,7 @@ void DynamicResultSetWrapper::impl_notify( const ListEvent& Changes )
     aNewEvent.Changes = Changes.Changes;
 
     {
-        osl::Guard< osl::Mutex > aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
         for( ListAction& rAction : aNewEvent.Changes )
         {
             if (m_bGotWelcome)
@@ -274,7 +273,7 @@ void SAL_CALL DynamicResultSetWrapper::setSource( const Reference< XInterface > 
 {
     impl_EnsureNotDisposed();
     {
-        osl::Guard< osl::Mutex > aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
         if( m_xSource.is() )
         {
             throw AlreadyInitializedException();
@@ -290,7 +289,7 @@ void SAL_CALL DynamicResultSetWrapper::setSource( const Reference< XInterface > 
 
     bool bStatic = false;
     {
-        osl::Guard< osl::Mutex > aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
         m_xSource = xSourceDynamic;
         xListener = m_xListener;
         bStatic = m_bStatic;
@@ -317,7 +316,7 @@ Reference< XResultSet > SAL_CALL DynamicResultSetWrapper::getStaticResultSet()
     Reference< XDynamicResultSet > xSource;
     Reference< XEventListener > xMyListenerImpl;
     {
-        osl::Guard< osl::Mutex > aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
         if( m_xListener.is() )
             throw ListenerAlreadySetException();
 
@@ -347,7 +346,7 @@ void SAL_CALL DynamicResultSetWrapper::setListener( const Reference< XDynamicRes
     Reference< XDynamicResultSet > xSource;
     Reference< XDynamicResultSetListener > xMyListenerImpl;
     {
-        osl::Guard< osl::Mutex > aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
         if( m_xListener.is() )
             throw ListenerAlreadySetException();
         if( m_bStatic )
@@ -409,7 +408,7 @@ sal_Int16 SAL_CALL DynamicResultSetWrapper::getCapabilities()
     m_aSourceSet.wait();
     Reference< XDynamicResultSet > xSource;
     {
-        osl::Guard< osl::Mutex > aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
         xSource = m_xSource;
     }
     return xSource->getCapabilities();

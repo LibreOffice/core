@@ -56,7 +56,7 @@ void CachedDynamicResultSetStub
     Reference< XResultSet > xStub(
         new CachedContentResultSetStub( m_xSourceResultOne ) );
 
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
     m_xMyResultOne = xStub;
 }
 
@@ -70,7 +70,7 @@ void CachedDynamicResultSetStub
     Reference< XResultSet > xStub(
         new CachedContentResultSetStub( m_xSourceResultTwo ) );
 
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
     m_xMyResultTwo = xStub;
 }
 

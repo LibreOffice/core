@@ -55,7 +55,7 @@ void CachedDynamicResultSet
     Reference< XResultSet > xCache(
         new CachedContentResultSet( m_xContext, m_xSourceResultOne, m_xContentIdentifierMapping ) );
 
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
     m_xMyResultOne = xCache;
 }
 
@@ -69,7 +69,7 @@ void CachedDynamicResultSet
     Reference< XResultSet > xCache(
         new CachedContentResultSet( m_xContext, m_xSourceResultTwo, m_xContentIdentifierMapping ) );
 
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
     m_xMyResultTwo = xCache;
 }
 
