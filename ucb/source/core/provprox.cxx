@@ -136,7 +136,6 @@ UcbContentProviderProxy::queryInterface( const Type & rType )
     if ( !aRet.hasValue() )
     {
         // Get original provider and forward the call...
-        osl::Guard< osl::Mutex > aGuard( m_aMutex );
         Reference< XContentProvider > xProvider = getContentProvider();
         if ( xProvider.is() )
             aRet = xProvider->queryInterface( rType );
@@ -155,7 +154,6 @@ XTYPEPROVIDER_COMMON_IMPL( UcbContentProviderProxy );
 Sequence< Type > SAL_CALL UcbContentProviderProxy::getTypes()
 {
     // Get original provider and forward the call...
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
     Reference< XTypeProvider > xProvider( getContentProvider(), UNO_QUERY );
     if ( xProvider.is() )
     {
@@ -201,8 +199,6 @@ Reference< XContent > SAL_CALL UcbContentProviderProxy::queryContent(
 {
     // Get original provider and forward the call...
 
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
-
     Reference< XContentProvider > xProvider = getContentProvider();
     if ( xProvider.is() )
         return xProvider->queryContent( Identifier );
@@ -218,7 +214,6 @@ sal_Int32 SAL_CALL UcbContentProviderProxy::compareContentIds(
 {
     // Get original provider and forward the call...
 
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
     Reference< XContentProvider > xProvider = getContentProvider();
     if ( xProvider.is() )
         return xProvider->compareContentIds( Id1, Id2 );
@@ -241,7 +236,7 @@ UcbContentProviderProxy::registerInstance( const OUString& Template,
 {
     // Just remember that this method was called ( and the params ).
 
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
 
     if ( !m_bRegister )
     {
@@ -261,7 +256,7 @@ Reference< XContentProvider > SAL_CALL
 UcbContentProviderProxy::deregisterInstance( const OUString& Template,
                                              const OUString& Arguments )
 {
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
 
     // registerInstance called at proxy and at original?
     if ( m_bRegister && m_xTargetProvider.is() )
@@ -296,7 +291,7 @@ UcbContentProviderProxy::deregisterInstance( const OUString& Template,
 Reference< XContentProvider > SAL_CALL
 UcbContentProviderProxy::getContentProvider()
 {
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
     if ( !m_xProvider.is() )
     {
         try
