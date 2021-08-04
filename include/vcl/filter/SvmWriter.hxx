@@ -65,4 +65,5 @@ public:
     void RasterOpHandler(MetaRasterOpAction* pAction);
     void TransparentHandler(MetaTransparentAction* pAction);
     void FloatTransparentHandler(MetaFloatTransparentAction* pAction);
+    void EPSHandler(MetaEPSAction* pAction);
 };

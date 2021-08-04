@@ -262,6 +262,13 @@ void SvmWriter::MetaActionHandler(MetaAction* pAction, ImplMetaWriteData* pData)
         }
         break;
 
+        case MetaActionType::EPS:
+        {
+            auto* pMetaAction = static_cast<MetaEPSAction*>(pAction);
+            EPSHandler(pMetaAction);
+        }
+        break;
+
         /* default case prevents test failure and will be
         removed once all the handlers are completed */
         default:
@@ -600,5 +607,20 @@ void SvmWriter::FloatTransparentHandler(MetaFloatTransparentAction* pAction)
     aSerializer.writePoint(pAction->GetPoint());
     aSerializer.writeSize(pAction->GetSize());
     aSerializer.writeGradient(pAction->GetGradient());
+}
+
+void SvmWriter::EPSHandler(MetaEPSAction* pAction)
+{
+    mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
+    VersionCompatWrite aCompat(mrStream, 1);
+
+    TypeSerializer aSerializer(mrStream);
+    aSerializer.writeGfxLink(pAction->GetLink());
+    aSerializer.writePoint(pAction->GetPoint());
+    aSerializer.writeSize(pAction->GetSize());
+
+    SvmWriter aWriter(mrStream);
+    GDIMetaFile aMtf = pAction->GetSubstitute();
+    aWriter.Write(aMtf);
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
