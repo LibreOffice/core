@@ -801,16 +801,12 @@ void DbCellControl::implAdjustReadOnly( const Reference< XPropertySet >& _rxMode
     if ( !(m_pWindow && _rxModel.is()) )
         return;
 
-    ControlBase* pEditWindow = dynamic_cast<ControlBase*>(m_pWindow.get());
-    if ( pEditWindow )
+    bool bReadOnly = m_rColumn.IsReadOnly();
+    if ( !bReadOnly )
     {
-        bool bReadOnly = m_rColumn.IsReadOnly();
-        if ( !bReadOnly )
-        {
-            _rxModel->getPropertyValue( i_bReadOnly ? OUString(FM_PROP_READONLY) : OUString(FM_PROP_ISREADONLY)) >>= bReadOnly;
-        }
-        pEditWindow->SetEditableReadOnly(bReadOnly);
+        _rxModel->getPropertyValue( i_bReadOnly ? OUString(FM_PROP_READONLY) : OUString(FM_PROP_ISREADONLY)) >>= bReadOnly;
     }
+    m_pWindow->SetEditableReadOnly(bReadOnly);
 }
 
 void DbCellControl::implAdjustEnabled( const Reference< XPropertySet >& _rxModel )
@@ -1920,7 +1916,7 @@ void DbNumericField::implAdjustGenericFieldSetting( const Reference< XPropertySe
     rPaintFormatter.SetFormat( sFormatString, aAppLanguage );
 }
 
-VclPtr<Control> DbNumericField::createField(BrowserDataWin* pParent, bool bSpinButton, const Reference<XPropertySet>& /*rxModel*/)
+VclPtr<svt::ControlBase> DbNumericField::createField(BrowserDataWin* pParent, bool bSpinButton, const Reference<XPropertySet>& /*rxModel*/)
 {
     return VclPtr<DoubleNumericControl>::Create(pParent, bSpinButton);
 }
@@ -2040,7 +2036,7 @@ void DbCurrencyField::implAdjustGenericFieldSetting( const Reference< XPropertyS
     rPaintCurrencyFormatter.SetCurrencySymbol(aStr);
 }
 
-VclPtr<Control> DbCurrencyField::createField(BrowserDataWin* pParent, bool bSpinButton, const Reference< XPropertySet >& /*rxModel*/)
+VclPtr<svt::ControlBase> DbCurrencyField::createField(BrowserDataWin* pParent, bool bSpinButton, const Reference< XPropertySet >& /*rxModel*/)
 {
     return VclPtr<LongCurrencyControl>::Create(pParent, bSpinButton);
 }
@@ -2123,7 +2119,7 @@ DbDateField::DbDateField( DbGridColumn& _rColumn )
     doPropertyListening( FM_PROP_DATE_SHOW_CENTURY );
 }
 
-VclPtr<Control> DbDateField::createField(BrowserDataWin* pParent, bool bSpinButton, const Reference< XPropertySet >& rxModel)
+VclPtr<svt::ControlBase> DbDateField::createField(BrowserDataWin* pParent, bool bSpinButton, const Reference< XPropertySet >& rxModel)
 {
     // check if there is a DropDown property set to TRUE
     bool bDropDown =    !hasProperty( FM_PROP_DROPDOWN, rxModel )
@@ -2249,7 +2245,7 @@ DbTimeField::DbTimeField( DbGridColumn& _rColumn )
     doPropertyListening( FM_PROP_STRICTFORMAT );
 }
 
-VclPtr<Control> DbTimeField::createField(BrowserDataWin* pParent, bool bSpinButton, const Reference< XPropertySet >& /*rxModel*/ )
+VclPtr<svt::ControlBase> DbTimeField::createField(BrowserDataWin* pParent, bool bSpinButton, const Reference< XPropertySet >& /*rxModel*/ )
 {
     return VclPtr<TimeControl>::Create(pParent, bSpinButton);
 }
@@ -2762,9 +2758,7 @@ void DbFilterField::Init(BrowserDataWin& rParent, const Reference< XRowSet >& xC
     DbCellControl::Init( rParent, xCursor );
 
     // filter cells are never readonly
-    ControlBase* pAsEdit = dynamic_cast<ControlBase*>(m_pWindow.get());
-    if (pAsEdit)
-        pAsEdit->SetEditableReadOnly(false);
+    m_pWindow->SetEditableReadOnly(false);
 }
 
 CellControllerRef DbFilterField::CreateController() const
