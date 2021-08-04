@@ -211,8 +211,8 @@ private:
 
 protected:
     DbGridColumn&               m_rColumn;
-    VclPtr<vcl::Window>         m_pPainter;
-    VclPtr<vcl::Window>         m_pWindow;
+    VclPtr<svt::ControlBase>    m_pPainter;
+    VclPtr<svt::ControlBase>    m_pWindow;
 
 protected:
     // attribute access
@@ -542,7 +542,7 @@ public:
     virtual ::svt::CellControllerRef    CreateController() const override;
 
 protected:
-    virtual VclPtr<Control> createField(
+    virtual VclPtr<svt::ControlBase> createField(
                             BrowserDataWin* _pParent,
                             bool bSpinButton,
                             const css::uno::Reference< css::beans::XPropertySet >& _rxModel
@@ -562,7 +562,7 @@ private:
     virtual void        updateFromModel( css::uno::Reference< css::beans::XPropertySet > _rxModel ) override;
 
     // DbSpinField
-    virtual VclPtr<Control> createField(
+    virtual VclPtr<svt::ControlBase> createField(
                             BrowserDataWin* _pParent,
                             bool bSpinButton,
                             const css::uno::Reference< css::beans::XPropertySet >& _rxModel
@@ -585,7 +585,7 @@ private:
     virtual void        updateFromModel( css::uno::Reference< css::beans::XPropertySet > _rxModel ) override;
 
     // DbSpinField
-    virtual VclPtr<Control> createField(
+    virtual VclPtr<svt::ControlBase> createField(
                             BrowserDataWin* _pParent,
                             bool bSpinButton,
                             const css::uno::Reference< css::beans::XPropertySet >& _rxModel
@@ -608,7 +608,7 @@ private:
     virtual void        updateFromModel( css::uno::Reference< css::beans::XPropertySet > _rxModel ) override;
 
     // DbSpinField
-    virtual VclPtr<Control> createField(
+    virtual VclPtr<svt::ControlBase> createField(
                             BrowserDataWin* _pParent,
                             bool bSpinButton,
                             const css::uno::Reference< css::beans::XPropertySet >& _rxModel
@@ -632,7 +632,7 @@ private:
     virtual void        updateFromModel( css::uno::Reference< css::beans::XPropertySet > _rxModel ) override;
 
     // DbSpinField
-    virtual VclPtr<Control> createField(
+    virtual VclPtr<svt::ControlBase> createField(
                             BrowserDataWin* _pParent,
                             bool bSpinButton,
                             const css::uno::Reference< css::beans::XPropertySet >& _rxModel
