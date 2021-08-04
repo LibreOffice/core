@@ -69,4 +69,5 @@ public:
     void RefPointHandler(MetaRefPointAction* pAction);
     void CommentHandler(MetaCommentAction* pAction);
     void LayoutModeHandler(MetaLayoutModeAction* pAction);
+    void TextLanguageHandler(MetaTextLanguageAction* pAction);
 };
