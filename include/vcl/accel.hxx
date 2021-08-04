@@ -29,6 +29,7 @@
 class ImplAccelData;
 class ImplAccelEntry;
 class CommandEvent;
+namespace vcl { class Window; }
 
 class UNLESS_MERGELIBS(VCL_DLLPUBLIC) Accelerator
 {
@@ -77,7 +78,6 @@ public:
 
     Accelerator&            operator=( const Accelerator& rAccel );
 
-    static bool             ToggleMnemonicsOnHierarchy(const CommandEvent& rCEvent, const vcl::Window *pWindow);
     static void             GenerateAutoMnemonicsOnHierarchy(const vcl::Window* pWindow);
 };
 

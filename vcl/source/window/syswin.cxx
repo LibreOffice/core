@@ -156,22 +156,25 @@ namespace
     }
 }
 
-bool Accelerator::ToggleMnemonicsOnHierarchy(const CommandEvent& rCEvent, const vcl::Window *pWindow)
+namespace
 {
-    if (rCEvent.GetCommand() == CommandEventId::ModKeyChange && ImplGetSVData()->maNWFData.mbAutoAccel)
+    bool ToggleMnemonicsOnHierarchy(const CommandEvent& rCEvent, const vcl::Window *pWindow)
     {
-        const CommandModKeyData *pCData = rCEvent.GetModKeyData();
-        const bool bShowAccel = pCData && pCData->IsMod2() && pCData->IsDown();
-        processChildren(pWindow, bShowAccel);
-        return true;
+        if (rCEvent.GetCommand() == CommandEventId::ModKeyChange && ImplGetSVData()->maNWFData.mbAutoAccel)
+        {
+            const CommandModKeyData *pCData = rCEvent.GetModKeyData();
+            const bool bShowAccel = pCData && pCData->IsMod2() && pCData->IsDown();
+            processChildren(pWindow, bShowAccel);
+            return true;
+        }
+        return false;
     }
-    return false;
 }
 
 bool SystemWindow::EventNotify( NotifyEvent& rNEvt )
 {
     if (rNEvt.GetType() == MouseNotifyEvent::COMMAND)
-        Accelerator::ToggleMnemonicsOnHierarchy(*rNEvt.GetCommandEvent(), this);
+        ToggleMnemonicsOnHierarchy(*rNEvt.GetCommandEvent(), this);
 
     // capture KeyEvents for menu handling
     if (rNEvt.GetType() == MouseNotifyEvent::KEYINPUT ||
