@@ -57,6 +57,7 @@ public:
     void TextRectHandler(MetaTextRectAction* pAction, ImplMetaWriteData* pData);
     void TextLineHandler(MetaTextLineAction* pAction);
     void BmpHandler(MetaBmpAction* pAction);
+    void BmpScaleHandler(MetaBmpScaleAction* pAction);
     void OverlineColorHandler(MetaOverlineColorAction* pAction);
     void TextAlignHandler(MetaTextAlignAction* pAction);
     void MapModeHandler(MetaMapModeAction* pAction);
