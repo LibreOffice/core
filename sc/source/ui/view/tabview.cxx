@@ -2588,7 +2588,7 @@ void lcl_ExtendTiledDimension(bool bColumn, const SCCOLROW nEnd, const SCCOLROW 
     if ((bColumn && aNewArea.getWidth()) || (!bColumn && aNewArea.getHeight()))
     {
         rTabView.UpdateSelectionOverlay();
-        SfxLokHelper::notifyInvalidation(rViewData.GetViewShell(), aNewArea.toString());
+        SfxLokHelper::notifyInvalidation(rViewData.GetViewShell(), &aNewArea);
     }
 
     // Provide size in the payload, so clients don't have to query for that.

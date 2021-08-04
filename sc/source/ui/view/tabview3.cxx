@@ -412,13 +412,13 @@ void ScTabView::SetCursor( SCCOL nPosX, SCROW nPosY, bool bNew )
                     // Only invalidate if spreadsheet extended to the right
                     if (aNewColArea.getWidth())
                     {
-                        SfxLokHelper::notifyInvalidation(aViewData.GetViewShell(), aNewColArea.toString());
+                        SfxLokHelper::notifyInvalidation(aViewData.GetViewShell(), &aNewColArea);
                     }
 
                     // Only invalidate if spreadsheet extended to the bottom
                     if (aNewRowArea.getHeight())
                     {
-                        SfxLokHelper::notifyInvalidation(aViewData.GetViewShell(), aNewRowArea.toString());
+                        SfxLokHelper::notifyInvalidation(aViewData.GetViewShell(), &aNewRowArea);
                     }
 
                     // Provide size in the payload, so clients don't have to
