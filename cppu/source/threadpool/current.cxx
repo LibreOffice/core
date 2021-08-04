@@ -20,7 +20,6 @@
 #include <sal/config.h>
 
 #include <rtl/byteseq.h>
-#include <osl/thread.h>
 #include <osl/mutex.hxx>
 
 #include <uno/current_context.h>
@@ -81,50 +80,33 @@ static typelib_InterfaceTypeDescription * get_type_XCurrentContext()
     return s_type_XCurrentContext;
 }
 
-extern "C" {
-
-static void delete_IdContainer( void * p )
+IdContainer::IdContainer()
 {
-    if (!p)
-        return;
-
-    IdContainer * pId = static_cast< IdContainer * >( p );
-    if (pId->pCurrentContext)
-    {
-        (*pId->pCurrentContextEnv->releaseInterface)(
-            pId->pCurrentContextEnv, pId->pCurrentContext );
-        (*pId->pCurrentContextEnv->aBase.release)(
-            &pId->pCurrentContextEnv->aBase );
-    }
-    if (pId->bInit)
-    {
-        ::rtl_byte_sequence_release( pId->pLocalThreadId );
-        ::rtl_byte_sequence_release( pId->pCurrentId );
-    }
-    delete pId;
+    pCurrentContext = nullptr;
+    pCurrentContextEnv = nullptr;
+    bInit = false;
 }
 
+IdContainer::~IdContainer()
+{
+    if (pCurrentContext)
+    {
+        (*pCurrentContextEnv->releaseInterface)(
+            pCurrentContextEnv, pCurrentContext );
+        (*pCurrentContextEnv->aBase.release)(
+            &pCurrentContextEnv->aBase );
+    }
+    if (bInit)
+    {
+        ::rtl_byte_sequence_release( pLocalThreadId );
+        ::rtl_byte_sequence_release( pCurrentId );
+    }
 }
 
 IdContainer * getIdContainer()
 {
-    struct ThreadKey
-    {
-        oslThreadKey _hThreadKey;
-        ~ThreadKey() { osl_destroyThreadKey(_hThreadKey); }
-    } static const s_key{ osl_createThreadKey(delete_IdContainer) };
-    oslThreadKey aKey = s_key._hThreadKey;
-
-    IdContainer * pId = static_cast< IdContainer * >( ::osl_getThreadKeyData( aKey ) );
-    if (! pId)
-    {
-        pId = new IdContainer;
-        pId->pCurrentContext = nullptr;
-        pId->pCurrentContextEnv = nullptr;
-        pId->bInit = false;
-        ::osl_setThreadKeyData( aKey, pId );
-    }
-    return pId;
+    static thread_local IdContainer aId;
+    return &aId;
 }
 
 }
