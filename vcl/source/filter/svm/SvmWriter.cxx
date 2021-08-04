@@ -255,6 +255,13 @@ void SvmWriter::MetaActionHandler(MetaAction* pAction, ImplMetaWriteData* pData)
         }
         break;
 
+        case MetaActionType::FLOATTRANSPARENT:
+        {
+            auto* pMetaAction = static_cast<MetaFloatTransparentAction*>(pAction);
+            FloatTransparentHandler(pMetaAction);
+        }
+        break;
+
         /* default case prevents test failure and will be
         removed once all the handlers are completed */
         default:
@@ -579,5 +586,19 @@ void SvmWriter::TransparentHandler(MetaTransparentAction* pAction)
 
     WritePolyPolygon(mrStream, aNoCurvePolyPolygon);
     mrStream.WriteUInt16(pAction->GetTransparence());
+}
+
+void SvmWriter::FloatTransparentHandler(MetaFloatTransparentAction* pAction)
+{
+    mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
+    VersionCompatWrite aCompat(mrStream, 1);
+
+    SvmWriter aWriter(mrStream);
+    GDIMetaFile aMtf = pAction->GetGDIMetaFile();
+    aWriter.Write(aMtf);
+    TypeSerializer aSerializer(mrStream);
+    aSerializer.writePoint(pAction->GetPoint());
+    aSerializer.writeSize(pAction->GetSize());
+    aSerializer.writeGradient(pAction->GetGradient());
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
