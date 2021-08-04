@@ -22,6 +22,7 @@
 #include <rtl/ref.hxx>
 
 #include <com/sun/star/style/XStyle.hpp>
+#include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
@@ -43,6 +44,7 @@ struct SfxItemPropertyMapEntry;
 
 typedef cppu::ImplInheritanceHelper< SfxUnoStyleSheet,
                                     css::beans::XPropertySet,
+                                    css::beans::XMultiPropertySet,
                                     css::lang::XServiceInfo,
                                     css::beans::XPropertyState,
                                     css::util::XModifyBroadcaster,
@@ -109,6 +111,13 @@ public:
     virtual void SAL_CALL addVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
     virtual void SAL_CALL removeVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
 
+    // XMultiPropertySet
+    virtual void SAL_CALL setPropertyValues(const css::uno::Sequence<OUString>& aPropertyNames, const css::uno::Sequence<css::uno::Any>& aValues) override;
+    virtual css::uno::Sequence<css::uno::Any> SAL_CALL getPropertyValues(const css::uno::Sequence<OUString>& aPropertyNames) override;
+    virtual void SAL_CALL addPropertiesChangeListener(const css::uno::Sequence<OUString>& aPropertyNames, const css::uno::Reference<css::beans::XPropertiesChangeListener>& xListener) override;
+    virtual void SAL_CALL removePropertiesChangeListener(const css::uno::Reference<css::beans::XPropertiesChangeListener>& xListener) override;
+    virtual void SAL_CALL firePropertiesChangeEvent(const css::uno::Sequence<OUString>& aPropertyNames, const css::uno::Reference<css::beans::XPropertiesChangeListener>& xListener) override;
+
     // XPropertyState
     virtual css::beans::PropertyState SAL_CALL getPropertyState( const OUString& PropertyName ) override;
     virtual css::uno::Sequence< css::beans::PropertyState > SAL_CALL getPropertyStates( const css::uno::Sequence< OUString >& aPropertyName ) override;
@@ -129,6 +138,9 @@ public:
 private:
     /// @throws css::uno::RuntimeException
     static const SfxItemPropertyMapEntry* getPropertyMapEntry( std::u16string_view rPropertyName );
+
+    void setPropertyValue_Impl(const OUString& aPropertyName, const css::uno::Any& aValue);
+    css::uno::Any SAL_CALL getPropertyValue_Impl(const OUString& PropertyName);
 
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
     virtual             ~SdStyleSheet() override;
