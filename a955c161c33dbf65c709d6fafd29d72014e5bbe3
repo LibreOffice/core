@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a7ba6e7f_cbbcdc8e",
+        "filename": "vcl/backendtest/outputdevice/polygon.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1002896
+      },
+      "writtenOn": "2021-08-04T06:07:37Z",
+      "side": 1,
+      "message": "Would something like this be okay to use to draw our half-ellipse as the B2dPolygon perfectly draws it but when I convert it to tools::Polygon the shape isn\u0027t same. Or should it be reverted ?",
+      "range": {
+        "startLine": 187,
+        "startChar": 8,
+        "endLine": 187,
+        "endChar": 74
+      },
+      "revId": "a955c161c33dbf65c709d6fafd29d72014e5bbe3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
