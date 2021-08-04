@@ -62,4 +62,5 @@ public:
     void FontHandler(MetaFontAction* pAction, ImplMetaWriteData* pData);
     void PushHandler(MetaPushAction* pAction);
     void PopHandler(MetaPopAction* pAction);
+    void RasterOpHandler(MetaRasterOpAction* pAction);
 };
