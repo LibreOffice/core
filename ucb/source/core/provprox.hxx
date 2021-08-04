@@ -19,7 +19,6 @@
 
 #pragma once
 
-#include <osl/mutex.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -32,6 +31,7 @@
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/basemutex.hxx>
+#include <mutex>
 
 
 
@@ -68,7 +68,7 @@ class UcbContentProviderProxy :
                 public css::ucb::XContentProvider,
                 public css::ucb::XParameterizedContentProvider
 {
-    ::osl::Mutex    m_aMutex;
+    std::mutex    m_aMutex;
     OUString m_aService;
     OUString m_aTemplate;
     OUString m_aArguments;
