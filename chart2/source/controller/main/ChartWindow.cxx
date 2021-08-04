@@ -283,11 +283,11 @@ void ChartWindow::LogicInvalidate(const tools::Rectangle* pRectangle)
     SfxViewShell* pCurrentShell = SfxViewShell::Current();
     if ( nullptr == pCurrentShell )
         return;
-    OString sRectangle;
+    tools::Rectangle aResultRectangle;
     if (!pRectangle)
     {
         // we have to invalidate the whole chart area not the whole document
-        sRectangle = GetBoundingBox().toString();
+        aResultRectangle = GetBoundingBox();
     }
     else
     {
@@ -325,9 +325,9 @@ void ChartWindow::LogicInvalidate(const tools::Rectangle* pRectangle)
             aRectangle = tools::Rectangle(aRectangle.TopLeft() + aOffset, aRectangle.GetSize());
         }
 
-        sRectangle = aRectangle.toString();
+        aResultRectangle = aRectangle;
     }
-    SfxLokHelper::notifyInvalidation(pCurrentShell, sRectangle);
+    SfxLokHelper::notifyInvalidation(pCurrentShell, &aResultRectangle);
 }
 
 FactoryFunction ChartWindow::GetUITestFactory() const
