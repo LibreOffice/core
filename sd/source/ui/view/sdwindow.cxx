@@ -1028,18 +1028,19 @@ void Window::LogicInvalidate(const ::tools::Rectangle* pRectangle)
 
     if (!comphelper::LibreOfficeKit::isActive())
         return;
-    OString sRectangle;
+    ::tools::Rectangle aRectangle;
+    ::tools::Rectangle* pResultRectangle;
     if (!pRectangle)
-        sRectangle = "EMPTY";
+        pResultRectangle = nullptr;
     else
     {
-        ::tools::Rectangle aRectangle(*pRectangle);
+        aRectangle = *pRectangle;
         if (GetMapMode().GetMapUnit() == MapUnit::Map100thMM)
             aRectangle = OutputDevice::LogicToLogic(aRectangle, MapMode(MapUnit::Map100thMM), MapMode(MapUnit::MapTwip));
-        sRectangle = aRectangle.toString();
+        pResultRectangle = &aRectangle;
     }
     SfxViewShell& rSfxViewShell = pDrawViewShell->GetViewShellBase();
-    SfxLokHelper::notifyInvalidation(&rSfxViewShell, sRectangle);
+    SfxLokHelper::notifyInvalidation(&rSfxViewShell, pResultRectangle);
 }
 
 void Window::LogicMouseButtonDown(const MouseEvent& rMouseEvent)

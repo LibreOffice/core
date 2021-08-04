@@ -493,14 +493,16 @@ void SfxLokHelper::notifyWindow(const SfxViewShell* pThisView,
     pThisView->libreOfficeKitViewCallback(LOK_CALLBACK_WINDOW, s.getStr());
 }
 
-void SfxLokHelper::notifyInvalidation(SfxViewShell const* pThisView, std::string_view rPayload)
+void SfxLokHelper::notifyInvalidation(SfxViewShell const* pThisView, tools::Rectangle const* pRect)
 {
-    OStringBuffer aBuf(32);
-
     if (DisableCallbacks::disabled())
         return;
 
-    aBuf.append(rPayload);
+    OStringBuffer aBuf(64);
+    if (pRect)
+        aBuf.append(pRect->toString());
+    else
+        aBuf.append("EMPTY");
     if (comphelper::LibreOfficeKit::isPartInInvalidation())
     {
         aBuf.append(", ");
