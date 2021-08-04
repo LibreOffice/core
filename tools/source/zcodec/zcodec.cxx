@@ -122,7 +122,7 @@ void ZCodec::Compress( SvStream& rIStm, SvStream& rOStm )
     for (;;)
     {
         pStream->next_in = mpInBuf.get();
-        pStream->avail_in = rIStm.ReadBytes( pStream->next_in, mnInBufSize );
+        pStream->avail_in = rIStm.ReadBytes( mpInBuf.get(), mnInBufSize );
         if (pStream->avail_in == 0)
             break;
         if ( pStream->avail_out == 0 )
@@ -183,7 +183,7 @@ void ZCodec::Write( SvStream& rOStm, const sal_uInt8* pData, sal_uInt32 nSize )
 
     auto pStream = static_cast<z_stream*>(mpsC_Stream);
     pStream->avail_in = nSize;
-    pStream->next_in = const_cast<unsigned char*>(pData);
+    pStream->next_in = pData;
 
     while ( pStream->avail_in || ( pStream->avail_out == 0 ) )
     {

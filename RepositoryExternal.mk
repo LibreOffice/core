@@ -348,6 +348,7 @@ ifneq ($(SYSTEM_ZLIB),)
 define gb_LinkTarget__use_zlib
 $(call gb_LinkTarget_add_defs,$(1),\
 	-DSYSTEM_ZLIB \
+	-DZLIB_CONST \
 )
 $(call gb_LinkTarget_add_libs,$(1),-lz)
 
@@ -364,6 +365,10 @@ else # !SYSTEM_ZLIB
 
 define gb_LinkTarget__use_zlib_multiarch
 $(if $(2),,$(call gb_Output_error,gb_LinkTarget__use_zlib_multiarch needs two arguments))
+
+$(call gb_LinkTarget_add_defs,$(1), \
+    -DZLIB_CONST \
+)
 
 $(call gb_LinkTarget_set_include,$(1),\
 	$(ZLIB_CFLAGS) \
