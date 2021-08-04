@@ -19,7 +19,7 @@
 
 #include <sal/config.h>
 
-#include <accel.h>
+#include <accel.hxx>
 #include <salframe.hxx>
 #include <svdata.hxx>
 

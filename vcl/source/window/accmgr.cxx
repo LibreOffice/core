@@ -18,7 +18,6 @@
  */
 
 
-#include <accel.h>
 #include <accel.hxx>
 #include <accmgr.hxx>
 
