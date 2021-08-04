@@ -433,6 +433,7 @@ const std::locale& ImplGetResLocale();
 VCL_PLUGIN_PUBLIC OUString VclResId(TranslateId sContextAndId);
 DockingManager*     ImplGetDockingManager();
 BlendFrameCache*    ImplGetBlendFrameCache();
+void GenerateAutoMnemonicsOnHierarchy(const vcl::Window* pWindow);
 
 VCL_PLUGIN_PUBLIC ImplSVHelpData& ImplGetSVHelpData();
 

@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vcl/accel.hxx>
 #include <vcl/event.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/tabpage.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/scrbar.hxx>
+#include <svdata.hxx>
 
 void TabPage::ImplInit( vcl::Window* pParent, WinBits nStyle )
 {
@@ -119,7 +119,7 @@ void TabPage::StateChanged( StateChangedType nType )
     if ( nType == StateChangedType::InitShow )
     {
         if (GetSettings().GetStyleSettings().GetAutoMnemonic())
-            Accelerator::GenerateAutoMnemonicsOnHierarchy(this);
+            GenerateAutoMnemonicsOnHierarchy(this);
         // FIXME: no layouting, workaround some clipping issues
         ImplAdjustNWFSizes();
     }
