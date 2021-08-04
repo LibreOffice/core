@@ -276,6 +276,13 @@ void SvmWriter::MetaActionHandler(MetaAction* pAction, ImplMetaWriteData* pData)
         }
         break;
 
+        case MetaActionType::COMMENT:
+        {
+            auto* pMetaAction = static_cast<MetaCommentAction*>(pAction);
+            CommentHandler(pMetaAction);
+        }
+        break;
+
         /* default case prevents test failure and will be
         removed once all the handlers are completed */
         default:
@@ -639,5 +646,16 @@ void SvmWriter::RefPointHandler(MetaRefPointAction* pAction)
     TypeSerializer aSerializer(mrStream);
     aSerializer.writePoint(pAction->GetRefPoint());
     mrStream.WriteBool(pAction->IsSetting());
+}
+
+void SvmWriter::CommentHandler(MetaCommentAction* pAction)
+{
+    mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
+    VersionCompatWrite aCompat(mrStream, 1);
+    write_uInt16_lenPrefixed_uInt8s_FromOString(mrStream, pAction->GetComment());
+    mrStream.WriteInt32(pAction->GetValue()).WriteUInt32(pAction->GetDataSize());
+
+    if (pAction->GetDataSize())
+        mrStream.WriteBytes(pAction->GetData(), pAction->GetDataSize());
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
