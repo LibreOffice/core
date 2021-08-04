@@ -1661,7 +1661,24 @@ void DocxSdrExport::writeDMLTextFrame(ww8::Frame const* pParentFrame, int nAncho
         pDocPrAttrList->add(XML_id, OString::number(nAnchorId).getStr());
         pDocPrAttrList->add(XML_name,
                             OUStringToOString(rFrameFormat.GetName(), RTL_TEXTENCODING_UTF8));
-        pFS->singleElementNS(XML_wp, XML_docPr, pDocPrAttrList);
+
+        pFS->startElementNS(XML_wp, XML_docPr, pDocPrAttrList);
+
+        OUString sHyperlink;
+        if (xPropertySet.is())
+            xPropertySet->getPropertyValue("HyperLinkURL") >>= sHyperlink;
+        if (!sHyperlink.isEmpty())
+        {
+            OUString sRelId = m_pImpl->getExport().GetFilter().addRelation(
+                pFS->getOutputStream(), oox::getRelationship(Relationship::HYPERLINK),
+                oox::drawingml::URLTransformer().getTransformedString(sHyperlink),
+                oox::drawingml::URLTransformer().isExternalURL(sHyperlink));
+            pFS->singleElementNS(XML_a, XML_hlinkClick, FSNS(XML_r, XML_id), sRelId,
+                                 FSNS(XML_xmlns, XML_a),
+                                 m_pImpl->getExport().GetFilter().getNamespaceURL(OOX_NS(dml)));
+        }
+
+        pFS->endElementNS(XML_wp, XML_docPr);
 
         pFS->startElementNS(XML_a, XML_graphic, FSNS(XML_xmlns, XML_a),
                             m_pImpl->getExport().GetFilter().getNamespaceURL(OOX_NS(dml)));
@@ -1938,6 +1955,16 @@ void DocxSdrExport::writeVMLTextFrame(ww8::Frame const* pParentFrame, bool bText
         if (!sAnchorId.isEmpty())
             m_pImpl->getFlyAttrList()->addNS(XML_w14, XML_anchorId,
                                              OUStringToOString(sAnchorId, RTL_TEXTENCODING_UTF8));
+
+        uno::Reference<drawing::XShape> xShape(const_cast<SdrObject*>(pObject)->getUnoShape(),
+                                               uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
+        OUString sHyperlink;
+        if (xShapeProps.is())
+            xShapeProps->getPropertyValue("HyperLinkURL") >>= sHyperlink;
+        if (!sHyperlink.isEmpty())
+            m_pImpl->getFlyAttrList()->add(XML_href,
+                                           OUStringToOString(sHyperlink, RTL_TEXTENCODING_UTF8));
     }
     rtl::Reference<FastAttributeList> xFlyAttrList(m_pImpl->getFlyAttrList());
     m_pImpl->getFlyAttrList().clear();

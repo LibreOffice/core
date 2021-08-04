@@ -770,6 +770,9 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
         {
             PropertySet(xShape).setAnyProperty(PROP_WritingMode, uno::makeAny(nWritingMode));
         }
+        // tdf#123626
+        if (!maShapeModel.maHyperlink.isEmpty())
+            PropertySet(xShape).setAnyProperty(PROP_HyperLinkURL, makeAny(maShapeModel.maHyperlink));
     }
     else
     {
@@ -814,8 +817,8 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
             PropertySet(xShape).setAnyProperty(PROP_TextWordWrap, makeAny(maTypeModel.maWrapStyle == "square"));
 
         // tdf#123626
-        if (!maTypeModel.maHyperlink.isEmpty())
-            PropertySet(xShape).setAnyProperty(PROP_Hyperlink, makeAny(maTypeModel.maHyperlink));
+        if (!maShapeModel.maHyperlink.isEmpty())
+            PropertySet(xShape).setAnyProperty(PROP_Hyperlink, makeAny(maShapeModel.maHyperlink));
 
         PropertySet(xShape).setAnyProperty(PROP_TextAutoGrowHeight,
                                            makeAny(maTypeModel.mbAutoHeight));
