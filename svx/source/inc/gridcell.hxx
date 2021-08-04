@@ -211,8 +211,8 @@ private:
 
 protected:
     DbGridColumn&               m_rColumn;
-    VclPtr<vcl::Window>         m_pPainter;
-    VclPtr<vcl::Window>         m_pWindow;
+    VclPtr<svt::ControlBase>    m_pPainter;
+    VclPtr<svt::ControlBase>    m_pWindow;
 
 protected:
     // attribute access
@@ -262,8 +262,7 @@ public:
     DbCellControl(DbGridColumn& _rColumn);
     virtual ~DbCellControl() override;
 
-
-    vcl::Window& GetWindow() const
+    svt::ControlBase& GetWindow() const
     {
         ENSURE_OR_THROW( m_pWindow, "no window" );
         return *m_pWindow;
@@ -545,7 +544,7 @@ public:
     virtual ::svt::CellControllerRef    CreateController() const override;
 
 protected:
-    virtual VclPtr<Control> createField(
+    virtual VclPtr<svt::ControlBase> createField(
                             BrowserDataWin* _pParent,
                             bool bSpinButton,
                             const css::uno::Reference< css::beans::XPropertySet >& _rxModel
@@ -565,7 +564,7 @@ protected:
     virtual void        updateFromModel( css::uno::Reference< css::beans::XPropertySet > _rxModel ) override;
 
     // DbSpinField
-    virtual VclPtr<Control> createField(
+    virtual VclPtr<svt::ControlBase> createField(
                             BrowserDataWin* _pParent,
                             bool bSpinButton,
                             const css::uno::Reference< css::beans::XPropertySet >& _rxModel
@@ -588,7 +587,7 @@ protected:
     virtual void        updateFromModel( css::uno::Reference< css::beans::XPropertySet > _rxModel ) override;
 
     // DbSpinField
-    virtual VclPtr<Control> createField(
+    virtual VclPtr<svt::ControlBase> createField(
                             BrowserDataWin* _pParent,
                             bool bSpinButton,
                             const css::uno::Reference< css::beans::XPropertySet >& _rxModel
@@ -611,7 +610,7 @@ protected:
     virtual void        updateFromModel( css::uno::Reference< css::beans::XPropertySet > _rxModel ) override;
 
     // DbSpinField
-    virtual VclPtr<Control> createField(
+    virtual VclPtr<svt::ControlBase> createField(
                             BrowserDataWin* _pParent,
                             bool bSpinButton,
                             const css::uno::Reference< css::beans::XPropertySet >& _rxModel
@@ -635,7 +634,7 @@ protected:
     virtual void        updateFromModel( css::uno::Reference< css::beans::XPropertySet > _rxModel ) override;
 
     // DbSpinField
-    virtual VclPtr<Control> createField(
+    virtual VclPtr<svt::ControlBase> createField(
                             BrowserDataWin* _pParent,
                             bool bSpinButton,
                             const css::uno::Reference< css::beans::XPropertySet >& _rxModel
@@ -776,14 +775,16 @@ public:
         { m_pCellControl->AlignControl(nAlignment);}
 
 protected:
-    void onWindowEvent( const VclEventId _nEventId, const vcl::Window& _rWindow, const void* _pEventData );
+    void onWindowEvent(const VclEventId _nEventId, const void* _pEventData);
 
     // default implementations call our focus listeners, don't forget to call them if you override this
     virtual void onFocusGained( const css::awt::FocusEvent& _rEvent );
     virtual void onFocusLost( const css::awt::FocusEvent& _rEvent );
 
 private:
-    vcl::Window* getEventWindow() const;
+    svt::ControlBase* getEventWindow() const;
+    DECL_LINK(OnFocusGained, LinkParamNone*, void);
+    DECL_LINK(OnFocusLost, LinkParamNone*, void);
     DECL_LINK( OnWindowEvent, VclWindowEvent&, void );
 };
 

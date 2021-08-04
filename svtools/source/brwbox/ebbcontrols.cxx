@@ -362,6 +362,7 @@ namespace svt
 
     IMPL_LINK_NOARG(ControlBase, FocusOutHdl, weld::Widget&, void)
     {
+        m_aFocusOutHdl.Call(nullptr);
         static_cast<BrowserDataWin*>(GetParent())->GetParent()->ChildFocusOut();
     }
 
