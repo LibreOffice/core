@@ -459,10 +459,6 @@ bool BackingWindow::PreNotify(NotifyEvent& rNEvt)
         if ((aCommand != "vnd.sun.star.findbar:FocusToFindbar") && pEvt && mpAccExec->execute(rKeyCode))
             return true;
     }
-    else if (rNEvt.GetType() == MouseNotifyEvent::COMMAND)
-    {
-        Accelerator::ToggleMnemonicsOnHierarchy(*rNEvt.GetCommandEvent(), this);
-    }
     return InterimItemWindow::PreNotify( rNEvt );
 }
 
