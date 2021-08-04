@@ -1685,7 +1685,6 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
     const bool bAllowAdjustments = !GetSettingsTable()->GetDoNotUseHTMLParagraphAutoSpacing();
     sal_Int32 nBeforeAutospacing = -1;
     bool bIsAutoSet = pParaContext && pParaContext->isSet(PROP_PARA_TOP_MARGIN_BEFORE_AUTO_SPACING);
-    bool bIsZeroAutospacingWithoutTopmargin = false;
     const bool bNoTopmargin = pParaContext && !pParaContext->isSet(PROP_PARA_TOP_MARGIN);
     // apply INHERITED autospacing only if top margin is not set
     if ( bIsAutoSet || bNoTopmargin )
@@ -1695,44 +1694,53 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
         // (see default_spacing = -1 in processing of LN_CT_Spacing_beforeAutospacing)
         if ( bNoTopmargin && nBeforeAutospacing == ConversionHelper::convertTwipToMM100(-1) )
         {
-            nBeforeAutospacing = 0;
-            bIsZeroAutospacingWithoutTopmargin = true;
+            sal_Int32 nStyleAuto = -1;
+            GetPropertyFromParaStyleSheet(PROP_PARA_TOP_MARGIN_BEFORE_AUTO_SPACING) >>= nStyleAuto;
+            if (nStyleAuto > 0)
+                nBeforeAutospacing = 0;
         }
     }
     if ( nBeforeAutospacing > -1 && pParaContext )
     {
-        if ( bAllowAdjustments && !bIsZeroAutospacingWithoutTopmargin )
+        if (bAllowAdjustments)
         {
             if ( GetIsFirstParagraphInShape() ||
                  (GetIsFirstParagraphInSection() && GetSectionContext() && GetSectionContext()->IsFirstSection()) ||
                  (m_bFirstParagraphInCell && m_nTableDepth > 0 && m_nTableDepth == m_nTableCellDepth) )
             {
-                nBeforeAutospacing = 0;
                 // export requires grabbag to match top_margin, so keep them in sync
-                if ( bIsAutoSet )
+                if (nBeforeAutospacing && bIsAutoSet)
                     pParaContext->Insert( PROP_PARA_TOP_MARGIN_BEFORE_AUTO_SPACING, uno::makeAny( sal_Int32(0) ),true, PARA_GRAB_BAG );
+                nBeforeAutospacing = 0;
             }
         }
-        if ( !bIsZeroAutospacingWithoutTopmargin || (m_nTableDepth > 0 && m_nTableDepth == m_nTableCellDepth) )
-            pParaContext->Insert(PROP_PARA_TOP_MARGIN, uno::makeAny(nBeforeAutospacing));
+        pParaContext->Insert(PROP_PARA_TOP_MARGIN, uno::makeAny(nBeforeAutospacing));
     }
 
     sal_Int32 nAfterAutospacing = -1;
     bIsAutoSet = pParaContext && pParaContext->isSet(PROP_PARA_BOTTOM_MARGIN_AFTER_AUTO_SPACING);
-    bool bApplyAutospacing = bIsAutoSet || (pParaContext && !pParaContext->isSet(PROP_PARA_BOTTOM_MARGIN));
-    if ( bApplyAutospacing )
+    const bool bNoBottomMargin = pParaContext && !pParaContext->isSet(PROP_PARA_BOTTOM_MARGIN);
+    bool bAppliedBottomAutospacing = false;
+    if (bIsAutoSet || bNoBottomMargin)
+    {
         GetAnyProperty(PROP_PARA_BOTTOM_MARGIN_AFTER_AUTO_SPACING, pPropertyMap) >>= nAfterAutospacing;
+        if (bNoBottomMargin && nAfterAutospacing == ConversionHelper::convertTwipToMM100(-1))
+        {
+            sal_Int32 nStyleAuto = -1;
+            GetPropertyFromParaStyleSheet(PROP_PARA_BOTTOM_MARGIN_AFTER_AUTO_SPACING) >>= nStyleAuto;
+            if (nStyleAuto > 0)
+                nAfterAutospacing = 0;
+        }
+    }
     if ( nAfterAutospacing > -1 && pParaContext )
     {
         pParaContext->Insert(PROP_PARA_BOTTOM_MARGIN, uno::makeAny(nAfterAutospacing));
-        bApplyAutospacing = bAllowAdjustments;
+        bAppliedBottomAutospacing = bAllowAdjustments;
     }
-    else
-        bApplyAutospacing = false;
 
     // tell TableManager to reset the bottom margin if it determines that this is the cell's last paragraph.
     if ( hasTableManager() && getTableManager().isInCell() )
-        getTableManager().setCellLastParaAfterAutospacing( bApplyAutospacing );
+        getTableManager().setCellLastParaAfterAutospacing(bAppliedBottomAutospacing);
 
     if (xTextAppend.is() && pParaContext && hasTableManager() && !getTableManager().isIgnore())
     {

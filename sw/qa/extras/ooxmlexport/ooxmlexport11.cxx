@@ -546,12 +546,22 @@ DECLARE_OOXMLEXPORT_TEST(testTdf113258_noBeforeAutospacing, "tdf113258_noBeforeA
                          getProperty<sal_Int32>(xShape->getStart(), "ParaTopMargin"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf142542_cancelledAutospacing, "tdf142542_cancelledAutospacing.docx")
+{
+    //Direct formatting disabling autoSpacing must override paragraph-style's autoSpacing.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), getProperty<sal_Int32>(getParagraph(1), "ParaTopMargin"));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), getProperty<sal_Int32>(getParagraph(1), "ParaBottomMargin"));
+}
+
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf137655, "tdf137655.docx")
 {
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // These were 280.
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc[1]/w:p[1]/w:pPr/w:spacing", "before", "0");
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc[2]/w:p[1]/w:pPr/w:spacing", "before", "0");
+
+    //tdf#142542: ensure that the original beforeAutospacing = 0 is not changed.
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc[1]/w:p[1]/w:pPr/w:spacing", "beforeAutospacing", "0");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf120511_eatenSection, "tdf120511_eatenSection.docx")
