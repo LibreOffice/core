@@ -3082,7 +3082,6 @@ IMPL_LINK_NOARG(DbFilterField, OnToggle, weld::CheckButton&, void)
     }
 }
 
-
 FmXGridCell::FmXGridCell( DbGridColumn* pColumn, std::unique_ptr<DbCellControl> _pControl )
             :OComponentHelper(m_aMutex)
             ,m_pColumn(pColumn)
@@ -3095,22 +3094,19 @@ FmXGridCell::FmXGridCell( DbGridColumn* pColumn, std::unique_ptr<DbCellControl> 
 {
 }
 
-
 void FmXGridCell::init()
 {
-    vcl::Window* pEventWindow( getEventWindow() );
+    svt::ControlBase* pEventWindow( getEventWindow() );
     if ( pEventWindow )
         pEventWindow->AddEventListener( LINK( this, FmXGridCell, OnWindowEvent ) );
 }
 
-
-vcl::Window* FmXGridCell::getEventWindow() const
+svt::ControlBase* FmXGridCell::getEventWindow() const
 {
     if ( m_pCellControl )
         return &m_pCellControl->GetWindow();
     return nullptr;
 }
-
 
 FmXGridCell::~FmXGridCell()
 {
@@ -3122,13 +3118,11 @@ FmXGridCell::~FmXGridCell()
 
 }
 
-
 void FmXGridCell::SetTextLineColor()
 {
     if (m_pCellControl)
         m_pCellControl->SetTextLineColor();
 }
-
 
 void FmXGridCell::SetTextLineColor(const Color& _rColor)
 {
