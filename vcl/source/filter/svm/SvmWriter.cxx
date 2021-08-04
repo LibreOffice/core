@@ -241,6 +241,13 @@ void SvmWriter::MetaActionHandler(MetaAction* pAction, ImplMetaWriteData* pData)
         }
         break;
 
+        case MetaActionType::RASTEROP:
+        {
+            auto* pMetaAction = static_cast<MetaRasterOpAction*>(pAction);
+            RasterOpHandler(pMetaAction);
+        }
+        break;
+
         /* default case prevents test failure and will be
         removed once all the handlers are completed */
         default:
@@ -537,5 +544,12 @@ void SvmWriter::PopHandler(MetaPopAction* pAction)
 {
     mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
     VersionCompatWrite aCompat(mrStream, 1);
+}
+
+void SvmWriter::RasterOpHandler(MetaRasterOpAction* pAction)
+{
+    mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
+    VersionCompatWrite aCompat(mrStream, 1);
+    mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetRasterOp()));
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
