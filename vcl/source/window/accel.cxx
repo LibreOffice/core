@@ -20,7 +20,6 @@
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <tools/solar.h>
-#include <accel.h>
 #include <accel.hxx>
 #include <map>
 #include <vector>
