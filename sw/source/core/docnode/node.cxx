@@ -1155,7 +1155,7 @@ void SwContentNode::SwClientNotify( const SwModify&, const SfxHint& rHint)
                 if (GetNodes().IsDocNodes()
                         && IsTextNode()
                         && pLegacyHint->m_pOld
-                        && SfxItemState::SET == static_cast<const SwAttrSetChg*>(pLegacyHint->m_pOld)->GetChgSet()->GetItemState(RES_CHRATR_HIDDEN, false))
+                        && SfxItemState::SET == pLegacyHint->m_pOld->StaticWhichCast(RES_ATTRSET_CHG).GetChgSet()->GetItemState(RES_CHRATR_HIDDEN, false))
                     bCalcHidden = true;
                 break;
 
