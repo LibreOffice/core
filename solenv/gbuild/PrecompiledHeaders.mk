@@ -142,6 +142,7 @@ gb_PrecompiledHeader_ignore_flags_system := \
 -DSKIA_DLL \
 -DGLM_FORCE_CTOR_INIT \
 -DVCL_INTERNALS \
+-DZLIB_CONST \
 -include $(SRCDIR)/pch/inc/clangfix.hxx \
 
 # Probably also update pch/inc/clangfix.hxx if you extend the list.

@@ -20,7 +20,6 @@ $(eval $(call gb_Library_use_sdk_api,package2))
 
 $(eval $(call gb_Library_add_defs,package2,\
 	-DDLLIMPLEMENTATION_PACKAGE \
-	-DZLIB_CONST \
 ))
 
 $(eval $(call gb_Library_set_precompiled_header,package2,package/inc/pch/precompiled_package2))

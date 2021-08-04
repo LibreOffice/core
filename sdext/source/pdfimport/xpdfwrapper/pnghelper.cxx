@@ -86,7 +86,7 @@ sal_uInt32 PngHelper::deflateBuffer( const Output_t* i_pBuf, size_t i_nLen, Outp
     if (Z_OK != deflateInit(&aStream, Z_BEST_COMPRESSION))
         return 0;
     aStream.avail_in = uInt(i_nLen);
-    aStream.next_in = const_cast<Bytef*>(i_pBuf);
+    aStream.next_in = i_pBuf;
 
     sal_uInt8 aOutBuf[ 32768 ];
     do
