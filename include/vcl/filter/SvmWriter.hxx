@@ -67,4 +67,5 @@ public:
     void FloatTransparentHandler(MetaFloatTransparentAction* pAction);
     void EPSHandler(MetaEPSAction* pAction);
     void RefPointHandler(MetaRefPointAction* pAction);
+    void CommentHandler(MetaCommentAction* pAction);
 };
