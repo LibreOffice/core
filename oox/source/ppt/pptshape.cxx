@@ -357,8 +357,6 @@ void PPTShape::addShape(
 
             if (pPlaceholder) {
                 SAL_INFO("oox.ppt","found placeholder with index: " << getSubTypeIndex().get() << " and type: " << lclDebugSubType( mnSubType ));
-            }
-            if (pPlaceholder) {
                 PPTShape* pPPTPlaceholder = dynamic_cast< PPTShape* >( pPlaceholder.get() );
                 TextListStylePtr pNewTextListStyle = std::make_shared<TextListStyle>();
 
