@@ -56,6 +56,7 @@ public:
     void StretchTextHandler(MetaStretchTextAction* pAction, ImplMetaWriteData* pData);
     void TextRectHandler(MetaTextRectAction* pAction, ImplMetaWriteData* pData);
     void TextLineHandler(MetaTextLineAction* pAction);
+    void BmpHandler(MetaBmpAction* pAction);
     void OverlineColorHandler(MetaOverlineColorAction* pAction);
     void TextAlignHandler(MetaTextAlignAction* pAction);
     void MapModeHandler(MetaMapModeAction* pAction);
