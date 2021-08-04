@@ -643,7 +643,7 @@ void DockingWindow::Resizing( Size& )
 void DockingWindow::DoInitialLayout()
 {
     if (GetSettings().GetStyleSettings().GetAutoMnemonic())
-       Accelerator::GenerateAutoMnemonicsOnHierarchy(this);
+       GenerateAutoMnemonicsOnHierarchy(this);
 
     if (isLayoutEnabled())
     {

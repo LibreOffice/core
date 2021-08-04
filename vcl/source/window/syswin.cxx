@@ -1097,7 +1097,7 @@ void SystemWindow::setOptimalLayoutSize()
 void SystemWindow::DoInitialLayout()
 {
     if (GetSettings().GetStyleSettings().GetAutoMnemonic())
-       Accelerator::GenerateAutoMnemonicsOnHierarchy(this);
+       GenerateAutoMnemonicsOnHierarchy(this);
 
     if (isLayoutEnabled())
     {

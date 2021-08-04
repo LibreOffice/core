@@ -77,8 +77,6 @@ public:
     void                    SetSelectHdl( const Link<Accelerator&,void>& rLink ) { maSelectHdl = rLink; }
 
     Accelerator&            operator=( const Accelerator& rAccel );
-
-    static void             GenerateAutoMnemonicsOnHierarchy(const vcl::Window* pWindow);
 };
 
 #endif // INCLUDED_VCL_ACCEL_HXX
