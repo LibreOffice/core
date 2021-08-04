@@ -91,7 +91,6 @@ public:
     virtual void HideRadioGroup() = 0;
     virtual void HideDeleteBtn() = 0;
     virtual void SetInputFields(bool bEnableX, bool bEnableY) = 0;
-    //from class vcl::Window
     virtual void    SetText( const OUString& rStr ) = 0;
 };
 
@@ -101,7 +100,6 @@ protected:
     virtual ~AbstractSdInsertLayerDlg() override = default;
 public:
     virtual void    GetAttr( SfxItemSet& rOutAttrs ) = 0;
-    //from class vcl::Window
     virtual void    SetHelpId( const OString& rHelpId ) = 0;
 };
 
