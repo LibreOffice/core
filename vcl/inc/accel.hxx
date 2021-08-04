@@ -26,8 +26,19 @@
 #include <memory>
 
 class ImplAccelData;
-class ImplAccelEntry;
 class CommandEvent;
+
+class Accelerator;
+
+class ImplAccelEntry
+{
+public:
+    sal_uInt16      mnId;
+    vcl::KeyCode    maKeyCode;
+    Accelerator*    mpAccel;
+    Accelerator*    mpAutoAccel;
+    bool            mbEnabled;
+};
 
 class Accelerator
 {
@@ -72,5 +83,7 @@ public:
 
     Accelerator&            operator=( const Accelerator& rAccel );
 };
+
+bool ImplGetKeyCode( KeyFuncType eFunc, sal_uInt16& rCode1, sal_uInt16& rCode2, sal_uInt16& rCode3, sal_uInt16& rCode4 );
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
