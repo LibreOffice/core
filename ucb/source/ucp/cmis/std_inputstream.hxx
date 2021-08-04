@@ -12,7 +12,7 @@
 #include <boost/shared_ptr.hpp>
 #include <istream>
 
-#include <osl/mutex.hxx>
+#include <mutex>
 #include <cppuhelper/weak.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
@@ -73,7 +73,7 @@ namespace cmis
 
         private:
 
-            osl::Mutex m_aMutex;
+            std::mutex m_aMutex;
             boost::shared_ptr< std::istream > m_pStream;
             sal_Int64 m_nLength;
     };
