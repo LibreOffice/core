@@ -53,6 +53,7 @@
 #include <svx/unoapi.hxx>
 #include <svx/svdomeas.hxx>
 #include <svx/svdpool.hxx>
+#include <tools/diagnose_ex.h>
 #include <tools/stream.hxx>
 #include <tools/gen.hxx>
 #include <tools/UnitConversion.hxx>
@@ -1792,8 +1793,14 @@ void SAL_CALL SvxShape::setPropertyValues( const css::uno::Sequence< OUString >&
             {
                 setPropertyValue( *pNames, *pValues );
             }
-            catch( beans::UnknownPropertyException& ) {}
-            catch( uno::Exception& ) {}
+            catch (beans::UnknownPropertyException&)
+            {
+                DBG_UNHANDLED_EXCEPTION("svx");
+            }
+            catch (uno::Exception&)
+            {
+                DBG_UNHANDLED_EXCEPTION("svx");
+            }
         }
     }
     else
@@ -1807,8 +1814,14 @@ void SAL_CALL SvxShape::setPropertyValues( const css::uno::Sequence< OUString >&
             {
                 xSet->setPropertyValue( *pNames, *pValues );
             }
-            catch( beans::UnknownPropertyException& ) {}
-            catch( uno::Exception& ) {}
+            catch (beans::UnknownPropertyException&)
+            {
+                DBG_UNHANDLED_EXCEPTION("svx");
+            }
+            catch (uno::Exception&)
+            {
+                DBG_UNHANDLED_EXCEPTION("svx");
+            }
         }
     }
 
