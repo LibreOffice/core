@@ -61,7 +61,7 @@ namespace cmis
 
     sal_Int32 SAL_CALL StdInputStream::readBytes( uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
     {
-        osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
 
         if ( 0 <= nBytesToRead && aData.getLength() < nBytesToRead )
             aData.realloc( nBytesToRead );
@@ -87,7 +87,7 @@ namespace cmis
     sal_Int32 SAL_CALL StdInputStream::readSomeBytes( uno::Sequence< sal_Int8 >& aData,
             sal_Int32 nMaxBytesToRead )
     {
-        osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
 
         if ( 0 <= nMaxBytesToRead && aData.getLength() < nMaxBytesToRead )
             aData.realloc( nMaxBytesToRead );
@@ -110,7 +110,7 @@ namespace cmis
 
     void SAL_CALL StdInputStream::skipBytes( sal_Int32 nBytesToSkip )
     {
-        osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
 
         if (!m_pStream)
             throw io::IOException( );
@@ -138,7 +138,7 @@ namespace cmis
 
     void SAL_CALL StdInputStream::seek( sal_Int64 location )
     {
-        osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
 
         if ( location < 0 || location > m_nLength )
             throw lang::IllegalArgumentException(
@@ -162,7 +162,7 @@ namespace cmis
 
     sal_Int64 SAL_CALL StdInputStream::getPosition( )
     {
-        osl::MutexGuard aGuard( m_aMutex );
+        std::scoped_lock aGuard( m_aMutex );
 
         if (!m_pStream)
             throw io::IOException( );
