@@ -19,6 +19,7 @@
 
 #include <vcl/filter/SvmWriter.hxx>
 #include <vcl/TypeSerializer.hxx>
+#include <vcl/dibtools.hxx>
 
 #include <tools/vcompat.hxx>
 
@@ -196,6 +197,13 @@ void SvmWriter::MetaActionHandler(MetaAction* pAction, ImplMetaWriteData* pData)
         {
             auto* pMetaAction = static_cast<MetaTextLineAction*>(pAction);
             TextLineHandler(pMetaAction);
+        }
+        break;
+
+        case MetaActionType::BMP:
+        {
+            auto* pMetaAction = static_cast<MetaBmpAction*>(pAction);
+            BmpHandler(pMetaAction);
         }
         break;
 
@@ -547,6 +555,18 @@ void SvmWriter::TextLineHandler(MetaTextLineAction* pAction)
     mrStream.WriteUInt32(pAction->GetUnderline());
     // new in version 2
     mrStream.WriteUInt32(pAction->GetOverline());
+}
+
+void SvmWriter::BmpHandler(MetaBmpAction* pAction)
+{
+    if (!pAction->GetBitmap().IsEmpty())
+    {
+        mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
+        VersionCompatWrite aCompat(mrStream, 1);
+        WriteDIB(pAction->GetBitmap(), mrStream, false, true);
+        TypeSerializer aSerializer(mrStream);
+        aSerializer.writePoint(pAction->GetPoint());
+    }
 }
 
 void SvmWriter::OverlineColorHandler(MetaOverlineColorAction* pAction)
