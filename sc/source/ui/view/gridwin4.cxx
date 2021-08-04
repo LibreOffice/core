@@ -1499,12 +1499,13 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
 
 void ScGridWindow::LogicInvalidate(const tools::Rectangle* pRectangle)
 {
-    OString sRectangle;
+    tools::Rectangle aRectangle;
+    tools::Rectangle* pResultRectangle;
     if (!pRectangle)
-        sRectangle = "EMPTY";
+        pResultRectangle = nullptr;
     else
     {
-        tools::Rectangle aRectangle(*pRectangle);
+        aRectangle = *pRectangle;
         // When dragging shapes the map mode is disabled.
         if (IsMapModeEnabled())
         {
@@ -1513,11 +1514,11 @@ void ScGridWindow::LogicInvalidate(const tools::Rectangle* pRectangle)
         }
         else
             aRectangle = PixelToLogic(aRectangle, MapMode(MapUnit::MapTwip));
-        sRectangle = aRectangle.toString();
+        pResultRectangle = &aRectangle;
     }
 
     ScTabViewShell* pViewShell = pViewData->GetViewShell();
-    SfxLokHelper::notifyInvalidation(pViewShell, sRectangle);
+    SfxLokHelper::notifyInvalidation(pViewShell, pResultRectangle);
 }
 
 void ScGridWindow::SetCellSelectionPixel(int nType, int nPixelX, int nPixelY)

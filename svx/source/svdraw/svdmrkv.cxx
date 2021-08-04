@@ -251,9 +251,9 @@ void SdrMarkView::ModelHasChanged()
     {
         //TODO: Is MarkedObjRect valid at this point?
         tools::Rectangle aSelection(GetMarkedObjRect());
-        OString sSelection;
+        tools::Rectangle* pResultRect;
         if (aSelection.IsEmpty())
-            sSelection = "EMPTY";
+            pResultRect = nullptr;
         else
         {
             sal_uInt32 nTotalPaintWindows = this->PaintWindowCount();
@@ -282,11 +282,11 @@ void SdrMarkView::ModelHasChanged()
                 }
             }
 
-            sSelection = aSelection.toString();
+            pResultRect = &aSelection;
         }
 
         if(SfxViewShell* pViewShell = GetSfxViewShell())
-            SfxLokHelper::notifyInvalidation(pViewShell, sSelection);
+            SfxLokHelper::notifyInvalidation(pViewShell, pResultRect);
     }
 }
 
