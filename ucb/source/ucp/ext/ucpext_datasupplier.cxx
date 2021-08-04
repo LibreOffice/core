@@ -34,7 +34,6 @@
 #include <sal/log.hxx>
 
 #include <memory>
-#include <vector>
 
 
 namespace ucb::ucp::ext
@@ -54,40 +53,6 @@ namespace ucb::ucp::ext
     using ::com::sun::star::deployment::PackageInformationProvider;
     using ::com::sun::star::deployment::XPackageInformationProvider;
     using ::com::sun::star::sdbc::XResultSet;
-
-
-    //= ResultListEntry
-
-    namespace {
-
-    struct ResultListEntry
-    {
-        OUString                 sId;
-        Reference< XContentIdentifier > xId;
-        ::rtl::Reference< Content >     pContent;
-        Reference< XRow >               xRow;
-    };
-
-    }
-
-    typedef ::std::vector< ResultListEntry >    ResultList;
-
-
-    //= DataSupplier_Impl
-
-    struct DataSupplier_Impl
-    {
-        ::osl::Mutex                                m_aMutex;
-        ResultList                                  m_aResults;
-        ::rtl::Reference< Content >                 m_xContent;
-        Reference< XComponentContext >              m_xContext;
-
-        DataSupplier_Impl( const Reference< XComponentContext >& rxContext, const ::rtl::Reference< Content >& i_rContent )
-            :m_xContent( i_rContent )
-            ,m_xContext( rxContext )
-        {
-        }
-    };
 
 
     //= helper
@@ -112,7 +77,8 @@ namespace ucb::ucp::ext
 
     DataSupplier::DataSupplier( const Reference< XComponentContext >& rxContext,
                                 const ::rtl::Reference< Content >& i_rContent )
-        :m_pImpl( new DataSupplier_Impl( rxContext, i_rContent ) )
+        :m_xContent( i_rContent )
+        ,m_xContext( rxContext )
     {
     }
 
@@ -121,11 +87,11 @@ namespace ucb::ucp::ext
     {
         try
         {
-            const Reference< XPackageInformationProvider > xPackageInfo = PackageInformationProvider::get( m_pImpl->m_xContext );
+            const Reference< XPackageInformationProvider > xPackageInfo = PackageInformationProvider::get( m_xContext );
 
-            const OUString sContentIdentifier( m_pImpl->m_xContent->getIdentifier()->getContentIdentifier() );
+            const OUString sContentIdentifier( m_xContent->getIdentifier()->getContentIdentifier() );
 
-            switch ( m_pImpl->m_xContent->getExtensionContentType() )
+            switch ( m_xContent->getExtensionContentType() )
             {
             case E_ROOT:
             {
@@ -141,15 +107,15 @@ namespace ucb::ucp::ext
                     const OUString& rLocalId = extInfo[0];
                     ResultListEntry aEntry;
                     aEntry.sId = ContentProvider::getRootURL() + Content::encodeIdentifier( rLocalId ) + "/";
-                    m_pImpl->m_aResults.push_back( aEntry );
+                    m_aResults.push_back( aEntry );
                 }
             }
             break;
             case E_EXTENSION_ROOT:
             case E_EXTENSION_CONTENT:
             {
-                const OUString sPackageLocation( m_pImpl->m_xContent->getPhysicalURL() );
-                ::ucbhelper::Content aWrappedContent( sPackageLocation, getResultSet()->getEnvironment(), m_pImpl->m_xContext );
+                const OUString sPackageLocation( m_xContent->getPhysicalURL() );
+                ::ucbhelper::Content aWrappedContent( sPackageLocation, getResultSet()->getEnvironment(), m_xContext );
 
                 // obtain the properties which our result set is set up for from the wrapped content
                 Sequence< OUString > aPropertyNames { "Title" };
@@ -160,7 +126,7 @@ namespace ucb::ucp::ext
                 {
                     ResultListEntry aEntry;
                     aEntry.sId = lcl_compose( sContentIdentifier, xContentRow->getString( 1 ) );
-                    m_pImpl->m_aResults.push_back( aEntry );
+                    m_aResults.push_back( aEntry );
                 }
             }
             break;
@@ -183,11 +149,11 @@ namespace ucb::ucp::ext
 
     OUString DataSupplier::queryContentIdentifierString( sal_uInt32 i_nIndex )
     {
-        ::osl::Guard< ::osl::Mutex > aGuard( m_pImpl->m_aMutex );
+        ::osl::Guard< ::osl::Mutex > aGuard( m_aMutex );
 
-        if ( i_nIndex < m_pImpl->m_aResults.size() )
+        if ( i_nIndex < m_aResults.size() )
         {
-            const OUString sId = m_pImpl->m_aResults[ i_nIndex ].sId;
+            const OUString sId = m_aResults[ i_nIndex ].sId;
             if ( !sId.isEmpty() )
                 return sId;
         }
@@ -199,11 +165,11 @@ namespace ucb::ucp::ext
 
     Reference< XContentIdentifier > DataSupplier::queryContentIdentifier( sal_uInt32 i_nIndex )
     {
-        ::osl::Guard< ::osl::Mutex > aGuard( m_pImpl->m_aMutex );
+        ::osl::Guard< ::osl::Mutex > aGuard( m_aMutex );
 
-        if ( i_nIndex < m_pImpl->m_aResults.size() )
+        if ( i_nIndex < m_aResults.size() )
         {
-            Reference< XContentIdentifier > xId( m_pImpl->m_aResults[ i_nIndex ].xId );
+            Reference< XContentIdentifier > xId( m_aResults[ i_nIndex ].xId );
             if ( xId.is() )
                 return xId;
         }
@@ -212,7 +178,7 @@ namespace ucb::ucp::ext
         if ( !sId.isEmpty() )
         {
             Reference< XContentIdentifier > xId = new ::ucbhelper::ContentIdentifier( sId );
-            m_pImpl->m_aResults[ i_nIndex ].xId = xId;
+            m_aResults[ i_nIndex ].xId = xId;
             return xId;
         }
 
@@ -222,11 +188,11 @@ namespace ucb::ucp::ext
 
     Reference< XContent > DataSupplier::queryContent( sal_uInt32 i_nIndex )
     {
-        ::osl::Guard< ::osl::Mutex > aGuard( m_pImpl->m_aMutex );
-        ENSURE_OR_RETURN( i_nIndex < m_pImpl->m_aResults.size(), "illegal index!", nullptr );
+        ::osl::Guard< ::osl::Mutex > aGuard( m_aMutex );
+        ENSURE_OR_RETURN( i_nIndex < m_aResults.size(), "illegal index!", nullptr );
 
 
-        ::rtl::Reference< Content > pContent( m_pImpl->m_aResults[ i_nIndex ].pContent );
+        ::rtl::Reference< Content > pContent( m_aResults[ i_nIndex ].pContent );
         if ( pContent.is() )
             return pContent;
 
@@ -235,10 +201,10 @@ namespace ucb::ucp::ext
         {
             try
             {
-                Reference< XContent > xContent( m_pImpl->m_xContent->getProvider()->queryContent( xId ) );
+                Reference< XContent > xContent( m_xContent->getProvider()->queryContent( xId ) );
                 pContent.set( dynamic_cast< Content* >( xContent.get() ) );
                 OSL_ENSURE( pContent.is() || !xContent.is(), "DataSupplier::queryContent: invalid content implementation!" );
-                m_pImpl->m_aResults[ i_nIndex ].pContent = pContent;
+                m_aResults[ i_nIndex ].pContent = pContent;
                 return pContent;
 
             }
@@ -254,23 +220,23 @@ namespace ucb::ucp::ext
 
     bool DataSupplier::getResult( sal_uInt32 i_nIndex )
     {
-        ::osl::ClearableGuard< ::osl::Mutex > aGuard( m_pImpl->m_aMutex );
+        ::osl::ClearableGuard< ::osl::Mutex > aGuard( m_aMutex );
 
         // true if result already present.
-        return m_pImpl->m_aResults.size() > i_nIndex;
+        return m_aResults.size() > i_nIndex;
     }
 
 
     sal_uInt32 DataSupplier::totalCount()
     {
-        ::osl::ClearableGuard< ::osl::Mutex > aGuard( m_pImpl->m_aMutex );
-        return m_pImpl->m_aResults.size();
+        ::osl::ClearableGuard< ::osl::Mutex > aGuard( m_aMutex );
+        return m_aResults.size();
     }
 
 
     sal_uInt32 DataSupplier::currentCount()
     {
-        return m_pImpl->m_aResults.size();
+        return m_aResults.size();
     }
 
 
@@ -282,32 +248,32 @@ namespace ucb::ucp::ext
 
     Reference< XRow > DataSupplier::queryPropertyValues( sal_uInt32 i_nIndex  )
     {
-        ::osl::MutexGuard aGuard( m_pImpl->m_aMutex );
-        ENSURE_OR_RETURN( i_nIndex < m_pImpl->m_aResults.size(), "DataSupplier::queryPropertyValues: illegal index!", nullptr );
+        ::osl::MutexGuard aGuard( m_aMutex );
+        ENSURE_OR_RETURN( i_nIndex < m_aResults.size(), "DataSupplier::queryPropertyValues: illegal index!", nullptr );
 
-        Reference< XRow > xRow = m_pImpl->m_aResults[ i_nIndex ].xRow;
+        Reference< XRow > xRow = m_aResults[ i_nIndex ].xRow;
         if ( xRow.is() )
             return xRow;
 
         ENSURE_OR_RETURN( queryContent( i_nIndex ).is(), "could not retrieve the content", nullptr );
 
-        switch ( m_pImpl->m_xContent->getExtensionContentType() )
+        switch ( m_xContent->getExtensionContentType() )
         {
         case E_ROOT:
         {
-            const OUString& rId( m_pImpl->m_aResults[ i_nIndex ].sId );
+            const OUString& rId( m_aResults[ i_nIndex ].sId );
             const OUString sRootURL( ContentProvider::getRootURL() );
             OUString sTitle = Content::decodeIdentifier( rId.copy( sRootURL.getLength() ) );
             if ( sTitle.endsWith("/") )
                 sTitle = sTitle.copy( 0, sTitle.getLength() - 1 );
-            xRow = Content::getArtificialNodePropertyValues( m_pImpl->m_xContext, getResultSet()->getProperties(), sTitle );
+            xRow = Content::getArtificialNodePropertyValues( m_xContext, getResultSet()->getProperties(), sTitle );
         }
         break;
 
         case E_EXTENSION_ROOT:
         case E_EXTENSION_CONTENT:
         {
-            xRow = m_pImpl->m_aResults[ i_nIndex ].pContent->getPropertyValues(
+            xRow = m_aResults[ i_nIndex ].pContent->getPropertyValues(
                 getResultSet()->getProperties(), getResultSet()->getEnvironment() );
         }
         break;
@@ -316,17 +282,17 @@ namespace ucb::ucp::ext
             break;
         }
 
-        m_pImpl->m_aResults[ i_nIndex ].xRow = xRow;
+        m_aResults[ i_nIndex ].xRow = xRow;
         return xRow;
     }
 
 
     void DataSupplier::releasePropertyValues( sal_uInt32 i_nIndex )
     {
-        ::osl::Guard< ::osl::Mutex > aGuard( m_pImpl->m_aMutex );
+        ::osl::Guard< ::osl::Mutex > aGuard( m_aMutex );
 
-        if ( i_nIndex < m_pImpl->m_aResults.size() )
-            m_pImpl->m_aResults[ i_nIndex ].xRow.clear();
+        if ( i_nIndex < m_aResults.size() )
+            m_aResults[ i_nIndex ].xRow.clear();
     }
 
 
