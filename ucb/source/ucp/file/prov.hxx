@@ -19,7 +19,6 @@
 
 #pragma once
 
-#include <osl/mutex.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -32,6 +31,7 @@
 #include <com/sun/star/ucb/XFileIdentifierConverter.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <memory>
+#include <mutex>
 
 // FileProvider
 
@@ -145,7 +145,7 @@ namespace fileaccess {
         css::uno::Reference< css::uno::XComponentContext >      m_xContext;
 
         void initProperties();
-        osl::Mutex   m_aMutex;
+        std::mutex   m_aMutex;
         OUString m_HostName;
         OUString m_HomeDirectory;
         sal_Int32     m_FileSystemNotation;
