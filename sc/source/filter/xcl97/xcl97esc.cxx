@@ -540,37 +540,38 @@ ShapeInteractionHelper::CreateShapeObj( XclExpObjectManager& rObjMgr, const Refe
     return new XclExpShapeObj( rObjMgr, xShape, pDoc );
 }
 
-void
-ShapeInteractionHelper::PopulateShapeInteractionInfo( const XclExpObjectManager& rObjMgr, const Reference< XShape >& xShape, EscherExHostAppData& rHostAppData )
+void ShapeInteractionHelper::PopulateShapeInteractionInfo(const XclExpObjectManager& rObjMgr,
+                                                          const Reference<XShape>& xShape,
+                                                          EscherExHostAppData& rHostAppData)
 {
-   try
-   {
-      SvMemoryStream* pMemStrm = nullptr;
-      OUString sHyperLink;
-      OUString sMacro;
-      SdrObject* pObj = GetSdrObjectFromXShape( xShape );
-      if (pObj)
-        sHyperLink = pObj->getHyperlink();
-      if ( ScMacroInfo* pInfo = ScDrawLayer::GetMacroInfo( pObj ) )
-      {
-         sMacro = pInfo->GetMacro();
-      }
-      if (  !sHyperLink.isEmpty() )
-      {
-         pMemStrm = new SvMemoryStream();
-         XclExpStream tmpStream( *pMemStrm, rObjMgr.GetRoot() );
-         ScAddress dummyAddress;
-         SvxURLField aUrlField;
-         aUrlField.SetURL( sHyperLink );
-         XclExpHyperlink hExpHlink( rObjMgr.GetRoot(), aUrlField, dummyAddress );
-         hExpHlink.WriteEmbeddedData( tmpStream );
-      }
-      if ( !sHyperLink.isEmpty() || !sMacro.isEmpty() )
-          rHostAppData.SetInteractionInfo( new InteractionInfo( pMemStrm ) );
-   }
-   catch( Exception& )
-   {
-   }
+    try
+    {
+        SvMemoryStream* pMemStrm = nullptr;
+        OUString sHyperLink;
+        OUString sMacro;
+        SdrObject* pObj = GetSdrObjectFromXShape(xShape);
+        if (pObj)
+            sHyperLink = pObj->getHyperlink();
+        if (ScMacroInfo* pInfo = ScDrawLayer::GetMacroInfo(pObj))
+        {
+            sMacro = pInfo->GetMacro();
+        }
+        if (!sHyperLink.isEmpty())
+        {
+            pMemStrm = new SvMemoryStream();
+            XclExpStream tmpStream(*pMemStrm, rObjMgr.GetRoot());
+            ScAddress dummyAddress;
+            SvxURLField aUrlField;
+            aUrlField.SetURL(sHyperLink);
+            XclExpHyperlink hExpHlink(rObjMgr.GetRoot(), aUrlField, dummyAddress);
+            hExpHlink.WriteEmbeddedData(tmpStream);
+        }
+        if (!sHyperLink.isEmpty() || !sMacro.isEmpty())
+            rHostAppData.SetInteractionInfo(new InteractionInfo(pMemStrm));
+    }
+    catch (Exception&)
+    {
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
