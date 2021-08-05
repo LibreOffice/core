@@ -178,7 +178,7 @@ void SAL_CALL OfficeDocumentsManager::documentEventOccured(
             bool found(false);
 
             {
-                osl::MutexGuard aGuard( m_aMtx );
+                std::scoped_lock aGuard( m_aMtx );
 
                 found = std::any_of(m_aDocs.begin(), m_aDocs.end(),
                     [&xModel](const DocumentList::value_type& rEntry) { return rEntry.second.xModel == xModel; });
@@ -204,7 +204,7 @@ void SAL_CALL OfficeDocumentsManager::documentEventOccured(
                     uno::Reference< frame::XModel >( Event.Source, uno::UNO_QUERY ) );
 
                 {
-                    osl::MutexGuard g(m_aMtx);
+                    std::scoped_lock g(m_aMtx);
                     m_aDocs[ aDocId ] = StorageInfo( aTitle, xStorage, xModel );
                 }
 
@@ -245,7 +245,7 @@ void SAL_CALL OfficeDocumentsManager::documentEventOccured(
             OUString aDocId;
 
             {
-                osl::MutexGuard aGuard( m_aMtx );
+                std::scoped_lock aGuard( m_aMtx );
 
                 auto it = std::find_if(m_aDocs.begin(), m_aDocs.end(),
                     [&xModel](const DocumentList::value_type& rEntry) { return rEntry.second.xModel == xModel; });
@@ -295,7 +295,7 @@ void SAL_CALL OfficeDocumentsManager::documentEventOccured(
                  xModel( Event.Source, uno::UNO_QUERY );
             OSL_ENSURE( xModel.is(), "Got no frame::XModel!" );
 
-            osl::MutexGuard aGuard( m_aMtx );
+            std::scoped_lock aGuard( m_aMtx );
 
             DocumentList::iterator it = std::find_if(m_aDocs.begin(), m_aDocs.end(),
                 [&xModel](const DocumentList::value_type& rEntry) { return rEntry.second.xModel == xModel; });
@@ -327,7 +327,7 @@ void SAL_CALL OfficeDocumentsManager::documentEventOccured(
 
             OUString const title(comphelper::DocumentInfo::getDocumentTitle(xModel));
 
-            osl::MutexGuard aGuard( m_aMtx );
+            std::scoped_lock aGuard( m_aMtx );
 
             DocumentList::iterator it = std::find_if(m_aDocs.begin(), m_aDocs.end(),
                 [&xModel](const DocumentList::value_type& rEntry) { return rEntry.second.xModel == xModel; });
@@ -365,7 +365,7 @@ void SAL_CALL OfficeDocumentsManager::documentEventOccured(
 
             OUString const aDocId(getDocumentId(Event.Source));
 
-            osl::MutexGuard aGuard( m_aMtx );
+            std::scoped_lock aGuard( m_aMtx );
 
             DocumentList::iterator it = std::find_if(m_aDocs.begin(), m_aDocs.end(),
                 [&xModel](const DocumentList::value_type& rEntry) { return rEntry.second.xModel == xModel; });
@@ -424,7 +424,7 @@ void OfficeDocumentsManager::buildDocumentsList()
                     bool found(false);
 
                     {
-                        osl::MutexGuard aGuard( m_aMtx );
+                        std::scoped_lock aGuard( m_aMtx );
 
                         found = std::any_of(m_aDocs.begin(), m_aDocs.end(),
                             [&xModel](const DocumentList::value_type& rEntry) { return rEntry.second.xModel == xModel; });
@@ -446,7 +446,7 @@ void OfficeDocumentsManager::buildDocumentsList()
                         OSL_ENSURE( xStorage.is(), "Got no document storage!" );
 
                         {
-                            osl::MutexGuard aGuard( m_aMtx );
+                            std::scoped_lock aGuard( m_aMtx );
                             m_aDocs[ aDocId ]
                                 = StorageInfo( aTitle, xStorage, xModel );
                         }
@@ -478,7 +478,7 @@ void OfficeDocumentsManager::buildDocumentsList()
 uno::Reference< embed::XStorage >
 OfficeDocumentsManager::queryStorage( const OUString & rDocId )
 {
-    osl::MutexGuard aGuard( m_aMtx );
+    std::scoped_lock aGuard( m_aMtx );
 
     DocumentList::const_iterator it = m_aDocs.find( rDocId );
     if ( it == m_aDocs.end() )
@@ -498,7 +498,7 @@ OUString OfficeDocumentsManager::queryDocumentId(
 uno::Reference< frame::XModel >
 OfficeDocumentsManager::queryDocumentModel( const OUString & rDocId )
 {
-    osl::MutexGuard aGuard( m_aMtx );
+    std::scoped_lock aGuard( m_aMtx );
 
     DocumentList::const_iterator it = m_aDocs.find( rDocId );
     if ( it == m_aDocs.end() )
@@ -510,7 +510,7 @@ OfficeDocumentsManager::queryDocumentModel( const OUString & rDocId )
 
 uno::Sequence< OUString > OfficeDocumentsManager::queryDocuments()
 {
-    osl::MutexGuard aGuard( m_aMtx );
+    std::scoped_lock aGuard( m_aMtx );
 
     return comphelper::mapKeysToSequence( m_aDocs );
 }
@@ -519,7 +519,7 @@ uno::Sequence< OUString > OfficeDocumentsManager::queryDocuments()
 OUString
 OfficeDocumentsManager::queryStorageTitle( const OUString & rDocId )
 {
-    osl::MutexGuard aGuard( m_aMtx );
+    std::scoped_lock aGuard( m_aMtx );
 
     DocumentList::const_iterator it = m_aDocs.find( rDocId );
     if ( it == m_aDocs.end() )
@@ -585,7 +585,7 @@ bool OfficeDocumentsManager::isBasicIDE(
 {
     if ( !m_xModuleMgr.is() )
     {
-        osl::MutexGuard aGuard( m_aMtx );
+        std::scoped_lock aGuard( m_aMtx );
         if ( !m_xModuleMgr.is() )
         {
             try
