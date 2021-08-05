@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "43c950b5_f0314f9f",
+        "filename": "include/comphelper/interfacecontainer3.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-08-05T06:39:52Z",
+      "side": 1,
+      "message": "rather \"OInterfaceContainerHelper3\"?",
+      "range": {
+        "startLine": 53,
+        "startChar": 29,
+        "endLine": 53,
+        "endChar": 53
+      },
+      "revId": "89ea9340aca77a87ef10785a734201d2f400a933",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "740316e5_5a9b4b67",
+        "filename": "include/comphelper/interfacecontainer3.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-08-05T06:39:52Z",
+      "side": 1,
+      "message": "rather \"OInterfaceContainerHelper3\"?",
+      "range": {
+        "startLine": 58,
+        "startChar": 7,
+        "endLine": 58,
+        "endChar": 32
+      },
+      "revId": "89ea9340aca77a87ef10785a734201d2f400a933",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "62774a6a_0276b432",
+        "filename": "include/comphelper/interfacecontainer3.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-08-05T06:39:52Z",
+      "side": 1,
+      "message": "If this class is a slightly modified copy of cppu::OInterfaceContainerHelper from include/cppuhelper/interfacecontainer.h (or of comphelper::OInterfaceContainerHelper2 from include/comphelper/interfacecontainer2.hxx), it should state that here, and state what the differences are.",
+      "revId": "89ea9340aca77a87ef10785a734201d2f400a933",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "33918e14_02144c55",
+        "filename": "include/comphelper/interfacecontainer3.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-08-05T06:39:52Z",
+      "side": 1,
+      "message": "rather \"OInterfaceIteratorHelper3\"?",
+      "range": {
+        "startLine": 122,
+        "startChar": 7,
+        "endLine": 122,
+        "endChar": 31
+      },
+      "revId": "89ea9340aca77a87ef10785a734201d2f400a933",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
