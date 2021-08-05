@@ -235,6 +235,11 @@ void SwDrawView::AddCustomHdl()
         // #i28701# - use last character rectangle saved at object
         // in order to avoid a format of the anchor frame
         SwAnchoredObject* pAnchoredObj = ::GetUserCall( pObj )->GetAnchoredObj( pObj );
+
+        // Invalidate/recalc LastCharRect which can contain invalid frame offset because
+        // of later frame changes
+        pAnchoredObj->CheckCharRectAndTopOfLine(false);
+
         SwRect aAutoPos = pAnchoredObj->GetLastCharRect();
         if ( aAutoPos.Height() )
         {
