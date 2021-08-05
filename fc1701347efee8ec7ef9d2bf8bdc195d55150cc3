@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "44c1f12d_8c665083",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-05T07:09:21Z",
+      "side": 1,
+      "message": "Those \"some loplugin:redundantcast\" were exactly my goal when using the define, to avoid the const_cast altogether for something that is in fact const. I simply only noticed the issue in a specific case that got modified in a commit, and only modified \u0027package2\u0027.",
+      "revId": "fc1701347efee8ec7ef9d2bf8bdc195d55150cc3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
