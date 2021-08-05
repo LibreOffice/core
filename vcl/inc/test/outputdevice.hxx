@@ -49,6 +49,7 @@ public:
 
     static TestResult checkRectangles(Bitmap& rBitmap, std::vector<Color>& aExpectedColors);
     static TestResult checkRectangle(Bitmap& rBitmap, int aLayerNumber, Color aExpectedColor);
+    static TestResult checkRectangles(Bitmap& rBitmap, bool aEnableAA = false);
 
     static TestResult checkFilled(Bitmap& rBitmap, tools::Rectangle aRectangle, Color aExpectedColor);
     static TestResult checkChecker(Bitmap& rBitmap, sal_Int32 nStartX, sal_Int32 nEndX,
@@ -86,7 +87,7 @@ public:
     static TestResult checkLineJoinRound(Bitmap& rBitmap) { return checkLineJoin(rBitmap, basegfx::B2DLineJoin::Round); }
     static TestResult checkLineJoinMiter(Bitmap& rBitmap) { return checkLineJoin(rBitmap, basegfx::B2DLineJoin::Miter); }
     static TestResult checkLineJoinNone(Bitmap& rBitmap) { return checkLineJoin(rBitmap, basegfx::B2DLineJoin::NONE); }
-    static TestResult checkDropShape(Bitmap& rBitmap);
+    static TestResult checkDropShape(Bitmap& rBitmap, bool bEnableAA = false);
     static TestResult checkHalfEllipse(Bitmap& rBitmap);
     static TestResult checkClosedBezier(Bitmap& rBitmap);
     static TestResult checkFilledAsymmetricalDropShape(Bitmap& rBitmap);

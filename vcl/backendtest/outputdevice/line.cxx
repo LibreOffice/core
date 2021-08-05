@@ -22,10 +22,12 @@ namespace
 
 void drawLineOffset(OutputDevice& rDevice, tools::Rectangle const & rRect, int nOffset)
 {
-    Point aLeftTop     (rRect.Left()  + nOffset, rRect.Top()    + nOffset);
-    Point aRightTop    (rRect.Right() - nOffset, rRect.Top()    + nOffset);
-    Point aLeftBottom  (rRect.Left()  + nOffset, rRect.Bottom() - nOffset);
-    Point aRightBottom (rRect.Right() - nOffset, rRect.Bottom() - nOffset);
+
+    int nMidOffset = rRect.GetWidth()/2;
+    Point aLeftTop     (rRect.Left()  + nOffset - (nOffset+1)/2, rRect.Top()    + nOffset - 1);
+    Point aRightTop    (rRect.Right() - nMidOffset - nOffset/3, rRect.Top()    + nOffset - 1);
+    Point aLeftBottom  (rRect.Left()  + nOffset - (nOffset+1)/2, rRect.Bottom() - nOffset + 1);
+    Point aRightBottom (rRect.Right() - nMidOffset - nOffset/3, rRect.Bottom() - nOffset + 1);
 
     rDevice.DrawLine(aLeftTop,     aRightTop);
     rDevice.DrawLine(aRightTop,    aRightBottom);

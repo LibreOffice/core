@@ -91,19 +91,16 @@ char returnDominantColor(Color aColor)
     int aRed = aColor.GetRed();
     int aGreen = aColor.GetGreen();
     int aBlue = aColor.GetBlue();
-    if (aRed == aGreen && aRed == aBlue)
-    {
-        return 'X'; //X here refers to Grey(since R=G=B would result into a shade of grey).
-    }
     if (aRed > aGreen && aRed > aBlue)
-    {
         return 'R';
-    }
+
     if (aGreen > aRed && aGreen > aBlue)
-    {
         return 'G';
-    }
-    return 'B';
+
+    if(aBlue > aRed && aBlue > aGreen)
+        return 'B';
+
+    return 'X'; //No Dominant Color.
 }
 
 void checkValueAA(BitmapScopedWriteAccess& pAccess, int x, int y, Color aExpected,
@@ -467,25 +464,104 @@ TestResult OutputDeviceTestCommon::checkRectangle(Bitmap& aBitmap)
     return checkRectangles(aBitmap, aExpected);
 }
 
+TestResult OutputDeviceTestCommon::checkRectangles(Bitmap& rBitmap, bool aEnableAA)
+{
+    BitmapScopedWriteAccess pAccess(rBitmap);
+
+    TestResult aResult = TestResult::Passed;
+    int nNumberOfQuirks = 0;
+    int nNumberOfErrors = 0;
+
+    std::vector<Color> aExpected = { constBackgroundColor, constLineColor, constLineColor };
+
+    for (size_t aLayerNumber = 0; aLayerNumber < aExpected.size(); aLayerNumber++)
+    {
+        tools::Long startX = aLayerNumber, endX = pAccess->Width() / 2 - aLayerNumber + 1;
+        tools::Long startY = aLayerNumber, endY = pAccess->Height() - aLayerNumber - 1;
+
+        for (tools::Long ptX = startX; ptX <= endX; ++ptX)
+        {
+            if (aEnableAA)
+            {
+                checkValueAA(pAccess, ptX, startY + (aLayerNumber == 2 ? 2 : 0),
+                             aExpected[aLayerNumber], nNumberOfQuirks, nNumberOfErrors, true);
+                checkValueAA(pAccess, ptX, endY - (aLayerNumber == 2 ? 2 : 0),
+                             aExpected[aLayerNumber], nNumberOfQuirks, nNumberOfErrors, true);
+            }
+            else
+            {
+                checkValue(pAccess, ptX, startY + (aLayerNumber == 2 ? 2 : 0),
+                           aExpected[aLayerNumber], nNumberOfQuirks, nNumberOfErrors, true);
+                checkValue(pAccess, ptX, endY - (aLayerNumber == 2 ? 2 : 0),
+                           aExpected[aLayerNumber], nNumberOfQuirks, nNumberOfErrors, true);
+            }
+        }
+        for (tools::Long ptY = startY + (aLayerNumber == 2 ? 2 : 0);
+             ptY <= endY - (aLayerNumber == 2 ? 2 : 0); ++ptY)
+        {
+            if (aEnableAA)
+            {
+                checkValueAA(pAccess, startX, ptY, aExpected[aLayerNumber], nNumberOfQuirks,
+                             nNumberOfErrors, true);
+                checkValueAA(pAccess, endX, ptY,  aExpected[aLayerNumber], nNumberOfQuirks,
+                             nNumberOfErrors, true);
+            }
+            else
+            {
+                checkValue(pAccess, startX, ptY, aExpected[aLayerNumber], nNumberOfQuirks,
+                           nNumberOfErrors, true);
+                checkValue(pAccess, endX, ptY, aExpected[aLayerNumber], nNumberOfQuirks,
+                           nNumberOfErrors, true);
+            }
+        }
+    }
+    if (nNumberOfQuirks > 0)
+        aResult = TestResult::PassedWithQuirks;
+    if (nNumberOfErrors > 0)
+        aResult = TestResult::Failed;
+    return aResult;
+}
+
 TestResult OutputDeviceTestCommon::checkRectangleAA(Bitmap& aBitmap)
 {
-    std::vector<Color> aExpected
-    {
-        constBackgroundColor, constBackgroundColor, constLineColor,
-        constBackgroundColor, constBackgroundColor, constLineColor, constBackgroundColor
-    };
-    return checkRectangles(aBitmap, aExpected);
+    return checkRectangles(aBitmap, true);
 }
 
 TestResult OutputDeviceTestCommon::checkFilledRectangle(Bitmap& aBitmap, bool useLineColor)
 {
-    std::vector<Color> aExpected
+    std::vector<Color> aExpected{ constBackgroundColor,
+                                  useLineColor ? constLineColor : constFillColor, constFillColor,
+                                  constFillColor, constFillColor };
+
+    BitmapScopedWriteAccess pAccess(aBitmap);
+
+    TestResult aResult = TestResult::Passed;
+    int nNumberOfQuirks = 0;
+    int nNumberOfErrors = 0;
+
+    for (size_t aLayerNumber = 0; aLayerNumber < aExpected.size(); aLayerNumber++)
     {
-        constBackgroundColor, constBackgroundColor,
-        useLineColor ? constLineColor : constFillColor,
-        constFillColor, constFillColor, constFillColor, constFillColor
-    };
-    return checkRectangles(aBitmap, aExpected);
+        tools::Long startX = aLayerNumber, endX = pAccess->Width() / 2 - aLayerNumber + 1;
+        tools::Long startY = aLayerNumber, endY = pAccess->Height() - aLayerNumber - 1;
+
+        for (tools::Long ptX = startX; ptX <= endX; ++ptX)
+        {
+            checkValue(pAccess, ptX, startY, aExpected[aLayerNumber], nNumberOfQuirks, nNumberOfErrors,
+                       true);
+            checkValue(pAccess, ptX, endY, aExpected[aLayerNumber], nNumberOfQuirks, nNumberOfErrors, true);
+        }
+        for (tools::Long ptY = startY; ptY <= endY; ++ptY)
+        {
+            checkValue(pAccess, startX, ptY, aExpected[aLayerNumber], nNumberOfQuirks, nNumberOfErrors,
+                       true);
+            checkValue(pAccess, endX, ptY, aExpected[aLayerNumber], nNumberOfQuirks, nNumberOfErrors, true);
+        }
+    }
+    if (nNumberOfQuirks > 0)
+        aResult = TestResult::PassedWithQuirks;
+    if (nNumberOfErrors > 0)
+        aResult = TestResult::Failed;
+    return aResult;
 }
 
 TestResult OutputDeviceTestCommon::checkFilled(Bitmap& rBitmap, tools::Rectangle aRectangle, Color aExpectedColor)
