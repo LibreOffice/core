@@ -23,7 +23,6 @@
 #include <sfx2/basedlgs.hxx>
 #include <svx/swframetypes.hxx>
 
-namespace vcl { class Window; }
 class SfxItemSet;
 class SwWrtShell;
 

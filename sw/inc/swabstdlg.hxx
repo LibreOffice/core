@@ -31,7 +31,6 @@
 class SfxViewFrame;
 class SfxBindings;
 class SfxItemSet;
-namespace vcl { class Window; }
 class SfxStyleSheetBase;
 class SwGlossaryHdl;
 class SwField;
@@ -113,7 +112,6 @@ public:
     virtual OUString    GetFontName() = 0;
     virtual bool        IsEndNote() = 0;
     virtual OUString    GetStr() = 0;
-    //from class Window
     virtual void        SetHelpId( const OString& sHelpId ) = 0;
     virtual void        SetText( const OUString& rStr ) = 0;
 };

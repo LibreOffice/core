@@ -27,7 +27,6 @@
 
 class SwFrameFormat;
 class SwWrtShell;
-namespace vcl { class Window; }
 class SwFlyFrameFormat;
 
 namespace com::sun::star {

@@ -43,7 +43,6 @@ class SwPaM;
 class SbModule;
 class SvxMacroItem;
 class SvNumberFormatter;
-namespace vcl { class Window; }
 namespace weld { class Widget; class Window; }
 enum class SwFieldIds : sal_uInt16;
 

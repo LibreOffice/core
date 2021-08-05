@@ -20,7 +20,6 @@
 #include <TableWindowTitle.hxx>
 #include <TableWindow.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/help.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
