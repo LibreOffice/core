@@ -319,6 +319,13 @@ void SvmWriter::MetaActionHandler(MetaAction* pAction, ImplMetaWriteData* pData)
         }
         break;
 
+        case MetaActionType::LINECOLOR:
+        {
+            auto* pMetaAction = static_cast<MetaLineColorAction*>(pAction);
+            LineColorHandler(pMetaAction);
+        }
+        break;
+
         case MetaActionType::OVERLINECOLOR:
         {
             auto* pMetaAction = static_cast<MetaOverlineColorAction*>(pAction);
@@ -862,6 +869,14 @@ void SvmWriter::MoveClipRegionHandler(MetaMoveClipRegionAction* pAction)
     mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
     VersionCompatWrite aCompat(mrStream, 1);
     mrStream.WriteInt32(pAction->GetHorzMove()).WriteInt32(pAction->GetVertMove());
+}
+
+void SvmWriter::LineColorHandler(MetaLineColorAction* pAction)
+{
+    mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
+    VersionCompatWrite aCompat(mrStream, 1);
+    WriteColor(pAction->GetColor());
+    mrStream.WriteBool(pAction->IsSetting());
 }
 
 void SvmWriter::OverlineColorHandler(MetaOverlineColorAction* pAction)
