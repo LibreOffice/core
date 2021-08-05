@@ -323,7 +323,7 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
 
         case SID_REMOVE_HYPERLINK:
             if ( pSingleSelectedObj )
-                SetHlinkForObject( pSingleSelectedObj, OUString() );
+                pSingleSelectedObj->setHyperlink(OUString());
             break;
 
         case SID_OPEN_HYPERLINK:
@@ -339,18 +339,17 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
                         pObj = pHit;
                 }
 
-                ScMacroInfo* pInfo = ScDrawLayer::GetMacroInfo( pObj );
-                if (pInfo && !pInfo->GetHlink().isEmpty())
+                if (!pObj->getHyperlink().isEmpty())
                 {
                     if (nSlot == SID_OPEN_HYPERLINK)
                     {
-                        ScGlobal::OpenURL(pInfo->GetHlink(), OUString(), true);
+                        ScGlobal::OpenURL(pObj->getHyperlink(), OUString(), true);
                     }
                     else if (nSlot == SID_COPY_HYPERLINK_LOCATION)
                     {
                         uno::Reference<datatransfer::clipboard::XClipboard> xClipboard
                             = GetViewShell()->GetWindow()->GetClipboard();
-                        vcl::unohelper::TextDataObject::CopyStringTo(pInfo->GetHlink(), xClipboard);
+                        vcl::unohelper::TextDataObject::CopyStringTo(pObj->getHyperlink(), xClipboard);
                     }
                 }
             }
@@ -619,16 +618,6 @@ void ScDrawShell::ExecuteMeasureDlg( SfxRequest& rReq )
 
         pView->InvalidateAttribs();
         rReq.Done();
-    }
-}
-
-void ScDrawShell::SetHlinkForObject( SdrObject* pObj, const OUString& rHlnk )
-{
-    if ( pObj )
-    {
-        ScMacroInfo* pInfo = ScDrawLayer::GetMacroInfo( pObj, true );
-        pInfo->SetHlink( rHlnk );
-        lcl_setModified( GetObjectShell() );
     }
 }
 

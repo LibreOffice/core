@@ -64,10 +64,9 @@ void ScDrawShell::GetHLinkState( SfxItemSet& rSet )             //  Hyperlink
     if ( rMarkList.GetMarkCount() == 1 )              // URL-Button marked ?
     {
         SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-        ScMacroInfo* pInfo = ScDrawLayer::GetMacroInfo( pObj );
-        if ( pInfo && !pInfo->GetHlink().isEmpty() )
+        if ( pObj && !pObj->getHyperlink().isEmpty() )
         {
-            aHLinkItem.SetURL( pInfo->GetHlink() );
+            aHLinkItem.SetURL( pObj->getHyperlink() );
             aHLinkItem.SetInsertMode(HLINK_FIELD);
         }
         SdrUnoObj* pUnoCtrl = dynamic_cast<SdrUnoObj*>( pObj );
@@ -203,7 +202,7 @@ void ScDrawShell::ExecuteHLink( const SfxRequest& rReq )
                             }
                             else
                             {
-                                SetHlinkForObject( pObj, rURL );
+                                pObj->setHyperlink(rURL);
                                 bDone = true;
                             }
                         }
