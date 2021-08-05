@@ -183,8 +183,8 @@ void SwEditShell::SetAttrSet( const SfxItemSet& rSet, SetAttrMode nFlags, SwPaM*
 
         GetDoc()->getIDocumentContentOperations().InsertItemSet(*pCursor, rSet, nFlags, GetLayout());
     }
-    EndAllAction();
     GetDoc()->getIDocumentRedlineAccess().SetRedlineFlags( eOldMode );
+    EndAllAction();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
