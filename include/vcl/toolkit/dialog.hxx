@@ -74,6 +74,9 @@ private:
     DECL_DLLPRIVATE_LINK(ImplAsyncCloseHdl, void*, void);
     DECL_DLLPRIVATE_LINK(ResponseHdl, Button*, void);
 
+    // get the default parent for a dialog as is done in standard initialization
+    SAL_DLLPRIVATE static vcl::Window* GetDefaultParent(WinBits nStyle);
+
 protected:
     void    ImplInitDialog( vcl::Window* pParent, WinBits nStyle, InitFlag eFlag = InitFlag::Default );
 
@@ -101,9 +104,6 @@ public:
     explicit        Dialog( vcl::Window* pParent, WinBits nStyle = WB_STDDIALOG, InitFlag eFlag = InitFlag::Default );
     virtual         ~Dialog() override;
     virtual void    dispose() override;
-
-    // get the default parent for a dialog as is done in standard initialization
-    static vcl::Window* GetDefaultParent(WinBits nStyle);
 
     virtual bool    EventNotify( NotifyEvent& rNEvt ) override;
     virtual void    StateChanged( StateChangedType nStateChange ) override;
