@@ -513,7 +513,8 @@ SwAddStylesDlg_Impl::SwAddStylesDlg_Impl(weld::Window* pParent,
         aWidths.push_back(m_xHeaderTree->get_pixel_size(sTitle).Width() + nPadding);
     }
     m_xHeaderTree->set_column_fixed_widths(aWidths);
-    auto nWidth = std::accumulate(aWidths.begin(), aWidths.end(), 0);
+    auto nWidth = std::accumulate(aWidths.begin(), aWidths.end(),
+                                  Application::GetSettings().GetStyleSettings().GetScrollBarSize());
     m_xHeaderTree->set_size_request(nWidth, m_xHeaderTree->get_height_rows(15));
 
     int nRow(0);
@@ -576,7 +577,7 @@ SwAddStylesDlg_Impl::SwAddStylesDlg_Impl(weld::Window* pParent,
 
 IMPL_LINK(SwAddStylesDlg_Impl, TreeSizeAllocHdl, const Size&, rSize, void)
 {
-    auto nWidth = rSize.Width();
+    auto nWidth = rSize.Width() - Application::GetSettings().GetStyleSettings().GetScrollBarSize();
 
     std::vector<int> aWidths;
     aWidths.push_back(0);
