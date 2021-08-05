@@ -1388,6 +1388,7 @@ OUString StyleSheetTable::ConvertStyleName( const OUString& rWWName, bool bExten
         { "TOC 7", "Contents 7" },
         { "TOC 8", "Contents 8" },
         { "TOC 9", "Contents 9" },
+        { "TOC Heading", "Contents Heading" },
         { "TOCHeading", "Contents Heading" },
         { "toc 1", "Contents 1" },
         { "toc 2", "Contents 2" },
