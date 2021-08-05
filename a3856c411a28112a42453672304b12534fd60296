@@ -138,6 +138,24 @@
       "revId": "a3856c411a28112a42453672304b12534fd60296",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "053d820a_db823f9a",
+        "filename": "ucb/source/cacher/dynamicresultsetwrapper.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-08-05T12:23:44Z",
+      "side": 1,
+      "message": "\u003e (\"1) The biggest of all the big problems with recursive mutexes is that they encourage you to completely lose track of your locking scheme and scope...\n\nThat is, literally, what the bulk of the code we right is about - allow you to lose track of other stuff so that you can focus on a writing code that does not require keeping massive scope in your head.\nI maintain, that properly used (like everything else in this world), recursive mutexes are just fine and dandy.\n\n\u003e With UNO, you must not hold mutexes while calling listeners.  Do the actual, mutating work upfront while holding a mutex and record the relevant notification data, then afterwards do the actual notifications asynchronously, after releasing the mutex.\n\nUnfortunately that idyllic state of affairs is rather rare in our codebase :-)\n\nI\u0027m am happy to do the rather mechanical work of converting stuff from osl::Mutex to std::recursive_mutex.\n\nBut I\u0027m not keen on signing up for deeper changes, that have a much strong likelihood of breaking stuff.",
+      "parentUuid": "ad87930b_bcbc4c3b",
+      "revId": "a3856c411a28112a42453672304b12534fd60296",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
