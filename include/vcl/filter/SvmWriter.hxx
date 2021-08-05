@@ -77,6 +77,7 @@ public:
     void FillColorHandler(MetaFillColorAction* pAction);
     void TextColorHandler(MetaTextColorAction* pAction);
     void TextFillColorHandler(MetaTextFillColorAction* pAction);
+    void TextLineColorHandler(MetaTextLineColorAction* pAction);
     void OverlineColorHandler(MetaOverlineColorAction* pAction);
     void TextAlignHandler(MetaTextAlignAction* pAction);
     void MapModeHandler(MetaMapModeAction* pAction);

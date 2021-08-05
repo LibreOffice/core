@@ -347,6 +347,13 @@ void SvmWriter::MetaActionHandler(MetaAction* pAction, ImplMetaWriteData* pData)
         }
         break;
 
+        case MetaActionType::TEXTLINECOLOR:
+        {
+            auto* pMetaAction = static_cast<MetaTextLineColorAction*>(pAction);
+            TextLineColorHandler(pMetaAction);
+        }
+        break;
+
         case MetaActionType::OVERLINECOLOR:
         {
             auto* pMetaAction = static_cast<MetaOverlineColorAction*>(pAction);
@@ -444,11 +451,6 @@ void SvmWriter::MetaActionHandler(MetaAction* pAction, ImplMetaWriteData* pData)
             TextLanguageHandler(pMetaAction);
         }
         break;
-
-        /* default case prevents test failure and will be
-        removed once all the handlers are completed */
-        default:
-            pAction->Write(mrStream, pData);
     }
 }
 
@@ -916,6 +918,14 @@ void SvmWriter::TextColorHandler(MetaTextColorAction* pAction)
 }
 
 void SvmWriter::TextFillColorHandler(MetaTextFillColorAction* pAction)
+{
+    mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
+    VersionCompatWrite aCompat(mrStream, 1);
+    WriteColor(pAction->GetColor());
+    mrStream.WriteBool(pAction->IsSetting());
+}
+
+void SvmWriter::TextLineColorHandler(MetaTextLineColorAction* pAction)
 {
     mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
     VersionCompatWrite aCompat(mrStream, 1);
