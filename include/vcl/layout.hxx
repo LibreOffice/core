@@ -13,7 +13,6 @@
 #include <config_options.h>
 #include <vcl/dllapi.h>
 #include <vcl/ctrl.hxx>
-#include <vcl/help.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <vcl/settings.hxx>
@@ -24,6 +23,7 @@
 #include <vcl/commandevent.hxx>
 #include <set>
 
+class HelpEvent;
 class ScrollBar;
 class ScrollBarBox;
 class Splitter;
@@ -686,26 +686,7 @@ private:
             return;
         Control::Command(rEvent);
     }
-    virtual void RequestHelp(const HelpEvent& rHelpEvent) override
-    {
-        if (rHelpEvent.GetMode() & (HelpEventMode::QUICK | HelpEventMode::BALLOON))
-        {
-            Point aPos(ScreenToOutputPixel(rHelpEvent.GetMousePosPixel()));
-            tools::Rectangle aHelpArea(aPos.X(), aPos.Y());
-            OUString sHelpTip = m_aQueryTooltipHdl.Call(aHelpArea);
-            if (sHelpTip.isEmpty())
-                return;
-            Point aPt = OutputToScreenPixel(aHelpArea.TopLeft());
-            aHelpArea.SetLeft(aPt.X());
-            aHelpArea.SetTop(aPt.Y());
-            aPt = OutputToScreenPixel(aHelpArea.BottomRight());
-            aHelpArea.SetRight(aPt.X());
-            aHelpArea.SetBottom(aPt.Y());
-            // tdf#125369 recover newline support of tdf#101779
-            QuickHelpFlags eHelpWinStyle = sHelpTip.indexOf('\n') != -1 ? QuickHelpFlags::TipStyleBalloon : QuickHelpFlags::NONE;
-            Help::ShowQuickHelp(this, aHelpArea, sHelpTip, eHelpWinStyle);
-        }
-    }
+    virtual void RequestHelp(const HelpEvent& rHelpEvent) override;
     virtual void StartDrag(sal_Int8 nAction, const Point& rPosPixel) override;
     virtual FactoryFunction GetUITestFactory() const override;
 
