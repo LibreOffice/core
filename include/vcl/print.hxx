@@ -48,7 +48,6 @@ enum class SalPrinterError;
 
 namespace vcl {
     class PrinterController;
-    class Window;
 }
 
 namespace weld { class Window; }
