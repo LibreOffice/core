@@ -73,7 +73,7 @@ namespace
             "Endnote Text",
             "Table of Authorities",
             "Macro Text",
-            "TOA Heading",
+            "TOC Heading",
             "List",
             "List 2",
             "List 3",
