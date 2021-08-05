@@ -18,8 +18,6 @@
  */
 
 
-#include <osl/mutex.hxx>
-
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/task/DocumentPasswordRequest.hpp>
 #include <com/sun/star/task/XInteractionPassword.hpp>
@@ -29,6 +27,8 @@
 #include <ucbhelper/interactionrequest.hxx>
 
 #include "tdoc_passwordrequest.hxx"
+
+#include <mutex>
 
 using namespace com::sun::star;
 using namespace tdoc_ucp;
@@ -65,7 +65,7 @@ namespace tdoc_ucp
         virtual OUString SAL_CALL getPassword() override;
 
     private:
-        osl::Mutex m_aMutex;
+        std::mutex m_aMutex;
         OUString m_aPassword;
     };
 
@@ -148,14 +148,14 @@ void SAL_CALL InteractionSupplyPassword::select()
 void SAL_CALL
 InteractionSupplyPassword::setPassword( const OUString& aPasswd )
 {
-    osl::MutexGuard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
     m_aPassword = aPasswd;
 }
 
 // virtual
 OUString SAL_CALL InteractionSupplyPassword::getPassword()
 {
-    osl::MutexGuard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
     return m_aPassword;
 }
 
