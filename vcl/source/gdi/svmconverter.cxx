@@ -25,6 +25,7 @@
 #include <tools/fract.hxx>
 #include <tools/stream.hxx>
 #include <vcl/dibtools.hxx>
+#include <vcl/filter/SvmReader.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/lineinfo.hxx>
 #include <vcl/metaact.hxx>
@@ -1088,7 +1089,8 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                 Gradient    aGradient;
                 sal_Int32   nFollowingActionCount(0);
 
-                ReadGDIMetaFile( rIStm, aMtf );
+                SvmReader aReader( rIStm );
+                aReader.Read( aMtf );
                 aSerializer.readPoint(aPos);
                 aSerializer.readSize(aSize);
                 aSerializer.readGradient(aGradient);

@@ -29,6 +29,7 @@
 #include <vcl/metric.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/filter/SvmReader.hxx>
 #include <tools/fract.hxx>
 #include <tools/helpers.hxx>
 #include <tools/stream.hxx>
@@ -4002,7 +4003,8 @@ void SAL_CALL SVGWriter::write( const Reference<XDocumentHandler>& rxDocHandler,
     SvMemoryStream  aMemStm( const_cast<sal_Int8 *>(rMtfSeq.getConstArray()), rMtfSeq.getLength(), StreamMode::READ );
     GDIMetaFile     aMtf;
 
-    ReadGDIMetaFile( aMemStm, aMtf );
+    SvmReader aReader( aMemStm );
+    aReader.Read( aMtf );
 
     rtl::Reference<SVGExport> pWriter(new SVGExport( mxContext, rxDocHandler, maFilterData ));
     pWriter->writeMtf( aMtf );

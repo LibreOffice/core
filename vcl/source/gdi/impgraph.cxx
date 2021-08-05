@@ -31,6 +31,7 @@
 #include <unotools/ucbhelper.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/tempfile.hxx>
+#include <vcl/filter/SvmReader.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/virdev.hxx>
@@ -1675,7 +1676,8 @@ bool ImpGraphic::swapInGraphic(SvStream& rStream)
     else if (meType == GraphicType::GdiMetafile)
     {
         GDIMetaFile aMetaFile;
-        ReadGDIMetaFile(rStream, aMetaFile);
+        SvmReader aReader(rStream);
+        aReader.Read(aMetaFile);
         if (!rStream.GetError())
         {
             maMetaFile = aMetaFile;
