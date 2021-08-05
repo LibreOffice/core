@@ -42,6 +42,24 @@
     },
     {
       "key": {
+        "uuid": "f886ebf9_be6f030c",
+        "filename": "svx/source/tbxctrls/tbcontrl.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2228,
+      "author": {
+        "id": 1002869
+      },
+      "writtenOn": "2021-08-05T08:32:06Z",
+      "side": 1,
+      "message": "but, Calc and Writer should have SID_ATTR_BORDER_DIAG_TLBR in common, because this function is executed by both of them and it works well in Calc. If I change it to RES_* , I think it wouldn\u0027t work in Calc.",
+      "parentUuid": "4ad1121f_a274b220",
+      "revId": "aeebe3c0db66fe8cf438a66cbd73bb10f7818ed8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "75ad4de1_45a21eb6",
         "filename": "sw/inc/hintids.hxx",
         "patchSetId": 4
@@ -71,6 +89,29 @@
       "side": 1,
       "message": "Actually there is only one here. I intended to add Diagonal Left border attribute(will add diagonal left later) as in Calc https://opengrok.libreoffice.org/xref/core/sc/inc/scitems.hxx?r\u003d19fa853c#147  (ATTR_BORDER_TLBR)\n\nShould I rename it to RES_BOX_TLBR ? because in Calc, ATTR_BORDER is equivalent to RES_BOX in Writer.",
       "parentUuid": "75ad4de1_45a21eb6",
+      "revId": "aeebe3c0db66fe8cf438a66cbd73bb10f7818ed8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "85909d9f_a7259949",
+        "filename": "sw/source/uibase/shells/tabsh.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 576,
+      "author": {
+        "id": 1002869
+      },
+      "writtenOn": "2021-08-05T08:32:06Z",
+      "side": 1,
+      "message": "also I\u0027ll use RESs here after all implementations done.",
+      "range": {
+        "startLine": 576,
+        "startChar": 62,
+        "endLine": 576,
+        "endChar": 77
+      },
       "revId": "aeebe3c0db66fe8cf438a66cbd73bb10f7818ed8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
