@@ -19,9 +19,6 @@
 
 #pragma once
 
-#include <memory>
-
-#include <osl/mutex.hxx>
 #include <rtl/ref.hxx>
 
 #include <cppuhelper/implbase.hxx>
@@ -36,15 +33,12 @@
 
 #include "tdoc_storage.hxx"
 
+#include <memory>
+#include <mutex>
+
 namespace tdoc_ucp {
 
-struct MutexHolder
-{
-    osl::Mutex m_aMutex;
-};
-
-
-class ParentStorageHolder : public MutexHolder
+class ParentStorageHolder
 {
 public:
     ParentStorageHolder(
@@ -57,9 +51,13 @@ public:
     getParentStorage() const
     { return m_xParentStorage; }
     void setParentStorage( const css::uno::Reference< css::embed::XStorage > & xStg )
-    { osl::MutexGuard aGuard( m_aMutex ); m_xParentStorage = xStg; }
+    {
+        std::scoped_lock aGuard( m_aMutex );
+        m_xParentStorage = xStg;
+    }
 
 private:
+    std::mutex m_aMutex;
     css::uno::Reference< css::embed::XStorage > m_xParentStorage;
     bool                                  m_bParentIsRootStorage;
 };
