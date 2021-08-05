@@ -16,8 +16,10 @@ namespace
 {
 void drawRectOffset(OutputDevice& rDevice, tools::Rectangle const& rRect, int nOffset)
 {
-    rDevice.DrawRect(tools::Rectangle(rRect.Left() + nOffset, rRect.Top() + nOffset,
-                                      rRect.Right() - nOffset, rRect.Bottom() - nOffset));
+    int nMidOffset = rRect.Left() + (rRect.Right() - rRect.Left()) / 2;
+    rDevice.DrawRect(
+        tools::Rectangle(rRect.Left() + nOffset - (nOffset + 1) / 2, rRect.Top() + nOffset - 1,
+                         rRect.Right() - nMidOffset - nOffset / 3, rRect.Bottom() - nOffset + 1));
 }
 
 void drawInvertOffset(OutputDevice& rDevice, tools::Rectangle const& rRect, int nOffset,
