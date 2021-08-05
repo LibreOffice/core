@@ -30,7 +30,6 @@
 
 namespace com::sun::star::beans    { class XPropertySet; }
 
-class Control;
 class MnemonicGenerator;
 
 namespace dbaui
