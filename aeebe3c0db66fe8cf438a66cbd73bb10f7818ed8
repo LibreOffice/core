@@ -25,6 +25,23 @@
     },
     {
       "key": {
+        "uuid": "4ad1121f_a274b220",
+        "filename": "svx/source/tbxctrls/tbcontrl.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2228,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-05T07:36:04Z",
+      "side": 1,
+      "message": "The suspicious thing is here, where you use SIDs, not RESs. I would suspect that SID_ATTR_BORDER_DIAG_TLBR is 106 or 107.",
+      "revId": "aeebe3c0db66fe8cf438a66cbd73bb10f7818ed8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "75ad4de1_45a21eb6",
         "filename": "sw/inc/hintids.hxx",
         "patchSetId": 4
