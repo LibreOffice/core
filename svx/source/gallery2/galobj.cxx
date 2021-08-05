@@ -32,6 +32,7 @@
 #include <svx/galmisc.hxx>
 #include <galobj.hxx>
 #include <vcl/dibtools.hxx>
+#include <vcl/filter/SvmReader.hxx>
 #include "gallerydrawmodel.hxx"
 #include <bitmaps.hlst>
 
@@ -212,7 +213,8 @@ void SgaObject::ReadData(SvStream& rIn, sal_uInt16& rReadVersion )
     }
     else
     {
-        ReadGDIMetaFile( rIn, aThumbMtf );
+        SvmReader aReader( rIn );
+        aReader.Read( aThumbMtf );
     }
 
     OUString aTmpStr = read_uInt16_lenPrefixed_uInt8s_ToOUString(rIn, RTL_TEXTENCODING_UTF8);
