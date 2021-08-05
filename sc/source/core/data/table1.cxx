@@ -269,7 +269,6 @@ ScTable::ScTable( ScDocument& rDoc, SCTAB nNewTab, const OUString& rNewName,
     bTableAreaValid(false),
     bTableAreaVisibleValid(false),
     bVisible(true),
-    bStreamValid(false),
     bPendingRowHeights(false),
     bCalcNotification(false),
     bGlobalKeepQuery(false),
@@ -277,6 +276,7 @@ ScTable::ScTable( ScDocument& rDoc, SCTAB nNewTab, const OUString& rNewName,
     bActiveScenario(false),
     mbPageBreaksValid(false),
     mbForceBreaks(false),
+    bStreamValid(false),
     aDefaultColAttrArray(static_cast<SCCOL>(-1), nNewTab, rDoc, nullptr)
 {
     if (bColInfo)
