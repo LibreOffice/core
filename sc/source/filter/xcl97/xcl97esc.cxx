@@ -548,9 +548,11 @@ ShapeInteractionHelper::PopulateShapeInteractionInfo( const XclExpObjectManager&
       SvMemoryStream* pMemStrm = nullptr;
       OUString sHyperLink;
       OUString sMacro;
-      if ( ScMacroInfo* pInfo = ScDrawLayer::GetMacroInfo( ::GetSdrObjectFromXShape( xShape ) ) )
+      SdrObject* pObj = GetSdrObjectFromXShape( xShape );
+      if (pObj)
+        sHyperLink = pObj->getHyperlink();
+      if ( ScMacroInfo* pInfo = ScDrawLayer::GetMacroInfo( pObj ) )
       {
-         sHyperLink = pInfo->GetHlink();
          sMacro = pInfo->GetMacro();
       }
       if (  !sHyperLink.isEmpty() )

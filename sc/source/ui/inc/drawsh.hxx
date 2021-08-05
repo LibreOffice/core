@@ -91,6 +91,8 @@ public:
 
     void GetDrawAttrStateForIFBX( SfxItemSet& rSet );
     OUString const & GetSidebarContextName();
+
+    void setModified();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

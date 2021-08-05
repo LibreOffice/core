@@ -546,7 +546,7 @@ void XclImpDrawObjBase::PreProcessSdrObject( XclImpDffConverter& rDffConv, SdrOb
 
     // macro and hyperlink
     // removed oracle/sun check for mbSimpleMacro ( no idea what its for )
-    if (!maMacroName.isEmpty() || !maHyperlink.isEmpty())
+    if (!maMacroName.isEmpty())
     {
         if( ScMacroInfo* pInfo = ScDrawLayer::GetMacroInfo( &rSdrObj, true ) )
         {
@@ -554,9 +554,10 @@ void XclImpDrawObjBase::PreProcessSdrObject( XclImpDffConverter& rDffConv, SdrOb
             if (!sMacro.isEmpty())
                 NotifyMacroEventRead();
             pInfo->SetMacro(sMacro);
-            pInfo->SetHlink( maHyperlink );
         }
     }
+    if (!maHyperlink.isEmpty())
+        rSdrObj.setHyperlink(maHyperlink);
 
     // call virtual function for object type specific processing
     DoPreProcessSdrObj( rDffConv, rSdrObj );

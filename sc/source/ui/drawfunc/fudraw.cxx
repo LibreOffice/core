@@ -714,7 +714,7 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
         SdrObjMacroHitRec aHitRec;  //! something missing ????
         rViewShell.SetActivePointer( pObj->GetMacroPointer(aHitRec) );
     }
-    else if ( !bAlt && pInfo && (!pInfo->GetMacro().isEmpty() || !pInfo->GetHlink().isEmpty()) )
+    else if ( !bAlt && pInfo && (!pInfo->GetMacro().isEmpty() || !pObj->getHyperlink().isEmpty()) )
         pWindow->SetPointer( PointerStyle::RefHand );
     else if ( IsDetectiveHit( aPnt ) )
         rViewShell.SetActivePointer( PointerStyle::Detective );
