@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0729e12f_64516e8f",
+        "filename": "setup_native/Package_packinfo.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-08-05T20:36:49Z",
+      "side": 1,
+      "message": "in the crashtesting build where the build-dir is different than the src-dir I get\n\n/home/buildslave/source/libo-core/setup_native/Package_packinfo.mk:18: *** gb_Package__check: Package setup_native_packinfo has not been defined.  Stop.\n\nreverting just this one line (10) makes it build FWIW\n\nautogen.input is\n--enable-dbgutil\n--enable-optimized\u003ddebug\n--enable-python\u003dinternal\n--disable-ccache\n--with-external-tar\u003d/home/buildslave/source/lo-externalsrc\n--disable-gtk3\n--disable-sdremote-bluetooth\n--without-java\n--without-krb5\n--without-gssapi\n--disable-werror",
+      "revId": "f267340d300da6318435ed1b2ae48b9f4275e2c4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
