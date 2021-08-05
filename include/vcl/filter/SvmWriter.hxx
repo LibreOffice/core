@@ -63,6 +63,7 @@ public:
     void BmpExScaleHandler(MetaBmpExScaleAction* pAction);
     void BmpExScalePartHandler(MetaBmpExScalePartAction* pAction);
     void MaskHandler(MetaMaskAction* pAction);
+    void MaskScaleHandler(MetaMaskScaleAction* pAction);
     void OverlineColorHandler(MetaOverlineColorAction* pAction);
     void TextAlignHandler(MetaTextAlignAction* pAction);
     void MapModeHandler(MetaMapModeAction* pAction);
