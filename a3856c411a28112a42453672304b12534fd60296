@@ -156,6 +156,24 @@
       "revId": "a3856c411a28112a42453672304b12534fd60296",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "40f6fe0b_ddc2d831",
+        "filename": "ucb/source/cacher/dynamicresultsetwrapper.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-08-05T12:43:02Z",
+      "side": 1,
+      "message": "\u003e \u003e (\"1) The biggest of all the big problems with recursive mutexes is that they encourage you to completely lose track of your locking scheme and scope...\n\u003e \n\u003e That is, literally, what the bulk of the code we right is about - allow you to lose track of other stuff so that you can focus on a writing code that does not require keeping massive scope in your head.\n\n\"lose track of your [class-local, say] locking scheme and scope\", I would clarify.  This is not about (e.g., class-)encapsulation allowing you to focus on just a small part of the overall code, but rather about turning even such a small, encapsulated part of the code into a quicksand that you drown in.\n\n\u003e I maintain, that properly used (like everything else in this world), recursive mutexes are just fine and dandy.\n\nThat doesn\u0027t match my experience, in which you want to be very clear about which data is controlled by a given mutex, and thus where exactly that mutex must be held in the code.  And where else it should not be held, to avoid deadlocks and bottlenecks.  And then, from my experience at least, you naturally arrive at a design that doesn\u0027t need recursive mutexes.\n\n\u003e I\u0027m am happy to do the rather mechanical work of converting stuff from osl::Mutex to std::recursive_mutex.\n\u003e \n\u003e But I\u0027m not keen on signing up for deeper changes, that have a much strong likelihood of breaking stuff.\n\nThen why not simply leave those problematic occurrences of osl::Mutex as they are, for now?",
+      "parentUuid": "053d820a_db823f9a",
+      "revId": "a3856c411a28112a42453672304b12534fd60296",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
