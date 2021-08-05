@@ -36,6 +36,7 @@
 #include <com/sun/star/frame/XTerminateListener.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <cppuhelper/implbase.hxx>
+#include <unotools/resmgr.hxx>
 #include <rtl/ref.hxx>
 
 #include "actionlistener.hxx"
@@ -142,7 +143,7 @@ private:
     void                    setDownloadBtnLabel( bool bAppendDots );
     void                    loadStrings();
     static OUString         loadString(const std::locale& rLocale,
-                                       const char* pResourceId);
+                                       TranslateId pResourceId);
     OUString                substVariables( const OUString &rSource ) const;
     static void             insertControlModel( css::uno::Reference< css::awt::XControlModel > const & rxDialogModel,
                                                 OUString const & rServiceName,
