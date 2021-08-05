@@ -47,3 +47,10 @@ race:ireallocSequence
 # field. But no idea at all how to fix it.
 race:cppu::getTypeFavourUnsigned
 
+
+# This is all inside GIO/Glib, no idea what it is doing
+#
+race:slab_allocator_alloc_chunk
+race:g_source_destroy_internal
+race:g_source_unref_internal
+race:g_task_finalize
