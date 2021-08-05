@@ -107,7 +107,7 @@ public:
             return;
         vcl::test::OutputDeviceTestRect aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupRectangle(false);
-        auto eResult = vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap);
+        auto eResult = vcl::test::OutputDeviceTestCommon::checkRectangles(aBitmap);
         exportImage("01-01_rectangle_test-rectangle.png", aBitmap);
 
         if (SHOULD_ASSERT)
@@ -120,7 +120,7 @@ public:
             return;
         vcl::test::OutputDeviceTestPixel aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupRectangle(false);
-        auto eResult = vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap);
+        auto eResult = vcl::test::OutputDeviceTestCommon::checkRectangles(aBitmap);
         exportImage("01-02_rectangle_test-pixel.png", aBitmap);
 
         if (SHOULD_ASSERT)
@@ -133,7 +133,7 @@ public:
             return;
         vcl::test::OutputDeviceTestLine aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupRectangle(false);
-        auto eResult = vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap);
+        auto eResult = vcl::test::OutputDeviceTestCommon::checkRectangles(aBitmap);
         exportImage("01-03_rectangle_test-line.png", aBitmap);
 
         if (SHOULD_ASSERT)
@@ -146,7 +146,7 @@ public:
             return;
         vcl::test::OutputDeviceTestPolygon aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupRectangle(false);
-        auto eResult = vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap);
+        auto eResult = vcl::test::OutputDeviceTestCommon::checkRectangles(aBitmap);
         exportImage("01-04_rectangle_test-polygon.png", aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
@@ -158,7 +158,7 @@ public:
             return;
         vcl::test::OutputDeviceTestPolyLine aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupRectangle(false);
-        auto eResult = vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap);
+        auto eResult = vcl::test::OutputDeviceTestCommon::checkRectangles(aBitmap);
         exportImage("01-05_rectangle_test-polyline.png", aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
@@ -170,7 +170,7 @@ public:
             return;
         vcl::test::OutputDeviceTestPolyLineB2D aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupRectangle(false);
-        auto eResult = vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap);
+        auto eResult = vcl::test::OutputDeviceTestCommon::checkRectangles(aBitmap);
         exportImage("01-06_rectangle_test-polyline_b2d.png", aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
@@ -182,7 +182,7 @@ public:
             return;
         vcl::test::OutputDeviceTestPolyPolygon aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupRectangle(false);
-        auto eResult = vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap);
+        auto eResult = vcl::test::OutputDeviceTestCommon::checkRectangles(aBitmap);
         exportImage("01-07_rectangle_test-polypolygon.png", aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
@@ -194,7 +194,7 @@ public:
             return;
         vcl::test::OutputDeviceTestPolyPolygonB2D aOutDevTest;
         Bitmap aBitmap = aOutDevTest.setupRectangle(false);
-        auto eResult = vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap);
+        auto eResult = vcl::test::OutputDeviceTestCommon::checkRectangles(aBitmap);
         exportImage("01-08_rectangle_test-polypolygon_b2d.png", aBitmap);
         if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);

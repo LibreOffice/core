@@ -17,11 +17,12 @@ namespace
 {
 void drawPolyLineOffset(OutputDevice& rDevice, tools::Rectangle const& rRect, int nOffset)
 {
+    int nMidOffset = rRect.GetWidth() / 2;
     basegfx::B2DPolygon aPolygon{
-        basegfx::B2DPoint(rRect.Left() + nOffset, rRect.Top() + nOffset),
-        basegfx::B2DPoint(rRect.Right() - nOffset, rRect.Top() + nOffset),
-        basegfx::B2DPoint(rRect.Right() - nOffset, rRect.Bottom() - nOffset),
-        basegfx::B2DPoint(rRect.Left() + nOffset, rRect.Bottom() - nOffset),
+        basegfx::B2DPoint(rRect.Left() + nOffset - (nOffset + 1) / 2, rRect.Top() + nOffset - 1),
+        basegfx::B2DPoint(rRect.Right() - nMidOffset - nOffset / 3, rRect.Top() + nOffset - 1),
+        basegfx::B2DPoint(rRect.Right() - nMidOffset - nOffset / 3, rRect.Bottom() - nOffset + 1),
+        basegfx::B2DPoint(rRect.Left() + nOffset - (nOffset + 1) / 2, rRect.Bottom() - nOffset + 1),
     };
     aPolygon.setClosed(true);
 
