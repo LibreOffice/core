@@ -56,6 +56,24 @@
       "revId": "aeebe3c0db66fe8cf438a66cbd73bb10f7818ed8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4652a1ad_564092f4",
+        "filename": "sw/inc/hintids.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 368,
+      "author": {
+        "id": 1002869
+      },
+      "writtenOn": "2021-08-05T07:36:08Z",
+      "side": 1,
+      "message": "Actually there is only one here. I intended to add Diagonal Left border attribute(will add diagonal left later) as in Calc https://opengrok.libreoffice.org/xref/core/sc/inc/scitems.hxx?r\u003d19fa853c#147  (ATTR_BORDER_TLBR)\n\nShould I rename it to RES_BOX_TLBR ? because in Calc, ATTR_BORDER is equivalent to RES_BOX in Writer.",
+      "parentUuid": "75ad4de1_45a21eb6",
+      "revId": "aeebe3c0db66fe8cf438a66cbd73bb10f7818ed8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
