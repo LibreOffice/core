@@ -17,6 +17,7 @@
 #include <vcl/toolkit/button.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <vcl/decoview.hxx>
+#include <vcl/help.hxx>
 #include <vcl/toolkit/dialog.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/scrbar.hxx>
@@ -2886,6 +2887,27 @@ bool isLayoutEnabled(const vcl::Window *pWindow)
     //Child is a container => we're layout enabled
     const vcl::Window *pChild = pWindow ? pWindow->GetWindow(GetWindowType::FirstChild) : nullptr;
     return pChild && isContainerWindow(*pChild) && !pChild->GetWindow(GetWindowType::Next);
+}
+
+void VclDrawingArea::RequestHelp(const HelpEvent& rHelpEvent)
+{
+    if (rHelpEvent.GetMode() & (HelpEventMode::QUICK | HelpEventMode::BALLOON))
+    {
+        Point aPos(ScreenToOutputPixel(rHelpEvent.GetMousePosPixel()));
+        tools::Rectangle aHelpArea(aPos.X(), aPos.Y());
+        OUString sHelpTip = m_aQueryTooltipHdl.Call(aHelpArea);
+        if (sHelpTip.isEmpty())
+            return;
+        Point aPt = OutputToScreenPixel(aHelpArea.TopLeft());
+        aHelpArea.SetLeft(aPt.X());
+        aHelpArea.SetTop(aPt.Y());
+        aPt = OutputToScreenPixel(aHelpArea.BottomRight());
+        aHelpArea.SetRight(aPt.X());
+        aHelpArea.SetBottom(aPt.Y());
+        // tdf#125369 recover newline support of tdf#101779
+        QuickHelpFlags eHelpWinStyle = sHelpTip.indexOf('\n') != -1 ? QuickHelpFlags::TipStyleBalloon : QuickHelpFlags::NONE;
+        Help::ShowQuickHelp(this, aHelpArea, sHelpTip, eHelpWinStyle);
+    }
 }
 
 void VclDrawingArea::StartDrag(sal_Int8, const Point&)
