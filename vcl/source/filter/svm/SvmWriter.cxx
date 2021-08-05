@@ -270,6 +270,13 @@ void SvmWriter::MetaActionHandler(MetaAction* pAction, ImplMetaWriteData* pData)
         }
         break;
 
+        case MetaActionType::GRADIENTEX:
+        {
+            auto* pMetaAction = static_cast<MetaGradientExAction*>(pAction);
+            GradientExHandler(pMetaAction);
+        }
+        break;
+
         case MetaActionType::OVERLINECOLOR:
         {
             auto* pMetaAction = static_cast<MetaOverlineColorAction*>(pAction);
@@ -747,6 +754,20 @@ void SvmWriter::GradientHandler(MetaGradientAction* pAction)
     VersionCompatWrite aCompat(mrStream, 1);
     TypeSerializer aSerializer(mrStream);
     aSerializer.writeRectangle(pAction->GetRect());
+    aSerializer.writeGradient(pAction->GetGradient());
+}
+
+void SvmWriter::GradientExHandler(MetaGradientExAction* pAction)
+{
+    mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
+    VersionCompatWrite aCompat(mrStream, 1);
+
+    // #i105373# see comment at MetaTransparentAction::Write
+    tools::PolyPolygon aNoCurvePolyPolygon;
+    pAction->GetPolyPolygon().AdaptiveSubdivide(aNoCurvePolyPolygon);
+
+    WritePolyPolygon(mrStream, aNoCurvePolyPolygon);
+    TypeSerializer aSerializer(mrStream);
     aSerializer.writeGradient(pAction->GetGradient());
 }
 
