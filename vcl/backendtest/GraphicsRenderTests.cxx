@@ -63,7 +63,7 @@ void GraphicsRenderTests::testDrawRectWithRectangle()
         appendTestResult(aTestName, "SKIPPED");
         return;
     }
-    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap);
+    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangles(aBitmap);
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
@@ -83,7 +83,7 @@ void GraphicsRenderTests::testDrawRectWithPixel()
         appendTestResult(aTestName, "SKIPPED");
         return;
     }
-    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap);
+    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangles(aBitmap);
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
@@ -103,7 +103,7 @@ void GraphicsRenderTests::testDrawRectWithLine()
         appendTestResult(aTestName, "SKIPPED");
         return;
     }
-    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap);
+    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangles(aBitmap);
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
@@ -123,7 +123,7 @@ void GraphicsRenderTests::testDrawRectWithPolygon()
         appendTestResult(aTestName, "SKIPPED");
         return;
     }
-    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap);
+    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangles(aBitmap);
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
@@ -143,7 +143,7 @@ void GraphicsRenderTests::testDrawRectWithPolyLine()
         appendTestResult(aTestName, "SKIPPED");
         return;
     }
-    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap);
+    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangles(aBitmap);
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
@@ -163,7 +163,7 @@ void GraphicsRenderTests::testDrawRectWithPolyLineB2D()
         appendTestResult(aTestName, "SKIPPED");
         return;
     }
-    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap);
+    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangles(aBitmap);
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
@@ -183,7 +183,7 @@ void GraphicsRenderTests::testDrawRectWithPolyPolygon()
         appendTestResult(aTestName, "SKIPPED");
         return;
     }
-    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap);
+    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangles(aBitmap);
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
@@ -203,7 +203,7 @@ void GraphicsRenderTests::testDrawRectWithPolyPolygonB2D()
         appendTestResult(aTestName, "SKIPPED");
         return;
     }
-    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap);
+    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangles(aBitmap);
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
@@ -1704,7 +1704,7 @@ void GraphicsRenderTests::testDrawRectangleOnSize1028WithRect()
         appendTestResult(aTestName, "SKIPPED");
         return;
     }
-    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap);
+    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangles(aBitmap);
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
@@ -1725,7 +1725,7 @@ void GraphicsRenderTests::testDrawRectangleOnSize4096WithRect()
         appendTestResult(aTestName, "SKIPPED");
         return;
     }
-    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap);
+    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangles(aBitmap);
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
@@ -1745,7 +1745,7 @@ void GraphicsRenderTests::testDrawRectangleOnSize1028WithPixel()
         appendTestResult(aTestName, "SKIPPED");
         return;
     }
-    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap);
+    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangles(aBitmap);
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
@@ -1765,7 +1765,7 @@ void GraphicsRenderTests::testDrawRectangleOnSize4096WithPixel()
         appendTestResult(aTestName, "SKIPPED");
         return;
     }
-    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap);
+    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangles(aBitmap);
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
@@ -1785,7 +1785,7 @@ void GraphicsRenderTests::testDrawRectangleOnSize1028WithLine()
         appendTestResult(aTestName, "SKIPPED");
         return;
     }
-    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap);
+    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangles(aBitmap);
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
@@ -1805,7 +1805,7 @@ void GraphicsRenderTests::testDrawRectangleOnSize4096WithLine()
         appendTestResult(aTestName, "SKIPPED");
         return;
     }
-    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap);
+    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangles(aBitmap);
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
@@ -1825,7 +1825,7 @@ void GraphicsRenderTests::testDrawRectangleOnSize1028WithPolyLine()
         appendTestResult(aTestName, "SKIPPED");
         return;
     }
-    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap);
+    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangles(aBitmap);
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
@@ -1845,7 +1845,7 @@ void GraphicsRenderTests::testDrawRectangleOnSize4096WithPolyLine()
         appendTestResult(aTestName, "SKIPPED");
         return;
     }
-    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap);
+    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangles(aBitmap);
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
@@ -1865,7 +1865,7 @@ void GraphicsRenderTests::testDrawRectangleOnSize1028WithPolygon()
         appendTestResult(aTestName, "SKIPPED");
         return;
     }
-    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap);
+    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangles(aBitmap);
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
@@ -1885,7 +1885,7 @@ void GraphicsRenderTests::testDrawRectangleOnSize4096WithPolygon()
         appendTestResult(aTestName, "SKIPPED");
         return;
     }
-    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap);
+    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangles(aBitmap);
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
@@ -1905,7 +1905,7 @@ void GraphicsRenderTests::testDrawRectangleOnSize1028WithPolyLineB2D()
         appendTestResult(aTestName, "SKIPPED");
         return;
     }
-    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap);
+    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangles(aBitmap);
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
@@ -1925,7 +1925,7 @@ void GraphicsRenderTests::testDrawRectangleOnSize4096WithPolyLineB2D()
         appendTestResult(aTestName, "SKIPPED");
         return;
     }
-    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap);
+    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangles(aBitmap);
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
@@ -1945,7 +1945,7 @@ void GraphicsRenderTests::testDrawRectangleOnSize1028WithPolyPolygon()
         appendTestResult(aTestName, "SKIPPED");
         return;
     }
-    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap);
+    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangles(aBitmap);
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
@@ -1965,7 +1965,7 @@ void GraphicsRenderTests::testDrawRectangleOnSize4096WithPolyPolygon()
         appendTestResult(aTestName, "SKIPPED");
         return;
     }
-    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap);
+    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangles(aBitmap);
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
@@ -1985,7 +1985,7 @@ void GraphicsRenderTests::testDrawRectangleOnSize1028WithPolyPolygonB2D()
         appendTestResult(aTestName, "SKIPPED");
         return;
     }
-    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap);
+    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangles(aBitmap);
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)
@@ -2005,7 +2005,7 @@ void GraphicsRenderTests::testDrawRectangleOnSize4096WithPolygonPolygonB2D()
         appendTestResult(aTestName, "SKIPPED");
         return;
     }
-    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangle(aBitmap);
+    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkRectangles(aBitmap);
     appendTestResult(aTestName, returnTestStatus(eResult),
                      (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
     if (m_aStoreResultantBitmap)

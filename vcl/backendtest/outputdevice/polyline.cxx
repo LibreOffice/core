@@ -21,13 +21,14 @@ namespace
 void drawPolyLineOffset(OutputDevice& rDevice, tools::Rectangle const & rRect, int nOffset)
 {
     tools::Polygon aPolygon(4);
-    aPolygon.SetPoint(Point(rRect.Left()  + nOffset, rRect.Top()    + nOffset), 0);
-    aPolygon.SetPoint(Point(rRect.Right() - nOffset, rRect.Top()    + nOffset), 1);
-    aPolygon.SetPoint(Point(rRect.Right() - nOffset, rRect.Bottom() - nOffset), 2);
-    aPolygon.SetPoint(Point(rRect.Left()  + nOffset, rRect.Bottom() - nOffset), 3);
+    int nMidOffset = rRect.GetWidth() / 2;
+    aPolygon.SetPoint(Point(rRect.Left()  + nOffset - (nOffset+1)/2, rRect.Top()    + nOffset - 1), 0);
+    aPolygon.SetPoint(Point(rRect.Right() - nMidOffset - nOffset/3, rRect.Top()    + nOffset - 1), 1);
+    aPolygon.SetPoint(Point(rRect.Right() - nMidOffset - nOffset/3, rRect.Bottom() - nOffset + 1), 2);
+    aPolygon.SetPoint(Point(rRect.Left()  + nOffset - (nOffset+1)/2, rRect.Bottom() - nOffset + 1), 3);
     aPolygon.Optimize(PolyOptimizeFlags::CLOSE);
 
-    rDevice.DrawPolyLine(aPolygon);
+    rDevice.DrawPolygon(aPolygon);
 }
 
 } // end anonymous namespace
