@@ -50,6 +50,12 @@ DECLARE_ODFEXPORT_TEST(testTdf137199, "tdf137199.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("HELLO2WORLD!"), getProperty<OUString>(getParagraph(4), "ListLabelString"));
 }
 
+DECLARE_ODFEXPORT_TEST(testTdf143605, "tdf143605.odt")
+{
+    // With numering type "none" there should be nothing
+    CPPUNIT_ASSERT_EQUAL(OUString(""), getProperty<OUString>(getParagraph(1), "ListLabelString"));
+}
+
 DECLARE_ODFEXPORT_TEST(testListFormatDocx, "listformat.docx")
 {
     // Ensure in resulting ODT we also have not just prefix/suffix, but custom delimiters
