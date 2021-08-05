@@ -70,6 +70,7 @@ public:
     void HatchHandler(MetaHatchAction* pAction);
     void WallpaperHandler(MetaWallpaperAction* pAction);
     void ClipRegionHandler(MetaClipRegionAction* pAction);
+    void ISectRectClipRegionHandler(MetaISectRectClipRegionAction* pAction);
     void OverlineColorHandler(MetaOverlineColorAction* pAction);
     void TextAlignHandler(MetaTextAlignAction* pAction);
     void MapModeHandler(MetaMapModeAction* pAction);
