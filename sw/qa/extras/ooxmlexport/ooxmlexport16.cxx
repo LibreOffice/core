@@ -740,6 +740,16 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf139549, "tdf139549.docx")
     CPPUNIT_ASSERT_DOUBLES_EQUAL(40.1, aStyleCommandValue.toFloat(), 0.1);
 }
 
+
+DECLARE_OOXMLEXPORT_TEST(testTdf143726, "Simple-TOC.odt")
+{
+    xmlDocUniquePtr pXmlStyles = parseExport("word/styles.xml");
+    CPPUNIT_ASSERT(pXmlStyles);
+    // Without the fix this was "TOA Heading" which belongs to the "Table of Authorities" index in Word
+    // TOC's heading style should be exported as "TOC Heading" as that's the default Word style name
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='ContentsHeading']/w:name", "val", "TOC Heading");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
