@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "79b32e36_bf8d7bda",
+        "filename": "svl/source/items/itempool.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 584,
+      "author": {
+        "id": 1002869
+      },
+      "writtenOn": "2021-08-05T06:28:55Z",
+      "side": 1,
+      "message": "error message: /svl/source/items/itempool.cxx:580: virtual const SfxPoolItem\u0026 SfxItemPool::PutImpl(const SfxPoolItem\u0026, sal_uInt16, bool): Assertion `!pImpl-\u003empStaticDefaults || typeid(rItem) \u003d\u003d typeid(GetDefaultItem(nWhich))\u0027 failed.\n\nwhen commenting assert line: \n/svl/source/items/poolitem.cxx:488: virtual bool SfxPoolItem::operator\u003d\u003d(const SfxPoolItem\u0026) const: Assertion `typeid(rCmp) \u003d\u003d typeid(*this) \u0026\u0026 \"comparing different pool item subclasses\"\u0027 failed.\n\nand \n\nwarn:legacy.osl:16301:16301:sw/source/uibase/shells/tabsh.cxx:488: where is BoxItem?",
+      "range": {
+        "startLine": 584,
+        "startChar": 12,
+        "endLine": 584,
+        "endChar": 59
+      },
+      "revId": "aeebe3c0db66fe8cf438a66cbd73bb10f7818ed8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
