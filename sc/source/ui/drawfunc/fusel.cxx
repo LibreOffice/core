@@ -167,9 +167,9 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
 
                    ScMacroInfo* pInfo = ScDrawLayer::GetMacroInfo( pObj, true );
                    // For interoperability favour links over macros if both are defined
-                   if ( !pInfo->GetHlink().isEmpty() )
+                   if ( !pObj->getHyperlink().isEmpty() )
                    {
-                       sURL = pInfo->GetHlink();
+                       sURL = pObj->getHyperlink();
                    }
                    else if ( !pInfo->GetMacro().isEmpty() )
                    {

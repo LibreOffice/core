@@ -636,10 +636,10 @@ void SAL_CALL ScShapeObj::setPropertyValue(const OUString& aPropertyName, const 
     else if  ( aPropertyName == SC_UNONAME_HYPERLINK ||
                aPropertyName == SC_UNONAME_URL )
     {
-        OUString sHlink;
-        ScMacroInfo* pInfo = ScShapeObj_getShapeHyperMacroInfo(this, true);
-        if ( ( aValue >>= sHlink ) && pInfo )
-            pInfo->SetHlink( sHlink );
+        OUString sHyperlink;
+        SdrObject* pObj = GetSdrObject();
+        if (pObj && (aValue >>= sHyperlink))
+            pObj->setHyperlink(sHyperlink);
     }
     else if ( aPropertyName == SC_UNONAME_MOVEPROTECT )
     {
@@ -833,8 +833,8 @@ uno::Any SAL_CALL ScShapeObj::getPropertyValue( const OUString& aPropertyName )
               aPropertyName == SC_UNONAME_URL )
     {
         OUString sHlink;
-        if ( ScMacroInfo* pInfo = ScShapeObj_getShapeHyperMacroInfo(this) )
-            sHlink = pInfo->GetHlink();
+        if (SdrObject* pObj = GetSdrObject())
+            sHlink = pObj->getHyperlink();
         aAny <<= sHlink;
     }
     else if ( aPropertyName == SC_UNONAME_MOVEPROTECT )
@@ -1354,10 +1354,7 @@ public:
                     OSL_ENSURE( pInfo, "shape macro info could not be created!" );
                     if ( !pInfo )
                         break;
-                    if ( rProperty.Name == SC_EVENTACC_SCRIPT )
-                        pInfo->SetMacro( sValue );
-                    else
-                        pInfo->SetHlink( sValue );
+                    pInfo->SetMacro( sValue );
                 }
             }
         }

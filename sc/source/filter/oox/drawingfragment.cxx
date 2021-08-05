@@ -116,10 +116,7 @@ void Shape::finalizeXShape( XmlFilterBase& rFilter, const Reference< XShapes >& 
     {
         SdrObject* pObj = SdrObject::getSdrObjectFromXShape( mxShape );
         if ( pObj )
-        {
-            if ( ScMacroInfo* pInfo = ScDrawLayer::GetMacroInfo( pObj, true ) )
-                pInfo->SetHlink( sURL );
-        }
+            pObj->setHyperlink(sURL);
     }
 }
 

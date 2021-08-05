@@ -81,12 +81,8 @@ public:
     void            SetMacro( const OUString& rMacro ) { maMacro = rMacro; }
     const OUString& GetMacro() const { return maMacro; }
 
-    void            SetHlink( const OUString& rHlink ) { maHlink = rHlink; }
-    const OUString& GetHlink() const { return maHlink; }
-
 private:
     OUString   maMacro;
-    OUString   maHlink;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
