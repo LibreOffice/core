@@ -1376,7 +1376,7 @@ OUString Application::GetToolkitName()
         return OUString();
 }
 
-vcl::Window* Application::GetDefDialogParent()
+vcl::Window* Dialog::GetDefDialogParent()
 {
     ImplSVData* pSVData = ImplGetSVData();
     // find some useful dialog parent
@@ -1431,6 +1431,12 @@ vcl::Window* Application::GetDefDialogParent()
 
     // use the desktop
     return nullptr;
+}
+
+weld::Window* Application::GetDefDialogParent()
+{
+    vcl::Window* pWindow = Dialog::GetDefDialogParent();
+    return pWindow ? pWindow->GetFrameWeld() : nullptr;
 }
 
 DialogCancelMode Application::GetDialogCancelMode()

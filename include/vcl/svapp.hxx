@@ -1092,16 +1092,20 @@ public:
 
     /** Get the default parent window for dialog boxes.
 
-     @remark GetDefDialogParent does all sorts of things find a useful parent
-             window for dialogs. It first uses the topmost parent of the active
-             window to avoid using floating windows or other dialog boxes. If
-             there are no active windows, then it will take a random stab and
+     @remark This is almost always a terrible method to use to get a parent
+             for a dialog, try hard to instead pass a specific parent window
+             to dialogs.
+
+             GetDefDialogParent does all sorts of things to try and find a useful
+             parent window for dialogs. It first uses the topmost parent of the
+             active window to avoid using floating windows or other dialog boxes.
+             If there are no active windows, then it will take a random stab and
              choose the first visible top window. Otherwise, it defaults to
              the desktop.
 
      @returns Pointer to the default window.
     */
-    static vcl::Window*              GetDefDialogParent();
+    static weld::Window*        GetDefDialogParent();
 
 
     /** Gets the dialog cancel mode for headless environments.

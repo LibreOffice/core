@@ -1075,8 +1075,7 @@ IMPL_LINK_NOARG(SwMMResultEmailDialog, SendDocumentsHdl_Impl, weld::Button&, voi
     xStore->storeToURL( sTargetTempURL, aValues   );
 
     //create the send dialog
-    vcl::Window* pParent = Application::GetDefDialogParent();
-    std::shared_ptr<SwSendMailDialog> xDlg = std::make_shared<SwSendMailDialog>(pParent ? pParent->GetFrameWeld() : nullptr, *xConfigItem);
+    std::shared_ptr<SwSendMailDialog> xDlg = std::make_shared<SwSendMailDialog>(Application::GetDefDialogParent(), *xConfigItem);
 
     xDlg->StartSend(nEnd - nBegin);
     weld::DialogController::runAsync(xDlg, [](sal_Int32 /*nResult*/){});

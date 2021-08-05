@@ -737,8 +737,7 @@ namespace
     {
         bool bRet = false;
 
-        vcl::Window* pWin = Application::GetDefDialogParent();
-        RTSPWDialog aDialog(pWin ? pWin->GetFrameWeld() : nullptr, rServer, rUserName);
+        RTSPWDialog aDialog(Application::GetDefDialogParent(), rServer, rUserName);
         if (aDialog.run() == RET_OK)
         {
             rUserName = aDialog.getUserName();
@@ -828,8 +827,7 @@ bool CUPSManager::endSpool( const OUString& rPrintername, const OUString& rJobTi
             {
                 OString sPrinterName(OUStringToOString(rPrintername, RTL_TEXTENCODING_UTF8));
                 OString sUser = cupsUser();
-                vcl::Window* pWin = Application::GetDefDialogParent();
-                RTSPWDialog aDialog(pWin ? pWin->GetFrameWeld() : nullptr, sPrinterName, sUser);
+                RTSPWDialog aDialog(Application::GetDefDialogParent(), sPrinterName, sUser);
                 aDialog.SetDomainVisible(bDomain);
                 aDialog.SetUserVisible(bUser);
                 aDialog.SetPassVisible(bPass);

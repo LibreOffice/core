@@ -4410,8 +4410,7 @@ void SbRtl_MsgBox(StarBASIC *, SbxArray & rPar, bool)
     WinBits nDialogType = nType & (16+32+64);
 
     SolarMutexGuard aSolarGuard;
-    vcl::Window* pParentWin = Application::GetDefDialogParent();
-    weld::Widget* pParent = pParentWin ? pParentWin->GetFrameWeld() : nullptr;
+    weld::Widget* pParent = Application::GetDefDialogParent();
 
     VclMessageType eType = VclMessageType::Other;
 

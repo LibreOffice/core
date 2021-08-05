@@ -406,7 +406,7 @@ void Dialog::PixelInvalidate(const tools::Rectangle* pRectangle)
 
 vcl::Window* Dialog::GetDefaultParent(WinBits nStyle)
 {
-    vcl::Window* pParent = Application::GetDefDialogParent();
+    vcl::Window* pParent = Dialog::GetDefDialogParent();
     if (!pParent && !(nStyle & WB_SYSTEMWINDOW))
         pParent = ImplGetSVData()->maFrameData.mpAppWin;
 

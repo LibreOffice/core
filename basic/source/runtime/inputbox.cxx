@@ -133,8 +133,7 @@ void SbRtl_InputBox(StarBASIC *, SbxArray & rPar, bool)
             nX = rPar.Get(4)->GetLong();
             nY = rPar.Get(5)->GetLong();
         }
-        vcl::Window* pParent = Application::GetDefDialogParent();
-        SvRTLInputBox aDlg(pParent ? pParent->GetFrameWeld() : nullptr,rPrompt,aTitle,aDefault,nX,nY);
+        SvRTLInputBox aDlg(Application::GetDefDialogParent(), rPrompt, aTitle, aDefault, nX, nY);
         aDlg.run();
         rPar.Get(0)->PutString(aDlg.GetText());
     }
