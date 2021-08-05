@@ -16,10 +16,11 @@ namespace
 {
 void drawPixelOffset(OutputDevice& rDevice, tools::Rectangle const& rRect, int nOffset)
 {
-    for (tools::Long x = 0 + nOffset; x < (rRect.GetWidth() - nOffset); ++x)
+    int nMidOffset = rRect.GetWidth() / 2;
+    for (tools::Long x = 0 + nOffset / 2; x < (rRect.GetWidth() - nMidOffset); ++x)
     {
-        tools::Long y1 = nOffset;
-        tools::Long y2 = rRect.GetHeight() - nOffset - 1;
+        tools::Long y1 = nOffset - 1;
+        tools::Long y2 = rRect.GetHeight() - nOffset;
 
         rDevice.DrawPixel(Point(x, y1));
         rDevice.DrawPixel(Point(x, y2));
@@ -27,8 +28,8 @@ void drawPixelOffset(OutputDevice& rDevice, tools::Rectangle const& rRect, int n
 
     for (tools::Long y = 0 + nOffset; y < (rRect.GetHeight() - nOffset); ++y)
     {
-        tools::Long x1 = nOffset;
-        tools::Long x2 = rRect.GetWidth() - nOffset - 1;
+        tools::Long x1 = nOffset / 2;
+        tools::Long x2 = rRect.GetWidth() - nMidOffset - nOffset / std::max((nOffset - 3), 2);
 
         rDevice.DrawPixel(Point(x1, y));
         rDevice.DrawPixel(Point(x2, y));

@@ -21,10 +21,16 @@ tools::Polygon createPolygonOffset(tools::Rectangle const& rRect, int nOffset, i
     // overlaps when drawing adjacent polygons. Specifying nFix = 1 allows to visually compensate
     // for this by making the polygon explicitly larger.
     tools::Polygon aPolygon(4);
-    aPolygon.SetPoint(Point(rRect.Left() + nOffset, rRect.Top() + nOffset), 0);
-    aPolygon.SetPoint(Point(rRect.Right() - nOffset + nFix, rRect.Top() + nOffset), 1);
-    aPolygon.SetPoint(Point(rRect.Right() - nOffset + nFix, rRect.Bottom() - nOffset + nFix), 2);
-    aPolygon.SetPoint(Point(rRect.Left() + nOffset, rRect.Bottom() - nOffset + nFix), 3);
+    int nMidOffset = rRect.GetWidth() / 2;
+    aPolygon.SetPoint(Point(rRect.Left() + nOffset - (nOffset + 1) / 2, rRect.Top() + nOffset - 1),
+                      0);
+    aPolygon.SetPoint(
+        Point(rRect.Right() - nMidOffset + nFix - nOffset / 3, rRect.Top() + nOffset - 1), 1);
+    aPolygon.SetPoint(
+        Point(rRect.Right() - nMidOffset + nFix - nOffset / 3, rRect.Bottom() - nOffset + nFix + 1),
+        2);
+    aPolygon.SetPoint(
+        Point(rRect.Left() + nOffset - (nOffset + 1) / 2, rRect.Bottom() - nOffset + nFix + 1), 3);
     aPolygon.Optimize(PolyOptimizeFlags::CLOSE);
     return aPolygon;
 }
