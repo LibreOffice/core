@@ -1099,8 +1099,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf94374)
 
 DECLARE_OOXMLEXPORT_TEST(testTdf83300, "tdf83300.docx")
 {
-    // This was 'Contents Heading', which (in the original document) implied 'keep with next' on unexpected paragraphs.
-    CPPUNIT_ASSERT_EQUAL(OUString("TOC Heading"), getProperty<OUString>(getParagraph(1), "ParaStyleName"));
+    // tdf#143722: This was 'TOC Heading', upon updating a TOC the heading replaced its Word-default blue + Calibri style
+    // with a Writer-default black + Liberation Sans one
+    CPPUNIT_ASSERT_EQUAL(OUString("Contents Heading"), getProperty<OUString>(getParagraph(1), "ParaStyleName"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf78902, "tdf78902.docx")
