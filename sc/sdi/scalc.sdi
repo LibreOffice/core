@@ -5089,43 +5089,6 @@ SfxVoidItem SplitWindow SID_WINDOW_SPLIT
     GroupId = SfxGroupId::View;
 ]
 
-
-SfxVoidItem EditShapeHyperlink SID_DRAW_HLINK_EDIT
-()
-[
-   AutoUpdate = FALSE,
-   FastCall = TRUE,
-   ReadOnlyDoc = TRUE,
-   Toggle = FALSE,
-   Container = FALSE,
-   RecordAbsolute = FALSE,
-   RecordPerSet;
-
-   AccelConfig = TRUE,
-   MenuConfig = FALSE,
-   ToolBoxConfig = FALSE,
-   GroupId = SfxGroupId::Drawing;
-]
-
-
-SfxVoidItem DeleteShapeHyperlink SID_DRAW_HLINK_DELETE
-()
-[
-   AutoUpdate = TRUE,
-   FastCall = TRUE,
-   ReadOnlyDoc = TRUE,
-   Toggle = FALSE,
-   Container = FALSE,
-   RecordAbsolute = FALSE,
-   RecordPerSet;
-
-   AccelConfig = TRUE,
-   MenuConfig = FALSE,
-   ToolBoxConfig = FALSE,
-   GroupId = SfxGroupId::Drawing;
-]
-
-
 SfxVoidItem StandardTextAttributes SID_TEXT_STANDARD
 ()
 [

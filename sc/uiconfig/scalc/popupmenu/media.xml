@@ -42,9 +42,10 @@
   <menu:menuitem menu:id=".uno:RenameObject"/>
   <menu:menuitem menu:id=".uno:ObjectTitleDescription"/>
   <menu:menuseparator/>
-  <menu:menuitem menu:id=".uno:EditShapeHyperlink"/>
-  <menu:menuitem menu:id=".uno:DeleteShapeHyperlink"/>
   <menu:menuitem menu:id=".uno:OpenHyperlinkOnCursor"/>
+  <menu:menuitem menu:id=".uno:EditHyperlink"/>
+  <menu:menuitem menu:id=".uno:CopyHyperlinkLocation"/>
+  <menu:menuitem menu:id=".uno:RemoveHyperlink"/>
   <menu:menuitem menu:id=".uno:AssignMacro"/>
 </menu:menupopup>
 

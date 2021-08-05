@@ -218,10 +218,11 @@ void ScDrawShell::GetDrawFuncState( SfxItemSet& rSet )      // disable functions
     bool bCanRename = false;
     if ( nMarkCount > 1 )
     {
-        // no hypelink options for a selected group
-        rSet.DisableItem( SID_DRAW_HLINK_EDIT );
-        rSet.DisableItem( SID_DRAW_HLINK_DELETE );
+        // no hyperlink options for a selected group
+        rSet.DisableItem( SID_EDIT_HYPERLINK );
+        rSet.DisableItem( SID_REMOVE_HYPERLINK );
         rSet.DisableItem( SID_OPEN_HYPERLINK );
+        rSet.DisableItem( SID_COPY_HYPERLINK_LOCATION );
         // Fit to cell only works with a single graphic
         rSet.DisableItem( SID_FITCELLSIZE );
     }
@@ -231,8 +232,10 @@ void ScDrawShell::GetDrawFuncState( SfxItemSet& rSet )      // disable functions
         ScMacroInfo* pInfo = ScDrawLayer::GetMacroInfo( pObj );
         if ( !pInfo || pInfo->GetHlink().isEmpty() )
         {
-            rSet.DisableItem( SID_DRAW_HLINK_DELETE );
+            rSet.DisableItem( SID_EDIT_HYPERLINK );
             rSet.DisableItem( SID_OPEN_HYPERLINK );
+            rSet.DisableItem( SID_REMOVE_HYPERLINK );
+            rSet.DisableItem( SID_COPY_HYPERLINK_LOCATION );
         }
         SdrLayerID nLayerID = pObj->GetLayer();
         if ( nLayerID != SC_LAYER_INTERN )

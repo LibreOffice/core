@@ -96,7 +96,6 @@ cmd/32/defaultparastyle.png cmd/32/controlcodes.png
 cmd/32/deleteallnotes.png cmd/32/deleteallannotation.png
 cmd/32/deletecell.png cmd/32/delete.png
 cmd/32/deletenote.png cmd/32/deleteannotation.png
-cmd/32/deleteshapehyperlink.png cmd/32/removehyperlink.png
 cmd/32/diagramaxisall.png cmd/32/diagramaxisxyz.png
 cmd/32/diagramaxismenu.png cmd/32/diagramaxis.png
 cmd/32/diagramdata.png cmd/32/changedatabasefield.png
@@ -115,7 +114,6 @@ cmd/32/editlinksmenu.png cmd/32/insertreferencefield.png
 cmd/32/editpastespecialmenu.png cmd/32/pastespecial.png
 cmd/32/editregion.png cmd/32/insertsection.png
 cmd/32/editselectmenu.png cmd/32/selecttables.png
-cmd/32/editshapehyperlink.png cmd/32/inserthyperlink.png
 cmd/32/ellipse.png cmd/32/basicshapes.ellipse.png
 cmd/32/ellipsetoolbox.png cmd/32/basicshapes.ellipse.png
 cmd/32/es/italic.png cmd/32/de/italic.png
@@ -812,7 +810,6 @@ cmd/lc_defaultparastyle.png cmd/lc_controlcodes.png
 cmd/lc_deleteallnotes.png cmd/lc_deleteallannotation.png
 cmd/lc_deletecell.png cmd/lc_delete.png
 cmd/lc_deletenote.png cmd/lc_deleteannotation.png
-cmd/lc_deleteshapehyperlink.png cmd/lc_removehyperlink.png
 cmd/lc_diagramaxisall.png cmd/lc_diagramaxisxyz.png
 cmd/lc_diagramaxismenu.png cmd/lc_diagramaxis.png
 cmd/lc_diagramdata.png cmd/lc_changedatabasefield.png
@@ -831,7 +828,6 @@ cmd/lc_editlinksmenu.png cmd/lc_insertreferencefield.png
 cmd/lc_editpastespecialmenu.png cmd/lc_pastespecial.png
 cmd/lc_editregion.png cmd/lc_insertsection.png
 cmd/lc_editselectmenu.png cmd/lc_selecttables.png
-cmd/lc_editshapehyperlink.png cmd/lc_inserthyperlink.png
 cmd/lc_ellipse.png cmd/lc_basicshapes.ellipse.png
 cmd/lc_ellipsetoolbox.png cmd/lc_basicshapes.ellipse.png
 cmd/lc_exitsearch.png cmd/lc_closepreview.png
@@ -1216,7 +1212,6 @@ cmd/sc_defaultparastyle.png cmd/sc_controlcodes.png
 cmd/sc_deleteallnotes.png cmd/sc_deleteallannotation.png
 cmd/sc_deletecell.png cmd/sc_delete.png
 cmd/sc_deletenote.png cmd/sc_deleteannotation.png
-cmd/sc_deleteshapehyperlink.png cmd/sc_removehyperlink.png
 cmd/sc_diagramaxisall.png cmd/sc_diagramaxisxyz.png
 cmd/sc_diagramaxismenu.png cmd/sc_diagramaxis.png
 cmd/sc_diagramdata.png cmd/sc_changedatabasefield.png
@@ -1235,7 +1230,6 @@ cmd/sc_editlinksmenu.png cmd/sc_insertreferencefield.png
 cmd/sc_editpastespecialmenu.png cmd/sc_pastespecial.png
 cmd/sc_editregion.png cmd/sc_insertsection.png
 cmd/sc_editselectmenu.png cmd/sc_selecttables.png
-cmd/sc_editshapehyperlink.png cmd/sc_inserthyperlink.png
 cmd/sc_ellipse.png cmd/sc_basicshapes.ellipse.png
 cmd/sc_ellipsetoolbox.png cmd/sc_basicshapes.ellipse.png
 cmd/sc_exitsearch.png cmd/sc_closepreview.png

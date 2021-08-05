@@ -63,7 +63,7 @@
     </menu:menupopup>
   </menu:menu>
   <menu:menuseparator/>
-  <menu:menuitem menu:id=".uno:EditShapeHyperlink"/>
-  <menu:menuitem menu:id=".uno:DeleteShapeHyperlink"/>
+  <menu:menuitem menu:id=".uno:EditHyperlink"/>
+  <menu:menuitem menu:id=".uno:RemoveHyperlink"/>
   <menu:menuitem menu:id=".uno:OpenHyperlinkOnCursor"/>
 </menu:menupopup>

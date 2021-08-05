@@ -1296,7 +1296,7 @@ void DesktopLOKTest::testContextMenuCalc()
 
     // Remove hyperlink is disabled
     {
-        boost::optional<boost::property_tree::ptree> aMenuItem = getContextMenuItem(aMenu.get(), ".uno:DeleteShapeHyperlink");
+        boost::optional<boost::property_tree::ptree> aMenuItem = getContextMenuItem(aMenu.get(), ".uno:RemoveHyperlink");
         CPPUNIT_ASSERT(aMenuItem);
 
         boost::optional<boost::property_tree::ptree&> aEnabled = aMenuItem.get().get_child_optional("enabled");
