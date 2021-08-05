@@ -309,7 +309,8 @@ static void writeMetaFile(GDIMetaFile& rInputMetafile, const OUString& rUrl)
 {
     SvFileStream aFileStream(rUrl, StreamMode::WRITE);
     aFileStream.Seek(STREAM_SEEK_TO_BEGIN);
-    rInputMetafile.Write(aFileStream);
+    SvmWriter aWriter(aFileStream);
+    aWriter.Write(rInputMetafile);
     aFileStream.Close();
 }
 

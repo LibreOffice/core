@@ -76,6 +76,7 @@
 #include <unotools/tempfile.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/errcode.hxx>
+#include <vcl/filter/SvmWriter.hxx>
 #include <vcl/salctype.hxx>
 #include <vcl/gdimtf.hxx>
 #include <comphelper/fileformat.h>
@@ -2058,7 +2059,8 @@ Any SAL_CALL SfxBaseModel::getTransferData( const datatransfer::DataFlavor& aFla
                 SvMemoryStream aMemStm( 65535, 65535 );
                 aMemStm.SetVersion( SOFFICE_FILEFORMAT_CURRENT );
 
-                xMetaFile->Write( aMemStm );
+                SvmWriter aWriter( aMemStm );
+                aWriter.Write( *xMetaFile );
                 aAny <<= Sequence< sal_Int8 >( static_cast< const sal_Int8* >( aMemStm.GetData() ),
                                                 aMemStm.TellEnd() );
             }
@@ -2076,7 +2078,8 @@ Any SAL_CALL SfxBaseModel::getTransferData( const datatransfer::DataFlavor& aFla
                 SvMemoryStream aMemStm( 65535, 65535 );
                 aMemStm.SetVersion( SOFFICE_FILEFORMAT_CURRENT );
 
-                xMetaFile->Write( aMemStm );
+                SvmWriter aWriter( aMemStm );
+                aWriter.Write( *xMetaFile );
                 aAny <<= Sequence< sal_Int8 >( static_cast< const sal_Int8* >( aMemStm.GetData() ),
                                                 aMemStm.TellEnd() );
             }

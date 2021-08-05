@@ -24,6 +24,7 @@
 #include <comphelper/propertysetinfo.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <svtools/DocumentToGraphicRenderer.hxx>
+#include <vcl/filter/SvmWriter.hxx>
 #include <vcl/gdimtf.hxx>
 #include <tools/stream.hxx>
 
@@ -158,7 +159,8 @@ void EPUBExportFilter::CreateMetafiles(std::vector<exp::FixedLayoutPage>& rPageM
         rGDIMetaFile.SetPrefSize(aLogic);
 
         SvMemoryStream aMemoryStream;
-        rGDIMetaFile.Write(aMemoryStream);
+        SvmWriter aWriter(aMemoryStream);
+        aWriter.Write(rGDIMetaFile);
         uno::Sequence<sal_Int8> aSequence(static_cast<const sal_Int8*>(aMemoryStream.GetData()),
                                           aMemoryStream.Tell());
 

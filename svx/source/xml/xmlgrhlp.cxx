@@ -39,6 +39,7 @@
 #include <unotools/streamwrap.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/saveopt.hxx>
+#include <vcl/filter/SvmWriter.hxx>
 #include <vcl/gfxlink.hxx>
 #include <vcl/metaact.hxx>
 #include <tools/zcodec.hxx>
@@ -152,7 +153,8 @@ GraphicInputStream::GraphicInputStream(GraphicObject const & aGraphicObject, con
         {
             pStream->SetVersion(SOFFICE_FILEFORMAT_8);
             pStream->SetCompressMode(SvStreamCompressFlags::ZBITMAP);
-            const_cast<GDIMetaFile&>(aGraphic.GetGDIMetaFile()).Write(*pStream);
+            SvmWriter aWriter(*pStream);
+            aWriter.Write(aGraphic.GetGDIMetaFile());
             bRet = (pStream->GetError() == ERRCODE_NONE);
         }
         else if (!rMimeType.isEmpty())
@@ -808,7 +810,8 @@ OUString SvXMLGraphicHelper::implSaveGraphic(css::uno::Reference<css::graphic::X
                     }
                     else
                     {
-                        rMtf.Write(*pStream);
+                        SvmWriter aWriter(*pStream);
+                        aWriter.Write(rMtf);
                     }
 
                     bSuccess = (pStream->GetError() == ERRCODE_NONE);

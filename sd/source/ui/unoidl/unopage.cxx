@@ -35,6 +35,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <vcl/bitmapex.hxx>
+#include <vcl/filter/SvmWriter.hxx>
 #include <vcl/metaact.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
@@ -1105,8 +1106,11 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
                         // Preview: WMF format.
                         ConvertGDIMetaFileToWMF(*xMetaFile, aDestStrm, nullptr, false);
                     else
+                    {
                         // PreviewMetafile: SVM format.
-                        xMetaFile->Write(aDestStrm);
+                        SvmWriter aWriter(aDestStrm);
+                        aWriter.Write(*xMetaFile);
+                    }
                     Sequence<sal_Int8> aSeq( static_cast<sal_Int8 const *>(aDestStrm.GetData()), aDestStrm.Tell() );
                     aAny <<= aSeq;
                 }

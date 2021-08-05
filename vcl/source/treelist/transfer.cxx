@@ -32,6 +32,7 @@
 #include <sot/storage.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/filter/SvmReader.hxx>
+#include <vcl/filter/SvmWriter.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/cvtgrf.hxx>
@@ -723,7 +724,8 @@ bool TransferableHelper::SetGDIMetaFile( const GDIMetaFile& rMtf )
     {
         SvMemoryStream aMemStm( 65535, 65535 );
 
-        const_cast<GDIMetaFile&>(rMtf).Write( aMemStm );
+        SvmWriter aWriter( aMemStm );
+        aWriter.Write( rMtf );
         maAny <<= Sequence< sal_Int8 >( static_cast< const sal_Int8* >( aMemStm.GetData() ), aMemStm.TellEnd() );
     }
 

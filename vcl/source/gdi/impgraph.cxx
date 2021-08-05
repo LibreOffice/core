@@ -32,6 +32,7 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/tempfile.hxx>
 #include <vcl/filter/SvmReader.hxx>
+#include <vcl/filter/SvmWriter.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/virdev.hxx>
@@ -1188,7 +1189,11 @@ bool ImpGraphic::swapOutGraphic(SvStream& rStream)
     {
         case GraphicType::GdiMetafile:
         {
-            WriteGDIMetaFile(rStream, maMetaFile);
+            if(!rStream.GetError())
+            {
+                SvmWriter aWriter(rStream);
+                aWriter.Write(maMetaFile);
+            }
         }
         break;
 

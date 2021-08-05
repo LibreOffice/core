@@ -35,7 +35,7 @@ void SvmWriter::WriteColor(::Color aColor)
     mrStream.WriteUInt32(static_cast<sal_uInt32>(aColor));
 }
 
-SvStream& SvmWriter::Write(GDIMetaFile& rMetaFile)
+SvStream& SvmWriter::Write(const GDIMetaFile& rMetaFile)
 {
     const SvStreamCompressFlags nStmCompressMode = mrStream.GetCompressMode();
     SvStreamEndian nOldFormat = mrStream.GetEndian();
@@ -57,11 +57,11 @@ SvStream& SvmWriter::Write(GDIMetaFile& rMetaFile)
 
     aWriteData.meActualCharSet = mrStream.GetStreamCharSet();
 
-    MetaAction* pAct = rMetaFile.FirstAction();
+    MetaAction* pAct = const_cast<GDIMetaFile&>(rMetaFile).FirstAction();
     while (pAct)
     {
         MetaActionHandler(pAct, &aWriteData);
-        pAct = rMetaFile.NextAction();
+        pAct = const_cast<GDIMetaFile&>(rMetaFile).NextAction();
     }
 
     mrStream.SetEndian(nOldFormat);

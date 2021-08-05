@@ -36,7 +36,7 @@ protected:
 public:
     SvmWriter(SvStream& rIStm);
 
-    SvStream& Write(GDIMetaFile& rMetaFile);
+    SvStream& Write(const GDIMetaFile& rMetaFile);
     void MetaActionHandler(MetaAction* pAction, ImplMetaWriteData* pData);
     void ActionHandler(MetaAction* pAction);
     void PixelHandler(MetaPixelAction* pAction);

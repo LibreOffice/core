@@ -31,6 +31,7 @@
 #include <fltcall.hxx>
 #include <vcl/salctype.hxx>
 #include <vcl/filter/PngImageReader.hxx>
+#include <vcl/filter/SvmWriter.hxx>
 #include <vcl/pngwrite.hxx>
 #include <vcl/vectorgraphicdata.hxx>
 #include <vcl/virdev.hxx>
@@ -1623,7 +1624,8 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString& r
                 // #i119735# just use GetGDIMetaFile, it will create a buffered version of contained bitmap now automatically
                 GDIMetaFile aMTF(aGraphic.GetGDIMetaFile());
 
-                aMTF.Write( rOStm );
+                SvmWriter aWriter( rOStm );
+                aWriter.Write( aMTF );
 
                 if( rOStm.GetError() )
                     nStatus = ERRCODE_GRFILTER_IOERROR;
@@ -1821,7 +1823,8 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString& r
                                 SvMemoryStream aMemStm( 65535, 65535 );
 
                                 // #i119735# just use GetGDIMetaFile, it will create a buffered version of contained bitmap now automatically
-                                const_cast<GDIMetaFile&>( aGraphic.GetGDIMetaFile() ).Write( aMemStm );
+                                SvmWriter aWriter( aMemStm );
+                                aWriter.Write( aGraphic.GetGDIMetaFile() );
 
                                 xActiveDataSource->setOutputStream( css::uno::Reference< css::io::XOutputStream >(
                                     xStmIf, css::uno::UNO_QUERY ) );
