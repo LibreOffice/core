@@ -102,6 +102,24 @@
       "revId": "a3856c411a28112a42453672304b12534fd60296",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eca0c217_823d795e",
+        "filename": "ucb/source/cacher/dynamicresultsetwrapper.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-08-05T07:21:25Z",
+      "side": 1,
+      "message": "Yeah, I still think that specific complaint is related to allow mutex\u0027s to be visible outside of a class, rather than recursive mutexes in general.\n\nIn our specific UNO case, it is virtually impossible to avoid them because we \n(a) often need to hold the mutex while calling listeners\n(b) the listeners call graph is arbitrarily complex, and often calls back into the listener-firing class.\n\nI\u0027m open to suggestions, but I don\u0027t know of any technique that can preserve multi-threading and support behaviour composition that includes listeners.",
+      "parentUuid": "9e1332f7_9bfce8f6",
+      "revId": "a3856c411a28112a42453672304b12534fd60296",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
