@@ -75,6 +75,7 @@ public:
     void MoveClipRegionHandler(MetaMoveClipRegionAction* pAction);
     void LineColorHandler(MetaLineColorAction* pAction);
     void FillColorHandler(MetaFillColorAction* pAction);
+    void TextColorHandler(MetaTextColorAction* pAction);
     void OverlineColorHandler(MetaOverlineColorAction* pAction);
     void TextAlignHandler(MetaTextAlignAction* pAction);
     void MapModeHandler(MetaMapModeAction* pAction);
