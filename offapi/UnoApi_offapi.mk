@@ -1209,6 +1209,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,com/sun/star/sheet,\
 	DataPilotTable \
 	DataPilotTables \
 	DataPilotTablesEnumeration \
+	ExtensionDataProvider \
 	DatabaseImportDescriptor \
 	DatabaseRange \
 	DatabaseRanges \
@@ -3505,6 +3506,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/sheet,\
 	XDataPilotTable2 \
 	XDataPilotTables \
 	XDataPilotTablesSupplier \
+	XExtensionDataProvider \
 	XDatabaseRange \
 	XDatabaseRanges \
 	XDimensionsSupplier \

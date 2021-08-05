@@ -17,6 +17,7 @@
 #include <tools/stream.hxx>
 #include <comphelper/processfactory.hxx>
 
+#include "ExtensionDataProvider.hxx"
 #include "htmldataprovider.hxx"
 #include "xmldataprovider.hxx"
 #include "sqldataprovider.hxx"
@@ -289,8 +290,7 @@ std::shared_ptr<DataProvider> DataProviderFactory::getDataProvider(ScDocument* p
     }
     else
     {
-        SAL_WARN("sc", "no external data provider supported yet");
-        return std::shared_ptr<DataProvider>();
+        return std::make_shared<ExtensionDataProvider>(pDoc, rDataSource);
     }
 
     return std::shared_ptr<DataProvider>();
