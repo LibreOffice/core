@@ -19,8 +19,6 @@
 
 #pragma once
 
-#include <algorithm>
-#include <vector>
 #include <tools/gen.hxx>
 #include <tools/color.hxx>
 #include "attarray.hxx"
@@ -35,9 +33,12 @@
 #include "document.hxx"
 #include "drwlayer.hxx"
 
+#include <algorithm>
+#include <atomic>
+#include <memory>
 #include <optional>
 #include <set>
-#include <memory>
+#include <vector>
 
 template <typename A, typename D> class ScBitMaskCompressedArray;
 template <typename A, typename D> class ScCompressedArray;
@@ -236,7 +237,6 @@ private:
     mutable bool    bTableAreaValid:1;
     mutable bool    bTableAreaVisibleValid:1;
     bool            bVisible:1;
-    bool            bStreamValid:1;
     bool            bPendingRowHeights:1;
     bool            bCalcNotification:1;
     bool            bGlobalKeepQuery:1;
@@ -244,6 +244,8 @@ private:
     bool            bActiveScenario:1;
     bool            mbPageBreaksValid:1;
     bool            mbForceBreaks:1;
+    /** this is touched from formula group threading context */
+    std::atomic<bool> bStreamValid;
 
     // Default attributes for the unallocated columns.
     ScAttrArray     aDefaultColAttrArray;
