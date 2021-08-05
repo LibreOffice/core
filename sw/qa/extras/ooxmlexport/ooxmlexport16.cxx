@@ -551,6 +551,58 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(Test_ShadowDirection, "tdf142361ShadowDirect
                 "rotWithShape", "0");
 }
 
+<<<<<<< HEAD   (876254 occasionally the bg color of the deck grip is wrong)
+=======
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf139549, "tdf139549.docx")
+{
+    // Document contains a VML textbox, the position of the textbox was incorrect.
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    OUString aStyle = getXPath(pXmlDoc, "//w:pict/v:shape", "style");
+    /* original is: "position:absolute;margin-left:138.5pt;margin-top:40.1pt;width:183pt;
+                     height:68pt;z-index:251675648;mso-position-horizontal:absolute;
+                     mso-position-horizontal-relative:page;mso-position-vertical:absolute;
+                     mso-position-vertical-relative:page" */
+    CPPUNIT_ASSERT(!aStyle.isEmpty());
+
+    sal_Int32 nextTokenPos = 0;
+    OUString aStyleCommand = aStyle.getToken(0, ';', nextTokenPos);
+    CPPUNIT_ASSERT(!aStyleCommand.isEmpty());
+
+    OUString aStyleCommandName = aStyleCommand.getToken(0, ':');
+    OUString aStyleCommandValue = aStyleCommand.getToken(1, ':');
+    CPPUNIT_ASSERT_EQUAL(OUString("position"), aStyleCommandName);
+    CPPUNIT_ASSERT_EQUAL(OUString("absolute"), aStyleCommandValue);
+
+    aStyleCommand = aStyle.getToken(0, ';', nextTokenPos);
+    CPPUNIT_ASSERT(!aStyleCommand.isEmpty());
+
+    aStyleCommandName = aStyleCommand.getToken(0, ':');
+    aStyleCommandValue = aStyleCommand.getToken(1, ':');
+    CPPUNIT_ASSERT_EQUAL(OUString("margin-left"), aStyleCommandName);
+    // Without the fix it failed, because the margin-left was 171.85pt.
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(138.5, aStyleCommandValue.toFloat(), 0.1);
+
+    aStyleCommand = aStyle.getToken(0, ';', nextTokenPos);
+    CPPUNIT_ASSERT(!aStyleCommand.isEmpty());
+
+    aStyleCommandName = aStyleCommand.getToken(0, ':');
+    aStyleCommandValue = aStyleCommand.getToken(1, ':');
+    CPPUNIT_ASSERT_EQUAL(OUString("margin-top"), aStyleCommandName);
+    // Without the fix it failed, because the margin-top was 55.45pt.
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(40.1, aStyleCommandValue.toFloat(), 0.1);
+}
+
+
+DECLARE_OOXMLEXPORT_TEST(testTdf143726, "Simple-TOC.odt")
+{
+    xmlDocUniquePtr pXmlStyles = parseExport("word/styles.xml");
+    CPPUNIT_ASSERT(pXmlStyles);
+    // Without the fix this was "TOA Heading" which belongs to the "Table of Authorities" index in Word
+    // TOC's heading style should be exported as "TOC Heading" as that's the default Word style name
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='ContentsHeading']/w:name", "val", "TOC Heading");
+}
+
+>>>>>>> CHANGE (544049 tdf143726 DOCX: export default TOC Header style with correct)
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
