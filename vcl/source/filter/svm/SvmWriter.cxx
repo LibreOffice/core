@@ -305,6 +305,13 @@ void SvmWriter::MetaActionHandler(MetaAction* pAction, ImplMetaWriteData* pData)
         }
         break;
 
+        case MetaActionType::ISECTREGIONCLIPREGION:
+        {
+            auto* pMetaAction = static_cast<MetaISectRegionClipRegionAction*>(pAction);
+            ISectRegionClipRegionHandler(pMetaAction);
+        }
+        break;
+
         case MetaActionType::OVERLINECOLOR:
         {
             auto* pMetaAction = static_cast<MetaOverlineColorAction*>(pAction);
@@ -834,6 +841,13 @@ void SvmWriter::ISectRectClipRegionHandler(MetaISectRectClipRegionAction* pActio
     VersionCompatWrite aCompat(mrStream, 1);
     TypeSerializer aSerializer(mrStream);
     aSerializer.writeRectangle(pAction->GetRect());
+}
+
+void SvmWriter::ISectRegionClipRegionHandler(MetaISectRegionClipRegionAction* pAction)
+{
+    mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
+    VersionCompatWrite aCompat(mrStream, 1);
+    WriteRegion(mrStream, pAction->GetRegion());
 }
 
 void SvmWriter::OverlineColorHandler(MetaOverlineColorAction* pAction)
