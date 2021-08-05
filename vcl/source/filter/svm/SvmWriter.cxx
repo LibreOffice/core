@@ -263,6 +263,13 @@ void SvmWriter::MetaActionHandler(MetaAction* pAction, ImplMetaWriteData* pData)
         }
         break;
 
+        case MetaActionType::GRADIENT:
+        {
+            auto* pMetaAction = static_cast<MetaGradientAction*>(pAction);
+            GradientHandler(pMetaAction);
+        }
+        break;
+
         case MetaActionType::OVERLINECOLOR:
         {
             auto* pMetaAction = static_cast<MetaOverlineColorAction*>(pAction);
@@ -732,6 +739,15 @@ void SvmWriter::MaskScalePartHandler(MetaMaskScalePartAction* pAction)
         aSerializer.writePoint(pAction->GetSrcPoint());
         aSerializer.writeSize(pAction->GetSrcSize());
     }
+}
+
+void SvmWriter::GradientHandler(MetaGradientAction* pAction)
+{
+    mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
+    VersionCompatWrite aCompat(mrStream, 1);
+    TypeSerializer aSerializer(mrStream);
+    aSerializer.writeRectangle(pAction->GetRect());
+    aSerializer.writeGradient(pAction->GetGradient());
 }
 
 void SvmWriter::OverlineColorHandler(MetaOverlineColorAction* pAction)
