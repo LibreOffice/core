@@ -924,7 +924,8 @@ SwXShape::SwXShape(
         lcl_addShapePropertyEventFactories( *pObj, *this );
         m_pImpl->m_bInitializedPropertyNotifier = true;
     }
-
+    m_pOtherTextBoxFormat = SwTextBoxHelper::getOtherTextBoxFormat(
+        uno::Reference<drawing::XShape>(xShape, uno::UNO_QUERY));
 }
 
 void SwXShape::AddExistingShapeToFormat( SdrObject const & _rObj )
@@ -959,6 +960,9 @@ void SwXShape::AddExistingShapeToFormat( SdrObject const & _rObj )
 
 SwXShape::~SwXShape()
 {
+    if (m_pOtherTextBoxFormat)
+        m_pOtherTextBoxFormat = nullptr;
+
     SolarMutexGuard aGuard;
     if (m_xShapeAgg.is())
     {
@@ -2107,6 +2111,10 @@ uno::Reference< text::XTextRange >  SwXShape::getAnchor()
 void SwXShape::dispose()
 {
     SolarMutexGuard aGuard;
+
+    if (m_pOtherTextBoxFormat)
+        m_pOtherTextBoxFormat = nullptr;
+
     SwFrameFormat* pFormat = GetFrameFormat();
     if(pFormat)
     {
@@ -2687,6 +2695,32 @@ css::drawing::PolyPolygonBezierCoords SwXShape::ConvertPolyPolygonBezierToLayout
 
     return aConvertedPath;
 }
+
+void SwXShape::SetOtherTextBoxFormat(SwFrameFormat* pOtherTextBoxFormat)
+{
+    if (pOtherTextBoxFormat != nullptr)
+    {
+        assert(pOtherTextBoxFormat->Which() == RES_FLYFRMFMT);
+        assert(nullptr == m_pOtherTextBoxFormat);
+    }
+    else
+        assert(m_pOtherTextBoxFormat);
+
+
+    m_pOtherTextBoxFormat = pOtherTextBoxFormat;
+    if (m_pOtherTextBoxFormat)
+    {
+        SdrObject* pObj = pOtherTextBoxFormat->FindSdrObject();
+
+        if (pObj)
+        {
+            SwFlyDrawObj* pSwFlyDraw = dynamic_cast<SwFlyDrawObj*>(pObj);
+
+            if (pSwFlyDraw)
+                pSwFlyDraw->SetTextBox(m_pOtherTextBoxFormat ? true : false);
+        }
+    }
+};
 
 SwXGroupShape::SwXGroupShape(uno::Reference<XInterface> & xShape,
                              SwDoc const*const pDoc)

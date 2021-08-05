@@ -98,6 +98,7 @@
 #include <wrtsh.hxx>
 #include <txtfld.hxx>
 #include <cellatr.hxx>
+#include <textboxhelper.hxx>
 
 using namespace ::com::sun::star;
 
@@ -2520,8 +2521,8 @@ SwFrameFormat::SwFrameFormat(
 :   SwFormat(rPool, pFormatNm, pWhichRange, pDrvdFrame, nFormatWhich),
     m_wXObject(),
     maFillAttributes(),
-    m_ffList(nullptr),
-    m_pOtherTextBoxFormat(nullptr)
+    m_ffList(nullptr)
+    //m_pOtherTextBoxFormat(nullptr)
 {
 }
 
@@ -2534,8 +2535,8 @@ SwFrameFormat::SwFrameFormat(
 :   SwFormat(rPool, rFormatNm, pWhichRange, pDrvdFrame, nFormatWhich),
     m_wXObject(),
     maFillAttributes(),
-    m_ffList(nullptr),
-    m_pOtherTextBoxFormat(nullptr)
+    m_ffList(nullptr)
+    //m_pOtherTextBoxFormat(nullptr)
 {
 }
 
@@ -2548,12 +2549,6 @@ SwFrameFormat::~SwFrameFormat()
         {
             rAnchor.GetContentAnchor()->nNode.GetNode().RemoveAnchoredFly(this);
         }
-    }
-
-    if( nullptr != m_pOtherTextBoxFormat )
-    {
-        m_pOtherTextBoxFormat->SetOtherTextBoxFormat( nullptr );
-        m_pOtherTextBoxFormat = nullptr;
     }
 }
 
@@ -2580,44 +2575,44 @@ void SwFrameFormat::SetName( const OUString& rNewName, bool bBroadcast )
         SwFormat::SetName( rNewName, bBroadcast );
 }
 
-void SwFrameFormat::SetOtherTextBoxFormat( SwFrameFormat *pFormat )
-{
-    if( nullptr != pFormat )
-    {
-        assert( (Which() == RES_DRAWFRMFMT && pFormat->Which() == RES_FLYFRMFMT)
-             || (Which() == RES_FLYFRMFMT && pFormat->Which() == RES_DRAWFRMFMT) );
-        assert( nullptr == m_pOtherTextBoxFormat );
-    }
-    else
-    {
-        assert( nullptr != m_pOtherTextBoxFormat );
-    }
-    bool bChanged = m_pOtherTextBoxFormat != pFormat;
-    m_pOtherTextBoxFormat = pFormat;
-
-    SdrObject* pObj = FindSdrObject();
-
-    if (pObj)
-    {
-        SwFlyDrawObj* pSwFlyDraw = dynamic_cast<SwFlyDrawObj*>(pObj);
-
-        if (pSwFlyDraw)
-            pSwFlyDraw->SetTextBox(true);
-    }
-
-    if (m_pOtherTextBoxFormat && bChanged && Which() == RES_DRAWFRMFMT)
-    {
-        // This is a shape of a shape+frame pair and my frame has changed. Make sure my content is
-        // in sync with the frame's content.
-        if (GetAttrSet().GetContent() != m_pOtherTextBoxFormat->GetAttrSet().GetContent())
-        {
-            SwAttrSet aSet(GetAttrSet());
-            SwFormatContent aContent(m_pOtherTextBoxFormat->GetAttrSet().GetContent());
-            aSet.Put(aContent);
-            SetFormatAttr(aSet);
-        }
-    }
-}
+//void SwFrameFormat::SetOtherTextBoxFormat( SwFrameFormat *pFormat )
+//{
+//    if( nullptr != pFormat )
+//    {
+//        assert( (Which() == RES_DRAWFRMFMT && pFormat->Which() == RES_FLYFRMFMT)
+//             || (Which() == RES_FLYFRMFMT && pFormat->Which() == RES_DRAWFRMFMT) );
+//        assert( nullptr == m_pOtherTextBoxFormat );
+//    }
+//    else
+//    {
+//        assert( nullptr != m_pOtherTextBoxFormat );
+//    }
+//    bool bChanged = m_pOtherTextBoxFormat != pFormat;
+//    m_pOtherTextBoxFormat = pFormat;
+//
+//    SdrObject* pObj = FindSdrObject();
+//
+//    if (pObj)
+//    {
+//        SwFlyDrawObj* pSwFlyDraw = dynamic_cast<SwFlyDrawObj*>(pObj);
+//
+//        if (pSwFlyDraw)
+//            pSwFlyDraw->SetTextBox(true);
+//    }
+//
+//    if (m_pOtherTextBoxFormat && bChanged && Which() == RES_DRAWFRMFMT)
+//    {
+//        // This is a shape of a shape+frame pair and my frame has changed. Make sure my content is
+//        // in sync with the frame's content.
+//        if (GetAttrSet().GetContent() != m_pOtherTextBoxFormat->GetAttrSet().GetContent())
+//        {
+//            SwAttrSet aSet(GetAttrSet());
+//            SwFormatContent aContent(m_pOtherTextBoxFormat->GetAttrSet().GetContent());
+//            aSet.Put(aContent);
+//            SetFormatAttr(aSet);
+//        }
+//    }
+//}
 
 bool SwFrameFormat::supportsFullDrawingLayerFillAttributeSet() const
 {
@@ -2912,10 +2907,10 @@ void SwFrameFormat::dumpAsXml(xmlTextWriterPtr pWriter) const
     if (pWhich)
         (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("which"), BAD_CAST(pWhich));
 
-    if (m_pOtherTextBoxFormat)
-    {
-        (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("OtherTextBoxFormat"), "%p", m_pOtherTextBoxFormat);
-    }
+    //if (m_pOtherTextBoxFormat)
+    //{
+    //    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("OtherTextBoxFormat"), "%p", m_pOtherTextBoxFormat);
+    //}
 
     GetAttrSet().dumpAsXml(pWriter);
 

@@ -186,7 +186,13 @@ class SwXTextFrame final : public SwXTextFrameBaseClass,
     SwXTextFrame(SwDoc *pDoc);
     SwXTextFrame(SwFrameFormat& rFormat);
 
+    SwFrameFormat* m_pOtherShapeFormat;
+
 public:
+    // For SwUndo:
+    SwFrameFormat* GetOtherShapeFormat() { return m_pOtherShapeFormat; };
+    void SetOtherShapeFormat(SwFrameFormat* pOtherShapeFormat) {m_pOtherShapeFormat = pOtherShapeFormat; };
+
     static SW_DLLPUBLIC css::uno::Reference<css::text::XTextFrame>
             CreateXTextFrame(SwDoc & rDoc, SwFrameFormat * pFrameFormat);
 

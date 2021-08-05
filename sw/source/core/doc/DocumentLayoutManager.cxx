@@ -42,6 +42,8 @@
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <svx/svdobj.hxx>
 #include <osl/diagnose.h>
+#include <unoframe.hxx>
+#include <unodraw.hxx>
 
 using namespace ::com::sun::star;
 
@@ -490,8 +492,18 @@ SwFrameFormat *DocumentLayoutManager::CopyLayoutFormat(
         pDest->SetFormatAttr(aSet);
 
         // Link FLY and DRAW formats, so it becomes a text box
-        pDest->SetOtherTextBoxFormat(pDestTextBox);
-        pDestTextBox->SetOtherTextBoxFormat(pDest);
+        try
+        {
+            uno::Reference<drawing::XShape> xShape(pDest->FindRealSdrObject()->getUnoShape(), uno::UNO_QUERY);
+            uno::Reference<text::XTextFrame> xFrame(pDestTextBox->FindRealSdrObject()->getUnoShape(), uno::UNO_QUERY);
+            SwTextBoxHelper::GetSwXShape(xShape)->SetOtherTextBoxFormat(pDestTextBox);
+            SwTextBoxHelper::GetSwXTextFrame(xFrame)->SetOtherShapeFormat(pDest);
+        }
+        catch (...)
+        {
+        }
+        //pDest->SetOtherTextBoxFormat(pDestTextBox);
+        //pDestTextBox->SetOtherTextBoxFormat(pDest);
     }
 
     if (pDest->GetName().isEmpty())

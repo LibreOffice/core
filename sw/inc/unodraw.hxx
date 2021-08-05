@@ -137,6 +137,8 @@ class SwXShape : public SwXShapeBaseClass, public SvtListener
     const SwFmDrawPage* m_pPage;
     SwFrameFormat* m_pFormat;
 
+    SwFrameFormat *m_pOtherTextBoxFormat;
+
     css::uno::Reference< css::uno::XAggregation > m_xShapeAgg;
     // reference to <XShape>, determined in the
     // constructor by <queryAggregation> at <xShapeAgg>.
@@ -260,6 +262,10 @@ public:
 
     // helper
     static void AddExistingShapeToFormat( SdrObject const & _rObj );
+
+    // textboxhelper
+    SwFrameFormat* GetOtherTextBoxFormat() { return m_pOtherTextBoxFormat; };
+    void SetOtherTextBoxFormat(SwFrameFormat* pOtherTextBoxFormat);
 };
 
 class SwXGroupShape final :

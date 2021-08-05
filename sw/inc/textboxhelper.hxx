@@ -29,6 +29,9 @@ class SwFrameFormat;
 class SwFrameFormats;
 class SwFormatContent;
 class SwDoc;
+class SwXShape;
+class SwXTextFrame;
+
 namespace tools
 {
 class Rectangle;
@@ -162,6 +165,12 @@ public:
     /// Undo the effect of saveLinks() + individual resetLink() calls.
     static void restoreLinks(std::set<ZSortFly>& rOld, std::vector<SwFrameFormat*>& rNew,
                              SavedLink& rSavedLinks);
+
+    static SwXShape* GetSwXShape(css::uno::Reference<css::drawing::XShape> xShape);
+    static SwXTextFrame* GetSwXTextFrame(css::uno::Reference<css::text::XTextFrame> xFrame);
+
+private:
+    static SwFrameFormat* findShapeFormat(const SwFrameFormat* pFlyFormat);
 };
 
 #endif // INCLUDED_SW_INC_TEXTBOXHELPER_HXX
