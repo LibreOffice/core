@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ead7d5bd_858690ca",
+        "filename": "sc/source/core/data/markdata.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1003120
+      },
+      "writtenOn": "2021-08-05T10:40:00Z",
+      "side": 1,
+      "message": "After running the DeleteTab function, I am getting this error here.\n\nIn function:\n    std::__debug::vector\u003c_Tp, _Allocator\u003e::const_reference \n    std::__debug::vector\u003c_Tp, \n    _Allocator\u003e::operator[](std::__debug::vector\u003c_Tp, \n    _Allocator\u003e::size_type) const [with _Tp \u003d std::unique_ptr\u003cScTable, \n    o3tl::default_delete\u003cScTable\u003e \u003e; _Allocator \u003d \n    std::allocator\u003cstd::unique_ptr\u003cScTable, o3tl::default_delete\u003cScTable\u003e \u003e \n    \u003e; std::__debug::vector\u003c_Tp, _Allocator\u003e::const_reference \u003d const \n    std::unique_ptr\u003cScTable, o3tl::default_delete\u003cScTable\u003e \u003e\u0026; \n    std::__debug::vector\u003c_Tp, _Allocator\u003e::size_type \u003d long unsigned int]\n\nError: attempt to subscript container with out-of-bounds index 5, but \ncontainer only holds 5 elements.\n\nObjects involved in the operation:\n    sequence \"this\" @ 0x0x55b4a8e81248 {\n      type \u003d std::__debug::vector\u003cstd::unique_ptr\u003cScTable, o3tl::default_delete\u003cScTable\u003e \u003e, std::allocator\u003cstd::unique_ptr\u003cScTable, o3tl::default_delete\u003cScTable\u003e \u003e \u003e \u003e;\n    }",
+      "revId": "bb2324a1eb5393fee9f9df2b6edca33266e8deb4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
