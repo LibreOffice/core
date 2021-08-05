@@ -78,6 +78,24 @@
     },
     {
       "key": {
+        "uuid": "db4c3469_b2db9b3c",
+        "filename": "svx/source/tbxctrls/tbcontrl.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2228,
+      "author": {
+        "id": 1002869
+      },
+      "writtenOn": "2021-08-05T13:01:02Z",
+      "side": 1,
+      "message": "calc:\nconstexpr TypedWhichId\u003cSvxLineItem\u003e ATTR_BORDER_TLBR (141);\nconstexpr TypedWhichId\u003cSvxBoxItem\u003e ATTR_BORDER (150);\n\nSelected Left border----------------------------------------------------------------------\u003e\ndebug:30859:30859: nWhich: 150 | rItem.Which(): 150\ndebug:30859:30859: typeid(rItem).name: 10SvxBoxItem\ndebug:30859:30859: typeid(GetDefaultItem(nWhich)).name(): 10SvxBoxItem\ndebug:30859:30859: (typeid(rItem) \u003d\u003d typeid(GetDefaultItem(nWhich))) \u003d 1\n\nSelected Diagonal left border--------------------------------------------------------------\u003e\ndebug:30859:30859: nWhich: 141 | rItem.Which(): 141\ndebug:30859:30859: typeid(rItem).name: 11SvxLineItem\ndebug:30859:30859: typeid(GetDefaultItem(nWhich)).name(): 11SvxLineItem\ndebug:30859:30859: (typeid(rItem) \u003d\u003d typeid(GetDefaultItem(nWhich))) \u003d 1\n\nLeft border: both returns SvxBoxItem as expected\n\nDiagonal Left Border: both returns SvxLineItem as expected\n\n-- \nWriter:\nconstexpr TypedWhichId\u003cSvxBoxItem\u003e RES_BOX(106);\nconstexpr TypedWhichId\u003cSvxShadowItem\u003e RES_SHADOW(107);\nconstexpr TypedWhichId\u003cSvxLineItem\u003e RES_BOX_TLBR (133);\n\nSelected Left border----------------------------------------------------------------------\u003e\ndebug:29093:29093: nWhich: 107 | rItem.Which(): 107\ndebug:29093:29093: typeid(rItem).name: 10SvxBoxItem\ndebug:29093:29093: typeid(GetDefaultItem(nWhich)).name(): 13SvxShadowItem\ndebug:29093:29093: 0\n\n\u003e returns SvxBoxItem for typeid(rItem)\n\u003e but returns SvxShadowItem for typeid(GetDefaultItem(nWhich))\nwhich evaluates 0 and terminate the LO\n\u003e both of them should return 106/SvxBoxItem, but returns 107.\n\nSelected Diagonal left border--------------------------------------------------------------\u003e\ndebug:29394:29394: nWhich: 106 | rItem.Which(): 106\ndebug:29394:29394: typeid(rItem).name: 11SvxLineItem\ndebug:29394:29394: typeid(GetDefaultItem(nWhich)).name(): 10SvxBoxItem\ndebug:29394:29394: 0\n\n\u003e returns SvxLineItem for typeid(rItem),\n\u003e but returns SvxBoxItem typeid(GetDefaultItem(nWhich))\n\u003e both of them should return 133/SvxLineItem, but returns 106\n\nWhat should I do to overcome these typeID issues? Any suggestions? Thanks.",
+      "parentUuid": "acc9db59_c8ef2b2d",
+      "revId": "aeebe3c0db66fe8cf438a66cbd73bb10f7818ed8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "75ad4de1_45a21eb6",
         "filename": "sw/inc/hintids.hxx",
         "patchSetId": 4
