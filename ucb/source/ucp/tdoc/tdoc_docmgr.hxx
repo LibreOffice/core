@@ -19,10 +19,7 @@
 
 #pragma once
 
-#include <map>
-
 #include <rtl/ref.hxx>
-#include <osl/mutex.hxx>
 
 #include <cppuhelper/implbase.hxx>
 
@@ -33,6 +30,9 @@
 #include <com/sun/star/frame/XGlobalEventBroadcaster.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/XCloseListener.hpp>
+
+#include <map>
+#include <mutex>
 
 namespace tdoc_ucp {
 
@@ -137,7 +137,7 @@ namespace tdoc_ucp {
         static bool isHelpDocument(
             const css::uno::Reference< css::frame::XModel > & xModel );
 
-        osl::Mutex                                          m_aMtx;
+        std::mutex                                          m_aMtx;
         css::uno::Reference< css::uno::XComponentContext >         m_xContext;
         css::uno::Reference< css::frame::XGlobalEventBroadcaster > m_xDocEvtNotifier;
         css::uno::Reference< css::frame::XModuleManager2 >         m_xModuleMgr;
