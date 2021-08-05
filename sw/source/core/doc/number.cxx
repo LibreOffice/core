@@ -657,102 +657,102 @@ OUString SwNumRule::MakeNumString( const SwNumberTree::tNumberVector & rNumVecto
         nLevel = _nRestrictToThisLevel;
     }
 
-    if (nLevel < MAXLEVEL)
+    assert(nLevel < MAXLEVEL);
+
+    const SwNumFormat& rMyNFormat = Get( o3tl::narrowing<sal_uInt16>(nLevel) );
+
+    if (rMyNFormat.GetNumberingType() == SVX_NUM_NUMBER_NONE)
+        return OUString();
+
+    css::lang::Locale aLocale( LanguageTag::convertToLocale(nLang));
+
+    if (rMyNFormat.HasListFormat())
     {
-        const SwNumFormat& rMyNFormat = Get( o3tl::narrowing<sal_uInt16>(nLevel) );
+        OUString sLevelFormat = rMyNFormat.GetListFormat(bInclStrings);
 
+        // In this case we are ignoring GetIncludeUpperLevels: we put all
+        // level numbers requested by level format
+        for (SwNumberTree::tNumberVector::size_type i=0; i <= nLevel; ++i)
         {
-            css::lang::Locale aLocale( LanguageTag::convertToLocale(nLang));
-
-            if (rMyNFormat.HasListFormat())
+            OUString sReplacement;
+            if (rNumVector[i])
             {
-                OUString sLevelFormat = rMyNFormat.GetListFormat(bInclStrings);
-
-                // In this case we are ignoring GetIncludeUpperLevels: we put all
-                // level numbers requested by level format
-                for (SwNumberTree::tNumberVector::size_type i=0; i <= nLevel; ++i)
-                {
-                    OUString sReplacement;
-                    if (rNumVector[i])
-                    {
-                        if (bOnlyArabic)
-                            sReplacement = OUString::number(rNumVector[i]);
-                        else
-                            sReplacement = Get(i).GetNumStr(rNumVector[i], aLocale);
-                    }
-                    else
-                        sReplacement = "0";        // all 0 level are a 0
-
-                    OUString sFind("%" + OUString::number(i + 1) + "%");
-                    sal_Int32 nPosition = sLevelFormat.indexOf(sFind);
-                    if (nPosition >= 0)
-                        sLevelFormat = sLevelFormat.replaceAt(nPosition, sFind.getLength(), sReplacement);
-                }
-
-                aStr = sLevelFormat;
+                if (bOnlyArabic)
+                    sReplacement = OUString::number(rNumVector[i]);
+                else
+                    sReplacement = Get(i).GetNumStr(rNumVector[i], aLocale);
             }
             else
+                sReplacement = "0";        // all 0 level are a 0
+
+            OUString sFind("%" + OUString::number(i + 1) + "%");
+            sal_Int32 nPosition = sLevelFormat.indexOf(sFind);
+            if (nPosition >= 0)
+                sLevelFormat = sLevelFormat.replaceAt(nPosition, sFind.getLength(), sReplacement);
+        }
+
+        aStr = sLevelFormat;
+    }
+    else
+    {
+        // Fallback case: level format is not defined
+        // So use old way with levels joining by dot "."
+        SwNumberTree::tNumberVector::size_type i = nLevel;
+
+        if (!IsContinusNum() &&
+            // - do not include upper levels, if level isn't numbered.
+            rMyNFormat.GetNumberingType() != SVX_NUM_NUMBER_NONE &&
+            rMyNFormat.GetIncludeUpperLevels())  // Just the own level?
+        {
+            sal_uInt8 n = rMyNFormat.GetIncludeUpperLevels();
+            if (1 < n)
             {
-                // Fallback case: level format is not defined
-                // So use old way with levels joining by dot "."
-                SwNumberTree::tNumberVector::size_type i = nLevel;
+                if (i + 1 >= n)
+                    i -= n - 1;
+                else
+                    i = 0;
+            }
+        }
 
-                if (!IsContinusNum() &&
-                    // - do not include upper levels, if level isn't numbered.
-                    rMyNFormat.GetNumberingType() != SVX_NUM_NUMBER_NONE &&
-                    rMyNFormat.GetIncludeUpperLevels())  // Just the own level?
-                {
-                    sal_uInt8 n = rMyNFormat.GetIncludeUpperLevels();
-                    if (1 < n)
-                    {
-                        if (i + 1 >= n)
-                            i -= n - 1;
-                        else
-                            i = 0;
-                    }
-                }
+        for (; i <= nLevel; ++i)
+        {
+            const SwNumFormat& rNFormat = Get(i);
+            if (SVX_NUM_NUMBER_NONE == rNFormat.GetNumberingType())
+            {
+                // Should 1.1.1 --> 2. NoNum --> 1..1 or 1.1 ??
+                //                 if( i != rNum.nMyLevel )
+                //                    aStr += ".";
+                continue;
+            }
 
-                for (; i <= nLevel; ++i)
-                {
-                    const SwNumFormat& rNFormat = Get(i);
-                    if (SVX_NUM_NUMBER_NONE == rNFormat.GetNumberingType())
-                    {
-                        // Should 1.1.1 --> 2. NoNum --> 1..1 or 1.1 ??
-                        //                 if( i != rNum.nMyLevel )
-                        //                    aStr += ".";
-                        continue;
-                    }
+            if (rNumVector[i])
+            {
+                if (bOnlyArabic)
+                    aStr.append(rNumVector[i]);
+                else
+                    aStr.append(rNFormat.GetNumStr(rNumVector[i], aLocale));
+            }
+            else
+                aStr.append("0");        // all 0 level are a 0
+            if (i != nLevel && !aStr.isEmpty())
+                aStr.append(".");
+        }
 
-                    if (rNumVector[i])
-                    {
-                        if (bOnlyArabic)
-                            aStr.append(rNumVector[i]);
-                        else
-                            aStr.append(rNFormat.GetNumStr(rNumVector[i], aLocale));
-                    }
-                    else
-                        aStr.append("0");        // all 0 level are a 0
-                    if (i != nLevel && !aStr.isEmpty())
-                        aStr.append(".");
-                }
+        // The type doesn't have any number, so don't append
+        // the post-/prefix string
+        if (bInclStrings && !bOnlyArabic &&
+            SVX_NUM_CHAR_SPECIAL != rMyNFormat.GetNumberingType() &&
+            SVX_NUM_BITMAP != rMyNFormat.GetNumberingType())
+        {
+            const OUString& sPrefix = rMyNFormat.GetPrefix();
+            const OUString& sSuffix = rMyNFormat.GetSuffix();
 
-                // The type doesn't have any number, so don't append
-                // the post-/prefix string
-                if (bInclStrings && !bOnlyArabic &&
-                    SVX_NUM_CHAR_SPECIAL != rMyNFormat.GetNumberingType() &&
-                    SVX_NUM_BITMAP != rMyNFormat.GetNumberingType())
-                {
-                    const OUString& sPrefix = rMyNFormat.GetPrefix();
-                    const OUString& sSuffix = rMyNFormat.GetSuffix();
-
-                    aStr.insert(0, sPrefix);
-                    aStr.append(sSuffix);
-                    if (pExtremities)
-                    {
-                        pExtremities->nPrefixChars = sPrefix.getLength();
-                        pExtremities->nSuffixChars = sSuffix.getLength();
-                    }
-                }
+            aStr.insert(0, sPrefix);
+            aStr.append(sSuffix);
+            if (pExtremities)
+            {
+                pExtremities->nPrefixChars = sPrefix.getLength();
+                pExtremities->nSuffixChars = sSuffix.getLength();
             }
         }
     }
