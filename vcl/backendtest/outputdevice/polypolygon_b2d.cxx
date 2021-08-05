@@ -20,11 +20,15 @@ basegfx::B2DPolygon createPolygonOffset(tools::Rectangle const& rRect, int nOffs
     // filling polygons always skips the right-most and bottom-most pixels, in order to avoid
     // overlaps when drawing adjacent polygons. Specifying nFix = 1 allows to visually compensate
     // for this by making the polygon explicitly larger.
+    int nMidOffset = rRect.GetWidth() / 2;
     basegfx::B2DPolygon aPolygon{
-        basegfx::B2DPoint(rRect.Left() + nOffset, rRect.Top() + nOffset),
-        basegfx::B2DPoint(rRect.Right() - nOffset + nFix, rRect.Top() + nOffset),
-        basegfx::B2DPoint(rRect.Right() - nOffset + nFix, rRect.Bottom() - nOffset + nFix),
-        basegfx::B2DPoint(rRect.Left() + nOffset, rRect.Bottom() - nOffset + nFix),
+        basegfx::B2DPoint(rRect.Left() + nOffset - (nOffset + 1) / 2, rRect.Top() + nOffset - 1),
+        basegfx::B2DPoint(rRect.Right() - nMidOffset - nOffset / 3 + nFix,
+                          rRect.Top() + nOffset - 1),
+        basegfx::B2DPoint(rRect.Right() - nMidOffset - nOffset / 3 + nFix,
+                          rRect.Bottom() - nOffset + 1 + nFix),
+        basegfx::B2DPoint(rRect.Left() + nOffset - (nOffset + 1) / 2,
+                          rRect.Bottom() - nOffset + 1 + nFix),
     };
     aPolygon.setClosed(true);
     return aPolygon;
