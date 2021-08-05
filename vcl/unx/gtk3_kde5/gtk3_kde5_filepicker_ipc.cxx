@@ -31,7 +31,7 @@
 
 #include <vcl/svapp.hxx>
 #include <vcl/sysdata.hxx>
-#include <vcl/syswin.hxx>
+#include <vcl/weld.hxx>
 
 #include <osl/file.h>
 #include <osl/process.h>
@@ -189,19 +189,16 @@ static gboolean ignoreDeleteEvent(GtkWidget* /*widget*/, GdkEvent* /*event*/,
 
 std::function<void()> Gtk3KDE5FilePickerIpc::blockMainWindow()
 {
-    vcl::Window* pParentWin = Application::GetDefDialogParent();
+    weld::Window* pParentWin = Application::GetDefDialogParent();
     if (!pParentWin)
         return {};
 
-    const SystemEnvData* pSysData = static_cast<SystemWindow*>(pParentWin)->GetSystemData();
-    if (!pSysData)
-        return {};
-
-    sendCommand(Commands::SetWinId, pSysData->GetWindowHandle(pParentWin->ImplGetFrame()));
-
-    auto* pMainWindow = static_cast<GtkWidget*>(pSysData->pWidget);
+    const SystemEnvData aSysData = pParentWin->get_system_data();
+    auto* pMainWindow = static_cast<GtkWidget*>(aSysData.pWidget);
     if (!pMainWindow)
         return {};
+
+    sendCommand(Commands::SetWinId, aSysData.GetWindowHandle(aSysData.pSalFrame));
 
     SolarMutexGuard guard;
     auto deleteEventSignalId = g_signal_lookup("delete_event", gtk_widget_get_type());
@@ -212,7 +209,7 @@ std::function<void()> Gtk3KDE5FilePickerIpc::blockMainWindow()
     // block the GtkSalFrame delete_event handler
     auto blockedHandler = g_signal_handler_find(
         pMainWindow, static_cast<GSignalMatchType>(G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_DATA),
-        deleteEventSignalId, 0, nullptr, nullptr, pSysData->pSalFrame);
+        deleteEventSignalId, 0, nullptr, nullptr, aSysData.pSalFrame);
     g_signal_handler_block(pMainWindow, blockedHandler);
 
     // prevent the window from being closed

@@ -691,8 +691,7 @@ void SbiIoSystem::Shutdown()
     // anything left to PRINT?
     if( !aOut.isEmpty() )
     {
-        vcl::Window* pParent = Application::GetDefDialogParent();
-        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pParent ? pParent->GetFrameWeld() : nullptr, VclMessageType::Warning,
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(Application::GetDefDialogParent(), VclMessageType::Warning,
             VclButtonsType::Ok, aOut));
         xBox->run();
     }
@@ -831,8 +830,7 @@ void SbiIoSystem::WriteCon(std::u16string_view rText)
     {
         SolarMutexGuard aSolarGuard;
 
-        vcl::Window* pParent = Application::GetDefDialogParent();
-        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pParent ? pParent->GetFrameWeld() : nullptr, VclMessageType::Warning,
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(Application::GetDefDialogParent(), VclMessageType::Warning,
             VclButtonsType::OkCancel, s));
         xBox->set_default_response(RET_OK);
         if (!xBox->run())

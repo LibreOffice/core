@@ -1295,7 +1295,7 @@ BasicDebugFlags Shell::CallBasicBreakHdl( StarBASIC const * pBasic )
         if ( StarBASIC::IsRunning() )   // if cancelled...
         {
             if ( bAppWindowDisabled )
-                Application::GetDefDialogParent()->Enable(false);
+                Application::GetDefDialogParent()->set_sensitive(false);
 
             if ( nWaitCount )
             {

@@ -62,8 +62,7 @@ css::uno::Any SAL_CALL SafeModeUI::dispatchWithReturnValue(const css::util::URL&
 {
     SolarMutexGuard aGuard;
     css::uno::Any aRet;
-    vcl::Window* pParentWindow = Application::GetDefDialogParent();
-    SafeModeDialog aDialog(pParentWindow ? pParentWindow->GetFrameWeld() : nullptr);
+    SafeModeDialog aDialog(Application::GetDefDialogParent());
     aDialog.run();
     return aRet;
 }

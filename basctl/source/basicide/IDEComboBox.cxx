@@ -194,14 +194,20 @@ void LibBox::ReleaseFocus()
     SfxViewShell* pCurSh = SfxViewShell::Current();
     DBG_ASSERT(pCurSh, "Current ViewShell not found!");
 
-    if (pCurSh)
-    {
-        vcl::Window* pShellWin = pCurSh->GetWindow();
-        if (!pShellWin)
-            pShellWin = Application::GetDefDialogParent();
+    if (!pCurSh)
+        return;
 
+    vcl::Window* pShellWin = pCurSh->GetWindow();
+    if (pShellWin)
+    {
         pShellWin->GrabFocus();
+        return;
     }
+
+    weld::Window* pWin = Application::GetDefDialogParent();
+    if (!pWin)
+        return;
+    pWin->grab_focus();
 }
 
 void LibBox::FillBox()

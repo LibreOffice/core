@@ -332,10 +332,10 @@ void BasicStopped(
             *pnWaitCount = nWait;
     }
 
-    vcl::Window* pDefParent = Application::GetDefDialogParent();
-    if ( pDefParent && !pDefParent->IsEnabled() )
+    weld::Window* pDefParent = Application::GetDefDialogParent();
+    if (pDefParent && !pDefParent->get_sensitive())
     {
-        pDefParent->Enable();
+        pDefParent->set_sensitive(true);
         if ( pbAppWindowDisabled )
             *pbAppWindowDisabled = true;
     }

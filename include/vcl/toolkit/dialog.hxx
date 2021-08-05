@@ -88,6 +88,8 @@ public:
     virtual        void    doDeferredInit(WinBits nBits) override;
     SAL_DLLPRIVATE void    disposeOwnedButtons();
 
+    SAL_DLLPRIVATE static vcl::Window* GetDefDialogParent();
+
 protected:
     explicit        Dialog( WindowType nType );
     explicit        Dialog( vcl::Window* pParent, std::u16string_view rID, const OUString& rUIXMLDescription);

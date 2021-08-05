@@ -3028,8 +3028,7 @@ weld::Window* ScDocShell::GetActiveDialogParent()
     ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
     if ( pViewSh )
         return pViewSh->GetDialogParent();
-    vcl::Window* pRet = Application::GetDefDialogParent();
-    return pRet ? pRet->GetFrameWeld() : nullptr;
+    return Application::GetDefDialogParent();
 }
 
 void ScDocShell::SetSolverSaveData( std::unique_ptr<ScOptSolverSave> pData )

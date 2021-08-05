@@ -134,8 +134,7 @@ namespace
 
     int QueryFaxNumber(OUString& rNumber)
     {
-        vcl::Window* pWin = Application::GetDefDialogParent();
-        QueryString aQuery(pWin ? pWin->GetFrameWeld() : nullptr, VclResId(SV_PRINT_QUERYFAXNUMBER_TXT), rNumber);
+        QueryString aQuery(Application::GetDefDialogParent(), VclResId(SV_PRINT_QUERYFAXNUMBER_TXT), rNumber);
         return aQuery.run();
     }
 }
