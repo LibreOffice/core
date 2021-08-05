@@ -66,6 +66,7 @@ public:
     void MaskScaleHandler(MetaMaskScaleAction* pAction);
     void MaskScalePartHandler(MetaMaskScalePartAction* pAction);
     void GradientHandler(MetaGradientAction* pAction);
+    void GradientExHandler(MetaGradientExAction* pAction);
     void OverlineColorHandler(MetaOverlineColorAction* pAction);
     void TextAlignHandler(MetaTextAlignAction* pAction);
     void MapModeHandler(MetaMapModeAction* pAction);
