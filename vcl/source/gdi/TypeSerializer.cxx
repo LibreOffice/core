@@ -22,6 +22,7 @@
 #include <tools/fract.hxx>
 #include <sal/log.hxx>
 #include <comphelper/fileformat.h>
+#include <vcl/filter/SvmReader.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/dibtools.hxx>
 
@@ -255,7 +256,8 @@ void TypeSerializer::readGraphic(Graphic& rGraphic)
 
             mrStream.Seek(nInitialStreamPosition);
             mrStream.ResetError();
-            ReadGDIMetaFile(mrStream, aMetaFile);
+            SvmReader aReader(mrStream);
+            aReader.Read(aMetaFile);
 
             if (!mrStream.GetError())
             {

@@ -25,6 +25,7 @@
 #include <tools/vcompat.hxx>
 #include <tools/helpers.hxx>
 #include <vcl/dibtools.hxx>
+#include <vcl/filter/SvmReader.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/graphictools.hxx>
@@ -3032,7 +3033,8 @@ void MetaFloatTransparentAction::Write( SvStream& rOStm, ImplMetaWriteData* pDat
 void MetaFloatTransparentAction::Read(SvStream& rIStm, ImplMetaReadData* pData)
 {
     VersionCompatRead aCompat(rIStm);
-    ReadGDIMetaFile(rIStm, maMtf, pData);
+    SvmReader aReader(rIStm);
+    aReader.Read(maMtf, pData);
     TypeSerializer aSerializer(rIStm);
     aSerializer.readPoint(maPoint);
     aSerializer.readSize(maSize);
@@ -3097,7 +3099,8 @@ void MetaEPSAction::Read( SvStream& rIStm, ImplMetaReadData* )
     aSerializer.readGfxLink(maGfxLink);
     aSerializer.readPoint(maPoint);
     aSerializer.readSize(maSize);
-    ReadGDIMetaFile( rIStm, maSubst );
+    SvmReader aReader(rIStm);
+    aReader.Read(maSubst);
 }
 
 MetaRefPointAction::MetaRefPointAction() :

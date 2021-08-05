@@ -31,6 +31,7 @@
 #include <sot/exchange.hxx>
 #include <sot/storage.hxx>
 #include <vcl/bitmap.hxx>
+#include <vcl/filter/SvmReader.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/cvtgrf.hxx>
@@ -335,7 +336,8 @@ Any SAL_CALL TransferableHelper::getTransferData2( const DataFlavor& rFlavor, co
                         GDIMetaFile     aMtf;
                         {
                             SvMemoryStream aSrcStm( aSeq.getArray(), aSeq.getLength(), StreamMode::WRITE | StreamMode::TRUNC );
-                            ReadGDIMetaFile( aSrcStm, aMtf );
+                            SvmReader aReader( aSrcStm );
+                            aReader.Read( aMtf );
                         }
 
                         Graphic         aGraphic( aMtf );
@@ -365,7 +367,8 @@ Any SAL_CALL TransferableHelper::getTransferData2( const DataFlavor& rFlavor, co
                         GDIMetaFile     aMtf;
                         {
                             SvMemoryStream aSrcStm( aSeq.getArray(), aSeq.getLength(), StreamMode::WRITE | StreamMode::TRUNC );
-                            ReadGDIMetaFile( aSrcStm, aMtf );
+                            SvmReader aReader( aSrcStm );
+                            aReader.Read( aMtf );
                         }
 
                         SvMemoryStream  aDstStm( 65535, 65535 );
@@ -1671,7 +1674,8 @@ bool TransferableDataHelper::GetGDIMetaFile( const DataFlavor& rFlavor, GDIMetaF
 
     if( GetSotStorageStream( rFlavor, xStm ) )
     {
-        ReadGDIMetaFile( *xStm, rMtf );
+        SvmReader aReader( *xStm );
+        aReader.Read( rMtf );
         bRet = ( xStm->GetError() == ERRCODE_NONE );
     }
 
