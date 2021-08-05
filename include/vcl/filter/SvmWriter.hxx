@@ -68,6 +68,7 @@ public:
     void GradientHandler(MetaGradientAction* pAction);
     void GradientExHandler(MetaGradientExAction* pAction);
     void HatchHandler(MetaHatchAction* pAction);
+    void WallpaperHandler(MetaWallpaperAction* pAction);
     void OverlineColorHandler(MetaOverlineColorAction* pAction);
     void TextAlignHandler(MetaTextAlignAction* pAction);
     void MapModeHandler(MetaMapModeAction* pAction);
