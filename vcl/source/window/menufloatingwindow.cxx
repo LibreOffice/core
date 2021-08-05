@@ -19,7 +19,6 @@
 
 #include "menufloatingwindow.hxx"
 #include "menuitemlist.hxx"
-#include "menubarwindow.hxx"
 #include "bufferdevice.hxx"
 
 #include <sal/log.hxx>
@@ -1032,7 +1031,6 @@ void MenuFloatingWindow::KeyInput( const KeyEvent& rKEvent )
 {
     VclPtr<vcl::Window> xWindow = this;
 
-    bool autoacc = ImplGetSVData()->maNWFData.mbAutoAccel;
     sal_uInt16 nCode = rKEvent.GetKeyCode().GetCode();
     bKeyInput = true;
     switch ( nCode )
@@ -1176,19 +1174,6 @@ void MenuFloatingWindow::KeyInput( const KeyEvent& rKEvent )
             }
             else
                 FloatingWindow::KeyInput( rKEvent );
-        }
-    }
-
-    if (pMenu && pMenu->pStartedFrom && pMenu->pStartedFrom->IsMenuBar())
-    {
-        MenuBar *pMenuBar = static_cast<MenuBar*>(pMenu->pStartedFrom.get());
-        const bool bShowAccels = nCode != KEY_ESCAPE;
-        if (pMenuBar->getMenuBarWindow()->GetMBWMenuKey() != bShowAccels)
-        {
-            pMenuBar->getMenuBarWindow()->SetMBWMenuKey(bShowAccels);
-            pMenuBar->getMenuBarWindow()->SetMBWHideAccel(!bShowAccels);
-            if (autoacc)
-                Invalidate(InvalidateFlags::Update);
         }
     }
 
