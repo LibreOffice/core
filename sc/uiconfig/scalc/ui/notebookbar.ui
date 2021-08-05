@@ -1103,17 +1103,17 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuImage-EditShapeHyperlink">
+      <object class="GtkMenuItem" id="MenuImage-EditHyperlink">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:EditShapeHyperlink</property>
+        <property name="action_name">.uno:EditHyperlink</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuImage-DeleteShapeHyperlink">
+      <object class="GtkMenuItem" id="MenuImage-RemoveHyperlink">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:DeleteShapeHyperlink</property>
+        <property name="action_name">.uno:RemoveHyperlink</property>
       </object>
     </child>
     <child>
@@ -1328,17 +1328,17 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuMedia-EditShapeHyperlink">
+      <object class="GtkMenuItem" id="MenuMedia-EditHyperlink">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:EditShapeHyperlink</property>
+        <property name="action_name">.uno:EditHyperlink</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuMedia-DeleteShapeHyperlink">
+      <object class="GtkMenuItem" id="MenuMedia-RemoveHyperlink">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:DeleteShapeHyperlink</property>
+        <property name="action_name">.uno:RemoveHyperlink</property>
       </object>
     </child>
     <child>

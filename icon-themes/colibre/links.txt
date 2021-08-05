@@ -2657,22 +2657,16 @@ cmd/sc_namegroup.png cmd/sc_definename.png
 # calc toolbar draw
 # ===============================================
 cmd/32/convertmenu.png cmd/32/bezierconvert.png
-cmd/32/deleteshapehyperlink.png cmd/32/removehyperlink.png
-cmd/32/editshapehyperlink.png cmd/32/inserthyperlink.png
 cmd/32/mirrormenu.png cmd/32/rotateleft.png
 cmd/32/openhyperlinkoncursor.png cmd/32/inserthyperlink.png
 cmd/32/rotateflipmenu.png cmd/32/rotateleft.png
 
 cmd/lc_convertmenu.png cmd/lc_bezierconvert.png
-cmd/lc_deleteshapehyperlink.png cmd/lc_removehyperlink.png
-cmd/lc_editshapehyperlink.png cmd/lc_inserthyperlink.png
 cmd/lc_mirrormenu.png cmd/lc_rotateleft.png
 cmd/lc_openhyperlinkoncursor.png cmd/lc_inserthyperlink.png
 cmd/lc_rotateflipmenu.png cmd/lc_rotateleft.png
 
 cmd/sc_convertmenu.png cmd/sc_bezierconvert.png
-cmd/sc_deleteshapehyperlink.png cmd/sc_removehyperlink.png
-cmd/sc_editshapehyperlink.png cmd/sc_inserthyperlink.png
 cmd/sc_mirrormenu.png cmd/sc_rotateleft.png
 cmd/sc_openhyperlinkoncursor.png cmd/sc_inserthyperlink.png
 cmd/sc_rotateflipmenu.png cmd/sc_rotateleft.png

@@ -221,9 +221,10 @@ interface TableDraw
     SID_FONTWORK_KERN_CHARACTER_PAIRS       [ ExecMethod = ExecDrawFunc ; StateMethod = GetDrawFuncState ; ]
     SID_FONTWORK_CHARACTER_SPACING_DIALOG   [ ExecMethod = ExecDrawFunc ; StateMethod = GetDrawFuncState ; ]
 
-    SID_DRAW_HLINK_EDIT             [ ExecMethod = ExecDrawAttr; StateMethod = GetDrawFuncState; ]
-    SID_DRAW_HLINK_DELETE           [ ExecMethod = ExecDrawAttr; StateMethod = GetDrawFuncState; ]
+    SID_EDIT_HYPERLINK              [ ExecMethod = ExecDrawAttr; StateMethod = GetDrawFuncState; ]
+    SID_REMOVE_HYPERLINK            [ ExecMethod = ExecDrawAttr; StateMethod = GetDrawFuncState; ]
     SID_OPEN_HYPERLINK              [ ExecMethod = ExecDrawAttr; StateMethod = GetDrawFuncState; ]
+    SID_COPY_HYPERLINK_LOCATION     [ ExecMethod = ExecDrawAttr; StateMethod = GetDrawFuncState; ]
 
     SID_ATTR_GLOW_COLOR             [ ExecMethod = ExecDrawAttr; StateMethod = GetDrawAttrState; ]
     SID_ATTR_GLOW_RADIUS            [ ExecMethod = ExecDrawAttr; StateMethod = GetDrawAttrState; ]

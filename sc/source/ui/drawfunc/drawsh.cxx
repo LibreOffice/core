@@ -59,6 +59,9 @@
 #include <svx/xflclit.hxx>
 #include <svx/xflgrit.hxx>
 #include <tools/UnitConversion.hxx>
+#include <vcl/unohelp2.hxx>
+
+using namespace css;
 
 SFX_IMPL_INTERFACE(ScDrawShell, SfxShell)
 
@@ -313,17 +316,18 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
             ExecuteTextAttrDlg( rReq );
             break;
 
-        case SID_DRAW_HLINK_EDIT:
+        case SID_EDIT_HYPERLINK:
             if ( pSingleSelectedObj )
                 rViewData.GetDispatcher().Execute( SID_HYPERLINK_DIALOG );
             break;
 
-        case SID_DRAW_HLINK_DELETE:
+        case SID_REMOVE_HYPERLINK:
             if ( pSingleSelectedObj )
                 SetHlinkForObject( pSingleSelectedObj, OUString() );
             break;
 
         case SID_OPEN_HYPERLINK:
+        case SID_COPY_HYPERLINK_LOCATION:
             if ( nMarkCount == 1 )
             {
                 SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
@@ -336,8 +340,19 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
                 }
 
                 ScMacroInfo* pInfo = ScDrawLayer::GetMacroInfo( pObj );
-                if ( pInfo && !pInfo->GetHlink().isEmpty() )
-                    ScGlobal::OpenURL( pInfo->GetHlink(), OUString(), true );
+                if (pInfo && !pInfo->GetHlink().isEmpty())
+                {
+                    if (nSlot == SID_OPEN_HYPERLINK)
+                    {
+                        ScGlobal::OpenURL(pInfo->GetHlink(), OUString(), true);
+                    }
+                    else if (nSlot == SID_COPY_HYPERLINK_LOCATION)
+                    {
+                        uno::Reference<datatransfer::clipboard::XClipboard> xClipboard
+                            = GetViewShell()->GetWindow()->GetClipboard();
+                        vcl::unohelper::TextDataObject::CopyStringTo(pInfo->GetHlink(), xClipboard);
+                    }
+                }
             }
             break;
 

@@ -159,10 +159,6 @@
 // #i59082# assign macro to shape
 #define SID_ASSIGNMACRO                 (SC_VIEW_START + 95)
 
-// #i66550# hyperlinks in shapes
-#define SID_DRAW_HLINK_EDIT             (SC_VIEW_START + 96)
-#define SID_DRAW_HLINK_DELETE           (SC_VIEW_START + 97)
-
 // "Zoom / Synchronize sheets" in options dialog
 #define SID_SC_OPT_SYNCZOOM             (SC_VIEW_START + 98)
 

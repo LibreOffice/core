@@ -1311,17 +1311,17 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuGraphic-EditShapeHyperlink">
+      <object class="GtkMenuItem" id="MenuGraphic-EditHyperlink">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:EditShapeHyperlink</property>
+        <property name="action_name">.uno:EditHyperlink</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuGraphic-DeleteShapeHyperlink">
+      <object class="GtkMenuItem" id="MenuGraphic-RemoveHyperlink">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:DeleteShapeHyperlink</property>
+        <property name="action_name">.uno:RemoveHyperlink</property>
       </object>
     </child>
     <child>
