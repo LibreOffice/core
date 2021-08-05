@@ -291,6 +291,13 @@ void SvmWriter::MetaActionHandler(MetaAction* pAction, ImplMetaWriteData* pData)
         }
         break;
 
+        case MetaActionType::CLIPREGION:
+        {
+            auto* pMetaAction = static_cast<MetaClipRegionAction*>(pAction);
+            ClipRegionHandler(pMetaAction);
+        }
+        break;
+
         case MetaActionType::OVERLINECOLOR:
         {
             auto* pMetaAction = static_cast<MetaOverlineColorAction*>(pAction);
@@ -804,6 +811,14 @@ void SvmWriter::WallpaperHandler(MetaWallpaperAction* pAction)
     VersionCompatWrite aCompat(mrStream, 1);
 
     WriteWallpaper(mrStream, pAction->GetWallpaper());
+}
+
+void SvmWriter::ClipRegionHandler(MetaClipRegionAction* pAction)
+{
+    mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
+    VersionCompatWrite aCompat(mrStream, 1);
+    WriteRegion(mrStream, pAction->GetRegion());
+    mrStream.WriteBool(pAction->IsClipping());
 }
 
 void SvmWriter::OverlineColorHandler(MetaOverlineColorAction* pAction)
