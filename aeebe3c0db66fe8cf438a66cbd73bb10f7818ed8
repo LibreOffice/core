@@ -60,6 +60,24 @@
     },
     {
       "key": {
+        "uuid": "acc9db59_c8ef2b2d",
+        "filename": "svx/source/tbxctrls/tbcontrl.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2228,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-05T08:39:10Z",
+      "side": 1,
+      "message": "Then you need to track (debug) how the SIT gets converted to real which id. Best is to debug how that happens in Calc (or simply grep for SID_ATTR_BORDER_DIAG_TLBR), and debug how a SvxLineItem/SvxBorderLine gets created with which ids of 106/107 (possibly), or how GetDefaultItem(SID_ATTR_BORDER_DIAG_TLBR) possibly internally converts SID_ATTR_BORDER_DIAG_TLBR to 106/107.",
+      "parentUuid": "f886ebf9_be6f030c",
+      "revId": "aeebe3c0db66fe8cf438a66cbd73bb10f7818ed8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "75ad4de1_45a21eb6",
         "filename": "sw/inc/hintids.hxx",
         "patchSetId": 4
