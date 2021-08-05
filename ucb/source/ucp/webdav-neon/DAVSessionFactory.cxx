@@ -44,7 +44,7 @@ rtl::Reference< DAVSession > DAVSessionFactory::createDAVSession(
                 const uno::Sequence< beans::NamedValue >& rFlags,
                 const uno::Reference< uno::XComponentContext > & rxContext )
 {
-    osl::MutexGuard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
 
     m_xContext = rxContext;
 
@@ -91,7 +91,7 @@ rtl::Reference< DAVSession > DAVSessionFactory::createDAVSession(
 void DAVSessionFactory::releaseElement( DAVSession const * pElement )
 {
     OSL_ASSERT( pElement );
-    osl::MutexGuard aGuard( m_aMutex );
+    std::scoped_lock aGuard( m_aMutex );
     if ( pElement->m_aContainerIt != m_aMap.end() )
         m_aMap.erase( pElement->m_aContainerIt );
 }
