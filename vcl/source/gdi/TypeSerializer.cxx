@@ -23,6 +23,7 @@
 #include <sal/log.hxx>
 #include <comphelper/fileformat.h>
 #include <vcl/filter/SvmReader.hxx>
+#include <vcl/filter/SvmWriter.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/dibtools.hxx>
 
@@ -410,7 +411,13 @@ void TypeSerializer::writeGraphic(const Graphic& rGraphic)
             default:
             {
                 if (aGraphic.IsSupportedGraphic())
-                    WriteGDIMetaFile(mrStream, rGraphic.GetGDIMetaFile());
+                {
+                    if (!mrStream.GetError())
+                    {
+                        SvmWriter aWriter(mrStream);
+                        aWriter.Write(rGraphic.GetGDIMetaFile());
+                    }
+                }
             }
             break;
         }
