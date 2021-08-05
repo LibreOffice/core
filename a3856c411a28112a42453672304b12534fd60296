@@ -120,6 +120,24 @@
       "revId": "a3856c411a28112a42453672304b12534fd60296",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ad87930b_bcbc4c3b",
+        "filename": "ucb/source/cacher/dynamicresultsetwrapper.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-08-05T09:08:44Z",
+      "side": 1,
+      "message": "\u003e Yeah, I still think that specific complaint is related to allow mutex\u0027s to be visible outside of a class, rather than recursive mutexes in general.\n\nI don\u0027t see how that makes a difference with the arguments provided there (\"1) The biggest of all the big problems with recursive mutexes is that they encourage you to completely lose track of your locking scheme and scope...\" and \"2) Sometimes you need to unlock...\").\n\n\u003e In our specific UNO case, it is virtually impossible to avoid them because we \n\u003e (a) often need to hold the mutex while calling listeners\n\u003e (b) the listeners call graph is arbitrarily complex, and often calls back into the listener-firing class.\n\nWith UNO, you must not hold mutexes while calling listeners.  Do the actual, mutating work upfront while holding a mutex and record the relevant notification data, then afterwards do the actual notifications asynchronously, after releasing the mutex.",
+      "parentUuid": "eca0c217_823d795e",
+      "revId": "a3856c411a28112a42453672304b12534fd60296",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
