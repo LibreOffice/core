@@ -333,6 +333,13 @@ void SvmWriter::MetaActionHandler(MetaAction* pAction, ImplMetaWriteData* pData)
         }
         break;
 
+        case MetaActionType::TEXTCOLOR:
+        {
+            auto* pMetaAction = static_cast<MetaTextColorAction*>(pAction);
+            TextColorHandler(pMetaAction);
+        }
+        break;
+
         case MetaActionType::OVERLINECOLOR:
         {
             auto* pMetaAction = static_cast<MetaOverlineColorAction*>(pAction);
@@ -892,6 +899,13 @@ void SvmWriter::FillColorHandler(MetaFillColorAction* pAction)
     VersionCompatWrite aCompat(mrStream, 1);
     WriteColor(pAction->GetColor());
     mrStream.WriteBool(pAction->IsSetting());
+}
+
+void SvmWriter::TextColorHandler(MetaTextColorAction* pAction)
+{
+    mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
+    VersionCompatWrite aCompat(mrStream, 1);
+    WriteColor(pAction->GetColor());
 }
 
 void SvmWriter::OverlineColorHandler(MetaOverlineColorAction* pAction)
