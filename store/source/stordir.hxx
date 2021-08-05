@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_STORE_SOURCE_STORDIR_HXX
-#define INCLUDED_STORE_SOURCE_STORDIR_HXX
+#pragma once
 
 #include <sal/types.h>
 
@@ -110,6 +109,5 @@ SAL_CALL query (OStoreObject *pHandle, SAL_UNUSED_PARAMETER OStoreDirectory_Impl
 
 } // namespace store
 
-#endif // INCLUDED_STORE_SOURCE_STORDIR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
