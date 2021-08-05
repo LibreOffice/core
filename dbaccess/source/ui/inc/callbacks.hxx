@@ -22,8 +22,6 @@
 #include <sot/exchange.hxx>
 
 class Point;
-class PopupMenu;
-class Control;
 struct AcceptDropEvent;
 struct ExecuteDropEvent;
 

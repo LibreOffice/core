@@ -28,8 +28,6 @@
 #include <vcl/weld.hxx>
 #include <osl/diagnose.h>
 
-class Control;
-
 namespace comphelper
 {
     class OPropertyChangeMultiplexer;
