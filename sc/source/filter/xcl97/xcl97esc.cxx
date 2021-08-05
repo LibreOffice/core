@@ -504,7 +504,6 @@ void XclEscherEx::DeleteCurrAppData()
     if ( pCurrAppData )
     {
         delete pCurrAppData->GetClientAnchor();
-//      delete pCurrAppData->GetClientData();
         delete pCurrAppData->GetClientTextbox();
         delete pCurrAppData->GetInteractionInfo();
         pCurrAppData.reset();
