@@ -585,7 +585,7 @@ void UpdateHandler::updateState( UpdateState eState )
 }
 
 OUString UpdateHandler::loadString(const std::locale& rLocale,
-                                   const char* pResourceId)
+                                   TranslateId pResourceId)
 {
     return Translate::get(pResourceId, rLocale);
 }
@@ -642,7 +642,7 @@ void UpdateHandler::loadStrings()
     msResumeBtn     = loadString( loc, RID_UPDATE_BTN_RESUME );
     msCancelBtn     = loadString( loc, RID_UPDATE_BTN_CANCEL );
 
-    std::pair<const char*, const char*> RID_UPDATE_BUBBLE[] =
+    std::pair<TranslateId, TranslateId> RID_UPDATE_BUBBLE[] =
     {
         { RID_UPDATE_BUBBLE_UPDATE_AVAIL, RID_UPDATE_BUBBLE_T_UPDATE_AVAIL },
         { RID_UPDATE_BUBBLE_UPDATE_NO_DOWN, RID_UPDATE_BUBBLE_T_UPDATE_NO_DOWN },
