@@ -1,0 +1,107 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6b89d0e6_c03f4dcf",
+        "filename": "include/comphelper/interfacecontainer4.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-08-05T06:50:48Z",
+      "side": 1,
+      "message": "rather \"OInterfaceContainerHelper4\"?",
+      "range": {
+        "startLine": 43,
+        "startChar": 29,
+        "endLine": 43,
+        "endChar": 53
+      },
+      "revId": "a3856c411a28112a42453672304b12534fd60296",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3f7ce701_53014aaf",
+        "filename": "include/comphelper/interfacecontainer4.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-08-05T06:50:48Z",
+      "side": 1,
+      "message": "rather \"OInterfaceContainerHelper4\"?",
+      "range": {
+        "startLine": 48,
+        "startChar": 7,
+        "endLine": 48,
+        "endChar": 32
+      },
+      "revId": "a3856c411a28112a42453672304b12534fd60296",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "21ee2b23_9767cbdb",
+        "filename": "include/comphelper/interfacecontainer4.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-08-05T06:50:48Z",
+      "side": 1,
+      "message": "As, according to the commit message, this class is a slightly modified copy of comphelper::OInterfaceContainerHelper3 from include/comphelper/interfacecontainer3.hxx, it should state that here, and state what the differences are.",
+      "revId": "a3856c411a28112a42453672304b12534fd60296",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a01cc125_116e2b2b",
+        "filename": "include/comphelper/interfacecontainer4.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-08-05T06:50:48Z",
+      "side": 1,
+      "message": "rather \"OInterfaceIteratorHelper4\"?",
+      "range": {
+        "startLine": 112,
+        "startChar": 7,
+        "endLine": 112,
+        "endChar": 31
+      },
+      "revId": "a3856c411a28112a42453672304b12534fd60296",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9e1332f7_9bfce8f6",
+        "filename": "ucb/source/cacher/dynamicresultsetwrapper.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-08-05T06:50:48Z",
+      "side": 1,
+      "message": "Recursive mutexes are a bad idea, cf. e.g. David Butenhof\u0027s comp.programming.threads \"Re: recursive mutexes\" (preserved at \u003chttp://zaval.org/resources/library/butenhof1.html\u003e).  While this change would at least indicate that the code relies upon the recursive nature of the originally used osl::Mutex, I\u0027m not convinced that migrating to a dedicatedly recursive mutex (rather than cleaning up the code to only require a non-recursive mutex) is a good move overall.",
+      "revId": "a3856c411a28112a42453672304b12534fd60296",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
