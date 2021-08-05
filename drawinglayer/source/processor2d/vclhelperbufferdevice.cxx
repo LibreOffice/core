@@ -275,10 +275,8 @@ impBufferDevice::impBufferDevice(OutputDevice& rOutDev, const basegfx::B2DRange&
 {
     basegfx::B2DRange aRangePixel(rRange);
     aRangePixel.transform(mrOutDev.GetViewTransformation());
-    const ::tools::Rectangle aRectPixel(static_cast<sal_Int32>(floor(aRangePixel.getMinX())),
-                                        static_cast<sal_Int32>(floor(aRangePixel.getMinY())),
-                                        static_cast<sal_Int32>(ceil(aRangePixel.getMaxX())),
-                                        static_cast<sal_Int32>(ceil(aRangePixel.getMaxY())));
+    const ::tools::Rectangle aRectPixel(floor(aRangePixel.getMinX()), floor(aRangePixel.getMinY()),
+                                        ceil(aRangePixel.getMaxX()), ceil(aRangePixel.getMaxY()));
     const Point aEmptyPoint;
     maDestPixel = ::tools::Rectangle(aEmptyPoint, mrOutDev.GetOutputSizePixel());
     maDestPixel.Intersection(aRectPixel);
