@@ -284,6 +284,13 @@ void SvmWriter::MetaActionHandler(MetaAction* pAction, ImplMetaWriteData* pData)
         }
         break;
 
+        case MetaActionType::WALLPAPER:
+        {
+            auto* pMetaAction = static_cast<MetaWallpaperAction*>(pAction);
+            WallpaperHandler(pMetaAction);
+        }
+        break;
+
         case MetaActionType::OVERLINECOLOR:
         {
             auto* pMetaAction = static_cast<MetaOverlineColorAction*>(pAction);
@@ -789,6 +796,14 @@ void SvmWriter::HatchHandler(MetaHatchAction* pAction)
 
     WritePolyPolygon(mrStream, aNoCurvePolyPolygon);
     WriteHatch(mrStream, pAction->GetHatch());
+}
+
+void SvmWriter::WallpaperHandler(MetaWallpaperAction* pAction)
+{
+    mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
+    VersionCompatWrite aCompat(mrStream, 1);
+
+    WriteWallpaper(mrStream, pAction->GetWallpaper());
 }
 
 void SvmWriter::OverlineColorHandler(MetaOverlineColorAction* pAction)
