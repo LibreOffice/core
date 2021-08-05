@@ -22,6 +22,23 @@
       "revId": "aeebe3c0db66fe8cf438a66cbd73bb10f7818ed8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "75ad4de1_45a21eb6",
+        "filename": "sw/inc/hintids.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 368,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-05T07:19:06Z",
+      "side": 1,
+      "message": "Where are the other RES_BORDER_* WhichIds defined?",
+      "revId": "aeebe3c0db66fe8cf438a66cbd73bb10f7818ed8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
