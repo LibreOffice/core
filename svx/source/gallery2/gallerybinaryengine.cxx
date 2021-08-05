@@ -28,6 +28,7 @@
 #include "codec.hxx"
 #include "gallerydrawmodel.hxx"
 #include <vcl/cvtgrf.hxx>
+#include <vcl/filter/SvmWriter.hxx>
 
 #include <sal/log.hxx>
 
@@ -504,7 +505,8 @@ SgaObjectBmp GalleryBinaryEngine::insertGraphic(const Graphic& rGraphic, const G
         {
             GDIMetaFile aMtf(rGraphic.GetGDIMetaFile());
 
-            aMtf.Write(*pOStm);
+            SvmWriter aWriter(*pOStm);
+            aWriter.Write(aMtf);
             bRet = (pOStm->GetError() == ERRCODE_NONE);
         }
         else

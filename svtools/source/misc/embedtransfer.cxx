@@ -27,6 +27,7 @@
 #include <svtools/embedtransfer.hxx>
 #include <tools/mapunit.hxx>
 #include <vcl/outdev.hxx>
+#include <vcl/filter/SvmWriter.hxx>
 #include <vcl/gdimtf.hxx>
 #include <comphelper/fileformat.h>
 #include <comphelper/propertysequence.hxx>
@@ -156,7 +157,8 @@ bool SvEmbedTransferHelper::GetData( const css::datatransfer::DataFlavor& rFlavo
                     aMemStm.SetVersion( SOFFICE_FILEFORMAT_CURRENT );
 
                     const GDIMetaFile& aMetaFile = m_pGraphic->GetGDIMetaFile();
-                    const_cast<GDIMetaFile*>(&aMetaFile)->Write( aMemStm );
+                    SvmWriter aWriter( aMemStm );
+                    aWriter.Write( aMetaFile );
                     uno::Any aAny;
                     aAny <<= uno::Sequence< sal_Int8 >( static_cast< const sal_Int8* >( aMemStm.GetData() ),
                                                     aMemStm.TellEnd() );

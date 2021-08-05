@@ -26,6 +26,7 @@
 #include <tools/helpers.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/filter/SvmReader.hxx>
+#include <vcl/filter/SvmWriter.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/graphictools.hxx>
@@ -3023,7 +3024,8 @@ void MetaFloatTransparentAction::Write( SvStream& rOStm, ImplMetaWriteData* pDat
     MetaAction::Write(rOStm, pData);
     VersionCompatWrite aCompat(rOStm, 1);
 
-    maMtf.Write( rOStm );
+    SvmWriter aWriter( rOStm );
+    aWriter.Write( maMtf );
     TypeSerializer aSerializer(rOStm);
     aSerializer.writePoint(maPoint);
     aSerializer.writeSize(maSize);
@@ -3089,7 +3091,8 @@ void MetaEPSAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     aSerializer.writeGfxLink(maGfxLink);
     aSerializer.writePoint(maPoint);
     aSerializer.writeSize(maSize);
-    maSubst.Write( rOStm );
+    SvmWriter aWriter( rOStm );
+    aWriter.Write( maSubst );
 }
 
 void MetaEPSAction::Read( SvStream& rIStm, ImplMetaReadData* )

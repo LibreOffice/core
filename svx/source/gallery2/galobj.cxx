@@ -33,6 +33,7 @@
 #include <galobj.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/filter/SvmReader.hxx>
+#include <vcl/filter/SvmWriter.hxx>
 #include "gallerydrawmodel.hxx"
 #include <bitmaps.hlst>
 
@@ -193,7 +194,13 @@ void SgaObject::WriteData( SvStream& rOut, const OUString& rDestDir ) const
         rOut.SetCompressMode( nOldCompressMode );
     }
     else
-        WriteGDIMetaFile( rOut, aThumbMtf );
+    {
+        if(!rOut.GetError())
+        {
+            SvmWriter aWriter(rOut);
+            aWriter.Write(aThumbMtf);
+        }
+    }
 
     OUString aURLWithoutDestDir = aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
     aURLWithoutDestDir = aURLWithoutDestDir.replaceFirst(rDestDir, "");
