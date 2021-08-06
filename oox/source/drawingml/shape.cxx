@@ -296,7 +296,12 @@ void Shape::addShape(
             if( meFrameType == FRAMETYPE_DIAGRAM )
             {
                 keepDiagramCompatibilityInfo();
-                if( !SvtFilterOptions::Get().IsSmartArt2Shape() )
+
+                // Check if this is the PPTX import, so far converting SmartArt to a non-editable
+                // metafile is only imlemented for DOCX.
+                bool bPowerPoint = dynamic_cast<oox::ppt::PowerPointImport*>(&rFilterBase) != nullptr;
+
+                if (!SvtFilterOptions::Get().IsSmartArt2Shape() && !bPowerPoint)
                     convertSmartArtToMetafile( rFilterBase );
             }
 
@@ -973,7 +978,17 @@ Reference< XShape > const & Shape::createAndInsert(
 
     Reference< lang::XMultiServiceFactory > xServiceFact( rFilterBase.getModel(), UNO_QUERY_THROW );
     if ( !mxShape.is() )
+    {
         mxShape.set( xServiceFact->createInstance( aServiceName ), UNO_QUERY_THROW );
+        if (aServiceName == "com.sun.star.drawing.GroupShape")
+        {
+            // TODO why is this necessary? A newly created group shape should have an empty
+            // grab-bag.
+            uno::Reference<beans::XPropertySet> xPropertySet(mxShape, uno::UNO_QUERY);
+            beans::PropertyValues aVals;
+            xPropertySet->setPropertyValue("InteropGrabBag", uno::makeAny(aVals));
+        }
+    }
 
     Reference< XPropertySet > xSet( mxShape, UNO_QUERY );
     if (xSet.is())
