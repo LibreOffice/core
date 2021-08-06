@@ -108,7 +108,7 @@ bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
 {
 
     sal_uInt16 nSign, nCount;
-    sal_uInt32 nLen, nOff;
+    sal_uInt32 nLen;
 
     Clear();
     // Read Master-Record
@@ -219,6 +219,7 @@ bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
                 MakeStrings( nCount );
                 for( size_t i = 0; i < mvStringOffsets.size() && SbiGood( r ); i++ )
                 {
+                    sal_uInt32 nOff;
                     r.ReadUInt32( nOff );
                     mvStringOffsets[ i ] = static_cast<sal_uInt16>(nOff);
                 }
