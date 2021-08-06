@@ -647,8 +647,7 @@ rtl::Reference<MetaAction> SvmReader::TextHandler(ImplMetaReadData* pData)
 
     Point aPoint;
     aSerializer.readPoint(aPoint);
-    OUString aStr;
-    aStr = mrStream.ReadUniOrByteString(pData->meActualCharSet);
+    OUString aStr = mrStream.ReadUniOrByteString(pData->meActualCharSet);
     sal_uInt16 nTmpIndex(0);
     mrStream.ReadUInt16(nTmpIndex);
     sal_uInt16 nTmpLen(0);
@@ -692,8 +691,7 @@ rtl::Reference<MetaAction> SvmReader::TextArrayHandler(ImplMetaReadData* pData)
     aSerializer.readPoint(aPoint);
     pAction->SetPoint(aPoint);
 
-    OUString aStr;
-    aStr = mrStream.ReadUniOrByteString(pData->meActualCharSet);
+    OUString aStr = mrStream.ReadUniOrByteString(pData->meActualCharSet);
     pAction->SetText(aStr);
 
     sal_uInt16 nTmpIndex(0);
@@ -769,8 +767,7 @@ rtl::Reference<MetaAction> SvmReader::StretchTextHandler(ImplMetaReadData* pData
 
     Point aPoint;
     aSerializer.readPoint(aPoint);
-    OUString aStr;
-    aStr = mrStream.ReadUniOrByteString(pData->meActualCharSet);
+    OUString aStr = mrStream.ReadUniOrByteString(pData->meActualCharSet);
     sal_uInt32 nTmpWidth;
     mrStream.ReadUInt32(nTmpWidth);
     sal_uInt16 nTmpIndex(0);
@@ -800,8 +797,7 @@ rtl::Reference<MetaAction> SvmReader::TextRectHandler(ImplMetaReadData* pData)
 
     tools::Rectangle aRect;
     aSerializer.readRectangle(aRect);
-    OUString aStr;
-    aStr = mrStream.ReadUniOrByteString(pData->meActualCharSet);
+    OUString aStr = mrStream.ReadUniOrByteString(pData->meActualCharSet);
     sal_uInt16 nTmp(0);
     mrStream.ReadUInt16(nTmp);
 
