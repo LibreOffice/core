@@ -72,6 +72,24 @@
     },
     {
       "key": {
+        "uuid": "1ce39684_9a08ae06",
+        "filename": "basic/source/comp/symtbl.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-06T14:51:41Z",
+      "side": 1,
+      "message": "\u003e But won\u0027t the buffer be initialized with nulls?\n\nof course. And the layout you show will definitely be correct. Yet, I don\u0027t see how it contradicts to what I write. snprintf returns 2; but you need to know how much to save to OUString - i.e., how logn should be std::string_view to include two more characters (\\0 and b) after the \"15\"; and you increase the size here, knowing that you add the character (and in unlikely case when you don\u0027t need to add a type character, you don\u0027t increase the size).\n\nI don\u0027t think that we need a longer buffer. The RTL_STR_MAX_VALUEOF* in include/rtl/ustring.hxx have max of 64 (for int64) - but that is for 64-bit number (which we don\u0027t have here), and for base-2 representation. For 32-bit number, the longest string is 32-character; and even that is for base-2 case (which we also don\u0027t use here), and that would be enough. For double, the max length is 25...",
+      "parentUuid": "3bf577ee_7403d3ba",
+      "revId": "21c324fddbe05bf15eac141aed930bdbe3fadba5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1ab891a8_5750af01",
         "filename": "basic/source/comp/symtbl.cxx",
         "patchSetId": 4
