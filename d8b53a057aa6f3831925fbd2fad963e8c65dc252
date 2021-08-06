@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "f95931a6_df900cb4",
+        "filename": "sw/CppunitTest_sw_core_edit.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-08-06T07:35:20Z",
+      "side": 1,
+      "message": "Good catch, fixed in https://gerrit.libreoffice.org/c/core/+/120096",
+      "parentUuid": "fa7dd7e8_46ca64ed",
+      "revId": "d8b53a057aa6f3831925fbd2fad963e8c65dc252",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5f7b0788_10a762fd",
         "filename": "sw/qa/core/edit/edit.cxx",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2021-08-06T06:51:06Z",
       "side": 1,
       "message": "TEMPLATE.SOURCECODE.HEADER suggests for C++ files:\n\n  /* vim:set shiftwidth\u003d4 softtabstop\u003d4 expandtab cinoptions\u003db1,g0,N-s cinkeys+\u003d0\u003dbreak: */",
+      "revId": "d8b53a057aa6f3831925fbd2fad963e8c65dc252",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fab338a5_f15bd9b3",
+        "filename": "sw/qa/core/edit/edit.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-08-06T07:35:20Z",
+      "side": 1,
+      "message": "Ditto",
+      "parentUuid": "5f7b0788_10a762fd",
       "revId": "d8b53a057aa6f3831925fbd2fad963e8c65dc252",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
