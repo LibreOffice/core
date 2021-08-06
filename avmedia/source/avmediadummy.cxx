@@ -61,6 +61,7 @@ bool MediaItem::PutValue( const css::uno::Any&, sal_uInt8 )
 
 AVMediaSetMask MediaItem::getMaskSet() const
 {
+    (void) this;                // Silence loplugin:staticmethods
     return AVMediaSetMask::NONE;
 }
 
@@ -83,10 +84,10 @@ bool MediaItem::operator==( const SfxPoolItem& rItem ) const
 
 } // namespace avmedia
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_framework_SoundHandler_get_implementation(css::uno::XComponentContext*,
                                                             css::uno::Sequence<css::uno::Any> const &)
 {
-    return NULL;
+    return nullptr;
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
