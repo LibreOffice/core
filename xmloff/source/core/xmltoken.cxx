@@ -3418,6 +3418,14 @@ namespace xmloff::token {
 
         TOKEN("local-url", XML_LOCAL_URL),
 
+        TOKEN("dir",                 XML_DIR ),
+        TOKEN("displaystyle",        XML_DISPLAYSTYLE ),
+        TOKEN("mathbackground",      XML_MATHBACKGROUND ),
+        TOKEN("movablelimits",       XML_MOVABLELIMITS ),
+        TOKEN("rtl",                 XML_RTL ),
+        TOKEN("symmetric",           XML_SYMMETRIC ),
+
+
 #if OSL_DEBUG_LEVEL > 0
         { 0, nullptr, std::nullopt,               XML_TOKEN_END }
 #else

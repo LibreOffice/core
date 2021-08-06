@@ -3171,4 +3171,10 @@ page-content-top
 page-content-bottom
 margin-gutter
 local-url
+dir
+displaystyle
+symmetric
+mathbackground
+movablelimits
+rtl
 TOKEN_END_DUMMY
