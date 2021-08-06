@@ -20,6 +20,7 @@
 #include <fuexecuteinteraction.hxx>
 
 #include <app.hrc>
+#include <config_features.h>
 #include <avmedia/mediawindow.hxx>
 #include <basic/sbstar.hxx>
 #include <config_features.h>
@@ -195,6 +196,7 @@ void FuExecuteInteraction::DoExecute(SfxRequest&)
         }
         break;
 
+#if HAVE_FEATURE_SCRIPTING
         case presentation::ClickAction_MACRO:
         {
             // Execute macro
@@ -223,6 +225,7 @@ void FuExecuteInteraction::DoExecute(SfxRequest&)
             }
         }
         break;
+#endif
 
         default:
             break;

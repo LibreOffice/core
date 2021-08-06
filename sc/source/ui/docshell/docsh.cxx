@@ -435,7 +435,7 @@ public:
     void hide_ask() const { m_xWarningOnBox->set_visible(false); };
 };
 
-
+#if HAVE_FEATURE_SCRIPTING
 class VBAScriptListener : public ::cppu::WeakImplHelper< css::script::vba::XVBAScriptListener >
 {
 private:
@@ -460,6 +460,7 @@ public:
     {
     }
 };
+#endif
 
 }
 

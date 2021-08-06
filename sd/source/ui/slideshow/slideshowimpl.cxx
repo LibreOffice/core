@@ -1509,6 +1509,7 @@ void SlideshowImpl::click( const Reference< XShape >& xShape )
     }
     break;
 
+#if HAVE_FEATURE_SCRIPTING
     case presentation::ClickAction_MACRO:
     {
         const OUString aMacro( pEvent->maStrBookmark );
@@ -1537,6 +1538,7 @@ void SlideshowImpl::click( const Reference< XShape >& xShape )
         }
     }
     break;
+#endif
 
     case ClickAction_VERB:
     {

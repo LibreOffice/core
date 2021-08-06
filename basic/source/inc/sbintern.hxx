@@ -23,6 +23,7 @@
 #include <sbxfac.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <vcl/errcode.hxx>
+#include <config_features.h>
 
 namespace utl
 {
@@ -99,8 +100,6 @@ public:
     virtual SbxObjectRef CreateObject( const OUString& ) override;
 };
 
-
-
 struct SbiGlobals
 {
     static SbiGlobals* pGlobals;
@@ -129,7 +128,9 @@ struct SbiGlobals
     OUString        aErrMsg;        // buffer for GetErrorText()
     std::unique_ptr<::utl::TransliterationWrapper> pTransliterationWrapper;    // For StrComp
     bool            bBlockCompilerError;
+#if HAVE_FEATURE_SCRIPTING
     std::unique_ptr<BasicManager>   pAppBasMgr;
+#endif
     StarBASIC*      pMSOMacroRuntimLib; // Lib containing MSO Macro Runtime API entry symbols
 
     SbiGlobals();
