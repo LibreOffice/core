@@ -193,7 +193,7 @@ namespace o3tl
 #define LANGUAGE_ENGLISH_BAHRAIN            LanguageType(0x5009)
 #define LANGUAGE_ENGLISH_BELIZE             LanguageType(0x2809)
 #define LANGUAGE_ENGLISH_CAN                LanguageType(0x1009)
-#define LANGUAGE_ENGLISH_CARIBBEAN          LanguageType(0x2409)
+#define LANGUAGE_ENGLISH_CARIBBEAN          LanguageType(0x2409)  /* MS reserved since rev.15, "en-029" */
 #define LANGUAGE_ENGLISH_EGYPT              LanguageType(0x5409)
 #define LANGUAGE_ENGLISH_EIRE               LanguageType(0x1809)
 #define LANGUAGE_ENGLISH_HONG_KONG_SAR      LanguageType(0x3C09)
@@ -229,11 +229,11 @@ namespace o3tl
 #define LANGUAGE_FRENCH_MALI                LanguageType(0x340C)
 #define LANGUAGE_FRENCH_MONACO              LanguageType(0x180C)
 #define LANGUAGE_FRENCH_MOROCCO             LanguageType(0x380C)
-#define LANGUAGE_FRENCH_NORTH_AFRICA        LanguageType(0xE40C)
+#define LANGUAGE_FRENCH_NORTH_AFRICA        LanguageType(0xE40C)  /* MS reserved, "fr-015", "015"="Northern Africa" */
 #define LANGUAGE_FRENCH_REUNION             LanguageType(0x200C)
 #define LANGUAGE_FRENCH_SENEGAL             LanguageType(0x280C)
 #define LANGUAGE_FRENCH_SWISS               LanguageType(0x100C)
-#define LANGUAGE_FRENCH_WEST_INDIES         LanguageType(0x1C0C)  /* MS in its MS-LCID.pdf now says "Neither defined nor reserved" */
+#define LANGUAGE_FRENCH_WEST_INDIES         LanguageType(0x1C0C)  /* MS-LCID.pdf in between said "Neither defined nor reserved" but since rev.15 it's "fr-029" */
 #define LANGUAGE_FRENCH_ZAIRE               LanguageType(0x240C)
 #define LANGUAGE_FRISIAN_NETHERLANDS        LanguageType(0x0462)
 #define LANGUAGE_FULFULDE_LATIN_LSO         LanguageType(0x7C67)
@@ -279,7 +279,7 @@ namespace o3tl
 #define LANGUAGE_KAZAKH_CYRILLIC_LSO        LanguageType(0x783F)
 #define LANGUAGE_KAZAKH_LATIN_LSO           LanguageType(0x7C3F)
 #define LANGUAGE_KHMER                      LanguageType(0x0453)
-#define LANGUAGE_KICHE_GUATEMALA            LanguageType(0x0486)  /* AKA K'iche', West Central Quiche,  */
+#define LANGUAGE_KICHE_GUATEMALA            LanguageType(0x0486)  /* AKA K'iche', West Central Quiche */
 #define LANGUAGE_KINYARWANDA_RWANDA         LanguageType(0x0487)  /* obsoletes LANGUAGE_USER_KINYARWANDA 0x0621 */
 #define LANGUAGE_KIRGHIZ                    LanguageType(0x0440)  /* AKA Kyrgyz */
 #define LANGUAGE_KONKANI                    LanguageType(0x0457)
@@ -288,7 +288,7 @@ namespace o3tl
 #define LANGUAGE_KURDISH_ARABIC_IRAQ        LanguageType(0x0492)  /* obsoletes LANGUAGE_USER_KURDISH_IRAQ 0x0E26 */
 #define LANGUAGE_KURDISH_ARABIC_LSO         LanguageType(0x7C92)
 #define LANGUAGE_LAO                        LanguageType(0x0454)
-#define LANGUAGE_LATIN_LSO                  LanguageType(0x0476)  /* obsoletes LANGUAGE_USER_LATIN 0x0610 */
+#define LANGUAGE_LATIN                      LanguageType(0x0476)  /* obsoletes LANGUAGE_USER_LATIN 0x0610 and LANGUAGE_USER_LATIN_VATICAN 0x8076 */
 #define LANGUAGE_LATVIAN                    LanguageType(0x0426)
 #define LANGUAGE_LITHUANIAN                 LanguageType(0x0427)
 #define LANGUAGE_LITHUANIAN_CLASSIC         LanguageType(0x0827)  /* MS in its MS-LCID.pdf now says "Neither defined nor reserved" */
@@ -455,9 +455,9 @@ namespace o3tl
 
 #define LANGUAGE_ar_Ploc_SA_reserved        LanguageType(0x4401)  /* 'ar-Ploc-SA', 'Ploc'?? */
 #define LANGUAGE_ja_Ploc_JP_reserved        LanguageType(0x0811)  /* 'ja-Ploc-JP', 'Ploc'?? */
-#define LANGUAGE_pap_029_reserved           LanguageType(0x0479)  /* 'pap-029' */
-#define LANGUAGE_ar_145_reserved            LanguageType(0x4801)  /* 'ar-145' */
-#define LANGUAGE_es_419                     LanguageType(0x580A)  /* 'es-419', not reserved, used? */
+#define LANGUAGE_pap_029_reserved           LanguageType(0x0479)  /* "pap-029", "029"="Caribbean" */
+#define LANGUAGE_ar_145_reserved            LanguageType(0x4801)  /* "ar-145", "145"="Western Asia" */
+#define LANGUAGE_es_419_reserved            LanguageType(0x580A)  /* MS reserved since rev.15, "es-419", "419"="Latin America and the Caribbean" */
 
 /* Seems these values were used or reserved at one point of time ... */
 #define LANGUAGE_Neither_defined_nor_reserved_0x007B LanguageType(0x007B)
@@ -533,8 +533,9 @@ namespace o3tl
  * mapping ISO back to LANGID will return the new value.
  */
 #define LANGUAGE_OBSOLETE_USER_LATIN        LanguageType(0x0610)
-#define LANGUAGE_USER_LATIN                 LANGUAGE_LATIN_LSO
-#define LANGUAGE_USER_LATIN_VATICAN         LanguageType(0x8076)  /* makeLangID( 0x20, getPrimaryLanguage( LANGUAGE_LATIN_LSO)) */
+#define LANGUAGE_USER_LATIN                 LANGUAGE_LATIN
+#define LANGUAGE_OBSOLETE_USER_LATIN_VATICAN LanguageType(0x8076)  /* makeLangID( 0x20, getPrimaryLanguage( LANGUAGE_LATIN)) */
+#define LANGUAGE_USER_LATIN_VATICAN         LANGUAGE_LATIN
 #define LANGUAGE_USER_ESPERANTO             LanguageType(0x0611)  /* no locale possible */
 #define LANGUAGE_USER_INTERLINGUA           LanguageType(0x0612)  /* no locale, but conventions */
 #define LANGUAGE_OBSOLETE_USER_MAORI        LanguageType(0x0620)
@@ -767,6 +768,7 @@ namespace o3tl
 #define LANGUAGE_USER_BRIBRI                LanguageType(0x06AB)
 #define LANGUAGE_USER_ENGLISH_DENMARK       LanguageType(0xB009)  /* makeLangID( 0x2C, getPrimaryLanguage( LANGUAGE_ENGLISH_UK)) */
 #define LANGUAGE_USER_SESOTHO_LESOTHO       LanguageType(0x8030)  /* makeLangID( 0x20, getPrimaryLanguage( LANGUAGE_SESOTHO)) */
+#define LANGUAGE_USER_YIDDISH_ISRAEL        LanguageType(0x843D)  /* makeLangID( 0x21, getPrimaryLanguage( LANGUAGE_YIDDISH)) */
 
 
 /* XXX Add new user defined LCIDs ^^^ there.

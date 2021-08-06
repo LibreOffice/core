@@ -251,7 +251,7 @@ IsoLanguageCountryEntry const aImplIsoLangEntries[] =
     { LANGUAGE_ENGLISH_BELIZE,              "en", "BZ", k0    },
     { LANGUAGE_ENGLISH_TRINIDAD,            "en", "TT", k0    },
     { LANGUAGE_ENGLISH_ZIMBABWE,            "en", "ZW", k0    },
-    { LANGUAGE_ENGLISH_INDONESIA,           "en", "ID", k0    },
+    { LANGUAGE_ENGLISH_INDONESIA,           "en", "ID", k0    },    // MS reserved
     { LANGUAGE_ESTONIAN,                    "et", "EE", k0    },
     { LANGUAGE_FAEROESE,                    "fo", "FO", k0    },
     { LANGUAGE_FARSI,                       "fa", "IR", k0    },
@@ -344,10 +344,10 @@ IsoLanguageCountryEntry const aImplIsoLangEntries[] =
     { LANGUAGE_GUJARATI,                    "gu", "IN", k0    },
     { LANGUAGE_KANNADA,                     "kn", "IN", k0    },
     { LANGUAGE_ASSAMESE,                    "as", "IN", k0    },
-    { LANGUAGE_KASHMIRI_INDIA,              "ks", "IN", k0    },
+    { LANGUAGE_KASHMIRI_INDIA,              "ks", "IN", kSAME },
     { LANGUAGE_KASHMIRI,                    "ks", ""  , kSAME },    // Kashmiri in "Jammu and Kashmir" ... no ISO3166 code for that
     { LANGUAGE_MALAYALAM,                   "ml", "IN", k0    },
-    { LANGUAGE_MANIPURI,                   "mni", "IN", k0    },
+    { LANGUAGE_MANIPURI,                   "mni", "IN", k0    },    // MS reserved
     { LANGUAGE_MARATHI,                     "mr", "IN", k0    },
     { LANGUAGE_KONKANI,                    "kok", "IN", k0    },
     { LANGUAGE_NEPALI,                      "ne", "NP", k0    },
@@ -378,8 +378,6 @@ IsoLanguageCountryEntry const aImplIsoLangEntries[] =
     { LANGUAGE_FRENCH_MOROCCO,              "fr", "MA", k0    },
     { LANGUAGE_FRENCH_REUNION,              "fr", "RE", k0    },
     { LANGUAGE_FRENCH,                      "fr", ""  , k0    },    // needed as a catcher before other "fr" entries!
-    { LANGUAGE_FRENCH_NORTH_AFRICA,         "fr", ""  , k0    },    // MS reserved, "fr-015"
-    { LANGUAGE_FRENCH_WEST_INDIES,          "fr", ""  , k0    },    // no ISO country code; MS "Neither defined nor reserved"
     { LANGUAGE_FRISIAN_NETHERLANDS,         "fy", "NL", k0    },
     { LANGUAGE_GAELIC_IRELAND,              "ga", "IE", k0    },
     { LANGUAGE_GAELIC_SCOTLAND,             "gd", "GB", k0    },
@@ -433,14 +431,14 @@ IsoLanguageCountryEntry const aImplIsoLangEntries[] =
     { LANGUAGE_AMHARIC_ETHIOPIA,            "am", "ET", k0    },
     { LANGUAGE_GUARANI_PARAGUAY,           "gug", "PY", k0    },
     { LANGUAGE_HAWAIIAN_UNITED_STATES,     "haw", "US", k0    },
-    { LANGUAGE_EDO,                        "bin", "NG", k0    },
-    { LANGUAGE_FULFULDE_NIGERIA,           "fuv", "NG", k0    },
-    { LANGUAGE_FULFULDE_NIGERIA,            "ff", "NG", kSAME },    // macrolanguage code
+    { LANGUAGE_EDO,                        "bin", "NG", k0    },    // MS reserved
+    { LANGUAGE_FULFULDE_NIGERIA,            "ff", "NG", k0    },    // macrolanguage code; MS since rev.15
+    { LANGUAGE_FULFULDE_NIGERIA,           "fuv", "NG", kSAME },    // MS reserved until rev.15, since rev.15 "ff-NG" and "ff-Latn-NG"
     { LANGUAGE_FULFULDE_SENEGAL,            "ff", "SN", k0    },    // macrolanguage code
     { LANGUAGE_HAUSA_NIGERIA,               "ha", "NG", kSAME },
     { LANGUAGE_USER_HAUSA_GHANA,            "ha", "GH", kSAME },
     { LANGUAGE_IGBO_NIGERIA,                "ig", "NG", k0    },
-    { LANGUAGE_KANURI_NIGERIA,              "kr", "NG", k0    },
+    { LANGUAGE_KANURI_NIGERIA,              "kr", "NG", k0    },    // macrolanguage code; MS reserved until rev.15
     { LANGUAGE_YORUBA,                      "yo", "NG", k0    },
     { LANGUAGE_SOMALI,                      "so", "SO", k0    },
     { LANGUAGE_PAPIAMENTU,                 "pap", "AN", k0    },
@@ -449,8 +447,8 @@ IsoLanguageCountryEntry const aImplIsoLangEntries[] =
     { LANGUAGE_USER_PAPIAMENTU_BONAIRE,    "pap", "BQ", k0    },
     { LANGUAGE_ENGLISH_SINGAPORE,           "en", "SG", k0    },
     { LANGUAGE_USER_YIDDISH_US,             "yi", "US", k0    },
-    { LANGUAGE_YIDDISH,                     "yi", "IL", k0    },    // new: old was "ji"
-    { LANGUAGE_YIDDISH,                     "ji", "IL", kSAME },    // old: new is "yi"
+    { LANGUAGE_USER_YIDDISH_ISRAEL,         "yi", "IL", k0    },    // new: old was "ji"
+    { LANGUAGE_USER_YIDDISH_ISRAEL,         "ji", "IL", kSAME },    // old: new is "yi"
     { LANGUAGE_SYRIAC,                     "syr", "TR", k0    },    // "TR" according to http://www.ethnologue.com/show_language.asp?code=SYC
     { LANGUAGE_SINHALESE_SRI_LANKA,         "si", "LK", k0    },
     { LANGUAGE_CHEROKEE_UNITED_STATES,     "chr", "US", kSAME },
@@ -476,14 +474,14 @@ IsoLanguageCountryEntry const aImplIsoLangEntries[] =
     { LANGUAGE_YAKUT_RUSSIA,               "sah", "RU", k0    },
     { LANGUAGE_MOHAWK_CANADA,              "moh", "CA", k0    },
     { LANGUAGE_BASHKIR_RUSSIA,              "ba", "RU", k0    },
-    { LANGUAGE_KICHE_GUATEMALA,            "qut", "GT", k0    },
+    { LANGUAGE_KICHE_GUATEMALA,            "qut", "GT", k0    },    // MS reserved since rev.15
     { LANGUAGE_DARI_AFGHANISTAN,           "prs", "AF", k0    },
     { LANGUAGE_DARI_AFGHANISTAN,           "gbz", "AF", kSAME },    // was an error
     { LANGUAGE_WOLOF_SENEGAL,               "wo", "SN", k0    },
     { LANGUAGE_FILIPINO,                   "fil", "PH", k0    },
     { LANGUAGE_USER_TAGALOG,                "tl", "PH", k0    },
     { LANGUAGE_ENGLISH_PHILIPPINES,         "en", "PH", k0    },
-    { LANGUAGE_IBIBIO_NIGERIA,             "ibb", "NG", k0    },
+    { LANGUAGE_IBIBIO_NIGERIA,             "ibb", "NG", k0    },    // MS reserved
     { LANGUAGE_YI,                          "ii", "CN", k0    },
     { LANGUAGE_ENGLISH_ARAB_EMIRATES,       "en", "AE", k0    },
     { LANGUAGE_ENGLISH_BAHRAIN,             "en", "BH", k0    },    // MS reserved
@@ -498,9 +496,10 @@ IsoLanguageCountryEntry const aImplIsoLangEntries[] =
     { LANGUAGE_TAMAZIGHT_TIFINAGH_MOROCCO, "tmz", "MA", kSAME },
     { LANGUAGE_TAMAZIGHT_MOROCCO,          "tmz", "MA", k0    },    // MS reserved
     { LANGUAGE_TAMAZIGHT_TIFINAGH_MOROCCO, "ber", "MA", kSAME },    // Morocco is officially using Tifinagh for its Berber languages, old kludge to distinguish from LANGUAGE_TAMAZIGHT_LATIN_ALGERIA
-    { LANGUAGE_USER_LATIN_VATICAN,          "la", "VA", k0    },
-    { LANGUAGE_OBSOLETE_USER_LATIN,         "la", "VA", k0    },
-    { LANGUAGE_LATIN_LSO,                   "la", ""  , k0    },
+    { LANGUAGE_LATIN,                       "la", "VA", k0    },
+    { LANGUAGE_OBSOLETE_USER_LATIN_VATICAN, "la", "VA", LANGUAGE_LATIN },
+    { LANGUAGE_OBSOLETE_USER_LATIN,         "la", "VA", LANGUAGE_LATIN },
+    { LANGUAGE_LATIN,                       "la", ""  , kSAME },
     { LANGUAGE_USER_ESPERANTO,              "eo", ""  , k0    },
     { LANGUAGE_USER_INTERLINGUA,            "ia", ""  , k0    },
     { LANGUAGE_USER_INTERLINGUE,            "ie", ""  , k0    },
@@ -583,7 +582,7 @@ IsoLanguageCountryEntry const aImplIsoLangEntries[] =
     { LANGUAGE_USER_MAORE,                 "swb", "YT", k0    },
     { LANGUAGE_USER_BUSHI,                 "buc", "YT", k0    },
     { LANGUAGE_USER_TAHITIAN,               "ty", "PF", k0    },
-    { LANGUAGE_MALAGASY_PLATEAU,           "plt", "MG", k0    },
+    { LANGUAGE_MALAGASY_PLATEAU,           "plt", "MG", k0    },    // MS reserved
     { LANGUAGE_MALAGASY_PLATEAU,            "mg", "MG", kSAME },
     { LANGUAGE_OBSOLETE_USER_MALAGASY_PLATEAU, "plt", "MG", k0 },
     { LANGUAGE_USER_BAFIA,                 "ksf", "CM", k0    },
@@ -719,14 +718,14 @@ IsoLanguageScriptCountryEntry const aImplIsoLangScriptEntries[] =
     { LANGUAGE_SERBIAN_CYRILLIC_LSO,                "sr-Cyrl", ""  , kSAME },   // MS
     { LANGUAGE_BOSNIAN_CYRILLIC_BOSNIA_HERZEGOVINA, "bs-Cyrl", "BA", k0    },
     { LANGUAGE_BOSNIAN_CYRILLIC_LSO,                "bs-Cyrl", ""  , k0    },
-    { LANGUAGE_AZERI_CYRILLIC,                      "az-Cyrl", "AZ", k0    },   // macrolanguage code
+    { LANGUAGE_AZERI_CYRILLIC,                      "az-Cyrl", "AZ", k0    },   // macrolanguage code; MS reserved since rev.15
     { LANGUAGE_AZERI_CYRILLIC_LSO,                  "az-Cyrl", ""  , k0    },   // macrolanguage code
-    { LANGUAGE_UZBEK_CYRILLIC,                      "uz-Cyrl", "UZ", k0    },   // macrolanguage code
+    { LANGUAGE_UZBEK_CYRILLIC,                      "uz-Cyrl", "UZ", k0    },   // macrolanguage code; MS reserved since rev.15
     { LANGUAGE_UZBEK_CYRILLIC_LSO,                  "uz-Cyrl", ""  , k0    },   // macrolanguage code
     { LANGUAGE_MONGOLIAN_CYRILLIC_MONGOLIA,         "mn-Cyrl", "MN", k0    },   // macrolanguage code; should be khk-MN or khk-Cyrl-MN
     { LANGUAGE_MONGOLIAN_CYRILLIC_LSO,              "mn-Cyrl", ""  , k0    },   // macrolanguage code; MS, should be khk or khk-Cyrl
     { LANGUAGE_MONGOLIAN_MONGOLIAN_MONGOLIA,        "mn-Mong", "MN", k0    },   // macrolanguage code; MS, should be khk-Mong-MN
-    { LANGUAGE_MONGOLIAN_MONGOLIAN_CHINA,           "mn-Mong", "CN", k0    },   // macrolanguage code; MS, should actually be mvf-CN
+    { LANGUAGE_MONGOLIAN_MONGOLIAN_CHINA,           "mn-Mong", "CN", k0    },   // macrolanguage code; MS reserved since rev.15; should actually be mvf-CN
     { LANGUAGE_MONGOLIAN_MONGOLIAN_LSO,             "mn-Mong", ""  , k0    },   // macrolanguage code
     { LANGUAGE_USER_PALI_LATIN,                     "pi-Latn", ""  , k0    },
     { LANGUAGE_USER_PALI_THAI,                      "pi-Thai", ""  , k0    },
@@ -736,10 +735,10 @@ IsoLanguageScriptCountryEntry const aImplIsoLangScriptEntries[] =
     { LANGUAGE_AZERI_LATIN,                         "az-Latn", "AZ", k0    },   // macrolanguage code; MS
     { LANGUAGE_AZERI_LATIN_LSO,                     "az-Latn", ""  , k0    },   // macrolanguage code; MS
     { LANGUAGE_USER_YIDDISH_US,                     "yi-Hebr", "US", kSAME },   // macrolanguage code; MS, Hebr is suppress-script
-    { LANGUAGE_YIDDISH,                             "yi-Hebr", "IL", kSAME },   // macrolanguage code; MS, Hebr is suppress-script
+    { LANGUAGE_USER_YIDDISH_ISRAEL,                 "yi-Hebr", "IL", kSAME },   // macrolanguage code; MS, Hebr is suppress-script
     { LANGUAGE_UZBEK_LATIN,                         "uz-Latn", "UZ", k0    },   // macrolanguage code
     { LANGUAGE_UZBEK_LATIN_LSO,                     "uz-Latn", ""  , k0    },
-    { LANGUAGE_SINDHI,                              "sd-Deva", "IN", k0    },   // MS
+    { LANGUAGE_SINDHI,                              "sd-Deva", "IN", k0    },   // MS reserved
     { LANGUAGE_SINDHI_PAKISTAN,                     "sd-Arab", "PK", k0    },   // MS
     { LANGUAGE_SINDHI_ARABIC_LSO,                   "sd-Arab", ""  , k0    },
     { LANGUAGE_CHEROKEE_UNITED_STATES,             "chr-Cher", "US", k0    },   // MS
@@ -750,12 +749,12 @@ IsoLanguageScriptCountryEntry const aImplIsoLangScriptEntries[] =
     { LANGUAGE_INUKTITUT_LATIN_LSO,                 "iu-Latn", ""  , k0    },   // macrolanguage code, MS
     { LANGUAGE_TAMAZIGHT_TIFINAGH_MOROCCO,         "tzm-Tfng", "MA", k0    },
     { LANGUAGE_TAMAZIGHT_TIFINAGH_LSO,             "tzm-Tfng", ""  , k0    },
-    { LANGUAGE_KASHMIRI_INDIA,                      "ks-Deva", "IN", k0    },   // MS
+    { LANGUAGE_KASHMIRI_INDIA,                      "ks-Deva", "IN", k0    },   // MS since rev.15, earlier was "ks-Deva" reserved
     { LANGUAGE_KASHMIRI,                            "ks-Arab", ""  , k0    },   // MS, Kashmiri in "Jammu and Kashmir" ... no ISO3166 code for that
     { LANGUAGE_HAUSA_NIGERIA,                       "ha-Latn", "NG", k0    },   // MS
     { LANGUAGE_USER_HAUSA_GHANA,                    "ha-Latn", "GH", k0    },
     { LANGUAGE_HAUSA_LATIN_LSO,                     "ha-Latn", ""  , k0    },
-    { LANGUAGE_LATIN_LSO,                           "la-Latn", ""  , kSAME },   // MS, though Latn is suppress-script
+    { LANGUAGE_LATIN,                               "la-Latn", ""  , kSAME },   // MS reserved until rev.15, though Latn is suppress-script, "la-VA" since rev.15
     { LANGUAGE_TAI_NUA_CHINA,                      "tdd-Tale", "CN", k0    },   // MS reserved
     { LANGUAGE_LU_CHINA,                           "khb-Talu", "CN", k0    },   // MS reserved
     { LANGUAGE_KURDISH_ARABIC_IRAQ,                 "ku-Arab", "IQ", kSAME },   // macrolanguage code, MS
@@ -768,6 +767,7 @@ IsoLanguageScriptCountryEntry const aImplIsoLangScriptEntries[] =
     { LANGUAGE_PUNJABI_ARABIC_LSO,                  "pa-Arab", ""  , k0    },   // MS, incorrect
     { LANGUAGE_TAMAZIGHT_LATIN_ALGERIA,            "tzm-Latn", "DZ", kSAME },   // MS
     { LANGUAGE_TAMAZIGHT_LATIN_LSO,                "tzm-Latn", ""  , k0    },   // MS
+    { LANGUAGE_FULFULDE_NIGERIA,                    "ff-Latn", "NG", kSAME },   // macrolanguage code; MS since rev.15
     { LANGUAGE_FULFULDE_SENEGAL,                    "ff-Latn", "SN", k0    },   // macrolanguage code, MS
     { LANGUAGE_FULFULDE_LATIN_LSO,                  "ff-Latn", ""  , k0    },   // macrolanguage code
     { LANGUAGE_BOSNIAN_LATIN_BOSNIA_HERZEGOVINA,    "bs-Latn", "BA", kSAME },   // MS, though Latn is suppress-script
@@ -781,9 +781,11 @@ IsoLanguageScriptCountryEntry const aImplIsoLangScriptEntries[] =
     { LANGUAGE_USER_HUNGARIAN_ROVAS,                "hu-Hung", "HU", k0    },
     { LANGUAGE_USER_MALAY_ARABIC_MALAYSIA,          "ms-Arab", "MY", k0    },
     { LANGUAGE_USER_MALAY_ARABIC_BRUNEI,            "ms-Arab", "BN", k0    },
-    { LANGUAGE_KAZAKH_LATIN,                        "kk-Latn", "KZ", k0    },   // MS reserved
+    { LANGUAGE_KAZAKH_LATIN,                        "kk-Latn", "KZ", k0    },
     { LANGUAGE_KAZAKH_LATIN_LSO,                    "kk-Latn", ""  , k0    },   // MS reserved
     { LANGUAGE_KAZAKH_CYRILLIC_LSO,                 "kk-Cyrl", ""  , k0    },   // MS reserved
+    { LANGUAGE_KANURI_NIGERIA,                      "kr-Latn", "NG", k0    },   // macrolanguage code; MS since rev.15
+    { LANGUAGE_TAMAZIGHT_ARABIC_MOROCCO,           "tzm-Arab", "MA", k0    },   // MS since rev.15, was reserved
     { LANGUAGE_DONTKNOW,                            "",        ""  , k0    }    // marks end of table
 };
 
@@ -797,6 +799,8 @@ Bcp47CountryEntry const aImplBcp47CountryEntries[] =
     { LANGUAGE_SPANISH_DATED,           "es-ES-u-co-trad", "ES", "es-u-co-trad", k0 },  // RFC6067/CLDR
     { LANGUAGE_SPANISH_DATED,              "es-ES_tradnl", "ES", "", kSAME },           // MS malformed
 //  { LANGUAGE_YUE_CHINESE_HONGKONG,         "zh-yue-HK", "HK", "", 0 },   // MS reserved, prefer yue-HK; do not add unless LanguageTag::simpleExtract() can handle it to not call liblangtag for rsc!
+    { LANGUAGE_YIDDISH,                          "yi-001",   "", "", k0 },  // MS since rev.15, was "yi-Hebr" reserved, "001"="World"
+    { LANGUAGE_FRENCH_WEST_INDIES,               "fr-029",   "", "", k0 },  // MS since rev.15, was "Neither defined nor reserved", "029"="Caribbean"
     { LANGUAGE_DONTKNOW,                    "", "", "", k0 }    // marks end of table
 };
 

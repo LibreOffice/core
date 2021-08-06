@@ -3173,7 +3173,7 @@ LanguageTag makeLanguageTagFromAppleLanguageId(AppleLanguageId nLanguage)
             nLang = LANGUAGE_CATALAN;
             break;
         case AppleLanguageId::LATIN:
-            nLang = LANGUAGE_USER_LATIN;
+            nLang = LANGUAGE_LATIN;
             break;
         case AppleLanguageId::QUENCHUA:
             nLang = LANGUAGE_QUECHUA_BOLIVIA; //maybe

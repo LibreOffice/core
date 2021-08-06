@@ -490,7 +490,9 @@ bool MsLangId::isLegacy( LanguageType nLang )
 LanguageType MsLangId::getReplacementForObsoleteLanguage( LanguageType nLang )
 {
     if (nLang == LANGUAGE_OBSOLETE_USER_LATIN)
-        nLang = LANGUAGE_USER_LATIN_VATICAN;
+        nLang = LANGUAGE_LATIN;
+    else if (nLang == LANGUAGE_OBSOLETE_USER_LATIN_VATICAN)
+        nLang = LANGUAGE_LATIN;
     else if (nLang == LANGUAGE_OBSOLETE_USER_MAORI)
         nLang = LANGUAGE_MAORI_NEW_ZEALAND;
     else if (nLang == LANGUAGE_OBSOLETE_USER_KINYARWANDA)
