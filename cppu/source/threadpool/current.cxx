@@ -106,33 +106,31 @@ IdContainer::~IdContainer()
     }
 }
 
-IdContainer * getIdContainer()
+IdContainer& getIdContainer()
 {
     static thread_local IdContainer aId;
-    return &aId;
+    return aId;
 }
 
 }
-
 
 extern "C" sal_Bool SAL_CALL uno_setCurrentContext(
     void * pCurrentContext,
     rtl_uString * pEnvTypeName, void * pEnvContext )
     SAL_THROW_EXTERN_C()
 {
-    IdContainer * pId = getIdContainer();
-    OSL_ASSERT( pId );
+    IdContainer& id = getIdContainer();
 
     // free old one
-    if (pId->pCurrentContext)
+    if (id.pCurrentContext)
     {
-        (*pId->pCurrentContextEnv->releaseInterface)(
-            pId->pCurrentContextEnv, pId->pCurrentContext );
-        (*pId->pCurrentContextEnv->aBase.release)(
-            &pId->pCurrentContextEnv->aBase );
-        pId->pCurrentContextEnv = nullptr;
+        (*id.pCurrentContextEnv->releaseInterface)(
+            id.pCurrentContextEnv, id.pCurrentContext );
+        (*id.pCurrentContextEnv->aBase.release)(
+            &id.pCurrentContextEnv->aBase );
+        id.pCurrentContextEnv = nullptr;
 
-        pId->pCurrentContext = nullptr;
+        id.pCurrentContext = nullptr;
     }
 
     if (pCurrentContext)
@@ -144,10 +142,10 @@ extern "C" sal_Bool SAL_CALL uno_setCurrentContext(
         {
             if (pEnv->pExtEnv)
             {
-                pId->pCurrentContextEnv = pEnv->pExtEnv;
-                (*pId->pCurrentContextEnv->acquireInterface)(
-                    pId->pCurrentContextEnv, pCurrentContext );
-                pId->pCurrentContext = pCurrentContext;
+                id.pCurrentContextEnv = pEnv->pExtEnv;
+                (*id.pCurrentContextEnv->acquireInterface)(
+                    id.pCurrentContextEnv, pCurrentContext );
+                id.pCurrentContext = pCurrentContext;
             }
             else
             {
@@ -167,8 +165,7 @@ extern "C" sal_Bool SAL_CALL uno_getCurrentContext(
     void ** ppCurrentContext, rtl_uString * pEnvTypeName, void * pEnvContext )
     SAL_THROW_EXTERN_C()
 {
-    IdContainer * pId = getIdContainer();
-    OSL_ASSERT( pId );
+    IdContainer& id = getIdContainer();
 
     Environment target_env;
 
@@ -189,7 +186,7 @@ extern "C" sal_Bool SAL_CALL uno_getCurrentContext(
     }
 
     // case: null-ref
-    if (nullptr == pId->pCurrentContext)
+    if (nullptr == id.pCurrentContext)
         return true;
 
     if (! target_env.is())
@@ -200,12 +197,12 @@ extern "C" sal_Bool SAL_CALL uno_getCurrentContext(
             return false;
     }
 
-    Mapping mapping(&pId->pCurrentContextEnv->aBase, target_env.get());
+    Mapping mapping(&id.pCurrentContextEnv->aBase, target_env.get());
     OSL_ASSERT( mapping.is() );
     if (! mapping.is())
         return false;
 
-    mapping.mapInterface(ppCurrentContext, pId->pCurrentContext, ::cppu::get_type_XCurrentContext() );
+    mapping.mapInterface(ppCurrentContext, id.pCurrentContext, ::cppu::get_type_XCurrentContext());
 
     return true;
 }

@@ -27,11 +27,9 @@
 
 #include "current.hxx"
 
-
 using namespace ::std;
 using namespace ::osl;
 using namespace ::cppu;
-
 
 static void createLocalId( sal_Sequence **ppThreadId )
 {
@@ -44,74 +42,71 @@ static void createLocalId( sal_Sequence **ppThreadId )
     rtl_getGlobalProcessId( reinterpret_cast<sal_uInt8 *>(&(*ppThreadId)->elements[4]) );
 }
 
-
 extern "C" void SAL_CALL
 uno_getIdOfCurrentThread( sal_Sequence **ppThreadId )
     SAL_THROW_EXTERN_C()
 {
-    IdContainer * p = getIdContainer();
-    if( ! p->bInit )
+    IdContainer& id = getIdContainer();
+    if (!id.bInit)
     {
         // first time, that the thread enters the bridge
         createLocalId( ppThreadId );
 
         // TODO
         // note : this is a leak !
-        p->pLocalThreadId = *ppThreadId;
-        p->pCurrentId = *ppThreadId;
-        p->nRefCountOfCurrentId = 1;
-        rtl_byte_sequence_acquire( p->pLocalThreadId );
-        rtl_byte_sequence_acquire( p->pCurrentId );
-        p->bInit = true;
+        id.pLocalThreadId = *ppThreadId;
+        id.pCurrentId = *ppThreadId;
+        id.nRefCountOfCurrentId = 1;
+        rtl_byte_sequence_acquire( id.pLocalThreadId );
+        rtl_byte_sequence_acquire( id.pCurrentId );
+        id.bInit = true;
     }
     else
     {
-        p->nRefCountOfCurrentId ++;
+        id.nRefCountOfCurrentId ++;
         if( *ppThreadId )
         {
             rtl_byte_sequence_release( *ppThreadId );
         }
-        *ppThreadId = p->pCurrentId;
+        *ppThreadId = id.pCurrentId;
         rtl_byte_sequence_acquire( *ppThreadId );
     }
 }
 
-
 extern "C" void SAL_CALL uno_releaseIdFromCurrentThread()
     SAL_THROW_EXTERN_C()
 {
-    IdContainer *p = getIdContainer();
-    OSL_ASSERT( p );
-    OSL_ASSERT( p->bInit );
-    OSL_ASSERT( p->nRefCountOfCurrentId );
+    IdContainer& id = getIdContainer();
+    OSL_ASSERT( id.bInit );
+    OSL_ASSERT( id.nRefCountOfCurrentId );
 
-    p->nRefCountOfCurrentId --;
-    if( ! p->nRefCountOfCurrentId && (p->pLocalThreadId != p->pCurrentId) )
+    id.nRefCountOfCurrentId --;
+    if( ! id.nRefCountOfCurrentId && (id.pLocalThreadId != id.pCurrentId) )
     {
-        rtl_byte_sequence_assign( &(p->pCurrentId) , p->pLocalThreadId );
+        rtl_byte_sequence_assign( &(id.pCurrentId) , id.pLocalThreadId );
     }
 }
 
 extern "C" sal_Bool SAL_CALL uno_bindIdToCurrentThread( sal_Sequence *pThreadId )
     SAL_THROW_EXTERN_C()
 {
-    IdContainer *p = getIdContainer();
-    if( ! p->bInit )
+    IdContainer& id = getIdContainer();
+    if (!id.bInit)
     {
-        p->pLocalThreadId = nullptr;
-        createLocalId( &(p->pLocalThreadId) );
-        p->nRefCountOfCurrentId = 1;
-        p->pCurrentId = pThreadId;
-        rtl_byte_sequence_acquire( p->pCurrentId );
-        p->bInit = true;
+        id.pLocalThreadId = nullptr;
+        createLocalId( &(id.pLocalThreadId) );
+        id.nRefCountOfCurrentId = 1;
+        id.pCurrentId = pThreadId;
+        rtl_byte_sequence_acquire(id.pCurrentId);
+        id.bInit = true;
     }
     else
     {
-        OSL_ASSERT( 0 == p->nRefCountOfCurrentId );
-        if( 0 == p->nRefCountOfCurrentId )
+        OSL_ASSERT( 0 == id.nRefCountOfCurrentId );
+        if( 0 == id.nRefCountOfCurrentId )
         {
-            rtl_byte_sequence_assign(&( p->pCurrentId ), pThreadId );
-            p->nRefCountOfCurrentId ++;
+            rtl_byte_sequence_assign(&( id.pCurrentId ), pThreadId );
+            id.nRefCountOfCurrentId ++;
         }
         else
         {
