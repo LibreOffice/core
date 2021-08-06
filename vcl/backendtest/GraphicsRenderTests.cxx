@@ -2015,6 +2015,106 @@ void GraphicsRenderTests::testDrawRectangleOnSize4096WithPolygonPolygonB2D()
     }
 }
 
+void GraphicsRenderTests::testDrawOpenPolygonWithPolyLine()
+{
+    vcl::test::OutputDeviceTestPolyLine aOutDevTest;
+    Bitmap aBitmap = aOutDevTest.setupOpenPolygon();
+    OUString aTestName = "testDrawOpenPolygonWithPolyLine";
+    if (!SHOULD_ASSERT)
+    {
+        appendTestResult(aTestName, "SKIPPED");
+        return;
+    }
+    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkOpenPolygon(aBitmap);
+    appendTestResult(aTestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        BitmapEx aBitmapEx(aBitmap);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
+    }
+}
+
+void GraphicsRenderTests::testDrawOpenPolygonWithPolyLineB2D()
+{
+    vcl::test::OutputDeviceTestPolyLineB2D aOutDevTest;
+    Bitmap aBitmap = aOutDevTest.setupOpenPolygon();
+    OUString aTestName = "testDrawOpenPolygonWithPolyLineB2D";
+    if (!SHOULD_ASSERT)
+    {
+        appendTestResult(aTestName, "SKIPPED");
+        return;
+    }
+    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkOpenPolygon(aBitmap);
+    appendTestResult(aTestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        BitmapEx aBitmapEx(aBitmap);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
+    }
+}
+
+void GraphicsRenderTests::testDrawOpenPolygonWithPolygon()
+{
+    vcl::test::OutputDeviceTestPolygon aOutDevTest;
+    Bitmap aBitmap = aOutDevTest.setupOpenPolygon();
+    OUString aTestName = "testDrawOpenPolygonWithPolygon";
+    if (!SHOULD_ASSERT)
+    {
+        appendTestResult(aTestName, "SKIPPED");
+        return;
+    }
+    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkOpenPolygon(aBitmap);
+    appendTestResult(aTestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        BitmapEx aBitmapEx(aBitmap);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
+    }
+}
+
+void GraphicsRenderTests::testDrawOpenPolygonWithPolyPolygon()
+{
+    vcl::test::OutputDeviceTestPolyPolygon aOutDevTest;
+    Bitmap aBitmap = aOutDevTest.setupOpenPolygon();
+    OUString aTestName = "testDrawOpenPolygonWithPolyPolygon";
+    if (!SHOULD_ASSERT)
+    {
+        appendTestResult(aTestName, "SKIPPED");
+        return;
+    }
+    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkOpenPolygon(aBitmap);
+    appendTestResult(aTestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        BitmapEx aBitmapEx(aBitmap);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
+    }
+}
+
+void GraphicsRenderTests::testDrawOpenPolygonWithPolyPolygonB2D()
+{
+    vcl::test::OutputDeviceTestPolyPolygon aOutDevTest;
+    Bitmap aBitmap = aOutDevTest.setupOpenPolygon();
+    OUString aTestName = "testDrawOpenPolygonWithPolyPolygonB2D";
+    if (!SHOULD_ASSERT)
+    {
+        appendTestResult(aTestName, "SKIPPED");
+        return;
+    }
+    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkOpenPolygon(aBitmap);
+    appendTestResult(aTestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        BitmapEx aBitmapEx(aBitmap);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
+    }
+}
+
 void GraphicsRenderTests::runALLTests()
 {
     testDrawRectWithRectangle();
@@ -2112,6 +2212,11 @@ void GraphicsRenderTests::runALLTests()
     testDrawRectangleOnSize4096WithPolyPolygon();
     testDrawRectangleOnSize1028WithPolyPolygonB2D();
     testDrawRectangleOnSize4096WithPolygonPolygonB2D();
+    testDrawOpenPolygonWithPolyLine();
+    testDrawOpenPolygonWithPolyLineB2D();
+    testDrawOpenPolygonWithPolygon();
+    testDrawOpenPolygonWithPolyPolygon();
+    testDrawOpenPolygonWithPolyPolygonB2D();
 }
 
 void GraphicsRenderTests::appendTestResult(OUString aTestName, OUString aTestStatus,
