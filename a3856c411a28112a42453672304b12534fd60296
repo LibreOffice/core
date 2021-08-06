@@ -192,6 +192,24 @@
       "revId": "a3856c411a28112a42453672304b12534fd60296",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "64b2c485_7673e503",
+        "filename": "ucb/source/cacher/dynamicresultsetwrapper.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-08-06T13:59:33Z",
+      "side": 1,
+      "message": "Yeah,\n\n\u003e Aug 03 09:13:13 \u003csberg\u003e\tmikekaganski, one advantage osl::Mutex -\u003e std::recursive_mutex would be to clarify that that osl::Mutex instance is actually meant to be recursive (similar to how replacing OSL_ASSERT et al with SAL_WARN/assert/... clarified what those ambiguous OSL_ASSERT actually meant)\n\n...but meanwhile I\u0027ve become rather unsure whether that would be a good idea, \"blessing\" those unfortunate uses of recursive mutexes and making it look like we are fine with the status quo there (which I think we are not; at least I\u0027m not)",
+      "parentUuid": "132ed3f8_f4d9bddd",
+      "revId": "a3856c411a28112a42453672304b12534fd60296",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
