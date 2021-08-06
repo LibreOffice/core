@@ -281,7 +281,7 @@ void OpCodeList::putDefaultOpCode( const FormulaCompiler::NonConstOpCodeMapPtr& 
             return;
         sKey = OUString::createFromAscii(pKey);
     }
-    else
+    else if (mpSymbols2)
     {
         TranslateId pKey;
         for (const std::pair<TranslateId, int>* pSymbol = mpSymbols2; pSymbol->first; ++pSymbol)
