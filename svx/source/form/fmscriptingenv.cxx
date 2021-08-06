@@ -793,6 +793,7 @@ namespace svxform
         impl_registerOrRevoke_throw( _rxManager, false );
     }
 
+#if HAVE_FEATURE_SCRIPTING
     namespace
     {
         class NewStyleUNOScript
@@ -830,7 +831,7 @@ namespace svxform
             m_rObjectShell.CallXScript( m_sScriptCode, _rArguments, _rSynchronousResult, aOutArgsIndex, aOutArgs, true, aCaller.hasValue() ? &aCaller : nullptr );
         }
     }
-
+#endif
 
     void FormScriptingEnvironment::doFireScriptEvent( const ScriptEvent& _rEvent, Any* _pSynchronousResult )
     {
