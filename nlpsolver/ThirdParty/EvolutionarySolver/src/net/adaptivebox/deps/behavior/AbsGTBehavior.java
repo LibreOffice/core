@@ -35,10 +35,6 @@ abstract public class AbsGTBehavior implements ILibEngine {
     socialLib = lib;
   }
 
-  public void setPbest(SearchPoint pbest) {
-    pbest_t = pbest;
-  }
-
   abstract public void setMemPoints(SearchPoint pbest, BasicPoint pcurrent, BasicPoint pold);
 
   abstract public void generateBehavior(SearchPoint trailPoint, ProblemEncoder problemEncoder);

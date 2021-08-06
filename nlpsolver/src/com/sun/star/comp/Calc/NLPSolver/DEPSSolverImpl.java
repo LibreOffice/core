@@ -141,8 +141,9 @@ public final class DEPSSolverImpl extends BaseEvolutionarySolver
             psGTBehavior.weight = m_weight.getValue();
             psGTBehavior.setLibrary(m_library);
 
-            agents[i] = new DEPSAgent(m_problemEncoder, deGTBehavior, psGTBehavior, m_agentSwitchRate.getValue(), m_specCompareEngine);
-            agents[i].setPbest(m_library.getSelectedPoint(i));
+            agents[i] = new DEPSAgent(m_problemEncoder, deGTBehavior, psGTBehavior,
+                                      m_agentSwitchRate.getValue(), m_specCompareEngine,
+                                      m_library.getSelectedPoint(i));
         }
 
         //Learn:

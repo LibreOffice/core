@@ -72,7 +72,8 @@ public class DEPSAgent {
 
   private double switchP = 0.5;
 
-  public DEPSAgent(ProblemEncoder encoder, DEGTBehavior deGTBehavior, PSGTBehavior psGTBehavior, double switchP, IGoodnessCompareEngine comparer) {
+  public DEPSAgent(ProblemEncoder encoder, DEGTBehavior deGTBehavior, PSGTBehavior psGTBehavior,
+                   double switchP, IGoodnessCompareEngine comparer, SearchPoint pbest) {
       this.switchP = switchP;
 
       problemEncoder = encoder;
@@ -82,6 +83,7 @@ public class DEPSAgent {
       trailPoint = problemEncoder.getFreshSearchPoint();
       pold_t = problemEncoder.getFreshSearchPoint();
       pcurrent_t = problemEncoder.getFreshSearchPoint();
+      pbest_t = pbest;
 
       this.deGTBehavior = deGTBehavior;
       this.deGTBehavior.setMemPoints(pbest_t, pcurrent_t, pold_t);
@@ -92,12 +94,6 @@ public class DEPSAgent {
 
   public void setSpecComparator(IGoodnessCompareEngine comparer) {
     qualityComparator = comparer;
-  }
-
-  public void setPbest(SearchPoint pbest) {
-    pbest_t = pbest;
-    deGTBehavior.setPbest(pbest_t);
-    psGTBehavior.setPbest(pbest_t);
   }
 
   private AbsGTBehavior getGTBehavior() {
