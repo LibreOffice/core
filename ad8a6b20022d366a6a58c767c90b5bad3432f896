@@ -1,0 +1,554 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "28710acf_64702fb2",
+        "filename": "bin/screenshots-upload/fetch-unit-id.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2021-08-06T13:02:38Z",
+      "side": 1,
+      "message": "The shebang needs to be the first line in the file, so the comment needs to be moved down.\n\nAlso some grammar fixes: \"The script ges the unit IDs using the Weblate API and assigns them to the screenshots\"\n\nand s/should be/must be/",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 4,
+        "endChar": 0
+      },
+      "revId": "ad8a6b20022d366a6a58c767c90b5bad3432f896",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6910f725_55bb504d",
+        "filename": "bin/screenshots-upload/fetch-unit-id.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2021-08-06T13:02:38Z",
+      "side": 1,
+      "message": "preferably the branch name should also be split / be a configure option. We keep the different branches in different projects in weblate. We have libo_ui-master, libo_ui-7-1 libo_ui-7-0,... and those are managed separately.\n\nThe master one can and should be the default, since that is the one that has UI changes, for the other one the screenshots would be added after UI freeze, so it is just adding the screenshot once or in exception cases.",
+      "revId": "ad8a6b20022d366a6a58c767c90b5bad3432f896",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ffa52e8f_a2233d27",
+        "filename": "bin/screenshots-upload/fetch-unit-id.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2021-08-06T13:02:38Z",
+      "side": 1,
+      "message": "\"program will wait {} seconds to avoid being blocked to to the request limit\".format(time_to_wait)\n\narguably is a little nicer/matter of preference (apart from the typo, Wait is not uppercase...",
+      "revId": "ad8a6b20022d366a6a58c767c90b5bad3432f896",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "451fbda4_05f6008d",
+        "filename": "bin/screenshots-upload/fetch-unit-id.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2021-08-06T13:02:38Z",
+      "side": 1,
+      "message": "using global is kind of an anti-pattern in python. OK in small scripts like these, but in larger projects using an object instance is preferred.",
+      "revId": "ad8a6b20022d366a6a58c767c90b5bad3432f896",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7e90c5b6_0117467d",
+        "filename": "bin/screenshots-upload/fetch-unit-id.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2021-08-06T13:02:38Z",
+      "side": 1,
+      "message": "If wrong options are passed, the script should optionally print a help message (list valid options) and abort, not try to continue. Wrong options are most definitely user-error/typo and thus the script probably won\u0027t do what the user wants anyway.",
+      "revId": "ad8a6b20022d366a6a58c767c90b5bad3432f896",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5157386e_bd156a9f",
+        "filename": "bin/screenshots-upload/fetch-unit-id.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2021-08-06T13:02:38Z",
+      "side": 1,
+      "message": "having that guarded whether ARGS is empty is wrong, needs to be just below the check whether the config option was given a few lines above.\nAlso the exceptions should arguably be handled in the function itself.\nThe error message should print the path that was tried. \"no file found at path {}\".format(pathname) or something like that.",
+      "revId": "ad8a6b20022d366a6a58c767c90b5bad3432f896",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b0108529_5695b278",
+        "filename": "bin/screenshots-upload/fetch-unit-id.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2021-08-06T13:02:38Z",
+      "side": 1,
+      "message": "don\u0027t exit with code 0 / no error in case of failure",
+      "revId": "ad8a6b20022d366a6a58c767c90b5bad3432f896",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f45ee7bd_4a491e20",
+        "filename": "bin/screenshots-upload/fetch-unit-id.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2021-08-06T13:02:38Z",
+      "side": 1,
+      "message": "same here, guarding against empty ARGS is wrong place, should be in the check for the config path, and more specifically in a check whether there was an api key specified in the configfile.\nAlso no need for all-uppercase long explanation (all-uppercase is \"shouting\". Also as mentioned on IRC: if the script is run in anonymous mode (that can also happen with an invalid api-token), the script should abort/only allow to continue when explicitly overridden with a config switch.",
+      "revId": "ad8a6b20022d366a6a58c767c90b5bad3432f896",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "25ec544e_3977ec4a",
+        "filename": "bin/screenshots-upload/fetch-unit-id.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2021-08-06T13:02:38Z",
+      "side": 1,
+      "message": "be consistent. You defined a constant earlier for the path, yet here you manually assemble it.\nThat has been pointed out previously already. Just don\u0027t do that.\n\nAlso in the error message, either use the proper filename or refer to it as the mapping file, I\u0027d prefer if it specified the name/pathname it looked for.",
+      "revId": "ad8a6b20022d366a6a58c767c90b5bad3432f896",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "12e4e18e_c1055d36",
+        "filename": "bin/screenshots-upload/fetch-unit-id.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2021-08-06T13:02:38Z",
+      "side": 1,
+      "message": "see above, don\u0027t exit with code 0 / no-error in case there was an error.\n\nI won\u0027t list repeated instances of that error.",
+      "revId": "ad8a6b20022d366a6a58c767c90b5bad3432f896",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "96c8d6a2_a5ab16c0",
+        "filename": "bin/screenshots-upload/fetch-unit-id.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2021-08-06T13:02:38Z",
+      "side": 1,
+      "message": "mentioned it a couple of times, but the request handling, and especially the assembly of the headers should not be duplicated. make the request handling a dedicated function.",
+      "revId": "ad8a6b20022d366a6a58c767c90b5bad3432f896",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b490c670_e3256195",
+        "filename": "bin/screenshots-upload/fetch-unit-id.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2021-08-06T13:02:38Z",
+      "side": 1,
+      "message": "should be None, not empty string, it is not a simple string, even if python doesn\u0027t have strong typing\nalso the name is misleading, as it doesn\u0027t refer to the URL string in the response, but is the response object after fetching the link from the next-url part of a response",
+      "revId": "ad8a6b20022d366a6a58c767c90b5bad3432f896",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8cd0a9ed_d89f3b18",
+        "filename": "bin/screenshots-upload/fetch-unit-id.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2021-08-06T13:02:38Z",
+      "side": 1,
+      "message": "having the raise_for_status() just fail the script instead of catching it and exiting with exit code 0 is much preferred.",
+      "revId": "ad8a6b20022d366a6a58c767c90b5bad3432f896",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ca0d2c2e_5398d356",
+        "filename": "bin/screenshots-upload/fetch-unit-id.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2021-08-06T13:02:38Z",
+      "side": 1,
+      "message": "see the note above about \"shouting\", and again: It should not ask for input of a pathname or similar. It should stop execution with an error.\nI strongly prefer a dedicated config switch --allow-anonymous or --force or something like that instead of a prompt to continue.",
+      "revId": "ad8a6b20022d366a6a58c767c90b5bad3432f896",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "775cea67_99841254",
+        "filename": "bin/screenshots-upload/fetch-unit-id.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2021-08-06T13:02:38Z",
+      "side": 1,
+      "message": "same remarks as in the other files, have raise_for_status() fail the script instead. And also the remark about not duplicating the request handling code. factor it out to a separate function.",
+      "revId": "ad8a6b20022d366a6a58c767c90b5bad3432f896",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "54765170_7babc861",
+        "filename": "bin/screenshots-upload/fetch-unit-id.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2021-08-06T13:02:38Z",
+      "side": 1,
+      "message": "another inconsitency - TXT_FILE_PATH as all-uppercase is supposed to be a constant, yet you modify it. \nJust make it the dirname portion, and assemble it with the filename and it would be more consistent.",
+      "revId": "ad8a6b20022d366a6a58c767c90b5bad3432f896",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "da6aa062_e30455f3",
+        "filename": "bin/screenshots-upload/mapping.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2021-08-06T13:02:38Z",
+      "side": 1,
+      "message": "same as with other scripts, shebang line needs to be first in file, the comment should come after the license header.",
+      "revId": "ad8a6b20022d366a6a58c767c90b5bad3432f896",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "02df7766_d6fcc9a4",
+        "filename": "bin/screenshots-upload/mapping.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2021-08-06T13:02:38Z",
+      "side": 1,
+      "message": "comments typically are placed above the statements they refer to, or are placed at the end of the same line",
+      "revId": "ad8a6b20022d366a6a58c767c90b5bad3432f896",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8a5578cb_fe1bd84d",
+        "filename": "bin/screenshots-upload/mapping.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2021-08-06T13:02:38Z",
+      "side": 1,
+      "message": "if you define constants like that, they should by convention be at the start of the file",
+      "revId": "ad8a6b20022d366a6a58c767c90b5bad3432f896",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7563e2b3_d140219f",
+        "filename": "bin/screenshots-upload/post-screenshots.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2021-08-06T13:02:38Z",
+      "side": 1,
+      "message": "same comment as for the other scripts, shebang line needs to be the first line in the script.",
+      "revId": "ad8a6b20022d366a6a58c767c90b5bad3432f896",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a2be2039_9286a995",
+        "filename": "bin/screenshots-upload/post-screenshots.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2021-08-06T13:02:38Z",
+      "side": 1,
+      "message": "same remark as as in the other files re not using CONSTANT_VARIABLE_NAMES for stuff that is not used as a constant.",
+      "revId": "ad8a6b20022d366a6a58c767c90b5bad3432f896",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9844948c_a7030334",
+        "filename": "bin/screenshots-upload/post-screenshots.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2021-08-06T13:02:38Z",
+      "side": 1,
+      "message": "ideally the reading of the config file and the requests would be factored out into a separate script that is included here to avoid duplication of that code....\nAlong with the definitions of the various paths and filenames.",
+      "revId": "ad8a6b20022d366a6a58c767c90b5bad3432f896",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f123a9f1_edad51fd",
+        "filename": "bin/screenshots-upload/post-screenshots.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2021-08-06T13:02:38Z",
+      "side": 1,
+      "message": "… and fail the script, exit with non-zero status.",
+      "revId": "ad8a6b20022d366a6a58c767c90b5bad3432f896",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aead0fcd_ef1318fa",
+        "filename": "bin/screenshots-upload/post-screenshots.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2021-08-06T13:02:38Z",
+      "side": 1,
+      "message": "typos in the strings, using again a different filename as what is actually looked for, and exiting with the \"no error occured\" exit status…",
+      "revId": "ad8a6b20022d366a6a58c767c90b5bad3432f896",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "793cf4e1_157c784f",
+        "filename": "bin/screenshots-upload/post-screenshots.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2021-08-06T13:02:38Z",
+      "side": 1,
+      "message": "same comment as in the other script, ARGS not being empty doesn\u0027t guarantee there\u0027s a configfile, also same note about the error handling, don\u0027t exit with error code 0 (no error) when there was an error.",
+      "revId": "ad8a6b20022d366a6a58c767c90b5bad3432f896",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "66381cb4_05e40cb6",
+        "filename": "bin/screenshots-upload/post-screenshots.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2021-08-06T13:02:38Z",
+      "side": 1,
+      "message": "again using CONSTANT_LOOKING_VARNAMES for stuff that clearly is not a constant.",
+      "revId": "ad8a6b20022d366a6a58c767c90b5bad3432f896",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c0bef957_3e6d3694",
+        "filename": "bin/screenshots-upload/post-screenshots.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2021-08-06T13:02:38Z",
+      "side": 1,
+      "message": "let raise_for_status abort the script/see comment in other files, same for other occurrences",
+      "revId": "ad8a6b20022d366a6a58c767c90b5bad3432f896",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "baf7e2ce_ffaf7b9b",
+        "filename": "bin/screenshots-upload/post-screenshots.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2021-08-06T13:02:38Z",
+      "side": 1,
+      "message": "see remark about using CONSTANT_LOOKING_NAMES…\nAlso insonsistent naming of the variables compared to the other scripts, again a reason to factor it out....",
+      "revId": "ad8a6b20022d366a6a58c767c90b5bad3432f896",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e9d5dac6_80da54cf",
+        "filename": "bin/screenshots-upload/post-screenshots.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2021-08-06T13:02:38Z",
+      "side": 1,
+      "message": "wording/typos",
+      "revId": "ad8a6b20022d366a6a58c767c90b5bad3432f896",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3a1e8240_3e465b8c",
+        "filename": "bin/screenshots-upload/post-screenshots.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2021-08-06T13:02:38Z",
+      "side": 1,
+      "message": "that\u0027s not all that helpful as error message.. also should likely abort the script, also make sure to clean up the lines below.",
+      "revId": "ad8a6b20022d366a6a58c767c90b5bad3432f896",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eeb5657d_93ae7063",
+        "filename": "bin/screenshots-upload/post-screenshots.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2021-08-06T13:02:38Z",
+      "side": 1,
+      "message": "again a note about the duplication of code and how the request handling should be done in a separate function....",
+      "revId": "ad8a6b20022d366a6a58c767c90b5bad3432f896",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2d7ca097_cc46cf40",
+        "filename": "bin/screenshots-upload/post-screenshots.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2021-08-06T13:02:38Z",
+      "side": 1,
+      "message": "not exiting after such a general exception probably is the wrong approach, only more general exceptions should be allowed to pass. A not explicitly handled exception should abort the script.\n\nAlso the missing unit-ID should be logged properly. just printing \"unit id is missing\" without stating what was looked for is not all that helpful message. Won\u0027t help to try manually/have a closer look afterwards...",
+      "revId": "ad8a6b20022d366a6a58c767c90b5bad3432f896",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
