@@ -326,6 +326,25 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTableShadow)
     verify(getComponent());
 }
 
+CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testGroupShapeSmartArt)
+{
+    // Given a file with a smartart inside a group shape:
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "smartart-groupshape.pptx";
+
+    // When loading that file:
+    load(aURL);
+
+    // Then make sure that the smartart is not just an empty group shape:
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XShapes> xGroup(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShapes> xSmartArt(xGroup->getByIndex(0), uno::UNO_QUERY);
+    // Without the accompanying fix in place, this test would have failed, because we lost all
+    // children of the group shape representing the smartart.
+    CPPUNIT_ASSERT_GREATER(static_cast<sal_Int32>(0), xSmartArt->getCount());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
