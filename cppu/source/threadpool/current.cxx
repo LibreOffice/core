@@ -81,10 +81,13 @@ static typelib_InterfaceTypeDescription * get_type_XCurrentContext()
 }
 
 IdContainer::IdContainer()
+    : pCurrentContext(nullptr)
+    , pCurrentContextEnv(nullptr)
+    , bInit(false)
+    , pLocalThreadId(nullptr)
+    , nRefCountOfCurrentId(0)
+    , pCurrentId(nullptr)
 {
-    pCurrentContext = nullptr;
-    pCurrentContextEnv = nullptr;
-    bInit = false;
 }
 
 IdContainer::~IdContainer()
