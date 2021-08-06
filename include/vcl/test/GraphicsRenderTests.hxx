@@ -143,6 +143,11 @@ class VCL_PLUGIN_PUBLIC GraphicsRenderTests
     void testDrawRectangleOnSize4096WithPolyPolygon();
     void testDrawRectangleOnSize1028WithPolyPolygonB2D();
     void testDrawRectangleOnSize4096WithPolygonPolygonB2D();
+    void testDrawOpenPolygonWithPolyLine();
+    void testDrawOpenPolygonWithPolyLineB2D();
+    void testDrawOpenPolygonWithPolygon();
+    void testDrawOpenPolygonWithPolyPolygon();
+    void testDrawOpenPolygonWithPolyPolygonB2D();
     static OUString returnTestStatus(vcl::test::TestResult const result);
     void runALLTests();
     void appendTestResult(OUString aTestName, OUString aTestStatus, Bitmap aTestBitmap = Bitmap());
