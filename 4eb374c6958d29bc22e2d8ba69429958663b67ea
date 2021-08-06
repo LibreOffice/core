@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9093e1d2_f7284ea6",
+        "filename": "basic/source/runtime/runtime.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 4192,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-06T21:58:35Z",
+      "side": 1,
+      "message": "This is suspicious. This tries to assign the type of the default\u0027s literal to the argument. Consider:\n\n  Sub Foo(Optional Variant Bar\u003d10)\n  ...\n\nBar should be Variant, but \"10\" is Integer. Will it assign Integer to Bar?\n\nI\u0027d think that we need to keep \u0027pVar \u003d new SbxVariable(pParam-\u003eeType)\u0027, and add another value having type of eType, and then set value from the latter to the former.",
+      "revId": "4eb374c6958d29bc22e2d8ba69429958663b67ea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
