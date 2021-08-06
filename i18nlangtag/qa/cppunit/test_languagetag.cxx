@@ -683,7 +683,8 @@ void TestLanguageTag::testAllTags()
 
 bool checkMapping( std::u16string_view rStr1, std::u16string_view rStr2 )
 {
-    if (rStr1 == u"la-Latn"     ) return rStr2 == u"la";
+    if (rStr1 == u"la"          ) return rStr2 == u"la-VA";
+    if (rStr1 == u"la-Latn"     ) return rStr2 == u"la-VA";
     if (rStr1 == u"tzm-Latn-DZ" ) return rStr2 == u"kab-DZ";
     if (rStr1 == u"bs-Latn-BA"  ) return rStr2 == u"bs-BA";
     if (rStr1 == u"bs-Latn"     ) return rStr2 == u"bs";
@@ -705,7 +706,8 @@ bool checkMapping( std::u16string_view rStr1, std::u16string_view rStr2 )
     if (rStr1 == u"ven-ZA"      ) return rStr2 == u"ve-ZA";
     if (rStr1 == u"qu-EC"       ) return rStr2 == u"quz-EC";
     if (rStr1 == u"qu-PE"       ) return rStr2 == u"quz-PE";
-    if (rStr1 == u"ff-NG"       ) return rStr2 == u"fuv-NG";
+    if (rStr1 == u"ff-Latn-NG"  ) return rStr2 == u"ff-NG";
+    if (rStr1 == u"fuv-NG"      ) return rStr2 == u"ff-NG";
     if (rStr1 == u"ji-IL"       ) return rStr2 == u"yi-IL";
     if (rStr1 == u"iu-CA"       ) return rStr2 == u"iu-Latn-CA";
     if (rStr1 == u"iu"          ) return rStr2 == u"iu-Latn";
@@ -716,6 +718,7 @@ bool checkMapping( std::u16string_view rStr1, std::u16string_view rStr2 )
     if (rStr1 == u"mg-MG"       ) return rStr2 == u"plt-MG";
     if (rStr1 == u"pli"         ) return rStr2 == u"pi-Latn";
     if (rStr1 == u"ks"          ) return rStr2 == u"ks-Arab";
+    if (rStr1 == u"ks-IN"       ) return rStr2 == u"ks-Deva-IN";
     if (rStr1 == u"chr-US"      ) return rStr2 == u"chr-Cher-US";
     if (rStr1 == u"sd-PK"       ) return rStr2 == u"sd-Arab-PK";
     if (rStr1 == u"sr-Cyrl-RS"  ) return rStr2 == u"sr-RS";
@@ -760,8 +763,7 @@ void TestLanguageTag::testAllIsoLangEntries()
         LanguageTag aTagID( elem.mnLang);
         if (!checkMapping( elem.maBcp47, aTagString.getBcp47()))
         {
-            OString aMessage( OUStringToOString( elem.maBcp47, RTL_TEXTENCODING_ASCII_US) + " -> " + OUStringToOString( aTagString.getBcp47(), RTL_TEXTENCODING_ASCII_US) );
-            CPPUNIT_ASSERT_EQUAL_MESSAGE( aMessage.getStr(), aTagString.getBcp47(), elem.maBcp47 );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( "defined elem to tag", elem.maBcp47, aTagString.getBcp47() );
         }
         if (elem.maBcp47 != aTagID.getBcp47())
         {
