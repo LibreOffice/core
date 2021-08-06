@@ -54,7 +54,8 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_mark_test, \
     ucbhelper \
 	unotest \
     utl \
-    vbahelper \
+    $(call gb_Helper_optional,SCRIPTING, \
+        vbahelper) \
     vcl \
     xo \
 ))

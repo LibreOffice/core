@@ -56,7 +56,8 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_uwriter, \
     ucbhelper \
     unotest \
     utl \
-    vbahelper \
+    $(call gb_Helper_optional,SCRIPTING, \
+        vbahelper) \
     vcl \
 	xmlreader \
     xo \

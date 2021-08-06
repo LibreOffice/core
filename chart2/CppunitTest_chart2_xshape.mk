@@ -52,7 +52,8 @@ $(eval $(call gb_CppunitTest_use_libraries,chart2_xshape, \
     ucbhelper \
     unotest \
     utl \
-    vbahelper \
+    $(call gb_Helper_optional,SCRIPTING, \
+        vbahelper) \
     xo \
     sw \
 ))
