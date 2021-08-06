@@ -333,7 +333,8 @@ void SAL_CALL SidebarController::notifyContextChangeEvent (const css::ui::Contex
                                              // calling with held
                                              // solarmutex
         // TODO: this call is redundant but mandatory for unit test to update context on document loading
-        UpdateConfigurations();
+        if (!comphelper::LibreOfficeKit::isActive())
+            UpdateConfigurations();
     }
 }
 
