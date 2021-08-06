@@ -41,7 +41,7 @@ struct IdContainer
     ~IdContainer();
 };
 
-IdContainer * getIdContainer();
+IdContainer& getIdContainer();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
