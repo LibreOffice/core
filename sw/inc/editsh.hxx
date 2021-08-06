@@ -539,8 +539,7 @@ public:
     bool IsNoNum( bool bChkStart = true ) const;
 
     /** @return Num-Level of the node in which point of cursor is.
-     @return values can be: NO_NUMBERING,
-     0..MAXLEVEL-1, NO_NUMLEVEL .. NO_NUMLEVEL|MAXLEVEL-1 */
+     @return values can be: NO_NUMBERING, 0..MAXLEVEL-1 */
     sal_uInt8 GetNumLevel() const;
 
     /// Detect highest and lowest level to check moving of outline levels.
