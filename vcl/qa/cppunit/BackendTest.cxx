@@ -1223,6 +1223,56 @@ public:
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
 
+    void testDrawOpenPolygonWithPolyLine()
+    {
+        vcl::test::OutputDeviceTestPolyLine aOutDevTest;
+        Bitmap aBitmap = aOutDevTest.setupOpenPolygon();
+        auto eResult = vcl::test::OutputDeviceTestCommon::checkOpenPolygon(aBitmap);
+        exportImage("19-01_open_polygon-polyline.png", aBitmap);
+        if (SHOULD_ASSERT)
+            CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
+    }
+
+    void testDrawOpenPolygonWithPolyLineB2D()
+    {
+        vcl::test::OutputDeviceTestPolyLineB2D aOutDevTest;
+        Bitmap aBitmap = aOutDevTest.setupOpenPolygon();
+        auto eResult = vcl::test::OutputDeviceTestCommon::checkOpenPolygon(aBitmap);
+        exportImage("19-02_open_polygon-polyline_b2d.png", aBitmap);
+        if (SHOULD_ASSERT)
+            CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
+    }
+
+    void testDrawOpenPolygonWithPolygon()
+    {
+        vcl::test::OutputDeviceTestPolygon aOutDevTest;
+        Bitmap aBitmap = aOutDevTest.setupOpenPolygon();
+        auto eResult = vcl::test::OutputDeviceTestCommon::checkOpenPolygon(aBitmap);
+        exportImage("19-03_open_polygon-polygon.png", aBitmap);
+        if (SHOULD_ASSERT)
+            CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
+    }
+
+    void testDrawOpenPolygonWithPolyPolygon()
+    {
+        vcl::test::OutputDeviceTestPolyPolygon aOutDevTest;
+        Bitmap aBitmap = aOutDevTest.setupOpenPolygon();
+        auto eResult = vcl::test::OutputDeviceTestCommon::checkOpenPolygon(aBitmap);
+        exportImage("19-04_open_polygon-polypolygon.png", aBitmap);
+        if (SHOULD_ASSERT)
+            CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
+    }
+
+    void testDrawOpenPolygonWithPolyPolygonB2D()
+    {
+        vcl::test::OutputDeviceTestPolyPolygonB2D aOutDevTest;
+        Bitmap aBitmap = aOutDevTest.setupOpenPolygon();
+        auto eResult = vcl::test::OutputDeviceTestCommon::checkOpenPolygon(aBitmap);
+        exportImage("19-04_open_polygon-polypolygon_b2d.png", aBitmap);
+        if (SHOULD_ASSERT)
+            CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
+    }
+
     void testTdf124848()
     {
 // TODO: This unit test is not executed for macOS unless bitmap scaling is implemented
@@ -1394,6 +1444,12 @@ public:
 
     CPPUNIT_TEST(testDrawingText);
     CPPUNIT_TEST(testEvenOddRuleInIntersectionRectangles);
+
+    CPPUNIT_TEST(testDrawOpenPolygonWithPolyLine);
+    CPPUNIT_TEST(testDrawOpenPolygonWithPolyLineB2D);
+    CPPUNIT_TEST(testDrawOpenPolygonWithPolygon);
+    CPPUNIT_TEST(testDrawOpenPolygonWithPolyPolygon);
+    CPPUNIT_TEST(testDrawOpenPolygonWithPolyPolygonB2D);
 
     CPPUNIT_TEST(testTdf124848);
     CPPUNIT_TEST(testTdf136171);
