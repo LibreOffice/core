@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "ec784cdc_775db2be",
+        "filename": "basic/source/comp/dim.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 999,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-08-06T14:43:06Z",
+      "side": 1,
+      "message": "Yes this was the old commit and I didn\u0027t drop the comment for the fast pseudo draft.",
+      "parentUuid": "6de6705e_b2606c58",
+      "revId": "21c324fddbe05bf15eac141aed930bdbe3fadba5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d8b590cc_0616e8ca",
         "filename": "basic/source/comp/symtbl.cxx",
         "patchSetId": 4
@@ -30,6 +48,24 @@
       "writtenOn": "2021-08-06T14:29:53Z",
       "side": 1,
       "message": "And in all cases where you add a type character, you need to increase size by 2, to include the null and the type character",
+      "revId": "21c324fddbe05bf15eac141aed930bdbe3fadba5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3bf577ee_7403d3ba",
+        "filename": "basic/source/comp/symtbl.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-08-06T14:43:06Z",
+      "side": 1,
+      "message": "But won\u0027t the buffer be initialized with nulls? So the string in the case of 15 will look like, since size will return 2:\nbuff[0] \u003d \u00271\u0027\nbuff[1] \u003d \u00275\u0027\nbuff[2] \u003d \u0027\\0\u0027\nbuff[3] \u003d \u0027b\u0027\nbuff[4] \u003d \u0027\\0\u0027\n\nBut I have to check if the size is smaller than the buffer\u0027s size. Should we increase the buffer? What should we do if the buffer is to small for the type character?",
+      "parentUuid": "d8b590cc_0616e8ca",
       "revId": "21c324fddbe05bf15eac141aed930bdbe3fadba5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "f42c252b_5914d23e",
+        "filename": "basic/source/comp/symtbl.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-08-06T14:43:06Z",
+      "side": 1,
+      "message": "Yes, this was just for a very very fast draft. I will amend the commit, when I have decided for a possible solution 😊",
+      "parentUuid": "1ab891a8_5750af01",
+      "revId": "21c324fddbe05bf15eac141aed930bdbe3fadba5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5001eb64_19b151a3",
         "filename": "basic/source/comp/symtbl.cxx",
         "patchSetId": 4
@@ -70,6 +124,24 @@
     },
     {
       "key": {
+        "uuid": "7683bceb_1be0db51",
+        "filename": "basic/source/comp/symtbl.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-08-06T14:43:06Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "5001eb64_19b151a3",
+      "revId": "21c324fddbe05bf15eac141aed930bdbe3fadba5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5c7a5019_3c232192",
         "filename": "basic/source/comp/symtbl.cxx",
         "patchSetId": 4
@@ -81,6 +153,24 @@
       "writtenOn": "2021-08-06T14:29:53Z",
       "side": 1,
       "message": "And here we would need to use\n\n  OUString::createFromAscii( std::string_view(buf, size) )\n\nso that the string_view contains the length, and makes the null embed into the resulting OUString. Otherwise, it will scan for null, and drop the type character",
+      "revId": "21c324fddbe05bf15eac141aed930bdbe3fadba5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "67a5a304_b245082b",
+        "filename": "basic/source/comp/symtbl.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-08-06T14:43:06Z",
+      "side": 1,
+      "message": "Thanks for the advice and help! I did not know how to save such a string.",
+      "parentUuid": "5c7a5019_3c232192",
       "revId": "21c324fddbe05bf15eac141aed930bdbe3fadba5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
