@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Package_Package,setup_native_packinfo))
+$(eval $(call gb_Package_Package,setup_native_packinfo,$(SRCDIR)))
 
 # Check if any bundled extensions are installed (where ENABLE_JAVA covers Extension_nlpsolver, cf.
 # nlpsolver/Module_nlpsolver.mk); if none are installed, then gb_Package_add_empty_directory is
