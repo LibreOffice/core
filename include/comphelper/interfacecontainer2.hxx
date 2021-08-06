@@ -53,11 +53,11 @@ namespace detail {
 
 class OInterfaceContainerHelper2;
 /**
-  This is the iterator of an InterfaceContainerHelper. Typically
+  This is the iterator of an OInterfaceContainerHelper2. Typically
   one constructs an instance on the stack for one firing session.
   It is not allowed to assign or copy an instance of this class.
 
-  @see OInterfaceContainerHelper
+  @see OInterfaceContainerHelper2
  */
 class COMPHELPER_DLLPUBLIC OInterfaceIteratorHelper2
 {
@@ -111,9 +111,13 @@ private:
 
 /**
   A container of interfaces. To access the elements use an iterator.
-  This implementation is thread save.
+  This implementation is thread-safe.
 
-  @see OInterfaceIteratorHelper
+  This is a copy of the code at include/cppuhelper/interfacecontainer.h,
+  Except that it uses a std::vector instead of a Sequence for the mutable listener
+  list, which provides far better performance.
+
+  @see OInterfaceIteratorHelper2
  */
 class COMPHELPER_DLLPUBLIC OInterfaceContainerHelper2
 {
