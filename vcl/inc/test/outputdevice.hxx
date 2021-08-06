@@ -70,6 +70,7 @@ public:
 
     static tools::Polygon createDropShapePolygon();
     static basegfx::B2DPolygon createHalfEllipsePolygon();
+    static basegfx::B2DPolygon createOpenPolygon(tools::Rectangle& rRect, int nOffset = 4);
 
     static void createHorizontalVerticalDiagonalLinePoints(tools::Rectangle rRect,
                                 Point& rHorizontalLinePoint1, Point& rHorizontalLinePoint2,
@@ -95,6 +96,7 @@ public:
     static TestResult checkTextLocation(Bitmap& rBitmap);
     static TestResult checkEvenOddRuleInIntersectingRecs(Bitmap &rBitmap);
     static TestResult checkIntersectingRecs(Bitmap& rBitmap,int aLayerNumber, Color aExpectedColor);
+    static TestResult checkOpenPolygon(Bitmap& rBitmap, bool aEnableAA = false);
 private:
     static TestResult checkLineCap(Bitmap& rBitmap, css::drawing::LineCap lineCap);
     static TestResult checkLineJoin(Bitmap& rBitmap, basegfx::B2DLineJoin lineJoin);
@@ -185,6 +187,7 @@ public:
     Bitmap setupClosedBezier();
     Bitmap setupRectangleOnSize1028();
     Bitmap setupRectangleOnSize4096();
+    Bitmap setupOpenPolygon();
 };
 
 class VCL_DLLPUBLIC OutputDeviceTestPolyLineB2D : public OutputDeviceTestCommon
@@ -199,6 +202,7 @@ public:
     Bitmap setupHalfEllipse(bool aEnableAA = false);
     Bitmap setupRectangleOnSize1028();
     Bitmap setupRectangleOnSize4096();
+    Bitmap setupOpenPolygon();
 };
 
 class VCL_DLLPUBLIC OutputDeviceTestRect : public OutputDeviceTestCommon
@@ -232,6 +236,7 @@ public:
     Bitmap setupFilledAsymmetricalDropShape();
     Bitmap setupRectangleOnSize1028();
     Bitmap setupRectangleOnSize4096();
+    Bitmap setupOpenPolygon();
 };
 
 class VCL_DLLPUBLIC OutputDeviceTestPolyPolygon : public OutputDeviceTestCommon
@@ -244,6 +249,7 @@ public:
     Bitmap setupIntersectingRectangles();
     Bitmap setupRectangleOnSize1028();
     Bitmap setupRectangleOnSize4096();
+    Bitmap setupOpenPolygon();
 };
 
 class VCL_DLLPUBLIC OutputDeviceTestPolyPolygonB2D : public OutputDeviceTestCommon
@@ -256,6 +262,7 @@ public:
     Bitmap setupIntersectingRectangles();
     Bitmap setupRectangleOnSize1028();
     Bitmap setupRectangleOnSize4096();
+    Bitmap setupOpenPolygon();
 };
 
 class VCL_DLLPUBLIC OutputDeviceTestGradient : public OutputDeviceTestCommon

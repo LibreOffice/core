@@ -162,6 +162,19 @@ Bitmap OutputDeviceTestPolyLineB2D::setupRectangleOnSize4096()
     return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
 }
 
+Bitmap OutputDeviceTestPolyLineB2D::setupOpenPolygon()
+{
+    initialSetup(21, 21, constBackgroundColor);
+
+    mpVirtualDevice->SetLineColor(constLineColor);
+    mpVirtualDevice->SetFillColor();
+
+    mpVirtualDevice->DrawPolyLine(OutputDeviceTestCommon::createOpenPolygon(maVDRectangle));
+    mpVirtualDevice->DrawPolyLine(OutputDeviceTestCommon::createOpenPolygon(maVDRectangle, 7));
+
+    return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
+}
+
 } // end namespace vcl::test
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
