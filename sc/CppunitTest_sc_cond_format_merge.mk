@@ -50,7 +50,8 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_cond_format_merge, \
     ucbhelper \
     unotest \
     utl \
-    vbahelper \
+    $(call gb_Helper_optional,SCRIPTING, \
+        vbahelper) \
     vcl \
     xo \
 ))

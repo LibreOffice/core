@@ -52,7 +52,8 @@ $(eval $(call gb_CppunitTest_use_libraries,chart2_geometry, \
     ucbhelper \
     unotest \
     utl \
-    vbahelper \
+    $(call gb_Helper_optional,SCRIPTING, \
+        vbahelper) \
     vcl \
     xo \
 ))

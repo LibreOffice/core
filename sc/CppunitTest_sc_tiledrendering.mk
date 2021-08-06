@@ -32,7 +32,8 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_tiledrendering, \
     scui \
     test \
     unotest \
-    vbahelper \
+    $(call gb_Helper_optional,SCRIPTING, \
+        vbahelper) \
     vcl \
     tl \
     utl \

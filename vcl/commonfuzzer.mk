@@ -43,10 +43,12 @@ fuzzer_externals = \
     zlib \
 
 fuzzer_core_libraries = \
-    basctl \
     avmedia \
     basegfx \
-    basprov \
+    $(call gb_Helper_optional,SCRIPTING, \
+        basctl \
+        basprov \
+    ) \
     bib \
     canvastools \
     configmgr \
@@ -71,7 +73,8 @@ fuzzer_core_libraries = \
     package2 \
     sax \
     sb \
-    scriptframe \
+    $(call gb_Helper_optional,SCRIPTING, \
+        scriptframe) \
     spell \
     sfx \
     sofficeapp \
@@ -145,9 +148,11 @@ fuzzer_calc_libraries = \
     pricing \
     scfilt \
     scd \
-    vbaevents \
-    vbahelper \
-    vbaobj \
+    $(call gb_Helper_optional,SCRIPTING, \
+        vbaevents \
+        vbahelper \
+        vbaobj \
+    ) \
     sc \
     for \
     forui \

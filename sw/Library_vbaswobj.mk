@@ -56,7 +56,8 @@ $(eval $(call gb_Library_use_libraries,vbaswobj,\
     tk \
     tl \
     utl \
-    vbahelper \
+    $(call gb_Helper_optional,SCRIPTING, \
+        vbahelper) \
     vcl \
 ))
 
