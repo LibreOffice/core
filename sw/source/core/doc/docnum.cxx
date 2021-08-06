@@ -1500,7 +1500,6 @@ static bool lcl_GotoNextPrevNum( SwPosition& rPos, bool bNext,
     SwNodeIndex aIdx( rPos.nNode );
     if( ! pNd->IsCountedInList() )
     {
-        // If NO_NUMLEVEL is switched on, we search the preceding Node with Numbering
         bool bError = false;
         do {
             sw::GotoPrevLayoutTextFrame(aIdx, pLayout);

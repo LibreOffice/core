@@ -89,8 +89,6 @@ enum class SwLabelType
 
 constexpr sal_uInt8 MAXLEVEL = 10;
 
-constexpr sal_uInt8 NO_NUMLEVEL = 0x20;    // "or" with the levels.
-
 //  Values for indents at numbering and bullet lists.
 //  (For more levels the values have to be multiplied with the levels+1;
 //  levels 0 ..4!)

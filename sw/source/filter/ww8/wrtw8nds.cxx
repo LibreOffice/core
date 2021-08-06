@@ -2969,12 +2969,12 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
             // isn't exported as numbered, but not counted, if no other attribute
             // is found in <pTmpSet>
             // #i44815# adjust numbering/indents for numbered paragraphs
-            //          without number (NO_NUMLEVEL)
+            //          without number
             // #i47013# need to check rNode.GetNumRule()!=NULL as well.
             if ( ! rNode.IsCountedInList() && rNode.GetNumRule()!=nullptr )
             {
                 // WW8 does not know numbered paragraphs without number
-                // (NO_NUMLEVEL). In WW8AttributeOutput::ParaNumRule(), we will export
+                // In WW8AttributeOutput::ParaNumRule(), we will export
                 // the RES_PARATR_NUMRULE as list-id 0, which in WW8 means
                 // no numbering. Here, we will adjust the indents to match
                 // visually.
@@ -3014,7 +3014,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                 }
 
                 // new first line indent = 0
-                // (first line indent is ignored for NO_NUMLEVEL)
+                // (first line indent is ignored)
                 if (!bParaRTL)
                     aLRSpace.SetTextFirstLineOffset( 0 );
 

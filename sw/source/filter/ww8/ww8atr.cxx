@@ -3733,9 +3733,8 @@ void AttributeOutputBase::ParaNumRule( const SwNumRuleItem& rNumRule )
         else
         {
             // #i44815# adjust numbering for numbered paragraphs
-            // without number (NO_NUMLEVEL). These paragraphs
-            // will receive a list id 0, which WW interprets as
-            // 'no number'.
+            // without number. These paragraphs will receive a
+            // list id 0, which WW interprets as 'no number'.
             nNumId = 0;
         }
     }
