@@ -467,6 +467,7 @@
                     <property name="image">image8</property>
                     <property name="relief">none</property>
                     <property name="always-show-image">True</property>
+                    <property name="active">True</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
