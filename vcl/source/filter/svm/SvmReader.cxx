@@ -655,18 +655,24 @@ rtl::Reference<MetaAction> SvmReader::TextHandler(ImplMetaReadData* pData)
     mrStream.ReadUInt16(nTmpLen);
 
     pAction->SetPoint(aPoint);
-    pAction->SetIndex(nTmpIndex);
-    pAction->SetLen(nTmpLen);
 
     if (aCompat.GetVersion() >= 2) // Version 2
         aStr = read_uInt16_lenPrefixed_uInt16s_ToOUString(mrStream);
 
-    if (nTmpIndex + nTmpLen > aStr.getLength())
+    if (nTmpIndex > aStr.getLength())
     {
-        SAL_WARN("vcl.gdi", "inconsistent offset and len");
-        pAction->SetIndex(0);
-        pAction->SetLen(aStr.getLength());
+        SAL_WARN("vcl.gdi", "inconsistent offset");
+        nTmpIndex = aStr.getLength();
     }
+
+    if (nTmpLen > aStr.getLength() - nTmpIndex)
+    {
+        SAL_WARN("vcl.gdi", "inconsistent len");
+        nTmpLen = aStr.getLength() - nTmpIndex;
+    }
+
+    pAction->SetIndex(nTmpIndex);
+    pAction->SetLen(nTmpLen);
 
     pAction->SetText(aStr);
 
@@ -692,22 +698,23 @@ rtl::Reference<MetaAction> SvmReader::TextArrayHandler(ImplMetaReadData* pData)
 
     sal_uInt16 nTmpIndex(0);
     mrStream.ReadUInt16(nTmpIndex);
-    pAction->SetIndex(nTmpIndex);
 
     sal_uInt16 nTmpLen(0);
     mrStream.ReadUInt16(nTmpLen);
-    pAction->SetLen(nTmpLen);
 
     sal_Int32 nAryLen(0);
     mrStream.ReadInt32(nAryLen);
 
-    if (nTmpIndex + nTmpLen > aStr.getLength())
+    if (nTmpLen > aStr.getLength() - nTmpIndex)
     {
         SAL_WARN("vcl.gdi", "inconsistent offset and len");
         pAction->SetIndex(0);
         pAction->SetLen(aStr.getLength());
         return pAction;
     }
+
+    pAction->SetIndex(nTmpIndex);
+    pAction->SetLen(nTmpLen);
 
     if (nAryLen)
     {
@@ -740,7 +747,7 @@ rtl::Reference<MetaAction> SvmReader::TextArrayHandler(ImplMetaReadData* pData)
         aStr = read_uInt16_lenPrefixed_uInt16s_ToOUString(mrStream);
         pAction->SetText(aStr);
 
-        if (nTmpIndex + nTmpLen > aStr.getLength())
+        if (nTmpLen > aStr.getLength() - nTmpIndex)
         {
             SAL_WARN("vcl.gdi", "inconsistent offset and len");
             pAction->SetIndex(0);
@@ -795,7 +802,7 @@ rtl::Reference<MetaAction> SvmReader::TextRectHandler(ImplMetaReadData* pData)
     aSerializer.readRectangle(aRect);
     OUString aStr;
     aStr = mrStream.ReadUniOrByteString(pData->meActualCharSet);
-    sal_uInt16 nTmp;
+    sal_uInt16 nTmp(0);
     mrStream.ReadUInt16(nTmp);
 
     pAction->SetRect(aRect);
@@ -1219,9 +1226,8 @@ rtl::Reference<MetaAction> SvmReader::TextAlignHandler()
 {
     rtl::Reference<MetaTextAlignAction> pAction(new MetaTextAlignAction);
 
-    sal_uInt16 nTmp16(0);
-
     VersionCompatRead aCompat(mrStream);
+    sal_uInt16 nTmp16(0);
     mrStream.ReadUInt16(nTmp16);
 
     pAction->SetTextAlign(static_cast<TextAlign>(nTmp16));
@@ -1264,10 +1270,10 @@ rtl::Reference<MetaAction> SvmReader::PushHandler()
     rtl::Reference<MetaPushAction> pAction(new MetaPushAction);
 
     VersionCompatRead aCompat(mrStream);
-    sal_uInt16 tmp;
-    mrStream.ReadUInt16(tmp);
+    sal_uInt16 nTmp(0);
+    mrStream.ReadUInt16(nTmp);
 
-    pAction->SetPushFlags(static_cast<PushFlags>(tmp));
+    pAction->SetPushFlags(static_cast<PushFlags>(nTmp));
 
     return pAction;
 }
