@@ -40,12 +40,12 @@ namespace comphelper
 {
 template <class ListenerT> class OInterfaceContainerHelper3;
 /**
-  This is the iterator of an InterfaceContainerHelper. Typically
+  This is the iterator of an OInterfaceContainerHelper3. Typically
   one constructs an instance on the stack for one firing session.
   It is not allowed to assign or copy an instance of this class.
 
   @tparam ListenerT UNO event listener type
-  @see OInterfaceContainerHelper
+  @see OInterfaceContainerHelper3
  */
 template <class ListenerT> class OInterfaceIteratorHelper3
 {
@@ -106,7 +106,12 @@ template <class ListenerT> void OInterfaceIteratorHelper3<ListenerT>::remove()
 
 /**
   A container of interfaces. To access the elements use an iterator.
-  This implementation is thread safe.
+  This implementation is thread-safe.
+
+  This is a copy of the code at include/comphelper/interfacecontainer2.hxx,
+  except that it is templatized on the type of the listener, which allows
+  some parts of the code to avoid doing an UNO_QUERY that can be expensive
+  in bulk.
 
   @tparam ListenerT UNO event listener type
   @see OInterfaceIteratorHelper
@@ -147,7 +152,7 @@ public:
         listener interface).
 
         @param rxIFace
-               interface to be added; it is allowed to
+               interface to be added; it is allowed to insert
                the same interface more than once
         @return
                 the new count of elements in the container
