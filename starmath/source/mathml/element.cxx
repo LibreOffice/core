@@ -96,6 +96,7 @@ void SmMlElement::setSubElement(size_t nPos, SmMlElement* aElement)
 {
     // This is the new parent element
     aElement->setParentElement(this);
+    aElement->setSubElementId(nPos);
     // Check if the vector is long enough
     // Careful nOldSize can be 0 and -1 will underflow
     // We must put something on the empty locations
