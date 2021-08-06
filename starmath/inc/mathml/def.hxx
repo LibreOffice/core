@@ -30,10 +30,11 @@ enum class SmLengthUnit : uint_fast8_t
     MlPx,
     MlIn,
     MlCm,
-    MlMM,
+    MlMm,
     MlPt,
     MlPc,
-    MlP // Percent
+    MlP, // Percent
+    MlM // Multiplier
 };
 
 struct SmLengthValue
@@ -125,7 +126,7 @@ enum class SmMlAttributeValueFence : uint_fast8_t
 enum class SmMlAttributeValueHref : uint_fast8_t
 {
     NMlEmpty = 0x00,
-    NMlValie = 0x01
+    NMlValid = 0x01
 };
 
 enum class SmMlAttributeValueLspace : uint_fast8_t
@@ -164,7 +165,7 @@ enum class SmMlAttributeValueMathvariant : uint_fast16_t
     bold_fraktur = 0x001 | 0x010,
     bold_script = 0x001 | 0x008,
     bold_sans_serif = 0x001 | 0x020,
-    sans_serif_italic = 0x001 | 0x002 | 0x20,
+    sans_serif_italic = 0x002 | 0x20,
     sans_serif_bold_italic = 0x001 | 0x002 | 0x020,
     // Non english
     initial = 0x080,
@@ -174,12 +175,6 @@ enum class SmMlAttributeValueMathvariant : uint_fast16_t
 };
 
 enum class SmMlAttributeValueMaxsize : uint_fast8_t
-{
-    MlInfinity = 0x00,
-    MlFinite = 0x01
-};
-
-enum class SmMlAttributeValueMinsize : uint_fast8_t
 {
     MlInfinity = 0x00,
     MlFinite = 0x01
@@ -282,7 +277,6 @@ struct SmMlMaxsize
 
 struct SmMlMinsize
 {
-    SmMlAttributeValueMinsize m_aMinsize;
     SmLengthValue m_aLengthValue;
 };
 

@@ -94,7 +94,6 @@ void SmMlAttribute::setDefaultAttributeValue()
             m_aAttributeValue.m_aMaxsize.m_aLengthValue.m_aOriginalText = new OUString(u"10000%");
             break;
         case SmMlAttributeValueType::MlMinsize:
-            m_aAttributeValue.m_aMinsize.m_aMinsize = SmMlAttributeValueMinsize::MlInfinity;
             m_aAttributeValue.m_aMinsize.m_aLengthValue.m_aLengthUnit = SmLengthUnit::MlP;
             m_aAttributeValue.m_aMinsize.m_aLengthValue.m_aLengthValue = 1;
             m_aAttributeValue.m_aMinsize.m_aLengthValue.m_aOriginalText = new OUString(u"1%");
@@ -393,7 +392,6 @@ void SmMlAttribute::setMlMaxsize(const SmMlMaxsize* aMaxsize)
 void SmMlAttribute::setMlMinsize(const SmMlMinsize* aMinsize)
 {
     clearPreviousAttributeValue();
-    m_aAttributeValue.m_aMinsize.m_aMinsize = aMinsize->m_aMinsize;
     m_aAttributeValue.m_aMinsize.m_aLengthValue.m_aLengthUnit
         = aMinsize->m_aLengthValue.m_aLengthUnit;
     m_aAttributeValue.m_aMinsize.m_aLengthValue.m_aLengthValue
