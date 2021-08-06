@@ -719,6 +719,19 @@ tools::Polygon OutputDeviceTestCommon::createClosedBezierLoop(const tools::Recta
     return aPolygon;
 }
 
+basegfx::B2DPolygon OutputDeviceTestCommon::createOpenPolygon(tools::Rectangle& rRect, int nOffset)
+{
+    int nMidOffset = rRect.GetWidth() / 2;
+    basegfx::B2DPolygon aPolygon{
+        basegfx::B2DPoint(rRect.Left() + nOffset - (nOffset + 1) / 2, rRect.Top() + nOffset - 1),
+        basegfx::B2DPoint(rRect.Left() + nOffset - (nOffset + 1) / 2, rRect.Bottom() - nOffset + 1),
+        basegfx::B2DPoint(rRect.Right() - nMidOffset - nOffset / 3, rRect.Bottom() - nOffset + 1),
+        basegfx::B2DPoint(rRect.Right() - nMidOffset - nOffset / 3, rRect.Top() + nOffset - 1),
+    };
+    aPolygon.setClosed(false);
+    return aPolygon;
+}
+
 TestResult OutputDeviceTestCommon::checkDropShape(Bitmap& rBitmap, bool aEnableAA)
 {
     BitmapScopedWriteAccess pAccess(rBitmap);
@@ -1093,6 +1106,61 @@ TestResult OutputDeviceTestCommon::checkEvenOddRuleInIntersectingRecs(Bitmap& rB
             aReturnValue = TestResult::PassedWithQuirks;
     }
     return aReturnValue;
+}
+
+TestResult OutputDeviceTestCommon::checkOpenPolygon(Bitmap& rBitmap, bool aEnableAA)
+{
+    std::vector<Color> aExpected = { constBackgroundColor, constLineColor, constLineColor };
+
+    BitmapScopedWriteAccess pAccess(rBitmap);
+
+    TestResult aResult = TestResult::Passed;
+    int nNumberOfQuirks = 0;
+    int nNumberOfErrors = 0;
+
+    for (size_t aLayerNumber = 0; aLayerNumber < aExpected.size(); aLayerNumber++)
+    {
+        tools::Long startX = aLayerNumber + 1, endX = pAccess->Width() / 2 - aLayerNumber;
+        tools::Long startY = aLayerNumber + 2, endY = pAccess->Height() - aLayerNumber - 3;
+
+        for (tools::Long ptX = startX; ptX <= endX; ++ptX)
+        {
+            if (aEnableAA)
+            {
+                checkValueAA(pAccess, ptX, endY - (aLayerNumber == 2 ? 2 : 0),
+                             aExpected[aLayerNumber], nNumberOfQuirks, nNumberOfErrors, true);
+            }
+            else
+            {
+                checkValue(pAccess, ptX, endY - (aLayerNumber == 2 ? 2 : 0),
+                           aExpected[aLayerNumber], nNumberOfQuirks, nNumberOfErrors, true);
+            }
+        }
+        for (tools::Long ptY = startY + (aLayerNumber == 2 ? 2 : 0);
+             ptY <= endY - (aLayerNumber == 2 ? 2 : 0); ++ptY)
+        {
+            if (aEnableAA)
+            {
+                checkValueAA(pAccess, startX, ptY, aExpected[aLayerNumber], nNumberOfQuirks,
+                             nNumberOfErrors, true);
+                checkValueAA(pAccess, endX, ptY, aExpected[aLayerNumber], nNumberOfQuirks,
+                             nNumberOfErrors, true);
+            }
+            else
+            {
+                checkValue(pAccess, startX, ptY, aExpected[aLayerNumber], nNumberOfQuirks,
+                           nNumberOfErrors, true);
+                checkValue(pAccess, endX, ptY, aExpected[aLayerNumber], nNumberOfQuirks,
+                           nNumberOfErrors, true);
+            }
+        }
+    }
+
+    if (nNumberOfQuirks > 0)
+        aResult = TestResult::PassedWithQuirks;
+    if (nNumberOfErrors > 0)
+        aResult = TestResult::Failed;
+    return aResult;
 }
 
 // Check 'count' pixels from (x,y) in (addX,addY) direction, the color values must not decrease.
