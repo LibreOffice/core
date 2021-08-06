@@ -10,6 +10,7 @@
 #pragma once
 
 #include "attribute.hxx"
+#include "starmathdatabase.hxx"
 #include <rect.hxx>
 
 #include <editeng/editdata.hxx>
@@ -27,6 +28,7 @@ public:
         , m_aAttributePosList(0)
         , m_aSubElements(0)
         , m_aParentElement(nullptr)
+        , m_nSubElementId(0)
     {
         SmImplAttributeType();
     };
@@ -39,6 +41,7 @@ protected:
         , m_aESelection(0, 0, 0, 0)
         , m_aSubElements(0)
         , m_aParentElement(nullptr)
+        , m_nSubElementId(0)
     {
         SmImplAttributeType();
     };
@@ -64,6 +67,9 @@ private:
 
     // Parent element
     SmMlElement* m_aParentElement;
+
+    // Child id, so it is possible to iterata
+    size_t m_nSubElementId;
 
 private:
     void SmImplAttributeType();
@@ -180,6 +186,17 @@ public: // sub elements
       * @param aElement
       */
     void setSubElement(size_t nPos, SmMlElement* aElement);
+
+    /**
+      * Get's subelement id
+      */
+    size_t getSubElementId() const { return m_nSubElementId; }
+
+    /**
+      * Set's subelement id
+      * @param nSubElementId
+      */
+    void setSubElementId(size_t nSubElementId) { m_nSubElementId = nSubElementId; }
 
 public: // parent elements
     /**
