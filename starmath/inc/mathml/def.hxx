@@ -125,7 +125,7 @@ enum class SmMlAttributeValueFence : uint_fast8_t
 enum class SmMlAttributeValueHref : uint_fast8_t
 {
     NMlEmpty = 0x00,
-    NMlValie = 0x01
+    NMlValid = 0x01
 };
 
 enum class SmMlAttributeValueLspace : uint_fast8_t
