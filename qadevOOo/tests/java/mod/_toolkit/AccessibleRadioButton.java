@@ -83,7 +83,7 @@ public class AccessibleRadioButton extends TestCase {
     private static XAccessibleAction accCloseButton;
 
     /**
-     * Closes a Hyperlink dialog, disposes the document, if exists, created in
+     * Closes an Hyperlink dialog, disposes the document, if exists, created in
      * <code>createTestEnvironment</code> method.
      */
     @Override
@@ -107,7 +107,7 @@ public class AccessibleRadioButton extends TestCase {
     }
 
     /**
-     * Creates a text document, opens a hypelink dialog, selects a first item
+     * Creates a text document, opens an hyperlink dialog, selects a first item
      * in IconChoiceCtrl.
      * Then obtains an accessible object with
      * the role <code>AccessibleRole.RADIOBUTTON</code> with the name <code>

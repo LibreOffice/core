@@ -39,7 +39,7 @@ LockedCanvasContext::onCreateContext(sal_Int32 nElementToken, const ::oox::Attri
     {
         case XML_nvGrpSpPr: // CT_GvmlGroupShapeNonVisual, child see at end
             return this;
-        case XML_grpSpPr: // CT_GroupShapeProporties
+        case XML_grpSpPr: // CT_GroupShapeProperties
             return new oox::drawingml::ShapePropertiesContext(*this, *mpShapePtr);
         case XML_txSp: // CT_GvmlTextShape
             break;
