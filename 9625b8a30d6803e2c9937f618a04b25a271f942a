@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a65e66e_d287bb64",
+        "filename": "basic/source/comp/symtbl.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-06T15:07:36Z",
+      "side": 1,
+      "message": "And still, this (illegal) does not need the addition +2 to size ... I would still suggest to increase size in the \u0027case\u0027 statements, instead of increasing in string_view ctor.",
+      "revId": "9625b8a30d6803e2c9937f618a04b25a271f942a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
