@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "35d8bf8c_18d3d15b",
+        "filename": "basic/source/comp/symtbl.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-06T15:05:14Z",
+      "side": 1,
+      "message": "I don\u0027t think you need to do the check; if needed, you should add an assert (because the failure to have large enough buffer would be a programming bug). Additionally, doing it only conditionally would fail your assumption below, where you create string_view with a fixed increment of 2.\n\nAnd you only need that size \u003d 1 \u003c aBufLength, because then you are free to put something to buf[size + 1], and you don\u0027t care if there\u0027s a null at buf[size + 2], since you will define the length explicitly.",
+      "revId": "709f1bbe0a4a2a63a36a57703d0a625b770f3665",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
