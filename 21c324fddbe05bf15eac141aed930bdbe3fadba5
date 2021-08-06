@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6de6705e_b2606c58",
+        "filename": "basic/source/comp/dim.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 999,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-06T14:29:53Z",
+      "side": 1,
+      "message": "I believe that we don\u0027t need to omit type char for variant - or else we will always get the string default.",
+      "revId": "21c324fddbe05bf15eac141aed930bdbe3fadba5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d8b590cc_0616e8ca",
+        "filename": "basic/source/comp/symtbl.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-06T14:29:53Z",
+      "side": 1,
+      "message": "And in all cases where you add a type character, you need to increase size by 2, to include the null and the type character",
+      "revId": "21c324fddbe05bf15eac141aed930bdbe3fadba5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1ab891a8_5750af01",
+        "filename": "basic/source/comp/symtbl.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-06T14:29:53Z",
+      "side": 1,
+      "message": "Here move the type character after the null, too",
+      "revId": "21c324fddbe05bf15eac141aed930bdbe3fadba5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5001eb64_19b151a3",
+        "filename": "basic/source/comp/symtbl.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-06T14:29:53Z",
+      "side": 1,
+      "message": "And here you need to get the size, even though you don\u0027t add type characters - but in fact, I suppose that adding # would be reasonable here, too",
+      "revId": "21c324fddbe05bf15eac141aed930bdbe3fadba5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5c7a5019_3c232192",
+        "filename": "basic/source/comp/symtbl.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-06T14:29:53Z",
+      "side": 1,
+      "message": "And here we would need to use\n\n  OUString::createFromAscii( std::string_view(buf, size) )\n\nso that the string_view contains the length, and makes the null embed into the resulting OUString. Otherwise, it will scan for null, and drop the type character",
+      "revId": "21c324fddbe05bf15eac141aed930bdbe3fadba5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
