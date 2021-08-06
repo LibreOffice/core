@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cec25256_754bb176",
+        "filename": "basic/source/comp/symtbl.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-06T22:23:21Z",
+      "side": 1,
+      "message": "I want to ask you to avoid incrementing size here. It is inconsistent with respect to the \u0027default\u0027 case, and in that case you would create a 1-character string containing a single null. It\u0027s OK to have the increment in each \u0027case\u0027 clause.",
+      "revId": "76413872d21158697a4f46f0ded7cd3814f59720",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
