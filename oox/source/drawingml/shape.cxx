@@ -978,6 +978,8 @@ Reference< XShape > const & Shape::createAndInsert(
     Reference< XPropertySet > xSet( mxShape, UNO_QUERY );
     if (xSet.is())
     {
+        ActionLockGuard const alg(mxShape);
+
         if( !msName.isEmpty() )
         {
             Reference< container::XNamed > xNamed( mxShape, UNO_QUERY );
@@ -1004,8 +1006,6 @@ Reference< XShape > const & Shape::createAndInsert(
             xSet->setPropertyValue("MoveProtect", Any(true));
             xSet->setPropertyValue("SizeProtect", Any(true));
         }
-
-        ActionLockGuard const alg(mxShape);
 
         // sj: removing default text of placeholder objects such as SlideNumberShape or HeaderShape
         if ( bClearText )
