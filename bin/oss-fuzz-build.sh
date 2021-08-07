@@ -5,6 +5,8 @@ if [ -z "${OUT}" ] || [ -z "${SRC}" ] || [ -z "${WORK}" ]; then
     exit 1
 fi
 
+echo start at `date`
+
 #shuffle CXXFLAGS -stdlib=libc++ arg into CXX as well because we use
 #the CXX as the linker and need to pass -stdlib=libc++ to build
 export CXX="$CXX -stdlib=libc++ -fsanitize-blacklist=$SRC/libreoffice/bin/sanitize-excludelist.txt"
@@ -55,3 +57,5 @@ done
 cp $SRC/*.dict $OUT
 #options files
 cp $SRC/libreoffice/vcl/workben/*.options $OUT
+
+echo end at `date`
