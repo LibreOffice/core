@@ -22,7 +22,7 @@
 
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
-#include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/multiinterfacecontainer2.hxx>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyAccess.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -59,7 +59,7 @@ public:
             GetActiveDics() const   { return pData->aActiveDics; }
 };
 
-typedef cppu::OMultiTypeInterfaceContainerHelperVar<sal_Int32>
+typedef comphelper::OMultiTypeInterfaceContainerHelperVar2<sal_Int32>
     OPropertyListenerContainerHelper;
 
 class LinguProps :

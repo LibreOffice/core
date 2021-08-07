@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include <cppuhelper/weak.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
+#include <comphelper/multiinterfacecontainer2.hxx>
 
 #include <embeddoc.hxx>
 #include <docholder.hxx>
@@ -32,11 +32,11 @@ using namespace ::com::sun::star;
 uno::Sequence< OUString > Interceptor::m_aInterceptedURL(IUL);
 
 class StatusChangeListenerContainer
-    : public cppu::OMultiTypeInterfaceContainerHelperVar<OUString>
+    : public comphelper::OMultiTypeInterfaceContainerHelperVar2<OUString>
 {
 public:
     explicit StatusChangeListenerContainer(osl::Mutex& aMutex)
-        :  cppu::OMultiTypeInterfaceContainerHelperVar<OUString>(aMutex)
+        :  comphelper::OMultiTypeInterfaceContainerHelperVar2<OUString>(aMutex)
     {
     }
 };
@@ -210,12 +210,12 @@ void Interceptor::generateFeatureStateEvent()
             if( i == 1 || (m_bLink && i != 5) )
                 continue;
 
-            cppu::OInterfaceContainerHelper* pICH =
+            comphelper::OInterfaceContainerHelper2* pICH =
                 m_pStatCL->getContainer(m_aInterceptedURL[i]);
-            uno::Sequence<uno::Reference<uno::XInterface> > aSeq;
-            if(pICH)
-                aSeq = pICH->getElements();
-            if(!aSeq.getLength())
+            if(!pICH)
+                continue;
+            std::vector<uno::Reference<uno::XInterface> > aSeq = pICH->getElements();
+            if(aSeq.empty())
                 continue;
 
             frame::FeatureStateEvent aStateEvent;

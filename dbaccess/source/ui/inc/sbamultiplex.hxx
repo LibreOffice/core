@@ -32,7 +32,7 @@
 #include <com/sun/star/frame/XStatusListener.hpp>
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
-#include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/multiinterfacecontainer2.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/weak.hxx>
 
@@ -176,7 +176,7 @@ namespace dbaui
             :public OSbaWeakSubObject                                                           \
             ,public listenerclass                                                           \
     {                                                                                       \
-        typedef ::cppu::OMultiTypeInterfaceContainerHelperVar<                              \
+        typedef ::comphelper::OMultiTypeInterfaceContainerHelperVar2<                              \
                 OUString >  ListenerContainerMap;   \
         ListenerContainerMap    m_aListeners;                                               \
                                                                                             \
@@ -198,11 +198,11 @@ namespace dbaui
                                                                                             \
         sal_Int32 getOverallLen() const;                                                    \
                                                                                             \
-        ::cppu::OInterfaceContainerHelper* getContainer(const OUString& rName)       \
+        ::comphelper::OInterfaceContainerHelper2* getContainer(const OUString& rName)       \
             { return m_aListeners.getContainer(rName); }                                    \
                                                                                             \
     private:                                                                                \
-        void Notify(::cppu::OInterfaceContainerHelper& rListeners, const eventtype& e);     \
+        void Notify(::comphelper::OInterfaceContainerHelper2& rListeners, const eventtype& e);     \
     };                                                                                      \
 
     // implementation of property listener multiplexers
@@ -232,7 +232,7 @@ namespace dbaui
                                                                                             \
     void SAL_CALL classname::methodname(const eventtype& e)                \
     {                                                                                       \
-        ::cppu::OInterfaceContainerHelper* pListeners = m_aListeners.getContainer(e.PropertyName);  \
+        ::comphelper::OInterfaceContainerHelper2* pListeners = m_aListeners.getContainer(e.PropertyName);  \
         if (pListeners)                                                                     \
             Notify(*pListeners, e);                                                         \
                                                                                             \
@@ -263,10 +263,10 @@ namespace dbaui
     sal_Int32 classname::getOverallLen() const                                              \
     {                                                                                       \
         sal_Int32 nLen = 0;                                                                 \
-        const css::uno::Sequence< OUString > aContained = m_aListeners.getContainedTypes(); \
+        const std::vector< OUString > aContained = m_aListeners.getContainedTypes(); \
         for ( OUString const & s : aContained)                 \
         {                                                                                   \
-            ::cppu::OInterfaceContainerHelper* pListeners = m_aListeners.getContainer(s);  \
+            ::comphelper::OInterfaceContainerHelper2* pListeners = m_aListeners.getContainer(s);  \
             if (!pListeners)                                                                \
                 continue;                                                                   \
             nLen += pListeners->getLength();                                                \
@@ -274,11 +274,11 @@ namespace dbaui
         return nLen;                                                                        \
     }                                                                                       \
                                                                                             \
-    void classname::Notify(::cppu::OInterfaceContainerHelper& rListeners, const eventtype& e)   \
+    void classname::Notify(::comphelper::OInterfaceContainerHelper2& rListeners, const eventtype& e)   \
     {                                                                                       \
         eventtype aMulti(e);                                                                \
         aMulti.Source = &m_rParent;                                                         \
-        ::cppu::OInterfaceIteratorHelper aIt(rListeners);                                   \
+        ::comphelper::OInterfaceIteratorHelper2 aIt(rListeners);                                   \
         while (aIt.hasMoreElements())                                                       \
             static_cast< listenerclass*>(aIt.next())->methodname(aMulti);               \
     }                                                                                       \

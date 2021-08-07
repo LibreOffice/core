@@ -24,8 +24,8 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <cppuhelper/weakagg.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <comphelper/multiinterfacecontainer2.hxx>
 #include <comphelper/propertysethelper.hxx>
 #include <osl/mutex.hxx>
 #include <rtl/ref.hxx>
@@ -57,7 +57,7 @@ namespace comphelper
     {
     private:
         std::map<OUString, Any>   maAnyMap;
-        cppu::OMultiTypeInterfaceContainerHelperVar<OUString> m_aListener;
+        comphelper::OMultiTypeInterfaceContainerHelperVar2<OUString> m_aListener;
 
     protected:
         virtual void _setPropertyValues( const PropertyMapEntry** ppEntries, const  Any* pValues ) override;
@@ -148,7 +148,7 @@ void GenericPropertySet::_setPropertyValues( const PropertyMapEntry** ppEntries,
 
     while( *ppEntries )
     {
-        OInterfaceContainerHelper * pHelper = m_aListener.getContainer((*ppEntries)->maName);
+        OInterfaceContainerHelper2 * pHelper = m_aListener.getContainer((*ppEntries)->maName);
 
         maAnyMap[ (*ppEntries)->maName ] = *pValues;
 
