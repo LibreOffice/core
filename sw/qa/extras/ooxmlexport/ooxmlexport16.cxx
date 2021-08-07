@@ -73,6 +73,33 @@ protected:
     }
 };
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testWrapPolygonCustomShape, "tdf142433_WrapPolygonCustomShape.odt")
+{
+    // Document has 4-point star with contour wrap. Error was, that the enhanced path was written
+    // literally as wrap polygon. But that does not work, because path might have links to equations
+    // and handles and not only numbers.
+    xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
+    CPPUNIT_ASSERT(pXmlDocument);
+    // Expected coordinates are 0|10800, 8936|8936, 10800|0, 12664|8936, 21600|10800, 12664|12664,
+    // 10800|21600, 8936|12664, 0|10800. Assert forth point, which comes from equations. Allow some
+    // tolerance.
+    sal_Int32 nXCoord = getXPath(pXmlDocument, "(//wp:lineTo)[3]", "x").toInt32();
+    // Without fix it would fail with expected 12664, actual 3
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(12664, nXCoord, 10);
+    // Without fix it would fail with expected 8936, actual 4
+    sal_Int32 nYCoord = getXPath(pXmlDocument, "(//wp:lineTo)[3]", "y").toInt32();
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(8936, nYCoord, 10);
+}
+
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFrameWrapTextMode, "tdf143432_Frame_WrapTextMode.odt")
+{
+    xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
+    CPPUNIT_ASSERT(pXmlDocument);
+    // Without the fix the value "largest" was written to file in both cases.
+    assertXPath(pXmlDocument, "(//wp:wrapSquare)[1]", "wrapText", "right");
+    assertXPath(pXmlDocument, "(//wp:wrapSquare)[2]", "wrapText", "left");
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf134219ContourWrap_glow_rotate)
 {
     auto verify = [this]() {
