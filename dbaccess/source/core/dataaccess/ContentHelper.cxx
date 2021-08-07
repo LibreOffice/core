@@ -493,9 +493,7 @@ void OContentHelper::notifyPropertiesChange( const Sequence< PropertyChangeEvent
         while ( aIter.hasMoreElements() )
         {
             // Propagate event.
-            Reference< XPropertiesChangeListener > xListener( aIter.next(), UNO_QUERY );
-            if ( xListener.is() )
-                xListener->propertiesChange( evt );
+            static_cast< XPropertiesChangeListener* > xListener( aIter.next() )->propertiesChange( evt );
         }
     }
 

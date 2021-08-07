@@ -833,9 +833,7 @@ void SwXMailMerge::LaunchMailMergeEvent( const MailMergeEvent &rEvt ) const
     comphelper::OInterfaceIteratorHelper2 aIt( const_cast<SwXMailMerge *>(this)->m_aMergeListeners );
     while (aIt.hasMoreElements())
     {
-        Reference< XMailMergeListener > xRef( aIt.next(), UNO_QUERY );
-        if (xRef.is())
-            xRef->notifyMailMergeEvent( rEvt );
+        static_cast< XMailMergeListener* > xRef( aIt.next() )->notifyMailMergeEvent( rEvt );
     }
 }
 
@@ -848,9 +846,7 @@ void SwXMailMerge::launchEvent( const PropertyChangeEvent &rEvt ) const
         cppu::OInterfaceIteratorHelper aIt( *pContainer );
         while (aIt.hasMoreElements())
         {
-            Reference< XPropertyChangeListener > xRef( aIt.next(), UNO_QUERY );
-            if (xRef.is())
-                xRef->propertyChange( rEvt );
+            static_cast< XPropertyChangeListener* > xRef( aIt.next() )->propertyChange( rEvt );
         }
     }
 }
