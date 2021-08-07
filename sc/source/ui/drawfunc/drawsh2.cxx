@@ -229,7 +229,7 @@ void ScDrawShell::GetDrawFuncState( SfxItemSet& rSet )      // disable functions
     else if ( nMarkCount == 1 )
     {
         SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
-        if ( !pObj || pObj->getHyperlink().isEmpty() )
+        if (pObj->getHyperlink().isEmpty())
         {
             rSet.DisableItem( SID_EDIT_HYPERLINK );
             rSet.DisableItem( SID_OPEN_HYPERLINK );
