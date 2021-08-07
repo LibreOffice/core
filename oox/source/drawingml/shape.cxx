@@ -298,7 +298,7 @@ void Shape::addShape(
                 keepDiagramCompatibilityInfo();
 
                 // Check if this is the PPTX import, so far converting SmartArt to a non-editable
-                // metafile is only imlemented for DOCX.
+                // metafile is only implemented for DOCX.
                 bool bPowerPoint = dynamic_cast<oox::ppt::PowerPointImport*>(&rFilterBase) != nullptr;
 
                 if (!SvtFilterOptions::Get().IsSmartArt2Shape() && !bPowerPoint)
