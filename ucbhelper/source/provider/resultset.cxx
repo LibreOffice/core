@@ -1335,10 +1335,8 @@ void ResultSet::propertyChanged( const beans::PropertyChangeEvent& rEvt ) const
         cppu::OInterfaceIteratorHelper aIter( *pPropsContainer );
         while ( aIter.hasMoreElements() )
         {
-            uno::Reference< beans::XPropertyChangeListener > xListener(
-                aIter.next(), uno::UNO_QUERY );
-            if ( xListener.is() )
-                xListener->propertyChange( rEvt );
+            static_cast< beans::XPropertyChangeListener* >( aIter.next() )
+                    ->propertyChange( rEvt );
         }
     }
 }

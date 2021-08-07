@@ -657,10 +657,8 @@ void ContentImplHelper::notifyPropertiesChange(
         while ( aIter.hasMoreElements() )
         {
             // Propagate event.
-            uno::Reference< beans::XPropertiesChangeListener > xListener(
-                aIter.next(), uno::UNO_QUERY );
-            if ( xListener.is() )
-                xListener->propertiesChange( evt );
+            static_cast< beans::XPropertiesChangeListener* > xListener(
+                aIter.next()->propertiesChange( evt );
         }
     }
 

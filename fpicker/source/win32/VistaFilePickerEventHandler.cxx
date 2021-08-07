@@ -288,7 +288,8 @@ void VistaFilePickerEventHandler::impl_sendEvent(  EEventType eEventType,
     {
         try
         {
-            css::uno::Reference< css::ui::dialogs::XFilePickerListener > xListener (pIterator.next(), css::uno::UNO_QUERY);
+            css::uno::Reference< css::ui::dialogs::XFilePickerListener > xListener (
+                static_cast< css::ui::dialogs::XFilePickerListener* >(pIterator.next()));
 
             Request rRequest;
             rRequest.setRequest (eEventType);

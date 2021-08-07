@@ -1910,10 +1910,7 @@ void PersistentPropertySet::notifyPropertyChangeEvent(
         while ( aIter.hasMoreElements() )
         {
             // Propagate event.
-            Reference< XPropertyChangeListener > xListener(
-                                                    aIter.next(), UNO_QUERY );
-            if ( xListener.is() )
-                xListener->propertyChange( rEvent );
+            static_cast< XPropertyChangeListener* > xListener( aIter.next() )->propertyChange( rEvent );
         }
     }
 
@@ -1926,10 +1923,7 @@ void PersistentPropertySet::notifyPropertyChangeEvent(
         while ( aIter.hasMoreElements() )
         {
             // Propagate event.
-            Reference< XPropertyChangeListener > xListener(
-                                                    aIter.next(), UNO_QUERY );
-            if ( xListener.is() )
-                xListener->propertyChange( rEvent );
+            static_cast< XPropertyChangeListener* >( aIter.next() )->propertyChange( rEvent );
         }
     }
 }

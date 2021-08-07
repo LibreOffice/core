@@ -2622,9 +2622,7 @@ void ChartView::impl_notifyModeChangeListener( const OUString& rNewMode )
             ::cppu::OInterfaceIteratorHelper aIt( *pIC );
             while( aIt.hasMoreElements() )
             {
-                uno::Reference< util::XModeChangeListener > xListener( aIt.next(), uno::UNO_QUERY );
-                if( xListener.is() )
-                    xListener->modeChanged( aEvent );
+                static_cast< util::XModeChangeListener* > xListener( aIt.next() )->modeChanged( aEvent );
             }
         }
     }
