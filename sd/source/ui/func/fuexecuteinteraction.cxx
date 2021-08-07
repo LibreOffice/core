@@ -23,7 +23,6 @@
 #include <config_features.h>
 #include <avmedia/mediawindow.hxx>
 #include <basic/sbstar.hxx>
-#include <config_features.h>
 #include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
