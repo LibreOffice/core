@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ecc4b901_95b2332f",
+        "filename": "qadevOOo/tests/java/mod/_toolkit/AccessibleRadioButton.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2021-08-07T21:15:37Z",
+      "side": 1,
+      "message": "This word has an aspirated “h”, so the word is pronounced /ˈhaɪpə(ɹ)lɪŋk/ and, thus, the correct version of the indefinite article is “a”, and not “an”.",
+      "revId": "05e3a7849c8e53f20cbaf76b6255b97e6faf9201",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b87f29a4_3e9ca000",
+        "filename": "qadevOOo/tests/java/mod/_toolkit/AccessibleRadioButton.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2021-08-07T21:15:37Z",
+      "side": 1,
+      "message": "Same as above: “a hyperlink”",
+      "revId": "05e3a7849c8e53f20cbaf76b6255b97e6faf9201",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
