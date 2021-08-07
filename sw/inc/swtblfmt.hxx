@@ -46,16 +46,17 @@ public:
     virtual bool supportsFullDrawingLayerFillAttributeSet() const override;
 };
 
-class SAL_DLLPUBLIC_RTTI SwTableBoxFormat final : public SwFrameFormat
+class SAL_DLLPUBLIC_RTTI SwTableBoxFormat final: public SwFrameFormat
 {
     friend class SwDoc;
 
-    SwTableBoxFormat( SwAttrPool& rPool, SwFrameFormat *pDrvdFrame )
-        : SwFrameFormat( rPool, OUString(), pDrvdFrame, RES_FRMFMT, aTableBoxSetRange )
+    SwTableBoxFormat(SwAttrPool& rPool, SwFrameFormat* pDrvdFrame)
+        : SwFrameFormat(rPool, OUString(), pDrvdFrame, RES_FRMFMT, aTableBoxSetRange)
     {}
 
     // For recognition of changes (especially TableBoxAttribute).
     virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
+    void BoxAttributeChanged(SwTableBox& rBox, const SwTableBoxNumFormat* pNewFormat, const SwTableBoxFormula* pNewFormula, const SwTableBoxValue* pNewValue, const sal_uLong nOldFormat);
 
 public:
     virtual bool supportsFullDrawingLayerFillAttributeSet() const override;
