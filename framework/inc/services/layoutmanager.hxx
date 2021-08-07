@@ -35,7 +35,7 @@
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/propshlp.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
+#include <comphelper/multicontainer2.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/propertycontainer.hxx>
 #include <comphelper/uno3.hxx>
@@ -261,7 +261,7 @@ namespace framework
             std::unique_ptr<GlobalSettings>                                m_pGlobalSettings;
             OUString                                                       m_aModuleIdentifier;
             Timer                                                          m_aAsyncLayoutTimer;
-            ::cppu::OMultiTypeInterfaceContainerHelper                     m_aListenerContainer; // container for ALL Listener
+            comphelper::OMultiTypeInterfaceContainerHelper2                m_aListenerContainer; // container for ALL Listener
             rtl::Reference< ToolbarLayoutManager >                         m_xToolbarManager;
 
         friend class detail::InfoHelperBuilder;

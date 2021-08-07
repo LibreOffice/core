@@ -23,6 +23,7 @@
 
 #include <com/sun/star/lang/InvalidListenerException.hpp>
 #include <cppuhelper/queryinterface.hxx>
+#include <comphelper/sequence.hxx>
 
 //  namespaces
 
@@ -188,13 +189,13 @@ Sequence< Reference< XInterface > > SAL_CALL OConnectionPointHelper::getConnecti
     // Set default return value, if method failed.
     Sequence< Reference< XInterface > > seqReturnConnections;
     // Get reference to private member of OConnectionPointHelperContainer!
-    OMultiTypeInterfaceContainerHelper& aSharedContainer = m_pContainerImplementation->impl_getMultiTypeContainer();
+    comphelper::OMultiTypeInterfaceContainerHelper2& aSharedContainer = m_pContainerImplementation->impl_getMultiTypeContainer();
     // Get pointer to specialized container which hold all interfaces of searched type.
-    OInterfaceContainerHelper* pSpecialContainer = aSharedContainer.getContainer( m_aInterfaceType );
+    comphelper::OInterfaceContainerHelper2* pSpecialContainer = aSharedContainer.getContainer( m_aInterfaceType );
     // Get elements of searched type, if some else exist.
     if ( pSpecialContainer != nullptr )
     {
-        seqReturnConnections = pSpecialContainer->getElements();
+        seqReturnConnections = comphelper::containerToSequence(pSpecialContainer->getElements());
     }
     // Don't forget this!
     impl_UnlockContainer();

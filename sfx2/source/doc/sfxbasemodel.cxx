@@ -59,7 +59,7 @@
 #include <comphelper/enumhelper.hxx>
 
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
+#include <comphelper/multicontainer2.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceashashmap.hxx>
@@ -188,7 +188,7 @@ struct IMPL_SfxBaseModel_DataContainer : public ::sfx2::IModifiableDocument
     OUString                                                   m_sURL                   ;
     OUString                                                   m_sRuntimeUID            ;
     OUString                                                   m_aPreusedFilterName     ;
-    ::cppu::OMultiTypeInterfaceContainerHelper                 m_aInterfaceContainer    ;
+    comphelper::OMultiTypeInterfaceContainerHelper2            m_aInterfaceContainer    ;
     std::unordered_map<css::uno::Reference< css::drawing::XShape >,
                        std::vector<css::uno::Reference< css::document::XShapeEventListener >>> maShapeListeners;
     Reference< XInterface >                                    m_xParent                ;
@@ -331,10 +331,10 @@ void SAL_CALL SfxPrintHelperListener_Impl::disposing( const lang::EventObject& )
 
 void SAL_CALL SfxPrintHelperListener_Impl::printJobEvent( const view::PrintJobEvent& rEvent )
 {
-    ::cppu::OInterfaceContainerHelper* pContainer = m_pData->m_aInterfaceContainer.getContainer( cppu::UnoType<view::XPrintJobListener>::get());
+    ::comphelper::OInterfaceContainerHelper2* pContainer = m_pData->m_aInterfaceContainer.getContainer( cppu::UnoType<view::XPrintJobListener>::get());
     if ( pContainer!=nullptr )
     {
-        ::cppu::OInterfaceIteratorHelper pIterator(*pContainer);
+        ::comphelper::OInterfaceIteratorHelper2 pIterator(*pContainer);
         while (pIterator.hasMoreElements())
             static_cast<view::XPrintJobListener*>(pIterator.next())->printJobEvent( rEvent );
     }
@@ -1427,10 +1427,10 @@ void SAL_CALL SfxBaseModel::close( sal_Bool bDeliverOwnership )
 
     Reference< XInterface > xSelfHold( static_cast< ::cppu::OWeakObject* >(this) );
     lang::EventObject       aSource  ( static_cast< ::cppu::OWeakObject* >(this) );
-    ::cppu::OInterfaceContainerHelper* pContainer = m_pData->m_aInterfaceContainer.getContainer( cppu::UnoType<util::XCloseListener>::get());
+    comphelper::OInterfaceContainerHelper2* pContainer = m_pData->m_aInterfaceContainer.getContainer( cppu::UnoType<util::XCloseListener>::get());
     if (pContainer!=nullptr)
     {
-        ::cppu::OInterfaceIteratorHelper pIterator(*pContainer);
+        comphelper::OInterfaceIteratorHelper2 pIterator(*pContainer);
         while (pIterator.hasMoreElements())
         {
             try
@@ -1458,7 +1458,7 @@ void SAL_CALL SfxBaseModel::close( sal_Bool bDeliverOwnership )
     pContainer = m_pData->m_aInterfaceContainer.getContainer( cppu::UnoType<util::XCloseListener>::get());
     if (pContainer!=nullptr)
     {
-        ::cppu::OInterfaceIteratorHelper pCloseIterator(*pContainer);
+        comphelper::OInterfaceIteratorHelper2 pCloseIterator(*pContainer);
         while (pCloseIterator.hasMoreElements())
         {
             try
@@ -2900,7 +2900,7 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
 
 void SfxBaseModel::NotifyModifyListeners_Impl() const
 {
-    ::cppu::OInterfaceContainerHelper* pIC = m_pData->m_aInterfaceContainer.getContainer( cppu::UnoType<util::XModifyListener>::get());
+    comphelper::OInterfaceContainerHelper2* pIC = m_pData->m_aInterfaceContainer.getContainer( cppu::UnoType<util::XModifyListener>::get());
     if ( pIC )
     {
         lang::EventObject aEvent( static_cast<frame::XModel *>(const_cast<SfxBaseModel *>(this)) );
@@ -3223,7 +3223,7 @@ void SfxBaseModel::postEvent_Impl( const OUString& aName, const Reference< frame
     if (aName.isEmpty())
         return;
 
-    ::cppu::OInterfaceContainerHelper* pIC =
+    comphelper::OInterfaceContainerHelper2* pIC =
         m_pData->m_aInterfaceContainer.getContainer( cppu::UnoType<document::XDocumentEventListener>::get());
     if ( pIC )
     {
@@ -3304,13 +3304,13 @@ void SfxBaseModel::notifyEvent( const document::EventObject& aEvent ) const
     if ( impl_isDisposed() )
         return;
 
-    ::cppu::OInterfaceContainerHelper* pIC = m_pData->m_aInterfaceContainer.getContainer(
+    comphelper::OInterfaceContainerHelper2* pIC = m_pData->m_aInterfaceContainer.getContainer(
                                         cppu::UnoType<document::XEventListener>::get());
     if( !pIC )
 
         return;
 
-    ::cppu::OInterfaceIteratorHelper aIt( *pIC );
+    comphelper::OInterfaceIteratorHelper2 aIt( *pIC );
     while( aIt.hasMoreElements() )
     {
         try

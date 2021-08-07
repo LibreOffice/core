@@ -24,7 +24,7 @@
 #include <algorithm>
 #include <limits>
 
-#include <cppuhelper/interfacecontainer.hxx>
+#include <comphelper/multicontainer2.hxx>
 #include <o3tl/any.hxx>
 #include <o3tl/safeint.hxx>
 #include <editeng/memberids.h>
@@ -156,7 +156,7 @@ namespace
 
     void lcl_SendChartEvent(
             uno::Reference<uno::XInterface> const& xSource,
-            ::cppu::OMultiTypeInterfaceContainerHelper const& rListeners)
+            ::comphelper::OMultiTypeInterfaceContainerHelper2 const& rListeners)
     {
         auto pContainer(rListeners.getContainer(cppu::UnoType<chart::XChartDataChangeEventListener>::get()));
         if (pContainer)
@@ -1913,7 +1913,7 @@ private:
 
 public:
     uno::WeakReference<uno::XInterface> m_wThis;
-    ::cppu::OMultiTypeInterfaceContainerHelper m_Listeners;
+    ::comphelper::OMultiTypeInterfaceContainerHelper2 m_Listeners;
 
     const SfxItemPropertySet * m_pPropSet;
 

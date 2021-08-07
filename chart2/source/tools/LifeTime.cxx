@@ -218,12 +218,12 @@ bool CloseableLifeTimeManager::g_close_startTryClose(bool bDeliverOwnership)
         if(xCloseable.is())
         {
             //--call queryClosing on all registered close listeners
-            ::cppu::OInterfaceContainerHelper* pIC = m_aListenerContainer.getContainer(
+            ::comphelper::OInterfaceContainerHelper2* pIC = m_aListenerContainer.getContainer(
                         cppu::UnoType<util::XCloseListener>::get());
             if( pIC )
             {
                 lang::EventObject aEvent( xCloseable );
-                ::cppu::OInterfaceIteratorHelper aIt( *pIC );
+                ::comphelper::OInterfaceIteratorHelper2 aIt( *pIC );
                 while( aIt.hasMoreElements() )
                 {
                     static_cast< util::XCloseListener* >( aIt.next() )
@@ -327,12 +327,12 @@ void CloseableLifeTimeManager::impl_doClose()
         if(xCloseable.is())
         {
             //--call notifyClosing on all registered close listeners
-            ::cppu::OInterfaceContainerHelper* pIC = m_aListenerContainer.getContainer(
+            ::comphelper::OInterfaceContainerHelper2* pIC = m_aListenerContainer.getContainer(
                         cppu::UnoType<util::XCloseListener>::get());
             if( pIC )
             {
                 lang::EventObject aEvent( xCloseable );
-                ::cppu::OInterfaceIteratorHelper aIt( *pIC );
+                ::comphelper::OInterfaceIteratorHelper2 aIt( *pIC );
                 while( aIt.hasMoreElements() )
                 {
                     static_cast< util::XCloseListener* >( aIt.next() )->notifyClosing( aEvent );

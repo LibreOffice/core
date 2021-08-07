@@ -48,6 +48,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/multicontainer2.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <vcl/svapp.hxx>
@@ -189,7 +190,7 @@ private:
     OUString                                                  m_aPropUIName;
     css::uno::Reference< css::uno::XComponentContext >        m_xContext;
     osl::Mutex                                                m_mutex;
-    cppu::OMultiTypeInterfaceContainerHelper                  m_aListenerContainer;   /// container for ALL Listener
+    comphelper::OMultiTypeInterfaceContainerHelper2           m_aListenerContainer;   /// container for ALL Listener
     rtl::Reference< ImageManager >                            m_xImageManager;
     css::uno::Reference< css::ui::XAcceleratorConfiguration > m_xAccConfig;
 };
@@ -1334,11 +1335,11 @@ sal_Bool SAL_CALL UIConfigurationManager::isReadOnly()
 
 void UIConfigurationManager::implts_notifyContainerListener( const ConfigurationEvent& aEvent, NotifyOp eOp )
 {
-    ::cppu::OInterfaceContainerHelper* pContainer = m_aListenerContainer.getContainer( cppu::UnoType<css::ui::XUIConfigurationListener>::get());
+    comphelper::OInterfaceContainerHelper2* pContainer = m_aListenerContainer.getContainer( cppu::UnoType<css::ui::XUIConfigurationListener>::get());
     if ( pContainer == nullptr )
         return;
 
-    ::cppu::OInterfaceIteratorHelper pIterator( *pContainer );
+    comphelper::OInterfaceIteratorHelper2 pIterator( *pContainer );
     while ( pIterator.hasMoreElements() )
     {
         try

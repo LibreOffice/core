@@ -22,7 +22,7 @@
 #include <svtools/svtdllapi.h>
 #include <com/sun/star/frame/XStatusbarController.hpp>
 #include <cppuhelper/weak.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
+#include <comphelper/multicontainer2.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <tools/gen.hxx>
 #include <unordered_map>
@@ -122,7 +122,7 @@ class SVT_DLLPUBLIC StatusbarController :
         css::uno::Reference< css::uno::XComponentContext >        m_xContext;
         OUString                                                  m_aCommandURL;
         URLToDispatchMap                                          m_aListenerMap;
-        ::cppu::OMultiTypeInterfaceContainerHelper                m_aListenerContainer;   /// container for ALL Listener
+        comphelper::OMultiTypeInterfaceContainerHelper2           m_aListenerContainer;   /// container for ALL Listener
         mutable css::uno::Reference< css::util::XURLTransformer > m_xURLTransformer;
         css::uno::Reference< css::ui::XStatusbarItem >            m_xStatusbarItem;
 };

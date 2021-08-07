@@ -37,7 +37,7 @@
 
 #include <rtl/ustring.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
+#include <comphelper/multicontainer2.hxx>
 
 #include <tools/link.hxx>
 #include <vcl/weld.hxx>
@@ -229,7 +229,7 @@ class ToolBarManager final : public ToolbarManager_Base
         css::uno::Reference< css::frame::XFrame >                    m_xFrame;
         ToolBarControllerMap                                         m_aControllerMap;
         osl::Mutex                                                   m_mutex;
-        ::cppu::OMultiTypeInterfaceContainerHelper                   m_aListenerContainer;   /// container for ALL Listener
+        comphelper::OMultiTypeInterfaceContainerHelper2              m_aListenerContainer;   /// container for ALL Listener
         css::uno::Reference< css::uno::XComponentContext >           m_xContext;
         css::uno::Reference< css::frame::XUIControllerFactory >      m_xToolbarControllerFactory;
         css::uno::Reference< css::ui::XImageManager >                m_xModuleImageManager;

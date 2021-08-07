@@ -30,6 +30,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 
 #include <rtl/ustring.hxx>
+#include <comphelper/multicontainer2.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/propshlp.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -132,7 +133,7 @@ class UIConfigElementWrapperBase : private cppu::BaseMutex,
         css::uno::Reference< css::container::XIndexAccess >             m_xConfigData;
         css::uno::WeakReference< css::frame::XFrame >                   m_xWeakFrame;
         css::uno::Reference< css::awt::XMenuBar >                       m_xMenuBar;
-        ::cppu::OMultiTypeInterfaceContainerHelper                      m_aListenerContainer;   /// container for ALL Listener
+        comphelper::OMultiTypeInterfaceContainerHelper2                 m_aListenerContainer;   /// container for ALL Listener
 };
 
 } // namespace framework

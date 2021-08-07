@@ -1751,13 +1751,13 @@ void SAL_CALL ChartController::removeSelectionChangeListener( const uno::Referen
 
 void ChartController::impl_notifySelectionChangeListeners()
 {
-    ::cppu::OInterfaceContainerHelper* pIC = m_aLifeTimeManager.m_aListenerContainer
+    ::comphelper::OInterfaceContainerHelper2* pIC = m_aLifeTimeManager.m_aListenerContainer
         .getContainer( cppu::UnoType<view::XSelectionChangeListener>::get() );
     if( pIC )
     {
         uno::Reference< view::XSelectionSupplier > xSelectionSupplier(this);
         lang::EventObject aEvent( xSelectionSupplier );
-        ::cppu::OInterfaceIteratorHelper aIt( *pIC );
+        ::comphelper::OInterfaceIteratorHelper2 aIt( *pIC );
         while( aIt.hasMoreElements() )
         {
             static_cast< view::XSelectionChangeListener* >( aIt.next() )->selectionChanged( aEvent );

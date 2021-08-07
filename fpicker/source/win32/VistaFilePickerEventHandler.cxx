@@ -279,11 +279,11 @@ void doRequest(Request& rRequest)
 void VistaFilePickerEventHandler::impl_sendEvent(  EEventType eEventType,
                                                  ::sal_Int16  nControlID)
 {
-    ::cppu::OInterfaceContainerHelper* pContainer = m_lListener.getContainer( cppu::UnoType<css::ui::dialogs::XFilePickerListener>::get());
+    comphelper::OInterfaceContainerHelper2* pContainer = m_lListener.getContainer( cppu::UnoType<css::ui::dialogs::XFilePickerListener>::get());
     if ( ! pContainer)
         return;
 
-    ::cppu::OInterfaceIteratorHelper pIterator(*pContainer);
+    comphelper::OInterfaceIteratorHelper2 pIterator(*pContainer);
     while (pIterator.hasMoreElements())
     {
         try

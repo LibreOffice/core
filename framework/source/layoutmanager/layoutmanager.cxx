@@ -2580,12 +2580,12 @@ void SAL_CALL LayoutManager::removeLayoutManagerEventListener( const uno::Refere
 
 void LayoutManager::implts_notifyListeners(short nEvent, const uno::Any& rInfoParam)
 {
-    lang::EventObject                  aSource( static_cast< ::cppu::OWeakObject*>(this) );
-    ::cppu::OInterfaceContainerHelper* pContainer = m_aListenerContainer.getContainer( cppu::UnoType<frame::XLayoutManagerListener>::get());
+    comphelper::OInterfaceContainerHelper2* pContainer = m_aListenerContainer.getContainer( cppu::UnoType<frame::XLayoutManagerListener>::get());
     if (pContainer==nullptr)
         return;
 
-    ::cppu::OInterfaceIteratorHelper pIterator(*pContainer);
+    lang::EventObject                  aSource( static_cast< ::cppu::OWeakObject*>(this) );
+    comphelper::OInterfaceIteratorHelper2 pIterator(*pContainer);
     while (pIterator.hasMoreElements())
     {
         try

@@ -39,7 +39,7 @@
 #include <tools/urlobj.hxx>
 #include <tools/diagnose_ex.h>
 #include <ucbhelper/content.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
+#include <comphelper/multicontainer2.hxx>
 #include <osl/mutex.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <vcl/settings.hxx>
@@ -59,7 +59,7 @@ using namespace ::com::sun::star::uno;
 struct IMPL_PrintListener_DataContainer : public SfxListener
 {
     SfxObjectShellRef                               m_pObjectShell;
-    ::cppu::OMultiTypeInterfaceContainerHelper      m_aInterfaceContainer;
+    comphelper::OMultiTypeInterfaceContainerHelper2 m_aInterfaceContainer;
     uno::Reference< css::view::XPrintJob>           m_xPrintJob;
     css::uno::Sequence< css::beans::PropertyValue > m_aPrintOptions;
 
@@ -778,7 +778,7 @@ void IMPL_PrintListener_DataContainer::Notify( SfxBroadcaster& rBC, const SfxHin
         m_aPrintOptions = pPrintHint->GetOptions();
     }
 
-    ::cppu::OInterfaceContainerHelper* pContainer = m_aInterfaceContainer.getContainer(
+    comphelper::OInterfaceContainerHelper2* pContainer = m_aInterfaceContainer.getContainer(
         cppu::UnoType<view::XPrintJobListener>::get());
     if ( !pContainer )
         return;
@@ -787,7 +787,7 @@ void IMPL_PrintListener_DataContainer::Notify( SfxBroadcaster& rBC, const SfxHin
     aEvent.Source = m_xPrintJob;
     aEvent.State = pPrintHint->GetWhich();
 
-    ::cppu::OInterfaceIteratorHelper pIterator(*pContainer);
+    comphelper::OInterfaceIteratorHelper2 pIterator(*pContainer);
     while (pIterator.hasMoreElements())
         static_cast<view::XPrintJobListener*>(pIterator.next())->printJobEvent( aEvent );
 }
