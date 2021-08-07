@@ -199,9 +199,7 @@ void LinguProps::launchEvent( const PropertyChangeEvent &rEvt ) const
         cppu::OInterfaceIteratorHelper aIt( *pContainer );
         while (aIt.hasMoreElements())
         {
-            Reference< XPropertyChangeListener > xRef( aIt.next(), UNO_QUERY );
-            if (xRef.is())
-                xRef->propertyChange( rEvt );
+            static_cast< XPropertyChangeListener* > xRef( aIt.next() )->propertyChange( rEvt );
         }
     }
 }
