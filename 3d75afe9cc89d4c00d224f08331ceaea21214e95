@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c6a353ef_b684c7d8",
+        "filename": "sc/source/ui/drawfunc/fudraw.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 711,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-08-07T19:10:02Z",
+      "side": 1,
+      "message": "At this line (when !bAlt) it looks like pObj is reassigned to something else than its original assignment so I feel that line 717 is then unsafe. https://gerrit.libreoffice.org/c/core/+/120163/1 to change this line 711 to use a different variable instead of pObj to leave pObj unchanged.",
+      "revId": "3d75afe9cc89d4c00d224f08331ceaea21214e95",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
