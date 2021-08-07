@@ -2116,11 +2116,153 @@ static void ChgNumToText( SwTableBox& rBox, sal_uLong nFormat )
     }
 
 }
+void SwTableBoxFormat::BoxAttributeChanged(SwTableBox& rBox, const SwTableBoxNumFormat* pNewFormat, const SwTableBoxFormula* pNewFormula, const SwTableBoxValue* pNewValue, sal_uLong nOldFormat)
+{
+    sal_uLong nNewFormat;
+    if(pNewFormat)
+    {
+        nNewFormat = pNewFormat->GetValue();
+        // new formatting
+        // is it newer or has the current been removed?
+        if( SfxItemState::SET != GetItemState(RES_BOXATR_VALUE, false))
+            pNewFormat = nullptr;
+    }
+    else
+    {
+        // fetch the current Item
+        (void)GetItemState(RES_BOXATR_FORMAT, false, reinterpret_cast<const SfxPoolItem**>(&pNewFormat));
+        nOldFormat = GetTableBoxNumFormat().GetValue();
+        nNewFormat = pNewFormat ? pNewFormat->GetValue() : nOldFormat;
+    }
+
+    // is it newer or has the current been removed?
+    if(pNewValue)
+    {
+        if(GetDoc()->GetNumberFormatter()->IsTextFormat(nNewFormat))
+            nOldFormat = 0;
+        else
+        {
+            if(SfxItemState::SET == GetItemState(RES_BOXATR_VALUE, false))
+                nOldFormat = getSwDefaultTextFormat();
+            else
+                nNewFormat = getSwDefaultTextFormat();
+        }
+    }
+
+    // Logic:
+    // Value change: -> "simulate" a format change!
+    // Format change:
+    // Text -> !Text or format change:
+    //          - align right for horizontal alignment, if LEFT or JUSTIFIED
+    //          - align bottom for vertical alignment, if TOP is set, or default
+    //          - replace text (color? negative numbers RED?)
+    // !Text -> Text:
+    //          - align left for horizontal alignment, if RIGHT
+    //          - align top for vertical alignment, if BOTTOM is set
+    SvNumberFormatter* pNumFormatr = GetDoc()->GetNumberFormatter();
+    bool bNewIsTextFormat = pNumFormatr->IsTextFormat(nNewFormat);
+
+    if((!bNewIsTextFormat && nOldFormat != nNewFormat) || pNewFormula)
+    {
+        bool bIsNumFormat = false;
+        OUString aOrigText;
+        bool bChgText = true;
+        double fVal = 0;
+        if(!pNewValue && SfxItemState::SET != GetItemState(RES_BOXATR_VALUE, false, reinterpret_cast<const SfxPoolItem**>(&pNewValue)))
+        {
+            // so far, no value has been set, so try to evaluate the content
+            sal_uLong nNdPos = rBox.IsValidNumTextNd();
+            if(ULONG_MAX != nNdPos)
+            {
+                sal_uInt32 nTmpFormatIdx = nNewFormat;
+                OUString aText(GetDoc()->GetNodes()[nNdPos] ->GetTextNode()->GetRedlineText());
+                aOrigText = aText;
+                if(aText.isEmpty())
+                    bChgText = false;
+                else
+                {
+                    // Keep Tabs
+                    lcl_TabToBlankAtSttEnd(aText);
+
+                    // JP 22.04.98: Bug 49659 -
+                    //  Special casing for percent
+                    if(SvNumFormatType::PERCENT == pNumFormatr->GetType(nNewFormat))
+                    {
+                        sal_uInt32 nTmpFormat = 0;
+                        if(GetDoc()->IsNumberFormat(aText, nTmpFormat, fVal))
+                        {
+                            if(SvNumFormatType::NUMBER == pNumFormatr->GetType( nTmpFormat))
+                                aText += "%";
+
+                            bIsNumFormat = GetDoc()->IsNumberFormat(aText, nTmpFormatIdx, fVal);
+                        }
+                    }
+                    else
+                        bIsNumFormat = GetDoc()->IsNumberFormat(aText, nTmpFormatIdx, fVal);
+
+                    if(bIsNumFormat)
+                    {
+                        // directly assign value - without Modify
+                        bool bIsLockMod = IsModifyLocked();
+                        LockModify();
+                        SetFormatAttr(SwTableBoxValue(fVal));
+                        if(!bIsLockMod)
+                            UnlockModify();
+                    }
+                }
+            }
+        }
+        else
+        {
+            fVal = pNewValue->GetValue();
+            bIsNumFormat = true;
+        }
+
+        // format contents with the new value assigned and write to paragraph
+        const Color* pCol = nullptr;
+        OUString sNewText;
+        if(DBL_MAX == fVal)
+        {
+            sNewText = SwViewShell::GetShellRes()->aCalc_Error;
+        }
+        else
+        {
+            if(bIsNumFormat)
+                pNumFormatr->GetOutputString(fVal, nNewFormat, sNewText, &pCol);
+            else
+            {
+                // Original text could not be parsed as
+                // number/date/time/..., so keep the text.
+#if 0
+                // Actually the text should be formatted
+                // according to the format, which may include
+                // additional text from the format, for example
+                // in {0;-0;"BAD: "@}. But other places when
+                // entering a new value or changing text or
+                // changing to a different format of type Text
+                // don't do this (yet?).
+                pNumFormatr->GetOutputString(aOrigText, nNewFormat, sNewText, &pCol);
+#else
+                sNewText = aOrigText;
+#endif
+            }
+
+            if(!bChgText)
+                sNewText.clear();
+        }
+
+        // across all boxes
+        ChgTextToNum(rBox, sNewText, pCol, GetDoc()->IsInsTableAlignNum());
+
+    }
+    else if(bNewIsTextFormat && nOldFormat != nNewFormat)
+        ChgNumToText(rBox, nNewFormat);
+}
 
 // for detection of modifications (mainly TableBoxAttribute)
 void SwTableBoxFormat::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
 {
-    if (rHint.GetId() != SfxHintId::SwLegacyModify)
+    if(rHint.GetId() != SfxHintId::SwLegacyModify)
         return;
     auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
     if(IsModifyLocked() || !GetDoc() || GetDoc()->IsInDtor())
@@ -2161,169 +2303,17 @@ void SwTableBoxFormat::SwClientNotify(const SwModify& rMod, const SfxHint& rHint
     {
         GetDoc()->getIDocumentFieldsAccess().SetFieldsDirty(true, nullptr, 0);
 
-        if( SfxItemState::SET == GetItemState( RES_BOXATR_FORMAT, false ) ||
-            SfxItemState::SET == GetItemState( RES_BOXATR_VALUE, false ) ||
-            SfxItemState::SET == GetItemState( RES_BOXATR_FORMULA, false ) )
+        if(SfxItemState::SET == GetItemState(RES_BOXATR_FORMAT, false) ||
+           SfxItemState::SET == GetItemState(RES_BOXATR_VALUE, false) ||
+           SfxItemState::SET == GetItemState(RES_BOXATR_FORMULA, false) )
         {
             // fetch the box
-            SwIterator<SwTableBox,SwFormat> aIter( *this );
+            SwIterator<SwTableBox,SwFormat> aIter(*this);
             SwTableBox* pBox = aIter.First();
-            if( pBox )
-            {
-                OSL_ENSURE( !aIter.Next(), "zero or more than one box at format" );
-
-                sal_uLong nNewFormat;
-                if( pNewFormat )
-                {
-                    nNewFormat = pNewFormat->GetValue();
-                    // new formatting
-                    // is it newer or has the current been removed?
-                    if( SfxItemState::SET != GetItemState( RES_BOXATR_VALUE, false ))
-                        pNewFormat = nullptr;
-                }
-                else
-                {
-                    // fetch the current Item
-                    (void)GetItemState(RES_BOXATR_FORMAT, false, reinterpret_cast<const SfxPoolItem**>(&pNewFormat));
-                    nOldFormat = GetTableBoxNumFormat().GetValue();
-                    nNewFormat = pNewFormat ? pNewFormat->GetValue() : nOldFormat;
-                }
-
-                // is it newer or has the current been removed?
-                if( pNewVal )
-                {
-                    if( GetDoc()->GetNumberFormatter()->IsTextFormat(nNewFormat) )
-                        nOldFormat = 0;
-                    else
-                    {
-                        if( SfxItemState::SET == GetItemState( RES_BOXATR_VALUE, false ))
-                            nOldFormat = getSwDefaultTextFormat();
-                        else
-                            nNewFormat = getSwDefaultTextFormat();
-                    }
-                }
-
-                // Logic:
-                // Value change: -> "simulate" a format change!
-                // Format change:
-                // Text -> !Text or format change:
-                //          - align right for horizontal alignment, if LEFT or JUSTIFIED
-                //          - align bottom for vertical alignment, if TOP is set, or default
-                //          - replace text (color? negative numbers RED?)
-                // !Text -> Text:
-                //          - align left for horizontal alignment, if RIGHT
-                //          - align top for vertical alignment, if BOTTOM is set
-                SvNumberFormatter* pNumFormatr = GetDoc()->GetNumberFormatter();
-                bool bNewIsTextFormat = pNumFormatr->IsTextFormat( nNewFormat );
-
-                if( (!bNewIsTextFormat && nOldFormat != nNewFormat) || pNewFormula )
-                {
-                    bool bIsNumFormat = false;
-                    OUString aOrigText;
-                    bool bChgText = true;
-                    double fVal = 0;
-                    if( !pNewVal && SfxItemState::SET != GetItemState(
-                        RES_BOXATR_VALUE, false, reinterpret_cast<const SfxPoolItem**>(&pNewVal) ))
-                    {
-                        // so far, no value has been set, so try to evaluate the content
-                        sal_uLong nNdPos = pBox->IsValidNumTextNd();
-                        if( ULONG_MAX != nNdPos )
-                        {
-                            sal_uInt32 nTmpFormatIdx = nNewFormat;
-                            OUString aText( GetDoc()->GetNodes()[ nNdPos ]
-                                            ->GetTextNode()->GetRedlineText());
-                            aOrigText = aText;
-                            if( aText.isEmpty() )
-                                bChgText = false;
-                            else
-                            {
-                                // Keep Tabs
-                                lcl_TabToBlankAtSttEnd( aText );
-
-                                // JP 22.04.98: Bug 49659 -
-                                //  Special casing for percent
-                                if( SvNumFormatType::PERCENT ==
-                                    pNumFormatr->GetType( nNewFormat ))
-                                {
-                                    sal_uInt32 nTmpFormat = 0;
-                                    if( GetDoc()->IsNumberFormat(
-                                                aText, nTmpFormat, fVal ))
-                                    {
-                                        if( SvNumFormatType::NUMBER ==
-                                            pNumFormatr->GetType( nTmpFormat ))
-                                            aText += "%";
-
-                                        bIsNumFormat = GetDoc()->IsNumberFormat(
-                                                    aText, nTmpFormatIdx, fVal );
-                                    }
-                                }
-                                else
-                                    bIsNumFormat = GetDoc()->IsNumberFormat(
-                                                    aText, nTmpFormatIdx, fVal );
-
-                                if( bIsNumFormat )
-                                {
-                                    // directly assign value - without Modify
-                                    bool bIsLockMod = IsModifyLocked();
-                                    LockModify();
-                                    SetFormatAttr( SwTableBoxValue( fVal ));
-                                    if( !bIsLockMod )
-                                        UnlockModify();
-                                }
-                            }
-                        }
-                    }
-                    else
-                    {
-                        fVal = pNewVal->GetValue();
-                        bIsNumFormat = true;
-                    }
-
-                    // format contents with the new value assigned and write to paragraph
-                    const Color* pCol = nullptr;
-                    OUString sNewText;
-                    if( DBL_MAX == fVal )
-                    {
-                        sNewText = SwViewShell::GetShellRes()->aCalc_Error;
-                    }
-                    else
-                    {
-                        if (bIsNumFormat)
-                            pNumFormatr->GetOutputString( fVal, nNewFormat, sNewText, &pCol );
-                        else
-                        {
-                            // Original text could not be parsed as
-                            // number/date/time/..., so keep the text.
-#if 0
-                            // Actually the text should be formatted
-                            // according to the format, which may include
-                            // additional text from the format, for example
-                            // in {0;-0;"BAD: "@}. But other places when
-                            // entering a new value or changing text or
-                            // changing to a different format of type Text
-                            // don't do this (yet?).
-                            pNumFormatr->GetOutputString( aOrigText, nNewFormat, sNewText, &pCol );
-#else
-                            sNewText = aOrigText;
-#endif
-                        }
-
-                        if( !bChgText )
-                        {
-                            sNewText.clear();
-                        }
-                    }
-
-                    // across all boxes
-                    ChgTextToNum( *pBox, sNewText, pCol,
-                                    GetDoc()->IsInsTableAlignNum() );
-
-                }
-                else if( bNewIsTextFormat && nOldFormat != nNewFormat )
-                {
-                    ChgNumToText( *pBox, nNewFormat );
-                }
-            }
+            SAL_INFO_IF(!pBox, "sw.core", "no box found at format");
+            SAL_WARN_IF(aIter.Next(), "sw.core", "more than one box found at format");
+            if(pBox)
+                BoxAttributeChanged(*pBox, pNewFormat, pNewFormula, pNewVal, nOldFormat);
         }
     }
     // call base class
