@@ -84,22 +84,14 @@ SwTableBoxFormula* SwTableBoxFormula::Clone( SfxItemPool* ) const
 */
 const SwNode* SwTableBoxFormula::GetNodeOfFormula() const
 {
-    const SwNode* pRet = nullptr;
-    if( m_pDefinedIn )
-    {
-        SwTableBox* pBox = SwIterator<SwTableBox,sw::BroadcastingModify>( *m_pDefinedIn ).First();
-        if( pBox )
-            pRet = pBox->GetSttNd();
-    }
-    return pRet;
+    auto pTableBox = GetTableBox();
+    return pTableBox ? pTableBox->GetSttNd() : nullptr;
 }
 
 SwTableBox* SwTableBoxFormula::GetTableBox()
 {
-    SwTableBox* pBox = nullptr;
-    if( m_pDefinedIn )
-        pBox = SwIterator<SwTableBox,sw::BroadcastingModify>( *m_pDefinedIn ).First();
-    return pBox;
+    assert(!m_pDefinedIn || dynamic_cast<SwTableBoxFormat*>(m_pDefinedIn));
+    return m_pDefinedIn ? static_cast<SwTableBoxFormat*>(m_pDefinedIn)->GetTableBox() : nullptr;
 }
 
 void SwTableBoxFormula::ChangeState( const SfxPoolItem* pItem )

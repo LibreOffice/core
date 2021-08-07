@@ -2273,6 +2273,15 @@ void SwTableBoxFormat::BoxAttributeChanged(SwTableBox& rBox, const SwTableBoxNum
         ChgNumToText(rBox, nNewFormat);
 }
 
+SwTableBox* SwTableBoxFormat::SwTableBoxFormat::GetTableBox()
+{
+    SwIterator<SwTableBox,SwFormat> aIter(*this);
+    auto pBox = aIter.First();
+    SAL_INFO_IF(!pBox, "sw.core", "no box found at format");
+    SAL_WARN_IF(pBox && aIter.Next(), "sw.core", "more than one box found at format");
+    return pBox;
+}
+
 // for detection of modifications (mainly TableBoxAttribute)
 void SwTableBoxFormat::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
 {
@@ -2321,12 +2330,7 @@ void SwTableBoxFormat::SwClientNotify(const SwModify& rMod, const SfxHint& rHint
            SfxItemState::SET == GetItemState(RES_BOXATR_VALUE, false) ||
            SfxItemState::SET == GetItemState(RES_BOXATR_FORMULA, false) )
         {
-            // fetch the box
-            SwIterator<SwTableBox,SwFormat> aIter(*this);
-            SwTableBox* pBox = aIter.First();
-            SAL_INFO_IF(!pBox, "sw.core", "no box found at format");
-            SAL_WARN_IF(pBox && aIter.Next(), "sw.core", "more than one box found at format");
-            if(pBox)
+            if(auto pBox = GetTableBox())
                 BoxAttributeChanged(*pBox, pNewFormat, pNewFormula, pNewVal, nOldFormat);
         }
     }
