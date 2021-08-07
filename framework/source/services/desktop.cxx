@@ -1621,19 +1621,17 @@ void Desktop::impl_sendTerminateToClipboard()
     {
         try
         {
-            css::uno::Reference< css::lang::XServiceInfo > xInfo( aIterator.next(), css::uno::UNO_QUERY );
+            css::frame::XTerminateListener* pTerminateListener =
+                static_cast< css::frame::XTerminateListener* >(aIterator.next());
+            css::uno::Reference< css::lang::XServiceInfo > xInfo( pTerminateListener, css::uno::UNO_QUERY );
             if ( !xInfo.is() )
                 continue;
 
             if ( xInfo->getImplementationName() != "com.sun.star.comp.svt.TransferableHelperTerminateListener" )
                 continue;
 
-            css::uno::Reference< css::frame::XTerminateListener > xListener(xInfo, css::uno::UNO_QUERY);
-            if ( ! xListener.is() )
-                continue;
-
             css::lang::EventObject aEvent( static_cast< ::cppu::OWeakObject* >(this) );
-            xListener->notifyTermination( aEvent );
+            pTerminateListener->notifyTermination( aEvent );
 
             // don't notify twice
             aIterator.remove();
@@ -1663,10 +1661,7 @@ void Desktop::impl_sendNotifyTerminationEvent()
     {
         try
         {
-            css::uno::Reference< css::frame::XTerminateListener > xListener(aIterator.next(), css::uno::UNO_QUERY);
-            if ( ! xListener.is() )
-                continue;
-            xListener->notifyTermination( aEvent );
+            static_cast< css::frame::XTerminateListener* >(aIterator.next())->notifyTermination( aEvent );
         }
         catch( const css::uno::Exception& )
         {

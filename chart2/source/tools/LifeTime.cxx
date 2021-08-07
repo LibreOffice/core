@@ -226,9 +226,8 @@ bool CloseableLifeTimeManager::g_close_startTryClose(bool bDeliverOwnership)
                 ::cppu::OInterfaceIteratorHelper aIt( *pIC );
                 while( aIt.hasMoreElements() )
                 {
-                    uno::Reference< util::XCloseListener > xCloseListener( aIt.next(), uno::UNO_QUERY );
-                    if(xCloseListener.is())
-                        xCloseListener->queryClosing( aEvent, bDeliverOwnership );
+                    static_cast< util::XCloseListener* >( aIt.next() )
+                        ->queryClosing( aEvent, bDeliverOwnership );
                 }
             }
         }
@@ -336,9 +335,7 @@ void CloseableLifeTimeManager::impl_doClose()
                 ::cppu::OInterfaceIteratorHelper aIt( *pIC );
                 while( aIt.hasMoreElements() )
                 {
-                    uno::Reference< util::XCloseListener > xListener( aIt.next(), uno::UNO_QUERY );
-                    if( xListener.is() )
-                        xListener->notifyClosing( aEvent );
+                    static_cast< util::XCloseListener* >( aIt.next() )->notifyClosing( aEvent );
                 }
             }
         }

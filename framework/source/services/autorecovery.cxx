@@ -3502,8 +3502,7 @@ void AutoRecovery::implts_informListener(      Job                      eJob  ,
     {
         try
         {
-            css::uno::Reference< css::frame::XStatusListener > xListener(static_cast<css::frame::XStatusListener*>(pIt.next()), css::uno::UNO_QUERY);
-            xListener->statusChanged(aEvent);
+            static_cast<css::frame::XStatusListener*>(pIt.next())->statusChanged(aEvent);
         }
         catch(const css::uno::RuntimeException&)
         {
