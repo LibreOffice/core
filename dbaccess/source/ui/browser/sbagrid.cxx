@@ -279,11 +279,11 @@ void SbaXGridPeer::NotifyStatusChanged(const css::util::URL& _rUrl, const Refere
         xControl->statusChanged(aEvt);
     else
     {
-        ::cppu::OInterfaceContainerHelper * pIter = m_aStatusListeners.getContainer(_rUrl);
+        ::comphelper::OInterfaceContainerHelper2 * pIter = m_aStatusListeners.getContainer(_rUrl);
 
         if (pIter)
         {
-            ::cppu::OInterfaceIteratorHelper aListIter(*pIter);
+            ::comphelper::OInterfaceIteratorHelper2 aListIter(*pIter);
             while (aListIter.hasMoreElements())
                 static_cast< css::frame::XStatusListener*>(aListIter.next())->statusChanged(aEvt);
         }
@@ -444,7 +444,7 @@ void SAL_CALL SbaXGridPeer::dispatch(const URL& aURL, const Sequence< PropertyVa
 
 void SAL_CALL SbaXGridPeer::addStatusListener(const Reference< css::frame::XStatusListener > & xControl, const css::util::URL& aURL)
 {
-    ::cppu::OInterfaceContainerHelper* pCont = m_aStatusListeners.getContainer(aURL);
+    ::comphelper::OInterfaceContainerHelper2* pCont = m_aStatusListeners.getContainer(aURL);
     if (!pCont)
         m_aStatusListeners.addInterface(aURL,xControl);
     else
@@ -454,7 +454,7 @@ void SAL_CALL SbaXGridPeer::addStatusListener(const Reference< css::frame::XStat
 
 void SAL_CALL SbaXGridPeer::removeStatusListener(const Reference< css::frame::XStatusListener > & xControl, const css::util::URL& aURL)
 {
-    ::cppu::OInterfaceContainerHelper* pCont = m_aStatusListeners.getContainer(aURL);
+    ::comphelper::OInterfaceContainerHelper2* pCont = m_aStatusListeners.getContainer(aURL);
     if ( pCont )
         pCont->removeInterface(xControl);
 }

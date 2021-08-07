@@ -22,7 +22,7 @@
 
 #include <svx/svxdllapi.h>
 #include <svx/shapeproperty.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
+#include <comphelper/multiinterfacecontainer2.hxx>
 #include <rtl/ustring.hxx>
 
 #include <memory>
@@ -141,7 +141,7 @@ namespace svx
             PropertyProviders;
         ::cppu::OWeakObject&            m_rContext;
         PropertyProviders               m_aProviders;
-        cppu::OMultiTypeInterfaceContainerHelperVar<OUString> m_aPropertyChangeListeners;
+        comphelper::OMultiTypeInterfaceContainerHelperVar2<OUString> m_aPropertyChangeListeners;
     };
 
 

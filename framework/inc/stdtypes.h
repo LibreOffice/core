@@ -21,7 +21,7 @@
 
 #include <com/sun/star/awt/KeyEvent.hpp>
 
-#include <cppuhelper/interfacecontainer.hxx>
+#include <comphelper/multiinterfacecontainer2.hxx>
 #include <rtl/ustring.hxx>
 
 namespace framework{
@@ -61,7 +61,7 @@ struct KeyEventEqualsFunc
     Mapping between these two parts of a property should be done in the fastest way :-)
 */
 
-typedef cppu::OMultiTypeInterfaceContainerHelperVar<OUString> ListenerHash;
+typedef comphelper::OMultiTypeInterfaceContainerHelperVar2<OUString> ListenerHash;
 
 }       // namespace framework
 

@@ -23,6 +23,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/multiinterfacecontainer2.hxx>
 
 #include <com/sun/star/task/XJob.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -56,7 +57,7 @@ namespace com::sun::star {
 
 }
 
-typedef cppu::OMultiTypeInterfaceContainerHelperVar<sal_Int32>
+typedef comphelper::OMultiTypeInterfaceContainerHelperVar2<sal_Int32>
     OPropertyListenerContainerHelper;
 
 class SwDBManager;

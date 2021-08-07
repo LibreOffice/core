@@ -21,6 +21,7 @@
 #include <memory>
 #include <com/sun/star/frame/XNotifyingDispatch.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
+#include <comphelper/multiinterfacecontainer2.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/weakref.hxx>
@@ -38,7 +39,7 @@ class SfxBindings;
 class SfxDispatcher;
 class SfxSlot;
 
-typedef cppu::OMultiTypeInterfaceContainerHelperVar<OUString>
+typedef comphelper::OMultiTypeInterfaceContainerHelperVar2<OUString>
     SfxStatusDispatcher_Impl_ListenerContainer;
 
 class SfxStatusDispatcher   :   public cppu::WeakImplHelper<css::frame::XNotifyingDispatch>
