@@ -307,7 +307,7 @@ IMPL_LINK(SdPageObjsTLV, KeyInputHdl, const KeyEvent&, rKEvt, bool)
     if (rKeyCode.GetCode() == KEY_RETURN)
     {
         std::unique_ptr<weld::TreeIter> xCursor(m_xTreeView->make_iterator());
-        if (m_xTreeView->get_cursor(xCursor.get()))
+        if (m_xTreeView->get_cursor(xCursor.get()) && m_xTreeView->iter_has_child(*xCursor))
         {
             if (m_xTreeView->get_row_expanded(*xCursor))
                 m_xTreeView->collapse_row(*xCursor);
