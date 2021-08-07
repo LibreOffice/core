@@ -251,8 +251,7 @@ void ChartModel::impl_notifyCloseListeners()
         ::cppu::OInterfaceIteratorHelper aIt( *pIC );
         while( aIt.hasMoreElements() )
         {
-            uno::Reference< util::XCloseListener > xListener( aIt.next(), uno::UNO_QUERY );
-            if( xListener.is() )
+            static_cast< util::XCloseListener* > xListener( aIt.next() )
                 xListener->notifyClosing( aEvent );
         }
     }
