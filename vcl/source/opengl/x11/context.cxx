@@ -9,6 +9,7 @@
 
 #include <memory>
 #include <vcl/lazydelete.hxx>
+#include <vcl/syschild.hxx>
 
 #include <svdata.hxx>
 

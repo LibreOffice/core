@@ -15,6 +15,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/opengl/OpenGLHelper.hxx>
+#include <vcl/window.hxx>
 
 #include "ogl_canvascustomsprite.hxx"
 #include "ogl_spritecanvas.hxx"
