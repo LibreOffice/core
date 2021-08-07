@@ -141,11 +141,11 @@ void SwUndoFormatAttr::Init( const SwFormat & rFormat )
             }
         } else if (dynamic_cast<const SwSectionFormat*>(&rFormat)) {
             m_nNodeIndex = rFormat.GetContent().GetContentIdx()->GetIndex();
-        } else if ( dynamic_cast< const SwTableBoxFormat* >( &rFormat ) !=  nullptr ) {
-            SwTableBox * pTableBox = SwIterator<SwTableBox,SwFormat>( rFormat ).First();
-            if ( pTableBox ) {
+        } else if(auto pBoxFormat = dynamic_cast<const SwTableBoxFormat*>(&rFormat))
+        {
+            auto pTableBox = pBoxFormat->GetTableBox();
+            if(pTableBox)
                 m_nNodeIndex = pTableBox->GetSttIdx();
-            }
         }
     }
 }

@@ -1639,22 +1639,21 @@ SwTableBox::~SwTableBox()
         delete pMod;    // and delete
 }
 
-SwTableBoxFormat* SwTableBox::CheckBoxFormat( SwTableBoxFormat* pFormat )
+SwTableBoxFormat* SwTableBox::CheckBoxFormat(SwTableBoxFormat* pFormat)
 {
     // We might need to create a new format here, because the box must be
     // added to the format solely if pFormat has a value or form.
-    if( SfxItemState::SET == pFormat->GetItemState( RES_BOXATR_VALUE, false ) ||
-        SfxItemState::SET == pFormat->GetItemState( RES_BOXATR_FORMULA, false ) )
+    if(SfxItemState::SET == pFormat->GetItemState(RES_BOXATR_VALUE, false) ||
+       SfxItemState::SET == pFormat->GetItemState(RES_BOXATR_FORMULA, false))
     {
-        SwTableBox* pOther = SwIterator<SwTableBox,SwFormat>( *pFormat ).First();
-        if( pOther )
+        if(pFormat->GetTableBox())
         {
             SwTableBoxFormat* pNewFormat = pFormat->GetDoc()->MakeTableBoxFormat();
             pNewFormat->LockModify();
             *pNewFormat = *pFormat;
 
             // Remove values and formulas
-            pNewFormat->ResetFormatAttr( RES_BOXATR_FORMULA, RES_BOXATR_VALUE );
+            pNewFormat->ResetFormatAttr(RES_BOXATR_FORMULA, RES_BOXATR_VALUE);
             pNewFormat->UnlockModify();
 
             pFormat = pNewFormat;
@@ -1669,32 +1668,27 @@ SwFrameFormat* SwTableBox::ClaimFrameFormat()
     // of an SwTableBoxFormat object
     // If other SwTableBox objects currently listen to the same SwTableBoxFormat as
     // this one, something needs to be done
-    SwTableBoxFormat *pRet = static_cast<SwTableBoxFormat*>(GetFrameFormat());
-    SwIterator<SwTableBox,SwFormat> aIter( *pRet );
-    for( SwTableBox* pLast = aIter.First(); pLast; pLast = aIter.Next() )
+    SwTableBoxFormat* pRet = static_cast<SwTableBoxFormat*>(GetFrameFormat());
+    if(pRet->GetTableBox() != this)
     {
-        if ( pLast != this )
-        {
-            // Found another SwTableBox object
-            // create a new Format as a copy and assign me to it
-            // don't copy values and formulas
-            SwTableBoxFormat* pNewFormat = pRet->GetDoc()->MakeTableBoxFormat();
-            pNewFormat->LockModify();
-            *pNewFormat = *pRet;
-            pNewFormat->ResetFormatAttr( RES_BOXATR_FORMULA, RES_BOXATR_VALUE );
-            pNewFormat->UnlockModify();
+        // Found another SwTableBox object
+        // create a new Format as a copy and assign me to it
+        // don't copy values and formulas
+        SwTableBoxFormat* pNewFormat = pRet->GetDoc()->MakeTableBoxFormat();
+        pNewFormat->LockModify();
+        *pNewFormat = *pRet;
+        pNewFormat->ResetFormatAttr(RES_BOXATR_FORMULA, RES_BOXATR_VALUE);
+        pNewFormat->UnlockModify();
 
-            // re-register SwCellFrame objects that know me
-            SwIterator<SwCellFrame,SwFormat> aFrameIter( *pRet );
-            for( SwCellFrame* pCell = aFrameIter.First(); pCell; pCell = aFrameIter.Next() )
-                if( pCell->GetTabBox() == this )
-                    pCell->RegisterToFormat( *pNewFormat );
+        // re-register SwCellFrame objects that know me
+        SwIterator<SwCellFrame,SwFormat> aFrameIter(*pRet);
+        for(SwCellFrame* pCell = aFrameIter.First(); pCell; pCell = aFrameIter.Next())
+            if(pCell->GetTabBox() == this)
+                pCell->RegisterToFormat(*pNewFormat);
 
-            // re-register myself
-            pNewFormat->Add( this );
-            pRet = pNewFormat;
-            break;
-        }
+        // re-register myself
+        pNewFormat->Add(this);
+        pRet = pNewFormat;
     }
     return pRet;
 }
@@ -2259,6 +2253,15 @@ void SwTableBoxFormat::BoxAttributeChanged(SwTableBox& rBox, const SwTableBoxNum
         ChgNumToText(rBox, nNewFormat);
 }
 
+SwTableBox* SwTableBoxFormat::SwTableBoxFormat::GetTableBox()
+{
+    SwIterator<SwTableBox,SwFormat> aIter(*this);
+    auto pBox = aIter.First();
+    SAL_WARN_IF(!pBox, "sw.core", "no box found at format");
+    SAL_WARN_IF(aIter.Next(), "sw.core", "more than one box found at format");
+    return pBox;
+}
+
 // for detection of modifications (mainly TableBoxAttribute)
 void SwTableBoxFormat::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
 {
@@ -2307,12 +2310,7 @@ void SwTableBoxFormat::SwClientNotify(const SwModify& rMod, const SfxHint& rHint
            SfxItemState::SET == GetItemState(RES_BOXATR_VALUE, false) ||
            SfxItemState::SET == GetItemState(RES_BOXATR_FORMULA, false) )
         {
-            // fetch the box
-            SwIterator<SwTableBox,SwFormat> aIter(*this);
-            SwTableBox* pBox = aIter.First();
-            SAL_WARN_IF(!pBox, "sw.core", "no box found at format");
-            SAL_WARN_IF(aIter.Next(), "sw.core", "more than one box found at format");
-            if(pBox)
+            if(auto pBox = GetTableBox())
                 BoxAttributeChanged(*pBox, pNewFormat, pNewFormula, pNewVal, nOldFormat);
         }
     }

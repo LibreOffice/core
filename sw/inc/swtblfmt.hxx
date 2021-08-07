@@ -60,6 +60,9 @@ class SAL_DLLPUBLIC_RTTI SwTableBoxFormat final: public SwFrameFormat
 
 public:
     virtual bool supportsFullDrawingLayerFillAttributeSet() const override;
+    SwTableBox* GetTableBox();
+    const SwTableBox* GetTableBox() const
+            { return const_cast<SwTableBoxFormat*>(this)->GetTableBox(); };
 };
 
 #endif
