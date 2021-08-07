@@ -219,7 +219,7 @@ void SAL_CALL BaseContainerControl::addControl ( const OUString& rName, const Re
     }
 
     // Send message to all listener
-    OInterfaceContainerHelper* pInterfaceContainer = m_aListeners.getContainer( cppu::UnoType<XContainerListener>::get());
+    comphelper::OInterfaceContainerHelper2* pInterfaceContainer = m_aListeners.getContainer( cppu::UnoType<XContainerListener>::get());
 
     if (!pInterfaceContainer)
         return;
@@ -231,7 +231,7 @@ void SAL_CALL BaseContainerControl::addControl ( const OUString& rName, const Re
     aEvent.Element <<= rControl;
 
     // Get all listener
-    OInterfaceIteratorHelper    aIterator (*pInterfaceContainer);
+    comphelper::OInterfaceIteratorHelper2  aIterator (*pInterfaceContainer);
 
     // Send event
     while ( aIterator.hasMoreElements() )
@@ -266,7 +266,7 @@ void SAL_CALL BaseContainerControl::removeControl ( const Reference< XControl > 
             maControlInfoList.erase(maControlInfoList.begin() + n);
 
             // Send message to all other listener
-            OInterfaceContainerHelper * pInterfaceContainer = m_aListeners.getContainer( cppu::UnoType<XContainerListener>::get());
+            comphelper::OInterfaceContainerHelper2 * pInterfaceContainer = m_aListeners.getContainer( cppu::UnoType<XContainerListener>::get());
 
             if (pInterfaceContainer)
             {
@@ -275,7 +275,7 @@ void SAL_CALL BaseContainerControl::removeControl ( const Reference< XControl > 
                 aEvent.Source    = *this;
                 aEvent.Element <<= rControl;
 
-                OInterfaceIteratorHelper    aIterator (*pInterfaceContainer);
+                comphelper::OInterfaceIteratorHelper2 aIterator (*pInterfaceContainer);
 
                 while ( aIterator.hasMoreElements() )
                 {

@@ -283,11 +283,11 @@ void TitleHelper::impl_sendTitleChangedEvent ()
     if( ! aEvent.Source.is() )
         return;
 
-    ::cppu::OInterfaceContainerHelper* pContainer = m_aListener.getContainer( cppu::UnoType<css::frame::XTitleChangeListener>::get());
+    comphelper::OInterfaceContainerHelper2* pContainer = m_aListener.getContainer( cppu::UnoType<css::frame::XTitleChangeListener>::get());
     if ( ! pContainer)
         return;
 
-    ::cppu::OInterfaceIteratorHelper pIt( *pContainer );
+    comphelper::OInterfaceIteratorHelper2 pIt( *pContainer );
     while ( pIt.hasMoreElements() )
     {
         try

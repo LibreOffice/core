@@ -27,7 +27,7 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XContainerQuery.hpp>
 #include <com/sun/star/util/XFlushable.hpp>
-#include <cppuhelper/interfacecontainer.h>
+#include <comphelper/multicontainer2.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <rtl/ustring.hxx>
@@ -93,7 +93,7 @@ class BaseContainer : public BaseLock
         FilterCache::EItemType m_eType;
 
         /** @short  holds all listener, which are registered at this instance. */
-        ::cppu::OMultiTypeInterfaceContainerHelper m_lListener;
+        comphelper::OMultiTypeInterfaceContainerHelper2 m_lListener;
 
 
     // native interface

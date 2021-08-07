@@ -38,11 +38,11 @@ namespace unocontrols {
 #define MULTIPLEX( INTERFACE, METHOD, EVENTTYP, EVENT )                                                                             \
                                                                                                                                     \
     /* First get all interfaces from container with right type.*/                                                                   \
-    OInterfaceContainerHelper* pContainer = m_aListenerHolder.getContainer( cppu::UnoType<INTERFACE>::get() );  \
+    comphelper::OInterfaceContainerHelper2* pContainer = m_aListenerHolder.getContainer( cppu::UnoType<INTERFACE>::get() );  \
     /* Do the follow only, if elements in container exist.*/                                                                        \
     if( !pContainer )                                                                                                        \
         return;                                                                                                                               \
-    OInterfaceIteratorHelper aIterator( *pContainer );                                                                          \
+    comphelper::OInterfaceIteratorHelper2 aIterator( *pContainer );                                                                          \
     EVENTTYP aLocalEvent = EVENT;                                                                                               \
     /* Remark: The control is the event source not the peer.*/                                                                  \
     /*         We must change the source of the event.      */                                                                  \
@@ -156,7 +156,7 @@ void OMRCListenerMultiplexerHelper::setPeer( const Reference< XWindow >& xPeer )
     if( m_xPeer.is() )
     {
         // get all types from the listener added to the peer
-        const Sequence< Type >    aContainedTypes = m_aListenerHolder.getContainedTypes();
+        const std::vector< Type > aContainedTypes = m_aListenerHolder.getContainedTypes();
         // loop over all listener types and remove the listeners from the peer
         for( const auto& rContainedType : aContainedTypes )
             impl_unadviseFromPeer( m_xPeer, rContainedType );
@@ -165,7 +165,7 @@ void OMRCListenerMultiplexerHelper::setPeer( const Reference< XWindow >& xPeer )
     if( m_xPeer.is() )
     {
         // get all types from the listener added to the peer
-        const Sequence< Type >    aContainedTypes = m_aListenerHolder.getContainedTypes();
+        const std::vector< Type > aContainedTypes = m_aListenerHolder.getContainedTypes();
         // loop over all listener types and add the listeners to the peer
         for( const auto& rContainedType : aContainedTypes )
             impl_adviseToPeer( m_xPeer, rContainedType );

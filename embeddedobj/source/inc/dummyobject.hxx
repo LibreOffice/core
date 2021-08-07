@@ -28,7 +28,7 @@
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/embed/XEmbedPersist.hpp>
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
+#include <comphelper/multicontainer2.hxx>
 
 namespace com::sun::star {
     namespace embed {
@@ -43,10 +43,6 @@ namespace com::sun::star {
     }
 }
 
-namespace cppu {
-    class OMultiTypeInterfaceContainerHelper;
-}
-
 /**
  * Represents an OLE object that has native data (next to the replacement
  * image), but we don't understand that data.
@@ -56,7 +52,7 @@ class ODummyEmbeddedObject : public ::cppu::WeakImplHelper
                         , css::embed::XEmbedPersist >
 {
     ::osl::Mutex    m_aMutex;
-    std::unique_ptr<cppu::OMultiTypeInterfaceContainerHelper>
+    std::unique_ptr<comphelper::OMultiTypeInterfaceContainerHelper2>
         m_pInterfaceContainer;
     bool m_bDisposed;
 
