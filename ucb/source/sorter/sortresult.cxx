@@ -1200,10 +1200,7 @@ void SortedResultSet::PropertyChanged( const PropertyChangeEvent& rEvt )
         OInterfaceIteratorHelper aIter( *pPropsContainer );
         while ( aIter.hasMoreElements() )
         {
-            Reference< XPropertyChangeListener > xListener(
-                                                    aIter.next(), UNO_QUERY );
-            if ( xListener.is() )
-                xListener->propertyChange( rEvt );
+            static_cast< XPropertyChangeListener* >( aIter.next() )->propertyChange( rEvt );
         }
     }
 
@@ -1214,10 +1211,7 @@ void SortedResultSet::PropertyChanged( const PropertyChangeEvent& rEvt )
         OInterfaceIteratorHelper aIter( *pPropsContainer );
         while ( aIter.hasMoreElements() )
         {
-            Reference< XPropertyChangeListener > xListener(
-                                                    aIter.next(), UNO_QUERY );
-            if ( xListener.is() )
-                xListener->propertyChange( rEvt );
+            static_cast< XPropertyChangeListener* >( aIter.next() )->propertyChange( rEvt );
         }
     }
 }

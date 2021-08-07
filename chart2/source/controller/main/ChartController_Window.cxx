@@ -1760,8 +1760,7 @@ void ChartController::impl_notifySelectionChangeListeners()
         ::cppu::OInterfaceIteratorHelper aIt( *pIC );
         while( aIt.hasMoreElements() )
         {
-            uno::Reference< view::XSelectionChangeListener > xListener( aIt.next(), uno::UNO_QUERY );
-            if( xListener.is() )
+            static_cast< view::XSelectionChangeListener* > xListener( aIt.next() )
                 xListener->selectionChanged( aEvent );
         }
     }
