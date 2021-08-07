@@ -104,9 +104,7 @@ void SAL_CALL GenericClipboard::setContents(const Reference< XTransferable >& xT
 
         while (aIterator.hasMoreElements())
         {
-            Reference < XClipboardListener > xListener(aIterator.next(), UNO_QUERY);
-            if (xListener.is())
-                xListener->changedContents(aEvent);
+            static_cast<XClipboardListener*>(aIterator.next())->changedContents(aEvent);
         }
     }
 }

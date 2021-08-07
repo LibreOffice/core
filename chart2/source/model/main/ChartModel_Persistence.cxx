@@ -654,9 +654,7 @@ void ChartModel::impl_notifyModifiedListeners()
         ::cppu::OInterfaceIteratorHelper aIt( *pIC );
         while( aIt.hasMoreElements() )
         {
-            uno::Reference< util::XModifyListener > xListener( aIt.next(), uno::UNO_QUERY );
-            if( xListener.is() )
-                xListener->modified( aEvent );
+            static_cast< util::XModifyListener* >( aIt.next() )->modified( aEvent );
         }
     }
 }
@@ -790,9 +788,8 @@ void ChartModel::impl_notifyStorageChangeListeners()
         ::cppu::OInterfaceIteratorHelper aIt( *pIC );
         while( aIt.hasMoreElements() )
         {
-            uno::Reference< document::XStorageChangeListener > xListener( aIt.next(), uno::UNO_QUERY );
-            if( xListener.is() )
-                xListener->notifyStorageChange( static_cast< ::cppu::OWeakObject* >( this ), m_xStorage );
+            static_cast< document::XStorageChangeListener* >( aIt.next() )
+                ->notifyStorageChange( static_cast< ::cppu::OWeakObject* >( this ), m_xStorage );
         }
     }
 }
