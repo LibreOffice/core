@@ -56,6 +56,7 @@
 
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/ofopxmlhelper.hxx>
+#include <comphelper/multicontainer2.hxx>
 #include <tools/diagnose_ex.h>
 
 #include "xstorage.hxx"
@@ -75,7 +76,7 @@ using namespace ::com::sun::star;
 struct StorInternalData_Impl
 {
     rtl::Reference<comphelper::RefCountedMutex> m_xSharedMutex;
-    ::cppu::OMultiTypeInterfaceContainerHelper m_aListenersContainer; // list of listeners
+    comphelper::OMultiTypeInterfaceContainerHelper2 m_aListenersContainer; // list of listeners
     ::std::unique_ptr< ::cppu::OTypeCollection> m_pTypeCollection;
     bool m_bIsRoot;
     sal_Int32 m_nStorageType; // the mode in which the storage is used
@@ -1921,12 +1922,12 @@ void OStorage::BroadcastModifiedIfNecessary()
 
     lang::EventObject aSource( static_cast< ::cppu::OWeakObject* >(this) );
 
-    ::cppu::OInterfaceContainerHelper* pContainer =
+    comphelper::OInterfaceContainerHelper2* pContainer =
             m_pData->m_aListenersContainer.getContainer(
                 cppu::UnoType<util::XModifyListener>::get());
     if ( pContainer )
     {
-           ::cppu::OInterfaceIteratorHelper pIterator( *pContainer );
+           comphelper::OInterfaceIteratorHelper2 pIterator( *pContainer );
            while ( pIterator.hasMoreElements( ) )
            {
                static_cast<util::XModifyListener*>( pIterator.next( ) )->modified( aSource );
@@ -1953,13 +1954,13 @@ void OStorage::BroadcastTransaction( sal_Int8 nMessage )
 
     lang::EventObject aSource( static_cast< ::cppu::OWeakObject* >(this) );
 
-    ::cppu::OInterfaceContainerHelper* pContainer =
+    comphelper::OInterfaceContainerHelper2* pContainer =
             m_pData->m_aListenersContainer.getContainer(
                 cppu::UnoType<embed::XTransactionListener>::get());
     if ( !pContainer )
            return;
 
-    ::cppu::OInterfaceIteratorHelper pIterator( *pContainer );
+    comphelper::OInterfaceIteratorHelper2 pIterator( *pContainer );
     while ( pIterator.hasMoreElements( ) )
     {
         OSL_ENSURE( nMessage >= 1 && nMessage <= 4, "Wrong internal notification code is used!" );

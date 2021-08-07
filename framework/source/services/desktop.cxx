@@ -1554,13 +1554,13 @@ bool Desktop::impl_sendQueryTerminationEvent(Desktop::TTerminateListenerList& lC
 {
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
-    ::cppu::OInterfaceContainerHelper* pContainer = m_aListenerContainer.getContainer( cppu::UnoType<css::frame::XTerminateListener>::get());
+    comphelper::OInterfaceContainerHelper2* pContainer = m_aListenerContainer.getContainer( cppu::UnoType<css::frame::XTerminateListener>::get());
     if ( ! pContainer )
         return true;
 
     css::lang::EventObject aEvent( static_cast< ::cppu::OWeakObject* >(this) );
 
-    ::cppu::OInterfaceIteratorHelper aIterator( *pContainer );
+    comphelper::OInterfaceIteratorHelper2 aIterator( *pContainer );
     while ( aIterator.hasMoreElements() )
     {
         try
@@ -1612,11 +1612,11 @@ void Desktop::impl_sendTerminateToClipboard()
 {
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
-    ::cppu::OInterfaceContainerHelper* pContainer = m_aListenerContainer.getContainer( cppu::UnoType<css::frame::XTerminateListener>::get());
+    comphelper::OInterfaceContainerHelper2* pContainer = m_aListenerContainer.getContainer( cppu::UnoType<css::frame::XTerminateListener>::get());
     if ( ! pContainer )
         return;
 
-    ::cppu::OInterfaceIteratorHelper aIterator( *pContainer );
+    comphelper::OInterfaceIteratorHelper2 aIterator( *pContainer );
     while ( aIterator.hasMoreElements() )
     {
         try
@@ -1652,13 +1652,13 @@ void Desktop::impl_sendNotifyTerminationEvent()
 {
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
-    ::cppu::OInterfaceContainerHelper* pContainer = m_aListenerContainer.getContainer( cppu::UnoType<css::frame::XTerminateListener>::get());
+    comphelper::OInterfaceContainerHelper2* pContainer = m_aListenerContainer.getContainer( cppu::UnoType<css::frame::XTerminateListener>::get());
     if ( ! pContainer )
         return;
 
     css::lang::EventObject aEvent( static_cast< ::cppu::OWeakObject* >(this) );
 
-    ::cppu::OInterfaceIteratorHelper aIterator( *pContainer );
+    comphelper::OInterfaceIteratorHelper2 aIterator( *pContainer );
     while ( aIterator.hasMoreElements() )
     {
         try

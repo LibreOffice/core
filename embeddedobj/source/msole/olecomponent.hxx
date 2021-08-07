@@ -34,8 +34,8 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <rtl/ref.hxx>
 
-namespace cppu {
-    class OMultiTypeInterfaceContainerHelper;
+namespace comphelper {
+    class OMultiTypeInterfaceContainerHelper2;
 }
 
 class OleWrapperClientSite;
@@ -48,7 +48,7 @@ class OleComponent : public ::cppu::WeakImplHelper< css::util::XCloseable, css::
                                                     css::datatransfer::XTransferable >
 {
     ::osl::Mutex m_aMutex;
-    ::cppu::OMultiTypeInterfaceContainerHelper* m_pInterfaceContainer;
+    comphelper::OMultiTypeInterfaceContainerHelper2* m_pInterfaceContainer;
 
     bool m_bDisposed;
     bool m_bModified;

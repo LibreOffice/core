@@ -243,12 +243,12 @@ uno::Reference< frame::XController > ChartModel::impl_getCurrentController()
 
 void ChartModel::impl_notifyCloseListeners()
 {
-    ::cppu::OInterfaceContainerHelper* pIC = m_aLifeTimeManager.m_aListenerContainer
+    ::comphelper::OInterfaceContainerHelper2* pIC = m_aLifeTimeManager.m_aListenerContainer
         .getContainer( cppu::UnoType<util::XCloseListener>::get());
     if( pIC )
     {
         lang::EventObject aEvent( static_cast< lang::XComponent*>(this) );
-        ::cppu::OInterfaceIteratorHelper aIt( *pIC );
+        ::comphelper::OInterfaceIteratorHelper2 aIt( *pIC );
         while( aIt.hasMoreElements() )
         {
             uno::Reference< util::XCloseListener > xListener( aIt.next(), uno::UNO_QUERY );

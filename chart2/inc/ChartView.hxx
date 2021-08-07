@@ -20,7 +20,7 @@
 
 #include <chartview/ExplicitValueProvider.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/interfacecontainer.h>
+#include <comphelper/multicontainer2.hxx>
 
 #include <svl/lstner.hxx>
 #include <com/sun/star/awt/Size.hpp>
@@ -229,7 +229,7 @@ private: //member
 
     std::vector< std::unique_ptr<VCoordinateSystem> > m_aVCooSysList;
 
-    ::cppu::OMultiTypeInterfaceContainerHelper
+    comphelper::OMultiTypeInterfaceContainerHelper2
                         m_aListenerContainer;
 
     bool m_bViewDirty; //states whether the view needs to be rebuild

@@ -2614,12 +2614,12 @@ void ChartView::impl_notifyModeChangeListener( const OUString& rNewMode )
 {
     try
     {
-        ::cppu::OInterfaceContainerHelper* pIC = m_aListenerContainer
+        comphelper::OInterfaceContainerHelper2* pIC = m_aListenerContainer
             .getContainer( cppu::UnoType<util::XModeChangeListener>::get());
         if( pIC )
         {
             util::ModeChangeEvent aEvent( static_cast< uno::XWeak* >( this ), rNewMode );
-            ::cppu::OInterfaceIteratorHelper aIt( *pIC );
+            comphelper::OInterfaceIteratorHelper2 aIt( *pIC );
             while( aIt.hasMoreElements() )
             {
                 uno::Reference< util::XModeChangeListener > xListener( aIt.next(), uno::UNO_QUERY );

@@ -21,7 +21,7 @@
 
 #include <com/sun/star/lang/XConnectionPointContainer.hpp>
 #include <cppuhelper/weak.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
+#include <comphelper/multicontainer2.hxx>
 
 namespace com::sun::star::lang { class XConnectionPoint; }
 
@@ -92,11 +92,11 @@ public:
     //  Is necessary to get container member at OConnectionPoint-instance.
     // Impl methods are not threadsafe!
     // "Parent" function must do this.
-    ::cppu::OMultiTypeInterfaceContainerHelper& impl_getMultiTypeContainer() { return m_aMultiTypeContainer; }
+    comphelper::OMultiTypeInterfaceContainerHelper2& impl_getMultiTypeContainer() { return m_aMultiTypeContainer; }
 
 private:
     ::osl::Mutex&                                   m_aSharedMutex;
-    ::cppu::OMultiTypeInterfaceContainerHelper      m_aMultiTypeContainer;   // Container to hold listener
+    comphelper::OMultiTypeInterfaceContainerHelper2 m_aMultiTypeContainer;   // Container to hold listener
 };
 
 }

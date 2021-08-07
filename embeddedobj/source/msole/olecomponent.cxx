@@ -1511,7 +1511,7 @@ void SAL_CALL OleComponent::addCloseListener( const uno::Reference< util::XClose
         throw lang::DisposedException(); // TODO
 
     if ( !m_pInterfaceContainer )
-        m_pInterfaceContainer = new ::cppu::OMultiTypeInterfaceContainerHelper( m_aMutex );
+        m_pInterfaceContainer = new comphelper::OMultiTypeInterfaceContainerHelper2( m_aMutex );
 
     m_pInterfaceContainer->addInterface( cppu::UnoType<util::XCloseListener>::get(), xListener );
 }
@@ -1682,7 +1682,7 @@ void SAL_CALL OleComponent::addEventListener( const uno::Reference< lang::XEvent
         throw lang::DisposedException(); // TODO
 
     if ( !m_pInterfaceContainer )
-        m_pInterfaceContainer = new ::cppu::OMultiTypeInterfaceContainerHelper( m_aMutex );
+        m_pInterfaceContainer = new comphelper::OMultiTypeInterfaceContainerHelper2( m_aMutex );
 
     m_pInterfaceContainer->addInterface( cppu::UnoType<lang::XEventListener>::get(), xListener );
 }
@@ -1771,7 +1771,7 @@ void SAL_CALL OleComponent::addModifyListener( const css::uno::Reference < css::
         throw lang::DisposedException(); // TODO
 
     if ( !m_pInterfaceContainer )
-        m_pInterfaceContainer = new ::cppu::OMultiTypeInterfaceContainerHelper( m_aMutex );
+        m_pInterfaceContainer = new comphelper::OMultiTypeInterfaceContainerHelper2( m_aMutex );
 
     m_pInterfaceContainer->addInterface( cppu::UnoType<util::XModifyListener>::get(), xListener );
 }

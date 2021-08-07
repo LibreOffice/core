@@ -47,7 +47,7 @@
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 
 #include <cppuhelper/exc_hlp.hxx>
-#include <cppuhelper/interfacecontainer.h>
+#include <comphelper/multicontainer2.hxx>
 #include <comphelper/mimeconfighelper.hxx>
 #include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
@@ -125,13 +125,13 @@ void OleEmbeddedObject::MoveListeners()
 
     // move state change listeners
     {
-        ::cppu::OInterfaceContainerHelper* pStateChangeContainer =
+        comphelper::OInterfaceContainerHelper2* pStateChangeContainer =
             m_pInterfaceContainer->getContainer( cppu::UnoType<embed::XStateChangeListener>::get());
         if ( pStateChangeContainer != nullptr )
         {
             if ( m_xWrappedObject.is() )
             {
-                ::cppu::OInterfaceIteratorHelper pIterator( *pStateChangeContainer );
+                comphelper::OInterfaceIteratorHelper2 pIterator( *pStateChangeContainer );
                 while ( pIterator.hasMoreElements() )
                 {
                     try
@@ -149,13 +149,13 @@ void OleEmbeddedObject::MoveListeners()
 
     // move event listeners
     {
-        ::cppu::OInterfaceContainerHelper* pEventContainer =
+        comphelper::OInterfaceContainerHelper2* pEventContainer =
             m_pInterfaceContainer->getContainer( cppu::UnoType<document::XEventListener>::get());
         if ( pEventContainer != nullptr )
         {
             if ( m_xWrappedObject.is() )
             {
-                ::cppu::OInterfaceIteratorHelper pIterator( *pEventContainer );
+                comphelper::OInterfaceIteratorHelper2 pIterator( *pEventContainer );
                 while ( pIterator.hasMoreElements() )
                 {
                     try
@@ -173,13 +173,13 @@ void OleEmbeddedObject::MoveListeners()
 
     // move close listeners
     {
-        ::cppu::OInterfaceContainerHelper* pCloseContainer =
+        comphelper::OInterfaceContainerHelper2* pCloseContainer =
             m_pInterfaceContainer->getContainer( cppu::UnoType<util::XCloseListener>::get());
         if ( pCloseContainer != nullptr )
         {
             if ( m_xWrappedObject.is() )
             {
-                ::cppu::OInterfaceIteratorHelper pIterator( *pCloseContainer );
+                comphelper::OInterfaceIteratorHelper2 pIterator( *pCloseContainer );
                 while ( pIterator.hasMoreElements() )
                 {
                     try
