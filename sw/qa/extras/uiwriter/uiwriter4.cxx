@@ -279,6 +279,7 @@ public:
     void testRedlineAutoCorrect2();
     void testEmojiAutoCorrect();
     void testInsertPdf();
+    void testTdf143760WrapContourToOff();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest4);
     CPPUNIT_TEST(testTdf96515);
@@ -394,6 +395,7 @@ public:
     CPPUNIT_TEST(testRedlineAutoCorrect2);
     CPPUNIT_TEST(testEmojiAutoCorrect);
     CPPUNIT_TEST(testInsertPdf);
+    CPPUNIT_TEST(testTdf143760WrapContourToOff);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -3631,6 +3633,31 @@ void SwUiWriterTest4::testInsertPdf()
     CPPUNIT_ASSERT(xGraphic.is());
     // Assert that the graphic is a PDF
     CPPUNIT_ASSERT_EQUAL(OUString("application/pdf"), getProperty<OUString>(xGraphic, "MimeType"));
+}
+
+void SwUiWriterTest4::testTdf143760WrapContourToOff()
+{
+    // Actually, this is an ooxmlexport test. It is here because here is a ready environment
+    // to change a shape by dispatchCommand.
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf143760_ContourToWrapOff.docx");
+    CPPUNIT_ASSERT(pDoc);
+    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(getShape(1), "SurroundContour"));
+
+    // Mark the object
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
+    SdrObject* pObject = pPage->GetObj(0);
+    CPPUNIT_ASSERT(pObject);
+    SdrView* pView = pWrtShell->GetDrawView();
+    pView->MarkObj(pObject, pView->GetSdrPageView());
+
+    // Set "wrap off"
+    dispatchCommand(mxComponent, ".uno:WrapOff", {});
+    CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(getShape(1), "SurroundContour"));
+
+    // Without fix this had failed, because the shape was written to file with contour.
+    reload("Office Open XML Text", "tdf143760_ContourToWrapOff.docx");
+    CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(getShape(1), "SurroundContour"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest4);

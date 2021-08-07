@@ -17,8 +17,12 @@
 #include <editeng/shaditem.hxx>
 #include <editeng/opaqitem.hxx>
 #include <editeng/boxitem.hxx>
+#include <svx/svdoashp.hxx>
 #include <svx/svdogrp.hxx>
+#include <svx/svdopath.hxx>
 #include <svx/svdobjkind.hxx>
+#include <svx/svditer.hxx>
+#include <svx/EnhancedCustomShape2d.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/relationship.hxx>
 #include <textboxhelper.hxx>
@@ -42,6 +46,7 @@
 #include <tools/diagnose_ex.h>
 #include <svx/xlnwtit.hxx>
 #include <svx/svdtrans.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 using namespace com::sun::star;
 using namespace oox;
@@ -276,6 +281,121 @@ void lcl_makeDistZeroAndExtentNonNegative(sal_Int64& rDistT, sal_Int64& rDistB, 
     lcl_makeSingleDistZeroAndExtentNonNegative(rDistT, rTopExt);
     lcl_makeSingleDistZeroAndExtentNonNegative(rDistR, rRightExt);
     lcl_makeSingleDistZeroAndExtentNonNegative(rDistB, rBottomExt);
+}
+
+tools::Polygon lcl_CreateContourPolygon(SdrObject* pSdrObj)
+{
+    tools::Polygon aContour;
+    if (!pSdrObj)
+    {
+        // use rectangular default
+        aContour.Insert(0, Point(0, 0));
+        aContour.Insert(1, Point(21600, 0));
+        aContour.Insert(2, Point(21600, 21600));
+        aContour.Insert(3, Point(0, 21600));
+        aContour.Insert(4, Point(0, 0));
+        return aContour;
+    }
+
+    // Simple version for now: Use ready PolygonFromPolyPolygon().
+    // For that we first create a B2DPolyPolygon from the shape, that ideally contains
+    // the outline of the shape.
+    basegfx::B2DPolyPolygon aPolyPolygon;
+    switch (pSdrObj->GetObjIdentifier())
+    {
+        case OBJ_CUSTOMSHAPE:
+        {
+            // EnhancedCustomShapeEngine::GetLineGeometry() is not directly usable, because the wrap
+            // polygon acts on the untransformed shape in Word. We do here similar as in
+            // GetLineGreometry(), but without transformations.
+            EnhancedCustomShape2d aCustomShape2d(*(static_cast<SdrObjCustomShape*>(pSdrObj)));
+            SdrObjectUniquePtr pLineGeometryObj = aCustomShape2d.CreateLineGeometry();
+            if (!pLineGeometryObj)
+                break;
+
+            // We might have got other object kinds than SdrPathObj, even groups.
+            SdrObjListIter aIter(*pLineGeometryObj, SdrIterMode::DeepWithGroups);
+            while (aIter.IsMore())
+            {
+                basegfx::B2DPolyPolygon aPP;
+                const SdrObject* pNext = aIter.Next();
+                if (auto pPathObj = dynamic_cast<const SdrPathObj*>(pNext))
+                    aPP = pPathObj->GetPathPoly();
+                else
+                {
+                    SdrObjectUniquePtr pNewObj = pLineGeometryObj->ConvertToPolyObj(false, false);
+                    SdrPathObj* pPath = dynamic_cast<SdrPathObj*>(pNewObj.get());
+                    if (pPath)
+                        aPP = pPath->GetPathPoly();
+                }
+                if (aPP.count())
+                    aPolyPolygon.append(aPP);
+            }
+
+            if (!aPolyPolygon.count())
+                break;
+
+            // Make relative to range 0..21600, 0..21600
+            Point aCenter(pSdrObj->GetSnapRect().Center());
+            basegfx::B2DHomMatrix aTranslateToOrigin(
+                basegfx::utils::createTranslateB2DHomMatrix(-aCenter.X(), -aCenter.Y()));
+            aPolyPolygon.transform(aTranslateToOrigin);
+            const double fWidth(pSdrObj->GetLogicRect().getWidth());
+            double fScaleX = fWidth == 0.0 ? 1.0 : 21600.0 / fWidth;
+            const double fHeight(pSdrObj->GetLogicRect().getHeight());
+            double fScaleY = fHeight == 0.0 ? 1.0 : 21600.0 / fHeight;
+            basegfx::B2DHomMatrix aScale(basegfx::utils::createScaleB2DHomMatrix(fScaleX, fScaleY));
+            aPolyPolygon.transform(aScale);
+
+            // "moon" and "msp-spt89" (up-right-arrow) are currently mirrowed horizontal. But
+            // that is removed on export in shapes.cxx. So need to remove it in wrap polygon too.
+            uno::Reference<drawing::XShape> xShape(pSdrObj->getUnoShape(), uno::UNO_QUERY);
+            uno::Reference<beans::XPropertySet> xProps(xShape, uno::UNO_QUERY);
+            comphelper::SequenceAsHashMap aCustomShapeGeometry(
+                xProps->getPropertyValue("CustomShapeGeometry"));
+            if (aCustomShapeGeometry["Type"].get<OUString>() == "moon"
+                || aCustomShapeGeometry["Type"].get<OUString>() == "mso-spt89")
+            {
+                basegfx::B2DHomMatrix aFlipH(basegfx::utils::createScaleB2DHomMatrix(-1.0, 1.0));
+                aPolyPolygon.transform(aFlipH);
+            }
+
+            basegfx::B2DHomMatrix aTranslateToCenter(
+                basegfx::utils::createTranslateB2DHomMatrix(10800.0, 10800.0));
+            aPolyPolygon.transform(aTranslateToCenter);
+            break;
+        } // end case OBJ_CUSTOMSHAPE
+        case OBJ_NONE:
+        default:
+            break;
+    }
+
+    // Simple version for now: Use ready PolygonFromPolyPolygon()
+    const tools::PolyPolygon aToolsPolyPoly(aPolyPolygon);
+    aContour = sw::util::PolygonFromPolyPolygon(aToolsPolyPoly);
+
+    // The wrap polygon needs at least two points in OOXML and three points in Word.
+    switch (aContour.GetSize())
+    {
+        case 0:
+            // use rectangular default
+            aContour.Insert(0, Point(0, 0));
+            aContour.Insert(1, Point(21600, 0));
+            aContour.Insert(2, Point(21600, 21600));
+            aContour.Insert(3, Point(0, 21600));
+            aContour.Insert(4, Point(0, 0));
+            break;
+        case 1:
+            aContour.Insert(1, aContour.GetPoint(0));
+            aContour.Insert(2, aContour.GetPoint(0));
+            break;
+        case 2:
+            aContour.Insert(2, aContour.GetPoint(0));
+            break;
+        default:
+            break;
+    }
+    return aContour;
 }
 } // end anonymous namespace
 
@@ -1035,175 +1155,137 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
 
     // XML_anchor has exact one of types wrapNone, wrapSquare, wrapTight, wrapThrough and
     // WrapTopAndBottom. Map our own types to them as far as possible.
-    sal_Int32 nWrapToken = 0; // 0 indicates that no wrap type is yet determined.
 
-    // See if we know the exact wrap type from grab-bag.
+    if (pFrameFormat->GetSurround().GetValue() == css::text::WrapTextMode_THROUGH
+        || pFrameFormat->GetSurround().GetValue() == css::text::WrapTextMode_THROUGHT)
+    {
+        m_pImpl->getSerializer()->singleElementNS(XML_wp, XML_wrapNone);
+        return;
+    }
+
+    if (pFrameFormat->GetSurround().GetValue() == css::text::WrapTextMode_NONE)
+    {
+        m_pImpl->getSerializer()->singleElementNS(XML_wp, XML_wrapTopAndBottom);
+        return;
+    }
+
+    // All remaining cases need attribute XML_wrapText
+    OUString sWrapType;
+    switch (pFrameFormat->GetSurround().GetSurround())
+    {
+        case text::WrapTextMode_DYNAMIC:
+            sWrapType = OUString("largest");
+            break;
+        case text::WrapTextMode_LEFT:
+            sWrapType = OUString("left");
+            break;
+        case text::WrapTextMode_RIGHT:
+            sWrapType = OUString("right");
+            break;
+        case text::WrapTextMode_PARALLEL:
+        default:
+            sWrapType = OUString("bothSides");
+            break;
+    }
+
+    // ToDo: Exclude cases where LibreOffice wrap without contour is different
+    // from Word XML_wrapSquare or where direct use of distances not possible and workaround
+    // will be done using wrapPolygon.
+    // ToDo: handle case Writer frame, where contour can be set in LibreOffice but is not rendered.
+
+    // This case needs no wrapPolygon
+    if (!pFrameFormat->GetSurround().IsContour())
+    {
+        m_pImpl->getSerializer()->singleElementNS(XML_wp, XML_wrapSquare, XML_wrapText, sWrapType);
+        return;
+    }
+
+    // Contour wrap.
+    sal_Int32 nWrapToken
+        = pFrameFormat->GetSurround().IsOutside() ? XML_wrapTight : XML_wrapThrough;
+
+    // ToDo: cases where wrapPolygon is used as workaround.
+
+    // Own wrap polygon exists only for TextGraphicObject and TextEmbeddedObject. It might be edited
+    // by user. If such exists, we use it and we are done.
+    if (const SwNoTextNode* pNd = sw::util::GetNoTextNodeFromSwFrameFormat(*pFrameFormat))
+    {
+        const tools::PolyPolygon* pPolyPoly = pNd->HasContour();
+        if (pPolyPoly && pPolyPoly->Count())
+        {
+            tools::Polygon aPoly
+                = sw::util::CorrectWordWrapPolygonForExport(*pPolyPoly, pNd, /*bCorrectCrop=*/true);
+            if (aPoly.GetSize() >= 3)
+            {
+                m_pImpl->getSerializer()->startElementNS(XML_wp, nWrapToken, XML_wrapText,
+                                                         sWrapType);
+                // ToDo: Test whether XML_edited true or false gives better results.
+                m_pImpl->getSerializer()->startElementNS(XML_wp, XML_wrapPolygon, XML_edited, "0");
+                m_pImpl->getSerializer()->singleElementNS(XML_wp, XML_start, XML_x,
+                                                          OString::number(aPoly[0].X()), XML_y,
+                                                          OString::number(aPoly[0].Y()));
+                for (sal_uInt16 i = 1; i < aPoly.GetSize(); ++i)
+                    m_pImpl->getSerializer()->singleElementNS(XML_wp, XML_lineTo, XML_x,
+                                                              OString::number(aPoly[i].X()), XML_y,
+                                                              OString::number(aPoly[i].Y()));
+                m_pImpl->getSerializer()->endElementNS(XML_wp, XML_wrapPolygon);
+
+                m_pImpl->getSerializer()->endElementNS(XML_wp, nWrapToken);
+                return;
+            }
+        }
+    }
+
+    // If this shape comes from ooxml import, there might be a wrap polygon in InteropGrabBag.
+    // Wrap polygons can be edited by users in Word. They are independent from changing shape size or
+    // rotation. So it is likely, that it is still usable.
     if (pObj)
     {
         uno::Any aAny;
         pObj->GetGrabBagItem(aAny);
         comphelper::SequenceAsHashMap aGrabBag(aAny);
-        auto it = aGrabBag.find("EG_WrapType");
+        auto it = aGrabBag.find("CT_WrapPath");
         if (it != aGrabBag.end())
         {
-            auto sType = it->second.get<OUString>();
-            if (sType == "wrapTight")
-                nWrapToken = XML_wrapTight;
-            else if (sType == "wrapThrough")
-                nWrapToken = XML_wrapThrough;
-            else
-                SAL_WARN("sw.ww8",
-                         "DocxSdrExport::startDMLAnchorInline: unexpected EG_WrapType value");
+            m_pImpl->getSerializer()->startElementNS(XML_wp, nWrapToken, XML_wrapText, sWrapType);
 
-            m_pImpl->getSerializer()->startElementNS(XML_wp, nWrapToken, XML_wrapText, "bothSides");
-
-            it = aGrabBag.find("CT_WrapPath");
-            if (it != aGrabBag.end())
+            m_pImpl->getSerializer()->startElementNS(XML_wp, XML_wrapPolygon, XML_edited, "0");
+            auto aSeqSeq = it->second.get<drawing::PointSequenceSequence>();
+            auto aPoints(comphelper::sequenceToContainer<std::vector<awt::Point>>(aSeqSeq[0]));
+            for (auto i = aPoints.begin(); i != aPoints.end(); ++i)
             {
-                m_pImpl->getSerializer()->startElementNS(XML_wp, XML_wrapPolygon, XML_edited, "0");
-                auto aSeqSeq = it->second.get<drawing::PointSequenceSequence>();
-                auto aPoints(comphelper::sequenceToContainer<std::vector<awt::Point>>(aSeqSeq[0]));
-                for (auto i = aPoints.begin(); i != aPoints.end(); ++i)
-                {
-                    awt::Point& rPoint = *i;
-                    m_pImpl->getSerializer()->singleElementNS(
-                        XML_wp, (i == aPoints.begin() ? XML_start : XML_lineTo), XML_x,
-                        OString::number(rPoint.X), XML_y, OString::number(rPoint.Y));
-                }
-                m_pImpl->getSerializer()->endElementNS(XML_wp, XML_wrapPolygon);
+                awt::Point& rPoint = *i;
+                m_pImpl->getSerializer()->singleElementNS(
+                    XML_wp, (i == aPoints.begin() ? XML_start : XML_lineTo), XML_x,
+                    OString::number(rPoint.X), XML_y, OString::number(rPoint.Y));
             }
+            m_pImpl->getSerializer()->endElementNS(XML_wp, XML_wrapPolygon);
 
             m_pImpl->getSerializer()->endElementNS(XML_wp, nWrapToken);
+            return;
         }
     }
 
-    // Or if we have a contour.
-    if (!nWrapToken && pFrameFormat->GetSurround().IsContour())
-    {
-        if (const SwNoTextNode* pNd = sw::util::GetNoTextNodeFromSwFrameFormat(*pFrameFormat))
-        {
-            const tools::PolyPolygon* pPolyPoly = pNd->HasContour();
-            if (pPolyPoly && pPolyPoly->Count())
-            {
-                nWrapToken = XML_wrapTight;
-                m_pImpl->getSerializer()->startElementNS(XML_wp, nWrapToken, XML_wrapText,
-                                                         "bothSides");
+    // In this case we likely had an odt document to be exported to docx. ODF does not know the
+    // concept of a wrap polygon and LibreOffice has no one internally. So as a workaround, we
+    // generate a wrap polygon from the shape geometry.
+    tools::Polygon aContour = lcl_CreateContourPolygon(const_cast<SdrObject*>(pObj));
 
-                m_pImpl->getSerializer()->startElementNS(XML_wp, XML_wrapPolygon, XML_edited, "0");
-                tools::Polygon aPoly = sw::util::CorrectWordWrapPolygonForExport(
-                    *pPolyPoly, pNd, /*bCorrectCrop=*/true);
-                for (sal_uInt16 i = 0; i < aPoly.GetSize(); ++i)
-                    m_pImpl->getSerializer()->singleElementNS(
-                        XML_wp, (i == 0 ? XML_start : XML_lineTo), XML_x,
-                        OString::number(aPoly[i].X()), XML_y, OString::number(aPoly[i].Y()));
-                m_pImpl->getSerializer()->endElementNS(XML_wp, XML_wrapPolygon);
+    // lcl_CreateContourPolygon() ensures at least three points
+    m_pImpl->getSerializer()->startElementNS(XML_wp, nWrapToken, XML_wrapText, sWrapType);
 
-                m_pImpl->getSerializer()->endElementNS(XML_wp, nWrapToken);
-            }
-        }
-        else if (SdrObject* pSdrObj = const_cast<SdrObject*>(pFrameFormat->FindRealSdrObject()))
-        {
-            // In this case we likely had an odt document to be exported to docx.
-            // There is no grab-bag or something else so for a workaround,
-            // let's export the geometry of the shape...
-            // First get the UNO-shape
-            uno::Reference<drawing::XShape> xShape(pSdrObj->getUnoShape(), uno::UNO_QUERY);
+    // ToDo: Test whether XML_edited true or false gives better results.
+    m_pImpl->getSerializer()->startElementNS(XML_wp, XML_wrapPolygon, XML_edited, "0");
+    m_pImpl->getSerializer()->singleElementNS(XML_wp, XML_start, XML_x,
+                                              OString::number(aContour.GetPoint(0).getX()), XML_y,
+                                              OString::number(aContour.GetPoint(0).getY()));
+    for (sal_uInt32 i = 1; i < aContour.GetSize(); i++)
+        m_pImpl->getSerializer()->singleElementNS(
+            XML_wp, XML_lineTo, XML_x, OString::number(aContour.GetPoint(i).getX()), XML_y,
+            OString::number(aContour.GetPoint(i).getY()));
+    m_pImpl->getSerializer()->endElementNS(XML_wp, XML_wrapPolygon);
 
-            if (xShape && xShape->getShapeType() == u"com.sun.star.drawing.CustomShape")
-            {
-                try
-                {
-                    // Get the properties of the Xshape
-                    uno::Reference<beans::XPropertySet> XProps(xShape, uno::UNO_QUERY);
-                    // Get the "CustomShapeGeometry" property and from its Any() make a hashMap
-                    comphelper::SequenceAsHashMap aCustomShapeGeometry(
-                        XProps->getPropertyValue("CustomShapeGeometry"));
-                    // Get the "Path" property and from its Any() make a hashMap
-                    comphelper::SequenceAsHashMap aPath(aCustomShapeGeometry.getValue("Path"));
-                    // From the Any() of the "Coordinates" property get the points
-                    uno::Sequence<css::drawing::EnhancedCustomShapeParameterPair> aCoords
-                        = aPath.getValue("Coordinates")
-                              .get<uno::Sequence<css::drawing::EnhancedCustomShapeParameterPair>>();
-
-                    // Check if only one side wrap allowed
-                    OUString sWrapType;
-                    switch (pFrameFormat->GetSurround().GetSurround())
-                    {
-                        case text::WrapTextMode_DYNAMIC:
-                            sWrapType = OUString("largest");
-                            break;
-                        case text::WrapTextMode_LEFT:
-                            sWrapType = OUString("left");
-                            break;
-                        case text::WrapTextMode_RIGHT:
-                            sWrapType = OUString("right");
-                            break;
-                        case text::WrapTextMode_PARALLEL:
-                        default:
-                            sWrapType = OUString("bothSides");
-                            break;
-                    }
-
-                    // And export:
-                    nWrapToken = XML_wrapTight;
-                    m_pImpl->getSerializer()->startElementNS(XML_wp, nWrapToken, XML_wrapText,
-                                                             sWrapType);
-
-                    m_pImpl->getSerializer()->startElementNS(XML_wp, XML_wrapPolygon, XML_edited,
-                                                             "0");
-
-                    try
-                    {
-                        // There are the coordinates
-                        for (sal_Int32 i = 0; i < aCoords.getLength(); i++)
-                            m_pImpl->getSerializer()->singleElementNS(
-                                XML_wp, (i == 0 ? XML_start : XML_lineTo), XML_x,
-                                OString::number(aCoords[i].First.Value.get<double>()), XML_y,
-                                OString::number(aCoords[i].Second.Value.get<double>()));
-                    }
-                    catch (const uno::Exception& e)
-                    {
-                        // e.g. on exporting first attachment of tdf#94591 to docx
-                        TOOLS_WARN_EXCEPTION(
-                            "sw.ww8",
-                            "DocxSdrExport::startDMLAnchorInline: bad coordinate: " << e.Message);
-                    }
-
-                    m_pImpl->getSerializer()->endElementNS(XML_wp, XML_wrapPolygon);
-
-                    m_pImpl->getSerializer()->endElementNS(XML_wp, nWrapToken);
-                }
-                catch (uno::Exception& e)
-                {
-                    TOOLS_WARN_EXCEPTION(
-                        "sw.ww8", "DocxSdrExport::startDMLAnchorInline: exception: " << e.Message);
-                }
-            }
-        }
-    }
-
-    if (nWrapToken)
-        return;
-
-    // No wrap type determined yet? Then just approximate based on what we have.
-    switch (pFrameFormat->GetSurround().GetValue())
-    {
-        case css::text::WrapTextMode_NONE:
-            m_pImpl->getSerializer()->singleElementNS(XML_wp, XML_wrapTopAndBottom);
-            break;
-        case css::text::WrapTextMode_THROUGH:
-            m_pImpl->getSerializer()->singleElementNS(XML_wp, XML_wrapNone);
-            break;
-        case css::text::WrapTextMode_PARALLEL:
-            m_pImpl->getSerializer()->singleElementNS(XML_wp, XML_wrapSquare, XML_wrapText,
-                                                      "bothSides");
-            break;
-        case css::text::WrapTextMode_DYNAMIC:
-        default:
-            m_pImpl->getSerializer()->singleElementNS(XML_wp, XML_wrapSquare, XML_wrapText,
-                                                      "largest");
-            break;
-    }
+    m_pImpl->getSerializer()->endElementNS(XML_wp, nWrapToken);
 }
 
 void DocxSdrExport::endDMLAnchorInline(const SwFrameFormat* pFrameFormat)
