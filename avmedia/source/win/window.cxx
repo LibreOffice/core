@@ -430,7 +430,7 @@ void Window::fireMousePressedEvent( const css::awt::MouseEvent& rEvt )
         ::cppu::OInterfaceIteratorHelper aIter( *pContainer );
 
         while( aIter.hasMoreElements() )
-            uno::Reference< awt::XMouseListener >( aIter.next(), uno::UNO_QUERY_THROW )->mousePressed( rEvt );
+            static_cast< awt::XMouseListener* >( aIter.next() )->mousePressed( rEvt );
     }
 }
 
@@ -443,7 +443,7 @@ void Window::fireMouseReleasedEvent( const css::awt::MouseEvent& rEvt )
         ::cppu::OInterfaceIteratorHelper aIter( *pContainer );
 
         while( aIter.hasMoreElements() )
-            uno::Reference< awt::XMouseListener >( aIter.next(), uno::UNO_QUERY_THROW )->mouseReleased( rEvt );
+            static_cast< awt::XMouseListener* >( aIter.next() )->mouseReleased( rEvt );
     }
 }
 
@@ -456,7 +456,7 @@ void Window::fireMouseMovedEvent( const css::awt::MouseEvent& rEvt )
         ::cppu::OInterfaceIteratorHelper aIter( *pContainer );
 
         while( aIter.hasMoreElements() )
-            uno::Reference< awt::XMouseMotionListener >( aIter.next(), uno::UNO_QUERY_THROW )->mouseMoved( rEvt );
+            static_cast< awt::XMouseMotionListener* >( aIter.next() )->mouseMoved( rEvt );
     }
 }
 
@@ -469,7 +469,7 @@ void Window::fireSetFocusEvent( const css::awt::FocusEvent& rEvt )
         ::cppu::OInterfaceIteratorHelper aIter( *pContainer );
 
         while( aIter.hasMoreElements() )
-            uno::Reference< awt::XFocusListener >( aIter.next(), uno::UNO_QUERY_THROW )->focusGained( rEvt );
+            static_cast< awt::XFocusListener* >( aIter.next() )->focusGained( rEvt );
     }
 }
 

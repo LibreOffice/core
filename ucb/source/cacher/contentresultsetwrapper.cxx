@@ -188,10 +188,7 @@ void ContentResultSetWrapper::impl_notifyPropertyChangeListeners( const Property
         OInterfaceIteratorHelper aIter( *pContainer );
         while( aIter.hasMoreElements() )
         {
-            Reference< XPropertyChangeListener > xListener(
-                                                    aIter.next(), UNO_QUERY );
-            if( xListener.is() )
-                xListener->propertyChange( rEvt );
+            static_cast< XPropertyChangeListener* >( aIter.next() )->propertyChange( rEvt );
         }
     }
 
@@ -202,10 +199,7 @@ void ContentResultSetWrapper::impl_notifyPropertyChangeListeners( const Property
         OInterfaceIteratorHelper aIter( *pContainer );
         while( aIter.hasMoreElements() )
         {
-            Reference< XPropertyChangeListener > xListener(
-                                                    aIter.next(), UNO_QUERY );
-            if( xListener.is() )
-                xListener->propertyChange( rEvt );
+            static_cast< XPropertyChangeListener* >( aIter.next() )->propertyChange( rEvt );
         }
     }
 }
@@ -226,10 +220,7 @@ void ContentResultSetWrapper::impl_notifyVetoableChangeListeners( const Property
         OInterfaceIteratorHelper aIter( *pContainer );
         while( aIter.hasMoreElements() )
         {
-            Reference< XVetoableChangeListener > xListener(
-                                                    aIter.next(), UNO_QUERY );
-            if( xListener.is() )
-                xListener->vetoableChange( rEvt );
+            static_cast< XVetoableChangeListener* >( aIter.next() )->vetoableChange( rEvt );
         }
     }
 
@@ -240,10 +231,7 @@ void ContentResultSetWrapper::impl_notifyVetoableChangeListeners( const Property
         OInterfaceIteratorHelper aIter( *pContainer );
         while( aIter.hasMoreElements() )
         {
-            Reference< XVetoableChangeListener > xListener(
-                                                    aIter.next(), UNO_QUERY );
-            if( xListener.is() )
-                xListener->vetoableChange( rEvt );
+            static_cast< XVetoableChangeListener* >( aIter.next() )->vetoableChange( rEvt );
         }
     }
 }
