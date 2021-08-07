@@ -54,8 +54,8 @@ namespace com::sun::star {
     }
 }
 
-namespace cppu {
-    class OMultiTypeInterfaceContainerHelper;
+namespace comphelper {
+    class OMultiTypeInterfaceContainerHelper2;
 }
 
 namespace comphelper {
@@ -86,7 +86,7 @@ protected:
 
     rtl::Reference<DocumentHolder> m_xDocHolder;
 
-    std::unique_ptr<::cppu::OMultiTypeInterfaceContainerHelper> m_pInterfaceContainer;
+    std::unique_ptr<::comphelper::OMultiTypeInterfaceContainerHelper2> m_pInterfaceContainer;
 
     bool m_bReadOnly;
 

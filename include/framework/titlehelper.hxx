@@ -29,7 +29,7 @@
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
+#include <comphelper/multicontainer2.hxx>
 
 #include <rtl/ustrbuf.hxx>
 
@@ -187,7 +187,7 @@ class FWK_DLLPUBLIC TitleHelper final : private ::cppu::BaseMutex
         ::sal_Int32 m_nLeasedNumber;
 
         /** contains all title change listener */
-        ::cppu::OMultiTypeInterfaceContainerHelper m_aListener;
+        comphelper::OMultiTypeInterfaceContainerHelper2 m_aListener;
 };
 
 } // namespace framework

@@ -28,7 +28,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 
 #include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/interfacecontainer.h>
+#include <comphelper/multicontainer.hxx>
 #include <osl/interlck.h>
 
 namespace fpicker{
@@ -182,7 +182,7 @@ class VistaFilePickerEventHandler : public ::cppu::BaseMutex
          *  be locked during this time. If we call our listener back now synchronously ..
          *  we will block on SolarMutex.acquire() forever .-))
          */
-        ::cppu::OMultiTypeInterfaceContainerHelper m_lListener;
+        comphelper::OMultiTypeInterfaceContainerHelper2 m_lListener;
 };
 
 } // namespace vista

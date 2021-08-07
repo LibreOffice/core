@@ -27,7 +27,7 @@
 #include <com/sun/star/util/XUpdatable.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
+#include <comphelper/multicontainer2.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include <comphelper/propertycontainer.hxx>
@@ -181,7 +181,7 @@ class SVT_DLLPUBLIC ToolboxController :
         css::uno::Reference< css::uno::XComponentContext >        m_xContext;
         OUString                                                  m_aCommandURL;
         URLToDispatchMap                                          m_aListenerMap;
-        ::cppu::OMultiTypeInterfaceContainerHelper                m_aListenerContainer;   /// container for ALL Listener
+        comphelper::OMultiTypeInterfaceContainerHelper2           m_aListenerContainer;   /// container for ALL Listener
 
         css::uno::Reference< css::awt::XWindow >                  m_xParentWindow;
         css::uno::Reference< css::util::XURLTransformer >         m_xUrlTransformer;

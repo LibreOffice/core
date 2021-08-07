@@ -20,7 +20,7 @@
 
 #include <osl/mutex.hxx>
 #include <osl/conditn.hxx>
-#include <cppuhelper/interfacecontainer.h>
+#include <comphelper/multicontainer2.hxx>
 #include "charttoolsdllapi.hxx"
 
 namespace com::sun::star::lang { class XComponent; }
@@ -45,7 +45,7 @@ public:
     bool    dispose();
 
 public:
-    ::cppu::OMultiTypeInterfaceContainerHelper      m_aListenerContainer;
+    ::comphelper::OMultiTypeInterfaceContainerHelper2      m_aListenerContainer;
 
 protected:
     SAL_DLLPRIVATE virtual bool    impl_canStartApiCall();

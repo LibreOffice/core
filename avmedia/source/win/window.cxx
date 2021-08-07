@@ -423,11 +423,11 @@ void SAL_CALL Window::removeEventListener( const uno::Reference< lang::XEventLis
 
 void Window::fireMousePressedEvent( const css::awt::MouseEvent& rEvt )
 {
-    ::cppu::OInterfaceContainerHelper* pContainer = maListeners.getContainer( cppu::UnoType<awt::XMouseListener>::get());
+    comphelper::OInterfaceContainerHelper2* pContainer = maListeners.getContainer( cppu::UnoType<awt::XMouseListener>::get());
 
     if( pContainer )
     {
-        ::cppu::OInterfaceIteratorHelper aIter( *pContainer );
+        comphelper::OInterfaceIteratorHelper2 aIter( *pContainer );
 
         while( aIter.hasMoreElements() )
             static_cast< awt::XMouseListener* >( aIter.next() )->mousePressed( rEvt );
@@ -436,11 +436,11 @@ void Window::fireMousePressedEvent( const css::awt::MouseEvent& rEvt )
 
 void Window::fireMouseReleasedEvent( const css::awt::MouseEvent& rEvt )
 {
-    ::cppu::OInterfaceContainerHelper* pContainer = maListeners.getContainer( cppu::UnoType<awt::XMouseListener>::get());
+    comphelper::OInterfaceContainerHelper2* pContainer = maListeners.getContainer( cppu::UnoType<awt::XMouseListener>::get());
 
     if( pContainer )
     {
-        ::cppu::OInterfaceIteratorHelper aIter( *pContainer );
+        comphelper::OInterfaceIteratorHelper2 aIter( *pContainer );
 
         while( aIter.hasMoreElements() )
             static_cast< awt::XMouseListener* >( aIter.next() )->mouseReleased( rEvt );
@@ -449,11 +449,11 @@ void Window::fireMouseReleasedEvent( const css::awt::MouseEvent& rEvt )
 
 void Window::fireMouseMovedEvent( const css::awt::MouseEvent& rEvt )
 {
-    ::cppu::OInterfaceContainerHelper* pContainer = maListeners.getContainer( cppu::UnoType<awt::XMouseMotionListener>::get());
+    comphelper::OInterfaceContainerHelper2* pContainer = maListeners.getContainer( cppu::UnoType<awt::XMouseMotionListener>::get());
 
     if( pContainer )
     {
-        ::cppu::OInterfaceIteratorHelper aIter( *pContainer );
+        comphelper::OInterfaceIteratorHelper2 aIter( *pContainer );
 
         while( aIter.hasMoreElements() )
             static_cast< awt::XMouseMotionListener* >( aIter.next() )->mouseMoved( rEvt );
@@ -462,11 +462,11 @@ void Window::fireMouseMovedEvent( const css::awt::MouseEvent& rEvt )
 
 void Window::fireSetFocusEvent( const css::awt::FocusEvent& rEvt )
 {
-    ::cppu::OInterfaceContainerHelper* pContainer = maListeners.getContainer( cppu::UnoType<awt::XFocusListener>::get());
+    comphelper::OInterfaceContainerHelper2* pContainer = maListeners.getContainer( cppu::UnoType<awt::XFocusListener>::get());
 
     if( pContainer )
     {
-        ::cppu::OInterfaceIteratorHelper aIter( *pContainer );
+        comphelper::OInterfaceIteratorHelper2 aIter( *pContainer );
 
         while( aIter.hasMoreElements() )
             static_cast< awt::XFocusListener* >( aIter.next() )->focusGained( rEvt );
