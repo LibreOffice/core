@@ -19,6 +19,7 @@
 
 
 #include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/multicontainer2.hxx>
 
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
@@ -282,6 +283,121 @@ void OInterfaceContainerHelper2::clear()
         aData.pAsInterface->release();
     aData.pAsInterface = nullptr;
     bIsList = false;
+}
+
+
+
+// specialized class for type
+
+OMultiTypeInterfaceContainerHelper2::OMultiTypeInterfaceContainerHelper2( Mutex & rMutex_ )
+    : rMutex( rMutex_ )
+{
+}
+
+OMultiTypeInterfaceContainerHelper2::~OMultiTypeInterfaceContainerHelper2()
+{
+}
+
+std::vector< css::uno::Type > OMultiTypeInterfaceContainerHelper2::getContainedTypes() const
+{
+    ::osl::MutexGuard aGuard( rMutex );
+    std::vector< Type > aInterfaceTypes;
+    aInterfaceTypes.reserve( m_aMap.size() );
+    for (const auto& rItem : m_aMap)
+    {
+        // are interfaces added to this container?
+        if( rItem.second->getLength() )
+            // yes, put the type in the array
+            aInterfaceTypes.push_back(rItem.first);
+    }
+    return aInterfaceTypes;
+}
+
+OMultiTypeInterfaceContainerHelper2::t_type2ptr::iterator OMultiTypeInterfaceContainerHelper2::findType(const Type & rKey )
+{
+    return std::find_if(m_aMap.begin(), m_aMap.end(),
+        [&rKey](const t_type2ptr::value_type& rItem) { return rItem.first == rKey; });
+}
+
+OMultiTypeInterfaceContainerHelper2::t_type2ptr::const_iterator OMultiTypeInterfaceContainerHelper2::findType(const Type & rKey ) const
+{
+    return std::find_if(m_aMap.begin(), m_aMap.end(),
+        [&rKey](const t_type2ptr::value_type& rItem) { return rItem.first == rKey; });
+}
+
+OInterfaceContainerHelper2 * OMultiTypeInterfaceContainerHelper2::getContainer( const Type & rKey ) const
+{
+    ::osl::MutexGuard aGuard( rMutex );
+
+    auto iter = findType( rKey );
+    if( iter != m_aMap.end() )
+        return (*iter).second.get();
+    return nullptr;
+}
+
+sal_Int32 OMultiTypeInterfaceContainerHelper2::addInterface(
+    const Type & rKey, const Reference< XInterface > & rListener )
+{
+    ::osl::MutexGuard aGuard( rMutex );
+    auto iter = findType( rKey );
+    if( iter == m_aMap.end() )
+    {
+        OInterfaceContainerHelper2 * pLC = new OInterfaceContainerHelper2( rMutex );
+        m_aMap.emplace_back(rKey, pLC);
+        return pLC->addInterface( rListener );
+    }
+    return (*iter).second->addInterface( rListener );
+}
+
+sal_Int32 OMultiTypeInterfaceContainerHelper2::removeInterface(
+    const Type & rKey, const Reference< XInterface > & rListener )
+{
+    ::osl::MutexGuard aGuard( rMutex );
+
+    // search container with id nUik
+    auto iter = findType( rKey );
+        // container found?
+    if( iter != m_aMap.end() )
+        return (*iter).second->removeInterface( rListener );
+
+    // no container with this id. Always return 0
+    return 0;
+}
+
+void OMultiTypeInterfaceContainerHelper2::disposeAndClear( const EventObject & rEvt )
+{
+    t_type2ptr::size_type nSize = 0;
+    std::unique_ptr<OInterfaceContainerHelper2 *[]> ppListenerContainers;
+    {
+        ::osl::MutexGuard aGuard( rMutex );
+        nSize = m_aMap.size();
+        if( nSize )
+        {
+            typedef OInterfaceContainerHelper2* ppp;
+            ppListenerContainers.reset(new ppp[nSize]);
+
+            t_type2ptr::size_type i = 0;
+            for (const auto& rItem : m_aMap)
+            {
+                ppListenerContainers[i++] = rItem.second.get();
+            }
+        }
+    }
+
+    // create a copy, because do not fire event in a guarded section
+    for( t_type2ptr::size_type i = 0; i < nSize; i++ )
+    {
+        if( ppListenerContainers[i] )
+            ppListenerContainers[i]->disposeAndClear( rEvt );
+    }
+}
+
+void OMultiTypeInterfaceContainerHelper2::clear()
+{
+    ::osl::MutexGuard aGuard( rMutex );
+
+    for (auto& rItem : m_aMap)
+        rItem.second->clear();
 }
 
 

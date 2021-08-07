@@ -451,11 +451,11 @@ void SAL_CALL BaseContainer::flush()
     // Further it's not a good idea to hold the own lock
     // if an outside object is called :-)
     css::lang::EventObject             aSource    (static_cast< css::util::XFlushable* >(this));
-    ::cppu::OInterfaceContainerHelper* pContainer = m_lListener.getContainer(cppu::UnoType<css::util::XFlushListener>::get());
+    comphelper::OInterfaceContainerHelper2* pContainer = m_lListener.getContainer(cppu::UnoType<css::util::XFlushListener>::get());
     if (!pContainer)
         return;
 
-    ::cppu::OInterfaceIteratorHelper pIterator(*pContainer);
+    comphelper::OInterfaceIteratorHelper2 pIterator(*pContainer);
     while (pIterator.hasMoreElements())
     {
         try

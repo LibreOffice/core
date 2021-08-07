@@ -28,7 +28,7 @@
 #include <com/sun/star/awt/XFocusListener.hpp>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakref.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
+#include <comphelper/multicontainer2.hxx>
 
 namespace com::sun::star::awt { class XWindow; }
 namespace com::sun::star::awt { struct KeyEvent; }
@@ -223,7 +223,7 @@ private:
     ::osl::Mutex                                m_aMutex;
     css::uno::Reference< css::awt::XWindow >      m_xPeer;   /// The source of the events. Normally this is the peer object.
     css::uno::WeakReference< css::awt::XWindow >  m_xControl;
-    ::cppu::OMultiTypeInterfaceContainerHelper  m_aListenerHolder;
+    comphelper::OMultiTypeInterfaceContainerHelper2  m_aListenerHolder;
 
 };
 

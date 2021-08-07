@@ -44,6 +44,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/ofopxmlhelper.hxx>
+#include <comphelper/multicontainer2.hxx>
 #include <comphelper/refcountedmutex.hxx>
 #include <comphelper/sequence.hxx>
 
@@ -66,7 +67,7 @@ struct WSInternalData_Impl
 {
     rtl::Reference<comphelper::RefCountedMutex> m_xSharedMutex;
     ::std::unique_ptr< ::cppu::OTypeCollection> m_pTypeCollection;
-    ::cppu::OMultiTypeInterfaceContainerHelper m_aListenersContainer; // list of listeners
+    comphelper::OMultiTypeInterfaceContainerHelper2 m_aListenersContainer; // list of listeners
     sal_Int32 m_nStorageType;
 
     // the mutex reference MUST NOT be empty
@@ -3008,13 +3009,13 @@ void OWriteStream::BroadcastTransaction( sal_Int8 nMessage )
 
     lang::EventObject aSource( static_cast< ::cppu::OWeakObject* >(this) );
 
-    ::cppu::OInterfaceContainerHelper* pContainer =
+    comphelper::OInterfaceContainerHelper2* pContainer =
             m_pData->m_aListenersContainer.getContainer(
                 cppu::UnoType<embed::XTransactionListener>::get());
     if ( !pContainer )
            return;
 
-    ::cppu::OInterfaceIteratorHelper pIterator( *pContainer );
+    comphelper::OInterfaceIteratorHelper2 pIterator( *pContainer );
     while ( pIterator.hasMoreElements( ) )
     {
         OSL_ENSURE( nMessage >= 1 && nMessage <= 4, "Wrong internal notification code is used!" );

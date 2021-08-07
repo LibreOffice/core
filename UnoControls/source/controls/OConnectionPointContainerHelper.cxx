@@ -22,6 +22,7 @@
 #include <OConnectionPointHelper.hxx>
 
 #include <cppuhelper/queryinterface.hxx>
+#include <comphelper/sequence.hxx>
 
 //  namespaces
 
@@ -94,7 +95,7 @@ void SAL_CALL OConnectionPointContainerHelper::release() noexcept
 Sequence< Type > SAL_CALL OConnectionPointContainerHelper::getConnectionPointTypes()
 {
     // Container is threadsafe himself !
-    return m_aMultiTypeContainer.getContainedTypes();
+    return comphelper::containerToSequence(m_aMultiTypeContainer.getContainedTypes());
 }
 
 //  XConnectionPointContainer
@@ -105,7 +106,7 @@ Reference< XConnectionPoint > SAL_CALL OConnectionPointContainerHelper::queryCon
     Reference< XConnectionPoint > xConnectionPoint;
 
     // Get all elements of the container, which have the searched type.
-    OInterfaceContainerHelper* pSpecialContainer = m_aMultiTypeContainer.getContainer( aType );
+    comphelper::OInterfaceContainerHelper2* pSpecialContainer = m_aMultiTypeContainer.getContainer( aType );
     if ( pSpecialContainer && pSpecialContainer->getLength() > 0 )
     {
         // Ready for multithreading

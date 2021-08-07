@@ -27,7 +27,7 @@
 #include <com/sun/star/embed/XTransactedObject.hpp>
 
 #include <cppuhelper/weak.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
+#include <comphelper/multicontainer2.hxx>
 #include <rtl/ustring.hxx>
 
 #include <rtl/ref.hxx>
@@ -171,7 +171,7 @@ namespace framework
             OUString                                                                   m_aModuleIdentifier;
             OUString                                                                   m_aResourceString;
             osl::Mutex m_mutex;
-            ::cppu::OMultiTypeInterfaceContainerHelper                                      m_aListenerContainer;   /// container for ALL Listener
+            comphelper::OMultiTypeInterfaceContainerHelper2                                 m_aListenerContainer;   /// container for ALL Listener
             o3tl::enumarray<vcl::ImageType,std::unique_ptr<ImageList>>                      m_pUserImageList;
             o3tl::enumarray<vcl::ImageType,bool>                                            m_bUserImageListModified;
             bool                                                                            m_bUseGlobal;

@@ -28,7 +28,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 
-#include <cppuhelper/interfacecontainer.h>
+#include <comphelper/multicontainer2.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 
 #include <oleembobj.hxx>
@@ -156,14 +156,14 @@ void OleEmbeddedObject::MakeEventListenerNotification_Impl( const OUString& aEve
     if ( !m_pInterfaceContainer )
         return;
 
-    ::cppu::OInterfaceContainerHelper* pContainer =
-    m_pInterfaceContainer->getContainer(
+    comphelper::OInterfaceContainerHelper2* pContainer =
+        m_pInterfaceContainer->getContainer(
                                 cppu::UnoType<document::XEventListener>::get());
     if ( pContainer == nullptr )
         return;
 
     document::EventObject aEvent( static_cast< ::cppu::OWeakObject* >( this ), aEventName );
-    ::cppu::OInterfaceIteratorHelper pIterator(*pContainer);
+    comphelper::OInterfaceIteratorHelper2 pIterator(*pContainer);
     while (pIterator.hasMoreElements())
     {
         try
@@ -399,7 +399,7 @@ void SAL_CALL OleEmbeddedObject::addStateChangeListener( const uno::Reference< e
         throw lang::DisposedException(); // TODO
 
     if ( !m_pInterfaceContainer )
-        m_pInterfaceContainer.reset(new ::cppu::OMultiTypeInterfaceContainerHelper( m_aMutex ));
+        m_pInterfaceContainer.reset(new comphelper::OMultiTypeInterfaceContainerHelper2( m_aMutex ));
 
     m_pInterfaceContainer->addInterface( cppu::UnoType<embed::XStateChangeListener>::get(),
                                                         xListener );
@@ -446,11 +446,11 @@ void SAL_CALL OleEmbeddedObject::close( sal_Bool bDeliverOwnership )
 
     if ( m_pInterfaceContainer )
     {
-        ::cppu::OInterfaceContainerHelper* pContainer =
+        comphelper::OInterfaceContainerHelper2* pContainer =
             m_pInterfaceContainer->getContainer( cppu::UnoType<util::XCloseListener>::get());
         if ( pContainer != nullptr )
         {
-            ::cppu::OInterfaceIteratorHelper pIterator(*pContainer);
+            comphelper::OInterfaceIteratorHelper2 pIterator(*pContainer);
             while (pIterator.hasMoreElements())
             {
                 try
@@ -468,7 +468,7 @@ void SAL_CALL OleEmbeddedObject::close( sal_Bool bDeliverOwnership )
                                     cppu::UnoType<util::XCloseListener>::get());
         if ( pContainer != nullptr )
         {
-            ::cppu::OInterfaceIteratorHelper pCloseIterator(*pContainer);
+            comphelper::OInterfaceIteratorHelper2 pCloseIterator(*pContainer);
             while (pCloseIterator.hasMoreElements())
             {
                 try
@@ -504,7 +504,7 @@ void SAL_CALL OleEmbeddedObject::addCloseListener( const uno::Reference< util::X
         throw lang::DisposedException(); // TODO
 
     if ( !m_pInterfaceContainer )
-        m_pInterfaceContainer.reset(new ::cppu::OMultiTypeInterfaceContainerHelper( m_aMutex ));
+        m_pInterfaceContainer.reset(new comphelper::OMultiTypeInterfaceContainerHelper2( m_aMutex ));
 
     m_pInterfaceContainer->addInterface( cppu::UnoType<util::XCloseListener>::get(), xListener );
 }
@@ -549,7 +549,7 @@ void SAL_CALL OleEmbeddedObject::addEventListener( const uno::Reference< documen
         throw lang::DisposedException(); // TODO
 
     if ( !m_pInterfaceContainer )
-        m_pInterfaceContainer.reset(new ::cppu::OMultiTypeInterfaceContainerHelper( m_aMutex ));
+        m_pInterfaceContainer.reset(new comphelper::OMultiTypeInterfaceContainerHelper2( m_aMutex ));
 
     m_pInterfaceContainer->addInterface( cppu::UnoType<document::XEventListener>::get(), xListener );
 }

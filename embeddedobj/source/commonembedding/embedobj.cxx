@@ -37,7 +37,7 @@
 
 #include <com/sun/star/embed/EmbedMisc.hpp>
 #include <cppuhelper/exc_hlp.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
+#include <comphelper/multicontainer2.hxx>
 #include <comphelper/lok.hxx>
 #include <sal/log.hxx>
 
@@ -129,13 +129,13 @@ void OCommonEmbeddedObject::StateChangeNotification_Impl( bool bBeforeChange, sa
     if ( !m_pInterfaceContainer )
         return;
 
-    ::cppu::OInterfaceContainerHelper* pContainer = m_pInterfaceContainer->getContainer(
+    comphelper::OInterfaceContainerHelper2* pContainer = m_pInterfaceContainer->getContainer(
                         cppu::UnoType<embed::XStateChangeListener>::get());
     if ( pContainer == nullptr )
         return;
 
     lang::EventObject aSource( static_cast< ::cppu::OWeakObject* >( this ) );
-    ::cppu::OInterfaceIteratorHelper pIterator(*pContainer);
+    comphelper::OInterfaceIteratorHelper2 pIterator(*pContainer);
 
     // should be locked after the method is finished successfully
     rGuard.clear();

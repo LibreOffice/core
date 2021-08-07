@@ -39,8 +39,8 @@
 #include <osl/thread.h>
 #include <memory>
 
-namespace cppu {
-    class OMultiTypeInterfaceContainerHelper;
+namespace comphelper {
+    class OMultiTypeInterfaceContainerHelper2;
 }
 
 class VerbExecutionController
@@ -122,7 +122,7 @@ class OleEmbeddedObject : public ::cppu::WeakImplHelper
 
     rtl::Reference<OleComponent> m_pOleComponent;
 
-    std::unique_ptr<::cppu::OMultiTypeInterfaceContainerHelper> m_pInterfaceContainer;
+    std::unique_ptr<::comphelper::OMultiTypeInterfaceContainerHelper2> m_pInterfaceContainer;
 
     bool m_bReadOnly;
 

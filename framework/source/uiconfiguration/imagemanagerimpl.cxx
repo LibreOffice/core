@@ -1161,12 +1161,12 @@ void ImageManagerImpl::removeConfigurationListener( const uno::Reference< css::u
 
 void ImageManagerImpl::implts_notifyContainerListener( const ConfigurationEvent& aEvent, NotifyOp eOp )
 {
-    ::cppu::OInterfaceContainerHelper* pContainer = m_aListenerContainer.getContainer(
+    comphelper::OInterfaceContainerHelper2* pContainer = m_aListenerContainer.getContainer(
                                         cppu::UnoType<css::ui::XUIConfigurationListener>::get());
     if ( pContainer == nullptr )
         return;
 
-    ::cppu::OInterfaceIteratorHelper pIterator( *pContainer );
+    comphelper::OInterfaceIteratorHelper2 pIterator( *pContainer );
     while ( pIterator.hasMoreElements() )
     {
         try
