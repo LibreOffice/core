@@ -3489,7 +3489,7 @@ void AutoRecovery::implts_informListener(      Job                      eJob  ,
                                          const css::frame::FeatureStateEvent& aEvent)
 {
     // Helper shares mutex with us -> threadsafe!
-    ::cppu::OInterfaceContainerHelper* pListenerForURL = nullptr;
+    ::comphelper::OInterfaceContainerHelper2* pListenerForURL = nullptr;
     OUString                           sJob            = AutoRecovery::implst_getJobDescription(eJob);
 
     // inform listener, which are registered for any URLs(!)
@@ -3497,7 +3497,7 @@ void AutoRecovery::implts_informListener(      Job                      eJob  ,
     if(pListenerForURL == nullptr)
         return;
 
-    ::cppu::OInterfaceIteratorHelper pIt(*pListenerForURL);
+    ::comphelper::OInterfaceIteratorHelper2 pIt(*pListenerForURL);
     while(pIt.hasMoreElements())
     {
         try

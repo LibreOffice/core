@@ -28,6 +28,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/multiinterfacecontainer2.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <tools/diagnose_ex.h>
 #include <memory>
@@ -93,7 +94,7 @@ public:
     virtual sal_Bool SAL_CALL hasPropertyByName( const OUString& Name ) override;
 };
 
-typedef OMultiTypeInterfaceContainerHelperVar<OUString>
+typedef comphelper::OMultiTypeInterfaceContainerHelperVar2<OUString>
     PropertyChangeListenerContainer_Impl;
 
 class PropertyChangeListeners_Impl : public PropertyChangeListenerContainer_Impl
@@ -1193,11 +1194,11 @@ void SortedResultSet::PropertyChanged( const PropertyChangeEvent& rEvt )
         return;
 
     // Notify listeners interested especially in the changed property.
-    OInterfaceContainerHelper* pPropsContainer =
+    OInterfaceContainerHelper2* pPropsContainer =
             mpPropChangeListeners->getContainer( rEvt.PropertyName );
     if ( pPropsContainer )
     {
-        OInterfaceIteratorHelper aIter( *pPropsContainer );
+        OInterfaceIteratorHelper2 aIter( *pPropsContainer );
         while ( aIter.hasMoreElements() )
         {
             static_cast< XPropertyChangeListener* >( aIter.next() )->propertyChange( rEvt );
@@ -1208,7 +1209,7 @@ void SortedResultSet::PropertyChanged( const PropertyChangeEvent& rEvt )
     pPropsContainer = mpPropChangeListeners->getContainer( OUString() );
     if ( pPropsContainer )
     {
-        OInterfaceIteratorHelper aIter( *pPropsContainer );
+        OInterfaceIteratorHelper2 aIter( *pPropsContainer );
         while ( aIter.hasMoreElements() )
         {
             static_cast< XPropertyChangeListener* >( aIter.next() )->propertyChange( rEvt );

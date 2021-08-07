@@ -839,11 +839,11 @@ void SwXMailMerge::LaunchMailMergeEvent( const MailMergeEvent &rEvt ) const
 
 void SwXMailMerge::launchEvent( const PropertyChangeEvent &rEvt ) const
 {
-    cppu::OInterfaceContainerHelper *pContainer =
+    comphelper::OInterfaceContainerHelper2 *pContainer =
             m_aPropListeners.getContainer( rEvt.PropertyHandle );
     if (pContainer)
     {
-        cppu::OInterfaceIteratorHelper aIt( *pContainer );
+        comphelper::OInterfaceIteratorHelper2 aIt( *pContainer );
         while (aIt.hasMoreElements())
         {
             static_cast< XPropertyChangeListener* >( aIt.next() )->propertyChange( rEvt );

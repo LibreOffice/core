@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include <cppuhelper/weak.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
+#include <comphelper/multiinterfacecontainer2.hxx>
 
 #include <embeddoc.hxx>
 #include <docholder.hxx>
@@ -32,11 +32,11 @@ using namespace ::com::sun::star;
 uno::Sequence< OUString > Interceptor::m_aInterceptedURL(IUL);
 
 class StatusChangeListenerContainer
-    : public cppu::OMultiTypeInterfaceContainerHelperVar<OUString>
+    : public comphelper::OMultiTypeInterfaceContainerHelperVar2<OUString>
 {
 public:
     explicit StatusChangeListenerContainer(osl::Mutex& aMutex)
-        :  cppu::OMultiTypeInterfaceContainerHelperVar<OUString>(aMutex)
+        :  comphelper::OMultiTypeInterfaceContainerHelperVar2<OUString>(aMutex)
     {
     }
 };

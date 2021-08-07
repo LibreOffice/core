@@ -32,6 +32,7 @@
 #include <com/sun/star/io/XActiveDataSink.hpp>
 #include <com/sun/star/ucb/NameClash.hpp>
 #include <comphelper/fileurl.hxx>
+#include <comphelper/multiinterfacecontainer2.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include "filglob.hxx"
@@ -53,7 +54,7 @@ using namespace com::sun::star::ucb;
 #define THROW_WHERE ""
 #endif
 
-typedef cppu::OMultiTypeInterfaceContainerHelperVar<OUString>
+typedef comphelper::OMultiTypeInterfaceContainerHelperVar2<OUString>
     PropertyListeners_impl;
 
 class fileaccess::PropertyListeners
@@ -1154,16 +1155,16 @@ BaseContent::cPCL()
     if (!m_pPropertyListener)
         return nullptr;
 
-    const Sequence< OUString > seqNames = m_pPropertyListener->getContainedTypes();
+    const std::vector< OUString > seqNames = m_pPropertyListener->getContainedTypes();
 
     std::unique_ptr<PropertyChangeNotifier> p;
 
-    if( seqNames.hasElements() )
+    if( !seqNames.empty() )
     {
         ListenerMap listener;
         for( const auto& rName : seqNames )
         {
-            cppu::OInterfaceContainerHelper* pContainer = m_pPropertyListener->getContainer(rName);
+            comphelper::OInterfaceContainerHelper2* pContainer = m_pPropertyListener->getContainer(rName);
             if (!pContainer)
                 continue;
             listener[rName] = pContainer->getElements();

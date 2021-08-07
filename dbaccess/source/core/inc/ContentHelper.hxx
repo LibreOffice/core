@@ -29,7 +29,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
-#include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/multiinterfacecontainer2.hxx>
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/sdbcx/XRename.hpp>
@@ -71,7 +71,7 @@ namespace dbaccess
 
     typedef std::shared_ptr<OContentHelper_Impl> TContentPtr;
 
-    typedef cppu::OMultiTypeInterfaceContainerHelperVar<OUString>
+    typedef comphelper::OMultiTypeInterfaceContainerHelperVar2<OUString>
         PropertyChangeListenerContainer;
     typedef ::cppu::WeakComponentImplHelper<   css::ucb::XContent
                                            ,   css::ucb::XCommandProcessor

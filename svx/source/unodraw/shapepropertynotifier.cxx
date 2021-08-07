@@ -95,8 +95,8 @@ namespace svx
 
         OUString sPropertyName( provPos->second->getPropertyName() );
 
-        ::cppu::OInterfaceContainerHelper* pPropListeners = m_aPropertyChangeListeners.getContainer( sPropertyName );
-        ::cppu::OInterfaceContainerHelper* pAllListeners = m_aPropertyChangeListeners.getContainer( OUString() );
+        ::comphelper::OInterfaceContainerHelper2* pPropListeners = m_aPropertyChangeListeners.getContainer( sPropertyName );
+        ::comphelper::OInterfaceContainerHelper2* pAllListeners = m_aPropertyChangeListeners.getContainer( OUString() );
         if ( !pPropListeners && !pAllListeners )
             return;
 

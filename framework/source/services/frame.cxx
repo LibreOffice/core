@@ -2870,11 +2870,11 @@ bool XFrameImpl::impl_existsVeto(const css::beans::PropertyChangeEvent& aEvent)
         The used helper is threadsafe and it lives for the whole lifetime of
         our own object.
     */
-    ::cppu::OInterfaceContainerHelper* pVetoListener = m_lVetoChangeListener.getContainer(aEvent.PropertyName);
+    ::comphelper::OInterfaceContainerHelper2* pVetoListener = m_lVetoChangeListener.getContainer(aEvent.PropertyName);
     if (! pVetoListener)
         return false;
 
-    ::cppu::OInterfaceIteratorHelper pListener(*pVetoListener);
+    ::comphelper::OInterfaceIteratorHelper2 pListener(*pVetoListener);
     while (pListener.hasMoreElements())
     {
         try
@@ -2899,11 +2899,11 @@ void XFrameImpl::impl_notifyChangeListener(const css::beans::PropertyChangeEvent
         The used helper is threadsafe and it lives for the whole lifetime of
         our own object.
     */
-    ::cppu::OInterfaceContainerHelper* pSimpleListener = m_lSimpleChangeListener.getContainer(aEvent.PropertyName);
+    ::comphelper::OInterfaceContainerHelper2* pSimpleListener = m_lSimpleChangeListener.getContainer(aEvent.PropertyName);
     if (! pSimpleListener)
         return;
 
-    ::cppu::OInterfaceIteratorHelper pListener(*pSimpleListener);
+    ::comphelper::OInterfaceIteratorHelper2 pListener(*pSimpleListener);
     while (pListener.hasMoreElements())
     {
         try
