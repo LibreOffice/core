@@ -21,7 +21,7 @@
 #include "cacheitem.hxx"
 #include <com/sun/star/util/XRefreshable.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <cppuhelper/interfacecontainer.h>
+#include <comphelper/multicontainer2.hxx>
 #include <cppuhelper/implbase.hxx>
 
 
@@ -41,7 +41,7 @@ class ConfigFlush final : public BaseLock
                                                   >
 {
         /** @short  holds all listener, which are registered at this instance. */
-        ::cppu::OMultiTypeInterfaceContainerHelper m_lListener;
+        comphelper::OMultiTypeInterfaceContainerHelper2 m_lListener;
 
 
     // native interface

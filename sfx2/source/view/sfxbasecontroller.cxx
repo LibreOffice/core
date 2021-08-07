@@ -41,6 +41,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/multicontainer2.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/docfac.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -353,7 +354,7 @@ struct IMPL_SfxBaseController_DataContainer
     Reference< XFrameActionListener >       m_xListener             ;
     Reference< XCloseListener >             m_xCloseListener        ;
     ::sfx2::UserInputInterception           m_aUserInputInterception;
-    ::cppu::OMultiTypeInterfaceContainerHelper      m_aListenerContainer    ;
+    ::comphelper::OMultiTypeInterfaceContainerHelper2      m_aListenerContainer    ;
     ::comphelper::OInterfaceContainerHelper2               m_aInterceptorContainer ;
     Reference< XStatusIndicator >           m_xIndicator            ;
     SfxViewShell*                           m_pViewShell            ;
@@ -890,7 +891,7 @@ awt::Rectangle SAL_CALL SfxBaseController::queryBorderedArea( const awt::Rectang
 
 void SfxBaseController::BorderWidthsChanged_Impl()
 {
-    ::cppu::OInterfaceContainerHelper* pContainer = m_pData->m_aListenerContainer.getContainer(
+    ::comphelper::OInterfaceContainerHelper2* pContainer = m_pData->m_aListenerContainer.getContainer(
                         cppu::UnoType<frame::XBorderResizeListener>::get());
     if ( !pContainer )
         return;
@@ -898,7 +899,7 @@ void SfxBaseController::BorderWidthsChanged_Impl()
     frame::BorderWidths aBWidths = getBorder();
     Reference< uno::XInterface > xThis( static_cast< ::cppu::OWeakObject* >(this), uno::UNO_QUERY );
 
-    ::cppu::OInterfaceIteratorHelper pIterator(*pContainer);
+    ::comphelper::OInterfaceIteratorHelper2 pIterator(*pContainer);
     while (pIterator.hasMoreElements())
     {
         try

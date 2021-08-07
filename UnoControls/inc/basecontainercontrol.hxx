@@ -24,6 +24,7 @@
 
 #include "basecontrol.hxx"
 #include <com/sun/star/awt/XControlContainer.hpp>
+#include <comphelper/multicontainer2.hxx>
 
 namespace unocontrols {
 
@@ -144,7 +145,7 @@ private:
     // list of pointer of "struct IMPL_ControlInfo" to hold child-controls
     ::std::vector< IMPL_ControlInfo > maControlInfoList;
 
-    ::cppu::OMultiTypeInterfaceContainerHelper                          m_aListeners;
+    comphelper::OMultiTypeInterfaceContainerHelper2   m_aListeners;
 
 };
 

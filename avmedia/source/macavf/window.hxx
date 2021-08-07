@@ -21,7 +21,7 @@
 
 #include "macavfcommon.hxx"
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/interfacecontainer.h>
+#include <comphelper/multicontainer2.hxx>
 
 #include <com/sun/star/media/XPlayerWindow.hpp>
 
@@ -92,7 +92,7 @@ public:
 private:
 
     ::osl::Mutex                                maMutex;
-    ::cppu::OMultiTypeInterfaceContainerHelper  maListeners;
+    comphelper::OMultiTypeInterfaceContainerHelper2  maListeners;
     css::media::ZoomLevel                       meZoomLevel;
     Player&                                     mrPlayer;
     int                                         mnPointerType;

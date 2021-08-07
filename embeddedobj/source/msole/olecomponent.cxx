@@ -32,7 +32,7 @@
 #include <com/sun/star/awt/XRequestCallback.hpp>
 
 #include "platform.h"
-#include <cppuhelper/interfacecontainer.h>
+#include <comphelper/multicontainer2.hxx>
 #include <comphelper/mimeconfighelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/windowserrorstring.hxx>
@@ -1460,11 +1460,11 @@ void SAL_CALL OleComponent::close( sal_Bool bDeliverOwnership )
 
         if (m_pInterfaceContainer)
         {
-            ::cppu::OInterfaceContainerHelper* pContainer
+            comphelper::OInterfaceContainerHelper2* pContainer
                 = m_pInterfaceContainer->getContainer(cppu::UnoType<util::XCloseListener>::get());
             if (pContainer != nullptr)
             {
-                ::cppu::OInterfaceIteratorHelper pIterator(*pContainer);
+                comphelper::OInterfaceIteratorHelper2 pIterator(*pContainer);
                 while (pIterator.hasMoreElements())
                 {
                     try
@@ -1483,7 +1483,7 @@ void SAL_CALL OleComponent::close( sal_Bool bDeliverOwnership )
                 = m_pInterfaceContainer->getContainer(cppu::UnoType<util::XCloseListener>::get());
             if (pContainer != nullptr)
             {
-                ::cppu::OInterfaceIteratorHelper pCloseIterator(*pContainer);
+                comphelper::OInterfaceIteratorHelper2 pCloseIterator(*pContainer);
                 while (pCloseIterator.hasMoreElements())
                 {
                     try
@@ -1511,7 +1511,7 @@ void SAL_CALL OleComponent::addCloseListener( const uno::Reference< util::XClose
         throw lang::DisposedException(); // TODO
 
     if ( !m_pInterfaceContainer )
-        m_pInterfaceContainer = new ::cppu::OMultiTypeInterfaceContainerHelper( m_aMutex );
+        m_pInterfaceContainer = new comphelper::OMultiTypeInterfaceContainerHelper2( m_aMutex );
 
     m_pInterfaceContainer->addInterface( cppu::UnoType<util::XCloseListener>::get(), xListener );
 }
@@ -1682,7 +1682,7 @@ void SAL_CALL OleComponent::addEventListener( const uno::Reference< lang::XEvent
         throw lang::DisposedException(); // TODO
 
     if ( !m_pInterfaceContainer )
-        m_pInterfaceContainer = new ::cppu::OMultiTypeInterfaceContainerHelper( m_aMutex );
+        m_pInterfaceContainer = new comphelper::OMultiTypeInterfaceContainerHelper2( m_aMutex );
 
     m_pInterfaceContainer->addInterface( cppu::UnoType<lang::XEventListener>::get(), xListener );
 }
@@ -1743,11 +1743,11 @@ void SAL_CALL OleComponent::setModified( sal_Bool bModified )
 
     if ( bModified && m_pInterfaceContainer )
     {
-        ::cppu::OInterfaceContainerHelper* pContainer =
+        comphelper::OInterfaceContainerHelper2* pContainer =
             m_pInterfaceContainer->getContainer( cppu::UnoType<util::XModifyListener>::get());
         if ( pContainer != nullptr )
         {
-            ::cppu::OInterfaceIteratorHelper pIterator( *pContainer );
+            comphelper::OInterfaceIteratorHelper2 pIterator( *pContainer );
             while ( pIterator.hasMoreElements() )
             {
                 try
@@ -1771,7 +1771,7 @@ void SAL_CALL OleComponent::addModifyListener( const css::uno::Reference < css::
         throw lang::DisposedException(); // TODO
 
     if ( !m_pInterfaceContainer )
-        m_pInterfaceContainer = new ::cppu::OMultiTypeInterfaceContainerHelper( m_aMutex );
+        m_pInterfaceContainer = new comphelper::OMultiTypeInterfaceContainerHelper2( m_aMutex );
 
     m_pInterfaceContainer->addInterface( cppu::UnoType<util::XModifyListener>::get(), xListener );
 }

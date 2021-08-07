@@ -68,7 +68,7 @@
 
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
+#include <comphelper/multicontainer2.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
 #include <sal/log.hxx>
@@ -377,7 +377,7 @@ private:
     /// helper for XFrames, XIndexAccess and XElementAccess interfaces
     css::uno::Reference< css::frame::XFrames >                              m_xFramesHelper;
     /// container for ALL Listener
-    ::cppu::OMultiTypeInterfaceContainerHelper                              m_aListenerContainer;
+    comphelper::OMultiTypeInterfaceContainerHelper2                         m_aListenerContainer;
     /// parent of this frame
     css::uno::Reference< css::frame::XFramesSupplier >                      m_xParent;
     /// containerwindow of this frame for embedded components
@@ -1671,10 +1671,10 @@ void SAL_CALL XFrameImpl::close( sal_Bool bDeliverOwnership )
     // internal operations too...
     // Note: container is threadsafe himself.
     css::lang::EventObject             aSource    (static_cast< ::cppu::OWeakObject*>(this));
-    ::cppu::OInterfaceContainerHelper* pContainer = m_aListenerContainer.getContainer( cppu::UnoType<css::util::XCloseListener>::get());
+    comphelper::OInterfaceContainerHelper2* pContainer = m_aListenerContainer.getContainer( cppu::UnoType<css::util::XCloseListener>::get());
     if (pContainer!=nullptr)
     {
-        ::cppu::OInterfaceIteratorHelper pIterator(*pContainer);
+        comphelper::OInterfaceIteratorHelper2 pIterator(*pContainer);
         while (pIterator.hasMoreElements())
         {
             try
@@ -1708,7 +1708,7 @@ void SAL_CALL XFrameImpl::close( sal_Bool bDeliverOwnership )
     pContainer = m_aListenerContainer.getContainer( cppu::UnoType<css::util::XCloseListener>::get());
     if (pContainer!=nullptr)
     {
-        ::cppu::OInterfaceIteratorHelper pIterator(*pContainer);
+        comphelper::OInterfaceIteratorHelper2 pIterator(*pContainer);
         while (pIterator.hasMoreElements())
         {
             try
@@ -2947,7 +2947,7 @@ void XFrameImpl::implts_sendFrameActionEvent( const css::frame::FrameAction& aAc
     // Get container for right listener.
     // FOLLOW LINES ARE THREADSAFE!!!
     // ( OInterfaceContainerHelper2 is synchronized with m_aListenerContainer! )
-    ::cppu::OInterfaceContainerHelper* pContainer = m_aListenerContainer.getContainer(
+    comphelper::OInterfaceContainerHelper2* pContainer = m_aListenerContainer.getContainer(
         cppu::UnoType<css::frame::XFrameActionListener>::get());
 
     if( pContainer == nullptr )
@@ -2957,7 +2957,7 @@ void XFrameImpl::implts_sendFrameActionEvent( const css::frame::FrameAction& aAc
     css::frame::FrameActionEvent aFrameActionEvent( static_cast< ::cppu::OWeakObject* >(this), this, aAction );
 
     // Get iterator for access to listener.
-    ::cppu::OInterfaceIteratorHelper aIterator( *pContainer );
+    comphelper::OInterfaceIteratorHelper2 aIterator( *pContainer );
     // Send message to all listener.
     while( aIterator.hasMoreElements() )
     {

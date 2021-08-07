@@ -38,7 +38,7 @@
 #include <com/sun/star/sdb/RowChangeAction.hpp>
 #include <com/sun/star/frame/CommandGroup.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
-#include <cppuhelper/interfacecontainer.hxx>
+#include <comphelper/multicontainer2.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
@@ -121,7 +121,7 @@ class BibFrameCtrl_Impl : public cppu::WeakImplHelper < XFrameActionListener >
 {
 public:
     Mutex                               aMutex;
-    OMultiTypeInterfaceContainerHelper  aLC;
+    comphelper::OMultiTypeInterfaceContainerHelper2  aLC;
 
     BibFrameController_Impl*            pController;
 

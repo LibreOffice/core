@@ -33,6 +33,7 @@
 #include <osl/mutex.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/multicontainer2.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <tools/UnitConversion.hxx>
 #include <vcl/svapp.hxx>
@@ -295,7 +296,7 @@ private:
 
 public:
     uno::WeakReference<uno::XInterface> m_wThis;
-    ::cppu::OMultiTypeInterfaceContainerHelper m_Listeners;
+    ::comphelper::OMultiTypeInterfaceContainerHelper2 m_Listeners;
     SfxItemPropertySet const& m_rPropSet;
     const TOXTypes m_eTOXType;
     bool m_bIsDescriptor;
@@ -1263,7 +1264,7 @@ void SAL_CALL SwXDocumentIndex::refresh()
         pTOXBase->UpdatePageNum();
     }
 
-    ::cppu::OInterfaceContainerHelper *const pContainer(
+    ::comphelper::OInterfaceContainerHelper2 *const pContainer(
         m_pImpl->m_Listeners.getContainer(
             cppu::UnoType<util::XRefreshListener>::get()));
     if (pContainer)

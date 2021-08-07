@@ -646,12 +646,12 @@ void ChartModel::impl_notifyModifiedListeners()
     //always notify the view first!
     ChartViewHelper::setViewToDirtyState( this );
 
-    ::cppu::OInterfaceContainerHelper* pIC = m_aLifeTimeManager.m_aListenerContainer
+    ::comphelper::OInterfaceContainerHelper2* pIC = m_aLifeTimeManager.m_aListenerContainer
         .getContainer( cppu::UnoType<util::XModifyListener>::get());
     if( pIC )
     {
         lang::EventObject aEvent( static_cast< lang::XComponent*>(this) );
-        ::cppu::OInterfaceIteratorHelper aIt( *pIC );
+        ::comphelper::OInterfaceIteratorHelper2 aIt( *pIC );
         while( aIt.hasMoreElements() )
         {
             static_cast< util::XModifyListener* >( aIt.next() )->modified( aEvent );
@@ -781,11 +781,11 @@ Reference< embed::XStorage > SAL_CALL ChartModel::getDocumentStorage()
 
 void ChartModel::impl_notifyStorageChangeListeners()
 {
-    ::cppu::OInterfaceContainerHelper* pIC = m_aLifeTimeManager.m_aListenerContainer
+    ::comphelper::OInterfaceContainerHelper2* pIC = m_aLifeTimeManager.m_aListenerContainer
           .getContainer( cppu::UnoType<document::XStorageChangeListener>::get());
     if( pIC )
     {
-        ::cppu::OInterfaceIteratorHelper aIt( *pIC );
+        ::comphelper::OInterfaceIteratorHelper2 aIt( *pIC );
         while( aIt.hasMoreElements() )
         {
             static_cast< document::XStorageChangeListener* >( aIt.next() )

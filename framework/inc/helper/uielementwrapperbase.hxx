@@ -26,6 +26,7 @@
 #include <com/sun/star/util/XUpdatable.hpp>
 
 #include <rtl/ustring.hxx>
+#include <comphelper/multicontainer2.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/propshlp.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -98,7 +99,7 @@ class UIElementWrapperBase : private cppu::BaseMutex,
 
         static css::uno::Sequence< css::beans::Property > impl_getStaticPropertyDescriptor();
 
-        ::cppu::OMultiTypeInterfaceContainerHelper             m_aListenerContainer;   /// container for ALL Listener
+        comphelper::OMultiTypeInterfaceContainerHelper2        m_aListenerContainer;   /// container for ALL Listener
         OUString                                               m_aResourceURL;
         css::uno::WeakReference< css::frame::XFrame >          m_xWeakFrame;
         sal_Int16                                              m_nType;
