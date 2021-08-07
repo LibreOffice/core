@@ -214,7 +214,7 @@ void PropertyChangeNotifier::notifyPropertyChanged(
 
     // notify listeners for all Events
 
-    uno::Sequence< uno::Reference< uno::XInterface > > seqList = m_aListeners[ OUString() ];
+    std::vector< uno::Reference< uno::XInterface > >& seqList = m_aListeners[ OUString() ];
     for( const auto& rListener : std::as_const(seqList) )
     {
         uno::Reference< beans::XPropertiesChangeListener > aListener( rListener,uno::UNO_QUERY );

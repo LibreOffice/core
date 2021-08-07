@@ -77,7 +77,7 @@ namespace fileaccess {
 
 
     typedef std::unordered_map< OUString,
-                           css::uno::Sequence< css::uno::Reference< css::uno::XInterface > > >  ListenerMap;
+                           std::vector< css::uno::Reference< css::uno::XInterface > > >  ListenerMap;
 
     class PropertyChangeNotifier
     {

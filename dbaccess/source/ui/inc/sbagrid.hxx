@@ -25,6 +25,7 @@
 
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/util/URL.hpp>
+#include <comphelper/multiinterfacecontainer2.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/uno3.hxx>
 #include "sbamultiplex.hxx"
@@ -92,7 +93,7 @@ namespace dbaui
                 :public FmXGridPeer
                 ,public css::frame::XDispatch
     {
-        cppu::OMultiTypeInterfaceContainerHelperVar<
+        comphelper::OMultiTypeInterfaceContainerHelperVar2<
             css::util::URL, void, SbaURLCompare>  m_aStatusListeners;
 
     public:

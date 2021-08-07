@@ -32,6 +32,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <cppuhelper/interfacecontainer.h>
 #include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/multiinterfacecontainer2.hxx>
 #include <memory>
 
 
@@ -47,7 +48,7 @@ class ContentResultSetWrapper
                 , public css::sdbc::XRow
 {
 protected:
-    typedef cppu::OMultiTypeInterfaceContainerHelperVar<OUString>
+    typedef comphelper::OMultiTypeInterfaceContainerHelperVar2<OUString>
         PropertyChangeListenerContainer_Impl;
 
     //members

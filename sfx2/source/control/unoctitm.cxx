@@ -775,10 +775,10 @@ void SfxDispatchController_Impl::addStatusListener(const css::uno::Reference< cs
 
 void SfxDispatchController_Impl::sendStatusChanged(const OUString& rURL, const css::frame::FeatureStateEvent& rEvent)
 {
-    ::cppu::OInterfaceContainerHelper* pContnr = pDispatch->GetListeners().getContainer(rURL);
+    ::comphelper::OInterfaceContainerHelper2* pContnr = pDispatch->GetListeners().getContainer(rURL);
     if (!pContnr)
         return;
-    ::cppu::OInterfaceIteratorHelper aIt(*pContnr);
+    ::comphelper::OInterfaceIteratorHelper2 aIt(*pContnr);
     while (aIt.hasMoreElements())
     {
         try
@@ -870,7 +870,7 @@ void SfxDispatchController_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
         InterceptLOKStateChangeEvent(nSID, pDispatcher->GetFrame(), aEvent, pState);
     }
 
-    const css::uno::Sequence<OUString> aContainedTypes = pDispatch->GetListeners().getContainedTypes();
+    const std::vector<OUString> aContainedTypes = pDispatch->GetListeners().getContainedTypes();
     for (const OUString& rName: aContainedTypes)
     {
         if (rName == aDispatchURL.Main || rName == aDispatchURL.Complete)

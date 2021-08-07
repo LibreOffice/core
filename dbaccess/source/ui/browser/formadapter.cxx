@@ -1134,7 +1134,7 @@ void SAL_CALL SbaXFormAdapter::setFastPropertyValue(sal_Int32 nHandle, const Any
 
         aValue >>= m_sName;
 
-        ::cppu::OInterfaceIteratorHelper aIt(*m_aPropertyChangeListeners.getContainer(PROPERTY_NAME));
+        ::comphelper::OInterfaceIteratorHelper2 aIt(*m_aPropertyChangeListeners.getContainer(PROPERTY_NAME));
         while (aIt.hasMoreElements())
             static_cast< css::beans::XPropertyChangeListener*>(aIt.next())->propertyChange(aEvt);
 

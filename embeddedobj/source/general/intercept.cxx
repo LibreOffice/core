@@ -18,7 +18,7 @@
  */
 
 #include <com/sun/star/embed/EmbedStates.hpp>
-#include <cppuhelper/interfacecontainer.hxx>
+#include <comphelper/multiinterfacecontainer2.hxx>
 
 #include <intercept.hxx>
 #include <docholder.hxx>
@@ -31,11 +31,11 @@ using namespace ::com::sun::star;
 uno::Sequence< OUString > Interceptor::m_aInterceptedURL(IUL);
 
 class StatusChangeListenerContainer
-    : public cppu::OMultiTypeInterfaceContainerHelperVar<OUString>
+    : public comphelper::OMultiTypeInterfaceContainerHelperVar2<OUString>
 {
 public:
     explicit StatusChangeListenerContainer(osl::Mutex& aMutex)
-        :  cppu::OMultiTypeInterfaceContainerHelperVar<OUString>(aMutex)
+        :  comphelper::OMultiTypeInterfaceContainerHelperVar2<OUString>(aMutex)
     {
     }
 };

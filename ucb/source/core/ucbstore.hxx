@@ -34,6 +34,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/multiinterfacecontainer2.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <unordered_map>
@@ -142,7 +143,7 @@ public:
 
 
 class PropertySetInfo_Impl;
-typedef cppu::OMultiTypeInterfaceContainerHelperVar<OUString> PropertyListeners_Impl;
+typedef comphelper::OMultiTypeInterfaceContainerHelperVar2<OUString> PropertyListeners_Impl;
 
 class PersistentPropertySet : public cppu::WeakImplHelper <
     css::lang::XServiceInfo,

@@ -486,10 +486,10 @@ void OContentHelper::notifyPropertiesChange( const Sequence< PropertyChangeEvent
         return;
 
     // First, notify listeners interested in changes of every property.
-    OInterfaceContainerHelper* pAllPropsContainer = m_aPropertyChangeListeners.getContainer( OUString() );
+    comphelper::OInterfaceContainerHelper2* pAllPropsContainer = m_aPropertyChangeListeners.getContainer( OUString() );
     if ( pAllPropsContainer )
     {
-        OInterfaceIteratorHelper aIter( *pAllPropsContainer );
+        comphelper::OInterfaceIteratorHelper2 aIter( *pAllPropsContainer );
         while ( aIter.hasMoreElements() )
         {
             // Propagate event.
@@ -507,10 +507,10 @@ void OContentHelper::notifyPropertiesChange( const Sequence< PropertyChangeEvent
         const PropertyChangeEvent& rEvent = *propertyChangeEvent;
         const OUString& rName = rEvent.PropertyName;
 
-        OInterfaceContainerHelper* pPropsContainer = m_aPropertyChangeListeners.getContainer( rName );
+        comphelper::OInterfaceContainerHelper2* pPropsContainer = m_aPropertyChangeListeners.getContainer( rName );
         if ( pPropsContainer )
         {
-            OInterfaceIteratorHelper aIter( *pPropsContainer );
+            comphelper::OInterfaceIteratorHelper2 aIter( *pPropsContainer );
             while ( aIter.hasMoreElements() )
             {
                 Sequence< PropertyChangeEvent >* propertyEvents;

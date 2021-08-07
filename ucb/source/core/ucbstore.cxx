@@ -1901,12 +1901,12 @@ void PersistentPropertySet::notifyPropertyChangeEvent(
                                     const PropertyChangeEvent& rEvent ) const
 {
     // Get "normal" listeners for the property.
-    OInterfaceContainerHelper* pContainer =
+    OInterfaceContainerHelper2* pContainer =
             m_pPropertyChangeListeners->getContainer(
                                                     rEvent.PropertyName );
     if ( pContainer && pContainer->getLength() )
     {
-        OInterfaceIteratorHelper aIter( *pContainer );
+        OInterfaceIteratorHelper2 aIter( *pContainer );
         while ( aIter.hasMoreElements() )
         {
             // Propagate event.
@@ -1915,11 +1915,11 @@ void PersistentPropertySet::notifyPropertyChangeEvent(
     }
 
     // Get "normal" listeners for all properties.
-    OInterfaceContainerHelper* pNoNameContainer =
+    OInterfaceContainerHelper2* pNoNameContainer =
             m_pPropertyChangeListeners->getContainer( OUString() );
     if ( pNoNameContainer && pNoNameContainer->getLength() )
     {
-        OInterfaceIteratorHelper aIter( *pNoNameContainer );
+        OInterfaceIteratorHelper2 aIter( *pNoNameContainer );
         while ( aIter.hasMoreElements() )
         {
             // Propagate event.
