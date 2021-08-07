@@ -675,6 +675,7 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
     Point aPnt      = pWindow->PixelToLogic( aPosPixel );
     SdrHdl* pHdl    = pView->PickHandle(aPnt);
     SdrPageView* pPV;
+    SdrObject* pMacroPickObj;
 
     ScMacroInfo* pInfo = nullptr;
     SdrObject* pObj = pView->PickObj(aPnt, pView->getHitTolLog(), pPV, SdrSearchOptions::ALSOONMASTER);
@@ -708,11 +709,11 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
         //  could be suppressed with ALT
         pWindow->SetPointer( PointerStyle::RefHand );          // Text-URL / ImageMap
     }
-    else if ( !bAlt && (pObj = pView->PickObj(aPnt, pView->getHitTolLog(), pPV, SdrSearchOptions::PICKMACRO)) )
+    else if ( !bAlt && (pMacroPickObj = pView->PickObj(aPnt, pView->getHitTolLog(), pPV, SdrSearchOptions::PICKMACRO)) )
     {
         //  could be suppressed with ALT
         SdrObjMacroHitRec aHitRec;  //! something missing ????
-        rViewShell.SetActivePointer( pObj->GetMacroPointer(aHitRec) );
+        rViewShell.SetActivePointer(pMacroPickObj->GetMacroPointer(aHitRec));
     }
     else if ( !bAlt && pInfo && (!pInfo->GetMacro().isEmpty() || !pObj->getHyperlink().isEmpty()) )
         pWindow->SetPointer( PointerStyle::RefHand );
