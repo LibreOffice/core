@@ -61,6 +61,7 @@
 #include <vcl/canvastools.hxx>
 #include <vcl/opengl/OpenGLContext.hxx>
 #include <vcl/opengl/OpenGLHelper.hxx>
+#include <vcl/syschild.hxx>
 #include <vcl/window.hxx>
 
 #include "TransitionImpl.hxx"

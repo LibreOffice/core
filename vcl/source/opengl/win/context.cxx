@@ -12,6 +12,7 @@
 #include <thread>
 #include <vcl/opengl/OpenGLContext.hxx>
 #include <vcl/opengl/OpenGLHelper.hxx>
+#include <vcl/syschild.hxx>
 
 #include <sal/log.hxx>
 #include <comphelper/windowserrorstring.hxx>

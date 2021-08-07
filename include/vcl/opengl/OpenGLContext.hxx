@@ -7,12 +7,17 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_OPENGL_OPENGLCONTEXT_HXX
-#define INCLUDED_VCL_OPENGL_OPENGLCONTEXT_HXX
+#pragma once
 
 #include <vcl/dllapi.h>
-#include <vcl/syschild.hxx>
+#include <vcl/sysdata.hxx>
+#include <vcl/vclptr.hxx>
 #include <rtl/ref.hxx>
+
+class Point;
+class Size;
+class SystemChildWindow;
+namespace vcl { class Window; }
 
 /// Holds the information of our new child window
 struct VCL_DLLPUBLIC GLWindow
@@ -113,7 +118,5 @@ public:
     OpenGLContext *mpPrevContext;
     OpenGLContext *mpNextContext;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
