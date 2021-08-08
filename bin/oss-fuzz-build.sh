@@ -33,7 +33,10 @@ for a in *fuzzer; do
     #some minimal fonts required
     mv $a $OUT
     mkdir -p $OUT/$a.fonts
-    cp $SRC/f543e6e2d7275557a839a164941c0a86e5f2c3f2a0042bfc434c88c6dde9e140-opens___.ttf ../share/fonts/truetype/Liberation* $OUT/$a.fonts
+    for b in $SRC/liberation*fonts*; do
+        tar -x -C $OUT/$a.fonts -v --strip-components=1 --wildcards --no-anchored '*.ttf' -f $b
+    done
+    cp $SRC/f543e6e2d7275557a839a164941c0a86e5f2c3f2a0042bfc434c88c6dde9e140-opens___.ttf $OUT/$a.fonts
     #minimal runtime requirements
     cp templateservices.rdb $OUT/$a.services.rdb
     cp types.rdb $OUT/$a.types.rdb
