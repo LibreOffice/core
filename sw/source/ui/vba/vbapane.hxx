@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SW_SOURCE_UI_VBA_VBAPANE_HXX
-#define INCLUDED_SW_SOURCE_UI_VBA_VBAPANE_HXX
+#pragma once
 
 #include <ooo/vba/word/XPane.hpp>
 #include <vbahelper/vbahelperinterface.hxx>
@@ -44,6 +43,6 @@ public:
     virtual OUString getServiceImplName() override;
     virtual css::uno::Sequence<OUString> getServiceNames() override;
 };
-#endif // INCLUDED_SW_SOURCE_UI_VBA_VBAPANE_HXX
+// INCLUDED_SW_SOURCE_UI_VBA_VBAPANE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
