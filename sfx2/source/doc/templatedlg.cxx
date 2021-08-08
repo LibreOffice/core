@@ -64,11 +64,11 @@ constexpr OUStringLiteral TM_SETTING_VIEWMODE = u"ViewMode";
 #define MNI_ACTION_DELETE_FOLDER "delete"
 #define MNI_ACTION_REFRESH   "refresh"
 #define MNI_ACTION_DEFAULT   "default"
-#define MNI_ACTION_DEFAULT_WRITER   "default writer"
-#define MNI_ACTION_DEFAULT_CALC   "default calc"
-#define MNI_ACTION_DEFAULT_IMPRESS   "default impress"
-#define MNI_ACTION_DEFAULT_DRAW   "default draw"
-#define MNI_ACTION_IMPORT   "import template"
+#define MNI_ACTION_DEFAULT_WRITER   "default_writer"
+#define MNI_ACTION_DEFAULT_CALC   "default_calc"
+#define MNI_ACTION_DEFAULT_IMPRESS   "default_impress"
+#define MNI_ACTION_DEFAULT_DRAW   "default_draw"
+#define MNI_ACTION_IMPORT   "import_template"
 #define MNI_ACTION_EXTENSIONS   "extensions"
 #define MNI_ALL_APPLICATIONS 0
 #define MNI_WRITER           1
