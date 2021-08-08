@@ -1081,10 +1081,14 @@ bool ScTable::SearchRangeForAllEmptyCells(
         if (aCol[nCol].IsEmptyData())
         {
             // The entire column is empty.
-            for (SCROW nRow = rRange.aStart.Row(); nRow <= rRange.aEnd.Row(); ++nRow)
+            const SCROW nEndRow = rRange.aEnd.Row();
+            for (SCROW nRow = rRange.aStart.Row(); nRow <= nEndRow; ++nRow)
             {
                 SCROW nLastRow;
-                if (!RowFiltered(nRow, nullptr, &nLastRow))
+                const bool bFiltered = RowFiltered(nRow, nullptr, &nLastRow);
+                if (nLastRow > nEndRow)
+                    nLastRow = nEndRow;
+                if (!bFiltered)
                 {
                     rMatchedRanges.Join(ScRange(nCol, nRow, nTab, nCol, nLastRow, nTab));
                     if (bReplace)
