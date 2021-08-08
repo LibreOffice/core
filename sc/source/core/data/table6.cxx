@@ -817,17 +817,16 @@ bool ScTable::SearchAndReplace(
             else if (nCommand == SvxSearchCmd::REPLACE_ALL)
                 bFound = ReplaceAllStyle(rSearchItem, rMark, rMatchedRanges, pUndoDoc);
         }
+        else if (ScDocument::IsEmptyCellSearch( rSearchItem))
+        {
+            // Search for empty cells.
+            bFound = SearchAndReplaceEmptyCells(rSearchItem, rCol, rRow, rMark, rMatchedRanges, rUndoStr, pUndoDoc);
+        }
         else
         {
             //  SearchParam no longer needed - SearchOptions contains all settings
             i18nutil::SearchOptions2 aSearchOptions = rSearchItem.GetSearchOptions();
             aSearchOptions.Locale = *ScGlobal::GetLocale();
-
-            if (aSearchOptions.searchString.isEmpty() || ( rSearchItem.GetRegExp() && aSearchOptions.searchString == "^$" ) )
-            {
-                // Search for empty cells.
-                return SearchAndReplaceEmptyCells(rSearchItem, rCol, rRow, rMark, rMatchedRanges, rUndoStr, pUndoDoc);
-            }
 
             //  reflect UseAsianOptions flag in SearchOptions
             //  (use only ignore case and width if asian options are disabled).
