@@ -507,6 +507,7 @@ bool ScOptSolverDlg::IsRefInputMode() const
 
 IMPL_LINK(ScOptSolverDlg, BtnHdl, weld::Button&, rBtn, void)
 {
+    auto xKeepAlive = shared_from_this();
     if (&rBtn == m_xBtnSolve.get() || &rBtn == m_xBtnClose.get())
     {
         bool bSolve = ( &rBtn == m_xBtnSolve.get() );
