@@ -29,7 +29,6 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <i18nlangtag/languagetag.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/toolkit/controllayout.hxx>
 #include <vcl/settings.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <unotools/accessiblestatesethelper.hxx>

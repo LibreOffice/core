@@ -28,7 +28,6 @@
 #include <vcl/toolkit/button.hxx>
 #include <vcl/tabpage.hxx>
 #include <vcl/tabctrl.hxx>
-#include <vcl/toolkit/controllayout.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/toolkit/lstbox.hxx>
 #include <vcl/settings.hxx>
@@ -2021,9 +2020,9 @@ tools::Rectangle TabControl::GetCharacterBounds( sal_uInt16 nPageId, tools::Long
         std::unordered_map< int, int >::const_iterator it = mpTabCtrlData->maLayoutPageIdToLine.find( static_cast<int>(nPageId) );
         if( it != mpTabCtrlData->maLayoutPageIdToLine.end() )
         {
-            Pair aPair = mpLayoutData->GetLineStartEnd( it->second );
+            Pair aPair = mxLayoutData->GetLineStartEnd( it->second );
             if( (aPair.B() - aPair.A()) >= nIndex )
-                aRet = mpLayoutData->GetCharacterBounds( aPair.A() + nIndex );
+                aRet = mxLayoutData->GetCharacterBounds( aPair.A() + nIndex );
         }
     }
 
@@ -2039,15 +2038,15 @@ tools::Long TabControl::GetIndexForPoint( const Point& rPoint, sal_uInt16& rPage
 
     if( HasLayoutData() )
     {
-        int nIndex = mpLayoutData->GetIndexForPoint( rPoint );
+        int nIndex = mxLayoutData->GetIndexForPoint( rPoint );
         if( nIndex != -1 )
         {
             // what line (->pageid) is this index in ?
-            int nLines = mpLayoutData->GetLineCount();
+            int nLines = mxLayoutData->GetLineCount();
             int nLine = -1;
             while( ++nLine < nLines )
             {
-                Pair aPair = mpLayoutData->GetLineStartEnd( nLine );
+                Pair aPair = mxLayoutData->GetLineStartEnd( nLine );
                 if( aPair.A() <= nIndex && aPair.B() >= nIndex )
                 {
                     nRet = nIndex - aPair.A();

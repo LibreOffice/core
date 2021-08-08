@@ -27,7 +27,6 @@
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/toolkit/controllayout.hxx>
 #include <vcl/toolkit/dialog.hxx>
 #include <vcl/toolkit/fixed.hxx>
 #include <vcl/toolkit/button.hxx>
@@ -1340,7 +1339,7 @@ void PushButton::KeyUp( const KeyEvent& rKEvt )
 
 void PushButton::FillLayoutData() const
 {
-    mpLayoutData.reset( new vcl::ControlLayoutData );
+    mxLayoutData.emplace();
     const_cast<PushButton*>(this)->Invalidate();
 }
 
@@ -2435,7 +2434,7 @@ void RadioButton::KeyUp( const KeyEvent& rKEvt )
 
 void RadioButton::FillLayoutData() const
 {
-    mpLayoutData.reset( new vcl::ControlLayoutData );
+    mxLayoutData.emplace();
     const_cast<RadioButton*>(this)->Invalidate();
 }
 
@@ -3249,7 +3248,7 @@ void CheckBox::KeyUp( const KeyEvent& rKEvt )
 
 void CheckBox::FillLayoutData() const
 {
-    mpLayoutData.reset( new vcl::ControlLayoutData );
+    mxLayoutData.emplace();
     const_cast<CheckBox*>(this)->Invalidate();
 }
 

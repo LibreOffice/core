@@ -18,7 +18,6 @@
  */
 
 #include <vcl/event.hxx>
-#include <vcl/toolkit/controllayout.hxx>
 #include <vcl/toolkit/group.hxx>
 #include <vcl/settings.hxx>
 
@@ -161,14 +160,14 @@ void GroupBox::ImplDraw( OutputDevice* pDev, DrawFlags nDrawFlags,
         }
     }
 
-    std::vector< tools::Rectangle >* pVector = bLayout ? &mpLayoutData->m_aUnicodeBoundRects : nullptr;
-    OUString* pDisplayText = bLayout ? &mpLayoutData->m_aDisplayText : nullptr;
+    std::vector< tools::Rectangle >* pVector = bLayout ? &mxLayoutData->m_aUnicodeBoundRects : nullptr;
+    OUString* pDisplayText = bLayout ? &mxLayoutData->m_aDisplayText : nullptr;
     DrawControlText( *pDev, aRect, aText, nTextStyle, pVector, pDisplayText );
 }
 
 void GroupBox::FillLayoutData() const
 {
-    mpLayoutData.reset( new vcl::ControlLayoutData );
+    mxLayoutData.emplace();
     const_cast<GroupBox*>(this)->ImplDraw( const_cast<GroupBox*>(this)->GetOutDev(), DrawFlags::NONE, Point(), GetOutputSizePixel(), true );
 }
 

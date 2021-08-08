@@ -23,7 +23,6 @@
 #include <vcl/settings.hxx>
 #include <vcl/event.hxx>
 #include <vcl/scrbar.hxx>
-#include <vcl/toolkit/controllayout.hxx>
 #include <vcl/toolkit/lstbox.hxx>
 #include <vcl/i18nhelp.hxx>
 #include <vcl/naturalsort.hxx>
@@ -1746,7 +1745,7 @@ void ImplListBoxWindow::DrawEntry(vcl::RenderContext& rRenderContext, sal_Int32 
 
 void ImplListBoxWindow::FillLayoutData() const
 {
-    mpLayoutData.reset( new vcl::ControlLayoutData );
+    mxLayoutData.emplace();
     const_cast<ImplListBoxWindow*>(this)->Invalidate(tools::Rectangle(Point(0, 0), GetOutDev()->GetOutputSize()));
 }
 
@@ -2497,7 +2496,7 @@ void ImplWin::MouseButtonDown( const MouseEvent& )
 
 void ImplWin::FillLayoutData() const
 {
-    mpLayoutData.reset( new vcl::ControlLayoutData );
+    mxLayoutData.emplace();
     ImplWin* pThis = const_cast<ImplWin*>(this);
     pThis->ImplDraw(*pThis->GetOutDev(), true);
 }
@@ -2715,8 +2714,8 @@ void ImplWin::DrawEntry(vcl::RenderContext& rRenderContext, bool bLayout)
             aTextRect.AdjustLeft(maImage.GetSizePixel().Width() + IMG_TXT_DISTANCE );
         }
 
-        std::vector< tools::Rectangle >* pVector = bLayout ? &mpLayoutData->m_aUnicodeBoundRects : nullptr;
-        OUString* pDisplayText = bLayout ? &mpLayoutData->m_aDisplayText : nullptr;
+        std::vector< tools::Rectangle >* pVector = bLayout ? &mxLayoutData->m_aUnicodeBoundRects : nullptr;
+        OUString* pDisplayText = bLayout ? &mxLayoutData->m_aDisplayText : nullptr;
         rRenderContext.DrawText( aTextRect, maString, nTextStyle, pVector, pDisplayText );
     }
 

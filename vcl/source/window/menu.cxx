@@ -31,7 +31,6 @@
 #include <vcl/decoview.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/taskpanelist.hxx>
-#include <vcl/toolkit/controllayout.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/commandinfoprovider.hxx>
 

@@ -23,7 +23,6 @@
 #include <vcl/decoview.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/uitest/logger.hxx>
-#include <vcl/toolkit/controllayout.hxx>
 #include <sal/log.hxx>
 
 #include <textlayout.hxx>
@@ -57,7 +56,7 @@ Control::~Control()
 
 void Control::dispose()
 {
-    mpLayoutData.reset();
+    mxLayoutData.reset();
     mpReferenceDevice.clear();
     Window::dispose();
 }
@@ -83,13 +82,13 @@ void Control::FillLayoutData() const
 
 void Control::CreateLayoutData() const
 {
-    SAL_WARN_IF( mpLayoutData, "vcl", "Control::CreateLayoutData: should be called with non-existent layout data only!" );
-    mpLayoutData.reset( new vcl::ControlLayoutData );
+    SAL_WARN_IF( mxLayoutData, "vcl", "Control::CreateLayoutData: should be called with non-existent layout data only!" );
+    mxLayoutData.emplace();
 }
 
 bool Control::HasLayoutData() const
 {
-    return mpLayoutData != nullptr;
+    return bool(mxLayoutData);
 }
 
 void Control::SetText( const OUString& rStr )
@@ -111,7 +110,7 @@ tools::Rectangle Control::GetCharacterBounds( tools::Long nIndex ) const
 {
     if( !HasLayoutData() )
         FillLayoutData();
-    return mpLayoutData ? mpLayoutData->GetCharacterBounds( nIndex ) : tools::Rectangle();
+    return mxLayoutData ? mxLayoutData->GetCharacterBounds( nIndex ) : tools::Rectangle();
 }
 
 tools::Long ControlLayoutData::GetIndexForPoint( const Point& rPoint ) const
@@ -135,7 +134,7 @@ tools::Long Control::GetIndexForPoint( const Point& rPoint ) const
 {
     if( ! HasLayoutData() )
         FillLayoutData();
-    return mpLayoutData ? mpLayoutData->GetIndexForPoint( rPoint ) : -1;
+    return mxLayoutData ? mxLayoutData->GetIndexForPoint( rPoint ) : -1;
 }
 
 tools::Long ControlLayoutData::GetLineCount() const
@@ -173,7 +172,7 @@ Pair Control::GetLineStartEnd( tools::Long nLine ) const
 {
     if( !HasLayoutData() )
         FillLayoutData();
-    return mpLayoutData ? mpLayoutData->GetLineStartEnd( nLine ) : Pair( -1, -1 );
+    return mxLayoutData ? mxLayoutData->GetLineStartEnd( nLine ) : Pair( -1, -1 );
 }
 
 tools::Long ControlLayoutData::ToRelativeLineIndex( tools::Long nIndex ) const
@@ -212,14 +211,14 @@ tools::Long Control::ToRelativeLineIndex( tools::Long nIndex ) const
 {
     if( !HasLayoutData() )
         FillLayoutData();
-    return mpLayoutData ? mpLayoutData->ToRelativeLineIndex( nIndex ) : -1;
+    return mxLayoutData ? mxLayoutData->ToRelativeLineIndex( nIndex ) : -1;
 }
 
 OUString Control::GetDisplayText() const
 {
     if( !HasLayoutData() )
         FillLayoutData();
-    return mpLayoutData ? mpLayoutData->m_aDisplayText : GetText();
+    return mxLayoutData ? mxLayoutData->m_aDisplayText : GetText();
 }
 
 bool Control::EventNotify( NotifyEvent& rNEvt )
@@ -270,23 +269,23 @@ void Control::AppendLayoutData( const Control& rSubControl ) const
 {
     if( !rSubControl.HasLayoutData() )
         rSubControl.FillLayoutData();
-    if( !rSubControl.HasLayoutData() || rSubControl.mpLayoutData->m_aDisplayText.isEmpty() )
+    if( !rSubControl.HasLayoutData() || rSubControl.mxLayoutData->m_aDisplayText.isEmpty() )
         return;
 
-    tools::Long nCurrentIndex = mpLayoutData->m_aDisplayText.getLength();
-    mpLayoutData->m_aDisplayText += rSubControl.mpLayoutData->m_aDisplayText;
-    int nLines = rSubControl.mpLayoutData->m_aLineIndices.size();
+    tools::Long nCurrentIndex = mxLayoutData->m_aDisplayText.getLength();
+    mxLayoutData->m_aDisplayText += rSubControl.mxLayoutData->m_aDisplayText;
+    int nLines = rSubControl.mxLayoutData->m_aLineIndices.size();
     int n;
-    mpLayoutData->m_aLineIndices.push_back( nCurrentIndex );
+    mxLayoutData->m_aLineIndices.push_back( nCurrentIndex );
     for( n = 1; n < nLines; n++ )
-        mpLayoutData->m_aLineIndices.push_back( rSubControl.mpLayoutData->m_aLineIndices[n] + nCurrentIndex );
-    int nRectangles = rSubControl.mpLayoutData->m_aUnicodeBoundRects.size();
+        mxLayoutData->m_aLineIndices.push_back( rSubControl.mxLayoutData->m_aLineIndices[n] + nCurrentIndex );
+    int nRectangles = rSubControl.mxLayoutData->m_aUnicodeBoundRects.size();
     tools::Rectangle aRel = rSubControl.GetWindowExtentsRelative(this);
     for( n = 0; n < nRectangles; n++ )
     {
-        tools::Rectangle aRect = rSubControl.mpLayoutData->m_aUnicodeBoundRects[n];
+        tools::Rectangle aRect = rSubControl.mxLayoutData->m_aUnicodeBoundRects[n];
         aRect.Move( aRel.Left(), aRel.Top() );
-        mpLayoutData->m_aUnicodeBoundRects.push_back( aRect );
+        mxLayoutData->m_aUnicodeBoundRects.push_back( aRect );
     }
 }
 
@@ -320,12 +319,12 @@ bool Control::ImplCallEventListenersAndHandler( VclEventId nEvent, std::function
 void Control::SetLayoutDataParent( const Control* pParent ) const
 {
     if( HasLayoutData() )
-        mpLayoutData->m_pParent = pParent;
+        mxLayoutData->m_pParent = pParent;
 }
 
 void Control::ImplClearLayoutData() const
 {
-    mpLayoutData.reset();
+    mxLayoutData.reset();
 }
 
 void Control::ImplDrawFrame( OutputDevice* pDev, tools::Rectangle& rRect )
