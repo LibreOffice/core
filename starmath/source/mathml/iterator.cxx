@@ -39,11 +39,10 @@ static inline void cloneElement(SmMlElement* aSmMlElement, void* aData)
         {
             // get parent
             SmMlElement* pParent = aSmMlElement->getParentElement();
+            aCopyTree = aCopyTree->getParentElement();
             // was this the last branch ?
-            if (aSmMlElement->getSubElementId() + 1 == pParent->getSubElementsCount()) // yes -> up
-                aCopyTree = aCopyTree->getParentElement();
-            else // no -> stay
-                break;
+            if (aSmMlElement->getSubElementId() + 1 != pParent->getSubElementsCount())
+                break; // no -> stop going up
             // Prepare for next round
             aSmMlElement = pParent;
         }
