@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_HWPFILTER_SOURCE_HCODE_H
-#define INCLUDED_HWPFILTER_SOURCE_HCODE_H
+#pragma once
 
 #include "hwplib.h"
 
@@ -56,7 +55,7 @@ DLLEXPORT ::std::string urltounix(const char *src);
  */
 #ifdef _WIN32
 DLLEXPORT ::std::string urltowin(const char *src);
-#endif
+
 /**
  *  Transfer integer to string following format
  */
