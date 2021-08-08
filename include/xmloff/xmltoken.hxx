@@ -3421,6 +3421,18 @@ namespace xmloff::token {
 
         XML_LOCAL_URL,
 
+        // Math ml
+        XML_DIR,
+        XML_DISPLAYSTYLE,
+        XML_LSPACE,
+        XML_MATHBACKGROUND,
+        XML_MAXSIZE,
+        XML_MINSIZE,
+        XML_MOVABLELIMITS,
+        XML_RSPACE,
+        XML_RTL,
+        XML_SYMMETRIC,
+
         XML_TOKEN_END
     };
 
