@@ -85,7 +85,7 @@ void ImportTest::testWK3WithFM3()
     CPPUNIT_ASSERT(xCellProps.is());
     sal_Int32 nCharColor = 0;
     CPPUNIT_ASSERT(xCellProps->getPropertyValue("CharColor") >>= nCharColor);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x0000ff), nCharColor); // blue text
+    CPPUNIT_ASSERT_EQUAL(Color(0x0000ff), nCharColor); // blue text
 }
 
 WpftLoader ImportTest::createCalcLoader(std::u16string_view rFile) const
