@@ -1141,9 +1141,9 @@ void Chart2ImportTest::testChartHatchFillXLSX()
     xPropSet->getPropertyValue("FillBackground") >>= bBackgroundFill;
     CPPUNIT_ASSERT(bBackgroundFill);
 
-    sal_Int32 nBackgroundColor;
+    Color nBackgroundColor;
     xPropSet->getPropertyValue("FillColor") >>= nBackgroundColor;
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0xFFFFFF), nBackgroundColor);
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, nBackgroundColor);
 
     // Check the datapoint has HatchName value
     uno::Reference<chart2::XDataSeries> xDataSeries(getDataSeriesFromDoc(xChartDoc, 0));
