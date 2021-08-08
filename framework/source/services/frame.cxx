@@ -1698,11 +1698,11 @@ void SAL_CALL XFrameImpl::close( sal_Bool bDeliverOwnership )
             m_bSelfClose = true;
         }
 
-        throw css::util::CloseVetoException("Frame in use for loading document ...",static_cast< ::cppu::OWeakObject*>(this));
+        throw css::util::CloseVetoException("Frame in use for loading document...",static_cast< ::cppu::OWeakObject*>(this));
     }
 
     if ( ! setComponent(nullptr,nullptr) )
-        throw css::util::CloseVetoException("Component couldn't be deattached ...",static_cast< ::cppu::OWeakObject*>(this));
+        throw css::util::CloseVetoException("Component couldn't be detached...",static_cast< ::cppu::OWeakObject*>(this));
 
     // If closing is allowed... inform all listeners and dispose this frame!
     pContainer = m_aListenerContainer.getContainer( cppu::UnoType<css::util::XCloseListener>::get());

@@ -41,7 +41,7 @@ namespace comphelper
 {
 /**
   A helper class to store interface references of different types.
-  This is a copy of the similiar class at include/cppuhelper/interfacecontainer.h,
+  This is a copy of the similar class at include/cppuhelper/interfacecontainer.h,
   but now uses the improved comphelper::InterfaceContainer2.
 
   @see OInterfaceIteratorHelper2
