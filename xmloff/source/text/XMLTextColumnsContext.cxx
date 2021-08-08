@@ -125,7 +125,7 @@ XMLTextColumnContext_Impl::XMLTextColumnContext_Impl(
 class XMLTextColumnSepContext_Impl: public SvXMLImportContext
 {
     sal_Int32 nWidth;
-    sal_Int32 nColor;
+    Sal_Int32 nColor;
     sal_Int8 nHeight;
     sal_Int8 nStyle;
     VerticalAlignment eVertAlign;
