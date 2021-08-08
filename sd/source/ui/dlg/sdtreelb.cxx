@@ -711,7 +711,9 @@ void SdPageObjsTLV::Select()
                 const bool bUndo = pObject->getSdrModelFromSdrObject().IsUndoEnabled();
                 pObject->getSdrModelFromSdrObject().EnableUndo(false);
                 pObject->SetName(m_xTreeView->get_selected_text(), false);
+                pObject->getSdrModelFromSdrObject().EnableUndo(bUndo);
                 m_aRowActivatedHdl.Call(*m_xTreeView);
+                pObject->getSdrModelFromSdrObject().EnableUndo(false);
                 pObject->SetName(OUString(), false);
                 pObject->getSdrModelFromSdrObject().EnableUndo(bUndo);
             }
