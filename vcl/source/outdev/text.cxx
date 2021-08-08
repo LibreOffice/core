@@ -30,6 +30,7 @@
 #include <sal/log.hxx>
 #include <tools/lineend.hxx>
 #include <tools/debug.hxx>
+#include <vcl/ctrl.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/metric.hxx>
@@ -37,7 +38,6 @@
 #include <vcl/virdev.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/unohelp.hxx>
-#include <vcl/toolkit/controllayout.hxx>
 
 #include <config_fuzzers.h>
 #include <outdev.h>

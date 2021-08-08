@@ -30,10 +30,10 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
+#include <vcl/ctrl.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/unohelp2.hxx>
 #include <vcl/status.hxx>
-#include <vcl/toolkit/controllayout.hxx>
 #include <vcl/settings.hxx>
 #include <i18nlangtag/languagetag.hxx>
 

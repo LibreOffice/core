@@ -20,7 +20,6 @@
 #include <vcl/builder.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
-#include <vcl/toolkit/controllayout.hxx>
 #include <vcl/toolkit/lstbox.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/uitest/uiobject.hxx>
@@ -627,7 +626,7 @@ void ListBox::Resize()
 
 void ListBox::FillLayoutData() const
 {
-    mpLayoutData.reset( new vcl::ControlLayoutData );
+    mxLayoutData.emplace();
     const ImplListBoxWindow* rMainWin = mpImplLB->GetMainWindow();
     if( mpFloatWin )
     {

@@ -24,7 +24,6 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <vcl/svapp.hxx>
-#include <vcl/toolkit/controllayout.hxx>
 #include <vcl/settings.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <unotools/accessiblestatesethelper.hxx>

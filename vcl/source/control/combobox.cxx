@@ -22,7 +22,6 @@
 #include <set>
 
 #include <comphelper/string.hxx>
-#include <vcl/toolkit/controllayout.hxx>
 #include <vcl/toolkit/lstbox.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/commandevent.hxx>
@@ -607,7 +606,7 @@ bool ComboBox::IsDropDownBox() const { return m_pImpl->m_pFloatWin != nullptr; }
 
 void ComboBox::FillLayoutData() const
 {
-    mpLayoutData.reset( new vcl::ControlLayoutData );
+    mxLayoutData.emplace();
     AppendLayoutData( *m_pImpl->m_pSubEdit );
     m_pImpl->m_pSubEdit->SetLayoutDataParent( this );
     ImplListBoxWindow* rMainWindow = GetMainWindow();

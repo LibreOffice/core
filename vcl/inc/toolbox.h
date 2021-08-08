@@ -21,7 +21,6 @@
 #define INCLUDED_VCL_INC_TOOLBOX_H
 
 #include <vcl/toolbox.hxx>
-#include <vcl/toolkit/controllayout.hxx>
 
 #include <optional>
 #include <vector>

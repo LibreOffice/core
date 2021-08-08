@@ -334,7 +334,6 @@
 #include <vcl/toolbox.hxx>
 #include <vcl/toolkit/button.hxx>
 #include <vcl/toolkit/combobox.hxx>
-#include <vcl/toolkit/controllayout.hxx>
 #include <vcl/toolkit/dialog.hxx>
 #include <vcl/toolkit/edit.hxx>
 #include <vcl/toolkit/fixed.hxx>
