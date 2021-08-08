@@ -2012,8 +2012,17 @@ bool ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
                     {
                         sc::SearchResultsDlg* pDlg = static_cast<sc::SearchResultsDlg*>(pWnd->GetController().get());
                         if (pDlg)
-                            pDlg->FillResults(rDoc, aMatchedRanges,
-                                    pSearchItem->GetCellType() == SvxSearchCellType::NOTE);
+                        {
+                            const bool bCellNotes = (pSearchItem->GetCellType() == SvxSearchCellType::NOTE);
+                            // ScCellIterator iterates over cells with content,
+                            // for empty cells iterate over match positions.
+                            const bool bEmptyCells = (!bCellNotes
+                                    && ((nCommand == SvxSearchCmd::FIND_ALL
+                                            && ScDocument::IsEmptyCellSearch(*pSearchItem))
+                                        || (nCommand == SvxSearchCmd::REPLACE_ALL
+                                            && pSearchItem->GetReplaceString().isEmpty())));
+                            pDlg->FillResults(rDoc, aMatchedRanges, bCellNotes, bEmptyCells);
+                        }
                     }
                 }
 
