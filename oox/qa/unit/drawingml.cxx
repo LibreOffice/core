@@ -304,7 +304,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTableShadow)
         CPPUNIT_ASSERT(bShadow);
         sal_Int32 nColor = 0;
         CPPUNIT_ASSERT(xShape->getPropertyValue("ShadowColor") >>= nColor);
-        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0xff0000), nColor);
+        CPPUNIT_ASSERT_EQUAL(Color(0xff0000), nColor);
     };
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "table-shadow.pptx";
     load(aURL);
