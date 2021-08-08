@@ -1297,6 +1297,14 @@ void ScDocument::GetSearchAndReplaceStart( const SvxSearchItem& rSearchItem,
     }
 }
 
+// static
+bool ScDocument::IsEmptyCellSearch( const SvxSearchItem& rSearchItem )
+{
+    return !rSearchItem.GetPattern() && (rSearchItem.GetCellType() != SvxSearchCellType::NOTE)
+        && (rSearchItem.GetSearchOptions().searchString.isEmpty()
+                || (rSearchItem.GetRegExp() && rSearchItem.GetSearchOptions().searchString == "^$"));
+}
+
 bool ScDocument::SearchAndReplace(
     const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow, SCTAB& rTab,
     const ScMarkData& rMark, ScRangeList& rMatchedRanges,

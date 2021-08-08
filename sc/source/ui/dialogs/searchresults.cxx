@@ -92,7 +92,8 @@ namespace
     };
 }
 
-void SearchResultsDlg::FillResults( ScDocument& rDoc, const ScRangeList &rMatchedRanges, bool bCellNotes )
+void SearchResultsDlg::FillResults( ScDocument& rDoc, const ScRangeList &rMatchedRanges, bool bCellNotes,
+        bool bEmptyCells )
 {
     ListWrapper aList(*mxList);
     std::vector<OUString> aTabNames = rDoc.GetAllTableNames();
@@ -103,13 +104,10 @@ void SearchResultsDlg::FillResults( ScDocument& rDoc, const ScRangeList &rMatche
     if (nMatchMax > ListWrapper::mnMaximum)
         nMatchMax = ListWrapper::mnMaximum;
 
-    if (bCellNotes)
+    if (bCellNotes || bEmptyCells)
     {
         for (size_t i = 0, n = nMatchMax; i < n; ++i)
         {
-            /* TODO: a CellNotes iterator would come handy and might speed
-             * things up a little, though we only loop through the
-             * search/replace result positions here. */
             ScRange const & rRange( rMatchedRanges[i] );
             // Bear in mind that mostly the range is one address position
             // or a column or a row joined.
@@ -122,11 +120,20 @@ void SearchResultsDlg::FillResults( ScDocument& rDoc, const ScRangeList &rMatche
                 {
                     for (aPos.SetRow( rRange.aStart.Row()); aPos.Row() <= rRange.aEnd.Row(); aPos.IncRow())
                     {
-                        const ScPostIt* pNote = rDoc.GetNote( aPos);
-                        if (pNote)
+                        if (bCellNotes)
+                        {
+                            const ScPostIt* pNote = rDoc.GetNote( aPos);
+                            if (pNote)
+                                aList.Insert(aTabNames[aPos.Tab()], aPos,
+                                        rDoc.GetAddressConvention(),
+                                        pNote->GetText());
+                        }
+                        else  // bEmptyCells
+                        {
                             aList.Insert(aTabNames[aPos.Tab()], aPos,
-                                         rDoc.GetAddressConvention(),
-                                         pNote->GetText());
+                                    rDoc.GetAddressConvention(),
+                                    rDoc.GetString(aPos));
+                        }
                     }
                 }
             }
