@@ -609,7 +609,10 @@ TestResult OutputDeviceTestCommon::checkDropShape(Bitmap& rBitmap, bool aEnableA
             if (SetPixels[{ x, y }])
             {
                 if (aEnableAA)
-                   checkValueAA(pAccess, y, x, constLineColor, nNumberOfQuirks, nNumberOfErrors);
+                {
+                    // coverity[swapped_arguments : FALSE] - this is in the correct order
+                    checkValueAA(pAccess, y, x, constLineColor, nNumberOfQuirks, nNumberOfErrors);
+                }
                 else
                     checkValue(pAccess, y, x, constLineColor, nNumberOfQuirks, nNumberOfErrors,
                                true);
