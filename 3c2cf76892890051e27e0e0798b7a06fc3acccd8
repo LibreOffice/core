@@ -34,6 +34,24 @@
       "revId": "3c2cf76892890051e27e0e0798b7a06fc3acccd8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "48d96d98_313a1e18",
+        "filename": "vcl/backendtest/outputdevice/common.cxx",
+        "patchSetId": 20
+      },
+      "lineNbr": 612,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-08-08T22:08:15Z",
+      "side": 1,
+      "message": "But the function sign. is void checkValueAA(BitmapScopedWriteAccess\u0026 pAccess, int x, int y, ...); and it seems the you are not reversing the GetPixel and SetPixel, which actually have the y and x reversed in the function signature. \n\nAnd you are setting here y,x, which is not what is expected by the function signature... so something is reversed or even double reversed, so it makes it correct in the end. Can you try to change the bitmap width and height to not be equal (which is one of the goals to make things non-symmetrical anyway) and see if it will crash...",
+      "parentUuid": "4aae0103_6ac58eb2",
+      "revId": "3c2cf76892890051e27e0e0798b7a06fc3acccd8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
