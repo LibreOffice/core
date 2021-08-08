@@ -1862,6 +1862,7 @@ public:
                                            SCCOL& rCol, SCROW& rRow, SCTAB& rTab,
                                            const ScMarkData& rMark, ScRangeList& rMatchedRanges,
                                            OUString& rUndoStr, ScDocument* pUndoDoc = nullptr );
+    static bool          IsEmptyCellSearch( const SvxSearchItem& rSearchItem );
 
                     // determine Col/Row of subsequent calls
                     // (e.g. not found from the beginning, or subsequent tables)
