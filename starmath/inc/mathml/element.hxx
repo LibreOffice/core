@@ -10,6 +10,7 @@
 #pragma once
 
 #include "attribute.hxx"
+#include "starmathdatabase.hxx"
 #include <rect.hxx>
 
 #include <editeng/editdata.hxx>
@@ -27,6 +28,7 @@ public:
         , m_aAttributePosList(0)
         , m_aSubElements(0)
         , m_aParentElement(nullptr)
+        , m_nSubElementId(0)
     {
         SmImplAttributeType();
     };
@@ -39,8 +41,24 @@ protected:
         , m_aESelection(0, 0, 0, 0)
         , m_aSubElements(0)
         , m_aParentElement(nullptr)
+        , m_nSubElementId(0)
     {
         SmImplAttributeType();
+    };
+
+public:
+    SmMlElement(const SmMlElement& aElement)
+        : SmRect(static_cast<SmRect>(aElement))
+        , m_aElementType(aElement.getMlElementType())
+        , m_aText(aElement.getText())
+        , m_aESelection(aElement.getESelectionReference())
+        , m_aSubElements(0)
+        , m_aParentElement(nullptr)
+        , m_nSubElementId(aElement.getSubElementId())
+    {
+        m_aAttributePosList = std::vector<SmMlAttributePos>(aElement.getAttributeCount());
+        for (size_t i = 0; i < aElement.getAttributeCount(); ++i)
+            setAttributeForce(i, aElement.getAttributePointer(i));
     };
 
 private:
@@ -64,6 +82,9 @@ private:
 
     // Parent element
     SmMlElement* m_aParentElement;
+
+    // Child id, so it is possible to iterata
+    size_t m_nSubElementId;
 
 private:
     void SmImplAttributeType();
@@ -91,6 +112,12 @@ public: // location in the source
       * @return selection
       */
     ESelection getESelection() const { return m_aESelection; };
+
+    /**
+      * Returns the location in the source code of the node type
+      * @return selection
+      */
+    const ESelection& getESelectionReference() const { return m_aESelection; };
 
     /**
       * Sets the location in the source code of the node type
@@ -147,6 +174,30 @@ public: // attributes
       */
     void setAttribute(const SmMlAttribute* aAttribute);
 
+protected: // attributes
+    /**
+      * Get's a given attribute.
+      * If no available returns empty attribute.
+      * @param nAttributePos
+      * @return given attribute.
+      */
+    const SmMlAttribute* getAttributePointer(size_t nAttributePos) const
+    {
+        return nAttributePos < m_aAttributeList.size() ? &m_aAttributeList[nAttributePos] : nullptr;
+    }
+
+    /**
+      * Set's a given attribute.
+      * If no available undefined behaviour.
+      * @param nAttributePos
+      * @param aAttribute
+      * @return given attribute.
+      */
+    void setAttributeForce(size_t nAttributePos, const SmMlAttribute* aAttribute)
+    {
+        m_aAttributeList[nAttributePos].setMlAttributeValue(aAttribute);
+    }
+
 public: // sub elements
     /**
       * Returns the sub elements count
@@ -180,6 +231,17 @@ public: // sub elements
       * @param aElement
       */
     void setSubElement(size_t nPos, SmMlElement* aElement);
+
+    /**
+      * Get's subelement id
+      */
+    size_t getSubElementId() const { return m_nSubElementId; }
+
+    /**
+      * Set's subelement id
+      * @param nSubElementId
+      */
+    void setSubElementId(size_t nSubElementId) { m_nSubElementId = nSubElementId; }
 
 public: // parent elements
     /**
