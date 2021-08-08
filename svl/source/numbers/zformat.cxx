@@ -3834,7 +3834,7 @@ bool SvNumberformat::ImpGetDateOutput(double fNumber,
                 sBuff.append('-');
             }
             aStr = rCal.getDisplayString( CalendarDisplayCode::LONG_YEAR, nNatNum );
-            if (aStr.getLength() < 4)
+            if (aStr.getLength() < 4 && !lcl_hasEra(NumFor[nIx]))
             {
                 using namespace comphelper::string;
                 // Ensure that year consists of at least 4 digits, so it
@@ -4199,7 +4199,7 @@ bool SvNumberformat::ImpGetDateTimeOutput(double fNumber,
                 sBuff.append('-');
             }
             aYear = rCal.getDisplayString( CalendarDisplayCode::LONG_YEAR, nNatNum );
-            if (aYear.getLength() < 4)
+            if (aYear.getLength() < 4 && !lcl_hasEra(NumFor[nIx]))
             {
                 using namespace comphelper::string;
                 // Ensure that year consists of at least 4 digits, so it
