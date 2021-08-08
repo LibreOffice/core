@@ -247,6 +247,9 @@ inline void _copyConstructAnyFromData(
             _acquire( pDestAny->pReserved, acquire );
         }
         break;
+    case typelib_TypeClass_UNKNOWN:
+        pDestAny->pData = pSource;
+        break;
     default:
         OSL_ASSERT(false);
         break;
@@ -386,6 +389,9 @@ inline void _copyConstructAny(
             case typelib_TypeClass_INTERFACE:
                 pDestAny->pData = &pDestAny->pReserved;
                 pDestAny->pReserved = nullptr; // either cpp or c-uno interface
+                break;
+            case typelib_TypeClass_UNKNOWN:
+                pDestAny->pData = nullptr;
                 break;
             default:
                 OSL_ASSERT(false);
