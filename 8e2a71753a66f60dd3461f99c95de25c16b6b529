@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3531f6fe_8df74617",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3842,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-08T17:56:38Z",
+      "side": 1,
+      "message": "The comment suggests that such years may be handled by the 2-year processing when edited - won\u0027t it affect years with era?",
+      "revId": "8e2a71753a66f60dd3461f99c95de25c16b6b529",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
