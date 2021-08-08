@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "004c509a_2bd21353",
+        "filename": "vcl/backendtest/outputdevice/common.cxx",
+        "patchSetId": 20
+      },
+      "lineNbr": 612,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-08-08T11:51:28Z",
+      "side": 1,
+      "message": "Is it intentional that we pass y, x here to x, y of checkValueAA?",
+      "revId": "3c2cf76892890051e27e0e0798b7a06fc3acccd8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
