@@ -375,7 +375,7 @@ void PropertyMap::printProperties()
         SAL_INFO( "writerfilter", getPropertyName( rPropPair.first ) );
 
         table::BorderLine2 aLine;
-        sal_Int32 nColor;
+        Color nColor;
         if ( rPropPair.second.getValue() >>= aLine )
         {
             TagLogger::getInstance().startElement( "borderline" );
