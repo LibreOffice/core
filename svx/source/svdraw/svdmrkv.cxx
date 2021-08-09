@@ -262,7 +262,7 @@ void SdrMarkView::ModelHasChanged()
             if (OutputDevice* pOutputDevice = mpMarkedPV->GetView().GetFirstOutputDevice())
             {
                 if (pOutputDevice->GetMapMode().GetMapUnit() == MapUnit::Map100thMM)
-                    aSelection = OutputDevice::LogicToLogic(aSelection, MapMode(MapUnit::Map100thMM), MapMode(MapUnit::MapTwip));
+                    aSelection = o3tl::convert(aSelection, o3tl::Length::mm100, o3tl::Length::twip);
             }
         }
 
@@ -718,7 +718,9 @@ bool SdrMarkView::dumpGluePointsToJSON(boost::property_tree::ptree& rTree)
                 const SdrGluePoint& rGP = !VertexObject ? (*pGPL)[i] : pObj->GetVertexGluePoint(i);
                 Point rPoint = rGP.GetAbsolutePos(*pObj);
                 if (bConvertUnit)
-                    rPoint = OutputDevice::LogicToLogic(rPoint, MapMode(MapUnit::Map100thMM), MapMode(MapUnit::MapTwip));
+                {
+                    rPoint = o3tl::convert(rPoint, o3tl::Length::mm100, o3tl::Length::twip);
+                }
                 point.put("x", rPoint.getX());
                 point.put("y", rPoint.getY());
                 node.add_child("point", point);
@@ -730,7 +732,9 @@ bool SdrMarkView::dumpGluePointsToJSON(boost::property_tree::ptree& rTree)
             {
                 Point p(aGridOffset.getX(), aGridOffset.getY());
                 if (bConvertUnit)
-                    p = OutputDevice::LogicToLogic(p, MapMode(MapUnit::Map100thMM), MapMode(MapUnit::MapTwip));
+                {
+                    p = o3tl::convert(p, o3tl::Length::mm100, o3tl::Length::twip);
+                }
                 boost::property_tree::ptree gridOffset;
                 gridOffset.put("x", p.getX());
                 gridOffset.put("y", p.getY());
@@ -785,7 +789,7 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
             {
                 if (pOutputDevice->GetMapMode().GetMapUnit() == MapUnit::Map100thMM)
                 {
-                    aSelection = OutputDevice::LogicToLogic(aSelection, MapMode(MapUnit::Map100thMM), MapMode(MapUnit::MapTwip));
+                    aSelection = o3tl::convert(aSelection, o3tl::Length::mm100, o3tl::Length::twip);
                     convertMapMode = true;
                 }
             }
@@ -842,7 +846,7 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
             {
                 Point p(aGridOffset.getX(), aGridOffset.getY());
                 if (convertMapMode)
-                    p = OutputDevice::LogicToLogic(p, MapMode(MapUnit::Map100thMM), MapMode(MapUnit::MapTwip));
+                    p = o3tl::convert(p, o3tl::Length::mm100, o3tl::Length::twip);
                 aExtraInfo.append(",\"gridOffsetX\":");
                 aExtraInfo.append(p.getX());
                 aExtraInfo.append(",\"gridOffsetY\":");
@@ -917,7 +921,7 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
                                 Point aMinPos(aDragParameters[1], aDragParameters[2]);
                                 Point aMaxPos(aDragParameters[3], aDragParameters[4]);
                                 Point aDragDirection = aMaxPos - aMinPos;
-                                aDragDirection = OutputDevice::LogicToLogic(aDragDirection, MapMode(MapUnit::Map100thMM), MapMode(MapUnit::MapTwip));
+                                aDragDirection = o3tl::convert(aDragDirection, o3tl::Length::mm100, o3tl::Length::twip);
 
                                 aExtraInfo.append(", \"dragDirection\": [");
                                 aExtraInfo.append(aDragDirection.toString());
@@ -999,7 +1003,9 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
                     Point pHdlPos = pHdl->GetPos();
                     pHdlPos.Move(addLogicOffset.getX(), addLogicOffset.getY());
                     if (convertMapMode)
-                        pHdlPos = OutputDevice::LogicToLogic(pHdlPos, MapMode(MapUnit::Map100thMM), MapMode(MapUnit::MapTwip));
+                    {
+                        pHdlPos = o3tl::convert(pHdlPos, o3tl::Length::mm100, o3tl::Length::twip);
+                    }
                     point.put("x", pHdlPos.getX());
                     point.put("y", pHdlPos.getY());
                     child.add_child("point", point);

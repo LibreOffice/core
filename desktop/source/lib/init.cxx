@@ -3993,8 +3993,9 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pComma
             if (aPropertyValuesVector[0].Name != "Action")
             {
                 tools::Rectangle aChartBB = aChartHelper.GetChartBoundingBox();
-                int nLeft = OutputDevice::LogicToLogic(aChartBB.Left(), MapUnit::MapTwip, MapUnit::Map100thMM);
-                int nTop = OutputDevice::LogicToLogic(aChartBB.Top(), MapUnit::MapTwip, MapUnit::Map100thMM);
+
+                int nLeft = o3tl::convert(aChartBB.Left(), o3tl::Length::twip, o3tl::Length::mm100);
+                int nTop = o3tl::convert(aChartBB.Top(), o3tl::Length::twip, o3tl::Length::mm100);
 
                 for (beans::PropertyValue& rPropValue: aPropertyValuesVector)
                 {
