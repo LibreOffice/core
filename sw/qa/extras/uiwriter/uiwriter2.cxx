@@ -2806,4 +2806,28 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf129655)
     xmlDocPtr pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "//fly/txt[@WritingMode='Vertical']", 1);
 }
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf129270)
+{
+    SwDoc* pDoc = createDoc("tdf129270.odt");
+    CPPUNIT_ASSERT(pDoc);
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+    SwXTextDocument* pXTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXTextDocument);
+
+    // Go to document end
+    pWrtShell->SttEndDoc(/*bStt=*/false);
+
+    // Press enter
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_RETURN);
+    Scheduler::ProcessEventsToIdle();
+
+    // Numbering for previous outline should remain the same "2"
+    CPPUNIT_ASSERT_EQUAL(OUString("2"), getProperty<OUString>(getParagraph(4), "ListLabelString"));
+
+    // Numbering for newly created outline should be "2.1"
+    CPPUNIT_ASSERT_EQUAL(OUString("2.1"),
+                         getProperty<OUString>(getParagraph(5), "ListLabelString"));
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
