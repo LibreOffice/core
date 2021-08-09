@@ -1571,22 +1571,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testUserFieldTypeLanguage)
                 "1,234.56");
 }
 
-CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf58521)
-{
-    // This is a testcase for the ContinuousEndnotes compat flag in docx.
-    // The document has 2 pages, the endnote anchor is on the first page.
-    // The endnote should be on the 2nd page together with the last page content.
-    createSwDoc(DATA_DIRECTORY, "tdf58521_endnotes.docx");
-    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-
-    // Without the accompanying fix in place, this test would have failed with:
-    // - Expected: 2
-    // - Actual  : 3
-    // i.e. there was a separate endnote page
-    assertXPath(pXmlDoc, "/root/page", 2);
-    assertXPath(pXmlDoc, "/root/page[2]/ftncont", 1);
-}
-
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
