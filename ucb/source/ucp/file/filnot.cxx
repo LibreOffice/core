@@ -57,7 +57,7 @@ ContentEventNotifier::ContentEventNotifier( TaskManager* pMyShell,
 }
 
 
-void ContentEventNotifier::notifyChildInserted( const OUString& aChildName )
+void ContentEventNotifier::notifyChildInserted( const OUString& aChildName ) const
 {
     rtl::Reference<FileContentIdentifier> xChildId = new FileContentIdentifier( aChildName );
 
@@ -76,7 +76,7 @@ void ContentEventNotifier::notifyChildInserted( const OUString& aChildName )
     }
 }
 
-void ContentEventNotifier::notifyDeleted()
+void ContentEventNotifier::notifyDeleted() const
 {
 
     ContentEvent aEvt( m_xCreatorContent,
@@ -94,7 +94,7 @@ void ContentEventNotifier::notifyDeleted()
 }
 
 
-void ContentEventNotifier::notifyRemoved( const OUString& aChildName )
+void ContentEventNotifier::notifyRemoved( const OUString& aChildName ) const
 {
     rtl::Reference<FileContentIdentifier> xChildId = new FileContentIdentifier( aChildName );
 
@@ -117,7 +117,7 @@ void ContentEventNotifier::notifyRemoved( const OUString& aChildName )
     }
 }
 
-void ContentEventNotifier::notifyExchanged()
+void ContentEventNotifier::notifyExchanged() const
 {
     ContentEvent aEvt( m_xCreatorContent,
                        ContentAction::EXCHANGED,
@@ -150,7 +150,7 @@ PropertySetInfoChangeNotifier::PropertySetInfoChangeNotifier(
 
 
 void
-PropertySetInfoChangeNotifier::notifyPropertyAdded( const OUString & aPropertyName )
+PropertySetInfoChangeNotifier::notifyPropertyAdded( const OUString & aPropertyName ) const
 {
     beans::PropertySetInfoChangeEvent aEvt( m_xCreatorContent,
                                             aPropertyName,
@@ -167,7 +167,7 @@ PropertySetInfoChangeNotifier::notifyPropertyAdded( const OUString & aPropertyNa
 
 
 void
-PropertySetInfoChangeNotifier::notifyPropertyRemoved( const OUString & aPropertyName )
+PropertySetInfoChangeNotifier::notifyPropertyRemoved( const OUString & aPropertyName ) const
 {
     beans::PropertySetInfoChangeEvent aEvt( m_xCreatorContent,
                                             aPropertyName,
@@ -199,13 +199,8 @@ PropertyChangeNotifier::PropertyChangeNotifier(
 }
 
 
-PropertyChangeNotifier::~PropertyChangeNotifier()
-{
-}
-
-
 void PropertyChangeNotifier::notifyPropertyChanged(
-    const uno::Sequence< beans::PropertyChangeEvent >& seqChanged )
+    const uno::Sequence< beans::PropertyChangeEvent >& seqChanged ) const
 {
     uno::Sequence< beans::PropertyChangeEvent > Changes  = seqChanged;
 
@@ -214,13 +209,17 @@ void PropertyChangeNotifier::notifyPropertyChanged(
 
     // notify listeners for all Events
 
-    std::vector< uno::Reference< uno::XInterface > >& seqList = m_aListeners[ OUString() ];
-    for( const auto& rListener : std::as_const(seqList) )
+    auto it = m_aListeners.find( OUString() );
+    if (it != m_aListeners.end())
     {
-        uno::Reference< beans::XPropertiesChangeListener > aListener( rListener,uno::UNO_QUERY );
-        if( aListener.is() )
+        const std::vector< uno::Reference< uno::XInterface > >& seqList = it->second;
+        for( const auto& rListener : seqList )
         {
-            aListener->propertiesChange( Changes );
+            uno::Reference< beans::XPropertiesChangeListener > aListener( rListener,uno::UNO_QUERY );
+            if( aListener.is() )
+            {
+                aListener->propertiesChange( Changes );
+            }
         }
     }
 
@@ -228,14 +227,17 @@ void PropertyChangeNotifier::notifyPropertyChanged(
     for( const auto& rChange : std::as_const(Changes) )
     {
         seq[0] = rChange;
-        seqList = m_aListeners[ rChange.PropertyName ];
-
-        for( const auto& rListener : std::as_const(seqList) )
+        it = m_aListeners.find( rChange.PropertyName );
+        if (it != m_aListeners.end())
         {
-            uno::Reference< beans::XPropertiesChangeListener > aListener( rListener,uno::UNO_QUERY );
-            if( aListener.is() )
+            const std::vector< uno::Reference< uno::XInterface > >& seqList = it->second;
+            for( const auto& rListener : seqList )
             {
-                aListener->propertiesChange( seq );
+                uno::Reference< beans::XPropertiesChangeListener > aListener( rListener,uno::UNO_QUERY );
+                if( aListener.is() )
+                {
+                    aListener->propertiesChange( seq );
+                }
             }
         }
     }
