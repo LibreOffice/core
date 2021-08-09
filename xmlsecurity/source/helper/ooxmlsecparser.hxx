@@ -16,6 +16,7 @@
 
 #include <xmloff/namespacemap.hxx>
 
+#include <memory>
 #include <optional>
 #include <stack>
 

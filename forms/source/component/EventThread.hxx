@@ -21,6 +21,7 @@
 
 #include <sal/config.h>
 
+#include <memory>
 #include <vector>
 
 #include <com/sun/star/lang/XEventListener.hpp>

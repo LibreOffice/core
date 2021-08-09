@@ -19,6 +19,10 @@
 
 #pragma once
 
+#include <sal/config.h>
+
+#include <memory>
+
 #include <config_options.h>
 #include <svtools/svtdllapi.h>
 
