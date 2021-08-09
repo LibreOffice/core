@@ -23,6 +23,8 @@
 #include <rtl/ustring.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
+#include <memory>
+
 // TokenGroups
 enum class TG {
     NONE          = 0x000000,

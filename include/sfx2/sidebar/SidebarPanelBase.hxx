@@ -19,6 +19,10 @@
 #ifndef INCLUDED_SFX2_SIDEBAR_SIDEBARPANELBASE_HXX
 #define INCLUDED_SFX2_SIDEBAR_SIDEBARPANELBASE_HXX
 
+#include <sal/config.h>
+
+#include <memory>
+
 #include <sfx2/dllapi.h>
 
 #include <cppuhelper/compbase.hxx>
