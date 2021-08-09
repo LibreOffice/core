@@ -2497,7 +2497,15 @@ void SwTextNode::CutImpl( SwTextNode * const pDest, const SwIndex & rDestStart,
         }
         else
         {
-            GetpSwAttrSet()->CopyToModify( *pDest );
+            // Copy all attrs except RES_PARATR_LIST_LEVEL: it was initialized before
+            // and current SwTextNode can contain not suitable for pDest value
+            SfxItemSet aCharSet(
+                pDest->GetDoc().GetAttrPool(),
+                                svl::Items<RES_CHRATR_BEGIN, RES_PARATR_LIST_LEVEL - 1,
+                                           RES_PARATR_LIST_LEVEL + 1, HINT_END>);
+            aCharSet.Put(*GetpSwAttrSet());
+            if (aCharSet.Count())
+                pDest->SetAttr(aCharSet, nDestStart, nDestStart + nLen);
         }
     }
 

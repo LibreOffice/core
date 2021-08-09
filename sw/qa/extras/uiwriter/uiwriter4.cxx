@@ -278,6 +278,7 @@ public:
     void testRedlineAutoCorrect();
     void testRedlineAutoCorrect2();
     void testEmojiAutoCorrect();
+    void testTdf129270();
     void testInsertPdf();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest4);
@@ -393,6 +394,7 @@ public:
     CPPUNIT_TEST(testRedlineAutoCorrect);
     CPPUNIT_TEST(testRedlineAutoCorrect2);
     CPPUNIT_TEST(testEmojiAutoCorrect);
+    CPPUNIT_TEST(testTdf129270);
     CPPUNIT_TEST(testInsertPdf);
     CPPUNIT_TEST_SUITE_END();
 };
@@ -3601,6 +3603,8 @@ void SwUiWriterTest4::testInsertLongDateFormat()
     // the date format was "YYYY-MM-DD", but now "YYYY. MMM DD."
     CPPUNIT_ASSERT(xField->getString().indexOf(" ") > -1);
 }
+
+void SwUiWriterTest4::testTdf129270() { createSwDoc(DATA_DIRECTORY, "tdf129270.odt"); }
 
 void SwUiWriterTest4::testInsertPdf()
 {
