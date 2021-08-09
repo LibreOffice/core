@@ -89,12 +89,12 @@ void ImplEntryList::SelectEntry( sal_Int32 nPos, bool bSelect )
 {
     if (0 <= nPos && o3tl::make_unsigned(nPos) < maEntries.size())
     {
-        std::vector<std::unique_ptr<ImplEntryType> >::iterator iter = maEntries.begin()+nPos;
+        auto iter = maEntries.begin()+nPos;
 
-        if ( ( (*iter)->mbIsSelected != bSelect ) &&
-           ( ( (*iter)->mnFlags & ListBoxEntryFlags::DisableSelection) == ListBoxEntryFlags::NONE  ) )
+        if ( ( iter->mbIsSelected != bSelect ) &&
+           ( ( iter->mnFlags & ListBoxEntryFlags::DisableSelection) == ListBoxEntryFlags::NONE  ) )
         {
-            (*iter)->mbIsSelected = bSelect;
+            iter->mbIsSelected = bSelect;
             if ( mbCallSelectionChangedHdl )
                 maSelectionChangedHdl.Call( nPos );
         }
@@ -121,12 +121,12 @@ namespace vcl
     }
 }
 
-sal_Int32 ImplEntryList::InsertEntry( sal_Int32 nPos, ImplEntryType* pNewEntry, bool bSort )
+sal_Int32 ImplEntryList::InsertEntry( sal_Int32 nPos, ImplEntryType&& aNewEntry, bool bSort )
 {
     assert(nPos >= 0);
     assert(maEntries.size() < LISTBOX_MAX_ENTRIES);
 
-    if ( !!pNewEntry->maImage )
+    if ( !!aNewEntry.maImage )
         mnImages++;
 
     sal_Int32 insPos = 0;
@@ -137,74 +137,66 @@ sal_Int32 ImplEntryList::InsertEntry( sal_Int32 nPos, ImplEntryType* pNewEntry, 
         if (0 <= nPos && nPos < nEntriesSize)
         {
             insPos = nPos;
-            maEntries.insert( maEntries.begin() + nPos, std::unique_ptr<ImplEntryType>(pNewEntry) );
+            maEntries.insert( maEntries.begin() + nPos, std::move(aNewEntry) );
         }
         else
         {
             insPos = nEntriesSize;
-            maEntries.push_back(std::unique_ptr<ImplEntryType>(pNewEntry));
+            maEntries.push_back(std::move(aNewEntry));
         }
     }
     else
     {
         const comphelper::string::NaturalStringSorter &rSorter = GetSorter();
 
-        const OUString& rStr = pNewEntry->maStr;
-
-        ImplEntryType* pTemp = GetEntry( nEntriesSize-1 );
+        const OUString& rStr = aNewEntry.maStr;
 
         try
         {
-            sal_Int32 nComp = rSorter.compare(rStr, pTemp->maStr);
+            sal_Int32 nComp = rSorter.compare(rStr, GetEntry( nEntriesSize-1 ).maStr);
 
             // fast insert for sorted data
             if ( nComp >= 0 )
             {
                 insPos = nEntriesSize;
-                maEntries.push_back(std::unique_ptr<ImplEntryType>(pNewEntry));
+                maEntries.push_back(std::move(aNewEntry));
+            }
+            else if (rSorter.compare(rStr, GetEntry( mnMRUCount ).maStr) <= 0)
+            {
+                insPos = 0;
+                maEntries.insert(maEntries.begin(), std::move(aNewEntry));
             }
             else
             {
-                pTemp = GetEntry( mnMRUCount );
+                sal_uLong nLow = mnMRUCount;
+                sal_uLong nHigh = maEntries.size()-1;
+                sal_Int32 nMid;
 
-                nComp = rSorter.compare(rStr, pTemp->maStr);
-                if ( nComp <= 0 )
+                // binary search
+                do
                 {
-                    insPos = 0;
-                    maEntries.insert(maEntries.begin(), std::unique_ptr<ImplEntryType>(pNewEntry));
-                }
-                else
-                {
-                    sal_uLong nLow = mnMRUCount;
-                    sal_uLong nHigh = maEntries.size()-1;
-                    sal_Int32 nMid;
+                    nMid = static_cast<sal_Int32>((nLow + nHigh) / 2);
+                    ImplEntryType& rTemp = GetEntry( nMid );
 
-                    // binary search
-                    do
+                    nComp = rSorter.compare(rStr, rTemp.maStr);
+
+                    if ( nComp < 0 )
+                        nHigh = nMid-1;
+                    else
                     {
-                        nMid = static_cast<sal_Int32>((nLow + nHigh) / 2);
-                        pTemp = GetEntry( nMid );
-
-                        nComp = rSorter.compare(rStr, pTemp->maStr);
-
-                        if ( nComp < 0 )
-                            nHigh = nMid-1;
+                        if ( nComp > 0 )
+                            nLow = nMid + 1;
                         else
-                        {
-                            if ( nComp > 0 )
-                                nLow = nMid + 1;
-                            else
-                                break;
-                        }
+                            break;
                     }
-                    while ( nLow <= nHigh );
-
-                    if ( nComp >= 0 )
-                        nMid++;
-
-                    insPos = nMid;
-                    maEntries.insert(maEntries.begin()+nMid, std::unique_ptr<ImplEntryType>(pNewEntry));
                 }
+                while ( nLow <= nHigh );
+
+                if ( nComp >= 0 )
+                    nMid++;
+
+                insPos = nMid;
+                maEntries.insert(maEntries.begin()+nMid, std::move(aNewEntry));
             }
         }
         catch (uno::RuntimeException& )
@@ -214,7 +206,7 @@ sal_Int32 ImplEntryList::InsertEntry( sal_Int32 nPos, ImplEntryType* pNewEntry, 
             // Collator implementation is garbage then give the user a chance to see
             // his stuff
             insPos = 0;
-            maEntries.insert(maEntries.begin(), std::unique_ptr<ImplEntryType>(pNewEntry));
+            maEntries.insert(maEntries.begin(), std::move(aNewEntry));
         }
 
     }
@@ -226,9 +218,9 @@ void ImplEntryList::RemoveEntry( sal_Int32 nPos )
 {
     if (0 <= nPos && o3tl::make_unsigned(nPos) < maEntries.size())
     {
-        std::vector<std::unique_ptr<ImplEntryType> >::iterator iter = maEntries.begin()+ nPos;
+        auto iter = maEntries.begin()+ nPos;
 
-        if ( !!(*iter)->maImage )
+        if ( !!iter->maImage )
             mnImages--;
 
         maEntries.erase(iter);
@@ -240,7 +232,7 @@ sal_Int32 ImplEntryList::FindEntry( std::u16string_view rString, bool bSearchMRU
     const sal_Int32 nEntries = static_cast<sal_Int32>(maEntries.size());
     for ( sal_Int32 n = bSearchMRUArea ? 0 : GetMRUCount(); n < nEntries; n++ )
     {
-        OUString aComp( vcl::I18nHelper::filterFormattingChars( maEntries[n]->maStr ) );
+        OUString aComp( vcl::I18nHelper::filterFormattingChars( maEntries[n].maStr ) );
         if ( aComp == rString )
             return n;
     }
@@ -255,15 +247,15 @@ sal_Int32 ImplEntryList::FindMatchingEntry( const OUString& rStr, sal_Int32 nSta
     const vcl::I18nHelper& rI18nHelper = mpWindow->GetSettings().GetLocaleI18nHelper();
     for ( sal_Int32 n = nStart; n < nEntryCount; )
     {
-        ImplEntryType* pImplEntry = GetEntry( n );
+        const ImplEntryType& rImplEntry = GetEntry( n );
         bool bMatch;
         if ( bLazy  )
         {
-            bMatch = rI18nHelper.MatchString( rStr, pImplEntry->maStr );
+            bMatch = rI18nHelper.MatchString( rStr, rImplEntry.maStr );
         }
         else
         {
-            bMatch = pImplEntry->maStr.startsWith(rStr);
+            bMatch = rImplEntry.maStr.startsWith(rStr);
         }
         if ( bMatch )
         {
@@ -296,7 +288,7 @@ tools::Long ImplEntryList::GetAddedHeight( sal_Int32 i_nEndIndex, sal_Int32 i_nB
         sal_Int32 nIndex = nStart;
         while( nIndex != LISTBOX_ENTRY_NOTFOUND && nIndex < nStop )
         {
-            tools::Long nPosHeight = GetEntryPtr( nIndex )->getHeightWithMargin();
+            tools::Long nPosHeight = GetEntry( nIndex ).getHeightWithMargin();
             if (nHeight > ::std::numeric_limits<tools::Long>::max() - nPosHeight)
             {
                 SAL_WARN( "vcl", "ImplEntryList::GetAddedHeight: truncated");
@@ -313,55 +305,37 @@ tools::Long ImplEntryList::GetAddedHeight( sal_Int32 i_nEndIndex, sal_Int32 i_nB
 
 tools::Long ImplEntryList::GetEntryHeight( sal_Int32 nPos ) const
 {
-    ImplEntryType* pImplEntry = GetEntry( nPos );
-    return pImplEntry ? pImplEntry->getHeightWithMargin() : 0;
+    return GetEntry( nPos ).getHeightWithMargin();
 }
 
 OUString ImplEntryList::GetEntryText( sal_Int32 nPos ) const
 {
-    OUString aEntryText;
-    ImplEntryType* pImplEntry = GetEntry( nPos );
-    if ( pImplEntry )
-        aEntryText = pImplEntry->maStr;
-    return aEntryText;
+    return GetEntry( nPos ).maStr;
 }
 
 bool ImplEntryList::HasEntryImage( sal_Int32 nPos ) const
 {
-    bool bImage = false;
-    ImplEntryType* pImplEntry = GetEntry( nPos );
-    if ( pImplEntry )
-        bImage = !!pImplEntry->maImage;
-    return bImage;
+    return !!GetEntry( nPos ).maImage;
 }
 
 Image ImplEntryList::GetEntryImage( sal_Int32 nPos ) const
 {
-    Image aImage;
-    ImplEntryType* pImplEntry = GetEntry( nPos );
-    if ( pImplEntry )
-        aImage = pImplEntry->maImage;
-    return aImage;
+    return GetEntry( nPos ).maImage;
 }
 
 void ImplEntryList::SetEntryData( sal_Int32 nPos, void* pNewData )
 {
-    ImplEntryType* pImplEntry = GetEntry( nPos );
-    if ( pImplEntry )
-        pImplEntry->mpUserData = pNewData;
+    GetEntry( nPos ).mpUserData = pNewData;
 }
 
 void* ImplEntryList::GetEntryData( sal_Int32 nPos ) const
 {
-    ImplEntryType* pImplEntry = GetEntry( nPos );
-    return pImplEntry ? pImplEntry->mpUserData : nullptr;
+    return GetEntry( nPos ).mpUserData;
 }
 
 void ImplEntryList::SetEntryFlags( sal_Int32 nPos, ListBoxEntryFlags nFlags )
 {
-    ImplEntryType* pImplEntry = GetEntry( nPos );
-    if ( pImplEntry )
-        pImplEntry->mnFlags = nFlags;
+    GetEntry( nPos ).mnFlags = nFlags;
 }
 
 sal_Int32 ImplEntryList::GetSelectedEntryCount() const
@@ -369,8 +343,8 @@ sal_Int32 ImplEntryList::GetSelectedEntryCount() const
     sal_Int32 nSelCount = 0;
     for ( sal_Int32 n = GetEntryCount(); n; )
     {
-        ImplEntryType* pImplEntry = GetEntry( --n );
-        if ( pImplEntry->mbIsSelected )
+        const ImplEntryType& rImplEntry = GetEntry( --n );
+        if ( rImplEntry.mbIsSelected )
             nSelCount++;
     }
     return nSelCount;
@@ -389,8 +363,8 @@ sal_Int32 ImplEntryList::GetSelectedEntryPos( sal_Int32 nIndex ) const
 
     for ( sal_Int32 n = 0; n < nEntryCount; n++ )
     {
-        ImplEntryType* pImplEntry = GetEntry( n );
-        if ( pImplEntry->mbIsSelected )
+        const ImplEntryType& rImplEntry = GetEntry( n );
+        if ( rImplEntry.mbIsSelected )
         {
             if ( nSel == nIndex )
             {
@@ -406,14 +380,13 @@ sal_Int32 ImplEntryList::GetSelectedEntryPos( sal_Int32 nIndex ) const
 
 bool ImplEntryList::IsEntryPosSelected( sal_Int32 nIndex ) const
 {
-    ImplEntryType* pImplEntry = GetEntry( nIndex );
-    return pImplEntry && pImplEntry->mbIsSelected;
+    return GetEntry( nIndex ).mbIsSelected;
 }
 
 bool ImplEntryList::IsEntrySelectable( sal_Int32 nPos ) const
 {
-    ImplEntryType* pImplEntry = GetEntry( nPos );
-    return pImplEntry == nullptr || ((pImplEntry->mnFlags & ListBoxEntryFlags::DisableSelection) == ListBoxEntryFlags::NONE);
+    const ImplEntryType& rImplEntry = GetEntry( nPos );
+    return ((rImplEntry.mnFlags & ListBoxEntryFlags::DisableSelection) == ListBoxEntryFlags::NONE);
 }
 
 sal_Int32 ImplEntryList::FindFirstSelectable( sal_Int32 nPos, bool bForward /* = true */ )
@@ -524,13 +497,13 @@ void ImplListBoxWindow::ImplCalcMetrics()
 
     for ( sal_Int32 n = maEntryList.GetEntryCount(); n; )
     {
-        ImplEntryType* pEntry = maEntryList.GetMutableEntryPtr( --n );
-        ImplUpdateEntryMetrics( *pEntry );
+        ImplEntryType& rEntry = maEntryList.GetEntry( --n );
+        ImplUpdateEntryMetrics( rEntry );
     }
 
     if( mnCurrentPos != LISTBOX_ENTRY_NOTFOUND )
     {
-        Size aSz( GetOutputSizePixel().Width(), maEntryList.GetEntryPtr( mnCurrentPos )->getHeightWithMargin() );
+        Size aSz( GetOutputSizePixel().Width(), maEntryList.GetEntry( mnCurrentPos ).getHeightWithMargin() );
         maFocusRect.SetSize( aSz );
     }
 }
@@ -707,10 +680,10 @@ void ImplListBoxWindow::ImplCallSelect()
 
             ImplClearLayoutData();
 
-            ImplEntryType* pNewEntry = new ImplEntryType( aSelected );
-            pNewEntry->mbIsSelected = bSelectNewEntry;
-            GetEntryList().InsertEntry( 0, pNewEntry, false );
-            ImplUpdateEntryMetrics( *pNewEntry );
+            ImplEntryType aNewEntry( aSelected );
+            aNewEntry.mbIsSelected = bSelectNewEntry;
+            auto nPos = GetEntryList().InsertEntry( 0, std::move(aNewEntry), false );
+            ImplUpdateEntryMetrics( GetEntryList().GetEntry(nPos) );
             GetEntryList().SetMRUCount( ++nMRUCount );
             SetSeparatorPos( nMRUCount ? nMRUCount-1 : 0 );
             maMRUChangedHdl.Call( nullptr );
@@ -721,24 +694,24 @@ void ImplListBoxWindow::ImplCallSelect()
     mbSelectionChanged = false;
 }
 
-sal_Int32 ImplListBoxWindow::InsertEntry(sal_Int32 nPos, ImplEntryType* pNewEntry, bool bSort)
+sal_Int32 ImplListBoxWindow::InsertEntry(sal_Int32 nPos, ImplEntryType&& aNewEntry, bool bSort)
 {
     assert(nPos >= 0);
     assert(maEntryList.GetEntryCount() < LISTBOX_MAX_ENTRIES);
 
     ImplClearLayoutData();
-    sal_Int32 nNewPos = maEntryList.InsertEntry( nPos, pNewEntry, bSort );
+    sal_Int32 nNewPos = maEntryList.InsertEntry( nPos, std::move(aNewEntry), bSort );
 
     if( GetStyle() & WB_WORDBREAK )
-        pNewEntry->mnFlags |= ListBoxEntryFlags::MultiLine;
+        maEntryList.GetEntry(nNewPos).mnFlags |= ListBoxEntryFlags::MultiLine;
 
-    ImplUpdateEntryMetrics( *pNewEntry );
+    ImplUpdateEntryMetrics( maEntryList.GetEntry(nNewPos) );
     return nNewPos;
 }
 
-sal_Int32 ImplListBoxWindow::InsertEntry( sal_Int32 nPos, ImplEntryType* pNewEntry )
+sal_Int32 ImplListBoxWindow::InsertEntry( sal_Int32 nPos, ImplEntryType&& aNewEntry )
 {
-    return InsertEntry(nPos, pNewEntry, mbSort);
+    return InsertEntry(nPos, std::move(aNewEntry), mbSort);
 }
 
 void ImplListBoxWindow::RemoveEntry( sal_Int32 nPos )
@@ -753,9 +726,7 @@ void ImplListBoxWindow::RemoveEntry( sal_Int32 nPos )
 void ImplListBoxWindow::SetEntryFlags( sal_Int32 nPos, ListBoxEntryFlags nFlags )
 {
     maEntryList.SetEntryFlags( nPos, nFlags );
-    ImplEntryType* pEntry = maEntryList.GetMutableEntryPtr( nPos );
-    if( pEntry )
-        ImplUpdateEntryMetrics( *pEntry );
+    ImplUpdateEntryMetrics( maEntryList.GetEntry(nPos) );
 }
 
 void ImplListBoxWindow::ImplShowFocusRect()
@@ -780,16 +751,20 @@ sal_Int32 ImplListBoxWindow::GetEntryPosForPoint( const Point& rPoint ) const
     tools::Long nY = gnBorder;
 
     sal_Int32 nSelect = mnTop;
-    const ImplEntryType* pEntry = maEntryList.GetEntryPtr( nSelect );
-    while (pEntry)
+    bool bFound = false;
+    while (nSelect < maEntryList.GetEntryCount())
     {
-        tools::Long nEntryHeight = pEntry->getHeightWithMargin();
+        const ImplEntryType& rEntry = maEntryList.GetEntry( nSelect );
+        tools::Long nEntryHeight = rEntry.getHeightWithMargin();
         if (rPoint.Y() <= nEntryHeight + nY)
+        {
+            bFound = true;
             break;
+        }
         nY += nEntryHeight;
-        pEntry = maEntryList.GetEntryPtr( ++nSelect );
+        ++nSelect;
     }
-    if( pEntry == nullptr )
+    if( !bFound )
         nSelect = LISTBOX_ENTRY_NOTFOUND;
 
     return nSelect;
@@ -1605,13 +1580,11 @@ void ImplListBoxWindow::ImplPaint(vcl::RenderContext& rRenderContext, sal_Int32 
 {
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
 
-    const ImplEntryType* pEntry = maEntryList.GetEntryPtr( nPos );
-    if (!pEntry)
-        return;
+    const ImplEntryType& rEntry = maEntryList.GetEntry( nPos );
 
     tools::Long nWidth = GetOutputSizePixel().Width();
     tools::Long nY = maEntryList.GetAddedHeight(nPos, mnTop);
-    tools::Rectangle aRect(Point(0, nY), Size(nWidth, pEntry->getHeightWithMargin()));
+    tools::Rectangle aRect(Point(0, nY), Size(nWidth, rEntry.getHeightWithMargin()));
 
     bool bSelected = maEntryList.IsEntryPosSelected(nPos);
     if (bSelected)
@@ -1650,11 +1623,9 @@ void ImplListBoxWindow::ImplPaint(vcl::RenderContext& rRenderContext, sal_Int32 
 
 void ImplListBoxWindow::DrawEntry(vcl::RenderContext& rRenderContext, sal_Int32 nPos, bool bDrawImage, bool bDrawText)
 {
-    const ImplEntryType* pEntry = maEntryList.GetEntryPtr(nPos);
-    if (!pEntry)
-        return;
+    const ImplEntryType& rEntry = maEntryList.GetEntry(nPos);
 
-    tools::Long nEntryHeight = pEntry->getHeightWithMargin();
+    tools::Long nEntryHeight = rEntry.getHeightWithMargin();
 
     // when changing this function don't forget to adjust ImplWin::DrawEntry()
 
@@ -1707,7 +1678,7 @@ void ImplListBoxWindow::DrawEntry(vcl::RenderContext& rRenderContext, sal_Int32 
         {
             tools::Long nMaxWidth = std::max(mnMaxWidth, GetOutputSizePixel().Width() - 2 * gnBorder);
             // a multiline entry should only be as wide as the window
-            if (pEntry->mnFlags & ListBoxEntryFlags::MultiLine)
+            if (rEntry.mnFlags & ListBoxEntryFlags::MultiLine)
                 nMaxWidth = GetOutputSizePixel().Width() - 2 * gnBorder;
 
             tools::Rectangle aTextRect(Point(gnBorder - mnLeft, nY),
@@ -1720,9 +1691,9 @@ void ImplListBoxWindow::DrawEntry(vcl::RenderContext& rRenderContext, sal_Int32 
             }
 
             DrawTextFlags nDrawStyle = ImplGetTextStyle();
-            if (pEntry->mnFlags & ListBoxEntryFlags::MultiLine)
+            if (rEntry.mnFlags & ListBoxEntryFlags::MultiLine)
                 nDrawStyle |= MULTILINE_ENTRY_DRAW_FLAGS;
-            if (pEntry->mnFlags & ListBoxEntryFlags::DrawDisabled)
+            if (rEntry.mnFlags & ListBoxEntryFlags::DrawDisabled)
                 nDrawStyle |= DrawTextFlags::Disable;
 
             rRenderContext.DrawText(aTextRect, aStr, nDrawStyle);
@@ -1735,7 +1706,7 @@ void ImplListBoxWindow::DrawEntry(vcl::RenderContext& rRenderContext, sal_Int32 
         rRenderContext.SetLineColor((GetBackground() != COL_LIGHTGRAY) ? COL_LIGHTGRAY : COL_GRAY);
         Point aStartPos(0, nY);
         if (isSeparator(nPos))
-            aStartPos.AdjustY(pEntry->getHeightWithMargin() - 1 );
+            aStartPos.AdjustY(rEntry.getHeightWithMargin() - 1 );
         Point aEndPos(aStartPos);
         aEndPos.setX( GetOutputSizePixel().Width() );
         rRenderContext.DrawLine(aStartPos, aEndPos);
@@ -1762,8 +1733,8 @@ void ImplListBoxWindow::ImplDoPaint(vcl::RenderContext& rRenderContext, const to
 
     for (sal_Int32 i = mnTop; i < nCount && nY < nHeight + mnMaxHeight; i++)
     {
-        const ImplEntryType* pEntry = maEntryList.GetEntryPtr(i);
-        tools::Long nEntryHeight = pEntry->getHeightWithMargin();
+        const ImplEntryType& rEntry = maEntryList.GetEntry(i);
+        tools::Long nEntryHeight = rEntry.getHeightWithMargin();
         if (nY + nEntryHeight >= rRect.Top() &&
             nY <= rRect.Bottom() + mnMaxHeight)
         {
@@ -1854,8 +1825,8 @@ void ImplListBoxWindow::SetTopEntry( sal_Int32 nTop )
     sal_Int32 nLastEntry = maEntryList.GetEntryCount()-1;
     if( nTop > nLastEntry )
         nTop = nLastEntry;
-    const ImplEntryType* pLast = maEntryList.GetEntryPtr( nLastEntry );
-    while( nTop > 0 && maEntryList.GetAddedHeight( nLastEntry, nTop-1 ) + pLast->getHeightWithMargin() <= nWHeight )
+    const ImplEntryType& rLast = maEntryList.GetEntry( nLastEntry );
+    while( nTop > 0 && maEntryList.GetAddedHeight( nLastEntry, nTop-1 ) + rLast.getHeightWithMargin() <= nWHeight )
         nTop--;
 
     if ( nTop == mnTop )
@@ -1950,8 +1921,8 @@ Size ImplListBoxWindow::CalcSize(sal_Int32 nMaxLines) const
 
 tools::Rectangle ImplListBoxWindow::GetBoundingRectangle( sal_Int32 nItem ) const
 {
-    const ImplEntryType* pEntry = maEntryList.GetEntryPtr( nItem );
-    Size aSz( GetSizePixel().Width(), pEntry ? pEntry->getHeightWithMargin() : GetEntryHeightWithMargin() );
+    const ImplEntryType& rEntry = maEntryList.GetEntry( nItem );
+    Size aSz( GetSizePixel().Width(), rEntry.getHeightWithMargin() );
     tools::Long nY = maEntryList.GetAddedHeight( nItem, GetTopEntry() ) + GetEntryList().GetMRUCount()*GetEntryHeightWithMargin();
     tools::Rectangle aRect( Point( 0, nY ), aSz );
     return aRect;
@@ -2083,16 +2054,14 @@ void ImplListBox::Clear()
 
 sal_Int32 ImplListBox::InsertEntry( sal_Int32 nPos, const OUString& rStr )
 {
-    ImplEntryType* pNewEntry = new ImplEntryType( rStr );
-    sal_Int32 nNewPos = maLBWindow->InsertEntry( nPos, pNewEntry );
+    sal_Int32 nNewPos = maLBWindow->InsertEntry( nPos, ImplEntryType( rStr ) );
     CompatStateChanged( StateChangedType::Data );
     return nNewPos;
 }
 
 sal_Int32 ImplListBox::InsertEntry( sal_Int32 nPos, const OUString& rStr, const Image& rImage )
 {
-    ImplEntryType* pNewEntry = new ImplEntryType( rStr, rImage );
-    sal_Int32 nNewPos = maLBWindow->InsertEntry( nPos, pNewEntry );
+    sal_Int32 nNewPos = maLBWindow->InsertEntry( nPos, ImplEntryType( rStr, rImage ) );
     CompatStateChanged( StateChangedType::Data );
     return nNewPos;
 }
@@ -2435,8 +2404,7 @@ void ImplListBox::SetMRUEntries( const OUString& rEntries, sal_Unicode cSep )
         // Accept only existing entries
         if ( GetEntryList().FindEntry( aEntry ) != LISTBOX_ENTRY_NOTFOUND )
         {
-            ImplEntryType* pNewEntry = new ImplEntryType( aEntry );
-            maLBWindow->InsertEntry(nMRUCount++, pNewEntry, false);
+            maLBWindow->InsertEntry(nMRUCount++, ImplEntryType(aEntry), false);
             bChanges = true;
         }
     }

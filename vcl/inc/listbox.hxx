@@ -95,23 +95,17 @@ private:
 
     Link<sal_Int32,void> maSelectionChangedHdl;
     bool            mbCallSelectionChangedHdl;
-    std::vector<std::unique_ptr<ImplEntryType> > maEntries;
+    std::vector<ImplEntryType> maEntries;
 
-    ImplEntryType*  GetEntry( sal_Int32  nPos ) const
-    {
-        if (nPos < 0 || o3tl::make_unsigned(nPos) >= maEntries.size())
-            return nullptr;
-        return maEntries[nPos].get();
-    }
 
 public:
                     ImplEntryList( vcl::Window* pWindow );
                     ~ImplEntryList();
 
-    sal_Int32               InsertEntry( sal_Int32  nPos, ImplEntryType* pNewEntry, bool bSort );
+    sal_Int32               InsertEntry( sal_Int32  nPos, ImplEntryType&& aNewEntry, bool bSort );
     void                    RemoveEntry( sal_Int32  nPos );
-    const ImplEntryType*    GetEntryPtr( sal_Int32  nPos ) const { return GetEntry( nPos ); }
-    ImplEntryType*          GetMutableEntryPtr( sal_Int32  nPos ) const { return GetEntry( nPos ); }
+    const ImplEntryType&    GetEntry( sal_Int32 nPos ) const { return maEntries[nPos]; }
+    ImplEntryType&          GetEntry( sal_Int32 nPos ) { return maEntries[nPos]; }
     void                    Clear();
     void                    dispose();
 
@@ -265,8 +259,8 @@ public:
     const ImplEntryList& GetEntryList() const { return maEntryList; }
     ImplEntryList& GetEntryList() { return maEntryList; }
 
-    sal_Int32       InsertEntry( sal_Int32  nPos, ImplEntryType* pNewEntry ); // sorts using mbSort
-    sal_Int32       InsertEntry( sal_Int32  nPos, ImplEntryType* pNewEntry, bool bSort ); // to insert ignoring mbSort, e.g. mru
+    sal_Int32       InsertEntry( sal_Int32  nPos, ImplEntryType&& aNewEntry ); // sorts using mbSort
+    sal_Int32       InsertEntry( sal_Int32  nPos, ImplEntryType&& aNewEntry, bool bSort ); // to insert ignoring mbSort, e.g. mru
     void            RemoveEntry( sal_Int32  nPos );
     void            Clear();
     void            ResetCurrentPos()               { mnCurrentPos = LISTBOX_ENTRY_NOTFOUND; }
