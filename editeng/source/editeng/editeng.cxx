@@ -1768,7 +1768,9 @@ const SfxPoolItem& EditEngine::GetParaAttrib( sal_Int32 nPara, sal_uInt16 nWhich
 void EditEngine::SetCharAttribs(sal_Int32 nPara, const SfxItemSet& rSet)
 {
     EditSelection aSel(pImpEditEngine->ConvertSelection(nPara, 0, nPara, GetTextLen(nPara)));
-    pImpEditEngine->SetAttribs(aSel, rSet);
+    // This is called by sd::View::OnBeginPasteOrDrop(), updating the cursor position on undo is not
+    // wanted.
+    pImpEditEngine->SetAttribs(aSel, rSet, /*nSpecial=*/SetAttribsMode::NONE, /*bSetSelection=*/false);
     pImpEditEngine->FormatAndUpdate();
 }
 

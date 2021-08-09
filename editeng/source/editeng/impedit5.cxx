@@ -483,7 +483,7 @@ SfxItemSet ImpEditEngine::GetAttribs( sal_Int32 nPara, sal_Int32 nStart, sal_Int
 }
 
 
-void ImpEditEngine::SetAttribs( EditSelection aSel, const SfxItemSet& rSet, SetAttribsMode nSpecial )
+void ImpEditEngine::SetAttribs( EditSelection aSel, const SfxItemSet& rSet, SetAttribsMode nSpecial, bool bSetSelection )
 {
     aSel.Adjust( aEditDoc );
 
@@ -499,6 +499,7 @@ void ImpEditEngine::SetAttribs( EditSelection aSel, const SfxItemSet& rSet, SetA
     {
         std::unique_ptr<EditUndoSetAttribs> pUndo = CreateAttribUndo( aSel, rSet );
         pUndo->SetSpecial( nSpecial );
+        pUndo->SetUpdateSelection(bSetSelection);
         InsertUndo( std::move(pUndo) );
     }
 
