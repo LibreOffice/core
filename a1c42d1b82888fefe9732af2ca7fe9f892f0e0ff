@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5790c1ec_f7bc821b",
+        "filename": "basic/source/classes/image.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 657,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-09T10:52:54Z",
+      "side": 1,
+      "message": "I believe this is completely correct, and my following comment is *unrelated* to this change.\n\nI believe that it\u0027s expected that nStringOff points to the end of strings block in the image after we load it. What I am afraid of is that this expectation might be not true - because I don\u0027t see anywhere in the code that this value is changed during the load. Additionally, AFAICT it was the same way ever since the code was created back in the dawn of the time. Maybe this member was used to increate the position in reading when the code was created, but then it was changed, and the member was forgotten to update after read complete?\n\nSo specifically, my fear is that this would make the length for the *last* string wrong (and that would be the problem also for old code, if the last string would happen to start with null). Can you please check if my worry is unwarranted? If I\u0027m right, we likely need another commit fixing this.",
+      "revId": "a1c42d1b82888fefe9732af2ca7fe9f892f0e0ff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
