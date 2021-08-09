@@ -241,10 +241,10 @@ namespace pcr
     {
         if ( !_bDoListen )
         {
-            std::unique_ptr< ::comphelper::OInterfaceIteratorHelper2 > pListenerIterator = m_aPropertyListeners.createIterator();
-            while ( pListenerIterator->hasMoreElements() )
+            ::comphelper::OInterfaceIteratorHelper2 aListenerIterator = m_aPropertyListeners.createIterator();
+            while ( aListenerIterator.hasMoreElements() )
             {
-                PropertyEventTranslation* pTranslator = dynamic_cast< PropertyEventTranslation* >( pListenerIterator->next() );
+                PropertyEventTranslation* pTranslator = dynamic_cast< PropertyEventTranslation* >( aListenerIterator.next() );
                 OSL_ENSURE( pTranslator, "EFormsHelper::impl_toggleBindingPropertyListening_throw: invalid listener element in my container!" );
                 if ( !pTranslator )
                     continue;
@@ -275,10 +275,10 @@ namespace pcr
             }
             else
             {
-                std::unique_ptr< ::comphelper::OInterfaceIteratorHelper2 > pListenerIterator = m_aPropertyListeners.createIterator();
-                while ( pListenerIterator->hasMoreElements() )
+                ::comphelper::OInterfaceIteratorHelper2 aListenerIterator = m_aPropertyListeners.createIterator();
+                while ( aListenerIterator.hasMoreElements() )
                 {
-                    Reference< XPropertyChangeListener > xListener( pListenerIterator->next(), UNO_QUERY );
+                    Reference< XPropertyChangeListener > xListener( aListenerIterator.next(), UNO_QUERY );
                     impl_switchBindingListening_throw( true, xListener );
                 }
             }
