@@ -29,35 +29,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 
-namespace comphelper
-{
-class PropertyMapImpl final
-{
-public:
-    PropertyMapImpl() noexcept;
-
-    void add(PropertyMapEntry const * pMap) noexcept;
-    void remove( const OUString& aName ) noexcept;
-
-    std::vector< Property > const & getProperties() noexcept;
-
-    const PropertyMap& getPropertyMap() const noexcept { return maPropertyMap;}
-
-        /// @throws UnknownPropertyException
-    Property getPropertyByName( const OUString& aName );
-    bool hasPropertyByName( const OUString& aName ) noexcept;
-
-private:
-    PropertyMap maPropertyMap;
-    std::vector< Property > maProperties;
-};
-}
-
-PropertyMapImpl::PropertyMapImpl() noexcept
-{
-}
-
-void PropertyMapImpl::add(PropertyMapEntry const * pMap) noexcept
+void PropertySetInfo::addImpl(PropertyMapEntry const * pMap) noexcept
 {
     while (!pMap->maName.isEmpty())
     {
@@ -68,18 +40,61 @@ void PropertyMapImpl::add(PropertyMapEntry const * pMap) noexcept
 
         maProperties.clear();
 
-        pMap = &pMap[1];
+        ++pMap;
     }
 }
 
-void PropertyMapImpl::remove( const OUString& aName ) noexcept
+PropertySetInfo::PropertySetInfo() noexcept
+{
+}
+
+PropertySetInfo::PropertySetInfo( PropertyMapEntry const * pMap ) noexcept
+{
+    while (!pMap->maName.isEmpty())
+    {
+        // check for duplicates
+        assert(maPropertyMap.find(pMap->maName) == maPropertyMap.end());
+
+        maPropertyMap[pMap->maName] = pMap;
+
+        ++pMap;
+    }
+}
+
+PropertySetInfo::PropertySetInfo(uno::Sequence<beans::Property> const& rProps) noexcept
+{
+    PropertyMapEntry * pEntries(new PropertyMapEntry[rProps.getLength() + 1]);
+    PropertyMapEntry * pEntry(&pEntries[0]);
+    for (auto const& it : rProps)
+    {
+        pEntry->maName = it.Name;
+        pEntry->mnHandle = it.Handle;
+        pEntry->maType = it.Type;
+        pEntry->mnAttributes = it.Attributes;
+        pEntry->mnMemberId = 0;
+        ++pEntry;
+    }
+    pEntry->maName = OUString();
+
+    addImpl(pEntries);
+}
+
+PropertySetInfo::~PropertySetInfo() noexcept
+{
+}
+
+void PropertySetInfo::add( PropertyMapEntry const * pMap ) noexcept
+{
+    addImpl( pMap );
+}
+
+void PropertySetInfo::remove( const OUString& aName ) noexcept
 {
     maPropertyMap.erase( aName );
-
     maProperties.clear();
 }
 
-std::vector< Property > const & PropertyMapImpl::getProperties() noexcept
+Sequence< css::beans::Property > SAL_CALL PropertySetInfo::getProperties()
 {
     // maybe we have to generate the properties after
     // a change in the property map or at first call
@@ -101,12 +116,10 @@ std::vector< Property > const & PropertyMapImpl::getProperties() noexcept
             ++propIter;
         }
     }
-
-    return maProperties;
+    return comphelper::containerToSequence(maProperties);
 }
 
-
-Property PropertyMapImpl::getPropertyByName( const OUString& aName )
+Property SAL_CALL PropertySetInfo::getPropertyByName( const OUString& aName )
 {
     PropertyMap::iterator aIter = maPropertyMap.find( aName );
 
@@ -118,73 +131,9 @@ Property PropertyMapImpl::getPropertyByName( const OUString& aName )
     return Property( aName, pEntry->mnHandle, pEntry->maType, pEntry->mnAttributes );
 }
 
-bool PropertyMapImpl::hasPropertyByName( const OUString& aName ) noexcept
+sal_Bool SAL_CALL PropertySetInfo::hasPropertyByName( const OUString& aName )
 {
     return maPropertyMap.find( aName ) != maPropertyMap.end();
-}
-
-
-PropertySetInfo::PropertySetInfo() noexcept
-    : mpImpl(new PropertyMapImpl)
-{
-}
-
-PropertySetInfo::PropertySetInfo( PropertyMapEntry const * pMap ) noexcept
-    : mpImpl(new PropertyMapImpl)
-{
-    mpImpl->add( pMap );
-}
-
-PropertySetInfo::PropertySetInfo(uno::Sequence<beans::Property> const& rProps) noexcept
-    : mpImpl(new PropertyMapImpl)
-{
-    PropertyMapEntry * pEntries(new PropertyMapEntry[rProps.getLength() + 1]);
-    PropertyMapEntry * pEntry(&pEntries[0]);
-    for (auto const& it : rProps)
-    {
-        pEntry->maName = it.Name;
-        pEntry->mnHandle = it.Handle;
-        pEntry->maType = it.Type;
-        pEntry->mnAttributes = it.Attributes;
-        pEntry->mnMemberId = 0;
-        ++pEntry;
-    }
-    pEntry->maName = OUString();
-    mpImpl->add(pEntries);
-}
-
-PropertySetInfo::~PropertySetInfo() noexcept
-{
-}
-
-void PropertySetInfo::add( PropertyMapEntry const * pMap ) noexcept
-{
-    mpImpl->add( pMap );
-}
-
-void PropertySetInfo::remove( const OUString& aName ) noexcept
-{
-    mpImpl->remove( aName );
-}
-
-Sequence< css::beans::Property > SAL_CALL PropertySetInfo::getProperties()
-{
-    return comphelper::containerToSequence(mpImpl->getProperties());
-}
-
-Property SAL_CALL PropertySetInfo::getPropertyByName( const OUString& aName )
-{
-    return mpImpl->getPropertyByName( aName );
-}
-
-sal_Bool SAL_CALL PropertySetInfo::hasPropertyByName( const OUString& Name )
-{
-    return mpImpl->hasPropertyByName( Name );
-}
-
-const PropertyMap& PropertySetInfo::getPropertyMap() const noexcept
-{
-    return mpImpl->getPropertyMap();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

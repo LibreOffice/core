@@ -22,13 +22,12 @@
 
 #include <sal/config.h>
 
-#include <map>
-
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/comphelperdllapi.h>
 #include <o3tl/typed_flags_set.hxx>
-#include <memory>
+#include <map>
+#include <vector>
 
 enum class PropertyMoreFlags : sal_uInt8 {
     NONE            = 0x00,
@@ -77,8 +76,6 @@ struct PropertyMapEntry
 
 typedef std::map<OUString, PropertyMapEntry const *> PropertyMap;
 
-class PropertyMapImpl;
-
 // don't export to avoid duplicate WeakImplHelper definitions with MSVC
 class SAL_DLLPUBLIC_TEMPLATE PropertySetInfo_BASE
     : public ::cppu::WeakImplHelper< css::beans::XPropertySetInfo >
@@ -90,8 +87,6 @@ class SAL_DLLPUBLIC_TEMPLATE PropertySetInfo_BASE
 class COMPHELPER_DLLPUBLIC PropertySetInfo final
     : public PropertySetInfo_BASE
 {
-private:
-    std::unique_ptr<PropertyMapImpl> mpImpl;
 public:
     PropertySetInfo() noexcept;
     PropertySetInfo( PropertyMapEntry const * pMap ) noexcept;
@@ -101,7 +96,7 @@ public:
     /** returns a stl map with all PropertyMapEntry pointer.<p>
         The key is the property name.
     */
-    const PropertyMap& getPropertyMap() const noexcept;
+    const PropertyMap& getPropertyMap() const noexcept { return maPropertyMap; }
 
     /** adds an array of PropertyMapEntry to this instance.<p>
         The end is marked with a PropertyMapEntry where mpName equals NULL</p>
@@ -114,6 +109,12 @@ public:
     virtual css::uno::Sequence< css::beans::Property > SAL_CALL getProperties() override;
     virtual css::beans::Property SAL_CALL getPropertyByName( const OUString& aName ) override;
     virtual sal_Bool SAL_CALL hasPropertyByName( const OUString& Name ) override;
+
+private:
+    void addImpl(PropertyMapEntry const * pMap) noexcept;
+
+    PropertyMap maPropertyMap;
+    std::vector< css::beans::Property > maProperties;
 };
 
 }
