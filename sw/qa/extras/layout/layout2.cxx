@@ -1587,21 +1587,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf58521)
     assertXPath(pXmlDoc, "/root/page[2]/ftncont", 1);
 }
 
-CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf58521_rtf)
-{
-    // This is a testcase for the ContinuousEndnotes compat flag in RTF.
-    // The document has 1 pages, the endnote anchor is on the first page.
-    // The endnote should be on the first page together with the last page content.
-    createSwDoc(DATA_DIRECTORY, "tdf58521-footnotes-endnotes.rtf");
-    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-
-    // Without the accompanying fix in place, this test would have failed with:
-    // - Expected: 1
-    // - Actual  : 2
-    // i.e. there was a separate endnote page
-    assertXPath(pXmlDoc, "/root/page", 1);
-}
-
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
