@@ -60,7 +60,7 @@ public:
 
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
-        return uno::Sequence<OUString> { "com.sun.star.graphic.GraphicObject" };
+        return { "com.sun.star.graphic.GraphicObject" };
     }
 };
 
