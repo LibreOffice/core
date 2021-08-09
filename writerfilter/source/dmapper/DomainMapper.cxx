@@ -255,10 +255,6 @@ DomainMapper::~DomainMapper()
         m_pImpl->SetDocumentSettingsProperty(
             "AddFrameOffsets",
             uno::Any(14 >= m_pImpl->GetSettingsTable()->GetWordCompatibilityMode()));
-        // tdf#58521: Use ContinuousEndnotes compatibility option for DOCX and RTF as well
-        m_pImpl->SetDocumentSettingsProperty(
-            "ContinuousEndnotes",
-            uno::Any(true));
     }
     catch( const uno::Exception& ) {}
 
