@@ -584,14 +584,14 @@ IMPL_LINK(ButtonPressRepeater, MousePressHdl, const MouseEvent&, rMouseEvent, bo
         return false;
     m_aRepeat.SetTimeout(MouseSettings::GetButtonStartRepeat());
     m_aRepeat.Start();
-    return false;
+    return true;
 }
 
 IMPL_LINK_NOARG(ButtonPressRepeater, MouseReleaseHdl, const MouseEvent&, bool)
 {
     m_bModKey = false;
     m_aRepeat.Stop();
-    return false;
+    return true;
 }
 
 IMPL_LINK_NOARG(ButtonPressRepeater, RepeatTimerHdl, Timer*, void)
