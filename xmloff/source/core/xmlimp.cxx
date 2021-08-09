@@ -2102,8 +2102,8 @@ void SvXMLImportFastNamespaceHandler::addNSDeclAttributes( rtl::Reference < comp
 {
     for(const auto& aNamespaceDefine : m_aNamespaceDefines)
     {
-        OUString& rPrefix = aNamespaceDefine->m_aPrefix;
-        OUString& rNamespaceURI = aNamespaceDefine->m_aNamespaceURI;
+        const OUString& rPrefix = aNamespaceDefine.m_aPrefix;
+        const OUString& rNamespaceURI = aNamespaceDefine.m_aNamespaceURI;
         OUString sDecl;
         if ( rPrefix.isEmpty() )
             sDecl = "xmlns";
@@ -2119,10 +2119,10 @@ void SvXMLImportFastNamespaceHandler::registerNamespace( const OUString& rNamesp
     // Elements with default namespace parsed by FastParser have namespace prefix.
     // A default namespace needs to be registered with the prefix, to maintain the compatibility.
     if ( rNamespacePrefix.isEmpty() )
-        m_aNamespaceDefines.push_back( std::make_unique<NamespaceDefine>(
+        m_aNamespaceDefines.push_back( NamespaceDefine(
                                     SvXMLImport::getNamespacePrefixFromURI( rNamespaceURI ), rNamespaceURI) );
 
-    m_aNamespaceDefines.push_back( std::make_unique<NamespaceDefine>(
+    m_aNamespaceDefines.push_back( NamespaceDefine(
                                     rNamespacePrefix, rNamespaceURI) );
 }
 
