@@ -136,7 +136,7 @@ private:
 
         NamespaceDefine( const OUString& rPrefix, const OUString& rNamespaceURI ) : m_aPrefix( rPrefix ), m_aNamespaceURI( rNamespaceURI ) {}
     };
-    std::vector< std::unique_ptr< NamespaceDefine > > m_aNamespaceDefines;
+    std::vector< NamespaceDefine > m_aNamespaceDefines;
 
 public:
     SvXMLImportFastNamespaceHandler();
