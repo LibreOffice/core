@@ -19,24 +19,11 @@
 
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
-#include <tools/solar.h>
 #include <accel.hxx>
-#include <map>
-#include <vector>
-
-typedef ::std::map< sal_uLong, ImplAccelEntry* > ImplAccelMap;
-typedef ::std::vector< std::unique_ptr<ImplAccelEntry> > ImplAccelList;
 
 #define ACCELENTRY_NOTFOUND     (sal_uInt16(0xFFFF))
 
-class ImplAccelData
-{
-public:
-    ImplAccelMap  maKeyMap; // for keycodes, generated with a code
-    ImplAccelList maIdList; // Id-List
-};
-
-static sal_uInt16 ImplAccelEntryGetIndex( ImplAccelList* pList, sal_uInt16 nId,
+static sal_uInt16 ImplAccelEntryGetIndex( const ImplAccelList* pList, sal_uInt16 nId,
                                sal_uInt16* pIndex = nullptr )
 {
     size_t  nLow;
@@ -124,17 +111,17 @@ void Accelerator::ImplInit()
 
 ImplAccelEntry* Accelerator::ImplGetAccelData( const vcl::KeyCode& rKeyCode ) const
 {
-    ImplAccelMap::iterator it = mpData->maKeyMap.find( rKeyCode.GetFullCode() );
-    if( it != mpData->maKeyMap.end() )
+    auto it = maKeyMap.find( rKeyCode.GetFullCode() );
+    if( it != maKeyMap.end() )
         return it->second;
     else
         return nullptr;
 }
 
-void Accelerator::ImplCopyData( ImplAccelData& rAccelData )
+void Accelerator::ImplCopyData( const Accelerator& rAccelData )
 {
     // copy table
-    for (std::unique_ptr<ImplAccelEntry>& i : rAccelData.maIdList)
+    for (const std::unique_ptr<ImplAccelEntry>& i : rAccelData.maIdList)
     {
         std::unique_ptr<ImplAccelEntry> pEntry(new ImplAccelEntry( *i ));
 
@@ -147,18 +134,18 @@ void Accelerator::ImplCopyData( ImplAccelData& rAccelData )
         else
             pEntry->mpAutoAccel = nullptr;
 
-        mpData->maKeyMap.insert( std::make_pair( pEntry->maKeyCode.GetFullCode(), pEntry.get() ) );
-        mpData->maIdList.push_back( std::move(pEntry) );
+        maKeyMap.insert( std::make_pair( pEntry->maKeyCode.GetFullCode(), pEntry.get() ) );
+        maIdList.push_back( std::move(pEntry) );
     }
 }
 
 void Accelerator::ImplDeleteData()
 {
     // delete accelerator-entries using the id-table
-    for (const std::unique_ptr<ImplAccelEntry>& pEntry : mpData->maIdList) {
+    for (const std::unique_ptr<ImplAccelEntry>& pEntry : maIdList) {
         delete pEntry->mpAutoAccel;
     }
-    mpData->maIdList.clear();
+    maIdList.clear();
 }
 
 void Accelerator::ImplInsertAccel( sal_uInt16 nItemId, const vcl::KeyCode& rKeyCode,
@@ -204,25 +191,23 @@ void Accelerator::ImplInsertAccel( sal_uInt16 nItemId, const vcl::KeyCode& rKeyC
     {
         OSL_FAIL( "Accelerator::InsertItem(): KeyCode with KeyCode 0 not allowed" );
     }
-    else if ( !mpData->maKeyMap.insert( std::make_pair( nCode, pEntry.get() ) ).second )
+    else if ( !maKeyMap.insert( std::make_pair( nCode, pEntry.get() ) ).second )
     {
         SAL_WARN( "vcl", "Accelerator::InsertItem(): KeyCode (Key: " << nCode << ") already exists" );
     }
     else
-        ImplAccelEntryInsert( &(mpData->maIdList), std::move(pEntry) );
+        ImplAccelEntryInsert( &maIdList, std::move(pEntry) );
 }
 
 Accelerator::Accelerator()
 {
     ImplInit();
-    mpData.reset(new ImplAccelData);
 }
 
 Accelerator::Accelerator(const Accelerator& rAccel)
 {
     ImplInit();
-    mpData.reset(new ImplAccelData);
-    ImplCopyData(*rAccel.mpData);
+    ImplCopyData(rAccel);
 }
 
 Accelerator::~Accelerator()
@@ -252,14 +237,13 @@ void Accelerator::InsertItem( sal_uInt16 nItemId, const vcl::KeyCode& rKeyCode )
 
 sal_uInt16 Accelerator::GetItemCount() const
 {
-
-    return static_cast<sal_uInt16>(mpData->maIdList.size());
+    return static_cast<sal_uInt16>(maIdList.size());
 }
 
 sal_uInt16 Accelerator::GetItemId( sal_uInt16 nPos ) const
 {
 
-    ImplAccelEntry* pEntry = ( nPos < mpData->maIdList.size() ) ? mpData->maIdList[ nPos ].get() : nullptr;
+    ImplAccelEntry* pEntry = ( nPos < maIdList.size() ) ? maIdList[ nPos ].get() : nullptr;
     if ( pEntry )
         return pEntry->mnId;
     else
@@ -269,9 +253,9 @@ sal_uInt16 Accelerator::GetItemId( sal_uInt16 nPos ) const
 Accelerator* Accelerator::GetAccel( sal_uInt16 nItemId ) const
 {
 
-    sal_uInt16 nIndex = ImplAccelEntryGetIndex( &(mpData->maIdList), nItemId );
+    sal_uInt16 nIndex = ImplAccelEntryGetIndex( &maIdList, nItemId );
     if ( nIndex != ACCELENTRY_NOTFOUND )
-        return mpData->maIdList[ nIndex ]->mpAccel;
+        return maIdList[ nIndex ]->mpAccel;
     else
         return nullptr;
 }
@@ -286,8 +270,8 @@ Accelerator& Accelerator::operator=( const Accelerator& rAccel )
 
     // delete and copy tables
     ImplDeleteData();
-    mpData->maKeyMap.clear();
-    ImplCopyData(*rAccel.mpData);
+    maKeyMap.clear();
+    ImplCopyData(rAccel);
 
     return *this;
 }
