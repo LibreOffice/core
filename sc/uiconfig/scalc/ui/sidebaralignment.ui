@@ -330,7 +330,7 @@
                 <property name="valign">center</property>
                 <property name="spacing">3</property>
                 <child>
-                  <object class="GtkRadioButton" id="bottom">
+                  <object class="GtkToggleButton" id="bottom">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="focus_on_click">False</property>
@@ -339,8 +339,6 @@
                     <property name="image">image3</property>
                     <property name="use_underline">True</property>
                     <property name="always_show_image">True</property>
-                    <property name="draw_indicator">False</property>
-                    <property name="group">standard</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -349,7 +347,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkRadioButton" id="top">
+                  <object class="GtkToggleButton" id="top">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="focus_on_click">False</property>
@@ -358,8 +356,6 @@
                     <property name="image">image2</property>
                     <property name="use_underline">True</property>
                     <property name="always_show_image">True</property>
-                    <property name="draw_indicator">False</property>
-                    <property name="group">standard</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -368,7 +364,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkRadioButton" id="standard">
+                  <object class="GtkToggleButton" id="standard">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="focus_on_click">False</property>
@@ -378,7 +374,6 @@
                     <property name="use_underline">True</property>
                     <property name="always_show_image">True</property>
                     <property name="active">True</property>
-                    <property name="draw_indicator">False</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -425,7 +420,6 @@
             <property name="receives_default">False</property>
             <property name="tooltip_text" translatable="yes" context="sidebaralignment|mergecells|tooltip_text">Joins the selected cells into one.</property>
             <property name="use_underline">True</property>
-            <property name="image_position">right</property>
             <property name="draw_indicator">True</property>
           </object>
           <packing>

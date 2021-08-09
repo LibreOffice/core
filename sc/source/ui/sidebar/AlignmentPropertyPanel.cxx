@@ -47,9 +47,9 @@ AlignmentPropertyPanel::AlignmentPropertyPanel(
     , mxCBXMergeCell(m_xBuilder->weld_check_button("mergecells"))
     , mxFtRotate(m_xBuilder->weld_label("orientationlabel"))
     , mxMtrAngle(m_xBuilder->weld_metric_spin_button("orientationdegrees", FieldUnit::DEGREE))
-    , mxRefEdgeBottom(m_xBuilder->weld_radio_button("bottom"))
-    , mxRefEdgeTop(m_xBuilder->weld_radio_button("top"))
-    , mxRefEdgeStd(m_xBuilder->weld_radio_button("standard"))
+    , mxRefEdgeBottom(m_xBuilder->weld_toggle_button("bottom"))
+    , mxRefEdgeTop(m_xBuilder->weld_toggle_button("top"))
+    , mxRefEdgeStd(m_xBuilder->weld_toggle_button("standard"))
     , mxCBStacked(m_xBuilder->weld_check_button("stacked"))
     , mxTextOrientBox(m_xBuilder->weld_widget("textorientbox"))
     , mxHorizontalAlign(m_xBuilder->weld_toolbar("horizontalalignment"))
@@ -68,7 +68,6 @@ AlignmentPropertyPanel::AlignmentPropertyPanel(
     , maVrtStackControl(SID_ATTR_ALIGN_STACKED, *pBindings, *this)
     , maRefEdgeControl(SID_ATTR_ALIGN_LOCKPOS, *pBindings, *this)
     , mbMultiDisable(false)
-    , mbSettingToggles(false)
     , maContext()
     , mpBindings(pBindings)
 {
@@ -122,25 +121,26 @@ void AlignmentPropertyPanel::Initialize()
     mxMtrAngle->connect_value_changed(LINK( this, AlignmentPropertyPanel, AngleModifiedHdl));
     mxCBStacked->connect_toggled(LINK(this, AlignmentPropertyPanel, ClickStackHdl));
 
-    Link<weld::Toggleable&,void> aLink2 = LINK(this, AlignmentPropertyPanel, ReferenceEdgeHdl);
-    mxRefEdgeBottom->connect_toggled(aLink2);
-    mxRefEdgeTop->connect_toggled(aLink2);
-    mxRefEdgeStd->connect_toggled(aLink2);
+    Link<weld::Button&,void> aLink2 = LINK(this, AlignmentPropertyPanel, ReferenceEdgeHdl);
+    mxRefEdgeBottom->connect_clicked(aLink2);
+    mxRefEdgeTop->connect_clicked(aLink2);
+    mxRefEdgeStd->connect_clicked(aLink2);
 }
 
-IMPL_LINK(AlignmentPropertyPanel, ReferenceEdgeHdl, weld::Toggleable&, rToggle, void)
+IMPL_LINK(AlignmentPropertyPanel, ReferenceEdgeHdl, weld::Button&, rToggle, void)
 {
-    if (mbSettingToggles)
-        return;
     SvxRotateMode eMode;
-    if (&rToggle == mxRefEdgeBottom.get() && mxRefEdgeBottom->get_active())
+    if (&rToggle == mxRefEdgeBottom.get())
         eMode = SVX_ROTATE_MODE_BOTTOM;
-    else if (&rToggle == mxRefEdgeTop.get() && mxRefEdgeTop->get_active())
+    else if (&rToggle == mxRefEdgeTop.get())
         eMode = SVX_ROTATE_MODE_TOP;
-    else if (&rToggle == mxRefEdgeStd.get() && mxRefEdgeStd->get_active())
+    else /*if (&rToggle == mxRefEdgeStd.get())*/
         eMode = SVX_ROTATE_MODE_STANDARD;
-    else
-        return;
+
+    mxRefEdgeBottom->set_active(eMode == SVX_ROTATE_MODE_BOTTOM);
+    mxRefEdgeTop->set_active(eMode == SVX_ROTATE_MODE_TOP);
+    mxRefEdgeStd->set_active(eMode == SVX_ROTATE_MODE_STANDARD);
+
     SvxRotateModeItem aItem(eMode, ATTR_ROTATE_MODE);
     GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_ALIGN_LOCKPOS,
             SfxCallMode::RECORD, { &aItem });
@@ -312,22 +312,11 @@ void AlignmentPropertyPanel::NotifyItemUpdate(
     case SID_ATTR_ALIGN_LOCKPOS:
         if( eState >= SfxItemState::DEFAULT)
         {
-            mbSettingToggles = true;
             const SvxRotateModeItem* pItem = static_cast<const SvxRotateModeItem*>(pState);
             SvxRotateMode eMode = pItem->GetValue();
-            if(eMode == SVX_ROTATE_MODE_BOTTOM)
-            {
-                mxRefEdgeBottom->set_state(TRISTATE_TRUE);
-            }
-            else if(eMode == SVX_ROTATE_MODE_TOP)
-            {
-                mxRefEdgeTop->set_state(TRISTATE_TRUE);
-            }
-            else if(eMode == SVX_ROTATE_MODE_STANDARD)
-            {
-                mxRefEdgeStd->set_state(TRISTATE_TRUE);
-            }
-            mbSettingToggles = false;
+            mxRefEdgeBottom->set_active(eMode == SVX_ROTATE_MODE_BOTTOM);
+            mxRefEdgeTop->set_active(eMode == SVX_ROTATE_MODE_TOP);
+            mxRefEdgeStd->set_active(eMode == SVX_ROTATE_MODE_STANDARD);
         }
         break;
     case SID_ATTR_ALIGN_DEGREES:
