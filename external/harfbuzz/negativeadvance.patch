@@ -1,0 +1,11 @@
+--- src/hb-graphite2.cc
++++ src/hb-graphite2.cc
+@@ -223,7 +223,7 @@
+   unsigned int base_glyph;
+   unsigned int num_glyphs;
+   unsigned int cluster;
+-  unsigned int advance;
++  int advance;
+ };
+ 
+ hb_bool_t
