@@ -1960,6 +1960,27 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testListsHeading)
                        "list 1, header 1");
 }
 
+CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testOleEmfPreviewToHtml)
+{
+    // Given a document containing an embedded object, with EMF preview:
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "ole2.odt";
+    mxComponent = loadFromDesktop(aURL, "com.sun.star.text.TextDocument", {});
+
+    // When exporting to HTML:
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aStoreProperties = {
+        comphelper::makePropertyValue("FilterName", OUString("HTML (StarWriter)")),
+    };
+    xStorable->storeToURL(maTempFile.GetURL(), aStoreProperties);
+
+    // Then make sure the <img> tag has matching file extension and data:
+    htmlDocUniquePtr pDoc = parseHtml(maTempFile);
+    OUString aPath = getXPath(pDoc, "/html/body/p/img", "src");
+    // Without the accompanying fix in place, this test would have failed, as aPath was
+    // ole_html_3978e5f373402b43.JPG, with EMF data.
+    CPPUNIT_ASSERT(aPath.endsWith("gif"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
