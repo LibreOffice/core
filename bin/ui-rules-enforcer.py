@@ -208,6 +208,22 @@ def remove_check_button_relief(current):
     if relief != None:
       current.remove(relief)
 
+def remove_check_button_image_position(current):
+  image_position = None
+  ischeckorradiobutton = current.get('class') == "GtkCheckButton" or current.get('class') == "GtkRadioButton"
+  for child in current:
+    remove_check_button_image_position(child)
+    if not ischeckorradiobutton:
+        continue
+    if child.tag == "property":
+      attributes = child.attrib
+      if attributes.get("name") == "image_position" or attributes.get("name") == "image-position":
+        image_position = child
+
+  if ischeckorradiobutton:
+    if image_position != None:
+      current.remove(image_position)
+
 def remove_spin_button_input_purpose(current):
   input_purpose = None
   isspinbutton = current.get('class') == "GtkSpinButton"
@@ -393,6 +409,7 @@ replace_button_use_stock(root)
 replace_image_stock(root)
 remove_check_button_align(root)
 remove_check_button_relief(root)
+remove_check_button_image_position(root)
 remove_spin_button_input_purpose(root)
 remove_spin_button_max_length(root)
 remove_track_visited_links(root)
