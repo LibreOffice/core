@@ -66,9 +66,9 @@ private:
     std::unique_ptr<weld::CheckButton> mxCBXMergeCell;
     std::unique_ptr<weld::Label> mxFtRotate;
     std::unique_ptr<weld::MetricSpinButton> mxMtrAngle;
-    std::unique_ptr<weld::RadioButton> mxRefEdgeBottom;
-    std::unique_ptr<weld::RadioButton> mxRefEdgeTop;
-    std::unique_ptr<weld::RadioButton> mxRefEdgeStd;
+    std::unique_ptr<weld::ToggleButton> mxRefEdgeBottom;
+    std::unique_ptr<weld::ToggleButton> mxRefEdgeTop;
+    std::unique_ptr<weld::ToggleButton> mxRefEdgeStd;
     std::unique_ptr<weld::CheckButton> mxCBStacked;
     std::unique_ptr<weld::Widget> mxTextOrientBox;
 
@@ -93,7 +93,6 @@ private:
     ::sfx2::sidebar::ControllerItem             maRefEdgeControl;
 
     bool                                        mbMultiDisable : 1;
-    bool                                        mbSettingToggles : 1;
 
     vcl::EnumContext                            maContext;
     SfxBindings*                                mpBindings;
@@ -103,7 +102,7 @@ private:
     DECL_LINK( CBOXWrapTextClkHdl, weld::Toggleable&, void );
     DECL_LINK( AngleModifiedHdl, weld::MetricSpinButton&, void );
     DECL_LINK( ClickStackHdl, weld::Toggleable&, void );
-    DECL_LINK( ReferenceEdgeHdl, weld::Toggleable&, void );
+    DECL_LINK( ReferenceEdgeHdl, weld::Button&, void );
 
     void Initialize();
 };
