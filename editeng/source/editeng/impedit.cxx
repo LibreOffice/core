@@ -405,7 +405,9 @@ void ImpEditView::lokSelectionCallback(const std::unique_ptr<tools::PolyPolygon>
             for (tools::Rectangle & rRectangle : aRectangles)
             {
                 if (bMm100ToTwip)
-                    rRectangle = OutputDevice::LogicToLogic(rRectangle, MapMode(MapUnit::Map100thMM), MapMode(MapUnit::MapTwip));
+                {
+                    rRectangle = o3tl::convert(rRectangle, o3tl::Length::mm100, o3tl::Length::twip);
+                }
                 rRectangle.Move(aOrigin.getX(), aOrigin.getY());
                 v.emplace_back(rRectangle.toString().getStr());
             }
@@ -1360,7 +1362,9 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
 
             // LOK output is always in twips, convert from mm100 if necessary.
             if (rOutDev.GetMapMode().GetMapUnit() == MapUnit::Map100thMM)
-                aRect = OutputDevice::LogicToLogic(aRect, MapMode(MapUnit::Map100thMM), MapMode(MapUnit::MapTwip));
+            {
+                aRect = o3tl::convert(aRect, o3tl::Length::mm100, o3tl::Length::twip);
+            }
             else if (rOutDev.GetMapMode().GetMapUnit() == MapUnit::MapTwip)
             {
                 // Writer comments: they use editeng, but are separate widgets.

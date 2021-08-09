@@ -342,7 +342,7 @@ void SAL_CALL SfxInPlaceClient_Impl::activatingInplace()
             if (m_pClient->GetEditWin())
             {
                 if (m_pClient->GetEditWin()->GetMapMode().GetMapUnit() == MapUnit::Map100thMM)
-                    aRect = OutputDevice::LogicToLogic(aRect, MapMode(MapUnit::Map100thMM), MapMode(MapUnit::MapTwip));
+                    aRect = o3tl::convert(aRect, o3tl::Length::mm100, o3tl::Length::twip);
             }
 
             OString str = aRect.toString() + ", \"INPLACE\"";

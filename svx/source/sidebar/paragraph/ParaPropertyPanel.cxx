@@ -257,18 +257,15 @@ void ParaPropertyPanel::StateChangedIndentImpl( SfxItemState eState, const SfxPo
     {
         const SvxLRSpaceItem* pSpace = static_cast<const SvxLRSpaceItem*>(pState);
         maTxtLeft = pSpace->GetTextLeft();
-        maTxtLeft = OutputDevice::LogicToLogic( maTxtLeft, m_eLRSpaceUnit, MapUnit::Map100thMM );
-        maTxtLeft = OutputDevice::LogicToLogic( maTxtLeft, MapUnit::Map100thMM, MapUnit::MapTwip );
+        maTxtLeft = OutputDevice::LogicToLogic(maTxtLeft, m_eLRSpaceUnit, MapUnit::MapTwip);
 
         tools::Long aTxtRight = pSpace->GetRight();
-        aTxtRight = OutputDevice::LogicToLogic( aTxtRight, m_eLRSpaceUnit, MapUnit::Map100thMM );
-        aTxtRight = OutputDevice::LogicToLogic( aTxtRight, MapUnit::Map100thMM, MapUnit::MapTwip );
+        aTxtRight = OutputDevice::LogicToLogic(aTxtRight, m_eLRSpaceUnit, MapUnit::MapTwip);
 
         tools::Long aTxtFirstLineOfst = pSpace->GetTextFirstLineOffset();
-        aTxtFirstLineOfst = OutputDevice::LogicToLogic( aTxtFirstLineOfst, m_eLRSpaceUnit, MapUnit::Map100thMM );
-        aTxtFirstLineOfst = OutputDevice::LogicToLogic( aTxtFirstLineOfst, MapUnit::Map100thMM, MapUnit::MapTwip );
+        aTxtFirstLineOfst = OutputDevice::LogicToLogic( aTxtFirstLineOfst, m_eLRSpaceUnit, MapUnit::MapTwip );
 
-        tools::Long nVal = OutputDevice::LogicToLogic( maTxtLeft, MapUnit::MapTwip, MapUnit::Map100thMM );
+        tools::Long nVal = o3tl::convert(maTxtLeft, o3tl::Length::twip, o3tl::Length::mm100);
         nVal = static_cast<tools::Long>(mxLeftIndent->normalize( nVal ));
 
         if ( maContext.GetCombinedContext_DI() != CombinedEnumContext(Application::WriterVariants, Context::Text)
@@ -278,7 +275,7 @@ void ParaPropertyPanel::StateChangedIndentImpl( SfxItemState eState, const SfxPo
             mxFLineIndent->set_min( nVal*-1, FieldUnit::MM_100TH );
         }
 
-        tools::Long nrVal = OutputDevice::LogicToLogic( aTxtRight, MapUnit::MapTwip, MapUnit::Map100thMM );
+        tools::Long nrVal = o3tl::convert(aTxtRight, o3tl::Length::twip, o3tl::Length::mm100);
         nrVal = static_cast<tools::Long>(mxRightIndent->normalize( nrVal ));
 
         switch (maContext.GetCombinedContext_DI())
@@ -309,7 +306,7 @@ void ParaPropertyPanel::StateChangedIndentImpl( SfxItemState eState, const SfxPo
         mxLeftIndent->set_value( nVal, FieldUnit::MM_100TH );
         mxRightIndent->set_value( nrVal, FieldUnit::MM_100TH );
 
-        tools::Long nfVal = OutputDevice::LogicToLogic( aTxtFirstLineOfst, MapUnit::MapTwip, MapUnit::Map100thMM );
+        tools::Long nfVal = o3tl::convert(aTxtFirstLineOfst, o3tl::Length::twip, o3tl::Length::mm100);
         nfVal = static_cast<tools::Long>(mxFLineIndent->normalize( nfVal ));
         mxFLineIndent->set_value( nfVal, FieldUnit::MM_100TH );
     }
@@ -337,18 +334,16 @@ void ParaPropertyPanel::StateChangedULImpl( SfxItemState eState, const SfxPoolIt
         const SvxULSpaceItem* pOldItem = static_cast<const SvxULSpaceItem*>(pState);
 
         maUpper = pOldItem->GetUpper();
-        maUpper = OutputDevice::LogicToLogic( maUpper, m_eULSpaceUnit, MapUnit::Map100thMM );
-        maUpper = OutputDevice::LogicToLogic( maUpper, MapUnit::Map100thMM, MapUnit::MapTwip );
+        maUpper = OutputDevice::LogicToLogic(maUpper, m_eULSpaceUnit, MapUnit::MapTwip);
 
         maLower = pOldItem->GetLower();
-        maLower = OutputDevice::LogicToLogic( maLower, m_eULSpaceUnit, MapUnit::Map100thMM );
-        maLower = OutputDevice::LogicToLogic( maLower, MapUnit::Map100thMM, MapUnit::MapTwip );
+        maLower = OutputDevice::LogicToLogic(maLower, m_eULSpaceUnit, MapUnit::MapTwip);
 
-        sal_Int64 nVal = OutputDevice::LogicToLogic( maUpper, MapUnit::MapTwip, MapUnit::Map100thMM );
+        sal_Int64 nVal = o3tl::convert(maUpper, o3tl::Length::twip, o3tl::Length::mm100);
         nVal = mxTopDist->normalize( nVal );
         mxTopDist->set_value( nVal, FieldUnit::MM_100TH );
 
-        nVal = OutputDevice::LogicToLogic( maLower, MapUnit::MapTwip, MapUnit::Map100thMM );
+        nVal = o3tl::convert(maLower, o3tl::Length::twip, o3tl::Length::mm100);
         nVal = mxBottomDist->normalize( nVal );
         mxBottomDist->set_value( nVal, FieldUnit::MM_100TH );
     }
