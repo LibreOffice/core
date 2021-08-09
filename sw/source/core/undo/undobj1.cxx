@@ -55,9 +55,14 @@ SwUndoFlyBase::~SwUndoFlyBase()
 {
     if( m_bDelFormat )       // delete during an Undo?
     {
-        if (m_pFrameFormat->GetOtherTextBoxFormat())
-        {   // clear that before delete
-            m_pFrameFormat->SetOtherTextBoxFormat(nullptr);
+        if (m_pFrameFormat->Which() == RES_DRAWFRMFMT)
+        {
+            dynamic_cast<SwDrawFrameFormat*>(m_pFrameFormat)->RemoveOtherTextBoxFormat(m_pFrameFormat->FindRealSdrObject());
+        }
+
+        if (m_pFrameFormat->Which() == RES_FLYFRMFMT)
+        {
+            dynamic_cast<SwFlyFrameFormat*>(m_pFrameFormat)->SetOwnerShape(std::pair(nullptr, nullptr));
         }
         delete m_pFrameFormat;
     }
@@ -138,31 +143,42 @@ void SwUndoFlyBase::InsFly(::sw::UndoRedoContext & rContext, bool bShowSelFrame)
         pCNd->GetTextNode()->InsertItem(aFormat, m_nContentPos, m_nContentPos, SetAttrMode::NOHINTEXPAND);
     }
 
-    if (m_pFrameFormat->GetOtherTextBoxFormat())
+    if (m_pFrameFormat->Which() == RES_FLYFRMFMT)
     {
-        // recklessly assume that this thing will live longer than the
-        // SwUndoFlyBase - not sure what could be done if that isn't the case...
-        m_pFrameFormat->GetOtherTextBoxFormat()->SetOtherTextBoxFormat(m_pFrameFormat);
-
-        if (m_pFrameFormat->GetOtherTextBoxFormat()->Which() == RES_DRAWFRMFMT)
-        {
-            SdrObject* pSdrObject = m_pFrameFormat->GetOtherTextBoxFormat()->FindSdrObject();
-            if (pSdrObject)
-            {
-                // Make sure the old UNO wrapper is no longer cached after changing the shape +
-                // textframe pair. Otherwise we would have a wrapper which doesn't know about its
-                // textframe, even if it's there.
-                pSdrObject->setUnoShape(nullptr);
-            }
-        }
-        if (m_pFrameFormat->Which() == RES_DRAWFRMFMT)
-        {
-            // This is a draw format and we just set the fly format's textbox pointer to this draw
-            // format.  Sync the draw format's content with the fly format's content.
-            SwFrameFormat* pFlyFormat = m_pFrameFormat->GetOtherTextBoxFormat();
-            m_pFrameFormat->SetFormatAttr(pFlyFormat->GetContent());
-        }
+        if (auto pShape = dynamic_cast<SwFlyFrameFormat*>(m_pFrameFormat)->GetOwnerShape().second)
+            pShape->AddOtherTextBoxFormat(std::pair(m_pFrameFormat->FindRealSdrObject(), dynamic_cast<SwFlyFrameFormat*>(m_pFrameFormat)));
     }
+    if (m_pFrameFormat->Which() == RES_DRAWFRMFMT)
+    {
+        if (auto pFrame = dynamic_cast<SwDrawFrameFormat*>(m_pFrameFormat)->GetOtherTextBoxFormat(m_pFrameFormat->FindRealSdrObject()))
+            pFrame->SetOwnerShape(std::pair(m_pFrameFormat->FindRealSdrObject(), dynamic_cast<SwDrawFrameFormat*>(m_pFrameFormat)));
+    }
+
+    //if (m_pFrameFormat->GetOtherTextBoxFormat())
+    //{
+    //    // recklessly assume that this thing will live longer than the
+    //    // SwUndoFlyBase - not sure what could be done if that isn't the case...
+    //    m_pFrameFormat->GetOtherTextBoxFormat()->SetOtherTextBoxFormat(m_pFrameFormat);
+    //
+    //    if (m_pFrameFormat->GetOtherTextBoxFormat()->Which() == RES_DRAWFRMFMT)
+    //    {
+    //        SdrObject* pSdrObject = m_pFrameFormat->GetOtherTextBoxFormat()->FindSdrObject();
+    //        if (pSdrObject)
+    //        {
+    //            // Make sure the old UNO wrapper is no longer cached after changing the shape +
+    //            // textframe pair. Otherwise we would have a wrapper which doesn't know about its
+    //            // textframe, even if it's there.
+    //            pSdrObject->setUnoShape(nullptr);
+    //        }
+    //    }
+    //    if (m_pFrameFormat->Which() == RES_DRAWFRMFMT)
+    //    {
+    //        // This is a draw format and we just set the fly format's textbox pointer to this draw
+    //        // format.  Sync the draw format's content with the fly format's content.
+    //        SwFrameFormat* pFlyFormat = m_pFrameFormat->GetOtherTextBoxFormat();
+    //        m_pFrameFormat->SetFormatAttr(pFlyFormat->GetContent());
+    //    }
+    //}
 
     m_pFrameFormat->MakeFrames();
 
@@ -203,9 +219,13 @@ void SwUndoFlyBase::DelFly( SwDoc* pDoc )
     m_bDelFormat = true;                 // delete Format in DTOR
     m_pFrameFormat->DelFrames();                 // destroy Frames
 
-    if (m_pFrameFormat->GetOtherTextBoxFormat())
+    if (m_pFrameFormat->Which() == RES_FLYFRMFMT)
     {   // tdf#108867 clear that pointer
-        m_pFrameFormat->GetOtherTextBoxFormat()->SetOtherTextBoxFormat(nullptr);
+        dynamic_cast<SwFlyFrameFormat*>(m_pFrameFormat)->SetOwnerShape(std::pair(nullptr, nullptr));
+    }
+    if (m_pFrameFormat->Which() == RES_DRAWFRMFMT)
+    {
+        dynamic_cast<SwDrawFrameFormat*>(m_pFrameFormat)->RemoveOtherTextBoxFormat(m_pFrameFormat->FindRealSdrObject());
     }
 
     // all Uno objects should now log themselves off

@@ -490,8 +490,12 @@ SwFrameFormat *DocumentLayoutManager::CopyLayoutFormat(
         pDest->SetFormatAttr(aSet);
 
         // Link FLY and DRAW formats, so it becomes a text box
-        pDest->SetOtherTextBoxFormat(pDestTextBox);
-        pDestTextBox->SetOtherTextBoxFormat(pDest);
+        if (pDest->Which() == RES_DRAWFRMFMT && pDestTextBox->Which() == RES_FLYFRMFMT)
+        {
+            auto pDestShape = dynamic_cast<SwDrawFrameFormat*>(pDest);
+            pDestShape->AddOtherTextBoxFormat(std::pair(pDestTextBox->FindSdrObject(), dynamic_cast<SwFlyFrameFormat*>(pDestTextBox)));
+            dynamic_cast<SwFlyFrameFormat*>(pDestTextBox)->SetOwnerShape(std::pair(pDest->FindSdrObject(), pDestShape));
+        }
     }
 
     if (pDest->GetName().isEmpty())
