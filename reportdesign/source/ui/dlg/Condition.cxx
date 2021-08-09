@@ -320,7 +320,7 @@ void Condition::updateToolbar(const uno::Reference< report::XReportControlFormat
     {
         vcl::Font aBaseFont( Application::GetDefaultDevice()->GetSettings().GetStyleSettings().GetAppFont() );
         SvxFont aFont( VCLUnoHelper::CreateFont( _xReportControlFormat->getFontDescriptor(), aBaseFont ) );
-        aFont.SetFontHeight(OutputDevice::LogicToLogic(Size(0, aFont.GetFontHeight()), MapMode(MapUnit::MapPoint), MapMode(MapUnit::MapTwip)).Height());
+        aFont.SetFontHeight(o3tl::convert(aFont.GetFontHeight(), o3tl::Length::pt, o3tl::Length::twip));
         aFont.SetEmphasisMark( static_cast< FontEmphasisMark >( _xReportControlFormat->getControlTextEmphasis() ) );
         aFont.SetRelief( static_cast< FontRelief >( _xReportControlFormat->getCharRelief() ) );
         aFont.SetColor( Color(ColorTransparency, _xReportControlFormat->getCharColor()) );

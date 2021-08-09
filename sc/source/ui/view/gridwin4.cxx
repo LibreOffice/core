@@ -1554,7 +1554,9 @@ void ScGridWindow::LogicInvalidate(const tools::Rectangle* pRectangle)
         if (IsMapModeEnabled())
         {
             if (GetMapMode().GetMapUnit() == MapUnit::Map100thMM)
-                aRectangle = OutputDevice::LogicToLogic(aRectangle, MapMode(MapUnit::Map100thMM), MapMode(MapUnit::MapTwip));
+            {
+                aRectangle = o3tl::convert(aRectangle, o3tl::Length::mm100, o3tl::Length::twip);
+            }
         }
         else
             aRectangle = PixelToLogic(aRectangle, MapMode(MapUnit::MapTwip));

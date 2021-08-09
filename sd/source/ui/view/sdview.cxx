@@ -689,7 +689,9 @@ bool View::SdrBeginTextEdit(
             {
                 ::tools::Rectangle aRectangle = pView->GetOutputArea();
                 if (pWin && pWin->GetMapMode().GetMapUnit() == MapUnit::Map100thMM)
-                    aRectangle = OutputDevice::LogicToLogic(aRectangle, MapMode(MapUnit::Map100thMM), MapMode(MapUnit::MapTwip));
+                {
+                    aRectangle = o3tl::convert(aRectangle, o3tl::Length::mm100, o3tl::Length::twip);
+                }
                 OString sRectangle = aRectangle.toString();
                 SfxLokHelper::notifyOtherViews(&mpViewSh->GetViewShellBase(), LOK_CALLBACK_VIEW_LOCK, "rectangle", sRectangle);
             }
