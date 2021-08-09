@@ -55,7 +55,7 @@ DLLEXPORT ::std::string urltounix(const char *src);
  */
 #ifdef _WIN32
 DLLEXPORT ::std::string urltowin(const char *src);
-
+#endif
 /**
  *  Transfer integer to string following format
  */
@@ -70,6 +70,6 @@ DLLEXPORT char *base64_encode_string( const uchar *buf, unsigned int len );
 DLLEXPORT double calcAngle(int x1, int y1, int x2, int y2);
 
 
-#endif // INCLUDED_HWPFILTER_SOURCE_HCODE_H
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
