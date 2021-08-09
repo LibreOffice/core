@@ -72,7 +72,6 @@ public:
 };
 
 typedef std::map<short, vcl::Font> SvxRTFFontTbl;
-typedef std::map<sal_uInt16, std::unique_ptr<SvxRTFStyleType>> SvxRTFStyleTbl;
 
 // own helper classes for the RTF Parser
 struct SvxRTFStyleType
@@ -84,6 +83,8 @@ struct SvxRTFStyleType
 
     SvxRTFStyleType(SfxItemPool& rPool, const WhichRangesContainer& pWhichRange);
 };
+
+typedef std::map<sal_uInt16, SvxRTFStyleType> SvxRTFStyleTbl;
 
 class EDITENG_DLLPUBLIC SvxRTFParser : public SvRTFParser
 {

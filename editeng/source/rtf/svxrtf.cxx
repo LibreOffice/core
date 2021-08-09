@@ -274,8 +274,8 @@ void SvxRTFParser::ReadStyleTable()
     sal_uInt16 nStyleNo = 0;
     bool bHasStyleNo = false;
     int _nOpenBrakets = 1;      // the first was already detected earlier!!
-    std::unique_ptr<SvxRTFStyleType> pStyle(new SvxRTFStyleType(*pAttrPool, aWhichMap));
-    pStyle->aAttrSet.Put( GetRTFDefaults() );
+    std::optional<SvxRTFStyleType> xStyle(SvxRTFStyleType(*pAttrPool, aWhichMap));
+    xStyle->aAttrSet.Put( GetRTFDefaults() );
 
     bIsInReadStyleTab = true;
     bChkStyleAttr = false;      // Do not check Attribute against the Styles
@@ -310,10 +310,10 @@ void SvxRTFParser::ReadStyleTable()
             }
             break;
 
-        case RTF_SBASEDON:  pStyle->nBasedOn = sal_uInt16(nTokenValue); break;
+        case RTF_SBASEDON:  xStyle->nBasedOn = sal_uInt16(nTokenValue); break;
         case RTF_SNEXT:     break;
         case RTF_OUTLINELEVEL:
-        case RTF_SOUTLVL:   pStyle->nOutlineNo = sal_uInt8(nTokenValue);    break;
+        case RTF_SOUTLVL:   xStyle->nOutlineNo = sal_uInt8(nTokenValue);    break;
         case RTF_S:         nStyleNo = static_cast<short>(nTokenValue);
                             bHasStyleNo = true;
                             break;
@@ -324,16 +324,16 @@ void SvxRTFParser::ReadStyleTable()
         case RTF_TEXTTOKEN:
             if (bHasStyleNo)
             {
-                pStyle->sName = DelCharAtEnd( aToken, ';' );
+                xStyle->sName = DelCharAtEnd( aToken, ';' );
 
                 if (!m_StyleTable.empty())
                 {
                     m_StyleTable.erase(nStyleNo);
                 }
                 // All data from the font is available, so off to the table
-                m_StyleTable.insert(std::make_pair(nStyleNo, std::move(pStyle)));
-                pStyle.reset(new SvxRTFStyleType(*pAttrPool, aWhichMap));
-                pStyle->aAttrSet.Put( GetRTFDefaults() );
+                m_StyleTable.emplace(nStyleNo, std::move(*xStyle));
+                xStyle.emplace(*pAttrPool, aWhichMap);
+                xStyle->aAttrSet.Put( GetRTFDefaults() );
                 nStyleNo = 0;
                 bHasStyleNo = false;
             }
@@ -342,7 +342,7 @@ void SvxRTFParser::ReadStyleTable()
             switch( nToken & ~(0xff | RTF_SWGDEFS) )
             {
             case RTF_PARFMT:        // here are no SWGDEFS
-                ReadAttr( nToken, &pStyle->aAttrSet );
+                ReadAttr( nToken, &xStyle->aAttrSet );
                 break;
 
             case RTF_CHRFMT:
@@ -365,7 +365,7 @@ void SvxRTFParser::ReadStyleTable()
                         ++nSkippedTokens;
                     }
                 }
-                ReadAttr( nToken, &pStyle->aAttrSet );
+                ReadAttr( nToken, &xStyle->aAttrSet );
                 if (nSkippedTokens && m_nTokenIndex == nEnteringIndex - nSkippedTokens)
                 {
                     // we called SkipToken to go back one or two, but ReadAttrs
@@ -381,7 +381,7 @@ void SvxRTFParser::ReadStyleTable()
             break;
         }
     }
-    pStyle.reset();         // Delete the Last Style
+    xStyle.reset();         // Delete the Last Style
     SkipToken();        // the closing brace is evaluated "above"
 
     // Flag back to old state
@@ -664,8 +664,8 @@ void SvxRTFParser::ClearStyleAttr_( SvxRTFItemStackType& rStkType )
     {
         // Delete all Attributes, which are already defined in the Style,
         // from the current AttrSet.
-        auto const& pStyle = m_StyleTable.find(rStkType.nStyleNo)->second;
-        SfxItemSet &rStyleSet = pStyle->aAttrSet;
+        auto & rStyle = m_StyleTable.find(rStkType.nStyleNo)->second;
+        SfxItemSet &rStyleSet = rStyle.aAttrSet;
         const SfxPoolItem* pSItem;
         for( sal_uInt16 nWhich = aIter.GetCurWhich(); nWhich; nWhich = aIter.NextWhich() )
         {
