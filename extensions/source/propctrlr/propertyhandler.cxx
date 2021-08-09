@@ -79,10 +79,10 @@ namespace pcr
             return;
 
         // remove all old property change listeners
-        std::unique_ptr< ::comphelper::OInterfaceIteratorHelper2 > removeListener = m_aPropertyListeners.createIterator();
-        std::unique_ptr< ::comphelper::OInterfaceIteratorHelper2 > readdListener = m_aPropertyListeners.createIterator();  // will copy the container as needed
-        while ( removeListener->hasMoreElements() )
-            removePropertyChangeListener( static_cast< XPropertyChangeListener* >( removeListener->next() ) );
+        ::comphelper::OInterfaceIteratorHelper2 removeListener = m_aPropertyListeners.createIterator();
+        ::comphelper::OInterfaceIteratorHelper2 readdListener = m_aPropertyListeners.createIterator();  // will copy the container as needed
+        while ( removeListener.hasMoreElements() )
+            removePropertyChangeListener( static_cast< XPropertyChangeListener* >( removeListener.next() ) );
         OSL_ENSURE( m_aPropertyListeners.empty(), "PropertyHandler::inspect: derived classes are expected to forward the removePropertyChangeListener call to their base class (me)!" );
 
         // remember the new component, and give derived classes the chance to react on it
@@ -90,8 +90,8 @@ namespace pcr
         onNewComponent();
 
         // add the listeners, again
-        while ( readdListener->hasMoreElements() )
-            addPropertyChangeListener( static_cast< XPropertyChangeListener* >( readdListener->next() ) );
+        while ( readdListener.hasMoreElements() )
+            addPropertyChangeListener( static_cast< XPropertyChangeListener* >( readdListener.next() ) );
     }
 
     void PropertyHandler::onNewComponent()

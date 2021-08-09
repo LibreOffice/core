@@ -79,10 +79,9 @@ namespace comphelper
 
         /** creates an iterator for looping through all registered listeners
         */
-        ::std::unique_ptr< ::comphelper::OInterfaceIteratorHelper2 > createIterator()
+        ::comphelper::OInterfaceIteratorHelper2 createIterator()
         {
-            ::std::unique_ptr< ::comphelper::OInterfaceIteratorHelper2 > pIterator( new ::comphelper::OInterfaceIteratorHelper2( m_aListeners ) );
-            return pIterator;
+            return ::comphelper::OInterfaceIteratorHelper2( m_aListeners );
         }
 
     protected:
