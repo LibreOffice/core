@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "07f80730_1d6750cb",
+        "filename": "include/comphelper/multicontainer2.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-08-09T11:07:40Z",
+      "side": 1,
+      "message": "That documentation, apparently copied from cppu::OMultiTypeInterfaceContainerHelper in include/cppuhelper/interfacecontainer.h doesn\u0027t make sense here, outside the context of cppu::OMultiTypeInterfaceContainerHelperVar from include/cppuhelper/interfacecontainer.h.\n\nIf this class is mostly a copy of cppu::OMultiTypeInterfaceContainerHelper, I would state that here, along with the actual differences.  (As otherwise, one wonders what that \"2\" should mean, esp. given there is no comphelper::OMultiTypeInterfaceContainerHelper or comphelper::OMultiTypeInterfaceContainerHelper1).",
+      "revId": "86abf3a682b424dc0fcbccf030f5a0b9bfb81d8c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
