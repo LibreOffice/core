@@ -278,6 +278,7 @@ public:
     void testRedlineAutoCorrect();
     void testRedlineAutoCorrect2();
     void testEmojiAutoCorrect();
+    void testTdf129270();
     void testInsertPdf();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest4);
@@ -393,6 +394,7 @@ public:
     CPPUNIT_TEST(testRedlineAutoCorrect);
     CPPUNIT_TEST(testRedlineAutoCorrect2);
     CPPUNIT_TEST(testEmojiAutoCorrect);
+    CPPUNIT_TEST(testTdf129270);
     CPPUNIT_TEST(testInsertPdf);
     CPPUNIT_TEST_SUITE_END();
 };
@@ -3600,6 +3602,30 @@ void SwUiWriterTest4::testInsertLongDateFormat()
     CPPUNIT_ASSERT_EQUAL(OUString("TextField"), getProperty<OUString>(xField, "TextPortionType"));
     // the date format was "YYYY-MM-DD", but now "YYYY. MMM DD."
     CPPUNIT_ASSERT(xField->getString().indexOf(" ") > -1);
+}
+
+void SwUiWriterTest4::testTdf129270()
+{
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf129270.odt");
+    CPPUNIT_ASSERT(pDoc);
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+    SwXTextDocument* pXTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXTextDocument);
+
+    // Go to document end
+    pWrtShell->SttEndDoc(/*bStt=*/false);
+
+    // Press enter
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_RETURN);
+    Scheduler::ProcessEventsToIdle();
+
+    // Numbering for previous outline should remain the same "2"
+    CPPUNIT_ASSERT_EQUAL(OUString("2"), getProperty<OUString>(getParagraph(4), "ListLabelString"));
+
+    // Numbering for newly created outline should be "2.1"
+    CPPUNIT_ASSERT_EQUAL(OUString("2.1"),
+                         getProperty<OUString>(getParagraph(5), "ListLabelString"));
 }
 
 void SwUiWriterTest4::testInsertPdf()
