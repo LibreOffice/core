@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9fc0f948_6ea72809",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-08-09T10:41:01Z",
+      "side": 1,
+      "message": "\"instdir/share/extensions being populated from some *old* build\", and you changed autogen.input before the new build?",
+      "revId": "51406e88a93008458cf4a7d4f84aa0b169cb7d0b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0bd9cc53_855f0a20",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-08-09T10:41:01Z",
+      "side": 1,
+      "message": "curious, which make target triggers that?",
+      "revId": "51406e88a93008458cf4a7d4f84aa0b169cb7d0b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
