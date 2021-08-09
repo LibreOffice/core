@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CHART2_SOURCE_INC_MODIFYLISTENERCALLBACK_HXX
-#define INCLUDED_CHART2_SOURCE_INC_MODIFYLISTENERCALLBACK_HXX
+#pragma once
 
 #include <tools/link.hxx>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
@@ -54,7 +53,5 @@ private: //member
 };
 
 } // namespace chart
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
