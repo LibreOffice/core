@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e59fa49a_7388106c",
+        "filename": "basic/source/comp/symtbl.cxx",
+        "patchSetId": 17
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-09T13:09:23Z",
+      "side": 1,
+      "message": "The \"(++size)++\" looks strange/hackish here. It seems you don\u0027t want to add a separate line for  the increment; maybe you could split the two increments to the different lines, like\n\n            size \u003d snprintf(buf, sizeof(buf), \"%.16g\", n) + 1;\n            buf[size++] \u003d \u0027#\u0027;",
+      "range": {
+        "startLine": 96,
+        "startChar": 16,
+        "endLine": 96,
+        "endChar": 26
+      },
+      "revId": "17969d952980c8da3cb17dcc7ebf594cdb859100",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
