@@ -52,6 +52,24 @@
       "revId": "3c2cf76892890051e27e0e0798b7a06fc3acccd8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4ca3ebfe_e745d9ee",
+        "filename": "vcl/backendtest/outputdevice/common.cxx",
+        "patchSetId": 20
+      },
+      "lineNbr": 612,
+      "author": {
+        "id": 1002896
+      },
+      "writtenOn": "2021-08-09T11:05:30Z",
+      "side": 1,
+      "message": "I\u0027ve tried changing the width and height and the test result was quirky. Also, I added the coordinates in the std::map in (x,y) [where x \u003d 0...width-1, y \u003d 0...height-1] manner which I later used in the main loop for checking if the coordinate is painted or not and passed it to checkValue as (y,x) since, the checkValue method would evaluate it in reverse order for ex:- it does \"pAccess-\u003eSetPixel(y, x, COL_LIGHTGREEN)\" but since the checkValue\u0027s signature is in the order (int x,int y), I think changing the provided coordinates to (y,x) manner or loop variables will do or if it wouldn\u0027t what is it that I\u0027m missing? Thanks for helping!",
+      "parentUuid": "48d96d98_313a1e18",
+      "revId": "3c2cf76892890051e27e0e0798b7a06fc3acccd8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
