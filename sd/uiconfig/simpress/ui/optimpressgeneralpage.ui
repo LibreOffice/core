@@ -474,7 +474,6 @@
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
                 <property name="use-underline">True</property>
-                <property name="image-position">right</property>
                 <property name="draw-indicator">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="textselected-atkobject">
