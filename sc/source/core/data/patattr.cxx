@@ -710,9 +710,9 @@ void ScPatternAttr::FillToEditItemSet( SfxItemSet& rEditSet, const SfxItemSet& r
 
     // Expect to be compatible to LogicToLogic, ie. 2540/1440 = 127/72, and round
 
-    tools::Long nHeight = convertTwipToMm100(nTHeight);
-    tools::Long nCjkHeight = convertTwipToMm100(nCjkTHeight);
-    tools::Long nCtlHeight = convertTwipToMm100(nCtlTHeight);
+    tools::Long nHeight = o3tl::convert(nTHeight, o3tl::Length::twip, o3tl::Length::mm100);
+    tools::Long nCjkHeight = o3tl::convert(nCjkTHeight, o3tl::Length::twip, o3tl::Length::mm100);
+    tools::Long nCtlHeight = o3tl::convert(nCtlTHeight, o3tl::Length::twip, o3tl::Length::mm100);
 
     //  put items into EditEngine ItemSet
 

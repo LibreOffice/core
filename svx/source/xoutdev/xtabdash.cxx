@@ -103,6 +103,8 @@ BitmapEx XDashList::ImpCreateBitmapForXDash(const XDash* pDash)
 
     if(pDash && (pDash->GetDots() || pDash->GetDashes()))
     {
+        constexpr auto md = o3tl::getConversionMulDiv(o3tl::Length::mm100, o3tl::Length::pt);
+
         const basegfx::B2DHomMatrix aScaleMatrix(OutputDevice::LogicToLogic(MapMode(MapUnit::Map100thMM), MapMode(MapUnit::MapPixel)));
         const basegfx::B2DVector aScaleVector(aScaleMatrix * basegfx::B2DVector(1.0, 0.0));
         const double fScaleValue(aScaleVector.getLength() * (nFactor * (1.4 / 2.0)));
