@@ -2583,7 +2583,8 @@ IMPL_LINK_NOARG(SvxCharPositionPage, FitToLineHdl_Impl, weld::Toggleable&, void)
 IMPL_LINK_NOARG(SvxCharPositionPage, KerningModifyHdl_Impl, weld::MetricSpinButton&, void)
 {
     tools::Long nVal = static_cast<tools::Long>(m_xKerningMF->get_value(FieldUnit::POINT));
-    nVal = OutputDevice::LogicToLogic( nVal, MapUnit::MapPoint, MapUnit::MapTwip );
+    nVal = o3tl::convert(nVal, o3tl::Length::pt, o3tl::Length::twip);
+
     tools::Long nKern = static_cast<short>(m_xKerningMF->denormalize(nVal));
 
     SvxFont& rFont = GetPreviewFont();

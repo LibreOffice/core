@@ -351,8 +351,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                 if(pItem && xObj.is())
                 {
                     Size aSize(static_cast<const SvxSizeItem*>(pItem)->GetSize());
-                    aSize = OutputDevice::LogicToLogic
-                                    ( aSize, MapMode( MapUnit::MapTwip ), MapMode( MapUnit::Map100thMM ) );
+                    aSize = o3tl::convert(aSize, o3tl::Length::twip, o3tl::Length::mm100);
 
                     if(aSize.Width() > MINLAY&& aSize.Height()> MINLAY)
                     {
