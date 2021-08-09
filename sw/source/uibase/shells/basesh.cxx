@@ -202,22 +202,22 @@ void SwBaseShell::ExecDelete(SfxRequest &rReq)
                 if (rSh.IsEndPara())
                 {
                     SwNodeIndex aIdx(rSh.GetCursor()->GetNode());
-                    // disallow if this is an outline node having folded content
-                    bool bVisible = true;
-                    aIdx.GetNode().GetTextNode()->GetAttrOutlineContentVisible(bVisible);
-                    if (!bVisible)
-                        return;
-                    // disallow if the next text node is an outline node having folded content
-                    ++aIdx;
-                    SwNodeType aNodeType;
-                    while ((aNodeType = aIdx.GetNode().GetNodeType()) != SwNodeType::Text)
-                        ++aIdx;
                     if (aIdx.GetNode().IsTextNode())
                     {
-                        bVisible = true;
+                        // disallow if this is an outline node having folded content
+                        // or the next node is an outline node having folded content
+                        bool bVisible = true;
                         aIdx.GetNode().GetTextNode()->GetAttrOutlineContentVisible(bVisible);
                         if (!bVisible)
-                            return;
+                            break;
+                        ++aIdx;
+                        if (aIdx.GetNode().IsTextNode())
+                        {
+                            bVisible = true;
+                            aIdx.GetNode().GetTextNode()->GetAttrOutlineContentVisible(bVisible);
+                            if (!bVisible)
+                                break;
+                        }
                     }
                 }
             }
@@ -230,18 +230,18 @@ void SwBaseShell::ExecDelete(SfxRequest &rReq)
                 if (rSh.IsSttPara())
                 {
                     SwNodeIndex aIdx(rSh.GetCursor()->GetNode());
-                    // disallow if this is a folded outline node
-                    bool bVisible = true;
-                    aIdx.GetNode().GetTextNode()->GetAttrOutlineContentVisible(bVisible);
-                    if (!bVisible)
-                        return;
-                    // disallow if previous text node does not have a layout frame
-                    --aIdx;
-                    SwNodeType aNodeType;
-                    while ((aNodeType = aIdx.GetNode().GetNodeType()) != SwNodeType::Text)
+                    if (aIdx.GetNode().IsTextNode())
+                    {
+                        // disallow if this is an outline node having folded content
+                        // or the previous node is a content node without a layout frame
+                        bool bVisible = true;
+                        aIdx.GetNode().GetTextNode()->GetAttrOutlineContentVisible(bVisible);
+                        if (!bVisible)
+                            break;
                         --aIdx;
-                    if (aIdx.GetNode().IsContentNode() && !aIdx.GetNode().GetContentNode()->getLayoutFrame(nullptr))
-                        return;
+                        if (aIdx.GetNode().IsContentNode() && !aIdx.GetNode().GetContentNode()->getLayoutFrame(nullptr))
+                            break;
+                    }
                 }
             }
             if( rSh.IsNoNum() )
