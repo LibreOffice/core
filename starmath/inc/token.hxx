@@ -35,6 +35,7 @@
 
 // std imports
 #include <cassert>
+#include <memory>
 #include <vector>
 #include <stack>
 #include <tuple>
