@@ -218,6 +218,8 @@ private:
     InfoArrayType       aPrevAttribs;
 
     SetAttribsMode      nSpecial;
+    /// Once the attributes are set / unset, set the selection to the end of the formatted range?
+    bool m_bSetSelection;
     bool                bSetIsRemove;
     bool                bRemoveParaAttribs;
     sal_uInt16          nRemoveWhich;
@@ -232,6 +234,7 @@ public:
     SfxItemSet&         GetNewAttribs()     { return aNewAttribs; }
 
     void                SetSpecial( SetAttribsMode n )  { nSpecial = n; }
+    void                SetUpdateSelection( bool bSetSelection )  { m_bSetSelection = bSetSelection; }
     void                SetRemoveAttribs( bool b )      { bSetIsRemove = b; }
     void                SetRemoveParaAttribs( bool b )  { bRemoveParaAttribs = b; }
     void                SetRemoveWhich( sal_uInt16 n )  { nRemoveWhich = n; }
