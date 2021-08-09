@@ -875,5 +875,7 @@ static_assert(o3tl::toTwips(25, o3tl::Length::in100) == 1440 / 4);
 static_assert(o3tl::toTwips(15, o3tl::Length::in100) == 216);
 // the following twip value used to the constant for 20mm
 static_assert(o3tl::toTwips(20, o3tl::Length::mm) == 1134);
+// 847 100thmm used to represent 24pt
+static_assert(o3tl::convert(24, o3tl::Length::pt, o3tl::Length::mm100) == 847);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

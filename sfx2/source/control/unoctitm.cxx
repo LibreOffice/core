@@ -1236,7 +1236,7 @@ static void InterceptLOKStateChangeEvent(sal_uInt16 nSID, SfxViewFrame* pViewFra
         {
             float nScaleValue = 1000.0;
             nValue *= nScaleValue;
-            sal_Int32 nConvertedValue = OutputDevice::LogicToLogic(nValue, MapUnit::MapTwip, MapUnit::MapInch);
+            sal_Int32 nConvertedValue = o3tl::convert(nValue, o3tl::Length::twip, o3tl::Length::in);
             aBuffer.append(nConvertedValue / nScaleValue);
         }
     }
