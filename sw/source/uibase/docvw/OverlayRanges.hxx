@@ -23,6 +23,7 @@
 #include <svx/sdr/overlay/overlayobject.hxx>
 #include <basegfx/range/b2drange.hxx>
 
+#include <memory>
 #include <vector>
 #include <memory>
 

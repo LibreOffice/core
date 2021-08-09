@@ -20,6 +20,10 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_TOOLS_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_TOOLS_HXX
 
+#include <sal/config.h>
+
+#include <memory>
+
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/uno/Sequence.h>
 

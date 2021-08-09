@@ -20,6 +20,10 @@
 #ifndef INCLUDED_SVTOOLS_SOURCE_CONTNR_CONTENTENUMERATION_HXX
 #define INCLUDED_SVTOOLS_SOURCE_CONTNR_CONTENTENUMERATION_HXX
 
+#include <sal/config.h>
+
+#include <memory>
+
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <salhelper/thread.hxx>
 #include <ucbhelper/content.hxx>

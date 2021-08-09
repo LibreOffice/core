@@ -20,6 +20,10 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_DOCVW_SHADOWOVERLAYOBJECT_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_DOCVW_SHADOWOVERLAYOBJECT_HXX
 
+#include <sal/config.h>
+
+#include <memory>
+
 #include <svx/sdr/overlay/overlayobject.hxx>
 
 #include <memory>

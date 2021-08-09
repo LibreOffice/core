@@ -22,6 +22,8 @@
 
 #include <sal/config.h>
 
+#include <memory>
+
 #include <com/sun/star/embed/XOLESimpleStorage.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase.hxx>

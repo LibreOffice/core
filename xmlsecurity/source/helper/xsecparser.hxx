@@ -28,6 +28,7 @@
 #include <xmloff/nmspmap.hxx>
 
 #include <memory>
+#include <optional>
 #include <stack>
 
 class XMLSignatureHelper;
