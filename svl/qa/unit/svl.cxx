@@ -1310,6 +1310,20 @@ void Test::testIsNumberFormatSpecific()
     }
 
     {
+        // tdf#143664
+        SvNumberFormatter aFormatter(m_xContext, LANGUAGE_GERMAN);
+
+        const sal_uInt32 n = aFormatter.GetFormatIndex( NF_DATE_SYS_DDMMYYYY, LANGUAGE_GERMAN);
+        std::vector<FormatInputOutput> aIO = {
+            { "23. M\u00C4R 1999", true, "23.03.1999", n },
+            { "23. M\u00C4RZ 1999", true, "23.03.1999", n },
+            { "23. MRZ 1999", true, "23.03.1999", n },
+        };
+
+        checkSpecificNumberFormats( aFormatter, aIO, "[de-DE] date March month names");
+    }
+
+    {
         // Test that de-AT accepts Januar and Jänner.
         SvNumberFormatter aFormatter(m_xContext, LANGUAGE_GERMAN_AUSTRIAN);
 
