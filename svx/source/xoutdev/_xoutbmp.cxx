@@ -132,12 +132,13 @@ ErrCode XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileName,
 
     if (rVectorGraphicDataPtr && rVectorGraphicDataPtr->getBinaryDataContainer().getSize())
     {
+        // Does the filter name match the original format?
         const bool bIsSvg(rFilterName.equalsIgnoreAsciiCase("svg") && VectorGraphicDataType::Svg == rVectorGraphicDataPtr->getType());
         const bool bIsWmf(rFilterName.equalsIgnoreAsciiCase("wmf") && VectorGraphicDataType::Wmf == rVectorGraphicDataPtr->getType());
         bool bIsEmf(rFilterName.equalsIgnoreAsciiCase("emf") && VectorGraphicDataType::Emf == rVectorGraphicDataPtr->getType());
         if (!bIsEmf)
         {
-            bIsEmf = rGraphic.GetGfxLink().IsEMF();
+            bIsEmf = rFilterName.equalsIgnoreAsciiCase("emf") && rGraphic.GetGfxLink().IsEMF();
         }
         const bool bIsPdf(rFilterName.equalsIgnoreAsciiCase("pdf") && VectorGraphicDataType::Pdf == rVectorGraphicDataPtr->getType());
 
