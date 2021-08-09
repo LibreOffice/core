@@ -2550,11 +2550,11 @@ SwFrameFormat::~SwFrameFormat()
         }
     }
 
-    if( nullptr != m_pOtherTextBoxFormat )
-    {
-        m_pOtherTextBoxFormat->SetOtherTextBoxFormat( nullptr );
-        m_pOtherTextBoxFormat = nullptr;
-    }
+    //if( nullptr != m_pOtherTextBoxFormat )
+    //{
+    //    m_pOtherTextBoxFormat->SetOtherTextBoxFormat( nullptr );
+    //    m_pOtherTextBoxFormat = nullptr;
+    //}
 }
 
 void SwFrameFormat::SetName( const OUString& rNewName, bool bBroadcast )
@@ -2580,44 +2580,44 @@ void SwFrameFormat::SetName( const OUString& rNewName, bool bBroadcast )
         SwFormat::SetName( rNewName, bBroadcast );
 }
 
-void SwFrameFormat::SetOtherTextBoxFormat( SwFrameFormat *pFormat )
-{
-    if( nullptr != pFormat )
-    {
-        assert( (Which() == RES_DRAWFRMFMT && pFormat->Which() == RES_FLYFRMFMT)
-             || (Which() == RES_FLYFRMFMT && pFormat->Which() == RES_DRAWFRMFMT) );
-        assert( nullptr == m_pOtherTextBoxFormat );
-    }
-    else
-    {
-        assert( nullptr != m_pOtherTextBoxFormat );
-    }
-    bool bChanged = m_pOtherTextBoxFormat != pFormat;
-    m_pOtherTextBoxFormat = pFormat;
-
-    SdrObject* pObj = FindSdrObject();
-
-    if (pObj)
-    {
-        SwFlyDrawObj* pSwFlyDraw = dynamic_cast<SwFlyDrawObj*>(pObj);
-
-        if (pSwFlyDraw)
-            pSwFlyDraw->SetTextBox(true);
-    }
-
-    if (m_pOtherTextBoxFormat && bChanged && Which() == RES_DRAWFRMFMT)
-    {
-        // This is a shape of a shape+frame pair and my frame has changed. Make sure my content is
-        // in sync with the frame's content.
-        if (GetAttrSet().GetContent() != m_pOtherTextBoxFormat->GetAttrSet().GetContent())
-        {
-            SwAttrSet aSet(GetAttrSet());
-            SwFormatContent aContent(m_pOtherTextBoxFormat->GetAttrSet().GetContent());
-            aSet.Put(aContent);
-            SetFormatAttr(aSet);
-        }
-    }
-}
+//void SwFrameFormat::SetOtherTextBoxFormat( SwFrameFormat *pFormat )
+//{
+//    if( nullptr != pFormat )
+//    {
+//        assert( (Which() == RES_DRAWFRMFMT && pFormat->Which() == RES_FLYFRMFMT)
+//             || (Which() == RES_FLYFRMFMT && pFormat->Which() == RES_DRAWFRMFMT) );
+//        assert( nullptr == m_pOtherTextBoxFormat );
+//    }
+//    else
+//    {
+//        assert( nullptr != m_pOtherTextBoxFormat );
+//    }
+//    bool bChanged = m_pOtherTextBoxFormat != pFormat;
+//    m_pOtherTextBoxFormat = pFormat;
+//
+//    SdrObject* pObj = FindSdrObject();
+//
+//    if (pObj)
+//    {
+//        SwFlyDrawObj* pSwFlyDraw = dynamic_cast<SwFlyDrawObj*>(pObj);
+//
+//        if (pSwFlyDraw)
+//            pSwFlyDraw->SetTextBox(true);
+//    }
+//
+//    if (m_pOtherTextBoxFormat && bChanged && Which() == RES_DRAWFRMFMT)
+//    {
+//        // This is a shape of a shape+frame pair and my frame has changed. Make sure my content is
+//        // in sync with the frame's content.
+//        if (GetAttrSet().GetContent() != m_pOtherTextBoxFormat->GetAttrSet().GetContent())
+//        {
+//            SwAttrSet aSet(GetAttrSet());
+//            SwFormatContent aContent(m_pOtherTextBoxFormat->GetAttrSet().GetContent());
+//            aSet.Put(aContent);
+//            SetFormatAttr(aSet);
+//        }
+//    }
+//}
 
 bool SwFrameFormat::supportsFullDrawingLayerFillAttributeSet() const
 {
@@ -2935,13 +2935,14 @@ void SwFrameFormats::dumpAsXml(xmlTextWriterPtr pWriter, const char* pName) cons
 
 
 SwFlyFrameFormat::SwFlyFrameFormat( SwAttrPool& rPool, const OUString &rFormatNm, SwFrameFormat *pDrvdFrame )
-    : SwFrameFormat( rPool, rFormatNm, pDrvdFrame, RES_FLYFRMFMT )
+    : SwFrameFormat( rPool, rFormatNm, pDrvdFrame, RES_FLYFRMFMT ), m_pOwnerShape(nullptr, nullptr)
 {}
 
 SwFlyFrameFormat::~SwFlyFrameFormat()
 {
     SwIterator<SwFlyFrame,SwFormat> aIter( *this );
     SwFlyFrame * pLast = aIter.First();
+
     if( pLast )
         do
         {
@@ -3477,6 +3478,10 @@ namespace sw
 SwDrawFrameFormat::~SwDrawFrameFormat()
 {
     CallSwClientNotify(sw::DrawFrameFormatHint(sw::DrawFrameFormatHintId::DYING));
+    if (m_pTextBoxFormatTable.size())
+    {
+        //Call textboxhelper!
+    }
 }
 
 void SwDrawFrameFormat::MakeFrames()
@@ -3635,6 +3640,30 @@ void SwFrameFormat::MoveTableBox(SwTableBox& rTableBox, const SwFrameFormat* pOl
         SwClientNotify(*this, sw::LegacyModifyHint(&rOld, &rNew));
 }
 
+SwFlyFrameFormat* SwDrawFrameFormat::GetOtherTextBoxFormat(const SdrObject* pObj) const
+{
+    for (const auto& pTextBoxEntry : m_pTextBoxFormatTable)
+    {
+        if (pTextBoxEntry.first == pObj)
+            return pTextBoxEntry.second;
+    }
+    return nullptr;
+}
+
+void SwDrawFrameFormat::AddOtherTextBoxFormat(std::pair<SdrObject*, SwFlyFrameFormat*> pNewElement)
+{
+    m_pTextBoxFormatTable.push_back(pNewElement);
+};
+
+void SwDrawFrameFormat::RemoveOtherTextBoxFormat(const SdrObject* pObj)
+{
+    for (auto pTextBoxEntry = m_pTextBoxFormatTable.begin();
+         pTextBoxEntry != m_pTextBoxFormatTable.end(); pTextBoxEntry++)
+    {
+        if (pTextBoxEntry->first == pObj)
+            m_pTextBoxFormatTable.erase(pTextBoxEntry);
+    }
+};
 
 namespace sw {
 

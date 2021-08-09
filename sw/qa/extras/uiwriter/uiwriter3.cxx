@@ -1782,7 +1782,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf130805)
     auto pShape = rFrmFormats.front();
     CPPUNIT_ASSERT(pShape);
 
-    SwTextBoxHelper::create(pShape);
+    SwTextBoxHelper::create(pShape, pShape->FindRealSdrObject());
     auto pTxBxFrm = SwTextBoxHelper::getOtherTextBoxFormat(getShape(1));
     CPPUNIT_ASSERT(pTxBxFrm);
 
@@ -1806,7 +1806,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf107893)
     CPPUNIT_ASSERT(pShape);
 
     //Add a textbox
-    SwTextBoxHelper::create(pShape);
+    SwTextBoxHelper::create(pShape, pShape->FindRealSdrObject());
     SwFrameFormat* pTxBxFrm = SwTextBoxHelper::getOtherTextBoxFormat(getShape(1));
     CPPUNIT_ASSERT(pTxBxFrm);
 
@@ -1814,7 +1814,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf107893)
     dispatchCommand(mxComponent, ".uno:Undo", {});
 
     //Add again
-    SwTextBoxHelper::create(pShape);
+    SwTextBoxHelper::create(pShape, pShape->FindRealSdrObject());
     pTxBxFrm = SwTextBoxHelper::getOtherTextBoxFormat(getShape(1));
 
     //This was nullptr because of unsuccessful re-adding
@@ -1861,7 +1861,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, TestTextBoxCrashAfterLineDel)
     CPPUNIT_ASSERT(pShape);
 
     // Add a textbox
-    SwTextBoxHelper::create(pShape);
+    SwTextBoxHelper::create(pShape, pShape->FindRealSdrObject());
     SwFrameFormat* pTxBxFrm = SwTextBoxHelper::getOtherTextBoxFormat(getShape(1));
     CPPUNIT_ASSERT(pTxBxFrm);
 
@@ -2412,7 +2412,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, AtPageTextBoxCrash)
     CPPUNIT_ASSERT(pShape);
 
     // Add a textbox to the shape
-    SwTextBoxHelper::create(pShape);
+    SwTextBoxHelper::create(pShape, pShape->FindRealSdrObject());
     auto pTxBxFrm = SwTextBoxHelper::getOtherTextBoxFormat(getShape(1));
     CPPUNIT_ASSERT(pTxBxFrm);
 
