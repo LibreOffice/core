@@ -182,16 +182,6 @@ public:
     BitmapChecksum  GetChecksum() const;
     sal_uLong       GetSizeBytes() const;
 
-    // Methods for reading and writing the new formats;
-    // the Read method also reads the old format
-    SvStream&       Read( SvStream& rIStm );
-    SvStream&       Write( SvStream& rOStm );
-
-    // Stream-operators write (still) the old format
-    // and read both the old and the new format
-    friend VCL_DLLPUBLIC SvStream& ReadGDIMetaFile(SvStream& rIStm, GDIMetaFile& rGDIMetaFile, ImplMetaReadData* pReadData);
-    friend VCL_DLLPUBLIC SvStream& WriteGDIMetaFile(SvStream& rOStm, const GDIMetaFile& rGDIMetaFile);
-
     /// Creates an antialiased thumbnail
     bool            CreateThumbnail(BitmapEx& rBitmapEx,
                                     BmpConversion nColorConversion = BmpConversion::N24Bit,
