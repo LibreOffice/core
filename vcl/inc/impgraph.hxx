@@ -25,6 +25,7 @@
 #include <vcl/graph.hxx>
 #include "graphic/Manager.hxx"
 #include "graphic/GraphicID.hxx"
+#include <optional>
 
 struct ImpSwapInfo
 {
@@ -79,7 +80,7 @@ private:
     // cache checksum computation
     mutable BitmapChecksum       mnChecksum = 0;
 
-    std::unique_ptr<GraphicID>   mpGraphicID;
+    std::optional<GraphicID>     mxGraphicID;
     GraphicExternalLink          maGraphicExternalLink;
 
     std::chrono::high_resolution_clock::time_point maLastUsed;
@@ -118,9 +119,9 @@ private:
 
     OString getUniqueID()
     {
-        if (!mpGraphicID)
-            mpGraphicID.reset(new GraphicID(*this));
-        return mpGraphicID->getIDString();
+        if (!mxGraphicID)
+            mxGraphicID.emplace(*this);
+        return mxGraphicID->getIDString();
     }
 
     void createSwapInfo();
