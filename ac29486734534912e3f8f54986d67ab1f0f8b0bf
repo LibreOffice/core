@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c770d31a_1769da66",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 2206,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-08-09T17:12:17Z",
+      "side": 1,
+      "message": "Balázs: there was an exclamation mark here. I\u0027ve removed it to test the intended solution.\n\nBut based on my testing, it seems, we could remove all the code here.\n\nI did that finally.",
+      "range": {
+        "startLine": 2206,
+        "startChar": 24,
+        "endLine": 2206,
+        "endChar": 25
+      },
+      "revId": "ac29486734534912e3f8f54986d67ab1f0f8b0bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
