@@ -1728,8 +1728,9 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
                                     HMM_PER_TWIPS, HMM_PER_TWIPS, aFract, aFract ).GetEditArea( pPattern, false );
             aPaperSize.setWidth( aUtilRect.GetWidth() );
             if (bLOKPrintTwips)
-                aPaperSizePTwips.setWidth(OutputDevice::LogicToLogic(
-                        aUtilRect.GetWidth(), MapUnit::Map100thMM, MapUnit::MapTwip));
+            {
+                aPaperSizePTwips.setWidth(o3tl::convert(aUtilRect.GetWidth(), o3tl::Length::mm100, o3tl::Length::twip));
+            }
         }
 
         pNewEngine->SetPaperSize( aPaperSize );

@@ -1036,7 +1036,9 @@ void Window::LogicInvalidate(const ::tools::Rectangle* pRectangle)
     {
         aRectangle = *pRectangle;
         if (GetMapMode().GetMapUnit() == MapUnit::Map100thMM)
-            aRectangle = OutputDevice::LogicToLogic(aRectangle, MapMode(MapUnit::Map100thMM), MapMode(MapUnit::MapTwip));
+        {
+            aRectangle = o3tl::convert(aRectangle, o3tl::Length::mm100, o3tl::Length::twip);
+        }
         pResultRectangle = &aRectangle;
     }
     SfxViewShell& rSfxViewShell = pDrawViewShell->GetViewShellBase();

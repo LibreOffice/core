@@ -493,9 +493,10 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ModifyBitmapHdl, ValueSet*, void)
         BitmapEx aBmpEx(pGraphicObject->GetGraphic().GetBitmapEx());
         Size aTempBitmapSize = aBmpEx.GetSizePixel();
         const double fUIScale = ( (mpView && mpView->GetModel()) ? double(mpView->GetModel()->GetUIScale()) : 1.0);
+        Size aBitmapSize100mm = o3tl::convert(aTempBitmapSize, o3tl::Length::pt, o3tl::Length::mm100);
 
-        rBitmapSize.setWidth( (OutputDevice::LogicToLogic(static_cast<sal_Int32>(aTempBitmapSize.Width()),MapUnit::MapPixel, MapUnit::Map100thMM )) / fUIScale );
-        rBitmapSize.setHeight( (OutputDevice::LogicToLogic(static_cast<sal_Int32>(aTempBitmapSize.Height()),MapUnit::MapPixel, MapUnit::Map100thMM )) / fUIScale );
+        rBitmapSize.setWidth(aBitmapSize100mm.Width() / fUIScale);
+        rBitmapSize.setHeight(aBitmapSize100mm.Height() / fUIScale);
         CalculateBitmapPresetSize();
         ModifyBitmapStyleHdl( *m_xBitmapStyleLB );
         ModifyBitmapPositionHdl( *m_xPositionLB );

@@ -446,8 +446,8 @@ tools::Long ScColumn::GetNeededSize(
             if ( !bTextWysiwyg )
             {
                 aPaper = bInPrintTwips ?
-                        OutputDevice::LogicToLogic(aPaper, aTwipMode, aHMMMode) :
-                        pDev->PixelToLogic(aPaper, aHMMMode);
+                            o3tl::convert(aPaper, o3tl::Length::twip, o3tl::Length::mm100) :
+                            pDev->PixelToLogic(aPaper, aHMMMode);
             }
         }
         pEngine->SetPaperSize(aPaper);
@@ -528,7 +528,7 @@ tools::Long ScColumn::GetNeededSize(
             {
                 Size aTextSize(pEngine->CalcTextWidth(), 0);
                 nValue = bInPrintTwips ?
-                        OutputDevice::LogicToLogic(aTextSize, aHMMMode, aTwipMode).Width() :
+                        o3tl::convert(aTextSize.Width(), o3tl::Length::mm100, o3tl::Length::twip) :
                         pDev->LogicToPixel(aTextSize, aHMMMode).Width();
             }
         }
@@ -536,7 +536,7 @@ tools::Long ScColumn::GetNeededSize(
         {
             Size aTextSize(0, pEngine->GetTextHeight());
             nValue = bInPrintTwips ?
-                    OutputDevice::LogicToLogic(aTextSize, aHMMMode, aTwipMode).Height() :
+                    o3tl::convert(aTextSize.Height(), o3tl::Length::mm100, o3tl::Length::twip) :
                     pDev->LogicToPixel(aTextSize, aHMMMode).Height();
 
             // With non-100% zoom and several lines or paragraphs, don't shrink below the result with FORMAT100 set
@@ -547,7 +547,7 @@ tools::Long ScColumn::GetNeededSize(
                 pEngine->QuickFormatDoc( true );
                 aTextSize = Size(0, pEngine->GetTextHeight());
                 tools::Long nSecondValue = bInPrintTwips ?
-                        OutputDevice::LogicToLogic(aTextSize, aHMMMode, aTwipMode).Height() :
+                        o3tl::convert(aTextSize.Height(), o3tl::Length::mm100, o3tl::Length::twip) :
                         pDev->LogicToPixel(aTextSize, aHMMMode).Height();
                 if ( nSecondValue > nValue )
                     nValue = nSecondValue;
