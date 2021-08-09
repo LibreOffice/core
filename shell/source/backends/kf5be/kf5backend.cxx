@@ -19,6 +19,8 @@
 
 #include <sal/config.h>
 
+#include <memory>
+
 #include <QtWidgets/QApplication>
 
 #include <boost/noncopyable.hpp>

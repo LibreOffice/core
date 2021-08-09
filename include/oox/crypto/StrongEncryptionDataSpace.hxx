@@ -11,6 +11,10 @@
 #ifndef INCLUDED_OOX_CRYPTO_STRONGENCRYPTINDATASPACE_HXX
 #define INCLUDED_OOX_CRYPTO_STRONGENCRYPTINDATASPACE_HXX
 
+#include <sal/config.h>
+
+#include <memory>
+
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/packages/XPackageEncryption.hpp>
