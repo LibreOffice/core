@@ -14,6 +14,7 @@
 // expected-no-diagnostics
 #else
 
+#include <memory>
 #include <vector>
 #include <ostream>
 #include <com/sun/star/uno/Any.hxx>

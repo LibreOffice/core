@@ -19,6 +19,10 @@
 
 #pragma once
 
+#include <sal/config.h>
+
+#include <memory>
+
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>

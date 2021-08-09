@@ -11,6 +11,10 @@
 #ifndef INCLUDED_VCL_FILTER_PNGIMAGEREADER_HXX
 #define INCLUDED_VCL_FILTER_PNGIMAGEREADER_HXX
 
+#include <sal/config.h>
+
+#include <memory>
+
 #include <vcl/dllapi.h>
 
 #include <com/sun/star/uno/Reference.hxx>

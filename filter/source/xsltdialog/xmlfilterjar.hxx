@@ -22,6 +22,7 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
+#include <memory>
 #include <vector>
 
 class filter_info_impl;
