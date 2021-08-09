@@ -1079,27 +1079,24 @@ void BaseContent::endTask( sal_Int32 CommandId )
 }
 
 
-std::unique_ptr<ContentEventNotifier>
+std::optional<ContentEventNotifier>
 BaseContent::cDEL()
 {
     osl::MutexGuard aGuard( m_aMutex );
 
     m_nState |= Deleted;
 
-    std::unique_ptr<ContentEventNotifier> p;
-    if( m_pContentEventListeners )
-    {
-        p.reset( new ContentEventNotifier( m_pMyShell,
-                                      this,
-                                      m_xContentIdentifier,
-                                      m_pContentEventListeners->getElements() ) );
-    }
+    if( !m_pContentEventListeners )
+        return {};
 
-    return p;
+    return ContentEventNotifier( m_pMyShell,
+                                  this,
+                                  m_xContentIdentifier,
+                                  m_pContentEventListeners->getElements() );
 }
 
 
-std::unique_ptr<ContentEventNotifier>
+std::optional<ContentEventNotifier>
 BaseContent::cEXC( const OUString& aNewName )
 {
     osl::MutexGuard aGuard( m_aMutex );
@@ -1108,72 +1105,60 @@ BaseContent::cEXC( const OUString& aNewName )
     m_aUncPath = aNewName;
     m_xContentIdentifier = new FileContentIdentifier( aNewName );
 
-    std::unique_ptr<ContentEventNotifier> p;
-    if( m_pContentEventListeners )
-        p.reset( new ContentEventNotifier( m_pMyShell,
-                                      this,
-                                      m_xContentIdentifier,
-                                      xOldRef,
-                                      m_pContentEventListeners->getElements() ) );
-
-    return p;
+    if( !m_pContentEventListeners )
+        return {};
+    return ContentEventNotifier( m_pMyShell,
+                                  this,
+                                  m_xContentIdentifier,
+                                  xOldRef,
+                                  m_pContentEventListeners->getElements() );
 }
 
 
-std::unique_ptr<ContentEventNotifier>
+std::optional<ContentEventNotifier>
 BaseContent::cCEL()
 {
     osl::MutexGuard aGuard( m_aMutex );
-    std::unique_ptr<ContentEventNotifier> p;
-    if( m_pContentEventListeners )
-        p.reset( new ContentEventNotifier( m_pMyShell,
+    if( !m_pContentEventListeners )
+        return {};
+    return ContentEventNotifier( m_pMyShell,
                                       this,
                                       m_xContentIdentifier,
-                                      m_pContentEventListeners->getElements() ) );
-
-    return p;
+                                      m_pContentEventListeners->getElements() );
 }
 
-std::unique_ptr<PropertySetInfoChangeNotifier>
+std::optional<PropertySetInfoChangeNotifier>
 BaseContent::cPSL()
 {
     osl::MutexGuard aGuard( m_aMutex );
-    std::unique_ptr<PropertySetInfoChangeNotifier> p;
-    if( m_pPropertySetInfoChangeListeners  )
-        p.reset( new PropertySetInfoChangeNotifier( this,
-                                               m_pPropertySetInfoChangeListeners->getElements() ) );
-
-    return p;
+    if( !m_pPropertySetInfoChangeListeners  )
+        return {};
+    return PropertySetInfoChangeNotifier( this, m_pPropertySetInfoChangeListeners->getElements() );
 }
 
 
-std::unique_ptr<PropertyChangeNotifier>
+std::optional<PropertyChangeNotifier>
 BaseContent::cPCL()
 {
     osl::MutexGuard aGuard( m_aMutex );
 
     if (!m_pPropertyListener)
-        return nullptr;
+        return {};
 
     const std::vector< OUString > seqNames = m_pPropertyListener->getContainedTypes();
+    if( seqNames.empty() )
+        return {};
 
-    std::unique_ptr<PropertyChangeNotifier> p;
-
-    if( !seqNames.empty() )
+    ListenerMap listener;
+    for( const auto& rName : seqNames )
     {
-        ListenerMap listener;
-        for( const auto& rName : seqNames )
-        {
-            comphelper::OInterfaceContainerHelper2* pContainer = m_pPropertyListener->getContainer(rName);
-            if (!pContainer)
-                continue;
-            listener[rName] = pContainer->getElements();
-        }
-
-        p.reset( new PropertyChangeNotifier( this, std::move(listener) ) );
+        comphelper::OInterfaceContainerHelper2* pContainer = m_pPropertyListener->getContainer(rName);
+        if (!pContainer)
+            continue;
+        listener[rName] = pContainer->getElements();
     }
 
-    return p;
+    return PropertyChangeNotifier( this, std::move(listener) );
 }
 
 

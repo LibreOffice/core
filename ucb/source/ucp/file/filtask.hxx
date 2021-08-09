@@ -490,21 +490,21 @@ namespace fileaccess
         /*                              get eventListeners                              */
         /********************************************************************************/
 
-        std::vector< std::unique_ptr< ContentEventNotifier > >
+        std::vector< ContentEventNotifier >
         getContentEventListeners( const OUString& aName );
 
-        std::vector< std::unique_ptr< ContentEventNotifier > >
+        std::vector< ContentEventNotifier >
         getContentDeletedEventListeners( const OUString& aName );
 
-        std::vector< std::unique_ptr < ContentEventNotifier > >
+        std::vector< ContentEventNotifier >
         getContentExchangedEventListeners( const OUString& aOldPrefix,
                                            const OUString& aNewPrefix,
                                            bool withChildren );
 
-        std::vector< std::unique_ptr< PropertyChangeNotifier > >
+        std::vector< PropertyChangeNotifier >
         getPropertyChangeNotifier( const OUString& aName );
 
-        std::vector< std::unique_ptr< PropertySetInfoChangeNotifier > >
+        std::vector< PropertySetInfoChangeNotifier >
         getPropertySetListeners( const OUString& aName );
 
 
@@ -513,29 +513,29 @@ namespace fileaccess
         /********************************************************************************/
 
         static void notifyPropertyChanges(
-            const std::vector<std::unique_ptr<PropertyChangeNotifier>>& listeners,
+            const std::vector<PropertyChangeNotifier>& listeners,
             const css::uno::Sequence<css::beans::PropertyChangeEvent>& seqChanged);
 
         static void notifyContentExchanged(
-            const std::vector<std::unique_ptr<ContentEventNotifier>>& listeners_vec);
+            const std::vector<ContentEventNotifier>& listeners_vec);
 
         static void
-        notifyInsert(const std::vector<std::unique_ptr<ContentEventNotifier>>& listeners,
+        notifyInsert(const std::vector<ContentEventNotifier>& listeners,
                      const OUString& aChildName);
 
         static void
-        notifyContentDeleted(const std::vector<std::unique_ptr<ContentEventNotifier>>& listeners);
+        notifyContentDeleted(const std::vector<ContentEventNotifier>& listeners);
 
         static void
-        notifyContentRemoved(const std::vector<std::unique_ptr<ContentEventNotifier>>& listeners,
+        notifyContentRemoved(const std::vector<ContentEventNotifier>& listeners,
                              const OUString& aChildName);
 
         static void notifyPropertyAdded(
-            const std::vector<std::unique_ptr<PropertySetInfoChangeNotifier>>& listeners,
+            const std::vector<PropertySetInfoChangeNotifier>& listeners,
             const OUString& aPropertyName);
 
         static void notifyPropertyRemoved(
-            const std::vector<std::unique_ptr<PropertySetInfoChangeNotifier>>& listeners,
+            const std::vector<PropertySetInfoChangeNotifier>& listeners,
             const OUString& aPropertyName);
 
         /********************************************************************************/

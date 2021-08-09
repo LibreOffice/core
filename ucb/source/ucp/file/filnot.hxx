@@ -24,6 +24,7 @@
 #include <com/sun/star/ucb/XContentIdentifier.hpp>
 #include <com/sun/star/ucb/XContent.hpp>
 #include <memory>
+#include <optional>
 #include <unordered_map>
 #include <vector>
 
@@ -54,10 +55,10 @@ namespace fileaccess {
             const css::uno::Reference< css::ucb::XContentIdentifier >& xOldId,
             const std::vector< css::uno::Reference< css::uno::XInterface > >& sListeners );
 
-        void notifyChildInserted( const OUString& aChildName );
-        void notifyDeleted();
-        void notifyRemoved( const OUString& aChildName );
-        void notifyExchanged( );
+        void notifyChildInserted( const OUString& aChildName ) const;
+        void notifyDeleted() const;
+        void notifyRemoved( const OUString& aChildName ) const;
+        void notifyExchanged() const;
     };
 
 
@@ -71,8 +72,8 @@ namespace fileaccess {
             const css::uno::Reference< css::ucb::XContent >& xCreatorContent,
             const std::vector< css::uno::Reference< css::uno::XInterface > >& sListeners );
 
-        void notifyPropertyAdded( const OUString & aPropertyName );
-        void notifyPropertyRemoved( const OUString & aPropertyName );
+        void notifyPropertyAdded( const OUString & aPropertyName ) const;
+        void notifyPropertyRemoved( const OUString & aPropertyName ) const;
     };
 
 
@@ -89,10 +90,8 @@ namespace fileaccess {
             const css::uno::Reference< css::ucb::XContent >& xCreatorContent,
             ListenerMap&& pListeners );
 
-        ~PropertyChangeNotifier();
-
         void notifyPropertyChanged(
-            const css::uno::Sequence< css::beans::PropertyChangeEvent >& seqChanged );
+            const css::uno::Sequence< css::beans::PropertyChangeEvent >& seqChanged ) const;
     };
 
 
@@ -100,12 +99,12 @@ namespace fileaccess {
     {
     public:
         // Side effect of this function is the change of the name
-        virtual std::unique_ptr<ContentEventNotifier> cEXC( const OUString& aNewName ) = 0;
+        virtual std::optional<ContentEventNotifier> cEXC( const OUString& aNewName ) = 0;
         // Side effect is the change of the state of the object to "deleted".
-        virtual std::unique_ptr<ContentEventNotifier> cDEL() = 0;
-        virtual std::unique_ptr<ContentEventNotifier> cCEL() = 0;
-        virtual std::unique_ptr<PropertySetInfoChangeNotifier> cPSL() = 0;
-        virtual std::unique_ptr<PropertyChangeNotifier> cPCL() = 0;
+        virtual std::optional<ContentEventNotifier> cDEL() = 0;
+        virtual std::optional<ContentEventNotifier> cCEL() = 0;
+        virtual std::optional<PropertySetInfoChangeNotifier> cPSL() = 0;
+        virtual std::optional<PropertyChangeNotifier> cPCL() = 0;
 
     protected:
         ~Notifier() {}

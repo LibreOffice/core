@@ -184,11 +184,11 @@ namespace fileaccess {
 
         // Notifier
 
-        std::unique_ptr<ContentEventNotifier> cDEL() override;
-        std::unique_ptr<ContentEventNotifier> cEXC( const OUString& aNewName ) override;
-        std::unique_ptr<ContentEventNotifier> cCEL() override;
-        std::unique_ptr<PropertySetInfoChangeNotifier> cPSL() override;
-        std::unique_ptr<PropertyChangeNotifier> cPCL() override;
+        std::optional<ContentEventNotifier> cDEL() override;
+        std::optional<ContentEventNotifier> cEXC( const OUString& aNewName ) override;
+        std::optional<ContentEventNotifier> cCEL() override;
+        std::optional<PropertySetInfoChangeNotifier> cPSL() override;
+        std::optional<PropertyChangeNotifier> cPCL() override;
 
     private:
         // Data members
