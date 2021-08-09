@@ -374,8 +374,8 @@ void EditRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
             auto const& pS = it->second;
             mpEditEngine->SetStyleSheet(
                 EditSelection(aStartPaM, aEndPaM),
-                static_cast<SfxStyleSheet*>(mpEditEngine->GetStyleSheetPool()->Find(pS->sName, SfxStyleFamily::All)));
-            nOutlLevel = pS->nOutlineNo;
+                static_cast<SfxStyleSheet*>(mpEditEngine->GetStyleSheetPool()->Find(pS.sName, SfxStyleFamily::All)));
+            nOutlLevel = pS.nOutlineNo;
         }
     }
 
@@ -436,10 +436,10 @@ void EditRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
 SvxRTFStyleType* EditRTFParser::FindStyleSheet( std::u16string_view rName )
 {
     SvxRTFStyleTbl& rTable = GetStyleTbl();
-    for (auto const& iter : rTable)
+    for (auto & iter : rTable)
     {
-        if (iter.second->sName == rName)
-            return iter.second.get();
+        if (iter.second.sName == rName)
+            return &iter.second;
     }
     return nullptr;
 }
@@ -458,9 +458,9 @@ SfxStyleSheet* EditRTFParser::CreateStyleSheet( SvxRTFStyleType const * pRTFStyl
         SvxRTFStyleTbl::iterator it = GetStyleTbl().find( pRTFStyle->nBasedOn );
         if ( it != GetStyleTbl().end())
         {
-            SvxRTFStyleType *const pS = it->second.get();
-            if ( pS && ( pS !=pRTFStyle ) )
-                aParent = pS->sName;
+            SvxRTFStyleType const& rS = it->second;
+            if ( &rS != pRTFStyle )
+                aParent = rS.sName;
         }
     }
 
@@ -492,10 +492,10 @@ void EditRTFParser::CreateStyleSheets()
     // the SvxRTFParser has now created the template...
     if (mpEditEngine->GetStyleSheetPool() && mpEditEngine->IsImportRTFStyleSheetsSet())
     {
-        for (auto const& elem : GetStyleTbl())
+        for (auto & elem : GetStyleTbl())
         {
-            SvxRTFStyleType* pRTFStyle = elem.second.get();
-            CreateStyleSheet( pRTFStyle );
+            SvxRTFStyleType& rRTFStyle = elem.second;
+            CreateStyleSheet( &rRTFStyle );
         }
     }
 }
