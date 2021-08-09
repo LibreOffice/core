@@ -8,6 +8,9 @@
  */
 
 #include "../sdmodeltestbase.hxx"
+
+#include <com/sun/star/datatransfer/clipboard/SystemClipboard.hpp>
+
 #include <app.hrc>
 #include <test/bootstrapfixture.hxx>
 #include <test/helper/transferable.hxx>
@@ -53,6 +56,7 @@
 #include <vcl/cursor.hxx>
 #include <vcl/scheduler.hxx>
 #include <vcl/vclevent.hxx>
+#include <vcl/unohelp2.hxx>
 
 #include <chrono>
 #include <cstdlib>
@@ -133,6 +137,7 @@ public:
     void testSlideDuplicateUndo();
     void testMoveShapeHandle();
     void testDeleteTable();
+    void testPasteUndo();
 
     CPPUNIT_TEST_SUITE(SdTiledRenderingTest);
     CPPUNIT_TEST(testCreateDestroy);
@@ -190,6 +195,7 @@ public:
     CPPUNIT_TEST(testSlideDuplicateUndo);
     CPPUNIT_TEST(testMoveShapeHandle);
     CPPUNIT_TEST(testDeleteTable);
+    CPPUNIT_TEST(testPasteUndo);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2679,6 +2685,41 @@ void SdTiledRenderingTest::testMoveShapeHandle()
     }
 
 }
+
+void SdTiledRenderingTest::testPasteUndo()
+{
+    // Given a document with a textbox, containing "world":
+    SdXImpressDocument* pXImpressDocument = createDoc("paste-undo.fodp");
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdPage* pActualPage = pViewShell->GetActualPage();
+    SdrObject* pObject = pActualPage->GetObj(0);
+    SdrView* pView = pViewShell->GetView();
+    pView->MarkObj(pObject, pView->GetSdrPageView());
+    pView->SdrBeginTextEdit(pObject);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_HOME);
+    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_HOME);
+    EditView& rEditView = pView->GetTextEditOutlinerView()->GetEditView();
+    ESelection aWordSelection(0, 0, 0, 1); // "w" of "world"
+    rEditView.SetSelection(aWordSelection);
+    comphelper::dispatchCommand(".uno:Cut", {});
+    Scheduler::ProcessEventsToIdle();
+
+    // When undoing a paste:
+    comphelper::dispatchCommand(".uno:Paste", {});
+    Scheduler::ProcessEventsToIdle();
+    comphelper::dispatchCommand(".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+
+    // Then make sure the cursor position is still at the beginning:
+    ESelection aSelection = rEditView.GetSelection();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 0
+    // - Actual  : 4
+    // i.e. the cursor position after undo was at the end of the line, not at the start, as
+    // expected.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), aSelection.nStartPos);
+}
+
 CPPUNIT_TEST_SUITE_REGISTRATION(SdTiledRenderingTest);
 
 CPPUNIT_PLUGIN_IMPLEMENT();

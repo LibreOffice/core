@@ -501,6 +501,7 @@ EditUndoSetAttribs::EditUndoSetAttribs(EditEngine* pEE, const ESelection& rESel,
     aESel(rESel),
     aNewAttribs(rNewItems),
     nSpecial(SetAttribsMode::NONE),
+    m_bSetSelection(true),
     // When EditUndoSetAttribs actually is a RemoveAttribs this could be
     // recognize by the empty itemset, but then it would have to be caught in
     // its own place, which possible a setAttribs does with an empty itemset.
@@ -560,7 +561,10 @@ void EditUndoSetAttribs::Undo()
     }
     if ( bFields )
         pEE->UpdateFieldsOnly();
-    ImpSetSelection();
+    if (m_bSetSelection)
+    {
+        ImpSetSelection();
+    }
 }
 
 void EditUndoSetAttribs::Redo()
@@ -574,7 +578,10 @@ void EditUndoSetAttribs::Redo()
     else
         pEE->RemoveCharAttribs( aSel, bRemoveParaAttribs, nRemoveWhich );
 
-    ImpSetSelection();
+    if (m_bSetSelection)
+    {
+        ImpSetSelection();
+    }
 }
 
 void EditUndoSetAttribs::AppendContentInfo(ContentAttribsInfo* pNew)
