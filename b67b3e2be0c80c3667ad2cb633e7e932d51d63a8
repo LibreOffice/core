@@ -16,6 +16,24 @@
       "revId": "b67b3e2be0c80c3667ad2cb633e7e932d51d63a8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e45c41e7_664fd614",
+        "filename": "sw/qa/core/fields/fields.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1000880
+      },
+      "writtenOn": "2021-08-09T18:56:11Z",
+      "side": 1,
+      "message": "Hi Xisco!\nUp to you: this issue found and fixed by me, I have no idea how important it is, so I fixed it only in master.\nI see no probs in backporting that.",
+      "parentUuid": "7ac0ae83_7bcd0d25",
+      "revId": "b67b3e2be0c80c3667ad2cb633e7e932d51d63a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
