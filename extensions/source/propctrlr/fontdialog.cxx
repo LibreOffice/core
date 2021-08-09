@@ -218,7 +218,8 @@ namespace pcr
             // build SfxItems with the values
             SvxFontItem aFontItem(static_cast<FontFamily>(nFontFamily), aFontName, aFontStyleName, PITCH_DONTKNOW, nFontCharset, CFID_FONT);
 
-            nFontHeight = static_cast<float>(OutputDevice::LogicToLogic(Size(0, static_cast<sal_Int32>(nFontHeight)), MapMode(MapUnit::MapPoint), MapMode(MapUnit::MapTwip)).Height());
+            nFontHeight = static_cast<float>(o3tl::convert(nFontHeight, o3tl::Length::pt, o3tl::Length::twip));
+
             SvxFontHeightItem aSvxFontHeightItem(static_cast<sal_uInt32>(nFontHeight),100,CFID_HEIGHT);
 
             FontWeight      eWeight=vcl::unohelper::ConvertFontWeight(nFontWeight);
@@ -319,7 +320,7 @@ namespace pcr
                 const SvxFontHeightItem& rSvxFontHeightItem =
                     static_cast<const SvxFontHeightItem&>(_rSet.Get(CFID_HEIGHT));
 
-                float nHeight = static_cast<float>(OutputDevice::LogicToLogic(Size(0, rSvxFontHeightItem.GetHeight()), MapMode(MapUnit::MapTwip), MapMode(MapUnit::MapPoint)).Height());
+                float nHeight = static_cast<float>(o3tl::convert(rSvxFontHeightItem.GetHeight(), o3tl::Length::twip, o3tl::Length::pt));
                 lcl_pushBackPropertyValue( _out_properties, PROPERTY_FONT_HEIGHT,makeAny(nHeight));
 
             }

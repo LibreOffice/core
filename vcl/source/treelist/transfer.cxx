@@ -1643,7 +1643,7 @@ bool TransferableDataHelper::GetBitmapEx( const DataFlavor& rFlavor, BitmapEx& r
                     rBmpEx.SetPrefMapMode(MapMode(MapUnit::MapPixel));
 
                     // #i122388# also adapt size by applying the mew MapMode
-                    const Size aNewSize(OutputDevice::LogicToLogic(aSize, MapMode(MapUnit::Map100thMM), MapMode(MapUnit::MapPixel)));
+                    const Size aNewSize(o3tl::convert(aSize, o3tl::Length::mm100, o3tl::Length::pt));
                     rBmpEx.SetPrefSize(aNewSize);
                 }
             }

@@ -70,7 +70,7 @@ namespace sdr::overlay
                         {
                             aSizeLogic = Size(DEFAULT_VALUE_FOR_HITTEST_TWIP, DEFAULT_VALUE_FOR_HITTEST_TWIP);
                             if (pManager->getOutputDevice().GetMapMode().GetMapUnit() == MapUnit::Map100thMM)
-                                aSizeLogic = OutputDevice::LogicToLogic(aSizeLogic, MapMode(MapUnit::MapTwip), MapMode(MapUnit::Map100thMM));
+                                aSizeLogic = o3tl::convert(aSizeLogic, o3tl::Length::twip, o3tl::Length::mm100);
                         }
 
                         fLogicTolerance = aSizeLogic.Width();

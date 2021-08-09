@@ -674,8 +674,8 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
                             {
                                 const SdrGrafCropItem& rNewCrop = pOutAttr->Get( SDRATTR_GRAFCROP );
 
-                                aLTSize = OutputDevice::LogicToLogic( Size( rNewCrop.GetLeft(), rNewCrop.GetTop() ), aMapTwip, aMap100 );
-                                aRBSize = OutputDevice::LogicToLogic( Size( rNewCrop.GetRight(), rNewCrop.GetBottom() ), aMapTwip, aMap100 );
+                                aLTSize = o3tl::convert(Size(rNewCrop.GetLeft(), rNewCrop.GetTop()), o3tl::Length::twip, o3tl::Length::mm100);
+                                aRBSize = o3tl::convert(Size(rNewCrop.GetRight(), rNewCrop.GetBottom()), o3tl::Length::twip, o3tl::Length::mm100);
                                 aSet.Put( SdrGrafCropItem( aLTSize.Width(), aLTSize.Height(), aRBSize.Width(), aRBSize.Height() ) );
                             }
 
@@ -684,7 +684,7 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
                             {
                                 Point       aNewOrigin( pObj->GetLogicRect().TopLeft() );
                                 const Size& rGrfSize = static_cast<const SvxSizeItem&>( pOutAttr->Get( SID_ATTR_GRAF_FRMSIZE ) ).GetSize();
-                                Size        aNewGrfSize( OutputDevice::LogicToLogic( rGrfSize, aMapTwip, aMap100 ) );
+                                Size aNewGrfSize = o3tl::convert(rGrfSize, o3tl::Length::twip, o3tl::Length::mm100);
                                 Size        aOldGrfSize( pObj->GetLogicRect().GetSize() );
 
                                 tools::Rectangle aNewRect( aNewOrigin, aNewGrfSize );
