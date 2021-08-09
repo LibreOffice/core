@@ -99,8 +99,8 @@ protected:
 
     virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
 
-    SwFrameFormat* GetOtherTextBoxFormat() const { return m_pOtherTextBoxFormat; }
-    void SetOtherTextBoxFormat( SwFrameFormat *pFormat );
+    //SwFrameFormat* GetOtherTextBoxFormat() const { return m_pOtherTextBoxFormat; }
+    //void SetOtherTextBoxFormat( SwFrameFormat *pFormat );
 
 public:
     virtual ~SwFrameFormat() override;
@@ -197,6 +197,8 @@ class SW_DLLPUBLIC SwFlyFrameFormat final : public SwFrameFormat
     Point   m_aLastFlyFramePrtRectPos;
     std::unique_ptr<SwFlyDrawContact> m_pContact;
 
+    std::pair<SdrObject*, SwDrawFrameFormat*> m_pOwnerShape;
+
     SwFlyFrameFormat( const SwFlyFrameFormat &rCpy ) = delete;
     SwFlyFrameFormat &operator=( const SwFlyFrameFormat &rCpy ) = delete;
 
@@ -247,6 +249,10 @@ public:
     void SetLastFlyFramePrtRectPos( const Point &rPoint ) { m_aLastFlyFramePrtRectPos = rPoint; }
 
     SwFlyDrawContact* GetOrCreateContact();
+
+    // For TextBox handling
+    const std::pair<SdrObject*, SwDrawFrameFormat*> GetOwnerShape() const { return m_pOwnerShape; };
+    void SetOwnerShape(std::pair<SdrObject*, SwDrawFrameFormat*> pNew) { m_pOwnerShape = pNew; };
 };
 
 //The DrawFrame-Format
@@ -365,6 +371,8 @@ class SW_DLLPUBLIC SwDrawFrameFormat final : public SwFrameFormat
 
     bool mbPosAttrSet;
 
+    std::vector<std::pair<SdrObject*, SwFlyFrameFormat*>> m_pTextBoxFormatTable;
+
     SwDrawFrameFormat( SwAttrPool& rPool, const OUString &rFormatNm,
                     SwFrameFormat *pDrvdFrame )
         : SwFrameFormat( rPool, rFormatNm, pDrvdFrame, RES_DRAWFRMFMT ),
@@ -374,7 +382,9 @@ class SW_DLLPUBLIC SwDrawFrameFormat final : public SwFrameFormat
           mnPositionLayoutDir( css::text::PositionLayoutDir::PositionInLayoutDirOfAnchor ),
 
           mbPosAttrSet( false )
-    {}
+    {
+        m_pTextBoxFormatTable.clear();
+    }
 
 public:
     virtual ~SwDrawFrameFormat() override;
@@ -397,6 +407,12 @@ public:
 
     bool IsPosAttrSet() const { return mbPosAttrSet; }
     void PosAttrSet() { mbPosAttrSet = true; }
+
+    // TextBox handling
+    SwFlyFrameFormat* GetOtherTextBoxFormat(const SdrObject* pObj) const;
+    void AddOtherTextBoxFormat(const std::pair<SdrObject*, SwFlyFrameFormat*> pNewElement);
+    void RemoveOtherTextBoxFormat(const SdrObject* pObj);
+    size_t GetOtherTextBoxCount() { return m_pTextBoxFormatTable.size(); };
 
     virtual OUString GetDescription() const override;
 };

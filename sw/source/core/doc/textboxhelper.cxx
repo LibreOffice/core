@@ -33,6 +33,7 @@
 #include <editeng/memberids.h>
 #include <svx/svdoashp.hxx>
 #include <svx/svdpage.hxx>
+#include <svx/svdogrp.hxx>
 #include <svl/itemiter.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <sal/log.hxx>
@@ -57,10 +58,17 @@
 
 using namespace com::sun::star;
 
-void SwTextBoxHelper::create(SwFrameFormat* pShape, bool bCopyText)
+void SwTextBoxHelper::create(SwFrameFormat* pShape, SdrObject* pObj, bool bCopyText)
 {
+    assert(pShape && pObj);
+    assert(dynamic_cast<SwDrawFrameFormat*>(pShape));
+
     // If TextBox wasn't enabled previously
-    if (pShape->GetAttrSet().HasItem(RES_CNTNT) && pShape->GetOtherTextBoxFormat())
+    if (dynamic_cast<SwDrawFrameFormat*>(pShape)->GetOtherTextBoxFormat(pObj))
+        return;
+
+    if (dynamic_cast<SdrObjGroup*>(pObj->getParentSdrObjectFromSdrObject()))
+        // Implement groupshapes here.
         return;
 
     // Store the current text content of the shape
@@ -68,14 +76,11 @@ void SwTextBoxHelper::create(SwFrameFormat* pShape, bool bCopyText)
 
     if (bCopyText)
     {
-        if (auto pSdrShape = pShape->FindRealSdrObject())
-        {
-            uno::Reference<text::XText> xSrcCnt(pSdrShape->getWeakUnoShape(), uno::UNO_QUERY);
-            auto xCur = xSrcCnt->createTextCursor();
-            xCur->gotoStart(false);
-            xCur->gotoEnd(true);
-            sCopyableText = xCur->getText()->getString();
-        }
+        uno::Reference<text::XText> xSrcCnt(pObj->getWeakUnoShape(), uno::UNO_QUERY);
+        auto xCur = xSrcCnt->createTextCursor();
+        xCur->gotoStart(false);
+        xCur->gotoEnd(true);
+        sCopyableText = xCur->getText()->getString();
     }
 
     // Create the associated TextFrame and insert it into the document.
@@ -107,8 +112,10 @@ void SwTextBoxHelper::create(SwFrameFormat* pShape, bool bCopyText)
     assert(nullptr != dynamic_cast<SwDrawFrameFormat*>(pShape));
     assert(nullptr != dynamic_cast<SwFlyFrameFormat*>(pFormat));
 
-    pShape->SetOtherTextBoxFormat(pFormat);
-    pFormat->SetOtherTextBoxFormat(pShape);
+    dynamic_cast<SwDrawFrameFormat*>(pShape)->AddOtherTextBoxFormat(
+        std::pair(pObj, dynamic_cast<SwFlyFrameFormat*>(pFormat)));
+    dynamic_cast<SwFlyFrameFormat*>(pFormat)->SetOwnerShape(
+        std::pair(pObj, dynamic_cast<SwDrawFrameFormat*>(pShape)));
 
     // Initialize properties.
     uno::Reference<beans::XPropertySet> xPropertySet(xTextFrame, uno::UNO_QUERY);
@@ -188,15 +195,19 @@ void SwTextBoxHelper::create(SwFrameFormat* pShape, bool bCopyText)
     }
 }
 
-void SwTextBoxHelper::destroy(SwFrameFormat* pShape)
+void SwTextBoxHelper::destroy(SwFrameFormat* pShape, SdrObject* pObj)
 {
     // If a TextBox was enabled previously
-    if (pShape->GetAttrSet().HasItem(RES_CNTNT))
+    if (!pShape || !pObj)
+        return;
+    auto pOwnerShape = dynamic_cast<SwDrawFrameFormat*>(pShape);
+
+    if (pOwnerShape)
     {
-        SwFrameFormat* pFormat = pShape->GetOtherTextBoxFormat();
+        SwFrameFormat* pFormat = pOwnerShape->GetOtherTextBoxFormat(pObj);
 
         // Unlink the TextBox's text range from the original shape.
-        pShape->ResetFormatAttr(RES_CNTNT);
+        //pShape->ResetFormatAttr(RES_CNTNT);
 
         // Delete the associated TextFrame.
         if (pFormat)
@@ -207,21 +218,20 @@ void SwTextBoxHelper::destroy(SwFrameFormat* pShape)
 bool SwTextBoxHelper::isTextBox(const SwFrameFormat* pFormat, sal_uInt16 nType)
 {
     assert(nType == RES_FLYFRMFMT || nType == RES_DRAWFRMFMT);
-    if (!pFormat || pFormat->Which() != nType || !pFormat->GetAttrSet().HasItem(RES_CNTNT))
+    if (!pFormat || pFormat->Which() != nType)
         return false;
 
-    sal_uInt16 nOtherType = (pFormat->Which() == RES_FLYFRMFMT) ? sal_uInt16(RES_DRAWFRMFMT)
-                                                                : sal_uInt16(RES_FLYFRMFMT);
-    SwFrameFormat* pOtherFormat = pFormat->GetOtherTextBoxFormat();
-    if (!pOtherFormat)
-        return false;
-
-    assert(pOtherFormat->Which() == nOtherType);
-    if (pOtherFormat->Which() != nOtherType)
-        return false;
-
-    const SwFormatContent& rContent = pFormat->GetContent();
-    return pOtherFormat->GetAttrSet().HasItem(RES_CNTNT) && pOtherFormat->GetContent() == rContent;
+    if (pFormat->Which() == RES_FLYFRMFMT)
+    {
+        return dynamic_cast<const SwFlyFrameFormat*>(pFormat)->GetOwnerShape().second;
+    }
+    if (pFormat->Which() == RES_DRAWFRMFMT)
+    {
+        // Replace with new sdrobj param for groupshapes.
+        return dynamic_cast<const SwDrawFrameFormat*>(pFormat)->GetOtherTextBoxFormat(
+            pFormat->FindRealSdrObject());
+    }
+    return false;
 }
 
 bool SwTextBoxHelper::hasTextFrame(const SdrObject* pObj)
@@ -314,11 +324,22 @@ void SwTextBoxHelper::getShapeWrapThrough(const SwFrameFormat* pTextBox, bool& r
 }
 
 SwFrameFormat* SwTextBoxHelper::getOtherTextBoxFormat(const SwFrameFormat* pFormat,
-                                                      sal_uInt16 nType)
+                                                      sal_uInt16 nType, const SdrObject* pObj)
 {
     if (!isTextBox(pFormat, nType))
         return nullptr;
-    return pFormat->GetOtherTextBoxFormat();
+
+    if (auto pShape = dynamic_cast<const SwDrawFrameFormat*>(pFormat))
+    {
+        return static_cast<SwFrameFormat*>(
+            pShape->GetOtherTextBoxFormat(pObj ? pObj : pShape->FindSdrObject()));
+    }
+    if (auto pFrame = dynamic_cast<const SwFlyFrameFormat*>(pFormat))
+    {
+        return static_cast<SwFrameFormat*>(pFrame->GetOwnerShape().second);
+    }
+
+    return nullptr;
 }
 
 SwFrameFormat* SwTextBoxHelper::getOtherTextBoxFormat(uno::Reference<drawing::XShape> const& xShape)

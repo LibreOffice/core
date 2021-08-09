@@ -58,9 +58,9 @@ public:
     using SavedContent = std::map<const SwFrameFormat*, SwFormatContent>;
     /// Create a TextBox for a shape. If the second parameter is true,
     /// the original text in the shape will be copied to the frame
-    static void create(SwFrameFormat* pShape, bool bCopyText = false);
+    static void create(SwFrameFormat* pShape, SdrObject* pObj, bool bCopyText = false);
     /// Destroy a TextBox for a shape.
-    static void destroy(SwFrameFormat* pShape);
+    static void destroy(SwFrameFormat* pShape, SdrObject* pObj);
     /// Get interface of a shape's TextBox, if there is any.
     static css::uno::Any queryInterface(const SwFrameFormat* pShape, const css::uno::Type& rType);
 
@@ -119,7 +119,8 @@ public:
      *
      * @see isTextBox
      */
-    static SwFrameFormat* getOtherTextBoxFormat(const SwFrameFormat* pFormat, sal_uInt16 nType);
+    static SwFrameFormat* getOtherTextBoxFormat(const SwFrameFormat* pFormat, sal_uInt16 nType,
+                                                const SdrObject* pObj = nullptr);
     /// If we have an associated TextFrame, then return that.
     static SwFrameFormat*
     getOtherTextBoxFormat(css::uno::Reference<css::drawing::XShape> const& xShape);
