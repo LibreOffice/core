@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f6581949_5b77c447",
+        "filename": "include/o3tl/unit_conversion.hxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-09T09:54:00Z",
+      "side": 1,
+      "message": "This template argument is unneeded here.",
+      "range": {
+        "startLine": 203,
+        "startChar": 20,
+        "endLine": 203,
+        "endChar": 32
+      },
+      "revId": "2a7a83c428e086c8071088aac724951351e2404e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
