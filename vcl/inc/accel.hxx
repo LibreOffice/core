@@ -20,12 +20,14 @@
 #pragma once
 
 #include <config_options.h>
+#include <tools/solar.h>
 #include <tools/link.hxx>
 #include <vcl/keycod.hxx>
 #include <vcl/dllapi.h>
 #include <memory>
+#include <map>
+#include <vector>
 
-class ImplAccelData;
 class CommandEvent;
 
 class Accelerator;
@@ -40,12 +42,16 @@ public:
     bool            mbEnabled;
 };
 
+typedef ::std::vector< std::unique_ptr<ImplAccelEntry> > ImplAccelList;
+
 class Accelerator
 {
     friend class ImplAccelManager;
 
 private:
-    std::unique_ptr<ImplAccelData> mpData;
+    typedef ::std::map< sal_uLong, ImplAccelEntry* > ImplAccelMap;
+    ImplAccelMap  maKeyMap; // for keycodes, generated with a code
+    ImplAccelList maIdList; // Id-List
     Link<Accelerator&,void> maActivateHdl;
     Link<Accelerator&,void> maSelectHdl;
 
@@ -54,7 +60,7 @@ private:
     bool*                   mpDel;
 
     void    ImplInit();
-    void    ImplCopyData( ImplAccelData& rAccelData );
+    void    ImplCopyData( const Accelerator& rAccelData );
     void    ImplDeleteData();
     void    ImplInsertAccel(sal_uInt16 nItemId, const vcl::KeyCode& rKeyCode,
                             bool bEnable, Accelerator* pAutoAccel);
