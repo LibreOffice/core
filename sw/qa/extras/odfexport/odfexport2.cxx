@@ -62,7 +62,7 @@ DECLARE_ODFEXPORT_TEST(testTdf137199, "tdf137199.docx")
 
 DECLARE_ODFEXPORT_TEST(testTdf143605, "tdf143605.odt")
 {
-    // With numering type "none" there should be nothing
+    // With numbering type "none" there should be nothing
     CPPUNIT_ASSERT_EQUAL(OUString(""), getProperty<OUString>(getParagraph(1), "ListLabelString"));
 }
 
