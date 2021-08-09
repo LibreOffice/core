@@ -80,33 +80,33 @@ using namespace ::xmloff::token;
 
 class SwXMLTableCell_Impl
 {
-    OUString aStyleName;
+    OUString m_aStyleName;
 
     OUString m_StringValue;
 
-    OUString sFormula;  // cell formula; valid if length > 0
-    double dValue;      // formula value
+    OUString m_sFormula;  // cell formula; valid if length > 0
+    double m_dValue;      // formula value
 
-    SvXMLImportContextRef   xSubTable;
+    SvXMLImportContextRef   m_xSubTable;
 
-    const SwStartNode *pStartNode;
-    sal_uInt32 nRowSpan;
-    sal_uInt32 nColSpan;
+    const SwStartNode *m_pStartNode;
+    sal_uInt32 m_nRowSpan;
+    sal_uInt32 m_nColSpan;
 
-    bool bProtected : 1;
-    bool bHasValue; // determines whether dValue attribute is valid
+    bool m_bProtected : 1;
+    bool m_bHasValue; // determines whether dValue attribute is valid
     bool mbCovered;
     bool m_bHasStringValue;
 
 public:
 
     SwXMLTableCell_Impl( sal_uInt32 nRSpan=1, sal_uInt32 nCSpan=1 ) :
-        dValue( 0.0 ),
-        pStartNode( nullptr ),
-        nRowSpan( nRSpan ),
-        nColSpan( nCSpan ),
-        bProtected( false ),
-        bHasValue( false ),
+        m_dValue( 0.0 ),
+        m_pStartNode( nullptr ),
+        m_nRowSpan( nRSpan ),
+        m_nColSpan( nCSpan ),
+        m_bProtected( false ),
+        m_bHasValue( false ),
         mbCovered( false )
         , m_bHasStringValue(false)
         {}
@@ -121,25 +121,25 @@ public:
                      double dVal,
                      OUString const*const pStringValue);
 
-    bool IsUsed() const { return pStartNode!=nullptr ||
-                                     xSubTable.is() || bProtected;}
+    bool IsUsed() const { return m_pStartNode!=nullptr ||
+                                     m_xSubTable.is() || m_bProtected;}
 
-    sal_uInt32 GetRowSpan() const { return nRowSpan; }
-    void SetRowSpan( sal_uInt32 nSet ) { nRowSpan = nSet; }
-    sal_uInt32 GetColSpan() const { return nColSpan; }
-    void SetStyleName(const OUString& rStyleName) { aStyleName = rStyleName; }
-    const OUString& GetStyleName() const { return aStyleName; }
-    const OUString& GetFormula() const { return sFormula; }
-    double GetValue() const { return dValue; }
-    bool HasValue() const { return bHasValue; }
-    bool IsProtected() const { return bProtected; }
+    sal_uInt32 GetRowSpan() const { return m_nRowSpan; }
+    void SetRowSpan( sal_uInt32 nSet ) { m_nRowSpan = nSet; }
+    sal_uInt32 GetColSpan() const { return m_nColSpan; }
+    void SetStyleName(const OUString& rStyleName) { m_aStyleName = rStyleName; }
+    const OUString& GetStyleName() const { return m_aStyleName; }
+    const OUString& GetFormula() const { return m_sFormula; }
+    double GetValue() const { return m_dValue; }
+    bool HasValue() const { return m_bHasValue; }
+    bool IsProtected() const { return m_bProtected; }
     bool IsCovered() const { return mbCovered; }
     bool HasStringValue() const { return m_bHasStringValue; }
     OUString const* GetStringValue() const {
         return m_bHasStringValue ? &m_StringValue : nullptr;
     }
 
-    const SwStartNode *GetStartNode() const { return pStartNode; }
+    const SwStartNode *GetStartNode() const { return m_pStartNode; }
     inline void SetStartNode( const SwStartNode *pSttNd );
 
     inline SwXMLTableContext *GetSubTable() const;
@@ -158,51 +158,51 @@ inline void SwXMLTableCell_Impl::Set( const OUString& rStyleName,
                                       double dVal,
                                       OUString const*const pStringValue )
 {
-    aStyleName = rStyleName;
-    nRowSpan = nRSpan;
-    nColSpan = nCSpan;
-    pStartNode = pStNd;
-    xSubTable = pTable;
-    dValue = dVal;
-    bHasValue = bHasVal;
+    m_aStyleName = rStyleName;
+    m_nRowSpan = nRSpan;
+    m_nColSpan = nCSpan;
+    m_pStartNode = pStNd;
+    m_xSubTable = pTable;
+    m_dValue = dVal;
+    m_bHasValue = bHasVal;
     mbCovered = bCov;
     if (pStringValue)
     {
         m_StringValue = *pStringValue;
     }
     m_bHasStringValue = (pStringValue != nullptr);
-    bProtected = bProtect;
+    m_bProtected = bProtect;
 
     // set formula, if valid
     if (pFormula != nullptr)
     {
-        sFormula = *pFormula;
+        m_sFormula = *pFormula;
     }
 }
 
 inline void SwXMLTableCell_Impl::SetStartNode( const SwStartNode *pSttNd )
 {
-    pStartNode = pSttNd;
-    xSubTable = nullptr;
+    m_pStartNode = pSttNd;
+    m_xSubTable = nullptr;
 }
 
 inline SwXMLTableContext *SwXMLTableCell_Impl::GetSubTable() const
 {
-    return static_cast<SwXMLTableContext *>(xSubTable.get());
+    return static_cast<SwXMLTableContext *>(m_xSubTable.get());
 }
 
 inline void SwXMLTableCell_Impl::Dispose()
 {
-    if( xSubTable.is() )
-        xSubTable = nullptr;
+    if( m_xSubTable.is() )
+        m_xSubTable = nullptr;
 }
 
 class SwXMLTableRow_Impl
 {
-    OUString   aStyleName;
-    OUString   aDfltCellStyleName;
+    OUString   m_aStyleName;
+    OUString   m_aDefaultCellStyleName;
     std::vector<std::unique_ptr<SwXMLTableCell_Impl>> m_Cells;
-    bool       bSplitable;
+    bool       m_bSplitable;
 
 public:
 
@@ -216,11 +216,11 @@ public:
 
     void Expand( sal_uInt32 nCells, bool bOneCell );
 
-    void SetSplitable( bool bSet ) { bSplitable = bSet; }
-    bool IsSplitable() const { return bSplitable; }
+    void SetSplitable( bool bSet ) { m_bSplitable = bSet; }
+    bool IsSplitable() const { return m_bSplitable; }
 
-    const OUString& GetStyleName() const { return aStyleName; }
-    const OUString& GetDefaultCellStyleName() const { return aDfltCellStyleName; }
+    const OUString& GetStyleName() const { return m_aStyleName; }
+    const OUString& GetDefaultCellStyleName() const { return m_aDefaultCellStyleName; }
 
     void Dispose();
 };
@@ -228,11 +228,11 @@ public:
 SwXMLTableRow_Impl::SwXMLTableRow_Impl( const OUString& rStyleName,
                                         sal_uInt32 nCells,
                                         const OUString *pDfltCellStyleName ) :
-    aStyleName( rStyleName ),
-    bSplitable( false )
+    m_aStyleName( rStyleName ),
+    m_bSplitable( false )
 {
     if( pDfltCellStyleName  )
-        aDfltCellStyleName = *pDfltCellStyleName;
+        m_aDefaultCellStyleName = *pDfltCellStyleName;
     OSL_ENSURE( nCells <= USHRT_MAX,
             "SwXMLTableRow_Impl::SwXMLTableRow_Impl: too many cells" );
     if( nCells > USHRT_MAX )
@@ -276,8 +276,8 @@ void SwXMLTableRow_Impl::Expand( sal_uInt32 nCells, bool bOneCell )
 inline void SwXMLTableRow_Impl::Set( const OUString& rStyleName,
                                      const OUString& rDfltCellStyleName )
 {
-    aStyleName = rStyleName;
-    aDfltCellStyleName = rDfltCellStyleName;
+    m_aStyleName = rStyleName;
+    m_aDefaultCellStyleName = rDfltCellStyleName;
 }
 
 void SwXMLTableRow_Impl::Dispose()
@@ -880,11 +880,11 @@ namespace {
 
 class SwXMLTableRowsContext_Impl : public SvXMLImportContext
 {
-    SvXMLImportContextRef   xMyTable;
+    SvXMLImportContextRef   m_xMyTable;
 
-    bool bHeader;
+    bool m_bHeader;
 
-    SwXMLTableContext *GetTable() { return static_cast<SwXMLTableContext *>(xMyTable.get()); }
+    SwXMLTableContext *GetTable() { return static_cast<SwXMLTableContext *>(m_xMyTable.get()); }
 
 public:
 
@@ -905,8 +905,8 @@ SwXMLTableRowsContext_Impl::SwXMLTableRowsContext_Impl( SwXMLImport& rImport,
         SwXMLTableContext *pTable,
         bool bHead ) :
     SvXMLImportContext( rImport ),
-    xMyTable( pTable ),
-    bHeader( bHead )
+    m_xMyTable( pTable ),
+    m_bHeader( bHead )
 {
 }
 
@@ -919,18 +919,18 @@ css::uno::Reference<css::xml::sax::XFastContextHandler> SwXMLTableRowsContext_Im
         return new SwXMLTableRowContext_Impl( GetSwImport(), nElement,
                                                   xAttrList,
                                                   GetTable(),
-                                                  bHeader );
+                                                  m_bHeader );
     SAL_WARN("sw", "unknown element " << SvXMLImport::getPrefixAndNameFromToken(nElement));
     return nullptr;
 }
 
 class SwXMLDDETableContext_Impl : public SvXMLImportContext
 {
-    OUString sConnectionName;
-    OUString sDDEApplication;
-    OUString sDDEItem;
-    OUString sDDETopic;
-    bool bIsAutomaticUpdate;
+    OUString m_sConnectionName;
+    OUString m_sDDEApplication;
+    OUString m_sDDEItem;
+    OUString m_sDDETopic;
+    bool m_bIsAutomaticUpdate;
 
 public:
 
@@ -941,21 +941,21 @@ public:
         sal_Int32 nElement,
         const Reference<xml::sax::XFastAttributeList> & xAttrList) override;
 
-    OUString& GetConnectionName()   { return sConnectionName; }
-    OUString& GetDDEApplication()   { return sDDEApplication; }
-    OUString& GetDDEItem()          { return sDDEItem; }
-    OUString& GetDDETopic()         { return sDDETopic; }
-    bool GetIsAutomaticUpdate() const { return bIsAutomaticUpdate; }
+    OUString& GetConnectionName()   { return m_sConnectionName; }
+    OUString& GetDDEApplication()   { return m_sDDEApplication; }
+    OUString& GetDDEItem()          { return m_sDDEItem; }
+    OUString& GetDDETopic()         { return m_sDDETopic; }
+    bool GetIsAutomaticUpdate() const { return m_bIsAutomaticUpdate; }
 };
 
 
 SwXMLDDETableContext_Impl::SwXMLDDETableContext_Impl(SwXMLImport& rImport) :
         SvXMLImportContext(rImport),
-        sConnectionName(),
-        sDDEApplication(),
-        sDDEItem(),
-        sDDETopic(),
-        bIsAutomaticUpdate(false)
+        m_sConnectionName(),
+        m_sDDEApplication(),
+        m_sDDEItem(),
+        m_sDDETopic(),
+        m_bIsAutomaticUpdate(false)
 {
 }
 
@@ -968,23 +968,23 @@ void SwXMLDDETableContext_Impl::startFastElement(
         switch (aIter.getToken())
         {
             case XML_ELEMENT(OFFICE, XML_DDE_APPLICATION):
-                sDDEApplication = aIter.toString();
+                m_sDDEApplication = aIter.toString();
                 break;
             case XML_ELEMENT(OFFICE, XML_DDE_TOPIC):
-                sDDETopic = aIter.toString();
+                m_sDDETopic = aIter.toString();
                 break;
             case XML_ELEMENT(OFFICE, XML_DDE_ITEM):
-                sDDEItem = aIter.toString();
+                m_sDDEItem = aIter.toString();
                 break;
             case XML_ELEMENT(OFFICE, XML_NAME):
-                sConnectionName = aIter.toString();
+                m_sConnectionName = aIter.toString();
                 break;
             case XML_ELEMENT(OFFICE, XML_AUTOMATIC_UPDATE):
             {
                 bool bTmp(false);
                 if (::sax::Converter::convertBool(bTmp, aIter.toView()))
                 {
-                    bIsAutomaticUpdate = bTmp;
+                    m_bIsAutomaticUpdate = bTmp;
                 }
                 break;
             }
