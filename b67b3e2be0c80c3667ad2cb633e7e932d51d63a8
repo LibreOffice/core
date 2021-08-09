@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7ac0ae83_7bcd0d25",
+        "filename": "sw/qa/core/fields/fields.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2021-08-09T17:29:40Z",
+      "side": 1,
+      "message": "Hi Vasily,\nSince this commit fixes a follow-up problem in tdf#143424, should it be backported to libreoffice-7-2 as well ?",
+      "revId": "b67b3e2be0c80c3667ad2cb633e7e932d51d63a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
