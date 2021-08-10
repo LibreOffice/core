@@ -16,6 +16,24 @@
       "revId": "0a666480276f704d5127f578333659893517abe7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "03e3422b_6f12d736",
+        "filename": "sfx2/source/appl/shutdownicon.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-08-10T16:55:43Z",
+      "side": 1,
+      "message": "Thanks for pointing out that all this code is rather pointless by now.  \u003chttps://gerrit.libreoffice.org/c/core/+/120282\u003e \"Simplify init-/deInitSysTray even further\" should address that.",
+      "parentUuid": "c998ec83_e9725dad",
+      "revId": "0a666480276f704d5127f578333659893517abe7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
