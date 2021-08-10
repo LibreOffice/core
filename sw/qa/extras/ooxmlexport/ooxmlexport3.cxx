@@ -364,8 +364,9 @@ DECLARE_OOXMLEXPORT_TEST(testCalendar5, "calendar5.docx")
     CPPUNIT_ASSERT_EQUAL(16.f, getProperty<float>(getRun(getParagraphOfText(1, xCell->getText()),3), "CharHeight"));
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTcBorders, "testTcBorders.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTcBorders)
 {
+    loadAndSave("testTcBorders.docx");
     //fdo#76635 : Table borders are not getting preserved.
 
     xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
@@ -381,8 +382,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTcBorders, "testTcBorders.docx")
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Bold", float(150), getProperty<float>(xStyle, "CharWeight"));
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testQuicktables, "quicktables.docx")
+CPPUNIT_TEST_FIXTURE(Test, testQuicktables)
 {
+    loadAndSave("quicktables.docx");
     xmlDocUniquePtr pXmlStyles = parseExport("word/styles.xml");
 
     // These were missing in the Calendar3 table style.
@@ -409,8 +411,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testQuicktables, "quicktables.docx")
     assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='MediumShading2-Accent5']/w:tblStylePr[@w:type='firstRow']/w:tcPr/w:tcBorders/w:top", "color", "auto");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFdo71302, "fdo71302.docx")
+CPPUNIT_TEST_FIXTURE(Test, testFdo71302)
 {
+    loadAndSave("fdo71302.docx");
     xmlDocUniquePtr pXmlStyles = parseExport("word/styles.xml");
 
     // This got renamed to "Strong Emphasis" without a good reason.
@@ -502,8 +505,9 @@ DECLARE_OOXMLEXPORT_TEST(testSmartart, "smartart.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("RenderedShapes"), nValue); // Rendered bitmap has the proper name
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFontNameIsEmpty, "font-name-is-empty.docx")
+CPPUNIT_TEST_FIXTURE(Test, testFontNameIsEmpty)
 {
+    loadAndSave("font-name-is-empty.docx");
     // Check no empty font name is exported
     // This test does not fail, if the document contains a font with empty name.
 
@@ -521,8 +525,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFontNameIsEmpty, "font-name-is-empty.doc
     xmlXPathFreeObject(pXmlObj);
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testMultiColumnLineSeparator, "multi-column-line-separator-SAVED.docx")
+CPPUNIT_TEST_FIXTURE(Test, testMultiColumnLineSeparator)
 {
+    loadAndSave("multi-column-line-separator-SAVED.docx");
     // Check for the Column Separator value.It should be FALSE as the document does not contain separator line.
     xmlDocUniquePtr pXmlDoc = parseExport();
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:pPr/w:sectPr/w:cols","sep","false");
@@ -557,8 +562,9 @@ DECLARE_OOXMLEXPORT_TEST(testCustomXmlGrabBag, "customxml.docx")
     CPPUNIT_ASSERT(CustomXml); // Grab Bag has all the expected elements
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testCustomXmlRelationships, "customxml.docx")
+CPPUNIT_TEST_FIXTURE(Test, testCustomXmlRelationships)
 {
+    loadAndSave("customxml.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("customXml/_rels/item1.xml.rels");
 
     // Check there is a relation to itemProps1.xml.
@@ -566,8 +572,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testCustomXmlRelationships, "customxml.docx"
     assertXPath(pXmlDoc, "/rels:Relationships/rels:Relationship[@Id='rId1']", "Target", "itemProps1.xml");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFdo69644, "fdo69644.docx")
+CPPUNIT_TEST_FIXTURE(Test, testFdo69644)
 {
+    loadAndSave("fdo69644.docx");
     // The problem was that the exporter exported the table definition
     // with only 3 columns, instead of 5 columns.
     // Check that the table grid is exported with 5 columns
@@ -581,8 +588,9 @@ DECLARE_OOXMLEXPORT_TEST(testFdo70812, "fdo70812.docx")
     getParagraph(1, "Sample pages document.");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testPgMargin, "testPgMargin.docx")
+CPPUNIT_TEST_FIXTURE(Test, testPgMargin)
 {
+    loadAndSave("testPgMargin.docx");
     xmlDocUniquePtr pXmlDoc = parseExport();
     assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:pgMar", "left", "1440");
 }
@@ -693,8 +701,9 @@ DECLARE_OOXMLEXPORT_TEST(testTextBoxGradientAngle, "fdo65295.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int16( 45 * 10), aGradient8.Angle);
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testCellGridSpan, "cell-grid-span.docx")
+CPPUNIT_TEST_FIXTURE(Test, testCellGridSpan)
 {
+    loadAndSave("cell-grid-span.docx");
     // The problem was during export gridSpan value for 1st & 2nd cells for test document
     // used to get set wrongly to 5 and 65532 respectively which was the reason for crash during save operation
     // Verifying gridSpan element is not present in RoundTripped Document (As it's Default value is 1).
@@ -715,8 +724,9 @@ DECLARE_OOXMLEXPORT_TEST(testFdo71646, "fdo71646.docx")
     CPPUNIT_ASSERT_EQUAL(text::WritingMode2::LR_TB, nLRDir);
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testParaAutoSpacing, "para-auto-spacing.docx")
+CPPUNIT_TEST_FIXTURE(Test, testParaAutoSpacing)
 {
+    loadAndSave("para-auto-spacing.docx");
     xmlDocUniquePtr pXmlDoc = parseExport();
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:spacing", "beforeAutospacing","1");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:spacing", "afterAutospacing","1");
@@ -796,8 +806,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf41542_imagePadding, "tdf41542_imagePadding.odt")
     CPPUNIT_ASSERT_EQUAL( crop.Left, crop.Right);
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFootnoteParagraphTag, "testFootnote.docx")
+CPPUNIT_TEST_FIXTURE(Test, testFootnoteParagraphTag)
 {
+    loadAndSave("testFootnote.docx");
     /* In footnotes.xml, the paragraph tag inside <w:footnote w:id="2"> was getting written into document.xml.
      * Check for, paragraph tag is correctly written into footnotes.xml.
      */
@@ -812,8 +823,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testSpacingLineRule,"table_lineRule.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:p/w:pPr/w:spacing", "lineRule", "auto");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTableLineSpacing, "table_atleast.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTableLineSpacing)
 {
+    loadAndSave("table_atleast.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:p/w:pPr/w:spacing", "line", "320");
 }
@@ -831,8 +843,9 @@ DECLARE_OOXMLEXPORT_TEST(testMce, "mce.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0x9bbb59), getProperty<sal_Int32>(getShape(1), "FillColor"));
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testThemePreservation, "theme-preservation.docx")
+CPPUNIT_TEST_FIXTURE(Test, testThemePreservation)
 {
+    loadAndSave("theme-preservation.docx");
     // check default font theme values have been preserved
     xmlDocUniquePtr pXmlStyles = parseExport("word/styles.xml");
     assertXPath(pXmlStyles, "/w:styles/w:docDefaults/w:rPrDefault/w:rPr/w:rFonts", "asciiTheme", "minorHAnsi");
@@ -883,8 +896,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testThemePreservation, "theme-preservation.d
     assertXPath(pXmlDocument, "/w:document/w:body/w:p[6]/w:pPr/w:shd", "themeShade", "80");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTableThemePreservation, "table-theme-preservation.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTableThemePreservation)
 {
+    loadAndSave("table-theme-preservation.docx");
     xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
 
     // check cell theme colors have been preserved
@@ -935,8 +949,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTableThemePreservation, "table-theme-pre
 
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testcantSplit, "2_table_doc.docx")
+CPPUNIT_TEST_FIXTURE(Test, testcantSplit)
 {
+    loadAndSave("2_table_doc.docx");
     // if Split table value is true for a table then during export do not write <w:cantSplit w:val="false"/>
     // in table row property,As default row prop is allow row to break across page.
     // writing <w:cantSplit w:val="false"/> during export was causing problem that all the cell data used to come on same page
@@ -973,15 +988,17 @@ DECLARE_OOXMLEXPORT_TEST(testExtraSectionBreak, "1_page.docx")
     CPPUNIT_ASSERT_EQUAL( OUString("Heading Base"), xStyle->getParentStyle() );
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testcolumnbreak, "columnbreak.docx")
+CPPUNIT_TEST_FIXTURE(Test, testcolumnbreak)
 {
+    loadAndSave("columnbreak.docx");
     CPPUNIT_ASSERT_EQUAL(style::BreakType_COLUMN_BEFORE, getProperty<style::BreakType>(getParagraph(5, "This is first line after col brk."), "BreakType"));
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[5]/w:r[1]/w:br", "type", "column");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testGlossary, "testGlossary.docx")
+CPPUNIT_TEST_FIXTURE(Test, testGlossary)
 {
+    loadAndSave("testGlossary.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/glossary/document.xml");
     assertXPath(pXmlDoc, "/w:glossaryDocument", "Ignorable", "w14 wp14");
 }
@@ -991,8 +1008,9 @@ DECLARE_OOXMLEXPORT_TEST(testFdo71785, "fdo71785.docx")
     // crashtest
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testCrashWhileSave, "testCrashWhileSave.docx")
+CPPUNIT_TEST_FIXTURE(Test, testCrashWhileSave)
 {
+    loadAndSave("testCrashWhileSave.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/footer1.xml");
     CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:ftr/w:tbl/w:tr/w:tc[1]/w:p[1]/w:pPr/w:pStyle", "val").match("Normal"));
 }
@@ -1007,8 +1025,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFileOpenInputOutputError,"floatingtbl_wi
     assertXPathContent(pXmlDoc, "//w:tbl/w:tr/w:tc[2]/w:p/m:oMathPara/m:oMath/m:sSubSup/m:e/m:r/m:t", u"\u03C3");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testSingleCellTableBorders, "tdf124399_SingleCellTableBorders.docx")
+CPPUNIT_TEST_FIXTURE(Test, testSingleCellTableBorders)
 {
+    loadAndSave("tdf124399_SingleCellTableBorders.docx");
     // tdf#124399: Extra borders on single cell tables fixed.
 
     xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
@@ -1016,8 +1035,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testSingleCellTableBorders, "tdf124399_Singl
     assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr/w:tc/w:tcPr/w:tcBorders/w:bottom [@w:val = 'nil']", 1);
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testInsideBorders, "tdf129242_InsideBorders.docx")
+CPPUNIT_TEST_FIXTURE(Test, testInsideBorders)
 {
+    loadAndSave("tdf129242_InsideBorders.docx");
     // tdf#129242: Don't remove inside borders if the table has more than one cells.
 
     xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
@@ -1026,8 +1046,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testInsideBorders, "tdf129242_InsideBorders.
     assertXPathChildren(pXmlDocument, "/w:document/w:body/w:tbl/w:tr/w:tc[2]/w:tcPr/w:tcBorders", 0);
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testRightBorder, "tdf129442_RightBorder.docx")
+CPPUNIT_TEST_FIXTURE(Test, testRightBorder)
 {
+    loadAndSave("tdf129442_RightBorder.docx");
     // tdf#129442: Right border of a one column table was missing.
 
     xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
@@ -1036,8 +1057,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testRightBorder, "tdf129442_RightBorder.docx
     assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[1]/w:tc/w:tcPr/w:tcBorders/w:end [@w:val = 'nil']", 0);
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testBottomBorder, "tdf129450_BottomBorder.docx")
+CPPUNIT_TEST_FIXTURE(Test, testBottomBorder)
 {
+    loadAndSave("tdf129450_BottomBorder.docx");
     // tdf#129450: Missing bottom border in one row table.
 
     xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
@@ -1046,8 +1068,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testBottomBorder, "tdf129450_BottomBorder.do
     assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr/w:tc[1]/w:tcPr/w:tcBorders/w:bottom [@w:val = 'nil']", 0);
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testBottomBorders, "tdf129452_BottomBorders.docx")
+CPPUNIT_TEST_FIXTURE(Test, testBottomBorders)
 {
+    loadAndSave("tdf129452_BottomBorders.docx");
     // tdf#129452: Do not omit bottom borders when a column in a table is vertically merged and
     // the inside borders are turned off.
 
@@ -1060,8 +1083,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testBottomBorders, "tdf129452_BottomBorders.
     assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[4]/w:tcPr/w:tcBorders/w:bottom", 0);
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFontTypes, "tdf120344_FontTypes.docx")
+CPPUNIT_TEST_FIXTURE(Test, testFontTypes)
 {
+    loadAndSave("tdf120344_FontTypes.docx");
     // tdf#120344: Font type of numbering symbols can be different than the font type of the text.
 
     // Check the font type of the text, should be Consolas.
@@ -1073,8 +1097,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFontTypes, "tdf120344_FontTypes.docx")
     assertXPath(qXmlDocument, "/w:numbering/w:abstractNum[1]/w:lvl[1]/w:rPr/w:rFonts [@w:ascii='Arial Black']", 1);
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testNumberingLevels, "tdf95495.docx")
+CPPUNIT_TEST_FIXTURE(Test, testNumberingLevels)
 {
+    loadAndSave("tdf95495.docx");
     xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
 
     // tdf#95495: set list level of the custom style based on the setting of the parent style
@@ -1087,8 +1112,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testNumberingLevels, "tdf95495.docx")
     assertXPath(pXmlDoc, "//body/txt[5]/LineBreak", "Line", "A.2.1 .DESCRIPTION");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testVerticalBorders, "calendar3.docx")
+CPPUNIT_TEST_FIXTURE(Test, testVerticalBorders)
 {
+    loadAndSave("calendar3.docx");
     // tdf#130799: Inside vertical borders of a table should not be missing.
 
     xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
@@ -1096,8 +1122,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testVerticalBorders, "calendar3.docx")
     assertXPathChildren(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[3]/w:tc[3]/w:tcPr/w:tcBorders", 2);
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testArrowFlipXY, "tdf100751_arrowBothFlip.docx")
+CPPUNIT_TEST_FIXTURE(Test, testArrowFlipXY)
 {
+    loadAndSave("tdf100751_arrowBothFlip.docx");
     // tdf#100751: Both x and y flip should happen.
 
     xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
@@ -1106,8 +1133,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testArrowFlipXY, "tdf100751_arrowBothFlip.do
     CPPUNIT_ASSERT(arrowStyle.indexOf(u"flip:xy") != sal_Int32(-1));
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testArrowPosition, "tdf104565_ArrowPosition.docx")
+CPPUNIT_TEST_FIXTURE(Test, testArrowPosition)
 {
+    loadAndSave("tdf104565_ArrowPosition.docx");
     // tdf#104565: Test correct position.
     xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
 
@@ -1116,8 +1144,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testArrowPosition, "tdf104565_ArrowPosition.
         "/wp:positionV/wp:posOffset", "516255");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testArrowMarker, "tdf123346_ArrowMarker.docx")
+CPPUNIT_TEST_FIXTURE(Test, testArrowMarker)
 {
+    loadAndSave("tdf123346_ArrowMarker.docx");
     // tdf#123346: Check arrow marker.
 
     xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
@@ -1126,8 +1155,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testArrowMarker, "tdf123346_ArrowMarker.docx
         "/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln/a:tailEnd", "type", "arrow");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testShapeLineWidth, "tdf92526_ShapeLineWidth.odt")
+CPPUNIT_TEST_FIXTURE(Test, testShapeLineWidth)
 {
+    loadAndSave("tdf92526_ShapeLineWidth.odt");
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // tdf#92526: Make sure that line with stays 0.
@@ -1138,16 +1168,18 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testShapeLineWidth, "tdf92526_ShapeLineWidth
         "/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln", "w", "0");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testRelativeAnchorWidthFromLeftMargin, "tdf132976_testRelativeAnchorWidthFromLeftMargin.docx")
+CPPUNIT_TEST_FIXTURE(Test, testRelativeAnchorWidthFromLeftMargin)
 {
+    loadAndSave("tdf132976_testRelativeAnchorWidthFromLeftMargin.docx");
     // tdf#132976 The size of the width of this shape should come from the size of the left margin.
     // It was set to the size of the width of the entire page before.
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "//anchored/SwAnchoredDrawObject/bounds", "width", "1133");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testRelativeAnchorWidthFromInsideOutsideMargin, "tdf133861_RelativeAnchorWidthFromInsideOutsideMargin.docx")
+CPPUNIT_TEST_FIXTURE(Test, testRelativeAnchorWidthFromInsideOutsideMargin)
 {
+    loadAndSave("tdf133861_RelativeAnchorWidthFromInsideOutsideMargin.docx");
     // tdf#133863 tdf#133864 The sizes of the width of these shapes depend on the sizes of the inside and outside margins.
     // The open book: outside --text-- inside | inside --text-- outside
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
@@ -1161,8 +1193,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testRelativeAnchorWidthFromInsideOutsideMarg
     assertXPath(pXmlDoc, "(//anchored/SwAnchoredDrawObject)[4]/bounds", "width", "1440");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testBodyPrUpright, "tdf123610_handle_upright.docx")
+CPPUNIT_TEST_FIXTURE(Test, testBodyPrUpright)
 {
+    loadAndSave("tdf123610_handle_upright.docx");
     // tdf#123610: Check grab-bag attribute upright to keep text upright regardless of shape rotation.
 
     xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
