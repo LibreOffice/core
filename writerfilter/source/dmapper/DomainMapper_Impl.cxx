@@ -3135,6 +3135,7 @@ void DomainMapper_Impl::PopFootOrEndnote()
     // FIXME: add footnote IDs to handle possible differences in footnote serialization
     uno::Reference< text::XFootnotesSupplier> xFootnotesSupplier( GetTextDocument(), uno::UNO_QUERY );
     uno::Reference< text::XEndnotesSupplier> xEndnotesSupplier( GetTextDocument(), uno::UNO_QUERY );
+    bool bCopied = false;
     if ( IsInFootOrEndnote() && ( ( IsInFootnote() && GetFootnoteCount() > -1 && xFootnotesSupplier.is() ) ||
          ( !IsInFootnote() && GetEndnoteCount() > -1 && xEndnotesSupplier.is() ) ) )
     {
@@ -3173,6 +3174,8 @@ void DomainMapper_Impl::PopFootOrEndnote()
                 // remove processed redlines
                 for( size_t i = 0; redIdx > -1 && i <= sal::static_int_cast<size_t>(redIdx) + 2; i++)
                     m_aStoredRedlines[eType].pop_front();
+
+                bCopied = true;
             }
 
             // remove temporary footnote
@@ -3180,7 +3183,7 @@ void DomainMapper_Impl::PopFootOrEndnote()
         }
     }
 
-    if (!IsRTFImport())
+    if (!IsRTFImport() && !bCopied)
         RemoveLastParagraph();
 
     // In case the foot or endnote did not contain a tab.
