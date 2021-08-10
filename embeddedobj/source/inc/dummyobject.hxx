@@ -27,6 +27,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/embed/XEmbedPersist.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/multicontainer2.hxx>
 
@@ -49,7 +50,8 @@ namespace com::sun::star {
  */
 class ODummyEmbeddedObject : public ::cppu::WeakImplHelper
                         < css::embed::XEmbeddedObject
-                        , css::embed::XEmbedPersist >
+                        , css::embed::XEmbedPersist
+                        , css::lang::XServiceInfo >
 {
     ::osl::Mutex    m_aMutex;
     std::unique_ptr<comphelper::OMultiTypeInterfaceContainerHelper2>
@@ -194,6 +196,10 @@ public:
     virtual void SAL_CALL removeEventListener(
                 const css::uno::Reference< css::document::XEventListener >& Listener ) override;
 
+    // XServiceInfo
+    OUString SAL_CALL getImplementationName() override;
+    sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

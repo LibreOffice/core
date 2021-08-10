@@ -33,6 +33,7 @@
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/chart2/XDefaultSizeTransmitter.hpp>
 #include <com/sun/star/io/XTempFile.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/weak.hxx>
 #include <rtl/ref.hxx>
 #include <map>
@@ -79,6 +80,8 @@ class OCommonEmbeddedObject : public css::embed::XEmbeddedObject
                             , public css::embed::XInplaceObject
                             , public css::container::XChild
                             , public css::chart2::XDefaultSizeTransmitter
+                            , public css::lang::XServiceInfo
+                            , public css::lang::XTypeProvider
                             , public ::cppu::OWeakObject
 {
 protected:
@@ -399,6 +402,15 @@ public:
     // XDefaultSizeTransmitter
     //#i103460# charts do not necessarily have an own size within ODF files, in this case they need to use the size settings from the surrounding frame, which is made available with this method
     virtual void SAL_CALL setDefaultSize( const css::awt::Size& rSize_100TH_MM ) override;
+
+    // XServiceInfo
+    OUString SAL_CALL getImplementationName() override;
+    sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+
+    // XTypeProvider
+    css::uno::Sequence<css::uno::Type> SAL_CALL getTypes() override;
+    css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

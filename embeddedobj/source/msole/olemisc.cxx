@@ -30,6 +30,7 @@
 
 #include <comphelper/multicontainer2.hxx>
 #include <comphelper/sequenceashashmap.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 #include <oleembobj.hxx>
 #include "olepersist.hxx"
@@ -680,6 +681,21 @@ void OleEmbeddedObject::initialize(const uno::Sequence<uno::Any>& rArguments)
         if (rValue.first == "StreamReadOnly")
             rValue.second >>= m_bStreamReadOnly;
     }
+}
+
+OUString SAL_CALL OleEmbeddedObject::getImplementationName()
+{
+    return "com.sun.star.comp.embed.OleEmbeddedObject";
+}
+
+sal_Bool SAL_CALL OleEmbeddedObject::supportsService(const OUString& ServiceName)
+{
+    return cppu::supportsService(this, ServiceName);
+}
+
+uno::Sequence<OUString> SAL_CALL OleEmbeddedObject::getSupportedServiceNames()
+{
+    return { "com.sun.star.comp.embed.OleEmbeddedObject" };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
