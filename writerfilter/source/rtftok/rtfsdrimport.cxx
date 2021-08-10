@@ -9,6 +9,7 @@
 
 #include "rtfsdrimport.hxx"
 #include <cmath>
+#include <optional>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
@@ -42,7 +43,6 @@
 #include <oox/helper/modelobjecthelper.hxx>
 #include <oox/drawingml/shapepropertymap.hxx>
 #include <oox/helper/propertyset.hxx>
-#include <boost/logic/tribool.hpp>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/svdobj.hxx>
@@ -194,7 +194,7 @@ void RTFSdrImport::applyProperty(uno::Reference<drawing::XShape> const& xShape,
     uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
     sal_Int16 nHoriOrient = 0;
     sal_Int16 nVertOrient = 0;
-    boost::logic::tribool obFitShapeToText(boost::logic::indeterminate);
+    std::optional<bool> obFitShapeToText;
     bool bFilled = true;
 
     if (aKey == u"posh")
@@ -256,12 +256,12 @@ void RTFSdrImport::applyProperty(uno::Reference<drawing::XShape> const& xShape,
         xPropertySet->setPropertyValue("HoriOrient", uno::makeAny(nHoriOrient));
     if (nVertOrient != 0 && xPropertySet.is())
         xPropertySet->setPropertyValue("VertOrient", uno::makeAny(nVertOrient));
-    if (!boost::logic::indeterminate(obFitShapeToText) && xPropertySet.is())
+    if (obFitShapeToText.has_value() && xPropertySet.is())
     {
         xPropertySet->setPropertyValue(
-            "SizeType", uno::makeAny(obFitShapeToText ? text::SizeType::MIN : text::SizeType::FIX));
-        xPropertySet->setPropertyValue("FrameIsAutomaticHeight",
-                                       uno::makeAny(static_cast<bool>(obFitShapeToText)));
+            "SizeType",
+            uno::makeAny(*obFitShapeToText ? text::SizeType::MIN : text::SizeType::FIX));
+        xPropertySet->setPropertyValue("FrameIsAutomaticHeight", uno::makeAny(*obFitShapeToText));
     }
     if (!bFilled && xPropertySet.is())
     {
@@ -389,9 +389,9 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
     std::optional<sal_Int16> oRelativeHeight;
     sal_Int16 nRelativeWidthRelation = text::RelOrientation::PAGE_FRAME;
     sal_Int16 nRelativeHeightRelation = text::RelOrientation::PAGE_FRAME;
-    boost::logic::tribool obRelFlipV(boost::logic::indeterminate);
-    boost::logic::tribool obFlipH(boost::logic::indeterminate);
-    boost::logic::tribool obFlipV(boost::logic::indeterminate);
+    std::optional<bool> obRelFlipV;
+    bool obFlipH(false);
+    bool obFlipV(false);
 
     OUString aShapeText = "";
     OUString aFontFamily = "";
@@ -894,7 +894,7 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
         }
 
         // Handle horizontal flip.
-        if (obFlipH == true && xPropertySet.is())
+        if (obFlipH && xPropertySet.is())
             xPropertySet->setPropertyValue("IsMirrored", uno::makeAny(true));
         return;
     }
@@ -956,7 +956,7 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
         }
     }
 
-    if (!boost::logic::indeterminate(obRelFlipV) && xPropertySet.is())
+    if (obRelFlipV.has_value() && xPropertySet.is())
     {
         if (nType == ESCHER_ShpInst_Line)
         {
@@ -972,7 +972,7 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
                     aPoly.append(basegfx::B2DPoint(rPoint.X, rPoint.Y));
                 }
                 basegfx::B2DHomMatrix aTransformation;
-                aTransformation.scale(1.0, obRelFlipV ? -1.0 : 1.0);
+                aTransformation.scale(1.0, *obRelFlipV ? -1.0 : 1.0);
                 aPoly.transform(aTransformation);
                 for (sal_Int32 i = 0; i < rPolygon.getLength(); ++i)
                 {
@@ -1026,16 +1026,16 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
             xShape->setSize(awt::Size(rShape.getRight() - rShape.getLeft(),
                                       rShape.getBottom() - rShape.getTop()));
 
-        if (obFlipH == true || obFlipV == true)
+        if (obFlipH || obFlipV)
         {
             if (bCustom)
             {
                 // This has to be set after position and size is set, otherwise flip will affect the position.
                 comphelper::SequenceAsHashMap aCustomShapeGeometry(
                     xPropertySet->getPropertyValue("CustomShapeGeometry"));
-                if (obFlipH == true)
+                if (obFlipH)
                     aCustomShapeGeometry["MirroredX"] <<= true;
-                if (obFlipV == true)
+                if (obFlipV)
                     aCustomShapeGeometry["MirroredY"] <<= true;
                 xPropertySet->setPropertyValue(
                     "CustomShapeGeometry",
@@ -1045,12 +1045,12 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
             {
                 Point aRef1 = pObject->GetSnapRect().Center();
                 Point aRef2(aRef1);
-                if (obFlipH == true)
+                if (obFlipH)
                 {
                     // Horizontal mirror means a vertical reference line.
                     aRef2.AdjustY(1);
                 }
-                if (obFlipV == true)
+                if (obFlipV)
                 {
                     // Vertical mirror means a horizontal reference line.
                     aRef2.AdjustX(1);
