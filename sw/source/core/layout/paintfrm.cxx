@@ -21,10 +21,12 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/progress.hxx>
+#include <sfx2/request.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/prntitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/shaditem.hxx>
+#include <editeng/lineitem.hxx>
 #include <svx/framelink.hxx>
 #include <drawdoc.hxx>
 #include <tgrditem.hxx>
@@ -2413,6 +2415,7 @@ void SwTabFramePainter::HandleFrame(const SwLayoutFrame& rLayoutFrame, const SwR
             SwBorderAttrAccess aAccess( SwFrame::GetCache(), &rLayoutFrame );
             const SwBorderAttrs& rAttrs = *aAccess.Get();
             const SvxBoxItem& rBox = rAttrs.GetBox();
+//            const SvxLineItem* rBoxDiagonal = rAttrs.GetAttrSet().GetItem(RES_BOX_TLBR); // ?
             Insert(rLayoutFrame, rBox, rPaintArea);
         }
     }
@@ -2457,6 +2460,13 @@ void SwTabFramePainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) cons
     aUpper.Pos() += pUpper->getFrameArea().Pos();
     SwRect aUpperAligned( aUpper );
     ::SwAlignRect( aUpperAligned, gProp.pSGlobalShell, &rDev );
+
+//    SwBorderAttrAccess aAccess( SwFrame::GetCache(), pUpper);
+//    const SwBorderAttrs& rAttrs = *aAccess.Get();
+//    const SfxPoolItem*      pBoxItem = nullptr;
+//    SfxItemState            eState = rAttrs.GetAttrSet().GetItemState( RES_BOX_TLBR, true, &pBoxItem );
+// we need to get the data of diagonal borders if they are requested ^^^
+// but it always returns SfxItemState::DEFAULT, not SfxItemState::SET
 
     // prepare SdrFrameBorderDataVector
     std::shared_ptr<drawinglayer::primitive2d::SdrFrameBorderDataVector> aData(
@@ -2642,6 +2652,54 @@ void SwTabFramePainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) cons
                         rInstance.addSdrConnectStyleData(false, aStyles[4], aY, true); // aBFromL
                     }
                 }
+
+//                // we need set bTLBR true if user requested diagonal left border
+//                // or, if current cell have diagonal left border before.
+//                // we need to fetch the bTLBR data in some way.
+//                bool bTLBR = true;
+
+//                // draw diagonal left border.
+//                // currently it draws the line in the document layout,
+//                // not in the current cell. ?
+//                if(bTLBR)
+//                {
+
+//                    Point adPaintStart = rDev.PixelToLogic( rDev.LogicToPixel(aStart) );
+//                    Point adPaintEnd = rDev.PixelToLogic( rDev.LogicToPixel(aEnd) );
+
+//                    // Top-Left
+//                    adPaintStart.setX( aUpper.Left() );
+//                    adPaintStart.setY( aUpper.Top() );
+
+//                    // Bottom-Right
+//                    adPaintEnd.setX( aUpper.Right_() );
+//                    adPaintEnd.setY( aUpper.Bottom_() );
+
+//                    const basegfx::B2DPoint aOrigin(adPaintStart.X(), adPaintStart.Y());
+//                    const basegfx::B2DVector aX(basegfx::B2DPoint(adPaintEnd.X(), adPaintEnd.Y()) - aOrigin);
+
+//                    if(!aX.equalZero())
+//                    {
+//                        const basegfx::B2DVector aY(basegfx::getNormalizedPerpendicular(aX));
+//                        aData->emplace_back(
+//                            aOrigin,
+//                            aX+aY,
+//                            aStyles[0],
+//                            pTmpColor);
+//                        drawinglayer::primitive2d::SdrFrameBorderData& rInstance(aData->back());
+
+//                        rInstance.addSdrConnectStyleData(true, aStyles[1], -aY, true); // aLFromT
+//                        rInstance.addSdrConnectStyleData(true, aStyles[2], -aX, true); // aLFromL
+//                        rInstance.addSdrConnectStyleData(true, aStyles[3], aY, false); // aLFromB
+
+//                        rInstance.addSdrConnectStyleData(false, aStyles[4], -aY, true); // aRFromT
+//                        rInstance.addSdrConnectStyleData(false, aStyles[5], aX, false); // aRFromR
+//                        rInstance.addSdrConnectStyleData(false, aStyles[6], aY, false); // aRFromB
+//                    }
+
+////                    rDev.DrawLine(Point(aUpper.Left(), aUpper.Top()), Point(aUpper.Right_(), aUpper.Bottom_()));
+////                    rDev.DrawLine(Point(rRect.TopLeft().X(), rRect.TopLeft().Y()), Point(rRect.BottomRight().X(), rRect.BottomRight().Y()));
+//                }
             }
         }
         ++aIter;
@@ -2797,6 +2855,20 @@ void SwTabFramePainter::Insert(const SwFrame& rFrame, const SvxBoxItem& rBoxItem
         const IDocumentSettingAccess& rIDSA = pShell->GetDoc()->getIDocumentSettingAccess();
         bWordTableCell = rIDSA.get(DocumentSettingId::TABLE_ROW_KEEP);
     }
+
+//    SwBorderAttrAccess aAccess( SwFrame::GetCache(), rFrame);
+//    const SwBorderAttrs& rAttrs = *aAccess.Get();
+//    const SvxLineItem* pTLBRLine = rAttrs.GetAttrSet().GetItem(RES_BOX_TLBR);
+
+//    SfxRequest rReq(rFrame, RES_BOX_TLBR);
+//    const SfxItemSet*       pArgs = rReq.GetArgs();
+//    const SfxItemSet&       rOldSet = pArgs->GetItemSet();
+//    const SfxPoolItem*      pBoxItem = nullptr;
+//    SfxItemState            eState = rOldSet.GetItemState( RES_BOX, true, &pBoxItem );
+//    const SfxPoolItem*      pTLBRItem = nullptr;
+//    SfxItemState            eTLBRState = rOldSet.GetItemState( RES_BOX_TLBR, true, &pTLBRItem );
+//    SfxItemState::SET != GetAttrSet().GetItemState( RES_BOX_TLBR );
+    // attempts to fetch RES_BOX_TLBR ^^^
 
     // no scaling needed, it's all in the primitives and the target device
     svx::frame::Style aL(rBoxItem.GetLeft(), 1.0);
@@ -3008,6 +3080,30 @@ void SwRootFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const&
 
     bool bResetRootPaint = false;
     SwViewShell *pSh = mpCurrShell;
+
+//    Point aTopLeft;
+//    tools::Rectangle abRect( aTopLeft, Size(100, 100) );
+//    aTopLeft = rRenderContext.PixelToLogic( aTopLeft );
+//    Point aBottomRight( rRenderContext.PixelToLogic( abRect.BottomRight() ) );
+
+//    abRect.SetLeft( aTopLeft.X() );
+//    abRect.SetTop( aTopLeft.Y() );
+//    abRect.SetRight( aBottomRight.X() );
+//    abRect.SetBottom( aBottomRight.Y() );
+
+//    rRenderContext.Push( PushFlags::LINECOLOR | PushFlags::FILLCOLOR );
+//    rRenderContext.SetLineColor( Color(0, 10, 200));
+//    rRenderContext.SetFillColor();
+//    rRenderContext.DrawLine(abRect.TopLeft(), abRect.BottomRight());
+
+//    const int delta=10;
+//    tools::Rectangle r(rRect.Left()+delta, rRect.Top()+delta, rRect.Right()-delta, rRect.Bottom()-delta);
+//    rRenderContext.Push( PushFlags::LINECOLOR | PushFlags::FILLCOLOR );
+//    rRenderContext.SetLineColor( Color(0, 254, 0));
+//    rRenderContext.SetFillColor();
+//    rRenderContext.DrawRect( r );
+//    rRenderContext.DrawLine(r.TopLeft(), r.BottomRight());
+    // this create a rectangle and draw a diagonal left line in its structure.
 
     if ( pSh->GetWin() )
     {
