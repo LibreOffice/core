@@ -54,13 +54,13 @@ SwCharFormats::~SwCharFormats()
 SwCharFormats::const_iterator SwCharFormats::find(const SwCharFormat* x) const
 {
     ByName::iterator it
-        = m_NameIndex.find(boost::make_tuple(x->GetName(), const_cast<SwCharFormat*>(x)));
+        = m_NameIndex.find(std::make_tuple(x->GetName(), const_cast<SwCharFormat*>(x)));
     return m_Array.project<0>(it);
 }
 
 SwCharFormats::ByName::const_iterator SwCharFormats::findByName(const OUString& name) const
 {
-    return m_NameIndex.find(boost::make_tuple(name));
+    return m_NameIndex.find(std::make_tuple(name));
 }
 
 SwCharFormat* SwCharFormats::FindFormatByName(const OUString& rName) const
