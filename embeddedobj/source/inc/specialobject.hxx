@@ -47,6 +47,11 @@ public:
     virtual void SAL_CALL changeState( sal_Int32 nNewState ) override;
 
     virtual void SAL_CALL doVerb( sal_Int32 nVerbID ) override;
+
+    // XServiceInfo
+    OUString SAL_CALL getImplementationName() override;
+    sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

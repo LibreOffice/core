@@ -31,6 +31,7 @@
 #include <com/sun/star/lang/NoSupportException.hpp>
 
 #include <comphelper/multicontainer2.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <dummyobject.hxx>
 
 
@@ -619,6 +620,21 @@ void SAL_CALL ODummyEmbeddedObject::removeEventListener( const uno::Reference< d
     if ( m_pInterfaceContainer )
         m_pInterfaceContainer->removeInterface( cppu::UnoType<document::XEventListener>::get(),
                                                 xListener );
+}
+
+OUString SAL_CALL ODummyEmbeddedObject::getImplementationName()
+{
+    return "com.sun.star.comp.embed.ODummyEmbeddedObject";
+}
+
+sal_Bool SAL_CALL ODummyEmbeddedObject::supportsService(const OUString& ServiceName)
+{
+    return cppu::supportsService(this, ServiceName);
+}
+
+uno::Sequence<OUString> SAL_CALL ODummyEmbeddedObject::getSupportedServiceNames()
+{
+    return { "com.sun.star.comp.embed.ODummyEmbeddedObject" };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

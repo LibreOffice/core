@@ -38,6 +38,7 @@
 
 #include <vcl/svapp.hxx>
 #include <tools/diagnose_ex.h>
+#include <cppuhelper/supportsservice.hxx>
 
 #include "persistence.hxx"
 
@@ -400,6 +401,16 @@ uno::Any SAL_CALL OCommonEmbeddedObject::queryInterface( const uno::Type& rType 
         void* p = static_cast<embed::XEmbedPersist2*>(this);
         return uno::Any(&p, rType);
     }
+    else if (rType == cppu::UnoType<lang::XServiceInfo>::get())
+    {
+        void* p = static_cast<lang::XServiceInfo*>(this);
+        return uno::Any(&p, rType);
+    }
+    else if (rType == cppu::UnoType<lang::XTypeProvider>::get())
+    {
+        void* p = static_cast<lang::XTypeProvider*>(this);
+        return uno::Any(&p, rType);
+    }
     else
         aReturn = ::cppu::queryInterface(
                     rType,
@@ -641,6 +652,41 @@ void SAL_CALL OCommonEmbeddedObject::removeEventListener( const uno::Reference< 
     if ( m_pInterfaceContainer )
         m_pInterfaceContainer->removeInterface( cppu::UnoType<document::XEventListener>::get(),
                                                 xListener );
+}
+
+OUString SAL_CALL OCommonEmbeddedObject::getImplementationName()
+{
+    return "com.sun.star.comp.embed.OCommonEmbeddedObject";
+}
+
+sal_Bool SAL_CALL OCommonEmbeddedObject::supportsService(const OUString& ServiceName)
+{
+    return cppu::supportsService(this, ServiceName);
+}
+
+uno::Sequence<OUString> SAL_CALL OCommonEmbeddedObject::getSupportedServiceNames()
+{
+    return { "com.sun.star.comp.embed.OCommonEmbeddedObject" };
+}
+
+uno::Sequence<uno::Type> SAL_CALL OCommonEmbeddedObject::getTypes()
+{
+    static const uno::Sequence<uno::Type> aTypes{
+        cppu::UnoType<embed::XEmbeddedObject>::get(),
+        cppu::UnoType<embed::XEmbedPersist2>::get(),
+        cppu::UnoType<embed::XLinkageSupport>::get(),
+        cppu::UnoType<embed::XInplaceObject>::get(),
+        cppu::UnoType<container::XChild>::get(),
+        cppu::UnoType<chart2::XDefaultSizeTransmitter>::get(),
+        cppu::UnoType<lang::XServiceInfo>::get(),
+        cppu::UnoType<lang::XTypeProvider>::get(),
+    };
+    return aTypes;
+}
+
+uno::Sequence<sal_Int8> SAL_CALL OCommonEmbeddedObject::getImplementationId()
+{
+    return uno::Sequence<sal_Int8>();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

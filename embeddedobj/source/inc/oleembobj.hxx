@@ -32,6 +32,7 @@
 #include <com/sun/star/util/XCloseListener.hpp>
 #include <com/sun/star/io/XActiveDataStreamer.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
@@ -114,7 +115,8 @@ class OleEmbeddedObject : public ::cppu::WeakImplHelper
                         , css::embed::XInplaceObject
                         , css::container::XChild
                         , css::io::XActiveDataStreamer
-                        , css::lang::XInitialization >
+                        , css::lang::XInitialization
+                        , css::lang::XServiceInfo >
 {
     friend class OleComponent;
 
@@ -444,6 +446,11 @@ public:
 
     // XInitialization
     void SAL_CALL initialize(const css::uno::Sequence<css::uno::Any>& rArguments) override;
+
+    // XServiceInfo
+    OUString SAL_CALL getImplementationName() override;
+    sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
