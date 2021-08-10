@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f914741c_1b6ae87c",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1716,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-08-10T16:06:08Z",
+      "side": 0,
+      "message": "Being in a table should have nothing to do with this setting.",
+      "range": {
+        "startLine": 1716,
+        "startChar": 71,
+        "endLine": 1716,
+        "endChar": 108
+      },
+      "revId": "d03aaef3dcb5d142955457ae9b8ca4469cfafa38",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

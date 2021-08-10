@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "56736eb9_ab56482a",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1712,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-08-10T16:06:08Z",
+      "side": 1,
+      "message": "PARA_GRAB_BAG assumes true if value matches ruler. If it is already zero, it doesn\u0027t need to be set, and if it was -1 that turned into a zero, it should not be entered into the grabbag. Lots of unit tests complained until this was done (although I didn\u0027t notice any layout issues).",
+      "range": {
+        "startLine": 1712,
+        "startChar": 20,
+        "endLine": 1712,
+        "endChar": 38
+      },
+      "revId": "7bb083adc80f3d2ccc42d79b8d1234af8e7c29fb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
