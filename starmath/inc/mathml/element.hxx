@@ -34,7 +34,7 @@ public:
     };
     /* Mathml stuff */
 
-protected:
+public:
     SmMlElement(SmMlElementType aElementType)
         : m_aElementType(aElementType)
         , m_aText(u"\u00B6")
@@ -272,7 +272,7 @@ public: // text elements
     /**
       * Returns the element text
       */
-    void setText(OUString aText) { m_aText = aText; };
+    void setText(const OUString& aText) { m_aText = aText; };
 };
 
 namespace starmathdatabase
