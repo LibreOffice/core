@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "fbe520b8_2eb7bfe0",
+        "filename": "basic/source/classes/image.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 615,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-10T09:51:14Z",
+      "side": 1,
+      "message": "I believe that SbiImage::AddString is only called from SbiCodeGen::Save, and not when *loading* the image (SbiImage::Load - called from SbModule::LoadData - also populates strings, and offsets, but not nStringOff).\n\nSo it might be relevant for password-protected cases, where the compilation (code generation) doesn\u0027t take place, and the only source of the data is the image.",
+      "parentUuid": "906f517f_36172764",
+      "revId": "a1c42d1b82888fefe9732af2ca7fe9f892f0e0ff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5790c1ec_f7bc821b",
         "filename": "basic/source/classes/image.cxx",
         "patchSetId": 12
