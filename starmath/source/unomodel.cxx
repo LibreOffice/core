@@ -224,6 +224,7 @@ enum SmModelPropertyHandles
     HANDLE_DIALOG_LIBRARIES,  // #i73329#
     HANDLE_BASELINE,
     HANDLE_INTEROP_GRAB_BAG,
+    HANDLE_STARMATH_VERSION
 };
 
 }
@@ -301,6 +302,7 @@ static rtl::Reference<PropertySetInfo> lcl_createModelPropertyInfo ()
         // #i972#
         { OUString("BaseLine")                         , HANDLE_BASELINE                           ,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  0                     },
         { OUString("InteropGrabBag")                   , HANDLE_INTEROP_GRAB_BAG                   ,  cppu::UnoType<uno::Sequence< beans::PropertyValue >>::get(),           PROPERTY_NONE,  0                     },
+        { OUString("SyntaxVersion")                    , HANDLE_STARMATH_VERSION                   ,  ::cppu::UnoType<sal_Int16>::get(),                             PROPERTY_NONE,  0                     },
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
     return rtl::Reference<PropertySetInfo>( new PropertySetInfo ( aModelPropertyInfoMap ) );
@@ -667,6 +669,9 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
                     pDocSh->SetUseThumbnailSave(bThumbnail);
             }
             break;
+            case HANDLE_STARMATH_VERSION:
+                pDocSh->SetSmSyntaxVersion(pValues->get<sal_uInt16>());
+                break;
         }
     }
 
@@ -885,6 +890,9 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
                 *pValue <<= pDocSh->IsUseThumbnailSave();
             }
             break;
+            case HANDLE_STARMATH_VERSION:
+                *pValue <<= pDocSh->GetSmSyntaxVersion();
+                break;
         }
     }
 }
