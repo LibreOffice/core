@@ -53,44 +53,23 @@ static void swapNibbles(unsigned char &c)
 #include <algorithm>
 
 // !!! Do not inline if already the operators <<,>> are inline
-static void SwapUShort( sal_uInt16& r )
+template <typename T, std::enable_if_t<std::is_integral_v<T> && sizeof(T) == 2, int> = 0>
+static void SwapNumber(T& r)
     {   r = OSL_SWAPWORD(r);   }
-static void SwapShort( short& r )
-    {   r = OSL_SWAPWORD(r);   }
-static void SwapULong( sal_uInt32& r )
+template <typename T, std::enable_if_t<std::is_integral_v<T> && sizeof(T) == 4, int> = 0>
+static void SwapNumber(T& r)
     {   r = OSL_SWAPDWORD(r);   }
-static void SwapLongInt( sal_Int32& r )
-    {   r = OSL_SWAPDWORD(r);   }
-
-static void SwapUInt64( sal_uInt64& r )
+template <typename T, std::enable_if_t<std::is_integral_v<T> && sizeof(T) == 8, int> = 0>
+static void SwapNumber(T& r)
     {
         union
         {
-            sal_uInt64 n;
+            T n;
             sal_uInt32 c[2];
         } s;
 
         s.n = r;
-        s.c[0] ^= s.c[1]; // swap the 32 bit words
-        s.c[1] ^= s.c[0];
-        s.c[0] ^= s.c[1];
-        // swap the bytes in the words
-        s.c[0] = OSL_SWAPDWORD(s.c[0]);
-        s.c[1] = OSL_SWAPDWORD(s.c[1]);
-        r = s.n;
-    }
-static void SwapInt64( sal_Int64& r )
-    {
-        union
-        {
-            sal_Int64 n;
-            sal_Int32 c[2];
-        } s;
-
-        s.n = r;
-        s.c[0] ^= s.c[1]; // swap the 32 bit words
-        s.c[1] ^= s.c[0];
-        s.c[0] ^= s.c[1];
+        std::swap(s.c[0], s.c[1]); // swap the 32 bit words
         // swap the bytes in the words
         s.c[0] = OSL_SWAPDWORD(s.c[0]);
         s.c[1] = OSL_SWAPDWORD(s.c[1]);
@@ -135,8 +114,6 @@ static void SwapDouble( double& r )
         }
     }
 #endif
-
-static void SwapUnicode(sal_Unicode & r) { r = OSL_SWAPWORD(r); }
 
 //SDO
 
@@ -554,7 +531,7 @@ bool SvStream::ReadUniStringLine( OUString& rStr, sal_Int32 nMaxCodepointsToRead
         for( j = n = 0; j < nLen ; ++j )
         {
             if (m_isSwap)
-                SwapUnicode( buf[n] );
+                SwapNumber( buf[n] );
             c = buf[j];
             if ( c == '\n' || c == '\r' )
             {
@@ -596,7 +573,7 @@ bool SvStream::ReadUniStringLine( OUString& rStr, sal_Int32 nMaxCodepointsToRead
         sal_Unicode cTemp;
         ReadBytes( &cTemp, sizeof(cTemp) );
         if (m_isSwap)
-            SwapUnicode( cTemp );
+            SwapNumber( cTemp );
         if( cTemp == c || (cTemp != '\n' && cTemp != '\r') )
             Seek( nOldFilePos );
     }
@@ -677,7 +654,7 @@ std::size_t write_uInt16s_FromOUString(SvStream& rStrm, std::u16string_view rStr
         const sal_Unicode* const pStop = pTmp + nLen;
         while ( p < pStop )
         {
-            SwapUnicode( *p );
+            SwapNumber( *p );
             p++;
         }
         nWritten = rStrm.WriteBytes( pTmp, nLen * sizeof(sal_Unicode) );
@@ -813,83 +790,25 @@ sal_uInt64 SvStream::SeekRel(sal_Int64 const nPos)
     return Seek( nActualPos );
 }
 
-SvStream& SvStream::ReadUInt16(sal_uInt16& r)
+template <typename T> SvStream& SvStream::ReadNumber(T& r)
 {
-    sal_uInt16 n = 0;
+    T n = 0;
     readNumberWithoutSwap(n);
     if (good())
     {
         if (m_isSwap)
-            SwapUShort(n);
+            SwapNumber(n);
         r = n;
     }
     return *this;
 }
 
-SvStream& SvStream::ReadUInt32(sal_uInt32& r)
-{
-    sal_uInt32 n = 0;
-    readNumberWithoutSwap(n);
-    if (good())
-    {
-        if (m_isSwap)
-            SwapULong(n);
-        r = n;
-    }
-    return *this;
-}
-
-SvStream& SvStream::ReadUInt64(sal_uInt64& r)
-{
-    sal_uInt64 n = 0;
-    readNumberWithoutSwap(n);
-    if (good())
-    {
-        if (m_isSwap)
-            SwapUInt64(n);
-        r = n;
-    }
-    return *this;
-}
-
-SvStream& SvStream::ReadInt16(sal_Int16& r)
-{
-    sal_Int16 n = 0;
-    readNumberWithoutSwap(n);
-    if (good())
-    {
-        if (m_isSwap)
-            SwapShort(n);
-        r = n;
-    }
-    return *this;
-}
-
-SvStream& SvStream::ReadInt32(sal_Int32& r)
-{
-    sal_Int32 n = 0;
-    readNumberWithoutSwap(n);
-    if (good())
-    {
-        if (m_isSwap)
-            SwapLongInt(n);
-        r = n;
-    }
-    return *this;
-}
-
-SvStream& SvStream::ReadInt64(sal_Int64& r)
-{
-    sal_Int64 n = 0;
-    readNumberWithoutSwap(n);
-    if (good())
-    {
-        if (m_isSwap)
-            SwapInt64(n);
-        r = n;
-    }
-    return *this;
-}
+SvStream& SvStream::ReadUInt16(sal_uInt16& r) { return ReadNumber(r); }
+SvStream& SvStream::ReadUInt32(sal_uInt32& r) { return ReadNumber(r); }
+SvStream& SvStream::ReadUInt64(sal_uInt64& r) { return ReadNumber(r); }
+SvStream& SvStream::ReadInt16(sal_Int16& r) { return ReadNumber(r); }
+SvStream& SvStream::ReadInt32(sal_Int32& r) { return ReadNumber(r); }
+SvStream& SvStream::ReadInt64(sal_Int64& r) { return ReadNumber(r); }
 
 SvStream& SvStream::ReadSChar( signed char& r )
 {
@@ -935,18 +854,7 @@ SvStream& SvStream::ReadUChar( unsigned char& r )
     return *this;
 }
 
-SvStream& SvStream::ReadUtf16(sal_Unicode& r)
-{
-    sal_uInt16 n = 0;
-    readNumberWithoutSwap(n);
-    if (good())
-    {
-        if (m_isSwap)
-            SwapUShort(n);
-        r = sal_Unicode(n);
-    }
-    return *this;
-}
+SvStream& SvStream::ReadUtf16(sal_Unicode& r) { return ReadNumber(r); }
 
 SvStream& SvStream::ReadCharAsBool( bool& r )
 {
@@ -1015,53 +923,20 @@ SvStream& SvStream::ReadStream( SvStream& rStream )
     return *this;
 }
 
-SvStream& SvStream::WriteUInt16( sal_uInt16 v )
+template <typename T> SvStream& SvStream::WriteNumber(T n)
 {
     if (m_isSwap)
-        SwapUShort(v);
-    writeNumberWithoutSwap(v);
+        SwapNumber(n);
+    writeNumberWithoutSwap(n);
     return *this;
 }
 
-SvStream& SvStream::WriteUInt32( sal_uInt32 v )
-{
-    if (m_isSwap)
-        SwapULong(v);
-    writeNumberWithoutSwap(v);
-    return *this;
-}
-
-SvStream& SvStream::WriteUInt64( sal_uInt64 v )
-{
-    if (m_isSwap)
-        SwapUInt64(v);
-    writeNumberWithoutSwap(v);
-    return *this;
-}
-
-SvStream& SvStream::WriteInt16( sal_Int16 v )
-{
-    if (m_isSwap)
-        SwapShort(v);
-    writeNumberWithoutSwap(v);
-    return *this;
-}
-
-SvStream& SvStream::WriteInt32( sal_Int32 v )
-{
-    if (m_isSwap)
-        SwapLongInt(v);
-    writeNumberWithoutSwap(v);
-    return *this;
-}
-
-SvStream& SvStream::WriteInt64  (sal_Int64 v)
-{
-    if (m_isSwap)
-        SwapInt64(v);
-    writeNumberWithoutSwap(v);
-    return *this;
-}
+SvStream& SvStream::WriteUInt16(sal_uInt16 v) { return WriteNumber(v); }
+SvStream& SvStream::WriteUInt32(sal_uInt32 v) { return WriteNumber(v); }
+SvStream& SvStream::WriteUInt64(sal_uInt64 v) { return WriteNumber(v); }
+SvStream& SvStream::WriteInt16(sal_Int16 v) { return WriteNumber(v); }
+SvStream& SvStream::WriteInt32(sal_Int32 v) { return WriteNumber(v); }
+SvStream& SvStream::WriteInt64(sal_Int64 v) { return WriteNumber(v); }
 
 SvStream& SvStream::WriteSChar( signed char v )
 {

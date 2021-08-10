@@ -409,6 +409,9 @@ public:
     bool good() const { return !(eof() || bad()); }
 
 private:
+    template <typename T> SvStream& ReadNumber(T& r);
+    template <typename T> SvStream& WriteNumber(T n);
+
     template<typename T>
     void readNumberWithoutSwap(T& rDataDest)
     { readNumberWithoutSwap_(&rDataDest, sizeof(rDataDest)); }
