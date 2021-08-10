@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "715a2d41_28e961fb",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000446
+      },
+      "writtenOn": "2021-08-10T06:39:51Z",
+      "side": 1,
+      "message": "This should be 142433\n143433 is about footnotes",
+      "range": {
+        "startLine": 16,
+        "startChar": 4,
+        "endLine": 16,
+        "endChar": 11
+      },
+      "revId": "23a2bcd54312d31f604b9ac8470e214189bb163e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
