@@ -126,38 +126,44 @@ DECLARE_OOXMLEXPORT_TEST(testAutofit, "autofit.docx")
     CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(getShape(2), "TextAutoGrowHeight"));
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTrackChangesDeletedParagraphMark, "testTrackChangesDeletedParagraphMark.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTrackChangesDeletedParagraphMark)
 {
+    loadAndSave("testTrackChangesDeletedParagraphMark.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:rPr/w:del");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTrackChangesInsertedParagraphMark, "testTrackChangesInsertedParagraphMark.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTrackChangesInsertedParagraphMark)
 {
+    loadAndSave("testTrackChangesInsertedParagraphMark.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:rPr/w:ins");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTrackChangesDeletedTableRow, "testTrackChangesDeletedTableRow.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTrackChangesDeletedTableRow)
 {
+    loadAndSave("testTrackChangesDeletedTableRow.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:trPr/w:del");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTrackChangesInsertedTableRow, "testTrackChangesInsertedTableRow.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTrackChangesInsertedTableRow)
 {
+    loadAndSave("testTrackChangesInsertedTableRow.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:trPr/w:ins");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTrackChangesDeletedTableCell, "testTrackChangesDeletedTableCell.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTrackChangesDeletedTableCell)
 {
+    loadAndSave("testTrackChangesDeletedTableCell.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:tc/w:tcPr/w:cellDel");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTrackChangesInsertedTableCell, "testTrackChangesInsertedTableCell.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTrackChangesInsertedTableCell)
 {
+    loadAndSave("testTrackChangesInsertedTableCell.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:tc/w:tcPr/w:cellIns");
 }
@@ -177,20 +183,23 @@ DECLARE_OOXMLEXPORT_TEST(testTextBoxPictureFill, "textbox_picturefill.docx")
     CPPUNIT_ASSERT_EQUAL(tools::Long(528), aGraphic.GetSizePixel().Height());
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFDO73034, "FDO73034.docx")
+CPPUNIT_TEST_FIXTURE(Test, testFDO73034)
 {
+    loadAndSave("FDO73034.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:rPr/w:u", "val").match("single"));
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFDO71834, "fdo71834.docx")
+CPPUNIT_TEST_FIXTURE(Test, testFDO71834)
 {
+    loadAndSave("fdo71834.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[1]/w:tr[2]/w:tc[1]/w:tcPr[1]/w:tcW[1]","type", "dxa");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTrackChangesParagraphProperties, "testTrackChangesParagraphProperties.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTrackChangesParagraphProperties)
 {
+    loadAndSave("testTrackChangesParagraphProperties.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     assertXPathChildren(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:pPrChange", 0);
 }
@@ -207,8 +216,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testMsoSpt180, "mso-spt180.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("ooxml-borderCallout1"), aType);
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFdo73550, "fdo73550.docx")
+CPPUNIT_TEST_FIXTURE(Test, testFdo73550)
 {
+    loadAndSave("fdo73550.docx");
     xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
     // This was wrap="none".
     assertXPath(pXmlDocument, "/w:document/w:body/w:p[2]/w:pPr/w:rPr/w:rFonts");
@@ -266,8 +276,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFdo73556,"fdo73556.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3751), tableWidth);
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testSegFaultWhileSave, "test_segfault_while_save.docx")
+CPPUNIT_TEST_FIXTURE(Test, testSegFaultWhileSave)
 {
+    loadAndSave("test_segfault_while_save.docx");
     // fdo#74499
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(6137), getXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tblGrid/w:gridCol[2]", "w").toInt32());
@@ -276,8 +287,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testSegFaultWhileSave, "test_segfault_while_
     CPPUNIT_ASSERT_EQUAL(OUString("First Page"), getProperty<OUString>(getParagraphOrTable(1), "PageDescName"));
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(fdo69656, "Table_cell_auto_width_fdo69656.docx")
+CPPUNIT_TEST_FIXTURE(Test, fdo69656)
 {
+    loadAndSave("Table_cell_auto_width_fdo69656.docx");
     // Changed the UT to check "dxa" instead of "auto"
     // For this particular issue file few cells have width type "auto"
     // LO supports VARIABLE and FIXED width type.
@@ -290,8 +302,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(fdo69656, "Table_cell_auto_width_fdo69656.do
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tblPr/w:tblW","type","dxa");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFdo76741, "fdo76741.docx")
+CPPUNIT_TEST_FIXTURE(Test, testFdo76741)
 {
+    loadAndSave("fdo76741.docx");
 
      // There are two issue related to table in the saved(exported) file
      // - the table alignment in saved file is "left" instead of "center"
@@ -318,14 +331,16 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFdo106029,"fdo106029.docx")
     assertXPath(pXmlDoc, "/w:settings/w:compat/w:doNotExpandShiftReturn");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFDO74106, "FDO74106.docx")
+CPPUNIT_TEST_FIXTURE(Test, testFDO74106)
 {
+    loadAndSave("FDO74106.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/numbering.xml");
     assertXPath(pXmlDoc, "/w:numbering/w:abstractNum[1]/w:lvl[1]/w:numFmt", "val","hebrew1");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFDO74215, "FDO74215.docx")
+CPPUNIT_TEST_FIXTURE(Test, testFDO74215)
 {
+    loadAndSave("FDO74215.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/numbering.xml");
     // tdf#106849 NumPicBullet xShape should not be resized.
 
@@ -386,8 +401,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf90697_complexBreaksHeaders,"tdf90697_complexBrea
     CPPUNIT_ASSERT_EQUAL(sal_Int16(0), xTextColumns->getColumnCount());
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testIndentation, "test_indentation.docx")
+CPPUNIT_TEST_FIXTURE(Test, testIndentation)
 {
+    loadAndSave("test_indentation.docx");
     // fdo#74141 :There was a problem that in style.xml and document.xml in <w:ind> tag "right" & "left" margin
     // attributes gets added(w:right=0 & w:left=0) if these attributes are not set in original document.
     // This test is to verify <w:ind> does not contain w:right attribute.
@@ -395,8 +411,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testIndentation, "test_indentation.docx")
     assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:p/w:pPr/w:ind", "end");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testChartInFooter, "chart-in-footer.docx")
+CPPUNIT_TEST_FIXTURE(Test, testChartInFooter)
 {
+    loadAndSave("chart-in-footer.docx");
     // fdo#73872: document contains chart in footer.
     // The problem was that  footer1.xml.rels files for footer1.xml
     // files were missing from docx file after roundtrip.
@@ -465,8 +482,9 @@ DECLARE_OOXMLEXPORT_TEST(testFloatingTablePosition, "floating-table-position.doc
     CPPUNIT_ASSERT_EQUAL(sal_Int32(8133), getProperty<sal_Int32>(xShape, "VertOrientPosition"));
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testAbi11739, "abi11739.docx")
+CPPUNIT_TEST_FIXTURE(Test, testAbi11739)
 {
+    loadAndSave("abi11739.docx");
     // Validation test: order of elements were wrong.
     xmlDocUniquePtr pXmlDoc = parseExport("word/styles.xml");
     // Order was: uiPriority, link, basedOn.
@@ -505,8 +523,9 @@ DECLARE_OOXMLEXPORT_TEST(testEmbeddedXlsx, "embedded-xlsx.docx")
     CPPUNIT_ASSERT_EQUAL(2, nImageFiles);
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testNumberedLists_StartingWithZero, "FDO74105.docx")
+CPPUNIT_TEST_FIXTURE(Test, testNumberedLists_StartingWithZero)
 {
+    loadAndSave("FDO74105.docx");
     /* Issue : Numbered lists Starting with value '0' is not preserved after RT.
      * In numbering.xml, an XML tag <w:start> is optional. If not mentioned,
      * the Numbered list should start from 0.
@@ -535,8 +554,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testPageBreak,"fdo74566.docx")
     getRun(xParagraph4, 1, "Second Page First line after Page Break");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testOleObject, "test_ole_object.docx")
+CPPUNIT_TEST_FIXTURE(Test, testOleObject)
 {
+    loadAndSave("test_ole_object.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:p[2]/w:r/w:object/v:shape/v:imagedata",
@@ -562,8 +582,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testOleObject, "test_ole_object.docx")
 
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFdo74792, "fdo74792.docx")
+CPPUNIT_TEST_FIXTURE(Test, testFdo74792)
 {
+    loadAndSave("fdo74792.docx");
     /*
      * fdo#74792 : The images associated with smart-art data[i].xml
      * were not preserved on exporting to DOCX format
@@ -579,8 +600,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFdo74792, "fdo74792.docx")
     CPPUNIT_ASSERT( xInputStream.is() );
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFdo77718, "fdo77718.docx")
+CPPUNIT_TEST_FIXTURE(Test, testFdo77718)
 {
+    loadAndSave("fdo77718.docx");
     //in case of multiple smart arts the names for images were getting
     //repeated and thereby causing a data loss as the binary stream was
     //getting over written. This test case ensures that unique names are
@@ -604,8 +626,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFdo77718, "fdo77718.docx")
     CPPUNIT_ASSERT( xInputStream2.is() );
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTableCurruption, "tableCurrupt.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTableCurruption)
 {
+    loadAndSave("tableCurrupt.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/header2.xml");
     CPPUNIT_ASSERT(pXmlDoc) ;
     assertXPath(pXmlDoc, "/w:hdr/w:tbl[1]/w:tr[1]/w:tc[1]",1);
@@ -616,8 +639,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTableCurruption, "tableCurrupt.docx")
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(0), aHeaderBottomBorder.LineWidth);
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testDateControl, "date-control.docx")
+CPPUNIT_TEST_FIXTURE(Test, testDateControl)
 {
+    loadAndSave("date-control.docx");
     // check XML
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtPr/w:date", "fullDate", "2014-03-05T00:00:00Z");
@@ -626,8 +650,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testDateControl, "date-control.docx")
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtContent/w:r/w:t", u"mi\u00E9rcoles, 05 de marzo de 2014");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(test_Tdf115030, "tdf115030.docx")
+CPPUNIT_TEST_FIXTURE(Test, test_Tdf115030)
 {
+    loadAndSave("tdf115030.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     sal_Unicode aDot = {0x02D9};
     sal_Unicode aDobleDot = {0x00A8};
@@ -636,15 +661,17 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(test_Tdf115030, "tdf115030.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/m:oMathPara/m:oMath[1]/m:acc/m:accPr/m:chr", "val", OUString(aDot));
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(test_OpeningBrace, "2120112713_OpenBrace.docx")
+CPPUNIT_TEST_FIXTURE(Test, test_OpeningBrace)
 {
+    loadAndSave("2120112713_OpenBrace.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // Checking for OpeningBrace tag
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/m:oMath[1]/m:d[1]/m:dPr[1]/m:begChr[1]","val","");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(test_Tdf132305, "tdf132305.docx")
+CPPUNIT_TEST_FIXTURE(Test, test_Tdf132305)
 {
+    loadAndSave("tdf132305.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/m:oMath[1]/m:bar/m:barPr/m:pos","val","top");
 }
@@ -684,8 +711,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(test_Tdf132305, "tdf132305.docx")
 //         <w:fldChar w:fldCharType="end" />
 //     </w:r>
 // See, tdf#38778
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf38778, "tdf38778_properties_in_run_for_field.doc")
+CPPUNIT_TEST_FIXTURE(Test, testTdf38778)
 {
+    loadAndSave("tdf38778_properties_in_run_for_field.doc");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     static const OUStringLiteral psz(u"20");
@@ -718,8 +746,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf38778, "tdf38778_properties_in_run_fo
     CPPUNIT_ASSERT(drawing::FillStyle_NONE != getProperty<drawing::FillStyle>(xStyle, "FillStyle"));
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFDO76312, "FDO76312.docx")
+CPPUNIT_TEST_FIXTURE(Test, testFDO76312)
 {
+    loadAndSave("FDO76312.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[1]/w:tr[1]/w:tc[1]");
@@ -760,8 +789,9 @@ void Test::verifyComboBoxExport(bool aComboBoxAsDropDown)
     }
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testComboBoxControl, "combobox-control.docx")
+CPPUNIT_TEST_FIXTURE(Test, testComboBoxControl)
 {
+    loadAndSave("combobox-control.docx");
     // check XML
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtPr/w:dropDownList/w:listItem[1]", "value", "manolo");
@@ -792,8 +822,9 @@ CPPUNIT_TEST_FIXTURE(Test, tdf134043_ImportComboBoxAsDropDown_false)
     verifyComboBoxExport(false);
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testCheckBoxControl, "checkbox-control.docx")
+CPPUNIT_TEST_FIXTURE(Test, testCheckBoxControl)
 {
+    loadAndSave("checkbox-control.docx");
     // check XML
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     assertXPath(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtPr/w14:checkbox/w14:checked", "val", "1");
@@ -803,8 +834,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testCheckBoxControl, "checkbox-control.docx"
     // TODO: import control and add a check here
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testParagraphWithComments, "paragraphWithComments.docx")
+CPPUNIT_TEST_FIXTURE(Test, testParagraphWithComments)
 {
+    loadAndSave("paragraphWithComments.docx");
     /* Comment id's were getting overwritten for annotation mark(s),
        which was causing a mismatch in the relationship for comment id's
        in document.xml and comment.xml
@@ -832,8 +864,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf104707_urlComment, "tdf104707_urlComment.odt")
     CPPUNIT_ASSERT_EQUAL(OUString("https://bugs.documentfoundation.org/show_bug.cgi?id=104707"), aURL);
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testOLEObjectinHeader, "2129393649.docx")
+CPPUNIT_TEST_FIXTURE(Test, testOLEObjectinHeader)
 {
+    loadAndSave("2129393649.docx");
     // fdo#76015 : Document contains oleobject in header xml.
     // Problem was relationship entry for oleobject from header was
     // exported into document.xml.rels file because of this rels file
@@ -863,21 +896,24 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testOLEObjectinHeader, "2129393649.docx")
         "Word.Picture.8");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(test_ClosingBrace, "2120112713.docx")
+CPPUNIT_TEST_FIXTURE(Test, test_ClosingBrace)
 {
+    loadAndSave("2120112713.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // Checking for ClosingBrace tag
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/m:oMath[1]/m:d[2]/m:dPr[1]/m:endChr[1]","val","");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testlvlPicBulletId, "lvlPicBulletId.docx")
+CPPUNIT_TEST_FIXTURE(Test, testlvlPicBulletId)
 {
+    loadAndSave("lvlPicBulletId.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/numbering.xml");
     assertXPath(pXmlDoc, "/w:numbering[1]/w:abstractNum[1]/w:lvl[1]/w:lvlPicBulletId[1]", 0);
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testSdtContent, "SdtContent.docx")
+CPPUNIT_TEST_FIXTURE(Test, testSdtContent)
 {
+    loadAndSave("SdtContent.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/header1.xml");
     assertXPath(pXmlDoc, "/w:hdr[1]/w:sdt[1]/w:sdtContent[1]/w:p[1]/w:del[1]");
 }
@@ -886,8 +922,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testSdtContent, "SdtContent.docx")
 // Currently LibreOffice exports custom geometry for this up arrow, not preset shape.
 // When LibreOffice can export preset shape with correct modifiers, then this test can be re-enabled.
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFdo76016, "fdo76016.docx")
+CPPUNIT_TEST_FIXTURE(Test, testFdo76016)
 {
+    loadAndSave("fdo76016.docx");
     // check XML
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     assertXPath(pXmlDoc, "//a:graphic/a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd[1]", "name", "adj1");
@@ -895,8 +932,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFdo76016, "fdo76016.docx")
 }
 #endif
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFileWithInvalidImageLink, "FileWithInvalidImageLink.docx")
+CPPUNIT_TEST_FIXTURE(Test, testFileWithInvalidImageLink)
 {
+    loadAndSave("FileWithInvalidImageLink.docx");
     /* In case if the original file has an image whose link is
        invalid, then the RT file used to result in corruption
        since the exported image would be an empty image.
@@ -909,8 +947,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFileWithInvalidImageLink, "FileWithInval
                            "embed");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testContentTypeDOCX, "fdo80410.docx")
+CPPUNIT_TEST_FIXTURE(Test, testContentTypeDOCX)
 {
+    loadAndSave("fdo80410.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("[Content_Types].xml");
 
     assertXPath(pXmlDoc,
@@ -931,8 +970,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testContentTypeDOCX, "fdo80410.docx")
         "Word.Document.12");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testContentTypeXLSM, "fdo76098.docx")
+CPPUNIT_TEST_FIXTURE(Test, testContentTypeXLSM)
 {
+    loadAndSave("fdo76098.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("[Content_Types].xml");
 
     assertXPath(pXmlDoc, "/ContentType:Types/ContentType:Override[@PartName='/word/embeddings/Microsoft_Excel_Macro-Enabled_Worksheet1.xlsm']", "ContentType", "application/vnd.ms-excel.sheet.macroEnabled.12");
@@ -951,32 +991,36 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testContentTypeXLSM, "fdo76098.docx")
         "rId1");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(test76108, "test76108.docx")
+CPPUNIT_TEST_FIXTURE(Test, test76108)
 {
+    loadAndSave("test76108.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     //docx file after RT is getting corrupted.
     assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:p[1]/w:r[1]/w:fldChar[1]", "fldCharType", "begin");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTCTagMisMatch, "TCTagMisMatch.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTCTagMisMatch)
 {
-   // TCTagMisMatch.docx : This document contains an empty table with borders.
-   // there was a TC tag mismatch which resulted into a crash.
+    loadAndSave("TCTagMisMatch.docx");
+    // TCTagMisMatch.docx : This document contains an empty table with borders.
+    // there was a TC tag mismatch which resulted into a crash.
 
-   xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
-   assertXPath(pXmlDoc,"/w:document[1]/w:body[1]/w:tbl[1]/w:tr[1]/w:tc[1]/w:tbl[1]/w:tr[1]/w:tc[1]",0);
-   assertXPath(pXmlDoc,"/w:document[1]/w:body[1]/w:tbl[1]/w:tr[1]/w:tc[1]", 1);
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    assertXPath(pXmlDoc,"/w:document[1]/w:body[1]/w:tbl[1]/w:tr[1]/w:tc[1]/w:tbl[1]/w:tr[1]/w:tc[1]",0);
+    assertXPath(pXmlDoc,"/w:document[1]/w:body[1]/w:tbl[1]/w:tr[1]/w:tc[1]", 1);
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testFDO78292, "FDO78292.docx")
+CPPUNIT_TEST_FIXTURE(Test, testFDO78292)
 {
-   //text node is a leaf node, it should not have any children
-   xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
-   assertXPath(pXmlDoc,"/w:document/w:body/w:p[14]/w:sdt[3]/w:sdtPr[1]/w:text/w14:checked",0);
+    loadAndSave("FDO78292.docx");
+    //text node is a leaf node, it should not have any children
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    assertXPath(pXmlDoc,"/w:document/w:body/w:p[14]/w:sdt[3]/w:sdtPr[1]/w:text/w14:checked",0);
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testSimpleSdts, "simple-sdts.docx")
+CPPUNIT_TEST_FIXTURE(Test, testSimpleSdts)
 {
+    loadAndSave("simple-sdts.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     assertXPath(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtPr/w:text", 1);
@@ -986,8 +1030,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testSimpleSdts, "simple-sdts.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtPr/w:citation", 1);
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testEmbeddedExcelChart, "EmbeddedExcelChart.docx")
+CPPUNIT_TEST_FIXTURE(Test, testEmbeddedExcelChart)
 {
+    loadAndSave("EmbeddedExcelChart.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("[Content_Types].xml");
 
     assertXPath(pXmlDoc,
@@ -1010,8 +1055,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testEmbeddedExcelChart, "EmbeddedExcelChart.
         "Excel.Chart.8");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf83227, "tdf83227.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf83227)
 {
+    loadAndSave("tdf83227.docx");
     // Bug document contains a rotated image, which is handled as a draw shape (not as a Writer image) on export.
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), maTempFile.GetURL());
     CPPUNIT_ASSERT_EQUAL(true, bool(xNameAccess->hasByName("word/media/image1.png")));
@@ -1019,8 +1065,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf83227, "tdf83227.docx")
     CPPUNIT_ASSERT_EQUAL(false, bool(xNameAccess->hasByName("word/media/image2.png")));
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf103001, "tdf103001.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf103001)
 {
+    loadAndSave("tdf103001.docx");
     // The same image is featured in the header and in the body text, make sure
     // the header relation is still written, even when caching is enabled.
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), maTempFile.GetURL());
@@ -1029,8 +1076,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf103001, "tdf103001.docx")
     CPPUNIT_ASSERT(xNameAccess->hasByName("word/_rels/header2.xml.rels"));
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf92521, "tdf92521.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf92521)
 {
+    loadAndSave("tdf92521.odt");
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // There should be a section break that's in the middle of the document: right after the table.
@@ -1075,8 +1123,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf102466, "tdf102466.docx")
     }
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf99090_pgbrkAfterTable, "tdf99090_pgbrkAfterTable.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf99090_pgbrkAfterTable)
 {
+    loadAndSave("tdf99090_pgbrkAfterTable.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
     // There should be a regular page break that's in the middle of the document: right after the table.
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:br", 1);
@@ -1180,8 +1229,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf81345_045Original,"tdf81345.docx")
 }
 #endif
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testDocxTablePosition, "floating-table-position.docx")
+CPPUNIT_TEST_FIXTURE(Test, testDocxTablePosition)
 {
+    loadAndSave("floating-table-position.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
     // the exported positions were wrong due to some missing shifting in the export code
@@ -1189,8 +1239,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testDocxTablePosition, "floating-table-posit
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tblPr/w:tblpPr", "tblpY", "4611");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testUnderlineGroupShapeText, "tdf123351_UnderlineGroupSapeText.docx")
+CPPUNIT_TEST_FIXTURE(Test, testUnderlineGroupShapeText)
 {
+    loadAndSave("tdf123351_UnderlineGroupSapeText.docx");
     // tdf#123351: Check if correct underline is used.
     xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
 
@@ -1241,8 +1292,9 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testUnderlineGroupShapeText, "tdf123351_Unde
         "/a:graphic/a:graphicData/wpg:wgp/wps:wsp[2]/wps:txbx/w:txbxContent/w:p/w:r/w:rPr/w:u", "val", "single");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testUnderlineColorGroupedShapes, "tdf132491_UnderlineColorGroupedShapes.docx")
+CPPUNIT_TEST_FIXTURE(Test, testUnderlineColorGroupedShapes)
 {
+    loadAndSave("tdf132491_UnderlineColorGroupedShapes.docx");
     // tdf#132491 : Check if correct color is used for underline.
     xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
     assertXPath(pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor"
@@ -1253,16 +1305,18 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testUnderlineColorGroupedShapes, "tdf132491_
         "/a:graphic/a:graphicData/wpg:wgp/wps:wsp[3]/wps:txbx/w:txbxContent/w:p/w:r/w:rPr/w:u", "color");
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testRelativeAnchorWidthFromRightMargin, "tdf133670_testRelativeAnchorWidthFromRightMargin.docx")
+CPPUNIT_TEST_FIXTURE(Test, testRelativeAnchorWidthFromRightMargin)
 {
+    loadAndSave("tdf133670_testRelativeAnchorWidthFromRightMargin.docx");
     // tdf#133670 The width was set relative from right margin, but this was handled relative from page width.
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     auto nWidth = getXPath(pXmlDoc, "//anchored/SwAnchoredDrawObject/bounds", "width").toInt32();
     CPPUNIT_ASSERT_DOUBLES_EQUAL(2408, nWidth, 1);
 }
 
-DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testAutoFitForLegacyShapes, "tdf112312_AutoFitForLegacyShapes.odt")
+CPPUNIT_TEST_FIXTURE(Test, testAutoFitForLegacyShapes)
 {
+    loadAndSave("tdf112312_AutoFitForLegacyShapes.odt");
     // tdf#112312: check if noAutoFit is used instead of spAutoFit even if the TextAutoGrowHeight is set
     xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
     assertXPath(pXmlDocument, "/w:document/w:body/w:p[2]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
