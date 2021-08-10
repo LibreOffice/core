@@ -940,7 +940,6 @@ void LngSvcMgr::GetAvailableSpellSvcs_Impl()
         uno::Reference< lang::XSingleComponentFactory > xCompFactory;
         uno::Reference< lang::XSingleServiceFactory > xFactory;
 
-        uno::Reference< linguistic2::XSpellChecker > xSvc;
         xCompFactory.set(aCurrent, css::uno::UNO_QUERY);
         if (!xCompFactory.is())
         {
@@ -950,26 +949,23 @@ void LngSvcMgr::GetAvailableSpellSvcs_Impl()
         {
             try
             {
-                xSvc.set( ( xCompFactory.is() ? xCompFactory->createInstanceWithContext( xContext ) : xFactory->createInstance() ), uno::UNO_QUERY );
+                uno::Reference< linguistic2::XSpellChecker > xSvc( ( xCompFactory.is() ? xCompFactory->createInstanceWithContext( xContext ) : xFactory->createInstance() ), uno::UNO_QUERY_THROW );
+
+                OUString            aImplName;
+                std::vector< LanguageType >   aLanguages;
+                uno::Reference< XServiceInfo > xInfo( xSvc, uno::UNO_QUERY );
+                if (xInfo.is())
+                    aImplName = xInfo->getImplementationName();
+                SAL_WARN_IF( aImplName.isEmpty(), "linguistic", "empty implementation name" );
+                uno::Sequence<lang::Locale> aLocaleSequence(xSvc->getLocales());
+                aLanguages = LocaleSeqToLangVec( aLocaleSequence );
+
+                pAvailSpellSvcs->push_back( std::make_unique<SvcInfo>( aImplName, aLanguages ) );
             }
             catch (const uno::Exception &)
             {
                 SAL_WARN( "linguistic", "createInstance failed" );
             }
-        }
-
-        if (xSvc.is())
-        {
-            OUString            aImplName;
-            std::vector< LanguageType >   aLanguages;
-            uno::Reference< XServiceInfo > xInfo( xSvc, uno::UNO_QUERY );
-            if (xInfo.is())
-                aImplName = xInfo->getImplementationName();
-            SAL_WARN_IF( aImplName.isEmpty(), "linguistic", "empty implementation name" );
-            uno::Sequence<lang::Locale> aLocaleSequence(xSvc->getLocales());
-            aLanguages = LocaleSeqToLangVec( aLocaleSequence );
-
-            pAvailSpellSvcs->push_back( std::make_unique<SvcInfo>( aImplName, aLanguages ) );
         }
     }
 }
@@ -998,7 +994,6 @@ void LngSvcMgr::GetAvailableGrammarSvcs_Impl()
         uno::Reference< lang::XSingleComponentFactory > xCompFactory;
         uno::Reference< lang::XSingleServiceFactory > xFactory;
 
-        uno::Reference< linguistic2::XProofreader > xSvc;
         xCompFactory.set(aCurrent, css::uno::UNO_QUERY);
         if (!xCompFactory.is())
         {
@@ -1008,13 +1003,24 @@ void LngSvcMgr::GetAvailableGrammarSvcs_Impl()
         {
             try
             {
-                if (xCompFactory.is())
+                uno::Reference< linguistic2::XProofreader > xSvc(
+                    xCompFactory.is()
+                        ? xCompFactory->createInstanceWithContext(xContext)
+                        : xFactory->createInstance(),
+                    uno::UNO_QUERY_THROW);
+
+                if (pAvailGrammarSvcs)
                 {
-                    xSvc.set(xCompFactory->createInstanceWithContext(xContext), uno::UNO_QUERY);
-                }
-                else
-                {
-                    xSvc.set(xFactory->createInstance(), uno::UNO_QUERY);
+                    OUString            aImplName;
+                    std::vector< LanguageType >    aLanguages;
+                    uno::Reference< XServiceInfo > xInfo( xSvc, uno::UNO_QUERY );
+                    if (xInfo.is())
+                        aImplName = xInfo->getImplementationName();
+                    SAL_WARN_IF( aImplName.isEmpty(), "linguistic", "empty implementation name" );
+                    uno::Sequence<lang::Locale> aLocaleSequence(xSvc->getLocales());
+                    aLanguages = LocaleSeqToLangVec( aLocaleSequence );
+
+                    pAvailGrammarSvcs->push_back( std::make_unique<SvcInfo>( aImplName, aLanguages ) );
                 }
             }
             catch (const uno::Exception &)
@@ -1023,19 +1029,6 @@ void LngSvcMgr::GetAvailableGrammarSvcs_Impl()
             }
         }
 
-        if (xSvc.is() && pAvailGrammarSvcs)
-        {
-            OUString            aImplName;
-            std::vector< LanguageType >    aLanguages;
-            uno::Reference< XServiceInfo > xInfo( xSvc, uno::UNO_QUERY );
-            if (xInfo.is())
-                aImplName = xInfo->getImplementationName();
-            SAL_WARN_IF( aImplName.isEmpty(), "linguistic", "empty implementation name" );
-            uno::Sequence<lang::Locale> aLocaleSequence(xSvc->getLocales());
-            aLanguages = LocaleSeqToLangVec( aLocaleSequence );
-
-            pAvailGrammarSvcs->push_back( std::make_unique<SvcInfo>( aImplName, aLanguages ) );
-        }
     }
 }
 
@@ -1062,7 +1055,6 @@ void LngSvcMgr::GetAvailableHyphSvcs_Impl()
         uno::Reference< lang::XSingleComponentFactory > xCompFactory;
         uno::Reference< lang::XSingleServiceFactory > xFactory;
 
-        uno::Reference< linguistic2::XHyphenator > xSvc;
         xCompFactory.set(aCurrent, css::uno::UNO_QUERY);
         if (!xCompFactory.is())
         {
@@ -1072,24 +1064,21 @@ void LngSvcMgr::GetAvailableHyphSvcs_Impl()
         {
             try
             {
-                xSvc.set( ( xCompFactory.is() ? xCompFactory->createInstanceWithContext( xContext ) : xFactory->createInstance() ), uno::UNO_QUERY );
+                uno::Reference< linguistic2::XHyphenator > xSvc( ( xCompFactory.is() ? xCompFactory->createInstanceWithContext( xContext ) : xFactory->createInstance() ), uno::UNO_QUERY_THROW );
+                OUString            aImplName;
+                std::vector< LanguageType >    aLanguages;
+                uno::Reference< XServiceInfo > xInfo( xSvc, uno::UNO_QUERY );
+                if (xInfo.is())
+                    aImplName = xInfo->getImplementationName();
+                SAL_WARN_IF( aImplName.isEmpty(), "linguistic", "empty implementation name" );
+                uno::Sequence<lang::Locale> aLocaleSequence(xSvc->getLocales());
+                aLanguages = LocaleSeqToLangVec( aLocaleSequence );
+                pAvailHyphSvcs->push_back( std::make_unique<SvcInfo>( aImplName, aLanguages ) );
             }
             catch (const uno::Exception &)
             {
                 SAL_WARN( "linguistic", "createInstance failed" );
             }
-        }
-        if (xSvc.is())
-        {
-            OUString            aImplName;
-            std::vector< LanguageType >    aLanguages;
-            uno::Reference< XServiceInfo > xInfo( xSvc, uno::UNO_QUERY );
-            if (xInfo.is())
-                aImplName = xInfo->getImplementationName();
-            SAL_WARN_IF( aImplName.isEmpty(), "linguistic", "empty implementation name" );
-            uno::Sequence<lang::Locale> aLocaleSequence(xSvc->getLocales());
-            aLanguages = LocaleSeqToLangVec( aLocaleSequence );
-            pAvailHyphSvcs->push_back( std::make_unique<SvcInfo>( aImplName, aLanguages ) );
         }
     }
 }
@@ -1118,7 +1107,6 @@ void LngSvcMgr::GetAvailableThesSvcs_Impl()
         uno::Reference< lang::XSingleComponentFactory > xCompFactory;
         uno::Reference< lang::XSingleServiceFactory > xFactory;
 
-        uno::Reference< linguistic2::XThesaurus > xSvc;
         xCompFactory.set(aCurrent, css::uno::UNO_QUERY);
         if (!xCompFactory.is())
         {
@@ -1128,25 +1116,23 @@ void LngSvcMgr::GetAvailableThesSvcs_Impl()
         {
             try
             {
-                xSvc.set( ( xCompFactory.is() ? xCompFactory->createInstanceWithContext( xContext ) : xFactory->createInstance() ), uno::UNO_QUERY );
+                uno::Reference< linguistic2::XThesaurus > xSvc( ( xCompFactory.is() ? xCompFactory->createInstanceWithContext( xContext ) : xFactory->createInstance() ), uno::UNO_QUERY_THROW );
+
+                OUString            aImplName;
+                std::vector< LanguageType >    aLanguages;
+                uno::Reference< XServiceInfo > xInfo( xSvc, uno::UNO_QUERY );
+                if (xInfo.is())
+                    aImplName = xInfo->getImplementationName();
+                SAL_WARN_IF( aImplName.isEmpty(), "linguistic", "empty implementation name" );
+                uno::Sequence<lang::Locale> aLocaleSequence(xSvc->getLocales());
+                aLanguages = LocaleSeqToLangVec( aLocaleSequence );
+
+                pAvailThesSvcs->push_back( std::make_unique<SvcInfo>( aImplName, aLanguages ) );
             }
             catch (const uno::Exception &)
             {
                SAL_WARN( "linguistic", "createInstance failed" );
             }
-        }
-        if (xSvc.is())
-        {
-            OUString            aImplName;
-            std::vector< LanguageType >    aLanguages;
-            uno::Reference< XServiceInfo > xInfo( xSvc, uno::UNO_QUERY );
-            if (xInfo.is())
-                aImplName = xInfo->getImplementationName();
-            SAL_WARN_IF( aImplName.isEmpty(), "linguistic", "empty implementation name" );
-            uno::Sequence<lang::Locale> aLocaleSequence(xSvc->getLocales());
-            aLanguages = LocaleSeqToLangVec( aLocaleSequence );
-
-            pAvailThesSvcs->push_back( std::make_unique<SvcInfo>( aImplName, aLanguages ) );
         }
     }
 }
