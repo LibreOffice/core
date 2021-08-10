@@ -27,6 +27,7 @@
 
 #include <vector>
 #include <memory>
+#include <optional>
 
 namespace com::sun::star::i18n { class XLocaleData5; }
 namespace com::sun::star::uno { class XComponentContext; }
@@ -89,8 +90,8 @@ private:
             algorithm == _algorithm;
         }
     };
-    std::vector<std::unique_ptr<lookupTableItem>>       lookupTable;
-    lookupTableItem *                                   cachedItem;
+    std::vector<lookupTableItem>       lookupTable;
+    std::optional<lookupTableItem>     cachedItem;
 
     // Service Factory
     css::uno::Reference < css::uno::XComponentContext > m_xContext;
