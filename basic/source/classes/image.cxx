@@ -61,11 +61,6 @@ void SbiImage::Clear()
     bError     = false;
 }
 
-static bool SbiGood( SvStream const & r )
-{
-    return r.good();
-}
-
 // Open Record
 static sal_uInt64 SbiOpenRecord( SvStream& r, FileOffset nSignature, sal_uInt16 nElem )
 {
@@ -218,14 +213,14 @@ bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
                     nCount = nMaxStrings;
                 }
                 MakeStrings( nCount );
-                for( size_t i = 0; i < mvStringOffsets.size() && SbiGood( r ); i++ )
+                for (size_t i = 0; i < mvStringOffsets.size() && r.good(); i++)
                 {
                     sal_uInt32 nOff;
                     r.ReadUInt32( nOff );
                     mvStringOffsets[ i ] = static_cast<sal_uInt16>(nOff);
                 }
                 r.ReadUInt32( nLen );
-                if( SbiGood( r ) )
+                if (r.good())
                 {
                     pStrings.reset(new sal_Unicode[ nLen ]);
                     nStringSize = static_cast<sal_uInt16>(nLen);
@@ -369,7 +364,7 @@ bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
     }
 done:
     r.Seek( nLast );
-    if( !SbiGood( r ) )
+    if (!r.good())
     {
         bError = true;
     }
@@ -410,28 +405,28 @@ bool SbiImage::Save( SvStream& r, sal_uInt32 nVer )
       .WriteInt32( 0 );
 
     // Name?
-    if( !aName.isEmpty() && SbiGood( r ) )
+    if (!aName.isEmpty() && r.good())
     {
         nPos = SbiOpenRecord( r, FileOffset::Name, 1 );
         r.WriteUniOrByteString( aName, eCharSet );
         SbiCloseRecord( r, nPos );
     }
     // Comment?
-    if( !aComment.isEmpty() && SbiGood( r ) )
+    if (!aComment.isEmpty() && r.good())
     {
         nPos = SbiOpenRecord( r, FileOffset::Comment, 1 );
         r.WriteUniOrByteString( aComment, eCharSet );
         SbiCloseRecord( r, nPos );
     }
     // Source?
-    if( !aOUSource.isEmpty() && SbiGood( r ) )
+    if (!aOUSource.isEmpty() && r.good())
     {
         nPos = SbiOpenRecord( r, FileOffset::Source, 1 );
         r.WriteUniOrByteString( aOUSource, eCharSet );
         SbiCloseRecord( r, nPos );
     }
     // Binary data?
-    if (aCode.size() && SbiGood(r))
+    if (aCode.size() && r.good())
     {
         nPos = SbiOpenRecord( r, FileOffset::PCode, 1 );
         if ( bLegacy )
@@ -453,7 +448,7 @@ bool SbiImage::Save( SvStream& r, sal_uInt32 nVer )
         nPos = SbiOpenRecord( r, FileOffset::StringPool, mvStringOffsets.size() );
         // For every String:
         //  sal_uInt32 Offset of the Strings in the Stringblock
-        for( size_t i = 0; i < mvStringOffsets.size() && SbiGood( r ); i++ )
+        for (size_t i = 0; i < mvStringOffsets.size() && r.good(); i++)
         {
             r.WriteUInt32( mvStringOffsets[ i ] );
         }
@@ -559,7 +554,7 @@ bool SbiImage::Save( SvStream& r, sal_uInt32 nVer )
     }
     // Set overall length
     SbiCloseRecord( r, nStart );
-    if( !SbiGood( r ) )
+    if (!r.good())
     {
         bError = true;
     }
