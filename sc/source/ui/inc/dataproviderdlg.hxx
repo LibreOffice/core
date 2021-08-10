@@ -86,6 +86,7 @@ public:
     void replaceNullTransformation();
     void dateTimeTransformation();
     void findReplaceTransformation();
+    void deleteRowTransformation();
 
     void updateApplyBtn(bool bValidConfig);
     void isValid();
