@@ -655,7 +655,7 @@ OUString SbiImage::GetString( short nId, SbxDataType *eType ) const
         sal_uInt32 nOff = mvStringOffsets[ nId - 1 ];
         sal_Unicode* pStr = pStrings.get() + nOff;
 
-        sal_uInt32 nNextOff = (nId < short(mvStringOffsets.size())) ? mvStringOffsets[ nId ] : nStringOff;
+        sal_uInt32 nNextOff = (nId < short(mvStringOffsets.size())) ? mvStringOffsets[ nId ] : nStringSize;
         sal_uInt32 nLen = nNextOff - nOff - 1;
         // #i42467: Special treatment for vbNullChar
         if (*pStr == 0)
