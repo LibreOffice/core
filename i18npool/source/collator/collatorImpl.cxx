@@ -34,7 +34,6 @@ namespace i18npool {
 CollatorImpl::CollatorImpl( const Reference < XComponentContext >& rxContext ) : m_xContext(rxContext)
 {
     mxLocaleData.set( LocaleData2::create(rxContext) );
-    cachedItem = nullptr;
 }
 
 CollatorImpl::~CollatorImpl()
@@ -139,10 +138,10 @@ bool
 CollatorImpl::createCollator(const lang::Locale& rLocale, const OUString& serviceName, const OUString& rSortAlgorithm)
 {
     for (size_t l = 0; l < lookupTable.size(); l++) {
-        cachedItem = lookupTable[l].get();
+        cachedItem = lookupTable[l];
         if (cachedItem->service == serviceName) {// cross locale sharing
-            lookupTable.emplace_back(new lookupTableItem(rLocale, rSortAlgorithm, serviceName, cachedItem->xC));
-            cachedItem = lookupTable.back().get();
+            lookupTable.emplace_back(rLocale, rSortAlgorithm, serviceName, cachedItem->xC);
+            cachedItem = lookupTable.back();
             return true;
         }
     }
@@ -153,8 +152,8 @@ CollatorImpl::createCollator(const lang::Locale& rLocale, const OUString& servic
         Reference < XCollator > xC;
         xC.set( xI, UNO_QUERY );
         if (xC.is()) {
-            lookupTable.emplace_back(new lookupTableItem(rLocale, rSortAlgorithm, serviceName, xC));
-            cachedItem = lookupTable.back().get();
+            lookupTable.emplace_back(rLocale, rSortAlgorithm, serviceName, xC);
+            cachedItem = lookupTable.back();
             return true;
         }
     }
@@ -165,7 +164,7 @@ void
 CollatorImpl::loadCachedCollator(const lang::Locale& rLocale, const OUString& rSortAlgorithm)
 {
     for (const auto& i : lookupTable) {
-        cachedItem = i.get();
+        cachedItem = i;
         if (cachedItem->equals(rLocale, rSortAlgorithm)) {
             return;
         }
@@ -200,7 +199,7 @@ CollatorImpl::loadCachedCollator(const lang::Locale& rLocale, const OUString& rS
         bLoaded = createCollator( rLocale, "Unicode", rSortAlgorithm);
         if (!bLoaded)
         {
-            cachedItem = nullptr;
+            cachedItem.reset();
             throw RuntimeException();   // could not load any service
         }
     }

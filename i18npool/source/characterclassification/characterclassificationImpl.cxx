@@ -125,10 +125,10 @@ bool CharacterClassificationImpl::createLocaleSpecificCharacterClassification(co
 {
     // to share service between same Language but different Country code, like zh_CN and zh_SG
     for (size_t l = 0; l < lookupTable.size(); l++) {
-        cachedItem = lookupTable[l].get();
+        cachedItem = lookupTable[l];
         if (serviceName == cachedItem->aName) {
-            lookupTable.emplace_back( new lookupTableItem(rLocale, serviceName, cachedItem->xCI) );
-            cachedItem = lookupTable.back().get();
+            lookupTable.emplace_back( rLocale, serviceName, cachedItem->xCI );
+            cachedItem = lookupTable.back();
             return true;
         }
     }
@@ -140,8 +140,8 @@ bool CharacterClassificationImpl::createLocaleSpecificCharacterClassification(co
     if ( xI.is() ) {
         xCI.set( xI, UNO_QUERY );
         if (xCI.is()) {
-            lookupTable.emplace_back( new lookupTableItem(rLocale, serviceName, xCI) );
-            cachedItem = lookupTable.back().get();
+            lookupTable.emplace_back( rLocale, serviceName, xCI );
+            cachedItem = lookupTable.back();
             return true;
         }
     }
@@ -156,7 +156,7 @@ CharacterClassificationImpl::getLocaleSpecificCharacterClassification(const Loca
         return cachedItem->xCI;
     else {
         for (const auto & i : lookupTable) {
-            cachedItem = i.get();
+            cachedItem = i;
             if (cachedItem->equals(rLocale))
                 return cachedItem->xCI;
         }
@@ -179,8 +179,8 @@ CharacterClassificationImpl::getLocaleSpecificCharacterClassification(const Loca
             return cachedItem->xCI;
         else if (xUCI.is())
         {
-            lookupTable.emplace_back( new lookupTableItem(rLocale, "Unicode", xUCI) );
-            cachedItem = lookupTable.back().get();
+            lookupTable.emplace_back( rLocale, "Unicode", xUCI );
+            cachedItem = lookupTable.back();
             return cachedItem->xCI;
         }
     }
