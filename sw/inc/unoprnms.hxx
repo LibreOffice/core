@@ -355,6 +355,7 @@
 #define UNO_NAME_RIGHT_BORDER "RightBorder"
 #define UNO_NAME_TOP_BORDER "TopBorder"
 #define UNO_NAME_BOTTOM_BORDER "BottomBorder"
+#define UNO_NAME_DIAGONAL_TLBR "DiagonalTLBR"
 #define UNO_NAME_BORDER_DISTANCE "BorderDistance"
 #define UNO_NAME_LEFT_BORDER_DISTANCE "LeftBorderDistance"
 #define UNO_NAME_RIGHT_BORDER_DISTANCE "RightBorderDistance"
