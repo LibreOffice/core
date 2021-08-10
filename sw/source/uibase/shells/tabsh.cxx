@@ -561,6 +561,31 @@ void SwTableShell::Execute(SfxRequest &rReq)
             bCallDone = true;
             break;
         }
+        case SID_ATTR_BORDER_DIAG_TLBR:
+        {
+        // code from ./sc/source/ui/view/formatsh.cxx:1963
+        // we should set diagonal left border here
+
+//            const ScPatternAttr* pOldAttrs = pTabViewShell->GetSelectionPattern();
+//            SfxItemSet aOldSet(pOldAttrs->GetItemSet());
+//            SfxItemSet aNewSet(pOldAttrs->GetItemSet());
+//            const SfxPoolItem* pItem = nullptr;
+
+//            if(SID_ATTR_BORDER_DIAG_TLBR == nSlot)
+//            {
+//                if(SfxItemState::SET == pArgs->GetItemState(RES_BOX_TLBR, true, &pItem))
+//                {
+//                    SvxLineItem aItem(RES_BOX_TLBR);
+//                    aItem.SetLine(pArgs->Get(RES_BOX_TLBR).GetLine());
+//                    aNewSet.Put(aItem);
+//                    rReq.AppendItem(aItem);
+//                    rSh.AutoUpdateFrame(&aNewSet, &aOldSet);
+//                    pTabViewShell->ApplyAttributes(&aNewSet, &aOldSet);
+//                }
+//            }
+
+            break;
+        }
         case FN_INSERT_TABLE:
             InsertTable( rReq );
             break;

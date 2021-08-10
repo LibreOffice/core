@@ -187,6 +187,7 @@
         { u"" UNO_NAME_RIGHT_BORDER,                        RES_BOX,                       cppu::UnoType<css::table::BorderLine>::get(),    PropertyAttribute::MAYBEVOID, RIGHT_BORDER           | CONVERT_TWIPS }, \
         { u"" UNO_NAME_TOP_BORDER,                          RES_BOX,                       cppu::UnoType<css::table::BorderLine>::get(),    PropertyAttribute::MAYBEVOID, TOP_BORDER             | CONVERT_TWIPS }, \
         { u"" UNO_NAME_BOTTOM_BORDER,                       RES_BOX,                       cppu::UnoType<css::table::BorderLine>::get(),    PropertyAttribute::MAYBEVOID, BOTTOM_BORDER          | CONVERT_TWIPS }, \
+        { u"" UNO_NAME_DIAGONAL_TLBR,                       RES_BOX_TLBR,                  cppu::UnoType<css::table::BorderLine>::get(),    0,                                                 0 | CONVERT_TWIPS }, \
         { u"" UNO_NAME_BORDER_DISTANCE,                     RES_BOX,                       cppu::UnoType<sal_Int32>::get(),         PropertyAttribute::MAYBEVOID, BORDER_DISTANCE        | CONVERT_TWIPS }, \
         { u"" UNO_NAME_LEFT_BORDER_DISTANCE,                RES_BOX,                       cppu::UnoType<sal_Int32>::get(),         PropertyAttribute::MAYBEVOID, LEFT_BORDER_DISTANCE   | CONVERT_TWIPS }, \
         { u"" UNO_NAME_RIGHT_BORDER_DISTANCE,               RES_BOX,                       cppu::UnoType<sal_Int32>::get(),         PropertyAttribute::MAYBEVOID, RIGHT_BORDER_DISTANCE  | CONVERT_TWIPS }, \
@@ -316,6 +317,7 @@
     { u"" UNO_NAME_RIGHT_BORDER, RES_BOX,             cppu::UnoType<css::table::BorderLine>::get(),  0, RIGHT_BORDER |CONVERT_TWIPS },                 \
     { u"" UNO_NAME_TOP_BORDER, RES_BOX,               cppu::UnoType<css::table::BorderLine>::get(),  0, TOP_BORDER   |CONVERT_TWIPS },             \
     { u"" UNO_NAME_BOTTOM_BORDER, RES_BOX,                cppu::UnoType<css::table::BorderLine>::get(),  0, BOTTOM_BORDER|CONVERT_TWIPS },                 \
+    { u"" UNO_NAME_DIAGONAL_TLBR, RES_BOX_TLBR,       cppu::UnoType<css::table::BorderLine>::get(),  0, 0 | CONVERT_TWIPS }, \
     { u"" UNO_NAME_BORDER_DISTANCE, RES_BOX,              cppu::UnoType<sal_Int32>::get(),   0, BORDER_DISTANCE|CONVERT_TWIPS },                       \
     { u"" UNO_NAME_LEFT_BORDER_DISTANCE, RES_BOX,             cppu::UnoType<sal_Int32>::get(),   0, LEFT_BORDER_DISTANCE  |CONVERT_TWIPS },                \
     { u"" UNO_NAME_RIGHT_BORDER_DISTANCE, RES_BOX,                cppu::UnoType<sal_Int32>::get(),   0, RIGHT_BORDER_DISTANCE |CONVERT_TWIPS },                \
@@ -427,6 +429,7 @@
                     { u"" UNO_NAME_RIGHT_BORDER, RES_BOX,             cppu::UnoType<css::table::BorderLine>::get(),  0, RIGHT_BORDER |CONVERT_TWIPS },\
                     { u"" UNO_NAME_TOP_BORDER, RES_BOX,               cppu::UnoType<css::table::BorderLine>::get(),  0, TOP_BORDER   |CONVERT_TWIPS },\
                     { u"" UNO_NAME_BOTTOM_BORDER, RES_BOX,                cppu::UnoType<css::table::BorderLine>::get(),  0, BOTTOM_BORDER|CONVERT_TWIPS },\
+                    { u"" UNO_NAME_DIAGONAL_TLBR, RES_BOX_TLBR,       cppu::UnoType<css::table::BorderLine>::get(),  0, 0 | CONVERT_TWIPS }, \
                     { u"" UNO_NAME_BORDER_DISTANCE, RES_BOX,              cppu::UnoType<sal_Int32>::get(),   0, BORDER_DISTANCE|CONVERT_TWIPS },\
                     { u"" UNO_NAME_LEFT_BORDER_DISTANCE, RES_BOX,             cppu::UnoType<sal_Int32>::get(),   0, LEFT_BORDER_DISTANCE  |CONVERT_TWIPS },\
                     { u"" UNO_NAME_RIGHT_BORDER_DISTANCE, RES_BOX,                cppu::UnoType<sal_Int32>::get(),   0, RIGHT_BORDER_DISTANCE |CONVERT_TWIPS },\
