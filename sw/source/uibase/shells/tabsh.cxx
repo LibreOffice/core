@@ -562,6 +562,33 @@ void SwTableShell::Execute(SfxRequest &rReq)
             bCallDone = true;
             break;
         }
+        case SID_ATTR_BORDER_DIAG_TLBR:
+        {
+            // set diagonal left border here
+            if(!pArgs)
+                break;
+
+            OSL_ENSURE( (SfxItemState::SET == pArgs->GetItemState(RES_BOX_TLBR, true, &pItem)), "where is BoxItem?" );
+
+            std::shared_ptr<SvxLineItem> aBox(std::make_shared<SvxLineItem>(RES_BOX_TLBR));
+
+            SfxItemSet aCoreSet( GetPool(),
+                            svl::Items<RES_BOX_TLBR, RES_BOX_TLBR,
+                            SID_ATTR_BORDER_DIAG_TLBR, SID_ATTR_BORDER_DIAG_TLBR>);
+
+            SvxBorderLine aBorderLine;
+            aBorderLine.SetBorderLineStyle(SvxBorderLineStyle::SOLID);
+            aBorderLine.SetWidth( DEF_LINE_WIDTH_5 );
+
+            aBox->SetLine(&aBorderLine);
+
+            aCoreSet.Put( *aBox  );
+            rSh.SetTabBorders( aCoreSet );
+
+            rReq.AppendItem( *aBox );
+            bCallDone = true;
+            break;
+        }
         case FN_INSERT_TABLE:
             InsertTable( rReq );
             break;
