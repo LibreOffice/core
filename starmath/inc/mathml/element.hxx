@@ -83,7 +83,7 @@ private:
     // Parent element
     SmMlElement* m_aParentElement;
 
-    // Child id, so it is possible to iterata
+    // Child id, so it is possible to iterate
     size_t m_nSubElementId;
 
 private:
@@ -147,7 +147,7 @@ public: // attributes
     size_t getAttributeCount() const { return m_aAttributeList.size(); };
 
     /**
-      * Get's a given attribute.
+      * Get a given attribute.
       * If no available returns empty attribute.
       * @param nAttributePos
       * @return given attribute.
@@ -159,7 +159,7 @@ public: // attributes
     }
 
     /**
-      * Get's a given attribute.
+      * Get a given attribute.
       * If no available returns empty attribute.
       * @param nAttributePos
       * @return given attribute.
@@ -176,7 +176,7 @@ public: // attributes
 
 protected: // attributes
     /**
-      * Get's a given attribute.
+      * Get a given attribute.
       * If no available returns empty attribute.
       * @param nAttributePos
       * @return given attribute.
@@ -233,12 +233,12 @@ public: // sub elements
     void setSubElement(size_t nPos, SmMlElement* aElement);
 
     /**
-      * Get's subelement id
+      * Get subelement id
       */
     size_t getSubElementId() const { return m_nSubElementId; }
 
     /**
-      * Set's subelement id
+      * Set subelement id
       * @param nSubElementId
       */
     void setSubElementId(size_t nSubElementId) { m_nSubElementId = nSubElementId; }
