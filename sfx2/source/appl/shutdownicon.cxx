@@ -20,8 +20,6 @@
 #include <sal/config.h>
 #include <sal/log.hxx>
 
-#include <mutex>
-
 #include "shutdownicon.hxx"
 #include <sfx2/strings.hrc>
 #include <sfx2/app.hxx>
@@ -105,41 +103,19 @@ css::uno::Sequence<OUString> SAL_CALL ShutdownIcon::getSupportedServiceNames()
 bool ShutdownIcon::bModalMode = false;
 rtl::Reference<ShutdownIcon> ShutdownIcon::pShutdownIcon;
 
-extern "C" {
-    static void disabled_initSystray() { }
-    static void disabled_deInitSystray() { }
-}
-
-namespace {
-
-oslGenericFunction pInitSystray = disabled_initSystray;
-oslGenericFunction pDeInitSystray = disabled_deInitSystray;
-
-void LoadModule()
-{
-#ifdef ENABLE_QUICKSTART_APPLET
-#  ifdef _WIN32
-    pInitSystray = win32_init_sys_tray;
-    pDeInitSystray = win32_shutdown_sys_tray;
-#  elif defined MACOSX
-    pInitSystray = aqua_init_systray;
-    pDeInitSystray = aqua_shutdown_systray;
-#  endif // MACOSX
-#endif // ENABLE_QUICKSTART_APPLET
-}
-
-}
-
 void ShutdownIcon::initSystray()
 {
     if (m_bInitialized)
         return;
     m_bInitialized = true;
 
-    static std::once_flag flag;
-    std::call_once(flag, LoadModule);
-    m_bVeto = true;
-    pInitSystray();
+#ifdef ENABLE_QUICKSTART_APPLET
+#  ifdef _WIN32
+    win32_init_sys_tray();
+#  elif defined MACOSX
+    aqua_init_systray();
+#  endif // MACOSX
+#endif // ENABLE_QUICKSTART_APPLET
 }
 
 void ShutdownIcon::deInitSystray()
@@ -147,12 +123,15 @@ void ShutdownIcon::deInitSystray()
     if (!m_bInitialized)
         return;
 
-    if (pDeInitSystray)
-        pDeInitSystray();
+#ifdef ENABLE_QUICKSTART_APPLET
+#  ifdef _WIN32
+    win32_shutdown_sys_tray();
+#  elif defined MACOSX
+    aqua_shutdown_systray();
+#  endif // MACOSX
+#endif // ENABLE_QUICKSTART_APPLET
 
     m_bVeto = false;
-    pInitSystray = nullptr;
-    pDeInitSystray = nullptr;
 
     m_pFileDlg.reset();
     m_bInitialized = false;
