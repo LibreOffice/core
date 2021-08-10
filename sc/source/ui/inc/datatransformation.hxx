@@ -31,7 +31,8 @@ enum class TransformationType
     NUMBER_TRANSFORMATION,
     REMOVE_NULL_TRANSFORMATION,
     DATETIME_TRANSFORMATION,
-    FINDREPLACE_TRANSFORMATION
+    FINDREPLACE_TRANSFORMATION,
+    DELETEROW_TRANSFORMATION
 };
 
 enum class TEXT_TRANSFORM_TYPE { TO_LOWER, TO_UPPER, CAPITALIZE, TRIM };
@@ -195,6 +196,19 @@ class SC_DLLPUBLIC FindReplaceTransformation : public DataTransformation
         SCCOL getColumn() const;
         const OUString & getFindString() const;
         const OUString & getReplaceString() const;
+};
+
+class SC_DLLPUBLIC DeleteRowTransformation : public DataTransformation
+{
+    SCCOL mnCol;
+    OUString maFindString;
+
+    public:
+        DeleteRowTransformation(SCCOL nCol, const OUString& aFindString);
+        virtual void Transform(ScDocument& rDoc) const override;
+        virtual TransformationType getTransformationType() const override;
+        SCCOL getColumn() const;
+        const OUString & getFindString() const;
 };
 
 }

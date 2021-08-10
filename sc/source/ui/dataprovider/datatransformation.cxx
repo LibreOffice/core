@@ -1217,6 +1217,50 @@ const OUString& FindReplaceTransformation::getReplaceString() const
     return maReplaceString;
 }
 
+DeleteRowTransformation::DeleteRowTransformation(SCCOL nCol, const OUString& aFindString)
+    : mnCol(nCol)
+    , maFindString(aFindString)
+{
+}
+
+void DeleteRowTransformation::Transform(ScDocument& rDoc) const
+{
+    sal_Int32 nIncrementIndex = 0;
+    if (mnCol == -1)
+        return;
+
+    SCROW nEndRow = getLastRow(rDoc, mnCol);
+    for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
+    {
+        CellType eType;
+        rDoc.GetCellType(mnCol, nRow - nIncrementIndex, 0, eType);
+        if (eType != CELLTYPE_NONE)
+        {
+            OUString aStr = rDoc.GetString(mnCol, nRow - nIncrementIndex, 0);
+            if (aStr == maFindString)
+            {
+                rDoc.DeleteRow(0, 0, rDoc.MaxCol(), 0, nRow - nIncrementIndex, 1);
+                nIncrementIndex++;
+            }
+        }
+    }
+}
+
+TransformationType DeleteRowTransformation::getTransformationType() const
+{
+    return TransformationType::DELETEROW_TRANSFORMATION;
+}
+
+SCCOL DeleteRowTransformation::getColumn() const
+{
+    return mnCol;
+}
+
+const OUString& DeleteRowTransformation::getFindString() const
+{
+    return maFindString;
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
