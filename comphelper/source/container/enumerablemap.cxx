@@ -39,6 +39,7 @@
 #include <cmath>
 #include <map>
 #include <memory>
+#include <optional>
 #include <utility>
 
 namespace comphelper
@@ -89,7 +90,7 @@ namespace comphelper
     {
         Type                                        m_aKeyType;
         Type                                        m_aValueType;
-        std::unique_ptr< KeyedValues >            m_pValues;
+        std::optional< KeyedValues >                m_pValues;
         std::shared_ptr< IKeyPredicateLess >      m_pKeyCompare;
         bool                                        m_bMutable;
         std::vector< MapEnumerator* >             m_aModListeners;
@@ -102,11 +103,11 @@ namespace comphelper
         MapData( const MapData& _source )
             :m_aKeyType( _source.m_aKeyType )
             ,m_aValueType( _source.m_aValueType )
-            ,m_pValues( new KeyedValues( *_source.m_pValues ) )
             ,m_pKeyCompare( _source.m_pKeyCompare )
             ,m_bMutable( false )
             ,m_aModListeners()
         {
+            m_pValues.emplace( *_source.m_pValues );
         }
     private:
         MapData& operator=( const MapData& _source ) = delete;
@@ -356,7 +357,7 @@ namespace comphelper
         m_aData.m_aKeyType = aKeyType;
         m_aData.m_aValueType = aValueType;
         m_aData.m_pKeyCompare = std::move(pComparator);
-        m_aData.m_pValues.reset( new KeyedValues( *m_aData.m_pKeyCompare ) );
+        m_aData.m_pValues.emplace( *m_aData.m_pKeyCompare );
         m_aData.m_bMutable = bMutable;
 
         if ( aInitialValues.hasElements() )
