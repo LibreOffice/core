@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "56fa7d0a_4eaa7c56",
+        "filename": "offapi/com/sun/star/sheet/XExtensionDataProvider.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-08-10T17:19:49Z",
+      "side": 1,
+      "message": "please add comment with \"@since LibreOffice 7.3\" to all new IDL types",
+      "revId": "48ac181456fc17db7ea6cc273a221bbe47bbc290",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
