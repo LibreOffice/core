@@ -28,6 +28,7 @@
 
 #include <cppuhelper/queryinterface.hxx>
 #include <osl/diagnose.h>
+#include <cppuhelper/supportsservice.hxx>
 
 #include <specialobject.hxx>
 
@@ -51,6 +52,8 @@ uno::Any SAL_CALL OSpecialEmbeddedObject::queryInterface( const uno::Type& rType
                                         static_cast< embed::XClassifiedObject* >( this ),
                                         static_cast< embed::XComponentSupplier* >( this ),
                                         static_cast< util::XCloseable* >( this ),
+                                        static_cast< lang::XServiceInfo* >( this ),
+                                        static_cast< lang::XTypeProvider* >( this ),
                                         static_cast< document::XEventBroadcaster* >( this ) );
     if ( aReturn.hasValue() )
         return aReturn;
@@ -158,6 +161,21 @@ void SAL_CALL OSpecialEmbeddedObject::doVerb( sal_Int32 nVerbID )
     }
     else
         OCommonEmbeddedObject::doVerb( nVerbID );
+}
+
+OUString SAL_CALL OSpecialEmbeddedObject::getImplementationName()
+{
+    return "com.sun.star.comp.embed.OSpecialEmbeddedObject";
+}
+
+sal_Bool SAL_CALL OSpecialEmbeddedObject::supportsService(const OUString& ServiceName)
+{
+    return cppu::supportsService(this, ServiceName);
+}
+
+uno::Sequence<OUString> SAL_CALL OSpecialEmbeddedObject::getSupportedServiceNames()
+{
+    return { "com.sun.star.comp.embed.OSpecialEmbeddedObject" };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
