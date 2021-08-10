@@ -19,6 +19,9 @@
 
 #include <sfx2/minfitem.hxx>
 #include <sal/log.hxx>
+#include <config_features.h>
+
+#if HAVE_FEATURE_SCRIPTING
 
 SfxPoolItem* SfxMacroInfoItem::CreateDefault() { SAL_WARN( "sfx", "No SfxMacroInfItem factory available"); return nullptr; }
 
@@ -67,5 +70,6 @@ OUString SfxMacroInfoItem::GetQualifiedName() const
     return aMacroName;
 }
 
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

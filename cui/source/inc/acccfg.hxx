@@ -28,9 +28,12 @@
 #include <vcl/idle.hxx>
 #include <vcl/keycod.hxx>
 #include <i18nutil/searchopt.hxx>
+#include <config_features.h>
 #include "cfgutil.hxx"
 
+#if HAVE_FEATURE_SCRIPTING
 class SfxMacroInfoItem;
+#endif
 class CuiConfigFunctionListBox;
 class SfxAcceleratorConfigPage;
 class SfxStringItem;
@@ -76,7 +79,9 @@ enum class StartFileDialogType
 class SfxAcceleratorConfigPage : public SfxTabPage
 {
 private:
+#if HAVE_FEATURE_SCRIPTING
     const SfxMacroInfoItem* m_pMacroInfoItem;
+#endif
     std::unique_ptr<sfx2::FileDialogHelper> m_pFileDlg;
 
     OUString aLoadAccelConfigStr;
