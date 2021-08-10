@@ -720,7 +720,7 @@ void SbxValue::Format( OUString& rRes, const OUString* pFmt ) const
                 else
                 {
                     aFmtStr = OUString::createFromAscii(pInfo->mpOOoFormat);
-                    pFormatter->PutandConvertEntry( aFmtStr, nCheckPos, nType, nIndex, LANGUAGE_ENGLISH, eLangType, true);
+                    pFormatter->PutandConvertEntry( aFmtStr, nCheckPos, nType, nIndex, LANGUAGE_ENGLISH_US, eLangType, true);
                 }
                 pFormatter->GetOutputString( nNumber, nIndex, rRes, &pCol );
             }
@@ -737,7 +737,7 @@ void SbxValue::Format( OUString& rRes, const OUString* pFmt ) const
                     if( floor( nNumber ) != nNumber )
                     {
                         aFmtStr = "H:MM:SS AM/PM";
-                        pFormatter->PutandConvertEntry( aFmtStr, nCheckPos, nType, nIndex, LANGUAGE_ENGLISH, eLangType, true);
+                        pFormatter->PutandConvertEntry( aFmtStr, nCheckPos, nType, nIndex, LANGUAGE_ENGLISH_US, eLangType, true);
                         OUString aTime;
                         pFormatter->GetOutputString( nNumber, nIndex, aTime, &pCol );
                         rRes += " " + aTime;
@@ -747,7 +747,7 @@ void SbxValue::Format( OUString& rRes, const OUString* pFmt ) const
                 {
                     // long time only
                     aFmtStr = "H:MM:SS AM/PM";
-                    pFormatter->PutandConvertEntry( aFmtStr, nCheckPos, nType, nIndex, LANGUAGE_ENGLISH, eLangType, true);
+                    pFormatter->PutandConvertEntry( aFmtStr, nCheckPos, nType, nIndex, LANGUAGE_ENGLISH_US, eLangType, true);
                     pFormatter->GetOutputString( nNumber, nIndex, rRes, &pCol );
                 }
             }
@@ -783,7 +783,7 @@ void SbxValue::Format( OUString& rRes, const OUString* pFmt ) const
             }
             else
             {
-                pFormatter->PutandConvertEntry( aFmtStr, nCheckPos, nType, nIndex, LANGUAGE_ENGLISH, eLangType, true);
+                pFormatter->PutandConvertEntry( aFmtStr, nCheckPos, nType, nIndex, LANGUAGE_ENGLISH_US, eLangType, true);
                 pFormatter->GetOutputString( nNumber, nIndex, rRes, &pCol );
             }
 
