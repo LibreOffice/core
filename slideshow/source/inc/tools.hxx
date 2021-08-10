@@ -70,7 +70,6 @@ namespace slideshow
             return d + (d >> 3);
         }
 
-        // xxx todo: remove with boost::hash when 1.33 is available
         template <typename T>
         struct hash
         {

@@ -34,7 +34,7 @@
 
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/polygon/WaveLine.hxx>
-#include <boost/functional/hash.hpp>
+#include <o3tl/hash_combine.hxx>
 #include <o3tl/lru_map.hxx>
 
 #define UNDERLINE_LAST      LINESTYLE_BOLDWAVE
@@ -90,8 +90,8 @@ namespace {
             size_t operator() ( const Key& rKey ) const
             {
                 size_t aSeed = 0;
-                boost::hash_combine(aSeed, rKey.m_aFirst);
-                boost::hash_combine(aSeed, rKey.m_aSecond);
+                o3tl::hash_combine(aSeed, rKey.m_aFirst);
+                o3tl::hash_combine(aSeed, rKey.m_aSecond);
                 return aSeed;
             }
         };
