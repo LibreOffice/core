@@ -21,6 +21,7 @@
 #include <editeng/boxitem.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/frmdiritem.hxx>
+#include <editeng/lineitem.hxx>
 #include <fesh.hxx>
 #include <fmtornt.hxx>
 #include <fmtfsize.hxx>
@@ -647,6 +648,14 @@ void SwDoc::SetTabBorders( const SwCursor& rCursor, const SfxItemSet& rSet )
     const SvxBoxItem* pSetBox;
     const SvxBoxInfoItem *pSetBoxInfo;
 
+    // diagonal down border
+    SvxLineItem pTLBRLine(RES_BOX_DIAGONAL_DOWN);
+    const SvxBorderLine dLeftBorderLine( nullptr, 10 );
+
+//    const SfxPoolItem* pItem;
+//    const SvxLineItem* pTLBRLine =static_cast< const SvxLineItem* >( pItem );
+//    pTLBRLine = rSet.GetItem(RES_BOX_DIAGONAL_DOWN);
+
     const SvxBorderLine* pLeft = nullptr;
     const SvxBorderLine* pRight = nullptr;
     const SvxBorderLine* pTop = nullptr;
@@ -681,6 +690,13 @@ void SwDoc::SetTabBorders( const SwCursor& rCursor, const SfxItemSet& rSet )
         pRight = pSetBox->GetRight();
         pTop = pSetBox->GetTop();
         pBottom = pSetBox->GetBottom();
+    }
+    else if( SfxItemState::SET == rSet.GetItemState( RES_BOX_DIAGONAL_DOWN, false,
+        reinterpret_cast<const SfxPoolItem**>(&pSetBox)) )
+    {
+        pTLBRLine.SetLine(&dLeftBorderLine);
+        bTopValid = bBottomValid = bLeftValid = bRightValid = false;
+        pSetBox = nullptr;
     }
     else
     {
@@ -865,7 +881,13 @@ void SwDoc::SetTabBorders( const SwCursor& rCursor, const SfxItemSet& rSet )
             {
                 SwFrameFormat *pOld = pBox->GetFrameFormat();
                 SwFrameFormat *pNew = pBox->ClaimFrameFormat();
-                pNew->SetFormatAttr( aBox );
+
+                if( SfxItemState::SET == rSet.GetItemState( RES_BOX_DIAGONAL_DOWN, false,
+                        reinterpret_cast<const SfxPoolItem**>(&pSetBox)) )
+                    pNew->SetFormatAttr( pTLBRLine );
+                else // RES_BOX
+                    pNew->SetFormatAttr( aBox );
+
                 aFormatCmp.push_back(std::make_unique<SwTableFormatCmp>(pOld, pNew, nType));
             }
         }
