@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "a828887e_a7bbcfee",
+        "filename": "basic/source/classes/image.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 615,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-08-10T10:23:13Z",
+      "side": 1,
+      "message": "You are right. May you could reproduce this error and we can fix it later after a bug report?",
+      "parentUuid": "fbe520b8_2eb7bfe0",
+      "revId": "a1c42d1b82888fefe9732af2ca7fe9f892f0e0ff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5790c1ec_f7bc821b",
         "filename": "basic/source/classes/image.cxx",
         "patchSetId": 12
