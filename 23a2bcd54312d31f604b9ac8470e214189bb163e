@@ -45,6 +45,30 @@
       "revId": "23a2bcd54312d31f604b9ac8470e214189bb163e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c1427281_8adadfef",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2021-08-10T16:00:57Z",
+      "side": 1,
+      "message": "I will address both in my next patchset.",
+      "parentUuid": "031928e5_b3c838c4",
+      "range": {
+        "startLine": 21,
+        "startChar": 4,
+        "endLine": 21,
+        "endChar": 11
+      },
+      "revId": "23a2bcd54312d31f604b9ac8470e214189bb163e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
