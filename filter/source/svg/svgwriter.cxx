@@ -30,6 +30,7 @@
 #include <vcl/outdev.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/filter/SvmReader.hxx>
+#include <vcl/filter/SvmWriter.hxx>
 #include <tools/fract.hxx>
 #include <tools/helpers.hxx>
 #include <tools/stream.hxx>
@@ -1943,7 +1944,7 @@ BitmapChecksum SVGActionWriter::GetChecksum( const MetaAction* pAction )
     GDIMetaFile aMtf;
     MetaAction* pA = const_cast<MetaAction*>(pAction);
     aMtf.AddAction( pA );
-    return aMtf.GetChecksum();
+    return SvmWriter::GetChecksum( aMtf );
 }
 
 void SVGActionWriter::SetEmbeddedBitmapRefs( const MetaBitmapActionMap* pEmbeddedBitmapsMap )
