@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c998ec83_e9725dad",
+        "filename": "sfx2/source/appl/shutdownicon.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-10T15:15:47Z",
+      "side": 1,
+      "message": "Use of function-local static might be more efficient - and in this case, what is the reason not to use something like\n\n    static bool flag \u003d LoadModule();\n\nwhere the function would return a bool?",
+      "revId": "0a666480276f704d5127f578333659893517abe7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
