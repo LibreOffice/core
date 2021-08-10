@@ -1742,7 +1742,7 @@ BitmapChecksum ImpGraphic::getChecksum() const
 
         case GraphicType::GdiMetafile:
         {
-            mnChecksum = maMetaFile.GetChecksum();
+            mnChecksum = SvmWriter::GetChecksum(maMetaFile);
         }
         break;
     }
