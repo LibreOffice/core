@@ -37,6 +37,7 @@ public:
     SvmWriter(SvStream& rIStm);
 
     SvStream& Write(const GDIMetaFile& rMetaFile);
+    static BitmapChecksum GetChecksum(const GDIMetaFile& rMetaFile);
     void MetaActionHandler(MetaAction* pAction, ImplMetaWriteData* pData);
     void ActionHandler(MetaAction* pAction);
     void PixelHandler(MetaPixelAction* pAction);
