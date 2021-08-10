@@ -61,6 +61,8 @@
 #include <svtools/acceleratorexecute.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/sequenceashashmap.hxx>
+#include <config_features.h>
+
 // namespaces
 
 using namespace css;
@@ -824,7 +826,9 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage(weld::Container* pPage,
                                                    weld::DialogController* pController,
                                                    const SfxItemSet& aSet)
     : SfxTabPage(pPage, pController, "cui/ui/accelconfigpage.ui", "AccelConfigPage", &aSet)
+#if HAVE_FEATURE_SCRIPTING
     , m_pMacroInfoItem()
+#endif
     , aLoadAccelConfigStr(CuiResId(RID_SVXSTR_LOADACCELCONFIG))
     , aSaveAccelConfigStr(CuiResId(RID_SVXSTR_SAVEACCELCONFIG))
     , aFilterAllStr(SfxResId(STR_SFX_FILTERNAME_ALL))
@@ -1514,12 +1518,16 @@ void SfxAcceleratorConfigPage::Reset(const SfxItemSet* rSet)
 
     RadioHdl(*m_xOfficeButton);
 
+#if HAVE_FEATURE_SCRIPTING
     const SfxPoolItem* pMacroItem = nullptr;
     if (SfxItemState::SET == rSet->GetItemState(SID_MACROINFO, true, &pMacroItem))
     {
         m_pMacroInfoItem = &dynamic_cast<const SfxMacroInfoItem&>(*pMacroItem);
         m_xGroupLBox->SelectMacro(m_pMacroInfoItem);
     }
+#else
+    (void)rSet;
+#endif
 }
 
 sal_Int32 SfxAcceleratorConfigPage::MapKeyCodeToPos(const vcl::KeyCode& aKey) const

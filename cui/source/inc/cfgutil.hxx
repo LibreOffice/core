@@ -31,10 +31,13 @@
 #include <com/sun/star/script/browse/XBrowseNode.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <vcl/weld.hxx>
+#include <config_features.h>
 
 class Button;
 class SaveInData;
+#if HAVE_FEATURE_SCRIPTING
 class SfxMacroInfoItem;
+#endif
 
 struct SfxStyleInfo_Impl
 {
@@ -225,8 +228,10 @@ public:
     void                SetFunctionListBox( CuiConfigFunctionListBox *pBox )
                         { m_pFunctionListBox = pBox; }
     void                GroupSelected();
+#if HAVE_FEATURE_SCRIPTING
     void                SelectMacro(const SfxMacroInfoItem*);
     void                SelectMacro(std::u16string_view, const OUString&);
+#endif
     void                SetStylesInfo(SfxStylesInfo_Impl* pStyles);
 };
 

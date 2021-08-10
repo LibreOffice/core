@@ -1022,6 +1022,7 @@ IMPL_LINK(CuiConfigGroupListBox, ExpandingHdl, const weld::TreeIter&, rIter, boo
     return true;
 }
 
+#if HAVE_FEATURE_SCRIPTING
 void CuiConfigGroupListBox::SelectMacro( const SfxMacroInfoItem *pItem )
 {
     SelectMacro( pItem->GetBasicManager()->GetName(),
@@ -1097,6 +1098,7 @@ void CuiConfigGroupListBox::SelectMacro( std::u16string_view rBasic,
         }
     } while (m_xTreeView->iter_next_sibling(*xIter));
 }
+#endif
 
 /*
  * Implementation of SvxScriptSelectorDialog
