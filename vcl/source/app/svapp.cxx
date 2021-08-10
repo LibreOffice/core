@@ -628,7 +628,7 @@ void Application::MergeSystemSettings( AllSettings& rSettings )
         if ( !pSVData->maAppData.mbSettingsInit )
         {
             // side effect: ImplUpdateGlobalSettings does an ImplGetFrame()->UpdateSettings
-            pWindow->ImplUpdateGlobalSettings( *pSVData->maAppData.mpSettings );
+            pWindow->ImplUpdateGlobalSettings( *pSVData->maAppData.mxSettings );
             pSVData->maAppData.mbSettingsInit = true;
         }
         // side effect: ImplUpdateGlobalSettings does an ImplGetFrame()->UpdateSettings
@@ -641,21 +641,21 @@ void Application::SetSettings( const AllSettings& rSettings )
     const SolarMutexGuard aGuard;
 
     ImplSVData* pSVData = ImplGetSVData();
-    if ( !pSVData->maAppData.mpSettings )
+    if ( !pSVData->maAppData.mxSettings )
     {
         InitSettings(pSVData);
-        *pSVData->maAppData.mpSettings = rSettings;
+        *pSVData->maAppData.mxSettings = rSettings;
     }
     else
     {
-        AllSettings aOldSettings = *pSVData->maAppData.mpSettings;
+        AllSettings aOldSettings = *pSVData->maAppData.mxSettings;
         if (aOldSettings.GetUILanguageTag().getLanguageType() != rSettings.GetUILanguageTag().getLanguageType() &&
                 pSVData->mbResLocaleSet)
         {
             pSVData->mbResLocaleSet = false;
         }
-        *pSVData->maAppData.mpSettings = rSettings;
-        AllSettingsFlags nChangeFlags = aOldSettings.GetChangeFlags( *pSVData->maAppData.mpSettings );
+        *pSVData->maAppData.mxSettings = rSettings;
+        AllSettingsFlags nChangeFlags = aOldSettings.GetChangeFlags( *pSVData->maAppData.mxSettings );
         if ( bool(nChangeFlags) )
         {
             DataChangedEvent aDCEvt( DataChangedEventType::SETTINGS, &aOldSettings, nChangeFlags );
@@ -733,25 +733,25 @@ void Application::SetSettings( const AllSettings& rSettings )
 const AllSettings& Application::GetSettings()
 {
     ImplSVData* pSVData = ImplGetSVData();
-    if ( !pSVData->maAppData.mpSettings )
+    if ( !pSVData->maAppData.mxSettings )
     {
         InitSettings(pSVData);
     }
 
-    return *(pSVData->maAppData.mpSettings);
+    return *(pSVData->maAppData.mxSettings);
 }
 
 namespace {
 
 void InitSettings(ImplSVData* pSVData)
 {
-    assert(!pSVData->maAppData.mpSettings && "initialization should not happen twice!");
+    assert(!pSVData->maAppData.mxSettings && "initialization should not happen twice!");
 
-    pSVData->maAppData.mpSettings.reset(new AllSettings());
+    pSVData->maAppData.mxSettings.emplace();
     if (!utl::ConfigManager::IsFuzzing())
     {
         pSVData->maAppData.mpCfgListener = new LocaleConfigurationListener;
-        pSVData->maAppData.mpSettings->GetSysLocale().GetOptions().AddListener( pSVData->maAppData.mpCfgListener );
+        pSVData->maAppData.mxSettings->GetSysLocale().GetOptions().AddListener( pSVData->maAppData.mpCfgListener );
     }
 }
 

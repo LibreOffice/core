@@ -530,15 +530,15 @@ void DeInitVCL()
         }
     }
 
-    if ( pSVData->maAppData.mpSettings )
+    if ( pSVData->maAppData.mxSettings )
     {
         if ( pSVData->maAppData.mpCfgListener )
         {
-            pSVData->maAppData.mpSettings->GetSysLocale().GetOptions().RemoveListener( pSVData->maAppData.mpCfgListener );
+            pSVData->maAppData.mxSettings->GetSysLocale().GetOptions().RemoveListener( pSVData->maAppData.mpCfgListener );
             delete pSVData->maAppData.mpCfgListener;
         }
 
-        pSVData->maAppData.mpSettings.reset();
+        pSVData->maAppData.mxSettings.reset();
     }
     if ( pSVData->maAppData.mpAccelMgr )
     {

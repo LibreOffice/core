@@ -1101,8 +1101,8 @@ void Window::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* p
              )
         {
             // side effect: ImplUpdateGlobalSettings does an ImplGetFrame()->UpdateSettings
-            ImplUpdateGlobalSettings( *pSVData->maAppData.mpSettings );
-            mpWindowImpl->mxOutDev->SetSettings( *pSVData->maAppData.mpSettings );
+            ImplUpdateGlobalSettings( *pSVData->maAppData.mxSettings );
+            mpWindowImpl->mxOutDev->SetSettings( *pSVData->maAppData.mxSettings );
             pSVData->maAppData.mbSettingsInit = true;
         }
 

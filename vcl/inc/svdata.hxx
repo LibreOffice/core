@@ -27,6 +27,7 @@
 #include <tools/fldunit.hxx>
 #include <unotools/options.hxx>
 #include <vcl/bitmapex.hxx>
+#include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <vcl/task.hxx>
@@ -131,7 +132,7 @@ struct ImplSVAppData
 {
     ~ImplSVAppData();
 
-    std::unique_ptr<AllSettings> mpSettings;           // Application settings
+    std::optional<AllSettings> mxSettings;           // Application settings
     LocaleConfigurationListener* mpCfgListener = nullptr;
     VclEventListeners       maEventListeners;     // listeners for vcl events (eg, extended toolkit)
     std::vector<Link<VclWindowEvent&,bool> >
