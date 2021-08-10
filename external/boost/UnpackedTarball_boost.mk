@@ -35,8 +35,8 @@ boost_patches += windows-no-utf8-locales.patch.0
 
 boost_patches += msvc2017.patch.0
 
-# Included in boost-1.76.0:
-boost_patches += 0001-Fix-usage-of-deprecated-Boost.Bind-features.patch.2
+# From upstream develop branch:
+boost_patches += 0001-Fix-include-inside-boost-namespace.patch.2
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,boost))
 
