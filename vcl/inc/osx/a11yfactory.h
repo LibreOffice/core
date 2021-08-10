@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_OSX_A11YFACTORY_H
-#define INCLUDED_VCL_INC_OSX_A11YFACTORY_H
+#pragma once
 
 #include "osxvcltypes.h"
 #include "a11ywrapper.h"
@@ -37,6 +36,5 @@
 +(void)revokeView: (NSView *) theViewt;
 @end
 
-#endif // INCLUDED_VCL_INC_OSX_A11YFACTORY_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
