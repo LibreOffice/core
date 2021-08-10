@@ -741,7 +741,7 @@ void SwDocTest::testSwScanner()
         aDocStat.Reset();
         pTextNode->CountWords(aDocStat, 0, pTextNode->Len());
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_uLong>(1), aDocStat.nWord);
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("postit anchor should effectively not exist", static_cast<sal_uLong>(10), aDocStat.nChar);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("postit anchor should effectively not exist", static_cast<sal_uInt>(10), aDocStat.nChar);
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(11), pTextNode->Len());
 
         aDocStat.Reset();
