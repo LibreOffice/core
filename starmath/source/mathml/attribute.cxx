@@ -63,6 +63,9 @@ void SmMlAttribute::setDefaultAttributeValue()
         case SmMlAttributeValueType::MlFence:
             m_aAttributeValue.m_aFence.m_aFence = SmMlAttributeValueFence::MlFalse;
             break;
+        case SmMlAttributeValueType::MlForm:
+            m_aAttributeValue.m_aForm.m_aForm = SmMlAttributeValueForm::MlInfix;
+            break;
         case SmMlAttributeValueType::MlHref:
             m_aAttributeValue.m_aHref.m_aHref = SmMlAttributeValueHref::NMlEmpty;
             m_aAttributeValue.m_aHref.m_aLnk = new OUString(u"");
@@ -139,6 +142,9 @@ void SmMlAttribute::setAttributeValue(const SmMlAttribute* aAttribute)
         case SmMlAttributeValueType::MlFence:
             setMlFence(aAttribute->getMlFence());
             break;
+        case SmMlAttributeValueType::MlForm:
+            setMlForm(aAttribute->getMlForm());
+            break;
         case SmMlAttributeValueType::MlHref:
             setMlHref(aAttribute->getMlHref());
             break;
@@ -209,6 +215,13 @@ const struct SmMlFence* SmMlAttribute::getMlFence() const
 {
     if (m_aSmMlAttributeValueType == SmMlAttributeValueType::MlFence)
         return &m_aAttributeValue.m_aFence;
+    return nullptr;
+}
+
+const struct SmMlForm* SmMlAttribute::getMlForm() const
+{
+    if (m_aSmMlAttributeValueType == SmMlAttributeValueType::MlForm)
+        return &m_aAttributeValue.m_aForm;
     return nullptr;
 }
 
@@ -328,6 +341,12 @@ void SmMlAttribute::setMlFence(const SmMlFence* aFence)
 {
     clearPreviousAttributeValue();
     m_aAttributeValue.m_aFence.m_aFence = aFence->m_aFence;
+}
+
+void SmMlAttribute::setMlForm(const SmMlForm* aForm)
+{
+    clearPreviousAttributeValue();
+    m_aAttributeValue.m_aForm.m_aForm = aForm->m_aForm;
 }
 
 void SmMlAttribute::setMlHref(const SmMlHref* aHref)
