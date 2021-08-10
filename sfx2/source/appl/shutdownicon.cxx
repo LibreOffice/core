@@ -20,9 +20,8 @@
 #include <sal/config.h>
 #include <sal/log.hxx>
 
-#include <cassert>
+#include <mutex>
 
-#include <boost/logic/tribool.hpp>
 #include "shutdownicon.hxx"
 #include <sfx2/strings.hrc>
 #include <sfx2/app.hxx>
@@ -113,28 +112,20 @@ extern "C" {
 
 namespace {
 
-boost::logic::tribool loaded(boost::logic::indeterminate); // loplugin:constvars:ignore
 oslGenericFunction pInitSystray = disabled_initSystray;
 oslGenericFunction pDeInitSystray = disabled_deInitSystray;
 
-bool LoadModule()
+void LoadModule()
 {
-    if (boost::logic::indeterminate(loaded))
-    {
 #ifdef ENABLE_QUICKSTART_APPLET
 #  ifdef _WIN32
-        pInitSystray = win32_init_sys_tray;
-        pDeInitSystray = win32_shutdown_sys_tray;
-        loaded = true;
+    pInitSystray = win32_init_sys_tray;
+    pDeInitSystray = win32_shutdown_sys_tray;
 #  elif defined MACOSX
-        pInitSystray = aqua_init_systray;
-        pDeInitSystray = aqua_shutdown_systray;
-        loaded = true;
+    pInitSystray = aqua_init_systray;
+    pDeInitSystray = aqua_shutdown_systray;
 #  endif // MACOSX
 #endif // ENABLE_QUICKSTART_APPLET
-    }
-    assert(!boost::logic::indeterminate(loaded));
-    return bool(loaded);
 }
 
 }
@@ -145,7 +136,8 @@ void ShutdownIcon::initSystray()
         return;
     m_bInitialized = true;
 
-    (void) LoadModule();
+    static std::once_flag flag;
+    std::call_once(flag, LoadModule);
     m_bVeto = true;
     pInitSystray();
 }

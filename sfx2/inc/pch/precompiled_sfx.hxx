@@ -47,7 +47,6 @@
 #include <unordered_map>
 #include <utility>
 #include <vector>
-#include <boost/logic/tribool.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/property_tree/ptree.hpp>
 #endif // PCH_LEVEL >= 1
