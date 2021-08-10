@@ -23,6 +23,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <vector>
 #include <memory>
+#include <optional>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 namespace com::sun::star::uno { class XComponentContext; }
@@ -81,8 +82,8 @@ private:
             aLocale.Variant == rLocale.Variant;
         };
     };
-    std::vector<std::unique_ptr<lookupTableItem>> lookupTable;
-    lookupTableItem *cachedItem;
+    std::vector<lookupTableItem> lookupTable;
+    std::optional<lookupTableItem> cachedItem;
 
     css::uno::Reference < css::uno::XComponentContext > m_xContext;
     css::uno::Reference < XCharacterClassification > xUCI;

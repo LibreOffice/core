@@ -32,12 +32,10 @@ namespace i18npool {
 InputSequenceCheckerImpl::InputSequenceCheckerImpl( const Reference < XComponentContext >& rxContext ) : m_xContext( rxContext )
 {
     serviceName = "com.sun.star.i18n.InputSequenceChecker";
-    cachedItem = nullptr;
 }
 
 InputSequenceCheckerImpl::InputSequenceCheckerImpl(const char *pServiceName)
     : serviceName(pServiceName)
-    , cachedItem(nullptr)
 {
 }
 
@@ -109,7 +107,7 @@ InputSequenceCheckerImpl::getInputSequenceChecker(char const * rLanguage)
     }
     else {
         for (const auto& l : lookupTable) {
-            cachedItem = l.get();
+            cachedItem = l;
             if (cachedItem->aLanguage == rLanguage)
                 return cachedItem->xISC;
         }
@@ -122,8 +120,8 @@ InputSequenceCheckerImpl::getInputSequenceChecker(char const * rLanguage)
         if ( xI.is() ) {
             Reference< XExtendedInputSequenceChecker > xISC( xI, UNO_QUERY );
             if (xISC.is()) {
-                lookupTable.emplace_back(new lookupTableItem(rLanguage, xISC));
-                cachedItem = lookupTable.back().get();
+                lookupTable.emplace_back(rLanguage, xISC);
+                cachedItem = lookupTable.back();
                 return cachedItem->xISC;
             }
         }

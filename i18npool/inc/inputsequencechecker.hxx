@@ -25,6 +25,7 @@
 
 #include <vector>
 #include <memory>
+#include <optional>
 
 namespace com::sun::star::uno { class XComponentContext; }
 
@@ -63,8 +64,8 @@ private:
         const char* aLanguage;
         css::uno::Reference < css::i18n::XExtendedInputSequenceChecker > xISC;
     };
-    std::vector<std::unique_ptr<lookupTableItem>> lookupTable;
-    lookupTableItem *cachedItem;
+    std::vector<lookupTableItem> lookupTable;
+    std::optional<lookupTableItem> cachedItem;
 
     css::uno::Reference < css::uno::XComponentContext > m_xContext;
 
