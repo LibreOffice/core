@@ -23,7 +23,6 @@
 
 #include <QtWidgets/QApplication>
 
-#include <boost/noncopyable.hpp>
 #include <com/sun/star/beans/Optional.hpp>
 #include <com/sun/star/beans/UnknownPropertyException.hpp>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
@@ -50,13 +49,16 @@
 
 namespace
 {
-class Service : public cppu::WeakImplHelper<css::lang::XServiceInfo, css::beans::XPropertySet>,
-                private boost::noncopyable
+class Service : public cppu::WeakImplHelper<css::lang::XServiceInfo, css::beans::XPropertySet>
 {
 public:
     Service();
 
 private:
+    // noncopyable until we have good reasons...
+    Service(const Service&) = delete;
+    Service& operator=(const Service&) = delete;
+
     virtual ~Service() override {}
 
     virtual OUString SAL_CALL getImplementationName() override
