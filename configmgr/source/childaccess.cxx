@@ -236,14 +236,14 @@ void ChildAccess::setProperty(
     }
     checkValue(value, type, isNillable);
     getParentAccess()->markChildAsModified(this);
-    changedValue_.reset(new css::uno::Any(value));
+    changedValue_.emplace(value);
     localModifications->add(getRelativePath());
 }
 
 
 css::uno::Any ChildAccess::asValue()
 {
-    if (changedValue_ != nullptr)
+    if (changedValue_)
     {
         return *changedValue_;
     }
@@ -287,7 +287,7 @@ void ChildAccess::commitChanges(bool valid, Modifications * globalModifications)
 {
     assert(globalModifications != nullptr);
     commitChildChanges(valid, globalModifications);
-    if (valid && changedValue_ != nullptr)
+    if (valid && changedValue_)
     {
         std::vector<OUString> path(getAbsolutePath());
         getComponents().addModification(path);
