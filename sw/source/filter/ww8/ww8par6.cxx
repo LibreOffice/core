@@ -1759,7 +1759,7 @@ void WW8FlyPara::ReadFull(sal_uInt8 nOrigSp29, SwWW8ImplReader* pIo)
             break;                      // (*pPap)++ does not work for FastSave
                                         // -> for FastSave, no test for graphics APO
         SvStream* pIoStrm = pIo->m_pStrm;
-        sal_uLong nPos = pIoStrm->Tell();
+        sal_uInt64 nPos = pIoStrm->Tell();
         WW8PLCFxSave1 aSave;
         xPlcxMan->GetPap()->Save( aSave );
         bGrafApo = false;
