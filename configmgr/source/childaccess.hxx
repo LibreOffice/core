@@ -22,6 +22,7 @@
 #include <sal/config.h>
 
 #include <memory>
+#include <optional>
 #include <vector>
 
 #include <com/sun/star/container/XChild.hpp>
@@ -125,7 +126,7 @@ private:
     rtl::Reference< Access > parent_; // null if free node
     OUString name_;
     rtl::Reference< Node > node_;
-    std::unique_ptr< css::uno::Any > changedValue_;
+    std::optional< css::uno::Any > changedValue_;
     bool inTransaction_;
         // to determine if a free node can be inserted underneath some root
     std::shared_ptr<osl::Mutex> lock_;
