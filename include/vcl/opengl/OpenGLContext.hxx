@@ -46,6 +46,14 @@ protected:
 public:
     static rtl::Reference<OpenGLContext> Create();
     virtual ~OpenGLContext();
+
+    // Avoid implicitly defined copy constructors/assignments for the DLLPUBLIC class (they may
+    // require forward-declared classes used internally to be defined in places using OpenGLContext)
+    OpenGLContext(const OpenGLContext&) = delete;
+    OpenGLContext(OpenGLContext&&) = delete;
+    OpenGLContext& operator=(const OpenGLContext&) = delete;
+    OpenGLContext& operator=(OpenGLContext&&) = delete;
+
     void acquire() { mnRefCount++; }
     void release() { if ( --mnRefCount == 0 ) delete this; }
     void dispose();
