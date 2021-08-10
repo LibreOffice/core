@@ -34,7 +34,7 @@ public:
     };
     /* Mathml stuff */
 
-protected:
+public:
     SmMlElement(SmMlElementType aElementType)
         : m_aElementType(aElementType)
         , m_aText(u"\u00B6")
@@ -174,6 +174,14 @@ public: // attributes
       */
     void setAttribute(const SmMlAttribute* aAttribute);
 
+    /** Checks if an attribute has been manually set
+    * @param aElementType
+    */
+    bool isAttributeSet(SmMlAttributeValueType aElementType)
+    {
+        return getAttribute(aElementType).isSet();
+    }
+
 protected: // attributes
     /**
       * Get's a given attribute.
@@ -272,7 +280,7 @@ public: // text elements
     /**
       * Returns the element text
       */
-    void setText(OUString aText) { m_aText = aText; };
+    void setText(const OUString& aText) { m_aText = aText; };
 };
 
 namespace starmathdatabase
