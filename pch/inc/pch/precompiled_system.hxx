@@ -23,7 +23,6 @@
 #include <boost/functional/hash.hpp>
 #include <boost/intrusive_ptr.hpp>
 #include <boost/lexical_cast.hpp>
-#include <boost/logic/tribool.hpp>
 #include <boost/math/special_functions/sinc.hpp>
 #include <boost/multi_array.hpp>
 #include <boost/multi_index/composite_key.hpp>
