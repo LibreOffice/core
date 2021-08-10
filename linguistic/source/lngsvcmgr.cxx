@@ -1009,19 +1009,16 @@ void LngSvcMgr::GetAvailableGrammarSvcs_Impl()
                         : xFactory->createInstance(),
                     uno::UNO_QUERY_THROW);
 
-                if (pAvailGrammarSvcs)
-                {
-                    OUString            aImplName;
-                    std::vector< LanguageType >    aLanguages;
-                    uno::Reference< XServiceInfo > xInfo( xSvc, uno::UNO_QUERY );
-                    if (xInfo.is())
-                        aImplName = xInfo->getImplementationName();
-                    SAL_WARN_IF( aImplName.isEmpty(), "linguistic", "empty implementation name" );
-                    uno::Sequence<lang::Locale> aLocaleSequence(xSvc->getLocales());
-                    aLanguages = LocaleSeqToLangVec( aLocaleSequence );
+                OUString            aImplName;
+                std::vector< LanguageType >    aLanguages;
+                uno::Reference< XServiceInfo > xInfo( xSvc, uno::UNO_QUERY );
+                if (xInfo.is())
+                    aImplName = xInfo->getImplementationName();
+                SAL_WARN_IF( aImplName.isEmpty(), "linguistic", "empty implementation name" );
+                uno::Sequence<lang::Locale> aLocaleSequence(xSvc->getLocales());
+                aLanguages = LocaleSeqToLangVec( aLocaleSequence );
 
-                    pAvailGrammarSvcs->push_back( std::make_unique<SvcInfo>( aImplName, aLanguages ) );
-                }
+                pAvailGrammarSvcs->push_back( std::make_unique<SvcInfo>( aImplName, aLanguages ) );
             }
             catch (const uno::Exception &)
             {
