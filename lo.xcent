@@ -22,5 +22,8 @@
 	<true/>
         <key>com.apple.security.cs.disable-executable-page-protection</key>
         <true/>
+    <!-- Allow Base to import data from Adddress Book -->
+    <key>com.apple.security.personal-information.addressbook</key>
+    <true/>
 </dict>
 </plist>
