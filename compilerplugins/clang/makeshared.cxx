@@ -37,11 +37,6 @@ public:
     virtual bool preRun() override
     {
         StringRef fn(handler.getMainFileName());
-        // uses boost::shared_ptr and we trigger because we're not looking specifically for std::shared_ptr
-        if (loplugin::isSamePathname(fn, SRCDIR "/ucb/source/ucp/cmis/cmis_repo_content.cxx"))
-            return false;
-        if (loplugin::isSamePathname(fn, SRCDIR "/ucb/source/ucp/cmis/cmis_content.cxx"))
-            return false;
         // TODO something weird with protected base classes going on here
         if (loplugin::isSamePathname(fn, SRCDIR "/sc/source/filter/excel/xeextlst.cxx"))
             return false;

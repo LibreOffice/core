@@ -7,6 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sal/config.h>
+
+#include <boost/make_shared.hpp>
+
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
@@ -166,23 +170,23 @@ namespace cmis
                     if ( m_aURL.getBindingUrl( ) == GDRIVE_BASE_URL )
                     {
                         libcmis::SessionFactory::setOAuth2AuthCodeProvider( AuthProvider::copyWebAuthCodeFallback );
-                        oauth2Data.reset( new libcmis::OAuth2Data(
+                        oauth2Data = boost::make_shared<libcmis::OAuth2Data>(
                             GDRIVE_AUTH_URL, GDRIVE_TOKEN_URL,
                             GDRIVE_SCOPE, GDRIVE_REDIRECT_URI,
-                            GDRIVE_CLIENT_ID, GDRIVE_CLIENT_SECRET ) );
+                            GDRIVE_CLIENT_ID, GDRIVE_CLIENT_SECRET );
                     }
                     if ( m_aURL.getBindingUrl().startsWith( ALFRESCO_CLOUD_BASE_URL ) )
-                        oauth2Data.reset( new libcmis::OAuth2Data(
+                        oauth2Data = boost::make_shared<libcmis::OAuth2Data>(
                             ALFRESCO_CLOUD_AUTH_URL, ALFRESCO_CLOUD_TOKEN_URL,
                             ALFRESCO_CLOUD_SCOPE, ALFRESCO_CLOUD_REDIRECT_URI,
-                            ALFRESCO_CLOUD_CLIENT_ID, ALFRESCO_CLOUD_CLIENT_SECRET ) );
+                            ALFRESCO_CLOUD_CLIENT_ID, ALFRESCO_CLOUD_CLIENT_SECRET );
                     if ( m_aURL.getBindingUrl( ) == ONEDRIVE_BASE_URL )
                     {
                         libcmis::SessionFactory::setOAuth2AuthCodeProvider( AuthProvider::copyWebAuthCodeFallback );
-                        oauth2Data.reset( new libcmis::OAuth2Data(
+                        oauth2Data = boost::make_shared<libcmis::OAuth2Data>(
                             ONEDRIVE_AUTH_URL, ONEDRIVE_TOKEN_URL,
                             ONEDRIVE_SCOPE, ONEDRIVE_REDIRECT_URI,
-                            ONEDRIVE_CLIENT_ID, ONEDRIVE_CLIENT_SECRET ) );
+                            ONEDRIVE_CLIENT_ID, ONEDRIVE_CLIENT_SECRET );
                     }
 
                     std::unique_ptr<libcmis::Session> session(libcmis::SessionFactory::createSession(
