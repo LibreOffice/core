@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "906f517f_36172764",
+        "filename": "basic/source/classes/image.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 615,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-08-10T09:42:43Z",
+      "side": 1,
+      "message": "Isn\u0027t nStringOff updated here? I could not reproduce any error with the last stored string. Do you have maybe a showcase of this problem?",
+      "revId": "a1c42d1b82888fefe9732af2ca7fe9f892f0e0ff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5790c1ec_f7bc821b",
         "filename": "basic/source/classes/image.cxx",
         "patchSetId": 12

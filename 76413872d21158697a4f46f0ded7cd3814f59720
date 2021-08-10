@@ -16,6 +16,24 @@
       "revId": "76413872d21158697a4f46f0ded7cd3814f59720",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4beec2fc_6de1eee1",
+        "filename": "basic/source/comp/symtbl.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2021-08-10T09:42:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cec25256_754bb176",
+      "revId": "76413872d21158697a4f46f0ded7cd3814f59720",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
