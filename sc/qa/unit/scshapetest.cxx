@@ -615,14 +615,14 @@ void ScShapeTest::testTdf137033_RotShear_ResizeHide()
     Degree100 aShearAngle(pObj->GetShearAngle());
     // mathematical exact would be Point(3868, 4795), Size(9763, 1909)
     // current values as of LO 7.2
-    const tools::Rectangle aExpectRect(Point(3871, 4796), Size(9764, 1910));
-    const Degree100 aExpectRotateAngle(20923_deg100);
-    const Degree100 aExpectShearAngle(-6572_deg100);
+    const tools::Rectangle aExpectRect(Point(3875, 4796), Size(9760, 1911));
+    const Degree100 aExpectRotateAngle(20925_deg100);
+    const Degree100 aExpectShearAngle(-6570_deg100);
     CPPUNIT_ASSERT_MESSAGE("Hide rows, shear angle: ",
                            abs(aShearAngle - aExpectShearAngle) <= 1_deg100);
     CPPUNIT_ASSERT_MESSAGE("Hide rows, rotate angle: ",
                            abs(aRotateAngle - aExpectRotateAngle) <= 1_deg100);
-    lcl_AssertRectEqualWithTolerance("Reload: wrong pos or size", aExpectRect, aSnapRect, 1);
+    lcl_AssertRectEqualWithTolerance("Load: wrong pos or size", aExpectRect, aSnapRect, 1);
 
     // Save and reload.
     saveAndReload(xComponent, "calc8");

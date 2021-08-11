@@ -628,7 +628,7 @@ void ScFiltersTest::testLegacyCellAnchoredRotatedShape()
         aAnchor.maStart.SetRow( 3 );
         aAnchor.maStart.SetCol( 6 );
         aAnchor.maEnd.SetRow( 9 );
-        aAnchor.maEnd.SetCol( 7 );
+        aAnchor.maEnd.SetCol( 8 );
         // test import
         impl_testLegacyCellAnchoredRotatedShape( rDoc, aRect, aAnchor );
         // test save and reload
