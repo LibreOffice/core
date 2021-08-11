@@ -272,7 +272,7 @@ ScDocCfg::ScDocCfg() :
                     case SCDOCLAYOUTOPT_TABSTOP:
                         // TabDistance in ScDocOptions is in twips
                         if (pValues[nProp] >>= nIntVal)
-                            SetTabDistance(static_cast<sal_uInt16>(convertMm100ToTwip(nIntVal)));
+                            SetTabDistance(o3tl::toTwips(nIntVal, o3tl::Length::mm100));
                         break;
                 }
             }

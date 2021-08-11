@@ -188,7 +188,7 @@ bool SvxLineSpacingItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 eLineSpaceRule = SvxLineSpaceRule::Auto;
                 nInterLineSpace = aLSp.Height;
                 if(bConvert)
-                    nInterLineSpace = static_cast<short>(convertMm100ToTwip(nInterLineSpace));
+                    nInterLineSpace = o3tl::toTwips(nInterLineSpace, o3tl::Length::mm100);
 
             }
             break;
@@ -209,7 +209,7 @@ bool SvxLineSpacingItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 eLineSpaceRule = aLSp.Mode == style::LineSpacingMode::FIX ? SvxLineSpaceRule::Fix : SvxLineSpaceRule::Min;
                 nLineHeight = aLSp.Height;
                 if(bConvert)
-                    nLineHeight = static_cast<sal_uInt16>(convertMm100ToTwip(nLineHeight));
+                    nLineHeight = o3tl::toTwips(nLineHeight, o3tl::Length::mm100);
             }
             break;
         }
@@ -880,7 +880,7 @@ bool SvxTabStopItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 }
                 sal_Unicode cFill = pArr[i].FillChar;
                 sal_Unicode cDecimal = pArr[i].DecimalChar;
-                SvxTabStop aTab( bConvert ? convertMm100ToTwip(pArr[i].Position) : pArr[i].Position,
+                SvxTabStop aTab( bConvert ? o3tl::toTwips(pArr[i].Position, o3tl::Length::mm100) : pArr[i].Position,
                                     eAdjust,
                                     cDecimal,
                                     cFill );
@@ -894,7 +894,7 @@ bool SvxTabStopItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             if (!(rVal >>= nNewPos) )
                 return false;
             if (bConvert)
-                nNewPos = convertMm100ToTwip ( nNewPos );
+                nNewPos = o3tl::toTwips(nNewPos, o3tl::Length::mm100);
             if (nNewPos <= 0)
                 return false;
             const SvxTabStop& rTab = maTabStops.front();

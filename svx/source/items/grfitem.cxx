@@ -83,10 +83,10 @@ bool SvxGrfCrop::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         return false;
     if( bConvert )
     {
-       aVal.Right   = convertMm100ToTwip(aVal.Right );
-       aVal.Top     = convertMm100ToTwip(aVal.Top );
-       aVal.Left    = convertMm100ToTwip(aVal.Left   );
-       aVal.Bottom  = convertMm100ToTwip(aVal.Bottom);
+       aVal.Right   = o3tl::toTwips(aVal.Right, o3tl::Length::mm100);
+       aVal.Top     = o3tl::toTwips(aVal.Top, o3tl::Length::mm100);
+       aVal.Left    = o3tl::toTwips(aVal.Left, o3tl::Length::mm100);
+       aVal.Bottom  = o3tl::toTwips(aVal.Bottom, o3tl::Length::mm100);
     }
 
     nLeft   = aVal.Left  ;

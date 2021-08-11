@@ -1543,7 +1543,7 @@ void ScStyleObj::setPropertyValue_Impl( std::u16string_view rPropertyName, const
                         {
                             sal_Int16 nVal = 0;
                             *pValue >>= nVal;
-                            rSet.Put(ScIndentItem(static_cast<sal_uInt16>(convertMm100ToTwip(nVal))));
+                            rSet.Put(ScIndentItem(o3tl::toTwips(nVal, o3tl::Length::mm100)));
                         }
                         break;
                     case ATTR_ROTATE_VALUE:

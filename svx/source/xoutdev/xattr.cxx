@@ -931,7 +931,7 @@ bool XLineWidthItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
     sal_Int32 nValue = 0;
     rVal >>= nValue;
     if( 0 != (nMemberId&CONVERT_TWIPS) )
-        nValue = convertMm100ToTwip(nValue);
+        nValue = o3tl::toTwips(nValue, o3tl::Length::mm100);
 
     SetValue( nValue );
     return true;

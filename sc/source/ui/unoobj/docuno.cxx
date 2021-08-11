@@ -4113,7 +4113,7 @@ void SAL_CALL ScTableColumnsObj::setPropertyValue(
         sal_Int32 nNewWidth = 0;
         if ( aValue >>= nNewWidth )
             rFunc.SetWidthOrHeight(
-                true, aColArr, nTab, SC_SIZE_ORIGINAL, static_cast<sal_uInt16>(convertMm100ToTwip(nNewWidth)), true, true);
+                true, aColArr, nTab, SC_SIZE_ORIGINAL, o3tl::toTwips(nNewWidth, o3tl::Length::mm100), true, true);
     }
     else if ( aPropertyName == SC_UNONAME_CELLVIS )
     {
@@ -4328,7 +4328,7 @@ void SAL_CALL ScTableRowsObj::setPropertyValue(
 
             // TODO: It's probably cleaner to use a different property name
             // for this.
-            rDoc.SetRowHeightOnly( nStartRow, nEndRow, nTab, static_cast<sal_uInt16>(convertMm100ToTwip(nNewHeight)) );
+            rDoc.SetRowHeightOnly( nStartRow, nEndRow, nTab, o3tl::toTwips(nNewHeight, o3tl::Length::mm100) );
         }
         else
         {
@@ -4351,12 +4351,12 @@ void SAL_CALL ScTableRowsObj::setPropertyValue(
                 // TODO: This is a band-aid fix.  Eventually we need to
                 // re-work ods' style import to get it to set styles to
                 // ScDocument directly.
-                rDoc.SetRowHeightOnly( nStartRow, nEndRow, nTab, static_cast<sal_uInt16>(convertMm100ToTwip(nNewHeight)) );
+                rDoc.SetRowHeightOnly( nStartRow, nEndRow, nTab, o3tl::toTwips(nNewHeight, o3tl::Length::mm100) );
                 rDoc.SetManualHeight( nStartRow, nEndRow, nTab, true );
             }
             else
                 rFunc.SetWidthOrHeight(
-                    false, aRowArr, nTab, SC_SIZE_ORIGINAL, static_cast<sal_uInt16>(convertMm100ToTwip(nNewHeight)), true, true);
+                    false, aRowArr, nTab, SC_SIZE_ORIGINAL, o3tl::toTwips(nNewHeight, o3tl::Length::mm100), true, true);
         }
     }
     else if ( aPropertyName == SC_UNONAME_CELLVIS )

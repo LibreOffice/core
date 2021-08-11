@@ -841,10 +841,10 @@ void SwXLineNumberingProperties::setPropertyValue(
         {
             sal_Int32 nVal = 0;
             aValue >>= nVal;
-            sal_Int32 nTmp = convertMm100ToTwip(nVal);
+            sal_Int32 nTmp = o3tl::toTwips(nVal, o3tl::Length::mm100);
             if (nTmp > SAL_MAX_UINT16)
                 nTmp = SAL_MAX_UINT16;
-            aFontMetric.SetPosFromLeft( static_cast< sal_uInt16 >(nTmp) );
+            aFontMetric.SetPosFromLeft(nTmp);
         }
         break;
         case WID_INTERVAL   :
@@ -1624,14 +1624,14 @@ void SwXNumberingRules::SetPropertiesToNumFormat(
             sal_Int32 nValue = 0;
             rProp.Value >>= nValue;
             // #i23727# nValue can be negative
-            aFormat.SetAbsLSpace(convertMm100ToTwip(nValue));
+            aFormat.SetAbsLSpace(o3tl::toTwips(nValue, o3tl::Length::mm100));
         }
         else if (rProp.Name == UNO_NAME_SYMBOL_TEXT_DISTANCE)
         {
             sal_Int32 nValue = 0;
             rProp.Value >>= nValue;
             if (nValue >= 0)
-                aFormat.SetCharTextDistance(static_cast<short>(convertMm100ToTwip(nValue)));
+                aFormat.SetCharTextDistance(o3tl::toTwips(nValue, o3tl::Length::mm100));
             else
                 bWrongArg = true;
         }
@@ -1640,7 +1640,7 @@ void SwXNumberingRules::SetPropertiesToNumFormat(
             sal_Int32 nValue = 0;
             rProp.Value >>= nValue;
             // #i23727# nValue can be positive
-            nValue = convertMm100ToTwip(nValue);
+            nValue = o3tl::toTwips(nValue, o3tl::Length::mm100);
             aFormat.SetFirstLineOffset(nValue);
         }
         else if (rProp.Name == UNO_NAME_POSITION_AND_SPACE_MODE)
@@ -1689,7 +1689,7 @@ void SwXNumberingRules::SetPropertiesToNumFormat(
         {
             sal_Int32 nValue = 0;
             rProp.Value >>= nValue;
-            nValue = convertMm100ToTwip(nValue);
+            nValue = o3tl::toTwips(nValue, o3tl::Length::mm100);
             if ( nValue >= 0 )
             {
                 aFormat.SetListtabPos( nValue );
@@ -1703,14 +1703,14 @@ void SwXNumberingRules::SetPropertiesToNumFormat(
         {
             sal_Int32 nValue = 0;
             rProp.Value >>= nValue;
-            nValue = convertMm100ToTwip(nValue);
+            nValue = o3tl::toTwips(nValue, o3tl::Length::mm100);
             aFormat.SetFirstLineIndent( nValue );
         }
         else if (rProp.Name == UNO_NAME_INDENT_AT)
         {
             sal_Int32 nValue = 0;
             rProp.Value >>= nValue;
-            nValue = convertMm100ToTwip(nValue);
+            nValue = o3tl::toTwips(nValue, o3tl::Length::mm100);
             aFormat.SetIndentAt( nValue );
         }
         else if (rProp.Name == UNO_NAME_NUMBERING_TYPE)
@@ -1843,10 +1843,8 @@ void SwXNumberingRules::SetPropertiesToNumFormat(
             awt::Size size;
             if (rProp.Value >>= size)
             {
-                size.Width = convertMm100ToTwip(size.Width);
-                size.Height = convertMm100ToTwip(size.Height);
-                pSetSize->setWidth( size.Width );
-                pSetSize->setHeight( size.Height );
+                pSetSize->setWidth(o3tl::toTwips(size.Width, o3tl::Length::mm100));
+                pSetSize->setHeight(o3tl::toTwips(size.Height, o3tl::Length::mm100));
             }
             else
                 bWrongArg = true;

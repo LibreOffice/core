@@ -3411,7 +3411,7 @@ static void impl_borderLine( FSHelperPtr const & pSerializer, sal_Int32 elementT
     if( rStyleProps != nullptr && pBorderLine && !pBorderLine->isEmpty() &&
             pBorderLine->GetBorderLineStyle() == static_cast<SvxBorderLineStyle>(rStyleProps->LineStyle) &&
             pBorderLine->GetColor() == Color(ColorTransparency, rStyleProps->Color) &&
-            pBorderLine->GetWidth() == convertMm100ToTwip( rStyleProps->LineWidth ) )
+            pBorderLine->GetWidth() == o3tl::toTwips(rStyleProps->LineWidth, o3tl::Length::mm100) )
         return;
 
     rtl::Reference<FastAttributeList> pAttr = FastSerializerHelper::createAttrList();
@@ -5148,7 +5148,7 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
     if (xShapePropSet)
     {
         if (css::awt::Size val; xShapePropSet->getPropertyValue("Size") >>= val)
-            aSize = Size(convertMm100ToTwip(val.Width), convertMm100ToTwip(val.Height));
+            aSize = Size(o3tl::toTwips(val.Width, o3tl::Length::mm100), o3tl::toTwips(val.Height, o3tl::Length::mm100));
     }
 
     m_rExport.SdrExporter().startDMLAnchorInline(pFrameFormat, aSize);
@@ -9692,7 +9692,7 @@ void DocxAttributeOutput::ParaGrabBag(const SfxGrabBagItem& rItem)
             m_bParaBeforeAutoSpacing = true;
             // get fixed value which was set during import
             rGrabBagElement.second >>= m_nParaBeforeSpacing;
-            m_nParaBeforeSpacing = convertMm100ToTwip(m_nParaBeforeSpacing);
+            m_nParaBeforeSpacing = o3tl::toTwips(m_nParaBeforeSpacing, o3tl::Length::mm100);
             SAL_INFO("sw.ww8", "DocxAttributeOutput::ParaGrabBag: property =" << rGrabBagElement.first << " : m_nParaBeforeSpacing= " << m_nParaBeforeSpacing);
         }
         else if (rGrabBagElement.first == "ParaBottomMarginAfterAutoSpacing")
@@ -9700,7 +9700,7 @@ void DocxAttributeOutput::ParaGrabBag(const SfxGrabBagItem& rItem)
             m_bParaAfterAutoSpacing = true;
             // get fixed value which was set during import
             rGrabBagElement.second >>= m_nParaAfterSpacing;
-            m_nParaAfterSpacing = convertMm100ToTwip(m_nParaAfterSpacing);
+            m_nParaAfterSpacing = o3tl::toTwips(m_nParaAfterSpacing, o3tl::Length::mm100);
             SAL_INFO("sw.ww8", "DocxAttributeOutput::ParaGrabBag: property =" << rGrabBagElement.first << " : m_nParaBeforeSpacing= " << m_nParaAfterSpacing);
         }
         else if (rGrabBagElement.first == "CharThemeFill")

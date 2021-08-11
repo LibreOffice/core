@@ -1324,35 +1324,35 @@ void SwView::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >
         if ( rValue.Name == "ViewLeft" )
         {
            rValue.Value >>= nX;
-           nX = convertMm100ToTwip( nX );
+           nX = o3tl::toTwips(nX, o3tl::Length::mm100);
         }
         else if ( rValue.Name == "ViewTop" )
         {
            rValue.Value >>= nY;
-           nY = convertMm100ToTwip( nY );
+           nY = o3tl::toTwips(nY, o3tl::Length::mm100);
         }
         else if ( rValue.Name == "VisibleLeft" )
         {
            rValue.Value >>= nLeft;
-           nLeft = convertMm100ToTwip( nLeft );
+           nLeft = o3tl::toTwips(nLeft, o3tl::Length::mm100);
            bGotVisibleLeft = true;
         }
         else if ( rValue.Name == "VisibleTop" )
         {
            rValue.Value >>= nTop;
-           nTop = convertMm100ToTwip( nTop );
+           nTop = o3tl::toTwips(nTop, o3tl::Length::mm100);
            bGotVisibleTop = true;
         }
         else if ( rValue.Name == "VisibleRight" )
         {
            rValue.Value >>= nRight;
-           nRight = convertMm100ToTwip( nRight );
+           nRight = o3tl::toTwips(nRight, o3tl::Length::mm100);
            bGotVisibleRight = true;
         }
         else if ( rValue.Name == "VisibleBottom" )
         {
            rValue.Value >>= nBottom;
-           nBottom = convertMm100ToTwip( nBottom );
+           nBottom = o3tl::toTwips(nBottom, o3tl::Length::mm100);
            bGotVisibleBottom = true;
         }
         else if ( rValue.Name == "ZoomType" )

@@ -211,10 +211,10 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                     rSh.StartUndo(SwUndoId::START);
                     tools::Rectangle aScaledCropedRectangle = aDialog.GetScaledCropRectangle();
 
-                    aCrop.SetLeft(   convertMm100ToTwip( aScaledCropedRectangle.Left() ));
-                    aCrop.SetTop(    convertMm100ToTwip( aScaledCropedRectangle.Top() ));
-                    aCrop.SetRight(  convertMm100ToTwip( aScaledCropedRectangle.Right() ));
-                    aCrop.SetBottom( convertMm100ToTwip( aScaledCropedRectangle.Bottom() ));
+                    aCrop.SetLeft(   o3tl::toTwips( aScaledCropedRectangle.Left(), o3tl::Length::mm100 ));
+                    aCrop.SetTop(    o3tl::toTwips( aScaledCropedRectangle.Top(), o3tl::Length::mm100 ));
+                    aCrop.SetRight(  o3tl::toTwips( aScaledCropedRectangle.Right(), o3tl::Length::mm100 ));
+                    aCrop.SetBottom( o3tl::toTwips( aScaledCropedRectangle.Bottom(), o3tl::Length::mm100 ));
 
                     Graphic aCompressedGraphic( aDialog.GetCompressedGraphic() );
                     rSh.ReRead(OUString(), OUString(), const_cast<const Graphic*>(&aCompressedGraphic));

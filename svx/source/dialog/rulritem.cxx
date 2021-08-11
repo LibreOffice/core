@@ -90,15 +90,15 @@ bool SvxLongLRSpaceItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberI
         css::frame::status::LeftRightMargin aLeftRightMargin;
         if ( rVal >>= aLeftRightMargin )
         {
-            mlLeft  = bConvert ? convertMm100ToTwip(aLeftRightMargin.Left) : aLeftRightMargin.Left;
-            mlRight = bConvert ? convertMm100ToTwip(aLeftRightMargin.Right) : aLeftRightMargin.Right;
+            mlLeft  = bConvert ? o3tl::toTwips(aLeftRightMargin.Left, o3tl::Length::mm100) : aLeftRightMargin.Left;
+            mlRight = bConvert ? o3tl::toTwips(aLeftRightMargin.Right, o3tl::Length::mm100) : aLeftRightMargin.Right;
             return true;
         }
     }
     else if ( rVal >>= nVal )
     {
         if ( bConvert )
-            nVal = convertMm100ToTwip( nVal );
+            nVal = o3tl::toTwips(nVal, o3tl::Length::mm100);
 
         switch( nMemberId )
         {
@@ -209,15 +209,15 @@ bool SvxLongULSpaceItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberI
         css::frame::status::UpperLowerMargin aUpperLowerMargin;
         if ( rVal >>= aUpperLowerMargin )
         {
-            mlLeft    = bConvert ? convertMm100ToTwip( aUpperLowerMargin.Upper ) : aUpperLowerMargin.Upper;
-            mlRight   = bConvert ? convertMm100ToTwip( aUpperLowerMargin.Lower ) : aUpperLowerMargin.Lower;
+            mlLeft    = bConvert ? o3tl::toTwips(aUpperLowerMargin.Upper, o3tl::Length::mm100) : aUpperLowerMargin.Upper;
+            mlRight   = bConvert ? o3tl::toTwips(aUpperLowerMargin.Lower, o3tl::Length::mm100) : aUpperLowerMargin.Lower;
             return true;
         }
     }
     else if ( rVal >>= nVal )
     {
         if ( bConvert )
-            nVal = convertMm100ToTwip( nVal );
+            nVal = o3tl::toTwips(nVal, o3tl::Length::mm100);
 
         switch( nMemberId )
         {

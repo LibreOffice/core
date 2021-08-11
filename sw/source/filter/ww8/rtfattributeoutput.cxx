@@ -3711,13 +3711,13 @@ void RtfAttributeOutput::ParaGrabBag(const SfxGrabBagItem& rItem)
         {
             m_bParaBeforeAutoSpacing = true;
             rValue.second >>= m_nParaBeforeSpacing;
-            m_nParaBeforeSpacing = convertMm100ToTwip(m_nParaBeforeSpacing);
+            m_nParaBeforeSpacing = o3tl::toTwips(m_nParaBeforeSpacing, o3tl::Length::mm100);
         }
         else if (rValue.first == "ParaBottomMarginAfterAutoSpacing")
         {
             m_bParaAfterAutoSpacing = true;
             rValue.second >>= m_nParaAfterSpacing;
-            m_nParaAfterSpacing = convertMm100ToTwip(m_nParaAfterSpacing);
+            m_nParaAfterSpacing = o3tl::toTwips(m_nParaAfterSpacing, o3tl::Length::mm100);
         }
     }
 }

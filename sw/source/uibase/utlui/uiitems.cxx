@@ -129,7 +129,7 @@ bool SwPageFootnoteInfoItem::PutValue(const Any& rVal, sal_uInt8 nMemberId)
                     bRet = false;
                 else
                 {
-                    nSet32 = convertMm100ToTwip(nSet32);
+                    nSet32 = o3tl::toTwips(nSet32, o3tl::Length::mm100);
                     switch(nMemberId & ~CONVERT_TWIPS)
                     {
                         case MID_FTN_HEIGHT:            aFootnoteInfo.SetHeight(nSet32);    break;
@@ -143,7 +143,7 @@ bool SwPageFootnoteInfoItem::PutValue(const Any& rVal, sal_uInt8 nMemberId)
             sal_Int16 nSet = 0;
             rVal >>= nSet;
             if(nSet >= 0)
-                aFootnoteInfo.SetLineWidth(convertMm100ToTwip(nSet));
+                aFootnoteInfo.SetLineWidth(o3tl::toTwips(nSet, o3tl::Length::mm100));
             else
                 bRet = false;
         }

@@ -2728,7 +2728,7 @@ SwXDocumentIndex::TokenAccess_Impl::replaceByIndex(
                 {
                     throw lang::IllegalArgumentException();
                 }
-                nPosition = convertMm100ToTwip(nPosition);
+                nPosition = o3tl::toTwips(nPosition, o3tl::Length::mm100);
                 if(nPosition < 0)
                 {
                     throw lang::IllegalArgumentException();

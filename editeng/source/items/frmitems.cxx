@@ -181,8 +181,8 @@ bool SvxSizeItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             {
                 if(bConvert)
                 {
-                    aTmp.Height = convertMm100ToTwip(aTmp.Height);
-                    aTmp.Width = convertMm100ToTwip(aTmp.Width);
+                    aTmp.Height = o3tl::toTwips(aTmp.Height, o3tl::Length::mm100);
+                    aTmp.Width = o3tl::toTwips(aTmp.Width, o3tl::Length::mm100);
                 }
                 m_aSize = Size( aTmp.Width, aTmp.Height );
             }
@@ -198,7 +198,7 @@ bool SvxSizeItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             if(!(rVal >>= nVal ))
                 return false;
 
-            m_aSize.setWidth( bConvert ? convertMm100ToTwip(nVal) : nVal );
+            m_aSize.setWidth( bConvert ? o3tl::toTwips(nVal, o3tl::Length::mm100) : nVal );
         }
         break;
         case MID_SIZE_HEIGHT:
@@ -207,7 +207,7 @@ bool SvxSizeItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             if(!(rVal >>= nVal))
                 return true;
 
-            m_aSize.setHeight( bConvert ? convertMm100ToTwip(nVal) : nVal );
+            m_aSize.setHeight( bConvert ? o3tl::toTwips(nVal, o3tl::Length::mm100) : nVal );
         }
         break;
         default: OSL_FAIL("Wrong MemberId!");
@@ -407,26 +407,26 @@ bool SvxLRSpaceItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             if(!(rVal >>= aLRSpace))
                 return false;
 
-            SetLeft( bConvert ? convertMm100ToTwip(aLRSpace.Left) : aLRSpace.Left );
-            SetTextLeft( bConvert ? convertMm100ToTwip(aLRSpace.TextLeft) : aLRSpace.TextLeft );
-            SetRight(bConvert ? convertMm100ToTwip(aLRSpace.Right) : aLRSpace.Right);
+            SetLeft( bConvert ? o3tl::toTwips(aLRSpace.Left, o3tl::Length::mm100) : aLRSpace.Left );
+            SetTextLeft( bConvert ? o3tl::toTwips(aLRSpace.TextLeft, o3tl::Length::mm100) : aLRSpace.TextLeft );
+            SetRight(bConvert ? o3tl::toTwips(aLRSpace.Right, o3tl::Length::mm100) : aLRSpace.Right);
             nPropLeftMargin = aLRSpace.ScaleLeft;
             nPropRightMargin = aLRSpace.ScaleRight;
-            SetTextFirstLineOffset(static_cast<short>(bConvert ?  convertMm100ToTwip(aLRSpace.FirstLine) : aLRSpace.FirstLine));
-            SetPropTextFirstLineOffset ( static_cast<sal_uInt16>(aLRSpace.ScaleFirstLine) );
+            SetTextFirstLineOffset(bConvert ? o3tl::toTwips(aLRSpace.FirstLine, o3tl::Length::mm100) : aLRSpace.FirstLine);
+            SetPropTextFirstLineOffset ( aLRSpace.ScaleFirstLine );
             SetAutoFirst( aLRSpace.AutoFirstLine );
             break;
         }
         case MID_L_MARGIN:
-            SetLeft( bConvert ? convertMm100ToTwip(nVal) : nVal );
+            SetLeft( bConvert ? o3tl::toTwips(nVal, o3tl::Length::mm100) : nVal );
             break;
 
         case MID_TXT_LMARGIN :
-            SetTextLeft( bConvert ? convertMm100ToTwip(nVal) : nVal );
+            SetTextLeft( bConvert ? o3tl::toTwips(nVal, o3tl::Length::mm100) : nVal );
         break;
 
         case MID_R_MARGIN:
-            SetRight(bConvert ? convertMm100ToTwip(nVal) : nVal);
+            SetRight(bConvert ? o3tl::toTwips(nVal, o3tl::Length::mm100) : nVal);
             break;
         case MID_L_REL_MARGIN:
         case MID_R_REL_MARGIN:
@@ -444,11 +444,11 @@ bool SvxLRSpaceItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         }
         break;
         case MID_FIRST_LINE_INDENT     :
-            SetTextFirstLineOffset(static_cast<short>(bConvert ?  convertMm100ToTwip(nVal) : nVal));
+            SetTextFirstLineOffset(bConvert ? o3tl::toTwips(nVal, o3tl::Length::mm100) : nVal);
             break;
 
         case MID_FIRST_LINE_REL_INDENT:
-            SetPropTextFirstLineOffset ( static_cast<sal_uInt16>(nVal) );
+            SetPropTextFirstLineOffset ( nVal );
             break;
 
         case MID_FIRST_AUTO:
@@ -456,7 +456,7 @@ bool SvxLRSpaceItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             break;
 
         case MID_GUTTER_MARGIN:
-            SetGutterMargin(bConvert ? convertMm100ToTwip(nVal) : nVal);
+            SetGutterMargin(bConvert ? o3tl::toTwips(nVal, o3tl::Length::mm100) : nVal);
             break;
 
         default:
@@ -716,8 +716,8 @@ bool SvxULSpaceItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             if ( !(rVal >>= aUpperLowerMarginScale ))
                 return false;
             {
-                SetUpper(static_cast<sal_uInt16>(bConvert ? convertMm100ToTwip( aUpperLowerMarginScale.Upper ) : aUpperLowerMarginScale.Upper));
-                SetLower(static_cast<sal_uInt16>(bConvert ? convertMm100ToTwip( aUpperLowerMarginScale.Lower ) : aUpperLowerMarginScale.Lower));
+                SetUpper(bConvert ? o3tl::toTwips(aUpperLowerMarginScale.Upper, o3tl::Length::mm100) : aUpperLowerMarginScale.Upper);
+                SetLower(bConvert ? o3tl::toTwips(aUpperLowerMarginScale.Lower, o3tl::Length::mm100) : aUpperLowerMarginScale.Lower);
                 if( aUpperLowerMarginScale.ScaleUpper > 1 )
                     nPropUpper = aUpperLowerMarginScale.ScaleUpper;
                 if( aUpperLowerMarginScale.ScaleLower > 1 )
@@ -728,12 +728,12 @@ bool SvxULSpaceItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         case MID_UP_MARGIN :
             if(!(rVal >>= nVal))
                 return false;
-            SetUpper(static_cast<sal_uInt16>(bConvert ? convertMm100ToTwip(nVal) : nVal));
+            SetUpper(bConvert ? o3tl::toTwips(nVal, o3tl::Length::mm100) : nVal);
             break;
         case MID_LO_MARGIN :
             if(!(rVal >>= nVal) || nVal < 0)
                 return false;
-            SetLower(static_cast<sal_uInt16>(bConvert ? convertMm100ToTwip(nVal) : nVal));
+            SetLower(bConvert ? o3tl::toTwips(nVal, o3tl::Length::mm100) : nVal);
             break;
         case MID_CTX_MARGIN :
             if (!(rVal >>= bVal))
@@ -1125,7 +1125,7 @@ bool SvxShadowItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             default: ; // prevent warning
         }
 
-        nWidth = bConvert ? convertMm100ToTwip(aShadow.ShadowWidth) : aShadow.ShadowWidth;
+        nWidth = bConvert ? o3tl::toTwips(aShadow.ShadowWidth, o3tl::Length::mm100) : aShadow.ShadowWidth;
         Color aSet(ColorTransparency, aShadow.Color);
         aShadowColor = aSet;
     }
@@ -1462,9 +1462,9 @@ lcl_lineToSvxLine(const table::BorderLine& rLine, SvxBorderLine& rSvxLine, bool 
     if ( bGuessWidth )
     {
         rSvxLine.GuessLinesWidths( rSvxLine.GetBorderLineStyle(),
-                sal_uInt16( bConvert ? convertMm100ToTwip(rLine.OuterLineWidth) : rLine.OuterLineWidth  ),
-                sal_uInt16( bConvert ? convertMm100ToTwip(rLine.InnerLineWidth) : rLine.InnerLineWidth  ),
-                sal_uInt16( bConvert ? convertMm100ToTwip(rLine.LineDistance )  : rLine.LineDistance  ));
+                bConvert ? o3tl::toTwips(rLine.OuterLineWidth, o3tl::Length::mm100) : rLine.OuterLineWidth,
+                bConvert ? o3tl::toTwips(rLine.InnerLineWidth, o3tl::Length::mm100) : rLine.InnerLineWidth,
+                bConvert ? o3tl::toTwips(rLine.LineDistance, o3tl::Length::mm100) : rLine.LineDistance );
     }
 
     bool bRet = !rSvxLine.isEmpty();
@@ -1492,7 +1492,7 @@ SvxBoxItem::LineToSvxLine(const css::table::BorderLine2& rLine, SvxBorderLine& r
     bool bGuessWidth = true;
     if ( rLine.LineWidth )
     {
-        rSvxLine.SetWidth( bConvert? convertMm100ToTwip( rLine.LineWidth ) : rLine.LineWidth );
+        rSvxLine.SetWidth( bConvert? o3tl::toTwips(rLine.LineWidth, o3tl::Length::mm100) : rLine.LineWidth );
         // fdo#46112: double does not necessarily mean symmetric
         // for backwards compatibility
         bGuessWidth = (SvxBorderLineStyle::DOUBLE == nStyle || SvxBorderLineStyle::DOUBLE_THIN == nStyle) &&
@@ -1573,11 +1573,11 @@ bool SvxBoxItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                     if ( aSeq[n] >>= nDist )
                     {
                         if( bConvert )
-                            nDist = convertMm100ToTwip(nDist);
+                            nDist = o3tl::toTwips(nDist, o3tl::Length::mm100);
                         if ( n == 4 )
-                            SetAllDistances(sal_uInt16(nDist));
+                            SetAllDistances(nDist);
                         else
-                            SetDistance( sal_uInt16( nDist ), nLines[n-5] );
+                            SetDistance( nDist, nLines[n-5] );
                     }
                     else
                         return false;
@@ -1650,7 +1650,7 @@ bool SvxBoxItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 tools::Long nWidth(0);
                 rVal >>= nWidth;
                 if( bConvert )
-                    nWidth = convertMm100ToTwip( nWidth );
+                    nWidth = o3tl::toTwips(nWidth, o3tl::Length::mm100);
 
                 // Set the line Width on all borders
                 for( SvxBoxItemLine n : o3tl::enumrange<SvxBoxItemLine>() )
@@ -1672,11 +1672,11 @@ bool SvxBoxItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         if(nDist >= 0)
         {
             if( bConvert )
-                nDist = convertMm100ToTwip(nDist);
+                nDist = o3tl::toTwips(nDist, o3tl::Length::mm100);
             if( nMemberId == BORDER_DISTANCE )
-                SetAllDistances(sal_uInt16(nDist));
+                SetAllDistances(nDist);
             else
-                SetDistance( sal_uInt16( nDist ), nLine );
+                SetDistance( nDist, nLine );
         }
     }
     else
@@ -2294,8 +2294,8 @@ bool SvxBoxInfoItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 if (( aSeq[4] >>= nVal ) && ( nVal >= 0 ))
                 {
                     if( bConvert )
-                        nVal = convertMm100ToTwip(nVal);
-                    SetDefDist( static_cast<sal_uInt16>(nVal) );
+                        nVal = o3tl::toTwips(nVal, o3tl::Length::mm100);
+                    SetDefDist( nVal );
                 }
             }
             return true;
@@ -2411,7 +2411,7 @@ bool SvxBoxInfoItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             if ( bRet && nVal>=0 )
             {
                 if( bConvert )
-                    nVal = convertMm100ToTwip(nVal);
+                    nVal = o3tl::toTwips(nVal, o3tl::Length::mm100);
                 SetDefDist( static_cast<sal_uInt16>(nVal) );
             }
             break;

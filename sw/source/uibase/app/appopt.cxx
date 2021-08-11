@@ -178,7 +178,7 @@ std::optional<SfxItemSet> SwModule::CreateItemSet( sal_uInt16 nId )
             aRet.Put( SfxUInt16Item( SID_ATTR_DEFTABSTOP, o3tl::narrowing<sal_uInt16>(::GetTabDist(rDefTabs))));
         }
         else
-            aRet.Put(SfxUInt16Item( SID_ATTR_DEFTABSTOP, o3tl::narrowing<sal_uInt16>(convertMm100ToTwip(pPref->GetDefTabInMm100()))));
+            aRet.Put(SfxUInt16Item( SID_ATTR_DEFTABSTOP, o3tl::toTwips(pPref->GetDefTabInMm100(), o3tl::Length::mm100)));
     }
 
     // Options for GridTabPage

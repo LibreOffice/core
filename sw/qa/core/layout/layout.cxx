@@ -297,7 +297,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testGutterMargin)
 
     // Verify that the new left edge is larger.
     tools::Long nNewLeft = pPage->getFramePrintArea().Left();
-    tools::Long nGutterTwips = convertMm100ToTwip(nGutterMm100);
+    tools::Long nGutterTwips = o3tl::toTwips(nGutterMm100, o3tl::Length::mm100);
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 1134
     // - Actual  : 0
@@ -326,7 +326,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testGutterTopMargin)
 
     // Verify that the new top edge is larger.
     tools::Long nNewTop = pPage->getFramePrintArea().Top();
-    tools::Long nGutterTwips = convertMm100ToTwip(nGutterMm100);
+    tools::Long nGutterTwips = o3tl::toTwips(nGutterMm100, o3tl::Length::mm100);
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 1134
     // - Actual  : 0
@@ -353,7 +353,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testGutterMirrorMargin)
     xStandard->setPropertyValue("GutterMargin", uno::makeAny(nGutterMm100));
 
     tools::Long nNewLeft = pPage->getFramePrintArea().Left();
-    tools::Long nGutterTwips = convertMm100ToTwip(nGutterMm100);
+    tools::Long nGutterTwips = o3tl::toTwips(nGutterMm100, o3tl::Length::mm100);
     CPPUNIT_ASSERT_EQUAL(nGutterTwips, nNewLeft - nOldLeft);
     tools::Long nNewRight = pPage2->getFramePrintArea().Right();
     // Without the accompanying fix in place, this test would have failed with:
@@ -380,7 +380,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testRtlGutterMargin)
 
     // Then make sure the new right edge of the print area is decreased:
     tools::Long nNewRight = pPage->getFramePrintArea().Right();
-    tools::Long nGutterTwips = convertMm100ToTwip(nGutterMm100);
+    tools::Long nGutterTwips = o3tl::toTwips(nGutterMm100, o3tl::Length::mm100);
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 1134
     // - Actual  : 0

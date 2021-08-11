@@ -465,10 +465,10 @@ void SdTiledRenderingTest::testPostMouseEvent()
     Point aPosition(pCursor->GetPos().getX(), pCursor->GetPos().getY() + pCursor->GetSize().Height() / 2);
     aPosition.setX(aPosition.getX() - 1000);
     pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN,
-                                      convertMm100ToTwip(aPosition.getX()), convertMm100ToTwip(aPosition.getY()),
+                                      o3tl::toTwips(aPosition.getX(), o3tl::Length::mm100), o3tl::toTwips(aPosition.getY(), o3tl::Length::mm100),
                                       1, MOUSE_LEFT, 0);
     pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP,
-                                      convertMm100ToTwip(aPosition.getX()), convertMm100ToTwip(aPosition.getY()),
+                                      o3tl::toTwips(aPosition.getX(), o3tl::Length::mm100), o3tl::toTwips(aPosition.getY(), o3tl::Length::mm100),
                                       1, MOUSE_LEFT, 0);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(pView->GetTextEditObject());
@@ -542,8 +542,8 @@ void SdTiledRenderingTest::testSetGraphicSelection()
     CPPUNIT_ASSERT_EQUAL(int(SdrHdlKind::Lower), static_cast<int>(pHdl->GetKind()));
     ::tools::Rectangle aShapeBefore = pObject->GetSnapRect();
     // Resize.
-    pXImpressDocument->setGraphicSelection(LOK_SETGRAPHICSELECTION_START, convertMm100ToTwip(pHdl->GetPos().getX()), convertMm100ToTwip(pHdl->GetPos().getY()));
-    pXImpressDocument->setGraphicSelection(LOK_SETGRAPHICSELECTION_END, convertMm100ToTwip(pHdl->GetPos().getX()), convertMm100ToTwip(pHdl->GetPos().getY() + 1000));
+    pXImpressDocument->setGraphicSelection(LOK_SETGRAPHICSELECTION_START, o3tl::toTwips(pHdl->GetPos().getX(), o3tl::Length::mm100), o3tl::toTwips(pHdl->GetPos().getY(), o3tl::Length::mm100));
+    pXImpressDocument->setGraphicSelection(LOK_SETGRAPHICSELECTION_END, o3tl::toTwips(pHdl->GetPos().getX(), o3tl::Length::mm100), o3tl::toTwips(pHdl->GetPos().getY() + 1000, o3tl::Length::mm100));
 
     // Assert that view shell ID tracking works.
     sal_Int32 nView1 = SfxLokHelper::getView();
@@ -810,8 +810,8 @@ void SdTiledRenderingTest::testResizeTable()
 
     // Resize the upper row, decrease its height by 1 cm.
     Point aInnerRowEdge = pObject->GetSnapRect().Center();
-    pXImpressDocument->setGraphicSelection(LOK_SETGRAPHICSELECTION_START, convertMm100ToTwip(aInnerRowEdge.getX()), convertMm100ToTwip(aInnerRowEdge.getY()));
-    pXImpressDocument->setGraphicSelection(LOK_SETGRAPHICSELECTION_END, convertMm100ToTwip(aInnerRowEdge.getX()), convertMm100ToTwip(aInnerRowEdge.getY() - 1000));
+    pXImpressDocument->setGraphicSelection(LOK_SETGRAPHICSELECTION_START, o3tl::toTwips(aInnerRowEdge.getX(), o3tl::Length::mm100), o3tl::toTwips(aInnerRowEdge.getY(), o3tl::Length::mm100));
+    pXImpressDocument->setGraphicSelection(LOK_SETGRAPHICSELECTION_END, o3tl::toTwips(aInnerRowEdge.getX(), o3tl::Length::mm100), o3tl::toTwips(aInnerRowEdge.getY() - 1000, o3tl::Length::mm100));
 
     // Remember the resized row heights.
     sal_Int32 nResizedRow1 = xRow1->getPropertyValue("Size").get<sal_Int32>();
@@ -855,8 +855,8 @@ void SdTiledRenderingTest::testResizeTableColumn()
 
     // Resize the left column, decrease its width by 1 cm.
     Point aInnerRowEdge = pObject->GetSnapRect().Center();
-    pXImpressDocument->setGraphicSelection(LOK_SETGRAPHICSELECTION_START, convertMm100ToTwip(aInnerRowEdge.getX()), convertMm100ToTwip(aInnerRowEdge.getY()));
-    pXImpressDocument->setGraphicSelection(LOK_SETGRAPHICSELECTION_END, convertMm100ToTwip(aInnerRowEdge.getX() - 1000), convertMm100ToTwip(aInnerRowEdge.getY()));
+    pXImpressDocument->setGraphicSelection(LOK_SETGRAPHICSELECTION_START, o3tl::toTwips(aInnerRowEdge.getX(), o3tl::Length::mm100), o3tl::toTwips(aInnerRowEdge.getY(), o3tl::Length::mm100));
+    pXImpressDocument->setGraphicSelection(LOK_SETGRAPHICSELECTION_END, o3tl::toTwips(aInnerRowEdge.getX() - 1000, o3tl::Length::mm100), o3tl::toTwips(aInnerRowEdge.getY(), o3tl::Length::mm100));
 
     // Remember the resized column widths.
     pXmlDoc = parseXmlDump();
@@ -1131,8 +1131,8 @@ void SdTiledRenderingTest::testCursorVisibility_SingleClick()
 
     // Click once outside of the text (in the first quartile) => no editing.
     const ::tools::Rectangle aRect = pTextObject->GetCurrentBoundRect();
-    const auto cornerX = convertMm100ToTwip(aRect.getX() + (aRect.getWidth() / 4));
-    const auto cornerY = convertMm100ToTwip(aRect.getY() + (aRect.getHeight() / 4));
+    const auto cornerX = o3tl::toTwips(aRect.getX() + (aRect.getWidth() / 4), o3tl::Length::mm100);
+    const auto cornerY = o3tl::toTwips(aRect.getY() + (aRect.getHeight() / 4), o3tl::Length::mm100);
     pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN,
                                       cornerX, cornerY,
                                       1, MOUSE_LEFT, 0);
@@ -1146,8 +1146,8 @@ void SdTiledRenderingTest::testCursorVisibility_SingleClick()
     CPPUNIT_ASSERT(!aView1.m_bCursorVisible);
 
     // Click again, now on the text, in the center, to start editing.
-    const auto centerX = convertMm100ToTwip(aRect.getX() + (aRect.getWidth() / 2));
-    const auto centerY = convertMm100ToTwip(aRect.getY() + (aRect.getHeight() / 2));
+    const auto centerX = o3tl::toTwips(aRect.getX() + (aRect.getWidth() / 2), o3tl::Length::mm100);
+    const auto centerY = o3tl::toTwips(aRect.getY() + (aRect.getHeight() / 2), o3tl::Length::mm100);
     pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN,
                                       centerX, centerY,
                                       1, MOUSE_LEFT, 0);
@@ -1180,8 +1180,8 @@ void SdTiledRenderingTest::testCursorVisibility_DoubleClick()
 
     // Double-click outside the text to enter edit mode.
     const ::tools::Rectangle aRect = pTextObject->GetCurrentBoundRect();
-    const auto cornerX = convertMm100ToTwip(aRect.getX() + (aRect.getWidth() / 4));
-    const auto cornerY = convertMm100ToTwip(aRect.getY() + (aRect.getHeight() / 4));
+    const auto cornerX = o3tl::toTwips(aRect.getX() + (aRect.getWidth() / 4), o3tl::Length::mm100);
+    const auto cornerY = o3tl::toTwips(aRect.getY() + (aRect.getHeight() / 4), o3tl::Length::mm100);
     pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN,
                                       cornerX, cornerY,
                                       2, MOUSE_LEFT, 0);
@@ -1224,8 +1224,8 @@ void SdTiledRenderingTest::testCursorVisibility_MultiView()
     SfxLokHelper::setView(nView1);
 
     ::tools::Rectangle aRect = pTextObject->GetCurrentBoundRect();
-    const auto centerX = convertMm100ToTwip(aRect.getX() + (aRect.getWidth() / 2));
-    const auto centerY = convertMm100ToTwip(aRect.getY() + (aRect.getHeight() / 2));
+    const auto centerX = o3tl::toTwips(aRect.getX() + (aRect.getWidth() / 2), o3tl::Length::mm100);
+    const auto centerY = o3tl::toTwips(aRect.getY() + (aRect.getHeight() / 2), o3tl::Length::mm100);
     pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN,
                                       centerX, centerY,
                                       2, MOUSE_LEFT, 0);
@@ -1260,8 +1260,8 @@ void SdTiledRenderingTest::testCursorVisibility_Escape()
 
     // Click once on the text to start editing.
     const ::tools::Rectangle aRect = pTextObject->GetCurrentBoundRect();
-    const auto centerX = convertMm100ToTwip(aRect.getX() + (aRect.getWidth() / 2));
-    const auto centerY = convertMm100ToTwip(aRect.getY() + (aRect.getHeight() / 2));
+    const auto centerX = o3tl::toTwips(aRect.getX() + (aRect.getWidth() / 2), o3tl::Length::mm100);
+    const auto centerY = o3tl::toTwips(aRect.getY() + (aRect.getHeight() / 2), o3tl::Length::mm100);
     pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN,
                                       centerX, centerY,
                                       1, MOUSE_LEFT, 0);
@@ -1441,10 +1441,10 @@ void SdTiledRenderingTest::testTdf102223()
     // select contents of cell
     ::tools::Rectangle aRect = pTableObject->GetCurrentBoundRect();
     pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN,
-                                      convertMm100ToTwip(aRect.getX() + 2), convertMm100ToTwip(aRect.getY() + 2),
+                                      o3tl::toTwips(aRect.getX() + 2, o3tl::Length::mm100), o3tl::toTwips(aRect.getY() + 2, o3tl::Length::mm100),
                                       1, MOUSE_LEFT, 0);
     pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP,
-                                      convertMm100ToTwip(aRect.getX() + 2), convertMm100ToTwip(aRect.getY() + 2),
+                                      o3tl::toTwips(aRect.getX() + 2, o3tl::Length::mm100), o3tl::toTwips(aRect.getY() + 2, o3tl::Length::mm100),
                                       1, MOUSE_LEFT, 0);
     Scheduler::ProcessEventsToIdle();
     pView->SdrBeginTextEdit(pTableObject);
@@ -1484,10 +1484,10 @@ void SdTiledRenderingTest::testTdf118354()
     // Without the fix, it would crash here
     ::tools::Rectangle aRect = pTableObject->GetCurrentBoundRect();
     pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN,
-                                      convertMm100ToTwip(aRect.getX() + 2), convertMm100ToTwip(aRect.getY() + 2),
+                                      o3tl::toTwips(aRect.getX() + 2, o3tl::Length::mm100), o3tl::toTwips(aRect.getY() + 2, o3tl::Length::mm100),
                                       1, MOUSE_LEFT, 0);
     pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP,
-                                      convertMm100ToTwip(aRect.getX() + 2), convertMm100ToTwip(aRect.getY() + 2),
+                                      o3tl::toTwips(aRect.getX() + 2, o3tl::Length::mm100), o3tl::toTwips(aRect.getY() + 2, o3tl::Length::mm100),
                                       1, MOUSE_LEFT, 0);
     Scheduler::ProcessEventsToIdle();
 
@@ -1554,10 +1554,10 @@ void SdTiledRenderingTest::testTdf103083()
     // select contents of bullet item
     ::tools::Rectangle aRect = pTextObject->GetCurrentBoundRect();
     pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN,
-                                      convertMm100ToTwip(aRect.getX() + 2), convertMm100ToTwip(aRect.getY() + 2),
+                                      o3tl::toTwips(aRect.getX() + 2, o3tl::Length::mm100), o3tl::toTwips(aRect.getY() + 2, o3tl::Length::mm100),
                                       1, MOUSE_LEFT, 0);
     pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP,
-                                      convertMm100ToTwip(aRect.getX() + 2), convertMm100ToTwip(aRect.getY() + 2),
+                                      o3tl::toTwips(aRect.getX() + 2, o3tl::Length::mm100), o3tl::toTwips(aRect.getY() + 2, o3tl::Length::mm100),
                                       1, MOUSE_LEFT, 0);
     Scheduler::ProcessEventsToIdle();
     pView->SdrBeginTextEdit(pTextObject);
@@ -1643,10 +1643,10 @@ void SdTiledRenderingTest::testTdf104405()
     rEditView2.SetSelection(ESelection(0, 0, 0, 3)); // start para, start char, end para, end char.
     ::tools::Rectangle aRect = pTableObject->GetCurrentBoundRect();
     pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN,
-                                      convertMm100ToTwip(aRect.getX()), convertMm100ToTwip(aRect.getY()),
+                                      o3tl::toTwips(aRect.getX(), o3tl::Length::mm100), o3tl::toTwips(aRect.getY(), o3tl::Length::mm100),
                                       1, MOUSE_LEFT, 0);
     pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP,
-                                      convertMm100ToTwip(aRect.getX()), convertMm100ToTwip(aRect.getY()),
+                                      o3tl::toTwips(aRect.getX(), o3tl::Length::mm100), o3tl::toTwips(aRect.getY(), o3tl::Length::mm100),
                                       1, MOUSE_LEFT, 0);
 
     Scheduler::ProcessEventsToIdle();
@@ -2025,8 +2025,8 @@ void SdTiledRenderingTest::testMultiViewInsertDeletePage2()
 
     // Double-click outside the text to enter edit mode.
     const ::tools::Rectangle aRect = pTextObject->GetCurrentBoundRect();
-    const auto cornerX = convertMm100ToTwip(aRect.getX() + (aRect.getWidth() / 4));
-    const auto cornerY = convertMm100ToTwip(aRect.getY() + (aRect.getHeight() / 4));
+    const auto cornerX = o3tl::toTwips(aRect.getX() + (aRect.getWidth() / 4), o3tl::Length::mm100);
+    const auto cornerY = o3tl::toTwips(aRect.getY() + (aRect.getHeight() / 4), o3tl::Length::mm100);
     pXImpressDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN,
                                       cornerX, cornerY,
                                       2, MOUSE_LEFT, 0);
