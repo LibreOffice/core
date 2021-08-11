@@ -150,9 +150,9 @@ struct Entity : public ParserData
 
     // Number of valid events in mxProducedEvents:
     size_t mnProducedEventsSize;
-    std::unique_ptr<EventList> mxProducedEvents;
-    std::queue<std::unique_ptr<EventList>> maPendingEvents;
-    std::queue<std::unique_ptr<EventList>> maUsedEvents;
+    std::optional<EventList> mxProducedEvents;
+    std::queue<EventList> maPendingEvents;
+    std::queue<EventList> maUsedEvents;
     osl::Mutex maEventProtector;
 
     static const size_t mnEventLowWater = 4;
@@ -548,7 +548,7 @@ EventList& Entity::getEventList()
         }
         if (!mxProducedEvents)
         {
-            mxProducedEvents.reset(new EventList);
+            mxProducedEvents.emplace();
             mxProducedEvents->maEvents.resize(mnEventListSize);
             mxProducedEvents->mbIsAttributesEmpty = false;
             mnProducedEventsSize = 0;
@@ -863,11 +863,11 @@ void FastSaxParserImpl::parseStream(const InputSource& rStructSource)
                 if (rEntity.maPendingEvents.size() <= Entity::mnEventLowWater)
                     rEntity.maProduceResume.set(); // start producer again
 
-                std::unique_ptr<EventList> xEventList = std::move(rEntity.maPendingEvents.front());
+                EventList aEventList = std::move(rEntity.maPendingEvents.front());
                 rEntity.maPendingEvents.pop();
                 aGuard.clear(); // unlock
 
-                if (!consume(*xEventList))
+                if (!consume(aEventList))
                     done = true;
 
                 aGuard.reset(); // lock
@@ -875,7 +875,7 @@ void FastSaxParserImpl::parseStream(const InputSource& rStructSource)
                 if ( rEntity.maPendingEvents.size() <= Entity::mnEventLowWater )
                 {
                     aGuard.clear();
-                    for (auto& rEvent : xEventList->maEvents)
+                    for (auto& rEvent : aEventList.maEvents)
                     {
                         if (rEvent.mxAttributes.is())
                         {
@@ -883,12 +883,12 @@ void FastSaxParserImpl::parseStream(const InputSource& rStructSource)
                             if( rEntity.mxNamespaceHandler.is() )
                                 rEvent.mxDeclAttributes->clear();
                         }
-                        xEventList->mbIsAttributesEmpty = true;
+                        aEventList.mbIsAttributesEmpty = true;
                     }
                     aGuard.reset();
                 }
 
-                rEntity.maUsedEvents.push(std::move(xEventList));
+                rEntity.maUsedEvents.push(std::move(aEventList));
             }
         } while (!done);
         aEnsureFree.joinThread();
@@ -978,12 +978,12 @@ void FastSaxParserImpl::deleteUsedEvents()
 
     while (!rEntity.maUsedEvents.empty())
     {
-        std::unique_ptr<EventList> xEventList = std::move(rEntity.maUsedEvents.front());
-        rEntity.maUsedEvents.pop();
+        { // the block makes sure that aEventList is destructed outside the lock
+            EventList aEventList = std::move(rEntity.maUsedEvents.front());
+            rEntity.maUsedEvents.pop();
 
-        aGuard.clear(); // unlock
-
-        xEventList.reset();
+            aGuard.clear(); // unlock
+        }
 
         aGuard.reset(); // lock
     }
@@ -1006,7 +1006,8 @@ void FastSaxParserImpl::produce( bool bForceFlush )
         aGuard.reset(); // lock
     }
 
-    rEntity.maPendingEvents.push(std::move(rEntity.mxProducedEvents));
+    rEntity.maPendingEvents.push(std::move(*rEntity.mxProducedEvents));
+    rEntity.mxProducedEvents.reset();
     assert(!rEntity.mxProducedEvents);
 
     aGuard.clear(); // unlock
