@@ -990,26 +990,26 @@ void SdOOXMLExportTest1::testTableCellBorder()
     sal_Int32 nLeftBorder = aBorderLine.LineWidth * 2;
     nLeftBorder = oox::drawingml::convertHmmToEmu( nLeftBorder );
     CPPUNIT_ASSERT(nLeftBorder);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xb0f0), aBorderLine.Color);
+    CPPUNIT_ASSERT_EQUAL(Color(0xb0f0), nColor);
 
     xCellPropSet->getPropertyValue("RightBorder") >>= aBorderLine;
     sal_Int32 nRightBorder = aBorderLine.LineWidth * 2;
     nRightBorder = oox::drawingml::convertHmmToEmu( nRightBorder );
     CPPUNIT_ASSERT(nRightBorder);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xffffff), aBorderLine.Color);
+    CPPUNIT_ASSERT_EQUAL(Color(0xffffff), nColor);
 
     xCellPropSet->getPropertyValue("TopBorder") >>= aBorderLine;
     sal_Int32 nTopBorder = aBorderLine.LineWidth * 2;
     nTopBorder = oox::drawingml::convertHmmToEmu( nTopBorder );
     CPPUNIT_ASSERT(nTopBorder);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xb0f0), aBorderLine.Color);
+    CPPUNIT_ASSERT_EQUAL(Color(0xb0f0), nColor);
 
 
     xCellPropSet->getPropertyValue("BottomBorder") >>= aBorderLine;
     sal_Int32 nBottomBorder = aBorderLine.LineWidth * 2;
     nBottomBorder = oox::drawingml::convertHmmToEmu( nBottomBorder );
     CPPUNIT_ASSERT(nBottomBorder);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xb0f0), aBorderLine.Color);
+    CPPUNIT_ASSERT_EQUAL(Color(0xb0f0), nColor);
 
     xDocShRef->DoClose();
 }
