@@ -792,13 +792,13 @@ void ScPatternAttr::GetFromEditItemSet( SfxItemSet& rDestSet, const SfxItemSet& 
         rDestSet.Put( *static_cast<const SvxFontItem*>(pItem), ATTR_CTL_FONT );
 
     if (rEditSet.GetItemState(EE_CHAR_FONTHEIGHT,true,&pItem) == SfxItemState::SET)
-        rDestSet.Put( SvxFontHeightItem( convertMm100ToTwip( static_cast<const SvxFontHeightItem*>(pItem)->GetHeight() ),
+        rDestSet.Put( SvxFontHeightItem(o3tl::toTwips(static_cast<const SvxFontHeightItem*>(pItem)->GetHeight(), o3tl::Length::mm100),
                         100, ATTR_FONT_HEIGHT ) );
     if (rEditSet.GetItemState(EE_CHAR_FONTHEIGHT_CJK,true,&pItem) == SfxItemState::SET)
-        rDestSet.Put( SvxFontHeightItem( convertMm100ToTwip( static_cast<const SvxFontHeightItem*>(pItem)->GetHeight() ),
+        rDestSet.Put( SvxFontHeightItem(o3tl::toTwips(static_cast<const SvxFontHeightItem*>(pItem)->GetHeight(), o3tl::Length::mm100),
                         100, ATTR_CJK_FONT_HEIGHT ) );
     if (rEditSet.GetItemState(EE_CHAR_FONTHEIGHT_CTL,true,&pItem) == SfxItemState::SET)
-        rDestSet.Put( SvxFontHeightItem( convertMm100ToTwip( static_cast<const SvxFontHeightItem*>(pItem)->GetHeight() ),
+        rDestSet.Put( SvxFontHeightItem(o3tl::toTwips(static_cast<const SvxFontHeightItem*>(pItem)->GetHeight(), o3tl::Length::mm100),
                         100, ATTR_CTL_FONT_HEIGHT ) );
 
     if (rEditSet.GetItemState(EE_CHAR_WEIGHT,true,&pItem) == SfxItemState::SET)

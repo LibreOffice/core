@@ -2386,7 +2386,7 @@ Size SdXImpressDocument::getDocumentSize()
     Size aSize = pCurPageView->GetPageRect().GetSize();
     // Convert the size in 100th mm to TWIP
     // See paintTile above for further info.
-    return Size(convertMm100ToTwip(aSize.getWidth()), convertMm100ToTwip(aSize.getHeight()));
+    return o3tl::convert(aSize, o3tl::Length::mm100, o3tl::Length::twip);
 }
 
 void SdXImpressDocument::getPostIts(::tools::JsonWriter& rJsonWriter)

@@ -594,33 +594,30 @@ bool SvxFontHeightItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             // CONVERT_TWIPS is not set.
             if( bConvert )
             {
-                aFontHeight.Height = static_cast<float>( nHeight / 20.0 );
+                aFontHeight.Height = o3tl::convert<double>(nHeight, o3tl::Length::twip, o3tl::Length::pt);
             }
             else
             {
-                double fPoints = convertMm100ToTwip(nHeight) / 20.0;
-                float fRoundPoints =
-                    static_cast<float>(::rtl::math::round(fPoints, 1));
-                aFontHeight.Height = fRoundPoints;
+                double fPoints = o3tl::convert<double>(nHeight, o3tl::Length::mm100, o3tl::Length::pt);
+                aFontHeight.Height = rtl::math::round(fPoints, 1);
             }
 
-            aFontHeight.Prop = static_cast<sal_Int16>(MapUnit::MapRelative == ePropUnit ? nProp : 100);
+            aFontHeight.Prop = MapUnit::MapRelative == ePropUnit ? nProp : 100;
 
-            float fRet = static_cast<float>(static_cast<short>(nProp));
+            float fRet = nProp;
             switch( ePropUnit )
             {
                 case MapUnit::MapRelative:
                     fRet = 0.;
                 break;
                 case MapUnit::Map100thMM:
-                    fRet = convertMm100ToTwip(fRet);
-                    fRet /= 20.;
+                    fRet = o3tl::convert(fRet, o3tl::Length::mm100, o3tl::Length::pt);
                 break;
                 case MapUnit::MapPoint:
 
                 break;
                 case MapUnit::MapTwip:
-                    fRet /= 20.;
+                    fRet = o3tl::convert(fRet, o3tl::Length::twip, o3tl::Length::pt);
                 break;
                 default: ;//prevent warning
             }
@@ -634,14 +631,12 @@ bool SvxFontHeightItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             // CONVERT_TWIPS is not set.
             if( bConvert )
             {
-                rVal <<= static_cast<float>( nHeight / 20.0 );
+                rVal <<= static_cast<float>(o3tl::convert<double>(nHeight, o3tl::Length::twip, o3tl::Length::pt));
             }
             else
             {
-                double fPoints = convertMm100ToTwip(nHeight) / 20.0;
-                float fRoundPoints =
-                    static_cast<float>(::rtl::math::round(fPoints, 1));
-                rVal <<= fRoundPoints;
+                double fPoints = o3tl::convert<double>(nHeight, o3tl::Length::mm100, o3tl::Length::pt);
+                rVal <<= static_cast<float>(::rtl::math::round(fPoints, 1));
             }
         }
         break;
@@ -650,21 +645,20 @@ bool SvxFontHeightItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         break;
         case MID_FONTHEIGHT_DIFF:
         {
-            float fRet = static_cast<float>(static_cast<short>(nProp));
+            float fRet = nProp;
             switch( ePropUnit )
             {
                 case MapUnit::MapRelative:
                     fRet = 0.;
                 break;
                 case MapUnit::Map100thMM:
-                    fRet = convertMm100ToTwip(fRet);
-                    fRet /= 20.;
+                    fRet = o3tl::convert(fRet, o3tl::Length::mm100, o3tl::Length::pt);
                 break;
                 case MapUnit::MapPoint:
 
                 break;
                 case MapUnit::MapTwip:
-                    fRet /= 20.;
+                    fRet = o3tl::convert(fRet, o3tl::Length::twip, o3tl::Length::pt);
                 break;
                 default: ;//prevent warning
             }
@@ -1500,7 +1494,7 @@ bool SvxKerningItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId)
     if(!(rVal >>= nVal))
         return false;
     if(nMemberId & CONVERT_TWIPS)
-        nVal = static_cast<sal_Int16>(convertMm100ToTwip(nVal));
+        nVal = o3tl::toTwips(nVal, o3tl::Length::mm100);
     SetValue(nVal);
     return true;
 }

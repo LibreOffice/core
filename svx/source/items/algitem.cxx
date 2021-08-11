@@ -269,16 +269,16 @@ bool SvxMarginItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     switch ( nMemberId & ~CONVERT_TWIPS )
     {
         case MID_MARGIN_L_MARGIN:
-            nLeftMargin = static_cast<sal_Int16>( bConvert ? convertMm100ToTwip(nVal) : nVal );
+            nLeftMargin = static_cast<sal_Int16>( bConvert ? o3tl::toTwips(nVal, o3tl::Length::mm100) : nVal );
             break;
         case MID_MARGIN_R_MARGIN:
-            nRightMargin = static_cast<sal_Int16>( bConvert ? convertMm100ToTwip(nVal) : nVal );
+            nRightMargin = static_cast<sal_Int16>( bConvert ? o3tl::toTwips(nVal, o3tl::Length::mm100) : nVal );
             break;
         case MID_MARGIN_UP_MARGIN:
-            nTopMargin = static_cast<sal_Int16>( bConvert ? convertMm100ToTwip(nVal) : nVal );
+            nTopMargin = static_cast<sal_Int16>( bConvert ? o3tl::toTwips(nVal, o3tl::Length::mm100) : nVal );
             break;
         case MID_MARGIN_LO_MARGIN:
-            nBottomMargin = static_cast<sal_Int16>( bConvert ? convertMm100ToTwip(nVal) : nVal );
+            nBottomMargin = static_cast<sal_Int16>( bConvert ? o3tl::toTwips(nVal, o3tl::Length::mm100) : nVal );
             break;
         default:
             OSL_FAIL("unknown MemberId");

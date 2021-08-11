@@ -174,9 +174,9 @@ static bool lcl_LineToSvxLine(const table::BorderLine& rLine, SvxBorderLine& rSv
     rSvxLine.SetColor(Color(ColorTransparency, rLine.Color));
 
     rSvxLine.GuessLinesWidths( SvxBorderLineStyle::NONE,
-                                convertMm100ToTwip( rLine.OuterLineWidth ),
-                                convertMm100ToTwip( rLine.InnerLineWidth ),
-                                convertMm100ToTwip( rLine.LineDistance ) );
+                                o3tl::toTwips(rLine.OuterLineWidth, o3tl::Length::mm100),
+                                o3tl::toTwips(rLine.InnerLineWidth, o3tl::Length::mm100),
+                                o3tl::toTwips(rLine.LineDistance, o3tl::Length::mm100) );
 
     return rLine.InnerLineWidth > 0 || rLine.OuterLineWidth > 0;
 }
@@ -219,7 +219,7 @@ static void lcl_SetSpecialProperty(SwFrameFormat* pFormat,
                 sal_Int32 nWidth = 0;
                 aValue >>= nWidth;
                 aSz.SetWidthPercent(0);
-                aSz.SetWidth ( convertMm100ToTwip ( nWidth ) );
+                aSz.SetWidth ( o3tl::toTwips(nWidth, o3tl::Length::mm100) );
             }
             else if(FN_TABLE_RELATIVE_WIDTH == pEntry->nWID)
             {
@@ -1313,7 +1313,7 @@ void SwXTextTableRow::setPropertyValue(const OUString& rPropertyName, const uno:
                     sal_Int32 nHeight = 0;
                     aValue >>= nHeight;
                     Size aSz(aFrameSize.GetSize());
-                    aSz.setHeight( convertMm100ToTwip(nHeight) );
+                    aSz.setHeight( o3tl::toTwips(nHeight, o3tl::Length::mm100) );
                     aFrameSize.SetSize(aSz);
                 }
                 pDoc->SetAttr(aFrameSize, *pLn->ClaimFrameFormat());
@@ -2633,7 +2633,7 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName, const uno::An
                     aBoxInfo.SetLine(aVertLine.isEmpty() ? nullptr : &aVertLine, SvxBoxInfoItemLine::VERT);
                     aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::VERT, aBorder.IsVerticalLineValid);
 
-                    aBox.SetAllDistances(o3tl::narrowing<sal_uInt16>(convertMm100ToTwip(aBorder.Distance)));
+                    aBox.SetAllDistances(o3tl::toTwips(aBorder.Distance, o3tl::Length::mm100));
                     aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::DISTANCE, aBorder.IsDistanceValid);
 
                     aSet.Put(aBox);
@@ -2653,10 +2653,10 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName, const uno::An
                         !aTableBorderDistances.IsBottomDistanceValid ))
                         break;
 
-                    const sal_uInt16 nLeftDistance =   convertMm100ToTwip(aTableBorderDistances.LeftDistance);
-                    const sal_uInt16 nRightDistance =  convertMm100ToTwip(aTableBorderDistances.RightDistance);
-                    const sal_uInt16 nTopDistance =    convertMm100ToTwip(aTableBorderDistances.TopDistance);
-                    const sal_uInt16 nBottomDistance = convertMm100ToTwip(aTableBorderDistances.BottomDistance);
+                    const sal_uInt16 nLeftDistance =   o3tl::toTwips(aTableBorderDistances.LeftDistance, o3tl::Length::mm100);
+                    const sal_uInt16 nRightDistance =  o3tl::toTwips(aTableBorderDistances.RightDistance, o3tl::Length::mm100);
+                    const sal_uInt16 nTopDistance =    o3tl::toTwips(aTableBorderDistances.TopDistance, o3tl::Length::mm100);
+                    const sal_uInt16 nBottomDistance = o3tl::toTwips(aTableBorderDistances.BottomDistance, o3tl::Length::mm100);
                     SwDoc* pDoc = pFormat->GetDoc();
                     SwTable* pTable = SwTable::FindTable( pFormat );
                     SwTableLines &rLines = pTable->GetTabLines();

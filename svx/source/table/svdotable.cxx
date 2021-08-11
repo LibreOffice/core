@@ -2461,7 +2461,7 @@ bool SdrTableObj::createTableEdgesJson(boost::property_tree::ptree & rJsonRoot)
     tools::Rectangle aRect = GetCurrentBoundRect();
     boost::property_tree::ptree aTableColumns;
     {
-        aTableColumns.put("tableOffset", convertMm100ToTwip(aRect.Left()));
+        aTableColumns.put("tableOffset", o3tl::toTwips(aRect.Left(), o3tl::Length::mm100));
 
         boost::property_tree::ptree aEntries;
         auto const & aEdges = mpImpl->mpLayouter->getVerticalEdges();
@@ -2469,18 +2469,18 @@ bool SdrTableObj::createTableEdgesJson(boost::property_tree::ptree & rJsonRoot)
         {
             if (rEdge.nIndex == 0)
             {
-                aTableColumns.put("left", convertMm100ToTwip(rEdge.nPosition));
+                aTableColumns.put("left", o3tl::toTwips(rEdge.nPosition, o3tl::Length::mm100));
             }
             else if (rEdge.nIndex == sal_Int32(aEdges.size() - 1))
             {
-                aTableColumns.put("right", convertMm100ToTwip(rEdge.nPosition));
+                aTableColumns.put("right", o3tl::toTwips(rEdge.nPosition, o3tl::Length::mm100));
             }
             else
             {
                 boost::property_tree::ptree aEntry;
-                aEntry.put("position", convertMm100ToTwip(rEdge.nPosition));
-                aEntry.put("min", convertMm100ToTwip(rEdge.nPosition + rEdge.nMin));
-                aEntry.put("max", convertMm100ToTwip(rEdge.nPosition + rEdge.nMax));
+                aEntry.put("position", o3tl::toTwips(rEdge.nPosition, o3tl::Length::mm100));
+                aEntry.put("min", o3tl::toTwips(rEdge.nPosition + rEdge.nMin, o3tl::Length::mm100));
+                aEntry.put("max", o3tl::toTwips(rEdge.nPosition + rEdge.nMax, o3tl::Length::mm100));
                 aEntry.put("hidden", false);
                 aEntries.push_back(std::make_pair("", aEntry));
             }
@@ -2491,7 +2491,7 @@ bool SdrTableObj::createTableEdgesJson(boost::property_tree::ptree & rJsonRoot)
 
     boost::property_tree::ptree aTableRows;
     {
-        aTableRows.put("tableOffset", convertMm100ToTwip(aRect.Top()));
+        aTableRows.put("tableOffset", o3tl::toTwips(aRect.Top(), o3tl::Length::mm100));
 
         boost::property_tree::ptree aEntries;
         auto const & aEdges = mpImpl->mpLayouter->getHorizontalEdges();
@@ -2499,18 +2499,18 @@ bool SdrTableObj::createTableEdgesJson(boost::property_tree::ptree & rJsonRoot)
         {
             if (rEdge.nIndex == 0)
             {
-                aTableRows.put("left", convertMm100ToTwip(rEdge.nPosition));
+                aTableRows.put("left", o3tl::toTwips(rEdge.nPosition, o3tl::Length::mm100));
             }
             else if (rEdge.nIndex == sal_Int32(aEdges.size() - 1))
             {
-                aTableRows.put("right", convertMm100ToTwip(rEdge.nPosition));
+                aTableRows.put("right", o3tl::toTwips(rEdge.nPosition, o3tl::Length::mm100));
             }
             else
             {
                 boost::property_tree::ptree aEntry;
-                aEntry.put("position", convertMm100ToTwip(rEdge.nPosition));
-                aEntry.put("min", convertMm100ToTwip(rEdge.nPosition + rEdge.nMin));
-                aEntry.put("max", convertMm100ToTwip(rEdge.nPosition + rEdge.nMax));
+                aEntry.put("position", o3tl::toTwips(rEdge.nPosition, o3tl::Length::mm100));
+                aEntry.put("min", o3tl::toTwips(rEdge.nPosition + rEdge.nMin, o3tl::Length::mm100));
+                aEntry.put("max", o3tl::toTwips(rEdge.nPosition + rEdge.nMax, o3tl::Length::mm100));
                 aEntry.put("hidden", false);
                 aEntries.push_back(std::make_pair("", aEntry));
             }

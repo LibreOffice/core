@@ -113,7 +113,7 @@ SwStdFontConfig::SwStdFontConfig() :
             else
             {
                pValues[nProp] >>= nDefaultFontHeight[nProp - DEF_FONT_COUNT];
-               nDefaultFontHeight[nProp - DEF_FONT_COUNT] = convertMm100ToTwip(nDefaultFontHeight[nProp - DEF_FONT_COUNT]);
+               nDefaultFontHeight[nProp - DEF_FONT_COUNT] = o3tl::toTwips(nDefaultFontHeight[nProp - DEF_FONT_COUNT], o3tl::Length::mm100);
             }
         }
     }

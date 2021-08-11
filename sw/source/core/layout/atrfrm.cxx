@@ -326,8 +326,8 @@ bool SwFormatFrameSize::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 Size aTmp(aVal.Width, aVal.Height);
                 if(bConvert)
                 {
-                    aTmp.setHeight( convertMm100ToTwip(aTmp.Height()) );
-                    aTmp.setWidth( convertMm100ToTwip(aTmp.Width()) );
+                    aTmp.setHeight(o3tl::toTwips(aTmp.Height(), o3tl::Length::mm100));
+                    aTmp.setWidth(o3tl::toTwips(aTmp.Width(), o3tl::Length::mm100));
                 }
                 SetSize(aTmp);
             }
@@ -391,7 +391,7 @@ bool SwFormatFrameSize::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             if(rVal >>= nWd)
             {
                 if(bConvert)
-                    nWd = convertMm100ToTwip(nWd);
+                    nWd = o3tl::toTwips(nWd, o3tl::Length::mm100);
                 if(nWd < MINLAY)
                    nWd = MINLAY;
                 SetWidth(nWd);
@@ -406,7 +406,7 @@ bool SwFormatFrameSize::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             if(rVal >>= nHg)
             {
                 if(bConvert)
-                    nHg = convertMm100ToTwip(nHg);
+                    nHg = o3tl::toTwips(nHg, o3tl::Length::mm100);
                 if(nHg < MINLAY)
                     nHg = MINLAY;
                 SetHeight(nHg);
@@ -1189,8 +1189,8 @@ bool SwFormatCol::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                     SwColumn aCol;
                     aCol.SetWishWidth(pArray[i].Width );
                     nWidthSum = nWidthSum + pArray[i].Width;
-                    aCol.SetLeft (convertMm100ToTwip(pArray[i].LeftMargin));
-                    aCol.SetRight(convertMm100ToTwip(pArray[i].RightMargin));
+                    aCol.SetLeft (o3tl::toTwips(pArray[i].LeftMargin, o3tl::Length::mm100));
+                    aCol.SetRight(o3tl::toTwips(pArray[i].RightMargin, o3tl::Length::mm100));
                     m_aColumns.insert(m_aColumns.begin() + i, aCol);
                 }
             bRet = true;
@@ -1433,7 +1433,7 @@ bool SwFormatVertOrient::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             sal_Int32 nVal = 0;
             rVal >>= nVal;
             if(bConvert)
-                nVal = convertMm100ToTwip(nVal);
+                nVal = o3tl::toTwips(nVal, o3tl::Length::mm100);
             SetPos( nVal );
         }
         break;
@@ -1531,7 +1531,7 @@ bool SwFormatHoriOrient::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             if(!(rVal >>= nVal))
                 bRet = false;
             if(bConvert)
-                nVal = convertMm100ToTwip(nVal);
+                nVal = o3tl::toTwips(nVal, o3tl::Length::mm100);
             SetPos( nVal );
         }
         break;
@@ -2380,7 +2380,7 @@ bool SwTextGridItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                         "This value needs TWIPS-MM100 conversion" );
             sal_Int32 nTmp = 0;
             bRet = (rVal >>= nTmp);
-            nTmp = convertMm100ToTwip( nTmp );
+            nTmp = o3tl::toTwips(nTmp, o3tl::Length::mm100);
             if( bRet && (nTmp >= 0) && ( nTmp <= SAL_MAX_UINT16) )
             {
                 // rhbz#1043551 round up to 5pt -- 0 causes divide-by-zero

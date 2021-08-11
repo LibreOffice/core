@@ -94,10 +94,6 @@ template <typename N> constexpr auto convertTwipToMm100(N n)
 {
     return o3tl::convert(n, o3tl::Length::twip, o3tl::Length::mm100);
 }
-template <typename N> constexpr auto convertMm100ToTwip(N n)
-{
-    return o3tl::convert(n, o3tl::Length::mm100, o3tl::Length::twip);
-}
 
 constexpr sal_Int64 sanitiseMm100ToTwip(sal_Int64 n)
 {

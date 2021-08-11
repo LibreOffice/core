@@ -1575,8 +1575,8 @@ CPPUNIT_TEST_FIXTURE(Test, testDefaultValues)
     CPPUNIT_ASSERT_EQUAL(double(12), getProperty<double>(run, "CharHeight"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(run, "CharEscapement"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(100), getProperty<sal_Int32>(run, "CharEscapementHeight"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int64(20),
-                         convertMm100ToTwip(getProperty<sal_Int16>(run, "CharKerning")));
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(20), o3tl::toTwips(getProperty<sal_Int16>(run, "CharKerning"),
+                                                      o3tl::Length::mm100));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(COL_AUTO), getProperty<sal_Int32>(run, "CharColor"));
 
     run = getRun(paragraph, 8, "expand0pt");
@@ -1592,8 +1592,8 @@ CPPUNIT_TEST_FIXTURE(Test, testDefaultValues)
     CPPUNIT_ASSERT_EQUAL(double(12), getProperty<double>(run, "CharHeight"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(run, "CharEscapement"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(100), getProperty<sal_Int32>(run, "CharEscapementHeight"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int64(20),
-                         convertMm100ToTwip(getProperty<sal_Int16>(run, "CharKerning")));
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(20), o3tl::toTwips(getProperty<sal_Int16>(run, "CharKerning"),
+                                                      o3tl::Length::mm100));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(COL_AUTO), getProperty<sal_Int32>(run, "CharColor"));
 
     run = getRun(paragraph, 10, "expand0pt");

@@ -147,7 +147,7 @@ bool SwFormatDrop::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         {
             sal_Int16 nVal = 0;
             if ( rVal >>= nVal )
-                m_nDistance = static_cast<sal_Int16>(convertMm100ToTwip(static_cast<sal_Int32>(nVal)));
+                m_nDistance = o3tl::toTwips(nVal, o3tl::Length::mm100);
             else
                 return false;
             break;
@@ -159,7 +159,7 @@ bool SwFormatDrop::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 auto pDrop = o3tl::doAccess<style::DropCapFormat>(rVal);
                 m_nLines      = pDrop->Lines;
                 m_nChars      = pDrop->Count;
-                m_nDistance   = convertMm100ToTwip(pDrop->Distance);
+                m_nDistance   = o3tl::toTwips(pDrop->Distance, o3tl::Length::mm100);
             }
         }
         break;

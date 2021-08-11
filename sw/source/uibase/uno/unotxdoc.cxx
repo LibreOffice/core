@@ -1071,27 +1071,27 @@ void SwXTextDocument::setPagePrintSettings(const Sequence< beans::PropertyValue 
         }
         else if(sName == "LeftMargin")
         {
-            aData.SetLeftSpace(convertMm100ToTwip(nVal));
+            aData.SetLeftSpace(o3tl::toTwips(nVal, o3tl::Length::mm100));
         }
         else if(sName == "RightMargin")
         {
-            aData.SetRightSpace(convertMm100ToTwip(nVal));
+            aData.SetRightSpace(o3tl::toTwips(nVal, o3tl::Length::mm100));
         }
         else if(sName == "TopMargin")
         {
-            aData.SetTopSpace(convertMm100ToTwip(nVal));
+            aData.SetTopSpace(o3tl::toTwips(nVal, o3tl::Length::mm100));
         }
         else if(sName == "BottomMargin")
         {
-            aData.SetBottomSpace(convertMm100ToTwip(nVal));
+            aData.SetBottomSpace(o3tl::toTwips(nVal, o3tl::Length::mm100));
         }
         else if(sName == "HoriMargin")
         {
-            aData.SetHorzSpace(convertMm100ToTwip(nVal));
+            aData.SetHorzSpace(o3tl::toTwips(nVal, o3tl::Length::mm100));
         }
         else if(sName == "VertMargin")
         {
-            aData.SetVertSpace(convertMm100ToTwip(nVal));
+            aData.SetVertSpace(o3tl::toTwips(nVal, o3tl::Length::mm100));
         }
         else if(sName == "IsLandscape")
         {

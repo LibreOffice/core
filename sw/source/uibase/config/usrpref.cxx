@@ -475,8 +475,8 @@ void SwGridConfig::Load()
                 case  0: m_rParent.SetSnap(bSet); break;//        "Option/SnapToGrid",
                 case  1: m_rParent.SetGridVisible(bSet); break;//"Option/VisibleGrid",
                 case  2: m_rParent.SetSynchronize(bSet); break;//  "Option/Synchronize",
-                case  3: aSnap.setWidth( convertMm100ToTwip(nSet) ); break;//      "Resolution/XAxis",
-                case  4: aSnap.setHeight( convertMm100ToTwip(nSet) ); break;//      "Resolution/YAxis",
+                case  3: aSnap.setWidth( o3tl::toTwips(nSet, o3tl::Length::mm100) ); break;//      "Resolution/XAxis",
+                case  4: aSnap.setHeight( o3tl::toTwips(nSet, o3tl::Length::mm100) ); break;//      "Resolution/YAxis",
                 case  5: m_rParent.SetDivisionX(static_cast<short>(nSet)); break;//   "Subdivision/XAxis",
                 case  6: m_rParent.SetDivisionY(static_cast<short>(nSet)); break;//   "Subdivision/YAxis"
             }

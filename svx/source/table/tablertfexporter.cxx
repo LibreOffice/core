@@ -96,7 +96,7 @@ void SdrTableRtfExporter::Write()
         Reference< XPropertySet > xSet( xColumns->getByIndex(nCol), UNO_QUERY_THROW );
         sal_Int32 nWidth = 0;
         xSet->getPropertyValue( gsSize ) >>= nWidth;
-        nPos += convertMm100ToTwip(nWidth);
+        nPos += o3tl::toTwips(nWidth, o3tl::Length::mm100);
         aColumnStart.push_back( nPos );
     }
     catch( Exception& )

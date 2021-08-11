@@ -209,10 +209,7 @@ ScTabSizeChangedHint::~ScTabSizeChangedHint()
 
 static void lcl_ReverseTwipsToMM( tools::Rectangle& rRect )
 {
-    rRect.SetLeft(convertMm100ToTwip(rRect.Left()));
-    rRect.SetRight(convertMm100ToTwip(rRect.Right()));
-    rRect.SetTop(convertMm100ToTwip(rRect.Top()));
-    rRect.SetBottom(convertMm100ToTwip(rRect.Bottom()));
+    rRect = o3tl::convert(rRect, o3tl::Length::mm100, o3tl::Length::twip);
 }
 
 static ScRange lcl_getClipRangeFromClipDoc(ScDocument* pClipDoc, SCTAB nClipTab)
@@ -1344,8 +1341,8 @@ bool ScDrawLayer::GetPrintArea( ScRange& rRange, bool bSetHor, bool bSetVer ) co
 
         if (bSetHor)
         {
-            nStartX = convertMm100ToTwip(nStartX);
-            nEndX = convertMm100ToTwip(nEndX);
+            nStartX = o3tl::toTwips(nStartX, o3tl::Length::mm100);
+            nEndX = o3tl::toTwips(nEndX, o3tl::Length::mm100);
             tools::Long nWidth;
 
             nWidth = 0;
@@ -1381,8 +1378,8 @@ bool ScDrawLayer::GetPrintArea( ScRange& rRange, bool bSetHor, bool bSetVer ) co
 
         if (bSetVer)
         {
-            nStartY = convertMm100ToTwip(nStartY);
-            nEndY = convertMm100ToTwip(nEndY);
+            nStartY = o3tl::toTwips(nStartY, o3tl::Length::mm100);
+            nEndY = o3tl::toTwips(nEndY, o3tl::Length::mm100);
             SCROW nRow = pDoc->GetRowForHeight( nTab, nStartY);
             rRange.aStart.SetRow( nRow>0 ? (nRow-1) : 0);
             nRow = pDoc->GetRowForHeight( nTab, nEndY);

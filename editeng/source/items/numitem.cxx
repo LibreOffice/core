@@ -671,8 +671,8 @@ SvxNumRule::SvxNumRule( SvxNumRuleFlags nFeatures,
                 if ( eDefaultNumberFormatPositionAndSpaceMode ==
                                     SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
                 {
-                    aFmts[i]->SetAbsLSpace( convertMm100ToTwip(DEF_WRITER_LSPACE * (i+1)) );
-                    aFmts[i]->SetFirstLineOffset(convertMm100ToTwip(-DEF_WRITER_LSPACE));
+                    aFmts[i]->SetAbsLSpace(o3tl::toTwips(DEF_WRITER_LSPACE * (i+1), o3tl::Length::mm100));
+                    aFmts[i]->SetFirstLineOffset(o3tl::toTwips(-DEF_WRITER_LSPACE, o3tl::Length::mm100));
                 }
                 else if ( eDefaultNumberFormatPositionAndSpaceMode ==
                                             SvxNumberFormat::LABEL_ALIGNMENT )

@@ -105,10 +105,10 @@ static void lcl_putHeightAndWidth ( SfxItemSet &rItemSet,
 {
     if( nWidth > 0 && nHeight > 0 )
     {
-        nWidth = convertMm100ToTwip( nWidth );
+        nWidth = o3tl::toTwips(nWidth, o3tl::Length::mm100);
         if( nWidth < MINFLY )
             nWidth = MINFLY;
-        nHeight = convertMm100ToTwip( nHeight );
+        nHeight = o3tl::toTwips(nHeight, o3tl::Length::mm100);
         if( nHeight < MINFLY )
             nHeight = MINFLY;
         rItemSet.Put( SwFormatFrameSize( SwFrameSize::Fixed, nWidth, nHeight ) );
