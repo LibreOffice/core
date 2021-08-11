@@ -987,29 +987,29 @@ void SdOOXMLExportTest1::testTableCellBorder()
     xCellPropSet->getPropertyValue("LeftBorder") >>= aBorderLine;
 // While importing the table cell border line width, it converts EMU->Hmm then divided result by 2.
 // To get original value of LineWidth need to multiple by 2.
-    sal_Int32 nLeftBorder = aBorderLine.LineWidth * 2;
-    nLeftBorder = oox::drawingml::convertHmmToEmu( nLeftBorder );
+    Color nLeftBorder = aBorderLine.LineWidth * 2;
+    nLeftBorder = oox::drawingml::convertHmmToEmu(nLeftBorder);
     CPPUNIT_ASSERT(nLeftBorder);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xb0f0), aBorderLine.Color);
+    CPPUNIT_ASSERT_EQUAL(Color(0xb0f0), aBorderLine.Color);
 
     xCellPropSet->getPropertyValue("RightBorder") >>= aBorderLine;
-    sal_Int32 nRightBorder = aBorderLine.LineWidth * 2;
-    nRightBorder = oox::drawingml::convertHmmToEmu( nRightBorder );
+    Color nRightBorder = aBorderLine.LineWidth * 2;
+    nRightBorder = oox::drawingml::convertHmmToEmu(nRightBorder);
     CPPUNIT_ASSERT(nRightBorder);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xffffff), aBorderLine.Color);
+    CPPUNIT_ASSERT_EQUAL(Color(0xffffff), aBorderLine.Color);
 
     xCellPropSet->getPropertyValue("TopBorder") >>= aBorderLine;
-    sal_Int32 nTopBorder = aBorderLine.LineWidth * 2;
-    nTopBorder = oox::drawingml::convertHmmToEmu( nTopBorder );
+    Color nTopBorder = aBorderLine.LineWidth * 2;
+    nTopBorder = oox::drawingml::convertHmmToEmu(nTopBorder);
     CPPUNIT_ASSERT(nTopBorder);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xb0f0), aBorderLine.Color);
+    CPPUNIT_ASSERT_EQUAL(Color(0xb0f0), aBorderLine.Color);
 
 
     xCellPropSet->getPropertyValue("BottomBorder") >>= aBorderLine;
-    sal_Int32 nBottomBorder = aBorderLine.LineWidth * 2;
-    nBottomBorder = oox::drawingml::convertHmmToEmu( nBottomBorder );
+    Color nBottomBorder = aBorderLine.LineWidth * 2;
+    nBottomBorder = oox::drawingml::convertHmmToEmu(nBottomBorder);
     CPPUNIT_ASSERT(nBottomBorder);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xb0f0), aBorderLine.Color);
+    CPPUNIT_ASSERT_EQUAL(Color(0xb0f0), aBorderLine.Color);
 
     xDocShRef->DoClose();
 }
