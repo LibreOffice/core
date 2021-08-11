@@ -13,6 +13,7 @@
 
 #include <config_features.h>
 #include <osl/detail/component-mapping.h>
+#include <svx/svdobj.hxx>
 
 extern "C" {
 void * i18npool_component_getFactory( const char* , void* , void* );
@@ -132,6 +133,7 @@ extern "C" int LLVMFuzzerInitialize(int *argc, char ***argv)
         __lsan_disable();
 
     CommonInitialize(argc, argv);
+    SdrObject::GetGlobalDrawObjectItemPool();
 
     comphelper::getProcessServiceFactory()->createInstance("com.sun.star.comp.Draw.PresentationDocument");
 
