@@ -2974,12 +2974,12 @@ DECLARE_ODFEXPORT_EXPORTONLY_TEST(tdf99631, "tdf99631.docx")
 {
     // check import of VisualArea settings of the embedded XLSX OLE objects
     xmlDocUniquePtr pXmlDoc = parseExport("Object 1/settings.xml");
-    assertXPathContent(pXmlDoc, "//config:config-item[@config:name='VisibleAreaWidth']", "4515");
+    assertXPathContent(pXmlDoc, "//config:config-item[@config:name='VisibleAreaWidth']", "4516");
     assertXPathContent(pXmlDoc, "//config:config-item[@config:name='VisibleAreaHeight']", "903");
 
     xmlDocUniquePtr pXmlDoc2 = parseExport("Object 2/settings.xml");
-    assertXPathContent(pXmlDoc2, "//config:config-item[@config:name='VisibleAreaWidth']", "4515");
-    assertXPathContent(pXmlDoc2, "//config:config-item[@config:name='VisibleAreaHeight']", "1354");
+    assertXPathContent(pXmlDoc2, "//config:config-item[@config:name='VisibleAreaWidth']", "4516");
+    assertXPathContent(pXmlDoc2, "//config:config-item[@config:name='VisibleAreaHeight']", "1355");
 }
 
 DECLARE_ODFEXPORT_TEST(tdf128504, "tdf128504.docx")
