@@ -1835,20 +1835,24 @@ void GtkSalFrame::GetClientSize( tools::Long& rWidth, tools::Long& rHeight )
 
 void GtkSalFrame::GetWorkArea( tools::Rectangle& rRect )
 {
+    GdkRectangle aRect;
 #if !GTK_CHECK_VERSION(4, 0, 0)
     GdkScreen  *pScreen = gtk_widget_get_screen(m_pWindow);
     tools::Rectangle aRetRect;
     int max = gdk_screen_get_n_monitors (pScreen);
     for (int i = 0; i < max; ++i)
     {
-        GdkRectangle aRect;
         gdk_screen_get_monitor_workarea(pScreen, i, &aRect);
         tools::Rectangle aMonitorRect(aRect.x, aRect.y, aRect.x+aRect.width, aRect.y+aRect.height);
         aRetRect.Union(aMonitorRect);
     }
     rRect = aRetRect;
 #else
-    (void)rRect;
+    GdkDisplay* pDisplay = gtk_widget_get_display(m_pWindow);
+    GdkSurface* gdkWindow = widget_get_surface(m_pWindow);
+    GdkMonitor* pMonitor = gdk_display_get_monitor_at_surface(pDisplay, gdkWindow);
+    gdk_monitor_get_geometry(pMonitor, &aRect);
+    rRect = tools::Rectangle(aRect.x, aRect.y, aRect.x+aRect.width, aRect.y+aRect.height);
 #endif
 }
 
