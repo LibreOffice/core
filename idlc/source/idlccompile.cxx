@@ -281,6 +281,14 @@ sal_Int32 compileFile(const OString * pathname)
         } while( nIndex != -1 );
     }
 
+#ifdef SYSTEM_UCPP_IS_GCC
+    // we're using -C to retain comments, but we don't want to pull in /usr/include/stdc-predef.h
+    lCppArgs.emplace_back("-nostdinc");
+
+    // use tabs and blank lines as seen in ucpp
+    lCppArgs.emplace_back("-traditional");
+#endif
+
     lCppArgs.emplace_back("-o");
 
     lCppArgs.push_back(OStringToOUString(preprocFile, RTL_TEXTENCODING_UTF8));
