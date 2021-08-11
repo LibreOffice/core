@@ -2987,7 +2987,7 @@ void DomainMapper_Impl::CreateRedline(uno::Reference<text::XTextRange> const& xR
         }
         // store frame and (possible floating) table redline data for restoring them after frame conversion
         enum StoredRedlines eType;
-        if (m_bIsActualParagraphFramed || (hasTableManager() && getTableManager().isInTable()))
+        if (m_bIsActualParagraphFramed || m_nTableDepth > 0)
             eType = StoredRedlines::FRAME;
         else if (IsInFootOrEndnote())
             eType = IsInFootnote() ? StoredRedlines::FOOTNOTE : StoredRedlines::ENDNOTE;

@@ -4045,6 +4045,35 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testRedlineDOCXTableInsertion)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xTables->getCount());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testRedlineDOCXTableMoveToFrame)
+{
+    // load a table with tracked drag & drop: Table1 is the moveFrom,
+    // Table2 is the moveTo - and framed - table
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "TC-table-DnD-move.docx");
+
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(),
+                                                    uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xTableNames = xTextTablesSupplier->getTextTables();
+    // check table count (2)
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTables->getCount());
+
+    // accept tracked table moving, remaining table is Table2
+    IDocumentRedlineAccess& rIDRA(pDoc->getIDocumentRedlineAccess());
+    rIDRA.AcceptAllRedline(true);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
+    CPPUNIT_ASSERT(xTableNames->hasByName("Table2"));
+    CPPUNIT_ASSERT(!xTableNames->hasByName("Table1"));
+
+    // Undo and reject tracked table moving, remaining table is Table1
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    rIDRA.AcceptAllRedline(false);
+    // This was 2 (not deleted Table2 – framed)
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
+    CPPUNIT_ASSERT(xTableNames->hasByName("Table1"));
+    CPPUNIT_ASSERT(!xTableNames->hasByName("Table2"));
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf128335)
 {
     // Load the bugdoc, which has 3 textboxes.
