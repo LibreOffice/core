@@ -35,6 +35,7 @@
 #include <vcl/idle.hxx>
 #include <vector>
 #include <memory>
+#include <optional>
 
 class SpellCheckerDispatcher;
 class HyphenatorDispatcher;
@@ -87,11 +88,11 @@ class LngSvcMgr :
 
     rtl::Reference<LngSvcMgrListenerHelper>             mxListenerHelper;
 
-    typedef std::vector< std::unique_ptr<SvcInfo> >    SvcInfoArray;
-    std::unique_ptr<SvcInfoArray>                      pAvailSpellSvcs;
-    std::unique_ptr<SvcInfoArray>                      pAvailGrammarSvcs;
-    std::unique_ptr<SvcInfoArray>                      pAvailHyphSvcs;
-    std::unique_ptr<SvcInfoArray>                      pAvailThesSvcs;
+    typedef std::vector< SvcInfo > SvcInfoArray;
+    std::optional<SvcInfoArray>                        pAvailSpellSvcs;
+    std::optional<SvcInfoArray>                        pAvailGrammarSvcs;
+    std::optional<SvcInfoArray>                        pAvailHyphSvcs;
+    std::optional<SvcInfoArray>                        pAvailThesSvcs;
 
     bool bDisposing;
 

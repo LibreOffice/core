@@ -922,7 +922,7 @@ void LngSvcMgr::GetAvailableSpellSvcs_Impl()
     if (pAvailSpellSvcs)
         return;
 
-    pAvailSpellSvcs.reset(new SvcInfoArray);
+    pAvailSpellSvcs.emplace();
 
     uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
 
@@ -960,7 +960,7 @@ void LngSvcMgr::GetAvailableSpellSvcs_Impl()
                 uno::Sequence<lang::Locale> aLocaleSequence(xSvc->getLocales());
                 aLanguages = LocaleSeqToLangVec( aLocaleSequence );
 
-                pAvailSpellSvcs->push_back( std::make_unique<SvcInfo>( aImplName, aLanguages ) );
+                pAvailSpellSvcs->push_back( SvcInfo( aImplName, aLanguages ) );
             }
             catch (const uno::Exception &)
             {
@@ -976,7 +976,7 @@ void LngSvcMgr::GetAvailableGrammarSvcs_Impl()
     if (pAvailGrammarSvcs)
         return;
 
-    pAvailGrammarSvcs.reset(new SvcInfoArray);
+    pAvailGrammarSvcs.emplace();
 
     uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
 
@@ -1018,7 +1018,7 @@ void LngSvcMgr::GetAvailableGrammarSvcs_Impl()
                 uno::Sequence<lang::Locale> aLocaleSequence(xSvc->getLocales());
                 aLanguages = LocaleSeqToLangVec( aLocaleSequence );
 
-                pAvailGrammarSvcs->push_back( std::make_unique<SvcInfo>( aImplName, aLanguages ) );
+                pAvailGrammarSvcs->push_back( SvcInfo( aImplName, aLanguages ) );
             }
             catch (const uno::Exception &)
             {
@@ -1035,7 +1035,7 @@ void LngSvcMgr::GetAvailableHyphSvcs_Impl()
     if (pAvailHyphSvcs)
         return;
 
-    pAvailHyphSvcs.reset(new SvcInfoArray);
+    pAvailHyphSvcs.emplace();
     uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
 
     uno::Reference< container::XContentEnumerationAccess > xEnumAccess( xContext->getServiceManager(), uno::UNO_QUERY );
@@ -1070,7 +1070,7 @@ void LngSvcMgr::GetAvailableHyphSvcs_Impl()
                 SAL_WARN_IF( aImplName.isEmpty(), "linguistic", "empty implementation name" );
                 uno::Sequence<lang::Locale> aLocaleSequence(xSvc->getLocales());
                 aLanguages = LocaleSeqToLangVec( aLocaleSequence );
-                pAvailHyphSvcs->push_back( std::make_unique<SvcInfo>( aImplName, aLanguages ) );
+                pAvailHyphSvcs->push_back( SvcInfo( aImplName, aLanguages ) );
             }
             catch (const uno::Exception &)
             {
@@ -1086,7 +1086,7 @@ void LngSvcMgr::GetAvailableThesSvcs_Impl()
     if (pAvailThesSvcs)
         return;
 
-    pAvailThesSvcs.reset(new SvcInfoArray);
+    pAvailThesSvcs.emplace();
 
     uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
 
@@ -1124,7 +1124,7 @@ void LngSvcMgr::GetAvailableThesSvcs_Impl()
                 uno::Sequence<lang::Locale> aLocaleSequence(xSvc->getLocales());
                 aLanguages = LocaleSeqToLangVec( aLocaleSequence );
 
-                pAvailThesSvcs->push_back( std::make_unique<SvcInfo>( aImplName, aLanguages ) );
+                pAvailThesSvcs->push_back( SvcInfo( aImplName, aLanguages ) );
             }
             catch (const uno::Exception &)
             {
@@ -1376,22 +1376,22 @@ uno::Sequence< OUString > SAL_CALL
     if (rServiceName == SN_SPELLCHECKER)
     {
         GetAvailableSpellSvcs_Impl();
-        pInfoArray = pAvailSpellSvcs.get();
+        pInfoArray = &*pAvailSpellSvcs;
     }
     else if (rServiceName == SN_GRAMMARCHECKER)
     {
         GetAvailableGrammarSvcs_Impl();
-        pInfoArray = pAvailGrammarSvcs.get();
+        pInfoArray = &*pAvailGrammarSvcs;
     }
     else if (rServiceName == SN_HYPHENATOR)
     {
         GetAvailableHyphSvcs_Impl();
-        pInfoArray = pAvailHyphSvcs.get();
+        pInfoArray = &*pAvailHyphSvcs;
     }
     else if (rServiceName == SN_THESAURUS)
     {
         GetAvailableThesSvcs_Impl();
-        pInfoArray = pAvailThesSvcs.get();
+        pInfoArray = &*pAvailThesSvcs;
     }
 
     if (pInfoArray)
@@ -1400,12 +1400,12 @@ uno::Sequence< OUString > SAL_CALL
         aVec.reserve(pInfoArray->size());
 
         LanguageType nLanguage = LinguLocaleToLanguage( rLocale );
-        for (const auto& pInfo : *pInfoArray)
+        for (const auto& rInfo : *pInfoArray)
         {
             if (LinguIsUnspecified( nLanguage )
-                || pInfo->HasLanguage( nLanguage ))
+                || rInfo.HasLanguage( nLanguage ))
             {
-                aVec.push_back(pInfo->aSvcImplName);
+                aVec.push_back(rInfo.aSvcImplName);
             }
         }
 
