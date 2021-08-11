@@ -2222,7 +2222,32 @@ namespace
         return pWidget;
     }
 
+    void container_remove(GtkWidget* pContainer, GtkWidget* pChild)
+    {
 #if !GTK_CHECK_VERSION(4, 0, 0)
+        gtk_container_remove(GTK_CONTAINER(pContainer), pChild);
+#else
+        assert(GTK_IS_BOX(pContainer) || GTK_IS_GRID(pContainer));
+        if (GTK_IS_BOX(pContainer))
+            gtk_box_remove(GTK_BOX(pContainer), pChild);
+        else if (GTK_IS_GRID(pContainer))
+            gtk_grid_remove(GTK_GRID(pContainer), pChild);
+#endif
+    }
+
+    void container_add(GtkWidget* pContainer, GtkWidget* pChild)
+    {
+#if !GTK_CHECK_VERSION(4, 0, 0)
+        gtk_container_add(GTK_CONTAINER(pContainer), pChild);
+#else
+        assert(GTK_IS_BOX(pContainer) || GTK_IS_GRID(pContainer));
+        if (GTK_IS_BOX(pContainer))
+            gtk_box_append(GTK_BOX(pContainer), pChild);
+        else if (GTK_IS_GRID(pContainer))
+            gtk_grid_attach(GTK_GRID(pContainer), pChild, 0, 0, 1, 1);
+#endif
+    }
+
     void replaceWidget(GtkWidget* pWidget, GtkWidget* pReplacement)
     {
         // remove the widget and replace it with pReplacement
@@ -2235,17 +2260,21 @@ namespace
         g_object_ref(pWidget);
 
         gint nTopAttach(0), nLeftAttach(0), nHeight(1), nWidth(1);
-#if !GTK_CHECK_VERSION(4, 0, 0)
         if (GTK_IS_GRID(pParent))
         {
+#if !GTK_CHECK_VERSION(4, 0, 0)
             gtk_container_child_get(GTK_CONTAINER(pParent), pWidget,
                     "left-attach", &nLeftAttach,
                     "top-attach", &nTopAttach,
                     "width", &nWidth,
                     "height", &nHeight,
                     nullptr);
-        }
+#else
+            gtk_grid_query_child(GTK_GRID(pParent), pWidget,
+                                 &nLeftAttach, &nTopAttach,
+                                 &nWidth, &nHeight);
 #endif
+        }
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
         gboolean bExpand(false), bFill(false);
@@ -2262,8 +2291,6 @@ namespace
                     "position", &nPosition,
                     nullptr);
         }
-
-        gtk_container_remove(GTK_CONTAINER(pParent), pWidget);
 #endif
 
         gtk_widget_set_visible(pReplacement, gtk_widget_get_visible(pWidget));
@@ -2310,7 +2337,7 @@ namespace
                     "position", nPosition,
                     nullptr);
 #else
-            gtk_box_prepend(GTK_BOX(pParent), pReplacement);
+            gtk_box_insert_child_after(GTK_BOX(pParent), pReplacement, pWidget);
 #endif
         }
 #if !GTK_CHECK_VERSION(4, 0, 0)
@@ -2327,27 +2354,24 @@ namespace
         gtk_widget_set_halign(pReplacement, gtk_widget_get_halign(pWidget));
         gtk_widget_set_valign(pReplacement, gtk_widget_get_valign(pWidget));
 
+        container_remove(pParent, pWidget);
+
         // coverity[freed_arg : FALSE] - this does not free pWidget, it is reffed by pReplacement
         g_object_unref(pWidget);
     }
-#endif
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
     void insertAsParent(GtkWidget* pWidget, GtkWidget* pReplacement)
     {
         g_object_ref(pWidget);
 
         replaceWidget(pWidget, pReplacement);
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
         // coverity[pass_freed_arg : FALSE] - pWidget is not freed here due to initial g_object_ref
-        gtk_container_add(GTK_CONTAINER(pReplacement), pWidget);
-#endif
+        container_add(pReplacement, pWidget);
 
         // coverity[freed_arg : FALSE] - this does not free pWidget, it is reffed by pReplacement
         g_object_unref(pWidget);
     }
-#endif
 
     GtkWidget* ensureEventWidget(GtkWidget* pWidget)
     {
@@ -5439,32 +5463,6 @@ public:
 IMPL_LINK_NOARG(ChildFrame, ImplHandleLayoutTimerHdl, Timer*, void)
 {
     Layout();
-}
-
-void container_remove(GtkWidget* pContainer, GtkWidget* pChild)
-{
-#if !GTK_CHECK_VERSION(4, 0, 0)
-    gtk_container_remove(GTK_CONTAINER(pContainer), pChild);
-#else
-    assert(GTK_IS_BOX(pContainer) || GTK_IS_GRID(pContainer));
-    if (GTK_IS_BOX(pContainer))
-        gtk_box_remove(GTK_BOX(pContainer), pChild);
-    else if (GTK_IS_GRID(pContainer))
-        gtk_grid_remove(GTK_GRID(pContainer), pChild);
-#endif
-}
-
-void container_add(GtkWidget* pContainer, GtkWidget* pChild)
-{
-#if !GTK_CHECK_VERSION(4, 0, 0)
-    gtk_container_add(GTK_CONTAINER(pContainer), pChild);
-#else
-    assert(GTK_IS_BOX(pContainer) || GTK_IS_GRID(pContainer));
-    if (GTK_IS_BOX(pContainer))
-        gtk_box_append(GTK_BOX(pContainer), pChild);
-    else if (GTK_IS_GRID(pContainer))
-        gtk_grid_attach(GTK_GRID(pContainer), pChild, 0, 0, 1, 1);
-#endif
 }
 
 class GtkInstanceContainer : public GtkInstanceWidget, public virtual weld::Container
@@ -10034,15 +10032,16 @@ public:
     }
 };
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
-
 class GtkInstanceMenuToggleButton : public GtkInstanceToggleButton, public MenuHelper
                                   , public virtual weld::MenuToggleButton
 {
 private:
     GtkBox* m_pContainer;
     GtkButton* m_pToggleMenuButton;
+    GtkMenuButton* m_pMenuButton;
+#if !GTK_CHECK_VERSION(4, 0, 0)
     gulong m_nMenuBtnClickedId;
+#endif
     gulong m_nToggleStateFlagsChangedId;
     gulong m_nMenuBtnStateFlagsChangedId;
 
@@ -10064,6 +10063,7 @@ private:
         gtk_widget_set_state_flags(GTK_WIDGET(pThis->m_pToggleButton), eFinalFlags, true);
     }
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
     static void signalMenuBtnClicked(GtkButton*, gpointer widget)
     {
         GtkInstanceMenuToggleButton* pThis = static_cast<GtkInstanceMenuToggleButton*>(widget);
@@ -10130,6 +10130,7 @@ private:
         g_main_loop_unref(pLoop);
         g_signal_handler_disconnect(m_pMenu, nSignalId);
     }
+#endif
 
     static gboolean signalMenuToggleButton(GtkWidget*, gboolean bGroupCycling, gpointer widget)
     {
@@ -10142,21 +10143,31 @@ public:
         GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
         : GtkInstanceToggleButton(GTK_TOGGLE_BUTTON(gtk_builder_get_object(pMenuToggleButtonBuilder, "togglebutton")),
                                   pBuilder, bTakeOwnership)
+#if !GTK_CHECK_VERSION(4, 0, 0)
         , MenuHelper(gtk_menu_button_get_popup(pMenuButton), false)
+#else
+        , MenuHelper(GTK_POPOVER_MENU(gtk_menu_button_get_popover(pMenuButton)), false)
+#endif
         , m_pContainer(GTK_BOX(gtk_builder_get_object(pMenuToggleButtonBuilder, "box")))
         , m_pToggleMenuButton(GTK_BUTTON(gtk_builder_get_object(pMenuToggleButtonBuilder, "menubutton")))
+        , m_pMenuButton(pMenuButton)
+#if !GTK_CHECK_VERSION(4, 0, 0)
         , m_nMenuBtnClickedId(g_signal_connect(m_pToggleMenuButton, "clicked", G_CALLBACK(signalMenuBtnClicked), this))
+#endif
         , m_nToggleStateFlagsChangedId(g_signal_connect(m_pToggleButton, "state-flags-changed", G_CALLBACK(signalToggleStateFlagsChanged), this))
         , m_nMenuBtnStateFlagsChangedId(g_signal_connect(m_pToggleMenuButton, "state-flags-changed", G_CALLBACK(signalMenuBtnStateFlagsChanged), this))
     {
-        GtkInstanceMenuButton::formatMenuButton(gtk_bin_get_child(GTK_BIN(pMenuButton)));
+#if !GTK_CHECK_VERSION(4, 0, 0)
+        GtkInstanceMenuButton::formatMenuButton(gtk_bin_get_child(GTK_BIN(m_pMenuButton)));
+#endif
 
-        insertAsParent(GTK_WIDGET(pMenuButton), GTK_WIDGET(m_pContainer));
-        gtk_widget_hide(GTK_WIDGET(pMenuButton));
+        insertAsParent(GTK_WIDGET(m_pMenuButton), GTK_WIDGET(m_pContainer));
+        gtk_widget_hide(GTK_WIDGET(m_pMenuButton));
 
         // move the first GtkMenuButton child, as created by GtkInstanceMenuButton ctor, into the GtkToggleButton
         // instead, leaving just the indicator behind in the GtkMenuButton
-        GtkWidget* pButtonBox = gtk_bin_get_child(GTK_BIN(pMenuButton));
+#if !GTK_CHECK_VERSION(4, 0, 0)
+        GtkWidget* pButtonBox = gtk_bin_get_child(GTK_BIN(m_pMenuButton));
         GList* pChildren = gtk_container_get_children(GTK_CONTAINER(pButtonBox));
         int nGroup = 0;
         for (GList* pChild = g_list_first(pChildren); pChild && nGroup < 2; pChild = g_list_next(pChild), ++nGroup)
@@ -10172,45 +10183,75 @@ public:
             g_object_unref(pWidget);
         }
         g_list_free(pChildren);
+#else
+        GtkWidget* pChild = gtk_widget_get_last_child(GTK_WIDGET(m_pMenuButton));
+        g_object_ref(pChild);
+        gtk_widget_unparent(pChild);
+        gtk_button_set_child(GTK_BUTTON(m_pToggleButton), pChild);
+        g_object_unref(pChild);
+#endif
 
         // match the GtkToggleButton relief to the GtkMenuButton
-        GtkReliefStyle eStyle = gtk_button_get_relief(GTK_BUTTON(pMenuButton));
+#if !GTK_CHECK_VERSION(4, 0, 0)
+        const GtkReliefStyle eStyle = gtk_button_get_relief(GTK_BUTTON(m_pMenuButton));
         gtk_button_set_relief(GTK_BUTTON(m_pToggleButton), eStyle);
         gtk_button_set_relief(GTK_BUTTON(m_pToggleMenuButton), eStyle);
+#else
+        const bool bStyle = gtk_menu_button_get_has_frame(GTK_MENU_BUTTON(m_pMenuButton));
+        gtk_button_set_has_frame(GTK_BUTTON(m_pToggleButton), bStyle);
+        gtk_button_set_has_frame(GTK_BUTTON(m_pToggleMenuButton), bStyle);
+#endif
 
         // move the GtkMenuButton margins up to the new parent
         gtk_widget_set_margin_top(GTK_WIDGET(m_pContainer),
-            gtk_widget_get_margin_top(GTK_WIDGET(pMenuButton)));
+            gtk_widget_get_margin_top(GTK_WIDGET(m_pMenuButton)));
         gtk_widget_set_margin_bottom(GTK_WIDGET(m_pContainer),
-            gtk_widget_get_margin_bottom(GTK_WIDGET(pMenuButton)));
+            gtk_widget_get_margin_bottom(GTK_WIDGET(m_pMenuButton)));
         gtk_widget_set_margin_start(GTK_WIDGET(m_pContainer),
-            gtk_widget_get_margin_start(GTK_WIDGET(pMenuButton)));
+            gtk_widget_get_margin_start(GTK_WIDGET(m_pMenuButton)));
         gtk_widget_set_margin_end(GTK_WIDGET(m_pContainer),
-            gtk_widget_get_margin_end(GTK_WIDGET(pMenuButton)));
+            gtk_widget_get_margin_end(GTK_WIDGET(m_pMenuButton)));
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
         gtk_menu_detach(m_pMenu);
         gtk_menu_attach_to_widget(m_pMenu, GTK_WIDGET(m_pToggleButton), nullptr);
+#endif
 
         g_signal_connect(m_pContainer, "mnemonic-activate", G_CALLBACK(signalMenuToggleButton), this);
     }
 
     virtual void disable_notify_events() override
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
         g_signal_handler_block(m_pToggleMenuButton, m_nMenuBtnClickedId);
+#endif
         GtkInstanceToggleButton::disable_notify_events();
     }
 
     virtual void enable_notify_events() override
     {
         GtkInstanceToggleButton::enable_notify_events();
+#if !GTK_CHECK_VERSION(4, 0, 0)
         g_signal_handler_unblock(m_pToggleMenuButton, m_nMenuBtnClickedId);
+#endif
     }
 
     virtual ~GtkInstanceMenuToggleButton()
     {
         g_signal_handler_disconnect(m_pToggleButton, m_nToggleStateFlagsChangedId);
         g_signal_handler_disconnect(m_pToggleMenuButton, m_nMenuBtnStateFlagsChangedId);
+#if !GTK_CHECK_VERSION(4, 0, 0)
         g_signal_handler_disconnect(m_pToggleMenuButton, m_nMenuBtnClickedId);
+#endif
+
+#if GTK_CHECK_VERSION(4, 0, 0)
+        GtkWidget* pChild = gtk_button_get_child(GTK_BUTTON(m_pToggleButton));
+        g_object_ref(pChild);
+        gtk_button_set_child(GTK_BUTTON(m_pToggleButton), nullptr);
+        gtk_widget_unparent(pChild);
+        gtk_widget_set_parent(pChild, GTK_WIDGET(m_pMenuButton));
+        g_object_unref(pChild);
+#endif
     }
 
     virtual void insert_item(int pos, const OUString& rId, const OUString& rStr,
@@ -10269,7 +10310,6 @@ public:
         assert(false && "not implemented");
     }
 };
-#endif
 
 class GtkInstanceMenu : public MenuHelper, public virtual weld::Menu
 {
@@ -17298,15 +17338,19 @@ void GtkInstanceDrawingArea::im_context_set_cursor_location(const tools::Rectang
 
 namespace {
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
-
 GtkBuilder* makeMenuToggleButtonBuilder()
 {
-    OUString aUri(AllSettings::GetUIRootDir() + "vcl/ui/menutogglebutton.ui");
+#if !GTK_CHECK_VERSION(4, 0, 0)
+    OUString aUri(AllSettings::GetUIRootDir() + "vcl/ui/menutogglebutton3.ui");
+#else
+    OUString aUri(AllSettings::GetUIRootDir() + "vcl/ui/menutogglebutton4.ui");
+#endif
     OUString aPath;
     osl::FileBase::getSystemPathFromFileURL(aUri, aPath);
     return gtk_builder_new_from_file(OUStringToOString(aPath, RTL_TEXTENCODING_UTF8).getStr());
 }
+
+#if !GTK_CHECK_VERSION(4, 0, 0)
 
 GtkBuilder* makeComboBoxBuilder()
 {
@@ -22103,7 +22147,6 @@ public:
 
     virtual std::unique_ptr<weld::MenuToggleButton> weld_menu_toggle_button(const OString &id) override
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
         GtkMenuButton* pButton = GTK_MENU_BUTTON(gtk_builder_get_object(m_pBuilder, id.getStr()));
         if (!pButton)
             return nullptr;
@@ -22111,10 +22154,6 @@ public:
         // gtk doesn't come with exactly the same concept
         GtkBuilder* pMenuToggleButton = makeMenuToggleButtonBuilder();
         return std::make_unique<GtkInstanceMenuToggleButton>(pMenuToggleButton, pButton, this, false);
-#else
-        (void)id;
-        return nullptr;
-#endif
     }
 
     virtual std::unique_ptr<weld::LinkButton> weld_link_button(const OString &id) override
