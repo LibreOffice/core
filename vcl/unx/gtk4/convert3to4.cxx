@@ -715,41 +715,11 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
 
                         auto xDoc = xChild->getOwnerDocument();
 
-                        if (GetParentObjectType(xChild) == "GtkButton"
-                            || GetParentObjectType(xChild) == "GtkToggleButton")
-                        {
-                            // relocate it to be a child of this GtkButton
-                            xGeneratedImageChild = xDoc->createElement("child");
-                            xGeneratedImageChild->appendChild(
-                                xImageNode->getParentNode()->removeChild(xImageNode));
-                            xObjectCandidate->appendChild(xGeneratedImageChild);
-                        }
-                        else if (GetParentObjectType(xChild) == "GtkMenuButton")
-                        {
-                            auto xProp = xImageNode->getFirstChild();
-                            while (xProp.is())
-                            {
-                                if (xProp->getNodeName() == "property")
-                                {
-                                    css::uno::Reference<css::xml::dom::XNamedNodeMap> xPropMap
-                                        = xProp->getAttributes();
-                                    css::uno::Reference<css::xml::dom::XNode> xPropName
-                                        = xPropMap->getNamedItem("name");
-                                    OUString sPropName(xPropName->getNodeValue().replace('_', '-'));
-                                    if (sPropName == "icon-name")
-                                    {
-                                        OUString sIconName(xProp->getFirstChild()->getNodeValue());
-                                        auto xIconName
-                                            = CreateProperty(xDoc, "icon-name", sIconName);
-                                        xObjectCandidate->insertBefore(xIconName, xChild);
-                                        break;
-                                    }
-                                }
-
-                                xProp = xProp->getNextSibling();
-                            }
-                            xImageNode->getParentNode()->removeChild(xImageNode);
-                        }
+                        // relocate it to be a child of this GtkButton
+                        xGeneratedImageChild = xDoc->createElement("child");
+                        xGeneratedImageChild->appendChild(
+                            xImageNode->getParentNode()->removeChild(xImageNode));
+                        xObjectCandidate->appendChild(xGeneratedImageChild);
                     }
 
                     xRemoveList.push_back(xChild);
@@ -1316,7 +1286,7 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
             }
 
             // only create the child box for GtkButton/GtkToggleButton
-            if (bChildAlwaysShowImage && sClass != "GtkMenuButton")
+            if (bChildAlwaysShowImage)
             {
                 auto xImageCandidateNode = xChild->getLastChild();
                 if (xImageCandidateNode && xImageCandidateNode->getNodeName() != "child")
@@ -1324,65 +1294,105 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                 if (xImageCandidateNode)
                     xChild->removeChild(xImageCandidateNode);
 
-                css::uno::Reference<css::xml::dom::XElement> xNewChildNode
-                    = xDoc->createElement("child");
-                css::uno::Reference<css::xml::dom::XElement> xNewObjectNode
-                    = xDoc->createElement("object");
-                css::uno::Reference<css::xml::dom::XAttr> xBoxClassName
-                    = xDoc->createAttribute("class");
-                xBoxClassName->setValue("GtkBox");
-                xNewObjectNode->setAttributeNode(xBoxClassName);
-
-                if (eChildImagePos == GTK_POS_TOP || eChildImagePos == GTK_POS_BOTTOM)
+                // for GtkMenuButton if this is a gearmenu with just an icon
+                // then "icon-name" is used for the indicator and there is
+                // expected to be no text. If there is a GtkPicture then treat
+                // this like a GtkButton and presumably its a ToggleMenuButton
+                // and the relocation of contents happens in the builder
+                if (sClass == "GtkMenuButton")
                 {
-                    auto xOrientation = CreateProperty(xDoc, "orientation", "vertical");
-                    xNewObjectNode->appendChild(xOrientation);
-                }
-
-                xNewObjectNode->appendChild(CreateProperty(xDoc, "spacing", "6"));
-                if (!bChildXAlign)
-                    xNewObjectNode->appendChild(CreateProperty(xDoc, "halign", "center"));
-
-                xNewChildNode->appendChild(xNewObjectNode);
-
-                xChild->appendChild(xNewChildNode);
-
-                css::uno::Reference<css::xml::dom::XElement> xNewLabelChildNode
-                    = xDoc->createElement("child");
-                css::uno::Reference<css::xml::dom::XElement> xNewChildObjectNode
-                    = xDoc->createElement("object");
-                css::uno::Reference<css::xml::dom::XAttr> xLabelClassName
-                    = xDoc->createAttribute("class");
-                xLabelClassName->setValue("GtkLabel");
-                xNewChildObjectNode->setAttributeNode(xLabelClassName);
-                if (xChildPropertyLabel)
-                {
-                    xNewChildObjectNode->appendChild(
-                        xChildPropertyLabel->getParentNode()->removeChild(xChildPropertyLabel));
-                }
-                else
-                {
-                    auto xNotVisible = CreateProperty(xDoc, "visible", "False");
-                    xNewChildObjectNode->appendChild(xNotVisible);
-                }
-                if (bChildUseUnderline)
-                {
-                    auto xUseUnderline = CreateProperty(xDoc, "use-underline", "True");
-                    xNewChildObjectNode->appendChild(xUseUnderline);
-                }
-                xNewLabelChildNode->appendChild(xNewChildObjectNode);
-
-                if (eChildImagePos == GTK_POS_LEFT || eChildImagePos == GTK_POS_TOP)
-                {
+                    bChildAlwaysShowImage = false;
                     if (xImageCandidateNode)
-                        xNewObjectNode->appendChild(xImageCandidateNode);
-                    xNewObjectNode->appendChild(xNewLabelChildNode);
+                    {
+                        bChildAlwaysShowImage = true;
+                        auto xImageObject = GetChildObject(xImageCandidateNode);
+                        auto xProp = xImageObject->getFirstChild();
+                        while (xProp.is())
+                        {
+                            if (xProp->getNodeName() == "property")
+                            {
+                                css::uno::Reference<css::xml::dom::XNamedNodeMap> xPropMap
+                                    = xProp->getAttributes();
+                                css::uno::Reference<css::xml::dom::XNode> xPropName
+                                    = xPropMap->getNamedItem("name");
+                                OUString sPropName(xPropName->getNodeValue().replace('_', '-'));
+                                if (sPropName == "icon-name")
+                                {
+                                    OUString sIconName(xProp->getFirstChild()->getNodeValue());
+                                    auto xIconName = CreateProperty(xDoc, "icon-name", sIconName);
+                                    insertAsFirstChild(xChild, xIconName);
+                                    bChildAlwaysShowImage = false;
+                                    break;
+                                }
+                            }
+
+                            xProp = xProp->getNextSibling();
+                        }
+                    }
                 }
-                else
+
+                if (bChildAlwaysShowImage)
                 {
-                    xNewObjectNode->appendChild(xNewLabelChildNode);
-                    if (xImageCandidateNode)
-                        xNewObjectNode->appendChild(xImageCandidateNode);
+                    css::uno::Reference<css::xml::dom::XElement> xNewChildNode
+                        = xDoc->createElement("child");
+                    css::uno::Reference<css::xml::dom::XElement> xNewObjectNode
+                        = xDoc->createElement("object");
+                    css::uno::Reference<css::xml::dom::XAttr> xBoxClassName
+                        = xDoc->createAttribute("class");
+                    xBoxClassName->setValue("GtkBox");
+                    xNewObjectNode->setAttributeNode(xBoxClassName);
+
+                    if (eChildImagePos == GTK_POS_TOP || eChildImagePos == GTK_POS_BOTTOM)
+                    {
+                        auto xOrientation = CreateProperty(xDoc, "orientation", "vertical");
+                        xNewObjectNode->appendChild(xOrientation);
+                    }
+
+                    xNewObjectNode->appendChild(CreateProperty(xDoc, "spacing", "6"));
+                    if (!bChildXAlign)
+                        xNewObjectNode->appendChild(CreateProperty(xDoc, "halign", "center"));
+
+                    xNewChildNode->appendChild(xNewObjectNode);
+
+                    xChild->appendChild(xNewChildNode);
+
+                    css::uno::Reference<css::xml::dom::XElement> xNewLabelChildNode
+                        = xDoc->createElement("child");
+                    css::uno::Reference<css::xml::dom::XElement> xNewChildObjectNode
+                        = xDoc->createElement("object");
+                    css::uno::Reference<css::xml::dom::XAttr> xLabelClassName
+                        = xDoc->createAttribute("class");
+                    xLabelClassName->setValue("GtkLabel");
+                    xNewChildObjectNode->setAttributeNode(xLabelClassName);
+                    if (xChildPropertyLabel)
+                    {
+                        xNewChildObjectNode->appendChild(
+                            xChildPropertyLabel->getParentNode()->removeChild(xChildPropertyLabel));
+                    }
+                    else
+                    {
+                        auto xNotVisible = CreateProperty(xDoc, "visible", "False");
+                        xNewChildObjectNode->appendChild(xNotVisible);
+                    }
+                    if (bChildUseUnderline)
+                    {
+                        auto xUseUnderline = CreateProperty(xDoc, "use-underline", "True");
+                        xNewChildObjectNode->appendChild(xUseUnderline);
+                    }
+                    xNewLabelChildNode->appendChild(xNewChildObjectNode);
+
+                    if (eChildImagePos == GTK_POS_LEFT || eChildImagePos == GTK_POS_TOP)
+                    {
+                        if (xImageCandidateNode)
+                            xNewObjectNode->appendChild(xImageCandidateNode);
+                        xNewObjectNode->appendChild(xNewLabelChildNode);
+                    }
+                    else
+                    {
+                        xNewObjectNode->appendChild(xNewLabelChildNode);
+                        if (xImageCandidateNode)
+                            xNewObjectNode->appendChild(xImageCandidateNode);
+                    }
                 }
             }
         }
