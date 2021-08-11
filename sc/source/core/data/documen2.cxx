@@ -87,6 +87,7 @@
 #include <listenercontext.hxx>
 #include <datamapper.hxx>
 #include <drwlayer.hxx>
+#include <config_features.h>
 
 using namespace com::sun::star;
 
@@ -1026,11 +1027,13 @@ sal_uLong ScDocument::TransferTab( ScDocument& rSrcDoc, SCTAB nSrcPos,
         if ( pSrcShell )
         {
             OUString aLibName("Standard");
+#if HAVE_FEATURE_SCRIPTING
             const BasicManager *pBasicManager = pSrcShell->GetBasicManager();
             if (pBasicManager && !pBasicManager->GetName().isEmpty())
             {
                 aLibName = pSrcShell->GetBasicManager()->GetName();
             }
+#endif
             OUString sSource;
             uno::Reference< script::XLibraryContainer > xLibContainer = pSrcShell->GetBasicContainer();
             uno::Reference< container::XNameContainer > xLib;
