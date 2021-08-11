@@ -970,7 +970,7 @@ void Chart2ExportTest::testDataLabelBordersDOCX()
 
             sal_Int32 nColor = -1;
             xPropSet->getPropertyValue(CHART_UNONAME_LABEL_BORDER_COLOR) >>= nColor;
-            CPPUNIT_ASSERT_EQUAL_MESSAGE("Border color should be green.", sal_Int32(0x0000FF00), nColor);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("Border color should be green.", Color(0x0000FF00), nColor);
         }
 
     } aTest;
@@ -987,7 +987,7 @@ void Chart2ExportTest::testDataLabelBordersDOCX()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("'Automatic' chart background fill in docx should be loaded as solid fill.",
         drawing::FillStyle_SOLID, eStyle);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("'Automatic' chart background fill in docx should be loaded as solid white.",
-         sal_Int32(0x00FFFFFF), sal_Int32(nColor & 0x00FFFFFF)); // highest 2 bytes are transparency which we ignore here.
+        Color(0x00FFFFFF), Color(nColor & 0x00FFFFFF)); // highest 2 bytes are transparency which we ignore here.
 
     aTest.checkObject1(xChartDoc);
     xChartDoc.set(getChartDocFromWriter(1), uno::UNO_QUERY);
