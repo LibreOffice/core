@@ -154,6 +154,8 @@ private:
     bool                    bInPrepareClose;
     bool                    bInDispose;
 
+    bool                    m_bLOKFreeze;
+
     sal_uInt16              nCurRefDlgId;
 
     std::unique_ptr<SfxBroadcaster> pAccessibilityBroadcaster;
@@ -402,6 +404,8 @@ public:
     ScFormEditData* GetFormEditData() { return mpFormEditData.get(); }
 
     virtual tools::Rectangle getLOKVisibleArea() const override;
+    void SetLOKFreeze(bool bValue) { m_bLOKFreeze = bValue; }
+    bool GetLOKFreeze() { return m_bLOKFreeze; }
 };
 
 #endif
