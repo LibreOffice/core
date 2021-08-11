@@ -28,6 +28,7 @@
 #include "scdllapi.h"
 #include <rtl/ustring.hxx>
 #include <tools/long.hxx>
+#include <o3tl/unit_conversion.hxx>
 
 #include <atomic>
 // HACK: <atomic> includes <stdbool.h>, which in some Clang versions does '#define bool bool',
@@ -79,35 +80,23 @@ const sal_Unicode CHAR_NNBSP    = 0x202F; //NARROW NO-BREAK SPACE
 
 const SCSIZE MAXSUBTOTAL        = 3;
 
-#define PIXEL_PER_INCH      96.0
-#define CM_PER_INCH         2.54
-#define POINTS_PER_INCH     72.0    /**< PostScript points per inch */
-#define PIXEL_PER_POINT     (PIXEL_PER_INCH / POINTS_PER_INCH)
-#define TWIPS_PER_POINT     20.0
-#define TWIPS_PER_INCH      (TWIPS_PER_POINT * POINTS_PER_INCH)
-#define TWIPS_PER_CM        (TWIPS_PER_INCH / CM_PER_INCH)
-#define CM_PER_TWIPS        (CM_PER_INCH / TWIPS_PER_INCH)
-#define TWIPS_PER_PIXEL     (TWIPS_PER_INCH / PIXEL_PER_INCH)
-#define TWIPS_PER_CHAR      (TWIPS_PER_INCH / 13.6)
-#define PIXEL_PER_TWIPS     (PIXEL_PER_INCH / TWIPS_PER_INCH)
-#define HMM_PER_TWIPS       (CM_PER_TWIPS * 1000.0)
+// ~105.88 twip, i.e. about 2 times narrower than o3tl::Length::ch, which is 210 twip
+constexpr auto TWIPS_PER_CHAR = o3tl::toTwips(1 / 13.6, o3tl::Length::in);
 
-#define STD_COL_WIDTH       1280    /* 2.2577cm, 64.00pt PS */
-#define STD_EXTRA_WIDTH     113     /* 2mm extra for optimal width,
-                                     * 0.1986cm with TeX points,
-                                     * 0.1993cm with PS points. */
+constexpr sal_Int32 STD_COL_WIDTH = o3tl::convert(64, o3tl::Length::pt, o3tl::Length::twip);
+constexpr sal_Int32 STD_EXTRA_WIDTH = o3tl::convert(2, o3tl::Length::mm, o3tl::Length::twip);
 
-#define MAX_EXTRA_WIDTH     23811   /* 42cm in TWIPS, 41.8430cm TeX, 41.9999cm PS */
-#define MAX_EXTRA_HEIGHT    23811
-#define MAX_COL_WIDTH       56693   /* 1m in TWIPS, 99.6266cm TeX, 100.0001cm PS */
-#define MAX_ROW_HEIGHT      56693
+constexpr sal_Int32 MAX_EXTRA_WIDTH = o3tl::convert(42, o3tl::Length::cm, o3tl::Length::twip);
+constexpr sal_Int32 MAX_EXTRA_HEIGHT = o3tl::convert(42, o3tl::Length::cm, o3tl::Length::twip);
+constexpr sal_Int32 MAX_COL_WIDTH = o3tl::convert(1, o3tl::Length::m, o3tl::Length::twip);
+constexpr sal_Int32 MAX_ROW_HEIGHT = o3tl::convert(1, o3tl::Length::m, o3tl::Length::twip);
 
                                     /* standard row height: text + margin - STD_ROWHEIGHT_DIFF */
 #define STD_ROWHEIGHT_DIFF  23
 
 namespace sc
 {
-    inline ::tools::Long TwipsToEvenHMM( ::tools::Long nTwips ) { return ( (nTwips * 127 + 72) / 144 ) * 2; }
+    constexpr ::tools::Long TwipsToEvenHMM( ::tools::Long nTwips ) { return o3tl::convert(nTwips, 127, 144) * 2; }
 }
 
                                     // standard size as OLE server (cells)

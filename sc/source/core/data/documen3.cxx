@@ -1735,10 +1735,7 @@ tools::Rectangle ScDocument::GetEmbeddedRect() const // 1/100 mm
         aRect.SetBottom( aRect.Top() );
         aRect.AdjustBottom(pTable->GetRowHeight( aEmbedRange.aStart.Row(), aEmbedRange.aEnd.Row()) );
 
-        aRect.SetLeft( static_cast<tools::Long>( aRect.Left()   * HMM_PER_TWIPS ) );
-        aRect.SetRight( static_cast<tools::Long>( aRect.Right()  * HMM_PER_TWIPS ) );
-        aRect.SetTop( static_cast<tools::Long>( aRect.Top()    * HMM_PER_TWIPS ) );
-        aRect.SetBottom( static_cast<tools::Long>( aRect.Bottom() * HMM_PER_TWIPS ) );
+        aRect = o3tl::convert(aRect, o3tl::Length::twip, o3tl::Length::mm100);
     }
     return aRect;
 }
@@ -1815,7 +1812,7 @@ ScRange ScDocument::GetRange( SCTAB nTab, const tools::Rectangle& rMMRect, bool 
         return ScRange();
     }
 
-    tools::Rectangle aPosRect = rMMRect;
+    tools::Rectangle aPosRect = o3tl::convert(rMMRect, o3tl::Length::mm100, o3tl::Length::twip);
     if ( IsNegativePage( nTab ) )
         ScDrawLayer::MirrorRectRTL( aPosRect ); // Always with positive (LTR) values
 
@@ -1825,13 +1822,13 @@ ScRange ScDocument::GetRange( SCTAB nTab, const tools::Rectangle& rMMRect, bool 
     bool bEnd;
 
     nSize = 0;
-    nTwips = static_cast<tools::Long>(aPosRect.Left() / HMM_PER_TWIPS);
+    nTwips = aPosRect.Left();
 
     SCCOL nX1 = 0;
     bEnd = false;
     while (!bEnd)
     {
-        nAdd = static_cast<tools::Long>(pTable->GetColWidth(nX1, bHiddenAsZero));
+        nAdd = pTable->GetColWidth(nX1, bHiddenAsZero);
         if (nSize+nAdd <= nTwips+1 && nX1<MaxCol())
         {
             nSize += nAdd;
@@ -1846,10 +1843,10 @@ ScRange ScDocument::GetRange( SCTAB nTab, const tools::Rectangle& rMMRect, bool 
     if (!aPosRect.IsEmpty())
     {
         bEnd = false;
-        nTwips = static_cast<tools::Long>(aPosRect.Right() / HMM_PER_TWIPS);
+        nTwips = aPosRect.Right();
         while (!bEnd)
         {
-            nAdd = static_cast<tools::Long>(pTable->GetColWidth(nX2, bHiddenAsZero));
+            nAdd = pTable->GetColWidth(nX2, bHiddenAsZero);
             if (nSize+nAdd < nTwips && nX2<MaxCol())
             {
                 nSize += nAdd;
@@ -1861,7 +1858,7 @@ ScRange ScDocument::GetRange( SCTAB nTab, const tools::Rectangle& rMMRect, bool 
     }
 
     nSize = 0;
-    nTwips = static_cast<tools::Long>(aPosRect.Top() / HMM_PER_TWIPS);
+    nTwips = aPosRect.Top();
 
     SCROW nY1 = 0;
     // Was if(nSize+nAdd<=nTwips+1) inside loop => if(nSize+nAdd<nTwips+2)
@@ -1871,7 +1868,7 @@ ScRange ScDocument::GetRange( SCTAB nTab, const tools::Rectangle& rMMRect, bool 
     SCROW nY2 = nY1;
     if (!aPosRect.IsEmpty())
     {
-        nTwips = static_cast<tools::Long>(aPosRect.Bottom() / HMM_PER_TWIPS);
+        nTwips = aPosRect.Bottom();
         // Was if(nSize+nAdd<nTwips) inside loop => if(nSize+nAdd<nTwips)
         if (lcl_AddTwipsWhile( nSize, nTwips, nY2, MaxRow(), pTable, bHiddenAsZero) && nY2 < MaxRow())
             ++nY2;  // original loop ended on last matched +1 unless that was rDoc.MaxRow()
@@ -2014,10 +2011,7 @@ tools::Rectangle ScDocument::GetMMRect( SCCOL nStartCol, SCROW nStartRow, SCCOL 
         aRect.AdjustRight(GetColWidth(i,nTab, bHiddenAsZero) );
     aRect.AdjustBottom(GetRowHeight( nStartRow, nEndRow, nTab, bHiddenAsZero ) );
 
-    aRect.SetLeft( static_cast<tools::Long>(aRect.Left()   * HMM_PER_TWIPS) );
-    aRect.SetRight( static_cast<tools::Long>(aRect.Right()  * HMM_PER_TWIPS) );
-    aRect.SetTop( static_cast<tools::Long>(aRect.Top()    * HMM_PER_TWIPS) );
-    aRect.SetBottom( static_cast<tools::Long>(aRect.Bottom() * HMM_PER_TWIPS) );
+    aRect = o3tl::convert(aRect, o3tl::Length::twip, o3tl::Length::mm100);
 
     if ( IsNegativePage( nTab ) )
         ScDrawLayer::MirrorRectRTL( aRect );

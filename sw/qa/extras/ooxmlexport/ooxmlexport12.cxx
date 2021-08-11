@@ -964,11 +964,11 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf99631)
     assertXPath(pXmlDoc, "//w:object", 2);
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r/w:object", 2);
     // first XSLX OLE object (1:1 scale)
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[1]/w:object[1]", "dxaOrig", "2560");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[1]/w:object[1]", "dxaOrig", "2561");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[1]/w:object[1]", "dyaOrig", "513");
     // second XLSX OLE object (same content + 1 row, but zoomed)
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[2]/w:object[1]", "dxaOrig", "2560");
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[2]/w:object[1]", "dyaOrig", "768");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[2]/w:object[1]", "dxaOrig", "2561");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[2]/w:object[1]", "dyaOrig", "769");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf138899)
