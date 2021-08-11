@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a5f63ac_10d68200",
+        "filename": "vcl/source/filter/svm/SvmWriter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 765,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-08-11T07:23:02Z",
+      "side": 1,
+      "message": "can you fix this comment so it points to the correct function in a new patch",
+      "revId": "b8292371bf6dc60d48e1643c0a20de3f65953bda",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
