@@ -77,14 +77,13 @@ struct SfxFoundCache_Impl
 
 class SfxFoundCacheArr_Impl
 {
-    typedef std::vector<std::unique_ptr<SfxFoundCache_Impl> > DataType;
-    DataType maData;
+    std::vector<SfxFoundCache_Impl> maData;
 
 public:
 
     SfxFoundCache_Impl& operator[] ( size_t i )
     {
-        return *maData[i];
+        return maData[i];
     }
 
     size_t size() const
@@ -92,9 +91,9 @@ public:
         return maData.size();
     }
 
-    void push_back( SfxFoundCache_Impl* p )
+    void push_back( SfxFoundCache_Impl p )
     {
-        maData.push_back(std::unique_ptr<SfxFoundCache_Impl>(p));
+        maData.push_back(p);
     }
 };
 
@@ -1122,9 +1121,8 @@ std::optional<SfxItemSet> SfxBindings::CreateSet_Impl
     pFnc = pRealSlot->GetStateFnc();
 
     // the RealSlot is always on
-    SfxFoundCache_Impl *pFound = new SfxFoundCache_Impl(
-        pRealSlot->GetWhich(rPool), pRealSlot, rCache);
-    rFound.push_back( pFound );
+    SfxFoundCache_Impl aFound(pRealSlot->GetWhich(rPool), pRealSlot, rCache);
+    rFound.push_back( aFound );
 
     // Search through the bindings for slots served by the same function. This ,    // will only affect slots which are present in the found interface.
 
@@ -1155,11 +1153,11 @@ std::optional<SfxItemSet> SfxBindings::CreateSet_Impl
 
         if ( bInsert && bSameMethod )
         {
-            SfxFoundCache_Impl *pFoundCache = new SfxFoundCache_Impl(
+            SfxFoundCache_Impl aFoundCache(
                 pSibling->GetWhich(rPool),
                 pSibling, *pSiblingCache);
 
-            rFound.push_back( pFoundCache );
+            rFound.push_back( aFoundCache );
         }
 
         pSibling = pSibling->GetNextSlot();
