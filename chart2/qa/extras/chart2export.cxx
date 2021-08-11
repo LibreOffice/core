@@ -894,7 +894,7 @@ void Chart2ExportTest::testDataLabelBordersDOCX()
     {
         sal_Int32 mnIndex;
         css::drawing::LineStyle meStyle;
-        sal_Int32 mnColor;
+        Color mnColor;
     };
 
     struct
@@ -941,7 +941,7 @@ void Chart2ExportTest::testDataLabelBordersDOCX()
                 xPropSet->getPropertyValue(CHART_UNONAME_LABEL_BORDER_WIDTH) >>= nWidth;
                 CPPUNIT_ASSERT(nWidth > 0);
 
-                sal_Int32 nColor = -1;
+                Color nColor(0xFFFFFFFF);
                 xPropSet->getPropertyValue(CHART_UNONAME_LABEL_BORDER_COLOR) >>= nColor;
                 CPPUNIT_ASSERT_EQUAL_MESSAGE("Border color is wrong.", aDataPoints[i].mnColor, nColor);
             }
@@ -968,9 +968,9 @@ void Chart2ExportTest::testDataLabelBordersDOCX()
             xPropSet->getPropertyValue(CHART_UNONAME_LABEL_BORDER_WIDTH) >>= nWidth;
             CPPUNIT_ASSERT(nWidth > 0);
 
-            sal_Int32 nColor = -1;
+            Color nColor(0xFFFFFFFF);
             xPropSet->getPropertyValue(CHART_UNONAME_LABEL_BORDER_COLOR) >>= nColor;
-            CPPUNIT_ASSERT_EQUAL_MESSAGE("Border color should be green.", sal_Int32(0x0000FF00), nColor);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("Border color should be green.", Color(0x0000FF00), nColor);
         }
 
     } aTest;
@@ -987,7 +987,7 @@ void Chart2ExportTest::testDataLabelBordersDOCX()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("'Automatic' chart background fill in docx should be loaded as solid fill.",
         drawing::FillStyle_SOLID, eStyle);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("'Automatic' chart background fill in docx should be loaded as solid white.",
-         sal_Int32(0x00FFFFFF), sal_Int32(nColor & 0x00FFFFFF)); // highest 2 bytes are transparency which we ignore here.
+        Color(0x00FFFFFF), Color(nColor & 0x00FFFFFF)); // highest 2 bytes are transparency which we ignore here.
 
     aTest.checkObject1(xChartDoc);
     xChartDoc.set(getChartDocFromWriter(1), uno::UNO_QUERY);
@@ -1599,7 +1599,7 @@ void Chart2ExportTest::testDataLabelFillColor()
     Reference<chart2::XDataSeries> xSeries = getDataSeriesFromDoc(xDoc, 0);
     Reference<beans::XPropertySet> xPropSet(xSeries, uno::UNO_QUERY_THROW);
     uno::Any aAny = xPropSet->getPropertyValue("LabelFillColor");
-    sal_Int32 nLabelFillColor;
+    Color nLabelFillColor;
     CPPUNIT_ASSERT(aAny >>= nLabelFillColor);
 
     xmlDocUniquePtr pXmlDoc = parseExport("xl/charts/chart", "Calc Office Open XML");
