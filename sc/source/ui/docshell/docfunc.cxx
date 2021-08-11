@@ -94,6 +94,7 @@
 #include <conditio.hxx>
 #include <columnspanset.hxx>
 #include <validat.hxx>
+#include <config_features.h>
 
 #include <memory>
 #include <utility>
@@ -3198,10 +3199,12 @@ void VBA_InsertModule( ScDocument& rDoc, SCTAB nTab, const OUString& sSource )
     if( xLibContainer.is() )
     {
         OUString aLibName( "Standard" );
+#if HAVE_FEATURE_SCRIPTING
         if ( rDocSh.GetBasicManager() && !rDocSh.GetBasicManager()->GetName().isEmpty() )
         {
             aLibName = rDocSh.GetBasicManager()->GetName();
         }
+#endif
         uno::Any aLibAny = xLibContainer->getByName( aLibName );
         aLibAny >>= xLib;
     }
@@ -3238,10 +3241,12 @@ void VBA_DeleteModule( ScDocShell& rDocSh, const OUString& sModuleName )
     if( xLibContainer.is() )
     {
         OUString aLibName( "Standard" );
+#if HAVE_FEATURE_SCRIPTING
         if ( rDocSh.GetBasicManager() && !rDocSh.GetBasicManager()->GetName().isEmpty() )
         {
             aLibName = rDocSh.GetBasicManager()->GetName();
         }
+#endif
         uno::Any aLibAny = xLibContainer->getByName( aLibName );
         aLibAny >>= xLib;
     }
