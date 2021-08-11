@@ -535,8 +535,8 @@ void ScModelObj::paintTile( VirtualDevice& rDevice,
         return;
 
     ScViewData* pActiveViewData = &pViewShell->GetViewData();
-    Fraction aFracX(tools::Long(nOutputWidth * TWIPS_PER_PIXEL), nTileWidth);
-    Fraction aFracY(tools::Long(nOutputHeight * TWIPS_PER_PIXEL), nTileHeight);
+    Fraction aFracX(o3tl::toTwips(nOutputWidth, o3tl::Length::px), nTileWidth);
+    Fraction aFracY(o3tl::toTwips(nOutputHeight, o3tl::Length::px), nTileHeight);
 
     // Try to find a view that matches the tile-zoom requested by iterating over
     // first few shells. This is to avoid switching of zooms in ScGridWindow::PaintTile
@@ -964,8 +964,8 @@ void ScModelObj::setClientZoom(int nTilePixelWidth_, int nTilePixelHeight_, int 
     if (!pViewData)
         return;
 
-    const Fraction newZoomX(nTilePixelWidth_ * TWIPS_PER_PIXEL, nTileTwipWidth_);
-    const Fraction newZoomY(nTilePixelHeight_ * TWIPS_PER_PIXEL, nTileTwipHeight_);
+    const Fraction newZoomX(o3tl::toTwips(nTilePixelWidth_, o3tl::Length::px), nTileTwipWidth_);
+    const Fraction newZoomY(o3tl::toTwips(nTilePixelHeight_, o3tl::Length::px), nTileTwipHeight_);
 
     if (pViewData->GetZoomX() == newZoomX && pViewData->GetZoomY() == newZoomY)
         return;

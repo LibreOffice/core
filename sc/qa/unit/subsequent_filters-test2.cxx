@@ -2509,18 +2509,18 @@ void ScFiltersTest2::testShapeRotationImport()
     // The expected values are in the map below. Note that some of the angles are outside of the set which contains
     // the value of the wrong angles. This is to check the border cases and one value on both sides.
     std::map<sal_Int32, std::map<std::string, sal_Int32>> aExpectedValues{
-        { 4400, { { "x", 6832 }, { "y", 36893 }, { "width", 8898 }, { "height", 1163 } } },
-        { 4500, { { "x", 4490 }, { "y", 36400 }, { "width", 8898 }, { "height", 1163 } } },
-        { 4600, { { "x", 1673 }, { "y", 36270 }, { "width", 8862 }, { "height", 1144 } } },
+        { 4400, { { "x", 6832 }, { "y", 36894 }, { "width", 8898 }, { "height", 1163 } } },
+        { 4500, { { "x", 4491 }, { "y", 36400 }, { "width", 8898 }, { "height", 1164 } } },
+        { 4600, { { "x", 1674 }, { "y", 36271 }, { "width", 8863 }, { "height", 1143 } } },
         { 13400, { { "x", 13762 }, { "y", 28403 }, { "width", 8863 }, { "height", 1194 } } },
-        { 13500, { { "x", 10817 }, { "y", 27951 }, { "width", 8863 }, { "height", 1170 } } },
-        { 13600, { { "x", 8449 }, { "y", 28336 }, { "width", 8897 }, { "height", 1164 } } },
-        { 22400, { { "x", 14948 }, { "y", 12978 }, { "width", 8898 }, { "height", 1164 } } },
-        { 22500, { { "x", 11765 }, { "y", 12834 }, { "width", 8898 }, { "height", 1164 } } },
-        { 22600, { { "x", 8253 }, { "y", 12919 }, { "width", 8863 }, { "height", 1171 } } },
+        { 13500, { { "x", 10818 }, { "y", 27951 }, { "width", 8863 }, { "height", 1170 } } },
+        { 13600, { { "x", 8450 }, { "y", 28337 }, { "width", 8898 }, { "height", 1163 } } },
+        { 22400, { { "x", 14949 }, { "y", 12978 }, { "width", 8898 }, { "height", 1163 } } },
+        { 22500, { { "x", 11765 }, { "y", 12834 }, { "width", 8898 }, { "height", 1163 } } },
+        { 22600, { { "x", 8253 }, { "y", 12920 }, { "width", 8862 }, { "height", 1170 } } },
         { 31400, { { "x", 8099 }, { "y", 1160 }, { "width", 9815 }, { "height", 1171 } } },
-        { 31500, { { "x", 4427 }, { "y", 1274 }, { "width", 10238 }, { "height", 1171 } } },
-        { 31600, { { "x", 1964 }, { "y", 1878 }, { "width", 10307 }, { "height", 1164 } } },
+        { 31500, { { "x", 4428 }, { "y", 1274 }, { "width", 10238 }, { "height", 1171 } } },
+        { 31600, { { "x", 1964 }, { "y", 1879 }, { "width", 10307 }, { "height", 1163 } } },
     };
 
     for (sal_Int32 ind = 0; ind < 12; ++ind)
@@ -2530,15 +2530,16 @@ void ScFiltersTest2::testShapeRotationImport()
         uno::Reference<beans::XPropertySet> xShapeProperties(xShape, uno::UNO_QUERY);
         uno::Any nRotProp = xShapeProperties->getPropertyValue("RotateAngle");
         sal_Int32 nRot = nRotProp.get<sal_Int32>();
+        const OString sNote = "RotateAngle = " + OString::number(nRot);
 
         awt::Point aPosition = xShape->getPosition();
         awt::Size aSize = xShape->getSize();
 
-        CPPUNIT_ASSERT(aExpectedValues.find(nRot) != aExpectedValues.end());
-        CPPUNIT_ASSERT_EQUAL(aExpectedValues[nRot]["x"], aPosition.X);
-        CPPUNIT_ASSERT_EQUAL(aExpectedValues[nRot]["y"], aPosition.Y);
-        CPPUNIT_ASSERT_EQUAL(aExpectedValues[nRot]["width"], aSize.Width);
-        CPPUNIT_ASSERT_EQUAL(aExpectedValues[nRot]["height"], aSize.Height);
+        CPPUNIT_ASSERT_MESSAGE(sNote.getStr(), aExpectedValues.find(nRot) != aExpectedValues.end());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sNote.getStr(), aExpectedValues[nRot]["x"], aPosition.X);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sNote.getStr(), aExpectedValues[nRot]["y"], aPosition.Y);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sNote.getStr(), aExpectedValues[nRot]["width"], aSize.Width);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sNote.getStr(), aExpectedValues[nRot]["height"], aSize.Height);
     }
 }
 
