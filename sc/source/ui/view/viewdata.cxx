@@ -1724,6 +1724,7 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
             //  (and same line breaks) as for output.
 
             Fraction aFract(1,1);
+            constexpr auto HMM_PER_TWIPS = o3tl::convert(1.0, o3tl::Length::twip, o3tl::Length::mm100);
             tools::Rectangle aUtilRect = ScEditUtil(&mrDoc, nNewX, nNewY, nTabNo, Point(0, 0), pWin->GetOutDev(),
                                     HMM_PER_TWIPS, HMM_PER_TWIPS, aFract, aFract ).GetEditArea( pPattern, false );
             aPaperSize.setWidth( aUtilRect.GetWidth() );

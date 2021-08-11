@@ -473,15 +473,15 @@ void ScMacrosTest::testRowColumn()
         "vnd.sun.Star.script:Standard.Module1.Macro_RowHeight?language=Basic&location=document",
         aParams, aRet, aOutParamIndex, aOutParam);
 
-    sal_uInt16 nHeight = rDoc.GetRowHeight(0, 0) * HMM_PER_TWIPS;
+    sal_uInt16 nHeight = o3tl::convert(rDoc.GetRowHeight(0, 0), o3tl::Length::twip, o3tl::Length::mm100);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(2000), nHeight);
 
     SfxObjectShell::CallXScript(
         xComponent,
         "vnd.sun.Star.script:Standard.Module1.Macro_ColumnWidth?language=Basic&location=document",
         aParams, aRet, aOutParamIndex, aOutParam);
-    sal_uInt16 nWidth  = rDoc.GetColWidth(0, 0) * HMM_PER_TWIPS;
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(4000), nWidth);
+    sal_uInt16 nWidth  = o3tl::convert(rDoc.GetColWidth(0, 0), o3tl::Length::twip, o3tl::Length::mm100);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(4001), nWidth);
 
     pDocSh->DoClose();
 }
