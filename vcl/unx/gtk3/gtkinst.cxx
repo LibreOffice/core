@@ -10039,9 +10039,7 @@ private:
     GtkBox* m_pContainer;
     GtkButton* m_pToggleMenuButton;
     GtkMenuButton* m_pMenuButton;
-#if !GTK_CHECK_VERSION(4, 0, 0)
     gulong m_nMenuBtnClickedId;
-#endif
     gulong m_nToggleStateFlagsChangedId;
     gulong m_nMenuBtnStateFlagsChangedId;
 
@@ -10063,7 +10061,6 @@ private:
         gtk_widget_set_state_flags(GTK_WIDGET(pThis->m_pToggleButton), eFinalFlags, true);
     }
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
     static void signalMenuBtnClicked(GtkButton*, gpointer widget)
     {
         GtkInstanceMenuToggleButton* pThis = static_cast<GtkInstanceMenuToggleButton*>(widget);
@@ -10080,6 +10077,16 @@ private:
         //launching PopupMenu to be destroyed, instead run the subloop here
         //until the gtk menu is destroyed
         GMainLoop* pLoop = g_main_loop_new(nullptr, true);
+
+#if  GTK_CHECK_VERSION(4, 0, 0)
+        gulong nSignalId = g_signal_connect_swapped(G_OBJECT(m_pMenu), "closed", G_CALLBACK(g_main_loop_quit), pLoop);
+
+        g_object_ref(m_pMenu);
+        gtk_menu_button_set_popover(m_pMenuButton, nullptr);
+        gtk_widget_set_parent(GTK_WIDGET(m_pMenu), pWidget);
+        gtk_popover_set_position(GTK_POPOVER(m_pMenu), GTK_POS_BOTTOM);
+        gtk_popover_popup(GTK_POPOVER(m_pMenu));
+#else
         gulong nSignalId = g_signal_connect_swapped(G_OBJECT(m_pMenu), "deactivate", G_CALLBACK(g_main_loop_quit), pLoop);
 
 #if GTK_CHECK_VERSION(3,22,0)
@@ -10123,14 +10130,21 @@ private:
 
             gtk_menu_popup(m_pMenu, nullptr, nullptr, nullptr, nullptr, nButton, nTime);
         }
+#endif
 
         if (g_main_loop_is_running(pLoop))
             main_loop_run(pLoop);
 
         g_main_loop_unref(pLoop);
         g_signal_handler_disconnect(m_pMenu, nSignalId);
-    }
+
+#if GTK_CHECK_VERSION(4, 0, 0)
+        gtk_widget_unparent(GTK_WIDGET(m_pMenu));
+        gtk_menu_button_set_popover(m_pMenuButton, GTK_WIDGET(m_pMenu));
+        g_object_unref(m_pMenu);
 #endif
+
+    }
 
     static gboolean signalMenuToggleButton(GtkWidget*, gboolean bGroupCycling, gpointer widget)
     {
@@ -10151,9 +10165,7 @@ public:
         , m_pContainer(GTK_BOX(gtk_builder_get_object(pMenuToggleButtonBuilder, "box")))
         , m_pToggleMenuButton(GTK_BUTTON(gtk_builder_get_object(pMenuToggleButtonBuilder, "menubutton")))
         , m_pMenuButton(pMenuButton)
-#if !GTK_CHECK_VERSION(4, 0, 0)
         , m_nMenuBtnClickedId(g_signal_connect(m_pToggleMenuButton, "clicked", G_CALLBACK(signalMenuBtnClicked), this))
-#endif
         , m_nToggleStateFlagsChangedId(g_signal_connect(m_pToggleButton, "state-flags-changed", G_CALLBACK(signalToggleStateFlagsChanged), this))
         , m_nMenuBtnStateFlagsChangedId(g_signal_connect(m_pToggleMenuButton, "state-flags-changed", G_CALLBACK(signalMenuBtnStateFlagsChanged), this))
     {
@@ -10222,27 +10234,21 @@ public:
 
     virtual void disable_notify_events() override
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
         g_signal_handler_block(m_pToggleMenuButton, m_nMenuBtnClickedId);
-#endif
         GtkInstanceToggleButton::disable_notify_events();
     }
 
     virtual void enable_notify_events() override
     {
         GtkInstanceToggleButton::enable_notify_events();
-#if !GTK_CHECK_VERSION(4, 0, 0)
         g_signal_handler_unblock(m_pToggleMenuButton, m_nMenuBtnClickedId);
-#endif
     }
 
     virtual ~GtkInstanceMenuToggleButton()
     {
         g_signal_handler_disconnect(m_pToggleButton, m_nToggleStateFlagsChangedId);
         g_signal_handler_disconnect(m_pToggleMenuButton, m_nMenuBtnStateFlagsChangedId);
-#if !GTK_CHECK_VERSION(4, 0, 0)
         g_signal_handler_disconnect(m_pToggleMenuButton, m_nMenuBtnClickedId);
-#endif
 
 #if GTK_CHECK_VERSION(4, 0, 0)
         GtkWidget* pChild = gtk_button_get_child(GTK_BUTTON(m_pToggleButton));
