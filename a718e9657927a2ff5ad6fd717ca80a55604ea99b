@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ed85259_ecbf015f",
+        "filename": "sc/qa/unit/scshapetest.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 644,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-11T23:31:29Z",
+      "side": 1,
+      "message": "For some reason, the change that should theoretically improve accuracy, actually makes it worse.",
+      "revId": "a718e9657927a2ff5ad6fd717ca80a55604ea99b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cab7c407_332a296c",
+        "filename": "sc/source/core/data/documen3.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2015,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-11T23:31:29Z",
+      "side": 1,
+      "message": "This line is specifically what causes the change; it indeed makes the conversion more correct (previous code just truncated doubles, while now we get rounded values).",
+      "revId": "a718e9657927a2ff5ad6fd717ca80a55604ea99b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
