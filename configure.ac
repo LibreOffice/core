@@ -2652,7 +2652,7 @@ AC_ARG_WITH(os-version,
 AC_ARG_WITH(idlc-cpp,
     AS_HELP_STRING([--with-idlc-cpp=<cpp/ucpp>],
         [Specify the C Preprocessor to use for idlc. Default is ucpp.]),
-,)
+,[with_idlc_cpp=cpp])
 
 AC_ARG_WITH(parallelism,
     AS_HELP_STRING([--with-parallelism],
@@ -8807,9 +8807,18 @@ dnl ===================================================================
 dnl Check for C preprocessor to use
 dnl ===================================================================
 AC_MSG_CHECKING([which C preprocessor to use in idlc])
+SYSTEM_UCPP_IS_GCC=
 if test -n "$with_idlc_cpp"; then
     AC_MSG_RESULT([$with_idlc_cpp])
     AC_PATH_PROG(SYSTEM_UCPP, $with_idlc_cpp)
+    AC_MSG_CHECKING([if $with_idlc_cpp is GCC CPP])
+    $SYSTEM_UCPP -nostdinc 2>&1 >/dev/null
+    if test $? -eq 0;  then
+        SYSTEM_UCPP_IS_GCC=TRUE
+        AC_MSG_RESULT([yes])
+    else
+        AC_MSG_RESULT([no])
+    fi
 else
     AC_MSG_RESULT([ucpp])
     AC_MSG_CHECKING([which ucpp tp use])
@@ -8822,6 +8831,7 @@ else
     fi
 fi
 AC_SUBST(SYSTEM_UCPP)
+AC_SUBST(SYSTEM_UCPP_IS_GCC)
 
 dnl ===================================================================
 dnl Check for epm (not needed for Windows)

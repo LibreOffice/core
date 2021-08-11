@@ -237,7 +237,15 @@ sal_Int32 compileFile(const OString * pathname)
     ::std::vector< OUString> lCppArgs;
     lCppArgs.emplace_back("-DIDL");
     lCppArgs.emplace_back("-C");
+#ifdef SYSTEM_UCPP_IS_GCC
+    // -nostdinc Do not search the standard system directories for header files
+    lCppArgs.emplace_back("-nostdinc");
+    // with gcc cpp, even when not explicitly including anything, /usr/include/stdc-predef.h
+    // gets inserted without -nostdinc
+#else
+    // -zI Do not use the standard (compile-time) include path.
     lCppArgs.emplace_back("-zI");
+#endif
 
     Options* pOptions = idlc()->getOptions();
 
