@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "eda8bbb3_a165219a",
+        "filename": "vcl/source/filter/svm/SvmWriter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 786,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2021-08-11T07:23:34Z",
+      "side": 1,
+      "message": "same here I guess...",
+      "revId": "80715b147eb509e84b401e773a543449bb452688",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
