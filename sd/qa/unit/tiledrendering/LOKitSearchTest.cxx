@@ -470,7 +470,7 @@ void LOKitSearchTest::testSearchInPDFInMultiplePages()
     CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultPart.size());
 
     CPPUNIT_ASSERT_EQUAL(1, mpCallbackRecorder->m_aSearchResultPart[0]);
-    CPPUNIT_ASSERT_EQUAL(OString("9463, 1308, 1099, 498"),
+    CPPUNIT_ASSERT_EQUAL(OString("9463, 1308, 1099, 499"),
                          mpCallbackRecorder->m_aSearchResultSelection[0]);
 
     // Search for "him"
@@ -483,7 +483,7 @@ void LOKitSearchTest::testSearchInPDFInMultiplePages()
     CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultPart.size());
 
     CPPUNIT_ASSERT_EQUAL(1, mpCallbackRecorder->m_aSearchResultPart[0]);
-    CPPUNIT_ASSERT_EQUAL(OString("5592, 2964, 1099, 498"),
+    CPPUNIT_ASSERT_EQUAL(OString("5592, 2964, 1100, 499"),
                          mpCallbackRecorder->m_aSearchResultSelection[0]);
 
     // Search for "him" - back to start
@@ -496,7 +496,7 @@ void LOKitSearchTest::testSearchInPDFInMultiplePages()
     CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultPart.size());
 
     CPPUNIT_ASSERT_EQUAL(0, mpCallbackRecorder->m_aSearchResultPart[0]);
-    CPPUNIT_ASSERT_EQUAL(OString("9463, 3382, 1099, 498"),
+    CPPUNIT_ASSERT_EQUAL(OString("9463, 3382, 1099, 499"),
                          mpCallbackRecorder->m_aSearchResultSelection[0]);
 }
 
@@ -573,7 +573,7 @@ void LOKitSearchTest::testSearchInPDFInMultiplePagesBackwards()
     CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultPart.size());
 
     CPPUNIT_ASSERT_EQUAL(1, mpCallbackRecorder->m_aSearchResultPart[0]);
-    CPPUNIT_ASSERT_EQUAL(OString("5592, 2964, 1099, 498"),
+    CPPUNIT_ASSERT_EQUAL(OString("5592, 2964, 1100, 499"),
                          mpCallbackRecorder->m_aSearchResultSelection[0]);
 
     // Search for "him"
@@ -586,7 +586,7 @@ void LOKitSearchTest::testSearchInPDFInMultiplePagesBackwards()
     CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultPart.size());
 
     CPPUNIT_ASSERT_EQUAL(1, mpCallbackRecorder->m_aSearchResultPart[0]);
-    CPPUNIT_ASSERT_EQUAL(OString("9463, 1308, 1099, 498"),
+    CPPUNIT_ASSERT_EQUAL(OString("9463, 1308, 1099, 499"),
                          mpCallbackRecorder->m_aSearchResultSelection[0]);
 
     // Search for "him" - back to start
@@ -599,7 +599,7 @@ void LOKitSearchTest::testSearchInPDFInMultiplePagesBackwards()
     CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultPart.size());
 
     CPPUNIT_ASSERT_EQUAL(0, mpCallbackRecorder->m_aSearchResultPart[0]);
-    CPPUNIT_ASSERT_EQUAL(OString("5592, 5038, 1099, 498"),
+    CPPUNIT_ASSERT_EQUAL(OString("5592, 5038, 1100, 499"),
                          mpCallbackRecorder->m_aSearchResultSelection[0]);
 }
 
