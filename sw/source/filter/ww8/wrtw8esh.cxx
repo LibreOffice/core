@@ -1414,7 +1414,7 @@ void WW8Export::WriteOutliner(const OutlinerParaObject& rParaObj, sal_uInt8 nTyp
 
         aAttrIter.OutParaAttr(false);
 
-        sal_uLong nPos = Strm().Tell();
+        sal_uInt64 nPos = Strm().Tell();
         m_pPapPlc->AppendFkpEntry( Strm().Tell(),
                                         pO->size(), pO->data() );
         pO->clear();

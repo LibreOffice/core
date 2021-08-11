@@ -43,7 +43,7 @@ void SvMetaObject::WriteStars( SvStream & rOutStm )
 void SvMetaObject::Back2Delimiter( SvStream & rOutStm )
 {
     // write no empty brackets
-    sal_uLong nPos = rOutStm.Tell();
+    sal_uInt64 nPos = rOutStm.Tell();
     rOutStm.SeekRel( -1 );
     char c = 0;
     rOutStm.ReadChar( c );
