@@ -889,8 +889,8 @@ void ScTiledRenderingTest::testColRowResize()
         }));
     comphelper::dispatchCommand(".uno:ColumnWidth", aArgs);
 
-    sal_uInt16 nWidth = rDoc.GetColWidth(static_cast<SCCOL>(2), static_cast<SCTAB>(0), false) * HMM_PER_TWIPS;
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(4000), nWidth);
+    sal_uInt16 nWidth = o3tl::convert(rDoc.GetColWidth(static_cast<SCCOL>(2), static_cast<SCTAB>(0), false), o3tl::Length::twip, o3tl::Length::mm100);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(4001), nWidth);
 
     // Row 5, Tab 0
     uno::Sequence<beans::PropertyValue> aArgs2( comphelper::InitPropertySequence({
@@ -899,7 +899,7 @@ void ScTiledRenderingTest::testColRowResize()
         }));
     comphelper::dispatchCommand(".uno:RowHeight", aArgs2);
 
-    sal_uInt16 nHeight = rDoc.GetRowHeight(static_cast<SCROW>(4), static_cast<SCTAB>(0), false) * HMM_PER_TWIPS;
+    sal_uInt16 nHeight = o3tl::convert(rDoc.GetRowHeight(static_cast<SCROW>(4), static_cast<SCTAB>(0), false), o3tl::Length::twip, o3tl::Length::mm100);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(2000), nHeight);
 }
 
