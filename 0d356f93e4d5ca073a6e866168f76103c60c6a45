@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0b32918f_6621b376",
+        "filename": "sw/source/uibase/dochdl/swdtflvr.cxx",
+        "patchSetId": 17
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-11T07:27:27Z",
+      "side": 1,
+      "message": "This is 17000 mm100, right?",
+      "revId": "0d356f93e4d5ca073a6e866168f76103c60c6a45",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0d267d46_a33cae2e",
+        "filename": "sw/source/uibase/dochdl/swdtflvr.cxx",
+        "patchSetId": 17
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-11T07:27:27Z",
+      "side": 1,
+      "message": "And this is 30 mm, right? So that constOleSize100mm has width in mm100, and height in mm?",
+      "revId": "0d356f93e4d5ca073a6e866168f76103c60c6a45",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "01032bb0_b64bd989",
+        "filename": "sw/source/uibase/dochdl/swdtflvr.cxx",
+        "patchSetId": 17
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-11T07:27:27Z",
+      "side": 1,
+      "message": "And here it converts both 17000 and 30 as if they were mm100. Or am I confused?",
+      "revId": "0d356f93e4d5ca073a6e866168f76103c60c6a45",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
