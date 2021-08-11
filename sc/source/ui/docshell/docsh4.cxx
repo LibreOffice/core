@@ -1691,7 +1691,7 @@ bool ScDocShell::AdjustPrintZoom( const ScRange& rRange )
 
         tools::Long nBlkTwipsX = 0;
         if (bHeaders)
-            nBlkTwipsX += tools::Long(PRINT_HEADER_WIDTH);
+            nBlkTwipsX += PRINT_HEADER_WIDTH;
         SCCOL nStartCol = rRange.aStart.Col();
         SCCOL nEndCol = rRange.aEnd.Col();
         if ( pRepeatCol && nStartCol >= pRepeatCol->aStart.Col() )
@@ -1709,7 +1709,7 @@ bool ScDocShell::AdjustPrintZoom( const ScRange& rRange )
 
         tools::Long nBlkTwipsY = 0;
         if (bHeaders)
-            nBlkTwipsY += tools::Long(PRINT_HEADER_HEIGHT);
+            nBlkTwipsY += PRINT_HEADER_HEIGHT;
         SCROW nStartRow = rRange.aStart.Row();
         SCROW nEndRow = rRange.aEnd.Row();
         if ( pRepeatRow && nStartRow >= pRepeatRow->aStart.Row() )
@@ -2258,7 +2258,7 @@ namespace {
 tools::Long SnapHorizontal( const ScDocument& rDoc, SCTAB nTab, tools::Long nVal, SCCOL& rStartCol )
 {
     SCCOL nCol = 0;
-    tools::Long nTwips = static_cast<tools::Long>(nVal / HMM_PER_TWIPS);
+    tools::Long nTwips = o3tl::convert(nVal, o3tl::Length::mm100, o3tl::Length::twip);
     tools::Long nSnap = 0;
     while ( nCol<rDoc.MaxCol() )
     {
@@ -2271,7 +2271,7 @@ tools::Long SnapHorizontal( const ScDocument& rDoc, SCTAB nTab, tools::Long nVal
         else
             break;
     }
-    nVal = static_cast<tools::Long>( nSnap * HMM_PER_TWIPS );
+    nVal = o3tl::convert(nSnap, o3tl::Length::twip, o3tl::Length::mm100);
     rStartCol = nCol;
     return nVal;
 }
@@ -2280,7 +2280,7 @@ tools::Long SnapHorizontal( const ScDocument& rDoc, SCTAB nTab, tools::Long nVal
 tools::Long SnapVertical( const ScDocument& rDoc, SCTAB nTab, tools::Long nVal, SCROW& rStartRow )
 {
     SCROW nRow = 0;
-    tools::Long nTwips = static_cast<tools::Long>(nVal / HMM_PER_TWIPS);
+    tools::Long nTwips = o3tl::convert(nVal, o3tl::Length::mm100, o3tl::Length::twip);
     tools::Long nSnap = 0;
 
     bool bFound = false;
@@ -2309,7 +2309,7 @@ tools::Long SnapVertical( const ScDocument& rDoc, SCTAB nTab, tools::Long nVal, 
     if (!bFound)
         nRow = rDoc.MaxRow();  // all hidden down to the bottom
 
-    nVal = static_cast<tools::Long>( nSnap * HMM_PER_TWIPS );
+    nVal = o3tl::convert(nSnap, o3tl::Length::twip, o3tl::Length::mm100);
     rStartRow = nRow;
     return nVal;
 }
