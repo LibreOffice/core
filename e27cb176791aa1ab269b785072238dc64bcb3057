@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8c6c7d5f_a56f6885",
+        "filename": "sw/source/filter/ww8/ww8par6.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1762,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-08-11T13:20:55Z",
+      "side": 1,
+      "message": "hmm so if you look in include/tools/stream.hxx, Tell returns a 64-bit integer and Seek parameter is 64-bit too so maybe a 64-bit integer would be better here?",
+      "revId": "e27cb176791aa1ab269b785072238dc64bcb3057",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
