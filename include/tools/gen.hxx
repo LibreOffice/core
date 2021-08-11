@@ -474,10 +474,10 @@ public:
 
     static Rectangle    Justify( const Point& rLT, const Point& rRB );
 
-    tools::Long         Left() const    { return nLeft;   }
-    tools::Long         Right() const;
-    tools::Long         Top() const     { return nTop;    }
-    tools::Long         Bottom() const;
+    constexpr tools::Long Left() const { return nLeft; }
+    constexpr tools::Long Right() const { return nRight == RECT_EMPTY ? nLeft : nRight; }
+    constexpr tools::Long Top() const { return nTop; }
+    constexpr tools::Long Bottom() const { return nBottom == RECT_EMPTY ? nTop : nBottom; }
 
     void                SetLeft(tools::Long v)    { nLeft = v;   }
     void                SetRight(tools::Long v)   { nRight = v;  }
@@ -798,8 +798,15 @@ namespace o3tl
 
 constexpr tools::Rectangle convert(const tools::Rectangle& rRectangle, o3tl::Length eFrom, o3tl::Length eTo)
 {
-    return tools::Rectangle(o3tl::convert(rRectangle.TopLeft(), eFrom, eTo),
-                            o3tl::convert(rRectangle.GetSize(), eFrom, eTo));
+    // 1. Create an empty rectangle with correct left and top
+    tools::Rectangle aRect(o3tl::convert(rRectangle.Left(), eFrom, eTo),
+                           o3tl::convert(rRectangle.Top(), eFrom, eTo));
+    // 2. If source has width/heigth, set respective right and bottom
+    if (rRectangle.GetWidth() != 0)
+        aRect.SetRight(o3tl::convert(rRectangle.Right(), eFrom, eTo));
+    if (rRectangle.GetHeight() != 0)
+        aRect.SetBottom(o3tl::convert(rRectangle.Bottom(), eFrom, eTo));
+    return aRect;
 }
 
 } // end o3tl
