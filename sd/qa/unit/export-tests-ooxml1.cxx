@@ -984,32 +984,32 @@ void SdOOXMLExportTest1::testTableCellBorder()
     uno::Reference< css::table::XMergeableCell > xCell(xTable->getCellByPosition(0, 0), uno::UNO_QUERY_THROW);
     uno::Reference< beans::XPropertySet > xCellPropSet (xCell, uno::UNO_QUERY_THROW);
 
-    xCellPropSet->getPropertyValue("LeftBorder") >>= aBorderLine;
+    xCellPropSet->getPropertyValue("LeftBorder") >>= nColor;
 // While importing the table cell border line width, it converts EMU->Hmm then divided result by 2.
 // To get original value of LineWidth need to multiple by 2.
-    sal_Int32 nLeftBorder = aBorderLine.LineWidth * 2;
+    Color nLeftBorder = nColor.LineWidth * 2;
     nLeftBorder = oox::drawingml::convertHmmToEmu( nLeftBorder );
     CPPUNIT_ASSERT(nLeftBorder);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xb0f0), aBorderLine.Color);
+    CPPUNIT_ASSERT_EQUAL(Color(0xb0f0), nColor);
 
-    xCellPropSet->getPropertyValue("RightBorder") >>= aBorderLine;
-    sal_Int32 nRightBorder = aBorderLine.LineWidth * 2;
+    xCellPropSet->getPropertyValue("RightBorder") >>= nColor;
+    Color nRightBorder = nColor.LineWidth * 2;
     nRightBorder = oox::drawingml::convertHmmToEmu( nRightBorder );
     CPPUNIT_ASSERT(nRightBorder);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xffffff), aBorderLine.Color);
+    CPPUNIT_ASSERT_EQUAL(Color(0xffffff), nColor);
 
-    xCellPropSet->getPropertyValue("TopBorder") >>= aBorderLine;
-    sal_Int32 nTopBorder = aBorderLine.LineWidth * 2;
+    xCellPropSet->getPropertyValue("TopBorder") >>= nColor;
+    Color nTopBorder = nColor.LineWidth * 2;
     nTopBorder = oox::drawingml::convertHmmToEmu( nTopBorder );
     CPPUNIT_ASSERT(nTopBorder);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xb0f0), aBorderLine.Color);
+    CPPUNIT_ASSERT_EQUAL(Color(0xb0f0), nColor);
 
 
-    xCellPropSet->getPropertyValue("BottomBorder") >>= aBorderLine;
-    sal_Int32 nBottomBorder = aBorderLine.LineWidth * 2;
+    xCellPropSet->getPropertyValue("BottomBorder") >>= nColor;
+    Color nBottomBorder = nColor.LineWidth * 2;
     nBottomBorder = oox::drawingml::convertHmmToEmu( nBottomBorder );
     CPPUNIT_ASSERT(nBottomBorder);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xb0f0), aBorderLine.Color);
+    CPPUNIT_ASSERT_EQUAL(Color(0xb0f0), nColor);
 
     xDocShRef->DoClose();
 }
