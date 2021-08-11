@@ -934,8 +934,10 @@ void ScTabView::ExpandBlock(SCCOL nMovX, SCROW nMovY, ScFollowMode eMode)
         SCCOL nOrigX = aViewData.GetCurX();
         SCROW nOrigY = aViewData.GetCurY();
 
-        // Note that the origin position *never* moves during selection.
+        if (comphelper::LibreOfficeKit::isActive())
+            pViewShell->SetLOKFreeze(true);
 
+        // Note that the origin position *never* moves during selection.
         if (!IsBlockMode())
             InitBlockMode(nOrigX, nOrigY, nTab, true);
 
@@ -953,8 +955,13 @@ void ScTabView::ExpandBlock(SCCOL nMovX, SCROW nMovY, ScFollowMode eMode)
         SCCOL nAlignX = bRowSelected ? aViewData.GetPosX(WhichH(eActive)) : nBlockEndX;
         SCROW nAlignY = bColSelected ? aViewData.GetPosY(WhichV(eActive)) : nBlockEndY;
         AlignToCursor(nAlignX, nAlignY, eMode);
-
         SelectionChanged();
+
+        if (comphelper::LibreOfficeKit::isActive())
+        {
+            pViewShell->SetLOKFreeze(false);
+            UpdateSelectionOverlay();
+        }
     }
 }
 

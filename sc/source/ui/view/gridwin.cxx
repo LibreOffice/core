@@ -5901,6 +5901,10 @@ void ScGridWindow::UpdateKitSelection(const std::vector<tools::Rectangle>& rRect
     if (!comphelper::LibreOfficeKit::isActive())
         return;
 
+    ScTabViewShell* pViewShell = mrViewData.GetViewShell();
+    if (pViewShell && pViewShell->GetLOKFreeze())
+        return;
+
     // If this is true, rRectangles should already in print twips.
     // If false, rRectangles are in pixels.
     bool bInPrintTwips = comphelper::LibreOfficeKit::isCompatFlagSet(
@@ -5922,7 +5926,6 @@ void ScGridWindow::UpdateKitSelection(const std::vector<tools::Rectangle>& rRect
         return;
     }
 
-    ScTabViewShell* pViewShell = mrViewData.GetViewShell();
     pViewShell->UpdateInputHandler();
     OString sBoundingBoxString = "EMPTY";
     if (!aBoundingBox.IsEmpty())
