@@ -115,6 +115,7 @@ public:
     void testUpdateCircleInMergedCellODS();
     void testDeleteCircleInMergedCellODS();
     void testBooleanFormatXLSX();
+    void testTdf76310();
     void testBasicCellContentODS();
     void testRangeNameXLS();
     void testRangeNameLocalXLS();
@@ -224,6 +225,7 @@ public:
     CPPUNIT_TEST(testUpdateCircleInMergedCellODS);
     CPPUNIT_TEST(testDeleteCircleInMergedCellODS);
     CPPUNIT_TEST(testBooleanFormatXLSX);
+    CPPUNIT_TEST(testTdf76310);
     CPPUNIT_TEST(testBasicCellContentODS);
     CPPUNIT_TEST(testRangeNameXLS);
     CPPUNIT_TEST(testRangeNameLocalXLS);
@@ -667,6 +669,25 @@ void ScFiltersTest::testBooleanFormatXLSX()
         const OUString& rFormatStr = pNumberFormat->GetFormatstring();
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Number format != boolean", aBooleanTypeStr, rFormatStr);
     }
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testTdf76310()
+{
+    ScDocShellRef xDocSh = loadDoc(u"tdf76310.", FORMAT_ODS);
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    OUString aFormula;
+    rDoc.GetFormula(0, 0, 0, aFormula);
+    // Without the fix in place, this test would have failed with
+    // - Expected: =1
+    // +
+    // 2
+    // - Actual  : =1 + 2
+    CPPUNIT_ASSERT_EQUAL(OUString("=1\n+\n2"), aFormula);
+    ASSERT_DOUBLES_EQUAL(3.0, rDoc.GetValue(0, 0, 0));
 
     xDocSh->DoClose();
 }
