@@ -36,6 +36,7 @@
 #include "HashMaps.hxx"
 
 #include <memory>
+#include <optional>
 
 class OZipFileAccess final : public ::cppu::WeakImplHelper<
                         css::packages::zip::XZipFileAccess2,
@@ -46,7 +47,7 @@ class OZipFileAccess final : public ::cppu::WeakImplHelper<
     rtl::Reference<comphelper::RefCountedMutex> m_aMutexHolder;
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
     css::uno::Reference< css::io::XInputStream > m_xContentStream;
-    std::unique_ptr<ZipFile> m_pZipFile;
+    std::optional<ZipFile> m_pZipFile;
     std::unique_ptr<::comphelper::OInterfaceContainerHelper2> m_pListenersContainer;
     bool m_bDisposed;
     bool m_bOwnContent;

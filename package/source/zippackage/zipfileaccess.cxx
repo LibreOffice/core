@@ -240,7 +240,7 @@ void SAL_CALL OZipFileAccess::initialize( const uno::Sequence< uno::Any >& aArgu
     }
 
     // TODO: in case xSeekable is implemented on separated XStream implementation a wrapper is required
-    m_pZipFile = std::make_unique<ZipFile>(
+    m_pZipFile.emplace(
                 m_aMutexHolder,
                 m_xContentStream,
                 m_xContext,
