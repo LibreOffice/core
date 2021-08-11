@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sfx2/ColorSets.hxx>
+
 #include <config_feature_desktop.h>
 #include <osl/file.hxx>
 #include <sfx2/docfilt.hxx>
@@ -1679,6 +1681,13 @@ void SfxViewFrame::Construct_Impl( SfxObjectShell *pObjSh )
         Notify( *pObjSh, SfxHint(SfxHintId::TitleChanged) );
         Notify( *pObjSh, SfxHint(SfxHintId::DocChanged) );
         m_pDispatcher->SetReadOnly_Impl( pObjSh->IsReadOnly() );
+
+        // let's see if we can access this one
+        // seems to work - but still don't know the proper way of storing
+        // something like this...
+        pObjSh->PutItem(SfxColorSetListItem(ColorSets(), SID_COLOR_SETS));
+
+        // SfxObjectShell::Current() -> *SfxObjectShell
     }
     else
     {

@@ -19,21 +19,30 @@
 #ifndef INCLUDED_EDITENG_COLRITEM_HXX
 #define INCLUDED_EDITENG_COLRITEM_HXX
 
-#include <editeng/ColorSets.hxx>
+#include <sfx2/objsh.hxx>
+#include <sfx2/ColorSets.hxx>
 #include <svl/poolitem.hxx>
 #include <tools/color.hxx>
 #include <editeng/editengdllapi.h>
 
+#include <sal/log.hxx>
+
 #define VERSION_USEAUTOCOLOR    1
+
+struct ThemeColorData
+{
+    sal_Int16 maThemeIndex;
+    sal_Int16 maTintShade;
+};
 
 /** SvxColorItem item describes a color.
 */
 class EDITENG_DLLPUBLIC SvxColorItem final : public SfxPoolItem
 {
 private:
+    // TODO: cache color
     Color mColor;
-    sal_Int16 maThemeIndex;
-    sal_Int16 maTintShade;
+    std::optional<ThemeColorData> maThemeColorData;
 
 public:
     static SfxPoolItem* CreateDefault();
@@ -54,39 +63,20 @@ public:
     virtual SvxColorItem* Clone(SfxItemPool* pPool = nullptr) const override;
     SvxColorItem(SvxColorItem const &) = default; // SfxPoolItem copy function dichotomy
 
-    const Color& GetValue() const
-    {
-        if( maThemeIndex > 0 )
-        {
-            Color aColor = ColorSets::get().getThemeColorSet().getColor(maThemeIndex);
-            aColor.ApplyTintOrShade(GetTintOrShade());
+    const Color& GetValue() const;
 
-            // experimental beware
-            const_cast<SvxColorItem*>(this)->mColor = aColor;
-        }
-        return mColor;
-    }
     void SetValue(const Color& rNewColor);
 
     sal_Int16 GetThemeIndex() const
     {
-        return maThemeIndex;
+        return maThemeColorData->maThemeIndex;
     }
 
-    void SetThemeIndex(sal_Int16 nIndex)
-    {
-        maThemeIndex = nIndex;
-    }
+    void SetThemeIndex(sal_Int16 nIndex) { maThemeColorData->maThemeIndex = nIndex; }
 
-    sal_Int16 GetTintOrShade() const
-    {
-        return maTintShade;
-    }
+    sal_Int16 GetTintOrShade() const { return maThemeColorData->maTintShade; }
 
-    void SetTintOrShade(sal_Int16 nTintOrShade)
-    {
-        maTintShade = nTintOrShade;
-    }
+    void SetTintOrShade(sal_Int16 nTintOrShade) { maThemeColorData->maTintShade = nTintOrShade; }
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };

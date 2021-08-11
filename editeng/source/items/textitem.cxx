@@ -21,6 +21,7 @@
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/frame/status/FontHeight.hpp>
 #include <math.h>
+#include <optional>
 #include <sal/log.hxx>
 #include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
@@ -77,6 +78,8 @@
 #include <editeng/itemtype.hxx>
 #include <editeng/eerdll.hxx>
 #include <libxml/xmlwriter.h>
+
+#include <sfx2/sfxsids.hrc>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;
@@ -1313,17 +1316,17 @@ bool SvxContourItem::GetPresentation
 SvxColorItem::SvxColorItem( const sal_uInt16 nId ) :
     SfxPoolItem(nId),
     mColor( COL_BLACK ),
-    maThemeIndex(4),
-    maTintShade(0)
+    maThemeColorData(std::nullopt)
 {
+    maThemeColorData = { 4, 0 };
 }
 
 SvxColorItem::SvxColorItem( const Color& rCol, const sal_uInt16 nId ) :
     SfxPoolItem( nId ),
     mColor( rCol ),
-    maThemeIndex(4),
-    maTintShade(0)
+    maThemeColorData(std::nullopt)
 {
+    maThemeColorData = { 4, 0 };
 }
 
 SvxColorItem::~SvxColorItem()
@@ -1335,9 +1338,9 @@ bool SvxColorItem::operator==( const SfxPoolItem& rAttr ) const
     assert(SfxPoolItem::operator==(rAttr));
     const SvxColorItem& rColorItem = static_cast<const SvxColorItem&>(rAttr);
 
-    return mColor == rColorItem.mColor &&
-           maThemeIndex == rColorItem.maThemeIndex &&
-           maTintShade == rColorItem.maTintShade;
+    return mColor == rColorItem.mColor
+           && maThemeColorData->maThemeIndex == rColorItem.maThemeColorData->maThemeIndex
+           && maThemeColorData->maTintShade == rColorItem.maThemeColorData->maTintShade;
 }
 
 bool SvxColorItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
@@ -1358,12 +1361,12 @@ bool SvxColorItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         }
         case MID_COLOR_THEME_INDEX:
         {
-            rVal <<= maThemeIndex;
+            rVal <<= maThemeColorData->maThemeIndex;
             break;
         }
         case MID_COLOR_TINT_OR_SHADE:
         {
-            rVal <<= maTintShade;
+            rVal <<= maThemeColorData->maTintShade;
             break;
         }
         default:
@@ -1401,7 +1404,7 @@ bool SvxColorItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             sal_Int16 nIndex = -1;
             if (!(rVal >>= nIndex))
                 return false;
-            maThemeIndex = nIndex;
+            maThemeColorData->maThemeIndex = nIndex;
         }
         break;
         case MID_COLOR_TINT_OR_SHADE:
@@ -1409,7 +1412,7 @@ bool SvxColorItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             sal_Int16 nTintShade = -1;
             if (!(rVal >>= nTintShade))
                 return false;
-            maTintShade = nTintShade;
+            maThemeColorData->maTintShade = nTintShade;
         }
         break;
         default:
@@ -1454,7 +1457,25 @@ void SvxColorItem::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterEndElement(pWriter);
 }
 
+const Color& SvxColorItem::GetValue() const
+{
+    if (maThemeColorData)
+    {
+        if (SfxObjectShell* pObjShell = SfxObjectShell::Current())
+        {
+            if (const SfxColorSetListItem* pColorSetItem = pObjShell->GetItem(SID_COLOR_SETS))
+            {
+                Color aColor
+                    = pColorSetItem->GetSfxColorSetList().getThemeColorSet().getColor(maThemeColorData->maThemeIndex);
+                aColor.ApplyTintOrShade(GetTintOrShade());
 
+                // experimental beware
+                const_cast<SvxColorItem*>(this)->mColor = aColor;
+            }
+        }
+    }
+    return mColor;
+}
 
 void SvxColorItem::SetValue( const Color& rNewCol )
 {
