@@ -2612,8 +2612,14 @@ void ScGridWindow::MouseMove( const MouseEvent& rMEvt )
         }
     }
 
-    if ( pViewData->GetView()->GetSelEngine()->SelMouseMove( rMEvt ) )
-        return;
+    // In LOK case, avoid spurious "leavingwindow" mouse move events which has negative coordinates.
+    // Such events occur for some reason when a user is selecting a range, (even when not leaving the view area)
+    // with one or more other viewers in that sheet.
+    bool bSkipSelectionUpdate = comphelper::LibreOfficeKit::isActive() &&
+        rMEvt.IsLeaveWindow() && (aCurMousePos.X() < 0 || aCurMousePos.Y() < 0);
+
+    if (!bSkipSelectionUpdate)
+        pViewData->GetView()->GetSelEngine()->SelMouseMove( rMEvt );
 }
 
 static void lcl_InitMouseEvent(css::awt::MouseEvent& rEvent, const MouseEvent& rEvt)
