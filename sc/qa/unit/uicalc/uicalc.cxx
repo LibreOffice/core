@@ -1324,7 +1324,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf136113)
     SdrPage* pPage = pDrawLayer->GetPage(0);
     SdrObject* pObj = pPage->GetObj(0);
 
-    CPPUNIT_ASSERT_EQUAL(tools::Long(18159), pObj->GetSnapRect().Left());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(18160), pObj->GetSnapRect().Left());
     CPPUNIT_ASSERT_EQUAL(tools::Long(1709), pObj->GetSnapRect().Top());
 
     lcl_SelectObjectByName(u"Arrow");
@@ -1334,7 +1334,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf136113)
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::UP);
     Scheduler::ProcessEventsToIdle();
 
-    CPPUNIT_ASSERT_EQUAL(tools::Long(18159), pObj->GetSnapRect().Left());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(18160), pObj->GetSnapRect().Left());
     CPPUNIT_ASSERT_EQUAL(tools::Long(1609), pObj->GetSnapRect().Top());
 
     // Without the fix in place, this test would have failed here

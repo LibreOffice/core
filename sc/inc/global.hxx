@@ -28,6 +28,7 @@
 #include "scdllapi.h"
 #include <rtl/ustring.hxx>
 #include <tools/long.hxx>
+#include <o3tl/unit_conversion.hxx>
 
 #include <atomic>
 // HACK: <atomic> includes <stdbool.h>, which in some Clang versions does '#define bool bool',
@@ -78,18 +79,8 @@ const sal_Unicode CHAR_NNBSP    = 0x202F; //NARROW NO-BREAK SPACE
 
 const SCSIZE MAXSUBTOTAL        = 3;
 
-#define PIXEL_PER_INCH      96.0
-#define CM_PER_INCH         2.54
-#define POINTS_PER_INCH     72.0    /**< PostScript points per inch */
-#define PIXEL_PER_POINT     (PIXEL_PER_INCH / POINTS_PER_INCH)
-#define TWIPS_PER_POINT     20.0
-#define TWIPS_PER_INCH      (TWIPS_PER_POINT * POINTS_PER_INCH)
-#define TWIPS_PER_CM        (TWIPS_PER_INCH / CM_PER_INCH)
-#define CM_PER_TWIPS        (CM_PER_INCH / TWIPS_PER_INCH)
-#define TWIPS_PER_PIXEL     (TWIPS_PER_INCH / PIXEL_PER_INCH)
-#define TWIPS_PER_CHAR      (TWIPS_PER_INCH / 13.6)
-#define PIXEL_PER_TWIPS     (PIXEL_PER_INCH / TWIPS_PER_INCH)
-#define HMM_PER_TWIPS       (CM_PER_TWIPS * 1000.0)
+// ~105.88 twip, i.e. about 2 times narrower than o3tl::Length::ch, which is 210 twip
+constexpr auto TWIPS_PER_CHAR = o3tl::toTwips(1.0, o3tl::Length::in) / 13.6;
 
 #define STD_COL_WIDTH       1280    /* 2.2577cm, 64.00pt PS */
 #define STD_EXTRA_WIDTH     113     /* 2mm extra for optimal width,
