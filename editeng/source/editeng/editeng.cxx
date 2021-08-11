@@ -2287,7 +2287,7 @@ sal_uInt16 EditEngine::GetFieldCount( sal_Int32 nPara ) const
     {
         for (auto const& attrib : pNode->GetCharAttribs().GetAttribs())
         {
-            if (attrib->Which() == EE_FEATURE_FIELD)
+            if (attrib.Which() == EE_FEATURE_FIELD)
                 ++nFields;
         }
     }
@@ -2301,16 +2301,15 @@ EFieldInfo EditEngine::GetFieldInfo( sal_Int32 nPara, sal_uInt16 nField ) const
     if ( pNode )
     {
         sal_uInt16 nCurrentField = 0;
-        for (auto const& attrib : pNode->GetCharAttribs().GetAttribs())
+        for (EditCharAttrib const& rAttr : pNode->GetCharAttribs().GetAttribs())
         {
-            const EditCharAttrib& rAttr = *attrib;
             if (rAttr.Which() == EE_FEATURE_FIELD)
             {
                 if ( nCurrentField == nField )
                 {
                     const SvxFieldItem* p = static_cast<const SvxFieldItem*>(rAttr.GetItem());
                     EFieldInfo aInfo(*p, nPara, rAttr.GetStart());
-                    aInfo.aCurrentText = static_cast<const EditCharAttribField&>(rAttr).GetFieldValue();
+                    aInfo.aCurrentText = rAttr.GetFieldValue();
                     return aInfo;
                 }
 
@@ -2346,7 +2345,7 @@ void EditEngine::RemoveFields( const std::function<bool ( const SvxFieldData* )>
         const CharAttribList::AttribsType& rAttrs = pNode->GetCharAttribs().GetAttribs();
         for (size_t nAttr = rAttrs.size(); nAttr; )
         {
-            const EditCharAttrib& rAttr = *rAttrs[--nAttr];
+            const EditCharAttrib& rAttr = rAttrs[--nAttr];
             if (rAttr.Which() == EE_FEATURE_FIELD)
             {
                 const SvxFieldData* pFldData = static_cast<const SvxFieldItem*>(rAttr.GetItem())->GetField();
@@ -2354,7 +2353,7 @@ void EditEngine::RemoveFields( const std::function<bool ( const SvxFieldData* )>
                 {
                     DBG_ASSERT( dynamic_cast<const SvxFieldItem*>(rAttr.GetItem()), "no field item..." );
                     EditSelection aSel( EditPaM(pNode, rAttr.GetStart()), EditPaM(pNode, rAttr.GetEnd()) );
-                    OUString aFieldText = static_cast<const EditCharAttribField&>(rAttr).GetFieldValue();
+                    OUString aFieldText = rAttr.GetFieldValue();
                     pImpEditEngine->ImpInsertText( aSel, aFieldText );
                 }
             }

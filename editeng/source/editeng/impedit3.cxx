@@ -1038,7 +1038,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                         aTmpFont.SetPhysFont(*GetRefDevice());
                         ImplInitDigitMode(*GetRefDevice(), aTmpFont.GetLanguage());
 
-                        OUString aFieldValue = static_cast<const EditCharAttribField*>(pNextFeature)->GetFieldValue();
+                        OUString aFieldValue = pNextFeature->GetFieldValue();
                         // get size, but also DXArray to allow length information in line breaking below
                         const sal_Int32 nLength(aFieldValue.getLength());
                         std::unique_ptr<tools::Long[]> pTmpDXArray(new tools::Long[nLength]);
@@ -1846,7 +1846,7 @@ void ImpEditEngine::ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, Te
         const CharAttribList::AttribsType& rAttrs = pNode->GetCharAttribs().GetAttribs();
         for (size_t nAttr = rAttrs.size(); nAttr; )
         {
-            const EditCharAttrib& rAttr = *rAttrs[--nAttr];
+            const EditCharAttrib& rAttr = rAttrs[--nAttr];
             if (rAttr.IsFeature() && rAttr.GetEnd() > nMinBreakPos && rAttr.GetEnd() <= nMaxBreakPos)
             {
                 nMinBreakPos = rAttr.GetEnd();
@@ -3347,7 +3347,7 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
                                     const EditCharAttrib* pAttr = rPortion.GetNode()->GetCharAttribs().FindFeature(nIndex);
                                     assert( pAttr && "Field not found");
                                     DBG_ASSERT( dynamic_cast< const SvxFieldItem* >( pAttr->GetItem() ) !=  nullptr, "Field of the wrong type! ");
-                                    aText = static_cast<const EditCharAttribField*>(pAttr)->GetFieldValue();
+                                    aText = pAttr->GetFieldValue();
                                     nTextStart = 0;
                                     nTextLen = aText.getLength();
                                     ExtraPortionInfo *pExtraInfo = rTextPortion.GetExtraInfos();

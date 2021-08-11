@@ -1657,7 +1657,7 @@ void ImpEditEngine::InitScriptTypes( sal_Int32 nPara )
     const EditCharAttrib* pField = pNode->GetCharAttribs().FindNextAttrib( EE_FEATURE_FIELD, 0 );
     while ( pField )
     {
-        const OUString aFldText = static_cast<const EditCharAttribField*>(pField)->GetFieldValue();
+        const OUString aFldText = pField->GetFieldValue();
         if ( !aFldText.isEmpty() )
         {
             aText = aText.replaceAt( pField->GetStart(), 1, aFldText.copy(0,1) );
@@ -2100,9 +2100,8 @@ void ImpEditEngine::ImpRemoveChars( const EditPaM& rPaM, sal_Int32 nChars )
         const sal_Int32 nStart = rPaM.GetIndex();
         const sal_Int32 nEnd = nStart + nChars;
         const CharAttribList::AttribsType& rAttribs = rPaM.GetNode()->GetCharAttribs().GetAttribs();
-        for (const auto & rAttrib : rAttribs)
+        for (const EditCharAttrib & rAttr : rAttribs)
         {
-            const EditCharAttrib& rAttr = *rAttrib;
             if (rAttr.GetEnd() >= nStart && rAttr.GetStart() < nEnd)
             {
                 EditSelection aSel( rPaM );
@@ -2969,38 +2968,36 @@ bool ImpEditEngine::UpdateFields()
         ContentNode* pNode = GetEditDoc().GetObject( nPara );
         OSL_ENSURE( pNode, "NULL-Pointer in Doc" );
         CharAttribList::AttribsType& rAttribs = pNode->GetCharAttribs().GetAttribs();
-        for (std::unique_ptr<EditCharAttrib> & rAttrib : rAttribs)
+        for (EditCharAttrib & rAttr : rAttribs)
         {
-            EditCharAttrib& rAttr = *rAttrib;
             if (rAttr.Which() == EE_FEATURE_FIELD)
             {
-                EditCharAttribField& rField = static_cast<EditCharAttribField&>(rAttr);
-                EditCharAttribField aCurrent(rField);
-                rField.Reset();
+                EditCharAttrib aCurrent(rAttr);
+                rAttr.ResetField();
 
                 if (!aStatus.MarkNonUrlFields() && !aStatus.MarkUrlFields())
                     ;   // nothing marked
                 else if (aStatus.MarkNonUrlFields() && aStatus.MarkUrlFields())
-                    rField.GetFieldColor() = GetColorConfig().GetColorValue( svtools::WRITERFIELDSHADINGS ).nColor;
+                    rAttr.GetFieldColor() = GetColorConfig().GetColorValue( svtools::WRITERFIELDSHADINGS ).nColor;
                 else
                 {
                     bool bURL = false;
-                    if (const SvxFieldItem* pFieldItem = dynamic_cast<const SvxFieldItem*>(rField.GetItem()))
+                    if (const SvxFieldItem* pFieldItem = dynamic_cast<const SvxFieldItem*>(rAttr.GetItem()))
                     {
                         if (const SvxFieldData* pFieldData = pFieldItem->GetField())
                             bURL = (dynamic_cast<const SvxURLField* >(pFieldData) != nullptr);
                     }
                     if ((bURL && aStatus.MarkUrlFields()) || (!bURL && aStatus.MarkNonUrlFields()))
-                        rField.GetFieldColor() = GetColorConfig().GetColorValue( svtools::WRITERFIELDSHADINGS ).nColor;
+                        rAttr.GetFieldColor() = GetColorConfig().GetColorValue( svtools::WRITERFIELDSHADINGS ).nColor;
                 }
 
                 const OUString aFldValue =
                     GetEditEnginePtr()->CalcFieldValue(
-                        static_cast<const SvxFieldItem&>(*rField.GetItem()),
-                        nPara, rField.GetStart(), rField.GetTextColor(), rField.GetFieldColor());
+                        static_cast<const SvxFieldItem&>(*rAttr.GetItem()),
+                        nPara, rAttr.GetStart(), rAttr.GetFieldTextColor(), rAttr.GetFieldColor());
 
-                rField.SetFieldValue(aFldValue);
-                if (rField != aCurrent)
+                rAttr.SetFieldValue(aFldValue);
+                if (rAttr != aCurrent)
                 {
                     bChanges = true;
                     bChangesInPara = true;

@@ -46,7 +46,7 @@ void CreateFont( SvxFont& rFont, const SfxItemSet& rSet, bool bSearchInParent = 
 sal_uInt16 GetScriptItemId( sal_uInt16 nItemId, SvtScriptType nScriptType );
 bool IsScriptItemValid( sal_uInt16 nItemId, short nScriptType );
 
-EditCharAttrib* MakeCharAttrib( SfxItemPool& rPool, const SfxPoolItem& rAttr, sal_Int32 nS, sal_Int32 nE );
+EditCharAttrib MakeCharAttrib( SfxItemPool& rPool, const SfxPoolItem& rAttr, sal_Int32 nS, sal_Int32 nE );
 
 class ContentNode;
 class EditDoc;
@@ -110,7 +110,7 @@ typedef std::vector<WritingDirectionInfo> WritingDirectionInfos;
 class ContentAttribsInfo
 {
 private:
-    typedef std::vector<std::unique_ptr<EditCharAttrib> > CharAttribsType;
+    typedef std::vector<EditCharAttrib> CharAttribsType;
 
     SfxItemSet          aPrevParaAttribs;
     CharAttribsType     aPrevCharAttribs;
@@ -122,7 +122,7 @@ public:
     const CharAttribsType&  GetPrevCharAttribs() const  { return aPrevCharAttribs; }
 
     void RemoveAllCharAttribsFromPool(SfxItemPool& rPool) const;
-    void AppendCharAttrib(EditCharAttrib* pNew);
+    void AppendCharAttrib(EditCharAttrib&& pNew);
 };
 
 
@@ -182,7 +182,7 @@ public:
 class CharAttribList
 {
 public:
-    typedef std::vector<std::unique_ptr<EditCharAttrib> > AttribsType;
+    typedef std::vector<EditCharAttrib> AttribsType;
 
 private:
     AttribsType     aAttribs;
@@ -209,7 +209,7 @@ public:
 
     sal_Int32 Count() const;
 
-    void            InsertAttrib( EditCharAttrib* pAttrib );
+    void            InsertAttrib( EditCharAttrib&& pAttrib );
 
     SvxFont&        GetDefFont()            { return aDefFont; }
 
@@ -811,7 +811,7 @@ public:
 
 inline EditCharAttrib* GetAttrib(CharAttribList::AttribsType& rAttribs, sal_Int32 nAttr)
 {
-    return (nAttr < static_cast<sal_Int32>(rAttribs.size())) ? rAttribs[nAttr].get() : nullptr;
+    return (nAttr < static_cast<sal_Int32>(rAttribs.size())) ? &rAttribs[nAttr] : nullptr;
 }
 
 #if OSL_DEBUG_LEVEL > 0 && !defined NDEBUG

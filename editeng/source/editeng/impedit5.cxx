@@ -207,11 +207,11 @@ std::unique_ptr<EditUndoSetAttribs> ImpEditEngine::CreateAttribUndo( EditSelecti
 
         for ( sal_Int32 nAttr = 0; nAttr < pNode->GetCharAttribs().Count(); nAttr++ )
         {
-            const EditCharAttrib& rAttr = *pNode->GetCharAttribs().GetAttribs()[nAttr];
+            const EditCharAttrib& rAttr = pNode->GetCharAttribs().GetAttribs()[nAttr];
             if (rAttr.GetLen())
             {
-                EditCharAttrib* pNew = MakeCharAttrib(*pPool, *rAttr.GetItem(), rAttr.GetStart(), rAttr.GetEnd());
-                pInf->AppendCharAttrib(pNew);
+                EditCharAttrib aNew = MakeCharAttrib(*pPool, *rAttr.GetItem(), rAttr.GetStart(), rAttr.GetEnd());
+                pInf->AppendCharAttrib(std::move(aNew));
             }
         }
     }
@@ -429,10 +429,8 @@ SfxItemSet ImpEditEngine::GetAttribs( sal_Int32 nPara, sal_Int32 nStart, sal_Int
             pNode->GetCharAttribs().OptimizeRanges(const_cast<SfxItemPool&>(rPool));
 
             const CharAttribList::AttribsType& rAttrs = pNode->GetCharAttribs().GetAttribs();
-            for (const auto & nAttr : rAttrs)
+            for (const EditCharAttrib & rAttr : rAttrs)
             {
-                const EditCharAttrib& rAttr = *nAttr;
-
                 if ( nStart == nEnd )
                 {
                     sal_Int32 nCursorPos = nStart;
@@ -544,9 +542,8 @@ void ImpEditEngine::SetAttribs( EditSelection aSel, const SfxItemSet& rSet, SetA
                     if ( nSpecial == SetAttribsMode::Edge )
                     {
                         CharAttribList::AttribsType& rAttribs = pNode->GetCharAttribs().GetAttribs();
-                        for (std::unique_ptr<EditCharAttrib> & rAttrib : rAttribs)
+                        for (EditCharAttrib & rAttr : rAttribs)
                         {
-                            EditCharAttrib& rAttr = *rAttrib;
                             if (rAttr.GetStart() > nEndPos)
                                 break;
 
@@ -742,9 +739,8 @@ void ImpEditEngine::GetCharAttribs( sal_Int32 nPara, std::vector<EECharAttrib>& 
 
     rLst.reserve(pNode->GetCharAttribs().Count());
     const CharAttribList::AttribsType& rAttrs = pNode->GetCharAttribs().GetAttribs();
-    for (const auto & i : rAttrs)
+    for (const EditCharAttrib & rAttr : rAttrs)
     {
-        const EditCharAttrib& rAttr = *i;
         EECharAttrib aEEAttr(rAttr.GetStart(), rAttr.GetEnd(), rAttr.GetItem());
         rLst.push_back(aEEAttr);
     }

@@ -212,155 +212,154 @@ const SfxItemInfo aItemInfos[EDITITEMCOUNT] = {
         { SID_FIELD, false },                  // EE_FEATURE_FIELD
 };
 
-EditCharAttrib* MakeCharAttrib( SfxItemPool& rPool, const SfxPoolItem& rAttr, sal_Int32 nS, sal_Int32 nE )
+EditCharAttrib MakeCharAttrib( SfxItemPool& rPool, const SfxPoolItem& rAttr, sal_Int32 nS, sal_Int32 nE )
 {
     // Create a new attribute in the pool
     const SfxPoolItem& rNew = rPool.Put( rAttr );
 
-    EditCharAttrib* pNew = nullptr;
     switch( rNew.Which() )
     {
         case EE_CHAR_LANGUAGE:
         case EE_CHAR_LANGUAGE_CJK:
         case EE_CHAR_LANGUAGE_CTL:
         {
-            pNew = new EditCharAttribLanguage( static_cast<const SvxLanguageItem&>(rNew), nS, nE );
+            return EditCharAttrib::MakeLanguage( static_cast<const SvxLanguageItem&>(rNew), nS, nE );
         }
         break;
         case EE_CHAR_COLOR:
         {
-            pNew = new EditCharAttribColor( static_cast<const SvxColorItem&>(rNew), nS, nE );
+            return EditCharAttrib::MakeColor( static_cast<const SvxColorItem&>(rNew), nS, nE );
         }
         break;
         case EE_CHAR_FONTINFO:
         case EE_CHAR_FONTINFO_CJK:
         case EE_CHAR_FONTINFO_CTL:
         {
-            pNew = new EditCharAttribFont( static_cast<const SvxFontItem&>(rNew), nS, nE );
+            return EditCharAttrib::MakeFont( static_cast<const SvxFontItem&>(rNew), nS, nE );
         }
         break;
         case EE_CHAR_FONTHEIGHT:
         case EE_CHAR_FONTHEIGHT_CJK:
         case EE_CHAR_FONTHEIGHT_CTL:
         {
-            pNew = new EditCharAttribFontHeight( static_cast<const SvxFontHeightItem&>(rNew), nS, nE );
+            return EditCharAttrib::MakeFontHeight( static_cast<const SvxFontHeightItem&>(rNew), nS, nE );
         }
         break;
         case EE_CHAR_FONTWIDTH:
         {
-            pNew = new EditCharAttribFontWidth( static_cast<const SvxCharScaleWidthItem&>(rNew), nS, nE );
+            return EditCharAttrib::MakeFontWidth( static_cast<const SvxCharScaleWidthItem&>(rNew), nS, nE );
         }
         break;
         case EE_CHAR_WEIGHT:
         case EE_CHAR_WEIGHT_CJK:
         case EE_CHAR_WEIGHT_CTL:
         {
-            pNew = new EditCharAttribWeight( static_cast<const SvxWeightItem&>(rNew), nS, nE );
+            return EditCharAttrib::MakeWeight( static_cast<const SvxWeightItem&>(rNew), nS, nE );
         }
         break;
         case EE_CHAR_UNDERLINE:
         {
-            pNew = new EditCharAttribUnderline( static_cast<const SvxUnderlineItem&>(rNew), nS, nE );
+            return EditCharAttrib::MakeUnderline( static_cast<const SvxUnderlineItem&>(rNew), nS, nE );
         }
         break;
         case EE_CHAR_OVERLINE:
         {
-            pNew = new EditCharAttribOverline( static_cast<const SvxOverlineItem&>(rNew), nS, nE );
+            return EditCharAttrib::MakeOverline( static_cast<const SvxOverlineItem&>(rNew), nS, nE );
         }
         break;
         case EE_CHAR_EMPHASISMARK:
         {
-            pNew = new EditCharAttribEmphasisMark( static_cast<const SvxEmphasisMarkItem&>(rNew), nS, nE );
+            return EditCharAttrib::MakeEmphasisMark( static_cast<const SvxEmphasisMarkItem&>(rNew), nS, nE );
         }
         break;
         case EE_CHAR_RELIEF:
         {
-            pNew = new EditCharAttribRelief( static_cast<const SvxCharReliefItem&>(rNew), nS, nE );
+            return EditCharAttrib::MakeRelief( static_cast<const SvxCharReliefItem&>(rNew), nS, nE );
         }
         break;
         case EE_CHAR_STRIKEOUT:
         {
-            pNew = new EditCharAttribStrikeout( static_cast<const SvxCrossedOutItem&>(rNew), nS, nE );
+            return EditCharAttrib::MakeStrikeout( static_cast<const SvxCrossedOutItem&>(rNew), nS, nE );
         }
         break;
         case EE_CHAR_ITALIC:
         case EE_CHAR_ITALIC_CJK:
         case EE_CHAR_ITALIC_CTL:
         {
-            pNew = new EditCharAttribItalic( static_cast<const SvxPostureItem&>(rNew), nS, nE );
+            return EditCharAttrib::MakeItalic( static_cast<const SvxPostureItem&>(rNew), nS, nE );
         }
         break;
         case EE_CHAR_OUTLINE:
         {
-            pNew = new EditCharAttribOutline( static_cast<const SvxContourItem&>(rNew), nS, nE );
+            return EditCharAttrib::MakeOutline( static_cast<const SvxContourItem&>(rNew), nS, nE );
         }
         break;
         case EE_CHAR_SHADOW:
         {
-            pNew = new EditCharAttribShadow( static_cast<const SvxShadowedItem&>(rNew), nS, nE );
+            return EditCharAttrib::MakeShadow( static_cast<const SvxShadowedItem&>(rNew), nS, nE );
         }
         break;
         case EE_CHAR_ESCAPEMENT:
         {
-            pNew = new EditCharAttribEscapement( static_cast<const SvxEscapementItem&>(rNew), nS, nE );
+            return EditCharAttrib::MakeEscapement( static_cast<const SvxEscapementItem&>(rNew), nS, nE );
         }
         break;
         case EE_CHAR_PAIRKERNING:
         {
-            pNew = new EditCharAttribPairKerning( static_cast<const SvxAutoKernItem&>(rNew), nS, nE );
+            return EditCharAttrib::MakePairKerning( static_cast<const SvxAutoKernItem&>(rNew), nS, nE );
         }
         break;
         case EE_CHAR_KERNING:
         {
-            pNew = new EditCharAttribKerning( static_cast<const SvxKerningItem&>(rNew), nS, nE );
+            return EditCharAttrib::MakeKerning( static_cast<const SvxKerningItem&>(rNew), nS, nE );
         }
         break;
         case EE_CHAR_WLM:
         {
-            pNew = new EditCharAttribWordLineMode( static_cast<const SvxWordLineModeItem&>(rNew), nS, nE );
+            return EditCharAttrib::MakeWordLineMode( static_cast<const SvxWordLineModeItem&>(rNew), nS, nE );
         }
         break;
         case EE_CHAR_XMLATTRIBS:
         {
-            pNew = new EditCharAttrib( rNew, nS, nE );  // Attribute is only for holding XML information...
+            return EditCharAttrib::MakeXml( rNew, nS, nE );  // Attribute is only for holding XML information...
         }
         break;
         case EE_CHAR_CASEMAP:
         {
-            pNew = new EditCharAttribCaseMap( static_cast<const SvxCaseMapItem&>(rNew), nS, nE );
+            return EditCharAttrib::MakeCaseMap( static_cast<const SvxCaseMapItem&>(rNew), nS, nE );
         }
         break;
         case EE_CHAR_GRABBAG:
         {
-            pNew = new EditCharAttribGrabBag( static_cast<const SfxGrabBagItem&>(rNew), nS, nE );
+            return EditCharAttrib::MakeGrabBag( static_cast<const SfxGrabBagItem&>(rNew), nS, nE );
         }
         break;
         case EE_FEATURE_TAB:
         {
-            pNew = new EditCharAttribTab( static_cast<const SfxVoidItem&>(rNew), nS );
+            return EditCharAttrib::MakeTab( static_cast<const SfxVoidItem&>(rNew), nS );
         }
         break;
         case EE_FEATURE_LINEBR:
         {
-            pNew = new EditCharAttribLineBreak( static_cast<const SfxVoidItem&>(rNew), nS );
+            return EditCharAttrib::MakeLineBreak( static_cast<const SfxVoidItem&>(rNew), nS );
         }
         break;
         case EE_FEATURE_FIELD:
         {
-            pNew = new EditCharAttribField( static_cast<const SvxFieldItem&>(rNew), nS );
+            return EditCharAttrib::MakeField( static_cast<const SvxFieldItem&>(rNew), nS );
         }
         break;
         case EE_CHAR_BKGCOLOR:
         {
-            pNew = new EditCharAttribBackgroundColor( static_cast<const SvxColorItem&>(rNew), nS, nE );
+            return EditCharAttrib::MakeBackgroundColor( static_cast<const SvxColorItem&>(rNew), nS, nE );
         }
         break;
         default:
         {
-            OSL_FAIL( "Invalid Attribute!" );
+            assert( false && "Invalid Attribute!" );
         }
     }
-    return pNew;
+    throw std::exception();
 }
 
 TextPortionList::TextPortionList()
@@ -819,13 +818,13 @@ ContentAttribsInfo::ContentAttribsInfo( const SfxItemSet& rParaAttribs ) :
 
 void ContentAttribsInfo::RemoveAllCharAttribsFromPool(SfxItemPool& rPool) const
 {
-    for (const std::unique_ptr<EditCharAttrib>& rAttrib : aPrevCharAttribs)
-        rPool.Remove(*rAttrib->GetItem());
+    for (const EditCharAttrib& rAttrib : aPrevCharAttribs)
+        rPool.Remove(*rAttrib.GetItem());
 }
 
-void ContentAttribsInfo::AppendCharAttrib(EditCharAttrib* pNew)
+void ContentAttribsInfo::AppendCharAttrib(EditCharAttrib&& pNew)
 {
-    aPrevCharAttribs.push_back(std::unique_ptr<EditCharAttrib>(pNew));
+    aPrevCharAttribs.push_back(std::move(pNew));
 }
 
 void ConvertItem( std::unique_ptr<SfxPoolItem>& rPoolItem, MapUnit eSourceUnit, MapUnit eDestUnit )
@@ -1265,7 +1264,7 @@ void ContentNode::ExpandAttribs( sal_Int32 nIndex, sal_Int32 nNew, SfxItemPool& 
                             sal_uInt16 nW = pAttrib->GetItem()->Which();
                             for ( sal_Int32 nA = 0; nA < nAttr; nA++ )
                             {
-                                const EditCharAttrib& r = *aCharAttribList.GetAttribs()[nA];
+                                const EditCharAttrib& r = aCharAttribList.GetAttribs()[nA];
                                 if ( ( r.GetStart() == 0 ) && ( r.GetItem()->Which() == nW ) )
                                 {
                                     bExpand = false;
@@ -1441,25 +1440,25 @@ void ContentNode::CopyAndCutAttribs( ContentNode* pPrevNode, SfxItemPool& rPool,
             // must be copied as an empty attributes.
             if ( bKeepEndingAttribs && !pAttrib->IsFeature() && !aCharAttribList.FindAttrib( pAttrib->GetItem()->Which(), 0 ) )
             {
-                EditCharAttrib* pNewAttrib = MakeCharAttrib( rPool, *(pAttrib->GetItem()), 0, 0 );
+                std::optional<EditCharAttrib> pNewAttrib = MakeCharAttrib( rPool, *(pAttrib->GetItem()), 0, 0 );
                 assert(pNewAttrib);
-                aCharAttribList.InsertAttrib( pNewAttrib );
+                aCharAttribList.InsertAttrib( std::move(*pNewAttrib) );
             }
         }
         else if ( pAttrib->IsInside( nCut ) || ( !nCut && !pAttrib->GetStart() && !pAttrib->IsFeature() ) )
         {
             // If cut is done right at the front then the attribute must be
             // kept! Has to be copied and changed.
-            EditCharAttrib* pNewAttrib = MakeCharAttrib( rPool, *(pAttrib->GetItem()), 0, pAttrib->GetEnd()-nCut );
+            std::optional<EditCharAttrib> pNewAttrib = MakeCharAttrib( rPool, *(pAttrib->GetItem()), 0, pAttrib->GetEnd()-nCut );
             assert(pNewAttrib);
-            aCharAttribList.InsertAttrib( pNewAttrib );
+            aCharAttribList.InsertAttrib( std::move(*pNewAttrib) );
             pAttrib->GetEnd() = nCut;
         }
         else
         {
             // Move all attributes in the current node (this)
             CharAttribList::AttribsType::iterator it = rPrevAttribs.begin() + nAttr;
-            aCharAttribList.InsertAttrib(it->release());
+            aCharAttribList.InsertAttrib(std::move(*it));
             rPrevAttribs.erase(it);
             pAttrib->MoveBackward( nCut );
             nAttr--;
@@ -1530,7 +1529,7 @@ void ContentNode::AppendAttribs( ContentNode* pNextNode )
             pAttrib->GetStart() = pAttrib->GetStart() + nNewStart;
             pAttrib->GetEnd() = pAttrib->GetEnd() + nNewStart;
             CharAttribList::AttribsType::iterator it = rNextAttribs.begin() + nAttr;
-            aCharAttribList.InsertAttrib(it->release());
+            aCharAttribList.InsertAttrib(std::move(*it));
             rNextAttribs.erase(it);
         }
         pAttrib = GetAttrib(rNextAttribs, nAttr);
@@ -1593,10 +1592,10 @@ sal_uLong ContentNode::GetExpandedLen() const
     const CharAttribList::AttribsType& rAttrs = GetCharAttribs().GetAttribs();
     for (sal_Int32 nAttr = rAttrs.size(); nAttr; )
     {
-        const EditCharAttrib& rAttr = *rAttrs[--nAttr];
+        const EditCharAttrib& rAttr = rAttrs[--nAttr];
         if (rAttr.Which() == EE_FEATURE_FIELD)
         {
-            nLen += static_cast<const EditCharAttribField&>(rAttr).GetFieldValue().getLength();
+            nLen += rAttr.GetFieldValue().getLength();
             --nLen; // Standalone, to avoid corner cases when previous getLength() returns 0
         }
     }
@@ -1636,7 +1635,7 @@ OUString ContentNode::GetExpandedText(sal_Int32 nStartPos, sal_Int32 nEndPos) co
                 case EE_FEATURE_LINEBR: aStr.append( "\x0A" );
                 break;
                 case EE_FEATURE_FIELD:
-                    aStr.append( static_cast<const EditCharAttribField*>(pNextFeature)->GetFieldValue() );
+                    aStr.append( pNextFeature->GetFieldValue() );
                 break;
                 default:    OSL_FAIL( "What feature?" );
             }
@@ -1654,7 +1653,7 @@ void ContentNode::UnExpandPosition( sal_Int32 &rPos, bool bBiasStart )
     const CharAttribList::AttribsType& rAttrs = GetCharAttribs().GetAttribs();
     for (size_t nAttr = 0; nAttr < rAttrs.size(); ++nAttr )
     {
-        const EditCharAttrib& rAttr = *rAttrs[nAttr];
+        const EditCharAttrib& rAttr = rAttrs[nAttr];
         assert (!(nAttr < rAttrs.size() - 1) ||
                 rAttrs[nAttr]->GetStart() <= rAttrs[nAttr + 1]->GetStart());
 
@@ -1665,7 +1664,7 @@ void ContentNode::UnExpandPosition( sal_Int32 &rPos, bool bBiasStart )
 
         if (rAttr.Which() == EE_FEATURE_FIELD)
         {
-            sal_Int32 nChunk = static_cast<const EditCharAttribField&>(rAttr).GetFieldValue().getLength();
+            sal_Int32 nChunk = rAttr.GetFieldValue().getLength();
             nChunk--; // Character representing the field in the string
 
             if (nOffset + nChunk >= rPos) // we're inside the field
@@ -1931,7 +1930,7 @@ void EditDoc::RemoveItemsFromPool(const ContentNode& rNode)
 {
     for (sal_Int32 nAttr = 0; nAttr < rNode.GetCharAttribs().Count(); ++nAttr)
     {
-        const EditCharAttrib& rAttr = *rNode.GetCharAttribs().GetAttribs()[nAttr];
+        const EditCharAttrib& rAttr = rNode.GetCharAttribs().GetAttribs()[nAttr];
         GetItemPool().Remove(*rAttr.GetItem());
     }
 }
@@ -2299,9 +2298,9 @@ EditPaM EditDoc::InsertFeature( EditPaM aPaM, const SfxPoolItem& rItem  )
     aPaM.GetNode()->ExpandAttribs( aPaM.GetIndex(), 1, GetItemPool() );
 
     // Create a feature-attribute for the feature...
-    EditCharAttrib* pAttrib = MakeCharAttrib( GetItemPool(), rItem, aPaM.GetIndex(), aPaM.GetIndex()+1 );
+    std::optional<EditCharAttrib> pAttrib = MakeCharAttrib( GetItemPool(), rItem, aPaM.GetIndex(), aPaM.GetIndex()+1 );
     assert(pAttrib);
-    aPaM.GetNode()->GetCharAttribs().InsertAttrib( pAttrib );
+    aPaM.GetNode()->GetCharAttribs().InsertAttrib( std::move(*pAttrib) );
 
     SetModified( true );
 
@@ -2521,9 +2520,9 @@ void EditDoc::InsertAttrib( const SfxPoolItem& rPoolItem, ContentNode* pNode, sa
 {
     // This method no longer checks whether a corresponding attribute already
     // exists at this place!
-    EditCharAttrib* pAttrib = MakeCharAttrib( GetItemPool(), rPoolItem, nStart, nEnd );
+    std::optional<EditCharAttrib> pAttrib = MakeCharAttrib( GetItemPool(), rPoolItem, nStart, nEnd );
     assert(pAttrib);
-    pNode->GetCharAttribs().InsertAttrib( pAttrib );
+    pNode->GetCharAttribs().InsertAttrib( std::move(*pAttrib) );
 
     SetModified( true );
 }
@@ -2554,8 +2553,8 @@ void EditDoc::InsertAttrib( ContentNode* pNode, sal_Int32 nStart, sal_Int32 nEnd
                 // check again if really splitting, or return !
                 sal_Int32 nOldEnd = pAttr->GetEnd();
                 pAttr->GetEnd() = nStart;
-                EditCharAttrib* pNew = MakeCharAttrib( GetItemPool(), *(pAttr->GetItem()), nStart, nOldEnd );
-                rAttrList.InsertAttrib(pNew);
+                std::optional<EditCharAttrib> pNew = MakeCharAttrib( GetItemPool(), *(pAttr->GetItem()), nStart, nOldEnd );
+                rAttrList.InsertAttrib(std::move(*pNew));
             }
             else if ( pAttr->GetEnd() == nStart )
             {
@@ -2708,9 +2707,9 @@ namespace {
 
 struct LessByStart
 {
-    bool operator() (const std::unique_ptr<EditCharAttrib>& left, const std::unique_ptr<EditCharAttrib>& right) const
+    bool operator() (const EditCharAttrib& left, const EditCharAttrib& right) const
     {
-        return left->GetStart() < right->GetStart();
+        return left.GetStart() < right.GetStart();
     }
 };
 
@@ -2727,7 +2726,7 @@ CharAttribList::~CharAttribList()
 {
 }
 
-void CharAttribList::InsertAttrib( EditCharAttrib* pAttrib )
+void CharAttribList::InsertAttrib( EditCharAttrib&& pAttrib )
 {
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 // optimize: binary search?    !
@@ -2738,28 +2737,28 @@ void CharAttribList::InsertAttrib( EditCharAttrib* pAttrib )
     // (InsertTextObject!) binary search would not be optimal here.
     // => Would bring something!
 
-    const sal_Int32 nStart = pAttrib->GetStart(); // may be better for Comp.Opt.
+    const sal_Int32 nStart = pAttrib.GetStart(); // may be better for Comp.Opt.
 
 #if OSL_DEBUG_LEVEL > 0 && !defined NDEBUG
     CharAttribList::DbgCheckAttribs(*this);
 #endif
 
-    if ( pAttrib->IsEmpty() )
+    if ( pAttrib.IsEmpty() )
         bHasEmptyAttribs = true;
 
     bool bInsert(true);
     for (sal_Int32 i = 0, n = aAttribs.size(); i < n; ++i)
     {
-        const EditCharAttrib& rCurAttrib = *aAttribs[i];
+        const EditCharAttrib& rCurAttrib = aAttribs[i];
         if (rCurAttrib.GetStart() > nStart)
         {
-            aAttribs.insert(aAttribs.begin()+i, std::unique_ptr<EditCharAttrib>(pAttrib));
+            aAttribs.insert(aAttribs.begin()+i, std::move(pAttrib));
             bInsert = false;
             break;
         }
     }
 
-    if (bInsert) aAttribs.push_back(std::unique_ptr<EditCharAttrib>(pAttrib));
+    if (bInsert) aAttribs.push_back(std::move(pAttrib));
 
 #if OSL_DEBUG_LEVEL > 0 && !defined NDEBUG
     CharAttribList::DbgCheckAttribs(*this);
@@ -2782,10 +2781,10 @@ void CharAttribList::OptimizeRanges( SfxItemPool& rItemPool )
 #endif
     for (sal_Int32 i = 0; i < static_cast<sal_Int32>(aAttribs.size()); ++i)
     {
-        EditCharAttrib& rAttr = *aAttribs[i];
+        EditCharAttrib& rAttr = aAttribs[i];
         for (sal_Int32 nNext = i+1; nNext < static_cast<sal_Int32>(aAttribs.size()); ++nNext)
         {
-            EditCharAttrib& rNext = *aAttribs[nNext];
+            EditCharAttrib& rNext = aAttribs[nNext];
             if (!rAttr.IsFeature() && rNext.GetStart() == rAttr.GetEnd() && rNext.Which() == rAttr.Which())
             {
                 if (*rNext.GetItem() == *rAttr.GetItem())
@@ -2818,10 +2817,10 @@ const EditCharAttrib* CharAttribList::FindAttrib( sal_uInt16 nWhich, sal_Int32 n
     // => The starting one is the valid one ...
     AttribsType::const_reverse_iterator it = std::find_if(aAttribs.rbegin(), aAttribs.rend(),
         [&nWhich, &nPos](const AttribsType::value_type& rxAttr) {
-            return rxAttr->Which() == nWhich && rxAttr->IsIn(nPos); });
+            return rxAttr.Which() == nWhich && rxAttr.IsIn(nPos); });
     if (it != aAttribs.rend())
     {
-        const EditCharAttrib& rAttr = **it;
+        const EditCharAttrib& rAttr = *it;
         return &rAttr;
     }
     return nullptr;
@@ -2833,10 +2832,10 @@ EditCharAttrib* CharAttribList::FindAttrib( sal_uInt16 nWhich, sal_Int32 nPos )
     // => The starting one is the valid one ...
     AttribsType::reverse_iterator it = std::find_if(aAttribs.rbegin(), aAttribs.rend(),
         [&nWhich, &nPos](AttribsType::value_type& rxAttr) {
-            return rxAttr->Which() == nWhich && rxAttr->IsIn(nPos); });
+            return rxAttr.Which() == nWhich && rxAttr.IsIn(nPos); });
     if (it != aAttribs.rend())
     {
-        EditCharAttrib& rAttr = **it;
+        EditCharAttrib& rAttr = *it;
         return &rAttr;
     }
     return nullptr;
@@ -2845,9 +2844,8 @@ EditCharAttrib* CharAttribList::FindAttrib( sal_uInt16 nWhich, sal_Int32 nPos )
 const EditCharAttrib* CharAttribList::FindNextAttrib( sal_uInt16 nWhich, sal_Int32 nFromPos ) const
 {
     assert(nWhich);
-    for (auto const& attrib : aAttribs)
+    for (const EditCharAttrib& rAttr : aAttribs)
     {
-        const EditCharAttrib& rAttr = *attrib;
         if (rAttr.GetStart() >= nFromPos && rAttr.Which() == nWhich)
             return &rAttr;
     }
@@ -2858,7 +2856,7 @@ bool CharAttribList::HasAttrib( sal_Int32 nStartPos, sal_Int32 nEndPos ) const
 {
     return std::any_of(aAttribs.rbegin(), aAttribs.rend(),
         [&nStartPos, &nEndPos](const AttribsType::value_type& rxAttr) {
-            return rxAttr->GetStart() < nEndPos && rxAttr->GetEnd() > nStartPos; });
+            return rxAttr.GetStart() < nEndPos && rxAttr.GetEnd() > nStartPos; });
 }
 
 
@@ -2869,9 +2867,9 @@ class FindByAddress
     const EditCharAttrib* mpAttr;
 public:
     explicit FindByAddress(const EditCharAttrib* p) : mpAttr(p) {}
-    bool operator() (const std::unique_ptr<EditCharAttrib>& r) const
+    bool operator() (const EditCharAttrib& r) const
     {
-        return r.get() == mpAttr;
+        return &r == mpAttr;
     }
 };
 
@@ -2904,7 +2902,7 @@ bool CharAttribList::HasBoundingAttrib( sal_Int32 nBound ) const
     AttribsType::const_reverse_iterator it = aAttribs.rbegin(), itEnd = aAttribs.rend();
     for (; it != itEnd; ++it)
     {
-        const EditCharAttrib& rAttr = **it;
+        const EditCharAttrib& rAttr = *it;
         if (rAttr.GetEnd() < nBound)
             return false;
 
@@ -2919,10 +2917,10 @@ EditCharAttrib* CharAttribList::FindEmptyAttrib( sal_uInt16 nWhich, sal_Int32 nP
     if ( !bHasEmptyAttribs )
         return nullptr;
 
-    for (const std::unique_ptr<EditCharAttrib>& rAttr : aAttribs)
+    for (EditCharAttrib& rAttr : aAttribs)
     {
-        if (rAttr->GetStart() == nPos && rAttr->GetEnd() == nPos && rAttr->Which() == nWhich)
-            return rAttr.get();
+        if (rAttr.GetStart() == nPos && rAttr.GetEnd() == nPos && rAttr.Which() == nWhich)
+            return &rAttr;
     }
     return nullptr;
 }
@@ -2934,9 +2932,9 @@ class FindByStartPos
     sal_Int32 mnPos;
 public:
     explicit FindByStartPos(sal_Int32 nPos) : mnPos(nPos) {}
-    bool operator() (const std::unique_ptr<EditCharAttrib>& r) const
+    bool operator() (const EditCharAttrib& r) const
     {
-        return r->GetStart() >= mnPos;
+        return r.GetStart() >= mnPos;
     }
 };
 
@@ -2953,8 +2951,8 @@ const EditCharAttrib* CharAttribList::FindFeature( sal_Int32 nPos ) const
         return nullptr;
 
     // And find the first attribute with feature.
-    it = std::find_if(it, aAttribs.end(), [](const std::unique_ptr<EditCharAttrib>& aAttrib) { return aAttrib->IsFeature(); } );
-    return it == aAttribs.end() ? nullptr : it->get();
+    it = std::find_if(it, aAttribs.end(), [](const EditCharAttrib& aAttrib) { return aAttrib.IsFeature(); } );
+    return it == aAttribs.end() ? nullptr : &*it;
 }
 
 namespace {
@@ -2964,10 +2962,10 @@ class RemoveEmptyAttrItem
     SfxItemPool& mrItemPool;
 public:
     explicit RemoveEmptyAttrItem(SfxItemPool& rPool) : mrItemPool(rPool) {}
-    void operator() (const std::unique_ptr<EditCharAttrib>& r)
+    void operator() (const EditCharAttrib& r)
     {
-        if (r->IsEmpty())
-            mrItemPool.Remove(*r->GetItem());
+        if (r.IsEmpty())
+            mrItemPool.Remove(*r.GetItem());
     }
 };
 
@@ -2976,7 +2974,7 @@ public:
 void CharAttribList::DeleteEmptyAttribs( SfxItemPool& rItemPool )
 {
     std::for_each(aAttribs.begin(), aAttribs.end(), RemoveEmptyAttrItem(rItemPool));
-    aAttribs.erase( std::remove_if(aAttribs.begin(), aAttribs.end(), [](const std::unique_ptr<EditCharAttrib>& aAttrib) { return aAttrib->IsEmpty(); } ), aAttribs.end() );
+    aAttribs.erase( std::remove_if(aAttribs.begin(), aAttribs.end(), [](const EditCharAttrib& aAttrib) { return aAttrib.IsEmpty(); } ), aAttribs.end() );
     bHasEmptyAttribs = false;
 }
 
@@ -3002,7 +3000,7 @@ void CharAttribList::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("CharAttribList"));
     for (auto const & i : aAttribs) {
-        i->dumpAsXml(pWriter);
+        i.dumpAsXml(pWriter);
     }
     (void)xmlTextWriterEndElement(pWriter);
 }

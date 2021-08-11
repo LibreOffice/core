@@ -59,24 +59,33 @@ class SfxGrabBagItem;
 #define DEF_METRIC  0
 
 
+enum class EditCharAttribType : sal_uInt8
+{
+    Font, Weight, Italic, Shadow, Escapement, Outline, Strikeout, CaseMap, Underline,
+    Overline, EmphasisMark, Relief, FontHeight, FontWidth, Color,
+    BackgroundColor, Language, Tab, LineBreak, Field,
+    PairKerning, Kerning, WordLineMode, GrabBag, Xml
+};
+
 
 // bFeature: Attribute must not expand/shrink, length is always 1
 // bEdge: Attribute will not expand, if you want to expand just on the edge
-class EditCharAttrib
+class EditCharAttrib final
 {
     const SfxPoolItem*  pItem;
-
-    sal_Int32               nStart;
-    sal_Int32               nEnd;
+    sal_Int32           nStart;
+    sal_Int32           nEnd;
+    EditCharAttribType  mnType;
     bool                bFeature    :1;
     bool                bEdge       :1;
+    // following fields only valid when mnType == EditCharAttribType::Field
+    OUString            aFieldValue;
+    std::optional<Color>  mxTxtColor;
+    std::optional<Color>  mxFldColor;
 
+
+    EditCharAttrib( const SfxPoolItem& rAttr, sal_Int32 nStart, sal_Int32 nEnd, EditCharAttribType nType, bool bFeature = false );
 public:
-    EditCharAttrib( const SfxPoolItem& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
-    virtual ~EditCharAttrib();
-
-    EditCharAttrib(const EditCharAttrib&) = delete;
-    EditCharAttrib& operator=(const EditCharAttrib&) = delete;
 
     void                dumpAsXml(xmlTextWriterPtr pWriter) const;
 
@@ -97,7 +106,7 @@ public:
     inline void     Expand( sal_Int32 nDiff );
     inline void     Collaps( sal_Int32 nDiff );
 
-    virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev );
+    void    SetFont( SvxFont& rFont, OutputDevice* pOutDev );
 
     bool    IsIn( sal_Int32 nIndex ) const
                 { return ( ( nStart <= nIndex ) && ( nEnd >= nIndex ) ); }
@@ -111,6 +120,44 @@ public:
 
     bool    IsEdge() const      { return bEdge; }
     void    SetEdge( bool b )   { bEdge = b; }
+
+    bool operator == ( const EditCharAttrib& rAttr ) const;
+    bool operator != ( const EditCharAttrib& rAttr ) const { return !(operator == ( rAttr ) ); }
+
+    std::optional<Color>&   GetFieldTextColor() { assert(mnType == EditCharAttribType::Field); return mxTxtColor; }
+    std::optional<Color>&   GetFieldColor()     { assert(mnType == EditCharAttribType::Field); return mxFldColor; }
+    const OUString& GetFieldValue() const { assert(mnType == EditCharAttribType::Field); return aFieldValue;}
+    void SetFieldValue(const OUString& rVal);
+    void ResetField();
+
+    static EditCharAttrib MakeFont( const SvxFontItem& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
+    static EditCharAttrib MakeWeight( const SvxWeightItem& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
+    static EditCharAttrib MakeItalic( const SvxPostureItem& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
+    static EditCharAttrib MakeShadow( const SvxShadowedItem& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
+    static EditCharAttrib MakeEscapement( const SvxEscapementItem& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
+    static EditCharAttrib MakeOutline( const SvxContourItem& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
+    static EditCharAttrib MakeStrikeout( const SvxCrossedOutItem& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
+    static EditCharAttrib MakeCaseMap( const SvxCaseMapItem& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
+    static EditCharAttrib MakeUnderline( const SvxUnderlineItem& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
+    static EditCharAttrib MakeOverline( const SvxOverlineItem& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
+    static EditCharAttrib MakeEmphasisMark( const SvxEmphasisMarkItem& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
+    static EditCharAttrib MakeRelief( const SvxCharReliefItem& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
+    static EditCharAttrib MakeFontHeight( const SvxFontHeightItem& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
+    static EditCharAttrib MakeFontWidth( const SvxCharScaleWidthItem& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
+    static EditCharAttrib MakeColor( const SvxColorItem& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
+    static EditCharAttrib MakeBackgroundColor(const SvxColorItem& rAttr,
+                                  sal_Int32 nStart,
+                                  sal_Int32 nEnd );
+    static EditCharAttrib MakeLanguage( const SvxLanguageItem& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
+    static EditCharAttrib MakeTab( const SfxVoidItem& rAttr, sal_Int32 nPos );
+    static EditCharAttrib MakeLineBreak( const SfxVoidItem& rAttr, sal_Int32 nPos );
+    static EditCharAttrib MakeField( const SvxFieldItem& rAttr, sal_Int32 nPos );
+    static EditCharAttrib MakeField( const EditCharAttrib& rAttr );
+    static EditCharAttrib MakePairKerning( const SvxAutoKernItem& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
+    static EditCharAttrib MakeKerning( const SvxKerningItem& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
+    static EditCharAttrib MakeWordLineMode( const SvxWordLineModeItem& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
+    static EditCharAttrib MakeGrabBag( const SfxGrabBagItem& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
+    static EditCharAttrib MakeXml( const SfxPoolItem& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
 };
 
 inline sal_Int32 EditCharAttrib::GetLen() const
@@ -146,261 +193,5 @@ inline void EditCharAttrib::Collaps( sal_Int32 nDiff )
     DBG_ASSERT( !bFeature, "Please do not shrink any Features!" );
     nEnd = nEnd - nDiff;
 }
-
-
-
-class EditCharAttribFont final : public EditCharAttrib
-{
-public:
-    EditCharAttribFont( const SvxFontItem& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
-
-    virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev ) override;
-};
-
-
-
-class EditCharAttribWeight final : public EditCharAttrib
-{
-public:
-    EditCharAttribWeight( const SvxWeightItem& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
-
-    virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev ) override;
-};
-
-
-class EditCharAttribItalic final : public EditCharAttrib
-{
-public:
-    EditCharAttribItalic( const SvxPostureItem& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
-
-    virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev ) override;
-};
-
-
-
-class EditCharAttribShadow final : public EditCharAttrib
-{
-public:
-    EditCharAttribShadow( const SvxShadowedItem& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
-
-    virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev ) override;
-};
-
-
-
-class EditCharAttribEscapement final : public EditCharAttrib
-{
-public:
-    EditCharAttribEscapement( const SvxEscapementItem& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
-
-    virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev ) override;
-};
-
-
-
-class EditCharAttribOutline final : public EditCharAttrib
-{
-public:
-    EditCharAttribOutline( const SvxContourItem& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
-
-    virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev ) override;
-};
-
-
-
-class EditCharAttribStrikeout final : public EditCharAttrib
-{
-public:
-    EditCharAttribStrikeout( const SvxCrossedOutItem& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
-
-    virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev ) override;
-};
-
-
-
-class EditCharAttribCaseMap final : public EditCharAttrib
-{
-public:
-    EditCharAttribCaseMap( const SvxCaseMapItem& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
-
-    virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev ) override;
-};
-
-
-
-class EditCharAttribUnderline final : public EditCharAttrib
-{
-public:
-    EditCharAttribUnderline( const SvxUnderlineItem& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
-
-    virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev ) override;
-};
-
-
-
-class EditCharAttribOverline final : public EditCharAttrib
-{
-public:
-    EditCharAttribOverline( const SvxOverlineItem& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
-
-    virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev ) override;
-};
-
-
-
-class EditCharAttribEmphasisMark final : public EditCharAttrib
-{
-public:
-    EditCharAttribEmphasisMark( const SvxEmphasisMarkItem& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
-
-    virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev ) override;
-};
-
-
-
-class EditCharAttribRelief final : public EditCharAttrib
-{
-public:
-    EditCharAttribRelief( const SvxCharReliefItem& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
-
-    virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev ) override;
-};
-
-
-
-class EditCharAttribFontHeight final : public EditCharAttrib
-{
-public:
-    EditCharAttribFontHeight( const SvxFontHeightItem& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
-
-    virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev ) override;
-};
-
-
-
-class EditCharAttribFontWidth final : public EditCharAttrib
-{
-public:
-    EditCharAttribFontWidth( const SvxCharScaleWidthItem& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
-
-    virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev ) override;
-};
-
-
-
-class EditCharAttribColor final : public EditCharAttrib
-{
-public:
-    EditCharAttribColor( const SvxColorItem& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
-
-    virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev ) override;
-};
-
-
-class EditCharAttribBackgroundColor final : public EditCharAttrib
-{
-public:
-    EditCharAttribBackgroundColor(const SvxColorItem& rAttr,
-                                  sal_Int32 nStart,
-                                  sal_Int32 nEnd );
-    virtual void    SetFont(SvxFont& rFont, OutputDevice* pOutDev) override;
-};
-
-
-
-class EditCharAttribLanguage final : public EditCharAttrib
-{
-public:
-    EditCharAttribLanguage( const SvxLanguageItem& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
-
-    virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev ) override;
-};
-
-
-
-class EditCharAttribTab final : public EditCharAttrib
-{
-public:
-    EditCharAttribTab( const SfxVoidItem& rAttr, sal_Int32 nPos );
-
-    virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev ) override;
-};
-
-
-
-class EditCharAttribLineBreak final : public EditCharAttrib
-{
-public:
-    EditCharAttribLineBreak( const SfxVoidItem& rAttr, sal_Int32 nPos );
-
-    virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev ) override;
-};
-
-
-
-class EditCharAttribField final : public EditCharAttrib
-{
-    OUString   aFieldValue;
-    std::optional<Color>  mxTxtColor;
-    std::optional<Color>  mxFldColor;
-
-    EditCharAttribField& operator = ( const EditCharAttribField& rAttr ) = delete;
-
-public:
-    EditCharAttribField( const SvxFieldItem& rAttr, sal_Int32 nPos );
-    EditCharAttribField( const EditCharAttribField& rAttr );
-    virtual ~EditCharAttribField() override;
-
-    bool operator == ( const EditCharAttribField& rAttr ) const;
-    bool operator != ( const EditCharAttribField& rAttr ) const
-                                    { return !(operator == ( rAttr ) ); }
-
-    virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev ) override;
-    std::optional<Color>&   GetTextColor()      { return mxTxtColor; }
-    std::optional<Color>&   GetFieldColor()     { return mxFldColor; }
-
-    const OUString& GetFieldValue() const { return aFieldValue;}
-    void SetFieldValue(const OUString& rVal);
-
-    void Reset();
-};
-
-
-
-class EditCharAttribPairKerning final : public EditCharAttrib
-{
-public:
-    EditCharAttribPairKerning( const SvxAutoKernItem& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
-
-    virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev ) override;
-};
-
-
-
-class EditCharAttribKerning final : public EditCharAttrib
-{
-public:
-    EditCharAttribKerning( const SvxKerningItem& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
-
-    virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev ) override;
-};
-
-
-
-class EditCharAttribWordLineMode final : public EditCharAttrib
-{
-public:
-    EditCharAttribWordLineMode( const SvxWordLineModeItem& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
-
-    virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev ) override;
-};
-
-
-class EditCharAttribGrabBag final : public EditCharAttrib
-{
-public:
-    EditCharAttribGrabBag( const SfxGrabBagItem& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
-};
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1229,19 +1229,19 @@ EditSelection ImpEditEngine::InsertTextObject( const EditTextObject& rTextObject
                         // EditDoc:: InsertAttrib, using FastInsertText they are
                         // already in the flow
                         DBG_ASSERT( rX.GetEnd() <= aPaM.GetNode()->Len(), "InsertBinTextObject: Attribute too large!" );
-                        EditCharAttrib* pAttr;
+                        std::optional<EditCharAttrib> xAttr;
                         if ( !bConvertMetricOfItems )
-                            pAttr = MakeCharAttrib( aEditDoc.GetItemPool(), *(rX.GetItem()), rX.GetStart()+nStartPos, rX.GetEnd()+nStartPos );
+                            xAttr = MakeCharAttrib( aEditDoc.GetItemPool(), *(rX.GetItem()), rX.GetStart()+nStartPos, rX.GetEnd()+nStartPos );
                         else
                         {
                             std::unique_ptr<SfxPoolItem> pNew(rX.GetItem()->Clone());
                             ConvertItem( pNew, eSourceUnit, eDestUnit );
-                            pAttr = MakeCharAttrib( aEditDoc.GetItemPool(), *pNew, rX.GetStart()+nStartPos, rX.GetEnd()+nStartPos );
+                            xAttr = MakeCharAttrib( aEditDoc.GetItemPool(), *pNew, rX.GetStart()+nStartPos, rX.GetEnd()+nStartPos );
                         }
-                        DBG_ASSERT( pAttr->GetEnd() <= aPaM.GetNode()->Len(), "InsertBinTextObject: Attribute does not fit! (1)" );
-                        aPaM.GetNode()->GetCharAttribs().InsertAttrib( pAttr );
-                        if ( pAttr->Which() == EE_FEATURE_FIELD )
+                        DBG_ASSERT( xAttr->GetEnd() <= aPaM.GetNode()->Len(), "InsertBinTextObject: Attribute does not fit! (1)" );
+                        if ( xAttr->Which() == EE_FEATURE_FIELD )
                             bUpdateFields = true;
+                        aPaM.GetNode()->GetCharAttribs().InsertAttrib( std::move(*xAttr) );
                     }
                     else
                     {
