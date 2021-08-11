@@ -363,6 +363,7 @@ private:
     bool IsColRowName( const OUString& );
     bool IsBoolean( const OUString& );
     void AutoCorrectParsedSymbol();
+    const ScRangeData* GetRangeData( SCTAB& rSheet, const OUString& rUpperName ) const;
 
     void AdjustSheetLocalNameRelReferences( SCTAB nDelta );
     void SetRelNameReference();

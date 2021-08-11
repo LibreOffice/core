@@ -3126,7 +3126,24 @@ bool ScCompiler::IsValue( const OUString& rSym )
             return false;
         }
         if (eStatus == rtl_math_ConversionStatus_OutOfRange)
+        {
+            // rtl::math::stringToDouble() recognizes XMLSchema-2 "INF" and
+            // "NaN" (case sensitive) that could be named expressions or DB
+            // areas as well.
+            // rSym is already upper so "NaN" is not possible here.
+            if (!std::isfinite(fVal) && rSym == "INF")
+            {
+                SCTAB nSheet = -1;
+                if (GetRangeData( nSheet, rSym))
+                    return false;
+                if (rDoc.GetDBCollection()->getNamedDBs().findByUpperName(rSym))
+                    return false;
+            }
+            /* TODO: is there a specific reason why we don't accept an infinity
+             * value that would raise an error in the interpreter, instead of
+             * setting the hard error at the token array already? */
             SetError( FormulaError::IllegalArgument );
+        }
         maRawToken.SetDouble( fVal );
         return true;
     }
@@ -3544,13 +3561,11 @@ bool ScCompiler::IsMacro( const OUString& rName )
 #endif
 }
 
-bool ScCompiler::IsNamedRange( const OUString& rUpperName )
+const ScRangeData* ScCompiler::GetRangeData( SCTAB& rSheet, const OUString& rUpperName ) const
 {
-    // IsNamedRange is called only from NextNewToken, with an upper-case string
-
     // try local names first
-    sal_Int16 nSheet = aPos.Tab();
-    ScRangeName* pRangeName = rDoc.GetRangeName(nSheet);
+    rSheet = aPos.Tab();
+    const ScRangeName* pRangeName = rDoc.GetRangeName(rSheet);
     const ScRangeData* pData = nullptr;
     if (pRangeName)
         pData = pRangeName->findByUpperName(rUpperName);
@@ -3560,9 +3575,17 @@ bool ScCompiler::IsNamedRange( const OUString& rUpperName )
         if (pRangeName)
             pData = pRangeName->findByUpperName(rUpperName);
         if (pData)
-            nSheet = -1;
+            rSheet = -1;
     }
+    return pData;
+}
 
+bool ScCompiler::IsNamedRange( const OUString& rUpperName )
+{
+    // IsNamedRange is called only from NextNewToken, with an upper-case string
+
+    SCTAB nSheet = -1;
+    const ScRangeData* pData = GetRangeData( nSheet, rUpperName);
     if (pData)
     {
         maRawToken.SetName( nSheet, pData->GetIndex());
@@ -3573,7 +3596,7 @@ bool ScCompiler::IsNamedRange( const OUString& rUpperName )
     if (mnCurrentSheetEndPos > 0 && mnCurrentSheetTab >= 0)
     {
         OUString aName( rUpperName.copy( mnCurrentSheetEndPos));
-        pRangeName = rDoc.GetRangeName( mnCurrentSheetTab);
+        const ScRangeName* pRangeName = rDoc.GetRangeName( mnCurrentSheetTab);
         if (pRangeName)
         {
             pData = pRangeName->findByUpperName(aName);
