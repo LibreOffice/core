@@ -8807,9 +8807,22 @@ dnl ===================================================================
 dnl Check for C preprocessor to use
 dnl ===================================================================
 AC_MSG_CHECKING([which C preprocessor to use in idlc])
+SYSTEM_UCPP_IS_GCC=
 if test -n "$with_idlc_cpp"; then
     AC_MSG_RESULT([$with_idlc_cpp])
     AC_PATH_PROG(SYSTEM_UCPP, $with_idlc_cpp)
+    AC_MSG_CHECKING([if $with_idlc_cpp is GCC CPP])
+    # ucpp will accept -v (to output version), warn about the others as unknown
+    # and return 1 (due to -v)
+    # gcc will accept -v (as verbose), --version (to output version) and -nostdinc
+    # and return 0 (due to --version ) if all options are supported
+    $SYSTEM_UCPP -v --version -nostdinc >/dev/null 2>/dev/null
+    if test $? -eq 0;  then
+        SYSTEM_UCPP_IS_GCC=TRUE
+        AC_MSG_RESULT([yes])
+    else
+        AC_MSG_RESULT([no])
+    fi
 else
     AC_MSG_RESULT([ucpp])
     AC_MSG_CHECKING([which ucpp tp use])
@@ -8822,6 +8835,7 @@ else
     fi
 fi
 AC_SUBST(SYSTEM_UCPP)
+AC_SUBST(SYSTEM_UCPP_IS_GCC)
 
 dnl ===================================================================
 dnl Check for epm (not needed for Windows)
