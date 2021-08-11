@@ -35,10 +35,18 @@ $(eval $(call gb_Executable_add_scanners,idlc,\
 ))
 
 ifneq (,$(SYSTEM_UCPP))
+
 $(eval $(call gb_Executable_add_defs,idlc,\
     -DSYSTEM_UCPP \
     -DUCPP=\"file://$(SYSTEM_UCPP)\" \
 ))
+
+ifneq ($(SYSTEM_UCPP_IS_GCC),)
+$(eval $(call gb_Executable_add_defs,idlc,\
+    -DSYSTEM_UCPP_IS_GCC \
+))
+endif
+
 endif
 
 $(eval $(call gb_Executable_add_exception_objects,idlc,\
