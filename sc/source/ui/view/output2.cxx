@@ -88,6 +88,7 @@ using namespace com::sun::star;
 #define DRAWTEXT_MAX    32767
 
 const sal_uInt16 SC_SHRINKAGAIN_MAX = 7;
+constexpr auto HMM_PER_TWIPS = o3tl::convert(1.0, o3tl::Length::twip, o3tl::Length::mm100);
 
 class ScDrawStringsVars
 {

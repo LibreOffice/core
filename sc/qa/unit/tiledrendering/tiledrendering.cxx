@@ -889,8 +889,8 @@ void ScTiledRenderingTest::testColRowResize()
         }));
     comphelper::dispatchCommand(".uno:ColumnWidth", aArgs);
 
-    sal_uInt16 nWidth = rDoc.GetColWidth(static_cast<SCCOL>(2), static_cast<SCTAB>(0), false) * HMM_PER_TWIPS;
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(4000), nWidth);
+    sal_uInt16 nWidth = o3tl::convert(rDoc.GetColWidth(static_cast<SCCOL>(2), static_cast<SCTAB>(0), false), o3tl::Length::twip, o3tl::Length::mm100);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(4001), nWidth);
 
     // Row 5, Tab 0
     uno::Sequence<beans::PropertyValue> aArgs2( comphelper::InitPropertySequence({
@@ -899,7 +899,7 @@ void ScTiledRenderingTest::testColRowResize()
         }));
     comphelper::dispatchCommand(".uno:RowHeight", aArgs2);
 
-    sal_uInt16 nHeight = rDoc.GetRowHeight(static_cast<SCROW>(4), static_cast<SCTAB>(0), false) * HMM_PER_TWIPS;
+    sal_uInt16 nHeight = o3tl::convert(rDoc.GetRowHeight(static_cast<SCROW>(4), static_cast<SCTAB>(0), false), o3tl::Length::twip, o3tl::Length::mm100);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(2000), nHeight);
 }
 
@@ -1225,7 +1225,7 @@ void ScTiledRenderingTest::testInvalidateOnInserRowCol()
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(aView.m_bInvalidateTiles);
     CPPUNIT_ASSERT_EQUAL(size_t(2), aView.m_aInvalidations.size());
-    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(-75, 50985, 32212230, 63989), aView.m_aInvalidations[0]);
+    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(-75, 50985, 32212230, 63990), aView.m_aInvalidations[0]);
 
     // move on the right
     for (int i = 0; i < 200; ++i)
@@ -1242,7 +1242,7 @@ void ScTiledRenderingTest::testInvalidateOnInserRowCol()
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(aView.m_bInvalidateTiles);
     CPPUNIT_ASSERT_EQUAL(size_t(2), aView.m_aInvalidations.size());
-    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(253650, -15, 32212230, 63989), aView.m_aInvalidations[0]);
+    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(253650, -15, 32212230, 63990), aView.m_aInvalidations[0]);
 }
 
 void ScTiledRenderingTest::testCommentCallback()
@@ -1963,7 +1963,7 @@ void ScTiledRenderingTest::testSheetChangeInvalidation()
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(aView1.m_bInvalidateTiles);
     CPPUNIT_ASSERT_EQUAL(size_t(2), aView1.m_aInvalidations.size());
-    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(0, 0, 1310719, 268435455), aView1.m_aInvalidations[0]);
+    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(0, 0, 1310720, 268435456), aView1.m_aInvalidations[0]);
     CPPUNIT_ASSERT_EQUAL(tools::Rectangle(0, 0, 1000000000, 1000000000), aView1.m_aInvalidations[1]);
     CPPUNIT_ASSERT_EQUAL(size_t(1), aView1.m_aInvalidationsParts.size());
     CPPUNIT_ASSERT_EQUAL(pModelObj->getPart(), aView1.m_aInvalidationsParts[0]);

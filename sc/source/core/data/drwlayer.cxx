@@ -647,8 +647,8 @@ namespace
     Point lcl_calcAvailableDiff(const ScDocument &rDoc, SCCOL nCol, SCROW nRow, SCTAB nTab, const Point &aWantedDiff)
     {
         Point aAvailableDiff(aWantedDiff);
-        tools::Long nHeight = static_cast<tools::Long>(rDoc.GetRowHeight( nRow, nTab ) * HMM_PER_TWIPS);
-        tools::Long nWidth  = static_cast<tools::Long>(rDoc.GetColWidth(  nCol, nTab ) * HMM_PER_TWIPS);
+        tools::Long nHeight = o3tl::convert(rDoc.GetRowHeight( nRow, nTab ), o3tl::Length::twip, o3tl::Length::mm100);
+        tools::Long nWidth  = o3tl::convert(rDoc.GetColWidth(  nCol, nTab ), o3tl::Length::twip, o3tl::Length::mm100);
         if (aAvailableDiff.Y() > nHeight)
             aAvailableDiff.setY( nHeight );
         if (aAvailableDiff.X() > nWidth)
@@ -2124,10 +2124,8 @@ tools::Rectangle ScDrawLayer::GetCellRect( const ScDocument& rDoc, const ScAddre
         aBotRight.AdjustY(rDoc.GetRowHeight( rPos.Row(), aEndPos.Row(), rPos.Tab() ) );
 
         // twips -> 1/100 mm
-        aTopLeft.setX( static_cast< tools::Long >( aTopLeft.X() * HMM_PER_TWIPS ) );
-        aTopLeft.setY( static_cast< tools::Long >( aTopLeft.Y() * HMM_PER_TWIPS ) );
-        aBotRight.setX( static_cast< tools::Long >( aBotRight.X() * HMM_PER_TWIPS ) );
-        aBotRight.setY( static_cast< tools::Long >( aBotRight.Y() * HMM_PER_TWIPS ) );
+        aTopLeft = o3tl::convert(aTopLeft, o3tl::Length::twip, o3tl::Length::mm100);
+        aBotRight = o3tl::convert(aBotRight, o3tl::Length::twip, o3tl::Length::mm100);
 
         aCellRect = tools::Rectangle( aTopLeft, aBotRight );
         if( rDoc.IsNegativePage( rPos.Tab() ) )
