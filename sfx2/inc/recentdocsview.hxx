@@ -91,6 +91,8 @@ private:
 
     virtual void LoseFocus() override;
 
+    bool isFileExists(const OUString &rURL) const;
+
     bool isAcceptedFile(const OUString &rURL) const;
 
     DECL_LINK( ExecuteHdl_Impl, void*, void );
