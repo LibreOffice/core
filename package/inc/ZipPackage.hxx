@@ -35,9 +35,11 @@
 #include <rtl/ref.hxx>
 
 #include "HashMaps.hxx"
+#include "ZipFile.hxx"
 #include <osl/file.h>
 #include <vector>
 #include <memory>
+#include <optional>
 
 class ZipOutputStream;
 class ZipPackageFolder;
@@ -99,7 +101,7 @@ class ZipPackage final : public cppu::WeakImplHelper
     css::uno::Reference < css::io::XSeekable > m_xContentSeek;
     const css::uno::Reference < css::uno::XComponentContext > m_xContext;
 
-    std::unique_ptr<ZipFile> m_pZipFile;
+    std::optional<ZipFile> m_pZipFile;
     bool m_bDisableFileSync = false;
 
     bool isLocalFile() const;
