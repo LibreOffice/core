@@ -31,6 +31,7 @@
 #include <vcl/image.hxx>
 #include <vcl/settings.hxx>
 #include <svtools/imagemgr.hxx>
+#include <filesystem>
 
 using namespace css;
 using namespace com::sun::star::uno;
@@ -87,6 +88,8 @@ public:
     // XEventListener
     virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 
+    bool isExistedFile(const OUString &rURL) const;
+
 private:
     virtual void impl_setPopupMenu() override;
     void fillPopupMenu( css::uno::Reference< css::awt::XPopupMenu > const & rPopupMenu );
@@ -115,6 +118,12 @@ RecentFilesMenuController::RecentFilesMenuController( const uno::Reference< uno:
     }
 }
 
+bool RecentFilesMenuController::isExistedFile(const OUString &rURL) const
+{
+    INetURLObject aURLObj(rURL);
+    return std::filesystem::exists(aURLObj.getFSysPath(FSysStyle::Detect).getStr());
+}
+
 // private function
 void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu > const & rPopupMenu )
 {
@@ -140,6 +149,8 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
         for ( int i = 0; i < nPickListMenuItems; i++ )
         {
             const SvtHistoryOptions::HistoryItem& rPickListEntry = aHistoryList[i];
+            if( !isExistedFile(rPickListEntry.sURL) )
+                continue;
             m_aRecentFilesItems.push_back( rPickListEntry.sURL );
         }
     }
