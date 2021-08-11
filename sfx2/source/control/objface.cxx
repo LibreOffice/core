@@ -70,9 +70,9 @@ struct SfxObjectUI_Impl
 
 struct SfxInterface_Impl
 {
-    std::vector<std::unique_ptr<SfxObjectUI_Impl>>
+    std::vector<SfxObjectUI_Impl>
                             aObjectBars;    // registered ObjectBars
-    std::vector<std::unique_ptr<SfxObjectUI_Impl>>
+    std::vector<SfxObjectUI_Impl>
                             aChildWindows;  // registered ChildWindows
     OUString                aPopupName;     // registered PopupMenu
     StatusBarId             eStatBarResId;  // registered StatusBar
@@ -83,7 +83,7 @@ struct SfxInterface_Impl
     }
 };
 
-static SfxObjectUI_Impl* CreateObjectBarUI_Impl(sal_uInt16 nPos, SfxVisibilityFlags nFlags, ToolbarId eId, SfxShellFeature nFeature);
+static SfxObjectUI_Impl CreateObjectBarUI_Impl(sal_uInt16 nPos, SfxVisibilityFlags nFlags, ToolbarId eId, SfxShellFeature nFeature);
 
 // constructor, registers a new unit
 SfxInterface::SfxInterface( const char *pClassName,
@@ -248,17 +248,15 @@ void SfxInterface::RegisterObjectBar(sal_uInt16 nPos, SfxVisibilityFlags nFlags,
 
 void SfxInterface::RegisterObjectBar(sal_uInt16 nPos, SfxVisibilityFlags nFlags, ToolbarId eId, SfxShellFeature nFeature)
 {
-    SfxObjectUI_Impl* pUI = CreateObjectBarUI_Impl(nPos, nFlags, eId, nFeature);
-    if ( pUI )
-        pImplData->aObjectBars.emplace_back(pUI);
+    pImplData->aObjectBars.emplace_back( CreateObjectBarUI_Impl(nPos, nFlags, eId, nFeature) );
 }
 
-SfxObjectUI_Impl* CreateObjectBarUI_Impl(sal_uInt16 nPos, SfxVisibilityFlags nFlags, ToolbarId eId, SfxShellFeature nFeature)
+SfxObjectUI_Impl CreateObjectBarUI_Impl(sal_uInt16 nPos, SfxVisibilityFlags nFlags, ToolbarId eId, SfxShellFeature nFeature)
 {
     if (nFlags == SfxVisibilityFlags::Invisible)
         nFlags |= SfxVisibilityFlags::Standard;
 
-    return new SfxObjectUI_Impl(nPos, nFlags, static_cast<sal_uInt32>(eId), nFeature);
+    return SfxObjectUI_Impl(nPos, nFlags, static_cast<sal_uInt32>(eId), nFeature);
 }
 
 ToolbarId SfxInterface::GetObjectBarId(sal_uInt16 nNo) const
@@ -277,7 +275,7 @@ ToolbarId SfxInterface::GetObjectBarId(sal_uInt16 nNo) const
 
     assert( nNo<pImplData->aObjectBars.size() );
 
-    return static_cast<ToolbarId>(pImplData->aObjectBars[nNo]->nObjId);
+    return static_cast<ToolbarId>(pImplData->aObjectBars[nNo].nObjId);
 }
 
 sal_uInt16 SfxInterface::GetObjectBarPos( sal_uInt16 nNo ) const
@@ -296,7 +294,7 @@ sal_uInt16 SfxInterface::GetObjectBarPos( sal_uInt16 nNo ) const
 
     assert( nNo<pImplData->aObjectBars.size() );
 
-    return pImplData->aObjectBars[nNo]->nPos;
+    return pImplData->aObjectBars[nNo].nPos;
 }
 
 SfxVisibilityFlags SfxInterface::GetObjectBarFlags( sal_uInt16 nNo ) const
@@ -315,7 +313,7 @@ SfxVisibilityFlags SfxInterface::GetObjectBarFlags( sal_uInt16 nNo ) const
 
     assert( nNo<pImplData->aObjectBars.size() );
 
-    return pImplData->aObjectBars[nNo]->nFlags;
+    return pImplData->aObjectBars[nNo].nFlags;
 }
 
 sal_uInt16 SfxInterface::GetObjectBarCount() const
@@ -333,9 +331,9 @@ void SfxInterface::RegisterChildWindow(sal_uInt16 nId, bool bContext)
 
 void SfxInterface::RegisterChildWindow(sal_uInt16 nId, bool bContext, SfxShellFeature nFeature)
 {
-    SfxObjectUI_Impl* pUI = new SfxObjectUI_Impl(0, SfxVisibilityFlags::Invisible, nId, nFeature);
-    pUI->bContext = bContext;
-    pImplData->aChildWindows.emplace_back(pUI);
+    SfxObjectUI_Impl aUI(0, SfxVisibilityFlags::Invisible, nId, nFeature);
+    aUI.bContext = bContext;
+    pImplData->aChildWindows.emplace_back(aUI);
 }
 
 void SfxInterface::RegisterStatusBar(StatusBarId eId)
@@ -358,8 +356,8 @@ sal_uInt32 SfxInterface::GetChildWindowId (sal_uInt16 nNo) const
 
     assert( nNo<pImplData->aChildWindows.size() );
 
-    sal_uInt32 nRet = pImplData->aChildWindows[nNo]->nObjId;
-    if ( pImplData->aChildWindows[nNo]->bContext )
+    sal_uInt32 nRet = pImplData->aChildWindows[nNo].nObjId;
+    if ( pImplData->aChildWindows[nNo].bContext )
         nRet += sal_uInt16( nClassId ) << 16;
     return nRet;
 }
@@ -379,7 +377,7 @@ SfxShellFeature SfxInterface::GetChildWindowFeature (sal_uInt16 nNo) const
 
     assert( nNo<pImplData->aChildWindows.size() );
 
-    return pImplData->aChildWindows[nNo]->nFeature;
+    return pImplData->aChildWindows[nNo].nFeature;
 }
 
 
@@ -420,7 +418,7 @@ SfxShellFeature SfxInterface::GetObjectBarFeature ( sal_uInt16 nNo ) const
 
     assert( nNo<pImplData->aObjectBars.size() );
 
-    return pImplData->aObjectBars[nNo]->nFeature;
+    return pImplData->aObjectBars[nNo].nFeature;
 }
 
 bool SfxInterface::IsObjectBarVisible(sal_uInt16 nNo) const
