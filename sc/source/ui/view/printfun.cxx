@@ -1565,8 +1565,8 @@ void ScPrintFunc::LocateArea( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
     aTwipOffset.AdjustY( -sal_Int32(rDoc.GetRowHeight( 0, nY1-1, nPrintTab )) );
 
     Point aMMOffset( aTwipOffset );
-    aMMOffset.setX( static_cast<tools::Long>(aMMOffset.X() * HMM_PER_TWIPS) );
-    aMMOffset.setY( static_cast<tools::Long>(aMMOffset.Y() * HMM_PER_TWIPS) );
+    aMMOffset.setX(o3tl::convert(aMMOffset.X(), o3tl::Length::twip, o3tl::Length::mm100));
+    aMMOffset.setY(o3tl::convert(aMMOffset.Y(), o3tl::Length::twip, o3tl::Length::mm100));
     aMMOffset += Point( nLogStX, nLogStY );
     MapMode aDrawMapMode( MapUnit::Map100thMM, aMMOffset, aLogicMode.GetScaleX(), aLogicMode.GetScaleY() );
 
@@ -2597,6 +2597,7 @@ void ScPrintFunc::InitModes()               // set MapModes from  nZoom etc.
     aOffset = Point( aSrcOffset.X()*100/nZoom, aSrcOffset.Y()*100/nZoom );
 
     tools::Long nEffZoom = nZoom * static_cast<tools::Long>(nManualZoom);
+    constexpr auto HMM_PER_TWIPS = o3tl::convert(1.0, o3tl::Length::twip, o3tl::Length::mm100);
     nScaleX = nScaleY = HMM_PER_TWIPS;  // output in 1/100 mm
 
     Fraction aZoomFract( nEffZoom,10000 );

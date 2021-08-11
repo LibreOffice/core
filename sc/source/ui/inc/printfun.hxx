@@ -42,8 +42,8 @@ class FmFormView;
 
 #define RANGENO_NORANGE             USHRT_MAX
 
-#define PRINT_HEADER_WIDTH          (1.0 * TWIPS_PER_CM)
-#define PRINT_HEADER_HEIGHT         (12.8 * TWIPS_PER_POINT)
+constexpr sal_Int64 PRINT_HEADER_WIDTH = o3tl::convert(1, o3tl::Length::cm, o3tl::Length::twip);
+constexpr sal_Int64 PRINT_HEADER_HEIGHT = o3tl::convert(12.8, o3tl::Length::pt, o3tl::Length::twip);
 
                                             // Settings for headers/footers
 struct ScPrintHFParam
