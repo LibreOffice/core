@@ -10040,7 +10040,7 @@ class GtkInstanceMenuToggleButton : public GtkInstanceToggleButton, public MenuH
                                   , public virtual weld::MenuToggleButton
 {
 private:
-    GtkContainer* m_pContainer;
+    GtkBox* m_pContainer;
     GtkButton* m_pToggleMenuButton;
     gulong m_nMenuBtnClickedId;
     gulong m_nToggleStateFlagsChangedId;
@@ -10143,7 +10143,7 @@ public:
         : GtkInstanceToggleButton(GTK_TOGGLE_BUTTON(gtk_builder_get_object(pMenuToggleButtonBuilder, "togglebutton")),
                                   pBuilder, bTakeOwnership)
         , MenuHelper(gtk_menu_button_get_popup(pMenuButton), false)
-        , m_pContainer(GTK_CONTAINER(gtk_builder_get_object(pMenuToggleButtonBuilder, "box")))
+        , m_pContainer(GTK_BOX(gtk_builder_get_object(pMenuToggleButtonBuilder, "box")))
         , m_pToggleMenuButton(GTK_BUTTON(gtk_builder_get_object(pMenuToggleButtonBuilder, "menubutton")))
         , m_nMenuBtnClickedId(g_signal_connect(m_pToggleMenuButton, "clicked", G_CALLBACK(signalMenuBtnClicked), this))
         , m_nToggleStateFlagsChangedId(g_signal_connect(m_pToggleButton, "state-flags-changed", G_CALLBACK(signalToggleStateFlagsChanged), this))
