@@ -39,6 +39,7 @@
 #include <vcl/virdev.hxx>
 #include "recentdocsviewitem.hxx"
 #include <sfx2/app.hxx>
+#include <filesystem>
 
 #include <officecfg/Office/Common.hxx>
 
@@ -209,6 +210,11 @@ bool RecentDocsView::isAcceptedFile(const OUString &rURL) const
            (mnFileTypes & ApplicationType::TYPE_OTHER    && typeMatchesExtension(ApplicationType::TYPE_OTHER,   aExt));
 }
 
+bool RecentDocsView::isExistedFile(const OUString &rURL) const{
+    INetURLObject aURLObj(rURL);
+    return std::filesystem::exists(aURLObj.getFSysPath(FSysStyle::Detect).getStr());
+}
+
 BitmapEx RecentDocsView::getDefaultThumbnail(const OUString &rURL)
 {
     BitmapEx aImg;
@@ -246,6 +252,10 @@ void RecentDocsView::Reload()
         const SvtHistoryOptions::HistoryItem& rRecentEntry = aHistoryList[i];
 
         OUString aURL = rRecentEntry.sURL;
+
+        if( !isExistedFile(aURL) )
+            continue;
+
         OUString aTitle;
         BitmapEx aThumbnail;
         BitmapEx aModule;
