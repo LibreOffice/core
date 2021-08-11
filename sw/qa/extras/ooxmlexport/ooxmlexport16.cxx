@@ -177,6 +177,15 @@ DECLARE_OOXMLEXPORT_TEST(testTdf138892_noNumbering, "tdf138892_noNumbering.docx"
     CPPUNIT_ASSERT_MESSAGE("Para3: <blank line>", getProperty<OUString>(getParagraph(3), "NumberingStyleName").isEmpty());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf44278, "tdf44278.docx")
+{
+    // Without the fix in place, this test would have failed with
+    // - Expected: 1
+    // - Actual  : 2
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf141231_arabicHebrewNumbering, "tdf141231_arabicHebrewNumbering.docx")
 {
     // The page's numbering type: instead of Hebrew, this was default style::NumberingType::ARABIC (4).
