@@ -1011,6 +1011,7 @@ void SdOOXMLExportTest1::testTableCellBorder()
     CPPUNIT_ASSERT(nBottomBorder);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0xb0f0), aBorderLine.Color);
 
+
     xDocShRef->DoClose();
 }
 
