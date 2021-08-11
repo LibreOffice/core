@@ -998,7 +998,7 @@ void Chart2ExportTest::testDataLabelBordersDOCX()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("'Automatic' chart background fill in docx should be loaded as solid fill.",
         drawing::FillStyle_SOLID, eStyle);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("'Automatic' chart background fill in docx should be loaded as solid white.",
-         sal_Int32(0x00FFFFFF), sal_Int32(nColor & 0x00FFFFFF)); // highest 2 bytes are transparency which we ignore here.
+        COL_WHITE, Color(ColorTransparency, nColor & 0x00FFFFFF)); // highest 2 bytes are transparency which we ignore here.
 
     aTest.checkObject1(xChartDoc);
     xChartDoc.set(getChartDocFromWriter(1), uno::UNO_QUERY);
@@ -1610,7 +1610,7 @@ void Chart2ExportTest::testDataLabelFillColor()
     Reference<chart2::XDataSeries> xSeries = getDataSeriesFromDoc(xDoc, 0);
     Reference<beans::XPropertySet> xPropSet(xSeries, uno::UNO_QUERY_THROW);
     uno::Any aAny = xPropSet->getPropertyValue("LabelFillColor");
-    sal_Int32 nLabelFillColor;
+    Color nLabelFillColor;
     CPPUNIT_ASSERT(aAny >>= nLabelFillColor);
 
     xmlDocUniquePtr pXmlDoc = parseExport("xl/charts/chart", "Calc Office Open XML");
