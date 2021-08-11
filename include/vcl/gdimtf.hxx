@@ -179,7 +179,6 @@ public:
     void            SetPrefMapMode( const MapMode& rMapMode ) { m_aPrefMapMode = rMapMode; }
 
 
-    BitmapChecksum  GetChecksum() const;
     sal_uLong       GetSizeBytes() const;
 
     /// Creates an antialiased thumbnail
