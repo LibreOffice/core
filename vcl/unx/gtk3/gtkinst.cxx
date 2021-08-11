@@ -10227,6 +10227,10 @@ public:
 #if !GTK_CHECK_VERSION(4, 0, 0)
         gtk_menu_detach(m_pMenu);
         gtk_menu_attach_to_widget(m_pMenu, GTK_WIDGET(m_pToggleButton), nullptr);
+#else
+        gtk_widget_insert_action_group(GTK_WIDGET(m_pContainer), "menu", m_pActionGroup);
+
+        update_action_group_from_popover_model();
 #endif
 
         g_signal_connect(m_pContainer, "mnemonic-activate", G_CALLBACK(signalMenuToggleButton), this);
