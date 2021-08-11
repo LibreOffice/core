@@ -34,6 +34,7 @@
 // which confuses clang plugins.
 #undef bool
 
+#include <limits>
 #include <memory>
 #include <string_view>
 
@@ -70,8 +71,8 @@ const sal_Unicode CHAR_NBHY     = 0x2011;
 const sal_Unicode CHAR_WJ       = 0x2060;
 const sal_Unicode CHAR_NNBSP    = 0x202F; //NARROW NO-BREAK SPACE
 
-#define MINDOUBLE   1.7e-307
-#define MAXDOUBLE   1.7e307
+constexpr double MINDOUBLE = std::numeric_limits<double>::min();
+constexpr double MAXDOUBLE = std::numeric_limits<double>::max();
 
 #define MINZOOM     20
 #define MAXZOOM     400

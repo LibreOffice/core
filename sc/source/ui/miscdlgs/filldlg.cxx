@@ -215,7 +215,7 @@ weld::Entry* ScFillSeriesDlg::CheckValues()
         if ( aIncStr.isEmpty() )
             return m_xEdIncrement.get();
         if ( aEndStr.isEmpty() )
-            fEndVal = ( fIncrement < 0 ) ? -MAXDOUBLE : MAXDOUBLE;
+            fEndVal = ( fIncrement < 0 ) ? MINDOUBLE : MAXDOUBLE;
     }
     return nullptr;
 }

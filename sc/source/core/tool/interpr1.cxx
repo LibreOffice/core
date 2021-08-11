@@ -7809,7 +7809,7 @@ void ScInterpreter::DBIterator( ScIterFunc eFunc )
             switch( eFunc )
             {
                 case ifPRODUCT: fRes = 1; break;
-                case ifMAX:     fRes = -MAXDOUBLE; break;
+                case ifMAX:     fRes = MINDOUBLE; break;
                 case ifMIN:     fRes = MAXDOUBLE; break;
                 default: ; // nothing
             }

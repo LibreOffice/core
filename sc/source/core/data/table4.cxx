@@ -1189,7 +1189,7 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
         {
             if (!bPositive)
                 nInc = -nInc;
-            double nEndVal = (nInc>=0.0) ? MAXDOUBLE : -MAXDOUBLE;
+            double nEndVal = (nInc>=0.0) ? MAXDOUBLE : MINDOUBLE;
             if (bVertical)
                 FillSeries( static_cast<SCCOL>(nCol), nRow1,
                         static_cast<SCCOL>(nCol), nRow2, nFillCount, eFillDir,
