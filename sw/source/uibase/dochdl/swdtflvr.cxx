@@ -139,7 +139,7 @@ constexpr tools::Long constOleWidthInMm = 210 - 2 * lMinBorderInMm;
 
 constexpr Size constOleSize100mm(
     constOleWidthInMm * 100, // convert from mm to 100mm
-    30 // 3 cm
+    3000 // 3 cm
 );
 
 constexpr Size constOleSizeTwip = o3tl::convert(constOleSize100mm, o3tl::Length::mm100, o3tl::Length::twip);
