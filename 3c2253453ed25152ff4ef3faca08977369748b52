@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "634dbc19_52427788",
+        "filename": "sw/source/uibase/shells/basesh.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-08-11T13:05:39Z",
+      "side": 1,
+      "message": "a bit suspicious to call this from a shell and not pass in the shell\u0027s layout?",
+      "range": {
+        "startLine": 245,
+        "startChar": 66,
+        "endLine": 245,
+        "endChar": 89
+      },
+      "revId": "3c2253453ed25152ff4ef3faca08977369748b52",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
