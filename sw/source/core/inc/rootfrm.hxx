@@ -107,7 +107,7 @@ class SW_DLLPUBLIC SwRootFrame final : public SwLayoutFrame
     static bool           s_isNoVirDev;// No virt. Device for SystemPaints
 
     /// Width of the HTML / Web document if not defined otherwise: 20cm.
-    static constexpr sal_Int64 MIN_BROWSE_WIDTH = convertMm100ToTwip(20000);
+    static constexpr sal_Int64 MIN_BROWSE_WIDTH = o3tl::toTwips(20000, o3tl::Length::mm100);
 
     bool    mbCheckSuperfluous   :1; // Search for empty Pages?
     bool    mbIdleFormat         :1; // Trigger Idle Formatter?

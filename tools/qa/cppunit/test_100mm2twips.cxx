@@ -34,12 +34,6 @@ public:
         CPPUNIT_ASSERT_EQUAL(sal_Int64(-145), sanitiseMm100ToTwip(-255));
     }
 
-    void testConvertMm100ToTwip()
-    {
-        CPPUNIT_ASSERT_EQUAL(sal_Int64(145), convertMm100ToTwip(255));
-        CPPUNIT_ASSERT_EQUAL(sal_Int64(-145), convertMm100ToTwip(-255));
-    }
-
     void testConvertPointToMm100()
     {
         CPPUNIT_ASSERT_DOUBLES_EQUAL(599.72, convertPointToMm100(17.0), 1E-2);
@@ -51,7 +45,6 @@ public:
 
     CPPUNIT_TEST_SUITE(UnitConversionTest);
     CPPUNIT_TEST(testSanitiseMm100ToTwip);
-    CPPUNIT_TEST(testConvertMm100ToTwip);
     CPPUNIT_TEST(testConvertPointToMm100);
     CPPUNIT_TEST_SUITE_END();
 };

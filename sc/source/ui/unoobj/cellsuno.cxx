@@ -951,7 +951,7 @@ template<typename TableBorderType>
 void lcl_fillBoxItems( SvxBoxItem& rOuter, SvxBoxInfoItem& rInner, const TableBorderType& rBorder )
 {
     ::editeng::SvxBorderLine aLine;
-    rOuter.SetAllDistances(static_cast<sal_uInt16>(convertMm100ToTwip(rBorder.Distance)));
+    rOuter.SetAllDistances(o3tl::toTwips(rBorder.Distance, o3tl::Length::mm100));
     rOuter.SetLine( ScHelperFunctions::GetBorderLine( aLine, rBorder.TopLine ),         SvxBoxItemLine::TOP );
     rOuter.SetLine( ScHelperFunctions::GetBorderLine( aLine, rBorder.BottomLine ),      SvxBoxItemLine::BOTTOM );
     rOuter.SetLine( ScHelperFunctions::GetBorderLine( aLine, rBorder.LeftLine ),        SvxBoxItemLine::LEFT );
@@ -2074,7 +2074,7 @@ static void lcl_SetCellProperty( const SfxItemPropertyMapEntry& rEntry, const un
                 if ( !(rValue >>= nIntVal) )
                     throw lang::IllegalArgumentException();
 
-                rSet.Put(ScIndentItem(static_cast<sal_uInt16>(convertMm100ToTwip(nIntVal))));
+                rSet.Put(ScIndentItem(o3tl::toTwips(nIntVal, o3tl::Length::mm100)));
 
             }
             break;
@@ -8385,9 +8385,9 @@ void ScTableColumnObj::SetOnePropertyValue(const SfxItemPropertyMapEntry* pEntry
         if ( aValue >>= nNewWidth )
         {
             //  property is 1/100mm, column width is twips
-            nNewWidth = convertMm100ToTwip(nNewWidth);
+            nNewWidth = o3tl::toTwips(nNewWidth, o3tl::Length::mm100);
             rFunc.SetWidthOrHeight(
-                true, aColArr, nTab, SC_SIZE_ORIGINAL, static_cast<sal_uInt16>(nNewWidth), true, true);
+                true, aColArr, nTab, SC_SIZE_ORIGINAL, nNewWidth, true, true);
         }
     }
     else if ( pEntry->nWID == SC_WID_UNO_CELLVIS )
@@ -8522,9 +8522,9 @@ void ScTableRowObj::SetOnePropertyValue( const SfxItemPropertyMapEntry* pEntry, 
         if ( aValue >>= nNewHeight )
         {
             //  property is 1/100mm, row height is twips
-            nNewHeight = convertMm100ToTwip(nNewHeight);
+            nNewHeight = o3tl::toTwips(nNewHeight, o3tl::Length::mm100);
             rFunc.SetWidthOrHeight(
-                false, aRowArr, nTab, SC_SIZE_ORIGINAL, static_cast<sal_uInt16>(nNewHeight), true, true);
+                false, aRowArr, nTab, SC_SIZE_ORIGINAL, nNewHeight, true, true);
         }
     }
     else if ( pEntry->nWID == SC_WID_UNO_CELLVIS )

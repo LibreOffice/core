@@ -1139,10 +1139,10 @@ void SwTableConfig::Load()
             sal_Int32 nTemp = 0;
             switch (nProp)
             {
-                case 0 : pValues[nProp] >>= nTemp; m_nTableHMove = o3tl::narrowing<sal_uInt16>(convertMm100ToTwip(nTemp)); break;  //"Shift/Row",
-                case 1 : pValues[nProp] >>= nTemp; m_nTableVMove = o3tl::narrowing<sal_uInt16>(convertMm100ToTwip(nTemp)); break;     //"Shift/Column",
-                case 2 : pValues[nProp] >>= nTemp; m_nTableHInsert = o3tl::narrowing<sal_uInt16>(convertMm100ToTwip(nTemp)); break;   //"Insert/Row",
-                case 3 : pValues[nProp] >>= nTemp; m_nTableVInsert = o3tl::narrowing<sal_uInt16>(convertMm100ToTwip(nTemp)); break;   //"Insert/Column",
+                case 0 : pValues[nProp] >>= nTemp; m_nTableHMove = o3tl::toTwips(nTemp, o3tl::Length::mm100); break;  //"Shift/Row",
+                case 1 : pValues[nProp] >>= nTemp; m_nTableVMove = o3tl::toTwips(nTemp, o3tl::Length::mm100); break;     //"Shift/Column",
+                case 2 : pValues[nProp] >>= nTemp; m_nTableHInsert = o3tl::toTwips(nTemp, o3tl::Length::mm100); break;   //"Insert/Row",
+                case 3 : pValues[nProp] >>= nTemp; m_nTableVInsert = o3tl::toTwips(nTemp, o3tl::Length::mm100); break;   //"Insert/Column",
                 case 4 : pValues[nProp] >>= nTemp; m_eTableChgMode = static_cast<TableChgMode>(nTemp); break;   //"Change/Effect",
                 case 5 : m_bInsTableFormatNum = *o3tl::doAccess<bool>(pValues[nProp]);  break;  //"Input/NumberRecognition",
                 case 6 : m_bInsTableChangeNumFormat = *o3tl::doAccess<bool>(pValues[nProp]); break;  //"Input/NumberFormatRecognition",

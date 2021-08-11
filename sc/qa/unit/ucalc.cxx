@@ -5125,10 +5125,10 @@ void Test::testAnchoredRotatedShape()
     CPPUNIT_ASSERT_MESSAGE("must have a draw layer", pDrawLayer != nullptr);
     SdrPage* pPage = pDrawLayer->GetPage(0);
     CPPUNIT_ASSERT_MESSAGE("must have a draw page", pPage != nullptr);
-    m_pDoc->SetRowHeightRange(0, MAXROW, 0, convertMm100ToTwip(1000));
+    m_pDoc->SetRowHeightRange(0, MAXROW, 0, o3tl::toTwips(1000, o3tl::Length::mm100));
     constexpr tools::Long TOLERANCE = 30; //30 hmm
     for ( SCCOL nCol = 0; nCol < MAXCOL; ++nCol )
-        m_pDoc->SetColWidth(nCol, 0, convertMm100ToTwip(1000));
+        m_pDoc->SetColWidth(nCol, 0, o3tl::toTwips(1000, o3tl::Length::mm100));
     {
         //Add a rect
         tools::Rectangle aRect( 4000, 5000, 10000, 7000 );
@@ -5160,9 +5160,9 @@ void Test::testAnchoredRotatedShape()
         m_pDoc->SetDrawPageSize(0);
 
         // increase row 5 by 2000 hmm
-        m_pDoc->SetRowHeight(5, 0, convertMm100ToTwip(3000));
+        m_pDoc->SetRowHeight(5, 0, o3tl::toTwips(3000, o3tl::Length::mm100));
         // increase col 6 by 1000 hmm
-        m_pDoc->SetColWidth(6, 0, convertMm100ToTwip(2000));
+        m_pDoc->SetColWidth(6, 0, o3tl::toTwips(2000, o3tl::Length::mm100));
 
         aRotRect.setWidth( aRotRect.GetWidth() + 1000 );
         aRotRect.setHeight( aRotRect.GetHeight() + 2000 );

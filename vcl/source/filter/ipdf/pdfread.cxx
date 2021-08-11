@@ -26,7 +26,7 @@ namespace
 /// Convert to inch, then assume 96 DPI.
 inline double pointToPixel(const double fPoint, const double fResolutionDPI)
 {
-    return fPoint * fResolutionDPI / 72.;
+    return o3tl::convert(fPoint, o3tl::Length::pt, o3tl::Length::in) * fResolutionDPI;
 }
 
 /// Decide if PDF data is old enough to be compatible.
@@ -159,13 +159,15 @@ size_t RenderPDFBitmaps(const void* pBuffer, int nSize, std::vector<BitmapEx>& r
             break;
 
         // Calculate the bitmap size in points.
-        size_t nPageWidthPoints = pPdfPage->getWidth();
-        size_t nPageHeightPoints = pPdfPage->getHeight();
+        double nPageWidthPoints = pPdfPage->getWidth();
+        double nPageHeightPoints = pPdfPage->getHeight();
         if (pSizeHint && pSizeHint->getX() && pSizeHint->getY())
         {
             // Have a size hint, prefer that over the logic size from the PDF.
-            nPageWidthPoints = convertMm100ToTwip(pSizeHint->getX()) / 20;
-            nPageHeightPoints = convertMm100ToTwip(pSizeHint->getY()) / 20;
+            nPageWidthPoints
+                = o3tl::convert(pSizeHint->getX(), o3tl::Length::mm100, o3tl::Length::pt);
+            nPageHeightPoints
+                = o3tl::convert(pSizeHint->getY(), o3tl::Length::mm100, o3tl::Length::pt);
         }
 
         // Returned unit is points, convert that to pixel.

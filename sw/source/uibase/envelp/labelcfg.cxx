@@ -180,16 +180,16 @@ static std::unique_ptr<SwLabRec> lcl_CreateSwLabRec(const OUString& rType, const
         switch(nTok++)
         {
             case  0 : pNewRec->m_bCont = sToken[0] == 'C'; break;
-            case  1 : pNewRec->m_nHDist    = convertMm100ToTwip(nVal);  break;
-            case  2 : pNewRec->m_nVDist    = convertMm100ToTwip(nVal);  break;
-            case  3 : pNewRec->m_nWidth    = convertMm100ToTwip(nVal);  break;
-            case  4 : pNewRec->m_nHeight   = convertMm100ToTwip(nVal);  break;
-            case  5 : pNewRec->m_nLeft     = convertMm100ToTwip(nVal);  break;
-            case  6 : pNewRec->m_nUpper    = convertMm100ToTwip(nVal);  break;
+            case  1 : pNewRec->m_nHDist    = o3tl::toTwips(nVal, o3tl::Length::mm100);  break;
+            case  2 : pNewRec->m_nVDist    = o3tl::toTwips(nVal, o3tl::Length::mm100);  break;
+            case  3 : pNewRec->m_nWidth    = o3tl::toTwips(nVal, o3tl::Length::mm100);  break;
+            case  4 : pNewRec->m_nHeight   = o3tl::toTwips(nVal, o3tl::Length::mm100);  break;
+            case  5 : pNewRec->m_nLeft     = o3tl::toTwips(nVal, o3tl::Length::mm100);  break;
+            case  6 : pNewRec->m_nUpper    = o3tl::toTwips(nVal, o3tl::Length::mm100);  break;
             case  7 : pNewRec->m_nCols     = nVal;                 break;
             case  8 : pNewRec->m_nRows     = nVal;                 break;
-            case  9 : pNewRec->m_nPWidth   = convertMm100ToTwip(nVal);  break;
-            case 10 : pNewRec->m_nPHeight  = convertMm100ToTwip(nVal);  break;
+            case  9 : pNewRec->m_nPWidth   = o3tl::toTwips(nVal, o3tl::Length::mm100);  break;
+            case 10 : pNewRec->m_nPHeight  = o3tl::toTwips(nVal, o3tl::Length::mm100);  break;
         }
     }
     // lines added for compatibility with custom label definitions saved before patch fdo#44516

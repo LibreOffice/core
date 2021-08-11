@@ -671,7 +671,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                         aRanges.emplace_back(nRow, nRow);
                     }
 
-                    pTabViewShell->SetWidthOrHeight(false, aRanges, SC_SIZE_DIRECT, convertMm100ToTwip(nHeight));
+                    pTabViewShell->SetWidthOrHeight(false, aRanges, SC_SIZE_DIRECT, o3tl::toTwips(nHeight, o3tl::Length::mm100));
                 }
                 else if ( pReqArgs && pReqArgs->HasItem( FID_ROW_HEIGHT, &pHeight ) )
                 {
@@ -679,7 +679,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
 
                     // #101390#; the value of the macro is in HMM so use convertMm100ToTwip to convert
                     pTabViewShell->SetMarkedWidthOrHeight( false, SC_SIZE_DIRECT,
-                        sal::static_int_cast<sal_uInt16>(convertMm100ToTwip(nHeight)));
+                        o3tl::toTwips(nHeight, o3tl::Length::mm100));
                     if( ! rReq.IsAPI() )
                         rReq.Done();
                 }
@@ -718,7 +718,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
 
                     // #101390#; the value of the macro is in HMM so use convertMm100ToTwip to convert
                     pTabViewShell->SetMarkedWidthOrHeight( false, SC_SIZE_OPTIMAL,
-                                    sal::static_int_cast<sal_uInt16>( convertMm100ToTwip(rUInt16Item.GetValue()) ) );
+                                    o3tl::toTwips(rUInt16Item.GetValue(), o3tl::Length::mm100) );
                     ScGlobal::nLastRowHeightExtra = rUInt16Item.GetValue();
 
                     if( ! rReq.IsAPI() )
@@ -770,7 +770,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                         aRanges.emplace_back(nColumn, nColumn);
                     }
 
-                    pTabViewShell->SetWidthOrHeight(true, aRanges, SC_SIZE_DIRECT, convertMm100ToTwip(nWidth));
+                    pTabViewShell->SetWidthOrHeight(true, aRanges, SC_SIZE_DIRECT, o3tl::toTwips(nWidth, o3tl::Length::mm100));
                 }
                 else if ( pReqArgs && pReqArgs->HasItem( FID_COL_WIDTH, &pWidth ) )
                 {
@@ -778,7 +778,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
 
                     // #101390#; the value of the macro is in HMM so use convertMm100ToTwip to convert
                     pTabViewShell->SetMarkedWidthOrHeight( true, SC_SIZE_DIRECT,
-                        sal::static_int_cast<sal_uInt16>(convertMm100ToTwip(nWidth)));
+                        o3tl::toTwips(nWidth, o3tl::Length::mm100));
                     if( ! rReq.IsAPI() )
                         rReq.Done();
                 }
@@ -815,7 +815,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
 
                     // #101390#; the value of the macro is in HMM so use convertMm100ToTwip to convert
                     pTabViewShell->SetMarkedWidthOrHeight( true, SC_SIZE_OPTIMAL,
-                                    sal::static_int_cast<sal_uInt16>( convertMm100ToTwip(rUInt16Item.GetValue()) ) );
+                                    o3tl::toTwips(rUInt16Item.GetValue(), o3tl::Length::mm100) );
                     ScGlobal::nLastColWidthExtra = rUInt16Item.GetValue();
 
                     if( ! rReq.IsAPI() )

@@ -107,15 +107,15 @@ bool SfxPointItem::PutValue( const uno::Any& rVal,
         bRet = ( rVal >>= aValue );
         if( bConvert )
         {
-            aValue.X = convertMm100ToTwip(aValue.X);
-            aValue.Y = convertMm100ToTwip(aValue.Y);
+            aValue.X = o3tl::toTwips(aValue.X, o3tl::Length::mm100);
+            aValue.Y = o3tl::toTwips(aValue.Y, o3tl::Length::mm100);
         }
     }
     else
     {
         bRet = ( rVal >>= nVal );
         if( bConvert )
-            nVal = convertMm100ToTwip( nVal );
+            nVal = o3tl::toTwips(nVal, o3tl::Length::mm100);
     }
 
     if ( bRet )

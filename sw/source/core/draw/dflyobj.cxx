@@ -898,10 +898,10 @@ void SwVirtFlyDrawObj::NbcCrop(const basegfx::B2DPoint& rRef, double fxFact, dou
     // pSh->StartUndo(SwUndoId::START);
 
     // Set new crop values in twips
-    aCrop.SetLeft  (convertMm100ToTwip(nLeftCrop));
-    aCrop.SetTop   (convertMm100ToTwip(nTopCrop));
-    aCrop.SetRight (convertMm100ToTwip(nRightCrop));
-    aCrop.SetBottom(convertMm100ToTwip(nBottomCrop));
+    aCrop.SetLeft  (o3tl::toTwips(nLeftCrop, o3tl::Length::mm100));
+    aCrop.SetTop   (o3tl::toTwips(nTopCrop, o3tl::Length::mm100));
+    aCrop.SetRight (o3tl::toTwips(nRightCrop, o3tl::Length::mm100));
+    aCrop.SetBottom(o3tl::toTwips(nBottomCrop, o3tl::Length::mm100));
     pSh->SetAttrItem(aCrop);
 
     // Set new frame size

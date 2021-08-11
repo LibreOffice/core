@@ -287,35 +287,35 @@ SwLabCfgItem::SwLabCfgItem(bool bLabel) :
                     case  4: pValues[nProp] >>= aItem.m_nRows;            break;// "Format/Row",
                     case  5:
                         pValues[nProp] >>= aItem.m_lHDist;
-                        aItem.m_lHDist = convertMm100ToTwip(aItem.m_lHDist);
+                        aItem.m_lHDist = o3tl::toTwips(aItem.m_lHDist, o3tl::Length::mm100);
                     break;// "Format/HorizontalDistance",
                     case  6:
                         pValues[nProp] >>= aItem.m_lVDist;
-                        aItem.m_lVDist = convertMm100ToTwip(aItem.m_lVDist);
+                        aItem.m_lVDist = o3tl::toTwips(aItem.m_lVDist, o3tl::Length::mm100);
                     break;// "Format/VerticalDistance",
                     case  7:
                         pValues[nProp] >>= aItem.m_lWidth;
-                        aItem.m_lWidth = convertMm100ToTwip(aItem.m_lWidth);
+                        aItem.m_lWidth = o3tl::toTwips(aItem.m_lWidth, o3tl::Length::mm100);
                     break;// "Format/Width",
                     case  8:
                         pValues[nProp] >>= aItem.m_lHeight;
-                        aItem.m_lHeight = convertMm100ToTwip(aItem.m_lHeight);
+                        aItem.m_lHeight = o3tl::toTwips(aItem.m_lHeight, o3tl::Length::mm100);
                     break;// "Format/Height",
                     case  9:
                         pValues[nProp] >>= aItem.m_lLeft;
-                        aItem.m_lLeft = convertMm100ToTwip(aItem.m_lLeft);
+                        aItem.m_lLeft = o3tl::toTwips(aItem.m_lLeft, o3tl::Length::mm100);
                     break;// "Format/LeftMargin",
                     case 10:
                         pValues[nProp] >>= aItem.m_lUpper;
-                        aItem.m_lUpper = convertMm100ToTwip(aItem.m_lUpper);
+                        aItem.m_lUpper = o3tl::toTwips(aItem.m_lUpper, o3tl::Length::mm100);
                     break;// "Format/TopMargin",
                     case 11:
                         pValues[nProp] >>= aItem.m_lPWidth;
-                        aItem.m_lPWidth = convertMm100ToTwip(aItem.m_lPWidth);
+                        aItem.m_lPWidth = o3tl::toTwips(aItem.m_lPWidth, o3tl::Length::mm100);
                     break;// "Format/PageWidth",
                     case 12:
                         pValues[nProp] >>= aItem.m_lPHeight;
-                        aItem.m_lPHeight = convertMm100ToTwip(aItem.m_lPHeight);
+                        aItem.m_lPHeight = o3tl::toTwips(aItem.m_lPHeight, o3tl::Length::mm100);
                     break;// "Format/PageHeight",
                     case 13: aItem.m_bSynchron = *o3tl::doAccess<bool>(pValues[nProp]); break;// "Option/Synchronize",
                     case 14: aItem.m_bPage = *o3tl::doAccess<bool>(pValues[nProp]); break;// "Option/Page",

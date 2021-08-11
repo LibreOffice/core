@@ -900,12 +900,12 @@ void ListsManager::lcl_sprm( Sprm& rSprm )
                     const int nHeight = nFontHeight * 35;
                     int nWidth = (nHeight * aPrefSize.Width) / aPrefSize.Height;
 
-                    awt::Size aSize( convertMm100ToTwip(nWidth), convertMm100ToTwip(nHeight) );
+                    awt::Size aSize( o3tl::toTwips(nWidth, o3tl::Length::mm100), o3tl::toTwips(nHeight, o3tl::Length::mm100) );
                     pCurrentLevel->SetGraphicSize( aSize );
                 }
                 else
                 {
-                    awt::Size aSize( convertMm100ToTwip(aPrefSize.Width), convertMm100ToTwip(aPrefSize.Height) );
+                    awt::Size aSize( o3tl::toTwips(aPrefSize.Width, o3tl::Length::mm100), o3tl::toTwips(aPrefSize.Height, o3tl::Length::mm100) );
                     pCurrentLevel->SetGraphicSize( aSize );
                 }
             }

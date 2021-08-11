@@ -147,7 +147,7 @@ void SAL_CALL ScDocDefaultsObj::setPropertyValue(
             sal_Int32 nValue = 0;
             if (aValue >>= nValue)
             {
-                aDocOpt.SetTabDistance(static_cast<sal_uInt16>(convertMm100ToTwip(nValue)));
+                aDocOpt.SetTabDistance(o3tl::toTwips(nValue, o3tl::Length::mm100));
                 rDoc.SetDocOptions(aDocOpt);
             }
         }

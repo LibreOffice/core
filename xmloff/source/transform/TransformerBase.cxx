@@ -722,7 +722,7 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
                             if (::sax::Converter::convertMeasure(nMeasure,
                                     aAttrValue))
                             {
-                                nMeasure = static_cast<sal_Int32>(convertMm100ToTwip(nMeasure));
+                                nMeasure = o3tl::toTwips(nMeasure, o3tl::Length::mm100);
 
                                 OUStringBuffer aBuffer;
                                 ::sax::Converter::convertMeasure( aBuffer,

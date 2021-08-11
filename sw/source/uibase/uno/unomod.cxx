@@ -610,7 +610,7 @@ void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, c
             if(!(rValue >>= nTmp)  ||  nTmp < 10)
                 throw IllegalArgumentException();
             Size aSize( mpViewOption->GetSnapSize() );
-            aSize.setWidth( convertMm100ToTwip( nTmp ) );
+            aSize.setWidth( o3tl::toTwips(nTmp, o3tl::Length::mm100) );
             mpViewOption->SetSnapSize( aSize );
         }
         break;
@@ -620,7 +620,7 @@ void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, c
             if(!(rValue >>= nTmp)  ||  nTmp < 10)
                 throw IllegalArgumentException();
             Size aSize( mpViewOption->GetSnapSize() );
-            aSize.setHeight( convertMm100ToTwip( nTmp ) );
+            aSize.setHeight( o3tl::toTwips(nTmp, o3tl::Length::mm100) );
             mpViewOption->SetSnapSize( aSize );
         }
         break;

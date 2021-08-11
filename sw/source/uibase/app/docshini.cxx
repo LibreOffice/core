@@ -658,7 +658,7 @@ void SwDocShell::SubInitNew()
 
         aDfltSet.Put( aHyp );
 
-        sal_uInt16 nNewPos = static_cast< sal_uInt16 >(convertMm100ToTwip(SW_MOD()->GetUsrPref(false)->GetDefTabInMm100()));
+        sal_uInt16 nNewPos = o3tl::toTwips(SW_MOD()->GetUsrPref(false)->GetDefTabInMm100(), o3tl::Length::mm100);
         if( nNewPos )
             aDfltSet.Put( SvxTabStopItem( 1, nNewPos,
                                           SvxTabAdjust::Default, RES_PARATR_TABSTOP ) );

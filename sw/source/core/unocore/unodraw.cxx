@@ -619,7 +619,7 @@ void SwXDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
         if ( !pDesc->GetHOrient() )
         {
             SwFormatHoriOrient* pHori = pDesc->GetHOrient( true );
-            SwTwips nHoriPos = convertMm100ToTwip(aMM100Pos.X);
+            SwTwips nHoriPos = o3tl::toTwips(aMM100Pos.X, o3tl::Length::mm100);
             pHori->SetPos( nHoriPos );
         }
         {
@@ -631,7 +631,7 @@ void SwXDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
         if ( !pDesc->GetVOrient() )
         {
             SwFormatVertOrient* pVert = pDesc->GetVOrient( true );
-            SwTwips nVertPos = convertMm100ToTwip(aMM100Pos.Y);
+            SwTwips nVertPos = o3tl::toTwips(aMM100Pos.Y, o3tl::Length::mm100);
             pVert->SetPos( nVertPos );
         }
         {
@@ -689,7 +689,7 @@ void SwXDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
     else if ((aAnchor.GetAnchorId() != RndStdIds::FLY_AT_PAGE) && m_pDoc->getIDocumentLayoutAccess().GetCurrentLayout())
     {
         SwCursorMoveState aState( CursorMoveState::SetOnlyText );
-        Point aTmp(convertMm100ToTwip(aMM100Pos.X), convertMm100ToTwip(aMM100Pos.Y));
+        Point aTmp(o3tl::toTwips(aMM100Pos.X, o3tl::Length::mm100), o3tl::toTwips(aMM100Pos.Y, o3tl::Length::mm100));
         m_pDoc->getIDocumentLayoutAccess().GetCurrentLayout()->GetModelPositionForViewPoint( pPam->GetPoint(), aTmp, &aState );
         aAnchor.SetAnchor( pPam->GetPoint() );
 
