@@ -363,6 +363,48 @@ EditCharAttrib* MakeCharAttrib( SfxItemPool& rPool, const SfxPoolItem& rAttr, sa
     return pNew;
 }
 
+ExtraPortionInfo::ExtraPortionInfo(ExtraPortionInfo const & other)
+{
+    nOrgWidth = other.nOrgWidth;
+    nWidthFullCompression = other.nWidthFullCompression;
+    nPortionOffsetX = other.nPortionOffsetX;
+    nMaxCompression100thPercent = other.nMaxCompression100thPercent;
+    nAsianCompressionTypes = other.nAsianCompressionTypes;
+    bFirstCharIsRightPunktuation = other.bFirstCharIsRightPunktuation;
+    bCompressed = other.bCompressed;
+    nOrgDXArrayLen = other.nOrgDXArrayLen;
+    if (other.pOrgDXArray)
+    {
+        pOrgDXArray.reset(new tools::Long[nOrgDXArrayLen]);
+        memcpy(pOrgDXArray.get(), other.pOrgDXArray.get(), nOrgDXArrayLen * sizeof(tools::Long) );
+    }
+    lineBreaksList = other.lineBreaksList;
+}
+
+TextPortion& TextPortion::operator=(TextPortion const & other)
+{
+    xExtraInfos.reset();
+    if (other.xExtraInfos)
+        xExtraInfos.reset(new ExtraPortionInfo(*other.xExtraInfos));
+    nLen = other.nLen;
+    aOutSz = other.aOutSz;
+    nKind = other.nKind;
+    nRightToLeftLevel = other.nRightToLeftLevel;
+    nExtraValue = other.nExtraValue;
+    return *this;
+}
+
+TextPortion& TextPortion::operator=(TextPortion&& other)
+{
+    xExtraInfos = std::move(other.xExtraInfos);
+    nLen = other.nLen;
+    aOutSz = other.aOutSz;
+    nKind = other.nKind;
+    nRightToLeftLevel = other.nRightToLeftLevel;
+    nExtraValue = other.nExtraValue;
+    return *this;
+}
+
 TextPortionList::TextPortionList()
 {
 }
@@ -391,22 +433,23 @@ sal_Int32 TextPortionList::Count() const
 
 const TextPortion& TextPortionList::operator[](sal_Int32 nPos) const
 {
-    return *maPortions[nPos];
+    return maPortions[nPos];
 }
 
 TextPortion& TextPortionList::operator[](sal_Int32 nPos)
 {
-    return *maPortions[nPos];
+    return maPortions[nPos];
 }
 
-void TextPortionList::Append(TextPortion* p)
+sal_Int32 TextPortionList::Append(TextPortion&& p)
 {
-    maPortions.push_back(std::unique_ptr<TextPortion>(p));
+    maPortions.push_back(std::move(p));
+    return maPortions.size() - 1;
 }
 
-void TextPortionList::Insert(sal_Int32 nPos, TextPortion* p)
+void TextPortionList::Insert(sal_Int32 nPos, TextPortion&& p)
 {
-    maPortions.insert(maPortions.begin()+nPos, std::unique_ptr<TextPortion>(p));
+    maPortions.insert(maPortions.begin()+nPos, std::move(p));
 }
 
 void TextPortionList::Remove(sal_Int32 nPos)
@@ -421,9 +464,9 @@ class FindTextPortionByAddress
     const TextPortion* mp;
 public:
     explicit FindTextPortionByAddress(const TextPortion* p) : mp(p) {}
-    bool operator() (const std::unique_ptr<TextPortion>& v) const
+    bool operator() (const TextPortion& v) const
     {
-        return v.get() == mp;
+        return &v == mp;
     }
 };
 
@@ -448,7 +491,7 @@ sal_Int32 TextPortionList::FindPortion(
     sal_Int32 n = maPortions.size();
     for (sal_Int32 i = 0; i < n; ++i)
     {
-        const TextPortion& rPortion = *maPortions[i];
+        const TextPortion& rPortion = maPortions[i];
         nTmpPos = nTmpPos + rPortion.GetLen();
         if ( nTmpPos >= nCharPos )
         {
@@ -469,7 +512,7 @@ sal_Int32 TextPortionList::GetStartPos(sal_Int32 nPortion)
     sal_Int32 nPos = 0;
     for (sal_Int32 i = 0; i < nPortion; ++i)
     {
-        const TextPortion& rPortion = *maPortions[i];
+        const TextPortion& rPortion = maPortions[i];
         nPos = nPos + rPortion.GetLen();
     }
     return nPos;
@@ -483,6 +526,7 @@ ExtraPortionInfo::ExtraPortionInfo()
 , nAsianCompressionTypes(AsianCompressionFlags::Normal)
 , bFirstCharIsRightPunktuation(false)
 , bCompressed(false)
+, nOrgDXArrayLen(0)
 , lineBreaksList()
 {
 }
@@ -497,9 +541,13 @@ void ExtraPortionInfo::SaveOrgDXArray( const tools::Long* pDXArray, sal_Int32 nL
     {
         pOrgDXArray.reset(new tools::Long[nLen]);
         memcpy( pOrgDXArray.get(), pDXArray, nLen * sizeof(tools::Long) );
+        nOrgDXArrayLen = nLen;
     }
     else
+    {
         pOrgDXArray.reset();
+        nOrgDXArrayLen = 0;
+    }
 }
 
 ParaPortion::ParaPortion( ContentNode* pN ) :

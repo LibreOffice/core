@@ -1104,8 +1104,7 @@ std::unique_ptr<EditTextObject> ImpEditEngine::CreateTextObject( EditSelection a
             for ( n = 0; n < nCount; n++ )
             {
                 const TextPortion& rTextPortion = rParaPortion.GetTextPortions()[n];
-                TextPortion* pNew = new TextPortion( rTextPortion );
-                pX->aTextPortions.Append(pNew);
+                pX->aTextPortions.Append(TextPortion( rTextPortion ));
             }
 
             // The lines
@@ -1297,8 +1296,7 @@ EditSelection ImpEditEngine::InsertTextObject( const EditTextObject& rTextObject
                 for ( sal_uInt16 _n = 0; _n < nCount; _n++ )
                 {
                     const TextPortion& rTextPortion = rXP.aTextPortions[_n];
-                    TextPortion* pNew = new TextPortion( rTextPortion );
-                    rParaPortion.GetTextPortions().Append(pNew);
+                    rParaPortion.GetTextPortions().Append(TextPortion( rTextPortion ));
                 }
 
                 // The lines

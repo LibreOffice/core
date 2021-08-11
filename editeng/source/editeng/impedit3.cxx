@@ -693,9 +693,8 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
 
     if ( bEmptyNodeWithPolygon )
     {
-        TextPortion* pDummyPortion = new TextPortion( 0 );
         rParaPortion.GetTextPortions().Reset();
-        rParaPortion.GetTextPortions().Append(pDummyPortion);
+        rParaPortion.GetTextPortions().Append(TextPortion( 0 )); // dummy portion
     }
     else if ( bQuickFormat )
     {
@@ -1623,8 +1622,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                 {
                     // normally CreateAndInsertEmptyLine would be called, but I want to use
                     // CreateLines, so I need Polygon code only here...
-                    TextPortion* pDummyPortion = new TextPortion( 0 );
-                    rParaPortion.GetTextPortions().Append(pDummyPortion);
+                    rParaPortion.GetTextPortions().Append(TextPortion( 0 )); // dummy portion
                     pLine = new EditLine;
                     rParaPortion.GetLines().Insert(++nLine, pLine);
                     bForceOneRun = true;
@@ -1702,15 +1700,15 @@ void ImpEditEngine::CreateAndInsertEmptyLine( ParaPortion* pParaPortion )
     SeekCursor( pParaPortion->GetNode(), bLineBreak ? pParaPortion->GetNode()->Len() : 0, aTmpFont );
     aTmpFont.SetPhysFont(*pRefDev);
 
-    TextPortion* pDummyPortion = new TextPortion( 0 );
-    pDummyPortion->GetSize() = aTmpFont.GetPhysTxtSize( pRefDev );
+    TextPortion aDummyPortion( 0 );
+    aDummyPortion.GetSize() = aTmpFont.GetPhysTxtSize( pRefDev );
     if ( IsFixedCellHeight() )
-        pDummyPortion->GetSize().setHeight( ImplCalculateFontIndependentLineSpacing( aTmpFont.GetFontHeight() ) );
-    pParaPortion->GetTextPortions().Append(pDummyPortion);
+        aDummyPortion.GetSize().setHeight( ImplCalculateFontIndependentLineSpacing( aTmpFont.GetFontHeight() ) );
+    sal_Int32 nDummyPos = pParaPortion->GetTextPortions().Append(std::move(aDummyPortion));
     FormatterFontMetric aFormatterMetrics;
     RecalcFormatterFontMetrics( aFormatterMetrics, aTmpFont );
     pTmpLine->SetMaxAscent( aFormatterMetrics.nMaxAscent );
-    pTmpLine->SetHeight( static_cast<sal_uInt16>(pDummyPortion->GetSize().Height()) );
+    pTmpLine->SetHeight( static_cast<sal_uInt16>(pParaPortion->GetTextPortions()[nDummyPos].GetSize().Height()) );
     sal_uInt16 nLineHeight = aFormatterMetrics.GetHeight();
     if ( nLineHeight > pTmpLine->GetHeight() )
         pTmpLine->SetHeight( nLineHeight );
@@ -2046,15 +2044,16 @@ void ImpEditEngine::ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, Te
     else if ( bHyphenated )
     {
         // A portion for inserting the separator...
-        TextPortion* pHyphPortion = new TextPortion( 0 );
-        pHyphPortion->SetKind( PortionKind::HYPHENATOR );
+        TextPortion aHyphPortion( 0 );
+        aHyphPortion.SetKind( PortionKind::HYPHENATOR );
         if ( (cAlternateReplChar || cAlternateExtraChar) && bAltFullRight ) // alternation after the break doesn't supported
         {
             TextPortion& rPrev = pParaPortion->GetTextPortions()[nEndPortion];
             DBG_ASSERT( rPrev.GetLen(), "Hyphenate: Prev portion?!" );
             rPrev.SetLen( rPrev.GetLen() - nAltDelChar );
-            pHyphPortion->SetLen( nAltDelChar );
-            if (cAlternateReplChar && !bAltFullLeft) pHyphPortion->SetExtraValue( cAlternateReplChar );
+            aHyphPortion.SetLen( nAltDelChar );
+            if (cAlternateReplChar && !bAltFullLeft)
+                aHyphPortion.SetExtraValue( cAlternateReplChar );
             // Correct width of the portion above:
             rPrev.GetSize().setWidth(
                 pLine->GetCharPosArray()[ nBreakPos-1 - pLine->GetStart() - nAltDelChar ] );
@@ -2064,10 +2063,10 @@ void ImpEditEngine::ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, Te
         SvxFont aFont;
         SeekCursor( pParaPortion->GetNode(), nBreakPos, aFont );
         aFont.SetPhysFont(*GetRefDevice());
-        pHyphPortion->GetSize().setHeight( GetRefDevice()->GetTextHeight() );
-        pHyphPortion->GetSize().setWidth( GetRefDevice()->GetTextWidth( CH_HYPH ) );
+        aHyphPortion.GetSize().setHeight( GetRefDevice()->GetTextHeight() );
+        aHyphPortion.GetSize().setWidth( GetRefDevice()->GetTextWidth( CH_HYPH ) );
 
-        pParaPortion->GetTextPortions().Insert(++nEndPortion, pHyphPortion);
+        pParaPortion->GetTextPortions().Insert(++nEndPortion, std::move(aHyphPortion));
     }
     pLine->SetEndPortion( nEndPortion );
 }
@@ -2346,8 +2345,8 @@ sal_Int32 ImpEditEngine::SplitTextPortion( ParaPortion* pPortion, sal_Int32 nPos
 
     sal_Int32 nOverlapp = nTmpPos - nPos;
     pTextPortion->SetLen( pTextPortion->GetLen() - nOverlapp );
-    TextPortion* pNewPortion = new TextPortion( nOverlapp );
-    pPortion->GetTextPortions().Insert(nSplitPortion+1, pNewPortion);
+    pPortion->GetTextPortions().Insert(nSplitPortion+1, TextPortion( nOverlapp ));
+    pTextPortion = &pPortion->GetTextPortions()[nSplitPortion]; // in case the vector re-allocated
     // Set sizes
     if ( pCurLine )
     {
@@ -2460,8 +2459,7 @@ void ImpEditEngine::CreateTextPortions( ParaPortion* pParaPortion, sal_Int32& rS
     ++i;
     while ( i != aPositions.end() )
     {
-        TextPortion* pNew = new TextPortion( (*i++) - *nInvPos++ );
-        pParaPortion->GetTextPortions().Append(pNew);
+        pParaPortion->GetTextPortions().Append(TextPortion( (*i++) - *nInvPos++ ));
     }
 
     DBG_ASSERT( pParaPortion->GetTextPortions().Count(), "No Portions?!" );
@@ -2497,8 +2495,7 @@ void ImpEditEngine::RecalcTextPortion( ParaPortion* pParaPortion, sal_Int32 nSta
             }
             else
             {
-                TextPortion* pNewPortion = new TextPortion( nNewChars );
-                pParaPortion->GetTextPortions().Insert(nNewPortionPos, pNewPortion);
+                pParaPortion->GetTextPortions().Insert(nNewPortionPos, TextPortion( nNewChars ));
             }
         }
         else

@@ -363,11 +363,13 @@ struct ExtraPortionInfo
     bool    bCompressed;
 
     std::unique_ptr<tools::Long[]> pOrgDXArray;
+    sal_Int32 nOrgDXArrayLen;
     std::vector< sal_Int32 > lineBreaksList;
 
 
             ExtraPortionInfo();
             ~ExtraPortionInfo();
+            ExtraPortionInfo(const ExtraPortionInfo&);
 
     void    SaveOrgDXArray( const tools::Long* pDXArray, sal_Int32 nLen );
 };
@@ -404,6 +406,9 @@ public:
                 {
                 }
 
+    TextPortion& operator=(const TextPortion&);
+    TextPortion& operator=(TextPortion&&);
+
 
     sal_Int32      GetLen() const              { return nLen; }
     void           SetLen( sal_Int32 nL )         { nLen = nL; }
@@ -429,7 +434,7 @@ public:
 
 class TextPortionList
 {
-    typedef std::vector<std::unique_ptr<TextPortion> > PortionsType;
+    typedef std::vector<TextPortion> PortionsType;
     PortionsType maPortions;
 
 public:
@@ -447,8 +452,8 @@ public:
     const TextPortion& operator[](sal_Int32 nPos) const;
     TextPortion& operator[](sal_Int32 nPos);
 
-    void Append(TextPortion* p);
-    void Insert(sal_Int32 nPos, TextPortion* p);
+    sal_Int32 Append(TextPortion&& p);
+    void Insert(sal_Int32 nPos, TextPortion&& p);
     void Remove(sal_Int32 nPos);
     sal_Int32 GetPos(const TextPortion* p) const;
 };
