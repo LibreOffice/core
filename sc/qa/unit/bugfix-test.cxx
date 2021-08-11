@@ -385,7 +385,6 @@ void ScFiltersTest::testTdf91979()
         "_blank",
         0,
         args);
-    CPPUNIT_ASSERT(xComponent.is());
 
     // Get the document model
     SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
@@ -457,7 +456,7 @@ void ScFiltersTest::testTdf88821_2()
     ScDocShellRef xDocSh = loadDoc(u"tdf88821-2.", FORMAT_HTML);
     ScDocument& rDoc = xDocSh->GetDocument();
 
-    // A2 should be 'ABCabcČŠŽčšž', not 'ABCabcÄŒÅ Å½ÄﾍÅ¡Å¾'
+    // A2 should be 'ABCabcČŠŽčšž', not 'ABCabcÄŒÅ Å½ÄﾍÅ¡Å¾'
     CPPUNIT_ASSERT_EQUAL(OStringToOUString("ABCabc\xC4\x8C\xC5\xA0\xC5\xBD\xC4\x8D\xC5\xA1\xC5\xBE", RTL_TEXTENCODING_UTF8), rDoc.GetString(0, 1, 0));
 
     xDocSh->DoClose();
@@ -560,7 +559,6 @@ void ScFiltersTest::testTdf128951()
 
     css::uno::Reference<css::lang::XComponent> xComponent
         = xDesktop->loadComponentFromURL("private:factory/scalc", "_blank", 0, aHiddenArgList);
-    CPPUNIT_ASSERT(xComponent.is());
 
     // 2. Create a new sheet instance
     css::uno::Reference<css::lang::XMultiServiceFactory> xFac(xComponent,
