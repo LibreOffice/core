@@ -390,7 +390,7 @@ void SwCSS1Parser::SetPageDescAttrs( const SvxBrushItem *pBrush,
                                                    &pItem ) )
         {
             // set a background
-            aBrushItem.reset(static_cast<SvxBrushItem*>(pItem->Clone()));
+            aBrushItem.reset(&pItem->Clone()->StaticWhichCast(RES_BACKGROUND));
             pItemSet2->ClearItem( RES_BACKGROUND );
             bSetBrush = true;
         }
@@ -398,7 +398,7 @@ void SwCSS1Parser::SetPageDescAttrs( const SvxBrushItem *pBrush,
         if( SfxItemState::SET == pItemSet2->GetItemState( RES_BOX, false, &pItem ) )
         {
             // set a border
-            aBoxItem.reset(static_cast<SvxBoxItem*>(pItem->Clone()));
+            aBoxItem.reset(&pItem->Clone()->StaticWhichCast(RES_BOX));
             pItemSet2->ClearItem( RES_BOX );
             bSetBox = true;
         }
@@ -406,7 +406,7 @@ void SwCSS1Parser::SetPageDescAttrs( const SvxBrushItem *pBrush,
         if( SfxItemState::SET == pItemSet2->GetItemState( RES_FRAMEDIR, false, &pItem ) )
         {
             // set a frame
-            aFrameDirItem.reset(static_cast<SvxFrameDirectionItem*>(pItem->Clone()));
+            aFrameDirItem.reset(&pItem->Clone()->StaticWhichCast(RES_FRAMEDIR));
             pItemSet2->ClearItem( RES_FRAMEDIR );
             bSetFrameDir = true;
         }
