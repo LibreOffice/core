@@ -491,7 +491,7 @@ public:
     void writeFrameFormatOptions(HtmlWriter& aHtml, const SwFrameFormat& rFrameFormat, std::u16string_view rAltText, HtmlFrmOpts nFrameOpts);
 
     void OutCSS1_TableFrameFormatOptions( const SwFrameFormat& rFrameFormat );
-    void OutCSS1_TableCellBorderHack(const SwFrameFormat& rFrameFormat);
+    void OutCSS1_TableCellBordersAndBG(const SwFrameFormat& rFrameFormat, const SvxBrushItem *pBrushItem);
     void OutCSS1_SectionFormatOptions( const SwFrameFormat& rFrameFormat, const SwFormatCol *pCol );
     void OutCSS1_FrameFormatOptions( const SwFrameFormat& rFrameFormat, HtmlFrmOpts nFrameOpts,
                                      const SdrObject *pSdrObj=nullptr,

@@ -2063,10 +2063,12 @@ void SwHTMLWriter::OutCSS1_TableFrameFormatOptions( const SwFrameFormat& rFrameF
         Strm().WriteChar( '\"' );
 }
 
-void SwHTMLWriter::OutCSS1_TableCellBorderHack(SwFrameFormat const& rFrameFormat)
+void SwHTMLWriter::OutCSS1_TableCellBordersAndBG(SwFrameFormat const& rFrameFormat, const SvxBrushItem *pBrushItem)
 {
     SwCSS1OutMode const aMode( *this,
         CSS1_OUTMODE_STYLE_OPT_ON|CSS1_OUTMODE_ENCODE|CSS1_OUTMODE_TABLEBOX, nullptr );
+    if (pBrushItem)
+        OutCSS1_SvxBrush(*this, *pBrushItem, Css1Background::Table, nullptr);
     OutCSS1_SvxBox(*this, rFrameFormat.GetBox());
     if (!m_bFirstCSS1Property)
         Strm().WriteChar(cCSS1_style_opt_end);
