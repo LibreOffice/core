@@ -998,7 +998,7 @@ const SwPageDesc *SwHTMLWriter::MakeHeader( sal_uInt16 &rHeaderAttrs )
         if (mbXHTML)
             sOut.append(OOO_STRING_SVTOOLS_HTML_doctype " " OOO_STRING_SVTOOLS_XHTML_doctype11);
         else
-            sOut.append(OOO_STRING_SVTOOLS_HTML_doctype " " OOO_STRING_SVTOOLS_HTML_doctype40);
+            sOut.append(OOO_STRING_SVTOOLS_HTML_doctype " " OOO_STRING_SVTOOLS_HTML_doctype5);
         HTMLOutFuncs::Out_AsciiTag( Strm(), sOut.makeStringAndClear().getStr() ); // No GetNamespace() here.
 
         // build prelude

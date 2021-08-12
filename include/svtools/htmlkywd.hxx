@@ -21,7 +21,8 @@
 
 #include <sal/config.h>
 
-#define OOO_STRING_SVTOOLS_HTML_doctype40 "HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\""
+// tdf#126879 - drop obsolete DOCTYPE HTML 4.0 and use the HTML5 DOCTYPE declaration
+#define OOO_STRING_SVTOOLS_HTML_doctype5 "html"
 #define OOO_STRING_SVTOOLS_XHTML_doctype11                                                         \
     "html PUBLIC \"-//W3C//DTD XHTML 1.1 plus MathML 2.0//EN\" "                                   \
     "\"http://www.w3.org/Math/DTD/mathml2/xhtml-math11-f.dtd\""
