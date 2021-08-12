@@ -306,7 +306,7 @@ void rtl_arena_hash_insert(
 */
 rtl_arena_segment_type * rtl_arena_hash_remove(
     rtl_arena_type * arena,
-    sal_uIntPtr addr,
+    sal_uInt64 addr,
     sal_Size size
 )
 {
