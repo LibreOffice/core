@@ -94,14 +94,14 @@ inline void readIpcArg(std::istream& stream, sal_Int16& value)
     stream.ignore(); // skip space
 }
 
-inline void readIpcArg(std::istream& stream, sal_uIntPtr& value)
+inline void readIpcArg(std::istream& stream, sal_uInt32& value)
 {
     stream >> value;
     stream.ignore(); // skip space
 }
 
 #if SAL_TYPES_SIZEOFPOINTER == 4
-inline void readIpcArg(std::istream& stream, uint64_t& value)
+inline void readIpcArg(std::istream& stream, uint32_t& value)
 {
     stream >> value;
     stream.ignore(); // skip space
@@ -141,7 +141,7 @@ inline void sendIpcArg(std::ostream& stream, bool value) { stream << value << ' 
 
 inline void sendIpcArg(std::ostream& stream, sal_Int16 value) { stream << value << ' '; }
 
-inline void sendIpcArg(std::ostream& stream, sal_uIntPtr value) { stream << value << ' '; }
+inline void sendIpcArg(std::ostream& stream, sal_uInt64 value) { stream << value << ' '; }
 
 #if SAL_TYPES_SIZEOFPOINTER == 4
 inline void sendIpcArg(std::ostream& stream, uint64_t value) { stream << value << ' '; }
