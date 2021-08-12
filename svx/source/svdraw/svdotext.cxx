@@ -241,14 +241,10 @@ void SdrTextObj::NbcSetText(const OUString& rStr)
 {
     SdrOutliner& rOutliner=ImpGetDrawOutliner();
     rOutliner.SetStyleSheet( 0, GetStyleSheet());
-    rOutliner.SetUpdateMode(true);
     rOutliner.SetText(rStr,rOutliner.GetParagraph( 0 ));
     std::unique_ptr<OutlinerParaObject> pNewText=rOutliner.CreateParaObject();
-    Size aSize(rOutliner.CalcTextSize());
-    rOutliner.Clear();
     NbcSetOutlinerParaObject(std::move(pNewText));
-    maTextSize = aSize;
-    mbTextSizeDirty=false;
+    mbTextSizeDirty=true;
 }
 
 void SdrTextObj::SetText(const OUString& rStr)
