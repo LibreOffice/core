@@ -16,6 +16,24 @@
       "revId": "ee606869ab7c9c191b2fa7411acc40c2995c2f6e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f7d5ad26_2f1a614e",
+        "filename": "starmath/source/mathml/export.cxx",
+        "patchSetId": 17
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 1002652
+      },
+      "writtenOn": "2021-08-12T14:00:09Z",
+      "side": 1,
+      "message": "I\u0027ve removed this.\nInstead I\u0027ve tried to get the SmMlExport threw the uno tunnel.\nInstead of passing the arguments threw any to xExporter (Reference\u003cdocument::XExporter\u003e).\nI\u0027d rather try to not use bad hacks.\n\nSomthing like this:\n    // filter\n    Reference\u003cXFilter\u003e xFilter(xExporter, UNO_QUERY);\n    SmMlExport* pFilter \u003d comphelper::getUnoTunnelImplementation\u003cSmMlExport\u003e(xFilter);\n\n    // Setup filter\n    if (pFilter \u003d\u003d nullptr)\n    {\n        SAL_WARN(\"starmath\", \"Failed to fetch SmMlExport\");\n        return false;\n    }\n    pFilter-\u003esetUseExportTag(m_bUseExportTag);\n    pFilter-\u003esetElementTree(m_pElementTree);\n\n    // Execute operation\n    uno::Sequence\u003cPropertyValue\u003e aProps(0);\n    xFilter-\u003efilter(aProps);\n    return pFilter-\u003egetSuccess();",
+      "parentUuid": "62dc6c36_bee415e9",
+      "revId": "ee606869ab7c9c191b2fa7411acc40c2995c2f6e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
