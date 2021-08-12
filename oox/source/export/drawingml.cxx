@@ -3877,6 +3877,7 @@ sal_Int32 DrawingML::GetCustomGeometryPointValue(
     return nValue;
 }
 
+// version for SdrObjCustomShape
 void DrawingML::WritePolyPolygon(const css::uno::Reference<css::drawing::XShape>& rXShape,
                                  const tools::PolyPolygon& rPolyPolygon, const bool bClosed)
 {
@@ -3961,6 +3962,98 @@ void DrawingML::WritePolyPolygon(const css::uno::Reference<css::drawing::XShape>
     mpFS->endElementNS( XML_a, XML_pathLst );
 
     mpFS->endElementNS( XML_a, XML_custGeom );
+}
+
+// version for SdrPathObj
+void DrawingML::WritePolyPolygon(const css::uno::Reference<css::drawing::XShape>& rXShape,
+                                 const bool bClosed)
+{
+    tools::PolyPolygon aPolyPolygon = EscherPropertyContainer::GetPolyPolygon(rXShape);
+    // In case of Writer, the parent element is <wps:spPr>, and there the
+    // <a:custGeom> element is not optional.
+    if (aPolyPolygon.Count() < 1 && GetDocumentType() != DOCUMENT_DOCX)
+        return;
+
+    mpFS->startElementNS(XML_a, XML_custGeom);
+    mpFS->singleElementNS(XML_a, XML_avLst);
+    mpFS->singleElementNS(XML_a, XML_gdLst);
+    mpFS->singleElementNS(XML_a, XML_ahLst);
+    mpFS->singleElementNS(XML_a, XML_rect, XML_l, "0", XML_t, "0", XML_r, "r", XML_b, "b");
+
+    mpFS->startElementNS(XML_a, XML_pathLst);
+
+    awt::Size aSize = rXShape->getSize();
+    awt::Point aPos = rXShape->getPosition();
+    Reference<XPropertySet> xPropertySet(rXShape, UNO_QUERY);
+    uno::Reference<XPropertySetInfo> xPropertySetInfo = xPropertySet->getPropertySetInfo();
+    if (xPropertySetInfo->hasPropertyByName("AnchorPosition"))
+    {
+        awt::Point aAnchorPosition;
+        xPropertySet->getPropertyValue("AnchorPosition") >>= aAnchorPosition;
+        aPos.X += aAnchorPosition.X;
+        aPos.Y += aAnchorPosition.Y;
+    }
+
+    // Only closed SdrPathObj can be filled
+    std::optional<OString> sFill;
+    if (!bClosed)
+        sFill = "none"; // for possible values see ST_PathFillMode in OOXML standard
+
+    // Put all polygons of rPolyPolygon in the same path element
+    // to subtract the overlapped areas.
+    mpFS->startElementNS(XML_a, XML_path, XML_fill, sFill, XML_w, OString::number(aSize.Width),
+                         XML_h, OString::number(aSize.Height));
+
+    for (sal_uInt16 i = 0; i < aPolyPolygon.Count(); i++)
+    {
+        const tools::Polygon& aPoly = aPolyPolygon[i];
+
+        if (aPoly.GetSize() > 0)
+        {
+            mpFS->startElementNS(XML_a, XML_moveTo);
+
+            mpFS->singleElementNS(XML_a, XML_pt, XML_x, OString::number(aPoly[0].X() - aPos.X),
+                                  XML_y, OString::number(aPoly[0].Y() - aPos.Y));
+
+            mpFS->endElementNS(XML_a, XML_moveTo);
+        }
+
+        for (sal_uInt16 j = 1; j < aPoly.GetSize(); j++)
+        {
+            PolyFlags flags = aPoly.GetFlags(j);
+            if (flags == PolyFlags::Control)
+            {
+                // a:cubicBezTo can only contain 3 a:pt elements, so we need to make sure of this
+                if (j + 2 < aPoly.GetSize() && aPoly.GetFlags(j + 1) == PolyFlags::Control
+                    && aPoly.GetFlags(j + 2) != PolyFlags::Control)
+                {
+                    mpFS->startElementNS(XML_a, XML_cubicBezTo);
+                    for (sal_uInt8 k = 0; k <= 2; ++k)
+                    {
+                        mpFS->singleElementNS(XML_a, XML_pt, XML_x,
+                                              OString::number(aPoly[j + k].X() - aPos.X), XML_y,
+                                              OString::number(aPoly[j + k].Y() - aPos.Y));
+                    }
+                    mpFS->endElementNS(XML_a, XML_cubicBezTo);
+                    j += 2;
+                }
+            }
+            else if (flags == PolyFlags::Normal)
+            {
+                mpFS->startElementNS(XML_a, XML_lnTo);
+                mpFS->singleElementNS(XML_a, XML_pt, XML_x, OString::number(aPoly[j].X() - aPos.X),
+                                      XML_y, OString::number(aPoly[j].Y() - aPos.Y));
+                mpFS->endElementNS(XML_a, XML_lnTo);
+            }
+        }
+    }
+    if (bClosed)
+        mpFS->singleElementNS(XML_a, XML_close);
+    mpFS->endElementNS(XML_a, XML_path);
+
+    mpFS->endElementNS(XML_a, XML_pathLst);
+
+    mpFS->endElementNS(XML_a, XML_custGeom);
 }
 
 void DrawingML::WriteConnectorConnections( EscherConnectorListEntry& rConnectorEntry, sal_Int32 nStartID, sal_Int32 nEndID )
