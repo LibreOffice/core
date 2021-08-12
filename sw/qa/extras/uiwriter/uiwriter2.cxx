@@ -46,6 +46,7 @@
 #include <xmloff/odffields.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
+#include <svl/srchitem.hxx>
 #include <svl/stritem.hxx>
 #include <comphelper/lok.hxx>
 #include <comphelper/scopeguard.hxx>
@@ -3841,6 +3842,37 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf118311)
     discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "//page[1]//body/tab", 0);
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf137737_FindReplace)
+{
+    createSwDoc(DATA_DIRECTORY, "tdf137737_FindReplace.docx");
+
+    // Replace staight quotes with something (opening quotes in real life, but X is adequate here)
+    uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
+        { "SearchItem.SearchString", uno::makeAny(OUString("^\"")) },
+        { "SearchItem.ReplaceString", uno::makeAny(OUString("X")) },
+        { "SearchItem.Command", uno::makeAny(static_cast<sal_Int16>(SvxSearchCmd::REPLACE)) },
+        { "SearchItem.AlgorithmType", uno::makeAny(static_cast<sal_Int16>(1)) }, //REGEX
+        { "SearchItem.AlgorithmType2", uno::makeAny(static_cast<sal_Int16>(2)) }, //REGEX
+    }));
+    // Find the first match.
+    dispatchCommand(mxComponent, ".uno:ExecuteSearch", aArgs);
+    // Replace the first match.
+    dispatchCommand(mxComponent, ".uno:ExecuteSearch", aArgs);
+
+    // Replace staight quotes with something (closing quotes in real life)
+    aArgs[0].Value <<= OUString("\"$");
+    dispatchCommand(mxComponent, ".uno:ExecuteSearch", aArgs);
+    dispatchCommand(mxComponent, ".uno:ExecuteSearch", aArgs);
+
+    //Finding the searched string via XReplaceable
+    uno::Reference<util::XReplaceable> xReplace(mxComponent, uno::UNO_QUERY);
+    uno::Reference<util::XReplaceDescriptor> xReplaceDes = xReplace->createReplaceDescriptor();
+    xReplaceDes->setSearchString("\"");
+    //There should not be any straight quotes left.
+    uno::Reference<container::XIndexAccess> xIndex(xReplace->findAll(xReplaceDes));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xIndex->getCount());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testRedlineTableRowDeletion)
