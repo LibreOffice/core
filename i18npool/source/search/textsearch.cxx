@@ -333,7 +333,7 @@ SearchResult TextSearch::searchForward( const OUString& searchStr, sal_Int32 sta
         // apply normal transliteration (1<->1, 1<->0)
 
         sal_Int32 nInStartPos = startPos;
-        if (pRegexMatcher && startPos > 0)
+        if (pRegexMatcher && startPos > 0 && !aSrchPara.searchString.startsWith("^"))
         {
             // tdf#89665, tdf#75806: An optimization to avoid transliterating the whole string, yet
             // transliterate enough of the leading text to allow sensible look-behind assertions.
@@ -345,7 +345,7 @@ SearchResult TextSearch::searchForward( const OUString& searchStr, sal_Int32 sta
             nInStartPos -= std::min(nMaxLeadingLen, startPos);
         }
         sal_Int32 nInEndPos = endPos;
-        if (pRegexMatcher && endPos < searchStr.getLength())
+        if (pRegexMatcher && endPos < searchStr.getLength() && !aSrchPara.searchString.endsWith("$"))
         {
             // tdf#65038: ditto for look-ahead assertions
             const sal_Int32 nMaxTrailingLen = aSrchPara.searchString.endsWith(")") ? 100 : 3;
