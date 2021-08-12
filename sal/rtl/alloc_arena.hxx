@@ -55,7 +55,7 @@ struct rtl_arena_segment_type
     rtl_arena_segment_type * m_fprev;
 
     /* segment description */
-    sal_uIntPtr         m_addr;
+    sal_uInt64         m_addr;
     sal_Size            m_size;
     sal_Size            m_type;
 };
