@@ -33,6 +33,24 @@
       "revId": "eff6f8f877369ed4cdee5aedff11c8ef23aa2b89",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3c30bdcf_e8d3d2fa",
+        "filename": "idlc/source/idlccompile.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2021-08-12T09:51:53Z",
+      "side": 1,
+      "message": "I had inspected the dumped output of ucpp and gcc\u0027s cpp and -traditional gave the same output as ucpp while otherwise the whitespacing is different so it seemed the safer option, but on the simple XAbc.idl case there is no difference in the final .urd so we can try without it.",
+      "parentUuid": "d990edf8_5cd85bf2",
+      "revId": "eff6f8f877369ed4cdee5aedff11c8ef23aa2b89",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
