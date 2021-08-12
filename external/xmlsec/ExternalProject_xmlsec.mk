@@ -18,6 +18,13 @@ $(eval $(call gb_ExternalProject_register_targets,xmlsec,\
 	build \
 ))
 
+# note: it's possible to use XSLT in XML signatures - that appears to be a
+# really bad idea from a security point of view though, because it will run
+# an XSLT script supplied as untrusted input, and XSLT implementations
+# tend to have extension functions, and some of these trivially allow
+# running arbitrary code... so investigate the situation with libxslt
+# before enabling it here; hopefully nobody uses XSLT in practice anyway.
+
 ifeq ($(OS),WNT)
 
 $(eval $(call gb_ExternalProject_use_nmake,xmlsec,build))
