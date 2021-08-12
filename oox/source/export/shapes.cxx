@@ -400,7 +400,6 @@ ShapeExport& ShapeExport::WritePolyPolygonShape( const Reference< XShape >& xSha
     FSHelperPtr pFS = GetFS();
     pFS->startElementNS(mnXmlNamespace, (GetDocumentType() != DOCUMENT_DOCX ? XML_sp : XML_wsp));
 
-    tools::PolyPolygon aPolyPolygon = EscherPropertyContainer::GetPolyPolygon( xShape );
     awt::Point aPos = xShape->getPosition();
     // Position is relative to group for child elements in Word, but absolute in API.
     if (GetDocumentType() == DOCUMENT_DOCX && m_xParent.is())
@@ -413,6 +412,7 @@ ShapeExport& ShapeExport::WritePolyPolygonShape( const Reference< XShape >& xSha
     tools::Rectangle aRect(Point(aPos.X, aPos.Y), Size(aSize.Width, aSize.Height));
 
 #if OSL_DEBUG_LEVEL > 0
+    tools::PolyPolygon aPolyPolygon = EscherPropertyContainer::GetPolyPolygon(xShape);
     awt::Size size = MapSize( awt::Size( aRect.GetWidth(), aRect.GetHeight() ) );
     SAL_INFO("oox.shape", "poly count " << aPolyPolygon.Count());
     SAL_INFO("oox.shape", "size: " << size.Width << " x " << size.Height);
@@ -436,7 +436,7 @@ ShapeExport& ShapeExport::WritePolyPolygonShape( const Reference< XShape >& xSha
     // visual shape properties
     pFS->startElementNS(mnXmlNamespace, XML_spPr);
     WriteTransformation( xShape, aRect, XML_a );
-    WritePolyPolygon(xShape, aPolyPolygon, bClosed);
+    WritePolyPolygon(xShape, bClosed);
     Reference< XPropertySet > xProps( xShape, UNO_QUERY );
     if( xProps.is() ) {
         if( bClosed )

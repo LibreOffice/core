@@ -11,6 +11,7 @@
 #include <unotest/macros_test.hxx>
 
 #include <com/sun/star/awt/Gradient.hpp>
+#include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
@@ -343,6 +344,28 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testGroupShapeSmartArt)
     // Without the accompanying fix in place, this test would have failed, because we lost all
     // children of the group shape representing the smartart.
     CPPUNIT_ASSERT_GREATER(static_cast<sal_Int32>(0), xSmartArt->getCount());
+}
+
+CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTdf142605_CurveSize)
+{
+    // The document contains a Bezier curve, where the control points are outside the bounding
+    // rectangle of the shape. Error was, that the export uses a path size which included the
+    // control points.
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf142605_CurveSize.odp";
+    loadAndReload(aURL, "Impress Office Open XML");
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
+    css::awt::Rectangle aBoundRect;
+    xShapeProps->getPropertyValue("BoundRect") >>= aBoundRect;
+    // Without fix, size was 6262 x 3509, and position was 10037|6790.
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(8601), aBoundRect.Width, 1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(4601), aBoundRect.Height, 1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(7699), aBoundRect.X, 1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(5699), aBoundRect.Y, 1);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

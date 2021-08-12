@@ -314,6 +314,8 @@ public:
         const SdrObjCustomShape& rSdrObjCustomShape);
     void WritePolyPolygon(const css::uno::Reference<css::drawing::XShape>& rXShape,
                           const tools::PolyPolygon& rPolyPolygon, const bool bClosed);
+    void WritePolyPolygon(const css::uno::Reference<css::drawing::XShape>& rXShape,
+                          const bool bClosed);
     void WriteFill( const css::uno::Reference< css::beans::XPropertySet >& xPropSet );
     void WriteShapeStyle( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet );
     void WriteShapeEffects( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet );
