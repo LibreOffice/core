@@ -10,7 +10,7 @@ AC_DEFUN([libo_CHECK_SYSTEM_MODULE], [
 AC_ARG_WITH(system-$1,
     AS_HELP_STRING([--with-system-$1],
         [Use $1 from operating system instead of building and bundling it.]),,
-    [with_system_$1="$with_system_libs"])
+    ifelse([$6],,[with_system_$1="$with_system_libs"],[[$6]]))
 AC_MSG_CHECKING([which $1 to use])
 if test "$with_system_$1" = "yes"; then
     AC_MSG_RESULT([external])
