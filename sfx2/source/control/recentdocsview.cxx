@@ -430,6 +430,7 @@ IMPL_LINK( RecentDocsView, ExecuteHdl_Impl, void*, p, void )
     {
         pLoadRecentFile->pView->DispatchedLoadRecentUsedFile();
         pLoadRecentFile->pView->SetPointer(PointerStyle::Arrow);
+        pLoadRecentFile->pView->Enable();
     }
 
     delete pLoadRecentFile;
