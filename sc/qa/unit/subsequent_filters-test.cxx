@@ -115,6 +115,7 @@ public:
     void testUpdateCircleInMergedCellODS();
     void testDeleteCircleInMergedCellODS();
     void testBooleanFormatXLSX();
+    void testTdf143809();
     void testTdf76310();
     void testBasicCellContentODS();
     void testRangeNameXLS();
@@ -225,6 +226,7 @@ public:
     CPPUNIT_TEST(testUpdateCircleInMergedCellODS);
     CPPUNIT_TEST(testDeleteCircleInMergedCellODS);
     CPPUNIT_TEST(testBooleanFormatXLSX);
+    CPPUNIT_TEST(testTdf143809);
     CPPUNIT_TEST(testTdf76310);
     CPPUNIT_TEST(testBasicCellContentODS);
     CPPUNIT_TEST(testRangeNameXLS);
@@ -669,6 +671,29 @@ void ScFiltersTest::testBooleanFormatXLSX()
         const OUString& rFormatStr = pNumberFormat->GetFormatstring();
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Number format != boolean", aBooleanTypeStr, rFormatStr);
     }
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testTdf143809()
+{
+    ScDocShellRef xDocSh = loadDoc(u"tdf143809.", FORMAT_ODS);
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    OUString aFormula;
+    rDoc.GetFormula(0, 0, 0, aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString("=SUMPRODUCT(IFERROR(CEILING.MATH(DURATIONS,300),0))"), aFormula);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 53700
+    // - Actual  : Err:502
+    CPPUNIT_ASSERT_EQUAL(OUString("53700"), rDoc.GetString(0, 0, 0));
+
+    rDoc.GetFormula(0, 1, 0, aFormula);
+    CPPUNIT_ASSERT_EQUAL(
+            OUString("=SUMPRODUCT(IFERROR(CEILING(SUMIFS(DURATIONS,IDS,IDS),300)/COUNTIFS(IDS,IDS),0))"), aFormula);
+    CPPUNIT_ASSERT_EQUAL(OUString("51900"), rDoc.GetString(0, 1, 0));
 
     xDocSh->DoClose();
 }
