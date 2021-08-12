@@ -5360,97 +5360,97 @@ void AttributeOutputBase::OutputItem( const SfxPoolItem& rHt )
             CharCrossedOut(rHt.StaticWhichCast(RES_CHRATR_CROSSEDOUT));
             break;
         case RES_CHRATR_ESCAPEMENT:
-            CharEscapement( static_cast< const SvxEscapementItem& >( rHt ) );
+            CharEscapement(rHt.StaticWhichCast(RES_CHRATR_ESCAPEMENT));
             break;
         case RES_CHRATR_FONT:
-            CharFont( static_cast< const SvxFontItem& >( rHt ) );
+            CharFont(rHt.StaticWhichCast(RES_CHRATR_FONT));
             break;
         case RES_CHRATR_FONTSIZE:
-            CharFontSize( static_cast< const SvxFontHeightItem& >( rHt ) );
+            CharFontSize(rHt.StaticWhichCast(RES_CHRATR_FONTSIZE));
             break;
         case RES_CHRATR_KERNING:
-            CharKerning( static_cast< const SvxKerningItem& >( rHt ) );
+            CharKerning(rHt.StaticWhichCast(RES_CHRATR_KERNING));
             break;
         case RES_CHRATR_LANGUAGE:
-            CharLanguage( static_cast< const SvxLanguageItem& >( rHt ) );
+            CharLanguage(rHt.StaticWhichCast(RES_CHRATR_LANGUAGE));
             break;
         case RES_CHRATR_POSTURE:
-            CharPosture( static_cast< const SvxPostureItem& >( rHt ) );
+            CharPosture(rHt.StaticWhichCast(RES_CHRATR_POSTURE));
             break;
         case RES_CHRATR_SHADOWED:
-            CharShadow( static_cast< const SvxShadowedItem& >( rHt ) );
+            CharShadow(rHt.StaticWhichCast(RES_CHRATR_SHADOWED));
             break;
         case RES_CHRATR_UNDERLINE:
-            CharUnderline( static_cast< const SvxUnderlineItem& >( rHt ) );
+            CharUnderline(rHt.StaticWhichCast(RES_CHRATR_UNDERLINE));
             break;
         case RES_CHRATR_WEIGHT:
-            CharWeight( static_cast< const SvxWeightItem& >( rHt ) );
+            CharWeight(rHt.StaticWhichCast(RES_CHRATR_WEIGHT));
             break;
         case RES_CHRATR_AUTOKERN:
-            CharAutoKern( static_cast< const SvxAutoKernItem& >( rHt ) );
+            CharAutoKern(rHt.StaticWhichCast(RES_CHRATR_AUTOKERN));
             break;
         case RES_CHRATR_BLINK:
-            CharAnimatedText( static_cast< const SvxBlinkItem& >( rHt ) );
+            CharAnimatedText(rHt.StaticWhichCast(RES_CHRATR_BLINK));
             break;
         case RES_CHRATR_BACKGROUND:
-            CharBackgroundBase( static_cast< const SvxBrushItem& >( rHt ) );
+            CharBackgroundBase(rHt.StaticWhichCast(RES_CHRATR_BACKGROUND));
             break;
 
         case RES_CHRATR_CJK_FONT:
-            CharFontCJK( static_cast< const SvxFontItem& >( rHt ) );
+            CharFontCJK(rHt.StaticWhichCast(RES_CHRATR_CJK_FONT));
             break;
         case RES_CHRATR_CJK_FONTSIZE:
-            CharFontSizeCJK( static_cast< const SvxFontHeightItem& >( rHt ) );
+            CharFontSizeCJK(rHt.StaticWhichCast(RES_CHRATR_CJK_FONTSIZE));
             break;
         case RES_CHRATR_CJK_LANGUAGE:
-            CharLanguageCJK( static_cast< const SvxLanguageItem& >( rHt ) );
+            CharLanguageCJK(rHt.StaticWhichCast(RES_CHRATR_CJK_LANGUAGE));
             break;
         case RES_CHRATR_CJK_POSTURE:
-            CharPostureCJK( static_cast< const SvxPostureItem& >( rHt ) );
+            CharPostureCJK(rHt.StaticWhichCast(RES_CHRATR_CJK_POSTURE));
             break;
         case RES_CHRATR_CJK_WEIGHT:
-            CharWeightCJK( static_cast< const SvxWeightItem& >( rHt ) );
+            CharWeightCJK(rHt.StaticWhichCast(RES_CHRATR_CJK_WEIGHT));
             break;
 
         case RES_CHRATR_CTL_FONT:
-            CharFontCTL( static_cast< const SvxFontItem& >( rHt ) );
+            CharFontCTL(rHt.StaticWhichCast(RES_CHRATR_CTL_FONT));
             break;
         case RES_CHRATR_CTL_FONTSIZE:
-            CharFontSizeCTL( static_cast< const SvxFontHeightItem& >( rHt ) );
+            CharFontSizeCTL(rHt.StaticWhichCast(RES_CHRATR_CTL_FONTSIZE));
             break;
         case RES_CHRATR_CTL_LANGUAGE:
-            CharLanguageCTL( static_cast< const SvxLanguageItem& >( rHt ) );
+            CharLanguageCTL(rHt.StaticWhichCast(RES_CHRATR_CTL_LANGUAGE));
             break;
         case RES_CHRATR_CTL_POSTURE:
-            CharPostureCTL( static_cast< const SvxPostureItem& >( rHt ) );
+            CharPostureCTL(rHt.StaticWhichCast(RES_CHRATR_CTL_POSTURE));
             break;
         case RES_CHRATR_CTL_WEIGHT:
-            CharWeightCTL( static_cast< const SvxWeightItem& >( rHt ) );
+            CharWeightCTL(rHt.StaticWhichCast(RES_CHRATR_CTL_WEIGHT));
             break;
 
         case RES_CHRATR_ROTATE:
-            CharRotate( static_cast< const SvxCharRotateItem& >( rHt ) );
+            CharRotate(rHt.StaticWhichCast(RES_CHRATR_ROTATE));
             break;
         case RES_CHRATR_EMPHASIS_MARK:
-            CharEmphasisMark( static_cast< const SvxEmphasisMarkItem& >( rHt ) );
+            CharEmphasisMark(rHt.StaticWhichCast(RES_CHRATR_EMPHASIS_MARK));
             break;
         case RES_CHRATR_TWO_LINES:
-            CharTwoLines( static_cast< const SvxTwoLinesItem& >( rHt ) );
+            CharTwoLines(rHt.StaticWhichCast(RES_CHRATR_TWO_LINES));
             break;
         case RES_CHRATR_SCALEW:
-            CharScaleWidth( static_cast< const SvxCharScaleWidthItem& >( rHt ) );
+            CharScaleWidth(rHt.StaticWhichCast(RES_CHRATR_SCALEW));
             break;
         case RES_CHRATR_RELIEF:
-            CharRelief( static_cast< const SvxCharReliefItem& >( rHt ) );
+            CharRelief(rHt.StaticWhichCast(RES_CHRATR_RELIEF));
             break;
         case RES_CHRATR_HIDDEN:
-            CharHidden( static_cast< const SvxCharHiddenItem& >( rHt ) );
+            CharHidden(rHt.StaticWhichCast(RES_CHRATR_HIDDEN));
             break;
         case RES_CHRATR_BOX:
-            FormatCharBorder( static_cast< const SvxBoxItem& >( rHt ) );
+            FormatCharBorder(rHt.StaticWhichCast(RES_CHRATR_BOX));
             break;
         case RES_CHRATR_HIGHLIGHT:
-            CharHighlight( static_cast< const SvxBrushItem& >( rHt ) );
+            CharHighlight(rHt.StaticWhichCast(RES_CHRATR_HIGHLIGHT));
             break;
         case RES_CHRATR_BIDIRTL:
             CharBidiRTL( rHt );
@@ -5459,130 +5459,130 @@ void AttributeOutputBase::OutputItem( const SfxPoolItem& rHt )
             CharIdctHint( rHt );
             break;
         case RES_TXTATR_INETFMT:
-            TextINetFormat( static_cast< const SwFormatINetFormat& >( rHt ) );
+            TextINetFormat(rHt.StaticWhichCast(RES_TXTATR_INETFMT));
             break;
         case RES_TXTATR_CHARFMT:
-            TextCharFormat( static_cast< const SwFormatCharFormat& >( rHt ) );
+            TextCharFormat(rHt.StaticWhichCast(RES_TXTATR_CHARFMT));
             break;
 
         case RES_TXTATR_FIELD:
         case RES_TXTATR_ANNOTATION:
         case RES_TXTATR_INPUTFIELD:
-            TextField( static_cast< const SwFormatField& >( rHt ) );
+            TextField(rHt.StaticWhichCast(RES_TXTATR_INPUTFIELD));
             break;
 
         case RES_TXTATR_FLYCNT:
-            TextFlyContent( static_cast< const SwFormatFlyCnt& >( rHt ) );
+            TextFlyContent(rHt.StaticWhichCast(RES_TXTATR_FLYCNT));
             break;
         case RES_TXTATR_FTN:
-            TextFootnote( static_cast< const SwFormatFootnote& >( rHt ) );
+            TextFootnote(rHt.StaticWhichCast(RES_TXTATR_FTN));
             break;
 
         case RES_PARATR_LINESPACING:
-            ParaLineSpacing( static_cast< const SvxLineSpacingItem& >( rHt ) );
+            ParaLineSpacing(rHt.StaticWhichCast(RES_PARATR_LINESPACING));
             break;
         case RES_PARATR_ADJUST:
-            ParaAdjust( static_cast< const SvxAdjustItem& >( rHt ) );
+            ParaAdjust(rHt.StaticWhichCast(RES_PARATR_ADJUST));
             break;
         case RES_PARATR_SPLIT:
-            ParaSplit( static_cast< const SvxFormatSplitItem& >( rHt ) );
+            ParaSplit(rHt.StaticWhichCast(RES_PARATR_SPLIT));
             break;
         case RES_PARATR_WIDOWS:
-            ParaWidows( static_cast< const SvxWidowsItem& >( rHt ) );
+            ParaWidows(rHt.StaticWhichCast(RES_PARATR_WIDOWS));
             break;
         case RES_PARATR_TABSTOP:
-            ParaTabStop( static_cast< const SvxTabStopItem& >( rHt ) );
+            ParaTabStop(rHt.StaticWhichCast(RES_PARATR_TABSTOP));
             break;
         case RES_PARATR_HYPHENZONE:
-            ParaHyphenZone( static_cast< const SvxHyphenZoneItem& >( rHt ) );
+            ParaHyphenZone(rHt.StaticWhichCast(RES_PARATR_HYPHENZONE));
             break;
         case RES_PARATR_NUMRULE:
-            ParaNumRule( static_cast< const SwNumRuleItem& >( rHt ) );
+            ParaNumRule(rHt.StaticWhichCast(RES_PARATR_NUMRULE));
             break;
         case RES_PARATR_SCRIPTSPACE:
-            ParaScriptSpace( static_cast< const SfxBoolItem& >( rHt ) );
+            ParaScriptSpace(rHt.StaticWhichCast(RES_PARATR_SCRIPTSPACE));
             break;
         case RES_PARATR_HANGINGPUNCTUATION:
-            ParaHangingPunctuation( static_cast< const SfxBoolItem& >( rHt ) );
+            ParaHangingPunctuation(rHt.StaticWhichCast(RES_PARATR_HANGINGPUNCTUATION));
             break;
         case RES_PARATR_FORBIDDEN_RULES:
-            ParaForbiddenRules( static_cast< const SfxBoolItem& >( rHt ) );
+            ParaForbiddenRules(rHt.StaticWhichCast(RES_PARATR_FORBIDDEN_RULES));
             break;
         case RES_PARATR_VERTALIGN:
-            ParaVerticalAlign( static_cast< const SvxParaVertAlignItem& >( rHt ) );
+            ParaVerticalAlign(rHt.StaticWhichCast(RES_PARATR_VERTALIGN));
             break;
         case RES_PARATR_SNAPTOGRID:
-            ParaSnapToGrid( static_cast< const SvxParaGridItem& >( rHt ) );
+            ParaSnapToGrid(rHt.StaticWhichCast(RES_PARATR_SNAPTOGRID));
             break;
 
         case RES_FRM_SIZE:
-            FormatFrameSize( static_cast< const SwFormatFrameSize& >( rHt ) );
+            FormatFrameSize(rHt.StaticWhichCast(RES_FRM_SIZE));
             break;
         case RES_PAPER_BIN:
-            FormatPaperBin( static_cast< const SvxPaperBinItem& >( rHt ) );
+            FormatPaperBin(rHt.StaticWhichCast(RES_PAPER_BIN));
             break;
         case RES_LR_SPACE:
-            FormatLRSpace( static_cast< const SvxLRSpaceItem& >( rHt ) );
+            FormatLRSpace(rHt.StaticWhichCast(RES_LR_SPACE));
             break;
         case RES_UL_SPACE:
-            FormatULSpace( static_cast< const SvxULSpaceItem& >( rHt ) );
+            FormatULSpace(rHt.StaticWhichCast(RES_UL_SPACE));
             break;
         case RES_PAGEDESC:
-            FormatPageDescription( static_cast< const SwFormatPageDesc& >( rHt ) );
+            FormatPageDescription(rHt.StaticWhichCast(RES_PAGEDESC));
             break;
         case RES_BREAK:
-            FormatBreak( static_cast< const SvxFormatBreakItem& >( rHt ) );
+            FormatBreak(rHt.StaticWhichCast(RES_BREAK));
             break;
         case RES_SURROUND:
-            FormatSurround( static_cast< const SwFormatSurround& >( rHt ) );
+            FormatSurround(rHt.StaticWhichCast(RES_SURROUND));
             break;
         case RES_VERT_ORIENT:
-            FormatVertOrientation( static_cast< const SwFormatVertOrient& >( rHt ) );
+            FormatVertOrientation(rHt.StaticWhichCast(RES_VERT_ORIENT));
             break;
         case RES_HORI_ORIENT:
-            FormatHorizOrientation( static_cast< const SwFormatHoriOrient& >( rHt ) );
+            FormatHorizOrientation(rHt.StaticWhichCast(RES_HORI_ORIENT));
             break;
         case RES_ANCHOR:
-            FormatAnchor( static_cast< const SwFormatAnchor& >( rHt ) );
+            FormatAnchor(rHt.StaticWhichCast(RES_ANCHOR));
             break;
         case RES_BACKGROUND:
-            FormatBackground( static_cast< const SvxBrushItem& >( rHt ) );
+            FormatBackground(rHt.StaticWhichCast(RES_BACKGROUND));
             break;
         case XATTR_FILLSTYLE:
-            FormatFillStyle( static_cast< const XFillStyleItem& >( rHt ) );
+            FormatFillStyle(rHt.StaticWhichCast(XATTR_FILLSTYLE));
             break;
         case XATTR_FILLGRADIENT:
-            FormatFillGradient( static_cast< const XFillGradientItem& >( rHt ) );
+            FormatFillGradient(rHt.StaticWhichCast(XATTR_FILLGRADIENT));
             break;
         case RES_BOX:
-            FormatBox( static_cast< const SvxBoxItem& >( rHt ) );
+            FormatBox(rHt.StaticWhichCast(RES_BOX));
             break;
         case RES_COL:
-            FormatColumns( static_cast< const SwFormatCol& >( rHt ) );
+            FormatColumns(rHt.StaticWhichCast(RES_COL));
             break;
         case RES_KEEP:
-            FormatKeep( static_cast< const SvxFormatKeepItem& >( rHt ) );
+            FormatKeep(rHt.StaticWhichCast(RES_KEEP));
             break;
         case RES_TEXTGRID:
-            FormatTextGrid( static_cast< const SwTextGridItem& >( rHt ) );
+            FormatTextGrid(rHt.StaticWhichCast(RES_TEXTGRID));
             break;
         case RES_LINENUMBER:
-            FormatLineNumbering( static_cast< const SwFormatLineNumber& >( rHt ) );
+            FormatLineNumbering(rHt.StaticWhichCast(RES_LINENUMBER));
             break;
         case RES_FRAMEDIR:
-            FormatFrameDirection( static_cast< const SvxFrameDirectionItem& >( rHt ) );
+            FormatFrameDirection(rHt.StaticWhichCast(RES_FRAMEDIR));
             break;
         case RES_PARATR_GRABBAG:
-            ParaGrabBag(static_cast<const SfxGrabBagItem&>(rHt));
+            ParaGrabBag(rHt.StaticWhichCast(RES_PARATR_GRABBAG));
             break;
         case RES_PARATR_OUTLINELEVEL:
-            ParaOutlineLevelBase(static_cast<const SfxUInt16Item&>(rHt));
+            ParaOutlineLevelBase(rHt.StaticWhichCast(RES_PARATR_OUTLINELEVEL));
             break;
         case RES_CHRATR_GRABBAG:
-            CharGrabBag(static_cast<const SfxGrabBagItem&>(rHt));
+            CharGrabBag(rHt.StaticWhichCast(RES_CHRATR_GRABBAG));
             break;
         case RES_RTL_GUTTER:
-            SectionRtlGutter(static_cast<const SfxBoolItem&>(rHt));
+            SectionRtlGutter(rHt.StaticWhichCast(RES_RTL_GUTTER));
             break;
 
         default:
