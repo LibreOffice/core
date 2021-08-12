@@ -2298,17 +2298,17 @@ bool SdrObjCustomShape::AdjustTextFrameWidthAndHeight(tools::Rectangle& rR, bool
 
             if (HasText())
             {
-                if(mpEdtOutl)
+                if(mpEditingOutliner)
                 {
-                    mpEdtOutl->SetMaxAutoPaperSize( aSiz );
+                    mpEditingOutliner->SetMaxAutoPaperSize( aSiz );
                     if (bWdtGrow)
                     {
-                        Size aSiz2(mpEdtOutl->CalcTextSize());
+                        Size aSiz2(mpEditingOutliner->CalcTextSize());
                         nWdt=aSiz2.Width()+1; // a little more tolerance
                         if (bHgtGrow) nHgt=aSiz2.Height()+1; // a little more tolerance
                     } else
                     {
-                        nHgt=mpEdtOutl->GetTextHeight()+1; // a little more tolerance
+                        nHgt=mpEditingOutliner->GetTextHeight()+1; // a little more tolerance
                     }
                 }
                 else
@@ -2664,8 +2664,8 @@ void SdrObjCustomShape::TakeTextRect( SdrOutliner& rOutliner, tools::Rectangle& 
 
     // put text into the Outliner - if necessary the use the text from the EditOutliner
     OutlinerParaObject* pPara= GetOutlinerParaObject();
-    if (mpEdtOutl && !bNoEditText)
-        pPara=mpEdtOutl->CreateParaObject().release();
+    if (mpEditingOutliner && !bNoEditText)
+        pPara=mpEditingOutliner->CreateParaObject().release();
 
     if (pPara)
     {
@@ -2686,7 +2686,7 @@ void SdrObjCustomShape::TakeTextRect( SdrOutliner& rOutliner, tools::Rectangle& 
     {
         rOutliner.SetTextObj( nullptr );
     }
-    if (mpEdtOutl && !bNoEditText && pPara)
+    if (mpEditingOutliner && !bNoEditText && pPara)
         delete pPara;
 
     rOutliner.SetUpdateMode(true);

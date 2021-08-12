@@ -69,7 +69,7 @@ std::unique_ptr<sdr::contact::ViewContact> SdrTextObj::CreateObjectSpecificViewC
 
 SdrTextObj::SdrTextObj(SdrModel& rSdrModel)
 :   SdrAttrObj(rSdrModel),
-    mpEdtOutl(nullptr),
+    mpEditingOutliner(nullptr),
     meTextKind(OBJ_TEXT)
 {
     mbTextSizeDirty = false;
@@ -88,7 +88,7 @@ SdrTextObj::SdrTextObj(SdrModel& rSdrModel)
 
 SdrTextObj::SdrTextObj(SdrModel& rSdrModel, SdrTextObj const & rSource)
 :   SdrAttrObj(rSdrModel, rSource),
-    mpEdtOutl(nullptr)
+    mpEditingOutliner(nullptr)
 {
     mbInEditMode = false;
     mbTextAnimationAllowed = true;
@@ -117,7 +117,7 @@ SdrTextObj::SdrTextObj(SdrModel& rSdrModel, SdrTextObj const & rSource)
         // empty (this operator== seems not prepared for MultiText
         // objects). In the current form it makes only sense to
         // create locally and use locally on a known existing SdrText
-        const Outliner* pEO = rSource.mpEdtOutl;
+        const Outliner* pEO = rSource.mpEditingOutliner;
         std::unique_ptr<OutlinerParaObject> pNewOutlinerParaObject;
 
         if (pEO!=nullptr)
@@ -140,7 +140,7 @@ SdrTextObj::SdrTextObj(
     const tools::Rectangle& rNewRect)
 :   SdrAttrObj(rSdrModel),
     maRect(rNewRect),
-    mpEdtOutl(nullptr),
+    mpEditingOutliner(nullptr),
     meTextKind(OBJ_TEXT)
 {
     mbTextSizeDirty = false;
@@ -162,7 +162,7 @@ SdrTextObj::SdrTextObj(
     SdrModel& rSdrModel,
     SdrObjKind eNewTextKind)
 :   SdrAttrObj(rSdrModel),
-    mpEdtOutl(nullptr),
+    mpEditingOutliner(nullptr),
     meTextKind(eNewTextKind)
 {
     mbTextSizeDirty = false;
@@ -185,7 +185,7 @@ SdrTextObj::SdrTextObj(
     const tools::Rectangle& rNewRect)
 :   SdrAttrObj(rSdrModel),
     maRect(rNewRect),
-    mpEdtOutl(nullptr),
+    mpEditingOutliner(nullptr),
     meTextKind(eNewTextKind)
 {
     mbTextSizeDirty = false;
@@ -773,7 +773,7 @@ void SdrTextObj::TakeTextRect( SdrOutliner& rOutliner, tools::Rectangle& rTextRe
     // put text into the outliner, if available from the edit outliner
     SdrText* pText = getActiveText();
     OutlinerParaObject* pOutlinerParaObject = pText ? pText->GetOutlinerParaObject() : nullptr;
-    OutlinerParaObject* pPara = (mpEdtOutl && !bNoEditText) ? mpEdtOutl->CreateParaObject().release() : pOutlinerParaObject;
+    OutlinerParaObject* pPara = (mpEditingOutliner && !bNoEditText) ? mpEditingOutliner->CreateParaObject().release() : pOutlinerParaObject;
 
     if (pPara)
     {
@@ -798,7 +798,7 @@ void SdrTextObj::TakeTextRect( SdrOutliner& rOutliner, tools::Rectangle& rTextRe
         rOutliner.SetTextObj( nullptr );
     }
 
-    if (mpEdtOutl && !bNoEditText && pPara)
+    if (mpEditingOutliner && !bNoEditText && pPara)
         delete pPara;
 
     rOutliner.SetUpdateMode(true);
@@ -866,9 +866,9 @@ void SdrTextObj::TakeTextRect( SdrOutliner& rOutliner, tools::Rectangle& rTextRe
 
 bool SdrTextObj::CanCreateEditOutlinerParaObject() const
 {
-    if( HasTextImpl( mpEdtOutl ) )
+    if( HasTextImpl( mpEditingOutliner ) )
     {
-        return mpEdtOutl->GetParagraphCount() > 0;
+        return mpEditingOutliner->GetParagraphCount() > 0;
     }
     return false;
 }
@@ -876,10 +876,10 @@ bool SdrTextObj::CanCreateEditOutlinerParaObject() const
 std::unique_ptr<OutlinerParaObject> SdrTextObj::CreateEditOutlinerParaObject() const
 {
     std::unique_ptr<OutlinerParaObject> pPara;
-    if( HasTextImpl( mpEdtOutl ) )
+    if( HasTextImpl( mpEditingOutliner ) )
     {
-        sal_Int32 nParaCount = mpEdtOutl->GetParagraphCount();
-        pPara = mpEdtOutl->CreateParaObject(0, nParaCount);
+        sal_Int32 nParaCount = mpEditingOutliner->GetParagraphCount();
+        pPara = mpEditingOutliner->CreateParaObject(0, nParaCount);
     }
     return pPara;
 }
@@ -1466,9 +1466,9 @@ TextChain *SdrTextObj::GetTextChain() const
 
 bool SdrTextObj::IsVerticalWriting() const
 {
-    if(mpEdtOutl)
+    if(mpEditingOutliner)
     {
-        return mpEdtOutl->IsVertical();
+        return mpEditingOutliner->IsVertical();
     }
 
     OutlinerParaObject* pOutlinerParaObject = GetOutlinerParaObject();
@@ -1550,8 +1550,8 @@ void SdrTextObj::SetVerticalWriting(bool bVertical)
 
 bool SdrTextObj::IsTopToBottom() const
 {
-    if (mpEdtOutl)
-        return mpEdtOutl->IsTopToBottom();
+    if (mpEditingOutliner)
+        return mpEditingOutliner->IsTopToBottom();
 
     if (OutlinerParaObject* pOutlinerParaObject = GetOutlinerParaObject())
         return pOutlinerParaObject->IsTopToBottom();
@@ -1684,7 +1684,7 @@ void SdrTextObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const b
 
 bool SdrTextObj::IsReallyEdited() const
 {
-    return mpEdtOutl && mpEdtOutl->IsModified();
+    return mpEditingOutliner && mpEditingOutliner->IsModified();
 }
 
 // moved inlines here form hxx
@@ -1884,13 +1884,13 @@ void SdrTextObj::onEditOutlinerStatusEvent( EditStatus* pEditStatus )
     }
     else if ( (IsAutoFit() || IsFitToSize()) && !mbInDownScale)
     {
-        assert(mpEdtOutl);
+        assert(mpEditingOutliner);
         mbInDownScale = true;
 
         // sucks that we cannot disable paints via
-        // mpEdtOutl->SetUpdateMode(FALSE) - but EditEngine skips
+        // mpEditingOutliner->SetUpdateMode(FALSE) - but EditEngine skips
         // formatting as well, then.
-        ImpAutoFitText(*mpEdtOutl);
+        ImpAutoFitText(*mpEditingOutliner);
         mbInDownScale = false;
     }
 }
@@ -1961,20 +1961,20 @@ bool SdrTextObj::IsChainable() const
 
 void SdrTextObj::onChainingEvent()
 {
-    if (!mpEdtOutl)
+    if (!mpEditingOutliner)
         return;
 
     // Outliner for text transfer
     SdrOutliner &aDrawOutliner = ImpGetDrawOutliner();
 
     EditingTextChainFlow aTxtChainFlow(this);
-    aTxtChainFlow.CheckForFlowEvents(mpEdtOutl);
+    aTxtChainFlow.CheckForFlowEvents(mpEditingOutliner);
 
     if (aTxtChainFlow.IsOverflow()) {
         SAL_INFO("svx.chaining", "[CHAINING] Overflow going on");
         // One outliner is for non-overflowing text, the other for overflowing text
         // We remove text directly from the editing outliner
-        aTxtChainFlow.ExecuteOverflow(mpEdtOutl, &aDrawOutliner);
+        aTxtChainFlow.ExecuteOverflow(mpEditingOutliner, &aDrawOutliner);
     } else if (aTxtChainFlow.IsUnderflow()) {
         SAL_INFO("svx.chaining", "[CHAINING] Underflow going on");
         // underflow-induced overflow

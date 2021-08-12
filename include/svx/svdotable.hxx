@@ -177,7 +177,7 @@ public:
     // #i121917#
     virtual bool HasText() const override;
 
-    bool IsTextEditActive() const { return mpEdtOutl != nullptr; }
+    bool IsTextEditActive() const { return mpEditingOutliner != nullptr; }
     bool IsTextEditActive( const sdr::table::CellPos& rPos );
 
     /** Returns true only if we are in edit mode and the user actually changed anything */
