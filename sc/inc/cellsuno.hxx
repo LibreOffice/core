@@ -176,7 +176,6 @@ class SC_DLLPUBLIC ScCellRangesBase :
     friend class ooo::vba::excel::ScVbaCellRangeAccess;
 
 private:
-    css::uno::WeakReference<css::uno::XInterface> m_wThis;
     const SfxItemPropertySet* pPropSet;
     ScDocShell*             pDocShell;
     std::unique_ptr<ScLinkListener> pValueListener;

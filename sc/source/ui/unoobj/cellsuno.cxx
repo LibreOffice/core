@@ -1377,15 +1377,6 @@ ScCellRangesBase::ScCellRangesBase(ScDocShell* pDocSh, const ScRange& rR) :
     bGotDataChangedHint( false ),
     aValueListeners( 0 )
 {
-    // this is a hack to get m_wThis initialized; ideally there would be
-    // factory functions doing this but there are so many subclasses of this...
-    osl_atomic_increment(&m_refCount);
-    {
-        m_wThis = uno::Reference<uno::XInterface>(
-                    static_cast<cppu::OWeakObject*>(this));
-    }
-    osl_atomic_decrement(&m_refCount);
-
     ScRange aCellRange(rR);
     aCellRange.PutInOrder();
     aRanges.push_back( aCellRange );
@@ -1409,15 +1400,6 @@ ScCellRangesBase::ScCellRangesBase(ScDocShell* pDocSh, const ScRangeList& rR) :
     bGotDataChangedHint( false ),
     aValueListeners( 0 )
 {
-    // this is a hack to get m_wThis initialized; ideally there would be
-    // factory functions doing this but there are so many subclasses of this...
-    osl_atomic_increment(&m_refCount);
-    {
-        m_wThis = uno::Reference<uno::XInterface>(
-                    static_cast<cppu::OWeakObject*>(this));
-    }
-    osl_atomic_decrement(&m_refCount);
-
     if (pDocShell)  // Null if created with createInstance
     {
         ScDocument& rDoc = pDocShell->GetDocument();
@@ -1513,17 +1495,65 @@ const ScMarkData* ScCellRangesBase::GetMarkData()
 
 void ScCellRangesBase::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    uno::Reference<uno::XInterface> const xThis(m_wThis);
-    if (!xThis.is())
-    {   // fdo#72695: if UNO object is already dead, don't revive it with event
-        if (SfxHintId::Dying == rHint.GetId())
-        {   // if the document dies, must reset to avoid crash in dtor!
-            ForgetCurrentAttrs();
-            pDocShell = nullptr;
+    const SfxHintId nId = rHint.GetId();
+    if ( nId == SfxHintId::Dying )
+    {
+        // if the document dies, must reset to avoid crash in dtor!
+        ForgetCurrentAttrs();
+        pDocShell = nullptr;           // invalid
+
+        // fdo#72695: if UNO object is already dead, don't revive it with event
+        if ( m_refCount > 0 && !aValueListeners.empty()  )
+        {
+            //  dispose listeners
+
+            lang::EventObject aEvent;
+            aEvent.Source.set(static_cast<cppu::OWeakObject*>(this));
+            for (uno::Reference<util::XModifyListener> & xValueListener : aValueListeners)
+                xValueListener->disposing( aEvent );
+
+            aValueListeners.clear();
+
+            //  The listeners can't have the last ref to this, as it's still held
+            //  by the DocShell.
         }
-        return;
     }
-    if ( auto pRefHint = dynamic_cast<const ScUpdateRefHint*>(&rHint) )
+    else if ( nId == SfxHintId::DataChanged )
+    {
+        // document content changed -> forget cached attributes
+        ForgetCurrentAttrs();
+
+        if ( bGotDataChangedHint && pDocShell )
+        {
+            //  This object was notified of content changes, so one call
+            //  for each listener is generated now.
+            //  The calls can't be executed directly because the document's
+            //  UNO broadcaster list must not be modified.
+            //  Instead, add to the document's list of listener calls,
+            //  which will be executed directly after the broadcast of
+            //  SfxHintId::DataChanged.
+
+            lang::EventObject aEvent;
+            aEvent.Source.set(static_cast<cppu::OWeakObject*>(this));
+
+            // the EventObject holds a Ref to this object until after the listener calls
+
+            ScDocument& rDoc = pDocShell->GetDocument();
+            for (const uno::Reference<util::XModifyListener> & xValueListener : aValueListeners)
+                rDoc.AddUnoListenerCall( xValueListener, aEvent );
+
+            bGotDataChangedHint = false;
+        }
+    }
+    else if ( nId == SfxHintId::ScCalcAll )
+    {
+        // broadcast from DoHardRecalc - set bGotDataChangedHint
+        // (SfxHintId::DataChanged follows separately)
+
+        if ( !aValueListeners.empty() )
+            bGotDataChangedHint = true;
+    }
+    else if ( auto pRefHint = dynamic_cast<const ScUpdateRefHint*>(&rHint) )
     {
         ScDocument& rDoc = pDocShell->GetDocument();
         std::unique_ptr<ScRangeList> pUndoRanges;
@@ -1535,7 +1565,7 @@ void ScCellRangesBase::Notify( SfxBroadcaster&, const SfxHint& rHint )
         {
             if (  pRefHint->GetMode() == URM_INSDEL
                && aRanges.size() == 1
-               && comphelper::getUnoTunnelImplementation<ScTableSheetObj>(xThis)
+               && dynamic_cast<ScTableSheetObj*>(this)
                )
             {
                 // #101755#; the range size of a sheet does not change
@@ -1566,65 +1596,6 @@ void ScCellRangesBase::Notify( SfxBroadcaster&, const SfxHint& rHint )
             RefChanged();
             if ( !aValueListeners.empty() )
                 bGotDataChangedHint = true;     // need to broadcast the undo, too
-        }
-    }
-    else
-    {
-        const SfxHintId nId = rHint.GetId();
-        if ( nId == SfxHintId::Dying )
-        {
-            ForgetCurrentAttrs();
-            pDocShell = nullptr;           // invalid
-
-            if ( !aValueListeners.empty() )
-            {
-                //  dispose listeners
-
-                lang::EventObject aEvent;
-                aEvent.Source.set(static_cast<cppu::OWeakObject*>(this));
-                for (uno::Reference<util::XModifyListener> & xValueListener : aValueListeners)
-                    xValueListener->disposing( aEvent );
-
-                aValueListeners.clear();
-
-                //  The listeners can't have the last ref to this, as it's still held
-                //  by the DocShell.
-            }
-        }
-        else if ( nId == SfxHintId::DataChanged )
-        {
-            // document content changed -> forget cached attributes
-            ForgetCurrentAttrs();
-
-            if ( bGotDataChangedHint && pDocShell )
-            {
-                //  This object was notified of content changes, so one call
-                //  for each listener is generated now.
-                //  The calls can't be executed directly because the document's
-                //  UNO broadcaster list must not be modified.
-                //  Instead, add to the document's list of listener calls,
-                //  which will be executed directly after the broadcast of
-                //  SfxHintId::DataChanged.
-
-                lang::EventObject aEvent;
-                aEvent.Source.set(static_cast<cppu::OWeakObject*>(this));
-
-                // the EventObject holds a Ref to this object until after the listener calls
-
-                ScDocument& rDoc = pDocShell->GetDocument();
-                for (const uno::Reference<util::XModifyListener> & xValueListener : aValueListeners)
-                    rDoc.AddUnoListenerCall( xValueListener, aEvent );
-
-                bGotDataChangedHint = false;
-            }
-        }
-        else if ( nId == SfxHintId::ScCalcAll )
-        {
-            // broadcast from DoHardRecalc - set bGotDataChangedHint
-            // (SfxHintId::DataChanged follows separately)
-
-            if ( !aValueListeners.empty() )
-                bGotDataChangedHint = true;
         }
     }
 }
