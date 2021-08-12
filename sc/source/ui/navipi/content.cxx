@@ -960,8 +960,13 @@ void ScContentTree::GetNoteStrings()
     // loop over cell notes
     std::vector<sc::NoteEntry> aEntries;
     pDoc->GetAllNoteEntries(aEntries);
+    weld::TreeIter* pParent = m_aRootNodes[ScContentId::NOTE].get();
     for (const auto& rEntry : aEntries)
-        InsertContent(ScContentId::NOTE, lcl_NoteString(*rEntry.mpNote));
+    {
+        OUString aValue = lcl_NoteString(*rEntry.mpNote);
+        m_xTreeView->insert(pParent, -1, &aValue, nullptr, nullptr, nullptr, false, m_xScratchIter.get());
+        m_xTreeView->set_sensitive(*m_xScratchIter, true);
+    }
 }
 
 ScAddress ScContentTree::GetNotePos( sal_uLong nIndex )
