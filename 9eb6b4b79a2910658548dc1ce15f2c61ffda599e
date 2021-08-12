@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "65f1dd71_e5842330",
+        "filename": "starmath/inc/mathml/element.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2021-08-12T08:13:06Z",
+      "side": 1,
+      "message": "You missed this line.\nDon’t remove the “\u0027s”, but add “s” instead. All of these are in the simple present.",
+      "revId": "9eb6b4b79a2910658548dc1ce15f2c61ffda599e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
