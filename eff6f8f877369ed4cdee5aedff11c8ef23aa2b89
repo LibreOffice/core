@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8695b126_f7f671bc",
+        "filename": "idlc/source/idlccompile.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-08-12T08:56:39Z",
+      "side": 1,
+      "message": "this should probably rather replace \"-zI\" above (which is ucpp\u0027s \"do not use the standard (compile-time) include path\" equivalent; maybe cpp silently ignores it, but it doesn\u0027t look like cpp would support that -zI flag)",
+      "revId": "eff6f8f877369ed4cdee5aedff11c8ef23aa2b89",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d990edf8_5cd85bf2",
+        "filename": "idlc/source/idlccompile.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-08-12T08:56:39Z",
+      "side": 1,
+      "message": "what would be the harm of not using it?",
+      "revId": "eff6f8f877369ed4cdee5aedff11c8ef23aa2b89",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
