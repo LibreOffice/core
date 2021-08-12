@@ -169,13 +169,13 @@ void SfxModule::RegisterStatusBarControl( const SfxStbCtrlFactory& rFact )
 
 SfxTbxCtrlFactArr_Impl*  SfxModule::GetTbxCtrlFactories_Impl() const
 {
-    return &*pImpl->pTbxCtrlFac;
+    return pImpl->pTbxCtrlFac ? &*pImpl->pTbxCtrlFac : nullptr;
 }
 
 
 SfxStbCtrlFactArr_Impl*  SfxModule::GetStbCtrlFactories_Impl() const
 {
-    return &*pImpl->pStbCtrlFac;
+    return pImpl->pStbCtrlFac ? &*pImpl->pStbCtrlFac : nullptr;
 }
 
 SfxChildWinFactArr_Impl* SfxModule::GetChildWinFactories_Impl() const
