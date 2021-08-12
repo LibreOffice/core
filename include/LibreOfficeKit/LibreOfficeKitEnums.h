@@ -772,6 +772,12 @@ typedef enum
      * The payload format is JSON: { "title": "title text", "content": "content text" }
      */
     LOK_CALLBACK_VALIDITY_INPUT_HELP = 51,
+
+    /**
+     * This is currently Calc only. Indicates the document background
+     * color in the payload as a RGB hex string (RRGGBB).
+     */
+    LOK_CALLBACK_DOCUMENT_BACKGROUND_COLOR = 52,
 }
 LibreOfficeKitCallbackType;
 
@@ -904,6 +910,8 @@ static inline const char* lokCallbackTypeToString(int nType)
         return "LOK_CALLBACK_FORM_FIELD_BUTTON";
     case LOK_CALLBACK_INVALIDATE_SHEET_GEOMETRY:
         return "LOK_CALLBACK_INVALIDATE_SHEET_GEOMETRY";
+    case LOK_CALLBACK_DOCUMENT_BACKGROUND_COLOR:
+        return "LOK_CALLBACK_DOCUMENT_BACKGROUND_COLOR";
     }
 
     assert(!"Unknown LibreOfficeKitCallbackType type.");
