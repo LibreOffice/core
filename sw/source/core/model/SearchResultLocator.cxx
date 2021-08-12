@@ -22,15 +22,14 @@
 
 namespace sw::search
 {
-LocationResult SearchResultLocator::find(SearchIndexData const& rSearchIndexData)
+void SearchResultLocator::findOne(LocationResult& rResult, SearchIndexData const& rSearchIndexData)
 {
-    LocationResult aResult;
-    if (rSearchIndexData.eType == NodeType::WriterNode)
+    if (rSearchIndexData.meType == NodeType::WriterNode)
     {
         SwNodes const& rNodes = mpDocument->GetNodes();
-        if (rSearchIndexData.nNodeIndex >= rNodes.Count())
-            return aResult;
-        SwNode* pNode = rNodes[rSearchIndexData.nNodeIndex];
+        if (rSearchIndexData.mnNodeIndex >= rNodes.Count())
+            return;
+        SwNode* pNode = rNodes[rSearchIndexData.mnNodeIndex];
 
         auto* pContentNode = pNode->GetContentNode();
         auto* pShell = mpDocument->getIDocumentLayoutAccess().GetCurrentViewShell();
@@ -41,13 +40,13 @@ LocationResult SearchResultLocator::find(SearchIndexData const& rSearchIndexData
                 = pContentNode->getLayoutFrame(pShell->GetLayout(), nullptr, nullptr);
             SwRect const& rArea = pFrame->getFrameArea();
 
-            aResult.mbFound = true;
-            aResult.maRectangles.emplace_back(rArea.Left(), rArea.Top(),
+            rResult.mbFound = true;
+            rResult.maRectangles.emplace_back(rArea.Left(), rArea.Top(),
                                               rArea.Left() + rArea.Width(),
                                               rArea.Top() + rArea.Height());
         }
     }
-    else if (rSearchIndexData.eType == NodeType::SdrObject)
+    else if (rSearchIndexData.meType == NodeType::SdrObject)
     {
         IDocumentDrawModelAccess& rDrawModelAccess = mpDocument->getIDocumentDrawModelAccess();
         auto* pModel = rDrawModelAccess.GetDrawModel();
@@ -59,12 +58,12 @@ LocationResult SearchResultLocator::find(SearchIndexData const& rSearchIndexData
                 SdrObject* pObject = pPage->GetObj(nObject);
                 if (pObject)
                 {
-                    if (pObject->GetName() == rSearchIndexData.aObjectName)
+                    if (pObject->GetName() == rSearchIndexData.maObjectName)
                     {
                         auto aRect = o3tl::convert(pObject->GetLogicRect(), o3tl::Length::mm100,
                                                    o3tl::Length::twip);
-                        aResult.mbFound = true;
-                        aResult.maRectangles.emplace_back(aRect.Left(), aRect.Top(),
+                        rResult.mbFound = true;
+                        rResult.maRectangles.emplace_back(aRect.Left(), aRect.Top(),
                                                           aRect.Left() + aRect.GetWidth(),
                                                           aRect.Top() + aRect.GetHeight());
                     }
@@ -72,6 +71,13 @@ LocationResult SearchResultLocator::find(SearchIndexData const& rSearchIndexData
             }
         }
     }
+}
+
+LocationResult SearchResultLocator::find(std::vector<SearchIndexData> const& rSearchIndexDataVector)
+{
+    LocationResult aResult;
+    for (auto const& rSearchIndexData : rSearchIndexDataVector)
+        findOne(aResult, rSearchIndexData);
 
     return aResult;
 }
