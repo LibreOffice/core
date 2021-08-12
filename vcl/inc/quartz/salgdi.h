@@ -267,11 +267,31 @@ struct AquaSharedAttributes
     }
 };
 
-class AquaGraphicsBackend final : public SalGraphicsImpl
+class AquaGraphicsBackendBase
 {
 private:
+    SalGraphicsImpl* mpImpl = nullptr;
+protected:
     AquaSharedAttributes& mrShared;
+public:
+    AquaGraphicsBackendBase(AquaSharedAttributes& rShared)
+        : mrShared( rShared )
+    {}
+    virtual ~AquaGraphicsBackendBase() = 0;
+    AquaSharedAttributes& GetShared() { return mrShared; }
+    SalGraphicsImpl* GetImpl()
+    {
+        if(mpImpl == nullptr)
+            mpImpl = dynamic_cast<SalGraphicsImpl*>(this);
+        return mpImpl;
+    }
+};
 
+inline AquaGraphicsBackendBase::~AquaGraphicsBackendBase() {}
+
+class AquaGraphicsBackend final : public SalGraphicsImpl, public AquaGraphicsBackendBase
+{
+private:
     void drawPixelImpl( tools::Long nX, tools::Long nY, const RGBAColor& rColor); // helper to draw single pixels
 
 #ifdef MACOSX
@@ -400,7 +420,7 @@ public:
 class AquaSalGraphics : public SalGraphicsAutoDelegateToImpl
 {
     AquaSharedAttributes maShared;
-    std::unique_ptr<AquaGraphicsBackend> mpBackend;
+    std::unique_ptr<AquaGraphicsBackendBase> mpBackend;
 
     /// device resolution of this graphics
     sal_Int32                               mnRealDPIX;
@@ -443,7 +463,7 @@ public:
     // InvalidateContext does an UnsetState and sets mrContext to 0
     void                    InvalidateContext();
 
-    AquaGraphicsBackend* getAquaGraphicsBackend() const
+    AquaGraphicsBackendBase* getAquaGraphicsBackend() const
     {
         return mpBackend.get();
     }
