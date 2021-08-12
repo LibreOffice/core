@@ -39,6 +39,7 @@ struct rtl_arena_stat_type
 /** rtl_arena_segment_type
  *  @internal
  */
+
 constexpr sal_Size RTL_ARENA_SEGMENT_TYPE_HEAD = 0x01;
 constexpr sal_Size RTL_ARENA_SEGMENT_TYPE_SPAN = 0x02;
 constexpr sal_Size RTL_ARENA_SEGMENT_TYPE_FREE = 0x04;
@@ -55,7 +56,7 @@ struct rtl_arena_segment_type
     rtl_arena_segment_type * m_fprev;
 
     /* segment description */
-    sal_uIntPtr         m_addr;
+    sal_uInt64          m_addr;
     sal_Size            m_size;
     sal_Size            m_type;
 };
