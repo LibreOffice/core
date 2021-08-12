@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6745e4f0_914d99a5",
+        "filename": "sfx2/source/appl/module.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-12T14:13:16Z",
+      "side": 1,
+      "message": "It looks like this is the only place where SfxModule_Impl is created, and the emplace gets executed unconditionally - likely pSlotPool could be made not optional, but a simple member initialized at ctor?",
+      "revId": "aa063443de8a4ef18ccb5ebc939183fae2b58688",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
