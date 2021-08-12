@@ -16,6 +16,24 @@
       "revId": "498d2b82187ec3ff58f076e0d15741e64c0505ba",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1e2abd8e_45c774f4",
+        "filename": "sw/source/core/table/swtable.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2021-08-12T13:03:34Z",
+      "side": 1,
+      "message": "Yes, we need some limitation to avoid copying the character formatting of the last portion, if that paragraph is not imported from a DOCX file. I suggested to Balázs to limit this based on the zero length of the last portion: if I right know, only in the case of paragraphs imported from an DOCX file there is a zero length terminating text portion which contains the paragraph-length character formatting for the newly inserted table rows.\n\nThe reverted commit 2ab481b038b62b1ff576ac4d49d03c1798cd7f84 \"tdf#90069 DOCX:\nfix character style of new table rows\" and this replacement are about the run-time table row insertions after the import, so likely we cannot use IsInWriterfilterImport() here.",
+      "parentUuid": "5ca1792f_31ddb7c4",
+      "revId": "498d2b82187ec3ff58f076e0d15741e64c0505ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
