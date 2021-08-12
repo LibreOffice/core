@@ -252,16 +252,6 @@ void tools::Rectangle::setY( tools::Long y )
     nTop  = y;
 }
 
-tools::Long tools::Rectangle::Right() const
-{
-    return nRight == RECT_EMPTY ? nLeft : nRight;
-}
-
-tools::Long tools::Rectangle::Bottom() const
-{
-    return nBottom == RECT_EMPTY ? nTop : nBottom;
-}
-
 /// Returns the difference between right and left, assuming the range includes one end, but not the other.
 tools::Long tools::Rectangle::getWidth() const
 {
