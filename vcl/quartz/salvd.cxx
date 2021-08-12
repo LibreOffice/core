@@ -103,7 +103,7 @@ AquaSalVirtualDevice::AquaSalVirtualDevice(
             nDY = 0;
         }
 
-        mpGraphics->SetVirDevGraphics(maLayer, pData->rCGContext);
+        mpGraphics->SetVirDevGraphics(this, maLayer, pData->rCGContext);
 
         SAL_INFO("vcl.virdev", "AquaSalVirtualDevice::AquaSalVirtualDevice() this=" << this <<
                  " (" << nDX << "x" << nDY << ") mbForeignContext=" << (mbForeignContext ? "YES" : "NO"));
@@ -151,7 +151,7 @@ AquaSalVirtualDevice::~AquaSalVirtualDevice()
 
     if( mpGraphics )
     {
-        mpGraphics->SetVirDevGraphics( nullptr, nullptr );
+        mpGraphics->SetVirDevGraphics( this, nullptr, nullptr );
         delete mpGraphics;
         mpGraphics = nullptr;
     }

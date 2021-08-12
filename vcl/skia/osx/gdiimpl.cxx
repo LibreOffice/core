@@ -30,15 +30,12 @@ AquaSkiaSalGraphicsImpl::AquaSkiaSalGraphicsImpl(AquaSalGraphics& rParent,
     : SkiaSalGraphicsImpl(rParent, rShared.mpFrame)
     , AquaGraphicsBackendBase(rShared)
 {
+    Init(); // mac code doesn't call Init()
 }
 
-AquaSkiaSalGraphicsImpl::~AquaSkiaSalGraphicsImpl() { DeInit(); }
-
-void AquaSkiaSalGraphicsImpl::Init()
+AquaSkiaSalGraphicsImpl::~AquaSkiaSalGraphicsImpl()
 {
-    // The m_pFrame and m_pVDev pointers are updated late in X11
-    //    setProvider(mX11Parent.GetGeometryProvider());
-    //    SkiaSalGraphicsImpl::Init();
+    DeInit(); // mac code doesn't call DeInit()
 }
 
 void AquaSkiaSalGraphicsImpl::DeInit()

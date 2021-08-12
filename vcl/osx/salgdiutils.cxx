@@ -75,6 +75,7 @@ void AquaSalGraphics::SetWindowGraphics( AquaSalFrame* pFrame )
     maShared.mbWindow = true;
     maShared.mbPrinter = false;
     maShared.mbVirDev = false;
+    mpBackend->UpdateGeometryProvider(pFrame);
 }
 
 void AquaSalGraphics::SetPrinterGraphics( CGContextRef xContext, sal_Int32 nDPIX, sal_Int32 nDPIY )
@@ -97,6 +98,8 @@ void AquaSalGraphics::SetPrinterGraphics( CGContextRef xContext, sal_Int32 nDPIX
         CGContextSaveGState( maShared.maContextHolder.get() );
         maShared.setState();
     }
+
+    mpBackend->UpdateGeometryProvider(nullptr);
 }
 
 void AquaSalGraphics::InvalidateContext()
