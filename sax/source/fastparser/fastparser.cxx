@@ -41,6 +41,7 @@
 #include <queue>
 #include <memory>
 #include <mutex>
+#include <optional>
 #include <stack>
 #include <string_view>
 #include <unordered_map>
