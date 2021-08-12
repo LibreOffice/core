@@ -42,6 +42,10 @@ $(eval $(call gb_Module_add_targets,extensions,\
 	Library_bib \
 ))
 
+$(eval $(call gb_Module_add_check_targets,extensions,\
+    CppunitTest_extensions_bibliography \
+))
+
 ifneq (,$(filter DBCONNECTIVITY,$(BUILD_TYPE)))
 $(eval $(call gb_Module_add_targets,extensions,\
 	Library_dbp \
