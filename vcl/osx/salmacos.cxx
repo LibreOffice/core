@@ -103,7 +103,7 @@ void AquaGraphicsBackend::copyBits(const SalTwoRect &rPosAry, SalGraphics *pSrcG
     if (pSrcGraphics)
     {
         AquaSalGraphics* pSrc = static_cast<AquaSalGraphics*>(pSrcGraphics);
-        pSrcShared = &pSrc->getAquaGraphicsBackend()->mrShared;
+        pSrcShared = &pSrc->getAquaGraphicsBackend()->GetShared();
     }
     else
         pSrcShared = &mrShared;

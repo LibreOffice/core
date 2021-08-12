@@ -191,7 +191,7 @@ void drawPattern50(void*, CGContextRef rContext)
 }
 
 AquaGraphicsBackend::AquaGraphicsBackend(AquaSharedAttributes& rShared)
-    : mrShared(rShared)
+    : AquaGraphicsBackendBase(rShared)
 {
 }
 

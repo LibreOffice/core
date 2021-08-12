@@ -57,6 +57,9 @@ $(eval $(call gb_Library_use_libraries,vclplug_osx,\
 $(eval $(call gb_Library_use_externals,vclplug_osx,\
     boost_headers \
     harfbuzz \
+    $(if $(filter SKIA,$(BUILD_TYPE)), \
+        skia \
+    ) \
 ))
 
 ifeq ($(DISABLE_GUI),)
@@ -138,6 +141,10 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_osx,\
     vcl/quartz/salvd \
     vcl/quartz/utils \
     vcl/quartz/AquaGraphicsBackend \
+    $(if $(filter SKIA,$(BUILD_TYPE)), \
+        vcl/skia/osx/gdiimpl \
+        vcl/skia/osx/rastercontext \
+        ) \
 ))
 
 $(eval $(call gb_Library_use_system_darwin_frameworks,vclplug_osx,\

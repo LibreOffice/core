@@ -73,6 +73,13 @@
 #include <apple_remote/RemoteControl.h>
 #include <postmac.h>
 
+#include <config_features.h>
+#if HAVE_FEATURE_SKIA
+#include <vcl/skia/SkiaHelper.hxx>
+#include <skia/salbmp.hxx>
+#include <skia/osx/gdiimpl.hxx>
+#endif
+
 extern "C" {
 #include <crt_externs.h>
 }
@@ -350,6 +357,10 @@ AquaSalInstance::AquaSalInstance()
 
     ImplSVData* pSVData = ImplGetSVData();
     pSVData->maAppData.mxToolkitName = OUString("osx");
+
+#if HAVE_FEATURE_SKIA
+    AquaSkiaSalGraphicsImpl::prepareSkia();
+#endif
 }
 
 AquaSalInstance::~AquaSalInstance()
@@ -361,6 +372,10 @@ AquaSalInstance::~AquaSalInstance()
         [pDockMenu release];
         pDockMenu = nil;
     }
+
+#if HAVE_FEATURE_SKIA
+    SkiaHelper::cleanup();
+#endif
 }
 
 void AquaSalInstance::TriggerUserEventProcessing()
@@ -877,7 +892,12 @@ SalSystem* AquaSalInstance::CreateSalSystem()
 
 std::shared_ptr<SalBitmap> AquaSalInstance::CreateSalBitmap()
 {
-    return std::make_shared<QuartzSalBitmap>();
+#if HAVE_FEATURE_SKIA
+    if (SkiaHelper::isVCLSkiaEnabled())
+        return std::make_shared<SkiaSalBitmap>();
+    else
+#endif
+        return std::make_shared<QuartzSalBitmap>();
 }
 
 OUString AquaSalInstance::getOSVersion()
