@@ -563,14 +563,15 @@ Any BibliographyLoader::getPropertyValue(const OUString& rPropertyName)
         CUSTOM3_POS                , // BibliographyDataField_CUSTOM3
         CUSTOM4_POS                , // BibliographyDataField_CUSTOM4
         CUSTOM5_POS                , // BibliographyDataField_CUSTOM5
-        ISBN_POS                    //BibliographyDataField_ISBN
+        ISBN_POS                   , // BibliographyDataField_ISBN
+        LOCAL_URL_POS                // BibliographyDataField_LOCAL_URL
     };
     if(rPropertyName != "BibliographyDataFieldNames")
         throw UnknownPropertyException(rPropertyName);
     Sequence<PropertyValue> aSeq(COLUMN_COUNT);
     PropertyValue* pArray = aSeq.getArray();
     BibConfig* pConfig = BibModul::GetConfig();
-    for(sal_uInt16 i = 0; i <= text::BibliographyDataField::ISBN ; i++)
+    for(sal_uInt16 i = 0; i <= text::BibliographyDataField::LOCAL_URL ; i++)
     {
         pArray[i].Name = pConfig->GetDefColumnName(aInternalMapping[i]);
         pArray[i].Value <<= static_cast<sal_Int16>(i);
