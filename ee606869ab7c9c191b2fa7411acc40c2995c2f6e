@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "62dc6c36_bee415e9",
+        "filename": "starmath/source/mathml/export.cxx",
+        "patchSetId": 17
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-08-12T12:56:09Z",
+      "side": 1,
+      "message": "sberg, I believe this is the cause of the cppu/ change, trying to pass the SmMlElement object via UNO.\n\nAnd yes, we can probably just pass it via casting, as sberg yes",
+      "revId": "ee606869ab7c9c191b2fa7411acc40c2995c2f6e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
