@@ -285,6 +285,7 @@ public:
             mpImpl = dynamic_cast<SalGraphicsImpl*>(this);
         return mpImpl;
     }
+    virtual void UpdateGeometryProvider(SalGeometryProvider*) {};
 };
 
 inline AquaGraphicsBackendBase::~AquaGraphicsBackendBase() {}
@@ -436,7 +437,7 @@ public:
                             AquaSalGraphics();
     virtual                 ~AquaSalGraphics() override;
 
-    void                    SetVirDevGraphics(CGLayerHolder const &rLayer, CGContextRef, int nBitDepth = 0);
+    void                    SetVirDevGraphics(SalVirtualDevice* pVirDev,CGLayerHolder const &rLayer, CGContextRef, int nBitDepth = 0);
 #ifdef MACOSX
     void                    initResolution( NSWindow* );
     void                    copyResolution( AquaSalGraphics& );

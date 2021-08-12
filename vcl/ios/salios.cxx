@@ -272,7 +272,7 @@ void AquaGraphicsBackend::copyArea(tools::Long nDstX, tools::Long nDstY,tools::L
     mrShared.refreshRect(nDstX, nDstY, nSrcWidth, nSrcHeight);
 }
 
-void AquaSalGraphics::SetVirDevGraphics(CGLayerHolder const & rLayer, CGContextRef xContext,
+void AquaSalGraphics::SetVirDevGraphics(SalVirtualDevice* pVirDev, CGLayerHolder const & rLayer, CGContextRef xContext,
                                         int nBitmapDepth)
 {
     SAL_INFO( "vcl.quartz", "SetVirDevGraphics() this=" << this << " layer=" << rLayer.get() << " context=" << xContext );
@@ -287,6 +287,8 @@ void AquaSalGraphics::SetVirDevGraphics(CGLayerHolder const & rLayer, CGContextR
     maShared.mnBitmapDepth = nBitmapDepth;
 
     maShared.mbForeignContext = xContext != NULL;
+
+    mpBackend->UpdateGeometryProvider(pVirDev);
 
     // return early if the virdev is being destroyed
     if (!xContext)
@@ -489,7 +491,7 @@ void AquaSalVirtualDevice::Destroy()
     {
         if( mpGraphics )
         {
-            mpGraphics->SetVirDevGraphics(nullptr, nullptr);
+            mpGraphics->SetVirDevGraphics(this, nullptr, nullptr);
         }
         CGLayerRelease(maLayer.get());
         maLayer.set(nullptr);
@@ -573,7 +575,7 @@ bool AquaSalVirtualDevice::SetSize( tools::Long nDX, tools::Long nDY )
         // to SetVirDevGraphics(). That parameter is of type CGLayerHolder, so what we actually pass
         // is an implicitly constructed *separate* CGLayerHolder. Is that what we want? No idea.
         // Possibly we could pass just maLayer as such? But doing that does not fix tdf#138122.
-        mpGraphics->SetVirDevGraphics(maLayer.get(), xDrawContext, mnBitmapDepth);
+        mpGraphics->SetVirDevGraphics(this, maLayer.get(), xDrawContext, mnBitmapDepth);
     }
 
     return maLayer.isSet();

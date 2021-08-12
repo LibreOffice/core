@@ -211,7 +211,7 @@ void AquaGraphicsBackend::copyScaledArea(tools::Long nDstX, tools::Long nDstY,to
     mrShared.refreshRect(nDstX, nDstY, nSrcWidth, nSrcHeight);
 }
 
-void AquaSalGraphics::SetVirDevGraphics(CGLayerHolder const &rLayer, CGContextRef xContext, int nBitmapDepth)
+void AquaSalGraphics::SetVirDevGraphics(SalVirtualDevice* pVirDev, CGLayerHolder const &rLayer, CGContextRef xContext, int nBitmapDepth)
 {
     SAL_INFO("vcl.quartz", "SetVirDevGraphics() this=" << this << " layer=" << rLayer.get() << " context=" << xContext);
 
@@ -223,6 +223,8 @@ void AquaSalGraphics::SetVirDevGraphics(CGLayerHolder const &rLayer, CGContextRe
     maShared.mbVirDev = true;
     maShared.maLayer = rLayer;
     maShared.mnBitmapDepth = nBitmapDepth;
+
+    mpBackend->UpdateGeometryProvider(pVirDev);
 
     // Get size and scale from layer if set else from bitmap and sal::aqua::getWindowScaling(), which is used to determine
     // scaling for direct graphics output too
@@ -444,7 +446,7 @@ void AquaSalVirtualDevice::Destroy()
     {
         if( mpGraphics )
         {
-            mpGraphics->SetVirDevGraphics(nullptr, nullptr);
+            mpGraphics->SetVirDevGraphics(this, nullptr, nullptr);
         }
         CGLayerRelease(maLayer.get());
         maLayer.set(nullptr);
@@ -517,7 +519,7 @@ bool AquaSalVirtualDevice::SetSize(tools::Long nDX, tools::Long nDY)
     CGSize aLayerSize = { static_cast<CGFloat>(nScaledWidth), static_cast<CGFloat>(nScaledHeight) };
     maLayer.set(CGLayerCreateWithContext(maBitmapContext.get(), aLayerSize, nullptr));
     maLayer.setScale(fScale);
-    mpGraphics->SetVirDevGraphics(maLayer, CGLayerGetContext(maLayer.get()), mnBitmapDepth);
+    mpGraphics->SetVirDevGraphics(this, maLayer, CGLayerGetContext(maLayer.get()), mnBitmapDepth);
 
     SAL_WARN_IF(!maBitmapContext.isSet(), "vcl.quartz", "No context");
 
