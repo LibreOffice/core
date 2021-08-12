@@ -33,6 +33,7 @@
 #include <svl/whiter.hxx>
 
 #include <svl/stritem.hxx>
+#include <svl/numformat.hxx>
 #include <svl/zformat.hxx>
 #include <svl/languageoptions.hxx>
 #include <svl/cjkoptions.hxx>

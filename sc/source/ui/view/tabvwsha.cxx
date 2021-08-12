@@ -28,6 +28,7 @@
 #include <sfx2/sidebar/Sidebar.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svl/ilstitem.hxx>
+#include <svl/numformat.hxx>
 #include <svl/int64item.hxx>
 #include <svl/srchitem.hxx>
 #include <svl/srchdefs.hxx>

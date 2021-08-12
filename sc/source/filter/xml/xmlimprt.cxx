@@ -21,6 +21,7 @@
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 
+#include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 
 #include <xmloff/namespacemap.hxx>

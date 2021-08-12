@@ -19,6 +19,7 @@
 
 #include <XclImpChangeTrack.hxx>
 #include <sot/storage.hxx>
+#include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/sharedstringpool.hxx>
 #include <sal/log.hxx>

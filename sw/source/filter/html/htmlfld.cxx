@@ -24,6 +24,7 @@
 #include <docsh.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <svtools/htmltokn.h>
+#include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include <unotools/useroptions.hxx>
 #include <fmtfld.hxx>

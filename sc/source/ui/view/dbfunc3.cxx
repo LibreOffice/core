@@ -21,6 +21,7 @@
 #include <scitems.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
+#include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include <sfx2/app.hxx>
 #include <unotools/collatorwrapper.hxx>

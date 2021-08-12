@@ -19,6 +19,7 @@
 
 #include <sfx2/frame.hxx>
 #include <sfx2/sfxsids.hrc>
+#include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
 

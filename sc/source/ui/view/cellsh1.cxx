@@ -29,6 +29,7 @@
 #include <comphelper/lok.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <svl/stritem.hxx>
+#include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
 #include <sfx2/dispatch.hxx>

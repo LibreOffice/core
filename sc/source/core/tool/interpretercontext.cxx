@@ -18,6 +18,7 @@
  */
 
 #include <interpretercontext.hxx>
+#include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 
 #include <document.hxx>

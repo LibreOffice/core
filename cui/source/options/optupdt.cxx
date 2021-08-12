@@ -19,6 +19,7 @@
 
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include "optupdt.hxx"
 #include <comphelper/processfactory.hxx>

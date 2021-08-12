@@ -18,7 +18,7 @@
  */
 
 #include <svl/zforlist.hxx>
-
+#include <svl/numformat.hxx>
 #include <svl/zformat.hxx>
 #include <svl/numuno.hxx>
 #include <i18nlangtag/languagetag.hxx>

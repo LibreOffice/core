@@ -34,6 +34,7 @@
 #include <com/sun/star/linguistic2/XHyphenator.hpp>
 #include <com/sun/star/linguistic2/XHyphenatedWord.hpp>
 #include <osl/diagnose.h>
+#include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 
 #include <editeng/acorrcfg.hxx>

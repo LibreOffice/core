@@ -27,6 +27,7 @@
 
 #include <tools/datetime.hxx>
 #include <svl/intitem.hxx>
+#include <svl/numformat.hxx>
 #include <sal/log.hxx>
 #include <sot/storage.hxx>
 #include <unotools/configmgr.hxx>

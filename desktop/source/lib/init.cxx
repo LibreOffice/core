@@ -115,6 +115,7 @@
 #include <sfx2/DocumentSigner.hxx>
 #include <sfx2/sidebar/SidebarDockingWindow.hxx>
 #include <sfx2/sidebar/SidebarController.hxx>
+#include <svl/numformat.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
 #include <svx/svdview.hxx>

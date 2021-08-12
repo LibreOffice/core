@@ -21,6 +21,7 @@
 
 #include <cmdid.h>
 #include <hintids.hxx>
+#include <svl/numformat.hxx>
 #include <svl/stritem.hxx>
 #include <com/sun/star/text/DefaultNumberingProvider.hpp>
 #include <com/sun/star/text/XDefaultNumberingProvider.hpp>

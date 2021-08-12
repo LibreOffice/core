@@ -39,6 +39,7 @@
 #include <editeng/justifyitem.hxx>
 
 #include <svl/sharedstringpool.hxx>
+#include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/intitem.hxx>
 #include <com/sun/star/task/XStatusIndicator.hpp>

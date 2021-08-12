@@ -20,6 +20,7 @@
 #include <float.h>
 #include <o3tl/any.hxx>
 #include <osl/diagnose.h>
+#include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <fmtfld.hxx>

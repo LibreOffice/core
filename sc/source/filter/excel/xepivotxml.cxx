@@ -26,6 +26,7 @@
 #include <oox/token/namespaces.hxx>
 #include <sax/tools/converter.hxx>
 #include <sax/fastattribs.hxx>
+#include <svl/numformat.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>

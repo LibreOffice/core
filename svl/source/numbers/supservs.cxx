@@ -24,6 +24,7 @@
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/weak.hxx>
 #include <i18nlangtag/languagetag.hxx>
+#include <svl/numformat.hxx>
 #include <tools/debug.hxx>
 #include <osl/mutex.hxx>
 #include <osl/diagnose.h>

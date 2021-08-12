@@ -18,6 +18,7 @@
  */
 
 #include <i18nlangtag/lang.h>
+#include <svl/numformat.hxx>
 #include <svl/zformat.hxx>
 #include <svl/eitem.hxx>
 #include <svx/svxids.hrc>

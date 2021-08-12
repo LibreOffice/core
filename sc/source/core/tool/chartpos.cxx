@@ -20,6 +20,7 @@
 #include <chartpos.hxx>
 #include <document.hxx>
 #include <osl/diagnose.h>
+#include <svl/numformat.hxx>
 
 #include <memory>
 

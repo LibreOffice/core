@@ -10,6 +10,7 @@
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <comphelper/processfactory.hxx>
+#include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
 #include <vcl/builderpage.hxx>

@@ -22,6 +22,7 @@
 #include <vcl/errinf.hxx>
 #include <tools/urlobj.hxx>
 #include <svl/converter.hxx>
+#include <svl/numformat.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/types.hxx>

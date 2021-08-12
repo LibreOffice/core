@@ -29,6 +29,7 @@
 #include <sal/macros.h>
 #include <sal/log.hxx>
 #include <rtl/tencinfo.h>
+#include <svl/numformat.hxx>
 #include <svtools/colorcfg.hxx>
 #include <vcl/unohelp.hxx>
 #include <editeng/svxfont.hxx>

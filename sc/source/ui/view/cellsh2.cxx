@@ -26,6 +26,7 @@
 #include <sfx2/request.hxx>
 #include <basic/sbxcore.hxx>
 #include <svl/whiter.hxx>
+#include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/stritem.hxx>
 #include <svl/visitem.hxx>

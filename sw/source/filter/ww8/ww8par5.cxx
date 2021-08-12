@@ -33,6 +33,7 @@
 #include <svl/cintitem.hxx>
 #include <svl/lngmisc.hxx>
 #include <svl/urihelper.hxx>
+#include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
 #include <sfx2/linkmgr.hxx>

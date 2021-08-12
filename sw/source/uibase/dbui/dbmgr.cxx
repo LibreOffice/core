@@ -50,6 +50,7 @@
 #include <dbconfig.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/pathoptions.hxx>
+#include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/stritem.hxx>
 #include <sfx2/docfile.hxx>

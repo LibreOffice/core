@@ -25,6 +25,7 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/objsh.hxx>
+#include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include <sal/macros.h>
 #include <osl/diagnose.h>

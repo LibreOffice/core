@@ -24,6 +24,7 @@
 #include <com/sun/star/chart2/MovingAverageType.hpp>
 
 #include <svl/intitem.hxx>
+#include <svl/numformat.hxx>
 #include <svl/stritem.hxx>
 #include <svl/zforlist.hxx>
 #include <vcl/formatter.hxx>

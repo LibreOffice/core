@@ -40,6 +40,7 @@
 #include <swddetbl.hxx>
 #include <mdiexp.hxx>
 #include <itabenum.hxx>
+#include <svl/numformat.hxx>
 #include <vcl/uitest/logger.hxx>
 #include <vcl/uitest/eventdescription.hxx>
 

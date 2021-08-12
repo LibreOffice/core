@@ -31,6 +31,7 @@
 #include <frameformats.hxx>
 #include <vector>
 #include <osl/diagnose.h>
+#include <svl/numformat.hxx>
 
 
 #ifdef DBG_UTIL

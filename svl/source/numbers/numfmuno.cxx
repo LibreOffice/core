@@ -31,6 +31,7 @@
 #include <cppuhelper/supportsservice.hxx>
 
 #include "numfmuno.hxx"
+#include <svl/numformat.hxx>
 #include <svl/numuno.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>

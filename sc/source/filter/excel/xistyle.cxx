@@ -76,6 +76,7 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XModel.hpp>
+#include <svl/numformat.hxx>
 
 using ::std::vector;
 using namespace ::com::sun::star;

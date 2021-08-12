@@ -57,6 +57,7 @@
 #include <redline.hxx>
 #include <vector>
 #include <calbck.hxx>
+#include <svl/numformat.hxx>
 
 #ifdef DBG_UTIL
 #define CHECK_TABLE(t) (t).CheckConsistency();

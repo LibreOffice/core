@@ -24,6 +24,7 @@
 #include "flddok.hxx"
 #include <swmodule.hxx>
 #include <wrtsh.hxx>
+#include <svl/numformat.hxx>
 #include <svl/zformat.hxx>
 
 #define USER_DATA_VERSION_1 "1"

@@ -22,6 +22,7 @@
 #include <unotools/configmgr.hxx>
 #include <unotools/pathoptions.hxx>
 #include <tools/urlobj.hxx>
+#include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include <formula/errorcodes.hxx>
 #include <sal/log.hxx>

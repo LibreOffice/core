@@ -18,6 +18,7 @@
 #include <clipparam.hxx>
 
 #include <svl/intitem.hxx>
+#include <svl/numformat.hxx>
 #include <formula/errorcodes.hxx>
 #include <refdata.hxx>
 

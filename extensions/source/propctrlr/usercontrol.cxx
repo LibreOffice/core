@@ -24,6 +24,7 @@
 #include <vcl/GraphicObject.hxx>
 #include <vcl/event.hxx>
 #include <tools/debug.hxx>
+#include <svl/numformat.hxx>
 #include <svl/zformat.hxx>
 #include <connectivity/dbconversion.hxx>
 #include "modulepcr.hxx"

@@ -45,6 +45,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/printer.hxx>
+#include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/charclass.hxx>

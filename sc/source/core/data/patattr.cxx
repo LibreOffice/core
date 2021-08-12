@@ -46,6 +46,7 @@
 #include <editeng/wrlmitem.hxx>
 #include <editeng/justifyitem.hxx>
 #include <svl/intitem.hxx>
+#include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include <vcl/outdev.hxx>
 #include <tools/fract.hxx>
