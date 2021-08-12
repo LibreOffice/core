@@ -260,10 +260,10 @@ EditingTextChainFlow::EditingTextChainFlow(SdrTextObj *pLinkTarget) :
 void EditingTextChainFlow::CheckForFlowEvents(SdrOutliner *pFlowOutl)
 {
     // if this is editing outliner no need to set parameters
-    if (pFlowOutl == GetLinkTarget()->mpEdtOutl)
+    if (pFlowOutl == GetLinkTarget()->mpEditingOutliner)
         impCheckForFlowEvents(pFlowOutl, nullptr);
     else
-        impCheckForFlowEvents(pFlowOutl, GetLinkTarget()->mpEdtOutl);
+        impCheckForFlowEvents(pFlowOutl, GetLinkTarget()->mpEditingOutliner);
 
     // Broadcast events for cursor handling
     impBroadcastCursorInfo();

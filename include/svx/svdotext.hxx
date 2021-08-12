@@ -144,7 +144,7 @@ private:
     // This method is only allowed for sdr::properties::TextProperties
     SVX_DLLPRIVATE SdrOutliner* GetTextEditOutliner() const
     {
-        return mpEdtOutl;
+        return mpEditingOutliner;
     }
 
     // to allow sdr::properties::TextProperties access to SetPortionInfoChecked()
@@ -181,7 +181,7 @@ protected:
     // an Outliner*, so that
     // 1. the TextObj won't be edited simultaneously by multiple views, and
     // 2. when streaming while editing Flush() can be done
-    SdrOutliner* mpEdtOutl;
+    SdrOutliner* mpEditingOutliner;
 
     // Possible values for eTextKind are:
     //     OBJ_TEXT         regular text frame
@@ -351,7 +351,7 @@ public:
     // #i121917#
     virtual bool HasText() const override;
 
-    bool IsTextEditActive() const { return mpEdtOutl != nullptr; }
+    bool IsTextEditActive() const { return mpEditingOutliner != nullptr; }
 
     /** returns the currently active text. */
     virtual SdrText* getActiveText() const;
@@ -501,7 +501,7 @@ public:
 
     virtual SdrObjectUniquePtr DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
 
-    void SetTextEditOutliner(SdrOutliner* pOutl) { mpEdtOutl = pOutl; }
+    void SetTextEditOutliner(SdrOutliner* pOutl) { mpEditingOutliner = pOutl; }
 
     /** Setup given Outliner equivalently to SdrTextObj::Paint()
 

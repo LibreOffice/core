@@ -124,19 +124,19 @@ bool SdrTextObj::AdjustTextFrameWidthAndHeight( tools::Rectangle& rR, bool bHgt,
             aNewSize.setHeight( 0x0FFFFFFF );
     }
 
-    if (mpEdtOutl)
+    if (mpEditingOutliner)
     {
-        mpEdtOutl->SetMaxAutoPaperSize(aNewSize);
+        mpEditingOutliner->SetMaxAutoPaperSize(aNewSize);
         if (bWdtGrow)
         {
-            Size aSiz2(mpEdtOutl->CalcTextSize());
+            Size aSiz2(mpEditingOutliner->CalcTextSize());
             nWdt = aSiz2.Width() + 1; // a little tolerance
             if (bHgtGrow)
                 nHgt = aSiz2.Height() + 1; // a little tolerance
         }
         else
         {
-            nHgt = mpEdtOutl->GetTextHeight() + 1; // a little tolerance
+            nHgt = mpEditingOutliner->GetTextHeight() + 1; // a little tolerance
         }
     }
     else
@@ -388,8 +388,8 @@ void SdrTextObj::RemoveOutlinerCharacterAttribs( const std::vector<sal_uInt16>& 
         {
             Outliner* pOutliner = nullptr;
 
-            if( mpEdtOutl || (pText == getActiveText()) )
-                pOutliner = mpEdtOutl;
+            if( mpEditingOutliner || (pText == getActiveText()) )
+                pOutliner = mpEditingOutliner;
 
             if(!pOutliner)
             {
@@ -403,7 +403,7 @@ void SdrTextObj::RemoveOutlinerCharacterAttribs( const std::vector<sal_uInt16>& 
                 pOutliner->RemoveAttribs( aSelAll, false, rWhichId );
             }
 
-            if(!mpEdtOutl || (pText != getActiveText()) )
+            if(!mpEditingOutliner || (pText != getActiveText()) )
             {
                 const sal_Int32 nParaCount = pOutliner->GetParagraphCount();
                 std::unique_ptr<OutlinerParaObject> pTemp = pOutliner->CreateParaObject(0, nParaCount);
@@ -416,8 +416,8 @@ void SdrTextObj::RemoveOutlinerCharacterAttribs( const std::vector<sal_uInt16>& 
 
 bool SdrTextObj::HasText() const
 {
-    if (mpEdtOutl)
-        return HasTextImpl(mpEdtOutl);
+    if (mpEditingOutliner)
+        return HasTextImpl(mpEditingOutliner);
 
     OutlinerParaObject* pOPO = GetOutlinerParaObject();
 

@@ -1407,7 +1407,7 @@ sal_Int32 SdrTableObj::CheckTextHit(const Point& rPnt) const
 SdrOutliner* SdrTableObj::GetCellTextEditOutliner( const Cell& rCell ) const
 {
     if( mpImpl.is() && (mpImpl->getCell( mpImpl->maEditPos ).get() == &rCell) )
-        return mpEdtOutl;
+        return mpEditingOutliner;
     else
         return nullptr;
 }
@@ -1435,7 +1435,7 @@ bool SdrTableObj::HasText() const
 
 bool SdrTableObj::IsTextEditActive( const CellPos& rPos )
 {
-    return mpEdtOutl && mpImpl.is() && (rPos == mpImpl->maEditPos);
+    return mpEditingOutliner && mpImpl.is() && (rPos == mpImpl->maEditPos);
 }
 
 
@@ -1524,8 +1524,8 @@ void SdrTableObj::TakeTextRect( const CellPos& rPos, SdrOutliner& rOutliner, too
 
     // set text at outliner, maybe from edit outliner
     OutlinerParaObject* pPara= xCell->GetOutlinerParaObject();
-    if (mpEdtOutl && !bNoEditText && mpImpl->mxActiveCell == xCell )
-        pPara=mpEdtOutl->CreateParaObject().release();
+    if (mpEditingOutliner && !bNoEditText && mpImpl->mxActiveCell == xCell )
+        pPara=mpEditingOutliner->CreateParaObject().release();
 
     if (pPara)
     {
@@ -1546,7 +1546,7 @@ void SdrTableObj::TakeTextRect( const CellPos& rPos, SdrOutliner& rOutliner, too
         rOutliner.SetTextObj( nullptr );
     }
 
-    if (mpEdtOutl && !bNoEditText && pPara && mpImpl->mxActiveCell == xCell )
+    if (mpEditingOutliner && !bNoEditText && pPara && mpImpl->mxActiveCell == xCell )
         delete pPara;
 
     rOutliner.SetUpdateMode(true);
@@ -1808,10 +1808,10 @@ void SdrTableObj::RecalcSnapRect()
 
 bool SdrTableObj::BegTextEdit(SdrOutliner& rOutl)
 {
-    if( mpEdtOutl != nullptr )
+    if( mpEditingOutliner != nullptr )
         return false;
 
-    mpEdtOutl=&rOutl;
+    mpEditingOutliner=&rOutl;
 
     mbInEditMode = true;
 
@@ -1877,7 +1877,7 @@ void SdrTableObj::EndTextEdit(SdrOutliner& rOutl)
         SetOutlinerParaObject(std::move(pNewText));
     }
 
-    mpEdtOutl = nullptr;
+    mpEditingOutliner = nullptr;
     rOutl.Clear();
     EEControlBits nStat = rOutl.GetControlWord();
     nStat &= ~EEControlBits::AUTOPAGESIZE;
@@ -2060,7 +2060,7 @@ void SdrTableObj::SetSkipChangeLayout(bool bSkipChangeLayout)
 
 bool SdrTableObj::IsReallyEdited() const
 {
-    return mpEdtOutl && mpEdtOutl->IsModified();
+    return mpEditingOutliner && mpEditingOutliner->IsModified();
 }
 
 bool SdrTableObj::IsFontwork() const

@@ -39,8 +39,8 @@ bool SdrTextObj::HasTextEdit() const
 
 bool SdrTextObj::BegTextEdit(SdrOutliner& rOutl)
 {
-    if (mpEdtOutl!=nullptr) return false; // Textedit might already run in another View!
-    mpEdtOutl=&rOutl;
+    if (mpEditingOutliner!=nullptr) return false; // Textedit might already run in another View!
+    mpEditingOutliner=&rOutl;
 
     mbInEditMode = true;
 
@@ -291,7 +291,7 @@ void SdrTextObj::EndTextEdit(SdrOutliner& rOutl)
     /* Chaining-related code */
     rOutl.ClearOverflowingParaNum();
 
-    mpEdtOutl = nullptr;
+    mpEditingOutliner = nullptr;
     rOutl.Clear();
     EEControlBits nStat = rOutl.GetControlWord();
     nStat &= ~EEControlBits::AUTOPAGESIZE;
@@ -336,26 +336,26 @@ EEAnchorMode SdrTextObj::GetOutlinerViewAnchorMode() const
 
 void SdrTextObj::ImpSetTextEditParams() const
 {
-    if (mpEdtOutl==nullptr)
+    if (mpEditingOutliner==nullptr)
         return;
 
-    bool bUpdBuf=mpEdtOutl->GetUpdateMode();
-    if (bUpdBuf) mpEdtOutl->SetUpdateMode(false);
+    bool bUpdBuf=mpEditingOutliner->GetUpdateMode();
+    if (bUpdBuf) mpEditingOutliner->SetUpdateMode(false);
     Size aPaperMin;
     Size aPaperMax;
     tools::Rectangle aEditArea;
     TakeTextEditArea(&aPaperMin,&aPaperMax,&aEditArea,nullptr);
     bool bContourFrame=IsContourTextFrame();
-    mpEdtOutl->SetMinAutoPaperSize(aPaperMin);
-    mpEdtOutl->SetMaxAutoPaperSize(aPaperMax);
-    mpEdtOutl->SetPaperSize(Size());
-    mpEdtOutl->SetTextColumns(GetTextColumnsNumber(), GetTextColumnsSpacing());
+    mpEditingOutliner->SetMinAutoPaperSize(aPaperMin);
+    mpEditingOutliner->SetMaxAutoPaperSize(aPaperMax);
+    mpEditingOutliner->SetPaperSize(Size());
+    mpEditingOutliner->SetTextColumns(GetTextColumnsNumber(), GetTextColumnsSpacing());
     if (bContourFrame) {
         tools::Rectangle aAnchorRect;
         TakeTextAnchorRect(aAnchorRect);
-        ImpSetContourPolygon(*mpEdtOutl,aAnchorRect, true);
+        ImpSetContourPolygon(*mpEditingOutliner,aAnchorRect, true);
     }
-    if (bUpdBuf) mpEdtOutl->SetUpdateMode(true);
+    if (bUpdBuf) mpEditingOutliner->SetUpdateMode(true);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
