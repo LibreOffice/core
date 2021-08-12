@@ -56,6 +56,12 @@
 #include <sallayout.hxx>
 #include <sft.hxx>
 
+#include <config_features.h>
+#include <vcl/skia/SkiaHelper.hxx>
+#if HAVE_FEATURE_SKIA
+#include <skia/osx/gdiimpl.hxx>
+#endif
+
 using namespace vcl;
 
 namespace {
@@ -186,13 +192,19 @@ bool CoreTextFontFace::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilit
 }
 
 AquaSalGraphics::AquaSalGraphics()
-    : mpBackend(new AquaGraphicsBackend(maShared))
-    , mnRealDPIX( 0 )
+    : mnRealDPIX( 0 )
     , mnRealDPIY( 0 )
     , maTextColor( COL_BLACK )
     , mbNonAntialiasedText( false )
 {
     SAL_INFO( "vcl.quartz", "AquaSalGraphics::AquaSalGraphics() this=" << this );
+
+#if HAVE_FEATURE_SKIA
+    if(SkiaHelper::isVCLSkiaEnabled())
+        mpBackend.reset(new AquaSkiaSalGraphicsImpl(*this, maShared));
+#endif
+    else
+        mpBackend.reset(new AquaGraphicsBackend(maShared));
 
     for (int i = 0; i < MAX_FALLBACK; ++i)
         mpTextStyle[i] = nullptr;
@@ -233,7 +245,7 @@ AquaSalGraphics::~AquaSalGraphics()
 
 SalGraphicsImpl* AquaSalGraphics::GetImpl() const
 {
-    return mpBackend.get();
+    return mpBackend->GetImpl();
 }
 
 void AquaSalGraphics::SetTextColor( Color nColor )
