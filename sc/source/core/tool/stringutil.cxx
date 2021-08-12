@@ -18,6 +18,7 @@
  */
 
 #include <stringutil.hxx>
+#include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 
 #include <rtl/ustrbuf.hxx>

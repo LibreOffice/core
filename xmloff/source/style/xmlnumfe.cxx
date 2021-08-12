@@ -19,6 +19,7 @@
 
 #include <comphelper/sequence.hxx>
 #include <comphelper/string.hxx>
+#include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
 #include <svl/numuno.hxx>

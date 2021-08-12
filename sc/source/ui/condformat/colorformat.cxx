@@ -12,6 +12,7 @@
 
 #include <document.hxx>
 
+#include <svl/numformat.hxx>
 #include <svx/colorbox.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>

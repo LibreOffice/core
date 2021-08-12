@@ -32,6 +32,7 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/objitem.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <svl/numformat.hxx>
 #include <svl/stritem.hxx>
 #include <svl/zforlist.hxx>
 #include <svx/srchdlg.hxx>

@@ -67,6 +67,7 @@
 #include <helper/msgbox.hxx>
 #include <helper/tkresmgr.hxx>
 #include "vclxwindows_internal.hxx"
+#include <svl/numformat.hxx>
 
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;

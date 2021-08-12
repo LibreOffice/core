@@ -32,6 +32,7 @@
 #include <editeng/unoipset.hxx>
 #include <editeng/langitem.hxx>
 #include <sfx2/linkmgr.hxx>
+#include <svl/numformat.hxx>
 #include <svl/srchitem.hxx>
 #include <svl/sharedstringpool.hxx>
 #include <svx/unomid.hxx>

@@ -31,6 +31,7 @@
 #include <comphelper/lok.hxx>
 #include <comphelper/sequence.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include <unotools/resmgr.hxx>
 #include <vcl/svapp.hxx>

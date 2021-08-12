@@ -28,6 +28,7 @@
 #include <o3tl/safeint.hxx>
 #include <sal/log.hxx>
 #include <svl/itemset.hxx>
+#include <svl/numformat.hxx>
 #include <svl/zformat.hxx>
 #include <sax/tools/converter.hxx>
 #include <unotools/configmgr.hxx>

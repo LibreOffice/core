@@ -54,6 +54,7 @@
 #include <connectivity/formattedcolumnvalue.hxx>
 #include <i18nlangtag/lang.h>
 #include <o3tl/safeint.hxx>
+#include <svl/numformat.hxx>
 #include <svl/numuno.hxx>
 #include <svl/zforlist.hxx>
 #include <svx/dialmgr.hxx>

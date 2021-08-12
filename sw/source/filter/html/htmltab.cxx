@@ -32,6 +32,7 @@
 #include <unotools/configmgr.hxx>
 #include <svtools/htmltokn.h>
 #include <svtools/htmlkywd.hxx>
+#include <svl/numformat.hxx>
 #include <svl/urihelper.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>

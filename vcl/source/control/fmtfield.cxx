@@ -38,6 +38,7 @@
 #include <rtl/math.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
+#include <svl/numformat.hxx>
 #include <osl/diagnose.h>
 #include <tools/json_writer.hxx>
 

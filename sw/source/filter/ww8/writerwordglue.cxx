@@ -27,6 +27,7 @@
 
 #include <rtl/tencinfo.h>
 #include <sal/log.hxx>
+#include <svl/numformat.hxx>
 
 #include <unicode/ubidi.h>
 #include <tools/tenccvt.hxx>

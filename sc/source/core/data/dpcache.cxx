@@ -38,6 +38,7 @@
 #include <unotools/textsearch.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/collatorwrapper.hxx>
+#include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>

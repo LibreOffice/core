@@ -25,6 +25,7 @@
 #include <sfx2/lnkbase.hxx>
 #include <txtfld.hxx>
 #include <svl/itempool.hxx>
+#include <svl/numformat.hxx>
 #include <tools/lineend.hxx>
 #include <svl/whiter.hxx>
 #include <svl/eitem.hxx>

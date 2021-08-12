@@ -41,6 +41,7 @@
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/calendarwrapper.hxx>
 #include <unotools/charclass.hxx>
+#include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 
 using namespace ::com::sun::star;

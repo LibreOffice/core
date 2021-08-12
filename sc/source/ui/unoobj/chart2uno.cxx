@@ -46,6 +46,7 @@
 
 #include <formula/opcode.hxx>
 #include <o3tl/safeint.hxx>
+#include <svl/numformat.hxx>
 #include <svl/sharedstring.hxx>
 
 #include <sfx2/objsh.hxx>

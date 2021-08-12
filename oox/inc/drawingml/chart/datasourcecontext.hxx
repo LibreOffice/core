@@ -24,6 +24,8 @@
 #include <drawingml/chart/chartcontextbase.hxx>
 #include <svl/zforlist.hxx>
 
+class SvNumberFormatter;
+
 namespace oox::drawingml::chart {
 
 

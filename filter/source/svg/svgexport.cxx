@@ -47,6 +47,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <i18nlangtag/lang.h>
+#include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>

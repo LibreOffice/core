@@ -69,6 +69,7 @@
 #include <unotools/syslocaleoptions.hxx>
 #include <tools/datetime.hxx>
 #include <tools/fldunit.hxx>
+#include <svl/numformat.hxx>
 #include <svl/zformat.hxx>
 
 #include <test/xmltesttools.hxx>

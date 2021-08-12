@@ -27,6 +27,7 @@
 
 #include <math.h>
 
+#include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
 #include <svl/sharedstringpool.hxx>

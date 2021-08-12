@@ -46,6 +46,7 @@
 #include <xelink.hxx>
 #include <dputil.hxx>
 #include <generalfunction.hxx>
+#include <svl/numformat.hxx>
 
 using namespace ::oox;
 

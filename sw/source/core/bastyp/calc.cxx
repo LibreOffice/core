@@ -40,6 +40,7 @@
 #include <osl/diagnose.h>
 #include <rtl/math.hxx>
 #include <shellres.hxx>
+#include <svl/numformat.hxx>
 #include <svl/languageoptions.hxx>
 #include <svl/zforlist.hxx>
 #include <swmodule.hxx>

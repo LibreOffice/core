@@ -20,6 +20,7 @@
 #include <vcl/svapp.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/docfile.hxx>
+#include <svl/numformat.hxx>
 #include <svl/stritem.hxx>
 #include <svl/zformat.hxx>
 #include <svx/svdograf.hxx>

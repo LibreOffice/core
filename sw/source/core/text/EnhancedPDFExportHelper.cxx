@@ -33,6 +33,7 @@
 #include <editeng/langitem.hxx>
 #include <tools/urlobj.hxx>
 #include <svl/languageoptions.hxx>
+#include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include <swatrset.hxx>
 #include <frmatr.hxx>

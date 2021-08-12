@@ -18,6 +18,7 @@
  */
 
 #include <hintids.hxx>
+#include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/stritem.hxx>
 #include <svl/whiter.hxx>

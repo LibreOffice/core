@@ -26,6 +26,7 @@
 #include <svx/svditer.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfile.hxx>
+#include <svl/numformat.hxx>
 #include <svl/poolcach.hxx>
 #include <svl/zforlist.hxx>
 #include <unotools/charclass.hxx>

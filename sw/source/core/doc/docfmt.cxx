@@ -20,6 +20,7 @@
 #include <libxml/xmlwriter.h>
 #include <hintids.hxx>
 #include <svl/itemiter.hxx>
+#include <svl/numformat.hxx>
 #include <editeng/tstpitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/formatbreakitem.hxx>

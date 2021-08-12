@@ -88,6 +88,7 @@
 #include <fntcache.hxx>
 #include <frameformats.hxx>
 #include <o3tl/numeric.hxx>
+#include <svl/numformat.hxx>
 #include <tools/datetimeutils.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>

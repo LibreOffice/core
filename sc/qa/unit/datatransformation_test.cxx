@@ -13,6 +13,7 @@
 #include <document.hxx>
 #include <datatransformation.hxx>
 #include <scdll.hxx>
+#include <svl/numformat.hxx>
 #include <tools/time.hxx>
 
 class ScDataTransformationTest : public ScBootstrapFixture

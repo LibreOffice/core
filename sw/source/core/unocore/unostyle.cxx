@@ -27,6 +27,7 @@
 #include <svl/style.hxx>
 #include <svl/itemiter.hxx>
 #include <svl/listener.hxx>
+#include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
 #include <svx/pageitem.hxx>

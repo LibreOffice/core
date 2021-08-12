@@ -20,6 +20,7 @@
 #include <comphelper/fileformat.h>
 #include <tools/stream.hxx>
 #include <sfx2/docfile.hxx>
+#include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
 #include <unotools/configmgr.hxx>

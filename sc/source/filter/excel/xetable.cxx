@@ -24,6 +24,7 @@
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <scitems.hxx>
 #include <svl/intitem.hxx>
+#include <svl/numformat.hxx>
 #include <svl/stritem.hxx>
 #include <tools/UnitConversion.hxx>
 #include <editeng/flditem.hxx>

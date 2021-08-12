@@ -81,6 +81,7 @@
 #include <svx/svdocirc.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/svdocapt.hxx>
+#include <svl/numformat.hxx>
 #include <svl/srchitem.hxx>
 #include <svl/sharedstringpool.hxx>
 #include <tools/UnitConversion.hxx>

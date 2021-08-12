@@ -110,6 +110,7 @@
 
 #include <tools/color.hxx>
 #include <rtl/math.hxx>
+#include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include <svx/unoshape.hxx>
 #include <comphelper/base64.hxx>

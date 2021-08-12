@@ -18,6 +18,7 @@
  */
 
 #include <config_features.h>
+#include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/currencytable.hxx>
 #include <svtools/langhelp.hxx>

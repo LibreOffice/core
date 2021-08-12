@@ -54,6 +54,7 @@
 #include <tools/cpuid.hxx>
 #include <formula/errorcodes.hxx>
 #include <svl/intitem.hxx>
+#include <svl/numformat.hxx>
 #include <formulagroup.hxx>
 #include <listenercontext.hxx>
 #include <types.hxx>

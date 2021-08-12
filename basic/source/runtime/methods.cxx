@@ -72,6 +72,7 @@
 #include <com/sun/star/util/SearchAlgorithms2.hpp>
 #include <i18nutil/searchopt.hxx>
 #include <unotools/textsearch.hxx>
+#include <svl/numformat.hxx>
 
 
 

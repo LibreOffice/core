@@ -44,6 +44,7 @@
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/objsh.hxx>
 #include <svl/itemset.hxx>
+#include <svl/numformat.hxx>
 #include <svl/stritem.hxx>
 #include <svl/urihelper.hxx>
 #include <svl/sharedstringpool.hxx>

@@ -19,6 +19,7 @@
 
 #include <osl/file.hxx>
 #include <vcl/metaact.hxx>
+#include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include <tools/urlobj.hxx>
 

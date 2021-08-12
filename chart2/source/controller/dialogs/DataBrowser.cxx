@@ -37,6 +37,7 @@
 #include <vcl/virdev.hxx>
 #include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
+#include <svl/numformat.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
 #include <com/sun/star/chart2/XChartDocument.hpp>

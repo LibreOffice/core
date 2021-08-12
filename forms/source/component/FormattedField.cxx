@@ -27,6 +27,7 @@
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbconversion.hxx>
 #include <o3tl/any.hxx>
+#include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/numuno.hxx>
 #include <vcl/keycodes.hxx>

@@ -44,6 +44,7 @@
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <WCopyTable.hxx>
 #include <unotools/syslocale.hxx>
+#include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include <connectivity/dbexception.hxx>
 #include <connectivity/FValue.hxx>

@@ -97,6 +97,7 @@
 #include <xmloff/SchXMLSeriesHelper.hxx>
 #include "ColorPropertySet.hxx"
 
+#include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/numuno.hxx>
 #include <tools/diagnose_ex.h>

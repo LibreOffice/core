@@ -11,6 +11,7 @@
 #include <edtwin.hxx>
 #include <bookmrk.hxx>
 #include <tools/date.hxx>
+#include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include <vcl/svapp.hxx>
 

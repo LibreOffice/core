@@ -37,6 +37,7 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/types.hxx>
 #include <svl/numuno.hxx>
+#include <svl/numformat.hxx>
 #include <svl/stritem.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/mnemonic.hxx>

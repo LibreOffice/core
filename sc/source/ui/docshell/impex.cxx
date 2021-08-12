@@ -61,6 +61,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <editeng/editobj.hxx>
+#include <svl/numformat.hxx>
 
 #include <memory>
 #include <string_view>

@@ -80,6 +80,7 @@
 #include <optload.hxx>
 #include <optpage.hxx>
 #include <swuiidxmrk.hxx>
+#include <svl/numformat.hxx>
 #include <svx/dialogs.hrc>
 #include <mailmergewizard.hxx>
 #include <mailconfigpage.hxx>

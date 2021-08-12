@@ -50,6 +50,7 @@
 
 #include <unotools/saveopt.hxx>
 #include <rtl/math.hxx>
+#include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>

@@ -20,6 +20,7 @@
 #include <rtl/math.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include <tools/color.hxx>
 #include <i18nlangtag/lang.h>

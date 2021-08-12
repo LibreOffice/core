@@ -19,6 +19,7 @@
 
 #include <rangelst.hxx>
 #include <sfx2/bindings.hxx>
+#include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/weld.hxx>

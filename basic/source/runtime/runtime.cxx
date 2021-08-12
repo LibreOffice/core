@@ -46,6 +46,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/character.hxx>
 
+#include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 
 #include <i18nutil/searchopt.hxx>

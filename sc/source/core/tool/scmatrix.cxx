@@ -27,6 +27,7 @@
 #include <matrixoperators.hxx>
 #include <math.hxx>
 
+#include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/sharedstring.hxx>
 #include <rtl/math.hxx>

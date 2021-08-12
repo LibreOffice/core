@@ -29,6 +29,7 @@
 #include <editeng/justifyitem.hxx>
 #include <editeng/editobj.hxx>
 #include <vcl/outdev.hxx>
+#include <svl/numformat.hxx>
 #include <svl/inethist.hxx>
 #include <sfx2/objsh.hxx>
 #include <osl/diagnose.h>

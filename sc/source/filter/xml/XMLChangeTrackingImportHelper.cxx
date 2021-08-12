@@ -23,6 +23,7 @@
 #include <rangeutl.hxx>
 #include <tools/datetime.hxx>
 #include <osl/diagnose.h>
+#include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include <sax/tools/converter.hxx>
 

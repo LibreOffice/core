@@ -24,6 +24,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/syswin.hxx>
 #include <vcl/jobset.hxx>
+#include <svl/numformat.hxx>
 #include <svl/whiter.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/eitem.hxx>

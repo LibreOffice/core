@@ -45,6 +45,7 @@
 
 #include <rtl/character.hxx>
 #include <rtl/math.hxx>
+#include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 
 

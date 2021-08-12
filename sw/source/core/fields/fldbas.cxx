@@ -24,6 +24,7 @@
 #include <libxml/xmlwriter.h>
 
 #include <rtl/math.hxx>
+#include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
 #include <o3tl/enumarray.hxx>

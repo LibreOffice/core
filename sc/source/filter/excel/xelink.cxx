@@ -24,6 +24,7 @@
 #include <oox/token/namespaces.hxx>
 #include <oox/token/relationship.hxx>
 #include <unotools/collatorwrapper.hxx>
+#include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include <sal/log.hxx>
 #include <document.hxx>

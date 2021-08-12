@@ -12,6 +12,7 @@
 #include <document.hxx>
 #include <rtl/math.hxx>
 #include <cmath>
+#include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include <unotools/charclass.hxx>
 

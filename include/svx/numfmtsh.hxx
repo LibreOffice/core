@@ -28,6 +28,7 @@
 #include <vector>
 
 class Color;
+class SvNumberFormatter;
 
 enum class SvxNumberValueType
 {

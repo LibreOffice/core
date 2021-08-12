@@ -20,6 +20,7 @@
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 
+#include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 
 #include <dbdocutl.hxx>

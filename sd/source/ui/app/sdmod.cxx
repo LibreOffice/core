@@ -23,6 +23,7 @@
 #include <tools/urlobj.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
+#include <svl/numformat.hxx>
 #include <svl/intitem.hxx>
 #include <sfx2/msg.hxx>
 #include <sfx2/objface.hxx>

@@ -38,6 +38,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <svl/intitem.hxx>
 #include <svl/itemset.hxx>
+#include <svl/numformat.hxx>
 #include <oox/helper/binaryinputstream.hxx>
 #include <oox/helper/attributelist.hxx>
 #include <oox/token/tokens.hxx>

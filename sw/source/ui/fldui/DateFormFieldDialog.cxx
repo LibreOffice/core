@@ -10,6 +10,7 @@
 #include <DateFormFieldDialog.hxx>
 #include <IMark.hxx>
 #include <xmloff/odffields.hxx>
+#include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
 #include <doc.hxx>
