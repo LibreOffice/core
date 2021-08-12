@@ -21,6 +21,7 @@
 
 #include <scitems.hxx>
 #include <comphelper/sequence.hxx>
+#include <editeng/brushitem.hxx>
 #include <editeng/editview.hxx>
 #include <editeng/outliner.hxx>
 #include <o3tl/any.hxx>
@@ -957,12 +958,30 @@ bool ScModelObj::isMimeTypeSupported()
     return EditEngine::HasValidData(aDataHelper.GetTransferable());
 }
 
+static void lcl_sendLOKDocumentBackground(const ScViewData* pViewData)
+{
+    ScDocShell* pDocSh = pViewData->GetDocShell();
+    ScDocument& rDoc = pDocSh->GetDocument();
+    const ScPatternAttr *pAttr = rDoc.GetDefPattern();
+    const SfxPoolItem& rItem = pAttr->GetItem(ATTR_BACKGROUND);
+    const SvxBrushItem& rBackground = static_cast<const SvxBrushItem&>(rItem);
+    const Color& rColor = rBackground.GetColor();
+
+    ScTabViewShell* pViewShell = pViewData->GetViewShell();
+    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_DOCUMENT_BACKGROUND_COLOR, rColor.AsRGBHexString().toUtf8().getStr());
+}
+
 void ScModelObj::setClientZoom(int nTilePixelWidth_, int nTilePixelHeight_, int nTileTwipWidth_, int nTileTwipHeight_)
 {
     ScViewData* pViewData = ScDocShell::GetViewData();
 
     if (!pViewData)
         return;
+
+    // Currently in LOK clients the doc background cannot be changed, so send this sparingly as possible but for every view.
+    // FIXME: Find a better place to trigger this callback where it would be called just once per view creation.
+    // Doing this in ScTabViewShell init code does not work because callbacks do not work at that point for the first view.
+    lcl_sendLOKDocumentBackground(pViewData);
 
     const Fraction newZoomX(nTilePixelWidth_ * TWIPS_PER_PIXEL, nTileTwipWidth_);
     const Fraction newZoomY(nTilePixelHeight_ * TWIPS_PER_PIXEL, nTileTwipHeight_);

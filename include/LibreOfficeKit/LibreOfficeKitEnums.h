@@ -774,6 +774,12 @@ typedef enum
     LOK_CALLBACK_VALIDITY_INPUT_HELP = 51,
 
     /**
+     * This is currently Calc only. Indicates the document background
+     * color in the payload as a RGB hex string (RRGGBB).
+     */
+    LOK_CALLBACK_DOCUMENT_BACKGROUND_COLOR = 52,
+
+    /**
      * The position of the cell cursor jumped to.
      *
      * Payload format: "x, y, width, height, column, row", where the first
@@ -783,8 +789,7 @@ typedef enum
      *
      * Rectangle format is the same as LOK_CALLBACK_INVALIDATE_TILES.
      */
-    LOK_CALLBACK_SC_FOLLOW_JUMP = 52,
-
+    LOK_CALLBACK_SC_FOLLOW_JUMP = 53,
 }
 LibreOfficeKitCallbackType;
 
@@ -917,6 +922,8 @@ static inline const char* lokCallbackTypeToString(int nType)
         return "LOK_CALLBACK_FORM_FIELD_BUTTON";
     case LOK_CALLBACK_INVALIDATE_SHEET_GEOMETRY:
         return "LOK_CALLBACK_INVALIDATE_SHEET_GEOMETRY";
+    case LOK_CALLBACK_DOCUMENT_BACKGROUND_COLOR:
+        return "LOK_CALLBACK_DOCUMENT_BACKGROUND_COLOR";
     case LOK_CALLBACK_SC_FOLLOW_JUMP:
         return "LOK_CALLBACK_SC_FOLLOW_JUMP";
     }
