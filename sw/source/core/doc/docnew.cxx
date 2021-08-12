@@ -43,6 +43,7 @@
 #include <sfx2/linkmgr.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/lrspitem.hxx>
+#include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include <unotools/lingucfg.hxx>
 #include <svx/svdpage.hxx>

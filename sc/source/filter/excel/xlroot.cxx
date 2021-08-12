@@ -28,6 +28,7 @@
 #include <comphelper/servicehelper.hxx>
 #include <sot/storage.hxx>
 #include <vcl/svapp.hxx>
+#include <svl/numformat.hxx>
 #include <svl/stritem.hxx>
 #include <svl/languageoptions.hxx>
 #include <sfx2/objsh.hxx>

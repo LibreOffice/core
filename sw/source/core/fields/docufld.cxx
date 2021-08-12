@@ -38,6 +38,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <tools/urlobj.hxx>
+#include <svl/numformat.hxx>
 #include <svl/urihelper.hxx>
 #include <unotools/useroptions.hxx>
 #include <unotools/syslocale.hxx>

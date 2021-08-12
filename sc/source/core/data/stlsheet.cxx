@@ -33,6 +33,7 @@
 #include <editeng/xmlcnitm.hxx>
 #include <svl/itempool.hxx>
 #include <svl/itemset.hxx>
+#include <svl/numformat.hxx>
 #include <svl/hint.hxx>
 #include <o3tl/unit_conversion.hxx>
 #include <attrib.hxx>

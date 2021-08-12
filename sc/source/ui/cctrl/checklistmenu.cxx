@@ -33,6 +33,7 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <tools/json_writer.hxx>
 #include <sfx2/viewsh.hxx>
+#include <svl/numformat.hxx>
 #include <vcl/jsdialog/executor.hxx>
 
 #include <document.hxx>

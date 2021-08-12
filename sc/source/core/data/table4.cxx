@@ -23,6 +23,7 @@
 #include <editeng/editeng.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/escapementitem.hxx>
+#include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include <vcl/keycodes.hxx>
 #include <rtl/math.hxx>

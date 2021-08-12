@@ -22,6 +22,7 @@
 #include <tools/debug.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <o3tl/safeint.hxx>
+#include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
 #include <svl/currencytable.hxx>

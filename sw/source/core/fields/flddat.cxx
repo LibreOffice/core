@@ -22,6 +22,7 @@
 #include <o3tl/any.hxx>
 #include <o3tl/temporary.hxx>
 #include <tools/datetime.hxx>
+#include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include <com/sun/star/util/DateTime.hpp>
 #include <doc.hxx>

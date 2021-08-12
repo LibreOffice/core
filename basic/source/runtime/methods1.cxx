@@ -52,6 +52,7 @@
 #include <sal/log.hxx>
 #include <eventatt.hxx>
 #include <rtl/math.h>
+#include <svl/numformat.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>

@@ -34,6 +34,7 @@
 #include <vcl/svapp.hxx>
 #include <svl/itempool.hxx>
 #include <svl/itemset.hxx>
+#include <svl/numformat.hxx>
 #include <svl/intitem.hxx>
 #include <svl/zformat.hxx>
 #include <tools/fract.hxx>

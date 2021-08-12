@@ -90,6 +90,7 @@
 #include <svl/filenotation.hxx>
 #include <svl/intitem.hxx>
 #include <svl/itemset.hxx>
+#include <svl/numformat.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <svl/numuno.hxx>
 #include <svl/urihelper.hxx>

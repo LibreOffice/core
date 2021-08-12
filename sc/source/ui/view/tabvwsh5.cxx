@@ -37,6 +37,7 @@
 #include <uiitems.hxx>
 #include <hints.hxx>
 #include <cellvalue.hxx>
+#include <svl/numformat.hxx>
 #include <svl/sharedstring.hxx>
 
 void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )

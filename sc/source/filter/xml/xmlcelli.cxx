@@ -59,6 +59,7 @@
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/prstylei.hxx>
 #include <xmloff/xmlimppr.hxx>
+#include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include <svx/svdocapt.hxx>
 #include <editeng/eeitem.hxx>

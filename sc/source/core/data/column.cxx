@@ -44,6 +44,7 @@
 #include <drwlayer.hxx>
 #include <mtvelements.hxx>
 
+#include <svl/numformat.hxx>
 #include <svl/poolcach.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/sharedstringpool.hxx>

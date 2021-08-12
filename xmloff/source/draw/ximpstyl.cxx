@@ -45,6 +45,7 @@
 #include <xmloff/xmlprcon.hxx>
 #include <xmloff/families.hxx>
 #include <com/sun/star/container/XNameContainer.hpp>
+#include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include "layerimp.hxx"
 #include <xmloff/XMLGraphicsDefaultStyle.hxx>

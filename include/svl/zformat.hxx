@@ -34,6 +34,7 @@ class Color;
 
 class ImpSvNumberformatScan;            // format code string scanner
 class ImpSvNumberInputScan;             // input string scanner
+class SvNumberFormatter;
 
 enum SvNumberformatLimitOps
 {

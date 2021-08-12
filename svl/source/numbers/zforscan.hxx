@@ -23,6 +23,7 @@
 #include <rtl/ustring.hxx>
 #include <svl/nfkeytab.hxx>
 #include <svl/nfsymbol.hxx>
+#include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include <tools/color.hxx>
 #include <tools/date.hxx>

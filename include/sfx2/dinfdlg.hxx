@@ -28,6 +28,7 @@
 #include <com/sun/star/util/Duration.hpp>
 #include <com/sun/star/document/CmisProperty.hpp>
 
+#include <svl/numformat.hxx>
 #include <svl/stritem.hxx>
 #include <svl/zforlist.hxx>
 #include <svtools/ctrlbox.hxx>

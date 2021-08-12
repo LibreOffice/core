@@ -18,6 +18,7 @@
  */
 
 #include <comphelper/processfactory.hxx>
+#include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include <editeng/editeng.hxx>
 

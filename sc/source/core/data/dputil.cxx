@@ -17,6 +17,7 @@
 #include <comphelper/string.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/calendarwrapper.hxx>
+#include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include <rtl/math.hxx>
 #include <osl/diagnose.h>

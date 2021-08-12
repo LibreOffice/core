@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include <unotools/charclass.hxx>
 

@@ -26,6 +26,7 @@
 #include <o3tl/temporary.hxx>
 #include <osl/thread.h>
 #include <unotools/textsearch.hxx>
+#include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
 #include <tools/urlobj.hxx>

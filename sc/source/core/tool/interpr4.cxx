@@ -31,6 +31,7 @@
 #include <basic/sbx.hxx>
 #include <basic/sbxobj.hxx>
 #include <basic/sbuno.hxx>
+#include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/sharedstringpool.hxx>
 #include <unotools/charclass.hxx>

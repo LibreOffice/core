@@ -80,6 +80,7 @@
 #include <unotextrange.hxx>
 #include <unotextcursor.hxx>
 #include <unoparagraph.hxx>
+#include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include <editeng/formatbreakitem.hxx>
 #include <editeng/shaditem.hxx>

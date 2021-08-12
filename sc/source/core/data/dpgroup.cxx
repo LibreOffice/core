@@ -26,6 +26,7 @@
 
 #include <osl/diagnose.h>
 #include <rtl/math.hxx>
+#include <svl/numformat.hxx>
 
 #include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
 

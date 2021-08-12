@@ -51,6 +51,7 @@
 #include <rootfrm.hxx>
 #include <svl/stritem.hxx>
 #include <unotxdoc.hxx>
+#include <svl/numformat.hxx>
 #include <svl/numuno.hxx>
 #include <fldbas.hxx>
 #include <unomap.hxx>

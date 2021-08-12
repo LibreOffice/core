@@ -22,6 +22,7 @@
 #include <document.hxx>
 
 #include <comphelper/processfactory.hxx>
+#include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
 #include <svl/languageoptions.hxx>

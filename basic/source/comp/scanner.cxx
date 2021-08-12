@@ -24,6 +24,7 @@
 
 #include <basic/sberrors.hxx>
 #include <i18nlangtag/lang.h>
+#include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include <rtl/character.hxx>
 

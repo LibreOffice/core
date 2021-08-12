@@ -27,6 +27,7 @@
 #include <i18nutil/unicode.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <svtools/langtab.hxx>
+#include <svl/numformat.hxx>
 #include <svl/slstitm.hxx>
 #include <svl/stritem.hxx>
 #include <sfx2/htmlmode.hxx>

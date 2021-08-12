@@ -22,6 +22,7 @@
 #include <sfx2/frame.hxx>
 #include <svl/stritem.hxx>
 #include <svl/intitem.hxx>
+#include <svl/numformat.hxx>
 #include <svx/colorbox.hxx>
 #include <vcl/svapp.hxx>
 #include <formula/token.hxx>

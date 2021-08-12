@@ -22,6 +22,7 @@
 #include <editeng/brushitem.hxx>
 #include <editeng/colritem.hxx>
 #include <unotools/textsearch.hxx>
+#include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
 #include <unotools/charclass.hxx>

@@ -14,6 +14,7 @@
 #include <comphelper/random.hxx>
 #include <formula/token.hxx>
 #include <sal/log.hxx>
+#include <svl/numformat.hxx>
 
 #include <cmath>
 #include <memory>

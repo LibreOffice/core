@@ -29,6 +29,7 @@
 #include <svx/svdpage.hxx>
 #include <svtools/htmlcfg.hxx>
 #include <sfx2/sfxhtml.hxx>
+#include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>

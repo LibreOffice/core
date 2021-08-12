@@ -25,6 +25,7 @@
 #include <sfx2/event.hxx>
 #include <openflag.hxx>
 
+#include <svl/numformat.hxx>
 #include <svtools/htmlkywd.hxx>
 #include <svtools/htmltokn.h>
 #include <vcl/imap.hxx>

@@ -31,6 +31,7 @@
 #include <basic/sberrors.hxx>
 
 #include <basic/sbx.hxx>
+#include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/sharedstringpool.hxx>
 #include <vcl/svapp.hxx>

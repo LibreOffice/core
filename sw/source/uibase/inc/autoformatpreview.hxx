@@ -22,6 +22,7 @@
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <sal/types.h>
 #include <svx/framelinkarray.hxx>
+#include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include <tools/gen.hxx>
 #include <rtl/ustring.hxx>

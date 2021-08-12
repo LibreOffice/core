@@ -29,6 +29,7 @@
 #include <svx/chrtitem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
+#include <svl/numformat.hxx>
 #include <vcl/formatter.hxx>
 #include <vcl/weld.hxx>
 #include <svl/zformat.hxx>

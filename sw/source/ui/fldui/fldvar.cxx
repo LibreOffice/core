@@ -31,6 +31,7 @@
 #include "fldvar.hxx"
 #include "flddinf.hxx"
 #include <calc.hxx>
+#include <svl/numformat.hxx>
 #include <svl/zformat.hxx>
 #include <strings.hrc>
 

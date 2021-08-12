@@ -32,6 +32,7 @@
 #include <sfx2/app.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/printer.hxx>
+#include <svl/numformat.hxx>
 #include <svx/pageitem.hxx>
 #include <svx/postattr.hxx>
 #include <svx/svxids.hrc>

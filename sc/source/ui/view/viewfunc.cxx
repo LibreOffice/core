@@ -29,6 +29,7 @@
 #include <editeng/justifyitem.hxx>
 #include <o3tl/unit_conversion.hxx>
 #include <sfx2/bindings.hxx>
+#include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
 #include <vcl/svapp.hxx>

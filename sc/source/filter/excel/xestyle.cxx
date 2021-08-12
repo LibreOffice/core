@@ -54,6 +54,7 @@
 #include <oox/token/tokens.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/relationship.hxx>
+#include <svl/numformat.hxx>
 
 using namespace ::com::sun::star;
 using namespace oox;

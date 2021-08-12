@@ -32,6 +32,7 @@
 #include <xmloff/namespacemap.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <sax/tools/converter.hxx>
+#include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/sharedstring.hxx>
 #include <sal/log.hxx>

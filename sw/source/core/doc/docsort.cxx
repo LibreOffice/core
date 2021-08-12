@@ -45,6 +45,7 @@
 #include <redline.hxx>
 #include <node2lay.hxx>
 #include <frameformats.hxx>
+#include <svl/numformat.hxx>
 
 #include <set>
 #include <utility>

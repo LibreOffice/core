@@ -19,6 +19,7 @@
 
 #include <scitems.hxx>
 #include <editeng/justifyitem.hxx>
+#include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include <sal/log.hxx>
 

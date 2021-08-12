@@ -53,6 +53,7 @@
 #include <svx/rotmodit.hxx>
 #include <editeng/unolingu.hxx>
 #include <editeng/justifyitem.hxx>
+#include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/broadcast.hxx>
 #include <vcl/outdev.hxx>

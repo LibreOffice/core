@@ -20,6 +20,7 @@
 #include <memory>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <osl/diagnose.h>
+#include <svl/numformat.hxx>
 #include <hintids.hxx>
 
 #include <editeng/lrspitem.hxx>
