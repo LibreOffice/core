@@ -429,11 +429,14 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
             // Avoid non-CSS version in the ReqIF case.
             rWrt.OutBackground( pBrushItem, false );
 
-        if( rWrt.m_bCfgOutStyles )
-            OutCSS1_TableBGStyleOpt( rWrt, *pBrushItem );
+        if (!rWrt.m_bCfgOutStyles)
+            pBrushItem = nullptr;
     }
 
-    rWrt.OutCSS1_TableCellBorderHack(*pBox->GetFrameFormat());
+    // tdf#132739 with rWrt.m_bCfgOutStyles of true bundle the brush item css
+    // properties into the same "style" tag as the borders so there is only one
+    // style tag
+    rWrt.OutCSS1_TableCellBordersAndBG(*pBox->GetFrameFormat(), pBrushItem);
 
     sal_uInt32 nNumFormat = 0;
     double nValue = 0.0;
