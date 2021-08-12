@@ -24,6 +24,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <sfx2/objsh.hxx>
 #include <formulacell.hxx>
+#include <config_features.h>
 #include <vector>
 #include <com/sun/star/container/XContainer.hpp>
 #include <com/sun/star/script/XLibraryContainer.hpp>
@@ -136,10 +137,13 @@ void ScMacroManager::InitUserFuncData()
     SfxObjectShell* pShell = mrDoc.GetDocumentShell();
     if (!pShell)
         return;
-    if (!pShell->GetBasicManager()->GetName().isEmpty())
+#if HAVE_FEATURE_SCRIPTING
+    const BasicManager *pBasicManager = pShell->GetBasicManager();
+    if (!pBasicManager->GetName().isEmpty())
     {
-        sProjectName = pShell->GetBasicManager()->GetName();
+        sProjectName = pBasicManager->GetName();
     }
+#endif
     try
     {
         Reference< script::XLibraryContainer > xLibraries( pShell->GetBasicContainer(), uno::UNO_SET_THROW );
