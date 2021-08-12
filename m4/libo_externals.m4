@@ -10,11 +10,11 @@ dnl -*- Mode: Autoconf; tab-width: 4; indent-tabs-mode: nil; fill-column: 102 -*
 # <$2 uppercase variable part - used for configure.ac and make variables>
 # <$3 pkg-config query string>
 # [$4 if optional, default to: enabled, disabled or fixed (default: fixed)]
-# [$5 which is preferred: (fixed-|test-)system or (fixed-)internal (default: internal)]
+# [$5 which is preferred: (fixed-|test-)system or (fixed-)internal or system-if-linux (default: internal)]
 # [$6 ignore $with_system_libs: TRUE or blank (default: blank/false)]
 #
 # $4 fixed: fixed-enabled, as fixed-disabled makes no sense.
-# $5 test-system: follows $test_system_$1, ignors $with_system_libs; no configure switch
+# $5 test-system: follows $test_system_$1, ignores $with_system_libs; no configure switch
 #
 # Used configure.ac variables:
 #  - $2_(CFLAGS|LIBS)_internal: must be filled to match the internal build
@@ -71,9 +71,20 @@ m4_if(
         with_system_$1=yes
     ],[$5],[fixed-internal],[
         with_system_$1=no
+    ],[$5],[system-if-linux],[
+        AC_ARG_WITH(system-$1,
+            AS_HELP_STRING([--with-system-$1],[Use $1 from the operating system.]),
+        ,[case "$_os" in
+            Linux)
+                with_system_nss=yes
+            ;;
+            *)
+                with_system_nss=no
+            ;;
+          esac])
     ],[
         m4_if([$5],[internal],,[m4_ifnblank([$5],
-              [m4_fatal([$$5 ($5) must be "(fixed-|test-)system", "(fixed-)internal" or empty (=internal)])])])
+              [m4_fatal([$$5 ($5) must be "(fixed-|test-)system", "(fixed-)internal", "system-if-linux" or empty (=internal)])])])
         AC_ARG_WITH(system-$1,
             AS_HELP_STRING([--with-system-$1],[Use $1 from the operating system.]),
         ,[csm_default_with($1,no,$6)])
