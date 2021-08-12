@@ -1805,8 +1805,8 @@ Writer& OutCSS1_TableBGStyleOpt( Writer& rWrt, const SfxPoolItem& rHt )
                                    CSS1_OUTMODE_TABLEBOX, nullptr );
     OutCSS1_SvxBrush( rWrt, rHt, Css1Background::Table, nullptr );
 
-    if( !rHTMLWrt.m_bFirstCSS1Property )
-        rWrt.Strm().WriteChar( '\"' );
+    if (!rHTMLWrt.m_bFirstCSS1Property)
+        rWrt.Strm().WriteChar(cCSS1_style_opt_end);
 
     return rWrt;
 }
@@ -2069,9 +2069,7 @@ void SwHTMLWriter::OutCSS1_TableCellBorderHack(SwFrameFormat const& rFrameFormat
         CSS1_OUTMODE_STYLE_OPT_ON|CSS1_OUTMODE_ENCODE|CSS1_OUTMODE_TABLEBOX, nullptr );
     OutCSS1_SvxBox(*this, rFrameFormat.GetBox());
     if (!m_bFirstCSS1Property)
-    {
-        Strm().WriteChar( cCSS1_style_opt_end );
-    }
+        Strm().WriteChar(cCSS1_style_opt_end);
 }
 
 void SwHTMLWriter::OutCSS1_SectionFormatOptions( const SwFrameFormat& rFrameFormat, const SwFormatCol *pCol )
