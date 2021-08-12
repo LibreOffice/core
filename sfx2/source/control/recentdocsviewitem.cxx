@@ -178,6 +178,7 @@ void RecentDocsViewItem::OpenDocument()
 {
     // show busy mouse pointer
     mrParentView.SetPointer(PointerStyle::Wait);
+    mrParentView.Disable();
 
     Reference<frame::XDispatch> xDispatch;
     css::util::URL aTargetURL;
