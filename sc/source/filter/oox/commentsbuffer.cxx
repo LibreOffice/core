@@ -198,7 +198,10 @@ void Comment::finalizeImport()
         // insert text and convert text formatting
         maModel.mxText->finalizeImport();
         Reference< XText > xAnnoText( xAnnoShape, UNO_QUERY_THROW );
+        Reference< css::document::XActionLockable > xAnnoLock( xAnnoShape, UNO_QUERY_THROW );
+        xAnnoLock->addActionLock();
         maModel.mxText->convert( xAnnoText );
+        xAnnoLock->removeActionLock();
     }
     catch( Exception& )
     {

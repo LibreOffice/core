@@ -1490,7 +1490,7 @@ void EditEngine::Clear()
 void EditEngine::SetText( const OUString& rText )
 {
     pImpEditEngine->SetText( rText );
-    if ( !rText.isEmpty() )
+    if ( !rText.isEmpty() && pImpEditEngine->GetUpdateMode() )
         pImpEditEngine->FormatAndUpdate();
 }
 
@@ -1747,7 +1747,8 @@ void EditEngine::SetText(sal_Int32 nPara, const OUString& rTxt)
 void EditEngine::SetParaAttribs( sal_Int32 nPara, const SfxItemSet& rSet )
 {
     pImpEditEngine->SetParaAttribs( nPara, rSet );
-    pImpEditEngine->FormatAndUpdate();
+    if ( pImpEditEngine->GetUpdateMode() )
+        pImpEditEngine->FormatAndUpdate();
 }
 
 const SfxItemSet& EditEngine::GetParaAttribs( sal_Int32 nPara ) const
