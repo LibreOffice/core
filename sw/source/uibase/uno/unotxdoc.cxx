@@ -3407,8 +3407,7 @@ SwXTextDocument::getSearchResultRectangles(const char* pPayload)
     {
         SwDoc* pDoc = m_pDocShell->GetDoc();
 
-        sw::search::SearchIndexData aData;
-
+        std::vector<sw::search::SearchIndexData> aDataVector;
         aWalker.children();
         while (aWalker.isValid())
         {
@@ -3419,21 +3418,28 @@ SwXTextDocument::getSearchResultRectangles(const char* pPayload)
 
                 if (!sType.isEmpty() && !sIndex.isEmpty())
                 {
-                    aData.nNodeIndex = sIndex.toInt32();
-                    aData.eType = sw::search::NodeType(sType.toInt32());
+                    sw::search::SearchIndexData aData;
+                    aData.mnNodeIndex = sIndex.toInt32();
+                    aData.meType = sw::search::NodeType(sType.toInt32());
 
-                    sw::search::SearchResultLocator aLocator(pDoc);
-                    sw::search::LocationResult aResult = aLocator.find(aData);
-                    if (aResult.mbFound)
-                    {
-                        for (auto const & rRect : aResult.maRectangles)
-                            aRectangles.push_back(rRect);
-                    }
+                    aDataVector.push_back(aData);
                 }
             }
             aWalker.next();
         }
         aWalker.parent();
+
+
+        if (!aDataVector.empty())
+        {
+            sw::search::SearchResultLocator aLocator(pDoc);
+            sw::search::LocationResult aResult = aLocator.find(aDataVector);
+            if (aResult.mbFound)
+            {
+                for (auto const & rRect : aResult.maRectangles)
+                    aRectangles.push_back(rRect);
+            }
+        }
     }
 
     return aRectangles;
