@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ca1792f_31ddb7c4",
+        "filename": "sw/source/core/table/swtable.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-08-12T11:42:14Z",
+      "side": 1,
+      "message": "since this code is now in sw core, and this function is called from multiple clients for different purposes, do we want to limit this copying of attributes to the Word import filters?\n\nthis SwDoc function can be checked for this:\n\nsw/inc/doc.hxx:    bool IsInWriterfilterImport() const { return mbInWriterfilterImport;",
+      "revId": "498d2b82187ec3ff58f076e0d15741e64c0505ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
