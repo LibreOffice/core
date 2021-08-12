@@ -24,11 +24,14 @@ public:
     AquaSkiaSalGraphicsImpl(AquaSalGraphics& rParent, AquaSharedAttributes& rShared);
     virtual ~AquaSkiaSalGraphicsImpl() override;
 
-    virtual void Init() override;
     virtual void DeInit() override;
     virtual void freeResources() override;
     //    virtual void Flush() override;
 
+    virtual void UpdateGeometryProvider(SalGeometryProvider* provider) override
+    {
+        setProvider(provider);
+    }
     static void prepareSkia();
 
 private:
