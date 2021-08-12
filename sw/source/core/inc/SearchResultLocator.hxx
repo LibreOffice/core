@@ -25,9 +25,18 @@ enum class NodeType
 
 struct SearchIndexData
 {
-    NodeType eType = NodeType::Undefined;
-    OUString aObjectName;
-    sal_uInt32 nNodeIndex = 0;
+    NodeType meType = NodeType::Undefined;
+    sal_uInt32 mnNodeIndex = 0;
+    OUString maObjectName;
+
+    SearchIndexData() {}
+
+    SearchIndexData(NodeType eType, sal_uInt32 nNodeIndex, OUString const& aObjectName = OUString())
+        : meType(eType)
+        , mnNodeIndex(nNodeIndex)
+        , maObjectName(aObjectName)
+    {
+    }
 };
 
 struct LocationResult
@@ -40,13 +49,15 @@ class SW_DLLPUBLIC SearchResultLocator
 {
     SwDoc* mpDocument;
 
+    void findOne(LocationResult& rResult, SearchIndexData const& rSearchIndexData);
+
 public:
     SearchResultLocator(SwDoc* pDoc)
         : mpDocument(pDoc)
     {
     }
 
-    LocationResult find(SearchIndexData const& rSearchIndexData);
+    LocationResult find(std::vector<SearchIndexData> const& rSearchIndexDataVector);
 };
 
 } // end sw namespace

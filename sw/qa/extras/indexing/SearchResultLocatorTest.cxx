@@ -56,11 +56,10 @@ void SearchResultLocatorTest::testSearchResultLocator()
     CPPUNIT_ASSERT(pDoc);
 
     sw::search::SearchResultLocator aLocator(pDoc);
-    sw::search::SearchIndexData aData;
-    aData.eType = sw::search::NodeType::WriterNode;
-    aData.nNodeIndex = 14;
+    std::vector<sw::search::SearchIndexData> aDataVector;
+    aDataVector.emplace_back(sw::search::NodeType::WriterNode, 14);
 
-    sw::search::LocationResult aResult = aLocator.find(aData);
+    sw::search::LocationResult aResult = aLocator.find(aDataVector);
     CPPUNIT_ASSERT_EQUAL(size_t(1), aResult.maRectangles.size());
 
     // skip asserting exact values for macOS and Windows because of
@@ -84,12 +83,10 @@ void SearchResultLocatorTest::testSearchResultLocatorForSdrObjects()
     CPPUNIT_ASSERT(pDoc);
 
     sw::search::SearchResultLocator aLocator(pDoc);
-    sw::search::SearchIndexData aData;
-    aData.eType = sw::search::NodeType::SdrObject;
-    aData.aObjectName = u"Circle";
-    aData.nNodeIndex = 1;
+    std::vector<sw::search::SearchIndexData> aDataVector;
+    aDataVector.emplace_back(sw::search::NodeType::SdrObject, 1, u"Circle");
 
-    sw::search::LocationResult aResult = aLocator.find(aData);
+    sw::search::LocationResult aResult = aLocator.find(aDataVector);
     CPPUNIT_ASSERT_EQUAL(size_t(1), aResult.maRectangles.size());
 
     // skip asserting exact values for macOS and Windows because of
