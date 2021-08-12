@@ -402,7 +402,6 @@ ScNavigatorDlg::ScNavigatorDlg(SfxBindings* pB, weld::Widget* pParent, SfxNaviga
     if ( nLastRoot != ScContentId::ROOT )
         m_xLbEntries->SetRootType( nLastRoot );
 
-    m_xLbEntries->Refresh();
     GetDocNames(nullptr);
 
     UpdateButtons();
