@@ -2115,6 +2115,46 @@ void GraphicsRenderTests::testDrawOpenPolygonWithPolyPolygonB2D()
     }
 }
 
+void GraphicsRenderTests::testDrawOpenBezierWithPolyLine()
+{
+    vcl::test::OutputDeviceTestPolyLine aOutDevTest;
+    Bitmap aBitmap = aOutDevTest.setupOpenBezier();
+    OUString aTestName = "testDrawOpenBezierWithPolyLine";
+    if (!SHOULD_ASSERT)
+    {
+        appendTestResult(aTestName, "SKIPPED");
+        return;
+    }
+    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkOpenBezier(aBitmap);
+    appendTestResult(aTestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        BitmapEx aBitmapEx(aBitmap);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
+    }
+}
+
+void GraphicsRenderTests::testDrawOpenBezierWithPolyLineB2D()
+{
+    vcl::test::OutputDeviceTestPolyLine aOutDevTest;
+    Bitmap aBitmap = aOutDevTest.setupOpenBezier();
+    OUString aTestName = "testDrawOpenBezierWithPolyLineB2D";
+    if (!SHOULD_ASSERT)
+    {
+        appendTestResult(aTestName, "SKIPPED");
+        return;
+    }
+    vcl::test::TestResult eResult = vcl::test::OutputDeviceTestCommon::checkOpenBezier(aBitmap);
+    appendTestResult(aTestName, returnTestStatus(eResult),
+                     (m_aStoreResultantBitmap ? aBitmap : Bitmap()));
+    if (m_aStoreResultantBitmap)
+    {
+        BitmapEx aBitmapEx(aBitmap);
+        exportBitmapExToImage(m_aUserInstallPath + aTestName + ".png", aBitmapEx);
+    }
+}
+
 void GraphicsRenderTests::runALLTests()
 {
     testDrawRectWithRectangle();
@@ -2217,6 +2257,8 @@ void GraphicsRenderTests::runALLTests()
     testDrawOpenPolygonWithPolygon();
     testDrawOpenPolygonWithPolyPolygon();
     testDrawOpenPolygonWithPolyPolygonB2D();
+    testDrawOpenBezierWithPolyLine();
+    testDrawOpenBezierWithPolyLineB2D();
 }
 
 void GraphicsRenderTests::appendTestResult(OUString aTestName, OUString aTestStatus,
