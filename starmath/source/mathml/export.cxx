@@ -683,6 +683,9 @@ void SmMlExport::exportMlAttributtes(const SmMlElement* pMlElement)
     for (size_t i = 0; i < nAttributeCount; ++i)
     {
         SmMlAttribute aAttribute = pMlElement->getAttribute(i);
+        if (!aAttribute.isSet())
+            continue;
+
         switch (aAttribute.getMlAttributeValueType())
         {
             case SmMlAttributeValueType::MlAccent:
