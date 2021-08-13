@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4b52a964_b8ad2daa",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-08-13T14:14:18Z",
+      "side": 1,
+      "message": "Why was this reverted? I\u0027m sure there was a reason, but you forgot to state it. :-) (In general, the longer an action lock guard is held during import, the better.)",
+      "revId": "a6ade09983dd95d6ebbd1ecfda564f645629ce34",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
