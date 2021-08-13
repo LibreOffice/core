@@ -1644,11 +1644,16 @@ namespace //local functions originally from docfmt.cxx
             return bRet;
         }
 
+        SwRangeRedline * pRedline = nullptr;
         if( rDoc.getIDocumentRedlineAccess().IsRedlineOn() && pCharSet && pCharSet->Count() )
         {
             if( pUndo )
                 pUndo->SaveRedlineData( rRg, false );
-            rDoc.getIDocumentRedlineAccess().AppendRedline( new SwRangeRedline( RedlineType::Format, rRg ), true);
+
+            pRedline = new SwRangeRedline( RedlineType::Format, rRg );
+            auto const result(rDoc.getIDocumentRedlineAccess().AppendRedline( pRedline, true));
+            if (IDocumentRedlineAccess::AppendResult::IGNORED == result)
+                pRedline = nullptr;
         }
 
         /* now if range */
@@ -1670,6 +1675,32 @@ namespace //local functions originally from docfmt.cxx
                 if( pNode->IsTextNode() && pCharSet && pCharSet->Count() )
                 {
                     SwRegHistory history( pNode, *pNode, pHistory );
+
+                    // store original text attributes to reject formatting change
+                    if (pRedline)
+                    {
+                        // Apply the first character's attributes to the ReplaceText
+                        SfxItemSet aSet( rDoc.GetAttrPool(),
+                                    svl::Items<RES_CHRATR_BEGIN,     RES_TXTATR_WITHEND_END - 1,
+                                    RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1> );
+                        pNode->GetTextNode()->GetParaAttr( aSet, pStt->nContent.GetIndex() + 1, aCntEnd.GetIndex() );
+
+                        aSet.ClearItem( RES_TXTATR_REFMARK );
+                        aSet.ClearItem( RES_TXTATR_TOXMARK );
+                        aSet.ClearItem( RES_TXTATR_CJK_RUBY );
+                        aSet.ClearItem( RES_TXTATR_INETFMT );
+                        aSet.ClearItem( RES_TXTATR_META );
+                        aSet.ClearItem( RES_TXTATR_METAFIELD );
+
+                        auto pExtra = new SwRedlineExtraData_FormatColl( "", USHRT_MAX, &aSet );
+                        if ( pExtra )
+                        {
+                            std::unique_ptr<SwRedlineExtraData_FormatColl> xRedlineExtraData;
+                            xRedlineExtraData.reset(pExtra);
+                            pRedline->SetExtraData( xRedlineExtraData.get() );
+                        }
+                    }
+
                     bRet = history.InsertItems(*pCharSet,
                             pStt->nContent.GetIndex(), aCntEnd.GetIndex(), nFlags, /*ppNewTextAttr*/nullptr)
                         || bRet;
