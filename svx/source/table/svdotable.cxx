@@ -696,7 +696,7 @@ void SdrTableObjImpl::update()
     mpTableObj->maRect = mpTableObj->maLogicRect;
     LayoutTable( mpTableObj->maRect, false, false );
 
-    mpTableObj->SetRectsDirty();
+    mpTableObj->SetBoundAndSnapRectsDirty();
     mpTableObj->ActionChanged();
     mpTableObj->BroadcastObjectChange();
 }
@@ -1446,7 +1446,7 @@ void SdrTableObj::onEditOutlinerStatusEvent( EditStatus* pEditStatus )
         tools::Rectangle aRect0( maRect );
         maRect = maLogicRect;
         mpImpl->LayoutTable( maRect, false, false );
-        SetRectsDirty();
+        SetBoundAndSnapRectsDirty();
         ActionChanged();
         BroadcastObjectChange();
         if (aRect0 != maRect)
@@ -1928,7 +1928,7 @@ void SdrTableObj::NbcSetLogicRect(const tools::Rectangle& rRect)
         NbcAdjustTextFrameWidthAndHeight();
     else
         NbcAdjustTextFrameWidthAndHeight(!bHeight, !bWidth);
-    SetRectsDirty();
+    SetBoundAndSnapRectsDirty();
 }
 
 
@@ -1956,7 +1956,7 @@ void SdrTableObj::NbcResize(const Point& rRef, const Fraction& xFact, const Frac
 
     maRect = maLogicRect;
     NbcAdjustTextFrameWidthAndHeight( maLogicRect.GetHeight() == aOldRect.GetHeight(), maLogicRect.GetWidth() == aOldRect.GetWidth() );
-    SetRectsDirty();
+    SetBoundAndSnapRectsDirty();
 }
 
 
@@ -1970,7 +1970,7 @@ bool SdrTableObj::AdjustTextFrameWidthAndHeight()
         if (m_pUserCall!=nullptr)
             aBoundRect0=GetLastBoundRect();
         maRect = aNewRect;
-        SetRectsDirty();
+        SetBoundAndSnapRectsDirty();
         SetChanged();
         BroadcastObjectChange();
         SendUserCall(SdrUserCallType::Resize,aBoundRect0);

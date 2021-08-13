@@ -594,7 +594,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject(
             rCamera.SetFocalLength( 1.0 );
             rCamera.SetProjection( eProjectionType );
             pScene->SetCamera( rCamera );
-            pScene->SetRectsDirty();
+            pScene->SetBoundAndSnapRectsDirty();
 
             double fOriginX, fOriginY;
             GetOrigin( rGeometryItem, fOriginX, fOriginY );

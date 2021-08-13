@@ -115,7 +115,7 @@ namespace sdr::properties
 
                 SdrObject& rObj = GetSdrObject();
                 rObj.SetBoundRectDirty();
-                rObj.SetRectsDirty(true);
+                rObj.SetBoundAndSnapRectsDirty(/*bNotMyself*/true);
             }
 
             mpStyleSheet = nullptr;
@@ -282,7 +282,7 @@ namespace sdr::properties
             SdrObject& rObj = GetSdrObject();
 
             rObj.SetBoundRectDirty();
-            rObj.SetRectsDirty(true);
+            rObj.SetBoundAndSnapRectsDirty(/*bNotMyself*/true);
             rObj.SetChanged();
         }
 
@@ -370,7 +370,7 @@ namespace sdr::properties
 
             SdrObject& rObj = GetSdrObject();
             rObj.SetBoundRectDirty();
-            rObj.SetRectsDirty(true);
+            rObj.SetBoundAndSnapRectsDirty(true);
         }
 
         SfxStyleSheet* AttributeProperties::GetStyleSheet() const
@@ -418,7 +418,7 @@ namespace sdr::properties
 
             // set necessary changes like in RemoveStyleSheet()
             GetSdrObject().SetBoundRectDirty();
-            GetSdrObject().SetRectsDirty(true);
+            GetSdrObject().SetBoundAndSnapRectsDirty(/*bNotMyself*/true);
 
             mpStyleSheet = nullptr;
         }
@@ -488,7 +488,7 @@ namespace sdr::properties
                 // in the ItemSet parts because GetBoundRect() may calculate a new
                 tools::Rectangle aBoundRect = rObj.GetLastBoundRect();
 
-                rObj.SetRectsDirty(true);
+                rObj.SetBoundAndSnapRectsDirty(/*bNotMyself*/true);
 
                 // tell the object about the change
                 rObj.SetChanged();

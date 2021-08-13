@@ -446,7 +446,7 @@ void E3dObject::NbcRotate(const Point& rRef, Degree100 nAngle, double sn, double
     aRotateZ.rotate(0.0, 0.0, fAngleInRad);
     NbcSetTransform(aRotateZ * GetTransform());
 
-    SetRectsDirty();        // This forces a recalculation of all BoundRects
+    SetBoundAndSnapRectsDirty();    // This forces a recalculation of all BoundRects
     NbcRotateGluePoints(rRef,nAngle,sn,cs);  // Rotate the glue points (who still
                                             // have coordinates relative to the
                                             // original page)

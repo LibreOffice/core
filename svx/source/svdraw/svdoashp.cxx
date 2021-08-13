@@ -1423,7 +1423,7 @@ void SdrObjCustomShape::NbcSetSnapRect( const tools::Rectangle& rRect )
     AdaptTextMinSize();
 
     ImpCheckShear();
-    SetRectsDirty();
+    SetBoundAndSnapRectsDirty();
     SetChanged();
 }
 
@@ -1445,7 +1445,7 @@ void SdrObjCustomShape::NbcSetLogicRect( const tools::Rectangle& rRect )
 
     AdaptTextMinSize();
 
-    SetRectsDirty();
+    SetBoundAndSnapRectsDirty();
     SetChanged();
 }
 
@@ -2037,7 +2037,7 @@ void SdrObjCustomShape::DragMoveCustomShapeHdl( const Point& rDestination,
             maRect.Move( nXDiff, nYDiff );
             m_aOutRect.Move( nXDiff, nYDiff );
             maSnapRect.Move( nXDiff, nYDiff );
-            SetRectsDirty(true);
+            SetBoundAndSnapRectsDirty(/*bNotMyself*/true);
             InvalidateRenderGeometry();
 
             for (const auto& rInteraction : aInteractionHandles)
@@ -2067,7 +2067,7 @@ bool SdrObjCustomShape::applySpecialDrag(SdrDragStat& rDrag)
         {
             rDrag.SetEndDragChangesGeoAndAttributes(true);
             DragMoveCustomShapeHdl( rDrag.GetNow(), static_cast<sal_uInt16>(pHdl->GetPointNum()), !rDrag.GetDragMethod()->IsShiftPressed() );
-            SetRectsDirty();
+            SetBoundAndSnapRectsDirty();
             InvalidateRenderGeometry();
             SetChanged();
             break;
@@ -2122,7 +2122,7 @@ void SdrObjCustomShape::DragCreateObject( SdrDragStat& rStat )
     ImpJustifyRect( aRect1 );
     rStat.SetActionRect( aRect1 );
     maRect = aRect1;
-    SetRectsDirty();
+    SetBoundAndSnapRectsDirty();
 
     for (const auto& rInteraction : aInteractionHandles)
     {
@@ -2148,7 +2148,7 @@ bool SdrObjCustomShape::MovCreate(SdrDragStat& rStat)
         InvalidateRenderGeometry();
     }
     DragCreateObject( rStat );
-    SetRectsDirty();
+    SetBoundAndSnapRectsDirty();
     return true;
 }
 
@@ -2158,7 +2158,7 @@ bool SdrObjCustomShape::EndCreate( SdrDragStat& rStat, SdrCreateCmd eCmd )
 
     AdaptTextMinSize();
 
-    SetRectsDirty();
+    SetBoundAndSnapRectsDirty();
     return ( eCmd == SdrCreateCmd::ForceEnd || rStat.GetPointCount() >= 2 );
 }
 
@@ -2457,7 +2457,7 @@ bool SdrObjCustomShape::NbcAdjustTextFrameWidthAndHeight(bool bHgt, bool bWdt)
         std::vector< SdrCustomShapeInteraction > aInteractionHandles( GetInteractionHandles() );
 
         maRect = aNewTextRect;
-        SetRectsDirty();
+        SetBoundAndSnapRectsDirty();
         SetChanged();
 
         for (const auto& rInteraction : aInteractionHandles)
@@ -2492,7 +2492,7 @@ bool SdrObjCustomShape::AdjustTextFrameWidthAndHeight()
         std::vector< SdrCustomShapeInteraction > aInteractionHandles( GetInteractionHandles() );
 
         maRect = aNewTextRect;
-        SetRectsDirty();
+        SetBoundAndSnapRectsDirty();
 
         for (const auto& rInteraction : aInteractionHandles)
         {
@@ -2763,7 +2763,7 @@ void SdrObjCustomShape::NbcSetOutlinerParaObject(std::optional<OutlinerParaObjec
 {
     SdrTextObj::NbcSetOutlinerParaObject( std::move(pTextObject) );
     SetBoundRectDirty();
-    SetRectsDirty(true);
+    SetBoundAndSnapRectsDirty(true);
     InvalidateRenderGeometry();
 }
 

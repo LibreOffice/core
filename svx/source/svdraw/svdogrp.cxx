@@ -72,7 +72,7 @@ SdrObjGroup::SdrObjGroup(SdrModel& rSdrModel, SdrObjGroup const & rSource)
         // tdf#116979: needed here, we need bSnapRectDirty to be true
         // which it is after using SdrObject::operator= (see above),
         // but set to false again using CopyObjects
-        SetRectsDirty();
+        SetBoundAndSnapRectsDirty();
     }
 
     // copy local parameters
@@ -362,7 +362,7 @@ void SdrObjGroup::NbcMove(const Size& rSiz)
     else
     {
         m_aOutRect.Move(rSiz);
-        SetRectsDirty();
+        SetBoundAndSnapRectsDirty();
     }
 }
 
@@ -399,7 +399,7 @@ void SdrObjGroup::NbcResize(const Point& rRef, const Fraction& xFact, const Frac
     else
     {
         ResizeRect(m_aOutRect,rRef,xFact,yFact);
-        SetRectsDirty();
+        SetBoundAndSnapRectsDirty();
     }
 }
 
@@ -539,7 +539,7 @@ void SdrObjGroup::Move(const Size& rSiz)
     else
     {
         m_aOutRect.Move(rSiz);
-        SetRectsDirty();
+        SetBoundAndSnapRectsDirty();
     }
 
     SetChanged();
@@ -592,7 +592,7 @@ void SdrObjGroup::Resize(const Point& rRef, const Fraction& xFact, const Fractio
     else
     {
         ResizeRect(m_aOutRect,rRef,xFact,yFact);
-        SetRectsDirty();
+        SetBoundAndSnapRectsDirty();
     }
 
     SetChanged();

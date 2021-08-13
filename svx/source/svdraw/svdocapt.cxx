@@ -412,7 +412,7 @@ void SdrCaptionObj::ImpRecalcTail()
     ImpCaptParams aPara;
     ImpGetCaptParams(aPara);
     ImpCalcTail(aPara, aTailPoly, maRect);
-    SetRectsDirty();
+    SetBoundAndSnapRectsDirty();
     SetXPolyDirty();
 }
 
@@ -543,7 +543,7 @@ bool SdrCaptionObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
     ImpGetCaptParams(aPara);
     maRect.SetPos(rStat.GetNow());
     ImpCalcTail(aPara,aTailPoly,maRect);
-    SetRectsDirty();
+    SetBoundAndSnapRectsDirty();
     return (eCmd==SdrCreateCmd::ForceEnd || rStat.GetPointCount()>=2);
 }
 
