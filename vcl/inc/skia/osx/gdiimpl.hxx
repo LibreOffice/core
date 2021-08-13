@@ -37,6 +37,7 @@ public:
 private:
     virtual void createWindowContext(bool forceRaster = false) override;
     virtual void performFlush() override;
+    void flushToScreen(const SkIRect& rect);
     friend std::unique_ptr<sk_app::WindowContext> createVulkanWindowContext(bool);
 };
 
