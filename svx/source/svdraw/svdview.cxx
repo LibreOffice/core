@@ -43,6 +43,7 @@
 #include <svx/sdrpaintwindow.hxx>
 #include <svx/sdrpagewindow.hxx>
 #include <svx/sdrhittesthelper.hxx>
+#include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 #include <drawinglayer/primitive2d/texthierarchyprimitive2d.hxx>
 #include <svx/sdr/contact/objectcontactofpageview.hxx>
 #include <sal/log.hxx>
@@ -457,11 +458,10 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
                 {
                     if (xReference.is())
                     {
-                        // try to cast to drawinglayer::primitive2d::TextHierarchyFieldPrimitive2D implementation
-                        pTextHierarchyFieldPrimitive2D = dynamic_cast<const drawinglayer::primitive2d::TextHierarchyFieldPrimitive2D*>(xReference.get());
-
-                        if (pTextHierarchyFieldPrimitive2D)
+                        auto pBasePrimitive = static_cast<const drawinglayer::primitive2d::BasePrimitive2D*>(xReference.get());
+                        if (pBasePrimitive->getPrimitive2DID() == PRIMITIVE2D_ID_TEXTHIERARCHYFIELDPRIMITIVE2D)
                         {
+                            pTextHierarchyFieldPrimitive2D = static_cast<const drawinglayer::primitive2d::TextHierarchyFieldPrimitive2D*>(xReference.get());
                             break;
                         }
                     }

@@ -36,22 +36,9 @@ getB2DRangeFromPrimitive2DReference(const Primitive2DReference& rCandidate,
 
     if (rCandidate.is())
     {
-        // try to get C++ implementation base
-        const BasePrimitive2D* pCandidate(dynamic_cast<BasePrimitive2D*>(rCandidate.get()));
-
-        if (pCandidate)
-        {
-            // use it if possible
-            aRetval.expand(pCandidate->getB2DRange(aViewInformation));
-        }
-        else
-        {
-            // use UNO API call instead
-            auto aViewParameters = geometry::createPropertyValues(aViewInformation);
-
-            aRetval.expand(basegfx::unotools::b2DRectangleFromRealRectangle2D(
-                rCandidate->getRange(aViewParameters)));
-        }
+        // get C++ implementation base
+        const BasePrimitive2D* pCandidate(static_cast<BasePrimitive2D*>(rCandidate.get()));
+        aRetval.expand(pCandidate->getB2DRange(aViewInformation));
     }
 
     return aRetval;
@@ -71,13 +58,8 @@ bool arePrimitive2DReferencesEqual(const Primitive2DReference& rxA, const Primit
         return true;
     }
 
-    const BasePrimitive2D* pA(dynamic_cast<const BasePrimitive2D*>(rxA.get()));
-    const BasePrimitive2D* pB(dynamic_cast<const BasePrimitive2D*>(rxB.get()));
-
-    if (!pA || !pB)
-    {
-        return false;
-    }
+    const BasePrimitive2D* pA(static_cast<const BasePrimitive2D*>(rxA.get()));
+    const BasePrimitive2D* pB(static_cast<const BasePrimitive2D*>(rxB.get()));
 
     return pA->operator==(*pB);
 }
