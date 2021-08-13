@@ -611,6 +611,7 @@ SvxJavaParameterDlg::SvxJavaParameterDlg(weld::Window* pParent)
     m_xAssignedList->set_size_request(m_xAssignedList->get_approximate_digit_width() * 54,
                                       m_xAssignedList->get_height_rows(6));
     m_xParameterEdit->connect_changed( LINK( this, SvxJavaParameterDlg, ModifyHdl_Impl ) );
+    m_xParameterEdit->connect_activate(LINK(this, SvxJavaParameterDlg, ActivateHdl_Impl));
     m_xAssignBtn->connect_clicked( LINK( this, SvxJavaParameterDlg, AssignHdl_Impl ) );
     m_xRemoveBtn->connect_clicked( LINK( this, SvxJavaParameterDlg, RemoveHdl_Impl ) );
     m_xEditBtn->connect_clicked( LINK( this, SvxJavaParameterDlg, EditHdl_Impl ) );
@@ -650,6 +651,16 @@ IMPL_LINK_NOARG(SvxJavaParameterDlg, AssignHdl_Impl, weld::Button&, void)
     ModifyHdl_Impl(*m_xParameterEdit);
     EnableEditButton();
     EnableRemoveButton();
+}
+
+IMPL_LINK_NOARG(SvxJavaParameterDlg, ActivateHdl_Impl, weld::Entry&, bool)
+{
+    if (m_xAssignBtn->get_sensitive())
+    {
+        AssignHdl_Impl(*m_xAssignBtn);
+        return true;
+    }
+    return false;
 }
 
 IMPL_LINK_NOARG(SvxJavaParameterDlg, EditHdl_Impl, weld::Button&, void)
