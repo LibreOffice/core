@@ -64,15 +64,16 @@ SmMlAttributePos starmathdatabase::MlAttributeListMo[] = {
     { SmMlAttributeValueType::MlMathsize, 5 },
     { SmMlAttributeValueType::MlMathvariant, 6 },
     { SmMlAttributeValueType::MlFence, 7 },
-    { SmMlAttributeValueType::MlMaxsize, 8 },
-    { SmMlAttributeValueType::MlMinsize, 9 },
-    { SmMlAttributeValueType::MlMovablelimits, 10 },
-    { SmMlAttributeValueType::MlLspace, 11 },
-    { SmMlAttributeValueType::MlRspace, 12 },
-    { SmMlAttributeValueType::MlAccent, 13 },
-    { SmMlAttributeValueType::MlStretchy, 14 },
-    { SmMlAttributeValueType::MlSeparator, 15 },
-    { SmMlAttributeValueType::MlSymmetric, 16 }
+    { SmMlAttributeValueType::MlForm, 8 },
+    { SmMlAttributeValueType::MlMaxsize, 9 },
+    { SmMlAttributeValueType::MlMinsize, 10 },
+    { SmMlAttributeValueType::MlMovablelimits, 11 },
+    { SmMlAttributeValueType::MlLspace, 12 },
+    { SmMlAttributeValueType::MlRspace, 13 },
+    { SmMlAttributeValueType::MlAccent, 14 },
+    { SmMlAttributeValueType::MlStretchy, 15 },
+    { SmMlAttributeValueType::MlSeparator, 16 },
+    { SmMlAttributeValueType::MlSymmetric, 17 }
     // clang-format on
 };
 
@@ -107,15 +108,16 @@ SmMlAttributePos starmathdatabase::MlAttributeListMstyle[] = {
     { SmMlAttributeValueType::MlMathsize, 5 },
     { SmMlAttributeValueType::MlMathvariant, 6 },
     { SmMlAttributeValueType::MlFence, 7 },
-    { SmMlAttributeValueType::MlMaxsize, 8 },
-    { SmMlAttributeValueType::MlMinsize, 9 },
-    { SmMlAttributeValueType::MlMovablelimits, 10 },
-    { SmMlAttributeValueType::MlLspace, 11 },
-    { SmMlAttributeValueType::MlRspace, 12 },
-    { SmMlAttributeValueType::MlAccent, 13 },
-    { SmMlAttributeValueType::MlStretchy, 14 },
-    { SmMlAttributeValueType::MlSeparator, 15 },
-    { SmMlAttributeValueType::MlSymmetric, 16 }
+    { SmMlAttributeValueType::MlForm, 8 },
+    { SmMlAttributeValueType::MlMaxsize, 9 },
+    { SmMlAttributeValueType::MlMinsize, 10 },
+    { SmMlAttributeValueType::MlMovablelimits, 11 },
+    { SmMlAttributeValueType::MlLspace, 12 },
+    { SmMlAttributeValueType::MlRspace, 13 },
+    { SmMlAttributeValueType::MlAccent, 14 },
+    { SmMlAttributeValueType::MlStretchy, 15 },
+    { SmMlAttributeValueType::MlSeparator, 16 },
+    { SmMlAttributeValueType::MlSymmetric, 17 }
     // clang-format on
 };
 
