@@ -35,6 +35,7 @@
 #include <basegfx/polygon/b2dpolygonclipper.hxx>
 #include <basegfx/color/bcolor.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textdecoratedprimitive2d.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
@@ -142,8 +143,9 @@ void VclProcessor2D::RenderTextSimpleOrDecoratedPortionPrimitive2D(
             }
 
             // handle additional font attributes
-            const primitive2d::TextDecoratedPortionPrimitive2D* pTCPP
-                = dynamic_cast<const primitive2d::TextDecoratedPortionPrimitive2D*>(
+            const primitive2d::TextDecoratedPortionPrimitive2D* pTCPP = nullptr;
+            if (rTextCandidate.getPrimitive2DID() == PRIMITIVE2D_ID_TEXTDECORATEDPORTIONPRIMITIVE2D)
+                pTCPP = static_cast<const primitive2d::TextDecoratedPortionPrimitive2D*>(
                     &rTextCandidate);
 
             if (pTCPP != nullptr)

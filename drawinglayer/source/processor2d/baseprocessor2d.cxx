@@ -60,20 +60,8 @@ namespace drawinglayer::processor2d
 
                 if(xReference.is())
                 {
-                    // try to cast to BasePrimitive2D implementation
-                    const primitive2d::BasePrimitive2D* pBasePrimitive = dynamic_cast< const primitive2d::BasePrimitive2D* >(xReference.get());
-
-                    if(pBasePrimitive)
-                    {
-                        // it is a BasePrimitive2D implementation, use local processor
-                        processBasePrimitive2D(*pBasePrimitive);
-                    }
-                    else
-                    {
-                        // unknown implementation, use UNO API call instead and process recursively
-                        auto aViewParameters = geometry::createPropertyValues(getViewInformation2D());
-                        process(comphelper::sequenceToContainer<primitive2d::Primitive2DContainer>(xReference->getDecomposition(aViewParameters)));
-                    }
+                    const primitive2d::BasePrimitive2D* pBasePrimitive = static_cast< const primitive2d::BasePrimitive2D* >(xReference.get());
+                    processBasePrimitive2D(*pBasePrimitive);
                 }
             }
         }

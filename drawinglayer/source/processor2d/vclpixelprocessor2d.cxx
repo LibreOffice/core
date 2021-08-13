@@ -612,65 +612,61 @@ void VclPixelProcessor2D::processUnifiedTransparencePrimitive2D(
         {
             const primitive2d::Primitive2DReference xReference(rContent[0]);
             const primitive2d::BasePrimitive2D* pBasePrimitive
-                = dynamic_cast<const primitive2d::BasePrimitive2D*>(xReference.get());
+                = static_cast<const primitive2d::BasePrimitive2D*>(xReference.get());
 
-            if (pBasePrimitive)
+            switch (pBasePrimitive->getPrimitive2DID())
             {
-                switch (pBasePrimitive->getPrimitive2DID())
+                case PRIMITIVE2D_ID_POLYPOLYGONCOLORPRIMITIVE2D:
                 {
-                    case PRIMITIVE2D_ID_POLYPOLYGONCOLORPRIMITIVE2D:
-                    {
-                        // single transparent tools::PolyPolygon identified, use directly
-                        const primitive2d::PolyPolygonColorPrimitive2D* pPoPoColor
-                            = static_cast<const primitive2d::PolyPolygonColorPrimitive2D*>(
-                                pBasePrimitive);
-                        SAL_WARN_IF(!pPoPoColor, "drawinglayer",
-                                    "OOps, PrimitiveID and PrimitiveType do not match (!)");
-                        bDrawTransparentUsed = true;
-                        tryDrawPolyPolygonColorPrimitive2DDirect(
-                            *pPoPoColor, rUniTransparenceCandidate.getTransparence());
-                        break;
-                    }
-                    case PRIMITIVE2D_ID_POLYGONHAIRLINEPRIMITIVE2D:
-                    {
-                        // single transparent PolygonHairlinePrimitive2D identified, use directly
-                        const primitive2d::PolygonHairlinePrimitive2D* pPoHair
-                            = static_cast<const primitive2d::PolygonHairlinePrimitive2D*>(
-                                pBasePrimitive);
-                        SAL_WARN_IF(!pPoHair, "drawinglayer",
-                                    "OOps, PrimitiveID and PrimitiveType do not match (!)");
-
-                        // do no tallow by default - problem is that self-overlapping parts of this geometry will
-                        // not be in an all-same transparency but will already alpha-cover themselves with blending.
-                        // This is not what the UnifiedTransparencePrimitive2D defines: It requires all its
-                        // content to be uniformly transparent.
-                        // For hairline the effect is pretty minimal, but still not correct.
-                        bDrawTransparentUsed = false;
-                        break;
-                    }
-                    case PRIMITIVE2D_ID_POLYGONSTROKEPRIMITIVE2D:
-                    {
-                        // single transparent PolygonStrokePrimitive2D identified, use directly
-                        const primitive2d::PolygonStrokePrimitive2D* pPoStroke
-                            = static_cast<const primitive2d::PolygonStrokePrimitive2D*>(
-                                pBasePrimitive);
-                        SAL_WARN_IF(!pPoStroke, "drawinglayer",
-                                    "OOps, PrimitiveID and PrimitiveType do not match (!)");
-
-                        // do no tallow by default - problem is that self-overlapping parts of this geometry will
-                        // not be in an all-same transparency but will already alpha-cover themselves with blending.
-                        // This is not what the UnifiedTransparencePrimitive2D defines: It requires all its
-                        // content to be uniformly transparent.
-                        // To check, activate and draw a wide transparent self-crossing line/curve
-                        bDrawTransparentUsed = false;
-                        break;
-                    }
-                    default:
-                        SAL_INFO("drawinglayer",
-                                 "default case for " << drawinglayer::primitive2d::idToString(
-                                     rUniTransparenceCandidate.getPrimitive2DID()));
-                        break;
+                    // single transparent tools::PolyPolygon identified, use directly
+                    const primitive2d::PolyPolygonColorPrimitive2D* pPoPoColor
+                        = static_cast<const primitive2d::PolyPolygonColorPrimitive2D*>(
+                            pBasePrimitive);
+                    SAL_WARN_IF(!pPoPoColor, "drawinglayer",
+                                "OOps, PrimitiveID and PrimitiveType do not match (!)");
+                    bDrawTransparentUsed = true;
+                    tryDrawPolyPolygonColorPrimitive2DDirect(
+                        *pPoPoColor, rUniTransparenceCandidate.getTransparence());
+                    break;
                 }
+                case PRIMITIVE2D_ID_POLYGONHAIRLINEPRIMITIVE2D:
+                {
+                    // single transparent PolygonHairlinePrimitive2D identified, use directly
+                    const primitive2d::PolygonHairlinePrimitive2D* pPoHair
+                        = static_cast<const primitive2d::PolygonHairlinePrimitive2D*>(
+                            pBasePrimitive);
+                    SAL_WARN_IF(!pPoHair, "drawinglayer",
+                                "OOps, PrimitiveID and PrimitiveType do not match (!)");
+
+                    // do no tallow by default - problem is that self-overlapping parts of this geometry will
+                    // not be in an all-same transparency but will already alpha-cover themselves with blending.
+                    // This is not what the UnifiedTransparencePrimitive2D defines: It requires all its
+                    // content to be uniformly transparent.
+                    // For hairline the effect is pretty minimal, but still not correct.
+                    bDrawTransparentUsed = false;
+                    break;
+                }
+                case PRIMITIVE2D_ID_POLYGONSTROKEPRIMITIVE2D:
+                {
+                    // single transparent PolygonStrokePrimitive2D identified, use directly
+                    const primitive2d::PolygonStrokePrimitive2D* pPoStroke
+                        = static_cast<const primitive2d::PolygonStrokePrimitive2D*>(pBasePrimitive);
+                    SAL_WARN_IF(!pPoStroke, "drawinglayer",
+                                "OOps, PrimitiveID and PrimitiveType do not match (!)");
+
+                    // do no tallow by default - problem is that self-overlapping parts of this geometry will
+                    // not be in an all-same transparency but will already alpha-cover themselves with blending.
+                    // This is not what the UnifiedTransparencePrimitive2D defines: It requires all its
+                    // content to be uniformly transparent.
+                    // To check, activate and draw a wide transparent self-crossing line/curve
+                    bDrawTransparentUsed = false;
+                    break;
+                }
+                default:
+                    SAL_INFO("drawinglayer",
+                             "default case for " << drawinglayer::primitive2d::idToString(
+                                 rUniTransparenceCandidate.getPrimitive2DID()));
+                    break;
             }
         }
 
