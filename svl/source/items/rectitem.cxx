@@ -78,14 +78,14 @@ bool SfxRectangleItem::QueryValue( css::uno::Any& rVal,
     {
         case 0:
         {
-            rVal <<= css::awt::Rectangle( aVal.getX(),
-                                             aVal.getY(),
+            rVal <<= css::awt::Rectangle( aVal.Left(),
+                                             aVal.Top(),
                                              aVal.getWidth(),
                                              aVal.getHeight() );
             break;
         }
-        case MID_RECT_LEFT:  rVal <<= aVal.getX(); break;
-        case MID_RECT_RIGHT: rVal <<= aVal.getY(); break;
+        case MID_RECT_LEFT:  rVal <<= aVal.Left(); break;
+        case MID_RECT_RIGHT: rVal <<= aVal.Top(); break;
         case MID_WIDTH: rVal <<= aVal.getWidth(); break;
         case MID_HEIGHT: rVal <<= aVal.getHeight(); break;
         default: OSL_FAIL("Wrong MemberID!"); return false;
@@ -112,8 +112,8 @@ bool SfxRectangleItem::PutValue( const css::uno::Any& rVal,
         switch ( nMemberId )
         {
             case 0:
-                aVal.setX( aValue.X );
-                aVal.setY( aValue.Y );
+                aVal.SetLeft( aValue.X );
+                aVal.SetTop( aValue.Y );
                 aVal.setWidth( aValue.Width );
                 aVal.setHeight( aValue.Height );
                 break;

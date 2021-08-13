@@ -5173,9 +5173,9 @@ void ScXMLExport::GetViewSettings(uno::Sequence<beans::PropertyValue>& rProps)
                 tools::Rectangle aRect(pEmbeddedObj->GetVisArea());
                 sal_uInt16 i(0);
                 pProps[i].Name = "VisibleAreaTop";
-                pProps[i].Value <<= static_cast<sal_Int32>(aRect.getY());
+                pProps[i].Value <<= static_cast<sal_Int32>(aRect.Top());
                 pProps[++i].Name = "VisibleAreaLeft";
-                pProps[i].Value <<= static_cast<sal_Int32>(aRect.getX());
+                pProps[i].Value <<= static_cast<sal_Int32>(aRect.Left());
                 pProps[++i].Name = "VisibleAreaWidth";
                 pProps[i].Value <<= static_cast<sal_Int32>(aRect.getWidth());
                 pProps[++i].Name = "VisibleAreaHeight";

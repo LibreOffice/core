@@ -1006,8 +1006,8 @@ css::awt::Rectangle VCLXToolkit::getWorkArea(  )
     sal_Int32 nDisplay = Application::GetDisplayBuiltInScreen();
     tools::Rectangle aWorkRect = Application::GetScreenPosSizePixel( nDisplay );
     css::awt::Rectangle aNotherRect;
-    aNotherRect.X = aWorkRect.getX();
-    aNotherRect.Y = aWorkRect.getY();
+    aNotherRect.X = aWorkRect.Left();
+    aNotherRect.Y = aWorkRect.Top();
     aNotherRect.Width = aWorkRect.getWidth();
     aNotherRect.Height = aWorkRect.getHeight();
     return aNotherRect;

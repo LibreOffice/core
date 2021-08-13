@@ -1112,9 +1112,10 @@ void XclObjAny::WriteFromTo( XclExpXmlStream& rStrm, const Reference< XShape >& 
             sal_Int16 nHalfWidth = aSize.Width / 2;
             sal_Int16 nHalfHeight = aSize.Height / 2;
 
-            const tools::Rectangle& aSnapRect(pObj->GetSnapRect()); // bounding box of the rotated shape
-            aTopLeft.X = aSnapRect.getX() + (aSnapRect.GetWidth() / 2) - nHalfWidth;
-            aTopLeft.Y = aSnapRect.getY() + (aSnapRect.GetHeight() / 2) - nHalfHeight;
+            // Center of bounding box of the rotated shape
+            const auto aSnapRectCenter(pObj->GetSnapRect().Center());
+            aTopLeft.X = aSnapRectCenter.X() - nHalfWidth;
+            aTopLeft.Y = aSnapRectCenter.Y() - nHalfHeight;
 
             // MSO changes the anchor positions at these angles and that does an extra 90 degrees
             // rotation on our shapes, so we output it in such position that MSO

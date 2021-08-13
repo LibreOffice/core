@@ -1140,12 +1140,8 @@ bool LayoutManager::implts_hideStatusBar( bool bStoreState )
 
 void LayoutManager::implts_setOffset( const sal_Int32 nBottomOffset )
 {
-    ::tools::Rectangle aOffsetRect;
-    setZeroRectangle( aOffsetRect );
-    aOffsetRect.setHeight( nBottomOffset );
-
     if ( m_xToolbarManager.is() )
-        m_xToolbarManager->setDockingAreaOffsets( aOffsetRect );
+        m_xToolbarManager->setDockingAreaOffsets({ 0, 0, 0, nBottomOffset });
 }
 
 void LayoutManager::implts_setInplaceMenuBar( const Reference< XIndexAccess >& xMergedMenuBar )

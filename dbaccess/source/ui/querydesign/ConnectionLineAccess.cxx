@@ -113,7 +113,7 @@ namespace dbaui
     {
         ::osl::MutexGuard aGuard( m_aMutex  );
         tools::Rectangle aRect(m_pLine ? m_pLine->GetBoundingRect() : tools::Rectangle());
-        return awt::Rectangle(aRect.getX(),aRect.getY(),aRect.getWidth(),aRect.getHeight());
+        return awt::Rectangle(aRect.Left(),aRect.Top(),aRect.getWidth(),aRect.getHeight());
     }
     awt::Point SAL_CALL OConnectionLineAccess::getLocation(  )
     {

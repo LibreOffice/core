@@ -821,7 +821,7 @@ public:
                 m_xMenuButton->SetParent(pEventWindow);
             int nButtonWidth = get_menu_button_width();
             m_xMenuButton->SetSizePixel(Size(nButtonWidth, rRect.GetHeight()));
-            m_xMenuButton->SetPosPixel(Point(rRect.GetWidth() - nButtonWidth, rRect.getY()));
+            m_xMenuButton->SetPosPixel(Point(rRect.GetWidth() - nButtonWidth, rRect.Top()));
         }
     }
 

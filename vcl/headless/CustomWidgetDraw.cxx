@@ -307,7 +307,7 @@ bool CustomWidgetDraw::getNativeControlRegion(
 {
     // Translate to POD rectangle and back.
     const rectangle_t aRegion
-        = { rBoundingControlRegion.getX(), rBoundingControlRegion.getY(),
+        = { rBoundingControlRegion.Left(), rBoundingControlRegion.Top(),
             rBoundingControlRegion.GetWidth(), rBoundingControlRegion.GetHeight() };
     if (s_pWidgetImplementation)
     {
