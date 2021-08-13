@@ -164,7 +164,7 @@ void SvxNumberType::dumpAsXml( xmlTextWriterPtr pWriter ) const
 SvxNumberFormat::SvxNumberFormat( SvxNumType eType )
     : SvxNumberType(eType),
       eNumAdjust(SvxAdjust::Left),
-      nInclUpperLevels(0),
+      nInclUpperLevels(1),
       nStart(1),
       cBullet(SVX_DEF_BULLET),
       nBulletRelSize(100),
