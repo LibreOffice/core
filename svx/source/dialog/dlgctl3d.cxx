@@ -120,7 +120,7 @@ void Svx3DPreviewControl::Construct()
     mpScene->SetTransform(aRotation * mpScene->GetTransform());
 
     // invalidate SnapRects of objects
-    mpScene->SetRectsDirty();
+    mpScene->SetBoundAndSnapRectsDirty();
 
     SfxItemSet aSet( mpModel->GetItemPool(),
         svl::Items<XATTR_LINESTYLE, XATTR_LINESTYLE,
@@ -360,7 +360,7 @@ void Svx3DLightControl::Construct2()
     }
 
     // invalidate SnapRects of objects
-    mpScene->SetRectsDirty();
+    mpScene->SetBoundAndSnapRectsDirty();
 }
 
 void Svx3DLightControl::ConstructLightObjects()

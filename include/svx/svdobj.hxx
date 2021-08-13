@@ -339,7 +339,7 @@ public:
     ///
     /// This is needed for instance for NbcMove, because usually one moves SnapRect and aOutRect
     /// at the same time to avoid recomputation.
-    virtual void SetRectsDirty(bool bNotMyself = false, bool bRecursive = true);
+    virtual void SetBoundAndSnapRectsDirty(bool bNotMyself = false, bool bRecursive = true);
 
     // frees the SdrObject pointed to by the argument
     // In case the object has an SvxShape, which has the ownership of the object, it

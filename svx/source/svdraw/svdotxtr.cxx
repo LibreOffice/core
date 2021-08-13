@@ -62,7 +62,7 @@ void SdrTextObj::NbcSetSnapRect(const tools::Rectangle& rRect)
         AdaptTextMinSize();
 
         ImpCheckShear();
-        SetRectsDirty();
+        SetBoundAndSnapRectsDirty();
     }
 }
 
@@ -78,7 +78,7 @@ void SdrTextObj::NbcSetLogicRect(const tools::Rectangle& rRect)
 
     AdaptTextMinSize();
 
-    SetRectsDirty();
+    SetBoundAndSnapRectsDirty();
 }
 
 Degree100 SdrTextObj::GetRotateAngle() const
@@ -96,7 +96,7 @@ void SdrTextObj::NbcMove(const Size& rSiz)
     maRect.Move(rSiz);
     m_aOutRect.Move(rSiz);
     maSnapRect.Move(rSiz);
-    SetRectsDirty(true);
+    SetBoundAndSnapRectsDirty(true);
 }
 
 void SdrTextObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
@@ -180,7 +180,7 @@ void SdrTextObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
     }
 
     ImpCheckShear();
-    SetRectsDirty();
+    SetBoundAndSnapRectsDirty();
 }
 
 void SdrTextObj::NbcRotate(const Point& rRef, Degree100 nAngle, double sn, double cs)
@@ -202,7 +202,7 @@ void SdrTextObj::NbcRotate(const Point& rRef, Degree100 nAngle, double sn, doubl
         maGeo.nRotationAngle=NormAngle36000(maGeo.nRotationAngle+nAngle);
         maGeo.RecalcSinCos();
     }
-    SetRectsDirty();
+    SetBoundAndSnapRectsDirty();
     NbcRotateGluePoints(rRef,nAngle,sn,cs);
     SetGlueReallyAbsolute(false);
 }
@@ -224,7 +224,7 @@ void SdrTextObj::NbcShear(const Point& rRef, Degree100 /*nAngle*/, double tn, bo
         NbcAdjustTextFrameWidthAndHeight();
     }
     ImpCheckShear();
-    SetRectsDirty();
+    SetBoundAndSnapRectsDirty();
     NbcShearGluePoints(rRef,tn,bVShear);
     SetGlueReallyAbsolute(false);
 }
@@ -277,7 +277,7 @@ void SdrTextObj::NbcMirror(const Point& rRef1, const Point& rRef2)
         NbcAdjustTextFrameWidthAndHeight();
     }
     ImpCheckShear();
-    SetRectsDirty();
+    SetBoundAndSnapRectsDirty();
     NbcMirrorGluePoints(rRef1,rRef2);
     SetGlueReallyAbsolute(false);
 }
