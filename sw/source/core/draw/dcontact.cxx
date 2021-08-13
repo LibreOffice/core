@@ -2439,25 +2439,25 @@ void SwDrawVirtObj::NbcMove(const Size& rSiz)
 void SwDrawVirtObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
 {
     rRefObj.NbcResize(rRef - GetOffset(), xFact, yFact);
-    SetRectsDirty();
+    SetBoundAndSnapRectsDirty();
 }
 
 void SwDrawVirtObj::NbcRotate(const Point& rRef, Degree100 nAngle, double sn, double cs)
 {
     rRefObj.NbcRotate(rRef - GetOffset(), nAngle, sn, cs);
-    SetRectsDirty();
+    SetBoundAndSnapRectsDirty();
 }
 
 void SwDrawVirtObj::NbcMirror(const Point& rRef1, const Point& rRef2)
 {
     rRefObj.NbcMirror(rRef1 - GetOffset(), rRef2 - GetOffset());
-    SetRectsDirty();
+    SetBoundAndSnapRectsDirty();
 }
 
 void SwDrawVirtObj::NbcShear(const Point& rRef, Degree100 nAngle, double tn, bool bVShear)
 {
     rRefObj.NbcShear(rRef - GetOffset(), nAngle, tn, bVShear);
-    SetRectsDirty();
+    SetBoundAndSnapRectsDirty();
 }
 
 void SwDrawVirtObj::Move(const Size& rSiz)
@@ -2471,7 +2471,7 @@ void SwDrawVirtObj::Resize(const Point& rRef, const Fraction& xFact, const Fract
     {
         tools::Rectangle aBoundRect0; if(m_pUserCall) aBoundRect0 = GetLastBoundRect();
         rRefObj.Resize(rRef - GetOffset(), xFact, yFact, bUnsetRelative);
-        SetRectsDirty();
+        SetBoundAndSnapRectsDirty();
         SendUserCall(SdrUserCallType::Resize, aBoundRect0);
     }
 }
@@ -2482,7 +2482,7 @@ void SwDrawVirtObj::Rotate(const Point& rRef, Degree100 nAngle, double sn, doubl
     {
         tools::Rectangle aBoundRect0; if(m_pUserCall) aBoundRect0 = GetLastBoundRect();
         rRefObj.Rotate(rRef - GetOffset(), nAngle, sn, cs);
-        SetRectsDirty();
+        SetBoundAndSnapRectsDirty();
         SendUserCall(SdrUserCallType::Resize, aBoundRect0);
     }
 }
@@ -2491,7 +2491,7 @@ void SwDrawVirtObj::Mirror(const Point& rRef1, const Point& rRef2)
 {
     tools::Rectangle aBoundRect0; if(m_pUserCall) aBoundRect0 = GetLastBoundRect();
     rRefObj.Mirror(rRef1 - GetOffset(), rRef2 - GetOffset());
-    SetRectsDirty();
+    SetBoundAndSnapRectsDirty();
     SendUserCall(SdrUserCallType::Resize, aBoundRect0);
 }
 
@@ -2501,7 +2501,7 @@ void SwDrawVirtObj::Shear(const Point& rRef, Degree100 nAngle, double tn, bool b
     {
         tools::Rectangle aBoundRect0; if(m_pUserCall) aBoundRect0 = GetLastBoundRect();
         rRefObj.Shear(rRef - GetOffset(), nAngle, tn, bVShear);
-        SetRectsDirty();
+        SetBoundAndSnapRectsDirty();
         SendUserCall(SdrUserCallType::Resize, aBoundRect0);
     }
 }
@@ -2526,7 +2526,7 @@ void SwDrawVirtObj::SetSnapRect(const tools::Rectangle& rRect)
     tools::Rectangle aR(rRect);
     aR -= GetOffset();
     rRefObj.SetSnapRect(aR);
-    SetRectsDirty();
+    SetBoundAndSnapRectsDirty();
     SendUserCall(SdrUserCallType::Resize, aBoundRect0);
 }
 
@@ -2534,7 +2534,7 @@ void SwDrawVirtObj::NbcSetSnapRect(const tools::Rectangle& rRect)
 {
     tools::Rectangle aR(rRect);
     aR -= GetOffset();
-    SetRectsDirty();
+    SetBoundAndSnapRectsDirty();
     rRefObj.NbcSetSnapRect(aR);
 }
 
@@ -2552,7 +2552,7 @@ void SwDrawVirtObj::SetLogicRect(const tools::Rectangle& rRect)
     tools::Rectangle aR(rRect);
     aR -= GetOffset();
     rRefObj.SetLogicRect(aR);
-    SetRectsDirty();
+    SetBoundAndSnapRectsDirty();
     SendUserCall(SdrUserCallType::Resize, aBoundRect0);
 }
 
@@ -2561,7 +2561,7 @@ void SwDrawVirtObj::NbcSetLogicRect(const tools::Rectangle& rRect)
     tools::Rectangle aR(rRect);
     aR -= GetOffset();
     rRefObj.NbcSetLogicRect(aR);
-    SetRectsDirty();
+    SetBoundAndSnapRectsDirty();
 }
 
 Point SwDrawVirtObj::GetSnapPoint(sal_uInt32 i) const
@@ -2582,7 +2582,7 @@ void SwDrawVirtObj::NbcSetPoint(const Point& rPnt, sal_uInt32 i)
     Point aP(rPnt);
     aP -= GetOffset();
     rRefObj.SetPoint(aP, i);
-    SetRectsDirty();
+    SetBoundAndSnapRectsDirty();
 }
 
 bool SwDrawVirtObj::HasTextEdit() const

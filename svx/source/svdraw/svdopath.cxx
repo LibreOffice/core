@@ -2482,7 +2482,7 @@ void SdrPathObj::NbcSetPoint(const Point& rPnt, sal_uInt32 nHdlNum)
         }
     }
 
-    SetRectsDirty();
+    SetBoundAndSnapRectsDirty();
 }
 
 sal_uInt32 SdrPathObj::NbcInsPointOld(const Point& rPos, bool bNewObj)
@@ -2520,7 +2520,7 @@ sal_uInt32 SdrPathObj::NbcInsPoint(const Point& rPos, bool bNewObj)
         aNewPoly.append(aPoint);
         aNewPoly.setClosed(IsClosed());
         maPathPolygon.append(aNewPoly);
-        SetRectsDirty();
+        SetBoundAndSnapRectsDirty();
         nNewHdl = GetHdlCount();
     }
     else
@@ -2739,7 +2739,7 @@ void SdrPathObj::NbcSetPathPoly(const basegfx::B2DPolyPolygon& rPathPoly)
     {
         maPathPolygon=rPathPoly;
         ImpForceKind();
-        SetRectsDirty();
+        SetBoundAndSnapRectsDirty();
     }
 }
 
@@ -2762,7 +2762,7 @@ void SdrPathObj::ToggleClosed()
         aBoundRect0 = GetLastBoundRect();
     ImpSetClosed(!IsClosed()); // set new ObjKind
     ImpForceKind(); // because we want Line -> Poly -> PolyLine instead of Line -> Poly -> Line
-    SetRectsDirty();
+    SetBoundAndSnapRectsDirty();
     SetChanged();
     BroadcastObjectChange();
     SendUserCall(SdrUserCallType::Resize, aBoundRect0);

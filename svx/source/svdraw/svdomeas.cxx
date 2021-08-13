@@ -859,7 +859,7 @@ bool SdrMeasureObj::applySpecialDrag(SdrDragStat& rDrag)
         }
     } // switch
 
-    SetRectsDirty();
+    SetBoundAndSnapRectsDirty();
     SetChanged();
 
     return true;
@@ -966,7 +966,7 @@ bool SdrMeasureObj::MovCreate(SdrDragStat& rStat)
 bool SdrMeasureObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 {
     SetTextDirty();
-    SetRectsDirty();
+    SetBoundAndSnapRectsDirty();
     return (eCmd==SdrCreateCmd::ForceEnd || rStat.GetPointCount()>=2);
 }
 
@@ -1030,7 +1030,7 @@ void SdrMeasureObj::NbcRotate(const Point& rRef, Degree100 nAngle, double sn, do
             aPt2.setY(aPt1.Y()+dy );
         }
     }
-    SetRectsDirty();
+    SetBoundAndSnapRectsDirty();
 }
 
 void SdrMeasureObj::NbcMirror(const Point& rRef1, const Point& rRef2)
@@ -1038,7 +1038,7 @@ void SdrMeasureObj::NbcMirror(const Point& rRef1, const Point& rRef2)
     SdrTextObj::NbcMirror(rRef1,rRef2);
     MirrorPoint(aPt1,rRef1,rRef2);
     MirrorPoint(aPt2,rRef1,rRef2);
-    SetRectsDirty();
+    SetBoundAndSnapRectsDirty();
 }
 
 void SdrMeasureObj::NbcShear(const Point& rRef, Degree100 nAngle, double tn, bool bVShear)
@@ -1046,7 +1046,7 @@ void SdrMeasureObj::NbcShear(const Point& rRef, Degree100 nAngle, double tn, boo
     SdrTextObj::NbcShear(rRef,nAngle,tn,bVShear);
     ShearPoint(aPt1,rRef,tn,bVShear);
     ShearPoint(aPt2,rRef,tn,bVShear);
-    SetRectsDirty();
+    SetBoundAndSnapRectsDirty();
     SetTextDirty();
 }
 
@@ -1099,7 +1099,7 @@ void SdrMeasureObj::NbcSetPoint(const Point& rPnt, sal_uInt32 i)
         aPt1=rPnt;
     if (1 == i)
         aPt2=rPnt;
-    SetRectsDirty();
+    SetBoundAndSnapRectsDirty();
     SetTextDirty();
 }
 

@@ -104,28 +104,28 @@ namespace sdr::contact
             rDisplayInfo.SetProcessLayers(aRememberedLayers);
             rDisplayInfo.SetSubContentActive(false);
 
-            if(!xMasterPageSequence.empty())
+            if(xMasterPageSequence.empty())
+                return;
+
+            // get range of MasterPage sub hierarchy
+            const drawinglayer::geometry::ViewInformation2D& rViewInformation2D(GetObjectContact().getViewInformation2D());
+            const basegfx::B2DRange aSubHierarchyRange(xMasterPageSequence.getB2DRange(rViewInformation2D));
+
+            if (rPageFillRange.isInside(aSubHierarchyRange))
             {
-                // get range of MasterPage sub hierarchy
-                const drawinglayer::geometry::ViewInformation2D& rViewInformation2D(GetObjectContact().getViewInformation2D());
-                const basegfx::B2DRange aSubHierarchyRange(xMasterPageSequence.getB2DRange(rViewInformation2D));
+                // completely inside, just render MasterPage content. Add to target
+                xRetval.append(xMasterPageSequence);
+            }
+            else if (rPageFillRange.overlaps(aSubHierarchyRange))
+            {
+                // overlapping, compute common area
+                basegfx::B2DRange aCommonArea(rPageFillRange);
+                aCommonArea.intersect(aSubHierarchyRange);
 
-                if (rPageFillRange.isInside(aSubHierarchyRange))
-                {
-                    // completely inside, just render MasterPage content. Add to target
-                    xRetval.append(xMasterPageSequence);
-                }
-                else if (rPageFillRange.overlaps(aSubHierarchyRange))
-                {
-                    // overlapping, compute common area
-                    basegfx::B2DRange aCommonArea(rPageFillRange);
-                    aCommonArea.intersect(aSubHierarchyRange);
-
-                    // need to create a clip primitive, add clipped list to target
-                    const drawinglayer::primitive2d::Primitive2DReference xReference(new drawinglayer::primitive2d::MaskPrimitive2D(
-                        basegfx::B2DPolyPolygon(basegfx::utils::createPolygonFromRect(aCommonArea)), xMasterPageSequence));
-                    xRetval.push_back(xReference);
-                }
+                // need to create a clip primitive, add clipped list to target
+                const drawinglayer::primitive2d::Primitive2DReference xReference(new drawinglayer::primitive2d::MaskPrimitive2D(
+                    basegfx::B2DPolyPolygon(basegfx::utils::createPolygonFromRect(aCommonArea)), xMasterPageSequence));
+                xRetval.push_back(xReference);
             }
 
             // return grouped primitive

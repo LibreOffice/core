@@ -282,7 +282,7 @@ static void lcl_InvalidateLowerObjs( SwLayoutFrame& _rLayoutFrame,
                     }
                     if ( pFly != nullptr )
                     {
-                        pFly->GetVirtDrawObj()->SetRectsDirty();
+                        pFly->GetVirtDrawObj()->SetBoundAndSnapRectsDirty();
                         pFly->GetVirtDrawObj()->SetChanged();
                     }
                 }
@@ -5022,7 +5022,7 @@ static bool lcl_ArrangeLowers( SwLayoutFrame *pLay, tools::Long lYStart, bool bI
                                 aRectFnSet.AddBottom( aFrm, lDiff );
                             }
 
-                            pFly->GetVirtDrawObj()->SetRectsDirty();
+                            pFly->GetVirtDrawObj()->SetBoundAndSnapRectsDirty();
                             // --> OD 2004-08-17 - also notify view of <SdrObject>
                             // instance, which represents the Writer fly frame in
                             // the drawing layer

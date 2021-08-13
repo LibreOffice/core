@@ -242,7 +242,7 @@ bool SdrTextObj::NbcAdjustTextFrameWidthAndHeight(bool bHgt, bool bWdt)
     bool bRet = AdjustTextFrameWidthAndHeight(maRect,bHgt,bWdt);
     if (bRet)
     {
-        SetRectsDirty();
+        SetBoundAndSnapRectsDirty();
         if (auto pRectObj = dynamic_cast<SdrRectObj *>(this)) { // this is a hack
             pRectObj->SetXPolyDirty();
         }
@@ -260,7 +260,7 @@ bool SdrTextObj::AdjustTextFrameWidthAndHeight()
     if (bRet) {
         tools::Rectangle aBoundRect0; if (m_pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
         maRect = aNewRect;
-        SetRectsDirty();
+        SetBoundAndSnapRectsDirty();
         if (auto pRectObj = dynamic_cast<SdrRectObj *>(this)) { // this is a hack
             pRectObj->SetXPolyDirty();
         }
