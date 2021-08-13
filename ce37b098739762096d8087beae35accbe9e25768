@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9df96ffa_ef954ae1",
+        "filename": "sfx2/source/dialog/StyleList.cxx",
+        "patchSetId": 19
+      },
+      "lineNbr": 1758,
+      "author": {
+        "id": 1002732
+      },
+      "writtenOn": "2021-08-13T18:03:22Z",
+      "side": 1,
+      "message": "oops.. missed this",
+      "range": {
+        "startLine": 1758,
+        "startChar": 19,
+        "endLine": 1758,
+        "endChar": 67
+      },
+      "revId": "ce37b098739762096d8087beae35accbe9e25768",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
