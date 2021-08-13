@@ -2479,7 +2479,7 @@ void SwFlyFrame::NotifyDrawObj()
 {
     SwVirtFlyDrawObj* pObj = GetVirtDrawObj();
     pObj->SetRect();
-    pObj->SetRectsDirty();
+    pObj->SetBoundAndSnapRectsDirty();
     pObj->SetChanged();
     pObj->BroadcastObjectChange();
 

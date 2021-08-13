@@ -546,7 +546,7 @@ void SdrEdgeObj::ImpSetTailPoint(bool bTail1, const Point& rPt)
         else (*pEdgeTrack)[0]=rPt;
     }
     ImpRecalcEdgeTrack();
-    SetRectsDirty();
+    SetBoundAndSnapRectsDirty();
 }
 
 void SdrEdgeObj::ImpDirtyEdgeTrack()
@@ -604,7 +604,7 @@ void SdrEdgeObj::ImpRecalcEdgeTrack()
         }
 
         tools::Rectangle aBoundRect0; if (m_pUserCall!=nullptr) aBoundRect0=GetCurrentBoundRect();
-        SetRectsDirty();
+        SetBoundAndSnapRectsDirty();
         *pEdgeTrack=ImpCalcEdgeTrack(*pEdgeTrack,aCon1,aCon2,&aEdgeInfo);
         ImpSetEdgeInfoToAttr(); // copy values from aEdgeInfo into the pool
         bEdgeTrackDirty=false;
@@ -1965,7 +1965,7 @@ bool SdrEdgeObj::applySpecialDrag(SdrDragStat& rDragStat)
     ImpSetEdgeInfoToAttr();
     bEdgeTrackUserDefined = false;
 
-    SetRectsDirty();
+    SetBoundAndSnapRectsDirty();
 
     if(bOriginalEdgeModified && rDragStat.GetView())
     {
@@ -2096,7 +2096,7 @@ bool SdrEdgeObj::EndCreate(SdrDragStat& rDragStat, SdrCreateCmd eCmd)
         }
         ImpSetEdgeInfoToAttr(); // copy values from aEdgeInfo into the pool
     }
-    SetRectsDirty();
+    SetBoundAndSnapRectsDirty();
     return bOk;
 }
 
@@ -2465,7 +2465,7 @@ void SdrEdgeObj::NbcSetPoint(const Point& rPnt, sal_uInt32 i)
     if (1 == i)
         (*pEdgeTrack)[nCount-1]=rPnt;
     SetEdgeTrackDirty();
-    SetRectsDirty();
+    SetBoundAndSnapRectsDirty();
 }
 
 SdrEdgeObjGeoData::SdrEdgeObjGeoData()
@@ -2584,7 +2584,7 @@ void SdrEdgeObj::setGluePointIndex( bool bTail, sal_Int32 nIndex /* = -1 */ )
     rConn1.SetConnectorId( static_cast<sal_uInt16>(nIndex) );
 
     SetChanged();
-    SetRectsDirty();
+    SetBoundAndSnapRectsDirty();
     ImpRecalcEdgeTrack();
 }
 

@@ -412,7 +412,7 @@ SdrObjectUniquePtr FuConstruct3dObject::CreateDefaultObject(const sal_uInt16 nID
     p3DObj->SetMergedItemSet(aAttr);
 
     // make object interactive at once
-    pScene->SetRectsDirty();
+    pScene->SetBoundAndSnapRectsDirty();
 
     // Take care of restrictions for the rectangle
     ::tools::Rectangle aRect(rRectangle);

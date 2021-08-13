@@ -174,7 +174,7 @@ public:
     virtual SdrObject* RemoveObject(size_t nObjNum) override;
 
     // needed for group functionality
-    virtual void SetRectsDirty(bool bNotMyself = false, bool bRecursive = true) override;
+    virtual void SetBoundAndSnapRectsDirty(bool bNotMyself = false, bool bRecursive = true) override;
     virtual void NbcSetLayer(SdrLayerID nLayer) override;
 
     // react on model/page change

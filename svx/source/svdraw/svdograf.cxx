@@ -1067,7 +1067,7 @@ void SdrGrafObj::ImpSetAttrToGrafInfo()
     aGrafInfo.SetCrop( rCrop.GetLeft(), rCrop.GetTop(), rCrop.GetRight(), rCrop.GetBottom() );
 
     SetXPolyDirty();
-    SetRectsDirty();
+    SetBoundAndSnapRectsDirty();
 }
 
 void SdrGrafObj::AdjustToMaxRect( const tools::Rectangle& rMaxRect, bool bShrinkOnly )

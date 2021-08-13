@@ -531,7 +531,7 @@ SdrObject* SvxDrawPage::CreateSdrObject_(const Reference< drawing::XShape > & xS
         aCam.SetFocalLength(100.0);
         pScene->SetCamera(aCam);
 
-        pScene->SetRectsDirty();
+        pScene->SetBoundAndSnapRectsDirty();
     }
     else if(auto pObj = dynamic_cast<E3dExtrudeObj* >(pNewObj))
     {

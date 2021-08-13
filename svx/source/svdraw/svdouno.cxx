@@ -304,7 +304,7 @@ void SdrUnoObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fracti
     maGeo.mfSinRotationAngle       = 0.0;
     maGeo.mfCosRotationAngle       = 1.0;
     maGeo.mfTanShearAngle       = 0.0;
-    SetRectsDirty();
+    SetBoundAndSnapRectsDirty();
 }
 
 

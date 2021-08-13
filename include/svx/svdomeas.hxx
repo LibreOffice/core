@@ -61,7 +61,16 @@ private:
     void ImpCalcGeometrics(const ImpMeasureRec& rRec, ImpMeasurePoly& rPol) const;
     static basegfx::B2DPolyPolygon ImpCalcXPoly(const ImpMeasurePoly& rPol);
     void ImpEvalDrag(ImpMeasureRec& rRec, const SdrDragStat& rDrag) const;
-    void SetTextDirty() { bTextDirty=true; SetTextSizeDirty(); if (!m_aOutRect.IsEmpty()) { SetBoundRectDirty(); SetRectsDirty(true); } }
+    void SetTextDirty()
+    {
+        bTextDirty=true;
+        SetTextSizeDirty();
+        if (!m_aOutRect.IsEmpty())
+        {
+            SetBoundRectDirty();
+            SetBoundAndSnapRectsDirty(/*bNotMyself*/true);
+        }
+    }
     void UndirtyText() const;
 
     virtual std::unique_ptr<SdrObjGeoData> NewGeoData() const override;

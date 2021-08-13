@@ -509,7 +509,7 @@ void SdrObject::Free( SdrObject*& _rpObject )
     delete pObject;
 }
 
-void SdrObject::SetRectsDirty(bool bNotMyself, bool bRecursive)
+void SdrObject::SetBoundAndSnapRectsDirty(bool bNotMyself, bool bRecursive)
 {
     if (!bNotMyself)
     {
@@ -1436,7 +1436,7 @@ PointerStyle SdrObject::GetCreatePointer() const
 void SdrObject::NbcMove(const Size& rSiz)
 {
     m_aOutRect.Move(rSiz);
-    SetRectsDirty();
+    SetBoundAndSnapRectsDirty();
 }
 
 void SdrObject::NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
@@ -1457,7 +1457,7 @@ void SdrObject::NbcResize(const Point& rRef, const Fraction& xFact, const Fracti
         }
     }
     ResizeRect(m_aOutRect,rRef,xFact,yFact);
-    SetRectsDirty();
+    SetBoundAndSnapRectsDirty();
 }
 
 void SdrObject::NbcRotate(const Point& rRef, Degree100 nAngle)
@@ -1492,7 +1492,7 @@ void SdrObject::NbcRotate(const Point& rRef,  Degree100 nAngle, double sn, doubl
     }
     m_aOutRect.Move(rRef.X(),rRef.Y());
     m_aOutRect.Justify(); // just in case
-    SetRectsDirty();
+    SetBoundAndSnapRectsDirty();
     NbcRotateGluePoints(rRef,nAngle,sn,cs);
     SetGlueReallyAbsolute(false);
 }
@@ -1523,7 +1523,7 @@ void SdrObject::NbcMirror(const Point& rRef1, const Point& rRef2)
     }
     m_aOutRect.Move(rRef1.X(),rRef1.Y());
     m_aOutRect.Justify(); // just in case
-    SetRectsDirty();
+    SetBoundAndSnapRectsDirty();
     NbcMirrorGluePoints(rRef1,rRef2);
     SetGlueReallyAbsolute(false);
 }
@@ -1929,7 +1929,7 @@ void SdrObject::SaveGeoData(SdrObjGeoData& rGeo) const
 
 void SdrObject::RestoreGeoData(const SdrObjGeoData& rGeo)
 {
-    SetRectsDirty();
+    SetBoundAndSnapRectsDirty();
     m_aOutRect      =rGeo.aBoundRect    ;
     m_aAnchor       =rGeo.aAnchor       ;
     m_bMovProt      =rGeo.bMovProt      ;

@@ -564,7 +564,7 @@ bool SdrCircObj::applySpecialDrag(SdrDragStat& rDrag)
             nEndAngle = nAngle;
         }
 
-        SetRectsDirty();
+        SetBoundAndSnapRectsDirty();
         SetXPolyDirty();
         ImpSetCircInfoToAttr();
         SetChanged();
@@ -749,7 +749,7 @@ bool SdrCircObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
         }
     }
     m_bClosedObj=meCircleKind!=SdrCircKind::Arc;
-    SetRectsDirty();
+    SetBoundAndSnapRectsDirty();
     SetXPolyDirty();
     ImpSetCircInfoToAttr();
     if (bRet)
@@ -814,7 +814,7 @@ void SdrCircObj::NbcMove(const Size& aSiz)
     m_aOutRect.Move(aSiz);
     maSnapRect.Move(aSiz);
     SetXPolyDirty();
-    SetRectsDirty(true);
+    SetBoundAndSnapRectsDirty(true);
 }
 
 void SdrCircObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
@@ -1051,7 +1051,7 @@ void SdrCircObj::NbcSetSnapRect(const tools::Rectangle& rRect)
         maRect=rRect;
         ImpJustifyRect(maRect);
     }
-    SetRectsDirty();
+    SetBoundAndSnapRectsDirty();
     SetXPolyDirty();
     ImpSetCircInfoToAttr();
 }
@@ -1102,7 +1102,7 @@ void SdrCircObj::ImpSetAttrToCircInfo()
         if(bKindChg || (meCircleKind != SdrCircKind::Full && bAngleChg))
         {
             SetXPolyDirty();
-            SetRectsDirty();
+            SetBoundAndSnapRectsDirty();
         }
     }
 }

@@ -1365,7 +1365,7 @@ void SdrTextObj::NbcSetOutlinerParaObjectForText( std::unique_ptr<OutlinerParaOb
     if (!IsTextFrame())
     {
         // the SnapRect keeps its size
-        SetRectsDirty(true);
+        SetBoundAndSnapRectsDirty(true);
     }
 
     // always invalidate BoundRect on change
@@ -1390,7 +1390,7 @@ void SdrTextObj::NbcReformatText()
     {
         // the SnapRect keeps its size
         SetBoundRectDirty();
-        SetRectsDirty(true);
+        SetBoundAndSnapRectsDirty(/*bNotMyself*/true);
     }
     SetTextSizeDirty();
     ActionChanged();
