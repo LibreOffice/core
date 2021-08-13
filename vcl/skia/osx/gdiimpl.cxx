@@ -52,6 +52,7 @@ void AquaSkiaSalGraphicsImpl::createWindowContext(bool forceRaster)
     SkiaZone zone;
     sk_app::DisplayParams displayParams;
     displayParams.fColorType = kN32_SkColorType;
+    forceRaster = true; // TODO
     RenderMethod renderMethod = forceRaster ? RenderRaster : renderMethodToUse();
     switch (renderMethod)
     {
