@@ -478,14 +478,14 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
                         {
                             sal_Int32 nVal = 0;
                             rProp.maValue >>= nVal;
-                            aVisArea.setX( nVal );
+                            aVisArea.SetPosX( nVal );
                         }
                         break;
                     case CTF_OLE_VIS_AREA_TOP:
                         {
                             sal_Int32 nVal = 0;
                             rProp.maValue >>= nVal;
-                            aVisArea.setY( nVal );
+                            aVisArea.SetPosY( nVal );
                         }
                         break;
                     case CTF_OLE_VIS_AREA_WIDTH:

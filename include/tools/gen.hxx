@@ -501,6 +501,10 @@ public:
     tools::Long         AdjustRight( tools::Long nHorzMoveDelta );
     tools::Long         AdjustTop( tools::Long nVertMoveDelta ) { nTop += nVertMoveDelta; return nTop; }
     tools::Long         AdjustBottom( tools::Long nVertMoveDelta );
+    /// Set the left edge of the rectangle to x, preserving the width
+    inline void SetPosX(tools::Long x);
+    /// Set the top edge of the rectangle to y, preserving the height
+    inline void SetPosY(tools::Long y);
     inline void         SetPos( const Point& rPoint );
     void                SetSize( const Size& rSize );
 
@@ -572,10 +576,6 @@ public:
     tools::Long getWidth() const { return Right() - Left(); }
     /// Returns the difference between bottom and top, assuming the range includes one end, but not the other.
     tools::Long getHeight() const { return Bottom() - Top(); }
-    /// Set the left edge of the rectangle to x, preserving the width
-    void                setX( tools::Long x );
-    /// Set the top edge of the rectangle to y, preserving the height
-    void                setY( tools::Long y );
     void                setWidth( tools::Long n ) { nRight = nLeft + n; }
     void                setHeight( tools::Long n ) { nBottom = nTop + n; }
     /// Returns the string representation of the rectangle, format is "x, y, width, height".
@@ -636,14 +636,24 @@ inline void tools::Rectangle::Move( tools::Long nHorzMove, tools::Long nVertMove
         nBottom += nVertMove;
 }
 
-inline void tools::Rectangle::SetPos( const Point& rPoint )
+inline void tools::Rectangle::SetPosX(tools::Long x)
 {
     if (!IsWidthEmpty())
-        nRight += rPoint.X() - nLeft;
+        nRight += x - nLeft;
+    nLeft = x;
+}
+
+inline void tools::Rectangle::SetPosY(tools::Long y)
+{
     if (!IsHeightEmpty())
-        nBottom += rPoint.Y() - nTop;
-    nLeft = rPoint.X();
-    nTop  = rPoint.Y();
+        nBottom += y - nTop;
+    nTop = y;
+}
+
+inline void tools::Rectangle::SetPos( const Point& rPoint )
+{
+    SetPosX(rPoint.X());
+    SetPosY(rPoint.Y());
 }
 
 inline tools::Rectangle tools::Rectangle::GetUnion( const tools::Rectangle& rRect ) const

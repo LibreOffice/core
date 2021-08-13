@@ -117,8 +117,8 @@ bool SfxRectangleItem::PutValue( const css::uno::Any& rVal,
                 aVal.setWidth( aValue.Width );
                 aVal.setHeight( aValue.Height );
                 break;
-            case MID_RECT_LEFT:  aVal.setX( nVal ); break;
-            case MID_RECT_RIGHT: aVal.setY( nVal ); break;
+            case MID_RECT_LEFT:  aVal.SetPosX( nVal ); break;
+            case MID_RECT_RIGHT: aVal.SetPosY( nVal ); break;
             case MID_WIDTH: aVal.setWidth( nVal ); break;
             case MID_HEIGHT: aVal.setHeight( nVal ); break;
             default: OSL_FAIL("Wrong MemberID!"); return false;
