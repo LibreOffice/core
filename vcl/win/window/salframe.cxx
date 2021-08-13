@@ -5460,6 +5460,14 @@ void SalTestMouseLeave()
     {
         POINT aPt;
         GetCursorPos( &aPt );
+
+        // a one item cache, because this function is sometimes hot - if the cursor has not moved, then
+        // no need to call WindowFromPoint
+        static POINT cachedPoint;
+        if (cachedPoint.x == aPt.x && cachedPoint.y == aPt.y)
+            return;
+        cachedPoint = aPt;
+
         if ( pSalData->mhWantLeaveMsg != WindowFromPoint( aPt ) )
             SendMessageW( pSalData->mhWantLeaveMsg, SAL_MSG_MOUSELEAVE, 0, MAKELPARAM( aPt.x, aPt.y ) );
     }
