@@ -846,7 +846,7 @@ SwUndoDefaultAttr::SwUndoDefaultAttr( const SfxItemSet& rSet, const SwDoc& rDoc 
     const SfxPoolItem* pItem;
     if( SfxItemState::SET == rSet.GetItemState( RES_PARATR_TABSTOP, false, &pItem ) ) {
         // store separately, because it may change!
-        m_pTabStop.reset( static_cast<SvxTabStopItem*>(pItem->Clone()) );
+        m_pTabStop.reset(&pItem->Clone()->StaticWhichCast(RES_PARATR_TABSTOP));
         if ( 1 != rSet.Count() ) { // are there more attributes?
             m_pOldSet.reset( new SfxItemSet( rSet ) );
         }
