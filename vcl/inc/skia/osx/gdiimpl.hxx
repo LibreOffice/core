@@ -34,6 +34,10 @@ public:
     }
     static void prepareSkia();
 
+    virtual bool drawNativeControl(ControlType nType, ControlPart nPart,
+                                   const tools::Rectangle& rControlRegion, ControlState nState,
+                                   const ImplControlValue& aValue) override;
+
 private:
     virtual void createWindowContext(bool forceRaster = false) override;
     virtual void performFlush() override;

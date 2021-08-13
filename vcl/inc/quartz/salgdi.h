@@ -269,10 +269,6 @@ struct AquaSharedAttributes
 
 class AquaGraphicsBackendBase
 {
-private:
-    SalGraphicsImpl* mpImpl = nullptr;
-protected:
-    AquaSharedAttributes& mrShared;
 public:
     AquaGraphicsBackendBase(AquaSharedAttributes& rShared)
         : mrShared( rShared )
@@ -286,6 +282,22 @@ public:
         return mpImpl;
     }
     virtual void UpdateGeometryProvider(SalGeometryProvider*) {};
+    virtual bool drawNativeControl(ControlType nType,
+                                   ControlPart nPart,
+                                   const tools::Rectangle &rControlRegion,
+                                   ControlState nState,
+                                   const ImplControlValue &aValue) = 0;
+protected:
+    static bool performDrawNativeControl(ControlType nType,
+                                         ControlPart nPart,
+                                         const tools::Rectangle &rControlRegion,
+                                         ControlState nState,
+                                         const ImplControlValue &aValue,
+                                         CGContextRef context,
+                                         AquaSalFrame* mpFrame);
+    AquaSharedAttributes& mrShared;
+private:
+    SalGraphicsImpl* mpImpl = nullptr;
 };
 
 inline AquaGraphicsBackendBase::~AquaGraphicsBackendBase() {}
@@ -414,6 +426,12 @@ public:
     bool drawGradient(const tools::PolyPolygon& rPolygon, const Gradient& rGradient) override;
     bool implDrawGradient(basegfx::B2DPolyPolygon const& rPolyPolygon,
                           SalGradient const& rGradient) override;
+
+    virtual bool drawNativeControl(ControlType nType,
+                                   ControlPart nPart,
+                                   const tools::Rectangle &rControlRegion,
+                                   ControlState nState,
+                                   const ImplControlValue &aValue) override;
 
     bool supportsOperation(OutDevSupportType eType) const override;
 };
@@ -549,8 +567,6 @@ public:
                             GetGraphicsData() const override;
 
 private:
-    UInt32                  getState( ControlState nState );
-    UInt32                  getTrackState( ControlState nState );
     static bool             GetRawFontData( const PhysicalFontFace* pFontData,
                                 std::vector<unsigned char>& rBuffer,
                                 bool* pJustCFF );
