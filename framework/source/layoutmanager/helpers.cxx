@@ -127,14 +127,6 @@ SystemWindow* getTopSystemWindow( const uno::Reference< awt::XWindow >& xWindow 
         return nullptr;
 }
 
-void setZeroRectangle( ::tools::Rectangle& rRect )
-{
-    rRect.setX(0);
-    rRect.setY(0);
-    rRect.setWidth(0);
-    rRect.setHeight(0);
-}
-
 // ATTENTION!
 // This value is directly copied from the sfx2 project.
 // You have to change BOTH values, see sfx2/inc/sfx2/sfxsids.hrc (SID_DOCKWIN_START)

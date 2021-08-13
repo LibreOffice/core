@@ -538,8 +538,8 @@ void SwFlyAtContentFrame::MakeAll(vcl::RenderContext* pRenderContext)
         SwFormatHoriOrient aHOri = pShapeFormat->GetHoriOrient();
         SwFormatVertOrient aVOri = pShapeFormat->GetVertOrient();
         // calc the right position of the shape depending on text area
-        aHOri.SetPos(aHOri.GetPos() + aTextRectangle.getX());
-        aVOri.SetPos(aVOri.GetPos() + aTextRectangle.getY());
+        aHOri.SetPos(aHOri.GetPos() + aTextRectangle.Left());
+        aVOri.SetPos(aVOri.GetPos() + aTextRectangle.Top());
         // save the new position for the shape
         GetFormat()->SetFormatAttr(aHOri);
         GetFormat()->SetFormatAttr(aVOri);

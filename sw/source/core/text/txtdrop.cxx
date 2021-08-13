@@ -876,13 +876,13 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTextFormatInfo &rInf 
 
                 if( rFnt.GetTopBorder() )
                 {
-                    aRect.setHeight(aRect.GetHeight() + rFnt.GetTopBorderSpace());
-                    aRect.setY(aRect.getY() - rFnt.GetTopBorderSpace());
+                    aRect.AdjustBottom(rFnt.GetTopBorderSpace() + 1);
+                    aRect.SetPosY(aRect.Top() - rFnt.GetTopBorderSpace());
                 }
 
                 if( rFnt.GetBottomBorder() )
                 {
-                    aRect.setHeight(aRect.GetHeight() + rFnt.GetBottomBorderSpace());
+                    aRect.AdjustBottom(rFnt.GetBottomBorderSpace() + 1);
                 }
 
                 if ( bFirstGlyphRect )
