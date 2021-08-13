@@ -142,7 +142,13 @@ namespace pcr
     {
         if (!rToggle.get_active())
             return;
-        m_xCalendarBox->set_date(m_xEntryFormatter->GetDate());
+        ::Date aDate = m_xEntryFormatter->GetDate();
+        if (aDate.IsEmpty())
+        {
+            // with an empty date preselect today in the calendar
+            aDate = ::Date(::Date::SYSTEM);
+        }
+        m_xCalendarBox->set_date(aDate);
     }
 
     Any SAL_CALL ODateControl::getValue()
