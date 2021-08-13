@@ -26,13 +26,6 @@
 
 namespace dbaccess
 {
-    // ResourceManager
-    namespace
-    {
-        // access safety
-        struct theResourceManagerMutex : public rtl::Static< osl::Mutex, theResourceManagerMutex > {};
-    }
-
     OUString ResourceManager::loadString(TranslateId pResId)
     {
         return Translate::get(pResId, Translate::Create("dba"));

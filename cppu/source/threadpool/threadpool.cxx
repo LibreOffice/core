@@ -25,7 +25,6 @@
 #include <unordered_map>
 
 #include <osl/diagnose.h>
-#include <rtl/instance.hxx>
 #include <sal/log.hxx>
 
 #include <uno/threadpool.h>
@@ -43,21 +42,10 @@ namespace cppu_threadpool
         rtl::Reference<ORequestThread> const & theThread): thread(theThread)
     {}
 
-    namespace {
-
-    struct theDisposedCallerAdmin :
-        public rtl::StaticWithInit< DisposedCallerAdminHolder, theDisposedCallerAdmin >
-    {
-        DisposedCallerAdminHolder operator () () {
-            return std::make_shared<DisposedCallerAdmin>();
-        }
-    };
-
-    }
-
     DisposedCallerAdminHolder const & DisposedCallerAdmin::getInstance()
     {
-        return theDisposedCallerAdmin::get();
+        static DisposedCallerAdminHolder theDisposedCallerAdmin =  std::make_shared<DisposedCallerAdmin>();
+        return theDisposedCallerAdmin;
     }
 
     DisposedCallerAdmin::~DisposedCallerAdmin()

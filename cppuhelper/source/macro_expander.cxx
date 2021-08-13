@@ -69,21 +69,6 @@ OUString expandMacros(OUString const & text) {
 namespace
 {
 
-class ImplNames
-{
-private:
-    Sequence<OUString> m_aNames;
-public:
-    ImplNames() : m_aNames(2)
-    {
-        m_aNames[0] = SERVICE_NAME_A;
-        m_aNames[1] = SERVICE_NAME_B;
-    }
-    const Sequence<OUString>& getNames() const { return m_aNames; }
-};
-
-class theImplNames : public rtl::Static<ImplNames, theImplNames> {};
-
 OUString s_impl_name()
 {
     return IMPL_NAME;
@@ -91,7 +76,11 @@ OUString s_impl_name()
 
 Sequence< OUString > const & s_get_service_names()
 {
-    return theImplNames::get().getNames();
+    static const Sequence< OUString > IMPL_NAMES {
+        SERVICE_NAME_A,
+        SERVICE_NAME_B
+    };
+    return IMPL_NAMES;
 }
 
 typedef cppu::WeakComponentImplHelper<
