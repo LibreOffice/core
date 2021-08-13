@@ -588,8 +588,7 @@ tools::Rectangle ScAccessiblePreviewTable::GetBoundingBoxOnScreen() const
         if (pWindow)
         {
             tools::Rectangle aRect = pWindow->GetWindowExtentsRelative(nullptr);
-            aCellRect.setX(aCellRect.getX() + aRect.getX());
-            aCellRect.setY(aCellRect.getY() + aRect.getY());
+            aCellRect.Move(aRect.Left(), aRect.Top());
         }
     }
     return aCellRect;

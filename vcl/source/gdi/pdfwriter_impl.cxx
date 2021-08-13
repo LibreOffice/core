@@ -6212,11 +6212,10 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
 
         // The rectangle is the bounding box of the text, but also includes
         // ascent / descent to match the on-screen rendering.
-        tools::Rectangle aRectangle;
         // This is the top left of the text without ascent / descent.
-        aRectangle.SetPos(PixelToLogic(rLayout.GetDrawPosition()));
-        aRectangle.setY(aRectangle.getY() - aRefDevFontMetric.GetAscent());
-        aRectangle.SetSize(PixelToLogic(Size(rLayout.GetTextWidth(), 0)));
+        tools::Rectangle aRectangle(PixelToLogic(rLayout.GetDrawPosition()),
+                                    Size(ImplDevicePixelToLogicWidth(rLayout.GetTextWidth()), 0));
+        aRectangle.AdjustTop(-aRefDevFontMetric.GetAscent());
         // This includes ascent / descent.
         aRectangle.setHeight(aRefDevFontMetric.GetLineHeight());
 

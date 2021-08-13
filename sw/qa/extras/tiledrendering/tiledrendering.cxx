@@ -334,8 +334,8 @@ void SwTiledRenderingTest::callbackImpl(int nType, const char* pPayload)
                 if (std::string_view("EMPTY") == pPayload)
                     return;
                 CPPUNIT_ASSERT(aSeq.getLength() == 4 || aSeq.getLength() == 5);
-                aInvalidation.setX(aSeq[0].toInt32());
-                aInvalidation.setY(aSeq[1].toInt32());
+                aInvalidation.SetLeft(aSeq[0].toInt32());
+                aInvalidation.SetTop(aSeq[1].toInt32());
                 aInvalidation.setWidth(aSeq[2].toInt32());
                 aInvalidation.setHeight(aSeq[3].toInt32());
                 if (m_aInvalidation.IsEmpty())
@@ -889,11 +889,11 @@ namespace {
                         if (std::string_view("EMPTY") == pPayload)
                             return;
                         CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4), aSeq.getLength());
-                        m_aOwnCursor.setX(aSeq[0].toInt32());
-                        m_aOwnCursor.setY(aSeq[1].toInt32());
+                        m_aOwnCursor.SetLeft(aSeq[0].toInt32());
+                        m_aOwnCursor.SetTop(aSeq[1].toInt32());
                         m_aOwnCursor.setWidth(aSeq[2].toInt32());
                         m_aOwnCursor.setHeight(aSeq[3].toInt32());
-                        if (m_aOwnCursor.getX() == 0 && m_aOwnCursor.getY() == 0)
+                        if (m_aOwnCursor.Left() == 0 && m_aOwnCursor.Top() == 0)
                             m_bOwnCursorAtOrigin = true;
                     }
                     break;
@@ -909,8 +909,8 @@ namespace {
                         if (std::string_view("EMPTY") == pPayload)
                             return;
                         CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4), aSeq.getLength());
-                        m_aViewCursor.setX(aSeq[0].toInt32());
-                        m_aViewCursor.setY(aSeq[1].toInt32());
+                        m_aViewCursor.SetLeft(aSeq[0].toInt32());
+                        m_aViewCursor.SetTop(aSeq[1].toInt32());
                         m_aViewCursor.setWidth(aSeq[2].toInt32());
                         m_aViewCursor.setHeight(aSeq[3].toInt32());
                     }
@@ -1700,8 +1700,8 @@ void SwTiledRenderingTest::testCommentEndTextEdit()
     // no unexpected cursor callbacks are emitted at origin (top left corner of
     // the document).
     aView1.m_bOwnCursorAtOrigin = false;
-    pXTextDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN, aBodyCursor.getX(), aBodyCursor.getY(), 1, MOUSE_LEFT, 0);
-    pXTextDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP, aBodyCursor.getX(), aBodyCursor.getY(), 1, MOUSE_LEFT, 0);
+    pXTextDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN, aBodyCursor.Left(), aBodyCursor.Top(), 1, MOUSE_LEFT, 0);
+    pXTextDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP, aBodyCursor.Left(), aBodyCursor.Top(), 1, MOUSE_LEFT, 0);
     Scheduler::ProcessEventsToIdle();
     // This failed, the cursor was at 0, 0 at some point during end text edit
     // of the comment.
@@ -2969,8 +2969,8 @@ void SwTiledRenderingTest::testTablePaintInvalidate()
     pDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
     pDevice->SetOutputSizePixelScaleOffsetAndBuffer(Size(nCanvasWidth, nCanvasHeight),
                                                     Fraction(1.0), Point(), aPixmap.data());
-    pXTextDocument->paintTile(*pDevice, nCanvasWidth, nCanvasHeight, m_aInvalidation.getX(),
-                              m_aInvalidation.getY(), /*nTileWidth=*/1000,
+    pXTextDocument->paintTile(*pDevice, nCanvasWidth, nCanvasHeight, m_aInvalidation.Left(),
+                              m_aInvalidation.Top(), /*nTileWidth=*/1000,
                               /*nTileHeight=*/1000);
     Scheduler::ProcessEventsToIdle();
 
