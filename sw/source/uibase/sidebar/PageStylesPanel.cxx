@@ -27,6 +27,7 @@
 #include <svx/xbtmpit.hxx>
 #include <svx/SvxNumOptionsTabPageHelper.hxx>
 #include "PageStylesPanel.hxx"
+#include <sfx2/sidebar/Panel.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/objsh.hxx>
@@ -249,6 +250,11 @@ void PageStylesPanel::Update()
         default:
             break;
     }
+
+    // Need to do a relayouting, otherwise the panel size is not updated after show / hide controls
+    sfx2::sidebar::Panel* pPanel = dynamic_cast<sfx2::sidebar::Panel*>(GetParent());
+    if (pPanel)
+        pPanel->TriggerDeckLayouting();
 }
 
 Color const & PageStylesPanel::GetColorSetOrDefault()
