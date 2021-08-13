@@ -42,12 +42,6 @@ namespace framework{
 
 sal_Int32 StatusIndicatorFactory::m_nInReschedule = 0;  ///< static counter for rescheduling
 
-namespace {
-
-struct RescheduleLock: public rtl::Static<osl::Mutex, RescheduleLock> {}; ///< mutex to guard the m_nInReschedule
-
-}
-
 constexpr OUStringLiteral PROGRESS_RESOURCE = u"private:resource/progressbar/progressbar";
 
 StatusIndicatorFactory::StatusIndicatorFactory(const css::uno::Reference< css::uno::XComponentContext >& xContext)
@@ -518,8 +512,9 @@ void StatusIndicatorFactory::impl_reschedule(bool bForce)
     if (!bReschedule)
         return;
 
+    static osl::Mutex rescheduleLock;
     // SAFE ->
-    osl::ResettableMutexGuard aRescheduleGuard(RescheduleLock::get());
+    osl::ResettableMutexGuard aRescheduleGuard(rescheduleLock);
 
     if (m_nInReschedule != 0)
         return;

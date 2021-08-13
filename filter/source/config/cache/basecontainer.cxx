@@ -38,7 +38,7 @@ BaseContainer::BaseContainer()
     , m_eType()
     , m_lListener  (m_aLock)
 {
-    TheFilterCache::get().load(FilterCache::E_CONTAINS_STANDARD);
+    GetTheFilterCache().load(FilterCache::E_CONTAINS_STANDARD);
 }
 
 
@@ -93,7 +93,7 @@ void BaseContainer::impl_loadOnDemand()
             break;
     }
 
-    TheFilterCache::get().load(eRequiredState);
+    GetTheFilterCache().load(eRequiredState);
     // <- SAFE
 #endif
 }
@@ -104,7 +104,7 @@ void BaseContainer::impl_initFlushMode()
     // SAFE ->
     osl::MutexGuard aLock(m_aLock);
     if (!m_pFlushCache)
-        m_pFlushCache = TheFilterCache::get().clone();
+        m_pFlushCache = GetTheFilterCache().clone();
     if (!m_pFlushCache)
         throw css::uno::RuntimeException( "Can not create write copy of internal used cache on demand.",
                 static_cast< OWeakObject* >(this));
@@ -119,7 +119,7 @@ FilterCache* BaseContainer::impl_getWorkingCache() const
     if (m_pFlushCache)
         return m_pFlushCache.get();
     else
-        return &TheFilterCache::get();
+        return &GetTheFilterCache();
     // <- SAFE
 }
 
@@ -422,7 +422,7 @@ void SAL_CALL BaseContainer::flush()
                 If the global cache gets this information via listener,
                 we should remove this method!
         */
-        TheFilterCache::get().takeOver(*m_pFlushCache);
+        GetTheFilterCache().takeOver(*m_pFlushCache);
     }
     catch(const css::uno::Exception& ex)
     {

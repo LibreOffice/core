@@ -28,7 +28,6 @@
 #include <svl/itemset.hxx>
 #include <svl/itempool.hxx>
 #include <svl/eitem.hxx>
-#include <rtl/instance.hxx>
 #include <tools/debug.hxx>
 
 #include <editeng/unoprnms.hxx>
@@ -1548,36 +1547,19 @@ void SAL_CALL SvxUnoTextRange::release()
 
 // XTypeProvider
 
-namespace
-{
-    struct theSvxUnoTextRangeTypes :
-        public rtl::StaticWithInit<uno::Sequence<uno::Type>, theSvxUnoTextRangeTypes>
-    {
-        uno::Sequence<uno::Type> operator () ()
-        {
-            uno::Sequence< uno::Type > aTypeSequence;
-
-            aTypeSequence.realloc( 9 ); // !DANGER! keep this updated
-            uno::Type* pTypes = aTypeSequence.getArray();
-
-            *pTypes++ = cppu::UnoType<text::XTextRange>::get();
-            *pTypes++ = cppu::UnoType<beans::XPropertySet>::get();
-            *pTypes++ = cppu::UnoType<beans::XMultiPropertySet>::get();
-            *pTypes++ = cppu::UnoType<beans::XMultiPropertyStates>::get();
-            *pTypes++ = cppu::UnoType<beans::XPropertyState>::get();
-            *pTypes++ = cppu::UnoType<lang::XServiceInfo>::get();
-            *pTypes++ = cppu::UnoType<lang::XTypeProvider>::get();
-            *pTypes++ = cppu::UnoType<lang::XUnoTunnel>::get();
-            *pTypes++ = cppu::UnoType<text::XTextRangeCompare>::get();
-
-            return aTypeSequence;
-        }
-    };
-}
-
 uno::Sequence< uno::Type > SAL_CALL SvxUnoTextRange::getTypes()
 {
-    return theSvxUnoTextRangeTypes::get();
+    static const uno::Sequence< uno::Type > TYPES {
+            cppu::UnoType<text::XTextRange>::get(),
+            cppu::UnoType<beans::XPropertySet>::get(),
+            cppu::UnoType<beans::XMultiPropertySet>::get(),
+            cppu::UnoType<beans::XMultiPropertyStates>::get(),
+            cppu::UnoType<beans::XPropertyState>::get(),
+            cppu::UnoType<lang::XServiceInfo>::get(),
+            cppu::UnoType<lang::XTypeProvider>::get(),
+            cppu::UnoType<lang::XUnoTunnel>::get(),
+            cppu::UnoType<text::XTextRangeCompare>::get() };
+    return TYPES;
 }
 
 uno::Sequence< sal_Int8 > SAL_CALL SvxUnoTextRange::getImplementationId()
@@ -1657,42 +1639,25 @@ uno::Any SAL_CALL SvxUnoTextBase::queryAggregation( const uno::Type & rType )
 
 // XTypeProvider
 
-namespace
-{
-    struct theSvxUnoTextBaseTypes :
-        public rtl::StaticWithInit<uno::Sequence<uno::Type>, theSvxUnoTextBaseTypes>
-    {
-        uno::Sequence<uno::Type> operator () ()
-        {
-            uno::Sequence< uno::Type > aTypeSequence;
-
-            aTypeSequence.realloc( 15 ); // !DANGER! keep this updated
-            uno::Type* pTypes = aTypeSequence.getArray();
-
-            *pTypes++ = cppu::UnoType<text::XText>::get();
-            *pTypes++ = cppu::UnoType<container::XEnumerationAccess>::get();
-            *pTypes++ = cppu::UnoType<beans::XPropertySet>::get();
-            *pTypes++ = cppu::UnoType<beans::XMultiPropertySet>::get();
-            *pTypes++ = cppu::UnoType<beans::XMultiPropertyStates>::get();
-            *pTypes++ = cppu::UnoType<beans::XPropertyState>::get();
-            *pTypes++ = cppu::UnoType<text::XTextRangeMover>::get();
-            *pTypes++ = cppu::UnoType<text::XTextAppend>::get();
-            *pTypes++ = cppu::UnoType<text::XTextCopy>::get();
-            *pTypes++ = cppu::UnoType<text::XParagraphAppend>::get();
-            *pTypes++ = cppu::UnoType<text::XTextPortionAppend>::get();
-            *pTypes++ = cppu::UnoType<lang::XServiceInfo>::get();
-            *pTypes++ = cppu::UnoType<lang::XTypeProvider>::get();
-            *pTypes++ = cppu::UnoType<lang::XUnoTunnel>::get();
-            *pTypes++ = cppu::UnoType<text::XTextRangeCompare>::get();
-
-            return aTypeSequence;
-        }
-    };
-}
-
 uno::Sequence< uno::Type > SAL_CALL SvxUnoTextBase::getTypes()
 {
-    return theSvxUnoTextBaseTypes::get();
+    static const uno::Sequence< uno::Type > TYPES {
+            cppu::UnoType<text::XText>::get(),
+            cppu::UnoType<container::XEnumerationAccess>::get(),
+            cppu::UnoType<beans::XPropertySet>::get(),
+            cppu::UnoType<beans::XMultiPropertySet>::get(),
+            cppu::UnoType<beans::XMultiPropertyStates>::get(),
+            cppu::UnoType<beans::XPropertyState>::get(),
+            cppu::UnoType<text::XTextRangeMover>::get(),
+            cppu::UnoType<text::XTextAppend>::get(),
+            cppu::UnoType<text::XTextCopy>::get(),
+            cppu::UnoType<text::XParagraphAppend>::get(),
+            cppu::UnoType<text::XTextPortionAppend>::get(),
+            cppu::UnoType<lang::XServiceInfo>::get(),
+            cppu::UnoType<lang::XTypeProvider>::get(),
+            cppu::UnoType<lang::XUnoTunnel>::get(),
+            cppu::UnoType<text::XTextRangeCompare>::get() };
+    return TYPES;
 }
 
 uno::Sequence< sal_Int8 > SAL_CALL SvxUnoTextBase::getImplementationId()

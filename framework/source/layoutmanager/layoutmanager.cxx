@@ -58,7 +58,6 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <toolkit/awt/vclxmenu.hxx>
 #include <comphelper/uno3.hxx>
-#include <rtl/instance.hxx>
 #include <officecfg/Office/Compatibility.hxx>
 
 #include <rtl/ref.hxx>
@@ -3066,18 +3065,11 @@ namespace detail
         ::cppu::OPropertyArrayHelper& getHelper() { return *m_pInfoHelper; }
     };
 }
-namespace
-{
-    struct theInfoHelper :
-        public rtl::StaticWithArg< detail::InfoHelperBuilder, LayoutManager,
-        theInfoHelper >
-    {
-    };
-}
 
 ::cppu::IPropertyArrayHelper& SAL_CALL LayoutManager::getInfoHelper()
 {
-    return theInfoHelper::get(*this).getHelper();
+    static detail::InfoHelperBuilder INFO(*this);
+    return INFO.getHelper();
 }
 
 uno::Reference< beans::XPropertySetInfo > SAL_CALL LayoutManager::getPropertySetInfo()
