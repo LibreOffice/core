@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "af1ee606_2e5c0de5",
+        "filename": "sc/qa/unit/helper/qahelper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 600,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-08-13T09:03:48Z",
+      "side": 1,
+      "message": "the parameter of SetVersion is sal_Int32",
+      "revId": "8eeeb4cb71e73e0eac46c0d2a52665ab5cff5662",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e24ec5ae_e70b35c4",
+        "filename": "sc/qa/unit/helper/qahelper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 640,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-08-13T09:03:48Z",
+      "side": 1,
+      "message": "this is declared as:\n\nenum class SfxFilterFlags\n\nthe default integer type for an \"enum class\" is \"int\"\n\n\u003d\u003e a 32-bit integer is sufficient for this case",
+      "revId": "8eeeb4cb71e73e0eac46c0d2a52665ab5cff5662",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a2918dae_22ba7752",
+        "filename": "vcl/unx/gtk3_kde5/filepicker_ipc_commands.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-08-13T09:03:48Z",
+      "side": 1,
+      "message": "this doesn\u0027t make sense considering...",
+      "revId": "8eeeb4cb71e73e0eac46c0d2a52665ab5cff5662",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d6ab32ba_86008d93",
+        "filename": "vcl/unx/gtk3_kde5/filepicker_ipc_commands.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2021-08-13T09:03:48Z",
+      "side": 1,
+      "message": "... there is the same thing again here\n\nit\u0027s not obvious to me why this code was written like this in the first place - on a 64-bit platform, there is no way to serialize 32-bit integers ... but why?\n\nperhaps better leave it alone for now?",
+      "revId": "8eeeb4cb71e73e0eac46c0d2a52665ab5cff5662",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
