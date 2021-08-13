@@ -35,15 +35,6 @@ OString Pair::toString() const
     return OString::number(A()) + ", " + OString::number(B());
 }
 
-tools::Rectangle tools::Rectangle::Justify( const Point& rLT, const Point& rRB )
-{
-    tools::Long nLeft   = std::min(rLT.X(), rRB.X());
-    tools::Long nTop    = std::min(rLT.Y(), rRB.Y());
-    tools::Long nRight  = std::max(rLT.X(), rRB.X());
-    tools::Long nBottom = std::max(rLT.Y(), rRB.Y());
-    return Rectangle( nLeft, nTop, nRight, nBottom );
-}
-
 void tools::Rectangle::SetSize( const Size& rSize )
 {
     if ( rSize.Width() < 0 )
@@ -193,7 +184,7 @@ OString tools::Rectangle::toString() const
     // Note that this is not just used for debugging output but the
     // format is parsed by external code (passed in callbacks to
     // LibreOfficeKit clients). So don't change.
-    return OString::number(getX()) + ", " + OString::number(getY()) + ", " + OString::number(getWidth()) + ", " + OString::number(getHeight());
+    return OString::number(Left()) + ", " + OString::number(Top()) + ", " + OString::number(getWidth()) + ", " + OString::number(getHeight());
 }
 
 void tools::Rectangle::expand(tools::Long nExpandBy)
@@ -236,32 +227,6 @@ tools::Long tools::Rectangle::AdjustBottom( tools::Long nVertMoveDelta )
     else
         nBottom += nVertMoveDelta;
     return nBottom;
-}
-
-void tools::Rectangle::setX( tools::Long x )
-{
-    if (nRight != RECT_EMPTY)
-        nRight += x - nLeft;
-    nLeft = x;
-}
-
-void tools::Rectangle::setY( tools::Long y )
-{
-    if (nBottom != RECT_EMPTY)
-        nBottom += y - nTop;
-    nTop  = y;
-}
-
-/// Returns the difference between right and left, assuming the range includes one end, but not the other.
-tools::Long tools::Rectangle::getWidth() const
-{
-    return nRight == RECT_EMPTY ? 0 : nRight - nLeft;
-}
-
-/// Returns the difference between bottom and top, assuming the range includes one end, but not the other.
-tools::Long tools::Rectangle::getHeight() const
-{
-    return nBottom == RECT_EMPTY ? 0 : nBottom - nTop;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

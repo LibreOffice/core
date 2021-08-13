@@ -321,7 +321,7 @@ css::awt::Rectangle SAL_CALL AccessibleCell::getBounds()
             awt::Size aParentSize (xParentComponent->getSize());
             ::tools::Rectangle aParentBBox (0,0, aParentSize.Width, aParentSize.Height);
             aBBox = aBBox.GetIntersection (aParentBBox);
-            aBoundingBox = awt::Rectangle ( aBBox.getX(), aBBox.getY(), aBBox.getWidth(), aBBox.getHeight());
+            aBoundingBox = awt::Rectangle ( aBBox.Left(), aBBox.Top(), aBBox.getWidth(), aBBox.getHeight());
         }
         else
         {
