@@ -34,7 +34,7 @@ public:
     };
     /* Mathml stuff */
 
-protected:
+public:
     SmMlElement(SmMlElementType aElementType)
         : m_aElementType(aElementType)
         , m_aText(u"\u00B6")
@@ -173,6 +173,14 @@ public: // attributes
       * @return given attribute.
       */
     void setAttribute(const SmMlAttribute* aAttribute);
+
+    /**
+      * Set's a given attribute.
+      * If no available does nothing.
+      * @param nAttributePos
+      * @return given attribute.
+      */
+    void setAttribute(const SmMlAttribute& aAttribute) { setAttribute(&aAttribute); }
 
     /** Checks if an attribute has been manually set
     * @param aElementType
