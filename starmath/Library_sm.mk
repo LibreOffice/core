@@ -105,6 +105,7 @@ $(eval $(call gb_Library_add_exception_objects,sm,\
         starmath/source/mathml/mathmlimport \
         starmath/source/mathml/mathmlMo \
         starmath/source/mathml/export \
+        starmath/source/mathml/import \
         starmath/source/mathml/iterator \
         starmath/source/mathml/attribute \
         starmath/source/mathml/element \
