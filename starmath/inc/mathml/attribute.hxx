@@ -25,6 +25,7 @@ union SmMlAttributeValue {
     struct SmMlDir m_aDir;
     struct SmMlDisplaystyle m_aDisplaystyle;
     struct SmMlFence m_aFence;
+    struct SmMlForm m_aForm;
     struct SmMlHref m_aHref;
     struct SmMlLspace m_aLspace;
     struct SmMlMathbackground m_aMathbackground;
@@ -126,6 +127,7 @@ public:
     const struct SmMlDir* getMlDir() const;
     const struct SmMlDisplaystyle* getMlDisplaystyle() const;
     const struct SmMlFence* getMlFence() const;
+    const struct SmMlForm* getMlForm() const;
     const struct SmMlHref* getMlHref() const;
     const struct SmMlLspace* getMlLspace() const;
     const struct SmMlMathbackground* getMlMathbackground() const;
@@ -146,6 +148,7 @@ public:
     void setMlDir(const SmMlDir* aDir);
     void setMlDisplaystyle(const SmMlDisplaystyle* aDisplaystyle);
     void setMlFence(const SmMlFence* aFence);
+    void setMlForm(const SmMlForm* aForm);
     void setMlHref(const SmMlHref* aHref);
     void setMlLspace(const SmMlLspace* aLspace);
     void setMlMathbackground(const SmMlMathbackground* aMathbackground);
@@ -171,10 +174,10 @@ extern SmMlAttributePos MlAttributeListMath[1];
 extern SmMlAttributePos MlAttributeListMi[7];
 extern SmMlAttributePos MlAttributeListMerror[4];
 extern SmMlAttributePos MlAttributeListMn[7];
-extern SmMlAttributePos MlAttributeListMo[17];
+extern SmMlAttributePos MlAttributeListMo[18];
 extern SmMlAttributePos MlAttributeListMrow[4];
 extern SmMlAttributePos MlAttributeListMtext[7];
-extern SmMlAttributePos MlAttributeListMstyle[17];
+extern SmMlAttributePos MlAttributeListMstyle[18];
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
