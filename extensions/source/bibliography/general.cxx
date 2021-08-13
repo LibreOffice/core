@@ -184,9 +184,6 @@ BibGeneralPage::BibGeneralPage(vcl::Window* pParent, BibDataManager* pMan)
     , xNoteED(m_xBuilder->weld_entry("notecontrol"))
     , xURLFT(m_xBuilder->weld_label("url"))
     , xURLED(m_xBuilder->weld_entry("urlcontrol"))
-    , m_xBrowseButton(m_xBuilder->weld_button("browse"))
-    , m_xPageCB(m_xBuilder->weld_check_button("pagecb"))
-    , m_xPageSB(m_xBuilder->weld_spin_button("pagesb"))
     , xCustom1FT(m_xBuilder->weld_label("custom1"))
     , xCustom1ED(m_xBuilder->weld_entry("custom1control"))
     , xCustom2FT(m_xBuilder->weld_label("custom2"))
@@ -319,9 +316,6 @@ BibGeneralPage::BibGeneralPage(vcl::Window* pParent, BibDataManager* pMan)
         xURLFT->get_label(), *xURLED,
         sTableErrorString, HID_BIB_URL_POS);
 
-    m_xBrowseButton->connect_clicked(LINK(this, BibGeneralPage, BrowseHdl));
-    m_xPageCB->connect_toggled(LINK(this, BibGeneralPage, PageNumHdl));
-
     AddControlWithError(lcl_GetColumnName(pMapping, CUSTOM1_POS),
         xCustom1FT->get_label(), *xCustom1ED,
         sTableErrorString, HID_BIB_CUSTOM1_POS);
@@ -360,11 +354,11 @@ BibGeneralPage::BibGeneralPage(vcl::Window* pParent, BibDataManager* pMan)
     set_height_request(aSize.Height());
 }
 
-IMPL_LINK(BibGeneralPage, BrowseHdl, weld::Button&, rButton, void)
+IMPL_LINK_NOARG(BibGeneralPage, BrowseHdl, weld::Button&, void)
 {
     sfx2::FileDialogHelper aFileDlg(ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
                                     FileDialogFlags::NONE, GetFrameWeld());
-    OUString aPath = (&rButton == m_xBrowseButton.get()) ? xURLED->get_text() : m_xLocalURLED->get_text();
+    OUString aPath = m_xLocalURLED->get_text();
     if (!aPath.isEmpty())
     {
         aFileDlg.SetDisplayDirectory(aPath);
@@ -375,13 +369,13 @@ IMPL_LINK(BibGeneralPage, BrowseHdl, weld::Button&, rButton, void)
         return;
     }
 
-    weld::Entry& rEntry = (&rButton == m_xBrowseButton.get()) ? *xURLED : *m_xLocalURLED;
+    weld::Entry& rEntry = *m_xLocalURLED;
     rEntry.set_text(aFileDlg.GetPath());
 };
 
 IMPL_LINK(BibGeneralPage, PageNumHdl, weld::Toggleable&, rPageCB, void)
 {
-    weld::SpinButton& rPageSB = (&rPageCB == m_xPageCB.get()) ? *m_xPageSB : *m_xLocalPageSB;
+    weld::SpinButton& rPageSB = *m_xLocalPageSB;
     if (rPageCB.get_active())
     {
         rPageSB.set_sensitive(true);
@@ -543,26 +537,7 @@ namespace
         {
             OUString sNewName;
             rValue >>= sNewName;
-            if (&m_rEntry == &m_rPage.GetURLED())
-            {
-                OUString aUrl;
-                int nPageNumber;
-                if (SplitUrlAndPage(sNewName, aUrl, nPageNumber))
-                {
-                    m_rEntry.set_text(aUrl);
-                    m_rPage.GetPageCB().set_active(true);
-                    m_rPage.GetPageSB().set_sensitive(true);
-                    m_rPage.GetPageSB().set_value(nPageNumber);
-                }
-                else
-                {
-                    m_rEntry.set_text(sNewName);
-                    m_rPage.GetPageCB().set_active(false);
-                    m_rPage.GetPageSB().set_sensitive(false);
-                    m_rPage.GetPageSB().set_value(0);
-                }
-            }
-            else if (&m_rEntry == &m_rPage.GetLocalURLED())
+            if (&m_rEntry == &m_rPage.GetLocalURLED())
             {
                 OUString aUrl;
                 int nPageNumber;
@@ -587,11 +562,7 @@ namespace
             }
 
             m_rEntry.save_value();
-            if (&m_rEntry == &m_rPage.GetURLED())
-            {
-                m_rPage.GetPageSB().save_value();
-            }
-            else if (&m_rEntry == &m_rPage.GetLocalURLED())
+            if (&m_rEntry == &m_rPage.GetLocalURLED())
             {
                 m_rPage.GetLocalPageSB().save_value();
             }
@@ -600,21 +571,15 @@ namespace
         /// Updates m_xPropSet based on the UI widget(s).
         virtual void WriteBack() override
         {
-            bool bURL = &m_rEntry == &m_rPage.GetURLED()
-                        && m_rPage.GetPageSB().get_value_changed_from_saved();
             bool bLocalURL = &m_rEntry == &m_rPage.GetLocalURLED()
                         && m_rPage.GetLocalPageSB().get_value_changed_from_saved();
-            if (!m_rEntry.get_value_changed_from_saved() && !(bURL || bLocalURL))
+            if (!m_rEntry.get_value_changed_from_saved() && !bLocalURL)
                 return;
 
             m_bSelfChanging = true;
 
             OUString aText;
-            if (&m_rEntry == &m_rPage.GetURLED())
-            {
-                aText = MergeUrlAndPage(m_rEntry.get_text(), m_rPage.GetPageSB());
-            }
-            else if (&m_rEntry == &m_rPage.GetLocalURLED())
+            if (&m_rEntry == &m_rPage.GetLocalURLED())
             {
                 aText = MergeUrlAndPage(m_rEntry.get_text(), m_rPage.GetLocalPageSB());
             }
@@ -630,11 +595,7 @@ namespace
 
             m_bSelfChanging = false;
             m_rEntry.save_value();
-            if (&m_rEntry == &m_rPage.GetURLED())
-            {
-                m_rPage.GetPageSB().save_value();
-            }
-            else if (&m_rEntry == &m_rPage.GetLocalURLED())
+            if (&m_rEntry == &m_rPage.GetLocalURLED())
             {
                 m_rPage.GetLocalPageSB().save_value();
             }
@@ -780,9 +741,6 @@ void BibGeneralPage::dispose()
     xNoteED.reset();
     xURLFT.reset();
     xURLED.reset();
-    m_xBrowseButton.reset();
-    m_xPageCB.reset();
-    m_xPageSB.reset();
     xCustom1FT.reset();
     xCustom1ED.reset();
     xCustom2FT.reset();
@@ -800,12 +758,6 @@ void BibGeneralPage::dispose()
     m_xLocalPageSB.reset();
     InterimItemWindow::dispose();
 }
-
-weld::Entry& BibGeneralPage::GetURLED() { return *xURLED; }
-
-weld::CheckButton& BibGeneralPage::GetPageCB() { return *m_xPageCB; }
-
-weld::SpinButton& BibGeneralPage::GetPageSB() { return *m_xPageSB; }
 
 weld::Entry& BibGeneralPage::GetLocalURLED() { return *m_xLocalURLED; }
 
@@ -828,10 +780,10 @@ bool BibGeneralPage::AddXControl(const OUString& rName, weld::Entry& rEntry)
                 uno::Reference< beans::XPropertySetInfo >  xPropInfo = xPropSet->getPropertySetInfo();
                 maChangeListeners.emplace_back(new EntryChangeListener(rEntry, xPropSet, *this));
                 maChangeListeners.back()->start();
-                if (&rEntry == xURLED.get())
+                if (&rEntry == m_xLocalURLED.get())
                 {
                     m_aURLListener = maChangeListeners.back();
-                    m_xPageSB->connect_focus_out(LINK(this, BibGeneralPage, LosePageFocusHdl));
+                    m_xLocalPageSB->connect_focus_out(LINK(this, BibGeneralPage, LosePageFocusHdl));
                 }
             }
         }
