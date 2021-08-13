@@ -107,9 +107,6 @@ class BibGeneralPage : public InterimItemWindow
     std::unique_ptr<weld::Entry> xNoteED;
     std::unique_ptr<weld::Label> xURLFT;
     std::unique_ptr<weld::Entry> xURLED;
-    std::unique_ptr<weld::Button> m_xBrowseButton;
-    std::unique_ptr<weld::CheckButton> m_xPageCB;
-    std::unique_ptr<weld::SpinButton> m_xPageSB;
 
     std::unique_ptr<weld::Label> xCustom1FT;
     std::unique_ptr<weld::Entry> xCustom1ED;
@@ -160,9 +157,6 @@ public:
         return sTableErrorString;
     }
 
-    weld::Entry& GetURLED();
-    weld::CheckButton& GetPageCB();
-    weld::SpinButton& GetPageSB();
     weld::Entry& GetLocalURLED();
     weld::CheckButton& GetLocalPageCB();
     weld::SpinButton& GetLocalPageSB();
