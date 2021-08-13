@@ -3420,6 +3420,7 @@ namespace xmloff::token {
 
         TOKEN("dir",                 XML_DIR ),
         TOKEN("displaystyle",        XML_DISPLAYSTYLE ),
+        TOKEN("infinity",            XML_INFINITY ),
         TOKEN("lspace",              XML_LSPACE ),
         TOKEN("mathbackground",      XML_MATHBACKGROUND ),
         TOKEN("maxsize",             XML_MAXSIZE ),

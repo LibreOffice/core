@@ -3173,6 +3173,7 @@ margin-gutter
 local-url
 dir
 displaystyle
+infinity
 lspace
 mathbackground
 maxsize
