@@ -21,6 +21,7 @@
 
 #include <editeng/editdata.hxx>
 #include <editeng/editstat.hxx>
+#include <editeng/overflowingtxt.hxx>
 #include <i18nlangtag/lang.h>
 #include <rtl/ustring.hxx>
 #include <svl/SfxBroadcaster.hxx>
@@ -68,8 +69,6 @@ class SvxNumberFormat;
 class EditEngine;
 class SvKeyValueIterator;
 class SvxForbiddenCharactersTable;
-class OverflowingText;
-class NonOverflowingText;
 class OutlinerViewShell;
 enum class CharCompressType;
 enum class TransliterationFlags;
@@ -734,8 +733,8 @@ public:
     void            SetParaRemovingHdl(const Link<ParagraphHdlParam,void>& rLink){aParaRemovingHdl=rLink;}
     const Link<ParagraphHdlParam,void>& GetParaRemovingHdl() const { return aParaRemovingHdl; }
 
-    std::unique_ptr<NonOverflowingText> GetNonOverflowingText() const;
-    std::unique_ptr<OverflowingText> GetOverflowingText() const;
+    std::optional<NonOverflowingText> GetNonOverflowingText() const;
+    std::optional<OverflowingText> GetOverflowingText() const;
     void ClearOverflowingParaNum();
     bool IsPageOverflow();
 
