@@ -113,6 +113,11 @@ void SAL_CALL OInputStreamHelper::closeInput()
     m_xLockBytes = nullptr;
 }
 
+void SAL_CALL OInputStreamHelper::acquire() SAL_NOEXCEPT
+{
+    cppu::WeakImplHelper<css::io::XInputStream, css::io::XSeekable>::acquire();
+}
+
 } // namespace utl
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

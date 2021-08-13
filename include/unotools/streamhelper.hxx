@@ -57,6 +57,9 @@ public:
     virtual void SAL_CALL seek( sal_Int64 location ) override;
     virtual sal_Int64 SAL_CALL getPosition(  ) override;
     virtual sal_Int64 SAL_CALL getLength(  ) override;
+
+    // workaround for Ubuntu 18.04 / Fedora 31 (Coverity VM) build with std::mutex; must not be inline!
+    virtual void SAL_CALL acquire() SAL_NOEXCEPT override;
 };
 
 }   // namespace utl
