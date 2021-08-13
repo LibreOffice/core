@@ -529,6 +529,8 @@ void SwFlyAtContentFrame::MakeAll(vcl::RenderContext* pRenderContext)
     // wrong position will applied in that case. FollowTextFlow needs fix.
     if (pShapeFormat && !pShapeFormat->GetFollowTextFlow().GetValue() &&
         SwTextBoxHelper::getProperty(pShapeFormat,
+            UNO_NAME_FRAME_ISAUTOMATIC_HEIGHT).hasValue() &&
+        SwTextBoxHelper::getProperty(pShapeFormat,
             UNO_NAME_FRAME_ISAUTOMATIC_HEIGHT).get<bool>() )
     {
         // get the text area of the shape

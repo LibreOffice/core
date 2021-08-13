@@ -2552,7 +2552,17 @@ SwFrameFormat::~SwFrameFormat()
 
     if( nullptr != m_pOtherTextBoxFormat )
     {
-        m_pOtherTextBoxFormat->SetOtherTextBoxFormat( nullptr );
+        if (Which() == RES_FLYFRMFMT && FindRealSdrObject())
+        {
+            // This is a fly-frame-format just del this
+            // textbox entry from the draw-frame-format.
+            m_pOtherTextBoxFormat->DelTextBox(FindRealSdrObject());
+
+            // Empty OtherTextBoxFormat does not needed del that too.
+            if (!m_pOtherTextBoxFormat->GetTextBoxCount())
+                delete m_pOtherTextBoxFormat;
+        }
+
         m_pOtherTextBoxFormat = nullptr;
     }
 }
@@ -2578,45 +2588,6 @@ void SwFrameFormat::SetName( const OUString& rNewName, bool bBroadcast )
     }
     else
         SwFormat::SetName( rNewName, bBroadcast );
-}
-
-void SwFrameFormat::SetOtherTextBoxFormat( SwFrameFormat *pFormat )
-{
-    if( nullptr != pFormat )
-    {
-        assert( (Which() == RES_DRAWFRMFMT && pFormat->Which() == RES_FLYFRMFMT)
-             || (Which() == RES_FLYFRMFMT && pFormat->Which() == RES_DRAWFRMFMT) );
-        assert( nullptr == m_pOtherTextBoxFormat );
-    }
-    else
-    {
-        assert( nullptr != m_pOtherTextBoxFormat );
-    }
-    bool bChanged = m_pOtherTextBoxFormat != pFormat;
-    m_pOtherTextBoxFormat = pFormat;
-
-    SdrObject* pObj = FindSdrObject();
-
-    if (pObj)
-    {
-        SwFlyDrawObj* pSwFlyDraw = dynamic_cast<SwFlyDrawObj*>(pObj);
-
-        if (pSwFlyDraw)
-            pSwFlyDraw->SetTextBox(true);
-    }
-
-    if (m_pOtherTextBoxFormat && bChanged && Which() == RES_DRAWFRMFMT)
-    {
-        // This is a shape of a shape+frame pair and my frame has changed. Make sure my content is
-        // in sync with the frame's content.
-        if (GetAttrSet().GetContent() != m_pOtherTextBoxFormat->GetAttrSet().GetContent())
-        {
-            SwAttrSet aSet(GetAttrSet());
-            SwFormatContent aContent(m_pOtherTextBoxFormat->GetAttrSet().GetContent());
-            aSet.Put(aContent);
-            SetFormatAttr(aSet);
-        }
-    }
 }
 
 bool SwFrameFormat::supportsFullDrawingLayerFillAttributeSet() const

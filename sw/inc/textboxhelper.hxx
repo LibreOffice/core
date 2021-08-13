@@ -58,9 +58,9 @@ public:
     using SavedContent = std::map<const SwFrameFormat*, SwFormatContent>;
     /// Create a TextBox for a shape. If the second parameter is true,
     /// the original text in the shape will be copied to the frame
-    static void create(SwFrameFormat* pShape, bool bCopyText = false);
+    static void create(SwFrameFormat* pShape, SdrObject* pObject, bool bCopyText = false);
     /// Destroy a TextBox for a shape.
-    static void destroy(SwFrameFormat* pShape);
+    static void destroy(SwFrameFormat* pShape, SdrObject* pObject);
     /// Get interface of a shape's TextBox, if there is any.
     static css::uno::Any queryInterface(const SwFrameFormat* pShape, const css::uno::Type& rType);
 
@@ -119,7 +119,8 @@ public:
      *
      * @see isTextBox
      */
-    static SwFrameFormat* getOtherTextBoxFormat(const SwFrameFormat* pFormat, sal_uInt16 nType);
+    static SwFrameFormat* getOtherTextBoxFormat(const SwFrameFormat* pFormat, sal_uInt16 nType,
+                                                SdrObject* pObject = nullptr);
     /// If we have an associated TextFrame, then return that.
     static SwFrameFormat*
     getOtherTextBoxFormat(css::uno::Reference<css::drawing::XShape> const& xShape);
@@ -138,7 +139,8 @@ public:
      * @param nType Expected frame format input type.
      *              Valid types are RES_DRAWFRMFMT and RES_FLYFRMFMT.
      */
-    static bool isTextBox(const SwFrameFormat* pFormat, sal_uInt16 nType);
+    static bool isTextBox(const SwFrameFormat* pFormat, sal_uInt16 nType,
+                          SdrObject* pObject = nullptr);
 
     /// Returns true if the SdrObject has a SwTextFrame otherwise false
     static bool hasTextFrame(const SdrObject* pObj);
@@ -162,6 +164,41 @@ public:
     /// Undo the effect of saveLinks() + individual resetLink() calls.
     static void restoreLinks(std::set<ZSortFly>& rOld, std::vector<SwFrameFormat*>& rNew,
                              SavedLink& rSavedLinks);
+};
+
+class SwTextBoxNode
+{
+    struct SwTextBoxElement
+    {
+        SwFrameFormat* m_pTextBoxFormat;
+        SdrObject* m_pDrawObject;
+        bool m_bIsActive;
+    };
+
+    std::vector<SwTextBoxElement> m_pTextBoxes;
+    SwFrameFormat* m_pOwnerShapeFormat;
+
+public:
+    SwTextBoxNode() = delete;
+
+    SwTextBoxNode(SwFrameFormat* pOwnerShapeFormat);
+    ~SwTextBoxNode();
+
+    SwTextBoxNode(SwTextBoxNode&) = default;
+
+    void AddTextBox(SdrObject* pDrawObject, SwFrameFormat* pNewTextBox);
+    void DelTextBox(SdrObject* pDrawObject);
+
+    SwFrameFormat* GetTextBox(const SdrObject* pDrawObject) const;
+    bool IsTextBoxActive(const SdrObject* pDrawObject) const;
+
+    void SetTextBoxInactive(SdrObject* pDrawObject);
+    void SetTextBoxActive(SdrObject* pDrawObject);
+
+    bool IsGroupTextBox() const;
+    SwFrameFormat* GetOwnerShape() { return m_pOwnerShapeFormat; };
+
+    size_t GetTextBoxCount() const { return m_pTextBoxes.size(); };
 };
 
 #endif // INCLUDED_SW_INC_TEXTBOXHELPER_HXX
