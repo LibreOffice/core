@@ -31,7 +31,7 @@
 #include <svl/ondemand.hxx>
 #include <svl/nfkeytab.hxx>
 
-#include <map>
+#include <unordered_map>
 #include <memory>
 
 namespace com::sun::star::i18n { class XNumberFormatCode; }
@@ -291,10 +291,9 @@ enum NfEvalDateFormat
 };
 
 
-typedef std::map<sal_uInt32, SvNumberformat*> SvNumberFormatTable;
-typedef std::map<sal_uInt16, sal_uInt32> SvNumberFormatterIndexTable;
-
-typedef ::std::map< sal_uInt32, sal_uInt32> SvNumberFormatterMergeMap;
+typedef std::unordered_map<sal_uInt32, SvNumberformat*> SvNumberFormatTable;
+typedef std::unordered_map<sal_uInt16, sal_uInt32> SvNumberFormatterIndexTable;
+typedef std::unordered_map< sal_uInt32, sal_uInt32> SvNumberFormatterMergeMap;
 
 
 /** Language/country dependent currency entries
