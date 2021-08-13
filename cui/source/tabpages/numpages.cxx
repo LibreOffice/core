@@ -690,7 +690,7 @@ IMPL_LINK_NOARG(SvxNumPickTabPage, NumSelectHdl_Impl, ValueSet*, void)
         }
         else
         {
-            aFmt.SetIncludeUpperLevels(sal::static_int_cast< sal_uInt8 >(0 != nUpperLevelOrChar ? pActNum->GetLevelCount() : 0));
+            aFmt.SetIncludeUpperLevels(sal::static_int_cast< sal_uInt8 >(0 != nUpperLevelOrChar ? pActNum->GetLevelCount() : 1));
             aFmt.SetCharFormatName(sNumCharFmtName);
             aFmt.SetBulletRelSize(100);
             // #i93908#
@@ -1641,7 +1641,7 @@ IMPL_LINK(SvxNumOptionsTabPage, NumberTypeSelectHdl_Impl, weld::ComboBox&, rBox,
             if(SVX_NUM_BITMAP == (nNumberingType&(~LINK_TOKEN)))
             {
                 bBmp |= nullptr != aNumFmt.GetBrush();
-                aNumFmt.SetIncludeUpperLevels( 0 );
+                aNumFmt.SetIncludeUpperLevels( 1 );
                 aNumFmt.SetListFormat("", "", i);
                 if(!bBmp)
                     aNumFmt.SetGraphic("");
@@ -1651,7 +1651,7 @@ IMPL_LINK(SvxNumOptionsTabPage, NumberTypeSelectHdl_Impl, weld::ComboBox&, rBox,
             }
             else if( SVX_NUM_CHAR_SPECIAL == nNumberingType )
             {
-                aNumFmt.SetIncludeUpperLevels( 0 );
+                aNumFmt.SetIncludeUpperLevels( 1 );
                 aNumFmt.SetListFormat("", "", i);
                 if( !aNumFmt.GetBulletFont() )
                     aNumFmt.SetBulletFont(&aActBulletFont);
