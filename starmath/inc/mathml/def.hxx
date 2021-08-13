@@ -76,6 +76,7 @@ enum class SmMlAttributeValueType : uint_fast8_t
     MlDir,
     MlDisplaystyle,
     MlFence,
+    MlForm,
     MlHref,
     MlLspace,
     MlMathbackground,
@@ -121,6 +122,13 @@ enum class SmMlAttributeValueFence : uint_fast8_t
 {
     MlFalse = 0x00,
     MlTrue = 0x01
+};
+
+enum class SmMlAttributeValueForm : uint_fast8_t
+{
+    MlPrefix = 0x01,
+    MlInfix = 0x02,
+    MlPosfix = 0x04
 };
 
 enum class SmMlAttributeValueHref : uint_fast8_t
@@ -234,6 +242,11 @@ struct SmMlDisplaystyle
 struct SmMlFence
 {
     SmMlAttributeValueFence m_aFence;
+};
+
+struct SmMlForm
+{
+    SmMlAttributeValueForm m_aForm;
 };
 
 struct SmMlHref

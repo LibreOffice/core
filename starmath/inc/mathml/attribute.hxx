@@ -25,6 +25,7 @@ union SmMlAttributeValue {
     struct SmMlDir m_aDir;
     struct SmMlDisplaystyle m_aDisplaystyle;
     struct SmMlFence m_aFence;
+    struct SmMlForm m_aForm;
     struct SmMlHref m_aHref;
     struct SmMlLspace m_aLspace;
     struct SmMlMathbackground m_aMathbackground;
@@ -48,6 +49,7 @@ class SmMlAttribute
 private:
     SmMlAttributeValueType m_aSmMlAttributeValueType;
     SmMlAttributeValue m_aAttributeValue;
+    bool m_bSet;
 
 private:
     void clearPreviousAttributeValue();
@@ -55,27 +57,41 @@ private:
     void setAttributeValue(const SmMlAttribute* aMlAttribute);
 
 public:
-    SmMlAttribute() { m_aSmMlAttributeValueType = SmMlAttributeValueType::NMlEmpty; };
+    SmMlAttribute()
+        : m_aSmMlAttributeValueType(SmMlAttributeValueType::NMlEmpty)
+        , m_bSet(false){};
 
     ~SmMlAttribute() { clearPreviousAttributeValue(); };
 
     SmMlAttribute(SmMlAttributeValueType)
+        : m_aSmMlAttributeValueType(SmMlAttributeValueType::NMlEmpty)
+        , m_bSet(false)
     {
-        m_aSmMlAttributeValueType = SmMlAttributeValueType::NMlEmpty;
         setDefaultAttributeValue();
     };
 
     SmMlAttribute(const SmMlAttribute& aMlAttribute)
+        : m_aSmMlAttributeValueType(SmMlAttributeValueType::NMlEmpty)
+        , m_bSet(aMlAttribute.isSet())
     {
-        m_aSmMlAttributeValueType = SmMlAttributeValueType::NMlEmpty;
         setAttributeValue(&aMlAttribute);
     }
 
     SmMlAttribute(const SmMlAttribute* aMlAttribute)
+        : m_aSmMlAttributeValueType(SmMlAttributeValueType::NMlEmpty)
+        , m_bSet(aMlAttribute->isSet())
     {
-        m_aSmMlAttributeValueType = SmMlAttributeValueType::NMlEmpty;
         setAttributeValue(aMlAttribute);
     }
+
+public:
+    /** Check if the attribute has been set
+    */
+    bool isSet() const { return m_bSet; }
+
+    /** Set if the attribute has been set
+    */
+    void isSetSet(bool bSet) { m_bSet = bSet; }
 
 public:
     /**
@@ -115,10 +131,15 @@ public:
 
     void setMlAttributeValue(const SmMlAttribute& aMlAttribute)
     {
+        m_bSet = true;
         setAttributeValue(&aMlAttribute);
     }
 
-    void setMlAttributeValue(const SmMlAttribute* aMlAttribute) { setAttributeValue(aMlAttribute); }
+    void setMlAttributeValue(const SmMlAttribute* aMlAttribute)
+    {
+        m_bSet = true;
+        setAttributeValue(aMlAttribute);
+    }
 
 public:
     // Get values
@@ -126,6 +147,7 @@ public:
     const struct SmMlDir* getMlDir() const;
     const struct SmMlDisplaystyle* getMlDisplaystyle() const;
     const struct SmMlFence* getMlFence() const;
+    const struct SmMlForm* getMlForm() const;
     const struct SmMlHref* getMlHref() const;
     const struct SmMlLspace* getMlLspace() const;
     const struct SmMlMathbackground* getMlMathbackground() const;
@@ -146,6 +168,7 @@ public:
     void setMlDir(const SmMlDir* aDir);
     void setMlDisplaystyle(const SmMlDisplaystyle* aDisplaystyle);
     void setMlFence(const SmMlFence* aFence);
+    void setMlForm(const SmMlForm* aForm);
     void setMlHref(const SmMlHref* aHref);
     void setMlLspace(const SmMlLspace* aLspace);
     void setMlMathbackground(const SmMlMathbackground* aMathbackground);
@@ -171,10 +194,10 @@ extern SmMlAttributePos MlAttributeListMath[1];
 extern SmMlAttributePos MlAttributeListMi[7];
 extern SmMlAttributePos MlAttributeListMerror[4];
 extern SmMlAttributePos MlAttributeListMn[7];
-extern SmMlAttributePos MlAttributeListMo[17];
+extern SmMlAttributePos MlAttributeListMo[18];
 extern SmMlAttributePos MlAttributeListMrow[4];
 extern SmMlAttributePos MlAttributeListMtext[7];
-extern SmMlAttributePos MlAttributeListMstyle[17];
+extern SmMlAttributePos MlAttributeListMstyle[18];
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
