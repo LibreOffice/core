@@ -127,7 +127,7 @@ namespace sdr::contact
             ViewObjectContactOfPageHierarchy(ObjectContact& rObjectContact, ViewContact& rViewContact);
             virtual ~ViewObjectContactOfPageHierarchy() override;
 
-            virtual drawinglayer::primitive2d::Primitive2DContainer getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInfo) const override;
+            virtual void getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInfo, drawinglayer::primitive2d::Primitive2DContainer& rContainer ) const override;
         };
 } // end of namespace sdr::contact
 
@@ -167,7 +167,7 @@ namespace sdr::contact
             ViewObjectContactOfSdrPage(ObjectContact& rObjectContact, ViewContact& rViewContact);
             virtual ~ViewObjectContactOfSdrPage() override;
 
-            virtual drawinglayer::primitive2d::Primitive2DContainer getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInfo) const override;
+            virtual void getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInfo, drawinglayer::primitive2d::Primitive2DContainer& rContainer ) const override;
         };
 } // end of namespace sdr::contact
 
