@@ -1994,12 +1994,12 @@ public:
             if (std::string_view("EMPTY") == pPayload)
                 return;
             CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4), aSeq.getLength());
-            m_aOwnCursor.setX(aSeq[0].toInt32());
-            m_aOwnCursor.setY(aSeq[1].toInt32());
+            m_aOwnCursor.SetLeft(aSeq[0].toInt32());
+            m_aOwnCursor.SetTop(aSeq[1].toInt32());
             m_aOwnCursor.setWidth(aSeq[2].toInt32());
             m_aOwnCursor.setHeight(aSeq[3].toInt32());
 
-            if (m_aOwnCursor.getX() == 0 && m_aOwnCursor.getY() == 0)
+            if (m_aOwnCursor.Left() == 0 && m_aOwnCursor.Top() == 0)
                 m_bZeroCursor = true;
         }
         break;

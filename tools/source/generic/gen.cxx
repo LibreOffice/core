@@ -193,7 +193,7 @@ OString tools::Rectangle::toString() const
     // Note that this is not just used for debugging output but the
     // format is parsed by external code (passed in callbacks to
     // LibreOfficeKit clients). So don't change.
-    return OString::number(getX()) + ", " + OString::number(getY()) + ", " + OString::number(getWidth()) + ", " + OString::number(getHeight());
+    return OString::number(Left()) + ", " + OString::number(Top()) + ", " + OString::number(getWidth()) + ", " + OString::number(getHeight());
 }
 
 void tools::Rectangle::expand(tools::Long nExpandBy)
@@ -230,20 +230,6 @@ tools::Long tools::Rectangle::AdjustBottom( tools::Long nVertMoveDelta )
     else
         nBottom += nVertMoveDelta;
     return nBottom;
-}
-
-void tools::Rectangle::setX( tools::Long x )
-{
-    if (!IsWidthEmpty())
-        nRight += x - nLeft;
-    nLeft = x;
-}
-
-void tools::Rectangle::setY( tools::Long y )
-{
-    if (!IsHeightEmpty())
-        nBottom += y - nTop;
-    nTop  = y;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
