@@ -817,10 +817,7 @@ void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, sal_uInt16 nWID, sal_u
                 sal_Int32 nValue;
                 if (aValue >>= nValue)
                 {
-                    if (bAdjustX)
-                        nValue += convertTwipToMm100(aRect.getX());
-                    else if (bAdjustY)
-                        nValue += convertTwipToMm100(aRect.getY());
+                    nValue += convertTwipToMm100(bAdjustX ? aRect.Left() : aRect.Top());
                     aValue <<= nValue;
                 }
             }
@@ -925,7 +922,7 @@ void SwTextBoxHelper::syncFlyFrameAttr(SwFrameFormat& rShape, SfxItemSet const& 
 
                 tools::Rectangle aRect = getTextRectangle(&rShape, /*bAbsolute=*/false);
                 if (!aRect.IsEmpty())
-                    aOrient.SetPos(aOrient.GetPos() + aRect.getY());
+                    aOrient.SetPos(aOrient.GetPos() + aRect.Top());
 
                 if (rShape.GetAnchor().GetAnchorId() == RndStdIds::FLY_AT_PAGE
                     && rShape.GetAnchor().GetPageNum() != 0)
@@ -953,7 +950,7 @@ void SwTextBoxHelper::syncFlyFrameAttr(SwFrameFormat& rShape, SfxItemSet const& 
 
                 tools::Rectangle aRect = getTextRectangle(&rShape, /*bAbsolute=*/false);
                 if (!aRect.IsEmpty())
-                    aOrient.SetPos(aOrient.GetPos() + aRect.getX());
+                    aOrient.SetPos(aOrient.GetPos() + aRect.Left());
 
                 if (rShape.GetAnchor().GetAnchorId() == RndStdIds::FLY_AT_PAGE
                     && rShape.GetAnchor().GetPageNum() != 0)
@@ -976,8 +973,8 @@ void SwTextBoxHelper::syncFlyFrameAttr(SwFrameFormat& rShape, SfxItemSet const& 
                 {
                     if (!bInlineAnchored)
                     {
-                        aVertOrient.SetPos(aVertOrient.GetPos() + aRect.getY());
-                        aHoriOrient.SetPos(aHoriOrient.GetPos() + aRect.getX());
+                        aVertOrient.SetPos(aVertOrient.GetPos() + aRect.Top());
+                        aHoriOrient.SetPos(aHoriOrient.GetPos() + aRect.Left());
 
                         aTextBoxSet.Put(aVertOrient);
                         aTextBoxSet.Put(aHoriOrient);
@@ -1198,10 +1195,10 @@ bool SwTextBoxHelper::doTextBoxPositioning(SwFrameFormat* pShape)
                 tools::Rectangle aRect(getTextRectangle(pShape, false));
 
                 SwFormatHoriOrient aNewHOri(pFormat->GetHoriOrient());
-                aNewHOri.SetPos(aRect.getX());
+                aNewHOri.SetPos(aRect.Left());
 
                 SwFormatVertOrient aNewVOri(pFormat->GetVertOrient());
-                aNewVOri.SetPos(aRect.getY() + pShape->GetVertOrient().GetPos());
+                aNewVOri.SetPos(aRect.Top() + pShape->GetVertOrient().GetPos());
 
                 // tdf#140598: Do not apply wrong rectangle position.
                 if (aRect.TopLeft() != Point(0, 0))
@@ -1220,9 +1217,9 @@ bool SwTextBoxHelper::doTextBoxPositioning(SwFrameFormat* pShape)
                 if (aRect.TopLeft() != Point(0, 0))
                 {
                     SwFormatHoriOrient aNewHOri(pShape->GetHoriOrient());
-                    aNewHOri.SetPos(aNewHOri.GetPos() + aRect.getX());
+                    aNewHOri.SetPos(aNewHOri.GetPos() + aRect.Left());
                     SwFormatVertOrient aNewVOri(pShape->GetVertOrient());
-                    aNewVOri.SetPos(aNewVOri.GetPos() + aRect.getY());
+                    aNewVOri.SetPos(aNewVOri.GetPos() + aRect.Top());
 
                     pFormat->SetFormatAttr(aNewHOri);
                     pFormat->SetFormatAttr(aNewVOri);

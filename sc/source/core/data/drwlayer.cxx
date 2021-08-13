@@ -868,9 +868,9 @@ void ScDrawLayer::ResizeLastRectFromAnchor(const SdrObject* pObj, ScDrawObjData&
                     // Prepare scale relative to top-left of aCurrentCellRect
                     basegfx::B2DHomMatrix aChange;
 
-                    aChange.translate(-aCurrentCellRect.getX(), -aCurrentCellRect.getY());
+                    aChange.translate(-aCurrentCellRect.Left(), -aCurrentCellRect.Top());
                     aChange.scale(fWidthFactor, fHeightFactor);
-                    aChange.translate(aCurrentCellRect.getX(), aCurrentCellRect.getY());
+                    aChange.translate(aCurrentCellRect.Left(), aCurrentCellRect.Top());
 
                     // create B2DRange and transform by prepared scale
                     basegfx::B2DRange aNewRange = vcl::unotools::b2DRectangleFromRectangle(aRect);
@@ -1213,7 +1213,7 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData& rData, bool bNegati
         }
         else
         {
-            Point aPos( rData.getShapeRect().getX(), rData.getShapeRect().getY() );
+            const Point aPos(rData.getShapeRect().TopLeft());
             if ( pObj->GetRelativePos() != aPos )
             {
                 if (bRecording)

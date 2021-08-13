@@ -871,9 +871,9 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
 
                         bool bMoved = PositionAndSizeHelper::moveObject( m_aSelection.getSelectedCID()
                                         , getModel()
-                                        , awt::Rectangle(aObjectRect.getX(),aObjectRect.getY(),aObjectRect.getWidth(),aObjectRect.getHeight())
-                                        , awt::Rectangle(aOldObjectRect.getX(), aOldObjectRect.getY(), 0, 0)
-                                        , awt::Rectangle(aPageRect.getX(),aPageRect.getY(),aPageRect.getWidth(),aPageRect.getHeight()) );
+                                        , awt::Rectangle(aObjectRect.Left(),aObjectRect.Top(),aObjectRect.getWidth(),aObjectRect.getHeight())
+                                        , awt::Rectangle(aOldObjectRect.Left(), aOldObjectRect.Top(), 0, 0)
+                                        , awt::Rectangle(aPageRect.Left(),aPageRect.Top(),aPageRect.getWidth(),aPageRect.getHeight()) );
 
                         if( bMoved || bChanged )
                         {
@@ -1522,16 +1522,16 @@ bool ChartController::execute_KeyInput( const KeyEvent& rKEvt )
                             {
                                 tools::Rectangle aRect = pObj->GetSnapRect();
                                 awt::Size aPageSize(ChartModelHelper::getPageSize(getModel()));
-                                if ((fShiftAmountX > 0.0 && (aRect.getX() + fShiftAmountX + aRect.getWidth() > aPageSize.Width)) ||
-                                    (fShiftAmountX < 0.0 && (aRect.getX() + fShiftAmountX < 0)) ||
-                                    (fShiftAmountY > 0.0 && (aRect.getY() + fShiftAmountY + aRect.getHeight() > aPageSize.Height)) ||
-                                    (fShiftAmountY < 0.0 && (aRect.getY() + fShiftAmountY < 0)))
+                                if ((fShiftAmountX > 0.0 && (aRect.Right() + fShiftAmountX > aPageSize.Width)) ||
+                                    (fShiftAmountX < 0.0 && (aRect.Left() + fShiftAmountX < 0)) ||
+                                    (fShiftAmountY > 0.0 && (aRect.Bottom() + fShiftAmountY > aPageSize.Height)) ||
+                                    (fShiftAmountY < 0.0 && (aRect.Top() + fShiftAmountY < 0)))
                                     bReturn = false;
                                 else
                                     bReturn = PositionAndSizeHelper::moveObject(
                                         m_aSelection.getSelectedCID(), getModel(),
-                                        awt::Rectangle(aRect.getX() + fShiftAmountX, aRect.getY() + fShiftAmountY, aRect.getWidth(), aRect.getHeight()),
-                                        awt::Rectangle(aRect.getX(), aRect.getY(), 0, 0),
+                                        awt::Rectangle(aRect.Left() + fShiftAmountX, aRect.Top() + fShiftAmountY, aRect.getWidth(), aRect.getHeight()),
+                                        awt::Rectangle(aRect.Left(), aRect.Top(), 0, 0),
                                         awt::Rectangle(0, 0, aPageSize.Width, aPageSize.Height));
                             }
                         }
