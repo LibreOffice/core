@@ -68,7 +68,7 @@ void SmMlElement::SmImplAttributeType()
     m_aAttributeList = starmathdatabase::makeMlAttributeList(m_aAttributePosList);
 }
 
-SmMlAttribute SmMlElement::getAttribute(SmMlAttributeValueType aElementType) const
+SmMlAttribute SmMlElement::getAttribute(SmMlAttributeValueType aAttributeType) const
 {
     // Look for the attribute position and return if exists
     for (size_t i = 0; i < m_aAttributePosList.size(); ++i)
