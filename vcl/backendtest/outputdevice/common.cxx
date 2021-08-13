@@ -142,11 +142,12 @@ std::map<Color, int> collectColors(Bitmap& bitmap, const tools::Rectangle& recta
     return colors;
 }
 
-bool checkConvexHullProperty(Bitmap& bitmap, Color constLineColor, int nOffset)
+bool checkConvexHullProperty(Bitmap& bitmap, Color constLineColor, int nWidthOffset,
+                             int nHeightOffset)
 {
     BitmapScopedWriteAccess pAccess(bitmap);
-    tools::Long thresholdWidth = pAccess->Width() - nOffset;
-    tools::Long thresholdHeight = pAccess->Height() - nOffset;
+    tools::Long thresholdWidth = pAccess->Width() - nWidthOffset;
+    tools::Long thresholdHeight = pAccess->Height() - nHeightOffset;
     for (tools::Long y = 0; y < pAccess->Height(); ++y)
     {
         for (tools::Long x = 0; x < pAccess->Width(); ++x)
@@ -733,6 +734,19 @@ basegfx::B2DPolygon OutputDeviceTestCommon::createOpenPolygon(const tools::Recta
     return aPolygon;
 }
 
+basegfx::B2DPolygon OutputDeviceTestCommon::createOpenBezier()
+{
+    basegfx::B2DPolygon aPolygon;
+
+    aPolygon.append({ 5.0, 2.0 });
+    aPolygon.append({ 3.0, 14.0 });
+    aPolygon.setClosed(false);
+
+    aPolygon.setControlPoints(0, { 15.0, 2.0 }, { 15.0, 15.0 });
+
+    return aPolygon;
+}
+
 TestResult OutputDeviceTestCommon::checkDropShape(Bitmap& rBitmap, bool aEnableAA)
 {
     BitmapScopedWriteAccess pAccess(rBitmap);
@@ -899,7 +913,44 @@ TestResult OutputDeviceTestCommon::checkClosedBezier(Bitmap& rBitmap)
 
     if (nNumberOfQuirks > 0)
         aResult = TestResult::PassedWithQuirks;
-    if (nNumberOfErrors > 0 || !checkConvexHullProperty(rBitmap, constLineColor, 2))
+    if (nNumberOfErrors > 0 || !checkConvexHullProperty(rBitmap, constLineColor, 2, 2))
+        aResult = TestResult::Failed;
+    return aResult;
+}
+
+TestResult OutputDeviceTestCommon::checkOpenBezier(Bitmap& rBitmap)
+{
+    BitmapScopedWriteAccess pAccess(rBitmap);
+
+    TestResult aResult = TestResult::Passed;
+    int nNumberOfQuirks = 0;
+    int nNumberOfErrors = 0;
+
+    std::map<std::pair<int, int>, bool> SetPixels
+        = { { { 14, 3 }, true }, { { 14, 4 }, true }, { { 14, 5 }, true }, { { 3, 6 }, true },
+            { { 4, 6 }, true },  { { 14, 6 }, true }, { { 4, 7 }, true },  { { 5, 7 }, true },
+            { { 13, 7 }, true }, { { 6, 8 }, true },  { { 7, 8 }, true },  { { 12, 8 }, true },
+            { { 13, 8 }, true }, { { 8, 9 }, true },  { { 9, 9 }, true },  { { 10, 9 }, true },
+            { { 11, 9 }, true }, { { 12, 9 }, true } };
+
+    for (tools::Long x = 0; x < pAccess->Width(); x++)
+    {
+        for (tools::Long y = 0; y < pAccess->Height(); ++y)
+        {
+            if (SetPixels[{ y, x }])
+            {
+                checkValue(pAccess, x, y, constLineColor, nNumberOfQuirks, nNumberOfErrors, true);
+            }
+            else
+            {
+                checkValue(pAccess, x, y, constBackgroundColor, nNumberOfQuirks, nNumberOfErrors,
+                           true);
+            }
+        }
+    }
+    if (nNumberOfQuirks > 0)
+        aResult = TestResult::PassedWithQuirks;
+    if (nNumberOfErrors > 0 || !checkConvexHullProperty(rBitmap, constLineColor, 2, 5))
         aResult = TestResult::Failed;
     return aResult;
 }
