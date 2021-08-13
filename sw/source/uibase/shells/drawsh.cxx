@@ -372,7 +372,7 @@ void SwDrawShell::Execute(SfxRequest &rReq)
             {
                 SwFrameFormat* pFrameFormat = ::FindFrameFormat(pObj);
                 if (pFrameFormat)
-                    SwTextBoxHelper::create(pFrameFormat, pObj->HasText());
+                    SwTextBoxHelper::create(pFrameFormat, pObj, pObj->HasText());
             }
             break;
         }
@@ -382,7 +382,7 @@ void SwDrawShell::Execute(SfxRequest &rReq)
             {
                 SwFrameFormat* pFrameFormat = ::FindFrameFormat(pObj);
                 if (pFrameFormat)
-                    SwTextBoxHelper::destroy(pFrameFormat);
+                    SwTextBoxHelper::destroy(pFrameFormat, pObj);
             }
             break;
         }

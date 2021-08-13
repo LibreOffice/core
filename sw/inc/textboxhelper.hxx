@@ -56,11 +56,14 @@ public:
     using SavedLink = std::map<const SwFrameFormat*, const SwFrameFormat*>;
     /// Maps a draw format to content.
     using SavedContent = std::map<const SwFrameFormat*, SwFormatContent>;
-    /// Create a TextBox for a shape. If the second parameter is true,
+    /// Create a TextBox for a shape. If the third parameter is true,
     /// the original text in the shape will be copied to the frame
-    static void create(SwFrameFormat* pShape, bool bCopyText = false);
-    /// Destroy a TextBox for a shape.
-    static void destroy(SwFrameFormat* pShape);
+    /// The textbox is created for the shape given by the pObject parameter.
+    static void create(SwFrameFormat* pShape, SdrObject* pObject, bool bCopyText = false);
+    /// Destroy a TextBox for a shape. If the format has more textboxes
+    /// like group shapes, it will destroy only that textbox what belongs
+    /// to the given pObject shape.
+    static void destroy(SwFrameFormat* pShape, SdrObject* pObject);
     /// Get interface of a shape's TextBox, if there is any.
     static css::uno::Any queryInterface(const SwFrameFormat* pShape, const css::uno::Type& rType);
 
@@ -114,12 +117,16 @@ public:
     /**
      * If we have an associated TextFrame, then return that.
      *
+     * If we have more textboxes for this format (group shape), that one will be
+     * returned, what belongs to the pObject.
+     *
      * @param nType Expected frame format type.
      *              Valid types are RES_DRAWFRMFMT and RES_FLYFRMFMT.
      *
      * @see isTextBox
      */
-    static SwFrameFormat* getOtherTextBoxFormat(const SwFrameFormat* pFormat, sal_uInt16 nType);
+    static SwFrameFormat* getOtherTextBoxFormat(const SwFrameFormat* pFormat, sal_uInt16 nType,
+                                                SdrObject* pObject = nullptr);
     /// If we have an associated TextFrame, then return that.
     static SwFrameFormat*
     getOtherTextBoxFormat(css::uno::Reference<css::drawing::XShape> const& xShape);
@@ -135,10 +142,18 @@ public:
      * A text box consists of a coupled fly and draw format. Most times you
      * just want to check for a single type, otherwise you get duplicate results.
      *
-     * @param nType Expected frame format input type.
+     * @param pFormat: Is this format have a textbox?
+     *
+     * @param nType: Expected frame format input type.
      *              Valid types are RES_DRAWFRMFMT and RES_FLYFRMFMT.
+     *
+     * @param pObject: If the pFormat has more textboxes than one, like
+     *                 groupshapes, the textbox what belongs to the given
+     *                 pObject will be inspected. If this parameter nullptr,
+     *                 the textbox what belongs to the pObject will only be inspected.
      */
-    static bool isTextBox(const SwFrameFormat* pFormat, sal_uInt16 nType);
+    static bool isTextBox(const SwFrameFormat* pFormat, sal_uInt16 nType,
+                          SdrObject* pObject = nullptr);
 
     /// Returns true if the SdrObject has a SwTextFrame otherwise false
     static bool hasTextFrame(const SdrObject* pObj);
@@ -162,6 +177,71 @@ public:
     /// Undo the effect of saveLinks() + individual resetLink() calls.
     static void restoreLinks(std::set<ZSortFly>& rOld, std::vector<SwFrameFormat*>& rNew,
                              SavedLink& rSavedLinks);
+};
+
+/// Textboxes are basically textframe + shape pairs. This means one shape has one frame.
+/// This is not enough for group shapes, because they have only one shape format and
+/// can have many frame formats. This class provides if there is a group shape for example,
+/// it can have multiple textboxes.
+class SwTextBoxNode
+{
+    // One TextBox-entry
+    struct SwTextBoxElement
+    {
+        // The textframe format
+        SwFrameFormat* m_pTextBoxFormat;
+        // The Draw object where the textbox belongs to
+        SdrObject* m_pDrawObject;
+        // This is for indicating if the textbox is in special case: for example during undo.
+        bool m_bIsActive;
+    };
+
+    // This vector stores the textboxes what belongs to this node
+    std::vector<SwTextBoxElement> m_pTextBoxes;
+    // This is the pointer to the shape format, which has this node
+    // (and the textboxes)
+    SwFrameFormat* m_pOwnerShapeFormat;
+
+public:
+    // Not needed.
+    SwTextBoxNode() = delete;
+
+    // ctor
+    SwTextBoxNode(SwFrameFormat* pOwnerShapeFormat);
+    // dtor
+    ~SwTextBoxNode();
+
+    // default copy ctor is enough
+    SwTextBoxNode(SwTextBoxNode&) = default;
+
+    // This method adds a textbox entry to the shape
+    // Parameters:
+    //     pDrawObject: The shape what the textbox be added to.
+    //     pNewTextBox: The newly created textbox format what will be added to the shape.
+    void AddTextBox(SdrObject* pDrawObject, SwFrameFormat* pNewTextBox);
+
+    // This will remove the textbox entry.
+    // Parameters:
+    //     pDrawObject: The shape which have the textbox to be deleted.
+    void DelTextBox(SdrObject* pDrawObject);
+
+    // This will return with the frame format of the textbox what belongs
+    // to the given shape (pDrawObject)
+    SwFrameFormat* GetTextBox(const SdrObject* pDrawObject) const;
+
+    // Is this textbox has special state, undo for example?
+    bool IsTextBoxActive(const SdrObject* pDrawObject) const;
+
+    // Setters for the state flag.
+    void SetTextBoxInactive(SdrObject* pDrawObject);
+    void SetTextBoxActive(SdrObject* pDrawObject);
+
+    // If this is a group shape, that returns true.
+    bool IsGroupTextBox() const;
+    // This returns with the shape what this class belongs to.
+    SwFrameFormat* GetOwnerShape() { return m_pOwnerShapeFormat; };
+    // This will give the current number of textboxes.
+    size_t GetTextBoxCount() const { return m_pTextBoxes.size(); };
 };
 
 #endif // INCLUDED_SW_INC_TEXTBOXHELPER_HXX
