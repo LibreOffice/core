@@ -54,7 +54,7 @@ namespace sdr::contact
             return true;
         }
 
-        drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactOfMasterPageDescriptor::getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInfo) const
+        void ViewObjectContactOfMasterPageDescriptor::getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInfo, drawinglayer::primitive2d::Primitive2DContainer& rContainer) const
         {
             drawinglayer::primitive2d::Primitive2DContainer xRetval;
             drawinglayer::primitive2d::Primitive2DContainer xMasterPageSequence;
@@ -97,39 +97,38 @@ namespace sdr::contact
                 ViewContact& rViewContactOfMasterPage(rDescriptor.GetUsedPage().GetViewContact());
                 ViewObjectContact& rVOCOfMasterPage(rViewContactOfMasterPage.GetViewObjectContact(GetObjectContact()));
 
-                xMasterPageSequence = rVOCOfMasterPage.getPrimitive2DSequenceHierarchy(rDisplayInfo);
+                rVOCOfMasterPage.getPrimitive2DSequenceHierarchy(rDisplayInfo, xMasterPageSequence);
             }
 
             // reset DisplayInfo changes for MasterPage paint
             rDisplayInfo.SetProcessLayers(aRememberedLayers);
             rDisplayInfo.SetSubContentActive(false);
 
-            if(!xMasterPageSequence.empty())
+            if(xMasterPageSequence.empty())
+                return;
+
+            // get range of MasterPage sub hierarchy
+            const drawinglayer::geometry::ViewInformation2D& rViewInformation2D(GetObjectContact().getViewInformation2D());
+            const basegfx::B2DRange aSubHierarchyRange(xMasterPageSequence.getB2DRange(rViewInformation2D));
+
+            if (rPageFillRange.isInside(aSubHierarchyRange))
             {
-                // get range of MasterPage sub hierarchy
-                const drawinglayer::geometry::ViewInformation2D& rViewInformation2D(GetObjectContact().getViewInformation2D());
-                const basegfx::B2DRange aSubHierarchyRange(xMasterPageSequence.getB2DRange(rViewInformation2D));
+                // completely inside, just render MasterPage content. Add to target
+                xRetval.append(xMasterPageSequence);
+            }
+            else if (rPageFillRange.overlaps(aSubHierarchyRange))
+            {
+                // overlapping, compute common area
+                basegfx::B2DRange aCommonArea(rPageFillRange);
+                aCommonArea.intersect(aSubHierarchyRange);
 
-                if (rPageFillRange.isInside(aSubHierarchyRange))
-                {
-                    // completely inside, just render MasterPage content. Add to target
-                    xRetval.append(xMasterPageSequence);
-                }
-                else if (rPageFillRange.overlaps(aSubHierarchyRange))
-                {
-                    // overlapping, compute common area
-                    basegfx::B2DRange aCommonArea(rPageFillRange);
-                    aCommonArea.intersect(aSubHierarchyRange);
-
-                    // need to create a clip primitive, add clipped list to target
-                    const drawinglayer::primitive2d::Primitive2DReference xReference(new drawinglayer::primitive2d::MaskPrimitive2D(
-                        basegfx::B2DPolyPolygon(basegfx::utils::createPolygonFromRect(aCommonArea)), xMasterPageSequence));
-                    xRetval.push_back(xReference);
-                }
+                // need to create a clip primitive, add clipped list to target
+                const drawinglayer::primitive2d::Primitive2DReference xReference(new drawinglayer::primitive2d::MaskPrimitive2D(
+                    basegfx::B2DPolyPolygon(basegfx::utils::createPolygonFromRect(aCommonArea)), xMasterPageSequence));
+                xRetval.push_back(xReference);
             }
 
-            // return grouped primitive
-            return xRetval;
+            rContainer.append(xRetval);
         }
 } // end of namespace
 

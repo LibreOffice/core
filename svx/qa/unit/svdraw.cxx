@@ -102,8 +102,8 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testSemiTransparentText)
     const sdr::contact::ViewObjectContact& rDrawPageVOContact
         = pSdrPage->GetViewContact().GetViewObjectContact(aObjectContact);
     sdr::contact::DisplayInfo aDisplayInfo;
-    drawinglayer::primitive2d::Primitive2DContainer xPrimitiveSequence
-        = rDrawPageVOContact.getPrimitive2DSequenceHierarchy(aDisplayInfo);
+    drawinglayer::primitive2d::Primitive2DContainer xPrimitiveSequence;
+    rDrawPageVOContact.getPrimitive2DSequenceHierarchy(aDisplayInfo, xPrimitiveSequence);
 
     // Make sure the text is semi-transparent.
     drawinglayer::Primitive2dXmlDump aDumper;
@@ -274,8 +274,8 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testRectangleObject)
         = pPage->GetViewContact().GetViewObjectContact(aObjectContact);
 
     sdr::contact::DisplayInfo aDisplayInfo;
-    drawinglayer::primitive2d::Primitive2DContainer xPrimitiveSequence
-        = rDrawPageVOContact.getPrimitive2DSequenceHierarchy(aDisplayInfo);
+    drawinglayer::primitive2d::Primitive2DContainer xPrimitiveSequence;
+    rDrawPageVOContact.getPrimitive2DSequenceHierarchy(aDisplayInfo, xPrimitiveSequence);
 
     drawinglayer::Primitive2dXmlDump aDumper;
     xmlDocUniquePtr pXmlDoc = aDumper.dumpAndParse(xPrimitiveSequence);
