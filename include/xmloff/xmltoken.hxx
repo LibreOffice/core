@@ -3424,6 +3424,7 @@ namespace xmloff::token {
         // Math ml
         XML_DIR,
         XML_DISPLAYSTYLE,
+        XML_INFINITY,
         XML_LSPACE,
         XML_MATHBACKGROUND,
         XML_MAXSIZE,
