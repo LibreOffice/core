@@ -368,34 +368,30 @@ ViewObjectContactOfPageHierarchy::~ViewObjectContactOfPageHierarchy()
 {
 }
 
-drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactOfPageHierarchy::getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInfo) const
+void ViewObjectContactOfPageHierarchy::getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInfo, drawinglayer::primitive2d::Primitive2DContainer& rContainer) const
 {
-    drawinglayer::primitive2d::Primitive2DContainer xRetval;
-
     // process local sub-hierarchy
     const sal_uInt32 nSubHierarchyCount(GetViewContact().GetObjectCount());
 
-    if(nSubHierarchyCount)
-    {
-        xRetval = getPrimitive2DSequenceSubHierarchy(rDisplayInfo);
+    if(!nSubHierarchyCount)
+        return;
 
-        if(!xRetval.empty())
-        {
-            // get ranges
-            const drawinglayer::geometry::ViewInformation2D& rViewInformation2D(GetObjectContact().getViewInformation2D());
-            const basegfx::B2DRange aObjectRange(xRetval.getB2DRange(rViewInformation2D));
-            const basegfx::B2DRange aViewRange(rViewInformation2D.getViewport());
+    drawinglayer::primitive2d::Primitive2DContainer xRetval = getPrimitive2DSequenceSubHierarchy(rDisplayInfo);
 
-            // check geometrical visibility
-            if(!aViewRange.isEmpty() && !aViewRange.overlaps(aObjectRange))
-            {
-                // not visible, release
-                xRetval.clear();
-            }
-        }
-    }
+    if(xRetval.empty())
+        return;
 
-    return xRetval;
+    // get ranges
+    const drawinglayer::geometry::ViewInformation2D& rViewInformation2D(GetObjectContact().getViewInformation2D());
+    const basegfx::B2DRange aObjectRange(xRetval.getB2DRange(rViewInformation2D));
+    const basegfx::B2DRange aViewRange(rViewInformation2D.getViewport());
+
+    // check geometrical visibility
+    if(!aViewRange.isEmpty() && !aViewRange.overlaps(aObjectRange))
+        // not visible, release
+        return;
+
+    rContainer.append(xRetval);
 }
 
 ViewObjectContactOfPageGrid::ViewObjectContactOfPageGrid(ObjectContact& rObjectContact, ViewContact& rViewContact)
@@ -582,50 +578,48 @@ ViewObjectContactOfSdrPage::~ViewObjectContactOfSdrPage()
 {
 }
 
-drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactOfSdrPage::getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInfo) const
+void ViewObjectContactOfSdrPage::getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInfo, drawinglayer::primitive2d::Primitive2DContainer& rContainer) const
 {
-    drawinglayer::primitive2d::Primitive2DContainer xRetval;
-
     // process local sub-hierarchy
     const sal_uInt32 nSubHierarchyCount(GetViewContact().GetObjectCount());
 
-    if(nSubHierarchyCount)
+    if(!nSubHierarchyCount)
+        return;
+
+    const bool bDoGhostedDisplaying(
+        GetObjectContact().DoVisualizeEnteredGroup()
+        && !GetObjectContact().isOutputToPrinter()
+        && GetObjectContact().getActiveViewContact() == &GetViewContact());
+
+    if(bDoGhostedDisplaying)
     {
-        const bool bDoGhostedDisplaying(
-            GetObjectContact().DoVisualizeEnteredGroup()
-            && !GetObjectContact().isOutputToPrinter()
-            && GetObjectContact().getActiveViewContact() == &GetViewContact());
+        rDisplayInfo.ClearGhostedDrawMode();
+    }
 
-        if(bDoGhostedDisplaying)
+    // create object hierarchy
+    drawinglayer::primitive2d::Primitive2DContainer xRetval = getPrimitive2DSequenceSubHierarchy(rDisplayInfo);
+
+    if(!xRetval.empty())
+    {
+        // get ranges
+        const drawinglayer::geometry::ViewInformation2D& rViewInformation2D(GetObjectContact().getViewInformation2D());
+        const basegfx::B2DRange aObjectRange(xRetval.getB2DRange(rViewInformation2D));
+        const basegfx::B2DRange aViewRange(rViewInformation2D.getViewport());
+
+        // check geometrical visibility
+        if(!aViewRange.isEmpty() && !aViewRange.overlaps(aObjectRange))
         {
-            rDisplayInfo.ClearGhostedDrawMode();
-        }
-
-        // create object hierarchy
-        xRetval = getPrimitive2DSequenceSubHierarchy(rDisplayInfo);
-
-        if(!xRetval.empty())
-        {
-            // get ranges
-            const drawinglayer::geometry::ViewInformation2D& rViewInformation2D(GetObjectContact().getViewInformation2D());
-            const basegfx::B2DRange aObjectRange(xRetval.getB2DRange(rViewInformation2D));
-            const basegfx::B2DRange aViewRange(rViewInformation2D.getViewport());
-
-            // check geometrical visibility
-            if(!aViewRange.isEmpty() && !aViewRange.overlaps(aObjectRange))
-            {
-                // not visible, release
-                xRetval.clear();
-            }
-        }
-
-        if(bDoGhostedDisplaying)
-        {
-            rDisplayInfo.SetGhostedDrawMode();
+            // not visible, release
+            xRetval.clear();
         }
     }
 
-    return xRetval;
+    if(bDoGhostedDisplaying)
+    {
+        rDisplayInfo.SetGhostedDrawMode();
+    }
+
+    rContainer.append(xRetval);
 }
 
 }

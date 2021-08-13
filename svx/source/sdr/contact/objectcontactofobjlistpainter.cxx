@@ -112,7 +112,7 @@ void ObjectContactOfObjListPainter::ProcessDisplay(DisplayInfo& rDisplayInfo)
     {
         const ViewObjectContact& rViewObjectContact = GetPaintObjectViewContact(a).GetViewObjectContact(*this);
 
-        xPrimitiveSequence.append(rViewObjectContact.getPrimitive2DSequenceHierarchy(rDisplayInfo));
+        rViewObjectContact.getPrimitive2DSequenceHierarchy(rDisplayInfo, xPrimitiveSequence);
     }
 
     // if there is something to show, use a vclProcessor to render it
