@@ -221,16 +221,16 @@ tools::Rectangle GtkSalGraphics::NWGetSpinButtonRect( ControlPart nPart, tools::
     if ( nPart == ControlPart::ButtonUp )
     {
         if (AllSettings::GetLayoutRTL())
-            partRect.setX(aAreaRect.Left());
+            partRect.SetPosX(aAreaRect.Left());
         else
-            partRect.setX(aAreaRect.Left() + (aAreaRect.GetWidth() - buttonRect.GetWidth()));
+            partRect.SetPosX(aAreaRect.Left() + (aAreaRect.GetWidth() - buttonRect.GetWidth()));
     }
     else if( nPart == ControlPart::ButtonDown )
     {
         if (AllSettings::GetLayoutRTL())
-            partRect.setX(aAreaRect.Left() + buttonRect.GetWidth());
+            partRect.SetPosX(aAreaRect.Left() + buttonRect.GetWidth());
         else
-            partRect.setX(aAreaRect.Left() + (aAreaRect.GetWidth() - 2 * buttonRect.GetWidth()));
+            partRect.SetPosX(aAreaRect.Left() + (aAreaRect.GetWidth() - 2 * buttonRect.GetWidth()));
     }
     else
     {

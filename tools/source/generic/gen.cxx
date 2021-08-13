@@ -232,18 +232,4 @@ tools::Long tools::Rectangle::AdjustBottom( tools::Long nVertMoveDelta )
     return nBottom;
 }
 
-void tools::Rectangle::setX( tools::Long x )
-{
-    if (!IsWidthEmpty())
-        nRight += x - nLeft;
-    nLeft = x;
-}
-
-void tools::Rectangle::setY( tools::Long y )
-{
-    if (!IsHeightEmpty())
-        nBottom += y - nTop;
-    nTop  = y;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

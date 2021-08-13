@@ -1680,11 +1680,11 @@ void X11SalFrame::SetWindowState( const SalFrameState *pState )
             // change requested properties
             if (pState->mnMask & WindowStateMask::X)
             {
-                aPosSize.setX (pState->mnX);
+                aPosSize.SetPosX (pState->mnX);
             }
             if (pState->mnMask & WindowStateMask::Y)
             {
-                aPosSize.setY (pState->mnY);
+                aPosSize.SetPosY (pState->mnY);
             }
             if (pState->mnMask & WindowStateMask::Width)
             {
