@@ -1022,8 +1022,9 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
             sal_uInt16 nNumElemVert(0), nNumElemMemVert(0), nElemSizeVert(0);
             rSt.ReadUInt16( nNumElemVert ).ReadUInt16( nNumElemMemVert ).ReadUInt16( nElemSizeVert );
             bool bOk = false;
-            if (nNumElemVert && ((nElemSizeVert == 8) || (nElemSizeVert == 4)))
+            if (nNumElemVert && (nElemSizeVert == 8 || nElemSizeVert == 4))
             {
+                assert(nElemSizeVert == 8 || nElemSizeVert == 4);
                 //check if there is enough data in the file to make the
                 //record sane
                 bOk = rSt.remainingSize() / nElemSizeVert >= nNumElemVert;
