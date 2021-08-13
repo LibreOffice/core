@@ -34,6 +34,24 @@
       "revId": "a6ade09983dd95d6ebbd1ecfda564f645629ce34",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3c65dce1_8581bc4c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2021-08-13T14:28:47Z",
+      "side": 1,
+      "message": "Ah! Thanks, I missed it. Makes sense.",
+      "parentUuid": "2f86b8c0_faacc846",
+      "revId": "a6ade09983dd95d6ebbd1ecfda564f645629ce34",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
