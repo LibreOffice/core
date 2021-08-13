@@ -1083,11 +1083,8 @@ class SwCreateAuthEntryDlg_Impl : public weld::GenericDialogController
     std::unique_ptr<weld::Container> m_xRight;
     std::unique_ptr<weld::ComboBox> m_xTypeListBox;
     std::unique_ptr<weld::ComboBox> m_xIdentifierBox;
-    std::unique_ptr<weld::Button> m_xBrowseButton;
     std::unique_ptr<weld::Button> m_xLocalBrowseButton;
-    std::unique_ptr<weld::CheckButton> m_xPageCB;
     std::unique_ptr<weld::CheckButton> m_xLocalPageCB;
-    std::unique_ptr<weld::SpinButton> m_xPageSB;
     std::unique_ptr<weld::SpinButton> m_xLocalPageSB;
 
     DECL_LINK(IdentifierHdl, weld::ComboBox&, void);
@@ -1660,16 +1657,7 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(weld::Window* pParent,
             m_pBoxes[nIndex]->set_grid_left_attach(1);
             m_pBoxes[nIndex]->set_grid_top_attach(bLeft ? nLeftRow : nRightRow);
             m_pBoxes[nIndex]->set_hexpand(true);
-            if (aCurInfo.nToxField == AUTH_FIELD_URL)
-            {
-                m_xBrowseButton = m_aBuilders.back()->weld_button("browse");
-                m_xBrowseButton->connect_clicked(LINK(this, SwCreateAuthEntryDlg_Impl, BrowseHdl));
-                m_xPageCB = m_aBuilders.back()->weld_check_button("pagecb");
-                // Distinguish different instances of this for ui-testing.
-                m_xPageCB->set_buildable_name(m_xPageCB->get_buildable_name() + "-visible");
-                m_xPageSB = m_aBuilders.back()->weld_spin_button("pagesb");
-            }
-            else if (aCurInfo.nToxField == AUTH_FIELD_LOCAL_URL)
+            if (aCurInfo.nToxField == AUTH_FIELD_LOCAL_URL)
             {
                 m_xLocalBrowseButton = m_aBuilders.back()->weld_button("browse");
                 m_xLocalBrowseButton->connect_clicked(
@@ -1683,25 +1671,16 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(weld::Window* pParent,
 
             // Now that both pEdits[nIndex] and m_xPageSB is initialized, set their values.
             OUString aText = pFields[aCurInfo.nToxField];
-            if (aCurInfo.nToxField == AUTH_FIELD_URL || aCurInfo.nToxField == AUTH_FIELD_LOCAL_URL)
+            if (aCurInfo.nToxField == AUTH_FIELD_LOCAL_URL)
             {
                 OUString aUrl;
                 int nPageNumber;
                 if (SplitUrlAndPage(aText, aUrl, nPageNumber))
                 {
                     pEdits[nIndex]->set_text(aUrl);
-                    if (aCurInfo.nToxField == AUTH_FIELD_URL)
-                    {
-                        m_xPageCB->set_active(true);
-                        m_xPageSB->set_sensitive(true);
-                        m_xPageSB->set_value(nPageNumber);
-                    }
-                    else
-                    {
-                        m_xLocalPageCB->set_active(true);
-                        m_xLocalPageSB->set_sensitive(true);
-                        m_xLocalPageSB->set_value(nPageNumber);
-                    }
+                    m_xLocalPageCB->set_active(true);
+                    m_xLocalPageSB->set_sensitive(true);
+                    m_xLocalPageSB->set_value(nPageNumber);
                 }
                 else
                 {
@@ -1724,12 +1703,6 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(weld::Window* pParent,
                     m_aFixedTexts.back()->set_sensitive(false);
                     pEdits[nIndex]->set_sensitive(false);
                 }
-            }
-            else if (aCurInfo.nToxField == AUTH_FIELD_URL)
-            {
-                m_xPageCB->show();
-                m_xPageCB->connect_toggled(LINK(this, SwCreateAuthEntryDlg_Impl, PageNumHdl));
-                m_xPageSB->show();
             }
             else if (aCurInfo.nToxField == AUTH_FIELD_LOCAL_URL)
             {
@@ -1768,11 +1741,7 @@ OUString  SwCreateAuthEntryDlg_Impl::GetEntryText(ToxAuthorityField eField) cons
         const TextInfo aCurInfo = aTextInfoArr[nIndex];
         if(aCurInfo.nToxField == eField)
         {
-            if (aCurInfo.nToxField == AUTH_FIELD_URL)
-            {
-                return MergeUrlAndPage(pEdits[nIndex]->get_text(), m_xPageSB);
-            }
-            else if (aCurInfo.nToxField == AUTH_FIELD_LOCAL_URL)
+            if (aCurInfo.nToxField == AUTH_FIELD_LOCAL_URL)
             {
                 return MergeUrlAndPage(pEdits[nIndex]->get_text(), m_xLocalPageSB);
             }
@@ -1825,7 +1794,6 @@ IMPL_LINK(SwCreateAuthEntryDlg_Impl, ShortNameHdl, weld::Entry&, rEdit, void)
 IMPL_LINK(SwCreateAuthEntryDlg_Impl, EnableHdl, weld::ComboBox&, rBox, void)
 {
     m_xOKBT->set_sensitive(m_bNameAllowed && rBox.get_active() != -1);
-    m_xBrowseButton->show();
     m_xLocalBrowseButton->show();
 };
 
@@ -1834,11 +1802,7 @@ IMPL_LINK(SwCreateAuthEntryDlg_Impl, BrowseHdl, weld::Button&, rButton, void)
     sfx2::FileDialogHelper aFileDlg(ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
                                     FileDialogFlags::NONE, getDialog());
     OUString aPath;
-    if (&rButton == m_xBrowseButton.get())
-    {
-        aPath = GetEntryText(AUTH_FIELD_URL);
-    }
-    else if (&rButton == m_xLocalBrowseButton.get())
+    if (&rButton == m_xLocalBrowseButton.get())
     {
         aPath = GetEntryText(AUTH_FIELD_LOCAL_URL);
     }
@@ -1857,9 +1821,7 @@ IMPL_LINK(SwCreateAuthEntryDlg_Impl, BrowseHdl, weld::Button&, rButton, void)
     for (int nIndex = 0; nIndex < AUTH_FIELD_END; nIndex++)
     {
         const TextInfo& rCurInfo = aTextInfoArr[nIndex];
-        if ((rCurInfo.nToxField == AUTH_FIELD_URL && &rButton == m_xBrowseButton.get())
-            || (rCurInfo.nToxField == AUTH_FIELD_LOCAL_URL
-                && &rButton == m_xLocalBrowseButton.get()))
+        if (rCurInfo.nToxField == AUTH_FIELD_LOCAL_URL && &rButton == m_xLocalBrowseButton.get())
         {
             pEdits[nIndex]->set_text(aPath);
             break;
@@ -1869,15 +1831,14 @@ IMPL_LINK(SwCreateAuthEntryDlg_Impl, BrowseHdl, weld::Button&, rButton, void)
 
 IMPL_LINK(SwCreateAuthEntryDlg_Impl, PageNumHdl, weld::Toggleable&, rPageCB, void)
 {
-    weld::SpinButton& rPageSB = (&rPageCB == m_xPageCB.get()) ? *m_xPageSB : *m_xLocalPageSB;
     if (rPageCB.get_active())
     {
-        rPageSB.set_sensitive(true);
-        rPageSB.set_value(1);
+        m_xLocalPageSB->set_sensitive(true);
+        m_xLocalPageSB->set_value(1);
     }
     else
     {
-        rPageSB.set_sensitive(false);
+        m_xLocalPageSB->set_sensitive(false);
     }
 }
 
