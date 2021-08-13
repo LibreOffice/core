@@ -3567,7 +3567,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf137185)
     CPPUNIT_ASSERT_EQUAL(OUString("Align me!"), xTxt->getText()->getString());
 
     // Add a textbox to the shape
-    SwTextBoxHelper::create(pShape, true);
+    SwTextBoxHelper::create(pShape, pShape->FindRealSdrObject(), true);
 
     // Check if the text moved from the shape to the frame
     auto pFormat = SwTextBoxHelper::getOtherTextBoxFormat(getShape(1));
