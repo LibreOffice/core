@@ -26,6 +26,7 @@
 
 #include <com/sun/star/uno/Reference.h>
 #include <memory>
+#include <optional>
 
 namespace com::sun::star {
   namespace datatransfer { class XTransferable; }
@@ -87,8 +88,8 @@ public:
     bool IsLastParaInterrupted() const;
 
 private:
-    const ESelection maContentSel;
-    const bool mbLastParaInterrupted;
+    ESelection maContentSel;
+    bool mbLastParaInterrupted;
 };
 
 
@@ -112,8 +113,8 @@ public:
     bool IsLastParaInterrupted() const;
 
 private:
-    std::unique_ptr<NonOverflowingText> mpNonOverflowingTxt;
-    std::unique_ptr<OverflowingText> mpOverflowingTxt;
+    std::optional<NonOverflowingText> mpNonOverflowingTxt;
+    std::optional<OverflowingText> mpOverflowingTxt;
 
     bool mbIsDeepMerge;
 };
