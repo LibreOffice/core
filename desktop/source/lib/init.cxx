@@ -822,17 +822,17 @@ void ExecuteOrientationChange()
 
 
     SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState(SID_ATTR_PAGE_SIZE, pItem);
-    pPageSizeItem.reset( static_cast<SvxSizeItem*>(pItem->Clone()) );
+    pPageSizeItem.reset(&pItem->Clone()->StaticWhichCast(SID_ATTR_PAGE_SIZE));
 
 
 
     SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState(SID_ATTR_PAGE_LRSPACE, pItem);
-    pPageLRMarginItem.reset( static_cast<SvxLongLRSpaceItem*>(pItem->Clone()) );
+    pPageLRMarginItem.reset(&pItem->Clone()->StaticWhichCast(SID_ATTR_PAGE_LRSPACE));
 
 
 
     SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState(SID_ATTR_PAGE_ULSPACE, pItem);
-    pPageULMarginItem.reset( static_cast<SvxLongULSpaceItem*>(pItem->Clone()) );
+    pPageULMarginItem.reset(&pItem->Clone()->StaticWhichCast(SID_ATTR_PAGE_ULSPACE));
 
 
     {
