@@ -173,7 +173,7 @@ ESelection OFlowChainedText::GetOverflowPointSel() const
 std::unique_ptr<OutlinerParaObject> OFlowChainedText::InsertOverflowingText(Outliner *pOutliner, OutlinerParaObject const *pTextToBeMerged)
 {
     // Just return the roughly merged paras for now
-    if (mpOverflowingTxt == nullptr)
+    if (!mpOverflowingTxt)
         return nullptr;
 
     if (mbIsDeepMerge) {
@@ -188,7 +188,7 @@ std::unique_ptr<OutlinerParaObject> OFlowChainedText::InsertOverflowingText(Outl
 
 std::unique_ptr<OutlinerParaObject> OFlowChainedText::RemoveOverflowingText(Outliner *pOutliner)
 {
-    if (mpNonOverflowingTxt == nullptr)
+    if (!mpNonOverflowingTxt)
         return nullptr;
 
     return mpNonOverflowingTxt->RemoveOverflowingText(pOutliner);

@@ -2013,7 +2013,7 @@ bool Outliner::IsPageOverflow()
     return pEditEngine->IsPageOverflow();
 }
 
-std::unique_ptr<NonOverflowingText> Outliner::GetNonOverflowingText() const
+std::optional<NonOverflowingText> Outliner::GetNonOverflowingText() const
 {
     /* XXX:
      * nCount should be the number of paragraphs of the non overflowing text
@@ -2021,7 +2021,7 @@ std::unique_ptr<NonOverflowingText> Outliner::GetNonOverflowingText() const
     */
 
     if ( GetParagraphCount() < 1 )
-        return nullptr;
+        return {};
 
     // last non-overflowing paragraph is before the first overflowing one
     sal_Int32 nCount = pEditEngine->GetOverflowingParaNum();
@@ -2032,14 +2032,14 @@ std::unique_ptr<NonOverflowingText> Outliner::GetNonOverflowingText() const
         SAL_INFO("editeng.chaining",
                  "[Overflowing] Ops, trying to retrieve para "
                  << nCount << " when max index is " << GetParagraphCount()-1 );
-        return nullptr;
+        return {};
     }
 
     if (nCount < 0)
     {
         SAL_INFO("editeng.chaining",
                  "[Overflowing] No Overflowing text but GetNonOverflowinText called?!");
-        return nullptr;
+        return {};
     }
 
     // NOTE: We want the selection of the overflowing text from here
@@ -2077,7 +2077,7 @@ std::unique_ptr<NonOverflowingText> Outliner::GetNonOverflowingText() const
         ESelection aEmptySel(0,0,0,0);
         //EditTextObject *pTObj = pEditEngine->CreateTextObject(aEmptySel);
         bool const bLastParaInterrupted = true; // Last Para was interrupted since everything overflew
-        return std::make_unique<NonOverflowingText>(aEmptySel, bLastParaInterrupted);
+        return NonOverflowingText(aEmptySel, bLastParaInterrupted);
     } else { // Get the lines that of the overflowing para fit in the box
 
         sal_Int32 nOverflowingPara = nCount;
@@ -2114,7 +2114,7 @@ std::unique_ptr<NonOverflowingText> Outliner::GetNonOverflowingText() const
         bool bLastParaInterrupted =
             pEditEngine->GetOverflowingLineNum() > 0;
 
-        return std::make_unique<NonOverflowingText>(aOverflowingTextSelection, bLastParaInterrupted);
+        return NonOverflowingText(aOverflowingTextSelection, bLastParaInterrupted);
     }
 }
 
@@ -2126,10 +2126,10 @@ std::unique_ptr<OutlinerParaObject> Outliner::GetEmptyParaObject() const
     return pPObj;
 }
 
-std::unique_ptr<OverflowingText> Outliner::GetOverflowingText() const
+std::optional<OverflowingText> Outliner::GetOverflowingText() const
 {
     if ( pEditEngine->GetOverflowingParaNum() < 0)
-        return nullptr;
+        return {};
 
 
     // Defensive check: overflowing para index beyond actual # of paragraphs?
@@ -2138,7 +2138,7 @@ std::unique_ptr<OverflowingText> Outliner::GetOverflowingText() const
                  "[Overflowing] Ops, trying to retrieve para "
                  << pEditEngine->GetOverflowingParaNum() << " when max index is "
                  << GetParagraphCount()-1 );
-        return nullptr;
+        return {};
     }
 
     sal_Int32 nHeadPara = pEditEngine->GetOverflowingParaNum();
@@ -2157,7 +2157,7 @@ std::unique_ptr<OverflowingText> Outliner::GetOverflowingText() const
     sal_Int32 nLastParaLen = GetText(GetParagraph(nLastPara)).getLength();
     aOverflowingTextSel = ESelection(nOverflowingPara, nLen,
                                      nLastPara, nLastParaLen);
-    return std::make_unique<OverflowingText>(pEditEngine->CreateTransferable(aOverflowingTextSel));
+    return OverflowingText(pEditEngine->CreateTransferable(aOverflowingTextSel));
 
 }
 
