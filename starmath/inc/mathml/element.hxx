@@ -34,7 +34,7 @@ public:
     };
     /* Mathml stuff */
 
-protected:
+public:
     SmMlElement(SmMlElementType aElementType)
         : m_aElementType(aElementType)
         , m_aText(u"\u00B6")
