@@ -204,19 +204,14 @@ namespace comphelper
         return false;
     }
 
-    namespace
-    {
-        class theEmptyDefault : public rtl::Static<Any, theEmptyDefault> {};
-    }
-
-
     const Any& NamedValueCollection::impl_get( const OUString& _rValueName ) const
     {
+        static Any theEmptyDefault;
         auto pos = maValues.find( _rValueName );
         if ( pos != maValues.end() )
             return pos->second;
 
-        return theEmptyDefault::get();
+        return theEmptyDefault;
     }
 
 

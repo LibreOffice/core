@@ -635,15 +635,10 @@ void DbusIpcThread::close() {
 
 #endif
 
-namespace
-{
-    class theRequestHandlerMutex
-        : public rtl::Static<osl::Mutex, theRequestHandlerMutex> {};
-}
-
 ::osl::Mutex& RequestHandler::GetMutex()
 {
-    return theRequestHandlerMutex::get();
+    static ::osl::Mutex theRequestHandlerMutex;
+    return theRequestHandlerMutex;
 }
 
 void RequestHandler::SetDowning()

@@ -383,13 +383,12 @@ void FatalError(const OUString& sMessage)
     _exit(EXITHELPER_FATAL_ERROR);
 }
 
-struct theCommandLineArgs : public rtl::Static< CommandLineArgs, theCommandLineArgs > {};
-
 }
 
 CommandLineArgs& Desktop::GetCommandLineArgs()
 {
-    return theCommandLineArgs::get();
+    static CommandLineArgs theCommandLineArgs;
+    return theCommandLineArgs;
 }
 
 OUString ReplaceStringHookProc( const OUString& rStr )
