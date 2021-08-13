@@ -885,9 +885,6 @@ linux-gnu*|k*bsd*-gnu*)
     build_skia=yes
     test_gdb_index=yes
     test_split_debug=yes
-    if test "$enable_fuzzers" = yes; then
-        test_system_freetype=no
-    fi
     _os=Linux
     ;;
 
