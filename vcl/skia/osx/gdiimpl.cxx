@@ -23,6 +23,8 @@
 
 #include <skia/osx/rastercontext.hxx>
 
+#include <SkCanvas.h>
+
 using namespace SkiaHelper;
 
 AquaSkiaSalGraphicsImpl::AquaSkiaSalGraphicsImpl(AquaSalGraphics& rParent,
@@ -122,6 +124,53 @@ void AquaSkiaSalGraphicsImpl::flushToScreen(const SkIRect& rect)
     CGImageRelease(screenImage);
     CGContextRelease(context);
     mrShared.refreshRect(rect.left(), rect.top(), rect.width(), rect.height());
+}
+
+bool AquaSkiaSalGraphicsImpl::drawNativeControl(ControlType nType, ControlPart nPart,
+                                                const tools::Rectangle& rControlRegion,
+                                                ControlState nState, const ImplControlValue& aValue)
+{
+    const tools::Long width = rControlRegion.GetWidth();
+    const tools::Long height = rControlRegion.GetHeight();
+    const size_t bytes = width * height * 4;
+    std::unique_ptr<sal_uInt8[]> data(new sal_uInt8[bytes]);
+    memset(data.get(), 0, bytes);
+    CGContextRef context
+        = CGBitmapContextCreate(data.get(), width, height, 8, width * 4, // TODO
+                                GetSalData()->mxRGBSpace, kCGImageAlphaPremultipliedLast); // TODO
+    assert(context); // TODO
+    // Flip upside down.
+    CGContextTranslateCTM(context, 0, height);
+    CGContextScaleCTM(context, 1, -1);
+    // Adjust for our drawn-to coordinates in the bitmap.
+    tools::Rectangle movedRegion = rControlRegion;
+    movedRegion.SetPos(Point(0, 0));
+    bool bOK = performDrawNativeControl(nType, nPart, movedRegion, nState, aValue, context,
+                                        mrShared.mpFrame);
+    CGContextRelease(context);
+    if (bOK)
+    {
+        SkBitmap bitmap;
+        if (!bitmap.installPixels(
+                SkImageInfo::Make(width, height, kRGBA_8888_SkColorType, kPremul_SkAlphaType),
+                data.get(), width * 4))
+            abort();
+
+        preDraw();
+        SAL_INFO("vcl.skia.trace", "drawnativecontrol(" << this << "): " << rControlRegion << ":"
+                                                        << int(nType) << "/" << int(nPart));
+        tools::Rectangle updateRect = rControlRegion;
+        // For background update only part that is not clipped, the same
+        // as in AquaGraphicsBackend::drawNativeControl().
+        if (nType == ControlType::WindowBackground)
+            updateRect.Intersection(mClipRegion.GetBoundRect());
+        addUpdateRegion(SkRect::MakeXYWH(updateRect.Left(), updateRect.Top(), updateRect.GetWidth(),
+                                         updateRect.GetHeight()));
+        getDrawCanvas()->drawImage(bitmap.asImage(), rControlRegion.Left(), rControlRegion.Top());
+        ++mPendingOperationsToFlush; // tdf#136369
+        postDraw();
+    }
+    return bOK;
 }
 
 std::unique_ptr<sk_app::WindowContext> createVulkanWindowContext(bool /*temporary*/)
