@@ -49,6 +49,7 @@ class SmMlAttribute
 private:
     SmMlAttributeValueType m_aSmMlAttributeValueType;
     SmMlAttributeValue m_aAttributeValue;
+    bool m_bSet;
 
 private:
     void clearPreviousAttributeValue();
@@ -56,27 +57,41 @@ private:
     void setAttributeValue(const SmMlAttribute* aMlAttribute);
 
 public:
-    SmMlAttribute() { m_aSmMlAttributeValueType = SmMlAttributeValueType::NMlEmpty; };
+    SmMlAttribute()
+        : m_aSmMlAttributeValueType(SmMlAttributeValueType::NMlEmpty)
+        , m_bSet(false){};
 
     ~SmMlAttribute() { clearPreviousAttributeValue(); };
 
     SmMlAttribute(SmMlAttributeValueType)
+        : m_aSmMlAttributeValueType(SmMlAttributeValueType::NMlEmpty)
+        , m_bSet(false)
     {
-        m_aSmMlAttributeValueType = SmMlAttributeValueType::NMlEmpty;
         setDefaultAttributeValue();
     };
 
     SmMlAttribute(const SmMlAttribute& aMlAttribute)
+        : m_aSmMlAttributeValueType(SmMlAttributeValueType::NMlEmpty)
+        , m_bSet(aMlAttribute.isSet())
     {
-        m_aSmMlAttributeValueType = SmMlAttributeValueType::NMlEmpty;
         setAttributeValue(&aMlAttribute);
     }
 
     SmMlAttribute(const SmMlAttribute* aMlAttribute)
+        : m_aSmMlAttributeValueType(SmMlAttributeValueType::NMlEmpty)
+        , m_bSet(aMlAttribute->isSet())
     {
-        m_aSmMlAttributeValueType = SmMlAttributeValueType::NMlEmpty;
         setAttributeValue(aMlAttribute);
     }
+
+public:
+    /** Check if the attribute has been set
+    */
+    bool isSet() const { return m_bSet; }
+
+    /** Set if the attribute has been set
+    */
+    void setSet(bool bSet) { m_bSet = bSet; }
 
 public:
     /**
@@ -116,10 +131,15 @@ public:
 
     void setMlAttributeValue(const SmMlAttribute& aMlAttribute)
     {
+        m_bSet = true;
         setAttributeValue(&aMlAttribute);
     }
 
-    void setMlAttributeValue(const SmMlAttribute* aMlAttribute) { setAttributeValue(aMlAttribute); }
+    void setMlAttributeValue(const SmMlAttribute* aMlAttribute)
+    {
+        m_bSet = true;
+        setAttributeValue(aMlAttribute);
+    }
 
 public:
     // Get values

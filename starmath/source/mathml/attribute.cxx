@@ -321,36 +321,42 @@ const struct SmMlSymmetric* SmMlAttribute::getMlSymmetric() const
 
 void SmMlAttribute::setMlAccent(const SmMlAccent* aAccent)
 {
+    m_bSet = true;
     clearPreviousAttributeValue();
     m_aAttributeValue.m_aAccent.m_aAccent = aAccent->m_aAccent;
 }
 
 void SmMlAttribute::setMlDir(const SmMlDir* aDir)
 {
+    m_bSet = true;
     clearPreviousAttributeValue();
     m_aAttributeValue.m_aDir.m_aDir = aDir->m_aDir;
 }
 
 void SmMlAttribute::setMlDisplaystyle(const SmMlDisplaystyle* aDisplaystyle)
 {
+    m_bSet = true;
     clearPreviousAttributeValue();
     m_aAttributeValue.m_aDisplaystyle.m_aDisplaystyle = aDisplaystyle->m_aDisplaystyle;
 }
 
 void SmMlAttribute::setMlFence(const SmMlFence* aFence)
 {
+    m_bSet = true;
     clearPreviousAttributeValue();
     m_aAttributeValue.m_aFence.m_aFence = aFence->m_aFence;
 }
 
 void SmMlAttribute::setMlForm(const SmMlForm* aForm)
 {
+    m_bSet = true;
     clearPreviousAttributeValue();
     m_aAttributeValue.m_aForm.m_aForm = aForm->m_aForm;
 }
 
 void SmMlAttribute::setMlHref(const SmMlHref* aHref)
 {
+    m_bSet = true;
     clearPreviousAttributeValue();
     m_aAttributeValue.m_aHref.m_aHref = aHref->m_aHref;
     m_aAttributeValue.m_aHref.m_aLnk = new OUString(*aHref->m_aLnk);
@@ -358,6 +364,7 @@ void SmMlAttribute::setMlHref(const SmMlHref* aHref)
 
 void SmMlAttribute::setMlLspace(const SmMlLspace* aLspace)
 {
+    m_bSet = true;
     clearPreviousAttributeValue();
     m_aAttributeValue.m_aLspace.m_aLengthValue.m_aLengthUnit
         = aLspace->m_aLengthValue.m_aLengthUnit;
@@ -369,18 +376,21 @@ void SmMlAttribute::setMlLspace(const SmMlLspace* aLspace)
 
 void SmMlAttribute::setMlMathbackground(const SmMlMathbackground* aMathbackground)
 {
+    m_bSet = true;
     clearPreviousAttributeValue();
     m_aAttributeValue.m_aMathbackground.m_aMathbackground = aMathbackground->m_aMathbackground;
 }
 
 void SmMlAttribute::setMlMathcolor(const SmMlMathcolor* aMathcolor)
 {
+    m_bSet = true;
     clearPreviousAttributeValue();
     m_aAttributeValue.m_aMathcolor.m_aMathcolor = aMathcolor->m_aMathcolor;
 }
 
 void SmMlAttribute::setMlMathsize(const SmMlMathsize* aMathsize)
 {
+    m_bSet = true;
     clearPreviousAttributeValue();
     m_aAttributeValue.m_aMathsize.m_aLengthValue.m_aLengthUnit
         = aMathsize->m_aLengthValue.m_aLengthUnit;
@@ -392,12 +402,14 @@ void SmMlAttribute::setMlMathsize(const SmMlMathsize* aMathsize)
 
 void SmMlAttribute::setMlMathvariant(const SmMlMathvariant* aMathvariant)
 {
+    m_bSet = true;
     clearPreviousAttributeValue();
     m_aAttributeValue.m_aMathvariant.m_aMathvariant = aMathvariant->m_aMathvariant;
 }
 
 void SmMlAttribute::setMlMaxsize(const SmMlMaxsize* aMaxsize)
 {
+    m_bSet = true;
     clearPreviousAttributeValue();
     m_aAttributeValue.m_aMaxsize.m_aMaxsize = aMaxsize->m_aMaxsize;
     m_aAttributeValue.m_aMaxsize.m_aLengthValue.m_aLengthUnit
@@ -410,6 +422,7 @@ void SmMlAttribute::setMlMaxsize(const SmMlMaxsize* aMaxsize)
 
 void SmMlAttribute::setMlMinsize(const SmMlMinsize* aMinsize)
 {
+    m_bSet = true;
     clearPreviousAttributeValue();
     m_aAttributeValue.m_aMinsize.m_aLengthValue.m_aLengthUnit
         = aMinsize->m_aLengthValue.m_aLengthUnit;
@@ -421,12 +434,14 @@ void SmMlAttribute::setMlMinsize(const SmMlMinsize* aMinsize)
 
 void SmMlAttribute::setMlMovablelimits(const SmMlMovablelimits* aMovablelimits)
 {
+    m_bSet = true;
     clearPreviousAttributeValue();
     m_aAttributeValue.m_aMovablelimits.m_aMovablelimits = aMovablelimits->m_aMovablelimits;
 }
 
 void SmMlAttribute::setMlRspace(const SmMlRspace* aRspace)
 {
+    m_bSet = true;
     clearPreviousAttributeValue();
     m_aAttributeValue.m_aRspace.m_aLengthValue.m_aLengthUnit
         = aRspace->m_aLengthValue.m_aLengthUnit;
@@ -438,18 +453,21 @@ void SmMlAttribute::setMlRspace(const SmMlRspace* aRspace)
 
 void SmMlAttribute::setMlSeparator(const SmMlSeparator* aSeparator)
 {
+    m_bSet = true;
     clearPreviousAttributeValue();
     m_aAttributeValue.m_aSeparator.m_aSeparator = aSeparator->m_aSeparator;
 }
 
 void SmMlAttribute::setMlStretchy(const SmMlStretchy* aStretchy)
 {
+    m_bSet = true;
     clearPreviousAttributeValue();
     m_aAttributeValue.m_aStretchy.m_aStretchy = aStretchy->m_aStretchy;
 }
 
 void SmMlAttribute::setMlSymmetric(const SmMlSymmetric* aSymmetric)
 {
+    m_bSet = true;
     clearPreviousAttributeValue();
     m_aAttributeValue.m_aSymmetric.m_aSymmetric = aSymmetric->m_aSymmetric;
 }
