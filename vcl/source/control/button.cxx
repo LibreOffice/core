@@ -453,7 +453,7 @@ void Button::ImplDrawAlignedImage(OutputDevice* pDev, Point& rPos,
         if (mpButtonData->mbSmallSymbol)
         {
             nYOffset = (aUnion.GetHeight() - aSymbolSize.Height()) / 2;
-            pSymbolRect->setY(aTextPos.Y() + nYOffset);
+            pSymbolRect->SetPosY(aTextPos.Y() + nYOffset);
         }
     }
 
