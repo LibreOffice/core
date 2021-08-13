@@ -1292,7 +1292,7 @@ SdrObject* SwVirtFlyDrawObj::CheckMacroHit( const SdrObjMacroHitRec& rRec ) cons
 
 bool SwVirtFlyDrawObj::IsTextBox() const
 {
-    return SwTextBoxHelper::isTextBox(GetFormat(), RES_FLYFRMFMT);
+    return SwTextBoxHelper::isTextBox(GetFormat(), RES_FLYFRMFMT, const_cast<SdrObject*>(dynamic_cast<const SdrObject*>(this)));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
