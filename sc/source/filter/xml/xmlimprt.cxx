@@ -737,9 +737,7 @@ void ScXMLImport::SetViewSettings(const uno::Sequence<beans::PropertyValue>& aVi
     SfxObjectShell* pEmbeddedObj = pDocObj->GetEmbeddedObject();
     if (pEmbeddedObj)
     {
-        tools::Rectangle aRect;
-        aRect.setX( nLeft );
-        aRect.setY( nTop );
+        tools::Rectangle aRect{ nLeft, nTop };
         aRect.setWidth( nWidth );
         aRect.setHeight( nHeight );
         pEmbeddedObj->SetVisArea(aRect);
