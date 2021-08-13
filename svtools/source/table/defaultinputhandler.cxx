@@ -21,8 +21,6 @@
 #include <table/defaultinputhandler.hxx>
 #include <table/tablecontrolinterface.hxx>
 
-#include "mousefunction.hxx"
-
 #include <vcl/event.hxx>
 #include <osl/diagnose.h>
 
@@ -31,24 +29,14 @@ namespace svt::table
 {
 
 
-    typedef ::rtl::Reference< MouseFunction >  PMouseFunction;
-    typedef ::std::vector< PMouseFunction >     MouseFunctions;
-    struct DefaultInputHandler_Impl
-    {
-        PMouseFunction  pActiveFunction;
-        MouseFunctions  aMouseFunctions;
-    };
-
-
     //= DefaultInputHandler
 
 
     DefaultInputHandler::DefaultInputHandler()
-        :m_pImpl( new DefaultInputHandler_Impl )
     {
-        m_pImpl->aMouseFunctions.push_back( new ColumnResize );
-        m_pImpl->aMouseFunctions.push_back( new RowSelection );
-        m_pImpl->aMouseFunctions.push_back( new ColumnSortHandler );
+        aMouseFunctions.push_back( new ColumnResize );
+        aMouseFunctions.push_back( new RowSelection );
+        aMouseFunctions.push_back( new ColumnSortHandler );
     }
 
 
@@ -57,78 +45,75 @@ namespace svt::table
     }
 
 
-    namespace
+    bool DefaultInputHandler::delegateMouseEvent( ITableControl& i_control, const MouseEvent& i_event,
+        FunctionResult ( MouseFunction::*i_handlerMethod )( ITableControl&, const MouseEvent& ) )
     {
-        bool lcl_delegateMouseEvent( DefaultInputHandler_Impl& i_impl, ITableControl& i_control, const MouseEvent& i_event,
-            FunctionResult ( MouseFunction::*i_handlerMethod )( ITableControl&, const MouseEvent& ) )
+        if ( pActiveFunction.is() )
         {
-            if ( i_impl.pActiveFunction.is() )
+            bool furtherHandler = false;
+            switch ( (pActiveFunction.get()->*i_handlerMethod)( i_control, i_event ) )
             {
-                bool furtherHandler = false;
-                switch ( (i_impl.pActiveFunction.get()->*i_handlerMethod)( i_control, i_event ) )
-                {
-                case ActivateFunction:
-                    OSL_ENSURE( false, "lcl_delegateMouseEvent: unexpected - function already *is* active!" );
-                    break;
-                case ContinueFunction:
-                    break;
-                case DeactivateFunction:
-                    i_impl.pActiveFunction.clear();
-                    break;
-                case SkipFunction:
-                    furtherHandler = true;
-                    break;
-                }
-                if ( !furtherHandler )
-                    // handled the event
-                    return true;
+            case ActivateFunction:
+                OSL_ENSURE( false, "lcl_delegateMouseEvent: unexpected - function already *is* active!" );
+                break;
+            case ContinueFunction:
+                break;
+            case DeactivateFunction:
+                pActiveFunction.clear();
+                break;
+            case SkipFunction:
+                furtherHandler = true;
+                break;
             }
-
-            // ask all other handlers
-            bool handled = false;
-            for (auto const& mouseFunction : i_impl.aMouseFunctions)
-            {
-                if (handled)
-                    break;
-                if (mouseFunction == i_impl.pActiveFunction)
-                    // we already invoked this function
-                    continue;
-
-                switch ( (mouseFunction.get()->*i_handlerMethod)( i_control, i_event ) )
-                {
-                case ActivateFunction:
-                    i_impl.pActiveFunction = mouseFunction;
-                    handled = true;
-                    break;
-                case ContinueFunction:
-                case DeactivateFunction:
-                    OSL_ENSURE( false, "lcl_delegateMouseEvent: unexpected: inactive handler cannot be continued or deactivated!" );
-                    break;
-                case SkipFunction:
-                    handled = false;
-                    break;
-                }
-            }
-            return handled;
+            if ( !furtherHandler )
+                // handled the event
+                return true;
         }
+
+        // ask all other handlers
+        bool handled = false;
+        for (auto const& mouseFunction : aMouseFunctions)
+        {
+            if (handled)
+                break;
+            if (mouseFunction == pActiveFunction)
+                // we already invoked this function
+                continue;
+
+            switch ( (mouseFunction.get()->*i_handlerMethod)( i_control, i_event ) )
+            {
+            case ActivateFunction:
+                pActiveFunction = mouseFunction;
+                handled = true;
+                break;
+            case ContinueFunction:
+            case DeactivateFunction:
+                OSL_ENSURE( false, "lcl_delegateMouseEvent: unexpected: inactive handler cannot be continued or deactivated!" );
+                break;
+            case SkipFunction:
+                handled = false;
+                break;
+            }
+        }
+        return handled;
     }
 
 
     bool DefaultInputHandler::MouseMove( ITableControl& i_tableControl, const MouseEvent& i_event )
     {
-        return lcl_delegateMouseEvent( *m_pImpl, i_tableControl, i_event, &MouseFunction::handleMouseMove );
+        return delegateMouseEvent( i_tableControl, i_event, &MouseFunction::handleMouseMove );
     }
 
 
     bool DefaultInputHandler::MouseButtonDown( ITableControl& i_tableControl, const MouseEvent& i_event )
     {
-        return lcl_delegateMouseEvent( *m_pImpl, i_tableControl, i_event, &MouseFunction::handleMouseDown );
+        return delegateMouseEvent( i_tableControl, i_event, &MouseFunction::handleMouseDown );
     }
 
 
     bool DefaultInputHandler::MouseButtonUp( ITableControl& i_tableControl, const MouseEvent& i_event )
     {
-        return lcl_delegateMouseEvent( *m_pImpl, i_tableControl, i_event, &MouseFunction::handleMouseUp );
+        return delegateMouseEvent( i_tableControl, i_event, &MouseFunction::handleMouseUp );
     }
 
 
