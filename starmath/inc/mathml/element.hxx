@@ -164,7 +164,7 @@ public: // attributes
       * @param nAttributePos
       * @return given attribute.
       */
-    SmMlAttribute getAttribute(SmMlAttributeValueType aElementType) const;
+    SmMlAttribute getAttribute(SmMlAttributeValueType aAttributeType) const;
 
     /**
       * Set's a given attribute.
@@ -173,6 +173,11 @@ public: // attributes
       * @return given attribute.
       */
     void setAttribute(const SmMlAttribute* aAttribute);
+
+    /** Checks if an attribute has been manually set
+    * @param aElementType
+    */
+    bool isAttributeSet(SmMlAttributeValueType aAttributeType) const;
 
 protected: // attributes
     /**
