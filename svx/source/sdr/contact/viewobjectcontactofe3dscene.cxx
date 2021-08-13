@@ -121,7 +121,7 @@ namespace sdr::contact
             return xRetval;
         }
 
-        drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactOfE3dScene::getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInfo) const
+        void ViewObjectContactOfE3dScene::getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInfo, drawinglayer::primitive2d::Primitive2DContainer& rContainer) const
         {
             // To get the VOCs for the contained 3D objects created to get the correct
             // Draw hierarchy and ActionChanged() working properly, travel the DrawHierarchy
@@ -129,7 +129,7 @@ namespace sdr::contact
             impInternalSubHierarchyTraveller(*this);
 
             // call parent
-            return ViewObjectContactOfSdrObj::getPrimitive2DSequenceHierarchy(rDisplayInfo);
+            ViewObjectContactOfSdrObj::getPrimitive2DSequenceHierarchy(rDisplayInfo, rContainer);
         }
 
 } // end of namespace

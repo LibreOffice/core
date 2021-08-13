@@ -404,33 +404,27 @@ bool ViewObjectContact::isPrimitiveGhosted(const DisplayInfo& rDisplayInfo) cons
     return (GetObjectContact().DoVisualizeEnteredGroup() && !GetObjectContact().isOutputToPrinter() && rDisplayInfo.IsGhostedDrawModeActive());
 }
 
-drawinglayer::primitive2d::Primitive2DContainer ViewObjectContact::getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInfo) const
+void ViewObjectContact::getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInfo, drawinglayer::primitive2d::Primitive2DContainer& rContainer) const
 {
-    drawinglayer::primitive2d::Primitive2DContainer xRetval;
-
     // check model-view visibility
-    if(isPrimitiveVisible(rDisplayInfo))
-    {
-        xRetval = getPrimitive2DSequence(rDisplayInfo);
+    if(!isPrimitiveVisible(rDisplayInfo))
+        return;
 
-        if(!xRetval.empty())
-        {
-            // get ranges
-            const drawinglayer::geometry::ViewInformation2D& rViewInformation2D(GetObjectContact().getViewInformation2D());
-            const basegfx::B2DRange aObjectRange(xRetval.getB2DRange(rViewInformation2D));
-            const basegfx::B2DRange& aViewRange(rViewInformation2D.getViewport());
+    drawinglayer::primitive2d::Primitive2DContainer xRetval = getPrimitive2DSequence(rDisplayInfo);
+    if(xRetval.empty())
+        return;
 
-            // check geometrical visibility
-            bool bVisible = aViewRange.isEmpty() || aViewRange.overlaps(aObjectRange);
-            if(!bVisible)
-            {
-                // not visible, release
-                xRetval.clear();
-            }
-        }
-    }
+    // get ranges
+    const drawinglayer::geometry::ViewInformation2D& rViewInformation2D(GetObjectContact().getViewInformation2D());
+    const basegfx::B2DRange aObjectRange(xRetval.getB2DRange(rViewInformation2D));
+    const basegfx::B2DRange& aViewRange(rViewInformation2D.getViewport());
 
-    return xRetval;
+    // check geometrical visibility
+    bool bVisible = aViewRange.isEmpty() || aViewRange.overlaps(aObjectRange);
+    if(!bVisible)
+        return;
+
+    rContainer.append(xRetval);
 }
 
 drawinglayer::primitive2d::Primitive2DContainer ViewObjectContact::getPrimitive2DSequenceSubHierarchy(DisplayInfo& rDisplayInfo) const
@@ -442,7 +436,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewObjectContact::getPrimitive2
     {
         const ViewObjectContact& rCandidate(GetViewContact().GetViewContact(a).GetViewObjectContact(GetObjectContact()));
 
-        xSeqRetval.append(rCandidate.getPrimitive2DSequenceHierarchy(rDisplayInfo));
+        rCandidate.getPrimitive2DSequenceHierarchy(rDisplayInfo, xSeqRetval);
     }
 
     return xSeqRetval;
