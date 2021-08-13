@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <rtl/instance.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
 #include <uno/dispatcher.hxx>
@@ -168,7 +167,11 @@ ExceptionThrower::ExceptionThrower()
     uno_Interface::pDispatcher = ExceptionThrower_dispatch;
 }
 
-class theExceptionThrower : public rtl::Static<ExceptionThrower, theExceptionThrower> {};
+ExceptionThrower& GetTheExceptionThrower()
+{
+    static ExceptionThrower INSTANCE;
+    return INSTANCE;
+}
 
 #if defined(IOS) || (defined(__aarch64__) && defined(ANDROID))
 // In the native iOS / Android app, where we don't have any Java, Python,
@@ -239,7 +242,7 @@ void SAL_CALL throwException( Any const & exc )
     Reference< XExceptionThrower > xThrower;
     uno2cpp.mapInterface(
         reinterpret_cast< void ** >( &xThrower ),
-        static_cast< uno_Interface * >( &theExceptionThrower::get() ),
+        static_cast< uno_Interface * >( &GetTheExceptionThrower() ),
         ExceptionThrower::getCppuType() );
     OSL_ASSERT( xThrower.is() );
     xThrower->throwException( exc );
@@ -274,7 +277,7 @@ Any SAL_CALL getCaughtException()
     UnoInterfaceReference unoI;
     cpp2uno.mapInterface(
         reinterpret_cast< void ** >( &unoI.m_pUnoI ),
-        static_cast< XExceptionThrower * >( &theExceptionThrower::get() ), pTD );
+        static_cast< XExceptionThrower * >( &GetTheExceptionThrower() ), pTD );
     OSL_ASSERT( unoI.is() );
 
     typelib_TypeDescription * pMemberTD = nullptr;
