@@ -46,6 +46,7 @@
 #include <algorithm>
 #include <tools/urlobj.hxx>
 #include <sfx2/filedlghelper.hxx>
+#include <sfx2/objsh.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -362,6 +363,19 @@ IMPL_LINK_NOARG(BibGeneralPage, BrowseHdl, weld::Button&, void)
     if (!aPath.isEmpty())
     {
         aFileDlg.SetDisplayDirectory(aPath);
+    }
+    else
+    {
+        SfxObjectShell* pShell = SfxObjectShell::Current();
+        OUString aBaseURL;
+        if (pShell)
+        {
+            aBaseURL = pShell->getDocumentBaseURL();
+        }
+        if (!aBaseURL.isEmpty())
+        {
+            aFileDlg.SetDisplayDirectory(aBaseURL);
+        }
     }
 
     if (aFileDlg.Execute() != ERRCODE_NONE)
