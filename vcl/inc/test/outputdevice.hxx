@@ -72,6 +72,7 @@ public:
     static basegfx::B2DPolygon createHalfEllipsePolygon();
     static tools::Polygon createClosedBezierLoop(const tools::Rectangle& rRect);
     static basegfx::B2DPolygon createOpenPolygon(const tools::Rectangle& rRect, int nOffset = 4);
+    static basegfx::B2DPolygon createOpenBezier();
 
     static void createHorizontalVerticalDiagonalLinePoints(tools::Rectangle rRect,
                                 Point& rHorizontalLinePoint1, Point& rHorizontalLinePoint2,
@@ -98,6 +99,7 @@ public:
     static TestResult checkEvenOddRuleInIntersectingRecs(Bitmap &rBitmap);
     static TestResult checkIntersectingRecs(Bitmap& rBitmap,int aLayerNumber, Color aExpectedColor);
     static TestResult checkOpenPolygon(Bitmap& rBitmap, bool aEnableAA = false);
+    static TestResult checkOpenBezier(Bitmap& rBitmap);
 private:
     static TestResult checkLineCap(Bitmap& rBitmap, css::drawing::LineCap lineCap);
     static TestResult checkLineJoin(Bitmap& rBitmap, basegfx::B2DLineJoin lineJoin);
@@ -189,6 +191,7 @@ public:
     Bitmap setupRectangleOnSize1028();
     Bitmap setupRectangleOnSize4096();
     Bitmap setupOpenPolygon();
+    Bitmap setupOpenBezier();
 };
 
 class VCL_DLLPUBLIC OutputDeviceTestPolyLineB2D : public OutputDeviceTestCommon
@@ -204,6 +207,7 @@ public:
     Bitmap setupRectangleOnSize1028();
     Bitmap setupRectangleOnSize4096();
     Bitmap setupOpenPolygon();
+    Bitmap setupOpenBezier();
 };
 
 class VCL_DLLPUBLIC OutputDeviceTestRect : public OutputDeviceTestCommon
