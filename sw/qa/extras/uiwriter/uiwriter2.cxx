@@ -2803,6 +2803,50 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf126206)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf50447)
+{
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf126206.docx");
+
+    SwWrtShell* const pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    // bold text
+    auto xText = getParagraph(1)->getText();
+    CPPUNIT_ASSERT(xText.is());
+    {
+        auto xCursor(xText->createTextCursorByRange(getRun(getParagraph(1), 1)));
+        CPPUNIT_ASSERT(xCursor.is());
+        CPPUNIT_ASSERT_EQUAL(OUString("Lorem "), xCursor->getString());
+        CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, getProperty<float>(xCursor, "CharWeight"));
+    }
+
+    // remove bold formatting with change tracking
+    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/true, 6, /*bBasicCall=*/false);
+    dispatchCommand(mxComponent, ".uno:Bold", {});
+
+    xText = getParagraph(1)->getText();
+    CPPUNIT_ASSERT(xText.is());
+    {
+        auto xCursor(xText->createTextCursorByRange(getRun(getParagraph(1), 2)));
+        CPPUNIT_ASSERT(xCursor.is());
+        CPPUNIT_ASSERT_EQUAL(OUString("Lorem "), xCursor->getString());
+        CPPUNIT_ASSERT_EQUAL(awt::FontWeight::NORMAL, getProperty<float>(xCursor, "CharWeight"));
+    }
+
+    // reject tracked changes
+    dispatchCommand(mxComponent, ".uno:RejectAllTrackedChanges", {});
+
+    // bold text again
+    xText = getParagraph(1)->getText();
+    CPPUNIT_ASSERT(xText.is());
+    {
+        auto xCursor(xText->createTextCursorByRange(getRun(getParagraph(1), 1)));
+        CPPUNIT_ASSERT(xCursor.is());
+        CPPUNIT_ASSERT_EQUAL(OUString("Lorem "), xCursor->getString());
+        // This was NORMAL
+        CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, getProperty<float>(xCursor, "CharWeight"));
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf101873)
 {
     SwDoc* pDoc = createSwDoc();
