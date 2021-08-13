@@ -148,6 +148,8 @@ class VCL_PLUGIN_PUBLIC GraphicsRenderTests
     void testDrawOpenPolygonWithPolygon();
     void testDrawOpenPolygonWithPolyPolygon();
     void testDrawOpenPolygonWithPolyPolygonB2D();
+    void testDrawOpenBezierWithPolyLine();
+    void testDrawOpenBezierWithPolyLineB2D();
     static OUString returnTestStatus(vcl::test::TestResult const result);
     void runALLTests();
     void appendTestResult(OUString aTestName, OUString aTestStatus, Bitmap aTestBitmap = Bitmap());
