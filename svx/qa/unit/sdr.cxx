@@ -68,7 +68,9 @@ SdrTest::renderPageToPrimitives(const uno::Reference<drawing::XDrawPage>& xDrawP
     const sdr::contact::ViewObjectContact& rDrawPageVOContact
         = pSdrPage->GetViewContact().GetViewObjectContact(aObjectContact);
     sdr::contact::DisplayInfo aDisplayInfo;
-    return rDrawPageVOContact.getPrimitive2DSequenceHierarchy(aDisplayInfo);
+    drawinglayer::primitive2d::Primitive2DContainer aContainer;
+    rDrawPageVOContact.getPrimitive2DSequenceHierarchy(aDisplayInfo, aContainer);
+    return aContainer;
 }
 
 CPPUNIT_TEST_FIXTURE(SdrTest, testShadowScaleOrigin)
