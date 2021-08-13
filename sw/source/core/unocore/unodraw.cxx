@@ -1166,9 +1166,9 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                 bool bValue(false);
                 aValue >>= bValue;
                 if (bValue)
-                    SwTextBoxHelper::create(pFormat);
+                    SwTextBoxHelper::create(pFormat, GetSvxShape()->GetSdrObject());
                 else
-                    SwTextBoxHelper::destroy(pFormat);
+                    SwTextBoxHelper::destroy(pFormat, GetSvxShape()->GetSdrObject());
 
             }
             else if (pEntry->nWID == RES_CHAIN)
