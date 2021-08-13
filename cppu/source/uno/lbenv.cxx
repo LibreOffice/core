@@ -819,11 +819,10 @@ namespace
         const OUString& getOIdPart() const { return m_sOidPart; }
     };
 
-    class theStaticOIdPart : public rtl::Static<makeOIdPart, theStaticOIdPart> {};
-
 const OUString & unoenv_getStaticOIdPart()
 {
-    return theStaticOIdPart::get().getOIdPart();
+    static makeOIdPart theStaticOIdPart;
+    return theStaticOIdPart.getOIdPart();
 }
 
 }
