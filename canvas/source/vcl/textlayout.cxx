@@ -183,10 +183,10 @@ namespace vclcanvas
             for (auto const& metric : aMetricVector)
             {
                 aBoundingBoxes[nIndex++] = geometry::RealRectangle2D(
-                    metric.getX(),
-                    metric.getY(),
-                    metric.getX() + metric.getWidth(),
-                    metric.getY() + metric.getHeight());
+                    metric.Left(),
+                    metric.Top(),
+                    metric.Right(),
+                    metric.Bottom());
             }
         }
         return aBoundingBoxes;

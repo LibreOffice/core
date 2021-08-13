@@ -1716,9 +1716,8 @@ void Menu::ImplPaintMenuTitle(vcl::RenderContext& rRenderContext, const tools::R
     // Draw background rectangle
     tools::Rectangle aBgRect(rRect);
     int nOuterSpaceX = ImplGetSVData()->maNWFData.mnMenuFormatBorderX;
-    aBgRect.setX(aBgRect.getX() + SPACE_AROUND_TITLE);
+    aBgRect.Move(SPACE_AROUND_TITLE, SPACE_AROUND_TITLE);
     aBgRect.setWidth(aBgRect.getWidth() - 2 * SPACE_AROUND_TITLE - 2 * nOuterSpaceX);
-    aBgRect.setY(aBgRect.getY() + SPACE_AROUND_TITLE);
     aBgRect.setHeight(nTitleHeight - 2 * SPACE_AROUND_TITLE);
     rRenderContext.DrawRect(aBgRect);
 

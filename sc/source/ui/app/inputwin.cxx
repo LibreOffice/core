@@ -445,8 +445,8 @@ void ScInputWindow::PixelInvalidate(const tools::Rectangle* pRectangle)
 
     if (pRectangle)
     {
-        const Point aPos(pRectangle->getX() - GetOutOffXPixel(), pRectangle->getY() - GetOutOffYPixel());
-        const tools::Rectangle aRect(aPos, pRectangle->GetSize());
+        tools::Rectangle aRect(*pRectangle);
+        aRect.Move(-GetOutOffXPixel(), -GetOutOffYPixel());
         Window::PixelInvalidate(&aRect);
     }
     else
