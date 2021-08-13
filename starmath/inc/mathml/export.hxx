@@ -19,20 +19,24 @@
 
 #pragma once
 
-// Our mathml
 #include "element.hxx"
-
-// Xml tools
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmltoken.hxx>
 
-// Extras
-#include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <com/sun/star/xml/sax/Writer.hpp>
-
 class SfxMedium;
 class SmDocShell;
+namespace com::sun::star
+{
+namespace io
+{
+class XOutputStream;
+}
+namespace beans
+{
+class XPropertySet;
+}
+}
 
 class SmMlExportWrapper
 {
@@ -70,11 +74,11 @@ public:
 
     /** Get's if xmlns field is added
      */
-    bool getUseExportTag() const { return m_bUseExportTag; }
+    bool getUseExportFlag() const { return m_bUseExportTag; }
 
     /** Set's if xmlns field is added
      */
-    void setUseExportTag(bool bUseExportTag) { m_bUseExportTag = bUseExportTag; }
+    void setUseExportFlag(bool bUseExportTag) { m_bUseExportTag = bUseExportTag; }
 
 public:
     explicit SmMlExportWrapper(css::uno::Reference<css::frame::XModel> const& rRef)
@@ -134,11 +138,11 @@ public:
 
     /** Get's if xmlns field is added
      */
-    bool getUseExportTag() const { return m_bUseExportTag; }
+    bool getUseExportFlag() const { return m_bUseExportTag; }
 
     /** Set's if xmlns field is added
      */
-    void setUseExportTag(bool bUseExportTag) { m_bUseExportTag = bUseExportTag; }
+    void setUseExportFlag(bool bUseExportTag) { m_bUseExportTag = bUseExportTag; }
 
     /** Set's the element tree to be exported.
       * If it isn't nullptr the this will be exported instead of the document
@@ -150,8 +154,7 @@ private:
       */
     SvXMLElementExport* createElementExport(xmloff::token::XMLTokenEnum nElement)
     {
-        // We can't afford to ignore white spaces. They are part of the code.
-        return new SvXMLElementExport(*this, XML_NAMESPACE_MATH, nElement, false, false);
+        return new SvXMLElementExport(*this, XML_NAMESPACE_MATH, nElement, true, false);
     }
 
     /** Adds an attribute
@@ -169,7 +172,7 @@ private:
         AddAttribute(XML_NAMESPACE_MATH, pAttribute, pAttributeValue);
     }
 
-public:
+private:
     /** Exports an attribute of type "length"
      */
     void exportMlAttributteLength(xmloff::token::XMLTokenEnum pAttribute,
@@ -181,7 +184,7 @@ public:
 
     /** Exports an element and all it's attributes
       */
-    SvXMLElementExport* exportMlElement(const SmMlElement* pMlElement);
+    void exportMlElement(const SmMlElement* pMlElement);
 
     /** Exports an element tree
       */
@@ -228,12 +231,7 @@ public:
     ErrCode exportDoc(enum ::xmloff::token::XMLTokenEnum eClass
                       = ::xmloff::token::XML_TOKEN_INVALID) override;
 
-    /** Get's view settings and prepares them to export
-     */
     virtual void GetViewSettings(css::uno::Sequence<css::beans::PropertyValue>& aProps) override;
-
-    /** Get's configuration settings and prepares them to export
-     */
     virtual void
     GetConfigurationSettings(css::uno::Sequence<css::beans::PropertyValue>& aProps) override;
 };

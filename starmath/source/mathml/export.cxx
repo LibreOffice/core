@@ -17,41 +17,61 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-// Our mathml
 #include <mathml/export.hxx>
-#include <mathml/iterator.hxx>
 
-// LO tools to use
+// TODO Check those includes
+#include <com/sun/star/xml/sax/Writer.hpp>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
+#include <com/sun/star/util/MeasureUnit.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/uno/Any.h>
-#include <com/sun/star/util/MeasureUnit.hpp>
-#include <com/sun/star/xml/sax/Writer.hpp>
 
-// Extra LO tools
-#include <comphelper/fileformat.h>
-#include <comphelper/genericpropertyset.hxx>
-#include <comphelper/processfactory.hxx>
-#include <comphelper/propertysetinfo.hxx>
-#include <sax/tools/converter.hxx>
+// TODO Check those includes
+#include <officecfg/Office/Common.hxx>
+#include <rtl/math.hxx>
 #include <sfx2/frame.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/sfxsids.hrc>
+#include <unotools/saveopt.hxx>
 #include <sot/storage.hxx>
 #include <svl/itemset.hxx>
 #include <svl/stritem.hxx>
+#include <comphelper/fileformat.h>
+#include <comphelper/processfactory.hxx>
 #include <unotools/streamwrap.hxx>
+#include <sax/tools/converter.hxx>
+#include <xmloff/xmlnamespace.hxx>
+#include <xmloff/xmltoken.hxx>
 #include <xmloff/namespacemap.hxx>
+#include <xmloff/attrlist.hxx>
+#include <comphelper/genericpropertyset.hxx>
+#include <comphelper/servicehelper.hxx>
+#include <comphelper/propertysetinfo.hxx>
+#include <tools/diagnose_ex.h>
 
-// Our starmath tools
-#include <cfgitem.hxx>
-#include <document.hxx>
-#include <smmod.hxx>
-#include <strings.hrc>
-#include <unomodel.hxx>
-#include <utility.hxx>
+// TODO Check those includes
+#include <stack>
+
+#include <com/sun/star/util/MeasureUnit.hpp>
+#include <com/sun/star/xml/sax/Writer.hpp>
+
+// TODO Check those includes
+#include <tools/stream.hxx>
+
+// TODO Check those includes
 #include <xparsmlbase.hxx>
+#include <strings.hrc>
+#include <smmod.hxx>
+#include <unomodel.hxx>
+#include <document.hxx>
+#include <utility.hxx>
+#include <cfgitem.hxx>
 #include <starmathdatabase.hxx>
+
+// TODO Check those includes
+#include <sal/config.h>
+#include <sal/log.hxx>
 
 using namespace ::com::sun::star;
 using namespace xmloff::token;
@@ -145,7 +165,8 @@ bool SmMlExportWrapper::Export(SfxMedium& rMedium)
     xInfoSet->setPropertyValue("UsePrettyPrinting", Any(true));
 
     // Set base URI
-    xInfoSet->setPropertyValue(u"BaseURI", makeAny(rMedium.GetBaseURL(true)));
+    OUString sPropName("BaseURI");
+    xInfoSet->setPropertyValue(sPropName, makeAny(rMedium.GetBaseURL(true)));
 
     if (!m_bFlat) //Storage (Package) of Stream
     {
@@ -239,7 +260,7 @@ OUString SmMlExportWrapper::Export(SmMlElement* pElementTree)
     SAL_WARN_IF(m_xModel == nullptr, "starmath", "Missing model");
     SAL_WARN_IF(xContext == nullptr, "starmath", "Missing context");
     if (m_xModel == nullptr || xContext == nullptr)
-        return u"";
+        return OUString("");
 
     //Get model
     uno::Reference<lang::XComponent> xModelComp = m_xModel;
@@ -247,14 +268,14 @@ OUString SmMlExportWrapper::Export(SmMlElement* pElementTree)
     SmModel* pModel = comphelper::getUnoTunnelImplementation<SmModel>(m_xModel);
     SAL_WARN_IF(pModel == nullptr, "starmath", "Failed to get threw uno tunnel");
     if (xModelComp == nullptr || pModel == nullptr)
-        return u"";
+        return OUString("");
 
     // Get doc shell
     SmDocShell* pDocShell = static_cast<SmDocShell*>(pModel->GetObjectShell());
     if (pDocShell == nullptr)
     {
         SAL_WARN("starmath", "Failed to fetch sm document");
-        return u"";
+        return OUString("");
     }
 
     // create XPropertySet with three properties for status indicator
@@ -304,9 +325,11 @@ bool SmMlExportWrapper::WriteThroughComponentOS(const Reference<io::XOutputStrea
         xSaxWriter->setCustomEntityNames(starmathdatabase::icustomMathmlHtmlEntitiesExport);
 
     // prepare arguments (prepend doc handler to given arguments)
-    Sequence<Any> aArgs(2);
+    Sequence<Any> aArgs(4);
     aArgs[0] <<= xSaxWriter;
     aArgs[1] <<= rPropSet;
+    aArgs[2].setValue(m_pElementTree, Type(TypeClass::TypeClass_UNKNOWN, OUString(u"")));
+    aArgs[3] <<= m_bUseExportTag;
 
     // get filter component
     auto xExporterData = rxContext->getServiceManager()->createInstanceWithArgumentsAndContext(
@@ -325,21 +348,17 @@ bool SmMlExportWrapper::WriteThroughComponentOS(const Reference<io::XOutputStrea
 
     // filter
     Reference<XFilter> xFilter(xExporter, UNO_QUERY);
-    SmMlExport* pFilter = comphelper::getUnoTunnelImplementation<SmMlExport>(xFilter);
-
-    // Setup filter
-    if (pFilter == nullptr)
-    {
-        SAL_WARN("starmath", "Failed to fetch SmMlExport");
-        return false;
-    }
-    pFilter->setUseExportTag(m_bUseExportTag);
-    pFilter->setElementTree(m_pElementTree);
-
-    // Execute operation
     uno::Sequence<PropertyValue> aProps(0);
     xFilter->filter(aProps);
-    return pFilter->getSuccess();
+
+    // Execute operation
+    SmMlExport* pFilter = comphelper::getUnoTunnelImplementation<SmMlExport>(xFilter);
+    if (m_pElementTree != nullptr)
+    {
+        pFilter->setElementTree(m_pElementTree);
+        m_pElementTree = nullptr;
+    }
+    return pFilter == nullptr || pFilter->getSuccess();
 }
 
 // export through an XML exporter component (storage version)
@@ -366,7 +385,7 @@ bool SmMlExportWrapper::WriteThroughComponentS(const Reference<embed::XStorage>&
     }
     catch (const uno::Exception&)
     {
-        SAL_WARN("starmath", "Can't create output stream in package");
+        DBG_UNHANDLED_EXCEPTION("starmath", "Can't create output stream in package");
         return false;
     }
 
@@ -411,7 +430,7 @@ SmMlExportWrapper::WriteThroughComponentMS(const Reference<XComponent>& xCompone
 
     // We don't want to read unitzialized data
     if (!bOk)
-        return u"";
+        return OUString(u"");
 
     // Recover data and generate string
     OString aString(static_cast<const char*>(aMemoryStream.GetData()),
@@ -477,10 +496,30 @@ Math_MLOasisSettingsExporter_get_implementation(css::uno::XComponentContext* con
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 Math_MLContentExporter_get_implementation(css::uno::XComponentContext* context,
-                                          css::uno::Sequence<css::uno::Any> const&)
+                                          css::uno::Sequence<css::uno::Any> const& aArgs)
 {
-    return cppu::acquire(new SmMlExport(context, "com.sun.star.comp.Math.XMLContentExporter",
-                                        SvXMLExportFlags::OASIS | SvXMLExportFlags::CONTENT));
+    SmMlExport* pSmMlExport = new SmMlExport(context, "com.sun.star.comp.Math.XMLContentExporter",
+                                             SvXMLExportFlags::OASIS | SvXMLExportFlags::CONTENT);
+    // Set element tree
+    SmMlElement* pElementTree = nullptr;
+    Type aType(TypeClass::TypeClass_UNKNOWN, OUString(u""));
+    Any a = aArgs[3];
+    a >>= aType;
+    void* data;
+    data = a.get<void*>();
+    //    fromAny(a,pElementTree);
+    //    a >>= pElementTree;
+
+    //    fromAny(a, static_cast<void*>(pElementTree));
+
+    //    fromAny(aArgs[3], pElementTree);
+    //    pSmMlExport->setElementTree(pElementTree);
+    // Set export tag
+    bool bUseExportTag = true;
+    aArgs[4] >>= bUseExportTag;
+    pSmMlExport->setUseExportFlag(bUseExportTag);
+    // Finish
+    return cppu::acquire(pSmMlExport);
 }
 
 SmDocShell* SmMlExport::getSmDocShell()
@@ -497,10 +536,9 @@ ErrCode SmMlExport::exportDoc(enum XMLTokenEnum eClass)
     {
         // Everything that isn't the formula itself get's default export
         SvXMLExport::exportDoc(eClass);
-        return ERRCODE_NONE;
     }
-
-    /* Needs comented for now or clang complains
+    else
+    {
         // Checks if it has to export a particular tree
         if (m_pElementTree == nullptr)
         {
@@ -517,96 +555,99 @@ ErrCode SmMlExport::exportDoc(enum XMLTokenEnum eClass)
                 return SVSTREAM_INVALID_PARAMETER;
             }
         }
-        */
 
-    // Start document amd encript if necessary
-    GetDocHandler()->startDocument();
-    addChaffWhenEncryptedStorage();
+        // Start document amd encript if necessary
+        GetDocHandler()->startDocument();
+        addChaffWhenEncryptedStorage();
 
-    // make use of a default namespace
-    // Math doesn't need namespaces from xmloff, since it now uses default namespaces
-    // Because that is common with current MathML usage in the web -> ResetNamespaceMap();
-    GetNamespaceMap_().Add(OUString(u""), GetXMLToken(XML_N_MATH), XML_NAMESPACE_MATH);
+        // make use of a default namespace
+        // Math doesn't need namespaces from xmloff, since it now uses default namespaces
+        // Because that is common with current MathML usage in the web -> ResetNamespaceMap();
+        GetNamespaceMap_().Add(OUString(u""), GetXMLToken(XML_N_MATH), XML_NAMESPACE_MATH);
 
-    // Add xmlns line
-    if (m_bUseExportTag)
-    {
-        GetAttrList().AddAttribute(GetNamespaceMap().GetAttrNameByKey(XML_NAMESPACE_MATH),
-                                   GetNamespaceMap().GetNameByKey(XML_NAMESPACE_MATH));
+        // Add xmlns line
+        if (m_bUseExportTag)
+        {
+            GetAttrList().AddAttribute(GetNamespaceMap().GetAttrNameByKey(XML_NAMESPACE_MATH),
+                                       GetNamespaceMap().GetNameByKey(XML_NAMESPACE_MATH));
+        }
+
+        // Export and close document
+        ExportContent_();
+        GetDocHandler()->endDocument();
     }
-
-    // Export and close document
-    ExportContent_();
-    GetDocHandler()->endDocument();
 
     return ERRCODE_NONE;
 }
 
 void SmMlExport::GetViewSettings(Sequence<PropertyValue>& aProps)
 {
-    // Get the document shell
-    SmDocShell* pDocShell = getSmDocShell();
-    if (pDocShell == nullptr)
-    {
-        SAL_WARN("starmath", "Missing document shell so no view settings");
+    uno::Reference<frame::XModel> xModel = GetModel();
+    if (!xModel.is())
         return;
-    }
 
-    // Allocate enough memory
+    SmModel* pModel = comphelper::getUnoTunnelImplementation<SmModel>(xModel);
+
+    if (!pModel)
+        return;
+
+    SmDocShell* pDocShell = static_cast<SmDocShell*>(pModel->GetObjectShell());
+    if (!pDocShell)
+        return;
+
     aProps.realloc(4);
     PropertyValue* pValue = aProps.getArray();
+    sal_Int32 nIndex = 0;
 
-    // The view settings are the formula display settings
     tools::Rectangle aRect(pDocShell->GetVisArea());
 
-    pValue[0].Name = "ViewAreaTop";
-    pValue[0].Value <<= aRect.Top();
+    pValue[nIndex].Name = "ViewAreaTop";
+    pValue[nIndex++].Value <<= aRect.Top();
 
-    pValue[1].Name = "ViewAreaLeft";
-    pValue[1].Value <<= aRect.Left();
+    pValue[nIndex].Name = "ViewAreaLeft";
+    pValue[nIndex++].Value <<= aRect.Left();
 
-    pValue[2].Name = "ViewAreaWidth";
-    pValue[2].Value <<= aRect.GetWidth();
+    pValue[nIndex].Name = "ViewAreaWidth";
+    pValue[nIndex++].Value <<= aRect.GetWidth();
 
-    pValue[3].Name = "ViewAreaHeight";
-    pValue[3].Value <<= aRect.GetHeight();
+    pValue[nIndex].Name = "ViewAreaHeight";
+    pValue[nIndex++].Value <<= aRect.GetHeight();
 }
 
 void SmMlExport::GetConfigurationSettings(Sequence<PropertyValue>& rProps)
 {
-    // Get model property set (settings)
     Reference<XPropertySet> xProps(GetModel(), UNO_QUERY);
     if (!xProps.is())
-    {
-        SAL_WARN("starmath", "Missing model properties so no configuration settings");
         return;
-    }
 
-    // Get model property set info (settings values)
     Reference<XPropertySetInfo> xPropertySetInfo = xProps->getPropertySetInfo();
     if (!xPropertySetInfo.is())
-    {
-        SAL_WARN("starmath", "Missing model properties info so no configuration settings");
         return;
-    }
 
-    // Allocate to store the properties
     Sequence<Property> aProps = xPropertySetInfo->getProperties();
     const sal_Int32 nCount = aProps.getLength();
-    rProps.realloc(nCount);
+    if (!nCount)
+        return;
 
-    // Copy properties
-    // This needs further revision
-    // Based in code mathmlexport.cxx::GetConfigurationSettings
-    for (sal_Int32 i = 0; i < nCount; ++i)
-    {
-        if (aProps[i].Name != "Formula" && aProps[i].Name != "BasicLibraries"
-            && aProps[i].Name != "DialogLibraries" && aProps[i].Name != "RuntimeUID")
-        {
-            rProps[i].Name = aProps[i].Name;
-            rProps[i].Value = xProps->getPropertyValue(aProps[i].Name);
-        }
-    }
+    rProps.realloc(nCount);
+    SmMathConfig* pConfig = SM_MOD()->GetConfig();
+    const bool bUsedSymbolsOnly = pConfig && pConfig->IsSaveOnlyUsedSymbols();
+
+    std::transform(aProps.begin(), aProps.end(), rProps.begin(),
+                   [bUsedSymbolsOnly, &xProps](Property& prop) {
+                       PropertyValue aRet;
+                       if (prop.Name != "Formula" && prop.Name != "BasicLibraries"
+                           && prop.Name != "DialogLibraries" && prop.Name != "RuntimeUID")
+                       {
+                           aRet.Name = prop.Name;
+                           OUString aActualName(prop.Name);
+                           // handle 'save used symbols only'
+                           if (bUsedSymbolsOnly && prop.Name == "Symbols")
+                               aActualName = "UserDefinedSymbolsInUse";
+                           aRet.Value = xProps->getPropertyValue(aActualName);
+                       }
+                       return aRet;
+                   });
 }
 
 SmMlExport::SmMlExport(const css::uno::Reference<css::uno::XComponentContext>& rContext,
@@ -761,7 +802,7 @@ void SmMlExport::exportMlAttributtes(const SmMlElement* pMlElement)
                     case SmMlAttributeValueHref::NMlEmpty:
                         break;
                     case SmMlAttributeValueHref::NMlValid:
-                        addAttribute(XML_HREF, *aAttributeValue->m_aLnk);
+                        addAttribute(XML_FENCE, *aAttributeValue->m_aLnk);
                         break;
                     default:
                         declareMlError();
@@ -773,7 +814,7 @@ void SmMlExport::exportMlAttributtes(const SmMlElement* pMlElement)
             {
                 auto aSizeData = aAttribute.getMlLspace();
                 auto aLengthData = aSizeData->m_aLengthValue;
-                exportMlAttributteLength(XML_LSPACE, aLengthData);
+                exportMlAttributteLength(XML_MATHSIZE, aLengthData);
                 break;
             }
             case SmMlAttributeValueType::MlMathbackground:
@@ -786,10 +827,10 @@ void SmMlExport::exportMlAttributtes(const SmMlElement* pMlElement)
                         break;
                     case SmMlAttributeValueMathbackground::MlRgb:
                     {
-                        OUString aTextColor
-                            = OUString::createFromAscii(starmathdatabase::Identify_Color_MATHML(
-                                                            sal_uInt32(aAttributeValue->m_aCol))
-                                                            .pIdent);
+                        OUString aTextColor = OUString::createFromAscii(
+                            starmathdatabase::Identify_Color_MATHML(
+                                static_cast<uint32_t>(aAttributeValue->m_aCol))
+                                .pIdent);
                         addAttribute(XML_MATHBACKGROUND, aTextColor);
                         break;
                     }
@@ -808,10 +849,10 @@ void SmMlExport::exportMlAttributtes(const SmMlElement* pMlElement)
                         break;
                     case SmMlAttributeValueMathcolor::MlRgb:
                     {
-                        OUString aTextColor
-                            = OUString::createFromAscii(starmathdatabase::Identify_Color_MATHML(
-                                                            sal_uInt32(aAttributeValue->m_aCol))
-                                                            .pIdent);
+                        OUString aTextColor = OUString::createFromAscii(
+                            starmathdatabase::Identify_Color_MATHML(
+                                static_cast<uint32_t>(aAttributeValue->m_aCol))
+                                .pIdent);
                         addAttribute(XML_MATHCOLOR, aTextColor);
                         break;
                     }
@@ -940,7 +981,7 @@ void SmMlExport::exportMlAttributtes(const SmMlElement* pMlElement)
             {
                 auto aSizeData = aAttribute.getMlRspace();
                 auto aLengthData = aSizeData->m_aLengthValue;
-                exportMlAttributteLength(XML_RSPACE, aLengthData);
+                exportMlAttributteLength(XML_MATHSIZE, aLengthData);
                 break;
             }
             case SmMlAttributeValueType::MlSeparator:
@@ -1001,7 +1042,7 @@ void SmMlExport::exportMlAttributtes(const SmMlElement* pMlElement)
     }
 }
 
-SvXMLElementExport* SmMlExport::exportMlElement(const SmMlElement* pMlElement)
+void SmMlExport::exportMlElement(const SmMlElement* pMlElement)
 {
     SvXMLElementExport* pElementExport;
     switch (pMlElement->getMlElementType())
@@ -1037,77 +1078,9 @@ SvXMLElementExport* SmMlExport::exportMlElement(const SmMlElement* pMlElement)
     exportMlAttributtes(pMlElement);
     if (aElementText.isEmpty())
         GetDocHandler()->characters(aElementText);
-    return pElementExport;
+    (void)pElementExport;
 }
 
-namespace
-{
-struct exportMlElementTreeExecData
-{
-private:
-    SmMlExport* m_pSmMlExport;
-    std::vector<SvXMLElementExport*> m_aSvXMLElementExportList;
-    size_t m_nDepth;
-
-public:
-    inline exportMlElementTreeExecData(SmMlExport* pSmMlExport)
-        : m_pSmMlExport(pSmMlExport)
-        , m_aSvXMLElementExportList(1024)
-        , m_nDepth(0)
-    {
-    }
-
-    inline void deleteDepthData()
-    {
-        delete m_aSvXMLElementExportList[m_nDepth];
-        --m_nDepth;
-    }
-
-    inline void setDepthData(SvXMLElementExport* aSvXMLElementExportList)
-    {
-        if (m_nDepth == m_aSvXMLElementExportList.size())
-            m_aSvXMLElementExportList.reserve(m_aSvXMLElementExportList.size() + 1024);
-        m_aSvXMLElementExportList[m_nDepth] = aSvXMLElementExportList;
-    }
-
-    inline void incrementDepth() { ++m_nDepth; }
-
-    inline SmMlExport* getSmMlExport() { return m_pSmMlExport; };
-};
-
-} // end unnamed namespace
-
-static inline void exportMlElementTreeExec(SmMlElement* aSmMlElement, void* aData)
-{
-    // Prepare data
-    exportMlElementTreeExecData* pData = static_cast<exportMlElementTreeExecData*>(aData);
-    pData->setDepthData(pData->getSmMlExport()->exportMlElement(aSmMlElement));
-
-    // Prepare for following
-    // If it has sub elements, then it will be the next
-    if (aSmMlElement->getSubElementsCount() != 0)
-        pData->incrementDepth();
-    else // Otherwise remounts up to where it should be
-    {
-        while (aSmMlElement->getParentElement() != nullptr)
-        {
-            // get parent
-            SmMlElement* pParent = aSmMlElement->getParentElement();
-            pData->deleteDepthData();
-            // was this the last branch ?
-            if (aSmMlElement->getSubElementId() + 1 != pParent->getSubElementsCount()) // yes -> up
-                break; // no -> stop going up
-            // Prepare for next round
-            aSmMlElement = pParent;
-        }
-    }
-}
-
-void SmMlExport::exportMlElementTree()
-{
-    exportMlElementTreeExecData* aData = new exportMlElementTreeExecData(this);
-    mathml::SmMlIteratorTopToBottom(m_pElementTree, exportMlElementTreeExec, aData);
-    delete aData;
-}
+void SmMlExport::exportMlElementTree() {}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
