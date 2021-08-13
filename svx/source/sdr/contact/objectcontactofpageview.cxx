@@ -220,7 +220,7 @@ namespace sdr::contact
 #if HAVE_FEATURE_DESKTOP || defined( ANDROID )
             // get whole Primitive2DContainer; this will already make use of updated ViewInformation2D
             // and may use the MapMode from the Target OutDev in the DisplayInfo
-            xPrimitiveSequence = rDrawPageVOContact.getPrimitive2DSequenceHierarchy(rDisplayInfo);
+            rDrawPageVOContact.getPrimitive2DSequenceHierarchy(rDisplayInfo, xPrimitiveSequence);
 #else
             // Hmm, !HAVE_FEATURE_DESKTOP && !ANDROID means iOS,
             // right? But does it makes sense to use a different code
@@ -256,7 +256,7 @@ namespace sdr::contact
             if (bGetHierarchy)
                 // get whole Primitive2DContainer; this will already make use of updated ViewInformation2D
                 // and may use the MapMode from the Target OutDev in the DisplayInfo
-                xPrimitiveSequence = rDrawPageVOContact.getPrimitive2DSequenceHierarchy(rDisplayInfo);
+                rDrawPageVOContact.getPrimitive2DSequenceHierarchy(rDisplayInfo, xPrimitiveSequence);
 #endif
 
             // if there is something to show, use a primitive processor to render it. There

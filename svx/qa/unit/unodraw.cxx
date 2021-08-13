@@ -161,8 +161,8 @@ CPPUNIT_TEST_FIXTURE(UnodrawTest, testTableShadowDirect)
     const sdr::contact::ViewObjectContact& rDrawPageVOContact
         = pSdrPage->GetViewContact().GetViewObjectContact(aObjectContact);
     sdr::contact::DisplayInfo aDisplayInfo;
-    drawinglayer::primitive2d::Primitive2DContainer xPrimitiveSequence
-        = rDrawPageVOContact.getPrimitive2DSequenceHierarchy(aDisplayInfo);
+    drawinglayer::primitive2d::Primitive2DContainer xPrimitiveSequence;
+    rDrawPageVOContact.getPrimitive2DSequenceHierarchy(aDisplayInfo, xPrimitiveSequence);
 
     // Check the primitives.
     drawinglayer::Primitive2dXmlDump aDumper;

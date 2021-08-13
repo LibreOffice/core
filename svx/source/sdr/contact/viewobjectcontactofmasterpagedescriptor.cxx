@@ -54,7 +54,7 @@ namespace sdr::contact
             return true;
         }
 
-        drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactOfMasterPageDescriptor::getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInfo) const
+        void ViewObjectContactOfMasterPageDescriptor::getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInfo, drawinglayer::primitive2d::Primitive2DContainer& rContainer) const
         {
             drawinglayer::primitive2d::Primitive2DContainer xRetval;
             drawinglayer::primitive2d::Primitive2DContainer xMasterPageSequence;
@@ -97,7 +97,7 @@ namespace sdr::contact
                 ViewContact& rViewContactOfMasterPage(rDescriptor.GetUsedPage().GetViewContact());
                 ViewObjectContact& rVOCOfMasterPage(rViewContactOfMasterPage.GetViewObjectContact(GetObjectContact()));
 
-                xMasterPageSequence = rVOCOfMasterPage.getPrimitive2DSequenceHierarchy(rDisplayInfo);
+                rVOCOfMasterPage.getPrimitive2DSequenceHierarchy(rDisplayInfo, xMasterPageSequence);
             }
 
             // reset DisplayInfo changes for MasterPage paint
@@ -129,7 +129,7 @@ namespace sdr::contact
             }
 
             // return grouped primitive
-            return xRetval;
+            rContainer.append(xRetval);
         }
 } // end of namespace
 

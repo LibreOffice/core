@@ -39,58 +39,58 @@ namespace sdr::contact
         {
         }
 
-        drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactOfGroup::getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInfo) const
+        void ViewObjectContactOfGroup::getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInfo, drawinglayer::primitive2d::Primitive2DContainer& rContainer) const
         {
             drawinglayer::primitive2d::Primitive2DContainer xRetval;
 
             // check model-view visibility
-            if(isPrimitiveVisible(rDisplayInfo))
+            if(!isPrimitiveVisible(rDisplayInfo))
+                return;
+
+            const sal_uInt32 nSubHierarchyCount(GetViewContact().GetObjectCount());
+            if(nSubHierarchyCount)
             {
-                const sal_uInt32 nSubHierarchyCount(GetViewContact().GetObjectCount());
+                const bool bDoGhostedDisplaying(
+                    GetObjectContact().DoVisualizeEnteredGroup()
+                    && !GetObjectContact().isOutputToPrinter()
+                    && GetObjectContact().getActiveViewContact() == &GetViewContact());
 
-                if(nSubHierarchyCount)
+                if(bDoGhostedDisplaying)
                 {
-                    const bool bDoGhostedDisplaying(
-                        GetObjectContact().DoVisualizeEnteredGroup()
-                        && !GetObjectContact().isOutputToPrinter()
-                        && GetObjectContact().getActiveViewContact() == &GetViewContact());
+                    rDisplayInfo.ClearGhostedDrawMode();
+                }
 
-                    if(bDoGhostedDisplaying)
+                // create object hierarchy
+                xRetval = getPrimitive2DSequenceSubHierarchy(rDisplayInfo);
+
+                if(!xRetval.empty())
+                {
+                    // get ranges
+                    const drawinglayer::geometry::ViewInformation2D& rViewInformation2D(GetObjectContact().getViewInformation2D());
+                    const ::basegfx::B2DRange aObjectRange(xRetval.getB2DRange(rViewInformation2D));
+                    const basegfx::B2DRange& aViewRange(rViewInformation2D.getViewport());
+
+                    // check geometrical visibility
+                    if(!aViewRange.isEmpty() && !aViewRange.overlaps(aObjectRange))
                     {
-                        rDisplayInfo.ClearGhostedDrawMode();
-                    }
-
-                    // create object hierarchy
-                    xRetval = getPrimitive2DSequenceSubHierarchy(rDisplayInfo);
-
-                    if(!xRetval.empty())
-                    {
-                        // get ranges
-                        const drawinglayer::geometry::ViewInformation2D& rViewInformation2D(GetObjectContact().getViewInformation2D());
-                        const ::basegfx::B2DRange aObjectRange(xRetval.getB2DRange(rViewInformation2D));
-                        const basegfx::B2DRange& aViewRange(rViewInformation2D.getViewport());
-
-                        // check geometrical visibility
-                        if(!aViewRange.isEmpty() && !aViewRange.overlaps(aObjectRange))
-                        {
-                            // not visible, release
-                            xRetval.clear();
-                        }
-                    }
-
-                    if(bDoGhostedDisplaying)
-                    {
-                        rDisplayInfo.SetGhostedDrawMode();
+                        // not visible, release
+                        xRetval.clear();
                     }
                 }
-                else
+
+                if(bDoGhostedDisplaying)
                 {
-                    // draw replacement object for group. This will use ViewContactOfGroup::createViewIndependentPrimitive2DSequence
-                    // which creates the replacement primitives for an empty group
-                    xRetval = ViewObjectContactOfSdrObj::getPrimitive2DSequenceHierarchy(rDisplayInfo);
+                    rDisplayInfo.SetGhostedDrawMode();
                 }
+
+                rContainer.append(xRetval);
             }
-            return xRetval;
+            else
+            {
+                // draw replacement object for group. This will use ViewContactOfGroup::createViewIndependentPrimitive2DSequence
+                // which creates the replacement primitives for an empty group
+                ViewObjectContactOfSdrObj::getPrimitive2DSequenceHierarchy(rDisplayInfo, rContainer);
+            }
         }
 
         bool ViewObjectContactOfGroup::isPrimitiveVisibleOnAnyLayer(const SdrLayerIDSet& aLayers) const

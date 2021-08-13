@@ -147,7 +147,7 @@ drawinglayer::primitive2d::Primitive2DContainer PagePrimitiveExtractor::createPr
         ViewObjectContact& rDrawPageVOContact = pStartPage->GetViewContact().GetViewObjectContact(*this);
 
         // get whole Primitive2DContainer
-        xRetval = rDrawPageVOContact.getPrimitive2DSequenceHierarchy(aDisplayInfo);
+        rDrawPageVOContact.getPrimitive2DSequenceHierarchy(aDisplayInfo, xRetval);
     }
 
     return xRetval;
