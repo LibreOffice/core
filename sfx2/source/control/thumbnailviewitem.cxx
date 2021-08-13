@@ -125,19 +125,14 @@ void ThumbnailViewItem::calculateItemsPosition (const tools::Long nThumbnailHeig
                               pAttrs->aFontSize.getX(), pAttrs->aFontSize.getY(),
                               css::lang::Locale() );
 
-    Size aRectSize = maDrawArea.GetSize();
     Size aImageSize = maPreview1.GetSizePixel();
 
     // Calculate thumbnail position
-    Point aPos = maDrawArea.TopLeft();
-    aPos.setX( maDrawArea.getX() + (aRectSize.Width()-aImageSize.Width())/2 );
-    aPos.setY( maDrawArea.getY() + nPadding + (nThumbnailHeight-aImageSize.Height())/2 );
-    maPrev1Pos = aPos;
+    const Point aPos = maDrawArea.TopCenter();
+    maPrev1Pos = aPos + Point(-aImageSize.Width() / 2, nPadding + (nThumbnailHeight - aImageSize.Height()) / 2);
 
     // Calculate text position
-    aPos.setY( maDrawArea.getY() + nThumbnailHeight + nPadding * 2 );
-    aPos.setX( maDrawArea.Left() + (aRectSize.Width() - aTextDev.getTextWidth(maTitle,0,nMaxTextLength))/2 );
-    maTextPos = aPos;
+    maTextPos = aPos + Point(-aTextDev.getTextWidth(maTitle, 0, nMaxTextLength) / 2, nThumbnailHeight + nPadding * 2);
 }
 
 void ThumbnailViewItem::Paint (drawinglayer::processor2d::BaseProcessor2D *pProcessor,

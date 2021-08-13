@@ -401,8 +401,7 @@ void EditorWindow::RequestHelp( const HelpEvent& rHEvt )
                         Point aTopLeft = GetEditView()->GetWindowPos(aHelpRect.TopLeft());
                         aTopLeft = GetEditView()->GetWindow()->OutputToScreenPixel(aTopLeft);
 
-                        aHelpRect.setX(aTopLeft.X());
-                        aHelpRect.setY(aTopLeft.Y());
+                        aHelpRect.SetPos(aTopLeft);
                     }
                 }
             }

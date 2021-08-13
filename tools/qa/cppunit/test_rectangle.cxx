@@ -47,15 +47,48 @@ void Test::test_rectangle()
         CPPUNIT_ASSERT_EQUAL(tools::Long(1), aRect.GetWidth());
         CPPUNIT_ASSERT_EQUAL(tools::Long(1), aRect.GetHeight());
 
-        // Annoyingly getWidth and getHeight returns the wrong size
-        // that was explicitly input.
+        // getWidth and getHeight return the size that excludes one of the bounds,
+        // unlike the ctor and GetWidth / GetHeight that operate on inclusive size
         CPPUNIT_ASSERT_EQUAL(tools::Long(0), aRect.getWidth());
         CPPUNIT_ASSERT_EQUAL(tools::Long(0), aRect.getHeight());
 
-        aRect.setX(12);
+        aRect.SetPosX(12);
         CPPUNIT_ASSERT_EQUAL(tools::Long(1), aRect.GetHeight());
-        aRect.setY(12);
+        aRect.SetPosY(12);
         CPPUNIT_ASSERT_EQUAL(tools::Long(1), aRect.GetWidth());
+    }
+
+    {
+        constexpr tools::Rectangle aRectTwip(1, 1, 1, 1);
+        constexpr tools::Rectangle aRectMm100(
+            o3tl::convert(aRectTwip, o3tl::Length::twip, o3tl::Length::mm100));
+        static_assert(!aRectMm100.IsEmpty());
+        // Make sure that we use coordinates for conversion, not width/height:
+        // the latter is ambiguous, and e.g. GetWidth(aRectTwip) gives 1, which
+        // would had been converted to 2, resulting in different LR coordinates
+        static_assert(aRectMm100.Left() == aRectMm100.Right());
+        static_assert(aRectMm100.Top() == aRectMm100.Bottom());
+    }
+
+    {
+        constexpr tools::Rectangle aRectTwip(1, 1);
+        constexpr tools::Rectangle aRectMm100(
+            o3tl::convert(aRectTwip, o3tl::Length::twip, o3tl::Length::mm100));
+        // Make sure that result keeps the empty flag
+        static_assert(aRectMm100.IsEmpty());
+        static_assert(aRectMm100.GetWidth() == 0);
+        static_assert(aRectMm100.GetHeight() == 0);
+    }
+
+    {
+        constexpr tools::Rectangle aRect(Point(), Size(-1, -2));
+        static_assert(!aRect.IsEmpty());
+        static_assert(aRect.Right() == 0);
+        static_assert(aRect.Bottom() == -1);
+
+        tools::Rectangle aRect2;
+        aRect2.SetSize(Size(-1, -2));
+        CPPUNIT_ASSERT_EQUAL(aRect, aRect2);
     }
 }
 
