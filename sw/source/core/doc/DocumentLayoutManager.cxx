@@ -490,8 +490,11 @@ SwFrameFormat *DocumentLayoutManager::CopyLayoutFormat(
         pDest->SetFormatAttr(aSet);
 
         // Link FLY and DRAW formats, so it becomes a text box
-        pDest->SetOtherTextBoxFormat(pDestTextBox);
-        pDestTextBox->SetOtherTextBoxFormat(pDest);
+        auto pTextBox = new SwTextBoxNode(pDest);
+        pTextBox->AddTextBox(pDest->FindRealSdrObject(), pDestTextBox);
+
+        pDest->SetOtherTextBoxFormat(pTextBox);
+        pDestTextBox->SetOtherTextBoxFormat(pTextBox);
     }
 
     if (pDest->GetName().isEmpty())
