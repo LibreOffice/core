@@ -25,7 +25,6 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 
-#include <rtl/instance.hxx>
 #include <rtl/ref.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -222,19 +221,9 @@ void GlobalSettings_Access::impl_initConfigAccess()
 
 //  global class
 
-namespace {
-
-struct mutexGlobalSettings : public rtl::Static< osl::Mutex, mutexGlobalSettings > {};
-
-}
-
-static rtl::Reference<GlobalSettings_Access> pStaticSettings;
-
 static GlobalSettings_Access* GetGlobalSettings( const css::uno::Reference< css::uno::XComponentContext >& rxContext )
 {
-    osl::MutexGuard aGuard(mutexGlobalSettings::get());
-    if ( !pStaticSettings )
-        pStaticSettings = new GlobalSettings_Access( rxContext );
+    static rtl::Reference<GlobalSettings_Access> pStaticSettings = new GlobalSettings_Access( rxContext );
     return pStaticSettings.get();
 }
 

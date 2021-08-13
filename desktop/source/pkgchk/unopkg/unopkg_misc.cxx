@@ -158,37 +158,31 @@ bool readArgument(
 }
 
 
-namespace {
-struct ExecutableDir : public rtl::StaticWithInit<
-    OUString, ExecutableDir> {
-    OUString operator () () {
-        OUString path;
-        if (osl_getExecutableFile( &path.pData ) != osl_Process_E_None) {
-            throw RuntimeException("cannot locate executable directory!",nullptr);
-        }
-        return path.copy( 0, path.lastIndexOf( '/' ) );
-    }
-};
-struct ProcessWorkingDir : public rtl::StaticWithInit<
-    OUString, ProcessWorkingDir> {
-    OUString operator () () {
-        OUString workingDir;
-        utl::Bootstrap::getProcessWorkingDir(workingDir);
-        return workingDir;
-    }
-};
-} // anon namespace
-
-
 OUString const & getExecutableDir()
 {
-    return ExecutableDir::get();
+    static const OUString EXEC =
+        [&]()
+        {
+            OUString path;
+            if (osl_getExecutableFile( &path.pData ) != osl_Process_E_None) {
+                throw RuntimeException("cannot locate executable directory!",nullptr);
+            }
+            return path.copy( 0, path.lastIndexOf( '/' ) );
+        }();
+    return EXEC;
 }
 
 
 OUString const & getProcessWorkingDir()
 {
-    return ProcessWorkingDir::get();
+    static const OUString WORKING =
+        [&]()
+        {
+            OUString workingDir;
+            utl::Bootstrap::getProcessWorkingDir(workingDir);
+            return workingDir;
+        }();
+    return WORKING;
 }
 
 

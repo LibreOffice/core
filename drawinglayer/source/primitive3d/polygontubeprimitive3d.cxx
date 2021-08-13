@@ -105,16 +105,13 @@ namespace drawinglayer::primitive3d
                 }
             };
 
-            struct theTubeBuffer :
-                public rtl::Static< TubeBuffer, theTubeBuffer > {};
-
             Primitive3DContainer getLineTubeSegments(
                 sal_uInt32 nSegments,
                 const attribute::MaterialAttribute3D& rMaterial)
             {
                 // static data for buffered tube primitives
-                TubeBuffer &rTheBuffer = theTubeBuffer::get();
-                return rTheBuffer.getLineTubeSegments(nSegments, rMaterial);
+                static TubeBuffer theTubeBuffer;
+                return theTubeBuffer.getLineTubeSegments(nSegments, rMaterial);
             }
 
             class CapBuffer
@@ -183,16 +180,13 @@ namespace drawinglayer::primitive3d
                 }
             };
 
-            struct theCapBuffer :
-                public rtl::Static< CapBuffer, theCapBuffer > {};
-
             Primitive3DContainer getLineCapSegments(
                 sal_uInt32 nSegments,
                 const attribute::MaterialAttribute3D& rMaterial)
             {
                 // static data for buffered cap primitives
-                CapBuffer &rTheBuffer = theCapBuffer::get();
-                return rTheBuffer.getLineCapSegments(nSegments, rMaterial);
+                static CapBuffer theCapBuffer;
+                return theCapBuffer.getLineCapSegments(nSegments, rMaterial);
             }
 
             class CapRoundBuffer
@@ -278,17 +272,13 @@ namespace drawinglayer::primitive3d
 
             };
 
-            struct theCapRoundBuffer :
-                public rtl::Static< CapRoundBuffer, theCapRoundBuffer > {};
-
-
             Primitive3DContainer getLineCapRoundSegments(
                 sal_uInt32 nSegments,
                 const attribute::MaterialAttribute3D& rMaterial)
             {
                 // static data for buffered cap primitives
-                CapRoundBuffer &rTheBuffer = theCapRoundBuffer::get();
-                return rTheBuffer.getLineCapRoundSegments(nSegments, rMaterial);
+                static CapRoundBuffer theCapRoundBuffer;
+                return theCapRoundBuffer.getLineCapRoundSegments(nSegments, rMaterial);
             }
 
             Primitive3DContainer getLineJoinSegments(

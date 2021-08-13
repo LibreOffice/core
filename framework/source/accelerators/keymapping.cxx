@@ -21,7 +21,6 @@
 
 #include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <rtl/instance.hxx>
 
 namespace framework
 {
@@ -154,14 +153,9 @@ KeyMapping::KeyMapping()
     }
 }
 
-namespace {
-
-struct Instance: public rtl::Static<KeyMapping, Instance> {};
-
-}
-
 KeyMapping & KeyMapping::get() {
-    return Instance::get();
+    static KeyMapping KEYS;
+    return KEYS;
 }
 
 sal_uInt16 KeyMapping::mapIdentifierToCode(const OUString& sIdentifier)

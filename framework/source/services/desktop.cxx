@@ -51,7 +51,6 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/lok.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <rtl/instance.hxx>
 #include <vcl/svapp.hxx>
 #include <desktop/crashreport.hxx>
 #include <vcl/scheduler.hxx>
@@ -1441,11 +1440,9 @@ void SAL_CALL Desktop::getFastPropertyValue( css::uno::Any& aValue  ,
 
 ::cppu::IPropertyArrayHelper& SAL_CALL Desktop::getInfoHelper()
 {
-    struct Static:
-        public rtl::StaticWithInit<cppu::OPropertyArrayHelper, Static>
-    {
-        cppu::OPropertyArrayHelper operator ()() {
-            return {
+    static cppu::OPropertyArrayHelper HELPER =
+        [&] () {
+            return cppu::OPropertyArrayHelper {
                 {{"ActiveFrame", PropHandle::ActiveFrame,
                   cppu::UnoType<css::lang::XComponent>::get(),
                   (css::beans::PropertyAttribute::TRANSIENT
@@ -1464,9 +1461,8 @@ void SAL_CALL Desktop::getFastPropertyValue( css::uno::Any& aValue  ,
                  {"Title", PropHandle::Title, cppu::UnoType<OUString>::get(),
                   css::beans::PropertyAttribute::TRANSIENT}},
                 true};
-        }
-    };
-    return Static::get();
+        }();
+    return HELPER;
 }
 
 /*-************************************************************************************************************

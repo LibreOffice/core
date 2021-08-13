@@ -30,6 +30,12 @@
 
 namespace filter::config{
 
+FilterCache& GetTheFilterCache()
+{
+    static FilterCache CACHE;
+    return CACHE;
+}
+
 /** @short  define all possible parts of a filter query.
 
     @descr  syntax: "<query>[:<param>[=<value>]]"
@@ -73,7 +79,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL FilterFactory::createInstan
     // SAFE ->
     osl::MutexGuard aLock(m_aLock);
 
-    auto & cache = TheFilterCache::get();
+    auto & cache = GetTheFilterCache();
 
     // search filter on cache
     CacheItem aFilter = cache.getItem(FilterCache::E_FILTER, sFilter);
@@ -122,7 +128,7 @@ css::uno::Sequence< OUString > SAL_CALL FilterFactory::getAvailableServiceNames(
     std::vector<OUString> lUNOFilters;
     try
     {
-        lUNOFilters = TheFilterCache::get().getMatchingItemsByProps(FilterCache::E_FILTER, lIProps, lEProps);
+        lUNOFilters = GetTheFilterCache().getMatchingItemsByProps(FilterCache::E_FILTER, lIProps, lEProps);
     }
     catch(const css::uno::RuntimeException&)
         { throw; }

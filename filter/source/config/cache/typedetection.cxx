@@ -82,7 +82,7 @@ OUString SAL_CALL TypeDetection::queryTypeByURL(const OUString& sURL)
     // set std types as minimum requirement first!
     // Only in case no type was found for given URL,
     // use optional types too ...
-    auto & cache = TheFilterCache::get();
+    auto & cache = GetTheFilterCache();
     FlatDetection lFlatTypes;
     cache.detectFlatForURL(aURL, lFlatTypes);
 
@@ -473,7 +473,7 @@ void TypeDetection::impl_checkResultsAndAddBestFilter(utl::MediaDescriptor& rDes
     if (!sFilter.isEmpty())
         return;
 
-    auto & cache = TheFilterCache::get();
+    auto & cache = GetTheFilterCache();
 
     // b)
     // check a preselected document service too.
@@ -642,7 +642,7 @@ bool TypeDetection::impl_getPreselectionForType(
     {
         // SAFE -> --------------------------
         osl::MutexGuard aLock(m_aLock);
-        aType = TheFilterCache::get().getItem(FilterCache::E_TYPE, sType);
+        aType = GetTheFilterCache().getItem(FilterCache::E_TYPE, sType);
         // <- SAFE --------------------------
     }
     catch(const css::container::NoSuchElementException&)
@@ -732,7 +732,7 @@ void TypeDetection::impl_getPreselectionForDocumentService(
         // Attention: For executing next lines of code, We must be sure that
         // all filters already loaded :-(
         // That can disturb our "load on demand feature". But we have no other chance!
-        auto & cache = TheFilterCache::get();
+        auto & cache = GetTheFilterCache();
         cache.load(FilterCache::E_CONTAINS_FILTERS);
 
         CacheItem lIProps;
@@ -766,7 +766,7 @@ OUString TypeDetection::impl_getTypeFromFilter(const OUString& rFilterName)
     try
     {
         osl::MutexGuard aLock(m_aLock);
-        aFilter = TheFilterCache::get().getItem(FilterCache::E_FILTER, rFilterName);
+        aFilter = GetTheFilterCache().getItem(FilterCache::E_FILTER, rFilterName);
     }
     catch (const container::NoSuchElementException&)
     {
@@ -788,7 +788,7 @@ void TypeDetection::impl_getAllFormatTypes(
     try
     {
         osl::MutexGuard aLock(m_aLock);
-        auto & cache = TheFilterCache::get();
+        auto & cache = GetTheFilterCache();
         cache.load(FilterCache::E_CONTAINS_FILTERS);
         aFilterNames = cache.getItemNames(FilterCache::E_FILTER);
     }
@@ -813,7 +813,7 @@ void TypeDetection::impl_getAllFormatTypes(
     {
         // Get all types that match the URL alone.
         FlatDetection aFlatByURL;
-        TheFilterCache::get().detectFlatForURL(aParsedURL, aFlatByURL);
+        GetTheFilterCache().detectFlatForURL(aParsedURL, aFlatByURL);
         for (auto const& elem : aFlatByURL)
         {
             FlatDetection::iterator itPos = std::find_if(rFlatTypes.begin(), rFlatTypes.end(), FindByType(elem.sType));
@@ -900,7 +900,7 @@ OUString TypeDetection::impl_detectTypeFlatAndDeep(      utl::MediaDescriptor& r
         {
             // SAFE -> ----------------------------------
             osl::ClearableMutexGuard aLock(m_aLock);
-            CacheItem aType = TheFilterCache::get().getItem(FilterCache::E_TYPE, sFlatType);
+            CacheItem aType = GetTheFilterCache().getItem(FilterCache::E_TYPE, sFlatType);
             aLock.clear();
 
             OUString sDetectService;
@@ -1155,7 +1155,7 @@ bool TypeDetection::impl_validateAndSetTypeOnDescriptor(      utl::MediaDescript
     // SAFE ->
     {
         osl::MutexGuard aLock(m_aLock);
-        if (TheFilterCache::get().hasItem(FilterCache::E_TYPE, sType))
+        if (GetTheFilterCache().hasItem(FilterCache::E_TYPE, sType))
         {
             rDescriptor[utl::MediaDescriptor::PROP_TYPENAME()] <<= sType;
             return true;
@@ -1177,7 +1177,7 @@ bool TypeDetection::impl_validateAndSetFilterOnDescriptor(      utl::MediaDescri
         // SAFE ->
         osl::ClearableMutexGuard aLock(m_aLock);
 
-        auto & cache = TheFilterCache::get();
+        auto & cache = GetTheFilterCache();
         CacheItem aFilter = cache.getItem(FilterCache::E_FILTER, sFilter);
         OUString sType;
         aFilter[PROPNAME_TYPE] >>= sType;

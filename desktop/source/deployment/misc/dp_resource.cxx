@@ -26,24 +26,17 @@ using namespace ::com::sun::star::uno;
 
 namespace dp_misc
 {
-namespace
+const LanguageTag& getOfficeLanguageTag()
 {
-struct OfficeLocale : public rtl::StaticWithInit<LanguageTag, OfficeLocale>
-{
-    LanguageTag operator()()
-    {
+    static const LanguageTag OFFICE_LANG = [&]() {
         OUString slang(utl::ConfigManager::getUILocale());
         //fallback, the locale is currently only set when the user starts the
         //office for the first time.
         if (slang.isEmpty())
             slang = "en-US";
         return LanguageTag(slang);
-    }
-};
-
-} // anon namespace
-
-const LanguageTag& getOfficeLanguageTag() { return OfficeLocale::get(); }
+    }();
+    return OFFICE_LANG;
 }
-
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

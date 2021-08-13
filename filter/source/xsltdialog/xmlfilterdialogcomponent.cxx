@@ -31,7 +31,6 @@
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <vcl/svapp.hxx>
-#include <rtl/instance.hxx>
 
 #include "xmlfiltersettingsdialog.hxx"
 
@@ -162,42 +161,23 @@ OUString SAL_CALL XMLFilterDialogComponent::getImplementationName()
     return "com.sun.star.comp.ui.XSLTFilterDialog";
 }
 
-namespace { struct lcl_ImplId : public rtl::Static< ::cppu::OImplementationId, lcl_ImplId > {}; }
-
 Sequence< sal_Int8 > SAL_CALL XMLFilterDialogComponent::getImplementationId()
 {
-    return css::uno::Sequence<sal_Int8>();
+    static ::cppu::OImplementationId implId;
+    return implId.getImplementationId();
 }
 
-
-namespace
-{
-    class DialogComponentTypes
-    {
-    private:
-        OTypeCollection m_aTypes;
-    public:
-        DialogComponentTypes() :
-            m_aTypes(
-                cppu::UnoType<XComponent>::get(),
-                cppu::UnoType<XTypeProvider>::get(),
-                cppu::UnoType<XAggregation>::get(),
-                cppu::UnoType<XWeak>::get(),
-                cppu::UnoType<XServiceInfo>::get(),
-                cppu::UnoType<XInitialization>::get(),
-                cppu::UnoType<XTerminateListener>::get(),
-                cppu::UnoType<css::ui::dialogs::XExecutableDialog>::get())
-        {
-        }
-        OTypeCollection& getTypeCollection() { return m_aTypes; }
-    };
-
-    struct theDialogComponentTypes : rtl::Static<DialogComponentTypes, theDialogComponentTypes> {};
-}
 
 Sequence< Type > XMLFilterDialogComponent::getTypes()
 {
-    return theDialogComponentTypes::get().getTypeCollection().getTypes();
+    return { cppu::UnoType<XComponent>::get(),
+             cppu::UnoType<XTypeProvider>::get(),
+             cppu::UnoType<XAggregation>::get(),
+             cppu::UnoType<XWeak>::get(),
+             cppu::UnoType<XServiceInfo>::get(),
+             cppu::UnoType<XInitialization>::get(),
+             cppu::UnoType<XTerminateListener>::get(),
+             cppu::UnoType<css::ui::dialogs::XExecutableDialog>::get() };
 }
 
 Sequence< OUString > SAL_CALL XMLFilterDialogComponent::getSupportedServiceNames()

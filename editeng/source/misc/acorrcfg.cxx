@@ -29,8 +29,6 @@
 #include <editeng/svxacorr.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
-#include <rtl/instance.hxx>
-
 using namespace utl;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
@@ -601,14 +599,10 @@ void SvxSwAutoCorrCfg::Notify( const Sequence<OUString>& /* aPropertyNames */ )
     Load(false);
 }
 
-namespace
-{
-    class theSvxAutoCorrCfg : public rtl::Static<SvxAutoCorrCfg, theSvxAutoCorrCfg>{};
-}
-
 SvxAutoCorrCfg& SvxAutoCorrCfg::Get()
 {
-    return theSvxAutoCorrCfg::get();
+    static SvxAutoCorrCfg theSvxAutoCorrCfg;
+    return theSvxAutoCorrCfg;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

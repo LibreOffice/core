@@ -64,19 +64,14 @@
 #include <editeng/xmlcnitm.hxx>
 #include <editeng/forbiddencharacterstable.hxx>
 #include <editeng/justifyitem.hxx>
-#include <rtl/instance.hxx>
 #include <tools/mapunit.hxx>
 
 using namespace ::com::sun::star;
 
-namespace
-{
-    class theEditDLL : public rtl::Static<EditDLL, theEditDLL> {};
-}
-
 EditDLL& EditDLL::Get()
 {
-    return theEditDLL::get();
+    static EditDLL theEditDLL;
+    return theEditDLL;
 }
 
 DefItems::DefItems()

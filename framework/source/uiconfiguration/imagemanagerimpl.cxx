@@ -44,7 +44,6 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/filter/PngImageReader.hxx>
 #include <vcl/pngwrite.hxx>
-#include <rtl/instance.hxx>
 #include <memory>
 
 using ::com::sun::star::uno::Sequence;
@@ -86,15 +85,10 @@ namespace framework
 
 static GlobalImageList*     pGlobalImageList = nullptr;
 
-namespace
-{
-    class theGlobalImageListMutex
-        : public rtl::Static<osl::Mutex, theGlobalImageListMutex> {};
-}
-
 static osl::Mutex& getGlobalImageListMutex()
 {
-    return theGlobalImageListMutex::get();
+    static osl::Mutex mutex;
+    return mutex;
 }
 
 static GlobalImageList* getGlobalImageList( const uno::Reference< uno::XComponentContext >& rxContext )

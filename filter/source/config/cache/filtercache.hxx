@@ -29,7 +29,6 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Any.h>
 #include <comphelper/documentconstants.hxx>
-#include <rtl/instance.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 
@@ -933,7 +932,7 @@ class FilterCache : public BaseLock
         static css::uno::Sequence< OUString > impl_convertFlagField2FlagNames(SfxFilterFlags nFlags);
 };
 
-struct TheFilterCache: public rtl::Static<FilterCache, TheFilterCache> {};
+FilterCache& GetTheFilterCache();
 
 } // namespace filter::config
 
