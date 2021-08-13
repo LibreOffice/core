@@ -125,6 +125,7 @@ private:
     std::unique_ptr<weld::Button> m_xEditBtn;
 
     DECL_LINK(ModifyHdl_Impl, weld::Entry&, void);
+    DECL_LINK(ActivateHdl_Impl, weld::Entry&, bool);
     DECL_LINK(AssignHdl_Impl, weld::Button&, void);
     DECL_LINK(SelectHdl_Impl, weld::TreeView&, void);
     DECL_LINK(DblClickHdl_Impl, weld::TreeView&, bool);
