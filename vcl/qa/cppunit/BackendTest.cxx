@@ -1273,6 +1273,26 @@ public:
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
 
+    void testDrawOpenBezierWithPolyLine()
+    {
+        vcl::test::OutputDeviceTestPolyLine aOutDevTest;
+        Bitmap aBitmap = aOutDevTest.setupOpenBezier();
+        auto eResult = vcl::test::OutputDeviceTestCommon::checkOpenBezier(aBitmap);
+        exportImage("19-01_open_bezier-polyline.png", aBitmap);
+        if (SHOULD_ASSERT)
+            CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
+    }
+
+    void testDrawOpenBezierWithPolyLineB2D()
+    {
+        vcl::test::OutputDeviceTestPolyLineB2D aOutDevTest;
+        Bitmap aBitmap = aOutDevTest.setupOpenBezier();
+        auto eResult = vcl::test::OutputDeviceTestCommon::checkOpenBezier(aBitmap);
+        exportImage("19-01_open_bezier-polyline_b2d.png", aBitmap);
+        if (SHOULD_ASSERT)
+            CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
+    }
+
     void testTdf124848()
     {
 // TODO: This unit test is not executed for macOS unless bitmap scaling is implemented
@@ -1450,6 +1470,9 @@ public:
     CPPUNIT_TEST(testDrawOpenPolygonWithPolygon);
     CPPUNIT_TEST(testDrawOpenPolygonWithPolyPolygon);
     CPPUNIT_TEST(testDrawOpenPolygonWithPolyPolygonB2D);
+
+    CPPUNIT_TEST(testDrawOpenBezierWithPolyLine);
+    CPPUNIT_TEST(testDrawOpenBezierWithPolyLineB2D);
 
     CPPUNIT_TEST(testTdf124848);
     CPPUNIT_TEST(testTdf136171);
