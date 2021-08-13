@@ -53,19 +53,8 @@ namespace drawinglayer::processor3d
 
                 if(xReference.is())
                 {
-                    // try to cast to BasePrimitive3D implementation
-                    const primitive3d::BasePrimitive3D* pBasePrimitive = dynamic_cast< const primitive3d::BasePrimitive3D* >(xReference.get());
-
-                    if(pBasePrimitive)
-                    {
-                        processBasePrimitive3D(*pBasePrimitive);
-                    }
-                    else
-                    {
-                        // unknown implementation, use UNO API call instead and process recursively
-                        const uno::Sequence< beans::PropertyValue >& rViewParameters(getViewInformation3D().getViewInformationSequence());
-                        process(comphelper::sequenceToContainer<primitive3d::Primitive3DContainer>(xReference->getDecomposition(rViewParameters)));
-                    }
+                    const primitive3d::BasePrimitive3D* pBasePrimitive = static_cast< const primitive3d::BasePrimitive3D* >(xReference.get());
+                    processBasePrimitive3D(*pBasePrimitive);
                 }
             }
         }

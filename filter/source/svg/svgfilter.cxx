@@ -267,11 +267,9 @@ bool SVGFilter::filterImpressOrDraw( const Sequence< PropertyValue >& rDescripto
                     {
                         if(rCandidate.is())
                         {
-                            // try to cast to BasePrimitive2D implementation
-                            const drawinglayer::primitive2d::BasePrimitive2D* pBasePrimitive(
-                                dynamic_cast< const drawinglayer::primitive2d::BasePrimitive2D* >(rCandidate.get()));
+                            auto pBasePrimitive = static_cast< const drawinglayer::primitive2d::BasePrimitive2D* >(rCandidate.get());
 
-                            if(pBasePrimitive && PRIMITIVE2D_ID_HIDDENGEOMETRYPRIMITIVE2D != pBasePrimitive->getPrimitive2DID())
+                            if(PRIMITIVE2D_ID_HIDDENGEOMETRYPRIMITIVE2D != pBasePrimitive->getPrimitive2DID())
                             {
                                 bAllAreHiddenGeometry = false;
                                 break;

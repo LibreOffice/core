@@ -98,20 +98,8 @@ namespace drawinglayer::primitive3d
 
             if(rCandidate.is())
             {
-                // try to get C++ implementation base
-                const BasePrimitive3D* pCandidate(dynamic_cast< BasePrimitive3D* >(rCandidate.get()));
-
-                if(pCandidate)
-                {
-                    // use it if possible
-                    aRetval.expand(pCandidate->getB3DRange(aViewInformation));
-                }
-                else
-                {
-                    // use UNO API call instead
-                    const uno::Sequence< beans::PropertyValue >& rViewParameters(aViewInformation.getViewInformationSequence());
-                    aRetval.expand(basegfx::unotools::b3DRectangleFromRealRectangle3D(rCandidate->getRange(rViewParameters)));
-                }
+                const BasePrimitive3D* pCandidate(static_cast< BasePrimitive3D* >(rCandidate.get()));
+                aRetval.expand(pCandidate->getB3DRange(aViewInformation));
             }
 
             return aRetval;
@@ -149,13 +137,8 @@ namespace drawinglayer::primitive3d
                 return true;
             }
 
-            const BasePrimitive3D* pA(dynamic_cast< const BasePrimitive3D* >(rxA.get()));
-            const BasePrimitive3D* pB(dynamic_cast< const BasePrimitive3D* >(rxB.get()));
-
-            if(!pA || !pB)
-            {
-                return false;
-            }
+            const BasePrimitive3D* pA(static_cast< const BasePrimitive3D* >(rxA.get()));
+            const BasePrimitive3D* pB(static_cast< const BasePrimitive3D* >(rxB.get()));
 
             return pA->operator==(*pB);
         }
