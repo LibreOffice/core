@@ -311,13 +311,13 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, SwPaM& rCursor, SvStream& rIn,
     m_bBodySeen( false ),
     m_bReadingHeaderOrFooter( false ),
     m_bNotifyMacroEventRead( false ),
+    m_bFuzzing(utl::ConfigManager::IsFuzzing()),
     m_isInTableStructure(false),
     m_nTableDepth( 0 ),
     m_pTempViewFrame(nullptr)
 {
-    const bool bFuzzing = utl::ConfigManager::IsFuzzing();
     // If requested explicitly, then force ignoring of comments (don't create postits for them).
-    if (!bFuzzing)
+    if (!m_bFuzzing)
     {
         if (officecfg::Office::Writer::Filter::Import::HTML::IgnoreComments::get())
             m_bIgnoreHTMLComments = true;
@@ -334,7 +334,7 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, SwPaM& rCursor, SvStream& rIn,
     memset(m_xAttrTab.get(), 0, sizeof(HTMLAttrTable));
 
     // Read the font sizes 1-7 from the INI file
-    if (!bFuzzing)
+    if (!m_bFuzzing)
     {
         m_aFontHeights[0] = officecfg::Office::Common::Filter::HTML::Import::FontSize::Size_1::get() * 20;
         m_aFontHeights[1] = officecfg::Office::Common::Filter::HTML::Import::FontSize::Size_2::get() * 20;
@@ -371,7 +371,7 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, SwPaM& rCursor, SvStream& rIn,
     m_xDoc->getIDocumentSettingAccess().set(DocumentSettingId::HTML_MODE, true);
 
     m_pCSS1Parser.reset(new SwCSS1Parser(m_xDoc.get(), *this, m_aFontHeights, m_sBaseURL, IsNewDoc()));
-    if (!bFuzzing)
+    if (!m_bFuzzing)
         m_pCSS1Parser->SetIgnoreFontFamily( officecfg::Office::Common::Filter::HTML::Import::FontSetting::get() );
 
     if( bReadUTF8 )
@@ -884,7 +884,7 @@ void SwHTMLParser::Continue( HtmlTokenId nToken )
         }
 
         // adjust AutoLoad in DocumentProperties
-        if (!utl::ConfigManager::IsFuzzing() && IsNewDoc())
+        if (!m_bFuzzing && IsNewDoc())
         {
             SwDocShell *pDocShell(m_xDoc->GetDocShell());
             OSL_ENSURE(pDocShell, "no SwDocShell");

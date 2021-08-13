@@ -643,7 +643,7 @@ IMAGE_SETEVENT:
 
     // bPercentWidth / bPercentHeight means we have a percent size.  If that's not the case and we have no
     // size from nWidth / nHeight either, then inspect the image header.
-    if ((!bPercentWidth && !nWidth) && (!bPercentHeight && !nHeight) && allowAccessLink(*m_xDoc))
+    if ((!bPercentWidth && !nWidth) && (!bPercentHeight && !nHeight) && !m_bFuzzing && allowAccessLink(*m_xDoc))
     {
         GraphicDescriptor aDescriptor(aGraphicURL);
         if (aDescriptor.Detect(/*bExtendedInfo=*/true))
