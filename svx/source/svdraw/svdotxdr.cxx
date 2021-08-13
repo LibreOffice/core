@@ -211,7 +211,7 @@ bool SdrTextObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 
     AdaptTextMinSize();
 
-    SetRectsDirty();
+    SetBoundAndSnapRectsDirty();
     if (auto pRectObj = dynamic_cast<SdrRectObj *>(this)) {
         pRectObj->SetXPolyDirty();
     }

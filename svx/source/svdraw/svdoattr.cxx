@@ -66,7 +66,7 @@ void SdrAttrObj::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
     {
         tools::Rectangle aBoundRect = GetLastBoundRect();
         SetBoundRectDirty();
-        SetRectsDirty(true);
+        SetBoundAndSnapRectsDirty(/*bNotMyself*/ true);
 
         // This may have led to object change
         SetChanged();

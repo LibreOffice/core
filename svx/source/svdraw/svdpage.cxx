@@ -270,7 +270,7 @@ void SdrObjList::SetSdrObjListRectsDirty()
 
     if(nullptr != pParentSdrObject)
     {
-        pParentSdrObject->SetRectsDirty();
+        pParentSdrObject->SetBoundAndSnapRectsDirty();
     }
 }
 

@@ -196,7 +196,7 @@ E3dScene::E3dScene(SdrModel& rSdrModel, E3dScene const & rSource)
         // tdf#116979: needed here, we need bSnapRectDirty to be true
         // which it is after using SdrObject::operator= (see above),
         // but set to false again using CopyObjects
-        SetRectsDirty();
+        SetBoundAndSnapRectsDirty();
     }
 
     // copy local data
@@ -318,7 +318,7 @@ void E3dScene::SetBoundRectDirty()
 
 void E3dScene::NbcSetSnapRect(const tools::Rectangle& rRect)
 {
-    SetRectsDirty();
+    SetBoundAndSnapRectsDirty();
     E3dObject::NbcSetSnapRect(rRect);
     aCamera.SetDeviceWindow(rRect);
     aCameraSet.SetViewportRectangle(rRect);
@@ -349,7 +349,7 @@ void E3dScene::SetCamera(const Camera3D& rNewCamera)
     aCamera = rNewCamera;
     static_cast<sdr::properties::E3dSceneProperties&>(GetProperties()).SetSceneItemsFromCamera();
 
-    SetRectsDirty();
+    SetBoundAndSnapRectsDirty();
 
     // Turn off ratio
     GetCameraSet().SetRatio(0.0);
@@ -380,7 +380,7 @@ void E3dScene::StructureChanged()
 
     if(nullptr != pScene && !pScene->mbSkipSettingDirty)
     {
-        SetRectsDirty();
+        SetBoundAndSnapRectsDirty();
     }
 
     ImpCleanup3DDepthMapper();
@@ -475,7 +475,7 @@ void E3dScene::SetAllSceneRectsDirty()
 
     if(nullptr != pScene)
     {
-        pScene->SetRectsDirty();
+        pScene->SetBoundAndSnapRectsDirty();
     }
 }
 
@@ -521,7 +521,7 @@ void E3dScene::RestoreGeoData(const SdrObjGeoData& rGeo)
 
 void E3dScene::Notify(SfxBroadcaster &rBC, const SfxHint  &rHint)
 {
-    SetRectsDirty();
+    SetBoundAndSnapRectsDirty();
     E3dObject::Notify(rBC, rHint);
 }
 
@@ -629,12 +629,12 @@ void E3dScene::NbcRotate(const Point& rRef, Degree100 nAngle, double sn, double 
     aRotation.rotate(0.0, 0.0, fAngleInRad);
     NbcSetTransform(aRotation * GetTransform());
 
-    SetRectsDirty();    // This forces a recalculation of all BoundRects
+    SetBoundAndSnapRectsDirty();    // This forces a recalculation of all BoundRects
     NbcRotateGluePoints(rRef,nAngle,sn,cs);  // Rotate the glue points (who still
                                             // have coordinates relative to the
                                             // original page)
     SetGlueReallyAbsolute(false);  // from now they are again relative to BoundRect (that is defined as aOutRect)
-    SetRectsDirty();
+    SetBoundAndSnapRectsDirty();
 }
 
 void E3dScene::RecalcSnapRect()
@@ -714,7 +714,7 @@ bool E3dScene::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
     rStat.TakeCreateRect(aRect1);
     aRect1.Justify();
     NbcSetSnapRect(aRect1);
-    SetRectsDirty();
+    SetBoundAndSnapRectsDirty();
     return (eCmd==SdrCreateCmd::ForceEnd || rStat.GetPointCount()>=2);
 }
 
@@ -803,10 +803,10 @@ SdrObject* E3dScene::RemoveObject(size_t nObjNum)
     return pRetval;
 }
 
-void E3dScene::SetRectsDirty(bool bNotMyself, bool bRecursive)
+void E3dScene::SetBoundAndSnapRectsDirty(bool bNotMyself, bool bRecursive)
 {
     // call parent
-    E3dObject::SetRectsDirty(bNotMyself, bRecursive);
+    E3dObject::SetBoundAndSnapRectsDirty(bNotMyself, bRecursive);
 
     for(size_t a = 0; a < GetObjCount(); ++a)
     {
@@ -814,7 +814,7 @@ void E3dScene::SetRectsDirty(bool bNotMyself, bool bRecursive)
 
         if(pCandidate)
         {
-            pCandidate->SetRectsDirty(bNotMyself, false);
+            pCandidate->SetBoundAndSnapRectsDirty(bNotMyself, false);
         }
     }
 }
