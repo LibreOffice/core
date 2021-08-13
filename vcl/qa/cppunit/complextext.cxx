@@ -88,8 +88,8 @@ void VclComplexTextTest::testArabic()
     // exact bounding rectangle, not essentially the same as text width/height
     tools::Rectangle aBoundRect;
     pOutDev->GetTextBoundRect(aBoundRect, aOneTwoThree);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0, aBoundRect.getX(), 1); // This sometimes equals to 1
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(1, aBoundRect.getY(), 1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0, aBoundRect.Left(), 1); // This sometimes equals to 1
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1, aBoundRect.Top(), 1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(71, aBoundRect.getWidth(), 1); // This sometimes equals to 70
     CPPUNIT_ASSERT_DOUBLES_EQUAL(15, aBoundRect.getHeight(), 1);
 

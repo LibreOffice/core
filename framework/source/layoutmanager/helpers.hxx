@@ -49,7 +49,6 @@ ToolBox* getToolboxPtr( vcl::Window* pWindow );
 vcl::Window* getWindowFromXUIElement( const css::uno::Reference< css::ui::XUIElement >& xUIElement );
 SystemWindow* getTopSystemWindow( const css::uno::Reference< css::awt::XWindow >& xWindow );
 bool equalRectangles( const css::awt::Rectangle& rRect1, const css::awt::Rectangle& rRect2 );
-void setZeroRectangle( ::tools::Rectangle& rRect );
 bool lcl_checkUIElement(const css::uno::Reference< css::ui::XUIElement >& xUIElement,css::awt::Rectangle& _rPosSize, css::uno::Reference< css::awt::XWindow >& _xWindow);
 css::uno::Reference< css::awt::XWindowPeer > createToolkitWindow( const css::uno::Reference< css::uno::XComponentContext >& rxContext, const css::uno::Reference< css::awt::XWindowPeer >& rParent, const char* pService );
 WindowAlign ImplConvertAlignment( css::ui::DockingArea aAlignment );

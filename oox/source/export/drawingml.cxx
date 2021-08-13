@@ -5319,9 +5319,10 @@ void DrawingML::WriteFromTo(const uno::Reference<css::drawing::XShape>& rXShape,
             // aTopLeft needs correction for rotated customshapes
             if (pObj->GetObjIdentifier() == OBJ_CUSTOMSHAPE)
             {
-                const tools::Rectangle& aSnapRect(pObj->GetSnapRect()); // bounding box of the rotated shape
-                aTopLeft.X = aSnapRect.getX() + (aSnapRect.GetWidth() / 2) - nHalfWidth;
-                aTopLeft.Y = aSnapRect.getY() + (aSnapRect.GetHeight() / 2) - nHalfHeight;
+                // Center of bounding box of the rotated shape
+                const auto aSnapRectCenter(pObj->GetSnapRect().Center());
+                aTopLeft.X = aSnapRectCenter.X() - nHalfWidth;
+                aTopLeft.Y = aSnapRectCenter.Y() - nHalfHeight;
             }
 
             // MSO changes the anchor positions at these angles and that does an extra 90 degrees

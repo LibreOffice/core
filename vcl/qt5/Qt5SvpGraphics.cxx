@@ -88,8 +88,8 @@ void Qt5SvpGraphics::handleDamage(const tools::Rectangle& rDamagedRegion)
 
     BitmapBuffer aBuffer;
     QImage2BitmapBuffer(*pImage, aBuffer);
-    SalTwoRect aTR(0, 0, pImage->width(), pImage->height(), rDamagedRegion.getX(),
-                   rDamagedRegion.getY(), rDamagedRegion.GetWidth(), rDamagedRegion.GetHeight());
+    SalTwoRect aTR(0, 0, pImage->width(), pImage->height(), rDamagedRegion.Left(),
+                   rDamagedRegion.Top(), rDamagedRegion.GetWidth(), rDamagedRegion.GetHeight());
     drawBitmap(aTR, &aBuffer, CAIRO_OPERATOR_OVER);
 }
 

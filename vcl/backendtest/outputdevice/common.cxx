@@ -135,8 +135,8 @@ std::map<Color, int> collectColors(Bitmap& bitmap, const tools::Rectangle& recta
 {
     std::map<Color, int> colors;
     BitmapScopedWriteAccess pAccess(bitmap);
-    for( tools::Long y = rectangle.getY(); y < rectangle.GetHeight(); ++y)
-        for( tools::Long x = rectangle.getX(); x < rectangle.GetWidth(); ++x)
+    for (tools::Long y = rectangle.Top(); y < rectangle.Bottom(); ++y)
+        for (tools::Long x = rectangle.Left(); x < rectangle.Right(); ++x)
           ++colors[pAccess->GetPixel(y, x)]; // operator[] initializes to 0 (default ctor) if creating
     return colors;
 }

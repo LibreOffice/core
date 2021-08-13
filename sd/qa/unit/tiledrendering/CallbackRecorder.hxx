@@ -37,8 +37,8 @@ void lcl_convertRectangle(const OUString& rString, tools::Rectangle& rRectangle)
 {
     uno::Sequence<OUString> aSeq = comphelper::string::convertCommaSeparated(rString);
     CPPUNIT_ASSERT(aSeq.getLength() == 4 || aSeq.getLength() == 5);
-    rRectangle.setX(aSeq[0].toInt32());
-    rRectangle.setY(aSeq[1].toInt32());
+    rRectangle.SetLeft(aSeq[0].toInt32());
+    rRectangle.SetTop(aSeq[1].toInt32());
     rRectangle.setWidth(aSeq[2].toInt32());
     rRectangle.setHeight(aSeq[3].toInt32());
 }

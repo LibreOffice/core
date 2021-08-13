@@ -1347,13 +1347,13 @@ ShapeExport& ShapeExport::WriteConnectorShape( const Reference< XShape >& xShape
     tools::Rectangle aRect( Point( aStartPoint.X, aStartPoint.Y ), Point( aEndPoint.X, aEndPoint.Y ) );
     if( aRect.getWidth() < 0 ) {
         bFlipH = true;
-        aRect.setX( aEndPoint.X );
+        aRect.SetLeft(aEndPoint.X);
         aRect.setWidth( aStartPoint.X - aEndPoint.X );
     }
 
     if( aRect.getHeight() < 0 ) {
         bFlipV = true;
-        aRect.setY( aEndPoint.Y );
+        aRect.SetTop(aEndPoint.Y);
         aRect.setHeight( aStartPoint.Y - aEndPoint.Y );
     }
 

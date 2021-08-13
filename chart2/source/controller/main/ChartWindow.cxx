@@ -38,9 +38,7 @@ namespace
 {
 ::tools::Rectangle lcl_AWTRectToVCLRect( const css::awt::Rectangle & rAWTRect )
 {
-    ::tools::Rectangle aResult;
-    aResult.setX( rAWTRect.X );
-    aResult.setY( rAWTRect.Y );
+    ::tools::Rectangle aResult(rAWTRect.X, rAWTRect.Y);
     aResult.setWidth( rAWTRect.Width );
     aResult.setHeight( rAWTRect.Height );
     return aResult;

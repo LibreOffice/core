@@ -2947,7 +2947,7 @@ void SdrObjCustomShape::AdjustToMaxRect(const tools::Rectangle& rMaxRect, bool b
     aB2DRange = aB2DPolygon.getB2DRange();
     const double fPolygonLeft = aB2DRange.getMinX();
     const double fPolygonTop = aB2DRange.getMinY();
-    aMathMatrix.translate(rMaxRect.getX() - fPolygonLeft, rMaxRect.getY() - fPolygonTop);
+    aMathMatrix.translate(rMaxRect.Left() - fPolygonLeft, rMaxRect.Top() - fPolygonTop);
 
     // Create a Matrix from aMathMatrix, which is usable with TRSetBaseGeometry
     aMathMatrix.decompose(aScale, aTranslate, fRotate, fShearX);

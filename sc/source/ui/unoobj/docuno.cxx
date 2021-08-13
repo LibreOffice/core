@@ -1845,7 +1845,6 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 
     const ScRange* pSelRange = nullptr;
     if ( bSinglePageSheets )
     {
-        awt::Size aPageSize;
         SCCOL nStartCol;
         SCROW nStartRow;
         const ScDocument* pDocument = &pDocShell->GetDocument();
@@ -1864,11 +1863,8 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 
                     aRange.aStart.Col(), aRange.aStart.Row(),
                     aRange.aEnd.Col(), aRange.aEnd.Row(), aRange.aStart.Tab()));
 
-        aPageSize.Width = aMMRect.GetWidth();
-        aPageSize.Height = aMMRect.GetHeight();
-
-        awt::Size aCalcPageSize ( aMMRect.GetSize().Width(),  aMMRect.GetSize().Height() );
-        awt::Point aCalcPagePos( aMMRect.getX(), aMMRect.getY() );
+        const awt::Size aPageSize(aMMRect.GetWidth(), aMMRect.GetHeight());
+        const awt::Point aCalcPagePos(aMMRect.Left(), aMMRect.Top());
 
         uno::Sequence<beans::PropertyValue> aSequence(5);
         beans::PropertyValue* pArray = aSequence.getArray();
@@ -1880,7 +1876,7 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 
         pArray[2].Name = SC_UNONAME_SOURCERANGE;
         pArray[2].Value <<= aRangeAddress;
         pArray[3].Name = SC_UNONAME_CALCPAGESIZE;
-        pArray[3].Value <<= aCalcPageSize;
+        pArray[3].Value <<= aPageSize;
         pArray[4].Name = SC_UNONAME_CALCPAGEPOS;
         pArray[4].Value <<= aCalcPagePos;
 
@@ -1981,8 +1977,8 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 
                     aCellRange.aStart.Col(), aCellRange.aStart.Row(),
                     aCellRange.aEnd.Col(), aCellRange.aEnd.Row(), aCellRange.aStart.Tab()));
 
-        awt::Size aCalcPageSize ( aMMRect.GetSize().Width(),  aMMRect.GetSize().Height() );
-        awt::Point aCalcPagePos( aMMRect.getX(), aMMRect.getY() );
+        const awt::Size aCalcPageSize(aMMRect.GetWidth(), aMMRect.GetHeight());
+        const awt::Point aCalcPagePos(aMMRect.Left(), aMMRect.Top());
 
         pArray[2].Name = SC_UNONAME_SOURCERANGE;
         pArray[2].Value <<= aRangeAddress;
