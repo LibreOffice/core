@@ -56,7 +56,7 @@ void AquaSkiaSalGraphicsImpl::createWindowContext(bool forceRaster)
     switch (renderMethod)
     {
         case RenderRaster:
-            displayParams.fColorType = kBGRA_8888_SkColorType; // TODO
+            displayParams.fColorType = kRGBA_8888_SkColorType; // TODO
             mWindowContext.reset(
                 new AquaSkiaWindowContextRaster(GetWidth(), GetHeight(), displayParams, this));
             break;
@@ -75,9 +75,52 @@ void AquaSkiaSalGraphicsImpl::performFlush()
     if (mWindowContext)
     {
         if (mDirtyRect.intersect(SkIRect::MakeWH(GetWidth(), GetHeight())))
-            mWindowContext->swapBuffers(&mDirtyRect); // TODO
+            flushToScreen(mDirtyRect);
         mDirtyRect.setEmpty();
     }
+}
+
+void AquaSkiaSalGraphicsImpl::flushToScreen(const SkIRect& rect)
+{
+    // Based on AquaGraphicsBackend::drawBitmap().
+    if (!mrShared.checkContext())
+        return;
+
+    assert(mSurface.get());
+    // Do not use sub-rect, it creates copies of the data.
+    sk_sp<SkImage> image = makeCheckedImageSnapshot(mSurface);
+    SkPixmap pixmap;
+    if (!image->peekPixels(&pixmap))
+        abort();
+    // This creates the bitmap context from the cropped part, writable_addr32() will get
+    // the first pixel of rect.topLeft(), and using pixmap.rowBytes() ensures the following
+    // pixel lines will be read from correct positions.
+    CGContextRef context
+        = CGBitmapContextCreate(pixmap.writable_addr32(rect.left(), rect.top()), rect.width(),
+                                rect.height(), 8, pixmap.rowBytes(), // TODO
+                                GetSalData()->mxRGBSpace, kCGImageAlphaNoneSkipLast); // TODO
+    assert(context); // TODO
+    CGImageRef screenImage = CGBitmapContextCreateImage(context);
+    assert(screenImage); // TODO
+    if (mrShared.isFlipped())
+    {
+        const CGRect screenRect = CGRectMake(rect.left(), GetHeight() - rect.top() - rect.height(),
+                                             rect.width(), rect.height());
+        mrShared.maContextHolder.saveState();
+        CGContextTranslateCTM(mrShared.maContextHolder.get(), 0, pixmap.height());
+        CGContextScaleCTM(mrShared.maContextHolder.get(), 1, -1);
+        CGContextDrawImage(mrShared.maContextHolder.get(), screenRect, screenImage);
+        mrShared.maContextHolder.restoreState();
+    }
+    else
+    {
+        const CGRect screenRect = CGRectMake(rect.left(), rect.top(), rect.width(), rect.height());
+        CGContextDrawImage(mrShared.maContextHolder.get(), screenRect, screenImage);
+    }
+
+    CGImageRelease(screenImage);
+    CGContextRelease(context);
+    mrShared.refreshRect(rect.left(), rect.top(), rect.width(), rect.height());
 }
 
 std::unique_ptr<sk_app::WindowContext> createVulkanWindowContext(bool /*temporary*/)
