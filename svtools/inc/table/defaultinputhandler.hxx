@@ -20,24 +20,18 @@
 #pragma once
 
 #include <table/tableinputhandler.hxx>
+#include <rtl/ref.hxx>
+#include <mousefunction.hxx>
 
 #include <memory>
+#include <vector>
 
 
 namespace svt::table
 {
 
-
-    struct DefaultInputHandler_Impl;
-
-
-    //= DefaultInputHandler
-
     class DefaultInputHandler final : public ITableInputHandler
     {
-    private:
-        ::std::unique_ptr< DefaultInputHandler_Impl > m_pImpl;
-
     public:
         DefaultInputHandler();
         virtual ~DefaultInputHandler() override;
@@ -48,6 +42,13 @@ namespace svt::table
         virtual bool    KeyInput        ( ITableControl& _rControl, const KeyEvent& rKEvt ) override;
         virtual bool    GetFocus        ( ITableControl& _rControl ) override;
         virtual bool    LoseFocus       ( ITableControl& _rControl ) override;
+
+    private:
+        bool delegateMouseEvent( ITableControl& i_control, const MouseEvent& i_event,
+            FunctionResult ( MouseFunction::*i_handlerMethod )( ITableControl&, const MouseEvent& ) );
+
+        rtl::Reference< MouseFunction >  pActiveFunction;
+        std::vector< rtl::Reference< MouseFunction > >  aMouseFunctions;
     };
 
 
