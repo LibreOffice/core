@@ -18,7 +18,7 @@
  */
 
 
-#include "mousefunction.hxx"
+#include <mousefunction.hxx>
 #include <table/tablecontrolinterface.hxx>
 #include <table/tablesort.hxx>
 
