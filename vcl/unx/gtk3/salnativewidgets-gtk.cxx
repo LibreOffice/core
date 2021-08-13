@@ -215,13 +215,8 @@ tools::Rectangle GtkSalGraphics::NWGetSpinButtonRect( ControlPart nPart, tools::
     gint buttonWidth = icon_size + padding.left + padding.right +
         border.left + border.right;
 
-    gint buttonHeight = icon_size + padding.top + padding.bottom +
-        border.top + border.bottom;
-
-    tools::Rectangle buttonRect;
-    buttonRect.SetSize(Size(buttonWidth, buttonHeight));
-    buttonRect.setY(aAreaRect.Top());
-    buttonRect.SetBottom( buttonRect.Top() + aAreaRect.GetHeight() );
+    tools::Rectangle buttonRect(Point(0, aAreaRect.Top()), Size(buttonWidth, 0));
+    buttonRect.setHeight(aAreaRect.GetHeight());
     tools::Rectangle partRect(buttonRect);
     if ( nPart == ControlPart::ButtonUp )
     {
@@ -327,26 +322,26 @@ tools::Rectangle GtkSalGraphics::NWGetScrollButtonRect( ControlPart nPart, tools
     if (nPart == ControlPart::ButtonUp)
     {
         aSize.setHeight( aSize.Height() * nFirst );
-        buttonRect.setX(aAreaRect.Left());
-        buttonRect.setY(aAreaRect.Top());
+        buttonRect.SetLeft(aAreaRect.Left());
+        buttonRect.SetTop(aAreaRect.Top());
     }
     else if (nPart == ControlPart::ButtonLeft)
     {
         aSize.setWidth( aSize.Width() * nFirst );
-        buttonRect.setX(aAreaRect.Left());
-        buttonRect.setY(aAreaRect.Top());
+        buttonRect.SetLeft(aAreaRect.Left());
+        buttonRect.SetTop(aAreaRect.Top());
     }
     else if (nPart == ControlPart::ButtonDown)
     {
         aSize.setHeight( aSize.Height() * nSecond );
-        buttonRect.setX(aAreaRect.Left());
-        buttonRect.setY(aAreaRect.Top() + aAreaRect.GetHeight() - aSize.Height());
+        buttonRect.SetLeft(aAreaRect.Left());
+        buttonRect.SetTop(aAreaRect.Top() + aAreaRect.GetHeight() - aSize.Height());
     }
     else if (nPart == ControlPart::ButtonRight)
     {
         aSize.setWidth( aSize.Width() * nSecond );
-        buttonRect.setX(aAreaRect.Left() + aAreaRect.GetWidth() - aSize.Width());
-        buttonRect.setY(aAreaRect.Top());
+        buttonRect.SetLeft(aAreaRect.Left() + aAreaRect.GetWidth() - aSize.Width());
+        buttonRect.SetTop(aAreaRect.Top());
     }
 
     buttonRect.SetSize(aSize);
@@ -810,10 +805,8 @@ void GtkSalGraphics::PaintOneSpinButton( GtkStyleContext *context,
 
     iconWidth = gdk_pixbuf_get_width(pixbuf)/scale;
     iconHeight = gdk_pixbuf_get_height(pixbuf)/scale;
-    tools::Rectangle arrowRect;
-    arrowRect.SetSize(Size(iconWidth, iconHeight));
-    arrowRect.setX( buttonRect.Left() + (buttonRect.GetWidth() - arrowRect.GetWidth()) / 2 );
-    arrowRect.setY( buttonRect.Top() + (buttonRect.GetHeight() - arrowRect.GetHeight()) / 2 );
+    tools::Rectangle arrowRect(buttonRect.Center() - Point(iconWidth / 2, iconHeight / 2),
+                               Size(iconWidth, iconHeight));
 
     gtk_style_context_save (context);
     gtk_style_context_set_scale (context, 1);

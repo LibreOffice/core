@@ -154,8 +154,7 @@ tools::Rectangle ImplCalcActionBounds(const MetaAction& rAct, const OutputDevice
                 {
                     tools::Rectangle aBoundRect1(
                         const_cast<OutputDevice&>(rOut).ImplGetTextBoundRect(*pSalLayout1));
-                    aActionBounds.SetLeft(rOut.PixelToLogic(aBoundRect1).getX()
-                                          + rOut.PixelToLogic(aBoundRect1).getWidth());
+                    aActionBounds.SetLeft(rOut.PixelToLogic(aBoundRect1).Right());
                 }
             }
         }
@@ -456,8 +455,7 @@ void SfxRedactionHelper::searchInMetaFile(const RedactionTarget& rRedactionTarge
                     // Calculate the difference between current wrong value and value should it be.
                     // Add the difference to current value.
                     // Then increase 10% of the new value to make it look better.
-                    aNewRect.SetTop(aNewRect.getY() + (aNewRect.getHeight() - aLastFontHeight)
-                                    - aLastFontHeight / 10);
+                    aNewRect.SetTop(aNewRect.Bottom() - aLastFontHeight - aLastFontHeight / 10);
                     aRedactionRectangles.push_back(aNewRect);
                 }
 
@@ -502,7 +500,7 @@ void SfxRedactionHelper::addRedactionRectToPage(
             "LineStyle", css::uno::makeAny(css::drawing::LineStyle::LineStyle_NONE));
 
         xRectShape->setSize(awt::Size(aNewRectangle.GetWidth(), aNewRectangle.GetHeight()));
-        xRectShape->setPosition(awt::Point(aNewRectangle.getX(), aNewRectangle.getY()));
+        xRectShape->setPosition(awt::Point(aNewRectangle.Left(), aNewRectangle.Top()));
 
         xPage->add(xRectShape);
     }

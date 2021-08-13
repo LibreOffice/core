@@ -202,8 +202,7 @@ tools::Rectangle ScAccessiblePreviewCell::GetBoundingBoxOnScreen() const
         if (pWindow)
         {
             tools::Rectangle aRect = pWindow->GetWindowExtentsRelative(nullptr);
-            aCellRect.setX(aCellRect.getX() + aRect.getX());
-            aCellRect.setY(aCellRect.getY() + aRect.getY());
+            aCellRect.Move(aRect.Left(), aRect.Top());
         }
     }
     return aCellRect;
@@ -223,8 +222,7 @@ tools::Rectangle ScAccessiblePreviewCell::GetBoundingBox() const
             if (xAccParentComp.is())
             {
                 tools::Rectangle aParentRect (VCLRectangle(xAccParentComp->getBounds()));
-                aCellRect.setX(aCellRect.getX() - aParentRect.getX());
-                aCellRect.setY(aCellRect.getY() - aParentRect.getY());
+                aCellRect.Move(-aParentRect.Left(), -aParentRect.Top());
             }
         }
     }

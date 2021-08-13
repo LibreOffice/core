@@ -57,6 +57,8 @@ ToolbarLayoutManager::ToolbarLayoutManager(
     m_xContext( rxContext),
     m_xUIElementFactoryManager( xUIElementFactory ),
     m_pParentLayouter( pParentLayouter ),
+    m_aDockingArea(0, 0, 0, 0),
+    m_aDockingAreaOffsets(0, 0, 0, 0),
     m_eDockOperation( DOCKOP_ON_COLROW ),
     m_ePreviewDetection( PREVIEWFRAME_UNKNOWN ),
     m_bComponentAttached( false ),
@@ -66,9 +68,6 @@ ToolbarLayoutManager::ToolbarLayoutManager(
     m_bLayoutInProgress( false ),
     m_bToolbarCreation( false )
 {
-    // initialize rectangles to zero values
-    setZeroRectangle( m_aDockingAreaOffsets );
-    setZeroRectangle( m_aDockingArea );
 }
 
 ToolbarLayoutManager::~ToolbarLayoutManager()

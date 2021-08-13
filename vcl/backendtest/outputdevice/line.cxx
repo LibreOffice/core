@@ -126,12 +126,11 @@ Bitmap OutputDeviceTestLine::setupDashedLine()
     std::vector<double> stroke({ 2.0, 1.0 });
     mpVirtualDevice->DrawPolyLineDirect( basegfx::B2DHomMatrix(),
         basegfx::B2DPolygon{
-            basegfx::B2DPoint(rectangle.getX(), rectangle.getY()),
-            basegfx::B2DPoint(rectangle.getX(), rectangle.getY() + rectangle.getHeight()),
-            basegfx::B2DPoint(rectangle.getX() + rectangle.getWidth(),
-                              rectangle.getY() + rectangle.getHeight()),
-            basegfx::B2DPoint(rectangle.getX() + rectangle.getWidth(), rectangle.getY()),
-            basegfx::B2DPoint(rectangle.getX(), rectangle.getY())},
+            basegfx::B2DPoint(rectangle.Left(), rectangle.Top()),
+            basegfx::B2DPoint(rectangle.Left(), rectangle.Bottom()),
+            basegfx::B2DPoint(rectangle.Right(), rectangle.Bottom()),
+            basegfx::B2DPoint(rectangle.Right(), rectangle.Top()),
+            basegfx::B2DPoint(rectangle.Left(), rectangle.Top())},
         1, 0, &stroke, basegfx::B2DLineJoin::NONE );
 
     return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());

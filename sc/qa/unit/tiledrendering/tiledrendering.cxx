@@ -260,8 +260,8 @@ static void lcl_convertRectangle(const OUString& rString, Rectangle& rRectangle)
 {
     uno::Sequence<OUString> aSeq = comphelper::string::convertCommaSeparated(rString);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4), aSeq.getLength());
-    rRectangle.setX(aSeq[0].toInt32());
-    rRectangle.setY(aSeq[1].toInt32());
+    rRectangle.SetLeft(aSeq[0].toInt32());
+    rRectangle.SetTop(aSeq[1].toInt32());
     rRectangle.setWidth(aSeq[2].toInt32());
     rRectangle.setHeight(aSeq[3].toInt32());
 }
@@ -469,8 +469,8 @@ struct EditCursorMessage final {
         aVal = aTree.get_child("relrect").get_value<std::string>();
         aSeq = comphelper::string::convertCommaSeparated(OUString::createFromAscii(aVal.c_str()));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(4), aSeq.getLength());
-        m_aRelRect.setX(aSeq[0].toInt32());
-        m_aRelRect.setY(aSeq[1].toInt32());
+        m_aRelRect.SetLeft(aSeq[0].toInt32());
+        m_aRelRect.SetTop(aSeq[1].toInt32());
         m_aRelRect.setWidth(aSeq[2].toInt32());
         m_aRelRect.setHeight(aSeq[3].toInt32());
     }
@@ -529,8 +529,8 @@ struct TextSelectionMessage
                 aSeq = comphelper::string::convertCommaSeparated(OUString::createFromAscii(aRectString.c_str()));
                 CPPUNIT_ASSERT_EQUAL(sal_Int32(4), aSeq.getLength());
                 tools::Rectangle aRect;
-                aRect.setX(aSeq[0].toInt32());
-                aRect.setY(aSeq[1].toInt32());
+                aRect.SetLeft(aSeq[0].toInt32());
+                aRect.SetTop(aSeq[1].toInt32());
                 aRect.setWidth(aSeq[2].toInt32());
                 aRect.setHeight(aSeq[3].toInt32());
 
@@ -621,8 +621,8 @@ public:
             uno::Sequence<OUString> aSeq = comphelper::string::convertCommaSeparated(OUString::createFromAscii(pPayload));
             m_aCellCursorBounds = tools::Rectangle();
             if (aSeq.getLength() == 6) {
-                m_aCellCursorBounds.setX(aSeq[0].toInt32());
-                m_aCellCursorBounds.setY(aSeq[1].toInt32());
+                m_aCellCursorBounds.SetLeft(aSeq[0].toInt32());
+                m_aCellCursorBounds.SetTop(aSeq[1].toInt32());
                 m_aCellCursorBounds.setWidth(aSeq[2].toInt32());
                 m_aCellCursorBounds.setHeight(aSeq[3].toInt32());
             }
@@ -669,8 +669,8 @@ public:
                 uno::Sequence<OUString> aSeq = comphelper::string::convertCommaSeparated(OUString::createFromAscii(pPayload));
                 CPPUNIT_ASSERT(aSeq.getLength() == 4 || aSeq.getLength() == 5);
                 tools::Rectangle aInvalidationRect;
-                aInvalidationRect.setX(aSeq[0].toInt32());
-                aInvalidationRect.setY(aSeq[1].toInt32());
+                aInvalidationRect.SetLeft(aSeq[0].toInt32());
+                aInvalidationRect.SetTop(aSeq[1].toInt32());
                 aInvalidationRect.setWidth(aSeq[2].toInt32());
                 aInvalidationRect.setHeight(aSeq[3].toInt32());
                 m_aInvalidations.push_back(aInvalidationRect);

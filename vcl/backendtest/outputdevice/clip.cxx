@@ -58,11 +58,10 @@ Bitmap OutputDeviceTestClip::setupClipB2DPolyPolygon()
     tools::Rectangle rectangle = maVDRectangle;
     rectangle.shrink(2);
     mpVirtualDevice->SetClipRegion(vcl::Region(basegfx::B2DPolyPolygon(basegfx::B2DPolygon{
-        basegfx::B2DPoint(rectangle.getX(), rectangle.getY()),
-        basegfx::B2DPoint(rectangle.getX(), rectangle.getY() + rectangle.getHeight()),
-        basegfx::B2DPoint(rectangle.getX() + rectangle.getWidth(),
-                          rectangle.getY() + rectangle.getHeight()),
-        basegfx::B2DPoint(rectangle.getX() + rectangle.getWidth(), rectangle.getY()),
+        basegfx::B2DPoint(rectangle.Left(), rectangle.Top()),
+        basegfx::B2DPoint(rectangle.Left(), rectangle.Bottom()),
+        basegfx::B2DPoint(rectangle.Right(), rectangle.Bottom()),
+        basegfx::B2DPoint(rectangle.Right(), rectangle.Top()),
     })));
     mpVirtualDevice->SetBackground(constFillColor);
     mpVirtualDevice->Erase(maVDRectangle);

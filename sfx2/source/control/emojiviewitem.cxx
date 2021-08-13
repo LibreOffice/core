@@ -42,11 +42,11 @@ void EmojiViewItem::calculateItemsPosition (const tools::Long /*nThumbnailHeight
                               css::lang::Locale() );
 
     Size aRectSize = maDrawArea.GetSize();
-    Point aPos = maDrawArea.TopLeft();
+    Point aPos = maDrawArea.TopCenter();
 
     // Calculate text position
-    aPos.setY( maDrawArea.getY() + (aRectSize.Height() - aTextDev.getTextHeight())/3 );
-    aPos.setX( maDrawArea.Left() + (aRectSize.Width() - aTextDev.getTextWidth(maTitle,0,nMaxTextLength))/2 );
+    aPos.Move(-aTextDev.getTextWidth(maTitle, 0, nMaxTextLength) / 2,
+              (aRectSize.Height() - aTextDev.getTextHeight()) / 3);
     maTextPos = aPos;
 }
 

@@ -119,8 +119,8 @@ awt::Rectangle SAL_CALL AccessiblePageShape::getBounds()
             ::tools::Rectangle aParentBBox (0,0, aParentSize.Width, aParentSize.Height);
             aBBox = aBBox.GetIntersection (aParentBBox);
             aBoundingBox = awt::Rectangle (
-                aBBox.getX(),
-                aBBox.getY(),
+                aBBox.Left(),
+                aBBox.Top(),
                 aBBox.getWidth(),
                 aBBox.getHeight());
         }

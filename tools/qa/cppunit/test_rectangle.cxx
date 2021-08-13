@@ -47,8 +47,8 @@ void Test::test_rectangle()
         CPPUNIT_ASSERT_EQUAL(tools::Long(1), aRect.GetWidth());
         CPPUNIT_ASSERT_EQUAL(tools::Long(1), aRect.GetHeight());
 
-        // Annoyingly getWidth and getHeight returns the wrong size
-        // that was explicitly input.
+        // getWidth and getHeight return the size that excludes one of the bounds,
+        // unlike the ctor and GetWidth / GetHeight that operate on inclusive size
         CPPUNIT_ASSERT_EQUAL(tools::Long(0), aRect.getWidth());
         CPPUNIT_ASSERT_EQUAL(tools::Long(0), aRect.getHeight());
 

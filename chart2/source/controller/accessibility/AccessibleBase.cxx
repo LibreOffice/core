@@ -655,7 +655,7 @@ awt::Rectangle SAL_CALL AccessibleBase::getBounds()
             awt::Point aOffset( aParentLocOnScreen.X - aULOnScreen.X,
                                 aParentLocOnScreen.Y - aULOnScreen.Y );
 
-            return awt::Rectangle( aRect.getX() - aOffset.X, aRect.getY() - aOffset.Y,
+            return awt::Rectangle( aRect.Left() - aOffset.X, aRect.Top() - aOffset.Y,
                                    aRect.getWidth(), aRect.getHeight());
         }
     }
