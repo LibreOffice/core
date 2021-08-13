@@ -95,6 +95,8 @@ public:
         // HAVE_ODBC_ADMINISTRATION
         if (loplugin::isSamePathname(fn, SRCDIR "/dbaccess/source/ui/dlg/dsselect.cxx"))
             return false;
+        if (loplugin::isSamePathname(fn, SRCDIR "/unotools/source/streaming/streamhelper.cxx"))
+            return false;
         return true;
     }
 
