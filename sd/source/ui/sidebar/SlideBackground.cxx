@@ -450,6 +450,10 @@ void SlideBackground::Update()
         default:
             break;
     }
+
+    // Need to do a relayouting, otherwise the panel size is not updated after show / hide controls
+    if (m_pPanel)
+        m_pPanel->TriggerDeckLayouting();
 }
 
 void SlideBackground::UpdateMarginBox()
