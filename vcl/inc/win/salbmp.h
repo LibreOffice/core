@@ -38,7 +38,7 @@ class WinSalBitmap final: public SalBitmap, public basegfx::SystemDependentDataH
 private:
     Size                maSize;
     HGLOBAL             mhDIB;
-    HBITMAP             mhDDB;
+    ScopedHBITMAP       mhDDB;
 
     sal_uInt16          mnBitCount;
 
@@ -48,7 +48,7 @@ private:
 public:
 
     HGLOBAL             ImplGethDIB() const { return mhDIB; }
-    HBITMAP             ImplGethDDB() const { return mhDDB; }
+    ScopedHBITMAP       ImplGethDDB() const { return mhDDB; }
 
     std::shared_ptr< Gdiplus::Bitmap > ImplGetGdiPlusBitmap(const WinSalBitmap* pAlphaSource = nullptr) const;
 
