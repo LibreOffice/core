@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "d1c28262_1883f242",
+        "filename": "starmath/source/mathml/export.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 503,
+      "author": {
+        "id": 1000638
+      },
+      "writtenOn": "2021-08-14T18:43:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "60e0dcf0_01c30a22",
+      "revId": "61a480b6e0e758c4a2794ee8d5d1632c91ba3f29",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f1b024a9_a6f0baac",
         "filename": "sw/source/filter/ww8/docxsdrexport.cxx",
         "patchSetId": 1
@@ -33,6 +51,24 @@
       "revId": "61a480b6e0e758c4a2794ee8d5d1632c91ba3f29",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6d8d01c7_36aee484",
+        "filename": "sw/source/filter/ww8/docxsdrexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 355,
+      "author": {
+        "id": 1000638
+      },
+      "writtenOn": "2021-08-14T18:43:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f1b024a9_a6f0baac",
+      "revId": "61a480b6e0e758c4a2794ee8d5d1632c91ba3f29",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
