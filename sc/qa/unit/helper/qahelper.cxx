@@ -591,7 +591,7 @@ OUString toString(
 ScDocShellRef ScBootstrapFixture::load( bool bReadWrite,
     const OUString& rURL, const OUString& rFilter, const OUString &rUserData,
     const OUString& rTypeName, SfxFilterFlags nFilterFlags, SotClipboardFormatId nClipboardID,
-    sal_uIntPtr nFilterVersion, const OUString* pPassword )
+    sal_uInt64 nFilterVersion, const OUString* pPassword )
 {
     auto pFilter = std::make_shared<SfxFilter>(
         rFilter,
@@ -624,7 +624,7 @@ ScDocShellRef ScBootstrapFixture::load( bool bReadWrite,
 ScDocShellRef ScBootstrapFixture::load(
     const OUString& rURL, const OUString& rFilter, const OUString &rUserData,
     const OUString& rTypeName, SfxFilterFlags nFilterFlags, SotClipboardFormatId nClipboardID,
-    sal_uIntPtr nFilterVersion, const OUString* pPassword )
+    sal_uInt64 nFilterVersion, const OUString* pPassword )
 {
     return load( false, rURL, rFilter, rUserData, rTypeName, nFilterFlags, nClipboardID,  nFilterVersion, pPassword );
 }
