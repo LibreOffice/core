@@ -472,17 +472,17 @@ public:
     constexpr Rectangle( tools::Long nLeft, tools::Long nTop );
     constexpr Rectangle( const Point& rLT, const Size& rSize );
 
-    static Rectangle    Justify( const Point& rLT, const Point& rRB );
+    inline constexpr static Rectangle Justify( const Point& rLT, const Point& rRB );
 
     constexpr tools::Long Left() const { return nLeft; }
-    constexpr tools::Long Right() const { return nRight == RECT_EMPTY ? nLeft : nRight; }
+    constexpr tools::Long Right() const { return IsWidthEmpty() ? nLeft : nRight; }
     constexpr tools::Long Top() const { return nTop; }
-    constexpr tools::Long Bottom() const { return nBottom == RECT_EMPTY ? nTop : nBottom; }
+    constexpr tools::Long Bottom() const { return IsHeightEmpty() ? nTop : nBottom; }
 
-    void                SetLeft(tools::Long v)    { nLeft = v;   }
-    void                SetRight(tools::Long v)   { nRight = v;  }
-    void                SetTop(tools::Long v)     { nTop = v;    }
-    void                SetBottom(tools::Long v)  { nBottom = v; }
+    constexpr void SetLeft(tools::Long v) { nLeft = v; }
+    constexpr void SetRight(tools::Long v) { nRight = v; }
+    constexpr void SetTop(tools::Long v) { nTop = v; }
+    constexpr void SetBottom(tools::Long v) { nBottom = v; }
 
     constexpr Point TopLeft() const { return { Left(), Top() }; }
     constexpr Point TopRight() const { return { Right(), Top() }; }
@@ -511,7 +511,7 @@ public:
     {
         tools::Long n = 0;
 
-        if (nRight != RECT_EMPTY)
+        if (!IsWidthEmpty())
         {
             n = nRight - nLeft;
             if (n < 0)
@@ -528,7 +528,7 @@ public:
     {
         tools::Long n = 0;
 
-        if (nBottom != RECT_EMPTY)
+        if (!IsHeightEmpty())
         {
             n = nBottom - nTop;
             if (n < 0)
@@ -554,9 +554,9 @@ public:
     void                SetEmpty() { nRight = nBottom = RECT_EMPTY; }
     void                SetWidthEmpty() { nRight = RECT_EMPTY; }
     void                SetHeightEmpty() { nBottom = RECT_EMPTY; }
-    constexpr bool IsEmpty() const { return (nRight == RECT_EMPTY) || (nBottom == RECT_EMPTY); }
-    bool                IsWidthEmpty() const { return nRight == RECT_EMPTY; }
-    bool                IsHeightEmpty() const { return nBottom == RECT_EMPTY; }
+    constexpr bool IsEmpty() const { return IsWidthEmpty() || IsHeightEmpty(); }
+    constexpr bool IsWidthEmpty() const { return nRight == RECT_EMPTY; }
+    constexpr bool IsHeightEmpty() const { return nBottom == RECT_EMPTY; }
 
     inline bool         operator == ( const tools::Rectangle& rRect ) const;
     inline bool         operator != ( const tools::Rectangle& rRect ) const;
@@ -571,9 +571,9 @@ public:
     tools::Long         getX() const { return nLeft; }
     tools::Long         getY() const { return nTop; }
     /// Returns the difference between right and left, assuming the range includes one end, but not the other.
-    tools::Long         getWidth() const;
+    tools::Long getWidth() const { return Right() - Left(); }
     /// Returns the difference between bottom and top, assuming the range includes one end, but not the other.
-    tools::Long         getHeight() const;
+    tools::Long getHeight() const { return Bottom() - Top(); }
     /// Set the left edge of the rectangle to x, preserving the width
     void                setX( tools::Long x );
     /// Set the top edge of the rectangle to y, preserving the height
@@ -605,17 +605,11 @@ private:
 }
 
 constexpr inline tools::Rectangle::Rectangle()
-    : nLeft( 0 )
-    , nTop( 0 )
-    , nRight( RECT_EMPTY )
-    , nBottom( RECT_EMPTY )
+    : Rectangle(0, 0)
 {}
 
 constexpr inline tools::Rectangle::Rectangle( const Point& rLT, const Point& rRB )
-    : nLeft( rLT.X())
-    , nTop( rLT.Y())
-    , nRight( rRB.X())
-    , nBottom( rRB.Y())
+    : Rectangle(rLT.X(), rLT.Y(), rRB.X(), rRB.Y())
 {}
 
 constexpr inline tools::Rectangle::Rectangle( tools::Long _nLeft,  tools::Long _nTop,
@@ -627,10 +621,7 @@ constexpr inline tools::Rectangle::Rectangle( tools::Long _nLeft,  tools::Long _
 {}
 
 constexpr inline tools::Rectangle::Rectangle( tools::Long _nLeft,  tools::Long _nTop )
-    : nLeft( _nLeft )
-    , nTop( _nTop )
-    , nRight( RECT_EMPTY )
-    , nBottom( RECT_EMPTY )
+    : Rectangle(_nLeft, _nTop, RECT_EMPTY, RECT_EMPTY)
 {}
 
 constexpr inline tools::Rectangle::Rectangle( const Point& rLT, const Size& rSize )
@@ -640,13 +631,20 @@ constexpr inline tools::Rectangle::Rectangle( const Point& rLT, const Size& rSiz
     , nBottom( rSize.Height() ? nTop+(rSize.Height()-1) : RECT_EMPTY )
 {}
 
+constexpr inline tools::Rectangle tools::Rectangle::Justify(const Point& rLT, const Point& rRB)
+{
+    const auto& [nLeft, nRight] = std::minmax(rLT.X(), rRB.X());
+    const auto& [nTop, nBottom] = std::minmax(rLT.Y(), rRB.Y());
+    return { nLeft, nTop, nRight, nBottom };
+}
+
 inline void tools::Rectangle::Move( tools::Long nHorzMove, tools::Long nVertMove )
 {
     nLeft += nHorzMove;
     nTop  += nVertMove;
-    if ( nRight != RECT_EMPTY )
+    if (!IsWidthEmpty())
         nRight += nHorzMove;
-    if ( nBottom != RECT_EMPTY )
+    if (!IsHeightEmpty())
         nBottom += nVertMove;
 }
 
@@ -690,23 +688,13 @@ inline bool tools::Rectangle::operator != ( const tools::Rectangle& rRect ) cons
 
 inline tools::Rectangle& tools::Rectangle::operator +=( const Point& rPt )
 {
-    nLeft += rPt.X();
-    nTop  += rPt.Y();
-    if ( nRight != RECT_EMPTY )
-        nRight += rPt.X();
-    if ( nBottom != RECT_EMPTY )
-        nBottom += rPt.Y();
+    Move(rPt.X(), rPt.Y());
     return *this;
 }
 
 inline tools::Rectangle& tools::Rectangle::operator -= ( const Point& rPt )
 {
-    nLeft -= rPt.X();
-    nTop  -= rPt.Y();
-    if ( nRight != RECT_EMPTY )
-        nRight -= rPt.X();
-    if ( nBottom != RECT_EMPTY )
-        nBottom -= rPt.Y();
+    Move(-rPt.X(), -rPt.Y());
     return *this;
 }
 
