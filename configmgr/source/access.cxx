@@ -1385,8 +1385,14 @@ rtl::Reference< ChildAccess > Access::getChild(OUString const & name) {
             locale = comphelper::LibreOfficeKit::getLanguageTag().getBcp47();
 
         if (!locale.isEmpty()) {
-            // Find the best match using the LanguageTag fallback mechanism
-            std::vector<OUString> aFallbacks = LanguageTag(locale).getFallbackStrings(true);
+            // Try exact match first, avoiding all fallback overhead.
+            rtl::Reference<ChildAccess> directChild(getChild(locale));
+            if (directChild.is())
+                return directChild;
+
+            // Find the best match using the LanguageTag fallback mechanism,
+            // excluding the original tag.
+            std::vector<OUString> aFallbacks = LanguageTag(locale).getFallbackStrings(false);
             for (const OUString& rFallback : aFallbacks)
             {
                 rtl::Reference<ChildAccess> child(getChild(rFallback));
@@ -1398,8 +1404,8 @@ rtl::Reference< ChildAccess > Access::getChild(OUString const & name) {
             // xml:lang attributes, look for the first entry with the same first
             // segment as the requested language tag before falling back to
             // defaults (see fdo#33638):
-            assert(aFallbacks.size() > 0);
-            locale = aFallbacks[aFallbacks.size() - 1];
+            if (aFallbacks.size() > 0)
+                locale = aFallbacks[aFallbacks.size() - 1];
             assert(
                 !locale.isEmpty() && locale.indexOf('-') == -1 &&
                 locale.indexOf('_') == -1);
