@@ -1383,6 +1383,7 @@ bool X11SalGraphicsImpl::drawEPS( tools::Long,tools::Long,tools::Long,tools::Lon
     return false;
 }
 
+// INFO: This is the main draw method for drawing the handwriting
 // draw a poly-polygon
 bool X11SalGraphicsImpl::drawPolyPolygon(
     const basegfx::B2DHomMatrix& rObjectToDevice,
