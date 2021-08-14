@@ -177,8 +177,8 @@ bool SmMlExportWrapper::Export(SfxMedium& rMedium)
                 xStatusIndicator->setValue(1);
 
             bRet = WriteThroughComponentS(xStg, xModelComp, u"meta.xml", xContext, xInfoSet,
-                                          bOASIS ? u"com.sun.star.comp.Math.XMLOasisMetaExporter"
-                                                 : u"com.sun.star.comp.Math.XMLMetaExporter");
+                                          bOASIS ? u"com.sun.star.comp.Math.MLOasisMetaExporter"
+                                                 : u"com.sun.star.comp.Math.MLMetaExporter");
         }
 
         // Write starmath formula
@@ -189,7 +189,7 @@ bool SmMlExportWrapper::Export(SfxMedium& rMedium)
                 xStatusIndicator->setValue(2);
 
             bRet = WriteThroughComponentS(xStg, xModelComp, u"content.xml", xContext, xInfoSet,
-                                          u"com.sun.star.comp.Math.XMLContentExporter");
+                                          u"com.sun.star.comp.Math.MLContentExporter");
         }
 
         // Write starmath settings
@@ -199,10 +199,9 @@ bool SmMlExportWrapper::Export(SfxMedium& rMedium)
             if (xStatusIndicator.is())
                 xStatusIndicator->setValue(3);
 
-            bRet
-                = WriteThroughComponentS(xStg, xModelComp, u"settings.xml", xContext, xInfoSet,
-                                         bOASIS ? u"com.sun.star.comp.Math.XMLOasisSettingsExporter"
-                                                : u"com.sun.star.comp.Math.XMLSettingsExporter");
+            bRet = WriteThroughComponentS(xStg, xModelComp, u"settings.xml", xContext, xInfoSet,
+                                          bOASIS ? u"com.sun.star.comp.Math.MLOasisSettingsExporter"
+                                                 : u"com.sun.star.comp.Math.MLSettingsExporter");
         }
     }
     else
@@ -222,7 +221,7 @@ bool SmMlExportWrapper::Export(SfxMedium& rMedium)
         // Write everything in the same place
         // Note: export through an XML exporter component (output stream version)
         bRet = WriteThroughComponentOS(xOut, xModelComp, xContext, xInfoSet,
-                                       u"com.sun.star.comp.Math.XMLContentExporter");
+                                       u"com.sun.star.comp.Math.MLContentExporter");
     }
 
     if (xStatusIndicator.is())
@@ -407,7 +406,7 @@ SmMlExportWrapper::WriteThroughComponentMS(const Reference<XComponent>& xCompone
     // write the stuff
     // Note: export through an XML exporter component (output stream version)
     bool bOk = WriteThroughComponentOS(xStream, xComponent, rxContext, rPropSet,
-                                       u"com.sun.star.comp.Math.XMLContentExporter");
+                                       u"com.sun.star.comp.Math.MLContentExporter");
 
     // We don't want to read unitzialized data
     if (!bOk)
@@ -439,7 +438,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 Math_MLExporter_get_implementation(css::uno::XComponentContext* context,
                                    css::uno::Sequence<css::uno::Any> const&)
 {
-    return cppu::acquire(new SmMlExport(context, "com.sun.star.comp.Math.XMLExporter",
+    return cppu::acquire(new SmMlExport(context, "com.sun.star.comp.Math.MLExporter",
                                         SvXMLExportFlags::OASIS | SvXMLExportFlags::ALL));
 }
 
@@ -448,14 +447,14 @@ Math_MLMetaExporter_get_implementation(css::uno::XComponentContext* context,
                                        css::uno::Sequence<css::uno::Any> const&)
 {
     return cppu::acquire(
-        new SmMlExport(context, "com.sun.star.comp.Math.XMLMetaExporter", SvXMLExportFlags::META));
+        new SmMlExport(context, "com.sun.star.comp.Math.MLMetaExporter", SvXMLExportFlags::META));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 Math_MLOasisMetaExporter_get_implementation(css::uno::XComponentContext* context,
                                             css::uno::Sequence<css::uno::Any> const&)
 {
-    return cppu::acquire(new SmMlExport(context, "com.sun.star.comp.Math.XMLOasisMetaExporter",
+    return cppu::acquire(new SmMlExport(context, "com.sun.star.comp.Math.MLOasisMetaExporter",
                                         SvXMLExportFlags::OASIS | SvXMLExportFlags::META));
 }
 
@@ -463,7 +462,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 Math_MLSettingsExporter_get_implementation(css::uno::XComponentContext* context,
                                            css::uno::Sequence<css::uno::Any> const&)
 {
-    return cppu::acquire(new SmMlExport(context, "com.sun.star.comp.Math.XMLSettingsExporter",
+    return cppu::acquire(new SmMlExport(context, "com.sun.star.comp.Math.MLSettingsExporter",
                                         SvXMLExportFlags::SETTINGS));
 }
 
@@ -471,7 +470,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 Math_MLOasisSettingsExporter_get_implementation(css::uno::XComponentContext* context,
                                                 css::uno::Sequence<css::uno::Any> const&)
 {
-    return cppu::acquire(new SmMlExport(context, "com.sun.star.comp.Math.XMLOasisSettingsExporter",
+    return cppu::acquire(new SmMlExport(context, "com.sun.star.comp.Math.MLOasisSettingsExporter",
                                         SvXMLExportFlags::OASIS | SvXMLExportFlags::SETTINGS));
 }
 
@@ -479,7 +478,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 Math_MLContentExporter_get_implementation(css::uno::XComponentContext* context,
                                           css::uno::Sequence<css::uno::Any> const&)
 {
-    return cppu::acquire(new SmMlExport(context, "com.sun.star.comp.Math.XMLContentExporter",
+    return cppu::acquire(new SmMlExport(context, "com.sun.star.comp.Math.MLContentExporter",
                                         SvXMLExportFlags::OASIS | SvXMLExportFlags::CONTENT));
 }
 
