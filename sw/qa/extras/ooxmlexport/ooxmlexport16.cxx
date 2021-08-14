@@ -90,7 +90,7 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testWrapPolygonCurve, "tdf136386_WrapPolygon
 
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testWrapPolygonLineShape, "tdf136386_WrapPolygonLineShape.odt")
 {
-    // Document has a sloping line with contour wrap. Error was, that type 'square' was written and
+    // Document has a slopping line with contour wrap. Error was, that type 'square' was written and
     // no wrap polygon. Now we write 'through' and use wrap polygon 0|0, 21600|21600, 0|0.
     xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
     CPPUNIT_ASSERT(pXmlDocument);
