@@ -51,14 +51,14 @@ void tools::Rectangle::SetSize( const Size& rSize )
     else if ( rSize.Width() > 0 )
         nRight  = nLeft + rSize.Width() -1;
     else
-        nRight = RECT_EMPTY;
+        SetWidthEmpty();
 
     if ( rSize.Height() < 0 )
         nBottom  = nTop + rSize.Height() +1;
     else if ( rSize.Height() > 0 )
         nBottom  = nTop + rSize.Height() -1;
     else
-        nBottom = RECT_EMPTY;
+        SetHeightEmpty();
 }
 
 void tools::Rectangle::SaturatingSetSize(const Size& rSize)
@@ -68,26 +68,26 @@ void tools::Rectangle::SaturatingSetSize(const Size& rSize)
     else if ( rSize.Width() > 0 )
         nRight = o3tl::saturating_add(nLeft, (rSize.Width() - 1));
     else
-        nRight = RECT_EMPTY;
+        SetWidthEmpty();
 
     if ( rSize.Height() < 0 )
         nBottom = o3tl::saturating_add(nTop, (rSize.Height() + 1));
     else if ( rSize.Height() > 0 )
         nBottom = o3tl::saturating_add(nTop, (rSize.Height() - 1));
     else
-        nBottom = RECT_EMPTY;
+        SetHeightEmpty();
 }
 
 void tools::Rectangle::SaturatingSetX(tools::Long x)
 {
-    if (nRight != RECT_EMPTY)
+    if (!IsWidthEmpty())
         nRight = o3tl::saturating_add(nRight, x - nLeft);
     nLeft = x;
 }
 
 void tools::Rectangle::SaturatingSetY(tools::Long y)
 {
-    if (nBottom != RECT_EMPTY)
+    if (!IsHeightEmpty())
         nBottom = o3tl::saturating_add(nBottom, y - nTop);
     nTop = y;
 }
@@ -138,12 +138,12 @@ tools::Rectangle& tools::Rectangle::Intersection( const tools::Rectangle& rRect 
 
 void tools::Rectangle::Justify()
 {
-    if ( (nRight < nLeft) && (nRight != RECT_EMPTY) )
+    if ((nRight < nLeft) && (!IsWidthEmpty()))
     {
         std::swap(nLeft, nRight);
     }
 
-    if ( (nBottom < nTop) && (nBottom != RECT_EMPTY) )
+    if ((nBottom < nTop) && (!IsHeightEmpty()))
     {
         std::swap(nBottom, nTop);
     }
@@ -198,31 +198,25 @@ OString tools::Rectangle::toString() const
 
 void tools::Rectangle::expand(tools::Long nExpandBy)
 {
-    nLeft   -= nExpandBy;
-    nTop    -= nExpandBy;
-    if (nRight == RECT_EMPTY)
-        nRight = nLeft + nExpandBy - 1;
-    else
-        nRight += nExpandBy;
-    if (nBottom == RECT_EMPTY)
-        nBottom = nTop + nExpandBy - 1;
-    else
-        nBottom += nExpandBy;
+    AdjustLeft(-nExpandBy);
+    AdjustTop(-nExpandBy);
+    AdjustRight(nExpandBy);
+    AdjustBottom(nExpandBy);
 }
 
 void tools::Rectangle::shrink(tools::Long nShrinkBy)
 {
     nLeft   += nShrinkBy;
     nTop    += nShrinkBy;
-    if (nRight != RECT_EMPTY)
+    if (!IsWidthEmpty())
         nRight -= nShrinkBy;
-    if (nBottom != RECT_EMPTY)
+    if (!IsHeightEmpty())
         nBottom -= nShrinkBy;
 }
 
 tools::Long tools::Rectangle::AdjustRight(tools::Long nHorzMoveDelta)
 {
-    if (nRight == RECT_EMPTY)
+    if (IsWidthEmpty())
         nRight = nLeft + nHorzMoveDelta - 1;
     else
         nRight += nHorzMoveDelta;
@@ -231,7 +225,7 @@ tools::Long tools::Rectangle::AdjustRight(tools::Long nHorzMoveDelta)
 
 tools::Long tools::Rectangle::AdjustBottom( tools::Long nVertMoveDelta )
 {
-    if (nBottom == RECT_EMPTY)
+    if (IsHeightEmpty())
         nBottom = nTop + nVertMoveDelta - 1;
     else
         nBottom += nVertMoveDelta;
@@ -240,28 +234,16 @@ tools::Long tools::Rectangle::AdjustBottom( tools::Long nVertMoveDelta )
 
 void tools::Rectangle::setX( tools::Long x )
 {
-    if (nRight != RECT_EMPTY)
+    if (!IsWidthEmpty())
         nRight += x - nLeft;
     nLeft = x;
 }
 
 void tools::Rectangle::setY( tools::Long y )
 {
-    if (nBottom != RECT_EMPTY)
+    if (!IsHeightEmpty())
         nBottom += y - nTop;
     nTop  = y;
-}
-
-/// Returns the difference between right and left, assuming the range includes one end, but not the other.
-tools::Long tools::Rectangle::getWidth() const
-{
-    return nRight == RECT_EMPTY ? 0 : nRight - nLeft;
-}
-
-/// Returns the difference between bottom and top, assuming the range includes one end, but not the other.
-tools::Long tools::Rectangle::getHeight() const
-{
-    return nBottom == RECT_EMPTY ? 0 : nBottom - nTop;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
