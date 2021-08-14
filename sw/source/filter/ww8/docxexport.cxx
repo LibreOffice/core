@@ -323,7 +323,7 @@ void DocxExport::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
 void DocxExport::WriteHyperlinkData( const ::sw::mark::IFieldmark& /*rFieldmark*/ )
 {
 #if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "TODO DocxExport::WriteHyperlinkData()\n" );
+    SAL_INFO("sw.source.ww8", "TODO DocxExport::WriteHyperlinkData().");
 #endif
 }
 
