@@ -511,7 +511,13 @@ void DomainMapperTableManager::endLevel( )
     m_aTablePositions.pop_back();
     m_aTableStyleNames.pop_back();
     m_aMoved.pop_back( );
+
+    std::optional<TableParagraph> oParagraph;
+    if (getTableDepthDifference() < 0 && !m_aParagraphsToEndTable.top()->empty())
+        oParagraph = m_aParagraphsToEndTable.top()->back();
     m_aParagraphsToEndTable.pop();
+    if (oParagraph && m_aParagraphsToEndTable.size())
+        m_aParagraphsToEndTable.top()->push_back(*oParagraph);
 }
 
 void DomainMapperTableManager::endOfCellAction()
