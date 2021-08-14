@@ -5360,10 +5360,10 @@ void AttributeOutputBase::OutputItem( const SfxPoolItem& rHt )
             CharCrossedOut(rHt.StaticWhichCast(RES_CHRATR_CROSSEDOUT));
             break;
         case RES_CHRATR_ESCAPEMENT:
-            CharEscapement( static_cast< const SvxEscapementItem& >( rHt ) );
+            CharEscapement(rHt.StaticWhichCast(RES_CHRATR_ESCAPEMENT));
             break;
         case RES_CHRATR_FONT:
-            CharFont( static_cast< const SvxFontItem& >( rHt ) );
+            CharFont(rHt.StaticWhichCast(RES_CHRATR_FONT));
             break;
         case RES_CHRATR_FONTSIZE:
             CharFontSize( static_cast< const SvxFontHeightItem& >( rHt ) );
