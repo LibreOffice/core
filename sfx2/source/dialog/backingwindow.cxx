@@ -606,6 +606,9 @@ IMPL_LINK (BackingWindow, MenuSelectHdl, const OString&, rId, void)
         mxAllRecentThumbnails->Reload();
         return;
     }
+    else if(rId == "clear_deleted"){
+        mxAllRecentThumbnails->clearDeletedFiles();
+    }
     else if (!rId.isEmpty())
     {
         initializeLocalView();
