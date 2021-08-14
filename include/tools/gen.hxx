@@ -472,7 +472,7 @@ public:
     constexpr Rectangle( tools::Long nLeft, tools::Long nTop );
     constexpr Rectangle( const Point& rLT, const Size& rSize );
 
-    static Rectangle    Justify( const Point& rLT, const Point& rRB );
+    inline constexpr static Rectangle Justify(const Point& rLT, const Point& rRB);
 
     constexpr tools::Long Left() const { return nLeft; }
     constexpr tools::Long Right() const { return IsWidthEmpty() ? nLeft : nRight; }
@@ -625,6 +625,13 @@ constexpr inline tools::Rectangle::Rectangle( const Point& rLT, const Size& rSiz
     , nRight(rSize.Width() ? nLeft + (rSize.Width() + (rSize.Width() > 0 ? -1 : 1)) : RECT_EMPTY)
     , nBottom(rSize.Height() ? nTop + (rSize.Height() + (rSize.Height() > 0 ? -1 : 1)) : RECT_EMPTY)
 {}
+
+constexpr inline tools::Rectangle tools::Rectangle::Justify(const Point& rLT, const Point& rRB)
+{
+    const std::pair<tools::Long, tools::Long> aLeftRight = std::minmax(rLT.X(), rRB.X());
+    const std::pair<tools::Long, tools::Long> aTopBottom = std::minmax(rLT.Y(), rRB.Y());
+    return { aLeftRight.first, aTopBottom.first, aLeftRight.second, aTopBottom.second };
+}
 
 inline void tools::Rectangle::Move( tools::Long nHorzMove, tools::Long nVertMove )
 {
