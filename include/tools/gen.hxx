@@ -472,7 +472,7 @@ public:
     constexpr Rectangle( tools::Long nLeft, tools::Long nTop );
     constexpr Rectangle( const Point& rLT, const Size& rSize );
 
-    static Rectangle    Justify( const Point& rLT, const Point& rRB );
+    inline constexpr static Rectangle Justify(const Point& rLT, const Point& rRB);
 
     constexpr tools::Long Left() const { return nLeft; }
     constexpr tools::Long Right() const { return nRight == RECT_EMPTY ? nLeft : nRight; }
@@ -639,6 +639,13 @@ constexpr inline tools::Rectangle::Rectangle( const Point& rLT, const Size& rSiz
     , nRight( rSize.Width()  ? nLeft+(rSize.Width()-1) : RECT_EMPTY )
     , nBottom( rSize.Height() ? nTop+(rSize.Height()-1) : RECT_EMPTY )
 {}
+
+constexpr inline tools::Rectangle tools::Rectangle::Justify(const Point& rLT, const Point& rRB)
+{
+    const auto [nLeft, nRight] = std::minmax(rLT.X(), rRB.X());
+    const auto [nTop, nBottom] = std::minmax(rLT.Y(), rRB.Y());
+    return { nLeft, nTop, nRight, nBottom };
+}
 
 inline void tools::Rectangle::Move( tools::Long nHorzMove, tools::Long nVertMove )
 {
