@@ -80,6 +80,8 @@ public:
     // received on load of recently used file
     void DispatchedLoadRecentUsedFile();
 
+    void clearDeletedFiles();
+
 private:
     virtual bool MouseButtonDown( const MouseEvent& rMEvt ) override;
 

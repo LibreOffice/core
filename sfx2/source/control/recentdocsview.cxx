@@ -19,6 +19,7 @@
 
 #include <sal/log.hxx>
 #include <comphelper/base64.hxx>
+#include <comphelper/DirectoryHelper.hxx>
 #include <recentdocsview.hxx>
 #include <sfx2/sfxresid.hxx>
 #include <tools/diagnose_ex.h>
@@ -298,6 +299,18 @@ void RecentDocsView::Reload()
 
     CalculateItemPositions();
     Invalidate();
+}
+
+void RecentDocsView::clearDeletedFiles(){
+    std::vector< SvtHistoryOptions::HistoryItem > aHistoryList = SvtHistoryOptions::GetList( EHistoryType::PickList );
+    for ( size_t i = 0; i < aHistoryList.size(); i++ )
+    {
+        const SvtHistoryOptions::HistoryItem& rPickListEntry = aHistoryList[i];
+        if ( !comphelper::DirectoryHelper::fileExists(rPickListEntry.sURL) ){
+            SvtHistoryOptions::DeleteItem(EHistoryType::PickList,rPickListEntry.sURL);
+        }
+    }
+    Reload();
 }
 
 bool RecentDocsView::MouseButtonDown( const MouseEvent& rMEvt )
