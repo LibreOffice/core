@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f1b024a9_a6f0baac",
+        "filename": "sw/source/filter/ww8/docxsdrexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 355,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2021-08-14T13:02:14Z",
+      "side": 1,
+      "message": "Please also fix what should be an adverb: “horizontally”",
+      "revId": "61a480b6e0e758c4a2794ee8d5d1632c91ba3f29",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
