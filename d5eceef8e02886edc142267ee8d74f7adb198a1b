@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1d0781b8_3288752f",
+        "filename": "desktop/source/lib/init.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 808,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-14T13:01:36Z",
+      "side": 1,
+      "message": "By the way, pPageSizeItem, pPageLRMarginItem, and pPageULMarginItem all are initialized here for no reason, and these allocated values are unused until released in the .reset() below. So it would be best to have a follow-up cleanup change, removing these unnecessary declarations from here, and instead declare and initialize the unique_ptrs where they are assigned correct values 😊",
+      "revId": "d5eceef8e02886edc142267ee8d74f7adb198a1b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
