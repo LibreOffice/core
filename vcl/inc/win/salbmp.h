@@ -25,7 +25,7 @@
 #include <salbmp.hxx>
 #include <basegfx/utils/systemdependentdata.hxx>
 #include <memory>
-
+#include <win/scoped_gdi.hxx>
 
 struct  BitmapBuffer;
 class   BitmapColor;
@@ -38,7 +38,7 @@ class WinSalBitmap final: public SalBitmap, public basegfx::SystemDependentDataH
 private:
     Size                maSize;
     HGLOBAL             mhDIB;
-    HBITMAP             mhDDB;
+    ScopedHBITMAP       mhDDB;
 
     sal_uInt16          mnBitCount;
 
