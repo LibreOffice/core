@@ -666,7 +666,29 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                 m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, "val", sStringValue);
             else if (nName == NS_ooxml::LN_CT_Language_bidi)
                 m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, "bidi", sStringValue);
-            lang::Locale aLocale( LanguageTag::convertToLocale( sStringValue));
+            lang::Locale aLocale;
+            if (sStringValue.getLength() <= 3 && sStringValue.getLength() >= 1)
+            {
+                // Cheesy Google Docs is known to tag language-only even for
+                // "en" or others that need some region to distinguish language
+                // variants for spell-checker and hyphenation. Obtain our known
+                // fallback to clarify and match. The original value/context is
+                // unknown anyway.
+                LanguageTag aLanguageTag( sStringValue);
+                aLanguageTag.makeFallback();
+                if (aLanguageTag.getLanguage() == sStringValue)
+                    aLocale = aLanguageTag.getLocale();
+                else
+                {
+                    // Do not fallback for an unknown language, which usually
+                    // results in "en-US", or any other non-matching case.
+                    aLocale = LanguageTag::convertToLocale( sStringValue);
+                }
+            }
+            else
+            {
+                aLocale = LanguageTag::convertToLocale( sStringValue);
+            }
             if (m_pImpl->GetTopContext())
                 m_pImpl->GetTopContext()->Insert(NS_ooxml::LN_CT_Language_val== nName ? PROP_CHAR_LOCALE :
                              NS_ooxml::LN_CT_Language_eastAsia == nName ? PROP_CHAR_LOCALE_ASIAN : PROP_CHAR_LOCALE_COMPLEX,
