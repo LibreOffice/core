@@ -331,7 +331,7 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                         else
                             // store the original value to limit rounding mistakes, if it's there in a recognized measure (twip)
                             getCurrentCellWidths()->push_back(pMeasureHandler->getMeasureValue() ? pMeasureHandler->getValue() : sal_Int32(0));
-                        if (getTableDepthDifference() > 0)
+                        if (getTableDepthDifference())
                             m_bPushCurrentWidth = true;
                     }
                 }
