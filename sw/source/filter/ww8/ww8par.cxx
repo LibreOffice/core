@@ -1024,9 +1024,9 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
             bool bOk = false;
             if (nNumElemVert && (nElemSizeVert == 8 || nElemSizeVert == 4))
             {
-                assert(nElemSizeVert == 8 || nElemSizeVert == 4);
                 //check if there is enough data in the file to make the
                 //record sane
+                // coverity[tainted_data : FALSE] - nElemSizeVert is either 8 or 4 so it has been sanitized
                 bOk = rSt.remainingSize() / nElemSizeVert >= nNumElemVert;
             }
             if (bOk)
