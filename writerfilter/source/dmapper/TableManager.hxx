@@ -358,7 +358,7 @@ protected:
     /**
        Return the current table difference, i.e. 1 if we are in the first cell of a new table, etc.
      */
-    sal_uInt32 getTableDepthDifference() const { return mnTableDepthNew - mnTableDepth; }
+    sal_Int32 getTableDepthDifference() const { return mnTableDepthNew - mnTableDepth; }
 
     sal_uInt32 getTableDepth() const { return mnTableDepthNew; }
 
