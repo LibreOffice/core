@@ -281,8 +281,10 @@
                 <w:nfc w:val="21"/>
             </xsl:when>
             <xsl:when test="$number-format = '일, 이, 삼, ...'">
-                <!-- '일, 이, 삼, ...' also seems: korean-counting -->
-                <w:nfc w:val="41"/>
+                <w:nfc w:val="42"/>
+            </xsl:when>
+            <xsl:when test="$number-format = '하나, 둘, 셋, ...'">
+                <w:nfc w:val="43"/>
             </xsl:when>
             <xsl:when test="$number-format = 'ㄱ, ㄴ, ㄷ, ...' or $number-format = '㉠, ㉡, ㉢, ...'">
                 <!-- mapping circled to uncircled -->

@@ -244,8 +244,10 @@
                 <w:numFmt w:val="iroha"/>
             </xsl:when>
             <xsl:when test="$number-format = '일, 이, 삼, ...'">
-                <!-- '일, 이, 삼, ...' also seems: korean-counting -->
-                <w:numFmt w:val="korean-digital"/>
+                <w:numFmt w:val="korean-counting"/>
+            </xsl:when>
+            <xsl:when test="$number-format = '하나, 둘, 셋, ...'">
+                <w:numFmt w:val="korean-legal"/>
             </xsl:when>
             <xsl:when test="$number-format = 'ㄱ, ㄴ, ㄷ, ...' or $number-format = '㉠, ㉡, ㉢, ...'">
                 <!-- mapping circled to uncircled -->
@@ -297,7 +299,7 @@
                 </xsl:choose>
             </xsl:when>
             <!-- unsupported: ordinal, cardinal-text, ordinal-text, hex, chicago, bullet, ideograph-zodiac-traditional,
-            chinese-not-impl, korean-legal -->
+            chinese-not-impl -->
             <xsl:otherwise>
                 <w:numFmt w:val="decimal"/>
             </xsl:otherwise>
