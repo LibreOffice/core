@@ -69,7 +69,7 @@ public:
     SVX_DLLPRIVATE ::tools::Rectangle& getCellRect() { return maCellRect; }
 
     bool CanCreateEditOutlinerParaObject() const;
-    std::unique_ptr<OutlinerParaObject> CreateEditOutlinerParaObject() const;
+    std::optional<OutlinerParaObject> CreateEditOutlinerParaObject() const;
     SVX_DLLPRIVATE void SetStyleSheet( SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAttr );
     SVX_DLLPRIVATE virtual SfxStyleSheet* GetStyleSheet() const override;
     SVX_DLLPRIVATE void TakeTextAnchorRect(tools::Rectangle& rAnchorRect) const;
@@ -166,7 +166,7 @@ public:
     // XEventListener
     SVX_DLLPRIVATE virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 
-    SVX_DLLPRIVATE virtual void SetOutlinerParaObject( std::unique_ptr<OutlinerParaObject> pTextObject ) override;
+    SVX_DLLPRIVATE virtual void SetOutlinerParaObject( std::optional<OutlinerParaObject> pTextObject ) override;
 
     SVX_DLLPRIVATE void AddUndo();
 

@@ -561,7 +561,7 @@ bool DrawDocShell::SaveAs( SfxMedium& rMedium )
             SdrOutliner* pOutl = mpViewShell->GetView()->GetTextEditOutliner();
             if( pObj && pOutl && pOutl->IsModified() )
             {
-                std::unique_ptr<OutlinerParaObject> pNewText = pOutl->CreateParaObject( 0, pOutl->GetParagraphCount() );
+                std::optional<OutlinerParaObject> pNewText = pOutl->CreateParaObject( 0, pOutl->GetParagraphCount() );
                 pObj->SetOutlinerParaObject( std::move(pNewText) );
                 pOutl->ClearModifyFlag();
             }

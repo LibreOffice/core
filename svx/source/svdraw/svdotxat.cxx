@@ -406,7 +406,7 @@ void SdrTextObj::RemoveOutlinerCharacterAttribs( const std::vector<sal_uInt16>& 
             if(!mpEditingOutliner || (pText != getActiveText()) )
             {
                 const sal_Int32 nParaCount = pOutliner->GetParagraphCount();
-                std::unique_ptr<OutlinerParaObject> pTemp = pOutliner->CreateParaObject(0, nParaCount);
+                std::optional<OutlinerParaObject> pTemp = pOutliner->CreateParaObject(0, nParaCount);
                 pOutliner->Clear();
                 NbcSetOutlinerParaObjectForText(std::move(pTemp), pText);
             }

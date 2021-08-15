@@ -480,7 +480,7 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
             }
         }
 
-        std::unique_ptr<OutlinerParaObject> pOPO = aOutliner.CreateParaObject();
+        std::optional<OutlinerParaObject> pOPO = aOutliner.CreateParaObject();
 
         if (pOutlinerView)
         {

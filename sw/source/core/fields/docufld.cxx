@@ -1782,7 +1782,7 @@ std::unique_ptr<SwField> SwPostItField::Copy() const
     std::unique_ptr<SwPostItField> pRet(new SwPostItField( static_cast<SwPostItFieldType*>(GetTyp()), m_sAuthor, m_sText, m_sInitials, m_sName,
                                                            m_aDateTime, m_bResolved, m_nPostItId));
     if (mpText)
-        pRet->SetTextObject( std::make_unique<OutlinerParaObject>(*mpText) );
+        pRet->SetTextObject( *mpText );
 
     // Note: member <m_xTextObject> not copied.
 
@@ -1820,7 +1820,7 @@ void SwPostItField::SetName(const OUString& rName)
 }
 
 
-void SwPostItField::SetTextObject( std::unique_ptr<OutlinerParaObject> pText )
+void SwPostItField::SetTextObject( std::optional<OutlinerParaObject> pText )
 {
     mpText = std::move(pText);
 }
@@ -1938,7 +1938,7 @@ void SwPostItField::dumpAsXml(xmlTextWriterPtr pWriter) const
     SwField::dumpAsXml(pWriter);
 
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("mpText"));
-    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", mpText.get());
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", mpText ? &*mpText : nullptr);
     if (mpText)
         mpText->dumpAsXml(pWriter);
     (void)xmlTextWriterEndElement(pWriter);

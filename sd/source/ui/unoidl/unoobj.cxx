@@ -897,7 +897,7 @@ void SdXShape::SetEmptyPresObj(bool bEmpty)
         const bool bVertical = pOutlinerParaObject && pOutlinerParaObject->IsEffectivelyVertical();
 
         // really delete SdrOutlinerObj at pObj
-        pObj->NbcSetOutlinerParaObject(nullptr);
+        pObj->NbcSetOutlinerParaObject(std::nullopt);
         if( bVertical )
             if (auto pTextObj = dynamic_cast<SdrTextObj*>( pObj ) )
                 pTextObj->SetVerticalWriting( true );

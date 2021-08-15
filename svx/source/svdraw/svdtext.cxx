@@ -52,7 +52,7 @@ void SdrText::CheckPortionInfo( SdrOutliner& rOutliner )
     // TODO: optimization: we could create a BigTextObject
     mbPortionInfoChecked=true;
 
-    if(mpOutlinerParaObject!=nullptr && rOutliner.ShouldCreateBigTextObject())
+    if(mpOutlinerParaObject && rOutliner.ShouldCreateBigTextObject())
     {
         // #i102062# MemoryLeak closed
         mpOutlinerParaObject = rOutliner.CreateParaObject();
@@ -70,39 +70,46 @@ const SfxItemSet& SdrText::GetItemSet() const
     return const_cast< SdrText* >(this)->GetObjectItemSet();
 }
 
-void SdrText::SetOutlinerParaObject( std::unique_ptr<OutlinerParaObject> pTextObject )
+void SdrText::SetOutlinerParaObject( std::optional<OutlinerParaObject> pTextObject )
 {
-    assert ( !mpOutlinerParaObject || (mpOutlinerParaObject.get() != pTextObject.get()) );
-
     // Update HitTestOutliner
     const SdrTextObj* pTestObj(mrObject.getSdrModelFromSdrObject().GetHitTestOutliner().GetTextObj());
 
-    if(pTestObj && pTestObj->GetOutlinerParaObject() == mpOutlinerParaObject.get())
-    {
-        mrObject.getSdrModelFromSdrObject().GetHitTestOutliner().SetTextObj(nullptr);
-    }
+    if(pTestObj)
+        if ( (!pTestObj->GetOutlinerParaObject() && !mpOutlinerParaObject)
+            || (pTestObj->GetOutlinerParaObject() && mpOutlinerParaObject && *pTestObj->GetOutlinerParaObject() == *mpOutlinerParaObject) )
+        {
+            mrObject.getSdrModelFromSdrObject().GetHitTestOutliner().SetTextObj(nullptr);
+        }
 
     mpOutlinerParaObject = std::move(pTextObject);
     mbPortionInfoChecked = false;
 }
 
-OutlinerParaObject* SdrText::GetOutlinerParaObject() const
+OutlinerParaObject* SdrText::GetOutlinerParaObject()
 {
-    return mpOutlinerParaObject.get();
+    return mpOutlinerParaObject ? &*mpOutlinerParaObject : nullptr;
+}
+
+const OutlinerParaObject* SdrText::GetOutlinerParaObject() const
+{
+    return mpOutlinerParaObject ? &*mpOutlinerParaObject : nullptr;
 }
 
 /** returns the current OutlinerParaObject and removes it from this instance */
-std::unique_ptr<OutlinerParaObject> SdrText::RemoveOutlinerParaObject()
+std::optional<OutlinerParaObject> SdrText::RemoveOutlinerParaObject()
 {
     // Update HitTestOutliner
     const SdrTextObj* pTestObj(mrObject.getSdrModelFromSdrObject().GetHitTestOutliner().GetTextObj());
 
-    if(pTestObj && pTestObj->GetOutlinerParaObject() == mpOutlinerParaObject.get())
-    {
-        mrObject.getSdrModelFromSdrObject().GetHitTestOutliner().SetTextObj(nullptr);
-    }
+    if(pTestObj)
+        if ( (!pTestObj->GetOutlinerParaObject() && !mpOutlinerParaObject)
+            || (pTestObj->GetOutlinerParaObject() && mpOutlinerParaObject && *pTestObj->GetOutlinerParaObject() == *mpOutlinerParaObject) )
+        {
+            mrObject.getSdrModelFromSdrObject().GetHitTestOutliner().SetTextObj(nullptr);
+        }
 
-    std::unique_ptr<OutlinerParaObject> pOPO = std::move(mpOutlinerParaObject);
+    std::optional<OutlinerParaObject> pOPO = std::move(mpOutlinerParaObject);
     mbPortionInfoChecked = false;
 
     return pOPO;

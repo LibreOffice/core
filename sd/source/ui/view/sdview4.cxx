@@ -127,7 +127,7 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
         {
             ::tools::Rectangle aRect( pNewGrafObj->GetLogicRect() );
             pNewGrafObj->AdjustToMaxRect( aRect );
-            pNewGrafObj->SetOutlinerParaObject(nullptr);
+            pNewGrafObj->SetOutlinerParaObject(std::nullopt);
             pNewGrafObj->SetEmptyPresObj(false);
         }
 

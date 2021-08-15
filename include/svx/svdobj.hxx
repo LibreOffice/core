@@ -631,8 +631,8 @@ public:
 
     // keep text in outliner's format
     // SetOutlinerParaObject: transfer ownership of *pTextObject!
-    void SetOutlinerParaObject(std::unique_ptr<OutlinerParaObject> pTextObject);
-    virtual void NbcSetOutlinerParaObject(std::unique_ptr<OutlinerParaObject> pTextObject);
+    void SetOutlinerParaObject(std::optional<OutlinerParaObject> pTextObject);
+    virtual void NbcSetOutlinerParaObject(std::optional<OutlinerParaObject> pTextObject);
     virtual OutlinerParaObject* GetOutlinerParaObject() const;
     virtual void NbcReformatText();
 

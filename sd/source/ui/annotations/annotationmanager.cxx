@@ -597,7 +597,7 @@ void AnnotationManagerImpl::ExecuteReplyToAnnotation( SfxRequest const & rReq )
     if (!sReplyText.isEmpty())
         aOutliner.Insert(sReplyText);
 
-    std::unique_ptr< OutlinerParaObject > pOPO( aOutliner.CreateParaObject() );
+    std::optional< OutlinerParaObject > pOPO( aOutliner.CreateParaObject() );
     pTextApi->SetText(*pOPO);
 
     OUString sReplyAuthor;

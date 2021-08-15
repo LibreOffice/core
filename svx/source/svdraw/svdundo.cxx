@@ -391,7 +391,7 @@ void SdrUndoAttrObj::Undo()
 
         if(pTextUndo)
         {
-            pObj->SetOutlinerParaObject(std::make_unique<OutlinerParaObject>(*pTextUndo));
+            pObj->SetOutlinerParaObject(*pTextUndo);
         }
     }
 
@@ -473,7 +473,7 @@ void SdrUndoAttrObj::Redo()
         // #i8508#
         if(pTextRedo)
         {
-            pObj->SetOutlinerParaObject(std::make_unique<OutlinerParaObject>(*pTextRedo));
+            pObj->SetOutlinerParaObject(*pTextRedo);
         }
     }
 
@@ -981,7 +981,7 @@ SdrUndoObjSetText::SdrUndoObjSetText(SdrObject& rNewObj, sal_Int32 nText)
 {
     SdrText* pText = static_cast< SdrTextObj*>( &rNewObj )->getText(mnText);
     if( pText && pText->GetOutlinerParaObject() )
-        pOldText.reset( new OutlinerParaObject(*pText->GetOutlinerParaObject()) );
+        pOldText = *pText->GetOutlinerParaObject();
 
     bEmptyPresObj = rNewObj.IsEmptyPresObj();
 }
@@ -996,7 +996,7 @@ bool SdrUndoObjSetText::IsDifferent() const
 {
     if (!pOldText || !pNewText)
         return pOldText || pNewText;
-    return !(*pOldText == *pNewText);
+    return *pOldText != *pNewText;
 }
 
 void SdrUndoObjSetText::AfterSetText()
@@ -1005,7 +1005,7 @@ void SdrUndoObjSetText::AfterSetText()
     {
         SdrText* pText = static_cast< SdrTextObj*>( pObj )->getText(mnText);
         if( pText && pText->GetOutlinerParaObject() )
-            pNewText.reset( new OutlinerParaObject(*pText->GetOutlinerParaObject()) );
+            pNewText = *pText->GetOutlinerParaObject();
         bNewTextAvailable=true;
     }
 }
@@ -1034,8 +1034,7 @@ void SdrUndoObjSetText::Undo()
     if (pText)
     {
         // copy text for Undo, because the original now belongs to SetOutlinerParaObject()
-        std::unique_ptr<OutlinerParaObject> pText1( pOldText ? new OutlinerParaObject(*pOldText) : nullptr );
-        pTarget->NbcSetOutlinerParaObjectForText(std::move(pText1), pText);
+        pTarget->NbcSetOutlinerParaObjectForText(pOldText, pText);
     }
 
     pTarget->SetEmptyPresObj(bEmptyPresObj);
@@ -1068,8 +1067,7 @@ void SdrUndoObjSetText::Redo()
     if (pText)
     {
         // copy text for Undo, because the original now belongs to SetOutlinerParaObject()
-        std::unique_ptr<OutlinerParaObject> pText1( pNewText ? new OutlinerParaObject(*pNewText) : nullptr );
-        pTarget->NbcSetOutlinerParaObjectForText( std::move(pText1), pText );
+        pTarget->NbcSetOutlinerParaObjectForText( pNewText, pText );
     }
 
     pTarget->ActionChanged();
@@ -1123,10 +1121,7 @@ void SdrUndoObjSetText::SdrRepeat(SdrView& rView)
             if( bUndo )
                 rView.AddUndo(std::make_unique<SdrUndoObjSetText>(*pTextObj,0));
 
-            std::unique_ptr<OutlinerParaObject> pText1;
-            if (pNewText)
-                pText1.reset(new OutlinerParaObject(*pNewText));
-            pTextObj->SetOutlinerParaObject(std::move(pText1));
+            pTextObj->SetOutlinerParaObject(pNewText);
         }
     }
 

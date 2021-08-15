@@ -986,10 +986,10 @@ void SdDrawDocument::SpellObject(SdrTextObj* pObj)
 
         if (mbHasOnlineSpellErrors)
         {
-            std::unique_ptr<OutlinerParaObject> pOPO = pOutl->CreateParaObject();
+            std::optional<OutlinerParaObject> pOPO = pOutl->CreateParaObject();
             if (pOPO)
             {
-                if (!( *pOPO == *pObj->GetOutlinerParaObject() ) ||
+                if ( *pOPO != *pObj->GetOutlinerParaObject() ||
                      !pObj->GetOutlinerParaObject()->isWrongListEqual( *pOPO ))
                 {
                     sd::ModifyGuard aGuard( this );

@@ -821,7 +821,7 @@ void ScCaptionPtr::clear()
 struct ScCaptionInitData
 {
     std::unique_ptr< SfxItemSet >       mxItemSet;          /// Caption object formatting.
-    std::unique_ptr< OutlinerParaObject >  mxOutlinerObj;      /// Text object with all text portion formatting.
+    std::optional< OutlinerParaObject >  mxOutlinerObj;      /// Text object with all text portion formatting.
     OUString     maSimpleText;       /// Simple text without formatting.
     Point               maCaptionOffset;    /// Caption position relative to cell corner.
     Size                maCaptionSize;      /// Size of the caption object.
@@ -900,8 +900,8 @@ const OutlinerParaObject* ScPostIt::GetOutlinerObject() const
 {
     if( maNoteData.mxCaption )
         return maNoteData.mxCaption->GetOutlinerParaObject();
-    if( maNoteData.mxInitData )
-        return maNoteData.mxInitData->mxOutlinerObj.get();
+    if( maNoteData.mxInitData && maNoteData.mxInitData->mxOutlinerObj )
+        return &*maNoteData.mxInitData->mxOutlinerObj;
     return nullptr;
 }
 
@@ -967,7 +967,7 @@ void ScPostIt::ForgetCaption( bool bPreserveData )
         ScCaptionInitData* pInitData = new ScCaptionInitData;
         const OutlinerParaObject* pOPO = GetOutlinerObject();
         if (pOPO)
-            pInitData->mxOutlinerObj.reset( new OutlinerParaObject(*pOPO));
+            pInitData->mxOutlinerObj = *pOPO;
         pInitData->maSimpleText = GetText();
 
         maNoteData.mxInitData.reset(pInitData);
@@ -1110,7 +1110,7 @@ void ScPostIt::CreateCaption( const ScAddress& rPos, const SdrCaptionObj* pCapti
     {
         // copy edit text object (object must be inserted into page already)
         if( OutlinerParaObject* pOPO = pCaption->GetOutlinerParaObject() )
-            maNoteData.mxCaption->SetOutlinerParaObject( std::make_unique<OutlinerParaObject>( *pOPO ) );
+            maNoteData.mxCaption->SetOutlinerParaObject( *pOPO );
         // copy formatting items (after text has been copied to apply font formatting)
         maNoteData.mxCaption->SetMergedItemSetAndBroadcast( pCaption->GetMergedItemSet() );
         // move textbox position relative to new cell, copy textbox size
@@ -1196,7 +1196,7 @@ ScCaptionPtr ScNoteUtil::CreateTempCaption(
     if( pNoteCaption && rUserText.isEmpty() )
     {
         if( OutlinerParaObject* pOPO = pNoteCaption->GetOutlinerParaObject() )
-            pCaption->SetOutlinerParaObject( std::make_unique<OutlinerParaObject>( *pOPO ) );
+            pCaption->SetOutlinerParaObject( *pOPO );
         // set formatting (must be done after setting text) and resize the box to fit the text
         pCaption->SetMergedItemSetAndBroadcast( pNoteCaption->GetMergedItemSet() );
         tools::Rectangle aCaptRect( pCaption->GetLogicRect().TopLeft(), pNoteCaption->GetLogicRect().GetSize() );
@@ -1249,7 +1249,10 @@ ScPostIt* ScNoteUtil::CreateNoteFromObjectData(
     aNoteData.mxInitData = std::make_shared<ScCaptionInitData>();
     ScCaptionInitData& rInitData = *aNoteData.mxInitData;
     rInitData.mxItemSet = std::move(pItemSet);
-    rInitData.mxOutlinerObj.reset( pOutlinerObj );
+    if (pOutlinerObj)
+        rInitData.mxOutlinerObj = *pOutlinerObj;
+    else
+        rInitData.mxOutlinerObj.reset();
 
     // convert absolute caption position to relative position
     rInitData.mbDefaultPosSize = rCaptionRect.IsEmpty();

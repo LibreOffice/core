@@ -2490,7 +2490,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 OutlinerMode nOutlMode = pOutl->GetOutlinerMode();
                 pOutl->SetStyleSheet( 0, nullptr );
                 pOutl->QuickInsertField( *pFieldItem, ESelection() );
-                std::unique_ptr<OutlinerParaObject> pOutlParaObject = pOutl->CreateParaObject();
+                std::optional<OutlinerParaObject> pOutlParaObject = pOutl->CreateParaObject();
 
                 SdrRectObj* pRectObj = new SdrRectObj(
                     *GetDoc(),

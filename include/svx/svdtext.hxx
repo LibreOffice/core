@@ -19,10 +19,12 @@
 
 #pragma once
 
+#include <editeng/outlobj.hxx>
 #include <svx/sdr/properties/defaultproperties.hxx>
 #include <svx/svxdllapi.h>
 #include <tools/weakbase.hxx>
 #include <memory>
+#include <optional>
 
 class OutlinerParaObject;
 class SdrOutliner;
@@ -48,8 +50,9 @@ public:
 
     void ForceOutlinerParaObject(OutlinerMode nOutlMode);
 
-    virtual void SetOutlinerParaObject(std::unique_ptr<OutlinerParaObject> pTextObject);
-    OutlinerParaObject* GetOutlinerParaObject() const;
+    virtual void SetOutlinerParaObject(std::optional<OutlinerParaObject> pTextObject);
+    OutlinerParaObject* GetOutlinerParaObject();
+    const OutlinerParaObject* GetOutlinerParaObject() const;
 
     void CheckPortionInfo(SdrOutliner& rOutliner);
     void ReformatText();
@@ -63,7 +66,7 @@ public:
     SdrTextObj& GetObject() const { return mrObject; }
 
     /** returns the current OutlinerParaObject and removes it from this instance */
-    std::unique_ptr<OutlinerParaObject> RemoveOutlinerParaObject();
+    std::optional<OutlinerParaObject> RemoveOutlinerParaObject();
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const;
 
@@ -72,7 +75,7 @@ protected:
     virtual SfxStyleSheet* GetStyleSheet() const;
 
 private:
-    std::unique_ptr<OutlinerParaObject> mpOutlinerParaObject;
+    std::optional<OutlinerParaObject> mpOutlinerParaObject;
     SdrTextObj& mrObject;
     bool mbPortionInfoChecked;
 };
