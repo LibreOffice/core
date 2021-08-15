@@ -389,11 +389,12 @@ tools::Polygon lcl_CreateContourPolygon(SdrObject* pSdrObj)
             // case OBJ_PLIN: disabled for unknown reason; related bug 75254.
             {
                 // Includes removing any control points
-                SdrObject* pConverted = pSdrObj->ConvertToPolyObj(false, false).release();
+                SdrObjectUniquePtr pNewObj = pSdrObj->ConvertToPolyObj(false, false);
+                SdrPathObj* pConverted = dynamic_cast<SdrPathObj*>(pNewObj.get());
                 if (!pConverted)
                     break;
-                aPolyPolygon = static_cast<SdrPathObj*>(pConverted)->GetPathPoly();
-                SdrObject::Free(pConverted);
+                aPolyPolygon = pConverted->GetPathPoly();
+                pNewObj.reset();
 
                 // Word adds a line from last to first point. That will cut of indentations from being
                 // filled. To prevent this, the wrap polygon is lead along the path back to the first
