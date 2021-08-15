@@ -315,7 +315,7 @@ void SdrTableRTFParser::FillTable()
                     if( xCellInfo->maItemSet.GetItemState(SDRATTR_TABLE_BORDER,false,&pPoolItem)==SfxItemState::SET)
                         xCell->SetMergedItem( *pPoolItem );
 
-                    std::unique_ptr<OutlinerParaObject> pTextObject(mpOutliner->CreateParaObject( xCellInfo->mnStartPara, xCellInfo->mnParaCount ));
+                    std::optional<OutlinerParaObject> pTextObject(mpOutliner->CreateParaObject( xCellInfo->mnStartPara, xCellInfo->mnParaCount ));
                     if( pTextObject )
                     {
                         SdrOutliner& rOutliner=mrTableObj.ImpGetDrawOutliner();

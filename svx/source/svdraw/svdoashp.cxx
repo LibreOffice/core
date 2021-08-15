@@ -2663,9 +2663,11 @@ void SdrObjCustomShape::TakeTextRect( SdrOutliner& rOutliner, tools::Rectangle& 
     rOutliner.SetPaperSize( aNullSize );
 
     // put text into the Outliner - if necessary the use the text from the EditOutliner
-    OutlinerParaObject* pPara= GetOutlinerParaObject();
+    std::optional<OutlinerParaObject> pPara;
+    if (GetOutlinerParaObject())
+        pPara = *GetOutlinerParaObject();
     if (mpEditingOutliner && !bNoEditText)
-        pPara=mpEditingOutliner->CreateParaObject().release();
+        pPara=mpEditingOutliner->CreateParaObject();
 
     if (pPara)
     {
@@ -2686,8 +2688,6 @@ void SdrObjCustomShape::TakeTextRect( SdrOutliner& rOutliner, tools::Rectangle& 
     {
         rOutliner.SetTextObj( nullptr );
     }
-    if (mpEditingOutliner && !bNoEditText && pPara)
-        delete pPara;
 
     rOutliner.SetUpdateMode(true);
     rOutliner.SetControlWord(nStat0);
@@ -2759,7 +2759,7 @@ void SdrObjCustomShape::TakeTextRect( SdrOutliner& rOutliner, tools::Rectangle& 
     rTextRect=tools::Rectangle(aTextPos,aTextSiz);
 }
 
-void SdrObjCustomShape::NbcSetOutlinerParaObject(std::unique_ptr<OutlinerParaObject> pTextObject)
+void SdrObjCustomShape::NbcSetOutlinerParaObject(std::optional<OutlinerParaObject> pTextObject)
 {
     SdrTextObj::NbcSetOutlinerParaObject( std::move(pTextObject) );
     SetBoundRectDirty();

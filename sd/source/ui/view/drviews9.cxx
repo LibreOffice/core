@@ -150,7 +150,7 @@ void DrawViewShell::ExecGallery(SfxRequest const & rReq)
 
                         SdrGrafObj* pNewGrafObj(pGrafObj->CloneSdrObject(pGrafObj->getSdrModelFromSdrObject()));
                         pNewGrafObj->SetEmptyPresObj(false);
-                        pNewGrafObj->SetOutlinerParaObject(nullptr);
+                        pNewGrafObj->SetOutlinerParaObject(std::nullopt);
                         pNewGrafObj->SetGraphic(aGraphic);
 
                         OUString aStr = mpDrawView->GetDescriptionOfMarkedObjects() +

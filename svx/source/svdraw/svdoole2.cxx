@@ -1229,7 +1229,7 @@ SdrObjectUniquePtr SdrOle2Obj::createSdrGrafObjReplacement(bool bAddText) const
 
             if(pOPO)
             {
-                pClone->NbcSetOutlinerParaObject(std::make_unique<OutlinerParaObject>(*pOPO));
+                pClone->NbcSetOutlinerParaObject(*pOPO);
             }
         }
 

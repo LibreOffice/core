@@ -1582,7 +1582,7 @@ void OutlineViewShell::UpdateTitleObject( SdPage* pPage, Paragraph const * pPara
         }
 
         // if we have a title object and a text, set the text
-        std::unique_ptr<OutlinerParaObject> pOPO;
+        std::optional<OutlinerParaObject> pOPO;
         if (pTO)
             pOPO = rOutliner.CreateParaObject(rOutliner.GetAbsPos(pPara), 1);
         if (pOPO)
@@ -1645,7 +1645,7 @@ void OutlineViewShell::UpdateOutlineObject( SdPage* pPage, Paragraph* pPara )
         return;
 
     ::Outliner&         rOutliner = pOlView->GetOutliner();
-    std::unique_ptr<OutlinerParaObject> pOPO;
+    std::optional<OutlinerParaObject> pOPO;
     SdrTextObj*         pTO  = nullptr;
 
     OutlinerMode eOutlinerMode = OutlinerMode::TitleObject;

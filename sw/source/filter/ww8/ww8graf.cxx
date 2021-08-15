@@ -960,9 +960,9 @@ static void removePositions(EditEngine &rDrawEditEngine, const std::vector<sal_I
     }
 }
 
-std::unique_ptr<OutlinerParaObject> SwWW8ImplReader::ImportAsOutliner(OUString &rString, WW8_CP nStartCp, WW8_CP nEndCp, ManTypes eType)
+std::optional<OutlinerParaObject> SwWW8ImplReader::ImportAsOutliner(OUString &rString, WW8_CP nStartCp, WW8_CP nEndCp, ManTypes eType)
 {
-    std::unique_ptr<OutlinerParaObject> pRet;
+    std::optional<OutlinerParaObject> pRet;
 
     sal_Int32 nLen = GetRangeAsDrawingString(rString, nStartCp, nEndCp, eType);
     if (nLen > 0)
@@ -992,7 +992,7 @@ std::unique_ptr<OutlinerParaObject> SwWW8ImplReader::ImportAsOutliner(OUString &
         }
 
         std::unique_ptr<EditTextObject> pTemporaryText = m_pDrawEditEngine->CreateTextObject();
-        pRet.reset( new OutlinerParaObject( std::move(pTemporaryText) ) );
+        pRet.emplace( std::move(pTemporaryText) );
         pRet->SetOutlinerMode( OutlinerMode::TextObject );
 
         m_pDrawEditEngine->SetText( OUString() );
@@ -1196,10 +1196,10 @@ void SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
         }
 
         bool bVertical = pTextObj->IsVerticalWriting();
-        std::unique_ptr<OutlinerParaObject> pOp(new OutlinerParaObject(m_pDrawEditEngine->CreateTextObject()));
-        pOp->SetOutlinerMode( OutlinerMode::TextObject );
-        pOp->SetVertical( bVertical );
-        pTextObj->NbcSetOutlinerParaObject( std::move(pOp) );
+        OutlinerParaObject aOp(m_pDrawEditEngine->CreateTextObject());
+        aOp.SetOutlinerMode( OutlinerMode::TextObject );
+        aOp.SetVertical( bVertical );
+        pTextObj->NbcSetOutlinerParaObject( std::move(aOp) );
         pTextObj->SetVerticalWriting(bVertical);
 
         // For the next TextBox also remove the old paragraph attributes

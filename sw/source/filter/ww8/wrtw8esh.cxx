@@ -1316,8 +1316,7 @@ void MSWord_SdrAttrIter::OutParaAttr(bool bCharAttr, const std::set<sal_uInt16>*
 
 void WW8Export::WriteSdrTextObj(const SdrTextObj& rTextObj, sal_uInt8 nTyp)
 {
-    const OutlinerParaObject* pParaObj = nullptr;
-    bool bOwnParaObj = false;
+    std::optional<OutlinerParaObject> pParaObj;
 
     /*
     #i13885#
@@ -1326,19 +1325,16 @@ void WW8Export::WriteSdrTextObj(const SdrTextObj& rTextObj, sal_uInt8 nTyp)
     */
     if (rTextObj.IsTextEditActive())
     {
-        pParaObj = rTextObj.CreateEditOutlinerParaObject().release();
-        bOwnParaObj = true;
+        pParaObj = rTextObj.CreateEditOutlinerParaObject();
     }
-    else
+    else if (rTextObj.GetOutlinerParaObject())
     {
-        pParaObj = rTextObj.GetOutlinerParaObject();
+        pParaObj = *rTextObj.GetOutlinerParaObject();
     }
 
     if( pParaObj )
     {
         WriteOutliner(*pParaObj, nTyp);
-        if( bOwnParaObj )
-            delete pParaObj;
     }
 }
 

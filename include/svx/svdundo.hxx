@@ -25,6 +25,7 @@
 #include <memory>
 #include <vector>
 
+#include <editeng/outlobj.hxx>
 #include <svl/undo.hxx>
 #include <svl/style.hxx>
 #include <tools/gen.hxx>
@@ -393,9 +394,9 @@ public:
 class SVXCORE_DLLPUBLIC SdrUndoObjSetText : public SdrUndoObj
 {
 protected:
-    std::unique_ptr<OutlinerParaObject>
+    std::optional<OutlinerParaObject>
                                 pOldText;
-    std::unique_ptr<OutlinerParaObject>
+    std::optional<OutlinerParaObject>
                                 pNewText;
     bool                        bNewTextAvailable;
     bool                        bEmptyPresObj;

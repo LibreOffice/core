@@ -71,13 +71,16 @@ public:
     OutlinerParaObject(std::unique_ptr<EditTextObject>, const ParagraphDataVector&, bool bIsEditDoc);
     OutlinerParaObject( std::unique_ptr<EditTextObject> );
     OutlinerParaObject( const OutlinerParaObject&);
+    OutlinerParaObject(OutlinerParaObject&&) noexcept;
     ~OutlinerParaObject();
 
     // assignment operator
     OutlinerParaObject& operator=(const OutlinerParaObject& rCandidate);
+    OutlinerParaObject& operator=(OutlinerParaObject&&) noexcept;
 
     // compare operator
     bool operator==(const OutlinerParaObject& rCandidate) const;
+    bool operator!=(const OutlinerParaObject& rCandidate) const { return !operator==(rCandidate); }
 
     // #i102062#
     bool isWrongListEqual(const OutlinerParaObject& rCompare) const;

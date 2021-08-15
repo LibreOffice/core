@@ -113,7 +113,7 @@ uno::Reference< drawing::XShape >  OReportDrawPage::CreateShape( SdrObject *pObj
                 * The empty OLE object gets a new IPObj
                 **************************************************/
                 pObj->SetEmptyPresObj(false);
-                rOle2Obj.SetOutlinerParaObject(nullptr);
+                rOle2Obj.SetOutlinerParaObject(std::nullopt);
                 rOle2Obj.SetObjRef(xObj);
                 rOle2Obj.SetPersistName(sName);
                 rOle2Obj.SetName(sName);

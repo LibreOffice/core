@@ -183,7 +183,7 @@ void FuExpandPage::DoExecute( SfxRequest& )
                 if (!pTextObj)
                     continue;
 
-                std::unique_ptr<OutlinerParaObject> pOutlinerParaObject = aOutliner.CreateParaObject( nParaPos, 1);
+                std::optional<OutlinerParaObject> pOutlinerParaObject = aOutliner.CreateParaObject( nParaPos, 1);
                 pOutlinerParaObject->SetOutlinerMode(OutlinerMode::TitleObject);
 
                 if( pOutlinerParaObject->GetDepth(0) != -1 )
@@ -213,7 +213,7 @@ void FuExpandPage::DoExecute( SfxRequest& )
                 if (pOutlineObj)
                 {
                     // create structuring text objects
-                    std::unique_ptr<OutlinerParaObject> pOPO = aOutliner.CreateParaObject(++nParaPos, nChildCount);
+                    std::optional<OutlinerParaObject> pOPO = aOutliner.CreateParaObject(++nParaPos, nChildCount);
 
                     std::unique_ptr<SdrOutliner> pTempOutl = SdrMakeOutliner(OutlinerMode::OutlineObject, *mpDoc);
                     pTempOutl->SetText( *pOPO );

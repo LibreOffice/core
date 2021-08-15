@@ -1321,7 +1321,7 @@ void SwFlyFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
                     Size aSize(getFrameArea().Width(), getFrameArea().Height());
                     pCustomShape->SuggestTextFrameSize(aSize);
                     // Do the calculations normally done after touching editeng text of the shape.
-                    pCustomShape->NbcSetOutlinerParaObjectForText(nullptr, nullptr);
+                    pCustomShape->NbcSetOutlinerParaObjectForText(std::nullopt, nullptr);
                 }
             }
         }

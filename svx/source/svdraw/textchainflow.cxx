@@ -156,7 +156,7 @@ void TextChainFlow::ExecuteUnderflow(SdrOutliner *pOutl)
     //GetTextChain()->SetNilChainingEvent(mpTargetLink, true);
     // making whole text
     // merges underflowing text with the one in the next box
-    std::unique_ptr<OutlinerParaObject> pNewText = mpUnderflChText->CreateMergedUnderflowParaObject(pOutl, mpNextLink->GetOutlinerParaObject());
+    std::optional<OutlinerParaObject> pNewText = mpUnderflChText->CreateMergedUnderflowParaObject(pOutl, mpNextLink->GetOutlinerParaObject());
 
     // Set the other box empty; it will be replaced by the rest of the text if overflow occurs
     if (!mpTargetLink->GetPreventChainable())
@@ -165,16 +165,15 @@ void TextChainFlow::ExecuteUnderflow(SdrOutliner *pOutl)
     // We store the size since NbcSetOutlinerParaObject can change it
     //Size aOldSize = pOutl->GetMaxAutoPaperSize();
 
-    auto pNewTextTemp = pNewText.get(); // because we need to access it after a std::move
     // This should not be done in editing mode!! //XXX
     if (!mpTargetLink->IsInEditMode())
     {
-        mpTargetLink->NbcSetOutlinerParaObject(std::move(pNewText));
+        mpTargetLink->NbcSetOutlinerParaObject(pNewText);
     }
 
     // Restore size and set new text
     //pOutl->SetMaxAutoPaperSize(aOldSize); // XXX (it seems to be working anyway without this)
-    pOutl->SetText(*pNewTextTemp);
+    pOutl->SetText(*pNewText);
 
     //GetTextChain()->SetNilChainingEvent(mpTargetLink, false);
 
@@ -199,7 +198,7 @@ void TextChainFlow::ExecuteOverflow(SdrOutliner *pNonOverflOutl, SdrOutliner *pO
 
 void TextChainFlow::impLeaveOnlyNonOverflowingText(SdrOutliner *pNonOverflOutl)
 {
-    std::unique_ptr<OutlinerParaObject> pNewText = mpOverflChText->RemoveOverflowingText(pNonOverflOutl);
+    std::optional<OutlinerParaObject> pNewText = mpOverflChText->RemoveOverflowingText(pNonOverflOutl);
 
     SAL_INFO("svx.chaining", "[TEXTCHAINFLOW - OF] SOURCE box set to "
              << pNewText->GetTextObject().GetParagraphCount() << " paras");
@@ -222,7 +221,7 @@ void TextChainFlow::impMoveChainedTextToNextLink(SdrOutliner *pOverflOutl)
         return;
     }
 
-    std::unique_ptr<OutlinerParaObject> pNewText =
+    std::optional<OutlinerParaObject> pNewText =
         mpOverflChText->InsertOverflowingText(pOverflOutl,
                                               mpNextLink->GetOutlinerParaObject());
     SAL_INFO("svx.chaining", "[TEXTCHAINFLOW - OF] DEST box set to "

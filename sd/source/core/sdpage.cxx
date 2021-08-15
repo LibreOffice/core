@@ -2084,9 +2084,8 @@ static SdrObject* convertPresentationObjectImpl(SdPage& rPage, SdrObject* pSourc
             SdOutliner* pOutl = rModel.GetInternalOutliner();
             pOutl->Clear();
             pOutl->SetText( *pOutlParaObj );
-            std::unique_ptr<OutlinerParaObject> pNew = pOutl->CreateParaObject();
-            pOutlParaObj = pNew.get();
-            pNewObj->SetOutlinerParaObject( std::move(pNew) );
+            pNewObj->SetOutlinerParaObject( pOutl->CreateParaObject() );
+            pOutlParaObj = pNewObj->GetOutlinerParaObject();
             pOutl->Clear();
             pNewObj->SetEmptyPresObj(false);
 

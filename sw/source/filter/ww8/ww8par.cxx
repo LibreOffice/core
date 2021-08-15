@@ -2159,7 +2159,7 @@ tools::Long SwWW8ImplReader::Read_And(WW8PLCFManResult* pRes)
     DateTime aDate = msfilter::util::DTTM2DateTime(nDateTime);
 
     OUString sText;
-    std::unique_ptr<OutlinerParaObject> pOutliner = ImportAsOutliner( sText, pRes->nCp2OrIdx,
+    std::optional<OutlinerParaObject> pOutliner = ImportAsOutliner( sText, pRes->nCp2OrIdx,
         pRes->nCp2OrIdx + pRes->nMemLen, MAN_AND );
 
     m_xFormatOfJustInsertedApo.reset();

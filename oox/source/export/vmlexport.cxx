@@ -1420,8 +1420,7 @@ sal_Int32 VMLExport::StartShape()
     const SdrTextObj* pTxtObj = dynamic_cast<const SdrTextObj*>( m_pSdrObject );
     if (pTxtObj && m_pTextExport && msfilter::util::HasTextBoxContent(m_nShapeType) && !IsWaterMarkShape(m_pSdrObject->GetName()) && !lcl_isTextBox(m_pSdrObject))
     {
-        const OutlinerParaObject* pParaObj = nullptr;
-        bool bOwnParaObj = false;
+        std::optional<OutlinerParaObject> pParaObj;
 
         /*
         #i13885#
@@ -1430,12 +1429,11 @@ sal_Int32 VMLExport::StartShape()
         */
         if (pTxtObj->IsTextEditActive())
         {
-            pParaObj = pTxtObj->CreateEditOutlinerParaObject().release();
-            bOwnParaObj = true;
+            pParaObj = pTxtObj->CreateEditOutlinerParaObject();
         }
-        else
+        else if (pTxtObj->GetOutlinerParaObject())
         {
-            pParaObj = pTxtObj->GetOutlinerParaObject();
+            pParaObj = *pTxtObj->GetOutlinerParaObject();
         }
 
         if( pParaObj )
@@ -1450,8 +1448,6 @@ sal_Int32 VMLExport::StartShape()
             m_pSerializer->startElementNS(XML_v, XML_textbox, pTextboxAttrList);
             m_pTextExport->WriteOutliner(*pParaObj);
             m_pSerializer->endElementNS(XML_v, XML_textbox);
-            if( bOwnParaObj )
-                delete pParaObj;
         }
     }
 

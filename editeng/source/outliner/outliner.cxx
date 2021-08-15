@@ -358,7 +358,7 @@ sal_Int32 Outliner::GetBulletsNumberingStatus() const
            : 2;
 }
 
-std::unique_ptr<OutlinerParaObject> Outliner::CreateParaObject( sal_Int32 nStartPara, sal_Int32 nCount ) const
+std::optional<OutlinerParaObject> Outliner::CreateParaObject( sal_Int32 nStartPara, sal_Int32 nCount ) const
 {
     if ( static_cast<sal_uLong>(nStartPara) + nCount >
             o3tl::make_unsigned(pParaList->GetParagraphCount()) )
@@ -370,7 +370,7 @@ std::unique_ptr<OutlinerParaObject> Outliner::CreateParaObject( sal_Int32 nStart
         nCount = pEditEngine->GetParagraphCount() - nStartPara;
 
     if (nCount <= 0)
-        return nullptr;
+        return std::nullopt;
 
     std::unique_ptr<EditTextObject> xText = pEditEngine->CreateTextObject( nStartPara, nCount );
     const bool bIsEditDoc(OutlinerMode::TextObject == GetOutlinerMode());
@@ -382,16 +382,15 @@ std::unique_ptr<OutlinerParaObject> Outliner::CreateParaObject( sal_Int32 nStart
         aParagraphDataVector[nPara-nStartPara] = *GetParagraph(nPara);
     }
 
-    std::unique_ptr<OutlinerParaObject> pPObj(new OutlinerParaObject(std::move(xText), aParagraphDataVector, bIsEditDoc));
-    pPObj->SetOutlinerMode(GetOutlinerMode());
+    OutlinerParaObject aPObj(std::move(xText), aParagraphDataVector, bIsEditDoc);
+    aPObj.SetOutlinerMode(GetOutlinerMode());
 
-    return pPObj;
+    return aPObj;
 }
 
 void Outliner::SetToEmptyText()
 {
-    std::unique_ptr<OutlinerParaObject> pEmptyTxt = GetEmptyParaObject();
-    SetText(*pEmptyTxt);
+    SetText(GetEmptyParaObject());
 }
 
 void Outliner::SetText( const OUString& rText, Paragraph* pPara )
@@ -2118,12 +2117,12 @@ std::optional<NonOverflowingText> Outliner::GetNonOverflowingText() const
     }
 }
 
-std::unique_ptr<OutlinerParaObject> Outliner::GetEmptyParaObject() const
+OutlinerParaObject Outliner::GetEmptyParaObject() const
 {
     std::unique_ptr<EditTextObject> pEmptyText = pEditEngine->GetEmptyTextObject();
-    std::unique_ptr<OutlinerParaObject> pPObj( new OutlinerParaObject( std::move(pEmptyText) ));
-    pPObj->SetOutlinerMode(GetOutlinerMode());
-    return pPObj;
+    OutlinerParaObject aPObj( std::move(pEmptyText) );
+    aPObj.SetOutlinerMode(GetOutlinerMode());
+    return aPObj;
 }
 
 std::optional<OverflowingText> Outliner::GetOverflowingText() const
