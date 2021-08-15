@@ -105,7 +105,7 @@ void DrawViewShell::ScannerEvent()
                                 {
                                     bInsertNewObject = false;
                                     pGrafObj->SetEmptyPresObj(false);
-                                    pGrafObj->SetOutlinerParaObject(nullptr);
+                                    pGrafObj->SetOutlinerParaObject({});
                                     pGrafObj->SetGraphic( Graphic( aScanBmp ) );
                                 }
                             }

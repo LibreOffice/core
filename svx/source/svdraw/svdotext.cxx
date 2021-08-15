@@ -118,7 +118,7 @@ SdrTextObj::SdrTextObj(SdrModel& rSdrModel, SdrTextObj const & rSource)
         // objects). In the current form it makes only sense to
         // create locally and use locally on a known existing SdrText
         const Outliner* pEO = rSource.mpEditingOutliner;
-        std::unique_ptr<OutlinerParaObject> pNewOutlinerParaObject;
+        std::optional<OutlinerParaObject> pNewOutlinerParaObject;
 
         if (pEO!=nullptr)
         {
@@ -126,7 +126,7 @@ SdrTextObj::SdrTextObj(SdrModel& rSdrModel, SdrTextObj const & rSource)
         }
         else if (nullptr != rSource.getActiveText()->GetOutlinerParaObject())
         {
-            pNewOutlinerParaObject.reset( new OutlinerParaObject(*rSource.getActiveText()->GetOutlinerParaObject()) );
+            pNewOutlinerParaObject = *rSource.getActiveText()->GetOutlinerParaObject();
         }
 
         pText->SetOutlinerParaObject( std::move(pNewOutlinerParaObject) );
@@ -242,7 +242,7 @@ void SdrTextObj::NbcSetText(const OUString& rStr)
     SdrOutliner& rOutliner=ImpGetDrawOutliner();
     rOutliner.SetStyleSheet( 0, GetStyleSheet());
     rOutliner.SetText(rStr,rOutliner.GetParagraph( 0 ));
-    std::unique_ptr<OutlinerParaObject> pNewText=rOutliner.CreateParaObject();
+    std::optional<OutlinerParaObject> pNewText=rOutliner.CreateParaObject();
     NbcSetOutlinerParaObject(std::move(pNewText));
     mbTextSizeDirty=true;
 }
@@ -261,7 +261,7 @@ void SdrTextObj::NbcSetText(SvStream& rInput, const OUString& rBaseURL, EETextFo
     SdrOutliner& rOutliner=ImpGetDrawOutliner();
     rOutliner.SetStyleSheet( 0, GetStyleSheet());
     rOutliner.Read(rInput,rBaseURL,eFormat);
-    std::unique_ptr<OutlinerParaObject> pNewText=rOutliner.CreateParaObject();
+    std::optional<OutlinerParaObject> pNewText=rOutliner.CreateParaObject();
     rOutliner.SetUpdateMode(true);
     Size aSize(rOutliner.CalcTextSize());
     rOutliner.Clear();
@@ -769,7 +769,11 @@ void SdrTextObj::TakeTextRect( SdrOutliner& rOutliner, tools::Rectangle& rTextRe
     // put text into the outliner, if available from the edit outliner
     SdrText* pText = getActiveText();
     OutlinerParaObject* pOutlinerParaObject = pText ? pText->GetOutlinerParaObject() : nullptr;
-    OutlinerParaObject* pPara = (mpEditingOutliner && !bNoEditText) ? mpEditingOutliner->CreateParaObject().release() : pOutlinerParaObject;
+    std::optional<OutlinerParaObject> pPara;
+    if (mpEditingOutliner && !bNoEditText)
+        pPara = mpEditingOutliner->CreateParaObject();
+    else if (pOutlinerParaObject)
+        pPara = *pOutlinerParaObject;
 
     if (pPara)
     {
@@ -793,9 +797,6 @@ void SdrTextObj::TakeTextRect( SdrOutliner& rOutliner, tools::Rectangle& rTextRe
     {
         rOutliner.SetTextObj( nullptr );
     }
-
-    if (mpEditingOutliner && !bNoEditText && pPara)
-        delete pPara;
 
     rOutliner.SetUpdateMode(true);
     rOutliner.SetControlWord(nStat0);
@@ -869,9 +870,9 @@ bool SdrTextObj::CanCreateEditOutlinerParaObject() const
     return false;
 }
 
-std::unique_ptr<OutlinerParaObject> SdrTextObj::CreateEditOutlinerParaObject() const
+std::optional<OutlinerParaObject> SdrTextObj::CreateEditOutlinerParaObject() const
 {
-    std::unique_ptr<OutlinerParaObject> pPara;
+    std::optional<OutlinerParaObject> pPara;
     if( HasTextImpl( mpEditingOutliner ) )
     {
         sal_Int32 nParaCount = mpEditingOutliner->GetParagraphCount();
@@ -1338,12 +1339,12 @@ OutlinerParaObject* SdrTextObj::GetOutlinerParaObject() const
         return nullptr;
 }
 
-void SdrTextObj::NbcSetOutlinerParaObject(std::unique_ptr<OutlinerParaObject> pTextObject)
+void SdrTextObj::NbcSetOutlinerParaObject(std::optional<OutlinerParaObject> pTextObject)
 {
     NbcSetOutlinerParaObjectForText( std::move(pTextObject), getActiveText() );
 }
 
-void SdrTextObj::NbcSetOutlinerParaObjectForText( std::unique_ptr<OutlinerParaObject> pTextObject, SdrText* pText )
+void SdrTextObj::NbcSetOutlinerParaObjectForText( std::optional<OutlinerParaObject> pTextObject, SdrText* pText )
 {
     if( pText )
         pText->SetOutlinerParaObject( std::move(pTextObject) );

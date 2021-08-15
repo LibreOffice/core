@@ -131,7 +131,7 @@ public:
     virtual void TakeTextAnchorRect(tools::Rectangle& rAnchorRect) const override;
     virtual void TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, tools::Rectangle* pViewInit, tools::Rectangle* pViewMin) const override;
     virtual EEAnchorMode GetOutlinerViewAnchorMode() const override;
-    virtual void NbcSetOutlinerParaObject(std::unique_ptr<OutlinerParaObject> pTextObject) override;
+    virtual void NbcSetOutlinerParaObject(std::optional<OutlinerParaObject> pTextObject) override;
     virtual OutlinerParaObject* GetOutlinerParaObject() const override;
 
     virtual bool CalcFieldValue(const SvxFieldItem& rField, sal_Int32 nPara, sal_uInt16 nPos,

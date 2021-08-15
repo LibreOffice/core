@@ -2731,7 +2731,7 @@ void SdrObjEditView::ApplyFormatPaintBrushToText(SfxItemSet const& rFormatSet, S
         rOutliner.SetParaAttribs(nPara, aSet);
     }
 
-    std::unique_ptr<OutlinerParaObject> pTemp = rOutliner.CreateParaObject(0, nParaCount);
+    std::optional<OutlinerParaObject> pTemp = rOutliner.CreateParaObject(0, nParaCount);
     rOutliner.Clear();
 
     rTextObj.NbcSetOutlinerParaObjectForText(std::move(pTemp), pText);

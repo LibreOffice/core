@@ -169,11 +169,10 @@ void SdrTableRtfExporter::WriteCell( sal_Int32 nCol, sal_Int32 nRow )
 
     OUString aContent;
 
-    OutlinerParaObject* pParaObj = xCell->CreateEditOutlinerParaObject().release();
-    bool bOwnParaObj = pParaObj != nullptr;
+    std::optional<OutlinerParaObject> pParaObj = xCell->CreateEditOutlinerParaObject();
 
-    if( pParaObj == nullptr )
-        pParaObj = xCell->GetOutlinerParaObject();
+    if( !pParaObj && xCell->GetOutlinerParaObject() )
+        pParaObj = *xCell->GetOutlinerParaObject();
 
     if(pParaObj)
     {
@@ -184,9 +183,6 @@ void SdrTableRtfExporter::WriteCell( sal_Int32 nCol, sal_Int32 nRow )
         aContent = rOutliner.GetEditEngine().GetText();
 
         rOutliner.Clear();
-
-        if( bOwnParaObj )
-            delete pParaObj;
     }
 
     bool bResetAttr = false;

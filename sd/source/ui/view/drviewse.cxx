@@ -1489,7 +1489,7 @@ void DrawViewShell::InsertURLField(const OUString& rURL, const OUString& rText,
         aURLField.SetTargetFrame(rTarget);
         SvxFieldItem aURLItem(aURLField, EE_FEATURE_FIELD);
         pOutl->QuickInsertField( aURLItem, ESelection() );
-        std::unique_ptr<OutlinerParaObject> pOutlParaObject = pOutl->CreateParaObject();
+        std::optional<OutlinerParaObject> pOutlParaObject = pOutl->CreateParaObject();
 
         SdrRectObj* pRectObj = new SdrRectObj(
             GetView()->getSdrModelFromSdrView(),

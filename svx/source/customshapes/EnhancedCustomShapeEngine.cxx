@@ -184,7 +184,7 @@ std::unique_ptr<SdrObject, SdrObjectFreeOp> EnhancedCustomShapeEngine::ImplForce
             OutlinerParaObject* pParaObj(rSdrObjCustomShape.GetOutlinerParaObject());
 
             if( pParaObj )
-                pTextObj->NbcSetOutlinerParaObject( std::make_unique<OutlinerParaObject>(*pParaObj) );
+                pTextObj->NbcSetOutlinerParaObject( *pParaObj );
 
             // copy all attributes
             SfxItemSet aTargetItemSet(rSdrObjCustomShape.GetMergedItemSet());

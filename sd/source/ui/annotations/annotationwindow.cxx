@@ -506,7 +506,7 @@ void AnnotationWindow::setAnnotation( const Reference< XAnnotation >& xAnnotatio
 
     if( pTextApi )
     {
-        std::unique_ptr< OutlinerParaObject > pOPO( pTextApi->CreateText() );
+        std::optional< OutlinerParaObject > pOPO( pTextApi->CreateText() );
         mpOutliner->SetText(*pOPO);
     }
 
@@ -574,7 +574,7 @@ void AnnotationWindow::SaveToDocument()
 
         if( pTextApi )
         {
-            std::unique_ptr<OutlinerParaObject> pOPO = mpOutliner->CreateParaObject();
+            std::optional<OutlinerParaObject> pOPO = mpOutliner->CreateParaObject();
             if( pOPO )
             {
                 if( mpDoc->IsUndoEnabled() )
