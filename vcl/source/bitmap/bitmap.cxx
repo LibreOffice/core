@@ -1458,19 +1458,12 @@ bool Bitmap::Scale( const double& rScaleX, const double& rScaleY, BmpScaleFlag n
 
 bool Bitmap::Scale( const Size& rNewSize, BmpScaleFlag nScaleFlag )
 {
-    const Size aSize( GetSizePixel() );
-    bool bRet;
-
-    if( aSize.Width() && aSize.Height() )
-    {
-        bRet = Scale( static_cast<double>(rNewSize.Width()) / aSize.Width(),
-                      static_cast<double>(rNewSize.Height()) / aSize.Height(),
-                      nScaleFlag );
-    }
-    else
-        bRet = true;
-
-    return bRet;
+    const Size aSize(GetSizePixel());
+    if (!aSize.Width() || !aSize.Height())
+        return true;
+    return Scale(static_cast<double>(rNewSize.Width()) / aSize.Width(),
+                 static_cast<double>(rNewSize.Height()) / aSize.Height(),
+                 nScaleFlag);
 }
 
 bool Bitmap::HasFastScale()
