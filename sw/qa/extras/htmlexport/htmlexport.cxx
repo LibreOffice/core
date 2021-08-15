@@ -1021,6 +1021,18 @@ DECLARE_HTMLEXPORT_TEST(testFieldShade, "field-shade.odt")
     assertXPath(pDoc, "/html/body/p[2]/span/span", 0);
 }
 
+DECLARE_HTMLEXPORT_TEST(testTdf132739, "tdf132739.odt")
+{
+    htmlDocUniquePtr pDoc = parseHtml(maTempFile);
+    CPPUNIT_ASSERT(pDoc);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: background: #5983b0; border: 1px solid #333333; padding: 0.04in
+    // - Actual  : background: #5983b0
+    assertXPath(pDoc, "/html/body/table/tr[1]/td", "style",
+                "background: #5983b0; border: 1px solid #333333; padding: 0.04in");
+}
+
 DECLARE_HTMLEXPORT_TEST(testFieldShadeReqIf, "field-shade-reqif.odt")
 {
     htmlDocUniquePtr pDoc = parseHtml(maTempFile);
