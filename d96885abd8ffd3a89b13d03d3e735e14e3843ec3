@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "942dd8f5_5476b738",
+        "filename": "sc/qa/unit/bugfix-test.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 562,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-08-15T22:42:19Z",
+      "side": 0,
+      "message": "This is after \u0027loadComponentFromURL() and not \u0027loadFromDesktop()\u0027.",
+      "revId": "d96885abd8ffd3a89b13d03d3e735e14e3843ec3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
