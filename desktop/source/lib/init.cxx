@@ -805,9 +805,7 @@ void ExecuteMarginULChange(
 void ExecuteOrientationChange()
 {
     std::unique_ptr<SvxPageItem> pPageItem(new SvxPageItem(SID_ATTR_PAGE));
-    std::unique_ptr<SvxSizeItem> pPageSizeItem(new SvxSizeItem(SID_ATTR_PAGE_SIZE));
-    std::unique_ptr<SvxLongLRSpaceItem> pPageLRMarginItem(new SvxLongLRSpaceItem( 0, 0, SID_ATTR_PAGE_LRSPACE ));
-    std::unique_ptr<SvxLongULSpaceItem> pPageULMarginItem(new SvxLongULSpaceItem( 0, 0, SID_ATTR_PAGE_ULSPACE ));
+
     // 1mm in twips rounded
     // This should be in sync with MINBODY in sw/source/uibase/sidebar/PageMarginControl.hxx
     constexpr tools::Long MINBODY = 56;
@@ -823,18 +821,13 @@ void ExecuteOrientationChange()
 
 
     SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState(SID_ATTR_PAGE_SIZE, pItem);
-    pPageSizeItem.reset(&pItem->Clone()->StaticWhichCast(SID_ATTR_PAGE_SIZE));
-
-
+    std::unique_ptr<SvxSizeItem> pPageSizeItem(&pItem->Clone()->StaticWhichCast(SID_ATTR_PAGE_SIZE));
 
     SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState(SID_ATTR_PAGE_LRSPACE, pItem);
-    pPageLRMarginItem.reset(&pItem->Clone()->StaticWhichCast(SID_ATTR_PAGE_LRSPACE));
-
-
+    std::unique_ptr<SvxLongLRSpaceItem> pPageLRMarginItem(&pItem->Clone()->StaticWhichCast(SID_ATTR_PAGE_LRSPACE));
 
     SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState(SID_ATTR_PAGE_ULSPACE, pItem);
-    pPageULMarginItem.reset(&pItem->Clone()->StaticWhichCast(SID_ATTR_PAGE_ULSPACE));
-
+    std::unique_ptr<SvxLongULSpaceItem> pPageULMarginItem(&pItem->Clone()->StaticWhichCast(SID_ATTR_PAGE_ULSPACE));
 
     {
         bool bIsLandscape = false;
