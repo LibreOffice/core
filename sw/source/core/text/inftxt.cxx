@@ -1482,11 +1482,11 @@ void SwTextFormatInfo::CtorInitTextFormatInfo( OutputDevice* pRenderContext, SwT
  */
 bool SwTextFormatInfo::IsHyphenate() const
 {
-    if( !m_bInterHyph && !m_bAutoHyph )
+    if ( !m_bInterHyph && !m_bAutoHyph )
         return false;
 
     LanguageType eTmp = GetFont()->GetLanguage();
-    if( LANGUAGE_DONTKNOW == eTmp || LANGUAGE_NONE == eTmp )
+    if ( LANGUAGE_DONTKNOW == eTmp || LANGUAGE_NONE == eTmp || LANGUAGE_JAPANESE == eTmp )
         return false;
 
     uno::Reference< XHyphenator > xHyph = ::GetHyphenator();
