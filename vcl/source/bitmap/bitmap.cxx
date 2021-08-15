@@ -1461,6 +1461,11 @@ bool Bitmap::Scale( const Size& rNewSize, BmpScaleFlag nScaleFlag )
     const Size aSize(GetSizePixel());
     if (!aSize.Width() || !aSize.Height())
         return true;
+    if (!rNewSize.Width() || !rNewSize.Height())
+    {
+        SetSizePixel(rNewSize);
+        return true;
+    }
     return Scale(static_cast<double>(rNewSize.Width()) / aSize.Width(),
                  static_cast<double>(rNewSize.Height()) / aSize.Height(),
                  nScaleFlag);
