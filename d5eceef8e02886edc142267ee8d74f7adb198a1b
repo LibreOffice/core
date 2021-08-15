@@ -16,6 +16,24 @@
       "revId": "d5eceef8e02886edc142267ee8d74f7adb198a1b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "39ce38f7_efdd9e61",
+        "filename": "desktop/source/lib/init.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 808,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-08-15T23:10:03Z",
+      "side": 1,
+      "message": "Done in https://gerrit.libreoffice.org/c/core/+/120520",
+      "parentUuid": "1d0781b8_3288752f",
+      "revId": "d5eceef8e02886edc142267ee8d74f7adb198a1b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
