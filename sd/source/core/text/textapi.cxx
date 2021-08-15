@@ -53,8 +53,8 @@ public:
     virtual void Redo() override;
 
 protected:
-    std::unique_ptr<OutlinerParaObject> mpOldText;
-    std::unique_ptr<OutlinerParaObject> mpNewText;
+    std::optional<OutlinerParaObject> mpOldText;
+    std::optional<OutlinerParaObject> mpNewText;
     rtl::Reference< TextApiObject > mxTextObj;
 };
 
@@ -109,7 +109,7 @@ public:
 
     void                Dispose();
     void                SetText( OutlinerParaObject const & rText );
-    std::unique_ptr<OutlinerParaObject> CreateText();
+    std::optional<OutlinerParaObject> CreateText();
     OUString            GetText() const;
     SdDrawDocument*     GetDoc() { return m_xImpl->mpDoc; }
 };
@@ -160,7 +160,7 @@ void TextApiObject::dispose()
 
 }
 
-std::unique_ptr<OutlinerParaObject> TextApiObject::CreateText()
+std::optional<OutlinerParaObject> TextApiObject::CreateText()
 {
     return mpSource->CreateText();
 }
@@ -257,12 +257,12 @@ void TextAPIEditSource::SetText( OutlinerParaObject const & rText )
     }
 }
 
-std::unique_ptr<OutlinerParaObject> TextAPIEditSource::CreateText()
+std::optional<OutlinerParaObject> TextAPIEditSource::CreateText()
 {
     if (m_xImpl->mpDoc && m_xImpl->mpOutliner)
         return m_xImpl->mpOutliner->CreateParaObject();
     else
-        return nullptr;
+        return std::nullopt;
 }
 
 OUString TextAPIEditSource::GetText() const

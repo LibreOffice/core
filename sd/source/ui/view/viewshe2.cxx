@@ -691,7 +691,7 @@ bool ViewShell::ActivateObject(SdrOle2Obj* pObj, sal_Int32 nVerb)
         {
             // OLE object is no longer empty
             pObj->SetEmptyPresObj(false);
-            pObj->SetOutlinerParaObject(nullptr);
+            pObj->SetOutlinerParaObject(std::nullopt);
             pObj->ClearGraphic();
 
             // the empty OLE object gets a new IPObj

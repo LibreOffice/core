@@ -1523,9 +1523,11 @@ void SdrTableObj::TakeTextRect( const CellPos& rPos, SdrOutliner& rOutliner, too
 
 
     // set text at outliner, maybe from edit outliner
-    OutlinerParaObject* pPara= xCell->GetOutlinerParaObject();
+    std::optional<OutlinerParaObject> pPara;
+    if (xCell->GetOutlinerParaObject())
+        pPara = *xCell->GetOutlinerParaObject();
     if (mpEditingOutliner && !bNoEditText && mpImpl->mxActiveCell == xCell )
-        pPara=mpEditingOutliner->CreateParaObject().release();
+        pPara = mpEditingOutliner->CreateParaObject();
 
     if (pPara)
     {
@@ -1545,9 +1547,6 @@ void SdrTableObj::TakeTextRect( const CellPos& rPos, SdrOutliner& rOutliner, too
     {
         rOutliner.SetTextObj( nullptr );
     }
-
-    if (mpEditingOutliner && !bNoEditText && pPara && mpImpl->mxActiveCell == xCell )
-        delete pPara;
 
     rOutliner.SetUpdateMode(true);
     rOutliner.SetControlWord(nStat0);
@@ -1862,7 +1861,7 @@ void SdrTableObj::EndTextEdit(SdrOutliner& rOutl)
 
     if(rOutl.IsModified())
     {
-        std::unique_ptr<OutlinerParaObject> pNewText;
+        std::optional<OutlinerParaObject> pNewText;
         Paragraph* p1stPara = rOutl.GetParagraph( 0 );
         sal_Int32 nParaCnt = rOutl.GetParagraphCount();
 
@@ -1897,7 +1896,7 @@ OutlinerParaObject* SdrTableObj::GetOutlinerParaObject() const
 }
 
 
-void SdrTableObj::NbcSetOutlinerParaObject( std::unique_ptr<OutlinerParaObject> pTextObject)
+void SdrTableObj::NbcSetOutlinerParaObject( std::optional<OutlinerParaObject> pTextObject)
 {
     CellRef xCell( getActiveCell() );
     if( !xCell.is() )

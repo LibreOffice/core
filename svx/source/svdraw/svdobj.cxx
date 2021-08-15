@@ -1151,7 +1151,7 @@ basegfx::B2DPolyPolygon SdrObject::TakeContour() const
         {
             // no text and no text animation
             pClone->SetMergedItem(SdrTextAniKindItem(SdrTextAniKind::NONE));
-            pClone->SetOutlinerParaObject(nullptr);
+            pClone->SetOutlinerParaObject(std::nullopt);
         }
 
         const SdrEdgeObj* pEdgeObj = dynamic_cast< const SdrEdgeObj* >(this);
@@ -1802,7 +1802,7 @@ void SdrObject::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterEndElement(pWriter);
 }
 
-void SdrObject::SetOutlinerParaObject(std::unique_ptr<OutlinerParaObject> pTextObject)
+void SdrObject::SetOutlinerParaObject(std::optional<OutlinerParaObject> pTextObject)
 {
     tools::Rectangle aBoundRect0; if (m_pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
     NbcSetOutlinerParaObject(std::move(pTextObject));
@@ -1833,7 +1833,7 @@ void SdrObject::SetOutlinerParaObject(std::unique_ptr<OutlinerParaObject> pTextO
     }
 }
 
-void SdrObject::NbcSetOutlinerParaObject(std::unique_ptr<OutlinerParaObject> /*pTextObject*/)
+void SdrObject::NbcSetOutlinerParaObject(std::optional<OutlinerParaObject> /*pTextObject*/)
 {
 }
 

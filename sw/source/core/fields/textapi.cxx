@@ -174,12 +174,12 @@ void SwTextAPIEditSource::SetString( const OUString& rText )
     m_pImpl->mpOutliner->Insert( rText );
 }
 
-std::unique_ptr<OutlinerParaObject> SwTextAPIEditSource::CreateText()
+std::optional<OutlinerParaObject> SwTextAPIEditSource::CreateText()
 {
     if ( m_pImpl->mpPool && m_pImpl->mpOutliner )
         return m_pImpl->mpOutliner->CreateParaObject();
     else
-        return nullptr;
+        return std::nullopt;
 }
 
 OUString SwTextAPIEditSource::GetText() const

@@ -39,7 +39,7 @@ public:
     /// @throws css::uno::RuntimeException
     void dispose();
 
-    std::unique_ptr<OutlinerParaObject> CreateText();
+    std::optional<OutlinerParaObject> CreateText();
     void                SetText( OutlinerParaObject const & rText );
     OUString            GetText() const;
 

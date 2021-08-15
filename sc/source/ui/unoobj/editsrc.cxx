@@ -169,9 +169,9 @@ void ScAnnotationEditSource::UpdateData()
 
     if( SdrObject* pObj = GetCaptionObj() )
     {
-        std::unique_ptr<OutlinerParaObject> pOPO( new OutlinerParaObject(pEditEngine->CreateTextObject()) );
-        pOPO->SetOutlinerMode( OutlinerMode::TextObject );
-        pObj->NbcSetOutlinerParaObject( std::move(pOPO) );
+        OutlinerParaObject aOPO( pEditEngine->CreateTextObject() );
+        aOPO.SetOutlinerMode( OutlinerMode::TextObject );
+        pObj->NbcSetOutlinerParaObject( std::move(aOPO) );
         pObj->ActionChanged();
     }
 

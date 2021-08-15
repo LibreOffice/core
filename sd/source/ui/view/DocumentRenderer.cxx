@@ -1095,7 +1095,7 @@ namespace {
     {
     public:
         OutlinerPrinterPage (
-            std::unique_ptr<OutlinerParaObject> pParaObject,
+            std::optional<OutlinerParaObject> pParaObject,
             const MapMode& rMapMode,
             const OUString& rsPageString,
             const Point& rPageStringOffset,
@@ -1148,7 +1148,7 @@ namespace {
         }
 
     private:
-        std::unique_ptr<OutlinerParaObject> mpParaObject;
+        std::optional<OutlinerParaObject> mpParaObject;
     };
 }
 

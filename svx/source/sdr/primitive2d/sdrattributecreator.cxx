@@ -570,7 +570,7 @@ namespace drawinglayer::primitive2d
 
                 if(bInEditMode)
                 {
-                    std::unique_ptr<OutlinerParaObject> pTempObj = rTextObj.CreateEditOutlinerParaObject();
+                    std::optional<OutlinerParaObject> pTempObj = rTextObj.CreateEditOutlinerParaObject();
 
                     if(pTempObj)
                     {

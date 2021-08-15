@@ -228,12 +228,10 @@ namespace sdr::properties
 
             if( mxCell.is() )
             {
-                OutlinerParaObject* pParaObj = mxCell->CreateEditOutlinerParaObject().release();
+                std::optional<OutlinerParaObject> pParaObj = mxCell->CreateEditOutlinerParaObject();
 
-                const bool bOwnParaObj = pParaObj != nullptr;
-
-                if( pParaObj == nullptr )
-                    pParaObj = mxCell->GetOutlinerParaObject();
+                if( !pParaObj && mxCell->GetOutlinerParaObject())
+                    pParaObj = *mxCell->GetOutlinerParaObject();
 
                 if(pParaObj)
                 {
@@ -281,13 +279,11 @@ namespace sdr::properties
                             mxItemSet->Put(aNewSet);
                         }
 
-                        std::unique_ptr<OutlinerParaObject> pTemp = pOutliner->CreateParaObject(0, nParaCount);
+                        std::optional<OutlinerParaObject> pTemp = pOutliner->CreateParaObject(0, nParaCount);
                         pOutliner->Clear();
                         mxCell->SetOutlinerParaObject(std::move(pTemp));
                     }
 
-                    if( bOwnParaObj )
-                        delete pParaObj;
                 }
             }
 
@@ -308,19 +304,14 @@ namespace sdr::properties
                 rObj.SetVerticalWriting(bVertical);
 
                 // Set a cell vertical property
-                OutlinerParaObject* pParaObj = mxCell->CreateEditOutlinerParaObject().release();
+                std::optional<OutlinerParaObject> pParaObj = mxCell->CreateEditOutlinerParaObject();
 
-                const bool bOwnParaObj = pParaObj != nullptr;
-
-                if( pParaObj == nullptr )
-                    pParaObj = mxCell->GetOutlinerParaObject();
+                if( !pParaObj && mxCell->GetOutlinerParaObject() )
+                    pParaObj = *mxCell->GetOutlinerParaObject();
 
                 if(pParaObj)
                 {
                     pParaObj->SetVertical(bVertical);
-
-                    if( bOwnParaObj )
-                        delete pParaObj;
                 }
             }
 
@@ -329,12 +320,10 @@ namespace sdr::properties
                 const SvxTextRotateItem* pRotateItem = static_cast<const SvxTextRotateItem*>(pNewItem);
 
                 // Set a cell vertical property
-                OutlinerParaObject* pParaObj = mxCell->CreateEditOutlinerParaObject().release();
+                std::optional<OutlinerParaObject> pParaObj = mxCell->CreateEditOutlinerParaObject();
 
-                const bool bOwnParaObj = pParaObj != nullptr;
-
-                if (pParaObj == nullptr)
-                    pParaObj = mxCell->GetOutlinerParaObject();
+                if (!pParaObj && mxCell->GetOutlinerParaObject())
+                    pParaObj = *mxCell->GetOutlinerParaObject();
 
                 if (pParaObj)
                 {
@@ -344,9 +333,6 @@ namespace sdr::properties
                         pParaObj->SetRotation(TextRotation::BOTTOMTOTOP);
                     else
                         pParaObj->SetRotation(TextRotation::NONE);
-
-                    if (bOwnParaObj)
-                        delete pParaObj;
                 }
 
                // Change autogrow direction
@@ -448,7 +434,7 @@ void Cell::dispose()
     if( mpProperties )
     {
         mpProperties.reset();
-        SetOutlinerParaObject( nullptr );
+        SetOutlinerParaObject( std::nullopt );
     }
 }
 
@@ -521,9 +507,9 @@ void Cell::replaceContentAndFormatting( const CellRef& xSourceCell )
 
     // tdf#118354 OutlinerParaObject may be nullptr, do not dereference when
     // not set (!)
-    if(nullptr != xSourceCell->GetOutlinerParaObject())
+    if(xSourceCell->GetOutlinerParaObject())
     {
-        SetOutlinerParaObject( std::make_unique<OutlinerParaObject>(*xSourceCell->GetOutlinerParaObject()) );
+        SetOutlinerParaObject( *xSourceCell->GetOutlinerParaObject() );
     }
 
     SdrTableObj& rTableObj = dynamic_cast< SdrTableObj& >( GetObject() );
@@ -605,7 +591,7 @@ bool Cell::IsTextEditActive() const
 
 bool Cell::hasText() const
 {
-    OutlinerParaObject* pParaObj = GetOutlinerParaObject();
+    const OutlinerParaObject* pParaObj = GetOutlinerParaObject();
     if( pParaObj )
     {
         const EditTextObject& rTextObj = pParaObj->GetTextObject();
@@ -631,12 +617,12 @@ bool Cell::CanCreateEditOutlinerParaObject() const
     return false;
 }
 
-std::unique_ptr<OutlinerParaObject> Cell::CreateEditOutlinerParaObject() const
+std::optional<OutlinerParaObject> Cell::CreateEditOutlinerParaObject() const
 {
     SdrTableObj& rTableObj = dynamic_cast< SdrTableObj& >( GetObject() );
     if( rTableObj.getActiveCell().get() == this )
         return rTableObj.CreateEditOutlinerParaObject();
-    return nullptr;
+    return std::nullopt;
 }
 
 
@@ -807,9 +793,9 @@ SdrTextHorzAdjust Cell::GetTextHorizontalAdjust() const
 }
 
 
-void Cell::SetOutlinerParaObject( std::unique_ptr<OutlinerParaObject> pTextObject )
+void Cell::SetOutlinerParaObject( std::optional<OutlinerParaObject> pTextObject )
 {
-    bool bNullTextObject = pTextObject == nullptr;
+    bool bNullTextObject = !pTextObject;
     SdrText::SetOutlinerParaObject( std::move(pTextObject) );
     maSelection.nStartPara = EE_PARA_MAX_COUNT;
 
@@ -1597,7 +1583,7 @@ void SAL_CALL Cell::setAllPropertiesToDefault()
         ESelection aSelection( 0, 0, EE_PARA_ALL, EE_TEXTPOS_ALL);
         rOutliner.RemoveAttribs(aSelection, true, 0);
 
-        std::unique_ptr<OutlinerParaObject> pTemp = rOutliner.CreateParaObject(0, nParaCount);
+        std::optional<OutlinerParaObject> pTemp = rOutliner.CreateParaObject(0, nParaCount);
         rOutliner.Clear();
 
         SetOutlinerParaObject(std::move(pTemp));

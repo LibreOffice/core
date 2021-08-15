@@ -136,7 +136,7 @@ namespace sdr::properties
                             mxItemSet->Put(aNewSet);
                         }
 
-                        std::unique_ptr<OutlinerParaObject> pTemp = pOutliner->CreateParaObject(0, nParaCount);
+                        std::optional<OutlinerParaObject> pTemp = pOutliner->CreateParaObject(0, nParaCount);
                         pOutliner->Clear();
 
                         rObj.NbcSetOutlinerParaObjectForText(std::move(pTemp),pText);
@@ -195,7 +195,7 @@ namespace sdr::properties
                             ESelection aSelection( 0, 0, EE_PARA_ALL, EE_TEXTPOS_ALL);
                             rOutliner.RemoveAttribs(aSelection, true, 0);
 
-                            std::unique_ptr<OutlinerParaObject> pTemp = rOutliner.CreateParaObject(0, nParaCount);
+                            std::optional<OutlinerParaObject> pTemp = rOutliner.CreateParaObject(0, nParaCount);
                             rOutliner.Clear();
 
                             rObj.NbcSetOutlinerParaObjectForText( std::move(pTemp), pText );
@@ -342,7 +342,7 @@ namespace sdr::properties
                             }
                         }
 
-                        std::unique_ptr<OutlinerParaObject> pTemp = rOutliner.CreateParaObject(0, nParaCount);
+                        std::optional<OutlinerParaObject> pTemp = rOutliner.CreateParaObject(0, nParaCount);
                         rOutliner.Clear();
                         rObj.NbcSetOutlinerParaObjectForText(std::move(pTemp), pText);
                     }
@@ -520,7 +520,7 @@ namespace sdr::properties
 
                     if(bBurnIn)
                     {
-                        std::unique_ptr<OutlinerParaObject> pTemp = pOutliner->CreateParaObject(0, nParaCount);
+                        std::optional<OutlinerParaObject> pTemp = pOutliner->CreateParaObject(0, nParaCount);
                         rObj.NbcSetOutlinerParaObjectForText(std::move(pTemp),pText);
                     }
                 }

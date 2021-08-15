@@ -534,16 +534,16 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
     {
         mpTextForwarder->flushCache();
 
-        OutlinerParaObject* pOutlinerParaObject = nullptr;
+        std::optional<OutlinerParaObject> pOutlinerParaObject;
         SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>( mpObject  );
         if( pTextObj && pTextObj->getActiveText() == mpText )
-            pOutlinerParaObject = pTextObj->CreateEditOutlinerParaObject().release(); // Get the OutlinerParaObject if text edit is active
+            pOutlinerParaObject = pTextObj->CreateEditOutlinerParaObject(); // Get the OutlinerParaObject if text edit is active
         bool bOwnParaObj(false);
 
         if( pOutlinerParaObject )
             bOwnParaObj = true; // text edit active
-        else
-            pOutlinerParaObject = mpText->GetOutlinerParaObject();
+        else if (mpText->GetOutlinerParaObject())
+            pOutlinerParaObject = *mpText->GetOutlinerParaObject();
 
         if( pOutlinerParaObject && ( bOwnParaObj || !mpObject->IsEmptyPresObj() || mpObject->getSdrPageFromSdrObject()->IsMasterPage() ) )
         {
@@ -556,7 +556,7 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
             if( mpText && bOwnParaObj && mpObject->IsEmptyPresObj() && pTextObj->IsReallyEdited() )
             {
                 mpObject->SetEmptyPresObj( false );
-                static_cast< SdrTextObj* >( mpObject)->NbcSetOutlinerParaObjectForText( std::unique_ptr<OutlinerParaObject>(pOutlinerParaObject), mpText );
+                static_cast< SdrTextObj* >( mpObject)->NbcSetOutlinerParaObjectForText( pOutlinerParaObject, mpText );
 
                 // #i103982# Here, due to mpObject->NbcSetOutlinerParaObjectForText, we LOSE ownership of the
                 // OPO, so do NOT delete it when leaving this method (!)
@@ -600,9 +600,6 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
         }
 
         mbDataValid = true;
-
-        if( bOwnParaObj )
-            delete pOutlinerParaObject;
     }
 
     if( bCreated && mpOutliner && HasView() )
@@ -786,7 +783,7 @@ void SvxTextEditSourceImpl::UpdateData()
                 }
                 else
                 {
-                    pTextObj->NbcSetOutlinerParaObjectForText( nullptr,mpText );
+                    pTextObj->NbcSetOutlinerParaObjectForText( std::nullopt, mpText );
                 }
             }
 

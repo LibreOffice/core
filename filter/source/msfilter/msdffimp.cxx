@@ -3664,7 +3664,7 @@ void SvxMSDffManager::ReadObjText( const OUString& rText, SdrObject* pObj )
         rOutliner.QuickSetAttribs( aParagraphAttribs, aSelection );
         nParaIndex++;
     }
-    std::unique_ptr<OutlinerParaObject> pNewText = rOutliner.CreateParaObject();
+    std::optional<OutlinerParaObject> pNewText = rOutliner.CreateParaObject();
     rOutliner.Clear();
     rOutliner.SetUpdateMode( bOldUpdateMode );
     pText->SetOutlinerParaObject( std::move(pNewText) );
@@ -4495,7 +4495,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                                 }
                                 if  ( bCreateNewParaObject )
                                 {
-                                    std::unique_ptr<OutlinerParaObject> pNewText = rOutliner.CreateParaObject();
+                                    std::optional<OutlinerParaObject> pNewText = rOutliner.CreateParaObject();
                                     rOutliner.Init( OutlinerMode::TextObject );
                                     static_cast<SdrObjCustomShape*>(pRet)->NbcSetOutlinerParaObject( std::move(pNewText) );
                                 }

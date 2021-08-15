@@ -77,6 +77,11 @@ OutlinerParaObject::OutlinerParaObject( const OutlinerParaObject& r ) :
 {
 }
 
+OutlinerParaObject::OutlinerParaObject( OutlinerParaObject&& r ) noexcept :
+    mpImpl(std::move(r.mpImpl))
+{
+}
+
 OutlinerParaObject::~OutlinerParaObject()
 {
 }
@@ -84,6 +89,12 @@ OutlinerParaObject::~OutlinerParaObject()
 OutlinerParaObject& OutlinerParaObject::operator=( const OutlinerParaObject& r )
 {
     mpImpl = r.mpImpl;
+    return *this;
+}
+
+OutlinerParaObject& OutlinerParaObject::operator=( OutlinerParaObject&& r ) noexcept
+{
+    mpImpl = std::move(r.mpImpl);
     return *this;
 }
 

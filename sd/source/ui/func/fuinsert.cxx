@@ -546,7 +546,7 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                                 // the empty OLE object gets a new IPObj
                                 bInsertNewObject = false;
                                 pObj->SetEmptyPresObj(false);
-                                static_cast<SdrOle2Obj*>(pObj)->SetOutlinerParaObject(nullptr);
+                                static_cast<SdrOle2Obj*>(pObj)->SetOutlinerParaObject(std::nullopt);
                                 static_cast<SdrOle2Obj*>(pObj)->SetObjRef(xObj);
                                 static_cast<SdrOle2Obj*>(pObj)->SetPersistName(aName);
                                 static_cast<SdrOle2Obj*>(pObj)->SetName(aName);

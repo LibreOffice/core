@@ -1449,7 +1449,7 @@ bool SvxTableController::DeleteMarked()
                 {
                     if (bUndo)
                         xCell->AddUndo();
-                    xCell->SetOutlinerParaObject(nullptr);
+                    xCell->SetOutlinerParaObject(std::nullopt);
                 }
             }
         }

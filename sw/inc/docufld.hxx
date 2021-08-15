@@ -23,6 +23,7 @@
 
 #include <string_view>
 
+#include <editeng/outlobj.hxx>
 #include <tools/solar.h>
 #include <tools/date.hxx>
 #include <tools/datetime.hxx>
@@ -450,7 +451,7 @@ class SW_DLLPUBLIC SwPostItField final : public SwField
     OUString m_sName;     ///< Name of the comment.
     DateTime    m_aDateTime;
     bool     m_bResolved;
-    std::unique_ptr<OutlinerParaObject> mpText;
+    std::optional<OutlinerParaObject> mpText;
     rtl::Reference<SwTextAPIObject> m_xTextObject;
     sal_uInt32 m_nPostItId;
 
@@ -491,8 +492,8 @@ public:
     void                    SetName(const OUString& rStr);
     const OUString&         GetName() const { return m_sName;}
 
-    const OutlinerParaObject* GetTextObject() const { return mpText.get();}
-    void SetTextObject( std::unique_ptr<OutlinerParaObject> pText );
+    const OutlinerParaObject* GetTextObject() const { return mpText ? &*mpText : nullptr;}
+    void SetTextObject( std::optional<OutlinerParaObject> pText );
 
     void SetResolved(bool bNewState);
     void ToggleResolved();
