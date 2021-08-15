@@ -843,7 +843,8 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
     bool bPresetWriteSuccessful = false;
     // Let the custom shapes what has name and preset information in OOXML, to be written
     // as preset ones with parameters. Try that with this converter class.
-    if (!sShapeType.startsWith("ooxml") && GetDocumentType() == DOCUMENT_DOCX
+    if (!sShapeType.startsWith("ooxml") && sShapeType != "non-primitive"
+        && GetDocumentType() == DOCUMENT_DOCX
         && xShape->getShapeType() == "com.sun.star.drawing.CustomShape")
     {
         DMLPresetShapeExporter aCustomShapeConverter(this, xShape);

@@ -70,6 +70,17 @@ protected:
     }
 };
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf143860NonPrimitiveCustomShape,
+                                    "tdf143860_NonPrimitiveCustomShape.odt")
+{
+    // The document has a custom shape of type non-primitive without handles. Make sure that the shape
+    // is not exported with preset but with custom geometry.
+    xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
+    CPPUNIT_ASSERT(pXmlDocument);
+    assertXPath(pXmlDocument, "//a:prstGeom", 0);
+    assertXPath(pXmlDocument, "//a:custGeom", 1);
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf136059, "tdf136059.odt")
 {
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Contour has not been exported!", true,
