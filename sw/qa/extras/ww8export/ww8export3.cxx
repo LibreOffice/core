@@ -930,6 +930,19 @@ DECLARE_WW8EXPORT_TEST(testTdf120394, "tdf120394.doc")
     }
 }
 
+DECLARE_WW8EXPORT_TEST(testTdf142760, "tdf142760.doc")
+{
+    // Without the fix in place, this test would have failed with
+    // - Expected: 2
+    // - Actual  : 6
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables( ), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
+}
+
 DECLARE_WW8EXPORT_TEST(testTdf134570, "tdf134570.doc")
 {
     CPPUNIT_ASSERT_EQUAL(1, getPages());
