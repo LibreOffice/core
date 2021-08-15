@@ -258,9 +258,9 @@ void CellAppearancePropertyPanel::NotifyItemUpdate(
                     mbBottom = true;
 
                 if(!AllSettings::GetLayoutRTL())
-                    UpdateCellBorder(mbTop, mbBottom, mbLeft, mbRight, mbVer, mbHor);
+                    UpdateCellBorder(mbTop, mbBottom, mbLeft, mbRight, mbVer, mbHor, mbDiagTLBR, mbDiagBLTR);
                 else
-                    UpdateCellBorder(mbTop, mbBottom, mbRight, mbLeft, mbVer, mbHor);
+                    UpdateCellBorder(mbTop, mbBottom, mbRight, mbLeft, mbVer, mbHor, mbDiagTLBR, mbDiagBLTR);
 
                 if(mbLeft || mbRight || mbTop || mbBottom)
                     mbOuterBorder = true;
@@ -301,9 +301,9 @@ void CellAppearancePropertyPanel::NotifyItemUpdate(
                     bBottom = true;
 
                 if(!AllSettings::GetLayoutRTL())
-                    UpdateCellBorder(bTop, bBottom, bLeft, bRight, mbVer, mbHor);
+                    UpdateCellBorder(bTop, bBottom, bLeft, bRight, mbVer, mbHor, mbDiagTLBR, mbDiagBLTR);
                 else
-                    UpdateCellBorder(bTop, bBottom, bRight, bLeft, mbVer, mbHor);
+                    UpdateCellBorder(bTop, bBottom, bRight, bLeft, mbVer, mbHor, mbDiagTLBR, mbDiagBLTR);
 
                 if(mbVer || mbHor || bLeft || bRight || bTop || bBottom)
                     mbInnerBorder = true;
@@ -337,6 +337,7 @@ void CellAppearancePropertyPanel::NotifyItemUpdate(
                 }
             }
         }
+        UpdateCellBorder(mbTop, mbBottom, mbLeft, mbRight, mbVer, mbHor, mbDiagTLBR, mbDiagBLTR);
         UpdateControlState();
         break;
     case SID_ATTR_BORDER_DIAG_BLTR:
@@ -363,6 +364,7 @@ void CellAppearancePropertyPanel::NotifyItemUpdate(
                 }
             }
         }
+        UpdateCellBorder(mbTop, mbBottom, mbLeft, mbRight, mbVer, mbHor, mbDiagTLBR, mbDiagBLTR);
         UpdateControlState();
         break;
     }
@@ -464,7 +466,8 @@ void CellAppearancePropertyPanel::UpdateControlState()
     }
 }
 
-void CellAppearancePropertyPanel::UpdateCellBorder(bool bTop, bool bBot, bool bLeft, bool bRight, bool bVer, bool bHor)
+void CellAppearancePropertyPanel::UpdateCellBorder(bool bTop, bool bBot, bool bLeft, bool bRight,
+                                                   bool bVer, bool bHor, bool bTLBR, bool bBLTR)
 {
     const Size aBmpSize = maIMGCellBorder.GetBitmapEx().GetSizePixel();
 
@@ -488,6 +491,10 @@ void CellAppearancePropertyPanel::UpdateCellBorder(bool bTop, bool bBot, bool bL
             pVirDev->DrawLine( aVT,aVB );
         if(bHor)
             pVirDev->DrawLine( aHL,aHR );
+        if(bTLBR)
+            pVirDev->DrawLine( aTL,aBR );
+        if(bBLTR)
+            pVirDev->DrawLine( aBL,aTR );
         mxTBCellBorder->set_item_image(SETBORDERSTYLE, pVirDev);
     }
     else
