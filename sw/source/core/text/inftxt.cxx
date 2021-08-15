@@ -1486,7 +1486,8 @@ bool SwTextFormatInfo::IsHyphenate() const
         return false;
 
     LanguageType eTmp = GetFont()->GetLanguage();
-    if( LANGUAGE_DONTKNOW == eTmp || LANGUAGE_NONE == eTmp )
+    // TODO: check for more ideographic langs w/o hyphenation as a concept
+    if ( LANGUAGE_DONTKNOW == eTmp || LANGUAGE_NONE == eTmp || LANGUAGE_JAPANESE == eTmp )
         return false;
 
     uno::Reference< XHyphenator > xHyph = ::GetHyphenator();
