@@ -1104,6 +1104,7 @@ void PowerPointExport::WritePresentationProps()
         Reference<beans::XPropertySet> xPresentationProps(xPresentationSupplier->getPresentation(),
                                                           uno::UNO_QUERY);
         bool bEndlessVal = xPresentationProps->getPropertyValue("IsEndless").get<bool>();
+        bool bChangeManually = xPresentationProps->getPropertyValue("IsAutomatic").get<bool>();
         OUString sFirstPage = xPresentationProps->getPropertyValue("FirstPage").get<OUString>();
         OUString sCustomShow = xPresentationProps->getPropertyValue("CustomShow").get<OUString>();
 
@@ -1117,6 +1118,7 @@ void PowerPointExport::WritePresentationProps()
         pFS->startElementNS(XML_p, XML_presentationPr, PPRNMSS);
 
         pFS->startElementNS(XML_p, XML_showPr, XML_loop, sax_fastparser::UseIf("1", bEndlessVal),
+                            XML_useTimings, sax_fastparser::UseIf("0", bChangeManually),
                             XML_showNarration, "1");
 
         Reference<drawing::XDrawPagesSupplier> xDPS(mXModel, uno::UNO_QUERY_THROW);
