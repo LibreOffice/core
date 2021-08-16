@@ -198,8 +198,6 @@ private:
 
     mutable SCCOL nTableAreaX;
     mutable SCROW nTableAreaY;
-    mutable SCCOL nTableAreaVisibleX;
-    mutable SCROW nTableAreaVisibleY;
 
     SCTAB           nTab;
     ScDocument&     rDocument;
@@ -234,7 +232,6 @@ private:
     bool            bLoadingRTL:1;
     bool            bPageSizeValid:1;
     mutable bool    bTableAreaValid:1;
-    mutable bool    bTableAreaVisibleValid:1;
     bool            bVisible:1;
     bool            bStreamValid:1;
     bool            bPendingRowHeights:1;
@@ -570,8 +567,8 @@ public:
     void        InvalidatePageBreaks();
 
     bool        GetCellArea( SCCOL& rEndCol, SCROW& rEndRow ) const;            // FALSE = empty
-    bool        GetTableArea( SCCOL& rEndCol, SCROW& rEndRow, bool bCalcHiddens = false) const;
-    bool        GetPrintArea( SCCOL& rEndCol, SCROW& rEndRow, bool bNotes, bool bCalcHiddens = false) const;
+    bool        GetTableArea( SCCOL& rEndCol, SCROW& rEndRow ) const;
+    bool        GetPrintArea( SCCOL& rEndCol, SCROW& rEndRow, bool bNotes ) const;
     bool        GetPrintAreaHor( SCROW nStartRow, SCROW nEndRow,
                                 SCCOL& rEndCol ) const;
     bool        GetPrintAreaVer( SCCOL nStartCol, SCCOL nEndCol,
