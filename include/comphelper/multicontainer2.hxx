@@ -42,8 +42,8 @@ class XInterface;
 /** */ //for docpp
 namespace comphelper
 {
-/** Specialized class for key type css::uno::Type,
-    without explicit usage of STL symbols.
+/** This is a copy of cppu::OMultiTypeInterfaceContainerHelper2 in include/ccppuhelper/interfacecontainer.h,
+    except that it uses comphelper::OInterfaceContainerHelper2, which is more efficient.
 */
 class COMPHELPER_DLLPUBLIC OMultiTypeInterfaceContainerHelper2
 {
