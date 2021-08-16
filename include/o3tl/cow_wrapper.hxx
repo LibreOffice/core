@@ -22,6 +22,7 @@
 
 #include <osl/interlck.h>
 
+#include <optional>
 #include <utility>
 #include <cstddef>
 
@@ -252,6 +253,20 @@ int cow_wrapper_client::queryUnmodified() const
             rSrc.m_pimpl = nullptr;
         }
 
+        // Only intended to be used by std::optional specialisations
+        explicit cow_wrapper( std::nullopt_t ) noexcept :
+            m_pimpl( nullptr )
+        {
+        }
+
+        // Only intended to be used by std::optional specialisations
+        explicit cow_wrapper( const cow_wrapper& rSrc, std::nullopt_t ) : // nothrow
+            m_pimpl( rSrc.m_pimpl )
+        {
+            if (m_pimpl)
+                MTPolicy::incrementCount( m_pimpl->m_ref_count );
+        }
+
         ~cow_wrapper() // nothrow, if ~T does not throw
         {
             release();
@@ -324,6 +339,9 @@ int cow_wrapper_client::queryUnmodified() const
         {
             return rOther.m_pimpl == m_pimpl;
         }
+
+        // Only intended to be used by std::optional specialisations
+        bool empty() const { return bool(m_pimpl); }
 
     private:
         impl_t* m_pimpl;
