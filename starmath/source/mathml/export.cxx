@@ -409,7 +409,7 @@ SmMlExportWrapper::WriteThroughComponentMS(const Reference<XComponent>& xCompone
     bool bOk = WriteThroughComponentOS(xStream, xComponent, rxContext, rPropSet,
                                        u"com.sun.star.comp.Math.XMLContentExporter");
 
-    // We don't want to read unitzialized data
+    // We don't want to read uninitialized data
     if (!bOk)
         return u"";
 
@@ -500,7 +500,7 @@ ErrCode SmMlExport::exportDoc(enum XMLTokenEnum eClass)
         return ERRCODE_NONE;
     }
 
-    /* Needs comented for now or clang complains
+    /* Needs to be commented out for now otherwise clang complains
         // Checks if it has to export a particular tree
         if (m_pElementTree == nullptr)
         {
@@ -519,7 +519,7 @@ ErrCode SmMlExport::exportDoc(enum XMLTokenEnum eClass)
         }
         */
 
-    // Start document amd encript if necessary
+    // Start document and encrypt if necessary
     GetDocHandler()->startDocument();
     addChaffWhenEncryptedStorage();
 

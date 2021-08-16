@@ -15,7 +15,7 @@
         <!-- allow use of third-party plugins/frameworks (aka Java) -->
         <key>com.apple.security.cs.disable-library-validation</key>
         <true/>
-        <!-- Allow Base to import data from Adddress Book -->
+        <!-- Allow Base to import data from Address Book -->
         <key>com.apple.security.personal-information.addressbook</key>
         <true/>
         @GET_TASK_ALLOW_ENTITLEMENT@
