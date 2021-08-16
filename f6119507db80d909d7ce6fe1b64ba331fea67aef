@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f45eee6_00468a3f",
+        "filename": "sw/source/filter/ww8/docxexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 326,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-08-16T08:54:33Z",
+      "side": 1,
+      "message": "Elsewhere in this file \"sw.ww8\" is used. Could you do the same?",
+      "revId": "f6119507db80d909d7ce6fe1b64ba331fea67aef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}

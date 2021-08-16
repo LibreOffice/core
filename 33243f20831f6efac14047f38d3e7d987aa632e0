@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e258c851_a4aa0565",
+        "filename": "sw/source/filter/ww8/docxexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 325,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-08-16T08:54:33Z",
+      "side": 0,
+      "message": "This is not needed with SAL_INFO. Should be removed.",
+      "revId": "33243f20831f6efac14047f38d3e7d987aa632e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6a304865_95f49f34",
+        "filename": "sw/source/filter/ww8/docxexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 327,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-08-16T08:54:33Z",
+      "side": 0,
+      "message": "This should also be removed.",
+      "revId": "33243f20831f6efac14047f38d3e7d987aa632e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
