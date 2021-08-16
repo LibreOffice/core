@@ -16,6 +16,23 @@
       "revId": "fd195d5bb04d3491e3339255e5f4103a9e38074c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fddc2f87_5b773d9a",
+        "filename": "sc/qa/unit/bugfix-test.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 562,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-08-16T16:35:12Z",
+      "side": 0,
+      "message": "Forget about the changes on this file. Changes on \u0027sc/qa/extras/scuniquecellformatsenumeration.cxx\u0027 would be enough.",
+      "revId": "fd195d5bb04d3491e3339255e5f4103a9e38074c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
