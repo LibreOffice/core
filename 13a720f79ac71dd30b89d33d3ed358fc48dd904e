@@ -22,6 +22,30 @@
       "revId": "13a720f79ac71dd30b89d33d3ed358fc48dd904e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5da408d3_0b6f1788",
+        "filename": "dbaccess/uiconfig/ui/directsqldialog.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-08-16T10:35:39Z",
+      "side": 1,
+      "message": "Without this, the 2 entries are on the same line, so the writing is scrambled.",
+      "parentUuid": "3d48334c_4bccddcb",
+      "range": {
+        "startLine": 153,
+        "startChar": 52,
+        "endLine": 153,
+        "endChar": 53
+      },
+      "revId": "13a720f79ac71dd30b89d33d3ed358fc48dd904e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
