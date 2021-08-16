@@ -46,6 +46,7 @@ namespace dbaui
         std::unique_ptr<weld::Button> m_xExecute;
         std::unique_ptr<weld::ComboBox> m_xSQLHistory;
         std::unique_ptr<weld::TextView> m_xStatus;
+        std::unique_ptr<weld::CheckButton> m_xDirectSQL;
         std::unique_ptr<weld::CheckButton> m_xShowOutput;
         std::unique_ptr<weld::TextView> m_xOutput;
         std::unique_ptr<weld::Button> m_xClose;
