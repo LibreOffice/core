@@ -193,11 +193,11 @@ sal_Int32 mysqlStrToOOOType(const OUString& sType)
     // TODO other types.
     if (sType.equalsIgnoreAsciiCase("tiny") || sType.equalsIgnoreAsciiCase("tinyint"))
         return css::sdbc::DataType::TINYINT;
-    if (sType.equalsIgnoreAsciiCase("smallint") || sType.equalsIgnoreAsciiCase("mediumint"))
+    if (sType.equalsIgnoreAsciiCase("smallint"))
         return css::sdbc::DataType::SMALLINT;
     if (sType.equalsIgnoreAsciiCase("longtext"))
         return css::sdbc::DataType::LONGVARCHAR;
-    if (sType.equalsIgnoreAsciiCase("int"))
+    if (sType.equalsIgnoreAsciiCase("int") || sType.equalsIgnoreAsciiCase("mediumint"))
         return css::sdbc::DataType::INTEGER;
     if (sType.equalsIgnoreAsciiCase("varchar") || sType.equalsIgnoreAsciiCase("set")
         || sType.equalsIgnoreAsciiCase("enum"))
