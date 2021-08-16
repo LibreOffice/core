@@ -3626,7 +3626,14 @@ drawinglayer::attribute::SdrAllFillAttributesHelperPtr SwFrameFormat::getSdrAllF
 
 void SwFrameFormat::MoveTableBox(SwTableBox& rTableBox, const SwFrameFormat* pOldFormat)
 {
-    Add(&rTableBox);
+    auto pTableBoxFormat = static_cast<SwTableBoxFormat*>(this);
+    if(pOldFormat)
+    {
+        auto pOldTableBoxFormat = const_cast<SwTableBoxFormat*>(static_cast<const SwTableBoxFormat*>(pOldFormat));
+        assert(pOldTableBoxFormat == rTableBox.GetRegisteredIn());
+        pOldTableBoxFormat->RemoveTableBox(&rTableBox);
+    }
+    pTableBoxFormat->AddTableBox(&rTableBox);
     if(!pOldFormat)
         return;
     const auto& rOld = pOldFormat->GetFormatAttr(RES_BOXATR_FORMAT);
