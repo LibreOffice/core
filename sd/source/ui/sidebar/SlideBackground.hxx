@@ -39,8 +39,6 @@ class XFillGradientItem;
 class XFillBitmapItem;
 class XFillHatchItem;
 
-const tools::Long MINBODY = 284;
-
 namespace sd::sidebar {
 
 class SlideBackground :
