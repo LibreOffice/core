@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "625b5d24_c0fa7b28",
+        "filename": "desktop/source/deployment/misc/dp_resource.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2021-08-16T10:07:08Z",
+      "side": 1,
+      "message": "that capture-default isn\u0027t used, is it?",
+      "range": {
+        "startLine": 31,
+        "startChar": 44,
+        "endLine": 31,
+        "endChar": 45
+      },
+      "revId": "9753428dfc2bf038188c9a59af7fd2d789b46517",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
