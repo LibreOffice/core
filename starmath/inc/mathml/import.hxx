@@ -99,7 +99,7 @@ public:
 public:
     /** Handles an error on the mathml structure
      */
-    void declareMlError();
+    static void declareMlError();
 
 public:
     /** Constructor

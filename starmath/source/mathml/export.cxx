@@ -904,7 +904,7 @@ void SmMlExport::exportMlAttributtes(const SmMlElement* pMlElement)
                 {
                     case SmMlAttributeValueMaxsize::MlInfinity:
                     {
-                        addAttribute(XML_MAXSIZE, OUString(u"infinity"));
+                        addAttribute(XML_MAXSIZE, XML_INFINITY);
                         break;
                     }
                     case SmMlAttributeValueMaxsize::MlFinite:
