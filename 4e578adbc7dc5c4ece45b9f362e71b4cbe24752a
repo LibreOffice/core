@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3f8807ca_6118a9b9",
+        "filename": "vcl/unx/gtk3/gtk3salnativewidgets-gtk.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 2962,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-08-16T10:41:30Z",
+      "side": 0,
+      "message": "This should be removed. Look how it is removed in the example:\nhttps://git.libreoffice.org/core/+/a8e83ce1d86892061603159f5c4460803d077fd5%5E!/",
+      "revId": "4e578adbc7dc5c4ece45b9f362e71b4cbe24752a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d3826883_8ed45a96",
+        "filename": "vcl/unx/gtk3/gtk3salnativewidgets-gtk.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 2964,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-08-16T10:41:30Z",
+      "side": 0,
+      "message": "This should also be removed.",
+      "revId": "4e578adbc7dc5c4ece45b9f362e71b4cbe24752a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
