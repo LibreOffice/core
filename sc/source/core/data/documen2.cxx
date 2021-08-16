@@ -578,7 +578,7 @@ bool ScDocument::GetPrintArea( SCTAB nTab, SCCOL& rEndCol, SCROW& rEndRow,
 {
     if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
     {
-        bool bAny = maTabs[nTab]->GetPrintArea( rEndCol, rEndRow, bNotes, /*bCalcHiddens*/false);
+        bool bAny = maTabs[nTab]->GetPrintArea( rEndCol, rEndRow, bNotes );
         if (mpDrawLayer)
         {
             ScRange aDrawRange(0,0,nTab, MaxCol(),MaxRow(),nTab);
