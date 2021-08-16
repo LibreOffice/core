@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5455d408_27a5268c",
+        "filename": "writerfilter/source/dmapper/DomainMapperTableManager.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 519,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2021-08-16T17:31:43Z",
+      "side": 1,
+      "message": "This check that stack size existed (even though it ALWAYS should) proved to be necessary via the unit tests - a crash in CppunitTest_sw_filters_test. Not surprisingly, it was a corrupted RTF.  sw/qa/core/data/rtf/fail/forcepoint-7.rtf",
+      "range": {
+        "startLine": 519,
+        "startChar": 18,
+        "endLine": 519,
+        "endChar": 53
+      },
+      "revId": "09922f7b7c7c064bb5d7d89d045c24bb88ab1a8a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
