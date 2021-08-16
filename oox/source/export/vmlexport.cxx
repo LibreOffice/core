@@ -286,10 +286,7 @@ static void impl_AddBool( sax_fastparser::FastAttributeList *pAttrList, sal_Int3
 
 static void impl_AddColor( sax_fastparser::FastAttributeList *pAttrList, sal_Int32 nElement, sal_uInt32 nColor )
 {
-#if OSL_DEBUG_LEVEL > 0
-    if ( nColor & 0xFF000000 )
-        fprintf( stderr, "TODO: this is not a RGB value!\n" );
-#endif
+    SAL_WARN_IF( nColor & 0xFF000000 , "oox.vml" , "This is not a RGB value!")
 
     if ( !pAttrList || ( nColor & 0xFF000000 ) )
         return;
