@@ -21,6 +21,7 @@ package com.sun.star.lib.util;
 import java.io.File;
 import java.net.URL;
 import java.net.URLClassLoader;
+import com.sun.star.lib.unoloader.UnoClassLoader;
 
 /**
  * Helper functions to locate and load native files.
@@ -35,6 +36,12 @@ import java.net.URLClassLoader;
  * algorithm.</p>
  */
 public final class NativeLibraryLoader {
+    static {
+        // if it's some other class loader, then resolving the symbol
+        // Java_com_sun_star_bridges_jni_1uno_JNI_1proxy_dispatch_1call in
+        // java_uno will not work and result in UnsatisfiedLinkError
+        assert(NativeLibraryLoader.class.getClassLoader() instanceof com.sun.star.lib.unoloader.UnoClassLoader);
+    }
     /**
      * Load a system library, using a given class loader to locate the library.
      *
