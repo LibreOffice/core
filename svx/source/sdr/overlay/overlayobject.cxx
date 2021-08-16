@@ -133,7 +133,7 @@ namespace sdr::overlay
 
                 if(!rSequence.empty())
                 {
-                    const drawinglayer::geometry::ViewInformation2D aViewInformation2D(getOverlayManager()->getCurrentViewInformation2D());
+                    const drawinglayer::geometry::ViewInformation2D & aViewInformation2D(getOverlayManager()->getCurrentViewInformation2D());
 
                     const_cast< sdr::overlay::OverlayObject* >(this)->maBaseRange =
                         rSequence.getB2DRange(aViewInformation2D);
