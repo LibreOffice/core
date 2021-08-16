@@ -16,6 +16,24 @@
       "revId": "86abf3a682b424dc0fcbccf030f5a0b9bfb81d8c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "103bd0bc_2954cffe",
+        "filename": "include/comphelper/multicontainer2.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-08-16T11:03:37Z",
+      "side": 1,
+      "message": "thanks, fixed here:\n   https://gerrit.libreoffice.org/c/core/+/120538",
+      "parentUuid": "07f80730_1d6750cb",
+      "revId": "86abf3a682b424dc0fcbccf030f5a0b9bfb81d8c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
