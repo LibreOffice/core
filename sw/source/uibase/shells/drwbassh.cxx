@@ -244,6 +244,8 @@ void SwDrawBaseShell::Execute(SfxRequest const &rReq)
                         pDlg->StartExecuteAsync([bCaption, bChanged, pDlg, pFrameFormat, pSdrView,
                                                  pSh, &rMarkList, this](
                                                     sal_Int32 nResult){
+                            pSdrView->GetModel()->SetChanged(false);
+
                             if (nResult == RET_OK)
                             {
                                 SwFormatVertOrient aVOrientFinal(pFrameFormat->GetFormatAttr(RES_VERT_ORIENT));
