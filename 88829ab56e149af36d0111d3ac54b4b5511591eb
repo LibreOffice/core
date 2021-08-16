@@ -22,6 +22,30 @@
       "revId": "88829ab56e149af36d0111d3ac54b4b5511591eb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "87ec0f13_a805af93",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport16.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2021-08-16T08:39:02Z",
+      "side": 1,
+      "message": "With \"sloping line\" I mean a line which is neither horizontal nor vertical. I want to refer to the mathematical meaning of \"slope of a straight line\".",
+      "parentUuid": "a64daeba_3a33c77a",
+      "range": {
+        "startLine": 104,
+        "startChar": 22,
+        "endLine": 104,
+        "endChar": 30
+      },
+      "revId": "88829ab56e149af36d0111d3ac54b4b5511591eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
