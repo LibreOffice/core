@@ -68,7 +68,7 @@ namespace sdr::contact
                         // get ranges
                         const drawinglayer::geometry::ViewInformation2D& rViewInformation2D(GetObjectContact().getViewInformation2D());
                         const ::basegfx::B2DRange aObjectRange(xRetval.getB2DRange(rViewInformation2D));
-                        const basegfx::B2DRange aViewRange(rViewInformation2D.getViewport());
+                        const basegfx::B2DRange& aViewRange(rViewInformation2D.getViewport());
 
                         // check geometrical visibility
                         if(!aViewRange.isEmpty() && !aViewRange.overlaps(aObjectRange))

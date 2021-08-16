@@ -2125,7 +2125,7 @@ namespace sdr::contact
                         {
                             // get ranges
                             const drawinglayer::geometry::ViewInformation2D& rViewInformation2D(rCandidate.GetObjectContact().getViewInformation2D());
-                            const basegfx::B2DRange aViewRange(rViewInformation2D.getViewport());
+                            const basegfx::B2DRange& aViewRange(rViewInformation2D.getViewport());
                             basegfx::B2DRange aObjectRange(rCandidate.getObjectRange());
 
                             // correct with virtual object's offset
