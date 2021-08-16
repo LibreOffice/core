@@ -1384,6 +1384,7 @@ void ScTable::CopyUpdated( const ScTable* pPosTab, ScTable* pDestTab ) const
 void ScTable::InvalidateTableArea()
 {
     bTableAreaValid = false;
+    bTableAreaVisibleValid = false;
 }
 
 void ScTable::InvalidatePageBreaks()
