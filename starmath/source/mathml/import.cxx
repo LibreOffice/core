@@ -279,8 +279,6 @@ ErrCode SmMLImportWrapper::Import(SfxMedium& rMedium)
 
         return ERRCODE_NONE;
     }
-
-    return ERRCODE_SFX_DOLOADFAILED;
 }
 
 ErrCode SmMLImportWrapper::Import(const OUString& aSource)
@@ -763,7 +761,7 @@ SmLengthValue SmMLImportContext::handleLengthAttributte(const OUString& aAttribu
     SmLengthUnit nUnit = SmLengthUnit::MlM;
     if (nUnitPos != aAttribute.getLength())
     {
-        OUString aUnit = aUnit.copy(nUnitPos);
+        OUString aUnit = aUnit.copy(aAttribute);
         if (aUnit.compareToIgnoreAsciiCaseAscii("ex"))
             nUnit = SmLengthUnit::MlEx;
         if (aUnit.compareToIgnoreAsciiCaseAscii("px"))
