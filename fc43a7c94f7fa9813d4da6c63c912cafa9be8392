@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "51acfb34_86247f68",
+        "filename": "connectivity/source/drivers/mysqlc/mysqlc_general.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2021-08-16T10:55:46Z",
+      "side": 1,
+      "message": "Here MEDIUMINT (called INT24) is mapped to 32 bit integer (SDBC INTEGER); which is coherent with the change being made.",
+      "range": {
+        "startLine": 41,
+        "startChar": 0,
+        "endLine": 43,
+        "endChar": 45
+      },
+      "revId": "fc43a7c94f7fa9813d4da6c63c912cafa9be8392",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "56615186_b73212fc",
+        "filename": "connectivity/source/drivers/mysqlc/mysqlc_general.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2021-08-16T10:55:46Z",
+      "side": 1,
+      "message": "Here MEDIUMINT (called INT24) is mapped to SDBC INTEGER; which is coherent with the change being made.",
+      "range": {
+        "startLine": 136,
+        "startChar": 0,
+        "endLine": 138,
+        "endChar": 48
+      },
+      "revId": "fc43a7c94f7fa9813d4da6c63c912cafa9be8392",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
