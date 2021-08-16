@@ -20,6 +20,7 @@
 #include <core_resource.hxx>
 #include <directsql.hxx>
 #include <sqledit.hxx>
+#include <strings.hxx>
 #include <strings.hrc>
 #include <comphelper/types.hxx>
 #include <osl/mutex.hxx>
@@ -29,6 +30,7 @@
 #include <vcl/weld.hxx>
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sdbc/XMultipleResults.hpp>
 
 namespace dbaui
@@ -45,6 +47,7 @@ namespace dbaui
         , m_xExecute(m_xBuilder->weld_button("execute"))
         , m_xSQLHistory(m_xBuilder->weld_combo_box("sqlhistory"))
         , m_xStatus(m_xBuilder->weld_text_view("status"))
+        , m_xDirectSQL(m_xBuilder->weld_check_button("directsql"))
         , m_xShowOutput(m_xBuilder->weld_check_button("showoutput"))
         , m_xOutput(m_xBuilder->weld_text_view("output"))
         , m_xClose(m_xBuilder->weld_button("close"))
@@ -180,6 +183,19 @@ namespace dbaui
         {
             // create a statement
             Reference< XStatement > xStatement = m_xConnection->createStatement();
+
+            if (m_xDirectSQL->get_active())
+            {
+                Reference< com::sun::star::beans::XPropertySet > xStatementProps(xStatement, UNO_QUERY_THROW);
+                try
+                {
+                    xStatementProps->setPropertyValue(PROPERTY_ESCAPE_PROCESSING, makeAny(false));
+                }
+                catch( const Exception& )
+                {
+                    DBG_UNHANDLED_EXCEPTION("dbaccess");
+                }
+            }
 
             Reference<XDatabaseMetaData> xMeta = m_xConnection->getMetaData();
             css::uno::Reference< css::sdbc::XMultipleResults > xMR ( xStatement, UNO_QUERY );

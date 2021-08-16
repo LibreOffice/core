@@ -126,6 +126,21 @@
                     <property name="can_focus">False</property>
                     <property name="column_spacing">12</property>
                     <child>
+                      <object class="GtkCheckButton" id="directsql">
+                        <property name="label" translatable="yes" context="directsqldialog|directsql">Run SQL command _directly</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="use_underline">True</property>
+                        <property name="draw_indicator">True</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">0</property>
+                        <property name="width">2</property>
+                      </packing>
+                    </child>
+                    <child>
                       <object class="GtkCheckButton" id="showoutput">
                         <property name="label" translatable="yes" context="directsqldialog|showoutput">_Show output of "select" statements</property>
                         <property name="visible">True</property>
@@ -136,7 +151,7 @@
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
-                        <property name="top_attach">0</property>
+                        <property name="top_attach">1</property>
                       </packing>
                     </child>
                     <child>
@@ -151,7 +166,7 @@
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
-                        <property name="top_attach">0</property>
+                        <property name="top_attach">1</property>
                       </packing>
                     </child>
                   </object>
