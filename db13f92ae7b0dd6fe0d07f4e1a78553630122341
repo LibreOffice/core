@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0b9673ae_7958d318",
+        "filename": "sfx2/source/dialog/StyleList.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-16T12:51:53Z",
+      "side": 1,
+      "message": "It is still wrong that we read the settings in StyleList, and call parent\u0027s SetFilterByIndex. The dialog should read the settings, and set the StyleList\u0027s properties.",
+      "revId": "db13f92ae7b0dd6fe0d07f4e1a78553630122341",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "40665a03_e0d8d01f",
+        "filename": "sfx2/source/dialog/StyleList.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 284,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-16T12:51:53Z",
+      "side": 1,
+      "message": "This \"m\" is wrong - I must had overlooked it previously, when we discussed that \"m\" is short for \"member\".",
+      "range": {
+        "startLine": 284,
+        "startChar": 40,
+        "endLine": 284,
+        "endChar": 41
+      },
+      "revId": "db13f92ae7b0dd6fe0d07f4e1a78553630122341",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
