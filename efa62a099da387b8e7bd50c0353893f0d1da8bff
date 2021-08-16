@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cc472212_989ef388",
+        "filename": "tools/source/generic/gen.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-08-16T18:51:47Z",
+      "side": 1,
+      "message": "something like:\n    const std::pair\u003ctools::Long, tools::Long\u003e nLeftRight \u003d std::minmax(\nmaybe?",
+      "revId": "efa62a099da387b8e7bd50c0353893f0d1da8bff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
