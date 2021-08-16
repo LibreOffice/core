@@ -532,7 +532,7 @@ ErrCode SmMLImportWrapper::ReadThroughComponent(const uno::Reference<embed::XSto
 
 // read a component from text
 ErrCode SmMLImportWrapper::ReadThroughComponent(
-    const OUString& aText, const css::uno::Reference<css::lang::XComponent>& xModelComponent,
+    std::u16string_view aText, const css::uno::Reference<css::lang::XComponent>& xModelComponent,
     css::uno::Reference<css::uno::XComponentContext> const& rxContext,
     css::uno::Reference<css::beans::XPropertySet> const& rPropSet)
 {

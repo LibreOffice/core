@@ -74,7 +74,7 @@ public:
 
     /** read a component from text
      */
-    ErrCode ReadThroughComponent(const OUString& aText,
+    ErrCode ReadThroughComponent(std::u16string_view aText,
                                  const css::uno::Reference<css::lang::XComponent>& xModelComponent,
                                  css::uno::Reference<css::uno::XComponentContext> const& rxContext,
                                  css::uno::Reference<css::beans::XPropertySet> const& rPropSet);
@@ -99,7 +99,7 @@ public:
 public:
     /** Handles an error on the mathml structure
      */
-    void declareMlError();
+    static void declareMlError();
 
 public:
     /** Constructor
