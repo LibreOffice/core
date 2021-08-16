@@ -170,6 +170,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/scalc,\
 	sc/uiconfig/scalc/ui/replacenulltransformationentry \
 	sc/uiconfig/scalc/ui/datetimetransformationentry \
 	sc/uiconfig/scalc/ui/findreplaceentry \
+	sc/uiconfig/scalc/ui/swaprowsentry \
 	sc/uiconfig/scalc/ui/movecopysheet \
 	sc/uiconfig/scalc/ui/movingaveragedialog \
 	sc/uiconfig/scalc/ui/multipleoperationsdialog \
