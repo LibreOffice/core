@@ -1261,6 +1261,53 @@ const OUString& DeleteRowTransformation::getFindString() const
     return maFindString;
 }
 
+SwapRowsTransformation::SwapRowsTransformation(SCROW mRow, SCROW nRow)
+    : mxRow(mRow)
+    , nxRow(nRow)
+{
+}
+
+void SwapRowsTransformation::Transform(ScDocument& rDoc) const
+{
+    if (mxRow == -1 || nxRow == -1)
+        return;
+
+    for (SCCOL nCol = 0; nCol <= rDoc.MaxCol(); ++nCol)
+    {
+        CellType aType;
+        rDoc.GetCellType(nCol, mxRow, 0, aType);
+        if (aType == CELLTYPE_STRING)
+        {
+            OUString aStr = rDoc.GetString(nCol, mxRow, 0);
+            OUString bStr = rDoc.GetString(nCol, nxRow, 0);
+            rDoc.SetString(nCol, mxRow, 0, bStr);
+            rDoc.SetString(nCol, nxRow, 0, aStr);
+        }
+        else if (aType == CELLTYPE_VALUE)
+        {
+            double aVal = rDoc.GetValue(nCol, mxRow, 0);
+            double bVal = rDoc.GetValue(nCol, nxRow, 0);
+            rDoc.SetValue(nCol, mxRow, 0, bVal);
+            rDoc.SetValue(nCol, nxRow, 0, aVal);
+        }
+    }
+}
+
+TransformationType SwapRowsTransformation::getTransformationType() const
+{
+    return TransformationType::SWAPROWS_TRANSFORMATION;
+}
+
+SCROW SwapRowsTransformation::getFirstRow() const
+{
+    return mxRow;
+}
+
+SCROW SwapRowsTransformation::getSecondRow() const
+{
+    return nxRow;
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
