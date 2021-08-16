@@ -1362,7 +1362,11 @@ lcl_SetTableBoxWidths2(SwTable & rTable, size_t const nMaxBoxes,
             size_t nWidth = nMaxBoxes ? USHRT_MAX / nMaxBoxes : USHRT_MAX;
             pNewFormat->SetFormatAttr( SwFormatFrameSize(SwFrameSize::Variable,
                         nWidth * (nMissing + 1)) );
-            pNewFormat->Add(rBoxes.back());
+            auto pBox = rBoxes.back();
+            auto pOldFormat = pBox->GetFrameFormat();
+            if(pOldFormat)
+                pOldFormat->RemoveTableBox(pBox);
+            pNewFormat->AddTableBox(pBox);
         }
     }
     size_t nWidth = nMaxBoxes ? USHRT_MAX / nMaxBoxes : USHRT_MAX;
@@ -4060,7 +4064,7 @@ void SwDoc::ChkBoxNumFormat( SwTableBox& rBox, bool bCallUpdate )
                 pUndo->SetNumFormat( nFormatIdx, fNumber );
             }
 
-            SwTableBoxFormat* pBoxFormat = static_cast<SwTableBoxFormat*>(rBox.GetFrameFormat());
+            SwTableBoxFormat* pBoxFormat = rBox.GetFrameFormat();
             SfxItemSet aBoxSet( GetAttrPool(), svl::Items<RES_BOXATR_FORMAT, RES_BOXATR_VALUE> );
 
             bool bLockModify = true;
@@ -4120,7 +4124,7 @@ void SwDoc::ChkBoxNumFormat( SwTableBox& rBox, bool bCallUpdate )
     {
         // It's not a number
         const SfxPoolItem* pValueItem = nullptr, *pFormatItem = nullptr;
-        SwTableBoxFormat* pBoxFormat = static_cast<SwTableBoxFormat*>(rBox.GetFrameFormat());
+        SwTableBoxFormat* pBoxFormat = rBox.GetFrameFormat();
         if( SfxItemState::SET == pBoxFormat->GetItemState( RES_BOXATR_FORMAT,
                 false, &pFormatItem ) ||
             SfxItemState::SET == pBoxFormat->GetItemState( RES_BOXATR_VALUE,

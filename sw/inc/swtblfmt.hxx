@@ -20,6 +20,9 @@
 #define INCLUDED_SW_INC_SWTBLFMT_HXX
 
 #include "frmfmt.hxx"
+#include <set>
+
+class SwTableBox;
 
 class SAL_DLLPUBLIC_RTTI SwTableFormat final : public SwFrameFormat
 {
@@ -49,6 +52,8 @@ public:
 class SAL_DLLPUBLIC_RTTI SwTableBoxFormat final: public SwFrameFormat
 {
     friend class SwDoc;
+    friend class SwTableBox;
+    std::set<SwTableBox*> m_vBoxes;
 
     SwTableBoxFormat(SwAttrPool& rPool, SwFrameFormat* pDrvdFrame)
         : SwFrameFormat(rPool, OUString(), pDrvdFrame, RES_FRMFMT, aTableBoxSetRange)
@@ -59,10 +64,27 @@ class SAL_DLLPUBLIC_RTTI SwTableBoxFormat final: public SwFrameFormat
     void BoxAttributeChanged(SwTableBox& rBox, const SwTableBoxNumFormat* pNewFormat, const SwTableBoxFormula* pNewFormula, const SwTableBoxValue* pNewValue, const sal_uLong nOldFormat);
 
 public:
+    SwTableBoxFormat(const SwTableBoxFormat& rFrom)
+        : SwFrameFormat(rFrom)
+        , m_vBoxes{} // never copy Boxes
+    { }
+    SwTableBoxFormat& operator=(const SwTableBoxFormat& rFrom)
+    {
+        SwFrameFormat::operator=(rFrom);
+        m_vBoxes.clear();
+        return *this;
+    }
+    SwTableBoxFormat& CloneBoxFormat();
     virtual bool supportsFullDrawingLayerFillAttributeSet() const override;
     SwTableBox* GetTableBox();
     const SwTableBox* GetTableBox() const
             { return const_cast<SwTableBoxFormat*>(this)->GetTableBox(); };
+    void AddTableBox(SwTableBox*);
+    void RemoveTableBox(SwTableBox*);
+    SwTableBoxFormat& SetTableBoxExclusive(SwTableBox&);
+#ifndef NDEBUG
+    void CheckFormatBoxes();
+#endif
 };
 
 #endif
