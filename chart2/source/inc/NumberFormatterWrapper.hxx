@@ -61,7 +61,7 @@ public:
 
 private:
     NumberFormatterWrapper      m_aNumberFormatterWrapper;
-    sal_uLong                       m_nNumberFormatKey;
+    sal_uInt64                       m_nNumberFormatKey;
 };
 
 } //namespace chart
