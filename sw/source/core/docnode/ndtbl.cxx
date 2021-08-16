@@ -1362,7 +1362,7 @@ lcl_SetTableBoxWidths2(SwTable & rTable, size_t const nMaxBoxes,
             size_t nWidth = nMaxBoxes ? USHRT_MAX / nMaxBoxes : USHRT_MAX;
             pNewFormat->SetFormatAttr( SwFormatFrameSize(SwFrameSize::Variable,
                         nWidth * (nMissing + 1)) );
-            pNewFormat->Add(rBoxes.back());
+            pNewFormat->AddTableBox(rBoxes.back());
         }
     }
     size_t nWidth = nMaxBoxes ? USHRT_MAX / nMaxBoxes : USHRT_MAX;

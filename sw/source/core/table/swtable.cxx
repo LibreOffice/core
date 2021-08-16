@@ -1580,7 +1580,7 @@ SwTableBox::SwTableBox( SwTableBoxFormat* pFormat, sal_uInt16 nLines, SwTableLin
     , mbDirectFormatting(false)
 {
     m_aLines.reserve( nLines );
-    CheckBoxFormat( pFormat )->Add( this );
+    CheckBoxFormat( pFormat )->AddTableBox( this );
 }
 
 SwTableBox::SwTableBox( SwTableBoxFormat* pFormat, const SwNodeIndex &rIdx,
@@ -1592,7 +1592,7 @@ SwTableBox::SwTableBox( SwTableBoxFormat* pFormat, const SwNodeIndex &rIdx,
     , mbDummyFlag(false)
     , mbDirectFormatting(false)
 {
-    CheckBoxFormat( pFormat )->Add( this );
+    CheckBoxFormat( pFormat )->AddTableBox(this);
 
     m_pStartNode = rIdx.GetNode().GetStartNode();
 
@@ -1614,7 +1614,7 @@ SwTableBox::SwTableBox( SwTableBoxFormat* pFormat, const SwStartNode& rSttNd, Sw
     , mbDummyFlag(false)
     , mbDirectFormatting(false)
 {
-    CheckBoxFormat( pFormat )->Add( this );
+    CheckBoxFormat( pFormat )->AddTableBox( this );
 
     // insert into the table
     const SwTableNode* pTableNd = m_pStartNode->FindTableNode();
@@ -1647,11 +1647,11 @@ SwTableBox::~SwTableBox()
         RemoveFromTable();
     }
 
-    // the TabelleBox can be deleted if it's the last client of the FrameFormat
-    sw::BroadcastingModify* pMod = GetFrameFormat();
-    pMod->Remove( this );               // remove,
-    if( !pMod->HasWriterListeners() )
-        delete pMod;    // and delete
+    // the TableBox can be deleted if it's the last client of the FrameFormat
+    auto pFormat = GetFrameFormat();
+    pFormat->RemoveTableBox(this);
+    if( !pFormat->HasWriterListeners() )
+        delete pFormat;    // and delete
 }
 
 SwTableBoxFormat* SwTableBox::CheckBoxFormat( SwTableBoxFormat* pFormat )
@@ -1661,8 +1661,7 @@ SwTableBoxFormat* SwTableBox::CheckBoxFormat( SwTableBoxFormat* pFormat )
     if( SfxItemState::SET == pFormat->GetItemState( RES_BOXATR_VALUE, false ) ||
         SfxItemState::SET == pFormat->GetItemState( RES_BOXATR_FORMULA, false ) )
     {
-        SwTableBox* pOther = SwIterator<SwTableBox,SwFormat>( *pFormat ).First();
-        if( pOther )
+        if( pFormat->GetTableBox() )
         {
             SwTableBoxFormat* pNewFormat = pFormat->GetDoc()->MakeTableBoxFormat();
             pNewFormat->LockModify();
@@ -1678,40 +1677,34 @@ SwTableBoxFormat* SwTableBox::CheckBoxFormat( SwTableBoxFormat* pFormat )
     return pFormat;
 }
 
+SwTableBoxFormat& SwTableBoxFormat::SetTableBoxExclusive(SwTableBox& rTableBox)
+{
+    if(m_vBoxes.size() < 2)
+    {
+        assert(!m_vBoxes.empty() && m_vBoxes.front() == &rTableBox);
+        return *this;
+    }
+    auto pNewFormat = GetDoc()->MakeTableBoxFormat();
+    pNewFormat->LockModify();
+    *pNewFormat = *this;
+    pNewFormat->ResetFormatAttr( RES_BOXATR_FORMULA, RES_BOXATR_VALUE );
+    pNewFormat->UnlockModify();
+
+    // re-register SwCellFrame objects of TableBox that to new format
+    SwIterator<SwCellFrame,SwFormat> aFrameIter( *this );
+    for( SwCellFrame* pCell = aFrameIter.First(); pCell; pCell = aFrameIter.Next() )
+        if( pCell->GetTabBox() == &rTableBox )
+            pCell->RegisterToFormat( *pNewFormat );
+
+    // re-register tablebox
+    RemoveTableBox( &rTableBox );
+    pNewFormat->AddTableBox( &rTableBox );
+    return *pNewFormat;
+}
+
 SwFrameFormat* SwTableBox::ClaimFrameFormat()
 {
-    // This method makes sure that this object is an exclusive SwTableBox client
-    // of an SwTableBoxFormat object
-    // If other SwTableBox objects currently listen to the same SwTableBoxFormat as
-    // this one, something needs to be done
-    SwTableBoxFormat *pRet = static_cast<SwTableBoxFormat*>(GetFrameFormat());
-    SwIterator<SwTableBox,SwFormat> aIter( *pRet );
-    for( SwTableBox* pLast = aIter.First(); pLast; pLast = aIter.Next() )
-    {
-        if ( pLast != this )
-        {
-            // Found another SwTableBox object
-            // create a new Format as a copy and assign me to it
-            // don't copy values and formulas
-            SwTableBoxFormat* pNewFormat = pRet->GetDoc()->MakeTableBoxFormat();
-            pNewFormat->LockModify();
-            *pNewFormat = *pRet;
-            pNewFormat->ResetFormatAttr( RES_BOXATR_FORMULA, RES_BOXATR_VALUE );
-            pNewFormat->UnlockModify();
-
-            // re-register SwCellFrame objects that know me
-            SwIterator<SwCellFrame,SwFormat> aFrameIter( *pRet );
-            for( SwCellFrame* pCell = aFrameIter.First(); pCell; pCell = aFrameIter.Next() )
-                if( pCell->GetTabBox() == this )
-                    pCell->RegisterToFormat( *pNewFormat );
-
-            // re-register myself
-            pNewFormat->Add( this );
-            pRet = pNewFormat;
-            break;
-        }
-    }
-    return pRet;
+    return &GetFrameFormat()->SetTableBoxExclusive(*this);
 }
 
 void SwTableBox::ChgFrameFormat(SwTableBoxFormat* pNewFormat, bool bNeedToReregister)
@@ -1722,8 +1715,7 @@ void SwTableBox::ChgFrameFormat(SwTableBoxFormat* pNewFormat, bool bNeedToReregi
     // First, re-register the Frames.
     if(bNeedToReregister)
         pOld->CallSwClientNotify(sw::TableBoxFormatChanged(*pNewFormat, *this));
-    // Now, re-register self.
-    pNewFormat->Add(this);
+    pNewFormat->AddTableBox(this);
     if(!pOld->HasWriterListeners())
         delete pOld;
 }
@@ -2276,13 +2268,20 @@ void SwTableBoxFormat::BoxAttributeChanged(SwTableBox& rBox, const SwTableBoxNum
 
 SwTableBox* SwTableBoxFormat::SwTableBoxFormat::GetTableBox()
 {
-    SwIterator<SwTableBox,SwFormat> aIter(*this);
-    auto pBox = aIter.First();
-    SAL_INFO_IF(!pBox, "sw.core", "no box found at format");
-    SAL_WARN_IF(pBox && aIter.Next(), "sw.core", "more than one box found at format");
-    return pBox;
+    return m_vBoxes.size() ? m_vBoxes.back() : nullptr;
 }
-
+void SwTableBoxFormat::AddTableBox(SwTableBox* pTableBox)
+{
+    m_vBoxes.push_back(pTableBox);
+}
+void SwTableBoxFormat::RemoveTableBox(SwTableBox* pTableBox)
+{
+    const auto ppBox = find(m_vBoxes.begin(), m_vBoxes.end(), pTableBox);
+    if(ppBox != m_vBoxes.end())
+        m_vBoxes.erase(ppBox);
+    else
+        SAL_WARN("sw.core", "box to remove not found: " << pTableBox);
+}
 // for detection of modifications (mainly TableBoxAttribute)
 void SwTableBoxFormat::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
 {
@@ -2717,7 +2716,7 @@ bool SwTable::HasLayout() const
 
 void SwTableBox::RegisterToFormat( SwFormat& rFormat )
 {
-    rFormat.Add( this );
+    static_cast<SwTableBoxFormat&>(rFormat).AddTableBox( this );
 }
 
 // free's any remaining child objects
