@@ -2515,8 +2515,17 @@ Label_RetryWithNewSep:
         while (!rStream.eof() && aStr.getLength() < nArbitraryLineLengthLimit)
         {
             const sal_Unicode * p = aStr.getStr() + nLastOffset;
-            while (*p)
+            const sal_Unicode * const pStop = aStr.getStr() + aStr.getLength();
+            while (p < pStop)
             {
+                if (!*p)
+                {
+                    // Skip embedded null-characters. They don't change
+                    // anything and are handled at a higher level.
+                    ++p;
+                    continue;
+                }
+
                 if (nQuotes)
                 {
                     if (*p == cFieldQuote)
