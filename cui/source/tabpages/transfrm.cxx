@@ -647,6 +647,7 @@ void SvxSlantTabPage::Reset(const SfxItemSet* rAttrs)
                 *pView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj()));
 
         //save geometry
+        const bool bOrigModelChangeState = pView->GetModel()->IsChanged();
         SdrCustomShapeGeometryItem aInitialGeometry(rSdrObjCustomShape.GetMergedItem(SDRATTR_CUSTOMSHAPE_GEOMETRY));
         EnhancedCustomShape2d aShape(rSdrObjCustomShape);
 
@@ -690,6 +691,7 @@ void SvxSlantTabPage::Reset(const SfxItemSet* rAttrs)
 
         //restore geometry
         rSdrObjCustomShape.SetMergedItem(aInitialGeometry);
+        pView->GetModel()->SetChanged(bOrigModelChangeState);
     }
 
     for (int i = 0; i < 2; ++i)
