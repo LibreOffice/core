@@ -5,7 +5,7 @@ if [ -z "${OUT}" ] || [ -z "${SRC}" ] || [ -z "${WORK}" ]; then
     exit 1
 fi
 
-echo start at `date`
+echo start at `date -u`
 
 #shuffle CXXFLAGS -stdlib=libc++ arg into CXX as well because we use
 #the CXX as the linker and need to pass -stdlib=libc++ to build
@@ -59,4 +59,4 @@ cp $SRC/*.dict $OUT
 #options files
 cp $SRC/libreoffice/vcl/workben/*.options $OUT
 
-echo end at `date`
+echo end at `date -u`
