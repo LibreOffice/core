@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <o3tl/unit_conversion.hxx>
 #include <svl/itemiter.hxx>
 #include <sfx2/objsh.hxx>
 #include <svx/svxids.hrc>
@@ -48,7 +51,7 @@ using namespace com::sun::star;
 
 // Word 97 incompatibility (#i19922#)
 // #i19922# - tdf#126051 see cui/source/tabpages/page.cxx and sw/source/uibase/sidebar/PageMarginControl.hxx
-const tools::Long MINBODY = 56;  // 1mm in twips rounded
+constexpr tools::Long MINBODY = o3tl::toTwips(1, o3tl::Length::mm); // 1mm in twips rounded
 
 // default distance to Header or footer
 const tools::Long DEF_DIST_WRITER = 500;    // 5mm (Writer)

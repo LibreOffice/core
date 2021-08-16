@@ -18,6 +18,7 @@
  */
 
 #include <memory>
+#include <o3tl/unit_conversion.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/viewsh.hxx>
@@ -60,7 +61,7 @@
 // static ----------------------------------------------------------------
 
 // #i19922# - tdf#126051 see svx/source/dialog/hdft.cxx and sw/source/uibase/sidebar/PageMarginControl.hxx
-const tools::Long MINBODY = 56;  // 1mm in twips rounded
+constexpr tools::Long MINBODY = o3tl::toTwips(1, o3tl::Length::mm); // 1mm in twips rounded
 
 const WhichRangesContainer SvxPageDescPage::pRanges(
     svl::Items<

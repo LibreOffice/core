@@ -19,6 +19,9 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_SIDEBAR_PAGEMARGINCONTROL_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_SIDEBAR_PAGEMARGINCONTROL_HXX
 
+#include <sal/config.h>
+
+#include <o3tl/unit_conversion.hxx>
 #include <svtools/toolbarmenu.hxx>
 
 #define SWPAGE_NARROW_VALUE    720
@@ -28,7 +31,7 @@
 #define SWPAGE_WIDE_VALUE3     1800
 
 // #i19922# - tdf#126051 see cui/source/tabpages/page.cxx and svx/source/dialog/hdft.cxx
-const tools::Long MINBODY = 56;  // 1mm in twips rounded
+constexpr tools::Long MINBODY = o3tl::toTwips(1, o3tl::Length::mm); // 1mm in twips rounded
 
 class PageMarginPopup;
 

@@ -808,7 +808,7 @@ void ExecuteOrientationChange()
 
     // 1mm in twips rounded
     // This should be in sync with MINBODY in sw/source/uibase/sidebar/PageMarginControl.hxx
-    constexpr tools::Long MINBODY = 56;
+    constexpr tools::Long MINBODY = o3tl::toTwips(1, o3tl::Length::mm);
 
     css::uno::Reference< css::document::XUndoManager > mxUndoManager(
                 getUndoManager( SfxViewFrame::Current()->GetFrame().GetFrameInterface() ) );
