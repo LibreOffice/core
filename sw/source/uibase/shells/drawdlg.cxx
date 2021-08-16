@@ -115,6 +115,8 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
 
             pDlg->StartExecuteAsync([bChanged, bHasMarked, pDoc, pDlg, pSh, pView, this](
                                         sal_Int32 nResult){
+                pDoc->SetChanged(false);
+
                 if (nResult == RET_OK)
                 {
                     pSh->StartAction();
@@ -168,6 +170,8 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
 
             pDlg->StartExecuteAsync([bChanged, bHasMarked, pDoc, pDlg, pSh, pView, this](
                                         sal_Int32 nResult){
+                pDoc->SetChanged(false);
+
                 if (nResult == RET_OK)
                 {
                     pSh->StartAction();
@@ -210,9 +214,8 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
 
     if (pDoc->IsChanged())
         GetShell().SetModified();
-    else
-        if (bChanged)
-            pDoc->SetChanged();
+    else if (bChanged)
+        pDoc->SetChanged();
 }
 
 namespace
