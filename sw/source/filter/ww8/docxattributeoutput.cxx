@@ -180,7 +180,7 @@ const sal_Int32 Tag_EndRun_1 = 9;
 const sal_Int32 Tag_EndRun_2 = 10;
 const sal_Int32 Tag_StartRunProperties = 11;
 const sal_Int32 Tag_InitCollectedRunProperties = 12;
-//static const sal_Int32 Tag_Redline_1 = 13;
+const sal_Int32 Tag_Redline_1 = 13;
 const sal_Int32 Tag_Redline_2 = 14;
 const sal_Int32 Tag_TableDefinition = 15;
 const sal_Int32 Tag_OutputFlyFrame = 16;
@@ -2756,6 +2756,11 @@ void DocxAttributeOutput::EndRunProperties( const SwRedlineData* pRedlineData )
 {
     // Call the 'Redline' function. This will add redline (change-tracking) information that regards to run properties.
     // This includes changes like 'Bold', 'Underline', 'Strikethrough' etc.
+
+    // If there is RedlineData present, call WriteCollectedRunProperties() for writing rPr before calling Redline().
+    // As there will be another rPr for redline and LO might mix both.
+    if(pRedlineData)
+        WriteCollectedRunProperties();
     Redline( pRedlineData );
 
     WriteCollectedRunProperties();
@@ -3171,6 +3176,34 @@ void DocxAttributeOutput::Redline( const SwRedlineData* pRedlineData)
                     ? "Author" + OUString::number( GetExport().GetInfoID(rAuthor) )
                     : rAuthor,
                 FSNS( XML_w, XML_date ), aDate );
+
+        // Check if there is any extra data stored in the redline object
+        if (pRedlineData->GetExtraData())
+        {
+            const SwRedlineExtraData* pExtraData = pRedlineData->GetExtraData();
+            const SwRedlineExtraData_FormatColl* pFormattingChanges = dynamic_cast<const SwRedlineExtraData_FormatColl*>(pExtraData);
+
+            // Check if the extra data is of type 'formatting changes'
+            if (pFormattingChanges)
+            {
+                 // Get the item set that holds all the changes properties
+                const SfxItemSet *pChangesSet = pFormattingChanges->GetItemSet();
+                if (pChangesSet)
+                {
+                    m_pSerializer->mark(Tag_Redline_1);
+
+                    m_pSerializer->startElementNS(XML_w, XML_rPr);
+
+                    // Output the redline item set
+                    if (pChangesSet)
+                        m_rExport.OutputItemSet( *pChangesSet, false, true, i18n::ScriptType::LATIN, m_rExport.m_bExportModeRTF );
+
+                    m_pSerializer->endElementNS( XML_w, XML_rPr );
+
+                    m_pSerializer->mergeTopMarks(Tag_Redline_1, sax_fastparser::MergeMarks::PREPEND);
+                }
+            }
+        }
 
         m_pSerializer->endElementNS( XML_w, XML_rPrChange );
         break;

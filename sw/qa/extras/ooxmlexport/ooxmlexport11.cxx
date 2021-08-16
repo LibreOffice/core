@@ -1036,6 +1036,15 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf124491, "tdf124491.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/*/*/w:rPrChange", 0);
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf143911, "tdf126206.docx")
+{
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    // export format change of text portions
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[2]/w:rPr/w:rPrChange");
+    // This was without tracked bold formatting
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[2]/w:rPr/w:rPrChange/w:rPr/w:b");
+}
+
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf105485, "tdf105485.docx")
 {
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
