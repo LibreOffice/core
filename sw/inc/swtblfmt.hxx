@@ -21,6 +21,8 @@
 
 #include "frmfmt.hxx"
 
+class SwTableBox;
+
 class SAL_DLLPUBLIC_RTTI SwTableFormat final : public SwFrameFormat
 {
     friend class SwDoc;
@@ -49,6 +51,7 @@ public:
 class SAL_DLLPUBLIC_RTTI SwTableBoxFormat final: public SwFrameFormat
 {
     friend class SwDoc;
+    std::vector<SwTableBox*> m_vBoxes;
 
     SwTableBoxFormat(SwAttrPool& rPool, SwFrameFormat* pDrvdFrame)
         : SwFrameFormat(rPool, OUString(), pDrvdFrame, RES_FRMFMT, aTableBoxSetRange)
@@ -63,6 +66,9 @@ public:
     SwTableBox* GetTableBox();
     const SwTableBox* GetTableBox() const
             { return const_cast<SwTableBoxFormat*>(this)->GetTableBox(); };
+    void AddTableBox(SwTableBox*);
+    void RemoveTableBox(SwTableBox*);
+    SwTableBoxFormat& SetTableBoxExclusive(SwTableBox&);
 };
 
 #endif
