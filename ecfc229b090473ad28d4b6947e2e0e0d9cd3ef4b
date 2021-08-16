@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "46dda9fb_16644887",
+        "filename": "oox/source/export/vmlexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 292,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2021-08-16T16:41:25Z",
+      "side": 0,
+      "message": "Let\u0027s keep the \"TODO\".",
+      "revId": "ecfc229b090473ad28d4b6947e2e0e0d9cd3ef4b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
