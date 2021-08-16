@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "55550bc8_c24dd944",
+        "filename": "ridljar/com/sun/star/lib/util/NativeLibraryLoader.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-08-16T10:31:20Z",
+      "side": 1,
+      "message": "I would do something like:\n\n    if (!(NativeLibraryLoader.class.getClassLoader() instanceof com.sun.star.lib.unoloader.UnoClassLoader))\n        throw new IllegalStateException();\n\nbecause assert in Java is a rather annoying design in that you have to explicitly enable it from the command line. And this seems like something that would be generally useful anyway, even in production builds.",
+      "revId": "73892b239dc18410c3dea8fcb8f799ff16ca007c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
