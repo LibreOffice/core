@@ -307,7 +307,7 @@ tools::Polygon lcl_CreateContourPolygon(SdrObject* pSdrObj)
         {
             // EnhancedCustomShapeEngine::GetLineGeometry() is not directly usable, because the wrap
             // polygon acts on the untransformed shape in Word. We do here similar as in
-            // GetLineGreometry(), but without transformations.
+            // GetLineGeometry(), but without transformations.
             EnhancedCustomShape2d aCustomShape2d(*static_cast<SdrObjCustomShape*>(pSdrObj));
             SdrObjectUniquePtr pLineGeometryObj = aCustomShape2d.CreateLineGeometry();
             if (!pLineGeometryObj)
@@ -352,7 +352,7 @@ tools::Polygon lcl_CreateContourPolygon(SdrObject* pSdrObj)
             // flipped coordinates. In such cases the wrap polygon needs to contain flipped
             // coordinates too. That is missing here.
 
-            // "moon" and "msp-spt89" (up-right-arrow) are currently mirrowed horizontal. But
+            // "moon" and "msp-spt89" (up-right-arrow) are currently mirrored horizontally. But
             // that is removed on export in shapes.cxx. So need to remove it in wrap polygon too.
             uno::Reference<drawing::XShape> xShape(pSdrObj->getUnoShape(), uno::UNO_QUERY);
             uno::Reference<beans::XPropertySet> xProps(xShape, uno::UNO_QUERY);
