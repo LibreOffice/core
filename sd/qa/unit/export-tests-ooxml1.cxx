@@ -61,6 +61,7 @@ using namespace css;
 class SdOOXMLExportTest1 : public SdModelTestBaseXML
 {
 public:
+    void testTdf143624();
     void testTdf142648();
     void testTdf47365();
     void testTdf125071();
@@ -123,6 +124,7 @@ public:
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest1);
 
+    CPPUNIT_TEST(testTdf143624);
     CPPUNIT_TEST(testTdf142648);
     CPPUNIT_TEST(testTdf47365);
     CPPUNIT_TEST(testTdf125071);
@@ -210,6 +212,20 @@ void checkFontAttributes( const SdrTextObj* pObj, ItemValue nVal, sal_uInt32 nId
     }
 }
 
+}
+
+void SdOOXMLExportTest1::testTdf143624()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL( m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tdf143624.pptx"), PPTX );
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+    xDocShRef->DoClose();
+
+    xmlDocUniquePtr pXmlDoc = parseExport(tempFile, "ppt/presProps.xml");
+
+    assertXPath(pXmlDoc, "/p:presentationPr/p:showPr", "useTimings", "0");
+
+    assertXPath(pXmlDoc, "/p:presentationPr/p:showPr", "showNarration", "1");
 }
 
 void SdOOXMLExportTest1::testTdf142648()
