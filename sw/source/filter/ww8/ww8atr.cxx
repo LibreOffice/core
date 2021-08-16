@@ -2442,6 +2442,7 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                                 sal_uInt8 nTestLvl =  ::sal::static_int_cast<sal_uInt8>(pColl->GetAssignedOutlineStyleLevel());
                                 if (nTestLvl < nTOXLvl && nTestLvl >= nMaxMSAutoEvaluate)
                                 {
+//";"
                                     if (!sTOption.isEmpty())
                                         sTOption += ",";
                                     sTOption += pColl->GetName() + "," + OUString::number( nTestLvl + 1 );
