@@ -123,7 +123,7 @@ public:
     virtual void getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInfo, drawinglayer::primitive2d::Primitive2DContainer& rContainer) const;
 
     // just process the sub-hierarchy, used as tooling from getPrimitive2DSequenceHierarchy
-    drawinglayer::primitive2d::Primitive2DContainer getPrimitive2DSequenceSubHierarchy(DisplayInfo& rDisplayInfo) const;
+    void getPrimitive2DSequenceSubHierarchy(DisplayInfo& rDisplayInfo, drawinglayer::primitive2d::Primitive2DContainer& rContainer) const;
 
     // interface to support GridOffset for non-linear ViewToDevice transformation (calc)
     const basegfx::B2DVector& getGridOffset() const;
