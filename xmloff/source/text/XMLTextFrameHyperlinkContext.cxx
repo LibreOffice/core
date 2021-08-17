@@ -119,7 +119,8 @@ SvXMLImportContextRef XMLTextFrameHyperlinkContext::CreateChildContext(
             pTextFrameContext = new XMLTextFrameContext( GetImport(), nPrefix,
                                                 rLocalName, xAttrList,
                                                 eDefaultAnchorType );
-        else if( IsXMLToken( rLocalName, XML_CUSTOM_SHAPE ) )
+        else if (IsXMLToken(rLocalName, XML_CUSTOM_SHAPE) || IsXMLToken(rLocalName, XML_PATH)
+                 || IsXMLToken(rLocalName, XML_ELLIPSE) || IsXMLToken(rLocalName, XML_LINE))
         {
             Reference<XShapes> xShapes;
             SvXMLShapeContext* pShapeContext
