@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c3970211_3d03090f",
+        "filename": "include/tools/gen.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 626,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-08-17T07:24:43Z",
+      "side": 1,
+      "message": "are you sure this calculation is symmetric? \n\nWhich is what we normally want out of spatial manipulations.\ni.e. does this work:\n    rect \u003d (Point(0,), Size(-1,-1))\n    rect.AdjustRight(1).AdjustBottom(1,1)\n    assert(rect.getSize() \u003d\u003d Size(0,0))",
+      "revId": "8f7961f8f711518ee139e613883d96df6bfe63c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
