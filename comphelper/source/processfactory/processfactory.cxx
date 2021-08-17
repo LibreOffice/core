@@ -86,8 +86,9 @@ Reference< XComponentContext > getComponentContext(
     Reference< XComponentContext > xRet;
     uno::Reference<beans::XPropertySet> const xProps( factory, uno::UNO_QUERY );
     if (xProps.is()) {
+        constexpr OUStringLiteral DEFAULT_CONTEXT = u"DefaultContext";
         try {
-            xRet.set( xProps->getPropertyValue("DefaultContext"),
+            xRet.set( xProps->getPropertyValue(DEFAULT_CONTEXT),
                       uno::UNO_QUERY );
         }
         catch (beans::UnknownPropertyException & e) {
