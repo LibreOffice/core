@@ -200,7 +200,7 @@ ErrCode SmMLImportWrapper::Import(SfxMedium& rMedium)
                                              bOASIS ? u"com.sun.star.comp.Math.MLOasisMetaImporter"
                                                     : u"com.sun.star.comp.Math.MLMetaImporter");
 
-        // Check if succefull
+        // Check if successful
         if (nWarn != ERRCODE_NONE)
         {
             if (xStatusIndicator.is())
@@ -220,7 +220,7 @@ ErrCode SmMLImportWrapper::Import(SfxMedium& rMedium)
                                      bOASIS ? u"com.sun.star.comp.Math.MLOasisSettingsImporter"
                                             : u"com.sun.star.comp.Math.MLSettingsImporter");
 
-        // Check if succefull
+        // Check if successful
         if (nWarn != ERRCODE_NONE)
         {
             if (xStatusIndicator.is())
@@ -237,7 +237,7 @@ ErrCode SmMLImportWrapper::Import(SfxMedium& rMedium)
         // read a component from storage
         nWarn = ReadThroughComponent(rMedium.GetStorage(), xModelComp, u"content.xml", xContext,
                                      xInfoSet, u"com.sun.star.comp.Math.MLImporter");
-        // Check if succefull
+        // Check if successful
         if (nWarn != ERRCODE_NONE)
         {
             if (xStatusIndicator.is())
