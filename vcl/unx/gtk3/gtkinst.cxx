@@ -2293,6 +2293,12 @@ namespace
         }
 #endif
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
+        // for gtk3 remove before replacement inserted, or there are warnings
+        // from GTK_BIN about having two children
+        container_remove(pParent, pWidget);
+#endif
+
         gtk_widget_set_visible(pReplacement, gtk_widget_get_visible(pWidget));
 #if !GTK_CHECK_VERSION(4, 0, 0)
         gtk_widget_set_no_show_all(pReplacement, gtk_widget_get_no_show_all(pWidget));
@@ -2354,7 +2360,10 @@ namespace
         gtk_widget_set_halign(pReplacement, gtk_widget_get_halign(pWidget));
         gtk_widget_set_valign(pReplacement, gtk_widget_get_valign(pWidget));
 
+#if GTK_CHECK_VERSION(4, 0, 0)
+        // for gtk4 remove after replacement inserted so we could use gtk_box_insert_child_after
         container_remove(pParent, pWidget);
+#endif
 
         // coverity[freed_arg : FALSE] - this does not free pWidget, it is reffed by pReplacement
         g_object_unref(pWidget);
