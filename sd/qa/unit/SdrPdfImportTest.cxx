@@ -31,6 +31,44 @@
 
 using namespace css;
 
+namespace
+{
+class EnvVarGuard
+{
+public:
+    EnvVarGuard(const char* var, const char* val)
+    {
+        if (getenv(var) == nullptr)
+        {
+            sVar = var;
+            SetEnv(sVar, val);
+        }
+    }
+    ~EnvVarGuard()
+    {
+        if (sVar)
+            SetEnv(sVar, nullptr);
+    }
+
+private:
+    static void SetEnv(const char* var, const char* val)
+    {
+#ifdef _WIN32
+        if (!val)
+            val = ""; // remove
+        _putenv_s(var, val);
+#else
+        if (val)
+            setenv(var, val, false);
+        else
+            unsetenv(var);
+#endif
+    }
+
+    const char* sVar = nullptr;
+};
+}
+
 class SdrPdfImportTest : public test::BootstrapFixture, public unotest::MacrosTest
 {
 protected:
@@ -61,7 +99,6 @@ void SdrPdfImportTest::tearDown()
 // convert the PDF content into objects/shapes.
 CPPUNIT_TEST_FIXTURE(SdrPdfImportTest, testImportSimpleText)
 {
-#if !defined(_WIN32)
     auto pPdfium = vcl::pdf::PDFiumLibrary::get();
     if (!pPdfium)
     {
@@ -69,16 +106,7 @@ CPPUNIT_TEST_FIXTURE(SdrPdfImportTest, testImportSimpleText)
     }
 
     // We need to enable PDFium import (and make sure to disable after the test)
-    bool bResetEnvVar = false;
-    if (getenv("LO_IMPORT_USE_PDFIUM") == nullptr)
-    {
-        bResetEnvVar = true;
-        setenv("LO_IMPORT_USE_PDFIUM", "1", false);
-    }
-    comphelper::ScopeGuard aPDFiumEnvVarGuard([&]() {
-        if (bResetEnvVar)
-            unsetenv("LO_IMPORT_USE_PDFIUM");
-    });
+    EnvVarGuard UsePDFiumGuard("LO_IMPORT_USE_PDFIUM", "1");
 
     mxComponent = loadFromDesktop(m_directories.getURLFromSrc(u"sd/qa/unit/data/SimplePDF.pdf"));
     auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
@@ -132,12 +160,10 @@ CPPUNIT_TEST_FIXTURE(SdrPdfImportTest, testImportSimpleText)
     const EditTextObject& aEdit = pOutlinerParagraphObject->GetTextObject();
     OUString sText = aEdit.GetText(0);
     CPPUNIT_ASSERT_EQUAL(OUString("This is PDF!"), sText);
-#endif
 }
 
 CPPUNIT_TEST_FIXTURE(SdrPdfImportTest, testAnnotationsImportExport)
 {
-#if !defined(_WIN32)
     auto pPdfium = vcl::pdf::PDFiumLibrary::get();
     if (!pPdfium)
     {
@@ -145,27 +171,9 @@ CPPUNIT_TEST_FIXTURE(SdrPdfImportTest, testAnnotationsImportExport)
     }
 
     // We need to enable PDFium import (and make sure to disable after the test)
-    bool bResetEnvVar = false;
-    if (getenv("LO_IMPORT_USE_PDFIUM") == nullptr)
-    {
-        bResetEnvVar = true;
-        setenv("LO_IMPORT_USE_PDFIUM", "1", false);
-    }
-    comphelper::ScopeGuard aPDFiumEnvVarGuard([&]() {
-        if (bResetEnvVar)
-            unsetenv("LO_IMPORT_USE_PDFIUM");
-    });
+    EnvVarGuard UsePDFiumGuard("LO_IMPORT_USE_PDFIUM", "1");
 
-    bool bPDFCompressorResetEnvVar = false;
-    if (getenv("VCL_DEBUG_DISABLE_PDFCOMPRESSION") == nullptr)
-    {
-        bPDFCompressorResetEnvVar = true;
-        setenv("VCL_DEBUG_DISABLE_PDFCOMPRESSION", "1", false);
-    }
-    comphelper::ScopeGuard aPDFCompressorEnvVarGuard([&]() {
-        if (bPDFCompressorResetEnvVar)
-            unsetenv("VCL_DEBUG_DISABLE_PDFCOMPRESSION");
-    });
+    EnvVarGuard DisablePDFCompressionGuard("VCL_DEBUG_DISABLE_PDFCOMPRESSION", "1");
 
     auto pPdfiumLibrary = vcl::pdf::PDFiumLibrary::get();
 
@@ -295,8 +303,6 @@ CPPUNIT_TEST_FIXTURE(SdrPdfImportTest, testAnnotationsImportExport)
         CPPUNIT_ASSERT_EQUAL(sal_uInt32(0), aDateTime.NanoSeconds);
         CPPUNIT_ASSERT_EQUAL(false, bool(aDateTime.IsUTC));
     }
-
-#endif
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
