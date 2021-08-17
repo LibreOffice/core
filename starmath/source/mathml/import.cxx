@@ -356,7 +356,7 @@ ErrCode SmMLImportWrapper::ReadThroughComponent(const Reference<io::XInputStream
                                                 Reference<beans::XPropertySet> const& rPropSet,
                                                 const char16_t* pFilterName, bool bEncrypted)
 {
-    // Needs an iunput stream but checked by caller
+    // Needs an input stream but checked by caller
     // Needs a context but checked by caller
     // Needs property set but checked by caller
     // Needs a filter name but checked by caller
@@ -1335,7 +1335,7 @@ void SmMLImport::SetConfigurationSettings(const Sequence<PropertyValue>& aConfPr
             }
             catch (const Exception&)
             {
-                SAL_WARN("starmath", "Unespected issue while loading document properties");
+                SAL_WARN("starmath", "Unexpected issue while loading document properties");
             }
         }
     }
