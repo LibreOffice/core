@@ -56,7 +56,10 @@ bool SequenceLoop::VisitCXXForRangeStmt(CXXForRangeStmt const* forStmt)
              .Namespace("star")
              .Namespace("sun")
              .Namespace("com")
-             .GlobalNamespace())
+             .GlobalNamespace()
+        // B2DPolyPolygon is similar in that accessing the non-const begin()/end() methods
+        // might trigger unnecessary copying
+        && !tc.Class("B2DPolyPolygon").Namespace("basegfx").GlobalNamespace())
         return true;
     const VarDecl* varDecl = forStmt->getLoopVariable();
     auto tc2 = loplugin::TypeCheck(varDecl->getType());

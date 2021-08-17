@@ -496,7 +496,7 @@ namespace basegfx::trapezoidhelper
                     aSource = aSource.getDefaultAdaptiveSubdivision();
                 }
 
-                for(const auto& aPolygonCandidate : aSource)
+                for(const auto& aPolygonCandidate : std::as_const(aSource))
                 {
                     // 1st run: count points
                     const sal_uInt32 nCount(aPolygonCandidate.count());
@@ -513,7 +513,7 @@ namespace basegfx::trapezoidhelper
                     // after 2nd loop since pointers to it are used in the edges
                     maPoints.reserve(nAllPointCount);
 
-                    for(const auto& aPolygonCandidate : aSource)
+                    for(const auto& aPolygonCandidate : std::as_const(aSource))
                     {
                         // 2nd run: add points
                         const sal_uInt32 nCount(aPolygonCandidate.count());
@@ -533,7 +533,7 @@ namespace basegfx::trapezoidhelper
                     // in the edges may be wrong. Security first here.
                     sal_uInt32 nStartIndex(0);
 
-                    for(const auto& aPolygonCandidate : aSource)
+                    for(const auto& aPolygonCandidate : std::as_const(aSource))
                     {
                         const sal_uInt32 nCount(aPolygonCandidate.count());
 

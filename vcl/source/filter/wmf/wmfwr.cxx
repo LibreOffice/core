@@ -984,7 +984,7 @@ void WMFWriter::HandleLineInfoPolyPolygons(const LineInfo& rInfo, const basegfx:
         aSrcLineInfo = rInfo;
         SetLineAndFillAttr();
 
-        for(auto const& rB2DPolygon : aLinePolyPolygon)
+        for(auto const& rB2DPolygon : std::as_const(aLinePolyPolygon))
         {
             WMFRecord_PolyLine( tools::Polygon(rB2DPolygon) );
         }
@@ -1000,7 +1000,7 @@ void WMFWriter::HandleLineInfoPolyPolygons(const LineInfo& rInfo, const basegfx:
     aSrcFillColor = aOldLineColor;
     SetLineAndFillAttr();
 
-    for(auto const& rB2DPolygon : aFillPolyPolygon)
+    for(auto const& rB2DPolygon : std::as_const(aFillPolyPolygon))
     {
         WMFRecord_Polygon( tools::Polygon(rB2DPolygon) );
     }

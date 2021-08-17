@@ -46,7 +46,7 @@ namespace sdr::contact
             sal_uInt32 nPolyCount(rUnitPolyPolygon.count());
             sal_uInt32 nPointCount(0);
 
-            for(auto const& rPolygon : rUnitPolyPolygon)
+            for(auto const& rPolygon : std::as_const(rUnitPolyPolygon))
             {
                 nPointCount += rPolygon.count();
             }

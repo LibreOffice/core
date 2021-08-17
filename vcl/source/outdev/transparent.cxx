@@ -172,7 +172,7 @@ void OutputDevice::DrawTransparent(
         {
             const bool bPixelSnapHairline(mnAntialiasing & AntialiasingFlags::PixelSnapHairline);
 
-            for(auto const& rPolygon : aB2DPolyPolygon)
+            for(auto const& rPolygon : std::as_const(aB2DPolyPolygon))
             {
                 mpGraphics->DrawPolyLine(
                     aFullTransform,
@@ -293,7 +293,7 @@ bool OutputDevice::DrawTransparentNatively ( const tools::PolyPolygon& rPolyPoly
             // draw the border line
             const bool bPixelSnapHairline(mnAntialiasing & AntialiasingFlags::PixelSnapHairline);
 
-            for(auto const& rPolygon : aB2DPolyPolygon)
+            for(auto const& rPolygon : std::as_const(aB2DPolyPolygon))
             {
                 bDrawn = mpGraphics->DrawPolyLine(
                     aTransform,

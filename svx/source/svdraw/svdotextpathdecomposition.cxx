@@ -557,7 +557,7 @@ namespace
             basegfx::B2DPolyPolygon aB2DPolyPolygon = rB2DPolyPolygon;
             aB2DPolyPolygon.transform(rTransform);
 
-            for(auto const& rPolygon : aB2DPolyPolygon)
+            for(auto const& rPolygon : std::as_const(aB2DPolyPolygon))
             {
                 // create one primitive per polygon
                 rTarget.push_back(
