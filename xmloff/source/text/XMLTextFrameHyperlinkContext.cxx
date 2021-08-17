@@ -101,22 +101,28 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTextFrameHyperlinkC
     SvXMLImportContext *pContext = nullptr;
     XMLTextFrameContext *pTextFrameContext = nullptr;
 
-    if( nElement == XML_ELEMENT(DRAW, XML_FRAME) )
+    switch (nElement)
     {
-        pTextFrameContext = new XMLTextFrameContext( GetImport(),
-                                                xAttrList,
-                                                eDefaultAnchorType );
-        pTextFrameContext->SetHyperlink( sHRef, sName, sTargetFrameName, bMap );
-        pContext = pTextFrameContext;
-        xFrameContext = pContext;
-    }
-    if (nElement == XML_ELEMENT(DRAW, XML_CUSTOM_SHAPE))
-    {
-        Reference<XShapes> xShapes;
-        SvXMLShapeContext* pShapeContext
-            = XMLShapeImportHelper::CreateGroupChildContext(GetImport(), nElement, xAttrList, xShapes);
-        pShapeContext->setHyperlink(sHRef);
-        pContext = pShapeContext;
+        case XML_ELEMENT(DRAW, XML_FRAME):
+        {
+            pTextFrameContext = new XMLTextFrameContext(GetImport(), xAttrList, eDefaultAnchorType);
+            pTextFrameContext->SetHyperlink(sHRef, sName, sTargetFrameName, bMap);
+            pContext = pTextFrameContext;
+            xFrameContext = pContext;
+        }
+        break;
+        case XML_ELEMENT(DRAW, XML_CUSTOM_SHAPE):
+        case XML_ELEMENT(DRAW, XML_PATH):
+        case XML_ELEMENT(DRAW, XML_ELLIPSE):
+        case XML_ELEMENT(DRAW, XML_LINE):
+        {
+            Reference<XShapes> xShapes;
+            SvXMLShapeContext* pShapeContext = XMLShapeImportHelper::CreateGroupChildContext(
+                GetImport(), nElement, xAttrList, xShapes);
+            pShapeContext->setHyperlink(sHRef);
+            pContext = pShapeContext;
+        }
+        break;
     }
 
     if (!pContext)
