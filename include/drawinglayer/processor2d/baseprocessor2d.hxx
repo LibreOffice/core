@@ -22,6 +22,7 @@
 
 #include <drawinglayer/drawinglayerdllapi.h>
 
+#include <drawinglayer/primitive2d/Primitive2DVisitor.hxx>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 
@@ -150,7 +151,7 @@ namespace drawinglayer::processor2d
             be helpful to add many for the purpose not interesting higher level primitives
             to not force their decomposition to be created and/or parsed.
          */
-        class DRAWINGLAYER_DLLPUBLIC BaseProcessor2D
+        class DRAWINGLAYER_DLLPUBLIC BaseProcessor2D : public  drawinglayer::primitive2d::Primitive2DDecompositionVisitor
         {
         private:
             /// The ViewInformation2D itself. It's private to isolate accesses to it
@@ -174,6 +175,10 @@ namespace drawinglayer::processor2d
 
             void process(const primitive2d::BasePrimitive2D& rCandidate);
 
+            // Primitive2DDecompositionVisitor
+            virtual void append(const primitive2d::Primitive2DReference&) override final;
+            virtual void append(const primitive2d::Primitive2DContainer&) override final;
+            virtual void append(primitive2d::Primitive2DContainer&&) override final;
 
         public:
             /// constructor/destructor
