@@ -23,7 +23,12 @@
 
 #include <skia/osx/rastercontext.hxx>
 
+#include <quartz/ctfonts.hxx>
+
 #include <SkCanvas.h>
+#include <SkFont.h>
+#include <SkFontMgr_mac_ct.h>
+#include <SkTypeface_mac.h>
 
 using namespace SkiaHelper;
 
@@ -171,6 +176,52 @@ bool AquaSkiaSalGraphicsImpl::drawNativeControl(ControlType nType, ControlPart n
         postDraw();
     }
     return bOK;
+}
+
+void AquaSkiaSalGraphicsImpl::drawTextLayout(const GenericSalLayout& rLayout)
+{
+    const CoreTextStyle& rStyle = *static_cast<const CoreTextStyle*>(&rLayout.GetFont());
+    const FontSelectPattern& rFontSelect = rStyle.GetFontSelectPattern();
+    int nHeight = rFontSelect.mnHeight;
+    int nWidth = rFontSelect.mnWidth ? rFontSelect.mnWidth : nHeight;
+    if (nWidth == 0 || nHeight == 0)
+    {
+        SAL_WARN("vcl.skia", "DrawTextLayout(): rFontSelect.mnHeight is zero!?");
+        return;
+    }
+
+    if (!fontManager)
+    {
+        SystemFontList* fontList = GetCoretextFontList();
+        if (fontList == nullptr)
+        {
+            SAL_WARN("vcl.skia", "DrawTextLayout(): No coretext font list");
+            fontManager = SkFontMgr_New_CoreText(nullptr);
+        }
+        else
+        {
+            fontManager = SkFontMgr_New_CoreText(fontList->fontCollection());
+        }
+    }
+
+    CTFontRef pFont
+        = static_cast<CTFontRef>(CFDictionaryGetValue(rStyle.GetStyleDict(), kCTFontAttributeName));
+    sk_sp<SkTypeface> typeface = SkMakeTypefaceFromCTFont(pFont);
+    SkFont font(typeface);
+    font.setSize(nHeight);
+    //    font.setScaleX(rStyle.mfFontStretch); TODO
+    if (rStyle.mbFauxBold)
+        font.setEmbolden(true);
+    font.setEdging(!mrShared.mbNonAntialiasedText ? SkFont::Edging::kAntiAlias
+                                                  : SkFont::Edging::kAlias);
+
+    // Vertical font, use width as "height".
+    SkFont verticalFont(font);
+    verticalFont.setSize(nHeight);
+    //    verticalFont.setSize(nWidth); TODO
+    //    verticalFont.setScaleX(1.0 * nHeight / nWidth);
+
+    drawGenericLayout(rLayout, mrShared.maTextColor, font, verticalFont);
 }
 
 std::unique_ptr<sk_app::WindowContext> createVulkanWindowContext(bool /*temporary*/)
