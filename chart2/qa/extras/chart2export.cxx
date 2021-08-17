@@ -531,10 +531,21 @@ void Chart2ExportTest::testBarChart()
 
 void Chart2ExportTest::testCrosses()
 {
-    load(u"/chart2/qa/extras/data/docx/", "Bar_horizontal_cone.docx");
-    xmlDocUniquePtr pXmlDoc = parseExport("word/charts/chart", "Office Open XML Text");
+    // test crosses val="autoZero" with DOCX
+    {
+        load(u"/chart2/qa/extras/data/docx/", "Bar_horizontal_cone.docx");
+        xmlDocUniquePtr pXmlDoc = parseExport("word/charts/chart", "Office Open XML Text");
 
-    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:catAx/c:crosses", "val", "autoZero");
+        assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:catAx/c:crosses", "val", "autoZero");
+    }
+    // tdf#142351: test crossesAt val="-50" with XLSX
+    {
+        load(u"/chart2/qa/extras/data/xlsx/", "tdf142351.xlsx");
+        xmlDocUniquePtr pXmlDoc = parseExport("xl/charts/chart", "Calc Office Open XML");
+        CPPUNIT_ASSERT(pXmlDoc);
+
+        assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:catAx/c:crossesAt", "val", "-50");
+    }
 }
 
 void Chart2ExportTest::testScatterChartTextXValues()
