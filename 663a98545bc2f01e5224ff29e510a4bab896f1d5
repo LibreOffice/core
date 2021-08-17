@@ -34,6 +34,24 @@
       "revId": "663a98545bc2f01e5224ff29e510a4bab896f1d5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4846a57d_ee582f14",
+        "filename": "sc/qa/unit/tiledrendering/tiledrendering.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1228,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-08-17T13:39:54Z",
+      "side": 1,
+      "message": "Yes, we store it into the SVM file format I think. Yes, it would sense to do that. It is rather unfortunate, because that file format is used as an intermediate stage in our processing quite a lot.\n\nWhat would be ideal (IMO) is\n(*) use (x,y,width,height) in tools::Rectangle and through the magic value away.\n(*) use the versioning mechanism in SVM to add some data to certain records whenever we hit this problem.",
+      "parentUuid": "8a1e8e62_017e8a87",
+      "revId": "663a98545bc2f01e5224ff29e510a4bab896f1d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
