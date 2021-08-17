@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "13f8970c_4a1da788",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-08-17T22:38:45Z",
+      "side": 1,
+      "message": "Likely yes. Content is from 2019-Apr-10 ... where I apparently built all dictionaries once.",
+      "parentUuid": "9fc0f948_6ea72809",
+      "revId": "51406e88a93008458cf4a7d4f84aa0b169cb7d0b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0bd9cc53_855f0a20",
         "filename": "/COMMIT_MSG",
         "patchSetId": 2
@@ -33,6 +51,24 @@
       "revId": "51406e88a93008458cf4a7d4f84aa0b169cb7d0b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1606ed56_0c86179e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2021-08-17T22:38:45Z",
+      "side": 1,
+      "message": "./autogen.sh --prefix\u003d...\nmake\nmake install",
+      "parentUuid": "0bd9cc53_855f0a20",
+      "revId": "51406e88a93008458cf4a7d4f84aa0b169cb7d0b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
