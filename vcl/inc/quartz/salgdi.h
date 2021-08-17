@@ -123,6 +123,8 @@ public:
     void    AnnounceFonts( PhysicalFontCollection& ) const;
     CoreTextFontFace* GetFontDataFromId( sal_IntPtr nFontId ) const;
 
+    CTFontCollectionRef fontCollection() { return mpCTFontCollection; }
+
 private:
     CTFontCollectionRef mpCTFontCollection;
     CFArrayRef mpCTFontArray;
@@ -170,6 +172,10 @@ struct AquaSharedAttributes
     int mnXorMode; // 0: off 1: on 2: invert only
     int mnBitmapDepth;  // zero unless bitmap
 
+    Color maTextColor;
+    /// allows text to be rendered without antialiasing
+    bool mbNonAntialiasedText;
+
     std::unique_ptr<XorEmulation> mpXorEmulation;
 
     AquaSharedAttributes()
@@ -188,6 +194,8 @@ struct AquaSharedAttributes
         , mnHeight(0)
         , mnXorMode(0)
         , mnBitmapDepth(0)
+        , maTextColor( COL_BLACK )
+        , mbNonAntialiasedText( false )
     {}
 
     void unsetClipPath()
@@ -287,6 +295,7 @@ public:
                                    const tools::Rectangle &rControlRegion,
                                    ControlState nState,
                                    const ImplControlValue &aValue) = 0;
+    virtual void drawTextLayout(const GenericSalLayout& layout) = 0;
 protected:
     static bool performDrawNativeControl(ControlType nType,
                                          ControlPart nPart,
@@ -433,6 +442,8 @@ public:
                                    ControlState nState,
                                    const ImplControlValue &aValue) override;
 
+    virtual void drawTextLayout(const GenericSalLayout& layout) override;
+
     bool supportsOperation(OutDevSupportType eType) const override;
 };
 
@@ -447,9 +458,6 @@ class AquaSalGraphics : public SalGraphicsAutoDelegateToImpl
 
     // Device Font settings
     rtl::Reference<CoreTextStyle>           mpTextStyle[MAX_FALLBACK];
-    RGBAColor                               maTextColor;
-    /// allows text to be rendered without antialiasing
-    bool                                    mbNonAntialiasedText;
 
 public:
                             AquaSalGraphics();
