@@ -20,6 +20,7 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
 
+#include <editsh.hxx>
 #include <ndgrf.hxx>
 #include <docsh.hxx>
 #include <unotxdoc.hxx>
@@ -280,6 +281,23 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf120761_zOrder)
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(0), getProperty<sal_uInt32>(xShape, "ZOrder"));
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf142003)
+{
+    load(mpTestDocumentPath, "changes-in-footnote.doc");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    SwEditShell* const pEditShell(pTextDoc->GetDocShell()->GetDoc()->GetEditShell());
+    pEditShell->AcceptRedline(0);
+
+    //The changes were offset from where they should have been
+    uno::Reference<text::XFootnotesSupplier> xFootnotesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xFootnotes = xFootnotesSupplier->getFootnotes();
+    uno::Reference<text::XTextRange> xParagraph(xFootnotes->getByIndex(0), uno::UNO_QUERY);
+    //before change was incorrect, Loren ipsum , doconsectetur ...
+    CPPUNIT_ASSERT(xParagraph->getString().startsWith("Lorem ipsum , consectetur adipiscing elit."));
+}
 
 // tests should only be added to ww8IMPORT *if* they fail round-tripping in ww8EXPORT
 
