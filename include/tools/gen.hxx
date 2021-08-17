@@ -622,8 +622,8 @@ constexpr inline tools::Rectangle::Rectangle( tools::Long _nLeft,  tools::Long _
 constexpr inline tools::Rectangle::Rectangle( const Point& rLT, const Size& rSize )
     : nLeft( rLT.X())
     , nTop( rLT.Y())
-    , nRight( rSize.Width()  ? nLeft+(rSize.Width()-1) : RECT_EMPTY )
-    , nBottom( rSize.Height() ? nTop+(rSize.Height()-1) : RECT_EMPTY )
+    , nRight(rSize.Width() ? nLeft + (rSize.Width() + (rSize.Width() > 0 ? -1 : 1)) : RECT_EMPTY)
+    , nBottom(rSize.Height() ? nTop + (rSize.Height() + (rSize.Height() > 0 ? -1 : 1)) : RECT_EMPTY)
 {}
 
 inline void tools::Rectangle::Move( tools::Long nHorzMove, tools::Long nVertMove )
