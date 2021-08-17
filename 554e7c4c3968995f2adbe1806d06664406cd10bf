@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "efedd480_c6ce106b",
+        "filename": "oox/source/core/xmlfilterbase.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 576,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2021-08-17T12:42:59Z",
+      "side": 1,
+      "message": "so this parameter is now ignored? Shouldn\u0027t the value of this param be written to OOXML?",
+      "range": {
+        "startLine": 576,
+        "startChar": 84,
+        "endLine": 576,
+        "endChar": 89
+      },
+      "revId": "554e7c4c3968995f2adbe1806d06664406cd10bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
