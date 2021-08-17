@@ -200,7 +200,10 @@ public:
 namespace basegfx
 {
 
-    B2DPolyPolygon::B2DPolyPolygon() = default;
+    static o3tl::cow_wrapper<ImplB2DPolyPolygon> DEFAULT;
+
+    B2DPolyPolygon::B2DPolyPolygon() :
+        mpPolyPolygon(DEFAULT) {}
 
     B2DPolyPolygon::B2DPolyPolygon(const B2DPolyPolygon&) = default;
 

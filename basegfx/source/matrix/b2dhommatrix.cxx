@@ -31,7 +31,9 @@ namespace basegfx
     {
     };
 
-    B2DHomMatrix::B2DHomMatrix() = default;
+    static o3tl::cow_wrapper<Impl2DHomMatrix> DEFAULT;
+
+    B2DHomMatrix::B2DHomMatrix() : mpImpl(DEFAULT) {}
 
     B2DHomMatrix::B2DHomMatrix(const B2DHomMatrix&) = default;
 
