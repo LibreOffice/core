@@ -201,11 +201,13 @@ $(eval $(call gb_Library_add_generated_exception_objects,mwaw,\
 	UnpackedTarball/libmwaw/src/lib/RagTimeSpreadsheet \
 	UnpackedTarball/libmwaw/src/lib/RagTimeStruct \
 	UnpackedTarball/libmwaw/src/lib/RagTimeText \
+	UnpackedTarball/libmwaw/src/lib/StudentWritingCParser \
 	UnpackedTarball/libmwaw/src/lib/StyleParser \
 	UnpackedTarball/libmwaw/src/lib/SuperPaintParser \
 	UnpackedTarball/libmwaw/src/lib/TeachTxtParser \
 	UnpackedTarball/libmwaw/src/lib/WingzGraph \
 	UnpackedTarball/libmwaw/src/lib/WingzParser \
+	UnpackedTarball/libmwaw/src/lib/WordMakerParser \
 	UnpackedTarball/libmwaw/src/lib/WriteNowEntry \
 	UnpackedTarball/libmwaw/src/lib/WriteNowParser \
 	UnpackedTarball/libmwaw/src/lib/WriteNowText \
