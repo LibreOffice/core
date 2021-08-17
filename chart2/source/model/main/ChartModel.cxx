@@ -234,7 +234,7 @@ uno::Reference< frame::XController > ChartModel::impl_getCurrentController()
     // get the first controller of this model
     if( m_aControllers.getLength() )
     {
-        uno::Reference<uno::XInterface> xI = m_aControllers.getElements()[0];
+        uno::Reference<uno::XInterface> xI = m_aControllers.getInterface(0);
         return uno::Reference<frame::XController>( xI, uno::UNO_QUERY );
     }
 
