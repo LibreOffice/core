@@ -2599,12 +2599,12 @@ void SmXMLImport::SetViewSettings(const Sequence<PropertyValue>& aViewProps)
         if (rValue.Name == "ViewAreaTop")
         {
             rValue.Value >>= nTmp;
-            aRect.SaturatingSetY(nTmp);
+            aRect.SaturatingSetPosY(nTmp);
         }
         else if (rValue.Name == "ViewAreaLeft")
         {
             rValue.Value >>= nTmp;
-            aRect.SaturatingSetX(nTmp);
+            aRect.SaturatingSetPosX(nTmp);
         }
         else if (rValue.Name == "ViewAreaWidth")
         {
