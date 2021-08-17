@@ -57,6 +57,17 @@ void Test::test_rectangle()
         aRect.SetPosY(12);
         CPPUNIT_ASSERT_EQUAL(tools::Long(1), aRect.GetWidth());
     }
+
+    {
+        constexpr tools::Rectangle aRect(Point(), Size(-1, -2));
+        static_assert(!aRect.IsEmpty());
+        static_assert(aRect.Right() == 0);
+        static_assert(aRect.Bottom() == -1);
+
+        tools::Rectangle aRect2;
+        aRect2.SetSize(Size(-1, -2));
+        CPPUNIT_ASSERT_EQUAL(aRect, aRect2);
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
