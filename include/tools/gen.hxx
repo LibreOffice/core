@@ -722,8 +722,15 @@ namespace o3tl
 
 constexpr tools::Rectangle convert(const tools::Rectangle& rRectangle, o3tl::Length eFrom, o3tl::Length eTo)
 {
-    return tools::Rectangle(o3tl::convert(rRectangle.TopLeft(), eFrom, eTo),
-                            o3tl::convert(rRectangle.GetSize(), eFrom, eTo));
+    // 1. Create an empty rectangle with correct left and top
+    tools::Rectangle aRect(o3tl::convert(rRectangle.Left(), eFrom, eTo),
+                           o3tl::convert(rRectangle.Top(), eFrom, eTo));
+    // 2. If source has width/heigth, set respective right and bottom
+    if (!rRectangle.IsWidthEmpty())
+        aRect.SetRight(o3tl::convert(rRectangle.Right(), eFrom, eTo));
+    if (!rRectangle.IsHeightEmpty())
+        aRect.SetBottom(o3tl::convert(rRectangle.Bottom(), eFrom, eTo));
+    return aRect;
 }
 
 } // end o3tl
