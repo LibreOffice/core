@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4661c9e2_3af29cf4",
+        "filename": "dbaccess/source/ui/dlg/dbwiz.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2021-08-17T15:41:18Z",
+      "side": 1,
+      "message": "I don\u0027t know if it should be \"a normal tab dialog\" or \"abnormal tab dialog\"",
+      "range": {
+        "startLine": 306,
+        "startChar": 7,
+        "endLine": 306,
+        "endChar": 15
+      },
+      "revId": "0cc36b947cc9744b7440dc13bc7fac46e0cca8f7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
