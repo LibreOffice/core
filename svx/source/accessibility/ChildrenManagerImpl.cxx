@@ -38,6 +38,7 @@
 #include <com/sun/star/container/XChild.hpp>
 #include <comphelper/types.hxx>
 #include <o3tl/safeint.hxx>
+#include <o3tl/sorted_vector.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/debug.hxx>
 #include <svx/SvxShapeTypes.hxx>
@@ -793,20 +794,6 @@ uno::Reference<XAccessible>
 */
 void ChildrenManagerImpl::UpdateSelection()
 {
-    Reference<frame::XController> xController(maShapeTreeInfo.GetController());
-    Reference<view::XSelectionSupplier> xSelectionSupplier (
-        xController, uno::UNO_QUERY);
-
-    // Try to cast the selection both to a multi selection and to a single
-    // selection.
-    Reference<container::XIndexAccess> xSelectedShapeAccess;
-    Reference<drawing::XShape> xSelectedShape;
-    if (xSelectionSupplier.is())
-    {
-        xSelectedShapeAccess.set( xSelectionSupplier->getSelection(), uno::UNO_QUERY);
-        xSelectedShape.set( xSelectionSupplier->getSelection(), uno::UNO_QUERY);
-    }
-
     // Remember the current and new focused shape.
     AccessibleShape* pCurrentlyFocusedShape = nullptr;
     AccessibleShape* pNewFocusedShape = nullptr;
@@ -815,73 +802,101 @@ void ChildrenManagerImpl::UpdateSelection()
     VEC_SHAPE vecSelect;
     int nAddSelect=0;
     bool bHasSelectedShape=false;
-    for (const auto& rChild : maVisibleChildren)
+    if (!maVisibleChildren.empty())
     {
-        AccessibleShape* pAccessibleShape = rChild.GetAccessibleShape();
-        if (rChild.mxAccessibleShape.is() && rChild.mxShape.is() && pAccessibleShape!=nullptr)
-        {
-            short nRole = pAccessibleShape->getAccessibleRole();
-            bool bDrawShape = (
-                nRole == AccessibleRole::GRAPHIC ||
-                nRole == AccessibleRole::EMBEDDED_OBJECT ||
-                nRole == AccessibleRole::SHAPE ||
-                nRole == AccessibleRole::IMAGE_MAP ||
-                nRole == AccessibleRole::TABLE_CELL ||
-                nRole == AccessibleRole::TABLE );
-            bool bShapeIsSelected = false;
+        Reference<frame::XController> xController(maShapeTreeInfo.GetController());
+        Reference<view::XSelectionSupplier> xSelectionSupplier (
+            xController, uno::UNO_QUERY);
 
-            // Look up the shape in the (single or multi-) selection.
-            if (xSelectedShape.is())
+        // Try to cast the selection both to a multi selection and to a single
+        // selection.
+        Reference<container::XIndexAccess> xSelectedShapeAccess;
+        Reference<drawing::XShape> xSelectedShape;
+        if (xSelectionSupplier.is())
+        {
+            xSelectedShapeAccess.set( xSelectionSupplier->getSelection(), uno::UNO_QUERY);
+            xSelectedShape.set( xSelectionSupplier->getSelection(), uno::UNO_QUERY);
+        }
+
+        // tdf#139220 to quickly find if a given drawing::XShape is selected
+        o3tl::sorted_vector<css::uno::Reference<css::drawing::XShape>> aSortedSelectedShapes;
+        if (!xSelectedShape.is() && xSelectedShapeAccess.is())
+        {
+            sal_Int32 nCount = xSelectedShapeAccess->getCount();
+            aSortedSelectedShapes.reserve(nCount);
+            for (sal_Int32 i = 0; i < nCount; ++i)
             {
-                if  (rChild.mxShape == xSelectedShape)
-                {
-                    bShapeIsSelected = true;
-                    pNewFocusedShape = pAccessibleShape;
-                }
+                css::uno::Reference<css::drawing::XShape> xShape(xSelectedShapeAccess->getByIndex(i), uno::UNO_QUERY);
+                aSortedSelectedShapes.insert(xShape);
             }
-            else if (xSelectedShapeAccess.is())
+        }
+
+        for (const auto& rChild : maVisibleChildren)
+        {
+            AccessibleShape* pAccessibleShape = rChild.GetAccessibleShape();
+            if (rChild.mxAccessibleShape.is() && rChild.mxShape.is() && pAccessibleShape!=nullptr)
             {
-                sal_Int32 nCount=xSelectedShapeAccess->getCount();
-                for (sal_Int32 i=0; i<nCount&&!bShapeIsSelected; i++)
-                    if (xSelectedShapeAccess->getByIndex(i) == rChild.mxShape)
+                short nRole = pAccessibleShape->getAccessibleRole();
+                bool bDrawShape = (
+                    nRole == AccessibleRole::GRAPHIC ||
+                    nRole == AccessibleRole::EMBEDDED_OBJECT ||
+                    nRole == AccessibleRole::SHAPE ||
+                    nRole == AccessibleRole::IMAGE_MAP ||
+                    nRole == AccessibleRole::TABLE_CELL ||
+                    nRole == AccessibleRole::TABLE );
+                bool bShapeIsSelected = false;
+
+                // Look up the shape in the (single or multi-) selection.
+                if (xSelectedShape.is())
+                {
+                    if  (rChild.mxShape == xSelectedShape)
+                    {
+                        bShapeIsSelected = true;
+                        pNewFocusedShape = pAccessibleShape;
+                    }
+                }
+                else if (!aSortedSelectedShapes.empty())
+                {
+                    if (aSortedSelectedShapes.find(rChild.mxShape) != aSortedSelectedShapes.end())
                     {
                         bShapeIsSelected = true;
                         // In a multi-selection no shape has the focus.
-                        if (nCount == 1)
+                        if (aSortedSelectedShapes.size() == 1)
                             pNewFocusedShape = pAccessibleShape;
                     }
-            }
+                }
 
-            // Set or reset the SELECTED state.
-            if (bShapeIsSelected)
-            {
-                if (pAccessibleShape->SetState (AccessibleStateType::SELECTED))
+                // Set or reset the SELECTED state.
+                if (bShapeIsSelected)
                 {
-                    if (bDrawShape)
+                    if (pAccessibleShape->SetState (AccessibleStateType::SELECTED))
                     {
-                        vecSelect.emplace_back(pAccessibleShape,true);
-                        ++nAddSelect;
+                        if (bDrawShape)
+                        {
+                            vecSelect.emplace_back(pAccessibleShape,true);
+                            ++nAddSelect;
+                        }
+                    }
+                    else
+                    {//Selected not change,has selected shape before
+                        bHasSelectedShape=true;
                     }
                 }
                 else
-                {//Selected not change,has selected shape before
-                    bHasSelectedShape=true;
-                }
-            }
-            else
-                //pAccessibleShape->ResetState (AccessibleStateType::SELECTED);
-            {
-                if(pAccessibleShape->ResetState (AccessibleStateType::SELECTED))
+                    //pAccessibleShape->ResetState (AccessibleStateType::SELECTED);
                 {
-                    if(bDrawShape)
+                    if(pAccessibleShape->ResetState (AccessibleStateType::SELECTED))
                     {
-                        vecSelect.emplace_back(pAccessibleShape,false);
+                        if(bDrawShape)
+                        {
+                            vecSelect.emplace_back(pAccessibleShape,false);
+                        }
                     }
                 }
+                // Does the shape have the current selection?
+                if (pAccessibleShape->GetState (AccessibleStateType::FOCUSED))
+                    pCurrentlyFocusedShape = pAccessibleShape;
             }
-            // Does the shape have the current selection?
-            if (pAccessibleShape->GetState (AccessibleStateType::FOCUSED))
-                pCurrentlyFocusedShape = pAccessibleShape;
         }
     }
 
