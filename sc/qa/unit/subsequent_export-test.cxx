@@ -3672,9 +3672,9 @@ void ScExportTest::testTdf80149()
     CPPUNIT_ASSERT_EQUAL(OUString("row 1"), rDoc.GetString(0, 0, 0));
 
     // Without the fix in place, this test would have failed with
-    // - Expected: Character 0x16 is here ->>_x0016_<<--
+    // - Expected: Character 0x16 is here ->><<--
     // - Actual  :
-    CPPUNIT_ASSERT_EQUAL(OUString("Character 0x16 is here ->>_x0016_<<--"), rDoc.GetString(1, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(OUString("Character 0x16 is here ->><<--"), rDoc.GetString(1, 0, 0));
     CPPUNIT_ASSERT_EQUAL(OUString("File opens in libre office, but can't be saved as xlsx"), rDoc.GetString(2, 0, 0));
     CPPUNIT_ASSERT_EQUAL(OUString("row 2"), rDoc.GetString(0, 1, 0));
     CPPUNIT_ASSERT_EQUAL(OUString("Subsequent rows get truncated"), rDoc.GetString(1, 1, 0));
