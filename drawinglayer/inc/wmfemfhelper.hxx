@@ -57,10 +57,7 @@ namespace wmfemfhelper
         void append(drawinglayer::primitive2d::BasePrimitive2D* pCandidate);
         drawinglayer::primitive2d::Primitive2DContainer getPrimitive2DSequence(const PropertyHolder& rPropertyHolder);
     };
-}
 
-namespace wmfemfhelper
-{
     /** Helper class which builds a stack on the TargetHolder class */
     class TargetHolders
     {
@@ -75,10 +72,7 @@ namespace wmfemfhelper
         TargetHolder& Current();
         ~TargetHolders();
     };
-}
 
-namespace wmfemfhelper
-{
     /** helper class for graphic context
 
     This class allows to hold a complete representation of classic
@@ -184,10 +178,7 @@ namespace wmfemfhelper
 
         bool getLineOrFillActive() const { return (mbLineColor || mbFillColor); }
     };
-}
 
-namespace wmfemfhelper
-{
     /** stack for properties
 
     This class builds a stack based on the PropertyHolder
@@ -210,10 +201,7 @@ namespace wmfemfhelper
         PropertyHolder& Current();
         ~PropertyHolders();
     };
-}
 
-namespace wmfemfhelper
-{
     drawinglayer::primitive2d::Primitive2DContainer interpretMetafile(
         const GDIMetaFile& rMetaFile,
         const drawinglayer::geometry::ViewInformation2D& rViewInformation);
