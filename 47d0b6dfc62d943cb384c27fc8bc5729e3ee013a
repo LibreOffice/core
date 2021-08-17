@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a1c0955b_00e65c6b",
+        "filename": "oox/source/core/xmlfilterbase.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 590,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2021-08-17T09:15:26Z",
+      "side": 1,
+      "message": "Please remove unused code. Git keeps history of all changes.",
+      "range": {
+        "startLine": 586,
+        "startChar": 4,
+        "endLine": 590,
+        "endChar": 27
+      },
+      "revId": "47d0b6dfc62d943cb384c27fc8bc5729e3ee013a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
