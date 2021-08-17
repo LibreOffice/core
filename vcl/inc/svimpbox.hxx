@@ -310,7 +310,16 @@ public:
 
     bool                IsSelectable( const SvTreeListEntry* pEntry );
     void                SetForceMakeVisible(bool bEnable) { mbForceMakeVisible = bEnable; }
+
+    // tdf#143114 allow to ask if CaptureOnButton is active
+    // (MouseButtonDown hit on SvLBoxButton, CaptureMouse() active)
+    bool                IsCaptureOnButtonActive() const;
 };
+
+inline bool SvImpLBox::IsCaptureOnButtonActive() const
+{
+    return nullptr != m_pActiveButton && nullptr != m_pActiveEntry;
+}
 
 inline Image& SvImpLBox::implGetImageLocation( const ImageType _eType )
 {
