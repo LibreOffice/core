@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "73fe6b7f_87bfad84",
+        "filename": "sc/qa/unit/tiledrendering/tiledrendering.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1228,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-08-17T13:33:06Z",
+      "side": 1,
+      "message": "seeing the magnitude of these values makes me wonder how often we accidentally hit the magic EMPTY value.... Sigh.",
+      "revId": "663a98545bc2f01e5224ff29e510a4bab896f1d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
