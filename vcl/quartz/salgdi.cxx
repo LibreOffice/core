@@ -194,8 +194,6 @@ bool CoreTextFontFace::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilit
 AquaSalGraphics::AquaSalGraphics()
     : mnRealDPIX( 0 )
     , mnRealDPIY( 0 )
-    , maTextColor( COL_BLACK )
-    , mbNonAntialiasedText( false )
 {
     SAL_INFO( "vcl.quartz", "AquaSalGraphics::AquaSalGraphics() this=" << this );
 
@@ -250,8 +248,8 @@ SalGraphicsImpl* AquaSalGraphics::GetImpl() const
 
 void AquaSalGraphics::SetTextColor( Color nColor )
 {
-    maTextColor = RGBAColor( nColor );
-    // SAL_ DEBUG(std::hex << nColor << std::dec << "={" << maTextColor.GetRed() << ", " << maTextColor.GetGreen() << ", " << maTextColor.GetBlue() << ", " << maTextColor.GetAlpha() << "}");
+    maShared.maTextColor = nColor;
+    // SAL_ DEBUG(std::hex << nColor << std::dec << "={" << maShared.maTextColor.GetRed() << ", " << maShared.maTextColor.GetGreen() << ", " << maShared.maTextColor.GetBlue() << ", " << maShared.maTextColor.GetAlpha() << "}");
 }
 
 void AquaSalGraphics::GetFontMetric(ImplFontMetricDataRef& rxFontMetric, int nFallbackLevel)
@@ -362,8 +360,13 @@ bool AquaSalGraphics::AddTempDevFont( PhysicalFontCollection*,
 
 void AquaSalGraphics::DrawTextLayout(const GenericSalLayout& rLayout)
 {
+    mpBackend->drawTextLayout(rLayout);
+}
+
+void AquaGraphicsBackend::drawTextLayout(const GenericSalLayout& rLayout)
+{
 #ifdef IOS
-    if (!maShared.checkContext())
+    if (!mrShared.checkContext())
     {
         SAL_WARN("vcl.quartz", "AquaSalGraphics::DrawTextLayout() without context");
         return;
@@ -437,20 +440,21 @@ void AquaSalGraphics::DrawTextLayout(const GenericSalLayout& rLayout)
     std::cerr << "]\n";
 #endif
 
-    maShared.maContextHolder.saveState();
+    mrShared.maContextHolder.saveState();
+    RGBAColor textColor( mrShared.maTextColor );
 
     // The view is vertically flipped (no idea why), flip it back.
-    CGContextScaleCTM(maShared.maContextHolder.get(), 1.0, -1.0);
-    CGContextSetShouldAntialias(maShared.maContextHolder.get(), !mbNonAntialiasedText);
-    CGContextSetFillColor(maShared.maContextHolder.get(), maTextColor.AsArray());
+    CGContextScaleCTM(mrShared.maContextHolder.get(), 1.0, -1.0);
+    CGContextSetShouldAntialias(mrShared.maContextHolder.get(), !mrShared.mbNonAntialiasedText);
+    CGContextSetFillColor(mrShared.maContextHolder.get(), textColor.AsArray());
 
     if (rStyle.mbFauxBold)
     {
 
         float fSize = rFontSelect.mnHeight / 23.0f;
-        CGContextSetStrokeColor(maShared.maContextHolder.get(), maTextColor.AsArray());
-        CGContextSetLineWidth(maShared.maContextHolder.get(), fSize);
-        CGContextSetTextDrawingMode(maShared.maContextHolder.get(), kCGTextFillStroke);
+        CGContextSetStrokeColor(mrShared.maContextHolder.get(), textColor.AsArray());
+        CGContextSetLineWidth(mrShared.maContextHolder.get(), fSize);
+        CGContextSetTextDrawingMode(mrShared.maContextHolder.get(), kCGTextFillStroke);
     }
 
     auto aIt = aGlyphOrientation.cbegin();
@@ -463,18 +467,18 @@ void AquaSalGraphics::DrawTextLayout(const GenericSalLayout& rLayout)
         size_t nStartIndex = std::distance(aGlyphOrientation.cbegin(), aIt);
         size_t nLen = std::distance(aIt, aNext);
 
-        maShared.maContextHolder.saveState();
+        mrShared.maContextHolder.saveState();
         if (rStyle.mfFontRotation && !bUprightGlyph)
         {
-            CGContextRotateCTM(maShared.maContextHolder.get(), rStyle.mfFontRotation);
+            CGContextRotateCTM(mrShared.maContextHolder.get(), rStyle.mfFontRotation);
         }
-        CTFontDrawGlyphs(pFont, &aGlyphIds[nStartIndex], &aGlyphPos[nStartIndex], nLen, maShared.maContextHolder.get());
-        maShared.maContextHolder.restoreState();
+        CTFontDrawGlyphs(pFont, &aGlyphIds[nStartIndex], &aGlyphPos[nStartIndex], nLen, mrShared.maContextHolder.get());
+        mrShared.maContextHolder.restoreState();
 
         aIt = aNext;
     }
 
-    maShared.maContextHolder.restoreState();
+    mrShared.maContextHolder.restoreState();
 }
 
 void AquaSalGraphics::SetFont(LogicalFontInstance* pReqFont, int nFallbackLevel)
