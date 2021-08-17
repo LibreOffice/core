@@ -303,7 +303,7 @@ void ODbTypeWizDialog::enableConfirmSettings( bool _bEnable )
     // As soon as it is to be used more wide-spread, we should find a proper concept
     // for enabling both the Next and Finish buttons, depending on the current page state.
     // Plus, the concept must also care for the case where those pages are embedded into
-    // anormal tab dialog.
+    // a normal tab dialog.
 }
 
 void ODbTypeWizDialog::saveDatasource()
