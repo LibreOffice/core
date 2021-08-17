@@ -619,8 +619,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf107035, "tdf107035.docx")
     auto xPgNumRun = getRun(getParagraph(1), 2, "1");
 
     // Check that the page number field colour is set to "automatic".
-    sal_Int32 nPgNumColour = getProperty<sal_Int32>(xPgNumRun, "CharColor");
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(COL_AUTO), nPgNumColour);
+    Color nPgNumColour = getProperty<Color>(xPgNumRun, "CharColor");
+    CPPUNIT_ASSERT_EQUAL(COL_AUTO, nPgNumColour);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf112118_DOCX, "tdf112118.docx")
