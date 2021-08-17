@@ -2750,7 +2750,6 @@ void WW8TabDesc::MoveOutsideTable()
 void WW8TabDesc::FinishSwTable()
 {
     m_pIo->m_xRedlineStack->closeall(*m_pIo->m_pPaM->GetPoint());
-    m_pIo->m_aFrameRedlines.emplace(std::move(m_pIo->m_xRedlineStack));
     m_pIo->m_xRedlineStack = std::move(mxOldRedlineStack);
 
     WW8DupProperties aDup(m_pIo->m_rDoc,m_pIo->m_xCtrlStck.get());
