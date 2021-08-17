@@ -44,6 +44,8 @@ void WpftWriterFilterTest::test()
         { "RagTime_2.1.hqx", REQUIRE_MWAW_VERSION(0, 3, 2) },
         { "RagTime_3.2.hqx", REQUIRE_MWAW_VERSION(0, 3, 2) },
         { "RagTime_5.5.rag", REQUIRE_MWAW_VERSION(0, 3, 6) },
+        { "StudentWritingCenter", REQUIRE_MWAW_VERSION(0, 3, 20) },
+        { "WordMaker", REQUIRE_MWAW_VERSION(0, 3, 20) },
     };
     const writerperfect::test::WpftOptionalMap_t aStarOfficeOptional{
         { "Writer_3.1.sdw", REQUIRE_STAROFFICE_VERSION(0, 0, 2) },
