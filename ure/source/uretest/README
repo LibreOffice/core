@@ -68,7 +68,7 @@ Makefile and Makefile.pln can execute the following tests:
 Builds a C++ UNO component, cppmain.uno, and runs the component with the uno
 executable.  The component first attempts to instantiate all the UNO services
 and singletons that are part of the URE installation.  The component then tries
-to instantiate and to call another C++ UNO component (ccptest.uno) as well as a
+to instantiate and to call another C++ UNO component (cpptest.uno) as well as a
 Java UNO component (javatest.uno).  The test completes when these components
 throw a special exception that is caught by cppmain.uno.
 
