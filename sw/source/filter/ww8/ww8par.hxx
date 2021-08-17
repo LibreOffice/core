@@ -1115,8 +1115,7 @@ private:
     This stack is for redlines, because their sequence of discovery can
     be out of order of their order of insertion into the document.
     */
-    std::stack<std::unique_ptr<sw::util::RedlineStack>> m_aFrameRedlines; //inside frames, tables, etc
-    std::unique_ptr<sw::util::RedlineStack> m_xRedlineStack;    //main document
+    std::unique_ptr<sw::util::RedlineStack> m_xRedlineStack;
 
     /*
     This stack is for fields that get referenced later, e.g. BookMarks and TOX.
