@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "affddd74_1ca2c3ea",
+        "filename": "vcl/source/treelist/treelistbox.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2294,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2021-08-17T16:58:34Z",
+      "side": 1,
+      "message": "Moved to end of function again. That call *can* dispose \"this\" so that pImpl is nullptr. In principle all usages of pImpl should be made safe (?). That\u0027s not done, si I guess this is best we can do for now.\nNote: I tried this in a 6.4 (coincidence), no dispose there when using FontWork...",
+      "range": {
+        "startLine": 2294,
+        "startChar": 4,
+        "endLine": 2294,
+        "endChar": 35
+      },
+      "revId": "df1c39e4ff3358967c00ecb793b585e2a009c366",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
