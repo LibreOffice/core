@@ -51,7 +51,6 @@
 #include <com/sun/star/rendering/XIntegerBitmapColorSpace.hpp>
 #include <com/sun/star/util/Endianness.hpp>
 #include <cppuhelper/implbase.hxx>
-#include <rtl/instance.hxx>
 #include <sal/log.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
@@ -843,33 +842,18 @@ namespace canvas::tools
                 }
             };
 
-            struct StandardColorSpaceHolder : public rtl::StaticWithInit<uno::Reference<rendering::XIntegerBitmapColorSpace>,
-                                                                         StandardColorSpaceHolder>
-            {
-                uno::Reference<rendering::XIntegerBitmapColorSpace> operator()()
-                {
-                    return new StandardColorSpace();
-                }
-            };
-
-            struct StandardNoAlphaColorSpaceHolder : public rtl::StaticWithInit<uno::Reference<rendering::XIntegerBitmapColorSpace>,
-                                                                         StandardNoAlphaColorSpaceHolder>
-            {
-                uno::Reference<rendering::XIntegerBitmapColorSpace> operator()()
-                {
-                    return new StandardNoAlphaColorSpace();
-                }
-            };
         }
 
         uno::Reference<rendering::XIntegerBitmapColorSpace> const & getStdColorSpace()
         {
-            return StandardColorSpaceHolder::get();
+            static uno::Reference<rendering::XIntegerBitmapColorSpace> SPACE = new StandardColorSpace();
+            return SPACE;
         }
 
         uno::Reference<rendering::XIntegerBitmapColorSpace> const & getStdColorSpaceWithoutAlpha()
         {
-            return StandardNoAlphaColorSpaceHolder::get();
+            static uno::Reference<rendering::XIntegerBitmapColorSpace> SPACE = new StandardNoAlphaColorSpace();
+            return SPACE;
         }
 
         rendering::IntegerBitmapLayout getStdMemoryLayout( const geometry::IntegerSize2D& rBmpSize )

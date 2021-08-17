@@ -210,22 +210,11 @@ namespace cairocanvas
         return uno::Any();
     }
 
-    namespace
-    {
-        struct DeviceColorSpace: public rtl::StaticWithInit<uno::Reference<rendering::XColorSpace>,
-                                                            DeviceColorSpace>
-        {
-            uno::Reference<rendering::XColorSpace> operator()()
-            {
-                return vcl::unotools::createStandardColorSpace();
-            }
-        };
-    }
-
     uno::Reference<rendering::XColorSpace> const & DeviceHelper::getColorSpace() const
     {
+        static uno::Reference<rendering::XColorSpace> SPACE = vcl::unotools::createStandardColorSpace();
         // always the same
-        return DeviceColorSpace::get();
+        return SPACE;
     }
 
     void DeviceHelper::dumpScreenContent() const

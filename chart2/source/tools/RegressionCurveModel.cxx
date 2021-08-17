@@ -99,31 +99,21 @@ void lcl_AddPropertiesToVector(
                 beans::PropertyAttribute::BOUND );
 }
 
-struct StaticXXXDefaults_Initializer
+::chart::tPropertyValueMap GetStaticXXXDefaults()
 {
-    ::chart::tPropertyValueMap* operator()()
-    {
-        static ::chart::tPropertyValueMap aStaticDefaults;
-        ::chart::LinePropertiesHelper::AddDefaultsToMap( aStaticDefaults );
-        return &aStaticDefaults;
-    }
+    static ::chart::tPropertyValueMap aStaticDefaults =
+        [](){
+            ::chart::tPropertyValueMap aTmp;
+            ::chart::LinePropertiesHelper::AddDefaultsToMap( aTmp );
+            return aTmp;
+        }();
+    return aStaticDefaults;
 };
 
-struct StaticXXXDefaults : public rtl::StaticAggregate< ::chart::tPropertyValueMap, StaticXXXDefaults_Initializer >
+::cppu::OPropertyArrayHelper& GetStaticRegressionCurveInfoHelper()
 {
-};
-
-struct StaticRegressionCurveInfoHelper_Initializer
-{
-    ::cppu::OPropertyArrayHelper* operator()()
-    {
-        static ::cppu::OPropertyArrayHelper aPropHelper( lcl_GetPropertySequence() );
-        return &aPropHelper;
-    }
-
-private:
-    static uno::Sequence< Property > lcl_GetPropertySequence()
-    {
+    static ::cppu::OPropertyArrayHelper aPropHelper =
+    [](){
         std::vector< css::beans::Property > aProperties;
         lcl_AddPropertiesToVector( aProperties );
         ::chart::LinePropertiesHelper::AddPropertiesToVector( aProperties );
@@ -132,25 +122,15 @@ private:
                      ::chart::PropertyNameLess() );
 
         return comphelper::containerToSequence( aProperties );
-    }
+    }();
+    return aPropHelper;
 };
 
-struct StaticRegressionCurveInfoHelper : public rtl::StaticAggregate< ::cppu::OPropertyArrayHelper, StaticRegressionCurveInfoHelper_Initializer >
+uno::Reference< beans::XPropertySetInfo >& GetStaticRegressionCurveInfo()
 {
-};
-
-struct StaticRegressionCurveInfo_Initializer
-{
-    uno::Reference< beans::XPropertySetInfo >* operator()()
-    {
-        static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
-            ::cppu::OPropertySetHelper::createPropertySetInfo(*StaticRegressionCurveInfoHelper::get() ) );
-        return &xPropertySetInfo;
-    }
-};
-
-struct StaticRegressionCurveInfo : public rtl::StaticAggregate< uno::Reference< beans::XPropertySetInfo >, StaticRegressionCurveInfo_Initializer >
-{
+    static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
+         ::cppu::OPropertySetHelper::createPropertySetInfo(GetStaticRegressionCurveInfoHelper() ) );
+    return xPropertySetInfo;
 };
 
 } // anonymous namespace
@@ -286,7 +266,7 @@ void RegressionCurveModel::fireModifyEvent()
 // ____ OPropertySet ____
 uno::Any RegressionCurveModel::GetDefaultValue( sal_Int32 nHandle ) const
 {
-    const tPropertyValueMap& rStaticDefaults = *StaticXXXDefaults::get();
+    const tPropertyValueMap& rStaticDefaults = GetStaticXXXDefaults();
     tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
     if( aFound == rStaticDefaults.end() )
         return uno::Any();
@@ -295,13 +275,13 @@ uno::Any RegressionCurveModel::GetDefaultValue( sal_Int32 nHandle ) const
 
 ::cppu::IPropertyArrayHelper & SAL_CALL RegressionCurveModel::getInfoHelper()
 {
-    return *StaticRegressionCurveInfoHelper::get();
+    return GetStaticRegressionCurveInfoHelper();
 }
 
 // ____ XPropertySet ____
 uno::Reference< beans::XPropertySetInfo > SAL_CALL RegressionCurveModel::getPropertySetInfo()
 {
-    return *StaticRegressionCurveInfo::get();
+    return GetStaticRegressionCurveInfo();
 }
 
 // needed by MSC compiler

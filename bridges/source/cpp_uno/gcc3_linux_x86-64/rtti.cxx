@@ -29,7 +29,6 @@
 #include <dlfcn.h>
 
 #include <osl/mutex.hxx>
-#include <rtl/instance.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
@@ -265,12 +264,11 @@ std::type_info * RTTI::getRTTI(typelib_TypeDescription const & pTypeDescr)
     return rtti;
 }
 
-struct theRttiFactory: public rtl::Static<RTTI, theRttiFactory> {};
-
 }
 
 std::type_info * x86_64::getRtti(typelib_TypeDescription const & type) {
-    return theRttiFactory::get().getRTTI(type);
+    static RTTI theRttiFactory;
+    return theRttiFactory.getRTTI(type);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

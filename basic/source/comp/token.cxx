@@ -21,7 +21,6 @@
 #include <array>
 
 #include <basic/sberrors.hxx>
-#include <rtl/instance.hxx>
 #include <sal/macros.h>
 #include <basiccharclass.hxx>
 #include <token.hxx>
@@ -191,8 +190,6 @@ public:
     bool canTokenBeLabel( SbiToken eTok )
         { return m_pTokenCanBeLabelTab[eTok]; }
 };
-
-class StaticTokenLabelInfo: public ::rtl::Static< TokenLabelInfo, StaticTokenLabelInfo >{};
 
 }
 
@@ -546,7 +543,9 @@ special:
 
 bool SbiTokenizer::MayBeLabel( bool bNeedsColon )
 {
-    if( eCurTok == SYMBOL || StaticTokenLabelInfo::get().canTokenBeLabel( eCurTok ) )
+    static TokenLabelInfo gaStaticTokenLabelInfo;
+
+    if( eCurTok == SYMBOL || gaStaticTokenLabelInfo.canTokenBeLabel( eCurTok ) )
     {
         return !bNeedsColon || DoesColonFollow();
     }
