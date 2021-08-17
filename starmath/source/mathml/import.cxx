@@ -37,7 +37,6 @@
 #include <svtools/sfxecode.hxx>
 #include <svl/itemset.hxx>
 #include <svl/stritem.hxx>
-#include <rtl/character.hxx>
 #include <sax/tools/converter.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
