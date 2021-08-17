@@ -85,7 +85,8 @@ public:
 
     void setParent( MutableTreeNode* pParent );
     void broadcast_changes();
-    void broadcast_changes(const Reference< XTreeNode >& xNode, bool bNew);
+    void broadcast_changes(std::unique_lock<std::mutex> & rLock,
+            const Reference< XTreeNode >& xNode, bool bNew);
 
     // XMutableTreeNode
     virtual css::uno::Any SAL_CALL getDataValue() override;
@@ -273,11 +274,14 @@ void MutableTreeNode::broadcast_changes()
     }
 }
 
-void MutableTreeNode::broadcast_changes(const Reference< XTreeNode >& xNode, bool bNew)
+void MutableTreeNode::broadcast_changes(std::unique_lock<std::mutex> & rLock,
+        const Reference< XTreeNode >& xNode, bool const bNew)
 {
-    if( mxModel.is() )
+    auto const xModel(mxModel);
+    rLock.unlock();
+    if (xModel.is())
     {
-        mxModel->broadcast( bNew ? nodes_inserted : nodes_removed, this, xNode );
+        xModel->broadcast(bNew ? nodes_inserted : nodes_removed, this, xNode);
     }
 }
 
@@ -295,7 +299,7 @@ void SAL_CALL MutableTreeNode::setDataValue( const Any& _datavalue )
 
 void SAL_CALL MutableTreeNode::appendChild( const Reference< XMutableTreeNode >& xChildNode )
 {
-    std::scoped_lock aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
     rtl::Reference< MutableTreeNode > xImpl( dynamic_cast< MutableTreeNode* >( xChildNode.get() ) );
 
     if( !xImpl.is() || xImpl->mbIsInserted || (this == xImpl.get()) )
@@ -305,12 +309,12 @@ void SAL_CALL MutableTreeNode::appendChild( const Reference< XMutableTreeNode >&
     xImpl->setParent(this);
     xImpl->mbIsInserted = true;
 
-    broadcast_changes( xChildNode, true );
+    broadcast_changes(aGuard, xChildNode, true);
 }
 
 void SAL_CALL MutableTreeNode::insertChildByIndex( sal_Int32 nChildIndex, const Reference< XMutableTreeNode >& xChildNode )
 {
-    std::scoped_lock aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
 
     if( (nChildIndex < 0) || (nChildIndex > static_cast<sal_Int32>(maChildren.size())) )
         throw IndexOutOfBoundsException();
@@ -327,12 +331,12 @@ void SAL_CALL MutableTreeNode::insertChildByIndex( sal_Int32 nChildIndex, const 
     maChildren.insert( aIter, xImpl );
     xImpl->setParent( this );
 
-    broadcast_changes( xChildNode, true );
+    broadcast_changes(aGuard, xChildNode, true);
 }
 
 void SAL_CALL MutableTreeNode::removeChildByIndex( sal_Int32 nChildIndex )
 {
-    std::scoped_lock aGuard( maMutex );
+    std::unique_lock aGuard( maMutex );
 
     if( (nChildIndex < 0) || (nChildIndex >= static_cast<sal_Int32>(maChildren.size())) )
         throw IndexOutOfBoundsException();
@@ -351,7 +355,7 @@ void SAL_CALL MutableTreeNode::removeChildByIndex( sal_Int32 nChildIndex )
     xImpl->setParent(nullptr);
     xImpl->mbIsInserted = false;
 
-    broadcast_changes( xImpl, false );
+    broadcast_changes(aGuard, xImpl, false);
 }
 
 void SAL_CALL MutableTreeNode::setHasChildrenOnDemand( sal_Bool bChildrenOnDemand )
