@@ -504,8 +504,6 @@ void SfxApplication::NewDocExec_Impl( SfxRequest& rReq )
     }
 
     ErrCode lErr = ERRCODE_NONE;
-    SfxItemSet* pSet = new SfxAllItemSet( GetPool() );
-    pSet->Put( SfxBoolItem( SID_TEMPLATE, true ) );
     if ( !bDirect )
     {
         SfxDocumentTemplates aTmpFac;
