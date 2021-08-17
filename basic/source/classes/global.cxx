@@ -10,7 +10,6 @@
 #include <comphelper/processfactory.hxx>
 #include <i18nlangtag/lang.h>
 #include <i18nutil/transliteration.hxx>
-#include <rtl/instance.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
@@ -35,12 +34,12 @@ namespace
         utl::TransliterationWrapper& getTransliteration() { return m_aTransliteration; }
     };
 
-    class theTransliterationWrapper : public rtl::Static<lclTransliterationWrapper, theTransliterationWrapper> {};
 }
 
 utl::TransliterationWrapper& SbGlobal::GetTransliteration()
 {
-    return theTransliterationWrapper::get().getTransliteration();
+    static lclTransliterationWrapper theTransliterationWrapper;
+    return theTransliterationWrapper.getTransliteration();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

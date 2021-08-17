@@ -177,31 +177,31 @@ namespace {
 
 typedef ::rtl::Reference< DocBasicItem > DocBasicItemRef;
 
-class GaDocBasicItems : public rtl::Static<std::unordered_map< const StarBASIC *, DocBasicItemRef >,GaDocBasicItems> {};
+std::unordered_map< const StarBASIC *, DocBasicItemRef > gaDocBasicItems;
 
 const DocBasicItem* lclFindDocBasicItem( const StarBASIC* pDocBasic )
 {
-    auto it = GaDocBasicItems::get().find( pDocBasic );
-    auto end = GaDocBasicItems::get().end();
+    auto it = gaDocBasicItems.find( pDocBasic );
+    auto end = gaDocBasicItems.end();
     return (it != end) ? it->second.get() : nullptr;
 }
 
 void lclInsertDocBasicItem( StarBASIC& rDocBasic )
 {
-    DocBasicItemRef& rxDocBasicItem = GaDocBasicItems::get()[ &rDocBasic ];
+    DocBasicItemRef& rxDocBasicItem = gaDocBasicItems[ &rDocBasic ];
     rxDocBasicItem.set( new DocBasicItem( rDocBasic ) );
     rxDocBasicItem->startListening();
 }
 
 void lclRemoveDocBasicItem( StarBASIC& rDocBasic )
 {
-    auto it = GaDocBasicItems::get().find( &rDocBasic );
-    if( it != GaDocBasicItems::get().end() )
+    auto it = gaDocBasicItems.find( &rDocBasic );
+    if( it != gaDocBasicItems.end() )
     {
         it->second->stopListening();
-        GaDocBasicItems::get().erase( it );
+        gaDocBasicItems.erase( it );
     }
-    for( auto& rEntry : GaDocBasicItems::get() )
+    for( auto& rEntry : gaDocBasicItems )
     {
         rEntry.second->clearDependingVarsOnDelete( rDocBasic );
     }
@@ -1914,8 +1914,7 @@ Reference< frame::XModel > StarBASIC::GetModelFromBasic( SbxObject* pBasic )
 
 void StarBASIC::DetachAllDocBasicItems()
 {
-    std::unordered_map< const StarBASIC *, DocBasicItemRef >& rItems = GaDocBasicItems::get();
-    for (auto const& item : rItems)
+    for (auto const& item : gaDocBasicItems)
     {
         DocBasicItemRef xItem = item.second;
         xItem->setDisposed(true);

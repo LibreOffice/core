@@ -1769,17 +1769,16 @@ typedef std::unordered_map< SbxVariable*, DimAsNewRecoverItem,
 
 namespace {
 
-class GaDimAsNewRecoverHash : public rtl::Static<DimAsNewRecoverHash, GaDimAsNewRecoverHash> {};
+DimAsNewRecoverHash gaDimAsNewRecoverHash;
 
 }
 
 void removeDimAsNewRecoverItem( SbxVariable* pVar )
 {
-    DimAsNewRecoverHash &rDimAsNewRecoverHash = GaDimAsNewRecoverHash::get();
-    DimAsNewRecoverHash::iterator it = rDimAsNewRecoverHash.find( pVar );
-    if( it != rDimAsNewRecoverHash.end() )
+    DimAsNewRecoverHash::iterator it = gaDimAsNewRecoverHash.find( pVar );
+    if( it != gaDimAsNewRecoverHash.end() )
     {
-        rDimAsNewRecoverHash.erase( it );
+        gaDimAsNewRecoverHash.erase( it );
     }
 }
 
@@ -1950,9 +1949,8 @@ void SbiRuntime::StepSET_Impl( SbxVariableRef& refVal, SbxVariableRef& refVar, b
                     if( xPrevVarObj.is() )
                     {
                         // Object is overwritten with NULL, instantiate init object
-                        DimAsNewRecoverHash &rDimAsNewRecoverHash = GaDimAsNewRecoverHash::get();
-                        DimAsNewRecoverHash::iterator it = rDimAsNewRecoverHash.find( refVar.get() );
-                        if( it != rDimAsNewRecoverHash.end() )
+                        DimAsNewRecoverHash::iterator it = gaDimAsNewRecoverHash.find( refVar.get() );
+                        if( it != gaDimAsNewRecoverHash.end() )
                         {
                             const DimAsNewRecoverItem& rItem = it->second;
                             if( rItem.m_pClassModule != nullptr )
@@ -1985,16 +1983,15 @@ void SbiRuntime::StepSET_Impl( SbxVariableRef& refVal, SbxVariableRef& refVar, b
                             OUString aObjClass = pValObj->GetClassName();
 
                             SbClassModuleObject* pClassModuleObj = dynamic_cast<SbClassModuleObject*>( pValObjBase );
-                            DimAsNewRecoverHash &rDimAsNewRecoverHash = GaDimAsNewRecoverHash::get();
                             if( pClassModuleObj != nullptr )
                             {
                                 SbModule* pClassModule = pClassModuleObj->getClassModule();
-                                rDimAsNewRecoverHash[refVar.get()] =
+                                gaDimAsNewRecoverHash[refVar.get()] =
                                     DimAsNewRecoverItem( aObjClass, pValObj->GetName(), pValObj->GetParent(), pClassModule );
                             }
                             else if( aObjClass.equalsIgnoreAsciiCase( "Collection" ) )
                             {
-                                rDimAsNewRecoverHash[refVar.get()] =
+                                gaDimAsNewRecoverHash[refVar.get()] =
                                     DimAsNewRecoverItem( aObjClass, pValObj->GetName(), pValObj->GetParent(), nullptr );
                             }
                         }

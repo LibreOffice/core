@@ -78,65 +78,41 @@ void lcl_AddPropertiesToVector(
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 }
 
-struct StaticStockChartTypeTemplateDefaults_Initializer
+::chart::tPropertyValueMap& GetStaticStockChartTypeTemplateDefaults()
 {
-    ::chart::tPropertyValueMap* operator()()
-    {
-        static ::chart::tPropertyValueMap aStaticDefaults;
-        lcl_AddDefaultsToMap( aStaticDefaults );
-        return &aStaticDefaults;
-    }
-private:
-    static void lcl_AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap )
-    {
-        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_STOCKCHARTTYPE_TEMPLATE_VOLUME, false );
-        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_STOCKCHARTTYPE_TEMPLATE_OPEN, false );
-        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_STOCKCHARTTYPE_TEMPLATE_LOW_HIGH, true );
-        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_STOCKCHARTTYPE_TEMPLATE_JAPANESE, false );
-    }
+    static ::chart::tPropertyValueMap aStaticDefaults =
+        [](){
+            ::chart::tPropertyValueMap aTmp;
+            ::chart::PropertyHelper::setPropertyValueDefault( aTmp, PROP_STOCKCHARTTYPE_TEMPLATE_VOLUME, false );
+            ::chart::PropertyHelper::setPropertyValueDefault( aTmp, PROP_STOCKCHARTTYPE_TEMPLATE_OPEN, false );
+            ::chart::PropertyHelper::setPropertyValueDefault( aTmp, PROP_STOCKCHARTTYPE_TEMPLATE_LOW_HIGH, true );
+            ::chart::PropertyHelper::setPropertyValueDefault( aTmp, PROP_STOCKCHARTTYPE_TEMPLATE_JAPANESE, false );
+            return aTmp;
+        }();
+    return aStaticDefaults;
 };
 
-struct StaticStockChartTypeTemplateDefaults : public rtl::StaticAggregate< ::chart::tPropertyValueMap, StaticStockChartTypeTemplateDefaults_Initializer >
+::cppu::OPropertyArrayHelper& GetStaticStockChartTypeTemplateInfoHelper()
 {
+    static ::cppu::OPropertyArrayHelper aPropHelper =
+        [](){
+            std::vector< css::beans::Property > aProperties;
+            lcl_AddPropertiesToVector( aProperties );
+
+            std::sort( aProperties.begin(), aProperties.end(),
+                         ::chart::PropertyNameLess() );
+
+            return comphelper::containerToSequence( aProperties );
+        }();
+    return aPropHelper;
 };
 
-struct StaticStockChartTypeTemplateInfoHelper_Initializer
+
+uno::Reference< beans::XPropertySetInfo >& GetStaticStockChartTypeTemplateInfo()
 {
-    ::cppu::OPropertyArrayHelper* operator()()
-    {
-        static ::cppu::OPropertyArrayHelper aPropHelper( lcl_GetPropertySequence() );
-        return &aPropHelper;
-    }
-
-private:
-    static Sequence< Property > lcl_GetPropertySequence()
-    {
-        std::vector< css::beans::Property > aProperties;
-        lcl_AddPropertiesToVector( aProperties );
-
-        std::sort( aProperties.begin(), aProperties.end(),
-                     ::chart::PropertyNameLess() );
-
-        return comphelper::containerToSequence( aProperties );
-    }
-};
-
-struct StaticStockChartTypeTemplateInfoHelper : public rtl::StaticAggregate< ::cppu::OPropertyArrayHelper, StaticStockChartTypeTemplateInfoHelper_Initializer >
-{
-};
-
-struct StaticStockChartTypeTemplateInfo_Initializer
-{
-    uno::Reference< beans::XPropertySetInfo >* operator()()
-    {
-        static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
-            ::cppu::OPropertySetHelper::createPropertySetInfo(*StaticStockChartTypeTemplateInfoHelper::get() ) );
-        return &xPropertySetInfo;
-    }
-};
-
-struct StaticStockChartTypeTemplateInfo : public rtl::StaticAggregate< uno::Reference< beans::XPropertySetInfo >, StaticStockChartTypeTemplateInfo_Initializer >
-{
+    static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
+        ::cppu::OPropertySetHelper::createPropertySetInfo(GetStaticStockChartTypeTemplateInfoHelper() ) );
+    return xPropertySetInfo;
 };
 
 } // anonymous namespace
@@ -172,7 +148,7 @@ StockChartTypeTemplate::~StockChartTypeTemplate()
 // ____ OPropertySet ____
 uno::Any StockChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle ) const
 {
-    const tPropertyValueMap& rStaticDefaults = *StaticStockChartTypeTemplateDefaults::get();
+    const tPropertyValueMap& rStaticDefaults = GetStaticStockChartTypeTemplateDefaults();
     tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
     if( aFound == rStaticDefaults.end() )
         return uno::Any();
@@ -181,13 +157,13 @@ uno::Any StockChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle ) const
 
 ::cppu::IPropertyArrayHelper & SAL_CALL StockChartTypeTemplate::getInfoHelper()
 {
-    return *StaticStockChartTypeTemplateInfoHelper::get();
+    return GetStaticStockChartTypeTemplateInfoHelper();
 }
 
 // ____ XPropertySet ____
 uno::Reference< beans::XPropertySetInfo > SAL_CALL StockChartTypeTemplate::getPropertySetInfo()
 {
-    return *StaticStockChartTypeTemplateInfo::get();
+    return GetStaticStockChartTypeTemplateInfo();
 }
 
 sal_Int32 StockChartTypeTemplate::getAxisCountByDimension( sal_Int32 nDimension )

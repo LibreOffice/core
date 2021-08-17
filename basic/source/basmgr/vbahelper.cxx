@@ -27,7 +27,6 @@
 #include <com/sun/star/frame/XModel2.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <comphelper/processfactory.hxx>
-#include <rtl/instance.hxx>
 
 namespace basic::vba {
 
@@ -145,8 +144,6 @@ struct CurrDirPool
     std::map< OUString, OUString > maCurrDirs;
 };
 
-struct StaticCurrDirPool : public ::rtl::Static< CurrDirPool, StaticCurrDirPool > {};
-
 } // namespace
 
 
@@ -167,7 +164,9 @@ void registerCurrentDirectory( const uno::Reference< frame::XModel >& rxModel, c
     if( rPath.isEmpty() )
         return;
 
-    CurrDirPool& rPool = StaticCurrDirPool::get();
+    static CurrDirPool StaticCurrDirPool;
+
+    CurrDirPool& rPool = StaticCurrDirPool;
     ::osl::MutexGuard aGuard( rPool.maMutex );
     try
     {

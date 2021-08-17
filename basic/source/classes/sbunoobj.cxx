@@ -449,30 +449,28 @@ typedef std::vector< ObjectItem > NativeObjectWrapperVector;
 
 namespace {
 
-class GaNativeObjectWrapperVector : public rtl::Static<NativeObjectWrapperVector, GaNativeObjectWrapperVector> {};
+NativeObjectWrapperVector gaNativeObjectWrapperVector;
 
 }
 
 void clearNativeObjectWrapperVector()
 {
-    GaNativeObjectWrapperVector::get().clear();
+    gaNativeObjectWrapperVector.clear();
 }
 
 static sal_uInt32 lcl_registerNativeObjectWrapper( SbxObject* pNativeObj )
 {
-    NativeObjectWrapperVector &rNativeObjectWrapperVector = GaNativeObjectWrapperVector::get();
-    sal_uInt32 nIndex = rNativeObjectWrapperVector.size();
-    rNativeObjectWrapperVector.emplace_back( pNativeObj );
+    sal_uInt32 nIndex = gaNativeObjectWrapperVector.size();
+    gaNativeObjectWrapperVector.emplace_back( pNativeObj );
     return nIndex;
 }
 
 static SbxObject* lcl_getNativeObject( sal_uInt32 nIndex )
 {
     SbxObjectRef xRetObj;
-    NativeObjectWrapperVector &rNativeObjectWrapperVector = GaNativeObjectWrapperVector::get();
-    if( nIndex < rNativeObjectWrapperVector.size() )
+    if( nIndex < gaNativeObjectWrapperVector.size() )
     {
-        ObjectItem& rItem = rNativeObjectWrapperVector[ nIndex ];
+        ObjectItem& rItem = gaNativeObjectWrapperVector[ nIndex ];
         xRetObj = rItem.m_xNativeObj;
     }
     return xRetObj.get();
