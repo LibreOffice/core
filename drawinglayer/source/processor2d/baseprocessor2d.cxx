@@ -41,28 +41,31 @@ namespace drawinglayer::processor2d
 
         void BaseProcessor2D::process(const primitive2d::BasePrimitive2D& rCandidate)
         {
-            primitive2d::Primitive2DContainer aContainer;
-            rCandidate.get2DDecomposition(aContainer, getViewInformation2D());
-            process(aContainer);
+            // use the visitor API to avoid the cost of constructing Primitive2DContainers
+            rCandidate.get2DDecomposition(*this, getViewInformation2D());
+        }
+
+        // Primitive2DDecompositionVisitor
+        void BaseProcessor2D::append(const primitive2d::Primitive2DReference& rCandidate)
+        {
+            const primitive2d::BasePrimitive2D* pBasePrimitive = static_cast< const primitive2d::BasePrimitive2D* >(rCandidate.get());
+            processBasePrimitive2D(*pBasePrimitive);
+        }
+        void BaseProcessor2D::append(const primitive2d::Primitive2DContainer& rContainer)
+        {
+            process(rContainer);
+        }
+        void BaseProcessor2D::append(primitive2d::Primitive2DContainer&& rCandidate)
+        {
+            process(rCandidate);
         }
 
         void BaseProcessor2D::process(const primitive2d::Primitive2DContainer& rSource)
         {
-            if(rSource.empty())
-                return;
-
-            const sal_Int32 nCount(rSource.size());
-
-            for(sal_Int32 a(0); a < nCount; a++)
+            for (const primitive2d::Primitive2DReference& rCandidate : rSource)
             {
-                // get reference
-                const primitive2d::Primitive2DReference xReference(rSource[a]);
-
-                if(xReference.is())
-                {
-                    const primitive2d::BasePrimitive2D* pBasePrimitive = static_cast< const primitive2d::BasePrimitive2D* >(xReference.get());
-                    processBasePrimitive2D(*pBasePrimitive);
-                }
+                const primitive2d::BasePrimitive2D* pBasePrimitive = static_cast< const primitive2d::BasePrimitive2D* >(rCandidate.get());
+                processBasePrimitive2D(*pBasePrimitive);
             }
         }
 
