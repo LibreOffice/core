@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a741d0b5_4f2e8748",
+        "filename": "svx/source/tbxctrls/tbcontrl.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 2178,
+      "author": {
+        "id": 1002869
+      },
+      "writtenOn": "2021-08-17T21:22:11Z",
+      "side": 1,
+      "message": "DONE",
+      "range": {
+        "startLine": 2178,
+        "startChar": 48,
+        "endLine": 2178,
+        "endChar": 59
+      },
+      "revId": "d89fe176d8ff6669293b33ef77c45610afd60cd2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
