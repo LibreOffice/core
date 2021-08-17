@@ -257,7 +257,7 @@ void AccessibleEventNotifier::addEvent( const TClientId _nClient, const Accessib
             return;
 
         // since we're synchronous, again, we want to notify immediately
-        aListeners = aClientPos->second->getElements();
+        aListeners = aClientPos->second->getElements1();
     }
 
     // default handling: loop through all listeners, and notify them

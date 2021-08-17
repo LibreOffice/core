@@ -144,7 +144,7 @@ public:
     /**
       Return all interfaces added to this container.
      **/
-    std::vector< css::uno::Reference< css::uno::XInterface > > getElements() const;
+    std::vector< css::uno::Reference< css::uno::XInterface > > getElements1() const;
 
     /** Inserts an element into the container.  The position is not specified, thus it is not
         specified in which order events are fired.
@@ -171,6 +171,8 @@ public:
                 the new count of elements in the container
     */
     sal_Int32 removeInterface( const css::uno::Reference< css::uno::XInterface > & rxIFace );
+    /** Return an interface by index */
+    css::uno::Reference< css::uno::XInterface > getInterface(sal_Int32 nIndex) const;
     /**
       Call disposing on all object in the container that
       support XEventListener. Then clear the container.

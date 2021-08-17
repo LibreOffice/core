@@ -139,7 +139,7 @@ sal_Int32 OInterfaceContainerHelper2::getLength() const
     return 0;
 }
 
-std::vector< Reference<XInterface> > OInterfaceContainerHelper2::getElements() const
+std::vector< Reference<XInterface> > OInterfaceContainerHelper2::getElements1() const
 {
     std::vector< Reference<XInterface> > rVec;
     MutexGuard aGuard( rMutex );
@@ -238,6 +238,20 @@ sal_Int32 OInterfaceContainerHelper2::removeInterface( const Reference<XInterfac
         aData.pAsInterface = nullptr;
     }
     return aData.pAsInterface ? 1 : 0;
+}
+
+Reference<XInterface> OInterfaceContainerHelper2::getInterface( sal_Int32 nIndex ) const
+{
+    MutexGuard aGuard( rMutex );
+
+    if( bIsList )
+        return (*aData.pAsVector)[nIndex];
+    else if( aData.pAsInterface )
+    {
+        if (nIndex == 0)
+            return aData.pAsInterface;
+    }
+    throw std::out_of_range("index out of range");
 }
 
 void OInterfaceContainerHelper2::disposeAndClear( const EventObject & rEvt )
