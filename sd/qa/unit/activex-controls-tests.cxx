@@ -342,15 +342,15 @@ void SdActiveXControlsTest::testSpinButtonProperties()
     xPropertySet->getPropertyValue("BackgroundColor") >>= nColor;
     CPPUNIT_ASSERT_EQUAL(Color(0xECE9D8), nColor);
 
-    sal_Int32 nMax;
+    Color nMax;
     xPropertySet->getPropertyValue("SpinValueMax") >>= nMax;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(100), nMax);
 
-    sal_Int32 nMin;
+    Color nMin;
     xPropertySet->getPropertyValue("SpinValueMin") >>= nMin;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nMin);
 
-    sal_Int32 nIncrement;
+    Color nIncrement;
     xPropertySet->getPropertyValue("SpinIncrement") >>= nIncrement;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), nIncrement);
 
@@ -358,7 +358,7 @@ void SdActiveXControlsTest::testSpinButtonProperties()
     xPropertySet->getPropertyValue("Repeat") >>= bRepeat;
     CPPUNIT_ASSERT_EQUAL(true, bRepeat);
 
-    sal_Int32 nDelay;
+    Color nDelay;
     xPropertySet->getPropertyValue("RepeatDelay") >>= nDelay;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(50), nDelay);
 
@@ -366,7 +366,7 @@ void SdActiveXControlsTest::testSpinButtonProperties()
     xPropertySet->getPropertyValue("SymbolColor") >>= nArrowColor;
     CPPUNIT_ASSERT_EQUAL(COL_BLACK, nArrowColor);
 
-    sal_Int32 nOrientation;
+    Color nOrientation;
     xPropertySet->getPropertyValue("Orientation") >>= nOrientation;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(awt::ScrollBarOrientation::HORIZONTAL), nOrientation);
 
