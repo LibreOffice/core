@@ -78,6 +78,7 @@
 #include <vcl/skia/SkiaHelper.hxx>
 #include <skia/salbmp.hxx>
 #include <skia/osx/gdiimpl.hxx>
+#include <skia/osx/bitmap.hxx>
 #endif
 
 extern "C" {
@@ -918,6 +919,11 @@ OUString AquaSalInstance::getOSVersion()
 
 CGImageRef CreateCGImage( const Image& rImage )
 {
+#if HAVE_FEATURE_SKIA
+    if (SkiaHelper::isVCLSkiaEnabled())
+        return SkiaHelper::createCGImage( rImage );
+#endif
+
     BitmapEx aBmpEx( rImage.GetBitmapEx() );
     Bitmap aBmp( aBmpEx.GetBitmap() );
 
