@@ -387,7 +387,7 @@ public:
 
     virtual tools::Rectangle getLOKVisibleArea() const { return tools::Rectangle(); }
 
-    // Fremium view settings
+    // Freemium view settings
     void setFreemiumView(bool isFreemium) { mbLOKIsFreemiumView = isFreemium; }
     bool isFreemiumView() { return mbLOKIsFreemiumView; }
 };
