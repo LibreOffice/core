@@ -42,7 +42,7 @@ class XInterface;
 /** */ //for docpp
 namespace comphelper
 {
-/** This is a copy of cppu::OMultiTypeInterfaceContainerHelper2 in include/ccppuhelper/interfacecontainer.h,
+/** This is a copy of cppu::OMultiTypeInterfaceContainerHelper2 in include/cppuhelper/interfacecontainer.h,
     except that it uses comphelper::OInterfaceContainerHelper2, which is more efficient.
 */
 class COMPHELPER_DLLPUBLIC OMultiTypeInterfaceContainerHelper2
