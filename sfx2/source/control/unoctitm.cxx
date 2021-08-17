@@ -81,6 +81,7 @@
 #include <desktop/crashreport.hxx>
 #include <vcl/threadex.hxx>
 #include <unotools/mediadescriptor.hxx>
+#include <tools/json_writer.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -532,16 +533,14 @@ void SfxDispatchController_Impl::dispatch( const css::util::URL& aURL,
         SfxViewShell::Current()->isFreemiumView() &&
         comphelper::LibreOfficeKit::isCommandFreemiumDenied(aURL.Complete))
     {
-        boost::property_tree::ptree aTree;
-        aTree.put("code", "");
-        aTree.put("kind", "freemiumdeny");
-        aTree.put("cmd", aURL.Complete);
-        aTree.put("message", "Blocked Freemium feature");
-        aTree.put("viewID", SfxViewShell::Current()->GetViewShellId().get());
+        tools::JsonWriter aJson;
+        aJson.put("code", "");
+        aJson.put("kind", "freemiumdeny");
+        aJson.put("cmd", aURL.Complete);
+        aJson.put("message", "Blocked Freemium feature");
+        aJson.put("viewID", SfxViewShell::Current()->GetViewShellId().get());
 
-        std::stringstream aStream;
-        boost::property_tree::write_json(aStream, aTree);
-        SfxViewShell::Current()->libreOfficeKitViewCallback(LOK_CALLBACK_ERROR, aStream.str().c_str());
+        SfxViewShell::Current()->libreOfficeKitViewCallback(LOK_CALLBACK_ERROR, aJson.extractAsOString().getStr());
         return;
     }
 
