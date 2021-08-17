@@ -591,8 +591,8 @@ public:
      * Sanitizing variants for handling data from the outside
      */
     void                SaturatingSetSize(const Size& rSize);
-    void                SaturatingSetX(tools::Long x);
-    void                SaturatingSetY(tools::Long y);
+    void                SaturatingSetPosX(tools::Long x);
+    void                SaturatingSetPosY(tools::Long y);
 
 private:
     tools::Long nLeft = 0;
