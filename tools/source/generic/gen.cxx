@@ -78,14 +78,14 @@ void tools::Rectangle::SaturatingSetSize(const Size& rSize)
         SetHeightEmpty();
 }
 
-void tools::Rectangle::SaturatingSetX(tools::Long x)
+void tools::Rectangle::SaturatingSetPosX(tools::Long x)
 {
     if (!IsWidthEmpty())
         nRight = o3tl::saturating_add(nRight, x - nLeft);
     nLeft = x;
 }
 
-void tools::Rectangle::SaturatingSetY(tools::Long y)
+void tools::Rectangle::SaturatingSetPosY(tools::Long y)
 {
     if (!IsHeightEmpty())
         nBottom = o3tl::saturating_add(nBottom, y - nTop);
