@@ -171,6 +171,8 @@ public:
                 the new count of elements in the container
     */
     sal_Int32 removeInterface( const css::uno::Reference< css::uno::XInterface > & rxIFace );
+    /** Return an interface by index */
+    css::uno::Reference< css::uno::XInterface > getInterface(sal_Int32 nIndex) const;
     /**
       Call disposing on all object in the container that
       support XEventListener. Then clear the container.
