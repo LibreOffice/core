@@ -384,7 +384,7 @@ void drawFromDrawCommands(gfx::DrawRoot const& rDrawRoot, SalGraphics& rGraphics
                 {
                     rGraphics.SetLineColor(Color(*rPath.mpStrokeColor));
                     rGraphics.SetFillColor();
-                    for (auto const& rPolygon : aPolyPolygon)
+                    for (auto const& rPolygon : std::as_const(aPolyPolygon))
                     {
                         FileDefinitionWidgetDraw::drawPolyLine(
                             rGraphics, basegfx::B2DHomMatrix(), rPolygon, 1.0 - rPath.mnOpacity,

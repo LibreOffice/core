@@ -950,7 +950,7 @@ void EMFWriter::Impl_handleLineInfoPolyPolygons(const LineInfo& rInfo, const bas
 
     if(aLinePolyPolygon.count())
     {
-        for(auto const& rB2DPolygon : aLinePolyPolygon)
+        for(auto const& rB2DPolygon : std::as_const(aLinePolyPolygon))
         {
             ImplWritePolygonRecord( tools::Polygon(rB2DPolygon), false );
         }
@@ -965,7 +965,7 @@ void EMFWriter::Impl_handleLineInfoPolyPolygons(const LineInfo& rInfo, const bas
     maVDev->SetLineColor();
     maVDev->SetFillColor(aOldLineColor);
 
-    for(auto const& rB2DPolygon : aFillPolyPolygon)
+    for(auto const& rB2DPolygon : std::as_const(aFillPolyPolygon))
     {
         ImplWritePolyPolygonRecord(tools::PolyPolygon( tools::Polygon(rB2DPolygon) ));
     }

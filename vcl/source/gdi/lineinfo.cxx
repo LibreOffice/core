@@ -238,7 +238,7 @@ void LineInfo::applyToB2DPolyPolygon(
         {
             basegfx::B2DPolyPolygon aResult;
 
-            for(auto const& rPolygon : io_rLinePolyPolygon)
+            for(auto const& rPolygon : std::as_const(io_rLinePolyPolygon))
             {
                 basegfx::B2DPolyPolygon aLineTarget;
                 basegfx::utils::applyLineDashing(
@@ -257,7 +257,7 @@ void LineInfo::applyToB2DPolyPolygon(
 
     const double fHalfLineWidth((GetWidth() * 0.5) + 0.5);
 
-    for(auto const& rPolygon : io_rLinePolyPolygon)
+    for(auto const& rPolygon : std::as_const(io_rLinePolyPolygon))
     {
         o_rFillPolyPolygon.append(basegfx::utils::createAreaGeometry(
             rPolygon,

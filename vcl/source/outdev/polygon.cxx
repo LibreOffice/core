@@ -90,7 +90,7 @@ void OutputDevice::DrawPolyPolygon( const tools::PolyPolygon& rPolyPoly )
         {
             const bool bPixelSnapHairline(mnAntialiasing & AntialiasingFlags::PixelSnapHairline);
 
-            for(auto const& rPolygon : aB2DPolyPolygon)
+            for(auto const& rPolygon : std::as_const(aB2DPolyPolygon))
             {
                 bSuccess = mpGraphics->DrawPolyLine(
                     aTransform,
@@ -320,7 +320,7 @@ void OutputDevice::ImplDrawPolyPolygonWithB2DPolyPolygon(const basegfx::B2DPolyP
         {
             const bool bPixelSnapHairline(mnAntialiasing & AntialiasingFlags::PixelSnapHairline);
 
-            for(auto const& rPolygon : aB2DPolyPolygon)
+            for(auto const& rPolygon : std::as_const(aB2DPolyPolygon))
             {
                 bSuccess = mpGraphics->DrawPolyLine(
                     aTransform,

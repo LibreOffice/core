@@ -184,7 +184,7 @@ void OutputDevice::drawLine( basegfx::B2DPolyPolygon aLinePolyPolygon, const Lin
         {
             basegfx::B2DPolyPolygon aResult;
 
-            for(auto const& rPolygon : aLinePolyPolygon)
+            for(auto const& rPolygon : std::as_const(aLinePolyPolygon))
             {
                 basegfx::B2DPolyPolygon aLineTarget;
                 basegfx::utils::applyLineDashing(
@@ -212,7 +212,7 @@ void OutputDevice::drawLine( basegfx::B2DPolyPolygon aLinePolyPolygon, const Lin
             aLinePolyPolygon = basegfx::utils::adaptiveSubdivideByDistance(aLinePolyPolygon, 1.0);
         }
 
-        for(auto const& rPolygon : aLinePolyPolygon)
+        for(auto const& rPolygon : std::as_const(aLinePolyPolygon))
         {
             aFillPolyPolygon.append(basegfx::utils::createAreaGeometry(
                 rPolygon,
@@ -229,7 +229,7 @@ void OutputDevice::drawLine( basegfx::B2DPolyPolygon aLinePolyPolygon, const Lin
 
     if(aLinePolyPolygon.count())
     {
-        for(auto const& rB2DPolygon : aLinePolyPolygon)
+        for(auto const& rB2DPolygon : std::as_const(aLinePolyPolygon))
         {
             const bool bPixelSnapHairline(mnAntialiasing & AntialiasingFlags::PixelSnapHairline);
             bool bDone(false);
@@ -283,7 +283,7 @@ void OutputDevice::drawLine( basegfx::B2DPolyPolygon aLinePolyPolygon, const Lin
 
         if(!bDone)
         {
-            for(auto const& rB2DPolygon : aFillPolyPolygon)
+            for(auto const& rB2DPolygon : std::as_const(aFillPolyPolygon))
             {
                 tools::Polygon aPolygon(rB2DPolygon);
 

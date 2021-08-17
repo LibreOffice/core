@@ -1942,7 +1942,7 @@ bool SvpSalGraphics::drawGradient(const tools::PolyPolygon& rPolyPolygon, const 
     else
     {
         basegfx::B2DPolyPolygon aB2DPolyPolygon(rPolyPolygon.getB2DPolyPolygon());
-        for (auto const & rPolygon : aB2DPolyPolygon)
+        for (auto const & rPolygon : std::as_const(aB2DPolyPolygon))
         {
             basegfx::B2DHomMatrix rObjectToDevice;
             AddPolygonToPath(cr, rPolygon, rObjectToDevice, !getAntiAlias(), false);

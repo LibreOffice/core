@@ -613,7 +613,7 @@ bool X11SalGraphics::drawPolyPolygon(
         cairo_t* cr = getCairoContext();
         clipRegion(cr);
 
-        for(auto const& rPolygon : aPolyPolygon)
+        for(auto const& rPolygon : std::as_const(aPolyPolygon))
         {
             const sal_uInt32 nPointCount(rPolygon.count());
 
