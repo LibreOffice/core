@@ -787,6 +787,8 @@ private:
 
     tools::Long Calc1ColumnTextHeight(tools::Long* pHeightNTP);
 
+    void IdleFormatAndUpdate(EditView* pCurView) { aIdleFormatter.DoIdleFormat(pCurView); }
+
 protected:
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
@@ -953,7 +955,6 @@ public:
     const Link<EENotify&,void>&   GetNotifyHdl() const            { return aNotifyHdl; }
 
     void            FormatAndUpdate( EditView* pCurView = nullptr, bool bCalledFromUndo = false );
-    inline void     IdleFormatAndUpdate( EditView* pCurView );
 
     const svtools::ColorConfig& GetColorConfig() const { return maColorConfig; }
     bool            IsVisualCursorTravelingEnabled();
@@ -1227,11 +1228,6 @@ inline VirtualDevice* ImpEditEngine::GetVirtualDevice( const MapMode& rMapMode, 
     pVirtDev->SetDrawMode( nDrawMode );
 
     return pVirtDev;
-}
-
-inline void ImpEditEngine::IdleFormatAndUpdate( EditView* pCurView )
-{
-    aIdleFormatter.DoIdleFormat( pCurView );
 }
 
 inline EditUndoManager& ImpEditEngine::GetUndoManager()
