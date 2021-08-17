@@ -88,7 +88,7 @@ private:
     size_t m_nSmSyntaxVersion;
 
 public:
-    /** Get's parsed element tree
+    /** Gets parsed element tree
     */
     SmMlElement* getElementTree() { return m_pElementTree; }
 
