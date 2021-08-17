@@ -49,6 +49,116 @@ bool lclNeedsRichTextFormat( const oox::xls::Font* pFont )
     return pFont && pFont->needsRichTextFormat();
 }
 
+sal_Int32 lcl_getHexLetterValue(sal_Unicode nCode)
+{
+    if (nCode >= '0' && nCode <= '9')
+        return nCode - '0';
+
+    if (nCode >= 'A' && nCode <= 'F')
+        return nCode - 'A' + 10;
+
+    if (nCode >= 'a' && nCode <= 'f')
+        return nCode - 'a' + 10;
+
+    return -1;
+}
+
+bool lcl_validEscape(sal_Unicode nCode)
+{
+    // Valid XML chars that can be escaped (ignoring the restrictions) as in the OOX open spec
+    // 2.1.1742 Part 1 Section 22.9.2.19, ST_Xstring (Escaped String)
+    if (nCode == 0x000D || nCode == 0x000A || nCode == 0x0009 || nCode == 0x005F)
+        return true;
+
+    // Other valid XML chars in basic multilingual plane that cannot be escaped.
+    if ((nCode >= 0x0020 && nCode <= 0xD7FF) || (nCode >= 0xE000 && nCode <= 0xFFFD))
+        return false;
+
+    return true;
+}
+
+OUString lcl_unEscapeUnicodeChars(const OUString& rSrc)
+{
+    // Example: Escaped representation of unicode char 0x000D is _x000D_
+
+    sal_Int32 nLen = rSrc.getLength();
+    if (!nLen)
+        return rSrc;
+
+    sal_Int32 nStart = 0;
+    bool bFound = true;
+    const OUString aPrefix = "_x";
+    sal_Int32 nPrefixStart = rSrc.indexOf(aPrefix, nStart);
+
+    if (nPrefixStart == -1)
+        return rSrc;
+
+    OUStringBuffer aBuf(rSrc);
+    sal_Int32 nOffset = 0; // index offset in aBuf w.r.t rSrc.
+
+    do
+    {
+        sal_Int32 nEnd = -1;
+        sal_Unicode nCode = 0;
+        bool bFoundThis = false;
+        for (sal_Int32 nIdx = 0; nIdx < 5; ++nIdx)
+        {
+            sal_Int32 nThisIdx = nPrefixStart + nIdx + 2;
+            if (nThisIdx >= nLen)
+                break;
+
+            sal_Unicode nThisCode = rSrc[nThisIdx];
+            sal_Int32 nLetter = lcl_getHexLetterValue(nThisCode);
+
+            if (!nIdx && nLetter < 0)
+                break;
+
+            if (nLetter >= 0)
+            {
+                nCode = (nCode << 4) + static_cast<sal_Unicode>(nLetter);
+            }
+            else if (nThisCode == '_')
+            {
+                nEnd = nThisIdx + 1;
+                bFoundThis = true;
+                break;
+            }
+            else
+            {
+                break;
+            }
+        }
+
+        if (bFoundThis)
+        {
+            // nEnd is already set inside the inner loop in this case.
+            if (lcl_validEscape(nCode))
+            {
+                bFound = true;
+                sal_Int32 nEscStrLen = nEnd - nPrefixStart;
+                aBuf.remove(nPrefixStart - nOffset, nEscStrLen);
+                aBuf.insert(nPrefixStart - nOffset, nCode);
+
+                nOffset += nEscStrLen - 1;
+            }
+        }
+        else
+        {
+            // Start the next search just after last "_x"
+            nEnd = nPrefixStart + 2;
+        }
+
+        nStart = nEnd;
+        nPrefixStart = rSrc.indexOf(aPrefix, nStart);
+    }
+    while (nPrefixStart != -1);
+
+    if (bFound)
+        return aBuf.makeStringAndClear();
+
+    return rSrc;
+}
+
 } // namespace
 
 RichStringPortion::RichStringPortion( const WorkbookHelper& rHelper ) :
@@ -60,7 +170,7 @@ RichStringPortion::RichStringPortion( const WorkbookHelper& rHelper ) :
 
 void RichStringPortion::setText( const OUString& rText )
 {
-    maText = rText;
+    maText = lcl_unEscapeUnicodeChars(rText);
 }
 
 FontRef const & RichStringPortion::createFont()
