@@ -28,7 +28,11 @@ namespace dp_misc
 {
 const LanguageTag& getOfficeLanguageTag()
 {
+<<<<<<< HEAD
     static const LanguageTag OFFICE_LANG = []() {
+=======
+    static const LanguageTag OFFICE_LANG = [&]() {
+>>>>>>> for rebase
         OUString slang(utl::ConfigManager::getUILocale());
         //fallback, the locale is currently only set when the user starts the
         //office for the first time.

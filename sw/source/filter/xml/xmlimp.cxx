@@ -1183,12 +1183,20 @@ void SwXMLImport::SetViewSettings(const Sequence < PropertyValue > & aViewProps)
         if ( rValue.Name == "ViewAreaTop" )
         {
             rValue.Value >>= nTmp;
+<<<<<<< HEAD
             aRect.SetPosY(bTwip ? sanitiseMm100ToTwip(nTmp) : nTmp);
+=======
+            aRect.setY(bTwip ? sanitiseMm100ToTwip(nTmp) : nTmp);
+>>>>>>> for rebase
         }
         else if ( rValue.Name == "ViewAreaLeft" )
         {
             rValue.Value >>= nTmp;
+<<<<<<< HEAD
             aRect.SetPosX(bTwip ? sanitiseMm100ToTwip(nTmp) : nTmp);
+=======
+            aRect.setX(bTwip ? sanitiseMm100ToTwip(nTmp) : nTmp);
+>>>>>>> for rebase
         }
         else if ( rValue.Name == "ViewAreaWidth" )
         {

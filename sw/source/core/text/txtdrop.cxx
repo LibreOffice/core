@@ -877,7 +877,11 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTextFormatInfo &rInf 
                 if( rFnt.GetTopBorder() )
                 {
                     aRect.setHeight(aRect.GetHeight() + rFnt.GetTopBorderSpace());
+<<<<<<< HEAD
                     aRect.SetPosY(aRect.Top() - rFnt.GetTopBorderSpace());
+=======
+                    aRect.setY(aRect.Top() - rFnt.GetTopBorderSpace());
+>>>>>>> for rebase
                 }
 
                 if( rFnt.GetBottomBorder() )

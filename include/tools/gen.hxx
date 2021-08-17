@@ -576,6 +576,13 @@ public:
     tools::Long getWidth() const { return Right() - Left(); }
     /// Returns the difference between bottom and top, assuming the range includes one end, but not the other.
     tools::Long getHeight() const { return Bottom() - Top(); }
+<<<<<<< HEAD
+=======
+    /// Set the left edge of the rectangle to x, preserving the width
+    void                setX( tools::Long x );
+    /// Set the top edge of the rectangle to y, preserving the height
+    void                setY( tools::Long y );
+>>>>>>> for rebase
     void                setWidth( tools::Long n ) { nRight = nLeft + n; }
     void                setHeight( tools::Long n ) { nBottom = nTop + n; }
     /// Returns the string representation of the rectangle, format is "x, y, width, height".
@@ -627,6 +634,7 @@ constexpr inline tools::Rectangle::Rectangle( const Point& rLT, const Size& rSiz
 {}
 
 inline void tools::Rectangle::Move( tools::Long nHorzMove, tools::Long nVertMove )
+<<<<<<< HEAD
 {
     nLeft += nHorzMove;
     nTop  += nVertMove;
@@ -648,12 +656,30 @@ inline void tools::Rectangle::SetPosY(tools::Long y)
     if (!IsHeightEmpty())
         nBottom += y - nTop;
     nTop = y;
+=======
+{
+    nLeft += nHorzMove;
+    nTop  += nVertMove;
+    if (!IsWidthEmpty())
+        nRight += nHorzMove;
+    if (!IsHeightEmpty())
+        nBottom += nVertMove;
+>>>>>>> for rebase
 }
 
 inline void tools::Rectangle::SetPos( const Point& rPoint )
 {
+<<<<<<< HEAD
     SetPosX(rPoint.X());
     SetPosY(rPoint.Y());
+=======
+    if (!IsWidthEmpty())
+        nRight += rPoint.X() - nLeft;
+    if (!IsHeightEmpty())
+        nBottom += rPoint.Y() - nTop;
+    nLeft = rPoint.X();
+    nTop  = rPoint.Y();
+>>>>>>> for rebase
 }
 
 inline tools::Rectangle tools::Rectangle::GetUnion( const tools::Rectangle& rRect ) const

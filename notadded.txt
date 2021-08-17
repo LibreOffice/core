@@ -1,0 +1,16 @@
+5158
+5119
+[['password|PasswordDialog', 'qAMT2', 1907923], 'https://weblate-gsoc.documentfoundation.org/api/screenshots/5207/units/']
+[['password|extended_tip|newpassEntry', 'XDzCT', 1907924], 'https://weblate-gsoc.documentfoundation.org/api/screenshots/5207/units/']
+[['password|extended_tip|confirmpassEntry', 'QbKd2', 1907925], 'https://weblate-gsoc.documentfoundation.org/api/screenshots/5207/units/']
+[['password|PasswordDialog', 'qAMT2', 1907923], 'https://weblate-gsoc.documentfoundation.org/api/screenshots/5207/units/']
+[['password|extended_tip|newpassEntry', 'XDzCT', 1907924], 'https://weblate-gsoc.documentfoundation.org/api/screenshots/5207/units/']
+[['password|extended_tip|confirmpassEntry', 'QbKd2', 1907925], 'https://weblate-gsoc.documentfoundation.org/api/screenshots/5207/units/']
+4703
+[['templatedlg|action_menu|label', 'DF5YC'], 'https://weblate-gsoc.documentfoundation.org/api/screenshots/5209/units/']
+4764
+[['fielddialog|alttitle', 'M2WyU', 1553371], 'https://weblate-gsoc.documentfoundation.org/api/screenshots/5226/units/']
+[['fielddialog|FieldDialog', 'KUVUc', 1553368], 'https://weblate-gsoc.documentfoundation.org/api/screenshots/5226/units/']
+[['fielddialog|format', 'WhGAL', 1553369], 'https://weblate-gsoc.documentfoundation.org/api/screenshots/5226/units/']
+[['fielddialog|alignment', 'MvFHK', 1553370], 'https://weblate-gsoc.documentfoundation.org/api/screenshots/5226/units/']
+[['fielddialog|alttitle', 'M2WyU', 1553371], 'https://weblate-gsoc.documentfoundation.org/api/screenshots/5226/units/']
