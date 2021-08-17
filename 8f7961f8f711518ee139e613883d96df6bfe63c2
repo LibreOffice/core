@@ -16,6 +16,24 @@
       "revId": "8f7961f8f711518ee139e613883d96df6bfe63c2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "10344b3e_1e7b7ee0",
+        "filename": "include/tools/gen.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 626,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-17T07:29:39Z",
+      "side": 1,
+      "message": "It was meant to match the existing SetSize. We have lots of non-symmetric things here at rectangle; but at least creating a rectangle with a specified *size* is expected to do the same as when you set the size separately; while it is not obvious that it must align with the sequence you mentioned 😊\n\nPlease see the unit test here, that I augmented with the case that IMO explains the change.",
+      "parentUuid": "c3970211_3d03090f",
+      "revId": "8f7961f8f711518ee139e613883d96df6bfe63c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
