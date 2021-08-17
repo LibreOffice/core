@@ -41,7 +41,6 @@
 #include <com/sun/star/util/Endianness.hpp>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <rtl/instance.hxx>
 #include <rtl/math.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/bitmapex.hxx>
@@ -1973,22 +1972,16 @@ constexpr OUStringLiteral PARAMETRICPOLYPOLYGON_IMPLEMENTATION_NAME = u"Canvas::
             }
         };
 
-        struct CairoNoAlphaColorSpaceHolder : public rtl::StaticWithInit<uno::Reference<rendering::XIntegerBitmapColorSpace>,
-                                                                     CairoNoAlphaColorSpaceHolder>
+        uno::Reference<rendering::XIntegerBitmapColorSpace>& GetCairoNoAlphaColorSpace()
         {
-            uno::Reference<rendering::XIntegerBitmapColorSpace> operator()()
-            {
-                return new CairoNoAlphaColorSpace();
-            }
+            static uno::Reference<rendering::XIntegerBitmapColorSpace> SPACE = new CairoNoAlphaColorSpace();
+            return SPACE;
         };
 
-        struct CairoColorSpaceHolder : public rtl::StaticWithInit<uno::Reference<rendering::XIntegerBitmapColorSpace>,
-                                                                     CairoColorSpaceHolder>
+        uno::Reference<rendering::XIntegerBitmapColorSpace>& GetCairoColorSpace()
         {
-            uno::Reference<rendering::XIntegerBitmapColorSpace> operator()()
-            {
-                return new CairoColorSpace();
-            }
+            static uno::Reference<rendering::XIntegerBitmapColorSpace> SPACE = new CairoColorSpace();
+            return SPACE;
         };
 
     }
@@ -2012,7 +2005,7 @@ constexpr OUStringLiteral PARAMETRICPOLYPOLYGON_IMPLEMENTATION_NAME = u"Canvas::
         aLayout.ScanLineBytes = nWidth*4;
         aLayout.ScanLineStride = aLayout.ScanLineBytes;
         aLayout.PlaneStride = 0;
-        aLayout.ColorSpace = mbHaveAlpha ? CairoColorSpaceHolder::get() : CairoNoAlphaColorSpaceHolder::get();
+        aLayout.ColorSpace = mbHaveAlpha ? GetCairoColorSpace() : GetCairoNoAlphaColorSpace();
         aLayout.Palette.clear();
         aLayout.IsMsbFirst = false;
 

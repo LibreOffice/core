@@ -22,7 +22,6 @@
 #include <basegfx/utils/canvastools.hxx>
 #include <basegfx/utils/unopolypolygon.hxx>
 #include <canvas/canvastools.hxx>
-#include <rtl/instance.hxx>
 #include <tools/stream.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/dibtools.hxx>
@@ -174,22 +173,23 @@ namespace vclcanvas
 
     namespace
     {
-        struct DeviceColorSpace: public rtl::StaticWithInit<uno::Reference<rendering::XColorSpace>,
-                                                            DeviceColorSpace>
+        uno::Reference<rendering::XColorSpace>& GetDeviceColorSpace()
         {
-            uno::Reference<rendering::XColorSpace> operator()()
+            static uno::Reference<rendering::XColorSpace> xColorSpace =
+            []()
             {
-                uno::Reference< rendering::XColorSpace > xColorSpace = canvas::tools::getStdColorSpace();
-                assert( xColorSpace.is() );
+                auto xTmp = canvas::tools::getStdColorSpace();
+                assert( xTmp.is() );
                 return xColorSpace;
-            }
+            }();
+            return xColorSpace;
         };
     }
 
     uno::Reference<rendering::XColorSpace> const & DeviceHelper::getColorSpace() const
     {
         // always the same
-        return DeviceColorSpace::get();
+        return GetDeviceColorSpace();
     }
 
     void DeviceHelper::dumpScreenContent() const
