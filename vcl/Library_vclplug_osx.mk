@@ -142,6 +142,7 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_osx,\
     vcl/quartz/utils \
     vcl/quartz/AquaGraphicsBackend \
     $(if $(filter SKIA,$(BUILD_TYPE)), \
+        vcl/skia/osx/bitmap \
         vcl/skia/osx/gdiimpl \
         vcl/skia/osx/rastercontext \
         ) \
