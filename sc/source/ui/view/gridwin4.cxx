@@ -2115,14 +2115,60 @@ void ScGridWindow::GetRectsAnyFor(const ScMarkData &rMarkData,
                                   ::std::vector< tools::Rectangle >& rRects,
                                   bool bInPrintTwips) const
 {
-    ScMarkData aMultiMark( rMarkData );
-    aMultiMark.SetMarking( false );
-    aMultiMark.MarkToMulti();
     ScDocument& rDoc = mrViewData.GetDocument();
     SCTAB nTab = mrViewData.GetTabNo();
-
+    double nPPTX = mrViewData.GetPPTX();
+    double nPPTY = mrViewData.GetPPTY();
     bool bLayoutRTL = rDoc.IsLayoutRTL( nTab );
     tools::Long nLayoutSign = bLayoutRTL ? -1 : 1;
+
+    ScMarkData aMultiMark( rMarkData );
+    aMultiMark.SetMarking( false );
+
+    if (!aMultiMark.IsMultiMarked())
+    {
+        // simple range case - simplify calculation
+        ScRange aSimpleRange;
+        aMultiMark.GetMarkArea( aSimpleRange );
+
+        aMultiMark.MarkToMulti();
+        if ( !aMultiMark.IsMultiMarked() )
+            return;
+
+        SCCOL nX1 = aSimpleRange.aStart.Col();
+        SCROW nY1 = aSimpleRange.aStart.Row();
+        SCCOL nX2 = aSimpleRange.aEnd.Col();
+        SCROW nY2 = aSimpleRange.aEnd.Row();
+
+        PutInOrder( nX1, nX2 );
+        PutInOrder( nY1, nY2 );
+
+        Point aScrStartPos = bInPrintTwips ? mrViewData.GetPrintTwipsPos(nX1, nY1) :
+            mrViewData.GetScrPos(nX1, nY1, eWhich);
+
+        tools::Long nStartX = aScrStartPos.X();
+        tools::Long nStartY = aScrStartPos.Y();
+
+        Point aScrEndPos = bInPrintTwips ? mrViewData.GetPrintTwipsPos(nX2, nY2) :
+            mrViewData.GetScrPos(nX2, nY2, eWhich);
+
+        tools::Long nWidthTwips = rDoc.GetColWidth(nX2, nTab);
+        const tools::Long nWidth = bInPrintTwips ?
+            nWidthTwips : ScViewData::ToPixel(nWidthTwips, nPPTX);
+        tools::Long nEndX = aScrEndPos.X() + (nWidth - 1) * nLayoutSign;
+
+        sal_uInt16 nHeightTwips = rDoc.GetRowHeight( nY2, nTab );
+        const tools::Long nHeight = bInPrintTwips ?
+            nHeightTwips : ScViewData::ToPixel(nHeightTwips, nPPTY);
+        tools::Long nEndY = aScrEndPos.Y() + nHeight - 1;
+
+        ScInvertMerger aInvert( &rRects );
+        aInvert.AddRect( tools::Rectangle( nStartX, nStartY, nEndX, nEndY ) );
+
+        return;
+    }
+
+    aMultiMark.MarkToMulti();
     if ( !aMultiMark.IsMultiMarked() )
         return;
     ScRange aMultiRange;
@@ -2182,9 +2228,6 @@ void ScGridWindow::GetRectsAnyFor(const ScMarkData &rMarkData,
         if (nY2 > nMaxTiledRow)
             nY2 = nMaxTiledRow;
     }
-
-    double nPPTX = mrViewData.GetPPTX();
-    double nPPTY = mrViewData.GetPPTY();
 
     ScInvertMerger aInvert( &rRects );
 
