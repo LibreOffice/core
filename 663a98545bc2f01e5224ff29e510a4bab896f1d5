@@ -52,6 +52,24 @@
       "revId": "663a98545bc2f01e5224ff29e510a4bab896f1d5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b828db15_7d71925e",
+        "filename": "sc/qa/unit/tiledrendering/tiledrendering.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1228,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-17T13:47:45Z",
+      "side": 1,
+      "message": "\u003e use the versioning mechanism in SVM\n\nAnd that would allow to have a version for use internally (with faster operation), and an older version for storing? I\u0027d think it would be ideal.",
+      "parentUuid": "4846a57d_ee582f14",
+      "revId": "663a98545bc2f01e5224ff29e510a4bab896f1d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
