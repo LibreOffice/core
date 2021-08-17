@@ -332,7 +332,7 @@ rtl::Reference<MetaAction> SvmReader::MetaActionHandler(ImplMetaReadData* pData)
 
 void SvmReader::ReadColor(Color& rColor)
 {
-    sal_uInt32 nTmp;
+    sal_uInt32 nTmp(0);
     mrStream.ReadUInt32(nTmp);
     rColor = ::Color(ColorTransparency, nTmp);
 }
@@ -344,7 +344,7 @@ rtl::Reference<MetaAction> SvmReader::LineColorHandler()
     VersionCompatRead aCompat(mrStream);
     Color aColor;
     ReadColor(aColor);
-    bool aBool;
+    bool aBool(false);
     mrStream.ReadCharAsBool(aBool);
 
     pAction->SetSetting(aBool);
@@ -361,7 +361,7 @@ rtl::Reference<MetaAction> SvmReader::FillColorHandler()
 
     Color aColor;
     ReadColor(aColor);
-    bool aBool;
+    bool aBool(false);
     mrStream.ReadCharAsBool(aBool);
 
     pAction->SetColor(aColor);
@@ -452,8 +452,8 @@ rtl::Reference<MetaAction> SvmReader::RoundRectHandler()
 
     tools::Rectangle aRectangle;
     aSerializer.readRectangle(aRectangle);
-    sal_uInt32 HorzRound;
-    sal_uInt32 VertRound;
+    sal_uInt32 HorzRound(0);
+    sal_uInt32 VertRound(0);
     mrStream.ReadUInt32(HorzRound).ReadUInt32(VertRound);
 
     pAction->SetRect(aRectangle);
@@ -723,7 +723,7 @@ rtl::Reference<MetaAction> SvmReader::TextArrayHandler(ImplMetaReadData* pData)
             if (aArray)
             {
                 sal_Int32 i;
-                sal_Int32 val;
+                sal_Int32 val(0);
                 for (i = 0; i < nAryLen; i++)
                 {
                     mrStream.ReadInt32(val);
@@ -768,7 +768,7 @@ rtl::Reference<MetaAction> SvmReader::StretchTextHandler(ImplMetaReadData* pData
     Point aPoint;
     aSerializer.readPoint(aPoint);
     OUString aStr = mrStream.ReadUniOrByteString(pData->meActualCharSet);
-    sal_uInt32 nTmpWidth;
+    sal_uInt32 nTmpWidth(0);
     mrStream.ReadUInt32(nTmpWidth);
     sal_uInt16 nTmpIndex(0);
     mrStream.ReadUInt16(nTmpIndex);
@@ -1108,7 +1108,7 @@ rtl::Reference<MetaAction> SvmReader::ClipRegionHandler()
     VersionCompatRead aCompat(mrStream);
     vcl::Region aRegion;
     ReadRegion(mrStream, aRegion);
-    bool aClip;
+    bool aClip(false);
     mrStream.ReadCharAsBool(aClip);
 
     pAction->SetRegion(aRegion);
@@ -1177,7 +1177,7 @@ rtl::Reference<MetaAction> SvmReader::TextFillColorHandler()
     VersionCompatRead aCompat(mrStream);
     Color aColor;
     ReadColor(aColor);
-    bool bSet;
+    bool bSet(false);
     mrStream.ReadCharAsBool(bSet);
 
     pAction->SetColor(aColor);
@@ -1193,7 +1193,7 @@ rtl::Reference<MetaAction> SvmReader::TextLineColorHandler()
     VersionCompatRead aCompat(mrStream);
     Color aColor;
     ReadColor(aColor);
-    bool bSet;
+    bool bSet(false);
     mrStream.ReadCharAsBool(bSet);
 
     pAction->SetColor(aColor);
@@ -1209,7 +1209,7 @@ rtl::Reference<MetaAction> SvmReader::OverlineColorHandler()
     VersionCompatRead aCompat(mrStream);
     Color aColor;
     ReadColor(aColor);
-    bool bSet;
+    bool bSet(false);
     mrStream.ReadCharAsBool(bSet);
 
     pAction->SetColor(aColor);
@@ -1304,7 +1304,7 @@ rtl::Reference<MetaAction> SvmReader::TransparentHandler()
     VersionCompatRead aCompat(mrStream);
     tools::PolyPolygon aPolyPoly;
     ReadPolyPolygon(mrStream, aPolyPoly);
-    sal_uInt16 nTransPercent;
+    sal_uInt16 nTransPercent(0);
     mrStream.ReadUInt16(nTransPercent);
 
     pAction->SetPolyPolygon(aPolyPoly);
@@ -1369,7 +1369,7 @@ rtl::Reference<MetaAction> SvmReader::RefPointHandler()
 
     Point aRefPoint;
     aSerializer.readPoint(aRefPoint);
-    bool bSet;
+    bool bSet(false);
     mrStream.ReadCharAsBool(bSet);
 
     pAction->SetRefPoint(aRefPoint);
@@ -1385,8 +1385,8 @@ rtl::Reference<MetaAction> SvmReader::CommentHandler()
     VersionCompatRead aCompat(mrStream);
     OString aComment;
     aComment = read_uInt16_lenPrefixed_uInt8s_ToOString(mrStream);
-    sal_Int32 nValue;
-    sal_uInt32 nDataSize;
+    sal_Int32 nValue(0);
+    sal_uInt32 nDataSize(0);
     mrStream.ReadInt32(nValue).ReadUInt32(nDataSize);
 
     if (nDataSize > mrStream.remainingSize())
@@ -1420,7 +1420,7 @@ rtl::Reference<MetaAction> SvmReader::LayoutModeHandler()
     rtl::Reference<MetaLayoutModeAction> pAction(new MetaLayoutModeAction);
 
     VersionCompatRead aCompat(mrStream);
-    sal_uInt32 tmp;
+    sal_uInt32 tmp(0);
     mrStream.ReadUInt32(tmp);
 
     pAction->SetLayoutMode(static_cast<ComplexTextLayoutFlags>(tmp));
