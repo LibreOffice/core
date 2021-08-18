@@ -254,6 +254,7 @@ public:
     void testAutoheight2Rows();
     void testXLSDefColWidth();
     void testPreviewMissingObjLink();
+    void testEscapedUnicodeXLSX();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testBooleanFormatXLSX);
@@ -397,6 +398,7 @@ public:
     CPPUNIT_TEST(testAutoheight2Rows);
     CPPUNIT_TEST(testXLSDefColWidth);
     CPPUNIT_TEST(testPreviewMissingObjLink);
+    CPPUNIT_TEST(testEscapedUnicodeXLSX);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -4366,6 +4368,17 @@ void ScFiltersTest::testPreviewMissingObjLink()
 
     const Graphic* pGraphic = pOleObj->GetGraphic();
     CPPUNIT_ASSERT_MESSAGE("the ole object links to a missing file, but we should retain its preview", pGraphic);
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testEscapedUnicodeXLSX()
+{
+    ScDocShellRef xDocSh = loadDoc("escape-unicode.", FORMAT_XLSX);
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    // Without the fix, there would be "_x000D_" after every new-line char.
+    CPPUNIT_ASSERT_EQUAL(OUString("Line 1\nLine 2\nLine 3\nLine 4"), rDoc.GetString(1, 1, 0));
 
     xDocSh->DoClose();
 }
