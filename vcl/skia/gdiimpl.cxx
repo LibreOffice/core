@@ -146,6 +146,11 @@ void addPolyPolygonToPath(const basegfx::B2DPolyPolygon& rPolyPolygon, SkPath& r
     if (nPolygonCount == 0)
         return;
 
+    sal_uInt32 nPointCount = 0;
+    for (const auto& rPolygon : rPolyPolygon)
+        nPointCount += rPolygon.count();
+    rPath.incReserve(nPointCount * 2);
+
     for (const auto& rPolygon : rPolyPolygon)
     {
         addPolygonToPath(rPolygon, rPath, hasOnlyOrthogonal);
@@ -555,6 +560,7 @@ void SkiaSalGraphicsImpl::setCanvasClipRegion(SkCanvas* canvas, const vcl::Regio
     // in case a polygon is used leads to off-by-one errors such as tdf#133208.
     RectangleVector rectangles;
     region.GetRegionRectangles(rectangles);
+    path.incReserve(rectangles.size() + 1);
     for (const tools::Rectangle& rectangle : rectangles)
         path.addRect(SkRect::MakeXYWH(rectangle.Left(), rectangle.Top(), rectangle.GetWidth(),
                                       rectangle.GetHeight()));
@@ -1137,9 +1143,14 @@ bool SkiaSalGraphicsImpl::drawPolyLine(const basegfx::B2DHomMatrix& rObjectToDev
     if (eLineJoin != basegfx::B2DLineJoin::NONE || fLineWidth <= 1.0)
     {
         SkPath aPath;
+        sal_uInt32 nPointCount = 0;
+        for (const auto& rPolygon : std::as_const(aPolyPolygonLine))
+            nPointCount += (rPolygon.count() + 1);
+        aPath.incReserve(nPointCount + 2);
+
         aPath.setFillType(SkPathFillType::kEvenOdd);
-        for (sal_uInt32 a(0); a < aPolyPolygonLine.count(); a++)
-            addPolygonToPath(aPolyPolygonLine.getB2DPolygon(a), aPath);
+        for (const auto& rPolygon : std::as_const(aPolyPolygonLine))
+            addPolygonToPath(rPolygon, aPath);
         aPath.offset(toSkX(0) + posFix, toSkY(0) + posFix, nullptr);
         addUpdateRegion(aPath.getBounds());
         getDrawCanvas()->drawPath(aPath, aPaint);
@@ -1440,6 +1451,7 @@ void SkiaSalGraphicsImpl::invert(basegfx::B2DPolygon const& rPoly, SalInvert eFl
         rasterHack = true;
 #endif
     SkPath aPath;
+    aPath.incReserve(rPoly.count());
     addPolygonToPath(rPoly, aPath);
     aPath.setFillType(SkPathFillType::kEvenOdd);
     addUpdateRegion(aPath.getBounds());
