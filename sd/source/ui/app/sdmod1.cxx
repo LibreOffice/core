@@ -489,6 +489,15 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest const & rReq )
             //pFrame is loaded with the desired template
             if (!aTemplDlg.getTemplatePath().isEmpty())
                 pFrame = CreateFromTemplate(aTemplDlg.getTemplatePath(), xTargetFrame, false);
+
+            // show tip-of-the-day dialog if it was deferred because SfxTemplateSelectionDlg
+            // was open
+            if (pFrame && SfxApplication::IsTipOfTheDayDue() && !SfxApplication::IsHeadlessOrUITest())
+            {
+                // tdf#127946 pass in argument for dialog parent
+                SfxUnoFrameItem aDocFrame(SID_FILLFRAME, pFrame->GetFrameInterface());
+                GetDispatcher()->ExecuteList(SID_TIPOFTHEDAY, SfxCallMode::SLOT, {}, { &aDocFrame });
+            }
         }
     }
 
