@@ -118,7 +118,7 @@ public:
  * Abstract base class for vectorised formula group interpreters,
  * plus a global instance factory.
  */
-class SC_DLLPUBLIC FormulaGroupInterpreter
+class FormulaGroupInterpreter
 {
     static FormulaGroupInterpreter *msInstance;
 

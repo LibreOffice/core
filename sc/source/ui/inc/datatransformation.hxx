@@ -183,7 +183,7 @@ class SC_DLLPUBLIC DateTimeTransformation : public DataTransformation
         const std::set<SCCOL>& getColumn() const;
 };
 
-class SC_DLLPUBLIC FindReplaceTransformation : public DataTransformation
+class FindReplaceTransformation : public DataTransformation
 {
     SCCOL mnCol;
     OUString maFindString;
@@ -198,7 +198,7 @@ class SC_DLLPUBLIC FindReplaceTransformation : public DataTransformation
         const OUString & getReplaceString() const;
 };
 
-class SC_DLLPUBLIC DeleteRowTransformation : public DataTransformation
+class DeleteRowTransformation : public DataTransformation
 {
     SCCOL mnCol;
     OUString maFindString;
