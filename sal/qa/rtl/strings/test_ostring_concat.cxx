@@ -68,15 +68,23 @@ void test::ostring::StringConcat::checkConcat()
     CPPUNIT_ASSERT_EQUAL( OString( "foobar" ), OString( OStringBuffer( "foo" ) + "bar" ));
     CPPUNIT_ASSERT_EQUAL(( typeid( OStringConcat< OStringBuffer, const char[ 4 ] > )), typeid( OStringBuffer( "foo" ) + "bar" ));
     CPPUNIT_ASSERT_EQUAL( OString( "foobar" ), OString( OStringLiteral( "foo" ) + "bar" ));
+#if defined __GNUC__ && __GNUC__ <= 11 && !defined __clang__
     CPPUNIT_ASSERT_EQUAL(( typeid( OStringConcat< OStringLiteral<4>, const char[ 4 ] > )), typeid( OStringLiteral<4>( "foo" ) + "bar" ));
-        //TODO: the explicit OStringLiteral<4> template argument in the unevaluated typeid context
+        // the explicit OStringLiteral<4> template argument in the unevaluated typeid context
         // is needed by some GCC versions, see <https://gcc.gnu.org/bugzilla/show_bug.cgi?id=96878>
         // "Failed class template argument deduction in unevaluated, parenthesized context"
+#else
+    CPPUNIT_ASSERT_EQUAL(( typeid( OStringConcat< OStringLiteral<4>, const char[ 4 ] > )), typeid( OStringLiteral( "foo" ) + "bar" ));
+#endif
     CPPUNIT_ASSERT_EQUAL( OString( "foobar" ), OString( OStringLiteral( "foo" ) + static_cast<const char*>("bar") ));
+#if defined __GNUC__ && __GNUC__ <= 11 && !defined __clang__
     CPPUNIT_ASSERT_EQUAL(( typeid( OStringConcat< OStringLiteral<4>, const char* > )), typeid( OStringLiteral<4>( "foo" ) + static_cast<const char*>("bar") ));
-        //TODO: the explicit OStringLiteral<4> template argument in the unevaluated typeid context
+        // the explicit OStringLiteral<4> template argument in the unevaluated typeid context
         // is needed by some GCC versions, see <https://gcc.gnu.org/bugzilla/show_bug.cgi?id=96878>
         // "Failed class template argument deduction in unevaluated, parenthesized context"
+#else
+    CPPUNIT_ASSERT_EQUAL(( typeid( OStringConcat< OStringLiteral<4>, const char* > )), typeid( OStringLiteral( "foo" ) + static_cast<const char*>("bar") ));
+#endif
     const char d1[] = "xyz";
     char d2[] = "abc";
     const char* d3 = d1;
