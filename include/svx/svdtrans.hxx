@@ -19,6 +19,9 @@
 
 #pragma once
 
+#include <sal/config.h>
+
+#include <basegfx/polygon/b2dpolygon.hxx>
 #include <rtl/ustring.hxx>
 #include <svx/svxdllapi.h>
 #include <tools/degree.hxx>
@@ -226,6 +229,8 @@ public:
 
 tools::Polygon Rect2Poly(const tools::Rectangle& rRect, const GeoStat& rGeo);
 void Poly2Rect(const tools::Polygon& rPol, tools::Rectangle& rRect, GeoStat& rGeo);
+
+basegfx::B2DPolygon Rect2B2DPoly(const tools::Rectangle& rRect, const GeoStat& rGeo);
 
 void OrthoDistance8(const Point& rPt0, Point& rPt, bool bBigOrtho);
 void OrthoDistance4(const Point& rPt0, Point& rPt, bool bBigOrtho);

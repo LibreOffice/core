@@ -1115,7 +1115,9 @@ void SdrTextObj::RecalcSnapRect()
 {
     if (maGeo.nRotationAngle || maGeo.nShearAngle)
     {
-        maSnapRect = Rect2Poly(maRect, maGeo).GetBoundRect();
+        const auto range = Rect2B2DPoly(maRect, maGeo).getB2DRange();
+        maSnapRect = tools::Rectangle(std::round(range.getMinX()), std::round(range.getMinY()),
+                                      std::round(range.getMaxX()), std::round(range.getMaxY()));
     } else {
         maSnapRect = maRect;
     }
