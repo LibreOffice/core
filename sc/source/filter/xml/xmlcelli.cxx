@@ -861,9 +861,7 @@ void ScXMLTableRowCellContext::SetAnnotation(const ScAddress& rPos)
         {
             // rescue settings from drawing object before the shape is removed
             ::std::unique_ptr< SfxItemSet > xItemSet( new SfxItemSet( pObject->GetMergedItemSet() ) );
-            ::std::unique_ptr< OutlinerParaObject > xOutlinerObj;
-            if( OutlinerParaObject* pOutlinerObj = pObject->GetOutlinerParaObject() )
-                xOutlinerObj.reset( new OutlinerParaObject( *pOutlinerObj ) );
+            const OutlinerParaObject* pOutlinerObj = pObject->GetOutlinerParaObject();
             tools::Rectangle aCaptionRect;
             if( mxAnnotationData->mbUseShapePos )
                 aCaptionRect = pObject->GetLogicRect();
@@ -875,19 +873,19 @@ void ScXMLTableRowCellContext::SetAnnotation(const ScAddress& rPos)
                 nOldShapeCount = xShapes->getCount();
 
             // an outliner object is required (empty note captions not allowed)
-            if (xOutlinerObj)
+            if (pOutlinerObj)
             {
                 // create cell note with all data from drawing object
                 if(!comphelper::LibreOfficeKit::isActive())
                 {
                     pNote = ScNoteUtil::CreateNoteFromObjectData( *pDoc, rPos,
-                    std::move(xItemSet), xOutlinerObj.release(),
+                    std::move(xItemSet), *pOutlinerObj,
                     aCaptionRect, mxAnnotationData->mbShown );
                 }
                 else
                 {
                     pNote = ScNoteUtil::CreateNoteFromObjectData( *pDoc, rPos,
-                    std::move(xItemSet), xOutlinerObj.release(),
+                    std::move(xItemSet), *pOutlinerObj,
                     aCaptionRect, false );
                 }
 

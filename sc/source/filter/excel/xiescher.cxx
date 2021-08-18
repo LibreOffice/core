@@ -1860,7 +1860,7 @@ void XclImpNoteObj::DoPreProcessSdrObj( XclImpDffConverter& rDffConv, SdrObject&
         ScNoteUtil::CreateNoteFromObjectData(
             GetDoc(), maScPos,
             rSdrObj.GetMergedItemSet().Clone(),             // new object on heap expected
-            new OutlinerParaObject( *pOutlinerObj ),        // new object on heap expected
+            *pOutlinerObj,
             rSdrObj.GetLogicRect(),
             ::get_flag( mnNoteFlags, EXC_NOTE_VISIBLE ) );
     }
