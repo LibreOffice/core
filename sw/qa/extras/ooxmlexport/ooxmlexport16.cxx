@@ -254,6 +254,19 @@ DECLARE_OOXMLEXPORT_TEST(testTdf44278, "tdf44278.docx")
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf137742, "tdf137742.docx")
+{
+    lang::Locale locale(
+        getProperty<lang::Locale>(getParagraph(1), "CharLocale"));
+    // the \lang inside the group was applied to CJK not Western
+    CPPUNIT_ASSERT_EQUAL(OUString("en"), locale.Language);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: US
+    // - Actual  :
+    CPPUNIT_ASSERT_EQUAL(OUString("US"), locale.Country);
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf141231_arabicHebrewNumbering, "tdf141231_arabicHebrewNumbering.docx")
 {
     // The page's numbering type: instead of Hebrew, this was default style::NumberingType::ARABIC (4).
