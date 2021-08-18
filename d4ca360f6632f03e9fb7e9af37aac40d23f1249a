@@ -34,6 +34,24 @@
       "revId": "d4ca360f6632f03e9fb7e9af37aac40d23f1249a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4fb0fa7e_40d8c5a2",
+        "filename": "svx/source/svdraw/svdoashp.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1592,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-18T14:58:50Z",
+      "side": 1,
+      "message": "\u003e Armin had started something, see aoo/aw080.\n\nI would love to see this work finished; I was one of those who wanted that for a long time:\n\ntdf#95812 😊",
+      "parentUuid": "ac46cca3_b4f712db",
+      "revId": "d4ca360f6632f03e9fb7e9af37aac40d23f1249a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
