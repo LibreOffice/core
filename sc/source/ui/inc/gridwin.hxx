@@ -190,6 +190,8 @@ class SAL_DLLPUBLIC_RTTI ScGridWindow : public vcl::Window, public DropTargetHel
 
     RfCorner                aRFSelectedCorned;
 
+    Timer                   maShowPageBreaksTimer;
+
     bool                    bEEMouse:1;               // Edit Engine has mouse
     bool                    bDPMouse:1;               // DataPilot D&D (new Pivot table)
     bool                    bRFMouse:1;               // RangeFinder drag
@@ -200,6 +202,7 @@ class SAL_DLLPUBLIC_RTTI ScGridWindow : public vcl::Window, public DropTargetHel
     bool                    bNeedsRepaint:1;
     bool                    bAutoMarkVisible:1;
     bool                    bListValButton:1;
+    bool                    bInitialPageBreaks:1;
 
     DECL_LINK( PopupModeEndHdl, FloatingWindow*, void );
     DECL_LINK( PopupSpellingHdl, SpellCallbackInfo&, void );
@@ -288,6 +291,8 @@ class SAL_DLLPUBLIC_RTTI ScGridWindow : public vcl::Window, public DropTargetHel
 
     void            GetSelectionRects( ::std::vector< tools::Rectangle >& rPixelRects );
 
+    void            SetupInitialPageBreaks(const ScDocument& rDoc, SCTAB nTab);
+    DECL_LINK(InitiatePageBreaksTimer, Timer*, void);
 
 protected:
     virtual void    PrePaint(vcl::RenderContext& rRenderContext) override;
@@ -461,6 +466,8 @@ public:
     virtual FactoryFunction GetUITestFactory() const override;
 
     void updateLOKValListButton(bool bVisible, const ScAddress& rPos) const;
+
+    void initiatePageBreaks();
 
 protected:
     void ImpCreateOverlayObjects();

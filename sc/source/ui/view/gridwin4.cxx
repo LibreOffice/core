@@ -1055,6 +1055,28 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
 
     if (mpNoteMarker)
         mpNoteMarker->Draw(); // Above the cursor, in drawing map mode
+
+    if (bPage && bInitialPageBreaks)
+        SetupInitialPageBreaks(rDoc, nTab);
+}
+
+
+void ScGridWindow::SetupInitialPageBreaks(const ScDocument& rDoc, SCTAB nTab)
+{
+    // tdf#124983, if option LibreOfficeDev Calc/View/Visual Aids/Page breaks
+    // is enabled, breaks should be visible. If the document is opened the first
+    // time, the breaks are not calculated yet, so for this initialization
+    // a timer will be triggered here.
+    std::set<SCCOL> aColBreaks;
+    std::set<SCROW> aRowBreaks;
+    rDoc.GetAllColBreaks(aColBreaks, nTab, true, false);
+    rDoc.GetAllRowBreaks(aRowBreaks, nTab, true, false);
+    if (aColBreaks.size() == 0 || aRowBreaks.size() == 0)
+    {
+        maShowPageBreaksTimer.SetPriority(TaskPriority::DEFAULT_IDLE);
+        maShowPageBreaksTimer.Start();
+    }
+    bInitialPageBreaks = false;
 }
 
 namespace
@@ -1998,6 +2020,57 @@ void ScGridWindow::DataChanged( const DataChangedEvent& rDCEvt )
                     if (pHdl)
                         pHdl->ForgetLastPattern();
                 }
+            }
+        }
+
+        Invalidate();
+    }
+}
+
+void ScGridWindow::initiatePageBreaks()
+{
+    bInitialPageBreaks = true;
+}
+
+IMPL_LINK(ScGridWindow, InitiatePageBreaksTimer, Timer*, pTimer, void)
+{
+    if (pTimer == &maShowPageBreaksTimer)
+    {
+        const ScViewOptions& rOpts = pViewData->GetOptions();
+        const bool bPage = rOpts.GetOption(VOPT_PAGEBREAKS);
+        // tdf#124983, if option LibreOfficeDev Calc/View/Visual Aids/Page
+        // breaks is enabled, breaks should be visible. If the document is
+        // opened the first time or a tab is activated the first time, the
+        // breaks are not calculated yet, so this initialization is done here.
+        if (bPage)
+        {
+            const SCTAB nCurrentTab = pViewData->GetTabNo();
+            ScDocument* pDoc = pViewData->GetDocument();
+            const Size aPageSize = pDoc->GetPageSize(nCurrentTab);
+            // Do not attempt to calculate a page size here if it is empty if
+            // that involves counting pages.
+            // An earlier implementation did
+            //   ScPrintFunc(pDocSh, pDocSh->GetPrinter(), nCurrentTab);
+            //   rDoc.SetPageSize(nCurrentTab, rDoc.GetPageSize(nCurrentTab));
+            // which resulted in tremendous waiting times after having loaded
+            // larger documents i.e. imported from CSV, in which UI is entirely
+            // blocked. All time is spent under ScPrintFunc::CountPages() in
+            // ScTable::ExtendPrintArea() in the loop that calls
+            // MaybeAddExtraColumn() to do stuff for each text string content
+            // cell (each row in each column). Maybe that can be optimized, or
+            // obtaining page size without that overhead would be possible, but
+            // as is calling that from here is a no-no so this is a quick
+            // disable things.
+            if (aPageSize.Width()>0&&aPageSize.Height())
+            {
+                ScDocShell* pDocSh = pViewData->GetDocShell();
+                const bool bModified = pDocSh->IsModified();
+                // Even setting the same size sets page size valid, so
+                // UpdatePageBreaks() actually does something.
+                pDoc->SetPageSize( nCurrentTab, aPageSize);
+                pDoc->UpdatePageBreaks(nCurrentTab);
+                pDocSh->PostPaint(0, 0, nCurrentTab, pDoc->MaxCol(), pDoc->MaxRow(), nCurrentTab, PaintPartFlags::Grid);
+                pDocSh->SetModified(bModified);
             }
         }
 
