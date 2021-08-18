@@ -30,6 +30,9 @@
 #include <bitmap/bmpfast.hxx>
 #include <vcl/BitmapReadAccess.hxx>
 
+#include <skia/utils.hxx>
+#include <skia/zone.hxx>
+
 #include <SkCanvas.h>
 #include <SkImage.h>
 #include <SkPixelRef.h>
@@ -38,9 +41,6 @@
 #include <SkColorFilter.h>
 #include <SkColorMatrix.h>
 #include <skia_opts.hxx>
-
-#include <skia/utils.hxx>
-#include <skia/zone.hxx>
 
 #ifdef DBG_UTIL
 #include <fstream>
