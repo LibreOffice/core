@@ -702,6 +702,12 @@
         }
     ],
     "add-extensions": {
+        "org.libreoffice.LibreOffice.BundledExtension": {
+            "directory": "libreoffice/share/extensions",
+            "subdirectories": true,
+            "no-autodownload": true,
+            "autodelete": true
+        },
         "org.libreoffice.LibreOffice.Help": {
             "directory": "libreoffice/help",
             "bundle": true,
