@@ -633,6 +633,9 @@ void OfaViewTabPage::UpdateSkiaStatus()
     // It can also be used on Linux, but only with the rarely used 'gen' backend.
     if (Application::GetToolkitName() == "x11")
         skiaHidden = false;
+    // OSX backend has Skia support too.
+    if (Application::GetToolkitName() == "osx")
+        skiaHidden = false;
 
     if (skiaHidden)
     {
