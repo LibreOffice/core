@@ -85,8 +85,10 @@ struct SfxItemPropertyMapEntry;
     { u"" UNO_NAME_EDIT_CHAR_POSTURE,     EE_CHAR_ITALIC,     ::cppu::UnoType<css::awt::FontSlant>::get(),0, MID_POSTURE }, \
     { u"" UNO_NAME_EDIT_CHAR_WEIGHT,      EE_CHAR_WEIGHT,     cppu::UnoType<float>::get(),            0, MID_WEIGHT }, \
     { u"" UNO_NAME_EDIT_CHAR_LOCALE,      EE_CHAR_LANGUAGE,   ::cppu::UnoType<css::lang::Locale>::get(),0, MID_LANG_LOCALE }, \
-    { u"" UNO_NAME_EDIT_CHAR_COLOR,       EE_CHAR_COLOR,      ::cppu::UnoType<sal_Int32>::get(),        0, 0 }, \
+    { u"" UNO_NAME_EDIT_CHAR_COLOR,       EE_CHAR_COLOR,      ::cppu::UnoType<sal_Int32>::get(),        0, MID_COLOR_RGB }, \
     { u"" UNO_NAME_EDIT_CHAR_TRANSPARENCE,EE_CHAR_COLOR,      ::cppu::UnoType<sal_Int16>::get(),        0, MID_COLOR_ALPHA }, \
+    { u"" UNO_NAME_EDIT_CHAR_COLOR_THEME, EE_CHAR_COLOR,      ::cppu::UnoType<sal_Int16>::get(),        0, MID_COLOR_THEME_INDEX }, \
+    { u"" UNO_NAME_EDIT_CHAR_COLOR_TINT_OR_SHADE, EE_CHAR_COLOR, ::cppu::UnoType<sal_Int16>::get(),     0, MID_COLOR_TINT_OR_SHADE }, \
     { u"CharBackColor",                EE_CHAR_BKGCOLOR,   ::cppu::UnoType<sal_Int32>::get(),        0, 0 }, \
     { u"CharBackTransparent",          EE_CHAR_BKGCOLOR,   ::cppu::UnoType<bool>::get(),             0, MID_GRAPHIC_TRANSPARENT }, \
     { u"" UNO_NAME_EDIT_CHAR_ESCAPEMENT,  EE_CHAR_ESCAPEMENT, ::cppu::UnoType<sal_Int16>::get(),        0, MID_ESC }, \
