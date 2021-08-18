@@ -149,11 +149,17 @@ void InsTableBox( SwDoc& rDoc, SwTableNode* pTableNd,
             if(pSwpHints && pSwpHints->Count()!=0)
             {
                 SwTextAttr* textAttr = pSwpHints->Get(pSwpHints->Count()-1);
-                if(textAttr->Which() == RES_TXTATR_AUTOFMT )
+                const sal_Int32 nThisStart = textAttr->GetStart();
+                const sal_Int32* nThisEnd = textAttr->GetEnd();
+                if(nThisEnd != nullptr)
                 {
-                    SwFormatAutoFormat& format = static_cast<SwFormatAutoFormat&>(textAttr->GetAttr());
-                    const std::shared_ptr<SfxItemSet>& handle = format.GetStyleHandle();
-                    aAttrSet.Put(*handle);
+                    bool bNoLengthAttribute = nThisStart == *nThisEnd;
+                    if(textAttr->Which() == RES_TXTATR_AUTOFMT && bNoLengthAttribute )
+                    {
+                        SwFormatAutoFormat& format = static_cast<SwFormatAutoFormat&>(textAttr->GetAttr());
+                        const std::shared_ptr<SfxItemSet>& handle = format.GetStyleHandle();
+                        aAttrSet.Put(*handle);
+                    }
                 }
             }
             if( pBox->GetSaveNumFormatColor() )
