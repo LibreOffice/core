@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "412ccbf3_fbd1ab38",
+        "filename": "sc/source/filter/xml/xmlcelli.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 869,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2021-08-18T13:29:14Z",
+      "side": 1,
+      "message": "the above line will delete the pointed-at pOutlinerObj object. Will push an updated version of this patch.",
+      "revId": "967d88f21ae27063c89934e9c0d0e67cfcc17d74",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
