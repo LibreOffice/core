@@ -515,6 +515,33 @@ static boost::property_tree::ptree unoAnyToPropertyTree(const uno::Any& anyItem)
     return aTree;
 }
 
+static void unoAnyToJson(tools::JsonWriter& rJson, const char * pNodeName, const uno::Any& anyItem)
+{
+    auto aNode = rJson.startNode(pNodeName);
+    OUString aType = anyItem.getValueTypeName();
+    rJson.put("type", aType.toUtf8().getStr());
+
+    if (aType == "string")
+        rJson.put("value", anyItem.get<OUString>().toUtf8().getStr());
+    else if (aType == "unsigned long")
+        rJson.put("value", OString::number(anyItem.get<sal_uInt32>()).getStr());
+    else if (aType == "long")
+        rJson.put("value", OString::number(anyItem.get<sal_Int32>()).getStr());
+    else if (aType == "[]any")
+    {
+        uno::Sequence<uno::Any> aSeq;
+        if (anyItem >>= aSeq)
+        {
+            auto valueNode = rJson.startNode("value");
+
+            for (auto i = 0; i < aSeq.getLength(); ++i)
+            {
+                unoAnyToJson(rJson, OString::number(i).getStr(), aSeq[i]);
+            }
+        }
+    }
+}
+
 namespace desktop {
 
 RectangleAndPart RectangleAndPart::Create(const std::string& rPayload)
@@ -3775,21 +3802,17 @@ public:
 
     virtual void SAL_CALL dispatchFinished(const css::frame::DispatchResultEvent& rEvent) override
     {
-        boost::property_tree::ptree aTree;
-        aTree.put("commandName", maCommand.getStr());
+        tools::JsonWriter aJson;
+        aJson.put("commandName", maCommand);
 
         if (rEvent.State != frame::DispatchResultState::DONTKNOW)
         {
             bool bSuccess = (rEvent.State == frame::DispatchResultState::SUCCESS);
-            aTree.put("success", bSuccess);
+            aJson.put("success", bSuccess);
         }
 
-        aTree.add_child("result", unoAnyToPropertyTree(rEvent.Result));
-
-        std::stringstream aStream;
-        boost::property_tree::write_json(aStream, aTree);
-        OString aPayload = aStream.str().c_str();
-        mpCallback->queue(LOK_CALLBACK_UNO_COMMAND_RESULT, aPayload.getStr());
+        unoAnyToJson(aJson, "result", rEvent.Result);
+        mpCallback->queue(LOK_CALLBACK_UNO_COMMAND_RESULT, aJson.extractData());
     }
 
     virtual void SAL_CALL disposing(const css::lang::EventObject&) override {}
@@ -3917,13 +3940,10 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pComma
             bool bResult = doc_saveAs(pThis, aURLUtf8.getStr(), "pdf", nullptr);
 
             // Send the result of save
-            boost::property_tree::ptree aTree;
-            aTree.put("commandName", pCommand);
-            aTree.put("success", bResult);
-            std::stringstream aStream;
-            boost::property_tree::write_json(aStream, aTree);
-            OString aPayload = aStream.str().c_str();
-            pDocument->mpCallbackFlushHandlers[nView]->queue(LOK_CALLBACK_UNO_COMMAND_RESULT, aPayload.getStr());
+            tools::JsonWriter aJson;
+            aJson.put("commandName", pCommand);
+            aJson.put("success", bResult);
+            pDocument->mpCallbackFlushHandlers[nView]->queue(LOK_CALLBACK_UNO_COMMAND_RESULT, aJson.extractData());
             return;
         }
 
@@ -3952,18 +3972,16 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pComma
         // skip saving and tell the result via UNO_COMMAND_RESULT
         if (bDontSaveIfUnmodified && !pDocSh->IsModified())
         {
-            boost::property_tree::ptree aTree;
-            aTree.put("commandName", pCommand);
-            aTree.put("success", false);
-
+            tools::JsonWriter aJson;
+            aJson.put("commandName", pCommand);
+            aJson.put("success", false);
             // Add the reason for not saving
-            const uno::Any aResultValue = uno::makeAny(OUString("unmodified"));
-            aTree.add_child("result", unoAnyToPropertyTree(aResultValue));
-
-            std::stringstream aStream;
-            boost::property_tree::write_json(aStream, aTree);
-            OString aPayload = aStream.str().c_str();
-            pDocument->mpCallbackFlushHandlers[nView]->queue(LOK_CALLBACK_UNO_COMMAND_RESULT, aPayload.getStr());
+            {
+                auto resultNode = aJson.startNode("result");
+                aJson.put("type", "string");
+                aJson.put("value", "unmodified");
+            }
+            pDocument->mpCallbackFlushHandlers[nView]->queue(LOK_CALLBACK_UNO_COMMAND_RESULT, aJson.extractData());
             return;
         }
     }
@@ -5833,7 +5851,7 @@ static char* lo_getFilterTypes(LibreOfficeKit* pThis)
 
     uno::Reference<container::XNameAccess> xTypeDetection(xSFactory->createInstance("com.sun.star.document.TypeDetection"), uno::UNO_QUERY);
     const uno::Sequence<OUString> aTypes = xTypeDetection->getElementNames();
-    boost::property_tree::ptree aTree;
+    tools::JsonWriter aJson;
     for (const OUString& rType : aTypes)
     {
         uno::Sequence<beans::PropertyValue> aValues;
@@ -5843,15 +5861,15 @@ static char* lo_getFilterTypes(LibreOfficeKit* pThis)
             OUString aValue;
             if (it != aValues.end() && (it->Value >>= aValue) && !aValue.isEmpty())
             {
-                boost::property_tree::ptree aChild;
-                aChild.put("MediaType", aValue.toUtf8());
-                aTree.add_child(rType.toUtf8().getStr(), aChild);
+                {
+                    auto typeNode = aJson.startNode(rType.toUtf8().getStr());
+                    aJson.put("MediaType", aValue.toUtf8());
+                }
             }
         }
     }
-    std::stringstream aStream;
-    boost::property_tree::write_json(aStream, aTree);
-    return strdup(aStream.str().c_str());
+
+    return strdup(aJson.extractData());
 }
 
 static void lo_setOptionalFeatures(LibreOfficeKit* pThis, unsigned long long const features)
