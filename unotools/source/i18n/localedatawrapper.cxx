@@ -909,7 +909,7 @@ void LocaleDataWrapper::loadDigitGrouping()
     }
 }
 
-css::uno::Sequence< sal_Int32 > LocaleDataWrapper::getDigitGrouping() const
+const css::uno::Sequence< sal_Int32 >& LocaleDataWrapper::getDigitGrouping() const
 {
     return aGrouping;
 }
@@ -1538,7 +1538,7 @@ css::uno::Sequence< css::i18n::Calendar2 > LocaleDataWrapper::getAllCalendars() 
 
 // --- XLocaleData4 ----------------------------------------------------------
 
-css::uno::Sequence< OUString > LocaleDataWrapper::getDateAcceptancePatterns() const
+const css::uno::Sequence< OUString > & LocaleDataWrapper::getDateAcceptancePatterns() const
 {
     return aDateAcceptancePatterns;
 }

@@ -2623,7 +2623,7 @@ bool SdrObjEditView::SupportsFormatPaintbrush(SdrInventor nObjectInventor,
     }
 }
 
-static WhichRangesContainer GetFormatRangeImpl(bool bTextOnly)
+static const WhichRangesContainer& GetFormatRangeImpl(bool bTextOnly)
 {
     static const WhichRangesContainer gFull(
         svl::Items<XATTR_LINE_FIRST, XATTR_LINE_LAST, XATTR_FILL_FIRST, XATTRSET_FILL,

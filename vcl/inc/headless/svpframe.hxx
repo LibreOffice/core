@@ -66,7 +66,7 @@ public:
     void LoseFocus();
     void PostPaint() const;
 
-    OUString title() const { return m_sTitle; }
+    const OUString& title() const { return m_sTitle; }
     SalFrameStyleFlags style() const { return m_nStyle; }
     bool isVisible() const { return m_bVisible; }
     bool hasFocus() const { return s_pFocusFrame == this; }

@@ -286,8 +286,17 @@ void PassStuffByRef::checkReturnValue(const FunctionDecl * functionDecl, const C
     if (startswith(type.getAsString(), "struct o3tl::strong_int")) {
         return;
     }
+    auto tc = loplugin::TypeCheck(functionDecl->getReturnType());
+    // these functions are passed by function-pointer
+    if (functionDecl->getIdentifier() && functionDecl->getName() == "GetRanges"
+        && tc.Struct("WhichRangesContainer").GlobalNamespace())
+        return;
     // extremely simple class, might as well pass by value
-    if (loplugin::TypeCheck(functionDecl->getReturnType()).Class("Color")) {
+    if (tc.Class("Color")) {
+        return;
+    }
+    // extremely simple class, might as well pass by value
+    if (tc.Struct("TranslateId")) {
         return;
     }
 

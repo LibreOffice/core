@@ -471,7 +471,7 @@ SvStream& ReadImplFont( SvStream& rIStm, ImplFont& rImplFont, tools::Long& rnNor
     return rIStm;
 }
 
-SvStream& WriteImplFont( SvStream& rOStm, const ImplFont& rImplFont, const tools::Long& rnNormedFontScaling )
+SvStream& WriteImplFont( SvStream& rOStm, const ImplFont& rImplFont, tools::Long nNormedFontScaling )
 {
     // tdf#127471 increase to version 4
     VersionCompatWrite aCompat( rOStm, 4 );
@@ -508,7 +508,7 @@ SvStream& WriteImplFont( SvStream& rOStm, const ImplFont& rImplFont, const tools
     rOStm.WriteUInt16( rImplFont.meOverline );
 
     // new in version 4, NormedFontScaling
-    rOStm.WriteInt32(rnNormedFontScaling);
+    rOStm.WriteInt32(nNormedFontScaling);
 
     return rOStm;
 }

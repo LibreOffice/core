@@ -817,7 +817,7 @@ bool SvtModuleOptions::IsModuleInstalled( EModule eModule ) const
     return m_pImpl->IsModuleInstalled( eModule );
 }
 
-OUString SvtModuleOptions::GetFactoryName( EFactory eFactory ) const
+const OUString & SvtModuleOptions::GetFactoryName( EFactory eFactory ) const
 {
     // doesn't need mutex, never modified
     return m_pImpl->GetFactoryName( eFactory );

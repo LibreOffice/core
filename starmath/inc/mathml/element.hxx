@@ -111,7 +111,7 @@ public: // location in the source
       * Returns the location in the source code of the node type
       * @return selection
       */
-    ESelection getESelection() const { return m_aESelection; };
+    const ESelection& getESelection() const { return m_aESelection; };
 
     /**
       * Returns the location in the source code of the node type
@@ -280,7 +280,7 @@ public: // text elements
     /**
       * Returns the element text
       */
-    OUString getText() const { return m_aText; };
+    const OUString& getText() const { return m_aText; };
 
     /**
       * Returns the element text

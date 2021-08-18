@@ -4506,7 +4506,7 @@ bool SfxMedium::IsInCheckIn( ) const
 }
 
 // should only be called on main thread
-std::shared_ptr<std::recursive_mutex> SfxMedium::GetCheckEditableMutex() const
+const std::shared_ptr<std::recursive_mutex>& SfxMedium::GetCheckEditableMutex() const
 {
     return pImpl->m_pCheckEditableWorkerMutex;
 }

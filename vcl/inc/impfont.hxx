@@ -97,7 +97,7 @@ public:
 private:
     friend class vcl::Font;
     friend SvStream&    ReadImplFont( SvStream& rIStm, ImplFont&, tools::Long& );
-    friend SvStream&    WriteImplFont( SvStream& rOStm, const ImplFont&, const tools::Long& );
+    friend SvStream&    WriteImplFont( SvStream& rOStm, const ImplFont&, tools::Long );
 
     void                AskConfig();
 

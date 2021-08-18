@@ -390,7 +390,7 @@ public:
      * Gets node position in input text.
      * @return node position in input text
      */
-    ESelection GetSelection() const { return m_aESelection; }
+    const ESelection& GetSelection() const { return m_aESelection; }
 
     /**
      * Gets node position in input text.

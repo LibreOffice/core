@@ -422,7 +422,7 @@ namespace svt
         static  bool        equalStates( const TemplateFolderContent& _rLHS, const TemplateFolderContent& _rRHS );
 
         // late initialize m_xOfficeInstDirs
-        uno::Reference< util::XOfficeInstallationDirectories > getOfficeInstDirs();
+        const uno::Reference< util::XOfficeInstallationDirectories >& getOfficeInstDirs();
     };
 
 
@@ -753,7 +753,7 @@ namespace svt
     }
 
 
-    uno::Reference< util::XOfficeInstallationDirectories >
+    const uno::Reference< util::XOfficeInstallationDirectories >&
     TemplateFolderCacheImpl::getOfficeInstDirs()
     {
         if ( !m_xOfficeInstDirs.is() )

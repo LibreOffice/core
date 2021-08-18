@@ -32,9 +32,9 @@ public:
         , m_aResultantBitmap(atestBitmap)
     {
     }
-    OUString getTestName() { return m_aTestName; }
-    OUString getStatus() { return m_aTestStatus; }
-    Bitmap getBitmap() { return m_aResultantBitmap; }
+    const OUString& getTestName() { return m_aTestName; }
+    const OUString& getStatus() { return m_aTestStatus; }
+    const Bitmap& getBitmap() { return m_aResultantBitmap; }
 };
 
 class VCL_PLUGIN_PUBLIC GraphicsRenderTests

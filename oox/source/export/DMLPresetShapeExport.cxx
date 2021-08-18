@@ -95,15 +95,15 @@ DMLPresetShapeExporter::~DMLPresetShapeExporter(){
 
 bool DMLPresetShapeExporter::HasHandleValue() { return m_bHasHandleValues; }
 
-OUString DMLPresetShapeExporter::GetShapeType() { return m_sPresetShapeType; }
+const OUString& DMLPresetShapeExporter::GetShapeType() { return m_sPresetShapeType; }
 
-css::uno::Sequence<css::uno::Sequence<css::beans::PropertyValue>>
+const css::uno::Sequence<css::uno::Sequence<css::beans::PropertyValue>>&
 DMLPresetShapeExporter::GetHandleValues()
 {
     return m_HandleValues;
 };
 
-css::uno::Sequence<css::drawing::EnhancedCustomShapeAdjustmentValue>
+const css::uno::Sequence<css::drawing::EnhancedCustomShapeAdjustmentValue>&
 DMLPresetShapeExporter::GetAdjustmentValues()
 {
     return m_AdjustmentValues;

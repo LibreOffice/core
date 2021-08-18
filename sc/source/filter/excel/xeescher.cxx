@@ -1807,7 +1807,7 @@ void XclMacroHelper::WriteMacroSubRec( XclExpStream& rStrm )
         WriteFormulaSubRec( rStrm, EXC_ID_OBJMACRO, *mxMacroLink );
 }
 
-OUString XclMacroHelper::GetMacroName() const { return maMacroName; }
+const OUString& XclMacroHelper::GetMacroName() const { return maMacroName; }
 
 bool
 XclMacroHelper::SetMacroLink( const ScriptEventDescriptor& rEvent, const XclTbxEventType& nEventType )

@@ -119,7 +119,7 @@ css::uno::Any SAL_CALL DispatchHelper::executeDispatch(
         return executeDispatch(xDispatch, aURL, true, lArguments);
 }
 
-css::uno::Any
+const css::uno::Any&
 DispatchHelper::executeDispatch(const css::uno::Reference<css::frame::XDispatch>& xDispatch,
                                 const css::util::URL& aURL, bool SyncronFlag,
                                 const css::uno::Sequence<css::beans::PropertyValue>& lArguments)
