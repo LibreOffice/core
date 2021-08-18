@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5df56f7d_8bbe6322",
+        "filename": "svx/source/svdraw/svdoashp.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1592,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2021-08-18T10:38:12Z",
+      "side": 1,
+      "message": "Sorry for asking here in the unrelated change. Just wanted to ask for your opinion:\n\nhere we \"update\" fObjectRotation using fAngle. We use fObjectRotation above (line 1580) to rotate around maRect.TopLeft(); and we use nAngle to rotate around rRef. Doesn\u0027t it introduce some garbage?\n\nWouldn\u0027t it be better to use e.g. B2DHomMatrix to store the combined transformation, and use it consistently all over the place, instead of using these separate rotations, scalings, shears, etc?",
+      "revId": "d4ca360f6632f03e9fb7e9af37aac40d23f1249a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
