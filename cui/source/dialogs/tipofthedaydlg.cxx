@@ -74,6 +74,15 @@ TipOfTheDayDialog::TipOfTheDayDialog(weld::Window* pParent)
 
     const auto t0 = std::chrono::system_clock::now().time_since_epoch();
     m_nDay = std::chrono::duration_cast<std::chrono::hours>(t0).count() / 24;
+
+    // save this time to the config now instead of in the dtor otherwise we
+    // end up with multiple copies of this dialog every time we open a new
+    // document if the first one isn't closed
+    std::shared_ptr<comphelper::ConfigurationChanges> xChanges(
+        comphelper::ConfigurationChanges::create());
+    officecfg::Office::Common::Misc::LastTipOfTheDayShown::set(m_nDay, xChanges);
+    xChanges->commit();
+
     if (m_nDay > officecfg::Office::Common::Misc::LastTipOfTheDayShown::get())
         m_nCurrentTip++;
 
@@ -90,7 +99,6 @@ TipOfTheDayDialog::~TipOfTheDayDialog()
 {
     std::shared_ptr<comphelper::ConfigurationChanges> xChanges(
         comphelper::ConfigurationChanges::create());
-    officecfg::Office::Common::Misc::LastTipOfTheDayShown::set(m_nDay, xChanges);
     officecfg::Office::Common::Misc::LastTipOfTheDayID::set(m_nCurrentTip, xChanges);
     officecfg::Office::Common::Misc::ShowTipOfTheDay::set(m_pShowTip->get_active(), xChanges);
     xChanges->commit();
