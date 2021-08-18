@@ -96,7 +96,7 @@ public:
 
     /// fast check if given format is contained here
     /// @precond pFormat must not have been deleted
-    bool ContainsFormat(SwCharFormat* pFormat) const;
+    bool ContainsFormat(const SwCharFormat* pFormat) const;
 
     void DeleteAndDestroyAll(bool keepDefault = false);
 

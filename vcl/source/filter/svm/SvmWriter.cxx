@@ -801,12 +801,12 @@ void SvmWriter::MetaActionHandler(MetaAction* pAction, ImplMetaWriteData* pData)
     }
 }
 
-void SvmWriter::ActionHandler(MetaAction* pAction)
+void SvmWriter::ActionHandler(const MetaAction* pAction)
 {
     mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
 }
 
-void SvmWriter::PixelHandler(MetaPixelAction* pAction)
+void SvmWriter::PixelHandler(const MetaPixelAction* pAction)
 {
     mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
     VersionCompatWrite aCompat(mrStream, 1);
@@ -815,7 +815,7 @@ void SvmWriter::PixelHandler(MetaPixelAction* pAction)
     WriteColor(pAction->GetColor());
 }
 
-void SvmWriter::PointHandler(MetaPointAction* pAction)
+void SvmWriter::PointHandler(const MetaPointAction* pAction)
 {
     mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
     VersionCompatWrite aCompat(mrStream, 1);
@@ -823,7 +823,7 @@ void SvmWriter::PointHandler(MetaPointAction* pAction)
     aSerializer.writePoint(pAction->GetPoint());
 }
 
-void SvmWriter::LineHandler(MetaLineAction* pAction)
+void SvmWriter::LineHandler(const MetaLineAction* pAction)
 {
     mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
 
@@ -837,7 +837,7 @@ void SvmWriter::LineHandler(MetaLineAction* pAction)
     WriteLineInfo(mrStream, pAction->GetLineInfo());
 }
 
-void SvmWriter::RectHandler(MetaRectAction* pAction)
+void SvmWriter::RectHandler(const MetaRectAction* pAction)
 {
     mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
 
@@ -846,7 +846,7 @@ void SvmWriter::RectHandler(MetaRectAction* pAction)
     aSerializer.writeRectangle(pAction->GetRect());
 }
 
-void SvmWriter::RoundRectHandler(MetaRoundRectAction* pAction)
+void SvmWriter::RoundRectHandler(const MetaRoundRectAction* pAction)
 {
     mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
 
@@ -856,7 +856,7 @@ void SvmWriter::RoundRectHandler(MetaRoundRectAction* pAction)
     mrStream.WriteUInt32(pAction->GetHorzRound()).WriteUInt32(pAction->GetVertRound());
 }
 
-void SvmWriter::EllipseHandler(MetaEllipseAction* pAction)
+void SvmWriter::EllipseHandler(const MetaEllipseAction* pAction)
 {
     mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
 
@@ -865,18 +865,7 @@ void SvmWriter::EllipseHandler(MetaEllipseAction* pAction)
     aSerializer.writeRectangle(pAction->GetRect());
 }
 
-void SvmWriter::ArcHandler(MetaArcAction* pAction)
-{
-    mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
-
-    VersionCompatWrite aCompat(mrStream, 1);
-    TypeSerializer aSerializer(mrStream);
-    aSerializer.writeRectangle(pAction->GetRect());
-    aSerializer.writePoint(pAction->GetStartPoint());
-    aSerializer.writePoint(pAction->GetEndPoint());
-}
-
-void SvmWriter::PieHandler(MetaPieAction* pAction)
+void SvmWriter::ArcHandler(const MetaArcAction* pAction)
 {
     mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
 
@@ -887,7 +876,7 @@ void SvmWriter::PieHandler(MetaPieAction* pAction)
     aSerializer.writePoint(pAction->GetEndPoint());
 }
 
-void SvmWriter::ChordHandler(MetaChordAction* pAction)
+void SvmWriter::PieHandler(const MetaPieAction* pAction)
 {
     mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
 
@@ -898,7 +887,18 @@ void SvmWriter::ChordHandler(MetaChordAction* pAction)
     aSerializer.writePoint(pAction->GetEndPoint());
 }
 
-void SvmWriter::PolyLineHandler(MetaPolyLineAction* pAction)
+void SvmWriter::ChordHandler(const MetaChordAction* pAction)
+{
+    mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
+
+    VersionCompatWrite aCompat(mrStream, 1);
+    TypeSerializer aSerializer(mrStream);
+    aSerializer.writeRectangle(pAction->GetRect());
+    aSerializer.writePoint(pAction->GetStartPoint());
+    aSerializer.writePoint(pAction->GetEndPoint());
+}
+
+void SvmWriter::PolyLineHandler(const MetaPolyLineAction* pAction)
 {
     mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
 
@@ -916,7 +916,7 @@ void SvmWriter::PolyLineHandler(MetaPolyLineAction* pAction)
         pAction->GetPolygon().Write(mrStream);
 }
 
-void SvmWriter::PolygonHandler(MetaPolygonAction* pAction)
+void SvmWriter::PolygonHandler(const MetaPolygonAction* pAction)
 {
     mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
 
@@ -932,7 +932,7 @@ void SvmWriter::PolygonHandler(MetaPolygonAction* pAction)
         pAction->GetPolygon().Write(mrStream);
 }
 
-void SvmWriter::PolyPolygonHandler(MetaPolyPolygonAction* pAction)
+void SvmWriter::PolyPolygonHandler(const MetaPolyPolygonAction* pAction)
 {
     mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
 
@@ -966,7 +966,7 @@ void SvmWriter::PolyPolygonHandler(MetaPolyPolygonAction* pAction)
     }
 }
 
-void SvmWriter::TextHandler(MetaTextAction* pAction, ImplMetaWriteData* pData)
+void SvmWriter::TextHandler(const MetaTextAction* pAction, const ImplMetaWriteData* pData)
 {
     mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
 
@@ -980,7 +980,7 @@ void SvmWriter::TextHandler(MetaTextAction* pAction, ImplMetaWriteData* pData)
     write_uInt16_lenPrefixed_uInt16s_FromOUString(mrStream, pAction->GetText()); // version 2
 }
 
-void SvmWriter::TextArrayHandler(MetaTextArrayAction* pAction, ImplMetaWriteData* pData)
+void SvmWriter::TextArrayHandler(const MetaTextArrayAction* pAction, const ImplMetaWriteData* pData)
 {
     mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
 
@@ -1002,7 +1002,8 @@ void SvmWriter::TextArrayHandler(MetaTextArrayAction* pAction, ImplMetaWriteData
     write_uInt16_lenPrefixed_uInt16s_FromOUString(mrStream, pAction->GetText()); // version 2
 }
 
-void SvmWriter::StretchTextHandler(MetaStretchTextAction* pAction, ImplMetaWriteData* pData)
+void SvmWriter::StretchTextHandler(const MetaStretchTextAction* pAction,
+                                   const ImplMetaWriteData* pData)
 {
     mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
 
@@ -1017,7 +1018,7 @@ void SvmWriter::StretchTextHandler(MetaStretchTextAction* pAction, ImplMetaWrite
     write_uInt16_lenPrefixed_uInt16s_FromOUString(mrStream, pAction->GetText()); // version 2
 }
 
-void SvmWriter::TextRectHandler(MetaTextRectAction* pAction, ImplMetaWriteData* pData)
+void SvmWriter::TextRectHandler(const MetaTextRectAction* pAction, const ImplMetaWriteData* pData)
 {
     mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
 
@@ -1030,7 +1031,7 @@ void SvmWriter::TextRectHandler(MetaTextRectAction* pAction, ImplMetaWriteData* 
     write_uInt16_lenPrefixed_uInt16s_FromOUString(mrStream, pAction->GetText()); // version 2
 }
 
-void SvmWriter::TextLineHandler(MetaTextLineAction* pAction)
+void SvmWriter::TextLineHandler(const MetaTextLineAction* pAction)
 {
     mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
 
@@ -1046,7 +1047,7 @@ void SvmWriter::TextLineHandler(MetaTextLineAction* pAction)
     mrStream.WriteUInt32(pAction->GetOverline());
 }
 
-void SvmWriter::BmpHandler(MetaBmpAction* pAction)
+void SvmWriter::BmpHandler(const MetaBmpAction* pAction)
 {
     if (!pAction->GetBitmap().IsEmpty())
     {
@@ -1058,7 +1059,7 @@ void SvmWriter::BmpHandler(MetaBmpAction* pAction)
     }
 }
 
-void SvmWriter::BmpScaleHandler(MetaBmpScaleAction* pAction)
+void SvmWriter::BmpScaleHandler(const MetaBmpScaleAction* pAction)
 {
     if (!pAction->GetBitmap().IsEmpty())
     {
@@ -1071,7 +1072,7 @@ void SvmWriter::BmpScaleHandler(MetaBmpScaleAction* pAction)
     }
 }
 
-void SvmWriter::BmpScalePartHandler(MetaBmpScalePartAction* pAction)
+void SvmWriter::BmpScalePartHandler(const MetaBmpScalePartAction* pAction)
 {
     if (!pAction->GetBitmap().IsEmpty())
     {
@@ -1086,7 +1087,7 @@ void SvmWriter::BmpScalePartHandler(MetaBmpScalePartAction* pAction)
     }
 }
 
-void SvmWriter::BmpExHandler(MetaBmpExAction* pAction)
+void SvmWriter::BmpExHandler(const MetaBmpExAction* pAction)
 {
     if (!pAction->GetBitmapEx().GetBitmap().IsEmpty())
     {
@@ -1098,7 +1099,7 @@ void SvmWriter::BmpExHandler(MetaBmpExAction* pAction)
     }
 }
 
-void SvmWriter::BmpExScaleHandler(MetaBmpExScaleAction* pAction)
+void SvmWriter::BmpExScaleHandler(const MetaBmpExScaleAction* pAction)
 {
     if (!pAction->GetBitmapEx().GetBitmap().IsEmpty())
     {
@@ -1111,7 +1112,7 @@ void SvmWriter::BmpExScaleHandler(MetaBmpExScaleAction* pAction)
     }
 }
 
-void SvmWriter::BmpExScalePartHandler(MetaBmpExScalePartAction* pAction)
+void SvmWriter::BmpExScalePartHandler(const MetaBmpExScalePartAction* pAction)
 {
     if (!pAction->GetBitmapEx().GetBitmap().IsEmpty())
     {
@@ -1126,7 +1127,7 @@ void SvmWriter::BmpExScalePartHandler(MetaBmpExScalePartAction* pAction)
     }
 }
 
-void SvmWriter::MaskHandler(MetaMaskAction* pAction)
+void SvmWriter::MaskHandler(const MetaMaskAction* pAction)
 {
     if (!pAction->GetBitmap().IsEmpty())
     {
@@ -1138,7 +1139,7 @@ void SvmWriter::MaskHandler(MetaMaskAction* pAction)
     }
 }
 
-void SvmWriter::MaskScaleHandler(MetaMaskScaleAction* pAction)
+void SvmWriter::MaskScaleHandler(const MetaMaskScaleAction* pAction)
 {
     if (!pAction->GetBitmap().IsEmpty())
     {
@@ -1151,7 +1152,7 @@ void SvmWriter::MaskScaleHandler(MetaMaskScaleAction* pAction)
     }
 }
 
-void SvmWriter::MaskScalePartHandler(MetaMaskScalePartAction* pAction)
+void SvmWriter::MaskScalePartHandler(const MetaMaskScalePartAction* pAction)
 {
     if (!pAction->GetBitmap().IsEmpty())
     {
@@ -1167,7 +1168,7 @@ void SvmWriter::MaskScalePartHandler(MetaMaskScalePartAction* pAction)
     }
 }
 
-void SvmWriter::GradientHandler(MetaGradientAction* pAction)
+void SvmWriter::GradientHandler(const MetaGradientAction* pAction)
 {
     mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
     VersionCompatWrite aCompat(mrStream, 1);
@@ -1176,7 +1177,7 @@ void SvmWriter::GradientHandler(MetaGradientAction* pAction)
     aSerializer.writeGradient(pAction->GetGradient());
 }
 
-void SvmWriter::GradientExHandler(MetaGradientExAction* pAction)
+void SvmWriter::GradientExHandler(const MetaGradientExAction* pAction)
 {
     mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
     VersionCompatWrite aCompat(mrStream, 1);
@@ -1190,7 +1191,7 @@ void SvmWriter::GradientExHandler(MetaGradientExAction* pAction)
     aSerializer.writeGradient(pAction->GetGradient());
 }
 
-void SvmWriter::HatchHandler(MetaHatchAction* pAction)
+void SvmWriter::HatchHandler(const MetaHatchAction* pAction)
 {
     mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
     VersionCompatWrite aCompat(mrStream, 1);
@@ -1203,7 +1204,7 @@ void SvmWriter::HatchHandler(MetaHatchAction* pAction)
     WriteHatch(mrStream, pAction->GetHatch());
 }
 
-void SvmWriter::WallpaperHandler(MetaWallpaperAction* pAction)
+void SvmWriter::WallpaperHandler(const MetaWallpaperAction* pAction)
 {
     mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
     VersionCompatWrite aCompat(mrStream, 1);
@@ -1211,7 +1212,7 @@ void SvmWriter::WallpaperHandler(MetaWallpaperAction* pAction)
     WriteWallpaper(mrStream, pAction->GetWallpaper());
 }
 
-void SvmWriter::ClipRegionHandler(MetaClipRegionAction* pAction)
+void SvmWriter::ClipRegionHandler(const MetaClipRegionAction* pAction)
 {
     mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
     VersionCompatWrite aCompat(mrStream, 1);
@@ -1219,7 +1220,7 @@ void SvmWriter::ClipRegionHandler(MetaClipRegionAction* pAction)
     mrStream.WriteBool(pAction->IsClipping());
 }
 
-void SvmWriter::ISectRectClipRegionHandler(MetaISectRectClipRegionAction* pAction)
+void SvmWriter::ISectRectClipRegionHandler(const MetaISectRectClipRegionAction* pAction)
 {
     mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
     VersionCompatWrite aCompat(mrStream, 1);
@@ -1227,21 +1228,21 @@ void SvmWriter::ISectRectClipRegionHandler(MetaISectRectClipRegionAction* pActio
     aSerializer.writeRectangle(pAction->GetRect());
 }
 
-void SvmWriter::ISectRegionClipRegionHandler(MetaISectRegionClipRegionAction* pAction)
+void SvmWriter::ISectRegionClipRegionHandler(const MetaISectRegionClipRegionAction* pAction)
 {
     mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
     VersionCompatWrite aCompat(mrStream, 1);
     WriteRegion(mrStream, pAction->GetRegion());
 }
 
-void SvmWriter::MoveClipRegionHandler(MetaMoveClipRegionAction* pAction)
+void SvmWriter::MoveClipRegionHandler(const MetaMoveClipRegionAction* pAction)
 {
     mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
     VersionCompatWrite aCompat(mrStream, 1);
     mrStream.WriteInt32(pAction->GetHorzMove()).WriteInt32(pAction->GetVertMove());
 }
 
-void SvmWriter::LineColorHandler(MetaLineColorAction* pAction)
+void SvmWriter::LineColorHandler(const MetaLineColorAction* pAction)
 {
     mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
     VersionCompatWrite aCompat(mrStream, 1);
@@ -1249,7 +1250,7 @@ void SvmWriter::LineColorHandler(MetaLineColorAction* pAction)
     mrStream.WriteBool(pAction->IsSetting());
 }
 
-void SvmWriter::FillColorHandler(MetaFillColorAction* pAction)
+void SvmWriter::FillColorHandler(const MetaFillColorAction* pAction)
 {
     mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
     VersionCompatWrite aCompat(mrStream, 1);
@@ -1257,22 +1258,14 @@ void SvmWriter::FillColorHandler(MetaFillColorAction* pAction)
     mrStream.WriteBool(pAction->IsSetting());
 }
 
-void SvmWriter::TextColorHandler(MetaTextColorAction* pAction)
+void SvmWriter::TextColorHandler(const MetaTextColorAction* pAction)
 {
     mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
     VersionCompatWrite aCompat(mrStream, 1);
     WriteColor(pAction->GetColor());
 }
 
-void SvmWriter::TextFillColorHandler(MetaTextFillColorAction* pAction)
-{
-    mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
-    VersionCompatWrite aCompat(mrStream, 1);
-    WriteColor(pAction->GetColor());
-    mrStream.WriteBool(pAction->IsSetting());
-}
-
-void SvmWriter::TextLineColorHandler(MetaTextLineColorAction* pAction)
+void SvmWriter::TextFillColorHandler(const MetaTextFillColorAction* pAction)
 {
     mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
     VersionCompatWrite aCompat(mrStream, 1);
@@ -1280,7 +1273,7 @@ void SvmWriter::TextLineColorHandler(MetaTextLineColorAction* pAction)
     mrStream.WriteBool(pAction->IsSetting());
 }
 
-void SvmWriter::OverlineColorHandler(MetaOverlineColorAction* pAction)
+void SvmWriter::TextLineColorHandler(const MetaTextLineColorAction* pAction)
 {
     mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
     VersionCompatWrite aCompat(mrStream, 1);
@@ -1288,14 +1281,22 @@ void SvmWriter::OverlineColorHandler(MetaOverlineColorAction* pAction)
     mrStream.WriteBool(pAction->IsSetting());
 }
 
-void SvmWriter::TextAlignHandler(MetaTextAlignAction* pAction)
+void SvmWriter::OverlineColorHandler(const MetaOverlineColorAction* pAction)
+{
+    mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
+    VersionCompatWrite aCompat(mrStream, 1);
+    WriteColor(pAction->GetColor());
+    mrStream.WriteBool(pAction->IsSetting());
+}
+
+void SvmWriter::TextAlignHandler(const MetaTextAlignAction* pAction)
 {
     mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
     VersionCompatWrite aCompat(mrStream, 1);
     mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetTextAlign()));
 }
 
-void SvmWriter::MapModeHandler(MetaMapModeAction* pAction)
+void SvmWriter::MapModeHandler(const MetaMapModeAction* pAction)
 {
     mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
     VersionCompatWrite aCompat(mrStream, 1);
@@ -1303,7 +1304,7 @@ void SvmWriter::MapModeHandler(MetaMapModeAction* pAction)
     aSerializer.writeMapMode(pAction->GetMapMode());
 }
 
-void SvmWriter::FontHandler(MetaFontAction* pAction, ImplMetaWriteData* pData)
+void SvmWriter::FontHandler(const MetaFontAction* pAction, ImplMetaWriteData* pData)
 {
     mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
     VersionCompatWrite aCompat(mrStream, 1);
@@ -1313,27 +1314,27 @@ void SvmWriter::FontHandler(MetaFontAction* pAction, ImplMetaWriteData* pData)
         pData->meActualCharSet = osl_getThreadTextEncoding();
 }
 
-void SvmWriter::PushHandler(MetaPushAction* pAction)
+void SvmWriter::PushHandler(const MetaPushAction* pAction)
 {
     mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
     VersionCompatWrite aCompat(mrStream, 1);
     mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetFlags()));
 }
 
-void SvmWriter::PopHandler(MetaPopAction* pAction)
+void SvmWriter::PopHandler(const MetaPopAction* pAction)
 {
     mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
     VersionCompatWrite aCompat(mrStream, 1);
 }
 
-void SvmWriter::RasterOpHandler(MetaRasterOpAction* pAction)
+void SvmWriter::RasterOpHandler(const MetaRasterOpAction* pAction)
 {
     mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
     VersionCompatWrite aCompat(mrStream, 1);
     mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetRasterOp()));
 }
 
-void SvmWriter::TransparentHandler(MetaTransparentAction* pAction)
+void SvmWriter::TransparentHandler(const MetaTransparentAction* pAction)
 {
     mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
     VersionCompatWrite aCompat(mrStream, 1);
@@ -1354,7 +1355,7 @@ void SvmWriter::TransparentHandler(MetaTransparentAction* pAction)
     mrStream.WriteUInt16(pAction->GetTransparence());
 }
 
-void SvmWriter::FloatTransparentHandler(MetaFloatTransparentAction* pAction)
+void SvmWriter::FloatTransparentHandler(const MetaFloatTransparentAction* pAction)
 {
     mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
     VersionCompatWrite aCompat(mrStream, 1);
@@ -1368,7 +1369,7 @@ void SvmWriter::FloatTransparentHandler(MetaFloatTransparentAction* pAction)
     aSerializer.writeGradient(pAction->GetGradient());
 }
 
-void SvmWriter::EPSHandler(MetaEPSAction* pAction)
+void SvmWriter::EPSHandler(const MetaEPSAction* pAction)
 {
     mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
     VersionCompatWrite aCompat(mrStream, 1);
@@ -1383,7 +1384,7 @@ void SvmWriter::EPSHandler(MetaEPSAction* pAction)
     aWriter.Write(aMtf);
 }
 
-void SvmWriter::RefPointHandler(MetaRefPointAction* pAction)
+void SvmWriter::RefPointHandler(const MetaRefPointAction* pAction)
 {
     mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
     VersionCompatWrite aCompat(mrStream, 1);
@@ -1393,7 +1394,7 @@ void SvmWriter::RefPointHandler(MetaRefPointAction* pAction)
     mrStream.WriteBool(pAction->IsSetting());
 }
 
-void SvmWriter::CommentHandler(MetaCommentAction* pAction)
+void SvmWriter::CommentHandler(const MetaCommentAction* pAction)
 {
     mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
     VersionCompatWrite aCompat(mrStream, 1);
@@ -1404,14 +1405,14 @@ void SvmWriter::CommentHandler(MetaCommentAction* pAction)
         mrStream.WriteBytes(pAction->GetData(), pAction->GetDataSize());
 }
 
-void SvmWriter::LayoutModeHandler(MetaLayoutModeAction* pAction)
+void SvmWriter::LayoutModeHandler(const MetaLayoutModeAction* pAction)
 {
     mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
     VersionCompatWrite aCompat(mrStream, 1);
     mrStream.WriteUInt32(static_cast<sal_uInt32>(pAction->GetLayoutMode()));
 }
 
-void SvmWriter::TextLanguageHandler(MetaTextLanguageAction* pAction)
+void SvmWriter::TextLanguageHandler(const MetaTextLanguageAction* pAction)
 {
     mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
     VersionCompatWrite aCompat(mrStream, 1);

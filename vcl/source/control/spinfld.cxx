@@ -603,7 +603,7 @@ void SpinField::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle
     Edit::Paint(rRenderContext, rRect);
 }
 
-void SpinField::ImplCalcButtonAreas(OutputDevice* pDev, const Size& rOutSz, tools::Rectangle& rDDArea,
+void SpinField::ImplCalcButtonAreas(const OutputDevice* pDev, const Size& rOutSz, tools::Rectangle& rDDArea,
                                     tools::Rectangle& rSpinUpArea, tools::Rectangle& rSpinDownArea)
 {
     const StyleSettings& rStyleSettings = pDev->GetSettings().GetStyleSettings();

@@ -308,7 +308,7 @@ public:
     explicit ScCheckListMenuWindow(vcl::Window* pParent, ScDocument* pDoc,
                                    bool bCanHaveSubMenu, bool bTreeMode, int nWidth = -1,
                                    ScCheckListMenuWindow* pParentMenu = nullptr,
-                                   vcl::ILibreOfficeKitNotifier* pNotifier = nullptr);
+                                   const vcl::ILibreOfficeKitNotifier* pNotifier = nullptr);
     virtual void dispose() override;
     virtual ~ScCheckListMenuWindow() override;
 

@@ -77,7 +77,7 @@ private:
         std::function<bool(MenuContent const&, OUString const&)> const& rSearchCriterium);
 
     void addCommandIfPossible(MenuContent const& rMenuContent,
-                              std::unique_ptr<weld::TreeView>& rpCommandTreeView,
+                              const std::unique_ptr<weld::TreeView>& rpCommandTreeView,
                               std::vector<CurrentEntry>& rCommandList);
 };
 

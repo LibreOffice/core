@@ -97,7 +97,7 @@ protected:
 
 public:
     StylesPreviewWindow_Base(
-        weld::Builder& xBuilder, std::vector<std::pair<OUString, OUString>>& aDefaultStyles,
+        weld::Builder& xBuilder, const std::vector<std::pair<OUString, OUString>>& aDefaultStyles,
         const css::uno::Reference<css::frame::XDispatchProvider>& xDispatchProvider);
     ~StylesPreviewWindow_Base();
 
@@ -113,7 +113,7 @@ class StylesPreviewWindow_Impl final : public InterimItemWindow, public StylesPr
 {
 public:
     StylesPreviewWindow_Impl(
-        vcl::Window* pParent, std::vector<std::pair<OUString, OUString>>& aDefaultStyles,
+        vcl::Window* pParent, const std::vector<std::pair<OUString, OUString>>& aDefaultStyles,
         const css::uno::Reference<css::frame::XDispatchProvider>& xDispatchProvider);
     ~StylesPreviewWindow_Impl();
 

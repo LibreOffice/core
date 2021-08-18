@@ -1532,7 +1532,7 @@ static tools::Long* shiftColor(tools::Long* pColorArray, BitmapColor const& rCol
     *pColorArray++ = static_cast<tools::Long>(rColor.GetRed()) << 12;
     return pColorArray;
 }
-static BitmapColor getColor(BitmapReadAccess *pReadAcc, tools::Long nZ)
+static BitmapColor getColor(const BitmapReadAccess *pReadAcc, tools::Long nZ)
 {
     Scanline pScanlineRead = pReadAcc->GetScanline(0);
     if (pReadAcc->HasPalette())

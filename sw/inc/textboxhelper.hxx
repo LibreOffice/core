@@ -102,10 +102,10 @@ public:
     /// Note: In case of AS_CHAR anchor the anchor type must be different,
     /// because if not, layout breaks, but this situation also handled by
     /// this function, and returns true in that case too.
-    static std::optional<bool> isAnchorTypeDifferent(SwFrameFormat* pShape);
+    static std::optional<bool> isAnchorTypeDifferent(const SwFrameFormat* pShape);
 
     /// Returns true if the given shape has a valid textframe.
-    static bool isTextBoxShapeHasValidTextFrame(SwFrameFormat* pShape);
+    static bool isTextBoxShapeHasValidTextFrame(const SwFrameFormat* pShape);
 
     // Returns true on success. Synchronize z-order of the text frame of the given textbox
     // by setting it one level higher than the z-order of the shape of the textbox.

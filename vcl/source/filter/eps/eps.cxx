@@ -2662,7 +2662,7 @@ bool PSWriter::ImplGetBoundingBox( double* nNumb, sal_uInt8* pSource, sal_uInt32
 
 //================== GraphicExport - the exported function ===================
 
-bool ExportEpsGraphic(SvStream & rStream, Graphic & rGraphic, FilterConfigItem* pFilterConfigItem)
+bool ExportEpsGraphic(SvStream & rStream, const Graphic & rGraphic, FilterConfigItem* pFilterConfigItem)
 {
     PSWriter aPSWriter;
     return aPSWriter.WritePS(rGraphic, rStream, pFilterConfigItem);

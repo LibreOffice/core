@@ -317,7 +317,7 @@ void ScViewUtil::HideDisabledSlot( SfxItemSet& rSet, SfxBindings& rBindings, sal
 }
 
 void ScViewUtil::ExecuteCharMap(const SvxFontItem& rOldFont,
-                                ScTabViewShell& rShell)
+                                const ScTabViewShell& rShell)
 {
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     SfxViewFrame& rFrame = *rShell.GetViewFrame();

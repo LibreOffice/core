@@ -172,7 +172,7 @@ extern "C"
 }
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
-static VclInputFlags categorizeEvent(GdkEvent *pEvent)
+static VclInputFlags categorizeEvent(const GdkEvent *pEvent)
 {
     VclInputFlags nType = VclInputFlags::NONE;
     switch (gdk_event_get_event_type(pEvent))
@@ -4754,7 +4754,7 @@ namespace
 #endif
     }
 
-    void set_image(GtkButton* pButton, VirtualDevice* pDevice)
+    void set_image(GtkButton* pButton, const VirtualDevice* pDevice)
     {
 #if !GTK_CHECK_VERSION(4, 0, 0)
         gtk_button_set_always_show_image(pButton, true);
@@ -8918,7 +8918,7 @@ private:
 
 public:
     // See: https://developer.gnome.org/Buttons/
-    void use_custom_content(VirtualDevice* pDevice)
+    void use_custom_content(const VirtualDevice* pDevice)
     {
         GtkStyleContext *pWidgetContext = gtk_widget_get_style_context(m_pWidget);
 

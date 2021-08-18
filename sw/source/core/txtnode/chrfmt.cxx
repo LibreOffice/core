@@ -95,7 +95,7 @@ void SwCharFormats::insert(SwCharFormat* x)
 
 void SwCharFormats::erase(const_iterator const& position) { m_PosIndex.erase(position); }
 
-bool SwCharFormats::ContainsFormat(SwCharFormat* x) const { return find(x) != end(); }
+bool SwCharFormats::ContainsFormat(const SwCharFormat* x) const { return find(x) != end(); }
 
 /** Need to call this when the format name changes */
 void SwCharFormats::SetFormatNameAndReindex(SwCharFormat* v, const OUString& sNewName)

@@ -32,8 +32,9 @@ class MediaItem;
 
 namespace svx::MediaShellHelpers
 {
-SVX_DLLPUBLIC void GetState(SdrMarkView* pSdrView, SfxItemSet& rSet);
-SVX_DLLPUBLIC const ::avmedia::MediaItem* Execute(SdrMarkView* pSdrView, SfxRequest const& rReq);
+SVX_DLLPUBLIC void GetState(const SdrMarkView* pSdrView, SfxItemSet& rSet);
+SVX_DLLPUBLIC const ::avmedia::MediaItem* Execute(const SdrMarkView* pSdrView,
+                                                  SfxRequest const& rReq);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

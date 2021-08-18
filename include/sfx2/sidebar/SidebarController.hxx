@@ -175,7 +175,7 @@ public:
 
     bool hasChartContextCurrently() const;
 
-    static SidebarController* GetSidebarControllerForView(SfxViewShell* pViewShell);
+    static SidebarController* GetSidebarControllerForView(const SfxViewShell* pViewShell);
 
 private:
     SidebarController(SidebarDockingWindow* pParentWindow, const SfxViewFrame* pViewFrame);

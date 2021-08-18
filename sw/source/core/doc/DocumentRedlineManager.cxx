@@ -436,7 +436,7 @@ namespace
     }
 
     // delete the empty tracked table row (i.e. if it's last tracked deletion was accepted)
-    void lcl_DeleteTrackedTableRow ( SwPosition* pPos )
+    void lcl_DeleteTrackedTableRow ( const SwPosition* pPos )
     {
         if ( const SwTableBox* pBox = pPos->nNode.GetNode().GetTableBox() )
         {

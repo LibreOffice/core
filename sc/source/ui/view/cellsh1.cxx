@@ -3037,7 +3037,7 @@ void SetupRangeForPivotTableDialog(const ScRange& rRange,
 }
 
 void ErrorOrRunPivotLayoutDialog(TranslateId pSrcErrorId,
-                                 ScAddress& rDestPos,
+                                 const ScAddress& rDestPos,
                                  ScModule* pScMod,
                                  ScTabViewShell* pTabViewShell,
                                  std::unique_ptr<ScDPObject>& pNewDPObject)

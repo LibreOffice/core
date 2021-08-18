@@ -393,7 +393,7 @@ static OUString lcl_GetStyleFamilyName( SfxStyleFamily nFamily )
     return OUString();
 }
 
-OUString SfxCommonTemplateDialog_Impl::getDefaultStyleName( const SfxStyleFamily eFam, StyleList& rStyleList )
+OUString SfxCommonTemplateDialog_Impl::getDefaultStyleName( const SfxStyleFamily eFam, const StyleList& rStyleList )
 {
     OUString sDefaultStyle;
     OUString aFamilyName = lcl_GetStyleFamilyName(eFam);

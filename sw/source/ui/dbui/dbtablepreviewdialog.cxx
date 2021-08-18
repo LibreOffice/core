@@ -42,7 +42,7 @@ private:
     }
 
 public:
-    DBTablePreviewFrame(css::uno::Reference<css::frame::XFrame2>& rFrame)
+    DBTablePreviewFrame(const css::uno::Reference<css::frame::XFrame2>& rFrame)
         : m_xFrame(rFrame)
     {
     }

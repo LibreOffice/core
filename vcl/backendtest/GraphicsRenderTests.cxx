@@ -25,7 +25,7 @@
 
 namespace
 {
-void exportBitmapExToImage(OUString const& rImageName, BitmapEx& rBitmapEx)
+void exportBitmapExToImage(OUString const& rImageName, const BitmapEx& rBitmapEx)
 {
     BitmapEx aBitmapEx(rBitmapEx);
     aBitmapEx.Scale(Size(500, 500), BmpScaleFlag::Fast);

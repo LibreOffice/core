@@ -66,7 +66,7 @@ public:
         }
     }
 
-    void handleOLENode(SwOLENode* pOleNode)
+    void handleOLENode(const SwOLENode* pOleNode)
     {
         auto pFrameFormat = pOleNode->GetFlyFormat();
         m_rXmlWriter.startElement("ole");
@@ -75,7 +75,7 @@ public:
         m_rXmlWriter.endElement();
     }
 
-    void handleGraphicNode(SwGrfNode* pGraphicNode)
+    void handleGraphicNode(const SwGrfNode* pGraphicNode)
     {
         auto pFrameFormat = pGraphicNode->GetFlyFormat();
         m_rXmlWriter.startElement("graphic");
@@ -84,7 +84,7 @@ public:
         m_rXmlWriter.endElement();
     }
 
-    void handleTextNode(SwTextNode* pTextNode)
+    void handleTextNode(const SwTextNode* pTextNode)
     {
         sal_Int64 nParentIndex = -1;
         if (!maNodeStack.empty() && maNodeStack.back())

@@ -121,7 +121,7 @@ public:
     ShapeExport&        WriteUnknownShape(const Reference< XShape >& xShape) override;
     ShapeExport&        WritePlaceholderShape(const Reference< XShape >& xShape, PlaceholderType ePlaceholder);
     /** Writes a placeholder shape that references the placeholder on the master slide */
-    ShapeExport&        WritePlaceholderReferenceShape(PlaceholderType ePlaceholder, sal_Int32 nReferencedPlaceholderIdx, PageType ePageType, Reference<XPropertySet>& rXPagePropSet);
+    ShapeExport&        WritePlaceholderReferenceShape(PlaceholderType ePlaceholder, sal_Int32 nReferencedPlaceholderIdx, PageType ePageType, const Reference<XPropertySet>& rXPagePropSet);
     ShapeExport&        WritePageShape(const Reference< XShape >& xShape, PageType ePageType, bool bPresObj);
     /** Writes textbody of a placeholder that references the placeholder on the master slide */
     ShapeExport&        WritePlaceholderReferenceTextBody(PlaceholderType ePlaceholder, PageType ePageType, const Reference<XPropertySet> xPagePropSet);
@@ -1667,7 +1667,7 @@ ShapeExport& PowerPointShapeExport::WritePlaceholderShape(const Reference< XShap
 
 ShapeExport& PowerPointShapeExport::WritePlaceholderReferenceShape(
     PlaceholderType ePlaceholder, sal_Int32 nReferencedPlaceholderIdx, PageType ePageType,
-    Reference<XPropertySet>& rXPagePropSet)
+    const Reference<XPropertySet>& rXPagePropSet)
 {
     mpFS->startElementNS(XML_p, XML_sp);
 

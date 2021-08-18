@@ -427,12 +427,12 @@ void SfxChildWindow::InitializeChildWinFactory_Impl(sal_uInt16 nId, SfxChildWinI
         rInfo.nFlags = static_cast<SfxChildWindowFlags>(static_cast<sal_uInt16>(aWinData.copy( nPos+1 ).toInt32()));
 }
 
-bool ParentIsFloatingWindow(vcl::Window *pParent)
+bool ParentIsFloatingWindow(const vcl::Window *pParent)
 {
     if (!pParent)
         return false;
     if (pParent->GetType() == WindowType::DOCKINGWINDOW || pParent->GetType() == WindowType::TOOLBOX)
-        return static_cast<DockingWindow*>(pParent)->GetFloatingWindow() != nullptr;
+        return static_cast<const DockingWindow*>(pParent)->GetFloatingWindow() != nullptr;
     if (pParent->GetType() == WindowType::FLOATINGWINDOW)
         return true;
     return false;

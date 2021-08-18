@@ -350,7 +350,7 @@ namespace emfio
         maAlternativeFontScales.clear();
     }
 
-    void ScaledFontDetectCorrectHelper::newCurrentMetaFontAction(rtl::Reference<MetaFontAction>& rNewMetaFontAction)
+    void ScaledFontDetectCorrectHelper::newCurrentMetaFontAction(const rtl::Reference<MetaFontAction>& rNewMetaFontAction)
     {
         maCurrentMetaFontAction.clear();
         maAlternativeFontScales.clear();

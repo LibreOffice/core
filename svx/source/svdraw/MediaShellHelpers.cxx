@@ -29,7 +29,7 @@
 
 namespace svx::MediaShellHelpers
 {
-void GetState(SdrMarkView* pSdrView, SfxItemSet& rSet)
+void GetState(const SdrMarkView* pSdrView, SfxItemSet& rSet)
 {
     if (!pSdrView)
         return;
@@ -64,7 +64,7 @@ void GetState(SdrMarkView* pSdrView, SfxItemSet& rSet)
     }
 }
 
-const ::avmedia::MediaItem* Execute(SdrMarkView* pSdrView, SfxRequest const& rReq)
+const ::avmedia::MediaItem* Execute(const SdrMarkView* pSdrView, SfxRequest const& rReq)
 {
     if (!pSdrView)
         return nullptr;

@@ -1381,7 +1381,7 @@ bool ImpGraphic::ensureAvailable() const
     return bResult;
 }
 
-void ImpGraphic::updateFromLoadedGraphic(ImpGraphic* pGraphic)
+void ImpGraphic::updateFromLoadedGraphic(const ImpGraphic* pGraphic)
 {
     if (mbPrepared)
     {

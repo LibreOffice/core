@@ -85,7 +85,7 @@ bool SplitUrlAndPage(const OUString& rText, OUString& rUrl, int& nPageNumber)
 }
 
 /// Merges rUrl and rPageSB to a URL string.
-OUString MergeUrlAndPage(const OUString& rUrl, weld::SpinButton& rPageSB)
+OUString MergeUrlAndPage(const OUString& rUrl, const weld::SpinButton& rPageSB)
 {
     if (!rPageSB.get_sensitive())
     {
@@ -484,7 +484,7 @@ BibGeneralPage::~BibGeneralPage()
 class ChangeListener : public cppu::WeakImplHelper<css::beans::XPropertyChangeListener>
 {
 public:
-    explicit ChangeListener(css::uno::Reference<css::beans::XPropertySet>& rPropSet)
+    explicit ChangeListener(const css::uno::Reference<css::beans::XPropertySet>& rPropSet)
         : m_xPropSet(rPropSet)
         , m_bSelfChanging(false)
     {
@@ -512,7 +512,7 @@ namespace
     class EntryChangeListener : public ChangeListener
     {
     public:
-        explicit EntryChangeListener(weld::Entry& rEntry, css::uno::Reference<css::beans::XPropertySet>& rPropSet,
+        explicit EntryChangeListener(weld::Entry& rEntry, const css::uno::Reference<css::beans::XPropertySet>& rPropSet,
                                      BibGeneralPage& rPage)
             : ChangeListener(rPropSet)
             , m_rEntry(rEntry)
@@ -625,7 +625,7 @@ namespace
     class ComboBoxChangeListener : public ChangeListener
     {
     public:
-        explicit ComboBoxChangeListener(weld::ComboBox& rComboBox, css::uno::Reference<css::beans::XPropertySet>& rPropSet)
+        explicit ComboBoxChangeListener(weld::ComboBox& rComboBox, const css::uno::Reference<css::beans::XPropertySet>& rPropSet)
             : ChangeListener(rPropSet)
             , m_rComboBox(rComboBox)
         {

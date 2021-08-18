@@ -110,7 +110,7 @@ using namespace ::com::sun::star;
 
 #include <svx/xdef.hxx>
 
-void ScDocShell::SetInitialLinkUpdate( SfxMedium* pMed )
+void ScDocShell::SetInitialLinkUpdate( const SfxMedium* pMed )
 {
     if (pMed)
     {

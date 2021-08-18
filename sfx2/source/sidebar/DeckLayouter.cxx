@@ -61,7 +61,7 @@ namespace {
         sal_Int32 mnWeight;
         bool mbShowTitleBar;
 
-        LayoutItem(std::shared_ptr<Panel>& pPanel)
+        LayoutItem(const std::shared_ptr<Panel>& pPanel)
             : mpPanel(pPanel)
             , maLayoutSize(0, 0, 0)
             , mnDistributedHeight(0)
@@ -91,7 +91,7 @@ namespace {
         ::std::vector<LayoutItem>& rLayoutItems,
         const LayoutMode eMode_);
     tools::Rectangle PlaceDeckTitle (
-        SidebarDockingWindow* pDockingWindow,
+        const SidebarDockingWindow* pDockingWindow,
         DeckTitleBar& rTitleBar,
         const tools::Rectangle& rAvailableSpace);
     tools::Rectangle PlaceVerticalScrollBar (
@@ -105,7 +105,7 @@ namespace {
 }
 
 void DeckLayouter::LayoutDeck (
-    SidebarDockingWindow* pDockingWindow,
+    const SidebarDockingWindow* pDockingWindow,
     const tools::Rectangle& rContentArea,
     sal_Int32& rMinimalWidth,
     sal_Int32& rMinimalHeight,
@@ -490,7 +490,7 @@ void DistributeHeights (
 }
 
 tools::Rectangle PlaceDeckTitle(
-    SidebarDockingWindow* pDockingWindow,
+    const SidebarDockingWindow* pDockingWindow,
     DeckTitleBar& rDeckTitleBar,
     const tools::Rectangle& rAvailableSpace)
 {

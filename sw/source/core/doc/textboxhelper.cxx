@@ -1233,7 +1233,7 @@ bool SwTextBoxHelper::doTextBoxPositioning(SwFrameFormat* pShape)
     return false;
 }
 
-std::optional<bool> SwTextBoxHelper::isAnchorTypeDifferent(SwFrameFormat* pShape)
+std::optional<bool> SwTextBoxHelper::isAnchorTypeDifferent(const SwFrameFormat* pShape)
 {
     std::optional<bool> bRet;
     if (isTextBoxShapeHasValidTextFrame(pShape))
@@ -1250,7 +1250,7 @@ std::optional<bool> SwTextBoxHelper::isAnchorTypeDifferent(SwFrameFormat* pShape
     return bRet;
 }
 
-bool SwTextBoxHelper::isTextBoxShapeHasValidTextFrame(SwFrameFormat* pShape)
+bool SwTextBoxHelper::isTextBoxShapeHasValidTextFrame(const SwFrameFormat* pShape)
 {
     if (pShape && pShape->Which() == RES_DRAWFRMFMT)
         if (auto pFormat = getOtherTextBoxFormat(pShape, RES_DRAWFRMFMT))

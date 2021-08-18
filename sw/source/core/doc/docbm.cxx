@@ -1532,7 +1532,7 @@ namespace sw::mark
         m_pLastActiveFieldmark = nullptr;
     }
 
-    void MarkManager::LOKUpdateActiveField(SfxViewShell* pViewShell)
+    void MarkManager::LOKUpdateActiveField(const SfxViewShell* pViewShell)
     {
         if (!comphelper::LibreOfficeKit::isActive())
             return;

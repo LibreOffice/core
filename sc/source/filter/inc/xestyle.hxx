@@ -749,8 +749,8 @@ public:
     XclExpDxfs( const XclExpRoot& rRoot );
 
     sal_Int32 GetDxfId(const OUString& rName);
-    sal_Int32 GetDxfByBackColor(Color& aColor);
-    sal_Int32 GetDxfByForeColor(Color& aColor);
+    sal_Int32 GetDxfByBackColor(Color aColor);
+    sal_Int32 GetDxfByForeColor(Color aColor);
 
     virtual void SaveXml( XclExpXmlStream& rStrm) override;
 private:

@@ -51,10 +51,10 @@ public:
     rtl::Reference<MetaAction> PolyLineHandler();
     rtl::Reference<MetaAction> PolygonHandler();
     rtl::Reference<MetaAction> PolyPolygonHandler();
-    rtl::Reference<MetaAction> TextHandler(ImplMetaReadData* pData);
-    rtl::Reference<MetaAction> TextArrayHandler(ImplMetaReadData* pData);
-    rtl::Reference<MetaAction> StretchTextHandler(ImplMetaReadData* pData);
-    rtl::Reference<MetaAction> TextRectHandler(ImplMetaReadData* pData);
+    rtl::Reference<MetaAction> TextHandler(const ImplMetaReadData* pData);
+    rtl::Reference<MetaAction> TextArrayHandler(const ImplMetaReadData* pData);
+    rtl::Reference<MetaAction> StretchTextHandler(const ImplMetaReadData* pData);
+    rtl::Reference<MetaAction> TextRectHandler(const ImplMetaReadData* pData);
     rtl::Reference<MetaAction> TextLineHandler();
     rtl::Reference<MetaAction> BmpHandler();
     rtl::Reference<MetaAction> BmpScaleHandler();

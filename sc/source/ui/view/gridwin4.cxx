@@ -1275,7 +1275,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
 }
 
 
-void ScGridWindow::SetupInitialPageBreaks(ScDocument& rDoc, SCTAB nTab, bool bSetup)
+void ScGridWindow::SetupInitialPageBreaks(const ScDocument& rDoc, SCTAB nTab, bool bSetup)
 {
     // tdf#124983, if option LibreOfficeDev Calc/View/Visual Aids/Page breaks
     // is enabled, breaks should be visible. If the document is opened the first

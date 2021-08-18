@@ -311,7 +311,7 @@ class SAL_DLLPUBLIC_RTTI ScGridWindow : public vcl::Window, public DropTargetHel
 
     Timer           maShowPageBreaksTimer;
     bool            bInitialPageBreaks;
-    void            SetupInitialPageBreaks(ScDocument& rDoc, SCTAB nTab, bool bSetup);
+    void            SetupInitialPageBreaks(const ScDocument& rDoc, SCTAB nTab, bool bSetup);
     DECL_LINK(InitiatePageBreaksTimer, Timer*, void);
 protected:
     virtual void    PrePaint(vcl::RenderContext& rRenderContext) override;

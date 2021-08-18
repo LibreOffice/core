@@ -706,7 +706,7 @@ void SdrPaintView::EndDrawLayers(SdrPaintWindow& rPaintWindow, bool bPaintFormLa
     }
 }
 
-void SdrPaintView::UpdateDrawLayersRegion(OutputDevice* pOut, const vcl::Region& rReg)
+void SdrPaintView::UpdateDrawLayersRegion(const OutputDevice* pOut, const vcl::Region& rReg)
 {
     SdrPaintWindow* pPaintWindow = FindPaintWindow(*pOut);
     OSL_ENSURE(pPaintWindow, "SdrPaintView::UpdateDrawLayersRegion: No SdrPaintWindow (!)");
@@ -724,7 +724,7 @@ void SdrPaintView::UpdateDrawLayersRegion(OutputDevice* pOut, const vcl::Region&
     }
 }
 
-vcl::Region SdrPaintView::OptimizeDrawLayersRegion(OutputDevice* pOut, const vcl::Region& rReg, bool bDisableIntersect)
+vcl::Region SdrPaintView::OptimizeDrawLayersRegion(const OutputDevice* pOut, const vcl::Region& rReg, bool bDisableIntersect)
 {
     // #i74769# check if pOut is a win and has a ClipRegion. If Yes, the Region
     // rReg may be made more granular (fine) with using it. Normally, rReg

@@ -495,7 +495,7 @@ namespace emfio
     public:
         ScaledFontDetectCorrectHelper();
         void endCurrentMetaFontAction();
-        void newCurrentMetaFontAction(rtl::Reference<MetaFontAction>& rNewMetaFontAction);
+        void newCurrentMetaFontAction(const rtl::Reference<MetaFontAction>& rNewMetaFontAction);
         void evaluateAlternativeFontScale(OUString const & rText, tools::Long nImportedTextLength);
         void applyAlternativeFontScale();
     };

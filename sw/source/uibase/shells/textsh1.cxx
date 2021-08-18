@@ -352,7 +352,7 @@ void InsertBreak(SwWrtShell& rWrtSh,
     }
 }
 
-OUString GetLocalURL(SwWrtShell& rSh)
+OUString GetLocalURL(const SwWrtShell& rSh)
 {
     SwField* pField = rSh.GetCurField();
     if (!pField)

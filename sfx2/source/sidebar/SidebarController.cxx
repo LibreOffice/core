@@ -1621,7 +1621,7 @@ bool SidebarController::hasChartContextCurrently() const
     return GetCurrentContext().msApplication == "com.sun.star.chart2.ChartDocument";
 }
 
-sfx2::sidebar::SidebarController* SidebarController::GetSidebarControllerForView(SfxViewShell* pViewShell)
+sfx2::sidebar::SidebarController* SidebarController::GetSidebarControllerForView(const SfxViewShell* pViewShell)
 {
     if (!pViewShell)
         return nullptr;

@@ -347,7 +347,8 @@ public:
 };
 
 // appends the node to the root of the tree view
-OUString lclAppendNode(std::unique_ptr<weld::TreeView>& pTree, ObjectInspectorNodeInterface* pEntry)
+OUString lclAppendNode(const std::unique_ptr<weld::TreeView>& pTree,
+                       ObjectInspectorNodeInterface* pEntry)
 {
     OUString sName = pEntry->getObjectName();
     OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pEntry)));
@@ -365,7 +366,7 @@ OUString lclAppendNode(std::unique_ptr<weld::TreeView>& pTree, ObjectInspectorNo
 }
 
 // appends the node to the parent
-OUString lclAppendNodeToParent(std::unique_ptr<weld::TreeView>& pTree,
+OUString lclAppendNodeToParent(const std::unique_ptr<weld::TreeView>& pTree,
                                const weld::TreeIter* pParent, ObjectInspectorNodeInterface* pEntry)
 {
     OUString sName = pEntry->getObjectName();
@@ -536,8 +537,8 @@ protected:
     OUString mrInfo;
     uno::Reference<uno::XComponentContext> mxContext;
 
-    ObjectInspectorNodeInterface* createNodeObjectForAny(OUString const& rName, uno::Any& rAny,
-                                                         OUString const& mrInfo);
+    ObjectInspectorNodeInterface*
+    createNodeObjectForAny(OUString const& rName, const uno::Any& rAny, OUString const& mrInfo);
 
 public:
     BasicValueNode(OUString const& rName, uno::Any const& rAny, OUString const& rInfo,
@@ -869,8 +870,9 @@ void StructNode::fillChildren(std::unique_ptr<weld::TreeView>& pTree, const weld
     }
 }
 
-ObjectInspectorNodeInterface*
-BasicValueNode::createNodeObjectForAny(OUString const& rName, uno::Any& rAny, OUString const& rInfo)
+ObjectInspectorNodeInterface* BasicValueNode::createNodeObjectForAny(OUString const& rName,
+                                                                     const uno::Any& rAny,
+                                                                     OUString const& rInfo)
 {
     switch (rAny.getValueType().getTypeClass())
     {
@@ -1049,7 +1051,7 @@ IMPL_LINK(ObjectInspectorTreeHandler, SelectionChanged, weld::TreeView&, rTreeVi
     mpObjectInspectorWidgets->mpToolbar->set_item_sensitive("inspect", bHaveNodeWithObject);
 }
 
-static void updateOrder(std::unique_ptr<weld::TreeView>& pTreeView, sal_Int32 nColumn)
+static void updateOrder(const std::unique_ptr<weld::TreeView>& pTreeView, sal_Int32 nColumn)
 {
     pTreeView->set_sort_column(nColumn);
 

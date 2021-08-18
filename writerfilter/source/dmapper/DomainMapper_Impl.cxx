@@ -3158,7 +3158,7 @@ static void lcl_PasteRedlines(
                 std::deque<css::uno::Any>& rRedlines,
                 std::vector<sal_Int32>& redPos,
                 std::vector<sal_Int32>& redLen,
-                sal_Int32& redIdx)
+                sal_Int32 redIdx)
 {
     // create redlines in the copied footnote
     for( size_t i = 0; redIdx > -1 && i <= sal::static_int_cast<size_t>(redIdx); i+=3)

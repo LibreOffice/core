@@ -79,7 +79,7 @@ protected:
 private:
     DECL_DLLPRIVATE_LINK( ImplTimeout, Timer*, void );
     SAL_DLLPRIVATE void   ImplInitSpinFieldData();
-    SAL_DLLPRIVATE void   ImplCalcButtonAreas( OutputDevice* pDev, const Size& rOutSz, tools::Rectangle& rDDArea, tools::Rectangle& rSpinUpArea, tools::Rectangle& rSpinDownArea );
+    SAL_DLLPRIVATE void   ImplCalcButtonAreas( const OutputDevice* pDev, const Size& rOutSz, tools::Rectangle& rDDArea, tools::Rectangle& rSpinUpArea, tools::Rectangle& rSpinDownArea );
 
     VclPtr<Edit>    mpEdit;
     AutoTimer       maRepeatTimer;
