@@ -152,8 +152,13 @@ IMPL_LINK_NOARG(OLEObjCache, UnloadCheckHdl, Timer*, void)
             }
 
             if ( bUnload && UnloadObj(pUnloadObj) )
+            {
                 // object was successfully unloaded
-                nCount2--;
+                RemoveObj(pUnloadObj);
+                nCount2 = std::min(nCount2 - 1, maObjs.size());
+                if (nIndex >= nCount2)
+                    nIndex = nCount2 - 1;
+            }
         }
         catch( uno::Exception& )
         {}
