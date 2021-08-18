@@ -69,6 +69,12 @@
 #include <svl/zformat.hxx>
 
 #include <test/xmltesttools.hxx>
+#include <com/sun/star/chart2/XChartDocument.hpp>
+#include <com/sun/star/chart2/XChartTypeContainer.hpp>
+#include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
+#include <com/sun/star/drawing/XDrawPage.hpp>
+#include <com/sun/star/drawing/XDrawPages.hpp>
+#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
@@ -282,6 +288,7 @@ public:
     void testTdf136721_paper_size();
     void testTdf139258_rotated_image();
     void testTdf140431();
+    void testTdf142264ManyChartsToXLSX();
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
@@ -462,6 +469,7 @@ public:
     CPPUNIT_TEST(testTdf136721_paper_size);
     CPPUNIT_TEST(testTdf139258_rotated_image);
     CPPUNIT_TEST(testTdf140431);
+    CPPUNIT_TEST(testTdf142264ManyChartsToXLSX);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -5864,6 +5872,87 @@ void ScExportTest::testTdf140431()
     const SvxFieldData* pData = pEditText->GetFieldData(0, 0, text::textfield::Type::URL);
     const SvxURLField* pURLData = static_cast<const SvxURLField*>(pData);
     CPPUNIT_ASSERT(pURLData->GetURL().startsWith("file://ndhlis"));
+
+    xDocSh->DoClose();
+}
+
+void ScExportTest::testTdf142264ManyChartsToXLSX()
+{
+    // The cache size for the test should be small enough, to make sure that some charts get
+    // unloaded in the process, and then loaded on demand properly (default is currently 20)
+    CPPUNIT_ASSERT_LESS(sal_Int32(40),
+        officecfg::Office::Common::Cache::DrawingEngine::OLE_Objects::get());
+
+    ScDocShellRef xDocSh = loadDoc(u"many_charts.", FORMAT_ODS);
+    CPPUNIT_ASSERT(xDocSh.is());
+    xDocSh = saveAndReload(xDocSh.get(), FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    auto xModel = xDocSh->GetModel();
+    css::uno::Reference<css::drawing::XDrawPagesSupplier> xSupplier(xModel,
+        css::uno::UNO_QUERY_THROW);
+    auto xDrawPages = xSupplier->getDrawPages();
+
+    // No charts (or other objects) on the first sheet, and resp. first draw page
+    css::uno::Reference<css::drawing::XDrawPage> xPage(xDrawPages->getByIndex(0),
+        css::uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xPage->getCount());
+
+    // 20 charts on the second sheet, and resp. second draw page
+    xPage.set(xDrawPages->getByIndex(1), css::uno::UNO_QUERY_THROW);
+    // Without the fix in place, this test would have failed with
+    // - Expected: 20
+    // - Actual : 0
+    // Because only the last 20 charts would get exported, all on the third sheet
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(20), xPage->getCount());
+    for (sal_Int32 i = 0; i < xPage->getCount(); ++i)
+    {
+        css::uno::Reference<css::beans::XPropertySet> xProps(xPage->getByIndex(i),
+            css::uno::UNO_QUERY_THROW);
+        css::uno::Reference<css::chart2::XChartDocument> xChart(xProps->getPropertyValue("Model"),
+            css::uno::UNO_QUERY_THROW);
+        const auto xDiagram = xChart->getFirstDiagram();
+        CPPUNIT_ASSERT(xDiagram);
+
+        css::uno::Reference<css::chart2::XCoordinateSystemContainer> xCooSysContainer(
+            xDiagram, uno::UNO_QUERY_THROW);
+
+        const auto xCooSysSeq = xCooSysContainer->getCoordinateSystems();
+        for (const auto& rCooSys : xCooSysSeq)
+        {
+            css::uno::Reference<css::chart2::XChartTypeContainer> xChartTypeCont(
+                rCooSys, uno::UNO_QUERY_THROW);
+            uno::Sequence<uno::Reference<chart2::XChartType>> xChartTypeSeq
+                = xChartTypeCont->getChartTypes();
+            CPPUNIT_ASSERT(xChartTypeSeq.hasElements());
+        }
+    }
+
+    // 20 charts on the third sheet, and resp. third draw page
+    xPage.set(xDrawPages->getByIndex(2), css::uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(20), xPage->getCount());
+    for (sal_Int32 i = 0; i < xPage->getCount(); ++i)
+    {
+        css::uno::Reference<css::beans::XPropertySet> xProps(xPage->getByIndex(i),
+            css::uno::UNO_QUERY_THROW);
+        css::uno::Reference<css::chart2::XChartDocument> xChart(xProps->getPropertyValue("Model"),
+            css::uno::UNO_QUERY_THROW);
+        const auto xDiagram = xChart->getFirstDiagram();
+        CPPUNIT_ASSERT(xDiagram);
+
+        css::uno::Reference<css::chart2::XCoordinateSystemContainer> xCooSysContainer(
+            xDiagram, uno::UNO_QUERY_THROW);
+
+        const auto xCooSysSeq = xCooSysContainer->getCoordinateSystems();
+        for (const auto& rCooSys : xCooSysSeq)
+        {
+            css::uno::Reference<css::chart2::XChartTypeContainer> xChartTypeCont(
+                rCooSys, uno::UNO_QUERY_THROW);
+            uno::Sequence<uno::Reference<chart2::XChartType>> xChartTypeSeq
+                = xChartTypeCont->getChartTypes();
+            CPPUNIT_ASSERT(xChartTypeSeq.hasElements());
+        }
+    }
 
     xDocSh->DoClose();
 }
