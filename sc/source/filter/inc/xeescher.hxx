@@ -322,13 +322,12 @@ public:
     virtual void        Save( XclExpStream& rStrm ) override;
     virtual void        SaveXml( XclExpXmlStream& rStrm ) override;
 
-    const css::uno::Reference<css::chart::XChartDocument>& GetChartDoc() const;
+    css::uno::Reference<css::chart::XChartDocument> GetChartDoc() const;
 
 private:
     typedef std::shared_ptr< XclExpChart > XclExpChartRef;
     XclExpChartRef                                    mxChart;        /// The chart itself (BOF/EOF substream data).
     css::uno::Reference< css::drawing::XShape >       mxShape;
-    css::uno::Reference< css::chart::XChartDocument > mxChartDoc;
     ScDocument*                                       mpDoc;
 };
 
