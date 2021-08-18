@@ -16,6 +16,24 @@
       "revId": "d4ca360f6632f03e9fb7e9af37aac40d23f1249a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ac46cca3_b4f712db",
+        "filename": "svx/source/svdraw/svdoashp.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1592,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2021-08-18T12:48:36Z",
+      "side": 1,
+      "message": "Armin had started something, see aoo/aw080. I see some problems: (1) SdrObjCustomShape is derived from SdrTextObj, but mirror is handled different, which affects the rotation angle. (2) The matrix which you get by TRGetBaseGeometry has a mathematical wrong shear angle. (3) Using a matrix would require to compose/decompose it in many places. (4) Who will do it? (5) The change would be huge. How would an intermediate state look?",
+      "parentUuid": "5df56f7d_8bbe6322",
+      "revId": "d4ca360f6632f03e9fb7e9af37aac40d23f1249a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
