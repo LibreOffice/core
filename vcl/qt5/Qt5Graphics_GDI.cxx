@@ -133,6 +133,7 @@ bool Qt5GraphicsBackend::setClipRegion(const vcl::Region& rRegion)
         if (!m_aClipPath.isEmpty())
         {
             QPainterPath aPath;
+            aPath.setFillRule(Qt::WindingFill);
             m_aClipPath.swap(aPath);
         }
     }
@@ -147,12 +148,15 @@ bool Qt5GraphicsBackend::setClipRegion(const vcl::Region& rRegion)
         if (!m_aClipPath.isEmpty())
         {
             QPainterPath aPath;
+            aPath.setFillRule(Qt::WindingFill);
             m_aClipPath.swap(aPath);
         }
     }
     else
     {
         QPainterPath aPath;
+        aPath.setFillRule(Qt::WindingFill);
+
         const basegfx::B2DPolyPolygon aPolyClip(rRegion.GetAsB2DPolyPolygon());
         AddPolyPolygonToPath(aPath, aPolyClip, !getAntiAlias(), false);
         m_aClipPath.swap(aPath);
@@ -174,6 +178,8 @@ void Qt5GraphicsBackend::ResetClipRegion()
     if (!m_aClipPath.isEmpty())
     {
         QPainterPath aPath;
+        aPath.setFillRule(Qt::WindingFill);
+
         m_aClipPath.swap(aPath);
     }
 }
@@ -274,6 +280,8 @@ void Qt5GraphicsBackend::drawPolyPolygon(sal_uInt32 nPolyCount, const sal_uInt32
         return;
 
     QPainterPath aPath;
+    aPath.setFillRule(Qt::WindingFill);
+
     for (sal_uInt32 nPoly = 0; nPoly < nPolyCount; nPoly++)
     {
         const sal_uInt32 nPoints = pPoints[nPoly];
@@ -308,6 +316,7 @@ bool Qt5GraphicsBackend::drawPolyPolygon(const basegfx::B2DHomMatrix& rObjectToD
     aPolyPolygon.transform(rObjectToDevice);
 
     QPainterPath aPath;
+    aPath.setFillRule(Qt::WindingFill);
     // ignore empty polygons
     if (!AddPolyPolygonToPath(aPath, aPolyPolygon, !getAntiAlias(), m_aLineColor != SALCOLOR_NONE))
         return true;
@@ -393,6 +402,7 @@ bool Qt5GraphicsBackend::drawPolyLine(const basegfx::B2DHomMatrix& rObjectToDevi
 
     // setup poly-polygon path
     QPainterPath aPath;
+    aPath.setFillRule(Qt::WindingFill);
 
     // MM01 todo - I assume that this is OKAY to be done in one run for Qt5,
     // but this NEEDS to be checked/verified
@@ -713,6 +723,16 @@ void Qt5GraphicsBackend::SetLineColor(Color nColor) { m_aLineColor = nColor; }
 void Qt5GraphicsBackend::SetFillColor() { m_aFillColor = SALCOLOR_NONE; }
 
 void Qt5GraphicsBackend::SetFillColor(Color nColor) { m_aFillColor = nColor; }
+
+void Qt5GraphicsBackend::SetFillRule()
+{
+    m_eFillRule = ::css::rendering::FillRule::FillRule_EVEN_ODD;
+}
+
+void Qt5GraphicsBackend::SetFillRule(com::sun::star::rendering::FillRule eFillRule)
+{
+    m_eFillRule = eFillRule;
+}
 
 void Qt5GraphicsBackend::SetXORMode(bool bSet, bool)
 {

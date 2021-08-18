@@ -94,6 +94,7 @@ class VCL_DLLPUBLIC SvpSalGraphics : public SalGraphics
     Color                          m_aLineColor;
     Color                          m_aFillColor;
     PaintMode                      m_ePaintMode;
+    ::css::rendering::FillRule     m_eFillRule = ::css::rendering::FillRule::FillRule_NON_ZERO;
 
 public:
     void setSurface(cairo_surface_t* pSurface, const basegfx::B2IVector& rSize);
@@ -167,6 +168,9 @@ public:
     virtual void            SetLineColor( Color nColor ) override;
     virtual void            SetFillColor() override;
     virtual void            SetFillColor( Color nColor ) override;
+
+    virtual void            SetFillRule() override;
+    virtual void            SetFillRule( css::rendering::FillRule eFillRule ) override;
 
     virtual void            SetXORMode( bool bSet, bool ) override;
 

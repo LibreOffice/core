@@ -111,6 +111,18 @@ void MetaAction::Scale( double, double )
 {
 }
 
+void MetaAction::ReadFillMode(SvStream& rIStm, PolyFillMode &rFillMode)
+{
+    sal_uInt32 nTmp;
+    rIStm.ReadUInt32(nTmp);
+    rFillMode = PolyFillMode(nTmp);
+}
+
+void MetaAction::WriteFillMode(SvStream& rIStm, PolyFillMode eFillMode)
+{
+    rIStm.WriteUInt32(static_cast<sal_uInt32>(eFillMode));
+}
+
 void MetaAction::ReadColor(SvStream& rIStm, ::Color& rColor)
 {
     sal_uInt32 nTmp;
@@ -1436,6 +1448,33 @@ rtl::Reference<MetaAction> MetaLineColorAction::Clone() const
 {
     return new MetaLineColorAction( *this );
 }
+
+MetaFillModeAction::MetaFillModeAction() :
+    MetaAction  ( MetaActionType::FILLMODE ),
+    mbSet       ( false )
+{}
+
+MetaFillModeAction::~MetaFillModeAction()
+{}
+
+void MetaFillModeAction::Execute( OutputDevice* pOut )
+{
+    if( mbSet )
+        pOut->SetFillMode( mePolyFillMode );
+    else
+        pOut->SetFillMode();
+}
+
+rtl::Reference<MetaAction> MetaFillModeAction::Clone() const
+{
+    return new MetaFillModeAction( *this );
+}
+
+MetaFillModeAction::MetaFillModeAction( const PolyFillMode& rPolyFillMode, bool bSet )
+    :    MetaAction  ( MetaActionType::FILLMODE),
+      mePolyFillMode     ( rPolyFillMode ),
+      mbSet       ( bSet )
+{}
 
 MetaFillColorAction::MetaFillColorAction() :
     MetaAction  ( MetaActionType::FILLCOLOR ),
