@@ -300,6 +300,7 @@ public:
     void testDeleteCirclesInRowAndCol();
     void testTdf129940();
     void testTdf139763ShapeAnchor();
+    void testEscapedUnicodeXLSX();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testCondFormatOperatorsSameRangeXLSX);
@@ -485,6 +486,7 @@ public:
     CPPUNIT_TEST(testDeleteCirclesInRowAndCol);
     CPPUNIT_TEST(testTdf129940);
     CPPUNIT_TEST(testTdf139763ShapeAnchor);
+    CPPUNIT_TEST(testEscapedUnicodeXLSX);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -5452,6 +5454,17 @@ void ScFiltersTest::testTdf139763ShapeAnchor()
     CPPUNIT_ASSERT_MESSAGE("Failed to get cell anchored object.", pObj);
     CPPUNIT_ASSERT_MESSAGE("Shape must be anchored to cell.", ScDrawLayer::IsCellAnchored(*pObj));
     CPPUNIT_ASSERT_MESSAGE("Shape must not resize with cell.", !ScDrawLayer::IsResizeWithCell(*pObj));
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testEscapedUnicodeXLSX()
+{
+    ScDocShellRef xDocSh = loadDoc("escape-unicode.", FORMAT_XLSX);
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    // Without the fix, there would be "_x000D_" after every new-line char.
+    CPPUNIT_ASSERT_EQUAL(OUString("Line 1\nLine 2\nLine 3\nLine 4"), rDoc.GetString(1, 1, 0));
 
     xDocSh->DoClose();
 }
