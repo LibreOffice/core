@@ -1118,7 +1118,7 @@ void PDFExport::ImplWriteWatermark( vcl::PDFWriter& rWriter, const Size& rPageSi
     aFont.SetItalic( ITALIC_NONE );
     aFont.SetWidthType( WIDTH_NORMAL );
     aFont.SetWeight( WEIGHT_NORMAL );
-    aFont.SetAlignment( TextAlign::Bottom );
+    aFont.SetAlignment( ALIGN_BOTTOM );
     tools::Long nTextWidth = rPageSize.Width();
     if( rPageSize.Width() < rPageSize.Height() )
     {
@@ -1189,7 +1189,7 @@ void PDFExport::ImplWriteTiledWatermark( vcl::PDFWriter& rWriter, const Size& rP
     aFont.SetItalic( ITALIC_NONE );
     aFont.SetWidthType( WIDTH_NORMAL );
     aFont.SetWeight( WEIGHT_NORMAL );
-    aFont.SetAlignment( TextAlign::Bottom );
+    aFont.SetAlignment( ALIGN_BOTTOM );
     aFont.SetFontHeight(40);
     aFont.SetOrientation(450_deg10);
 

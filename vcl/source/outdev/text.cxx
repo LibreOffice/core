@@ -1586,9 +1586,9 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Recta
                 aPos.AdjustY((nHeight-(nFormatLines*nTextHeight))/2 );
 
             // Font alignment
-            if ( eAlign == TextAlign::Bottom )
+            if ( eAlign == ALIGN_BOTTOM )
                 aPos.AdjustY(nTextHeight );
-            else if ( eAlign == TextAlign::Baseline )
+            else if ( eAlign == ALIGN_BASELINE )
                 aPos.AdjustY(rTargetDevice.GetFontMetric().GetAscent() );
 
             // Output all lines except for the last one
@@ -1664,9 +1664,9 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Recta
             aPos.AdjustX((nWidth-nTextWidth)/2 );
 
         // vertical font alignment
-        if ( eAlign == TextAlign::Bottom )
+        if ( eAlign == ALIGN_BOTTOM )
             aPos.AdjustY(nTextHeight );
-        else if ( eAlign == TextAlign::Baseline )
+        else if ( eAlign == ALIGN_BASELINE )
             aPos.AdjustY(rTargetDevice.GetFontMetric().GetAscent() );
 
         if ( nStyle & DrawTextFlags::Bottom )

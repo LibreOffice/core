@@ -119,7 +119,7 @@ static void lcl_PrintHeader( vcl::RenderContext &rOutDev, sal_Int32 nPages, sal_
 
     vcl::Font aFont( aOldFont );
     aFont.SetWeight( WEIGHT_BOLD );
-    aFont.SetAlignment( TextAlign::Bottom );
+    aFont.SetAlignment( ALIGN_BOTTOM );
     rOutDev.SetFont( aFont );
 
     tools::Long nFontHeight = rOutDev.GetTextHeight();

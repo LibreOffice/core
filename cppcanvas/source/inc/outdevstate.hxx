@@ -63,7 +63,7 @@ namespace cppcanvas::internal
                 textOverlineStyle(LINESTYLE_NONE),
                 textUnderlineStyle(LINESTYLE_NONE),
                 textStrikeoutStyle(STRIKEOUT_NONE),
-                textReferencePoint(TextAlign::Baseline),
+                textReferencePoint(ALIGN_BASELINE),
 
                 isTextOutlineModeSet( false ),
                 isTextEffectShadowSet( false ),

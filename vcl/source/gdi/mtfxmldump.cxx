@@ -144,9 +144,10 @@ OUString convertTextAlignToString(TextAlign eAlign)
 {
     switch (eAlign)
     {
-        case TextAlign::Baseline:        return "baseline";
-        case TextAlign::Bottom:          return "bottom";
-        case TextAlign::Top:             return "top";
+        case ALIGN_BASELINE:             return "baseline";
+        case ALIGN_BOTTOM:               return "bottom";
+        case ALIGN_TOP:                  return "top";
+        case TextAlign_FORCE_EQUAL_SIZE: return "equalsize";
     }
     return OUString();
 }

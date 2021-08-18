@@ -1077,16 +1077,16 @@ namespace wmfemfhelper
         rTextTransform.scale(aFontScaling.getX(), aFontScaling.getY());
 
         // take text align into account
-        if (TextAlign::Baseline != rFont.GetAlignment())
+        if(ALIGN_BASELINE != rFont.GetAlignment())
         {
             drawinglayer::primitive2d::TextLayouterDevice aTextLayouterDevice;
             aTextLayouterDevice.setFont(rFont);
 
-            if (TextAlign::Top == rFont.GetAlignment())
+            if(ALIGN_TOP == rFont.GetAlignment())
             {
                 rAlignmentOffset.setY(aTextLayouterDevice.getFontAscent());
             }
-            else // TextAlign::Bottom
+            else // ALIGN_BOTTOM
             {
                 rAlignmentOffset.setY(-aTextLayouterDevice.getFontDescent());
             }

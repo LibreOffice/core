@@ -61,7 +61,7 @@ FontMetric OutputDevice::GetDevFont( int nDevFontIndex ) const
         aFontMetric.SetPitch( rData.GetPitch() );
         aFontMetric.SetWeight( rData.GetWeight() );
         aFontMetric.SetItalic( rData.GetItalic() );
-        aFontMetric.SetAlignment( TextAlign::Top );
+        aFontMetric.SetAlignment( TextAlign::ALIGN_TOP );
         aFontMetric.SetWidthType( rData.GetWidthType() );
         aFontMetric.SetQuality( rData.GetQuality() );
     }
@@ -199,7 +199,7 @@ FontMetric OutputDevice::GetFontMetric() const
     aMetric.SetPitch( xFontMetric->GetPitch() );
     aMetric.SetWeight( xFontMetric->GetWeight() );
     aMetric.SetItalic( xFontMetric->GetItalic() );
-    aMetric.SetAlignment( TextAlign::Top );
+    aMetric.SetAlignment( TextAlign::ALIGN_TOP );
     aMetric.SetWidthType( xFontMetric->GetWidthType() );
     if ( pFontInstance->mnOwnOrientation )
         aMetric.SetOrientation( pFontInstance->mnOwnOrientation );
@@ -1017,12 +1017,12 @@ bool OutputDevice::ImplNewFont() const
 
     // calculate text offset depending on TextAlignment
     TextAlign eAlign = maFont.GetAlignment();
-    if ( eAlign == TextAlign::Baseline )
+    if ( eAlign == ALIGN_BASELINE )
     {
         mnTextOffX = 0;
         mnTextOffY = 0;
     }
-    else if ( eAlign == TextAlign::Top )
+    else if ( eAlign == ALIGN_TOP )
     {
         mnTextOffX = 0;
         mnTextOffY = +pFontInstance->mxFontMetric->GetAscent() + mnEmphasisAscent;
@@ -1032,7 +1032,7 @@ bool OutputDevice::ImplNewFont() const
             aOriginPt.RotateAround( mnTextOffX, mnTextOffY, pFontInstance->mnOrientation );
         }
     }
-    else // eAlign == TextAlign::Bottom
+    else // eAlign == ALIGN_BOTTOM
     {
         mnTextOffX = 0;
         mnTextOffY = -pFontInstance->mxFontMetric->GetDescent() + mnEmphasisDescent;

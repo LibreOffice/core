@@ -1235,7 +1235,7 @@ void SmViewShell::Impl_Print(OutputDevice &rOutDev, const SmPrintUIOptions &rPri
         Size aSize650 (0, 650);
         vcl::Font aFont(FAMILY_DONTKNOW, aSize600);
 
-        aFont.SetAlignment(TextAlign::Top);
+        aFont.SetAlignment(ALIGN_TOP);
         aFont.SetWeight(WEIGHT_BOLD);
         aFont.SetFontSize(aSize650);
         aFont.SetColor( COL_BLACK );
@@ -1279,7 +1279,7 @@ void SmViewShell::Impl_Print(OutputDevice &rOutDev, const SmPrintUIOptions &rPri
     if (bIsPrintFormulaText)
     {
         vcl::Font aFont(FAMILY_DONTKNOW, Size(0, 600));
-        aFont.SetAlignment(TextAlign::Top);
+        aFont.SetAlignment(ALIGN_TOP);
         aFont.SetColor( COL_BLACK );
 
         // get size

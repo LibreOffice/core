@@ -1942,7 +1942,7 @@ SwFontSave::SwFontSave(const SwTextSizeInfo &rInf, SwFont *pNew,
           ( *pNew->GetBackColor() != *pFnt->GetBackColor() ) ) )
     {
         pNew->SetTransparent( true );
-        pNew->SetAlign( TextAlign::Baseline );
+        pNew->SetAlign( ALIGN_BASELINE );
         pInf->SetFont( pNew );
     }
     else

@@ -1840,7 +1840,7 @@ void SvmTest::testTextAlign()
     ScopedVclPtrInstance<VirtualDevice> pVirtualDev;
     setupBaseVirtualDevice(*pVirtualDev, aGDIMetaFile);
 
-    pVirtualDev->SetTextAlign(TextAlign::Bottom);
+    pVirtualDev->SetTextAlign(TextAlign::ALIGN_BOTTOM);
 
     checkTextAlign(writeAndReadStream(aGDIMetaFile));
     checkTextAlign(readFile(u"textalign.svm"));

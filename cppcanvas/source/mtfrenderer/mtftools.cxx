@@ -51,24 +51,28 @@ namespace cppcanvas::tools
         ::Size getBaselineOffset( const ::cppcanvas::internal::OutDevState& outdevState,
                                   const VirtualDevice&                      rVDev )
         {
-            ::Size aRet(0, 0);
             const ::FontMetric& aMetric = rVDev.GetFontMetric();
 
             // calc offset for text output, the XCanvas always renders
             // baseline offset.
             switch( outdevState.textReferencePoint )
             {
-                case TextAlign::Baseline:
-                    break;
-                case TextAlign::Top:
-                    aRet = ::Size(0, aMetric.GetInternalLeading() + aMetric.GetAscent());
-                    break;
-                case TextAlign::Bottom:
-                    aRet = ::Size(0, -aMetric.GetDescent());
-                    break;
-            }
+                case ALIGN_TOP:
+                    return ::Size( 0,
+                                   aMetric.GetInternalLeading() + aMetric.GetAscent() );
 
-            return aRet;
+                default:
+                    ENSURE_OR_THROW( false,
+                                      "tools::getBaselineOffset(): Unexpected TextAlign value" );
+                    // FALLTHROUGH intended (to calm compiler warning - case won't happen)
+                case ALIGN_BASELINE:
+                    return ::Size( 0, 0 );
+
+                case ALIGN_BOTTOM:
+                    return ::Size( 0,
+                                   -aMetric.GetDescent() );
+
+            }
         }
 
         ::basegfx::B2DHomMatrix& calcLogic2PixelLinearTransform( ::basegfx::B2DHomMatrix&   o_rMatrix,

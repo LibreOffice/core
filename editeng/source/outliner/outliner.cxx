@@ -858,7 +858,7 @@ vcl::Font Outliner::ImpCalcBulletFont( sal_Int32 nPara ) const
     nScaledLineHeight *= nScale*10;
     nScaledLineHeight /= 1000;
 
-    aBulletFont.SetAlignment( TextAlign::Bottom );
+    aBulletFont.SetAlignment( ALIGN_BOTTOM );
     aBulletFont.SetFontSize( Size( 0, nScaledLineHeight ) );
     bool bVertical = IsVertical();
     aBulletFont.SetVertical( bVertical );
@@ -921,7 +921,7 @@ void Outliner::PaintBullet(sal_Int32 nPara, const Point& rStartPos, const Point&
             vcl::Font aBulletFont( ImpCalcBulletFont( nPara ) );
             // Use baseline
             bool bSymbol = pFmt->GetNumberingType() == SVX_NUM_CHAR_SPECIAL;
-            aBulletFont.SetAlignment( bSymbol ? TextAlign::Bottom : TextAlign::Baseline );
+            aBulletFont.SetAlignment( bSymbol ? ALIGN_BOTTOM : ALIGN_BASELINE );
             vcl::Font aOldFont = rOutDev.GetFont();
             rOutDev.SetFont( aBulletFont );
 

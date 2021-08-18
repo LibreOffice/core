@@ -205,7 +205,7 @@ bool DXF2GDIMetaFile::SetFontAttribute(const DXFBasicEntity & rE, short nAngle, 
     aFont.SetTransparent(true);
     aFont.SetFamily(FAMILY_SWISS);
     aFont.SetFontSize(Size(0,nHeight));
-    aFont.SetAlignment(TextAlign::Baseline);
+    aFont.SetAlignment(ALIGN_BASELINE);
     aFont.SetOrientation(Degree10(nAngle));
     if (aActFont!=aFont) {
         aActFont=aFont;

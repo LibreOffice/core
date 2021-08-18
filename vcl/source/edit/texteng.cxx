@@ -188,7 +188,7 @@ void TextEngine::SetFont( const vcl::Font& rFont )
     aFillColor.SetAlpha( 255 );
     maFont.SetFillColor( aFillColor );
 
-    maFont.SetAlignment(TextAlign::Top);
+    maFont.SetAlignment( ALIGN_TOP );
     mpRefDev->SetFont( maFont );
     mnDefTab = mpRefDev->GetTextWidth("    ");
     if ( !mnDefTab )

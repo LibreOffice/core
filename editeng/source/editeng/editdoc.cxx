@@ -1939,7 +1939,7 @@ void EditDoc::RemoveItemsFromPool(const ContentNode& rNode)
 void CreateFont( SvxFont& rFont, const SfxItemSet& rSet, bool bSearchInParent, SvtScriptType nScriptType )
 {
     vcl::Font aPrevFont( rFont );
-    rFont.SetAlignment( TextAlign::Baseline );
+    rFont.SetAlignment( ALIGN_BASELINE );
     rFont.SetTransparent( true );
 
     sal_uInt16 nWhich_FontInfo = GetScriptItemId( EE_CHAR_FONTINFO, nScriptType );
