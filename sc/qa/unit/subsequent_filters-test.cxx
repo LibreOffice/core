@@ -216,6 +216,7 @@ public:
     void testTdf139782();
     void testTdf129681();
     void testTdf111974XLSM();
+    void testEscapedUnicodeXLSX();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testCondFormatOperatorsSameRangeXLSX);
@@ -318,6 +319,7 @@ public:
     CPPUNIT_TEST(testTdf139782);
     CPPUNIT_TEST(testTdf129681);
     CPPUNIT_TEST(testTdf111974XLSM);
+    CPPUNIT_TEST(testEscapedUnicodeXLSX);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -3124,6 +3126,17 @@ void ScFiltersTest::testTdf129681()
 }
 
 void ScFiltersTest::testTdf111974XLSM() { testImportCrash(u"tdf111974.", FORMAT_XLSM); }
+
+void ScFiltersTest::testEscapedUnicodeXLSX()
+{
+    ScDocShellRef xDocSh = loadDoc(u"escape-unicode.", FORMAT_XLSX);
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    // Without the fix, there would be "_x000D_" after every new-line char.
+    CPPUNIT_ASSERT_EQUAL(OUString("Line 1\nLine 2\nLine 3\nLine 4"), rDoc.GetString(1, 1, 0));
+
+    xDocSh->DoClose();
+}
 
 ScFiltersTest::ScFiltersTest()
       : ScBootstrapFixture( "sc/qa/unit/data" )
