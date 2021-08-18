@@ -183,6 +183,288 @@ CPPUNIT_TEST_FIXTURE(I18npoolDefaultnumberingproviderTest, testArabicZero5)
     CPPUNIT_ASSERT_EQUAL(OUString("10000"), aActual);
 }
 
+CPPUNIT_TEST_FIXTURE(I18npoolDefaultnumberingproviderTest, testKoreanCounting)
+{
+    // 1 -> "일"
+    uno::Reference<text::XNumberingFormatter> xFormatter(
+        text::DefaultNumberingProvider::create(mxComponentContext), uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aProperties = {
+        comphelper::makePropertyValue(
+            "NumberingType", static_cast<sal_uInt16>(style::NumberingType::NUMBER_HANGUL_KO)),
+        comphelper::makePropertyValue("Value", static_cast<sal_Int32>(1)),
+    };
+    lang::Locale aLocale;
+    OUString aActual = xFormatter->makeNumberingString(aProperties, aLocale);
+    // Without the accompanying fix in place, this test would have failed with a
+    // lang.IllegalArgumentException, support for NUMBER_HANGUL_KO was missing.
+    CPPUNIT_ASSERT_EQUAL(OUString(u"\uc77c"), aActual);
+
+    // 10 -> "십"
+    aProperties = {
+        comphelper::makePropertyValue(
+            "NumberingType", static_cast<sal_uInt16>(style::NumberingType::NUMBER_HANGUL_KO)),
+        comphelper::makePropertyValue("Value", static_cast<sal_Int32>(10)),
+    };
+    aActual = xFormatter->makeNumberingString(aProperties, aLocale);
+    CPPUNIT_ASSERT_EQUAL(OUString(u"\uc2ed"), aActual);
+
+    // 100 -> "백"
+    aProperties = {
+        comphelper::makePropertyValue(
+            "NumberingType", static_cast<sal_uInt16>(style::NumberingType::NUMBER_HANGUL_KO)),
+        comphelper::makePropertyValue("Value", static_cast<sal_Int32>(100)),
+    };
+    aActual = xFormatter->makeNumberingString(aProperties, aLocale);
+    CPPUNIT_ASSERT_EQUAL(OUString(u"\ubc31"), aActual);
+}
+
+CPPUNIT_TEST_FIXTURE(I18npoolDefaultnumberingproviderTest, testKoreanLegal)
+{
+    // 1 -> "하나"
+    uno::Reference<text::XNumberingFormatter> xFormatter(
+        text::DefaultNumberingProvider::create(mxComponentContext), uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aProperties = {
+        comphelper::makePropertyValue(
+            "NumberingType", static_cast<sal_uInt16>(style::NumberingType::NUMBER_LEGAL_KO)),
+        comphelper::makePropertyValue("Value", static_cast<sal_Int32>(1)),
+    };
+    lang::Locale aLocale;
+    OUString aActual = xFormatter->makeNumberingString(aProperties, aLocale);
+    // Without the accompanying fix in place, this test would have failed with a
+    // lang.IllegalArgumentException, support for NUMBER_LEGAL_KO was missing.
+    CPPUNIT_ASSERT_EQUAL(OUString(u"\ud558\ub098"), aActual);
+
+    // 2 -> "둘"
+    aProperties = {
+        comphelper::makePropertyValue(
+            "NumberingType", static_cast<sal_uInt16>(style::NumberingType::NUMBER_LEGAL_KO)),
+        comphelper::makePropertyValue("Value", static_cast<sal_Int32>(2)),
+    };
+    aActual = xFormatter->makeNumberingString(aProperties, aLocale);
+    CPPUNIT_ASSERT_EQUAL(OUString(u"\ub458"), aActual);
+
+    // 3 -> "셋"
+    aProperties = {
+        comphelper::makePropertyValue(
+            "NumberingType", static_cast<sal_uInt16>(style::NumberingType::NUMBER_LEGAL_KO)),
+        comphelper::makePropertyValue("Value", static_cast<sal_Int32>(3)),
+    };
+    aActual = xFormatter->makeNumberingString(aProperties, aLocale);
+    CPPUNIT_ASSERT_EQUAL(OUString(u"\uc14b"), aActual);
+
+    // 4 -> "넷"
+    aProperties = {
+        comphelper::makePropertyValue(
+            "NumberingType", static_cast<sal_uInt16>(style::NumberingType::NUMBER_LEGAL_KO)),
+        comphelper::makePropertyValue("Value", static_cast<sal_Int32>(4)),
+    };
+    aActual = xFormatter->makeNumberingString(aProperties, aLocale);
+    CPPUNIT_ASSERT_EQUAL(OUString(u"\ub137"), aActual);
+
+    // 5 -> "다섯"
+    aProperties = {
+        comphelper::makePropertyValue(
+            "NumberingType", static_cast<sal_uInt16>(style::NumberingType::NUMBER_LEGAL_KO)),
+        comphelper::makePropertyValue("Value", static_cast<sal_Int32>(5)),
+    };
+    aActual = xFormatter->makeNumberingString(aProperties, aLocale);
+    CPPUNIT_ASSERT_EQUAL(OUString(u"\ub2e4\uc12f"), aActual);
+    // 6 -> "여섯
+    aProperties = {
+        comphelper::makePropertyValue(
+            "NumberingType", static_cast<sal_uInt16>(style::NumberingType::NUMBER_LEGAL_KO)),
+        comphelper::makePropertyValue("Value", static_cast<sal_Int32>(6)),
+    };
+    aActual = xFormatter->makeNumberingString(aProperties, aLocale);
+    CPPUNIT_ASSERT_EQUAL(OUString(u"\uc5ec\uc12f"), aActual);
+    // 7 -> "일곱"
+    aProperties = {
+        comphelper::makePropertyValue(
+            "NumberingType", static_cast<sal_uInt16>(style::NumberingType::NUMBER_LEGAL_KO)),
+        comphelper::makePropertyValue("Value", static_cast<sal_Int32>(7)),
+    };
+    aActual = xFormatter->makeNumberingString(aProperties, aLocale);
+    CPPUNIT_ASSERT_EQUAL(OUString(u"\uc77c\uacf1"), aActual);
+
+    // 8 -> "여덟"
+    aProperties = {
+        comphelper::makePropertyValue(
+            "NumberingType", static_cast<sal_uInt16>(style::NumberingType::NUMBER_LEGAL_KO)),
+        comphelper::makePropertyValue("Value", static_cast<sal_Int32>(8)),
+    };
+    aActual = xFormatter->makeNumberingString(aProperties, aLocale);
+    CPPUNIT_ASSERT_EQUAL(OUString(u"\uc5ec\ub35f"), aActual);
+
+    // 9 -> "아홉"
+    aProperties = {
+        comphelper::makePropertyValue(
+            "NumberingType", static_cast<sal_uInt16>(style::NumberingType::NUMBER_LEGAL_KO)),
+        comphelper::makePropertyValue("Value", static_cast<sal_Int32>(9)),
+    };
+    aActual = xFormatter->makeNumberingString(aProperties, aLocale);
+    CPPUNIT_ASSERT_EQUAL(OUString(u"\uc544\ud649"), aActual);
+
+    // 10 -> "열"
+    aProperties = {
+        comphelper::makePropertyValue(
+            "NumberingType", static_cast<sal_uInt16>(style::NumberingType::NUMBER_LEGAL_KO)),
+        comphelper::makePropertyValue("Value", static_cast<sal_Int32>(10)),
+    };
+    aActual = xFormatter->makeNumberingString(aProperties, aLocale);
+    CPPUNIT_ASSERT_EQUAL(OUString(u"\uc5f4"), aActual);
+
+    // 21 -> "스물하나"
+    aProperties = {
+        comphelper::makePropertyValue(
+            "NumberingType", static_cast<sal_uInt16>(style::NumberingType::NUMBER_LEGAL_KO)),
+        comphelper::makePropertyValue("Value", static_cast<sal_Int32>(21)),
+    };
+    aActual = xFormatter->makeNumberingString(aProperties, aLocale);
+    CPPUNIT_ASSERT_EQUAL(OUString(u"\uc2a4\ubb3c\ud558\ub098"), aActual);
+
+    // 32 -> "서른둘"
+    aProperties = {
+        comphelper::makePropertyValue(
+            "NumberingType", static_cast<sal_uInt16>(style::NumberingType::NUMBER_LEGAL_KO)),
+        comphelper::makePropertyValue("Value", static_cast<sal_Int32>(32)),
+    };
+    aActual = xFormatter->makeNumberingString(aProperties, aLocale);
+    CPPUNIT_ASSERT_EQUAL(OUString(u"\uc11c\ub978\ub458"), aActual);
+
+    // 43 -> "마흔셋"
+    aProperties = {
+        comphelper::makePropertyValue(
+            "NumberingType", static_cast<sal_uInt16>(style::NumberingType::NUMBER_LEGAL_KO)),
+        comphelper::makePropertyValue("Value", static_cast<sal_Int32>(43)),
+    };
+    aActual = xFormatter->makeNumberingString(aProperties, aLocale);
+    CPPUNIT_ASSERT_EQUAL(OUString(u"\ub9c8\ud754\uc14b"), aActual);
+
+    // 54 -> "쉰넷"
+    aProperties = {
+        comphelper::makePropertyValue(
+            "NumberingType", static_cast<sal_uInt16>(style::NumberingType::NUMBER_LEGAL_KO)),
+        comphelper::makePropertyValue("Value", static_cast<sal_Int32>(54)),
+    };
+    aActual = xFormatter->makeNumberingString(aProperties, aLocale);
+    CPPUNIT_ASSERT_EQUAL(OUString(u"\uc270\ub137"), aActual);
+
+    // 65 -> "예순다섯"
+    aProperties = {
+        comphelper::makePropertyValue(
+            "NumberingType", static_cast<sal_uInt16>(style::NumberingType::NUMBER_LEGAL_KO)),
+        comphelper::makePropertyValue("Value", static_cast<sal_Int32>(65)),
+    };
+    aActual = xFormatter->makeNumberingString(aProperties, aLocale);
+    CPPUNIT_ASSERT_EQUAL(OUString(u"\uc608\uc21c\ub2e4\uc12f"), aActual);
+
+    // 76 -> "일흔여섯"
+    aProperties = {
+        comphelper::makePropertyValue(
+            "NumberingType", static_cast<sal_uInt16>(style::NumberingType::NUMBER_LEGAL_KO)),
+        comphelper::makePropertyValue("Value", static_cast<sal_Int32>(76)),
+    };
+    aActual = xFormatter->makeNumberingString(aProperties, aLocale);
+    CPPUNIT_ASSERT_EQUAL(OUString(u"\uc77c\ud754\uc5ec\uc12f"), aActual);
+
+    // 87 -> "여든일곱"
+    aProperties = {
+        comphelper::makePropertyValue(
+            "NumberingType", static_cast<sal_uInt16>(style::NumberingType::NUMBER_LEGAL_KO)),
+        comphelper::makePropertyValue("Value", static_cast<sal_Int32>(87)),
+    };
+    aActual = xFormatter->makeNumberingString(aProperties, aLocale);
+    CPPUNIT_ASSERT_EQUAL(OUString(u"\uc5ec\ub4e0\uc77c\uacf1"), aActual);
+
+    // 98 -> "아흔여덟"
+    aProperties = {
+        comphelper::makePropertyValue(
+            "NumberingType", static_cast<sal_uInt16>(style::NumberingType::NUMBER_LEGAL_KO)),
+        comphelper::makePropertyValue("Value", static_cast<sal_Int32>(98)),
+    };
+    aActual = xFormatter->makeNumberingString(aProperties, aLocale);
+    CPPUNIT_ASSERT_EQUAL(OUString(u"\uc544\ud754\uc5ec\ub35f"), aActual);
+
+    // 99 -> "아흔아홉"
+    aProperties = {
+        comphelper::makePropertyValue(
+            "NumberingType", static_cast<sal_uInt16>(style::NumberingType::NUMBER_LEGAL_KO)),
+        comphelper::makePropertyValue("Value", static_cast<sal_Int32>(99)),
+    };
+    aActual = xFormatter->makeNumberingString(aProperties, aLocale);
+    CPPUNIT_ASSERT_EQUAL(OUString(u"\uc544\ud754\uc544\ud649"), aActual);
+}
+
+CPPUNIT_TEST_FIXTURE(I18npoolDefaultnumberingproviderTest, testKoreanDigital)
+{
+    // 1 -> "일"
+    uno::Reference<text::XNumberingFormatter> xFormatter(
+        text::DefaultNumberingProvider::create(mxComponentContext), uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aProperties = {
+        comphelper::makePropertyValue(
+            "NumberingType", static_cast<sal_uInt16>(style::NumberingType::NUMBER_DIGITAL_KO)),
+        comphelper::makePropertyValue("Value", static_cast<sal_Int32>(1)),
+    };
+    lang::Locale aLocale;
+    OUString aActual = xFormatter->makeNumberingString(aProperties, aLocale);
+    // Without the accompanying fix in place, this test would have failed with a
+    // lang.IllegalArgumentException, support for NUMBER_DIGITAL_KO was missing.
+    CPPUNIT_ASSERT_EQUAL(OUString(u"\uc77c"), aActual);
+
+    // 10 -> "일영"
+    aProperties = {
+        comphelper::makePropertyValue(
+            "NumberingType", static_cast<sal_uInt16>(style::NumberingType::NUMBER_DIGITAL_KO)),
+        comphelper::makePropertyValue("Value", static_cast<sal_Int32>(10)),
+    };
+    aActual = xFormatter->makeNumberingString(aProperties, aLocale);
+    CPPUNIT_ASSERT_EQUAL(OUString(u"\uc77c\uc601"), aActual);
+
+    // 100 -> "일영영"
+    aProperties = {
+        comphelper::makePropertyValue(
+            "NumberingType", static_cast<sal_uInt16>(style::NumberingType::NUMBER_DIGITAL_KO)),
+        comphelper::makePropertyValue("Value", static_cast<sal_Int32>(100)),
+    };
+    aActual = xFormatter->makeNumberingString(aProperties, aLocale);
+    CPPUNIT_ASSERT_EQUAL(OUString(u"\uc77c\uc601\uc601"), aActual);
+}
+
+CPPUNIT_TEST_FIXTURE(I18npoolDefaultnumberingproviderTest, testKoreanDigital2)
+{
+    // 1 -> "一"
+    uno::Reference<text::XNumberingFormatter> xFormatter(
+        text::DefaultNumberingProvider::create(mxComponentContext), uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aProperties = {
+        comphelper::makePropertyValue(
+            "NumberingType", static_cast<sal_uInt16>(style::NumberingType::NUMBER_DIGITAL2_KO)),
+        comphelper::makePropertyValue("Value", static_cast<sal_Int32>(1)),
+    };
+    lang::Locale aLocale;
+    OUString aActual = xFormatter->makeNumberingString(aProperties, aLocale);
+    // Without the accompanying fix in place, this test would have failed with a
+    // lang.IllegalArgumentException, support for NUMBER_DIGITAL2_KO was missing.
+    CPPUNIT_ASSERT_EQUAL(OUString(u"\u4e00"), aActual);
+
+    // 10 -> "一零"
+    aProperties = {
+        comphelper::makePropertyValue(
+            "NumberingType", static_cast<sal_uInt16>(style::NumberingType::NUMBER_DIGITAL2_KO)),
+        comphelper::makePropertyValue("Value", static_cast<sal_Int32>(10)),
+    };
+    aActual = xFormatter->makeNumberingString(aProperties, aLocale);
+    CPPUNIT_ASSERT_EQUAL(OUString(u"\u4e00\u96f6"), aActual);
+
+    // 100 -> "一零零"
+    aProperties = {
+        comphelper::makePropertyValue(
+            "NumberingType", static_cast<sal_uInt16>(style::NumberingType::NUMBER_DIGITAL2_KO)),
+        comphelper::makePropertyValue("Value", static_cast<sal_Int32>(100)),
+    };
+    aActual = xFormatter->makeNumberingString(aProperties, aLocale);
+    CPPUNIT_ASSERT_EQUAL(OUString(u"\u4e00\u96f6\u96f6"), aActual);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
