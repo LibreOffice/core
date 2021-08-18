@@ -17,7 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
 
+#include <basegfx/matrix/b2dhommatrix.hxx>
 #include <svx/svdtrans.hxx>
 #include <math.h>
 #include <svx/xpoly.hxx>
@@ -520,6 +522,19 @@ void Poly2Rect(const tools::Polygon& rPol, tools::Rectangle& rRect, GeoStat& rGe
     aRU.AdjustX(nWdt );
     aRU.AdjustY(nHgt );
     rRect=tools::Rectangle(aPt0,aRU);
+}
+
+basegfx::B2DPolygon Rect2B2DPoly(const tools::Rectangle& rRect, const GeoStat& rGeo)
+{
+    basegfx::B2DPolygon aPol = tools::Polygon(rRect).getB2DPolygon();
+    basegfx::B2DHomMatrix aTransform;
+    aTransform.translate(-rRect.Left(), -rRect.Top());
+    aTransform.shearX(basegfx::deg2rad(rGeo.nShearAngle.get() / 100.0));
+    // GeoStat::nRotationAngle is rotating in the opposite direction cf. to B2DHomMatrix::rotate
+    aTransform.rotate(basegfx::deg2rad(-rGeo.nRotationAngle.get() / 100.0));
+    aTransform.translate(rRect.Left(), rRect.Top());
+    aPol.transform(aTransform);
+    return aPol;
 }
 
 
