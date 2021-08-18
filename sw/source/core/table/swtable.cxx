@@ -142,7 +142,7 @@ void InsTableBox( SwDoc& rDoc, SwTableNode* pTableNd,
 
     if( pCNd->IsTextNode() )
     {
-        if( pCNd->GetpSwAttrSet() )
+        if( pCNd->GetpSwAttrSet() && pCNd->GetSwAttrSet().HasItem(RES_PARATR_LIST_AUTOFMT) )
         {
             SwAttrSet aAttrSet( *pCNd->GetpSwAttrSet() );
             SwTextNode* pTNd = static_cast<SwTextNode*>(pCNd);
@@ -150,7 +150,7 @@ void InsTableBox( SwDoc& rDoc, SwTableNode* pTableNd,
             if(pSwpHints && pSwpHints->Count()!=0)
             {
                 SwTextAttr* textAttr = pSwpHints->Get(pSwpHints->Count()-1);
-                if(textAttr->Which() == RES_TXTATR_AUTOFMT )
+                if(textAttr->Which() == RES_TXTATR_AUTOFMT)
                 {
                     SwFormatAutoFormat& format = static_cast<SwFormatAutoFormat&>(textAttr->GetAttr());
                     const std::shared_ptr<SfxItemSet>& handle = format.GetStyleHandle();
