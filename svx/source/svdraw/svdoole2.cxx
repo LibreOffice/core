@@ -1725,14 +1725,7 @@ bool SdrOle2Obj::Unload()
         // Already unloaded.
         return true;
 
-    bool bUnloaded = false;
-
-    if ( mpImpl->mxObjRef.is() )
-    {
-        bUnloaded = Unload( mpImpl->mxObjRef.GetObject(), GetAspect() );
-    }
-
-    return bUnloaded;
+    return Unload(mpImpl->mxObjRef.GetObject(), GetAspect());
 }
 
 void SdrOle2Obj::GetObjRef_Impl()
